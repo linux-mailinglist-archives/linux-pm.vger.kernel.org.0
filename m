@@ -1,147 +1,199 @@
-Return-Path: <linux-pm+bounces-33627-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33628-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7CEFBB3FC90
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Sep 2025 12:33:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8BE7DB3FCD6
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Sep 2025 12:40:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A22FB1B25223
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Sep 2025 10:33:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E398D173FF7
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Sep 2025 10:40:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66D2F2EA15D;
-	Tue,  2 Sep 2025 10:33:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D9F12ECD2A;
+	Tue,  2 Sep 2025 10:40:13 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22FFC2ED148;
-	Tue,  2 Sep 2025 10:33:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A16028466E;
+	Tue,  2 Sep 2025 10:40:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756809190; cv=none; b=dfHHfdQ3hoh3LSRxxLZKZ4TWVjDDWJJ/aiH3H2HN+lKJaCvk2CsXrrgMZuDzn/Rp2h67h888fIhX2PhVmEcIgkpzu5TFpnK+h43UrT0zfze0rD8M64oiMWEo2VsP/5TAhfeD2860XOREhbod1BbZGNfggNNEQYJqYZJj4uFNh5I=
+	t=1756809613; cv=none; b=T29Qx65+sEYtO2AWAog9dR0+mGS8upY9XXgA+GG+rf63K7MlTNggBajlYoOK9nOoASLiYI5pauVXzsKT8t0tGApbyVgjA9Er6RnVbPoie0Qae6OApRuXjBuPUIAaZ6cFfjc7Y2D7cGHNYUqCs9AV6RC4Tw8XPYYj+JOlXIXbH2I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756809190; c=relaxed/simple;
-	bh=L8JaUs3SOhVHk302t291gHlKh5NKD5qAHGAnGijZbM4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=azXb57iSNxQajeST1qYtisZ3/3TIw215OeN1HolMp7qM+G+mSjXWrOn9KWpf9/zQgxVXA2aUUD+dybgk03VeZ3k10jX6TqJDHSyB035OI7r4p2BXiuXbPAmkIxBXMxzIX0lIcjqbpZQHnpSPAueAD857K1tLQps5KoDiBSRPnv4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 3107081c87e811f0b29709d653e92f7d-20250902
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.45,REQID:3fbf43f8-ebc9-4b27-884e-79c619713230,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:6493067,CLOUDID:7ac0a2afc203774c376dc034898cbd81,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102,TC:nil,Content:0|52,EDM:
-	-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,
-	AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: 3107081c87e811f0b29709d653e92f7d-20250902
-Received: from mail.kylinos.cn [(10.44.16.175)] by mailgw.kylinos.cn
-	(envelope-from <zhangzihuan@kylinos.cn>)
-	(Generic MTA)
-	with ESMTP id 1546738643; Tue, 02 Sep 2025 18:32:57 +0800
-Received: from mail.kylinos.cn (localhost [127.0.0.1])
-	by mail.kylinos.cn (NSMail) with SMTP id A718FE008FA3;
-	Tue,  2 Sep 2025 18:32:56 +0800 (CST)
-X-ns-mid: postfix-68B6C7D8-5510786
-Received: from [172.25.120.24] (unknown [172.25.120.24])
-	by mail.kylinos.cn (NSMail) with ESMTPA id 589C2E008FA2;
-	Tue,  2 Sep 2025 18:32:48 +0800 (CST)
-Message-ID: <29890791-4ddf-49c7-a4f2-0ac83e6d53c6@kylinos.cn>
-Date: Tue, 2 Sep 2025 18:32:47 +0800
+	s=arc-20240116; t=1756809613; c=relaxed/simple;
+	bh=pWlV0hVI8MLJpH5NEq4FarqF5cViZIgU9Fel9EHeJ+U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=l3IUMuuh5Jy/W1n3+4aIkgM5e8BGzh880yB/Td/SaGUsGW87h+CfywNhAFGd05QVCvCidZYCotN939X7w27AdAnDiZFY/nYQwh2Qxm8HfSNThbnlpVxdQiVBbxhQ2BKTLO20dMFiQbK/xcRYNrymPXKut+aufcggFOlkkrSJVx0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 50DA226BE;
+	Tue,  2 Sep 2025 03:40:02 -0700 (PDT)
+Received: from e133380.arm.com (e133380.arm.com [10.1.197.68])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B8F813F6A8;
+	Tue,  2 Sep 2025 03:40:06 -0700 (PDT)
+Date: Tue, 2 Sep 2025 11:39:53 +0100
+From: Dave Martin <Dave.Martin@arm.com>
+To: Yeoreum Yun <yeoreum.yun@arm.com>
+Cc: catalin.marinas@arm.com, will@kernel.org, broonie@kernel.org,
+	oliver.upton@linux.dev, anshuman.khandual@arm.com, robh@kernel.org,
+	james.morse@arm.com, mark.rutland@arm.com, joey.gouly@arm.com,
+	ahmed.genidi@arm.com, kevin.brodsky@arm.com,
+	scott@os.amperecomputing.com, mbenes@suse.cz,
+	james.clark@linaro.org, frederic@kernel.org, rafael@kernel.org,
+	pavel@kernel.org, ryan.roberts@arm.com, suzuki.poulose@arm.com,
+	maz@kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+	kvmarm@lists.linux.dev
+Subject: Re: [PATCH v4 2/5] arm64: initialise SCTLR2_ELx register at boot time
+Message-ID: <aLbJeQf9LKXFTxzS@e133380.arm.com>
+References: <20250821172408.2101870-1-yeoreum.yun@arm.com>
+ <20250821172408.2101870-3-yeoreum.yun@arm.com>
+ <aLW4A3rTcJvA0c+j@e133380.arm.com>
+ <aLXmCJOuxCHVXEYx@e129823.arm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 03/12] cpufreq: intel_pstate: Use scope-based cleanup
- helper
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Viresh Kumar <viresh.kumar@linaro.org>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Michael Ellerman <mpe@ellerman.id.au>, Krzysztof Kozlowski
- <krzk@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>,
- Thierry Reding <thierry.reding@gmail.com>,
- MyungJoo Ham <myungjoo.ham@samsung.com>,
- Kyungmin Park <kyungmin.park@samsung.com>,
- Chanwoo Choi <cw00.choi@samsung.com>,
- Jani Nikula <jani.nikula@linux.intel.com>,
- Rodrigo Vivi <rodrigo.vivi@intel.com>, Tvrtko Ursulin
- <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>,
- Simona Vetter <simona@ffwll.ch>, Daniel Lezcano <daniel.lezcano@kernel.org>,
- Sascha Hauer <s.hauer@pengutronix.de>, Shawn Guo <shawnguo@kernel.org>,
- Eduardo Valentin <edubezval@gmail.com>, Keerthy <j-keerthy@ti.com>,
- Ben Horgan <ben.horgan@arm.com>, zhenglifeng <zhenglifeng1@huawei.com>,
- Zhang Rui <rui.zhang@intel.com>, Len Brown <lenb@kernel.org>,
- Lukasz Luba <lukasz.luba@arm.com>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Beata Michalska <beata.michalska@arm.com>, Fabio Estevam
- <festevam@gmail.com>, Pavel Machek <pavel@kernel.org>,
- Sumit Gupta <sumitg@nvidia.com>,
- Prasanna Kumar T S M <ptsm@linux.microsoft.com>,
- Sudeep Holla <sudeep.holla@arm.com>, Yicong Yang <yangyicong@hisilicon.com>,
- linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
- intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
- imx@lists.linux.dev, linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250901085748.36795-1-zhangzihuan@kylinos.cn>
- <20250901085748.36795-4-zhangzihuan@kylinos.cn>
- <CAJZ5v0hu48NrMr6Vkjn_UyHywJMx7F5N6yWf2LiXxykZF79EKA@mail.gmail.com>
-From: Zihuan Zhang <zhangzihuan@kylinos.cn>
-In-Reply-To: <CAJZ5v0hu48NrMr6Vkjn_UyHywJMx7F5N6yWf2LiXxykZF79EKA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aLXmCJOuxCHVXEYx@e129823.arm.com>
+
+Hi,
+
+On Mon, Sep 01, 2025 at 07:29:28PM +0100, Yeoreum Yun wrote:
+> Hi Dave,
+> 
+> > On Thu, Aug 21, 2025 at 06:24:05PM +0100, Yeoreum Yun wrote:
+> > > The value of the SCTLR2_ELx register is UNKNOWN after reset.
+> > > If the firmware initializes these registers properly, no additional
+> > > initialization is required.
+> > > However, in cases where they are not initialized correctly,
+> > > initialize the SCTLR2_ELx registers during CPU/vCPU boot
+> > > to prevent unexpected system behavior caused by invalid values.
+> > >
+> > > Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
+> > > ---
+> >
+> > [...]
+> >
+> > > diff --git a/arch/arm64/include/asm/assembler.h b/arch/arm64/include/asm/assembler.h
+> > > index 23be85d93348..c25c2aed5125 100644
+> > > --- a/arch/arm64/include/asm/assembler.h
+> > > +++ b/arch/arm64/include/asm/assembler.h
+> > > @@ -738,6 +738,21 @@ alternative_endif
+
+[...]
+
+> > > +/* Set SCTLR2_ELx to the @reg value. */
+> > > +.macro set_sctlr2_elx, el, reg, tmp
+> > > +	mrs_s	\tmp, SYS_ID_AA64MMFR3_EL1
+> > > +	ubfx	\tmp, \tmp, #ID_AA64MMFR3_EL1_SCTLRX_SHIFT, #4
+> > > +	cbz	\tmp, .Lskip_sctlr2_\@
+> > > +	.if	\el == 2
+> > > +	msr_s	SYS_SCTLR2_EL2, \reg
+> > > +	.elseif	\el == 12
+> > > +	msr_s	SYS_SCTLR2_EL12, \reg
+> > > +	.else
+> > > +	msr_s	SYS_SCTLR2_EL1, \reg
+> > > +	.endif
+> > > +.Lskip_sctlr2_\@:
+> > > +.endm
+
+[...]
+
+> > If might be a good idea to migrate other macros that use an "el"
+> > argument to do something similar -- although that probably doesn't
+> > belong in this series.
+> >
+> > The assembler seems to have no ".elseifc" directive, so you'll need
+> > separate nested .ifc blocks:
+> >
+> > 	.ifc	\el,2
+> > 	msr_s	SYS_SCTLR2_EL2, \reg
+> > 	.else
+> > 	.ifc	\el,12
+> > 	msr_s	SYS_SCTLR2_EL12, \reg
+> > 	.else
+> > 	.ifc	\el,1
+> > 	msr_s	SYS_SCTLR2_EL1, \reg
+> > 	.else
+> > 	.error	"Bad EL \"\el\" in set_sctlr2_elx"
+> > 	.endif
+> > 	.endif
+> > 	.endif
+> >
+> > (Note, I've not tested this approach.  If you can think of a better
+> > way, please feel free to suggest.)
+> 
+> Thanks for your suggestion. Let me test and check about this idea could
+> be applied in other macro too :D
+> (But as you mention, I'll apply this for SCTLR2 in other patchset).
+
+Ack, let me know how it goes.
+
+It is probably not worth doing this if the changes become complicated,
+though.
+
+[...]
+
+> > > diff --git a/arch/arm64/kernel/hyp-stub.S b/arch/arm64/kernel/hyp-stub.S
+> > > index 36e2d26b54f5..ac12f1b4f8e2 100644
+> > > --- a/arch/arm64/kernel/hyp-stub.S
+> > > +++ b/arch/arm64/kernel/hyp-stub.S
+> > > @@ -144,7 +144,17 @@ SYM_CODE_START_LOCAL(__finalise_el2)
+> > >
+> > >  .Lskip_indirection:
+> > >  .Lskip_tcr2:
+> > > +	mrs_s	x1, SYS_ID_AA64MMFR3_EL1
+> > > +	ubfx	x1, x1, #ID_AA64MMFR3_EL1_SCTLRX_SHIFT, #4
+> > > +	cbz	x1, .Lskip_sctlr2
+> > > +	mrs_s	x1, SYS_SCTLR2_EL12
+> > > +	msr_s	SYS_SCTLR2_EL1, x1
+> > >
+> > > +	// clean SCTLR2_EL1
+> > > +	mov_q	x1, INIT_SCTLR2_EL1
+> > > +	msr_s	SYS_SCTLR2_EL12, x1
+> >
+> > I'm still not sure why we need to do this.  The code doesn't seem to
+> > clean up by the EL1 value of any other register -- or have I missed
+> > something?
+> >
+> > We have already switched to EL2, via the HVC call that jumped to
+> > __finalise_el2.  We won't run at EL1 again unless KVM starts a guest --
+> > but in that case, it's KVM's responsibility to set up the EL1 registers
+> > before handing control to the guest.
+> >
+> > In any case, is SCTLR2_EL1 ever set to anything except INIT_SCTLR2_EL1
+> > before we get here?
+> 
+> Regardless of VHE and nVHE, between init_kernel_el() and finalise_el2()
+> the kernel modifies SCTLR_EL1/SCTLR2_EL1 (since el level in this period
+> is EL1).
+> and at the end of finalise_el2(), kernel switches to el2 and
+> if VHE, it writes the SCTLR_EL1/SCTLR2_EL1 to SCTLR_EL2/SCTLR2_EL2 and
+> initialize the SCTLR_EL1/SCTLR2_EL1.
+> 
+> Although there is no code to modify SCTLR2_EL1 between this period,
+> as SCTLR1_ELx, I initialize the SCTLR2_EL1 as init value for the future
+> usage.
+
+I think that we don't need to ensure that all sysregs are cleanly
+initialised; only those that can affect execution in some way need to
+be initialised.
+
+Once we are running at EL2 with VHE, we don't switch back to EL1, so
+the _EL1 control registers don't affect execution any more.
 
 
-=E5=9C=A8 2025/9/1 23:17, Rafael J. Wysocki =E5=86=99=E9=81=93:
-> On Mon, Sep 1, 2025 at 10:58=E2=80=AFAM Zihuan Zhang <zhangzihuan@kylin=
-os.cn> wrote:
->> Replace the manual cpufreq_cpu_put() with __free(put_cpufreq_policy)
->> annotation for policy references. This reduces the risk of reference
->> counting mistakes and aligns the code with the latest kernel style.
->>
->> No functional change intended.
->>
->> Signed-off-by: Zihuan Zhang <zhangzihuan@kylinos.cn>
->> ---
->>   drivers/cpufreq/intel_pstate.c | 8 +++-----
->>   1 file changed, 3 insertions(+), 5 deletions(-)
->>
->> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_ps=
-tate.c
->> index f366d35c5840..4abc1ef2d2b0 100644
->> --- a/drivers/cpufreq/intel_pstate.c
->> +++ b/drivers/cpufreq/intel_pstate.c
->> @@ -1502,9 +1502,8 @@ static void __intel_pstate_update_max_freq(struc=
-t cpufreq_policy *policy,
->>
->>   static bool intel_pstate_update_max_freq(struct cpudata *cpudata)
->>   {
->> -       struct cpufreq_policy *policy __free(put_cpufreq_policy);
->> +       struct cpufreq_policy *policy __free(put_cpufreq_policy) =3D c=
-pufreq_cpu_get(cpudata->cpu);
->>
->> -       policy =3D cpufreq_cpu_get(cpudata->cpu);
->>          if (!policy)
->>                  return false;
-> The structure of the code is intentional here and there's no reason to
-> change it.
+If we did have to clean up the _EL1 registers, then this code would
+need to clean up all the other regs too, but I can't see clean-up for
+anything other than SCTLR2_EL1 here.  Is there some cleanup code
+elsewhere that I have missed?
 
-
-Got it. Thanks for clarifying.
-
-So for this case the current structure is intentional -
-
-should I also avoid similar changes in other drivers?
-
+Cheers
+---Dave
 
