@@ -1,115 +1,188 @@
-Return-Path: <linux-pm+bounces-33657-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33658-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 30094B40B17
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Sep 2025 18:51:37 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D35BB40B43
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Sep 2025 18:56:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D7D8E5E0EDF
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Sep 2025 16:51:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E9A97561E2D
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Sep 2025 16:56:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4ADC0338F22;
-	Tue,  2 Sep 2025 16:51:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 342E831DDB8;
+	Tue,  2 Sep 2025 16:56:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J94iLqyw"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Jkyy2MsO"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86A6332BF49;
-	Tue,  2 Sep 2025 16:51:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A786D283C89;
+	Tue,  2 Sep 2025 16:56:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756831887; cv=none; b=V1S1hu5i/Q9DGzdwprS0I3fjvNAOGPYx7R7CsO05mEN2w8ErjVvz4HtCYO8cxaYK0B+9E8NubtAZLPKSjt9iVMDKeX5+/IQJNUxOUkLjxylX4vZqn9q6iUGZYiM6Tc12ZN1FSUuUu08smrdskICZBcUuXB33dOTMuGXDn6tZtMU=
+	t=1756832183; cv=none; b=oXRoxgQH3puomPzhAK5tgNx9d5SUqtDwh7vfSYjk9JuYVb+npup2pAuQWmeoYf0SuGId+hNh3PFKZfwPoU8W+EBrEhgeQPGDBOs7TssyPy/Q6olnnizKEt9b8/K5O8J//VcqLFNPyD1zssHYHA4D4403+S7jP0bepvFTgtOMiN8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756831887; c=relaxed/simple;
-	bh=lIbE/1Aoqm4Jo61r+hMyagD0H71z3BwYFHkhUMeX9zQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=tWewmGiZoVi4M9gN+87wBMskL9NJvlp2S2xAgIWJ99O2iS2MmEBboBz281kXQrPvjrK+w1Qm5atkECA6TpEbBYIplxo4/QX/GBRvA6jE9yw+GVKU9YyZle2o4xNwOUnAXurytuIUvLKgbPwsdThdobxJrOUJtYpz1MA8niMXel4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J94iLqyw; arc=none smtp.client-ip=209.85.167.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-55f78e3cdf9so3196563e87.1;
-        Tue, 02 Sep 2025 09:51:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756831884; x=1757436684; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lIbE/1Aoqm4Jo61r+hMyagD0H71z3BwYFHkhUMeX9zQ=;
-        b=J94iLqyw4Y9xEGaAYce2nV2xlgusHZkx3vXA+gWWWEFukU2iVPAffTfEsX+a9Gohvp
-         Qm/+aOHNEQgqJEqnZyyQwHswH5ZCqGEjtjUZKjKJ9Zw5AUNcXKsPNW14DVCD2aAaFdkr
-         K+tvWRCFr+ROgw9u4BhY2v0FRZRN/cn+n20c+CMOltfhGI6obIayE3JXR400KngOFGQS
-         OkGXWhEkOuB+u32JXdpT38cgrpbTLDCmzrXB6jQejYfqQiMbonGw8R8DHVKaFFg6TLUp
-         GJP+yymOel3pDRcez8bnBEyhtLtxPBPtjtVj4hd+fIb/pDJK8FyL306zb6nFbMhr79m9
-         bQKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756831884; x=1757436684;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lIbE/1Aoqm4Jo61r+hMyagD0H71z3BwYFHkhUMeX9zQ=;
-        b=rsZpnUSRNTe8Y4SB7TdhHqoA/HbTpKGnoTBDwoy0lyGDHk5kUe12caJZITmMq07XWc
-         xa0WnWFmjCfec4e0MttPUs9XJWR6CpT7eEElrwCfHD+iyKpy6jXt5s5NUu/jfOvnROr/
-         n1ekf7RQpi2710Bv+I6Dx47dAkUW1CyyvabA/VEN2p1g2ZGC9GAFN+Hm2Nxmf01mE14B
-         X2VnHgApj0ysYKdwVrg39AXHAWNnL2EGNKrFZypw9MZUTEOkDFcWTv6mMxStb5pYPiu8
-         iaSk65bWhvdc9BfJ43D1vLQ2qMK23gOUOgUtOJ0OdrN5G4pEDl5mjWK16mdmx/Hynhl4
-         V3jA==
-X-Forwarded-Encrypted: i=1; AJvYcCV1l67AkcN8T1D7qtyC1T8tKkBgiX7qwS3vIYU2ut069kfQFzDhfXf1Bz6dAVe2uAz1OaZ8BeBkMDt+@vger.kernel.org, AJvYcCV7o3GvJkhOArEqfXduCVEdQB5pvSEmCcnGdAHN2BUJL8eY9ArD9CTRg9lqxRW36peahp/a4gQZQWvSrQo=@vger.kernel.org, AJvYcCWYQOMSmiH/Yv60T6NsWj1c5maZ9fPR0JI4odxV3ZY5e/muOcSmOC9vNruWWGLmTpoH2tzdxYR2pZiJ8IAR@vger.kernel.org, AJvYcCXt1meYzWYxfW8K6sDzV13FPyQvvIXAphyLoUog2pJb0E9LK3U1V83jrqbr0+5d8hSqCJmAvcCdCFM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyU+RF5QNAypOGrouilOVevSUH/Yze/zy4rkKpgMVo8JHu7eqUt
-	z9S8eF0PfO/rGQXAnFzXKk6lUMA/LTeAeRJmP1gJUcKwe5ZRsow1C26ZwUMveIPtPC16v1pNhpx
-	vSHFThnAxXSvnk/zh3GxsKh1tbWkkeQU=
-X-Gm-Gg: ASbGncuaaT/AeTqEsaQ3Mc7yIBH+mg98TjIZTsmGEBq30MrVQ7gJK+vb0t8PyjKVQEj
-	LFo9ZNydQrto7wliim7gbBFZsVd30fnaBg+PE7nVnQT8LS4VsNMNcNCQxNPHUIMKKuCrBtDCSCh
-	DLUn17VAJnSpaONq/fyp6A9haZxlH++BrfG54DbcRFVMsauA5yiQzyfKo+dUZWTcHRbNMax4riX
-	EVYrH8=
-X-Google-Smtp-Source: AGHT+IEChupoSD+9y1BXRKDMPiEUXXbCpO5UGzRaQ31kMw0aqronmTkKMHnTV+chIoZjNTqShh3rv+672NAMniN+Xf8=
-X-Received: by 2002:a05:6512:448e:b0:55f:645a:7146 with SMTP id
- 2adb3069b0e04-55f70968d9dmr3182922e87.46.1756831883361; Tue, 02 Sep 2025
- 09:51:23 -0700 (PDT)
+	s=arc-20240116; t=1756832183; c=relaxed/simple;
+	bh=M2vqCr5I7i3KfPqnsheMASeTdG7RiTSBtyebaD680CM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=TBEV5rPLYLalJxSOvzgJ8kU/T2tcpkavpLfnVXjT+6gqfeJNgxZDY2A4wgTqOKd81OmTHnmQHt9J6VFeGnJZZSJ3y5gZvq65j83PxdFeZflvIPrk6DSaANwQu6oFQ6aUY7pk++ofsMDlKcN+E4IBNKCaHQGjZKg3z77epSVQHVc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Jkyy2MsO; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1756832182; x=1788368182;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=M2vqCr5I7i3KfPqnsheMASeTdG7RiTSBtyebaD680CM=;
+  b=Jkyy2MsOSaYtOzI9ZdbOzeu8dgcoT1MppAkhgLmQs0USeTQJtpu1Ve5W
+   gowVzNJ+ddNTcoJ3PWZ2gGkfdRKCmZxnntBwr6WoCtSJJrTWcZ9P0tanr
+   v/6m3AMPFwLrj1poiRb/+lUcMbhs3r9x/g5T5uWErMMThMIVofPUnmad+
+   1wHOZNIFEJLfLlSf2bGZw+14IA2I1AdoRYx98H8hqpvWydC60UQKV7Qrt
+   hh2foMvSczo5JHMpL5XqU2d3aXx0I8T5afEvrFuIfibBoaM+CMrEmJQDn
+   EiCXqSGuZDVZRUVQgbTev4gxDyR4kbfutX7ca1i1znx0Q7FVot7mduONc
+   A==;
+X-CSE-ConnectionGUID: BY+DRahsS+WNyMHV00t6EA==
+X-CSE-MsgGUID: Ub3E1R7LSSqYSXBgxmZUCg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11541"; a="69378994"
+X-IronPort-AV: E=Sophos;i="6.18,233,1751266800"; 
+   d="scan'208";a="69378994"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2025 09:56:21 -0700
+X-CSE-ConnectionGUID: fvnKOAPET8myKCVVkh9zhA==
+X-CSE-MsgGUID: UxbMA+rKQayHoMfsrZToQg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,233,1751266800"; 
+   d="scan'208";a="176634926"
+Received: from tslove-mobl4.amr.corp.intel.com (HELO [10.125.109.202]) ([10.125.109.202])
+  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2025 09:56:21 -0700
+Message-ID: <4f340f1e-1cbf-4b50-ae23-a0e50170146c@intel.com>
+Date: Tue, 2 Sep 2025 09:56:20 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250831-tegra186-icc-v1-0-607ddc53b507@gmail.com> <20250902-glittering-toucan-of-feminism-95fd9f@kuoka>
-In-Reply-To: <20250902-glittering-toucan-of-feminism-95fd9f@kuoka>
-From: Aaron Kling <webgeek1234@gmail.com>
-Date: Tue, 2 Sep 2025 11:51:11 -0500
-X-Gm-Features: Ac12FXwYWaxQZ7C2fCm_0oyX8iaPoPZ0amPC4H_SBlrNsaYfoKZf6cjuvVA16aA
-Message-ID: <CALHNRZ_CNvq_srzBZytrO6ZReg81Z6g_-Sa+=26kBEHx_c8WQA@mail.gmail.com>
-Subject: Re: [PATCH 0/8] Support dynamic EMC frequency scaling on Tegra186/Tegra194
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Thierry Reding <thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-kernel@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-tegra@vger.kernel.org, 
-	linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1] cpu: Add missing check to cpuhp_smt_enable()
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+ Linux PM <linux-pm@vger.kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>, LKML
+ <linux-kernel@vger.kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+ Christian Loehle <christian.loehle@arm.com>,
+ Dave Hansen <dave.hansen@linux.intel.com>,
+ the arch/x86 maintainers <x86@kernel.org>
+References: <12740505.O9o76ZdvQC@rafael.j.wysocki>
+ <CAJZ5v0ik7fRKwH3CnXysvBJkkdJbWP-6iL=zBF0o92rR+nHTKg@mail.gmail.com>
+From: Dave Hansen <dave.hansen@intel.com>
+Content-Language: en-US
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+In-Reply-To: <CAJZ5v0ik7fRKwH3CnXysvBJkkdJbWP-6iL=zBF0o92rR+nHTKg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Tue, Sep 2, 2025 at 3:23=E2=80=AFAM Krzysztof Kozlowski <krzk@kernel.org=
-> wrote:
->
-> On Sun, Aug 31, 2025 at 10:33:48PM -0500, Aaron Kling wrote:
-> > This series borrows the concept used on Tegra234 to scale EMC based on
-> > CPU frequency and applies it to Tegra186 and Tegra194. Except that the
-> > bpmp on those archs does not support bandwidth manager, so the scaling
-> > iteself is handled similar to how Tegra124 currently works.
-> >
->
-> Three different subsystems and no single explanation of dependencies and
-> how this can be merged.
+On 9/2/25 08:05, Rafael J. Wysocki wrote:
+> On Fri, Aug 29, 2025 at 10:01 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>> Christian has reported that commit a430c11f4015 ("intel_idle: Rescan
+>> "dead" SMT siblings during initialization") broke the use case in
 
-The only cross-subsystem hard dependency is that patches 5 and 6 need
-patches 1 and 2 respectively. Patch 5 logically needs patch 3 to
-operate as expected, but there should not be compile compile or probe
-failures if those are out of order. How would you expect this to be
-presented in a cover letter?
+Does "dead" here mean present but offline?
 
-Aaron
+>> which both nosmt and maxcpus were added to the kernel command line
+>> because it caused CPUs that were not SMT siblings to be brought
+>> online during the intel_idle driver initialization in violation of the
+>> maxcpus limit.
+
+How does intel_idle fit in here? I don't immediately see it calling
+cpuhp_smt_enable().
+
+>> The underlying reason for this is a missing topology_is_primary_thread()
+>> check in cpuhp_smt_enable() which causes that function to put online
+>> more CPUs than just the SMT siblings that it is supposed to handle.
+>>
+>> Add the missing check to address the issue.
+
+We should probably add a bit more checking in cpuhp_smt_enable() to make
+sure that it's being called under expected conditions like a:
+
+	WARN_ON_ONCE(cpu_smt_control != CPU_SMT_DISABLED);
+
+and probably also some comments about how it is expected to work.
+
+cpuhp_smt_enable() doesn't _really_ enable SMT. It specifically takes it
+from DISABLED=>ENABLED. Thinking about it in that context, enabling
+_just_ the secondary (disabled) threads makes a lot of sense.
+
+But that can come later, after the bug fix.
+
+>> --- a/kernel/cpu.c
+>> +++ b/kernel/cpu.c
+>> @@ -2710,6 +2710,12 @@
+
+No 'diff -p', eh?
+
+>>         cpu_maps_update_begin();
+>>         cpu_smt_control = CPU_SMT_ENABLED;
+>>         for_each_present_cpu(cpu) {
+>> +               /*
+>> +                * Avoid accidentally onlining primary thread CPUs that have
+>> +                * been taken offline.
+>> +                */
+>> +               if (topology_is_primary_thread(cpu))
+>> +                       continue;
+>>                 /* Skip online CPUs and CPUs on offline nodes */
+>>                 if (cpu_online(cpu) || !node_online(cpu_to_node(cpu)))
+>>                         continue;
+Is there a more generic problem with this not respecting 'maxcpus'? If
+maxcpus had forced a primary thread offline, this would still online the
+secondary thread, even with the fix. Taking _that_ online might still
+bring you over the maxcpus limit.
+
+
 
