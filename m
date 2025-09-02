@@ -1,123 +1,163 @@
-Return-Path: <linux-pm+bounces-33659-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33660-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B6548B40B52
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Sep 2025 18:57:58 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B55CB40BD2
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Sep 2025 19:18:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 61C4C1B26C3D
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Sep 2025 16:58:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BC40B7AE9DF
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Sep 2025 17:16:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2211333EAF3;
-	Tue,  2 Sep 2025 16:57:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79DF930DEB4;
+	Tue,  2 Sep 2025 17:18:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G4uUGFLw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CMFfl+47"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B9AA30F94D;
-	Tue,  2 Sep 2025 16:57:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A8042C17A8;
+	Tue,  2 Sep 2025 17:18:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756832273; cv=none; b=NjnXJcmaaM6HkmfBFp0hnxiILuXTh0x2RwOAZO956sVtnD5exJeiShyN87QaDu85JQ5fTNwK+mj0KqKUIB3gYxT2vVjknkcY/QufkDI3PPvjm/W++MYiSHCAjimH11+Gvso3CG/K5Z1G+68L3yGu3I6S07JTkDsD+cxGlzUouSc=
+	t=1756833503; cv=none; b=s36TBnDms96aQ9w3dLdRqPpvQRZS2FCLJtn91TL9FUgcezHvodnxifdTlhDSgNRDnWGaiZZdfVi0BmD5NJZ43gbRSvnoJ0wLkGMEcgofpNG+0B/OMU1vKWH3sbjFfSHYLjMp5020BoPBSBECC7AYGA+Seo5HpVniNEsj5AtP7Lc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756832273; c=relaxed/simple;
-	bh=xjZdrMmxgQtX66TPP8v+Vqq+oEDA+LsGXidCV2cNP9g=;
+	s=arc-20240116; t=1756833503; c=relaxed/simple;
+	bh=Nxyio4+r5dh5pFJsnBPHpzd74dQzog6NwYV0HbGML+8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dZ3CXrXneq+rxGxiO6yUreFkpiMFLOy6KuOPUaPm7r55ABIg0yBy5YzUYuODS2apgbczs+cZgWVeocLyK7U1HCuC6TmX+GWuQx6C3zl9D79v6fUuJUqz7cIWtbTKGECydcn57euDEH6RvZACDO6/WtzPatXVq6I2p7IjgcHGRKk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G4uUGFLw; arc=none smtp.client-ip=209.85.167.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-55f69cf4b77so3968280e87.2;
-        Tue, 02 Sep 2025 09:57:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756832269; x=1757437069; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=USMABpzeN1jg9NNbpP8+DcIerB0Re2d1/c7KuEPDElE=;
-        b=G4uUGFLwy2ZH7Dv7lCRGy00i/Sm/IocCayBz9ttTMOixOFOzupMcjKCOjMfClYSR21
-         ngzhXES9dxWKJZIlCzjk5yZWPld647iVI70ij+lkWpxyxirVBtl8cItTPz2Ng+KOKg+B
-         YxrafEbkYNpcQUGGh77aWXoGt+jkZlv+CxX/EhRDpNOseCi/IGRFyfQ/nCTdX2hMWtwJ
-         7EOhG/nt6Ry+r0Da6VtL/RE//E7MWGsf8dR7ru5za5/n4t3AQ/bxEkQvic5i9LWVoTzj
-         58HxwTrAtxhAkjJbJdjSCcdiK1baFLPdUsq1SPl0iHQeNMvtgMPO6rcQSJaZVlrgkOYE
-         N8Dw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756832269; x=1757437069;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=USMABpzeN1jg9NNbpP8+DcIerB0Re2d1/c7KuEPDElE=;
-        b=tsLpEpyN1A2Wh3IWzjPLUH6FlKs2+MyW75IkDIuYmlzefK7mftv1IN5GQm4Wf4OouO
-         lTv9RveazBvprDhokYbN0Hckkr7JFaNIW6BvbHCDyemSZwnFtJQPQ0Eg+c4uC3metn9T
-         UfmCJStjPC+BiqylK/nhVijAfmzORGw3K5KZhi+duKZGC3RkEvZSE4b+FM6ni0bvNy74
-         Kh93gCllqtSMGskXvAO8OEIvAG7UJgxCqeOUzS1klFHR/1HW6zNcdpz0un+KSgA6Gnvp
-         F1McYJ4NSaFGr+8rvS6cuciOAF6VzXoJ5xW18tqWscQ0wUcBy7/oomNOXpgnR97E3IES
-         7Z1w==
-X-Forwarded-Encrypted: i=1; AJvYcCU9mBPXcskPihfJ2GlJWCln2G8T8DTNBfM2rmWGPNLEbM7ytaMYwyvavDcB/CEnYIzxoSQMIIeEpjD+Cd4M@vger.kernel.org, AJvYcCWi2OluK/g+wG4dHzcxYbVM0pMMU7flFH28HfxwYaIDsZgWST5tM4UhUixGzU89mluOBQDZtoLNEIA=@vger.kernel.org, AJvYcCWyAOj0JighmIp32Mcp0M5dhhSzOQ1qkGr2IoMXcpBVWNNVfXkGSdFisCD1fEEb9dROspi4eDOBymkL@vger.kernel.org, AJvYcCXm7JrEUx4goNAF/A/bPblVPfrIQfCxSToFc0LjThTRjIVayGMH+kf4kHsrK5AV+64T9gPZhuI9ZPd16eQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YylWTD3kAbei5kYL1NMcouSgA+hhgr84DK/K49Ok/XhGTFGzvZN
-	rIhbTbFDiw76oNcKGEeSNzcvMbDwb/9UO5aTCgyTsD+CHOu+iqMFIvZIF1bMyPz2qfe0+66+wTc
-	pDScAMNVZqbkYgQIl5MDLyiyI9N3/1a4kOyfgBFexKg==
-X-Gm-Gg: ASbGnct3pZYYhQJN5kSEA9XBTd28Dz+sw1aM5xOjMNYgKEsFCZO1jb1Ky6boJbDlqaR
-	i/WvixH5OyPmDlHyEdcxsYmzQk3m3b5k6SR/57G9ahh7YZH9OVfjwbVaPxNuEWfz33LSAGcPknn
-	JpGJlSlWOSNJrvWf/q8ujMhJjq+tC5XdMgpH1StW1wl3t0kWTasrpILHCpW9LYaWkgZ0B5k4l+m
-	WWW7q0Tmpr35Ec4WQ==
-X-Google-Smtp-Source: AGHT+IHhfyehhL9dzCmmW7RKEpzEoQp3xfJMMII4o8LTS1/yYrgYDUDOmVLVqNX1VUdzQSoTOGBSF65LedRhnwtIiBI=
-X-Received: by 2002:a05:6512:3b9e:b0:55c:e95e:cd63 with SMTP id
- 2adb3069b0e04-55f708ecf1dmr3560056e87.30.1756832268893; Tue, 02 Sep 2025
- 09:57:48 -0700 (PDT)
+	 To:Cc:Content-Type; b=eB0q+7slVw1YWoIe0GYpmL1dfsC+WEvRnUspz1rFc1zfIEyfFffdhFNq+MT47/LlcqHOsH4035nvbTjXiI5nODqFZ52RVR97K4aNaFiBfK0aHY1ZVPrXJMXV6848k0i3exs44tN8VMQfsrYKjNo38EVGW+2xZWySONVwle1cEuA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CMFfl+47; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C621CC4AF09;
+	Tue,  2 Sep 2025 17:18:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756833502;
+	bh=Nxyio4+r5dh5pFJsnBPHpzd74dQzog6NwYV0HbGML+8=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=CMFfl+47xuEPoKET33eEnJFn20A2dteQlQDXU8jCPUPX3iwss40ccYTcGq2wTgF4q
+	 LrMJ0uEhZ0X37NhhJnz2MoMGJfRvmOmoO9OKYPjgs8YO494OYr4/AYpMkR6eUMoJUI
+	 i5ltvR9zF2II7QBvnTCEplLGGGUm01Mftn+IAvs7d41xPzLPAZL8dh2UHqCz6nS9vO
+	 Pn8JfRaw1D2PpeWN+fAwRuvpmjdpySJ8xMYgKWkLFm7/97VeiyAVU7M45Vs2HvDr3a
+	 Op9lheD8WU0ufwksoXs7iicrQpaZNO1MLDZlH6R9RvT0oC1vGg7RhtiiiZGEfqXaMy
+	 0X0XC7dwlrCvg==
+Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-30cce534a91so2026072fac.0;
+        Tue, 02 Sep 2025 10:18:22 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVIreWc3+K1YVtuIG2ZssR2/6L0BbKOBbnGpS0dYtL6Yennfbs7CSxPjb47obX4GV/6J4EzU8UqKqcY0ZQ=@vger.kernel.org, AJvYcCWlWYEto5GSE4R2r72Ge2s2Nm9rejuIprgZx6wu0/Yh89fM/kqeslT4UiBA7wvBLV05wXvuGJ2Gm1w=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwuUpHYVDYerQB519O+2DLuP1WrknS+yWIZ2lYvyQP9ZeLwte8S
+	yYKyHdKnj1IizWdymu8ewZvvC6iExqVuneCFEAWvpgyeuI00yHPMWthW6rI6HdBBR2dpFSPujEi
+	2oRiTIDaFQPwHpgpDl7YUzYohNxEhHlk=
+X-Google-Smtp-Source: AGHT+IFfaCM0HgCk+C7C9sgQixAGC/QLnJMylf+6miUkFD4/stc00mbTidlUJ9lVmdzyckPt71i7NlnS1C3nEgLe5ds=
+X-Received: by 2002:a05:6870:17a3:b0:307:bb94:2260 with SMTP id
+ 586e51a60fabf-31963345334mr4412017fac.24.1756833502029; Tue, 02 Sep 2025
+ 10:18:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250831-tegra186-icc-v1-0-607ddc53b507@gmail.com>
- <20250831-tegra186-icc-v1-2-607ddc53b507@gmail.com> <20250902-curious-cooperative-agouti-1efdcd@kuoka>
-In-Reply-To: <20250902-curious-cooperative-agouti-1efdcd@kuoka>
-From: Aaron Kling <webgeek1234@gmail.com>
-Date: Tue, 2 Sep 2025 11:57:37 -0500
-X-Gm-Features: Ac12FXzEK5elSQZytKBQDMCCZLo03Xy4jbKPZ68ZK5aetWahruENEzoM8bpe-ok
-Message-ID: <CALHNRZ8VBXnf0UULDP=fqGSEYvWXoGhoY10P8FyHbYGwi9uY4w@mail.gmail.com>
-Subject: Re: [PATCH 2/8] dt-bindings: tegra: Add ICC IDs for dummy memory
- clients for Tegra194
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Thierry Reding <thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-kernel@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-tegra@vger.kernel.org, 
-	linux-pm@vger.kernel.org
+References: <12740505.O9o76ZdvQC@rafael.j.wysocki> <CAJZ5v0ik7fRKwH3CnXysvBJkkdJbWP-6iL=zBF0o92rR+nHTKg@mail.gmail.com>
+ <4f340f1e-1cbf-4b50-ae23-a0e50170146c@intel.com>
+In-Reply-To: <4f340f1e-1cbf-4b50-ae23-a0e50170146c@intel.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 2 Sep 2025 19:18:10 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0hQEecBFfZkefbipXPV6HVupz67q5RYR=heC=ZUpOY+bQ@mail.gmail.com>
+X-Gm-Features: Ac12FXxVBwZFPXzb8hFIoHPwnmgx_eyrOYO9eQh9yO2D0GDFLmCe6CXi9HvRtw0
+Message-ID: <CAJZ5v0hQEecBFfZkefbipXPV6HVupz67q5RYR=heC=ZUpOY+bQ@mail.gmail.com>
+Subject: Re: [PATCH v1] cpu: Add missing check to cpuhp_smt_enable()
+To: Dave Hansen <dave.hansen@intel.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, LKML <linux-kernel@vger.kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Christian Loehle <christian.loehle@arm.com>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, "the arch/x86 maintainers" <x86@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Sep 2, 2025 at 3:25=E2=80=AFAM Krzysztof Kozlowski <krzk@kernel.org=
-> wrote:
+On Tue, Sep 2, 2025 at 6:56=E2=80=AFPM Dave Hansen <dave.hansen@intel.com> =
+wrote:
 >
-> On Sun, Aug 31, 2025 at 10:33:50PM -0500, Aaron Kling wrote:
-> > Add ICC IDs for dummy software clients representing CCPLEX clusters.
-> >
-> > Signed-off-by: Aaron Kling <webgeek1234@gmail.com>
-> > ---
-> >  include/dt-bindings/memory/tegra194-mc.h | 6 ++++++
-> >  1 file changed, 6 insertions(+)
-> >
+> On 9/2/25 08:05, Rafael J. Wysocki wrote:
+> > On Fri, Aug 29, 2025 at 10:01=E2=80=AFPM Rafael J. Wysocki <rafael@kern=
+el.org> wrote:
+> >> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >> Christian has reported that commit a430c11f4015 ("intel_idle: Rescan
+> >> "dead" SMT siblings during initialization") broke the use case in
 >
-> Please use subject prefixes matching the subsystem. You can get them for
-> example with 'git log --oneline -- DIRECTORY_OR_FILE' on the directory
-> your patch is touching. For bindings, the preferred subjects are
-> explained here:
-> https://www.kernel.org/doc/html/latest/devicetree/bindings/submitting-pat=
-ches.html#i-for-patch-submitters
->
-> dt-bindings: memory: tegra194-mc: (or nvidia,tegra194-mc)
+> Does "dead" here mean present but offline?
 
-For reference, I did base the commit subject on existing commits,
-namely b0dae3d which these patches are based on. Apparently that was a
-bad reference. I will update as requested for v2.
+Yes.
 
-Aaron
+> >> which both nosmt and maxcpus were added to the kernel command line
+> >> because it caused CPUs that were not SMT siblings to be brought
+> >> online during the intel_idle driver initialization in violation of the
+> >> maxcpus limit.
+>
+> How does intel_idle fit in here? I don't immediately see it calling
+> cpuhp_smt_enable().
+
+It calls arch_cpu_rescan_dead_smt_siblings() which calls cpuhp_smt_enable()=
+.
+
+> >> The underlying reason for this is a missing topology_is_primary_thread=
+()
+> >> check in cpuhp_smt_enable() which causes that function to put online
+> >> more CPUs than just the SMT siblings that it is supposed to handle.
+> >>
+> >> Add the missing check to address the issue.
+>
+> We should probably add a bit more checking in cpuhp_smt_enable() to make
+> sure that it's being called under expected conditions like a:
+>
+>         WARN_ON_ONCE(cpu_smt_control !=3D CPU_SMT_DISABLED);
+>
+> and probably also some comments about how it is expected to work.
+
+Well, see the callers.  Two out of three take care of this already and
+the third one doesn't care.
+
+> cpuhp_smt_enable() doesn't _really_ enable SMT. It specifically takes it
+> from DISABLED=3D>ENABLED. Thinking about it in that context, enabling
+> _just_ the secondary (disabled) threads makes a lot of sense.
+>
+> But that can come later, after the bug fix.
+>
+> >> --- a/kernel/cpu.c
+> >> +++ b/kernel/cpu.c
+> >> @@ -2710,6 +2710,12 @@
+>
+> No 'diff -p', eh?
+
+Ah, sorry about this.
+
+> >>         cpu_maps_update_begin();
+> >>         cpu_smt_control =3D CPU_SMT_ENABLED;
+> >>         for_each_present_cpu(cpu) {
+> >> +               /*
+> >> +                * Avoid accidentally onlining primary thread CPUs tha=
+t have
+> >> +                * been taken offline.
+> >> +                */
+> >> +               if (topology_is_primary_thread(cpu))
+> >> +                       continue;
+> >>                 /* Skip online CPUs and CPUs on offline nodes */
+> >>                 if (cpu_online(cpu) || !node_online(cpu_to_node(cpu)))
+> >>                         continue;
+>
+> Is there a more generic problem with this not respecting 'maxcpus'? If
+> maxcpus had forced a primary thread offline, this would still online the
+> secondary thread, even with the fix. Taking _that_ online might still
+> bring you over the maxcpus limit.
+
+Yes, there is AFAICS, but it has been there for some time and it
+doesn't affect the rescan during boot.
+
+For the rescan, it is actually useful to not respect maxcpus because
+it allows all of the SMT siblings to be kicked, but for run-time
+enabling of SMT it may be sort of a problem.
+
+This change simply addresses the regression, which is that cores
+without SMT become online quite surprisingly after intel_idle (and
+ACPI idle too for that matter) initialization, due to
+arch_cpu_rescan_dead_smt_siblings().
 
