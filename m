@@ -1,151 +1,150 @@
-Return-Path: <linux-pm+bounces-33635-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33636-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 131B1B3FEA5
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Sep 2025 13:54:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 29AE7B3FEAE
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Sep 2025 13:55:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5D2EC18805E2
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Sep 2025 11:55:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 96EF3188AC6F
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Sep 2025 11:55:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06D312F5496;
-	Tue,  2 Sep 2025 11:47:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72B412FABE9;
+	Tue,  2 Sep 2025 11:47:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="n3pPskEY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HPfsH/6Z"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E51E28489D
-	for <linux-pm@vger.kernel.org>; Tue,  2 Sep 2025 11:47:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 361112FA0ED;
+	Tue,  2 Sep 2025 11:47:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756813649; cv=none; b=tZ1MUjHaPSa+ezNjQSmKWG8Gxq5fEetlhhyt/VXkEa61esj4T3DIH4rsRJknlIRc4ITnQspshSOsbQjIoFO+jq5qYZ581dlFOS5L1FoYHf2Io+7sexdK16Y9SUoZXphAd6aRYu65PdFywZjJceYo+m5Ge8cfiyoTpM5+K5PkkNk=
+	t=1756813666; cv=none; b=Vz7oGV6vUnV9q/XcFhVWvclnBqFJrNKDUL1SS9FamAC7YGJ1msjEBg8gRYfRNiRDuE3q3FUWbHeN28zNME2URZOQARYCJ9dO15hhmnBxn8M/FC+FUx5CsXHFMERBpK5oRCt4THtUambykTfLprgRci52P8vjJzTOHNeHXazOkw4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756813649; c=relaxed/simple;
-	bh=Efg1Sal0KX5O8uYenvTI/MzkTGbrZNd4ohf0F8McEG8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ub5Ggkvl2FhgTIgPa8u0t3i6pYu3Tu0sasFuXXs1Izev/mJnzmkVwwcG6mi1o2KQ+8HjaNn1rNHGjqbCiso8A6ZAt54JVymN0VAd63TD7KXa+2XK+oDyNkNBcCgvJdaUyodGzeMFIGuOIPJ+6X8T7wXh2L2vZPFERyeFHhAdcE4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=n3pPskEY; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 582Ae3E9021586
-	for <linux-pm@vger.kernel.org>; Tue, 2 Sep 2025 11:47:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	2vTMTDMliYIWA3QTZWruvIxOrprzqsFuQP3qBWa983E=; b=n3pPskEY+Eh83K48
-	/AyIcuimWmqNruTTtWvxMDhNVoW2VQtC9rKYwTLztaLXfKdbZklJBtG1Dk+Mt8bm
-	YXEM83F6t/MKboEyU/t+omkD2O3hp1ckF8phDoztzkunBXbqb9ROnyIaBwmZTaRy
-	Z6riUIPl3GnJwacNqqXWcfbh8a5SNV/c+DTPNwrhzKFD1M5VyttREfZqgvCBZeu/
-	pKgT0GAdFUIoAuMuqapYv1HWrtyzFH+3MXUPPJt7i0BcFKQsieaLweLFM3MB8h5A
-	ZVHqMbX0iXUan4RJ8jUvYNhyDCqe/3uGRYTcrtXTyHwdRn8hDnUeOjW8V9f3oAs2
-	urVuRA==
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com [209.85.160.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 48ur8ryqmt-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Tue, 02 Sep 2025 11:47:27 +0000 (GMT)
-Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-4b3037bd983so28866411cf.1
-        for <linux-pm@vger.kernel.org>; Tue, 02 Sep 2025 04:47:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756813645; x=1757418445;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2vTMTDMliYIWA3QTZWruvIxOrprzqsFuQP3qBWa983E=;
-        b=gVfhVbH3aYO5zHDdDhBQK+jjf8c4iRsbKUhtbXWGkmK+xLNNHaWxuYJjD4dilqXdxW
-         fqUcrYh40Somgp0DVYNl5tXPUZ8d/82XtpkL2epCx4RvSCSNsT/+QriD2w/UqSZQsfdn
-         HNXSv5WQLLnd3prgNKBdkJFc9AdInggQhxF1MmrdV0xCrgTn9ObPdATpVxmzp96c0WNZ
-         v4H8deaFO+tUx8f5nMU+sVHhxKRiFqVv65gbKr7viQyaooZLKrupBB2QZjiuNnDEIbmp
-         qBCOYUNhVXhF8e7eGjMUUIKWOEco0a26mFyGb4j8pyiJYrlQcEaKxmXnI/Mv+Sz6kas2
-         z6Kw==
-X-Gm-Message-State: AOJu0YynmYUIdH1psGeREn5diTvKoCoKsJJyOceMjURYZgwlRPeZ9fsd
-	Cs4EmWih/Fn6crMRJ6F8DDoeLc65X7hKV5Lqgq9Aa1WptyUuaSTWZ5Ny0vSXPeWDe3eR3qot9E9
-	38HuUaypzQWJTpuIgouxfigBLxchoqEiu+4pDedzmdh03kW2Mc4sZzByRWh04tA==
-X-Gm-Gg: ASbGncsSM7W0nZuk3MpAruygyC8jipTp4hUFDVvmPiHgW/6nyBa4mnvJfS7oV5nWVPT
-	fpScitypKFJJ4/vy15TFqDIv09JVRw/t1EEubASC9Wl2Yaq+U7QFIc19+N4Gx9GCp7iEeCMmKt6
-	tszyOEEZxe+Bqbc7kWEoGsktDLs+NY1zS7yjIasnZeGj87atMTJorNCut6gSYo9vPUe7GDW0lTb
-	3HH/ODXCzsTU4DwwrCV/HFvuseHrPQ0xZYd+KjADG/Ueg8ns+3D/006XTpd2mOOI2JrW58hszYs
-	lt/Gvk9Iie9vxuXyVzp7M/8V9rBIiod5qyOiXS3s/Zn72xctI5KIjrPShUQxB37PHO0NYBRoK9e
-	yx4nk1Yv9UhiOGnBqtwkRuA==
-X-Received: by 2002:ac8:5804:0:b0:4b2:b591:4602 with SMTP id d75a77b69052e-4b313f0e2ebmr130498461cf.9.1756813645506;
-        Tue, 02 Sep 2025 04:47:25 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEa/TiGzm5CdFf5W/mtmjzpcHIClEM9pOfrKxv/RTV2a1ZzxsQKuK48Yvc6XvUx5Q34m34s4w==
-X-Received: by 2002:ac8:5804:0:b0:4b2:b591:4602 with SMTP id d75a77b69052e-4b313f0e2ebmr130498241cf.9.1756813645033;
-        Tue, 02 Sep 2025 04:47:25 -0700 (PDT)
-Received: from [192.168.149.223] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b041f00d4c2sm571868366b.97.2025.09.02.04.47.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Sep 2025 04:47:24 -0700 (PDT)
-Message-ID: <6f9b7f9d-9ec7-4827-b6d5-51c42b5eb7b9@oss.qualcomm.com>
-Date: Tue, 2 Sep 2025 13:47:21 +0200
+	s=arc-20240116; t=1756813666; c=relaxed/simple;
+	bh=gAWv/p7BEF+KhNFGeotQ/1FrGNmecWyX1X5tGPHcCbM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=DUVymcAmNrmoSwQ0sxNi5UCk7K0Av9KqLQlO4IuHMACbdP+xfK/gR6RGhuv1TcIhDOWYXWoogC/8X3ZOYLA5ruoWt5WferrdOSX++IlBClivx3VQ4uJd7+mr/8YBuPN9BN1XF2nuEqlFnsisjFqiyRah7NIVcljrw92o/o2rGto=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HPfsH/6Z; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B89A4C4CEFB;
+	Tue,  2 Sep 2025 11:47:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756813665;
+	bh=gAWv/p7BEF+KhNFGeotQ/1FrGNmecWyX1X5tGPHcCbM=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=HPfsH/6ZQcNOGF26sYaQeEFwmNMIdemb3Sta1S24MP4Zqrzhp4xCYmME5rlpIalRH
+	 wypS78addLryNXm+pxr8ZGRJ6CcNSwygSiD1yVSMsso71z9NbVxptxqSwM6eYw/hYg
+	 E0n3a2RupUKViIi/xlJEoNXhZ7BEfE1ktdGaf5/LFZ2Ez9stJf6othwGdlk629boGF
+	 /qfOkz7gPd4OTUDCeTkBwoG5jhFrt7JDvzdGAjA8tfRoviw73ahpeW1eDDr4LJyfaL
+	 kf0/YFTRyn96EDkuB2SQEiQU90yOjmPyWIIFwn87EXpdsYgRoiI9E5Ci5ZKOtauLQA
+	 Z0F2061pPrGmQ==
+Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-74382048b8cso3236488a34.3;
+        Tue, 02 Sep 2025 04:47:45 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUVyZzEvDrpJiYpGPI18U++0rHWEWScfMbN+8RsmUNgReancPWdbpTviAo4PG0Yu53eShXJnkTrBOjPj659@vger.kernel.org, AJvYcCUx1L6stu8U7sZnJp72GOudNHstfwvOjUOQk855W1Uu6IzLyqVzgdL/ajHiLKPF/ruufMYSHpszEwg=@vger.kernel.org, AJvYcCWp/HlUVkWFej94prIo50z3kdd9jANokP5ZRNMo0bmok0m7ZISSXOOnmhlZ+PQ/E23KBSESreU4SjUsrg==@vger.kernel.org, AJvYcCWrK1n3rH1E6Cw0pywubB8/FWao+M0dXPSvp5W349D6enXAACrc0ojv8yK7hiu31Re7bGtaC3y8S2w2@vger.kernel.org
+X-Gm-Message-State: AOJu0YxtA9p452iUBSYwF/IzrtQfQy8BBTDGS20i+GvQd9Iu5RCJry85
+	mrrOLcJIQkmgHR6usm06eqcMXoCLSZ+Aba2as7zkA8nUYgQ8iwlQDPpqdUORHr6H6eQqBZC7ytA
+	BNCmoenoubEmtvfE7KGxY+m3v0Dvenaw=
+X-Google-Smtp-Source: AGHT+IECJJHjGAnU1NUr4ozcxCWnRFCL9WRpq+BEhjBinEbwysmqVcNyjx+zeZUwmYMUKeDdT6dFc6CYWYPr3CoZ3wk=
+X-Received: by 2002:a05:6830:3746:b0:743:8af2:1b0e with SMTP id
+ 46e09a7af769-74569e90f29mr6034860a34.19.1756813664724; Tue, 02 Sep 2025
+ 04:47:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/3] arm64: dts: qcom: sm8450: Add opp-level to
- indicate PCIe data rates
-To: Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
-        Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20250819-opp_pcie-v3-0-f8bd7e05ce41@oss.qualcomm.com>
- <20250819-opp_pcie-v3-2-f8bd7e05ce41@oss.qualcomm.com>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <20250819-opp_pcie-v3-2-f8bd7e05ce41@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODMwMDAxOSBTYWx0ZWRfXxS08pgYOPSrD
- yyCOI+ium/n7s7j82Gchlb/i8cEILMUBp3A0AHLarI3Q6EemyPDQpBrcvZgBqtCfPanAG4AMm/4
- Hm240nxbAhOM9WA5F+E+imEO6GtxLtOx71NHsEaY8A22U6nZhA8GjaRYBD4v6T8G0h+CR7w5YP/
- TiWsdJ9YfCv+a2LBDVzRccSZYPDL4F+zOEiqqgVu8G7hW+PIO4RrSCN+c+gFVe8K51IKm6w0ns2
- AMtZ4Nny10MaOJ9NUpxSoXvguEUMB/G/sAsHZR8Eenb/ecx8LLi4yA5UGiX79DiwJOKgP6zZAxz
- Bw021ZHxGroDy96Twju+Hz4CMnNaIrnXlfkygH/dfNcpFuJyNn2dPiJlmNhfYzKNr4UgpfCyiOW
- 9xr/SZG/
-X-Proofpoint-GUID: dAAoTUBxDgsvLwVV6KANtfTCGct_PKUf
-X-Proofpoint-ORIG-GUID: dAAoTUBxDgsvLwVV6KANtfTCGct_PKUf
-X-Authority-Analysis: v=2.4 cv=PNkP+eqC c=1 sm=1 tr=0 ts=68b6d94f cx=c_pps
- a=WeENfcodrlLV9YRTxbY/uA==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
- a=IkcTkHD0fZMA:10 a=yJojWOMRYYMA:10 a=EUspDBNiAAAA:8 a=6pHcnep46kEejBPVP2gA:9
- a=QEXdDO2ut3YA:10 a=kacYvNCVWA4VmyqE58fU:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-09-02_03,2025-08-28_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 bulkscore=0 priorityscore=1501 impostorscore=0 clxscore=1015
- suspectscore=0 adultscore=0 phishscore=0 malwarescore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2508300019
+References: <20250901085748.36795-1-zhangzihuan@kylinos.cn>
+ <20250901085748.36795-4-zhangzihuan@kylinos.cn> <CAJZ5v0hu48NrMr6Vkjn_UyHywJMx7F5N6yWf2LiXxykZF79EKA@mail.gmail.com>
+ <29890791-4ddf-49c7-a4f2-0ac83e6d53c6@kylinos.cn>
+In-Reply-To: <29890791-4ddf-49c7-a4f2-0ac83e6d53c6@kylinos.cn>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 2 Sep 2025 13:47:33 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0jvOKeLRkjWoKR5eVKZ-hib7c8D-VOBvtCvs1+HGfPUiQ@mail.gmail.com>
+X-Gm-Features: Ac12FXxFwO1d3JYj5phS50T_U2DONG2wuxBfs8rK_GU-NaLU6wYAD3eFplzuixw
+Message-ID: <CAJZ5v0jvOKeLRkjWoKR5eVKZ-hib7c8D-VOBvtCvs1+HGfPUiQ@mail.gmail.com>
+Subject: Re: [PATCH v3 03/12] cpufreq: intel_pstate: Use scope-based cleanup helper
+To: Zihuan Zhang <zhangzihuan@kylinos.cn>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Krzysztof Kozlowski <krzk@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
+	Thierry Reding <thierry.reding@gmail.com>, MyungJoo Ham <myungjoo.ham@samsung.com>, 
+	Kyungmin Park <kyungmin.park@samsung.com>, Chanwoo Choi <cw00.choi@samsung.com>, 
+	Jani Nikula <jani.nikula@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
+	Tvrtko Ursulin <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>, 
+	Simona Vetter <simona@ffwll.ch>, Daniel Lezcano <daniel.lezcano@kernel.org>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Shawn Guo <shawnguo@kernel.org>, 
+	Eduardo Valentin <edubezval@gmail.com>, Keerthy <j-keerthy@ti.com>, Ben Horgan <ben.horgan@arm.com>, 
+	zhenglifeng <zhenglifeng1@huawei.com>, Zhang Rui <rui.zhang@intel.com>, 
+	Len Brown <lenb@kernel.org>, Lukasz Luba <lukasz.luba@arm.com>, 
+	Pengutronix Kernel Team <kernel@pengutronix.de>, Beata Michalska <beata.michalska@arm.com>, 
+	Fabio Estevam <festevam@gmail.com>, Pavel Machek <pavel@kernel.org>, Sumit Gupta <sumitg@nvidia.com>, 
+	Prasanna Kumar T S M <ptsm@linux.microsoft.com>, Sudeep Holla <sudeep.holla@arm.com>, 
+	Yicong Yang <yangyicong@hisilicon.com>, linux-pm@vger.kernel.org, 
+	linux-acpi@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+	linux-arm-kernel@lists.infradead.org, intel-gfx@lists.freedesktop.org, 
+	dri-devel@lists.freedesktop.org, imx@lists.linux.dev, 
+	linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 8/19/25 7:34 AM, Krishna Chaitanya Chundru wrote:
-> Add opp-level to indicate PCIe data rates and also define OPP enteries
-> for each link width and data rate. Append the opp level to name of the
-> opp node to indicate both frequency and level.
-> 
-> Signed-off-by: Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>
-> ---
+On Tue, Sep 2, 2025 at 12:33=E2=80=AFPM Zihuan Zhang <zhangzihuan@kylinos.c=
+n> wrote:
+>
+>
+> =E5=9C=A8 2025/9/1 23:17, Rafael J. Wysocki =E5=86=99=E9=81=93:
+> > On Mon, Sep 1, 2025 at 10:58=E2=80=AFAM Zihuan Zhang <zhangzihuan@kylin=
+os.cn> wrote:
+> >> Replace the manual cpufreq_cpu_put() with __free(put_cpufreq_policy)
+> >> annotation for policy references. This reduces the risk of reference
+> >> counting mistakes and aligns the code with the latest kernel style.
+> >>
+> >> No functional change intended.
+> >>
+> >> Signed-off-by: Zihuan Zhang <zhangzihuan@kylinos.cn>
+> >> ---
+> >>   drivers/cpufreq/intel_pstate.c | 8 +++-----
+> >>   1 file changed, 3 insertions(+), 5 deletions(-)
+> >>
+> >> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_ps=
+tate.c
+> >> index f366d35c5840..4abc1ef2d2b0 100644
+> >> --- a/drivers/cpufreq/intel_pstate.c
+> >> +++ b/drivers/cpufreq/intel_pstate.c
+> >> @@ -1502,9 +1502,8 @@ static void __intel_pstate_update_max_freq(struc=
+t cpufreq_policy *policy,
+> >>
+> >>   static bool intel_pstate_update_max_freq(struct cpudata *cpudata)
+> >>   {
+> >> -       struct cpufreq_policy *policy __free(put_cpufreq_policy);
+> >> +       struct cpufreq_policy *policy __free(put_cpufreq_policy) =3D c=
+pufreq_cpu_get(cpudata->cpu);
+> >>
+> >> -       policy =3D cpufreq_cpu_get(cpudata->cpu);
+> >>          if (!policy)
+> >>                  return false;
+> > The structure of the code is intentional here and there's no reason to
+> > change it.
+>
+>
+> Got it. Thanks for clarifying.
+>
+> So for this case the current structure is intentional -
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Note that I'm talking about this particular change only.  The other
+change in the $subject patch is fine.
 
-Are there any other SoCs affected?
+> should I also avoid similar changes in other drivers?
 
-Konrad
+That depends on who maintains them, which is why I wanted you to split
+the patch into smaller changes in the first place.
+
+My personal view is that code formatting changes, which effectively is
+what this particular one is, are pointless unless they make the code
+much easier to follow.
 
