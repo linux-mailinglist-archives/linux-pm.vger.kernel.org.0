@@ -1,47 +1,47 @@
-Return-Path: <linux-pm+bounces-33616-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33617-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB538B3F83F
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Sep 2025 10:24:12 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 675BAB3F841
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Sep 2025 10:25:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E14437A5576
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Sep 2025 08:22:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EF25318980B9
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Sep 2025 08:25:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FA992E7160;
-	Tue,  2 Sep 2025 08:23:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD7152E762E;
+	Tue,  2 Sep 2025 08:25:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="quANh/F8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bYCxO9xh"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10E4B2E612D;
-	Tue,  2 Sep 2025 08:23:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72EBD2E613A;
+	Tue,  2 Sep 2025 08:25:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756801439; cv=none; b=jj44UrVS8QJeFs1LrWpsO0T6GhwO6JEhORoFYHU9x7dmmvRwqpiCp98o80mJnptlkp3/mtItIbgIjs/Yrd9f/ZbPnqUdbdC1H1qENIaGS7o61CwyYfhYOvjBxUjTOZ5lJULCxB5NJ9m2tzoO+gMdkVkX+9etq8pfRpPC3P9/Y4s=
+	t=1756801526; cv=none; b=H8xL6bsmcuKTO4PkyrXjvdPFE4YGq81RItN1EZrLZeSTt4lTHwWanOaa5FR/EQiYLpE+3tog9XNy+o4K27D/Cc6xv76VKXyApd1RvfURQlfwCXYvQRR3vobzzImZohK4o1BQlSwLLorCfIbAocccJOi+ptS1gXfUAyEsKI81fOs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756801439; c=relaxed/simple;
-	bh=1ATwK9QeTQPiTLRp7e1b8aQrtqeEFUfLhDTxDp84PSc=;
+	s=arc-20240116; t=1756801526; c=relaxed/simple;
+	bh=m8v8Z7SngkH8vSoJlDA+lnDIPikSc2blJeJCqYOjf+w=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BEf0teLpfjEerTW+BzantJPIZh8N2dHsu5Ud82FHedJ3IsaIjTuoWBrOgcaWVhg5Q2OkthvaBSN/hdsqfKIx1TpjqBElQoKrbL2oYq7XUwdn5DfOxRvRysubmlcUi/BSIhKg2eVvdofcDG2ujoi3hZ2/+/6DRdabQ5YfJrPTYUY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=quANh/F8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76D06C4CEED;
-	Tue,  2 Sep 2025 08:23:58 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=h1yzPrdoYrM1LTkFI05fS5/VYNwCiaU/AI0EEPGI96XwqUTK/pjPk75zya1cytpmJcoEbuXvbtOiwmc8X6INiU+/Cz3R8j5INJHFFakgR8YyikS9I+w+We/T8OT/2lZMPZqpKCo/xVd7E4IkiWH/xdxzb8I8H0Dd4SPLSHT/XRw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bYCxO9xh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 673B0C4CEED;
+	Tue,  2 Sep 2025 08:25:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756801438;
-	bh=1ATwK9QeTQPiTLRp7e1b8aQrtqeEFUfLhDTxDp84PSc=;
+	s=k20201202; t=1756801526;
+	bh=m8v8Z7SngkH8vSoJlDA+lnDIPikSc2blJeJCqYOjf+w=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=quANh/F8Q8ySKbjfQo9wpn+67nUYriaEUG9upUzUsFxoPSaI8gHBbtavupzn7TaTG
-	 YjGCsrm1yPeRAC9kERMQLFeY0OrCtCumwf+nHwcOT+yejC7zNJoR28fgn+kfMinRe7
-	 xF8pdUfgpKrM+avje5qS68of1z2MiTfQQlOGqRcEyrU7r/LTyrgPl8kPcH6MEQWKDr
-	 ROUxTqpGSu6kL2wKwdJnyI7IWERufXJ45R1t1Yv4cRKepliy5ptM2TAJ/NC9HuDD4G
-	 fKb33mlqJyhB2lQVkVI8191p1BFI7na5ibMYr79NeXBAaYG+G2IKU7UHU3Syhz2ZGp
-	 YzPZWSBmob8cg==
-Date: Tue, 2 Sep 2025 10:23:56 +0200
+	b=bYCxO9xhKI+J4Z0cCZGTWK2Cd8xdhI2mwnHNJeUJFMlZqHqEK7daaq5H3KwNzXHHr
+	 FL8QqfQ74EzpjgA6NAOJPADBi+pxpfU87Cj/iU8cQt9GYdx/xIMJ8S04s+MhWaU6Cg
+	 n7MJS0Q9r8LStepZu7D/plyXTd8nJB9JExDahBRUJlCCNGTZd0lkZBBGvDdsDlLvYL
+	 Rr7E+E1jj9O+irwBVgK1tXesEjrwDOAvbumukYoZYYwgPvyhoHgAMJrEJgFycPZDFX
+	 GXVu5a11FzlOJRqucKl5loe/cSkRiStX6kANkPiygeG+9cXgEBu18IGxXa08JxHOCn
+	 zExKh0ylyzvFQ==
+Date: Tue, 2 Sep 2025 10:25:23 +0200
 From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Aaron Kling <webgeek1234@gmail.com>
 Cc: Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
@@ -49,10 +49,11 @@ Cc: Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
 	"Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
 	Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
 	linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 0/8] Support dynamic EMC frequency scaling on
- Tegra186/Tegra194
-Message-ID: <20250902-glittering-toucan-of-feminism-95fd9f@kuoka>
+Subject: Re: [PATCH 2/8] dt-bindings: tegra: Add ICC IDs for dummy memory
+ clients for Tegra194
+Message-ID: <20250902-curious-cooperative-agouti-1efdcd@kuoka>
 References: <20250831-tegra186-icc-v1-0-607ddc53b507@gmail.com>
+ <20250831-tegra186-icc-v1-2-607ddc53b507@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -61,18 +62,24 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250831-tegra186-icc-v1-0-607ddc53b507@gmail.com>
+In-Reply-To: <20250831-tegra186-icc-v1-2-607ddc53b507@gmail.com>
 
-On Sun, Aug 31, 2025 at 10:33:48PM -0500, Aaron Kling wrote:
-> This series borrows the concept used on Tegra234 to scale EMC based on
-> CPU frequency and applies it to Tegra186 and Tegra194. Except that the
-> bpmp on those archs does not support bandwidth manager, so the scaling
-> iteself is handled similar to how Tegra124 currently works.
+On Sun, Aug 31, 2025 at 10:33:50PM -0500, Aaron Kling wrote:
+> Add ICC IDs for dummy software clients representing CCPLEX clusters.
 > 
+> Signed-off-by: Aaron Kling <webgeek1234@gmail.com>
+> ---
+>  include/dt-bindings/memory/tegra194-mc.h | 6 ++++++
+>  1 file changed, 6 insertions(+)
+>
 
-Three different subsystems and no single explanation of dependencies and
-how this can be merged.
+Please use subject prefixes matching the subsystem. You can get them for
+example with 'git log --oneline -- DIRECTORY_OR_FILE' on the directory
+your patch is touching. For bindings, the preferred subjects are
+explained here:
+https://www.kernel.org/doc/html/latest/devicetree/bindings/submitting-patches.html#i-for-patch-submitters
 
+dt-bindings: memory: tegra194-mc: (or nvidia,tegra194-mc)
 
 Best regards,
 Krzysztof
