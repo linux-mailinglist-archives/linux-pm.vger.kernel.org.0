@@ -1,273 +1,142 @@
-Return-Path: <linux-pm+bounces-33661-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33662-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 69F87B40BE8
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Sep 2025 19:22:14 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 451C6B40D19
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Sep 2025 20:23:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 150E77ABB38
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Sep 2025 17:20:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 15159563532
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Sep 2025 18:23:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3578C341646;
-	Tue,  2 Sep 2025 17:22:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E367B34AAED;
+	Tue,  2 Sep 2025 18:23:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VNlDoo4a"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="OmAC73NJ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AF9F4C9D;
-	Tue,  2 Sep 2025 17:22:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756833725; cv=none; b=PEmGPTIzqDYxJAt6QpfJ3nY3ovE4Rz3xbk7ebFwrCWxZqCCFvBnFGKay3/pRuH5+3iF/MREsUzG9bDJcWgtlx9/+r87TIqEH0e1Vtl/BUbhqrVK9CEPUn4qFp8ZtMLi9QysW8TrXqwGFV9EH5eVc+4ANfBmsMLXE/4rxF/+9xmk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756833725; c=relaxed/simple;
-	bh=B6M7C6RAvQGIo2fAq8KjeI0slfKrcN2+BChM7Fx5Yek=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CrK0IEDCRusCHGNZzFJ5A8sH44LqTBKKXNMSBM4yVkhUSc1D3hnja/GPgLSiVq+b5+oAaTYQmwOj8IzEjDWYJc2UIP++nByYZuMifLwx5zNRMvKIvhyUz6LW3PfPCUoLYv4jx8PgDzaV2v+4Deupxem5Ux5CkX98CIJFggRtVzo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VNlDoo4a; arc=none smtp.client-ip=209.85.167.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-55f74c6d316so3070315e87.0;
-        Tue, 02 Sep 2025 10:22:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756833721; x=1757438521; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UHL/9iHScP0f81WBDBOizsme4Dv5vS87EI96jZlcSN0=;
-        b=VNlDoo4aabpzvnbp+UD/sxN7uinL2Th/IL3DVcU9Gpki4+6sxp2sVDtAARO2GhoZdQ
-         3Cw5XKrTM7wub1dUyLuSEr43ZP69TrKyY68pvUguQf4CjO3RbL64NGsJfy+eZrnd46Bm
-         oSh7kHDgZFAWsIs8DHTJaTVMFnOT/4wwNiwk5aINdSVx3kznQ/bAWMiXtoSklJIGRrdf
-         p3tt3LgpBiM0H0DUWJephh0rRd68wruoHTkURT+SEsR4chhGTFguej4JWpvTWHaBTAsW
-         qRIsyox1WSGhJ9y5bMILn9e3KUEkSz4jXYdjAML1q9AFW5i8Q9D1ud37n/aaDjKPNYUx
-         7YZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756833721; x=1757438521;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UHL/9iHScP0f81WBDBOizsme4Dv5vS87EI96jZlcSN0=;
-        b=g79gPu7YLF0TsmSZWA1PSa0db4TTNbSHNK1rd4Xm8VCZPRKOwVeG6Uzogml+7MI/UF
-         tQrWho/qF7ecvK89WR7uK/su3LdE99mIPTXM/1+GmzG1bFja0dmdwc5BzwXOq7BTjfqF
-         Kj6+mjKLnNOO7o1poNSBCi/6nHZyx+PfFQ5n/uA0BzDT4nwxWNaWpd/KwphD54i7bSmD
-         /qrRegUxUtTg6bt0Cknw+Evqn2wRjZ1RTPsSwYuQAwfpk5NAdyi1ORKX/HJAhwetpaIi
-         2jvVfSodyyJCQcD/wBlVSph24ucJkDqDk0li59Pzh3GuyhDYKjBNiw+eDEXuUWt0Wzgq
-         rkMQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUC+DyHkKepa4K/jpZdlgYGA+vIxWI513Im26ziCtjuyFz+lLO7DwvK7wWsyr/OFj+35/LVkhtDHXOEOAM=@vger.kernel.org, AJvYcCUFXJsNtGZs3YJbOTU0dHFlf5AAa39t7ihWgliANvOM5RdkxxkQxnCFp85EMpNx7TjviP/6PeMDzShInzAY@vger.kernel.org, AJvYcCVVr5Tm6Ttx9rneoZexUZW+or/kQsQCwiOUGtY22H8gO4cAqIO9IEKbNapV77CBpGNzyPOjyDsCSknu@vger.kernel.org, AJvYcCW0w4zVmTbvOFXLrraYAz3QV3t4HpoQUosbD9pot3Rahlh/BegTTKV0X7sL46P8YfqzEx9soDgphWo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyJhA1bACAwP99VB6aJ/qmURmn3vVnUFAd+MZCgOXGuwy8LHN01
-	ByMpAl1S+4l+USC4500G/AU0x6ACnjXhnWFr6uzvshb5AiJPRY534Rns3cDC39ZGGzdinjTcTv9
-	rUef/h6Z1YvXyRphpxqqzLMyrzc0/Lh4=
-X-Gm-Gg: ASbGncusWsZhIbDHxiv4o1I4rcm++zwToBS4wlFXfVJx3s46XIkY4u3F9AhBzjsLRWY
-	dXXS8b37zaE7KJL81UnH1CnSxJr7to0ayunv233pvjF6rvMQMCBmDoLmOuJ667IfpGV478xMjQU
-	hOsYn8lbpd8OXPJWmVmMaU51+GkPToB3C5DqkLMIIL9a7GFBWVJiPKATnTDFkbJqgcq2RAYtB6r
-	+QB0nzfv8z1ijutAQ==
-X-Google-Smtp-Source: AGHT+IE8oTTq+xEDbODxk6NkVp632kFnXlauLi5KyQdm1eD41EnADMVC5Pj54/S9hW5DBLjU9xVeRCbpJzdGAY5g6ME=
-X-Received: by 2002:a05:6512:6812:b0:55f:44b8:1eda with SMTP id
- 2adb3069b0e04-55f709c5066mr3203274e87.57.1756833720986; Tue, 02 Sep 2025
- 10:22:00 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA6B8342CAC;
+	Tue,  2 Sep 2025 18:23:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1756837425; cv=pass; b=h/nIbSp/dIUVcLs3sRjPhOX+DWbsnCGu77WztxUxnXy+YhfRc2Ag9Z3st87SH3Hf8BkDIMu+X5Vza2v5gmAQvgVltiZMHyJiTgmxzqRL10U/nm4lbWi4ZtAmsXzjH+yGAWKn7KBRW0RycHnj6zXT2I5oXh9USbtYPHRfnOw+mEI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1756837425; c=relaxed/simple;
+	bh=86yFnlbFgfJOZ1JVMwGweD0cPnE4acOJf3zcLI5fsQU=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=BRnKU2LbyoquCMSQRexToQoCuEgjGq8oWB/qERzW2GQsY1+le9kWYfck8ZLRhQPhoIlV/IKSkkbDl+5hCsGc2BuYwjfao656G264c3eWRDBQSBi+CLiuyew923S1BwwqjMXXN4Y15tJEyQJT+aql6OrAi6csQeBBWkG7Hz2sGew=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=OmAC73NJ; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1756837404; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=iVaC1acz+cP2ZbGgsiwgo01uh/ELXH7m4/LAWjXSvaz47uaJMb2tsZOwpA9EMdRICSZMZtWP5LFhmXNM5rb0F5DW86rY04Qm6oEMYkWljZTZLpxcY7tJpexHerZK9JphzL09YFfW++8y7qI4rJ3OdVutRcxuE2VEijk/m3++Nb4=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1756837404; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=BCFlD1zHgQgM4xri0/j82ex/DVmcdA0YHQ4MAtyH7xs=; 
+	b=asOwdXhamGQusT7/wMBK3mxp0Jye+ZDAZN8aDoTpGXFxc0uoC4IpbcSQwPJVxztRcRparxiiE+j9rmuOxdJYnt7Gu6Wp3d00R0iwN1hhg5T6xWaU0shXHZqiwAOg/MlG7g3dqI0Xux7UZiWp39PamO66/529bK5mfZEvddWYGi4=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
+	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1756837404;
+	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
+	h=From:From:Date:Date:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Message-Id:To:To:Cc:Cc:Reply-To;
+	bh=BCFlD1zHgQgM4xri0/j82ex/DVmcdA0YHQ4MAtyH7xs=;
+	b=OmAC73NJoqFQKkZxTWM+3KfV6EGtWhyv8kt0G/CjhzhvFcvW8UyMEOHxjcoA3N7F
+	e73dZRt8XRh9rOWAQXEiMPCLQw1eol5TZlXby+f22f004zYxImj3KbTbwqTvaD6ORHm
+	aNRuQipJseF15Ml9savpQ9KxIoFzkmzf33o9425I=
+Received: by mx.zohomail.com with SMTPS id 1756837403727645.9913468928908;
+	Tue, 2 Sep 2025 11:23:23 -0700 (PDT)
+From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+Date: Tue, 02 Sep 2025 20:23:04 +0200
+Subject: [PATCH] pmdomian: core: don't unset stay_on during sync_state
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250831-tegra186-icc-v1-0-607ddc53b507@gmail.com>
- <20250831-tegra186-icc-v1-3-607ddc53b507@gmail.com> <20250901055322.eorgaa3sycydjrrj@vireshk-i7>
-In-Reply-To: <20250901055322.eorgaa3sycydjrrj@vireshk-i7>
-From: Aaron Kling <webgeek1234@gmail.com>
-Date: Tue, 2 Sep 2025 12:21:48 -0500
-X-Gm-Features: Ac12FXwAMFX1p_PsOnmUDjM6sbNKJYvGiQz3wZmgcPdZm7OguorJSHmUZJm_-T4
-Message-ID: <CALHNRZ_EbtHSXaDQ+1gGf3HjdyW5Q54EDN901-r8A_aXLbDJkw@mail.gmail.com>
-Subject: Re: [PATCH 3/8] cpufreq: tegra186: add OPP support and set bandwidth
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>, Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Thierry Reding <thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-kernel@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-tegra@vger.kernel.org, 
-	linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250902-rk3576-lockup-regression-v1-1-c4a0c9daeb00@collabora.com>
+X-B4-Tracking: v=1; b=H4sIAAc2t2gC/yWNQQ6CMBBFr9LM2jFttTRyFcOC1ik2CMUpEBPC3
+ a2yfD9572+QiSNlqMUGTGvMMY0F1EmAf7ZjRxgfhUFLbeRNauT+YmyFr+T7ZUKmjin/JDROBRW
+ cDUErKPrEFOLnn743BzO9l/IwHyO4NhP6NAxxrsVanZVF9ldo9v0LIgl9dpcAAAA=
+X-Change-ID: 20250902-rk3576-lockup-regression-5b1f1fb7ff21
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ kernel@collabora.com, linux-rockchip@lists.infradead.org, 
+ Cristian Ciocaltea <cristian.ciocaltea@collabora.com>, 
+ Sebastian Reichel <sebastian.reichel@collabora.com>, 
+ Heiko Stuebner <heiko@sntech.de>, 
+ Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+X-Mailer: b4 0.14.2
 
-On Mon, Sep 1, 2025 at 12:53=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.o=
-rg> wrote:
->
-> On 31-08-25, 22:33, Aaron Kling via B4 Relay wrote:
-> > diff --git a/drivers/cpufreq/tegra186-cpufreq.c b/drivers/cpufreq/tegra=
-186-cpufreq.c
-> > index bd94beebc4cc2fe6870e13ca55343cedb9729e99..f0abb44e2ed00a301161565=
-e4c4f62cfed4a5814 100644
-> > --- a/drivers/cpufreq/tegra186-cpufreq.c
-> > +++ b/drivers/cpufreq/tegra186-cpufreq.c
-> > @@ -18,6 +18,7 @@
-> >  #define EDVD_CORE_VOLT_FREQ_F_SHIFT  0
-> >  #define EDVD_CORE_VOLT_FREQ_F_MASK   0xffff
-> >  #define EDVD_CORE_VOLT_FREQ_V_SHIFT  16
-> > +#define KHZ                          1000
->
-> Can reuse:
->
-> include/linux/units.h:#define HZ_PER_KHZ                1000UL
+This reverts commit de141a9aa52d6b2fbeb63f98975c2c72276f0878.
 
-Will do.
+On RK3576, the UFS controller's power domain has a quirk that requires
+it to stay enabled, infrastricture for which was added in Commit
+cd3fa304ba5c ("pmdomain: core: Introduce dev_pm_genpd_rpm_always_on()").
 
->
-> > +static int tegra_cpufreq_set_bw(struct cpufreq_policy *policy, unsigne=
-d long freq_khz)
-> > +{
-> > +     struct tegra186_cpufreq_data *data =3D cpufreq_get_driver_data();
-> > +     struct dev_pm_opp *opp;
-> > +     struct device *dev;
-> > +     int ret;
-> > +
-> > +     dev =3D get_cpu_device(policy->cpu);
-> > +     if (!dev)
-> > +             return -ENODEV;
-> > +
-> > +     opp =3D dev_pm_opp_find_freq_exact(dev, freq_khz * KHZ, true);
-> > +     if (IS_ERR(opp))
-> > +             return PTR_ERR(opp);
-> > +
-> > +     ret =3D dev_pm_opp_set_opp(dev, opp);
->
-> Won't it be easier to use dev_pm_opp_set_rate() instead ?
+Unfortunately, Commit de141a9aa52d ("pmdomain: core: Leave powered-on
+genpds on until sync_state") appears to break this quirk wholesale. The
+result is that RK3576 devices with the UFS controller enabled but unused
+will freeze once pmdomain shuts off unused domains.
 
-I'm not very familiar with the opp system. If I read correctly,
-dev_pm_opp_set_rate() will round to the closest rate while this code
-will fail if the exact rate isn't found. This code is based on the
-existing tegra194-cpufreq driver. And I'm unsure if this was done for
-a reason. I have seen unexpected rates returned from clk_round_rate in
-the development of this topic, so that could be related.
+Revert it until a better fix can be found.
 
->
-> > +     if (ret)
-> > +             data->icc_dram_bw_scaling =3D false;
-> > +
-> > +     dev_pm_opp_put(opp);
->
-> The OPP core supports scope based cleanup helpers now, maybe use them
-> to remove all these put calls.
+Fixes: de141a9aa52d ("pmdomain: core: Leave powered-on genpds on until sync_state")
+Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+---
+ drivers/pmdomain/core.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-I will look into this.
+diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
+index 0006ab3d078972cc72a6dd22a2144fb31443e3da..4eba30c7c2fabcb250444fee27d7554473a4d0c2 100644
+--- a/drivers/pmdomain/core.c
++++ b/drivers/pmdomain/core.c
+@@ -1357,7 +1357,6 @@ static int genpd_runtime_resume(struct device *dev)
+ 	return ret;
+ }
+ 
+-#ifndef CONFIG_PM_GENERIC_DOMAINS_OF
+ static bool pd_ignore_unused;
+ static int __init pd_ignore_unused_setup(char *__unused)
+ {
+@@ -1393,7 +1392,6 @@ static int __init genpd_power_off_unused(void)
+ 	return 0;
+ }
+ late_initcall_sync(genpd_power_off_unused);
+-#endif
+ 
+ #ifdef CONFIG_PM_SLEEP
+ 
+@@ -3494,7 +3492,6 @@ void of_genpd_sync_state(struct device_node *np)
+ 	list_for_each_entry(genpd, &gpd_list, gpd_list_node) {
+ 		if (genpd->provider == of_fwnode_handle(np)) {
+ 			genpd_lock(genpd);
+-			genpd->stay_on = false;
+ 			genpd_power_off(genpd, false, 0);
+ 			genpd_unlock(genpd);
+ 		}
+@@ -3522,7 +3519,6 @@ static void genpd_provider_sync_state(struct device *dev)
+ 
+ 	case GENPD_SYNC_STATE_SIMPLE:
+ 		genpd_lock(genpd);
+-		genpd->stay_on = false;
+ 		genpd_power_off(genpd, false, 0);
+ 		genpd_unlock(genpd);
+ 		break;
 
->
-> > +     return ret;
-> > +}
-> > +
-> > +static int tegra_cpufreq_init_cpufreq_table(struct cpufreq_policy *pol=
-icy,
-> > +                                         struct cpufreq_frequency_tabl=
-e *bpmp_lut,
-> > +                                         struct cpufreq_frequency_tabl=
-e **opp_table)
-> > +{
-> > +     struct tegra186_cpufreq_data *data =3D cpufreq_get_driver_data();
-> > +     struct cpufreq_frequency_table *freq_table =3D NULL;
-> > +     struct cpufreq_frequency_table *pos;
-> > +     struct device *cpu_dev;
-> > +     struct dev_pm_opp *opp;
-> > +     unsigned long rate;
-> > +     int ret, max_opps;
-> > +     int j =3D 0;
-> > +
-> > +     cpu_dev =3D get_cpu_device(policy->cpu);
-> > +     if (!cpu_dev) {
-> > +             pr_err("%s: failed to get cpu%d device\n", __func__, poli=
-cy->cpu);
-> > +             return -ENODEV;
-> > +     }
-> > +
-> > +     /* Initialize OPP table mentioned in operating-points-v2 property=
- in DT */
-> > +     ret =3D dev_pm_opp_of_add_table_indexed(cpu_dev, 0);
-> > +     if (!ret) {
->
-> If you handle the error case here, then the below can move out of the
-> if/else block.
+---
+base-commit: 5cc61f86dff464a63b6a6e4758f26557fda4d494
+change-id: 20250902-rk3576-lockup-regression-5b1f1fb7ff21
 
-I'd prefer not to deviate too much from the tegra194-cpufreq code this
-is based on, so the drivers can be more easily kept in parity to each
-other. But I will look at making this a bit cleaner as per this and
-the next comment.
+Best regards,
+-- 
+Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 
->
-> > +             max_opps =3D dev_pm_opp_get_opp_count(cpu_dev);
-> > +             if (max_opps <=3D 0) {
-> > +                     dev_err(cpu_dev, "Failed to add OPPs\n");
-> > +                     return max_opps;
-> > +             }
-> > +
-> > +             /* Disable all opps and cross-validate against LUT later =
-*/
-> > +             for (rate =3D 0; ; rate++) {
->
-> Maybe using while(1) would be more readable ?
->
-> > +                     opp =3D dev_pm_opp_find_freq_ceil(cpu_dev, &rate)=
-;
-> > +                     if (IS_ERR(opp))
-> > +                             break;
-> > +
-> > +                     dev_pm_opp_put(opp);
-> > +                     dev_pm_opp_disable(cpu_dev, rate);
-> > +             }
-> > +     } else {
-> > +             dev_err(cpu_dev, "Invalid or empty opp table in device tr=
-ee\n");
-> > +             data->icc_dram_bw_scaling =3D false;
-> > +             return ret;
-> > +     }
-> > +
-> > +     freq_table =3D kcalloc((max_opps + 1), sizeof(*freq_table), GFP_K=
-ERNEL);
-> > +     if (!freq_table)
-> > +             return -ENOMEM;
-> > +
-> > +     /*
-> > +      * Cross check the frequencies from BPMP-FW LUT against the OPP's=
- present in DT.
-> > +      * Enable only those DT OPP's which are present in LUT also.
-> > +      */
-> > +     cpufreq_for_each_valid_entry(pos, bpmp_lut) {
-> > +             opp =3D dev_pm_opp_find_freq_exact(cpu_dev, pos->frequenc=
-y * KHZ, false);
-> > +             if (IS_ERR(opp))
-> > +                     continue;
-> > +
-> > +             dev_pm_opp_put(opp);
-> > +
-> > +             ret =3D dev_pm_opp_enable(cpu_dev, pos->frequency * KHZ);
-> > +             if (ret < 0)
-> > +                     return ret;
-> > +
-> > +             freq_table[j].driver_data =3D pos->driver_data;
-> > +             freq_table[j].frequency =3D pos->frequency;
-> > +             j++;
-> > +     }
-> > +
-> > +     freq_table[j].driver_data =3D pos->driver_data;
-> > +     freq_table[j].frequency =3D CPUFREQ_TABLE_END;
-> > +
-> > +     *opp_table =3D &freq_table[0];
-> > +
-> > +     dev_pm_opp_set_sharing_cpus(cpu_dev, policy->cpus);
-> > +
-> > +     tegra_cpufreq_set_bw(policy, freq_table[j - 1].frequency);
->
-> Maybe a comment on why exactly you are changing the freq here ?
-
-To my knowledge, this does not change any clocks. The intent here is
-to prime the interconnect data. In the pre-req series, there's a
-change that sets all clocks to max frequency during probe. Then my use
-case involves setting performance governor by default on some boots.
-During testing, I noticed that the interconnect data provided by this
-driver was all zeroes. Which led me to notice that set_bw is only
-called when the target frequency changes. Which wasn't happening
-because clocks were already set to max. If my understanding here is
-wrong or there's a better way to handle this, I will fix it.
-
-Aaron
 
