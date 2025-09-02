@@ -1,327 +1,156 @@
-Return-Path: <linux-pm+bounces-33629-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33630-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A6323B3FD4C
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Sep 2025 13:06:45 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E484B3FDAE
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Sep 2025 13:21:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6F6BD2C18BF
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Sep 2025 11:06:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 159712C4866
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Sep 2025 11:21:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E91F02F3C1D;
-	Tue,  2 Sep 2025 11:06:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DBE32E92C5;
+	Tue,  2 Sep 2025 11:21:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="dz/JlEU0";
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="dz/JlEU0"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="KdXe8w0J"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from AM0PR02CU008.outbound.protection.outlook.com (mail-westeuropeazon11013026.outbound.protection.outlook.com [52.101.72.26])
+Received: from mout.web.de (mout.web.de [212.227.15.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEF4528505D;
-	Tue,  2 Sep 2025 11:06:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.72.26
-ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756811200; cv=fail; b=KqytbZDHgEI+gNs6ghqBNWSqmmsgDeh7gMfwvcsAlpwVwb7ArM7XCp604VAcuXJn9/fl11CMWr+F+dh6OyWQm2p1/M905YjZnXc6FZLC0gUoM6OBQ+mKFB/AyfVN5b/xhWO5R6W6sVBBrgNfzj9byoQD9/ALXEd9JZiXZrn6H2U=
-ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756811200; c=relaxed/simple;
-	bh=oJZCHkE+sM0UxdGsJy6eW7GI0RGPpYgIV8PAZYSikQE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=Uq5+ssFlXSWN/zOPj2Y3gHFk2c2i7irOKwpA9faqykycIxsmNhrvoHoXfO6cw6vHfp3rzKwuf3lZSv23qqG6/Z5RGJxppiqWkycrDE0IKKU5SxL4Ri/nc9r1AAqFoHi/sbrDgfRAD+S6eGBHIenLNrZto9ZqBTM75V6s+InUrsg=
-ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=dz/JlEU0; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=dz/JlEU0; arc=fail smtp.client-ip=52.101.72.26
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
- b=po1FJyLRP/nimXd43tXDrvtr2+AZcYnlZGH8Hrugi1TXaXKQcXx0IWznxxuFev3b9A0DPApgQygVLor0wGCm9wjtFzx4gVlS2gUmvAkrSQmPucDl2bualh9BPFBJhJd1NXqvoWrQSrBi/92GMizyYJ/KX4zgzlmacF9it+oJ386+lUBXIrsPBpU9Wajz5AR9GezfwSsmUJsPIjVaa4yW5KHmxjzIRxAR5kIyGVMqCpitg19nnZ2yERQ6VhSJW2tPMQD+aGwLGMmrPewZE7EQ7orvYQfk22t6JGKxod4EJsjmOqlE/EU2p4bKHAhDLJhQbLKd4o6lxaG70S9AoMKCqA==
-ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pwdV+dehK2QOZg6Gt2pn37MPgwsFmhnDm8kfR1mWyZc=;
- b=OyXr+mk/Ia6RJOZ8Tcj5q3cptrLTTEd/QirK++PP51cCOcH4YVUFX/9PGrufc4f4L8BNPJrE61aA18OGF+DnAZNaI2p6a959EjtIpCJYTglzuDS9AZBIk6rmYAQQA2Sgh57R8V78gPpKDgISYCFlm7g3B9YMwYE84iYpc8ZaSNB3T80N+6Ygs7jMfij7WfElzN/8XEJCWIHdMCePLv3f7mY9YXeCA9InjCnpv9/24XVKm3/pfIQqkKCSACs6wTwgbCaUTrKw88HptvH6aEYSX48PAp5Nux8Pa5txZC3YXGPOH9otZSwqltcuT3QLMEsDw/s2giZNHX1C30kmsfqInA==
-ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
- 4.158.2.129) smtp.rcpttodomain=kernel.org smtp.mailfrom=arm.com; dmarc=pass
- (p=none sp=none pct=100) action=none header.from=arm.com; dkim=pass
- (signature was verified) header.d=arm.com; arc=pass (0 oda=1 ltdi=1
- spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
- dmarc=[1,1,header.from=arm.com])
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pwdV+dehK2QOZg6Gt2pn37MPgwsFmhnDm8kfR1mWyZc=;
- b=dz/JlEU0jU6bVU2S0DV/SFmjOQWOl/KXIDpA0qbGXYoE3K47Gacq5Sm+xrFzFXLM48cPMAl/2xwmMEJ2S/U2N0Ax8rSaEKc8tFmKsbgFQuyLUow1coxmlBpJrIDbnAeXS0nLA/3mYqO1t6rvl7Xkxzt5H5pJ2/ttKr/wApgfM/k=
-Received: from DU2PR04CA0011.eurprd04.prod.outlook.com (2603:10a6:10:3b::16)
- by DU2PR08MB7326.eurprd08.prod.outlook.com (2603:10a6:10:2e5::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9094.16; Tue, 2 Sep
- 2025 11:06:31 +0000
-Received: from DB3PEPF00008860.eurprd02.prod.outlook.com
- (2603:10a6:10:3b:cafe::a3) by DU2PR04CA0011.outlook.office365.com
- (2603:10a6:10:3b::16) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9073.27 via Frontend Transport; Tue,
- 2 Sep 2025 11:06:31 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 4.158.2.129)
- smtp.mailfrom=arm.com; dkim=pass (signature was verified)
- header.d=arm.com;dmarc=pass action=none header.from=arm.com;
-Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
- 4.158.2.129 as permitted sender) receiver=protection.outlook.com;
- client-ip=4.158.2.129; helo=outbound-uk1.az.dlp.m.darktrace.com; pr=C
-Received: from outbound-uk1.az.dlp.m.darktrace.com (4.158.2.129) by
- DB3PEPF00008860.mail.protection.outlook.com (10.167.242.11) with Microsoft
- SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.9094.14
- via Frontend Transport; Tue, 2 Sep 2025 11:06:31 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=LNCieBYMUBTc3A0JlGsYIgQooYLZxGlY9nUXJ9ZzAlW43zDIpnXHYTnobJe9zl6kB2W5JxKeaa+i9rVJnAKCg8XVD9C/PJnWbehD9CdfMbNnYxT1TCrNHpO4kTBV0Qzsr/DI9ae6Zh3QNAKMY5f8entdNc6D5CUj8yIDriIEmU5KXpEo2f6hOwT84dvwGsH9GJBIARCrPemDXpBxclrkk1PcXJ8r9H4Y6Cv5GpTE9H3oqTeovVJisg7KsOGaf6CAcX2LP4I9ilHDAtHV7kzVPTtm7DdDuWNRQkVAky6uXOnsDZrxsexyx/rzB0F/9YZvj2L6Kv2UPebqwaRsnchhFw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pwdV+dehK2QOZg6Gt2pn37MPgwsFmhnDm8kfR1mWyZc=;
- b=hwy2X3dKYX7tDlJwnpucQDUe4RlF2hRiVGoXJRiStbKTUFhAi+3XE6t9IwJ3+7hsDBx2sM+na+hINFQPW3IVOiKy21V5CzZQvpXItR6PBYyis7qY2a5xWlcQiMxOXac1jHOisRoVRn5U8WPK2jqb6Danfn5pTiQB0EPOOwwL775RexIPgCcVuBuGxOHlCRTvkSKxFq0McEdatcEpHEZHvstVu2tImFq618LlX2il3XULAuaoR2byBk1Sq6SxzNNH+Ix3t7JMS19nJ2lpvSJlfKqkSInUNROuDgg8fxCmoHXAk1gAUfaEwjr/SkXvrbiUk0Vbmog7B+rV9OKpqHE3yA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
- header.d=arm.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pwdV+dehK2QOZg6Gt2pn37MPgwsFmhnDm8kfR1mWyZc=;
- b=dz/JlEU0jU6bVU2S0DV/SFmjOQWOl/KXIDpA0qbGXYoE3K47Gacq5Sm+xrFzFXLM48cPMAl/2xwmMEJ2S/U2N0Ax8rSaEKc8tFmKsbgFQuyLUow1coxmlBpJrIDbnAeXS0nLA/3mYqO1t6rvl7Xkxzt5H5pJ2/ttKr/wApgfM/k=
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-Received: from GV1PR08MB10521.eurprd08.prod.outlook.com
- (2603:10a6:150:163::20) by AS4PR08MB8069.eurprd08.prod.outlook.com
- (2603:10a6:20b:588::7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9073.27; Tue, 2 Sep
- 2025 11:05:54 +0000
-Received: from GV1PR08MB10521.eurprd08.prod.outlook.com
- ([fe80::d430:4ef9:b30b:c739]) by GV1PR08MB10521.eurprd08.prod.outlook.com
- ([fe80::d430:4ef9:b30b:c739%7]) with mapi id 15.20.9073.021; Tue, 2 Sep 2025
- 11:05:53 +0000
-Date: Tue, 2 Sep 2025 12:05:50 +0100
-From: Yeoreum Yun <yeoreum.yun@arm.com>
-To: Dave Martin <Dave.Martin@arm.com>
-Cc: catalin.marinas@arm.com, will@kernel.org, broonie@kernel.org,
-	oliver.upton@linux.dev, anshuman.khandual@arm.com, robh@kernel.org,
-	james.morse@arm.com, mark.rutland@arm.com, joey.gouly@arm.com,
-	ahmed.genidi@arm.com, kevin.brodsky@arm.com,
-	scott@os.amperecomputing.com, mbenes@suse.cz,
-	james.clark@linaro.org, frederic@kernel.org, rafael@kernel.org,
-	pavel@kernel.org, ryan.roberts@arm.com, suzuki.poulose@arm.com,
-	maz@kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	kvmarm@lists.linux.dev
-Subject: Re: [PATCH v4 2/5] arm64: initialise SCTLR2_ELx register at boot time
-Message-ID: <aLbPjmy/ZYSd+wzA@e129823.arm.com>
-References: <20250821172408.2101870-1-yeoreum.yun@arm.com>
- <20250821172408.2101870-3-yeoreum.yun@arm.com>
- <aLW4A3rTcJvA0c+j@e133380.arm.com>
- <aLXmCJOuxCHVXEYx@e129823.arm.com>
- <aLbJeQf9LKXFTxzS@e133380.arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <aLbJeQf9LKXFTxzS@e133380.arm.com>
-X-ClientProxiedBy: LO4P302CA0044.GBRP302.PROD.OUTLOOK.COM
- (2603:10a6:600:317::10) To GV1PR08MB10521.eurprd08.prod.outlook.com
- (2603:10a6:150:163::20)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1A6B274FCB;
+	Tue,  2 Sep 2025 11:21:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.14
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1756812112; cv=none; b=mJdP7Z9FIyfx7aRyFoyhyvdQoVnh2FxeMzFkuUOxzAq6YAi97/qiZzPMIgP6eQYKgRW2n20xrmWeEMa6HluyvFkFHIyab6Djrn9GJT/0+RjCKazKpfMA3tvJXtuzqW315i5DgCJQvIMTsRoFde47PN1OZ0ap+xW6QKUVBtUIwlw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1756812112; c=relaxed/simple;
+	bh=4NAU2fFUN4oBOnGRtO210Gil1SgW+nftUGXv/Nci2NM=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
+	 In-Reply-To:Content-Type; b=pc+I8Z0eT9p+8dQcb1hx/Yj5fbgoSt5XBsgRCwR1chP5aEwr7HmU6q/GgiddtU34BJ+mNd12tza43Ef5wUXUDWGeSWkL/Z+uvOToVU6L5PH+sqd7ZUY8X3ZBt/9FnJblYG638oiW98HAub8c6ApgsKquFhdiB72HwQiHtkJP590=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=KdXe8w0J; arc=none smtp.client-ip=212.227.15.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1756812101; x=1757416901; i=markus.elfring@web.de;
+	bh=31kywrcRGSrYQdI1SUL49Ta8jxlih29MoES76Pc5fVs=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
+	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 cc:content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=KdXe8w0Jpu5vNzEbeiqSBdpoU3/BS5jSzZX+TYqScdiTzkm/VPTsyHz7QXnv3f5g
+	 W6bh8/SAgJGaHvTAIRU0oxYw07VwEgpGkdDV/IhtRcBg6HkXYA9PhfwMB1++tyfXZ
+	 oQ14DrqgTztzc5C5zE1NPd2ySNrFI4VyZn0JHh5Vdmdg67VigsWTOwXG2R+sbhClu
+	 /imlJC8WOX5W8i1tonOeOqm9IzgfkbY5WXyNsqzNJmNqUFbNApwN0bbAeqnDoTE+S
+	 wU/pLqqPEC31Fv6oULYBo8+AI+JpGi0Agvw3eaT3DsUNTqSRJOqv6ey0dQAKVoo4E
+	 FLvLVr0j8qj1vHxYtA==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.29] ([94.31.69.184]) by smtp.web.de (mrweb006
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 1MnG2C-1uACyP1sSC-00lGnm; Tue, 02
+ Sep 2025 13:21:41 +0200
+Message-ID: <6b83923f-ce62-49be-b211-de9e518d3d6e@web.de>
+Date: Tue, 2 Sep 2025 13:21:40 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-TrafficTypeDiagnostic:
-	GV1PR08MB10521:EE_|AS4PR08MB8069:EE_|DB3PEPF00008860:EE_|DU2PR08MB7326:EE_
-X-MS-Office365-Filtering-Correlation-Id: 882dd958-5d74-406b-8999-08ddea10c58f
-x-checkrecipientrouted: true
-NoDisclaimer: true
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted:
- BCL:0;ARA:13230040|376014|7416014|366016|1800799024;
-X-Microsoft-Antispam-Message-Info-Original:
- =?utf-8?B?Tk04Mlhkd1ZJV3FIelo3eno0ckMwNmhudGs4MmJmRmpwZlJack5jbDlPK01h?=
- =?utf-8?B?bC9DUE9sRXNURy8rVzBUY1JodXQ5K3NyV2g0Y2Fzb21yNkI4aHJkNjd5Mi94?=
- =?utf-8?B?RmxqcEw5b1ErYTljb1AvVElMSDZodFZvTllpdTZCYzZiYkpkVWtjcms5VXF1?=
- =?utf-8?B?OFFVcmhsZ1FrdzZRZnFINzdDVUVrYXBsZVRuL3A2eHU3RWttZjgvSXZaWW9H?=
- =?utf-8?B?VHVZbENzTGtydXJNcUNMNUZtdkpOeFQvUm9lRytwOVc1cXNveHdJdzZRWVBk?=
- =?utf-8?B?R0x6WUFnK2RGcDcvL0x1cjd4ZW1RSTBYMXIrQ3lleTg3NkxvR3RkR0t0WDRo?=
- =?utf-8?B?ZnR6NUIwL0VxZ1QzSlVNb1IwKzUxV1hpVmlUTi80T09PVm9FeTY4eXlXR2Ji?=
- =?utf-8?B?ZzdkcFFSRUtkRG5xbWNmRlgwc0IxT0hwdkVYOWJXREFRZDh2NDdrbDZhWENY?=
- =?utf-8?B?YVpNbUxPUWcrUGtEdHpMVFQwM1FjSkJGUkFzSFh3clNYZlVTdk1rOHp2T0t4?=
- =?utf-8?B?ZkdLR0lvVEFTRVNaaE5HaDVSOFltTzd1YzlDSjQ2NjUyVUlMRHBnUTVTaWpy?=
- =?utf-8?B?ZGNFMDYycjRDNjNPM3dkZStzdncvZG9rY01hNnk5RDhEWXV2dU8vZmZQS040?=
- =?utf-8?B?ZzdtMHM1UHQ4M1J5U1hVMVFjTnJjLzBTT2lqVi9vNk1xTnY4Z1NoQ2tuSVRv?=
- =?utf-8?B?QmZEcUVhTEVkZGNrLzZaZXVoV2gxT01USG9YNEsyM3BXOXFwUnFzNmtQQ2gr?=
- =?utf-8?B?c1k0OUhTQm1ycitxNExFclcxYXlRWXlMQkZZSVdsRkpjQUZBUkxOdzVJV0p1?=
- =?utf-8?B?amdRcGFoQ0llSGRRZ1p0UTRUUEhWT3VwQWkrZE8rM2o4LzBhdTBpQmNPYllu?=
- =?utf-8?B?MVc5WXFPa3gyb2E1WHhYS25IQ2trN1JaN2xITVBxK0l0Z3MxSGk4Zzl0VCti?=
- =?utf-8?B?aGdiRytnZnZvM1QyVUVNNnVaTi95OHN6T2RKUTZ4TXF3YUFTWFYxdzk0d0Qy?=
- =?utf-8?B?dUFjdjFvcGZiL2FqTnNuY1prclAwVUc5R2NnWXEwZGUyRzZ4T0tiN0UxYVVk?=
- =?utf-8?B?NVZiK2NSeVZWREtxN2xCd2hnYVZCK1BZNmlCYTNTTm1KUXRxZnZjbExiSDhE?=
- =?utf-8?B?bUEzbXQ4UlhCR3FRS0w3QjhFOEt6d3BCWUdDTmdSZE1ELzYzaThweGsrSjBv?=
- =?utf-8?B?UlE2empKczNBQ2N6TTUyVnA4T01ZVDNmY3JFdkxSeFd4V0ZHdC9lYmFiQnZl?=
- =?utf-8?B?aEpiUDJ1MlVJZTBpNGVGNHdYYmNkTGtrcUxQOXg2TVJFSmRraXBvOVVVWWZi?=
- =?utf-8?B?QS9lYVh6MURzOTV6SW9HcGRQSXhQek02YXpLZERvekJDZG9vY3pCbzJTVld1?=
- =?utf-8?B?MWxTRzg1cm5tUTdqdmxaSFJHRWh5elhXcGxxdjRPTk5GRzd3a25KRmpiekhN?=
- =?utf-8?B?K1Q3SG5QenpSdFFUZW1DTzZaYTVnN0d1Q09jbFpaTEtYd2prb29rVGpDOFB2?=
- =?utf-8?B?eHZpRmhTMnBRdWs5S2VWbWRHOFBnUzJ3ZUZka2Vwb2lvSkUvTEpJZUY2TTJr?=
- =?utf-8?B?SVZjeWtOTllHQ2VzT2NRRFlkdnY4aDJFLzF5QW4xRzdmdDZxRmtDUlpjRy83?=
- =?utf-8?B?Z25vY3ViR3pWNmJwT2xSQ25QdkdVZXNKWXdodlQ4anJQTG1UMmoyRTNPdStD?=
- =?utf-8?B?S05tWUNiME9yQVJVNURzam1TT0xCajVVNjBIY3pnYzFIUU02aitPemVSNStU?=
- =?utf-8?B?d3BsZzdVWlpDUFZmd1o2ODNkeHovRS9GWms4OXA4cUMyVzVsM0oyZmFIMHRS?=
- =?utf-8?B?S3oraDlwK3IvV3VBRnYvN2d3bmRJc3lRUElDVmNyN3RySkpJMXJwZFllT2tx?=
- =?utf-8?B?dC95UUJPWHNHb2oxdVZNSGNMdk51bGpJamgwVWJ4YjJVKzloaWJIUTZKSUlk?=
- =?utf-8?Q?IAr1zMPTv8M=3D?=
-X-Forefront-Antispam-Report-Untrusted:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:GV1PR08MB10521.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS4PR08MB8069
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped:
- DB3PEPF00008860.eurprd02.prod.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs:
-	699a96f1-b1c0-4368-81e7-08ddea10af04
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|35042699022|14060799003|1800799024|82310400026|7416014|376014|36860700013;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?aUtRSnpUNDgrK0pxYXhyODA4Y2xEUjFPQStuTnZZRFdBWCsxaGNCUko1R05P?=
- =?utf-8?B?MjJPbUtJR3FlMm9rTDdNdEw4N01GQ1AwejVmQlByeFZESGdjcVJYMm1abVBp?=
- =?utf-8?B?aUdERU83Qy9jdk9CdFlrUFRHMHBtNTVOS2gyeDU2Q0wvbnJnbFdNeHhJRGZZ?=
- =?utf-8?B?NVhoSTJKbFh5WTBHRkQrL2pZcUJNNmYxcFRmUGhkckxFWnJMYzBrLzJlOWRY?=
- =?utf-8?B?STBldUgxeWRxVzFjQmxuSzNwZUpSR3g1OWtBNUVGbTZxblNPSFhMZzBUTkV5?=
- =?utf-8?B?bXhITFA5YlNaaXRUNU12Qm9FVFR5TXJvZWczZEFUa3h4WUpQNVBFWktQeFM5?=
- =?utf-8?B?Z1VVN1VwSUxUK0hRdUZJSTA3czlCS2RYZk9yMWZqS1NCVUd6U1NXT2huQ0o3?=
- =?utf-8?B?dzdoRnl3ZHZuK0k3NEZkNmFNeVJFc1U0S0wvMXhTYnBRTGhENGtXcVNGYW5z?=
- =?utf-8?B?UWtDMW9PR25Ic0F3TS9pU04rSU1tVVZjL0ljYnZIaGFyOGRqeUJpSERMdEE3?=
- =?utf-8?B?L3ZUQy93bUY2T2I1ekJiM0RtZjdnOSs0YlpFUnVRMDdoZlFBbGVBRzFaSEp2?=
- =?utf-8?B?M2pmeWRFa3FxTE1SdGxnNSttMkVKekdwOVhySU54TWdlU2xSclp4YjF3R3ps?=
- =?utf-8?B?Y2JTdW5jaENPaGVMdnM4QUNnbURqZnhYWHBBcVdsd2VnU3gvRmg1am1zVkRp?=
- =?utf-8?B?NlpZbm01a2tOaExQQTNRN056UndTdlVqb20vU3RoNDVxQ0VFL2tldytTY2lN?=
- =?utf-8?B?LzFDSXdCcUdOK0k1d3ZoUTlaWUdLQ3cyYXo0dmRFYXEwV010KzNTdEg1QUwr?=
- =?utf-8?B?V1VXN2diMDhKTVFHS2VWRGc3N0E5VkhNYWUyUENZMXNFNkZ5UHRUcWd0ZGpB?=
- =?utf-8?B?Yzd3aGFaWXo0dzJUNFZDM1MwdzJaQWRraTBPZ3IvYzdxcDBVbUJrUjdVcVRX?=
- =?utf-8?B?YUY1eWFGS0NndDdjTm8yMml3UmZIUlI4RVlwdC8xbkY4ME9WR0kzUkZ5eEtr?=
- =?utf-8?B?NmJ0V2pKUUM2ZnVpbStJUU9lOU5BVnNwVTFTdEJjTDNPOVZVem8zYkRjazh6?=
- =?utf-8?B?V0NNZ2RUNlJDZE83eVBDcFM3ZC9oc1NMZEdHMUxDbEFqNlNtblQxRUhsSE5N?=
- =?utf-8?B?VGk4RVVvZkJGZW9iZVdldnQ5NXlCOFNOYzYyL0pabkI1UGs0RmU2UHNDSC9W?=
- =?utf-8?B?WnJlT3daQ0xJb2F1cElnWmRCbU9CRmp4ZnBXOWhPS1M5M3NHUzIySE9NS2FX?=
- =?utf-8?B?MkJUUC9mT2VRekE5bVA4Nm94OHZTeDhXNitGaEVzQStzSXRuYmREYUp0WTdv?=
- =?utf-8?B?ZjdsUk9jTm5PV0VHNVVCaHZwZG5JcHRJM0RkRTdyRkZDeGxLdlVndUpDcHRB?=
- =?utf-8?B?ZVM2UXVENWIyNFd6aWsxK00vUGhpdGp2MGxTTXFwMzJaYyt3L3U1QlU1b0tI?=
- =?utf-8?B?MnZmTjliUGJOdERtMUsrSGQrcVFzTHhlSy9iQzRmdlppWFFNTWQ0Ri9NNHFB?=
- =?utf-8?B?NGdEenJiZXN3WjZVcG9WUERUVjRpY2s3N2pBZ0pRNDRHcmM5YTdybGlNZU90?=
- =?utf-8?B?Z21VV2ZtdEhrTXF6S01BbVFYSDJWcHVReDJJQkNWZXU1YkQwVy9NaVpmbFVX?=
- =?utf-8?B?dmdxWmJyOWg5c09IcDYvSDJyV2xoRytqRmZRNGphY2JPaVFEYWV0U1FUdHhV?=
- =?utf-8?B?VEpodmszb2xlRHNSZmJ3eFY3amI2WTBXRjRHUVp5ckF2R2ovTk5HbXRINkpR?=
- =?utf-8?B?UXNJTE9qNUU4cXNjcjgrTWxvNms2Ky9NcWpvLzhPMTFtQ2ZrRFhxYW5QVHlr?=
- =?utf-8?B?SGtIRVkxZWZzSXhseVg4a2lhUjZYWnFnWXJ0ejF3ckMvREJmTEF2N2hlUTl3?=
- =?utf-8?B?SFNjOU9RYW9DcUFSbXhsdlpHeUNVODVaMHo0RWhpTFNXQXZQSzEycXdFRlIz?=
- =?utf-8?B?dlJuQ3VQQzMzNUlXMTJ1T0VUdUN2MHJ0d2J2T1p6cnY0L1Y0dy9tYlh6RVE4?=
- =?utf-8?B?MjQzMWZEOUhWY1JkMUFyeXJ2RHVNQ296WnVBT1JzQkt1cnVKdDU3TUgwKzVu?=
- =?utf-8?Q?sIk7h+?=
-X-Forefront-Antispam-Report:
-	CIP:4.158.2.129;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:outbound-uk1.az.dlp.m.darktrace.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(35042699022)(14060799003)(1800799024)(82310400026)(7416014)(376014)(36860700013);DIR:OUT;SFP:1101;
-X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Sep 2025 11:06:31.0303
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 882dd958-5d74-406b-8999-08ddea10c58f
-X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[4.158.2.129];Helo=[outbound-uk1.az.dlp.m.darktrace.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	DB3PEPF00008860.eurprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR08MB7326
+User-Agent: Mozilla Thunderbird
+To: Miaoqian Lin <linmq006@gmail.com>, linux-pm@vger.kernel.org
+Cc: stable@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>
+References: <20250902070215.2383320-1-linmq006@gmail.com>
+Subject: Re: [PATCH] cpufreq: nforce2: fix PCI device reference leaks in
+ nforce2_fsb_read
+Content-Language: en-GB, de-DE
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <20250902070215.2383320-1-linmq006@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:5L0MIjgb+4fdwiTiT1/W/GbO9MTgpaaQcU1NaDImIFVPmx70D3B
+ GxkmXdhaPvhVjRGAQ99vVH3MwZzt7bikVQ9OioAgsWv+DCLQ/LmzkSXn3XZxRXsWB59Zk63
+ LF8G9mqbaipXgTVweLFT3vKqTW9retYzTeRZdj6F+iPEWXvLtfrU8ZChzYalUSkEwsz//au
+ 8Vz9sBPWFqxjIk5l0cM1A==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:dex3zIVDKGM=;zlo///4GpSatL5Vhz4mb+WlwwQw
+ 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
 
-Hi Dave,
+> Add missing pci_dev_put() calls to release device references
+> obtained via pci_get_subsys().
 
-[...]
+* Would you like to complete the object clean-up by using a goto chain?
 
-> > > > diff --git a/arch/arm64/kernel/hyp-stub.S b/arch/arm64/kernel/hyp-stub.S
-> > > > index 36e2d26b54f5..ac12f1b4f8e2 100644
-> > > > --- a/arch/arm64/kernel/hyp-stub.S
-> > > > +++ b/arch/arm64/kernel/hyp-stub.S
-> > > > @@ -144,7 +144,17 @@ SYM_CODE_START_LOCAL(__finalise_el2)
-> > > >
-> > > >  .Lskip_indirection:
-> > > >  .Lskip_tcr2:
-> > > > +	mrs_s	x1, SYS_ID_AA64MMFR3_EL1
-> > > > +	ubfx	x1, x1, #ID_AA64MMFR3_EL1_SCTLRX_SHIFT, #4
-> > > > +	cbz	x1, .Lskip_sctlr2
-> > > > +	mrs_s	x1, SYS_SCTLR2_EL12
-> > > > +	msr_s	SYS_SCTLR2_EL1, x1
-> > > >
-> > > > +	// clean SCTLR2_EL1
-> > > > +	mov_q	x1, INIT_SCTLR2_EL1
-> > > > +	msr_s	SYS_SCTLR2_EL12, x1
-> > >
-> > > I'm still not sure why we need to do this.  The code doesn't seem to
-> > > clean up by the EL1 value of any other register -- or have I missed
-> > > something?
-> > >
-> > > We have already switched to EL2, via the HVC call that jumped to
-> > > __finalise_el2.  We won't run at EL1 again unless KVM starts a guest --
-> > > but in that case, it's KVM's responsibility to set up the EL1 registers
-> > > before handing control to the guest.
-> > >
-> > > In any case, is SCTLR2_EL1 ever set to anything except INIT_SCTLR2_EL1
-> > > before we get here?
-> >
-> > Regardless of VHE and nVHE, between init_kernel_el() and finalise_el2()
-> > the kernel modifies SCTLR_EL1/SCTLR2_EL1 (since el level in this period
-> > is EL1).
-> > and at the end of finalise_el2(), kernel switches to el2 and
-> > if VHE, it writes the SCTLR_EL1/SCTLR2_EL1 to SCTLR_EL2/SCTLR2_EL2 and
-> > initialize the SCTLR_EL1/SCTLR2_EL1.
-> >
-> > Although there is no code to modify SCTLR2_EL1 between this period,
-> > as SCTLR1_ELx, I initialize the SCTLR2_EL1 as init value for the future
-> > usage.
->
-> I think that we don't need to ensure that all sysregs are cleanly
-> initialised; only those that can affect execution in some way need to
-> be initialised.
->
-> Once we are running at EL2 with VHE, we don't switch back to EL1, so
-> the _EL1 control registers don't affect execution any more.
->
-> If we did have to clean up the _EL1 registers, then this code would
-> need to clean up all the other regs too, but I can't see clean-up for
-> anything other than SCTLR2_EL1 here.  Is there some cleanup code
-> elsewhere that I have missed?
->
-> Cheers
-> ---Dave
+* How do you think about to increase the application of scope-based resource management?
+  https://elixir.bootlin.com/linux/v6.17-rc4/source/include/linux/pci.h#L1208
 
-When I look at init_el2(), it returns to EL1 via:
 
-  mov x0, #INIT_PSTATE_EL1
-  msr spsr_el2, x0
-  ...
-  eret
-
-In other words, from init_kernel_el() through finalise_el2(),
-all system-register accesses are made at EL1 (i.e., SYS_REG_EL1).
-During this period, it appears that only SCTLR_EL1 is modified,
-so the code only needs to care about the accessed register — SCTLR_EL1.
-
-That’s why SCTLR_EL1 is reinitialised at the end of finalise_el2().
-Otherwise, the MMU bit might remain enabled, which could cause errors later
-when launching a VM under VHE.
-
-However, the idea behind this patch is to initialise SCTLR2_ELx
-the same way as SCTLR_ELx.
-I’m not sure whether SCTLR2_ELx is modified during this period.
-If it is (now or in the future),
-it should be cleared/reinitialised just like SCTLR_EL1.
-
-This patch is based on the assumption that there may be modifications to
-SCTLR2_ELx during this period. So it isn’t about other system registers;
-it’s about the register actually used during this period.
-
-Am I missing anything?
-
-Thanks!
-
---
-Sincerely,
-Yeoreum Yun
+Regards,
+Markus
 
