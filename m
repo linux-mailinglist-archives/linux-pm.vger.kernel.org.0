@@ -1,129 +1,116 @@
-Return-Path: <linux-pm+bounces-33601-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33602-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6FB59B3F4B1
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Sep 2025 07:42:23 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A842B3F4DF
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Sep 2025 07:54:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 5116E4E1F54
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Sep 2025 05:42:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5C38E17E0B6
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Sep 2025 05:54:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D098D2E1742;
-	Tue,  2 Sep 2025 05:42:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="MXjDWCpC"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01F372D5945;
+	Tue,  2 Sep 2025 05:54:42 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E9182DF15F
-	for <linux-pm@vger.kernel.org>; Tue,  2 Sep 2025 05:42:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E970155A4E;
+	Tue,  2 Sep 2025 05:54:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756791732; cv=none; b=HaPdsCtwDccxhBdYdVWIRDTnH4WhfXa7ni7QAq5zX82umISSGbgRV6sbJzRQJH6ERIdQF4FpKnua+wJMx4oOlrgqIB5WNALG2fQfJeZFKx2pxRobwmj0mVxDOFzHj35GpL84eTgiQ4/guGgKtc3852z6DaFPsX4G9khAnihI0Z8=
+	t=1756792481; cv=none; b=SvGwGO46oeEH0lcqSqDnxcIxJIkPnjFw/nqYwV1zbIFzpVy46GnycFElKeOT9pIF7F14jnDhcPKI7EVQaYW6FLSVeWYE+tOrKdX29MVcpvjnueNls51ho5vGbwzrX4i8s93iu1tXM+MvkCnZVVjkc3H18F7Rpn/AWdNQXdNn3m8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756791732; c=relaxed/simple;
-	bh=pZaGKPAZ4D4liWfovQ4DFxzR16FVRL9jBWQ0qKv61nc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VoQGBLvo3m5R0WtUWJ1bDcLTJryZO+VnEjJKGFr0mHlQpDJT7MT5TMsTIZL/O0AuZbEy2xJQ+PGrhyvUPGKQGcpmgHpcrfs37LBUuMFGIO88Y7LL4S+HhJt81Vw3AiJbfYhzhOSng/u9CWNWOJj4uatwDLeXoY9z0nKbPgAmrUo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=MXjDWCpC; arc=none smtp.client-ip=209.85.210.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-772679eb358so782331b3a.1
-        for <linux-pm@vger.kernel.org>; Mon, 01 Sep 2025 22:42:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1756791730; x=1757396530; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=29jR3k9rMqRnPavHCfPYA2GU7BTpIOhCsdj5RSaJa9w=;
-        b=MXjDWCpC3WOkjlOA6o+/CxydSLjRl/ViNkZwObKZY+dTrukdZ0TM9s89BXJ46p+OqK
-         3VzgDUgJQfMoz4SaT9CUZIShj/1NYtb40q4U2RjuPlbrjySd8jmXiUROwqPfIwspAK1U
-         KTuZmBA28bhanPywyg51uIN2/3129yivPN9SFiGU5CiyB1xTedF7HQsiZH9wdZngrmLg
-         w3IiJvEony4C2HblDyl/GrDk1MwgZjgIldp72IrjBgb2UOTLmsv6YMPm31aMBnwptlWr
-         rCcVoeENFhuzMPLiIOCuXluTvfIN3VXrPYe2y2PsOeSpwGThIcVBX/JDHCdut9Lq9s9q
-         0hqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756791730; x=1757396530;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=29jR3k9rMqRnPavHCfPYA2GU7BTpIOhCsdj5RSaJa9w=;
-        b=vbIpGhA2E7eKsz4ZvH/MIA9D8kIu8Qlf5R3egZRi4WwV7k5drJPhJZ6beVDPlj13TI
-         HS7cArJoZMlaHPvd8qPGEWuxv1lXvFKULRD+kWaYc0HMo7h18h37Q448ZWggqWrfZUew
-         G9jOf9mQJJrOduBnLmYB0nd/RcApsKDILj1ZX7dqwOgndMm1q1T7wHe4bvMdoFJUZg58
-         tQ7xO7IaTZEvBaWq5bLm9Q58o8FgufdclkthOlTeXSENgxG7WpepV4RUt1I37eNfWcDN
-         7e762TIo/y8vN1Gmf0kQp2Mz89D1UBLDe7MmiSjXRhc1LK9oIqWr4EROry/343zJ7OgU
-         bG1w==
-X-Forwarded-Encrypted: i=1; AJvYcCXoIPyfjWaF3Np6gWU3/d3QMCILphiZZ8FpGNJVaDHe7E5q/eEtViRh2RPkKSCpHn//NT16Kl1SVw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwIqod2dpkB7lVskOXIHsJoKMqnHciCzzFdlZDolMIzfEoOJotN
-	xl2Yej7+Ntgq+uzheZ0m0oRQkgp1yHitBwmq8r9d6/+TqoK7OomO7eQEM/we18DtTsw=
-X-Gm-Gg: ASbGncuy2U6YpbTCZe5jAKvDlpD2IfL2T7YvPmbdQ2BN6FoV0KnmTWYlLVR8p6078G1
-	nVe6RwNydhUI7dnFTFQD2uKq1maMWWua9eFYP0g9E0UfpORs4y41icr0hMlvDFRs1H6JtNiDjIC
-	ueQJWHhXQ5B90XURmvSiXuAf9mQSGa9VKcxKW1DOGBJRrf2onMv1v54xhOHjz0He6Y2zx+nkmfD
-	zRn2S3TiZqxiww2Z7vkTSlZBKdOR/8huAKZZJP2iDP4res+N3WomnqQsNB1wLam/HtRM+xVthWs
-	+DJXOuNT46gDEY3+q0h6v8P1rR12fx2xklPjaYLxxYEX7mqI5NTl1+WtBQkwP5N+PIEi7tWaPl7
-	oIVeIQokv/b/21lKdIuB9KZOK8ZmC23abuyc=
-X-Google-Smtp-Source: AGHT+IHgtpeK6x+sOCjFIsM2TVd58y3MaGgb8bWKzH0H2wvyTxXZOIDRA7XC34qnep/kILfY/MTD2g==
-X-Received: by 2002:a05:6a20:a105:b0:243:a02b:ca64 with SMTP id adf61e73a8af0-243d6e5d1a8mr14547776637.26.1756791730571;
-        Mon, 01 Sep 2025 22:42:10 -0700 (PDT)
-Received: from localhost ([122.172.87.165])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b4cd309439dsm11045404a12.43.2025.09.01.22.42.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Sep 2025 22:42:09 -0700 (PDT)
-Date: Tue, 2 Sep 2025 11:12:07 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Zihuan Zhang <zhangzihuan@kylinos.cn>
-Cc: "Rafael J . wysocki" <rafael@kernel.org>,
-	zhenglifeng <zhenglifeng1@huawei.com>, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 0/3] cpufreq: drop redundant freq_table argument in
- helpers
-Message-ID: <20250902054207.zke5xg3su2vpdob3@vireshk-i7>
-References: <20250901112551.35534-1-zhangzihuan@kylinos.cn>
+	s=arc-20240116; t=1756792481; c=relaxed/simple;
+	bh=5k4Pf0S95BYVV6TxbTYRd0U91VaIZdGIHUN+s3ul00c=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=iHUpmhxqwGZEoOJO4VODGyyzCofF2gb1nQ12zTgOYx+e9dyF7jiHOGCG1KJis0ofdwQQ2RlA8W1URPDXs9oR/hVUMdlDqTpLRkqu/W740jI13MX/CiCX8ymaJbKBFLw1inARmQgiucV7gDCmBBsbioAPNpsSL+cZOOAC6suCUos=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 4c7b2d7a87c111f0b29709d653e92f7d-20250902
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.45,REQID:a776418d-9bf0-42b2-ad91-acbccc124229,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:6493067,CLOUDID:51ae38d66cd7331b4ada42ace9655337,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102,TC:nil,Content:0|52,EDM:
+	-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,
+	AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 1,FCT|NGT
+X-CID-BAS: 1,FCT|NGT,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: 4c7b2d7a87c111f0b29709d653e92f7d-20250902
+Received: from mail.kylinos.cn [(10.44.16.175)] by mailgw.kylinos.cn
+	(envelope-from <zhangzihuan@kylinos.cn>)
+	(Generic MTA)
+	with ESMTP id 1587702374; Tue, 02 Sep 2025 13:54:33 +0800
+Received: from mail.kylinos.cn (localhost [127.0.0.1])
+	by mail.kylinos.cn (NSMail) with SMTP id C2450E008FA3;
+	Tue,  2 Sep 2025 13:54:32 +0800 (CST)
+X-ns-mid: postfix-68B68698-70541356
+Received: from [172.25.120.24] (unknown [172.25.120.24])
+	by mail.kylinos.cn (NSMail) with ESMTPA id 2F0B2E008FA2;
+	Tue,  2 Sep 2025 13:54:32 +0800 (CST)
+Message-ID: <180ab822-16d3-4d08-974c-5f8109dc8c82@kylinos.cn>
+Date: Tue, 2 Sep 2025 13:54:31 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250901112551.35534-1-zhangzihuan@kylinos.cn>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 0/3] cpufreq: drop redundant freq_table argument in
+ helpers
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: "Rafael J . wysocki" <rafael@kernel.org>,
+ zhenglifeng <zhenglifeng1@huawei.com>, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20250901112551.35534-1-zhangzihuan@kylinos.cn>
+ <20250902054207.zke5xg3su2vpdob3@vireshk-i7>
+From: Zihuan Zhang <zhangzihuan@kylinos.cn>
+In-Reply-To: <20250902054207.zke5xg3su2vpdob3@vireshk-i7>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
 
-On 01-09-25, 19:25, Zihuan Zhang wrote:
-> This patchset updates the cpufreq core and drivers to fully adopt
-> the new policy->freq_table approach introduced in commit
-> e0b3165ba521 ("cpufreq: add 'freq_table' in struct cpufreq_policy").
-> 
-> Motivation:
-> - The frequency table is per-policy, not per-CPU, so redundant
->   freq_table arguments in core helpers and drivers are no longer needed.
-> - Removing the extra argument reduces confusion and potential mistakes.
-> 
-> Patch details:
-> 
-> 1. cpufreq: core: drop redundant freq_table argument in helpers
->    - Remove freq_table parameters in core helper functions.
->    - All helper functions now use policy directly.
-> 
-> 2. cpufreq: drivers: remove redundant freq_table argument
->    - Update cpufreq drivers to match the new core API.
->    - Calls that previously passed a separate freq_table argument
->    - No behavior changes, only API consistency.
-> 
-> Zihuan Zhang (3):
->   cpufreq: Drop redundant freq_table parameter
->   cpufreq: sh: drop redundant freq_table argument
->   cpufreq: virtual: drop redundant freq_table argument
 
-Individual patches must not break kernel compilation, but compilation
-breaks after the first patch itself in your series as you have not
-updated all the users.
-
-Merge all three into a single patch.
-
--- 
-viresh
+=E5=9C=A8 2025/9/2 13:42, Viresh Kumar =E5=86=99=E9=81=93:
+> On 01-09-25, 19:25, Zihuan Zhang wrote:
+>> This patchset updates the cpufreq core and drivers to fully adopt
+>> the new policy->freq_table approach introduced in commit
+>> e0b3165ba521 ("cpufreq: add 'freq_table' in struct cpufreq_policy").
+>>
+>> Motivation:
+>> - The frequency table is per-policy, not per-CPU, so redundant
+>>    freq_table arguments in core helpers and drivers are no longer need=
+ed.
+>> - Removing the extra argument reduces confusion and potential mistakes=
+.
+>>
+>> Patch details:
+>>
+>> 1. cpufreq: core: drop redundant freq_table argument in helpers
+>>     - Remove freq_table parameters in core helper functions.
+>>     - All helper functions now use policy directly.
+>>
+>> 2. cpufreq: drivers: remove redundant freq_table argument
+>>     - Update cpufreq drivers to match the new core API.
+>>     - Calls that previously passed a separate freq_table argument
+>>     - No behavior changes, only API consistency.
+>>
+>> Zihuan Zhang (3):
+>>    cpufreq: Drop redundant freq_table parameter
+>>    cpufreq: sh: drop redundant freq_table argument
+>>    cpufreq: virtual: drop redundant freq_table argument
+> Individual patches must not break kernel compilation, but compilation
+> breaks after the first patch itself in your series as you have not
+> updated all the users.
+>
+> Merge all three into a single patch.
+>
+Got it. I wasn=E2=80=99t sure if core and driver changes should be split,=
+ but=20
+yes, merging them into a single patch is better.
 
