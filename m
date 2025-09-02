@@ -1,352 +1,188 @@
-Return-Path: <linux-pm+bounces-33650-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33651-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19172B40650
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Sep 2025 16:14:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A1F4B4069B
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Sep 2025 16:23:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 90B6B3BEEC1
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Sep 2025 14:13:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 35B0C54213D
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Sep 2025 14:21:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABD422FE599;
-	Tue,  2 Sep 2025 14:13:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E11C3093B6;
+	Tue,  2 Sep 2025 14:21:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="agyxXhK0"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="SWE+h9ba"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8477B2F3C19;
-	Tue,  2 Sep 2025 14:13:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE9FC307ACE
+	for <linux-pm@vger.kernel.org>; Tue,  2 Sep 2025 14:21:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756822425; cv=none; b=t4/bB4dil6aIlsGDO44kGE0GKNw/buCE96a4BzMpkBgOa71TnvfO4RL+HTzZ4ncBqYtlPqT9jgaIM2Au7jKevlHevK+Jisw6HKJyDp+cUzNdlmdzuhdAwYTG62McUo0/2RdVi7MAiHBQ0M1MqSSjbW/Y6AHO9iiZn41buNPhui4=
+	t=1756822875; cv=none; b=NtIw07xj12GpLRR7rjK2LVu9Fw+7b8EJO2v3FKcUSDbYasn7oqQAeERoqSxyS211Ajz9B/rBRanTqKZR3KcWWXMahErhIwnTqtCASflGroJRFykdHrhpyRHm+qo4usxXn/c9vxrpr8Bc8HjsjdcLtksJjncdyfpooUkUZJA5NRA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756822425; c=relaxed/simple;
-	bh=EBKiIC/TQi8pMFqdMi+Nl1qN1IVUCv8zQzOrO7F+syA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ix+v+gJ6gQyO340SIw4bk6Ziq/iHmnIl31k7tf2E24z8UCZinYLKnXJ+tymk7UmGpmMREnV3JHWvRb70k5tyrRoTFt+EWXP8UsIYSGmJG3fNCOvTUpaPreBbA4DRiL2InhI1e10/s40DEkYokkVRSof/Vl+MTcHVIaV9r2U3hSU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=agyxXhK0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AD9DC4CEED;
-	Tue,  2 Sep 2025 14:13:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756822425;
-	bh=EBKiIC/TQi8pMFqdMi+Nl1qN1IVUCv8zQzOrO7F+syA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=agyxXhK0HvbsjMPjmaJo+Ie03/Oa2dOZ7WhHK7aoEmnrPZve48dqtTpIkHmC+Kw/w
-	 QLDLXlTPErSSKgnrcaiWvTjJs+qGb3Q2BJHayEJJUuH7VSGdhSU8L9eqf4bxhi93Q/
-	 9kHsf9tW5+jNBYrJo1kqkG0q8EpvvsRtLzoaiPp3Io2lM3II8eugU9Nk0NHr8aa+Vk
-	 oabLC5h/wUcLFRDUxjphGLqy4oOh/Uwxj8sDzGM9IjyrhRr7zhQaKfh4BsqouhyRfo
-	 cZnn1gR2dzOL2qnTEZ5TDt0jN/DCM4WzzpGeB7bds67qyS0+yYRhI9ttjGJmdkVXw+
-	 3L+w26wUiy6hw==
-Date: Tue, 2 Sep 2025 15:13:39 +0100
-From: Lee Jones <lee@kernel.org>
-To: Chris Morgan <macroalpha82@gmail.com>
-Cc: linux-rockchip@lists.infradead.org, linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org, broonie@kernel.org, lgirdwood@gmail.com,
-	sre@kernel.org, heiko@sntech.de, conor+dt@kernel.org,
-	krzk+dt@kernel.org, robh@kernel.org,
-	Chris Morgan <macromorgan@hotmail.com>
-Subject: Re: [PATCH V7 2/5] mfd: bq257xx: Add support for BQ25703A core driver
-Message-ID: <20250902141339.GR2163762@google.com>
-References: <20250821162448.117621-1-macroalpha82@gmail.com>
- <20250821162448.117621-3-macroalpha82@gmail.com>
+	s=arc-20240116; t=1756822875; c=relaxed/simple;
+	bh=Mo3fvh+zcipnakizUINPMwCYdgGPfGwVYd3T2yXE6PQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=sM1XrlnnL6VGjbDqaaW8Wy4bgTUqxfrYYj1yQq12NtADEMCuWqLizI/PH/SR68kXnIVjo2IJyBIJW8PFIjdQqNTeU7eiHMjqdmuRk+t+cWsrYeHUxvIFKIiMBBnzDP0KaeYFCyx9yBjA0/GQYrFaKbcmvi0Ac68cnz7YOngWmt8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=SWE+h9ba; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 582AxxoE015204
+	for <linux-pm@vger.kernel.org>; Tue, 2 Sep 2025 14:21:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	cFH5cDNds5B5T/pje3FPEuPlO2hxs24Eot+U2AM5tl8=; b=SWE+h9baJZPg0zr+
+	h1VZBwnEPUP82cZ9ImIy24Jh4zgzo/2qILVaNrT21iAph2NMju2XB3jE5iQxS7uG
+	Iwl1soq01wpYlpscMNpjn3haYm3gzIyvm6XWOYT7tfCemR+a7OkbNsCEwJBsCYVj
+	gOdLUGnVpCtqtLB/Q4Z5j9NgLmA3R8J/wshkDR2wcPJ2EEMN+7WDwr6ta/UvVMJa
+	+4z1oo9rg4lSxeIwSBHqFAk5fJMlsDGwRd5BuNxcy77ZMn4TxnhUw22EDCyS3UvR
+	hTdD+MpQOgivxSlhDw6JFyTADU0xanIEsPOSM5PBMWUz02c0xzvKuM3oT7InLn3Z
+	1fs5Ng==
+Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com [209.85.210.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 48urw003e3-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Tue, 02 Sep 2025 14:21:11 +0000 (GMT)
+Received: by mail-pf1-f200.google.com with SMTP id d2e1a72fcca58-7724046c346so2699273b3a.1
+        for <linux-pm@vger.kernel.org>; Tue, 02 Sep 2025 07:21:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756822869; x=1757427669;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cFH5cDNds5B5T/pje3FPEuPlO2hxs24Eot+U2AM5tl8=;
+        b=NCuPqHRDupOrAu5ryYzXHqH6d2G/i1NH1L7wdCR6vqQUjaOtDFMsZEjcadEFoU5rtJ
+         VhA6vfFMNoYHP3N3+X2gnslCqaoVfaI9LMyL+VmN4Tl4gSn+8GYGUAVIKiGKMGBlL1cp
+         cdhBuig6pm9+Duy7m558TcNNAlQa3E6ZORPAD+BZR1eLxOLPPMB0oBZEDPSeti8YezVP
+         4THS9SCxBOgqzNenI/HDrWCeXXlq6zq67eH1teL6jv0OdMfSrKoa9UtwVoBI6S5erI3n
+         cWlNuUHMpLQKYPhXAKSqd+sg3ZpMQdfV3Cg6wKCVefsQlEvFY0+tuJSn1EehQ0bc2b18
+         km6A==
+X-Forwarded-Encrypted: i=1; AJvYcCXHsliXVwDBAJsyGfAXP1RMXAeUE25ulZEvmrQWrH1KP9in6ilrggEQ3qr53E72gNa6suhGJ77oSg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx41sNBvEAq7Q1jKIz9xz0E3Gz7RLKa4aED8mAGO3B+8ew574Bi
+	UZDvc7VTGpo19YH4QDrdzS4URjprc1Jglcgl4OHGys7mBQmI1nAmDDdWCBp3kfYcJlqIzS0Cq6V
+	tCE4r0E+Bp9en5ZzeJU1G2RY7zdBmX/Am114BmYYGKF3tjNFPydSUjIE20F0nlA==
+X-Gm-Gg: ASbGnctF4hou7OwIS8inRPS+M7oPeQ2wg/r+R8GQeLjfinJsswRkTJbRM5MwGhCbFUo
+	iZMRXcDm5Zv8kOwm2pnG0DtfGmwBE+ANl6E7zXU/9HwHNXpPaDNk06dauXNexEo3bPh6AsO8UAU
+	xI1/0WsG7FHQjKeTzrnkVpyF5H2birSt04C8jwIU2DoQiPL6ml+7IsgcdAqKNSqunMXGID3Ne9x
+	HUDIGxtRRIuMok9PNU0TwIHSgqcjAzW+xiQksS+nDquAj+H30jQGxqvpJIurTQgyQHo9rgPS3PU
+	LqL7So6QJMglStFTKOinN3YyS/Vu0Ksz5FyVhzbr6sdEXaf9ajPCNkUJvGji7yqIl1zzxmNk
+X-Received: by 2002:a05:6a20:3949:b0:243:25b0:2321 with SMTP id adf61e73a8af0-243d6f7e6d2mr17559825637.52.1756822869354;
+        Tue, 02 Sep 2025 07:21:09 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFqXouN6x5NC3Ff1ESu4awUlD3wgjdZZfk9g/KwRyDmJBn/xJVqTV3xHk+1W13vbBTuHhuaMw==
+X-Received: by 2002:a05:6a20:3949:b0:243:25b0:2321 with SMTP id adf61e73a8af0-243d6f7e6d2mr17559757637.52.1756822868877;
+        Tue, 02 Sep 2025 07:21:08 -0700 (PDT)
+Received: from [10.216.7.97] ([202.46.23.19])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-772396d2dbcsm11499176b3a.50.2025.09.02.07.20.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 Sep 2025 07:21:08 -0700 (PDT)
+Message-ID: <f7394b06-d51a-cdbc-7990-13209b478398@oss.qualcomm.com>
+Date: Tue, 2 Sep 2025 19:50:58 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v14 03/10] power: reset: reboot-mode: Add support for 64
+ bit magic
+Content-Language: en-US
+To: Arnd Bergmann <arnd@arndb.de>, Rob Herring <robh@kernel.org>,
+        Casey Connolly <casey.connolly@linaro.org>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Souvik Chakravarty <Souvik.Chakravarty@arm.com>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+ <conor+dt@kernel.org>,
+        Andy Yan <andy.yan@rock-chips.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>,
+        cros-qcom-dts-watchers@chromium.org, Vinod Koul <vkoul@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Florian Fainelli <florian.fainelli@broadcom.com>
+Cc: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+        Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Andre Draszik
+ <andre.draszik@linaro.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        Elliot Berman <quic_eberman@quicinc.com>,
+        Srinivas Kandagatla <srini@kernel.org>
+References: <20250815-arm-psci-system_reset2-vendor-reboots-v14-0-37d29f59ac9a@oss.qualcomm.com>
+ <20250815-arm-psci-system_reset2-vendor-reboots-v14-3-37d29f59ac9a@oss.qualcomm.com>
+ <88ee0a26-8d64-4060-b703-40156cd011a7@linaro.org>
+From: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
+In-Reply-To: <88ee0a26-8d64-4060-b703-40156cd011a7@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250821162448.117621-3-macroalpha82@gmail.com>
+X-Proofpoint-GUID: eG5x0JJRsGLZRGOymqa7XxTmKtgDXCWA
+X-Proofpoint-ORIG-GUID: eG5x0JJRsGLZRGOymqa7XxTmKtgDXCWA
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODMwMDAyNyBTYWx0ZWRfX7Tbc8nplL733
+ KmdLm+I6uH2p+ikGcDFb6iNbkdxN7gK0emkOL1yLBLRH2dkL3PxW3thKpAXrDYlqRh99n//tOEY
+ 4XpfHjEeKcdyCJcmP3Gtoi1yeuDxKxkfcr2oIyfBD3XPj/5jPZHiWWAsa+9OnESgP5iQSq34ND7
+ ptD82aqHnVPDSr3IZWSSzOWneTeA+EgUJ+k4iRUDhXH+otn5/pFaMhqmwmhIPwnxsqkCAR0x2sM
+ t/BRrygordu1tbSl4SFC9yPedC2X6osh36UOWaDfWpXcbgVRLVOQaaXgBHSZ1KJLjHZ7G8XISoy
+ LAdk3YabiD+nsDt0HTB6PVxNNh5dJSmGmzYj5JtkV5mz6H56IfyRp1YGB8VCSi71zMHdAN1zwej
+ qLpFyS4V
+X-Authority-Analysis: v=2.4 cv=NrDRc9dJ c=1 sm=1 tr=0 ts=68b6fd57 cx=c_pps
+ a=mDZGXZTwRPZaeRUbqKGCBw==:117 a=j4ogTh8yFefVWWEFDRgCtg==:17
+ a=IkcTkHD0fZMA:10 a=yJojWOMRYYMA:10 a=FBzynz1gJkPyhc2EhIcA:9
+ a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=zc0IvFSfCIW2DFIPzwfm:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-09-02_04,2025-08-28_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1015 suspectscore=0 malwarescore=0 priorityscore=1501 phishscore=0
+ impostorscore=0 spamscore=0 bulkscore=0 adultscore=0 classifier=typeunknown
+ authscore=0 authtc= authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2507300000 definitions=main-2508300027
 
-On Thu, 21 Aug 2025, Chris Morgan wrote:
 
-> From: Chris Morgan <macromorgan@hotmail.com>
+
+On 8/28/2025 6:52 PM, Casey Connolly wrote:
+> Hi Shivendra,
 > 
-> The Texas Instruments BQ25703A is an integrated charger manager and
-> boost converter.
+> On 15/08/2025 16:35, Shivendra Pratap wrote:
+>> Current reboot-mode supports a single 32-bit argument for any
+>> supported mode. Some reboot-mode based drivers may require
+>> passing two independent 32-bit arguments during a reboot
+>> sequence, for uses-cases, where a mode requires an additional
+>> argument. Such drivers may not be able to use the reboot-mode
+>> driver. For example, ARM PSCI vendor-specific resets, need two
+>> arguments for its operation – reset_type and cookie, to complete
+>> the reset operation. If a driver wants to implement this
+>> firmware-based reset, it cannot use reboot-mode framework.
+>>
+>> Introduce 64-bit magic values in reboot-mode driver to
+>> accommodate dual 32-bit arguments when specified via device tree.
+>> In cases, where no second argument is passed from device tree,
+>> keep the upper 32-bit of magic un-changed(0) to maintain backward
+>> compatibility.
 > 
-> The MFD driver initalizes the device for the regulator driver
-> and power supply driver.
-> 
-> Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
-> ---
->  drivers/mfd/Kconfig         |  11 ++++
->  drivers/mfd/Makefile        |   1 +
->  drivers/mfd/bq257xx.c       |  97 +++++++++++++++++++++++++++++++++
->  include/linux/mfd/bq257xx.h | 104 ++++++++++++++++++++++++++++++++++++
->  4 files changed, 213 insertions(+)
->  create mode 100644 drivers/mfd/bq257xx.c
->  create mode 100644 include/linux/mfd/bq257xx.h
-> 
-> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-> index 425c5fba6cb1..768417c97339 100644
-> --- a/drivers/mfd/Kconfig
-> +++ b/drivers/mfd/Kconfig
-> @@ -1641,6 +1641,17 @@ config MFD_TI_LMU
->  	  LM36274.  It consists of backlight, LED and regulator driver.
->  	  It provides consistent device controls for lighting functions.
->  
-> +config MFD_BQ257XX
-> +	tristate "TI BQ257XX Buck/Boost Charge Controller"
-> +	depends on I2C
-> +	select MFD_CORE
-> +	select REGMAP_I2C
-> +	help
-> +	  Support Texas Instruments BQ25703 Buck/Boost converter with
-> +	  charge controller. It consists of regulators that provide
-> +	  system voltage and OTG voltage, and a charger manager for
-> +	  batteries containing one or more cells.
-> +
->  config MFD_OMAP_USB_HOST
->  	bool "TI OMAP USBHS core and TLL driver"
->  	depends on USB_EHCI_HCD_OMAP || USB_OHCI_HCD_OMAP3
-> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-> index f7bdedd5a66d..3d700374a42d 100644
-> --- a/drivers/mfd/Makefile
-> +++ b/drivers/mfd/Makefile
-> @@ -13,6 +13,7 @@ obj-$(CONFIG_MFD_SM501)		+= sm501.o
->  obj-$(CONFIG_ARCH_BCM2835)	+= bcm2835-pm.o
->  obj-$(CONFIG_MFD_BCM590XX)	+= bcm590xx.o
->  obj-$(CONFIG_MFD_BD9571MWV)	+= bd9571mwv.o
-> +obj-$(CONFIG_MFD_BQ257XX)	+= bq257xx.o
->  obj-$(CONFIG_MFD_CGBC)		+= cgbc-core.o
->  obj-$(CONFIG_MFD_CROS_EC_DEV)	+= cros_ec_dev.o
->  obj-$(CONFIG_MFD_CS42L43)	+= cs42l43.o
-> diff --git a/drivers/mfd/bq257xx.c b/drivers/mfd/bq257xx.c
-> new file mode 100644
-> index 000000000000..ac4485a2cc60
-> --- /dev/null
-> +++ b/drivers/mfd/bq257xx.c
-> @@ -0,0 +1,97 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * BQ257XX Core Driver
-> + * Copyright (C) 2025 Chris Morgan <macromorgan@hotmail.com>
-> + */
-> +
-> +#include <linux/device.h>
-> +#include <linux/i2c.h>
-> +#include <linux/mfd/bq257xx.h>
-> +#include <linux/mfd/core.h>
-> +#include <linux/regmap.h>
-> +
-> +static const struct regmap_range bq25703_readonly_reg_ranges[] = {
-> +	regmap_reg_range(BQ25703_CHARGER_STATUS, BQ25703_MANUFACT_DEV_ID),
-> +};
-> +
-> +static const struct regmap_access_table bq25703_writeable_regs = {
-> +	.no_ranges = bq25703_readonly_reg_ranges,
-> +	.n_no_ranges = ARRAY_SIZE(bq25703_readonly_reg_ranges),
-> +};
-> +
-> +static const struct regmap_range bq25703_volatile_reg_ranges[] = {
-> +	regmap_reg_range(BQ25703_CHARGE_OPTION_0, BQ25703_IIN_HOST),
-> +	regmap_reg_range(BQ25703_CHARGER_STATUS, BQ25703_ADC_OPTION),
-> +};
-> +
-> +static const struct regmap_access_table bq25703_volatile_regs = {
-> +	.yes_ranges = bq25703_volatile_reg_ranges,
-> +	.n_yes_ranges = ARRAY_SIZE(bq25703_volatile_reg_ranges),
-> +};
-> +
-> +static const struct regmap_config bq25703_regmap_config = {
-> +	.reg_bits = 8,
-> +	.val_bits = 16,
-> +	.max_register = BQ25703_ADC_OPTION,
-> +	.cache_type = REGCACHE_RBTREE,
+> How about adding a n_magic_args property to struct reboot_mode_driver?
+> Then in struct mode_info change magic to be a u32 array of a fixed
+> length (currently two in-keeping with the DT bindings).
 
-Are you sure you want RB?  Most people have switched to MAPLE.
+Arnd/Rob,
 
-> +	.wr_table = &bq25703_writeable_regs,
-> +	.volatile_table = &bq25703_volatile_regs,
-> +	.val_format_endian = REGMAP_ENDIAN_LITTLE,
-> +};
-> +
-> +static int bq257xx_probe(struct i2c_client *client)
-> +{
-> +	struct bq257xx_device *ddata;
-> +	static const struct mfd_cell cells[] = {
-> +		MFD_CELL_NAME("bq257xx-regulator"),
-> +		MFD_CELL_NAME("bq257xx-charger"),
-> +	};
+As per previous discussion on patch v10, magic and cookie were implemented
+as a 64 bit number (64 bit magic).
 
-Sorry, that isn't what I meant.
+Need you thoughts that if we should change the magic to 32bit array, as being
+suggested in the above comments.
 
-Please place the 'struct mfd_cell' out of the function, like everyone
-else does.
-
-> +	int ret;
-> +
-> +	ddata = devm_kzalloc(&client->dev, sizeof(*ddata), GFP_KERNEL);
-> +	if (!ddata)
-> +		return -ENOMEM;
-> +
-> +	ddata->client = client;
-
-'\n' here.
-
-> +	ddata->regmap = devm_regmap_init_i2c(client, &bq25703_regmap_config);
-> +	if (IS_ERR(ddata->regmap)) {
-> +		return dev_err_probe(&client->dev, PTR_ERR(ddata->regmap),
-> +				     "Failed to allocate register map\n");
-> +	}
-> +
-> +	i2c_set_clientdata(client, ddata);
-> +
-> +	ret = devm_mfd_add_devices(&client->dev, PLATFORM_DEVID_AUTO,
-> +				   cells, ARRAY_SIZE(cells), NULL, 0, NULL);
-> +	if (ret)
-> +		return dev_err_probe(&client->dev, ret,
-> +				     "Failed to register child devices\n");
-> +
-> +	return ret;
-> +}
-> +
-> +static const struct i2c_device_id bq257xx_i2c_ids[] = {
-> +	{ "bq25703a" },
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(i2c, bq257xx_i2c_ids);
-> +
-> +static const struct of_device_id bq257xx_of_match[] = {
-> +	{ .compatible = "ti,bq25703a" },
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(of, bq257xx_of_match);
-> +
-> +static struct i2c_driver bq257xx_driver = {
-> +	.driver = {
-> +		.name = "bq257xx",
-> +		.of_match_table = bq257xx_of_match,
-> +	},
-> +	.probe = bq257xx_probe,
-> +	.id_table = bq257xx_i2c_ids,
-> +};
-> +module_i2c_driver(bq257xx_driver);
-> +
-> +MODULE_DESCRIPTION("bq257xx buck/boost/charger driver");
-> +MODULE_AUTHOR("Chris Morgan <macromorgan@hotmail.com>");
-> +MODULE_LICENSE("GPL");
-> diff --git a/include/linux/mfd/bq257xx.h b/include/linux/mfd/bq257xx.h
-> new file mode 100644
-> index 000000000000..1d6ddc7fb09f
-> --- /dev/null
-> +++ b/include/linux/mfd/bq257xx.h
-> @@ -0,0 +1,104 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Register definitions for TI BQ257XX
-> + * Copyright (C) 2020 Texas Instruments Incorporated - http://www.ti.com/
-> + */
-> +
-> +#define BQ25703_CHARGE_OPTION_0			0x00
-> +#define BQ25703_CHARGE_CURRENT			0x02
-> +#define BQ25703_MAX_CHARGE_VOLT			0x04
-> +#define BQ25703_OTG_VOLT			0x06
-> +#define BQ25703_OTG_CURRENT			0x08
-> +#define BQ25703_INPUT_VOLTAGE			0x0a
-> +#define BQ25703_MIN_VSYS			0x0c
-> +#define BQ25703_IIN_HOST			0x0e
-> +#define BQ25703_CHARGER_STATUS			0x20
-> +#define BQ25703_PROCHOT_STATUS			0x22
-> +#define BQ25703_IIN_DPM				0x24
-> +#define BQ25703_ADCIBAT_CHG			0x28
-> +#define BQ25703_ADCIINCMPIN			0x2a
-> +#define BQ25703_ADCVSYSVBAT			0x2c
-> +#define BQ25703_MANUFACT_DEV_ID			0x2e
-> +#define BQ25703_CHARGE_OPTION_1			0x30
-> +#define BQ25703_CHARGE_OPTION_2			0x32
-> +#define BQ25703_CHARGE_OPTION_3			0x34
-> +#define BQ25703_ADC_OPTION			0x3a
-> +
-> +#define BQ25703_EN_LWPWR			BIT(15)
-> +#define BQ25703_WDTMR_ADJ_MASK			GENMASK(14, 13)
-> +#define BQ25703_WDTMR_DISABLE			0
-> +#define BQ25703_WDTMR_5_SEC			1
-> +#define BQ25703_WDTMR_88_SEC			2
-> +#define BQ25703_WDTMR_175_SEC			3
-> +
-> +#define BQ25703_ICHG_MASK			GENMASK(12, 6)
-> +#define BQ25703_ICHG_STEP_UA			64000
-> +#define BQ25703_ICHG_MIN_UA			64000
-> +#define BQ25703_ICHG_MAX_UA			8128000
-> +
-> +#define BQ25703_MAX_CHARGE_VOLT_MASK		GENMASK(15, 4)
-> +#define BQ25703_VBATREG_STEP_UV			16000
-> +#define BQ25703_VBATREG_MIN_UV			1024000
-> +#define BQ25703_VBATREG_MAX_UV			19200000
-> +
-> +#define BQ25703_OTG_VOLT_MASK			GENMASK(13, 6)
-> +#define BQ25703_OTG_VOLT_STEP_UV		64000
-> +#define BQ25703_OTG_VOLT_MIN_UV			4480000
-> +#define BQ25703_OTG_VOLT_MAX_UV			20800000
-> +#define BQ25703_OTG_VOLT_NUM_VOLT		256
-> +
-> +#define BQ25703_OTG_CUR_MASK			GENMASK(14, 8)
-> +#define BQ25703_OTG_CUR_STEP_UA			50000
-> +#define BQ25703_OTG_CUR_MAX_UA			6350000
-> +
-> +#define BQ25703_MINVSYS_MASK			GENMASK(13, 8)
-> +#define BQ25703_MINVSYS_STEP_UV			256000
-> +#define BQ25703_MINVSYS_MIN_UV			1024000
-> +#define BQ25703_MINVSYS_MAX_UV			16128000
-> +
-> +#define BQ25703_STS_AC_STAT			BIT(15)
-> +#define BQ25703_STS_IN_FCHRG			BIT(10)
-> +#define BQ25703_STS_IN_PCHRG			BIT(9)
-> +#define BQ25703_STS_FAULT_ACOV			BIT(7)
-> +#define BQ25703_STS_FAULT_BATOC			BIT(6)
-> +#define BQ25703_STS_FAULT_ACOC			BIT(5)
-> +
-> +#define BQ25703_IINDPM_MASK			GENMASK(14, 8)
-> +#define BQ25703_IINDPM_STEP_UA			50000
-> +#define BQ25703_IINDPM_MIN_UA			50000
-> +#define BQ25703_IINDPM_MAX_UA			6400000
-> +#define BQ25703_IINDPM_DEFAULT_UA		3300000
-> +#define BQ25703_IINDPM_OFFSET_UA		50000
-> +
-> +#define BQ25703_ADCIBAT_DISCHG_MASK		GENMASK(6, 0)
-> +#define BQ25703_ADCIBAT_CHG_MASK		GENMASK(14, 8)
-> +#define BQ25703_ADCIBAT_CHG_STEP_UA		64000
-> +#define BQ25703_ADCIBAT_DIS_STEP_UA		256000
-> +
-> +#define BQ25703_ADCIIN				GENMASK(15, 8)
-> +#define BQ25703_ADCIINCMPIN_STEP		50000
-> +
-> +#define BQ25703_ADCVSYS_MASK			GENMASK(15, 8)
-> +#define BQ25703_ADCVBAT_MASK			GENMASK(7, 0)
-> +#define BQ25703_ADCVSYSVBAT_OFFSET_UV		2880000
-> +#define BQ25703_ADCVSYSVBAT_STEP		64000
-> +
-> +#define BQ25703_ADC_CH_MASK			GENMASK(7, 0)
-> +#define BQ25703_ADC_CONV_EN			BIT(15)
-> +#define BQ25703_ADC_START			BIT(14)
-> +#define BQ25703_ADC_FULL_SCALE			BIT(13)
-> +#define BQ25703_ADC_CMPIN_EN			BIT(7)
-> +#define BQ25703_ADC_VBUS_EN			BIT(6)
-> +#define BQ25703_ADC_PSYS_EN			BIT(5)
-> +#define BQ25703_ADC_IIN_EN			BIT(4)
-> +#define BQ25703_ADC_IDCHG_EN			BIT(3)
-> +#define BQ25703_ADC_ICHG_EN			BIT(2)
-> +#define BQ25703_ADC_VSYS_EN			BIT(1)
-> +#define BQ25703_ADC_VBAT_EN			BIT(0)
-> +
-> +#define BQ25703_EN_OTG_MASK			BIT(12)
-> +
-> +struct bq257xx_device {
-> +	struct i2c_client *client;
-> +	struct regmap *regmap;
-> +};
-> -- 
-> 2.43.0
-> 
-
--- 
-Lee Jones [李琼斯]
+thanks,
+Shivendra
 
