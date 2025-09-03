@@ -1,126 +1,130 @@
-Return-Path: <linux-pm+bounces-33741-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33742-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 730EDB426C5
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Sep 2025 18:23:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE4DFB426DF
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Sep 2025 18:28:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2EFAA3AEAC6
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Sep 2025 16:23:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 916E73A57B5
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Sep 2025 16:28:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BCA52D1916;
-	Wed,  3 Sep 2025 16:23:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E16432E54D3;
+	Wed,  3 Sep 2025 16:28:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b="Jqzcv09N"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NogQV0fa"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-08.mail-europe.com (mail-08.mail-europe.com [57.129.93.249])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 473C72D12E7
-	for <linux-pm@vger.kernel.org>; Wed,  3 Sep 2025 16:23:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.129.93.249
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30AFE2D63E4;
+	Wed,  3 Sep 2025 16:28:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756916613; cv=none; b=VuBmh8qnUQhZnZwKF1DNfnSpDZKNpXQXwaeoGSH+8djkeMcUn4iOaRsdf4dnKB6mj+mYH7AqihADowH0KnvulM3s86PnW6FwCo1dECm8nzylqXzLB9s6VzkH3ggi/3NHpHo8eaYLNHRRbNTjtcq6txyzYqssWPAAu0KjUF9giGk=
+	t=1756916882; cv=none; b=cOrQOm4VHH2dFeJb1DV4ZxiPYiO3xdwxjn8+T/8ifmz+ov2EO4X5tsIaFyxOc/leTv7IBaCRIUWpXcliU/5Z4Y6yQKa/J9Ee9wSqxI7j/y/SiT236uJobi7J7suhb3N1xeK7QT6c7D+yBQaoQd8ezk8UVv1un8jUSw1da/FviLk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756916613; c=relaxed/simple;
-	bh=ImTdk45fEohuEmL0fTKBT+vvbto6WFa2InFnhG0G+MA=;
-	h=Date:To:From:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Ckvtuo07GIOLc/l+GxTT7XTv0KFIEAb+B0sfhJlpveHh8iiSlYTxKVnpyrLYF8hyr2KRHiiKeSRjF3aGBlnmvwqtOcdAWN0ojBNSMDtaKoW9sVERGnrGuzxV6yxH5CnaKxGALGYt3YP9vHWAfr4ieDhMgIG7heOUfMHjGgkaT00=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=Jqzcv09N; arc=none smtp.client-ip=57.129.93.249
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-	s=protonmail; t=1756916599; x=1757175799;
-	bh=+ORUhx+zeVXnXE7+aCzen2Up5Y/VFjmxmSaXieTvP1Q=;
-	h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
-	 Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
-	b=Jqzcv09NnHP2W7WMJX5xh2S2uvEDF+9Sp8bKgdQ0ebTPhxHlru+hZMMhCNcPk9HBY
-	 FraJ5casOZkfpodAsHrmoBaUX8OlhQBjzZMjXAM2hAiPENxbgsI5nUBQMbLMgZ1+4J
-	 a3VekuOAEX2dWMDqa1TwC90EeJUG7rpFugT+W03JM6J7oEVLTG/6oeimN62fqEfyI2
-	 vPOO++OsjQui0DW4WyVYJzLdK7XUe/x9sS/o5BHMpjhT+TaN38o1mFrFHL3FEvcqjp
-	 bLKi0ZcVbGWdne2BVoSYIfshrEkmExQEXuyIfSbK9MRacs8Jx1W830ZBUFPd4fcey9
-	 T3WLgI/l0HNSA==
-Date: Wed, 03 Sep 2025 16:23:12 +0000
-To: "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
-From: aprilgrimoire <aprilgrimoire@proton.me>
-Cc: "mario.limonciello@amd.com" <mario.limonciello@amd.com>
-Subject: [BUG] MECHREVO Yilong15Pro GM5HG7A: lid switch causing unwanted s2idle wakeups
-Message-ID: <6ww4uu6Gl4F5n6VY5dl1ufASfKzs4DhMxAN8BuqUpCoqU3PQukVSVSBCl_lKIzkQ-S8kt1acPd58eyolhkWN32lMLFj4ViI0Tdu2jwhnYZ8=@proton.me>
-Feedback-ID: 151975985:user:proton
-X-Pm-Message-ID: acb382bdbb0c6be637933d3b0930c7d1f98c9157
+	s=arc-20240116; t=1756916882; c=relaxed/simple;
+	bh=ohfi0HqJzhAtGpVR6EnVIzSbyLCb+8C/x27UYL+bpmE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=npppzDm807AD6a7klC47OKEpkmA0EAvJL6wGHhFvjhuP7g30Xwos0NY9mPbqE70qcXZZgQrnR3XrmREPihIkDJmxMLURse2WRYg+cMbiz+fpDfre4lPTP46tGXugB2Z2DunyH2jOU6Xjw/ewpXx45LMz5xwfV+oNGrUBFVM/mNk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NogQV0fa; arc=none smtp.client-ip=209.85.167.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-55f76454f69so29930e87.0;
+        Wed, 03 Sep 2025 09:28:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1756916879; x=1757521679; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5qWfhUQvd7EuaFksqXbpSrvG1yXtKPy9RHczOGQWZB0=;
+        b=NogQV0faPsv8OTAii5cHApnVX1HdrWWEJpNv9CVRybAQzciZCvWEQ7/vObroSg1e1a
+         1O822NeWN8itZToSGFa1sdro/xR93cn7z+HNCwftSZSNZ3hRhBFZXbHEGG5mAVw9Kf0F
+         /N225Wdlo996WciquPMrclYERLOEwW4Sx1Ta3Jg4WQSne2kA1T2Lp4fGTUYuWVusGi3M
+         +qzByxLMiQ2tfakteDD+yj64QIhhzFRKY3aYkq2faH/xTPwGWVg89OP+Hi1bld1qmDEK
+         1VyJ00QSAlj89HUvmliHaA9uzDKerFhg54HFrBvtlc3XSMw9TzGuYxiTrVRZrPWhAixu
+         J+dg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756916879; x=1757521679;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5qWfhUQvd7EuaFksqXbpSrvG1yXtKPy9RHczOGQWZB0=;
+        b=IU5NXQJzknBN+qxATBrhBuGo3rITulr4zizhNsCRKJ2LyQJPjMVPFpLMy2x3bLtJ2n
+         9iaLDgUC34fSCnifiVz+B5kcT2PMoLAHeOlXjNsGnmfVjPwAncsHwHUZI2xZbY7EL8cJ
+         QwOuJyJIL8NAkYIHQBaWBblI70+QUafjocPXaF1nKk9Dy+TpmgadNhYmPs+IDyhBeaMo
+         qxo6jVe18MYceGWp3kBnjOgOavkNCSHkO/eXVVnJrDNawPrTYKeEh3QdLN9rgxuWaDl0
+         ukJofoTTlEQu8XZaML+LcbOieEI78pNGnDcc8y5Bn8FWoVOIUFw4NhyYRLLKMNuDGS3p
+         cZ0w==
+X-Forwarded-Encrypted: i=1; AJvYcCUzAeTUXdXbVUFaXiPO7M6aR8YDDP+v/bOyvZ5Jka0SV0gUL0Umy5S8U4vKS9nfCJ9m965b6cFmP4Y=@vger.kernel.org, AJvYcCWvfSlYWTQXTtdByDDR1/6nH/WD9t4gPZsS/PhZBMVID5VD02RFDqhM703+M7Dsqj6rLXaGpjnId7pKFokq@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyvuoz6Aw8FVzuoDDjVHKrUy8iQje0xyExhy3m4+UlfEetG9RBZ
+	RUsRqsEX/yqvXP2V5uWOds++lGC51KodzDDHIYqixnbKTyg7rW67rWGH
+X-Gm-Gg: ASbGnctGlHVMF8GfjFmRoLxdKjr/NhKuU02uXDTa1uPhXBicRVGRZyijQo9Fq4wNxD2
+	0tN8LY/CEDoX4UGCetqSuAh+BjR35nXzxqjlGfA6Cmrvj6/ItdTTRx4aNXY+/A6PWkZUZdxIlDP
+	nwZup4oM8Pqieh76p7Tdb7Y9jBJRpR3rYUJO30V737+bjmZw0+xOikWawNPGTe2Ub7lFLb1mn+3
+	GSqxGGpWT6OeH3fzvJbaCkmEG3OjQKC/gW49XXQdKBMTh8fIN9jX6aCs2X0Cucqlo51ZfOOG2A0
+	0vL1/bcESyd8b2SSsBUaA3HViduUORNmLsOdb9R5+Dp/yrmokqU810uRTj/LUSSYRpuvTixsy6j
+	QcQ+vznLnEtOQRA==
+X-Google-Smtp-Source: AGHT+IGakqVr9tJwsFTKbRCowF6A+ZKhvH0Q4lwodxjfZqI1A9JwQVEuGRl1OyB6JODyjIgrGAu6cg==
+X-Received: by 2002:a05:6512:671c:b0:55f:6c08:a15a with SMTP id 2adb3069b0e04-55f70905fe3mr4044095e87.32.1756916879145;
+        Wed, 03 Sep 2025 09:27:59 -0700 (PDT)
+Received: from xeon.. ([188.163.112.70])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5608ace9fddsm604665e87.78.2025.09.03.09.27.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Sep 2025 09:27:58 -0700 (PDT)
+From: Svyatoslav Ryhel <clamor95@gmail.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Svyatoslav Ryhel <clamor95@gmail.com>
+Cc: linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-iio@vger.kernel.org
+Subject: [PATCH v5 0/1 RESEND] thermal: thermal-generic-adc: add temp sensor function
+Date: Wed,  3 Sep 2025 19:27:48 +0300
+Message-ID: <20250903162749.109910-1-clamor95@gmail.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Hi!
-Opening or closing the lid causes my laptop Yilong15Pro GM5HG7A to wake up =
-from s2idle, similar to the symptom described in
+To avoid duplicating sensor functionality and conversion tables, this
+design allows converting an ADC IIO channel's output directly into a
+temperature IIO channel. This is particularly useful for devices where
+hwmon isn't suitable or where temperature data must be accessible through
+IIO.
 
-https://community.frame.work/t/tracking-waking-from-sleep-when-plugged-in-a=
-md-k-ubuntu-22-04/44168
+One such device is, for example, the MAX17040 fuel gauge.
 
-This issue for Framework 13 has been fixed in
+---
+Changes on switching from v4 to v5:
+- switched back to IIO_CHAN_INFO_PROCESSED
+- dropped schema commit
+- applied Jonathan Cameron code improvement suggestions
 
-https://lore.kernel.org/platform-driver-x86/20231212045006.97581-5-mario.li=
-monciello@amd.com/
+Changes on switching from v3 to v4:
+- switch to use of RAW and SCALED channels to provide more accurate data
 
-For me specifically, two interrupts appear on such unwanted wakeups: IRQ1 a=
-nd IRQ7. IRQ1 is the lid switch, with DRIVER=3D=3Dbutton. IRQ7 has SUBSYSTE=
-M=3D=3Dserio and DRIVER=3D=3Damd_gpio. I tried some workarounds and got to =
-disable IRQ1, but IRQ7 doesn't support disabling and the issue persists.
+Changes on switching from v2 to v3:
+- rephrased commit headers
 
-I did some modifications to the kernel code:
+Changes on switching from v1 to v2:
+- documented #iio-channel-cells property
+- switched to IIO_CHAN_INFO_PROCESSED
+---
 
------ drivers/platform/x86/amd/pmc/pmc.c
+Svyatoslav Ryhel (1):
+  thermal: thermal-generic-adc: add temperature sensor channel
 
-static int amd_pmc_wa_irq1(struct amd_pmc_dev *pdev)
-{
-        ...
-        if (device_may_wakeup(d)) {
-                dev_info_once(d, "Disabling IRQ1 wakeup source to avoid pla=
-tform firmware bug\n");
-                disable_irq_wake(1);
-                dev_warn(d, "Also disabling IRQ7!!! This is bad practice!!!=
- Remove after testing IMMEDIATELY!!!");
-                disable_irq_wake(7);
-                device_set_wakeup_enable(d, false);
-        }
-        ...
-}
+ drivers/thermal/thermal-generic-adc.c | 55 ++++++++++++++++++++++++++-
+ 1 file changed, 54 insertions(+), 1 deletion(-)
 
------ drivers/platform/x86/amd/pmc/pmc-quirks.c
-        ...
-        {
-                .ident =3D "MECHREVO Yilong15Pro Series GM5HG7A",
-                .driver_data =3D &quirk_spurious_8042,
-                .matches =3D {
-                        DMI_MATCH(DMI_SYS_VENDOR, "MECHREVO"),
-                        DMI_MATCH(DMI_PRODUCT_NAME, "Yilong15Pro Series GM5=
-HG7A"),
-                        /* Not matching BIOS version: MECHREVO doesn't supp=
-ort Linux officially, so no expectation of them fixing the bios. */
-                }
-        },
-        ...
+-- 
+2.48.1
 
-But IRC7 cannot be disabled:
-
-(base) =E2=9E=9C  ~ echo disabled | sudo tee /sys/kernel/irq/7/wakeup
-Password:
-tee: /sys/kernel/irq/7/wakeup: Permission denied
-
-In dsdt.dsl, I also nuked some code about the lid state and changed all Sha=
-redAndWake to Shared, however it didn't work either.
-
-Mechrevo officially only supports Windows, and this lid issue doesn't appea=
-r on Windows. Does this indicate this issue can be workaround in the driver=
- level? What can be done next?
-
-Thanks!
 
