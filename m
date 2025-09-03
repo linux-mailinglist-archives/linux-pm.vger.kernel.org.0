@@ -1,99 +1,116 @@
-Return-Path: <linux-pm+bounces-33772-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33773-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64966B42C3A
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Sep 2025 23:54:50 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8AC28B42D18
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Sep 2025 00:56:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B1BF2485B8E
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Sep 2025 21:54:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EE5C45E0D86
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Sep 2025 22:55:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C6CE2ECE93;
-	Wed,  3 Sep 2025 21:54:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 943C52EFDAB;
+	Wed,  3 Sep 2025 22:55:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lXnHhCdj"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 854BF2EDD47
-	for <linux-pm@vger.kernel.org>; Wed,  3 Sep 2025 21:54:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 696172EFD80;
+	Wed,  3 Sep 2025 22:55:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756936473; cv=none; b=I5qSHeftraTxz7U3jijTCF4uJjweWi25XEAsIgXtSWjQgkmV/cROr7I0jktpeGGMRI5/IFp6bXz7CV99CqbC26/yq6vTEvAtyxFEMrTULW4pis29/mTO2b2f90cZyQ6iFP51Q+iXdCj3LTvdEpRn7iNPoSw+4vjLhjGoJw693YM=
+	t=1756940129; cv=none; b=JlgLxYUk9DhaPD/Bv3JqA65w3mNy72eWJ6y0utf02wiysUPiXTg7LvWeqf5sGRQ1hknamwrzmD16Wak2f+oADDJYzvSLlkfunaKOS+NEWOBBYmuU+y6YpFt5eqmP31w+ZCWD6kIEqt8lVKSAcdFdfu2nL/0dmcsbuIoFCrlA/Tw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756936473; c=relaxed/simple;
-	bh=G4mYCXoN4yRBxspHAQL769uJxZrsIjBLXNwvtiJGyI8=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=C5AoOLM7+1lKVqwcjfRSjfHsTXe5vARn9oblDRvb8MsAMpGXOIrQQSoJQTXPi9pICMKFNkrhJPE6Vjm5c2KOdwNMsuabloP9oRwSL/t9F1jkVDtVsyPrKXbDIBPjnXQd/Wgc7GHEBjZ07ADPIMoKRW3YRAmDzBQCkeGi+kFbmso=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f197.google.com with SMTP id e9e14a558f8ab-3f05a805d9bso6602145ab.2
-        for <linux-pm@vger.kernel.org>; Wed, 03 Sep 2025 14:54:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756936471; x=1757541271;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2O74hPI1AmCEb/MNAKEFM55bhmEH5GlfBH15kqp2jTI=;
-        b=h2+T/eu1gc5uiB9iTitBGm1ZOWvzrKUwh+bWeImoaPhAND1igU4wN52CxsGFEtcsTO
-         PLxDt/btXxiaOuO2zF1cvg4e/ABxsleGRLDNon0zK0HR+JUlFPl7+UmW6Xpp6FZ7bk5y
-         xyiLrhBu13mx3nE1zT/HNn6MsyRqeii3j5YjrYrscP0RS0oEQdIgUgu9vKuZo2A+BHeX
-         7oKJeiJYBQWW503iZLHhBD48lgB449AytNupVP4ovvBYoI9TTPYM7Bie/xfgH4QKGGTC
-         tVPE+DZxB38j4GgAAkJHnFT5WngfopVPgKIKAU/BPIFQX9sc/nlmfKlVwBsVQxFHPKv0
-         AJvw==
-X-Forwarded-Encrypted: i=1; AJvYcCU1pR5Q64Ylzvnmzl09zkDsjaRfxEc2z575VrWJPNg5P8zKr5+bI9iw5wRGIKVbUT3W3Jhs/l78dw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwHI28SqLsZLvGlaMeQw76OyhLcFzisFTKdkJv8bnb5px/E/rHO
-	TZV8RzU5ufSzubfJq1fc98sAq8GDgnzQjjoB16oJ4+xZ28a6KKCIH9I03+RhLt0C9v7OR4O9R/G
-	7plVtekXEYhH2xu0SUjpVuPHhMdqkkdgFlXWuF8KJ79h+jtmIu+SRQYdSM3Q=
-X-Google-Smtp-Source: AGHT+IGQ8GGe2aGNCS5FqoX3dQ8cs8QfO01N2mWEh4tvTIeUDa/c+oQzCz8n+Yhf3P8i8J3Kk9jlVMkptUoPJUd0UTZ+1fj8yVll
+	s=arc-20240116; t=1756940129; c=relaxed/simple;
+	bh=1VgGtMZsWvs80zyeZmeX0N1kSokjzXOz9E4Nb9E9dD8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=Maiiw0XdHRz54JOJifMLEOc2areYNOCoJuAD4rCF9ycQ3E7xGjzAavmG6yNvU/+t4aTT7w+wZrNNIc+mQU7xDWCMV8kqYykX0I0QCbqylHVWYL7lZ3x20YBiNUqOSJLPWL3gccs/xXYmBruVYy6YH2FeGiaB6es6WSusVo4CP88=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lXnHhCdj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2FD3C4CEE7;
+	Wed,  3 Sep 2025 22:55:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756940128;
+	bh=1VgGtMZsWvs80zyeZmeX0N1kSokjzXOz9E4Nb9E9dD8=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:From;
+	b=lXnHhCdjC99sj9uGG9oV9sG4kb9KCqUAT4Ys+KBfjrMN9j2nv1062Z10Cc0bw8ncn
+	 Gw43AHBHHydaTnX/Z2mgF5PSwEuwuRptsY9a/D7QcFym6D76UrbYEROrV3WhJST/OO
+	 wUEE3J9XFZ1rRErS5mmfJf1yNb6zATqF45fxbEl5Oquy49lbqvzlkxl3yO7UwWBwK3
+	 UHbv4lNgom2seevc25qo591uc9K7s8dYJYojsKTu9l9aIKcWvC0UYOiwmEVno4s5jc
+	 F/veSmKPMcH/mkmzn07HNkcmrlzDxcu1Z8jYmsOfgUCx4b5mrjSy3+j3xsxphgIDH2
+	 8rCDRufj1ZYug==
+Date: Wed, 3 Sep 2025 17:55:27 -0500
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: Manivannan Sadhasivam <mani@kernel.org>
+Cc: "David E. Box" <david.e.box@linux.intel.com>, rafael@kernel.org,
+	bhelgaas@google.com, vicamo.yang@canonical.com, kenny@panix.com,
+	ilpo.jarvinen@linux.intel.com, nirmal.patel@linux.intel.com,
+	linux-pm@vger.kernel.org, linux-pci@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V3 1/2] PCI/ASPM: Add host-bridge API to override default
+ ASPM/CLKPM link state
+Message-ID: <20250903225527.GA1236657@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:17ca:b0:3ee:f256:ad0f with SMTP id
- e9e14a558f8ab-3f40028a817mr292023965ab.9.1756936470782; Wed, 03 Sep 2025
- 14:54:30 -0700 (PDT)
-Date: Wed, 03 Sep 2025 14:54:30 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <68b8b916.050a0220.3db4df.0205.GAE@google.com>
-Subject: [syzbot] Monthly pm report (Sep 2025)
-From: syzbot <syzbot+list1e6f2776186824071470@syzkaller.appspotmail.com>
-To: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2fo64esrc5v5vj46iff2ptgcthaeahwicuzug46popwqrryfsi@yt62sqsnv4e3>
 
-Hello pm maintainers/developers,
+On Sun, Aug 31, 2025 at 06:28:53PM +0530, Manivannan Sadhasivam wrote:
+> On Thu, Aug 28, 2025 at 03:43:45PM GMT, Bjorn Helgaas wrote:
+> > On Mon, Aug 25, 2025 at 01:35:22PM -0700, David E. Box wrote:
+> > > Synthetic PCIe hierarchies, such as those created by Intel VMD, are not
+> > > enumerated by firmware and do not receive BIOS-provided ASPM or CLKPM
+> > > defaults. Devices in such domains may therefore run without the intended
+> > > power management.
+> > > 
+> > > Add a host-bridge mechanism that lets controller drivers supply their own
+> > > defaults. A new aspm_default_link_state field in struct pci_host_bridge is
+> > > set via pci_host_set_default_pcie_link_state(). During link initialization,
+> > > if this field is non-zero, ASPM and CLKPM defaults come from it instead of
+> > > BIOS.
+> > > 
+> > > This enables drivers like VMD to align link power management with platform
+> > > expectations and avoids embedding controller-specific quirks in ASPM core
+> > > logic.
+> > 
+> > I think this kind of sidesteps the real issue.  Drivers for host
+> > controllers or PCI devices should tell us about *broken* things, but
+> > not about things advertised by the hardware and available for use.
+> > 
+> > The only documented policy controls I'm aware of for ASPM are:
+> > 
+> >   - FADT "PCIe ASPM Controls" bit ("if set, OS must not enable ASPM
+> >     control on this platform")
+> > 
+> >   - _OSC negotiation for control of the PCIe Capability (OS is only
+> >     allowed to write PCI_EXP_LNKCTL if platform has granted control to
+> >     the OS)
+> > 
+> > I think what we *should* be doing is enabling ASPM when it's
+> > advertised, subject to those platform policy controls and user choices
+> > like CONFIG_PCIEASPM_PERFORMANCE/POWERSAVE/etc and sysfs attributes.
+> > 
+> > So basically I think link->aspm_default should be PCIE_LINK_STATE_ALL
+> > without drivers doing anything at all.  Maybe we have to carve out
+> > exceptions, e.g., "VMD hierarchies are exempt from _OSC," or "devices
+> > on x86 systems before 2026 can't enable more ASPM than BIOS did," or
+> > whatever.  Is there any baby step we can make in that direction?
+> 
+> I'm not sure about the ACPI world, but for devicetree platforms,
+> BIOS or the bootloader won't configure ASPM for the devices
+> (mostly). So the baby step would be to set PCIE_LINK_STATE_ALL for
+> all devicetree platforms :)
 
-This is a 31-day syzbot report for the pm subsystem.
-All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/pm
+Yes.  How likely would this be to break something?
 
-During the period, 0 new issues were detected and 0 were fixed.
-In total, 3 issues are still open and 10 have already been fixed.
-
-Some of the still happening issues:
-
-Ref Crashes Repro Title
-<1> 920     Yes   WARNING in enable_work
-                  https://syzkaller.appspot.com/bug?extid=7053fbd8757fecbbe492
-<2> 8       Yes   possible deadlock in rpm_suspend
-                  https://syzkaller.appspot.com/bug?extid=361e2c54f7f4bf035391
-<3> 7       Yes   possible deadlock in dpm_for_each_dev
-                  https://syzkaller.appspot.com/bug?extid=2a03726f1d4eff48b278
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-To disable reminders for individual bugs, reply with the following command:
-#syz set <Ref> no-reminders
-
-To change bug's subsystems, reply with:
-#syz set <Ref> subsystems: new-subsystem
-
-You may send multiple commands in a single email message.
+Before doing that, I think we need to add some logging, at least at
+pci_dbg(), of what is already enabled and what we change, so we have
+some kind of hint when things do break.
 
