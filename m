@@ -1,186 +1,159 @@
-Return-Path: <linux-pm+bounces-33701-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33702-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id AFD23B41CB3
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Sep 2025 13:07:47 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CEF96B41CD8
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Sep 2025 13:14:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 133874E4B1F
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Sep 2025 11:07:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9C70D1718F7
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Sep 2025 11:14:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 145F72F5332;
-	Wed,  3 Sep 2025 11:07:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C64182F658E;
+	Wed,  3 Sep 2025 11:14:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fqEv+pAy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kalyoq8L"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D90112F3C0A;
-	Wed,  3 Sep 2025 11:07:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 851CA6BB5B;
+	Wed,  3 Sep 2025 11:14:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756897662; cv=none; b=qt6n6ydyS628wpeLf01+ZN4iBhgajl7yt8838ebPoKJml4bknlh8sTvYo1bV1gFq1lBPNt+XMvGLt29GAV0hjMrrNwEWirWpSoYgBBirfNJ3ojEkDllyLL2I3whDpOECFXFDbwKO17IGZY/VLVvv+R3kbSxIugw+mxmbStZEycU=
+	t=1756898072; cv=none; b=pbDh/idD6hXVSvZWHdseErqur5lGAaNdIubmyX9bixEaiIMOTp0AiR6TWm8MrEL02bMWGIrA0Sj3b5v+rLfWH79ndKEdV75b3VhmVcuwFC/x1srCFSXpWO47XJA75os9Wpa/Q/zcHfp3ti0bKgkKrHz8nqTQ0Ppuk2wXcXkWMZ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756897662; c=relaxed/simple;
-	bh=I5jJC5YsqDheZourzIns4HynVHdhk9fmj1JJIPP/qj8=;
+	s=arc-20240116; t=1756898072; c=relaxed/simple;
+	bh=vm2XwpR6G5MsEs9Dn0NTqtZEBq4V49QV1VyjT2uiFhE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jGN/cYquAmqyTAD9c8ZfHnzCHSv1bTzdJGwdjzUGbRtjCKHBLPsVsTionnEn3q+nDz8AttTMqiw7Um4JtNz8T2ho8CkQKFY6g0lK5/d4j5BApGEMw4MRUtHXMczzsqKNMsqX3zqSLTfHw61xouLGWEr8bMusKl1TVX53sGP7ktI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fqEv+pAy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C2DBC116C6;
-	Wed,  3 Sep 2025 11:07:41 +0000 (UTC)
+	 To:Cc:Content-Type; b=Mm/phWZVxEilPI2pNLnZ02n9jXBbhzN3azb5xsbtuDPPK913r6Fm6UZh20p3Nk9XB5wkmOrEzXJ1c+TNFZy2nQenUHMrvjp7QqO7/8rzDO3uPCv2+DPtc0joWPhlqQENFUEsXv5ZCgEo/wO7/YfuZqx3b4c9nd/S5kBJTZU1hec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kalyoq8L; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0628EC4AF0B;
+	Wed,  3 Sep 2025 11:14:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756897661;
-	bh=I5jJC5YsqDheZourzIns4HynVHdhk9fmj1JJIPP/qj8=;
+	s=k20201202; t=1756898072;
+	bh=vm2XwpR6G5MsEs9Dn0NTqtZEBq4V49QV1VyjT2uiFhE=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=fqEv+pAyAzyDrwpa5ycGv/vldrUVHpTuiDwGvEU2O6hGAiipiQXkldusw4kvuf6Ta
-	 cyV691K7HV2CSSp8RoFgEXQf84IwuC16kmYKwmqprM4hACuabw/Z49bNoigh1mbEVi
-	 lfVSk0I2yERql792+nQOshGycv64BeF9PB3eQ5nWjt+fGlrVe/cR9xNBoxCPamJrks
-	 yVsq4p2oAGuZ5xkOC8mK0WErUxsBMrB2HOYx2elO7r0rSGI9RKr76w6rqsVHTkCBqv
-	 Yq7iI8uXw1FkSRxTENbSKEf2moleyaF/1d2WgigF4GfkMeRbER5SxoiWsyCxL1V2R/
-	 ofS+YYpOUUEJQ==
-Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-7459de59821so150469a34.1;
-        Wed, 03 Sep 2025 04:07:41 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUj0Y0dprgvS1emlIgqMZ0jXlQ3NB50ScXDFT+itF84+5qh8XTsS285gghVwJNgYAOsotjfyqvwQg4=@vger.kernel.org, AJvYcCUsaCZz+5zJEX4snl0XQ/Yz4A9gakD1q22bJ5VhlA57wBixgbDaaApVWIqxhQ/c9FpaSsSAGu6woqCq@vger.kernel.org, AJvYcCWqMz0BlqVcSkdKRbWhKrTwLsjvaqoJyKTMGdNMDsAp3vlCUVARfECjIG7Zgb7iUu0Al+9LiJBKwlnSlg==@vger.kernel.org, AJvYcCX83Y8guLBHNoz+nd6cRrTd6UbYj8xh43YIGn28VV3XzXmVqAzu6XBJGh+852zXCbkrkSiYJWmDalKV2S/y@vger.kernel.org
-X-Gm-Message-State: AOJu0YxjUywI4fMtmPe6+nodFf7V5y8l7pu5UFHJHRj3sLewdR19hlgm
-	A/q+sI7GYcCVKacQoUood/Gd9De6kvtFM8A6qZamw9dcLswTlNbnciaGpfVyg9fi80WGcyAHrDH
-	vzZF1TKWMxjlq/9xXqgYdnGne6RccIog=
-X-Google-Smtp-Source: AGHT+IFm2i7E3heNFR05VvLVwsYMlRgIplk+0JGJpDoA3hxcK7mnkmts5Dorpw2CJryu3vWJY1lQqzZJZSMnb+GSebY=
-X-Received: by 2002:a05:6830:2642:b0:745:508c:455c with SMTP id
- 46e09a7af769-74569dc34b9mr7242918a34.8.1756897660735; Wed, 03 Sep 2025
- 04:07:40 -0700 (PDT)
+	b=kalyoq8LVQW7m3mKRob6fOKRe//8tQVSnrsGtI4fcNKOcDAc/PfD9KCXn3KIowLVC
+	 VsfuNWiPnZYImatY7gJ89l3u9uDxVhbbEnddnYAT+KElOAH2mmVXquFpg5m5NTNYbV
+	 lEHaYSVlHITD9qR2fWWrlIw5ON7duo6dxtj/8kDhnDtUUfn4iBiM/KFzFWi9BpEGcc
+	 sNQ/6Uwq+8jaHqoRGWnaAJCOp5Tsq1WYxScT17K6B3cJ8hgZ7sQ3p8ymRvNNyO0sRU
+	 i3xKVKOB29SoKQonPzRIUP7KdR+UjBGdMtoq7KtijJFN8qvJoZDtJwNVr9vkV6oxB3
+	 pXmG/OM4XQAyw==
+Received: by mail-ot1-f45.google.com with SMTP id 46e09a7af769-74542b1b2bcso6298184a34.3;
+        Wed, 03 Sep 2025 04:14:31 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCULhJp9th0FDfiBrr8HiFjQYmx/1wGq6PbpICiVhHfLVhwg4pWhyxeQvEOVwCMQUMqBIYiU3Omt/7M=@vger.kernel.org, AJvYcCVviN7VZRTxgVVTKzRvE6u0/i6H0483bRGRF1yAGcycWflJKgKkXs4SzlkHu5kuZ0uPF3GbeU3ZYJE=@vger.kernel.org, AJvYcCX2BDL1w4X8M8hrbLxO/fbXzJGzSOvqjqV+lq17VUZOL+ZfmrZsGmiWk/4VIvRD9sivuQCI4bYVlDfk@vger.kernel.org, AJvYcCXJEpvmJ7007DoT8FeecimNcMsr1ChaxSb+L2aXtv7uG7gkw3Y4e3hzmz8y1m6LELZxrlOgyLyuci1YiG48ZQjpK4sn@vger.kernel.org, AJvYcCXZUlXpzV/xESgMaAZR3/zw+wLvwYuzQU+5qyvIPw6tBbbkuahRo9QbpW9ZvZGriop0Q2EP/s8+RrIGxQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy5PzwNcJsGUepV+pM7xZyPDqLW6GQMolo0/iZhOcnq2SSwcr7r
+	k7gl12uoGLr/NZ+jaxIKAPBVJiHLRVNNWYRfAYS9dyUM722sbu6CPgV+Z1oiZZkUKn1A00u8hT8
+	SB1uc1DWymCY9OG6oJ3+RslNSGNwf25Q=
+X-Google-Smtp-Source: AGHT+IFYtjUdNN091mPJ/megBC3ceMzIS6ZlVy0m6f3KXcMJbRJK/ufd2TNnsBvKPVbrcFu/dkcLveR5ZqO+tEUHKi0=
+X-Received: by 2002:a05:6830:258f:b0:741:c51c:9d9 with SMTP id
+ 46e09a7af769-74569d79ca2mr6941662a34.1.1756898071379; Wed, 03 Sep 2025
+ 04:14:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250901085748.36795-1-zhangzihuan@kylinos.cn> <20250901085748.36795-3-zhangzihuan@kylinos.cn>
-In-Reply-To: <20250901085748.36795-3-zhangzihuan@kylinos.cn>
+References: <20250818020101.3619237-1-superm1@kernel.org> <29e61472-5f41-4e76-9b5b-f3e106d6a629@kernel.org>
+In-Reply-To: <29e61472-5f41-4e76-9b5b-f3e106d6a629@kernel.org>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 3 Sep 2025 13:07:27 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0jxHQ3fBk_fSwg7QYsePvUyh=FDteyO+8F8oGfUwX2E9A@mail.gmail.com>
-X-Gm-Features: Ac12FXxXhqpwDXjodHxvBBGUiHE126LWfl3UmWuK-7WK82DNR_r2zpKQkeauJig
-Message-ID: <CAJZ5v0jxHQ3fBk_fSwg7QYsePvUyh=FDteyO+8F8oGfUwX2E9A@mail.gmail.com>
-Subject: Re: [PATCH v3 02/12] ACPI: processor: thermal: Use scope-based
- cleanup helper
-To: Zihuan Zhang <zhangzihuan@kylinos.cn>
-Cc: "Rafael J . wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Krzysztof Kozlowski <krzk@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
-	Thierry Reding <thierry.reding@gmail.com>, MyungJoo Ham <myungjoo.ham@samsung.com>, 
-	Kyungmin Park <kyungmin.park@samsung.com>, Chanwoo Choi <cw00.choi@samsung.com>, 
-	Jani Nikula <jani.nikula@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
-	Tvrtko Ursulin <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>, 
-	Simona Vetter <simona@ffwll.ch>, Daniel Lezcano <daniel.lezcano@kernel.org>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, Shawn Guo <shawnguo@kernel.org>, 
-	Eduardo Valentin <edubezval@gmail.com>, Keerthy <j-keerthy@ti.com>, Ben Horgan <ben.horgan@arm.com>, 
-	zhenglifeng <zhenglifeng1@huawei.com>, Zhang Rui <rui.zhang@intel.com>, 
-	Len Brown <lenb@kernel.org>, Lukasz Luba <lukasz.luba@arm.com>, 
-	Pengutronix Kernel Team <kernel@pengutronix.de>, Beata Michalska <beata.michalska@arm.com>, 
-	Fabio Estevam <festevam@gmail.com>, Pavel Machek <pavel@kernel.org>, Sumit Gupta <sumitg@nvidia.com>, 
-	Prasanna Kumar T S M <ptsm@linux.microsoft.com>, Sudeep Holla <sudeep.holla@arm.com>, 
-	Yicong Yang <yangyicong@hisilicon.com>, linux-pm@vger.kernel.org, 
-	linux-acpi@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	linux-arm-kernel@lists.infradead.org, intel-gfx@lists.freedesktop.org, 
-	dri-devel@lists.freedesktop.org, imx@lists.linux.dev, 
-	linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org
+Date: Wed, 3 Sep 2025 13:14:18 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0hLO5xhmjniO4=rLK1JK9OM8naxXVEGuHUT3cuhRp=Atw@mail.gmail.com>
+X-Gm-Features: Ac12FXzNMS5NRD7LbxBvydgvS_DdIA-2JZ6IFCfa_y9sZ_Fxqc7W0P6m00WI9xA
+Message-ID: <CAJZ5v0hLO5xhmjniO4=rLK1JK9OM8naxXVEGuHUT3cuhRp=Atw@mail.gmail.com>
+Subject: Re: [PATCH v6 00/11] Improvements to S5 power consumption
+To: Mario Limonciello <superm1@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Danilo Krummrich <dakr@kernel.org>
+Cc: Bjorn Helgaas <bhelgaas@google.com>, Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>, 
+	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>, 
+	"Martin K . Petersen" <martin.petersen@oracle.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	"open list:HIBERNATION (aka Software Suspend, aka swsusp)" <linux-pm@vger.kernel.org>, 
+	"open list:RADEON and AMDGPU DRM DRIVERS" <amd-gfx@lists.freedesktop.org>, 
+	"open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>, 
+	"open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>, 
+	"open list:SCSI SUBSYSTEM" <linux-scsi@vger.kernel.org>, 
+	"open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>, 
+	"open list:TRACING" <linux-trace-kernel@vger.kernel.org>, AceLan Kao <acelan.kao@canonical.com>, 
+	Kai-Heng Feng <kaihengf@nvidia.com>, Mark Pearson <mpearson-lenovo@squebb.ca>, 
+	=?UTF-8?Q?Merthan_Karaka=C5=9F?= <m3rthn.k@gmail.com>, 
+	Eric Naim <dnaim@cachyos.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Sep 1, 2025 at 10:58=E2=80=AFAM Zihuan Zhang <zhangzihuan@kylinos.c=
-n> wrote:
+On Wed, Sep 3, 2025 at 6:41=E2=80=AFAM Mario Limonciello <superm1@kernel.or=
+g> wrote:
 >
-> Replace the manual cpufreq_cpu_put() with __free(put_cpufreq_policy)
-> annotation for policy references. This reduces the risk of reference
-> counting mistakes and aligns the code with the latest kernel style.
+> On 8/17/2025 9:00 PM, Mario Limonciello (AMD) wrote:
+> > A variety of issues both in function and in power consumption have been
+> > raised as a result of devices not being put into a low power state when
+> > the system is powered off.
+> >
+> > There have been some localized changes[1] to PCI core to help these iss=
+ues,
+> > but they have had various downsides.
+> >
+> > This series instead tries to use the S4 flow when the system is being
+> > powered off.  This lines up the behavior with what other operating syst=
+ems
+> > do as well.  If for some reason that fails or is not supported, run the=
+ir
+> > shutdown() callbacks.
+> >
+> > Cc: AceLan Kao <acelan.kao@canonical.com>
+> > Cc: Kai-Heng Feng <kaihengf@nvidia.com>
+> > Cc: Mark Pearson <mpearson-lenovo@squebb.ca>
+> > Cc: Merthan Karaka=C5=9F <m3rthn.k@gmail.com>
+> > Cc: Eric Naim <dnaim@cachyos.org>
+> > ---
+> > v5->v6:
+> >   * Fix for LKP robot issue
+> >   * Some commit message changes
+> >   * Rebase on 6.17-rc2
+> >
+> > Mario Limonciello (AMD) (11):
+> >    PM: Introduce new PMSG_POWEROFF event
+> >    scsi: Add PM_EVENT_POWEROFF into suspend callbacks
+> >    usb: sl811-hcd: Add PM_EVENT_POWEROFF into suspend callbacks
+> >    USB: Pass PMSG_POWEROFF event to suspend_common() for poweroff with =
+S4
+> >      flow
+> >    PCI: PM: Disable device wakeups when halting system through S4 flow
+> >    PCI: PM: Split out code from pci_pm_suspend_noirq() into helper
+> >    PCI: PM: Run bridge power up actions as part of restore phase
+> >    PCI: PM: Use pci_power_manageable() in pci_pm_poweroff_noirq()
+> >    PCI: Put PCIe bridges with downstream devices into D3 at hibernate
+> >    drm/amd: Avoid evicting resources at S5
+> >    PM: Use hibernate flows for system power off
+> >
+> >   drivers/base/power/main.c                  |  7 ++
+> >   drivers/gpu/drm/amd/amdgpu/amdgpu_device.c |  4 +
+> >   drivers/pci/pci-driver.c                   | 99 +++++++++++++++------=
+-
+> >   drivers/scsi/mesh.c                        |  1 +
+> >   drivers/scsi/stex.c                        |  1 +
+> >   drivers/usb/core/hcd-pci.c                 | 11 ++-
+> >   drivers/usb/host/sl811-hcd.c               |  1 +
+> >   include/linux/pm.h                         |  5 +-
+> >   include/trace/events/power.h               |  3 +-
+> >   kernel/reboot.c                            |  6 ++
+> >   10 files changed, 103 insertions(+), 35 deletions(-)
+> >
 >
-> No functional change intended.
+> Rafael, Bjorn,
 >
-> Signed-off-by: Zihuan Zhang <zhangzihuan@kylinos.cn>
-> ---
->  drivers/acpi/processor_thermal.c | 18 ++++++------------
->  1 file changed, 6 insertions(+), 12 deletions(-)
->
-> diff --git a/drivers/acpi/processor_thermal.c b/drivers/acpi/processor_th=
-ermal.c
-> index 1219adb11ab9..3c8b57df9619 100644
-> --- a/drivers/acpi/processor_thermal.c
-> +++ b/drivers/acpi/processor_thermal.c
-> @@ -62,19 +62,14 @@ static int phys_package_first_cpu(int cpu)
->         return 0;
->  }
->
-> -static int cpu_has_cpufreq(unsigned int cpu)
-> +static bool cpu_has_cpufreq(unsigned int cpu)
->  {
-> -       struct cpufreq_policy *policy;
-> +       struct cpufreq_policy *policy __free(put_cpufreq_policy) =3D cpuf=
-req_cpu_get(cpu);
->
->         if (!acpi_processor_cpufreq_init)
->                 return 0;
->
-> -       policy =3D cpufreq_cpu_get(cpu);
-> -       if (policy) {
-> -               cpufreq_cpu_put(policy);
-> -               return 1;
-> -       }
-> -       return 0;
-> +       return !!policy;
->  }
->
->  static int cpufreq_get_max_state(unsigned int cpu)
-> @@ -95,7 +90,6 @@ static int cpufreq_get_cur_state(unsigned int cpu)
->
->  static int cpufreq_set_cur_state(unsigned int cpu, int state)
->  {
-> -       struct cpufreq_policy *policy;
->         struct acpi_processor *pr;
->         unsigned long max_freq;
->         int i, ret;
-> @@ -111,6 +105,9 @@ static int cpufreq_set_cur_state(unsigned int cpu, in=
-t state)
->          * frequency.
->          */
->         for_each_online_cpu(i) {
+> Any feedback for this series?
 
-I would still prefer the code below to be moved to a separate function
-that would be called in each step of the for_each_online_cpu() loop.
+I still have the same basic concern as before: It is an intrusive
+change likely to cause regressions to occur.
 
-> +               struct cpufreq_policy *policy __free(put_cpufreq_policy) =
-=3D
-> +                       cpufreq_cpu_get(i);
-> +
->                 if (topology_physical_package_id(i) !=3D
->                     topology_physical_package_id(cpu))
->                         continue;
-> @@ -120,15 +117,12 @@ static int cpufreq_set_cur_state(unsigned int cpu, =
-int state)
->                 if (unlikely(!freq_qos_request_active(&pr->thermal_req)))
->                         continue;
->
-> -               policy =3D cpufreq_cpu_get(i);
->                 if (!policy)
->                         return -EINVAL;
->
->                 max_freq =3D (policy->cpuinfo.max_freq *
->                             (100 - reduction_step(i) * cpufreq_thermal_re=
-duction_pctg)) / 100;
->
-> -               cpufreq_cpu_put(policy);
-> -
->                 ret =3D freq_qos_update_request(&pr->thermal_req, max_fre=
-q);
->                 if (ret < 0) {
->                         pr_warn("Failed to update thermal freq constraint=
-: CPU%d (%d)\n",
-> --
-> 2.25.1
->
->
+It also changes the driver ABI quite dramatically because different
+callbacks will now be used for system shutdown and kexec, for example,
+at least on some platforms.
+
+Frankly, I'd like to know Greg's and Danilo's opinions on the direction her=
+e.
 
