@@ -1,164 +1,140 @@
-Return-Path: <linux-pm+bounces-33669-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33670-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 014E2B4117A
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Sep 2025 02:51:34 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA547B41188
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Sep 2025 02:56:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BE95A7B3A57
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Sep 2025 00:49:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D789C1895E8C
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Sep 2025 00:56:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BE0C153BED;
-	Wed,  3 Sep 2025 00:51:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83193199FBA;
+	Wed,  3 Sep 2025 00:55:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Mu57fO9m"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBB6013D8A4;
-	Wed,  3 Sep 2025 00:51:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA602195B1A;
+	Wed,  3 Sep 2025 00:55:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756860688; cv=none; b=RR2iNL1MoatBeFcuVhoQy8nIudinRkk+8d5DeYOxU/tIFnf0hYNNWaK1Q/hsrEBKN6QGR0PV39wZDF+194N/A7DxfVwZ2KVowmnfajrCH0fkNq4e+iUZhLggT1BUdv98g9T/jUvgfj4+Y8gVLBrffwqvrzv8UkWoeQJKohevP+w=
+	t=1756860951; cv=none; b=J2INQP4X+v29etkpIyBXvBjs0Y7FUSC9T0OPf7dd4mzj3onLujRcYhuH+U1TLfef6WkLK+e+uXB/XjKiex9OJTchEE9fara753B5+7+EBLJevXpGJH9vluXN3Z5JANCNJ0Pbs0WUIwB/mi+vZv7QDRcpAa+5Tc34UmDFSaI4bag=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756860688; c=relaxed/simple;
-	bh=SWn2YoMWlNMEPB8MPyZq3aGVAkzLGIwvqZCBCqopq50=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GW6RtB6MlDJ9htREGdIJgqvhIKFRdlP424Nz5dBiuPYhaBEZmJfR0hD0WFiASDpejpJabmN7qAcI+eQlad9fZZegB7B+xOSkZC7gHJIwNB5iwKaEro4v6DOtPFsb+Spc1QRyq5rBLuaoCMPvCHpDDdbrnwUG6mi1UB/NXf26Otg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 1864b9c6886011f0b29709d653e92f7d-20250903
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.45,REQID:149e317a-1aff-43d6-90c9-1a5d04dd57b0,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:6493067,CLOUDID:461f970947de3929c2a541614ce8e229,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102,TC:nil,Content:0|52,EDM:
-	-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,
-	AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: 1864b9c6886011f0b29709d653e92f7d-20250903
-Received: from mail.kylinos.cn [(10.44.16.175)] by mailgw.kylinos.cn
-	(envelope-from <zhangzihuan@kylinos.cn>)
-	(Generic MTA)
-	with ESMTP id 1164660955; Wed, 03 Sep 2025 08:51:15 +0800
-Received: from mail.kylinos.cn (localhost [127.0.0.1])
-	by mail.kylinos.cn (NSMail) with SMTP id 22D4BE008FA3;
-	Wed,  3 Sep 2025 08:51:15 +0800 (CST)
-X-ns-mid: postfix-68B79102-9412696
-Received: from [172.25.120.24] (unknown [172.25.120.24])
-	by mail.kylinos.cn (NSMail) with ESMTPA id 28EDFE008FA2;
-	Wed,  3 Sep 2025 08:51:07 +0800 (CST)
-Message-ID: <40706b1f-e23c-417b-b3e1-2dc839828588@kylinos.cn>
-Date: Wed, 3 Sep 2025 08:51:06 +0800
+	s=arc-20240116; t=1756860951; c=relaxed/simple;
+	bh=swZueAhBXSwklO7Tf/fSg9bLL3E16TGenKFw98dM9Wk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=GIjJO/cRN+lWId6rOoIVrKT/LsGrcV99/ARoZ7akIvvUr9AHDWwEqvCiTZLf4yrItLNUTUtppa0C25pVS2msfTdwQ/rsgXfneCij8cAOSCFNJk1ZNVinfBZtOgv3tdiJBeqSt5g760Qpz9shlX3HR3n0/PWFzeLJFWaJFosmqbs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Mu57fO9m; arc=none smtp.client-ip=209.85.167.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-55f6186cc17so4936739e87.2;
+        Tue, 02 Sep 2025 17:55:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1756860948; x=1757465748; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=biFf42usLj+Vl0gHJRJPvudXd19GDtQlKIRujcLuh50=;
+        b=Mu57fO9mnGb6wQSV+akQdt6rmo+F4HgUyAwJOWsLusZGtIAbX/8T7luezRG4M1GTwe
+         IwaF/WtoCNw1YbukPpB+BwOHqYNz8hsXc2F1a048CswPc6SiMlp65cqonabI0Cl43t33
+         inC21+ZGelYIPKYx4fo9ylAUwJVP7HkH99lmNcszSSIK6qPUU4vULvfmC0pw7FG9ftWN
+         SYoyFVmCLGYxh+QekGzD37IaVe+ifWornLB0z+RvxRSIKvYPGouS/hzkNnKiiIIlq6XG
+         JaOMVcl6oLBfFSeuqxh1s8GZrxuTblvYAt8ie/OhAHP/Av4encivn0LnlODPVgOjfyjf
+         kt3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756860948; x=1757465748;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=biFf42usLj+Vl0gHJRJPvudXd19GDtQlKIRujcLuh50=;
+        b=b79mY24GRpZOPKK+v09e9kQj/YQVTXDoqqgO2P9DehjMPes+pCIacJVKmyqmgME+Pv
+         24BJrDSimsAR+7mgGExOsN9CRnkkhApweNhdCVCC6xvuEO8ETOugODWR52bXDXaqLDf4
+         x5xgW0C5OB2uo4vcHt/ewEuMGc0Bgj+6EnXYhWeKhu0bOzxKMrqg1DCW4OJlr6mek9bM
+         iJs9o9sdIZATWKUlPDbM+J7WXnlToUPIUFkC/XK7o3M4wHTcXYV7eR1/lmeahbufEavl
+         JmIEXvcUQlJdCYP2BbW6AzTG4LCUePP792FsBI+GxDMs1wqBovv9111iewHt2AjH4Qp+
+         UqmA==
+X-Forwarded-Encrypted: i=1; AJvYcCUqgbcEnKmF6j+7u5wn2SCNt8nwA6ZjzgklOR17EDp+cshmDXVUB1lsAJyXQp9rMBYxWvQhwIRLw1U=@vger.kernel.org, AJvYcCVf4KttbraW5K+Srr1jsHxJeeR0QlncYToH7smUPj5Qc2nug64T/rVPGCj8Hk1JG5O5oajv117av+NbYdw=@vger.kernel.org, AJvYcCVr5+TxGrXHUcXFq67BqOpC7nCN2h5MiZ1vWBqoSoEQ+pGn4iMOCxutKzpnvH7bw9A7X7nYnzJZ+OGF@vger.kernel.org, AJvYcCWT0vnE3PQz9gNBZtsujdU5rNYteRbrQvQsfyrbvZx8QXNImLtOUlyPzovXKo08QQztVLeMq0qN9qCo94dM@vger.kernel.org
+X-Gm-Message-State: AOJu0YxiAx+OkbNS1TooxE9zYqbZOX8tNXB08y7uXRaKFSpVhdfvKLYT
+	1FdrXf2SccMK7Vd9yoYE7NFh4S8F6rKW0frmpDW71PtqLuCQmG8Xr1y8PMCCDayKZA7xywJEgIO
+	08YieNF1Xlay6aEgtCxUhvbYru5RUb1M=
+X-Gm-Gg: ASbGncu8DWzysgY0+C/VPa37OzL+tH8bbxIjgWqeQV8ZaH5vHbZsUhS4Pu1ad08L+iD
+	n0kNHbnuKod3gmPhRLdnScBSgtCYYuVXphVwfGrPJF9IC5Ve9ITYnv+M7qDc42druMeCZGMBQ9f
+	zW4/E6Mp+v3VUPchnJLaDTOaQkaivR4J/PV9Hv66g1fJ/VYPLm2q42X8KfYZLy6QLnHNcOKu89k
+	C8sjtOp
+X-Google-Smtp-Source: AGHT+IGPZiMfaP1paVpXDCG7OlJWEUH8L/hCasKQtaW7zajb61su/qh6PDSxtn5RJPKHGKRCZNKuZzFMs+Ee/c4fsFU=
+X-Received: by 2002:a05:6512:4045:10b0:55f:71ad:5913 with SMTP id
+ 2adb3069b0e04-55f71ad6048mr3433585e87.50.1756860947536; Tue, 02 Sep 2025
+ 17:55:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 03/12] cpufreq: intel_pstate: Use scope-based cleanup
- helper
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Viresh Kumar <viresh.kumar@linaro.org>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Michael Ellerman <mpe@ellerman.id.au>, Krzysztof Kozlowski
- <krzk@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>,
- Thierry Reding <thierry.reding@gmail.com>,
- MyungJoo Ham <myungjoo.ham@samsung.com>,
- Kyungmin Park <kyungmin.park@samsung.com>,
- Chanwoo Choi <cw00.choi@samsung.com>,
- Jani Nikula <jani.nikula@linux.intel.com>,
- Rodrigo Vivi <rodrigo.vivi@intel.com>, Tvrtko Ursulin
- <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>,
- Simona Vetter <simona@ffwll.ch>, Daniel Lezcano <daniel.lezcano@kernel.org>,
- Sascha Hauer <s.hauer@pengutronix.de>, Shawn Guo <shawnguo@kernel.org>,
- Eduardo Valentin <edubezval@gmail.com>, Keerthy <j-keerthy@ti.com>,
- Ben Horgan <ben.horgan@arm.com>, zhenglifeng <zhenglifeng1@huawei.com>,
- Zhang Rui <rui.zhang@intel.com>, Len Brown <lenb@kernel.org>,
- Lukasz Luba <lukasz.luba@arm.com>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Beata Michalska <beata.michalska@arm.com>, Fabio Estevam
- <festevam@gmail.com>, Pavel Machek <pavel@kernel.org>,
- Sumit Gupta <sumitg@nvidia.com>,
- Prasanna Kumar T S M <ptsm@linux.microsoft.com>,
- Sudeep Holla <sudeep.holla@arm.com>, Yicong Yang <yangyicong@hisilicon.com>,
- linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
- intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
- imx@lists.linux.dev, linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250901085748.36795-1-zhangzihuan@kylinos.cn>
- <20250901085748.36795-4-zhangzihuan@kylinos.cn>
- <CAJZ5v0hu48NrMr6Vkjn_UyHywJMx7F5N6yWf2LiXxykZF79EKA@mail.gmail.com>
- <29890791-4ddf-49c7-a4f2-0ac83e6d53c6@kylinos.cn>
- <CAJZ5v0jvOKeLRkjWoKR5eVKZ-hib7c8D-VOBvtCvs1+HGfPUiQ@mail.gmail.com>
-From: Zihuan Zhang <zhangzihuan@kylinos.cn>
-In-Reply-To: <CAJZ5v0jvOKeLRkjWoKR5eVKZ-hib7c8D-VOBvtCvs1+HGfPUiQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+References: <20250828-t210-actmon-v1-0-aeb19ec1f244@gmail.com> <25477710.6Emhk5qWAg@senjougahara>
+In-Reply-To: <25477710.6Emhk5qWAg@senjougahara>
+From: Aaron Kling <webgeek1234@gmail.com>
+Date: Tue, 2 Sep 2025 19:55:36 -0500
+X-Gm-Features: Ac12FXyiMmcEPBnXVhKhTD563A-aPjl9MtxAaVDXptfjkCQhW65cAeinrQCkxqE
+Message-ID: <CALHNRZ-660RVcYLo9Pxxj9gz1s0x4nLYOSFwbtiEwSU1qbvA5Q@mail.gmail.com>
+Subject: Re: [PATCH RFC 0/7] Support Tegra210 actmon for dynamic EMC scaling
+To: Mikko Perttunen <mperttunen@nvidia.com>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>, Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Thierry Reding <thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, MyungJoo Ham <myungjoo.ham@samsung.com>, 
+	Kyungmin Park <kyungmin.park@samsung.com>, Chanwoo Choi <cw00.choi@samsung.com>, 
+	Dmitry Osipenko <digetx@gmail.com>, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-
-=E5=9C=A8 2025/9/2 19:47, Rafael J. Wysocki =E5=86=99=E9=81=93:
-> On Tue, Sep 2, 2025 at 12:33=E2=80=AFPM Zihuan Zhang <zhangzihuan@kylin=
-os.cn> wrote:
->>
->> =E5=9C=A8 2025/9/1 23:17, Rafael J. Wysocki =E5=86=99=E9=81=93:
->>> On Mon, Sep 1, 2025 at 10:58=E2=80=AFAM Zihuan Zhang <zhangzihuan@kyl=
-inos.cn> wrote:
->>>> Replace the manual cpufreq_cpu_put() with __free(put_cpufreq_policy)
->>>> annotation for policy references. This reduces the risk of reference
->>>> counting mistakes and aligns the code with the latest kernel style.
->>>>
->>>> No functional change intended.
->>>>
->>>> Signed-off-by: Zihuan Zhang <zhangzihuan@kylinos.cn>
->>>> ---
->>>>    drivers/cpufreq/intel_pstate.c | 8 +++-----
->>>>    1 file changed, 3 insertions(+), 5 deletions(-)
->>>>
->>>> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_=
-pstate.c
->>>> index f366d35c5840..4abc1ef2d2b0 100644
->>>> --- a/drivers/cpufreq/intel_pstate.c
->>>> +++ b/drivers/cpufreq/intel_pstate.c
->>>> @@ -1502,9 +1502,8 @@ static void __intel_pstate_update_max_freq(str=
-uct cpufreq_policy *policy,
->>>>
->>>>    static bool intel_pstate_update_max_freq(struct cpudata *cpudata)
->>>>    {
->>>> -       struct cpufreq_policy *policy __free(put_cpufreq_policy);
->>>> +       struct cpufreq_policy *policy __free(put_cpufreq_policy) =3D=
- cpufreq_cpu_get(cpudata->cpu);
->>>>
->>>> -       policy =3D cpufreq_cpu_get(cpudata->cpu);
->>>>           if (!policy)
->>>>                   return false;
->>> The structure of the code is intentional here and there's no reason t=
-o
->>> change it.
->>
->> Got it. Thanks for clarifying.
->>
->> So for this case the current structure is intentional -
-> Note that I'm talking about this particular change only.  The other
-> change in the $subject patch is fine.
+On Tue, Sep 2, 2025 at 6:51=E2=80=AFPM Mikko Perttunen <mperttunen@nvidia.c=
+om> wrote:
 >
->> should I also avoid similar changes in other drivers?
-> That depends on who maintains them, which is why I wanted you to split
-> the patch into smaller changes in the first place.
+> On Friday, August 29, 2025 1:01=E2=80=AFPM Aaron Kling via B4 Relay wrote=
+:
+> > This series adds interconnect support to tegra210 MC and EMC, then
+> > enables actmon. This enables dynamic emc scaling.
+> >
+> > This series is marked RFC for two reasons:
+> >
+> > 1) Calculating rate from bandwidth usage results in double the expected
+> >    rate. I thought this might be due to the ram being 64-bit, but the
+> >    related CFG5 register reports 32-bit on both p2371-2180 and
+> >    p3450-0000. I'm using the calculation used for Tegra124 and haven't
+> >    seen seen anything obviously different between the ram handling on
+> >    these archs to cause a different result. I have considered that the
+> >    number of channels might affect the reporting, and factoring in that
+> >    variable does result in the correct rate, but I don't want to assume
+> >    that's correct without confirmation.
 >
-> My personal view is that code formatting changes, which effectively is
-> what this particular one is, are pointless unless they make the code
-> much easier to follow.
+> My thinking is also that this is due to the channels. L4T says
+>
+> /*
+>  * Tegra11 has dual 32-bit memory channels, while
+>  * Tegra12 has single 64-bit memory channel. Tegra21
+>  * has either dual 32 bit channels (LP4) or a single
+>  * 64 bit channel (LP3).
+>  *
+>  * MC effectively operates as 64-bit bus.
+>  */
+>
+> next to calculating bw_to_freq, and proceeds to use the same divisor for =
+T114 to T210. Regarding the CFG5_DRAM_WIDTH field, I'm guessing it gives th=
+e width for one channel, but I'm not sure how it would function for other m=
+emory types -- I'm not sure if any Tegra210 devices using memory other than=
+ LPDDR4 were ever released.
 
+Mmm. "MC effectively operates as 64-bit bus." So I could just hardcode
+64-bit dram width and skip reading the CFG5_DRAM_WIDTH field
+altogether. And regardless of the layout, if I'm reading that
+correctly, the calculation would remain correct. That should get the
+numbers I'm expecting on the devkits, but I will verify again before
+uploading a new revision.
 
-UnderStood, Thanks!
-
+Aaron
 
