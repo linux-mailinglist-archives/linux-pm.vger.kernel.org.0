@@ -1,55 +1,54 @@
-Return-Path: <linux-pm+bounces-33733-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33734-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2CA25B42412
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Sep 2025 16:53:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 54CE5B42427
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Sep 2025 16:56:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A6E441BA6326
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Sep 2025 14:53:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 926655E46DB
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Sep 2025 14:56:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BD562F618F;
-	Wed,  3 Sep 2025 14:52:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0530B2FE058;
+	Wed,  3 Sep 2025 14:56:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jLVTA5Rp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CR0Exwn5"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 243812EAB98;
-	Wed,  3 Sep 2025 14:52:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1CE4213E6D;
+	Wed,  3 Sep 2025 14:56:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756911171; cv=none; b=SugLPPquz9R6dllFs5aJG5ogtr8gxJCUCTK0Nvw3m+HT3nqZL1WaKYKNTDlXQ5csHfzBUnUu9uIVSzTVSlmQcJjya1GT0lnWdqdaGjoV23w934vLtepNQdO5RWEl3xLyJXi90ytSJ2T0HRZy6K9ipnOEgQnsU7eRoxl8EGlE+5E=
+	t=1756911369; cv=none; b=baDV3tSxsYKBmJmFv+OHEsquTKhL7Xjxhi1fIZDaXithV1uRyT6fivNjQu0iPEmRPsYtawh/UnjKjkExAohJCcOpWi4rl7397uJzRMMK+pKi9+e3Ejn5y35i/l19+aUi2F4qIkksgImzj+N+/1yeFNM2cJPYispQgUKH0RtWYe8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756911171; c=relaxed/simple;
-	bh=nV+S/XHLNnvkXUtLlnmeR7m6BvGtTpNnmtypMB7Ondw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=MnAJB2CeFRgJzsJDo29MaZw6D/al3rMGA+Cko69vKywM7z2AMj0TWdeT3dqlTf+KXlwy+2l5gDvQlHbU7E+xOQnRe0ONgs0qs/WuBlmDENWPoVVKxIOmNWJfp5RBQ4cMBVqSkWe8sp7/icQy3u2WbDAR4+c6nLzTqEYXPDt6WLI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jLVTA5Rp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5987C4CEE7;
-	Wed,  3 Sep 2025 14:52:48 +0000 (UTC)
+	s=arc-20240116; t=1756911369; c=relaxed/simple;
+	bh=fyT8F1OdM5Im8IxoGeyk6V0vUNEhI+uFQ3mu15FZr98=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=E68BReJC+S+GZ4y+ldofGTf/ZnKFAvNGEVa021N30JtDVsytNeZryF7w8dT331paTev0VCjFbeW+/S1Melmf5W4+qiOAnKpLB25/W8MJThCjTdHn1HBDR0+jLbVfKWyTo9rflT5C0swueZIPRpD3aVkiPH0BTrIzMzs/xWHhAkc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CR0Exwn5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0C1EC4CEE7;
+	Wed,  3 Sep 2025 14:56:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756911170;
-	bh=nV+S/XHLNnvkXUtLlnmeR7m6BvGtTpNnmtypMB7Ondw=;
+	s=k20201202; t=1756911369;
+	bh=fyT8F1OdM5Im8IxoGeyk6V0vUNEhI+uFQ3mu15FZr98=;
 	h=From:To:Cc:Subject:Date:From;
-	b=jLVTA5RpyM32+M2n1e8WmRlGXciz1hK/3H7yt5uwgmBmhTCFReAFimDJUHl+nZX2b
-	 IqbmslFMd0j6yyavaNWxouSICJ+fa6K8UwqUVqjP4KcidVvBEp7GkzKj6tfaia99id
-	 XbLzL36r31ZZA5OsJxDm3ttQlNHK82yW3/BfWUR4UaSntZoJS+TnCvzUjEQ0NJ+7d2
-	 cy1JrLYdpHlWtvVc18Xyy/0XSk5++qyQTc27SJE7Ccm1rjtGyIBkGwI9vdaNu8ptSF
-	 Rl9nYvHmKM0XLFSLOmHgpNMmlXL2aBk21XQZf8fNGmEGBBP4Y7F9d7Thr3C7Jiq8PF
-	 9g2b7QK7Nd/ig==
+	b=CR0Exwn5abVZ3SLaiL1Fks0DMyZweqUobY4ouS1FKSSqB1jsQSxNyZS+LiGgrbIQE
+	 vILuGfJfU/DhvdDecvSbn2sUUZo/DYFhom35YB5S+C+lopGVN72S9oXLn28zNIO1Fx
+	 +PtBTBylyZ9fGmXs3pzIbxYBzGfl73oD92aWgynpdK5TNdnmkwr49FXL8bFstDOL9v
+	 WvLfgmTmROOmPWr33Cx6i4gSy6F6bAvqD4y+P5tiTsiVRMDJLRoH28b8vbrsYFYC22
+	 KNtloPgcimwzVNC7PWrzSeH2S8i3w0+D9XJs0DRZ4wbjUhxVq0s3lAh/tmw0RpGbGR
+	 K32bYfiuf2hkA==
 From: "Rafael J. Wysocki" <rafael@kernel.org>
 To: Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>,
- Daniel Lezcano <daniel.lezcano@linaro.org>,
- Krzysztof Kozlowski <krzk@kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>,
+ Krzysztof Kozlowski <krzk@kernel.org>, Zihuan Zhang <zhangzihuan@kylinos.cn>
 Subject:
- [PATCH v1] thermal: testing: Rearrange variable declarations involving
- __free()
-Date: Wed, 03 Sep 2025 16:52:45 +0200
-Message-ID: <5934556.DvuYhMxLoT@rafael.j.wysocki>
+ [PATCH v1] cpufreq: core: Rearrange variable declarations involving __free()
+Date: Wed, 03 Sep 2025 16:56:04 +0200
+Message-ID: <4691667.LvFx2qVVIh@rafael.j.wysocki>
 Organization: Linux Kernel Development
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -69,111 +68,94 @@ No intentional functional impact.
 
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/thermal/testing/zone.c |   31 +++++++++++--------------------
- 1 file changed, 11 insertions(+), 20 deletions(-)
+ drivers/cpufreq/cpufreq.c |   27 +++++++--------------------
+ 1 file changed, 7 insertions(+), 20 deletions(-)
 
---- a/drivers/thermal/testing/zone.c
-+++ b/drivers/thermal/testing/zone.c
-@@ -184,15 +184,14 @@ static void tt_add_tz_work_fn(struct wor
- 
- int tt_add_tz(void)
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -1845,7 +1845,6 @@ static unsigned int cpufreq_verify_curre
+  */
+ unsigned int cpufreq_quick_get(unsigned int cpu)
  {
--	struct tt_thermal_zone *tt_zone __free(kfree);
--	struct tt_work *tt_work __free(kfree) = NULL;
- 	int ret;
+-	struct cpufreq_policy *policy __free(put_cpufreq_policy) = NULL;
+ 	unsigned long flags;
  
--	tt_zone = kzalloc(sizeof(*tt_zone), GFP_KERNEL);
-+	struct tt_thermal_zone *tt_zone __free(kfree) = kzalloc(sizeof(*tt_zone),
-+								GFP_KERNEL);
- 	if (!tt_zone)
- 		return -ENOMEM;
+ 	read_lock_irqsave(&cpufreq_driver_lock, flags);
+@@ -1860,7 +1859,7 @@ unsigned int cpufreq_quick_get(unsigned
  
--	tt_work = kzalloc(sizeof(*tt_work), GFP_KERNEL);
-+	struct tt_work *tt_work __free(kfree) = kzalloc(sizeof(*tt_work), GFP_KERNEL);
- 	if (!tt_work)
- 		return -ENOMEM;
+ 	read_unlock_irqrestore(&cpufreq_driver_lock, flags);
  
-@@ -237,7 +236,6 @@ static void tt_zone_unregister_tz(struct
+-	policy = cpufreq_cpu_get(cpu);
++	struct cpufreq_policy *policy __free(put_cpufreq_policy) = cpufreq_cpu_get(cpu);
+ 	if (policy)
+ 		return policy->cur;
  
- int tt_del_tz(const char *arg)
+@@ -1876,9 +1875,7 @@ EXPORT_SYMBOL(cpufreq_quick_get);
+  */
+ unsigned int cpufreq_quick_get_max(unsigned int cpu)
  {
--	struct tt_work *tt_work __free(kfree) = NULL;
- 	struct tt_thermal_zone *tt_zone, *aux;
- 	int ret;
- 	int id;
-@@ -246,7 +244,7 @@ int tt_del_tz(const char *arg)
- 	if (ret != 1)
- 		return -EINVAL;
- 
--	tt_work = kzalloc(sizeof(*tt_work), GFP_KERNEL);
-+	struct tt_work *tt_work __free(kfree) = kzalloc(sizeof(*tt_work), GFP_KERNEL);
- 	if (!tt_work)
- 		return -ENOMEM;
- 
-@@ -330,20 +328,17 @@ static void tt_zone_add_trip_work_fn(str
- 
- int tt_zone_add_trip(const char *arg)
- {
--	struct tt_thermal_zone *tt_zone __free(put_tt_zone) = NULL;
--	struct tt_trip *tt_trip __free(kfree) = NULL;
--	struct tt_work *tt_work __free(kfree);
- 	int id;
- 
--	tt_work = kzalloc(sizeof(*tt_work), GFP_KERNEL);
-+	struct tt_work *tt_work __free(kfree) = kzalloc(sizeof(*tt_work), GFP_KERNEL);
- 	if (!tt_work)
- 		return -ENOMEM;
- 
--	tt_trip = kzalloc(sizeof(*tt_trip), GFP_KERNEL);
-+	struct tt_trip *tt_trip __free(kfree) = kzalloc(sizeof(*tt_trip), GFP_KERNEL);
- 	if (!tt_trip)
- 		return -ENOMEM;
- 
--	tt_zone = tt_get_tt_zone(arg);
-+	struct tt_thermal_zone *tt_zone __free(put_tt_zone) = tt_get_tt_zone(arg);
- 	if (IS_ERR(tt_zone))
- 		return PTR_ERR(tt_zone);
- 
-@@ -387,7 +382,6 @@ static const struct thermal_zone_device_
- 
- static int tt_zone_register_tz(struct tt_thermal_zone *tt_zone)
- {
--	struct thermal_trip *trips __free(kfree) = NULL;
- 	struct thermal_zone_device *tz;
- 	struct tt_trip *tt_trip;
- 	int i;
-@@ -397,7 +391,8 @@ static int tt_zone_register_tz(struct tt
- 	if (tt_zone->tz)
- 		return -EINVAL;
- 
--	trips = kcalloc(tt_zone->num_trips, sizeof(*trips), GFP_KERNEL);
-+	struct thermal_trip *trips __free(kfree) = kcalloc(tt_zone->num_trips,
-+							   sizeof(*trips), GFP_KERNEL);
- 	if (!trips)
- 		return -ENOMEM;
- 
-@@ -421,9 +416,7 @@ static int tt_zone_register_tz(struct tt
- 
- int tt_zone_reg(const char *arg)
- {
--	struct tt_thermal_zone *tt_zone __free(put_tt_zone);
+-	struct cpufreq_policy *policy __free(put_cpufreq_policy);
 -
--	tt_zone = tt_get_tt_zone(arg);
-+	struct tt_thermal_zone *tt_zone __free(put_tt_zone) = tt_get_tt_zone(arg);
- 	if (IS_ERR(tt_zone))
- 		return PTR_ERR(tt_zone);
+-	policy = cpufreq_cpu_get(cpu);
++	struct cpufreq_policy *policy __free(put_cpufreq_policy) = cpufreq_cpu_get(cpu);
+ 	if (policy)
+ 		return policy->max;
  
-@@ -432,9 +425,7 @@ int tt_zone_reg(const char *arg)
- 
- int tt_zone_unreg(const char *arg)
+@@ -1894,9 +1891,7 @@ EXPORT_SYMBOL(cpufreq_quick_get_max);
+  */
+ __weak unsigned int cpufreq_get_hw_max_freq(unsigned int cpu)
  {
--	struct tt_thermal_zone *tt_zone __free(put_tt_zone);
+-	struct cpufreq_policy *policy __free(put_cpufreq_policy);
 -
--	tt_zone = tt_get_tt_zone(arg);
-+	struct tt_thermal_zone *tt_zone __free(put_tt_zone) = tt_get_tt_zone(arg);
- 	if (IS_ERR(tt_zone))
- 		return PTR_ERR(tt_zone);
+-	policy = cpufreq_cpu_get(cpu);
++	struct cpufreq_policy *policy __free(put_cpufreq_policy) = cpufreq_cpu_get(cpu);
+ 	if (policy)
+ 		return policy->cpuinfo.max_freq;
  
+@@ -1920,9 +1915,7 @@ static unsigned int __cpufreq_get(struct
+  */
+ unsigned int cpufreq_get(unsigned int cpu)
+ {
+-	struct cpufreq_policy *policy __free(put_cpufreq_policy);
+-
+-	policy = cpufreq_cpu_get(cpu);
++	struct cpufreq_policy *policy __free(put_cpufreq_policy) = cpufreq_cpu_get(cpu);
+ 	if (!policy)
+ 		return 0;
+ 
+@@ -2751,9 +2744,7 @@ static void cpufreq_policy_refresh(struc
+  */
+ void cpufreq_update_policy(unsigned int cpu)
+ {
+-	struct cpufreq_policy *policy __free(put_cpufreq_policy);
+-
+-	policy = cpufreq_cpu_get(cpu);
++	struct cpufreq_policy *policy __free(put_cpufreq_policy) = cpufreq_cpu_get(cpu);
+ 	if (!policy)
+ 		return;
+ 
+@@ -2770,9 +2761,7 @@ EXPORT_SYMBOL(cpufreq_update_policy);
+  */
+ void cpufreq_update_limits(unsigned int cpu)
+ {
+-	struct cpufreq_policy *policy __free(put_cpufreq_policy);
+-
+-	policy = cpufreq_cpu_get(cpu);
++	struct cpufreq_policy *policy __free(put_cpufreq_policy) = cpufreq_cpu_get(cpu);
+ 	if (!policy)
+ 		return;
+ 
+@@ -3054,9 +3043,7 @@ static int __init cpufreq_core_init(void
+ 
+ static bool cpufreq_policy_is_good_for_eas(unsigned int cpu)
+ {
+-	struct cpufreq_policy *policy __free(put_cpufreq_policy);
+-
+-	policy = cpufreq_cpu_get(cpu);
++	struct cpufreq_policy *policy __free(put_cpufreq_policy) = cpufreq_cpu_get(cpu);
+ 	if (!policy) {
+ 		pr_debug("cpufreq policy not set for CPU: %d\n", cpu);
+ 		return false;
 
 
 
