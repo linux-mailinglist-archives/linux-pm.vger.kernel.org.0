@@ -1,140 +1,144 @@
-Return-Path: <linux-pm+bounces-33670-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33671-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA547B41188
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Sep 2025 02:56:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D3071B41231
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Sep 2025 04:13:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D789C1895E8C
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Sep 2025 00:56:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A7695167557
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Sep 2025 02:13:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83193199FBA;
-	Wed,  3 Sep 2025 00:55:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Mu57fO9m"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BD2B1E9B3A;
+	Wed,  3 Sep 2025 02:13:02 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA602195B1A;
-	Wed,  3 Sep 2025 00:55:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 305251E3DDB;
+	Wed,  3 Sep 2025 02:12:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756860951; cv=none; b=J2INQP4X+v29etkpIyBXvBjs0Y7FUSC9T0OPf7dd4mzj3onLujRcYhuH+U1TLfef6WkLK+e+uXB/XjKiex9OJTchEE9fara753B5+7+EBLJevXpGJH9vluXN3Z5JANCNJ0Pbs0WUIwB/mi+vZv7QDRcpAa+5Tc34UmDFSaI4bag=
+	t=1756865582; cv=none; b=i6bVzszNB0mZC3KfJGbrl1ylQMvMnNrRisM7hr40X1kBh3lJjxkgMyl4nH/dUUiGQjltaZy0/TlqC/KIbRncxpIe00SvqK/FO7bBQu0Fik/wtGSCO93iziqlMJtBoplKhxO010qIQ5oHlGJHFbdKaaGyC94YKapyT+adxcSyAw4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756860951; c=relaxed/simple;
-	bh=swZueAhBXSwklO7Tf/fSg9bLL3E16TGenKFw98dM9Wk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GIjJO/cRN+lWId6rOoIVrKT/LsGrcV99/ARoZ7akIvvUr9AHDWwEqvCiTZLf4yrItLNUTUtppa0C25pVS2msfTdwQ/rsgXfneCij8cAOSCFNJk1ZNVinfBZtOgv3tdiJBeqSt5g760Qpz9shlX3HR3n0/PWFzeLJFWaJFosmqbs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Mu57fO9m; arc=none smtp.client-ip=209.85.167.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-55f6186cc17so4936739e87.2;
-        Tue, 02 Sep 2025 17:55:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756860948; x=1757465748; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=biFf42usLj+Vl0gHJRJPvudXd19GDtQlKIRujcLuh50=;
-        b=Mu57fO9mnGb6wQSV+akQdt6rmo+F4HgUyAwJOWsLusZGtIAbX/8T7luezRG4M1GTwe
-         IwaF/WtoCNw1YbukPpB+BwOHqYNz8hsXc2F1a048CswPc6SiMlp65cqonabI0Cl43t33
-         inC21+ZGelYIPKYx4fo9ylAUwJVP7HkH99lmNcszSSIK6qPUU4vULvfmC0pw7FG9ftWN
-         SYoyFVmCLGYxh+QekGzD37IaVe+ifWornLB0z+RvxRSIKvYPGouS/hzkNnKiiIIlq6XG
-         JaOMVcl6oLBfFSeuqxh1s8GZrxuTblvYAt8ie/OhAHP/Av4encivn0LnlODPVgOjfyjf
-         kt3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756860948; x=1757465748;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=biFf42usLj+Vl0gHJRJPvudXd19GDtQlKIRujcLuh50=;
-        b=b79mY24GRpZOPKK+v09e9kQj/YQVTXDoqqgO2P9DehjMPes+pCIacJVKmyqmgME+Pv
-         24BJrDSimsAR+7mgGExOsN9CRnkkhApweNhdCVCC6xvuEO8ETOugODWR52bXDXaqLDf4
-         x5xgW0C5OB2uo4vcHt/ewEuMGc0Bgj+6EnXYhWeKhu0bOzxKMrqg1DCW4OJlr6mek9bM
-         iJs9o9sdIZATWKUlPDbM+J7WXnlToUPIUFkC/XK7o3M4wHTcXYV7eR1/lmeahbufEavl
-         JmIEXvcUQlJdCYP2BbW6AzTG4LCUePP792FsBI+GxDMs1wqBovv9111iewHt2AjH4Qp+
-         UqmA==
-X-Forwarded-Encrypted: i=1; AJvYcCUqgbcEnKmF6j+7u5wn2SCNt8nwA6ZjzgklOR17EDp+cshmDXVUB1lsAJyXQp9rMBYxWvQhwIRLw1U=@vger.kernel.org, AJvYcCVf4KttbraW5K+Srr1jsHxJeeR0QlncYToH7smUPj5Qc2nug64T/rVPGCj8Hk1JG5O5oajv117av+NbYdw=@vger.kernel.org, AJvYcCVr5+TxGrXHUcXFq67BqOpC7nCN2h5MiZ1vWBqoSoEQ+pGn4iMOCxutKzpnvH7bw9A7X7nYnzJZ+OGF@vger.kernel.org, AJvYcCWT0vnE3PQz9gNBZtsujdU5rNYteRbrQvQsfyrbvZx8QXNImLtOUlyPzovXKo08QQztVLeMq0qN9qCo94dM@vger.kernel.org
-X-Gm-Message-State: AOJu0YxiAx+OkbNS1TooxE9zYqbZOX8tNXB08y7uXRaKFSpVhdfvKLYT
-	1FdrXf2SccMK7Vd9yoYE7NFh4S8F6rKW0frmpDW71PtqLuCQmG8Xr1y8PMCCDayKZA7xywJEgIO
-	08YieNF1Xlay6aEgtCxUhvbYru5RUb1M=
-X-Gm-Gg: ASbGncu8DWzysgY0+C/VPa37OzL+tH8bbxIjgWqeQV8ZaH5vHbZsUhS4Pu1ad08L+iD
-	n0kNHbnuKod3gmPhRLdnScBSgtCYYuVXphVwfGrPJF9IC5Ve9ITYnv+M7qDc42druMeCZGMBQ9f
-	zW4/E6Mp+v3VUPchnJLaDTOaQkaivR4J/PV9Hv66g1fJ/VYPLm2q42X8KfYZLy6QLnHNcOKu89k
-	C8sjtOp
-X-Google-Smtp-Source: AGHT+IGPZiMfaP1paVpXDCG7OlJWEUH8L/hCasKQtaW7zajb61su/qh6PDSxtn5RJPKHGKRCZNKuZzFMs+Ee/c4fsFU=
-X-Received: by 2002:a05:6512:4045:10b0:55f:71ad:5913 with SMTP id
- 2adb3069b0e04-55f71ad6048mr3433585e87.50.1756860947536; Tue, 02 Sep 2025
- 17:55:47 -0700 (PDT)
+	s=arc-20240116; t=1756865582; c=relaxed/simple;
+	bh=JI2pw/aLbFjiEEKXaJ1MnG8Mwwiicn7mraaE5Z1JEoc=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=itRCFIklglnB4rFVGt8aq0LJIrwdh/y2VKzh0OjZQzLLgxYiqm8xkriixH75y9LKQ2kfTS6UwH/2GjPijhhHXNLIYERr8tehRQ/kQ4fR0kK8OFa9Q574pX8pPtUPQK8938t+b6zBayXfNOY0u5dUQ6fgo2jenyqlbIz+BcP+raY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 7e64a03c886b11f0b29709d653e92f7d-20250903
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.45,REQID:a08d3f21-1eda-4701-933a-4d08872f3f53,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:6493067,CLOUDID:aa48c90d2685f52c421d2b43104888ae,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:81|82|83|102|850,TC:nil,Content:0|50,EDM
+	:-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0
+	,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: 7e64a03c886b11f0b29709d653e92f7d-20250903
+Received: from mail.kylinos.cn [(10.44.16.175)] by mailgw.kylinos.cn
+	(envelope-from <zhangzihuan@kylinos.cn>)
+	(Generic MTA)
+	with ESMTP id 1390030646; Wed, 03 Sep 2025 10:12:51 +0800
+Received: from mail.kylinos.cn (localhost [127.0.0.1])
+	by mail.kylinos.cn (NSMail) with SMTP id A8973E008FA3;
+	Wed,  3 Sep 2025 10:12:50 +0800 (CST)
+X-ns-mid: postfix-68B7A422-507635249
+Received: from localhost.localdomain (unknown [172.25.120.24])
+	by mail.kylinos.cn (NSMail) with ESMTPA id E1C47E008FA2;
+	Wed,  3 Sep 2025 10:12:30 +0800 (CST)
+From: Zihuan Zhang <zhangzihuan@kylinos.cn>
+To: krzk@kernel.org
+Cc: airlied@gmail.com,
+	alim.akhtar@samsung.com,
+	beata.michalska@arm.com,
+	ben.horgan@arm.com,
+	bp@alien8.de,
+	catalin.marinas@arm.com,
+	cw00.choi@samsung.com,
+	daniel.lezcano@kernel.org,
+	dave.hansen@linux.intel.com,
+	dri-devel@lists.freedesktop.org,
+	edubezval@gmail.com,
+	festevam@gmail.com,
+	imx@lists.linux.dev,
+	intel-gfx@lists.freedesktop.org,
+	j-keerthy@ti.com,
+	jani.nikula@linux.intel.com,
+	kernel@pengutronix.de,
+	kyungmin.park@samsung.com,
+	lenb@kernel.org,
+	linux-acpi@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-omap@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	lukasz.luba@arm.com,
+	mpe@ellerman.id.au,
+	myungjoo.ham@samsung.com,
+	pavel@kernel.org,
+	ptsm@linux.microsoft.com,
+	rafael@kernel.org,
+	rodrigo.vivi@intel.com,
+	rui.zhang@intel.com,
+	s.hauer@pengutronix.de,
+	shawnguo@kernel.org,
+	simona@ffwll.ch,
+	srinivas.pandruvada@linux.intel.com,
+	sudeep.holla@arm.com,
+	sumitg@nvidia.com,
+	thierry.reding@gmail.com,
+	tursulin@ursulin.net,
+	viresh.kumar@linaro.org,
+	will@kernel.org,
+	yangyicong@hisilicon.com,
+	zhangzihuan@kylinos.cn,
+	zhenglifeng1@huawei.com
+Subject: Re: [PATCH v3 12/12] PM: EM: Use scope-based cleanup helper
+Date: Wed,  3 Sep 2025 10:12:30 +0800
+Message-Id: <20250903021230.1044454-1-zhangzihuan@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <b38e64cc-4971-4e71-931c-820453aa91a7@kernel.org>
+References: <b38e64cc-4971-4e71-931c-820453aa91a7@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250828-t210-actmon-v1-0-aeb19ec1f244@gmail.com> <25477710.6Emhk5qWAg@senjougahara>
-In-Reply-To: <25477710.6Emhk5qWAg@senjougahara>
-From: Aaron Kling <webgeek1234@gmail.com>
-Date: Tue, 2 Sep 2025 19:55:36 -0500
-X-Gm-Features: Ac12FXyiMmcEPBnXVhKhTD563A-aPjl9MtxAaVDXptfjkCQhW65cAeinrQCkxqE
-Message-ID: <CALHNRZ-660RVcYLo9Pxxj9gz1s0x4nLYOSFwbtiEwSU1qbvA5Q@mail.gmail.com>
-Subject: Re: [PATCH RFC 0/7] Support Tegra210 actmon for dynamic EMC scaling
-To: Mikko Perttunen <mperttunen@nvidia.com>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>, Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Thierry Reding <thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, MyungJoo Ham <myungjoo.ham@samsung.com>, 
-	Kyungmin Park <kyungmin.park@samsung.com>, Chanwoo Choi <cw00.choi@samsung.com>, 
-	Dmitry Osipenko <digetx@gmail.com>, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=yes
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Sep 2, 2025 at 6:51=E2=80=AFPM Mikko Perttunen <mperttunen@nvidia.c=
-om> wrote:
->
-> On Friday, August 29, 2025 1:01=E2=80=AFPM Aaron Kling via B4 Relay wrote=
-:
-> > This series adds interconnect support to tegra210 MC and EMC, then
-> > enables actmon. This enables dynamic emc scaling.
-> >
-> > This series is marked RFC for two reasons:
-> >
-> > 1) Calculating rate from bandwidth usage results in double the expected
-> >    rate. I thought this might be due to the ram being 64-bit, but the
-> >    related CFG5 register reports 32-bit on both p2371-2180 and
-> >    p3450-0000. I'm using the calculation used for Tegra124 and haven't
-> >    seen seen anything obviously different between the ram handling on
-> >    these archs to cause a different result. I have considered that the
-> >    number of channels might affect the reporting, and factoring in that
-> >    variable does result in the correct rate, but I don't want to assume
-> >    that's correct without confirmation.
->
-> My thinking is also that this is due to the channels. L4T says
->
-> /*
->  * Tegra11 has dual 32-bit memory channels, while
->  * Tegra12 has single 64-bit memory channel. Tegra21
->  * has either dual 32 bit channels (LP4) or a single
->  * 64 bit channel (LP3).
->  *
->  * MC effectively operates as 64-bit bus.
->  */
->
-> next to calculating bw_to_freq, and proceeds to use the same divisor for =
-T114 to T210. Regarding the CFG5_DRAM_WIDTH field, I'm guessing it gives th=
-e width for one channel, but I'm not sure how it would function for other m=
-emory types -- I'm not sure if any Tegra210 devices using memory other than=
- LPDDR4 were ever released.
+> You are not improving the source code here. This is not how to use
+>  __free() and you clearly do not understand the source code.
 
-Mmm. "MC effectively operates as 64-bit bus." So I could just hardcode
-64-bit dram width and skip reading the CFG5_DRAM_WIDTH field
-altogether. And regardless of the layout, if I'm reading that
-correctly, the calculation would remain correct. That should get the
-numbers I'm expecting on the devkits, but I will verify again before
-uploading a new revision.
+Sorry for the problem, policy should be assigned after cpumask_test_cpu()=
+.
 
-Aaron
+I actually realized earlier that __free() only frees at the end of the va=
+riable=E2=80=99s lifetime.=20
+I had suggested using a braced macro in cpufreq.h to allow immediate rele=
+ase after use,=20
+but I understand the maintainer=E2=80=99s advice to =E2=80=9Ckeep it simp=
+le=E2=80=9D and will follow that.
+
+> What's more, you did not use standard tools which would tell you this i=
+s
+> buggy and wrong.
+
+Could you please let me know which standard tools you recommend for detec=
+ting such issues?=20
+
+I=E2=80=99d like to use them to avoid similar mistakes in the future.
+
+> Don't introduce cleanup.h if you do not understand how it works.
+
+Should I drop this patch?
 
