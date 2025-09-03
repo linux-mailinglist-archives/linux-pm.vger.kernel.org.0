@@ -1,135 +1,172 @@
-Return-Path: <linux-pm+bounces-33759-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33760-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4AD9FB429C4
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Sep 2025 21:22:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1928CB429EF
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Sep 2025 21:31:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 01077684C13
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Sep 2025 19:22:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1E1233BE855
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Sep 2025 19:31:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E0B9322C78;
-	Wed,  3 Sep 2025 19:22:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DD0836932A;
+	Wed,  3 Sep 2025 19:30:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="absLc8px"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PvzjfBDg"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75AE42D9789;
-	Wed,  3 Sep 2025 19:22:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71D3A2D7DE2;
+	Wed,  3 Sep 2025 19:30:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756927339; cv=none; b=SHV8VN6kJNT1fnaBzw+XJI1Y84UmlqfYh+BHJ9HR9pkJS1RcRg0rS2ZduLe++4pj3vg9SjoCIcutM2VYHpz3l4dMfKH4iuAHjpxWMgDmZSskyqzNuJ5Z9JgADJFJer70H6YsgU56rMXSRk6KQ76/tLhaz0wEVFpji6vK9QiHGPI=
+	t=1756927859; cv=none; b=ugojfmXnlpvNmTZN/eDiJn1jOU+2o3UmBtgEV04p2bRdvGEIGbJ7ZF86dQwyQn7v/MhWwotzxvK9oq9qVvaI0aUs/Eh8jpyXktgKnbaubvJDzhfMdMR6UMMG7puI5se5eURfzWCWuCJUpOXRwdTtLv+y1i0RM3IWFeLdLDXN1tI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756927339; c=relaxed/simple;
-	bh=rykkV+aIo0HAPne2/nU2ZujvLiZiMYmAcJynKMLa6gE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eZZeadYLS85aHaaHxL1modGl6XTNoAUq+50Q85MnzFSwErFRw4GSRat0YmpMOyMF1EXSAIXTtnGS2tNZZR6r+dZf5mrTlnIbgCT82glVeWhMcJMrzX6tpQazVmBUAA167Pw5SuYA73pFtjnlhBeor1/2Mnotc4CVUdZ6mYNAh90=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=absLc8px; arc=none smtp.client-ip=209.85.218.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-b03fa5c5a89so35409566b.2;
-        Wed, 03 Sep 2025 12:22:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756927336; x=1757532136; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=L5hErnfofMrsL0rvB3tnJy6h2xcJ8CpBYIwMkGlraO4=;
-        b=absLc8px06Tj7Hp3gv+pu6wMMleS2iw15b43UKwfSJBYWSHQouVkxd40mQlbyQG4I9
-         oRLVEH8Jryv2dm7yqgikRgNlKeK80XpHei3uPQyc0ONmT5GcGnxhxxk4um6ugqyb0Yrp
-         rDtoMksUmC7MF74z8pw6eolpLKwFT5GaIo4DnMBe0s7yRAz7Ip0UVMh/bEWlHSKU6ndi
-         d3+OhL9RPTpjs6P4SNo4yEW8cQKKZpiBODxJ+J0z63uSBkQpkJucSNkeGXirKl6sPvrS
-         2Y7cFkMwyYopf9psm86cxcjkjbXBw5uaBGO8qxWAbJv7CWgpGURcouNGkhWT2jI8WxQw
-         2gSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756927336; x=1757532136;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=L5hErnfofMrsL0rvB3tnJy6h2xcJ8CpBYIwMkGlraO4=;
-        b=Ct5kIftZEOgq+noq49hR0QWKEss2SjVjpTeu1t/HI8Dp7rklPXwCLPpFBrRvImETMv
-         vBZpZuUXkDKAeLklVPfaNjx774yGSHWdexAYRCvhlC/RJ6A0qbeOFlq35EBJLHuvL5zr
-         w2jpdUZVMHGkrzxbJV50fS/zSf+DA71udyKy/lyQGcvi5pJtPrrFPDyjqxS4m6Pvv1hN
-         zWUREUcwwlZuca5cBQsUWfCf/5zFzsLUjES06tOVZtvrf+/ikEeweKGgqcIyBpKSpthJ
-         aqMSZSd8zJqJNVDx74I4jaMALX/78VOwxNkHgsj7gsCbolrxeZnn7BHegQ+Lg2KTiPm9
-         Noxg==
-X-Forwarded-Encrypted: i=1; AJvYcCWJqxgPYhT+2MAEb5K3UrlGakpgcetXzDGexZGhjAsUKYpvnkJwjJBUNXv2sx/ihqJUOsm+n4S4DKSe2bI=@vger.kernel.org, AJvYcCWrO8enkIkm8wAV9qTsDHCNqkMBMpjMTidygOOvexewVpswKDDMf473LqY0/2ZF0j1nB1IIr4Tk6OI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyO9VK7RUYVxPm6kJGbuRELjsqvUw+7WQIJ2Z8DBiXQxwU0mT5A
-	MczHDAk65V0Ver4cRbHTNK2YIvR+FuI2W0G2H1Wb+ZAxKQU11PMh6Gj0u+cYTLUm6NY=
-X-Gm-Gg: ASbGncuaH632rgr3KDmtvae/fbKw0E+++Uv+0LRzgC+POXqN0ycOITQrNEAs00vcwVx
-	XdSFiTBVZ1O4y8z5oonlOpCTGp5rTfuLpNSwjSTL6d2BE6PI7rlnj3ma9rqxCWKyckMB9+haVjy
-	fLQM9hudnl7K/mc/9GWtFuHFQTDfC7HmxIDWNsaBtUyfbfirAJVYYCU8mXbq6h1mRkJQqYl92Lo
-	OamZl78Lw14FseSYqh6y875nYRED1UyJqupk/3/sutXfmXT4WXup2SYwgEdSy0o69dvPRbPaxB6
-	0f3QIpnX5X+a8ejVC09xFVZd9jbfuibtWrdZwPSeA3DoeorAFNjpulaokjIoyK3SgO4thAxpYox
-	kcVWPTD0r/wC5d6MAohtBEo4Z2SUaAjd0sCpqSOEAVHu41iwtEXilPQsuR2ljcbOZ0Zs2EvuWFY
-	a1FSLZr8Gw6nhe
-X-Google-Smtp-Source: AGHT+IEeezqUr9fOV+VRXNcpCXANoGRtDZemK7RiaVtFwKS2NCo0HPyPFOYQoPA/+YXkdSPf0kSpHg==
-X-Received: by 2002:a17:907:7245:b0:b04:76ed:3ff5 with SMTP id a640c23a62f3a-b0476ed442bmr148672566b.40.1756927335680;
-        Wed, 03 Sep 2025 12:22:15 -0700 (PDT)
-Received: from XPS ([2a02:908:1b0:afe0:5d6b:7d4c:ed7e:88a9])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b02152cc1b8sm1147287666b.36.2025.09.03.12.22.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Sep 2025 12:22:15 -0700 (PDT)
-Date: Wed, 3 Sep 2025 21:22:13 +0200
-From: Osama Abdelkader <osama.abdelkader@gmail.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: daniel.lezcano@linaro.org, rui.zhang@intel.com, lukasz.luba@arm.com,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] thermal: hwmon: replace deprecated strcpy() with
- strscpy()
-Message-ID: <aLiVZWY9J1vdp0CD@XPS>
-References: <20250901150653.166978-1-osama.abdelkader@gmail.com>
- <CAJZ5v0hrKBNxDeZOKpUXyuZV7LRUX4ov4ifEGDtNMrA8km6uOA@mail.gmail.com>
- <aLhK_zMvtkdCtsHR@osama>
- <CAJZ5v0j2ooBwnPWKjXGyYOOBtjs6zbAh-+jaUaV5u7sBi87+Rw@mail.gmail.com>
- <aLh62dIWcHtWv2uj@osama>
- <CAJZ5v0jpAm-KrS0k4be523ygbRMPjSDGgNas7ipwpd9kKacqKg@mail.gmail.com>
+	s=arc-20240116; t=1756927859; c=relaxed/simple;
+	bh=bOEWhj/DMbKGMjfDehipU/AbvbJ3F+TVVjLU6ELKsOk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=aaHY7D4t36OE/4lgmBFPbAwOAsQJ6tjr4fPTzztkPVFOUlrsvpkJGxGtAxrp7CVfBRP/K96J3MPzjAlVRyPoYcAINUuf3xGJ5h/oGpmx3OuSmRMU1io7oi7d7YmnSNHzhtGN/fgwhWrZGWi6hKtgbY5lDSg4GZNVEhegEQBb4O8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PvzjfBDg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01FBBC4CEF1;
+	Wed,  3 Sep 2025 19:30:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756927859;
+	bh=bOEWhj/DMbKGMjfDehipU/AbvbJ3F+TVVjLU6ELKsOk=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=PvzjfBDgO1d08l/fMcveDZ5WNV6UR3qJ3/HUrf8QrlVTNtSopedwXM2p/Bybw2sDj
+	 V15hgqannh1CLdKq0t7mlpwRLVZoXN/l2Yi0hqTY5hjWuJL9InoYl9A/4GiwCpAl0Y
+	 Qu7yoIydPa+MTnrqjkEe9aU2X6xOtq55Vv9uk9ecRXWAOr8ZAnTfzdm6g+YKOptaRb
+	 HhHMS/37Y0Hhi3cCLhotHkrsJi28htIkbKMfsNhv+d+X2FYXqqwHPaQ3uzROcxJNsq
+	 l3n+CG4Yae+j8lT26ARA3mePUeJqKnhk8CsK2gjOoxVGlrk/StU0DUkUU4SvhA2DAq
+	 /8QI4KnorUzHA==
+Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-74381e207a0so238700a34.0;
+        Wed, 03 Sep 2025 12:30:58 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVRwWlJzteIi5F+EMfzA2SFh8HDtPAItlUDCAOS2Qv9xtf09dtRST8/nfjaseJl6O3FraY6/yOa8/u5v1E=@vger.kernel.org, AJvYcCVfma8MyKyuSJVL8z6eZdAE1CSMOdlMFCBjHIlqXKlj4uLRCwVsSfgCbxrRz2+h9wMslHt34fsQU1yt@vger.kernel.org, AJvYcCWe1ytw0emkaXf3szTZl2MaJyWboaTXS/QrbhBLmlGqgr3Oc+GBDb9yaCGaSlHrcCgb1YwMFzJU8u0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw4DzGcnM7dy/YKsVX++L4dHFulLTbUCFKeteNm/+7rBvEcDE44
+	aYhoJugE9ql/1Sr8KyH1AZnPkTFEvFMB+q4n5tEdpLeOkjcvEO8Ty2h/U/hJYuH9MnnaWV3Sav/
+	ZBPSu4Zfqxca9XJBkXXPDyet861vjLz0=
+X-Google-Smtp-Source: AGHT+IFQ9p90hXRjXn6MH1j2HTRM3pCYObsSQwrkh4lUED/TieWX9bpnR5r4rbFvPldePlcfrCpubqwBnT7H7rcJ4o0=
+X-Received: by 2002:a05:6808:180e:b0:438:3927:e4c6 with SMTP id
+ 5614622812f47-4383927e64emr879646b6e.43.1756927858264; Wed, 03 Sep 2025
+ 12:30:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0jpAm-KrS0k4be523ygbRMPjSDGgNas7ipwpd9kKacqKg@mail.gmail.com>
+References: <CA+zupgwnbt=5Oh28Chco=YNt9WwKzi2J+0hQ04nqyZG_7WUAYg@mail.gmail.com>
+ <CAPwe5RMpdG1ziRAwDhqkxuzHX0x=SdFQRFUbPCVuir1OgE90YQ@mail.gmail.com>
+ <5d692b81-6f58-4e86-9cb0-ede69a09d799@rowland.harvard.edu>
+ <CAJZ5v0jQpQjfU5YCDbfdsJNV=6XWD=PyazGC3JykJVdEX3hQ2Q@mail.gmail.com>
+ <20250829004312.5fw5jxj2gpft75nx@synopsys.com> <e3b5a026-fe08-4b7e-acd1-e78a88c5f59c@rowland.harvard.edu>
+ <CAJZ5v0gwBvC-y0fgWLMCkKdd=wpXs2msf5HCFaXkc1HbRfhNsg@mail.gmail.com>
+ <f8965cfe-de9a-439c-84e3-63da066aa74f@rowland.harvard.edu>
+ <CAJZ5v0g9nip2KUs2hoa7yMMAow-WsS-4EYX6FvEbpRFw10C2wQ@mail.gmail.com>
+ <CAJZ5v0gzFWW6roYTjUFeL2Tt8kKJ_g5Q=tp2=s87dy05x-Hvww@mail.gmail.com> <38b706cc-5966-4766-9165-51935fdcd790@rowland.harvard.edu>
+In-Reply-To: <38b706cc-5966-4766-9165-51935fdcd790@rowland.harvard.edu>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 3 Sep 2025 21:30:47 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0h=i9XF_SQMOhz3P+4SAH3Qy-r1oUiiw7Bp=PcRnJjVbQ@mail.gmail.com>
+X-Gm-Features: Ac12FXxZ7Fb-Zf_CneXnD7imu_hj0xqNHkA7Lqw2wc98nBmKdYWlFPnzXaLvWWc
+Message-ID: <CAJZ5v0h=i9XF_SQMOhz3P+4SAH3Qy-r1oUiiw7Bp=PcRnJjVbQ@mail.gmail.com>
+Subject: Re: [PATCH] drvier: usb: dwc3: Fix runtime PM trying to activate
+ child device xxx.dwc3 but parent is not active
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
+	ryan zhou <ryanzhou54@gmail.com>, Roy Luo <royluo@google.com>, 
+	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>, 
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 03, 2025 at 08:36:19PM +0200, Rafael J. Wysocki wrote:
-> On Wed, Sep 3, 2025 at 7:29 PM Osama Abdelkader
-> <osama.abdelkader@gmail.com> wrote:
-> >
-> > On Wed, Sep 03, 2025 at 04:21:35PM +0200, Rafael J. Wysocki wrote:
-> > > On Wed, Sep 3, 2025 at 4:04 PM Osama Abdelkader
-> > > <osama.abdelkader@gmail.com> wrote:
-> > > >
-> > > > On Wed, Sep 03, 2025 at 01:50:03PM +0200, Rafael J. Wysocki wrote:
-> > > > > On Mon, Sep 1, 2025 at 5:06 PM Osama Abdelkader
-> > > > > <osama.abdelkader@gmail.com> wrote:
-> > > > > >
-> > > > > > strcpy() is deprecated; use strscpy() instead.
-> > > > >
-> > > > > So why is it better to use strscpy() in this particular case?
-> > > >
-> > > > Thanks for the review. Technically, there is no change since both have const buf size,
-> > > > it's just for consistency with other drivers.
-> > >
-> > > $ cd linux-kernel-source
-> > > $ git grep strcpy | wc -l
-> > > 1187
-> > >
-> > > What kind of consistency do you mean?
-> >
-> > I mean in thermal subsystem, it's only this one.
-> 
-> So please add this information to the patch changelog.
+On Tue, Sep 2, 2025 at 4:41=E2=80=AFAM Alan Stern <stern@rowland.harvard.ed=
+u> wrote:
+>
+> On Mon, Sep 01, 2025 at 10:40:25PM +0200, Rafael J. Wysocki wrote:
+> > Of course, the driver of B may also choose to leave the device in
+> > runtime suspend in its system resume callback.  This requires checking
+> > the runtime PM status of the device upfront, but the driver needs to
+> > do that anyway in order to leave the device in runtime suspend during
+> > system suspend, so it can record the fact that the device has been
+> > left in runtime suspend.  That record can be used later during system
+> > resume.
+>
+> As a general rule, I think this is by default the best approach.  That
+> is, since B was in runtime suspend before the system sleep, you should
+> just keep it in runtime suspend after the system sleep unless you have
+> some good reason not to.  In other words, strive to leave the entire
+> system in the same state that it started in, as near as possible.
 
-Sure, I just sent v2.
+That's reasonable IMV.
 
-Thanks,
-Osama
+> One good reason not to would obviously be if B is the source of a wakeup
+> signal...
+>
+> > The kind of tricky aspect of this is when the device triggers a system
+> > wakeup by generating a wakeup signal.  In that case, it is probably
+> > better to resume it during system resume, but the driver should know
+> > that it is the case (it has access to the device's registers after
+> > all).
+>
+> Not necessarily.  Suppose that C is a child of B, and C is the wakeup
+> source.  B's driver might decide to keep B in runtime suspend
+> since B wasn't the wakeup source -- but then C's driver would have to
+> make the same decision and would not have access to C's registers.
+>
+> >  It may, for example, use runtime_resume() for resuming the
+> > device (and its parent etc) then.
+>
+> Consider this as a possible heuristic for B's ->resume callback, in the
+> case where B was in runtime suspend throughout the system sleep:
+>
+>         If B's parent A is not in runtime suspend, test whether B
+>         has a wakeup signal pending.  If it does, do a runtime
+>         resume.  If not (or if A is in runtime suspend), leave B
+>         in runtime suspend.
+>
+> At first glance I think that will work fairly well.  Even if B is kept
+> in runtime suspend when it shouldn't be, the normal runtime wakeup
+> signalling mechanism should kick in without too much of a delay.
+
+This is not just about the parent, but also about suppliers and things
+get fairly complicated at that point, so I would just rely on the
+observation that runtime wakeup should trigger shortly.
+
+> The big problem is that this issue applies to all subsystems and
+> devices.  It would be better if we had a uniform solution that could be
+> implemented in the PM core, not in every single subsystem or device
+> driver.
+>
+> Here's another possibility, one that can be implemented in the PM core
+> during the ->resume, ->resume_early, or ->resume_noirq phase of system
+> wakeup:
+>
+>         If A and B are both in runtime suspend, do not invoke B's
+>         ->resume callback.  (Or maybe don't invoke it if A's ->resume
+>         callback wasn't invoked.)
+>
+> There probably are some detailed reasons why that won't always work, but
+> maybe you figure out something like it that will be okay.
+
+I personally think that it would be reasonable to simply preserve
+device states in error paths unless they have been changed already
+before the error (or suspend abort due to a wakeup signal).
+
+By this rule, B would be left in runtime suspend if it were still in
+runtime suspend when the error (or suspend abort in general) occurred
+and then it doesn't matter what happens to A.
+
+The PM core can do something like that for the drivers opting in for
+runtime PM integration assistance, so to speak.  That is, drivers that
+point their ->suspend() and ->resume() callbacks to
+pm_runtime_force_suspend() and pm_runtime_force_resume(),
+respectively, or set DPM_FLAG_SMART_SUSPEND (or both at the same time
+which is now feasible).  Otherwise, it is hard to say what the
+expectations of the driver are and some code between the driver and
+the PM core may be involved (say, the PCI bus type).
 
