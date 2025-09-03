@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-33738-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33739-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19B48B4246D
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Sep 2025 17:08:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D7FDB42472
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Sep 2025 17:09:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DFE53163778
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Sep 2025 15:08:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3DBDA3A6464
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Sep 2025 15:09:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB5503128BE;
-	Wed,  3 Sep 2025 15:08:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DB9B31282D;
+	Wed,  3 Sep 2025 15:08:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rc8oL8WI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QfunatNh"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF7AB312830;
-	Wed,  3 Sep 2025 15:08:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E33593126DA;
+	Wed,  3 Sep 2025 15:08:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756912106; cv=none; b=gWOBVt0tHsdWJrq7GweWdPqPTfpBrpLhpddG3XSmlyFRHW7l2UddYvkVVFlVJdgFrCeiFuQdZwsWjSONkN+v55SrzAqeTarup1Y7hpKnqy1i35x/NwrAWN4Kl8CeMhVUyTj+XLKohTX8Qg5w5IWaNXpJ+ZKKbxSAIWhKRGu284I=
+	t=1756912123; cv=none; b=aiAuRaan0siYA307EE2nvq7r015YI72SC+dmw+gHXqRRWZzoRWwaPYbufjt4XhokmjN9bktdYfwwnm0d7prMBhSpx6H/tu0ggiHjAINeWr13WcuuOA8un9Y9zWc7YlI4Z+6t0wGbZ6kGP/gJBri5S13bA1Q2Z8frNhXlxcoXYh8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756912106; c=relaxed/simple;
-	bh=4OGMjsPefYUiz5Eg4nhv/X6kX9TsR0TDPzAxkLnV3wo=;
+	s=arc-20240116; t=1756912123; c=relaxed/simple;
+	bh=9ouQ0iQlY79HsX0GCj2o5a6poym0/jvJWR64x0eRimw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cIn3JAh4aYDZcac8IY/y3PM/vBtUvLe4aEBdjFQ0MBBN38plQqQLkPj0CW5lgwvM7Ykflr9Am1HtaXubssZBMp10pskQbfksVBkwc3KBqH3fYIilYVnEGtsFB+B8NXNx9kVVh+Gz+ReGP+YvEe3oo83NRLl0J4kGLp/8mk+aTdo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rc8oL8WI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E889DC4CEF0;
-	Wed,  3 Sep 2025 15:08:24 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=P2p+rAduHZgFlqJDA/AIaE4ScUgnQS1diZJY+ibwGCva7zHc7pfeFusMsaLr6et0AsdvOwv7PUZC0E68X8Zm8YbQccevpcz/4JOo/x95wyeViKiuyegJlqpoZNfQobjxwwjNpu/wiMi+x2cOB7MBcpqDVOaFSL+tYASshhjQyPc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QfunatNh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E222EC4CEE7;
+	Wed,  3 Sep 2025 15:08:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756912106;
-	bh=4OGMjsPefYUiz5Eg4nhv/X6kX9TsR0TDPzAxkLnV3wo=;
+	s=k20201202; t=1756912122;
+	bh=9ouQ0iQlY79HsX0GCj2o5a6poym0/jvJWR64x0eRimw=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Rc8oL8WI10Z2IK54JvcGKmhDxZOeVJ1FpJ9Gw8VtFPu4qwdqZq4Y2ldfFEICy2X/3
-	 ZFUra86pmW7xvwMn3EweJ3D+XxXpBCPbE5CsNF9C9OnPon3CceSK6ia/Ec5TLvNHgn
-	 Y6KEoM2mXVXLiyWgYQtg7xlV0aegBjX0uapBnRo6527dZjG8smrN+HI2WHG86fr2yp
-	 2P5ZJ1yp4GZZwOQ5iANYqiHs21OcpYPt/UM2Y+hxEaD8mMCCB+p/vdLOttxpclPkJG
-	 +jed467QYTUODHDTzIhYST/UsqF88O7+EyWY3K0E5gGGqjBJ3td2sO3rVNRO8QY3vv
-	 Uk3uqZRemmKYw==
-Message-ID: <cd671c41-2f52-4be9-b2ad-f547daff5a3a@kernel.org>
-Date: Wed, 3 Sep 2025 17:08:22 +0200
+	b=QfunatNhVLPv+nRLkxa6SyFGhg7EJfCxvpId2yuAyfO028KfxS7gVKRcNPEghQrZU
+	 YR0mAaqiI3yH/qAQVGxa1463uM0+rXnmeTrOsBX4H9AxTjSpGB1wFfGSkd0UyZsQBq
+	 4RTkSArfux13cG2e/2lC/JoheaYzYENTQBCKAsh3SMqa5iznf24kVZCfYNKOocNGuc
+	 YqHyXL6Y5AO01lJOJzQZgcSIgRbmnmugN82Yyg4WjnX2KJhP37E+1/2Bc2Ia/L8Q6R
+	 iit5BKZVBowXNG3qtgZRjLOWcSTUjsvAhqHANNtzKt2oV7uel9tQIpMa72PMPbppjP
+	 1ZQnhv+DnkOpQ==
+Message-ID: <e9259611-9ce4-4d5a-b6ca-586c701e8f5b@kernel.org>
+Date: Wed, 3 Sep 2025 17:08:39 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,13 +50,15 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1] cpufreq: core: Rearrange variable declarations
+Subject: Re: [PATCH v1] cpufreq: intel_pstate: Rearrange variable declaration
  involving __free()
 To: "Rafael J. Wysocki" <rafael@kernel.org>,
  Linux PM <linux-pm@vger.kernel.org>
 Cc: LKML <linux-kernel@vger.kernel.org>,
- Viresh Kumar <viresh.kumar@linaro.org>, Zihuan Zhang <zhangzihuan@kylinos.cn>
-References: <4691667.LvFx2qVVIh@rafael.j.wysocki>
+ Viresh Kumar <viresh.kumar@linaro.org>, Zihuan Zhang
+ <zhangzihuan@kylinos.cn>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+References: <2251447.irdbgypaU6@rafael.j.wysocki>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -102,20 +104,20 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <4691667.LvFx2qVVIh@rafael.j.wysocki>
+In-Reply-To: <2251447.irdbgypaU6@rafael.j.wysocki>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 03/09/2025 16:56, Rafael J. Wysocki wrote:
+On 03/09/2025 16:59, Rafael J. Wysocki wrote:
 > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> Follow cleanup.h recommendations and always define and assign variables
+> Follow cleanup.h recommendations and define and assign a variable
 > in one statement when __free() is used.
 > 
 > No intentional functional impact.
 > 
 > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
+
 
 Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
