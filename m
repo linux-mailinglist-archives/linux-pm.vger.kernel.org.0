@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-33679-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33680-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C89F2B414BA
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Sep 2025 08:11:31 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id B6FACB41514
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Sep 2025 08:23:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C27B5167F89
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Sep 2025 06:11:30 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 905ED4E174E
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Sep 2025 06:23:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A78B42D73B2;
-	Wed,  3 Sep 2025 06:11:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 759AA2EA15D;
+	Wed,  3 Sep 2025 06:18:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OhG5GB8k"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mL+uVQb2"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6977014A9B;
-	Wed,  3 Sep 2025 06:11:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DE892D9485;
+	Wed,  3 Sep 2025 06:18:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756879884; cv=none; b=Zgzdbz6ipTNQqxQhNpB/yv5prUeNfNYtUesg/g98hcy35PtrkB9/ldfp7JcgkPDQgKCKvh/AehNLpRePni4mIQSNDwTRrxphHEp/WRQ7PEZO3m8A8q35zNNpLkv7we1vOOD9tq+y/NYq28Qh0am5miBExgCSmgTl9ZKG2o/pqiE=
+	t=1756880319; cv=none; b=hwg2/uoFM585/lVtXYp9pncbFVWl5XEsOowp5dVcYboZkDoJLExybZs/OwLWOczersz1o9dqKSOHLsxCeQuh771zO1uC4+SCQ7dsQFnGjh94uIDEmfQbyjZQwZOSYrYhHByrNmUNZkiTuV8h6+HN4QGIEXjUHNnoqVkruyXKHRc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756879884; c=relaxed/simple;
-	bh=DEWGVqilbGOs6UgUqJ9p5sDy7a3JODRL7uL+KLdqaDM=;
+	s=arc-20240116; t=1756880319; c=relaxed/simple;
+	bh=oHD1nI1vPHFspW9ycjjPbvdzivA3JdL7B2Dq18hkaTY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OPnVd3hRkVLVhRB/XvU8TtxT8JJhKuRF7IMLT+GLHTxTKQ2ft66vlUdG4xTSq1CJarohMPt/bQ3CgZNZNSRfluRDWiP7D9CrPG+Jn5QwIcmWXw/aDoIpv1pDYJclMI/pAo2/T7N1PEHLhhzfDCt9xmYKl1Jr+m21yWZn3dHxOqQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OhG5GB8k; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2C74C4CEF0;
-	Wed,  3 Sep 2025 06:11:14 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=VqVBE2uWS5tEmehs3+6yrSBnG/kUo1Ri+Iu4UAOW5/NrmoOZWV1tqMNiMLappSI/rwA4G6Nh7Orsv3eFqXWk62xDo6ibtgSmqsWytQPjIrD6+mA/gEmaLci5lxcoIVmUdOKsNzJ2gm+K8f+5YbI4aGXv8R4HWBH6Z6J6p3xQB0s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mL+uVQb2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07BC6C4CEF0;
+	Wed,  3 Sep 2025 06:18:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756879884;
-	bh=DEWGVqilbGOs6UgUqJ9p5sDy7a3JODRL7uL+KLdqaDM=;
+	s=k20201202; t=1756880318;
+	bh=oHD1nI1vPHFspW9ycjjPbvdzivA3JdL7B2Dq18hkaTY=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=OhG5GB8keEQ58YNgxAI/Sjc1rocLhOfxCLl/XZwlEzS1WCwat/fRihODLk7ZhvcWr
-	 H3XYzOgamWZw2UP1IcvzjzFaTBdCBESmwBjW57Q0I4QlZ/cxF1rW0y5KmmG5aM1SZs
-	 0uwLCKpyV6hM1ZLubZDbjoGbQOQY4z6fZm3zXiREW8Xa2eaDBHXBu8+MrVOXj9aNfo
-	 pqJnCWRxzZG176Yw/RX5egzLS+IB1ebxgjYZCtkELZ6V0YgtZVtdAYK9klO4OCqnRM
-	 DQ1ON/yN8nE1oOUXnkRR5ccXnOp7joOzEV/f+6jB4MMYU965FZbZcYRzziTXfVhat1
-	 LzBIkLuy7dzZg==
-Message-ID: <04ca5584-b10e-465d-bbda-627b7f743ce9@kernel.org>
-Date: Wed, 3 Sep 2025 08:11:12 +0200
+	b=mL+uVQb22ZO0+HiuyDtI9fXK3YI/RQCk/pN1aSFJP6XBnO36plQw+PeMhuJgfV97s
+	 TIQNu4kIAf2NJuQZJah+ymwhesyszHinQu9zRFpAsq4CVSySHJInS7x4UCOGh+pl8v
+	 5Qbei+/A/NavI3IqottYAGh6kv6q6jTqrp7RNGHJGvC+zZbbd9bjWBl/mzcQhFRtrT
+	 YoK+uKmgIqx5R/frOm245xGOmOCejoNBQsl71bsr69hsg/rFH03PivLWcnhO1SuPHK
+	 uAe/9SkRC/IcBFsdQbvNGMBI+oOMebtR6nmq27+jqBUhd2bmUeUiBMN2jW1qvLC8kw
+	 uerc7nxycs/0A==
+Message-ID: <691a9317-238e-487b-ae5a-6bb0d73e37dd@kernel.org>
+Date: Wed, 3 Sep 2025 08:18:34 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,28 +50,19 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 12/12] PM: EM: Use scope-based cleanup helper
-To: Zihuan Zhang <zhangzihuan@kylinos.cn>
-Cc: airlied@gmail.com, alim.akhtar@samsung.com, beata.michalska@arm.com,
- ben.horgan@arm.com, bp@alien8.de, catalin.marinas@arm.com,
- cw00.choi@samsung.com, daniel.lezcano@kernel.org,
- dave.hansen@linux.intel.com, dri-devel@lists.freedesktop.org,
- edubezval@gmail.com, festevam@gmail.com, imx@lists.linux.dev,
- intel-gfx@lists.freedesktop.org, j-keerthy@ti.com,
- jani.nikula@linux.intel.com, kernel@pengutronix.de,
- kyungmin.park@samsung.com, lenb@kernel.org, linux-acpi@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-omap@vger.kernel.org, linux-pm@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, lukasz.luba@arm.com, mpe@ellerman.id.au,
- myungjoo.ham@samsung.com, pavel@kernel.org, ptsm@linux.microsoft.com,
- rafael@kernel.org, rodrigo.vivi@intel.com, rui.zhang@intel.com,
- s.hauer@pengutronix.de, shawnguo@kernel.org, simona@ffwll.ch,
- srinivas.pandruvada@linux.intel.com, sudeep.holla@arm.com,
- sumitg@nvidia.com, thierry.reding@gmail.com, tursulin@ursulin.net,
- viresh.kumar@linaro.org, will@kernel.org, yangyicong@hisilicon.com,
- zhenglifeng1@huawei.com
-References: <b38e64cc-4971-4e71-931c-820453aa91a7@kernel.org>
- <20250903021230.1044454-1-zhangzihuan@kylinos.cn>
+Subject: Re: [PATCH 0/8] Support dynamic EMC frequency scaling on
+ Tegra186/Tegra194
+To: Aaron Kling <webgeek1234@gmail.com>
+Cc: Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+ Thierry Reding <thierry.reding@gmail.com>,
+ Jonathan Hunter <jonathanh@nvidia.com>, "Rafael J. Wysocki"
+ <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-kernel@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
+ linux-pm@vger.kernel.org
+References: <20250831-tegra186-icc-v1-0-607ddc53b507@gmail.com>
+ <20250902-glittering-toucan-of-feminism-95fd9f@kuoka>
+ <CALHNRZ_CNvq_srzBZytrO6ZReg81Z6g_-Sa+=26kBEHx_c8WQA@mail.gmail.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -117,28 +108,31 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20250903021230.1044454-1-zhangzihuan@kylinos.cn>
+In-Reply-To: <CALHNRZ_CNvq_srzBZytrO6ZReg81Z6g_-Sa+=26kBEHx_c8WQA@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 03/09/2025 04:12, Zihuan Zhang wrote:
->> You are not improving the source code here. This is not how to use
->>  __free() and you clearly do not understand the source code.
+On 02/09/2025 18:51, Aaron Kling wrote:
+> On Tue, Sep 2, 2025 at 3:23 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
+>>
+>> On Sun, Aug 31, 2025 at 10:33:48PM -0500, Aaron Kling wrote:
+>>> This series borrows the concept used on Tegra234 to scale EMC based on
+>>> CPU frequency and applies it to Tegra186 and Tegra194. Except that the
+>>> bpmp on those archs does not support bandwidth manager, so the scaling
+>>> iteself is handled similar to how Tegra124 currently works.
+>>>
+>>
+>> Three different subsystems and no single explanation of dependencies and
+>> how this can be merged.
 > 
-> Sorry for the problem, policy should be assigned after cpumask_test_cpu().
-> 
-> I actually realized earlier that __free() only frees at the end of the variable’s lifetime. 
-> I had suggested using a braced macro in cpufreq.h to allow immediate release after use, 
-> but I understand the maintainer’s advice to “keep it simple” and will follow that.
-> 
->> What's more, you did not use standard tools which would tell you this is
->> buggy and wrong.
-> 
-> Could you please let me know which standard tools you recommend for detecting such issues? 
-> 
-> I’d like to use them to avoid similar mistakes in the future.
-All standard tools used for kernel development, sparse, smatch, clang,
-coccinelle, see my talk from OSSE25.
+> The only cross-subsystem hard dependency is that patches 5 and 6 need
+> patches 1 and 2 respectively. Patch 5 logically needs patch 3 to
+> operate as expected, but there should not be compile compile or probe
+> failures if those are out of order. How would you expect this to be
+> presented in a cover letter?
+
+In whatever way you wish, but you must clearly express dependencies and
+any merge restrictions.
 
 Best regards,
 Krzysztof
