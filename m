@@ -1,97 +1,105 @@
-Return-Path: <linux-pm+bounces-33752-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33753-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F006B428C0
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Sep 2025 20:35:48 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 08553B428C7
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Sep 2025 20:36:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4F73C3B919D
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Sep 2025 18:35:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D17D516B1BC
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Sep 2025 18:36:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45A56368092;
-	Wed,  3 Sep 2025 18:35:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16A21368092;
+	Wed,  3 Sep 2025 18:36:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n5WdzNSb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GV83WRpG"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1748B368089;
-	Wed,  3 Sep 2025 18:35:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE0C01B0439;
+	Wed,  3 Sep 2025 18:36:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756924538; cv=none; b=gFXm0laE1LQj82TpA6vnt3YN9SdsMBN438QjAUvk4fGAHejlkR9zYk4eS27PDUEUTfNGFUHCRwaGVzJmugYy/bEZXXe8FwvT0baGXZ/ZjPj97rE2Cv1AH7LeBhluu5Lw8P52FgsSdiWt6pPM/EPVtumq8LFYhxUqS66nvwywADc=
+	t=1756924591; cv=none; b=h8tCG+0H2BX78RnPD3lyknTE5b/jrPre/ZMGjmjQsPcwgjpAAxPYL700wV51aX4V4LMZW4F1pibU4dt3kjn/o/dMbZ8vwFbUcX4A6BH8FdFyVArZblMOfB86LuVoZPUvNsLz0ifdgTJ6uTeTplGYTbZfDhIDyVi8NtieAqysQwo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756924538; c=relaxed/simple;
-	bh=IjPPP+c6tWyLw6wQQKtlKQ3iXM7IyODWQ7haY+XqloY=;
+	s=arc-20240116; t=1756924591; c=relaxed/simple;
+	bh=DxGbF8nyuy2x1Qe0JywEi7i8GgYPUaoARbWOEZzLKoI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Her39NRRieTUBGfBomLVFHe5pYZwy5htyduYNsaj9P4PwjiYagaSF2UM+y0rRzmE6bITOTcsaAaiI5mAun3uF/IOFIpjO0rNf555pm4FDsjpcqln5LiLnxmobE6WhbH/05q4Vsabq8r336LLuvXLOuSeWhqKdCxY8BcVcmUA5MM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n5WdzNSb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84C37C4CEF1;
-	Wed,  3 Sep 2025 18:35:37 +0000 (UTC)
+	 To:Cc:Content-Type; b=ZBpB+wC9ux3hXOM8eZt1jAVUbFI2fC9kUaSwLBXitxsxDHmCChw0Z1g3HuGUUZLy2MgSPTFFXU2hIiDo7DUKthWYy+y9mOsma0ka7bDjzTL5q5WkjvLe3TKxaKIMklK1yHaVNEeL++JFZwX3DzlRJt/MfBNumY8jKnRRlF3+3uI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GV83WRpG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B22A3C4CEE7;
+	Wed,  3 Sep 2025 18:36:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756924537;
-	bh=IjPPP+c6tWyLw6wQQKtlKQ3iXM7IyODWQ7haY+XqloY=;
+	s=k20201202; t=1756924590;
+	bh=DxGbF8nyuy2x1Qe0JywEi7i8GgYPUaoARbWOEZzLKoI=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=n5WdzNSbHmmq7r5KO5WzrhQtOX4SKxXEiDyToULyQ/idA87ldhACFIRjunPs8P9Tu
-	 2i8adrGV7aGhK/CleFVZbP7qPgW96qMviLZBaYHDo2gwOwD7xzGH6+5d13s4fSeCQc
-	 Q97QnyiggxNIZ/5y6CzW5+FM2eQ3oyzXWkudWmaSmYaU2sXi88wvQrTgvxsXuiAncS
-	 J/f4C8SGnnKmHZ51PzODl71/5v9Sm5mvboU4RHYwZQZ2dpytqE1hNDwuaG4itZfoxc
-	 IdfsiVh4AVV5hXtPJ3VDb68HexXyFyPBGst5sS8OkiJ6tH1ivECmuhO2jTsOHNMS0L
-	 j9/HakQxfZReQ==
-Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-61e4f5f46cfso80018eaf.0;
-        Wed, 03 Sep 2025 11:35:37 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUzkvhaqApp5sPRax/EyPwOGT4Hrpnzsu6ESNhsUmLBS3RmdbAumJDGYFw1QLQ387GD2gTaWVLT9to=@vger.kernel.org, AJvYcCWBreSZYckkw1/0nIdTH3uDOWI9Dahxsd/o3TJh7C6O3Fm5FA9ZaehQ2BBeoBNfjUV9cbYyZP6EO+rvgbg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyjtS2QS5faHcchY7vyHEbCia98UR75w5/Gd7clS/xkeEz9ZLXX
-	InYk4SMnrAAahzF6FYPE/Ma4KdCGiPbtQepuB0LuAzEsVjIeTNMVoln4lHJQWN7M/ozerfBomxa
-	kA5v7X5X2CdIvCmi2DTHJwYofpCbYVGA=
-X-Google-Smtp-Source: AGHT+IHcVyuPueHYutqfiO2a11D7xs+rkydQE1nQYBQhq3NtxHJnOTF/VqrCirG3hX67b+AveDMKHFO/KrEnzLGNees=
-X-Received: by 2002:a05:6820:1c83:b0:61d:b236:a864 with SMTP id
- 006d021491bc7-61e336f524fmr8229208eaf.3.1756924536872; Wed, 03 Sep 2025
- 11:35:36 -0700 (PDT)
+	b=GV83WRpGnwyEV0MUKSCaGeIkw9kXlys0qESYwOehY/3xtrSk7s6o9sMZCzWo7q67N
+	 POugD1LGlL8PWvCWQqeasyX/SaRpZr082Np7/5rvq304wG2aBwysqBZEXvEeVPZke7
+	 L8xIusKFzUralRBOY+oWzmFWz0QIqJNIHcI9DMEv4gC5W4TC+hbHrmDXCS2qjNQHNX
+	 BVoBdqnGgZDn1gIsNZwcUQtzWep6SBLKkeR/mfmueltGtRIFLx4ayqsHZZtQqBTYn+
+	 /lXXglOT8N7IWbSBzvy4mp1RQ5zkoOHyUrwq3jQ5XP7v3rMYHtjmRViYcslOy9U/XD
+	 E/6BLTUyDm6+A==
+Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-61e74e59d8fso91808eaf.0;
+        Wed, 03 Sep 2025 11:36:30 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWDhWVLz/sn8M/9vcuwuMoS74AMuLogScj65LVXelllkxKODMY6+Mk+1CbEIwYPs6uy1StPWTrKnvgTbFU=@vger.kernel.org, AJvYcCXeMv5rGb1CQMyeHsqEu+FvF2+v6H2Vnk/g35gnXzlt/mkWOzqkTUmZytCBqvy7eO2biogtFsk3b8o=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxbM0SyDA+rxadyUUDa4FqlTE480s7GZ6s0DjXY8sccD6mJYSSF
+	xDfjUSTEpFyLZvPkpYUXrcoBjMryFdLSzFou5YYbAHRFcqdzEej/jszTuoZevhAYrWyPZlKJZSA
+	4AwNrdta1DAREd/34QK41Vcvety1W17U=
+X-Google-Smtp-Source: AGHT+IGxEVBXAzUtzz5LDGx0UWbbjZ0fGVov7RkAQBFfSP7bN7hFDxN7tzQnRyxhfbBcLgETPtTAm1VTcCNPshwcVDU=
+X-Received: by 2002:a05:6820:c309:b0:61b:f98a:2f19 with SMTP id
+ 006d021491bc7-61e3195183bmr5496413eaf.2.1756924590085; Wed, 03 Sep 2025
+ 11:36:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <12740505.O9o76ZdvQC@rafael.j.wysocki> <CAJZ5v0ik7fRKwH3CnXysvBJkkdJbWP-6iL=zBF0o92rR+nHTKg@mail.gmail.com>
- <4f340f1e-1cbf-4b50-ae23-a0e50170146c@intel.com> <CAJZ5v0hQEecBFfZkefbipXPV6HVupz67q5RYR=heC=ZUpOY+bQ@mail.gmail.com>
- <c65c1b18-be70-493f-ab1f-07af55902772@intel.com>
-In-Reply-To: <c65c1b18-be70-493f-ab1f-07af55902772@intel.com>
+References: <20250901150653.166978-1-osama.abdelkader@gmail.com>
+ <CAJZ5v0hrKBNxDeZOKpUXyuZV7LRUX4ov4ifEGDtNMrA8km6uOA@mail.gmail.com>
+ <aLhK_zMvtkdCtsHR@osama> <CAJZ5v0j2ooBwnPWKjXGyYOOBtjs6zbAh-+jaUaV5u7sBi87+Rw@mail.gmail.com>
+ <aLh62dIWcHtWv2uj@osama>
+In-Reply-To: <aLh62dIWcHtWv2uj@osama>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 3 Sep 2025 20:35:24 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0jqUkBHarZkViyy1j-UUL3fgF7cp7AeU+X2Nyj1BCfBcg@mail.gmail.com>
-X-Gm-Features: Ac12FXxpQI-jp1kKgxBfIC5TqYnqhSzY-gRax2CKo1TF1r7DqfzLIOhPZuui6qA
-Message-ID: <CAJZ5v0jqUkBHarZkViyy1j-UUL3fgF7cp7AeU+X2Nyj1BCfBcg@mail.gmail.com>
-Subject: Re: [PATCH v1] cpu: Add missing check to cpuhp_smt_enable()
-To: Dave Hansen <dave.hansen@intel.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, LKML <linux-kernel@vger.kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Christian Loehle <christian.loehle@arm.com>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, "the arch/x86 maintainers" <x86@kernel.org>
+Date: Wed, 3 Sep 2025 20:36:19 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0jpAm-KrS0k4be523ygbRMPjSDGgNas7ipwpd9kKacqKg@mail.gmail.com>
+X-Gm-Features: Ac12FXxMug-OuZUCmZo3ji2RSEI6m_lTCwTED6lG6J9lQfpnDoPqvzkfMduKHKE
+Message-ID: <CAJZ5v0jpAm-KrS0k4be523ygbRMPjSDGgNas7ipwpd9kKacqKg@mail.gmail.com>
+Subject: Re: [PATCH] thermal: hwmon: replace deprecated strcpy() with strscpy()
+To: Osama Abdelkader <osama.abdelkader@gmail.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, daniel.lezcano@linaro.org, rui.zhang@intel.com, 
+	lukasz.luba@arm.com, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 3, 2025 at 8:00=E2=80=AFPM Dave Hansen <dave.hansen@intel.com> =
-wrote:
+On Wed, Sep 3, 2025 at 7:29=E2=80=AFPM Osama Abdelkader
+<osama.abdelkader@gmail.com> wrote:
 >
-> I munged the changelog up a bit:
+> On Wed, Sep 03, 2025 at 04:21:35PM +0200, Rafael J. Wysocki wrote:
+> > On Wed, Sep 3, 2025 at 4:04=E2=80=AFPM Osama Abdelkader
+> > <osama.abdelkader@gmail.com> wrote:
+> > >
+> > > On Wed, Sep 03, 2025 at 01:50:03PM +0200, Rafael J. Wysocki wrote:
+> > > > On Mon, Sep 1, 2025 at 5:06=E2=80=AFPM Osama Abdelkader
+> > > > <osama.abdelkader@gmail.com> wrote:
+> > > > >
+> > > > > strcpy() is deprecated; use strscpy() instead.
+> > > >
+> > > > So why is it better to use strscpy() in this particular case?
+> > >
+> > > Thanks for the review. Technically, there is no change since both hav=
+e const buf size,
+> > > it's just for consistency with other drivers.
+> >
+> > $ cd linux-kernel-source
+> > $ git grep strcpy | wc -l
+> > 1187
+> >
+> > What kind of consistency do you mean?
 >
-> > https://git.kernel.org/pub/scm/linux/kernel/git/daveh/devel.git/commit/=
-?h=3Dtestme&id=3D13f107f882bb5
->
-> I hope that looks better to everyone.
+> I mean in thermal subsystem, it's only this one.
 
-It does to me, thanks!
-
-> I also went looking at this assuming that it was x86-specific. I'd
-> appreciate a quick head nod from Thomas or Peter on this before I push
-> it anywhere, though.
-
-Sure.
-
-Thank you!
+So please add this information to the patch changelog.
 
