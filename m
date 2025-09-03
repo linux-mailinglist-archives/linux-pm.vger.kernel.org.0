@@ -1,196 +1,164 @@
-Return-Path: <linux-pm+bounces-33668-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33669-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 99FADB41162
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Sep 2025 02:39:02 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 014E2B4117A
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Sep 2025 02:51:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1610D1B63BFB
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Sep 2025 00:39:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BE95A7B3A57
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Sep 2025 00:49:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8452513BC0C;
-	Wed,  3 Sep 2025 00:38:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SPPYkJHE"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BE0C153BED;
+	Wed,  3 Sep 2025 00:51:28 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B46A129CEB;
-	Wed,  3 Sep 2025 00:38:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBB6013D8A4;
+	Wed,  3 Sep 2025 00:51:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756859937; cv=none; b=C+NkcevQSEe5VJT2FQWxqQcmUIhkw9R8fAIpmEzHk31/RXDMTCaGbrbZ67QPteAQeaO/6Ry6YetzSLplc71gjks+IWEiRskLwRK3VoCNIXOaufEJ741HkAue5yAjmcCnigoPDAUa2a97XtUZTcmuIcT58f4l1akzCrabFlcLf1U=
+	t=1756860688; cv=none; b=RR2iNL1MoatBeFcuVhoQy8nIudinRkk+8d5DeYOxU/tIFnf0hYNNWaK1Q/hsrEBKN6QGR0PV39wZDF+194N/A7DxfVwZ2KVowmnfajrCH0fkNq4e+iUZhLggT1BUdv98g9T/jUvgfj4+Y8gVLBrffwqvrzv8UkWoeQJKohevP+w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756859937; c=relaxed/simple;
-	bh=bQ5P0TRtfeMCqFKYa4GZQ4TLIAFW8wAzvRz7MT19Sh0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RBKxefT/ICDJotfige364SQ4FBM5b7WRR9FRy51E2rZs+IMtrV5chPLvi8yDQ2nE33TtpXcw6dUlItJtrjxJcz01jmONW9dwvHPBQJ4GSwQEh6S2KvH1BDRzIFfIc7VWsOWi2xg2M26mAq5O7/LXowuaJhQthAigV9RRv5xLtHw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SPPYkJHE; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-45cb5e1adf7so769595e9.0;
-        Tue, 02 Sep 2025 17:38:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756859934; x=1757464734; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bzaSJEDDfxV3rlsTLegpkKoIznmaYx9gbH4pD2Ij04E=;
-        b=SPPYkJHEArfvzF9uIS/FxjbealpcNlkOWU8FqYlmE44CBZenkaOoJuiSIIxu02g/Vb
-         bR97OFM34e81wvzdhF7T6kuz7rqjL8Cdn6D2xGJIl4q/ibJNXjrr16wgxxvP5lrPAnO1
-         qcptcDxkQU7qHdUQe3d6EXOaE4lCQb6cZh6++czVrwhlECEvJp2VnOyp39tvF486uqJj
-         mboZhlcVtsFOYc3exk0vaKpVSMX3t9hWmeWWfTgPKzsuodfZJKAI0B1S227tGF7t2D+Y
-         rdcDOsesRbR9zPhOoDJM0dZMOAM/3ukdLDJJ+5KhebFgucUKBSVE0eNLnKcY1x1cu6hS
-         pboA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756859934; x=1757464734;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bzaSJEDDfxV3rlsTLegpkKoIznmaYx9gbH4pD2Ij04E=;
-        b=nqugKHbvOutSO0Dcc2q9+lj4NCZBrDaDeURN2QyZr2EO0zctBH7yq6BUOXcxKh4wWB
-         dDDOX9/DzKbTtk8kiQb95sKMwTTjGHPEWdctdVOgm8H5X911lqvZQHYN2AjwclqAKx9o
-         D1ifkc81K+Ln5Luhrvm/zoFtObS0O0igkjsysalE01uRXSU6mgd/ak4Rhn0UVYK1XYRj
-         0ody4KATcGlSU6UHbyT85jI9xSqBZOF46MkziAdTNg4qNL7RnMtnk/gW70TV3A+t164G
-         B8HUwiE7Qv0YTc0Uu6Ai/qj9RUsHouDxc1ona9gn3Sr8E/F5QAA6y7EbR7ulmM/u8T0a
-         Jp9g==
-X-Forwarded-Encrypted: i=1; AJvYcCUagLRJpBm2D83B8f9b2SeAvIw4qjZUQTr1NXEPbx2frKf8v7QQwJvlsPYBqljjA4JmL6JyquVW7l1u3UEFaVQC@vger.kernel.org, AJvYcCWB7Ncdma+mIBcunIuDQXWzHKiAV5FIKBVtlKvTLZhsWNO4chjv413uFDlAnC6Zo3Qrt8ZB8zCSApw=@vger.kernel.org, AJvYcCXEr0PZeeYObiaYrZNEmS0cZRnuPcst7Y8t+LdpnU26xvgvBWj+BOPveI5++JZIPdAV6ao=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzPznU23aPqWGy7i4Lr+zOjjF6GPXXUR/qlzyhYU+6WE4KXR0K1
-	RASwPHZljE1CnYfTs+LsH6LEerPhd4RaGXFLIzWvyV0eKeAhfJuxT3EywllyCCTAEgmuVWExn+r
-	/Ows1ya3rYxbTe7qk962/pH8fQL2FYzg=
-X-Gm-Gg: ASbGncsN+jZ5Wu+DlwneCqCrjPGnkVf6YPZSMLpFkQC8I0uLlf6kT7renzD/ltayWjp
-	dFUhyDHzgwddva8X+gEAxJcJH8lZ5PHRJ2Qi607D2apG6eJimMX7ZQHBZHTjBe6z1q0UjhShcPS
-	SpVndS8qQ614eO5K9HqVwYCbgDVHLKixHWYSfJwo2/0UpLQJ6HUbCidrO3MUoGaE9p+Z90lme4P
-	zH4yXm8GlFp+CgosRu3oU4lgHLgLHKufWLBng55a69kbbs=
-X-Google-Smtp-Source: AGHT+IGjt3Seiom+fEIKYjnNnbJm13OQMDvMA4L7fKAByybsoTA43NUC5VMhJJG7x72r0smtxjxuSVJ1TkH2cwV00rc=
-X-Received: by 2002:a05:600c:3153:b0:458:bda4:43df with SMTP id
- 5b1f17b1804b1-45b85570996mr139409705e9.17.1756859933744; Tue, 02 Sep 2025
- 17:38:53 -0700 (PDT)
+	s=arc-20240116; t=1756860688; c=relaxed/simple;
+	bh=SWn2YoMWlNMEPB8MPyZq3aGVAkzLGIwvqZCBCqopq50=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=GW6RtB6MlDJ9htREGdIJgqvhIKFRdlP424Nz5dBiuPYhaBEZmJfR0hD0WFiASDpejpJabmN7qAcI+eQlad9fZZegB7B+xOSkZC7gHJIwNB5iwKaEro4v6DOtPFsb+Spc1QRyq5rBLuaoCMPvCHpDDdbrnwUG6mi1UB/NXf26Otg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 1864b9c6886011f0b29709d653e92f7d-20250903
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.45,REQID:149e317a-1aff-43d6-90c9-1a5d04dd57b0,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:6493067,CLOUDID:461f970947de3929c2a541614ce8e229,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102,TC:nil,Content:0|52,EDM:
+	-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,
+	AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: 1864b9c6886011f0b29709d653e92f7d-20250903
+Received: from mail.kylinos.cn [(10.44.16.175)] by mailgw.kylinos.cn
+	(envelope-from <zhangzihuan@kylinos.cn>)
+	(Generic MTA)
+	with ESMTP id 1164660955; Wed, 03 Sep 2025 08:51:15 +0800
+Received: from mail.kylinos.cn (localhost [127.0.0.1])
+	by mail.kylinos.cn (NSMail) with SMTP id 22D4BE008FA3;
+	Wed,  3 Sep 2025 08:51:15 +0800 (CST)
+X-ns-mid: postfix-68B79102-9412696
+Received: from [172.25.120.24] (unknown [172.25.120.24])
+	by mail.kylinos.cn (NSMail) with ESMTPA id 28EDFE008FA2;
+	Wed,  3 Sep 2025 08:51:07 +0800 (CST)
+Message-ID: <40706b1f-e23c-417b-b3e1-2dc839828588@kylinos.cn>
+Date: Wed, 3 Sep 2025 08:51:06 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250901135609.76590-1-yikai.lin@vivo.com> <20250901135609.76590-3-yikai.lin@vivo.com>
-In-Reply-To: <20250901135609.76590-3-yikai.lin@vivo.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 2 Sep 2025 17:38:41 -0700
-X-Gm-Features: Ac12FXwsB0RPqWE7renRRPw-WrdvYCrmWnv4rC0XwGG-GxE2-E70WtLP8kdCAfo
-Message-ID: <CAADnVQ+iazLpRWtt219MqGD0LHVoccahG=Cf1w+Ow5xOjRd_Lg@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf-next 2/2] selftests/bpf: Add selftests for cpuidle_gov_ext
-To: Lin Yikai <yikai.lin@vivo.com>
-Cc: Christian Loehle <christian.loehle@arm.com>, Song Liu <song@kernel.org>, 
-	"Rafael J . Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Yonghong Song <yonghong.song@linux.dev>, 
-	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, 
-	Linux Power Management <linux-pm@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
-	Tejun Heo <tj@kernel.org>, zhaofuyu@vivo.com
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 03/12] cpufreq: intel_pstate: Use scope-based cleanup
+ helper
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Viresh Kumar <viresh.kumar@linaro.org>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+ Michael Ellerman <mpe@ellerman.id.au>, Krzysztof Kozlowski
+ <krzk@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>,
+ Thierry Reding <thierry.reding@gmail.com>,
+ MyungJoo Ham <myungjoo.ham@samsung.com>,
+ Kyungmin Park <kyungmin.park@samsung.com>,
+ Chanwoo Choi <cw00.choi@samsung.com>,
+ Jani Nikula <jani.nikula@linux.intel.com>,
+ Rodrigo Vivi <rodrigo.vivi@intel.com>, Tvrtko Ursulin
+ <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>,
+ Simona Vetter <simona@ffwll.ch>, Daniel Lezcano <daniel.lezcano@kernel.org>,
+ Sascha Hauer <s.hauer@pengutronix.de>, Shawn Guo <shawnguo@kernel.org>,
+ Eduardo Valentin <edubezval@gmail.com>, Keerthy <j-keerthy@ti.com>,
+ Ben Horgan <ben.horgan@arm.com>, zhenglifeng <zhenglifeng1@huawei.com>,
+ Zhang Rui <rui.zhang@intel.com>, Len Brown <lenb@kernel.org>,
+ Lukasz Luba <lukasz.luba@arm.com>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Beata Michalska <beata.michalska@arm.com>, Fabio Estevam
+ <festevam@gmail.com>, Pavel Machek <pavel@kernel.org>,
+ Sumit Gupta <sumitg@nvidia.com>,
+ Prasanna Kumar T S M <ptsm@linux.microsoft.com>,
+ Sudeep Holla <sudeep.holla@arm.com>, Yicong Yang <yangyicong@hisilicon.com>,
+ linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
+ intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+ imx@lists.linux.dev, linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250901085748.36795-1-zhangzihuan@kylinos.cn>
+ <20250901085748.36795-4-zhangzihuan@kylinos.cn>
+ <CAJZ5v0hu48NrMr6Vkjn_UyHywJMx7F5N6yWf2LiXxykZF79EKA@mail.gmail.com>
+ <29890791-4ddf-49c7-a4f2-0ac83e6d53c6@kylinos.cn>
+ <CAJZ5v0jvOKeLRkjWoKR5eVKZ-hib7c8D-VOBvtCvs1+HGfPUiQ@mail.gmail.com>
+From: Zihuan Zhang <zhangzihuan@kylinos.cn>
+In-Reply-To: <CAJZ5v0jvOKeLRkjWoKR5eVKZ-hib7c8D-VOBvtCvs1+HGfPUiQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Sep 1, 2025 at 6:56=E2=80=AFAM Lin Yikai <yikai.lin@vivo.com> wrote=
-:
+
+=E5=9C=A8 2025/9/2 19:47, Rafael J. Wysocki =E5=86=99=E9=81=93:
+> On Tue, Sep 2, 2025 at 12:33=E2=80=AFPM Zihuan Zhang <zhangzihuan@kylin=
+os.cn> wrote:
+>>
+>> =E5=9C=A8 2025/9/1 23:17, Rafael J. Wysocki =E5=86=99=E9=81=93:
+>>> On Mon, Sep 1, 2025 at 10:58=E2=80=AFAM Zihuan Zhang <zhangzihuan@kyl=
+inos.cn> wrote:
+>>>> Replace the manual cpufreq_cpu_put() with __free(put_cpufreq_policy)
+>>>> annotation for policy references. This reduces the risk of reference
+>>>> counting mistakes and aligns the code with the latest kernel style.
+>>>>
+>>>> No functional change intended.
+>>>>
+>>>> Signed-off-by: Zihuan Zhang <zhangzihuan@kylinos.cn>
+>>>> ---
+>>>>    drivers/cpufreq/intel_pstate.c | 8 +++-----
+>>>>    1 file changed, 3 insertions(+), 5 deletions(-)
+>>>>
+>>>> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_=
+pstate.c
+>>>> index f366d35c5840..4abc1ef2d2b0 100644
+>>>> --- a/drivers/cpufreq/intel_pstate.c
+>>>> +++ b/drivers/cpufreq/intel_pstate.c
+>>>> @@ -1502,9 +1502,8 @@ static void __intel_pstate_update_max_freq(str=
+uct cpufreq_policy *policy,
+>>>>
+>>>>    static bool intel_pstate_update_max_freq(struct cpudata *cpudata)
+>>>>    {
+>>>> -       struct cpufreq_policy *policy __free(put_cpufreq_policy);
+>>>> +       struct cpufreq_policy *policy __free(put_cpufreq_policy) =3D=
+ cpufreq_cpu_get(cpudata->cpu);
+>>>>
+>>>> -       policy =3D cpufreq_cpu_get(cpudata->cpu);
+>>>>           if (!policy)
+>>>>                   return false;
+>>> The structure of the code is intentional here and there's no reason t=
+o
+>>> change it.
+>>
+>> Got it. Thanks for clarifying.
+>>
+>> So for this case the current structure is intentional -
+> Note that I'm talking about this particular change only.  The other
+> change in the $subject patch is fine.
 >
-> +
-> +/*
-> + * For some low-power scenarios,
-> + * such as the screen off scenario of mobile devices
-> + * (which will be determined by the user-space BPF program),
-> + * we aim to choose a deeper state
-> + * At this point, we will somewhat disregard the impact on CPU performan=
-ce.
-> + */
-> +int expect_deeper =3D 0;
+>> should I also avoid similar changes in other drivers?
+> That depends on who maintains them, which is why I wanted you to split
+> the patch into smaller changes in the first place.
+>
+> My personal view is that code formatting changes, which effectively is
+> what this particular one is, are pointless unless they make the code
+> much easier to follow.
 
-...
 
-> +/* Select the next idle state */
-> +SEC("struct_ops.s/select")
-> +int BPF_PROG(bpf_cpuidle_select, struct cpuidle_driver *drv, struct cpui=
-dle_device *dev)
-> +{
-> +       u32 key =3D 0;
-> +       s64 delta, latency_req, residency_ns;
-> +       int i;
-> +       unsigned long long disable;
-> +       struct cpuidle_gov_data *data;
-> +       struct cpuidle_state *cs;
-> +
-> +       data =3D bpf_map_lookup_percpu_elem(&cpuidle_gov_data_map, &key, =
-dev->cpu);
-> +       if (!data) {
-> +               bpf_printk("cpuidle_gov_ext: [%s] cpuidle_gov_data_map is=
- NULL\n", __func__);
-> +               return 0;
-> +       }
-> +       latency_req =3D bpf_cpuidle_ext_gov_latency_req(dev->cpu);
-> +       delta =3D bpf_tick_nohz_get_sleep_length();
-> +
-> +       update_predict_duration(data, drv, dev);
-> +       for (i =3D ARRAY_SIZE(drv->states)-1; i > 0; i--) {
-> +               if (i >=3D drv->state_count)
-> +                       continue;
-> +               cs =3D &drv->states[i];
-> +               disable =3D dev->states_usage[i].disable;
-> +               if (disable)
-> +                       continue;
-> +               if (latency_req < cs->exit_latency_ns)
-> +                       continue;
-> +
-> +               if (delta < cs->target_residency_ns)
-> +                       continue;
-> +
-> +               if (data->next_pred / FIT_FACTOR * ALPHA_SCALE < cs->targ=
-et_residency_ns)
-> +                       continue;
-> +
-> +               break;
-> +       }
-> +       residency_ns =3D drv->states[i].target_residency_ns;
-> +       if (expect_deeper &&
-> +               i <=3D drv->state_count-2 &&
-> +               !dev->states_usage[i+1].disable &&
-> +               data->last_pred >=3D residency_ns &&
-> +               data->next_pred < residency_ns &&
-> +               data->next_pred / FIT_FACTOR * ALPHA_SCALE >=3D residency=
-_ns &&
-> +               data->next_pred / FIT_FACTOR * ALPHA_SCALE >=3D data->las=
-t_duration &&
-> +               delta > residency_ns) {
-> +               i++;
-> +       }
-> +
-> +       return i;
-> +}
+UnderStood, Thanks!
 
-This function is the main programmability benefit that
-you're claiming, right?
-
-And user space knob 'expect_deeper' is the key difference
-vs all existing governors ?
-
-If so, I have to agree with Rafael. This doesn't look too compelling
-to bolt bpf struct-ops onto cpuidle.
-
-There must be a way to introduce user togglable knobs in the current
-set of governors, no?
-
-Other than that the patch set seems to be doing all the right things
-from bpf perspective. KF_SLEEPABLE is missing in kfuncs and
-the safety aspect needs to be thoroughly analyzed,
-but before doing in-depth review the examples need to have more substance.
-With real world benchmarks and results.
-The commit log is saying:
-"This implementation serves as a foundation, not a final solution"
-It's understood that it's work-in-progress, but we need to see
-more real usage before committing.
 
