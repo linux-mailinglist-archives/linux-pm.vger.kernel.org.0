@@ -1,144 +1,138 @@
-Return-Path: <linux-pm+bounces-33676-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33677-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1939EB41373
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Sep 2025 06:14:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C292DB41398
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Sep 2025 06:42:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C894C3ADDE5
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Sep 2025 04:14:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9668854320B
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Sep 2025 04:42:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C67B32D29B7;
-	Wed,  3 Sep 2025 04:14:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C150D2D3EC2;
+	Wed,  3 Sep 2025 04:41:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="LX6lc/8I"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s/wbSSBA"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CE722AC17
-	for <linux-pm@vger.kernel.org>; Wed,  3 Sep 2025 04:14:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F2C02D3A71;
+	Wed,  3 Sep 2025 04:41:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756872892; cv=none; b=feMExcclTaHG1gCOmXdEwj7VqwrwvG3qAxUvDX69liYwzTUY8UXQyRQd/JYZLXyrka838kcGbvRCHvu/WUXVrqcuI2x5jEljedtujYBnTNQ5bz0khDNvz7UWsD8dRtfDopBGEFYdRf+DEEjxqxqiCpNSFJyp3bGKVeOelUAHGmk=
+	t=1756874516; cv=none; b=B+NgY05FhnMe9/GGYizIUfc2kR89n73Qit/Q3xbIKge6nxlqgdmB03IS0TtbJN51cnLTpoerHgMQy6rqFBSX1uJKWl1a/Bic9JuNo0iuiOLlkUuAN/EPitQKsSlbJAq03UrA6yL9Y+tPHui0MGRCvaFt7SGygDOZ42UDrHQIIJA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756872892; c=relaxed/simple;
-	bh=pwpMnp02iR5Nb2xJei5nSyPw103lFtmOwIACABH/wec=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=j4DHmfxby9v5uLNo8dGa4nKq0HnyJqKN0NMw8FE3kb9zB1B0OkcHlltnPnQHk1AgLjCc9ATdYKTdrzmltG/F948oDwgMHyi/RA8uFf9wp3W91uQf67MSAytJ8BpUW+6TzcPo9uRxgDr26Ut5PwdHCa3K8xvIO3YJ48rZ6u16mY0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=LX6lc/8I; arc=none smtp.client-ip=209.85.216.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-329b760080fso2245435a91.1
-        for <linux-pm@vger.kernel.org>; Tue, 02 Sep 2025 21:14:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1756872890; x=1757477690; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3736M7NCTLnENtRRfPhfcHj37p+iIh+YlnUYDC/dTVs=;
-        b=LX6lc/8IUF+pScPW4nmbhn51UMQyqKdHekTgDIDfQdbQ9lHh8iyUPz07ZqI9zKxsI1
-         /O8a9768TVrLkQbL+3q4T7WmHl5xBKaQAT3WsgxsyPdFWbTKdwxXoIe9wIt282YRGvLB
-         /T6wOd/GGB+5iVgPQ8Tn60GPf5pgzfLfOAldSZlNxcok2RcQj7MS9rbgrhcOzF6ns/2B
-         G2dX28q+jGRg8TiC4lRYTp/tdiBPGGngqL+Z+Afnq1houfRnbvz1gY6JRAYDrTEwwiLt
-         bBdzHv20KrimuzXdjnkQeAmzdiLZ5hK5hSzGlbF5leNJni23K+KJVmQKIllLIPA4DcZD
-         EgIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756872890; x=1757477690;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3736M7NCTLnENtRRfPhfcHj37p+iIh+YlnUYDC/dTVs=;
-        b=qNrF8oQJpu4YFcOnwQ9x7t/ZcdqhzWnPGTrqoSK/L+7Wq5MpaVk/kqFDT1vyC4RxdT
-         WOMOSrg1sHHWk11mNL7Ed/9Gft0OlUhaDZaoGZcjyoydL3GmoGbyCm2e5GeNj4HuERke
-         o9iaAddjq1N5lWstj8wVeonYZhIjRUzmEhqvrUpRbnZN1GTR4A7uv6z2sryFl9EOwqnI
-         L07+ZDTDfxY+DM42RYwS1mBERdMab7F03R7nN8xhvC/4OM1WcraS+jQlq8b2LkANxTJ4
-         e1DcoOc41Jj9Ryq76Wrhx9lMxD1AVyKMzLaJSPvWxBSFrLSU0zfgI1cpc66z5cNl+s3r
-         fB0g==
-X-Forwarded-Encrypted: i=1; AJvYcCXOj0vFSlCl7P4RCbxJmBqan/0sgLvyLG92/2Rz9aE07T1ADGzWtwRSnMHPtHIL/JJyTGiJRbuz6w==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzxAgRELC/CjjyJNYVwz3Z0mrP0ywQXSm5QXxVHQC38urMN5ZSg
-	eK0KJeoRKv3z624HrOM+YPuFLujgm7MIeT5GO9aIV46ges9nqlpEOwdleyuTDpTq5Pw=
-X-Gm-Gg: ASbGnct8RDaRkOiPfWll0aXDWKRMQRx1+c/cMTIOXo8sA2ZvH33XKqkmRnmpBxJMegV
-	SblXuW7Ju0L+C/I9cO0y/1f9yO+zolFV5UhUQyZ24t9KFtxldrD1bWivseyDv7XD8AieMAxGNMs
-	5zB8LDjoBeLcbfzRPYF6woJvBzDmVpgi4BzLZXTTdZyneKaukmst+hR8TAl4BReweFmMUxa71Ng
-	jDP1Xzuw/rraqmn1R0wTdWhOwS3Eox/Q1OvqwvsmuErYkjbdGhFYSlS8ZsbtoXbPg+IpKL1ft11
-	N0mgUgTGNIYEM0RJI7Rj/0CQbyqsC4uwQfZZV+V9HDIjmrLvjJ7VsYOfUILsTl/j8muNpbh69sZ
-	tQ2q5gUKgreiL/Zd60ZtZ5y9Sz7pBySzyiDE=
-X-Google-Smtp-Source: AGHT+IGcvj4f93HyRKYjmm+ix+F/dgYOGHgJhEHnb22iW86TWueIT+1XgMH2qdsfKMuWPvqAcJ0VJg==
-X-Received: by 2002:a17:90b:2884:b0:327:ca0a:67b4 with SMTP id 98e67ed59e1d1-3281544fe3amr20695525a91.12.1756872890400;
-        Tue, 02 Sep 2025 21:14:50 -0700 (PDT)
-Received: from localhost ([122.172.87.165])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-329d08a36b3sm4862695a91.25.2025.09.02.21.14.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Sep 2025 21:14:49 -0700 (PDT)
-Date: Wed, 3 Sep 2025 09:44:47 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Qianfeng Rong <rongqianfeng@vivo.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	"open list:CPU FREQUENCY SCALING FRAMEWORK" <linux-pm@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 2/3] cpufreq: powernow: Use int type to store negative
- error codes
-Message-ID: <20250903041447.6t7q5ddoqwm3og4d@vireshk-i7>
-References: <20250902114545.651661-1-rongqianfeng@vivo.com>
- <20250902114545.651661-3-rongqianfeng@vivo.com>
+	s=arc-20240116; t=1756874516; c=relaxed/simple;
+	bh=Ce5ETH+F6WnWDEeaq7pLglfV4JdFcr3PKEJyxp/keno=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=XN1gnNkX7wy3aXifhWNBNemX2RmarO9zHhtk1Ze6t0g6gjegt/ZxAMu8qTJ6Hi/Yt/LwYqJAyhhuOmXvSkrZQx7UFXHeLf9Rr93OO5gXQrCVwHhHApvfKP981Mpzds8AMMnBpMoCYBI5jbjN4aFiDKh14WrcYF49m2VMjN3vIqs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s/wbSSBA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C2AAC4CEF0;
+	Wed,  3 Sep 2025 04:41:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756874516;
+	bh=Ce5ETH+F6WnWDEeaq7pLglfV4JdFcr3PKEJyxp/keno=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=s/wbSSBARIKT8Fd9JqzskawfzifT7+BPOBAzwXDl6WBxhU410noLNvQWfHvv+Nb4Q
+	 SbPcIb3hxSHQY5dHlRH7uTb7j/F/Gu7pEGr7MuO33HXsvNskDBMUab0jPLJFQsfQGn
+	 DBDR9JuXyqBeBGip1IjfApmvbUcrJdSUfPe1zWbEw+SMhMPPGSNw74IL9FARn5fKmF
+	 zjHgI792YdyiwMwWOpQd3S9Oo3Edup8Zqq77sQ1wl2zqgUT6OeYww9IfARtdlcDtB3
+	 vOHV/VFLi6+2jqm//3XxZoeker+XP6Xe8Qrr8AEKkb368Q3fZA1sXUVv4Sn/GGGapn
+	 XGwAwOPKYtzMA==
+Message-ID: <29e61472-5f41-4e76-9b5b-f3e106d6a629@kernel.org>
+Date: Tue, 2 Sep 2025 23:41:52 -0500
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250902114545.651661-3-rongqianfeng@vivo.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 00/11] Improvements to S5 power consumption
+To: "Rafael J . Wysocki" <rafael@kernel.org>,
+ Bjorn Helgaas <bhelgaas@google.com>
+Cc: Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Danilo Krummrich <dakr@kernel.org>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
+ "Martin K . Petersen" <martin.petersen@oracle.com>,
+ Steven Rostedt <rostedt@goodmis.org>,
+ "open list:HIBERNATION (aka Software Suspend, aka swsusp)"
+ <linux-pm@vger.kernel.org>,
+ "open list:RADEON and AMDGPU DRM DRIVERS" <amd-gfx@lists.freedesktop.org>,
+ "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+ "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
+ "open list:SCSI SUBSYSTEM" <linux-scsi@vger.kernel.org>,
+ "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
+ "open list:TRACING" <linux-trace-kernel@vger.kernel.org>,
+ AceLan Kao <acelan.kao@canonical.com>, Kai-Heng Feng <kaihengf@nvidia.com>,
+ Mark Pearson <mpearson-lenovo@squebb.ca>,
+ =?UTF-8?Q?Merthan_Karaka=C5=9F?= <m3rthn.k@gmail.com>,
+ Eric Naim <dnaim@cachyos.org>
+References: <20250818020101.3619237-1-superm1@kernel.org>
+Content-Language: en-US
+From: Mario Limonciello <superm1@kernel.org>
+In-Reply-To: <20250818020101.3619237-1-superm1@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-$Subject is incorrect.
-
-On 02-09-25, 19:45, Qianfeng Rong wrote:
-> In powernow_decode_bios(), the 'ret' variable stores either negative error
-> codes or zero returned by get_ranges(), so it needs to be changed to int
-> type.
-
-You don't need to mention this now. You are making a different change.
-
-> However, since the 'ret' variable is only used once and can be
-> simplified to 'return get_ranges()', it is better to remove the 'ret'
-> variable.
+On 8/17/2025 9:00 PM, Mario Limonciello (AMD) wrote:
+> A variety of issues both in function and in power consumption have been
+> raised as a result of devices not being put into a low power state when
+> the system is powered off.
 > 
-> Signed-off-by: Qianfeng Rong <rongqianfeng@vivo.com>
->  drivers/cpufreq/powernow-k7.c | 4 +---
-
-There should be a `---` line in between these two statements, you have
-corrupted your patch somehow.
-
->  1 file changed, 1 insertion(+), 3 deletions(-)
+> There have been some localized changes[1] to PCI core to help these issues,
+> but they have had various downsides.
 > 
-> diff --git a/drivers/cpufreq/powernow-k7.c b/drivers/cpufreq/powernow-k7.c
-> index 31039330a3ba..72430c3c5500 100644
-> --- a/drivers/cpufreq/powernow-k7.c
-> +++ b/drivers/cpufreq/powernow-k7.c
-> @@ -451,7 +451,6 @@ static int powernow_decode_bios(int maxfid, int startvid)
->  	unsigned int i, j;
->  	unsigned char *p;
->  	unsigned int etuple;
-> -	unsigned int ret;
->  
->  	etuple = cpuid_eax(0x80000001);
->  
-> @@ -500,8 +499,7 @@ static int powernow_decode_bios(int maxfid, int startvid)
->  				    (startvid == pst->startvid)) {
->  					print_pst_entry(pst, j);
->  					p = (char *)pst + sizeof(*pst);
-> -					ret = get_ranges(p);
-> -					return ret;
-> +					return get_ranges(p);
->  				} else {
->  					unsigned int k;
->  					p = (char *)pst + sizeof(*pst);
-> -- 
-> 2.34.1
+> This series instead tries to use the S4 flow when the system is being
+> powered off.  This lines up the behavior with what other operating systems
+> do as well.  If for some reason that fails or is not supported, run their
+> shutdown() callbacks.
+> 
+> Cc: AceLan Kao <acelan.kao@canonical.com>
+> Cc: Kai-Heng Feng <kaihengf@nvidia.com>
+> Cc: Mark Pearson <mpearson-lenovo@squebb.ca>
+> Cc: Merthan Karakaş <m3rthn.k@gmail.com>
+> Cc: Eric Naim <dnaim@cachyos.org>
+> ---
+> v5->v6:
+>   * Fix for LKP robot issue
+>   * Some commit message changes
+>   * Rebase on 6.17-rc2
+> 
+> Mario Limonciello (AMD) (11):
+>    PM: Introduce new PMSG_POWEROFF event
+>    scsi: Add PM_EVENT_POWEROFF into suspend callbacks
+>    usb: sl811-hcd: Add PM_EVENT_POWEROFF into suspend callbacks
+>    USB: Pass PMSG_POWEROFF event to suspend_common() for poweroff with S4
+>      flow
+>    PCI: PM: Disable device wakeups when halting system through S4 flow
+>    PCI: PM: Split out code from pci_pm_suspend_noirq() into helper
+>    PCI: PM: Run bridge power up actions as part of restore phase
+>    PCI: PM: Use pci_power_manageable() in pci_pm_poweroff_noirq()
+>    PCI: Put PCIe bridges with downstream devices into D3 at hibernate
+>    drm/amd: Avoid evicting resources at S5
+>    PM: Use hibernate flows for system power off
+> 
+>   drivers/base/power/main.c                  |  7 ++
+>   drivers/gpu/drm/amd/amdgpu/amdgpu_device.c |  4 +
+>   drivers/pci/pci-driver.c                   | 99 +++++++++++++++-------
+>   drivers/scsi/mesh.c                        |  1 +
+>   drivers/scsi/stex.c                        |  1 +
+>   drivers/usb/core/hcd-pci.c                 | 11 ++-
+>   drivers/usb/host/sl811-hcd.c               |  1 +
+>   include/linux/pm.h                         |  5 +-
+>   include/trace/events/power.h               |  3 +-
+>   kernel/reboot.c                            |  6 ++
+>   10 files changed, 103 insertions(+), 35 deletions(-)
+> 
 
--- 
-viresh
+Rafael, Bjorn,
+
+Any feedback for this series?
+
+Thanks,
 
