@@ -1,157 +1,214 @@
-Return-Path: <linux-pm+bounces-33794-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33795-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01E9FB431C2
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Sep 2025 07:48:15 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 58F6DB431F9
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Sep 2025 08:07:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B18433B5C36
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Sep 2025 05:48:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0F88E178500
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Sep 2025 06:07:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 469FA22577C;
-	Thu,  4 Sep 2025 05:48:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF88523D7D0;
+	Thu,  4 Sep 2025 06:07:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dqGAs6I5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 691AA632;
-	Thu,  4 Sep 2025 05:48:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07CBB1F61C
+	for <linux-pm@vger.kernel.org>; Thu,  4 Sep 2025 06:07:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756964890; cv=none; b=TUEG0617wKtDhvVCSKRgSmOBd0e0KXkeA5h7wT5wZjcQti432wXNMw9QuQ7Rl+rJpFhxmA6QzjQtj72qxvdW7bzdLU+abTiyCKjbub9MWKEsS8lS+4mQERFlyOdw4pu0teChmQnVEZNKbY/oVxkh29KmtFBSAX3P+JfGJR8d8BE=
+	t=1756966024; cv=none; b=QtVnr/cNogadmp5RWwOr7qNdHfLNPhYr8EvLiECuwmaR5+XbscsjuQ71OFOj3+P2gPILHfZ0yexwdkaoSRe8GbFIl6964YFhkfvP33raWQUbi30UP5tpHevAPXndoGiSklbCC7Iyt6CkrF9hxaaYXDMnC1WSTk5jfIAeOaiSQ3I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756964890; c=relaxed/simple;
-	bh=IpNmrUdy8CvZ3z+f9f9HoqvRZnkztjy1It2MTZGjkrg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=n2Yk3OjlG9ZRXvk+y22X5wxW+OIHWUgqywy5SPstFhUfwBONtLp59dW6089y53aFDprtwRhYaqvMKuwhj5HYegTcad85s+mwNu3qc8IxQK2cCDJfOHL440XLDdzcIhSPjisqUJoGC6UNS5GC7fRwJ672gfv83biIKUHS51y3rL4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: b882ea48895211f0b29709d653e92f7d-20250904
-X-CID-CACHE: Type:Local,Time:202509041323+08,HitQuantity:1
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.45,REQID:1139f5f8-1815-40d3-8c36-998badc99a4c,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:6493067,CLOUDID:b868f439536289f8e62dcf9eeb14dd12,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102,TC:nil,Content:0|52,EDM:
-	-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,
-	AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 1,FCT|NGT
-X-CID-BAS: 1,FCT|NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: b882ea48895211f0b29709d653e92f7d-20250904
-Received: from mail.kylinos.cn [(10.44.16.175)] by mailgw.kylinos.cn
-	(envelope-from <zhangzihuan@kylinos.cn>)
-	(Generic MTA)
-	with ESMTP id 1120577113; Thu, 04 Sep 2025 13:48:02 +0800
-Received: from mail.kylinos.cn (localhost [127.0.0.1])
-	by mail.kylinos.cn (NSMail) with SMTP id 3C5C6E008FA5;
-	Thu,  4 Sep 2025 13:48:02 +0800 (CST)
-X-ns-mid: postfix-68B92812-3133838
-Received: from [172.25.120.24] (unknown [172.25.120.24])
-	by mail.kylinos.cn (NSMail) with ESMTPA id 84329E008FA2;
-	Thu,  4 Sep 2025 13:48:01 +0800 (CST)
-Message-ID: <e91bd1e9-8db4-4923-92fe-52893623487e@kylinos.cn>
-Date: Thu, 4 Sep 2025 13:48:00 +0800
+	s=arc-20240116; t=1756966024; c=relaxed/simple;
+	bh=8VLiRlbdEDGR6S10bYVDOAAlQaQ7lCfTI6kCXLj6o+4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=YrV3qV3Ou7XT/LS1ObBCYVWFkw0s3aNoPceSRzUBbFHT12fNpoU/4Go565L9UmOf0wutQsNu1wzPu4uXKrhv6DUMZQS/8QyKzqqFidIW7SkCIipc4wspU3kkKVFSmCip8jDCPf1oxnYemPynAHaP2xu4f1pxjkbYuvpGTssMzQA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=dqGAs6I5; arc=none smtp.client-ip=209.85.210.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-7723f0924a3so953929b3a.2
+        for <linux-pm@vger.kernel.org>; Wed, 03 Sep 2025 23:07:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1756966022; x=1757570822; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XrH5FhNlqSqaASYKthIH8BEM+L5uCH5xK0PYntSpqAs=;
+        b=dqGAs6I5X04fo0HtDxaq3AE2+PjStBxw/qVqhHFp07aZJXvypqCQOu7wWZ3R5aMUBq
+         lFXHEQzMzq5j6aq7spREJuhXz0wAuxDYg0rUbdhjuunZmmSVkFrzRgSGtfYU5ns8X+vK
+         1WtX/PyeczF4X1otx3mNnrWfJIB50wEYHGxI8PzzbaqRk7Su1ACTNFADJdVdRFfJ4KLi
+         TgsbQO2kuEMzZFmhaYqWZmhmaJq6BR03mRhmy0iCyj8Xgi8+/al3VzGPgfXwijK8dc2d
+         CYIEPPIn8Ydr/hnCbM51ToYltJlOPE3fYq41tgh5RA/uHSlRYtHtDPBaMmipM6+9ZcC4
+         OYzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756966022; x=1757570822;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XrH5FhNlqSqaASYKthIH8BEM+L5uCH5xK0PYntSpqAs=;
+        b=h6pTeXzOJ+nA5rzOLHYCcSSflz7wGkGJ9yqC6Y/8bX/jU4X4SUt3IePV7k+swkP7rq
+         lnejYB909R+yII4GQNc3gGvuMUKL2OlgxVHJbgy5W9M391nVJLumbABsfPD+xmPyw5Eq
+         0mtAJpA/AD4Lcyvxwn14wsznH1pPxXrd8wXY+aYUQaugH5w0i/Ia+SJnrpE13Xpnyyso
+         xJz825s1lkL2k5+85YYjYMIO7dgjAHcWoglYIV/FyGS8BJUGHx1hl75p5a7G7AqgZsNX
+         mL229XOPP0tq1sJpZHgtD61nA04ANW+fU/OdVEaEHbr0dPoQ65MsKYG3GzEJcy1TmAv0
+         8BPg==
+X-Gm-Message-State: AOJu0Yw4D1q4m84PQ3dv7JNQ6E8eo6K+2HsidldO/oPrB2HzE/bboJjs
+	cYFfOQqOUH+w7yt+zLp1w+yMMLiNLrlCcB/TO4KJTCR1USbyV3iFt5h1Tu+CWhIeJveKI2x1Tyt
+	pqG0q
+X-Gm-Gg: ASbGncugyxoMNK5w+uc+3Qn9wRgc4LlV5WmLT5bDNOVf86s7rs/xP0wZ7hUsWPGfUK4
+	R4yL3XTbbUmVYH0SwQlXg+7edELuVsUVmW1oXr104USip1V9p9OogGKRH1OS2Zlr8Y81C/UL/hN
+	rNQmsvE1dhy3okFEqYaLmCPFblB2ZK2bBH6SKLcbryPGm4ZOg9afvQ35G5bvjJcC2gv4AUm4RfR
+	Xnawe2rnqcRxZ/f8+UdIetwR8EBIbRGx6K7U/LWMN9vthiYpvfcOUt2yJUzg4Xf9540t3H7rVSc
+	S1vth9DlqN1CZyslbUYOETqwRjRDCZHm7Dbi3XoW/cg2F8/z/fYX0ducX1rOVGtwujN7XQXPJip
+	I1Yyv9S3jl+wJQtsRfWHE7HIP
+X-Google-Smtp-Source: AGHT+IHnk/l9teAMG9E5B87Jg/EXyeqOB5llncCumUd15rAiQ5fPikP6J8Wqy7iTrp7dKgwZ757QXA==
+X-Received: by 2002:a05:6a20:7348:b0:243:c336:7bb0 with SMTP id adf61e73a8af0-243d6e5d4d7mr24894476637.23.1756966022161;
+        Wed, 03 Sep 2025 23:07:02 -0700 (PDT)
+Received: from localhost ([122.172.87.183])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7725b974350sm10545449b3a.72.2025.09.03.23.07.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Sep 2025 23:07:01 -0700 (PDT)
+Date: Thu, 4 Sep 2025 11:36:59 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Linux PM <linux-pm@vger.kernel.org>
+Subject: [GIT PULL] cpufreq/arm updates for 6.18
+Message-ID: <20250904060659.3sdrvfnhscq6wp6d@vireshk-i7>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 2/3] cpufreq: Always enforce policy limits even without
- frequency table
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: "Rafael J . wysocki" <rafael@kernel.org>,
- Saravana Kannan <saravanak@google.com>, zhenglifeng
- <zhenglifeng1@huawei.com>, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250904032210.92978-1-zhangzihuan@kylinos.cn>
- <20250904032210.92978-3-zhangzihuan@kylinos.cn>
- <20250904044812.cpadajrtz3mrz2ke@vireshk-i7>
- <540469c3-9bc5-444e-87da-95dc27fc481b@kylinos.cn>
- <20250904053700.abdkh23zwi5x65do@vireshk-i7>
-From: Zihuan Zhang <zhangzihuan@kylinos.cn>
-In-Reply-To: <20250904053700.abdkh23zwi5x65do@vireshk-i7>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+Hi Rafael,
 
-=E5=9C=A8 2025/9/4 13:37, Viresh Kumar =E5=86=99=E9=81=93:
-> On 04-09-25, 13:23, Zihuan Zhang wrote:
->> =E5=9C=A8 2025/9/4 12:48, Viresh Kumar =E5=86=99=E9=81=93:
->>> On 04-09-25, 11:22, Zihuan Zhang wrote:
->>>>    int cpufreq_generic_frequency_table_verify(struct cpufreq_policy_=
-data *policy)
->>>>    {
->>>> +	cpufreq_verify_within_cpu_limits(policy);
->>> So if we have a freq-table, we will call this twice now. Why make it
->>> bad for the existing users ?
->>
->> Just to clarify, in the third patch of this series we remove
->> cpufreq_generic_frequency_table_verify() from the table_verify path,
->> so cpufreq_verify_within_cpu_limits() is now only called here. There
->> won=E2=80=99t be any duplicate invocation for drivers that already hav=
-e a
->> frequency table.
-> Maybe I wasn't clear enough.
->
-> int cpufreq_frequency_table_verify(...)
-> {
-> 	cpufreq_verify_within_cpu_limits(...);
->          ...
-> }
->
-> int cpufreq_generic_frequency_table_verify(...)
-> {
->          cpufreq_verify_within_cpu_limits(...);
->          cpufreq_frequency_table_verify(...);
->          ...
-> }
->
-> For a driver with a valid freq-table, we will call
-> cpufreq_verify_within_cpu_limits() unnecessarily, isn't it ?
+I will out of office until end of September and so the early pull
+request.
 
-I understand your point about the potential duplicate call to
-cpufreq_verify_within_cpu_limits() for drivers with a valid freq-table.
-However, in the third patch of this series, we removed the call to
-cpufreq_generic_frequency_table_verify() from the table_verify path.
+The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
 
+  Linux 6.17-rc1 (2025-08-10 19:41:16 +0300)
 
-In the Third patch:
+are available in the Git repository at:
 
--int cpufreq_frequency_table_verify(struct cpufreq_policy_data *policy)
-+static int cpufreq_frequency_table_verify(struct cpufreq_policy_data *po=
-licy)
-  {
-  	struct cpufreq_frequency_table *pos, *table =3D policy->freq_table;
-  	unsigned int freq, prev_smaller =3D 0;
-@@ -73,8 +73,6 @@ int cpufreq_frequency_table_verify(struct cpufreq_polic=
-y_data *policy)
-  	pr_debug("request for verification of policy (%u - %u kHz) for cpu %u\=
-n",
-  					policy->min, policy->max, policy->cpu);
- =20
--	cpufreq_verify_within_cpu_limits(policy);
--
-  	cpufreq_for_each_valid_entry(pos, table) {
+  git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git tags/cpufreq-arm-updates-6.18
 
+for you to fetch changes up to 3e681899cc6e6c77eca55dd8c7cc57b27868e8a2:
 
-Now, the verification and the CPU limits check are unified in the
-generic function, so there is no longer a redundant invocation for
-drivers with a frequency table.
+  cpufreq: mediatek: avoid redundant conditions (2025-09-04 10:20:44 +0530)
 
-Thanks!
+----------------------------------------------------------------
+CPUFreq updates for 6.18
 
+- Minor improvements to Rust Cpumask APIs (Alice Ryhl, Baptiste Lepers,
+  and Shankari Anand).
 
+- Minor cleanups and optimizations to various cpufreq drivers (Akhilesh
+  Patil, BowenYu, Dennis Beier, Liao Yuanhong, Zihuan Zhang, Florian
+  Fainelli, Taniya Das, Md Sadre Alam, and Christian Marangi).
 
+- Enhancements for TI cpufreq driver (Judith Mendez, and Paresh Bhagat).
 
+- Enhancements for mediatek cpufreq driver (Nicolas Frattaroli).
 
+- Remove outdated cpufreq-dt.txt (Frank Li).
 
+- Update MAINTAINERS for virtual-cpufreq maintainer (Saravana Kannan).
 
+----------------------------------------------------------------
+Akhilesh Patil (1):
+      cpufreq: armada-37xx: use max() to calculate target_vm
 
+Alice Ryhl (1):
+      rust: cpumask: rename CpumaskVar::as[_mut]_ref to from_raw[_mut]
+
+Baptiste Lepers (1):
+      rust: cpumask: Mark CpumaskVar as transparent
+
+BowenYu (1):
+      cpufreq: Remove unused parameter in cppc_perf_from_fbctrs()
+
+Christian Marangi (1):
+      cpufreq: airoha: Add support for AN7583 SoC
+
+Dennis Beier (1):
+      cpufreq/longhaul: handle NULL policy in longhaul_exit
+
+Florian Fainelli (1):
+      cpufreq: scmi: Account for malformed DT in scmi_dev_used_by_cpus()
+
+Frank Li (1):
+      dt-bindings: Remove outdated cpufreq-dt.txt
+
+Judith Mendez (3):
+      cpufreq: ti: Support more speed grades on AM62Px SoC
+      cpufreq: ti: Allow all silicon revisions to support OPPs
+      arm64: dts: ti: k3-am62p: Fix supported hardware for 1GHz OPP
+
+Liao Yuanhong (1):
+      cpufreq: mediatek: avoid redundant conditions
+
+Md Sadre Alam (1):
+      cpufreq: qcom-nvmem: Enable cpufreq for ipq5424
+
+Nicolas Frattaroli (5):
+      dt-bindings: cpufreq: Add mediatek,mt8196-cpufreq-hw binding
+      cpufreq: mediatek-hw: Refactor match data into struct
+      cpufreq: mediatek-hw: Separate per-domain and per-instance data
+      cpufreq: mediatek-hw: Add support for MT8196
+      cpufreq: mediatek-hw: don't use error path on NULL fdvfs
+
+Paresh Bhagat (2):
+      cpufreq: dt-platdev: Blacklist ti,am62d2 SoC
+      cpufreq: ti: Add support for AM62D2
+
+Saravana Kannan (1):
+      MAINTAINERS: Add myself as virtual-cpufreq maintainer
+
+Shankari Anand (1):
+      rust: opp: update ARef and AlwaysRefCounted imports from sync::aref
+
+Taniya Das (1):
+      dt-bindings: cpufreq: cpufreq-qcom-hw: Add QCS615 compatible
+
+Zihuan Zhang (5):
+      cpufreq: brcmstb-avs: Use scope-based cleanup helper
+      cpufreq: CPPC: Use scope-based cleanup helper
+      cpufreq: s5pv210: Use scope-based cleanup helper
+      cpufreq: mediatek: Use scope-based cleanup helper
+      cpufreq: tegra186: Use scope-based cleanup helper
+
+ Documentation/devicetree/bindings/cpufreq/cpufreq-dt.txt                  |  61 -----------------------------------------
+ Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml            |   2 ++
+ Documentation/devicetree/bindings/cpufreq/mediatek,mt8196-cpufreq-hw.yaml |  82 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ MAINTAINERS                                                               |   6 +++++
+ arch/arm64/boot/dts/ti/k3-am62p5.dtsi                                     |   2 +-
+ drivers/cpufreq/airoha-cpufreq.c                                          |   1 +
+ drivers/cpufreq/armada-37xx-cpufreq.c                                     |   4 +--
+ drivers/cpufreq/brcmstb-avs-cpufreq.c                                     |   4 +--
+ drivers/cpufreq/cppc_cpufreq.c                                            |  16 ++++-------
+ drivers/cpufreq/cpufreq-dt-platdev.c                                      |   3 +++
+ drivers/cpufreq/longhaul.c                                                |   3 +++
+ drivers/cpufreq/mediatek-cpufreq-hw.c                                     | 134 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-----------------
+ drivers/cpufreq/mediatek-cpufreq.c                                        |  11 ++++----
+ drivers/cpufreq/qcom-cpufreq-nvmem.c                                      |   5 ++++
+ drivers/cpufreq/s5pv210-cpufreq.c                                         |   4 +--
+ drivers/cpufreq/scmi-cpufreq.c                                            |  10 +++++++
+ drivers/cpufreq/tegra186-cpufreq.c                                        |   4 +--
+ drivers/cpufreq/ti-cpufreq.c                                              |  12 ++++++---
+ rust/kernel/cpufreq.rs                                                    |   2 +-
+ rust/kernel/cpumask.rs                                                    |   5 ++--
+ rust/kernel/opp.rs                                                        |  13 ++++-----
+ 21 files changed, 258 insertions(+), 126 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/cpufreq/cpufreq-dt.txt
+ create mode 100644 Documentation/devicetree/bindings/cpufreq/mediatek,mt8196-cpufreq-hw.yaml
+
+-- 
+viresh
 
