@@ -1,60 +1,48 @@
-Return-Path: <linux-pm+bounces-33823-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33824-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E6C5B43927
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Sep 2025 12:47:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E7FFDB4394E
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Sep 2025 12:55:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1CFF2568301
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Sep 2025 10:47:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 75DD43BCB79
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Sep 2025 10:55:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F13572E54D6;
-	Thu,  4 Sep 2025 10:47:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7ADA2FAC06;
+	Thu,  4 Sep 2025 10:55:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QHD9Wfe9"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D46B62D3EE1;
-	Thu,  4 Sep 2025 10:47:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEDA02F6182;
+	Thu,  4 Sep 2025 10:55:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756982853; cv=none; b=gOwlUx4QpV9VM/YLkd5wnuixYcRLNXMFdzTyaQkxan+1GuhR6mOivI5p/Msf9dpAnnS7UGTKVNY1NRJhREZz2yw6aHZ9H34DaYqCiI1E5XHPah5gEfmIquuj+hguHluBmT3Pf3EqnpuxXWw/c4GLoKSSW8a/vvxGt/n28XLTiU8=
+	t=1756983335; cv=none; b=Dy0AAFU22+MB0zSP1RQl7y22zrGQyyVfHoDA8cKAuMxKoYcAO3ETsWhosrY8K/bVilQ/T82hPtdjeO9o/F8e9+k9j6V2hrsXSljyftaARA4WiVHT69YXDlrXgKXlHmD5HFd2SrYkxKjVpXpikK7VMRS34IAVePxOPjQKVMFqLs4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756982853; c=relaxed/simple;
-	bh=Gj5asRFR6sSZAb0fMHZ8hSd9lHxZe6gkdrfTf1S3qE0=;
+	s=arc-20240116; t=1756983335; c=relaxed/simple;
+	bh=IsvPPeqV8POyoYunxkhkVNbHZma0NTrLqcfEJ8H1vOg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AoJTgALL2azkgJaop5Q7H2ZV2GQLxZPXbPFpb5RFzLrAQu3gXFtUt5UUomk7tC2kQyNylHWzzRvLcw37t6QAc0gApkumRe45qWNgZ08yArtSed7wDvcmgiOO6VF2pY9YvjrvILAdN+EK1tdoqXIcp3okVm5zaY1hAYfdIZ/38ew=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 895d9cb6897c11f0b29709d653e92f7d-20250904
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.45,REQID:ada2efff-1531-418a-8421-c63ffc6a35d1,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:6493067,CLOUDID:ea9584713e4b478c9bd0e44140e46635,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102|817,TC:nil,Content:-10|-
-	8|-5|50,EDM:-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,
-	OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 1,FCT|NGT
-X-CID-BAS: 1,FCT|NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: 895d9cb6897c11f0b29709d653e92f7d-20250904
-Received: from mail.kylinos.cn [(10.44.16.175)] by mailgw.kylinos.cn
-	(envelope-from <zhangzihuan@kylinos.cn>)
-	(Generic MTA)
-	with ESMTP id 1198488497; Thu, 04 Sep 2025 18:47:22 +0800
-Received: from mail.kylinos.cn (localhost [127.0.0.1])
-	by mail.kylinos.cn (NSMail) with SMTP id 0A35FE008FA5;
-	Thu,  4 Sep 2025 18:47:22 +0800 (CST)
-X-ns-mid: postfix-68B96E39-8502081323
-Received: from [172.25.120.24] (unknown [172.25.120.24])
-	by mail.kylinos.cn (NSMail) with ESMTPA id 77002E008FA2;
-	Thu,  4 Sep 2025 18:47:21 +0800 (CST)
-Message-ID: <54bcd1e6-aa6d-425d-8ba1-575ae0b67823@kylinos.cn>
-Date: Thu, 4 Sep 2025 18:47:20 +0800
+	 In-Reply-To:Content-Type; b=be1fxuFiD54fqN74FXHx3tGk5fyN5y0gOA7jjrcfbDB5GiZKekOE3jh1KK6iqqiANrUB/V2w3mS9wCl9T6lkHRQZIuT5JglqbIzZFMSYQSTMXKVImtbp5KkoIpbdK8kUD5/ZGN0QzgbrdAGLKRCn3QSYErj0XZRHk5hDo7ZDR/E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QHD9Wfe9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EBC1C4CEF0;
+	Thu,  4 Sep 2025 10:55:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756983335;
+	bh=IsvPPeqV8POyoYunxkhkVNbHZma0NTrLqcfEJ8H1vOg=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=QHD9Wfe9pl81KaKyYx3q2f/4xdKdSE4GTZg14n1v3R0PxBM2ZlnaHOp2M9mEmpnQ5
+	 nUlqo58kaXVT5TT+pkv8cdyMVTGaoBvtxf38tWncUX2yB0f3CxtRqy561mgeJRWNQo
+	 Zhv/Z1n+OkYOqJfBS08e434/Ym6augQuxit6SOa8DpY9qyOg6llKU1Rh607HpYBBA2
+	 L7AwBCP5Q+3XlTax5HRY96wjwpovkEbeP+5SnEeWTzW84jrlXkStyQ4pBCLZHIU+w6
+	 JNDzKYYrJgjrAbpK3rgqdSGP9hdCr746owEOPUcBO2xvQnEcg93ncOsWSJTeG3AvsC
+	 pUyvVC5JHBs5w==
+Message-ID: <818b7848-1b34-49dc-87bd-0438a82f2ebf@kernel.org>
+Date: Thu, 4 Sep 2025 12:55:23 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -62,35 +50,109 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1] cpufreq: core: Rearrange variable declarations
- involving __free()
-To: Viresh Kumar <viresh.kumar@linaro.org>,
+Subject: Re: [PATCH v4 07/10] powercap: dtpm_cpu: Use scope-based cleanup
+ helper
+To: Zihuan Zhang <zhangzihuan@kylinos.cn>,
  "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
- Krzysztof Kozlowski <krzk@kernel.org>
-References: <4691667.LvFx2qVVIh@rafael.j.wysocki>
- <20250904041433.v675m7u36sxfeuov@vireshk-i7>
-From: Zihuan Zhang <zhangzihuan@kylinos.cn>
-In-Reply-To: <20250904041433.v675m7u36sxfeuov@vireshk-i7>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Cc: Viresh Kumar <viresh.kumar@linaro.org>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+ Michael Ellerman <mpe@ellerman.id.au>, Alim Akhtar
+ <alim.akhtar@samsung.com>, Thierry Reding <thierry.reding@gmail.com>,
+ MyungJoo Ham <myungjoo.ham@samsung.com>,
+ Kyungmin Park <kyungmin.park@samsung.com>,
+ Chanwoo Choi <cw00.choi@samsung.com>,
+ Jani Nikula <jani.nikula@linux.intel.com>,
+ Rodrigo Vivi <rodrigo.vivi@intel.com>, Tvrtko Ursulin
+ <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>,
+ Simona Vetter <simona@ffwll.ch>, Daniel Lezcano <daniel.lezcano@kernel.org>,
+ Sascha Hauer <s.hauer@pengutronix.de>, Shawn Guo <shawnguo@kernel.org>,
+ Eduardo Valentin <edubezval@gmail.com>, Keerthy <j-keerthy@ti.com>,
+ Ben Horgan <ben.horgan@arm.com>, zhenglifeng <zhenglifeng1@huawei.com>,
+ Zhang Rui <rui.zhang@intel.com>, Len Brown <lenb@kernel.org>,
+ Lukasz Luba <lukasz.luba@arm.com>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Beata Michalska <beata.michalska@arm.com>, Fabio Estevam
+ <festevam@gmail.com>, Pavel Machek <pavel@kernel.org>,
+ Sumit Gupta <sumitg@nvidia.com>,
+ Prasanna Kumar T S M <ptsm@linux.microsoft.com>,
+ Sudeep Holla <sudeep.holla@arm.com>, Yicong Yang <yangyicong@hisilicon.com>,
+ linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
+ intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+ imx@lists.linux.dev, linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250903131733.57637-1-zhangzihuan@kylinos.cn>
+ <20250903131733.57637-8-zhangzihuan@kylinos.cn>
+ <CAJZ5v0hirWzWZiLbAXPWB58SQv3CAW95iHLnsqs=i2twVCcmwg@mail.gmail.com>
+ <52e322e5-2dd4-488c-a98e-3a4018f0c323@kylinos.cn>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <52e322e5-2dd4-488c-a98e-3a4018f0c323@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
+On 04/09/2025 12:37, Zihuan Zhang wrote:
+>>   * Lastly, given that the benefit of cleanup helpers is removal of
+>>   * "goto", and that the "goto" statement can jump between scopes, the
+>>   * expectation is that usage of "goto" and cleanup helpers is never
+>>   * mixed in the same function. I.e. for a given routine, convert all
+>>   * resources that need a "goto" cleanup to scope-based cleanup, or
+>>   * convert none of them.
+> 
+> 
+> Should I replace all the memory allocation cleanups here with `__free`?
+> That would allow us to drop all the `goto`s, but since this function has
+> quite a few of them, I’m concerned it might introduce new issues. What’s
+> your recommendation?
 
-> On 03-09-25, 16:56, Rafael J. Wysocki wrote:
->> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->>
->> Follow cleanup.h recommendations and always define and assign variables
->> in one statement when __free() is used.
->>
->> No intentional functional impact.
->>
->> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->> ---
->>   drivers/cpufreq/cpufreq.c |   27 +++++++--------------------
->>   1 file changed, 7 insertions(+), 20 deletions(-)
->
->
+If you keep asking this, I have doubts you really know how to use
+cleanup.h. Don't blindly convert code to cleanup.h. It's very odd syntax
+and it is not even welcomed everywhere.
 
-Reviewd-by: Zihuan Zhang <zhangzihuan@kylinos.cn>
-
+Best regards,
+Krzysztof
 
