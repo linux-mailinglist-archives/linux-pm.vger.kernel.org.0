@@ -1,194 +1,112 @@
-Return-Path: <linux-pm+bounces-33781-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33782-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44FE4B43070
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Sep 2025 05:23:05 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id EAF6EB430F8
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Sep 2025 06:14:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 683025E7C09
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Sep 2025 03:23:02 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7F1527B648E
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Sep 2025 04:13:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8BCA28C01E;
-	Thu,  4 Sep 2025 03:22:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25B92238C3A;
+	Thu,  4 Sep 2025 04:14:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="lLTWsFVb"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 035BF3209;
-	Thu,  4 Sep 2025 03:22:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A68571E3DF8
+	for <linux-pm@vger.kernel.org>; Thu,  4 Sep 2025 04:14:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756956155; cv=none; b=I4gIbA/UoE9LNronrVbrpH7nP+E+VorM3KuYo/p6t3/jOHp9tgDHp6SnbkwQVjWcddGve9sl2Ij26B7F+31kBUisL//9ZyATfdEAnr4ab1/zLDUtiUJaiQrPVxuvJxP46X+ZKeyVe+kFoUiwajJsaMppD3oT6WYCA5xoIJVWvR8=
+	t=1756959280; cv=none; b=KwIfU3Fzebgc1tccBdsGqcYrvugfHSBiCLlTPXkEPpzrUqTe2wxcJd95rxmtsrAt/k+zQzcwG5BryFQc+csnBDlXzsEJO1W/GzqcIc5k9tBS+ATz+tSLBpxJlLalcPe+K3EAYSMYkuMYPnaWcKPS2/WTh2tXM+4QPykwsYmmJe0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756956155; c=relaxed/simple;
-	bh=k0LN+wL4HRHl6TaEJ88+JUFRCRFLfXvr2BjuIXLReHM=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=YoJjcJpV9l4vY2dohEyUmFhVcl85CTFV1nd0FHmCv6S/iBCiG67yM+B0ZOQkNkfludoUrmdljummoZamHaKRLpQ/1dzc/Ib7jXVKyjPWKq4PWAxZ+sIOwg0g/1veS2JNWSQCUJ61+Uaz7Q9YV3H0MLcuVyLbscsLGW+rsEJqPmU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 609be398893e11f0b29709d653e92f7d-20250904
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.45,REQID:713e5fd1-bb7d-4cfc-b179-ac01170625ac,IP:0,U
-	RL:0,TC:0,Content:28,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:28
-X-CID-META: VersionHash:6493067,CLOUDID:1c3f862ab780cee6f3c4f534703e0f60,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:81|82|102|850,TC:nil,Content:4|50,EDM:-3
-	,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV
-	:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: 609be398893e11f0b29709d653e92f7d-20250904
-Received: from mail.kylinos.cn [(10.44.16.175)] by mailgw.kylinos.cn
-	(envelope-from <zhangzihuan@kylinos.cn>)
-	(Generic MTA)
-	with ESMTP id 1138274889; Thu, 04 Sep 2025 11:22:25 +0800
-Received: from mail.kylinos.cn (localhost [127.0.0.1])
-	by mail.kylinos.cn (NSMail) with SMTP id B375CE008FA5;
-	Thu,  4 Sep 2025 11:22:24 +0800 (CST)
-X-ns-mid: postfix-68B905F0-562822608
-Received: from localhost.localdomain (unknown [172.25.120.24])
-	by mail.kylinos.cn (NSMail) with ESMTPA id 148D7E008FA3;
-	Thu,  4 Sep 2025 11:22:24 +0800 (CST)
-From: Zihuan Zhang <zhangzihuan@kylinos.cn>
-To: "Rafael J . wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Saravana Kannan <saravanak@google.com>
-Cc: zhenglifeng <zhenglifeng1@huawei.com>,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
+	s=arc-20240116; t=1756959280; c=relaxed/simple;
+	bh=wfhBwTLerbIFEpI0SAT9l34CPI5ZRFP2pNH501mDj30=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ljcT6XFKtErBAzosn0DCYmEOEMbRFoPFuseoJ9ZJRW968ihQhd/pef0QrLgNjjz1xAC1AmO3+yQiHRNMlxjVnyJav9Ul1hHBAbq2O7mWTNjOxvgaOL9mE/8vjiJlNywG0a4zvVIVuRojCfYvW5iefYfW/BnSRU50b75pbm3Jm84=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=lLTWsFVb; arc=none smtp.client-ip=209.85.215.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-b4717543ed9so325389a12.3
+        for <linux-pm@vger.kernel.org>; Wed, 03 Sep 2025 21:14:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1756959277; x=1757564077; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=LocwM3GBVVDfOIx9PjNIngxyRovOpNm11wI4of2MRWY=;
+        b=lLTWsFVbUv9+vpnl7x0CrpXfDLcWsyFRm91UrntfsuCWR1vciTCFSGlYJ9BLS09nxG
+         0YlYZiUGxXvnoq6KwT+rS2MebQu7nbn4x6GESo+N4LNGN78mmhqUydxOdxBBS7f8n9iY
+         3mLYNLLz8xvri6AIMSjfCejL61itmyDKZPxjNEZ8bQ8gGLvkXqCuvvHnzp36Nc8jQl5V
+         An0XXNBAd+jJOXduvkUgv54Gocqsm4DuTn0Xh2aiytk2orccWMWJqMCrxEVSqXVidEoq
+         AVuBZUzxclEFQhF7EaHXhV0U98LFC+JA8V+YGN42ViZINN03m/wR+xw3B8JRqAk0r50r
+         8Jbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756959277; x=1757564077;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LocwM3GBVVDfOIx9PjNIngxyRovOpNm11wI4of2MRWY=;
+        b=Omj004CssTvk67imVeXt4ZIhWDXaioBT48YvTqfKj/FURmYmAgTQ71mnrK6lF5kA0W
+         omS6d6Q8ZT1n2+ADgfhAmtTvn/mRWHaky5aNSbwJLu3IlwmlP8PR4NXprf8oiXx0lxkq
+         4HBqnQCEhIo81xtmLnYEuxUivR2HwuL/7RTrdByMcEYlM+KNBAvykB3zFdIwAh5o77xu
+         qYdhn5gVDpDyZr7booyewZfzl/8XYYMkLUKI3dR2dI/41DTDhQ99g6Ae8RlEC6gkeZaY
+         gKP13497CK/hGxre6q3zANEhgr7YkzSKmkBvAZgAyz5gOk9QK+JpEzNgASd10dBiY2xd
+         eIdw==
+X-Gm-Message-State: AOJu0Yw2gEdVq70bqxvCgquUQ5q3phYWBszgV31cR4++MnMyoyFy6C/2
+	RmpWcuxsAeq6+T14q854up9WDOfhx9Y4k33p1beToIsJiLAy2ug+FHfCEHX+KiTyzCY=
+X-Gm-Gg: ASbGncu1pa+BC3WyCf60uo1m/NgQ6DxgiWqfffy/mQWVJk6S62JbAOooIHx7s/g0RT+
+	oii/HbQdL5QoPo3msRwp4CTBVXyJhCH0fWJyuKXkgU3c9qyr5c5MNkOCErDfJhq8L5x1yVAc8SF
+	lzQa8OlOLu1Fa0H0ib0MqxpAisVR6aqQL0IPLk6H5ySQNJ6AgMkTUs5mU4jMhIFosmvfohXLXe9
+	PAuklZh3+pHPKRO7MJITares/kc3xp2pZxROI0nyOWyU5CAxZtDzEnDeZV5IvZ9SLHI4QaYpX4f
+	pqFIKTpFghr+D7ECS/Z2sjyj/dXexCZh6Jwfqh2uubTOAVjBRedlNoStrFoDWKra606zyz/7Vxd
+	UsAef+cx/kQ5oqZq6T6TRaQ/3
+X-Google-Smtp-Source: AGHT+IHYV8nFK793hWCZc3pPhU9vTCt9DxyMPIvaatR1rCvBdvcPzSm23YrTWhjMGZtVSn7xStvSZQ==
+X-Received: by 2002:a17:902:e749:b0:24b:164d:4e61 with SMTP id d9443c01a7336-24b164d5153mr82404125ad.13.1756959276906;
+        Wed, 03 Sep 2025 21:14:36 -0700 (PDT)
+Received: from localhost ([122.172.87.183])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2493b6ce20dsm147546105ad.92.2025.09.03.21.14.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Sep 2025 21:14:36 -0700 (PDT)
+Date: Thu, 4 Sep 2025 09:44:33 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Linux PM <linux-pm@vger.kernel.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
 	Zihuan Zhang <zhangzihuan@kylinos.cn>
-Subject: [PATCH v1 3/3] cpufreq: Make cpufreq_frequency_table_verify() internal
-Date: Thu,  4 Sep 2025 11:22:10 +0800
-Message-Id: <20250904032210.92978-4-zhangzihuan@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20250904032210.92978-1-zhangzihuan@kylinos.cn>
-References: <20250904032210.92978-1-zhangzihuan@kylinos.cn>
+Subject: Re: [PATCH v1] cpufreq: core: Rearrange variable declarations
+ involving __free()
+Message-ID: <20250904041433.v675m7u36sxfeuov@vireshk-i7>
+References: <4691667.LvFx2qVVIh@rafael.j.wysocki>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4691667.LvFx2qVVIh@rafael.j.wysocki>
 
-The helper cpufreq_frequency_table_verify() was previously exported and u=
-sed
-directly by a few cpufreq drivers. With the previous change ensuring that
-cpufreq_generic_frequency_table_verify() always calls
-cpufreq_verify_within_cpu_limits(), drivers no longer need to call
-cpufreq_frequency_table_verify() explicitly.
+On 03-09-25, 16:56, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> Follow cleanup.h recommendations and always define and assign variables
+> in one statement when __free() is used.
+> 
+> No intentional functional impact.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>  drivers/cpufreq/cpufreq.c |   27 +++++++--------------------
+>  1 file changed, 7 insertions(+), 20 deletions(-)
 
-Update the affected drivers (sh-cpufreq and virtual-cpufreq) to use
-cpufreq_generic_frequency_table_verify() instead, and convert
-cpufreq_frequency_table_verify() to a private static function inside
-freq_table.c.
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-This reduces the exported cpufreq API surface and enforces a single, cons=
-istent
-entry point (cpufreq_generic_frequency_table_verify()) for drivers.
-
-No functional changes intended.
-
-Signed-off-by: Zihuan Zhang <zhangzihuan@kylinos.cn>
----
- drivers/cpufreq/freq_table.c      | 5 +----
- drivers/cpufreq/sh-cpufreq.c      | 6 ++----
- drivers/cpufreq/virtual-cpufreq.c | 5 +----
- include/linux/cpufreq.h           | 2 --
- 4 files changed, 4 insertions(+), 14 deletions(-)
-
-diff --git a/drivers/cpufreq/freq_table.c b/drivers/cpufreq/freq_table.c
-index f4b05dcc479b..79fa65aa3859 100644
---- a/drivers/cpufreq/freq_table.c
-+++ b/drivers/cpufreq/freq_table.c
-@@ -64,7 +64,7 @@ int cpufreq_frequency_table_cpuinfo(struct cpufreq_poli=
-cy *policy)
- 		return 0;
- }
-=20
--int cpufreq_frequency_table_verify(struct cpufreq_policy_data *policy)
-+static int cpufreq_frequency_table_verify(struct cpufreq_policy_data *po=
-licy)
- {
- 	struct cpufreq_frequency_table *pos, *table =3D policy->freq_table;
- 	unsigned int freq, prev_smaller =3D 0;
-@@ -73,8 +73,6 @@ int cpufreq_frequency_table_verify(struct cpufreq_polic=
-y_data *policy)
- 	pr_debug("request for verification of policy (%u - %u kHz) for cpu %u\n=
-",
- 					policy->min, policy->max, policy->cpu);
-=20
--	cpufreq_verify_within_cpu_limits(policy);
--
- 	cpufreq_for_each_valid_entry(pos, table) {
- 		freq =3D pos->frequency;
-=20
-@@ -97,7 +95,6 @@ int cpufreq_frequency_table_verify(struct cpufreq_polic=
-y_data *policy)
-=20
- 	return 0;
- }
--EXPORT_SYMBOL_GPL(cpufreq_frequency_table_verify);
-=20
- /*
-  * Generic routine to verify policy & frequency table, requires driver t=
-o set
-diff --git a/drivers/cpufreq/sh-cpufreq.c b/drivers/cpufreq/sh-cpufreq.c
-index 642ddb9ea217..ee3fd1e71b90 100644
---- a/drivers/cpufreq/sh-cpufreq.c
-+++ b/drivers/cpufreq/sh-cpufreq.c
-@@ -90,10 +90,8 @@ static int sh_cpufreq_verify(struct cpufreq_policy_dat=
-a *policy)
- {
- 	struct clk *cpuclk =3D &per_cpu(sh_cpuclk, policy->cpu);
-=20
--	if (policy->freq_table)
--		return cpufreq_frequency_table_verify(policy);
--
--	cpufreq_verify_within_cpu_limits(policy);
-+	if (!cpufreq_generic_frequency_table_verify(policy))
-+		return 0;
-=20
- 	policy->min =3D (clk_round_rate(cpuclk, 1) + 500) / 1000;
- 	policy->max =3D (clk_round_rate(cpuclk, ~0UL) + 500) / 1000;
-diff --git a/drivers/cpufreq/virtual-cpufreq.c b/drivers/cpufreq/virtual-=
-cpufreq.c
-index 6ffa16d239b2..2498f40cd57e 100644
---- a/drivers/cpufreq/virtual-cpufreq.c
-+++ b/drivers/cpufreq/virtual-cpufreq.c
-@@ -249,10 +249,7 @@ static int virt_cpufreq_offline(struct cpufreq_polic=
-y *policy)
-=20
- static int virt_cpufreq_verify_policy(struct cpufreq_policy_data *policy=
-)
- {
--	if (policy->freq_table)
--		return cpufreq_frequency_table_verify(policy);
--
--	cpufreq_verify_within_cpu_limits(policy);
-+	cpufreq_generic_frequency_table_verify(policy);
- 	return 0;
- }
-=20
-diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
-index 40966512ea18..577f1cd723a0 100644
---- a/include/linux/cpufreq.h
-+++ b/include/linux/cpufreq.h
-@@ -782,8 +782,6 @@ struct cpufreq_frequency_table {
-=20
- int cpufreq_frequency_table_cpuinfo(struct cpufreq_policy *policy);
-=20
--int cpufreq_frequency_table_verify(struct cpufreq_policy_data *policy);
--
- int cpufreq_generic_frequency_table_verify(struct cpufreq_policy_data *p=
-olicy);
-=20
- int cpufreq_table_index_unsorted(struct cpufreq_policy *policy,
---=20
-2.25.1
-
+-- 
+viresh
 
