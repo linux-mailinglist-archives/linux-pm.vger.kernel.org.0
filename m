@@ -1,141 +1,156 @@
-Return-Path: <linux-pm+bounces-33875-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33876-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE9E0B444A6
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Sep 2025 19:47:25 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C5D0B444B2
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Sep 2025 19:50:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B8ACE1C244E3
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Sep 2025 17:47:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 088371893685
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Sep 2025 17:50:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C9E23115B1;
-	Thu,  4 Sep 2025 17:47:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F200F31A565;
+	Thu,  4 Sep 2025 17:49:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RdglNrEo"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="evZN+BCJ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBE4A30BF67
-	for <linux-pm@vger.kernel.org>; Thu,  4 Sep 2025 17:47:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0C633128CC;
+	Thu,  4 Sep 2025 17:49:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757008042; cv=none; b=DbP/q2eel4FkVaPruqOGkHfeVgUPL9zUivs/IZ8+1BKwU6u4GoXf24vZQCf1Y1gHbpcjikRUmL1yxt3sgOll66fsdTSL7eqzSpdqT67cVHQnp4JbzWe5V+7Q+j6XGbOUn4K3swKmPP2Cq3b7HbueXWCXRgj/wPA1cvFa1kFi6F8=
+	t=1757008193; cv=none; b=tlvUE25LIyQSFUAgjQyf/AVngdlO8u8Rz42EdwHiQn8M5+ko7+Fm9x026zXk2uBSLZmFRznH8CcLFLTi0ADviwdk5V7esa7yWbvSLfB93K/ibxyQiQneyXKke8BUGaJ50QncE12J87iudeMlYNgqyicDtyC/iV3MdcXkYAx6dtU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757008042; c=relaxed/simple;
-	bh=WiS/zKldcH5CuecqA3QVM3DCJhglrilqx5Mr5kloZEM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=b3Ilgc2f5Eycnr/DTDATYgxJU4iC2ueWeArZC00S43l+ZCX/jnelt3wHrh8zTTNZkxUo7h+go7GwLpCDdCsJUZs1NOQMy+l5KK9Y49gFlhOBlTDHVmlZsiAgTM2wlqcBft966J/Q6ONWR1D/g98P3art0yRGG5M9KSiWsiKpeDA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RdglNrEo; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52065C4CEF0;
-	Thu,  4 Sep 2025 17:47:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757008040;
-	bh=WiS/zKldcH5CuecqA3QVM3DCJhglrilqx5Mr5kloZEM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=RdglNrEohFJgswkg3KIs0v9aNFzgX2NBW4EMGi2iG6g+hfbvxjxGboACnKbHFmGtX
-	 bMSRcU+MfbzQbzleDYYTDzuakXQk3Y+Rh7hnnW7OHMgqchXtQCY+urznWL4DjxG4j/
-	 6Vo36KppWxHzEYSLlS40U3Z6jJMYCn7I7WNwAPAKEd5eht4J9ffRsSDPas4H7Eujpc
-	 oL7/EATEhx+qkn28/ZBnG2ag45sB0rcgeqhPyvBg8hLUkmcSNH2ThyZgpCVPUlgt97
-	 67HBioo+O8Mln6XYubaMOxNqGjbPcRCRQLfJbI1ckTY8rUu4SRL4a8zwhFSd8/TtnO
-	 bYw/fWe/7aVGA==
-Message-ID: <5f958462-5fc1-4837-b5e1-65c0ad8badcd@kernel.org>
-Date: Thu, 4 Sep 2025 12:47:19 -0500
+	s=arc-20240116; t=1757008193; c=relaxed/simple;
+	bh=1OwhFp6QY2B9dXyCDZ9mtktpC15PTprmIsEgeb1yOCg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=OQK8SSpOAsEXT9DhacEYyrjhZ1xD4jbBgsuTVTgb54UhzOM+dY1g6ZNAJ3DQOL8rMxlXB/inibZQAqNl11uyUZidNF3yst1Smr5WJcb2hbeqryRuaDs6k8Tqxa7ytwdmoGebWwR36NVsEYnMtx0B09/K0xhAm2RI7d9k27/L0iY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=evZN+BCJ; arc=none smtp.client-ip=209.85.208.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-333f92d60ddso11847731fa.3;
+        Thu, 04 Sep 2025 10:49:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1757008189; x=1757612989; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1OwhFp6QY2B9dXyCDZ9mtktpC15PTprmIsEgeb1yOCg=;
+        b=evZN+BCJIrgR+DFdcgMy45ij4uajXQHpNyY0ZPYu9d5yBAclw/pTXYbVubo1sgdXYO
+         UR+6Rplh67axriipwjwwBF725VAr7SqPEhh5tcBCjbR0RZLXnij5T08kxByLeCIWkzww
+         1PYsQ0S989CGAuErYyg+g0FCJi4RoKpKiKU7igmRlmi2F28sOY/zLoO5CuTnXvsNK7uu
+         hjuIVSITORjZBhzYkljF7bDmIBrmS1XS4KsikEmDWszPRW/0+J/LK6WsOhNtACbMMQnG
+         A8uVpVlAV85u20brieWTkYwZ0qRKny3PcWLMftRThPH+xnrOuQCq1aMfqLXL8d0f3guG
+         uvig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757008189; x=1757612989;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1OwhFp6QY2B9dXyCDZ9mtktpC15PTprmIsEgeb1yOCg=;
+        b=NDAYs9xozJQrik89fceWegPJ/C+gWKKhgy4qae78acaimy4jnAwi69uGFPp8lPqIG6
+         ggju94B1t8JGxGeTM6WQPvHUrNI/6uXWDndphNbuWLihs8TjPY4REcurPUKgDMxkQlIA
+         EUT3molCyBGaz1COd2t8Hvqskcl3gRc6A4JJWgg96LN1KbOGLkb2KRWmLJOneDOgQLy6
+         ZMAT7c2FP1Q6LBaU1duvxK4ZDk7Q8fFqCQXd+fjNL/meq//rocOgbQntNaVMMlzKfSXO
+         DcGh0DWCWBrsQ8FW8bRvtSJXIEWcw3CTKrucyYuGMwWkal5BLd+3WOWgxG603ndlyRfY
+         DjGQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUo5WgbL8rTWkg5Iz1nw3v3/CvxFPveyClnqYIHeynA3aUwOwXZ1X1NdwZiV1ysUBLeUoE1/rkCi40Q@vger.kernel.org, AJvYcCV/EFKP9dUkDK8nWmJZqdNGsvDQVV0Mh7yj8U0OnalJb0ckm1oOtsifPzEGY3po8/CjQR4ILZx47oR7U9s5@vger.kernel.org, AJvYcCVPZIJJ1uIF306B8RmiTuZ+eawhSncjO2ykBB4wj9VRSuMzwIOJxsq6PLPagr3bFrH+lPI4xlrL8rg=@vger.kernel.org, AJvYcCWms9lW7sdtS0hapVIOWS4RrQbKMuy6kK6vT3TH3gmFOStLpd1E+JL5qhCUsq8nDTOdWyklrZkpNK/w4x0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyp9es5ACgbxxZg5BkHS2RgT6Aiv6K2/UuHLdeLQykPLUjv6uRm
+	hD3nEpP9LSfG3twV7/Wfua/CBVJEzoBiWqwZ7Obc6sY7qTfbN2vPzazjHRpf1Ce5cLry4EMZu9x
+	y4eSp8mgxLEl6Qpa7A2q5Dl7h6MkQXXU=
+X-Gm-Gg: ASbGncttFGYTp75UoTIe7oHt19nh8GR7lckiV0vILVfT5pNwDBkar1wTBQxcZo9aUH4
+	s2uCB84OVxPK2+ud+PGHwZAWxSEUaapZyZ01XcVfSHWLaY4w5vEI36SOG2eQOEQhisqcpX/7SAs
+	WevErVYEoQgcPYGeWTxMcUW2UDAzU9CHGFlnUZovfR29gKBdYlYOCk8Pph0F5ITzvx8CNPU3jQY
+	XynMiU=
+X-Google-Smtp-Source: AGHT+IH7QIHZ0cpl1bQSa5L4Bb5DytTvCb/2gvt8Gsq4gOq49faXMoYH00vGZ0ZJuXaKzDud/8jnwgq3KDUTQ3B7Nx0=
+X-Received: by 2002:a2e:a4d8:0:b0:32a:6e20:7cdb with SMTP id
+ 38308e7fff4ca-336ca997e26mr43184441fa.17.1757008188845; Thu, 04 Sep 2025
+ 10:49:48 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [BUG] MECHREVO Yilong15Pro GM5HG7A: lid switch causing unwanted
- s2idle wakeups
-To: aprilgrimoire <aprilgrimoire@proton.me>
-Cc: "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-References: <6ww4uu6Gl4F5n6VY5dl1ufASfKzs4DhMxAN8BuqUpCoqU3PQukVSVSBCl_lKIzkQ-S8kt1acPd58eyolhkWN32lMLFj4ViI0Tdu2jwhnYZ8=@proton.me>
- <06f0c531-2cb6-4a1a-a716-406b4f5f9676@kernel.org>
- <MawTZCnf5jVqp47YcxRrH21nl0rN8O78_my4TxiZ3tFoNxuP568eHxnEH5-VIMa6DtNbHdXytnpRgVyay-UydMK5tbYe4-TG8e2BYEky5hc=@proton.me>
- <7a3a3a35-27d3-4b46-b297-475deda04656@kernel.org>
- <lyy4riGTLOpvYTPUeUx6krjnYdeE8iYbWRrLOJLOChOKMcys00nhNWJ_JD8V8kkVQk87ktMK8w7BAEosOs3KGipyHlvkvQ0_j6cipUfxYtA=@proton.me>
- <0fb5a890-63f0-412b-8d88-79b40e2c564b@kernel.org>
- <El5fBf0AkhefzH0LWKyMF3vOCNsHYBCEwxtvXD-tJfLGAFCeJ5ZVbgZE6ibf-KfMxtlkTwr3g1-feqSgfcafGzVGjulc-8QggWHHoJlRDNY=@proton.me>
- <5369f2b5-dba1-4b25-a093-7aa79c578975@kernel.org>
- <wkUEC8nqZzIcVXalYzsLi_YheAs0Tw07ug-73PAqUwKmquJr89CPnQKwBImSQLcDABIk4tfWPLCPKa00vG1jH8NpiH5f4yXVATYakltJAQI=@proton.me>
-Content-Language: en-US
-From: Mario Limonciello <superm1@kernel.org>
-In-Reply-To: <wkUEC8nqZzIcVXalYzsLi_YheAs0Tw07ug-73PAqUwKmquJr89CPnQKwBImSQLcDABIk4tfWPLCPKa00vG1jH8NpiH5f4yXVATYakltJAQI=@proton.me>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20250831-tegra186-icc-v1-0-607ddc53b507@gmail.com>
+ <20250902-glittering-toucan-of-feminism-95fd9f@kuoka> <CALHNRZ_CNvq_srzBZytrO6ZReg81Z6g_-Sa+=26kBEHx_c8WQA@mail.gmail.com>
+ <47c7adc9-fa91-4d4e-9be4-912623c627d6@kernel.org> <CALHNRZ8rxyRvb1GCifeXRKjPkkBE+sK6VnPc2nS01iZV_NcjaQ@mail.gmail.com>
+ <08062eb7-1b7d-4fc3-86ea-af70069065eb@kernel.org>
+In-Reply-To: <08062eb7-1b7d-4fc3-86ea-af70069065eb@kernel.org>
+From: Aaron Kling <webgeek1234@gmail.com>
+Date: Thu, 4 Sep 2025 12:49:37 -0500
+X-Gm-Features: Ac12FXymL814iB6fXAOm_7ikLix-XDwcIFwbTiMJt5Sq938zGMyGgX9ZoGVSnow
+Message-ID: <CALHNRZ-iGASiVknUFJXJ8OkYYrG+0VMTistreDAG38WytHmEPQ@mail.gmail.com>
+Subject: Re: [PATCH 0/8] Support dynamic EMC frequency scaling on Tegra186/Tegra194
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Thierry Reding <thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-kernel@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-tegra@vger.kernel.org, 
+	linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 9/4/25 11:34 AM, aprilgrimoire wrote:
-> 
-> 
->   > The Linux kernel will break from the s2dile loop when a device asserts
->> to wake the system.
->>
->> If IRQ1 triggers when the keyboard isn't pressed that is absolutely a
->> firmware bug. We can work around it with a quirk entry for
->> pmc-quirks.c. The obvious trade off is that the keyboard can't be used
->> as a wake source either, but if you don't disable IRQ1 then another even
->> that normally wouldn't wake the system "will wake the system".
->>
->> For example if you plug in the power adapter the EC will assert the SCI
->> and will notify the APU to wake up from hardware sleep. Normally the
->> kernel will process the EC events and go back to sleep.
->>
->> But if IRQ1 is spuriously active during this time then it will wake the
->> system when you plug in the power adapter. So I think it's the lesser
->> evil to add that quirk. That being said we need to figure out what GPIO
->> 0 is tied to for your system. Because maybe the better solution is to
->> disable GPIO 0 and just "rely" upon the spurious IRQ1.
->>
->> With GPIO 0 enabled, can you check when it gets triggered besides the
->> lid event? Try these:
->>
->> * Suspend on battery / power adapter plug in
->> * Suspend on AC / power adapter plug out
->> * Press power button
->> * Click touchpad
->>
->> Ideally GPIO 0 is only used for the lid, but given the ASL notifies the
->> PWRB device I don't have high hopes.
-> 
-> Hi, Mario!
-> 
-> I tried these events, and I am highly affirmative (on the patched kernel, with GPIO 0 disabled, these events don't trigger wakeups) that:
-> * Press power button and keyboard triggers GPIO 0
-> * Plugging / Unplugging the PD100W adapter doesn't trigger GPIO 0
->    (The model also supports 240W round-pin unknown-protocol adapters, but I don't have one here.)
-> * Clicking touchpad doesn't trigger GPIO 0
+On Thu, Sep 4, 2025 at 3:19=E2=80=AFAM Krzysztof Kozlowski <krzk@kernel.org=
+> wrote:
+>
+> On 03/09/2025 08:37, Aaron Kling wrote:
+> > On Wed, Sep 3, 2025 at 1:20=E2=80=AFAM Krzysztof Kozlowski <krzk@kernel=
+.org> wrote:
+> >>
+> >> On 02/09/2025 18:51, Aaron Kling wrote:
+> >>> On Tue, Sep 2, 2025 at 3:23=E2=80=AFAM Krzysztof Kozlowski <krzk@kern=
+el.org> wrote:
+> >>>>
+> >>>> On Sun, Aug 31, 2025 at 10:33:48PM -0500, Aaron Kling wrote:
+> >>>>> This series borrows the concept used on Tegra234 to scale EMC based=
+ on
+> >>>>> CPU frequency and applies it to Tegra186 and Tegra194. Except that =
+the
+> >>>>> bpmp on those archs does not support bandwidth manager, so the scal=
+ing
+> >>>>> iteself is handled similar to how Tegra124 currently works.
+> >>>>>
+> >>>>
+> >>>> Three different subsystems and no single explanation of dependencies=
+ and
+> >>>> how this can be merged.
+> >>>
+> >>> The only cross-subsystem hard dependency is that patches 5 and 6 need
+> >>> patches 1 and 2 respectively. Patch 5 logically needs patch 3 to
+> >>> operate as expected, but there should not be compile compile or probe
+> >>> failures if those are out of order. How would you expect this to be
+> >>> presented in a cover letter?
+> >>
+> >> Also, placing cpufreq patch between two memory controller patches mean=
+s
+> >> you really make it more difficult to apply it for the maintainers.
+> >> Really, think thoroughly how this patchset is supposed to be read.
+> >
+> > This is making me more confused. My understanding was that a series
+> > like this that has binding, driver, and dt changes would flow like
+> > that: all bindings first, all driver changes in the middle, and all dt
+>
+> You mix completely independent subsystems, that's the main problem.
+> Don't send v3 before you understand it or we finish the discussion here.
+>
+> > changes last. Are you suggesting that this should be: cpufreq driver
+> > -> bindings -> memory drivers -> dt? Are the bindings supposed to be
+> > pulled with the driver changes? I had understood those to be managed
+> > separately.
+> What does the submitting patches doc in DT say?
 
- From what you've said it sounds like GPIO0 is basically an EC output 
-pin that is overloaded to cover power button, lid, and keyboard.  That's 
-a bit unusual for keyboard.
+The only relevant snippet I see is:
+"The Documentation/ portion of the patch should come in the series
+before the code implementing the binding."
 
-> 
-> I think it isn't feasible to rely on the spurious IRQ1, unless some efficient re-suspend mechanism is implemented. As mentioned in
+I had got it in my head that all bindings should go first as a
+separate subsystem, not just docs. I will double check all series
+before sending new revisions.
 
-Yeah I don't think you should rely upon IRQ1.
-
-> 
-> https://community.frame.work/t/tracking-framework-amd-ryzen-7040-series-lid-wakeup-behavior-feedback/39128/10?u=aprilgrimoire
-> 
-
-I wouldn't read too much into the Framework issue - this was purely a 
-polarity issue in their firmware.  It was fixed in a combination of 
-their EC and BIOS.
-
->> I have pulled scalding hot laptops with a nearly dead battery out of my bag because the laptop didn’t go to sleep correctly and stayed on when I closed the lid.
-> 
-> When put in bags, the lid could move slightly upon shaken, and I am worried that IRQ1 would trigger without me knowing.
-> 
-> Or am I misunderstanding your suggestion on how to use the spurious IRQ1?
-> 
-> Thanks!
-
-Can you double-confirm that with IRQ1 disabled that you still get GPIO0 
-for keyboard wakeup specifically?
-
+Aaron
 
