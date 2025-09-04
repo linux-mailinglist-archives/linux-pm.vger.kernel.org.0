@@ -1,182 +1,110 @@
-Return-Path: <linux-pm+bounces-33777-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33778-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1B1A0B42DDF
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Sep 2025 02:06:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E9EBB4306A
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Sep 2025 05:22:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B37C21BC316B
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Sep 2025 00:06:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BCFAE1BC74FD
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Sep 2025 03:22:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E61111185;
-	Thu,  4 Sep 2025 00:06:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dKlZvOGe"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96DA926B2D3;
+	Thu,  4 Sep 2025 03:22:28 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F3734C83;
-	Thu,  4 Sep 2025 00:06:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DDBA23875D;
+	Thu,  4 Sep 2025 03:22:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756944374; cv=none; b=SRh8Oldh1FgXH7D2maLYmPompHYFSoayOxlxCo23qf+FMJGlynvUnZGno5X5BQ4lYex14gTPN44GIlnE4t9frkPkBhpZBewfJbKpnByQBODmz68ms+2hgNeRJ91A653loSEdmZ8tshIZC0VfXnrkS9gOO2d1tzCk3KggkfQJDu8=
+	t=1756956148; cv=none; b=kT30r0kFMgYu8zF1Vjyf7lcD7aNh0rxKSjMz2GfJWqaQhPIBwT0pGdtle6DOq1jHsiz6BoFqJ2T3Kdh2BgacFlznMMXhXVMcRILHB+ZKQXRwGVwb9b3cIu0G2eQCoSpK8pAt2q4gUDhGfP7JjVv1CHe0SjwBAYn5eYcjRFY2mp0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756944374; c=relaxed/simple;
-	bh=ueQqSFAkz7inyl+gUZAJz0CtG/v1zHEcbuhSN35iGGo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=b2AZ4WXjJnFAK0XwabOsXwvGrZJzbj617OYMXRyasNSe99lC/cI2fDi9Gmr2RK46FJlvNVWwIvXmBtaLw7Fsb7yAnnQkkjE3kTkUKIDNYvgfmG8sf9Wk+2w4IyY2EbCFq6eP5dHTvMVS/6CzQIIOEJgtJqlqPD64wruZdOYwO1o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dKlZvOGe; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1756944372; x=1788480372;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ueQqSFAkz7inyl+gUZAJz0CtG/v1zHEcbuhSN35iGGo=;
-  b=dKlZvOGeuCvylj/mMoC1iaPt6UKZB9i5paO6IWZZlDr15Zz7FkLDaGDd
-   E3BxswjfSHe0fD07W7Ooy0vgJOUXJUHk8gqs4a+s6jMVIHfums8sybFj5
-   i3Ak6SLu+C8a4Y8nfbd4HmmB9JUwCAkPnmsmmkuTQlIco5kZE4pgWOcgO
-   02TNweWxftZdulGeLpfs7Ka9tL2Bdy15zIjggSWXOLybn8NYmhV3Wn1dB
-   HKG2ovSF0lwHu9a5iwcxwdUeHSoA+YPjKDPzftek/3NmXOMea3q9nGAZM
-   Ht2HMZ2JbKm+I3+cBTPBr3JRMk1DKpNxSaRfzXhCDzKt2J2bgla+LUyNC
-   A==;
-X-CSE-ConnectionGUID: oHZ3Q1f3QTWAvpJy9yMdCQ==
-X-CSE-MsgGUID: AmFDZtOLQBqQaqNcdGu0KQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11542"; a="46847199"
-X-IronPort-AV: E=Sophos;i="6.18,236,1751266800"; 
-   d="scan'208";a="46847199"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2025 17:06:10 -0700
-X-CSE-ConnectionGUID: SSs88hKHT6iVvkhM+Ra0rg==
-X-CSE-MsgGUID: dqzO2MoDSzeH1wK6SEzLyw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,236,1751266800"; 
-   d="scan'208";a="172099997"
-Received: from spandruv-desk.jf.intel.com ([10.54.55.20])
-  by fmviesa008.fm.intel.com with ESMTP; 03 Sep 2025 17:06:09 -0700
-From: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To: rafael@kernel.org,
-	viresh.kumar@linaro.org
-Cc: linux-pm@vger.kernel.org,
+	s=arc-20240116; t=1756956148; c=relaxed/simple;
+	bh=iDKUp7MUy7dgr0C2FyAFxllVOl2HoJ5YjabrF0Yj4bI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=gfyPAyw0jWDTN/LFqF+hUee23uBpxl1RUM5+7K1+5MKYp9+wZnuPRBspaRMD0ISPed4K2i1SGaAW9COsl4vchIMJMJzpzQ5I4zSeu7/nTVJ8/rjSsmdPcl7IgUN+vpLhLZFfN35tuvGkw9jB1L+wlRR69t/R93qhk0YE8jv8MJw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 5c4e48d0893e11f0b29709d653e92f7d-20250904
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.45,REQID:cf8d650f-e84a-4973-8b9b-40525fe9c724,IP:0,U
+	RL:0,TC:0,Content:34,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:34
+X-CID-META: VersionHash:6493067,CLOUDID:b94927d9bb52012ab223db94077570a5,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:102|850,TC:nil,Content:4|50,EDM:-3,IP:ni
+	l,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES
+	:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: 5c4e48d0893e11f0b29709d653e92f7d-20250904
+Received: from mail.kylinos.cn [(10.44.16.175)] by mailgw.kylinos.cn
+	(envelope-from <zhangzihuan@kylinos.cn>)
+	(Generic MTA)
+	with ESMTP id 674417792; Thu, 04 Sep 2025 11:22:17 +0800
+Received: from mail.kylinos.cn (localhost [127.0.0.1])
+	by mail.kylinos.cn (NSMail) with SMTP id 80C82E008FA3;
+	Thu,  4 Sep 2025 11:22:17 +0800 (CST)
+X-ns-mid: postfix-68B905E9-155737605
+Received: from localhost.localdomain (unknown [172.25.120.24])
+	by mail.kylinos.cn (NSMail) with ESMTPA id 53ED8E008FA2;
+	Thu,  4 Sep 2025 11:22:16 +0800 (CST)
+From: Zihuan Zhang <zhangzihuan@kylinos.cn>
+To: "Rafael J . wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Saravana Kannan <saravanak@google.com>
+Cc: zhenglifeng <zhenglifeng1@huawei.com>,
+	linux-pm@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [PATCH 2/2] cpufreq: intel_pstate: Enable HWP without EPP feature
-Date: Wed,  3 Sep 2025 17:06:08 -0700
-Message-ID: <20250904000608.260817-2-srinivas.pandruvada@linux.intel.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20250904000608.260817-1-srinivas.pandruvada@linux.intel.com>
-References: <20250904000608.260817-1-srinivas.pandruvada@linux.intel.com>
+	Zihuan Zhang <zhangzihuan@kylinos.cn>
+Subject: [PATCH v1 0/3] cpufreq: Clean up frequency table handling
+Date: Thu,  4 Sep 2025 11:22:07 +0800
+Message-Id: <20250904032210.92978-1-zhangzihuan@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-When EPP feature is not available (CPUID CPUID.06H:EAX[10] is not set),
-intel_pstate will not enable HWP.
+This series contains a set of cleanups around cpufreq frequency table
+handling.
 
-Some processors support DEC feature (Dynamic Efficiency Control). But in
-this case HWP must be enabled.
+The first patch drops the redundant @freq_table parameter from
+cpufreq_frequency_table_verify(). This has already been Acked, but is
+included here to avoid build issues with the following changes.
 
-So, enable HWP even if EPP feature is not available but DEC feature is
-present.
+The second patch makes sure that policy limits are always enforced
+even when a driver does not provide a frequency table. This removes
+the implicit dependency on the table and makes the enforcement logic
+consistent across drivers.
 
-When EPP feature is not available don't publish sysfs attributes
-"energy_performance_available_preferences" and
-"energy_performance_preference", but continue to enable HWP.
+The third patch makes cpufreq_frequency_table_verify() internal,
+since no external user should call it directly after the parameter
+removal and the refactoring.
 
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
----
- drivers/cpufreq/intel_pstate.c | 35 +++++++++++++++++++++++++++++++---
- 1 file changed, 32 insertions(+), 3 deletions(-)
+Together these patches simplify the API surface, reduce redundancy,
+and make policy enforcement more robust.
 
-diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-index c28454b16723..d74abe909fbc 100644
---- a/drivers/cpufreq/intel_pstate.c
-+++ b/drivers/cpufreq/intel_pstate.c
-@@ -904,6 +904,11 @@ static struct freq_attr *hwp_cpufreq_attrs[] = {
- 	NULL,
- };
- 
-+static struct freq_attr *hwp_cpufreq_default_attrs[] = {
-+	&base_frequency,
-+	NULL,
-+};
-+
- static bool no_cas __ro_after_init;
- 
- static struct cpudata *hybrid_max_perf_cpu __read_mostly;
-@@ -1370,6 +1375,9 @@ static void intel_pstate_hwp_offline(struct cpudata *cpu)
- #define POWER_CTL_EE_ENABLE	1
- #define POWER_CTL_EE_DISABLE	2
- 
-+/* Enable bit for Dynamic Efficiency Control (DEC) */
-+#define POWER_CTL_DEC_ENABLE	27
-+
- static int power_ctl_ee_state;
- 
- static void set_power_ctl_ee_state(bool input)
-@@ -3761,6 +3769,17 @@ static const struct x86_cpu_id intel_hybrid_scaling_factor[] = {
- 	{}
- };
- 
-+static bool dec_enabled(void)
-+{
-+	u64 power_ctl;
-+
-+	rdmsrq(MSR_IA32_POWER_CTL, power_ctl);
-+	if (power_ctl & BIT(POWER_CTL_DEC_ENABLE))
-+		return true;
-+
-+	return false;
-+}
-+
- static int __init intel_pstate_init(void)
- {
- 	static struct cpudata **_all_cpu_data;
-@@ -3793,15 +3812,24 @@ static int __init intel_pstate_init(void)
- 		 * Avoid enabling HWP for processors without EPP support,
- 		 * because that means incomplete HWP implementation which is a
- 		 * corner case and supporting it is generally problematic.
-+		 * But when DEC enable bit is set (MSR 0x1FC bit 27), continue
-+		 * to enable HWP.
- 		 *
- 		 * If HWP is enabled already, though, there is no choice but to
- 		 * deal with it.
- 		 */
--		if ((!no_hwp && boot_cpu_has(X86_FEATURE_HWP_EPP)) || hwp_forced) {
-+		if (!no_hwp || hwp_forced) {
-+			if (boot_cpu_has(X86_FEATURE_HWP_EPP)) {
-+				intel_pstate.attr = hwp_cpufreq_attrs;
-+				intel_cpufreq.attr = hwp_cpufreq_attrs;
-+			} else if (dec_enabled()) {
-+				intel_pstate.attr = hwp_cpufreq_default_attrs;
-+				intel_cpufreq.attr = hwp_cpufreq_default_attrs;
-+			} else {
-+				goto skip_hwp_enable;
-+			}
- 			hwp_active = true;
- 			hwp_mode_bdw = id->driver_data;
--			intel_pstate.attr = hwp_cpufreq_attrs;
--			intel_cpufreq.attr = hwp_cpufreq_attrs;
- 			intel_cpufreq.flags |= CPUFREQ_NEED_UPDATE_LIMITS;
- 			intel_cpufreq.adjust_perf = intel_cpufreq_adjust_perf;
- 			if (!default_driver)
-@@ -3811,6 +3839,7 @@ static int __init intel_pstate_init(void)
- 
- 			goto hwp_cpu_matched;
- 		}
-+skip_hwp_enable:
- 		pr_info("HWP not enabled\n");
- 	} else {
- 		if (no_load)
--- 
-2.51.0
+Zihuan Zhang (3):
+  cpufreq: Drop redundant freq_table parameter
+  cpufreq: Always enforce policy limits even without frequency table
+  cpufreq: Make cpufreq_frequency_table_verify() internal
+
+ drivers/cpufreq/cpufreq.c         |  2 +-
+ drivers/cpufreq/freq_table.c      | 18 +++++++-----------
+ drivers/cpufreq/sh-cpufreq.c      |  8 ++------
+ drivers/cpufreq/virtual-cpufreq.c |  5 +----
+ include/linux/cpufreq.h           |  5 +----
+ 5 files changed, 12 insertions(+), 26 deletions(-)
+
+--=20
+2.25.1
 
 
