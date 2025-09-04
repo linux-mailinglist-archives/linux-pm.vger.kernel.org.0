@@ -1,60 +1,60 @@
-Return-Path: <linux-pm+bounces-33791-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33792-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B6514B4318D
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Sep 2025 07:24:10 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D1ACAB431A4
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Sep 2025 07:34:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 70A13687E46
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Sep 2025 05:24:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7FAC56841E3
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Sep 2025 05:34:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7C9423A995;
-	Thu,  4 Sep 2025 05:24:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F8B9225765;
+	Thu,  4 Sep 2025 05:34:14 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29A2522C355;
-	Thu,  4 Sep 2025 05:24:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C7FD8F40;
+	Thu,  4 Sep 2025 05:34:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756963446; cv=none; b=hvUPhHf86MqybtX8PjBoDNiLgK54HGFGagQNVD1YOi+Zq0WwcOHEi/9JQq1gpJ8ebfWzRV3xbIFKdOREEOuWOkAP58Q+umwGjWeDouW5Y8EM93Qju2Ak8Je4gYWNINLXScES/9jqLL31RFD8iahgDCxsGbC3PofODsKZCOnPTgo=
+	t=1756964054; cv=none; b=j7iEsXbWEcqWKGSy9Y6h7SY+aNey6Wv7a0Ah67qyPlKyZEvWSMH7GfsPgCKaktWXzsEsWuS1hpBTTtBOwUkp4ZmEwOviCuP4GhHI+mDivFnGanZcoP2B31k74rwEM1zIMfbMr6S0BmcAcf9xwkpnogDlWeR3n8vxsIUjNuuSsGM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756963446; c=relaxed/simple;
-	bh=ps2vSL6FMlRnK/n3hdnbliP23/FN2FPWl5kCq8zoEps=;
+	s=arc-20240116; t=1756964054; c=relaxed/simple;
+	bh=dVA1sh5/4tNj1irys2HDUW8x5U34dwpBEa6/c7osDpw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=moLM4Azxd23CUiVHFmSEFLDn/yrVs+Xh5MnScSskOEw5EQWdOh9ge5tSRCBvFecwENsqJLAZn651uSfekoKX98X4xtecmddzJqlef89AxBfxxQHPPx06idjFaXRSaSNF5sAuLGkhTAdKrarZe51cNdQVWaOAxftdGqzExiSWoB4=
+	 In-Reply-To:Content-Type; b=WZmJZU4wJhzzq1DMZI95zYmklpJc9lh9J41nPbhd5r6D0Rpiixbp0xDf9d7oyb/gqjOlkIexWNFPTBKlLWCAe/he4rPPU2TJQplmQEdyLuShc7FmksW/dMRKwg1Tx0RDdUN3JUzXwayoIPGvv4acJ433ociGRRmka8vlJTGAM0M=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 5b2dad2c894f11f0b29709d653e92f7d-20250904
+X-UUID: c46a823c895011f0b29709d653e92f7d-20250904
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.45,REQID:f25e3567-48cd-4b8c-a06f-3892f72d4ce9,IP:0,U
+X-CID-O-INFO: VERSION:1.1.45,REQID:1dd3973b-f040-4b1a-842e-bc10317294e6,IP:0,U
 	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
 	release,TS:0
-X-CID-META: VersionHash:6493067,CLOUDID:b868f439536289f8e62dcf9eeb14dd12,BulkI
+X-CID-META: VersionHash:6493067,CLOUDID:b45f3d8ab14e5ed8d1296dbb5da40e85,BulkI
 	D:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102,TC:nil,Content:0|52,EDM:
 	-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,
 	AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
 X-CID-BVR: 1,FCT|NGT
 X-CID-BAS: 1,FCT|NGT,0,_
 X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: 5b2dad2c894f11f0b29709d653e92f7d-20250904
+X-UUID: c46a823c895011f0b29709d653e92f7d-20250904
 Received: from mail.kylinos.cn [(10.44.16.175)] by mailgw.kylinos.cn
 	(envelope-from <zhangzihuan@kylinos.cn>)
 	(Generic MTA)
-	with ESMTP id 1322521824; Thu, 04 Sep 2025 13:23:57 +0800
+	with ESMTP id 1646123066; Thu, 04 Sep 2025 13:34:03 +0800
 Received: from mail.kylinos.cn (localhost [127.0.0.1])
-	by mail.kylinos.cn (NSMail) with SMTP id 2A326E008FA2;
-	Thu,  4 Sep 2025 13:23:57 +0800 (CST)
-X-ns-mid: postfix-68B9226D-137554
+	by mail.kylinos.cn (NSMail) with SMTP id 3AE73E008FA5;
+	Thu,  4 Sep 2025 13:34:03 +0800 (CST)
+X-ns-mid: postfix-68B924CB-1066366
 Received: from [172.25.120.24] (unknown [172.25.120.24])
-	by mail.kylinos.cn (NSMail) with ESMTPA id 855C4E008FA2;
-	Thu,  4 Sep 2025 13:23:56 +0800 (CST)
-Message-ID: <540469c3-9bc5-444e-87da-95dc27fc481b@kylinos.cn>
-Date: Thu, 4 Sep 2025 13:23:55 +0800
+	by mail.kylinos.cn (NSMail) with ESMTPA id 9FF8EE008FA2;
+	Thu,  4 Sep 2025 13:34:02 +0800 (CST)
+Message-ID: <cec3bcea-4c75-4869-b9b8-efd3412a1e17@kylinos.cn>
+Date: Thu, 4 Sep 2025 13:34:01 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -62,89 +62,82 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 2/3] cpufreq: Always enforce policy limits even without
- frequency table
+Subject: Re: [PATCH v1 3/3] cpufreq: Make cpufreq_frequency_table_verify()
+ internal
 To: Viresh Kumar <viresh.kumar@linaro.org>
 Cc: "Rafael J . wysocki" <rafael@kernel.org>,
  Saravana Kannan <saravanak@google.com>, zhenglifeng
  <zhenglifeng1@huawei.com>, linux-pm@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <20250904032210.92978-1-zhangzihuan@kylinos.cn>
- <20250904032210.92978-3-zhangzihuan@kylinos.cn>
- <20250904044812.cpadajrtz3mrz2ke@vireshk-i7>
+ <20250904032210.92978-4-zhangzihuan@kylinos.cn>
+ <20250904044557.tde36hekoeuhnsci@vireshk-i7>
 From: Zihuan Zhang <zhangzihuan@kylinos.cn>
-In-Reply-To: <20250904044812.cpadajrtz3mrz2ke@vireshk-i7>
+In-Reply-To: <20250904044557.tde36hekoeuhnsci@vireshk-i7>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
 
 
-=E5=9C=A8 2025/9/4 12:48, Viresh Kumar =E5=86=99=E9=81=93:
+=E5=9C=A8 2025/9/4 12:45, Viresh Kumar =E5=86=99=E9=81=93:
 > On 04-09-25, 11:22, Zihuan Zhang wrote:
->> Currently, cpufreq_frequency_table_verify() simply returns when the dr=
-iver=E2=80=99s
->> frequency table is missing (policy->freq_table =3D=3D NULL).
->> This means that cpufreq_verify_within_cpu_limits() is not invoked in s=
-uch
->> cases, leaving policy->min and policy->max unchecked.
->>
->> Some cpufreq drivers handle this manually by calling
->> cpufreq_verify_within_cpu_limits() even when no frequency table is pre=
-sent,
->> in order to ensure the policy stays within CPU limits.
->>
->> To avoid this inconsistency and potential misuse, make
->> cpufreq_generic_frequency_table_verify() always call
->> cpufreq_verify_within_cpu_limits(), regardless of whether policy->freq=
-_table
->> is available. This unifies the behavior across all drivers and makes t=
-he helper
->> safe to use universally.
->>
->> Signed-off-by: Zihuan Zhang <zhangzihuan@kylinos.cn>
->> ---
->>   drivers/cpufreq/freq_table.c | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/drivers/cpufreq/freq_table.c b/drivers/cpufreq/freq_table=
+>> diff --git a/drivers/cpufreq/sh-cpufreq.c b/drivers/cpufreq/sh-cpufreq=
 .c
->> index d5111ee56e38..f4b05dcc479b 100644
->> --- a/drivers/cpufreq/freq_table.c
->> +++ b/drivers/cpufreq/freq_table.c
->> @@ -105,6 +105,7 @@ EXPORT_SYMBOL_GPL(cpufreq_frequency_table_verify);
->>    */
->>   int cpufreq_generic_frequency_table_verify(struct cpufreq_policy_dat=
-a *policy)
+>> index 642ddb9ea217..ee3fd1e71b90 100644
+>> --- a/drivers/cpufreq/sh-cpufreq.c
+>> +++ b/drivers/cpufreq/sh-cpufreq.c
+>> @@ -90,10 +90,8 @@ static int sh_cpufreq_verify(struct cpufreq_policy_=
+data *policy)
 >>   {
->> +	cpufreq_verify_within_cpu_limits(policy);
-> So if we have a freq-table, we will call this twice now. Why make it
-> bad for the existing users ?
-
-
-Just to clarify, in the third patch of this series we remove
-cpufreq_generic_frequency_table_verify() from the table_verify path,
-so cpufreq_verify_within_cpu_limits() is now only called here. There
-won=E2=80=99t be any duplicate invocation for drivers that already have a
-frequency table.
-
-This also resolves the semantic concern, since the helper is no
-longer invoked outside of this context.
-
-Thanks!
-
-
-> And then the name of this function, it is all about freq-table. If it
-> isn't there, not sure we should call it at all.
-
-
-As it stands, only drivers that have a frequency table actually call
-cpufreq_generic_frequency_table_verify(). Drivers without a table
-implement their own verification logic. So in practice, this helper
-is still only used in the context of a frequency table, keeping the
-semantics consistent with its name.
-
->>   	if (!policy->freq_table)
->>   		return -ENODEV;
+>>   	struct clk *cpuclk =3D &per_cpu(sh_cpuclk, policy->cpu);
 >>  =20
->> --=20
->> 2.25.1
+>> -	if (policy->freq_table)
+>> -		return cpufreq_frequency_table_verify(policy);
+>> -
+>> -	cpufreq_verify_within_cpu_limits(policy);
+>> +	if (!cpufreq_generic_frequency_table_verify(policy))
+>> +		return 0;
+>>  =20
+>>   	policy->min =3D (clk_round_rate(cpuclk, 1) + 500) / 1000;
+>>   	policy->max =3D (clk_round_rate(cpuclk, ~0UL) + 500) / 1000;
+>> diff --git a/drivers/cpufreq/virtual-cpufreq.c b/drivers/cpufreq/virtu=
+al-cpufreq.c
+>> index 6ffa16d239b2..2498f40cd57e 100644
+>> --- a/drivers/cpufreq/virtual-cpufreq.c
+>> +++ b/drivers/cpufreq/virtual-cpufreq.c
+>> @@ -249,10 +249,7 @@ static int virt_cpufreq_offline(struct cpufreq_po=
+licy *policy)
+>>  =20
+>>   static int virt_cpufreq_verify_policy(struct cpufreq_policy_data *po=
+licy)
+>>   {
+>> -	if (policy->freq_table)
+>> -		return cpufreq_frequency_table_verify(policy);
+>> -
+>> -	cpufreq_verify_within_cpu_limits(policy);
+>> +	cpufreq_generic_frequency_table_verify(policy);
+>>   	return 0;
+>>   }
+> You ended up changing the logic of both these files and it isn't the
+> same anymore. Earlier if freq_table was there and
+> cpufreq_frequency_table_verify() failed, we used to return, but not
+> anymore.
+>
+> And we don't return the error anymore for virtual driver.
+
+
+Thanks for pointing this out, Viresh.
+
+You are correct =E2=80=94 with the current changes, if
+cpufreq_generic_frequency_table_verify() fails, we no longer return
+an error in these drivers. For drivers that lack a frequency table,
+they can still operate, which is why I wasn=E2=80=99t sure whether return=
+ing
+an error is strictly necessary.
+
+I would appreciate your advice here: should we preserve the old
+behavior and return an error on failure, or is it acceptable for
+drivers without a table to continue without it?
+
+
+>
 
