@@ -1,214 +1,178 @@
-Return-Path: <linux-pm+bounces-33795-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33796-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 58F6DB431F9
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Sep 2025 08:07:08 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 07A55B43203
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Sep 2025 08:09:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0F88E178500
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Sep 2025 06:07:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5E9C61BC7DEA
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Sep 2025 06:09:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF88523D7D0;
-	Thu,  4 Sep 2025 06:07:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E11C724677F;
+	Thu,  4 Sep 2025 06:08:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dqGAs6I5"
+	dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b="Oc2xHTLB"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-244102.protonmail.ch (mail-244102.protonmail.ch [109.224.244.102])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07CBB1F61C
-	for <linux-pm@vger.kernel.org>; Thu,  4 Sep 2025 06:07:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F534245032
+	for <linux-pm@vger.kernel.org>; Thu,  4 Sep 2025 06:08:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=109.224.244.102
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756966024; cv=none; b=QtVnr/cNogadmp5RWwOr7qNdHfLNPhYr8EvLiECuwmaR5+XbscsjuQ71OFOj3+P2gPILHfZ0yexwdkaoSRe8GbFIl6964YFhkfvP33raWQUbi30UP5tpHevAPXndoGiSklbCC7Iyt6CkrF9hxaaYXDMnC1WSTk5jfIAeOaiSQ3I=
+	t=1756966135; cv=none; b=YoNc56L2v7GgSkWvcPo1c+oEYnet6Y16fpgtac5AUeiy8kgwHv7GtCJwVXby/veR/A5auV4RQ8umnvozW2ulfAHgTJOa1Wjhszp7x+0kzl7YJFYNvrwK3V/85/yQxfb3TJl1RBeXG20FzbdPQz5UFplKCry+Df6XwVvi/vOczlw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756966024; c=relaxed/simple;
-	bh=8VLiRlbdEDGR6S10bYVDOAAlQaQ7lCfTI6kCXLj6o+4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=YrV3qV3Ou7XT/LS1ObBCYVWFkw0s3aNoPceSRzUBbFHT12fNpoU/4Go565L9UmOf0wutQsNu1wzPu4uXKrhv6DUMZQS/8QyKzqqFidIW7SkCIipc4wspU3kkKVFSmCip8jDCPf1oxnYemPynAHaP2xu4f1pxjkbYuvpGTssMzQA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=dqGAs6I5; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-7723f0924a3so953929b3a.2
-        for <linux-pm@vger.kernel.org>; Wed, 03 Sep 2025 23:07:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1756966022; x=1757570822; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XrH5FhNlqSqaASYKthIH8BEM+L5uCH5xK0PYntSpqAs=;
-        b=dqGAs6I5X04fo0HtDxaq3AE2+PjStBxw/qVqhHFp07aZJXvypqCQOu7wWZ3R5aMUBq
-         lFXHEQzMzq5j6aq7spREJuhXz0wAuxDYg0rUbdhjuunZmmSVkFrzRgSGtfYU5ns8X+vK
-         1WtX/PyeczF4X1otx3mNnrWfJIB50wEYHGxI8PzzbaqRk7Su1ACTNFADJdVdRFfJ4KLi
-         TgsbQO2kuEMzZFmhaYqWZmhmaJq6BR03mRhmy0iCyj8Xgi8+/al3VzGPgfXwijK8dc2d
-         CYIEPPIn8Ydr/hnCbM51ToYltJlOPE3fYq41tgh5RA/uHSlRYtHtDPBaMmipM6+9ZcC4
-         OYzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756966022; x=1757570822;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XrH5FhNlqSqaASYKthIH8BEM+L5uCH5xK0PYntSpqAs=;
-        b=h6pTeXzOJ+nA5rzOLHYCcSSflz7wGkGJ9yqC6Y/8bX/jU4X4SUt3IePV7k+swkP7rq
-         lnejYB909R+yII4GQNc3gGvuMUKL2OlgxVHJbgy5W9M391nVJLumbABsfPD+xmPyw5Eq
-         0mtAJpA/AD4Lcyvxwn14wsznH1pPxXrd8wXY+aYUQaugH5w0i/Ia+SJnrpE13Xpnyyso
-         xJz825s1lkL2k5+85YYjYMIO7dgjAHcWoglYIV/FyGS8BJUGHx1hl75p5a7G7AqgZsNX
-         mL229XOPP0tq1sJpZHgtD61nA04ANW+fU/OdVEaEHbr0dPoQ65MsKYG3GzEJcy1TmAv0
-         8BPg==
-X-Gm-Message-State: AOJu0Yw4D1q4m84PQ3dv7JNQ6E8eo6K+2HsidldO/oPrB2HzE/bboJjs
-	cYFfOQqOUH+w7yt+zLp1w+yMMLiNLrlCcB/TO4KJTCR1USbyV3iFt5h1Tu+CWhIeJveKI2x1Tyt
-	pqG0q
-X-Gm-Gg: ASbGncugyxoMNK5w+uc+3Qn9wRgc4LlV5WmLT5bDNOVf86s7rs/xP0wZ7hUsWPGfUK4
-	R4yL3XTbbUmVYH0SwQlXg+7edELuVsUVmW1oXr104USip1V9p9OogGKRH1OS2Zlr8Y81C/UL/hN
-	rNQmsvE1dhy3okFEqYaLmCPFblB2ZK2bBH6SKLcbryPGm4ZOg9afvQ35G5bvjJcC2gv4AUm4RfR
-	Xnawe2rnqcRxZ/f8+UdIetwR8EBIbRGx6K7U/LWMN9vthiYpvfcOUt2yJUzg4Xf9540t3H7rVSc
-	S1vth9DlqN1CZyslbUYOETqwRjRDCZHm7Dbi3XoW/cg2F8/z/fYX0ducX1rOVGtwujN7XQXPJip
-	I1Yyv9S3jl+wJQtsRfWHE7HIP
-X-Google-Smtp-Source: AGHT+IHnk/l9teAMG9E5B87Jg/EXyeqOB5llncCumUd15rAiQ5fPikP6J8Wqy7iTrp7dKgwZ757QXA==
-X-Received: by 2002:a05:6a20:7348:b0:243:c336:7bb0 with SMTP id adf61e73a8af0-243d6e5d4d7mr24894476637.23.1756966022161;
-        Wed, 03 Sep 2025 23:07:02 -0700 (PDT)
-Received: from localhost ([122.172.87.183])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7725b974350sm10545449b3a.72.2025.09.03.23.07.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Sep 2025 23:07:01 -0700 (PDT)
-Date: Thu, 4 Sep 2025 11:36:59 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Linux PM <linux-pm@vger.kernel.org>
-Subject: [GIT PULL] cpufreq/arm updates for 6.18
-Message-ID: <20250904060659.3sdrvfnhscq6wp6d@vireshk-i7>
+	s=arc-20240116; t=1756966135; c=relaxed/simple;
+	bh=V8teur4SDWqDVTxFOydyor0bfXi/rLRSN4jnQG7/GxI=;
+	h=Date:To:From:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=oQakT8+GoPRHu/bt/l4y7N/4xu2o/AZhWtTGLzlpknAjqzHwHJmbAqhCqS+1x8lCY6T+ek9g8K3HEygX+1Ip/apZqaRFeSBWK4nbYQJf/ThecWwGLz0bcvQ3xXxyx63coOnqkPGygTjK+HHVYVDuL2V+uXpLmcexLy2Kpv5HNsA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=Oc2xHTLB; arc=none smtp.client-ip=109.224.244.102
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
+	s=protonmail; t=1756966109; x=1757225309;
+	bh=V8teur4SDWqDVTxFOydyor0bfXi/rLRSN4jnQG7/GxI=;
+	h=Date:To:From:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector;
+	b=Oc2xHTLBeCZ2MIIXF0j8/3/XUFU1AIqEsqIyrlpaPBXMlEK80+qCzWetxVc9TVg3F
+	 JWWEVD/DIxb659ALWe1qom90YbiCo1XMvSSDgS3hvMEzJ9n4Yh6Yuj0/GJEIXxRrYd
+	 f4GjnUsO4C6YhVFRm3zdWZn/zXGXk3/Hq4I7oN0oT3qKjlv3BlJmpPRmdun2CqAYh4
+	 bQ0ut9iJKekgLRcKJEkJl/scKZD+rae3NnA4LfLmVZ/APgwKATfQWTNjd0rDNicZgJ
+	 K2ygWc4vjNhwNxjqP20QkYzbh63gp8aBET3D9+et03xMH7Opsz5F74KJarx9aYClxZ
+	 0fDNODuINXrfw==
+Date: Thu, 04 Sep 2025 06:08:25 +0000
+To: "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+From: aprilgrimoire <aprilgrimoire@proton.me>
+Subject: Fw: Re: [BUG] MECHREVO Yilong15Pro GM5HG7A: lid switch causing unwanted s2idle wakeups
+Message-ID: <t_XcoJxQhVr8bLjSsy8n4-7hKzBhuOAXpr6hcNA42d8qLOl3sS2oqb1Nnj1ryIEYVuW5tKPVN1FXmZKrMO0aGDVAZTpYYZoXOrPUqzRgRRU=@proton.me>
+In-Reply-To: <vVnKVxELkDdxFLiNbtGhT9X7GA_OV3Wk7q6YB_K4Qz3N8Dfp-MCcZqeobEP8dX-H4kjqKzYqyloahoaxB6ZEp8l9XgkIrD8S27Ertjwq324=@proton.me>
+References: <6ww4uu6Gl4F5n6VY5dl1ufASfKzs4DhMxAN8BuqUpCoqU3PQukVSVSBCl_lKIzkQ-S8kt1acPd58eyolhkWN32lMLFj4ViI0Tdu2jwhnYZ8=@proton.me> <06f0c531-2cb6-4a1a-a716-406b4f5f9676@kernel.org> <MawTZCnf5jVqp47YcxRrH21nl0rN8O78_my4TxiZ3tFoNxuP568eHxnEH5-VIMa6DtNbHdXytnpRgVyay-UydMK5tbYe4-TG8e2BYEky5hc=@proton.me> <7a3a3a35-27d3-4b46-b297-475deda04656@kernel.org> <vVnKVxELkDdxFLiNbtGhT9X7GA_OV3Wk7q6YB_K4Qz3N8Dfp-MCcZqeobEP8dX-H4kjqKzYqyloahoaxB6ZEp8l9XgkIrD8S27Ertjwq324=@proton.me>
+Feedback-ID: 151975985:user:proton
+X-Pm-Message-ID: 89fc801a994497da7fe8a45e7f28e3d4f958d847
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi Rafael,
 
-I will out of office until end of September and so the early pull
-request.
 
-The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
 
-  Linux 6.17-rc1 (2025-08-10 19:41:16 +0300)
 
-are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git tags/cpufreq-arm-updates-6.18
+Sent with Proton Mail secure email.
 
-for you to fetch changes up to 3e681899cc6e6c77eca55dd8c7cc57b27868e8a2:
+------- Forwarded Message -------
+From: aprilgrimoire <aprilgrimoire@proton.me>
+Date: On Thursday, September 4th, 2025 at 2:07 PM
+Subject: Re: [BUG] MECHREVO Yilong15Pro GM5HG7A: lid switch causing unwante=
+d s2idle wakeups
+To: Mario Limonciello <superm1@kernel.org>
 
-  cpufreq: mediatek: avoid redundant conditions (2025-09-04 10:20:44 +0530)
 
-----------------------------------------------------------------
-CPUFreq updates for 6.18
-
-- Minor improvements to Rust Cpumask APIs (Alice Ryhl, Baptiste Lepers,
-  and Shankari Anand).
-
-- Minor cleanups and optimizations to various cpufreq drivers (Akhilesh
-  Patil, BowenYu, Dennis Beier, Liao Yuanhong, Zihuan Zhang, Florian
-  Fainelli, Taniya Das, Md Sadre Alam, and Christian Marangi).
-
-- Enhancements for TI cpufreq driver (Judith Mendez, and Paresh Bhagat).
-
-- Enhancements for mediatek cpufreq driver (Nicolas Frattaroli).
-
-- Remove outdated cpufreq-dt.txt (Frank Li).
-
-- Update MAINTAINERS for virtual-cpufreq maintainer (Saravana Kannan).
-
-----------------------------------------------------------------
-Akhilesh Patil (1):
-      cpufreq: armada-37xx: use max() to calculate target_vm
-
-Alice Ryhl (1):
-      rust: cpumask: rename CpumaskVar::as[_mut]_ref to from_raw[_mut]
-
-Baptiste Lepers (1):
-      rust: cpumask: Mark CpumaskVar as transparent
-
-BowenYu (1):
-      cpufreq: Remove unused parameter in cppc_perf_from_fbctrs()
-
-Christian Marangi (1):
-      cpufreq: airoha: Add support for AN7583 SoC
-
-Dennis Beier (1):
-      cpufreq/longhaul: handle NULL policy in longhaul_exit
-
-Florian Fainelli (1):
-      cpufreq: scmi: Account for malformed DT in scmi_dev_used_by_cpus()
-
-Frank Li (1):
-      dt-bindings: Remove outdated cpufreq-dt.txt
-
-Judith Mendez (3):
-      cpufreq: ti: Support more speed grades on AM62Px SoC
-      cpufreq: ti: Allow all silicon revisions to support OPPs
-      arm64: dts: ti: k3-am62p: Fix supported hardware for 1GHz OPP
-
-Liao Yuanhong (1):
-      cpufreq: mediatek: avoid redundant conditions
-
-Md Sadre Alam (1):
-      cpufreq: qcom-nvmem: Enable cpufreq for ipq5424
-
-Nicolas Frattaroli (5):
-      dt-bindings: cpufreq: Add mediatek,mt8196-cpufreq-hw binding
-      cpufreq: mediatek-hw: Refactor match data into struct
-      cpufreq: mediatek-hw: Separate per-domain and per-instance data
-      cpufreq: mediatek-hw: Add support for MT8196
-      cpufreq: mediatek-hw: don't use error path on NULL fdvfs
-
-Paresh Bhagat (2):
-      cpufreq: dt-platdev: Blacklist ti,am62d2 SoC
-      cpufreq: ti: Add support for AM62D2
-
-Saravana Kannan (1):
-      MAINTAINERS: Add myself as virtual-cpufreq maintainer
-
-Shankari Anand (1):
-      rust: opp: update ARef and AlwaysRefCounted imports from sync::aref
-
-Taniya Das (1):
-      dt-bindings: cpufreq: cpufreq-qcom-hw: Add QCS615 compatible
-
-Zihuan Zhang (5):
-      cpufreq: brcmstb-avs: Use scope-based cleanup helper
-      cpufreq: CPPC: Use scope-based cleanup helper
-      cpufreq: s5pv210: Use scope-based cleanup helper
-      cpufreq: mediatek: Use scope-based cleanup helper
-      cpufreq: tegra186: Use scope-based cleanup helper
-
- Documentation/devicetree/bindings/cpufreq/cpufreq-dt.txt                  |  61 -----------------------------------------
- Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml            |   2 ++
- Documentation/devicetree/bindings/cpufreq/mediatek,mt8196-cpufreq-hw.yaml |  82 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- MAINTAINERS                                                               |   6 +++++
- arch/arm64/boot/dts/ti/k3-am62p5.dtsi                                     |   2 +-
- drivers/cpufreq/airoha-cpufreq.c                                          |   1 +
- drivers/cpufreq/armada-37xx-cpufreq.c                                     |   4 +--
- drivers/cpufreq/brcmstb-avs-cpufreq.c                                     |   4 +--
- drivers/cpufreq/cppc_cpufreq.c                                            |  16 ++++-------
- drivers/cpufreq/cpufreq-dt-platdev.c                                      |   3 +++
- drivers/cpufreq/longhaul.c                                                |   3 +++
- drivers/cpufreq/mediatek-cpufreq-hw.c                                     | 134 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-----------------
- drivers/cpufreq/mediatek-cpufreq.c                                        |  11 ++++----
- drivers/cpufreq/qcom-cpufreq-nvmem.c                                      |   5 ++++
- drivers/cpufreq/s5pv210-cpufreq.c                                         |   4 +--
- drivers/cpufreq/scmi-cpufreq.c                                            |  10 +++++++
- drivers/cpufreq/tegra186-cpufreq.c                                        |   4 +--
- drivers/cpufreq/ti-cpufreq.c                                              |  12 ++++++---
- rust/kernel/cpufreq.rs                                                    |   2 +-
- rust/kernel/cpumask.rs                                                    |   5 ++--
- rust/kernel/opp.rs                                                        |  13 ++++-----
- 21 files changed, 258 insertions(+), 126 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/cpufreq/cpufreq-dt.txt
- create mode 100644 Documentation/devicetree/bindings/cpufreq/mediatek,mt8196-cpufreq-hw.yaml
-
--- 
-viresh
+> > IRQ1 doesn't show up in this report, so this is not a problem with the
+> > keyboard wakeup.
+> >=20
+> > There's a few things that stand out to me.
+> >=20
+> > 1) There are ACPI errors with the PEP _DSM; specificially the screen on
+> > action. This isn't likely the cause of this issue but it's most
+> > definitely a BIOS bug.
+> >=20
+> > ACPI BIOS Error (bug): Could not resolve symbol [\_SB.ACDC.RTAC],
+> > AE_NOT_FOUND (20250404/psargs-332)
+> > ACPI Error: Aborting method \_SB.PEP.DSM due to previous error
+> > (AE_NOT_FOUND) (20250404/psparse-529)
+> > ACPI: \SB.PEP: Failed to transitioned to state screen on
+> >=20
+> > 2) The wakeup is from IRQ 7 (like you said) which is the GPIO controlle=
+r.
+> > PM: Triggering wakeup from IRQ 7
+> > Woke up from IRQ 7 (IR-IO-APIC 7-fasteoi pinctrl_amd)
+> >=20
+> > The GPIO controller wakes up the system when any of the pins that are
+> > marked as wake pins are triggered. In your case this is GPIO 0.
+> > GPIO 0 is active: 0x38157800
+> >=20
+> > According to the SSDT _EVT handler this notifies the _PWRB ACPI object.
+> >=20
+> > Case (Zero)
+> > {
+> > M000 (0x3900)
+> > Notify (\_SB.PWRB, 0x80) // Status Change
+> > }
+> >=20
+> > We can see that notify happened here:
+> > Dispatching Notify on [PWRB] (Device) Value 0x80 (Status Change)
+> >=20
+> > So based on above what it looks like is going on to me is that the lid
+> > is likely indirectly tied to GPIO 0 in this design. It's not clear if
+> > it's a mux, directly connected or if the EC drives that GPIO or what no=
+t.
+> >=20
+> > It's worth noting that we did have a Linux kernel change to turn off
+> > debounce for all GPIOs recently at suspend time [1]. You can see in
+> > your log this message associated with it.
+> >=20
+> > Clearing debounce for GPIO #0 during suspend.
+> >=20
+> > I don't expect it's the cause of your issue, but you could try to rever=
+t
+> > it to confirm.
+> >=20
+> > Instead I think what's going on is that they have their design expectin=
+g
+> > that Windows does a "dark screen wakeup". This is where it exits a
+> > hardware sleep state but doesn't fully wake the system. If no input
+> > activity happens then it goes back to hardware sleep.
+> >=20
+> > This is something that common userspace (systemd on most systems)
+> > doesn't support today.
+> >=20
+> > One option for you is to try to set this GPIO not to be a wake source b=
+y
+> > gpiolib_acpi.ignore_wake=3DAMDI0030:00@0.
+> >=20
+> > If this helps, please also check whether this breaks power button wakeu=
+p
+> > though. If it does we might be trading one wakeup source for another if
+> > they're muxed.
+> >=20
+> > [1]
+> > https://github.com/torvalds/linux/commit/8ff4fb276e2384a87ae7f65f3c28e1=
+e139dbb3fe
+>=20
+>=20
+> Hi, Mario!
+>=20
+> I tested clearing debounce, and it didn't make a difference.
+>=20
+> The gpiolib_acpi.ignore_wake option worked!
+>=20
+> It seemed that IRQ 1 is just a regular device, with wake up settable via =
+udev. Even without the kernel modification, gpiolib_acpi.ignore_wake alone =
+could stop the lid from waking the system up.
+>=20
+> It seems this quirk should not be applied here: The lid triggers two even=
+ts, one from IRQ1 and another from IRQ7. The kernel cmdline option can disa=
+ble the IRQ7 signal from waking the system up, and the IRQ1 event can be di=
+sabled by either
+>=20
+> 1. Enabling the quirk
+> 2. Setting ACTION=3D=3D"add", SUBSYSTEM=3D=3D"input", ATTR{name}=3D=3D"Li=
+d Switch", ATTR{inhibited}=3D"1"
+> in udev
+>=20
+> The problem is, the quirk also stops other on-laptop methods from waking =
+the system up: builtin keyboard, builtin touchpad and power button, none of=
+ those would work with the quirk enabled. With the udev workaround, the lid=
+ event can be disabled, and I can still wake up with the builtin keyboard.
+>=20
+> Thanks!
 
