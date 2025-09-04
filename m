@@ -1,65 +1,47 @@
-Return-Path: <linux-pm+bounces-33877-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33878-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E21EB44525
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Sep 2025 20:14:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A53CBB4455A
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Sep 2025 20:27:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F2FD33A66E6
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Sep 2025 18:14:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 33975A43BBC
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Sep 2025 18:27:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59EEC342C90;
-	Thu,  4 Sep 2025 18:14:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EB353093DE;
+	Thu,  4 Sep 2025 18:27:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Jaw00GqV"
+	dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b="VhHomcl9"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mailbackend.panix.com (mailbackend.panix.com [166.84.1.89])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92351341AB6;
-	Thu,  4 Sep 2025 18:14:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E53D2F8BE6
+	for <linux-pm@vger.kernel.org>; Thu,  4 Sep 2025 18:27:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.84.1.89
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757009660; cv=none; b=Yipl0miklET8xJEJNjmwHom6BvrZJCeZY4W/tpMdYi6xJN/JPEux9AyGuBqpNGNYQEyJh4nA30Bc04UXPgO7XgReroxCK8D8H0AX+9TCAGhn6n05oM/U1pI2SwpKULV7FZ+tItylhYb2UHKa/6j6wHQWt4TzC19GgarQHd4T4fI=
+	t=1757010474; cv=none; b=iwncQfiIDixVzHTHGmFbDqEuNL4D4auG7oQjZ8H7QY1jySc3n5nlQi8bHWELcDB8yTqNZXtpCAWF5vPxOqW9v5ZKcPDTBI+WIdwOJfkdnleKBF3do1PQjwhJg+5h77v01cgs8G4qSFhDfioN4SQhCeGgMcdOcQi+8XlTFY3FcZE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757009660; c=relaxed/simple;
-	bh=snRYZy8sFUcGEZgJH9P6mgJNhGmYsmCzIsOzo2eyGW4=;
+	s=arc-20240116; t=1757010474; c=relaxed/simple;
+	bh=x9EZ/kV0i/zHJDqGm3CQ4ZDC/UWJVf/mcnmIunFj6Kw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=a2vJ1HFSMVfjnV5Q3S1EfvMKOvmPNVjNTlcFJdghqHtpv90zkvCuVYiHgApaY8+yZ5o4P5JBNxX/oblS6Sf41J940ZpOdi1/x/8N8xhhfJ/ZTxb3LpP24l13w/dSzdVpEAMrdACUpMMAjzRxzta9834/9ZWoSBcNoH99kUiF+7w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Jaw00GqV; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757009658; x=1788545658;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=snRYZy8sFUcGEZgJH9P6mgJNhGmYsmCzIsOzo2eyGW4=;
-  b=Jaw00GqVNWfQlgJBQsYhi5N2jGUlLg0p0hbxuHBUiIRPyLlMvnvjRK/V
-   F897XlXnTAh0IGECbRrzjkPNGMgJbH5JqdDTFbvyp3wZieXP5pB4MwV0k
-   Q7aIzW9KY0Rnwb8Cbv/qDoIetRTRr4jij45zSuF+nFN3SSnwhY63iu6BY
-   wfdUAAjQPsEhNXNdGadRohmT9ty1bSDi7dK73HmcqgI2+rHS0dj0YF9+n
-   4rvNm2FHgjc08RtV4HzG9aj1AlDpKEacMKHI0krCSs71BUHBaQtQeB98G
-   25mfyhqaXxmtC+QlY5GcaNZ4GQbWKLc5yy4qyWHCpd8yJ7uIQ3CtwCyU8
-   w==;
-X-CSE-ConnectionGUID: bQP0YyE1T3KLRj1fus8YTw==
-X-CSE-MsgGUID: avdgIM2GRH+ixkTYZGfj6Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11543"; a="76814956"
-X-IronPort-AV: E=Sophos;i="6.18,239,1751266800"; 
-   d="scan'208";a="76814956"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2025 11:14:18 -0700
-X-CSE-ConnectionGUID: uXWQ13oQTYOxPlfW1q2Xow==
-X-CSE-MsgGUID: vt+G3bBGQMSvNLBiSWtcYA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,239,1751266800"; 
-   d="scan'208";a="176300742"
-Received: from cmdeoliv-mobl4.amr.corp.intel.com (HELO [10.125.110.24]) ([10.125.110.24])
-  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2025 11:14:16 -0700
-Message-ID: <14d94e89-8342-4bd7-9c53-a3b46e22caa7@intel.com>
-Date: Thu, 4 Sep 2025 11:14:15 -0700
+	 In-Reply-To:Content-Type; b=G0SSPiKN7+VorNSdVc/ZXrzNih/QE74sVymCUToKE2Jxclx19GoLHogqOP0mnF3L2h7CGXpSidDltkl9+/CNHLwNLn05WREW4k4c/z2CPQsymfO8PDJlTgpnP6RXUMHsM30INbgiuA4SKcuUnJ7GqVDBnzP6JRQ22ujTCgccjX0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com; spf=pass smtp.mailfrom=panix.com; dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b=VhHomcl9; arc=none smtp.client-ip=166.84.1.89
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=panix.com
+Received: from [192.168.8.212] (kenny-tx.gotdns.com [162.196.229.233])
+	by mailbackend.panix.com (Postfix) with ESMTPSA id 4cHnym23d9zSnV;
+	Thu,  4 Sep 2025 14:27:44 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=panix.com; s=panix;
+	t=1757010464; bh=x9EZ/kV0i/zHJDqGm3CQ4ZDC/UWJVf/mcnmIunFj6Kw=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=VhHomcl9AciyMEfmUeuo4RPZGi18yMfKN1zIw9rRBMINLGhmJmj5kCsr1BbyHs1F8
+	 FsUpTRWVwLQQI/Wod2WiG4H9EXRKqho1lYfYN56UZWxeT59JWhZNg4rbCRCMygiZZ5
+	 iepIr90MNOEVS1Nt0miJ/jxuqMacAyPGtZuyZugo=
+Message-ID: <0233464f-af55-4e98-b925-cc83506058fc@panix.com>
+Date: Thu, 4 Sep 2025 11:27:42 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -67,114 +49,60 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 5/6] dax/hmem: Reintroduce Soft Reserved ranges back into
- the iomem tree
-To: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
- linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org,
- nvdimm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
- linux-pm@vger.kernel.org
-Cc: Davidlohr Bueso <dave@stgolabs.net>,
- Jonathan Cameron <jonathan.cameron@huawei.com>,
- Alison Schofield <alison.schofield@intel.com>,
- Vishal Verma <vishal.l.verma@intel.com>, Ira Weiny <ira.weiny@intel.com>,
- Dan Williams <dan.j.williams@intel.com>, Matthew Wilcox
- <willy@infradead.org>, Jan Kara <jack@suse.cz>,
- "Rafael J . Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>,
- Pavel Machek <pavel@kernel.org>, Li Ming <ming.li@zohomail.com>,
- Jeff Johnson <jeff.johnson@oss.qualcomm.com>,
- Ying Huang <huang.ying.caritas@gmail.com>,
- Yao Xingtao <yaoxt.fnst@fujitsu.com>, Peter Zijlstra <peterz@infradead.org>,
- Greg KH <gregkh@linuxfoundation.org>,
- Nathan Fontenot <nathan.fontenot@amd.com>,
- Terry Bowman <terry.bowman@amd.com>, Robert Richter <rrichter@amd.com>,
- Benjamin Cheatham <benjamin.cheatham@amd.com>,
- PradeepVineshReddy Kodamati <PradeepVineshReddy.Kodamati@amd.com>,
- Zhijian Li <lizhijian@fujitsu.com>
-References: <20250822034202.26896-1-Smita.KoralahalliChannabasappa@amd.com>
- <20250822034202.26896-6-Smita.KoralahalliChannabasappa@amd.com>
+Subject: Re: I think there's an issue with e3f1164fc9e ("PM: EM: Support late
+ CPUs booting and capacity adjustment") if there's "holes" in your CPU
+ topology
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Christian Loehle <christian.loehle@arm.com>, lukasz.luba@arm.com,
+ "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+ Dietmar Eggemann <dietmar.eggemann@arm.com>, Me <kenny@panix.com>
+References: <40212796-734c-4140-8a85-854f72b8144d@panix.com>
+ <27809ad9-2a35-475d-bef8-47a06e81d647@arm.com>
+ <3d87a8c3-ecb9-4ee5-917c-f944915ee684@panix.com>
+ <d23e3fe9-a8b8-49fd-8198-8868b41ee57f@arm.com>
+ <03d67820-1e21-4361-b539-10b3ad346155@panix.com>
+ <fbf349ec-f200-4eff-9a5b-6674a1eef52a@arm.com>
+ <d9e8f92f-08d1-4006-accd-7a2b65b0bc6c@panix.com>
+ <CAJZ5v0jmMbWjFZUZe56ZYzjsHYE1=fSb+5MWNLMN_K4ZCJPu+Q@mail.gmail.com>
+ <e08a1424-6873-4c61-b97b-94c4e9a9077c@panix.com>
+ <CAJZ5v0iw0SZAZd9HvwZdT=kqPq0AUJp_8LjWA6byOX3K4BVjrg@mail.gmail.com>
+ <CAJZ5v0j8PGqHYN-XR=pkBCyvhN9kwUDupeU6MJTJoCbiJv8F7Q@mail.gmail.com>
 Content-Language: en-US
-From: Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <20250822034202.26896-6-Smita.KoralahalliChannabasappa@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+From: Kenneth Crudup <kenny@panix.com>
+In-Reply-To: <CAJZ5v0j8PGqHYN-XR=pkBCyvhN9kwUDupeU6MJTJoCbiJv8F7Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
 
+I'll test this today and get back to you.
 
-On 8/21/25 8:42 PM, Smita Koralahalli wrote:
-> Reworked from a patch by Alison Schofield <alison.schofield@intel.com>
-> 
-> Reintroduce Soft Reserved range into the iomem_resource tree for dax_hmem
-> to consume.
-> 
-> This restores visibility in /proc/iomem for ranges actively in use, while
-> avoiding the early-boot conflicts that occurred when Soft Reserved was
-> published into iomem before CXL window and region discovery.
-> 
-> Link: https://lore.kernel.org/linux-cxl/29312c0765224ae76862d59a17748c8188fb95f1.1692638817.git.alison.schofield@intel.com/
-> Co-developed-by: Alison Schofield <alison.schofield@intel.com>
-> Signed-off-by: Alison Schofield <alison.schofield@intel.com>
-> Signed-off-by: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+-K
 
-Reviewed-by: Dave Jiang <dave.jiang@intel.com>
-> ---
->  drivers/dax/hmem/hmem.c | 38 ++++++++++++++++++++++++++++++++++++++
->  1 file changed, 38 insertions(+)
+On 9/4/25 10:40, Rafael J. Wysocki wrote:
+> On Wed, Sep 3, 2025 at 8:53 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+>>
+>> On Wed, Sep 3, 2025 at 8:43 PM Kenneth Crudup <kenny@panix.com> wrote:
+>>>
+>>>
+>>> Is there a way to distinguish between "offline cores" and
+>>> "'non-'existent" cores?
+>>>
+>>> This way we could just skip the ones that "aren't" there, right?
+>>
+>> I'm not quite sure about the underlying use case TBH.
+>>
+>> The em_check_capacity_update() call may not be necessary on x86 at
+>> all, but I need to double check.
 > 
-> diff --git a/drivers/dax/hmem/hmem.c b/drivers/dax/hmem/hmem.c
-> index 90978518e5f4..24a6e7e3d916 100644
-> --- a/drivers/dax/hmem/hmem.c
-> +++ b/drivers/dax/hmem/hmem.c
-> @@ -93,6 +93,40 @@ static void process_defer_work(struct work_struct *_work)
->  	walk_hmem_resources(&pdev->dev, handle_deferred_cxl);
->  }
->  
-> +static void remove_soft_reserved(void *data)
-> +{
-> +	struct resource *r = data;
-> +
-> +	remove_resource(r);
-> +	kfree(r);
-> +}
-> +
-> +static int add_soft_reserve_into_iomem(struct device *host,
-> +				       const struct resource *res)
-> +{
-> +	struct resource *soft = kzalloc(sizeof(*soft), GFP_KERNEL);
-> +	int rc;
-> +
-> +	if (!soft)
-> +		return -ENOMEM;
-> +
-> +	*soft = DEFINE_RES_NAMED_DESC(res->start, (res->end - res->start + 1),
-> +				      "Soft Reserved", IORESOURCE_MEM,
-> +				      IORES_DESC_SOFT_RESERVED);
-> +
-> +	rc = insert_resource(&iomem_resource, soft);
-> +	if (rc) {
-> +		kfree(soft);
-> +		return rc;
-> +	}
-> +
-> +	rc = devm_add_action_or_reset(host, remove_soft_reserved, soft);
-> +	if (rc)
-> +		return rc;
-> +
-> +	return 0;
-> +}
-> +
->  static int hmem_register_device(struct device *host, int target_nid,
->  				const struct resource *res)
->  {
-> @@ -125,6 +159,10 @@ static int hmem_register_device(struct device *host, int target_nid,
->  					    IORES_DESC_SOFT_RESERVED);
->  	if (rc != REGION_INTERSECTS)
->  		return 0;
-> +
-> +	rc = add_soft_reserve_into_iomem(host, res);
-> +	if (rc)
-> +		return rc;
->  #else
->  	rc = region_intersects(res->start, resource_size(res), IORESOURCE_MEM,
->  			       IORES_DESC_SOFT_RESERVED);
+> So AFAICS, this can be addressed by something like the attached patch
+> (the majority of changes in it is just moving kerneldoc comments
+> around and function renaming).
+> 
+> Since intel_pstate handles capacity updates itself, it can do without
+> em_check_capacity_update().
+
+-- 
+Kenneth R. Crudup / Sr. SW Engineer, Scott County Consulting, Orange 
+County CA
 
 
