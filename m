@@ -1,193 +1,255 @@
-Return-Path: <linux-pm+bounces-33851-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33852-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BBEC5B44123
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Sep 2025 17:54:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4044BB4413A
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Sep 2025 17:56:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 593FB1CC157A
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Sep 2025 15:55:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BF2221CC15AB
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Sep 2025 15:56:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2614C27A917;
-	Thu,  4 Sep 2025 15:54:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDD61281378;
+	Thu,  4 Sep 2025 15:55:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NIh3REyG"
+	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="EtUj1aF3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 555802727FD
-	for <linux-pm@vger.kernel.org>; Thu,  4 Sep 2025 15:54:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BECD280335;
+	Thu,  4 Sep 2025 15:55:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757001273; cv=none; b=L4bdhWYOSFeHTq3qTnIdid1yU16yrnfyAet02BIl8H48nbRoj8H4i6evgqYtVvhS0JMUS9xUBIKAdmM0i+JDUrEvvfnWuzYPJ9s8/eDeOwqJMAhNBZ+1NNNOPHuVV5zcd8t9kSELL65gErd7XN4hLqJVeTrLqln+2Aox0Iy8aSg=
+	t=1757001338; cv=none; b=oTra1gq4c9dlTHOj7EIqnKwbpVPTCbnoPReEs3bxK7AtX1CF+xJfc1piHnjSdsejpRI89wNrel11eK3CbIhkyTidGJP9V2ILpuiIBTULHHsGjlulcZbSbae3Y9RZ10CJ2yVmtONUhkp4wMxAgu5tBfqgkgHTEy3LMAkW30OZUm0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757001273; c=relaxed/simple;
-	bh=b9Pk8BqglMnlOjW+2OPEuCtoYaTDFtbC5JpYCv9HD/c=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=Ngtf643NXAPStUBPCtI20nr4kSzEyYgTwdBsDuNP7yKuC16K1AsJQ17d+q/HE6uu7JbGQY0uOriUyYIvWnC2hOsKWnplTvSauws3XxxJlj8zlkSTCMaovZQjXlv5jvK0qpdmJWklTc4RqkV7TXj9FHNAdqjMFeHyindIllaDgJk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NIh3REyG; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757001271; x=1788537271;
-  h=date:from:to:cc:subject:message-id;
-  bh=b9Pk8BqglMnlOjW+2OPEuCtoYaTDFtbC5JpYCv9HD/c=;
-  b=NIh3REyGWIiIFjg8zyc+LSp1GXCtAKByrkZd+Sjng+sr0nc/gOiIn8Zi
-   ARRw8LiKs13NR+3FycbNyCzFa4HiT2UXUcLG77wFbsVgfCHA6s3xwuoxH
-   dKAGsfSTmeIlwwdUm/DfV8j+OGXzIUS3XC0ONfxUM1GVQGdyHm2sYbUpR
-   ZS6eNLCAGHGAlPMjad+ajSbF2Kl9EKPQtho9QG6G6le0m0XPwkhCTaKka
-   jJxhbnRRbn3f1EVtHqSkMtOe92F4+hkdfYYqCfKWdpeEZd7T6/fKBCbnK
-   0W12Hq2XzMMcnHGcuAKQHQAbYqFLVS6RkbsD0kw/JlXtaBjq5ejmRI9sz
-   Q==;
-X-CSE-ConnectionGUID: nPG7vso7QCmxvQhHelyDrw==
-X-CSE-MsgGUID: oGMbjoP1Rmy5GSYkspA60Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11543"; a="59202765"
-X-IronPort-AV: E=Sophos;i="6.18,238,1751266800"; 
-   d="scan'208";a="59202765"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2025 08:54:30 -0700
-X-CSE-ConnectionGUID: JrUJtHlGSeqBNBeuQyKIhg==
-X-CSE-MsgGUID: z4mDeUSjQ0CPhhUGnv20LA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,238,1751266800"; 
-   d="scan'208";a="195580394"
-Received: from lkp-server02.sh.intel.com (HELO 06ba48ef64e9) ([10.239.97.151])
-  by fmviesa002.fm.intel.com with ESMTP; 04 Sep 2025 08:54:29 -0700
-Received: from kbuild by 06ba48ef64e9 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uuCHL-0005SN-1H;
-	Thu, 04 Sep 2025 15:54:06 +0000
-Date: Thu, 04 Sep 2025 23:53:23 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Mario Limonciello (AMD)" <superm1@kernel.org>
-Cc: linux-pm@vger.kernel.org
-Subject: [amd-pstate:bleeding-edge] BUILD SUCCESS
- ba3319e5905710abe495b11a1aaf03ebb51d62e2
-Message-ID: <202509042317.BEiXUeRm-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1757001338; c=relaxed/simple;
+	bh=H2o6l74Q+Wze9cr3QOcR1WhRgm/QpQGaTuJu+mYEEP4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=oLZV7iQLl0Y6FuEJlKXXfK9guCHd+eSQGR/vevRHjN2+Li79+2mlXjWeiL2GENQBIrYgWCDHYMCVx2qWOKp6NZFSwe91bZHRa+13DrT6JNR3LH+ULwehgNiKoUSuFZD4YWtjUkDgwLj01zOX1IkgGkyQp8FcnkdxVMb5Ov9ixIE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=EtUj1aF3; arc=none smtp.client-ip=185.11.138.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
+	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Reply-To;
+	bh=JXBbmbucA/mSoOJjIBHCDzFXAIUYdW9KdILBDaPTQUA=; b=EtUj1aF3Y/qzGo0Tq72hQD09oH
+	DzVGDhUARUe+87Q9iNJaGY+WfyFW+wPP7Vw86mFsl46R7WtcpZfi+xfwsx/G5mFUy0Nj5snEaDbIf
+	VzHWxvqk2Znrt6Tvj8yu4mv/Hr4843JlrZVMneceSDCeCMEfLyDqYxbEYrKqnNwCJr9MPOEJWFV5r
+	MSCyCs4ePLZZ1+CKC5FLSEG+zxJwZlZN/S5RHe7CrniaR2Fd7nyrBSwy2Y5qBUKFQZsyu+o+CsWUj
+	FHjdn1QjzA7w+tSo40o+jnG9TdiKCCbpGxZnwIB3rEZlwrmSeNMJ8OWUajrtI3tXCy5W6bfzVgZ9Y
+	V976g8jQ==;
+Received: from i53875bb9.versanet.de ([83.135.91.185] helo=diego.localnet)
+	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <heiko@sntech.de>)
+	id 1uuCJC-00021d-8E; Thu, 04 Sep 2025 17:55:34 +0200
+From: Heiko =?UTF-8?B?U3TDvGJuZXI=?= <heiko@sntech.de>
+To: Ulf Hansson <ulf.hansson@linaro.org>,
+ Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ kernel@collabora.com, linux-rockchip@lists.infradead.org,
+ Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+ Sebastian Reichel <sebastian.reichel@collabora.com>,
+ Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+Subject: Re: [PATCH] pmdomian: core: don't unset stay_on during sync_state
+Date: Thu, 04 Sep 2025 17:55:33 +0200
+Message-ID: <878503621.0ifERbkFSE@diego>
+In-Reply-To: <117136352.nniJfEyVGO@diego>
+References:
+ <20250902-rk3576-lockup-regression-v1-1-c4a0c9daeb00@collabora.com>
+ <117136352.nniJfEyVGO@diego>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git bleeding-edge
-branch HEAD: ba3319e5905710abe495b11a1aaf03ebb51d62e2  cpufreq/amd-pstate: Fix a regression leading to EPP 0 after resume
+Am Donnerstag, 4. September 2025, 17:49:16 Mitteleurop=C3=A4ische Sommerzei=
+t schrieb Heiko St=C3=BCbner:
+> Hi,
+>=20
+> Am Dienstag, 2. September 2025, 20:23:04 Mitteleurop=C3=A4ische Sommerzei=
+t schrieb Nicolas Frattaroli:
+> > This reverts commit de141a9aa52d6b2fbeb63f98975c2c72276f0878.
+> >=20
+> > On RK3576, the UFS controller's power domain has a quirk that requires
+> > it to stay enabled, infrastricture for which was added in Commit
+> > cd3fa304ba5c ("pmdomain: core: Introduce dev_pm_genpd_rpm_always_on()").
+> >=20
+> > Unfortunately, Commit de141a9aa52d ("pmdomain: core: Leave powered-on
+> > genpds on until sync_state") appears to break this quirk wholesale. The
+> > result is that RK3576 devices with the UFS controller enabled but unused
+> > will freeze once pmdomain shuts off unused domains.
+> >=20
+> > Revert it until a better fix can be found.
+> >=20
+> > Fixes: de141a9aa52d ("pmdomain: core: Leave powered-on genpds on until =
+sync_state")
+> > Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+>=20
+> just an observation independent of the conversation in the other thread.
+> This patch/revert whatever fixes an actual issue for me.
 
-elapsed time: 1504m
+ah and just saw Nicolas' mail from 6 minutes earlier.
 
-configs tested: 100
-configs skipped: 3
+So I guess what saves me here is the rocket driver being built as a
+module, power-domain getting turned off early, rocket probes with
+pd off and then gets its supplies as expected.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
 
-tested configs:
-alpha                             allnoconfig    gcc-15.1.0
-alpha                            allyesconfig    gcc-15.1.0
-arc                               allnoconfig    gcc-15.1.0
-arc                   randconfig-001-20250904    gcc-9.5.0
-arc                   randconfig-002-20250904    gcc-11.5.0
-arm                               allnoconfig    clang-22
-arm                   randconfig-001-20250904    gcc-10.5.0
-arm                   randconfig-002-20250904    gcc-13.4.0
-arm                   randconfig-003-20250904    gcc-8.5.0
-arm                   randconfig-004-20250904    gcc-13.4.0
-arm64                             allnoconfig    gcc-15.1.0
-arm64                 randconfig-001-20250904    gcc-8.5.0
-arm64                 randconfig-002-20250904    gcc-8.5.0
-arm64                 randconfig-003-20250904    clang-22
-arm64                 randconfig-004-20250904    gcc-8.5.0
-csky                              allnoconfig    gcc-15.1.0
-csky                  randconfig-001-20250904    gcc-15.1.0
-csky                  randconfig-002-20250904    gcc-10.5.0
-hexagon                          allmodconfig    clang-17
-hexagon                           allnoconfig    clang-22
-hexagon                          allyesconfig    clang-22
-hexagon               randconfig-001-20250904    clang-22
-hexagon               randconfig-002-20250904    clang-20
-i386        buildonly-randconfig-001-20250903    gcc-13
-i386        buildonly-randconfig-002-20250903    gcc-13
-i386        buildonly-randconfig-003-20250903    clang-20
-i386        buildonly-randconfig-004-20250903    clang-20
-i386        buildonly-randconfig-005-20250903    clang-20
-i386        buildonly-randconfig-006-20250903    clang-20
-loongarch                        allmodconfig    clang-19
-loongarch                         allnoconfig    clang-22
-loongarch             randconfig-001-20250904    gcc-15.1.0
-loongarch             randconfig-002-20250904    clang-22
-m68k                             allmodconfig    gcc-15.1.0
-m68k                              allnoconfig    gcc-15.1.0
-m68k                             allyesconfig    gcc-15.1.0
-microblaze                       allmodconfig    gcc-15.1.0
-microblaze                        allnoconfig    gcc-15.1.0
-microblaze                       allyesconfig    gcc-15.1.0
-microblaze                          defconfig    gcc-15.1.0
-mips                              allnoconfig    gcc-15.1.0
-nios2                             allnoconfig    gcc-11.5.0
-nios2                               defconfig    gcc-11.5.0
-nios2                 randconfig-001-20250904    gcc-11.5.0
-nios2                 randconfig-002-20250904    gcc-11.5.0
-openrisc                          allnoconfig    gcc-15.1.0
-parisc                            allnoconfig    gcc-15.1.0
-parisc                              defconfig    gcc-15.1.0
-parisc                randconfig-001-20250904    gcc-8.5.0
-parisc                randconfig-002-20250904    gcc-11.5.0
-parisc64                            defconfig    gcc-15.1.0
-powerpc                           allnoconfig    gcc-15.1.0
-powerpc               randconfig-001-20250904    clang-19
-powerpc               randconfig-002-20250904    gcc-13.4.0
-powerpc               randconfig-003-20250904    clang-22
-powerpc64             randconfig-001-20250904    gcc-15.1.0
-powerpc64             randconfig-002-20250904    clang-22
-powerpc64             randconfig-003-20250904    gcc-8.5.0
-riscv                             allnoconfig    gcc-15.1.0
-riscv                 randconfig-001-20250904    gcc-8.5.0
-riscv                 randconfig-002-20250904    clang-22
-s390                             allmodconfig    clang-18
-s390                              allnoconfig    clang-22
-s390                             allyesconfig    gcc-15.1.0
-s390                  randconfig-001-20250904    gcc-10.5.0
-s390                  randconfig-002-20250904    gcc-8.5.0
-sh                               allmodconfig    gcc-15.1.0
-sh                                allnoconfig    gcc-15.1.0
-sh                               allyesconfig    gcc-15.1.0
-sh                    randconfig-001-20250904    gcc-12.5.0
-sh                    randconfig-002-20250904    gcc-10.5.0
-sparc                            allmodconfig    gcc-15.1.0
-sparc                             allnoconfig    gcc-15.1.0
-sparc                               defconfig    gcc-15.1.0
-sparc                 randconfig-001-20250904    gcc-11.5.0
-sparc                 randconfig-002-20250904    gcc-15.1.0
-sparc64               randconfig-001-20250904    gcc-12.5.0
-sparc64               randconfig-002-20250904    clang-20
-um                               allmodconfig    clang-19
-um                                allnoconfig    clang-22
-um                               allyesconfig    gcc-13
-um                    randconfig-001-20250904    gcc-13
-um                    randconfig-002-20250904    clang-22
-x86_64                            allnoconfig    clang-20
-x86_64      buildonly-randconfig-001-20250903    clang-20
-x86_64      buildonly-randconfig-001-20250904    gcc-12
-x86_64      buildonly-randconfig-002-20250903    clang-20
-x86_64      buildonly-randconfig-002-20250904    clang-20
-x86_64      buildonly-randconfig-003-20250903    clang-20
-x86_64      buildonly-randconfig-003-20250904    gcc-13
-x86_64      buildonly-randconfig-004-20250903    gcc-13
-x86_64      buildonly-randconfig-004-20250904    gcc-13
-x86_64      buildonly-randconfig-005-20250903    clang-20
-x86_64      buildonly-randconfig-005-20250904    gcc-13
-x86_64      buildonly-randconfig-006-20250903    gcc-13
-x86_64      buildonly-randconfig-006-20250904    clang-20
-x86_64                              defconfig    gcc-11
-xtensa                            allnoconfig    gcc-15.1.0
-xtensa                randconfig-001-20250904    gcc-10.5.0
-xtensa                randconfig-002-20250904    gcc-11.5.0
+Heiko
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+
+>=20
+> On the rk3588 the NPU power-domains are a hirarchy of
+>=20
+> PD_NPU
+> 	PD_NPUTOP (core0)
+> 		PD_NPU1 (core1)
+> 		PD_NPU2 (core2)
+>=20
+> and the PD_NPU does need a supply regulator.
+>=20
+> (1) With "just" v6.17-rc + the rocket driver probing and then idling, I g=
+et:
+>=20
+> # cat /sys/kernel/debug/regulator/regulator_summary
+>  regulator                      use open bypass  opmode voltage current  =
+   min     max
+> -------------------------------------------------------------------------=
+=2D-------------
+>  dc_12v                           4    3      0 unknown 12000mV     0mA 1=
+2000mV 12000mV=20
+> [...]
+>     vcc5v0_baseboard              2    1      0 unknown  5000mV     0mA  =
+5000mV  5000mV=20
+>        vcc5v0_sys                18   18      0 unknown  5000mV     0mA  =
+5000mV  5000mV=20
+> [...]
+>           vdd_npu_s0              0    0      0  normal   800mV     0mA  =
+ 550mV   950mV=20
+>           vcc_1v2_s3              2    1      0 unknown  1200mV     0mA  =
+1200mV  1200mV=20
+>              fe1b0000.ethernet-phy   1                                 0m=
+A     0mV     0mV
+>           vdd_gpu_s0              1    2      0  normal   675mV     0mA  =
+ 550mV   950mV=20
+>              fb000000.gpu-mali    1                                 0mA  =
+ 675mV   850mV
+>              fd8d8000.power-management:power-controller-domain   0       =
+                          0mA     0mV     0mV
+> [...]
+>=20
+> #  cat /sys/kernel/debug/pm_genpd/pm_genpd_summary=20
+> domain                          status          children        performan=
+ce
+>     /device                         runtime status                  manag=
+ed by
+> -------------------------------------------------------------------------=
+=2D----
+> [...]
+> gpu                             off-0                           0
+>     fb000000.gpu                    suspended                   0        =
+   SW
+> npu2                            off-0                           0
+>     fdada000.iommu                  suspended                   0        =
+   SW
+>     fdad0000.npu                    suspended                   0        =
+   SW
+> npu1                            off-0                           0
+>     fdaca000.iommu                  suspended                   0        =
+   SW
+>     fdac0000.npu                    suspended                   0        =
+   SW
+> nputop                          off-0                           0
+>                                                 npu1, npu2
+>     fdab9000.iommu                  suspended                   0        =
+   SW
+>     fdab0000.npu                    suspended                   0        =
+   SW
+> npu                             on                              0
+>                                                 nputop
+>=20
+> Observe that the PD_NPU never got its regulator and the domain also
+> never actually gets turned off. While the domains directly attached to
+> the cores get turned off.
+>=20
+>=20
+> (2) with Nicolas's patch applied on top, I get the correct behaviour,
+> that was also happening with v6.16 before
+>=20
+> # cat /sys/kernel/debug/regulator/regulator_summary
+>  regulator                      use open bypass  opmode voltage current  =
+   min     max
+> -------------------------------------------------------------------------=
+=2D-------------
+>  dc_12v                           4    3      0 unknown 12000mV     0mA 1=
+2000mV 12000mV=20
+> [...]
+>     vcc5v0_baseboard              2    1      0 unknown  5000mV     0mA  =
+5000mV  5000mV=20
+>        vcc5v0_sys                18   18      0 unknown  5000mV     0mA  =
+5000mV  5000mV=20
+> [...]
+>           vdd_npu_s0              0    1      0  normal   800mV     0mA  =
+ 550mV   950mV=20
+>              fd8d8000.power-management:power-controller-domain   0       =
+                          0mA     0mV     0mV
+>           vdd_cpu_big1_s0         2    1      0  normal  1000mV     0mA  =
+ 550mV  1050mV=20
+>              cpu6-cpu             1                                 0mA  =
+1000mV  1000mV
+>           vdd_gpu_s0              1    2      0  normal   675mV     0mA  =
+ 550mV   950mV=20
+>              fb000000.gpu-mali    1                                 0mA  =
+ 675mV   850mV
+>              fd8d8000.power-management:power-controller-domain   0       =
+                          0mA     0mV     0mV
+> [...]
+>=20
+> # cat /sys/kernel/debug/pm_genpd/pm_genpd_summary=20
+> domain                          status          children        performan=
+ce
+>     /device                         runtime status                  manag=
+ed by
+> -------------------------------------------------------------------------=
+=2D----
+> [...]
+> gpu                             off-0                           0
+>     fb000000.gpu                    suspended                   0        =
+   SW
+> npu2                            off-0                           0
+>     fdada000.iommu                  suspended                   0        =
+   SW
+>     fdad0000.npu                    suspended                   0        =
+   SW
+> npu1                            off-0                           0
+>     fdaca000.iommu                  suspended                   0        =
+   SW
+>     fdac0000.npu                    suspended                   0        =
+   SW
+> nputop                          off-0                           0
+>                                                 npu1, npu2
+>     fdab9000.iommu                  suspended                   0        =
+   SW
+>     fdab0000.npu                    suspended                   0        =
+   SW
+> npu                             off-0                           0
+>                                                 nputop
+>=20
+> The regulator handling is working correctly and also the parent PD_NPU
+> domain gets turned off when its children are off.
+>=20
+>=20
+> Heiko
+>=20
+
+
+
+
 
