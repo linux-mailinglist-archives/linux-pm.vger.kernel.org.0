@@ -1,129 +1,148 @@
-Return-Path: <linux-pm+bounces-33797-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33798-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A3B9B4323A
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Sep 2025 08:21:48 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 82D01B4328D
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Sep 2025 08:36:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D44B318909D0
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Sep 2025 06:22:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4CB243A7284
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Sep 2025 06:36:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44F9225C818;
-	Thu,  4 Sep 2025 06:21:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C70002750FA;
+	Thu,  4 Sep 2025 06:36:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="sbPJvd8e"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="fv1TVnEl"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA17725A326
-	for <linux-pm@vger.kernel.org>; Thu,  4 Sep 2025 06:21:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BE6A2750E1;
+	Thu,  4 Sep 2025 06:36:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756966904; cv=none; b=iY5cVI3w85My4A3pNNVbdz2Cp6Jh5XhHol35upiKO/ENNVr8+NGIlmi/NAXFO+M3O9AWyYDW++nw2KYnROm05QJvx9fVqlwZosftirYFbuxyeeyJXo8w+MdINPn0dC0KFjf52UJ//EpBQJqrHAEsk9OZqUW25+SgH22MV4UvTXk=
+	t=1756967797; cv=none; b=TtMiHxkf6AMrAE8bDdV4B21axTWqfZZtplv7674fMnMg0RJtro8hrCB8uk7Ba7L9tR0A8uSOyCSxi2mN2oNch7EBIgxX3mGBXOZRInVXlRmmrmtRBUwhwrc4TXD9L7hVYfiFYV9yRbSeckb6bwh8WaL/kcd9TCpW9H6mcxNXbMU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756966904; c=relaxed/simple;
-	bh=dsjFbCPPBcQUN6NyZlDbgqX9JMBy6m992126rerFcqA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=V/nYjB2gHHMR+ZFaYPed+vstnJPAQ2fR1g8O2asPpmSnOUBFbOgff/TgAquPmNYlEifHuLu4tD7/SHlS4orH+8LrDuI/dFmPBT7cKeVEoq3Ae5XzsdZneoj+36pi8X2AeAresbLqUr/QEPC4f8nbrZrwmamPQSWJXZm7FIzhHCM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=sbPJvd8e; arc=none smtp.client-ip=209.85.210.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-7724fe9b24dso523288b3a.2
-        for <linux-pm@vger.kernel.org>; Wed, 03 Sep 2025 23:21:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1756966902; x=1757571702; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-disposition:mime-version
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cVgZ/gNKs42YfhP0pDOFqKNX9bgP5Vvk7tKDnOpJ1lk=;
-        b=sbPJvd8eP/rgdEorQd/UT8U2iQSKjayVAuRnknGlOFBlbn/A4ewYY8zgYg6su0UEh8
-         yK1IJYQDC81EUihlPihvmZMDUgUIHrifbT9zMR6XbK6dKp/IJ8kXe2WLlzNJduY+g6T5
-         y/z1X03qK61QrvQBzefgA6kJS80tz2jrmMMOPFVC06CHJ7PPJNrKerifgi8RLujbuOVb
-         oXnhya30+EIl9QLhuxDEgQbg8nUaVvEosQHWj+k8xzThLmBwk+l6/k/go02nxu3mabQq
-         4HuOENZLu/9B0tA2M7TQ893c75JL4P/nibE8k6r9t1+5WxopCNEC2pOicVtFktJv64yQ
-         6UHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756966902; x=1757571702;
-        h=content-transfer-encoding:content-disposition:mime-version
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cVgZ/gNKs42YfhP0pDOFqKNX9bgP5Vvk7tKDnOpJ1lk=;
-        b=SOts1qYLltPBhNHBPNinejvQGeV4wC3pdx3EglJziC68oqEB29ru44z18LI/ci10fc
-         65gF01mpwcI2f9LCx/+ujc4ptPFYyy/Hbg2Vx0C/nBoSihiPviNrKjLLgeZuGJxJZzFm
-         WqudnkRlGLsAtJRLet/G2nMEZeXR+vzwuk+bvubCqQ8eo9j9VLMYS7uE7P5vdL4AX8Hn
-         5owfz7j5Ofq+btmcgwHWXI5KQdiGWHWGij3pmtRejfaSqW+n2NHOVZXlXl7qJsE6KPmn
-         1ns7toSFyK5tilxHBDBqa+xGSysJEAU8J85oNEbx3WDCUCNo1nlqgX0fN4ARR15uLBfH
-         1wNg==
-X-Gm-Message-State: AOJu0YwOpPaq46pVGmpacXZgSTT3MMIMXlK3PClY/fYkyK4vF857nd2q
-	EjlVOyiLv+H27id8esnQ/6KqQ7rHnMFvbfDErBQqQTH/g5QG0Bs2RSERpI+8fT3Q0oI=
-X-Gm-Gg: ASbGncveG+VLDJsjIMy2/AvJ+2YMFDtLZ58Lo3vRiNf2y7Fz3FFnhvZc9HkPnzxcrss
-	PL3WHmeRfDGKbG8hGSnFFt3Y4iRh8RWrdAwrLu/TIsa8DyLQrbQDVQHlrQFmqDroJCs3awEjjOf
-	c/Y9GZ80j3t6/9pOncqrwzxe6eKg2lkrQR0cTVni+UaLquKERtbSC3kxv+jh2cHP/x0LDvYq/b1
-	mwOXhNjcoowVCMCGP6Dh975fF2hieQqD5xW6L6+Aj3kUEQE/7XQu6CXEglLMRzpOlYqQRR17dxY
-	DhMNXG4nHC427pqsOeoTFiV9BUNqFWeHJcrODArxdYdHEi9Ygd0MgbPwrOAW3Sb20Mhkvr/M5va
-	b0utIEL8dvr5DVF2/N9u/TJWM
-X-Google-Smtp-Source: AGHT+IFLMzri4rEUNbRN96sAyOhp5tYQX/waUPboQ1bFVmORRXdHQnIuWPf3NvQ7st+W4OskDHL2Uw==
-X-Received: by 2002:a05:6a20:430f:b0:243:78a:8272 with SMTP id adf61e73a8af0-243d6f8a600mr27358997637.56.1756966901893;
-        Wed, 03 Sep 2025 23:21:41 -0700 (PDT)
-Received: from localhost ([122.172.87.183])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b4d6cde2f0fsm15384596a12.13.2025.09.03.23.21.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Sep 2025 23:21:41 -0700 (PDT)
-Date: Thu, 4 Sep 2025 11:51:39 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Linux PM <linux-pm@vger.kernel.org>
-Subject: [GIT PULL] OPP updates for 6.18
-Message-ID: <20250904062139.kt5ajtvocp5c3ihl@vireshk-i7>
+	s=arc-20240116; t=1756967797; c=relaxed/simple;
+	bh=DpE82IJAwixADlnMuviaS0MAb4mJckPRZS0EepdPCVc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hLzbmMqUyI4+7u37WxC6pIFBFpVBF6SmMm0Vxvt+9GKregLg09Hyhv6bfRs2PHgX3gpcf84u4H82UC0OnawhBpnviVqln7QqxbRHU7LB5gZyDD86s9unvDAXsepx+VqpHiJk2x96En1D30MZd0sjJbquvzpzEshluElUFQgRGew=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=fv1TVnEl; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+	Content-ID:Content-Description:In-Reply-To:References;
+	bh=KxCfRS8/dIzqWWtc3wSYSDwPd9eAd3omN4Lj9Pa5Xi0=; b=fv1TVnEl4thmm1prMBC18GOGOt
+	//dRAfezKTviuTLVDljsrJaNhm5m95oYJWrjAq59bj7C+SOpIg7AGQ8LOEcoy+EJ29rQQaOnElXNI
+	sCw5UeRV3x107+1UOO0ca0zaCT6qJ6OpvBdyvQ6r8Pt8vlZuo2jmJ+1OvhMhq16CW1tbUI21IWT5Y
+	rIPdYnF3qUBmDHjRuJDbAcJs1kfWEbxRBT8Chgcfjha2FkQ76rFZTRQGXZMvX2dj0wqIcqqZbMvgS
+	hr/1DwJz+rys8ZqveEeYED/qv/BL0CDESRGO4DX4cTYNcGuu521CoP9UpecqwNAOZ0beea/ytW9LN
+	FAkWJopg==;
+Received: from [50.53.25.54] (helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1uu3aC-00000009ZVY-3nK0;
+	Thu, 04 Sep 2025 06:36:32 +0000
+From: Randy Dunlap <rdunlap@infradead.org>
+To: linux-kernel@vger.kernel.org
+Cc: Randy Dunlap <rdunlap@infradead.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Pavel Machek <pavel@ucw.cz>,
+	Len Brown <len.brown@intel.com>,
+	linux-pm@vger.kernel.org,
+	Jonathan Corbet <corbet@lwn.net>,
+	linux-doc@vger.kernel.org,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+Subject: [PATCH v4] kernel.h: add comments for system_states
+Date: Wed,  3 Sep 2025 23:36:31 -0700
+Message-ID: <20250904063631.2364995-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 
-Hi Rafael,
+Provide some basic comments about the system_states and what they imply.
+Also convert the comments to kernel-doc format.
 
-I will out of office until end of September and so the early pull
-request.
+However, kernel-doc does not support kernel-doc notation on extern
+struct/union/typedef/enum/etc. So I made this a DOC: block so that
+I can use (insert) it into a Documentation (.rst) file and have it
+look decent.
 
-The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Acked-by: Rafael J. Wysocki <rafael@kernel.org> # v1
+---
+v2: add Rafael's Ack.
+v3: add Andrew
+v4: add DOC: so that this DOC: block can be used in Documentation/
+    add Greg K-H
+    add Jon Corbet, Mauro Chehab, & linux-doc
 
-  Linux 6.17-rc1 (2025-08-10 19:41:16 +0300)
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Pavel Machek <pavel@ucw.cz>
+Cc: Len Brown <len.brown@intel.com>
+Cc: linux-pm@vger.kernel.org
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: linux-doc@vger.kernel.org
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+---
+ Documentation/driver-api/pm/devices.rst |    8 ++++++++
+ include/linux/kernel.h                  |   18 ++++++++++++++++--
+ 2 files changed, 24 insertions(+), 2 deletions(-)
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git tags/opp-updates-6.18
-
-for you to fetch changes up to 05db35963eef7a55f1782190185cb8ddb9d923b7:
-
-  OPP: Add support to find OPP for a set of keys (2025-08-26 10:40:58 +0530)
-
-----------------------------------------------------------------
-OPP updates for 6.18
-
-- Add support to find OPP for a set of keys (Krishna Chaitanya Chundru).
-
-- Minor optimization to OPP Rust implementation (Onur Özkan).
-
-----------------------------------------------------------------
-Krishna Chaitanya Chundru (1):
-      OPP: Add support to find OPP for a set of keys
-
-Onur Özkan (1):
-      rust: opp: use to_result for error handling
-
- drivers/opp/core.c     | 99 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- include/linux/pm_opp.h | 30 ++++++++++++++++++++++++++++++
- rust/kernel/opp.rs     | 16 +++++-----------
- 3 files changed, 134 insertions(+), 11 deletions(-)
-
--- 
-viresh
+--- linux-next-20250819.orig/include/linux/kernel.h
++++ linux-next-20250819/include/linux/kernel.h
+@@ -164,8 +164,22 @@ extern int root_mountflags;
+ 
+ extern bool early_boot_irqs_disabled;
+ 
+-/*
+- * Values used for system_state. Ordering of the states must not be changed
++/**
++ * DOC: General system_states available for drivers
++ *
++ * enum system_states - Values used for system_state.
++ *
++ * * @SYSTEM_BOOTING:	%0, no init needed
++ * * @SYSTEM_SCHEDULING:	system is ready for scheduling; OK to use RCU
++ * * @SYSTEM_FREEING_INITMEM: system is freeing all of initmem; almost running
++ * * @SYSTEM_RUNNING:	system is up and running
++ * * @SYSTEM_HALT:	system entered clean system halt state
++ * * @SYSTEM_POWER_OFF:	system entered shutdown/clean power off state
++ * * @SYSTEM_RESTART:	system entered emergency power off or normal restart
++ * * @SYSTEM_SUSPEND:	system entered suspend or hibernate state
++ *
++ * Note:
++ * Ordering of the states must not be changed
+  * as code checks for <, <=, >, >= STATE.
+  */
+ extern enum system_states {
+--- linux-next-20250819.orig/Documentation/driver-api/pm/devices.rst
++++ linux-next-20250819/Documentation/driver-api/pm/devices.rst
+@@ -241,6 +241,14 @@ before reactivating its class I/O queues
+ More power-aware drivers might prepare the devices for triggering system wakeup
+ events.
+ 
++System states available for drivers
++-----------------------------------
++
++These system states are available for drivers to help them determine how to
++handle state transitions.
++
++.. kernel-doc:: include/linux/kernel.h
++   :doc: General system_states available for drivers
+ 
+ Call Sequence Guarantees
+ ------------------------
 
