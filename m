@@ -1,198 +1,96 @@
-Return-Path: <linux-pm+bounces-34017-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34018-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8616BB462F7
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 20:59:18 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF658B462F8
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 20:59:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7A5ACB616CA
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 18:57:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6C5F93ACB18
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 18:59:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94798315D53;
-	Fri,  5 Sep 2025 18:58:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DB78315D30;
+	Fri,  5 Sep 2025 18:59:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ej9bT+AH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jdKJkRnk"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6873B315D50;
-	Fri,  5 Sep 2025 18:58:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F28F4315D22;
+	Fri,  5 Sep 2025 18:59:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757098724; cv=none; b=mj+/x/vIWmL1lisCqPftOXdvP/w129ClEo56apNKd9/KbSp89PN6mVhCajB0yl5OIjqiaYUa7tH3qY1Ba7olWbK4PEmmOXIl64lGJoKkrqqilDMoptDiK+l0YjKEHaYbmLvR+B0RNuKYEIEaKV4bwmq0cWDxB5IHDF//mF3Iy7s=
+	t=1757098780; cv=none; b=USyXOK3K6H2K1JHc8eHxYPe5npBjIiHBbb+XXbkacn0IEQVMeQHgYfY+ecLQHptHPxnajc4QxdtDstdt9pLiBAAVsuNvj/SgHCMSHma0o+XcOfnf1hxNb5DkM3ugmw4cRd7Dzve+t9GjVTspFUodOa6E1O0Y5s+C4g18n57QA9I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757098724; c=relaxed/simple;
-	bh=rU8H7yVzYunD4DNT9+hMVGaDzLXU5ASEdQBXlxFPCos=;
+	s=arc-20240116; t=1757098780; c=relaxed/simple;
+	bh=lFK6x9Jn+RDIo8hk6YvE4XAAa/pvvhUQnFYDz1Cs4OU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CVtAn/KB60f4qg/RR4na8JLKi1vLBIrTTE2f3ayMEFXRmy87FN0OIeh1rVLC15o4U0l3ZqnNl1VFqDbTHMth6q1cYup5LUA6s4vnYsFbvqxs/nIDGjbLVn3kd+RypeiY7eRkHm/BmhveRRcuVx8r/V5QQkNAf4Ny92ch1J8uuxQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ej9bT+AH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4839C4CEF8;
-	Fri,  5 Sep 2025 18:58:43 +0000 (UTC)
+	 To:Cc:Content-Type; b=Sbt2ogh75aJqZJ8JQkJecT0yVLAYAGwu3g+m9EF9ZEAcbr7XudVACJaAE1+7xa6xRkd5PgefuKWOE2lJQlHQ22KBLV66emYrRs6DTM7V9JhoA7zw1MIhdGZNqw+OlbFl9c01FTDYGU50+IP3RY4wbuoeohWfJY8pT+6G3CpuPZg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jdKJkRnk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BA77C4CEF9;
+	Fri,  5 Sep 2025 18:59:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757098723;
-	bh=rU8H7yVzYunD4DNT9+hMVGaDzLXU5ASEdQBXlxFPCos=;
+	s=k20201202; t=1757098779;
+	bh=lFK6x9Jn+RDIo8hk6YvE4XAAa/pvvhUQnFYDz1Cs4OU=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Ej9bT+AHaViilxZtpDyZHbQ8gop9t4alea0N9e8r5ufJYtbsaoMBBti2/Y0u2G63X
-	 WzggPxIawGlanVyEI+RdHIGI3g2r91s4uH1HM7Wo9LVEAka9HI5taNmXLor14cAbHT
-	 HfGQiiRz+j6gnotpyQ9tPn7KQa+cEisfmnHU1Ym/WmzJY8X6UPBOFWhptFXBsUZegW
-	 W7lV1zrouxNVyo0P7wzDFuMSgY6hWbXzdWYK1bAT6cCEbfQmerscnI9AGQDnGxyti9
-	 7ysZ4/r8AGBykIJf0CbnOFdFfQ4m4giIRXb5B0dQr++jYY/RL3LlVoy39ElJIe/v7g
-	 4zdQQXNG4qU4A==
-Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-61f60e50f74so499611eaf.2;
-        Fri, 05 Sep 2025 11:58:43 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVxEI8lqLpJvnPy88e8twhuAOyIA5vLGA79pcxUJELx5avy8Qq/CsniZ8XQO6tZMYFTU1O0MbocmRM=@vger.kernel.org, AJvYcCWDnhEiZOaG1fS5uVqxkKlY3zOR+Sbc4/GPi8+KrORih0XJsFKyC5geTmCtPVvAywA6lRVHNqUP1AfBNuc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyaw1RwVlfsQDuJr4ItZPhbsuE7ECIHhhlwIlXnrppZkndFH/nM
-	nvne1gk3irxrQvKVf8yn3FY6u3aenJE/s5XxQ5OcM3B8Ni9vdNfcbdCCvfYKBQzHX4g2wq3IHgy
-	1sHEReu2HjTRFCzrQgJVlOsXEFYUjGao=
-X-Google-Smtp-Source: AGHT+IFMSDOOQD8LeOtfW8lG4VvNmodsWThkPD8e8eHfEMXjWk9YZcSuwKltimR8bqgLLyz3/Zd49QfPbkUFeUuVb1g=
-X-Received: by 2002:a05:6820:1620:b0:61e:76d7:f1ea with SMTP id
- 006d021491bc7-61e76d7f81emr4739925eaf.3.1757098723249; Fri, 05 Sep 2025
- 11:58:43 -0700 (PDT)
+	b=jdKJkRnkbnHJMRkli9lQG33dV3/fQZAgS7QO930nFXG9dfIEJl+9LcMyEeaGLUjfC
+	 5DlEDt2L/BkjL01kTRckA43nFg6Ozo0Ba1Jq5z0xTNFS2tFNJL520VaOUJfVYIURTr
+	 A1hWIHpw8jvsithOHfIUXZ89u71XleSvDorTXwbRd7jdewESlLbICbOifqQgxUf2Or
+	 xeUv3UCj4ji3aeTitKVVdMCf+tegG/754T45cYjbbOEkgXYi4PCDS+tsqzEZCu7kN5
+	 LaNFboJehUpGW4mBEGNzrjvea79VDEIrSMrsSDnwshdf8TI+Z1tRhDEl3IUI81uqTL
+	 AOY5WVf+cLujg==
+Received: by mail-oo1-f43.google.com with SMTP id 006d021491bc7-61e45cdfafeso539800eaf.1;
+        Fri, 05 Sep 2025 11:59:39 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUIkXYOlElniRfa5hQxr7w3cjN5yBpce1+6O/hy9zL/2cK3WPwWV+YK6XETyDtanNH/opei+WarTCcchi0=@vger.kernel.org, AJvYcCVP1HF8lga5EfF2i2ngk+eeY4cZcm/eousZ/KPL6/BspH+LOlD18x5b9Yq2vjDy1Yg4F4LIe5NTi4w=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwJ2Udw739IHoi36L3mZics7MjHpQFIP9C+Vy27Ui/BoOJxfJ5m
+	yk/V1JWK4ZfNkkvA/mIm2kGTzAFEGc29wMCizBBQmyYjAJfPWlBOqM6VpszOt5Txh4GLVi1vZpj
+	d1Wfz3fGsb8X7E0RWwd4TQZJrpFzx/TM=
+X-Google-Smtp-Source: AGHT+IGBZn5bdUbUxZQ9R/VAE48egjxy7wtN2aJCa+dJNcBVRD8YKhEC7iDOHIvCcjhDlPCkYpcfxNDZIk8H+vZ1QR4=
+X-Received: by 2002:a05:6808:2f18:b0:438:2629:2fca with SMTP id
+ 5614622812f47-4382629499fmr6067333b6e.10.1757098778854; Fri, 05 Sep 2025
+ 11:59:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250904000608.260817-1-srinivas.pandruvada@linux.intel.com>
-In-Reply-To: <20250904000608.260817-1-srinivas.pandruvada@linux.intel.com>
+References: <20250902114545.651661-1-rongqianfeng@vivo.com>
+ <20250902114545.651661-4-rongqianfeng@vivo.com> <20250903041328.qgxv5eoajd6yg6jv@vireshk-i7>
+In-Reply-To: <20250903041328.qgxv5eoajd6yg6jv@vireshk-i7>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 5 Sep 2025 20:58:32 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0gRkQyZxfsoFOYmvHX3NQz1mwer0gK1NB9gKfwO2TKgGQ@mail.gmail.com>
-X-Gm-Features: Ac12FXx8t7CXiL1Lb6ThcDqHZP8IcWR_AgIJc_BTgvHG7NL_xTYxabKE6KZfIxM
-Message-ID: <CAJZ5v0gRkQyZxfsoFOYmvHX3NQz1mwer0gK1NB9gKfwO2TKgGQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] cpufreq: intel_pstate: Remove EPB related changes
-To: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc: rafael@kernel.org, viresh.kumar@linaro.org, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
+Date: Fri, 5 Sep 2025 20:59:28 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0jsV1ZOdLa1=PTvrjzoJ9iVUE9fF6oWZbNcGwB+djNvQg@mail.gmail.com>
+X-Gm-Features: Ac12FXxs1ss8vivAI2PLfbdSuyFs5Lh1DN8xxMUIsH-ok7cqJQI8Q188vzJPvQ8
+Message-ID: <CAJZ5v0jsV1ZOdLa1=PTvrjzoJ9iVUE9fF6oWZbNcGwB+djNvQg@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] cpufreq: speedstep-lib: Use int type to store
+ negative error codes
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: Qianfeng Rong <rongqianfeng@vivo.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	"open list:CPU FREQUENCY SCALING FRAMEWORK" <linux-pm@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Sep 4, 2025 at 2:06=E2=80=AFAM Srinivas Pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
+On Wed, Sep 3, 2025 at 6:13=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.or=
+g> wrote:
 >
-> The intel_pstate driver does not enable HWP mode when CPUID.06H:EAX[10]
-> is not set, indicating that EPP (Energy Performance Preference) is not
-> supported by the hardware.
+> On 02-09-25, 19:45, Qianfeng Rong wrote:
+> > Change the return type of the speedstep_get_freqs() function from unsig=
+ned
+> > int to int because it may return negative error codes.  For the same
+> > reason, change the 'ret' variables to int type as well.
+> >
+> > No effect on runtime.
+> >
+> > Signed-off-by: Qianfeng Rong <rongqianfeng@vivo.com>
+> > ---
+> >  drivers/cpufreq/speedstep-lib.c | 12 ++++++------
+> >  drivers/cpufreq/speedstep-lib.h | 10 +++++-----
+> >  2 files changed, 11 insertions(+), 11 deletions(-)
 >
-> When EPP is unavailable, the system falls back to using EPB (Energy
-> Performance Bias) if the feature is supported. However, since the
-> intel_pstate driver will not enable HWP in this scenario, any EPB-related
-> code becomes unreachable and irrelevant. Remove the EPB handling code
-> paths simplifying the driver logic and reducing code size.
->
-> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> ---
->  drivers/cpufreq/intel_pstate.c | 49 +++-------------------------------
->  1 file changed, 4 insertions(+), 45 deletions(-)
->
-> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstat=
-e.c
-> index f366d35c5840..c28454b16723 100644
-> --- a/drivers/cpufreq/intel_pstate.c
-> +++ b/drivers/cpufreq/intel_pstate.c
-> @@ -620,24 +620,9 @@ static int min_perf_pct_min(void)
->                 (cpu->pstate.min_pstate * 100 / turbo_pstate) : 0;
->  }
->
-> -static s16 intel_pstate_get_epb(struct cpudata *cpu_data)
-> -{
-> -       u64 epb;
-> -       int ret;
-> -
-> -       if (!boot_cpu_has(X86_FEATURE_EPB))
-> -               return -ENXIO;
-> -
-> -       ret =3D rdmsrq_on_cpu(cpu_data->cpu, MSR_IA32_ENERGY_PERF_BIAS, &=
-epb);
-> -       if (ret)
-> -               return (s16)ret;
-> -
-> -       return (s16)(epb & 0x0f);
-> -}
-> -
->  static s16 intel_pstate_get_epp(struct cpudata *cpu_data, u64 hwp_req_da=
-ta)
->  {
-> -       s16 epp;
-> +       s16 epp =3D -EOPNOTSUPP;
->
->         if (boot_cpu_has(X86_FEATURE_HWP_EPP)) {
->                 /*
-> @@ -651,34 +636,13 @@ static s16 intel_pstate_get_epp(struct cpudata *cpu=
-_data, u64 hwp_req_data)
->                                 return epp;
->                 }
->                 epp =3D (hwp_req_data >> 24) & 0xff;
-> -       } else {
-> -               /* When there is no EPP present, HWP uses EPB settings */
-> -               epp =3D intel_pstate_get_epb(cpu_data);
->         }
->
->         return epp;
->  }
->
-> -static int intel_pstate_set_epb(int cpu, s16 pref)
-> -{
-> -       u64 epb;
-> -       int ret;
-> -
-> -       if (!boot_cpu_has(X86_FEATURE_EPB))
-> -               return -ENXIO;
-> -
-> -       ret =3D rdmsrq_on_cpu(cpu, MSR_IA32_ENERGY_PERF_BIAS, &epb);
-> -       if (ret)
-> -               return ret;
-> -
-> -       epb =3D (epb & ~0x0f) | pref;
-> -       wrmsrq_on_cpu(cpu, MSR_IA32_ENERGY_PERF_BIAS, epb);
-> -
-> -       return 0;
-> -}
-> -
->  /*
-> - * EPP/EPB display strings corresponding to EPP index in the
-> + * EPP display strings corresponding to EPP index in the
->   * energy_perf_strings[]
->   *     index           String
->   *-------------------------------------
-> @@ -782,7 +746,7 @@ static int intel_pstate_set_energy_pref_index(struct =
-cpudata *cpu_data,
->                                               u32 raw_epp)
->  {
->         int epp =3D -EINVAL;
-> -       int ret;
-> +       int ret =3D -EOPNOTSUPP;
->
->         if (!pref_index)
->                 epp =3D cpu_data->epp_default;
-> @@ -802,10 +766,6 @@ static int intel_pstate_set_energy_pref_index(struct=
- cpudata *cpu_data,
->                         return -EBUSY;
->
->                 ret =3D intel_pstate_set_epp(cpu_data, epp);
-> -       } else {
-> -               if (epp =3D=3D -EINVAL)
-> -                       epp =3D (pref_index - 1) << 2;
-> -               ret =3D intel_pstate_set_epb(cpu_data->cpu, epp);
->         }
->
->         return ret;
-> @@ -1337,9 +1297,8 @@ static void intel_pstate_hwp_set(unsigned int cpu)
->         if (boot_cpu_has(X86_FEATURE_HWP_EPP)) {
->                 value &=3D ~GENMASK_ULL(31, 24);
->                 value |=3D (u64)epp << 24;
-> -       } else {
-> -               intel_pstate_set_epb(cpu, epp);
->         }
-> +
->  skip_epp:
->         WRITE_ONCE(cpu_data->hwp_req_cached, value);
->         wrmsrq_on_cpu(cpu, MSR_HWP_REQUEST, value);
-> --
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
 Applied as 6.18 material, thanks!
 
