@@ -1,455 +1,434 @@
-Return-Path: <linux-pm+bounces-34003-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34004-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1DE55B46027
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 19:31:32 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5AB8EB4604D
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 19:37:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6F1E716BD89
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 17:31:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 08BC318921AB
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 17:38:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC6C331327F;
-	Fri,  5 Sep 2025 17:31:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 858FA352FD1;
+	Fri,  5 Sep 2025 17:37:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="X1NeQo74"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pu+HYx4j"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FAB130B535;
-	Fri,  5 Sep 2025 17:31:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D4C7345743;
+	Fri,  5 Sep 2025 17:37:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757093479; cv=none; b=qM9ge1xhfKECYDZGuyX+Ac6rwvKLX3erfboWKeXPxdUQ972Sq0mxbyzNhbP+p+dyQB/4ggWMiFCzAbRRTfaRSYbnHfTd1uHAWqfm+aL+Yrd0f1UQcCp+ShNYsLHcA2L3PXUDtBuuspdhVJ49nKsBqOqK38veEsKkX2auOKQNy5U=
+	t=1757093870; cv=none; b=Og/SKJm00SBYcJK44SuoeFC1cUuOIV9KCuXMyHL72lwiykDIcXQyx39tHcy3OWOD54catGIASBdAtWIY4/qj6gO6XJdmFIEqGUhSFLEzAnjq5oACpMf6U2DZ2MmhXbQWXBQF+5B5/t2qW3S5ymqOLwVNvwgUdvbh/SIkjNoPOL0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757093479; c=relaxed/simple;
-	bh=h80fMGqLICxrNDHhzBgbW0Npk/eAfFOAliGe9t5BTv0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=s6O1Ymj0xboZkeycGU+0CCOpBPTwUdcpElGnByhNoVVkrOqnwSvaz4E28Xe73spfimnsUMtYyXSgnuhgx0N5b6S9NGIxg54ZbrpZzSUaN7oCI7Nkai88g81JQKAcz3JRL32ZNewz11a7AY1FWudiNGaI4Tqoa//iALmTfD6+PDI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=X1NeQo74; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757093478; x=1788629478;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=h80fMGqLICxrNDHhzBgbW0Npk/eAfFOAliGe9t5BTv0=;
-  b=X1NeQo74LI384Cwa/fnd6eZZ3FUPimG+5Dysk/o3YhqkQoe5G2pv7s8I
-   7zuP7QtaG5jbRqYGBiGZm6ygiGttUcpipeSoR/AA+//q9+9eCUqh+vl6p
-   qkcnCLJJ3tamYLjwmAgrQ1OMMLYOncRYHVo89X7kzizkewG6xKDsvM8ue
-   5OGy/lS+L221RHiA7KQiAOCgzpk039iI9ejtHS5oJ/adRPxQLPnSknzZr
-   1D1WtgVyjte1cD+ZeYrzgY9OxQCYIkrtOlgFT/5O3lRF0qqZ1GR9iZrTw
-   tm0U5Tx//Zmv5yIjB+W+PIUk+QA7LazAYnffZ+P0cf8t/0K+TVWa5L+h7
-   Q==;
-X-CSE-ConnectionGUID: poJdgOzuQVGgpW6cWSNnsw==
-X-CSE-MsgGUID: f1nhqVRpSde5k3va5LYE0g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11544"; a="63089987"
-X-IronPort-AV: E=Sophos;i="6.18,241,1751266800"; 
-   d="scan'208";a="63089987"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2025 10:31:17 -0700
-X-CSE-ConnectionGUID: GzbmdZJWQ16Q+VGxutyK5g==
-X-CSE-MsgGUID: DKhYdlAAQtmEv4ixuxSUew==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,241,1751266800"; 
-   d="scan'208";a="171779900"
-Received: from xpardee-mobl.amr.corp.intel.com (HELO [10.246.154.149]) ([10.246.154.149])
-  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2025 10:31:16 -0700
-Message-ID: <f920bd2e-9020-4b1c-85bb-63b8d61cfde8@linux.intel.com>
-Date: Fri, 5 Sep 2025 10:31:15 -0700
+	s=arc-20240116; t=1757093870; c=relaxed/simple;
+	bh=x6IIS6wHflZ7IWG0oUKT031UepYbt38TsRpu2nZoZcA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Ae0RBZWIR/I/HqJsX8JQZdcdsbC55/SmFGbIUgoRrqmWS/C8/AHdHCx/7LJ+1ou3KvsbcZQywy6CeEj8A6Hp3qcX9Woh0IhJy7+fcW+WhA3sv3tmkRvcW6uV+5cSoL7PRmObpjtzpw5/uya3aw0BMWVIJAVzLeDoK03aBA3pZHw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pu+HYx4j; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4270C4CEFB;
+	Fri,  5 Sep 2025 17:37:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757093869;
+	bh=x6IIS6wHflZ7IWG0oUKT031UepYbt38TsRpu2nZoZcA=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=pu+HYx4jymn4unNUiDUjbmCGcZrTp8XRWzvpssXb+IBP2zHB+XAcvUDX9xP7RqjRl
+	 rF0HYtHC0Yf1uIckGQBc2Nd7NBxYgWhpVUYt37U4AENutiKquu79FcMbYQVu+QPpPQ
+	 rtpYy7XsoBYUexFJxBAkhxonOjH5JPXxcFGErHMmZpByC28rMDG9BsHmKoSac9I/Eq
+	 r9uXh2M4VyaBZSuUl+BNuTJzA1Vg4YnCKPVFhV3AajdyIP41BMBrvjdmcZNzRWcpSu
+	 3YB63uhsJ4l5UHc8QFDRyyAUm6bUyeKSIBMBbLWlzZrrY+CHL0m9LAITEaL+yjvfz0
+	 IHBuSuW+hWd0A==
+Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-61ff9c5a0c6so601144eaf.0;
+        Fri, 05 Sep 2025 10:37:49 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWqLhVvzNEmtgyymNPcVFyys1HUbHik1XRNp36j3Br9LutL0fSuPEQeJfbpEJRV8411abOsBn7G8dw=@vger.kernel.org, AJvYcCXalMWSuc3ipeQCQPpLASm/UTJL9I0FyarW+3x+3uylKFnO1CBV1B16778MlYY7FvkSCeSTukausmYx0JY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywnn877KjGGi5lruCnofCxlxPZnySscvQjI6W/5HS0fhuPewz75
+	qHpzYFRyKlSvQZS8Ju/yf6voaJUjMTumS7lsCjQNINJ3bCAXD6MIXo+rA7/9Xivzt64CARWrO6u
+	SfTzo6Znlvrf02c/CGw+viB+iCuR90AE=
+X-Google-Smtp-Source: AGHT+IFxB02usVeB3J1htLOk4C0d72Yo0VpFL3Y324JwLT3q0u+OPeMZMRyvVOVtMDORpghLBv4DsafJihG60sryfxU=
+X-Received: by 2002:a05:6820:1b96:b0:61e:154c:5b01 with SMTP id
+ 006d021491bc7-61e3374776emr15322036eaf.6.1757093869019; Fri, 05 Sep 2025
+ 10:37:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 4/6] platform/x86:intel/pmc: Show substate requirement
- for S0ix blockers
-To: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc: irenic.rajneesh@gmail.com, david.e.box@linux.intel.com,
- Hans de Goede <hdegoede@redhat.com>, platform-driver-x86@vger.kernel.org,
- LKML <linux-kernel@vger.kernel.org>, linux-pm@vger.kernel.org
-References: <20250815224611.2460255-1-xi.pardee@linux.intel.com>
- <20250815224611.2460255-5-xi.pardee@linux.intel.com>
- <cd1b9ca5-27be-bcc1-6aa6-65d7196022e7@linux.intel.com>
-Content-Language: en-US
-From: Xi Pardee <xi.pardee@linux.intel.com>
-In-Reply-To: <cd1b9ca5-27be-bcc1-6aa6-65d7196022e7@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20250829003319.2785282-1-briannorris@chromium.org>
+In-Reply-To: <20250829003319.2785282-1-briannorris@chromium.org>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Fri, 5 Sep 2025 19:37:38 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0gGKsR0bVayyTXy1W9FLwVfG1S+gseH7jPKtggzZFNpfA@mail.gmail.com>
+X-Gm-Features: Ac12FXxCo1cGKz7rVH9hIlnZysOzUz34OtnVdpQF90W5Tc8T67jQkMoHjMgve_g
+Message-ID: <CAJZ5v0gGKsR0bVayyTXy1W9FLwVfG1S+gseH7jPKtggzZFNpfA@mail.gmail.com>
+Subject: Re: [PATCH 1/3] PM: runtime: Add basic kunit tests for API contracts
+To: Brian Norris <briannorris@chromium.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>, 
+	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>, kunit-dev@googlegroups.com, 
+	Len Brown <lenb@kernel.org>, Sakari Ailus <sakari.ailus@linux.intel.com>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Ilpo,
-
-Thanks for the review.
-
-On 8/28/2025 6:06 AM, Ilpo Järvinen wrote:
-> On Fri, 15 Aug 2025, Xi Pardee wrote:
+On Fri, Aug 29, 2025 at 2:33=E2=80=AFAM Brian Norris <briannorris@chromium.=
+org> wrote:
 >
->> Add support to read and show S0ix blocker substate requirements.
->> Starting from Panther Lake, substate requirement data is provided
->> based on S0ix blockers instead of all low power mode requirements.
->> For platforms that support this new feature, add support to display
->> substate requirements based on S0ix blockers.
->>
->> Change the "substate_requirements" attribute of Intel PMC Core
->> driver to show the substate requirements for each S0ix blocker
->> and the corresponding S0ix blocker value.
->>
->> Signed-off-by: Xi Pardee <xi.pardee@linux.intel.com>
->> ---
->>   drivers/platform/x86/intel/pmc/arl.c  |   4 +
->>   drivers/platform/x86/intel/pmc/core.c | 126 ++++++++++++++++++++++++--
->>   drivers/platform/x86/intel/pmc/core.h |  14 +++
->>   drivers/platform/x86/intel/pmc/lnl.c  |   2 +
->>   drivers/platform/x86/intel/pmc/mtl.c  |   2 +
->>   5 files changed, 138 insertions(+), 10 deletions(-)
->>
->> diff --git a/drivers/platform/x86/intel/pmc/arl.c b/drivers/platform/x86/intel/pmc/arl.c
->> index 9d66d65e75779..17ad87b392abe 100644
->> --- a/drivers/platform/x86/intel/pmc/arl.c
->> +++ b/drivers/platform/x86/intel/pmc/arl.c
->> @@ -725,9 +725,11 @@ struct pmc_dev_info arl_pmc_dev = {
->>   	.dmu_guid = ARL_PMT_DMU_GUID,
->>   	.regmap_list = arl_pmc_info_list,
->>   	.map = &arl_socs_reg_map,
->> +	.sub_req_show = &pmc_core_substate_req_regs_fops,
->>   	.suspend = cnl_suspend,
->>   	.resume = arl_resume,
->>   	.init = arl_core_init,
->> +	.sub_req = pmc_core_pmt_get_lpm_req,
->>   };
->>   
->>   struct pmc_dev_info arl_h_pmc_dev = {
->> @@ -735,7 +737,9 @@ struct pmc_dev_info arl_h_pmc_dev = {
->>   	.dmu_guid = ARL_PMT_DMU_GUID,
->>   	.regmap_list = arl_pmc_info_list,
->>   	.map = &mtl_socm_reg_map,
->> +	.sub_req_show = &pmc_core_substate_req_regs_fops,
->>   	.suspend = cnl_suspend,
->>   	.resume = arl_h_resume,
->>   	.init = arl_h_core_init,
->> +	.sub_req = pmc_core_pmt_get_lpm_req,
->>   };
->> diff --git a/drivers/platform/x86/intel/pmc/core.c b/drivers/platform/x86/intel/pmc/core.c
->> index cbfdcdc50ad21..a0b948a875a5a 100644
->> --- a/drivers/platform/x86/intel/pmc/core.c
->> +++ b/drivers/platform/x86/intel/pmc/core.c
->> @@ -851,6 +851,68 @@ static void pmc_core_substate_req_header_show(struct seq_file *s, int pmc_index,
->>   	}
->>   }
->>   
->> +static int pmc_core_substate_blk_req_show(struct seq_file *s, void *unused)
->> +{
->> +	struct pmc_dev *pmcdev = s->private;
->> +	unsigned int pmc_index;
->> +
->> +	for (pmc_index = 0; pmc_index < ARRAY_SIZE(pmcdev->pmcs); pmc_index++) {
->> +		const struct pmc_bit_map **maps;
->> +		unsigned int arr_size, r_idx;
->> +		u32 offset, counter;
->> +		u32 *lpm_req_regs;
->> +		struct pmc *pmc;
->> +
->> +		pmc = pmcdev->pmcs[pmc_index];
->> +		if (!pmc || !pmc->lpm_req_regs)
->> +			continue;
->> +
->> +		lpm_req_regs = pmc->lpm_req_regs;
->> +		maps = pmc->map->s0ix_blocker_maps;
->> +		offset = pmc->map->s0ix_blocker_offset;
->> +		arr_size = pmc_core_lpm_get_arr_size(maps);
->> +
->> +		/* Display the header */
->> +		pmc_core_substate_req_header_show(s, pmc_index, HEADER_VALUE);
->> +
->> +		for (r_idx = 0; r_idx < arr_size; r_idx++) {
->> +			const struct pmc_bit_map *map;
->> +
->> +			for (map = maps[r_idx]; map->name; map++) {
->> +				int mode;
->> +
->> +				if (!map->blk)
->> +					continue;
->> +
->> +				counter = pmc_core_reg_read(pmc, offset);
->> +				seq_printf(s, "pmc%d: %34s |", pmc_index, map->name);
-> For printing unsigned int, use %u.
-Will change to %u in next version.
+> In exploring the various return codes and failure modes of runtime PM
+> APIs, I found it helpful to verify and codify many of them in unit
+> tests, especially given that even the kerneldoc can be rather complex to
+> reason through, and it also has had subtle errors of its own.
 >
->> +				pmc_for_each_mode(mode, pmcdev) {
->> +					bool required = *lpm_req_regs & BIT(mode);
->> +
->> +					seq_printf(s, " %9s |", required ? "Required" : " ");
->> +				}
->> +				seq_printf(s, " %9d |\n", counter);
-> Use %u for u32.
-Will change to %u in next version.
+> Signed-off-by: Brian Norris <briannorris@chromium.org>
+
+This is nice in general, but I have a couple of questions/comments (see bel=
+ow).
+
+> ---
 >
->> +				offset += map->blk * S0IX_BLK_SIZE;
->> +				lpm_req_regs++;
->> +			}
->> +		}
->> +	}
->> +	return 0;
->> +}
->> +
->> +static int pmc_core_substate_blk_req_open(struct inode *inode, struct file *file)
->> +{
->> +	return single_open(file, pmc_core_substate_blk_req_show, inode->i_private);
->> +}
->> +
->> +const struct file_operations pmc_core_substate_blk_req_fops = {
->> +	.owner		= THIS_MODULE,
->> +	.open		= pmc_core_substate_blk_req_open,
->> +	.read		= seq_read,
->> +	.llseek		= seq_lseek,
->> +	.release	= single_release,
->> +};
->> +
->>   static int pmc_core_substate_req_regs_show(struct seq_file *s, void *unused)
->>   {
->>   	struct pmc_dev *pmcdev = s->private;
->> @@ -941,7 +1003,19 @@ static int pmc_core_substate_req_regs_show(struct seq_file *s, void *unused)
->>   	}
->>   	return 0;
->>   }
->> -DEFINE_SHOW_ATTRIBUTE(pmc_core_substate_req_regs);
->> +
->> +static int pmc_core_substate_req_regs_open(struct inode *inode, struct file *file)
->> +{
->> +	return single_open(file, pmc_core_substate_req_regs_show, inode->i_private);
->> +}
->> +
->> +const struct file_operations pmc_core_substate_req_regs_fops = {
->> +	.owner		= THIS_MODULE,
->> +	.open		= pmc_core_substate_req_regs_open,
->> +	.read		= seq_read,
->> +	.llseek		= seq_lseek,
->> +	.release	= single_release,
->> +};
->>   
->>   static unsigned int pmc_core_get_crystal_freq(void)
->>   {
->> @@ -1274,7 +1348,7 @@ static void pmc_core_dbgfs_unregister(struct pmc_dev *pmcdev)
->>   	debugfs_remove_recursive(pmcdev->dbgfs_dir);
->>   }
->>   
->> -static void pmc_core_dbgfs_register(struct pmc_dev *pmcdev)
->> +static void pmc_core_dbgfs_register(struct pmc_dev *pmcdev, struct pmc_dev_info *pmc_dev_info)
->>   {
->>   	struct pmc *primary_pmc = pmcdev->pmcs[PMC_IDX_MAIN];
->>   	struct dentry *dir;
->> @@ -1341,7 +1415,7 @@ static void pmc_core_dbgfs_register(struct pmc_dev *pmcdev)
->>   	if (primary_pmc->lpm_req_regs) {
->>   		debugfs_create_file("substate_requirements", 0444,
->>   				    pmcdev->dbgfs_dir, pmcdev,
->> -				    &pmc_core_substate_req_regs_fops);
->> +				    pmc_dev_info->sub_req_show);
->>   	}
->>   
->>   	if (primary_pmc->map->pson_residency_offset && pmc_core_is_pson_residency_enabled(pmcdev)) {
->> @@ -1409,8 +1483,7 @@ static u32 pmc_core_find_guid(struct pmc_info *list, const struct pmc_reg_map *m
->>    * +----+---------------------------------------------------------+
->>    *
->>    */
->> -static int pmc_core_pmt_get_lpm_req(struct pmc_dev *pmcdev, struct pmc *pmc,
->> -				    struct telem_endpoint *ep)
->> +int pmc_core_pmt_get_lpm_req(struct pmc_dev *pmcdev, struct pmc *pmc, struct telem_endpoint *ep)
->>   {
->>   	const u8 *lpm_indices;
->>   	int num_maps, mode_offset = 0;
->> @@ -1448,7 +1521,37 @@ static int pmc_core_pmt_get_lpm_req(struct pmc_dev *pmcdev, struct pmc *pmc,
->>   	return ret;
->>   }
->>   
->> -static int pmc_core_get_telem_info(struct pmc_dev *pmcdev, int func)
->> +int pmc_core_pmt_get_blk_sub_req(struct pmc_dev *pmcdev, struct pmc *pmc,
->> +				 struct telem_endpoint *ep)
->> +{
->> +	u32 num_blocker, sample_id;
->> +	unsigned int index;
->> +	u32 *req_offset;
->> +	int ret;
->> +
->> +	num_blocker = pmc->map->num_s0ix_blocker;
->> +	sample_id = pmc->map->blocker_req_offset;
->> +
->> +	pmc->lpm_req_regs = devm_kcalloc(&pmcdev->pdev->dev, num_blocker,
->> +					 sizeof(u32), GFP_KERNEL);
->> +	if (!pmc->lpm_req_regs)
->> +		return -ENOMEM;
->> +
->> +	req_offset = pmc->lpm_req_regs;
->> +	for (index = 0; index < num_blocker; index++) {
->> +		ret = pmt_telem_read32(ep, sample_id, req_offset, 1);
->> +		if (ret) {
->> +			dev_err(&pmcdev->pdev->dev,
->> +				"couldn't read Low Power Mode requirements: %d\n", ret);
->> +			return ret;
->> +		}
->> +		sample_id++;
->> +		req_offset++;
-> These two look superfluous variables as they move in-sync with index and
-> xx + index or xx[index] could be used instead? I can see the pointer one
-> might make things a bit nicer looking, but if you preserve it, it should
-> be incremented inside the for loop's increment, not here.
-
-Will rename sample_id to sample_offset and use sample_offset + index as 
-argument in pmt_telem_read32() call instead.
-
-Will move req_offset++ inside the for loop's increment in next version.
-
->> +	}
->> +	return 0;
->> +}
->> +
->> +static int pmc_core_get_telem_info(struct pmc_dev *pmcdev, struct pmc_dev_info *pmc_dev_info)
->>   {
->>   	struct pci_dev *pcidev __free(pci_dev_put) = NULL;
->>   	struct telem_endpoint *ep;
->> @@ -1456,11 +1559,12 @@ static int pmc_core_get_telem_info(struct pmc_dev *pmcdev, int func)
->>   	u32 guid;
->>   	int ret;
->>   
->> -	pcidev = pci_get_domain_bus_and_slot(0, 0, PCI_DEVFN(20, func));
->> +	pcidev = pci_get_domain_bus_and_slot(0, 0, PCI_DEVFN(20, pmc_dev_info->pci_func));
->>   	if (!pcidev)
->>   		return -ENODEV;
->>   
->>   	for (i = 0; i < ARRAY_SIZE(pmcdev->pmcs); ++i) {
->> +		int (*sub_req)(struct pmc_dev *pmcdev, struct pmc *pmc, struct telem_endpoint *ep);
->>   		struct pmc *pmc;
->>   
->>   		pmc = pmcdev->pmcs[i];
->> @@ -1477,7 +1581,9 @@ static int pmc_core_get_telem_info(struct pmc_dev *pmcdev, int func)
->>   			return -EPROBE_DEFER;
->>   		}
->>   
->> -		ret = pmc_core_pmt_get_lpm_req(pmcdev, pmc, ep);
->> +		sub_req = pmc_dev_info->sub_req;
->> +		ret = sub_req(pmcdev, pmc, ep);
->> +
-> Please don't separate a call and its error handling with empty lines.
+>  drivers/base/Kconfig              |   6 +
+>  drivers/base/power/Makefile       |   1 +
+>  drivers/base/power/runtime-test.c | 259 ++++++++++++++++++++++++++++++
+>  3 files changed, 266 insertions(+)
+>  create mode 100644 drivers/base/power/runtime-test.c
 >
-> Why is the sub_req variable necessary?
-
-The sub_req is not necessary. Will remove it in next version.
-
-Thanks!
-
-Xi
-
+> diff --git a/drivers/base/Kconfig b/drivers/base/Kconfig
+> index 064eb52ff7e2..1786d87b29e2 100644
+> --- a/drivers/base/Kconfig
+> +++ b/drivers/base/Kconfig
+> @@ -167,6 +167,12 @@ config PM_QOS_KUNIT_TEST
+>         depends on KUNIT=3Dy
+>         default KUNIT_ALL_TESTS
 >
->>   		pmt_telem_unregister_endpoint(ep);
->>   		if (ret)
->>   			return ret;
->> @@ -1592,7 +1698,7 @@ int generic_core_init(struct pmc_dev *pmcdev, struct pmc_dev_info *pmc_dev_info)
->>   		pmc_core_punit_pmt_init(pmcdev, pmc_dev_info->dmu_guid);
->>   
->>   	if (ssram) {
->> -		ret = pmc_core_get_telem_info(pmcdev, pmc_dev_info->pci_func);
->> +		ret = pmc_core_get_telem_info(pmcdev, pmc_dev_info);
->>   		if (ret)
->>   			goto unmap_regbase;
->>   	}
->> @@ -1766,7 +1872,7 @@ static int pmc_core_probe(struct platform_device *pdev)
->>   	pmcdev->pmc_xram_read_bit = pmc_core_check_read_lock_bit(primary_pmc);
->>   	pmc_core_do_dmi_quirks(primary_pmc);
->>   
->> -	pmc_core_dbgfs_register(pmcdev);
->> +	pmc_core_dbgfs_register(pmcdev, pmc_dev_info);
->>   	pm_report_max_hw_sleep(FIELD_MAX(SLP_S0_RES_COUNTER_MASK) *
->>   			       pmc_core_adjust_slp_s0_step(primary_pmc, 1));
->>   
->> diff --git a/drivers/platform/x86/intel/pmc/core.h b/drivers/platform/x86/intel/pmc/core.h
->> index 4a94a4ee031e6..bfe8fba808063 100644
->> --- a/drivers/platform/x86/intel/pmc/core.h
->> +++ b/drivers/platform/x86/intel/pmc/core.h
->> @@ -344,6 +344,8 @@ struct pmc_bit_map {
->>    * @pm_read_disable_bit: Bit index to read PMC_READ_DISABLE
->>    * @slps0_dbg_offset:	PWRMBASE offset to SLP_S0_DEBUG_REG*
->>    * @s0ix_blocker_offset PWRMBASE offset to S0ix blocker counter
->> + * @num_s0ix_blocker:	Number of S0ix blockers
->> + * @blocker_req_offset:	Telemetry offset to S0ix blocker low power mode substate requirement table
->>    *
->>    * Each PCH has unique set of register offsets and bit indexes. This structure
->>    * captures them to have a common implementation.
->> @@ -369,6 +371,8 @@ struct pmc_reg_map {
->>   	const u32 ltr_ignore_max;
->>   	const u32 pm_vric1_offset;
->>   	const u32 s0ix_blocker_offset;
->> +	const u32 num_s0ix_blocker;
->> +	const u32 blocker_req_offset;
->>   	/* Low Power Mode registers */
->>   	const int lpm_num_maps;
->>   	const int lpm_num_modes;
->> @@ -474,18 +478,22 @@ enum pmc_index {
->>    *			SSRAM support.
->>    * @map:		Pointer to a pmc_reg_map struct that contains platform
->>    *			specific attributes of the primary PMC
->> + * @sub_req_show:	File operations to show substate requirements
->>    * @suspend:		Function to perform platform specific suspend
->>    * @resume:		Function to perform platform specific resume
->>    * @init:		Function to perform platform specific init action
->> + * @sub_req:		Function to achieve low power mode substate requirements
->>    */
->>   struct pmc_dev_info {
->>   	u8 pci_func;
->>   	u32 dmu_guid;
->>   	struct pmc_info *regmap_list;
->>   	const struct pmc_reg_map *map;
->> +	const struct file_operations *sub_req_show;
->>   	void (*suspend)(struct pmc_dev *pmcdev);
->>   	int (*resume)(struct pmc_dev *pmcdev);
->>   	int (*init)(struct pmc_dev *pmcdev, struct pmc_dev_info *pmc_dev_info);
->> +	int (*sub_req)(struct pmc_dev *pmcdev, struct pmc *pmc, struct telem_endpoint *ep);
->>   };
->>   
->>   extern const struct pmc_bit_map msr_map[];
->> @@ -531,6 +539,12 @@ extern struct pmc_dev_info ptl_pmc_dev;
->>   
->>   void cnl_suspend(struct pmc_dev *pmcdev);
->>   int cnl_resume(struct pmc_dev *pmcdev);
->> +int pmc_core_pmt_get_lpm_req(struct pmc_dev *pmcdev, struct pmc *pmc, struct telem_endpoint *ep);
->> +int pmc_core_pmt_get_blk_sub_req(struct pmc_dev *pmcdev, struct pmc *pmc,
->> +				 struct telem_endpoint *ep);
->> +
->> +extern const struct file_operations pmc_core_substate_req_regs_fops;
->> +extern const struct file_operations pmc_core_substate_blk_req_fops;
->>   
->>   #define pmc_for_each_mode(mode, pmcdev)						\
->>   	for (unsigned int __i = 0, __cond;					\
->> diff --git a/drivers/platform/x86/intel/pmc/lnl.c b/drivers/platform/x86/intel/pmc/lnl.c
->> index e08a77c778c2c..6fa027e7071f4 100644
->> --- a/drivers/platform/x86/intel/pmc/lnl.c
->> +++ b/drivers/platform/x86/intel/pmc/lnl.c
->> @@ -574,7 +574,9 @@ struct pmc_dev_info lnl_pmc_dev = {
->>   	.pci_func = 2,
->>   	.regmap_list = lnl_pmc_info_list,
->>   	.map = &lnl_socm_reg_map,
->> +	.sub_req_show = &pmc_core_substate_req_regs_fops,
->>   	.suspend = cnl_suspend,
->>   	.resume = lnl_resume,
->>   	.init = lnl_core_init,
->> +	.sub_req = pmc_core_pmt_get_lpm_req,
->>   };
->> diff --git a/drivers/platform/x86/intel/pmc/mtl.c b/drivers/platform/x86/intel/pmc/mtl.c
->> index faa13a7ee688f..0b87e10f864e6 100644
->> --- a/drivers/platform/x86/intel/pmc/mtl.c
->> +++ b/drivers/platform/x86/intel/pmc/mtl.c
->> @@ -997,7 +997,9 @@ struct pmc_dev_info mtl_pmc_dev = {
->>   	.dmu_guid = MTL_PMT_DMU_GUID,
->>   	.regmap_list = mtl_pmc_info_list,
->>   	.map = &mtl_socm_reg_map,
->> +	.sub_req_show = &pmc_core_substate_req_regs_fops,
->>   	.suspend = cnl_suspend,
->>   	.resume = mtl_resume,
->>   	.init = mtl_core_init,
->> +	.sub_req = pmc_core_pmt_get_lpm_req,
->>   };
->>
+> +config PM_RUNTIME_KUNIT_TEST
+> +       tristate "KUnit Tests for runtime PM" if !KUNIT_ALL_TESTS
+> +       depends on KUNIT
+> +       depends on PM
+> +       default KUNIT_ALL_TESTS
+> +
+>  config HMEM_REPORTING
+>         bool
+>         default n
+> diff --git a/drivers/base/power/Makefile b/drivers/base/power/Makefile
+> index 01f11629d241..2989e42d0161 100644
+> --- a/drivers/base/power/Makefile
+> +++ b/drivers/base/power/Makefile
+> @@ -4,5 +4,6 @@ obj-$(CONFIG_PM_SLEEP)  +=3D main.o wakeup.o wakeup_stats=
+.o
+>  obj-$(CONFIG_PM_TRACE_RTC)     +=3D trace.o
+>  obj-$(CONFIG_HAVE_CLK) +=3D clock_ops.o
+>  obj-$(CONFIG_PM_QOS_KUNIT_TEST) +=3D qos-test.o
+> +obj-$(CONFIG_PM_RUNTIME_KUNIT_TEST) +=3D runtime-test.o
+>
+>  ccflags-$(CONFIG_DEBUG_DRIVER) :=3D -DDEBUG
+> diff --git a/drivers/base/power/runtime-test.c b/drivers/base/power/runti=
+me-test.c
+> new file mode 100644
+> index 000000000000..263c28d5fc50
+> --- /dev/null
+> +++ b/drivers/base/power/runtime-test.c
+> @@ -0,0 +1,259 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright 2025 Google, Inc.
+> + */
+> +
+> +#include <linux/cleanup.h>
+> +#include <linux/pm_runtime.h>
+> +#include <kunit/device.h>
+> +#include <kunit/test.h>
+> +
+> +#define DEVICE_NAME "pm_runtime_test_device"
+> +
+> +static void pm_runtime_depth_test(struct kunit *test)
+> +{
+> +       struct device *dev =3D kunit_device_register(test, DEVICE_NAME);
+> +
+> +       KUNIT_ASSERT_PTR_NE(test, NULL, dev);
+> +
+> +       pm_runtime_enable(dev);
+> +
+> +       KUNIT_EXPECT_TRUE(test, pm_runtime_suspended(dev));
+> +       KUNIT_EXPECT_EQ(test, 0, pm_runtime_get_sync(dev));
+> +       KUNIT_EXPECT_TRUE(test, pm_runtime_active(dev));
+> +       KUNIT_EXPECT_EQ(test, 1, pm_runtime_get_sync(dev)); /* "already a=
+ctive" */
+> +       KUNIT_EXPECT_EQ(test, 0, pm_runtime_put_sync(dev));
+> +       KUNIT_EXPECT_EQ(test, 0, pm_runtime_put_sync(dev));
+> +       KUNIT_EXPECT_TRUE(test, pm_runtime_suspended(dev));
+> +}
+> +
+> +/* Test pm_runtime_put() and friends when already suspended. */
+> +static void pm_runtime_already_suspended_test(struct kunit *test)
+> +{
+> +       struct device *dev =3D kunit_device_register(test, DEVICE_NAME);
+> +
+> +       KUNIT_ASSERT_PTR_NE(test, NULL, dev);
+> +
+> +       pm_runtime_enable(dev);
+> +
+> +       KUNIT_EXPECT_TRUE(test, pm_runtime_suspended(dev));
+> +       pm_runtime_get_noresume(dev);
+> +
+> +       /* Flush, in case the above (non-sync) triggered any work. */
+> +       KUNIT_EXPECT_EQ(test, 0, pm_runtime_barrier(dev)); /* no wakeup n=
+eeded */
+
+Why do you run pm_runtime_barrier(dev) here?  It is guaranteed that no
+requests are pending at this point.
+
+> +
+> +       KUNIT_EXPECT_TRUE(test, pm_runtime_suspended(dev));
+
+This has already been tested above.
+
+> +       /*
+> +        * We never actually left RPM_SUSPENDED, but rpm_idle() still tre=
+ats
+> +        * this as -EAGAIN / "runtime PM status change ongoing".
+
+No, this means "Conditions are not suitable, but may change".
+
+> +        */
+> +       KUNIT_EXPECT_EQ(test, -EAGAIN, pm_runtime_put(dev));
+> +
+> +       pm_runtime_get_noresume(dev);
+> +       KUNIT_EXPECT_TRUE(test, pm_runtime_suspended(dev));
+
+This has been tested already twice and why would it change?
+
+> +       KUNIT_EXPECT_EQ(test, -EAGAIN, pm_runtime_put_sync(dev));
+> +
+> +       KUNIT_EXPECT_EQ(test, 1, pm_runtime_suspend(dev));
+> +       KUNIT_EXPECT_EQ(test, 1, pm_runtime_autosuspend(dev));
+> +       KUNIT_EXPECT_EQ(test, 1, pm_request_autosuspend(dev));
+> +
+> +       pm_runtime_get_noresume(dev);
+> +       KUNIT_EXPECT_TRUE(test, pm_runtime_suspended(dev));
+
+There's no way by which it could change above.
+
+> +       KUNIT_EXPECT_EQ(test, 1, pm_runtime_put_sync_autosuspend(dev));
+> +
+> +       pm_runtime_get_noresume(dev);
+> +       KUNIT_EXPECT_TRUE(test, pm_runtime_suspended(dev));
+> +       KUNIT_EXPECT_EQ(test, 1, pm_runtime_put_autosuspend(dev));
+> +
+> +       /* Grab 2 refcounts */
+> +       pm_runtime_get_noresume(dev);
+> +       pm_runtime_get_noresume(dev);
+> +       KUNIT_EXPECT_TRUE(test, pm_runtime_suspended(dev));
+> +       /* The first put() sees usage_count 1 */
+> +       KUNIT_EXPECT_EQ(test, 0, pm_runtime_put_autosuspend(dev));
+> +       /* The second put() sees usage_count 0 but tells us "already susp=
+ended". */
+> +       KUNIT_EXPECT_EQ(test, 1, pm_runtime_put_autosuspend(dev));
+> +
+> +       KUNIT_EXPECT_TRUE(test, pm_runtime_suspended(dev));
+
+Again, there is no way this can change in the whole test.
+
+> +}
+> +
+> +static void pm_runtime_idle_test(struct kunit *test)
+> +{
+> +       struct device *dev =3D kunit_device_register(test, DEVICE_NAME);
+> +
+> +       KUNIT_ASSERT_PTR_NE(test, NULL, dev);
+> +
+> +       pm_runtime_enable(dev);
+> +
+> +       KUNIT_EXPECT_TRUE(test, pm_runtime_suspended(dev));
+> +       KUNIT_EXPECT_EQ(test, 0, pm_runtime_get_sync(dev));
+> +       KUNIT_EXPECT_TRUE(test, pm_runtime_active(dev));
+> +       KUNIT_EXPECT_EQ(test, -EAGAIN, pm_runtime_idle(dev));
+> +       KUNIT_EXPECT_TRUE(test, pm_runtime_active(dev));
+> +       pm_runtime_put_noidle(dev);
+> +       KUNIT_EXPECT_TRUE(test, pm_runtime_active(dev));
+> +       KUNIT_EXPECT_EQ(test, 0, pm_runtime_idle(dev));
+> +       KUNIT_EXPECT_TRUE(test, pm_runtime_suspended(dev));
+> +       KUNIT_EXPECT_EQ(test, -EAGAIN, pm_runtime_idle(dev));
+> +       KUNIT_EXPECT_EQ(test, -EAGAIN, pm_request_idle(dev));
+> +}
+> +
+> +static void pm_runtime_disabled_test(struct kunit *test)
+> +{
+> +       struct device *dev =3D kunit_device_register(test, DEVICE_NAME);
+> +
+> +       KUNIT_ASSERT_PTR_NE(test, NULL, dev);
+> +
+> +       /* Never called pm_runtime_enable() */
+> +       KUNIT_EXPECT_FALSE(test, pm_runtime_enabled(dev));
+> +
+> +       /* "disabled" is treated as "active" */
+> +       KUNIT_EXPECT_TRUE(test, pm_runtime_active(dev));
+> +       KUNIT_EXPECT_FALSE(test, pm_runtime_suspended(dev));
+> +
+> +       /*
+> +        * Note: these "fail", but they still acquire/release refcounts, =
+so
+> +        * keep them balanced.
+> +        */
+> +       KUNIT_EXPECT_EQ(test, -EACCES, pm_runtime_get(dev));
+> +       KUNIT_EXPECT_EQ(test, -EACCES, pm_runtime_put(dev));
+> +
+> +       KUNIT_EXPECT_EQ(test, -EACCES, pm_runtime_get_sync(dev));
+> +       KUNIT_EXPECT_EQ(test, -EACCES, pm_runtime_put_sync(dev));
+> +
+> +       KUNIT_EXPECT_EQ(test, -EACCES, pm_runtime_get(dev));
+> +       KUNIT_EXPECT_EQ(test, -EACCES, pm_runtime_put_autosuspend(dev));
+> +
+> +       KUNIT_EXPECT_EQ(test, -EACCES, pm_runtime_resume_and_get(dev));
+> +       KUNIT_EXPECT_EQ(test, -EACCES, pm_runtime_idle(dev));
+> +       KUNIT_EXPECT_EQ(test, -EACCES, pm_request_idle(dev));
+> +       KUNIT_EXPECT_EQ(test, -EACCES, pm_request_resume(dev));
+> +       KUNIT_EXPECT_EQ(test, -EACCES, pm_request_autosuspend(dev));
+> +       KUNIT_EXPECT_EQ(test, -EACCES, pm_runtime_suspend(dev));
+> +       KUNIT_EXPECT_EQ(test, -EACCES, pm_runtime_resume(dev));
+> +       KUNIT_EXPECT_EQ(test, -EACCES, pm_runtime_autosuspend(dev));
+> +
+> +       /* Still active */
+
+Still disabled rather.
+
+> +       KUNIT_EXPECT_TRUE(test, pm_runtime_active(dev));
+> +}
+> +
+> +static void pm_runtime_error_test(struct kunit *test)
+> +{
+> +       struct device *dev =3D kunit_device_register(test, DEVICE_NAME);
+> +
+> +       KUNIT_ASSERT_PTR_NE(test, NULL, dev);
+> +
+> +       pm_runtime_enable(dev);
+> +       KUNIT_EXPECT_TRUE(test, pm_runtime_suspended(dev));
+> +
+> +       /* Fake a .runtime_resume() error */
+> +       dev->power.runtime_error =3D -EIO;
+> +
+> +       /*
+> +        * Note: these "fail", but they still acquire/release refcounts, =
+so
+> +        * keep them balanced.
+> +        */
+> +       KUNIT_EXPECT_EQ(test, -EINVAL, pm_runtime_get(dev));
+> +       KUNIT_EXPECT_EQ(test, -EINVAL, pm_runtime_put(dev));
+> +
+> +       KUNIT_EXPECT_EQ(test, -EINVAL, pm_runtime_get_sync(dev));
+> +       KUNIT_EXPECT_EQ(test, -EINVAL, pm_runtime_put_sync(dev));
+> +
+> +       KUNIT_EXPECT_EQ(test, -EINVAL, pm_runtime_get(dev));
+> +       KUNIT_EXPECT_EQ(test, -EINVAL, pm_runtime_put_autosuspend(dev));
+> +
+> +       KUNIT_EXPECT_EQ(test, -EINVAL, pm_runtime_resume_and_get(dev));
+> +       KUNIT_EXPECT_EQ(test, -EINVAL, pm_runtime_idle(dev));
+> +       KUNIT_EXPECT_EQ(test, -EINVAL, pm_request_idle(dev));
+> +       KUNIT_EXPECT_EQ(test, -EINVAL, pm_request_resume(dev));
+> +       KUNIT_EXPECT_EQ(test, -EINVAL, pm_request_autosuspend(dev));
+> +       KUNIT_EXPECT_EQ(test, -EINVAL, pm_runtime_suspend(dev));
+> +       KUNIT_EXPECT_EQ(test, -EINVAL, pm_runtime_resume(dev));
+> +       KUNIT_EXPECT_EQ(test, -EINVAL, pm_runtime_autosuspend(dev));
+> +
+> +       /* Still suspended */
+
+Error is still pending.
+
+> +       KUNIT_EXPECT_TRUE(test, pm_runtime_suspended(dev));
+> +       /* Clear error */
+> +       KUNIT_EXPECT_EQ(test, 0, pm_runtime_set_suspended(dev));
+> +       KUNIT_EXPECT_EQ(test, 0, dev->power.runtime_error);
+> +       /* Still suspended */
+> +       KUNIT_EXPECT_TRUE(test, pm_runtime_suspended(dev));
+> +
+> +       KUNIT_EXPECT_EQ(test, 0, pm_runtime_get(dev));
+> +       KUNIT_EXPECT_EQ(test, 1, pm_runtime_barrier(dev)); /* resume was =
+pending */
+> +       KUNIT_EXPECT_EQ(test, 0, pm_runtime_put(dev));
+> +       pm_runtime_suspend(dev); /* flush the put(), to suspend */
+> +       KUNIT_EXPECT_TRUE(test, pm_runtime_suspended(dev));
+> +
+> +       KUNIT_EXPECT_EQ(test, 0, pm_runtime_get_sync(dev));
+> +       KUNIT_EXPECT_EQ(test, 0, pm_runtime_put_sync(dev));
+> +
+> +       KUNIT_EXPECT_EQ(test, 0, pm_runtime_get_sync(dev));
+> +       KUNIT_EXPECT_EQ(test, 0, pm_runtime_put_autosuspend(dev));
+> +
+> +       KUNIT_EXPECT_EQ(test, 0, pm_runtime_resume_and_get(dev));
+> +
+> +       /*
+> +        * The following should all "fail" with -EAGAIN (usage is non-zer=
+o) or
+> +        * 1 (already resumed).
+
+The return value of 1 doesn't count as a failure.
+
+> +        */
+> +       KUNIT_EXPECT_EQ(test, -EAGAIN, pm_runtime_idle(dev));
+> +       KUNIT_EXPECT_EQ(test, -EAGAIN, pm_request_idle(dev));
+> +       KUNIT_EXPECT_EQ(test, 1, pm_request_resume(dev));
+> +       KUNIT_EXPECT_EQ(test, -EAGAIN, pm_request_autosuspend(dev));
+> +       KUNIT_EXPECT_EQ(test, -EAGAIN, pm_runtime_suspend(dev));
+> +       KUNIT_EXPECT_EQ(test, 1, pm_runtime_resume(dev));
+> +       KUNIT_EXPECT_EQ(test, -EAGAIN, pm_runtime_autosuspend(dev));
+> +
+> +       KUNIT_EXPECT_EQ(test, 0, pm_runtime_put_sync(dev));
+> +
+> +       /* Suspended again */
+> +       KUNIT_EXPECT_TRUE(test, pm_runtime_suspended(dev));
+> +}
+> +
+> +/*
+> + * Explore a typical probe() sequence in which a device marks itself pow=
+ered,
+> + * but doesn't hold any runtime PM reference, so it suspends as soon as =
+it goes
+> + * idle.
+> + */
+> +static void pm_runtime_probe_active_test(struct kunit *test)
+> +{
+> +       struct device *dev =3D kunit_device_register(test, DEVICE_NAME);
+> +
+> +       KUNIT_ASSERT_PTR_NE(test, NULL, dev);
+> +
+> +       KUNIT_EXPECT_TRUE(test, pm_runtime_status_suspended(dev));
+> +
+> +       KUNIT_EXPECT_EQ(test, 0, pm_runtime_set_active(dev));
+> +       KUNIT_EXPECT_TRUE(test, pm_runtime_active(dev));
+> +
+> +       pm_runtime_enable(dev);
+> +       KUNIT_EXPECT_TRUE(test, pm_runtime_active(dev));
+> +
+> +       /* Flush, and ensure we stayed active. */
+
+There's nothing to flush though.
+
+> +       KUNIT_EXPECT_EQ(test, 0, pm_runtime_barrier(dev));
+> +       KUNIT_EXPECT_TRUE(test, pm_runtime_active(dev));
+> +
+> +       /* Ask for idle? Now we suspend. */
+> +       KUNIT_EXPECT_EQ(test, 0, pm_runtime_idle(dev));
+> +       KUNIT_EXPECT_TRUE(test, pm_runtime_suspended(dev));
+> +}
+> +
+> +static struct kunit_case pm_runtime_test_cases[] =3D {
+> +       KUNIT_CASE(pm_runtime_depth_test),
+> +       KUNIT_CASE(pm_runtime_already_suspended_test),
+> +       KUNIT_CASE(pm_runtime_idle_test),
+> +       KUNIT_CASE(pm_runtime_disabled_test),
+> +       KUNIT_CASE(pm_runtime_error_test),
+> +       KUNIT_CASE(pm_runtime_probe_active_test),
+> +       {}
+> +};
+> +
+> +static struct kunit_suite pm_runtime_test_suite =3D {
+> +       .name =3D "pm_runtime_test_cases",
+> +       .test_cases =3D pm_runtime_test_cases,
+> +};
+> +
+> +kunit_test_suite(pm_runtime_test_suite);
+> +MODULE_DESCRIPTION("Runtime power management unit test suite");
+> +MODULE_LICENSE("GPL");
+> --
 
