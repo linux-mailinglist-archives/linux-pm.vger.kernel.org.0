@@ -1,162 +1,181 @@
-Return-Path: <linux-pm+bounces-33979-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33980-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1B4E2B45889
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 15:14:27 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F4FDB458B9
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 15:24:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BC6A05C0EC8
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 13:14:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 107731893685
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 13:25:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 267F3350857;
-	Fri,  5 Sep 2025 13:13:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r3bSByT7"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CCCE3451AF;
+	Fri,  5 Sep 2025 13:24:41 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3A1F350848;
-	Fri,  5 Sep 2025 13:13:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A4711B4F09;
+	Fri,  5 Sep 2025 13:24:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757078034; cv=none; b=sVkI+qkd358fXpRtwDfgN2opRJLVQbs3+vj6UURibv1VXb+CEkBD5I73L/V3BpjJaNGJ6VOwOg2ZiU69EBvcye8yNuWiJtW3yEj4qnaT5t4L84mz+qQZh56c7EtxpUJda0CX4qEDGyM61JO5jtNJvvFXNacz2BOIm9nPCZTe4kA=
+	t=1757078681; cv=none; b=PBEqLG6xHGPCczpFWk+0Ci/QvAPkmj3Gmf2QtiLofz5zL4A7w8xe6go0DJbVzc1jM8I5706auByJFX+2DXL07N2v9LpDHeu7mxWkGOxJ7gztYFwVF8AZT0rKmjA5samMPLxuz8cyxQCOYfsXjOuqfjbI5lHWU585CW4FfaeRC84=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757078034; c=relaxed/simple;
-	bh=4fPiVUr8iqSHUA1048R7A5lGeRD0073y1e1CWCfad+4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cR25W6bg+DtdK39Q4TsWkX2ro9Mie2s8/XZyGZK2kHbff5VRxkPo16syoT7mhAyoAx2JXlVeEfSrGL7Jm4lpSjC26XgKIRE5tmim1QPdofBuVPEK6Qru/CrQoTDVsFSBeSbPTmnAyXtSbURPyfF+C+VIpHLOqhHU6ToK4X/Bc5Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r3bSByT7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D40A3C4CEFB;
-	Fri,  5 Sep 2025 13:13:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757078033;
-	bh=4fPiVUr8iqSHUA1048R7A5lGeRD0073y1e1CWCfad+4=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=r3bSByT7fJh4/eg4OUCA7r/B+lOhcIzVlTUYOH0PkK7wnmHVVqhsF3hB31k1ee16k
-	 IE7zVoR7w6ItgNUPNeknoirAkgujWF7B057JqvQkoZZ5sjbJcGfBSy0mDB4Ix3HoPk
-	 zCWBm1bw6z5GzuJ3L/vY4jy0llOv7BJjIlh4bP+UWH2Z7RyyjSGIoCnqzFQvn4No6X
-	 4yAtGYd6SXsCR9XRlAe8Pb6Mn0U0Oq0ZtYn6fGBfEPw7+lths1xeo6AfQHcvdqm8vB
-	 S2AGmabgQC9PNIbNHe+1soaGzmldetgDNeRVbyzJud1Y0sgXSSDdDMGHBFX9VCrvum
-	 sFIhFmTZWT/4g==
-Received: by mail-ot1-f49.google.com with SMTP id 46e09a7af769-7454cf6abf9so1023435a34.1;
-        Fri, 05 Sep 2025 06:13:53 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCV4o4v+fgI68T/pMdqmBO5cpirGeq8vESJ1Dsf97LE8mdFmg3p+YP+oI6E/hBqjMe8Nvn4zQ/G6VMG8vlk=@vger.kernel.org, AJvYcCVXNIyY43VtIehvNawsaFQTgVLqhC278oQFMiHaXh4DZXkuxETlKDJPfG2KzQQ17XRo8OZOJ7HtyHY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyo9hwI3Z7E6fYI6saKuGvAh2Cubvpecje8+epnUHXTcU1LLQe6
-	oQUDQBpoAY7menyA/wchME/Lq+kofYss8N4mZkbYwwRAmLenRyN5QRcOOgxiSChU9nWONGx93oe
-	BaYrJ5ZiW7Y/H1fqAAHbyKKbTRktToFM=
-X-Google-Smtp-Source: AGHT+IFffuiP30MgrkTsgngQV11TsWgdOrnGzK7NoEJFqBdCBOCtrraIWbEOd+sb7Dy7S/K5rYsbEu53ji3Zgc0AX60=
-X-Received: by 2002:a05:6830:6a8b:b0:746:d832:eb4d with SMTP id
- 46e09a7af769-746d832ee97mr3136923a34.6.1757078033181; Fri, 05 Sep 2025
- 06:13:53 -0700 (PDT)
+	s=arc-20240116; t=1757078681; c=relaxed/simple;
+	bh=fgg0w7E0F42rqEVvGzUPcQeGcZf2Yl3sxB4hyWOH4dM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=d4NfCqudA8UKn0A5hUoXYGOq/K8HRGOT2WniCct/TbkZn5jQ1jJjE5nB9zW76boCJ3OD7arMmhl//2fr5waFdrXXd3BwpFLU8VR1TIy6WZ09k/qpuGhzETthoJ+HvJIh4EPoKmqWdP6sZNXG4s4XzVnjuuL6VWLUqOse30hYBqc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: a6e6a2d48a5b11f0b29709d653e92f7d-20250905
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.45,REQID:8422d8b4-b443-4d71-a0b2-cf6de6c4675e,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:6493067,CLOUDID:eb53ebb2a39f7b4fc4886caf3fac51b3,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:102|850,TC:nil,Content:0|50,EDM:-3,IP:ni
+	l,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES
+	:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: a6e6a2d48a5b11f0b29709d653e92f7d-20250905
+Received: from mail.kylinos.cn [(10.44.16.175)] by mailgw.kylinos.cn
+	(envelope-from <zhangzihuan@kylinos.cn>)
+	(Generic MTA)
+	with ESMTP id 560139086; Fri, 05 Sep 2025 21:24:29 +0800
+Received: from mail.kylinos.cn (localhost [127.0.0.1])
+	by mail.kylinos.cn (NSMail) with SMTP id 20FEEE008FA7;
+	Fri,  5 Sep 2025 21:24:29 +0800 (CST)
+X-ns-mid: postfix-68BAE48C-8949761
+Received: from localhost.localdomain (unknown [172.25.120.24])
+	by mail.kylinos.cn (NSMail) with ESMTPA id 3F132E008FA3;
+	Fri,  5 Sep 2025 21:24:17 +0800 (CST)
+From: Zihuan Zhang <zhangzihuan@kylinos.cn>
+To: "Rafael J . wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Jonathan Cameron <jonathan.cameron@huawei.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	MyungJoo Ham <myungjoo.ham@samsung.com>,
+	Kyungmin Park <kyungmin.park@samsung.com>,
+	Chanwoo Choi <cw00.choi@samsung.com>,
+	Jani Nikula <jani.nikula@linux.intel.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Tvrtko Ursulin <tursulin@ursulin.net>,
+	David Airlie <airlied@gmail.com>,
+	Simona Vetter <simona@ffwll.ch>,
+	Daniel Lezcano <daniel.lezcano@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Eduardo Valentin <edubezval@gmail.com>,
+	Keerthy <j-keerthy@ti.com>
+Cc: Ben Horgan <ben.horgan@arm.com>,
+	zhenglifeng <zhenglifeng1@huawei.com>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Len Brown <lenb@kernel.org>,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Beata Michalska <beata.michalska@arm.com>,
+	Fabio Estevam <festevam@gmail.com>,
+	Pavel Machek <pavel@kernel.org>,
+	Sumit Gupta <sumitg@nvidia.com>,
+	Prasanna Kumar T S M <ptsm@linux.microsoft.com>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Yicong Yang <yangyicong@hisilicon.com>,
+	linux-pm@vger.kernel.org,
+	linux-acpi@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-arm-kernel@lists.infradead.org,
+	intel-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org,
+	imx@lists.linux.dev,
+	linux-omap@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Zihuan Zhang <zhangzihuan@kylinos.cn>
+Subject: [PATCH v5 0/6] cpufreq: use __free() for all cpufreq_cpu_get() references
+Date: Fri,  5 Sep 2025 21:24:07 +0800
+Message-Id: <20250905132413.1376220-1-zhangzihuan@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <12740505.O9o76ZdvQC@rafael.j.wysocki> <871polxs9c.ffs@tglx>
-In-Reply-To: <871polxs9c.ffs@tglx>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 5 Sep 2025 15:13:41 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0jyN0=aGFOwE8fzuXi=1LgiLR5wgvvsAihGB0qpUp=mUQ@mail.gmail.com>
-X-Gm-Features: Ac12FXytMQ0oah2eRFtPagBtfjslFVTgXfnj9GXfs5MDvT0D4yuymp6BzFyWryE
-Message-ID: <CAJZ5v0jyN0=aGFOwE8fzuXi=1LgiLR5wgvvsAihGB0qpUp=mUQ@mail.gmail.com>
-Subject: Re: [PATCH v1] cpu: Add missing check to cpuhp_smt_enable()
-To: Thomas Gleixner <tglx@linutronix.de>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Linux PM <linux-pm@vger.kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Christian Loehle <christian.loehle@arm.com>, Dave Hansen <dave.hansen@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Sep 5, 2025 at 9:39=E2=80=AFAM Thomas Gleixner <tglx@linutronix.de>=
- wrote:
->
-> On Fri, Aug 29 2025 at 22:01, Rafael J. Wysocki wrote:
-> > --- a/kernel/cpu.c
-> > +++ b/kernel/cpu.c
-> > @@ -2710,6 +2710,12 @@
-> >       cpu_maps_update_begin();
-> >       cpu_smt_control =3D CPU_SMT_ENABLED;
-> >       for_each_present_cpu(cpu) {
-> > +             /*
-> > +              * Avoid accidentally onlining primary thread CPUs that h=
-ave
-> > +              * been taken offline.
-> > +              */
-> > +             if (topology_is_primary_thread(cpu))
-> > +                     continue;
->
-> Hmm. That's kinda solving the problem, but I think the proper solution
-> would be to implement topology_is_core_online() for x86.
->
-> The above is preventing the primary thread to be onlined, but then
-> onlines the corresponding hyperthread, which does not really make sense.
+This patchset converts all remaining cpufreq users to rely on the
+__free(put_cpufreq_policy) annotation for policy references, instead of
+calling cpufreq_cpu_put() manually.
 
-Well, manual online can be used for onlining the secondary thread of a
-core where the primary thread is offline, so this is technically
-possible already.
+Motivation:
+- Reduce the chance of reference counting mistakes
+- Make the code more consistent with the latest kernel style
+- behavior remains the same, but reference counting is now safer=20
+  and easier to maintain.
 
-> Something like the completely untested below.
+The changes are split into 6 patches as they touch different subsystems
+and are maintained by different people. There is no functional change.
 
-So given the above, shouldn't topology_is_core_online() check if any
-thread in the given core is online?
+V5:
+ - drop 4 patches
+ - change return value int topology.c suggested by Jonathan Cameron
+ - fix code in processor_thermal.c suggested by Rafael and Jonathan Camer=
+on
+ - fix code in intel_pstate.c suggested by Rafael
+ - fix code in governor_passive.c suggested Jonathan Cameron
+ - fix code in energy_model.c suggested by Rafael and Krzysztof Kozlowski
 
-> ---
-> diff --git a/arch/x86/include/asm/topology.h b/arch/x86/include/asm/topol=
-ogy.h
-> index 6c79ee7c0957..21041898157a 100644
-> --- a/arch/x86/include/asm/topology.h
-> +++ b/arch/x86/include/asm/topology.h
-> @@ -231,6 +231,16 @@ static inline bool topology_is_primary_thread(unsign=
-ed int cpu)
->  }
->  #define topology_is_primary_thread topology_is_primary_thread
->
-> +int topology_get_primary_thread(unsigned int cpu);
-> +
-> +static inline bool topology_is_core_online(unsigned int cpu)
-> +{
-> +       int pcpu =3D topology_get_primary_thread(cpu);
-> +
-> +       return pcpu >=3D 0 ? cpu_online(pcpu) : false;
-> +}
-> +#define topology_is_core_online topology_is_core_online
-> +
->  #else /* CONFIG_SMP */
->  static inline int topology_phys_to_logical_pkg(unsigned int pkg) { retur=
-n 0; }
->  static inline int topology_max_smt_threads(void) { return 1; }
-> diff --git a/arch/x86/kernel/cpu/topology.c b/arch/x86/kernel/cpu/topolog=
-y.c
-> index e35ccdc84910..6073a16628f9 100644
-> --- a/arch/x86/kernel/cpu/topology.c
-> +++ b/arch/x86/kernel/cpu/topology.c
-> @@ -372,6 +372,19 @@ unsigned int topology_unit_count(u32 apicid, enum x8=
-6_topology_domains which_uni
->         return topo_unit_count(lvlid, at_level, apic_maps[which_units].ma=
-p);
->  }
->
-> +#ifdef CONFIG_SMP
-> +int topology_get_primary_thread(unsigned int cpu)
-> +{
-> +       u32 apic_id =3D cpuid_to_apicid[cpu];
-> +
-> +       /*
-> +        * Get the core domain level APIC id, which is the primary thread
-> +        * and return the CPU number assigned to it.
-> +        */
-> +       return topo_lookup_cpuid(topo_apicid(apic_id, TOPO_CORE_DOMAIN));
-> +}
-> +#endif
-> +
->  #ifdef CONFIG_ACPI_HOTPLUG_CPU
->  /**
->   * topology_hotplug_apic - Handle a physical hotplugged APIC after boot
->
->
+V4:
+ - Fix compile error in topology.c
+ - drop 2 patches
+ - Move code into a function in processor_thermal.c
+ - Move code into a function in intel_pstate.c
+ - Move policy declare in dtpm_cpu.c
+ - Fix compile error in imx_thermal.c
+ - Fix compile error in ti-thermal-common.c
+ - Fix compile error in energy_model.c
+
+V3:
+ - drop patch 'KVM: x86: Use __free(put_cpufreq_policy) for policy refere=
+nce'
+ - removed 5 patches which has been applied
+ - Consolidate CPUFreq policy assignments and allocations into one line,
+   suggested by Ben Horgan
+ - Change cpu_has_cpufreq() return type to bool, following Rafael's sugge=
+stion
+ - Change the title to 'Use scope-based cleanup helper'
+
+V2:
+ - Fix compile error in powernv-cpufreq.c
+ - Split patch to separate logical changes
+
+Zihuan Zhang (6):
+  arm64: topology: Use scope-based cleanup helper
+  ACPI: processor: thermal: Use scope-based cleanup helper
+  cpufreq: intel_pstate: Use scope-based cleanup helper
+  PM / devfreq: Use scope-based cleanup helper
+  drm/i915: Use scope-based cleanup helper
+  PM: EM: Use scope-based cleanup helper
+
+ arch/arm64/kernel/topology.c        | 11 ++----
+ drivers/acpi/processor_thermal.c    | 52 +++++++++++++------------
+ drivers/cpufreq/intel_pstate.c      | 59 +++++++++++++++-------------
+ drivers/devfreq/governor_passive.c  | 60 +++++++++++------------------
+ drivers/gpu/drm/i915/gt/intel_llc.c |  4 +-
+ kernel/power/energy_model.c         |  9 +----
+ 6 files changed, 89 insertions(+), 106 deletions(-)
+
+--=20
+2.25.1
+
 
