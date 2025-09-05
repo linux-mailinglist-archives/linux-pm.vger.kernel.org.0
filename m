@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-33905-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33906-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC911B44E7F
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 08:59:39 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CDCF4B44E8F
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 09:02:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 942C83B3094
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 06:59:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 42519189536C
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 07:02:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E00012D372E;
-	Fri,  5 Sep 2025 06:59:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D28F02D249D;
+	Fri,  5 Sep 2025 07:02:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CF4binMN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TtM6XFxq"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA2D62D3220;
-	Fri,  5 Sep 2025 06:59:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 946EA32F76C;
+	Fri,  5 Sep 2025 07:02:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757055574; cv=none; b=QZwVEZNUcswm/65YmNIEioO3Y6FDMsGXXMlpAR1jX7wAyiqVybHPtlK1aiWLHFk1C6U1EbgzwwzEh3NWbXJzVsK05UmSgM02ExkVfZyoxFXBC8rrfS6uz92DjQZKm24V71cQJDBcbd7Oefk/7VOzgk4Fm4hzOcuHA9fYgdkBFZ0=
+	t=1757055742; cv=none; b=RzGaFS4xg7fHKskNhyOGD+GC0+Fhqd88zDfZFJlckkO1Ibs5ht3Xr20Klql85hCej3fae+89CsuZSFZyjWqsGHpwjKLnzuawz1eMP/1XWJXA0Ex+Y3FnCPsV3nUx0eA/b3PUiuBFZi87RNgQpeBC2zeKmH+HZekaPdrZo1kIq58=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757055574; c=relaxed/simple;
-	bh=cugq+qw3GpO8v3/zvxw4Zv8vTWDCt+fAotQhmHLxXiY=;
+	s=arc-20240116; t=1757055742; c=relaxed/simple;
+	bh=fTBkavZ91ssgIY3s9ptez3AviwpoecTcBhXYPHGbbbM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aC4mLq6uyIwYRNcECVcCFv+5cY70BHuBRQ7jSIuTTeJC1hKe1hzg4kwurfUiMg5anQtS9L6ixAm3atLLAl7YVfCMofAJnC8bICyAylZV5YNE8imjyp41Mw7UwTWZ6RbYqtTNKeQqfwqr6xGUlI6r4JWW7tzeCGQchD7oSb9aEgk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CF4binMN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7C8CC4CEF1;
-	Fri,  5 Sep 2025 06:59:30 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=OA2LDr9nRdZidpSNzG9LBO7EDpCPuujglxELKuXFzoDRB6r2mfbS2n7OjAWWKLbUh0Rwqa7VSlv1sVVRXJ4zqIsRyyCly+ii5Q76LQgn6vSpoklnBU3j9D0FHCxpgV22NIbWAtzOua1DCXZElGai0oMKx+nb3HlCFMpRcmypC00=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TtM6XFxq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61182C4CEF1;
+	Fri,  5 Sep 2025 07:02:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757055574;
-	bh=cugq+qw3GpO8v3/zvxw4Zv8vTWDCt+fAotQhmHLxXiY=;
+	s=k20201202; t=1757055741;
+	bh=fTBkavZ91ssgIY3s9ptez3AviwpoecTcBhXYPHGbbbM=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=CF4binMNIxiWGtuuQhlwzvCc8J+tQLefHXAmP/4jLna/lyTqrOrP/MM+f/iZsI3Xg
-	 8Ns6FSBRCjnyqRr3EllKTVhjAGqUGoepfpf5wB0Bh0nWrIx4P62B4A4cYZV/1ahs9X
-	 7EjbQ7iUYVhfHGLHkbr8LqwA3CdK670OU0aiogzMt+kpNmF7x1kJDXmTMl1qsI+6wz
-	 7lpajlijr7zG9v8ybLc4stzG1Z0h2yzN10V+hpWFJogtvX97f3FPgwjEgykRpIYZjq
-	 m6VXZtH592HS4jrN6unhF6tLxKDBBTg5uHTLVKEEWDPB6bbaGkQz8qBWTYKZsZA9f/
-	 40aNz3qwrTpuw==
-Message-ID: <3c463028-65b2-462e-b933-9ccb3fb37e0e@kernel.org>
-Date: Fri, 5 Sep 2025 08:59:29 +0200
+	b=TtM6XFxqtN3QeBsuHZlpZfezN9qmURrZfJfI5CCDT5eGvBRGhyX9PdD9MGup8yjnn
+	 0p9KCIiNdorRgLjz3L3MYT1Z5S78sCbEjPaYAd5TxYTGTYxlzNpe7dyP6ctX6eXSTt
+	 wmEFEgieMnkUhnyQscTQ323sCBTvrUj+AFt1Az5eyDJQY3Y7/v1/1MNoRdo0djg0Cg
+	 BGN7Js2b+GPfHh7BDZdtkTHST45y2B/DgwyGbWoz80F94Z0WMwrnI3fpho1XctpIDt
+	 7jr1TSxMsWIG+Ru4C3Lhao5f3LzrMHUw1awATjvXu0RsNrOievNIEjJhefvmsZ/tIM
+	 btioibLovSD7A==
+Message-ID: <a04f3aa8-e7e3-4d20-bc86-5496c7abe272@kernel.org>
+Date: Fri, 5 Sep 2025 09:02:09 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,21 +50,42 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 5/8] memory: tegra210: Support interconnect framework
-To: Aaron Kling <webgeek1234@gmail.com>
-Cc: Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
- Thierry Reding <thierry.reding@gmail.com>,
- Jonathan Hunter <jonathanh@nvidia.com>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>,
+Subject: Re: [PATCH v4 09/10] thermal/drivers/ti-soc-thermal: Use scope-based
+ cleanup helper
+To: Andreas Kemnade <andreas@kemnade.info>,
+ Zihuan Zhang <zhangzihuan@kylinos.cn>
+Cc: "Rafael J . wysocki" <rafael@kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+ Michael Ellerman <mpe@ellerman.id.au>, Alim Akhtar
+ <alim.akhtar@samsung.com>, Thierry Reding <thierry.reding@gmail.com>,
  MyungJoo Ham <myungjoo.ham@samsung.com>,
  Kyungmin Park <kyungmin.park@samsung.com>,
- Chanwoo Choi <cw00.choi@samsung.com>, Dmitry Osipenko <digetx@gmail.com>,
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
- linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20250903-t210-actmon-v2-0-e0d534d4f8ea@gmail.com>
- <20250903-t210-actmon-v2-5-e0d534d4f8ea@gmail.com>
- <20250904-aloof-cow-of-speed-ad5fe5@kuoka>
- <CALHNRZ-A6L1s_Uc0cO-+akHyzHGkb4bkYd0pNKX96DqJfOBp9g@mail.gmail.com>
+ Chanwoo Choi <cw00.choi@samsung.com>,
+ Jani Nikula <jani.nikula@linux.intel.com>,
+ Rodrigo Vivi <rodrigo.vivi@intel.com>, Tvrtko Ursulin
+ <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>,
+ Simona Vetter <simona@ffwll.ch>, Daniel Lezcano <daniel.lezcano@kernel.org>,
+ Sascha Hauer <s.hauer@pengutronix.de>, Shawn Guo <shawnguo@kernel.org>,
+ Eduardo Valentin <edubezval@gmail.com>, Keerthy <j-keerthy@ti.com>,
+ Ben Horgan <ben.horgan@arm.com>, zhenglifeng <zhenglifeng1@huawei.com>,
+ Zhang Rui <rui.zhang@intel.com>, Len Brown <lenb@kernel.org>,
+ Lukasz Luba <lukasz.luba@arm.com>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Beata Michalska <beata.michalska@arm.com>, Fabio Estevam
+ <festevam@gmail.com>, Pavel Machek <pavel@kernel.org>,
+ Sumit Gupta <sumitg@nvidia.com>,
+ Prasanna Kumar T S M <ptsm@linux.microsoft.com>,
+ Sudeep Holla <sudeep.holla@arm.com>, Yicong Yang <yangyicong@hisilicon.com>,
+ linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
+ intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+ imx@lists.linux.dev, linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250903131733.57637-1-zhangzihuan@kylinos.cn>
+ <20250903131733.57637-10-zhangzihuan@kylinos.cn>
+ <20250905085726.2bc6fcb4@akair>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -110,51 +131,72 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <CALHNRZ-A6L1s_Uc0cO-+akHyzHGkb4bkYd0pNKX96DqJfOBp9g@mail.gmail.com>
+In-Reply-To: <20250905085726.2bc6fcb4@akair>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 04/09/2025 19:28, Aaron Kling wrote:
->>> +
->>> +static int tegra_emc_opp_table_init(struct tegra210_emc *emc)
->>> +{
->>> +     u32 hw_version = BIT(tegra_sku_info.soc_speedo_id);
->>> +     struct dev_pm_opp *opp;
->>> +     unsigned long rate;
->>> +     int opp_token, err, max_opps, i;
->>> +
->>> +     err = dev_pm_opp_set_supported_hw(emc->dev, &hw_version, 1);
->>> +     if (err < 0) {
->>> +             dev_err(emc->dev, "failed to set OPP supported HW: %d\n", err);
->>> +             return err;
->>> +     }
->>> +     opp_token = err;
->>> +
->>> +     err = dev_pm_opp_of_add_table(emc->dev);
->>> +     if (err) {
->>> +             if (err == -ENODEV)
->>> +                     dev_err(emc->dev, "OPP table not found, please update your device tree\n");
->>
->> So this looks like the actual ABI break.
+On 05/09/2025 08:57, Andreas Kemnade wrote:
+> Am Wed,  3 Sep 2025 21:17:32 +0800
+> schrieb Zihuan Zhang <zhangzihuan@kylinos.cn>:
 > 
-> Okay, so let's discuss this. For reference, I based this patch off the
-> tegra124 change [0], which also caused an abi break. I know past
+>> Replace the manual cpufreq_cpu_put() with __free(put_cpufreq_policy)
+>> annotation for policy references. This reduces the risk of reference
+>> counting mistakes and aligns the code with the latest kernel style.
+>>
+>> No functional change intended.
+>>
+>> Signed-off-by: Zihuan Zhang <zhangzihuan@kylinos.cn>
+>> ---
+>>  drivers/thermal/ti-soc-thermal/ti-thermal-common.c | 13 ++++---------
+>>  1 file changed, 4 insertions(+), 9 deletions(-)
+>>
+>> diff --git a/drivers/thermal/ti-soc-thermal/ti-thermal-common.c b/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
+>> index 0cf0826b805a..37d06468913a 100644
+>> --- a/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
+>> +++ b/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
+>> @@ -27,7 +27,6 @@
+>>  
+>>  /* common data structures */
+>>  struct ti_thermal_data {
+>> -	struct cpufreq_policy *policy;
+>>  	struct thermal_zone_device *ti_thermal;
+>>  	struct thermal_zone_device *pcb_tz;
+>>  	struct thermal_cooling_device *cool_dev;
+>> @@ -218,6 +217,7 @@ int ti_thermal_register_cpu_cooling(struct ti_bandgap *bgp, int id)
+>>  {
+>>  	struct ti_thermal_data *data;
+>>  	struct device_node *np = bgp->dev->of_node;
+>> +	struct cpufreq_policy *policy __free(put_cpufreq_policy) = cpufreq_cpu_get(0);
+>>  
+> this looks as it changes the lifecycle from the device lifetime to just
+> this function...
+> 
+>>  	/*
+>>  	 * We are assuming here that if one deploys the zone
+>> @@ -234,19 +234,17 @@ int ti_thermal_register_cpu_cooling(struct ti_bandgap *bgp, int id)
+>>  	if (!data)
+>>  		return -EINVAL;
+>>  
+>> -	data->policy = cpufreq_cpu_get(0);
+>> -	if (!data->policy) {
+>> +	if (!policy) {
+>>  		pr_debug("%s: CPUFreq policy not found\n", __func__);
+>>  		return -EPROBE_DEFER;
+>>  	}
+>>  
+>>  	/* Register cooling device */
+>> -	data->cool_dev = cpufreq_cooling_register(data->policy);
+>> +	data->cool_dev = cpufreq_cooling_register(policy);
+> 
+> and it is passed on to something living beyond this function. I see no
+> _get(policy) in cpufreq_cooling_register().
+> Am I missing something?
+Yeah, " No functional change intended." is clearly incorrect.
 
-That was almost 5 years ago and we also got stricter what we require in
-the commit msg. It's also documented in writing bindings.
+I already commented on this series that it is very bad and author should
+does not understand how cleanup.h works, and here is another example.
 
-> changes don't justify current mistakes, but this is the context. This
-> series adds all new required dt properties to the arch common dtsi, so
-> any newly compiled dtb will work. Any old dtb with a new kernel would
-> fail to probe, however. I think it would be safe to just skip the
-
-That's the ABI break.
-
-> interconnect init if the opp table init returns ENODEV, then let probe
-> succeed, but I would have to verify that. Do I need to do that and
-> drop the new requires from the binding?
-
-The best would be yes, make it optional in the binding as well.
+IMO, entire patchset should be dropped.
 
 Best regards,
 Krzysztof
