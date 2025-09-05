@@ -1,170 +1,324 @@
-Return-Path: <linux-pm+bounces-33941-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33942-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 622D4B4529C
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 11:10:42 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2562CB4531C
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 11:26:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D4781A044D8
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 09:10:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BA4FA161D78
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 09:26:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53CF1285C99;
-	Fri,  5 Sep 2025 09:07:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B00FACA5A;
+	Fri,  5 Sep 2025 09:26:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="UVVO3r8q"
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="V505oIzl"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpbg154.qq.com (smtpbg154.qq.com [15.184.224.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34DF728313B
-	for <linux-pm@vger.kernel.org>; Fri,  5 Sep 2025 09:07:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C46EB4C9D;
+	Fri,  5 Sep 2025 09:25:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=15.184.224.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757063235; cv=none; b=W2ojA8/N8JPnrF/4Y1+MoELiugKWGwHnEXdnwJ3g1hHuuS6HF1jiyPNCi+01j05Wn3ZLv6kUFd9G9vLzZyQIQDfsJm5ogQS/LvZvYxFBU44c6kArZj24w0rhaVUdtuu+4VB/HeJQJ/XlWEDlGNBzwqrnAUPYbIDZn4pBfvohbB8=
+	t=1757064364; cv=none; b=OD9HFYM8dOhg0A7mi5SaAxmfFXTFyk6IoTgsAGT61m1fCzYv5enhMIbXn2+qS99AsV25eA5B/vbC+PtRJl3+hsOtb4/0ouLj/oEMaEdrD2E6bxxiEE15W8SO/bx3244gF5BXIP4U+dMjl7hjPiGwS24qPSXSK7MctFCC5/resus=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757063235; c=relaxed/simple;
-	bh=MxmeDlDN5KAsmLl6RmrOmIHNNJKRzlp34HwIOHi+2Nk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=O7UWpjLpStMn7VlYSk+CfXFRunHSGKKgxOBt2MWLLEwZn5YIll3rybTgizUnp9GUk88N0Wjih1LLOtVJTTW+WUDDj4ZOdt7OoWtcGKw0JoAJfNqBxwwQ+yKcr9+pYeVnCW7G4YbczNO60KkiEs26QMHGRe28DHMLZU6X3OjUAaU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=UVVO3r8q; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-45dd5e24d16so6610465e9.3
-        for <linux-pm@vger.kernel.org>; Fri, 05 Sep 2025 02:07:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1757063231; x=1757668031; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yWlMhxr6/JAIt8xHhW6LUxkzXPJaGBgQ29vWEbfPbfw=;
-        b=UVVO3r8qLEr+BI6+9Li/6sNjkH0ShAqfTpk9Y1oEFpvX59oIpd56sR7rLOAK9nTiYe
-         zsJpRVZlH1nRrtHHFjXMilTVSUHx1qLPjQtL8+KYUkJskekCRlXndtEo2TKtDBHB/5fL
-         NSP5QDWCUUPM3p+ufHdJ2JxR2qGWlojLDbWwcLPazSCpjhGXTu94EMXZEqdtQiktDXhU
-         RIuKIabUExueLDOo7nNMuWWWfgBtM4LsT7phxpK9lN5xEcqGbeaWXeP94w4l9wfvGckc
-         9h5eBoRgEwZev0yMKOPllQ47fYVLl5QW4k4UdcGbtisVNS4ciKcr5Ha7pvVSL4L2mDee
-         W4Cg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757063231; x=1757668031;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yWlMhxr6/JAIt8xHhW6LUxkzXPJaGBgQ29vWEbfPbfw=;
-        b=Qc2Kd7R5STrAUq+vBwcUseFo0jjxYIcKDzvRbpj4v6KL6vm09YUqouQcDRnwpXEtXR
-         u/J8P4IHsk8D8roLU0IurGpXRessh0ziv4xh0XcdDy3TM90e5tu5GiYyRrpwk0v7G37X
-         R2v2QkR+Qq0zUfi6lOsv99PvtKJe8sM4ylzk1mtNXgCra55VNynsYVKqAxBybr7SDiY9
-         oKyHXe9qeX3fjw/hZq3jV8TT/ti9hOSHgBXnc+ccjhUL90PK8mtM6iqYh29Fyj2/IcAm
-         EeEytQELH6+qp9WXGhxKsl+nt2cbHIOr53YgN7K1e2hjQE+buS+VWULTFRRCZ7lzvWeH
-         giew==
-X-Forwarded-Encrypted: i=1; AJvYcCUAQ+GmzKAEfKV2j/SuftHSvHgD3ceJO4vu3tnH1ZzKMHBzRDuQwhgKisxF8oIB8F/zKdSFfwAhIg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwmDsP6FCCQ9/73S8+9p9q5Fdg6KxwakD7m8g9oQUSIHMfmQzSm
-	5S3fILA0oUtpDfDUb0fNsCWrhIDgi89M2HvGXF5QiE6rlZl+IQyKP6oZpDpK0Mi1G5E=
-X-Gm-Gg: ASbGnctPUocswSvq/4SR4j6i5v2ekiU+kxoPR56ZPl50A92RvVYx6Dw0HrxY1gDGIvR
-	kW5FWaQBRRaDs5fzXc//pyZb4x6JwFkVaBVe6WHT5LJ77fQsxwnjhxiu3vHhewxhghTw0l/lTWJ
-	h/s2qG4147JyjeN/V3PyrzSIRvH0sukmCp1mFOg3wAgLzMQxZaTM5vOi+hna6rtPIJAJuPu2JQW
-	0PCj2x6sttAaYQW3mAk9E+frCEWm86M1ZdPdzhFKMmuU5L+XBh0R1Gcfxh9BJbkQfkEg7cf6zOR
-	Itv3vpsDvAXSQ69lQp9CvzSx7SKvErO+hOPu5T6+DWXAECU13xx5soLsY8uSMHdmfcdNWP3Vj+c
-	kogksnJlB298fLFnHdZ+34Elm1Ft8uwHZ/F8s8o9RFMtWzM0=
-X-Google-Smtp-Source: AGHT+IED/A3KRrjTPIg3Rfxm4o8Ll0/rnXVSCw4XqZdm4RnIIk+8IMDwa9jZJ8xmaRzlAn5M4IpdMg==
-X-Received: by 2002:a05:600c:4f07:b0:45d:d6fc:2509 with SMTP id 5b1f17b1804b1-45ddc189486mr562625e9.6.1757063231266;
-        Fri, 05 Sep 2025 02:07:11 -0700 (PDT)
-Received: from localhost.localdomain ([2a00:6d43:105:c401:e307:1a37:2e76:ce91])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45dcfcf3de7sm35952735e9.4.2025.09.05.02.07.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Sep 2025 02:07:10 -0700 (PDT)
-From: Marco Crivellari <marco.crivellari@suse.com>
-To: linux-kernel@vger.kernel.org,
+	s=arc-20240116; t=1757064364; c=relaxed/simple;
+	bh=3zvekOl/XUiFqh4vR601bBqR6NZW8zUuGgIujgaGiWE=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=TsZ9Mj56rYnUsAZXfAtlu5lMlN9QY8eipjnXT4Dcmac9g5ETDFYS9SY9Zc/FmgqvgxveJU98skeO8SkTAguVIydCBvQVnfcSnNsCqUuDYtULJz5mXrU0HUIR9KLc1qchQd7Tdj0NbgAR0t5yhxK7KkVzyT8JZKrIopmlKd5gvr0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=V505oIzl; arc=none smtp.client-ip=15.184.224.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1757064290;
+	bh=NSrcGanPs+5thfVBp9IfRff+Z3I/BYaUE7ZN230XMHE=;
+	h=From:To:Subject:Date:Message-Id:MIME-Version;
+	b=V505oIzlFc9WXaTEemOeh0habn2DXooxe+QQoJLzM/AnSHX+8AFq/KopIDegEzr4N
+	 2EtYO/cLRsaTHnGZeTsLRyM1QJ9tB5OLGTw/VlFnV1vvlTlJQA/ZNxwk9e3AjpT1j1
+	 X3Cke2GrRS5bu/vYa7yoK1dUonk81kwxBtmCaY0E=
+X-QQ-mid: zesmtpip2t1757064283t11615352
+X-QQ-Originating-IP: mlRFQHyC4nBT6gVb+OjwyzNfdLiKfLDPbT+9EicTTQE=
+Received: from localhost.localdomain ( [localhost])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Fri, 05 Sep 2025 17:24:41 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 14279267152202296948
+EX-QQ-RecipientCnt: 7
+From: tuhaowen <tuhaowen@uniontech.com>
+To: len.brown@intel.com,
+	pavel@kernel.org,
+	rafael@kernel.org
+Cc: tuhaowen@uniontech.com,
+	huangbibo@uniontech.com,
+	linux-kernel@vger.kernel.org,
 	linux-pm@vger.kernel.org
-Cc: Tejun Heo <tj@kernel.org>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Marco Crivellari <marco.crivellari@suse.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Sebastian Reichel <sre@kernel.org>
-Subject: [PATCH 2/2] power: supply: WQ_PERCPU added to alloc_workqueue users
-Date: Fri,  5 Sep 2025 11:06:41 +0200
-Message-ID: <20250905090641.106297-3-marco.crivellari@suse.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20250905090641.106297-1-marco.crivellari@suse.com>
-References: <20250905090641.106297-1-marco.crivellari@suse.com>
+Subject: [PATCH v2] PM: Add configurable sync timeout for suspend and hibernation
+Date: Fri,  5 Sep 2025 17:24:33 +0800
+Message-Id: <20250905092433.15257-1-tuhaowen@uniontech.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20250905024702.1214-1-tuhaowen@uniontech.com>
+References: <20250905024702.1214-1-tuhaowen@uniontech.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: zesmtpip:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-1
+X-QQ-XMAILINFO: OZuCtzQljvyFda5zDYJjU3XsFzRs1S3hBWUcYTBtNYUDeuiUOk81THBo
+	fbgRp6cdI/AI1ZksDBlFt+xW7HpArIUvXJ6xsq4S8rj+maWZXBJtKQIHICfq+Bnj8LgHWvd
+	Cx99j0f6p1XiXMzy2ZahFWd6h2/VDG6eTly+kiWeOiI1/AbNn8y/0f6pXxj8g9szvEwkJkk
+	JcruDOwNcPHi8jgrJrsPTQlja3XvsLe8FQCKK40Vpf+FaGjY8dq3T+qJOcLDYFPo1WnliFA
+	T/WokkcGkJ3zbXeQTlXc7a69CnArNJc1hhrH1qO5D2DywkafItS+NtLBipL6D4DE0xEvajM
+	J7prgG8LRXcVQLaMmoIoaT5GZ/Avql2DEGsq4qiwuyktHOyrPRMe1lspFxebKuk6TzyJNXP
+	7miaXegC8eJ7zLJzwK08IYwcgcTPepr+HvX+xAM8rfzQoXy/wn2FE4oso/4khYx0HfS4eqF
+	X1NU1B9eEnV9qJqHfzXapg3LD5DTRNoxYU5xDTgztlvBMuh9T9n3bfGkZFAn5VzZtNVipfz
+	dBn/u1IVVXbuZX1nC+57Tc/u8cPSHtA7eJpuCsYgCfRFpIiCwIn72KmSstJUp1TKCaeBdIb
+	RSgzbYDSi6F00LLc/lJs0ELcVawa0orLV/gcikYFmYTgpod7wFJ1Ud+yvV0pyosrw95nYZq
+	AI47Z1Ik8BETVrkHZhKJdoRIR8AYPUIj1I+6wjBaH2JdqSDzCCxNiCGzstFcPu1Kxo1vckw
+	iKXGUnXR3aup3cqKonLEFwV1PBUwYTBNV+g33YdEJdHLizH852mYfTb9nNApS8/2AGV7f1F
+	jUDzHD/+MIw3gOcDugGdJXuxtsbSMJbzP75xk4ZdTN8cw0kkhkfsHg0qulfxcHtuMb5147+
+	tyWDen3bcRcHKDLASKoA5HhDJO1+uNzcqSJ9DXAFoWrerNHbSYKAEcLbi0hpL3Ab5wMf/6s
+	n1QKflh3vTTNp6FV/Fp02N9874GYQqT0iYM7v/FHHbr4KaKFQxFT6/AYxLluGOWJ5ISu29+
+	aOGRfek6+xb5oBhhD8ojfqxLL/YPc9ZAslNsFRWLbO8dWOb/qI
+X-QQ-XMRINFO: OD9hHCdaPRBwq3WW+NvGbIU=
+X-QQ-RECHKSPAM: 0
 
-Currently if a user enqueue a work item using schedule_delayed_work() the
-used wq is "system_wq" (per-cpu wq) while queue_delayed_work() use
-WORK_CPU_UNBOUND (used when a cpu is not specified). The same applies to
-schedule_work() that is using system_wq and queue_work(), that makes use
-again of WORK_CPU_UNBOUND.
-This lack of consistentcy cannot be addressed without refactoring the API.
+When large file operations are in progress during system suspend or
+hibernation, the ksys_sync() call can hang for extended periods,
+leading to unresponsive system behavior. Users copying large files
+to USB drives may experience black screen hangs when attempting to
+suspend, requiring forced power cycles.
 
-alloc_workqueue() treats all queues as per-CPU by default, while unbound
-workqueues must opt-in via WQ_UNBOUND.
+This patch introduces a unified sync timeout mechanism for both
+suspend-to-RAM (S3) and hibernation (S4) to prevent indefinite
+hangs while maintaining data integrity.
 
-This default is suboptimal: most workloads benefit from unbound queues,
-allowing the scheduler to place worker threads where they’re needed and
-reducing noise when CPUs are isolated.
+Key features:
+- Configurable timeout via sysfs interface
+- Default behavior unchanged (timeout disabled by default)
+- Unified implementation for both suspend and hibernation paths
+- Graceful fallback to direct sync on thread creation failure
 
-This default is suboptimal: most workloads benefit from unbound queues,
-allowing the scheduler to place worker threads where they’re needed and
-reducing noise when CPUs are isolated.
+Sysfs interface:
+- /sys/power/sleep_sync_timeout: Runtime configuration (0-600000ms)
 
-This patch adds a new WQ_PERCPU flag to explicitly request the use of
-the per-CPU behavior. Both flags coexist for one release cycle to allow
-callers to transition their calls.
+When timeout is enabled and exceeded, the sync operation is aborted
+and suspend/hibernation fails gracefully with -ETIMEDOUT, preventing
+system hangs.
 
-Once migration is complete, WQ_UNBOUND can be removed and unbound will
-become the implicit default.
+Implementation creates a separate kthread for sync operations when
+timeout is enabled, allowing the main suspend path to maintain
+control and abort if necessary.
 
-With the introduction of the WQ_PERCPU flag (equivalent to !WQ_UNBOUND),
-any alloc_workqueue() caller that doesn’t explicitly specify WQ_UNBOUND
-must now use WQ_PERCPU.
+Compared to [PATCH v3 0/3] PM: Support aborting suspend during
+filesystem sync (see: https://lore.kernel.org/linux-pm/20250821004237.
+2712312-1-wusamuel@google.com/), this patch addresses scenarios where
+there may be no wakeup event, but the sync operation is excessively
+slow (e.g., due to slow or faulty storage). By introducing a configurable
+timeout, it proactively prevents indefinite hangs and improves user
+experience in a wider range of real-world cases. The implementation
+is also simpler and gives users or system integrators more flexibility
+to tune behavior for different devices and requirements. Additionally,
+the ksys_sync_helper_timeout() interface is designed as a reusable
+generic function that other kernel subsystems can leverage when they
+need sync operations with timeout control, promoting code reuse and
+reducing maintenance overhead across the kernel.
 
-All existing users have been updated accordingly.
-
-Suggested-by: Tejun Heo <tj@kernel.org>
-Signed-off-by: Marco Crivellari <marco.crivellari@suse.com>
+Signed-off-by: tuhaowen <tuhaowen@uniontech.com>
 ---
- drivers/power/supply/ab8500_btemp.c       | 3 ++-
- drivers/power/supply/ipaq_micro_battery.c | 3 ++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+Changes in v2:
+- Unified timeout logic in kernel/power/main.c
+- Removed duplicate code from suspend.c and hibernate.c
+- Added sysfs interface for runtime configuration
+- Changed default to 0 (disabled) for backward compatibility
+- Increased maximum timeout to 10 minutes
+- Simplified parameter control (removed separate enable flag)
+---
+ include/linux/suspend.h  |  3 ++
+ kernel/power/hibernate.c |  4 +-
+ kernel/power/main.c      | 82 ++++++++++++++++++++++++++++++++++++++++
+ kernel/power/suspend.c   |  6 ++-
+ 4 files changed, 93 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/power/supply/ab8500_btemp.c b/drivers/power/supply/ab8500_btemp.c
-index b00c84fbc33c..e5202a7b6209 100644
---- a/drivers/power/supply/ab8500_btemp.c
-+++ b/drivers/power/supply/ab8500_btemp.c
-@@ -667,7 +667,8 @@ static int ab8500_btemp_bind(struct device *dev, struct device *master,
+diff --git a/include/linux/suspend.h b/include/linux/suspend.h
+index da6ebca3f..976c8f8a1 100644
+--- a/include/linux/suspend.h
++++ b/include/linux/suspend.h
+@@ -439,6 +439,8 @@ void restore_processor_state(void);
+ extern int register_pm_notifier(struct notifier_block *nb);
+ extern int unregister_pm_notifier(struct notifier_block *nb);
+ extern void ksys_sync_helper(void);
++extern int ksys_sync_helper_timeout(unsigned int timeout_ms);
++extern unsigned int sync_timeout_ms;
+ extern void pm_report_hw_sleep_time(u64 t);
+ extern void pm_report_max_hw_sleep(u64 t);
  
- 	/* Create a work queue for the btemp */
- 	di->btemp_wq =
--		alloc_workqueue("ab8500_btemp_wq", WQ_MEM_RECLAIM, 0);
-+		alloc_workqueue("ab8500_btemp_wq", WQ_MEM_RECLAIM | WQ_PERCPU,
-+				0);
- 	if (di->btemp_wq == NULL) {
- 		dev_err(dev, "failed to create work queue\n");
- 		return -ENOMEM;
-diff --git a/drivers/power/supply/ipaq_micro_battery.c b/drivers/power/supply/ipaq_micro_battery.c
-index 7e0568a5353f..ff8573a5ca6d 100644
---- a/drivers/power/supply/ipaq_micro_battery.c
-+++ b/drivers/power/supply/ipaq_micro_battery.c
-@@ -232,7 +232,8 @@ static int micro_batt_probe(struct platform_device *pdev)
- 		return -ENOMEM;
+@@ -486,6 +488,7 @@ static inline void pm_report_hw_sleep_time(u64 t) {};
+ static inline void pm_report_max_hw_sleep(u64 t) {};
  
- 	mb->micro = dev_get_drvdata(pdev->dev.parent);
--	mb->wq = alloc_workqueue("ipaq-battery-wq", WQ_MEM_RECLAIM, 0);
-+	mb->wq = alloc_workqueue("ipaq-battery-wq",
-+				 WQ_MEM_RECLAIM | WQ_PERCPU, 0);
- 	if (!mb->wq)
- 		return -ENOMEM;
+ static inline void ksys_sync_helper(void) {}
++static inline int ksys_sync_helper_timeout(unsigned int timeout_ms) { return 0; }
  
+ #define pm_notifier(fn, pri)	do { (void)(fn); } while (0)
+ 
+diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
+index 23c0f4e6c..2678181a5 100644
+--- a/kernel/power/hibernate.c
++++ b/kernel/power/hibernate.c
+@@ -777,7 +777,9 @@ int hibernate(void)
+ 	if (error)
+ 		goto Restore;
+ 
+-	ksys_sync_helper();
++	error = ksys_sync_helper_timeout(sync_timeout_ms);
++	if (error)
++		goto Exit;
+ 
+ 	error = freeze_processes();
+ 	if (error)
+diff --git a/kernel/power/main.c b/kernel/power/main.c
+index 6254814d4..3912f221a 100644
+--- a/kernel/power/main.c
++++ b/kernel/power/main.c
+@@ -17,10 +17,21 @@
+ #include <linux/suspend.h>
+ #include <linux/syscalls.h>
+ #include <linux/pm_runtime.h>
++#include <linux/completion.h>
++#include <linux/kthread.h>
++#include <linux/jiffies.h>
+ 
+ #include "power.h"
+ 
+ #ifdef CONFIG_PM_SLEEP
++/* Sync timeout parameters */
++unsigned int sync_timeout_ms;
++EXPORT_SYMBOL_GPL(sync_timeout_ms);
++
++/* Sync timeout implementation */
++static struct completion sync_completion;
++static struct task_struct *sync_task;
++
+ /*
+  * The following functions are used by the suspend/hibernate code to temporarily
+  * change gfp_allowed_mask in order to avoid using I/O during memory allocations
+@@ -79,6 +90,45 @@ void ksys_sync_helper(void)
+ }
+ EXPORT_SYMBOL_GPL(ksys_sync_helper);
+ 
++static int sync_thread_func(void *data)
++{
++	ksys_sync_helper();
++	complete(&sync_completion);
++	return 0;
++}
++
++int ksys_sync_helper_timeout(unsigned int timeout_ms)
++{
++	unsigned long timeout_jiffies;
++
++	/* If timeout is 0, use regular sync without timeout */
++	if (timeout_ms == 0) {
++		ksys_sync_helper();
++		return 0;
++	}
++
++	init_completion(&sync_completion);
++	sync_task = kthread_run(sync_thread_func, NULL, "sync_timeout");
++	if (IS_ERR(sync_task)) {
++		pr_warn("%s: Failed to create sync thread, performing sync directly\n",
++			__func__);
++		ksys_sync_helper();
++		return 0;
++	}
++
++	timeout_jiffies = msecs_to_jiffies(timeout_ms);
++	if (!wait_for_completion_timeout(&sync_completion, timeout_jiffies)) {
++		pr_warn("%s: Sync operation timed out after %u ms, aborting\n",
++			__func__, timeout_ms);
++		kthread_stop(sync_task);
++		return -ETIMEDOUT;
++	}
++	return 0;
++}
++EXPORT_SYMBOL_GPL(ksys_sync_helper_timeout);
++
++
++
+ /* Routines for PM-transition notifications */
+ 
+ static BLOCKING_NOTIFIER_HEAD(pm_chain_head);
+@@ -240,6 +290,37 @@ static ssize_t sync_on_suspend_store(struct kobject *kobj,
+ }
+ 
+ power_attr(sync_on_suspend);
++
++/*
++ * sleep_sync_timeout: configure sync timeout during suspend/hibernation.
++ *
++ * show() returns the current sync timeout in milliseconds.
++ * store() accepts timeout value in milliseconds. 0 disables timeout.
++ */
++static ssize_t sleep_sync_timeout_show(struct kobject *kobj,
++				 struct kobj_attribute *attr, char *buf)
++{
++	return sysfs_emit(buf, "%u\n", sync_timeout_ms);
++}
++
++static ssize_t sleep_sync_timeout_store(struct kobject *kobj,
++				  struct kobj_attribute *attr,
++				  const char *buf, size_t n)
++{
++	unsigned long val;
++
++	if (kstrtoul(buf, 10, &val))
++		return -EINVAL;
++
++	/* Allow any reasonable timeout value */
++	if (val > 600000) /* Max 10 minutes */
++		return -EINVAL;
++
++	sync_timeout_ms = val;
++	return n;
++}
++
++power_attr(sleep_sync_timeout);
+ #endif /* CONFIG_SUSPEND */
+ 
+ #ifdef CONFIG_PM_SLEEP_DEBUG
+@@ -974,6 +1055,7 @@ static struct attribute * g[] = {
+ #ifdef CONFIG_SUSPEND
+ 	&mem_sleep_attr.attr,
+ 	&sync_on_suspend_attr.attr,
++	&sleep_sync_timeout_attr.attr,
+ #endif
+ #ifdef CONFIG_PM_AUTOSLEEP
+ 	&autosleep_attr.attr,
+diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
+index 8eaec4ab1..4f8015a75 100644
+--- a/kernel/power/suspend.c
++++ b/kernel/power/suspend.c
+@@ -585,8 +585,12 @@ static int enter_state(suspend_state_t state)
+ 
+ 	if (sync_on_suspend_enabled) {
+ 		trace_suspend_resume(TPS("sync_filesystems"), 0, true);
+-		ksys_sync_helper();
++		error = ksys_sync_helper_timeout(sync_timeout_ms);
+ 		trace_suspend_resume(TPS("sync_filesystems"), 0, false);
++		if (error) {
++			pr_err("PM: Sync timeout, aborting suspend\n");
++			goto Unlock;
++		}
+ 	}
+ 
+ 	pm_pr_dbg("Preparing system for sleep (%s)\n", mem_sleep_labels[state]);
 -- 
-2.51.0
+2.20.1
 
 
