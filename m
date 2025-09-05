@@ -1,171 +1,214 @@
-Return-Path: <linux-pm+bounces-34026-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34027-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 422B5B46409
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 21:59:16 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD9C4B46487
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 22:18:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E0B721C86356
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 19:59:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1600C1BC4495
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 20:18:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FAB0283121;
-	Fri,  5 Sep 2025 19:59:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45C942BE027;
+	Fri,  5 Sep 2025 20:17:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b="aJEUvpQm";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="PRZ7ZsQ5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uIKc5zt2"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fout-a2-smtp.messagingengine.com (fout-a2-smtp.messagingengine.com [103.168.172.145])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40861E55A;
-	Fri,  5 Sep 2025 19:59:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.145
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A4A52472A4;
+	Fri,  5 Sep 2025 20:17:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757102351; cv=none; b=WBfZspVF1EFOsAfhFUD9y/V9+Y9yWc9H1f4GV0gmarExm66i3Hysd6j8nWbLg0Zv/fSi5dSjHWNGrMkVLzlElJI+Ao3X5MgtY5Dvj5y+6MrdVUJbKDTQOwTsehYT84lmkVkzGG7jG8kItZL41uk0w+EjUoTIz15xSNQ283XJsAA=
+	t=1757103459; cv=none; b=P0zEBIuNjCWsawEENSMocYkyKtd98NLTalO7IR6kSLABZrhlI90QmCeKbYGNBPjos7t8ad3q7BDvA2iWGLPzcFpJtgG1vxjteGejUh1VEyozYZVJDDoTl7pMEqCESCDhAwaSyfq5TsXbG8lkljo5NRF0F+UPU9BWl++aVaKx4f8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757102351; c=relaxed/simple;
-	bh=P69v0RjJ/1HhflldI2zS//OsaLLhmdwzpEbl3SC1MoM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Q8soS2bSz2VuGAnf4/ryukfMmsRJho1pCyU8gs4z2N9l+g/ksukixNsgSfOIpIvGlKWI/7PDYEi6yIspb1JGkTw/BlomHKlmJPUEHiDlZssWCJeS9uGlwdOWSQbYsZ9+FITAdORwflbHJR/C/J6jb8Tn84HC4v4iU3eepoUvldU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se; spf=pass smtp.mailfrom=ragnatech.se; dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b=aJEUvpQm; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=PRZ7ZsQ5; arc=none smtp.client-ip=103.168.172.145
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ragnatech.se
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfout.phl.internal (Postfix) with ESMTP id 6034DEC0369;
-	Fri,  5 Sep 2025 15:59:08 -0400 (EDT)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-04.internal (MEProxy); Fri, 05 Sep 2025 15:59:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ragnatech.se; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1757102348;
-	 x=1757188748; bh=Ihr2nGMrA7SrxtqaATN/qj9edQvgu9qlvw8CXfM7AHg=; b=
-	aJEUvpQm0fTZOAWzprgDF3Vk5XXmdejTjBuZVB4F4o5OXNN54d12ZOz9tgEa5SRk
-	+TV+6WQ63HVNfurO8OjUyIiWuO257j6NdIo1FwAJnlu7lzQ2ASziPXuboMozTv/4
-	t3hIvOtO5xywwTH1Hsxqi6iNCEaz0HgRMWr1t3zEs3LdM9l3g9OJKWgsBoziMcLC
-	sU0PYd0Mi42ihP6pl3f2JWPDmrcsuW/KfbkDZtySyzTsWVsFxENpKxud/MVAzYR0
-	fZB4bChMvVPgXWkjrftM+EP8vO0TUteifZj9ETnHhhfQh4GIcOB7oaRzdr0+QaIX
-	9N5D/N3zPn6ahGqDNQY4NQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1757102348; x=
-	1757188748; bh=Ihr2nGMrA7SrxtqaATN/qj9edQvgu9qlvw8CXfM7AHg=; b=P
-	RZ7ZsQ50MVu+Xpc1TRra0H7put71OygcTmoyi2KAorv4nq5py+KfE3oP7xN23KSH
-	nK5Wmp88YT1myDxXjBDN5Jv+bK6CJmGpq286RXjoBvUYO347YVhBamFtJaf/S0U6
-	lNmps/NU6twsdzjRKKgnqQXCg7vCBacoMumQrXwL3IcSvFQBPBuDNyOAGTo6cVt9
-	2Umgoj6w5DRY43Z0wuPig9P5iPVVaeliTSy+hqpsjrhQK50IptlK/3uP9+9H+FXE
-	YpBbFV6mZXBiR0kX1L61RHVXBGVAcrkPz7anfbge9MApCXTjDFSIz8QD2a6Zv8cW
-	fS6Na+OFhPkr8r+TpDgdA==
-X-ME-Sender: <xms:C0G7aGvA-9VnF09n4T4T6oDo61ULzUXUMyvMOoO3nyVIiZKBbvIMdQ>
-    <xme:C0G7aGE_NfmHzPIIJ0Nj3lAYTRYqBHPkyWLWmkvOmsqwLo2MI81mvs5-Ko206Sl0a
-    oTJvijw5uM3tvE7MG8>
-X-ME-Received: <xmr:C0G7aHzYqo-gfeEeuF5x1xqz3iJf8a5ZES9dTPxwMSxi-d2b9yKOlSGt9Mr6EuymYfyNyEzq6VU4DseXxdS7Vf5QWgO2jNNk2g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdeljeelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceurghi
-    lhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurh
-    epfffhvfevuffkfhggtggugfgjsehtkeertddttdejnecuhfhrohhmpefpihhklhgrshcu
-    ufpnuggvrhhluhhnugcuoehnihhklhgrshdrshhouggvrhhluhhnugesrhgrghhnrghtvg
-    gthhdrshgvqeenucggtffrrghtthgvrhhnpeevteegtddvvdfhtdekgefhfeefheetheek
-    keegfeejudeiudeuleegtdehkeekteenucevlhhushhtvghrufhiiigvpedtnecurfgrrh
-    grmhepmhgrihhlfhhrohhmpehnihhklhgrshdrshhouggvrhhluhhnugesrhgrghhnrght
-    vggthhdrshgvpdhnsggprhgtphhtthhopeelpdhmohguvgepshhmthhpohhuthdprhgtph
-    htthhopehmrghrvghkrdhvrghsuhhtodhrvghnvghsrghssehmrghilhgsohigrdhorhhg
-    pdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtg
-    hpthhtoheprhgrfhgrvghlsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnihgv
-    lhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhrtghpthhtohepghgvvghrthdorh
-    gvnhgvshgrshesghhlihguvghrrdgsvgdprhgtphhtthhopehluhhkrghsiidrlhhusggr
-    segrrhhmrdgtohhmpdhrtghpthhtohepmhgrghhnuhhsrdgurghmmhesghhmrghilhdrtg
-    homhdprhgtphhtthhopehruhhirdiihhgrnhhgsehinhhtvghlrdgtohhmpdhrtghpthht
-    oheplhhinhhugidqrhgvnhgvshgrshdqshhotgesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:C0G7aA2RlI1LXPe5W92YM4PaBXtrusDCM5Ichdv_BpS8X7Iai_HBxA>
-    <xmx:C0G7aHpXWzged01duQ2rar9iZcQ_M9b3rHeKL4zJ42Xo-TUf49Uz9Q>
-    <xmx:C0G7aNUTmvNE701JTvr_Fj6Y36bLbPlOnAsxbkxsgKZDPvrBYaW2Bw>
-    <xmx:C0G7aArRPFUdwShFj8U86DxNtYMOYwh06AqDD3c54q0GfgH0qKNv4Q>
-    <xmx:DEG7aDiKY1y7g7ibaACkiyaylctgFz47WOa_N8NUPEvJOuQG4ez-4L48>
-Feedback-ID: i80c9496c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 5 Sep 2025 15:59:06 -0400 (EDT)
-Date: Fri, 5 Sep 2025 21:59:04 +0200
-From: Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>
-To: Marek Vasut <marek.vasut+renesas@mailbox.org>
-Cc: linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Lukasz Luba <lukasz.luba@arm.com>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Zhang Rui <rui.zhang@intel.com>, linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH] thermal/drivers/rcar_gen3: Document Gen4 support in
- Kconfig entry
-Message-ID: <20250905195904.GA2033628@ragnatech.se>
-References: <20250905193322.148115-1-marek.vasut+renesas@mailbox.org>
+	s=arc-20240116; t=1757103459; c=relaxed/simple;
+	bh=VCWnUGzPf6mLuDmms/YZCG2llaFLvKJwA1gnXCCbRdk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=KOUO0m7vCBcbqM44yiOHQESKRCp4tdJ6id8+gMrinGrE1+hrgCXSodgzPqQb3VLz6ZLM0iSNerlbQcTzq9WRyKJRf0N861lhjc7rrjJTmRC3Bsa2E4Uw9209d/tnBaD+mCw8LzfqZw+5FKMQqt1J+EkIdRfd74XPX3HyxPdFU+c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uIKc5zt2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6C78C19424;
+	Fri,  5 Sep 2025 20:17:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757103458;
+	bh=VCWnUGzPf6mLuDmms/YZCG2llaFLvKJwA1gnXCCbRdk=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=uIKc5zt24/XZwP7JYEqTfBfFRmX6Wk9YHD8HxEi0IvUGCXmYhq0zMpSm8supQ0Fb5
+	 iJGS/xoCTwpWx6B21zvCyX58JiG6wKZeHnfKV9PrzdFD8g77UCWMhwV/+VxR8kAvlQ
+	 yPVyT4akXZx6QFmh+sC2ZrMWYx9v4XhPjX4ZqEzVtRypqr58ssUWkgaJb/JjbHDIS4
+	 Q06psN5PW+ZumYVyodesqKh7Uj5j1bR2yhf3Z/vTbdtMhbmMxPQZsd1C7tcDa8a8kX
+	 RxRMOqOPKJoPYzcqOhn1uU/Cd9d8rzzAEwXshP6QHtlDLuGvIqnZfJzgThdRl7C/Wq
+	 nxK2iLAKYjwYQ==
+Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-61bd4ad64c7so801135eaf.0;
+        Fri, 05 Sep 2025 13:17:38 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUraKzGHcjXYxM1x/+9H6tiER1I4b50o6C7rUX/4wtqzr/VOG9IGoSfNrhGWomA7QzUlxwix5GfGIZm@vger.kernel.org, AJvYcCVzPIiU1SNvKJUtQ7YeeoPzVxX8J3LFk/kijiUVPzVkeIPTZs21lE3YeABzKz60w9gIDNdsdUoF6YA=@vger.kernel.org, AJvYcCW33R3KoX3K4Z9WBena+05xnJDAfGRhXR2g/Wowh0HXWGpPiCqW+hzlMAqNPF9F88GHzcIRhzhUO2CIUQ==@vger.kernel.org, AJvYcCWeIQnyZ7xMarkvd48XpvBIVuEdVJfUwZ26Pr1xRpgQxQ/Z0BY8p9NaRaBsro6l1EQw7aA+SAa2AX6r4Bkz@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxup4JkUgMLv2/to1UB8LLZENstzPjwt63ZTbRR96PJDlopYiIe
+	CQWuKrqR0CD/5cFOCPYxe9c6F+LeuqbayCBOvLK1ZJs48u/6jo3MCVzJaCJ8/0nSzAe1UKOD7X1
+	lfCdSUaQJfhS1zwtBXVQQa1ifj4vdEc0=
+X-Google-Smtp-Source: AGHT+IEfq1HNckIyyDDXquy0XLtyGZg1XWmotG9HdXFUDIR4D+v0h/9IrUo3g6diO4+f6WOXTRuaooZELa2e+VnSV5o=
+X-Received: by 2002:a05:6820:809:b0:61f:f932:8d64 with SMTP id
+ 006d021491bc7-61ff9329264mr2455383eaf.1.1757103457768; Fri, 05 Sep 2025
+ 13:17:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250905193322.148115-1-marek.vasut+renesas@mailbox.org>
+References: <20250905132413.1376220-1-zhangzihuan@kylinos.cn> <20250905132413.1376220-3-zhangzihuan@kylinos.cn>
+In-Reply-To: <20250905132413.1376220-3-zhangzihuan@kylinos.cn>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Fri, 5 Sep 2025 22:17:26 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0iTdgM5BBi2ysiJxfA2c=MQ0fjLsEvVct9stxomvEe=4Q@mail.gmail.com>
+X-Gm-Features: Ac12FXw3PBjsIjj4AtBsEfmKTR7PfZEmevzc6Jwe0zbtA2TuWwqukJr66Nf1sL8
+Message-ID: <CAJZ5v0iTdgM5BBi2ysiJxfA2c=MQ0fjLsEvVct9stxomvEe=4Q@mail.gmail.com>
+Subject: Re: [PATCH v5 2/6] ACPI: processor: thermal: Use scope-based cleanup helper
+To: Zihuan Zhang <zhangzihuan@kylinos.cn>
+Cc: "Rafael J . wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
+	Jonathan Cameron <jonathan.cameron@huawei.com>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, 
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Krzysztof Kozlowski <krzk@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
+	Thierry Reding <thierry.reding@gmail.com>, MyungJoo Ham <myungjoo.ham@samsung.com>, 
+	Kyungmin Park <kyungmin.park@samsung.com>, Chanwoo Choi <cw00.choi@samsung.com>, 
+	Jani Nikula <jani.nikula@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
+	Tvrtko Ursulin <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>, 
+	Simona Vetter <simona@ffwll.ch>, Daniel Lezcano <daniel.lezcano@kernel.org>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Shawn Guo <shawnguo@kernel.org>, 
+	Eduardo Valentin <edubezval@gmail.com>, Keerthy <j-keerthy@ti.com>, Ben Horgan <ben.horgan@arm.com>, 
+	zhenglifeng <zhenglifeng1@huawei.com>, Zhang Rui <rui.zhang@intel.com>, 
+	Len Brown <lenb@kernel.org>, Lukasz Luba <lukasz.luba@arm.com>, 
+	Pengutronix Kernel Team <kernel@pengutronix.de>, Beata Michalska <beata.michalska@arm.com>, 
+	Fabio Estevam <festevam@gmail.com>, Pavel Machek <pavel@kernel.org>, Sumit Gupta <sumitg@nvidia.com>, 
+	Prasanna Kumar T S M <ptsm@linux.microsoft.com>, Sudeep Holla <sudeep.holla@arm.com>, 
+	Yicong Yang <yangyicong@hisilicon.com>, linux-pm@vger.kernel.org, 
+	linux-acpi@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+	linux-arm-kernel@lists.infradead.org, intel-gfx@lists.freedesktop.org, 
+	dri-devel@lists.freedesktop.org, imx@lists.linux.dev, 
+	linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Marek,
-
-Thanks for your patch.
-
-On 2025-09-05 21:32:56 +0200, Marek Vasut wrote:
-> The R-Car Gen3 thermal driver supports both R-Car Gen3 and Gen4 SoCs.
-> Update the Kconfig entry.
-> 
-> Signed-off-by: Marek Vasut <marek.vasut+renesas@mailbox.org>
-
-Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-
+On Fri, Sep 5, 2025 at 3:24=E2=80=AFPM Zihuan Zhang <zhangzihuan@kylinos.cn=
+> wrote:
+>
+> Replace the manual cpufreq_cpu_put() with __free(put_cpufreq_policy)
+> annotation for policy references. This reduces the risk of reference
+> counting mistakes and aligns the code with the latest kernel style.
+>
+> No functional change intended.
+>
+> Signed-off-by: Zihuan Zhang <zhangzihuan@kylinos.cn>
 > ---
-> Cc: "Niklas Söderlund" <niklas.soderlund@ragnatech.se>
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Cc: Geert Uytterhoeven <geert+renesas@glider.be>
-> Cc: Lukasz Luba <lukasz.luba@arm.com>
-> Cc: Magnus Damm <magnus.damm@gmail.com>
-> Cc: Zhang Rui <rui.zhang@intel.com>
-> Cc: linux-pm@vger.kernel.org
-> Cc: linux-renesas-soc@vger.kernel.org
-> ---
->  drivers/thermal/renesas/Kconfig | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/thermal/renesas/Kconfig b/drivers/thermal/renesas/Kconfig
-> index dcf5fc5ae08e4..f4af8c7f28b05 100644
-> --- a/drivers/thermal/renesas/Kconfig
-> +++ b/drivers/thermal/renesas/Kconfig
-> @@ -10,13 +10,13 @@ config RCAR_THERMAL
->  	  thermal framework.
->  
->  config RCAR_GEN3_THERMAL
-> -	tristate "Renesas R-Car Gen3 and RZ/G2 thermal driver"
-> +	tristate "Renesas R-Car Gen3/Gen4 and RZ/G2 thermal driver"
->  	depends on ARCH_RENESAS || COMPILE_TEST
->  	depends on HAS_IOMEM
->  	depends on OF
->  	help
-> -	  Enable this to plug the R-Car Gen3 or RZ/G2 thermal sensor driver into
-> -	  the Linux thermal framework.
-> +	  Enable this to plug the R-Car Gen3/Gen4 or RZ/G2 thermal sensor
-> +	  driver into the Linux thermal framework.
->  
->  config RZG2L_THERMAL
->  	tristate "Renesas RZ/G2L thermal driver"
-> -- 
-> 2.50.1
-> 
+>  drivers/acpi/processor_thermal.c | 52 +++++++++++++++++---------------
+>  1 file changed, 27 insertions(+), 25 deletions(-)
+>
+> diff --git a/drivers/acpi/processor_thermal.c b/drivers/acpi/processor_th=
+ermal.c
+> index 1219adb11ab9..460713d1414a 100644
+> --- a/drivers/acpi/processor_thermal.c
+> +++ b/drivers/acpi/processor_thermal.c
+> @@ -62,19 +62,14 @@ static int phys_package_first_cpu(int cpu)
+>         return 0;
+>  }
+>
+> -static int cpu_has_cpufreq(unsigned int cpu)
+> +static bool cpu_has_cpufreq(unsigned int cpu)
+>  {
+> -       struct cpufreq_policy *policy;
+> -
+>         if (!acpi_processor_cpufreq_init)
+>                 return 0;
+>
+> -       policy =3D cpufreq_cpu_get(cpu);
+> -       if (policy) {
+> -               cpufreq_cpu_put(policy);
+> -               return 1;
+> -       }
+> -       return 0;
+> +       struct cpufreq_policy *policy __free(put_cpufreq_policy) =3D cpuf=
+req_cpu_get(cpu);
+> +
+> +       return policy !=3D NULL;
+>  }
+>
+>  static int cpufreq_get_max_state(unsigned int cpu)
 
--- 
-Kind Regards,
-Niklas Söderlund
+The changes above are fine and can be sent as a separate patch.
+
+> @@ -93,12 +88,31 @@ static int cpufreq_get_cur_state(unsigned int cpu)
+>         return reduction_step(cpu);
+>  }
+>
+> +static bool cpufreq_update_thermal_limit(unsigned int cpu, struct acpi_p=
+rocessor *pr)
+> +{
+> +       unsigned long max_freq;
+> +       int ret;
+> +       struct cpufreq_policy *policy __free(put_cpufreq_policy) =3D cpuf=
+req_cpu_get(cpu);
+> +
+> +       if (!policy)
+> +               return false;
+> +
+> +       max_freq =3D (policy->cpuinfo.max_freq *
+> +               (100 - reduction_step(cpu) * cpufreq_thermal_reduction_pc=
+tg)) / 100;
+> +
+> +       ret =3D freq_qos_update_request(&pr->thermal_req, max_freq);
+> +       if (ret < 0) {
+> +               pr_warn("Failed to update thermal freq constraint: CPU%d =
+(%d)\n",
+> +         pr->id, ret);
+> +       }
+
+But this silently fixes a bug in the original code which needs to be
+documented with a Fixes: tag (and it would be better to fix the bug
+separately before the using the __free()-based cleanup TBH) and
+introduces some whitespace breakage.
+
+> +
+> +       return true;
+> +}
+> +
+>  static int cpufreq_set_cur_state(unsigned int cpu, int state)
+>  {
+> -       struct cpufreq_policy *policy;
+>         struct acpi_processor *pr;
+> -       unsigned long max_freq;
+> -       int i, ret;
+> +       int i;
+>
+>         if (!cpu_has_cpufreq(cpu))
+>                 return 0;
+> @@ -120,20 +134,8 @@ static int cpufreq_set_cur_state(unsigned int cpu, i=
+nt state)
+>                 if (unlikely(!freq_qos_request_active(&pr->thermal_req)))
+>                         continue;
+>
+> -               policy =3D cpufreq_cpu_get(i);
+> -               if (!policy)
+> +               if (!cpufreq_update_thermal_limit(i, pr))
+>                         return -EINVAL;
+> -
+> -               max_freq =3D (policy->cpuinfo.max_freq *
+> -                           (100 - reduction_step(i) * cpufreq_thermal_re=
+duction_pctg)) / 100;
+> -
+> -               cpufreq_cpu_put(policy);
+> -
+> -               ret =3D freq_qos_update_request(&pr->thermal_req, max_fre=
+q);
+> -               if (ret < 0) {
+> -                       pr_warn("Failed to update thermal freq constraint=
+: CPU%d (%d)\n",
+> -                               pr->id, ret);
+> -               }
+>         }
+>         return 0;
+>  }
+> --
 
