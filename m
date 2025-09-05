@@ -1,181 +1,229 @@
-Return-Path: <linux-pm+bounces-33927-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33928-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B38CB45064
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 09:54:48 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 92DA2B45073
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 09:56:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1A79A188017A
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 07:55:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 48D4217B1F5
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 07:56:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A64F2F4A06;
-	Fri,  5 Sep 2025 07:54:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFBF52F659C;
+	Fri,  5 Sep 2025 07:56:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b="QaTEQEmj";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Y0cf+H8i"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from flow-a4-smtp.messagingengine.com (flow-a4-smtp.messagingengine.com [103.168.172.139])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D8132248AF;
-	Fri,  5 Sep 2025 07:54:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75EEE2F60CD;
+	Fri,  5 Sep 2025 07:56:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757058879; cv=none; b=mc7Yrx3OzTmDwxSUZj2wDJgAP+BGh7xB9YOG/aWWPWJPBRTBWAfPStAyuewRgKuCz/IXXkeGe4hmBOZrYmM80oM2BW7vnqNh8+1ObDUhYwsUp9JWeY3Qs8h0J+KiY6/4MpJ1PUuT73l0jiT+IS00A6iVGRFUmNRY48qnzff+CgI=
+	t=1757058996; cv=none; b=PbABLUAIg5WqHT3UW6lzL9GvbEeZV68KtHgNg8lNA8e82zSpWR0W8ZCkiYkZZJ1t4GpdyxEcdDhQJAHWfmPv6nKdOoAQMpOQ8/S/YGlXyKfHG5ea0peuJYqQdZ4CIWoP38pk4fKD/mNWuzNZpCqr6KhF4cAdgcO8djAgqUGGwxk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757058879; c=relaxed/simple;
-	bh=Oo60j/fi4u5fOu814FQ+7xkjFeyOTHjJvjpPWpxNuZk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Jax/p8HtZTy3s9oBbPXiD9NRJOUp25Nh4tWj/9QeT6sXJ2CMDGt3Z1t/gKEURb7G16XNZcCMdrMRqZBt8Z9LU+pYixHLsawjHlTdxRZ/Ze+ty0JlTPdh1CZlQR5d+M0UUzXzgoDuhp5d/W9E40mD2HRHB0ZkDwWGCsXfjJevSss=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 8b7cd9b08a2d11f0b29709d653e92f7d-20250905
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.45,REQID:b8911e54-e0aa-40d7-9e56-019791a9cc88,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:6493067,CLOUDID:1038342e134dfa48eabc61cf9e37c597,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102,TC:nil,Content:0|52,EDM:
-	-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,
-	AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: 8b7cd9b08a2d11f0b29709d653e92f7d-20250905
-Received: from mail.kylinos.cn [(10.44.16.175)] by mailgw.kylinos.cn
-	(envelope-from <zhangzihuan@kylinos.cn>)
-	(Generic MTA)
-	with ESMTP id 1912680162; Fri, 05 Sep 2025 15:54:26 +0800
-Received: from mail.kylinos.cn (localhost [127.0.0.1])
-	by mail.kylinos.cn (NSMail) with SMTP id 49564E008FA7;
-	Fri,  5 Sep 2025 15:54:26 +0800 (CST)
-X-ns-mid: postfix-68BA9732-140429547
-Received: from [172.25.120.24] (unknown [172.25.120.24])
-	by mail.kylinos.cn (NSMail) with ESMTPA id 33213E008FA4;
-	Fri,  5 Sep 2025 15:54:22 +0800 (CST)
-Message-ID: <2ccca29e-4d5f-44fa-bfc8-d77c659bc9f3@kylinos.cn>
-Date: Fri, 5 Sep 2025 15:54:21 +0800
+	s=arc-20240116; t=1757058996; c=relaxed/simple;
+	bh=DCIyd4J3pbvUjw8wlbL34A1o0IPs27eqjyKuOZAMvOA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ViW5tY6pTMR/CliMHA/3AZd15+lEB34bZvnBVzVlHfeWJNeI3WX5V8syMQmUJPII1ySlPspe91DOKyPWMAVd1sUDD+cf1VGjc6/O4LUgI9hDrRZ+oKQdSYrjT5bQIURWR36ifwhyVzI7Afgjxcpsz8JZkC/ZLqVmT8afsf4OpF8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se; spf=pass smtp.mailfrom=ragnatech.se; dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b=QaTEQEmj; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Y0cf+H8i; arc=none smtp.client-ip=103.168.172.139
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ragnatech.se
+Received: from phl-compute-10.internal (phl-compute-10.internal [10.202.2.50])
+	by mailflow.phl.internal (Postfix) with ESMTP id 820DD1380159;
+	Fri,  5 Sep 2025 03:56:32 -0400 (EDT)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-10.internal (MEProxy); Fri, 05 Sep 2025 03:56:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ragnatech.se; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1757058992;
+	 x=1757066192; bh=KXUoaaH+PV1RudhFs2J2lVTbxM4uje+tSmH6gtbu+Nw=; b=
+	QaTEQEmjGTJeSxeiah6pwWZmjZ/MZs5T6DwWq8Nmr7oHpYFT9j95C72yMyBcZ5nz
+	u3cXjVlnWCc6V75Dwc83w5se6RUX0cgy2r6hhn8896BD1N9niWfNBDEsX5z3bbZh
+	580Lxh1wJduGFt3iTeOOmO1kuUcf+UmbfmLmVrhi303staCq+82oOHT6v6FtLJ0q
+	KUmIN0sVOTWfm9OO4IWePH36nTPtiHUbxCP6V5sCpCoy7ecX5fAcARL2bBp1+hYX
+	meum9lsc6nxtc9bJfoYbWnrGaAyGJmjEbDgf28gHFpwuN2s7fsfyePI14fKiGSKO
+	+KWH0qpxAXjQsFF5TvJk4Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1757058992; x=
+	1757066192; bh=KXUoaaH+PV1RudhFs2J2lVTbxM4uje+tSmH6gtbu+Nw=; b=Y
+	0cf+H8iNJvMgyddoNtlWXiFqcl4IGVll81T+/QLuu0VNzM2Tdl4Dututnx+WBVfY
+	ZUAq036GCT8hJkBvo1Xuxdbdn01HtUdgUk4Ofv3efStIQ3nE14kAyA73FHfb4fjf
+	KOwQB+75cW2V3GGZKDUuIfX594V3wr1n+Z2P2+qfVHB3QqrZG4ssbRrH1By1GbCD
+	TRIW/OdNehrErechp8kPDk8rijxMDklBtf55Ic7ogPHsHFoI0ZeeNpUdQIUyNFBc
+	8OZXytKiVrvaFoIX8swMPQV8EFgUKFbS92QjUo575ehIJo8Op3B6lZAJqKd3TDxm
+	YaTlavtRtgFLUQVaVcOvQ==
+X-ME-Sender: <xms:rJe6aPT4hEQwkAeohLnFC7wamjbvAr7niwm9b31Yo5zEex0vYFN_jg>
+    <xme:rJe6aPCqpHI9uJ68XId1Qna7oWm5iyUGoAQPsu1kx2oN2qHjsCp2dNoZI4nTxFNl9
+    MurlN6lVZ1a7ntIgiI>
+X-ME-Received: <xmr:rJe6aO_r3H0kGSKS2fH0hEtRAmpG1wYDXGxPnza4nmiPk8yaDQHgreHxbUoYRRqeSVYYMKGdX0I7aNFWxHyOdN0DhlU70pWKyg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdekfeegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceurghi
+    lhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurh
+    epfffhvfevuffkfhggtggugfgjsehtkeertddttdejnecuhfhrohhmpefpihhklhgrshcu
+    ufpnuggvrhhluhhnugcuoehnihhklhgrshdrshhouggvrhhluhhnugesrhgrghhnrghtvg
+    gthhdrshgvqeenucggtffrrghtthgvrhhnpeevteegtddvvdfhtdekgefhfeefheetheek
+    keegfeejudeiudeuleegtdehkeekteenucevlhhushhtvghrufhiiigvpedtnecurfgrrh
+    grmhepmhgrihhlfhhrohhmpehnihhklhgrshdrshhouggvrhhluhhnugesrhgrghhnrght
+    vggthhdrshgvpdhnsggprhgtphhtthhopeeihedpmhhouggvpehsmhhtphhouhhtpdhrtg
+    hpthhtohepiihhrghordigihgthhgrohesvhhivhhordgtohhmpdhrtghpthhtohepjhgu
+    vghlvhgrrhgvsehsuhhsvgdrtghomhdprhgtphhtthhopehlihhnuhigsehrohgvtghkqd
+    hushdrnhgvthdprhgtphhtthhopehjihgtvdefsehkvghrnhgvlhdrohhrghdprhgtphht
+    thhopegulhgvtghhnhgvrhessggrhihlihgsrhgvrdgtohhmpdhrtghpthhtohepnhhunh
+    hordhsrgesrghnrghlohhgrdgtohhmpdhrtghpthhtoheprghnugihsehkvghrnhgvlhdr
+    ohhrghdprhgtphhtthhopeifvghnshestghsihgvrdhorhhgpdhrtghpthhtohepjhgvrh
+    hnvghjrdhskhhrrggsvggtsehgmhgrihhlrdgtohhm
+X-ME-Proxy: <xmx:rJe6aLaJP6Xj2rkulgEos-3PuobS8mQKjatGJJBMK7inm3Pq7Gp2Vg>
+    <xmx:rJe6aNF7-pW6bVrecDyimGuFt4rFKlRaO80vk9U-M3x2Osc7wCA6DA>
+    <xmx:rJe6aLeryKtg2eNLenz4G8c7nPW0XLHn41W-YUcd9nAafvGlUomGZw>
+    <xmx:rJe6aID5jwH-KTo0RNYmn7aS7aHdvvvDvzZsp7Xrs_Dh-FuDrHloig>
+    <xmx:sJe6aL5VH3NVRImO0zXqWNKt1X3K9WtPu7YT5fkHwr7N4ubXrLHaDEMN>
+Feedback-ID: i80c9496c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 5 Sep 2025 03:56:27 -0400 (EDT)
+Date: Fri, 5 Sep 2025 09:56:25 +0200
+From: Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>
+To: Xichao Zhao <zhao.xichao@vivo.com>
+Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
+	Jonathan Cameron <jic23@kernel.org>,
+	David Lechner <dlechner@baylibre.com>,
+	Nuno =?utf-8?B?U8Oh?= <nuno.sa@analog.com>,
+	Andy Shevchenko <andy@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,	Mark Brown <broonie@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Guillaume La Roque <glaroque@baylibre.com>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Broadcom internal kernel review list
+ <bcm-kernel-feedback-list@broadcom.com>,	Ray Jui <rjui@broadcom.com>,
+ Scott Branden <sbranden@broadcom.com>,
+	Markus Mayer <mmayer@broadcom.com>, Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	zhanghongchen <zhanghongchen@loongson.cn>,
+	Yinbo Zhu <zhuyinbo@loongson.cn>, Amit Kucheria <amitk@kernel.org>,
+	Thara Gopinath <thara.gopinath@gmail.com>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>,	Heiko Stuebner <heiko@sntech.de>,
+	Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>,	Orson Zhai <orsonzhai@gmail.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Chunyan Zhang <zhang.lyra@gmail.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,	Talel Shenhar <talel@amazon.com>,
+	Eduardo Valentin <edubezval@gmail.com>, Keerthy <j-keerthy@ti.com>,
+	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	"open list:HARDWARE MONITORING" <linux-hwmon@vger.kernel.org>,
+	open list <linux-kernel@vger.kernel.org>,
+	"open list:IIO SUBSYSTEM AND DRIVERS" <linux-iio@vger.kernel.org>,
+	"moderated list:ARM/Allwinner sunXi SoC support"
+ <linux-arm-kernel@lists.infradead.org>,
+	"open list:ARM/Allwinner sunXi SoC support"
+ <linux-sunxi@lists.linux.dev>,
+	"open list:THERMAL" <linux-pm@vger.kernel.org>,
+	"open list:THERMAL DRIVER FOR AMLOGIC SOCS"
+ <linux-amlogic@lists.infradead.org>,
+	"moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE"
+ <linux-rpi-kernel@lists.infradead.org>,
+	"open list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE"
+ <imx@lists.linux.dev>,
+	"open list:QUALCOMM TSENS THERMAL DRIVER"
+ <linux-arm-msm@vger.kernel.org>,
+	"open list:RENESAS R-CAR THERMAL DRIVERS"
+ <linux-renesas-soc@vger.kernel.org>,
+	"open list:ARM/Rockchip SoC support"
+ <linux-rockchip@lists.infradead.org>,
+	"open list:SAMSUNG THERMAL DRIVER" <linux-samsung-soc@vger.kernel.org>,
+	"moderated list:ARM/STM32 ARCHITECTURE"
+ <linux-stm32@st-md-mailman.stormreply.com>,
+	"open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>,
+	"open list:TI BANDGAP AND THERMAL DRIVER" <linux-omap@vger.kernel.org>
+Subject: Re: [PATCH 01/12] thermal: of: Add error handling in
+ devm_thermal_*_register()
+Message-ID: <20250905075625.GA1852264@ragnatech.se>
+References: <20250905072423.368123-1-zhao.xichao@vivo.com>
+ <20250905072423.368123-2-zhao.xichao@vivo.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 09/10] thermal/drivers/ti-soc-thermal: Use scope-based
- cleanup helper
-To: Andreas Kemnade <andreas@kemnade.info>,
- Krzysztof Kozlowski <krzk@kernel.org>
-Cc: "Rafael J . wysocki" <rafael@kernel.org>,
- Viresh Kumar <viresh.kumar@linaro.org>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Michael Ellerman <mpe@ellerman.id.au>, Alim Akhtar
- <alim.akhtar@samsung.com>, Thierry Reding <thierry.reding@gmail.com>,
- MyungJoo Ham <myungjoo.ham@samsung.com>,
- Kyungmin Park <kyungmin.park@samsung.com>,
- Chanwoo Choi <cw00.choi@samsung.com>,
- Jani Nikula <jani.nikula@linux.intel.com>,
- Rodrigo Vivi <rodrigo.vivi@intel.com>, Tvrtko Ursulin
- <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>,
- Simona Vetter <simona@ffwll.ch>, Daniel Lezcano <daniel.lezcano@kernel.org>,
- Sascha Hauer <s.hauer@pengutronix.de>, Shawn Guo <shawnguo@kernel.org>,
- Eduardo Valentin <edubezval@gmail.com>, Keerthy <j-keerthy@ti.com>,
- Ben Horgan <ben.horgan@arm.com>, zhenglifeng <zhenglifeng1@huawei.com>,
- Zhang Rui <rui.zhang@intel.com>, Len Brown <lenb@kernel.org>,
- Lukasz Luba <lukasz.luba@arm.com>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Beata Michalska <beata.michalska@arm.com>, Fabio Estevam
- <festevam@gmail.com>, Pavel Machek <pavel@kernel.org>,
- Sumit Gupta <sumitg@nvidia.com>,
- Prasanna Kumar T S M <ptsm@linux.microsoft.com>,
- Sudeep Holla <sudeep.holla@arm.com>, Yicong Yang <yangyicong@hisilicon.com>,
- linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
- intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
- imx@lists.linux.dev, linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250903131733.57637-1-zhangzihuan@kylinos.cn>
- <20250903131733.57637-10-zhangzihuan@kylinos.cn>
- <20250905085726.2bc6fcb4@akair>
-From: Zihuan Zhang <zhangzihuan@kylinos.cn>
-In-Reply-To: <20250905085726.2bc6fcb4@akair>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250905072423.368123-2-zhao.xichao@vivo.com>
 
+Hello Xichao,
 
-=E5=9C=A8 2025/9/5 14:57, Andreas Kemnade =E5=86=99=E9=81=93:
-> Am Wed,  3 Sep 2025 21:17:32 +0800
-> schrieb Zihuan Zhang <zhangzihuan@kylinos.cn>:
->
->> Replace the manual cpufreq_cpu_put() with __free(put_cpufreq_policy)
->> annotation for policy references. This reduces the risk of reference
->> counting mistakes and aligns the code with the latest kernel style.
->>
->> No functional change intended.
->>
->> Signed-off-by: Zihuan Zhang <zhangzihuan@kylinos.cn>
->> ---
->>   drivers/thermal/ti-soc-thermal/ti-thermal-common.c | 13 ++++--------=
--
->>   1 file changed, 4 insertions(+), 9 deletions(-)
->>
->> diff --git a/drivers/thermal/ti-soc-thermal/ti-thermal-common.c b/driv=
-ers/thermal/ti-soc-thermal/ti-thermal-common.c
->> index 0cf0826b805a..37d06468913a 100644
->> --- a/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
->> +++ b/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
->> @@ -27,7 +27,6 @@
->>  =20
->>   /* common data structures */
->>   struct ti_thermal_data {
->> -	struct cpufreq_policy *policy;
->>   	struct thermal_zone_device *ti_thermal;
->>   	struct thermal_zone_device *pcb_tz;
->>   	struct thermal_cooling_device *cool_dev;
->> @@ -218,6 +217,7 @@ int ti_thermal_register_cpu_cooling(struct ti_band=
-gap *bgp, int id)
->>   {
->>   	struct ti_thermal_data *data;
->>   	struct device_node *np =3D bgp->dev->of_node;
->> +	struct cpufreq_policy *policy __free(put_cpufreq_policy) =3D cpufreq=
-_cpu_get(0);
->>  =20
-> this looks as it changes the lifecycle from the device lifetime to just
-> this function...
+Thanks for your work.
 
+On 2025-09-05 15:23:53 +0800, Xichao Zhao wrote:
+> devm_thermal_of_zone_register() does not print any error message
+> when registering a thermal zone with a device node sensor fails
+> and allocating device resource data fails.
+> 
+> This forces each driver to implement redundant error logging.
+> Additionally, when upper-layer functions propagate these errors
+> without logging, critical debugging information is lost.
+> 
+> Add dev_err_probe() in devm_thermal_of_zone_register() to unify
+> error reporting.
+> 
+> Signed-off-by: Xichao Zhao <zhao.xichao@vivo.com>
+> ---
+>  drivers/thermal/thermal_of.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
+> index 1a51a4d240ff..8fe0ad402579 100644
+> --- a/drivers/thermal/thermal_of.c
+> +++ b/drivers/thermal/thermal_of.c
+> @@ -475,11 +475,15 @@ struct thermal_zone_device *devm_thermal_of_zone_register(struct device *dev, in
+>  
+>  	ptr = devres_alloc(devm_thermal_of_zone_release, sizeof(*ptr),
+>  			   GFP_KERNEL);
+> -	if (!ptr)
+> +	if (!ptr) {
+> +		dev_err(dev, "Failed to allocate device resource data\n");
+>  		return ERR_PTR(-ENOMEM);
+> +	}
+>  
+>  	tzd = thermal_of_zone_register(dev->of_node, sensor_id, data, ops);
+>  	if (IS_ERR(tzd)) {
+> +		dev_err_probe(dev, PTR_ERR(tzd),
+> +			      "Failed to register thermal zone sensor[%d]\n", sensor_id);
 
-I thought policy was only used in this function, so I moved it here.
+Don't thermal_of_zone_register() already print an error message for 
+failure cases? If not can this print be moved there? That would allow 
+the change you make in R-Car drivers to remove the prating completely, 
+not just for the devm_* cases.
 
-Thanks for clarifying the lifecycle issue.
+>  		devres_free(ptr);
+>  		return tzd;
+>  	}
+> -- 
+> 2.34.1
+> 
 
->>   	/*
->>   	 * We are assuming here that if one deploys the zone
->> @@ -234,19 +234,17 @@ int ti_thermal_register_cpu_cooling(struct ti_ba=
-ndgap *bgp, int id)
->>   	if (!data)
->>   		return -EINVAL;
->>  =20
->> -	data->policy =3D cpufreq_cpu_get(0);
->> -	if (!data->policy) {
->> +	if (!policy) {
->>   		pr_debug("%s: CPUFreq policy not found\n", __func__);
->>   		return -EPROBE_DEFER;
->>   	}
->>  =20
->>   	/* Register cooling device */
->> -	data->cool_dev =3D cpufreq_cooling_register(data->policy);
->> +	data->cool_dev =3D cpufreq_cooling_register(policy);
-> and it is passed on to something living beyond this function. I see no
-> _get(policy) in cpufreq_cooling_register().
-> Am I missing something?
-
-This indeed causes a problem.
-
-Sure,=C2=A0 I will drop the patchset.
-
-Thanks!
-
-> Regards,
-> Andreas
+-- 
+Kind Regards,
+Niklas Söderlund
 
