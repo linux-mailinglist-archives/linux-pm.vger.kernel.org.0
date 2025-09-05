@@ -1,116 +1,171 @@
-Return-Path: <linux-pm+bounces-34025-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34026-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C40FB463F0
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 21:49:14 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 422B5B46409
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 21:59:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3CA411B26742
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 19:49:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E0B721C86356
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 19:59:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EB2627AC31;
-	Fri,  5 Sep 2025 19:49:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FAB0283121;
+	Fri,  5 Sep 2025 19:59:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="Zo/88RbZ"
+	dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b="aJEUvpQm";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="PRZ7ZsQ5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fout-a2-smtp.messagingengine.com (fout-a2-smtp.messagingengine.com [103.168.172.145])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAFBD248176
-	for <linux-pm@vger.kernel.org>; Fri,  5 Sep 2025 19:49:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40861E55A;
+	Fri,  5 Sep 2025 19:59:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.145
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757101749; cv=none; b=coTaMiIXtCqtobhlwElARIxtl+q9x5C8cInQr+afiN/2fBNDfZuukkRLZSWbEWUbX1luMi0hIvzMdYl/SW4L3vsnTbvh9Jq+jjfkoeNVo6R9hn3pQJ+39kI76sXt4mHoB7G83JmDsJVChmg35gG4Wuzalt2vt74bxDfGngVreVw=
+	t=1757102351; cv=none; b=WBfZspVF1EFOsAfhFUD9y/V9+Y9yWc9H1f4GV0gmarExm66i3Hysd6j8nWbLg0Zv/fSi5dSjHWNGrMkVLzlElJI+Ao3X5MgtY5Dvj5y+6MrdVUJbKDTQOwTsehYT84lmkVkzGG7jG8kItZL41uk0w+EjUoTIz15xSNQ283XJsAA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757101749; c=relaxed/simple;
-	bh=SDXmXmmQ1vFXl5JZs1WJtKI6JEciS/jqDcvT58tTS3k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=vDNBx8bkZVZY+VbW9DGCUNQcqYRovhu47wryqvmJYRXCzXjtJvtId4B2ugIHzo7xqMMmaWFqYZqQtqdeFveyVAV9sbbqbZUkIFXHalqUEcz7XRzwLFj+xGpSo2ggCb4HV++SMNNlvXNCJcFS5d9xp7q6dXquDIUjWJizndScw7Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=Zo/88RbZ; arc=none smtp.client-ip=209.85.160.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-30cce872d9cso2374441fac.1
-        for <linux-pm@vger.kernel.org>; Fri, 05 Sep 2025 12:49:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1757101747; x=1757706547; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Szv82Yg+I4qLiwXwVi16VMgcWXR81jSEFdZnsxSabZg=;
-        b=Zo/88RbZ8lyQFhw9ebZaQt80sP8CNUlPBN7QFTYbY7uYEhD9sEhlMiKaOWPucu9vYi
-         Z+vNYCJuXYTpkvPOprh3Ax1h0qj1Mas6y0HCobeHzgv4g/2Tiuamkt76y62jViwwH+h/
-         uqbBGWx8NoiCWMrPQpt5gkXd+VpRNWgLmkBWpjl6duA8Zf/esd4gZbxJypYlB/gkf0Ov
-         eUblqhPoltvH5PMDFaQhltsEX4bB4EVspdVkakHYifC4tSCeGamL9AnBO1D39JVX5aqk
-         9ec31rWFBRQQTaePZ33eaG92gUmoysdl52K66KMZlUOAvdRm09r4BRPmqQ8NIFPvXdxX
-         yVqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757101747; x=1757706547;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Szv82Yg+I4qLiwXwVi16VMgcWXR81jSEFdZnsxSabZg=;
-        b=i1p7wBAII59CbvQ58K4kAujzudZrb8ZeEyqAgrjDk6iUr3oLA1ZFeFuuV897QZ+jBm
-         cmFvX7G8DQa2KuZCdUDmlHf2OAbLcMN0cPUSPgyqZQ810AuSYiFjDU18WWbKvUUH2mnZ
-         aOU2LVmoOQ0dBTx/wsDxDwf/CG5iIRlRuF8Ls5q/KJR/KowGTbWTqhS6jmipo0BsxDYM
-         HlYtRvWlZd7m2kmdZ3ID7zhVLwUc0Ijur3wSfY6ASDMMrgrAl4KcZZ+i0mStiDcwmTmP
-         1DRley6cM7aiQEWmzJt9L370D62JZZKAFgd+JQ/ythH2ugRlRuBak3SdqQy6xHO6x8kO
-         JaqQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWGZ/GIWin/JHzoJAXZIwjPuPsKIUhYXD8zgUkvTPM9huYTPzINeyNMKX4QK70xYvv3WmxioC9H1A==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz2601kQE6G5u6hMOrTLxe1gVtaJXDbQsyGIAj90/4X8cQCA2+6
-	w4zP25b6hGnNMDtMNtQOKk/m5frrrWa1/vJmbwXAcUWrjcuKjhGQksmX6AeWnFRvNwI=
-X-Gm-Gg: ASbGnct4oOZyIVZJSlvDCH5bD8DY+JMDRE8eXR6+lcW2P6+QCPW/9ugszYuATT2wBCQ
-	XX3aFlBCJTgbQLiOtvaWz4v181QzhuCm2/Igw2lM2UbPAXEHXSUPr0CKYtSufQX0NHYYVZ8VmHb
-	5Tv2ot+7LJ9kt6pODbx4Dmd8iaKr/iNtXjavamse0zrutGNt12MLekpnwtKWIvE0IQzolxvCSBl
-	XRu2dfxlPKKxOO781UI6NhSNffxk0NMfGRLi/5gPOEVnwvxoOKoYttcWOctZrEb56Ehdw2gwyjM
-	9u9zc9/F4z8YKtOyGKEtTtmMk+p8H7LRwtAwmviF6Wtc3aFj3oEGDaXzBG9CYEdpEp9tuv14kWa
-	zsm5sTn5MuAi3mEJDwnRuvcgr0L2/w9i5VGajWMMvm2HL1UVS3D6haKp1BlWNQmFjjB1ws846bx
-	6e4ik2tbM=
-X-Google-Smtp-Source: AGHT+IFRxRKk8LtvZ6He+rGVAow3FoQP7Fwy9rnhW18mDzyKWJ4V4U2SXMzMRn0S6iDAapzSQorQTA==
-X-Received: by 2002:a05:6870:b013:b0:321:8f88:a39c with SMTP id 586e51a60fabf-3218f88c130mr1286348fac.47.1757101746811;
-        Fri, 05 Sep 2025 12:49:06 -0700 (PDT)
-Received: from ?IPV6:2600:8803:e7e4:1d00:52e:cda3:16cc:72bb? ([2600:8803:e7e4:1d00:52e:cda3:16cc:72bb])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-319b5fcbbaasm3996358fac.15.2025.09.05.12.49.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 Sep 2025 12:49:06 -0700 (PDT)
-Message-ID: <e97130f5-9ec6-4ac4-9944-96f992eb215f@baylibre.com>
-Date: Fri, 5 Sep 2025 14:49:05 -0500
+	s=arc-20240116; t=1757102351; c=relaxed/simple;
+	bh=P69v0RjJ/1HhflldI2zS//OsaLLhmdwzpEbl3SC1MoM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Q8soS2bSz2VuGAnf4/ryukfMmsRJho1pCyU8gs4z2N9l+g/ksukixNsgSfOIpIvGlKWI/7PDYEi6yIspb1JGkTw/BlomHKlmJPUEHiDlZssWCJeS9uGlwdOWSQbYsZ9+FITAdORwflbHJR/C/J6jb8Tn84HC4v4iU3eepoUvldU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se; spf=pass smtp.mailfrom=ragnatech.se; dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b=aJEUvpQm; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=PRZ7ZsQ5; arc=none smtp.client-ip=103.168.172.145
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ragnatech.se
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfout.phl.internal (Postfix) with ESMTP id 6034DEC0369;
+	Fri,  5 Sep 2025 15:59:08 -0400 (EDT)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-04.internal (MEProxy); Fri, 05 Sep 2025 15:59:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ragnatech.se; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1757102348;
+	 x=1757188748; bh=Ihr2nGMrA7SrxtqaATN/qj9edQvgu9qlvw8CXfM7AHg=; b=
+	aJEUvpQm0fTZOAWzprgDF3Vk5XXmdejTjBuZVB4F4o5OXNN54d12ZOz9tgEa5SRk
+	+TV+6WQ63HVNfurO8OjUyIiWuO257j6NdIo1FwAJnlu7lzQ2ASziPXuboMozTv/4
+	t3hIvOtO5xywwTH1Hsxqi6iNCEaz0HgRMWr1t3zEs3LdM9l3g9OJKWgsBoziMcLC
+	sU0PYd0Mi42ihP6pl3f2JWPDmrcsuW/KfbkDZtySyzTsWVsFxENpKxud/MVAzYR0
+	fZB4bChMvVPgXWkjrftM+EP8vO0TUteifZj9ETnHhhfQh4GIcOB7oaRzdr0+QaIX
+	9N5D/N3zPn6ahGqDNQY4NQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1757102348; x=
+	1757188748; bh=Ihr2nGMrA7SrxtqaATN/qj9edQvgu9qlvw8CXfM7AHg=; b=P
+	RZ7ZsQ50MVu+Xpc1TRra0H7put71OygcTmoyi2KAorv4nq5py+KfE3oP7xN23KSH
+	nK5Wmp88YT1myDxXjBDN5Jv+bK6CJmGpq286RXjoBvUYO347YVhBamFtJaf/S0U6
+	lNmps/NU6twsdzjRKKgnqQXCg7vCBacoMumQrXwL3IcSvFQBPBuDNyOAGTo6cVt9
+	2Umgoj6w5DRY43Z0wuPig9P5iPVVaeliTSy+hqpsjrhQK50IptlK/3uP9+9H+FXE
+	YpBbFV6mZXBiR0kX1L61RHVXBGVAcrkPz7anfbge9MApCXTjDFSIz8QD2a6Zv8cW
+	fS6Na+OFhPkr8r+TpDgdA==
+X-ME-Sender: <xms:C0G7aGvA-9VnF09n4T4T6oDo61ULzUXUMyvMOoO3nyVIiZKBbvIMdQ>
+    <xme:C0G7aGE_NfmHzPIIJ0Nj3lAYTRYqBHPkyWLWmkvOmsqwLo2MI81mvs5-Ko206Sl0a
+    oTJvijw5uM3tvE7MG8>
+X-ME-Received: <xmr:C0G7aHzYqo-gfeEeuF5x1xqz3iJf8a5ZES9dTPxwMSxi-d2b9yKOlSGt9Mr6EuymYfyNyEzq6VU4DseXxdS7Vf5QWgO2jNNk2g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdeljeelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceurghi
+    lhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurh
+    epfffhvfevuffkfhggtggugfgjsehtkeertddttdejnecuhfhrohhmpefpihhklhgrshcu
+    ufpnuggvrhhluhhnugcuoehnihhklhgrshdrshhouggvrhhluhhnugesrhgrghhnrghtvg
+    gthhdrshgvqeenucggtffrrghtthgvrhhnpeevteegtddvvdfhtdekgefhfeefheetheek
+    keegfeejudeiudeuleegtdehkeekteenucevlhhushhtvghrufhiiigvpedtnecurfgrrh
+    grmhepmhgrihhlfhhrohhmpehnihhklhgrshdrshhouggvrhhluhhnugesrhgrghhnrght
+    vggthhdrshgvpdhnsggprhgtphhtthhopeelpdhmohguvgepshhmthhpohhuthdprhgtph
+    htthhopehmrghrvghkrdhvrghsuhhtodhrvghnvghsrghssehmrghilhgsohigrdhorhhg
+    pdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtg
+    hpthhtoheprhgrfhgrvghlsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnihgv
+    lhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhrtghpthhtohepghgvvghrthdorh
+    gvnhgvshgrshesghhlihguvghrrdgsvgdprhgtphhtthhopehluhhkrghsiidrlhhusggr
+    segrrhhmrdgtohhmpdhrtghpthhtohepmhgrghhnuhhsrdgurghmmhesghhmrghilhdrtg
+    homhdprhgtphhtthhopehruhhirdiihhgrnhhgsehinhhtvghlrdgtohhmpdhrtghpthht
+    oheplhhinhhugidqrhgvnhgvshgrshdqshhotgesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:C0G7aA2RlI1LXPe5W92YM4PaBXtrusDCM5Ichdv_BpS8X7Iai_HBxA>
+    <xmx:C0G7aHpXWzged01duQ2rar9iZcQ_M9b3rHeKL4zJ42Xo-TUf49Uz9Q>
+    <xmx:C0G7aNUTmvNE701JTvr_Fj6Y36bLbPlOnAsxbkxsgKZDPvrBYaW2Bw>
+    <xmx:C0G7aArRPFUdwShFj8U86DxNtYMOYwh06AqDD3c54q0GfgH0qKNv4Q>
+    <xmx:DEG7aDiKY1y7g7ibaACkiyaylctgFz47WOa_N8NUPEvJOuQG4ez-4L48>
+Feedback-ID: i80c9496c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 5 Sep 2025 15:59:06 -0400 (EDT)
+Date: Fri, 5 Sep 2025 21:59:04 +0200
+From: Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>
+To: Marek Vasut <marek.vasut+renesas@mailbox.org>
+Cc: linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Zhang Rui <rui.zhang@intel.com>, linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH] thermal/drivers/rcar_gen3: Document Gen4 support in
+ Kconfig entry
+Message-ID: <20250905195904.GA2033628@ragnatech.se>
+References: <20250905193322.148115-1-marek.vasut+renesas@mailbox.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 4/5] iio: imu: inv_icm42600: Use
- devm_regulator_get_enable() for vdd regulator
-To: Sean Nyekjaer <sean@geanix.com>,
- Jean-Baptiste Maneyrol <jean-baptiste.maneyrol@tdk.com>, rafael@kernel.org,
- Jonathan Cameron <jic23@kernel.org>, =?UTF-8?Q?Nuno_S=C3=A1?=
- <nuno.sa@analog.com>, Andy Shevchenko <andy@kernel.org>
-Cc: linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, Jean-Baptiste Maneyrol <jmaneyrol@invensense.com>,
- Jonathan Cameron <Jonathan.Cameron@huawei.com>
-References: <20250901-icm42pmreg-v3-0-ef1336246960@geanix.com>
- <20250901-icm42pmreg-v3-4-ef1336246960@geanix.com>
-From: David Lechner <dlechner@baylibre.com>
-Content-Language: en-US
-In-Reply-To: <20250901-icm42pmreg-v3-4-ef1336246960@geanix.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250905193322.148115-1-marek.vasut+renesas@mailbox.org>
 
-On 9/1/25 2:49 AM, Sean Nyekjaer wrote:
-> The vdd regulator is not used for runtime power management, so it does
-> not need explicit enable/disable handling.
-> Use devm_regulator_get_enable() to let the regulator be managed
-> automatically by devm.
+Hi Marek,
+
+Thanks for your patch.
+
+On 2025-09-05 21:32:56 +0200, Marek Vasut wrote:
+> The R-Car Gen3 thermal driver supports both R-Car Gen3 and Gen4 SoCs.
+> Update the Kconfig entry.
 > 
-> This simplifies the code by removing the manual enable and cleanup
-> logic.
-> 
-> Signed-off-by: Sean Nyekjaer <sean@geanix.com>
+> Signed-off-by: Marek Vasut <marek.vasut+renesas@mailbox.org>
+
+Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+
 > ---
-Reviewed-by: David Lechner <dlechner@baylibre.com>
+> Cc: "Niklas Söderlund" <niklas.soderlund@ragnatech.se>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: Geert Uytterhoeven <geert+renesas@glider.be>
+> Cc: Lukasz Luba <lukasz.luba@arm.com>
+> Cc: Magnus Damm <magnus.damm@gmail.com>
+> Cc: Zhang Rui <rui.zhang@intel.com>
+> Cc: linux-pm@vger.kernel.org
+> Cc: linux-renesas-soc@vger.kernel.org
+> ---
+>  drivers/thermal/renesas/Kconfig | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/thermal/renesas/Kconfig b/drivers/thermal/renesas/Kconfig
+> index dcf5fc5ae08e4..f4af8c7f28b05 100644
+> --- a/drivers/thermal/renesas/Kconfig
+> +++ b/drivers/thermal/renesas/Kconfig
+> @@ -10,13 +10,13 @@ config RCAR_THERMAL
+>  	  thermal framework.
+>  
+>  config RCAR_GEN3_THERMAL
+> -	tristate "Renesas R-Car Gen3 and RZ/G2 thermal driver"
+> +	tristate "Renesas R-Car Gen3/Gen4 and RZ/G2 thermal driver"
+>  	depends on ARCH_RENESAS || COMPILE_TEST
+>  	depends on HAS_IOMEM
+>  	depends on OF
+>  	help
+> -	  Enable this to plug the R-Car Gen3 or RZ/G2 thermal sensor driver into
+> -	  the Linux thermal framework.
+> +	  Enable this to plug the R-Car Gen3/Gen4 or RZ/G2 thermal sensor
+> +	  driver into the Linux thermal framework.
+>  
+>  config RZG2L_THERMAL
+>  	tristate "Renesas RZ/G2L thermal driver"
+> -- 
+> 2.50.1
+> 
 
+-- 
+Kind Regards,
+Niklas Söderlund
 
