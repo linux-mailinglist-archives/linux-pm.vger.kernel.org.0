@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-33902-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33903-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C19BB44E56
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 08:56:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1CD93B44E72
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 08:58:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0A7137BD1D7
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 06:54:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0A3233B7C37
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 06:58:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA2052D24AB;
-	Fri,  5 Sep 2025 06:56:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD6AD2D6E63;
+	Fri,  5 Sep 2025 06:56:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mjdUTUJS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ms4kB5hR"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A68A32D2388;
-	Fri,  5 Sep 2025 06:56:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82F602D320E;
+	Fri,  5 Sep 2025 06:56:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757055361; cv=none; b=OOcHoB8+qkX6qMVmPYw1/FUzPXmzC9qq2AuwpJGqJR3gNhiMoIeNGfO6sCVyCXO/19Yl0eWr1bU9sMvvjR1WLuQswfRIxJ169GgoJ8g6iobbmD5foqBDoWp0kGcc8EwOBAAy7i19WYB8wyAty+t6W9BrBB+PNqY+V3ztPEA4xgc=
+	t=1757055419; cv=none; b=EjRv+4DrDR9qgh9YFj5fIqWLRjSXWSy56TfIIxa1rLGsItNLI6C6lUgMqzeBJ9EujPT65f3kNu83TVrpyV6UmlNuGwVDNV7bmsWNGJzxoQpTuEYii9oaiM946qRmuBsbwLEJgyHu1nDFxNWZOmrQLA4DwUNQMPoBx7QBPc5ZrYs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757055361; c=relaxed/simple;
-	bh=u2x0AyKxRMlKXaCJT0BreFUoyMPXThpU89ocYl6LnXs=;
+	s=arc-20240116; t=1757055419; c=relaxed/simple;
+	bh=uyFr8wxxfdR7aQYmyIRkP6+JdlV8SLol7rwk9pzJiHU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=omNaGe1528CUGspbQhZ5atpeOXg7QHpASO8RhbtbouOF8BMPmiVDINsTB7XCrM44IZ2M1vIdh5NkRcaQR9C+29Lzm5Pe8oHPhClaD7Vas2TiVurcR3jPakYAWVaryr5lyFpJllT+DLzrdNcVpHTIviZoSZ4BpaWPdyTxXkOriDg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mjdUTUJS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78DC6C4CEF1;
-	Fri,  5 Sep 2025 06:55:57 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=u9usu1k7g7TeV3irZyFFFY2TzNIp0K9WFawjBQJldaebQMf2oyAzebEGXnjEGJTncGIWkG6GQBPPfVKG7PhsSX1oOdh1K4SspjHYOLNGYCGzcQgMISi67xW1637SJceRxL1vaX0/NCSuzqQQX294hPREQAHAObkSMHa+EOjkhHY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ms4kB5hR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1B87C4CEF1;
+	Fri,  5 Sep 2025 06:56:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757055360;
-	bh=u2x0AyKxRMlKXaCJT0BreFUoyMPXThpU89ocYl6LnXs=;
+	s=k20201202; t=1757055419;
+	bh=uyFr8wxxfdR7aQYmyIRkP6+JdlV8SLol7rwk9pzJiHU=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=mjdUTUJS/Gom5Fi1r3+Ed+LbSve5kfuT7/1KBgSWC3goAtkdfpuNXGQGmLM++pY8e
-	 Ry8SYIm7I4jySzNvPPkwc7a6+uus5P6qYyHnr5X6hJgF1FNV496sBzILJ6aKPOfUWX
-	 o74IYwp6nw6ueCCdhvH9vzc0r91pt6Dutqi7IidfcFbnEeQP4vZqHBljs8p0R+mvXS
-	 8blPdDhJELc4poDYN9OW/6pXGfwUFy1M4gamS7SgLfUCS/GKIPNiKOgxW01kWQux5h
-	 vn1pHKpOXdjcL76gtefpT9fVArlGlpk36X+ETiAo/fJQcOw92gvgteK5dTyEcKZwu0
-	 Co5J2l4fwCcCQ==
-Message-ID: <d2e1b1b3-20dd-4bfd-a67a-d43c5f488f7d@kernel.org>
-Date: Fri, 5 Sep 2025 08:55:55 +0200
+	b=Ms4kB5hRXdSwJtIEDgY176SzYJ9i7DwB6lYiJLEo7v2gsHfkawDrVvJxqcy5OkaZP
+	 eK/D6IvM6esNyKcKvI3475cQVfDQ675K1YAVUpfgDS8etfrbPYX7NeBYS2GAhFfYhN
+	 NddOOi3O9Ui9M4yFx4U5d6QacamueHaUSi6AeJg+Rtg8Kvh00dRLtQoPJQ7vDQ0xgn
+	 uTz/VyJeBAAVE/WViT94o+vXysBHUdKlcyRn6C/QxHFmG8v9WAQ3zwhWLmQYfF2OwP
+	 /lzkdwtBh9FnTwt0mAw6hiRlWgwghjM1GkVVG+w6GN6iNY+KYzmeObBrfcXsGUq90G
+	 Hc7YpocH8z04w==
+Message-ID: <c64f09f5-440f-411d-b2f1-6c85b9adffb7@kernel.org>
+Date: Fri, 5 Sep 2025 08:56:53 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,23 +50,22 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/8] Support dynamic EMC frequency scaling on
- Tegra186/Tegra194
+Subject: Re: [PATCH v2 1/8] dt-bindings: memory: tegra210: Add memory client
+ IDs
 To: Aaron Kling <webgeek1234@gmail.com>
 Cc: Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
  Thierry Reding <thierry.reding@gmail.com>,
- Jonathan Hunter <jonathanh@nvidia.com>, "Rafael J. Wysocki"
- <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
- linux-pm@vger.kernel.org
-References: <20250831-tegra186-icc-v1-0-607ddc53b507@gmail.com>
- <20250902-glittering-toucan-of-feminism-95fd9f@kuoka>
- <CALHNRZ_CNvq_srzBZytrO6ZReg81Z6g_-Sa+=26kBEHx_c8WQA@mail.gmail.com>
- <47c7adc9-fa91-4d4e-9be4-912623c627d6@kernel.org>
- <CALHNRZ8rxyRvb1GCifeXRKjPkkBE+sK6VnPc2nS01iZV_NcjaQ@mail.gmail.com>
- <08062eb7-1b7d-4fc3-86ea-af70069065eb@kernel.org>
- <CALHNRZ-iGASiVknUFJXJ8OkYYrG+0VMTistreDAG38WytHmEPQ@mail.gmail.com>
+ Jonathan Hunter <jonathanh@nvidia.com>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ MyungJoo Ham <myungjoo.ham@samsung.com>,
+ Kyungmin Park <kyungmin.park@samsung.com>,
+ Chanwoo Choi <cw00.choi@samsung.com>, Dmitry Osipenko <digetx@gmail.com>,
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20250903-t210-actmon-v2-0-e0d534d4f8ea@gmail.com>
+ <20250903-t210-actmon-v2-1-e0d534d4f8ea@gmail.com>
+ <20250904-honest-accurate-bullfrog-fdeaf9@kuoka>
+ <CALHNRZ8DEYq-DOC6jV8TAqGznd8e2mzfS7Xs61Gp3R5visPFzw@mail.gmail.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -112,33 +111,46 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <CALHNRZ-iGASiVknUFJXJ8OkYYrG+0VMTistreDAG38WytHmEPQ@mail.gmail.com>
+In-Reply-To: <CALHNRZ8DEYq-DOC6jV8TAqGznd8e2mzfS7Xs61Gp3R5visPFzw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 04/09/2025 19:49, Aaron Kling wrote:
+On 04/09/2025 19:33, Aaron Kling wrote:
+> On Thu, Sep 4, 2025 at 3:20 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
 >>
->>> changes last. Are you suggesting that this should be: cpufreq driver
->>> -> bindings -> memory drivers -> dt? Are the bindings supposed to be
->>> pulled with the driver changes? I had understood those to be managed
->>> separately.
->> What does the submitting patches doc in DT say?
+>> On Wed, Sep 03, 2025 at 02:50:07PM -0500, Aaron Kling wrote:
+>>> Each memory client has unique hardware ID, add these IDs.
+>>>
+>>> Signed-off-by: Aaron Kling <webgeek1234@gmail.com>
+>>> ---
+>>>  include/dt-bindings/memory/tegra210-mc.h | 58 ++++++++++++++++++++++++++++++++
+>>>  1 file changed, 58 insertions(+)
+>>>
+>>> diff --git a/include/dt-bindings/memory/tegra210-mc.h b/include/dt-bindings/memory/tegra210-mc.h
+>>> index 5e082547f1794cba1f72872782e04d8747863b6d..48474942a000e049142014e3bcc132b88bf1a92d 100644
+>>> --- a/include/dt-bindings/memory/tegra210-mc.h
+>>> +++ b/include/dt-bindings/memory/tegra210-mc.h
+>>> @@ -75,4 +75,62 @@
+>>>  #define TEGRA210_MC_RESET_ETR                28
+>>>  #define TEGRA210_MC_RESET_TSECB              29
+>>>
+>>> +#define TEGRA210_MC_PTCR             0
+>>
+>> There is no driver user of this ABI, so does not look like a binding.
+>>
+>> You have entire commit msg to clarify such unusual things, like lack of
+>> users. Please use it.
 > 
-> The only relevant snippet I see is:
-> "The Documentation/ portion of the patch should come in the series
-> before the code implementing the binding."
+> The tegra210-mc driver has these hardcoded and should probably be
+> updated to use the bindings instead, but I think that's outside of the
+> scope of this series. I will clarify such in the updated message.
+
+If you introduce the binding, change the drivers to use it. Otherwise
+there is no point benefit in this binding, really.
+
 > 
-> I had got it in my head that all bindings should go first as a
-> separate subsystem, not just docs. I will double check all series
-> before sending new revisions.
-A bit further because you asked about process:
+> Aaron
 
-3) For a series going though multiple trees, the binding patch should be
-kept with the driver using the binding.
-
-We do like this since years, and git log would tell you who committed
-the bindings (driver maintainer), so I really do not understand why 1%
-of cases happening other way caused that impression from your last sentence.
 
 Best regards,
 Krzysztof
