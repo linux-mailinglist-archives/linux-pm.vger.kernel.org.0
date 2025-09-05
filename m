@@ -1,60 +1,82 @@
-Return-Path: <linux-pm+bounces-33965-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33966-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 58F55B454AA
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 12:26:51 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2CCF0B454EC
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 12:42:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C308C7BDB66
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 10:24:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BF15E189C03A
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 10:42:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 824832DF715;
-	Fri,  5 Sep 2025 10:25:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC7372D5C6C;
+	Fri,  5 Sep 2025 10:41:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="WBRVZcAs"
+	dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b="nErYQFrP"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f67.google.com (mail-wr1-f67.google.com [209.85.221.67])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A90422D63F9;
-	Fri,  5 Sep 2025 10:25:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757067906; cv=pass; b=TAx2PTNh4Fw3PJ5sszGXBykO2n2xJQ59jcvu41Z712BKgQcK5PYayTziAgXwcH3VCcq5PvBLcV2jrQz/stpyKaAcYt6XHx4yaNpdFjRsCNxxnDhSquk+v/o4lqL93oPgJa9tiUkRaIr91hG68KSDgNufnrK7zyQ5UlvSgKKWZG4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757067906; c=relaxed/simple;
-	bh=LOie7xlQJ0scqzXgsdNFHHg0hfBLjYGaNAilgHEsTjE=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=qKuLxsCwzv87C74yPHcFyq+aCuab9+XnMqsRpuKQfGlcNtg7yZCPyYIZGee64RuMGi1c6D91HdVqWrTMR3W+x9xqxRjD0gOHp+c5HnqOKvDz6T2PxRzx/oYLSl6Jfxt7Y3F0Rh/5xS2wTQ/0MarYqqDhqqnpCUwzzE/MTUnsdr4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=WBRVZcAs; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1757067875; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=MAsKo4LeVHFOB/g56olOP/qphebtN2nXyKTUzRmitCHhypINYgjabDTo5qdUETgJhk8LlkSKtQnVMZx66jWF4CVC4Dj1c4Vth2ShtnfGg/3zeA9gVvGO/jOpbduvI7nmQXrwuYUGFSgs9mUzzkvBxWEUdosIT6MTpXmA7Ikrgqk=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1757067875; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=t68GoJOEGUEUjdRNIFT8AZyowHk5MgMEkLYw/UUNqc8=; 
-	b=PjRTicYmTIhRvLtkVIOKSmSfXz7mUhNuwGyNYj7UleEwxbwTlNeHMZ1CgejiYJPdI+yzB8BCTFXadT1Zq5EzdU4ueFwU+9x9JoYLs4UMetwCKbPlvJFUZ2ezEPOjyrTejKwJVwrWQ9v3DZW2xMCwg3opEGR/rlKEEVYACagKCow=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
-	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1757067874;
-	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
-	h=From:From:Date:Date:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Message-Id:References:In-Reply-To:To:To:Cc:Cc:Reply-To;
-	bh=t68GoJOEGUEUjdRNIFT8AZyowHk5MgMEkLYw/UUNqc8=;
-	b=WBRVZcAswgXyyYK8wK02p4CGwE5nbd2WSG9zWpw1DtS0Es5KTqLMkqPpOFofpmWh
-	s86cJwG+kPisREbQgbBeXU9qRwCQmVIMD3vQncf2o6HrQpyu7Y7byK9qOo52sNtDJdH
-	lso2KM1U60YpZ7DX7/7+/IPnG2FfAOiBNjwuNlhE=
-Received: by mx.zohomail.com with SMTPS id 1757067873891378.59619255531265;
-	Fri, 5 Sep 2025 03:24:33 -0700 (PDT)
-From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-Date: Fri, 05 Sep 2025 12:23:06 +0200
-Subject: [PATCH RFC 10/10] drm/panthor: add support for MediaTek
- MFlexGraphics
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 991862FE05D
+	for <linux-pm@vger.kernel.org>; Fri,  5 Sep 2025 10:41:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.67
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1757068863; cv=none; b=OmH56SOzqPuvxxuI/c5PbFt82fQuT97of1Zqp/OBqwehr09rMdr9e+q1wnxlRbUFGaV4BkWhBrYplysTvsv0NqZWibhaBzhIxqzj3PEkwSJgjU1S3SyPpg1hoTj3oDOvt54qwY7Dy1Xlcu+6r0y9kuXQVQQaGXQfKBhiO4l6LwA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1757068863; c=relaxed/simple;
+	bh=t5R4UW31UoUE7aHekeSNbKI9qdNJcDF4TdGs9lVlvwU=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=UQGq9Ta/cN0I9eKvvDpKVMlUHXT02RrVZu5BF0nUEWlImPIYZ4sP2iVlEd1XWu2mkMWE8aB6gOefF5x2MkIIqutxGYGAcSo5qd1lWL3HD92/Fwh9woGs9l3AdMoNnVDJ5hHG3YEYwxNs5jSFWnHK1AKHeJHiIexHgCt4lGqk774=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fairphone.com; spf=pass smtp.mailfrom=fairphone.com; dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b=nErYQFrP; arc=none smtp.client-ip=209.85.221.67
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fairphone.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fairphone.com
+Received: by mail-wr1-f67.google.com with SMTP id ffacd0b85a97d-3cf991e8c82so1841665f8f.3
+        for <linux-pm@vger.kernel.org>; Fri, 05 Sep 2025 03:41:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fairphone.com; s=fair; t=1757068860; x=1757673660; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=GqjeSvXCrahhKJFKiSx2ZS2MamV+BQDmtkvvhQaFj0M=;
+        b=nErYQFrPLnzJ0M837wBnQPML0jsbi5TPv3oemfRLLWRNEqxOfLUPLoJHLz2m1Z5I8f
+         D3XlQpk17/+ID2Sov2g1VyhbtqAG8LrMuuSgY9ef7SopGhX3r0NukZadHnCDXDblPkaD
+         wT+uIKVHupThisXo5aSbma/O74JK/worJFX+t5pO1bF5F+iGQ/WV4OfK8OcrDf0wxubR
+         Rawf8VLL4YpN7XIpf0bGEtAUvxCaZlrF7/KedGzawNWM8TF1wlTm+Ark0aNhnfEd+ucu
+         2PUZPLnLgDtcGr5O2n/8mneAcimvVAGAYjd1v2NLuJ9eiM4XRdVPBUk+nig2t9z0og8c
+         ue2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757068860; x=1757673660;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GqjeSvXCrahhKJFKiSx2ZS2MamV+BQDmtkvvhQaFj0M=;
+        b=DIx39oixx4RE06mCWMRGyncJgCPQ5WdE6yG8qUpkNzPek0Dmo+Otau/ivirwp3L404
+         6EaQN/+t9A9/ShBFm2zFnWEtqZ0FNNVLiMHf+sxxE6LaQ9x4+enUGYmrzMa4AldPFcuj
+         warGgYPBV1YJixSMh7jAqF7904CQe0H3HuHbbqk7lB04Ou4QPepZvxw2gdt7IMU5aWuX
+         gY3TyQWKq+RljiPBNW6sf+2TWDCA4Q2YjLMwWXt3Z717c/ek7ipsGpLMT4qOLja9wP+H
+         LSmwu7dXNk00zSXOq+xIqX+918UMoC/PLenRiSzh5wmK34LSIu4/od2RBPqM/GoVW19m
+         TX2w==
+X-Forwarded-Encrypted: i=1; AJvYcCXO+XGvGosHzJYR6U0pLTe3zObDuyDfy6i43Y7llGOa/mnSfUivd8Ptst6ZGDOVl27LCt0ixo6R9A==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzTnFnArRhHp1N6ziKyGof4LW37FTIypKMugscYS/YxGnCz1uXq
+	cuUa2LPWrzkNTtiC4IwOijkQABWq2CSwDsSp3DGD+gvUQcXH0YulBIHaS65O5C6eJCY=
+X-Gm-Gg: ASbGnctDeO53XU8+N58GFPZl0LEfIiE4gEkyfr4VF01TUEgV9Q8Od0SMyCHYB3Dt241
+	NEd5ZcdazzQKzyNBQ5TbwxPzdnYXT9i/T2xWCWyJVX++rpKGEqnb4m1Df/1jZoBNBzX1OIIx3iC
+	9XCW7+y0ydL34N1ZQF/JqVyLCEb1hSad8IdsgXdK1lGel/mNtmNl+JB0vX6dgr0F9jPqEJ1wqvk
+	S9gGvx8mHKSpMe9eQZB+ty6YXU13rs7zJ+Hy6WWUr13ic+2+22T79HIAhWXj6XI/ns/os2dNVnn
+	btCWjgLjfE4ZWqHD0HZiTQ1OFoTmjUOefB7wW10Ro/ruS+04/pipsaD3j4mWT9p0v/WHAI63jy6
+	TpFnk+U2sBuuUnL7kWrKsYzXnnd+7VoGY+KGs5BQiFjwQJS2G04bukJIdMkpLzZ2pm2i1uY/4TA
+	U0PdVvp50i9KuhR7NxOfRWgRQVVEdOww==
+X-Google-Smtp-Source: AGHT+IGACoEn/nbo6e2DyckGACB/CNW4OVzXkDG8m1N/cYcO1zHIfjpCrYFjRtT8AHuW/9OW2nHiOg==
+X-Received: by 2002:a05:6000:2185:b0:3d1:e1b1:9640 with SMTP id ffacd0b85a97d-3d1e1b19c98mr12582044f8f.30.1757068859889;
+        Fri, 05 Sep 2025 03:40:59 -0700 (PDT)
+Received: from [172.18.170.139] (ip-185-104-138-158.ptr.icomera.net. [185.104.138.158])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3d6cf485eb7sm20990738f8f.3.2025.09.05.03.40.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Sep 2025 03:40:59 -0700 (PDT)
+From: Luca Weiss <luca.weiss@fairphone.com>
+Subject: [PATCH v3 0/7] Various dt-bindings for Milos and The Fairphone
+ (Gen. 6) addition
+Date: Fri, 05 Sep 2025 12:40:31 +0200
+Message-Id: <20250905-sm7635-fp6-initial-v3-0-0117c2eff1b7@fairphone.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -63,1144 +85,113 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250905-mt8196-gpufreq-v1-10-7b6c2d6be221@collabora.com>
-References: <20250905-mt8196-gpufreq-v1-0-7b6c2d6be221@collabora.com>
-In-Reply-To: <20250905-mt8196-gpufreq-v1-0-7b6c2d6be221@collabora.com>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
- Boris Brezillon <boris.brezillon@collabora.com>, 
- Steven Price <steven.price@arm.com>, Liviu Dudau <liviu.dudau@arm.com>, 
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Matthias Brugger <matthias.bgg@gmail.com>, 
- MyungJoo Ham <myungjoo.ham@samsung.com>, 
- Kyungmin Park <kyungmin.park@samsung.com>, 
- Chanwoo Choi <cw00.choi@samsung.com>, Jassi Brar <jassisinghbrar@gmail.com>, 
- Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc: Chia-I Wu <olvaffe@gmail.com>, Chen-Yu Tsai <wenst@chromium.org>, 
- kernel@collabora.com, dri-devel@lists.freedesktop.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
- linux-pm@vger.kernel.org, linux-hardening@vger.kernel.org, 
- Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+X-B4-Tracking: v=1; b=H4sIAB++umgC/22STW7cMAyFrzLwui4oidTPrHqPoguKojoCOvbEd
+ o0Uwdy9ipMiSBptpEfwfQQe9TSsujRdh/PpaVh0b2ubpy7cl9MgF55+6thK14MFS+CtG9dr8I7
+ GevNjm9rW+NdoSBGqVnJShm68LVrb4wH9/uNFL/rwu7O3l+Ib+nx6BcM/8KLXedPbMss6GkyFP
+ ULEHM87Hmze5HIYS2DwKpoMaIiI4iH3d9WoWhxwsUixug+u3kG+dxqWxFEKRYci0SraIo4Z1SO
+ DTe9dmIwjcsgupJyzBJ8pSyo5FbXFcr9dDELvXSpBDBSxhJlspX5CdQCg5J0EMpZ9KBg/zBKjv
+ s9KFJNiTcCQQlAjJZFFG6jWjFn42ZV51VHm67Vt59Okj9t4xJmAhufgL23d5uXPsdzdHMm/xk2
+ f7XE3I4wlSXHWKovJ3yq35XaZJ/3ahxzI3b5hgvn0O+y2YzTWxCEmAvoPc7/f/wKRA4eteAIAA
+ A==
+X-Change-ID: 20250623-sm7635-fp6-initial-15e40fef53cd
+To: "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Viresh Kumar <viresh.kumar@linaro.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Manivannan Sadhasivam <mani@kernel.org>, 
+ Herbert Xu <herbert@gondor.apana.org.au>, 
+ "David S. Miller" <davem@davemloft.net>, Vinod Koul <vkoul@kernel.org>, 
+ Thomas Gleixner <tglx@linutronix.de>, 
+ Bjorn Andersson <andersson@kernel.org>, 
+ Konrad Dybcio <konradybcio@kernel.org>
+Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org, 
+ linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+ linux-crypto@vger.kernel.org, Luca Weiss <luca.weiss@fairphone.com>, 
+ Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1757068857; l=3748;
+ i=luca.weiss@fairphone.com; s=20250611; h=from:subject:message-id;
+ bh=t5R4UW31UoUE7aHekeSNbKI9qdNJcDF4TdGs9lVlvwU=;
+ b=mjMaowhNsly/zEKdyzh/hul06MF3DpyjaK7gVEMVYiaf6Ivc6lj6N3MeRPBWNYHmfJrRKlB8f
+ v04JNynDydODI94kqZ4CMNQym0Bs1p31FHxAA6xv4IM8oxlUahGV10C
+X-Developer-Key: i=luca.weiss@fairphone.com; a=ed25519;
+ pk=O1aw+AAust5lEmgrNJ1Bs7PTY0fEsJm+mdkjExA69q8=
 
-MediaTek uses some glue logic to control frequency and power on some of
-their GPUs. This is best exposed as a devfreq driver, as it saves us
-from having to hardcode OPPs into the device tree, and can be extended
-with additional devfreq-y logic like more clever governors that use the
-hardware's GPUEB MCU to set frame time targets and power limits.
+Document various bits of the Milos SoC in the dt-bindings, which don't
+really need any other changes.
 
-Add this driver to the panthor subdirectory. It needs to live here as it
-needs to call into panthor's devfreq layer, and panthor for its part
-also needs to call into this driver during probe to get a devfreq device
-registered. Solving the cyclical dependency by having mediatek_mfg live
-without knowledge of what a panthor is would require moving the devfreq
-provider stuff into a generic devfreq subsystem solution, which I didn't
-want to do.
+Then we can add the dtsi for the Milos SoC and finally add a dts for
+the newly announced The Fairphone (Gen. 6) smartphone.
 
-Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+Dependencies:
+* The dt-bindings should not have any dependencies on any other patches.
+* The qcom dts bits depend on most other Milos patchsets I have sent in
+  conjuction with this one. The exact ones are specified in the b4 deps.
+
+Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
 ---
- drivers/gpu/drm/panthor/Kconfig        |   13 +
- drivers/gpu/drm/panthor/Makefile       |    2 +
- drivers/gpu/drm/panthor/mediatek_mfg.c | 1053 ++++++++++++++++++++++++++++++++
- 3 files changed, 1068 insertions(+)
+Changes in v3:
+- Rebase on linux-next, drop patches already applied
+- Pick up tags
+- Drop simple-framebuffer to drop dependency on interconnect patchset,
+  will add back later
+- #interrupt-cells = <4> for intc
+- Move protected-clocks to dts
+- usb_1: reg size and assigned-clock-rates update
+- tsens: reg size & interrupt fixes
+- thermal trips cleanup based on review comments
+- Link to v2: https://lore.kernel.org/r/20250713-sm7635-fp6-initial-v2-0-e8f9a789505b@fairphone.com
 
-diff --git a/drivers/gpu/drm/panthor/Kconfig b/drivers/gpu/drm/panthor/Kconfig
-index 55b40ad07f3b0779e0c434469ddc874ff74fde27..c4d2599c05df9e0e009b8e99b3d29c220269ca0d 100644
---- a/drivers/gpu/drm/panthor/Kconfig
-+++ b/drivers/gpu/drm/panthor/Kconfig
-@@ -21,3 +21,16 @@ config DRM_PANTHOR
- 
- 	  Note that the Mali-G68 and Mali-G78, while Valhall architecture, will
- 	  be supported with the panfrost driver as they are not CSF GPUs.
-+
-+config DRM_PANTHOR_MEDIATEK_MFG
-+	tristate "MediaTek MFlexGraphics Extensions for Panthor"
-+	depends on (DRM_PANTHOR && ARCH_MEDIATEK) || COMPILE_TEST
-+	select DEVFREQ_GOV_SIMPLE_ONDEMAND
-+	select PM_DEVFREQ
-+	select MTK_GPUEB_MBOX
-+	help
-+	  Support for power and clock control in Panthor for MediaTek
-+	  MFlexGraphics devices, such as the GPU on the MT8196 or MT6991 SoCs.
-+
-+	  These extensions are required for the GPU to work on these platforms,
-+	  as they control the glue logic that powers on the GPU.
-diff --git a/drivers/gpu/drm/panthor/Makefile b/drivers/gpu/drm/panthor/Makefile
-index 02db21748c125688d2ef20ed254b5ebd7ff642e4..e0ebfdfb20bd78e0003c860c86c040746248fb89 100644
---- a/drivers/gpu/drm/panthor/Makefile
-+++ b/drivers/gpu/drm/panthor/Makefile
-@@ -12,4 +12,6 @@ panthor-y := \
- 	panthor_mmu.o \
- 	panthor_sched.o
- 
-+obj-$(CONFIG_DRM_PANTHOR_MEDIATEK_MFG) += mediatek_mfg.o
-+
- obj-$(CONFIG_DRM_PANTHOR) += panthor.o
-diff --git a/drivers/gpu/drm/panthor/mediatek_mfg.c b/drivers/gpu/drm/panthor/mediatek_mfg.c
-new file mode 100644
-index 0000000000000000000000000000000000000000..bc2bf6539b28197b3cf347a28274e1618ff10d61
---- /dev/null
-+++ b/drivers/gpu/drm/panthor/mediatek_mfg.c
-@@ -0,0 +1,1053 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Driver for MediaTek MFlexGraphics Devices
-+ *
-+ * Copyright (C) 2025, Collabora Ltd.
-+ */
-+
-+#include <linux/atomic.h>
-+#include <linux/completion.h>
-+#include <linux/clk.h>
-+#include <linux/container_of.h>
-+#include <linux/devfreq.h>
-+#include <linux/iopoll.h>
-+#include <linux/mailbox_client.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/of_address.h>
-+#include <linux/of_platform.h>
-+#include <linux/platform_device.h>
-+#include <linux/pm_opp.h>
-+#include <linux/regulator/consumer.h>
-+
-+#include <drm/drm_managed.h>
-+
-+#include "panthor_devfreq.h"
-+#include "panthor_device.h"
-+
-+#define GPR_LP_STATE		0x0028
-+#define   EB_ON_SUSPEND		0x0
-+#define   EB_ON_RESUME		0x1
-+#define GPR_IPI_MAGIC		0x34
-+
-+#define RPC_PWR_CON		0x0504
-+#define   PWR_ACK_M		GENMASK(31, 30)
-+#define RPC_DUMMY_REG_2		0x0658
-+#define RPC_GHPM_CFG0_CON	0x0800
-+#define   GHPM_ENABLE_M		BIT(0)
-+#define   GHPM_ON_SEQ_M		BIT(2)
-+#define RPC_GHPM_RO0_CON	0x09A4
-+#define   GHPM_STATE_M		GENMASK(7, 0)
-+#define   GHPM_PWR_STATE_M	BIT(16)
-+
-+#define GF_REG_MAGIC			0x0000
-+#define GF_REG_GPU_OPP_IDX		0x0004
-+#define GF_REG_STK_OPP_IDX		0x0008
-+#define GF_REG_GPU_OPP_NUM		0x000c
-+#define GF_REG_STK_OPP_NUM		0x0010
-+#define GF_REG_GPU_OPP_SNUM		0x0014
-+#define GF_REG_STK_OPP_SNUM		0x0018
-+#define GF_REG_POWER_COUNT		0x001c
-+#define GF_REG_BUCK_COUNT		0x0020
-+#define GF_REG_MTCMOS_COUNT		0x0024
-+#define GF_REG_CG_COUNT			0x0028 /* CG = Clock Gate? */
-+#define GF_REG_ACTIVE_COUNT		0x002C
-+#define GF_REG_TEMP_RAW			0x0030
-+#define GF_REG_TEMP_NORM_GPU		0x0034
-+#define GF_REG_TEMP_HIGH_GPU		0x0038
-+#define GF_REG_TEMP_NORM_STK		0x003C
-+#define GF_REG_TEMP_HIGH_STK		0x0040
-+#define GF_REG_FREQ_CUR_GPU		0x0044
-+#define GF_REG_FREQ_CUR_STK		0x0048
-+#define GF_REG_FREQ_OUT_GPU		0x004C /* Guess: actual achieved freq */
-+#define GF_REG_FREQ_OUT_STK		0x0050 /* Guess: actual achieved freq */
-+#define GF_REG_FREQ_METER_GPU		0x0054 /* Seems unused, always 0 */
-+#define GF_REG_FREQ_METER_STK		0x0058 /* Seems unused, always 0 */
-+#define GF_REG_VOLT_CUR_GPU		0x005C /* in tens of microvolts */
-+#define GF_REG_VOLT_CUR_STK		0x0060 /* in tens of microvolts */
-+#define GF_REG_VOLT_CUR_GPU_SRAM	0x0064
-+#define GF_REG_VOLT_CUR_STK_SRAM	0x0068
-+#define GF_REG_VOLT_CUR_GPU_REG		0x006C /* Seems unused, always 0 */
-+#define GF_REG_VOLT_CUR_STK_REG		0x0070 /* Seems unused, always 0 */
-+#define GF_REG_VOLT_CUR_GPU_REG_SRAM	0x0074
-+#define GF_REG_VOLT_CUR_STK_REG_SRAM	0x0078
-+#define GF_REG_PWR_CUR_GPU		0x007C /* in milliwatts */
-+#define GF_REG_PWR_CUR_STK		0x0080 /* in milliwatts */
-+#define GF_REG_PWR_MAX_GPU		0x0084 /* in milliwatts */
-+#define GF_REG_PWR_MAX_STK		0x0088 /* in milliwatts */
-+#define GF_REG_PWR_MIN_GPU		0x008C /* in milliwatts */
-+#define GF_REG_PWR_MIN_STK		0x0090 /* in milliwatts */
-+#define GF_REG_LEAKAGE_RT_GPU		0x0094 /* Unknown */
-+#define GF_REG_LEAKAGE_RT_STK		0x0098 /* Unknown */
-+#define GF_REG_LEAKAGE_RT_SRAM		0x009C /* Unknown */
-+#define GF_REG_LEAKAGE_HT_GPU		0x00A0 /* Unknown */
-+#define GF_REG_LEAKAGE_HT_STK		0x00A4 /* Unknown */
-+#define GF_REG_LEAKAGE_HT_SRAM		0x00A8 /* Unknown */
-+#define GF_REG_VOLT_DAC_LOW_GPU		0x00AC /* Seems unused, always 0 */
-+#define GF_REG_VOLT_DAC_LOW_STK		0x00B0 /* Seems unused, always 0 */
-+#define GF_REG_OPP_CUR_CEIL		0x00B4
-+#define GF_REG_OPP_CUR_FLOOR		0x00B8
-+#define GF_REG_OPP_CUR_LIMITER_CEIL	0x00BC
-+#define GF_REG_OPP_CUR_LIMITER_FLOOR	0x00C0
-+#define GF_REG_OPP_PRIORITY_CEIL	0x00C4
-+#define GF_REG_OPP_PRIORITY_FLOOR	0x00C8
-+#define GF_REG_PWR_CTL			0x00CC
-+#define GF_REG_ACTIVE_SLEEP_CTL		0x00D0
-+#define GF_REG_DVFS_STATE		0x00D4
-+#define GF_REG_SHADER_PRESENT		0x00D8
-+#define GF_REG_ASENSOR_ENABLE		0x00DC
-+#define GF_REG_AGING_LOAD		0x00E0
-+#define GF_REG_AGING_MARGIN		0x00E4
-+#define GF_REG_AVS_ENABLE		0x00E8
-+#define GF_REG_AVS_MARGIN		0x00EC
-+#define GF_REG_CHIP_TYPE		0x00F0
-+#define GF_REG_SB_VERSION		0x00F4
-+#define GF_REG_PTP_VERSION		0x00F8
-+#define GF_REG_DBG_VERSION		0x00FC
-+#define GF_REG_KDBG_VERSION		0x0100
-+#define GF_REG_GPM1_MODE		0x0104
-+#define GF_REG_GPM3_MODE		0x0108
-+#define GF_REG_DFD_MODE			0x010C
-+#define GF_REG_DUAL_BUCK		0x0110
-+#define GF_REG_SEGMENT_ID		0x0114
-+#define GF_REG_POWER_TIME_H		0x0118
-+#define GF_REG_POWER_TIME_L		0x011C
-+#define GF_REG_PWR_STATUS		0x0120
-+#define GF_REG_STRESS_TEST		0x0124
-+#define GF_REG_TEST_MODE		0x0128
-+#define GF_REG_IPS_MODE			0x012C
-+#define GF_REG_TEMP_COMP_MODE		0x0130
-+#define GF_REG_HT_TEMP_COMP_MODE	0x0134
-+#define GF_REG_PWR_TRACKER_MODE		0x0138
-+#define GF_REG_OPP_TABLE_GPU		0x0314
-+#define GF_REG_OPP_TABLE_STK		0x09A4
-+#define GF_REG_OPP_TABLE_GPU_S		0x1034
-+#define GF_REG_OPP_TABLE_STK_S		0x16c4
-+#define GF_REG_LIMIT_TABLE		0x1d54
-+#define GF_REG_GPM3_TABLE		0x223C
-+
-+#define MFG_MT8196_E2_ID	0x101
-+#define GPUEB_SLEEP_MAGIC	0x55667788UL
-+
-+#define GPUEB_TIMEOUT_US	10000UL
-+#define GPUEB_POLL_US		50
-+
-+#define MAX_OPP_NUM             70
-+
-+/*
-+ * This enum is part of the ABI of the GPUEB firmware. Don't change the
-+ * numbering, as you would wreak havoc.
-+ */
-+enum mtk_mfg_ipi_cmd {
-+	CMD_INIT_SHARED_MEM		= 0,
-+	CMD_GET_FREQ_BY_IDX		= 1,
-+	CMD_GET_POWER_BY_IDX		= 2,
-+	CMD_GET_OPPIDX_BY_FREQ		= 3,
-+	CMD_GET_LEAKAGE_POWER		= 4,
-+	CMD_SET_LIMIT			= 5,
-+	CMD_POWER_CONTROL		= 6,
-+	CMD_ACTIVE_SLEEP_CONTROL	= 7,
-+	CMD_COMMIT			= 8,
-+	CMD_DUAL_COMMIT			= 9,
-+	CMD_PDCA_CONFIG			= 10,
-+	CMD_UPDATE_DEBUG_OPP_INFO	= 11,
-+	CMD_SWITCH_LIMIT		= 12,
-+	CMD_FIX_TARGET_OPPIDX		= 13,
-+	CMD_FIX_DUAL_TARGET_OPPIDX	= 14,
-+	CMD_FIX_CUSTOM_FREQ_VOLT	= 15,
-+	CMD_FIX_DUAL_CUSTOM_FREQ_VOLT	= 16,
-+	CMD_SET_MFGSYS_CONFIG		= 17,
-+	CMD_MSSV_COMMIT			= 18,
-+	CMD_NUM				= 19,
-+};
-+
-+/*
-+ * This struct is part of the ABI of the GPUEB firmware. Changing it, or
-+ * reordering fields in it, will break things, so don't do it. Thank you.
-+ */
-+struct __packed mtk_mfg_ipi_msg {
-+	__le32 magic;
-+	__le32 cmd;
-+	__le32 target;
-+	/*
-+	 * Downstream relies on the compiler to implicitly add the following
-+	 * padding, as it declares the struct as non-packed.
-+	 */
-+	__le32 padding_lol;
-+	union {
-+		s32 __bitwise oppidx;
-+		s32 __bitwise return_value;
-+		__le32 freq;
-+		__le32 volt;
-+		__le32 power;
-+		__le32 power_state;
-+		__le32 mode;
-+		__le32 value;
-+		struct {
-+			__le64 base;
-+			__le32 size;
-+		} shared_mem;
-+		struct {
-+			__le32 freq;
-+			__le32 volt;
-+		} custom;
-+		struct {
-+			__le32 limiter;
-+			s32 __bitwise ceiling_info;
-+			s32 __bitwise floor_info;
-+		} set_limit;
-+		struct {
-+			__le32 target;
-+			__le32 val;
-+		} mfg_cfg;
-+		struct {
-+			__le32 target;
-+			__le32 val;
-+		} mssv;
-+		struct {
-+			s32 __bitwise gpu_oppidx;
-+			s32 __bitwise stack_oppidx;
-+		} dual_commit;
-+		struct {
-+			__le32 fgpu;
-+			__le32 vgpu;
-+			__le32 fstack;
-+			__le32 vstack;
-+		} dual_custom;
-+	} u;
-+};
-+
-+struct __packed mtk_mfg_ipi_sleep_msg {
-+	__le32 event;
-+	__le32 state;
-+	__le32 magic;
-+};
-+
-+/**
-+ * struct mtk_mfg_opp_entry - OPP table entry from firmware
-+ * @freq_khz: The operating point's frequency in kilohertz
-+ * @voltage_core: The operating point's core voltage in tens of microvolts
-+ * @voltage_sram: The operating point's SRAM voltage in tens of microvolts
-+ * @posdiv: exponent of base 2 for PLL frequency divisor used for this OPP
-+ * @voltage_margin: Number of tens of microvolts the voltage can be undershot
-+ * @power_mw: estimate of power usage at this operating point, in milliwatts
-+ *
-+ * This struct is part of the ABI with the EB firmware. Do not change it.
-+ */
-+struct __packed mtk_mfg_opp_entry {
-+	__le32 freq_khz;
-+	__le32 voltage_core;
-+	__le32 voltage_sram;
-+	__le32 posdiv;
-+	__le32 voltage_margin;
-+	__le32 power_mw;
-+};
-+
-+struct mtk_mfg_mbox {
-+	struct mbox_client cl;
-+	struct completion rx_done;
-+	struct mtk_mfg *mfg;
-+	struct mbox_chan *ch;
-+	void *rx_data;
-+};
-+
-+struct mtk_mfg {
-+	struct platform_device *pdev;
-+	struct panthor_device *ptdev;
-+	struct clk *clk_eb;
-+	struct clk_bulk_data *gpu_clks;
-+	struct regulator_bulk_data *gpu_regs;
-+	void __iomem *rpc;
-+	void __iomem *gpr;
-+	void __iomem *sram;
-+	phys_addr_t sram_phys;
-+	unsigned int sram_size;
-+	unsigned int ghpm_en_reg;
-+	u32 ipi_magic;
-+	unsigned int num_opps;
-+	unsigned int num_unique_gpu_opps;
-+	struct dev_pm_opp_data *gpu_opps;
-+	struct dev_pm_opp_data *stack_opps;
-+	struct mtk_mfg_mbox *gf_mbox;
-+	struct mtk_mfg_mbox *slp_mbox;
-+	int last_opp;
-+	const struct mtk_mfg_variant *variant;
-+};
-+
-+struct mtk_mfg_variant {
-+	const char *const *clk_names;
-+	unsigned int num_clks;
-+	const char *const *regulator_names;
-+	unsigned int num_regulators;
-+	int (*init)(struct mtk_mfg *mfg);
-+};
-+
-+static inline void mtk_mfg_update_reg_bits(void __iomem *addr, u32 mask, u32 val)
-+{
-+	writel((readl(addr) & ~mask) | (val & mask), addr);
-+}
-+
-+static inline unsigned long mtk_mfg_read_gpu_freq(struct mtk_mfg *mfg)
-+{
-+	return readl(mfg->sram + GF_REG_FREQ_CUR_GPU) * 1000UL;
-+}
-+
-+static int mtk_mfg_eb_on(struct mtk_mfg *mfg)
-+{
-+	struct device *dev = &mfg->pdev->dev;
-+	u32 val;
-+	int ret;
-+
-+	/*
-+	 * If MFG is already on from e.g. the bootloader, we should skip doing
-+	 * the power-on sequence, as it wouldn't work without powering it off
-+	 * first.
-+	 */
-+	if ((readl(mfg->rpc + RPC_PWR_CON) & PWR_ACK_M) == PWR_ACK_M)
-+		return 0;
-+
-+	ret = readl_poll_timeout(mfg->rpc + RPC_GHPM_RO0_CON, val,
-+				 !(val & (GHPM_PWR_STATE_M | GHPM_STATE_M)),
-+				 GPUEB_POLL_US, GPUEB_TIMEOUT_US);
-+	if (ret) {
-+		dev_err(dev, "timed out waiting for EB to power on\n");
-+		return ret;
-+	}
-+
-+	mtk_mfg_update_reg_bits(mfg->rpc + mfg->ghpm_en_reg, GHPM_ENABLE_M,
-+				GHPM_ENABLE_M);
-+
-+	mtk_mfg_update_reg_bits(mfg->rpc + RPC_GHPM_CFG0_CON, GHPM_ON_SEQ_M, 0);
-+	mtk_mfg_update_reg_bits(mfg->rpc + RPC_GHPM_CFG0_CON, GHPM_ON_SEQ_M,
-+				GHPM_ON_SEQ_M);
-+
-+	mtk_mfg_update_reg_bits(mfg->rpc + mfg->ghpm_en_reg, GHPM_ENABLE_M, 0);
-+
-+
-+	ret = readl_poll_timeout(mfg->rpc + RPC_PWR_CON, val,
-+				 (val & PWR_ACK_M) == PWR_ACK_M,
-+				 GPUEB_POLL_US, GPUEB_TIMEOUT_US);
-+	if (ret) {
-+		dev_err(dev, "timed out waiting for EB power ack, val = 0x%X\n",
-+			val);
-+		return ret;
-+	}
-+
-+	ret = readl_poll_timeout(mfg->gpr + GPR_LP_STATE, val,
-+				 (val == EB_ON_RESUME),
-+				 GPUEB_POLL_US, GPUEB_TIMEOUT_US);
-+	if (ret) {
-+		dev_err(dev, "timed out waiting for EB to resume, status = 0x%X\n", val);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static int mtk_mfg_eb_off(struct mtk_mfg *mfg)
-+{
-+	struct mtk_mfg_ipi_sleep_msg msg = {
-+		.event = 0,
-+		.state = 0,
-+		.magic = GPUEB_SLEEP_MAGIC
-+	};
-+	u32 val;
-+	int ret;
-+
-+	ret = mbox_send_message(mfg->slp_mbox->ch, &msg);
-+	if (ret < 0) {
-+		dev_err(&mfg->pdev->dev, "failure in mbox comms: %pe\n",
-+			ERR_PTR(ret));
-+		return ret;
-+	}
-+
-+	ret = readl_poll_timeout(mfg->rpc + RPC_PWR_CON, val,
-+				 !(val & PWR_ACK_M), GPUEB_POLL_US,
-+				 GPUEB_TIMEOUT_US);
-+
-+	if (ret) {
-+		dev_err(&mfg->pdev->dev,
-+			"timed out waiting for EB to power off, val=0x%08X\n",
-+			val);
-+	}
-+
-+	return ret;
-+}
-+
-+static int mtk_mfg_send_ipi(struct mtk_mfg *mfg, struct mtk_mfg_ipi_msg *msg)
-+{
-+	int ret;
-+
-+	msg->magic = mfg->ipi_magic;
-+
-+	ret = mbox_send_message(mfg->gf_mbox->ch, msg);
-+	if (ret < 0) {
-+		dev_err(&mfg->pdev->dev, "error from mailbox subsystem: %pe\n",
-+			ERR_PTR(ret));
-+		return ret;
-+	}
-+
-+	wait_for_completion(&mfg->gf_mbox->rx_done);
-+
-+	memcpy(msg, mfg->gf_mbox->rx_data, sizeof(*msg));
-+
-+	if (msg->u.return_value < 0) {
-+		dev_err(&mfg->pdev->dev, "IPI return: %d\n",
-+			msg->u.return_value);
-+		return -EPROTO;
-+	}
-+
-+	return 0;
-+}
-+
-+static int mtk_mfg_init_shared_mem(struct mtk_mfg *mfg)
-+{
-+	struct device *dev = &mfg->pdev->dev;
-+	struct mtk_mfg_ipi_msg msg = {};
-+	int ret;
-+
-+	dev_info(dev, "clearing GPUEB sram, 0x%X bytes\n", mfg->sram_size);
-+	memset_io(mfg->sram, 0, mfg->sram_size);
-+
-+	msg.cmd = CMD_INIT_SHARED_MEM;
-+	msg.u.shared_mem.base = mfg->sram_phys;
-+	msg.u.shared_mem.size = mfg->sram_size;
-+
-+	ret = mtk_mfg_send_ipi(mfg, &msg);
-+	if (ret)
-+		return ret;
-+
-+	if (readl(mfg->sram) != 0xBABADADA) {
-+		dev_err(dev, "EB did not initialise SRAM correctly\n");
-+		return -EIO;
-+	}
-+
-+	dev_info(dev, "initialised mem at phys 0x%016llX\n", mfg->sram_phys);
-+
-+	return 0;
-+}
-+
-+static int mtk_mfg_power_control(struct mtk_mfg *mfg, bool enabled)
-+{
-+	struct mtk_mfg_ipi_msg msg = {};
-+
-+	msg.cmd = CMD_POWER_CONTROL;
-+	msg.u.power_state = enabled ? 1 : 0;
-+
-+	return mtk_mfg_send_ipi(mfg, &msg);
-+}
-+
-+static int mtk_mfg_set_oppidx(struct mtk_mfg *mfg, int opp_idx)
-+{
-+	struct mtk_mfg_ipi_msg msg = {};
-+	int ret;
-+
-+	if (!mfg->gpu_opps || !mfg->stack_opps)
-+		return 0;
-+
-+	if (opp_idx >= mfg->num_opps)
-+		return -EINVAL;
-+
-+	if (mfg->last_opp == opp_idx)
-+		return 0;
-+
-+	msg.cmd = CMD_FIX_TARGET_OPPIDX;
-+	msg.u.oppidx = opp_idx;
-+
-+	ret = mtk_mfg_send_ipi(mfg, &msg);
-+	if (ret)
-+		return ret;
-+
-+	mfg->last_opp = opp_idx;
-+
-+	return 0;
-+}
-+
-+static int mtk_mfg_read_opp_tables(struct mtk_mfg *mfg)
-+{
-+	struct device *dev = &mfg->pdev->dev;
-+	struct mtk_mfg_opp_entry e = {};
-+	unsigned int i;
-+	unsigned long long last_freq;
-+
-+	mfg->num_opps = readl(mfg->sram + GF_REG_GPU_OPP_NUM);
-+	if (mfg->num_opps != readl(mfg->sram + GF_REG_STK_OPP_NUM)) {
-+		dev_err(dev, "OPP count of GPU and Stack differ, %u vs. %u\n",
-+			mfg->num_opps, readl(mfg->sram + GF_REG_STK_OPP_NUM));
-+		return -EINVAL;
-+	}
-+
-+	if (mfg->num_opps > MAX_OPP_NUM || mfg->num_opps == 0) {
-+		dev_err(dev, "OPP count (%u) out of range %u >= count > 0\n",
-+			mfg->num_opps, MAX_OPP_NUM);
-+		return -EINVAL;
-+	}
-+
-+	mfg->gpu_opps = devm_kcalloc(dev, mfg->num_opps,
-+				     sizeof(struct dev_pm_opp_data), GFP_KERNEL);
-+	if (!mfg->gpu_opps)
-+		return -ENOMEM;
-+
-+	mfg->stack_opps = devm_kcalloc(dev, mfg->num_opps,
-+				       sizeof(struct dev_pm_opp_data), GFP_KERNEL);
-+	if (!mfg->stack_opps)
-+		return -ENOMEM;
-+
-+	for (i = 0; i < mfg->num_opps; i++) {
-+		memcpy_fromio(&e, mfg->sram + GF_REG_OPP_TABLE_GPU + i * sizeof(e),
-+			      sizeof(e));
-+		if (mem_is_zero(&e, sizeof(e))) {
-+			dev_err(dev, "ran into an empty GPU OPP at index %u\n",
-+				i);
-+			return -EINVAL;
-+		}
-+		mfg->gpu_opps[i].freq = e.freq_khz * 1000ULL;
-+		mfg->gpu_opps[i].u_volt = e.voltage_core * 10;
-+
-+		if (!last_freq || mfg->gpu_opps[i].freq != last_freq)
-+			mfg->num_unique_gpu_opps++;
-+
-+		last_freq = mfg->gpu_opps[i].freq;
-+	}
-+
-+	/* Why do I even bother? */
-+	for (i = 0; i < mfg->num_opps; i++) {
-+		memcpy_fromio(&e, mfg->sram + GF_REG_OPP_TABLE_STK + i * sizeof(e),
-+			      sizeof(e));
-+		if (mem_is_zero(&e, sizeof(e))) {
-+			dev_err(dev, "ran into an empty GPU OPP at index %u\n",
-+				i);
-+			return -EINVAL;
-+		}
-+		mfg->stack_opps[i].freq = e.freq_khz * 1000ULL;
-+		mfg->stack_opps[i].u_volt = e.voltage_core * 10;
-+	}
-+
-+	return 0;
-+}
-+
-+static inline bool mtk_mfg_opp_idx_match(struct mtk_mfg *mfg, int idx,
-+					 unsigned long rate)
-+{
-+	if ((idx == mfg->num_opps - 1) && mfg->gpu_opps[idx].freq >= rate)
-+		return true;
-+
-+	if (mfg->gpu_opps[idx].freq >= rate && mfg->gpu_opps[idx + 1].freq < rate)
-+		return true;
-+
-+	return false;
-+}
-+
-+/**
-+ * mtk_mfg_get_closest_opp_idx - find OPP index for desired GPU frequency
-+ * @mfg: pointer to a &struct mtk_mfg driver instance
-+ * @gpu_rate: desired rate of the GPU core in Hz
-+ *
-+ * Given a desired target frequency for the GPU core, find the index of a
-+ * matching OPP, or the next higher OPP if no exact match is found, or the
-+ * maximum OPP for frequencies exceeding the maximum OPP's frequency.
-+ *
-+ * For duplicate OPP entries, chooses the highest OPP index, as in, the one
-+ * closest to the next lower frequency OPP.
-+ *
-+ * Returns -EINVAL on error, or the OPP index on success.
-+ */
-+static int mtk_mfg_get_closest_opp_idx(struct mtk_mfg *mfg, unsigned long gpu_rate)
-+{
-+	int l = 0;
-+	int r = mfg->num_opps - 1;
-+	int m;
-+
-+	if (!mfg->gpu_opps)
-+		return -EINVAL;
-+
-+	if (mfg->gpu_opps[0].freq <= gpu_rate)
-+		return 0;
-+
-+	while (l <= r) {
-+		m = l + (r - l) / 2;
-+		if (mtk_mfg_opp_idx_match(mfg, m, gpu_rate)) {
-+			return m;
-+		} else if (mfg->gpu_opps[m].freq >= gpu_rate) /* >= for dupes */
-+			l = m + 1;
-+		else
-+			r = m - 1;
-+	}
-+
-+	return -EINVAL;
-+}
-+
-+static int mtk_mfg_devfreq_target(struct device *dev, unsigned long *freq,
-+				  u32 flags)
-+{
-+	struct panthor_device *ptdev = dev_get_drvdata(dev);
-+	struct panthor_devfreq *pdevfreq = ptdev->devfreq;
-+	struct mtk_mfg *mfg = dev_get_drvdata(&pdevfreq->devfreq->dev);
-+	int ret, opp;
-+
-+	opp = mtk_mfg_get_closest_opp_idx(mfg, *freq);
-+	if (opp < 0) {
-+		dev_err(dev, "Couldn't get closest OPP: %pe\n", ERR_PTR(opp));
-+		return opp;
-+	}
-+
-+	ret = pm_runtime_resume_and_get(&mfg->pdev->dev);
-+	if (ret)
-+		return ret;
-+
-+	ret =  mtk_mfg_set_oppidx(mfg, opp);
-+	if (!ret)
-+		*freq = mtk_mfg_read_gpu_freq(mfg);
-+	else
-+		dev_err(dev, "Couldn't set OPP: %pe\n", ERR_PTR(ret));
-+
-+	pm_runtime_put(&mfg->pdev->dev);
-+
-+	return ret;
-+}
-+
-+static int mtk_mfg_devfreq_get_cur_freq(struct device *dev, unsigned long *freq)
-+{
-+	struct panthor_device *ptdev = dev_get_drvdata(dev);
-+	struct panthor_devfreq *pdevfreq = ptdev->devfreq;
-+	struct mtk_mfg *mfg;
-+	int ret;
-+
-+	if (IS_ERR_OR_NULL(pdevfreq->devfreq))
-+		return -ENODEV;
-+
-+	mfg = dev_get_drvdata(&pdevfreq->devfreq->dev);
-+	if (IS_ERR_OR_NULL(mfg)) {
-+		*freq = pdevfreq->devfreq->profile->initial_freq;
-+		return 0;
-+	}
-+
-+	ret = pm_runtime_resume_and_get(&mfg->pdev->dev);
-+	if (ret)
-+		return ret;
-+
-+	*freq = mtk_mfg_read_gpu_freq(mfg);
-+
-+	pm_runtime_put(&mfg->pdev->dev);
-+
-+	return 0;
-+}
-+
-+static const struct devfreq_dev_profile mtk_mfg_devfreq_profile = {
-+	.timer = DEVFREQ_TIMER_DELAYED,
-+	.polling_ms = 50, /* ~3 frames */
-+	.target = mtk_mfg_devfreq_target,
-+	.get_dev_status = panthor_devfreq_get_dev_status,
-+	.get_cur_freq = mtk_mfg_devfreq_get_cur_freq,
-+};
-+
-+static const char *const mtk_mfg_mt8196_clk_names[] = {
-+	"mfgpll",
-+	"mfgpll_sc0",
-+	"mfgpll_sc1",
-+};
-+
-+static const char *const mtk_mfg_mt8196_regulators[] = {
-+	"core",
-+	"stack",
-+	"sram",
-+};
-+
-+static int mtk_mfg_mt8196_init(struct mtk_mfg *mfg)
-+{
-+	void __iomem *e2_base;
-+
-+	e2_base = devm_platform_ioremap_resource_byname(mfg->pdev, "e2_id");
-+	if (IS_ERR(e2_base))
-+		return dev_err_probe(&mfg->pdev->dev, PTR_ERR(e2_base),
-+				     "Couldn't get e2_id register\n");
-+
-+	if (readl(e2_base) == MFG_MT8196_E2_ID)
-+		mfg->ghpm_en_reg = RPC_DUMMY_REG_2;
-+	else
-+		mfg->ghpm_en_reg = RPC_GHPM_CFG0_CON;
-+
-+	return 0;
-+};
-+
-+static const struct mtk_mfg_variant mtk_mfg_mt8196_variant = {
-+	.clk_names = mtk_mfg_mt8196_clk_names,
-+	.num_clks = ARRAY_SIZE(mtk_mfg_mt8196_clk_names),
-+	.regulator_names = mtk_mfg_mt8196_regulators,
-+	.num_regulators = ARRAY_SIZE(mtk_mfg_mt8196_regulators),
-+	.init = mtk_mfg_mt8196_init,
-+};
-+
-+static int mtk_mfg_init_devfreq(struct panthor_device *ptdev,
-+				struct device *gpufreq_dev)
-+{
-+	struct device *gpu = ptdev->base.dev;
-+	struct panthor_devfreq *pdevfreq;
-+	struct mtk_mfg *mfg;
-+	struct devfreq_dev_profile *profile;
-+	struct dev_pm_opp *opp;
-+	int j = 0;
-+	int i, ret;
-+
-+	mfg = dev_get_drvdata(gpufreq_dev);
-+
-+	if (!mfg)
-+		return -EPROBE_DEFER;
-+
-+	if (!mfg->gpu_opps)
-+		return -EPROBE_DEFER;
-+
-+	pdevfreq = drmm_kzalloc(&ptdev->base, sizeof(*ptdev->devfreq), GFP_KERNEL);
-+	if (!pdevfreq)
-+		return -ENOMEM;
-+
-+	ptdev->devfreq = pdevfreq;
-+	mfg->ptdev = ptdev;
-+
-+	spin_lock_init(&pdevfreq->lock);
-+
-+	profile = devm_kmemdup(gpu, &mtk_mfg_devfreq_profile, sizeof(*profile),
-+			       GFP_KERNEL);
-+
-+	if (!profile)
-+		return -ENOMEM;
-+
-+	ret = pm_runtime_resume_and_get(&mfg->pdev->dev);
-+	if (ret) {
-+		dev_err(gpufreq_dev, "could not resume runtime pm: %pe\n",
-+			ERR_PTR(ret));
-+		return ret;
-+	}
-+	profile->initial_freq = mtk_mfg_read_gpu_freq(mfg);
-+	pm_runtime_put(&mfg->pdev->dev);
-+
-+	profile->freq_table = devm_kcalloc(gpu, mfg->num_unique_gpu_opps,
-+					   sizeof(*profile->freq_table),
-+					   GFP_KERNEL);
-+	if (!profile->freq_table)
-+		return -ENOMEM;
-+
-+	profile->max_state = mfg->num_unique_gpu_opps;
-+
-+	for (i = mfg->num_opps - 1; i >= 0 && j < profile->max_state; i--) {
-+		if ((j == 0) || (mfg->gpu_opps[i].freq != profile->freq_table[j - 1])) {
-+			profile->freq_table[j] = mfg->gpu_opps[i].freq;
-+			ret = dev_pm_opp_add_dynamic(gpu, &mfg->gpu_opps[i]);
-+			if (ret) {
-+				dev_err(gpu, "couldn't add OPP %d: %pe\n",
-+					i, ERR_PTR(ret));
-+				return ret;
-+			}
-+			j++;
-+		}
-+	}
-+
-+	opp = devfreq_recommended_opp(gpu, &profile->initial_freq, 0);
-+	if (IS_ERR(opp)) {
-+		dev_err(gpufreq_dev, "failed getting OPP recommendation: %pe\n",
-+			opp);
-+		return PTR_ERR(opp);
-+	}
-+
-+	ret = dev_pm_opp_set_opp(gpu, opp);
-+	dev_pm_opp_put(opp);
-+	if (ret) {
-+		dev_err(gpu, "Couldn't set recommended OPP\n");
-+		return ret;
-+	}
-+
-+	ptdev->fast_rate = profile->freq_table[profile->max_state - 1];
-+
-+	pdevfreq->time_last_update = ktime_get();
-+	pdevfreq->gov_data.upthreshold = 45;
-+	pdevfreq->gov_data.downdifferential = 5;
-+
-+	pdevfreq->devfreq = devm_devfreq_add_device(ptdev->base.dev, profile,
-+						    DEVFREQ_GOV_SIMPLE_ONDEMAND,
-+						    &pdevfreq->gov_data);
-+	if (IS_ERR(pdevfreq->devfreq)) {
-+		dev_err(gpu, "Failed to register devfreq device: %pe\n",
-+			pdevfreq->devfreq);
-+		return PTR_ERR(pdevfreq->devfreq);
-+	}
-+
-+	/*
-+	 * There are some ways devfreq_add_device can fail without setting an
-+	 * error pointer, but setting a NULL pointer instead. We really don't
-+	 * want to return 0 in the above check, so return -EINVAL here.
-+	 */
-+	if (!pdevfreq->devfreq) {
-+		dev_err(gpu, "Failed to register devfreq device\n");
-+		return -EINVAL;
-+	}
-+
-+	dev_set_drvdata(&pdevfreq->devfreq->dev, mfg);
-+
-+	return 0;
-+}
-+
-+static void mtk_mfg_mbox_rx_callback(struct mbox_client *cl, void *mssg)
-+{
-+	struct mtk_mfg_mbox *mb = container_of(cl, struct mtk_mfg_mbox, cl);
-+
-+	mb->rx_data = mssg;
-+	complete(&mb->rx_done);
-+}
-+
-+static int mtk_mfg_init_mbox(struct mtk_mfg *mfg)
-+{
-+	struct device *dev = &mfg->pdev->dev;
-+	struct mtk_mfg_mbox *gf;
-+	struct mtk_mfg_mbox *slp;
-+
-+	gf = devm_kzalloc(dev, sizeof(*gf), GFP_KERNEL);
-+	if (!gf)
-+		return -ENOMEM;
-+
-+	slp = devm_kzalloc(dev, sizeof(*slp), GFP_KERNEL);
-+	if (!slp)
-+		return -ENOMEM;
-+
-+	gf->mfg = mfg;
-+	init_completion(&gf->rx_done);
-+	gf->cl.dev = dev;
-+	gf->cl.rx_callback = mtk_mfg_mbox_rx_callback;
-+	gf->cl.tx_tout = GPUEB_TIMEOUT_US / USEC_PER_MSEC;
-+	gf->ch = mbox_request_channel_byname(&gf->cl, "gpufreq");
-+	if (IS_ERR(gf->ch))
-+		return PTR_ERR(gf->ch);
-+
-+	mfg->gf_mbox = gf;
-+
-+	slp->mfg = mfg;
-+	init_completion(&slp->rx_done);
-+	slp->cl.dev = dev;
-+	slp->cl.tx_tout = GPUEB_TIMEOUT_US / USEC_PER_MSEC;
-+	slp->cl.tx_block = true;
-+	slp->ch = mbox_request_channel_byname(&slp->cl, "sleep");
-+	if (IS_ERR(slp->ch))
-+		return PTR_ERR(slp->ch);
-+
-+	mfg->slp_mbox = slp;
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id mtk_mfg_of_match[] = {
-+	{ .compatible = "mediatek,mt8196-gpufreq", .data = &mtk_mfg_mt8196_variant },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, mtk_mfg_of_match);
-+
-+static int mtk_mfg_probe(struct platform_device *pdev)
-+{
-+	struct device_node *shmem __free(device_node);
-+	struct panthor_devfreq_provider *prov;
-+	struct mtk_mfg *mfg;
-+	struct device *dev = &pdev->dev;
-+	const struct mtk_mfg_variant *data = of_device_get_match_data(dev);
-+	struct resource res;
-+	int ret;
-+	int i;
-+
-+	mfg = devm_kzalloc(dev, sizeof(*mfg), GFP_KERNEL);
-+	if (!mfg)
-+		return -ENOMEM;
-+
-+	prov = devm_kzalloc(dev, sizeof(*prov), GFP_KERNEL);
-+	if (!prov)
-+		return -ENOMEM;
-+
-+	prov->dev = dev;
-+	prov->init = mtk_mfg_init_devfreq;
-+
-+	mfg->pdev = pdev;
-+	mfg->variant = data;
-+
-+	dev_set_drvdata(dev, mfg);
-+
-+	mfg->gpr = devm_platform_ioremap_resource_byname(pdev, "gpr");
-+	if (IS_ERR(mfg->gpr))
-+		return dev_err_probe(dev, PTR_ERR(mfg->gpr),
-+				     "Could not retrieve GPR MMIO registers\n");
-+
-+	mfg->rpc = devm_platform_ioremap_resource_byname(pdev, "rpc");
-+	if (IS_ERR(mfg->rpc))
-+		return dev_err_probe(dev, PTR_ERR(mfg->rpc),
-+				     "Could not retrieve RPC MMIO registers\n");
-+
-+	mfg->clk_eb = devm_clk_get(dev, "eb");
-+	if (IS_ERR(mfg->clk_eb))
-+		return dev_err_probe(dev, PTR_ERR(mfg->clk_eb),
-+				     "Could not get 'eb' clock\n");
-+
-+	mfg->gpu_clks = devm_kcalloc(dev, data->num_clks, sizeof(*mfg->gpu_clks),
-+				     GFP_KERNEL);
-+	if (!mfg->gpu_clks)
-+		return -ENOMEM;
-+
-+	for (i = 0; i < data->num_clks; i++)
-+		mfg->gpu_clks[i].id = data->clk_names[i];
-+
-+	ret = devm_clk_bulk_get(dev, data->num_clks, mfg->gpu_clks);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "couldn't get GPU clocks\n");
-+
-+	mfg->gpu_regs = devm_kcalloc(dev, data->num_regulators,
-+				     sizeof(*mfg->gpu_regs), GFP_KERNEL);
-+	if (!mfg->gpu_regs)
-+		return -ENOMEM;
-+
-+	for (i = 0; i < data->num_regulators; i++)
-+		mfg->gpu_regs[i].supply = data->regulator_names[i];
-+
-+	ret = devm_regulator_bulk_get(dev, data->num_regulators, mfg->gpu_regs);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "couldn't get GPU regulators\n");
-+
-+	shmem = of_parse_phandle(dev->of_node, "shmem", 0);
-+	if (!shmem)
-+		return dev_err_probe(dev, -ENODEV, "Could not get 'shmem'\n");
-+
-+	ret = of_address_to_resource(shmem, 0, &res);
-+	if (ret)
-+		return dev_err_probe(dev, ret,
-+				     "failed to get GPUEB shared memory\n");
-+
-+	mfg->sram = devm_ioremap(dev, res.start, resource_size(&res));
-+	if (!mfg->sram)
-+		return dev_err_probe(dev, -EADDRNOTAVAIL,
-+				     "failed to ioremap GPUEB sram\n");
-+	mfg->sram_size = resource_size(&res);
-+	mfg->sram_phys = res.start;
-+
-+	if (data->init) {
-+		ret = data->init(mfg);
-+		if (ret)
-+			return dev_err_probe(dev, ret, "Variant init failed\n");
-+	}
-+
-+	ret = clk_prepare_enable(mfg->clk_eb);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "failed to turn on EB clock\n");
-+	mfg->ipi_magic = readl(mfg->gpr + GPR_IPI_MAGIC);
-+	writel(0x0, mfg->gpr + GPR_IPI_MAGIC); /* why. */
-+
-+	ret = mtk_mfg_init_mbox(mfg);
-+	if (ret) {
-+		ret = dev_err_probe(dev, ret, "Couldn't initialise mailbox\n");
-+		goto out;
-+	}
-+
-+	clk_disable_unprepare(mfg->clk_eb);
-+
-+	mfg->last_opp = -1;
-+
-+	devm_pm_runtime_enable(dev);
-+
-+	ret = pm_runtime_resume_and_get(dev);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "Failed to power on MFG\n");
-+
-+	ret = mtk_mfg_init_shared_mem(mfg);
-+	if (ret) {
-+		dev_err(dev, "Couldn't initialize EB SRAM: %pe\n", ERR_PTR(ret));
-+		goto out;
-+	}
-+
-+	ret = mtk_mfg_read_opp_tables(mfg);
-+	if (ret) {
-+		dev_err(dev, "Error reading OPP tables from EB: %pe\n",
-+			ERR_PTR(ret));
-+		goto out;
-+	}
-+
-+	panthor_devfreq_register_provider(prov);
-+
-+out:
-+	pm_runtime_put(dev);
-+	return ret;
-+}
-+
-+static int mtk_mfg_suspend(struct device *dev)
-+{
-+	struct mtk_mfg *mfg = dev_get_drvdata(dev);
-+	int ret;
-+
-+	ret = mtk_mfg_power_control(mfg, false);
-+	if (ret) {
-+		dev_err(dev, "power_control failed: %pe\n", ERR_PTR(ret));
-+		return ret;
-+	}
-+	ret = mtk_mfg_eb_off(mfg);
-+	if (ret) {
-+		dev_err(dev, "eb_off failed: %pe\n", ERR_PTR(ret));
-+		return ret;
-+	}
-+	clk_bulk_disable_unprepare(mfg->variant->num_clks, mfg->gpu_clks);
-+	clk_disable_unprepare(mfg->clk_eb);
-+	ret = regulator_bulk_disable(mfg->variant->num_regulators, mfg->gpu_regs);
-+
-+	return ret;
-+}
-+
-+static int mtk_mfg_resume(struct device *dev)
-+{
-+	struct mtk_mfg *mfg = dev_get_drvdata(dev);
-+	int ret;
-+
-+	ret = regulator_bulk_enable(mfg->variant->num_regulators,
-+				    mfg->gpu_regs);
-+	if (ret)
-+		return ret;
-+
-+	ret = clk_prepare_enable(mfg->clk_eb);
-+	if (ret)
-+		goto err_disable_regulators;
-+
-+	ret = clk_bulk_prepare_enable(mfg->variant->num_clks, mfg->gpu_clks);
-+	if (ret)
-+		goto err_disable_eb_clk;
-+
-+	ret = mtk_mfg_eb_on(mfg);
-+	if (ret)
-+		goto err_disable_clks;
-+
-+	ret = mtk_mfg_power_control(mfg, true);
-+	if (ret)
-+		goto err_eb_off;
-+
-+	return 0;
-+
-+err_eb_off:
-+	mtk_mfg_eb_off(mfg);
-+err_disable_clks:
-+	clk_bulk_disable_unprepare(mfg->variant->num_clks, mfg->gpu_clks);
-+err_disable_eb_clk:
-+	clk_disable_unprepare(mfg->clk_eb);
-+err_disable_regulators:
-+	regulator_bulk_disable(mfg->variant->num_regulators, mfg->gpu_regs);
-+
-+	return ret;
-+}
-+
-+
-+static DEFINE_RUNTIME_DEV_PM_OPS(mtk_mfg_pm_ops,
-+				 mtk_mfg_suspend,
-+				 mtk_mfg_resume,
-+				 NULL);
-+
-+static struct platform_driver mtk_mfg_driver = {
-+	.driver = {
-+		.name = "panthor-mtk-mfg",
-+		.of_match_table = mtk_mfg_of_match,
-+		.pm = pm_ptr(&mtk_mfg_pm_ops),
-+	},
-+	.probe = mtk_mfg_probe,
-+};
-+module_platform_driver(mtk_mfg_driver);
-+
-+MODULE_SOFTDEP("pre: panthor");
-+MODULE_AUTHOR("Nicolas Frattaroli <nicolas.frattaroli@collabora.com>");
-+MODULE_DESCRIPTION("MediaTek MFlexGraphics Extension for Panthor");
-+MODULE_LICENSE("GPL");
+Changes in v2:
+- Rebrand SM7635 to Milos as requested: https://lore.kernel.org/linux-arm-msm/aGMI1Zv6D+K+vWZL@hu-bjorande-lv.qualcomm.com/
+- Disable pm8550vs instances by default
+- Enable gpi_dma by default, sort pinctrl, update gpio-reserved-ranges
+  style, update USB2.0 comment, newlines before status, remove dummy
+  panel for simpledrm
+- Link to v1: https://lore.kernel.org/r/20250625-sm7635-fp6-initial-v1-0-d9cd322eac1b@fairphone.com
 
+---
+Luca Weiss (7):
+      dt-bindings: cpufreq: qcom-hw: document Milos CPUFREQ Hardware
+      dt-bindings: crypto: qcom,prng: document Milos
+      dt-bindings: qcom,pdc: document the Milos Power Domain Controller
+      dt-bindings: arm: qcom: Add Milos and The Fairphone (Gen. 6)
+      arm64: dts: qcom: pm8550vs: Disable different PMIC SIDs by default
+      arm64: dts: qcom: Add initial Milos dtsi
+      arm64: dts: qcom: Add The Fairphone (Gen. 6)
+
+ Documentation/devicetree/bindings/arm/qcom.yaml    |    5 +
+ .../bindings/cpufreq/cpufreq-qcom-hw.yaml          |    2 +
+ .../devicetree/bindings/crypto/qcom,prng.yaml      |    1 +
+ .../bindings/interrupt-controller/qcom,pdc.yaml    |    1 +
+ arch/arm64/boot/dts/qcom/Makefile                  |    1 +
+ arch/arm64/boot/dts/qcom/milos-fairphone-fp6.dts   |  790 ++++++
+ arch/arm64/boot/dts/qcom/milos.dtsi                | 2633 ++++++++++++++++++++
+ arch/arm64/boot/dts/qcom/pm8550vs.dtsi             |    8 +
+ arch/arm64/boot/dts/qcom/qcs8550-aim300.dtsi       |   16 +
+ arch/arm64/boot/dts/qcom/sm8550-hdk.dts            |   16 +
+ arch/arm64/boot/dts/qcom/sm8550-mtp.dts            |   16 +
+ arch/arm64/boot/dts/qcom/sm8550-qrd.dts            |   16 +
+ arch/arm64/boot/dts/qcom/sm8550-samsung-q5q.dts    |   16 +
+ .../dts/qcom/sm8550-sony-xperia-yodo-pdx234.dts    |   16 +
+ arch/arm64/boot/dts/qcom/sm8650-hdk.dts            |   16 +
+ arch/arm64/boot/dts/qcom/sm8650-mtp.dts            |   16 +
+ arch/arm64/boot/dts/qcom/sm8650-qrd.dts            |   16 +
+ 17 files changed, 3585 insertions(+)
+---
+base-commit: 87a9e300217e33b2388b9c1ffe99ec454eb6e983
+change-id: 20250623-sm7635-fp6-initial-15e40fef53cd
+prerequisite-change-id: 20250620-sm7635-remoteprocs-149da64084b8:v4
+prerequisite-patch-id: 33c2e4cd2d8e7b9c253b86f6f3c42e4602d16b7d
+prerequisite-patch-id: 0688b95e4ac7b2f042023a7cb09e0d8cb7929bb6
+prerequisite-patch-id: d7a06ece910e7844c60b910fe8eed30ad2458f34
+prerequisite-patch-id: 9105660b1ac9a8cd5834cc82e42dc3aa4e64a029
+prerequisite-patch-id: 49135534a379bbbc76b5bc9db9de2d2ab9d387c5
+prerequisite-patch-id: ec7c10dc254b52f55557f3000e563c7512a67d48
+prerequisite-patch-id: 4c1e65349589e4f90a0977e1cd9524275ffb4bca
+
+Best regards,
 -- 
-2.51.0
+Luca Weiss <luca.weiss@fairphone.com>
 
 
