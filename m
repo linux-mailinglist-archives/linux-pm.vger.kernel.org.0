@@ -1,101 +1,112 @@
-Return-Path: <linux-pm+bounces-34009-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34010-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 63F83B461A9
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 20:03:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 54FCDB46206
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 20:16:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 33AC95C47F9
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 18:03:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2B8F0189AF82
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 18:16:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4819636CE1A;
-	Fri,  5 Sep 2025 18:03:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70E41305949;
+	Fri,  5 Sep 2025 18:16:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q5DIzv/G"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O9dK17ne"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2379036CDF5
-	for <linux-pm@vger.kernel.org>; Fri,  5 Sep 2025 18:03:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4941F305943;
+	Fri,  5 Sep 2025 18:16:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757095406; cv=none; b=dCClVNdXrrv5FTxhj6VYyF+KRFLH/vaAz8JZHmRzVdWs4cVN/dZkFzGsJnmH2JgqUasGHbdYWyvYY6w1ZxCtzXzbVHNWE/AnHl9CMaNxKlkwIwDM1AzbFjF3aK4N0Sgvbuis4CxiPa6GMiOKDypr9yC6Xcjbm+6uM1H6tKZarQ8=
+	t=1757096193; cv=none; b=mnM25rIS7DP1rkZi3Zpx8xPD43IWvex6IIhjM/QAY+10Z/de+Z2TF4gqyw72pigiyhLAy++aprbc/KlGZ7KiX6EIU5V2OE/Ro/hWMo4N0dYIsSJ3YNpUv0LLwQdnPG9E1A/UXniVClVqMGRt55ygcvGSIikceRKr/rEzWjWnT40=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757095406; c=relaxed/simple;
-	bh=aX6G1a/+0EOsKEFDFSF/08ysGp022PYE1EvRNGxAVVo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XOlDBdSiR3FI3i6z4UD95we1vFOSOzEUSGv/96xNvOaInYnWg8aVdAA3PGC8MIEbSCG9emSUZiewl2IieVDyjgPeiHaybp7uC7k5Rsb8jl/upr98IgDoaZlWMAQYiZdBCDfBeB4W7zAfScooenUbxNusFbjGvpuAFPfWrxqTL1U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q5DIzv/G; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E8D9C4CEF1;
-	Fri,  5 Sep 2025 18:03:25 +0000 (UTC)
+	s=arc-20240116; t=1757096193; c=relaxed/simple;
+	bh=kgeUru8SqZkKjo++DVOShHL+x7j8bEOW8CXZ1n4HJ4I=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=AUZqtMR/WDLgIc9UvuZVjgS0/UCfyoLnIJrVDnOlbBzAGnzrk7t/BhXn286WaErPLXobbM19cQTpE9KM0lSuL1pkvrvuZhzzF4IhP0HC7ZuGAw5Zzy/a1lsJ3IX1HUZsOb/0+lZYVRkAt7CebbXRk6zPqUGzSWBs9hGg1stEWbo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O9dK17ne; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D796AC4CEF1;
+	Fri,  5 Sep 2025 18:16:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757095405;
-	bh=aX6G1a/+0EOsKEFDFSF/08ysGp022PYE1EvRNGxAVVo=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Q5DIzv/G7hTbMQNXnE7yUNud5rvXsd6DpAbCVQp3AiYbjInVXQZyVFH7SxY6Xlb+o
-	 a9jR1DC3c7VGUjLGAJt3aue19Lef7XNvr8udzqFqVxcNHbgSVPnw8no1bk5djxAKuT
-	 60rhF8O+DSZu9vyt9Av5LK8xMG8YAdpqq/PW0ZasS/b4x2vyYTIl/Y2GHl/clUaoic
-	 R/GjlOF9MlLdPqWCCtvzhVTYy28egtk8FMDvxltM7/L0DB5LFicqJ/n2HdpVNWebMd
-	 01GypzGAkUYlbnLGkBRJfFbPnYCpLDlcf6tcwMsgX0qZC3DYQlfc/FznBRhayw75Xm
-	 g63r5/NC88yhw==
-Message-ID: <ee05a9de-07e6-44f2-a6e1-1aed8de989e5@kernel.org>
-Date: Fri, 5 Sep 2025 13:03:24 -0500
+	s=k20201202; t=1757096192;
+	bh=kgeUru8SqZkKjo++DVOShHL+x7j8bEOW8CXZ1n4HJ4I=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=O9dK17nejrpL4+/xicNIQtZQomaV8ACmLfmJC62L9iiPr3X3NXJGGj7XYmLCnVPVY
+	 +YbOdU58vjYO9FVARAhPHDgE2Xbd/QwbcXXfqZpnIeuYRI4CcEAKUT6ht9Xjh90UjH
+	 vZaTt3QFIHD1W20yY/FJzYemKuq+cQubLUtTDEqVC6Rj+PQACqMHkpkzvEyjmX0gD6
+	 LvCkBs/pddtNasuF21kZWhM7+ZuDw3fVwgG06EV7HORWGvjwv4RGJhwI32WThXPaj7
+	 ir4CMxngo8kKbiLRZISiN3OmV3ttSOLpL5bErZY4FS2HxhE6qaCtC8V6eHTFGrEpHW
+	 hPkXJrQaaldwg==
+Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-61e577ada07so608507eaf.1;
+        Fri, 05 Sep 2025 11:16:32 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUqrauRPyY3PzEWpmo2RoKqgSVbqsYViiL1DxLXI2bV76cTE1OO9zDsMe3dI1LPlLsAOGCTfd8sJ8+xHRc=@vger.kernel.org, AJvYcCV6it1pVtXr4n9Yer9XB+ZYzpZTUvHvAoBbAHjJxqDzALmwAt7ooR5xqebuc98Op8mjkdQd7OZGdlg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxwGEONzEwodkwoltuMyrLLVAxW6Y52+DLqeN+telN+2PJV3T1u
+	yvT9nbgi9Axt/anPAcBroL1hqrJXyR6YpQB3YSDT+uc40ij+FJwzJNU8h5y7umEHq+3q8yvLnvA
+	iWLkGqnMH4nLjDANzO0lpvS0OkvMpi/8=
+X-Google-Smtp-Source: AGHT+IGXIW3TkYCSqij0GpZXxVhFjPyivTRhdzaFNa3YQ6G5atigKLs5Mk+dwdIKMoVjnheC8qJVGvGvq0e6pnpWKW8=
+X-Received: by 2002:a05:6820:2222:b0:621:7582:b2b3 with SMTP id
+ 006d021491bc7-6217582b96amr492748eaf.4.1757096192184; Fri, 05 Sep 2025
+ 11:16:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [BUG] MECHREVO Yilong15Pro GM5HG7A: lid switch causing unwanted
- s2idle wakeups
-To: aprilgrimoire <aprilgrimoire@proton.me>
-Cc: "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-References: <6ww4uu6Gl4F5n6VY5dl1ufASfKzs4DhMxAN8BuqUpCoqU3PQukVSVSBCl_lKIzkQ-S8kt1acPd58eyolhkWN32lMLFj4ViI0Tdu2jwhnYZ8=@proton.me>
- <06f0c531-2cb6-4a1a-a716-406b4f5f9676@kernel.org>
- <MawTZCnf5jVqp47YcxRrH21nl0rN8O78_my4TxiZ3tFoNxuP568eHxnEH5-VIMa6DtNbHdXytnpRgVyay-UydMK5tbYe4-TG8e2BYEky5hc=@proton.me>
- <7a3a3a35-27d3-4b46-b297-475deda04656@kernel.org>
- <lyy4riGTLOpvYTPUeUx6krjnYdeE8iYbWRrLOJLOChOKMcys00nhNWJ_JD8V8kkVQk87ktMK8w7BAEosOs3KGipyHlvkvQ0_j6cipUfxYtA=@proton.me>
- <0fb5a890-63f0-412b-8d88-79b40e2c564b@kernel.org>
- <El5fBf0AkhefzH0LWKyMF3vOCNsHYBCEwxtvXD-tJfLGAFCeJ5ZVbgZE6ibf-KfMxtlkTwr3g1-feqSgfcafGzVGjulc-8QggWHHoJlRDNY=@proton.me>
- <5369f2b5-dba1-4b25-a093-7aa79c578975@kernel.org>
- <wkUEC8nqZzIcVXalYzsLi_YheAs0Tw07ug-73PAqUwKmquJr89CPnQKwBImSQLcDABIk4tfWPLCPKa00vG1jH8NpiH5f4yXVATYakltJAQI=@proton.me>
- <5f958462-5fc1-4837-b5e1-65c0ad8badcd@kernel.org>
- <v02CD0KPkF5AAcf8UtMCnQtlQ6-UL3YfDuqg-nLJuD1aDIvmY3DiKi3Bgg_6Ay2wY1dQpRPwYdo6qMQir0urvYQ3ch3xFhEmKexz5cmeDg8=@proton.me>
-Content-Language: en-US
-From: Mario Limonciello <superm1@kernel.org>
-In-Reply-To: <v02CD0KPkF5AAcf8UtMCnQtlQ6-UL3YfDuqg-nLJuD1aDIvmY3DiKi3Bgg_6Ay2wY1dQpRPwYdo6qMQir0urvYQ3ch3xFhEmKexz5cmeDg8=@proton.me>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20250902073323.48330-1-zhangzihuan@kylinos.cn> <20250902075624.gcacapuytmwenaxo@vireshk-i7>
+In-Reply-To: <20250902075624.gcacapuytmwenaxo@vireshk-i7>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Fri, 5 Sep 2025 20:16:20 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0gApi4_3gcLkCM5dw4MBsTOHB2hCn7oo5Vy_Hkk-oxbSA@mail.gmail.com>
+X-Gm-Features: Ac12FXzD5NAt1sCb8IayH0weIQpmF-ruesZzRDg0sc_RFuI9s32Z07JirSxJmnc
+Message-ID: <CAJZ5v0gApi4_3gcLkCM5dw4MBsTOHB2hCn7oo5Vy_Hkk-oxbSA@mail.gmail.com>
+Subject: Re: [PATCH v2] cpufreq: Drop redundant freq_table parameter
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: Zihuan Zhang <zhangzihuan@kylinos.cn>, "Rafael J . wysocki" <rafael@kernel.org>, 
+	zhenglifeng <zhenglifeng1@huawei.com>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 9/4/2025 9:51 PM, aprilgrimoire wrote:
->> Can you double-confirm that with IRQ1 disabled that you still get GPIO0
->> for keyboard wakeup specifically?
-> 
-> Sure!
-> 
-> https://paste.gentoo.zip/CSE5LMA6
+On Tue, Sep 2, 2025 at 9:56=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.or=
+g> wrote:
+>
+> On 02-09-25, 15:33, Zihuan Zhang wrote:
+> > Since commit e0b3165ba521 ("cpufreq: add 'freq_table' in struct
+> > cpufreq_policy"),
+> > freq_table has been stored in struct cpufreq_policy instead of being
+> > maintained separately.
+> >
+> > However, several helpers in freq_table.c still take both policy and
+> > freq_table as parameters, even though policy->freq_table can always be
+> > used. This leads to redundant function arguments and increases the chan=
+ce
+> > of inconsistencies.
+> >
+> > This patch removes the unnecessary freq_table argument from these funct=
+ions
+> > and updates their callers to only pass policy. This makes the code simp=
+ler,
+> > more consistent, and avoids duplication.
+> >
+> > V2:
+> >  - Merge three patches into one to fix compile error
+> >  - simple the check suggested by Viresh Kumar
+> >
+> > Signed-off-by: Zihuan Zhang <zhangzihuan@kylinos.cn>
+> > ---
+> >  drivers/cpufreq/cpufreq.c         |  2 +-
+> >  drivers/cpufreq/freq_table.c      | 14 ++++++--------
+> >  drivers/cpufreq/sh-cpufreq.c      |  6 ++----
+> >  drivers/cpufreq/virtual-cpufreq.c |  2 +-
+> >  include/linux/cpufreq.h           |  7 +++----
+> >  5 files changed, 13 insertions(+), 18 deletions(-)
+>
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-Thanks.  I saw you sent a patch.  Directionally I think that's the right 
-move for what you've shared.  All the sources are marking GPIO 0 and IRQ 
-1 as active (presumably because of how their EC works), and IRQ1 is 
-definitely spurious.
-
-I left you some comments on that patch that you can fix in a v2.
-
-But as for your lid causing wakeups, there are three options.
-
-1) Request the vendor to change the firmware so that it doesn't behave 
-this way.
-2) Come up with a filtering quirk mechanism in the kernel somewhere to 
-put the system back to HW sleep instead of breaking the s2idle loop.
-3) Come up with a filtering mechanism somewhere in userspace to put the 
-system back into suspend.
-
-I don't really think idea 2 is very scalable though, so I would say it's 
-best to ask for a firmware fix, and if that isn't viable then come up 
-with a workaround in userspace.
+Applied as 6.18 material, thanks!
 
