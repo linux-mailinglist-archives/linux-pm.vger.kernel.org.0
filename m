@@ -1,165 +1,54 @@
-Return-Path: <linux-pm+bounces-33928-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33929-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92DA2B45073
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 09:56:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B9DD9B45192
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 10:34:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 48D4217B1F5
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 07:56:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 62F865A67A7
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 08:34:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFBF52F659C;
-	Fri,  5 Sep 2025 07:56:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2B9E274B3D;
+	Fri,  5 Sep 2025 08:30:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b="QaTEQEmj";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Y0cf+H8i"
+	dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b="eB1V8B2u"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from flow-a4-smtp.messagingengine.com (flow-a4-smtp.messagingengine.com [103.168.172.139])
+Received: from mail-106103.protonmail.ch (mail-106103.protonmail.ch [79.135.106.103])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75EEE2F60CD;
-	Fri,  5 Sep 2025 07:56:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.139
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C458273D9A
+	for <linux-pm@vger.kernel.org>; Fri,  5 Sep 2025 08:30:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.135.106.103
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757058996; cv=none; b=PbABLUAIg5WqHT3UW6lzL9GvbEeZV68KtHgNg8lNA8e82zSpWR0W8ZCkiYkZZJ1t4GpdyxEcdDhQJAHWfmPv6nKdOoAQMpOQ8/S/YGlXyKfHG5ea0peuJYqQdZ4CIWoP38pk4fKD/mNWuzNZpCqr6KhF4cAdgcO8djAgqUGGwxk=
+	t=1757061018; cv=none; b=QwpbX7fjUmQ0OB0o27SmvYglcABM3r1qVPy5hZ0IrfO4GJ2KLJlbxWh24o5cbO7XApsF6WM6oRhP17Fi0P18AlmdduqioQvFn7XoIIX+RzrIweBudziArfDV2RyHzF169mozTpoCC9guhz1qvXyedHMLpf8NapK8TLddza7/bRE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757058996; c=relaxed/simple;
-	bh=DCIyd4J3pbvUjw8wlbL34A1o0IPs27eqjyKuOZAMvOA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ViW5tY6pTMR/CliMHA/3AZd15+lEB34bZvnBVzVlHfeWJNeI3WX5V8syMQmUJPII1ySlPspe91DOKyPWMAVd1sUDD+cf1VGjc6/O4LUgI9hDrRZ+oKQdSYrjT5bQIURWR36ifwhyVzI7Afgjxcpsz8JZkC/ZLqVmT8afsf4OpF8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se; spf=pass smtp.mailfrom=ragnatech.se; dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b=QaTEQEmj; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Y0cf+H8i; arc=none smtp.client-ip=103.168.172.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ragnatech.se
-Received: from phl-compute-10.internal (phl-compute-10.internal [10.202.2.50])
-	by mailflow.phl.internal (Postfix) with ESMTP id 820DD1380159;
-	Fri,  5 Sep 2025 03:56:32 -0400 (EDT)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-10.internal (MEProxy); Fri, 05 Sep 2025 03:56:32 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ragnatech.se; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1757058992;
-	 x=1757066192; bh=KXUoaaH+PV1RudhFs2J2lVTbxM4uje+tSmH6gtbu+Nw=; b=
-	QaTEQEmjGTJeSxeiah6pwWZmjZ/MZs5T6DwWq8Nmr7oHpYFT9j95C72yMyBcZ5nz
-	u3cXjVlnWCc6V75Dwc83w5se6RUX0cgy2r6hhn8896BD1N9niWfNBDEsX5z3bbZh
-	580Lxh1wJduGFt3iTeOOmO1kuUcf+UmbfmLmVrhi303staCq+82oOHT6v6FtLJ0q
-	KUmIN0sVOTWfm9OO4IWePH36nTPtiHUbxCP6V5sCpCoy7ecX5fAcARL2bBp1+hYX
-	meum9lsc6nxtc9bJfoYbWnrGaAyGJmjEbDgf28gHFpwuN2s7fsfyePI14fKiGSKO
-	+KWH0qpxAXjQsFF5TvJk4Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1757058992; x=
-	1757066192; bh=KXUoaaH+PV1RudhFs2J2lVTbxM4uje+tSmH6gtbu+Nw=; b=Y
-	0cf+H8iNJvMgyddoNtlWXiFqcl4IGVll81T+/QLuu0VNzM2Tdl4Dututnx+WBVfY
-	ZUAq036GCT8hJkBvo1Xuxdbdn01HtUdgUk4Ofv3efStIQ3nE14kAyA73FHfb4fjf
-	KOwQB+75cW2V3GGZKDUuIfX594V3wr1n+Z2P2+qfVHB3QqrZG4ssbRrH1By1GbCD
-	TRIW/OdNehrErechp8kPDk8rijxMDklBtf55Ic7ogPHsHFoI0ZeeNpUdQIUyNFBc
-	8OZXytKiVrvaFoIX8swMPQV8EFgUKFbS92QjUo575ehIJo8Op3B6lZAJqKd3TDxm
-	YaTlavtRtgFLUQVaVcOvQ==
-X-ME-Sender: <xms:rJe6aPT4hEQwkAeohLnFC7wamjbvAr7niwm9b31Yo5zEex0vYFN_jg>
-    <xme:rJe6aPCqpHI9uJ68XId1Qna7oWm5iyUGoAQPsu1kx2oN2qHjsCp2dNoZI4nTxFNl9
-    MurlN6lVZ1a7ntIgiI>
-X-ME-Received: <xmr:rJe6aO_r3H0kGSKS2fH0hEtRAmpG1wYDXGxPnza4nmiPk8yaDQHgreHxbUoYRRqeSVYYMKGdX0I7aNFWxHyOdN0DhlU70pWKyg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdekfeegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceurghi
-    lhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurh
-    epfffhvfevuffkfhggtggugfgjsehtkeertddttdejnecuhfhrohhmpefpihhklhgrshcu
-    ufpnuggvrhhluhhnugcuoehnihhklhgrshdrshhouggvrhhluhhnugesrhgrghhnrghtvg
-    gthhdrshgvqeenucggtffrrghtthgvrhhnpeevteegtddvvdfhtdekgefhfeefheetheek
-    keegfeejudeiudeuleegtdehkeekteenucevlhhushhtvghrufhiiigvpedtnecurfgrrh
-    grmhepmhgrihhlfhhrohhmpehnihhklhgrshdrshhouggvrhhluhhnugesrhgrghhnrght
-    vggthhdrshgvpdhnsggprhgtphhtthhopeeihedpmhhouggvpehsmhhtphhouhhtpdhrtg
-    hpthhtohepiihhrghordigihgthhgrohesvhhivhhordgtohhmpdhrtghpthhtohepjhgu
-    vghlvhgrrhgvsehsuhhsvgdrtghomhdprhgtphhtthhopehlihhnuhigsehrohgvtghkqd
-    hushdrnhgvthdprhgtphhtthhopehjihgtvdefsehkvghrnhgvlhdrohhrghdprhgtphht
-    thhopegulhgvtghhnhgvrhessggrhihlihgsrhgvrdgtohhmpdhrtghpthhtohepnhhunh
-    hordhsrgesrghnrghlohhgrdgtohhmpdhrtghpthhtoheprghnugihsehkvghrnhgvlhdr
-    ohhrghdprhgtphhtthhopeifvghnshestghsihgvrdhorhhgpdhrtghpthhtohepjhgvrh
-    hnvghjrdhskhhrrggsvggtsehgmhgrihhlrdgtohhm
-X-ME-Proxy: <xmx:rJe6aLaJP6Xj2rkulgEos-3PuobS8mQKjatGJJBMK7inm3Pq7Gp2Vg>
-    <xmx:rJe6aNF7-pW6bVrecDyimGuFt4rFKlRaO80vk9U-M3x2Osc7wCA6DA>
-    <xmx:rJe6aLeryKtg2eNLenz4G8c7nPW0XLHn41W-YUcd9nAafvGlUomGZw>
-    <xmx:rJe6aID5jwH-KTo0RNYmn7aS7aHdvvvDvzZsp7Xrs_Dh-FuDrHloig>
-    <xmx:sJe6aL5VH3NVRImO0zXqWNKt1X3K9WtPu7YT5fkHwr7N4ubXrLHaDEMN>
-Feedback-ID: i80c9496c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 5 Sep 2025 03:56:27 -0400 (EDT)
-Date: Fri, 5 Sep 2025 09:56:25 +0200
-From: Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>
-To: Xichao Zhao <zhao.xichao@vivo.com>
-Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
-	Jonathan Cameron <jic23@kernel.org>,
-	David Lechner <dlechner@baylibre.com>,
-	Nuno =?utf-8?B?U8Oh?= <nuno.sa@analog.com>,
-	Andy Shevchenko <andy@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Samuel Holland <samuel@sholland.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,	Mark Brown <broonie@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	Guillaume La Roque <glaroque@baylibre.com>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Broadcom internal kernel review list
- <bcm-kernel-feedback-list@broadcom.com>,	Ray Jui <rjui@broadcom.com>,
- Scott Branden <sbranden@broadcom.com>,
-	Markus Mayer <mmayer@broadcom.com>, Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	zhanghongchen <zhanghongchen@loongson.cn>,
-	Yinbo Zhu <zhuyinbo@loongson.cn>, Amit Kucheria <amitk@kernel.org>,
-	Thara Gopinath <thara.gopinath@gmail.com>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>,	Heiko Stuebner <heiko@sntech.de>,
-	Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,	Orson Zhai <orsonzhai@gmail.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Chunyan Zhang <zhang.lyra@gmail.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>,	Talel Shenhar <talel@amazon.com>,
-	Eduardo Valentin <edubezval@gmail.com>, Keerthy <j-keerthy@ti.com>,
-	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	"open list:HARDWARE MONITORING" <linux-hwmon@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:IIO SUBSYSTEM AND DRIVERS" <linux-iio@vger.kernel.org>,
-	"moderated list:ARM/Allwinner sunXi SoC support"
- <linux-arm-kernel@lists.infradead.org>,
-	"open list:ARM/Allwinner sunXi SoC support"
- <linux-sunxi@lists.linux.dev>,
-	"open list:THERMAL" <linux-pm@vger.kernel.org>,
-	"open list:THERMAL DRIVER FOR AMLOGIC SOCS"
- <linux-amlogic@lists.infradead.org>,
-	"moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE"
- <linux-rpi-kernel@lists.infradead.org>,
-	"open list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE"
- <imx@lists.linux.dev>,
-	"open list:QUALCOMM TSENS THERMAL DRIVER"
- <linux-arm-msm@vger.kernel.org>,
-	"open list:RENESAS R-CAR THERMAL DRIVERS"
- <linux-renesas-soc@vger.kernel.org>,
-	"open list:ARM/Rockchip SoC support"
- <linux-rockchip@lists.infradead.org>,
-	"open list:SAMSUNG THERMAL DRIVER" <linux-samsung-soc@vger.kernel.org>,
-	"moderated list:ARM/STM32 ARCHITECTURE"
- <linux-stm32@st-md-mailman.stormreply.com>,
-	"open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>,
-	"open list:TI BANDGAP AND THERMAL DRIVER" <linux-omap@vger.kernel.org>
-Subject: Re: [PATCH 01/12] thermal: of: Add error handling in
- devm_thermal_*_register()
-Message-ID: <20250905075625.GA1852264@ragnatech.se>
-References: <20250905072423.368123-1-zhao.xichao@vivo.com>
- <20250905072423.368123-2-zhao.xichao@vivo.com>
+	s=arc-20240116; t=1757061018; c=relaxed/simple;
+	bh=tld5YRe1XOKy5ncbULbWgRE+y8pmaRY1ciOM/ru8AE8=;
+	h=Date:To:From:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=AtePkSRCA3xt+5aSjLq3Hz4X9Wvl4ekU+BLRJwhL6lLt5HLxNRfjipkE6EbkKMs/K42euoYMusX82+G5uk1bZ9HFXbPKyJBewcGf2FRWKILfKtUxAnkKmY1p0+nr2LLS3EKj+2Ik9Qoac7k12sr9S0FmpwzIp/1lnZppCkw1cZ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=eB1V8B2u; arc=none smtp.client-ip=79.135.106.103
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
+	s=protonmail; t=1757061012; x=1757320212;
+	bh=tld5YRe1XOKy5ncbULbWgRE+y8pmaRY1ciOM/ru8AE8=;
+	h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+	 Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
+	b=eB1V8B2utgiAmyToqgg1dpjU9W/l7AXVPQYjslKV0uPyUQZ28jnsXq1eiZAvvfqPD
+	 L9gLSRTb87VhLJF6IsRNxOA73wdTJYsxyhFsl4yfFXYhsl5rSncLiAIRLZkssGhR8f
+	 oLjtuYCiBOntuUbjY7kTg98H/QFpqEq0CwTA+tcLxybGY1fHRhBJTvykWX4Vd2De+U
+	 f9ofEq3Nd56iclmZYVI29MhdkYyZW4urbXmJaUqd9qNb4eFxmhKonmJfoHkp7lhwSA
+	 8lZUzY1vJ0QgYPGAgZDXb+A2roo3YuXAfS5Vt7sSY8pP+/oboNL3QuH8oGf6DcUSXv
+	 2RNcwKou6WDlQ==
+Date: Fri, 05 Sep 2025 08:30:07 +0000
+To: "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+From: aprilgrimoire <aprilgrimoire@proton.me>
+Cc: Mario Limonciello <superm1@kernel.org>
+Subject: [PATCH] Subject: [PATCH 1/1] x86: Fix spurious 8042 for Mechrevo Yilong15Pro
+Message-ID: <WO4-1V8LhkguyJ12_oK3K7dgEjZwM31XRoXJEbZa-sLbqL85Lmc7iqi_3dCpyyFKsuDSlMj5_Kg-r5iZX4rxeHqsF9T6jXkE7RaGZDrbDhE=@proton.me>
+Feedback-ID: 151975985:user:proton
+X-Pm-Message-ID: 0b696f21f0f1368cc0d28659052fbad076ecee76
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -167,63 +56,51 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250905072423.368123-2-zhao.xichao@vivo.com>
+Content-Transfer-Encoding: quoted-printable
 
-Hello Xichao,
+From d82abe97c5696e22eb24c7eabe641432446da8cf Mon Sep 17 00:00:00 2001From:=
+ April Grimoire <AprilGrimoire@proton.me>
+Date: Fri, 5 Sep 2025 16:24:33 +0800
+Subject: [PATCH] Subject: [PATCH 1/1] x86: Fix spurious 8042 for Mechrevo
+=C2=A0Yilong15Pro
 
-Thanks for your work.
+The firmware of Mechrevo Yilong15Pro emits a spurious keyboard interrupt on
+events including closing the lid. When a user closes the lid on an already
+suspended system this causes the system to wake up.
+Add Mechrevo Yilong15Pro Series (GM5HG7A) to the list of quirk
+spurious_8042 to workaround this issue.
 
-On 2025-09-05 15:23:53 +0800, Xichao Zhao wrote:
-> devm_thermal_of_zone_register() does not print any error message
-> when registering a thermal zone with a device node sensor fails
-> and allocating device resource data fails.
-> 
-> This forces each driver to implement redundant error logging.
-> Additionally, when upper-layer functions propagate these errors
-> without logging, critical debugging information is lost.
-> 
-> Add dev_err_probe() in devm_thermal_of_zone_register() to unify
-> error reporting.
-> 
-> Signed-off-by: Xichao Zhao <zhao.xichao@vivo.com>
-> ---
->  drivers/thermal/thermal_of.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
-> index 1a51a4d240ff..8fe0ad402579 100644
-> --- a/drivers/thermal/thermal_of.c
-> +++ b/drivers/thermal/thermal_of.c
-> @@ -475,11 +475,15 @@ struct thermal_zone_device *devm_thermal_of_zone_register(struct device *dev, in
->  
->  	ptr = devres_alloc(devm_thermal_of_zone_release, sizeof(*ptr),
->  			   GFP_KERNEL);
-> -	if (!ptr)
-> +	if (!ptr) {
-> +		dev_err(dev, "Failed to allocate device resource data\n");
->  		return ERR_PTR(-ENOMEM);
-> +	}
->  
->  	tzd = thermal_of_zone_register(dev->of_node, sensor_id, data, ops);
->  	if (IS_ERR(tzd)) {
-> +		dev_err_probe(dev, PTR_ERR(tzd),
-> +			      "Failed to register thermal zone sensor[%d]\n", sensor_id);
+Link: https://lore.kernel.org/linux-pm/6ww4uu6Gl4F5n6VY5dl1ufASfKzs4DhMxAN8=
+BuqUpCoqU3PQukVSVSBCl_lKIzkQ-S8kt1acPd58eyolhkWN32lMLFj4ViI0Tdu2jwhnYZ8=3D@=
+proton.me/
 
-Don't thermal_of_zone_register() already print an error message for 
-failure cases? If not can this print be moved there? That would allow 
-the change you make in R-Car drivers to remove the prating completely, 
-not just for the devm_* cases.
+Signed-off-by: April Grimoire <aprilgrimoire@proton.me>
+---
+=C2=A0drivers/platform/x86/amd/pmc/pmc-quirks.c | 8 ++++++++
+=C2=A01 file changed, 8 insertions(+)
 
->  		devres_free(ptr);
->  		return tzd;
->  	}
-> -- 
-> 2.34.1
-> 
-
--- 
-Kind Regards,
-Niklas Söderlund
+diff --git a/drivers/platform/x86/amd/pmc/pmc-quirks.c b/drivers/platform/x=
+86/amd/pmc/pmc-quirks.c
+index 18fb44139d..4d0a38e06f 100644
+--- a/drivers/platform/x86/amd/pmc/pmc-quirks.c
++++ b/drivers/platform/x86/amd/pmc/pmc-quirks.c
+@@ -239,6 +239,14 @@ static const struct dmi_system_id fwbug_list[] =3D {
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 DMI_MATCH(DMI_BOARD_NAME, "WUJIE1=
+4-GX4HRXL"),
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 }
+=C2=A0 =C2=A0 },
++ =C2=A0 {
++ =C2=A0 =C2=A0 =C2=A0 .ident =3D "MECHREVO Yilong15Pro Series GM5HG7A",
++ =C2=A0 =C2=A0 =C2=A0 .driver_data =3D &quirk_spurious_8042,
++ =C2=A0 =C2=A0 =C2=A0 .matches =3D {
++ =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 DMI_MATCH(DMI_SYS_VENDOR, "MECHREVO"),
++ =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 DMI_MATCH(DMI_PRODUCT_NAME, "Yilong15P=
+ro Series GM5HG7A"),
++ =C2=A0 =C2=A0 =C2=A0 }
++ =C2=A0 },
+=C2=A0 =C2=A0 /* https://bugzilla.kernel.org/show_bug.cgi?id=3D220116 */
+=C2=A0 =C2=A0 {
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 .ident =3D "PCSpecialist Lafite Pro V 14M",
+--
+2.49.1
 
