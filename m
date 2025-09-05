@@ -1,150 +1,164 @@
-Return-Path: <linux-pm+bounces-34006-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34007-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 387E1B460FD
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 19:50:40 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 26FAFB4610E
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 19:51:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D58551C246AA
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 17:51:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C3645A06B81
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 17:51:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01F09309F1B;
-	Fri,  5 Sep 2025 17:50:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39DBE2741C3;
+	Fri,  5 Sep 2025 17:51:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="MeAap+sk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O1Doe/PO"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFD4D23E342;
-	Fri,  5 Sep 2025 17:50:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 161473191DB
+	for <linux-pm@vger.kernel.org>; Fri,  5 Sep 2025 17:51:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757094634; cv=none; b=fDiDMerTFXUrZKqzCgOmyZuVGOnLy65PFOMhrZcNUrYvcBYgJYJi74h7voTMOGqRQERcMW5aEFglN2bUbzyxD+k72/wtvuLF4k6Vag3v+tTAdIYWfN4gppr/e7yLqe6zqVq13QiKygCATgXMGFGKaPqkCBEXEqjS5y9YABaQIn8=
+	t=1757094704; cv=none; b=cdk5F9vZ2APQ7rmO9TL8E90SZP1cWIVgymAIq8n3jhQdhMmFskaAKk3CLjZT/H/1wUISzLatw10C3eRtS8be5NW9mhtXdBAx3pb5YUlyK6faSlKMorbMlMZV6kF49ayKGr46/X8sf8SZYE5R/+3HGNmMbTLM4VOFG+PfgaeHqMQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757094634; c=relaxed/simple;
-	bh=fEvOC+Hb5Uih6l7ipb42YGCKy5ESrhPsjYdJkhOP85s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PqmmsWYgbF+n6GcRUOsOuOagNvKVmvXsKeE8RucJsQuC9YCFVYuVaKgaogy/DjsEmwgEiN0KE1k1xztgp/JjZJrPIcV5C3jbWAdP37fGX5Z/nhcwUA1xotVz1sKGYV1YzAtNCAw+D5mVwwrVZq0ejsHyFo3e3SKGGMiZNYGHTRA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=MeAap+sk; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 34ABD40E016D;
-	Fri,  5 Sep 2025 17:50:28 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id 5uOUeExJDHzu; Fri,  5 Sep 2025 17:50:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1757094622; bh=nvYUl9QmXcZhGV7LDMivTR1R7SodOASqEywSNEZXCFc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=MeAap+sk+VdwfyCrswiOc5REIH3s9U7SaP0ra9piDtNpViHKJrjiiXC+OYwbEnjcT
-	 vwbogjD2xQul6ZxKUnv7+8p/uvByda2LQ9ycJvqg+iaTvEDQdy9sJBj06686iAO05u
-	 LYk91Odqh2reQIDbVXE62GJ/SEHiShROwNqiWov8ZplEJ8dGU2H1o2LOqjuJUFPYnH
-	 Hl+/PMD8BvMWnnq9L74fYprFl1mAEdcKlMLwU1XuOaLLcme2lQlb8wB1EKeF1Wkr4w
-	 LPM1FpPt6mnOkHIE9/9ieU3LBDgDcugFeP301vE3tSOReDbOxcanvOnV9REpx/V79V
-	 kfDbtKEyGS+YKgf0/TkIDFi8HgFuTi+wPxplFJsKSbpkO+19/x25dNs7Yx2ChXhYA9
-	 nPABWcUYMaDxUwaTEk4fUX6JFbTPtsJX7TaU/qqXqIhLRLk9YuaagdbqQjdSVL1ZPz
-	 bVURNzkLucbI0Ny6oLRtekjNLnYlGwfAjPpE9J1xw8qkQ6Ea7DOkkTa1/3ISF7wWw4
-	 8G4tfgbnQEIkhkmQlAQseuKbvB3XWcCxvk0N/X8c1Ep28yuffQIMOl3KMycFMzcT1s
-	 76pK91UNExnVDSeaQTE2egOD0fCWDWZkFiJ4UCsr4k78nblHLZu4xXeaf2cCLYd3/h
-	 Ka+nU1Z9wTcsmovkAE+m7C4c=
-Received: from zn.tnic (p5de8ed27.dip0.t-ipconnect.de [93.232.237.39])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with UTF8SMTPSA id EFA6B40E00DE;
-	Fri,  5 Sep 2025 17:49:34 +0000 (UTC)
-Date: Fri, 5 Sep 2025 19:49:28 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: Zihuan Zhang <zhangzihuan@kylinos.cn>
-Cc: "Rafael J . wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Jonathan Cameron <jonathan.cameron@huawei.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	MyungJoo Ham <myungjoo.ham@samsung.com>,
-	Kyungmin Park <kyungmin.park@samsung.com>,
-	Chanwoo Choi <cw00.choi@samsung.com>,
-	Jani Nikula <jani.nikula@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Tvrtko Ursulin <tursulin@ursulin.net>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Daniel Lezcano <daniel.lezcano@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Eduardo Valentin <edubezval@gmail.com>, Keerthy <j-keerthy@ti.com>,
-	Ben Horgan <ben.horgan@arm.com>,
-	zhenglifeng <zhenglifeng1@huawei.com>,
-	Zhang Rui <rui.zhang@intel.com>, Len Brown <lenb@kernel.org>,
-	Lukasz Luba <lukasz.luba@arm.com>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Beata Michalska <beata.michalska@arm.com>,
-	Fabio Estevam <festevam@gmail.com>, Pavel Machek <pavel@kernel.org>,
-	Sumit Gupta <sumitg@nvidia.com>,
-	Prasanna Kumar T S M <ptsm@linux.microsoft.com>,
-	Sudeep Holla <sudeep.holla@arm.com>,
-	Yicong Yang <yangyicong@hisilicon.com>, linux-pm@vger.kernel.org,
-	linux-acpi@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-arm-kernel@lists.infradead.org,
-	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-	imx@lists.linux.dev, linux-omap@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 0/6] cpufreq: use __free() for all cpufreq_cpu_get()
- references
-Message-ID: <20250905174928.GFaLsiqKV36JDowX94@fat_crate.local>
-References: <20250905132413.1376220-1-zhangzihuan@kylinos.cn>
+	s=arc-20240116; t=1757094704; c=relaxed/simple;
+	bh=WA1/qpWiONQ6ZeqY6L1/qu1W5betsE/u3Wz1RhtlcFA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=GEgde3nT3X+wwSch8UbpJpAl397dLBT6+ZD03/DnSX/qLb0r+7+Fvse+17IKOt1INDqssqwu7w6zZ05cJPqldj3v/G+pCVcbx1BirjSvB5sSeJbIMID+coWo6X/ymiAE9ptujJEjT9OszRzIh61W415dV/NC6T4ExibM4KkleaM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O1Doe/PO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 544CFC4CEF1;
+	Fri,  5 Sep 2025 17:51:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757094703;
+	bh=WA1/qpWiONQ6ZeqY6L1/qu1W5betsE/u3Wz1RhtlcFA=;
+	h=Date:Subject:To:References:From:In-Reply-To:From;
+	b=O1Doe/POv/o02clXOPG0Mvuyn4ilqUrxD7JQ0UXKZpNL7UmO27iJUZKLoNx/BYJAG
+	 tcOJ8zlTcnRh6bzoNU6ZPMTzby7WV/E6yzaCKtAPAeq5R2wX9UKu/bF6uQhf0C4YNH
+	 gCQU/rSEJg5PPmuvOGohYx6iH3gL3VN5f7dII7xEMDBV1V7fS3WhyKqK70OqrukAR4
+	 TVyhXWNap/hbxZDN8sQyp7qdLRe3QXLZtjbAD+/j/38pu191pTRLd8XtAykVdcNTWl
+	 6ZVAVCmgnxGSCDAqSA48XF3VlVn3gXz7I+4/fSkM7lORmsQ2kcRZAEQjXNl6iXaBYN
+	 9Q3AMP43MlsvQ==
+Message-ID: <cc7e3318-78a1-4219-a4eb-48e769afc6d4@kernel.org>
+Date: Fri, 5 Sep 2025 12:51:42 -0500
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250905132413.1376220-1-zhangzihuan@kylinos.cn>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] Subject: [PATCH 1/1] x86: Fix spurious 8042 for Mechrevo
+ Yilong15Pro
+To: aprilgrimoire <aprilgrimoire@proton.me>,
+ "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+References: <WO4-1V8LhkguyJ12_oK3K7dgEjZwM31XRoXJEbZa-sLbqL85Lmc7iqi_3dCpyyFKsuDSlMj5_Kg-r5iZX4rxeHqsF9T6jXkE7RaGZDrbDhE=@proton.me>
+Content-Language: en-US
+From: Mario Limonciello <superm1@kernel.org>
+In-Reply-To: <WO4-1V8LhkguyJ12_oK3K7dgEjZwM31XRoXJEbZa-sLbqL85Lmc7iqi_3dCpyyFKsuDSlMj5_Kg-r5iZX4rxeHqsF9T6jXkE7RaGZDrbDhE=@proton.me>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Fri, Sep 05, 2025 at 09:24:07PM +0800, Zihuan Zhang wrote:
-> This patchset converts all remaining cpufreq users to rely on the
-> __free(put_cpufreq_policy) annotation for policy references, instead of
-> calling cpufreq_cpu_put() manually.
+On 9/5/2025 3:30 AM, aprilgrimoire wrote:
+>  From d82abe97c5696e22eb24c7eabe641432446da8cf Mon Sep 17 00:00:00 2001From: April Grimoire <AprilGrimoire@proton.me>
+> Date: Fri, 5 Sep 2025 16:24:33 +0800
+> Subject: [PATCH] Subject: [PATCH 1/1] x86: Fix spurious 8042 for Mechrevo
+>   Yilong15Pro
+> 
+> The firmware of Mechrevo Yilong15Pro emits a spurious keyboard interrupt on
+> events including closing the lid. When a user closes the lid on an already
+> suspended system this causes the system to wake up.
+> Add Mechrevo Yilong15Pro Series (GM5HG7A) to the list of quirk
+> spurious_8042 to workaround this issue.
+> 
+> Link: https://lore.kernel.org/linux-pm/6ww4uu6Gl4F5n6VY5dl1ufASfKzs4DhMxAN8BuqUpCoqU3PQukVSVSBCl_lKIzkQ-S8kt1acPd58eyolhkWN32lMLFj4ViI0Tdu2jwhnYZ8=@proton.me/
+> 
+> Signed-off-by: April Grimoire <aprilgrimoire@proton.me>
+> ---
 
-Sep 01 Zihuan Zhang ( :8.6K|) [PATCH v3 00/12] cpufreq: use __free() for all cpufreq_cpu_get() references
-Sep 03 Zihuan Zhang ( :  65|) [PATCH v4 00/10] cpufreq: use __free() for all cpufreq_cpu_get() references
-Sep 05 Zihuan Zhang ( :8.3K|) [PATCH v5 0/6] cpufreq: use __free() for all cpufreq_cpu_get() references
+Three comments.
 
-Please stop the spamming. While waiting, go read how this kernel process thing
-works:
+1) The subject line is really messed up.
+2) This needs to be submitted to platform-x86 mailing list instead.
 
-From: Documentation/process/submitting-patches.rst
+3) It doesn't apply to the -fixes branch for platform-x86.  You'll need 
+to rebase it.
 
-Don't get discouraged - or impatient
-------------------------------------
+❯ git checkout platform-x86/fixes
+Note: switching to 'platform-x86/fixes'.
 
-After you have submitted your change, be patient and wait.  Reviewers are
-busy people and may not get to your patch right away.
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.
 
-Once upon a time, patches used to disappear into the void without comment,
-but the development process works more smoothly than that now.  You should
-receive comments within a week or so; if that does not happen, make sure
-that you have sent your patches to the right place.  Wait for a minimum of
-one week before resubmitting or pinging reviewers - possibly longer during
-busy times like merge windows.
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
 
--- 
-Regards/Gruss,
-    Boris.
+   git switch -c <new-branch-name>
 
-https://people.kernel.org/tglx/notes-about-netiquette
+Or undo this operation with:
+
+   git switch -
+
+Turn off this advice by setting config variable advice.detachedHead to false
+
+HEAD is now at aa28991fd5dc4 platform/x86/intel: power-domains: Use 
+topology_logical_package_id() for package ID
+❯ b4 shazam -sl 
+https://lore.kernel.org/linux-pm/WO4-1V8LhkguyJ12_oK3K7dgEjZwM31XRoXJEbZa-sLbqL85Lmc7iqi_3dCpyyFKsuDSlMj5_Kg-r5iZX4rxeHqsF9T6jXkE7RaGZDrbDhE=@proton.me/
+Grabbing thread from 
+lore.kernel.org/all/WO4-1V8LhkguyJ12_oK3K7dgEjZwM31XRoXJEbZa-sLbqL85Lmc7iqi_3dCpyyFKsuDSlMj5_Kg-r5iZX4rxeHqsF9T6jXkE7RaGZDrbDhE%3D@proton.me/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 1 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Checking attestation on all messages, may take a moment...
+---
+   ✓ [PATCH] Subject: [PATCH 1/1] x86: Fix spurious 8042 for Mechrevo 
+Yilong15Pro
+     + Link: 
+https://lore.kernel.org/r/WO4-1V8LhkguyJ12_oK3K7dgEjZwM31XRoXJEbZa-sLbqL85Lmc7iqi_3dCpyyFKsuDSlMj5_Kg-r5iZX4rxeHqsF9T6jXkE7RaGZDrbDhE=@proton.me
+     + Signed-off-by: Mario Limonciello (AMD) <superm1@kernel.org>
+   ---
+   ✓ Signed: DKIM/proton.me
+---
+Total patches: 1
+---
+Applying: Subject: [PATCH 1/1] x86: Fix spurious 8042 for Mechrevo 
+Yilong15Pro
+Patch failed at 0001 Subject: [PATCH 1/1] x86: Fix spurious 8042 for 
+Mechrevo Yilong15Pro
+When you have resolved this problem, run "git am --continue".
+If you prefer to skip this patch, run "git am --skip" instead.
+To restore the original branch and stop patching, run "git am --abort".
+error: corrupt patch at line 10
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+
+>   drivers/platform/x86/amd/pmc/pmc-quirks.c | 8 ++++++++
+>   1 file changed, 8 insertions(+)
+> 
+> diff --git a/drivers/platform/x86/amd/pmc/pmc-quirks.c b/drivers/platform/x86/amd/pmc/pmc-quirks.c
+> index 18fb44139d..4d0a38e06f 100644
+> --- a/drivers/platform/x86/amd/pmc/pmc-quirks.c
+> +++ b/drivers/platform/x86/amd/pmc/pmc-quirks.c
+> @@ -239,6 +239,14 @@ static const struct dmi_system_id fwbug_list[] = {
+>              DMI_MATCH(DMI_BOARD_NAME, "WUJIE14-GX4HRXL"),
+>          }
+>      },
+> +   {
+> +       .ident = "MECHREVO Yilong15Pro Series GM5HG7A",
+> +       .driver_data = &quirk_spurious_8042,
+> +       .matches = {
+> +           DMI_MATCH(DMI_SYS_VENDOR, "MECHREVO"),
+> +           DMI_MATCH(DMI_PRODUCT_NAME, "Yilong15Pro Series GM5HG7A"),
+> +       }
+> +   },
+>      /* https://bugzilla.kernel.org/show_bug.cgi?id=220116 */
+>      {
+>          .ident = "PCSpecialist Lafite Pro V 14M",
+> --
+> 2.49.1
+
 
