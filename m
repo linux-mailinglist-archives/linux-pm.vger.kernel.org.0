@@ -1,234 +1,162 @@
-Return-Path: <linux-pm+bounces-33978-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33979-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56B08B45866
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 15:06:47 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B4E2B45889
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 15:14:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0BCDB3B3EAC
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 13:06:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BC6A05C0EC8
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 13:14:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8699C18DF8D;
-	Fri,  5 Sep 2025 13:06:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 267F3350857;
+	Fri,  5 Sep 2025 13:13:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nCdRJhVx"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r3bSByT7"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82CA6219EB;
-	Fri,  5 Sep 2025 13:06:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3A1F350848;
+	Fri,  5 Sep 2025 13:13:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757077602; cv=none; b=nqQfGVpvtFoO/Xb5mPyTUPTP9ZFXrj+65BkmuDawfwmOsAWdCBeb7laehOLcaIOvEdFIUBj/90Rwe29jiLIpP1KB2uG6ndUdPRuscql7XgKWntYABCkXmaAUw+q9bT2KK9Yvu5YydsWwdKCU91d348arhecHq8JVsfoD9BtY69Y=
+	t=1757078034; cv=none; b=sVkI+qkd358fXpRtwDfgN2opRJLVQbs3+vj6UURibv1VXb+CEkBD5I73L/V3BpjJaNGJ6VOwOg2ZiU69EBvcye8yNuWiJtW3yEj4qnaT5t4L84mz+qQZh56c7EtxpUJda0CX4qEDGyM61JO5jtNJvvFXNacz2BOIm9nPCZTe4kA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757077602; c=relaxed/simple;
-	bh=HxiuYgNYwxrIO8dkyKKccGLoa1n3kcaOo11GRqt6NMg=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=EKd413d2R3siyemZ+Ahi6/ue84n6zVYcoLq3GfDe+XTrM+mB3u3SNw+zthIbZrY3YvC6CfUa0hkyTkUWnxrI3sFGsgd6YiIIitJMCeCKK+I2CuPZsZXJ/hMOTpieTNCQT4N34SuAUM4Y65YrIHI3QzeveHnXDwSWq21TgzsvwQI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nCdRJhVx; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757077600; x=1788613600;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=HxiuYgNYwxrIO8dkyKKccGLoa1n3kcaOo11GRqt6NMg=;
-  b=nCdRJhVxiEy/tz5o/YTyciE2q6HYqf5865feTSNX3LanPm4QPzOv6/xS
-   qwKFgDjP9IVEeZ0qH/Gbo2P0sJp8sDyG+FJxr9UZ7k8LxDvqfqsq4VjyG
-   j/ti9pZrFQqkfg2gIQjODXBd1S36S0r+LuDTkhTUEw4//+LhXCZQDoDPW
-   Cc33QlVB48m4XSVTvcs4+AJju+ogkp0/1k0vE/C5tioQ1eIqtWKkk+UO2
-   90Yx4UavqZGsXQBMGxM3hVKyqe6vQP8r8QsPICfeCcslhFsrGRUq3dVvh
-   8gMUHLLU+mPEZiakrw604u4/5XWi56e/7CMRFW/q3D3D/WlJl9DaU87Q6
-   Q==;
-X-CSE-ConnectionGUID: ExB36ddAQ/edBuX0VJSFBA==
-X-CSE-MsgGUID: 3vgb9pdQRzCZjJp3nM25kA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11543"; a="59283211"
-X-IronPort-AV: E=Sophos;i="6.18,241,1751266800"; 
-   d="scan'208";a="59283211"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2025 06:06:39 -0700
-X-CSE-ConnectionGUID: 1QfBFO8xSs2NO+PC9Iu5jQ==
-X-CSE-MsgGUID: qhm5jLl2TSS4s014OA3SEA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,241,1751266800"; 
-   d="scan'208";a="202978805"
-Received: from dhhellew-desk2.ger.corp.intel.com (HELO localhost) ([10.245.246.159])
-  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2025 06:06:35 -0700
-From: Jani Nikula <jani.nikula@linux.intel.com>
-To: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc: Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org,
- "Rafael J. Wysocki" <rafael@kernel.org>, Andrew Morton
- <akpm@linux-foundation.org>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, Pavel Machek <pavel@ucw.cz>, Len Brown
- <len.brown@intel.com>, linux-pm@vger.kernel.org, Jonathan Corbet
- <corbet@lwn.net>, linux-doc@vger.kernel.org, Mauro Carvalho Chehab
- <mchehab@kernel.org>, "James E.J. Bottomley"
- <James.Bottomley@HansenPartnership.com>
-Subject: Re: [PATCH v4] kernel.h: add comments for system_states
-In-Reply-To: <20250905140104.42418fba@foz.lan>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20250904063631.2364995-1-rdunlap@infradead.org>
- <6089e22ddfdc135040cdeb69329d817846026728@intel.com>
- <20250905140104.42418fba@foz.lan>
-Date: Fri, 05 Sep 2025 16:06:31 +0300
-Message-ID: <34fb6a27a2c17c22c0ac93bebb0bbfd1a04d1833@intel.com>
+	s=arc-20240116; t=1757078034; c=relaxed/simple;
+	bh=4fPiVUr8iqSHUA1048R7A5lGeRD0073y1e1CWCfad+4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=cR25W6bg+DtdK39Q4TsWkX2ro9Mie2s8/XZyGZK2kHbff5VRxkPo16syoT7mhAyoAx2JXlVeEfSrGL7Jm4lpSjC26XgKIRE5tmim1QPdofBuVPEK6Qru/CrQoTDVsFSBeSbPTmnAyXtSbURPyfF+C+VIpHLOqhHU6ToK4X/Bc5Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r3bSByT7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D40A3C4CEFB;
+	Fri,  5 Sep 2025 13:13:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757078033;
+	bh=4fPiVUr8iqSHUA1048R7A5lGeRD0073y1e1CWCfad+4=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=r3bSByT7fJh4/eg4OUCA7r/B+lOhcIzVlTUYOH0PkK7wnmHVVqhsF3hB31k1ee16k
+	 IE7zVoR7w6ItgNUPNeknoirAkgujWF7B057JqvQkoZZ5sjbJcGfBSy0mDB4Ix3HoPk
+	 zCWBm1bw6z5GzuJ3L/vY4jy0llOv7BJjIlh4bP+UWH2Z7RyyjSGIoCnqzFQvn4No6X
+	 4yAtGYd6SXsCR9XRlAe8Pb6Mn0U0Oq0ZtYn6fGBfEPw7+lths1xeo6AfQHcvdqm8vB
+	 S2AGmabgQC9PNIbNHe+1soaGzmldetgDNeRVbyzJud1Y0sgXSSDdDMGHBFX9VCrvum
+	 sFIhFmTZWT/4g==
+Received: by mail-ot1-f49.google.com with SMTP id 46e09a7af769-7454cf6abf9so1023435a34.1;
+        Fri, 05 Sep 2025 06:13:53 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCV4o4v+fgI68T/pMdqmBO5cpirGeq8vESJ1Dsf97LE8mdFmg3p+YP+oI6E/hBqjMe8Nvn4zQ/G6VMG8vlk=@vger.kernel.org, AJvYcCVXNIyY43VtIehvNawsaFQTgVLqhC278oQFMiHaXh4DZXkuxETlKDJPfG2KzQQ17XRo8OZOJ7HtyHY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyo9hwI3Z7E6fYI6saKuGvAh2Cubvpecje8+epnUHXTcU1LLQe6
+	oQUDQBpoAY7menyA/wchME/Lq+kofYss8N4mZkbYwwRAmLenRyN5QRcOOgxiSChU9nWONGx93oe
+	BaYrJ5ZiW7Y/H1fqAAHbyKKbTRktToFM=
+X-Google-Smtp-Source: AGHT+IFffuiP30MgrkTsgngQV11TsWgdOrnGzK7NoEJFqBdCBOCtrraIWbEOd+sb7Dy7S/K5rYsbEu53ji3Zgc0AX60=
+X-Received: by 2002:a05:6830:6a8b:b0:746:d832:eb4d with SMTP id
+ 46e09a7af769-746d832ee97mr3136923a34.6.1757078033181; Fri, 05 Sep 2025
+ 06:13:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <12740505.O9o76ZdvQC@rafael.j.wysocki> <871polxs9c.ffs@tglx>
+In-Reply-To: <871polxs9c.ffs@tglx>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Fri, 5 Sep 2025 15:13:41 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0jyN0=aGFOwE8fzuXi=1LgiLR5wgvvsAihGB0qpUp=mUQ@mail.gmail.com>
+X-Gm-Features: Ac12FXytMQ0oah2eRFtPagBtfjslFVTgXfnj9GXfs5MDvT0D4yuymp6BzFyWryE
+Message-ID: <CAJZ5v0jyN0=aGFOwE8fzuXi=1LgiLR5wgvvsAihGB0qpUp=mUQ@mail.gmail.com>
+Subject: Re: [PATCH v1] cpu: Add missing check to cpuhp_smt_enable()
+To: Thomas Gleixner <tglx@linutronix.de>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Linux PM <linux-pm@vger.kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Christian Loehle <christian.loehle@arm.com>, Dave Hansen <dave.hansen@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 05 Sep 2025, Mauro Carvalho Chehab <mchehab+huawei@kernel.org> wrote:
-> Em Fri, 05 Sep 2025 12:02:37 +0300
-> Jani Nikula <jani.nikula@linux.intel.com> escreveu:
+On Fri, Sep 5, 2025 at 9:39=E2=80=AFAM Thomas Gleixner <tglx@linutronix.de>=
+ wrote:
 >
->> On Wed, 03 Sep 2025, Randy Dunlap <rdunlap@infradead.org> wrote:
->> > Provide some basic comments about the system_states and what they imply.
->> > Also convert the comments to kernel-doc format.
->> >
->> > However, kernel-doc does not support kernel-doc notation on extern
->> > struct/union/typedef/enum/etc. So I made this a DOC: block so that
->> > I can use (insert) it into a Documentation (.rst) file and have it
->> > look decent.  
->> 
->> The simple workaround is to separate the enum type and the variable:
->> 
->> /**
->>  * kernel-doc for the enum
->>  */
->> enum system_states {
->> 	...
->> };
->> 
->> /**
->>  * kernel-doc for the variable
->>  */
->> extern enum system_states system_state;
->> 
->> BR,
->> Jani.
->> 
->> >
->> > Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
->> > Acked-by: Rafael J. Wysocki <rafael@kernel.org> # v1
->> > ---
->> > v2: add Rafael's Ack.
->> > v3: add Andrew
->> > v4: add DOC: so that this DOC: block can be used in Documentation/
->> >     add Greg K-H
->> >     add Jon Corbet, Mauro Chehab, & linux-doc
->> >
->> > Cc: Andrew Morton <akpm@linux-foundation.org>
->> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->> > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
->> > Cc: Pavel Machek <pavel@ucw.cz>
->> > Cc: Len Brown <len.brown@intel.com>
->> > Cc: linux-pm@vger.kernel.org
->> > Cc: Jonathan Corbet <corbet@lwn.net>
->> > Cc: linux-doc@vger.kernel.org
->> > Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
->> > Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
->> > ---
->> >  Documentation/driver-api/pm/devices.rst |    8 ++++++++
->> >  include/linux/kernel.h                  |   18 ++++++++++++++++--
->> >  2 files changed, 24 insertions(+), 2 deletions(-)
->> >
->> > --- linux-next-20250819.orig/include/linux/kernel.h
->> > +++ linux-next-20250819/include/linux/kernel.h
->> > @@ -164,8 +164,22 @@ extern int root_mountflags;
->> >  
->> >  extern bool early_boot_irqs_disabled;
->> >  
->> > -/*
->> > - * Values used for system_state. Ordering of the states must not be changed
->> > +/**
->> > + * DOC: General system_states available for drivers
->> > + *
->> > + * enum system_states - Values used for system_state.
->> > + *
->> > + * * @SYSTEM_BOOTING:	%0, no init needed
->> > + * * @SYSTEM_SCHEDULING:	system is ready for scheduling; OK to use RCU
->> > + * * @SYSTEM_FREEING_INITMEM: system is freeing all of initmem; almost running
->> > + * * @SYSTEM_RUNNING:	system is up and running
->> > + * * @SYSTEM_HALT:	system entered clean system halt state
->> > + * * @SYSTEM_POWER_OFF:	system entered shutdown/clean power off state
->> > + * * @SYSTEM_RESTART:	system entered emergency power off or normal restart
->> > + * * @SYSTEM_SUSPEND:	system entered suspend or hibernate state
->> > + *
->> > + * Note:
->> > + * Ordering of the states must not be changed
->> >   * as code checks for <, <=, >, >= STATE.
->> >   */
->> >  extern enum system_states {
->> > --- linux-next-20250819.orig/Documentation/driver-api/pm/devices.rst
->> > +++ linux-next-20250819/Documentation/driver-api/pm/devices.rst
->> > @@ -241,6 +241,14 @@ before reactivating its class I/O queues
->> >  More power-aware drivers might prepare the devices for triggering system wakeup
->> >  events.
->> >  
->> > +System states available for drivers
->> > +-----------------------------------
->> > +
->> > +These system states are available for drivers to help them determine how to
->> > +handle state transitions.
->> > +
->> > +.. kernel-doc:: include/linux/kernel.h
->> > +   :doc: General system_states available for drivers
->> >  
->> >  Call Sequence Guarantees
->> >  ------------------------
->> >  
->> 
+> On Fri, Aug 29 2025 at 22:01, Rafael J. Wysocki wrote:
+> > --- a/kernel/cpu.c
+> > +++ b/kernel/cpu.c
+> > @@ -2710,6 +2710,12 @@
+> >       cpu_maps_update_begin();
+> >       cpu_smt_control =3D CPU_SMT_ENABLED;
+> >       for_each_present_cpu(cpu) {
+> > +             /*
+> > +              * Avoid accidentally onlining primary thread CPUs that h=
+ave
+> > +              * been taken offline.
+> > +              */
+> > +             if (topology_is_primary_thread(cpu))
+> > +                     continue;
 >
-> If the problem is with "extern" before enum, fixing kdoc be
-> fairly trivial.
+> Hmm. That's kinda solving the problem, but I think the proper solution
+> would be to implement topology_is_core_online() for x86.
+>
+> The above is preventing the primary thread to be onlined, but then
+> onlines the corresponding hyperthread, which does not really make sense.
 
-The non-trivial part is deciding whether you're documenting the enum
-type or the variable. Both are equally valid options.
+Well, manual online can be used for onlining the secondary thread of a
+core where the primary thread is offline, so this is technically
+possible already.
 
-BR,
-Jani.
+> Something like the completely untested below.
 
->
-> If you see:
->
-> 	def dump_function(self, ln, prototype):
-> 	
->      	# Prefixes that would be removed
->         sub_prefixes = [
-> 	    ...
-> 	    (r"^extern +", "", 0),	
-> 	    ...
-> 	}
->
->         for search, sub, flags in sub_prefixes:
->             prototype = KernRe(search, flags).sub(sub, prototype)
->
->
-> we need something similar to that at:
-> 	def dump_enum(self, ln, proto):
->
-> alternatively, we could use a simpler approach modifying adding a
-> non-group optional match for "extern". E.g:
->
-> -	r = KernRe(r'enum\s+(\w*)\s*\{(.*)\}')
-> +       r = KernRe(r'(?:extern\s+)?enum\s+(\w*)\s*\{(.*)\}')
->
-> (untested)
->
-> Regards,
-> Mauro
->
->
-> Thanks,
-> Mauro
+So given the above, shouldn't topology_is_core_online() check if any
+thread in the given core is online?
 
--- 
-Jani Nikula, Intel
+> ---
+> diff --git a/arch/x86/include/asm/topology.h b/arch/x86/include/asm/topol=
+ogy.h
+> index 6c79ee7c0957..21041898157a 100644
+> --- a/arch/x86/include/asm/topology.h
+> +++ b/arch/x86/include/asm/topology.h
+> @@ -231,6 +231,16 @@ static inline bool topology_is_primary_thread(unsign=
+ed int cpu)
+>  }
+>  #define topology_is_primary_thread topology_is_primary_thread
+>
+> +int topology_get_primary_thread(unsigned int cpu);
+> +
+> +static inline bool topology_is_core_online(unsigned int cpu)
+> +{
+> +       int pcpu =3D topology_get_primary_thread(cpu);
+> +
+> +       return pcpu >=3D 0 ? cpu_online(pcpu) : false;
+> +}
+> +#define topology_is_core_online topology_is_core_online
+> +
+>  #else /* CONFIG_SMP */
+>  static inline int topology_phys_to_logical_pkg(unsigned int pkg) { retur=
+n 0; }
+>  static inline int topology_max_smt_threads(void) { return 1; }
+> diff --git a/arch/x86/kernel/cpu/topology.c b/arch/x86/kernel/cpu/topolog=
+y.c
+> index e35ccdc84910..6073a16628f9 100644
+> --- a/arch/x86/kernel/cpu/topology.c
+> +++ b/arch/x86/kernel/cpu/topology.c
+> @@ -372,6 +372,19 @@ unsigned int topology_unit_count(u32 apicid, enum x8=
+6_topology_domains which_uni
+>         return topo_unit_count(lvlid, at_level, apic_maps[which_units].ma=
+p);
+>  }
+>
+> +#ifdef CONFIG_SMP
+> +int topology_get_primary_thread(unsigned int cpu)
+> +{
+> +       u32 apic_id =3D cpuid_to_apicid[cpu];
+> +
+> +       /*
+> +        * Get the core domain level APIC id, which is the primary thread
+> +        * and return the CPU number assigned to it.
+> +        */
+> +       return topo_lookup_cpuid(topo_apicid(apic_id, TOPO_CORE_DOMAIN));
+> +}
+> +#endif
+> +
+>  #ifdef CONFIG_ACPI_HOTPLUG_CPU
+>  /**
+>   * topology_hotplug_apic - Handle a physical hotplugged APIC after boot
+>
+>
 
