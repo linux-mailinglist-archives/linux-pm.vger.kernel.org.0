@@ -1,148 +1,217 @@
-Return-Path: <linux-pm+bounces-33974-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33975-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ACB1FB4551B
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 12:45:05 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 76E7BB4554F
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 12:50:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 958D7164A08
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 10:45:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DD81658423B
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 10:49:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D0E12DF157;
-	Fri,  5 Sep 2025 10:42:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD698311C13;
+	Fri,  5 Sep 2025 10:48:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FJb78JN9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k3MZ1pvT"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C28642D5C6C;
-	Fri,  5 Sep 2025 10:42:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B00ED30E855;
+	Fri,  5 Sep 2025 10:48:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757068956; cv=none; b=NIJvHLJa29szJJ0JnUHMJ5+Fy7W66I8PyFUD7xniygAqvfJ2/pID653DFD3rvFUAXGFzLDfvq5aIvcztupXpWt4FQQ+EILgkVLJ8YWXc4aM8E6xSU/iLE2sRYBJsBwEkbY9b3MuwB0x52uLC1WK872U/BEpmpyN5SK8GJkQulPQ=
+	t=1757069292; cv=none; b=ZRQe+lBxrVIhRwGvW3cDB/ycrI6XG1KK0sevg6KYKxG0Mc1793YfedPbGR4A3INXOJ7RVdXyFUwida7J1j7YB0k8nNxCqRmwnuAQtyv8/2Q7tVXnRJ9+PSc+nk4hWJvtB4Gp5b2ylDsIlVeYuBnyObXP/2nhsuU6BhSHKUynuS8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757068956; c=relaxed/simple;
-	bh=+I+6Ob8PFYzlZ0UQk3wSgdfHmrOiugnSzIZKb8fhQEk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nH24OTQ5/53JFbLpARH9vl4IsdQWpCgF+/E666Cv7FtI3Gj8Y/B1DIAigK3gvg4/4GnUqOEMHnWNNRxQ8ptVCGUZxIJbVS9TtYgIBUrVyO/3eLGMk4RieILOBel5N8Tq0MiU8EN9/68WleOCdSHpLaJuNpTHMSRL0SsHJLFJAsU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FJb78JN9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98C01C4CEF1;
-	Fri,  5 Sep 2025 10:42:19 +0000 (UTC)
+	s=arc-20240116; t=1757069292; c=relaxed/simple;
+	bh=3BMIevIPv5UuOOVHMNBtqTYriH3klwwZDMVfFyThPqw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=SfCmtdCLVJugzazECipCOe2ZPUCe6F7s+KsCu+Z312fA1dL6REhdFCJfUnYwgGqzvTp15o2G/siQI6JEiBptZQrzQigPMUy3sI/7jhwaG0OSb1AlryugweTxe+YTr+nSd/O1oktpl2xqT6fDJmNTN6ykeeI3dBshHa/ID43DNSM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k3MZ1pvT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 566ADC4CEF7;
+	Fri,  5 Sep 2025 10:48:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757068955;
-	bh=+I+6Ob8PFYzlZ0UQk3wSgdfHmrOiugnSzIZKb8fhQEk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=FJb78JN9Aubn7l+hWFWK2KhL4xncFQiznSU1O+VqVeYoJWONHp4RcAOCsvHduuTfN
-	 +nudQ518QxKtrWwCOfBIzTxEEJAGpU/jUCrDlsuwWXRXBBl2j3vBt1Ltw4szB1n87y
-	 h7x6GKYVobYJ3QTWpsrKBMfGZ15EnA7yYfTpXWUhfEXV1WWfuuJ0vS7hs6fM/OGabb
-	 EOWmFuoLcS3oeA8aB09KPBnxvbJrH5hUgrl3aMa2r81N5UzhAZ8Ke81VM3YcHVbnvU
-	 RJi3JEAJOsT+TM9h+WPDYgQX6anuQ91U155dHwC08dgE3WTQvlLfDX33vEVEuA2/m4
-	 2N9AdUNBEKQBA==
-Date: Fri, 5 Sep 2025 11:42:15 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Xichao Zhao <zhao.xichao@vivo.com>
-Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
-	Jonathan Cameron <jic23@kernel.org>,
-	David Lechner <dlechner@baylibre.com>,
-	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-	Andy Shevchenko <andy@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Samuel Holland <samuel@sholland.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	Guillaume La Roque <glaroque@baylibre.com>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
-	Markus Mayer <mmayer@broadcom.com>, Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	zhanghongchen <zhanghongchen@loongson.cn>,
-	Yinbo Zhu <zhuyinbo@loongson.cn>, Amit Kucheria <amitk@kernel.org>,
-	Thara Gopinath <thara.gopinath@gmail.com>,
-	Niklas =?iso-8859-1?Q?S=F6derlund?= <niklas.soderlund@ragnatech.se>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Heiko Stuebner <heiko@sntech.de>,
-	Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Orson Zhai <orsonzhai@gmail.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Chunyan Zhang <zhang.lyra@gmail.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
-	Talel Shenhar <talel@amazon.com>,
-	Eduardo Valentin <edubezval@gmail.com>, Keerthy <j-keerthy@ti.com>,
-	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	"open list:HARDWARE MONITORING" <linux-hwmon@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:IIO SUBSYSTEM AND DRIVERS" <linux-iio@vger.kernel.org>,
-	"moderated list:ARM/Allwinner sunXi SoC support" <linux-arm-kernel@lists.infradead.org>,
-	"open list:ARM/Allwinner sunXi SoC support" <linux-sunxi@lists.linux.dev>,
-	"open list:THERMAL" <linux-pm@vger.kernel.org>,
-	"open list:THERMAL DRIVER FOR AMLOGIC SOCS" <linux-amlogic@lists.infradead.org>,
-	"moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" <linux-rpi-kernel@lists.infradead.org>,
-	"open list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" <imx@lists.linux.dev>,
-	"open list:QUALCOMM TSENS THERMAL DRIVER" <linux-arm-msm@vger.kernel.org>,
-	"open list:RENESAS R-CAR THERMAL DRIVERS" <linux-renesas-soc@vger.kernel.org>,
-	"open list:ARM/Rockchip SoC support" <linux-rockchip@lists.infradead.org>,
-	"open list:SAMSUNG THERMAL DRIVER" <linux-samsung-soc@vger.kernel.org>,
-	"moderated list:ARM/STM32 ARCHITECTURE" <linux-stm32@st-md-mailman.stormreply.com>,
-	"open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>,
-	"open list:TI BANDGAP AND THERMAL DRIVER" <linux-omap@vger.kernel.org>
-Subject: Re: [PATCH 04/12] regulator: max8973: Remove redundant error log
- prints
-Message-ID: <2f060139-7446-4cb1-910d-791918b28f51@sirena.org.uk>
-References: <20250905072423.368123-1-zhao.xichao@vivo.com>
- <20250905072423.368123-5-zhao.xichao@vivo.com>
+	s=k20201202; t=1757069291;
+	bh=3BMIevIPv5UuOOVHMNBtqTYriH3klwwZDMVfFyThPqw=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=k3MZ1pvTn1XZL5vGExYPBFL6Zz81+3p/Ox2kKbNWCZF7ueMAAtcLe3R6eckSxyqqx
+	 NZMxnGzeKsUhl/5SmKeuJfHMUxwRHkZmFctIlWaJXM4VHeaeK5TDDpvz+1iO/k68T7
+	 WMvSrYxYDWX9CDOScP+cTpx2aOFrBUmI3t7naO/c1jpYx7/SiT7ava4PD5fnDezox4
+	 MWG2IjyYELCMI9BiXiwegmCxM52zhEFJJzAnbR0OoSCNEs2U8xT+EuhKUt2PEt5A5B
+	 JWYYehK9X3ReHenH/HyUx/N0IEb5yCML4KWhVEALwLjzCA6bq6Ua2+OiVofThmLfKi
+	 n1gsAiHLouhzA==
+Message-ID: <dc42cadc-bfc9-4473-ad90-aaab88101b49@kernel.org>
+Date: Fri, 5 Sep 2025 12:48:06 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="hSBr52yOin/qCY9V"
-Content-Disposition: inline
-In-Reply-To: <20250905072423.368123-5-zhao.xichao@vivo.com>
-X-Cookie: He who laughs, lasts.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 6/6] thermal: versal-thermal: Support thermal management
+ in AI Engine
+To: Michal Simek <michal.simek@amd.com>, linux-kernel@vger.kernel.org,
+ monstr@monstr.eu, michal.simek@xilinx.com, git@xilinx.com
+Cc: Anish Kadamathikuttiyil Karthikeyan Pillai
+ <anish.kadamathikuttiyil-karthikeyan-pillai@amd.com>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Lukasz Luba
+ <lukasz.luba@arm.com>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ Salih Erim <salih.erim@amd.com>, Zhang Rui <rui.zhang@intel.com>,
+ "open list:THERMAL" <linux-pm@vger.kernel.org>
+References: <cover.1757061697.git.michal.simek@amd.com>
+ <3636099d5d0b31ebf232a5b2e741f0ff7e7e1631.1757061697.git.michal.simek@amd.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <3636099d5d0b31ebf232a5b2e741f0ff7e7e1631.1757061697.git.michal.simek@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+On 05/09/2025 10:41, Michal Simek wrote:
+> +	vti->channel = iio_channel_get(NULL, SYSMON_TEMP_CH_NAME);
+> +	if (IS_ERR(vti->channel)) {
+> +		vti->num_aie_channels = 0;
+> +		versal_thermal_iio_chan_release(vti);
+> +		return dev_err_probe(&pdev->dev, PTR_ERR(vti->channel),
+> +							"IIO channel %s not found\n",
+> +							SYSMON_TEMP_CH_NAME);
+> +	}
+> +
+>  	vti->tzd = devm_thermal_of_zone_register(&pdev->dev, 0, vti, &thermal_zone_ops);
+>  	if (IS_ERR(vti->tzd))
+>  		return dev_err_probe(&pdev->dev, PTR_ERR(vti->tzd),
+>  				     "Thermal zone sensor register failed\n");
+>  
+> -	return devm_thermal_add_hwmon_sysfs(&pdev->dev, vti->tzd);
+> +	ret = devm_thermal_add_hwmon_sysfs(&pdev->dev, vti->tzd);
+> +	if (ret)
+> +		return dev_err_probe(&pdev->dev, ret,
+> +				     "Failed to add hwmon sysfs for sysmon temp\n");
+> +
+> +	sysmon_node = of_find_node_by_name(NULL, "sysmon");
+
+Undocumented ABI. Please don't do that. sysmon is not an approved name
+and for sure can be changed anytime to anything.
+
+Phandles express relationships usually.
 
 
---hSBr52yOin/qCY9V
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> +	if (sysmon_node) {
+> +		ret = of_property_read_u32(sysmon_node, "xlnx,numaiechannels",
+> +					   &num_aie_channels);
+> +		if (ret < 0)
+> +			num_aie_channels = 0;
+> +	}
+> +
+> +	if (num_aie_channels > 0) {
+> +		aie_temp_chan_names = devm_kcalloc(&pdev->dev, num_aie_channels,
+> +						   sizeof(*aie_temp_chan_names),
+> +						   GFP_KERNEL);
+> +		if (!aie_temp_chan_names)
+> +			return -ENOMEM;
+> +
+> +		for_each_child_of_node(sysmon_node, child_node) {
+> +			if (of_property_present(child_node, "xlnx,aie-temp")) {
+> +				ret = of_property_read_string(child_node, "xlnx,name",
+> +							      &aie_temp_chan_name);
+> +				if (ret < 0) {
+> +					of_node_put(child_node);
+> +					return ret;
+> +				}
+> +				aie_temp_chan_names[aie_ch_index] = aie_temp_chan_name;
+> +				aie_ch_index++;
+> +			}
+> +		}
+> +
+> +		/* Allocate memory for the dynamic aie temperature channels */
+> +		vti->channel_aie = devm_kcalloc(&pdev->dev, num_aie_channels,
+> +						sizeof(*vti->channel_aie), GFP_KERNEL);
+> +		if (!vti->channel_aie)
+> +			return -ENOMEM;
+> +
+> +		for (aie_ch_index = 0; aie_ch_index < num_aie_channels; aie_ch_index++) {
+> +			vti->channel_aie[aie_ch_index] =
+> +			    iio_channel_get(NULL, aie_temp_chan_names[aie_ch_index]);
+> +			if (IS_ERR(vti->channel_aie[aie_ch_index])) {
+> +				vti->num_aie_channels = aie_ch_index + 1;
+> +				versal_thermal_iio_chan_release(vti);
+> +				return dev_err_probe(&pdev->dev,
+> +						     PTR_ERR(vti->channel_aie[aie_ch_index]),
+> +						     "IIO AIE TEMP channel %s not found\n",
+> +						     aie_temp_chan_names[aie_ch_index]);
+> +			}
+> +		}
+> +
+> +		vti->tzd_aie = devm_thermal_of_zone_register(&pdev->dev, 1, vti,
+> +							     &thermal_zone_ops_aie);
+> +		if (IS_ERR(vti->tzd_aie))
+> +			return dev_err_probe(&pdev->dev, PTR_ERR(vti->tzd_aie),
+> +					      "Failed to register thermal zone aie temp\n");
+> +
+> +		ret = devm_thermal_add_hwmon_sysfs(&pdev->dev, vti->tzd_aie);
+> +		if (ret)
+> +			return dev_err_probe(&pdev->dev, ret,
+> +					     "Failed to add hwmon sysfs for aie temp\n");
+> +	}
+> +	vti->num_aie_channels = num_aie_channels;
+> +	platform_set_drvdata(pdev, vti);
+> +	return 0;
+> +}
+> +
+> +static void versal_thermal_remove(struct platform_device *pdev)
+> +{
+> +	struct versal_thermal_info *vti = platform_get_drvdata(pdev);
+> +
+> +	versal_thermal_iio_chan_release(vti);
 
-On Fri, Sep 05, 2025 at 03:23:56PM +0800, Xichao Zhao wrote:
-> devm_thermal_of_zone_register() prints error log messages when
-> it fails, so there is no need to print error log messages again.
+Don't mix non-devm with devm. This should be a proper devm cleanup action.
 
-Acked-by: Mark Brown <broonie@kernel.org>
 
---hSBr52yOin/qCY9V
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmi6vocACgkQJNaLcl1U
-h9A9Ggf8DfcaSZB9QDgKG3CTzMYN6dA03Qdzw6VmLM9o81xSSlRvqsWSYEm0G86q
-z/jyW0esF1zaS9pQ+ni9mgIUQQvCBr6/d1pY2UJpJd3z1xw2eJUWIgNHIfLsaKDk
-ZIixofNJ8unn3ayIaYKW6fWIhZcoMRY+yXMtvdtUD2vxzMFOerQ1dFKakBEsu9Nj
-JTQTup0slsEXR1tzi/4HBQfftUi+24MUDaRkOnfPfOn1D5gmUaZ6c07B1fGp9dmM
-5c73MTNcN3xonK265AHjzWrgi4sJoXEeqfN7SmvHqspnq6df5zHeKUvFD9Jx+lEw
-n/HlWMMkt3wAlpDVMMsmqqlWaSrGcA==
-=sWAM
------END PGP SIGNATURE-----
-
---hSBr52yOin/qCY9V--
+Best regards,
+Krzysztof
 
