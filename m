@@ -1,324 +1,188 @@
-Return-Path: <linux-pm+bounces-33942-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-33943-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2562CB4531C
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 11:26:09 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 58F1AB45334
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 11:34:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BA4FA161D78
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 09:26:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ED5A016227C
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Sep 2025 09:34:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B00FACA5A;
-	Fri,  5 Sep 2025 09:26:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72577233D85;
+	Fri,  5 Sep 2025 09:34:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="V505oIzl"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CrYRj6Ih"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtpbg154.qq.com (smtpbg154.qq.com [15.184.224.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C46EB4C9D;
-	Fri,  5 Sep 2025 09:25:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=15.184.224.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A63B21E487;
+	Fri,  5 Sep 2025 09:34:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757064364; cv=none; b=OD9HFYM8dOhg0A7mi5SaAxmfFXTFyk6IoTgsAGT61m1fCzYv5enhMIbXn2+qS99AsV25eA5B/vbC+PtRJl3+hsOtb4/0ouLj/oEMaEdrD2E6bxxiEE15W8SO/bx3244gF5BXIP4U+dMjl7hjPiGwS24qPSXSK7MctFCC5/resus=
+	t=1757064873; cv=none; b=XUBNycb0EK8keuzKItQMTxS0XT064M8phz/IYtQfxm6CVFz/CDFUpyXLkvvXli3FEn9X8WOYymgDhR7ndmrpksRdlDQurN07nFlHggFZSvOVF0DA3HksMagJscV89IKyt39mRnSWYInC08tJggIg7YHKn2VDNhQJPBcR1h8OlyI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757064364; c=relaxed/simple;
-	bh=3zvekOl/XUiFqh4vR601bBqR6NZW8zUuGgIujgaGiWE=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=TsZ9Mj56rYnUsAZXfAtlu5lMlN9QY8eipjnXT4Dcmac9g5ETDFYS9SY9Zc/FmgqvgxveJU98skeO8SkTAguVIydCBvQVnfcSnNsCqUuDYtULJz5mXrU0HUIR9KLc1qchQd7Tdj0NbgAR0t5yhxK7KkVzyT8JZKrIopmlKd5gvr0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=V505oIzl; arc=none smtp.client-ip=15.184.224.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1757064290;
-	bh=NSrcGanPs+5thfVBp9IfRff+Z3I/BYaUE7ZN230XMHE=;
-	h=From:To:Subject:Date:Message-Id:MIME-Version;
-	b=V505oIzlFc9WXaTEemOeh0habn2DXooxe+QQoJLzM/AnSHX+8AFq/KopIDegEzr4N
-	 2EtYO/cLRsaTHnGZeTsLRyM1QJ9tB5OLGTw/VlFnV1vvlTlJQA/ZNxwk9e3AjpT1j1
-	 X3Cke2GrRS5bu/vYa7yoK1dUonk81kwxBtmCaY0E=
-X-QQ-mid: zesmtpip2t1757064283t11615352
-X-QQ-Originating-IP: mlRFQHyC4nBT6gVb+OjwyzNfdLiKfLDPbT+9EicTTQE=
-Received: from localhost.localdomain ( [localhost])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Fri, 05 Sep 2025 17:24:41 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 14279267152202296948
-EX-QQ-RecipientCnt: 7
-From: tuhaowen <tuhaowen@uniontech.com>
-To: len.brown@intel.com,
-	pavel@kernel.org,
-	rafael@kernel.org
-Cc: tuhaowen@uniontech.com,
-	huangbibo@uniontech.com,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Subject: [PATCH v2] PM: Add configurable sync timeout for suspend and hibernation
-Date: Fri,  5 Sep 2025 17:24:33 +0800
-Message-Id: <20250905092433.15257-1-tuhaowen@uniontech.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20250905024702.1214-1-tuhaowen@uniontech.com>
-References: <20250905024702.1214-1-tuhaowen@uniontech.com>
+	s=arc-20240116; t=1757064873; c=relaxed/simple;
+	bh=fxW6po38fpa+VnoP8FiDQdHk6gPNDw4WKNm1oy92zAc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CBK0rMxCbzHnt5xIMXO92xWHVVkQ+pOS1wOdifkNeh/QaCEmYbEalc7MLUA0QudFh8Ci0/OZ1IOZluFOontlzXXJp6pIDhKfCBo9ddkEcriacxiAUQgyD2wREVsCJBHp4KwDmchq2lBGUw0F5TvS589UI7UhCCpZ57Wcjcw6caw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CrYRj6Ih; arc=none smtp.client-ip=209.85.218.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-b0415e03e25so280465466b.0;
+        Fri, 05 Sep 2025 02:34:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1757064870; x=1757669670; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5ZXKC69S7By8Ya1ZMREMZuen7JwS2/FHlmhonyDWpnQ=;
+        b=CrYRj6IhCe9KtIQdmHHYgkjdQYfG4uBemTw3/P4ae1kVl3KwoYvcoWQ6px/wJ4QD3W
+         Jwmqle5Ywhp/Sw/HW53nPA3RJQAkvnli6p3OuB95vreFxw1OspSfNRyuZTtc69ni6GUC
+         5XuklFMOjHF+AWS40y+R9rj8ZJy2hQxqQqFiFH6ljfKBSSdhYPvIJBvzf8Zawzx/w0t1
+         oJvw+w0WPDuflgpfYnlVNcJSz096kqGU/gMZo+YuOsiA7YYaRLrR7FoyGsqv+GoPdIRt
+         5lDWSeFwjlxTCLUAUpCRZi39bZIjFyNV0omyAo6IcvabaP6Wxb1ZILpQeiOC1kswhSFp
+         aLIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757064870; x=1757669670;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5ZXKC69S7By8Ya1ZMREMZuen7JwS2/FHlmhonyDWpnQ=;
+        b=VXxKhhVe3ucTCgOwNX5WTE/425RIL3C/tJUvgjzBc+3q7OJkP/BN3f6LGCUSWj95yq
+         h6LBDjttVupwOSd+A2sAWsqNOnhOFesz3lyB4mC51tOZ2CZw4ji9agwDapYWUFLAsOoS
+         8dFqOUJ9FFI4mZKQjc8obQ8gOAYg0CrWM8U2oKFYuft0iNA+KI9KU6/T+ggHKi3YPRlp
+         iSfuDtujLHOwsFeB9XGZxzmp1joMaSUVG9C//8tqDqJLh2ZbB/ozRwDKnLpo/5zNlrnG
+         G727iiW67zZJrQmpnGZgvVSniou+zy7s8JszSaBhE08aqHQ/j+vwp5j1b41jRGOng/uG
+         S8vA==
+X-Forwarded-Encrypted: i=1; AJvYcCUasFWLteE+ZtgExUAlYUg0tSCCnz3272pLvNaco2Vf0UL+MZuQfIDnOeW7ySVxrGxFMBo33EHhkBWitA==@vger.kernel.org, AJvYcCUb5TGnJlyP9yHElYemQr+lbQHEKRgiQHC04aMvR5CoMD2M/H2soaoZJV7QnvRUXuABIL2KGn8guqq1BVx3jXzXcbs=@vger.kernel.org, AJvYcCUiYxI0kXVshUOVT4uyl8RZT99e0emtzH0TjlbxZsbwxI0YTDPn4QzSWlU3fThaCrxq6A/cHaifFSA=@vger.kernel.org, AJvYcCVPv6zv3oOAzkA8ezkkYYMQeM4oP71CFHyJU46ec3Lm+q8VnuP2MkQAcr3j755JIAGwIzQ7Rjojbf96OPc=@vger.kernel.org, AJvYcCW3x+HygORLmbFG3bUPDaa3Pj9Fm9FEuUAC19HniiBWUeG5VxJurE1Jt3JHCNhk9gHEKOEavl5K5iktPmM=@vger.kernel.org, AJvYcCWZ6tegJYq4VUj7IrzBIyQ2InSKcqR5mG6YVOQLI5V77WK2VYZYuN6fwemYVyPZvAkaH8KYIhpPXZtAo8uJnmdnvGs=@vger.kernel.org, AJvYcCXhckLESZaXDgJ3DwEo+rOY7PbPpMNb6/Shivvsznc3/09wxV9TULBqV9JyvmXeMK0TALSZ5l4IyJSokCoT@vger.kernel.org, AJvYcCXiDajjlA3H+CMZ20wvKwBGhOrSazCniOC988gBAVn2Cn39xQe/WrHjhH3UlboROjvz+FsbIwgTfuE57gSD@vger.kernel.org, AJvYcCXqyJSU6+pMhbyCcf1EreU3stmDacjvbVuVyr354WfUuCJfL/CsSWXGKPYcnbsqBbn6fbFSyrBCyd8w@vger.kernel.org
+X-Gm-Message-State: AOJu0YwINcKARE4xHg5qYdGCUGx2Ua+8M2XVmAv2YVBMJJxBv8iravMm
+	yPhoYLPamQM1OuCYMAHy4Kt3Frj21yIIjbrFqk+XpV/KR4QetqnFzta75lVw6Hs9vIUHqjOxG2s
+	G1IsVirGZSDlDGFluI/a9CIVj9KZ+XoE=
+X-Gm-Gg: ASbGncsuJy0d0Tp3t7B7B1hb6E7zSqoYWug6yVYIGEvisBHzyJ8RDztWChlOzmMhn1J
+	KMsgqRBier6QKiQUFIVfjG9c1zTNWVtoBW9aevICccA990adfPboNgOLDotO/EKoW2C58FDD0Fo
+	Cmi/ZRtNulcdWRPD9R6uzGOMZcmEJRQ1/XTeX3rPvbU5IJ/LG9iDhR+GYMl15S9T4JY05FZYCqI
+	AK/PYYUOSaWxCJbhJGi
+X-Google-Smtp-Source: AGHT+IFNrkynh+/Ymp/HCHyA5XGYRylr5jF6GjIL2qDKGYyZpbM+uW2yDfuf4gc8lpHjzkwCg5YwNrLoynQjYkyhMFI=
+X-Received: by 2002:a17:907:928a:b0:b04:5b3d:c31f with SMTP id
+ a640c23a62f3a-b045b3dc692mr1195506366b.49.1757064869658; Fri, 05 Sep 2025
+ 02:34:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: zesmtpip:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-1
-X-QQ-XMAILINFO: OZuCtzQljvyFda5zDYJjU3XsFzRs1S3hBWUcYTBtNYUDeuiUOk81THBo
-	fbgRp6cdI/AI1ZksDBlFt+xW7HpArIUvXJ6xsq4S8rj+maWZXBJtKQIHICfq+Bnj8LgHWvd
-	Cx99j0f6p1XiXMzy2ZahFWd6h2/VDG6eTly+kiWeOiI1/AbNn8y/0f6pXxj8g9szvEwkJkk
-	JcruDOwNcPHi8jgrJrsPTQlja3XvsLe8FQCKK40Vpf+FaGjY8dq3T+qJOcLDYFPo1WnliFA
-	T/WokkcGkJ3zbXeQTlXc7a69CnArNJc1hhrH1qO5D2DywkafItS+NtLBipL6D4DE0xEvajM
-	J7prgG8LRXcVQLaMmoIoaT5GZ/Avql2DEGsq4qiwuyktHOyrPRMe1lspFxebKuk6TzyJNXP
-	7miaXegC8eJ7zLJzwK08IYwcgcTPepr+HvX+xAM8rfzQoXy/wn2FE4oso/4khYx0HfS4eqF
-	X1NU1B9eEnV9qJqHfzXapg3LD5DTRNoxYU5xDTgztlvBMuh9T9n3bfGkZFAn5VzZtNVipfz
-	dBn/u1IVVXbuZX1nC+57Tc/u8cPSHtA7eJpuCsYgCfRFpIiCwIn72KmSstJUp1TKCaeBdIb
-	RSgzbYDSi6F00LLc/lJs0ELcVawa0orLV/gcikYFmYTgpod7wFJ1Ud+yvV0pyosrw95nYZq
-	AI47Z1Ik8BETVrkHZhKJdoRIR8AYPUIj1I+6wjBaH2JdqSDzCCxNiCGzstFcPu1Kxo1vckw
-	iKXGUnXR3aup3cqKonLEFwV1PBUwYTBNV+g33YdEJdHLizH852mYfTb9nNApS8/2AGV7f1F
-	jUDzHD/+MIw3gOcDugGdJXuxtsbSMJbzP75xk4ZdTN8cw0kkhkfsHg0qulfxcHtuMb5147+
-	tyWDen3bcRcHKDLASKoA5HhDJO1+uNzcqSJ9DXAFoWrerNHbSYKAEcLbi0hpL3Ab5wMf/6s
-	n1QKflh3vTTNp6FV/Fp02N9874GYQqT0iYM7v/FHHbr4KaKFQxFT6/AYxLluGOWJ5ISu29+
-	aOGRfek6+xb5oBhhD8ojfqxLL/YPc9ZAslNsFRWLbO8dWOb/qI
-X-QQ-XMRINFO: OD9hHCdaPRBwq3WW+NvGbIU=
-X-QQ-RECHKSPAM: 0
+References: <20250905072423.368123-1-zhao.xichao@vivo.com> <20250905072423.368123-2-zhao.xichao@vivo.com>
+In-Reply-To: <20250905072423.368123-2-zhao.xichao@vivo.com>
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
+Date: Fri, 5 Sep 2025 12:33:53 +0300
+X-Gm-Features: Ac12FXxbms9z4N7jI4jHPwNjVwlV8d4OiE5hmfmL25yynmREhxdRP_mz9jzg-_c
+Message-ID: <CAHp75VforxjsHWzxrxfD_YOshvg0Y=KwrpmAPWwhyarNm2wNjQ@mail.gmail.com>
+Subject: Re: [PATCH 01/12] thermal: of: Add error handling in devm_thermal_*_register()
+To: Xichao Zhao <zhao.xichao@vivo.com>
+Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
+	Jonathan Cameron <jic23@kernel.org>, David Lechner <dlechner@baylibre.com>, 
+	=?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>, 
+	Andy Shevchenko <andy@kernel.org>, Chen-Yu Tsai <wens@csie.org>, 
+	Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, 
+	Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, 
+	Guillaume La Roque <glaroque@baylibre.com>, Miquel Raynal <miquel.raynal@bootlin.com>, 
+	Florian Fainelli <florian.fainelli@broadcom.com>, 
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Ray Jui <rjui@broadcom.com>, 
+	Scott Branden <sbranden@broadcom.com>, Markus Mayer <mmayer@broadcom.com>, 
+	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
+	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
+	zhanghongchen <zhanghongchen@loongson.cn>, Yinbo Zhu <zhuyinbo@loongson.cn>, 
+	Amit Kucheria <amitk@kernel.org>, Thara Gopinath <thara.gopinath@gmail.com>, 
+	=?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>, 
+	Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, 
+	Heiko Stuebner <heiko@sntech.de>, Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>, 
+	Krzysztof Kozlowski <krzk@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
+	Orson Zhai <orsonzhai@gmail.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
+	Chunyan Zhang <zhang.lyra@gmail.com>, Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
+	Alexandre Torgue <alexandre.torgue@foss.st.com>, Thierry Reding <thierry.reding@gmail.com>, 
+	Jonathan Hunter <jonathanh@nvidia.com>, Talel Shenhar <talel@amazon.com>, 
+	Eduardo Valentin <edubezval@gmail.com>, Keerthy <j-keerthy@ti.com>, 
+	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	"open list:HARDWARE MONITORING" <linux-hwmon@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>, 
+	"open list:IIO SUBSYSTEM AND DRIVERS" <linux-iio@vger.kernel.org>, 
+	"moderated list:ARM/Allwinner sunXi SoC support" <linux-arm-kernel@lists.infradead.org>, 
+	"open list:ARM/Allwinner sunXi SoC support" <linux-sunxi@lists.linux.dev>, 
+	"open list:THERMAL" <linux-pm@vger.kernel.org>, 
+	"open list:THERMAL DRIVER FOR AMLOGIC SOCS" <linux-amlogic@lists.infradead.org>, 
+	"moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" <linux-rpi-kernel@lists.infradead.org>, 
+	"open list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" <imx@lists.linux.dev>, 
+	"open list:QUALCOMM TSENS THERMAL DRIVER" <linux-arm-msm@vger.kernel.org>, 
+	"open list:RENESAS R-CAR THERMAL DRIVERS" <linux-renesas-soc@vger.kernel.org>, 
+	"open list:ARM/Rockchip SoC support" <linux-rockchip@lists.infradead.org>, 
+	"open list:SAMSUNG THERMAL DRIVER" <linux-samsung-soc@vger.kernel.org>, 
+	"moderated list:ARM/STM32 ARCHITECTURE" <linux-stm32@st-md-mailman.stormreply.com>, 
+	"open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>, 
+	"open list:TI BANDGAP AND THERMAL DRIVER" <linux-omap@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-When large file operations are in progress during system suspend or
-hibernation, the ksys_sync() call can hang for extended periods,
-leading to unresponsive system behavior. Users copying large files
-to USB drives may experience black screen hangs when attempting to
-suspend, requiring forced power cycles.
+On Fri, Sep 5, 2025 at 10:25=E2=80=AFAM Xichao Zhao <zhao.xichao@vivo.com> =
+wrote:
+>
+> devm_thermal_of_zone_register() does not print any error message
+> when registering a thermal zone with a device node sensor fails
+> and allocating device resource data fails.
+>
+> This forces each driver to implement redundant error logging.
+> Additionally, when upper-layer functions propagate these errors
+> without logging, critical debugging information is lost.
+>
+> Add dev_err_probe() in devm_thermal_of_zone_register() to unify
+> error reporting.
 
-This patch introduces a unified sync timeout mechanism for both
-suspend-to-RAM (S3) and hibernation (S4) to prevent indefinite
-hangs while maintaining data integrity.
+...
 
-Key features:
-- Configurable timeout via sysfs interface
-- Default behavior unchanged (timeout disabled by default)
-- Unified implementation for both suspend and hibernation paths
-- Graceful fallback to direct sync on thread creation failure
+>         ptr =3D devres_alloc(devm_thermal_of_zone_release, sizeof(*ptr),
+>                            GFP_KERNEL);
+> -       if (!ptr)
+> +       if (!ptr) {
 
-Sysfs interface:
-- /sys/power/sleep_sync_timeout: Runtime configuration (0-600000ms)
+> +               dev_err(dev, "Failed to allocate device resource data\n")=
+;
 
-When timeout is enabled and exceeded, the sync operation is aborted
-and suspend/hibernation fails gracefully with -ETIMEDOUT, preventing
-system hangs.
+We do not add error messages for ENOMEM.
 
-Implementation creates a separate kthread for sync operations when
-timeout is enabled, allowing the main suspend path to maintain
-control and abort if necessary.
+>                 return ERR_PTR(-ENOMEM);
 
-Compared to [PATCH v3 0/3] PM: Support aborting suspend during
-filesystem sync (see: https://lore.kernel.org/linux-pm/20250821004237.
-2712312-1-wusamuel@google.com/), this patch addresses scenarios where
-there may be no wakeup event, but the sync operation is excessively
-slow (e.g., due to slow or faulty storage). By introducing a configurable
-timeout, it proactively prevents indefinite hangs and improves user
-experience in a wider range of real-world cases. The implementation
-is also simpler and gives users or system integrators more flexibility
-to tune behavior for different devices and requirements. Additionally,
-the ksys_sync_helper_timeout() interface is designed as a reusable
-generic function that other kernel subsystems can leverage when they
-need sync operations with timeout control, promoting code reuse and
-reducing maintenance overhead across the kernel.
+Even if you want so eagerly to do that, it should be
 
-Signed-off-by: tuhaowen <tuhaowen@uniontech.com>
----
-Changes in v2:
-- Unified timeout logic in kernel/power/main.c
-- Removed duplicate code from suspend.c and hibernate.c
-- Added sysfs interface for runtime configuration
-- Changed default to 0 (disabled) for backward compatibility
-- Increased maximum timeout to 10 minutes
-- Simplified parameter control (removed separate enable flag)
----
- include/linux/suspend.h  |  3 ++
- kernel/power/hibernate.c |  4 +-
- kernel/power/main.c      | 82 ++++++++++++++++++++++++++++++++++++++++
- kernel/power/suspend.c   |  6 ++-
- 4 files changed, 93 insertions(+), 2 deletions(-)
+   return dev_err_probe();
 
-diff --git a/include/linux/suspend.h b/include/linux/suspend.h
-index da6ebca3f..976c8f8a1 100644
---- a/include/linux/suspend.h
-+++ b/include/linux/suspend.h
-@@ -439,6 +439,8 @@ void restore_processor_state(void);
- extern int register_pm_notifier(struct notifier_block *nb);
- extern int unregister_pm_notifier(struct notifier_block *nb);
- extern void ksys_sync_helper(void);
-+extern int ksys_sync_helper_timeout(unsigned int timeout_ms);
-+extern unsigned int sync_timeout_ms;
- extern void pm_report_hw_sleep_time(u64 t);
- extern void pm_report_max_hw_sleep(u64 t);
- 
-@@ -486,6 +488,7 @@ static inline void pm_report_hw_sleep_time(u64 t) {};
- static inline void pm_report_max_hw_sleep(u64 t) {};
- 
- static inline void ksys_sync_helper(void) {}
-+static inline int ksys_sync_helper_timeout(unsigned int timeout_ms) { return 0; }
- 
- #define pm_notifier(fn, pri)	do { (void)(fn); } while (0)
- 
-diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-index 23c0f4e6c..2678181a5 100644
---- a/kernel/power/hibernate.c
-+++ b/kernel/power/hibernate.c
-@@ -777,7 +777,9 @@ int hibernate(void)
- 	if (error)
- 		goto Restore;
- 
--	ksys_sync_helper();
-+	error = ksys_sync_helper_timeout(sync_timeout_ms);
-+	if (error)
-+		goto Exit;
- 
- 	error = freeze_processes();
- 	if (error)
-diff --git a/kernel/power/main.c b/kernel/power/main.c
-index 6254814d4..3912f221a 100644
---- a/kernel/power/main.c
-+++ b/kernel/power/main.c
-@@ -17,10 +17,21 @@
- #include <linux/suspend.h>
- #include <linux/syscalls.h>
- #include <linux/pm_runtime.h>
-+#include <linux/completion.h>
-+#include <linux/kthread.h>
-+#include <linux/jiffies.h>
- 
- #include "power.h"
- 
- #ifdef CONFIG_PM_SLEEP
-+/* Sync timeout parameters */
-+unsigned int sync_timeout_ms;
-+EXPORT_SYMBOL_GPL(sync_timeout_ms);
-+
-+/* Sync timeout implementation */
-+static struct completion sync_completion;
-+static struct task_struct *sync_task;
-+
- /*
-  * The following functions are used by the suspend/hibernate code to temporarily
-  * change gfp_allowed_mask in order to avoid using I/O during memory allocations
-@@ -79,6 +90,45 @@ void ksys_sync_helper(void)
- }
- EXPORT_SYMBOL_GPL(ksys_sync_helper);
- 
-+static int sync_thread_func(void *data)
-+{
-+	ksys_sync_helper();
-+	complete(&sync_completion);
-+	return 0;
-+}
-+
-+int ksys_sync_helper_timeout(unsigned int timeout_ms)
-+{
-+	unsigned long timeout_jiffies;
-+
-+	/* If timeout is 0, use regular sync without timeout */
-+	if (timeout_ms == 0) {
-+		ksys_sync_helper();
-+		return 0;
-+	}
-+
-+	init_completion(&sync_completion);
-+	sync_task = kthread_run(sync_thread_func, NULL, "sync_timeout");
-+	if (IS_ERR(sync_task)) {
-+		pr_warn("%s: Failed to create sync thread, performing sync directly\n",
-+			__func__);
-+		ksys_sync_helper();
-+		return 0;
-+	}
-+
-+	timeout_jiffies = msecs_to_jiffies(timeout_ms);
-+	if (!wait_for_completion_timeout(&sync_completion, timeout_jiffies)) {
-+		pr_warn("%s: Sync operation timed out after %u ms, aborting\n",
-+			__func__, timeout_ms);
-+		kthread_stop(sync_task);
-+		return -ETIMEDOUT;
-+	}
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(ksys_sync_helper_timeout);
-+
-+
-+
- /* Routines for PM-transition notifications */
- 
- static BLOCKING_NOTIFIER_HEAD(pm_chain_head);
-@@ -240,6 +290,37 @@ static ssize_t sync_on_suspend_store(struct kobject *kobj,
- }
- 
- power_attr(sync_on_suspend);
-+
-+/*
-+ * sleep_sync_timeout: configure sync timeout during suspend/hibernation.
-+ *
-+ * show() returns the current sync timeout in milliseconds.
-+ * store() accepts timeout value in milliseconds. 0 disables timeout.
-+ */
-+static ssize_t sleep_sync_timeout_show(struct kobject *kobj,
-+				 struct kobj_attribute *attr, char *buf)
-+{
-+	return sysfs_emit(buf, "%u\n", sync_timeout_ms);
-+}
-+
-+static ssize_t sleep_sync_timeout_store(struct kobject *kobj,
-+				  struct kobj_attribute *attr,
-+				  const char *buf, size_t n)
-+{
-+	unsigned long val;
-+
-+	if (kstrtoul(buf, 10, &val))
-+		return -EINVAL;
-+
-+	/* Allow any reasonable timeout value */
-+	if (val > 600000) /* Max 10 minutes */
-+		return -EINVAL;
-+
-+	sync_timeout_ms = val;
-+	return n;
-+}
-+
-+power_attr(sleep_sync_timeout);
- #endif /* CONFIG_SUSPEND */
- 
- #ifdef CONFIG_PM_SLEEP_DEBUG
-@@ -974,6 +1055,7 @@ static struct attribute * g[] = {
- #ifdef CONFIG_SUSPEND
- 	&mem_sleep_attr.attr,
- 	&sync_on_suspend_attr.attr,
-+	&sleep_sync_timeout_attr.attr,
- #endif
- #ifdef CONFIG_PM_AUTOSLEEP
- 	&autosleep_attr.attr,
-diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
-index 8eaec4ab1..4f8015a75 100644
---- a/kernel/power/suspend.c
-+++ b/kernel/power/suspend.c
-@@ -585,8 +585,12 @@ static int enter_state(suspend_state_t state)
- 
- 	if (sync_on_suspend_enabled) {
- 		trace_suspend_resume(TPS("sync_filesystems"), 0, true);
--		ksys_sync_helper();
-+		error = ksys_sync_helper_timeout(sync_timeout_ms);
- 		trace_suspend_resume(TPS("sync_filesystems"), 0, false);
-+		if (error) {
-+			pr_err("PM: Sync timeout, aborting suspend\n");
-+			goto Unlock;
-+		}
- 	}
- 
- 	pm_pr_dbg("Preparing system for sleep (%s)\n", mem_sleep_labels[state]);
--- 
-2.20.1
+But, it will ignore the ENOMEM error code for printing.
 
+> +       }
+
+So, the bottom line, no need to add this message here.
+
+...
+
+>         tzd =3D thermal_of_zone_register(dev->of_node, sensor_id, data, o=
+ps);
+>         if (IS_ERR(tzd)) {
+> +               dev_err_probe(dev, PTR_ERR(tzd),
+> +                             "Failed to register thermal zone sensor[%d]=
+\n", sensor_id);
+>                 devres_free(ptr);
+>                 return tzd;
+
+I don't see how ptr is related to the mesasge. Can't we use
+
+  return dev_err_probe(dev, PTR_ERR(...), ...);
+
+instead?
+
+--=20
+With Best Regards,
+Andy Shevchenko
 
