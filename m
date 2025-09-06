@@ -1,45 +1,44 @@
-Return-Path: <linux-pm+bounces-34090-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34094-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1152B477B3
-	for <lists+linux-pm@lfdr.de>; Sat,  6 Sep 2025 23:45:17 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 398F7B477BC
+	for <lists+linux-pm@lfdr.de>; Sat,  6 Sep 2025 23:46:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 761CB3AA829
-	for <lists+linux-pm@lfdr.de>; Sat,  6 Sep 2025 21:45:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2EF521BC0C32
+	for <lists+linux-pm@lfdr.de>; Sat,  6 Sep 2025 21:46:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93FE929992B;
-	Sat,  6 Sep 2025 21:45:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A00E22BEFF2;
+	Sat,  6 Sep 2025 21:45:12 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DB5F2949E0;
-	Sat,  6 Sep 2025 21:45:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 828042C11F1;
+	Sat,  6 Sep 2025 21:45:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757195110; cv=none; b=HYNxwjFFwA6ZZZ3MkJFbMdXcwHVJKFSo7jM3XN07NVmyUJ6S6LlJv0SyEEoxUpnkC3/GmP6nb5vPNdS9GS9e/68atqsuSsvnrksQthGo2Yh8NMl3FXmEwcP3D8jjnFwzT4//0GKWZfegdRz5C93FwDu4z2Q9DpHZRLWoPwGVXpU=
+	t=1757195112; cv=none; b=pqpRAwS8dV8BYf7McKQk5aeCYAIS8ItAfot3rp6LRTkzDvjJuDiJqjrdawF4gkk483+oJbMAW8b5mziexDUtoNTTFRb2bXN+VMxwdckhm63Y6uYphjqwWaPF134AJ0uXSFih4/ANY3/Iu42aXAC4CpecEMW1jXE8wi3Szl7tWuY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757195110; c=relaxed/simple;
-	bh=Om2wsWKzfBTumU1uMrWiRYO/VKpdX3KrMlYogK6co3I=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=F2b3ExVg/BRw3V+BKI0ZZdoG48JBEQB+U01VJLY4w8Nhp95kqO9I5UMpw7JjNZGuC6YMITK1LYfbX2iMV6KlJmgdKAsQZ8tGlRhyV3nbvOdNCX3hg3kvnDUdtuQcpVEK5OXfEC/18K7PdtsEjartflfW26pD3ZMIGfRtnX6kHm4=
+	s=arc-20240116; t=1757195112; c=relaxed/simple;
+	bh=bhMIE6MSZqFNo1JsDbth9BZC3YvbClPalVRDfH8OFiY=;
+	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=l8AkXLKocAvi5Z94ZeEz6FqoFp0CmhqMvsR9Kn+HTD7xJiiDbmj6J9zceyX0/T4xwWMzC8gDDTfasukOBAR7+CZCrXu1N7Aw8MgLjVAYHuzj2sIMK0VZet81CN/JDWeBCtauWWGq44xRoTbNQ8WTCoTJ5cMYP8tS+hfb+RbIICA=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1D20C4CEF5;
-	Sat,  6 Sep 2025 21:45:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1060C4CEE7;
+	Sat,  6 Sep 2025 21:45:11 +0000 (UTC)
 Received: by venus (Postfix, from userid 1000)
-	id CB4F2180B28; Sat, 06 Sep 2025 23:45:07 +0200 (CEST)
+	id D49F4180B44; Sat, 06 Sep 2025 23:45:07 +0200 (CEST)
 From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org, 
- Colin Ian King <colin.i.king@gmail.com>
-Cc: kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20250807121349.460862-1-colin.i.king@gmail.com>
-References: <20250807121349.460862-1-colin.i.king@gmail.com>
-Subject: Re: [PATCH][next] power: supply: 88pm860x: make fsm_state array
- static const, simplify usage
-Message-Id: <175719510782.45380.3925400276927678009.b4-ty@collabora.com>
+To: Tobias Schrammm <t.schramm@manjaro.org>, 
+ Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Qianfeng Rong <rongqianfeng@vivo.com>
+In-Reply-To: <20250814143654.289715-1-rongqianfeng@vivo.com>
+References: <20250814143654.289715-1-rongqianfeng@vivo.com>
+Subject: Re: [PATCH] power: supply: use max() to improve code
+Message-Id: <175719510786.45380.16502433728208652784.b4-ty@collabora.com>
 Date: Sat, 06 Sep 2025 23:45:07 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -52,23 +51,16 @@ Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.14.2
 
 
-On Thu, 07 Aug 2025 13:13:49 +0100, Colin Ian King wrote:
-> Don't populate the read-only array fsm_state on the stack at run time,
-> instead make it static const, this reduces the object code size as
-> the data is placed on the data segment and this removes the need to
-> have code to set the array up on each call.
+On Thu, 14 Aug 2025 22:36:53 +0800, Qianfeng Rong wrote:
+> Use max() to reduce the code in cw_battery_get_property() and improve
+> its readability.
 > 
-> Note that making the size of the strings to a more optimal 11 bytes long
-> does not seem to reduce the overall size. Making the array an array of
-> pointers to the strings increases the code size due to the dereferencing
-> overhead.
 > 
-> [...]
 
 Applied, thanks!
 
-[1/1] power: supply: 88pm860x: make fsm_state array static const, simplify usage
-      commit: cb03556acf83b235dfb2e9f86e14f5e5b8a5f1e7
+[1/1] power: supply: use max() to improve code
+      commit: d48d4e4f141b38944da3b0a9c21ce6828ec31d83
 
 Best regards,
 -- 
