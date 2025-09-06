@@ -1,151 +1,199 @@
-Return-Path: <linux-pm+bounces-34071-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34072-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 87B16B475C5
-	for <lists+linux-pm@lfdr.de>; Sat,  6 Sep 2025 19:22:23 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD43AB475CB
+	for <lists+linux-pm@lfdr.de>; Sat,  6 Sep 2025 19:22:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3B44EA42A26
-	for <lists+linux-pm@lfdr.de>; Sat,  6 Sep 2025 17:22:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 82939566AEC
+	for <lists+linux-pm@lfdr.de>; Sat,  6 Sep 2025 17:22:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B242266EEA;
-	Sat,  6 Sep 2025 17:22:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7930269B01;
+	Sat,  6 Sep 2025 17:22:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZcRTwoQe"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="njJ4kGuJ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA80B15D5B6;
-	Sat,  6 Sep 2025 17:22:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6A50266EEA;
+	Sat,  6 Sep 2025 17:22:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757179337; cv=none; b=uXqvMqJip1EgWAy7ZwlcPhj51Kh3e/Yt489K//k3+E2HsOZuL2gUckd5KZOohvf6R+RihmiujWOUvU+Q70rJwRHe4KBqTBJT9dvySiIdYgC96C9lLJ1+VtrddX6hNbEMx6CA8DEDtmFA5TyJkFg5NbfQo7dns/2Kmr+K/QjPqxk=
+	t=1757179347; cv=none; b=DnevCofxN5YnPt2luHX2Hwh7t+MM0J5nu9JpeUx/spgHPzpHwSmi8vjQ7oDcAet03CMMgp+piJASnJROCW6ZsBw4e1HC3dfJlX7f3nO4jMDWLInYMepr/eSofjb0yCROvdJb/VBVNVfUVHb3GssTMMM6I6adwMzuCw4AdQQLpL0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757179337; c=relaxed/simple;
-	bh=GEjc/MZiSs5pA+NLyK1ocRIWX/r07ZJrV7YSReaHnLM=;
+	s=arc-20240116; t=1757179347; c=relaxed/simple;
+	bh=MJPdRrONakWXxOxEQWgsQYVE/bfwQLRKAPlHNaeeTlw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Ucsc0Ln7sjDBjvb91x/SMl/aKISe7tYcAsn3aPtaiv/qEGwkRQXeHTD8mXPayNiL22knb4dJCizVFrrm9dkd60slDMpDa2Wp6O+7/5vzWlKusGfXt1+oT8z7044Nt0qld8ZIwdCsxSA6md1iqlPGtvV9l4PzlWX8RNumaqHc1GA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZcRTwoQe; arc=none smtp.client-ip=209.85.208.177
+	 To:Cc:Content-Type; b=R8yJzD59d15wTsdsi80NxA/nk7l6uZe/z3qo+UBpS15ouhe5qwd2edNl4N3m0PQFjr+cF9dLp3WR2tGA7obq7oJI15GuZXZU+IgSov9U+vYRrMD1ZHqtsonDvey5xbv1znyMJk8Vtfp1jCKohwIE5JE4VxVZjsQTDP74zD6kCc0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=njJ4kGuJ; arc=none smtp.client-ip=209.85.218.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-337cc414358so26404861fa.3;
-        Sat, 06 Sep 2025 10:22:15 -0700 (PDT)
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-b04b869abb9so62792866b.1;
+        Sat, 06 Sep 2025 10:22:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757179334; x=1757784134; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1757179343; x=1757784143; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=SLBswoadtY/Z1Rk6E4ozam6v04Xnc0YdjRNFILOtZyE=;
-        b=ZcRTwoQe3h+uBR4IR5TzfldISycKzJOIZgqn9QPBTPeHUogOwuJuYcNq9T/X57Guv+
-         gBrX8jHoGcHq1RpMO4W5iUWLsfZOglrqLKOwFPnvRzqBvmGJF64jU5lfmnjIlykfsM8o
-         e3kr2qTa2SVbts25JbI6ANFJA1DZWutwVFUx0I28zLqpeeumjBnFx1hhJGBwvVobg4Gv
-         QqjmuFaSl8WxwSujQM/1t/P2eAT6v+3SWhzsFLWWHM0t7EoLakayL0ef9JYoTVk+qyaV
-         aJ/kiHjjlwoXpyX0tlxDjb4C1Esd+bwSuNjeMr6EWczDgABXGSNcdrr3t4/YZ0reh2J/
-         ZuGw==
+        bh=W/hMIupBscvuO4EPQ/Tt0MsH4XbYqSn2Fhm3xvRpI+s=;
+        b=njJ4kGuJmZtNI/Vo7pyQPqP1fopcQ13SCBZEkGxNkgxnT5SWblmxbwrzt+hJgBe8jH
+         Wo+Gp5ZT3mGu/jIMb7rZwhi1I0AFcrNyFC0xaHHT8OANboPnANxZSJNHQMpn1FmBzmT7
+         4MYfqCgWwFyvBcJIB2G5n+ixaOOOkdXL7HNHhRX7reThmbPnKxz+U0I1PVpBqFZ/ISLs
+         JtsQVFk6UnWw4Qz9TZ5YJxwg2iH0vRSaaT9NqHB404g/kZ7nDanAQbkmmgHw97TelpJH
+         MFZCpvFV8f7iLyvaE97elUDxHV8Sb48P6S4HjmkO8hVK3k1uWuoPOnE/aeQVrA2itzVM
+         axjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757179334; x=1757784134;
+        d=1e100.net; s=20230601; t=1757179343; x=1757784143;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=SLBswoadtY/Z1Rk6E4ozam6v04Xnc0YdjRNFILOtZyE=;
-        b=PoMOHHVfbDd/g11JNV9ja+5lzbGF1PTykBl2C+THZs8x9Ac9/rNpAHtqcCXU565FBH
-         gNePl9EqUHGxjnHoI/rU6oAOMUnEKDsRhjNefHHPhJ9VuVrTcC0Zr5WVycuNW/E2Gb/S
-         FmLkT+6vQiwKiR3Vp7QfU2Yh8I7WGcEjZq+VM3/JyEnHHI5wASE5/9u8JwLV4PbWbhRf
-         3CvfEZtoVdST3Qf0ojkpEz9heT1FfGTA7xJety5rPHs3CIl6A3nvNLRLEd9tEJWRgu7x
-         IEilyqwszfXXkg1yLYMOC8mZhYZ7uNmGT1Y5/C+zkZaAQoPugXLrTaGTDNPUr6+iuCCo
-         LCuA==
-X-Forwarded-Encrypted: i=1; AJvYcCU41S8XL+nmzVfBgOZ9zEyw4DeV3NVrRCvSoTRt5DnaFAzL2SRtVa/fCS2JVzHv2VArptOdBjgBzbo8BKZD@vger.kernel.org, AJvYcCUdsyFSFVSa6g0M8z7FkTBaeNNETLqLzxg9pT2Wi9wWJzliJexHMnQun1Zu/yDCx6QFcqHqwfQDf9Y=@vger.kernel.org, AJvYcCUw6s/VuT7TGw+PnUNL42eYi4Iv0rdmq7/Lz2Iu1D/KDyObAb8Dcqd3dcw/w9Jqb5fvthSWvruPnpAx@vger.kernel.org, AJvYcCWWnkgwT5tgDEb7iPckkMWjTprgomop5LJATv7OmDvdrRRoSi4xy1UxiKK5mhhTeWgYznqsSj8yJ2G9N5g=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwCBOt/++rXcq4I9p2EnjeVmL0CZuIH8h/J/UdoWfQdxAVFfn4j
-	miAgANuK9rxZqhPkYBD3mhXS9n1xKFm7sNd/vOo/kGwI5mCDULMGknWANQz9DbPoyQ8zL5+szkp
-	AZ/7V28MZ+I49qVTETXGqHuF5wQAMQVw=
-X-Gm-Gg: ASbGncvbN+ujHR5+kJBXcU3/rwUeQ6s2RDIpJj0LEiaKCIc/hKtfKEgyT6RXLYEVKk9
-	iA/arEMXpYZMxy3pKaPqHqETPxWcVlOIVxIUhjWVpxkWrx8buOhWJgTN+aYc9s0WB6joNWjpg49
-	39SJtZp0dbV5Cxq0pxeupHonl0yx+RDLGNNckIZBT6ne0uiXBKW1Hj74XPAIqJUidYJGydAYhAn
-	iyQe1g7G8I08bx/vQ==
-X-Google-Smtp-Source: AGHT+IGUttnd6bDIZZjIggXw9ycYs2qWr2c6QGeJLhOasz1kEwDXyb69WjepMI4Phdw9wN75p2CmHZHYwxDU9qdmFR0=
-X-Received: by 2002:a2e:b8c9:0:b0:338:f:5ce9 with SMTP id 38308e7fff4ca-33b52891a56mr8562581fa.20.1757179333524;
- Sat, 06 Sep 2025 10:22:13 -0700 (PDT)
+        bh=W/hMIupBscvuO4EPQ/Tt0MsH4XbYqSn2Fhm3xvRpI+s=;
+        b=QzEBnFhR8CLOEbh8tfBf4DxvCaNs41w/zJG74atC2c2lTjvLje4R7aGo7d/zgEyxDR
+         7sXuzkX8XxAmjCMCkaF8xkKKRTG/JCPZDbVM/iFN9ojVyuUKUCRae0h0x/z56dft2Fx9
+         UjtOJ+r50OjfQH0p6NwwXA3zsL3zVDNkl/6123DDi8JLcrq/eIulBquIILEt1Zc6z8Ai
+         cO0suOrsnd8KiOcxFrSmylXLeVWsLqPL/xsK3Wnc3Kb2iWJxwx3rEcSIkoryYlJtulqI
+         YWaNeMnpqu2ndasf/eVr1Tf0LvW5mXtQMFY+dtxgSNv6tHLxdQk73CpV5nfKcJSJKuXV
+         ssoQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVcxnkhCpSi1CZBL6jeTrE6VK43U6bOhjMIbkqBg4Gz8GCSwLfd3qxXc9vvGPWMzzw/MlHLYL7UwMRyZK4=@vger.kernel.org, AJvYcCWhTS4iOeuTZLWXg/Pq8S0sCB1I5EUPrrCT3W0qQyiOYmVXTkMR82Up78ZwZ5X7GD/72rr1pfUf0Nc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxeYDsn0MZ2oQ0gicKnqfeSivKrYqMP1x2kQM+GDCAGrWv76Yw2
+	hLnToPxowDLYGo3F3M9wTn5bK2+jBnnbMOX1PPvtEoy/DBfNxivLGqATGoFdDbnIeFj5JMnthtz
+	W32QwjreiHmUIF4TYmIopkesiOZ+aIpA=
+X-Gm-Gg: ASbGncuN/NZHnIofffKJy9CVlI6ziGN99Ij6iteeenm8t2bvWaTW7rjbiAaG4ynGfDn
+	ssGPiPZ0HGGHFOvCbE4Ph6mSZXZAXf7UxLDH1oC5vFgWyFGE0JuVQQljQqqarg5KIuaLcWbIdFy
+	Hi132NoAnUFKqT6DrrfbRexKwfKcuaTwjbEVVgYctzgSYEJQ8k5OM1yLhLrld+iWJQsZ5zxjIe1
+	iZSxeEpWDE+PzeENEbpQBe3McENOQVffZ5rI0fOC2a6IaiRiQ==
+X-Google-Smtp-Source: AGHT+IHPrzgQMbrXWR06J3+2IY2pmoNozG9f+sOFa1muRT0XJT0J6CNFJbzQzFAMI7vcEmflXtRpDCuqd7TNeACKbpI=
+X-Received: by 2002:a17:907:9410:b0:b04:ac31:cd31 with SMTP id
+ a640c23a62f3a-b04b1451f7fmr257815766b.18.1757179343315; Sat, 06 Sep 2025
+ 10:22:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250903-t210-actmon-v2-0-e0d534d4f8ea@gmail.com>
- <20250903-t210-actmon-v2-3-e0d534d4f8ea@gmail.com> <20250904-groovy-sheep-of-wizardry-ad0ae9@kuoka>
-In-Reply-To: <20250904-groovy-sheep-of-wizardry-ad0ae9@kuoka>
-From: Aaron Kling <webgeek1234@gmail.com>
-Date: Sat, 6 Sep 2025 12:22:02 -0500
-X-Gm-Features: Ac12FXzXqB-Wxx7_0jaBO62-jVTmudr9H9J1HjyTysGTyoh4yJxcTiHR8B2v-C0
-Message-ID: <CALHNRZ-3paF4jEVJCbaWt3S3BYLdDT2tHo9K6XrB-eiB6qSEHQ@mail.gmail.com>
-Subject: Re: [PATCH v2 3/8] dt-bindings: memory: tegra210: emc: Document OPP
- table and interconnect
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Thierry Reding <thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, MyungJoo Ham <myungjoo.ham@samsung.com>, 
-	Kyungmin Park <kyungmin.park@samsung.com>, Chanwoo Choi <cw00.choi@samsung.com>, 
-	Dmitry Osipenko <digetx@gmail.com>, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20250825185807.57668-1-vivekyadav1207731111@gmail.com>
+ <CAJZ5v0gfrTvLgs=PdmRbRRN05GE4Bk8Q7hJdtQfyk3VqaOz7FQ@mail.gmail.com>
+ <CABPSWR5cG=xTA72BHayYQTb=24VS3N+=dbsiMcU+gyqTKvNXAQ@mail.gmail.com>
+ <2fb11c0970da307cf8cf4f35d35c49f78f82ee72.camel@perches.com>
+ <CAJZ5v0iAfgE4RkVXH7GaG9SqvGa0VfVuFi_cLd0utC8oPY0Fkg@mail.gmail.com> <99c1c03a9f7fe55b8f73e5574612dc3e1cd1af55.camel@perches.com>
+In-Reply-To: <99c1c03a9f7fe55b8f73e5574612dc3e1cd1af55.camel@perches.com>
+From: vivek yadav <vivekyadav1207731111@gmail.com>
+Date: Sat, 6 Sep 2025 22:52:11 +0530
+X-Gm-Features: AS18NWATrau_XSgNpQXKBMdEXPkIlXn_qvi-65LrRfyCeYLtq6uJjOq-XKj3GvA
+Message-ID: <CABPSWR6uKR0fz1-jJcJ1_JCsBbXhHioUe3o02DMSP8T18y1T1Q@mail.gmail.com>
+Subject: Re: [PATCH] cpuidle: sysfs: Use sysfs_emit/sysfs_emit_at instead of sprintf/scnprintf
+To: Joe Perches <joe@perches.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, daniel.lezcano@linaro.org, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Sep 4, 2025 at 3:11=E2=80=AFAM Krzysztof Kozlowski <krzk@kernel.org=
-> wrote:
+>On Fri, Sep 5, 2025 at 8:22=E2=80=AFPM Joe Perches <joe@perches.com> wrote=
+:
+>>
+>> On Fri, 2025-09-05 at 22:57 +0530, vivek yadav wrote:
+>> > On Mon, Aug 25, 2025 at 8:58=E2=80=AFPM <vivekyadav1207731111@gmail.co=
+m> wrote:
+>> > > >
+>> > > > From: Vivek Yadav <vivekyadav1207731111@gmail.com>
+>> > > >
+>> > > > The ->show() callbacks in sysfs should use sysfs_emit() or
+>> > > > sysfs_emit_at()
+>> []
+>> > > > diff --git a/drivers/cpuidle/sysfs.c b/drivers/cpuidle/sysfs.c
+>> []
+>> > > > @@ -22,21 +22,21 @@ static ssize_t show_available_governors(struct=
+ device *dev,
+>> > > >                                         struct device_attribute *a=
+ttr,
+>> > > >                                         char *buf)
+>> > > >  {
+>> > > > -       ssize_t i =3D 0;
+>> > > > +       ssize_t len =3D 0;
+>> > >
+>> > > The variable rename is not necessary or even useful AFAICS ->
+>> >
+>> > There is no harm if we leave the variable name as 'i' but it would be =
+better
+>> > if we give it a suitable name like 'offset'. It will definitely improv=
+e
+>> > readability.
+>>
+>> size and len are most commonly used.
+>> I prefer len.
 >
-> On Wed, Sep 03, 2025 at 02:50:09PM -0500, Aaron Kling wrote:
-> > These are needed for dynamic frequency scaling of the EMC controller.
-> >
-> > Signed-off-by: Aaron Kling <webgeek1234@gmail.com>
-> > ---
-> >  .../bindings/memory-controllers/nvidia,tegra210-emc.yaml    | 13 +++++=
-++++++++
-> >  1 file changed, 13 insertions(+)
->
-> I asked to order patches within patchset in some logical way. First
-> patch was memory, second other, third again memory.
->
-> There are no dependencies explained, so this looks like groupping
-> unrelated patches, therefore SPLIT finally the patchset per subsystem.
->
-> >
-> > diff --git a/Documentation/devicetree/bindings/memory-controllers/nvidi=
-a,tegra210-emc.yaml b/Documentation/devicetree/bindings/memory-controllers/=
-nvidia,tegra210-emc.yaml
-> > index bc8477e7ab193b7880bb681037985f3fccebf02f..6cc1c7fc7a328bd18c7c0be=
-b535c1ff918bcdb2a 100644
-> > --- a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra=
-210-emc.yaml
-> > +++ b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra=
-210-emc.yaml
-> > @@ -33,6 +33,9 @@ properties:
-> >      items:
-> >        - description: EMC general interrupt
-> >
-> > +  "#interconnect-cells":
-> > +    const: 0
-> > +
-> >    memory-region:
-> >      maxItems: 1
-> >      description:
-> > @@ -44,12 +47,19 @@ properties:
-> >      description:
-> >        phandle of the memory controller node
-> >
-> > +  operating-points-v2:
-> > +    description:
-> > +      Should contain freqs and voltages and opp-supported-hw property,=
- which
-> > +      is a bitfield indicating SoC speedo ID mask.
-> > +
->
-> No opp-table?
+>Fine, in new code, use whatever you like, but what really is the
+>reason for doing a rename in code that has been almost unchanged since
+>2.6.22?
 
-All other tegra devices have the opp tables in standalone nodes, not
-as subnodes to their users. I followed that style here, see patch 8.
+Hi Rafael,
 
-Aaron
+You are correct that the variable name =E2=80=98i=E2=80=99 has remained unc=
+hanged
+since v2.6.22. Its long-standing presence is understandable, but it
+doesn=E2=80=99t necessarily mean it can=E2=80=99t be updated in the future =
+if needed.
+
+As @Joe pointed out, statistics show that most developers prefer using
+more descriptive names such as =E2=80=98len=E2=80=99 or =E2=80=98size=E2=80=
+=99 when possible.
+
+With this in mind, I believe it=E2=80=99s time to bring this discussion to =
+a
+conclusion. Shall we move forward with this change in variable naming
+=E2=80=94 YES or NO?
+
+Looking forward to your input.
+
+Best regards,
+Vivek
+
+On Sat, Sep 6, 2025 at 12:43=E2=80=AFPM Joe Perches <joe@perches.com> wrote=
+:
+>
+> On Fri, 2025-09-05 at 20:34 +0200, Rafael J. Wysocki wrote:
+> > On Fri, Sep 5, 2025 at 8:22=E2=80=AFPM Joe Perches <joe@perches.com> wr=
+ote:
+> > >
+> > > On Fri, 2025-09-05 at 22:57 +0530, vivek yadav wrote:
+> > > > On Mon, Aug 25, 2025 at 8:58=E2=80=AFPM <vivekyadav1207731111@gmail=
+.com> wrote:
+> > > > > >
+> > > > > > From: Vivek Yadav <vivekyadav1207731111@gmail.com>
+> > > > > >
+> > > > > > The ->show() callbacks in sysfs should use sysfs_emit() or
+> > > > > > sysfs_emit_at()
+> > > []
+> > > > > > diff --git a/drivers/cpuidle/sysfs.c b/drivers/cpuidle/sysfs.c
+> > > []
+> > > > > > @@ -22,21 +22,21 @@ static ssize_t show_available_governors(str=
+uct device *dev,
+> > > > > >                                         struct device_attribute=
+ *attr,
+> > > > > >                                         char *buf)
+> > > > > >  {
+> > > > > > -       ssize_t i =3D 0;
+> > > > > > +       ssize_t len =3D 0;
+> > > > >
+> > > > > The variable rename is not necessary or even useful AFAICS ->
+> > > >
+> > > > There is no harm if we leave the variable name as 'i' but it would =
+be better
+> > > > if we give it a suitable name like 'offset'. It will definitely imp=
+rove
+> > > > readability.
+> > >
+> > > size and len are most commonly used.
+> > > I prefer len.
+> >
+> > Fine, in new code, use whatever you like, but what really is the
+> > reason for doing a rename in code that has been almost unchanged since
+> > 2.6.22?
+>
+> If a sprintf -> sysfs_emit conversion is done, it's IMO better
+> style to be consistent with the typical sysfs_emit uses.
 
