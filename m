@@ -1,158 +1,146 @@
-Return-Path: <linux-pm+bounces-34073-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34074-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 089E1B475FE
-	for <lists+linux-pm@lfdr.de>; Sat,  6 Sep 2025 19:55:40 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B293AB4762B
+	for <lists+linux-pm@lfdr.de>; Sat,  6 Sep 2025 20:37:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A35A47C1F43
-	for <lists+linux-pm@lfdr.de>; Sat,  6 Sep 2025 17:55:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6D51BA429AF
+	for <lists+linux-pm@lfdr.de>; Sat,  6 Sep 2025 18:37:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D96B2F1FE3;
-	Sat,  6 Sep 2025 17:55:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B923127D773;
+	Sat,  6 Sep 2025 18:37:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="Vo8En1fH"
+	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="zUfL4s8U"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65CC24086A;
-	Sat,  6 Sep 2025 17:55:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757181333; cv=pass; b=GheWWSbPwCVVyanpohn8n+rZHFUe50plU1HVmsJYI5EW3xm46enKZQlbbvFByhknKjI4ZGDbkXvWtU+NLP/kM1W9VKgqzPAGf4z7IFt4yIymMQ1AVx5nZ1+k+At2peFPf0HtHQ83hemtryXKELD6ldMOqb3JZVHi4AanMSO83Rg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757181333; c=relaxed/simple;
-	bh=cxA/TjFCZsy3Ml7FHfxCzzBAUJu9FQFAXS6ZycQWykc=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F43021171D;
+	Sat,  6 Sep 2025 18:37:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1757183857; cv=none; b=IPhnQHa41znbIUCQA4Mz3dG3dbLvqJ+RzBWswKTaLr8Z/oTM9pPxn449Bk6o/lcTfG3GxBywDp7lGttebl4bj7EYxxhSQw91nUHStIRy5vawheXRzueApn5jXNiZ0WQd7MXxQDRrhZlvzNmpWj7b+1FAJNWADivf3wP9AtYGfsY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1757183857; c=relaxed/simple;
+	bh=hPruiawnravlHUFNKTkQxxaPtFJbhczk4BB1r9Ut7gA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=qkEsm0OUs74H+26/HJwMGWAAMOnuuS0xKkacbVzoHf7NsjBRdtu4sJy0sfi1VYasMqv5J3PWOIO4PBiN+4Gioy2qGqkQ/1MZwDqknjiDPo/qgY46BrxJ0XvByaT8ayi3YuoB7A/9ITjm7ULpzJCrl4AMyER6SemUy5lpGeE1ypI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=Vo8En1fH; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1757181295; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=WNxEioriaEs/u+KCseNI2dB68EOHRgf0F+l9UmkTxpaMjOTaqo7u92cu+ELDxOq6VauP91oW2ZnCuFdGdIQG226W+TRDWmCwA6K1lZfffMI7N5jNd0xsoKMeTVR1IK7VMxAMZB0evgvqsPZF3Nuz8Jix1RWyYjfVfQelO0JUG6g=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1757181295; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=IP7rUBaz1mvKnSQijXZkfLhmJRgyKEeoaWImepnoHPM=; 
-	b=mM+byTotFb+OP9BafKuB5zHSQdFPMwb3RQYFI8+0FJmDjAyweLe7SNCFmWy+36m5UCxNSlRPRyu0GAm8QbEmAmilnIpWvS5mwtSI5Vs3PEYrSxv5JBfOOaVstU2l2TGJaQBFEzZvZOkP023kXkSiEAzAJ3ZZKPwVhvEWRN0EGdc=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
-	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1757181295;
-	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
-	bh=IP7rUBaz1mvKnSQijXZkfLhmJRgyKEeoaWImepnoHPM=;
-	b=Vo8En1fHBjlORqqr4nwH2t1Ko4oGKDiIZXye5dpPTJTXQ0z0uomJitKJBaxlGxz0
-	Hyf/qh7Sf5IUbhGDXsb0Bl7OJakZbjMGKA4FFAayKBvo3sM8/nDtjSqFD7NHQPPAjTa
-	lnvN1396nqMaHKXIkhA6srQFSndnyRG4BHZ+RY68=
-Received: by mx.zohomail.com with SMTPS id 1757181293913862.8978758635274;
-	Sat, 6 Sep 2025 10:54:53 -0700 (PDT)
-From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-To: Rob Herring <robh@kernel.org>
-Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Boris Brezillon <boris.brezillon@collabora.com>,
- Steven Price <steven.price@arm.com>, Liviu Dudau <liviu.dudau@arm.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
- Matthias Brugger <matthias.bgg@gmail.com>,
+	 MIME-Version:Content-Type; b=qZMDdxG6o1ogsrZ4rNeG+YOQb79zyyQsVlOi/Xtn9Yu9pB3ePHBbWx176cbZQ5iLXF6GVzTznIccgmD80D3VKQmwz0ixwrmfq0Z22Jr6si9MMPtLnCjjoR6dudYQ8b6AwOP7442gTTU58MbmxKQb3Nfl/uym2vR/qo9FoZ2pfQw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=zUfL4s8U; arc=none smtp.client-ip=185.11.138.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
+	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Reply-To;
+	bh=ixgp0grp21H2AsoUs2fpv0iJHrH7SDIdhzu9KNRECUs=; b=zUfL4s8U0K9Q2MHNMM7l5z2A3k
+	HSGFJ9vEoXv7ibDwXsOiPVKUCFvVWIbJ9iF4P0Ekkwdc8o879WQskezT8MWsqZGbwYcVVXuPnYiho
+	WVciJJuqRAwj9WK/qdKky1pIzSfAkWqbWVySteyWQVBR1ni9v8Q4mkct4H6a5zuJ0Im+9Qb+Ormlv
+	OglT+cTJHqa5SwMH+c3tdAIIpP6cgRhg+9+sdveb42AuA0fla1kJy6JesNwCJGdlcogGnzeWg4nnt
+	j5wWodQiCGrnYN/fWLF6w+sIq5XxS+yk8IP7iZDQj6XyvSVdfig2z/fe/s71nI6A266E3w521EAsn
+	jot+Zmdg==;
+Received: from i53875a53.versanet.de ([83.135.90.83] helo=diego.localnet)
+	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <heiko@sntech.de>)
+	id 1uuxms-0006t1-Id; Sat, 06 Sep 2025 20:37:22 +0200
+From: Heiko =?UTF-8?B?U3TDvGJuZXI=?= <heiko@sntech.de>
+To: Chanwoo Choi <cw00.choi@samsung.com>,
  MyungJoo Ham <myungjoo.ham@samsung.com>,
  Kyungmin Park <kyungmin.park@samsung.com>,
- Chanwoo Choi <cw00.choi@samsung.com>, Jassi Brar <jassisinghbrar@gmail.com>,
- Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- Chia-I Wu <olvaffe@gmail.com>, Chen-Yu Tsai <wenst@chromium.org>,
- kernel@collabora.com, dri-devel@lists.freedesktop.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
- linux-pm@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject:
- Re: [PATCH RFC 01/10] dt-bindings: gpu: mali-valhall-csf: add
- mediatek,mt8196-mali variant
-Date: Sat, 06 Sep 2025 19:54:46 +0200
-Message-ID: <13801600.O9o76ZdvQC@workhorse>
-In-Reply-To: <20250905232657.GA1497794-robh@kernel.org>
+ Sascha Hauer <s.hauer@pengutronix.de>,
+ Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+ Sebastian Reichel <sebastian.reichel@collabora.com>,
+ Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+Cc: kernel@collabora.com, linux-pm@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org,
+ linux-kernel@vger.kernel.org,
+ Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+Subject: Re: [PATCH 2/2] PM / devfreq: rockchip-dfi: add support for LPDDR5
+Date: Sat, 06 Sep 2025 20:37:21 +0200
+Message-ID: <14289002.RDIVbhacDa@diego>
+In-Reply-To:
+ <20250530-rk3588-dfi-improvements-v1-2-6e077c243a95@collabora.com>
 References:
- <20250905-mt8196-gpufreq-v1-0-7b6c2d6be221@collabora.com>
- <20250905-mt8196-gpufreq-v1-1-7b6c2d6be221@collabora.com>
- <20250905232657.GA1497794-robh@kernel.org>
+ <20250530-rk3588-dfi-improvements-v1-0-6e077c243a95@collabora.com>
+ <20250530-rk3588-dfi-improvements-v1-2-6e077c243a95@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset="utf-8"
 
-Hi Rob,
+Am Freitag, 30. Mai 2025, 15:38:09 Mitteleurop=C3=A4ische Sommerzeit schrie=
+b Nicolas Frattaroli:
+> The Rockchip RK3588 SoC can also support LPDDR5 memory. This type of
+> memory needs some special case handling in the rockchip-dfi driver.
+>=20
+> Add support for it in rockchip-dfi, as well as the needed GRF register
+> definitions.
+>=20
+> This has been tested as returning both the right cycle count and
+> bandwidth on a LPDDR5 board where the CKR bit is 1. I couldn't test
+> whether the values are correct on a system where CKR is 0, as I'm not
+> savvy enough with the Rockchip tooling to know whether this can be set
+> in the DDR init blob.
+>=20
+> Downstream has some special case handling for a hardware version where
+> not just the control bits differ, but also the register. Since I don't
+> know whether that hardware version is in any production silicon, it's
+> left unimplemented for now, with an error message urging users to report
+> if they have such a system.
+>=20
+> There is a slight change of behaviour for non-LPDDR5 systems: instead of
+> writing 0 as the control flags to the control register and pretending
+> everything is alright if the memory type is unknown, we now explicitly
+> return an error.
+>=20
+> Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 
-On Saturday, 6 September 2025 01:26:57 Central European Summer Time Rob Herring wrote:
-> On Fri, Sep 05, 2025 at 12:22:57PM +0200, Nicolas Frattaroli wrote:
-> > The Mali-based GPU on the MediaTek MT8196 SoC is shackled to its concept
-> > of "MFlexGraphics", which in this iteration includes an embedded MCU
-> > that needs to be poked to power on the GPU, and is in charge of
-> > controlling all the clocks and regulators.
-> > 
-> > In return, it lets us omit the OPP tables from the device tree, as those
-> > can now be enumerated at runtime from the MCU.
-> > 
-> > Add the mediatek,mt8196-mali compatible, and a performance-controller
-> > property which points to a node representing such setups. It's required
-> > on mt8196 devices.
-> > 
-> > Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-> > ---
-> >  .../bindings/gpu/arm,mali-valhall-csf.yaml         | 36 +++++++++++++++++++++-
-> >  1 file changed, 35 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/gpu/arm,mali-valhall-csf.yaml b/Documentation/devicetree/bindings/gpu/arm,mali-valhall-csf.yaml
-> > index a5b4e00217587c5d1f889094e2fff7b76e6148eb..6df802e900b744d226395c29f8d87fb6d3282d26 100644
-> > --- a/Documentation/devicetree/bindings/gpu/arm,mali-valhall-csf.yaml
-> > +++ b/Documentation/devicetree/bindings/gpu/arm,mali-valhall-csf.yaml
-> > @@ -19,6 +19,7 @@ properties:
-> >        - items:
-> >            - enum:
-> >                - rockchip,rk3588-mali
-> > +              - mediatek,mt8196-mali
-> >            - const: arm,mali-valhall-csf   # Mali Valhall GPU model/revision is fully discoverable
-> >  
-> >    reg:
-> > @@ -53,6 +54,13 @@ properties:
-> >    opp-table:
-> >      type: object
-> >  
-> > +  performance-controller:
-> > +    $ref: /schemas/types.yaml#/definitions/phandle
-> > +    description:
-> > +      A phandle of a device that controls this GPU's power and frequency,
-> > +      if any. If present, this is usually in the form of some specialised
-> > +      embedded MCU.
-> 
-> We already abuse power-domains binding with both power and performance. 
-> There's a performance-domain binding too, but only used on one platform 
-> for CPUs (Mediatek too IIRC). Or perhaps you could just point to an 
-> empty OPP table. I don't think you have anything new here, so don't 
-> invent something new.
+header additions
+Acked-by: Heiko Stuebner <heiko@sntech.de>
 
-Oops, yeah, I forgot about performance-domain already existing. I agree
-that it looks like a good fit; iirc I initially disregarded it because
-I thought it was an actual heterogenous core cpufreq-y thing I'd be
-overloading with new meaning, but I see now that this is not so, and
-aside from mediatek, Apple appears to be the only user.
-
-Thanks for the fast review.
-
-Kind regards,
-Nicolas Frattaroli
-
-> 
-> Rob
-> 
+> diff --git a/include/soc/rockchip/rk3588_grf.h b/include/soc/rockchip/rk3=
+588_grf.h
+> index 630b35a550640e57f1b5a50dfbe362653a7cbcc1..02a7b2432d9942e15a77424c4=
+4fefec189faaa33 100644
+> --- a/include/soc/rockchip/rk3588_grf.h
+> +++ b/include/soc/rockchip/rk3588_grf.h
+> @@ -12,7 +12,11 @@
+>  #define RK3588_PMUGRF_OS_REG3_DRAMTYPE_INFO_V3		GENMASK(13, 12)
+>  #define RK3588_PMUGRF_OS_REG3_SYSREG_VERSION		GENMASK(31, 28)
+> =20
+> -#define RK3588_PMUGRF_OS_REG4           0x210
+> -#define RK3588_PMUGRF_OS_REG5           0x214
+> +#define RK3588_PMUGRF_OS_REG4				0x210
+> +#define RK3588_PMUGRF_OS_REG5				0x214
+> +#define RK3588_PMUGRF_OS_REG6				0x218
+> +#define RK3588_PMUGRF_OS_REG6_LP5_BANK_MODE		GENMASK(2, 1)
+> +/* Whether the LPDDR5 is in 2:1 (=3D 0) or 4:1 (=3D 1) CKR a.k.a. DQS mo=
+de */
+> +#define RK3588_PMUGRF_OS_REG6_LP5_CKR			BIT(0)
+> =20
+>  #endif /* __SOC_RK3588_GRF_H */
+> diff --git a/include/soc/rockchip/rockchip_grf.h b/include/soc/rockchip/r=
+ockchip_grf.h
+> index e46fd72aea8d1f649768a3269b85176dacceef0e..41c7bb26fd5387df85e5b5818=
+6b67bf74706f360 100644
+> --- a/include/soc/rockchip/rockchip_grf.h
+> +++ b/include/soc/rockchip/rockchip_grf.h
+> @@ -13,6 +13,7 @@ enum {
+>  	ROCKCHIP_DDRTYPE_LPDDR3	=3D 6,
+>  	ROCKCHIP_DDRTYPE_LPDDR4	=3D 7,
+>  	ROCKCHIP_DDRTYPE_LPDDR4X =3D 8,
+> +	ROCKCHIP_DDRTYPE_LPDDR5	=3D 9,
+>  };
+> =20
+>  #endif /* __SOC_ROCKCHIP_GRF_H */
+>=20
+>=20
 
 
 
