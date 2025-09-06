@@ -1,48 +1,45 @@
-Return-Path: <linux-pm+bounces-34093-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34091-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 99D36B477B6
-	for <lists+linux-pm@lfdr.de>; Sat,  6 Sep 2025 23:45:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 33A81B477B2
+	for <lists+linux-pm@lfdr.de>; Sat,  6 Sep 2025 23:45:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 61A9D5A13A7
-	for <lists+linux-pm@lfdr.de>; Sat,  6 Sep 2025 21:45:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 213501889E70
+	for <lists+linux-pm@lfdr.de>; Sat,  6 Sep 2025 21:45:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 295002853E9;
-	Sat,  6 Sep 2025 21:45:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CE53299A8A;
+	Sat,  6 Sep 2025 21:45:10 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AD9829D297;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F66A296BC4;
 	Sat,  6 Sep 2025 21:45:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757195111; cv=none; b=fEQIPrqdbIKKmuUJpk/tlnTBQj0CBFMPsWrdcehSIv2U2KF6rBf3fHy1ih4c7w/gFADcksV/+ncd2ydWv5k+rSjEkL0ArQzIv25ImvvYW0LfzGLKS5iZQ6Kt3TeXs176IDsqCN7q6+xoi6qmQtyZou6fAyBWtjNR8VWN77gX0Pw=
+	t=1757195110; cv=none; b=MQbjC1h9sCHTVztKpV4bnOUE6/e9YPsbQwmQXGskH0+wFAn+nkweuufWNEmKBo+yoRTJh+VH7WENL4xiuJ9UhOSuaA6lLZmIXe5Y6J8LEfl2qicKyzv3tNdr4TeLf/fDPOJdc+bScOolwX2CDgmOnSKJLefXjx3vMTBbS2eX+Fw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757195111; c=relaxed/simple;
-	bh=CkWfFx///imCZ4ylARdnUZRuL4uo4svqlC6355p4Q+4=;
+	s=arc-20240116; t=1757195110; c=relaxed/simple;
+	bh=VzK0XPr7AXZsyOn2Cqhxf8005HZCUF9KNfskUhyV5Ms=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=CmC6GL9GRk5tI9LxZH6X9Zve/UXFeYR1CrMUn6F2jTokDRd0Ldoa+n3IDdeXURpuQmzid2obydCY3973hvcCqYzbeelflaThQljeszg3IAHinQLkeGv0HirV7/PYGGq0usjl9fRI0E3xwMibboWmz1oHn2pavn9/4Z7TanqmNyA=
+	 MIME-Version:Content-Type; b=uBXQD0GRPbTjrK7N2fF9L7XjDfKvg2yLgYtgGGtWofju1iNd7guba5Tu2CkBJz/DZfri/rBki37K8MNirwhrGvJtPyaEj1q4p9m/ZvVSL/h/ItklNikJxxVSSz6KZZaWtPrIJ5MtZtQKz2znQC+4B1vwy7p5CYLCjHfhRnfdGEs=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7860AC4CEF8;
-	Sat,  6 Sep 2025 21:45:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECE2EC4CEF9;
+	Sat,  6 Sep 2025 21:45:09 +0000 (UTC)
 Received: by venus (Postfix, from userid 1000)
-	id C88E1180B26; Sat, 06 Sep 2025 23:45:07 +0200 (CEST)
+	id CEEE9180B2F; Sat, 06 Sep 2025 23:45:07 +0200 (CEST)
 From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Sebastian Reichel <sre@kernel.org>, 
- Matthias Brugger <matthias.bgg@gmail.com>, 
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
- Waqar Hameed <waqar.hameed@axis.com>
-Cc: kernel@axis.com, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
-In-Reply-To: <pndzfcekt8w.a.out@axis.com>
-References: <pndzfcekt8w.a.out@axis.com>
-Subject: Re: [PATCH v2] power: supply: Remove error prints for
- devm_add_action_or_reset()
-Message-Id: <175719510781.45380.7018471850966283088.b4-ty@collabora.com>
+To: sre@kernel.org, chris.ruehl@gtsys.com.hk
+Cc: linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, ruehlchr@gmail.com, 
+ Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+In-Reply-To: <20250811152209.37131-1-chris.ruehl@gtsys.com.hk>
+References: <20250811152209.37131-1-chris.ruehl@gtsys.com.hk>
+Subject: Re: [PATCH v1] power: supply: qcom_battmgr: add OOI chemistry
+Message-Id: <175719510784.45380.14398122215810434964.b4-ty@collabora.com>
 Date: Sat, 06 Sep 2025 23:45:07 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -55,20 +52,16 @@ Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.14.2
 
 
-On Tue, 05 Aug 2025 11:33:35 +0200, Waqar Hameed wrote:
-> When `devm_add_action_or_reset()` fails, it is due to a failed memory
-> allocation and will thus return `-ENOMEM`. `dev_err_probe()` doesn't do
-> anything when error is `-ENOMEM`. Therefore, remove the useless call to
-> `dev_err_probe()` when `devm_add_action_or_reset()` fails, and just
-> return the value instead.
+On Mon, 11 Aug 2025 17:22:09 +0200, chris.ruehl@gtsys.com.hk wrote:
+> The ASUS S15 xElite model report the Li-ion battery with an OOI, hence this
+> update the detection and return the appropriate type.
 > 
 > 
-> [...]
 
 Applied, thanks!
 
-[1/1] power: supply: Remove error prints for devm_add_action_or_reset()
-      commit: 32f350d58544e2529dc8798275684e97f0a2df6f
+[1/1] power: supply: qcom_battmgr: add OOI chemistry
+      commit: fee0904441325d83e7578ca457ec65a9d3f21264
 
 Best regards,
 -- 
