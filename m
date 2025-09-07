@@ -1,378 +1,172 @@
-Return-Path: <linux-pm+bounces-34110-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34111-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1777BB47BA4
-	for <lists+linux-pm@lfdr.de>; Sun,  7 Sep 2025 15:35:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE12FB47C22
+	for <lists+linux-pm@lfdr.de>; Sun,  7 Sep 2025 17:42:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C7E2B3B580D
-	for <lists+linux-pm@lfdr.de>; Sun,  7 Sep 2025 13:35:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 650133ABE8D
+	for <lists+linux-pm@lfdr.de>; Sun,  7 Sep 2025 15:42:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 149EB1FAC34;
-	Sun,  7 Sep 2025 13:35:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66E0F277017;
+	Sun,  7 Sep 2025 15:42:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f3by046A"
+	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="cWAiZK0+";
+	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="SC9AHSrK"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [80.241.56.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB22C1C28E;
-	Sun,  7 Sep 2025 13:35:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12A2B15667D;
+	Sun,  7 Sep 2025 15:42:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757252153; cv=none; b=NOd63p+5vGm34WgAr7qklSpyY4haPHw9+2SVJ1jVeXVG8Nefm172P3dZYp1KwgHdz5brquWU9/a3rlxwHXlU2vewVlgoVHj2Ca3zFLXbHt0Mc9NQ8jXepi6kVCz2Z11rZCRi3fe+3kPK7UnDFYqoRwvBRGPyouEYOm1m4vrpBXU=
+	t=1757259735; cv=none; b=dwOXOp7HqSZyneKbDYk0gyLqXF8FG1plOCetp0x1DwwAOTd2YWGEXLjjU92cN+YFhur6jZjT48Z4CfQ199KAHcYikpJFGijuld/QtHoHhYJnFJ5mTw0slJNPUCb5p6jcu4fHDzuSsm4MY/hA45B4+DxoDehbTtflOZEQX3E8DL8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757252153; c=relaxed/simple;
-	bh=rNoPmiCA0KoAx7EBFxvixnxdNCF9UXaAbsu4Ps4ESSg=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=hlFK8d6PLafEEfgbhSGKmmo8C79iFsPEw7CgMvU/Lmur7UMA59SxF57qaxTVdskfdKMM6XwXC3tpBRF9TYRjjTYlhDX1OllUALI33WHdIbMauNmOAaRkUOfeMEw4QjgXLzXzJiKb+DiRPUO84jRa2FnEWZPKqRI1Q8uyeT9eRHw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f3by046A; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1328CC4CEF0;
-	Sun,  7 Sep 2025 13:35:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757252152;
-	bh=rNoPmiCA0KoAx7EBFxvixnxdNCF9UXaAbsu4Ps4ESSg=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=f3by046Ai3dw8pXvF2Ofc1BkEM4yJpKZJtJFZ5WQuv26/ouDy8ulNZluqueF8c8OV
-	 BuK/2W1LBNR5b6Nv0xXhJOQxswO7JMEOQ16MOrzipAWkDUuhNz96uDmX6ums/fTo/6
-	 mptQOZs84fqcA6lt+svO/HyyJpk80rb1NYcDHsV5Ww/kRdXKVOsmRrNROPuKSZ2dyc
-	 dLQL7clxM1lbfX+XJWAeXqjeeYJDqEjM+eEq8hT8W1Ega807Cadc6VdF0zKRNdj7Rd
-	 0rkmLfucKiUqVPv8pO4w66yCgk1DndsMiQt28XnuesTzllP3wbg3k+6b0izxSDYfGi
-	 wF8VyUCtbdbrQ==
-Date: Sun, 7 Sep 2025 15:35:47 +0200
-From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To: Randy Dunlap <rdunlap@infradead.org>
-Cc: Jani Nikula <jani.nikula@linux.intel.com>, linux-kernel@vger.kernel.org,
- Andrew Morton <akpm@linux-foundation.org>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, Pavel Machek <pavel@ucw.cz>, Len Brown
- <len.brown@intel.com>, linux-pm@vger.kernel.org, Jonathan Corbet
- <corbet@lwn.net>, linux-doc@vger.kernel.org, "James E.J. Bottomley"
- <James.Bottomley@hansenpartnership.com>
-Subject: Re: [PATCH v4] kernel.h: add comments for system_states
-Message-ID: <20250907153547.5d4271d9@foz.lan>
-In-Reply-To: <20250906233028.56573fd6@foz.lan>
-References: <20250904063631.2364995-1-rdunlap@infradead.org>
-	<6089e22ddfdc135040cdeb69329d817846026728@intel.com>
-	<20250905140104.42418fba@foz.lan>
-	<34fb6a27a2c17c22c0ac93bebb0bbfd1a04d1833@intel.com>
-	<atj2koasbiuf67rzr7bbdwpu4kcgkdsqt6rhz5vwpbryfqxm7z@mfmts3tnsasf>
-	<2aad4540-ccdd-4519-9bed-7d8c7ccd009d@infradead.org>
-	<20250906105627.2c0cd0d9@foz.lan>
-	<d815f5c3-6e15-4758-8bf4-601d5543cab9@infradead.org>
-	<20250906233028.56573fd6@foz.lan>
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; x86_64-redhat-linux-gnu)
+	s=arc-20240116; t=1757259735; c=relaxed/simple;
+	bh=K7NJ68o8i0sSlMsAcTHigJ/Z7kn33sPqjLQuXKnkZAU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Vag/p/TMmdVv4WgDuu9zlHaBk8gKJ3cFkt5vr9GSJr7ysw2ikj+GLFObT8rJ7ti5GWuHEA00mNlgF23nFVV2sORsNeL6dYSwrOfhMG7scPOQl22rwSDRy4jwXhOWRKpp1w0sjUq13iX4ohtiCBHxpVWGjbD4aD705AAzaTfiMRA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=cWAiZK0+; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=SC9AHSrK; arc=none smtp.client-ip=80.241.56.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailbox.org
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:b231:465::1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4cKZ8F3QG2z9sNt;
+	Sun,  7 Sep 2025 17:42:05 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+	t=1757259725;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=r8ZyPJlnK88y58nk5PDDlvvHiR6G9HAR+z7l0FP9g8M=;
+	b=cWAiZK0+l4h0XvJXgSLiAS8NgFP78J66iixaOEiqPVMNUz+U7KMUCuFcSw+rw3bPJEMQaN
+	kM5XhCOynHe86PZgQJVokb4gfTT3EWLfV0SGeviBO6LjV9lBAl6Vjr3Lx/9UHwNskTqNuZ
+	l3dhIgXrHTJfpRsWprT3+FXpChNLQShJ35sOO+2vS1G4JvZfgQ0b4m1nEytd0ObiAGkL85
+	jVseyPWwsvP/QO0PmPQ/ShkfnuQ1538wV/27fxHlhoPgC9xHjKFiX72usEuOKsjdAnQkkQ
+	vEqULhAamXrau4R3tDqHJp2uUENEl3TnKLsWmr+VPM23ZJQghwgaGCFM2sxXMw==
+Authentication-Results: outgoing_mbo_mout;
+	dkim=pass header.d=mailbox.org header.s=mail20150812 header.b=SC9AHSrK;
+	spf=pass (outgoing_mbo_mout: domain of marek.vasut+renesas@mailbox.org designates 2001:67c:2050:b231:465::1 as permitted sender) smtp.mailfrom=marek.vasut+renesas@mailbox.org
+From: Marek Vasut <marek.vasut+renesas@mailbox.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+	t=1757259723;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=r8ZyPJlnK88y58nk5PDDlvvHiR6G9HAR+z7l0FP9g8M=;
+	b=SC9AHSrK9xzsCBCrrrUG1vAH/UYNhSTkhY6rWgSwhLjipANSNqiELzP4BCAoeXH2UaiBPJ
+	Lf5HbknorM4Z2fwcDI6rej6P8927U7QKuoM7MiFvrPJLUaAJo6DJ4/1wXonW4oZZHOEZrD
+	eoB+P9BoBCFLrjzOZWPCStp9xi+5EIbaMoJUm+8jYtBuTmI90oexsBOxEZsRIExTRCkrpI
+	9Hf3w+BmgYzLtqeg2ntbpf3jRGbxQoquY7FGy5BMkBwX+VR+jlwgP6qjdOlFIqTMrF/WTh
+	K4XhU7C2gsfqLfqfPYKSV2IqHuGfdB6eKMa7Ffn4KF33JTAh7+YaQWfbglismw==
+To: linux-pm@vger.kernel.org
+Cc: Marek Vasut <marek.vasut+renesas@mailbox.org>,
+	=?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Zhang Rui <rui.zhang@intel.com>,
+	linux-renesas-soc@vger.kernel.org
+Subject: [PATCH] thermal/drivers/rcar_gen3: Fix comment typo
+Date: Sun,  7 Sep 2025 17:41:38 +0200
+Message-ID: <20250907154148.171496-1-marek.vasut+renesas@mailbox.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-MBO-RS-ID: 854210152853a8b1908
+X-MBO-RS-META: k3qby57p35eqdwjxhsp6d534hgui11c6
+X-Rspamd-Queue-Id: 4cKZ8F3QG2z9sNt
 
-Em Sat, 6 Sep 2025 23:30:28 +0200
-Mauro Carvalho Chehab <mchehab+huawei@kernel.org> escreveu:
+Fix typo to millidegree Celsius. This aligns the comment with
+another comment later on the same function. No functional change.
 
-> Em Sat, 6 Sep 2025 10:13:23 -0700
-> Randy Dunlap <rdunlap@infradead.org> escreveu:
-> 
-> > On 9/6/25 1:56 AM, Mauro Carvalho Chehab wrote:  
-> > > Em Fri, 5 Sep 2025 15:07:31 -0700
-> > > Randy Dunlap <rdunlap@infradead.org> escreveu:
-> > >     
-> > >> Hi,
-> > >>
-> > >> On 9/5/25 6:38 AM, Mauro Carvalho Chehab wrote:    
-> > >>> On Fri, Sep 05, 2025 at 04:06:31PM +0300, Jani Nikula wrote:      
-> > >>>> On Fri, 05 Sep 2025, Mauro Carvalho Chehab <mchehab+huawei@kernel.org> wrote:      
-> > >>>>> Em Fri, 05 Sep 2025 12:02:37 +0300
-> > >>>>> Jani Nikula <jani.nikula@linux.intel.com> escreveu:
-> > >>>>>      
-> > >>>>>> On Wed, 03 Sep 2025, Randy Dunlap <rdunlap@infradead.org> wrote:      
-> > >>>>>>> Provide some basic comments about the system_states and what they imply.
-> > >>>>>>> Also convert the comments to kernel-doc format.
-> > >>>>>>>
-> > >>>>>>> However, kernel-doc does not support kernel-doc notation on extern
-> > >>>>>>> struct/union/typedef/enum/etc. So I made this a DOC: block so that
-> > >>>>>>> I can use (insert) it into a Documentation (.rst) file and have it
-> > >>>>>>> look decent.        
-> > >>>>>>
-> > >>>>>> The simple workaround is to separate the enum type and the variable:
-> > >>>>>>
-> > >>>>>> /**
-> > >>>>>>  * kernel-doc for the enum
-> > >>>>>>  */
-> > >>>>>> enum system_states {
-> > >>>>>> 	...
-> > >>>>>> };
-> > >>>>>>
-> > >>>>>> /**
-> > >>>>>>  * kernel-doc for the variable
-> > >>>>>>  */
-> > >>>>>> extern enum system_states system_state;
-> > >>>>>>
-> > >>>>>> BR,
-> > >>>>>> Jani.
-> > >>>>>>      
-> > >>>>>>>
-> > >>>>>>> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> > >>>>>>> Acked-by: Rafael J. Wysocki <rafael@kernel.org> # v1
-> > >>>>>>> ---      
-> > >>
-> > >> [snip]    
-> > >>>>> If the problem is with "extern" before enum, fixing kdoc be
-> > >>>>> fairly trivial.      
-> > >>>>
-> > >>>> The non-trivial part is deciding whether you're documenting the enum
-> > >>>> type or the variable. Both are equally valid options.      
-> > >>>
-> > >>> True.
-> > >>>
-> > >>> I'd say that, if the variable is under EXPORT_SYMBOL macros, it
-> > >>> should be documented.      
-> > >>
-> > >> Do you mean documented with kernel-doc? How do we do that?
-> > >> I was under the impression that we don't currently have a way to
-> > >> use kernel-doc for variables (definitions, only for declarations).    
-> > > 
-> > > No, but it shouldn't be hard to add something like:
-> > > 
-> > > 	/**
-> > > 	 * global system_state - stores system state
-> > > 	 * <some description>
-> > > 	 */
-> > > 	extern enum system_states system_state;  
-> > > 
-> > > and place a dump_global() function at kdoc parser. Ok, one might use
-> > > DOC:, but IMHO the best is to have a proper handler for it that would
-> > > automatically pick the type.    
-> > 
-> > Nitpick, I would s/global/var/. But I won't complain about "global".  
-> 
-> Either way works for me. Yet, I would expect it to be used only for
-> global variables, as documenting local ones using kernel-doc is
-> probably not what we expect inside Kernel documentation. So, naming it
-> "global" may help.
-> 
-> > More importantly, I have seen several patches where people try to document a
-> > variable, so it seems like something that we should support at some point.  
-> 
-> Agreed.
-> 
-> Adding a parsing rule for the variable doesn't sound hard, as they follow,
-> in principle, this regex(*):
-> 
-> 	OPTIONAL_ATTRIBS = ["
-> 	    "extern"
-> 	]
-> 
-> 	optional = "|".join(OPTIONAL_ATTRIBS)
-> 
-> 	"^(?:extern\s+)?(\w.*)\s+([\w\_]+)(?:#.*)$"
-> 
-> (*) eventually, some might have extra attributes, but we can
->     start with a simpler regex, adding a more complex parser if/when
->     needed.
-> 
-> I added at the end a one-minute hacky prototype I wrote, completely
-> untested and incomplete.
+Signed-off-by: Marek Vasut <marek.vasut+renesas@mailbox.org>
+---
+Cc: "Niklas Söderlund" <niklas.soderlund@ragnatech.se>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: Lukasz Luba <lukasz.luba@arm.com>
+Cc: Magnus Damm <magnus.damm@gmail.com>
+Cc: Zhang Rui <rui.zhang@intel.com>
+Cc: linux-pm@vger.kernel.org
+Cc: linux-renesas-soc@vger.kernel.org
+---
+NOTE: Sent with -U25 for the extra context which spans both comments,
+      the later one is at the end.
+---
+ drivers/thermal/renesas/rcar_gen3_thermal.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Heh, it doesn't hurt spending 15 mins or so to write something that actually
-works and implement all functions.
-
-The example below produces:
-
-	$ ./scripts/kernel-doc include/media/tuner-types.h 
-...
-	.. c:var:: tuners
-
-	  list of tuners
-
-	extern const struct tunertype tuners[];
-
-	.. c:var:: tuner_count
-
-	  number of known tuners
-
-	$ ./scripts/kernel-doc include/media/tuner-types.h --man
-...
-	.TH "Kernel API" 9 "global tuner_count" "September 2025" "API Manual" LINUX
-	.SH NAME
-	extern unsigned const int tuner_count; \- number of known tuners
-	.SH SYNOPSIS
-	enum tuner_count {
-	.SH "SEE ALSO"
-	.PP
-
-Still not ready for kernel merge (plus I placed bogus descriptions for
-two externs from media that IMO doesn't make sense to document), but it
-has all needed steps for someone wanting to extend kernel-doc to see
-how to do it.
-
-Feel free to modify it - even renaming from "global" to "var" and
-submit upstream.
-
-Thanks,
-Mauro
-
-[PATCH] [RFC] kernel-doc: add support for handling global varaibles
-
-Add support for documenting global variables with kernel-doc.
-
-Please notice that this is mostly an example, as:
-
-1. I'm documenting just two random variables from media, that
-   doesn't make sense to actually be documented. I did it just
-   to have some example and be able to test it;
-
-2. the html output requires tweak: right now, it is just printing
-   the entire variable prototype as-is, without any formatting,
-   and witout making sense at the output
-
-Feel free to modify this patch to make it something actually
-mergeable.
-
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-
-diff --git a/include/media/tuner-types.h b/include/media/tuner-types.h
-index c79b773f750c..cf074beaeccc 100644
---- a/include/media/tuner-types.h
-+++ b/include/media/tuner-types.h
-@@ -199,7 +199,18 @@ struct tunertype {
- 	u8 *sleepdata;
- };
+diff --git a/drivers/thermal/renesas/rcar_gen3_thermal.c b/drivers/thermal/renesas/rcar_gen3_thermal.c
+index 45151a1733a94..af0bfe2555cb7 100644
+--- a/drivers/thermal/renesas/rcar_gen3_thermal.c
++++ b/drivers/thermal/renesas/rcar_gen3_thermal.c
+@@ -149,51 +149,51 @@ static inline void rcar_gen3_thermal_write(struct rcar_gen3_thermal_tsc *tsc,
  
-+/**
-+ * global tuner - list of tuners
-+ *
-+ * List of all tuners defined via v4l2 API
-+ */
- extern const struct tunertype tuners[];
-+
-+/**
-+ * global tune_count - number of known tuners
-+ *
-+ * Number of tuners at @tuners list
-+ */
- extern unsigned const int tuner_count;
+ static void rcar_gen3_thermal_shared_coefs(struct rcar_gen3_thermal_priv *priv)
+ {
+ 	priv->tj_t =
+ 		DIV_ROUND_CLOSEST((priv->ptat[1] - priv->ptat[2]) * priv->info->scale,
+ 				  priv->ptat[0] - priv->ptat[2])
+ 		+ priv->info->adj_below;
+ }
+ static void rcar_gen3_thermal_tsc_coefs(struct rcar_gen3_thermal_priv *priv,
+ 					struct rcar_gen3_thermal_tsc *tsc)
+ {
+ 	tsc->coef.below.a = priv->info->scale * (priv->ptat[2] - priv->ptat[1]);
+ 	tsc->coef.above.a = priv->info->scale * (priv->ptat[0] - priv->ptat[1]);
  
- #endif
-diff --git a/scripts/lib/kdoc/kdoc_output.py b/scripts/lib/kdoc/kdoc_output.py
-index 1eca9a918558..a58562bef35a 100644
---- a/scripts/lib/kdoc/kdoc_output.py
-+++ b/scripts/lib/kdoc/kdoc_output.py
-@@ -199,6 +199,10 @@ class OutputFormat:
-             self.out_enum(fname, name, args)
-             return self.data
+ 	tsc->coef.below.b = (priv->ptat[2] - priv->ptat[0]) * (tsc->thcode[2] - tsc->thcode[1]);
+ 	tsc->coef.above.b = (priv->ptat[0] - priv->ptat[2]) * (tsc->thcode[1] - tsc->thcode[0]);
+ }
  
-+        if dtype == "global":
-+            self.out_global(fname, name, args)
-+            return self.data
-+
-         if dtype == "typedef":
-             self.out_typedef(fname, name, args)
-             return self.data
-@@ -227,6 +231,9 @@ class OutputFormat:
-     def out_enum(self, fname, name, args):
-         """Outputs an enum"""
+ static int rcar_gen3_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
+ {
+ 	struct rcar_gen3_thermal_tsc *tsc = thermal_zone_device_priv(tz);
+ 	struct rcar_gen3_thermal_priv *priv = tsc->priv;
+ 	const struct equation_set_coef *coef;
+ 	int adj, decicelsius, reg, thcode;
  
-+    def out_global(self, fname, name, args):
-+        """Outputs a global variable"""
-+
-     def out_typedef(self, fname, name, args):
-         """Outputs a typedef"""
+-	/* Read register and convert to mili Celsius */
++	/* Read register and convert to millidegree Celsius */
+ 	reg = rcar_gen3_thermal_read(tsc, REG_GEN3_TEMP) & CTEMP_MASK;
  
-@@ -472,6 +479,20 @@ class RestFormat(OutputFormat):
-         self.lineprefix = oldprefix
-         self.out_section(args)
+ 	if (reg < tsc->thcode[1]) {
+ 		adj = priv->info->adj_below;
+ 		coef = &tsc->coef.below;
+ 		thcode = tsc->thcode[2];
+ 	} else {
+ 		adj = priv->info->adj_above;
+ 		coef = &tsc->coef.above;
+ 		thcode = tsc->thcode[0];
+ 	}
  
-+    def out_global(self, fname, name, args):
-+        oldprefix = self.lineprefix
-+        ln = args.declaration_start_line
-+
-+        self.data += f"\n\n.. c:var:: {name}\n\n"
-+
-+        self.print_lineno(ln)
-+        self.lineprefix = "  "
-+        self.output_highlight(args.get('purpose', ''))
-+        self.data += "\n"
-+
-+        # FIXME: better handle it
-+        self.data += args.other_stuff["var_type"]
-+
-     def out_typedef(self, fname, name, args):
+ 	/*
+ 	 * The dividend can't be grown as it might overflow, instead shorten the
+ 	 * divisor to convert to decidegree Celsius. If we convert after the
+ 	 * division precision is lost as we will scale up from whole degrees
+ 	 * Celsius.
+ 	 */
+ 	decicelsius = DIV_ROUND_CLOSEST(coef->a * (thcode - reg), coef->b / 10);
  
-         oldprefix = self.lineprefix
-@@ -772,6 +793,18 @@ class ManFormat(OutputFormat):
-             self.data += f'.SH "{section}"' + "\n"
-             self.output_highlight(text)
+ 	/* Guaranteed operating range is -40C to 125C. */
  
-+    def out_global(self, fname, name, args):
-+        out_name = self.arg_name(args, name)
-+        prototype = args.other_stuff["var_type"]
-+
-+        self.data += f'.TH "{self.modulename}" 9 "{out_name}" "{self.man_date}" "API Manual" LINUX' + "\n"
-+
-+        self.data += ".SH NAME\n"
-+        self.data += f"{prototype} \\- {args['purpose']}\n"
-+
-+        self.data += ".SH SYNOPSIS\n"
-+        self.data += f"enum {name}" + " {\n"
-+
-     def out_typedef(self, fname, name, args):
-         module = self.modulename
-         purpose = args.get('purpose')
-diff --git a/scripts/lib/kdoc/kdoc_parser.py b/scripts/lib/kdoc/kdoc_parser.py
-index 574972e1f741..e2a3f4574894 100644
---- a/scripts/lib/kdoc/kdoc_parser.py
-+++ b/scripts/lib/kdoc/kdoc_parser.py
-@@ -64,7 +64,7 @@ type_param = KernRe(r"@(\w*((\.\w+)|(->\w+))*(\.\.\.)?)", cache=False)
- # Tests for the beginning of a kerneldoc block in its various forms.
- #
- doc_block = doc_com + KernRe(r'DOC:\s*(.*)?', cache=False)
--doc_begin_data = KernRe(r"^\s*\*?\s*(struct|union|enum|typedef)\b\s*(\w*)", cache = False)
-+doc_begin_data = KernRe(r"^\s*\*?\s*(struct|union|enum|typedef|global)\b\s*(\w*)", cache = False)
- doc_begin_func = KernRe(str(doc_com) +			# initial " * '
-                         r"(?:\w+\s*\*\s*)?" + 		# type (not captured)
-                         r'(?:define\s+)?' + 		# possible "define" (not captured)
-@@ -886,6 +886,27 @@ class KernelDoc:
-         self.output_declaration('enum', declaration_name,
-                                 purpose=self.entry.declaration_purpose)
+ 	/* Reporting is done in millidegree Celsius */
+ 	*temp = decicelsius * 100 + adj * 1000;
  
-+    def dump_global(self, ln, proto):
-+        """
-+        Stores global variables that are part of kAPI.
-+        """
-+        VAR_ATTRIBS = [
-+            "extern",
-+        ]
-+        OPTIONAL_VAR_ATTR = "^(?:" + "|".join(VAR_ATTRIBS) + ")?"
-+
-+        r= KernRe(OPTIONAL_VAR_ATTR + r"(\w.*)\s+([\w_]+)[\d\]\[]*\s*;(?:#.*)?$")
-+        if not r.match(proto):
-+           self.emit_msg(ln,f"{proto}: can't parse variable")
-+           return
-+
-+        declaration_name = r.group(2)
-+        var_type = r.group(0)
-+
-+        self.output_declaration("global", declaration_name,
-+                                var_type=var_type,
-+                                purpose=self.entry.declaration_purpose)
-+
-     def dump_declaration(self, ln, prototype):
-         """
-         Stores a data declaration inside self.entries array.
-@@ -897,6 +918,8 @@ class KernelDoc:
-             self.dump_typedef(ln, prototype)
-         elif self.entry.decl_type in ["union", "struct"]:
-             self.dump_struct(ln, prototype)
-+        elif self.entry.decl_type == "global":
-+            self.dump_global(ln, prototype)
-         else:
-             # This would be a bug
-             self.emit_message(ln, f'Unknown declaration type: {self.entry.decl_type}')
+-- 
+2.51.0
 
 
