@@ -1,175 +1,122 @@
-Return-Path: <linux-pm+bounces-34175-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34176-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C2433B49AB2
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Sep 2025 22:09:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E7202B49B68
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Sep 2025 23:04:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A8DF91BC536B
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Sep 2025 20:09:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0460F1BC4879
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Sep 2025 21:04:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43D6D2D7D30;
-	Mon,  8 Sep 2025 20:09:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBE9E2DAFDF;
+	Mon,  8 Sep 2025 21:04:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="bzhLdmNe"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kUD2eANc"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C72726E711;
-	Mon,  8 Sep 2025 20:09:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757362149; cv=pass; b=rFUh/GkESTeAGwXEGFIfGRLmHRE9LMxBddNduaSo+Vjs1Pe7DIjdn1lj9UbQ5CVievq/k6jhXG0GtgzHZ+R4gJxlmHpSL116dVU9OQzuHtswQY8gpUuUMg882u5BqwdkkFeBXPyqyVTKWJZ5xPxw2gdx/irGcYz7nWIdhMcY8+E=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757362149; c=relaxed/simple;
-	bh=ZVHLGUJZLSkdI8nNXcaoalwzWkaiHSFvSSx0MmfhHLY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tkz3sZPsWLX3OHOsnvacMjYX2ziUf6tS1boI6ohzfHKEh48vMwyHx832TzmH3s6AcVZBTR4H/LhxGD5aAmq63UAPqTF1bHQtc32JaMFwQkyPJr0yGm7cN83mEwZ1jnHmU8mZvJ9XGNfO4MXdqWa7dk5Vp1h2ED3u/oT8RAkPn7w=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=bzhLdmNe; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1757362128; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=E1mI5O+BDwsYYpSLAByTqShmsSFPlSYjA0QQG11arz0JIb3l0hXMKZswHsKy6q6pZ0xJqFQs9ZiKcFFaZvUulJqUav1h5cnAXEhRucURC+3xI7XurBiTddAVdJ14lzIUuvQW/8yjGHVr2iJrwbaUHIy6iOiowe6sZzgOOytlhHc=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1757362128; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=ZVHLGUJZLSkdI8nNXcaoalwzWkaiHSFvSSx0MmfhHLY=; 
-	b=Ri6vHzbBorDOsfQYgge4VSpSZQaD0JucXQjQnv5bzhkwCuW3WQdaBhJjVWEUpETh3cy0+xpYhSaFNwKg4lVtlHm8zXSUPrrQGTRialWdBOQuRQV5/lruGlwQWXOut0pLTnehEZ0uREXKpnWYuGV0Zo2D9kTjNJt8s6rX7c9YhkI=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
-	dmarc=pass header.from=<sebastian.reichel@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1757362128;
-	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
-	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
-	bh=ZVHLGUJZLSkdI8nNXcaoalwzWkaiHSFvSSx0MmfhHLY=;
-	b=bzhLdmNeSoKiUCCs+h3HRUTeksAj05YUsr2VX04toyCYMTy/TbaoVB+S5OklYhvS
-	QGKRfqt8MuXyrFuhLiICxnLP56psSav6qle5AARsAZ8jZwdFNfPzAwsSKX8rKK2imua
-	Ixcw1adB75NrB4EP8gE1xT8u3ikXDLeSJhCy5RCM=
-Received: by mx.zohomail.com with SMTPS id 17573621245361.8411634081112425;
-	Mon, 8 Sep 2025 13:08:44 -0700 (PDT)
-Received: by venus (Postfix, from userid 1000)
-	id 2E84F180B26; Mon, 08 Sep 2025 22:08:41 +0200 (CEST)
-Date: Mon, 8 Sep 2025 22:08:41 +0200
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, kernel@collabora.com, 
-	linux-rockchip@lists.infradead.org, Cristian Ciocaltea <cristian.ciocaltea@collabora.com>, 
-	Heiko Stuebner <heiko@sntech.de>
-Subject: Re: [PATCH] pmdomian: core: don't unset stay_on during sync_state
-Message-ID: <dr5qspjhwxaxutiilgx4rvfbrho4bijoll6lciv2bc7c7e7r7m@pgmxztqje5ux>
-References: <20250902-rk3576-lockup-regression-v1-1-c4a0c9daeb00@collabora.com>
- <3556261.BddDVKsqQX@workhorse>
- <CAPDyKFpSY+FeKh7ocjQ_nGNZA5+3tWAL8e7ZNKXKNFP-yoiu_g@mail.gmail.com>
- <1953725.CQOukoFCf9@workhorse>
- <CAPDyKFofhy5wiNsHUgdtzFwGtO3QPqhVuu1KsPLBWHF08JzqyA@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93D901798F;
+	Mon,  8 Sep 2025 21:04:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1757365440; cv=none; b=mV8NVYy9+BNkKAIbWomn9i+D6ynAtelhEsXykXkMs39D/r40jTe3eC6Aws9zHUfQ6851e8+hIxsj+MYjXC7VoE/ZgdGHPCOHY2FmguKHYrIJWF7VwCvsoYC/2uLBdiKRx4oqogKv0EP2g4RBN4613D6no6F4JL4AuMBZp8kbwNk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1757365440; c=relaxed/simple;
+	bh=lmBcECvI36pXG+iHU1bzh6Ylx9CdhpfB7qPxbZazMD0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=jTFIZcyrremzvaI+AhQXFlKUvEoj4cijXbMYeKXMkMTerh+jdMxfTKNOaLPiPmac1RRrBoxau7kFqYZamearV6tnc+9IYTZTwtE1Wai1+ER3K5IScjg/4XgjQ3PcARZBvHC0P0jMrdxzKXuc+ndNqgCCe5wahB9zG6zM57MelYw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kUD2eANc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE2FFC4CEF1;
+	Mon,  8 Sep 2025 21:03:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757365440;
+	bh=lmBcECvI36pXG+iHU1bzh6Ylx9CdhpfB7qPxbZazMD0=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:From;
+	b=kUD2eANcUSnmZikgbgETII3iTa24k+oeRhzfI9YCi5f3bwtd4lgG2fwztFAvjYI60
+	 F/zHHjUVFvBISmBziuBrXXoL78lba4vMDWNeJhxbUFqKW6bAdnP/xvF+Jibtaaj7/K
+	 2xt+be6LoPggc/4xlnto2Kz8RTuhDdvU2ZgivWjekGN9S75oliz3Kz88e+yPEN0ABX
+	 +3+xF708OF3uhYQ5T6OQ/0SR1tSQvr/jk9XyMTZckxGQHXe3b9LKDCM+Mc0jE98A6s
+	 jxR12bUB2aUHvCGU0YUmZtRrbdLp9evBqazn565mnJcUOOR4JllnCwuGgcikgzOn3e
+	 pxhldnRmZOYaA==
+Date: Mon, 8 Sep 2025 16:03:58 -0500
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: "Mario Limonciello (AMD)" <superm1@kernel.org>
+Cc: Bjorn Helgaas <bhelgaas@google.com>,
+	"open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
+	linux-pm@vger.kernel.org, "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+	Lukas Wunner <lukas@wunner.de>,
+	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
+	"Rafael J . Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH v6] PCI/PM: Skip resuming to D0 if disconnected
+Message-ID: <20250908210358.GA1464207@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="pjwce7oem4hc2zyx"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAPDyKFofhy5wiNsHUgdtzFwGtO3QPqhVuu1KsPLBWHF08JzqyA@mail.gmail.com>
-X-Zoho-Virus-Status: 1
-X-Zoho-Virus-Status: 1
-X-Zoho-AV-Stamp: zmail-av-1.4.3/257.348.87
-X-ZohoMailClient: External
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250811163510.601103-1-superm1@kernel.org>
 
+On Mon, Aug 11, 2025 at 11:35:10AM -0500, Mario Limonciello (AMD) wrote:
+> When a USB4 dock is unplugged the PCIe bridge it's connected to will
+> issue a "Link Down" and "Card not detected event". The PCI core will
+> treat this as a surprise hotplug event and unconfigure all downstream
+> devices. This involves setting the device error state to
+> `pci_channel_io_perm_failure` which pci_dev_is_disconnected() will check.
 
---pjwce7oem4hc2zyx
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH] pmdomian: core: don't unset stay_on during sync_state
-MIME-Version: 1.0
+There's nothing special about USB4 here, right?  I guess the same
+happens with any surprise hotplug remove?
 
-Hi,
+pciehp_unconfigure_device() does the pci_dev_set_io_state(dev,
+pci_channel_io_perm_failure) part on everything that got removed, so
+that part is pretty straightforward.
 
-On Mon, Sep 08, 2025 at 03:40:24PM +0200, Ulf Hansson wrote:
-> On Mon, 8 Sept 2025 at 15:14, Nicolas Frattaroli wrote:
-> > On Friday, 5 September 2025 16:27:27 CEST Ulf Hansson wrote:
-> > > I would suggest implementing an auxiliary driver, along with the
-> > > rockchip_pm_domain_driver. The main job for the auxiliary driver would
-> > > be to get the regulator in its ->probe() - and if it fails because the
-> > > regulator isn't available yet, it should keep trying by returning
-> > > -EPROBE_DEFER. See more about the auxiliary bus/device/driver in
-> > > include/linux/auxiliary_bus.h and module_auxiliary_driver().
-> > >
-> > > Moreover, when the rockchip_pm_domain_driver probes, it becomes
-> > > responsible for pre-parsing the OF nodes for the domain-supply DT
-> > > property, for each of the specified power-domains. If it finds a
-> > > domain-supply, it should register an auxiliary device that corresponds
-> > > to that particular power-domain. This can be done by using
-> > > platform-data that is shared with the auxiliary device/driver. See
-> > > devm_auxiliary_device_create().
-> > >
-> > > Furthermore we would need some kind of synchronization mechanism
-> > > between the rockchip_pm_domain_driver and the auxiliary driver, to
-> > > manage the regulator get/enable/disable. I think that should be rather
-> > > easy to work out.
-> > >
-> > > Do you think this can work?
-> >
-> > This sounds similar to something Heiko suggested to me, and I agree
-> > it could work. It does seem like a pretty painful solution though,
-> > in terms of needed additional code and complexity to basically just
-> > tell Linux "hey you can't get this regulator yet but please try
-> > again later without our involvement".
->=20
-> Well, I would give this a go and see what you end up with. The nice
-> thing with this approach, I think, is that we get a driver and can use
-> the -EPROBE_DEFER mechanism.
->=20
-> Another option would be to explore using fw_devlink/device_links, to
-> somehow get a notification as soon as the regulator gets registered.
+> It doesn't make sense to runtime resume disconnected devices to D0 and
+> report the (expected) error, so bail early.
 
-I think the main pain issue with this is fw_devlink actually. The
-power domain consumers are all referencing the main DT node. So once
-it has been marked as initialized (of_genpd_add_provider_onecell()
-calls fwnode_dev_initialized() at some point), fw_devlink allows the
-consumers to be probed. As the DT node must be usable for processing
-after the normal pmdomains are registered, this means the consumers
-for pmdomains with "domain-supply" will potentially be probed too
-early resulting in some extra -EPROBE_DEFER. OTOH that should be the
-status quo, so probably it does not matter.
+Can you include a hint about where the runtime resume happens?  It
+seems unintuitive to power up removed devices.
 
-> I think those kinds of dependencies are better solved by using
-> fw_devlink/device_links.
-
-I think the regulator dependency tracking would happen automatically
-when the auxillary sub-device uses the power-domain sub-node as its
-device fwnode.
-
-Greetings,
-
--- Sebastian
-
---pjwce7oem4hc2zyx
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmi/N8UACgkQ2O7X88g7
-+ppCahAAqkRqtVsC2durQTJGemBzq0yjG7dqCWIVfUIy4528VeNzKUM68rhTEM3Q
-DDCirmiWqQAa0loyj8c1BClUDHE1GYlLPZlFhJYT5X3riH0O9tvS9vqk89BlCqUw
-vV3iXxgnaB3Lf5otlZzGW7cIdh5NfOEDtl4uAB+oTdDhPtGSOIqVTyK2lez/qgyi
-J0ECOTVmc0XbvI6/nWgyj6WMVqpq8rJxsd/TBS2PmAfW0V4dFhr9BTOoeYOZowNB
-PPm4y0UOzS6YaprDF2F9jpPqY9yb/cSQJwZpteZaeNGdqlBucS22AvnmBTGQpmH3
-gCDj+ThQfm3kvTASarp/i4kv7KXBZFsecdbw8MnFu8rzryVC9SKRPIaKzKVqNdgk
-/ddMfYkWdoGp31DXc9EowBSNXBipYYpz7R/OInML/c1Q6/OAFeeys2qUy1iI/3zz
-IjOpu795St7XHwIYyLMNAzjP0AckJRm55+lUnxS7CpOTJGPYDELz55dM6YT9e+0Q
-xX8jmJwa79pffiCVV6BcMscMwxji7OMhoS0pbJ4S+BHuvdrEN+MmgJUNBDOeDG7a
-vvOpc8/6+y4LjZhV/zxRMGTKdTVQDnHuchg3uKaImghIplGEDkXsghrST5cAT4Aa
-zJpy1DDzDeUG/XWypyoRrnW+UlQ8SgIBPKv8shYELogchijmi7w=
-=o5Sb
------END PGP SIGNATURE-----
-
---pjwce7oem4hc2zyx--
+> Suggested-by: Lukas Wunner <lukas@wunner.de>
+> Reviewed-by: Lukas Wunner <lukas@wunner.de>
+> Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> Acked-by: Rafael J. Wysocki <rafael@kernel.org>
+> Signed-off-by: Mario Limonciello (AMD) <superm1@kernel.org>
+> ---
+> v6:
+>  * rebase on v6.17-rc1
+> v5:
+>  * Pick up tags, rebase on linux-next
+>  * https://lore.kernel.org/linux-pci/20250709205948.3888045-1-superm1@kernel.org/T/#mbd784f786c50a3d1b5ab1833520995c01eae2fd2
+> ---
+>  drivers/pci/pci.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> index b0f4d98036cdd..036511f5b2625 100644
+> --- a/drivers/pci/pci.c
+> +++ b/drivers/pci/pci.c
+> @@ -1374,6 +1374,11 @@ int pci_power_up(struct pci_dev *dev)
+>  		return -EIO;
+>  	}
+>  
+> +	if (pci_dev_is_disconnected(dev)) {
+> +		dev->current_state = PCI_D3cold;
+> +		return -EIO;
+> +	}
+> +
+>  	pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
+>  	if (PCI_POSSIBLE_ERROR(pmcsr)) {
+>  		pci_err(dev, "Unable to change power state from %s to D0, device inaccessible\n",
+> 
+> base-commit: 8f5ae30d69d7543eee0d70083daf4de8fe15d585
+> -- 
+> 2.43.0
+> 
 
