@@ -1,133 +1,113 @@
-Return-Path: <linux-pm+bounces-34170-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34171-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 904F7B4991F
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Sep 2025 20:55:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A4AFFB49935
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Sep 2025 21:00:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B97BE1B263C1
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Sep 2025 18:55:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5A671342B3C
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Sep 2025 19:00:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3349831E0E7;
-	Mon,  8 Sep 2025 18:54:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60E9D26AC3;
+	Mon,  8 Sep 2025 19:00:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nMqnPm92"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aEGZcPBK"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 093A531C576;
-	Mon,  8 Sep 2025 18:54:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CBE380B
+	for <linux-pm@vger.kernel.org>; Mon,  8 Sep 2025 19:00:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757357684; cv=none; b=UhCNqcPZsJHAe3fjPdswNBz3Z/SJUHQ2kr7SHUv2RAmURbEGVHm1Ay7nkt+qCl4thqTKJaK5QB8blUJdQnblqxFjpNopk70plvavAzVTR8bFRDV5OwPbIIR0zOg1il2MCTOw6Tc1bQdUau2FB+ADe4VQua+/I/lGgyzLAMOK5xE=
+	t=1757358045; cv=none; b=BWl55ikc4B33HYH446s8zc2o5cL3W6yTC1bHRPv0JAdxfZgltk+juBvMmTBxYSwD3cKdYnMkFoC7NRBLOhLWfWmAdYT9e0bIGTzfgGALwf3qhdBCGmbn8h2tNu07UQ+uiwRa+iuhbn0ChXWzpleHbw0IjZvJeK1RK5z/fMI1XCs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757357684; c=relaxed/simple;
-	bh=HC3BwWe2fJzOfGoybqsrEIEg9/rGhJskoegmSxORszM=;
+	s=arc-20240116; t=1757358045; c=relaxed/simple;
+	bh=Iwt8hYw/vrd2vOLIqq6ZleY9I9OALhrgBly+IB3p4y4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ENHciBiFcD2OphEvzJ4yAWB0do7UJaFmwyBsrVh6XWuOAgzzzaVY8355wmLg7bdhygJZ4o82DLbwzowKldPj2dUuFMmzxgbU4bU7nWqJSbw6P0kleQ2vysfEQdj8pM7PxoTB4GOhUNpzOSFaK9fX0KWb9s+G5txSRyCmlpsrBD4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nMqnPm92; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8796EC4CEFA;
-	Mon,  8 Sep 2025 18:54:43 +0000 (UTC)
+	 To:Cc:Content-Type; b=cOt8LT0pYN1oFAs7Pp6lk0+NQuvR1h3pm9Zva/UOtFiZFSmFziOpX9M/D1G3lG8s1tp37lOO/C3Yx0wgK+4HQa6nffrTmrkxUnsjEU1u9mOtN7ql0cOUttgrI7esR6jikK4Qastd3IIj+LOngcftFf1WkJsEZjpcIbbDe5V77Sc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aEGZcPBK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B06EC4CEF5
+	for <linux-pm@vger.kernel.org>; Mon,  8 Sep 2025 19:00:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757357683;
-	bh=HC3BwWe2fJzOfGoybqsrEIEg9/rGhJskoegmSxORszM=;
+	s=k20201202; t=1757358045;
+	bh=Iwt8hYw/vrd2vOLIqq6ZleY9I9OALhrgBly+IB3p4y4=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=nMqnPm929t4cun8MDWo706UzxnidQaGX+8PE+SOJmuXd0sw9p1OAy3fNeomhXuJ8y
-	 FAZXCbNIb9kFvxoKruPUz640gwSvvks0aSz4daKaNz0BFK94jyYUjeyPoXicy2WVa8
-	 gcr4rBCkxVp1Loh6kgfNRedrHgRgkISQtqHjxUwuoRkYhYQ1ZnqSgpgKGijCfAlBw1
-	 YVelIs/JTyvimSyzrdlvRfEpLfjPJlFfYn/Q0HUDzQpXQdwze3dGT1cjyz+Q4o1cW1
-	 hjPDKjoJz2n6khfeBDJgslryCFsARByLkpba5YVbBghJlwhMU/DOsMvHo14IL6VAhQ
-	 hEe/x2z22kY3g==
-Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-74542b1b2bcso3647286a34.3;
-        Mon, 08 Sep 2025 11:54:43 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCW0lR1MpDjqL5LXt+dwYuZ7Nkzf9vLakbzOoLU5aYdvvzpNj0ND8TZpJ+Egq9kTOfoUWa4HzVEHpQhkOZM=@vger.kernel.org, AJvYcCX9XllCTRsNoqnWGgUb+WBOzqnw+lwRxDL1jjyLqztqZdYJKGoWzSwlW2b8v0H2Zi6dlEBRAIUlD7A=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy1MWKdq65MrvSFIj6fWtOOwKJARVGtQiaVmfh4NHo+36wncPig
-	sV7ON/fvUp7EOn8OytHa0iMMwv0+oHP/844jV0AhfzH+Jc0IP3VSNVBQhjrPkFBV3oeh9jiZi5v
-	TTRncIBO0CC52Jt8pf3dTkEV/OizLpQY=
-X-Google-Smtp-Source: AGHT+IFI4Bx5Gvm0Ft6vinfpRqYEXas41f/whzbKpcuomonW8MSHnsmc1TuQt3oBeG1Cy67OATMaENJHiGiUwfm7FAs=
-X-Received: by 2002:a05:6808:2190:b0:439:adcd:9eb6 with SMTP id
- 5614622812f47-43b29859a99mr4229388b6e.0.1757357682859; Mon, 08 Sep 2025
- 11:54:42 -0700 (PDT)
+	b=aEGZcPBKnEJNyca8UbJVNeFjyUKw1F0Sclth6PpXAQzxq4fBX61Ca8GF9ntkw3Ntf
+	 eU+88Ahgg9RyJZ5mSDyjJS0kCsrvRFH+iXMgBDbuWMeB9M3pOeetzFku+UJ/yjmCCK
+	 faQvgy/CmkykbUxPv98wktSAFJJmOUEuMDM/f8l6if/s2l9fTvRcmmp0plgqp1Zlp1
+	 wiIVDdzQnq2zFv92pl8k0j/3nf6rfK+Ytxo3l6OaXEC2bTYlmvgcV/w9BoYcZPF+tN
+	 r6vXa5dsicC/NjkEYVwaDju19r7Rdz8oNueg+uvj24TLEnWRoMaI7Xetpjd05LYs70
+	 ncEXrHHNRtZAA==
+Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-746d7c469a8so3070611a34.3
+        for <linux-pm@vger.kernel.org>; Mon, 08 Sep 2025 12:00:45 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWGYq6BnvhUdq3yi0yCPTFhAfx+RmLj1ZDa2YGqR4HFlnNecjco2JIxb5ecpb7KDiWyHeF1J7FvOw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzYjKx8VDKNYGkEh3HiUWcJPC8LGzvCdHSZPNTQ4KqPdVGExJW3
+	Bzdm4aj+beyOTSJuO7QKq4V9TTlLJU7CH6I6geqr7g7pX3TILKIC9AE4VcW8j5EDDU7u51+JEnn
+	g3NVOvCJa8KwLbVZxSEqd1uIfcoujDKw=
+X-Google-Smtp-Source: AGHT+IGAc/QTf7MFW3ME+EoVhTsd/d9NkxbS9EKHVaWNR9LSiaGmj4LpOxXi/9SR2X+AF6P0d+EK5rrdpsin7Vj7LNA=
+X-Received: by 2002:a05:6808:159d:b0:438:3b96:7cf9 with SMTP id
+ 5614622812f47-43b29a4c789mr3920119b6e.15.1757358044442; Mon, 08 Sep 2025
+ 12:00:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250826183644.220093-1-sohil.mehta@intel.com>
- <CAJZ5v0hw+797-mm3qA6PqQdA7hWyZKhkYobbvF+8MCvg1cHZvQ@mail.gmail.com> <67ffd6b7-55c2-4ee0-9243-44bf8336152d@intel.com>
-In-Reply-To: <67ffd6b7-55c2-4ee0-9243-44bf8336152d@intel.com>
+References: <20250904081600.2706572-1-kaushlendra.kumar@intel.com>
+ <CAJZ5v0iBdmzD2ansm34HQhXQE+Q6_qUkjW1XC9xK_G8Aw_0ubQ@mail.gmail.com> <LV3PR11MB8768E28D7A75ADDD9722624BF502A@LV3PR11MB8768.namprd11.prod.outlook.com>
+In-Reply-To: <LV3PR11MB8768E28D7A75ADDD9722624BF502A@LV3PR11MB8768.namprd11.prod.outlook.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 8 Sep 2025 20:54:30 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0iXrqs2oVx0iYanjyJ6ucXorWi6PXPqW7Kdjnsu-zTGEg@mail.gmail.com>
-X-Gm-Features: Ac12FXwY-2evvI3P2YVMrb7jo8op0NgDbdgESRZ7BRnBXWyTJn2_4vQQnQjFOus
-Message-ID: <CAJZ5v0iXrqs2oVx0iYanjyJ6ucXorWi6PXPqW7Kdjnsu-zTGEg@mail.gmail.com>
-Subject: Re: [PATCH v3] cpufreq: ondemand: Update the efficient idle check for
- Intel extended Families
-To: Sohil Mehta <sohil.mehta@intel.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org, 
-	x86@kernel.org, Tony Luck <tony.luck@intel.com>, Zhao Liu <zhao1.liu@linux.intel.com>, 
-	linux-kernel@vger.kernel.org
+Date: Mon, 8 Sep 2025 21:00:32 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0g5h1Xs6YPzujxy80kUvsQ=D5D1tPWOaNtnXB5GCuXP_A@mail.gmail.com>
+X-Gm-Features: Ac12FXw34JgH79Hh6Tcp2MmQn4BkjOemnbmoZIXOGhlUMislepMRVCG-sU-yrJc
+Message-ID: <CAJZ5v0g5h1Xs6YPzujxy80kUvsQ=D5D1tPWOaNtnXB5GCuXP_A@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: acpi-cpufreq: Optimize SMP calls in drv_write() function
+To: "Kumar, Kaushlendra" <kaushlendra.kumar@intel.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>, 
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Sep 5, 2025 at 11:32=E2=80=AFPM Sohil Mehta <sohil.mehta@intel.com>=
- wrote:
+On Sat, Sep 6, 2025 at 6:22=E2=80=AFAM Kumar, Kaushlendra
+<kaushlendra.kumar@intel.com> wrote:
 >
-> On 9/4/2025 1:02 PM, Rafael J. Wysocki wrote:
->
+> > But smp_call_function_many() doesn't run func() on the local CPU, does =
+it?
 > >
-> > Since you are adding this #ifdef below, why don't you go a bit farther =
-and do
-> >
-> >> +#ifdef CONFIG_X86
-> >> +#include <asm/cpu_device_id.h>
-> >
-> > static bool should_io_be_busy(void)
-> > {
-> >        /* All Intel Family 6 and later processors have efficient idle. =
-*/
-> >        return boot_cpu_data.x86_vendor =3D=3D X86_VENDOR_INTEL &&
-> > boot_cpu_data.x86_vfm >=3D INTEL_PENTIUM_PRO;
-> > }
-> > #else
-> > static inline bool should_io_be_busy(void)
-> > {
-> >         return false;
-> > }
-> >> +#endif
-> >> +
-> >>  #include "cpufreq_ondemand.h"
-> >>
+> > So what do you really do in this patch?
 >
-> I am fine with this approach. Would moving the #define to the header be
-> slightly better?
-
-I think so.
-
-> Add to cpufreq_ondemand.h:
+> Thanks for the review feedback. I've examined the function documentation =
+for smp_call_function_many():
 >
-> #ifdef CONFIG_X86
-> #include <asm/cpu_device_id.h>
-> bool od_should_io_be_busy(void);
-> #else
-> static inline bool od_should_io_be_busy(void) { return false; }
-> #endif
->
-> Then, cpufreq_ondemand.c doesn't need the #ifdefs. It can simply do:
->
-> bool od_should_io_be_busy(void)
-> {
->         /* For Intel, Family 6 and later have an efficient idle. */
->         return (boot_cpu_data.x86_vendor =3D=3D X86_VENDOR_INTEL &&
->                 boot_cpu_data.x86_vfm >=3D INTEL_PENTIUM_PRO);
-> }
+> /**
+>  * smp_call_function_many(): Run a function on a set of CPUs.
+>  * @mask: The set of cpus to run on (only runs on online subset).
+>  * @func: The function to run. This must be fast and non-blocking.
+>  * @info: An arbitrary pointer to pass to the function.
+>  * @wait: Bitmask that controls the operation. If %SCF_WAIT is set, wait
+>  *        (atomically) until function has completed on other CPUs. If
+>  *        %SCF_RUN_LOCAL is set, the function will also be run locally
+>  *        if the local CPU is set in the @cpumask.
 
-You'd still need to put the above under #ifdef CONFIG_X86 though.
+@wait is not a bitmask, so the above description is not accurate.
 
-But it may as well go into the header as static inline in the CONFIG_X86 ca=
-se.
+>  *
+>  * If @wait is true, then returns once @func has returned.
+>  *
+>  * You must not call this function with disabled interrupts or from a
+>  * hardware interrupt handler or from a bottom half handler. Preemption
+>  * must be disabled when calling this function.
+>  */
+>
+> Based on this documentation, when the SCF_RUN_LOCAL flag is there and the=
+ current CPU is in the mask, it will get called on local CPU also.
+
+This applies to smp_call_function_many_cond() which is called by
+smp_call_function_many() with the mask of either SCF_WAIT or 0.
+
+In any case, the $subject patch isn't quite right.
 
