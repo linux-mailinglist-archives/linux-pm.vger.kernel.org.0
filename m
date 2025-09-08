@@ -1,74 +1,87 @@
-Return-Path: <linux-pm+bounces-34125-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34126-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 962F7B48476
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Sep 2025 08:51:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 63026B4848C
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Sep 2025 08:56:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 97AC7189F698
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Sep 2025 06:52:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1EF64175DD6
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Sep 2025 06:56:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDD4B2E2299;
-	Mon,  8 Sep 2025 06:51:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5FD12E283B;
+	Mon,  8 Sep 2025 06:55:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="S+QNeCkJ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FF872DE71C;
-	Mon,  8 Sep 2025 06:51:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06AE822333B
+	for <linux-pm@vger.kernel.org>; Mon,  8 Sep 2025 06:55:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757314310; cv=none; b=fWpM700K9KE2VOEaPh8w28TlOhD4h3wDM7ddZ7P28PBhGe445IS49tBj4nopIwMWG49ToYeLeuoTw/0RTvemp5IOYDtEBj9IxhCgdcQOtmc+j4+S7LKzhgimjGYbkcX4V961KiIRRricQExDxWPCsQ53vHtLZAeOO/mCaU1w378=
+	t=1757314556; cv=none; b=LWAcowyWUtdvfO7j0r7vFcP77bZ9IluL308CTgQwSVn/Vv48jSvJwtHJ0U0qGxxn/eYWWdRdozs4nBrdN1N3W868pFs672xL5woAs9IpvWSOUlTvsZmDl6mzdqN2MhxC0CC7AI8nY5Tzy2Po2070YUn3HmrmEpK+M1q3IQz/mfQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757314310; c=relaxed/simple;
-	bh=oRwcKR3Rnw7wjg+ZTVkb/70S0fOkg6QBMnIuoZHQwmc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kIzRk9Q4HfHEGAM+pv83qPf2Z6EVtxkVidur6uS5TtR/6troLRpskp9CxD6uMrcv2I2XaeCdBOAOkSFuF4QLUh5vXjDMS0mQodjuE724Veg8qt1lCMZdYSxB0XUUue7+ytTllscQXqSOs379u3uDMVE92Lg2AGYjB0HROUpSmXI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 454919548c8011f0b29709d653e92f7d-20250908
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.45,REQID:8e69cfff-4f9f-4122-a335-cb4fa4821e28,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:6493067,CLOUDID:f6a7994fb7f88b258705a5b9368f90b6,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102,TC:nil,Content:0|52,EDM:
-	-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,
-	AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 1,FCT|NGT
-X-CID-BAS: 1,FCT|NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: 454919548c8011f0b29709d653e92f7d-20250908
-Received: from mail.kylinos.cn [(10.44.16.175)] by mailgw.kylinos.cn
-	(envelope-from <zhangzihuan@kylinos.cn>)
-	(Generic MTA)
-	with ESMTP id 1382312738; Mon, 08 Sep 2025 14:51:39 +0800
-Received: from mail.kylinos.cn (localhost [127.0.0.1])
-	by mail.kylinos.cn (NSMail) with SMTP id 422F7E008FA4;
-	Mon,  8 Sep 2025 14:51:39 +0800 (CST)
-X-ns-mid: postfix-68BE7CFB-151394164
-Received: from [172.25.120.24] (unknown [172.25.120.24])
-	by mail.kylinos.cn (NSMail) with ESMTPA id 77254E008FA3;
-	Mon,  8 Sep 2025 14:51:38 +0800 (CST)
-Message-ID: <cbe36377-6f92-4913-8cd7-087e718af368@kylinos.cn>
-Date: Mon, 8 Sep 2025 14:51:37 +0800
-Precedence: bulk
-X-Mailing-List: linux-pm@vger.kernel.org
-List-Id: <linux-pm.vger.kernel.org>
-List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
-List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 2/3] cpufreq: Always enforce policy limits even without
- frequency table
-To: Viresh Kumar <viresh.kumar@linaro.org>
+	s=arc-20240116; t=1757314556; c=relaxed/simple;
+	bh=CpGKAIjx9opYm+HfzeDAQ0MJW1WE+sPDSShf9nh5CuE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=syUc6a/DqLuzm/Ri0ptJPF1uzws7OS+Hh4Bvb9H5/Gp+CUwA3AE+3gjvshyY3QyxSyHXdGol7gj5McvdiL21hP74d52svnLcLJ4hU2DTwCM+v3lEB/gESDe1M1eKFZW6DqfQpMhqCBxt/D6ZOwCNMJxyBn1BnITG2KJLap+WEeI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=S+QNeCkJ; arc=none smtp.client-ip=209.85.210.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-77256e75eacso3546640b3a.0
+        for <linux-pm@vger.kernel.org>; Sun, 07 Sep 2025 23:55:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1757314554; x=1757919354; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=qjDemfu2IvLbw+qXa34kZRvjbWxOCBrNvY9zl55RAps=;
+        b=S+QNeCkJo5vY6/myyb7Q/teXNz6Er8X+ArNhFihobADj5DF7hO2I1+SGcptkb3NkI8
+         Kodq9ENIZSOX8UJ/2EYtW4LNlMT700Q79IpRI5Zr/gt34VCodxvOFZnW1Xn2BgqtxkYb
+         tn0oObkMX9XNcosl1PXfGzTRFmMDURbOZY687YrVFxg04eIUi4kHRI23I1KCTslL/WCR
+         ZeISeY8zoxnaCzlrfBb6xCYQSxtdzMCMKVFTolDzhloziHJ49Mk47SopbLVDL92pnCxa
+         I+OCZ8lCOk+nDLhzlat7ETyl7h6KZVT0qkkHm5jxzfRxIuo+j6q8H2NkV238+tnWEmd4
+         CTlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757314554; x=1757919354;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qjDemfu2IvLbw+qXa34kZRvjbWxOCBrNvY9zl55RAps=;
+        b=dT80NQTaQrPkWrBJdA1xlqdQNDNJj0i8EHu6RSkVZzr+dqJAYIdT+QPq5UB78dX9Qs
+         9hJLJs9hG4RbowpSn46dlU+MgxeS+7onngPGrqBPbWNOg50+VBul/nJ9gO7/FMrlDM+7
+         CsGDSrHFDjPWkIlIcKiUaMBcJWGxEEh/lAd9jAnaZrx8qGG3RiyGFmMZQlIbkIPcoO48
+         1rdw58g+FwaBLge7S4fjfsbviHLCbHucIK2CS1LKOoC2gGjQSPUJtNLXWXhoeWUftBmc
+         v/rfxiOe6O2vE50MbI6Ao0eonobVO5zEDnCXZhh7cT8Pa7v6rkdmSsr37rCgxB2e6lig
+         42uw==
+X-Forwarded-Encrypted: i=1; AJvYcCVZjv2OtnLV7ZxI+yD8eYIGM6z53Xi50tnJv3tqBE9Bk0dtQq9tvIaNFd9pYah+Vwnblw0bfxtPcQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzU16IRU+nkOi2J+pPpuqPDUA5GMS/wHTO9TzoPA/ql5CPgYMRZ
+	CDSuJ/3lEAPYKmMrHne8k9g7VYlQ5ODjUnOUv7x8QvVjY4BIuDdzW4wkxnmxrrZPAfU=
+X-Gm-Gg: ASbGncuVtcaj1ESQ21yYLNs0ztr4OEICm8eL8QsjzkySV9CIW+aeXLvxPtpBNqecqpB
+	qF+QCDKiIlvmCeew73p0jy1iyuR26DEzWQVlWOfUXFXed3XFzqxuZvJM+y4LOjJUg+q/+Zdp6DA
+	XlX/ZY7DFzVdeP0n7LkCAiyHWkJJEwnDOeCyYNFES55RVei4Wzt8CLmaozwpwJpQWSmihvwpX1c
+	KPd8ZlrOL8z9pEnAY7tGEmoQCxGhm8Dm2vlhgVCZpg5pl5LF5Fihszwg58liZaWeEQaR73/mIRZ
+	+D9RbY3KP74Ja7B9sU+euVoP9yNVXHMYtQS+uBL6IU7WoksxNKmJjsEq7zoyk3dFJ1aTCsXpmDf
+	P9+6GYFutFVCDi0YSeGTgk6fqqHWH99OEW2Zyc9m5lDN6yQ==
+X-Google-Smtp-Source: AGHT+IFUii7IFPGF/GfdssWSzTteSva2Jd9iVfJQLLidaUj532ste3VwU6C9KZtFqK7PJto/9xnrdw==
+X-Received: by 2002:a05:6a00:1823:b0:772:1fa1:be4a with SMTP id d2e1a72fcca58-7742de60f4amr7353357b3a.16.1757314554209;
+        Sun, 07 Sep 2025 23:55:54 -0700 (PDT)
+Received: from localhost ([122.172.87.183])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7722a2d97acsm28535953b3a.41.2025.09.07.23.55.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 07 Sep 2025 23:55:53 -0700 (PDT)
+Date: Mon, 8 Sep 2025 12:25:51 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Zihuan Zhang <zhangzihuan@kylinos.cn>
 Cc: "Rafael J . wysocki" <rafael@kernel.org>,
- Saravana Kannan <saravanak@google.com>, zhenglifeng
- <zhenglifeng1@huawei.com>, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org
+	Saravana Kannan <saravanak@google.com>,
+	zhenglifeng <zhenglifeng1@huawei.com>, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 2/3] cpufreq: Always enforce policy limits even
+ without frequency table
+Message-ID: <20250908065551.d5jhp5ejix4fzgd2@vireshk-i7>
 References: <20250904032210.92978-1-zhangzihuan@kylinos.cn>
  <20250904032210.92978-3-zhangzihuan@kylinos.cn>
  <20250904044812.cpadajrtz3mrz2ke@vireshk-i7>
@@ -76,30 +89,37 @@ References: <20250904032210.92978-1-zhangzihuan@kylinos.cn>
  <20250904053700.abdkh23zwi5x65do@vireshk-i7>
  <e91bd1e9-8db4-4923-92fe-52893623487e@kylinos.cn>
  <20250908061333.rwzq5dj4nxlav6x5@vireshk-i7>
-From: Zihuan Zhang <zhangzihuan@kylinos.cn>
-In-Reply-To: <20250908061333.rwzq5dj4nxlav6x5@vireshk-i7>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
+ <cbe36377-6f92-4913-8cd7-087e718af368@kylinos.cn>
+Precedence: bulk
+X-Mailing-List: linux-pm@vger.kernel.org
+List-Id: <linux-pm.vger.kernel.org>
+List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
+List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cbe36377-6f92-4913-8cd7-087e718af368@kylinos.cn>
 
+On 08-09-25, 14:51, Zihuan Zhang wrote:
+> We are currently considering moving the check that ensures a driver
+> providing a freq_table also implements target_index() into the driver
+> registration path.
 
-=E5=9C=A8 2025/9/8 14:13, Viresh Kumar =E5=86=99=E9=81=93:
-> On 04-09-25, 13:48, Zihuan Zhang wrote:
->> I understand your point about the potential duplicate call to
->> cpufreq_verify_within_cpu_limits() for drivers with a valid freq-table=
-.
->> However, in the third patch of this series, we removed the call to
->> cpufreq_generic_frequency_table_verify() from the table_verify path.
-> Yeah, I missed that.
->
+That won't work AFAIU. The freq table is initialized during
+policy->init and that's not done at the time of registration.
 
-We are currently considering moving the check that ensures a driver=20
-providing a freq_table also implements target_index() into the driver=20
-registration path.
+> This way, freq_table.c no longer needs to defensively check for NULL
+> pointers.
+> 
+> Additionally, we are thinking about merging the two related APIs into a
+> single one. Do you think this is a good idea?
 
-This way, freq_table.c no longer needs to defensively check for NULL=20
-pointers.
+Which ones ? target/target_index ? I am not sure if that can be done.
 
-Additionally, we are thinking about merging the two related APIs into a=20
-single one. Do you think this is a good idea?
+We are fine with improvements generally, but please make sure whatever
+you send doesn't break existing users. That will help saving some of
+our review time.
 
+-- 
+viresh
 
