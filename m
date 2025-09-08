@@ -1,139 +1,188 @@
-Return-Path: <linux-pm+bounces-34166-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34167-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48C0AB493F9
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Sep 2025 17:44:44 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 87988B4977A
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Sep 2025 19:44:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A43922054A1
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Sep 2025 15:44:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 39F323ADC3B
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Sep 2025 17:44:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BD2D31282E;
-	Mon,  8 Sep 2025 15:41:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94DBE31329D;
+	Mon,  8 Sep 2025 17:44:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="PkfM9Yu+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uQ55R3nr"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D44F3126DE
-	for <linux-pm@vger.kernel.org>; Mon,  8 Sep 2025 15:41:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6315E3126DB;
+	Mon,  8 Sep 2025 17:44:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757346078; cv=none; b=o93zp6mqVXSIQ6AlxxIwRVSfsIV9paf5MitPk5srYz/gzUSc6xtylHsCfpQ11ftPrMdl04XKDVxbdjg66fknGdu9X2BNzHcLJr3zeWjx6zGXe4ZFRVmAcSlENQPlPnuepl7ULo+ci/0pnSwSRjtDvYrO1Rcs+3hHGaq0Fqs5kZY=
+	t=1757353454; cv=none; b=lvklgHmzEKdbiDy6+Vo3j+0wQuDV4bpZ21BBqmpQeQliF1uVO6UAVjEp3PPE02cgn/xCYMuEr2V4HGV7wP6Uir74M5gkQdmPPvW88HqAP260NAG1lBu9oQGbyaGNPjWosUIyJjV+8GkCFyPuL/fczMIGsYrRpbiP4kqvr/1WGm8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757346078; c=relaxed/simple;
-	bh=G2fs2nKN2ZhgBjC25RM41Kh9rDq7tT3JvNkxLut32sM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oMW1ooYpbqOrhQ+CYHs8hnTyYtroBZdipUvvnu1/xi3uwaM8rbLZnBI8zpxXY74qjZztz45dytgtgZXohaLPj4scaQo8jYCqSRj6mhK7FlmPEPEROUZcaUfIkQtg0rCT3PE5WMg6jyHEphTW1wGb4hYtg5VN1/zJRbj0kuKdBOs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=PkfM9Yu+; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5889LYVI003963
-	for <linux-pm@vger.kernel.org>; Mon, 8 Sep 2025 15:41:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	gUNywjEFdmTkr5x1l5m+XCGsRzCZz5+0YY3gu0GUprQ=; b=PkfM9Yu+/rv2MnZl
-	juMEblxaJs+I6c+tH9adT04naeezqLbdt3+0KRkf+CBpg479N1M1Xc7CW7Y4pzBu
-	Tpyfsj/vEb2UH7ZYficaX9JEdlJdMkDTUfhf0exzJDx3y+FgZLMIs20zu3UVPUrx
-	sXLWQ5pkT3AMLqlfTXxBr0Gm63BZlSPWOfKoP/h+LesanJOsoRyh7x6VpGNcbthO
-	KUd9xawEPStYPb6axXwBCdG5yPeY7Aj3t89D6bz9hNKcvgn6ajm0TFRm3bVI34Pb
-	JaNqJRAnBzMex4V848mv6p1S3KTEjMfyycOxCSKIqFNQ/Q0PK0nX1xqd/Y6rAKvG
-	GP6jUg==
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com [209.85.160.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 490dqfvxq4-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Mon, 08 Sep 2025 15:41:16 +0000 (GMT)
-Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-4b612061144so2632671cf.1
-        for <linux-pm@vger.kernel.org>; Mon, 08 Sep 2025 08:41:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757346075; x=1757950875;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gUNywjEFdmTkr5x1l5m+XCGsRzCZz5+0YY3gu0GUprQ=;
-        b=A9bI9pEpoTms3y+V5ZFnkM7Fkc0cOf1a0OcWiShUKxke5rQHWnoPSpTd+ZvpNlBMxR
-         pAxFa8e2izfkEaNYSa1IKj8iFKbdrtF0H1mCtqFBs3Sn7gfo1oCSgMxHbPN2dNWugghn
-         e0Am6c2qoIAzhcs57W3yIx0glB8Ml5MkM6BJeIzYfwYyi6AIHi/xvG6l2pfbnK9W5iXM
-         ClK6LH3EdqOUcm3xUsR/QFLNygcvurmL4JfkPItXHthyVbwlzvxr/1zAMuaDmwB9cNmu
-         iGWOaQkSphJFJr3s3tMh5dTFvb4ewBQhKTNAl1wXdIH+RCBL9q/6WPKfMHdsWVxgRbrV
-         4Mdg==
-X-Forwarded-Encrypted: i=1; AJvYcCUbPJxkk1wdzOpUOeMub46FmUSHcm94gezva0K6+mwbrY9SPvsR4GvwPpCGyAxR/4RakNliYyBCZA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw0vWt5gjiMIDikwlPXttWHMjVdvwVtO8DyoK/v7JmjklYTyGjA
-	bbG84RYH29DjoO0CiFmONU/6fu/7HKH68hWMc6sfKx6NJfannjxKkYrH6v8x6jhwrQeFlZkhOgd
-	bHIo/jyxc8b3rpjAq8Z3/ZPBSotCua6Wy4dpAf0Uu0j6yg4VPeQNvvcqCCHMb9U/KMvFzNw==
-X-Gm-Gg: ASbGnctD7En826YjPsLKnJD+VSCmkdzHasmgIwE0NYaTci/svttf5m6Np40h3+82XKP
-	ZiS1eYNo/cMItDehIqdAZ0LxalsfIjotsQq5X44bwUUg4955TEQ8f+q/jgbqEwZo0pnDjJo9/7s
-	2+fyvnP12b8rdVpC34NFFgWh1wjJn2PJrUjObSfnG6FqkGpYSMDOUAV5uQpk2XfWHcjkfJrxjOm
-	YXhvCeDn1+mD53jC3pLjwvYIqIOkAtQDoXWpqH4r9OyYsXig8DZcHlt1MCkOOoqDQ4LQRUFamHP
-	GmJP1soam4kDj3BLvkZGxOqkEr1ylvEoqFT31ft5xnneQct98xKXDQuuIy0vxRFw+qEp8Y2ee5G
-	SboFbrdCOJWNC682EmT9fBw==
-X-Received: by 2002:ac8:5f14:0:b0:4b4:9175:fd48 with SMTP id d75a77b69052e-4b5f830417amr59239701cf.0.1757346075067;
-        Mon, 08 Sep 2025 08:41:15 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEd5ZNZ50YBUchs3nuPz0LYnawAnj+cThrii0JYVr/emigl5wPPuJaCTU+N79pP56oMJTCaig==
-X-Received: by 2002:ac8:5f14:0:b0:4b4:9175:fd48 with SMTP id d75a77b69052e-4b5f830417amr59239211cf.0.1757346074307;
-        Mon, 08 Sep 2025 08:41:14 -0700 (PDT)
-Received: from [192.168.149.223] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b040d44c9adsm2198301666b.9.2025.09.08.08.41.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Sep 2025 08:41:13 -0700 (PDT)
-Message-ID: <2f95d508-34ba-4a29-9add-63909db22b60@oss.qualcomm.com>
-Date: Mon, 8 Sep 2025 17:41:11 +0200
+	s=arc-20240116; t=1757353454; c=relaxed/simple;
+	bh=pxv4SKGaeo+/iwpYsHET1lGXi6vy1Me0WnNKi9ZjTC0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Fok9FDCzNApE1oxbP8P5dWdOo1nrPyek8+69u2uUWk8yrlRzbqFhxkGMvR61HE6IbDWOnW/4+A3kyf1wEu+iurd7XfKo5lqvSP7N2q0u6c1zCxNm51TVVF1rd48h01HUOl0ovL5I67zhbiz/pH5I+1ekjG9o6J0kQRNqd+VjS9Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uQ55R3nr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDA3DC4CEF7;
+	Mon,  8 Sep 2025 17:44:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757353454;
+	bh=pxv4SKGaeo+/iwpYsHET1lGXi6vy1Me0WnNKi9ZjTC0=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=uQ55R3nryISj4fR5HBA0VoKRZaL0v3af3ouPwi2RYm+lkfp+cjWrR+LX97PQ39TS1
+	 clH9A7/msCwa+hxqIXvZap62ixLxWNUKGlyOeLuJV8znNAyQIIIlIRl7QdF9UFedNx
+	 /zzbC62VRoizSlgV9RXiMFblpCIyIdzz5InicZSgkGQa5gJNSmQ9JPTCCTrMF1450E
+	 WqwqOE5QYrbszoHVL/c8r7aVLjzlTVX8pWSgdStRA2xntbvfP1x7rQyr+rD6fhFc0o
+	 J+VT7dY5asCWkyo9eFP04FfqRkHLvlAbHP3e4Euy0HrUB7bOv1NGBWr90PGQZVedzN
+	 8WpYZnTJv15ew==
+Received: by mail-ot1-f51.google.com with SMTP id 46e09a7af769-74382041c9eso3397308a34.3;
+        Mon, 08 Sep 2025 10:44:13 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVTzMXfwZV7W7QjX49RgBPyEtUHWQ/Afl1TFtsmS0SDRrT8is+2bKwk7+uYA0Qm8Km4ZQgRsGK8bqgr@vger.kernel.org, AJvYcCVVdZtXbbZc+vTyINgy9vVso/OMrjsbW3uJ/TDwTWXbj+nedaHYJgmCjZeF8e/lFUTpzO1brucDMKUkxA==@vger.kernel.org, AJvYcCWlZkHAbw/3w6ZTt6FpgHqRKGAZ3Xq4khlQ0JTLCt5zZMV3G+23JZN92259/DQ1s4DavyN07osFe2SIXxu9@vger.kernel.org, AJvYcCXGmbVEpE2WHozBPjHvmZS38qKWa26g9ZDKmzSxzMkB/n+hVpSoFcQ/cfGfKfU9bPqHbdrc16z95VI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwINSDgX5oF4M8Bk7prIfTTlmthf/wg1rmEgZBA/ciVMAwHs5/R
+	T4QPcLIRwRDXMmtdDEe2Pd6RBCxXIggtO9AnCHg4D6VzaKr9d3XI/4PMvgQKUoWlJz1Su6g5x0D
+	0SFqS3H79Y3KZO8wY3q4qwRqkPRYkJJU=
+X-Google-Smtp-Source: AGHT+IEmLNooDlmw6mUZRYEbyTwg6KsbFI0N3/Ra3KC+hBAS5x57Hk+ruqmJHv0ou2jqI/XILrzNZEQVMGT+C7Z3Oeg=
+X-Received: by 2002:a05:6808:198f:b0:439:b82f:ce with SMTP id
+ 5614622812f47-43b29b4d9d1mr3597972b6e.31.1757353453065; Mon, 08 Sep 2025
+ 10:44:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] cpuidle: qcom-spm: drop unnecessary initialisations
-To: Johan Hovold <johan@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20250908152213.30621-1-johan@kernel.org>
- <20250908152213.30621-3-johan@kernel.org>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <20250908152213.30621-3-johan@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-ORIG-GUID: sHEu5oP2Is_C9RG8vnj9fLu20u6khYza
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTA2MDAzNSBTYWx0ZWRfXy/m4d2aOaopJ
- HmnRWw8WugBpTFp2ukliRREYJspq8zd5RxkMpm4j4AJgswtVmMW33JaysD9uXWkwQSB6z93hqQH
- FvyMW5OwZ2T/FuVNtJ2NTqk9LuNgx1YcLpO7CjKSu0gCQeBkyg+letcbfHtb/GdVnSvz8rvH3zQ
- 3xqZhUP+0t2i1LrqK6pm2+tkalJ0RT399Bfyj50/z4rK+k2bpX+80cUPHwLp+DLJMvleUidut7y
- 5Vb+NdLyJGoZAKtmRfJKX+FYF4hE0yVx6k8iKa+apwvANRRayJ1uQYLJWurQA/Qn/CN9j1GDaIk
- HOM+AIpWZuQ5h0rCAtPAyEM7vsQ/BHftI9uQZXd3AF45TamnMWHYlts+xEoFmlibWMrWQpDWC8C
- bAtnIDuo
-X-Proofpoint-GUID: sHEu5oP2Is_C9RG8vnj9fLu20u6khYza
-X-Authority-Analysis: v=2.4 cv=N8UpF39B c=1 sm=1 tr=0 ts=68bef91c cx=c_pps
- a=WeENfcodrlLV9YRTxbY/uA==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
- a=IkcTkHD0fZMA:10 a=yJojWOMRYYMA:10 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8
- a=vJ8C-6PKK5JqxMKs-bcA:9 a=QEXdDO2ut3YA:10 a=kacYvNCVWA4VmyqE58fU:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-09-08_05,2025-09-08_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- adultscore=0 spamscore=0 malwarescore=0 clxscore=1015 bulkscore=0
- suspectscore=0 priorityscore=1501 impostorscore=0 phishscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2509060035
+References: <20250905132413.1376220-1-zhangzihuan@kylinos.cn>
+ <20250905132413.1376220-3-zhangzihuan@kylinos.cn> <CAJZ5v0iTdgM5BBi2ysiJxfA2c=MQ0fjLsEvVct9stxomvEe=4Q@mail.gmail.com>
+ <6683fb5a-64f4-433e-a22b-153b01dfa572@kylinos.cn>
+In-Reply-To: <6683fb5a-64f4-433e-a22b-153b01dfa572@kylinos.cn>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 8 Sep 2025 19:44:01 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0h9pYXi4Op4zAA+Q7QZz5gkJg+83eKUCqM-YKh76CVLKg@mail.gmail.com>
+X-Gm-Features: Ac12FXxUqqlT9sudI62ao99U1pS-dgaUtp-l-yYYj3dQjoUJWeYTt-vc3mF_8T8
+Message-ID: <CAJZ5v0h9pYXi4Op4zAA+Q7QZz5gkJg+83eKUCqM-YKh76CVLKg@mail.gmail.com>
+Subject: Re: [PATCH v5 2/6] ACPI: processor: thermal: Use scope-based cleanup helper
+To: Zihuan Zhang <zhangzihuan@kylinos.cn>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
+	Jonathan Cameron <jonathan.cameron@huawei.com>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, 
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Krzysztof Kozlowski <krzk@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
+	Thierry Reding <thierry.reding@gmail.com>, MyungJoo Ham <myungjoo.ham@samsung.com>, 
+	Kyungmin Park <kyungmin.park@samsung.com>, Chanwoo Choi <cw00.choi@samsung.com>, 
+	Jani Nikula <jani.nikula@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
+	Tvrtko Ursulin <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>, 
+	Simona Vetter <simona@ffwll.ch>, Daniel Lezcano <daniel.lezcano@kernel.org>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Shawn Guo <shawnguo@kernel.org>, 
+	Eduardo Valentin <edubezval@gmail.com>, Keerthy <j-keerthy@ti.com>, Ben Horgan <ben.horgan@arm.com>, 
+	zhenglifeng <zhenglifeng1@huawei.com>, Zhang Rui <rui.zhang@intel.com>, 
+	Len Brown <lenb@kernel.org>, Lukasz Luba <lukasz.luba@arm.com>, 
+	Pengutronix Kernel Team <kernel@pengutronix.de>, Beata Michalska <beata.michalska@arm.com>, 
+	Fabio Estevam <festevam@gmail.com>, Pavel Machek <pavel@kernel.org>, Sumit Gupta <sumitg@nvidia.com>, 
+	Prasanna Kumar T S M <ptsm@linux.microsoft.com>, Sudeep Holla <sudeep.holla@arm.com>, 
+	Yicong Yang <yangyicong@hisilicon.com>, linux-pm@vger.kernel.org, 
+	linux-acpi@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+	linux-arm-kernel@lists.infradead.org, intel-gfx@lists.freedesktop.org, 
+	dri-devel@lists.freedesktop.org, imx@lists.linux.dev, 
+	linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 9/8/25 5:22 PM, Johan Hovold wrote:
-> Drop the unnecessary initialisations of the platform device and driver
-> data pointers which are assigned on first use when registering the
-> cpuidle device during probe.
-> 
-> Signed-off-by: Johan Hovold <johan@kernel.org>
-> ---
+On Mon, Sep 8, 2025 at 11:16=E2=80=AFAM Zihuan Zhang <zhangzihuan@kylinos.c=
+n> wrote:
+>
+>
+> =E5=9C=A8 2025/9/6 04:17, Rafael J. Wysocki =E5=86=99=E9=81=93:
+> > On Fri, Sep 5, 2025 at 3:24=E2=80=AFPM Zihuan Zhang <zhangzihuan@kylino=
+s.cn> wrote:
+> >> Replace the manual cpufreq_cpu_put() with __free(put_cpufreq_policy)
+> >> annotation for policy references. This reduces the risk of reference
+> >> counting mistakes and aligns the code with the latest kernel style.
+> >>
+> >> No functional change intended.
+> >>
+> >> Signed-off-by: Zihuan Zhang <zhangzihuan@kylinos.cn>
+> >> ---
+> >>   drivers/acpi/processor_thermal.c | 52 +++++++++++++++++-------------=
+--
+> >>   1 file changed, 27 insertions(+), 25 deletions(-)
+> >>
+> >> diff --git a/drivers/acpi/processor_thermal.c b/drivers/acpi/processor=
+_thermal.c
+> >> index 1219adb11ab9..460713d1414a 100644
+> >> --- a/drivers/acpi/processor_thermal.c
+> >> +++ b/drivers/acpi/processor_thermal.c
+> >> @@ -62,19 +62,14 @@ static int phys_package_first_cpu(int cpu)
+> >>          return 0;
+> >>   }
+> >>
+> >> -static int cpu_has_cpufreq(unsigned int cpu)
+> >> +static bool cpu_has_cpufreq(unsigned int cpu)
+> >>   {
+> >> -       struct cpufreq_policy *policy;
+> >> -
+> >>          if (!acpi_processor_cpufreq_init)
+> >>                  return 0;
+> >>
+> >> -       policy =3D cpufreq_cpu_get(cpu);
+> >> -       if (policy) {
+> >> -               cpufreq_cpu_put(policy);
+> >> -               return 1;
+> >> -       }
+> >> -       return 0;
+> >> +       struct cpufreq_policy *policy __free(put_cpufreq_policy) =3D c=
+pufreq_cpu_get(cpu);
+> >> +
+> >> +       return policy !=3D NULL;
+> >>   }
+> >>
+> >>   static int cpufreq_get_max_state(unsigned int cpu)
+> > The changes above are fine and can be sent as a separate patch.
+> >
+> >> @@ -93,12 +88,31 @@ static int cpufreq_get_cur_state(unsigned int cpu)
+> >>          return reduction_step(cpu);
+> >>   }
+> >>
+> >> +static bool cpufreq_update_thermal_limit(unsigned int cpu, struct acp=
+i_processor *pr)
+> >> +{
+> >> +       unsigned long max_freq;
+> >> +       int ret;
+> >> +       struct cpufreq_policy *policy __free(put_cpufreq_policy) =3D c=
+pufreq_cpu_get(cpu);
+> >> +
+> >> +       if (!policy)
+> >> +               return false;
+> >> +
+> >> +       max_freq =3D (policy->cpuinfo.max_freq *
+> >> +               (100 - reduction_step(cpu) * cpufreq_thermal_reduction=
+_pctg)) / 100;
+> >> +
+> >> +       ret =3D freq_qos_update_request(&pr->thermal_req, max_freq);
+> >> +       if (ret < 0) {
+> >> +               pr_warn("Failed to update thermal freq constraint: CPU=
+%d (%d)\n",
+> >> +         pr->id, ret);
+> >> +       }
+> > But this silently fixes a bug in the original code which needs to be
+> > documented with a Fixes: tag (and it would be better to fix the bug
+> > separately before the using the __free()-based cleanup TBH) and
+> > introduces some whitespace breakage.
+>
+> Thanks!
+>
+>   I=E2=80=99ll follow your advice and handle the Fixes tag and whitespace=
+ issues.
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Actually, no need to resend.
 
-Konrad
+The current code is correct as it registers and unregisters the freq
+QoS request from cpufreq policy notifiers, so the policy is guaranteed
+to be there when cpufreq_set_cur_state() runs.
 
