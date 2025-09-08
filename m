@@ -1,113 +1,111 @@
-Return-Path: <linux-pm+bounces-34121-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34122-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52BCCB48340
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Sep 2025 06:25:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D2CFB483F2
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Sep 2025 08:13:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5540017873A
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Sep 2025 04:25:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 02EF0170AAE
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Sep 2025 06:13:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E5D5214228;
-	Mon,  8 Sep 2025 04:25:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7B22221264;
+	Mon,  8 Sep 2025 06:13:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Rd5gvOsv"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="XE1EdX49"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54FCF155389
-	for <linux-pm@vger.kernel.org>; Mon,  8 Sep 2025 04:25:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 606E1BA42
+	for <linux-pm@vger.kernel.org>; Mon,  8 Sep 2025 06:13:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757305539; cv=none; b=pl4GoQNm8yX4JKPACkEeAbIy1IJsVs6A6mW2AObG1RW4OElh4dUYhTLAZf4H+5SOtvejj0lVFQPxyRc0OA7STlB847hwuz+X3hIo7LcZLxqhnfEcSHHPb5hst0jgn2qizdWPtezTr/sZP6DkOd1qaDzWDLBnPHFP3tF8xHEYOdI=
+	t=1757312018; cv=none; b=VFevvFMVQVILP0aznR4+dOgcY+HfLqbEqAsqdCBZDhADDa9P2jIv6/FBf/j7xisryuFQJFTfz2r/w3A/f8CSB3Ip2MZbv3mTNP/BdUwFkzTQXpYP5m/IdcN3RbBhJzhgU49A6mCta/JPkReNwjhCrX2D5w06Lj0C6O0N68LLPQQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757305539; c=relaxed/simple;
-	bh=JJY+81scHQDcFtsyZt373VhbFQrp10HPkYPme3UNHdU=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=WtwK6dWv0DHiWXzku6pr6o7AcVVPFW3LJ9VaH8zcwonO3xbSlq0fE8Ao5Kz+umvM3vGmXWskqcdEH97uqMI6VoL2C8jf2piFR4mdRkyw4mkDcA2FklmUsq3RhgyBy7+cAD533eccVUTf2A889kAy7sHGGJVxoq8IXw4q3vbM+pQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Rd5gvOsv; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757305537; x=1788841537;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=JJY+81scHQDcFtsyZt373VhbFQrp10HPkYPme3UNHdU=;
-  b=Rd5gvOsv2x/+Ar5lX2jT100RCQGgoXeT+G40CMQl63sM+7Y8imp7m1rU
-   5zSSqSWSdzsd6k4lQ4aMJVO++qzwLLCGd+lyvWzi6T4/3ysaRa0scmx9x
-   LyBJLEX1nUqBzuArQ2PYXMXsgK4UWlj1EvZDNEcaLVwV7JtpyuraPLZo5
-   ZBfhkhId2VnjEHe2/+YduWDVDsoUOMlJSOrlyVMY7kc6W0Z7TqbgJnYnl
-   gIpo5AxCOopK7HG0C3NeppO3CIOVCtZw6T5whGasS6wivW9M8SISXSfpf
-   P/oUZZAtPgdvZhXsypRdCrdms3iqMWhckOydbn94gIfeikBRMDTSH5ZQ3
-   g==;
-X-CSE-ConnectionGUID: BjEQ1irKRHCvN75sp2WxdA==
-X-CSE-MsgGUID: y3Uzv8/XQnq3FZrvn1PzNA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11546"; a="70173789"
-X-IronPort-AV: E=Sophos;i="6.18,247,1751266800"; 
-   d="scan'208";a="70173789"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2025 21:25:36 -0700
-X-CSE-ConnectionGUID: FJX2hoVdRMqPP8pHa0Mv3Q==
-X-CSE-MsgGUID: WlhpJ7KUTx+jaqQ+EvvbFg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,247,1751266800"; 
-   d="scan'208";a="203642121"
-Received: from baandr0id001.iind.intel.com ([10.66.253.151])
-  by fmviesa001.fm.intel.com with ESMTP; 07 Sep 2025 21:25:35 -0700
-From: Kaushlendra Kumar <kaushlendra.kumar@intel.com>
-To: myungjoo.ham@samsung.com,
-	kyungmin.park@samsung.com,
-	cw00.choi@samsung.com
-Cc: linux-pm@vger.kernel.org,
-	Kaushlendra Kumar <kaushlendra.kumar@intel.com>
-Subject: [PATCH] PM / devfreq: Fix error code propagation in devm_devfreq_event_add_edev()
-Date: Mon,  8 Sep 2025 09:54:02 +0530
-Message-Id: <20250908042402.3404408-1-kaushlendra.kumar@intel.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1757312018; c=relaxed/simple;
+	bh=bzc4qQuEEvgrgwrE2R9mbQf6DBRnuUtN62w99zNOguw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GMjx1mmM/ZUmIW+jgLLiriiWAO2+y9e+CH+GWIYsZAU2ll944eRVPX2JDRziIofZFyC4//rY7QTvcMQ6YSQwzhtMxLIIgLBa+JONvnb3AYntumk5Th6Dy448HNaVB1EeDcdhonLvXq9rHkhsWAk+KuZOG2UwLGWHm19qoBPvwno=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=XE1EdX49; arc=none smtp.client-ip=209.85.215.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-b476c67c5easo2636202a12.0
+        for <linux-pm@vger.kernel.org>; Sun, 07 Sep 2025 23:13:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1757312017; x=1757916817; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=XSpWzyyEZu+Bxd21h2rvWlPTRVpUiAP49N8nWNLhFfU=;
+        b=XE1EdX49wqiDC3s+fRpfBhAWMKP/7n6EH8/tAvCx0UcqpmP1RL7mROAIK4G2ZAv70S
+         UxG6Vn8sZeWyZ+LWtESy+4f3/aUCqHUvxD9luMUvt9dZVxinZSQzYl4Oy8r0/Wa3vRtI
+         fdupl2Kps5Tl54vL5xfRQn4Xk34BIAdSSeAO88Zpcx76E7FJ0bZzMyMkHJugyJ5+0OCL
+         e7ZDN3jVNeMPf+HkR5PsEZq9xdBWsyuuEKmCXamaTTdaxpC4KEyr3zhKm+wC9KrfZtYY
+         jZt7fr1tcxF27p6baRY8flZRUoWlvyj+L9f0485BIG7e/9ztgnl2qyOFHDzfsUf7hhjv
+         tZWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757312017; x=1757916817;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XSpWzyyEZu+Bxd21h2rvWlPTRVpUiAP49N8nWNLhFfU=;
+        b=ePQHF2NzBwfNhRcccGwj0iDqVzDJJeBf5vN2fg58SSnvakkcaJO4wHAU7mxG++JMhM
+         iJdRxoDTGsVRtjn9vO+P3BIS7SO4nSrXKiXlTR6+JaP1/0QS656NvG5X6qcmJYmadK4K
+         LtF2YdjHbVs7RYC5M1r8l/qUorVZseq/RzVqnISgbYnYnCOZAf31Rh8DER8QPu0xfhDU
+         v2yTJjEyek61iwm7Fe87JHXPfM0D8VthZ0UxZ+zMknaA5x0UIA8FWIfTHsnTeSHMv+Sd
+         QRMC3Q4XZHW/uyizTnGf6t2T/atm+OxAN5ACgrKeOcbg6/7EMjuL7A9aBZYPa3Lt3HnV
+         bccA==
+X-Forwarded-Encrypted: i=1; AJvYcCWsREPEbJ8uz2o+KjXyoYmVlw4mtM9akb6lVICnqNkV2AXVccVpyueZkPRsUmtd2LzCGxDFCfJ2yQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzUMqu3eCGKiQQMP1wetV2ZFNOi9hxIvM9FHr/oYxPgeZ0hLYS4
+	dzuA9cOqCzEoiA81k9F+eTLBvDDhkg1qbf4tdoPtGCJrJPwdLSLbJcgQVsgZCVL5YXQ=
+X-Gm-Gg: ASbGncsY7gR4rP5lA30GCIA0qf61X0CXauIZfKf4qGxPzfkborB2RoQEv7a3/HKjasd
+	gG8s+qGIfNigJVnL3RvtT9YItsWH8Fj/8Vo3XGqNh9pq4DCzinjYDgj3xzvzYcnHDPgDCTGTFHx
+	RQzj59Mtfd1Vx4IUknYNclPcT/VTeMgRIG1+x6NT9goQRtVxWN0UPD6xPw+hQaORFWLK7CEwZLV
+	DZvhFOaqUZvfrF1qpaGJeE3+KcGy6orClLXG8R2tNXdPLr4uS/p9suGur+yMvGg3lm+O45vF2KP
+	na2ZaNb5XOM7hpsft7bLNZLX5ZX5FLmLrQFzpAGyK5L9QWGsisNZEwOAkfVJGkDREm8lXf4XXyD
+	iNo4rtlhocEkgMq7FCCuU+N6I
+X-Google-Smtp-Source: AGHT+IHdBfGAMTNAQaghtyqFNtIGW5Wx0vAdVoZp4XMlTkw8tyPs8PqBh9LaIqQl5x4IILpeatDJQg==
+X-Received: by 2002:a17:902:fc4f:b0:248:aa0d:bb22 with SMTP id d9443c01a7336-2516e1be7a9mr86223805ad.0.1757312016597;
+        Sun, 07 Sep 2025 23:13:36 -0700 (PDT)
+Received: from localhost ([122.172.87.183])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-24b14206426sm164265075ad.17.2025.09.07.23.13.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 07 Sep 2025 23:13:35 -0700 (PDT)
+Date: Mon, 8 Sep 2025 11:43:33 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Zihuan Zhang <zhangzihuan@kylinos.cn>
+Cc: "Rafael J . wysocki" <rafael@kernel.org>,
+	Saravana Kannan <saravanak@google.com>,
+	zhenglifeng <zhenglifeng1@huawei.com>, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 2/3] cpufreq: Always enforce policy limits even
+ without frequency table
+Message-ID: <20250908061333.rwzq5dj4nxlav6x5@vireshk-i7>
+References: <20250904032210.92978-1-zhangzihuan@kylinos.cn>
+ <20250904032210.92978-3-zhangzihuan@kylinos.cn>
+ <20250904044812.cpadajrtz3mrz2ke@vireshk-i7>
+ <540469c3-9bc5-444e-87da-95dc27fc481b@kylinos.cn>
+ <20250904053700.abdkh23zwi5x65do@vireshk-i7>
+ <e91bd1e9-8db4-4923-92fe-52893623487e@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e91bd1e9-8db4-4923-92fe-52893623487e@kylinos.cn>
 
-Fix incorrect error code return in devm_devfreq_event_add_edev() when
-devfreq_event_add_edev() fails. The function was unconditionally
-returning -ENOMEM regardless of the actual error returned by
-devfreq_event_add_edev().
+On 04-09-25, 13:48, Zihuan Zhang wrote:
+> I understand your point about the potential duplicate call to
+> cpufreq_verify_within_cpu_limits() for drivers with a valid freq-table.
+> However, in the third patch of this series, we removed the call to
+> cpufreq_generic_frequency_table_verify() from the table_verify path.
 
-The devfreq_event_add_edev() function can fail for various reasons:
-- Invalid parameters (-EINVAL)
-- Memory allocation failure (-ENOMEM)
-- Device registration failure (various error codes)
+Yeah, I missed that.
 
-This change ensures that callers receive the accurate error information,
-improving error handling and debugging capabilities in the devfreq
-event subsystem.
-
-Signed-off-by: Kaushlendra Kumar <kaushlendra.kumar@intel.com>
----
- drivers/devfreq/devfreq-event.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/devfreq/devfreq-event.c b/drivers/devfreq/devfreq-event.c
-index 70219099c604..32194c60dfc7 100644
---- a/drivers/devfreq/devfreq-event.c
-+++ b/drivers/devfreq/devfreq-event.c
-@@ -403,7 +403,7 @@ struct devfreq_event_dev *devm_devfreq_event_add_edev(struct device *dev,
- 	edev = devfreq_event_add_edev(dev, desc);
- 	if (IS_ERR(edev)) {
- 		devres_free(ptr);
--		return ERR_PTR(-ENOMEM);
-+		return edev;
- 	}
- 
- 	*ptr = edev;
 -- 
-2.34.1
-
+viresh
 
