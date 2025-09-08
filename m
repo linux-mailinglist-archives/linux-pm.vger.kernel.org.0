@@ -1,155 +1,282 @@
-Return-Path: <linux-pm+bounces-34149-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34150-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9657DB48B23
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Sep 2025 13:08:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 79AC8B48BEA
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Sep 2025 13:19:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5C2C33A2159
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Sep 2025 11:08:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 106AB16212D
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Sep 2025 11:19:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D3912F90DC;
-	Mon,  8 Sep 2025 11:08:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A23A6302747;
+	Mon,  8 Sep 2025 11:15:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PxgzLJaw"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="XpdT/jZX"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50E551C4A10;
-	Mon,  8 Sep 2025 11:08:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D280303C9F;
+	Mon,  8 Sep 2025 11:15:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757329710; cv=none; b=O6kxOx+edg/DotuTXQ3NKeCc7knHBJ2ZKIodXHcR/8ex80G+gNuSlVDElww2EJ1As/E39EKWRgp0ACtsgpo0Lg+ytuEt6/9USTaHy2XIwbFgx9dPR+Btz3LhR/R6B7TR0Oprqd2dHuE2fFljne6n0r253zF4dfQ/LNxeMs+JK/c=
+	t=1757330109; cv=none; b=u3bVsJp8Ee9igEuQCOax4lEJ/Nh/RIZxg1xx/vTOfs0sCSkhYZMxd/tE2yvH1pycYk2RX0Ei193qTcfnEr5egodKcDaHb80YBNDrIfaH/CQeLdEUX+56+RTzzkLL5yqPNQRxm/NqKJ8n3k3eynA/KX1eWZemqCkQ2fKpubZ/RnM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757329710; c=relaxed/simple;
-	bh=+Q43JtoguPcKuo4Q1eJ/Poz52uueYi6hh+5pzKswldA=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=D/m1lzpx6FwFHCHtrUbQc4HjqNEV95lElzXdYq/EeLoZ1A9gV7nmLzkYvlaKnmclyel+6Q0OnrcR9ojAXf6gS72i6L9IR/i5htqZtcUPGlrsqqZLniPN2XFIbix/IP/u5wsZtsCfiyTTvQDOojFVtRyx4Gl+2P7bj3zN0y9tBAY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PxgzLJaw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75B0BC4CEF1;
-	Mon,  8 Sep 2025 11:08:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757329709;
-	bh=+Q43JtoguPcKuo4Q1eJ/Poz52uueYi6hh+5pzKswldA=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=PxgzLJawFXejmbGNwpkM2ZvxsiaMFNyFYD/mUNZtq0696MwrW1wGMLsOyASAiQ96P
-	 1hlbEAmgWodQj08SqXlDsvKKtD0ZRWgbzVqQ33TEsPpRY8tRnXAo1SCkn2vwRkyFVo
-	 WxptTEtOB0kks3ZKYCA3NhUaQpW0s8+yOYQitIW80B1hi98B138Jsh94pxI4JHtxC5
-	 bwuag3CE/Xjod2DV27WSPxvxTf8sG/tCVoM8jNvSLjbNL1R8WNKuxdOg8e3QKhi8/x
-	 kBnPRPbCop4ij9+Gwdn54H2JeW39F275dmdlwxA1NZsGXX7xoiD05Yhsva/5/j5WEg
-	 7OrRoU/BrMxIQ==
-Date: Mon, 8 Sep 2025 13:08:24 +0200
-From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To: Jani Nikula <jani.nikula@linux.intel.com>
-Cc: Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org,
- Andrew Morton <akpm@linux-foundation.org>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, Pavel Machek <pavel@ucw.cz>, Len Brown
- <len.brown@intel.com>, linux-pm@vger.kernel.org, Jonathan Corbet
- <corbet@lwn.net>, linux-doc@vger.kernel.org, "James E.J. Bottomley"
- <James.Bottomley@hansenpartnership.com>
-Subject: Re: [PATCH v4] kernel.h: add comments for system_states
-Message-ID: <20250908130824.7510ffda@foz.lan>
-In-Reply-To: <f6e0f7409df67e0554885cacb74023a8aad9a717@intel.com>
-References: <20250904063631.2364995-1-rdunlap@infradead.org>
-	<6089e22ddfdc135040cdeb69329d817846026728@intel.com>
-	<20250905140104.42418fba@foz.lan>
-	<34fb6a27a2c17c22c0ac93bebb0bbfd1a04d1833@intel.com>
-	<atj2koasbiuf67rzr7bbdwpu4kcgkdsqt6rhz5vwpbryfqxm7z@mfmts3tnsasf>
-	<2aad4540-ccdd-4519-9bed-7d8c7ccd009d@infradead.org>
-	<20250906105627.2c0cd0d9@foz.lan>
-	<d815f5c3-6e15-4758-8bf4-601d5543cab9@infradead.org>
-	<20250906233028.56573fd6@foz.lan>
-	<20250907153547.5d4271d9@foz.lan>
-	<20250907181719.0138c054@foz.lan>
-	<f6e0f7409df67e0554885cacb74023a8aad9a717@intel.com>
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; x86_64-redhat-linux-gnu)
+	s=arc-20240116; t=1757330109; c=relaxed/simple;
+	bh=OMK7ztTy/hr+DFx5lept7xu4GuQI0uzYkMpWvYSDScI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ok467kBEUF0IxtIkIX+w4JdW/EhZu0XztuOnJu0yJOS/OAnrXD3yap6msEVJF2pWnYgdog/pLzCnSr2pD3VjpsgidKo5WXG5NqceF+GfZssHNCQSy6tSuAjnS9Aoab8480U5GsAxDfSO9D87itnl7TsD6kRcOJvK9D6KWXUhR9I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=XpdT/jZX; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1757330105;
+	bh=OMK7ztTy/hr+DFx5lept7xu4GuQI0uzYkMpWvYSDScI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=XpdT/jZXwuTehiGIMwpqT+gCEf11TGAG4gaTFsV2bMtbNLtV2xcDXF4MkycLHrI23
+	 SMyPiG7ulsQVhZA3zyrI9Cjj97KRwYK65ueKUi5D8g7oj377B3QxEOcIwavDeXHuIO
+	 fb4hy1g7HPNR1YBQiHjU4B9SJvsr1Z4Qh+b2NuBVpRWDAYdGSne6zjF3D+VSjdu6bR
+	 y10MCinaMkVCY57dZAjXkgCtPstbZl8sFPI1v7CQtCMkGW05whW4KAgt/uouJuZ6k9
+	 q+1+cM9DscPa5ifKovnFtpHzVBJWutGjRjLgh4sSKh8YTTjPhINScRkBiPST/PAKCr
+	 dCkSVkalKLpIA==
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 66F2317E00A6;
+	Mon,  8 Sep 2025 13:15:04 +0200 (CEST)
+Message-ID: <751d3abc-cf40-40a2-a580-7c0ba425ac25@collabora.com>
+Date: Mon, 8 Sep 2025 13:15:03 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC 02/10] dt-bindings: devfreq: add mt8196-gpufreq
+ binding
+To: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>,
+ Boris Brezillon <boris.brezillon@collabora.com>,
+ Steven Price <steven.price@arm.com>, Liviu Dudau <liviu.dudau@arm.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Matthias Brugger
+ <matthias.bgg@gmail.com>, MyungJoo Ham <myungjoo.ham@samsung.com>,
+ Kyungmin Park <kyungmin.park@samsung.com>,
+ Chanwoo Choi <cw00.choi@samsung.com>, Jassi Brar <jassisinghbrar@gmail.com>,
+ Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: Chia-I Wu <olvaffe@gmail.com>, Chen-Yu Tsai <wenst@chromium.org>,
+ kernel@collabora.com, dri-devel@lists.freedesktop.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
+ linux-pm@vger.kernel.org, linux-hardening@vger.kernel.org
+References: <20250905-mt8196-gpufreq-v1-0-7b6c2d6be221@collabora.com>
+ <20250905-mt8196-gpufreq-v1-2-7b6c2d6be221@collabora.com>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Content-Language: en-US
+In-Reply-To: <20250905-mt8196-gpufreq-v1-2-7b6c2d6be221@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-Em Mon, 08 Sep 2025 12:22:06 +0300
-Jani Nikula <jani.nikula@linux.intel.com> escreveu:
-
-> On Sun, 07 Sep 2025, Mauro Carvalho Chehab <mchehab+huawei@kernel.org> wrote:
-> > Heh, looking at Sphinx doc at:
-> > https://www.sphinx-doc.org/en/master/usage/domains/c.html:
-> >
-> > 	.. c:member:: declaration
-> > 	.. c:var:: declaration
-> >
-> > 	    Describes a C struct member or variable. Example signature:
-> >
-> > 	    .. c:member:: PyObject *PyTypeObject.tp_bases
-> >
-> > 	    The difference between the two directives is only cosmetic.
-> >
-> > I guess the best is to encode it as:
-> >
-> > 	prototype = args.other_stuff["var_type"]
-> > 	self.data += f"\n\n.. c:var:: {prototype}\n\n"
-> >
-> > And let Sphinx format it for us.  
+Il 05/09/25 12:22, Nicolas Frattaroli ha scritto:
+> On the MediaTek MT8196 SoC, the GPU has its power and frequency
+> dynamically controlled by an embedded special-purpose MCU. This MCU is
+> in charge of powering up the GPU silicon. It also provides us with a
+> list of available OPPs at runtime, and is fully in control of all the
+> regulator and clock fiddling it takes to reach a certain level of
+> performance. It's also in charge of enforcing limits on power draw or
+> temperature.
 > 
-> In the same vein, I believe we should let Sphinx format everything else
-> for us as well. Function parameters should use ":param foo: desc" and
-> struct/union members should be indented within the enclosing
-> struct/union.
+> Add a binding for this device in the devfreq subdirectory, where it
+> seems to fit in best considering its tasks.
+> 
+> The functions of many of the mailbox channels are unknown. This is not
+> the fault of this binding's author; we've never received adequate
+> documentation for this hardware, and the downstream code does not make
+> use of them in a way that'd reveal their purpose. They are kept in the
+> binding as the binding should be complete.
+> 
+> Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+> ---
+>   .../bindings/devfreq/mediatek,mt8196-gpufreq.yaml  | 116 +++++++++++++++++++++
+>   1 file changed, 116 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/devfreq/mediatek,mt8196-gpufreq.yaml b/Documentation/devicetree/bindings/devfreq/mediatek,mt8196-gpufreq.yaml
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..1fe43c9fc94bb603b1fb77e9a97a27e92fea1ae8
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/devfreq/mediatek,mt8196-gpufreq.yaml
+> @@ -0,0 +1,116 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/devfreq/mediatek,mt8196-gpufreq.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: MediaTek MFlexGraphics Performance Controller
 
-Good idea. We need to verify first if :param: and :returns: are available 
-since 3.4.3. Docs imply so:
+Doesn't MFG stand for MediaTek Flexible Graphics? (or did they update the name?)
 
-	https://www.sphinx-doc.org/en/master/usage/domains/c.html
+Perhaps it's a good idea to also add that reference... I think it's a little more
+readable and understandable compared to "MFlexGraphics" :-)
 
-> I also think we're going way overboard with including e.g. struct
-> definition in the output. I'd just chuck those away and maybe add links
-> to kernel git source for the definition instead.
+> +
+> +maintainers:
+> +  - Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+> +
+> +properties:
+> +  $nodename:
+> +    pattern: '^performance-controller@[a-f0-9]+$'
+> +
+> +  compatible:
+> +    enum:
+> +      - mediatek,mt8196-gpufreq
+> +
+> +  reg:
+> +    items:
+> +      - description: GPR memory area
+> +      - description: RPC memory area
+> +      - description: SoC variant ID register
+> +
+> +  reg-names:
+> +    items:
+> +      - const: gpr
+> +      - const: rpc
+> +      - const: e2_id
 
-We still need to parse all parameters, as we need them for man pages, as this
-is the standard practice (see "man 2 read", for instance).
+We should find a better name for that "e2_id".
 
-We may do something else for html, but:
+> +
+> +  clocks:
+> +    items:
+> +      - description: main clock of the embedded controller (EB)
+> +      - description: core PLL
+> +      - description: stack 0 PLL
+> +      - description: stack 1 PLL
+> +
+> +  clock-names:
+> +    items:
+> +      - const: eb
+> +      - const: mfgpll
+> +      - const: mfgpll_sc0
+> +      - const: mfgpll_sc1
+> +
+> +  mboxes:
+> +    items:
+> +      - description: FastDVFS events
+> +      - description: frequency control
+> +      - description: sleep control
+> +      - description: timer control
+> +      - description: frequency hopping control
+> +      - description: hardware voter control
+> +      - description: gpumpu (some type of memory control, unknown)
+> +      - description: FastDVFS control
+> +      - description: Unknown
+> +      - description: Unknown
+> +      - description: Unknown, but likely controls some boosting behaviour
+> +      - description: Unknown
+> +
+> +  mbox-names:
+> +    items:
+> +      - const: fast_dvfs_event
 
-- on functions, the full prototype is required by Sphinx:
+Any problem if we avoid underscores in names?
 
-	.. c:function:: void media_set_bus_info (char *bus_info, size_t bus_info_size, struct device *dev)
+> +      - const: gpufreq
+> +      - const: sleep
+> +      - const: timer
+> +      - const: fhctl
+> +      - const: ccf
+> +      - const: gpumpu
 
-- for struct/union/enum, a data type is not supported, but the documentation
-  has an example about how Sphinx actually expects it:
+"some type of memory control" .. it's really a MPU. For memory protection. :-)
+Besides, I don't think we have to touch anything in the gpumpu for freq control
+via gpueb.
 
-	.. c:struct:: Data
+> +      - const: fast_dvfs
+> +      - const: ipir_c_met
+> +      - const: ipis_c_met
 
-	   .. c:union:: @data
+MET is a hardware event tracer / profiler... and I'm fairly sure that we have no
+real reason to support it (at least, not like that, and not in a first submission).
 
-	      .. c:var:: int a
+Ah btw: ipir ipis .. ipi-receive ipi-send
 
-	      .. c:var:: double b
+> +      - const: brisket
 
-  If we're willing to use the Sphinx way, tests are required.
-  Implementing it would add more complexity, though. Not sure
-  about the benefits if any.
+Brisket is... something. There's one for the GPU, one for CPU, and one for APU.
+Not sure what it exactly does, but seems to be or control a FLL (freq locked loop).
 
-In summary, for html/pdf/epub, there are three possible outcomings:
+> +      - const: ppb
 
-- keep as-is;
-- replace them by links;
-- implement Sphinx way.
+PPB = Peak Power Budget
 
-In any case, changing it won't cleanup the code, as we still need
-parameters parsing for man pages.
+The PPB needs its own "big" driver (the PBM - Power Budget Manager) in order to do
+anything - as in - this manages a SoC-global peak power setting based on the
+available maximum deliverable instantaneous (and/or sustainable) power from the
+board's power source and it is mainly used for smartphone usecase (battery!).
 
-Also, as a documentation user, when read I documentation, I do 
-expect to see the function prototypes just before parameter
-descriptions. If possible, untouched. This is specially important, 
-IMHO, where there are macros to help generating functions and structs.
+In order to work, the PPB HW (yet another mcu) needs to be initialized with tables
+for CPU and GPU (and APU? and something else too?), and with other data explaining
+the maximum instantaneous power that can delivered at a certain battery percentage.
 
-Thanks,
-Mauro
+Important point is... I doubt that PPB is being initialized by the bootloader, on
+all of Genio, Kompanio and Dimensity chips, so this should be disabled by default.
+
+You can keep it, especially now that you have a description for it - and because it
+does indeed exist, but I doubt that we're using this anytime soon.
+
+Cheers,
+Angelo
+
+> +
+> +  shmem:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description: phandle to the shared memory region of the GPUEB MCU
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - reg-names
+> +  - clocks
+> +  - clock-names
+> +  - mboxes
+> +  - mbox-names
+> +  - shmem
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/mediatek,mt8196-clock.h>
+> +
+> +    gpufreq: performance-controller@4b09fd00 {
+> +        compatible = "mediatek,mt8196-gpufreq";
+> +        reg = <0x4b09fd00 0x80>,
+> +              <0x4b800000 0x1000>,
+> +              <0x4b860128 0x4>;
+> +        reg-names = "gpr", "rpc", "e2_id";
+> +        clocks = <&topckgen CLK_TOP_MFG_EB>,
+> +                 <&mfgpll CLK_MFG_AO_MFGPLL>,
+> +                 <&mfgpll_sc0 CLK_MFGSC0_AO_MFGPLL_SC0>,
+> +                 <&mfgpll_sc1 CLK_MFGSC1_AO_MFGPLL_SC1>;
+> +        clock-names = "eb", "mfgpll", "mfgpll_sc0",
+> +                      "mfgpll_sc1";
+> +        mboxes = <&gpueb_mbox 0>, <&gpueb_mbox 1>, <&gpueb_mbox 2>,
+> +                 <&gpueb_mbox 3>, <&gpueb_mbox 4>, <&gpueb_mbox 5>,
+> +                 <&gpueb_mbox 6>, <&gpueb_mbox 7>, <&gpueb_mbox 8>,
+> +                 <&gpueb_mbox 9>, <&gpueb_mbox 10>, <&gpueb_mbox 11>;
+> +        mbox-names = "fast_dvfs_event", "gpufreq", "sleep", "timer", "fhctl",
+> +                     "ccf", "gpumpu", "fast_dvfs", "ipir_c_met", "ipis_c_met",
+> +                     "brisket", "ppb";
+> +        shmem = <&gpufreq_shmem>;
+> +    };
+> 
+
 
