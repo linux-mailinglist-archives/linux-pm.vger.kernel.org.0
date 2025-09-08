@@ -1,172 +1,369 @@
-Return-Path: <linux-pm+bounces-34147-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34148-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB5CCB48B06
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Sep 2025 13:03:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B251EB48B10
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Sep 2025 13:04:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8AFEF3AB604
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Sep 2025 11:03:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7A2181897698
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Sep 2025 11:04:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D2BD2FB0BF;
-	Mon,  8 Sep 2025 11:02:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 887432FB0B7;
+	Mon,  8 Sep 2025 11:03:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Tq/BLgxF"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1C7F2F83C5;
-	Mon,  8 Sep 2025 11:02:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6734E2FABE0;
+	Mon,  8 Sep 2025 11:03:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757329375; cv=none; b=TCKmhQFeNkHNxGgBNUV1BAW7hBeySbJv/5gCDoYUsglQNltEmAU+2C1CmMMZlVmrEN/ND98xWk4Zuo+hhuvB3JLT/NHL97Hhjj6zFDcyHe5lugzwPxJeD1AR1aE80eRlE5R89h0rmu6fllCK2Z6UIsds68TRrZ8/ddRp8wNtRyc=
+	t=1757329434; cv=none; b=aYmVHY9LX5R6BIUa2zoeXpxL6SdtuS/03MCpWnOlaxCG0BnCrPZFvECi7yDo+w6MqpcYnWtAn3d0wa4E0XnUunljpdcCtUzUUNT4GYXEtz+ADMD/iK6ScxoHpOihKufG5rdP5ozJUC8yBqm0PqLq4SZe2yxiyOfh3mtHCEpt7gA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757329375; c=relaxed/simple;
-	bh=5Z9hcWmBvhQi9ZeiiHw5kfj7bz6e3HIyXygpf0Q7xFg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=b63BTDn+B0xJs9P2XXQDTyQdrI//Ma5LFehD7VEbQ5cWOsswMTS0z7UoY0H2JvoqOmefzHCcTvib2kCaq1H4buA7Q+kat2CnKqJ0a7QjlEOfWVmo155zx93PGuvE3lYtAxocumrcWhaWlRqzm5q93ljHelbztNzbio3SspMj/14=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AF1491692;
-	Mon,  8 Sep 2025 04:02:44 -0700 (PDT)
-Received: from e133380.arm.com (e133380.arm.com [10.1.197.68])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 15E293F63F;
-	Mon,  8 Sep 2025 04:02:48 -0700 (PDT)
-Date: Mon, 8 Sep 2025 12:02:41 +0100
-From: Dave Martin <Dave.Martin@arm.com>
-To: Yeoreum Yun <yeoreum.yun@arm.com>
-Cc: catalin.marinas@arm.com, will@kernel.org, broonie@kernel.org,
-	oliver.upton@linux.dev, anshuman.khandual@arm.com, robh@kernel.org,
-	james.morse@arm.com, mark.rutland@arm.com, joey.gouly@arm.com,
-	ahmed.genidi@arm.com, kevin.brodsky@arm.com,
-	scott@os.amperecomputing.com, mbenes@suse.cz,
-	james.clark@linaro.org, frederic@kernel.org, rafael@kernel.org,
-	pavel@kernel.org, ryan.roberts@arm.com, suzuki.poulose@arm.com,
-	maz@kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	kvmarm@lists.linux.dev
-Subject: Re: [PATCH v4 0/5] initialize SCTRL2_ELx
-Message-ID: <aL630WeBwWoUGTBp@e133380.arm.com>
-References: <20250821172408.2101870-1-yeoreum.yun@arm.com>
- <aLW5OIgv8/bvvY9E@e133380.arm.com>
- <aLXjVNCbT6YeWlSS@e129823.arm.com>
- <aLgd0/7peYBA4z87@e133380.arm.com>
- <aLgvzKeEPn325aRO@e129823.arm.com>
+	s=arc-20240116; t=1757329434; c=relaxed/simple;
+	bh=nnDO52lb3fZnH4BbFRvfPh9V5QmWlluTdmnAisy1PlU=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=h2FztI7BXmmVG4QcPXOFoKybkC20NRW0Fd46foUaqc1Cm8u1tApVLv5goO8Gnw2JikojNI7DDotqd4G5/jYyyg6u6o/diAVDwnBVVk8MA8DOy9HxYR8Gi3AEyVfVEigmJfJWvm00n85LgFuDbOD61+Kl3o68wwrEBSDzXaukAtE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Tq/BLgxF; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1757329433; x=1788865433;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version:content-id;
+  bh=nnDO52lb3fZnH4BbFRvfPh9V5QmWlluTdmnAisy1PlU=;
+  b=Tq/BLgxFh+c157SbAwTlpxUyD/0iGHCgSbBOrjDLdiMCDInXv4ubpbep
+   DeTKdw7kUM5cmxJ7nkfVDCvUP6eNI/QYOQhEGl26fMYbBIUYEnBLYWMWL
+   smDg3vylbPc6YqKpVaHh7SQJNKZlDSaSwq6wLNfmEnYUgsHUcbkAmOWPa
+   K/SXxKDrv+srITq6SZE95hK4XoaDsr+SD3AFFaVsZB0OIRuhVI2eL46WJ
+   J1yEyU2r44bIRbNhlORS76lzfb1uICYr64inZlOAdkN/N7rVwvWAGEVYE
+   XkDc4925hTDyggavCvtx/OR4gDigr1CmLAKs9XHosVZXFlVgPvzCE2pxW
+   w==;
+X-CSE-ConnectionGUID: tfOclQoTQr+wf/cxMtm+lg==
+X-CSE-MsgGUID: f+N67MXvSfuZc/z2zKeR9Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11546"; a="63222574"
+X-IronPort-AV: E=Sophos;i="6.18,248,1751266800"; 
+   d="scan'208";a="63222574"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2025 04:03:52 -0700
+X-CSE-ConnectionGUID: vS4iXOewTwKYh/36n4l1Tw==
+X-CSE-MsgGUID: mT7o05c6SvC10/MUHnrVdw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,248,1751266800"; 
+   d="scan'208";a="176817028"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.11])
+  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2025 04:03:49 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Mon, 8 Sep 2025 14:03:45 +0300 (EEST)
+To: Xi Pardee <xi.pardee@linux.intel.com>
+cc: irenic.rajneesh@gmail.com, david.e.box@linux.intel.com, 
+    Hans de Goede <hdegoede@redhat.com>, platform-driver-x86@vger.kernel.org, 
+    LKML <linux-kernel@vger.kernel.org>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v3 5/6] platform/x86:intel/pmc: Show device and function
+ number
+In-Reply-To: <7fae6fc8-6df5-4d1f-90ec-b6bf159e62da@linux.intel.com>
+Message-ID: <ed041865-c5aa-1312-e401-8cf333ac0820@linux.intel.com>
+References: <20250815224611.2460255-1-xi.pardee@linux.intel.com> <20250815224611.2460255-6-xi.pardee@linux.intel.com> <c9aa04ae-f942-cf73-d046-78d0f90f373d@linux.intel.com> <7fae6fc8-6df5-4d1f-90ec-b6bf159e62da@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aLgvzKeEPn325aRO@e129823.arm.com>
+Content-Type: multipart/mixed; BOUNDARY="8323328-1559071104-1757328370=:938"
+Content-ID: <45d0b3af-16cb-d41d-b9d8-351e9de031af@linux.intel.com>
 
-Hi,
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-On Wed, Sep 03, 2025 at 01:08:44PM +0100, Yeoreum Yun wrote:
+--8323328-1559071104-1757328370=:938
+Content-Type: text/plain; CHARSET=ISO-8859-15
+Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-ID: <c4323cb8-65e8-c085-f405-05909754bedc@linux.intel.com>
 
-[...]
+On Sun, 7 Sep 2025, Xi Pardee wrote:
 
-> > > > Have you tested all the code paths, or are there some things that have
-> > > > not been tested?
-> > >
-> > > I've tested for pKVM, nested and nhve and crash path
-> > > (I do my best what can I do for modified path).
-> >
-> > Was that just confirming that the kernel boots / does not crash?
-> 
-> Not only that, since the my last mistake, I've check it with debugger
-> too -- set the SCTLR2_ELx as I expected.
-> 
-> >
-> > What about CPU suspend/resume and hotplug?
-> 
-> Of course It's done both enter/exit idle and hotplug with related kselftest test.
-
-Were you able to step through these paths, too?
-
-> > My concern is that most of the defined SCTLR2_ELx bits won't affect
-> > kernel execution unless the corresponding hardware features are
-> > actively being used -- so while we know that the patches don't break
-> > the kernel, this may not prove that SCTLR2_ELx is really being
-> > initialised / saved / restored / reset correctly.
-> 
-> That's why I've confirmed with debugger whether the SCTLR2_ELx value
-> sets as I expected... personally I've done as much as I can for
-> test related for SCTLR2_ELx.
-
-OK
-
-> > > > Since this code is not useful by itself, it may make sense to delay
-> > > > merging it until we have patches for a feature that depends on SCTLR2.
-> > >
-> > > Whatever I pass this detiermination for maintainer.
-> >
-> > Sure, that's just my opinion.
-> >
-> > Either way, this doesn't stop anyone from building support for specific
-> > features on top of this series before it gets merged.
+> Hi Ilpo,
+>=20
+> Thanks for the review.
+>=20
+> On 8/28/2025 6:56 AM, Ilpo J=E4rvinen wrote:
+> > On Fri, 15 Aug 2025, Xi Pardee wrote:
+> >=20
+> > > Add support to show device and function number for S0ix blockers. Thi=
+s
+> > > feature depends on S0ix blocker substate requirement table and BDF
+> > > association table. This feature is available for platforms starting f=
+rom
+> > > Pather Lake.
+> > >=20
+> > > Only a subset of S0ix blockers has device and function number associa=
+ted
+> > > to it. Get the availability information from the substate requirement
+> > > table. Get the device and function number mapping information for eac=
+h
+> > > S0ix blocker from the BDF association table.
+> > >=20
+> > > Signed-off-by: Xi Pardee <xi.pardee@linux.intel.com>
+> > > ---
+> > >   drivers/platform/x86/intel/pmc/core.c | 182 +++++++++++++++++++++++=
+++-
+> > >   drivers/platform/x86/intel/pmc/core.h |  23 +++-
+> > >   2 files changed, 203 insertions(+), 2 deletions(-)
+> > >=20
+> > > diff --git a/drivers/platform/x86/intel/pmc/core.c
+> > > b/drivers/platform/x86/intel/pmc/core.c
+> > > index a0b948a875a5a..69ee40cbb8b8a 100644
+> > > --- a/drivers/platform/x86/intel/pmc/core.c
+> > > +++ b/drivers/platform/x86/intel/pmc/core.c
 
 
-Looking again through this series, I realised that the requirements for
-this feature are not documented in booting.rst.
+> > > +=09=09const char *name =3D NULL;
+> > > +=09=09struct list_head *cur;
+> > > +=09=09struct bdf_entry *bdf;
+> > > +=09=09struct pmc *pmc;
+> > > +
+> > > +=09=09pmc =3D pmcdev->pmcs[pmcidx];
+> > > +=09=09if (!pmc)
+> > > +=09=09=09continue;
+> > > +
+> > > +=09=09list_for_each(cur, pmc->bdf_list) {
+> > > +=09=09=09bdf =3D list_entry(cur, struct bdf_entry, node);
+> > > +=09=09=09if (bdf->name !=3D name) {
+> > > +=09=09=09=09seq_printf(s, "pmc%d: %30s | %15x | %15x |\n",
+> > > pmcidx,
+> > %u
+> Will change it in next version.
 
-Does the following patch look good to you?  If so, feel free to append
-it to the series (with your Reviewed-by, if you're happy with the
-changes).
+I don't remember if I mentioned it earlier but if you're going to address=
+=20
+the review comment fully. There's no need to "ack" them like this. I=20
+trust you make the changes you don't contest.
 
-It's probably worth double-checking the bit numbers etc.  I wrote this
-some weeks ago and then forgot about it.
+By doing so, we can both save time by only focusing on the points which=20
+are contested or need further discussion. :-)
 
---8<--
 
-From 0f0adc70ef6c00a3f198c1f0e105b6e47f8cab3b Mon Sep 17 00:00:00 2001
-From: Dave Martin <Dave.Martin@arm.com>
-Date: Mon, 8 Sep 2025 11:36:21 +0100
-Subject: [PATCH] docs: arm64: Document booting requirements for FEAT_SCTLR2
+> > > +=09if (!maps[*r_idx][*i_idx].name)
+> > > +=09=09(*r_idx)++;
+> > > +
+> > > +=09// Iteration reaches the end of the maps
+> > > +=09if (*r_idx >=3D arr_size)
+> > > +=09=09return NULL;
+> > > +
+> > > +=09for (; *r_idx < arr_size; (*r_idx)++) {
+> > > +=09=09const char *ip_name;
+> > Can't you put this to the innermost block?
+> Will move it in next version.
+> >=20
+> > > +=09=09if (reset)
+> > Why you need this?
+>=20
+> The purpose of this function is to return the name of the NEXT s0ix block=
+er
+> with BDF information.
+>=20
+> r_idx and i_idx are used to keep track of the current position of the
+> iteration, therefore i_idx could not be reset to 0 at the first run of th=
+e
+> inner for loop. After the first run of inner for loop reset should be set=
+ to
+> true so in next run of the outer for loop i_idx could be reset to 0 (whic=
+h
+> mean the iteration reaches the next s0ix blocker map).
 
-Support for FEAT_SCTLR2 imposes some requirments on the configuration
-of traps at exception levels above the level at which the kernel is
-booted.
+But why you cannot reset i_idx after the inner for () loop and drop=20
+this reset variable entirely?
 
-Document them.
+> > > +=09=09=09*i_idx =3D 0;
+> > > +
+> > > +=09=09for (; maps[*r_idx][*i_idx].name; reset =3D TRUE, (*i_idx)++) =
+{
+> > true
+> >=20
+> > This is hard enough to understand even without that "for (;". Would
+> > probably be better to use while () instead.
+> Will change to while loop in next version.
+> > > +=09=09=09if (!maps[*r_idx][*i_idx].blk)
+> > > +=09=09=09=09continue;
+> > > +
+> > > +=09=09=09bool exist =3D **lpm_req_regs & BIT(BDF_EXIST_BIT);
+> > > +=09=09=09(*lpm_req_regs)++;
+> > > +=09=09=09if (exist) {
+> > > +=09=09=09=09ip_name =3D maps[*r_idx][*i_idx].name;
+> > > +=09=09=09=09(*i_idx)++;
+> > > +=09=09=09=09return ip_name;
+> > > +=09=09=09}
+> > > +=09=09}
+> > > +=09}
+> > > +=09return NULL;
+> > > +}
+> > TBH, this entire function is horrible mess, two nested iterators as
+> > pointers, etc.
+> >=20
+> > I'm very far from following all what going on here.
+> >=20
+> > I suppose I've not seen this patch previously?
+>=20
+> To achieve the NEXT name of the s0ix blocker with BDF information we need=
+ to
+> iterate through two (set of) maps in parallel. The s0ix_blocker_maps prov=
+ide
+> names of all s0ix blockers and the lpm_req_regs map shows that which s0ix
+> blocker has associated BDF information.
+>=20
+> if maps[*r_idx][*i_idx].blk is set, that means it is a s0ix blocker. For =
+each
+> s0ix blocker, if **lpm_req_regs & BIT(BDF_EXIST_BIT) is set, that means t=
+his
+> blocker has associated BDF information. Pointers are used to keep track o=
+f the
+> current position of the two (set of) maps so the function provides the NE=
+XT
+> name of the s0ix blocker with associated BDF info.
+>=20
+> I will probably switch to use a temporary data structure, such as list, t=
+o
+> store all s0ix blockers with BDF info and then iterate through this list =
+in
+> pmc_core_process_bdf() call instead. That will make the logic easier to f=
+ollow
+> and maintain. I will also add more comments to next version of this patch=
+=2E
 
-For now, don't document requirements on the initial state of SCTLR2_ELx
-at the kernel boot exception level.  The general wording under "System
-registers" appiles.  (SCTLR_ELx is similarly undocumented.)
+My out-of-band suggestion was to convert i_idx into a correctly typed=20
+pointer  as it's the last-level array, you only need to do two things for=
+=20
+the pointer:
 
-Signed-off-by: Dave Martin <Dave.Martin@arm.com>
----
+- set it to start of the next array when r_idx increases.
+- increment the pointer with ++.
 
-Based on v6.17-rc1
+> > > +static int pmc_core_process_bdf(struct pmc_dev *pmcdev,  struct pmc =
+*pmc,
+> > > u32 data,
+> > > +=09=09=09=09unsigned int *r_idx, unsigned int *i_idx, u32
+> > > **lpm_req_regs,
+> > > +=09=09=09=09const char **name)
+> > > +{
+> > > +=09unsigned int i;
+> > > +
+> > > +=09if (!data)
+> > > +=09=09return 0;
+> > > +
+> > > +=09if (!*name)
+> > > +=09=09return -EINVAL;
+> > > +
+> > > +=09for (i =3D BDF_FUN_LOW_BIT; i <=3D BDF_FUN_HIGH_BIT; i++) {
+> > I think you can iterate 0 ... __fls(FIELD_MAX()).
+>=20
+> Each 16 bit represents one device and the associated function numbers for=
+ one
+> s0ix blocker.
+>=20
+> Bit 4-0 indicates the device number.
+>=20
+> Bit 12-5 indicates function numbers.
+>=20
+> Bit 15 indicates if the next 16 bit is associated to the same s0ix blocke=
+r as
+> the current word.
+>
+> Between bit 12 and bit 5, each bit position represents one function numbe=
+r.
+> Bit 5 represents function 0 and bit 12 represents function 7. I will add =
+more
+> comments in the next version.
+>=20
+> Will change to use __fls(FIELD_MAX()) in next version.
 
- Documentation/arch/arm64/booting.rst | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+Yes, these are fields which are to be defined with GENMASK()/BIT(). Then=20
+this code just has to figure out how to deal with that change and my=20
+suggestion was to use fls construct. If you find better approach, those=20
+can be used as well but my point is that this iteration should be sourced=
+=20
+from the GENMASK_U16(12, 5).
 
-diff --git a/Documentation/arch/arm64/booting.rst b/Documentation/arch/arm64/booting.rst
-index 2f666a7c303c..e8fe1b2023a9 100644
---- a/Documentation/arch/arm64/booting.rst
-+++ b/Documentation/arch/arm64/booting.rst
-@@ -545,6 +545,16 @@ Before jumping into the kernel, the following conditions must be met:
- 
-    - MDCR_EL3.TPM (bit 6) must be initialized to 0b0
- 
-+  For CPUs with the SCTLR2_ELx registers (FEAT_SCTLR2):
-+
-+  - If EL3 is present:
-+
-+    - SCR_EL3.SCTLR2En (bit 44) must be initialised to 0b1.
-+
-+  - If the kernel is entered at EL1 and EL2 is present:
-+
-+    - HCRX_EL2.SCTLR2En (bit 15) must be initialised to 0b1.
-+
- The requirements described above for CPU mode, caches, MMUs, architected
- timers, coherency and system registers apply to all CPUs.  All CPUs must
- enter the kernel in the same exception level.  Where the values documented
--- 
-2.34.1
+> > > +=09name =3D pmc_core_get_next_bdf_ip_name(pmc, &r_idx, &i_idx,
+> > > &lpm_reg_regs);
+> > > +=09if (!name)
+> > > +=09=09return -EINVAL;
+> > > +
+> > > +=09pmc->bdf_list =3D devm_kzalloc(&pmcdev->pdev->dev, sizeof(struct
+> > > list_head), GFP_KERNEL);
+> > Should use sizeof(*xx).
+> >=20
+> > But why you need to allocate the list head and not have it in place
+> > within the pmc's struct?
+>=20
+> The memory for bdf_list is only allocated when the bdf information is
+> available to achieve.
+>
+> intel_pmc_core driver can check if the memory is allocated to decide whet=
+her
+> to create a file in debugfs for bdf in pmc_core_dbgfs_register().
 
+But can't you use empty list check for that?
+
+> > > +=09if (!pmc->bdf_list)
+> > > +=09=09return -ENOMEM;
+> > > +
+> > > +=09INIT_LIST_HEAD(pmc->bdf_list);
+
+> > > +
+> > > +=09for (; sample_id < max_sample_id; sample_id++) {
+> > > +=09=09u32 data;
+> > > +
+> > > +=09=09ret =3D pmt_telem_read32(ep, sample_id, &data, 1);
+> > > +=09=09if (ret) {
+> > > +=09=09=09dev_err(&pmcdev->pdev->dev,
+> > > +=09=09=09=09"couldn't read bdf: %d\n", ret);
+> > One line.
+> Will change it in next version.
+> >=20
+> > > +=09=09=09return ret;
+> > > +=09=09}
+> > > +
+> > > +=09=09if (sample_id =3D=3D header_id) {
+> > > +=09=09=09size =3D (data & GENMASK(BDF_SIZE_HIGH_BIT,
+> > > BDF_SIZE_LOW_BIT))
+> > > +=09=09=09       >> BDF_SIZE_LOW_BIT;
+> > Define the field and use FIELD_GET().
+> Will change it in next version.
+> >=20
+> > > +=09=09=09header_id +=3D size + 1;
+> > No, I just cannot understand what's going on here, it's hopeless. Alway=
+s
+> > when I think I've finally understood what its all about you throw a cur=
+ve
+> > ball like this.
+>=20
+> There is one header line (32 bit) between each type of s0ix blocker in th=
+e bdf
+> association table. The bit 23-26 in header line indicates the size of eac=
+h
+> section of one specific type of s0ix blocker in this table.
+>=20
+> header_id is used=A0 to keep track of the id of each header so we will pr=
+ocess
+> the header line differently from the other lines.
+>=20
+> I will add more detailed comment in next version.
+
+I suspect naming the fields with defines and using FIELD_GET() will=20
+already get you far.
+
+Perhaps BDF_SIZE (=3Dwhat remains when you take those custom coded bit fiel=
+d=20
+postfix out of the current naming) should be renamed into something like=20
+BDF_SECTION_SIZE for better clarity.
+
+--=20
+ i.
+--8323328-1559071104-1757328370=:938--
 
