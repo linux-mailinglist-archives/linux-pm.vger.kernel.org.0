@@ -1,128 +1,164 @@
-Return-Path: <linux-pm+bounces-34142-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34143-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F03AB4882F
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Sep 2025 11:22:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 08520B4884D
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Sep 2025 11:25:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5ACA43AAE24
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Sep 2025 09:22:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BB6A917D8C7
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Sep 2025 09:25:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1FD02EE61D;
-	Mon,  8 Sep 2025 09:22:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06E852F069C;
+	Mon,  8 Sep 2025 09:25:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WQyPMgAX"
+	dkim=fail reason="signature verification failed" (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="Z1nkeBvp"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A95781D63EF;
-	Mon,  8 Sep 2025 09:22:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C8631C4A13;
+	Mon,  8 Sep 2025 09:25:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757323336; cv=none; b=TcDdsnk1zWmVMEzXLOAXQk6Je2WvLXFHMzCdSqXFjsc0sT80cpz4eAI2AmpYkhr9bgix/9cvXWhWq7OsvCusz7JKvUe9UZH7Gh5WZaT25rfZAJAzLUlQYLHizbX4phI3XvjW8k8pWLgQivArK0FsonnyQdpZ4wTU7M+7whjQgXU=
+	t=1757323532; cv=none; b=J4xi/qPr142ckd4BnEb9U5uRxOVP9VGyt+AFUDUyexPzN5Sm6DJr2XPZUReFnDW8wL1rRYO3MHUBhz5WCKJAteTiTvY49YZIjJhdltFthTkxvMegGtbz3bGdqFXLBhXajL0rtp5AfKMdTFVgsD3nrySgTj7+KcR4eY1CAvXJ2Y4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757323336; c=relaxed/simple;
-	bh=RQXADD0cS0ZVsnz4pMEqemDrTvOMGV2K8cYEaFDvCXE=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=PvVs5OQKe2sEN3fMRjpPr/YYeg5hdeFinxeX5oLy1oTwI4VFHBiohePiHJ73OzaVYnopHaCezT0grC/8Q0E/+ty8vQzn/cOXpqqq+JGyvh6wGOltM91U5vhUv1aGjqRa4StZuHqsUOV94teiXFg1hBZAVVkE6XDFMllq34Iia38=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WQyPMgAX; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757323335; x=1788859335;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=RQXADD0cS0ZVsnz4pMEqemDrTvOMGV2K8cYEaFDvCXE=;
-  b=WQyPMgAXAa57JwBOWlEtPMfdcjQ6wwXGwD1hy0lBmJ6eyZlpUkBvpSmI
-   TugWoXTWL8SVcyLdmsMkB86SrUrp2v6wpQTBfeGhnOvLhAVd2jYBwsucb
-   ru8CqyTnR6SAZW857mfZMi3Z3rB2fv+mUNhOSwTbe0XJeUhZuazdlG9IM
-   yOQR/whN6YfhQdXNtlEz4crdnYL/lSSVnGw6XxegmQBe8boipFlZL+Ysb
-   7kelUuFMpBTj6R0EOF0oYAxTfR3HtBU8JyjbFK+PBD3LlTxvUdcEb0W4S
-   +KTiezptSo/8o8eecgkaKt5200pAgxMQzcMDf28dK5g3AuHusm0AWEASs
-   g==;
-X-CSE-ConnectionGUID: GtuG5Jj4R3aaRVl3MMGzLQ==
-X-CSE-MsgGUID: FiU7uKF3SMGvA73qxZoYhA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11546"; a="70278467"
-X-IronPort-AV: E=Sophos;i="6.18,248,1751266800"; 
-   d="scan'208";a="70278467"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2025 02:22:14 -0700
-X-CSE-ConnectionGUID: IWOIyFBNRUqNWsZB9TcL/Q==
-X-CSE-MsgGUID: xab+wN7WQpWnqCl8fIlQAw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,248,1751266800"; 
-   d="scan'208";a="209904081"
-Received: from carterle-desk.ger.corp.intel.com (HELO localhost) ([10.245.246.204])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2025 02:22:10 -0700
-From: Jani Nikula <jani.nikula@linux.intel.com>
-To: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>, Randy Dunlap
- <rdunlap@infradead.org>
-Cc: linux-kernel@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Pavel Machek
- <pavel@ucw.cz>, Len Brown <len.brown@intel.com>, linux-pm@vger.kernel.org,
- Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org, "James E.J.
- Bottomley" <James.Bottomley@hansenpartnership.com>
-Subject: Re: [PATCH v4] kernel.h: add comments for system_states
-In-Reply-To: <20250907181719.0138c054@foz.lan>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20250904063631.2364995-1-rdunlap@infradead.org>
- <6089e22ddfdc135040cdeb69329d817846026728@intel.com>
- <20250905140104.42418fba@foz.lan>
- <34fb6a27a2c17c22c0ac93bebb0bbfd1a04d1833@intel.com>
- <atj2koasbiuf67rzr7bbdwpu4kcgkdsqt6rhz5vwpbryfqxm7z@mfmts3tnsasf>
- <2aad4540-ccdd-4519-9bed-7d8c7ccd009d@infradead.org>
- <20250906105627.2c0cd0d9@foz.lan>
- <d815f5c3-6e15-4758-8bf4-601d5543cab9@infradead.org>
- <20250906233028.56573fd6@foz.lan> <20250907153547.5d4271d9@foz.lan>
- <20250907181719.0138c054@foz.lan>
-Date: Mon, 08 Sep 2025 12:22:06 +0300
-Message-ID: <f6e0f7409df67e0554885cacb74023a8aad9a717@intel.com>
+	s=arc-20240116; t=1757323532; c=relaxed/simple;
+	bh=54WIjGXn+e12vG4j7roz9vOc3xWeWTD/9qMG6rU+YCg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=atZmWpwvPKcn4AaTfViU5Uf/5CXW+kdWtiPqTAaIQhCsllcyd+h+SBhD8rgtLYfOdGC211RNPPf9G+ZHfraEpao77BMEKCgJLZYRAVhqGIWlaZWPVGnkNss8HtvWCp4EiKyncluj1i85MFjUb+ItFe2QW4U5lSWYHhswfeUYKDE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=fail (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=Z1nkeBvp reason="signature verification failed"; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 5A4A540E01A5;
+	Mon,  8 Sep 2025 09:25:28 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=fail (4096-bit key)
+	reason="fail (body has been altered)" header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id 7s5Yx-duyol7; Mon,  8 Sep 2025 09:25:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1757323514; bh=u4qtBOrEcvr/i1pRga+z9xPfqiyhYrJPtEKHxUcFniQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Z1nkeBvpkTu/gPHOzI97EwwiHRI7x3O51S+p47ynJaKa/2OfHrSM5QWYiW2UiVAIt
+	 wd/I/t7Wh1HKSVqq1gCC6DP0E9GzPK3sUY45wa9dYIEeydLxr+69khpMfelB2Dtaiz
+	 hayVfNfCmR36yqf3bFCdT9cqwEvt0tqnh8pqElC6k8buRuuLlsYWd3L/Vg/RRhZibs
+	 fvACbsKvnsrnG/nQHyQ6AT6YgVvv2eRhd2BM5efqUoe98v8j+k+JfC6eGToUEFh26m
+	 CC3oPbeXihbUlL94uWW64uf6AmahwU7tVVBMsFuElETGqadl3V0S7SlOfOBNKdVTem
+	 sYO7HTRFc5UE637PQOylo33PzUweaKlEyjFpspvqqN28cxVUbHk3Kj1qWIHjqiekVu
+	 oO+Kr0+RjtVcpJLM0K9136+LsA0njAwUueUvEuWDULVLo334z8BqmTwTNLzcTGLKJB
+	 3+qxsYjOtKUut0NL1dbW+e6HVSMGUgCQACDXeWflbQTMEVzrc2L+knWE/QA6U4TexK
+	 qpMeHMwbGxxuIOiL2QL7y31nAnoyA5HTNx6Ei2IQYVJAybBVhOdC4P2d/JfRNBSY2d
+	 R4NTEihlGI7QqgtMDXc4MPyrWVmvQruflOcWHSp4JrTZP03/f8MdouGoxRzw25AyVK
+	 VeW1t/QnT4N790FqN/m5Jg/M=
+Received: from zn.tnic (p5de8ed27.dip0.t-ipconnect.de [93.232.237.39])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with UTF8SMTPSA id 4182740E01A3;
+	Mon,  8 Sep 2025 09:24:27 +0000 (UTC)
+Date: Mon, 8 Sep 2025 11:24:24 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: Zihuan Zhang <zhangzihuan@kylinos.cn>
+Cc: "Rafael J . wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Jonathan Cameron <jonathan.cameron@huawei.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	MyungJoo Ham <myungjoo.ham@samsung.com>,
+	Kyungmin Park <kyungmin.park@samsung.com>,
+	Chanwoo Choi <cw00.choi@samsung.com>,
+	Jani Nikula <jani.nikula@linux.intel.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Tvrtko Ursulin <tursulin@ursulin.net>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Daniel Lezcano <daniel.lezcano@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Eduardo Valentin <edubezval@gmail.com>, Keerthy <j-keerthy@ti.com>,
+	Ben Horgan <ben.horgan@arm.com>,
+	zhenglifeng <zhenglifeng1@huawei.com>,
+	Zhang Rui <rui.zhang@intel.com>, Len Brown <lenb@kernel.org>,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Beata Michalska <beata.michalska@arm.com>,
+	Fabio Estevam <festevam@gmail.com>, Pavel Machek <pavel@kernel.org>,
+	Sumit Gupta <sumitg@nvidia.com>,
+	Prasanna Kumar T S M <ptsm@linux.microsoft.com>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Yicong Yang <yangyicong@hisilicon.com>, linux-pm@vger.kernel.org,
+	linux-acpi@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	linux-arm-kernel@lists.infradead.org,
+	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+	imx@lists.linux.dev, linux-omap@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 0/6] cpufreq: use __free() for all cpufreq_cpu_get()
+ references
+Message-ID: <20250908092424.GEaL6gyNdH8oa_oTyq@fat_crate.local>
+References: <20250905132413.1376220-1-zhangzihuan@kylinos.cn>
+ <20250905174928.GFaLsiqKV36JDowX94@fat_crate.local>
+ <a968c6da-265a-405c-8f79-cf0474c80bc5@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <a968c6da-265a-405c-8f79-cf0474c80bc5@kylinos.cn>
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, 07 Sep 2025, Mauro Carvalho Chehab <mchehab+huawei@kernel.org> wrote:
-> Heh, looking at Sphinx doc at:
-> https://www.sphinx-doc.org/en/master/usage/domains/c.html:
->
-> 	.. c:member:: declaration
-> 	.. c:var:: declaration
->
-> 	    Describes a C struct member or variable. Example signature:
->
-> 	    .. c:member:: PyObject *PyTypeObject.tp_bases
->
-> 	    The difference between the two directives is only cosmetic.
->
-> I guess the best is to encode it as:
->
-> 	prototype = args.other_stuff["var_type"]
-> 	self.data += f"\n\n.. c:var:: {prototype}\n\n"
->
-> And let Sphinx format it for us.
+On Mon, Sep 08, 2025 at 05:12:37PM +0800, Zihuan Zhang wrote:
+> > From: Documentation/process/submitting-patches.rst
+> >=20
+> > Don't get discouraged - or impatient
+> > ------------------------------------
+> >=20
+> > After you have submitted your change, be patient and wait.  Reviewers=
+ are
+> > busy people and may not get to your patch right away.
+> >=20
+> > Once upon a time, patches used to disappear into the void without com=
+ment,
+> > but the development process works more smoothly than that now.  You s=
+hould
+> > receive comments within a week or so; if that does not happen, make s=
+ure
+> > that you have sent your patches to the right place.  Wait for a minim=
+um of
+> > one week before resubmitting or pinging reviewers - possibly longer d=
+uring
+> > busy times like merge windows.
+> Sorry for the noise. I=E2=80=99ll split the patchset and avoid CC=E2=80=
+=99ing unnecessary
+> people in the future.
 
-In the same vein, I believe we should let Sphinx format everything else
-for us as well. Function parameters should use ":param foo: desc" and
-struct/union members should be indented within the enclosing
-struct/union.
+I don't think you read what I sent you. Lemme spell it out: you're suppos=
+ed to
+*wait* to gather review feedback, at least a week. While waiting,
+*incorporate* or *address* all that feedback and *then* send a new set.
 
-I also think we're going way overboard with including e.g. struct
-definition in the output. I'd just chuck those away and maybe add links
-to kernel git source for the definition instead.
+If you keep spamming people like that, you'll accomplish the opposite of =
+what
+you're trying to do.
 
+And while waiting you can read our documentation on the community process=
+ so
+that you know what to do in the future.
 
-BR,
-Jani.
+--=20
+Regards/Gruss,
+    Boris.
 
-
--- 
-Jani Nikula, Intel
+https://people.kernel.org/tglx/notes-about-netiquette
 
