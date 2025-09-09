@@ -1,111 +1,123 @@
-Return-Path: <linux-pm+bounces-34214-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34215-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC9E3B4A37F
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Sep 2025 09:29:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 41B1CB4A400
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Sep 2025 09:42:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 63420173D7B
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Sep 2025 07:29:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E8FBA541F86
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Sep 2025 07:41:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 993E2305974;
-	Tue,  9 Sep 2025 07:29:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C26FC30C611;
+	Tue,  9 Sep 2025 07:39:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="bvNh1g+7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AMwbF2j9"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FB3F303A2A
-	for <linux-pm@vger.kernel.org>; Tue,  9 Sep 2025 07:29:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 964F93081D4;
+	Tue,  9 Sep 2025 07:39:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757402950; cv=none; b=qPZtlZcKwbRsopxSYwGWED4x3HUgY7zORDFFZTJxDEA65ai4HP0BRnopztzgqH+RhvlIBh3Rm3eF9ElpVRDvpmTArzN/aPIaJOpdSqMSvVqzIZsoZYxGkzrtROt2qxDbGp/b2fQYrQzSZvkEY0Cj8NyH/gOjt2OxKIHWl7oyVOI=
+	t=1757403592; cv=none; b=JHQ65cWqQS7o5Rmu6uOvHLbUx+xhHHteknE4ednq7dyvSyHs0D6KBlK3RZAFkzlpLggBDlWHCsC6wXUGN36VyHs/NiHdoKOzp4xgvvrd6mkq8t7qX3XAXaZEOd1jTOAlAKrQY+Y78iYNrrF/dIP/cF9fLSsWNyTK+5eFQc/xG68=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757402950; c=relaxed/simple;
-	bh=kERCxz1CPMxNIALKOs69C6lr9f4B92RMxE65sB0O02Q=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JxFbFalhefyswBtteoK3IfNZNq0ihZGSm3QIG62e93RTxDjAK9bMe91r5VmCCldcKsIjooTAazyW8KKdPonSgELt/KqFVmBw35OWRvMi4kud6ChsJPve5Oj93LWWvIevzuTtJU09VnpYI38mfDUsZVEqMdTaKMdMtPI+59GREq0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=bvNh1g+7; arc=none smtp.client-ip=209.85.167.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-55f6017004dso5520607e87.0
-        for <linux-pm@vger.kernel.org>; Tue, 09 Sep 2025 00:29:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1757402947; x=1758007747; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5GW9/KDzfTAM0j8ChoxUoKCHzLYQFoY43LgESCksmw8=;
-        b=bvNh1g+7wRBxASFmt26MTZ/8W5gHGv60cS7M+deO1Yt21U7Ixp5ooxQljxLr9uPV6+
-         bILEDreqRwJtdoe2u8T0He8IMm9dMdWxUUjqyFNi0UPDKl7awOVvWKEXNPtldKF26V4y
-         VOPPmOI1Tzeh0WvRPVCIIisadqxpDQ48Fj5GismRRO+FJbZ0Wx/gQcgqugqEY164ZH36
-         PE5TxTDN52Z/K+lAjoYNQwgclCo/NoJUmykHsQ51CvUyLW17CLrqxtwTnpLjV6kelsho
-         jq0R2qMm2ZkrBWUFEBf7kbvrnBb+8BrXhILk0t2PC0OK/upFS68yz2VEuuQK0AsI8MfF
-         t/lA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757402947; x=1758007747;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5GW9/KDzfTAM0j8ChoxUoKCHzLYQFoY43LgESCksmw8=;
-        b=BfEf73Eq18QtUmCkC8gyJMJy92OISDnVznBTLkkxa2TeL6MCUvddOU7EPod2/DAFzr
-         +lZTkbb8i8ASyHa0A5ypm69ORIxPuVeYzraNR9SD99Vc4Ig1iqD2hENbuYv8rTTD9Wiq
-         cuZUgzC3Y7x6e4pN6nJ2Vtozgf1UoGMFK+6a/qggT4rYVOyDxuAi7PNmtk1pozHGFFsU
-         sfBg9qDTtHYWt0+/dX3Cl1p5iJDEP42JZb2Zk3b4z6ExoWqmG2YaLsDt/wgieKUJeJ1A
-         HCJkf5f8RN+WljUb5yulYvYUKKI+6mQgv5Q+3Ex+zO40HuFAdu1xfwEYvYbLeGUXW1Uq
-         4Jnw==
-X-Forwarded-Encrypted: i=1; AJvYcCVrjHdVvBay4WUhSCUhUSoBs/3/AscMG63IHoPFEOc/XprU/uhxbZlv/yjoIhwxKnVYkA3k6xXYRw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxQ5CRsrIOvpqxI6iBfg43exVnscERo40IPGyLgMjJF7ogVqpnN
-	ij40h46T2f4pV9k6ZIpZCzXSVlzMYaPbSKznWg7AHLE6AoudSLxJvtdv1zJEKR6f5pOlKtzI1QY
-	IQSsnopkuchkoXGzq2CQoduRu0LcMe54EyqSFCfEIqEsVaRfu/4HDF0I=
-X-Gm-Gg: ASbGncsb+dMeKAstZHDOFC22ERbPU5X/QPqd9CaiT+G7nfM+/1A4jhI08WBKIiRbmpg
-	lShBTpHnhAv8wlCZYzWgXep7ePuiP5Dkl/wUgHESVIGeDCL76S2I7Aucnjji/x+n3gmJlmrv0M6
-	E6ls9ptzXjlXVEMkRU0ysvkFKqcQnyNoapoprOzwrp2uYJ7oJ67e6UMsZ8bhm8vCIaZGGRghWMT
-	t0Z1L581SbSzEoY/WxW6A5FPRaTySkrl9+O6Xp/
-X-Google-Smtp-Source: AGHT+IEqjgrmt+ZifJsC8dXxSIKNDWKgEEWLxttnQICiP6BTNthulURTjzWWJSjVEjQR2y08Mi3KbU5mWodqpjV6U2s=
-X-Received: by 2002:a05:6512:1390:b0:55f:6eed:7805 with SMTP id
- 2adb3069b0e04-56261313e4amr2985001e87.2.1757402946529; Tue, 09 Sep 2025
- 00:29:06 -0700 (PDT)
+	s=arc-20240116; t=1757403592; c=relaxed/simple;
+	bh=Ga5Cr0dJ0wmB7/q61wksi9ORqCdh01tkjlQ464HQdvQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=g0n6rNqtCLMztTWt2sHHFmuGCVOTp3KYAc9u8AwIPxRsFHq3pYX0gPY+qNT8i7zuhrdkqzzvhU0/JEdMpiE8a+NvZ5kvH0RsLnQfnhBaqBgfggwuS4e2fIZ+ZM0b8XynOlPqIfnP/lH81yRfbRYxvskQEH/ONikkiA1xVNcBo/E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AMwbF2j9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2934BC4CEF4;
+	Tue,  9 Sep 2025 07:39:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757403592;
+	bh=Ga5Cr0dJ0wmB7/q61wksi9ORqCdh01tkjlQ464HQdvQ=;
+	h=From:To:Cc:Subject:Date:From;
+	b=AMwbF2j9Mv2qr3wKfOwaADzJdd6ZO/t+yoApsbrDeLGuercUd/Y0aUIdeB+9Mf3nH
+	 jZnLsBYD7i95pQB8xbcGfk7xVCGmYDPW81WMjFLQOUNcQiukTdojSbJr34kWl6dKkW
+	 xnaz9ZpKtDG56GEdjOCLESx5aW4iEja3Mc5iF8Tww8+9ZF219i1rXEFamyrS01CI/n
+	 gfyF8a2ld+Wv1D0pcbkOKl+Tc9pz6R6rLL+BQaR/lhlWpxifo6164NXr8r+E3fjK8S
+	 xzma5Xwfs9kO7gUjzHWd1Jj1pMG0cDRO9q2okMg3ocEhJx5rwGZK6hm8N8C8SxV2L3
+	 b9dfm7uRmifMw==
+Received: from johan by xi.lan with local (Exim 4.98.2)
+	(envelope-from <johan@kernel.org>)
+	id 1uvsxA-000000006bN-46IF;
+	Tue, 09 Sep 2025 09:39:49 +0200
+From: Johan Hovold <johan@kernel.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>
+Cc: Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	linux-pm@vger.kernel.org,
+	linux-mediatek@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	Johan Hovold <johan@kernel.org>,
+	Jia-Wei Chang <jia-wei.chang@mediatek.com>,
+	Rex-BC Chen <rex-bc.chen@mediatek.com>
+Subject: [PATCH] cpufreq: mediatek: fix device leak on probe failure
+Date: Tue,  9 Sep 2025 09:38:19 +0200
+Message-ID: <20250909073819.25295-1-johan@kernel.org>
+X-Mailer: git-send-email 2.49.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250905090641.106297-1-marco.crivellari@suse.com> <175737718425.13878.11571194583527518524.b4-ty@collabora.com>
-In-Reply-To: <175737718425.13878.11571194583527518524.b4-ty@collabora.com>
-From: Marco Crivellari <marco.crivellari@suse.com>
-Date: Tue, 9 Sep 2025 09:28:55 +0200
-X-Gm-Features: Ac12FXxiOyfxaEVDT_NXlO0DudoWPhmQ3vX57NQ9bBPYwwNRA7GuGVoSn6-SHn0
-Message-ID: <CAAofZF4GrebP07QZBMzyjCEyGeL-Z9snNWRs0=S0CwrtAJ6AwA@mail.gmail.com>
-Subject: Re: [PATCH 0/2] power: replace wq users and add WQ_PERCPU to
- alloc_workqueue() users
-To: Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	Tejun Heo <tj@kernel.org>, Lai Jiangshan <jiangshanlai@gmail.com>, 
-	Frederic Weisbecker <frederic@kernel.org>, Sebastian Andrzej Siewior <bigeasy@linutronix.de>, 
-	Michal Hocko <mhocko@suse.com>, Sebastian Reichel <sre@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Tue, Sep 9, 2025 at 2:19=E2=80=AFAM Sebastian Reichel
-<sebastian.reichel@collabora.com> wrote:
-> Applied, thanks!
->
-> [1/2] power: supply: replace use of system_wq with system_percpu_wq
->       commit: c4a7748b551e5a06fe9a3862001192b1b5cfe195
-> [2/2] power: supply: WQ_PERCPU added to alloc_workqueue users
->       commit: cc2ec444e461b6ca2bc73cd7cbd06aaf15bdfa1a
+Make sure to drop the reference to the cci device taken by
+of_find_device_by_node() on probe failure (e.g. probe deferral).
 
-Thank you!
---=20
+Fixes: 0daa47325bae ("cpufreq: mediatek: Link CCI device to CPU")
+Cc: Jia-Wei Chang <jia-wei.chang@mediatek.com>
+Cc: Rex-BC Chen <rex-bc.chen@mediatek.com>
+Signed-off-by: Johan Hovold <johan@kernel.org>
+---
+ drivers/cpufreq/mediatek-cpufreq.c | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
 
-Marco Crivellari
+diff --git a/drivers/cpufreq/mediatek-cpufreq.c b/drivers/cpufreq/mediatek-cpufreq.c
+index f3f02c4b6888..21537a05785d 100644
+--- a/drivers/cpufreq/mediatek-cpufreq.c
++++ b/drivers/cpufreq/mediatek-cpufreq.c
+@@ -404,9 +404,11 @@ static int mtk_cpu_dvfs_info_init(struct mtk_cpu_dvfs_info *info, int cpu)
+ 	}
+ 
+ 	info->cpu_clk = clk_get(cpu_dev, "cpu");
+-	if (IS_ERR(info->cpu_clk))
+-		return dev_err_probe(cpu_dev, PTR_ERR(info->cpu_clk),
+-				     "cpu%d: failed to get cpu clk\n", cpu);
++	if (IS_ERR(info->cpu_clk)) {
++		ret = PTR_ERR(info->cpu_clk);
++		dev_err_probe(cpu_dev, ret, "cpu%d: failed to get cpu clk\n", cpu);
++		goto out_put_cci_dev;
++	}
+ 
+ 	info->inter_clk = clk_get(cpu_dev, "intermediate");
+ 	if (IS_ERR(info->inter_clk)) {
+@@ -552,6 +554,10 @@ static int mtk_cpu_dvfs_info_init(struct mtk_cpu_dvfs_info *info, int cpu)
+ out_free_mux_clock:
+ 	clk_put(info->cpu_clk);
+ 
++out_put_cci_dev:
++	if (info->soc_data->ccifreq_supported)
++		put_device(info->cci_dev);
++
+ 	return ret;
+ }
+ 
+@@ -569,6 +575,8 @@ static void mtk_cpu_dvfs_info_release(struct mtk_cpu_dvfs_info *info)
+ 	clk_put(info->inter_clk);
+ 	dev_pm_opp_of_cpumask_remove_table(&info->cpus);
+ 	dev_pm_opp_unregister_notifier(info->cpu_dev, &info->opp_nb);
++	if (info->soc_data->ccifreq_supported)
++		put_device(info->cci_dev);
+ }
+ 
+ static int mtk_cpufreq_init(struct cpufreq_policy *policy)
+-- 
+2.49.1
 
-L3 Support Engineer, Technology & Product
-
-marco.crivellari@suse.com
 
