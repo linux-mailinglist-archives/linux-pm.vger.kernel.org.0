@@ -1,109 +1,119 @@
-Return-Path: <linux-pm+bounces-34220-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34221-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F0D2B4A5D2
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Sep 2025 10:47:00 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B5EE5B4A5F7
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Sep 2025 10:51:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 39B321C21550
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Sep 2025 08:47:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2E7707B020E
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Sep 2025 08:49:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B535D1EFF8D;
-	Tue,  9 Sep 2025 08:46:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE1EB2727E6;
+	Tue,  9 Sep 2025 08:51:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="Ul/tCMtt"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="MbilZubL"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CED9526FA52
-	for <linux-pm@vger.kernel.org>; Tue,  9 Sep 2025 08:46:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1BF3262FC5
+	for <linux-pm@vger.kernel.org>; Tue,  9 Sep 2025 08:51:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757407612; cv=none; b=DhT9Nlarkr9uwHFo55sIPi8nlRIOf07ipAZFAs+UkCZHO8UhlOs0xGGKF5cr9dxXVej9E5AO5gmE6tl9lFw9cTI5tPZL3KA9mtSwqgowwqoc49zQmOihQMFKeXdd+yvFFJsvG/3Z+Ow+xBQJrq9Len6xsXOfPpCzkvboleGz/4A=
+	t=1757407888; cv=none; b=XRubJ0a62qoruUA8Ehxzj/eL1n1XvJxjGnt8TDxoioojaM+VlqYlEeCQDlIKOJKP9418ggjufq1kVKSCm42q6afCr40/dtQ5IyLJi3x+Skh8XIxBjStfUtDqB7ihAQ8EdmeDPq+Z4XUtqz7zK+ighhv+BpYFGdYEF2wsaUR2vgc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757407612; c=relaxed/simple;
-	bh=pXzuqrImXeJWFFQ0K35SwJI1PhXgtgYR7km+ODpMrOI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=FrxpXinN7C0OXW6hpVKs6twPIjutPedzdGp+RgLVFdcsYnPbJdDFZm9XrkHqLKQm7vW13n4j2rszYBRbCqZstx91XMiCeZYVXXRsDzGSgnWxXetGhkNKqHcoS9ZdYIi5qv0d2xeJeYLdsIdi9j6ULp2QAI/vWGUAEkIw+JdRAKs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=Ul/tCMtt; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=from:to:cc:subject:date:message-id
-	:in-reply-to:references:mime-version:content-transfer-encoding;
-	 s=k1; bh=439+ZGOih5RHJfeOoq1gfrAFd0Ov/4mMgHr7V0fVGiw=; b=Ul/tCM
-	ttyrKNiXbppGv4zPqYxypInAK+cQQVG4wGemCM7b4xIEAtKI1s0sSCr+EL1ZVo3r
-	kELKDULSfeK69tdhUbZLHhj4wESxHosBuKqwoj7u4Ler2JX/vxcZeDaU0PaojF9+
-	oMmoYN7pMf4CkSU2zB45MNUx3nePsCluHi3gcntq/Ht6vZX0fT4Cah/gqr7LvVN+
-	SCuQnltnIO2BPgU+7rPwRjeOXrUKYz7xhEYfvTREvHQ67456haoMdQdG1RAIaGNf
-	zXU9mOP/2ntoa6934ERWtZWQvYMYv1y/niq7aNPIIxXLHWhVm+/ywlfKTtzDorXy
-	TCHKTZ2fklcmDJcQ==
-Received: (qmail 172378 invoked from network); 9 Sep 2025 10:46:41 +0200
-Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 9 Sep 2025 10:46:41 +0200
-X-UD-Smtp-Session: l3s3148p1@NSzGV1o+YOwgAwDPXyerAKQ7QDbxBzog
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: linux-renesas-soc@vger.kernel.org
-Cc: =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-	Marek Vasut <marek.vasut@gmail.com>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>,
-	Lukasz Luba <lukasz.luba@arm.com>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	linux-pm@vger.kernel.org
-Subject: [RFC PATCH 2/2] thermal/drivers/rcar_gen3: use approved default values
-Date: Tue,  9 Sep 2025 10:46:20 +0200
-Message-ID: <20250909084618.23082-6-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.47.2
-In-Reply-To: <20250909084618.23082-4-wsa+renesas@sang-engineering.com>
-References: <20250909084618.23082-4-wsa+renesas@sang-engineering.com>
+	s=arc-20240116; t=1757407888; c=relaxed/simple;
+	bh=1i0l57ZqPs+nmk+dFWLjTwKNbcYbY5vaJfjBDNvQmEA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=lNwrwthIdO4+ErhRCLN9wqyKfRlobMK9Qj71lynGaInVHS1oBJYJmo7MnM7ViRqgldkWswa46H480SelZg0494nIdea/EwvU9Ow0CkC3OpIlZW234ryKY3QtHaDVMwfBPB2j22YKxucvAab1EQlwBwUi+ICYDnkNJHzTAtNzG00=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=MbilZubL; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-45dd7b15a64so34539305e9.0
+        for <linux-pm@vger.kernel.org>; Tue, 09 Sep 2025 01:51:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1757407885; x=1758012685; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4BbK4pmT6bYfsuRclAv9tGmENtdvKapeB1KD4zENnxo=;
+        b=MbilZubLP8HGIcUYPayibK3NA2+OCRapfMPZaS3RVouAoOaJ8JYAVT2UiLD/cEBlXp
+         fDqwboQaAWIeZmuCvl8rN8qnVEwfpJkHm9FD+t0my01NFD0zHDLmvJXTFbkCtzwROlFL
+         rYNp/3GA/cwaloArqKEX4MUuiviKkzPpNlu5Ej8nFNmZxLqvKFHOF8zoHBqAcP1FBRHv
+         HLaGpXPtxT5/cXGLu5c+otnFFHooj4uCPaWrIz3739vY62Hxm5+lD73xO/8+WiaZEDB9
+         ycgqoKLbrVl1bEyCiZ4dFdRWrls/ZsXT953ASXCdnlU3QgXcG2yz/B69zB7J8xAuicIv
+         ePJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757407885; x=1758012685;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4BbK4pmT6bYfsuRclAv9tGmENtdvKapeB1KD4zENnxo=;
+        b=ad502Y7G/rWFWKMfnATgDaothD9T4Ptn4So0yGzIhUgZiGHAh7jKcJg3kWyShIcJoT
+         bQvFgCd5v2Ub5cr9IZaxolQXMEEZDPgBRVf2w6QG/co6MelLgzihA7H+coNZofvbBBIL
+         E8GT9TQQm+efF1xlzNJol0YnhOphdUUATXcHU8vN+B28EQ4IUsaJqHiGqWhpKgbNNx7D
+         JhBbhWXpXqTN7H7v+kO458+f76/4l8zuNnBoA7UXaiDLGuNblms7cZxHIy9cQEGa/8YI
+         Wfmn24iD2es6Ut/SyfC+7O+511HQWxPPNIHvdm+j+A4lW7Ww0yjNffTKv8Sxid33pCpF
+         DAKg==
+X-Forwarded-Encrypted: i=1; AJvYcCUIiOFGNsW1QXTicpLhN2dNuxrQGSci/xXY0u1y+70D0SqxHS3Bw730+PVmkpOwVNYhYlEfC/kIIA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YymqDnzL2HK6laYrafclY/EAWVVg1NiOSsePquyRhS3fiMJTUyr
+	plMY7PYAXKg9o7LHI73lqjE214d5M1HzX69UGzjFZ9rLKvgQfwmcCSQMUvwK4uP8Ejl23iakEtI
+	ERaLl
+X-Gm-Gg: ASbGncuiIECywwFyzhe1GVJRmqXkDOG1dRecy0ifZy17f1CZOsWgtWbj934eK2iAcTU
+	0FJRbpxGMdvLHesuVnyeeShZ8UkuJuq5cY0rrDjI8vgP9LrJI0Nau/kkKqJ6esyZoIz3/z0hFHI
+	yMcXwxgxAvDZNcaeBRSuPbV6dXaXmWiDNyGYqxYFXQzx6cs3TuZOjAAUslWfO/i6YjePrd1C3cv
+	C+trKjyOcbEo/8VQusKkZarqd72cKBJP/bW2yQxKgy7h6GDuhGAgRR4f3Atgi5Hsucr2vBpehrG
+	XSP+sXTpjyw25B6p/4zmp8Vqc3oVTfPLiXJvOlNUaefUU9kek5bl6tmlKAUAFBkRnRkKod5VaF6
+	fxiwgwjKbu9QMv1VmEbhnjbRbM+hc0f4PSGLIrNwKLL6BcWp9TztttjJOqzDGzOygbCaW1bQKVc
+	J3
+X-Google-Smtp-Source: AGHT+IGL8x6BwFXjJDJUYELQJ29ZWMfUnWO7dg/5uItdRfaodfdZ4YFnPkvyFInGau3LOLm3pLE8/g==
+X-Received: by 2002:a05:600c:4746:b0:45c:b642:87a6 with SMTP id 5b1f17b1804b1-45dd5aa03ccmr137829465e9.0.1757407884865;
+        Tue, 09 Sep 2025 01:51:24 -0700 (PDT)
+Received: from ?IPV6:2001:a61:13f5:7601:eee5:15cd:c3c1:e601? ([2001:a61:13f5:7601:eee5:15cd:c3c1:e601])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3e75223f607sm1727954f8f.51.2025.09.09.01.51.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 Sep 2025 01:51:24 -0700 (PDT)
+Message-ID: <30807256-d5f4-4550-8e1d-aedee05dc667@suse.com>
+Date: Tue, 9 Sep 2025 10:51:21 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: Different approaches to sync timeout: Desktop vs Mobile use cases
+To: tuhaowen <tuhaowen@uniontech.com>, pavel@kernel.org, rafael@kernel.org
+Cc: saravanak@google.com, huangbibo@uniontech.com, len.brown@intel.com,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, wusamuel@google.com
+References: <CAGETcx-mA1kBw+r+tJOdpdqKHZQfNHvA-JS8wXc_ZHhj23WtMg@mail.gmail.com>
+ <20250909071358.5943-1-tuhaowen@uniontech.com>
+Content-Language: en-US
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <20250909071358.5943-1-tuhaowen@uniontech.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-The current default values for R-Car Gen4 are from a V4H Rev3.0 SoC.
-They seem incomplete because of the same values for all THS instances.
-Also, the bits to flag valid fuses were not set. So, better use the
-values from the Rev2.2 SoC which have the valid flags set.
+Hi,
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
- drivers/thermal/renesas/rcar_gen3_thermal.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+On 09.09.25 09:13, tuhaowen wrote:
 
-diff --git a/drivers/thermal/renesas/rcar_gen3_thermal.c b/drivers/thermal/renesas/rcar_gen3_thermal.c
-index 07b53d4f2683..b7026ab733d4 100644
---- a/drivers/thermal/renesas/rcar_gen3_thermal.c
-+++ b/drivers/thermal/renesas/rcar_gen3_thermal.c
-@@ -372,12 +372,12 @@ static const struct rcar_gen3_thermal_fuse_default rcar_gen3_thermal_fuse_defaul
- };
- 
- static const struct rcar_gen3_thermal_fuse_default rcar_gen3_thermal_fuse_default_info_gen4 = {
--	.ptat = { 3274, 2164, 985 },
--	.thcodes = { /* All four THS units share the same trimming */
--		{ 3218, 2617, 1980 },
--		{ 3218, 2617, 1980 },
--		{ 3218, 2617, 1980 },
--		{ 3218, 2617, 1980 },
-+	.ptat = { 3146, 2076, 928 },
-+	.thcodes = {
-+		{ 3092, 2505, 1881 },
-+		{ 2181, 2609, 2001 },
-+		{ 3175, 2587, 1962 },
-+		{ 3163, 2592, 1986 },
- 	}
- };
- 
--- 
-2.47.2
+> **Use Case**: Desktop/laptop systems where users expect immediate feedback
+> **Problem**: When large file operations are in progress (e.g., copying
+> files to USB drives) and users initiate suspend, ksys_sync() can hang
+
+It seems to me like both your approaches seek to mitigate
+the consequences of the issue rather than solve it.
+Your issue is that you have too many dirty blocks associated
+with a slow device.
+
+In other words, you should sync and need to limit the number
+of dirty blocks created after you've started syncing without
+freezing all of user space.
+
+	Regards
+		Oliver
 
 
