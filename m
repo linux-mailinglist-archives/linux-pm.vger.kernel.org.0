@@ -1,284 +1,268 @@
-Return-Path: <linux-pm+bounces-34194-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34195-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E16D1B4A16B
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Sep 2025 07:43:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8221BB4A1EC
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Sep 2025 08:19:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4FEC37AB3E3
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Sep 2025 05:41:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 30C14164EAA
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Sep 2025 06:19:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40F262F7AD6;
-	Tue,  9 Sep 2025 05:43:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C81E4301467;
+	Tue,  9 Sep 2025 06:19:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dD0f0QVu"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="znGGJjSt"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
+Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com [209.85.222.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2835D2264A3;
-	Tue,  9 Sep 2025 05:43:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E871B2550CA
+	for <linux-pm@vger.kernel.org>; Tue,  9 Sep 2025 06:19:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757396607; cv=none; b=MmDj47+rBolCKGESlTjKdMtqeKO1OJxW7J1FnmiqOqB5a5HqEGnY70Dqk97bmCVGRwdhanAQRAS/sdiI/9FdrjZbcQSKfLRiNWEagjl0FobE4E69bIDUIw9/PFFBy+U3CH+y35px1dCbZxlj7lCZn1sbvM/PVuFPdV2z+B8VDaU=
+	t=1757398747; cv=none; b=o7zSw19Pp/KdcSukhsaHA4gCNO9EdSL4Z/CtxktYhvL5fo4yhVuXyRqKOyfE9FwJ+h7FUokontEGXRt1f2IHVmhIY2Tl1AyN/gUcrWs3un+RiboOKTdjN581/ZylNfCqkhhjOft9mvs73h8yBhTWAHpwVol6Ja96o5Bcveg5ygo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757396607; c=relaxed/simple;
-	bh=1JLWB9NxHUYB0N6l6hiWHN/rHGZX8pA98KRFRV3h72Q=;
+	s=arc-20240116; t=1757398747; c=relaxed/simple;
+	bh=L1VXCUHFXkUw4WZkL8qpqYcrzAFyAOw2NAFSE0iyzC0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BnK/y7+WK0HFsjrfvspZiWsSzUZGQo5WwpUX3cYQavjb58REXcNtUHS1NKSfY/1Mc5L4aa5w1dlRSILharBRZfQiextWXn6oIUTsE3wSgPb1CeiucoL6jUcq+fEsWyRSoaE5JFFtosuf4iVgl/WmSOkpN10zxEKEl8oyDX+QPjE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dD0f0QVu; arc=none smtp.client-ip=209.85.208.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-336ce4a894cso39182451fa.1;
-        Mon, 08 Sep 2025 22:43:24 -0700 (PDT)
+	 To:Cc:Content-Type; b=cI3z5/LedNEaTwCX2DzM81CthC4he6MeEbG/3eZfNfEmHbRJpA+apx8Bdmn0WnDbNp+0HjcOUd+f8HGYcVfLexlQS9ti6pb8z9ZFcvHCw17LIlRoQSipFQGIEFEaJVph+ukhdBAyGiV391LCbBJxFLWdpzRwbztGucDKw1prMYM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=znGGJjSt; arc=none smtp.client-ip=209.85.222.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ua1-f41.google.com with SMTP id a1e0cc1a2514c-8b32453d838so1050785241.2
+        for <linux-pm@vger.kernel.org>; Mon, 08 Sep 2025 23:19:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757396603; x=1758001403; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1757398745; x=1758003545; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1G6Fm4HNrV/bD2bs71ctmqkCh2KbDqFBUWnpt06ckp8=;
-        b=dD0f0QVu+U2TUvR2HlvPKN28OTip5jypb4FQsReRkc+vu7jR7Xma+gmriEnOkjAXsz
-         sYzE9+AvHYT1vVkzG3D62rV0xM21drBwrfO78mc96dzkiqY3bJScMfiYTYY0KE4rKEbN
-         CE37Aqz8eJDJYrHq7hS6ziVA51r3FbLPFzn9VdsXueCw64YKRoPXwcrxVr4OFXGExMEk
-         21bfoEQ+rkrU2HyDkFZw73XyfW3wCIobhFUKsIxlmbs1LqchM5i7bYjAvXUgVJMzU3Jk
-         2g9sQ0wMspD3ysl9TPqxcP3FncDgq9iV0nbXEi7k6bkMA8lTQgOThdvmN3yum5lKX1tG
-         9bYg==
+        bh=jk+p+zHJ4oke51qSESVQoUfFkabu9tf2MtR0ttT0epY=;
+        b=znGGJjStIbyu4g3gIg+UdnXdDE5akf3+AmbtNDGVZ305SG9rhIrPr4yX0hhw4BFXvk
+         2cm8S88GyNtfOxBysBUj+EsKzaObFhdGt+TvWnDWRUJQGlvUOkDY7QixIvF2wzF+6eOM
+         BY4jF4zt784fcBb37xGjM7+ovGL9W36SCSZb5LmpiNP0K2VFX+dnj9uku7JwrzJPRoom
+         DBPJ/fk+7I0sII3rQunjawQwSJON/6SDOgmrz119v1VN0KIDhp7+N8KF4VcUKn/wCX/i
+         fRavgYq6hbZQ8gTEa4jOTq4kVOFG8TWeNqVab/IgQYjHY4ZoFfJq0N6PFMqeaRsmFvUL
+         lVNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757396603; x=1758001403;
+        d=1e100.net; s=20230601; t=1757398745; x=1758003545;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=1G6Fm4HNrV/bD2bs71ctmqkCh2KbDqFBUWnpt06ckp8=;
-        b=Qnxq5nbm5sR5TrmiHLBw1HW/woV7Wa2qPHAQKsLmr55v+RVz/4MrICCasZc8oekyLx
-         17UYedrJX2UIowfbFKF/9PHG0jDesL5qlIbSZTX/PyLUmmecubpfAUvfcfykxBDYBX8i
-         XZHD2kwsGZonDhsavA5i0jxFnzJHhrdB+nDBWjtKkG/+26sJQcShqOYZwsFvRyQfYM3/
-         s0PgEAjQ+JZiwXbQq+j1RJVbKsmRVSBvo9HGXn+My2xo4eIclmIaXT5bYkHAUNaqooU4
-         c2k8YRa6Kf6yGIKGnOeVkzzYLgxsCSBjOnOkXZVdRnN+D3qDQJZUV3CF/cdZTac2w1yK
-         mACQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVCMueoYooEoDlCynrcGFBrhAeiPlswMDvmcxl//sGNzZRwbBZ4YVRjUH7mzCW5hiVEuZxTxjLt7kQ=@vger.kernel.org, AJvYcCXH1Jsn6p83EfFzz1Q5fGBImRtI1ma0ZkLbGm2Oi0qps0SylfQnvErWbamtDxvPqhaq/Y4PiMb4aZEF@vger.kernel.org, AJvYcCXJ5Kg+DlYI7HbguHsAJSAFKlvmUJixaqxQtmQSwiPztmxWMRekNlz0EmrSWD3cdTD3tgSoN4yXcGSqZFhd@vger.kernel.org, AJvYcCXQqSfm8NiNSg5uEeu68XeWDL2j1eVfnzhwD/8GGPf5K57IieN60OPGfCCljACeTs4jCKs0PvkDIQNSxCs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywv3ACKzqjFUHNUgOSSuE60nkJBmn933VuQQ0auw1Cp2mahME7P
-	PXe2gkuJlGckJci0iQk8rTXQzeoRuEsfLxx66i6wFbtoMcLjsf23YDtt1+3Klqb9I8v2Pi9VeLP
-	+adJPhutb1vesM1RgVvFy/NNJORScd4EcI/Tx4io=
-X-Gm-Gg: ASbGncspXHrqxldgqooC43lDjhI3YSrTom24WjTA1gRak29xvW88gr5GLbEcqgH8pp5
-	IxrC34gg8xjFzkPUpHRDexrej2R9FxMFjmcHO//JvSY++O+wYRkqxIp2a/q0XTpz5Gx4SAcYAxb
-	KVDbLEnlbdbbApdT0iLjEx+xlHFa4DItHkIfMHDOY7fo2bhI9BtlgWGyaNhmgBBbZt90NI2DZN1
-	mCl7iAC7G/6SCyanA==
-X-Google-Smtp-Source: AGHT+IFnQAtfbNXUxujuvpaZBVeXodUsf4RXFRUXQ8ktfLXToDvcxeXnGxXIgaFmJAGt6UaM90HbCfaGi6DB9sgP+uA=
-X-Received: by 2002:a2e:be9e:0:b0:337:e190:6814 with SMTP id
- 38308e7fff4ca-33b5cfd0d57mr33329871fa.20.1757396602983; Mon, 08 Sep 2025
- 22:43:22 -0700 (PDT)
+        bh=jk+p+zHJ4oke51qSESVQoUfFkabu9tf2MtR0ttT0epY=;
+        b=eGqL2WsOhg7KL0YM3NQ8P55QiopIDHAH/Ev7/7QMQw0UTzjPzezwGn64Q0vWhzNWNr
+         zD01thJHTMZRUevAF4mMpLE1uvYUo4V8Y8lcAPIny6P87Qp2OFRPgERVXU0BWcytDdEo
+         Zer1+10yAgHhdkhbZpRP2XLBeK1dWp+1CmVYwe53VVBQLWOq8SrV8J93ai+5VeAj8RwY
+         +JGPQyes0xMUQC1f6TgunRbHAHb85vjJTJ+bS3UUWG5QmyYM4rqsRa6hElshresamfGy
+         sxjrGPIR2WvozGlkaD3+1u/WzWAGpvnRvzL9U90iRgKMDhL1XePo/enDw9J8gd8DSdjL
+         M9nw==
+X-Forwarded-Encrypted: i=1; AJvYcCVTCV6AJryjcBVxlr6yMBjJN/Tk3dtFvCcizALgXpzt722uNd3NDYwdw9k0p3PgGElZAJf+NeYn/g==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwKCFfCyrz1Nwww2taZp0kZk2J9fEseV0MJLBEOSIaeiiyzjorP
+	17+BCCy4+ETvKgT0Vx6SDJ/pb0A/nUZ11I8gUecXy9mM8fx2IfyOUB+bJ03BTMSVu3CXEDkk+q+
+	xbzgpc9NQ/a11TH6T/AR2EKpCqlM6qFFaH5FqnOFm
+X-Gm-Gg: ASbGncv+0ki0Fx3sEuneO1eqs4Ckuyab3nz7O1oUMNDJobt1kf75m2uO28mql0bGNN/
+	ObU/VXzreuBVWFUIzUwHDOL67uwh8Jf4pMDnRlic07CaQ7GP/zSJcENvVwDwOhKe9n4ley2FGpP
+	e835gbivVEfCEQ2NXYncti6Cwx5B14HBApPUSAyNjjhvD4WTiIWfTm9gf8hrsrGvDHC4hQu94lL
+	0UQW9f7W3bJ
+X-Google-Smtp-Source: AGHT+IHQNH5bxNKrdTFAvr26RVQCsobnfCMGnFcjjLcgm0Ualx4aeMZlCbit4BGJSHXpfyWIckep63sdStx2kGUzgpc=
+X-Received: by 2002:a05:6102:4a92:b0:522:826e:7bfe with SMTP id
+ ada2fe7eead31-53d1afa279dmr3179250137.5.1757398744489; Mon, 08 Sep 2025
+ 23:19:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250831-tegra186-icc-v1-0-607ddc53b507@gmail.com>
- <20250831-tegra186-icc-v1-3-607ddc53b507@gmail.com> <20250901055322.eorgaa3sycydjrrj@vireshk-i7>
- <CALHNRZ_EbtHSXaDQ+1gGf3HjdyW5Q54EDN901-r8A_aXLbDJkw@mail.gmail.com> <20250903050107.sbri6snqrzq4hale@vireshk-i7>
-In-Reply-To: <20250903050107.sbri6snqrzq4hale@vireshk-i7>
-From: Aaron Kling <webgeek1234@gmail.com>
-Date: Tue, 9 Sep 2025 00:43:11 -0500
-X-Gm-Features: Ac12FXzAJuPe-CvFuYuufxqv80GNsivKH6j8HchajG_Xb4CMnT3WaKxDxqCkLXs
-Message-ID: <CALHNRZ-qkhDc5uO8g18T97RgHZCQ59Zh2Vn+yEX-W3+GSfj_sA@mail.gmail.com>
-Subject: Re: [PATCH 3/8] cpufreq: tegra186: add OPP support and set bandwidth
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: Sumit Gupta <sumitg@nvidia.com>, Krzysztof Kozlowski <krzk@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Thierry Reding <thierry.reding@gmail.com>, 
-	Jonathan Hunter <jonathanh@nvidia.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-kernel@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-tegra@vger.kernel.org, 
-	linux-pm@vger.kernel.org
+References: <CAGETcx_C_UcjjPOfUip=L28P3PWjMvmSc4nZJ5ML=tScUXfk2w@mail.gmail.com>
+ <20250909024538.15946-1-tuhaowen@uniontech.com>
+In-Reply-To: <20250909024538.15946-1-tuhaowen@uniontech.com>
+From: Saravana Kannan <saravanak@google.com>
+Date: Mon, 8 Sep 2025 23:18:27 -0700
+X-Gm-Features: AS18NWBpIhGUkBwXHz5Cxh0u45kdsxsLpNLylrw97iJA-XyLjU8bAzSiD3rZzTo
+Message-ID: <CAGETcx-mA1kBw+r+tJOdpdqKHZQfNHvA-JS8wXc_ZHhj23WtMg@mail.gmail.com>
+Subject: Re: [PATCH v2] PM: Add configurable sync timeout for suspend and hibernation
+To: tuhaowen <tuhaowen@uniontech.com>
+Cc: huangbibo@uniontech.com, len.brown@intel.com, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, pavel@kernel.org, rafael@kernel.org, 
+	wusamuel@google.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 3, 2025 at 12:01=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.o=
-rg> wrote:
+On Mon, Sep 8, 2025 at 7:46=E2=80=AFPM tuhaowen <tuhaowen@uniontech.com> wr=
+ote:
 >
-> +Sumit
+> Hi Saravana,
 >
-> On 02-09-25, 12:21, Aaron Kling wrote:
-> > On Mon, Sep 1, 2025 at 12:53=E2=80=AFAM Viresh Kumar <viresh.kumar@lina=
-ro.org> wrote:
-> > > On 31-08-25, 22:33, Aaron Kling via B4 Relay wrote:
-> > > > +static int tegra_cpufreq_set_bw(struct cpufreq_policy *policy, uns=
-igned long freq_khz)
-> > > > +{
-> > > > +     struct tegra186_cpufreq_data *data =3D cpufreq_get_driver_dat=
-a();
-> > > > +     struct dev_pm_opp *opp;
-> > > > +     struct device *dev;
-> > > > +     int ret;
-> > > > +
-> > > > +     dev =3D get_cpu_device(policy->cpu);
-> > > > +     if (!dev)
-> > > > +             return -ENODEV;
-> > > > +
-> > > > +     opp =3D dev_pm_opp_find_freq_exact(dev, freq_khz * KHZ, true)=
-;
-> > > > +     if (IS_ERR(opp))
-> > > > +             return PTR_ERR(opp);
-> > > > +
-> > > > +     ret =3D dev_pm_opp_set_opp(dev, opp);
-> > >
-> > > Won't it be easier to use dev_pm_opp_set_rate() instead ?
-> >
-> > I'm not very familiar with the opp system. If I read correctly,
-> > dev_pm_opp_set_rate() will round to the closest rate while this code
-> > will fail if the exact rate isn't found. This code is based on the
-> > existing tegra194-cpufreq driver. And I'm unsure if this was done for
-> > a reason.
+> Thank you for your detailed feedback and suggestions. I appreciate you
+> taking the time to review my approach. Let me address your concerns and
+> explain the real-world issues I'm trying to solve.
 >
-> Sumit, any explanation for this ?
+> > This doesn't really fix our issue where we want to abort suspend only
+> > if we have to stay awake. If there's no need to abort the suspend (to
+> > deal with some user/wake source request), then it's okay to take the
+> > time to sync and then suspend. If you abort the suspend, it's just
+> > going to get attempted again and in fact waste power.
 >
-> > I have seen unexpected rates returned from clk_round_rate in
-> > the development of this topic, so that could be related.
+> I understand your perspective, but I'm addressing a different class of
+> problems. The key issue is user experience and system reliability when
+> sync operations become indefinitely blocked.
 >
-> Right, but we should end up configuring a valid rate from the OPP
-> table.
+> > I also don't understand how your patch fixes anything. If anything
+> > this makes things worse because the user might have expected their
+> > device to have hibernated only to come back hours later to see their
+> > battery dead. And even if the user is actively monitoring it, you
+> > still need to sync the file system fully before you eventually
+> > suspend. So, this doesn't really save any time or the need to sync.
 >
-> > > > +static int tegra_cpufreq_init_cpufreq_table(struct cpufreq_policy =
-*policy,
-> > > > +                                         struct cpufreq_frequency_=
-table *bpmp_lut,
-> > > > +                                         struct cpufreq_frequency_=
-table **opp_table)
-> > > > +{
-> > > > +     struct tegra186_cpufreq_data *data =3D cpufreq_get_driver_dat=
-a();
-> > > > +     struct cpufreq_frequency_table *freq_table =3D NULL;
-> > > > +     struct cpufreq_frequency_table *pos;
-> > > > +     struct device *cpu_dev;
-> > > > +     struct dev_pm_opp *opp;
-> > > > +     unsigned long rate;
-> > > > +     int ret, max_opps;
-> > > > +     int j =3D 0;
-> > > > +
-> > > > +     cpu_dev =3D get_cpu_device(policy->cpu);
-> > > > +     if (!cpu_dev) {
-> > > > +             pr_err("%s: failed to get cpu%d device\n", __func__, =
-policy->cpu);
-> > > > +             return -ENODEV;
-> > > > +     }
-> > > > +
-> > > > +     /* Initialize OPP table mentioned in operating-points-v2 prop=
-erty in DT */
-> > > > +     ret =3D dev_pm_opp_of_add_table_indexed(cpu_dev, 0);
-> > > > +     if (!ret) {
-> > >
-> > > If you handle the error case here, then the below can move out of the
-> > > if/else block.
-> >
-> > I'd prefer not to deviate too much from the tegra194-cpufreq code this
-> > is based on, so the drivers can be more easily kept in parity to each
-> > other.
+> This highlights exactly the problem I'm trying to solve. When a user
+> initiates suspend/hibernation, the screen goes black immediately, giving
+> the impression that the system has successfully entered sleep state.
+> However, if ksys_sync() is blocked (which can happen in several scenarios
+> I'll describe below), the system appears to be suspended but is actually
+> still running at full power consumption in the background.
 >
-> I am not sure if that is really important here. The kernel normally
-> contains code in this format:
+> The user has no way to know the system is stuck in sync - they see a
+> black screen and assume suspension succeeded. This leads to exactly the
+> scenario you mentioned: coming back hours later to find the battery dead,
+> but with the added risk of data corruption since the sync never completed=
+.
 >
-> if (err)
->         return;
+> > Can you explain the actual real world issue you are trying to fix? If
+> > it's the UI hanging and not responding to keypress/mouse move, then to
+> > me it looks like those should be marked as wake sources.
 >
-> keep-working;
+> Here are the specific real-world scenarios I've encountered:
 >
-> If you want both the drivers to have similar code, then maybe that
-> code should be moved to another file and used by both. But we
-> shouldn't keep them same when we feel that we can do better.
+> 1. **Device removal during file operations**: When copying large files
+>    to USB drives and then initiating suspend, if the USB device is
+>    removed during the sync process, some filesystems may not properly
+>    handle the device disappearance. The sync can become indefinitely
+>    blocked waiting for I/O operations on a device that no longer exists.
 >
-> > But I will look at making this a bit cleaner as per this and
-> > the next comment.
+> 2. **Faulty storage devices**: Slow or failing storage devices can cause
+>    sync operations to hang for extended periods, making the system appear
+>    unresponsive.
 >
-> Thanks.
+> I've observed stack traces like this when the block device is removed dur=
+ing sync:
 >
-> > > > +             max_opps =3D dev_pm_opp_get_opp_count(cpu_dev);
-> > > > +             if (max_opps <=3D 0) {
-> > > > +                     dev_err(cpu_dev, "Failed to add OPPs\n");
-> > > > +                     return max_opps;
-> > > > +             }
-> > > > +
-> > > > +             /* Disable all opps and cross-validate against LUT la=
-ter */
-> > > > +             for (rate =3D 0; ; rate++) {
-> > >
-> > > Maybe using while(1) would be more readable ?
-> > >
-> > > > +                     opp =3D dev_pm_opp_find_freq_ceil(cpu_dev, &r=
-ate);
-> > > > +                     if (IS_ERR(opp))
-> > > > +                             break;
-> > > > +
-> > > > +                     dev_pm_opp_put(opp);
-> > > > +                     dev_pm_opp_disable(cpu_dev, rate);
-> > > > +             }
-> > > > +     } else {
-> > > > +             dev_err(cpu_dev, "Invalid or empty opp table in devic=
-e tree\n");
-> > > > +             data->icc_dram_bw_scaling =3D false;
-> > > > +             return ret;
-> > > > +     }
-> > > > +
-> > > > +     freq_table =3D kcalloc((max_opps + 1), sizeof(*freq_table), G=
-FP_KERNEL);
-> > > > +     if (!freq_table)
-> > > > +             return -ENOMEM;
-> > > > +
-> > > > +     /*
-> > > > +      * Cross check the frequencies from BPMP-FW LUT against the O=
-PP's present in DT.
-> > > > +      * Enable only those DT OPP's which are present in LUT also.
-> > > > +      */
-> > > > +     cpufreq_for_each_valid_entry(pos, bpmp_lut) {
-> > > > +             opp =3D dev_pm_opp_find_freq_exact(cpu_dev, pos->freq=
-uency * KHZ, false);
-> > > > +             if (IS_ERR(opp))
-> > > > +                     continue;
-> > > > +
-> > > > +             dev_pm_opp_put(opp);
-> > > > +
-> > > > +             ret =3D dev_pm_opp_enable(cpu_dev, pos->frequency * K=
-HZ);
-> > > > +             if (ret < 0)
-> > > > +                     return ret;
-> > > > +
-> > > > +             freq_table[j].driver_data =3D pos->driver_data;
-> > > > +             freq_table[j].frequency =3D pos->frequency;
-> > > > +             j++;
-> > > > +     }
-> > > > +
-> > > > +     freq_table[j].driver_data =3D pos->driver_data;
-> > > > +     freq_table[j].frequency =3D CPUFREQ_TABLE_END;
-> > > > +
-> > > > +     *opp_table =3D &freq_table[0];
-> > > > +
-> > > > +     dev_pm_opp_set_sharing_cpus(cpu_dev, policy->cpus);
-> > > > +
-> > > > +     tegra_cpufreq_set_bw(policy, freq_table[j - 1].frequency);
-> > >
-> > > Maybe a comment on why exactly you are changing the freq here ?
->
-> I meant bandwidth here.
->
-> > To my knowledge, this does not change any clocks. The intent here is
-> > to prime the interconnect data. In the pre-req series, there's a
-> > change that sets all clocks to max frequency during probe. Then my use
-> > case involves setting performance governor by default on some boots.
-> > During testing, I noticed that the interconnect data provided by this
-> > driver was all zeroes. Which led me to notice that set_bw is only
-> > called when the target frequency changes. Which wasn't happening
-> > because clocks were already set to max. If my understanding here is
-> > wrong or there's a better way to handle this, I will fix it.
->
-> There are a lot of synchronization issues here because we are trying
-> to set clk and bw separately. I guess other variables, like regulator,
-> level, etc. (if used) will also be out of sync here.
->
-> I think the right way to fix this would be to call set-opp for the
-> device, so all the variables are configured properly.
+> ```
+> [<0>] __switch_to+0xd0/0x168
+> [<0>] iterate_supers+0x88/0x118
+> [<0>] ksys_sync+0x48/0xb8
+> [<0>] ksys_sync_helper+0x18/0xa0
+> [<0>] pm_suspend+0x260/0x3e8
+> ```
 
-That's what the tegra_cpufreq_set_bw function does. Matches the passed
-frequency in the opp table and calls dev_pm_opp_set_opp.
+This seems like a fundamental sync issue you are trying to paper
+over/work around. I think the right fix should be in the ksys_sync()
+code.
 
-Aaron
+> In this case, ksys_sync() is permanently blocked and will never complete,
+> even though the user believes the system has suspended.
+>
+> My timeout approach provides several benefits:
+>
+> 1. **User feedback**: If I set a 1-minute timeout and sync doesn't
+>    complete, the system fails suspend gracefully and returns control to
+>    the user. This gives them clear indication that something went wrong,
+>    rather than leaving them with a black screen and unknown system state.
+>
+> 2. **Prevents false assumptions**: Users won't mistakenly believe their
+>    system is suspended when it's actually consuming full power.
+>
+> 3. **Allows recovery**: Users can investigate the issue, safely eject
+>    devices, or take other corrective actions.
+
+If the user has closed the laptop, none of these will be noticed by
+the user. And the laptop will still consume power since it's not
+suspended and cause a dead battery hours later.
+
+> > However, if you are really set on proving the need for a timeout and
+> > implementing it, you can always add it as a separate patch after our
+> > patch lands. You can set up a timer to call pm_system_wakeup(). Or
+> > just grab a wake source after a time period.
+>
+> I appreciate this suggestion, and I'm certainly willing to coordinate our
+> approaches. However, I believe the sync timeout addresses a fundamentally
+> different problem than wakeup-event-based abortion.
+>
+> Regarding your concern about sync completion after timeout, I want to
+> clarify that in my updated implementation, I've removed kthread_stop() to
+> ensure the sync operation continues in the background even after timeout.
+
+I don't think the kthread_stop() is even correct to do. You are just
+randomly killing the sync thread where data structures and locks could
+be left in a bad state.
+
+> This means:
+>
+> 1. The suspend operation fails immediately with a timeout error, giving
+>    the user feedback
+> 2. The sync operation continues running in the background to completion
+> 3. Data integrity is preserved while providing responsive user experience
+>
+> This approach ensures that we get both the user experience benefits
+> (immediate feedback) and data safety (background sync completion).
+>
+> I believe both our approaches serve different but complementary purposes:
+> - Your approach: Handle cases where wakeup events should abort sync
+> - My approach: Handle cases where sync becomes pathologically slow or
+>   blocked
+
+I'm still not sold on the timeout being the right solution to your
+issue, but I'm not going to block the feature.
+
+> Would you be open to discussing how we might integrate both approaches?
+> I'm happy to work on this as a follow-up patch series after your changes
+> land, or we could explore a unified solution that handles both scenarios.
+
+I think a follow up patch is the best approach. We'll give you the
+APIs to abort as needed (timer in your case) and you can try to
+convince the community that the timeout is needed.
+
+>
+> > In fact, thinking more about this, you are generally having a problem
+> > with suspend taking too long to complete. Doesn't matter if it's due
+> > to file system sync or anything else. In which case, you should just
+> > use a timer to call pm_system_wakeup() and not fix just file system
+> > sync (which happens to be the current long pole).
+>
+> This is an interesting perspective. However, I believe filesystem sync
+> deserves special attention because:
+>
+> 1. It's currently the most common source of indefinite hangs during
+>    suspend
+
+This is not a reason for special casing for the file system.
+
+> 2. The consequences of interrupted vs. timed-out sync are different
+>    (data integrity)
+
+Not really. You do realize that even in our patch we let the sync
+continue in the background, right?
+
+> 3. Sync has specific requirements for background completion that other
+>    suspend operations may not have
+
+Not sure what you mean.
+
+> I'd be very interested in your thoughts on this approach and whether we
+> can find a path forward that addresses both our use cases. I really
+> appreciate your patience in this discussion and look forward to
+> continuing our collaboration on this important issue.
+
+I don't want to block your effort, but I also can't support it. So a
+unified patch doesn't seem like the right way to go. As I mentioned
+above, I'd recommend building on top of what we land.
+
+> Thanks again for taking the time to review and provide such detailed
+> feedback.
+
+Same to you!
+
+Thanks,
+Saravana
 
