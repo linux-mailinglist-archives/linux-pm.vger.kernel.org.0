@@ -1,179 +1,228 @@
-Return-Path: <linux-pm+bounces-34192-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34193-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3D45B49EF4
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Sep 2025 04:09:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 634E2B49F5D
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Sep 2025 04:47:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C8F961B243FB
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Sep 2025 02:10:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5102A1BC54F4
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Sep 2025 02:47:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E05523BD1B;
-	Tue,  9 Sep 2025 02:09:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75A652566D3;
+	Tue,  9 Sep 2025 02:47:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="jmtataFC"
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="IfmFqjJc"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from SEYPR02CU001.outbound.protection.outlook.com (mail-koreacentralazon11013024.outbound.protection.outlook.com [40.107.44.24])
+Received: from smtpbg150.qq.com (smtpbg150.qq.com [18.132.163.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 732FD2222B7;
-	Tue,  9 Sep 2025 02:09:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.44.24
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757383784; cv=fail; b=EjGLEXBTLzB+AMf118V/JgsFH0RikLStKAofCVaaPVDC+qglQWQw0q+urM5e/S1AolmkW8lNo46T2rIHEvMrdLqyY5EroOROZUX6W+//EuuAuFlNf++RcrXmwz2ZtUuMF1TD7APVsl0H1CDGImmlYu5eysVfOtWSAWjKg1glh0A=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757383784; c=relaxed/simple;
-	bh=ImxDRemNLAR61M+FM4hGXhj3uCU95KW/mNhHJJHaHRw=;
-	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=QuhN1hWsQaGmRYwSE8Vzg7OVKrnzVCPRBxhmTySh/3zOmSEBOZlqsIsgl7RTzzTamJKeXab7WHXm15Ptx7zdSJLpluBBoVU3Cclek+rXlieH2Xb+dLqXqcajitaeSTtekUBo6jA1tC/mNxtluCSu5HwXxrFl7jJvxxUJdZFVVio=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=jmtataFC; arc=fail smtp.client-ip=40.107.44.24
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=l769NqO3qN7eWeiW41O5KVOJnb/I+Cc+agzpU8w0Bj8rbR0P0JgR8FjrEdUFari+e8CSIKHt2lri+/RInH10dHLWYHViE2n98lxwUMkxzWmqZNVfr0tjhks+D5t6Lz+b2aRYT3m92+SUJG25M4fEhgUd10LOJ6yGxbm4KcD6iMVemh9/rtvSDhEC9Nu0KfanpY5rGY5Lu7MrpEHreWX/aH4hm0BZ6YP7BbqzCP3zZCNgcXu9olUG9RkOx90kzjYHc8rP1eB42IinI7WfEiTe75SDZlEAHhwiWhUdBt4N3QHhzV60x3Lm9+PG+nNZETfLVxnOROEO3tGMy3bCJgztIA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7Vzg6kIO+UoBIbWuxnZInIiulpUG9dQFp0Fou9p3PVs=;
- b=dxq0XdrTfT5kCpGj9aGhwhTdTWp5ojJDbpzhe6nzc5+kCtpvoFZt5JIZAYBvZ1Gv0xwxgwwkwL1LM9seLGTX8hsz0uAlvZlwPdF0vG6mMCWYIl7DkSrtBCaAZ6Js1vmBRWIK7Nu+PHVKydw1MaruYyU9KrBgeg5TpUbmHvru5crFr2Ky7z4Vvf1VtZfW/gSS5EDk4WezlUQE02MP5++Pa7NgeeRhLkiasAe6WdVAJotiPu+OQ2/DQWyTvZivjLk8A7t1IoUBVJzmD4T5L8kYrxdWdarM4ZiUO7L4ZegpjcR1PrdK2SE1RgFYMVgNi2YK1qLaXRKK/lD3YF5lbNk1UQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7Vzg6kIO+UoBIbWuxnZInIiulpUG9dQFp0Fou9p3PVs=;
- b=jmtataFCIt8vjf0F0i3n/3Bnl5gHFnDt3WBzJseB0KNRQM85SaPUrsc3mdnJDwbF9Jy5fT+70t9l0nspUSmyzVM5C14LM7brubTt/lS4CfwslQXZrqapfRdugT3Bsn2vIl1lgxErjhcmg57J5uDzDeA2p2AjCF7B7HE0n0bcWR932kzEDj9cNvLLTYCmPIAHVjc+JjIMwffr/g8vWnjy/aK9c1bMiy7CtPMCM4RudHBVgf6rfJzTm0NSZiH7JdWq7FrjAnWuRc1UaV1SLls1Q5Rx8OHmOETY+OW4K/R8eK9cwB+lAkz/g+w9/W4fvIQall600yYQrjoscOIY1AYsbw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from KL1PR06MB7330.apcprd06.prod.outlook.com (2603:1096:820:146::7)
- by PS1PPFEFCBCC15E.apcprd06.prod.outlook.com (2603:1096:308::26d) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9094.22; Tue, 9 Sep
- 2025 02:09:35 +0000
-Received: from KL1PR06MB7330.apcprd06.prod.outlook.com
- ([fe80::d1d3:916:af43:55f5]) by KL1PR06MB7330.apcprd06.prod.outlook.com
- ([fe80::d1d3:916:af43:55f5%4]) with mapi id 15.20.9094.021; Tue, 9 Sep 2025
- 02:09:35 +0000
-From: Xichao Zhao <zhao.xichao@vivo.com>
-To: sre@kernel.org
-Cc: pali@kernel.org,
-	linux-pm@vger.kernel.org,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBC09222565;
+	Tue,  9 Sep 2025 02:46:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.132.163.193
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1757386027; cv=none; b=dle4YlJH6ynmrqUfuYEwPaH/V5gsBpn1S7Pw23r74/YTGoCpGVde1REMbw5dqNlMtxTOxITcm+Y/8Niqskg7EksCjhxgC7w05DeoRCu9PjgbO74guKbkEs8CuksZ4sQevVXaR+yTKiGJGxLMgP/unlbilfajrweAsZvbx+snsRI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1757386027; c=relaxed/simple;
+	bh=YFytggKE3/r0gV08mg1HQPgEX6IZRGpx2+YlNZw6fAk=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=pbx4yFgaWr+tZNUz7Rbr5BhLhD5W3nbqoPpSVW43mwk7su8ZX0pEJLO94FA9iV62YJahwj6Kbf+tf4bEJl+ATbLyAsPaqHBpkesysgW2s5HjaxUaboiF2udzdccXFJx7M86ghnJhXcVITqwegXN2QFehthhKmhAwiDZWwgJKn9U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=IfmFqjJc; arc=none smtp.client-ip=18.132.163.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1757385968;
+	bh=L8hQjVh+mUDXEkjLruGWrolOFzVSakfWaJvc2hCg9Og=;
+	h=From:To:Subject:Date:Message-Id:MIME-Version;
+	b=IfmFqjJcCewu80yU6qKrv5g330Ul224g7PlqjzOQZ9jMXloSqwzGlTZToc3BbgKbb
+	 swI7enqWxbSpxwnDi75ad/7eQmgO5lYAWCwr3AuYiO04ywaqJrKZ1jzRbhQpxyeOp5
+	 +WZzTQM+CHknEOn23yYEIqoBBheSm19ssEz+l8cs=
+X-QQ-mid: zesmtpip3t1757385941t961e95f2
+X-QQ-Originating-IP: Frk8i664kPPQ92DA/s1R2O/T5OFzVpyT3+ZbamSxsLg=
+Received: from localhost.localdomain ( [localhost])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Tue, 09 Sep 2025 10:45:39 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 10612580091879111053
+EX-QQ-RecipientCnt: 9
+From: tuhaowen <tuhaowen@uniontech.com>
+To: saravanak@google.com
+Cc: huangbibo@uniontech.com,
+	len.brown@intel.com,
 	linux-kernel@vger.kernel.org,
-	Xichao Zhao <zhao.xichao@vivo.com>
-Subject: [PATCH] power: supply: rx51: remove redundant condition checks
-Date: Tue,  9 Sep 2025 10:09:25 +0800
-Message-Id: <20250909020925.382261-1-zhao.xichao@vivo.com>
-X-Mailer: git-send-email 2.34.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI1PR02CA0009.apcprd02.prod.outlook.com
- (2603:1096:4:1f7::10) To KL1PR06MB7330.apcprd06.prod.outlook.com
- (2603:1096:820:146::7)
+	linux-pm@vger.kernel.org,
+	pavel@kernel.org,
+	rafael@kernel.org,
+	tuhaowen@uniontech.com,
+	wusamuel@google.com
+Subject: Re: [PATCH v2] PM: Add configurable sync timeout for suspend and hibernation
+Date: Tue,  9 Sep 2025 10:45:38 +0800
+Message-Id: <20250909024538.15946-1-tuhaowen@uniontech.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <CAGETcx_C_UcjjPOfUip=L28P3PWjMvmSc4nZJ5ML=tScUXfk2w@mail.gmail.com>
+References: <CAGETcx_C_UcjjPOfUip=L28P3PWjMvmSc4nZJ5ML=tScUXfk2w@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: KL1PR06MB7330:EE_|PS1PPFEFCBCC15E:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0faed892-05f6-4dc9-7d42-08ddef45ec2e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|52116014|366016|1800799024|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?0OmJkU3uXZ1qcGYYxpjOkZwcV5p0LCoYiqpRQo1ERVfgjxrcMmoU9UTWroMf?=
- =?us-ascii?Q?SRxUI1tsZIpWHqkqIDd1S9M0ooJcFRBxHzhgrV/fH4O4+mwVDyiBYRhBc76U?=
- =?us-ascii?Q?SANMBkkVJqIBbE8pmdY9FhEdSd7umSX8RzY4y9JYAYv06rLP7+SMkGk6tXh9?=
- =?us-ascii?Q?6m5Q8wEdSVAwBWdfpqvOMdME0LexKUvgEu8TY4Utf0Ng7bJwobcCsWsIb2iC?=
- =?us-ascii?Q?+Qh+6KG2Q0dnvHxXmfCbLwaSbuu4P3qponVa2aXCcI4/59KPxXIEgExwHp0t?=
- =?us-ascii?Q?UkLWc/IsevzQjuw2fGUvHvsYX7kp1+ss9fUDwicJwEcNwVkUSOnnNs79dk1W?=
- =?us-ascii?Q?nfJsd51AWofl5kR3qu7A5ZPv6TI12fn05aauFxsGMMR7NU0NdurYt6OlUtwp?=
- =?us-ascii?Q?MC447QCc4n3IuRhWhGi7X8ahOGhGUiozOuO8O84nGfW91BJ1cJVTyttoeaAM?=
- =?us-ascii?Q?a1cN0tWK4/mMSM1ToA+c+IKUMStSkScUG3e66563uLHTiY+JD3CzexpA/5X3?=
- =?us-ascii?Q?5nMRJ+CFZcg+a59MRuhiJUOt3TxVtDjTX4vsBCpuu3nhPCNlqXaC0E/Jtv86?=
- =?us-ascii?Q?/OZxkWsvULyRf3Ww90jm842mViTaO29A2eZHA64d0Yu8KMnWwEsI0w4V9qNN?=
- =?us-ascii?Q?WidFj2Zf9Uw+yQbMC97b8tE7tdQL8X6BB9rFL4ycpmZmWfK2ZnzjCrgTZVBU?=
- =?us-ascii?Q?6JaSXYSO6fE8pIRt4jy8I6chtAEF7VgygaUX4TE5XMk5ugsN+QjUn2ROVlPf?=
- =?us-ascii?Q?YU9JjkXTyD3csjE4VuF2JtOYJfyERMTQljB6CEfTdKZ5erUA11QaFv0V3BiS?=
- =?us-ascii?Q?aI6ckTiw0cRpqoqCaarYhAowzkxV2c2oMX5c+6ZZtCzEf8vAFEwiQvMGRthx?=
- =?us-ascii?Q?MpgDEtuYWvXfQqXazIvf3ulmzDz7LTid2xhF6PsyaMPO+2WkkqFVc0yHpsBD?=
- =?us-ascii?Q?K7brzFtZBtNBWboNUvhBHD7doKnj5HRjeZLPRefJzHz5WoKWPspBtQMzMpsN?=
- =?us-ascii?Q?yJgPd6sUhnB+bNGnTpLHkqVeqimd0/rNa9HL/qc1IIfC7JgFTI5n+50UrQMs?=
- =?us-ascii?Q?FPMhcpuaxqijCh4gsI1YLekfzErNdFDJolJGNsBDS+sry0O3Kfjy+unnbgWT?=
- =?us-ascii?Q?3b2d3sFaUvTiBP5PlgN3ZALz3G2Kh6LzL/pgoLJovRiqT6KbkQt6CUAuhuAj?=
- =?us-ascii?Q?jspXEiIS3o/Y3mTzB/qvw8wqpUnzO8ygc1QpvChWcnPJIfI+1pTMkntx0lts?=
- =?us-ascii?Q?ZHenK2PM5/K19DJh1VXNqLb5tTzkACiSLr5Mc4BtOEo4uAfJ4ohBe+Xseit2?=
- =?us-ascii?Q?+Ha5n670nHI+Du80GaTX6dFFBXQF7/pAsiWCSCr//UyvlJe2HbXi5qRjO+sZ?=
- =?us-ascii?Q?12PQQsjL70o+niuPPEzfifiWreNtWwL/5RzJSI4i9JjrfLM5LWSW4olDEYuj?=
- =?us-ascii?Q?dIsICIPrOJBAmXBWVhqwWxRNi8OX7aBN3l2JKiC5LtNw32p0fI/ZmBoZSxdV?=
- =?us-ascii?Q?ZPDKw1XGvA0MWtk=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:KL1PR06MB7330.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(52116014)(366016)(1800799024)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?CXjAq5cYOYHzNA+7BlTCeYf2LESThcySVZsB3/FwLx74HAN3r4e5WphQ+uo3?=
- =?us-ascii?Q?pkH56dhAydWh2hms4Ij7V19YkLv/nSG3l5O5atPieMEKIZCLTiGn6JdPIlnZ?=
- =?us-ascii?Q?71vpE1FD85wIQbB2CqcF5EIhNk5C3NPROdYt/lSox06zqlF9Mf4UlRB8PH88?=
- =?us-ascii?Q?QyhCW0nQ8zABag/O2p4wLUfJo7S+gewaPmfd8PTx1mMorUbPV0X1075tWttl?=
- =?us-ascii?Q?Uy5vOp/NMkbPUara7z0NmENfeJ+eYafx4JETSuVN2EeiX+u4TNLqNVp9W3zr?=
- =?us-ascii?Q?EBO8r0l8/ckcAxNukC6uNt2uP9COK6bXDGUF9FElO44VpbSsZxql4YfPe4sB?=
- =?us-ascii?Q?YRZsll/vgxbX4sCyu1OB2VtDYv0h+ecA7Ps8pdGDt19hhXOCoDcZ4hHrW3N/?=
- =?us-ascii?Q?YhUhDvkTwEeMtVBjtR1r+HpAS5zfsPBlJgjnyRoVk2t/zQ18qqXLL+NTreUi?=
- =?us-ascii?Q?gqw3UoV4JgNEtQbNoRBylq06DneXDosKOqp8WYKUi4KueCKUpTN3OehjRwng?=
- =?us-ascii?Q?iZtLMYHRRXJaplpOHAvLSMfl4UgJ0Z4dEOYnCCI8flurag6NGR5vjRT6lCls?=
- =?us-ascii?Q?o2unpQuiQtcIiV0ll+TX5f+FhzL34ZS6rvZBky4E8EFc3WFpk9yW2Ny+HViG?=
- =?us-ascii?Q?AbXxU2QvRWjZDAFEiNy2dz+ZYMAXITk6BBVjGtoS1JdQwr9541JU3D2MyLLZ?=
- =?us-ascii?Q?ZdeFy1p9l44bwe2ytAZ5piwaDba9h1Pzz7Q8rt3+KtGLoZTBrFYNdb6y0zIi?=
- =?us-ascii?Q?cEoT+tk7+72a6aFWZtR/X0CojGTPPtVSO4v3L8x7adk14d8OU04xH/lUeugG?=
- =?us-ascii?Q?bUiTKsHXUsmAjBhTHrHNXJmCMUCC8wS7mRvp9n279shXH4zf/Rgoyq/6Ji0s?=
- =?us-ascii?Q?eJ9nbKEeCUvL14pQxkulBMYhtl8Y+XiH+mhxXpwazdBoMXOm/a9YXfAzKPJf?=
- =?us-ascii?Q?Y+HUgZ+Z9SVSRTvm1fTwk1efx1/FyZqOuF+cY478SgBZuYBPUXfAb58cvE/+?=
- =?us-ascii?Q?rvun92150FjHPvKJL4IB8vO7x3iNc4xliqzNSgyQi6njm29mI0nAyUH3hKzH?=
- =?us-ascii?Q?ZmqzWvDwwmkzJIDHwpMtgQeUIud3KSTe4Palk5tsH04cJPJqrWwG3aBa8ycE?=
- =?us-ascii?Q?8E50dUGLbA/M0UGNHzHz3qCbHOrpi5ZzuisC7hvQy1Ior/M3O1ylohdKzr8z?=
- =?us-ascii?Q?KgbYQ5Zby9ooZHIQEUT8EmZfpwbbNkw+nZhyrVwE6XMdqu8c+PsTpLYmO2P2?=
- =?us-ascii?Q?VTUSMeCde9eRpOdRJMu6U47LIolM6oRAvk7Lgb1lTy3zXcIKo8eK5NG/PFsL?=
- =?us-ascii?Q?LZdzYFWbvQL+kDpREM06mq5gXOh2B1KLeAn2gqYXt3exMsE7lMObNdAMbf7M?=
- =?us-ascii?Q?k1sEQyXWNhNjHrw4tpaiKSpE/j6sbsEgos9woQP3x+VABCs46FQodrDqjwaG?=
- =?us-ascii?Q?JNcmKUrnEp4xrylxrxnEk8itNQPWSHRdXi8GNv97rTQZ+29ufyDk0L2tTgqY?=
- =?us-ascii?Q?ORLUIxm69dc5Fgm6n6olQArfbj6JCEVaw4S2hKWp4msbI5ALZzh2x7UKUIBB?=
- =?us-ascii?Q?EuFBwpiuOZFRp8vOvjl3M8oDh9j400U9NbIgjfFh?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0faed892-05f6-4dc9-7d42-08ddef45ec2e
-X-MS-Exchange-CrossTenant-AuthSource: KL1PR06MB7330.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Sep 2025 02:09:35.3246
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ADvMjN0WIBMr2mejDrjrg3Lm9+MQth/JEnKi7uxBtvEpq1jhXDVwBl8D0l5LmucCkZ5T0ID0Qfkd4PkIGsgO8g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PS1PPFEFCBCC15E
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: zesmtpip:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-1
+X-QQ-XMAILINFO: NThgMOl/3vH7i0HA3LKp1KM4UXA5K0mrxeL6HzDodXUx4X/U1aC9WXeJ
+	NTIVcc1yl+xPTL6kKivuJEhR2BXm3Ddzl1ybeynSSWZ0m48Hxuy4oAEpAQkap4uVY/QGpGA
+	ucbQYggLhKUoaONOWjyli1rfuxJUX5UEYubXLwhoBwi2TE2q/9noyPfmWi85a7EGEeI7UEZ
+	Yj1XIfPCPU2IsJmEn4MXC1o9G9WFO0+4Wlpfp7TfGZaoc93tuywq8IwlpLQZnTZZstCvXLc
+	Y6ppd2bvoAQQQfqEZagl8Q22U17CIcjWfLc1jw7jsnuiNivHJiUC8HlVBzk4nAquJYrImhF
+	lagxy1D+hgrhn2hHMKywHAnM232T0LSmzF4d0S1SYjqUPSMQdzn8bKworXuGEmyMsD1sjRm
+	k7loI3AsJvjklUB1GiZGxCUYJX4iEG3Qs5/RJNZY5EtufK8Q4Lc047X/TZI9oEjmKpp9n7j
+	+AK8bon0QsHU2RkUV0RnEVJcoEFTU40d66mmAV5jfQKiu7SBxVb/ABSWG2m7cFrzL+jI2ZE
+	UnfO4qUHtg+TpuR+CD4TiA8vB40CrWkYVAKl+xwd4xDkcZ5uL2na0ZLf3RvvpUdjAbclJod
+	gRRJ+tuc2t2aWBF8G0bRC8pVqh0qy0Hj5pPD0XcwEGWJoJHTfaa4X0wjLdWDgD74RwRfMDH
+	nahcIf1bzAgkfnqtN+g/J2BUY4EHB1oxyCV2AvieiZ+xZg34n0MOyXF3jxwhk9c17NZ3V7f
+	J15T0JqR4k9lrByVhCtV3T+KtfUdF0iQ4wuolAtIRZjmHJXQoSFAIeDllOyQhnkP4bbsst7
+	iHDWd+hmR3rWY8NYybIKWRo2exHsiYGtXtftmwMLUMVt3VOPmUslXfIso3c8WKBonB0VHFz
+	qd3iZxTxTVVHQ5RmgXAZeYHNRBX6WlkxDvW9R88BZ5hw8o4ahmN5W90tUj10AQBd/dfSLJ8
+	KLlt69t/SCx7oMRUoovxREyCtnSdbrDb1kyj5Q3AyxEmCkG1mxFxtJPGK2oy962qjZh0njG
+	1pPpKYpQ==
+X-QQ-XMRINFO: Mp0Kj//9VHAxr69bL5MkOOs=
+X-QQ-RECHKSPAM: 0
 
-Remove redundant condition checks and replace else if with else.
+Hi Saravana,
 
-Signed-off-by: Xichao Zhao <zhao.xichao@vivo.com>
----
- drivers/power/supply/rx51_battery.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thank you for your detailed feedback and suggestions. I appreciate you
+taking the time to review my approach. Let me address your concerns and
+explain the real-world issues I'm trying to solve.
 
-diff --git a/drivers/power/supply/rx51_battery.c b/drivers/power/supply/rx51_battery.c
-index 7cdcd415e868..b0220ec2d926 100644
---- a/drivers/power/supply/rx51_battery.c
-+++ b/drivers/power/supply/rx51_battery.c
-@@ -116,7 +116,7 @@ static int rx51_battery_read_temperature(struct rx51_device_info *di)
- 		int mid = (max + min) / 2;
- 		if (rx51_temp_table2[mid] <= raw)
- 			min = mid;
--		else if (rx51_temp_table2[mid] > raw)
-+		else
- 			max = mid;
- 		if (rx51_temp_table2[mid] == raw)
- 			break;
--- 
-2.34.1
+> This doesn't really fix our issue where we want to abort suspend only
+> if we have to stay awake. If there's no need to abort the suspend (to
+> deal with some user/wake source request), then it's okay to take the
+> time to sync and then suspend. If you abort the suspend, it's just
+> going to get attempted again and in fact waste power.
 
+I understand your perspective, but I'm addressing a different class of
+problems. The key issue is user experience and system reliability when
+sync operations become indefinitely blocked.
+
+> I also don't understand how your patch fixes anything. If anything
+> this makes things worse because the user might have expected their
+> device to have hibernated only to come back hours later to see their
+> battery dead. And even if the user is actively monitoring it, you
+> still need to sync the file system fully before you eventually
+> suspend. So, this doesn't really save any time or the need to sync.
+
+This highlights exactly the problem I'm trying to solve. When a user
+initiates suspend/hibernation, the screen goes black immediately, giving
+the impression that the system has successfully entered sleep state.
+However, if ksys_sync() is blocked (which can happen in several scenarios
+I'll describe below), the system appears to be suspended but is actually
+still running at full power consumption in the background.
+
+The user has no way to know the system is stuck in sync - they see a
+black screen and assume suspension succeeded. This leads to exactly the
+scenario you mentioned: coming back hours later to find the battery dead,
+but with the added risk of data corruption since the sync never completed.
+
+> Can you explain the actual real world issue you are trying to fix? If
+> it's the UI hanging and not responding to keypress/mouse move, then to
+> me it looks like those should be marked as wake sources.
+
+Here are the specific real-world scenarios I've encountered:
+
+1. **Device removal during file operations**: When copying large files
+   to USB drives and then initiating suspend, if the USB device is 
+   removed during the sync process, some filesystems may not properly
+   handle the device disappearance. The sync can become indefinitely
+   blocked waiting for I/O operations on a device that no longer exists.
+
+2. **Faulty storage devices**: Slow or failing storage devices can cause
+   sync operations to hang for extended periods, making the system appear
+   unresponsive.
+
+I've observed stack traces like this when the block device is removed during sync:
+
+```
+[<0>] __switch_to+0xd0/0x168
+[<0>] iterate_supers+0x88/0x118
+[<0>] ksys_sync+0x48/0xb8
+[<0>] ksys_sync_helper+0x18/0xa0
+[<0>] pm_suspend+0x260/0x3e8
+```
+
+In this case, ksys_sync() is permanently blocked and will never complete,
+even though the user believes the system has suspended.
+
+My timeout approach provides several benefits:
+
+1. **User feedback**: If I set a 1-minute timeout and sync doesn't
+   complete, the system fails suspend gracefully and returns control to
+   the user. This gives them clear indication that something went wrong,
+   rather than leaving them with a black screen and unknown system state.
+
+2. **Prevents false assumptions**: Users won't mistakenly believe their
+   system is suspended when it's actually consuming full power.
+
+3. **Allows recovery**: Users can investigate the issue, safely eject
+   devices, or take other corrective actions.
+
+> However, if you are really set on proving the need for a timeout and
+> implementing it, you can always add it as a separate patch after our
+> patch lands. You can set up a timer to call pm_system_wakeup(). Or
+> just grab a wake source after a time period.
+
+I appreciate this suggestion, and I'm certainly willing to coordinate our
+approaches. However, I believe the sync timeout addresses a fundamentally
+different problem than wakeup-event-based abortion.
+
+Regarding your concern about sync completion after timeout, I want to
+clarify that in my updated implementation, I've removed kthread_stop() to
+ensure the sync operation continues in the background even after timeout.
+This means:
+
+1. The suspend operation fails immediately with a timeout error, giving
+   the user feedback
+2. The sync operation continues running in the background to completion
+3. Data integrity is preserved while providing responsive user experience
+
+This approach ensures that we get both the user experience benefits
+(immediate feedback) and data safety (background sync completion).
+
+I believe both our approaches serve different but complementary purposes:
+- Your approach: Handle cases where wakeup events should abort sync
+- My approach: Handle cases where sync becomes pathologically slow or 
+  blocked
+
+Would you be open to discussing how we might integrate both approaches?
+I'm happy to work on this as a follow-up patch series after your changes
+land, or we could explore a unified solution that handles both scenarios.
+
+> In fact, thinking more about this, you are generally having a problem
+> with suspend taking too long to complete. Doesn't matter if it's due
+> to file system sync or anything else. In which case, you should just
+> use a timer to call pm_system_wakeup() and not fix just file system
+> sync (which happens to be the current long pole).
+
+This is an interesting perspective. However, I believe filesystem sync
+deserves special attention because:
+
+1. It's currently the most common source of indefinite hangs during
+   suspend
+2. The consequences of interrupted vs. timed-out sync are different
+   (data integrity)
+3. Sync has specific requirements for background completion that other
+   suspend operations may not have
+
+I'd be very interested in your thoughts on this approach and whether we
+can find a path forward that addresses both our use cases. I really
+appreciate your patience in this discussion and look forward to
+continuing our collaboration on this important issue.
+
+Thanks again for taking the time to review and provide such detailed
+feedback.
+
+Best regards,
+Haowen Tu
 
