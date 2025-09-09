@@ -1,132 +1,96 @@
-Return-Path: <linux-pm+bounces-34239-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34242-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 50B4EB4AC4A
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Sep 2025 13:39:30 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 54AB6B4AC62
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Sep 2025 13:41:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 05861345669
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Sep 2025 11:39:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 150983A38EE
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Sep 2025 11:41:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3639B32274F;
-	Tue,  9 Sep 2025 11:39:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CA5232252B;
+	Tue,  9 Sep 2025 11:41:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OkyQYxWb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E3IhVLci"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 938773218C7;
-	Tue,  9 Sep 2025 11:39:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22AFB31B82C;
+	Tue,  9 Sep 2025 11:41:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757417960; cv=none; b=Kp5KuBiCNYclU6Pox90E5IYhVlQOow0ym8i9mE8H3wWx6kkLurA+FnXwfo0JYxUV0ACvorr6lEsHy+p7DMb23P5VbDd9ZYJclE/4bEXpM0nGSkGhskZgco9iHNpr0NLWeFxVuyIXQk/X0QYsE/U+a3wVpQ8Dwj3YuJ3lwGfnPco=
+	t=1757418095; cv=none; b=JeaNYTaSvYHOcV2nZKxUi9S6106oxr7M3OTcdlPQfz3OpA0paMecMxluF5Kk25zycojLh8/heZ0NIeQla6iOUndibmHQRKw+g0fYS64pzHZAyIqFv6aRereveqZxyC1l5Ux1NobVV4Ev4lT2IDlTUsqSlx9Ipf906gYOcqwuKhc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757417960; c=relaxed/simple;
-	bh=/lQPn8R9xF5EP26Yw19J4XYjAXrahPPIh8/YXIx3HiY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GWV1bwnDLEKxdSQx1RrEovK8Q9+qdjxpw6+1dIGu0MqRRtX2jJojZVkh35hMX4ImcBrSJ0jjjEuNkF/WesjApk4ARFpOafr/cxJZdJgh93VU0pZ4bsph0oppdVwTC97OP2QkJYEKNG7TdYw1eElK3QnsVgc2Ml9UIVDRXpEDWz4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OkyQYxWb; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757417959; x=1788953959;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/lQPn8R9xF5EP26Yw19J4XYjAXrahPPIh8/YXIx3HiY=;
-  b=OkyQYxWbkAQMB7ukdQbxXcL41zwyNLj5lGFlzvIN3sS2kNta5KQ4Mner
-   Io1QBoiWZpJWflT3CaNxC30cmOqcR6r2M1lBQaliYjLsYKKBXvtPN1ywu
-   sycndcqCzVh4p+k/qiuFuNhwaotGArdvkI1B6l8VpQVRKv++vhSZTPnBb
-   QYr2eTd+1LHjK2Zj4i87kXjOXlsD0RGsuNPDRpU2NqWdW9NMvHDi/KtYd
-   K6AGsLCZ5CXxqa8ZLmjWdpjLGpa/hrWLjBdhZQ1WafDPevTNyEYTlmPOr
-   DJaPCJO6hr6fJcZBOBBcwLVFEH60JfgUt0ytUiPD9UWvqqEKDb8LxPXKS
-   w==;
-X-CSE-ConnectionGUID: NhFTDtjUQi2k/b1KqxJv9Q==
-X-CSE-MsgGUID: 6ttpKTHnTj6m54WDMtSAhw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11547"; a="71072876"
-X-IronPort-AV: E=Sophos;i="6.18,251,1751266800"; 
-   d="scan'208";a="71072876"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2025 04:39:18 -0700
-X-CSE-ConnectionGUID: BaPjKtCAQWKpUWbsyb3AOw==
-X-CSE-MsgGUID: 6QhrmVOxSlW3s04C9Z9qjA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,251,1751266800"; 
-   d="scan'208";a="177412667"
-Received: from smile.fi.intel.com ([10.237.72.51])
-  by fmviesa005.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2025 04:39:15 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
-	(envelope-from <andriy.shevchenko@intel.com>)
-	id 1uvwgq-00000001QS8-1aCJ;
-	Tue, 09 Sep 2025 14:39:12 +0300
-Date: Tue, 9 Sep 2025 14:39:12 +0300
-From: Andy Shevchenko <andriy.shevchenko@intel.com>
-To: Sean Nyekjaer <sean@geanix.com>
-Cc: Jean-Baptiste Maneyrol <jean-baptiste.maneyrol@tdk.com>,
-	rafael@kernel.org, Jonathan Cameron <jic23@kernel.org>,
-	David Lechner <dlechner@baylibre.com>,
-	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-	Andy Shevchenko <andy@kernel.org>, linux-iio@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	Jean-Baptiste Maneyrol <jmaneyrol@invensense.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: Re: [PATCH v4 5/5] iio: imu: inv_icm42600: use guard() to release
- mutexes
-Message-ID: <aMAR4Jx3pWQ1_rjX@smile.fi.intel.com>
-References: <20250909-icm42pmreg-v4-0-2bf763662c5c@geanix.com>
- <20250909-icm42pmreg-v4-5-2bf763662c5c@geanix.com>
+	s=arc-20240116; t=1757418095; c=relaxed/simple;
+	bh=csnciOLr7bNNQ5Y0SzQdIQW4n35Ea4AWAZOFdz0lb74=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=OdrEvyhVKEWO4QnTHmCeZb771jXp94eJeoSonJxCaQ93YAJqDBXuZJFMZ2tTKWx2XU50pBg+Y2qGFI0qERaLKw6A1yqzdu1QqY7DrH6MuQ9CAWdcyM05vT+g6F72dAQpnDZm4VGQA0pTq4UOfjprh8R3PqRWIaBHd29XIK8FwhE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E3IhVLci; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51586C4CEF4;
+	Tue,  9 Sep 2025 11:41:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757418094;
+	bh=csnciOLr7bNNQ5Y0SzQdIQW4n35Ea4AWAZOFdz0lb74=;
+	h=From:To:Cc:Subject:Date:From;
+	b=E3IhVLciZ4eOif8XOYK5Wf7e8WOLhx6X5lT5LEXmD7fe1BDvutk03xuusIgC1v+3r
+	 C3FPsD9kiwEJaZFgMomw0UjrFvpKHRxX2Si6PzRmJYWlFyZTmTGMIQzZo96ZIdZ7JR
+	 lz60YkARr4DTwZ3RDk9z4prp9EclbCmfVfl5OHFTqDNBtJlpXvpRnzYhaEDnklCc2c
+	 PVXRQms3YnhSAjw59oAGABuD7gkjm1sx1AKZu7KaI9fJvt1q0QGF0EmsX/3PQdTABD
+	 upNSeKZslIOIdq4pnKtadTV8wiNTACBb2avYcevV4sJKSDqVsWhmD1rSPjt8wtVhun
+	 aQiEA9I7/B2qw==
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+To: Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Linux ACPI <linux-acpi@vger.kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>,
+ Mario Limonciello <mario.limonciello@amd.com>,
+ "Gautham R . Shenoy" <gautham.sheoy@amd.com>
+Subject: [PATCH v1] cpufreq: ACPI: Use on_each_cpu_mask() in drv_write()
+Date: Tue, 09 Sep 2025 13:41:30 +0200
+Message-ID: <2797300.mvXUDI8C0e@rafael.j.wysocki>
+Organization: Linux Kernel Development
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250909-icm42pmreg-v4-5-2bf763662c5c@geanix.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Sep 09, 2025 at 09:11:11AM +0200, Sean Nyekjaer wrote:
-> Replace explicit mutex_lock() and mutex_unlock() with the guard() macro
-> for cleaner and safer mutex handling.
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-...
+Make drv_write() call on_each_cpu_mask() instead of using an open-coded
+equivalent of the latter.
 
->  	/* exit if FIFO is already on */
->  	if (st->fifo.on) {
-> -		ret = 0;
-> -		goto out_on;
+No intentional functional impact.
 
-Probably you wanted the same comment here
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/cpufreq/acpi-cpufreq.c |    8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
 
-	/* increase FIFO on counter */
+--- a/drivers/cpufreq/acpi-cpufreq.c
++++ b/drivers/cpufreq/acpi-cpufreq.c
+@@ -335,14 +335,8 @@ static void drv_write(struct acpi_cpufre
+ 		.val = val,
+ 		.func.write = data->cpu_freq_write,
+ 	};
+-	int this_cpu;
+ 
+-	this_cpu = get_cpu();
+-	if (cpumask_test_cpu(this_cpu, mask))
+-		do_drv_write(&cmd);
+-
+-	smp_call_function_many(mask, do_drv_write, &cmd, 1);
+-	put_cpu();
++	on_each_cpu_mask(mask, do_drv_write, &cmd, true);
+ }
+ 
+ static u32 get_cur_val(const struct cpumask *mask, struct acpi_cpufreq_data *data)
 
-> +		st->fifo.on++;
-> +		return 0;
->  	}
-
-...
-
->  	/* exit if there are several sensors using the FIFO */
->  	if (st->fifo.on > 1) {
-> -		ret = 0;
-> -		goto out_off;
-
-In the similar way
-
-	/* decrease FIFO on counter */
-
-> +		st->fifo.on--;
-> +		return 0;
->  	}
-
--- 
-With Best Regards,
-Andy Shevchenko
 
 
 
