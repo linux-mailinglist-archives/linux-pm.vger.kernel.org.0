@@ -1,167 +1,131 @@
-Return-Path: <linux-pm+bounces-34282-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34283-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB9EAB50231
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Sep 2025 18:13:08 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B176B50257
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Sep 2025 18:19:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 065B51C617E3
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Sep 2025 16:13:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D5050163B46
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Sep 2025 16:19:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02F3433EB0D;
-	Tue,  9 Sep 2025 16:13:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A26C34F490;
+	Tue,  9 Sep 2025 16:19:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="Kn2NOuvD"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l5sXPnEK"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D457A3594E;
-	Tue,  9 Sep 2025 16:13:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D93C133A01A;
+	Tue,  9 Sep 2025 16:19:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757434384; cv=none; b=hAQfA3/QeMSkHe4PsPiOr7rJQm5TOnAptWzrMFevIQejhcm3BMiVCiGJ97+ifIYVH4dalq7j45FBGLaV43x/f1y0PWpMGxbePwX643Pv3G7eBo4BKdUhQXyGtZtmu099jRhm0diyMxXxjp+B3IJJAZGB4r7TM82IGG6ezxrI4mw=
+	t=1757434749; cv=none; b=WuhPg/wYHCTw0iY57Q0xFW96tArbHo6NCs9nR/EpbWCog5QtcAcFczzyx8+2q637cVRtmaW3WR4x/ugXzs0juDAj8qBbK1Q9mnJvWbmD67VDZ4lysJ9c2fMfmF4/PWIvqAY4DRCpoeaApkdEpmt8ENlv/oqiB2UxUyY3/tJ1sho=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757434384; c=relaxed/simple;
-	bh=zF+pibFWFF+py+h3GHMhUcPWe6XzCW0OIVU4fGG31Sc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=H+EgDsyR4okaBmi1Rwlupjc1P78VWUrZldbFv+p2v4kJvhS0cYjv4JEWubx2c14cW12hBVbFTluvlRpl5TioqlKJLkbaWbMxtwfNNUulflo8kYyeVIHRQWV3oZA3ndVGl0AZ5ksuhhIehaM4Ocbwb43MHGKsLmFK/uwz9sngFFA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=fail (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=Kn2NOuvD reason="signature verification failed"; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 5515540E01B0;
-	Tue,  9 Sep 2025 16:12:53 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=fail (4096-bit key)
-	reason="fail (body has been altered)" header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id WjqufeJ0WJTY; Tue,  9 Sep 2025 16:12:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1757434367; bh=R6cxdKUTP067b/7o2F/e5uNSuLE+BTpfOFxYXHQQkFI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Kn2NOuvDOy8qA+j1Q/vTeTO7R77GC4i0Ukib8EUb2wmZoacKVuBBgqRCERAj8gN1/
-	 FwW2WldBidmRNCtsWqhq+CvnCI2cLrIO7UWHurN0/OXaD6hzSSvXfCUFIGs1RIcjl+
-	 5mad77mhIhzMtq5UrrgkS7qjr2/GDoasLQWh7dEQpGqEL7Fxp2EFlkQl+dHajy7aS2
-	 5lOGgUBONF990KX89fnDfXsWw/hElN8aCgpwPcvVqgroat89w5wRY9Gv6Dm1tlTDd9
-	 H9Ksr0+DgAJnYgzGVtfNhP/kBI2RNSgMw+AKk//8qWBSaHmQAffltBeF+odAPo+kJ7
-	 jU3zHrjjLdMIEyow9s2n2l/q41zJny82p86eLCx5GE8cKQN0h0b5i/WEii0qlyGXfv
-	 /KeykfLmCCwujLO+DpxzXKK0JiXkC+qg0gISuHPC9UBPjwGkVDcqzx6zsGaVV3TMY7
-	 lMqRzEIBcfSuIxhQVBSHvPLlieDwUX5iL8exZPvgW7MB5i7NvUdBzeGRNxf8Jx7Nn9
-	 qOUogClBFvGfZc5NFWEt9ZcKijH1ADF+qOyi6i2V6LBmhVWnh+DsDkkMi+xzZFzOVs
-	 bVSmHA1seIl+yQjLwjScUfNqOZsZ8+1LuMHP4rrbYssLcQoM/mUCN5ULCnjElcoVsO
-	 cNSzloV0TZma0UIFT3fUEQKU=
-Received: from zn.tnic (p5de8ed27.dip0.t-ipconnect.de [93.232.237.39])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with UTF8SMTPSA id 2365440E0176;
-	Tue,  9 Sep 2025 16:12:17 +0000 (UTC)
-Date: Tue, 9 Sep 2025 18:12:10 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-Cc: linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org,
-	nvdimm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-	linux-pm@vger.kernel.org, Davidlohr Bueso <dave@stgolabs.net>,
-	Jonathan Cameron <jonathan.cameron@huawei.com>,
-	Dave Jiang <dave.jiang@intel.com>,
-	Alison Schofield <alison.schofield@intel.com>,
-	Vishal Verma <vishal.l.verma@intel.com>,
-	Ira Weiny <ira.weiny@intel.com>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Len Brown <len.brown@intel.com>, Pavel Machek <pavel@kernel.org>,
-	Li Ming <ming.li@zohomail.com>,
-	Jeff Johnson <jeff.johnson@oss.qualcomm.com>,
-	Ying Huang <huang.ying.caritas@gmail.com>,
-	Yao Xingtao <yaoxt.fnst@fujitsu.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Greg KH <gregkh@linuxfoundation.org>,
-	Nathan Fontenot <nathan.fontenot@amd.com>,
-	Terry Bowman <terry.bowman@amd.com>,
-	Robert Richter <rrichter@amd.com>,
-	Benjamin Cheatham <benjamin.cheatham@amd.com>,
-	PradeepVineshReddy Kodamati <PradeepVineshReddy.Kodamati@amd.com>,
-	Zhijian Li <lizhijian@fujitsu.com>
-Subject: Re: [PATCH 1/6] dax/hmem, e820, resource: Defer Soft Reserved
- registration until hmem is ready
-Message-ID: <20250909161210.GBaMBR2rN8h6eT9JHe@fat_crate.local>
-References: <20250822034202.26896-1-Smita.KoralahalliChannabasappa@amd.com>
- <20250822034202.26896-2-Smita.KoralahalliChannabasappa@amd.com>
+	s=arc-20240116; t=1757434749; c=relaxed/simple;
+	bh=5+oqeQqKcOcNexLLWSaNP8FwXROd5N6zTPNxd1c9umA=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=G88c48Hn1Jm8F9M4dJnitjW9nutfSXjeOUQpcKLWKsLHIbMYFulMEqywqX5y+UiKLza8lX3oqLywAh4iMLbVqdfDllGOFrcl+ZNpc7CaTKZwKZDEmEhJ7mz6fpyBTjT3iL1uMQpnfc4ww0b337Qx25EE9hw6sBSDZc1efgfwx0M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l5sXPnEK; arc=none smtp.client-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-24cb39fbd90so48719015ad.3;
+        Tue, 09 Sep 2025 09:19:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1757434747; x=1758039547; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QAi4h7GkC5BQfTMRwYsmkT5Tfbmlnk4jobHVH0SykIo=;
+        b=l5sXPnEKk0LR4ccF5FAyPuiQk+wurRvsvDXs1X0iddwlzLdEjYMTxcjMGS9eKnI7zi
+         aNQ1FvCd1sMVhQoCf9hn26YyZQwAKfw1Jh93nwiPAnx/GMt/Wp6+ikk38/EGekNXovKK
+         PT5XzQ2UKt0p4hMhfGHUXN/iG11wKGac5C8modnQkovLw4IBLvMKwbQgTIWf5BSAWNR8
+         l6IJQQYWZzBfUVyLakn8D1aHkyA6MlOmRtmkE+mTJv0qzOQlPD+VD1OceGSl+yv/vGhI
+         61k78fUajVWYTCrzjyK1ZzxeoO1cZXofkqAqH+hVc5gU9qkC8y4gpwdiV2hWBGY5pyaw
+         cOVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757434747; x=1758039547;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QAi4h7GkC5BQfTMRwYsmkT5Tfbmlnk4jobHVH0SykIo=;
+        b=Au0Q5iGpZQWuRQY/8e4t5tIqj6SQC8h8Zib90QLO11f5xAkdNaO5QVLgtMoOn5GbNc
+         NbrUD/1mNZVdr7ZmHltdtXa36KwZpqtlSnEO8U6rJa0VuuqSxbt0Tohg2F2HN+QN7Xs1
+         eiJSMxo80LkivaP+QazavfHV0FePYAV2xwaKVZd3Da2enebCatIBBqgb1K3bqLVrxrnX
+         SbVVm7f/4bJgBkdhclBi+YQ5OryRmG69mQVMFRw4yxdXoXNCeTtzQG/DW1jHwn3NIW3S
+         H2//F4os7WW6M1IdMuJwie5kPulFg4o7R2mLz9ZS2Y6WviLmCVvTpyb2UcSpFcpCrcUb
+         NXrw==
+X-Forwarded-Encrypted: i=1; AJvYcCU47gN6Saqg0e5qDpS1CA8SrFfbO2nVYOTNloJUeSjlIxZK+Ur+HTsMty+F73ZiJjtiuG43oh9ojAsp1QI=@vger.kernel.org, AJvYcCVHUqV14pSVroZq4gzVuVtrTXe/PomOg20hpSm7VPOIR/JofGtdKhGagnOSqWVN2gbFwuswdQKPrQE=@vger.kernel.org, AJvYcCWFyOBc1fBHoqwm/tWyKjX6CescWsHpe/V1qD8zsE52XZEd9Xrh28hFM8DuaehRwUGTgBMtYf/NOy52@vger.kernel.org
+X-Gm-Message-State: AOJu0YxJvwtC1N9oOCsA+qLmy8MRAB+e+VsGtuJZr5V8DLYMxcyS3eo3
+	G618Yw2RboWKGJtInP/oqbhjSzf/GTtP3iI3y9b982rjRpjZ64dcwjWe
+X-Gm-Gg: ASbGncshLozy3pywiRQ2Og6lVL0Kpfe63crFzOvK5I9s2hROYyYP3FSf5g03zMCCWLq
+	412dNpswb0582pUURlaTLHrwkxRml1qmwF55b5Nb2ulMw/hBVHoXRXCOsR5TC/3nimFXlNKmyqi
+	5ZJ8lEC7qnOLn6S1fKVl/BEO1ko1OkgMtRpNRallBZSwiTfQmHaI86LpJUhtgNC+B0+N7ZC0cEQ
+	pzX60J0winKTTGKMLeyP6TCSokJFPdrWocWGN29Xo0lW4eKUgX/HJdQQ9IF+Wkjp96thQN4fdwM
+	3KDdxGimsS3QFtPjTCQy8+EQHYqUy4YFPQJsrnTiOc+MpB+MAOc26JQdEIcbZVkKFw3sQg6dIUM
+	rlEV3ZCQLHNx8TGsmebtDIXE=
+X-Google-Smtp-Source: AGHT+IFc01xMg0RhYt92nNhZiu4xLaJuYGnO9/E2/g5lUU+8IKkN3wggu++B8oAay63yya0pPMnlBQ==
+X-Received: by 2002:a17:902:f78f:b0:240:3eb9:5363 with SMTP id d9443c01a7336-2516e69aedamr146484675ad.27.1757434746918;
+        Tue, 09 Sep 2025 09:19:06 -0700 (PDT)
+Received: from localhost ([104.28.247.70])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-25a27422decsm2241595ad.4.2025.09.09.09.19.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Sep 2025 09:19:06 -0700 (PDT)
+From: Ryan Zhou <ryanzhou54@gmail.com>
+To: stern@rowland.harvard.edu
+Cc: Thinh.Nguyen@synopsys.com,
+	gregkh@linuxfoundation.org,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	rafael@kernel.org,
+	royluo@google.com,
+	ryanzhou54@gmail.com
+Subject: [PATCH v2] drvier: usb: dwc3: Fix runtime PM trying to activate child device xxx.dwc3 but parent is not active
+Date: Wed, 10 Sep 2025 00:19:01 +0800
+Message-Id: <20250909161901.10733-1-ryanzhou54@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <385dccf3-234a-4f83-9610-81ac30bf1466@rowland.harvard.edu>
+References: <385dccf3-234a-4f83-9610-81ac30bf1466@rowland.harvard.edu>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250822034202.26896-2-Smita.KoralahalliChannabasappa@amd.com>
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Fri, Aug 22, 2025 at 03:41:57AM +0000, Smita Koralahalli wrote:
-> diff --git a/arch/x86/kernel/e820.c b/arch/x86/kernel/e820.c
-> index c3acbd26408b..aef1ff2cabda 100644
-> --- a/arch/x86/kernel/e820.c
-> +++ b/arch/x86/kernel/e820.c
-> @@ -1153,7 +1153,7 @@ void __init e820__reserve_resources_late(void)
->  	res =3D e820_res;
->  	for (i =3D 0; i < e820_table->nr_entries; i++) {
->  		if (!res->parent && res->end)
-> -			insert_resource_expand_to_fit(&iomem_resource, res);
-> +			insert_resource_late(res);
->  		res++;
->  	}
->
+Issue description:During the wake-up sequence, if the system invokes
+ dwc3->resume and detects that the parent device of dwc3 is in a
+runtime suspend state, the system will generate an error: runtime PM
+trying to activate child device xxx.dwc3 but parent is not active.
 
-Btw, this doesn't even build and cover letter doesn't say what it applies
-ontop so I applied it on my pile of tip/master.
+Solution:At the dwc3->resume entry point, if the dwc3 controller
+is detected in a suspended state, the function shall return
+immediately without executing any further operations.
 
-kernel/resource.c: In function =E2=80=98region_intersects_soft_reserve=E2=
-=80=99:
-kernel/resource.c:694:36: error: =E2=80=98soft_reserve_resource=E2=80=99 =
-undeclared (first use in this function); did you mean =E2=80=98devm_relea=
-se_resource=E2=80=99?
-  694 |         ret =3D __region_intersects(&soft_reserve_resource, start=
-, size, flags,
-      |                                    ^~~~~~~~~~~~~~~~~~~~~
-      |                                    devm_release_resource
-kernel/resource.c:694:36: note: each undeclared identifier is reported on=
-ly once for each function it appears in
-make[3]: *** [scripts/Makefile.build:287: kernel/resource.o] Error 1
-make[2]: *** [scripts/Makefile.build:556: kernel] Error 2
-make[2]: *** Waiting for unfinished jobs....
-make[1]: *** [/mnt/kernel/kernel/2nd/linux/Makefile:2011: .] Error 2
-make: *** [Makefile:248: __sub-make] Error 2
+Signed-off-by: Ryan Zhou <ryanzhou54@gmail.com>
+---
+ drivers/usb/dwc3/core.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Also, I'd do this resource insertion a bit differently:
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index 370fc524a468..06a6f8a67129 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -2687,6 +2687,9 @@ int dwc3_pm_resume(struct dwc3 *dwc)
+ 	struct device *dev = dwc->dev;
+ 	int		ret = 0;
+ 
++	if (pm_runtime_suspended(dev))
++		return ret;
++
+ 	pinctrl_pm_select_default_state(dev);
+ 
+ 	pm_runtime_disable(dev);
+-- 
+2.25.1
 
-insert_resource_expand_to_fit(struct resource *new)
-{
-	struct resource *root =3D &iomem_resource;
-
-	if (new->desc =3D=3D IORES_DESC_SOFT_RESERVED)
-		root =3D &soft_reserve_resource;
-
-	return __insert_resource_expand_to_fit(root, new);
-}
-
-and rename the current insert_resource_expand_to_fit() to the __ variant.
-
-It looks like you want to intercept all callers of
-insert_resource_expand_to_fit() instead of defining a separate set which =
-works
-on the soft-reserve thing.
-
-Oh well, the resource code is yucky already.
-
---=20
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
 
