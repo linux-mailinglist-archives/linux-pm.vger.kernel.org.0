@@ -1,335 +1,127 @@
-Return-Path: <linux-pm+bounces-34205-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34206-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 211E2B4A2C2
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Sep 2025 08:59:49 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CCED7B4A313
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Sep 2025 09:11:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BD9B44E18A1
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Sep 2025 06:59:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C297F1B26D75
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Sep 2025 07:12:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E89A30504C;
-	Tue,  9 Sep 2025 06:59:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14A2C306D53;
+	Tue,  9 Sep 2025 07:11:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="YwPg07wX"
+	dkim=pass (2048-bit key) header.d=geanix.com header.i=@geanix.com header.b="A3nNHWXo"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtpbgjp3.qq.com (smtpbgjp3.qq.com [54.92.39.34])
+Received: from mail-43170.protonmail.ch (mail-43170.protonmail.ch [185.70.43.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E23582594BE;
-	Tue,  9 Sep 2025 06:59:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.92.39.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94CCD2EB856
+	for <linux-pm@vger.kernel.org>; Tue,  9 Sep 2025 07:11:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757401187; cv=none; b=gjMzupHpvaxL3JwcgkFgcIuI7jtklNVkQehRwd/mqujLHwye8QdpTG0AXcGctHAraELxacBlyfuzr2eCEfKai/Cvu0e8wHotg8ksym2m6KTpBcQbL8hcyuR/jtxZigQ25fE4XRkENGJUa1nmKAIVSarQhAL56n+M6b7l6PlyeCE=
+	t=1757401895; cv=none; b=bqE2v+ilzoeA9rn6jWQJaJ7divBdtcibWgKyQkkZNNIfzGCA7YaJLk4enjlWNRcHxPy3zD5KT9fRH/ePcPU42Z6fIPROAkPxwYjFkdZTDRvv9wqjijsYxQ7nzvABbPrQgQ5ylnXJjsm2lNcRL/u8qiiLZMK/YNSIrSuofCBI5V0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757401187; c=relaxed/simple;
-	bh=BHJ8sqoqyUyJ68vlzeIfk7fhhGNyUBpM7zl7WiDhdE8=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=VUUnUcSBnmZK53Z5kaE33PiaVw2+acmi0aCqKEPpSSfGccITMsjHNBJwllYwM4Ylz6pTdyDwZ1Y8DT27VqsT0jsX/UtnrgrydHWYRNLScV6C2FgZU1VEHNDsIWokymGkwOxgTiMKPZbiD2/xXB9oUtgURJPvSWv5Fnz36hgc7Tk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=YwPg07wX; arc=none smtp.client-ip=54.92.39.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1757401133;
-	bh=EwH0w4PvA3lfCqW8m/2b+fjNT4NdGf5u9DmtXqAOHkk=;
-	h=From:To:Subject:Date:Message-Id:MIME-Version;
-	b=YwPg07wXe7jGG/NTKieEzMgV1hECOJEJyTgi+wkJdBlFn7QvxpTTNikbIHrMRG9Nf
-	 tyFsWtuEhqw4oxcIc/NysLuitdkoh0OF1ILk9q3JsTBGyYBPYC4dmNWcnu9nJeI+b7
-	 6BVAUZ8opg4wPRO6U3O1tzuLN5JICBookmGS5uIk=
-X-QQ-mid: zesmtpip2t1757401125t4e3447c9
-X-QQ-Originating-IP: 8UGy5pCIyeWgCEIGkL9vSwscSkxUIz1k8lZ1704/x84=
-Received: from localhost.localdomain ( [localhost])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Tue, 09 Sep 2025 14:58:43 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 17818815471825471435
-EX-QQ-RecipientCnt: 10
-From: tuhaowen <tuhaowen@uniontech.com>
-To: rafael@kernel.org
-Cc: tuhaowen@uniontech.com,
-	huangbibo@uniontech.com,
-	kernel-team@android.com,
-	len.brown@intel.com,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	pavel@kernel.org,
-	saravanak@google.com,
-	wusamuel@google.com
-Subject: [PATCH v3] PM: Add configurable sync timeout for suspend and hibernation
-Date: Tue,  9 Sep 2025 14:58:36 +0800
-Message-Id: <20250909065836.32534-1-tuhaowen@uniontech.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20250908022238.6852-1-tuhaowen@uniontech.com>
-References: <20250908022238.6852-1-tuhaowen@uniontech.com>
+	s=arc-20240116; t=1757401895; c=relaxed/simple;
+	bh=OX+8nctLubxm85gtheRJLeHFla34FZZyCJ8GRdbIEug=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Gk9Q4icCnHgVy6qiHv6qw0Owrk6If3bmuLmNjaveA7Nu++aV1DD+w1w/iL9cIRnYEmV7Z2Nb/H5qgWXWH0eQfDdbIuMk59w0fsYElvH6l/RydFIit27e8QPhZxKqpnmeA4Vk7zyodGG5+1uXEgbh7E8QTbmoI3qprx5pTeqEVBY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=geanix.com; spf=pass smtp.mailfrom=geanix.com; dkim=pass (2048-bit key) header.d=geanix.com header.i=@geanix.com header.b=A3nNHWXo; arc=none smtp.client-ip=185.70.43.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=geanix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=geanix.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=geanix.com;
+	s=protonmail2; t=1757401885; x=1757661085;
+	bh=k3RFqLUt7EBVe7ElX+OXbwZrnbLLAyRZG+pz1IndmLY=;
+	h=From:Subject:Date:Message-Id:To:Cc:From:To:Cc:Date:Subject:
+	 Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
+	b=A3nNHWXovN5o2Z8zSAKqJsGCKxV4m3Ul6CeJ+yTH+qjrJxkflfr3hjOvJjqph/Owa
+	 0Z+BVqRS34v2XY/+MDl0fSg0d1KIi4OfcliHXkNPjeFzOBTf4ObSRGcnxHxEcp2l/g
+	 PVpn6T6dYCZpJ7jEpgwXbS5tIDYR7rAb1dQdufGSG0fVLxJppCPYjPIdPTXq5JzPHd
+	 tuyc7usTY6ehXj07zziP12Nqd2EHDRBTWvwNL6m5D5wgsNDQuwv6yK2Tkm7lEywtYF
+	 jOEN5xvW0mN3VWw1opV8KlENrqGVjrjlFnfX3+LjsldorJFvdFtze7rJPd5cZY77Fl
+	 +jijG98iIuoyw==
+X-Pm-Submission-Id: 4cLZk36ZP8z1DDs1
+From: Sean Nyekjaer <sean@geanix.com>
+Subject: [PATCH v4 0/5] iio: imu: inv_icm42600: pm_runtime fixes + various
+ changes
+Date: Tue, 09 Sep 2025 09:11:06 +0200
+Message-Id: <20250909-icm42pmreg-v4-0-2bf763662c5c@geanix.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: zesmtpip:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-1
-X-QQ-XMAILINFO: Of2cEohDBRJBDM+Qe3D+WtGbjNGrZtKNGF2ObA7PgfFGF04sLwd3fww+
-	JAcBwSI4QO2tOrGOj6nhCAVeS3KUxYKfsZwbosiy5koe9IQYGK/uV71TKtATlZy+7n1sviA
-	3jMYms430TLxFi3pMQShs++xR3J7XCa83/oAFApWFQ615xIPO3DohiE6/0UBISjIScdUUXR
-	bSJFeWjijWph2y0RNraTYoxSL0mbbNJclIHorB84rCcLJs6v/hmTLmhSfjTH6vSj2n2jf1q
-	1SVv9bZrRTcYhUd/gcqJY9eeZAUlaUcUHbas+cPcrRQxPcufbpO3hbHnSM9sH/g603AskUh
-	megS3JEl52pD5NvkdCyvM/d0FLYT55+0BiN+F4BeLUcgQszDShxLQURJqd9CjqYcZ6E2/Vt
-	KzJ6gqe/acdeULCy/kLtKpj/J2x275U0oJ9KIhAOVYzkQqymFSoSewe9VujpJ3BXvfA2QDj
-	ehpeFL9M4BchTFDU9TKeUkAb9NCNlIjq2u7RRO1sIgZit2AvGnqvr0B+sWqwrO0uolB3ixb
-	9Bja4cI39lo5SYKVYzmICpMXD3fLAGq5gvMDncaAx5wO1M1P7UnJWATenH7d67bm0BOyeEF
-	0dXgONEwdxZG9nU9n967dto1W8Ga1wUYqZnsZbMPrEEN0GR2zC0S/oYb/xO8MRNn+2k9+OU
-	rDbXu4BfSG+SxeRT7iXp+P50dpt0esUMYfmrSWPKJu669bzW5klEWXtrI2AZ5mr7YMrQcQt
-	0Yktcgui+WNDw2AleSDgeQxGEJuXJtz0n2CXJeGHE8ncJ0t+jPZEXooe1bi61AsrzliK/c+
-	SUoy2lW5SAg8kawY/XQfc5yq/8gaNWRrVN96IUSRpw+8l6IV7s+MwLDEcSvuio8xRvhmDqN
-	HcjeeYAbYrieOFbfLXHu2G3BglifjBTG0MmL2XH+zPzw2UdlHNsyzSyjnNo0+hg20ytseLg
-	aUrafInsRDpmctQlsSPc58ncVdyZnD/FI7w6vdNUc8Q2DGzEVueezoYXNjnfBga2ATu3JWt
-	W4qo/XqG2CokiVh9AjBoUFv8PD4Sg=
-X-QQ-XMRINFO: OD9hHCdaPRBwq3WW+NvGbIU=
-X-QQ-RECHKSPAM: 0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAArTv2gC/2XOTQ6DIBCG4asY1qWBgQrTVe/RdGFxVBb+BBtiY
+ 7x70aSxpgsW3yTPG2Y2UvA0sms2s0DRj77v0tCnjLmm6GrivkybgYCLMMJy71oNQxuo5qBLmx4
+ a6zRLYAhU+WmL3R9pN3589eG9taNcr98M/mai5IKrUpBB5RCfcKup6Px0dn3L1k6E3drjFyIkW
+ 2grwCAZA/LPqt2ikAerkqVKKpWDzjEXB7ssyweKljpDHQEAAA==
+X-Change-ID: 20250708-icm42pmreg-24d824d978c4
+To: Jean-Baptiste Maneyrol <jean-baptiste.maneyrol@tdk.com>, 
+ rafael@kernel.org, Jonathan Cameron <jic23@kernel.org>, 
+ David Lechner <dlechner@baylibre.com>, 
+ =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>, 
+ Andy Shevchenko <andy@kernel.org>
+Cc: linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-pm@vger.kernel.org, Jean-Baptiste Maneyrol <jmaneyrol@invensense.com>, 
+ Jonathan Cameron <Jonathan.Cameron@huawei.com>, 
+ Sean Nyekjaer <sean@geanix.com>
+X-Mailer: b4 0.14.2
 
-When large file operations are in progress during system suspend or
-hibernation, the ksys_sync() call can hang for extended periods,
-leading to unresponsive system behavior. Users copying large files
-to USB drives may experience black screen hangs when attempting to
-suspend, requiring forced power cycles.
+This series was triggered by "Runtime PM usage count underflow!" when
+unloading the module(s).
+By testing the driver in various use cases and reading code it was
+obvious that it could need some tiding up.
 
-A specific problematic scenario occurs when data is being copied and
-the system enters S3 suspend. If the block device is removed during
-this process, some filesystems may not properly handle the device
-disappearance and continue to believe the block device exists. This
-causes ksys_sync() to be switched out and never complete, with the
-following stack trace:
+@Rafael:
+Is checking pm_runtime_status_suspended() is a viable option?
+To avoid calling regulator_disable 2x during remove()?
 
-[<0>] __switch_to+0xd0/0x168
-[<0>] iterate_supers+0x88/0x118
-[<0>] ksys_sync+0x48/0xb8
-[<0>] ksys_sync_helper+0x18/0xa0
-[<0>] pm_suspend+0x260/0x3e8
-
-This patch introduces a unified sync timeout mechanism for both
-suspend-to-RAM (S3) and hibernation (S4) to prevent indefinite
-hangs while maintaining data integrity.
-
-Key features:
-- Configurable timeout via sysfs interface
-- Default behavior unchanged (timeout disabled by default)
-- Unified implementation for both suspend and hibernation paths
-- Graceful fallback to direct sync on thread creation failure
-- Non-blocking timeout: sync continues in background after timeout
-
-Sysfs interface:
-- /sys/power/sleep_sync_timeout: Runtime configuration (0-600000ms)
-
-When timeout is enabled and exceeded, the suspend/hibernation operation
-fails gracefully with -ETIMEDOUT to prevent system hangs, while the
-sync operation continues running in the background to ensure eventual
-data integrity. This approach provides responsive user experience
-without compromising data safety.
-
-Implementation creates a separate kthread for sync operations when
-timeout is enabled. If the timeout expires, the main suspend path
-immediately returns with an error, allowing the system to remain
-responsive, while the background sync thread continues to completion
-independently. The sync operation is never forcibly terminated or
-interrupted.
-
-Signed-off-by: tuhaowen <tuhaowen@uniontech.com>
+Signed-off-by: Sean Nyekjaer <sean@geanix.com>
 ---
+Changes in v4:
+- Corrected review comments from David in PATCH 5/5
+- Link to v3: https://lore.kernel.org/r/20250901-icm42pmreg-v3-0-ef1336246960@geanix.com
+
 Changes in v3:
-- Added mutex protection to prevent concurrent sync timeout operations
-- Removed kthread_stop() to allow sync completion after system resume
-- Non-blocking timeout implementation: sync continues in background
----
- include/linux/suspend.h  |  3 ++
- kernel/power/hibernate.c |  4 +-
- kernel/power/main.c      | 88 ++++++++++++++++++++++++++++++++++++++++
- kernel/power/suspend.c   |  6 ++-
- 4 files changed, 99 insertions(+), 2 deletions(-)
+- Return early if pm_runtime_status_suspended() is set.
+- Fixed various comments from Andy in "use guard() to release mutexes" 
+- Link to v2: https://lore.kernel.org/r/20250808-icm42pmreg-v2-0-a480279e7721@geanix.com
 
-diff --git a/include/linux/suspend.h b/include/linux/suspend.h
-index da6ebca3f..976c8f8a1 100644
---- a/include/linux/suspend.h
-+++ b/include/linux/suspend.h
-@@ -439,6 +439,8 @@ void restore_processor_state(void);
- extern int register_pm_notifier(struct notifier_block *nb);
- extern int unregister_pm_notifier(struct notifier_block *nb);
- extern void ksys_sync_helper(void);
-+extern int ksys_sync_helper_timeout(unsigned int timeout_ms);
-+extern unsigned int sync_timeout_ms;
- extern void pm_report_hw_sleep_time(u64 t);
- extern void pm_report_max_hw_sleep(u64 t);
- 
-@@ -486,6 +488,7 @@ static inline void pm_report_hw_sleep_time(u64 t) {};
- static inline void pm_report_max_hw_sleep(u64 t) {};
- 
- static inline void ksys_sync_helper(void) {}
-+static inline int ksys_sync_helper_timeout(unsigned int timeout_ms) { return 0; }
- 
- #define pm_notifier(fn, pri)	do { (void)(fn); } while (0)
- 
-diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-index 23c0f4e6c..2678181a5 100644
---- a/kernel/power/hibernate.c
-+++ b/kernel/power/hibernate.c
-@@ -777,7 +777,9 @@ int hibernate(void)
- 	if (error)
- 		goto Restore;
- 
--	ksys_sync_helper();
-+	error = ksys_sync_helper_timeout(sync_timeout_ms);
-+	if (error)
-+		goto Exit;
- 
- 	error = freeze_processes();
- 	if (error)
-diff --git a/kernel/power/main.c b/kernel/power/main.c
-index 6254814d4..a437fa0b2 100644
---- a/kernel/power/main.c
-+++ b/kernel/power/main.c
-@@ -17,10 +17,22 @@
- #include <linux/suspend.h>
- #include <linux/syscalls.h>
- #include <linux/pm_runtime.h>
-+#include <linux/completion.h>
-+#include <linux/kthread.h>
-+#include <linux/jiffies.h>
- 
- #include "power.h"
- 
- #ifdef CONFIG_PM_SLEEP
-+/* Sync timeout parameters */
-+unsigned int sync_timeout_ms;
-+EXPORT_SYMBOL_GPL(sync_timeout_ms);
-+
-+/* Sync timeout implementation */
-+static struct completion sync_completion;
-+static struct task_struct *sync_task;
-+static DEFINE_MUTEX(sync_timeout_mutex);
-+
- /*
-  * The following functions are used by the suspend/hibernate code to temporarily
-  * change gfp_allowed_mask in order to avoid using I/O during memory allocations
-@@ -79,6 +91,50 @@ void ksys_sync_helper(void)
- }
- EXPORT_SYMBOL_GPL(ksys_sync_helper);
- 
-+static int sync_thread_func(void *data)
-+{
-+	ksys_sync_helper();
-+	complete(&sync_completion);
-+	return 0;
-+}
-+
-+int ksys_sync_helper_timeout(unsigned int timeout_ms)
-+{
-+	unsigned long timeout_jiffies;
-+	int ret = 0;
-+
-+	/* If timeout is 0, use regular sync without timeout */
-+	if (timeout_ms == 0) {
-+		ksys_sync_helper();
-+		return 0;
-+	}
-+
-+	mutex_lock(&sync_timeout_mutex);
-+	init_completion(&sync_completion);
-+	sync_task = kthread_run(sync_thread_func, NULL, "sync_timeout");
-+	if (IS_ERR(sync_task)) {
-+		pr_warn("%s: Failed to create sync thread, performing sync directly\n",
-+			__func__);
-+		ksys_sync_helper();
-+		goto unlock;
-+	}
-+
-+	timeout_jiffies = msecs_to_jiffies(timeout_ms);
-+	if (!wait_for_completion_timeout(&sync_completion, timeout_jiffies)) {
-+		pr_warn("%s: Sync operation timed out after %u ms, aborting suspend/hibernation\n",
-+			__func__, timeout_ms);
-+		pr_info("%s: Sync operation continues in background\n", __func__);
-+		ret = -ETIMEDOUT;
-+	}
-+
-+unlock:
-+	mutex_unlock(&sync_timeout_mutex);
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(ksys_sync_helper_timeout);
-+
-+
-+
- /* Routines for PM-transition notifications */
- 
- static BLOCKING_NOTIFIER_HEAD(pm_chain_head);
-@@ -240,6 +296,37 @@ static ssize_t sync_on_suspend_store(struct kobject *kobj,
- }
- 
- power_attr(sync_on_suspend);
-+
-+/*
-+ * sleep_sync_timeout: configure sync timeout during suspend/hibernation.
-+ *
-+ * show() returns the current sync timeout in milliseconds.
-+ * store() accepts timeout value in milliseconds. 0 disables timeout.
-+ */
-+static ssize_t sleep_sync_timeout_show(struct kobject *kobj,
-+				 struct kobj_attribute *attr, char *buf)
-+{
-+	return sysfs_emit(buf, "%u\n", sync_timeout_ms);
-+}
-+
-+static ssize_t sleep_sync_timeout_store(struct kobject *kobj,
-+				  struct kobj_attribute *attr,
-+				  const char *buf, size_t n)
-+{
-+	unsigned long val;
-+
-+	if (kstrtoul(buf, 10, &val))
-+		return -EINVAL;
-+
-+	/* Allow any reasonable timeout value */
-+	if (val > 600000) /* Max 10 minutes */
-+		return -EINVAL;
-+
-+	sync_timeout_ms = val;
-+	return n;
-+}
-+
-+power_attr(sleep_sync_timeout);
- #endif /* CONFIG_SUSPEND */
- 
- #ifdef CONFIG_PM_SLEEP_DEBUG
-@@ -974,6 +1061,7 @@ static struct attribute * g[] = {
- #ifdef CONFIG_SUSPEND
- 	&mem_sleep_attr.attr,
- 	&sync_on_suspend_attr.attr,
-+	&sleep_sync_timeout_attr.attr,
- #endif
- #ifdef CONFIG_PM_AUTOSLEEP
- 	&autosleep_attr.attr,
-diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
-index 8eaec4ab1..4f8015a75 100644
---- a/kernel/power/suspend.c
-+++ b/kernel/power/suspend.c
-@@ -585,8 +585,12 @@ static int enter_state(suspend_state_t state)
- 
- 	if (sync_on_suspend_enabled) {
- 		trace_suspend_resume(TPS("sync_filesystems"), 0, true);
--		ksys_sync_helper();
-+		error = ksys_sync_helper_timeout(sync_timeout_ms);
- 		trace_suspend_resume(TPS("sync_filesystems"), 0, false);
-+		if (error) {
-+			pr_err("PM: Sync timeout, aborting suspend\n");
-+			goto Unlock;
-+		}
- 	}
- 
- 	pm_pr_dbg("Preparing system for sleep (%s)\n", mem_sleep_labels[state]);
+Changes in v2:
+- Removed patch iio: imu: inv_icm42600: Use inv_icm42600_disable_vddio_reg()
+- Moved changes from patch iio: imu: inv_icm42600: Remove redundant
+  error msg on regulator_disable() into iio: imu: inv_icm42600: Simplify
+  pm_runtime setup.
+- Move associated sleep close to enabling of vdd
+- Pass regulator as the parameter to inv_icm42600_disable_vddio_reg()
+- Use devm_pm_runtime_set_active_enabled() to simplify even more
+- Added a new commit that uses guard() to release mutexes
+- Link to v1: https://lore.kernel.org/r/20250709-icm42pmreg-v1-0-3d0e793c99b2@geanix.com
+
+---
+Sean Nyekjaer (5):
+      iio: imu: inv_icm42600: Simplify pm_runtime setup
+      iio: imu: inv_icm42600: Drop redundant pm_runtime reinitialization in resume
+      iio: imu: inv_icm42600: Avoid configuring if already pm_runtime suspended
+      iio: imu: inv_icm42600: Use devm_regulator_get_enable() for vdd regulator
+      iio: imu: inv_icm42600: use guard() to release mutexes
+
+ drivers/iio/imu/inv_icm42600/inv_icm42600.h        |   1 -
+ drivers/iio/imu/inv_icm42600/inv_icm42600_accel.c  |  24 ++---
+ drivers/iio/imu/inv_icm42600/inv_icm42600_buffer.c |  41 ++++----
+ drivers/iio/imu/inv_icm42600/inv_icm42600_core.c   | 117 +++++++--------------
+ drivers/iio/imu/inv_icm42600/inv_icm42600_gyro.c   |  24 ++---
+ 5 files changed, 70 insertions(+), 137 deletions(-)
+---
+base-commit: dfbbee0907fb30a1dd31ff1a84e1bd34bd824369
+change-id: 20250708-icm42pmreg-24d824d978c4
+
+Best regards,
 -- 
-2.20.1
+Sean Nyekjaer <sean@geanix.com>
 
 
