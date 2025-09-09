@@ -1,101 +1,119 @@
-Return-Path: <linux-pm+bounces-34231-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34232-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF8A6B4A94C
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Sep 2025 12:03:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C7957B4AAAA
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Sep 2025 12:30:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9A3B5161A1A
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Sep 2025 10:03:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3FEB81635F5
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Sep 2025 10:30:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6A8C3176E1;
-	Tue,  9 Sep 2025 10:03:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45E0831815D;
+	Tue,  9 Sep 2025 10:29:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IcNGCFiG"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="gZh306tf"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACC7D3148B7;
-	Tue,  9 Sep 2025 10:03:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72DF1317709
+	for <linux-pm@vger.kernel.org>; Tue,  9 Sep 2025 10:29:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757412236; cv=none; b=eR9426kCMB9G/dl8DSCwOcxYcT2OyFJT7dZh57uVOb0alUpTGkVWS4wAf9jZFf+X2NhBYeJkZJUIxKEGGnl0rKR8lOOXdTeclLnx7frn9ZYbuhja19JqjKNnUhhSLO1P92IBy+YSgI8NNsSSfQ90gJ6VSdeCWuVd/rGAUVquspA=
+	t=1757413797; cv=none; b=feB0NXYwr5Gais+XdtTXdt6N96uhSJ/OGRi4XCgYSUPWytNIM0zIi6klvbRlW07KBtcxI487XRDMEK3ijW9mKIdK7ABOZmCtkURXdL9JCy5I0Ogou9stwZuZW0W++2mpTiHHfFbdVfF8LXzTi9cFnSoDyOKq9Jqb71rrSlaa1/0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757412236; c=relaxed/simple;
-	bh=MX1yEKtU1XlkDkySNWFMl83sKLvqqiq1wh9vWRpHFI4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AxkR3Zpq0T/F/vdMyMcazTifgpj6K1D9N9xy5wl5UAintdh5McVxQx4/YTUnBwHctVxuh+FnMknMd+G+KFPQQ0vV35GolwsnWy/s/Rf0zboDUoCX79BWJEd1tnupK/eeqZ+Bwu49QC6eGCBWFf4rrwtSP/2+nARecNWqRSNGBzY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IcNGCFiG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31718C4CEF4;
-	Tue,  9 Sep 2025 10:03:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757412236;
-	bh=MX1yEKtU1XlkDkySNWFMl83sKLvqqiq1wh9vWRpHFI4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=IcNGCFiGtCBdlK6h3ILvTV3+IPmzjlaTRMi9z9G1FxFYljC0M7EBZ5EmsWrmiGzp/
-	 gVMFc2QKLoySwHA70lazg0F30+jLHbFTn+WcYnAEF9eG2ETDjGzxLIjS4K6rw2c9mz
-	 2D3bGFHNjV1s57QvgcFtygPVer631Myaiuo7jQkZ3/6LxtdFWK+YrQcV/NHjIWy38H
-	 Dp4jp2uruQtJSsxQNOLAGj3TjDCw6/AdL+t68/59DknoP7AhnKnTIGNIa98YDReGXU
-	 o3BvpcNq6EerKPwmuQIloDBc5Nh8JnQIYXuBq1tBpg1hwwu+9AGk7lXlbeIP0LH4Ed
-	 BOh4I1W6SjGvA==
-Received: from johan by xi.lan with local (Exim 4.98.2)
-	(envelope-from <johan@kernel.org>)
-	id 1uvvCc-000000001ZX-0dx4;
-	Tue, 09 Sep 2025 12:03:54 +0200
-Date: Tue, 9 Sep 2025 12:03:54 +0200
-From: Johan Hovold <johan@kernel.org>
-To: Chen-Yu Tsai <wenst@chromium.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	linux-pm@vger.kernel.org, linux-mediatek@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	Jia-Wei Chang <jia-wei.chang@mediatek.com>,
-	Rex-BC Chen <rex-bc.chen@mediatek.com>
-Subject: Re: [PATCH] cpufreq: mediatek: fix device leak on probe failure
-Message-ID: <aL_7ituSjf5a0p_U@hovoldconsulting.com>
-References: <20250909073819.25295-1-johan@kernel.org>
- <CAGXv+5EcnLJHG_50mYb2YB0_q1XOztF84c9tAJJfKZxSCWuUCQ@mail.gmail.com>
+	s=arc-20240116; t=1757413797; c=relaxed/simple;
+	bh=IqiYlfOVbQa/zh50FAoJsm1nVp//uGooPnZlzF1wXek=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=q1qSkjomLz3+IpSo14LIenD+w5NKjx/krMwGegKc7+tXjCTjmYVa4FiDttXGogWgNaCL/6CZ0ZpNZU6ZYJ10FwDOwJEUhuQj66Odu/uJnaJCpzCpkrusd4MJNWcvps0pZqrc38JNjjv2vD/qZlI0Mq1URv0mIChNp30hnqtDK+E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=gZh306tf; arc=none smtp.client-ip=209.85.221.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-3e249a4d605so4357479f8f.3
+        for <linux-pm@vger.kernel.org>; Tue, 09 Sep 2025 03:29:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1757413794; x=1758018594; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=o6DLuZEXjLVaECtCo3C0mHyLZL5DvcGRCHNBQ9l3dvw=;
+        b=gZh306tfVI/Vb6F1+ICCiJ9FJjx0eiFQXdGI4DoGVqLhUwulNgja9VOsQU7+uZfJ9u
+         fzVbWmAW9b2zEVSBiBsYOo7N4R1FpzA60DV6aAVjL3mdXZstwfuZFgUW8spzERjZujH2
+         Y0eRPRLXTc2ftk8i1o/Icd8PncFZ1Jci6cO/626B3PX1BZAMsFj7DISE7mNdFWWdwJSM
+         xOV3b/CmNs77mYv5a5zqtEjo26F+3AkpIuv9Z+renrVnoMS0HTVsre+suwZcpgHMJFuT
+         hgjqSdnFN4ZmoIfcRBwfKsciUqWYSNeoe9OOAxtpSq9X12eu34zZKpB1O4SKAca4vcie
+         ikdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757413794; x=1758018594;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=o6DLuZEXjLVaECtCo3C0mHyLZL5DvcGRCHNBQ9l3dvw=;
+        b=vEzFAP5syXCcywNJkX0TpJ7RvjQzmsvO56L3HisdM6T+MzE28vfjup/qYkkT1Y48OA
+         bBfCk6/lxci5sfhoOmSE7nAhFYzBgw1zbazvfru0q/JGmYImBjvHPNn/70n3/PXBcuq6
+         wwYj4M20qd1EB7v5jhon2n2+2my6G1fPEK4QGQUCZVDB7vMdH8wusJJ17xqoTC4qc/BK
+         c+DdjCiF19qFsSIfd7ya0TgScFI4Kd8ahC0c7mhOL7CdOk21pMWs6ItmCBPqFDQDpUfF
+         8WEQaVewwGuT04qtyh6fRaJF1FqNiPK7snEXDUjd8LWDLbz+sYWiHIIrXn7ZuhK1l1aj
+         F6Og==
+X-Forwarded-Encrypted: i=1; AJvYcCXIBCzj8ClI6InjwaZX1la0JQvLEXkkHHnNZw/jTRAEoH2/QMYeKeuILeisqpEctbx52PgUitnwIg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx8tgcBPI1wBe6Zx8DomvKXE1XFEOalBxiAVQUUG4pAibbXJwNS
+	3SGvE54Me5YO71CjoG8PSFP+8lTdqzwnN+vTUR/ofw91pEhzoiubSCrUyRjHvkvw019b6QH2URd
+	BnXwk
+X-Gm-Gg: ASbGncucrwDVandvrA1WDFe0j1CH1zFDniAJqSO354kMqxS4fqyTqAlLnLwUoytg5LO
+	YY059+n5uVCZo6HS8n4b56lhmvpF41KvEve/ahthoRwKBQDLylrCW1/TGggsOfOYhsN1Ty22Q8F
+	f+w614+3AfZyIh30mJOUJHkEvcmGQRWnFVu1DdvlWdScFwPU2Z/chqkbRU+yxEp1jSGR+53JuM0
+	eHm5u1mnO3RSWUpTOwbxyb+s5irO+GKP4/CeJUWyJr1jgkX0iIMBa5eKWfTiK1tt2+w4FZR0+sH
+	fdO+9lgeooRFtZcDHVduACwDCIvGuOrwI7kzRmI66wLihTnOor9bVwiZ3cK+7cSgZGFzXCw/eDT
+	HhMc+EC66sjtNacmnw3ZM2XZpDKY=
+X-Google-Smtp-Source: AGHT+IFdlL+stSgluJu4iHh99463lMmfzZUp75gWa4DtFMccsEMf3Hiqt7K4aEcp6FbjhSixFYzjGg==
+X-Received: by 2002:a05:6000:612:b0:3e7:484a:741b with SMTP id ffacd0b85a97d-3e7484a77efmr5916594f8f.41.1757413793883;
+        Tue, 09 Sep 2025 03:29:53 -0700 (PDT)
+Received: from localhost ([196.207.164.177])
+        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-45cb5693921sm289899335e9.0.2025.09.09.03.29.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Sep 2025 03:29:53 -0700 (PDT)
+Date: Tue, 9 Sep 2025 13:29:50 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Kaushlendra Kumar <kaushlendra.kumar@intel.com>
+Cc: Chanwoo Choi <cw00.choi@samsung.com>,
+	MyungJoo Ham <myungjoo.ham@samsung.com>,
+	Kyungmin Park <kyungmin.park@samsung.com>, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: [PATCH next] PM / devfreq: Fix double free in
+ devfreq_event_add_edev()
+Message-ID: <aMABnic3SVnYMvGc@stanley.mountain>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAGXv+5EcnLJHG_50mYb2YB0_q1XOztF84c9tAJJfKZxSCWuUCQ@mail.gmail.com>
+X-Mailer: git-send-email haha only kidding
 
-On Tue, Sep 09, 2025 at 05:57:45PM +0800, Chen-Yu Tsai wrote:
-> On Tue, Sep 9, 2025 at 5:40 PM Johan Hovold <johan@kernel.org> wrote:
-> >
-> > Make sure to drop the reference to the cci device taken by
-> > of_find_device_by_node() on probe failure (e.g. probe deferral).
+The put_device() function calls devfreq_event_release_edev() which frees
+"evdev".  Calling kfree() again is a double free.
 
-> > @@ -552,6 +554,10 @@ static int mtk_cpu_dvfs_info_init(struct mtk_cpu_dvfs_info *info, int cpu)
-> >  out_free_mux_clock:
-> >         clk_put(info->cpu_clk);
-> >
-> > +out_put_cci_dev:
-> > +       if (info->soc_data->ccifreq_supported)
-> > +               put_device(info->cci_dev);
-> 
-> put_device() has a check for NULL, so the if isn't really needed.
+Fixes: 430a1845c804 ("PM / devfreq: Fix memory leak in devfreq_event_add_edev()")
+Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
+---
+ drivers/devfreq/devfreq-event.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-I know, but this follows the pattern currently used by the driver (e.g.
-for regulator_put()) and avoids relying on the caller having cleared the
-info struct.
+diff --git a/drivers/devfreq/devfreq-event.c b/drivers/devfreq/devfreq-event.c
+index 34406c52b845..70219099c604 100644
+--- a/drivers/devfreq/devfreq-event.c
++++ b/drivers/devfreq/devfreq-event.c
+@@ -328,7 +328,6 @@ struct devfreq_event_dev *devfreq_event_add_edev(struct device *dev,
+ 	ret = device_register(&edev->dev);
+ 	if (ret < 0) {
+ 		put_device(&edev->dev);
+-		kfree(edev);
+ 		return ERR_PTR(ret);
+ 	}
+ 	dev_set_drvdata(&edev->dev, edev);
+-- 
+2.47.2
 
-> Either way,
-> 
-> Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
-
-Thanks for reviewing.
-
-Johan
 
