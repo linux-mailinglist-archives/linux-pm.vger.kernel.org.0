@@ -1,65 +1,64 @@
-Return-Path: <linux-pm+bounces-34262-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34265-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5EDF5B4FDBB
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Sep 2025 15:45:02 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 722E6B4FDA5
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Sep 2025 15:43:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 263DC1896BDE
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Sep 2025 13:41:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 113E57B34F3
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Sep 2025 13:41:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52AE934DCFD;
-	Tue,  9 Sep 2025 13:40:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 439662C1780;
+	Tue,  9 Sep 2025 13:41:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="lzss2o8l"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="ZScoQ9Xx"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 531CB3451B3;
-	Tue,  9 Sep 2025 13:40:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F495341652;
+	Tue,  9 Sep 2025 13:41:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757425226; cv=none; b=hn/eXaTGkvLHzl++cAM2kIU3CGfX7RP8M8bvUC2MkO5ZpXL75r6Nq3PO3crIWChf77GW4mkDymXMm7m/+0N0BZ4WsCkqFuOdvD7NXusV9+sk+5uWkZO/N/fINRJWJJAOtMfeB09LNkqMRUQUyYsCvblWSgbE/CB8DK2s84DlPhM=
+	t=1757425278; cv=none; b=LGuqUNJsXwckz6q0ZbL+18hD1oLAGHID2CkKduz90n/Qvi4iaXjTAU21YKXt62XxugvD3JnJJ6ey7Sy9D37+HCRf7wy7P0DtBgQqVAoEzymYFsZuDeBimq+BA9kfMpehW/i+ZPfGIt0IN0r4A6N/XYq1GHEiocYlrIfsR6n9P0s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757425226; c=relaxed/simple;
-	bh=KuovKEQlwmh8oCwvjFmFfUc7Q/lftXQQSlX/OAViXWw=;
+	s=arc-20240116; t=1757425278; c=relaxed/simple;
+	bh=Eimgia/Bx+eO8L8UJ+aEbzz/pUw0klt6lj4m5EBC2Fk=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=Xd3I0pq/vy0ZSyzJsLSSMamQob4qgphr/4iLM8QUtI3PS+sNt4cfCick4r+V2AmdXYLI0OnA2atLiS03kZsEXnmgQuGfpzHd2w5/eauEgA37MJU4wPJ/bDdEZee+Q5ik3oNj8T8IhPDiMuUiDQsLULL+gzDNFvYxfkTWSe4md00=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=lzss2o8l; arc=none smtp.client-ip=205.220.180.131
+	 In-Reply-To:To:CC; b=Ci23g6yobPGp134cnHrhRBADLi6PzcMQCMUPMrTx0K/4uRxd/f15bNZnuRPebOK7B8R/xGyFTHpihKZ3C8HTFXUWfEgsK9dm4enFV25EXfiovl3lEARxIWtPKH1z7X89JGN8sIZ9Xgrxz4G9PcTVoIFcRoImipR7vM/Wn1P/L7s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=ZScoQ9Xx; arc=none smtp.client-ip=205.220.180.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
 Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5899LYZh011085;
-	Tue, 9 Sep 2025 13:39:59 GMT
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5899LmLM011213;
+	Tue, 9 Sep 2025 13:41:05 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	2hERqCjKKo8nYbV8I9A7DrGzOeOvQ5/8pI1ggHCbJuA=; b=lzss2o8l8QikStGs
-	bNFp6xV3K4FsMWId+AwyYJgqXeXF7ZOLEEjkjm8PPIppfdsJNdQjH7KNBz1fexLJ
-	R1zp0zDQsezaghfKsCHbF3ZpzUxg7Z8ngAAxbpnKTtLpsd/sOt0y0B+F6QaF2HHI
-	Gj8tVjNBDBkLpzwkHc1uZVU9BNGWshhtSNNfh9iTOegAfU9f/LbANRJM6X+3oiim
-	m54DzeV40dG1PxdVOr9AAqiE5eCQLtH5PoOSDnM8biv8N5IAVLb7F72MliMSuRvg
-	cnJ3oCZ6FzcYm1ralad4YPMWA+PlQGAvZrQU4s0n4zAcYVLhTtSLXfpQFt3BFlc0
-	HKXO3Q==
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 490cj0rcf9-1
+	OjqkTZoCAD9ovROFl0rX5aKoq7H9e/i+GzLPj/Z2kg4=; b=ZScoQ9XxqNq7uV4Y
+	DwX43EF6D/J4Lf9WyjNuDpunMYgqD5q26RQWlhtWsrBH+j4mKaYR6ZmpVIZTsxWw
+	53f8jHuRBL7ORkTPrlof0klGjEdQdGofwbLEzKddAzPbdOno5jsXvFDyTNeelBbG
+	iErJRMj+wCClWfX5wlByePyDWRqvB+qXYHBrk3iAmhFqfCYg4Zr9g+nIFEkfwgfG
+	vRjjTufFBjk11Tf0fyMpsqCkD7r4Jv7dBhZOxDgQyCimoB1CY8vaJ9lFeDsclsVR
+	sJR/5fAhfnkuKdeua0xw22s0xqu2A9Z9uK2KOlqKfXyEwfzvs4N4zjMMHQTet6wh
+	GV4Trg==
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 490cj0rck3-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 09 Sep 2025 13:39:59 +0000 (GMT)
+	Tue, 09 Sep 2025 13:41:05 +0000 (GMT)
 Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 589DdwDi030843
+	by NASANPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 589Df4Hi026246
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 9 Sep 2025 13:39:58 GMT
+	Tue, 9 Sep 2025 13:41:04 GMT
 Received: from nsssdc-sh01-lnx.ap.qualcomm.com (10.80.80.8) by
  nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1748.24; Tue, 9 Sep 2025 06:39:52 -0700
+ 15.2.1748.24; Tue, 9 Sep 2025 06:39:58 -0700
 From: Luo Jie <quic_luoj@quicinc.com>
-Date: Tue, 9 Sep 2025 21:39:14 +0800
-Subject: [PATCH v5 05/10] dt-bindings: clock: gcc-ipq5424: Add definition
- for GPLL0_OUT_AUX
+Date: Tue, 9 Sep 2025 21:39:15 +0800
+Subject: [PATCH v5 06/10] clk: qcom: gcc-ipq5424: Add gpll0_out_aux clock
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -68,7 +67,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20250909-qcom_ipq5424_nsscc-v5-5-332c49a8512b@quicinc.com>
+Message-ID: <20250909-qcom_ipq5424_nsscc-v5-6-332c49a8512b@quicinc.com>
 References: <20250909-qcom_ipq5424_nsscc-v5-0-332c49a8512b@quicinc.com>
 In-Reply-To: <20250909-qcom_ipq5424_nsscc-v5-0-332c49a8512b@quicinc.com>
 To: Bjorn Andersson <andersson@kernel.org>,
@@ -101,32 +100,34 @@ CC: <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
         <quic_kkumarcs@quicinc.com>, <quic_linchen@quicinc.com>,
         <quic_leiwei@quicinc.com>, <quic_pavir@quicinc.com>,
         <quic_suruchia@quicinc.com>, Luo Jie
-	<quic_luoj@quicinc.com>
+	<quic_luoj@quicinc.com>,
+        Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1757425161; l=1040;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1757425161; l=1385;
  i=quic_luoj@quicinc.com; s=20250209; h=from:subject:message-id;
- bh=KuovKEQlwmh8oCwvjFmFfUc7Q/lftXQQSlX/OAViXWw=;
- b=pgzIOJPucKpGZ3r/u/Pu8yuaTr0Q3c2FfSOwf6sbpz6c4HEj7b9QhdJScWeEOwxjtl3EneFu9
- eeYU1lbw6p/DZkXpZplXaoimHHH4V8uU5z5S8nO6DpWRIYRtv+2IuvC
+ bh=Eimgia/Bx+eO8L8UJ+aEbzz/pUw0klt6lj4m5EBC2Fk=;
+ b=GYXz812jaKZp5QhxDx/CmtaENY9kmrzcwgghrTbGqf1w5bvCJHJJKOngrIpMnXlJyCmwRHuB6
+ 6nABo1G5PpgDCS2DYROBuCXbGVGPTBOGi0VAr16jte1CIILzDJvKX4R
 X-Developer-Key: i=quic_luoj@quicinc.com; a=ed25519;
  pk=pzwy8bU5tJZ5UKGTv28n+QOuktaWuriznGmriA9Qkfc=
 X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nasanex01b.na.qualcomm.com (10.46.141.250)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: XuTmUDAXd37FE9Df9Psw4uQ0FMJYJQdE
-X-Proofpoint-GUID: XuTmUDAXd37FE9Df9Psw4uQ0FMJYJQdE
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTA2MDAyNCBTYWx0ZWRfX9LRlDw6+NjeZ
- ky4HyV6aq8PuV8SvDupD2I78P68dZLFtLw433jwN/jcEUrryHRQclwNWpxLUcsVFOWOt9FqdyOL
- mBtNfcF5e4XjfpT29MrCSq+FVg3r1cWKjDS6uv6rG5lA5/W7Krde0MAh811G0vee0sCe0imx6My
- YI0QmhBoAnQ8CUt08y1JggUm9Mp6KGBUrHxsaHrKM08BwL99iUDVq0m8GxDr0vCAX11rdghjGI8
- 1YLeQF471uyAVEe+ccpjOQqVxQEEt1fhO0397A9iNvKqGA/siIKkP5c/X+0dKlc62hiCUP6N+UX
- SPNTL7qbgnLaRIqb5jDfWXpSede01Zcjc7DtQlhB/7kFByapYHGPdEpWo1mZkzfP2ydSedg8Us4
- uyvrqH62
-X-Authority-Analysis: v=2.4 cv=QeFmvtbv c=1 sm=1 tr=0 ts=68c02e2f cx=c_pps
+X-Proofpoint-ORIG-GUID: BDDiW5u-mrJmedzxzlfB8DJZ-M4a5daL
+X-Proofpoint-GUID: BDDiW5u-mrJmedzxzlfB8DJZ-M4a5daL
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTA2MDAyNCBTYWx0ZWRfX+dmjoaqO0xHe
+ DQVHAbwniuuTLrnprgbrrF/FXfe3X/Mt2kwws6OZYJCHCEHGLf9vQyAbqsHDXdToMFk6YAzhFB+
+ nwjId97vmvaHZYuKdplhhQik+qGOJIPYTqH7sMndZwF2vuGieANpXCf8LRLm/pmNqzqWqktuNwL
+ xKAr0emRpvpQn2b+TyDZjO2kD+2L8kVj2d/8yUZBRaJCjw9WfNBWaZ+7xWjcFF9S61n3nvdRhHF
+ PHwqOFS+z6M8CrbmtvDHjkYsVs9rTYxwZeLkeM2D0auNBLEH7ik3ZpXBnxU7aQWhkHkxesF9WZz
+ wdhMRyftzQBfv0Dk5TWEWN6bE9w0kocw/3jbw6PltPy+xii5Pp6O6UjB6cRf5fkJnEl00e3bE9C
+ jOP7rj4O
+X-Authority-Analysis: v=2.4 cv=QeFmvtbv c=1 sm=1 tr=0 ts=68c02e71 cx=c_pps
  a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17
- a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=yJojWOMRYYMA:10 a=COk6AnOGAAAA:8
- a=J5jK_jrvxbvMreSVrnAA:9 a=QEXdDO2ut3YA:10 a=TjNXssC_j7lpFel5tvFf:22
+ a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=yJojWOMRYYMA:10 a=EUspDBNiAAAA:8
+ a=COk6AnOGAAAA:8 a=PgHBclK_Yek0rHWKhOgA:9 a=QEXdDO2ut3YA:10
+ a=TjNXssC_j7lpFel5tvFf:22
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
  definitions=2025-09-09_01,2025-09-08_02,2025-03-28_01
@@ -136,34 +137,48 @@ X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
  authscore=0 authtc= authcc= route=outbound adjust=0 reason=mlx scancount=1
  engine=8.19.0-2507300000 definitions=main-2509060024
 
-The GCC clock GPLL0_OUT_AUX is one of source clocks for IPQ5424 NSS clock
-controller.
+The clock gpll0_out_aux acts as the parent clock for some of the NSS
+(Network Subsystem) clocks.
 
+Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 Signed-off-by: Luo Jie <quic_luoj@quicinc.com>
 ---
- include/dt-bindings/clock/qcom,ipq5424-gcc.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/clk/qcom/gcc-ipq5424.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-diff --git a/include/dt-bindings/clock/qcom,ipq5424-gcc.h b/include/dt-bindings/clock/qcom,ipq5424-gcc.h
-index c15ad16923bd..3ae33a0fa002 100644
---- a/include/dt-bindings/clock/qcom,ipq5424-gcc.h
-+++ b/include/dt-bindings/clock/qcom,ipq5424-gcc.h
-@@ -1,7 +1,7 @@
- /* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
- /*
-  * Copyright (c) 2018,2020 The Linux Foundation. All rights reserved.
-- * Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
-+ * Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
-  */
+diff --git a/drivers/clk/qcom/gcc-ipq5424.c b/drivers/clk/qcom/gcc-ipq5424.c
+index 6cfe4f2b2888..35af6ffeeb85 100644
+--- a/drivers/clk/qcom/gcc-ipq5424.c
++++ b/drivers/clk/qcom/gcc-ipq5424.c
+@@ -79,6 +79,20 @@ static struct clk_fixed_factor gpll0_div2 = {
+ 	},
+ };
  
- #ifndef _DT_BINDINGS_CLOCK_IPQ_GCC_IPQ5424_H
-@@ -152,5 +152,6 @@
- #define GCC_PCIE3_RCHNG_CLK			143
- #define GCC_IM_SLEEP_CLK			144
- #define GCC_XO_CLK				145
-+#define GPLL0_OUT_AUX				146
++static struct clk_alpha_pll_postdiv gpll0_out_aux = {
++	.offset = 0x20000,
++	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_DEFAULT],
++	.width = 4,
++	.clkr.hw.init = &(const struct clk_init_data) {
++		.name = "gpll0_out_aux",
++		.parent_hws = (const struct clk_hw *[]) {
++			&gpll0.clkr.hw
++		},
++		.num_parents = 1,
++		.ops = &clk_alpha_pll_postdiv_ro_ops,
++	},
++};
++
+ static struct clk_alpha_pll gpll2 = {
+ 	.offset = 0x21000,
+ 	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_NSS_HUAYRA],
+@@ -2934,6 +2948,7 @@ static struct clk_regmap *gcc_ipq5424_clocks[] = {
+ 	[GPLL2] = &gpll2.clkr,
+ 	[GPLL2_OUT_MAIN] = &gpll2_out_main.clkr,
+ 	[GPLL4] = &gpll4.clkr,
++	[GPLL0_OUT_AUX] = &gpll0_out_aux.clkr,
+ };
  
- #endif
+ static const struct qcom_reset_map gcc_ipq5424_resets[] = {
 
 -- 
 2.34.1
