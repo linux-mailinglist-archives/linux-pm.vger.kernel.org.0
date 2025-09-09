@@ -1,136 +1,161 @@
-Return-Path: <linux-pm+bounces-34290-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34301-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35A80B50345
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Sep 2025 18:54:42 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 13111B50550
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Sep 2025 20:32:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5A77F7B5D45
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Sep 2025 16:52:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BBBAF3ACDA0
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Sep 2025 18:32:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF37B35AAA3;
-	Tue,  9 Sep 2025 16:54:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DF3A302746;
+	Tue,  9 Sep 2025 18:31:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="02cnPnG5"
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="UUc02X7e"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from terminus.zytor.com (terminus.zytor.com [198.137.202.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA67535CEC7
-	for <linux-pm@vger.kernel.org>; Tue,  9 Sep 2025 16:54:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD53D3009F7;
+	Tue,  9 Sep 2025 18:31:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757436849; cv=none; b=kEsTq4QG/uK6QDovKkXXMCHN/S8OUMxUIMz8G8sPftGQQRgcHyS4vp0ZT9JWEXZMgVBD189RsZob123+HJTsOIWvhvJWipxTTBUD8ftRPUq3WgbjGJQjcnuDt0BPoDih7EVJmUgLn7Tq/cYikp4igubKEP6uq4IMTHHWVp2z7M4=
+	t=1757442667; cv=none; b=VValfAK9KhaHD7WK5MHidJC+55n9B5x7ywdT5e5vgNXAlFYne3/NfvMg42wU7CPzH71LKekn1DdRtk8XpYHCrnMmQOJreRCZj98azWISFJtZI7PArQEW6JShBmLPYkjTtL4SfPhV3+qxGxnAuYRpEHp9WuZ3M4c8CFMwMF/VVlw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757436849; c=relaxed/simple;
-	bh=h2tBW9z9qtavE4/GQ4hxoUrDMkmeBsS59wkL6NhBrnw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SpsnrbDD6eK9MKkrI5UmoQDumf3Rp/TNEi9KdIF2i3m/F5MIWMFdwxbBr3fl4oucazCJwU3MlYJesL90T/q/9/3DG1l9TrFXLn7jK2jL/w+ju0RTSGbWsZVONC6rS0gtNAf7hgDPK3Yg0u9sdcPhXZ3quazbsCBbBjYoaLRUtyI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=02cnPnG5; arc=none smtp.client-ip=209.85.208.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-61d14448c22so229a12.1
-        for <linux-pm@vger.kernel.org>; Tue, 09 Sep 2025 09:54:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1757436846; x=1758041646; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=h2tBW9z9qtavE4/GQ4hxoUrDMkmeBsS59wkL6NhBrnw=;
-        b=02cnPnG5JHmzSOyhGYZnqqb4/5yn9bUz07e6w7jZkCDq0fOyqRUzEJVWBfK7oFMEgp
-         iqzQP8qYR6oWI938UijKnHOngFnOMFIrgj2j7BDzC+RZbt6U7BUydF99VQVwr3ZraJIY
-         dsCo4+ZAQWJbn/dYXEEAphG+fmw6MitBlnl9hs4BDQk9R59loD7An8YLwlLL69SNQptM
-         9RTkUiGaBdQg6fbtsok4HlVmDZOe5cLPw5wdCNfcw2w/EOue3HDHAxO4me1Lav/UJurO
-         UU0J2bgYlQZpdq6mFUmGWRpQTr7iZaBIgbIbtiTme2bfD6WZL8r7Xkn9wad0b/OXlSlu
-         DkNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757436846; x=1758041646;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=h2tBW9z9qtavE4/GQ4hxoUrDMkmeBsS59wkL6NhBrnw=;
-        b=jCRSoTXBjXMlpf9zIuPQrm8eILl1qi5Cz7ur+JymUn/OUoajk7rFu30d4XDG+ARCTy
-         oFgpxTJjbErNbNalZgKTB7BokJy/C1otc/kDvKV+8olg3iyFA7fUQIahTG8TmKXGfppt
-         gkXSLSxxKbSFmL+YjVvHVf8AOu5rWhaJN12n7obDVTgLOvXt2cC8eXFnzqvEoy/nJ5YC
-         mV7CPUuchPX2JniG2SlM+j4XNtToZwj20N8u0GwGSJFIswJn0vIp2skW+XwkqLWz5qRS
-         yOYFYOA5FHYte/NZj9rvuYAFRDVErFsn8dRh2B4yYqnzLdCx/e50tqduHGR/e4+ZTxDM
-         w9IQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXV+4Jz5RBi+UqmpWZtc3rrDa/MFCtOme7lLGdR93Kwh0sIfeDNGOry+Gln41kOijSRZ/Uv61JDmA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwbmPRIGLYfEKOjK1wzWBVoNxhwHNl64q08j9B+CJlkdzmELD1R
-	15AkOEML7FWQETdrxAi/5t0t1ZSA90L4nJYPoJp9sM8MbeqkfqKEvdZoyVzeGHRlzlMbnz8h9tR
-	ruTp4ksgahL8b3ew1PIhix7Ub7M3Y9TH+MKWI4tQs
-X-Gm-Gg: ASbGnct9kipHQ2uEMOjUXVhmxEIa3BJuy1OKwEcA3u1OB/dXUx7hdyQ41Ct4ja4uU/S
-	rc7wiqHDtINLjht0wqKzUX5Gzl5BjUXZ0SRNBwgJMZlQxlNmjy4yWzFP3jLM7tlgpRYmGTDns0U
-	SU/5WBT49qqWoMBvUFcTLK6w5ch8TW49iQ6J/3RjWQ5o7Ov3OxoN5HWFD9pSb5Y55m1vgPdvfzs
-	c5jI5J78GWRPoMMKnqJMyIY9cKuOIBTfvw/PnOaYCKfhXqPFhFnAVk=
-X-Google-Smtp-Source: AGHT+IHIuRq2aKoS3kEjqYzebKZlwD2uOrphU5fkaOYcf/p/e9onUEd1fbAZ1KbzoQawzSyO+8wUa2PQlZBj/Dw4WRI=
-X-Received: by 2002:a05:6402:d60:b0:61c:d36d:218c with SMTP id
- 4fb4d7f45d1cf-6234d3ee779mr244623a12.0.1757436845803; Tue, 09 Sep 2025
- 09:54:05 -0700 (PDT)
+	s=arc-20240116; t=1757442667; c=relaxed/simple;
+	bh=pStNnpckjBLLxiCBdaRhSwHKmajHAFXvUVGozP1EwF0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=nodW5cax7HbZYNSxDPBlTXXH8miS2UlntWmt8rsJAtSZfGI54FINBTUkCyc7KO38ANmVSo2eZIfRy4WQhaIsjV671YbpsT7ee8hB6yxKFcrghwl84rgYDWpSBayEtVw0uzO5RUq214IYxKYdP4YCstXLJCrGkWr8UVg6LZGIw9M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=UUc02X7e; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+Received: from terminus.zytor.com (terminus.zytor.com [IPv6:2607:7c80:54:3:0:0:0:136])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 589ISSCx1542432
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+	Tue, 9 Sep 2025 11:28:32 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 589ISSCx1542432
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2025082201; t=1757442513;
+	bh=CH/NWgaZ5GpbCC8/+8SUZ4UxLR0GYrpdjFXxNoAb+HA=;
+	h=From:To:Cc:Subject:Date:From;
+	b=UUc02X7eS9hHXoR5t1iGlp6z92iu5VX+brkyldlBDbUMApAijCSL89t8qZNIpymqt
+	 rDbqeIY0vUD6znn7goSyBl+ODBSZuLIXQPnWsnp4juKjYai6A0PILQ4mMTuc+Ks/sW
+	 r03JtS4cPuYZCJFDg6Zh9dV/IfwWTsrobyhnnqSmKig8/uPiUQbtcvyJlVBXtGXwIP
+	 GmenLjCbJeJQz2f66Ga9nH0mIxFWH9gh1bxpEKnsp8dh+J2qtVylz5ygWQAsrlqdVv
+	 KKPCn/ulWGYmnMho3bxl5wsMe/Ebg266iJkTETezXULGIo12uzI1iI1dN8ZmI4t8rO
+	 KFPlh5YNB2YtQ==
+From: "Xin Li (Intel)" <xin@zytor.com>
+To: linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Cc: seanjc@google.com, pbonzini@redhat.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, rafael@kernel.org, pavel@kernel.org,
+        brgerst@gmail.com, xin@zytor.com, david.kaplan@amd.com,
+        peterz@infradead.org, andrew.cooper3@citrix.com,
+        kprateek.nayak@amd.com, arjan@linux.intel.com, chao.gao@intel.com,
+        rick.p.edgecombe@intel.com, dan.j.williams@intel.com
+Subject: [RFC PATCH v1 0/5] x86/boot, KVM: Move VMXON/VMXOFF handling from KVM to CPU lifecycle
+Date: Tue,  9 Sep 2025 11:28:20 -0700
+Message-ID: <20250909182828.1542362-1-xin@zytor.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250909090659.26400-1-zhongjinji@honor.com> <20250909090659.26400-2-zhongjinji@honor.com>
- <aL_wLqsy7nzP_bRF@tiehlicka> <CAJuCfpFCARoMJ8eniYdZ3hSaM_E3GvfRBV1VD1OohOfJpP87Hg@mail.gmail.com>
- <aMBZfYUN9qtcXXtL@tiehlicka>
-In-Reply-To: <aMBZfYUN9qtcXXtL@tiehlicka>
-From: Suren Baghdasaryan <surenb@google.com>
-Date: Tue, 9 Sep 2025 09:53:52 -0700
-X-Gm-Features: AS18NWAskqfJSKzjlCIyKddbks8of4_LFzBxNZe2p1mk8JK6wEwUqIe8FiYXcFc
-Message-ID: <CAJuCfpFsgTmmSGEzK6TF62TNr4d4E+Art4ghfB3dHxQYMHJ2ww@mail.gmail.com>
-Subject: Re: [PATCH v8 1/3] mm/oom_kill: Introduce thaw_oom_process() for
- thawing OOM victims
-To: Michal Hocko <mhocko@suse.com>
-Cc: zhongjinji <zhongjinji@honor.com>, rientjes@google.com, shakeel.butt@linux.dev, 
-	akpm@linux-foundation.org, tglx@linutronix.de, liam.howlett@oracle.com, 
-	lorenzo.stoakes@oracle.com, lenb@kernel.org, rafael@kernel.org, 
-	pavel@kernel.org, linux-mm@kvack.org, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, liulu.liu@honor.com, feng.han@honor.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Tue, Sep 9, 2025 at 9:44=E2=80=AFAM Michal Hocko <mhocko@suse.com> wrote=
-:
->
-> On Tue 09-09-25 09:27:54, Suren Baghdasaryan wrote:
-> > On Tue, Sep 9, 2025 at 2:15=E2=80=AFAM Michal Hocko <mhocko@suse.com> w=
-rote:
-> > >
-> > > On Tue 09-09-25 17:06:57, zhongjinji wrote:
-> > > > OOM killer is a mechanism that selects and kills processes when the=
- system
-> > > > runs out of memory to reclaim resources and keep the system stable.
-> > > > However, the oom victim cannot terminate on its own when it is froz=
-en,
-> > > > because __thaw_task() only thaws one thread of the victim, while
-> > > > the other threads remain in the frozen state.
-> > > >
-> > > > Since __thaw_task did not fully thaw the OOM victim for self-termin=
-ation,
-> > > > introduce thaw_oom_process() to properly thaw OOM victims.
-> > >
-> > > You will need s@thaw_oom_process@thaw_processes@
-> >
-> > Do you suggest renaming thaw_oom_process() into thaw_processes()
-> > (s/thaw_oom_process/thaw_processes)? If so, I don't think that's a
-> > better name considering the function sets TIF_MEMDIE flag. From that
-> > perspective less generic thaw_oom_process() seems appropriate, no?
->
-> Please see the discussion for the patch 2.
-> TL;DR yes rename and drop TIF_MEMDIE part and update freezer to check
-> tsk_is_oom_victim rather than TIF_MEMDIE.
+There is now broad consensus that TDX should be decoupled from KVM. To
+achieve this separation, it is necessary to move VMXON/VMXOFF handling
+out of KVM. Sean has also discussed this approach in several TDX patch
+series threads, e.g. [1], and has already done a round of refactoring
+in KVM [2].
 
-Oh, sorry. For some reason that part of the email thread ended up as a
-separate email in my mailbox and I missed it. Your suggestion there
-sounds great.
+The simplest thing we could think of is to execute VMXON during the CPU
+startup phase and VMXOFF during the CPU shutdown phase, even although
+this leaves VMX on when it doesn't strictly need to be on.
 
->
-> --
-> Michal Hocko
-> SUSE Labs
+This RFC series demonstrates the idea and seeks feedback from the KVM
+community on its viability.
+
+
+The benefits of doing VMXON/VMXOFF in the CPU startup/shutdown phase:
+
+  1) Eliminates in-flight VMXON/VMXOFF during CPU hotplug, system reboot,
+     or kexec while KVM is loading or unloading.
+
+  2) Removes the “insane dances” for handling unexpected VMXON/VMXOFF
+     execution, including the emergency reboot disable virtualization
+     mechanism and kvm_rebooting.
+
+  3) Allows KVM and other hypervisors on Linux to omit explicit VMX
+     enable/disable logic.
+
+
+This RFC series follows the direction and does the following:
+
+  1) Move VMXON to the CPU startup phase instead of KVM initialization.
+
+  2) Move VMXOFF to the CPU shutdown phase instead of KVM teardown.
+
+  3) Move VMCLEAR of VMCSs to cpu_disable_virtualization().
+
+  4) Remove the emergency reboot disable virtualization mechanism.
+
+  5) Remove kvm_rebooting.
+
+
+AMD SVM support is not included, as I do not have access to AMD hardware,
+but adding it should be straightforward (currently broken in this RFC).
+
+Note, the first two patches should ideally be merged into a single patch
+to avoid breaking functionality in between. However, they are kept
+separate in this RFC for clarity and easier review. I will merge them
+if this approach proves viable.
+
+
+[1] https://lore.kernel.org/lkml/ZhawUG0BduPVvVhN@google.com/
+[2] https://lore.kernel.org/lkml/20240830043600.127750-1-seanjc@google.com/
+
+
+Xin Li (Intel) (5):
+  x86/boot: Shift VMXON from KVM init to CPU startup phase
+  x86/boot: Move VMXOFF from KVM teardown to CPU shutdown phase
+  x86/shutdown, KVM: VMX: Move VMCLEAR of VMCSs to
+    cpu_disable_virtualization()
+  x86/reboot: Remove emergency_reboot_disable_virtualization()
+  KVM: Remove kvm_rebooting and its references
+
+ arch/x86/include/asm/kvm_host.h  |   1 -
+ arch/x86/include/asm/processor.h |   3 +
+ arch/x86/include/asm/reboot.h    |  11 --
+ arch/x86/include/asm/vmx.h       |   5 +
+ arch/x86/kernel/cpu/common.c     | 162 +++++++++++++++++++++++++++
+ arch/x86/kernel/crash.c          |   5 +-
+ arch/x86/kernel/process.c        |   3 +
+ arch/x86/kernel/reboot.c         |  88 ++-------------
+ arch/x86/kernel/smp.c            |   3 +-
+ arch/x86/kernel/smpboot.c        |   6 +
+ arch/x86/kvm/svm/svm.c           |   8 --
+ arch/x86/kvm/svm/vmenter.S       |  42 +++----
+ arch/x86/kvm/vmx/main.c          |   1 -
+ arch/x86/kvm/vmx/tdx.c           |   4 +-
+ arch/x86/kvm/vmx/vmcs.h          |  10 +-
+ arch/x86/kvm/vmx/vmenter.S       |   2 -
+ arch/x86/kvm/vmx/vmx.c           | 185 ++-----------------------------
+ arch/x86/kvm/x86.c               |  18 +--
+ arch/x86/power/cpu.c             |  10 +-
+ include/linux/kvm_host.h         |   9 --
+ virt/kvm/kvm_main.c              |  29 +----
+ 21 files changed, 230 insertions(+), 375 deletions(-)
+
+
+base-commit: 76eeb9b8de9880ca38696b2fb56ac45ac0a25c6c
+-- 
+2.51.0
+
 
