@@ -1,212 +1,131 @@
-Return-Path: <linux-pm+bounces-34288-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34289-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14122B502A4
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Sep 2025 18:30:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 17996B502FA
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Sep 2025 18:45:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 78C7B541020
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Sep 2025 16:30:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BF991360A9D
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Sep 2025 16:45:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B61632D0C8F;
-	Tue,  9 Sep 2025 16:30:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50469352FE8;
+	Tue,  9 Sep 2025 16:44:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JfcmVSjw"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="b1zVAztl"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE1C426F2B2
-	for <linux-pm@vger.kernel.org>; Tue,  9 Sep 2025 16:30:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4524035337F
+	for <linux-pm@vger.kernel.org>; Tue,  9 Sep 2025 16:44:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757435421; cv=none; b=KUf1hEd9HCX2J6xuPqPIzyPLSd81IKat12rpRGqE+tcRkAxi2SFOjSYDhjzjKljgV3j1ceQ94xQkeoTFIcHEPlT8LLNtIljDRXsHKqWqbtTSCRLsbLdag983BR8iqVPfnEjI69SgtAe7tyxq+NsjupZEJrVeVbrKtGjNde5Q+A8=
+	t=1757436290; cv=none; b=cUceSC2vuki/UibmqfM33HjrX4WlDxFyVMWfcXmXDy/KdMbkk2lTpGf3Sq2SJx1TRTBH8h1Y6B+e/UGalnOuNkzNTqM/O8o2EzoaBl43jFeY8ZBsSVJFL48uoOXkCpidZwXIKN3uEXQ9r7/vBE1adyKaQCROSC6KHRfj+01A1d0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757435421; c=relaxed/simple;
-	bh=G9PEcnKcf0gtKT3AM2VvMAbi0kN3cdo24SxGQ889Ud4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EnpJADnrUyQAWdoQa1Mj8ObXsk6/SeoDEATQrTJwM1qr6LIDsycYrxdhSkcxKg/ceP7dQjhru95zVnB30CCe/vS1Ewwp5PLnitWn344YupK0tkGzSeQlm2xlT2cGFBGA16NEOjem0XG97QSPNvcb4itzfIa9ZRcmEBEwziuE29I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JfcmVSjw; arc=none smtp.client-ip=209.85.208.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-61ed6eeaff9so20825a12.1
-        for <linux-pm@vger.kernel.org>; Tue, 09 Sep 2025 09:30:19 -0700 (PDT)
+	s=arc-20240116; t=1757436290; c=relaxed/simple;
+	bh=crjz8IuTMvnuAst3XpK5ykzknRWc+hiwRiocj24vF8U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WQYR9g+H5D2nHuB3ssBVvV/jO1Qws3LluttSsPvqBJiBvjzrjH4cDLwegepfSSvM+/hm/MsdKnq6DqCzN9hhwzppr1PLr+wJ1IBXKBZ0pym8EwJW6w/FQ/rcdbsLBRKwu8X0x0x5cRreK38M6APTzODuV7oGMzbUd2iiJRj/UnQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=b1zVAztl; arc=none smtp.client-ip=209.85.218.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-b042cc39551so1049394766b.0
+        for <linux-pm@vger.kernel.org>; Tue, 09 Sep 2025 09:44:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1757435418; x=1758040218; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FHJHNlNOaMOyVoBAHvHo+maMOWkTYnhe6QXua4Kxw8s=;
-        b=JfcmVSjwopHDQIStx+t09KlHzkV+DQ3usXYMp1aXOcUZ98o//nTTDJfElTAj0e3jU/
-         ZD+E9r39lwpi8cR7envVxeCniVnP/UNoqGgYHblsa0yjG4Xz07GGMG/RyRVYJWHfrxxX
-         b06g9OgwslN2cuDEHHtt9KCzFIOpq4iZbMUVd4/x9xXZJl1o8kJmKj3Y7EnL3Qk538GC
-         FaF4LmRCRhTRXmbyn2RsXQTgZD9DaNwiBTRMaETOFWN5EoYL7AKcV2v5waYqrP2REix3
-         Cd9fKvw/KuGYQZa0tu2epuAuU60zydq+iELXq+4IMMpvrAcGD5nWTCLzaDQ//19k5F3c
-         DeBg==
+        d=suse.com; s=google; t=1757436287; x=1758041087; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=wCW/MpT2vQ9C50MIPfrp6np6huywdbRHgHAuQqK4bT4=;
+        b=b1zVAztlhyyaWl8F9e0FNzrx16OLgTOgCu9e3Voc5z6KYj07qQhRIS/ZqdDd9uYgQt
+         hnZxwjGtQtccpcgpKU4Jeg7mZ0k7+3/WVV+Wf5C+qTn3/opsZJQ8YI1EVsc/YTaX4h6F
+         xWJVZYNA6g3FPbDSTpTIxXioSrzTieD/PGlUdSnkSUHplwxdKBYRo+6l0LzSx43Vu0HG
+         8vWU/pXpjgWJv2dhZ5+5hpJ74yJ6DKJ1Pan4S3F05LM7xFdAyz3Ue+YnkoHSgWVG6WBl
+         FSzwFLtjDDJUsD/6Ve3mQ9ew0FG3LXcxIdUheVxCDBf+6FyrHaYTc5oBN144YCxqXdBo
+         6ZnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757435418; x=1758040218;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FHJHNlNOaMOyVoBAHvHo+maMOWkTYnhe6QXua4Kxw8s=;
-        b=IMqtgjwZsRIvEfVXH3e8BOqqGSD481wMm3BMrBH2sxmW/YGaCnxa06YMshLjVF7D+T
-         UUOFp6pmhK37oI0L5XrfXl9pGen7zDDh8FvG2/32W9UIOmkT2CHu7hICWvJDZw//SGIU
-         I84mLZKyslaWVsi/7qQ4xpiJ8HbKZPJnl762jBDFeHqeSPKL16e8vFJok5sRb8SK/A8I
-         dnjp1u7nyey1jvyMDDupz3EQG2Ts7vKCSLOaOIYMIl+3gJq1EiYPKs7TBg1Xprn0fYix
-         nZKqfgZyLUifLYOquYvqrawLoBvns0G8p11RxAEaZgtclpEkWrtPSz22CGifmIfYsc61
-         kHlQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX9TtcIaEgwG7A14qLAoT9o8AC3+z+zdpSxuAoavCSs3omv8bE5KoVTeqHhBLZlPnfkFU4C1sZCHQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx3jS0sGFRGNMddvPRTL9XArFtXbDelxH9tNTWzxIZB/RE9DWs5
-	3CpJq6xNWNdFs4CyR4hw5FIpGiRbVlFp6qdcixFxSVm8sSRi0yvnQsOuc5DWeiG1ywrtSpeifjk
-	1uwFk9DUoiVJHsb5XAcqJgGcgTeu7nX7fXy9kvFVb
-X-Gm-Gg: ASbGncthLzMRyOQt4qhgY0MhjH2NusSj4mQLLrYRYephAhnE4AqAM8hnO0BbM7jAzgx
-	ITZSbShUWX2dHZgCMxiUm9HFRyXzKg1s/AclsqU97fHAF1GExYiysE+pehQqmvdUG95wFikKHgk
-	kPwZnArPcCnykOA/MumJgrLsEsXUhpLHlwUDlarcgN2bx9QnWu7gc4fqAVhSETCfvArKsjqEIOH
-	gBwm9iQSAebZYNbKphRSEoiV9a3se79Kn/8yqWryPAk
-X-Google-Smtp-Source: AGHT+IFbWAiDVlID1hnyzgk511dH5neUI5OLeqIjJ12rVpIAxmuNfaLD/tbpY5u2JY5Vm3Sgx+0SMd1CXr4QkvXrU5o=
-X-Received: by 2002:a05:6402:4541:b0:61e:c6ae:7a58 with SMTP id
- 4fb4d7f45d1cf-626a1f9b6a2mr267968a12.0.1757435417828; Tue, 09 Sep 2025
- 09:30:17 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1757436287; x=1758041087;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wCW/MpT2vQ9C50MIPfrp6np6huywdbRHgHAuQqK4bT4=;
+        b=tCGgMS3qBYWcv8eEoEfiCzsg5j+BtSOPi19Cpn17djvlqfGCWfPRPIEqqSyiaKA3X8
+         PHkfc8IEICQ2VFIloZChKvd6RtHw55Z4WNWSdYJu37ut1s8EuJsF67Ig65SyjVSkS7uR
+         o84LHxn8/wMe9CHyZwYr7O5VzFHpFpreQRjdsT//pp/B0csdcfBXarXcTGfrLvUsDQXP
+         tOB+XBsP/2InPPnBZ7QeayjNhr9ru1uyJW55FaDI4Z2/WwYj3wpULR+gyppP7QKHIwE0
+         eb7HnqpflANUA2zmqCh6+btvP8by8Um1Nf1XVJJXPsNt7him1Mz//ljmZVEOjbfSVbt+
+         KsDg==
+X-Forwarded-Encrypted: i=1; AJvYcCWzG2UXHINAFfH4iXQUA7sug5F6XTJ8U0dgJgeQNsGM71aRp2zOD3tR/7BsZhmGsNHNvh+g6dzGrg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzrYFZkSuPXHrdYYTyGDhSJrgyWJVn+RlyR5kC7V42xZ28nyGd2
+	FBPd6OKl7c7gT/bB9X86ORE+Nj9UkbKwqRdZ/IHmCnPJ1Yo6JzEv2z03mYau4lmDTqA=
+X-Gm-Gg: ASbGncsaNTBcE3fDeqsHCuPMRZ/b7SxGBOM8ud60O6s77AJGxh6fINzaSimd1N984At
+	YL7DX5DboqbBmL3FHCQQNhyQ8xFStc2dPdv9Z+sY+WUCm8/tBa9jrbG1vh75P9ONDK7RsPA8L/r
+	Sfqb4rpvFUzK3a5i54qc+eovvqofxy0xIQcElTivbBbMXXjIqruZ/HZ7hVDUvYCiyxRGT/13ST5
+	02m651QzBLcsIbc/jLATp830UqdF9FxDYOUR+NOzCo2+u94Ap3wF0spO0OAigV6JiIERz3UGQWB
+	atu04NECrVxcYNmGs9O2IihiI8Nh6/R7ZlCc18ukMleSerhUN8ohplgxUUGe2vvw80KfQIGJX7d
+	PMkO3DJvmSVLjKC/WuDFZeYCWp0uRx0qaigSHlzU4P9ia
+X-Google-Smtp-Source: AGHT+IHEqPGu01fBLkHalrq5g2/LgoDfcb+GW1hxVNwE/Xt1vQY2NUkE1HZsTFp64+X7RC6+sFL+Pw==
+X-Received: by 2002:a17:907:3f9d:b0:aff:16eb:8b09 with SMTP id a640c23a62f3a-b04b13cf9c8mr1203677366b.5.1757436286539;
+        Tue, 09 Sep 2025 09:44:46 -0700 (PDT)
+Received: from localhost (109-81-31-43.rct.o2.cz. [109.81.31.43])
+        by smtp.gmail.com with UTF8SMTPSA id a640c23a62f3a-b07830ac12asm18292866b.38.2025.09.09.09.44.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Sep 2025 09:44:46 -0700 (PDT)
+Date: Tue, 9 Sep 2025 18:44:45 +0200
+From: Michal Hocko <mhocko@suse.com>
+To: Suren Baghdasaryan <surenb@google.com>
+Cc: zhongjinji <zhongjinji@honor.com>, rientjes@google.com,
+	shakeel.butt@linux.dev, akpm@linux-foundation.org,
+	tglx@linutronix.de, liam.howlett@oracle.com,
+	lorenzo.stoakes@oracle.com, lenb@kernel.org, rafael@kernel.org,
+	pavel@kernel.org, linux-mm@kvack.org, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, liulu.liu@honor.com,
+	feng.han@honor.com
+Subject: Re: [PATCH v8 1/3] mm/oom_kill: Introduce thaw_oom_process() for
+ thawing OOM victims
+Message-ID: <aMBZfYUN9qtcXXtL@tiehlicka>
+References: <20250909090659.26400-1-zhongjinji@honor.com>
+ <20250909090659.26400-2-zhongjinji@honor.com>
+ <aL_wLqsy7nzP_bRF@tiehlicka>
+ <CAJuCfpFCARoMJ8eniYdZ3hSaM_E3GvfRBV1VD1OohOfJpP87Hg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250909090659.26400-1-zhongjinji@honor.com> <20250909090659.26400-4-zhongjinji@honor.com>
- <CAJuCfpHVzRtUQukO0kZP072vCu89DwOEAocS571b4sGxMc6Zow@mail.gmail.com>
-In-Reply-To: <CAJuCfpHVzRtUQukO0kZP072vCu89DwOEAocS571b4sGxMc6Zow@mail.gmail.com>
-From: Suren Baghdasaryan <surenb@google.com>
-Date: Tue, 9 Sep 2025 09:30:04 -0700
-X-Gm-Features: AS18NWAA3gXYcKcu6BJyCASw1JY2Tg5yKdBcwtKDAMzJA7pfY6LSVb0ENi0HJp8
-Message-ID: <CAJuCfpFKyPht_31Xq+a7YXhjxMWCrucdMSjJS--YnzMf6npqoQ@mail.gmail.com>
-Subject: Re: [PATCH v8 3/3] mm/oom_kill: The OOM reaper traverses the VMA
- maple tree in reverse order
-To: zhongjinji <zhongjinji@honor.com>
-Cc: mhocko@suse.com, rientjes@google.com, shakeel.butt@linux.dev, 
-	akpm@linux-foundation.org, tglx@linutronix.de, liam.howlett@oracle.com, 
-	lorenzo.stoakes@oracle.com, lenb@kernel.org, rafael@kernel.org, 
-	pavel@kernel.org, linux-mm@kvack.org, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, liulu.liu@honor.com, feng.han@honor.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJuCfpFCARoMJ8eniYdZ3hSaM_E3GvfRBV1VD1OohOfJpP87Hg@mail.gmail.com>
 
-On Tue, Sep 9, 2025 at 9:29=E2=80=AFAM Suren Baghdasaryan <surenb@google.co=
-m> wrote:
->
-> On Tue, Sep 9, 2025 at 2:07=E2=80=AFAM zhongjinji <zhongjinji@honor.com> =
-wrote:
+On Tue 09-09-25 09:27:54, Suren Baghdasaryan wrote:
+> On Tue, Sep 9, 2025 at 2:15 AM Michal Hocko <mhocko@suse.com> wrote:
 > >
-> > Although the oom_reaper is delayed and it gives the oom victim chance t=
-o
-> > clean up its address space this might take a while especially for
-> > processes with a large address space footprint. In those cases
-> > oom_reaper might start racing with the dying task and compete for share=
-d
-> > resources - e.g. page table lock contention has been observed.
+> > On Tue 09-09-25 17:06:57, zhongjinji wrote:
+> > > OOM killer is a mechanism that selects and kills processes when the system
+> > > runs out of memory to reclaim resources and keep the system stable.
+> > > However, the oom victim cannot terminate on its own when it is frozen,
+> > > because __thaw_task() only thaws one thread of the victim, while
+> > > the other threads remain in the frozen state.
+> > >
+> > > Since __thaw_task did not fully thaw the OOM victim for self-termination,
+> > > introduce thaw_oom_process() to properly thaw OOM victims.
 > >
-> > Reduce those races by reaping the oom victim from the other end of the
-> > address space.
-> >
-> > It is also a significant improvement for process_mrelease(). When a pro=
-cess
-> > is killed, process_mrelease is used to reap the killed process and ofte=
-n
-> > runs concurrently with the dying task. The test data shows that after
-> > applying the patch, lock contention is greatly reduced during the proce=
-dure
-> > of reaping the killed process.
-> >
-> > The test is based on arm64.
-> >
-> > Without the patch:
-> > |--99.57%-- oom_reaper
-> > |    |--0.28%-- [hit in function]
-> > |    |--73.58%-- unmap_page_range
-> > |    |    |--8.67%-- [hit in function]
-> > |    |    |--41.59%-- __pte_offset_map_lock
-> > |    |    |--29.47%-- folio_remove_rmap_ptes
-> > |    |    |--16.11%-- tlb_flush_mmu
-> > |    |    |--1.66%-- folio_mark_accessed
-> > |    |    |--0.74%-- free_swap_and_cache_nr
-> > |    |    |--0.69%-- __tlb_remove_folio_pages
-> > |    |--19.94%-- tlb_finish_mmu
-> > |    |--3.21%-- folio_remove_rmap_ptes
-> > |    |--1.16%-- __tlb_remove_folio_pages
-> > |    |--1.16%-- folio_mark_accessed
-> > |    |--0.36%-- __pte_offset_map_lock
-> >
-> > With the patch:
-> > |--99.53%-- oom_reaper
-> > |    |--55.77%-- unmap_page_range
-> > |    |    |--20.49%-- [hit in function]
-> > |    |    |--58.30%-- folio_remove_rmap_ptes
-> > |    |    |--11.48%-- tlb_flush_mmu
-> > |    |    |--3.33%-- folio_mark_accessed
-> > |    |    |--2.65%-- __tlb_remove_folio_pages
-> > |    |    |--1.37%-- _raw_spin_lock
-> > |    |    |--0.68%-- __mod_lruvec_page_state
-> > |    |    |--0.51%-- __pte_offset_map_lock
-> > |    |--32.21%-- tlb_finish_mmu
-> > |    |--6.93%-- folio_remove_rmap_ptes
-> > |    |--1.90%-- __tlb_remove_folio_pages
-> > |    |--1.55%-- folio_mark_accessed
-> > |    |--0.69%-- __pte_offset_map_lock
-> >
-> > Signed-off-by: zhongjinji <zhongjinji@honor.com>
-> > Reviewed-by: Liam R. Howlett <Liam.Howlett@oracle.com>
-> > Reviewed-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-> > Acked-by: Shakeel Butt <shakeel.butt@linux.dev>
-> > Acked-by: Michal Hocko <mhocko@suse.com>
->
-> Reviewed-by: Suren Baghdsaryan <surenb@google.com>
+> > You will need s@thaw_oom_process@thaw_processes@
+> 
+> Do you suggest renaming thaw_oom_process() into thaw_processes()
+> (s/thaw_oom_process/thaw_processes)? If so, I don't think that's a
+> better name considering the function sets TIF_MEMDIE flag. From that
+> perspective less generic thaw_oom_process() seems appropriate, no?
 
-Apparently I misspelled my own last name :)
+Please see the discussion for the patch 2.
+TL;DR yes rename and drop TIF_MEMDIE part and update freezer to check
+tsk_is_oom_victim rather than TIF_MEMDIE.
 
-Reviewed-by: Suren Baghdasaryan <surenb@google.com>
-
->
-> > ---
-> >  mm/oom_kill.c | 10 ++++++++--
-> >  1 file changed, 8 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/mm/oom_kill.c b/mm/oom_kill.c
-> > index ffa50a1f0132..52d285da5ba4 100644
-> > --- a/mm/oom_kill.c
-> > +++ b/mm/oom_kill.c
-> > @@ -516,7 +516,7 @@ static bool __oom_reap_task_mm(struct mm_struct *mm=
-)
-> >  {
-> >         struct vm_area_struct *vma;
-> >         bool ret =3D true;
-> > -       VMA_ITERATOR(vmi, mm, 0);
-> > +       MA_STATE(mas, &mm->mm_mt, ULONG_MAX, ULONG_MAX);
-> >
-> >         /*
-> >          * Tell all users of get_user/copy_from_user etc... that the co=
-ntent
-> > @@ -526,7 +526,13 @@ static bool __oom_reap_task_mm(struct mm_struct *m=
-m)
-> >          */
-> >         set_bit(MMF_UNSTABLE, &mm->flags);
-> >
-> > -       for_each_vma(vmi, vma) {
-> > +       /*
-> > +        * It might start racing with the dying task and compete for sh=
-ared
-> > +        * resources - e.g. page table lock contention has been observe=
-d.
-> > +        * Reduce those races by reaping the oom victim from the other =
-end
-> > +        * of the address space.
-> > +        */
-> > +       mas_for_each_rev(&mas, vma, 0) {
-> >                 if (vma->vm_flags & (VM_HUGETLB|VM_PFNMAP))
-> >                         continue;
-> >
-> > --
-> > 2.17.1
-> >
+-- 
+Michal Hocko
+SUSE Labs
 
