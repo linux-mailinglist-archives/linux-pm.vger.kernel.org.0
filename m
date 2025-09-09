@@ -1,82 +1,81 @@
-Return-Path: <linux-pm+bounces-34296-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34297-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB980B5053D
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Sep 2025 20:30:21 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F11AB50540
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Sep 2025 20:30:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 999CC188CCCD
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Sep 2025 18:30:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 457235448AB
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Sep 2025 18:30:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8882F362085;
-	Tue,  9 Sep 2025 18:29:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A67F36299B;
+	Tue,  9 Sep 2025 18:29:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="awNKGOSs"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HBoghBsw"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C103C35FC1F;
-	Tue,  9 Sep 2025 18:29:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC50C2FB606;
+	Tue,  9 Sep 2025 18:29:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757442581; cv=none; b=l0YoNzJwR3JfPraI1862Y8kIcPq0m/zbrNSursRrEtYtabcBMuL8ManEMy9/V6I6TnlSzpgzE8ozjnEtWoLQ/24hKHIAqMNPJsjzmIPul3+29RGRohUCqDUFgs0/d/aenz528eAh+N7MXnyAwf8d1ENo3dZVUMXyx4TDSGJcrAo=
+	t=1757442582; cv=none; b=NN17xccVEODDHCw8UUNcMUyauEiZzywX8BCzB37T8vId1GQqFkW98JnkGdTI1tVu3B+gk3fPU42pZY+cfQCJjfNw40Vgtd6vjc2AvDVsli/PxaLhtj05mWo1ivSMPqA7lYgFwXw5qIP1M1LMwCe26t67fa6KFdd4keqeQpXQ84I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757442581; c=relaxed/simple;
-	bh=voRlcLKfoLfnlVLyVO+ZDmBOdNNCSLvdkGqha5/sHqA=;
+	s=arc-20240116; t=1757442582; c=relaxed/simple;
+	bh=AOZdHI28joffYImWPpnLzx5R7A6JCfptSZlkeOeIOYw=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=VcveT4kRyTYlXMKLJ5Voj3MjF94bND3weoKKBzRYYglUuzo9ZmBVgM5CsxRZTq1+dfmWE7CJD8alMfQkfgx+Fg9vGMI0cTMgSbga92KOsVmz3UOfHtEst8rtS6qtFDTl4DHDpkVoJAFeg421qg4w5vrB7UBU09X2WNplnmJqdZg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=awNKGOSs; arc=none smtp.client-ip=209.85.208.42
+	 In-Reply-To:To:Cc; b=QmAqOCWWOU/NluKu7ikAzZs5fVKyJZO65fT+NTQ/tzrSTTtgvxu27Jl0/IJB2osoKLCUhQqEHnmDFGqcxBJNVEXkjC8YagcN8daQdUdHKXaif+TDNTw0zaVd3WsgfNnwgvZAjShDcnuvAFWadQYPGUMMTRJZ9fJeBYkg7kQZD9w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HBoghBsw; arc=none smtp.client-ip=209.85.218.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-625e1ef08eeso6595826a12.1;
-        Tue, 09 Sep 2025 11:29:39 -0700 (PDT)
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-b00a9989633so249548166b.0;
+        Tue, 09 Sep 2025 11:29:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757442578; x=1758047378; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1757442579; x=1758047379; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=RUBWcTiGE2fz4jspmliN1on/EZodfLpmty6A15u2Kyw=;
-        b=awNKGOSsRe1FoIG2dkGB2i32w4cf9ekOtO4LvHxkbnKFzDXorFoTyno0+VXo0ufd8q
-         DkcaCrWLGDEOArMf9p9PdrsXSdV20uLymVS/nXsmwH8wudw/9hFHNLvzbx4H5n71CbNN
-         Y0ZDatn3toBOL8zwakJUJJctYyypCY7J5zfwJHTJnsPJCf/nJfooobaaLT1YTRsPUHbL
-         eaRnOr//6A6zxA/fVAje4rdS1CDRn7CeOFPp3BQj+G+gKERlC6Lb/EmbQsFzw0C5wqBX
-         Df1aEXtQops5E4IRaxgcvbvvLhHRkiXrkwDrEGEy/wWiAWGwMgs58onPu8bfvqO/nPal
-         3Bjw==
+        bh=FzUQISPfSnlkW3kJz7YjgfNYemqJ20idPrIcwsmfNes=;
+        b=HBoghBswzGd63tfRxmvQBEZKGcE35ysuDjmFadp0YistDkMFZ5XRgaGBDg6mRdx3gw
+         xCGOP73Az2Ssslx2hS4aNh4qA9eTZI242gsHUALCZfgAywar1CVDKKMuzYBT3AklMUeq
+         vmJKmlFOP2OKGwzkXS1OGH1R6LXR1sYd6fmvqjEW43WuKGI2+TN57qgpyLYWXyfZxtp2
+         qsd58o89LJcVUuXoXgUEkIefX0ggiAm+3tZGgRnuIbj0nM2OCGm6Yu8bxJ6ObwX/4Ogc
+         zjHsJgcISIC7pbfDkZXRNM35NzchEahfENxeESsfQ7GKo4a6R7vn7PaYt4zcN7F7n3Zi
+         8cQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757442578; x=1758047378;
+        d=1e100.net; s=20230601; t=1757442579; x=1758047379;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=RUBWcTiGE2fz4jspmliN1on/EZodfLpmty6A15u2Kyw=;
-        b=FMeUXfL/VigGyvfGChcDgBZH/gp3OqIUgY04I0DwymOpgCqgxxLTMTCS3M3HM/WeEL
-         vq25ZM9Ytj//GrqxfAlCFYk7TowUUlTbdIsaqfqKUVxDhJSuDhtVKeK9LyQ/aROQYYJ2
-         77kkzHqx9v7ta+ee/yQyXpzEVcoMedFofEfxSPzfbbB/H7FzJqGGMFyv/DXPg39SPOnk
-         KnwNDnGwffgJCfSRLxh4rr5t/T3eyWrvkfn55d5gSdE2BufNmRXWD8ZLfFWPLs0SZNMu
-         bs68K8pVftgp6UbUiqpOuPMENjXQfpv33dXT85wV064AfKsmQ4/QfxmfohzVCrgjNrkF
-         tQYg==
-X-Forwarded-Encrypted: i=1; AJvYcCUT8T8LzmaTqupu3sqNTDdILGgELGynvIrTkh8kXqBFmpdLPugz+KEP0mqvT9tlzxWkrCkd2y/aKnMYZns=@vger.kernel.org, AJvYcCW9Wv6alpgyDY4ewvKrJe3vvaTv9Khr8WUEk8ERr9rUPQOfrdjxjGAP2v4xLkttHtf9NgwwUB8pjCY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwnuOuJhrbsivJ/LjyNSwKuaGEd3/oteXRRikz1nSNLw9zr25PR
-	c+tlf/Hd2ur270RUgG5wnN0cmqdLoez/39NkW2JCCt+oPPfkcp3RVrjA
-X-Gm-Gg: ASbGncvHQB/fcl/tn35dDdtDXOnScoBGX3U/de+yyVcjVQruWa5ncM3rZRK9QzksNrk
-	P2k71aPO5fuiOD7Nr1AYB9ZpDSRCyUsGBqaSRQQ+Lql8TnAvbwqMzQFcxPg1bp6/qAI51WGJVzW
-	s+tEdMdG1DNwGiFJhnu76ZVmHDNEaHxzDn7T8P9kYxvX4cLPW+6dts28OGpjmv3QPtqFndKzB/3
-	H+OTZS8VJ2CbV34TF7kBLH/wH9RUUC4zzL885MouWo+VvlAGn8lwT243cYAwrtSo0dvWA1BA1R+
-	MY6pa4kLZMX2Qy2UBMJyrokqPsQ8oTi9pNSJlE+3wO5dibqk1i/Rdf0XtSxImflHialGlVZCcid
-	OjCkYmmyUHE+pbcpsplrXxjRSCT4S3mw=
-X-Google-Smtp-Source: AGHT+IGo/fVlDxx0iEjAiRxVdtiG0SnOp5LBdVELsWq+uS8dF6Zkyf3XgDEiU85/yBjMYrGxb4hsIw==
-X-Received: by 2002:a17:906:4788:b0:b04:286a:2fb8 with SMTP id a640c23a62f3a-b04b1764361mr1194415866b.56.1757442577887;
-        Tue, 09 Sep 2025 11:29:37 -0700 (PDT)
+        bh=FzUQISPfSnlkW3kJz7YjgfNYemqJ20idPrIcwsmfNes=;
+        b=IizSVCen6pZ2qAt60P0rOm5bhmU91iZ/TCBpSajp/r6lJFxrueIVy00A7G4cJo6wLG
+         016m08J/F/0YcEkcnMJzLDJfU60dM1oTtLfV+5AIY40kdSeFdAdzybCzyjMzeX2PQvM9
+         qRTc1JjBFfBkbLWbeT1bENmpDaoCV/7yX+OnplFAsmbUwiOQsx2DlbC6FfSVdNaZb+ak
+         gBOdb2Vylo5Ehi9SEaypKKjjHYDAlxPBkt0Xe2kvJwqLDydixHumq02HTTLeAKsXLIna
+         rcyrIElR1jzoHfxaZyf+TdYaqdORvRBUouQLlmwCXViL3QhX1+fQxInOKoPCQ3qbIvxh
+         M1sg==
+X-Forwarded-Encrypted: i=1; AJvYcCUnv+mmRKIbAItFcEZdAQKUHakztGHV0mum0c++dGNxuLr8odQv5h0doiIYDtAM5bdxs6NjYjzopvWEw3o=@vger.kernel.org, AJvYcCXtPqPK722yv8Zn3D5/ymckwAQzC2Db9k2sM5skFU1T61j21zahKQabdXfLPPW027lkzLP/i5KZIJs=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy6R7qRVy5SUHen+ZN1BkH3nlZul7NzJrTbAj1Uxe3L6BaBfyqg
+	P0eMLoXsHo6kCep8AqKohA2eeCi+rAXpGyJ+twUi67OwQTWk1iicweae
+X-Gm-Gg: ASbGncv+QFoy2R95F0jz8uVxEcld2yjI/3Es9friiR5o3qUOMUgSySm7Ro9xdSvG376
+	7pvG6jk4Ohh3YYaYpJmQoZet9fzCaMmF5dUZwNSdlN3q2g38n+bCXBCcEJwkIDvzKBqq4G+mhiN
+	egJbLcbvXdGUFqxraDnnIOcLLFFjQ1eARSgNU9najCH/Tg4tzjzv9xLN/sfF8IS8/EJ5LyWpNCK
+	VXIfFHzd7KDBJxhEj/y0X8IC1zJklcHqORHwaOHnLkn4Nca5dvSW+Y658PyktiJZMCm/vj0pUOY
+	C5PPYguM+sjScFCkYPfEvZZoey4lbMOqc23/bvxbG75jiiEC+zCcf0D0kfFyKH7iw6hkYFZTrjA
+	pDGIJwnWaU+Q+CsacfPCO5sbcQiujYYk=
+X-Google-Smtp-Source: AGHT+IHQtkSFgpYIb6iSuxElFUCAOmSnPT66isQRP6YYymUqLVyiijDHJ/yH5TUXJNCdRGysLT9gkg==
+X-Received: by 2002:a17:907:1c26:b0:b04:23e0:5c2b with SMTP id a640c23a62f3a-b0492e105e9mr1812319466b.0.1757442578918;
+        Tue, 09 Sep 2025 11:29:38 -0700 (PDT)
 Received: from [127.0.1.1] ([46.53.240.27])
-        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-b07833ebe61sm30520666b.89.2025.09.09.11.29.36
+        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-b07833ebe61sm30520666b.89.2025.09.09.11.29.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Sep 2025 11:29:37 -0700 (PDT)
+        Tue, 09 Sep 2025 11:29:38 -0700 (PDT)
 From: Dzmitry Sankouski <dsankouski@gmail.com>
-Date: Tue, 09 Sep 2025 21:29:15 +0300
-Subject: [PATCH v2 5/9] power: supply: max77705_charger: add writable
- properties
+Date: Tue, 09 Sep 2025 21:29:16 +0300
+Subject: [PATCH v2 6/9] power: supply: max77705_charger: rework interrupts
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -85,7 +84,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250909-max77705_77976_charger_improvement-v2-5-a8d2fba47159@gmail.com>
+Message-Id: <20250909-max77705_77976_charger_improvement-v2-6-a8d2fba47159@gmail.com>
 References: <20250909-max77705_77976_charger_improvement-v2-0-a8d2fba47159@gmail.com>
 In-Reply-To: <20250909-max77705_77976_charger_improvement-v2-0-a8d2fba47159@gmail.com>
 To: Chanwoo Choi <cw00.choi@samsung.com>, 
@@ -97,100 +96,83 @@ Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
  linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
  Dzmitry Sankouski <dsankouski@gmail.com>
 X-Mailer: b4 0.14.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1757442571; l=2821;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1757442571; l=2452;
  i=dsankouski@gmail.com; s=20240619; h=from:subject:message-id;
- bh=voRlcLKfoLfnlVLyVO+ZDmBOdNNCSLvdkGqha5/sHqA=;
- b=KRZ7lLKiPymYMTT0VDoUzLme/2qaBON8OoAY12WwYPYekG2N/Cxb6I11J4m/QzntErQqfrAj3
- Wj0j8/WjaR5BsY6d3JKhsYC8SQurz22S/Gz/0RwW1uAdEZo53RQ1CYL
+ bh=AOZdHI28joffYImWPpnLzx5R7A6JCfptSZlkeOeIOYw=;
+ b=DWmY9B7YzsPwPPQ/M7aqpAbYkjkWy5uklAWkZ+VBulSv+3ZTrTYzn9Tg/8o8S2srYf/nQLxAt
+ v5DQaeMng69AU/n9HBZqbOmoxGIuYz0ywXdUAuY73Nt/8tkTbkO7rTN
 X-Developer-Key: i=dsankouski@gmail.com; a=ed25519;
  pk=YJcXFcN1EWrzBYuiE2yi5Mn6WLn6L1H71J+f7X8fMag=
 
-Add INPUT_CURRENT_LIMIT, CONSTANT_CHARGE_CURRENT properties as writeable
-to be able to control input power consumption and charging speed.
+Current implementation uses handle_post_irq to actually handle chgin
+irq. This is not how things are meant to work in regmap-irq.
+
+Remove handle_post_irq, and request a threaded interrupt for chgin.
+
+Fixes: a6a494c8e3ce ("power: supply: max77705: Add charger driver for Maxim 77705")
 
 Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
 ---
- drivers/power/supply/max77705_charger.c | 54 +++++++++++++++++++++++++++++++++
- 1 file changed, 54 insertions(+)
+ drivers/power/supply/max77705_charger.c | 20 +++++++++++---------
+ 1 file changed, 11 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/power/supply/max77705_charger.c b/drivers/power/supply/max77705_charger.c
-index 93d055458849..d6a3cd98c898 100644
+index d6a3cd98c898..4e5219ffa87c 100644
 --- a/drivers/power/supply/max77705_charger.c
 +++ b/drivers/power/supply/max77705_charger.c
-@@ -105,6 +105,17 @@ static int max77705_get_online(struct regmap *regmap, int *val)
- 	return 0;
- }
- 
-+static int max77705_set_integer(struct max77705_charger_data *chg, enum max77705_field_idx fidx,
-+				unsigned int clamp_min, unsigned int clamp_max,
-+				unsigned int div, int val)
-+{
-+	unsigned int regval;
-+
-+	regval = clamp_val(val, clamp_min, clamp_max) / div;
-+
-+	return regmap_field_write(chg->rfield[fidx], regval);
-+}
-+
- static int max77705_check_battery(struct max77705_charger_data *chg, int *val)
- {
- 	unsigned int reg_data;
-@@ -384,12 +395,55 @@ static int max77705_chg_get_property(struct power_supply *psy,
- 	return 0;
- }
- 
-+static int max77705_set_property(struct power_supply *psy,
-+				 enum power_supply_property psp,
-+				 const union power_supply_propval *val)
-+{
-+	struct max77705_charger_data *charger = power_supply_get_drvdata(psy);
-+	int err = 0;
-+
-+	switch (psp) {
-+	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
-+		err = max77705_set_integer(charger, MAX77705_CHG_CC_LIM,
-+					   MAX77705_CURRENT_CHGIN_MIN,
-+					   MAX77705_CURRENT_CHGIN_MAX,
-+					   MAX77705_CURRENT_CHG_STEP,
-+					   val->intval);
-+		break;
-+	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
-+		err = max77705_set_integer(charger, MAX77705_CHG_CHGIN_LIM,
-+					   MAX77705_CURRENT_CHGIN_MIN,
-+					   MAX77705_CURRENT_CHGIN_MAX,
-+					   MAX77705_CURRENT_CHGIN_STEP,
-+					   val->intval);
-+		break;
-+	default:
-+		err = -EINVAL;
-+	}
-+
-+	return err;
-+};
-+
-+static int max77705_property_is_writeable(struct power_supply *psy,
-+					  enum power_supply_property psp)
-+{
-+	switch (psp) {
-+	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
-+	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
-+		return true;
-+	default:
-+		return false;
-+	}
-+}
-+
- static const struct power_supply_desc max77705_charger_psy_desc = {
- 	.name = "max77705-charger",
- 	.type		= POWER_SUPPLY_TYPE_USB,
- 	.properties = max77705_charger_props,
-+	.property_is_writeable	= max77705_property_is_writeable,
- 	.num_properties = ARRAY_SIZE(max77705_charger_props),
- 	.get_property = max77705_chg_get_property,
-+	.set_property		= max77705_set_property,
+@@ -40,13 +40,13 @@ static enum power_supply_property max77705_charger_props[] = {
+ 	POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT,
  };
  
- static void max77705_chgin_isr_work(struct work_struct *work)
+-static int max77705_chgin_irq(void *irq_drv_data)
++static irqreturn_t max77705_chgin_irq(int irq, void *irq_drv_data)
+ {
+ 	struct max77705_charger_data *chg = irq_drv_data;
+ 
+ 	queue_work(chg->wqueue, &chg->chgin_work);
+ 
+-	return 0;
++	return IRQ_HANDLED;
+ }
+ 
+ static const struct regmap_irq max77705_charger_irqs[] = {
+@@ -64,7 +64,6 @@ static struct regmap_irq_chip max77705_charger_irq_chip = {
+ 	.name			= "max77705-charger",
+ 	.status_base		= MAX77705_CHG_REG_INT,
+ 	.mask_base		= MAX77705_CHG_REG_INT_MASK,
+-	.handle_post_irq	= max77705_chgin_irq,
+ 	.num_regs		= 1,
+ 	.irqs			= max77705_charger_irqs,
+ 	.num_irqs		= ARRAY_SIZE(max77705_charger_irqs),
+@@ -593,12 +592,6 @@ static int max77705_charger_probe(struct i2c_client *i2c)
+ 					     "cannot allocate regmap field\n");
+ 	}
+ 
+-	ret = regmap_update_bits(chg->regmap,
+-				MAX77705_CHG_REG_INT_MASK,
+-				MAX77705_CHGIN_IM, 0);
+-	if (ret)
+-		return ret;
+-
+ 	pscfg.fwnode = dev_fwnode(dev);
+ 	pscfg.drv_data = chg;
+ 
+@@ -614,6 +607,15 @@ static int max77705_charger_probe(struct i2c_client *i2c)
+ 	if (ret)
+ 		return dev_err_probe(dev, ret, "failed to add irq chip\n");
+ 
++	ret = devm_request_threaded_irq(dev, regmap_irq_get_virq(irq_data, MAX77705_CHGIN_I),
++				 NULL, max77705_chgin_irq,
++				 IRQF_TRIGGER_HIGH,
++	"chgin-irq", chg);
++	if (ret) {
++		pr_err("%s: Failed to Request IRQ (%d)\n", __func__, ret);
++		return ret;
++	}
++
+ 	chg->wqueue = create_singlethread_workqueue(dev_name(dev));
+ 	if (!chg->wqueue)
+ 		return dev_err_probe(dev, -ENOMEM, "failed to create workqueue\n");
 
 -- 
 2.39.5
