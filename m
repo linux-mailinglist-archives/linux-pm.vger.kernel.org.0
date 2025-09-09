@@ -1,281 +1,148 @@
-Return-Path: <linux-pm+bounces-34302-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34291-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8BC03B50553
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Sep 2025 20:32:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 413E7B50536
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Sep 2025 20:29:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 41C943AF1EF
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Sep 2025 18:32:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 468E61BC86A4
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Sep 2025 18:29:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA47835E4FE;
-	Tue,  9 Sep 2025 18:31:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 279CB352FDC;
+	Tue,  9 Sep 2025 18:29:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="K0XYalmI"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OitNkwcf"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from terminus.zytor.com (terminus.zytor.com [198.137.202.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD09A302CAB;
-	Tue,  9 Sep 2025 18:31:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E20D747F;
+	Tue,  9 Sep 2025 18:29:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757442669; cv=none; b=VVORG+NyNFhw3u7s7SfwW2CA/1YOygQzBySqtWidNtrUCdKnWTtxiDjlemW1cQwKNGY3EOPjEjD0THRMyh8KMuLuAcCX4ClNv44HaBC0/XZ7DI89a1byXrou58Sg6bSMJ7Yi0K9We4hG5AXHyk/QY3LRiQSmdhjTUQ9ZdK8cM/8=
+	t=1757442576; cv=none; b=KfjCqTnn03YLGoNfOhJZVBqJM4b/eZc211fBnCWOZp7oGH/NgJKWudkznBgSkTzO6T0J8Yu145FpFcnODOBNfW9pSXjfc25MEgkPPDAEWOd5ukDQZbQZiZ0+qj0h620P2LUZ9ZddHUvMDaWWb6gAizhVUNhTsj5yobwDktQ5S5M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757442669; c=relaxed/simple;
-	bh=sfspnZ2Xc2kJrFia0AEmuo7v4zNy/L4pJcSHT2DDcEU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=EnwGi/Xm6B+GVlOfcYDR/OCoWA3+dRQ9t8fRhom++I1GlqhmfcyFExYClXHgWhrWjMzEMFSy0wctFdaSl51OqQ+4NEvHPdpfPDvNcMk8TLB1dyqaOoD9OxpOKmLvHUiVLZPJ/DgzEAc9Qy2lvaYapkdnAVvsyV00LJED4QlFCKI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=K0XYalmI; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
-Received: from terminus.zytor.com (terminus.zytor.com [IPv6:2607:7c80:54:3:0:0:0:136])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 589ISSD41542432
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-	Tue, 9 Sep 2025 11:28:38 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 589ISSD41542432
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2025082201; t=1757442519;
-	bh=VNqB3TSQtWjm3nTUpaiiCNmmIt4N6RO62SGzcJafqTc=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=K0XYalmIS1uPRvoH9QT4rdaZNgD7TlcWwAMi105/AZuIXlG+KazrqQpNOVCh3UJD2
-	 35rcqk5TDE/DbC6P5R08BLn8gwF55lXku3ke1rXbwq2Q8Gj13jXkV2mFr7JT6mAyI2
-	 1zS6jamxihp/awKQQ0aqvqUshvdslpBL0Lpb4yyg+8ZMatfPOzGdx8eZKsVBdrN32u
-	 /STpPCnrH+ES0wKIQgNW6WpXo/SomJDNKLvcGJb3+Uy2foM3lPZC3j0UYkv/hrZpaQ
-	 nvIZ4sXrIMSSTT5MrEK2bpvinUDiTy2KLWS1dV31bM3zQRLflD6iNWdXWZZxlbdLJS
-	 Z5rVJOG4thPwA==
-From: "Xin Li (Intel)" <xin@zytor.com>
-To: linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Cc: seanjc@google.com, pbonzini@redhat.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, rafael@kernel.org, pavel@kernel.org,
-        brgerst@gmail.com, xin@zytor.com, david.kaplan@amd.com,
-        peterz@infradead.org, andrew.cooper3@citrix.com,
-        kprateek.nayak@amd.com, arjan@linux.intel.com, chao.gao@intel.com,
-        rick.p.edgecombe@intel.com, dan.j.williams@intel.com
-Subject: [RFC PATCH v1 5/5] KVM: Remove kvm_rebooting and its references
-Date: Tue,  9 Sep 2025 11:28:25 -0700
-Message-ID: <20250909182828.1542362-6-xin@zytor.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20250909182828.1542362-1-xin@zytor.com>
-References: <20250909182828.1542362-1-xin@zytor.com>
+	s=arc-20240116; t=1757442576; c=relaxed/simple;
+	bh=8/VhQMsCYdwokncl/VGkbezDDLNFgwE4Ik+VJqNIH+8=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=RTQbxIJ7Txvp0upOQdz6PcifmNeO7oL57wxdvrzbhThc5oEF3xnMXB3uXoxVzdP/ECHWAFYvjQpwUSY+VQ5CcG+YX9DUQbPgiELJdgmTtZ8LoIiCkL/TZgC5jXbhvLmjHOHDu/eW9620VF6jNGsr0DuPkyrir8bL1P32evGvjgY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OitNkwcf; arc=none smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-b045d56e181so890952566b.2;
+        Tue, 09 Sep 2025 11:29:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1757442573; x=1758047373; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3YvSQYwo7bHxPE4EP4TGCXv9yZH+Ts8UI/kjqLSZAlA=;
+        b=OitNkwcfrjeqJEHdHKdK1pSk1RLLOzKMGI4cgTs2V7S//e37qOkZvfZfO9WduZ7G8E
+         uKMVhLrQoMSmrrt+MSjcrJSO7tpsnz/zq6WMseLUghlA+tmL3gMCgEDk+Yl3XyVi95wG
+         So4Shnqg6sMk9IzS71cO8uwbMP2dykEmtOnrzvXDVi9IqdVHWhv88O9K59UvX5KbGJWZ
+         nYMJtIN4Ff+W9RtA32XJYV5KgnBcJ5F3dXKOfSw8CCmpRByPIgFu8D0gQUVB5j3/AH60
+         kg2IQn7MPitZJK+y0RVen+gdnQ7qgZPxu2izbWSHBzw4fuX48ODDxkHrWdGFbRMUzwoX
+         Kn6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757442573; x=1758047373;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3YvSQYwo7bHxPE4EP4TGCXv9yZH+Ts8UI/kjqLSZAlA=;
+        b=vh36pYWfgc6NzcouilFDPYc/WIJg/6WuBtgxaNaYBG+qJfhH/1Yt7inleIWwjZkS/H
+         6GY6Jp99/uZzt8hCNlerHYPjW2BkTuEOmCVE5MKxINt1N0y9B2gPh1EnxZAJz+aCNoCX
+         m+dghV+usLXaCKuvjKVEyM+pT2ge0f3W7jOnBRpOcQBFxo7Km319tzUnHEel+W14sG/Z
+         rrPJOzQ545SpVvYYQh/qanlZVgrpEFIQAmhXbmpXG9oMVXTlRqhvIldWSh9fYlPT8mTF
+         bqV2+erOLIhk1WB7GwAOkedig7dcekcYmjwprZlTnLpp7oE6OVbrPdghWyeo74RU9zSx
+         yb7g==
+X-Forwarded-Encrypted: i=1; AJvYcCUy3TkgooLsj5y7Np2zr5+cb0M3NfApQQK/bpOHJNfGQ6NRAW1PmMe8Mg+AjslqpIyV2HjEF2psm60=@vger.kernel.org, AJvYcCVRJ6cOVN1JK9n3fwOh4YjzaaFsO4/AIyO9RqCW3ylQmtio31CxzraTf8yWpCFsKEoUREnSvbhup4S4Ce0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwSYvTGBs3Vo5kRcRs/1YrwVyFO5XGZBX1eGn7R3J+4dHgS0ODR
+	oMu7IXOAZiEtThKS6g0uhBbevek4HnhHqLG2zx+H9ddZr0q/7ykD7aMm
+X-Gm-Gg: ASbGncvs+LLdCTEgsbQODlZa2lh56h0ylk//sktvGtlAT18k5KTz0B2x2fZAyeArQB3
+	hkXjYQJzIkmtIFmgqnnKeyDUk6hRA0gOMjHk42JDF3SIezccKnQ/trKZJyXv0WpZVBumc62seN0
+	OalDgFF5wix7R1ssd/PJuBsdQ1+K5cYsaQIH2ftN6A/dSuHvBlst/vg/LlimddoOdYttknYpwPT
+	PJ+1/ElielemQzOr8uMoUCvtbr3QEKFQtwfIQ1CcV3TtLk8NlEdBpNa72j5y6Ih39oJMZhHLQVs
+	6Virl5eZNbePiDWfrKhi5VS47Y/YjlF8hWonYP7ZKfldgpcV8HESlOS26Rbzk8qoHL0bHqjdGur
+	QL8FZX7jwaM/9gl30xIvkOc4RA2AdnnO9/vtNGKl3GA==
+X-Google-Smtp-Source: AGHT+IFcw30pZdVbvqIn23OQkYsVvw7+ElUc8E1dm0PvAq4GMpXt/lHdNRTNqck7AEfAxyfK5cBvMg==
+X-Received: by 2002:a17:907:6eaa:b0:b04:8701:7304 with SMTP id a640c23a62f3a-b04b13bf6e0mr1320121866b.10.1757442572628;
+        Tue, 09 Sep 2025 11:29:32 -0700 (PDT)
+Received: from [127.0.1.1] ([46.53.240.27])
+        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-b07833ebe61sm30520666b.89.2025.09.09.11.29.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Sep 2025 11:29:32 -0700 (PDT)
+From: Dzmitry Sankouski <dsankouski@gmail.com>
+Subject: [PATCH v2 0/9] power: supply: fixes and improvements for
+ max77(705,976) chargers
+Date: Tue, 09 Sep 2025 21:29:10 +0300
+Message-Id: <20250909-max77705_77976_charger_improvement-v2-0-a8d2fba47159@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAPZxwGgC/5WOyw7CIBBFf8WwFqUvUVf+h2kaoNN2kgJ1qKgx/
+ XepC/cu79w7J+fNAhBCYOfNmxFEDOhdCvl2w8ygXA8c25RZLvJKHAvBrXpKKUXVSHmShyaNqAd
+ q0E7kI1hwM4eiKzOpO6WqA0sgrQJwTcqZYUXpch9mRbdxBjO4/Q94D9o0k38kWgsjRqDX+j0Rd
+ Pj8Kl7rlAcMs0/Vahyz9fqXXMy44JDaVhddWxb5pbcKx53xltXLsnwA7pdl2RIBAAA=
+To: Chanwoo Choi <cw00.choi@samsung.com>, 
+ Krzysztof Kozlowski <krzk@kernel.org>, Lee Jones <lee@kernel.org>, 
+ Sebastian Reichel <sre@kernel.org>, 
+ Luca Ceresoli <luca.ceresoli@bootlin.com>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+ Sebastian Reichel <sebastian.reichel@collabora.com>, 
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+ Dzmitry Sankouski <dsankouski@gmail.com>
+X-Mailer: b4 0.14.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1757442571; l=1710;
+ i=dsankouski@gmail.com; s=20240619; h=from:subject:message-id;
+ bh=8/VhQMsCYdwokncl/VGkbezDDLNFgwE4Ik+VJqNIH+8=;
+ b=EOQHuaCWUoFI2GU1R+FHQrOxNrNj3ymMFptThRX1N+zlMd7CD3N2QTXn5WdX0mnwmZudnplAB
+ zEKBwaWAlDjByeiQ/iunIEVjBcOmHvMDCKyddMYNKxQrRVWvnLnhwHf
+X-Developer-Key: i=dsankouski@gmail.com; a=ed25519;
+ pk=YJcXFcN1EWrzBYuiE2yi5Mn6WLn6L1H71J+f7X8fMag=
 
-Drop kvm_rebooting and all related uses.  Virtualization is now disabled
-immediately before a CPU shuts down, eliminating any chance of executing
-virtualization instructions during reboot.
+This series consists of:
+- max77705: interrupt handling fix
+- max77705: make input current limit and charge current limit properties
+  writable
+- max77705: add adaptive input current limit feature
+- max77705: switch to regfields
+- max77705: refactoring
+- max77976: change property for current charge limit value
 
-Signed-off-by: Xin Li (Intel) <xin@zytor.com>
+Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
 ---
- arch/x86/kvm/svm/vmenter.S | 42 ++++++++++++--------------------------
- arch/x86/kvm/vmx/tdx.c     |  4 +---
- arch/x86/kvm/vmx/vmenter.S |  2 --
- arch/x86/kvm/x86.c         |  8 ++------
- include/linux/kvm_host.h   |  1 -
- virt/kvm/kvm_main.c        | 15 ++------------
- 6 files changed, 18 insertions(+), 54 deletions(-)
+Changes in v2:
+- fix charger register protection unlock
+- Link to v1: https://lore.kernel.org/r/20250830-max77705_77976_charger_improvement-v1-0-e976db3fd432@gmail.com
 
-diff --git a/arch/x86/kvm/svm/vmenter.S b/arch/x86/kvm/svm/vmenter.S
-index 235c4af6b692..d530f62679b9 100644
---- a/arch/x86/kvm/svm/vmenter.S
-+++ b/arch/x86/kvm/svm/vmenter.S
-@@ -145,7 +145,6 @@ SYM_FUNC_START(__svm_vcpu_run)
- 	 */
- 	mov SVM_vmcb01_pa(%_ASM_DI), %_ASM_AX
- 1:	vmload %_ASM_AX
--2:
- 
- 	/* Get svm->current_vmcb->pa into RAX. */
- 	mov SVM_current_vmcb(%_ASM_DI), %_ASM_AX
-@@ -173,8 +172,8 @@ SYM_FUNC_START(__svm_vcpu_run)
- 	VM_CLEAR_CPU_BUFFERS
- 
- 	/* Enter guest mode */
--3:	vmrun %_ASM_AX
--4:
-+2:	vmrun %_ASM_AX
-+
- 	/* Pop @svm to RAX while it's the only available register. */
- 	pop %_ASM_AX
- 
-@@ -200,13 +199,11 @@ SYM_FUNC_START(__svm_vcpu_run)
- 	mov %_ASM_AX, %_ASM_DI
- 
- 	mov SVM_vmcb01_pa(%_ASM_DI), %_ASM_AX
--5:	vmsave %_ASM_AX
--6:
-+3:	vmsave %_ASM_AX
- 
- 	/* Restores GSBASE among other things, allowing access to percpu data.  */
- 	pop %_ASM_AX
--7:	vmload %_ASM_AX
--8:
-+4:	vmload %_ASM_AX
- 
- 	/* IMPORTANT: Stuff the RSB immediately after VM-Exit, before RET! */
- 	FILL_RETURN_BUFFER %_ASM_AX, RSB_CLEAR_LOOPS, X86_FEATURE_RSB_VMEXIT
-@@ -269,23 +266,12 @@ SYM_FUNC_START(__svm_vcpu_run)
- 	RESTORE_GUEST_SPEC_CTRL_BODY
- 	RESTORE_HOST_SPEC_CTRL_BODY (%_ASM_SP)
- 
--10:	cmpb $0, _ASM_RIP(kvm_rebooting)
--	jne 2b
--	ud2
--30:	cmpb $0, _ASM_RIP(kvm_rebooting)
--	jne 4b
--	ud2
--50:	cmpb $0, _ASM_RIP(kvm_rebooting)
--	jne 6b
--	ud2
--70:	cmpb $0, _ASM_RIP(kvm_rebooting)
--	jne 8b
--	ud2
--
--	_ASM_EXTABLE(1b, 10b)
--	_ASM_EXTABLE(3b, 30b)
--	_ASM_EXTABLE(5b, 50b)
--	_ASM_EXTABLE(7b, 70b)
-+5:	ud2
-+
-+	_ASM_EXTABLE(1b, 5b)
-+	_ASM_EXTABLE(2b, 5b)
-+	_ASM_EXTABLE(3b, 5b)
-+	_ASM_EXTABLE(4b, 5b)
- 
- SYM_FUNC_END(__svm_vcpu_run)
- 
-@@ -343,7 +329,7 @@ SYM_FUNC_START(__svm_sev_es_vcpu_run)
- 
- 	/* Enter guest mode */
- 1:	vmrun %rax
--2:
-+
- 	/* IMPORTANT: Stuff the RSB immediately after VM-Exit, before RET! */
- 	FILL_RETURN_BUFFER %rax, RSB_CLEAR_LOOPS, X86_FEATURE_RSB_VMEXIT
- 
-@@ -365,11 +351,9 @@ SYM_FUNC_START(__svm_sev_es_vcpu_run)
- 	RESTORE_GUEST_SPEC_CTRL_BODY
- 	RESTORE_HOST_SPEC_CTRL_BODY %sil
- 
--3:	cmpb $0, kvm_rebooting(%rip)
--	jne 2b
--	ud2
-+2:	ud2
- 
--	_ASM_EXTABLE(1b, 3b)
-+	_ASM_EXTABLE(1b, 2b)
- 
- SYM_FUNC_END(__svm_sev_es_vcpu_run)
- #endif /* CONFIG_KVM_AMD_SEV */
-diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
-index 66744f5768c8..cfe5f8b63973 100644
---- a/arch/x86/kvm/vmx/tdx.c
-+++ b/arch/x86/kvm/vmx/tdx.c
-@@ -2052,10 +2052,8 @@ int tdx_handle_exit(struct kvm_vcpu *vcpu, fastpath_t fastpath)
- 	 * Handle TDX SW errors, including TDX_SEAMCALL_UD, TDX_SEAMCALL_GP and
- 	 * TDX_SEAMCALL_VMFAILINVALID.
- 	 */
--	if (unlikely((vp_enter_ret & TDX_SW_ERROR) == TDX_SW_ERROR)) {
--		KVM_BUG_ON(!kvm_rebooting, vcpu->kvm);
-+	if (unlikely((vp_enter_ret & TDX_SW_ERROR) == TDX_SW_ERROR))
- 		goto unhandled_exit;
--	}
- 
- 	if (unlikely(tdx_failed_vmentry(vcpu))) {
- 		/*
-diff --git a/arch/x86/kvm/vmx/vmenter.S b/arch/x86/kvm/vmx/vmenter.S
-index 0a6cf5bff2aa..3457b5e1f856 100644
---- a/arch/x86/kvm/vmx/vmenter.S
-+++ b/arch/x86/kvm/vmx/vmenter.S
-@@ -293,8 +293,6 @@ SYM_INNER_LABEL_ALIGN(vmx_vmexit, SYM_L_GLOBAL)
- 	RET
- 
- .Lfixup:
--	cmpb $0, _ASM_RIP(kvm_rebooting)
--	jne .Lvmfail
- 	ud2
- .Lvmfail:
- 	/* VM-Fail: set return value to 1 */
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 8b9f64770684..1abc4550fd76 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -687,15 +687,11 @@ static void drop_user_return_notifiers(void)
- 
- /*
-  * Handle a fault on a hardware virtualization (VMX or SVM) instruction.
-- *
-- * Hardware virtualization extension instructions may fault if a reboot turns
-- * off virtualization while processes are running.  Usually after catching the
-- * fault we just panic; during reboot instead the instruction is ignored.
-  */
- noinstr void kvm_spurious_fault(void)
- {
--	/* Fault while not rebooting.  We want the trace. */
--	BUG_ON(!kvm_rebooting);
-+	/* We want the trace. */
-+	BUG_ON(true);
- }
- EXPORT_SYMBOL_GPL(kvm_spurious_fault);
- 
-diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-index 151305b33bce..2d9c306db4f0 100644
---- a/include/linux/kvm_host.h
-+++ b/include/linux/kvm_host.h
-@@ -2276,7 +2276,6 @@ static inline bool kvm_check_request(int req, struct kvm_vcpu *vcpu)
- 
- #ifdef CONFIG_KVM_GENERIC_HARDWARE_ENABLING
- extern bool enable_virt_at_load;
--extern bool kvm_rebooting;
- #endif
- 
- extern unsigned int halt_poll_ns;
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index 6e86c6a45a71..0037761c1a51 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -5559,9 +5559,6 @@ bool enable_virt_at_load = true;
- module_param(enable_virt_at_load, bool, 0444);
- EXPORT_SYMBOL_GPL(enable_virt_at_load);
- 
--__visible bool kvm_rebooting;
--EXPORT_SYMBOL_GPL(kvm_rebooting);
--
- static DEFINE_PER_CPU(bool, virtualization_enabled);
- static DEFINE_MUTEX(kvm_usage_lock);
- static int kvm_usage_count;
-@@ -5610,18 +5607,10 @@ static int kvm_offline_cpu(unsigned int cpu)
- static void kvm_shutdown(void)
- {
- 	/*
--	 * Disable hardware virtualization and set kvm_rebooting to indicate
--	 * that KVM has asynchronously disabled hardware virtualization, i.e.
--	 * that relevant errors and exceptions aren't entirely unexpected.
--	 * Some flavors of hardware virtualization need to be disabled before
--	 * transferring control to firmware (to perform shutdown/reboot), e.g.
--	 * on x86, virtualization can block INIT interrupts, which are used by
--	 * firmware to pull APs back under firmware control.  Note, this path
--	 * is used for both shutdown and reboot scenarios, i.e. neither name is
--	 * 100% comprehensive.
-+	 * Note, this path is used for both shutdown and reboot scenarios, i.e.
-+	 * neither name is 100% comprehensive.
- 	 */
- 	pr_info("kvm: exiting hardware virtualization\n");
--	kvm_rebooting = true;
- 	on_each_cpu(kvm_disable_virtualization_cpu, NULL, 1);
- }
- 
+---
+Dzmitry Sankouski (9):
+      power: supply: max77705_charger: move active discharge setting to mfd parent
+      power: supply: max77705_charger: refactoring: rename charger to chg
+      power: supply: max77705_charger: use regfields for config registers
+      power: supply: max77705_charger: return error when config fails
+      power: supply: max77705_charger: add writable properties
+      power: supply: max77705_charger: rework interrupts
+      power: supply: max77705_charger: use REGMAP_IRQ_REG_LINE macro
+      power: supply: max77705_charger: implement aicl feature
+      power: supply: max77976_charger: fix constant current reporting
+
+ drivers/mfd/max77705.c                  |   3 +
+ drivers/power/supply/max77705_charger.c | 386 +++++++++++++++++++++-----------
+ drivers/power/supply/max77976_charger.c |  12 +-
+ include/linux/power/max77705_charger.h  | 149 ++++++------
+ 4 files changed, 345 insertions(+), 205 deletions(-)
+---
+base-commit: be5d4872e528796df9d7425f2bd9b3893eb3a42c
+change-id: 20250830-max77705_77976_charger_improvement-e3f417bfaa56
+
+Best regards,
 -- 
-2.51.0
+Dzmitry Sankouski <dsankouski@gmail.com>
 
 
