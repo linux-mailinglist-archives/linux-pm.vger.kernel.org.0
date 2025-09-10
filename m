@@ -1,195 +1,206 @@
-Return-Path: <linux-pm+bounces-34353-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34354-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A604B51416
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 12:33:00 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DFE34B5145E
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 12:48:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 967C87BD5D3
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 10:28:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E390F1C80B0F
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 10:49:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 939643164D1;
-	Wed, 10 Sep 2025 10:26:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14F113168E8;
+	Wed, 10 Sep 2025 10:48:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uxlXJBtZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ikuwFCWc"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 693A23164C0;
-	Wed, 10 Sep 2025 10:26:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD1A330DEB0;
+	Wed, 10 Sep 2025 10:48:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757500018; cv=none; b=kQHt3Tbf/1yAJCH4UlS2oSrhe0u+vdNyzwlCPA2IgE3BW/xUFzaryaG23yUVoKCUR0EXLu6bKOIhU4kyAZZl9V2s9d9ni7ytImUZ+v63oO4dmypOHv/PbVmqNwWUMMugkTXC8ngarEGhuah689vnc/mWNUUTJrdZWpSpTSR5d58=
+	t=1757501284; cv=none; b=IkmD6tvQhSljQwkuObzfsd8nt+xfyNOdddhFkUV2c6k3Vpwjj6H/TJDe9vCUUK73mejdNFGpRPDFz+IFj0VIExJXNajUvVP17a46BCSQZgS1Yk6WALM3OrbNJM9a9RWQzdmm85pQBR13sjodcWb9/VBPP7PfzI6r+nY2Vn0kuoM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757500018; c=relaxed/simple;
-	bh=bDfRAQYYJeFwDu+iCdyQBIBE3rcoxBIvTJMBJoSMxKA=;
+	s=arc-20240116; t=1757501284; c=relaxed/simple;
+	bh=qDpgc9lbGYlwfBYi10xPhVUs43JbbR7o2l7CiQw1yPE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=aYGpTXgaWsA4Rv7fMi8CElh2auFbtoaEX2sUH09BG7T6JWJ+lFb95jox6h0uAIQqSIKSO9zAoXb1N14pn5U1xublzV6jh5hnyPbipryDS7uB5d/Xvl1gjKHI7xjILdX3HgZRdAogCW+v33YFPBHtp1juQtcxSYrt0JmBIseHe2w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uxlXJBtZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01037C4CEF0;
-	Wed, 10 Sep 2025 10:26:58 +0000 (UTC)
+	 To:Cc:Content-Type; b=Z+RreGabh30TZ7HTuJv0nbMoD78q8q25tiwOnBK4gm1/6ZPBn4xSOmb/AoeiO1V/NtPUdx8kWB5aJdZqDcMtgCi3N4ZwT20GFhs3X9Ob38FSdHnD8cFyIFFlOXHR5ntkYVRR22eQZPzAAIUsGIdjgqKms3pvMUQ9oomM3LphOJo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ikuwFCWc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57F4EC4CEF5;
+	Wed, 10 Sep 2025 10:48:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757500018;
-	bh=bDfRAQYYJeFwDu+iCdyQBIBE3rcoxBIvTJMBJoSMxKA=;
+	s=k20201202; t=1757501283;
+	bh=qDpgc9lbGYlwfBYi10xPhVUs43JbbR7o2l7CiQw1yPE=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=uxlXJBtZXrPyR0/fdSiywoBa+aXpaOXLPreyDaSCg6mirW8FPDPWRMHMkpY0THeI3
-	 6FwUI2Jhsg3WaNZYYSXf7vcICsFhtQ8SwZGCdkZ5r3NXOv9Kl4F/n/Hupv0dC/98D9
-	 tBChFGwLy3vjBO6hQ7y+1mpKac7Uq9dtyYx6AefQAMTieHqPJ4LDG6bVWhhAf8QUc/
-	 wLXUPp/8nkbPfsMQBcDJdrsR5rCAULH2iy45POzhQaXl6lc8hUjVMvygo/IKr2kaXo
-	 L8GBTReFj7keYV8Lk5wcy5EHrl98F15kTQVDgGus3qw9CifonPDc9EhHqxJgGlpgYo
-	 ka0zKxrFTdIww==
-Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-62182f350ddso2289041eaf.3;
-        Wed, 10 Sep 2025 03:26:57 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUES53T9ZOUMD9L5J30rh+NT31GgNZr1gwr8xo47SacdpWG9S6Qyph6q/LpMc/8gnF3bQKhIgiEc54=@vger.kernel.org, AJvYcCULs7h3kIYWf7Cb4K/m7CLkLwbW51Us4YDlmr8ItYwd+xTtdiB+6Lfp6mlRLxwmM3gH7X6yErBRHL/QaFQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy37dCUu4P/Qo+gwvDLo6uaQ9WMjM1k6nreoOK9c8dShw0obV6V
-	EsaG2XCaRjlP29H17FAZWDjCxnhbNHJApWexG4th/qz9msV/krsQY4IekkjgGdbNyN9plH/AhxM
-	kUxiEXmVbsnNYo/u9ri+xfdlaS3IQXPY=
-X-Google-Smtp-Source: AGHT+IEW1ZMJYmF6fePsBwm2GCT1JKTtlATrU+IU3wp5hSKaQdIZweJd49rKiN9bwXqO9xNq7YIri6kNCsNL4ZS3CAg=
-X-Received: by 2002:a05:6820:2293:b0:621:71a0:5b67 with SMTP id
- 006d021491bc7-62178a9c5b3mr6831201eaf.7.1757500012941; Wed, 10 Sep 2025
- 03:26:52 -0700 (PDT)
+	b=ikuwFCWcJQMbXqT6ZfYU0s7v1wnqccpphYl74kAuoodBa3YQVNSPK8ILuKz8wcTxE
+	 +zWH18fBpbZrhiLdGwT8ygna2yTT+zwBZSiezbGREhnjLk+tc5czoYnwDhUbeyh1q0
+	 Rb7cD3ucwypUrs6NoKbQGoC8fi3QWLQ5N3x60ckawA9IG62BEJOWifg6bqq/8O+efA
+	 NzueSrPZchkr7v7LjtR+VaxOnsDHQhYPqyOlwE9bBIGBhKws8UYgCDM6yBYM6zSN1p
+	 INGEni4w/SMqZrvQvd1BBIoUSYE1nmKAPa7Pytio9oFS9lLDR6srh//tBVH8iRjmXA
+	 3EJNZNRdeengg==
+Received: by mail-oo1-f49.google.com with SMTP id 006d021491bc7-61e783a1e00so4364560eaf.1;
+        Wed, 10 Sep 2025 03:48:03 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU8hmPYyTfgsR9wDjcdY75E0R4b2N0l5j9V9s/Z+vm+qXs/q2hj7v28PMCaS0/suK/+Jj0DGDhbeB0=@vger.kernel.org, AJvYcCUSWUq00e2PWhWpHYgwUFmCki1S2rzI54xFQiOt42fi2+I4J+G9t67OQKJSPh+bg3huFdVfk7mlU4szYas=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwK3tAU5Zb9/1kju1m4Xfnpskp546DmGQlxckbb2VVGhhgCZ53t
+	61lO+RsFbrKwffahzOg3INwFg+stvrObdmNE0AZ0J1qhuXpPqhMecDynscQqO9PgwhrcmxioebY
+	8h9t7QAL0p0BQsjmZYTFUBwFh1oExMxY=
+X-Google-Smtp-Source: AGHT+IFC3+WBj79KyRnaqtx2xXM/liykO21L96RODQt39xRNhwTw4jpy+n/c1yaN69BCg98VErRnV2TPPxbV5z7r5wo=
+X-Received: by 2002:a05:6820:1ad0:b0:621:aa5e:f502 with SMTP id
+ 006d021491bc7-621aa5ef7b3mr695472eaf.5.1757501277728; Wed, 10 Sep 2025
+ 03:47:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250908230655.2562440-1-sohil.mehta@intel.com>
-In-Reply-To: <20250908230655.2562440-1-sohil.mehta@intel.com>
+References: <20250908075443.208570-1-aboorvad@linux.ibm.com>
+In-Reply-To: <20250908075443.208570-1-aboorvad@linux.ibm.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 10 Sep 2025 12:26:40 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0i3B9LQmU-o5Reh6T+sVEPeGqMvEf7f_3Wdh6jc+sRBeA@mail.gmail.com>
-X-Gm-Features: Ac12FXyY-gpWX307z-g_sZf8fnXHzp98YH9CeYGgxf7ItUtBMs4z60VBBzSvkHI
-Message-ID: <CAJZ5v0i3B9LQmU-o5Reh6T+sVEPeGqMvEf7f_3Wdh6jc+sRBeA@mail.gmail.com>
-Subject: Re: [PATCH v4] cpufreq: ondemand: Update the efficient idle check for
- Intel extended Families
-To: Sohil Mehta <sohil.mehta@intel.com>
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org, 
-	x86@kernel.org, Tony Luck <tony.luck@intel.com>, Zhao Liu <zhao1.liu@linux.intel.com>, 
-	linux-kernel@vger.kernel.org
+Date: Wed, 10 Sep 2025 12:47:46 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0hLYkeStuZqUsjSphXmBovAxCvvzx4JJJw=3AmDYjdCtQ@mail.gmail.com>
+X-Gm-Features: Ac12FXzBD6IaoVn6PUKKFS-uKjzoe8FMWezXsDom8HFc21nQgUtJ6Hl_t8__7EE
+Message-ID: <CAJZ5v0hLYkeStuZqUsjSphXmBovAxCvvzx4JJJw=3AmDYjdCtQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/1] cpuidle: menu: Add residency threshold for
+ non-polling state selection
+To: Aboorva Devarajan <aboorvad@linux.ibm.com>
+Cc: rafael@kernel.org, christian.loehle@arm.com, daniel.lezcano@linaro.org, 
+	gautam@linux.ibm.com, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Sep 9, 2025 at 1:08=E2=80=AFAM Sohil Mehta <sohil.mehta@intel.com> =
-wrote:
->
-> IO time is considered busy by default for modern Intel processors. The
-> current check covers recent Family 6 models but excludes the brand new
-> Families 18 and 19.
->
-> According to Arjan van de Ven, the model check was mainly due to a lack
-> of testing on systems before INTEL_CORE2_MEROM. He suggests considering
-> all Intel processors as having an efficient idle.
->
-> Extend the IO busy classification to all Intel processors starting with
-> Family 6, including Family 15 (Pentium 4s) and upcoming Families 18/19.
->
-> Use an x86 VFM check and move the function to the header file to avoid
-> using arch-specific #ifdefs in the C file.
->
-> Signed-off-by: Sohil Mehta <sohil.mehta@intel.com>
+Please change the subject of the patch to something like "cpuidle:
+menu: Use residency threshold in polling state override decisions"
+which more precisely reflects the patch purpose IMV.
 
-Applied (with a minor whitespace adjustment) as 6.18 material, thanks!
+On Mon, Sep 8, 2025 at 9:54=E2=80=AFAM Aboorva Devarajan <aboorvad@linux.ib=
+m.com> wrote:
+>
+> On virtualized PowerPC (pseries) systems, where only one polling state
+> (Snooze) and one deep state (CEDE) are available, selecting CEDE when
+> the predicted idle duration exceeds the target residency of the CEDE
 
+If the target residency is exceeded by the predicted idle duration, it
+should be fine to select the given state.
+
+Did you really mean "less than" here?  That would be consistent with
+the code change.
+
+> state can hurt performance. In such cases, the entry/exit overhead of
+> CEDE outweighs the power savings, leading to unnecessary state transition=
+s
+> and higher latency.
+>
+> Menu governor currently contains a special-case rule that prioritizes
+> the first non-polling state over polling, even when its target residency
+> is much longer than the predicted idle duration. On PowerPC/pseries,
+> where the gap between the polling state (Snooze) and the first non-pollin=
+g
+> state (CEDE) is large, this behavior causes performance regressions.
+>
+> This patch refines the special case by adding an extra requirement:
+> the first non-polling state may only be chosen if its
+> target_residency_ns is below the defined RESIDENCY_THRESHOLD_NS. If this
+> condition is not met, the non-polling state is not selected, and polling
+> state is retained instead.
+>
+> This change is limited to the single special-case condition for the first
+> non-polling state. The general state selection logic in the menu governor
+> remains unchanged.
+>
+> Performance improvement observed with pgbench on PowerPC (pseries)
+> system:
+> +---------------------------+------------+------------+------------+
+> | Metric                    | Baseline   | Patched    | Change (%) |
+> +---------------------------+------------+------------+------------+
+> | Transactions/sec (TPS)    | 495,210    | 536,982    | +8.45%     |
+> | Avg latency (ms)          | 0.163      | 0.150      | -7.98%     |
+> +---------------------------+------------+------------+------------+
+> CPUIdle state usage:
+> +--------------+--------------+-------------+
+> | Metric       | Baseline     | Patched     |
+> +--------------+--------------+-------------+
+> | Total usage  | 12,735,820   | 13,918,442  |
+> | Above usage  | 11,401,520   | 1,598,210   |
+> | Below usage  | 20,145       | 702,395     |
+> +--------------+--------------+-------------+
+>
+> Above/Total and Below/Total usage percentages which indicates
+> mispredictions:
+> +------------------------+-----------+---------+
+> | Metric                 | Baseline  | Patched |
+> +------------------------+-----------+---------+
+> | Above % (Above/Total)  | 89.56%    | 11.49%  |
+> | Below % (Below/Total)  | 0.16%     | 5.05%   |
+> | Total cpuidle miss (%) | 89.72%    | 16.54%  |
+> +------------------------+-----------+---------+
+>
+> The results show that restricting non-polling state selection to
+> cases where its residency is within the threshold reduces mispredictions,
+> lowers unnecessary state transitions, and improves overall throughput.
+>
+> Signed-off-by: Aboorva Devarajan <aboorvad@linux.ibm.com>
 > ---
-> v4:
->  - Move the function check to the header file as an inline function.
->  - Combine x86 specific #ifdefs.
 >
-> v3: https://lore.kernel.org/lkml/20250826183644.220093-1-sohil.mehta@inte=
-l.com/
->  - Posting this patch separately since the core family cleanup series
->    was merged without it.
->  - Improve commit message and code comments.
+> v2: https://lore.kernel.org/all/20250317060357.29451-1-aboorvad@linux.ibm=
+.com/
+>
+> Changes in v2 -> v3:
+>   - Modifed the patch following Rafael's feedback, incorporated a residen=
+cy threshold check
+>     (s->target_residency_ns < RESIDENCY_THRESHOLD_NS) as suggested.
+>   - Updated commit message accordingly.
 > ---
->  drivers/cpufreq/cpufreq_ondemand.c | 25 +------------------------
->  drivers/cpufreq/cpufreq_ondemand.h | 22 ++++++++++++++++++++++
->  2 files changed, 23 insertions(+), 24 deletions(-)
+>  drivers/cpuidle/governors/menu.c | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
 >
-> diff --git a/drivers/cpufreq/cpufreq_ondemand.c b/drivers/cpufreq/cpufreq=
-_ondemand.c
-> index 0e65d37c9231..a6ecc203f7b7 100644
-> --- a/drivers/cpufreq/cpufreq_ondemand.c
-> +++ b/drivers/cpufreq/cpufreq_ondemand.c
-> @@ -29,29 +29,6 @@ static struct od_ops od_ops;
+> diff --git a/drivers/cpuidle/governors/menu.c b/drivers/cpuidle/governors=
+/menu.c
+> index b2e3d0b0a116..d25b04539109 100644
+> --- a/drivers/cpuidle/governors/menu.c
+> +++ b/drivers/cpuidle/governors/menu.c
+> @@ -316,11 +316,13 @@ static int menu_select(struct cpuidle_driver *drv, =
+struct cpuidle_device *dev,
 >
->  static unsigned int default_powersave_bias;
->
-> -/*
-> - * Not all CPUs want IO time to be accounted as busy; this depends on ho=
-w
-> - * efficient idling at a higher frequency/voltage is.
-> - * Pavel Machek says this is not so for various generations of AMD and o=
-ld
-> - * Intel systems.
-> - * Mike Chan (android.com) claims this is also not true for ARM.
-> - * Because of this, whitelist specific known (series) of CPUs by default=
-, and
-> - * leave all others up to the user.
-> - */
-> -static int should_io_be_busy(void)
-> -{
-> -#if defined(CONFIG_X86)
-> -       /*
-> -        * For Intel, Core 2 (model 15) and later have an efficient idle.
-> -        */
-> -       if (boot_cpu_data.x86_vendor =3D=3D X86_VENDOR_INTEL &&
-> -                       boot_cpu_data.x86 =3D=3D 6 &&
-> -                       boot_cpu_data.x86_model >=3D 15)
-> -               return 1;
-> -#endif
-> -       return 0;
-> -}
-> -
->  /*
->   * Find right freq to be set now with powersave_bias on.
->   * Returns the freq_hi to be used right now and will set freq_hi_delay_u=
-s,
-> @@ -377,7 +354,7 @@ static int od_init(struct dbs_data *dbs_data)
->         dbs_data->sampling_down_factor =3D DEF_SAMPLING_DOWN_FACTOR;
->         dbs_data->ignore_nice_load =3D 0;
->         tuners->powersave_bias =3D default_powersave_bias;
-> -       dbs_data->io_is_busy =3D should_io_be_busy();
-> +       dbs_data->io_is_busy =3D od_should_io_be_busy();
->
->         dbs_data->tuners =3D tuners;
->         return 0;
-> diff --git a/drivers/cpufreq/cpufreq_ondemand.h b/drivers/cpufreq/cpufreq=
-_ondemand.h
-> index 1af8e5c4b86f..eb35ec19fa86 100644
-> --- a/drivers/cpufreq/cpufreq_ondemand.h
-> +++ b/drivers/cpufreq/cpufreq_ondemand.h
-> @@ -24,3 +24,25 @@ static inline struct od_policy_dbs_info *to_dbs_info(s=
-truct policy_dbs_info *pol
->  struct od_dbs_tuners {
->         unsigned int powersave_bias;
->  };
-> +
-> +#ifdef CONFIG_X86
-> +#include <asm/cpu_device_id.h>
-> +/*
-> + * Not all CPUs want IO time to be accounted as busy; this depends on
-> + * how efficient idling at a higher frequency/voltage is.
-> + *
-> + * Pavel Machek says this is not so for various generations of AMD and
-> + * old Intel systems. Mike Chan (android.com) claims this is also not
-> + * true for ARM.
-> + *
-> + * Because of this, select a known series of Intel CPUs (Family 6 and
-> + * later) by default, and leave all others up to the user.
-> + */
-> +static inline bool od_should_io_be_busy(void)
-> +{
-> +       return (boot_cpu_data.x86_vendor =3D=3D X86_VENDOR_INTEL &&
-> +               boot_cpu_data.x86_vfm >=3D INTEL_PENTIUM_PRO);
-> +}
-> +#else
-> +static inline bool od_should_io_be_busy(void) { return false; }
-> +#endif
+>                 if (s->target_residency_ns > predicted_ns) {
+>                         /*
+> -                        * Use a physical idle state, not busy polling, u=
+nless
+> -                        * a timer is going to trigger soon enough.
+> +                        * Use a physical idle state instead of busy poll=
+ing
+> +                        * if the next timer doesn't expire soon and its
+> +                        * target residency is below the residency thresh=
+old.
+
+I would rephrase this somewhat, like this:
+
+* Use a physical idle state instead of busy polling so long as
+* its target residency is below the residency threshold and the
+* next timer doesn't expire soon.
+
+>                          */
+>                         if ((drv->states[idx].flags & CPUIDLE_FLAG_POLLIN=
+G) &&
+> -                           s->target_residency_ns <=3D data->next_timer_=
+ns) {
+> +                           s->target_residency_ns <=3D data->next_timer_=
+ns &&
+> +                           s->target_residency_ns < RESIDENCY_THRESHOLD_=
+NS) {
+
+And maybe adjust the checks ordering here.
+
+The point is that on the example platform in question
+s->target_residency_ns is always above RESIDENCY_THRESHOLD_NS, so it
+is never really necessary to check data->next_timer_ns in which case
+the HW should be able to optimize this.
+
+>                                 predicted_ns =3D s->target_residency_ns;
+>                                 idx =3D i;
+>                                 break;
 > --
-> 2.43.0
->
 
