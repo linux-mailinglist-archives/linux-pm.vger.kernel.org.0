@@ -1,206 +1,232 @@
-Return-Path: <linux-pm+bounces-34354-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34355-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DFE34B5145E
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 12:48:54 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 39E1AB5151B
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 13:12:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E390F1C80B0F
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 10:49:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 37C8A445262
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 11:11:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14F113168E8;
-	Wed, 10 Sep 2025 10:48:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F6F3319878;
+	Wed, 10 Sep 2025 11:11:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ikuwFCWc"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YKGZCT6/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD1A330DEB0;
-	Wed, 10 Sep 2025 10:48:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757501284; cv=none; b=IkmD6tvQhSljQwkuObzfsd8nt+xfyNOdddhFkUV2c6k3Vpwjj6H/TJDe9vCUUK73mejdNFGpRPDFz+IFj0VIExJXNajUvVP17a46BCSQZgS1Yk6WALM3OrbNJM9a9RWQzdmm85pQBR13sjodcWb9/VBPP7PfzI6r+nY2Vn0kuoM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757501284; c=relaxed/simple;
-	bh=qDpgc9lbGYlwfBYi10xPhVUs43JbbR7o2l7CiQw1yPE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Z+RreGabh30TZ7HTuJv0nbMoD78q8q25tiwOnBK4gm1/6ZPBn4xSOmb/AoeiO1V/NtPUdx8kWB5aJdZqDcMtgCi3N4ZwT20GFhs3X9Ob38FSdHnD8cFyIFFlOXHR5ntkYVRR22eQZPzAAIUsGIdjgqKms3pvMUQ9oomM3LphOJo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ikuwFCWc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57F4EC4CEF5;
-	Wed, 10 Sep 2025 10:48:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757501283;
-	bh=qDpgc9lbGYlwfBYi10xPhVUs43JbbR7o2l7CiQw1yPE=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=ikuwFCWcJQMbXqT6ZfYU0s7v1wnqccpphYl74kAuoodBa3YQVNSPK8ILuKz8wcTxE
-	 +zWH18fBpbZrhiLdGwT8ygna2yTT+zwBZSiezbGREhnjLk+tc5czoYnwDhUbeyh1q0
-	 Rb7cD3ucwypUrs6NoKbQGoC8fi3QWLQ5N3x60ckawA9IG62BEJOWifg6bqq/8O+efA
-	 NzueSrPZchkr7v7LjtR+VaxOnsDHQhYPqyOlwE9bBIGBhKws8UYgCDM6yBYM6zSN1p
-	 INGEni4w/SMqZrvQvd1BBIoUSYE1nmKAPa7Pytio9oFS9lLDR6srh//tBVH8iRjmXA
-	 3EJNZNRdeengg==
-Received: by mail-oo1-f49.google.com with SMTP id 006d021491bc7-61e783a1e00so4364560eaf.1;
-        Wed, 10 Sep 2025 03:48:03 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU8hmPYyTfgsR9wDjcdY75E0R4b2N0l5j9V9s/Z+vm+qXs/q2hj7v28PMCaS0/suK/+Jj0DGDhbeB0=@vger.kernel.org, AJvYcCUSWUq00e2PWhWpHYgwUFmCki1S2rzI54xFQiOt42fi2+I4J+G9t67OQKJSPh+bg3huFdVfk7mlU4szYas=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwK3tAU5Zb9/1kju1m4Xfnpskp546DmGQlxckbb2VVGhhgCZ53t
-	61lO+RsFbrKwffahzOg3INwFg+stvrObdmNE0AZ0J1qhuXpPqhMecDynscQqO9PgwhrcmxioebY
-	8h9t7QAL0p0BQsjmZYTFUBwFh1oExMxY=
-X-Google-Smtp-Source: AGHT+IFC3+WBj79KyRnaqtx2xXM/liykO21L96RODQt39xRNhwTw4jpy+n/c1yaN69BCg98VErRnV2TPPxbV5z7r5wo=
-X-Received: by 2002:a05:6820:1ad0:b0:621:aa5e:f502 with SMTP id
- 006d021491bc7-621aa5ef7b3mr695472eaf.5.1757501277728; Wed, 10 Sep 2025
- 03:47:57 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6436D30AD10;
+	Wed, 10 Sep 2025 11:11:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.12
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1757502679; cv=fail; b=XShWqpZaWpiyUgCbUObSC3pxaa8MIVP+PozoIb3Zp9Zv68rUU6vgHQ61rYT7Z9RrCBHWrH2zOhctRBDCpK7hHo77HLBf+ycTQB+R4di/Mq35Gy4L1oT8bml7fug4WZ0aZpCaiW6PFt9A92+O1mBMZPOd8ci5PmIsgrEHdcOYH44=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1757502679; c=relaxed/simple;
+	bh=EGOfaTfMKd1th0WwKk698kzRFp1GecqjPor3uTjt2w8=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=rxS0iVSMVMPB2AMUYEFhL8CobvzO+awyY1mYLKtAMhjZbj8ErM9MwCYpjVKdgL5uUKM/XXrmjYm8lzic6HPjp/f/i0Ie90vlMs9e5BxRSciOxVBVEyVhSnpWxm7Ia3BYx4PglzPSDo4U+wOBjuqFpRZOggKSV2HfYSuAASb3SiI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YKGZCT6/; arc=fail smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1757502677; x=1789038677;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=EGOfaTfMKd1th0WwKk698kzRFp1GecqjPor3uTjt2w8=;
+  b=YKGZCT6/XkSY81Gia85x/4VqR5ySb9ahjBaM0XL8yy/yNIFp785b9tt9
+   WoAD1GM91z5RgdXwG83mNw9j5+eFrgj4A+XCU8iq26SNeV2kGIfqlVyCG
+   EBEyI2Iq5sEAS3h4/Wmr8Y1bKoYHWg1jjB2OuFmQCkY/VeBtNxGqNBkGN
+   5Dg0xq5mMyF9CCeBViEFfLrYfvUTnUNbWgbqxGXgT+ZX4Kkt/GxLimev7
+   x92jI+4iNpBzlNzPpA8cDtXPW2HE696oNLwDkNjTavCvmo45U9tNoq7kz
+   wLJQyA+bma1iFRTxyDV6zIwhKXRMBiferqqtMMewyfGaY8YZx7iduIvaa
+   A==;
+X-CSE-ConnectionGUID: OIBlTgn0SlGQ9GUyI4EmvQ==
+X-CSE-MsgGUID: g03wy6QlRLeFTHtQ+FLdXA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11548"; a="71224032"
+X-IronPort-AV: E=Sophos;i="6.18,254,1751266800"; 
+   d="scan'208";a="71224032"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2025 04:11:16 -0700
+X-CSE-ConnectionGUID: A+zMeBQXRISe1Zecx+c+Gg==
+X-CSE-MsgGUID: dd4KIGy/S2KoLXnFWd9mAQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,254,1751266800"; 
+   d="scan'208";a="173814273"
+Received: from orsmsx901.amr.corp.intel.com ([10.22.229.23])
+  by fmviesa009.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2025 04:11:15 -0700
+Received: from ORSMSX902.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.17; Wed, 10 Sep 2025 04:11:14 -0700
+Received: from ORSEDG903.ED.cps.intel.com (10.7.248.13) by
+ ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.17 via Frontend Transport; Wed, 10 Sep 2025 04:11:14 -0700
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (40.107.93.64) by
+ edgegateway.intel.com (134.134.137.113) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.17; Wed, 10 Sep 2025 04:11:13 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=mf2JhZRHzfX9yRQaUA+kQ5vQ+xQq9tthmE5tlKTSzxGfeoYYc1nIMyPnVMzNKzxuIBTC9fPtD4Kp900iB5P0IjLQ5CCTDjb0hamOHYlfq9me7TkzV25ZZXQLbHjp1MucNhwcpYvWsOUZEwqrvvCWNKE/uSCIHKjbKCqbEi7WiW88yri/p6PFKK+xIS1Tlas8lU5W59eCRWXnbHLN/5M60IvYoJkBhZxa77kJV5m5yvB+EzKgeb0PbygOOEAJH9xoXKqhwdqgfgo3gTXHrIMdlUb2jjs5cg+LLeqdMtAIFxZWduZ3iugu1VWF5/L4yKeZUp1YaAOsTjWtYjutpPYPzg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Gl9p6U7spL2k5i2oKLzZNj5Dx+9uFalO4AlFLH8B0T8=;
+ b=ywgm2lvqoWN0qMG7AK8kugAy+oaQCZaetdc3p24kPfgffxMznzX2S0OA7lt7l9EvHjHE7s4w1SGy/EfdSwpNY8AlpzNPBIyQz/9iZR0bhw8KNK7epJ2FujOn0+zp1m0uguk5oe0agAGqqv3kqMCxFRkjacsKP+O8oywvce1J0L98rKk/CPhAQqHq2FIU2TU7kQyeHg54VaYHYhfNRE/wqpnHvpxLOvD4Zi+rTN7GHHx8EL8GVmhDJFF+hpT1yWbNHkokn9RM+cwM+DoGLwsRsaUl20qWp37LDY8N8zgY4Xwqla8KuIjwi0IfVhmDSyRHezAkqnejtNf9QHTKbiv+uQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CH3PR11MB8660.namprd11.prod.outlook.com (2603:10b6:610:1ce::13)
+ by MN6PR11MB8194.namprd11.prod.outlook.com (2603:10b6:208:477::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9094.22; Wed, 10 Sep
+ 2025 11:11:11 +0000
+Received: from CH3PR11MB8660.namprd11.prod.outlook.com
+ ([fe80::cfad:add4:daad:fb9b]) by CH3PR11MB8660.namprd11.prod.outlook.com
+ ([fe80::cfad:add4:daad:fb9b%4]) with mapi id 15.20.9094.021; Wed, 10 Sep 2025
+ 11:11:11 +0000
+Date: Wed, 10 Sep 2025 19:10:57 +0800
+From: Chao Gao <chao.gao@intel.com>
+To: "Huang, Kai" <kai.huang@intel.com>
+CC: "kvm@vger.kernel.org" <kvm@vger.kernel.org>, "linux-pm@vger.kernel.org"
+	<linux-pm@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "xin@zytor.com" <xin@zytor.com>,
+	"brgerst@gmail.com" <brgerst@gmail.com>, "andrew.cooper3@citrix.com"
+	<andrew.cooper3@citrix.com>, "arjan@linux.intel.com" <arjan@linux.intel.com>,
+	"Williams, Dan J" <dan.j.williams@intel.com>, "dave.hansen@linux.intel.com"
+	<dave.hansen@linux.intel.com>, "Edgecombe, Rick P"
+	<rick.p.edgecombe@intel.com>, "seanjc@google.com" <seanjc@google.com>,
+	"mingo@redhat.com" <mingo@redhat.com>, "pbonzini@redhat.com"
+	<pbonzini@redhat.com>, "tglx@linutronix.de" <tglx@linutronix.de>,
+	"hpa@zytor.com" <hpa@zytor.com>, "peterz@infradead.org"
+	<peterz@infradead.org>, "pavel@kernel.org" <pavel@kernel.org>, "bp@alien8.de"
+	<bp@alien8.de>, "kprateek.nayak@amd.com" <kprateek.nayak@amd.com>,
+	"rafael@kernel.org" <rafael@kernel.org>, "david.kaplan@amd.com"
+	<david.kaplan@amd.com>, "x86@kernel.org" <x86@kernel.org>
+Subject: Re: [RFC PATCH v1 1/5] x86/boot: Shift VMXON from KVM init to CPU
+ startup phase
+Message-ID: <aMFcwXEWMc2VIzQQ@intel.com>
+References: <20250909182828.1542362-1-xin@zytor.com>
+ <20250909182828.1542362-2-xin@zytor.com>
+ <1301b802284ed5755fe397f54e1de41638aec49c.camel@intel.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <1301b802284ed5755fe397f54e1de41638aec49c.camel@intel.com>
+X-ClientProxiedBy: SI1PR02CA0012.apcprd02.prod.outlook.com
+ (2603:1096:4:1f7::8) To CH3PR11MB8660.namprd11.prod.outlook.com
+ (2603:10b6:610:1ce::13)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250908075443.208570-1-aboorvad@linux.ibm.com>
-In-Reply-To: <20250908075443.208570-1-aboorvad@linux.ibm.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 10 Sep 2025 12:47:46 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0hLYkeStuZqUsjSphXmBovAxCvvzx4JJJw=3AmDYjdCtQ@mail.gmail.com>
-X-Gm-Features: Ac12FXzBD6IaoVn6PUKKFS-uKjzoe8FMWezXsDom8HFc21nQgUtJ6Hl_t8__7EE
-Message-ID: <CAJZ5v0hLYkeStuZqUsjSphXmBovAxCvvzx4JJJw=3AmDYjdCtQ@mail.gmail.com>
-Subject: Re: [PATCH v3 1/1] cpuidle: menu: Add residency threshold for
- non-polling state selection
-To: Aboorva Devarajan <aboorvad@linux.ibm.com>
-Cc: rafael@kernel.org, christian.loehle@arm.com, daniel.lezcano@linaro.org, 
-	gautam@linux.ibm.com, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH3PR11MB8660:EE_|MN6PR11MB8194:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6349b2d0-8463-45a2-08ef-08ddf05ac002
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|7416014|1800799024;
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?DkNiQbp9zlXYCdmKDbX2H0EZRIgiyyDwHJXeA6G1NSMsi6oOXG+LdMMjqb/i?=
+ =?us-ascii?Q?ey8Xx3euLKkDNtkVe8dxBj3HtM++kO9p9gbEja/QNh9dN+al+dW6cx/iRtTJ?=
+ =?us-ascii?Q?UjZSNd9IiM9mUZM4zuYpaA20nOlISfbpOrg/DG/dfWPJ6ztMiE6Vgn/mbaLK?=
+ =?us-ascii?Q?cFTMiGu8tWJmo+RAW3ADz/4I8ztUnRCU/foWIzSe7BljWZOQE0M4pKgyY+PH?=
+ =?us-ascii?Q?SOh7fJmQgsWZ2uwC0sm7vrC+RdXaQSKXbb2WyOkz8h8DiKbrB2iAt/XhdCt1?=
+ =?us-ascii?Q?Mnf+Cc0v45d5oDPYoCUGiQpyUBrKfdImbpEEaIs61RrocXJKcVGlTrws8+EW?=
+ =?us-ascii?Q?rYlcXctJS9M1u1bT4ycXADB0xQGOzFyBot2fhMNOVVJX2hJ1oCb7w/ugjjek?=
+ =?us-ascii?Q?93DUhRC/JDHSidGE8nk79TNkwCVZs2BcJdzieTnknudZFfj6UYw2dEQRp8rI?=
+ =?us-ascii?Q?jC72Hhf6IWrJ61F0oJqZlw7ATZHp3oj86smXq+mDpxK464XBUV1NLj/NOc9u?=
+ =?us-ascii?Q?2QYAUkeRfkkZqulIdBwtd2NIlRKP4Tv/24cgtpPjeBUxtepz53IHOX0SZpcH?=
+ =?us-ascii?Q?KbarH+Nvo7hJOIM8z36Hcz5kGQqsn4p/OJYWc7zAsKzlAkRL75+e0yRcAuq8?=
+ =?us-ascii?Q?qp2t+S+zEKavAHD0NCs2exWh0Wb80fIx8nt/hBqO4OyF9iaSZRSXESMLRf1m?=
+ =?us-ascii?Q?uVzeSx6hGQhAhhe28WoU1jXqIniM5Wo8gjI9VGZiqst/b7j88sKaIq0Ey4eG?=
+ =?us-ascii?Q?BVkkQ4+ljx6G0XJMaRin3E1VNjDgU+t0caWiCk+hVn5uwArNK+oeYSQkjVxB?=
+ =?us-ascii?Q?5vntVng9LKVlYmKkdYFchf13+a/O9phaELKyyvNLJ3R77C2ry1d4vu+a+pWq?=
+ =?us-ascii?Q?ZqMlqMtLaXEhFMBInjx+fYz4jYyyT5ya6wocjLNvY2JwRqDiub4T3rftivdT?=
+ =?us-ascii?Q?ulGvzWcAx90/CLZutbzvg41dmWsuvBZKOV7MLFttMzxqcPPAmKLEvzHRd+6t?=
+ =?us-ascii?Q?fZbT85RW8e6dEN4NeaJHFxQXjUZchbywIqhOio49foCRrPB3NgbXfqdHbWqM?=
+ =?us-ascii?Q?DOVyKypCH0cJwJjycFevy7nAJYPOhuzc3jKnRpCvFmQBio3qwn0tcbm+3qlh?=
+ =?us-ascii?Q?cqYvSeMVzwOS1UbpDM7xnWatI9U6PTyaMwjgYtUyDWyeVsbgP/YQGclyXPtp?=
+ =?us-ascii?Q?Csrf6H6+RwH1VOK+pbbliJvvt7idI8hMAijn2OpHUi41krEa3uaddMqxNXFT?=
+ =?us-ascii?Q?z04xfdFBr20qZP/A/EEAVTtoSPG55xnpYFhD4253z/cKULfF/rzGsjxJF9RJ?=
+ =?us-ascii?Q?KFm/qpwlqsxwX9edi6R+82xSL+fhuKnuatCTJsYIna8SuB7vNVhAXBgcGSf+?=
+ =?us-ascii?Q?s4TXaDxMPuq4QJ4wB0/2jDaJaEoC6cPofLRA6LD3IWi4hjWJQnO9tM/9r9Q3?=
+ =?us-ascii?Q?mRKnSKOuJkI=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR11MB8660.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?2tLbk/j9qCmlhlhdKsq5W4Z/jefFhU1rsFZ+wvZOZCKlXkOPSP8EgL46RW8S?=
+ =?us-ascii?Q?snCTjwFnYbnZWv9HpPOOITUfpvwbWMBsQzGlTyEQ9y4AlTE2lrdUl5Fq1Woy?=
+ =?us-ascii?Q?5PyVzpSngua3/oLd0i/7XUbHTUKgsWL/F9M7FETos4z+5tJFmjC+6BYw90ob?=
+ =?us-ascii?Q?F1hWeMfJLcww9Zk1ZD1gmuNQn+hqFzaSa37dWvpQ2w6Ynkn6hswt1Lp/LC1u?=
+ =?us-ascii?Q?3tS/tY3nz8YGXe52d4uqN4NjPkYQC/zT5VySc19WZd7z4Nssz6Us7qhV4Nh2?=
+ =?us-ascii?Q?5TXnaFUEkGIN6HIWoAroelMZ7tpDN5AEiHDAi4rji6QnZbxcFgHXT6OBTEkb?=
+ =?us-ascii?Q?hwpYZO/Jf81iAnzRegsE1le2OTO7qHJSIFpF9Y9+ojvGY7Jw0IC2mCdPQzPS?=
+ =?us-ascii?Q?AUTEO2Hfi+G0sZhJcanO2cFGZnoa90UxnVQsqtA5FRlzp1AYyv4hexRfivS5?=
+ =?us-ascii?Q?wrPM/wdRybrrEOt0kQPJ5RzPhKfphfUczIrqHiSkCSk+U7EuoQONImdmxk+5?=
+ =?us-ascii?Q?PpD3aqnAxmT267SkkFlHyuov2yq1fI6BU4NKArqy54aL0lYFU8qJnxsTv2Gd?=
+ =?us-ascii?Q?CUTIGAVXFEmzcb2k4FaNVt+Ct0LkHoSvWmNZP8Hcf7KtVdGEp+a1+9F0bqhz?=
+ =?us-ascii?Q?m+ggL0h43Z5gSOauyhk35qcFXOVCOqHNaWED2+HSPg5YJ00jgkgkf+crXxrO?=
+ =?us-ascii?Q?zNk0+Huy4aw2JmuL6NNC+OkLPS2xoz/QqnGNTesnWFueXf6FF3PTXhZNJ1R4?=
+ =?us-ascii?Q?MgN+3ylcBkOqbUflobWrViz6v9H6JCPP1Ak+lvZxIDkvruxlHM0aAXdefNgR?=
+ =?us-ascii?Q?KKVlTQYG+a5dLcEWYLieexAqTnZWDgWHab+PBzH33J65gQghi5q1JyYRr2cK?=
+ =?us-ascii?Q?MvxsAQ2sMpcIAlwAmsSqhuPeDq2ZsOcw+toy/khI6PCbX2Hbn9fQwT5nhdr9?=
+ =?us-ascii?Q?UBOPxN4Ha/4HW1umlBQgDe1cOJafv0c2d2+zriseAbRIOUk7ebm08b3WaLZL?=
+ =?us-ascii?Q?uBxaJ2q2Mka6ukgLdPZ0Cd/d/IbCnvF/3rll0OEoPpwRBTrnUvwFoo+gIUHn?=
+ =?us-ascii?Q?aOU/AjESqBGff44s4MZWIihaok+Wj5dBLSl/wg6IYkp4Vx4TZA2/+r/4zC0C?=
+ =?us-ascii?Q?X33Jwe7ZGIGWVdUlYBOvVLUvduN+FeaiASrbcsM4MfnG5AD3RXHT4gUlIIWe?=
+ =?us-ascii?Q?XNmLgNARZe6mEdi/E+5icjnZ8E+ZZxUHM1vk/758KsZZEVrKdjMCcSt77U0Y?=
+ =?us-ascii?Q?qNK/R0nGC3nw6hSDpzG64r1qRIm1gFQ8G4VeApmioZpyIF8On3coy6YmGvPa?=
+ =?us-ascii?Q?5MMglqNWsN6sU6VT8Wkg0/lJt7hv9KfltSsbCUkKjNFy0vAo6RopC6v1mxY+?=
+ =?us-ascii?Q?79BlGD0GMBwSpeBf9Uco+3YBjA5+vQJrJI9KHvKhzmFNRhEvykD6yAVkZHOG?=
+ =?us-ascii?Q?yURVW77KJVXlp30fMhUTrUONUKH57+zShBrsAhGXfVrJXJ6Qre3tO/e6WvOA?=
+ =?us-ascii?Q?6QERKpe2rJL1dtBsCoWrNgVrfvfjFyA5yn5/OCCyWbz7U0lHtfBPmlGiTHx6?=
+ =?us-ascii?Q?ajlEVFahw1Ie13JujcV4u08x/5W6LaEsjm95rDiW?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6349b2d0-8463-45a2-08ef-08ddf05ac002
+X-MS-Exchange-CrossTenant-AuthSource: CH3PR11MB8660.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Sep 2025 11:11:11.7682
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: mfh0Dsr2YFmPiCHhSoO7xTvyVQzym2FMg2d6UZQvGfaR+ZKsnbkEmRL7fjIc/MpOBmZcTo0UDD+nuDJL9cjYHQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN6PR11MB8194
+X-OriginatorOrg: intel.com
 
-Please change the subject of the patch to something like "cpuidle:
-menu: Use residency threshold in polling state override decisions"
-which more precisely reflects the patch purpose IMV.
+>> @@ -2551,6 +2636,12 @@ void __init arch_cpu_finalize_init(void)
+>>  	*c = boot_cpu_data;
+>>  	c->initialized = true;
+>>  
+>> +	/*
+>> +	 * Enable BSP virtualization right after the BSP cpuinfo_x86 structure
+>> +	 * is initialized to ensure this_cpu_has() works as expected.
+>> +	 */
+>> +	cpu_enable_virtualization();
+>> +
+>> 
+>
+>Any reason that you choose to do it in arch_cpu_finalize_init()?  Perhaps
+>just a arch_initcall() or similar?
+>
+>KVM has a specific CPUHP_AP_KVM_ONLINE to handle VMXON/OFF for CPU
+>online/offline.  And it's not in STARTUP section (which is not allowed to
+>fail) so it can handle the failure of VMXON.
+>
+>How about adding a VMX specific CPUHP callback instead?
+>
+>In this way, not only we can put all VMX related code together (e.g.,
+>arch/x86/virt/vmx/vmx.c) which is way easier to review/maintain, but also
+>we can still handle the failure of VMXON just like in KVM.
 
-On Mon, Sep 8, 2025 at 9:54=E2=80=AFAM Aboorva Devarajan <aboorvad@linux.ib=
-m.com> wrote:
->
-> On virtualized PowerPC (pseries) systems, where only one polling state
-> (Snooze) and one deep state (CEDE) are available, selecting CEDE when
-> the predicted idle duration exceeds the target residency of the CEDE
-
-If the target residency is exceeded by the predicted idle duration, it
-should be fine to select the given state.
-
-Did you really mean "less than" here?  That would be consistent with
-the code change.
-
-> state can hurt performance. In such cases, the entry/exit overhead of
-> CEDE outweighs the power savings, leading to unnecessary state transition=
-s
-> and higher latency.
->
-> Menu governor currently contains a special-case rule that prioritizes
-> the first non-polling state over polling, even when its target residency
-> is much longer than the predicted idle duration. On PowerPC/pseries,
-> where the gap between the polling state (Snooze) and the first non-pollin=
-g
-> state (CEDE) is large, this behavior causes performance regressions.
->
-> This patch refines the special case by adding an extra requirement:
-> the first non-polling state may only be chosen if its
-> target_residency_ns is below the defined RESIDENCY_THRESHOLD_NS. If this
-> condition is not met, the non-polling state is not selected, and polling
-> state is retained instead.
->
-> This change is limited to the single special-case condition for the first
-> non-polling state. The general state selection logic in the menu governor
-> remains unchanged.
->
-> Performance improvement observed with pgbench on PowerPC (pseries)
-> system:
-> +---------------------------+------------+------------+------------+
-> | Metric                    | Baseline   | Patched    | Change (%) |
-> +---------------------------+------------+------------+------------+
-> | Transactions/sec (TPS)    | 495,210    | 536,982    | +8.45%     |
-> | Avg latency (ms)          | 0.163      | 0.150      | -7.98%     |
-> +---------------------------+------------+------------+------------+
-> CPUIdle state usage:
-> +--------------+--------------+-------------+
-> | Metric       | Baseline     | Patched     |
-> +--------------+--------------+-------------+
-> | Total usage  | 12,735,820   | 13,918,442  |
-> | Above usage  | 11,401,520   | 1,598,210   |
-> | Below usage  | 20,145       | 702,395     |
-> +--------------+--------------+-------------+
->
-> Above/Total and Below/Total usage percentages which indicates
-> mispredictions:
-> +------------------------+-----------+---------+
-> | Metric                 | Baseline  | Patched |
-> +------------------------+-----------+---------+
-> | Above % (Above/Total)  | 89.56%    | 11.49%  |
-> | Below % (Below/Total)  | 0.16%     | 5.05%   |
-> | Total cpuidle miss (%) | 89.72%    | 16.54%  |
-> +------------------------+-----------+---------+
->
-> The results show that restricting non-polling state selection to
-> cases where its residency is within the threshold reduces mispredictions,
-> lowers unnecessary state transitions, and improves overall throughput.
->
-> Signed-off-by: Aboorva Devarajan <aboorvad@linux.ibm.com>
-> ---
->
-> v2: https://lore.kernel.org/all/20250317060357.29451-1-aboorvad@linux.ibm=
-.com/
->
-> Changes in v2 -> v3:
->   - Modifed the patch following Rafael's feedback, incorporated a residen=
-cy threshold check
->     (s->target_residency_ns < RESIDENCY_THRESHOLD_NS) as suggested.
->   - Updated commit message accordingly.
-> ---
->  drivers/cpuidle/governors/menu.c | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/cpuidle/governors/menu.c b/drivers/cpuidle/governors=
-/menu.c
-> index b2e3d0b0a116..d25b04539109 100644
-> --- a/drivers/cpuidle/governors/menu.c
-> +++ b/drivers/cpuidle/governors/menu.c
-> @@ -316,11 +316,13 @@ static int menu_select(struct cpuidle_driver *drv, =
-struct cpuidle_device *dev,
->
->                 if (s->target_residency_ns > predicted_ns) {
->                         /*
-> -                        * Use a physical idle state, not busy polling, u=
-nless
-> -                        * a timer is going to trigger soon enough.
-> +                        * Use a physical idle state instead of busy poll=
-ing
-> +                        * if the next timer doesn't expire soon and its
-> +                        * target residency is below the residency thresh=
-old.
-
-I would rephrase this somewhat, like this:
-
-* Use a physical idle state instead of busy polling so long as
-* its target residency is below the residency threshold and the
-* next timer doesn't expire soon.
-
->                          */
->                         if ((drv->states[idx].flags & CPUIDLE_FLAG_POLLIN=
-G) &&
-> -                           s->target_residency_ns <=3D data->next_timer_=
-ns) {
-> +                           s->target_residency_ns <=3D data->next_timer_=
-ns &&
-> +                           s->target_residency_ns < RESIDENCY_THRESHOLD_=
-NS) {
-
-And maybe adjust the checks ordering here.
-
-The point is that on the example platform in question
-s->target_residency_ns is always above RESIDENCY_THRESHOLD_NS, so it
-is never really necessary to check data->next_timer_ns in which case
-the HW should be able to optimize this.
-
->                                 predicted_ns =3D s->target_residency_ns;
->                                 idx =3D i;
->                                 break;
-> --
+KVM's policy is that a CPU can be online if there is no VM running. It is hard
+to implement/move the same logic inside the core kernel because the core kernel
+would need to refcount the running VMs. Any idea/suggestion on how to handle
+VMXON failure in the core kernel?
 
