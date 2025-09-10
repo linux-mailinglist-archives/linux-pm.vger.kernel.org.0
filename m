@@ -1,175 +1,124 @@
-Return-Path: <linux-pm+bounces-34363-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34364-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8DC06B5179E
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 15:09:38 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 60BE6B517B2
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 15:14:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C9D705E01C9
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 13:09:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8EF76189D541
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 13:14:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB41730CD9C;
-	Wed, 10 Sep 2025 13:09:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF6B930FC19;
+	Wed, 10 Sep 2025 13:14:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IylvfrZI"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kbAf2RUe"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B178628C5D9;
-	Wed, 10 Sep 2025 13:09:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41D3C27F747;
+	Wed, 10 Sep 2025 13:14:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757509754; cv=none; b=pnxVXxXAuhVbcMlRGcXEeL35JufnYendWYg5EmmheN6LN4F1MNWFPf99sIdANcBppoM4eGA/jNc8XjcBvc5AQ3hAxCIEfIOs5zkLzJNgRFPGNZ75Dd76dBfnvpndt7GES1ZL8jh6saCbY3YLNxe7FJju7l4c+nSAmX0iMe59y4g=
+	t=1757510059; cv=none; b=hfAF3pNGaX0CCbLA5HRPZqj2tMqpG542bAkaryO6wG7hclRq7StaSn16UHbH9INDMengdHyO4ZSmcAI2k7x2nE8jcZJoMT7vbxuk+uSAAfYmJ887y1ApS3YWL1eWZE4KeKxTo7+ZEbJXyJ8te23crVmFQ2YywAckBJbXxh3aKnc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757509754; c=relaxed/simple;
-	bh=uvhIjfKa8lTdjsCWUdtRVp8DWidoMVrr7CNRdvWoSv4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=smaoVNczpgiY8OCk/Q+wtQZNwgjD3qsAfKgaKRY1H+WQbuWcUCgQtzfgat8j455Eit/xbsh4CefOPYEBKdTiDK+4lOnwSaeD3iQXbd1HAPqj8JFYWUgITvTUMFMKru3RE1pn/nfxOW2n088gUcqPruKy0Mt3B2KdR+dUeXvs660=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IylvfrZI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40E63C4CEF5;
-	Wed, 10 Sep 2025 13:09:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757509753;
-	bh=uvhIjfKa8lTdjsCWUdtRVp8DWidoMVrr7CNRdvWoSv4=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=IylvfrZID0skbH0951saMUSNs5tUaZUXV6nKzwW/Jh248IH9tvnGCcCl/+29Yhoni
-	 QU1weGycrsJmtQWKm0gDIyx+1Vkkn8lr/eaWzV4LfFeejBQoVNK8Ix7w57Qff3Y/TO
-	 IlF08MaRklC4m7xV2nprFgF9hz/TriQMfplQwpth4RBtWysVRoW/+GiCPtPA+YRWKi
-	 wU8cpEOVyPGmxLk2hAo18WYDbwdIs3itKvsEFljtaUgWGlNMg1ikwTaXToQ1J5wH8D
-	 Vaoti+el6/GWat9XFGRx59ausx7ymwijgxqkBKbRbM39xFVsP/dntU1xszO69/Y34L
-	 tSC28Z26UaUog==
-Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-6219257cb0fso638758eaf.2;
-        Wed, 10 Sep 2025 06:09:13 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVdV9l8wIf+wT69aQsofBrmYN9CxEtulGTUyIIE7lbj3tgbLkAq+GttY6/FLBoG7asnT6vbeKY9LORFxRg=@vger.kernel.org, AJvYcCXjKCNYLEZRaa4kbSOYTecKxCFevZ/4WHygzIkINlGA5/lMHMzD4WlEtdKE2K826GO9iAMvDaAmBPM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz4og7rFLQpirAT8ApmtVVXsj0CxMQOkLE1phGV82t8+O7pXFEa
-	WXGCgaxF2KeZUWKfRRbuCVopYlrwPbrLxuXdfrrQR11l06jCRn96Sbx7SL5Ww9EcC1q6g2jsYh8
-	CibXQZSlIxa4veLXcwQnlEOEzlB5PM2M=
-X-Google-Smtp-Source: AGHT+IEV1+Zwr1jjsISpN+i6rFKuCoD11ljywxpczs93aLgS8TuxE6wRy0V56lCleUm3bASPQVStW/q4JsAlGKHeigo=
-X-Received: by 2002:a05:6820:300b:b0:621:858a:ee1c with SMTP id
- 006d021491bc7-621858af1dcmr4630740eaf.7.1757509752556; Wed, 10 Sep 2025
- 06:09:12 -0700 (PDT)
+	s=arc-20240116; t=1757510059; c=relaxed/simple;
+	bh=9Pe02Wp9Wa61TyWuZketBjA9b9YjXG6KBrzkRTagEIM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=S+vk5M5jXSDRBC5b1AKODMOWLFg8OLziQGcR6ZQ5qgL/ID7uCju4fBcvcMvmVb51wN0jrNphGRAOnVeygSq75z+WkCCUA/dXy+hyqQeYO3weYiUwaHKo231ZIBQBDm7tlr6IyNV698kvJOavN5Dx3wRfa8WWb1ZmuwECnRTKt8w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kbAf2RUe; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1757510058; x=1789046058;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=9Pe02Wp9Wa61TyWuZketBjA9b9YjXG6KBrzkRTagEIM=;
+  b=kbAf2RUeuYl6Mv+bm9REmsVKmJj1zUTo/u6yfp1gCgy3s5AYAUPUppfu
+   84DqvzigUHA0SBw6DNIWXCoT1IoGwbEVNJvulnXqyEqXr5LWOZ8J85UCc
+   uXf/XgyfNLzA6mekiU0zsyAxkx/lpPOvIoPqskMnuiRIRlSp9My7BCGUW
+   Fo8tn9jLry7pX1c4euyeAXIwj6wR40mE+FNs1SSY1S6uRMGMSyqdYuGb1
+   +TA4oK7G5cz+3MTJ7L/Ms75Xx7Vh0X/MtW3yW+b2OmmJx3NWojoWhBIS/
+   4sKjpnLa1PptABOTShDgYmdaZhcJPhHq2A6VmWtVi85jIq2I+OQD82WX8
+   A==;
+X-CSE-ConnectionGUID: X9Cf4j54QQ2qIQGeKXRMtg==
+X-CSE-MsgGUID: WSDFDTEDTnW19IQlRCFPOA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11549"; a="85262895"
+X-IronPort-AV: E=Sophos;i="6.18,254,1751266800"; 
+   d="scan'208";a="85262895"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2025 06:14:17 -0700
+X-CSE-ConnectionGUID: nvYFnd3DSq+q8t+5CqgS5w==
+X-CSE-MsgGUID: h1V5Bt/aSRKm0ETaLO0Hfw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,254,1751266800"; 
+   d="scan'208";a="197062774"
+Received: from qliang3-mobl3.ccr.corp.intel.com (HELO [10.125.65.247]) ([10.125.65.247])
+  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2025 06:14:12 -0700
+Message-ID: <c29abf85-aafe-4cf8-b4e8-6d3b5b250ce6@linux.intel.com>
+Date: Wed, 10 Sep 2025 06:13:59 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250909094335.1097103-1-treapking@chromium.org>
- <CAJZ5v0jNytfP8W2XSyBNLe8OsD=O9M7WWvhtxdwXA-5KxwKfbg@mail.gmail.com> <CAEXTbpd6k=_yF4vG-zU4C0ymriLYXcT4AusCFJ03wZWJecOS5w@mail.gmail.com>
-In-Reply-To: <CAEXTbpd6k=_yF4vG-zU4C0ymriLYXcT4AusCFJ03wZWJecOS5w@mail.gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 10 Sep 2025 15:09:00 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0gEeVraqck8q_Ave66RMLOSC=p8=33PaBCKsMBuHGLqKA@mail.gmail.com>
-X-Gm-Features: Ac12FXy5-Dk5URgq2Yqz1iZj-3bn-vzI4RcpJwBsUOcnWoqt9zJj1y4WXjCk0Y0
-Message-ID: <CAJZ5v0gEeVraqck8q_Ave66RMLOSC=p8=33PaBCKsMBuHGLqKA@mail.gmail.com>
-Subject: Re: [PATCH] PM: sleep: Don't wait for SYNC_STATE_ONLY device links
-To: Pin-yen Lin <treapking@chromium.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, Pavel Machek <pavel@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, 
-	Saravana Kannan <saravanak@google.com>, Hsin-Te Yuan <yuanhsinte@chromium.org>, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	Chen-Yu Tsai <wenst@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v1 1/5] x86/boot: Shift VMXON from KVM init to CPU
+ startup phase
+To: "Huang, Kai" <kai.huang@intel.com>, "Gao, Chao" <chao.gao@intel.com>
+Cc: "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+ "brgerst@gmail.com" <brgerst@gmail.com>,
+ "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+ "x86@kernel.org" <x86@kernel.org>, "rafael@kernel.org" <rafael@kernel.org>,
+ "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "seanjc@google.com" <seanjc@google.com>, "xin@zytor.com" <xin@zytor.com>,
+ "pbonzini@redhat.com" <pbonzini@redhat.com>,
+ "mingo@redhat.com" <mingo@redhat.com>,
+ "tglx@linutronix.de" <tglx@linutronix.de>, "hpa@zytor.com" <hpa@zytor.com>,
+ "peterz@infradead.org" <peterz@infradead.org>,
+ "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+ "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+ "kprateek.nayak@amd.com" <kprateek.nayak@amd.com>,
+ "pavel@kernel.org" <pavel@kernel.org>,
+ "david.kaplan@amd.com" <david.kaplan@amd.com>,
+ "Williams, Dan J" <dan.j.williams@intel.com>, "bp@alien8.de" <bp@alien8.de>
+References: <20250909182828.1542362-1-xin@zytor.com>
+ <20250909182828.1542362-2-xin@zytor.com>
+ <1301b802284ed5755fe397f54e1de41638aec49c.camel@intel.com>
+ <aMFcwXEWMc2VIzQQ@intel.com>
+ <16a9cc439f2826ee99ff1cfc42c9006a7a544dd4.camel@intel.com>
+Content-Language: en-US
+From: Arjan van de Ven <arjan@linux.intel.com>
+In-Reply-To: <16a9cc439f2826ee99ff1cfc42c9006a7a544dd4.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi,
+> 
+> Since I think doing VMXON when bringing up CPU unconditionally is a
+> dramatic move at this stage, I was actually thinking we don't do VMXON in
+> CPUHP callback, but only do prepare things like sanity check and VMXON
+> region setup etc.  If anything fails, we refuse to online CPU, or mark CPU
+> as VMX not supported, whatever.
 
-On Wed, Sep 10, 2025 at 2:43=E2=80=AFPM Pin-yen Lin <treapking@chromium.org=
-> wrote:
->
-> Hi Rafael,
->
-> Thanks for the review.
->
-> On Wed, Sep 10, 2025 at 7:56=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.=
-org> wrote:
-> >
-> > On Tue, Sep 9, 2025 at 11:44=E2=80=AFAM Pin-yen Lin <treapking@chromium=
-.org> wrote:
-> > >
-> > > Device links with DL_FLAG_SYNC_STATE_ONLY should not affect suspend
-> > > and resume, and functions like device_reorder_to_tail() and
-> > > device_link_add() doesn't try to reorder the consumers with such flag=
-.
-> > >
-> > > However, dpm_wait_for_consumers() and dpm_wait_for_suppliers() doesn'=
-t
-> > > check this flag before triggering dpm_wait, leading to potential hang
-> > > during suspend/resume.
-> >
-> > Have you seen this happen or is it just a theory?
->
-> We initially see this with a downstream kernel, but I can reproduce
-> this with the upstream kernel when I connect the usb host controller
-> to a "usb-a-connector" node on MT8186 Corsola Chromebook. The
-> devicetree looks like:
->
-> usb-a-connector {
->         compatible =3D "usb-a-connector";
->         port {
->                 usb_a_con: endpoint {
->                         remote-endpoint =3D <&usb_hs>;
->                 };
->         };
-> };
->
-> usb_host {
->         compatible =3D "mediatek,mt8186-xhci", "mediatek,mtk-xhci";
->         port {
->                 usb_hs: endpoint {
->                         remote-endpoint =3D <&usb_a_con>;
->                 };
->         };
-> };
->
-> In this case, the two nodes form a cycle and I ended up seeing a
-> SYNC_STATE_ONLY devlink from usb_host (supplier) to the
-> usb-a-connector (consumer).
+the whole point is to always vmxon -- and simplify all the complexity
+from doing this dynamic.
+So yes "dramatic" maybe but needed -- especially as things like TDX
+and TDX connect need vmxon to be enabled outside of KVM context.
 
-It would be good to add the above information to the patch changelog.
 
-> I'm not very sure why we didn't see this issue before. Maybe it's
-> related to the fact that the usb-a-connector has a compatible string
-> (so a platform device is created) but no driver binds into it.
-> >
-> > > Add DL_FLAG_SYNC_STATE_ONLY in dpm_wait_for_consumers() and
-> > > dpm_wait_for_suppliers() to fix this.
-> >
-> > The above sentence is incomplete AFAICS.
->
-> Sorry, I meant "Add a check for DL_FLAG_SYNC_STATE_ONLY in ...". I'll
-> update this in the next version.
-> >
-> > > Fixes: 05ef983e0d65a ("driver core: Add device link support for SYNC_=
-STATE_ONLY flag")
-> > > Signed-off-by: Pin-yen Lin <treapking@chromium.org>
-> > > ---
-> > >
-> > >  drivers/base/power/main.c | 6 ++++--
-> > >  1 file changed, 4 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
-> > > index 2ea6e05e6ec90..3271f4af2cb65 100644
-> > > --- a/drivers/base/power/main.c
-> > > +++ b/drivers/base/power/main.c
-> > > @@ -282,7 +282,8 @@ static void dpm_wait_for_suppliers(struct device =
-*dev, bool async)
-> > >          * walking.
-> > >          */
-> > >         list_for_each_entry_rcu_locked(link, &dev->links.suppliers, c=
-_node)
-> > > -               if (READ_ONCE(link->status) !=3D DL_STATE_DORMANT)
-> > > +               if (READ_ONCE(link->status) !=3D DL_STATE_DORMANT &&
-> > > +                   !device_link_test(link, DL_FLAG_SYNC_STATE_ONLY))
-> >
-> > This should use a check like device_link_flag_is_sync_state_only(),
-> > which is different from the above one, for consistency with
-> > device_reorder_to_tail().
->
-> Thanks. I'll fix this in the next version.
+> 
+> The core kernel then provides two APIs to do VMXON/VMXOFF respectively,
+> and KVM can use them.  The APIs needs to handle concurrent requests from
+> multiple users, though.  VMCLEAR could still be in KVM since this is kinda
+> KVM's internal on how to manage vCPUs.
+> 
+> Does this make sense?
 
-Thanks!
+not to me -- the whole point is to not having this dynamic thing
+
 
