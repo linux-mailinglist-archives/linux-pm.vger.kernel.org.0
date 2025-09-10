@@ -1,342 +1,120 @@
-Return-Path: <linux-pm+bounces-34344-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34345-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56F60B512C8
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 11:40:14 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 831A7B512D5
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 11:41:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BFD51188D3DB
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 09:40:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 20CA1564325
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 09:41:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF185314A64;
-	Wed, 10 Sep 2025 09:39:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1FBE3148B7;
+	Wed, 10 Sep 2025 09:41:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hut0o4aI"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="lHSKzCSZ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B82D3148D4;
-	Wed, 10 Sep 2025 09:39:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C6CE306492
+	for <linux-pm@vger.kernel.org>; Wed, 10 Sep 2025 09:41:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757497187; cv=none; b=k6I6ewiPPLDTSTvE2cq6tmNo8xTH5MoFqx6Fop+BxounRFkOFMbmjffvQoi5E8jxuTrsZQKvXRJVilVJGaUxbvVYynZ9v+9sPfglvKMgnVb9B/r29LYWRhN73BE0sPz/GQkJD0hJy/n5HGlIEz2q90WuNn4IgxW5B5IMzPHHYWk=
+	t=1757497277; cv=none; b=SCwPyoLwTwHa5oMoDf8ORxelS+8arZF3gKec/Bp/GPFaNzQIqlabpVFoPSAgogDLaYiI9Fgv48W7apLEar0ta1cF01snUYVE1QFqcrtOSzBDPJxyabCtEZ4dnJfkGKCJVyo44gDQLtf+/L1hhPHM8jWcd/OsAUno6RKS6eOtWGg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757497187; c=relaxed/simple;
-	bh=DG29mR2Uzj3dMeySz9wzg/RJdg+PsDMyEmYkbWnfp5A=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=F58shjjSqjYggIDzGfjFiTGAxTQLwqezK2BhrOFYlPrNFLmag3V7f9QMoFj0ihsM+nCDIOnExqx+w3VFZ/bisPOfIYIA79uNaLC7MrujhD4IbD/NhPL75RLGd8WHs1JC+4m3uVDLw5Qy4dWuc1GgALuSPf6DaUx7KlgT8sLBWQ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hut0o4aI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBE81C4CEF0;
-	Wed, 10 Sep 2025 09:39:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757497187;
-	bh=DG29mR2Uzj3dMeySz9wzg/RJdg+PsDMyEmYkbWnfp5A=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=hut0o4aITN8IhWBbeVDXtd+SC34BUn+ftJ03ciGhpANktF6MmaO/7irdZ34XbsDJL
-	 a3z0gpB00y4B59dsrzELzNGorBJixpfImFpJ9cpZ+eK5/eJy3fXhJD78PXEDkFM4jI
-	 aENpbOsuBKE+7/Pcy7fFQtW5q/4oqeZi5iQZkrUup9HTGXC2IRRlvgJCpRC8kv9X3n
-	 rYOotru4HKyn+pzESjCRF4gssRxPPUZq4H/GTyqJ+SvCo5gGI7xOB7xeszw5CrCMst
-	 cgqsDU9rbjxjupI9MHqy/Bn0GxeEqNylOoT9lNY9avjmEHhDB1wvhsD7IHweDtPaV3
-	 iWsUppX5llJkQ==
-Message-ID: <29ec10fa-1ca4-43eb-a865-7219d39c7140@kernel.org>
-Date: Wed, 10 Sep 2025 11:39:41 +0200
+	s=arc-20240116; t=1757497277; c=relaxed/simple;
+	bh=iT6a/zPgyBzTF0XoggB8KlW7bpDBsu9wFGAHxlhXv7U=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=q2CtRcs6HZow4Qp+tPfBkiFf0gBep7YF/Uz5c+co7LyLBOKhZgf7+YtXiAGbRIzgHEkGqAmyvibVIezxJn6vuFlaD2wQaRi1UDkMDQ6LbY6Yn/3Vkk9/UQhiq4TKh+sS8wUuH8Mg3fAzr/PWYVyumvmsvH2ZhYmCATcVDcJgdTw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=lHSKzCSZ; arc=none smtp.client-ip=209.85.208.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-61eaa4f6784so1133416a12.3
+        for <linux-pm@vger.kernel.org>; Wed, 10 Sep 2025 02:41:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1757497273; x=1758102073; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0SOuA/g/nVXdKYjh7EclBkYe4s8OIpHOm/5rpv34JIc=;
+        b=lHSKzCSZoBSfplgHs2b1zbxD7ew72xpOmcWdm0omUOP7VhOk6JD8xrSK4504pKtvQK
+         7BFHNwxgoN3uPVLYlJBh9TuwojPstdzFMS+Mlv8zSHSNZmtTUM+8R1z9jdE/xmJNuH0t
+         JjIFlWQzwUKvqjA6e3w0l9FuNahuo33I8GpCedoU8odUAK36CQYI/pa5lNEFXUKHkb9K
+         J2Gx9jr+eAY9AG/8aJbmDWM/+k0TnkBLKi8hIh7XjvibM130HrsSlmJ0riHH0pkSyqT1
+         FPLMOp0M7JppOPy/x+HogbbghPr/6fyVnUeXHuyBL7ifVRnQn7MVacBEq9rgsHIuflLY
+         NjJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757497273; x=1758102073;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0SOuA/g/nVXdKYjh7EclBkYe4s8OIpHOm/5rpv34JIc=;
+        b=dYytaFnedpirUL9DIM83OsyqykiRnxrAIxQUmOttOJDWzmu6CDtpWDkPd11Gw1sPL2
+         Njmxe6vWblQQe+A1N7VtYp3wVZTjpfr6TdmwW2FP8PwDsdfbfujAzQRlYwRFWW+X0xdR
+         rbz+pcsnjqv312KAYL5B67pbjjURjkmDMEzHlYk5rugUZQ1it7ijvLhAvAPaqRTIW9yn
+         AlYsqguaJKTZVoOWNG2GDIkIhemzqx74vOrizXFgcYq4T19rMU6xTUE+CzD9Aq1fzxs+
+         AatsP9B1yZ9IGKFqYj3fjKGnUx1QFpDqO9icklfWxPS4kwdW9Mo4J88hfVu6t86OFmfz
+         jkXw==
+X-Forwarded-Encrypted: i=1; AJvYcCUxmV743+6+OCU9Zg29etoepRdJ1sJ5kA3gMq0fI2sRm8q7CuyX1Laqp0mnY8KOSEOkDj0u8xNI0w==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwKoB8OM/HXOqKZkNV7mUICpibtBM4k+IOG7Gxm9tRSWKEfxJ5T
+	v6CrmfKE6bsV5axHb8uXLYM+qVUmemomQoQVw5IfOj5f5oB8/HwYp48TcHMFCKMJJ9s=
+X-Gm-Gg: ASbGncu/LsbHS23u6UsPDFGcNkrojLMmjhR1YNnxS1HSsSlFIvEiXGyh6EBrKl3N2WN
+	M5t12/xrFnhqnQhyt2y61Z3ZLPwgfUavnqj8Jeyskq2tCZZ9rqCoLd08HIADQXIvqn8uj/Iv6aJ
+	mrFwtYx4uaJZBEJrALvqry1KwiZDv6zqUZ4I5PBedCnf3hpWugUPWb6CKr+lJ3ozLju8rbQuU8p
+	FLMS6jdNkMnAzGmb7AMrIQAH5D0r7lD59kssOMjVhaYBBBQpvG/zQYyO3wKPRc6r7EpEAwRzFUd
+	k5gFisp9KIPl+n3c7mZsIX8xsuEr4gocAKOrBr+YQzVqp7aaqTzIeuGSVjONlvIiHw3lW1eU6vL
+	nioPqhMYdYh8PXpoTk0zd1i7l6eiUHZSsbR13wEM=
+X-Google-Smtp-Source: AGHT+IFFimeDDYyh9wXdVWxN7z2S4of6Ed5oLlealg+J5WJbf9k2XtQ+Zl7cp5trMu0jBLQkBELkhw==
+X-Received: by 2002:a05:6402:325b:b0:62d:c7b9:b149 with SMTP id 4fb4d7f45d1cf-62dc7b9b348mr387259a12.2.1757497273537;
+        Wed, 10 Sep 2025 02:41:13 -0700 (PDT)
+Received: from [127.0.1.1] ([178.197.219.123])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-62c01bdb7e9sm3021590a12.48.2025.09.10.02.41.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Sep 2025 02:41:12 -0700 (PDT)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To: Krzysztof Kozlowski <krzk@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Thierry Reding <thierry.reding@gmail.com>, 
+ Jonathan Hunter <jonathanh@nvidia.com>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ MyungJoo Ham <myungjoo.ham@samsung.com>, 
+ Kyungmin Park <kyungmin.park@samsung.com>, 
+ Chanwoo Choi <cw00.choi@samsung.com>, Dmitry Osipenko <digetx@gmail.com>, 
+ Aaron Kling <webgeek1234@gmail.com>
+Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org
+In-Reply-To: <20250906-t210-actmon-v3-2-1403365d571e@gmail.com>
+References: <20250906-t210-actmon-v3-0-1403365d571e@gmail.com>
+ <20250906-t210-actmon-v3-2-1403365d571e@gmail.com>
+Subject: Re: (subset) [PATCH v3 2/9] dt-bindings: memory: tegra210: emc:
+ Document OPP table and interconnect
+Message-Id: <175749727162.29308.12636309161261093675.b4-ty@linaro.org>
+Date: Wed, 10 Sep 2025 11:41:11 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 5/9] memory: tegra210: Support interconnect framework
-To: webgeek1234@gmail.com, Rob Herring <robh@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Thierry Reding
- <thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>,
- MyungJoo Ham <myungjoo.ham@samsung.com>,
- Kyungmin Park <kyungmin.park@samsung.com>,
- Chanwoo Choi <cw00.choi@samsung.com>, Dmitry Osipenko <digetx@gmail.com>
-Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
- linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20250906-t210-actmon-v3-0-1403365d571e@gmail.com>
- <20250906-t210-actmon-v3-5-1403365d571e@gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
- cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
- JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
- gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
- J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
- NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
- BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
- vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
- Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
- TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
- S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
- FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJoF1BKBQkWlnSaAAoJEBuTQ307
- QWKbHukP/3t4tRp/bvDnxJfmNdNVn0gv9ep3L39IntPalBFwRKytqeQkzAju0whYWg+R/rwp
- +r2I1Fzwt7+PTjsnMFlh1AZxGDmP5MFkzVsMnfX1lGiXhYSOMP97XL6R1QSXxaWOpGNCDaUl
- ajorB0lJDcC0q3xAdwzRConxYVhlgmTrRiD8oLlSCD5baEAt5Zw17UTNDnDGmZQKR0fqLpWy
- 786Lm5OScb7DjEgcA2PRm17st4UQ1kF0rQHokVaotxRM74PPDB8bCsunlghJl1DRK9s1aSuN
- hL1Pv9VD8b4dFNvCo7b4hfAANPU67W40AaaGZ3UAfmw+1MYyo4QuAZGKzaP2ukbdCD/DYnqi
- tJy88XqWtyb4UQWKNoQqGKzlYXdKsldYqrLHGoMvj1UN9XcRtXHST/IaLn72o7j7/h/Ac5EL
- 8lSUVIG4TYn59NyxxAXa07Wi6zjVL1U11fTnFmE29ALYQEXKBI3KUO1A3p4sQWzU7uRmbuxn
- naUmm8RbpMcOfa9JjlXCLmQ5IP7Rr5tYZUCkZz08LIfF8UMXwH7OOEX87Y++EkAB+pzKZNNd
- hwoXulTAgjSy+OiaLtuCys9VdXLZ3Zy314azaCU3BoWgaMV0eAW/+gprWMXQM1lrlzvwlD/k
- whyy9wGf0AEPpLssLVt9VVxNjo6BIkt6d1pMg6mHsUEVzsFNBFVDXDQBEADNkrQYSREUL4D3
- Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
- MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
- OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
- GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
- 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
- YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
- 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
- BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
- JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
- 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
- YpsFAmgXUF8FCRaWWyoACgkQG5NDfTtBYptO0w//dlXJs5/42hAXKsk+PDg3wyEFb4NpyA1v
- qmx7SfAzk9Hf6lWwU1O6AbqNMbh6PjEwadKUk1m04S7EjdQLsj/MBSgoQtCT3MDmWUUtHZd5
- RYIPnPq3WVB47GtuO6/u375tsxhtf7vt95QSYJwCB+ZUgo4T+FV4hquZ4AsRkbgavtIzQisg
- Dgv76tnEv3YHV8Jn9mi/Bu0FURF+5kpdMfgo1sq6RXNQ//TVf8yFgRtTUdXxW/qHjlYURrm2
- H4kutobVEIxiyu6m05q3e9eZB/TaMMNVORx+1kM3j7f0rwtEYUFzY1ygQfpcMDPl7pRYoJjB
- dSsm0ZuzDaCwaxg2t8hqQJBzJCezTOIkjHUsWAK+tEbU4Z4SnNpCyM3fBqsgYdJxjyC/tWVT
- AQ18NRLtPw7tK1rdcwCl0GFQHwSwk5pDpz1NH40e6lU+NcXSeiqkDDRkHlftKPV/dV+lQXiu
- jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
- zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
- XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20250906-t210-actmon-v3-5-1403365d571e@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-
-On 06/09/2025 22:16, Aaron Kling via B4 Relay wrote:
-> +
-> +static int tegra_emc_interconnect_init(struct tegra210_emc *emc)
-> +{
-> +	const struct tegra_mc_soc *soc = emc->mc->soc;
-> +	struct icc_node *node;
-> +	int err;
-> +
-> +	emc->icc_provider.dev = emc->dev;
-> +	emc->icc_provider.set = emc_icc_set;
-> +	emc->icc_provider.data = &emc->icc_provider;
-> +	emc->icc_provider.aggregate = soc->icc_ops->aggregate;
-> +	emc->icc_provider.xlate_extended = emc_of_icc_xlate_extended;
-> +	emc->icc_provider.get_bw = tegra_emc_icc_get_init_bw;
-> +
-> +	icc_provider_init(&emc->icc_provider);
-> +
-> +	/* create External Memory Controller node */
-> +	node = icc_node_create(TEGRA_ICC_EMC);
-> +	if (IS_ERR(node)) {
-> +		err = PTR_ERR(node);
-> +		goto err_msg;
-
-return dev_err_probe
-
-> +	}
-> +
-> +	node->name = "External Memory Controller";
-> +	icc_node_add(node, &emc->icc_provider);
-> +
-> +	/* link External Memory Controller to External Memory (DRAM) */
-> +	err = icc_link_create(node, TEGRA_ICC_EMEM);
-> +	if (err)
-> +		goto remove_nodes;
-> +
-> +	/* create External Memory node */
-> +	node = icc_node_create(TEGRA_ICC_EMEM);
-> +	if (IS_ERR(node)) {
-> +		err = PTR_ERR(node);
-> +		goto remove_nodes;
-> +	}
-> +
-> +	node->name = "External Memory (DRAM)";
-> +	icc_node_add(node, &emc->icc_provider);
-> +
-> +	err = icc_provider_register(&emc->icc_provider);
-> +	if (err)
-> +		goto remove_nodes;
-> +
-> +	return 0;
-> +
-> +remove_nodes:
-> +	icc_nodes_remove(&emc->icc_provider);
-> +err_msg:
-> +	dev_err(emc->dev, "failed to initialize ICC: %d\n", err);
-
-Write descriptive error messages or skip it. It's printing errors also
-on ENOMEM.
-
-I will send a patch to fix existing code.
-
-> +
-> +	return err;
-> +}
-> +
-> +static int tegra_emc_opp_table_init(struct tegra210_emc *emc)
-> +{
-> +	u32 hw_version = BIT(tegra_sku_info.soc_speedo_id);
-> +	struct dev_pm_opp *opp;
-> +	unsigned long rate;
-> +	int opp_token, err, max_opps, i;
-> +
-> +	err = dev_pm_opp_set_supported_hw(emc->dev, &hw_version, 1);
-> +	if (err < 0) {
-> +		dev_err(emc->dev, "failed to set OPP supported HW: %d\n", err);
-> +		return err;
-
-return dev_err_probe
-
-> +	}
-> +	opp_token = err;
-> +
-> +	err = dev_pm_opp_of_add_table(emc->dev);
-> +	if (err) {
-> +		if (err == -ENODEV)
-> +			dev_warn(emc->dev, "OPP table not found, please update your device tree\n");
-> +		else
-> +			dev_err(emc->dev, "failed to add OPP table: %d\n", err);
-> +
-> +		goto put_hw_table;
-> +	}
-> +
-> +	max_opps = dev_pm_opp_get_opp_count(emc->dev);
-> +	if (max_opps <= 0) {
-> +		dev_err(emc->dev, "Failed to add OPPs\n");
-> +		goto remove_table;
-> +	}
-> +
-> +	if (emc->num_timings != max_opps) {
-> +		dev_err(emc->dev, "OPP table does not match emc table\n");
-> +		goto remove_table;
-> +	}
-> +
-> +	for (i = 0; i < emc->num_timings; i++) {
-> +		rate = emc->timings[i].rate * 1000;
-> +		opp = dev_pm_opp_find_freq_exact(emc->dev, rate, true);
-> +		if (IS_ERR(opp)) {
-> +			dev_err(emc->dev, "Rate %lu not found in OPP table\n", rate);
-> +			goto remove_table;
-> +		}
-> +
-> +		dev_pm_opp_put(opp);
-> +	}
-> +
-> +	dev_info_once(emc->dev, "OPP HW ver. 0x%x, current clock rate %lu MHz\n",
-> +		      hw_version, clk_get_rate(emc->clk) / 1000000);
-> +
-> +	return 0;
-> +
-> +remove_table:
-> +	dev_pm_opp_of_remove_table(emc->dev);
-> +put_hw_table:
-> +	dev_pm_opp_put_supported_hw(opp_token);
-> +
-> +	return err;
-> +}
-> +
-
-...
-
-> diff --git a/drivers/memory/tegra/tegra210.c b/drivers/memory/tegra/tegra210.c
-> index cfa61dd885577a8fbd79c396a1316101197ca1f2..20828a07d2d0cafa739b534c20c12f065b276669 100644
-> --- a/drivers/memory/tegra/tegra210.c
-> +++ b/drivers/memory/tegra/tegra210.c
-> @@ -3,6 +3,9 @@
->   * Copyright (C) 2015 NVIDIA CORPORATION.  All rights reserved.
->   */
->  
-> +#include <linux/of.h>
-> +#include <linux/device.h>
-> +
->  #include <dt-bindings/memory/tegra210-mc.h>
->  
->  #include "mc.h"
-> @@ -1273,6 +1276,83 @@ static const struct tegra_mc_reset tegra210_mc_resets[] = {
->  	TEGRA210_MC_RESET(TSECB,     0x970, 0x974, 13),
->  };
->  
-> +static int tegra210_mc_icc_set(struct icc_node *src, struct icc_node *dst)
-> +{
-> +	/* TODO: program PTSA */
-> +	return 0;
-> +}
-> +
-> +static int tegra210_mc_icc_aggregate(struct icc_node *node, u32 tag, u32 avg_bw,
-> +				     u32 peak_bw, u32 *agg_avg, u32 *agg_peak)
-> +{
-> +	/*
-> +	 * ISO clients need to reserve extra bandwidth up-front because
-> +	 * there could be high bandwidth pressure during initial filling
-> +	 * of the client's FIFO buffers.  Secondly, we need to take into
-> +	 * account impurities of the memory subsystem.
-> +	 */
-> +	if (tag & TEGRA_MC_ICC_TAG_ISO)
-> +		peak_bw = tegra_mc_scale_percents(peak_bw, 400);
-> +
-> +	*agg_avg += avg_bw;
-> +	*agg_peak = max(*agg_peak, peak_bw);
-> +
-> +	return 0;
-> +}
-> +
-> +static struct icc_node_data *
-> +tegra210_mc_of_icc_xlate_extended(const struct of_phandle_args *spec, void *data)
-> +{
-> +	struct tegra_mc *mc = icc_provider_to_tegra_mc(data);
-> +	const struct tegra_mc_client *client;
-> +	unsigned int i, idx = spec->args[0];
-> +	struct icc_node_data *ndata;
-> +	struct icc_node *node;
-> +
-> +	list_for_each_entry(node, &mc->provider.nodes, node_list) {
-> +		if (node->id != idx)
-> +			continue;
-> +
-> +		ndata = kzalloc(sizeof(*ndata), GFP_KERNEL);
-> +		if (!ndata)
-> +			return ERR_PTR(-ENOMEM);
-> +
-> +		client = &mc->soc->clients[idx];
-> +		ndata->node = node;
-> +
-> +		switch (client->swgroup) {
-> +		case TEGRA_SWGROUP_DC:
-> +		case TEGRA_SWGROUP_DCB:
-> +		case TEGRA_SWGROUP_PTC:
-> +		case TEGRA_SWGROUP_VI:
-> +			/* these clients are isochronous by default */
-> +			ndata->tag = TEGRA_MC_ICC_TAG_ISO;
-> +			break;
-> +
-> +		default:
-> +			ndata->tag = TEGRA_MC_ICC_TAG_DEFAULT;
-> +			break;
-> +		}
-> +
-> +		return ndata;
-> +	}
-> +
-> +	for (i = 0; i < mc->soc->num_clients; i++) {
-> +		if (mc->soc->clients[i].id == idx)
-> +			return ERR_PTR(-EPROBE_DEFER);
-
-This feels like more reasonable use of deferred probe, but I wonder how
-is this condition possible.
-
-This xlate is called at earliest after MC ICC is registered. At this
-tage all nodes are created, so previous list_for_each_entry() should
-succeed and return. If previous list_for_each_entry() did not return,
-how can you find a matching client for which the node will be added
-later, thus deferred probe?
-
-This is again existing code, of course :)
+X-Mailer: b4 0.14.2
 
 
+On Sat, 06 Sep 2025 15:16:52 -0500, Aaron Kling wrote:
+> These are needed for dynamic frequency scaling of the EMC controller.
+> 
+> 
+
+Applied, thanks!
+
+[2/9] dt-bindings: memory: tegra210: emc: Document OPP table and interconnect
+      https://git.kernel.org/krzk/linux-mem-ctrl/c/550faad18505aac40a1551a5b467e0a63bf2d639
 
 Best regards,
-Krzysztof
+-- 
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
 
