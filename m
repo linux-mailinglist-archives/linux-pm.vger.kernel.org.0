@@ -1,200 +1,147 @@
-Return-Path: <linux-pm+bounces-34360-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34361-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8BC3B5172C
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 14:44:01 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B5ACB51762
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 14:56:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5630416FC77
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 12:44:01 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 518EA4E350B
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 12:56:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2232B31B800;
-	Wed, 10 Sep 2025 12:43:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 522D331C591;
+	Wed, 10 Sep 2025 12:56:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="lvXHCLx6"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ttel2A/b"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
+Received: from mail-vk1-f179.google.com (mail-vk1-f179.google.com [209.85.221.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71F0D31B117
-	for <linux-pm@vger.kernel.org>; Wed, 10 Sep 2025 12:43:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9222D31CA55;
+	Wed, 10 Sep 2025 12:56:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757508239; cv=none; b=gvM5aFSyj4AwH0UxAWGe8tBBQQQrGCNzBIDlFKg/ggQO8hLoXqMrD+ir4ip4D/TKB14daxV8GDrfNhcq7ydIEpAFQMB7Jn++yraRFquPlEJMNXB2S8mnGLBFEPmlHhNQbHI3noG9Xgp0r9NYhYb65rigx8UtdFkUUqyBU+EzgyM=
+	t=1757509011; cv=none; b=mk1j2w2kdtfV7AknvtyAJWkcXOVxprBKbF80XbGmiPzRVL7pS+SeS5FPumwUDjz88KVDm99iZa9hteyEmH2JlOjR/rpKLX05styldpFQzAZOf3BpKTGf+pxENmUzh76SfAtfABOUI8r2zNHWeHTDGsGwTy0kYhTgP5ykqoH17U4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757508239; c=relaxed/simple;
-	bh=6hyxMssO6UptV5ndyXXdOtME72JdJ4MYovUh70TTqVQ=;
+	s=arc-20240116; t=1757509011; c=relaxed/simple;
+	bh=xSHU9LrZBwNFz3tU6gqUFT4uW67nrsrFJZDTWDmyaJs=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BT+J2iaA3awJss+F4CXlupJq0ysFMUQ+QNvBhKiy+Xgt3gZMhngrSp45Te2zP0J7spniTwOA9PkI9q5vqwEJeQOTKroB5CIX1xiy5RPpIHW2ZthHLOgYk7NrJbg2GpgRnGyxgOT917DkoVT5YXkkW02FxFYCHH/TZp10DjIDRMk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=lvXHCLx6; arc=none smtp.client-ip=209.85.210.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-ot1-f45.google.com with SMTP id 46e09a7af769-74572fb94b3so5856694a34.2
-        for <linux-pm@vger.kernel.org>; Wed, 10 Sep 2025 05:43:57 -0700 (PDT)
+	 To:Cc:Content-Type; b=UaUz/+5ramIBCh4Vg3/aDLLdzLIhs/emqHaUEJ34EWCxN6Or3QyqQdaaq8+FuXDo6hNgnQyesV5Rz06yYmFOhszl2Lq/XgPoMDVk7Nbz8oFB0nhgtgQ6QEp6Kulnb5wtHDJwsgUsCAv2eNFj4E0hxNZ1YnLl9qCU0+DzonUKHpw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ttel2A/b; arc=none smtp.client-ip=209.85.221.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vk1-f179.google.com with SMTP id 71dfb90a1353d-54492cc6eb1so4596295e0c.2;
+        Wed, 10 Sep 2025 05:56:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1757508236; x=1758113036; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1757509008; x=1758113808; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pQhOG91bArp9vZkb5DwKkVqTLjRBlvwnVCISw9YNxrs=;
-        b=lvXHCLx6U2wmIq79iRabgINYDjQJ4QPVu5vF/wVxi1qjxfkLeJj1Or8X7NP2J7T+SJ
-         50prWJfeuxtfACirtp3UBZGda/0P3eccUJIlTxztWKx1QYKd5zsJ4bSnh8NBe6CACML9
-         XuC7erT2+LLUoY72K4f/tulK0wLRZ/GPlYV9Q=
+        bh=sb8UTMBnB9ZvHWVTvvBbSBlx8XsNQb46z3ALMolTZM4=;
+        b=Ttel2A/bFzMrA2PqQxGTCe2bhK37KmMvHka9zyVuTRM7HMP+U8Tbt7+BlPs/8kdOdB
+         8yoq1F9jVxHaCbwsDVijafcJLit0XPUozymHL8gsWl9Hvv+KjfufF8O7Y7IwG1WMVsjg
+         RReJh9QXqixjr3RunAEHN8qLhQ2y6ujupkMridqCp/TZS7S9BKOcNOWMytA13IQcqEGn
+         QOdhtMl8UHmt+FkCx73a5VYjW4OJVdfWIfgObK/TyXUHzKLw4weeqyjjb0lFPav/Q8zx
+         l9XtEtv+Im5J6P7EfGYn68JJn/sK7oV7gQ4u/dUu93EPWuapOEvI+34+dnQ9Tw9BeKAI
+         ct0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757508236; x=1758113036;
+        d=1e100.net; s=20230601; t=1757509008; x=1758113808;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=pQhOG91bArp9vZkb5DwKkVqTLjRBlvwnVCISw9YNxrs=;
-        b=YcaI7fPAI2yM0EA16xJ22v4WbAP2N4oOAF2gZs1dGruflPrd1nySt0nSdzrUVi46Ax
-         /tmawsfw6cF+GHtNTQk6H2ECLH1yUkUY3m7NWLIpDLva+M10H2lySJTB2hZt10wbxf8r
-         6UzttARuNQplwzlxUJ3fl1sSVfgw+UlIYkWwwScWTQtjn7bbU7+66NoeAMKp4s0G2TMn
-         WOQtmojaE1fof/5kNT9YoFyUdKebEiYdg1oOBUz7cr0M44gv/SbSE3NrUD45fY/uzldt
-         IFsD+3PxfYnHnjM4m4MN2LNDvKgvq7AMafcD3+UelzSLnL9AY8ZqOIyk5+/80WP5lwzi
-         5cMA==
-X-Forwarded-Encrypted: i=1; AJvYcCVGRsyCADOtmUdTsQKE1vy6l4uuJIVD/In3Pt1qvoHWKJ6IbxgzVHFWa7HOGytv5EJ4R5wr11TwkA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzAl60HSj8JGMyhyCtCPopkHHvQm+HcJssaWAiF+W/4/p3ER1U1
-	x3yoATkD6wANZ778jBNj34t+VV6rY7k1ntwtVh8JEN8Do5iYv0ELlUoIZ0SL5CWcb2rpZzx9k88
-	gihFj6ilut3EFIvXCJKHlTWchi8Vtckdu0Oc7Kzrk
-X-Gm-Gg: ASbGncswKyT1vLtmqOTRhASw3APcXfc9naIYahP9166IG4G4p85yXvTJL0Wm/m98Js1
-	NYmuuctrApCQEFNGLvVZFrX4MrGdB8KmorIAzwHMgWaHUevtT+hBm/F7ELhsqdXzzYzOd9gjlJ9
-	Wk7RLVnS16vfK0qLidf27umUhwoccvrIOppGOG7qpscSeiS0h48tYLQfQLwXwmgkdgyWs69SQyB
-	2sBbakHVVG2/exUtvzVMaAsQfuHRqFQPgIHVj3cJkwG/FKZ
-X-Google-Smtp-Source: AGHT+IGxcqc4D5gEQ+X5NRlavlcxPq6T9FzervsoDixpqR3jg4vwtYGtcuqLh1US1dqr6ottFh5JAcVWbB+ygwZExC4=
-X-Received: by 2002:a05:6830:2a16:b0:73e:8c8b:749 with SMTP id
- 46e09a7af769-74c667ebe6dmr9355332a34.0.1757508236391; Wed, 10 Sep 2025
- 05:43:56 -0700 (PDT)
+        bh=sb8UTMBnB9ZvHWVTvvBbSBlx8XsNQb46z3ALMolTZM4=;
+        b=dQ4+FTeMSmP5xZy5peCLM9CeifjAa30yoQiRXPG6Py8g0Fg+ncjX2rf6oxs1nCIQSU
+         WaNP9TYsrcls3LMOt5z5sgMEtSlNj/JBmIGuLPPzdLn++xpnaYOhTvpUmo3XFHLIMbqD
+         273Pe1tAf9MSbG7N5wjxZPIjCEkqb/l08B5/bs9pEEXVmAqa/u3e1DTXEuJ76sdm3tvu
+         qoj2ZcJ6kBydICT/gXhRf0RgVtU1LmoDM0pXkrGlYEZpRxDTNuScuWYDVX3jXu73bGG5
+         IZEO6oOdvBpp225Y54dH0ChL32zZdFy3zvofFLF9PXUZuqZGJ4SCngvwKopKZa5ZY7UR
+         F3vA==
+X-Forwarded-Encrypted: i=1; AJvYcCVB4Dsp9cC1PZWPk71LGJCa86vPXjkehW8pATCigobzffL7MCrxQuMwZxLTzw7ytNbrSw/wGErMOzY=@vger.kernel.org, AJvYcCVsFjWO/cqFPXNHqTyu3AD+hqns0jkJ72vJJkquLFOjhK+shtV6geq+OnjFHQBlxeC/SxdIOSZcCIC0@vger.kernel.org, AJvYcCWf0EfmyqLe8UgigXJHLWSb12U18Bg4jQK1Q2TvzgUxuDuFi4ppqCs8aLk8dmVMCo5ftobPE+hd3B3WDY0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx8PJGuoKcr1RBwYkaxk53Q5XY+akdEoZEWx+1p2QsHCTQTugww
+	kHMaM+JjeNeVLncCrc1yq7QGwDwl9XSIXdDFD1UOtypoVEA98Pry6GXOueUSrEKmHKEAV4gNMxq
+	+HdGk6lSu5553vejYGBahV405WMy72TM=
+X-Gm-Gg: ASbGnctEodg77zRu7QID1s7Sf2xibp6dk2aTby8WYdYGARJuLz86BFuFosQtPN2dg2+
+	zh+JR20mW7T/5Oqgh3UI1CNy2GF0WISlaCAlF5jDL8b/n2dDAfBkDZN2wpVKKdjWPEZ5GM1I7ds
+	gPRa7k48vzSflxVRWZH33Kqqfuuv2z4mKx/iu37ZlnMyM4iCsphmvhdyBYIHxm6eszqauwzyR2m
+	O/mf/wsnwgypoO2X7Pr8vmPG/O8rF7cXg==
+X-Google-Smtp-Source: AGHT+IGv0enk7fYhOCUXWeXriRP5nJe9zA6ZJ12AwgJXoYDwpTT3uv6N5288bzYDWEt9Jff+/TgZf+T19I96wZzBOtg=
+X-Received: by 2002:a05:6122:92a:b0:544:71fb:f49b with SMTP id
+ 71dfb90a1353d-5472c0d3f98mr4731397e0c.10.1757509008386; Wed, 10 Sep 2025
+ 05:56:48 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250909094335.1097103-1-treapking@chromium.org> <CAJZ5v0jNytfP8W2XSyBNLe8OsD=O9M7WWvhtxdwXA-5KxwKfbg@mail.gmail.com>
-In-Reply-To: <CAJZ5v0jNytfP8W2XSyBNLe8OsD=O9M7WWvhtxdwXA-5KxwKfbg@mail.gmail.com>
-From: Pin-yen Lin <treapking@chromium.org>
-Date: Wed, 10 Sep 2025 20:43:45 +0800
-X-Gm-Features: Ac12FXxR5wted0eOqkHInYwIU_oThynHjmKnNyVK-3wz-J14_ellHNLoRtJtMTE
-Message-ID: <CAEXTbpd6k=_yF4vG-zU4C0ymriLYXcT4AusCFJ03wZWJecOS5w@mail.gmail.com>
-Subject: Re: [PATCH] PM: sleep: Don't wait for SYNC_STATE_ONLY device links
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Len Brown <lenb@kernel.org>, Pavel Machek <pavel@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, 
-	Saravana Kannan <saravanak@google.com>, Hsin-Te Yuan <yuanhsinte@chromium.org>, 
+References: <385dccf3-234a-4f83-9610-81ac30bf1466@rowland.harvard.edu>
+ <20250909161901.10733-1-ryanzhou54@gmail.com> <2025090959-italicize-silly-f628@gregkh>
+In-Reply-To: <2025090959-italicize-silly-f628@gregkh>
+From: ryan zhou <ryanzhou54@gmail.com>
+Date: Wed, 10 Sep 2025 20:56:36 +0800
+X-Gm-Features: AS18NWDBnTEnh2Hh312GhBRiDmM_gIC7GVX0oLT774vf9tj-hQ0o8e7_KViXTHM
+Message-ID: <CAPwe5RPxRhvYmoDZF792Vwv638kt+Hk+CYoJJCmcjewGp8NfYQ@mail.gmail.com>
+Subject: Re: [PATCH v2] drvier: usb: dwc3: Fix runtime PM trying to activate
+ child device xxx.dwc3 but parent is not active
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: stern@rowland.harvard.edu, Thinh.Nguyen@synopsys.com, 
 	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	Chen-Yu Tsai <wenst@chromium.org>
+	linux-usb@vger.kernel.org, rafael@kernel.org, royluo@google.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Rafael,
+Hi Greg KH,
+Sorry, I didn't understand your question. Are you asking for my patch
+commit ID? I've resubmitted patch v3, and the commit details are as
+follows:
 
-Thanks for the review.
+commit 92bc5086f53404f6d14d8550209d1c8cd3fa9036 (HEAD -> usb-next-develop)
 
-On Wed, Sep 10, 2025 at 7:56=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.or=
-g> wrote:
+Or do you need the commit that introduced this issue?
+
+
+
+Greg KH <gregkh@linuxfoundation.org> =E4=BA=8E2025=E5=B9=B49=E6=9C=8810=E6=
+=97=A5=E5=91=A8=E4=B8=89 00:25=E5=86=99=E9=81=93=EF=BC=9A
 >
-> On Tue, Sep 9, 2025 at 11:44=E2=80=AFAM Pin-yen Lin <treapking@chromium.o=
-rg> wrote:
+> On Wed, Sep 10, 2025 at 12:19:01AM +0800, Ryan Zhou wrote:
+> > Issue description:During the wake-up sequence, if the system invokes
+> >  dwc3->resume and detects that the parent device of dwc3 is in a
+> > runtime suspend state, the system will generate an error: runtime PM
+> > trying to activate child device xxx.dwc3 but parent is not active.
 > >
-> > Device links with DL_FLAG_SYNC_STATE_ONLY should not affect suspend
-> > and resume, and functions like device_reorder_to_tail() and
-> > device_link_add() doesn't try to reorder the consumers with such flag.
+> > Solution:At the dwc3->resume entry point, if the dwc3 controller
+> > is detected in a suspended state, the function shall return
+> > immediately without executing any further operations.
 > >
-> > However, dpm_wait_for_consumers() and dpm_wait_for_suppliers() doesn't
-> > check this flag before triggering dpm_wait, leading to potential hang
-> > during suspend/resume.
->
-> Have you seen this happen or is it just a theory?
-
-We initially see this with a downstream kernel, but I can reproduce
-this with the upstream kernel when I connect the usb host controller
-to a "usb-a-connector" node on MT8186 Corsola Chromebook. The
-devicetree looks like:
-
-usb-a-connector {
-        compatible =3D "usb-a-connector";
-        port {
-                usb_a_con: endpoint {
-                        remote-endpoint =3D <&usb_hs>;
-                };
-        };
-};
-
-usb_host {
-        compatible =3D "mediatek,mt8186-xhci", "mediatek,mtk-xhci";
-        port {
-                usb_hs: endpoint {
-                        remote-endpoint =3D <&usb_a_con>;
-                };
-        };
-};
-
-In this case, the two nodes form a cycle and I ended up seeing a
-SYNC_STATE_ONLY devlink from usb_host (supplier) to the
-usb-a-connector (consumer).
-
-I'm not very sure why we didn't see this issue before. Maybe it's
-related to the fact that the usb-a-connector has a compatible string
-(so a platform device is created) but no driver binds into it.
->
-> > Add DL_FLAG_SYNC_STATE_ONLY in dpm_wait_for_consumers() and
-> > dpm_wait_for_suppliers() to fix this.
->
-> The above sentence is incomplete AFAICS.
-
-Sorry, I meant "Add a check for DL_FLAG_SYNC_STATE_ONLY in ...". I'll
-update this in the next version.
->
-> > Fixes: 05ef983e0d65a ("driver core: Add device link support for SYNC_ST=
-ATE_ONLY flag")
-> > Signed-off-by: Pin-yen Lin <treapking@chromium.org>
+> > Signed-off-by: Ryan Zhou <ryanzhou54@gmail.com>
 > > ---
+> >  drivers/usb/dwc3/core.c | 3 +++
+> >  1 file changed, 3 insertions(+)
 > >
-> >  drivers/base/power/main.c | 6 ++++--
-> >  1 file changed, 4 insertions(+), 2 deletions(-)
+> > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> > index 370fc524a468..06a6f8a67129 100644
+> > --- a/drivers/usb/dwc3/core.c
+> > +++ b/drivers/usb/dwc3/core.c
+> > @@ -2687,6 +2687,9 @@ int dwc3_pm_resume(struct dwc3 *dwc)
+> >       struct device *dev =3D dwc->dev;
+> >       int             ret =3D 0;
 > >
-> > diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
-> > index 2ea6e05e6ec90..3271f4af2cb65 100644
-> > --- a/drivers/base/power/main.c
-> > +++ b/drivers/base/power/main.c
-> > @@ -282,7 +282,8 @@ static void dpm_wait_for_suppliers(struct device *d=
-ev, bool async)
-> >          * walking.
-> >          */
-> >         list_for_each_entry_rcu_locked(link, &dev->links.suppliers, c_n=
-ode)
-> > -               if (READ_ONCE(link->status) !=3D DL_STATE_DORMANT)
-> > +               if (READ_ONCE(link->status) !=3D DL_STATE_DORMANT &&
-> > +                   !device_link_test(link, DL_FLAG_SYNC_STATE_ONLY))
->
-> This should use a check like device_link_flag_is_sync_state_only(),
-> which is different from the above one, for consistency with
-> device_reorder_to_tail().
-
-Thanks. I'll fix this in the next version.
->
-> >                         dpm_wait(link->supplier, async);
+> > +     if (pm_runtime_suspended(dev))
+> > +             return ret;
+> > +
+> >       pinctrl_pm_select_default_state(dev);
 > >
-> >         device_links_read_unlock(idx);
-> > @@ -339,7 +340,8 @@ static void dpm_wait_for_consumers(struct device *d=
-ev, bool async)
-> >          * unregistration).
-> >          */
-> >         list_for_each_entry_rcu_locked(link, &dev->links.consumers, s_n=
-ode)
-> > -               if (READ_ONCE(link->status) !=3D DL_STATE_DORMANT)
-> > +               if (READ_ONCE(link->status) !=3D DL_STATE_DORMANT &&
-> > +                   !device_link_test(link, DL_FLAG_SYNC_STATE_ONLY))
->
-> And same here.
->
-> >                         dpm_wait(link->consumer, async);
-> >
-> >         device_links_read_unlock(idx);
+> >       pm_runtime_disable(dev);
 > > --
-
-Regards,
-Pin-yen
+> > 2.25.1
+> >
+> >
+>
+> What commit id does this fi?
+>
+> thanks,
+>
+> greg k-h
 
