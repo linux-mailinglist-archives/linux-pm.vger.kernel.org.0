@@ -1,218 +1,177 @@
-Return-Path: <linux-pm+bounces-34351-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34352-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id D540CB51386
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 12:09:30 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 814E4B513C1
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 12:22:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 1798D4E1A92
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 10:09:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DEC0B7A590F
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 10:20:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0E8A3128B6;
-	Wed, 10 Sep 2025 10:09:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A94C33126AE;
+	Wed, 10 Sep 2025 10:21:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QQFU1GHH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dcVj4qEF"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDE3E30DD15;
-	Wed, 10 Sep 2025 10:09:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84E4E306493
+	for <linux-pm@vger.kernel.org>; Wed, 10 Sep 2025 10:21:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757498942; cv=none; b=gc+l+bGgH0REocCljbSXX5/3D3FWLeqpdgDoWxv2DhUzWBRIVfHwaDnrEN+EUVPEWbK04bCg+7qbBxEj1Zgi1zepubWZZh0EntABugNFb49OtQ0bRYjkcg6ULseU6e0X4DTM1H0uUxwQGMkl4BnC6ybvrAb9XFb5wgq9KuaIVSM=
+	t=1757499716; cv=none; b=dRTwonEWG4FqRNA7kVBujZKVwBkPxI2PI/OhZWjeEbaZpyl+38NtkEzqY4D9KCzdqOZ6WmkOu/Myy1iw1oMKdjBO4VSPIVpxbB6jDYpsnCuRi3NmweQChu6mfYZO7U6BlG8/65OUuI6zlod2/Fl6fA9g93raDznqpgpFTYZOMZA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757498942; c=relaxed/simple;
-	bh=aeTA+lv2/iWgxRZ8jrB4QdsGG60YLD9kDCzhaXcpjuI=;
+	s=arc-20240116; t=1757499716; c=relaxed/simple;
+	bh=yrVyn3V6aAztgIoV6+HguoUJUYcfI42wgA0V0OhlJ14=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pXc1DfpZcgjkcWhLxXFs7r+qKgxpxEMKEWfq+aluETrx6XzE1zY1Tjp0iY6Te110z5iLg9VkgeWz+SGove6tJ3gd/R6ncPwVuRVN9B2jarxwJdRkqwT0DOd5Jtt431IM/Yf0W4CNMDd+PGZ6hg84sL+ZjRk+0XiXSVfN6u2pt1g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QQFU1GHH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47073C4CEFA;
-	Wed, 10 Sep 2025 10:09:02 +0000 (UTC)
+	 To:Cc:Content-Type; b=m8jjFQkCplJecIv1ELG3HI0x6R0HkesjSqE+O6WkrUQa8cUzql7Gkfc0IXHRjUSgagFyetdS/INY8S0RRrOgqWmLgGFtNb9BbUZqxxmxgFG2Kx4Iq5qatxakY9V/ME706rBN+pDDuv2R6l6LscnOJwc9BqaU/5YUhbsLJhL1nmA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dcVj4qEF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 172DFC4CEF0
+	for <linux-pm@vger.kernel.org>; Wed, 10 Sep 2025 10:21:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757498942;
-	bh=aeTA+lv2/iWgxRZ8jrB4QdsGG60YLD9kDCzhaXcpjuI=;
+	s=k20201202; t=1757499716;
+	bh=yrVyn3V6aAztgIoV6+HguoUJUYcfI42wgA0V0OhlJ14=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=QQFU1GHHjWal7zYc1RUbSOSaNT0uaWghqNsDYZe5aP9TWWSRuwHaiP+rBjseazOe7
-	 KdHnWOdoWamQrPloFa1nMFvP91qGHAtQllguliMy0H5sjU278KuYewVoxP1Q+1GpUy
-	 RBuXYe9LRLH36Hk3B1zVggFknetUtvofUAY8Q94ukztZVPeMEfKC9XLG1Tm4jnr2SI
-	 5COlVZERZ4h7nW3c8McxUIalWkWkQjJMyWfOtNCgdE6mW45hUSdpB3HWnWCaVncvs/
-	 ooGQtFpUbqlkLnv7JzLhPIkC6hi8c1MY/OsjvKPvncrIhVVu+DPP1Pi+TfgO7XN0re
-	 3nlWnmcI0uytQ==
-Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-61e783a1e00so4347116eaf.1;
-        Wed, 10 Sep 2025 03:09:02 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUaNmLTCAnlB2vJT5AOpXFNXC0e8iKvFJiv+4THIhHeC4twwIvwbzXdP6VkMON4HNyL6Vp6bycJw/8TEbg=@vger.kernel.org, AJvYcCWNzEvcfCBF2VqXzeoE3Eo0eqpbkwTS4TNLKD8q4II08vvP+HfOl1tzKxkpAKmX21RSyr8QTRm94BY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyD1IA5Nj+GLEMx+MIx2D8RXXDEkqladF0lcpGMArdc2bfimVqo
-	3JuhknNC7PfLi4i+L74QVKGYZe/ZqpE7Aw6xmUy+lF2V+I9hVvU52wsZaGSwEVQGT6LeqXmANYn
-	cnJhDYjKzfeVPEsfi9fKQ7l54zWGxvBI=
-X-Google-Smtp-Source: AGHT+IExtstt7zgf6AALxQeMVPvejKGakN2bVaehDXZcFGnx8oq5iaf6A0etveV3YN9Z/Vbh9/EJ7H+n5FKVYkmfBfo=
-X-Received: by 2002:a4a:ba8d:0:b0:61f:f60f:de87 with SMTP id
- 006d021491bc7-62178a93955mr5432528eaf.7.1757498941534; Wed, 10 Sep 2025
- 03:09:01 -0700 (PDT)
+	b=dcVj4qEF1pmN8+klQXXEdKFvcOcL8mcEAC4VGlGLUzBkeHA9DYN+mtfVI6qCrcAet
+	 Gno9odmTqBsm9jfamk5o/1B5/glI2R6ojev9oCHXd2GWFmF92L5sJYMU369EK9Vv5k
+	 RhZ0VecyRqcsaw2HpTt9sDfCIaKv9JMVqDKVNMy87m0VMvXqQo4SwLs+ZPkxoAeRX6
+	 RzT2h9kuY+iYppYVn+0w9mZOTo/xyTqGDArWe5wzhPKGV9l1rrnisaVXqsKgJ5OkcS
+	 WOSIoELJl8uI+PjfAZWo3vfIS0WYohx/l8kJmjl36HQnR9vJwfH24nRlH8/ZRc5kSi
+	 tAZQZvfTGUk9A==
+Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-746da717f35so2825423a34.1
+        for <linux-pm@vger.kernel.org>; Wed, 10 Sep 2025 03:21:56 -0700 (PDT)
+X-Gm-Message-State: AOJu0Yxdf6tpDVWHnm9/MHZ8kRi2K0KZUwROES62/S+dP+uFIggsFD5w
+	Me2U3zNVOm+1+ILezLPM4DhFFutdzKyrX2uODOwF5odDpQx94YS8W980jfrY0FkRhQxf23eujZ4
+	jqg/tjiyFjmsSgaWiCltDDJ8u3Rwr5Z8=
+X-Google-Smtp-Source: AGHT+IE2mwQLuun6oXjMMCRbkpIPPscqMaw9NfYkdmN5GH0yqZyaPz4+uTubmwcB33ra4Sjxbe1J4Z7AudR/pYILVss=
+X-Received: by 2002:a05:6830:2b06:b0:747:4744:a4d6 with SMTP id
+ 46e09a7af769-74c7548c385mr7200370a34.17.1757499715344; Wed, 10 Sep 2025
+ 03:21:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250904000608.260817-1-srinivas.pandruvada@linux.intel.com>
- <20250904000608.260817-2-srinivas.pandruvada@linux.intel.com>
- <CAJZ5v0gwXiRTo_Lri3rduA-RqDhwgK4ymwX3ttxqhTw9W6d=fQ@mail.gmail.com> <CAJZ5v0jqLnnBL8fLJ3vxS_61rAigru8T1a9Q-k+cg2kptv_zUA@mail.gmail.com>
-In-Reply-To: <CAJZ5v0jqLnnBL8fLJ3vxS_61rAigru8T1a9Q-k+cg2kptv_zUA@mail.gmail.com>
+References: <20250906115316.3010384-1-kaushlendra.kumar@intel.com> <20250908070243.jfz3glf4qy4eohm5@vireshk-i7>
+In-Reply-To: <20250908070243.jfz3glf4qy4eohm5@vireshk-i7>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 10 Sep 2025 12:08:49 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0iu87EJYfJV+6gTBXkc5B5pfXo97JEfBb_ddOMnMrTCTw@mail.gmail.com>
-X-Gm-Features: Ac12FXzms7NFc8nF1XizTbqRsQ7_ppMIftb6YidwLrbMwfsz9eQKhTkFVqXLZwE
-Message-ID: <CAJZ5v0iu87EJYfJV+6gTBXkc5B5pfXo97JEfBb_ddOMnMrTCTw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] cpufreq: intel_pstate: Enable HWP without EPP feature
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, viresh.kumar@linaro.org, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Date: Wed, 10 Sep 2025 12:21:43 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0iAcfr8KcaMds9a3=CSM_=Q6w6rfV2KsKaLXGettGUjQg@mail.gmail.com>
+X-Gm-Features: Ac12FXw0hbvxaGPuSApkgf5nccl8jKGYtB5vHOzDq-TtWAhqsEXfC_3xw-k3eCA
+Message-ID: <CAJZ5v0iAcfr8KcaMds9a3=CSM_=Q6w6rfV2KsKaLXGettGUjQg@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: conservative: Replace sscanf() with kstrtouint()
+To: Viresh Kumar <viresh.kumar@linaro.org>, 
+	Kaushlendra Kumar <kaushlendra.kumar@intel.com>
+Cc: linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Sep 6, 2025 at 6:13=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.org=
-> wrote:
+On Mon, Sep 8, 2025 at 9:02=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.or=
+g> wrote:
 >
-> On Fri, Sep 5, 2025 at 11:02=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.=
-org> wrote:
+> On 06-09-25, 17:23, Kaushlendra Kumar wrote:
+> > Replace sscanf() with kstrtouint() in all sysfs store functions to impr=
+ove
+> > input validation and security. The kstrtouint() function provides bette=
+r
+> > error detection, overflow protection, and consistent error handling
+> > compared to sscanf().
 > >
-> > On Thu, Sep 4, 2025 at 2:06=E2=80=AFAM Srinivas Pandruvada
-> > <srinivas.pandruvada@linux.intel.com> wrote:
-> > >
-> > > When EPP feature is not available (CPUID CPUID.06H:EAX[10] is not set=
-),
-> > > intel_pstate will not enable HWP.
-> > >
-> > > Some processors support DEC feature (Dynamic Efficiency Control). But=
- in
-> > > this case HWP must be enabled.
-> > >
-> > > So, enable HWP even if EPP feature is not available but DEC feature i=
-s
-> > > present.
-> > >
-> > > When EPP feature is not available don't publish sysfs attributes
-> > > "energy_performance_available_preferences" and
-> > > "energy_performance_preference", but continue to enable HWP.
-> > >
-> > > Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.c=
-om>
-> > > ---
-> > >  drivers/cpufreq/intel_pstate.c | 35 +++++++++++++++++++++++++++++++-=
---
-> > >  1 file changed, 32 insertions(+), 3 deletions(-)
-> > >
-> > > diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_p=
-state.c
-> > > index c28454b16723..d74abe909fbc 100644
-> > > --- a/drivers/cpufreq/intel_pstate.c
-> > > +++ b/drivers/cpufreq/intel_pstate.c
-> > > @@ -904,6 +904,11 @@ static struct freq_attr *hwp_cpufreq_attrs[] =3D=
- {
-> > >         NULL,
-> > >  };
-> > >
-> > > +static struct freq_attr *hwp_cpufreq_default_attrs[] =3D {
-> > > +       &base_frequency,
-> > > +       NULL,
-> > > +};
-> > > +
-> > >  static bool no_cas __ro_after_init;
-> > >
-> > >  static struct cpudata *hybrid_max_perf_cpu __read_mostly;
-> > > @@ -1370,6 +1375,9 @@ static void intel_pstate_hwp_offline(struct cpu=
-data *cpu)
-> > >  #define POWER_CTL_EE_ENABLE    1
-> > >  #define POWER_CTL_EE_DISABLE   2
-> > >
-> > > +/* Enable bit for Dynamic Efficiency Control (DEC) */
-> > > +#define POWER_CTL_DEC_ENABLE   27
-> > > +
-> > >  static int power_ctl_ee_state;
-> > >
-> > >  static void set_power_ctl_ee_state(bool input)
-> > > @@ -3761,6 +3769,17 @@ static const struct x86_cpu_id intel_hybrid_sc=
-aling_factor[] =3D {
-> > >         {}
-> > >  };
-> > >
-> > > +static bool dec_enabled(void)
-> > > +{
-> > > +       u64 power_ctl;
-> > > +
-> > > +       rdmsrq(MSR_IA32_POWER_CTL, power_ctl);
-> > > +       if (power_ctl & BIT(POWER_CTL_DEC_ENABLE))
-> > > +               return true;
-> > > +
-> > > +       return false;
-> > > +}
-> > > +
-> > >  static int __init intel_pstate_init(void)
-> > >  {
-> > >         static struct cpudata **_all_cpu_data;
-> > > @@ -3793,15 +3812,24 @@ static int __init intel_pstate_init(void)
-> > >                  * Avoid enabling HWP for processors without EPP supp=
-ort,
-> > >                  * because that means incomplete HWP implementation w=
-hich is a
-> > >                  * corner case and supporting it is generally problem=
-atic.
-> > > +                * But when DEC enable bit is set (MSR 0x1FC bit 27),=
- continue
-> > > +                * to enable HWP.
-> > >                  *
-> > >                  * If HWP is enabled already, though, there is no cho=
-ice but to
-> > >                  * deal with it.
-> > >                  */
-> > > -               if ((!no_hwp && boot_cpu_has(X86_FEATURE_HWP_EPP)) ||=
- hwp_forced) {
-> > > +               if (!no_hwp || hwp_forced) {
-> > > +                       if (boot_cpu_has(X86_FEATURE_HWP_EPP)) {
-> > > +                               intel_pstate.attr =3D hwp_cpufreq_att=
-rs;
-> > > +                               intel_cpufreq.attr =3D hwp_cpufreq_at=
-trs;
-> > > +                       } else if (dec_enabled()) {
-> > > +                               intel_pstate.attr =3D hwp_cpufreq_def=
-ault_attrs;
-> > > +                               intel_cpufreq.attr =3D hwp_cpufreq_de=
-fault_attrs;
-> > > +                       } else {
-> > > +                               goto skip_hwp_enable;
-> > > +                       }
-> > >                         hwp_active =3D true;
-> > >                         hwp_mode_bdw =3D id->driver_data;
-> > > -                       intel_pstate.attr =3D hwp_cpufreq_attrs;
-> > > -                       intel_cpufreq.attr =3D hwp_cpufreq_attrs;
-> > >                         intel_cpufreq.flags |=3D CPUFREQ_NEED_UPDATE_=
-LIMITS;
-> > >                         intel_cpufreq.adjust_perf =3D intel_cpufreq_a=
-djust_perf;
-> > >                         if (!default_driver)
-> > > @@ -3811,6 +3839,7 @@ static int __init intel_pstate_init(void)
-> > >
-> > >                         goto hwp_cpu_matched;
-> > >                 }
-> > > +skip_hwp_enable:
-> > >                 pr_info("HWP not enabled\n");
-> > >         } else {
-> > >                 if (no_load)
-> > > --
+> > The kstrtouint() function provides:
+> > - Robust error detection for invalid input strings
+> > - Built-in overflow protection and boundary checking
+> > - Consistent error reporting (0 for success, negative for failure)
 > >
-> > I think that this would work, but then it looks super ad hoc and I'd
-> > like to completely rearrange it.
+> > This maintains existing functionality while improving input validation
+> > robustness and following kernel coding best practices for string parsin=
+g.
 > >
-> > My (totally untested) version is attached.  Please let me know if this
-> > can be made work for you and if so, I'll turn it into a proper patch.
+> > Signed-off-by: Kaushlendra Kumar <kaushlendra.kumar@intel.com>
+> > ---
+> >  drivers/cpufreq/cpufreq_conservative.c | 24 ++++++++++++------------
+> >  1 file changed, 12 insertions(+), 12 deletions(-)
+> >
+> > diff --git a/drivers/cpufreq/cpufreq_conservative.c b/drivers/cpufreq/c=
+pufreq_conservative.c
+> > index 56500b25d77c..cce6a8d113e1 100644
+> > --- a/drivers/cpufreq/cpufreq_conservative.c
+> > +++ b/drivers/cpufreq/cpufreq_conservative.c
+> > @@ -152,9 +152,9 @@ static ssize_t sampling_down_factor_store(struct go=
+v_attr_set *attr_set,
+> >       struct dbs_data *dbs_data =3D to_dbs_data(attr_set);
+> >       unsigned int input;
+> >       int ret;
+> > -     ret =3D sscanf(buf, "%u", &input);
+> > +     ret =3D kstrtouint(buf, 0, &input);
+> >
+> > -     if (ret !=3D 1 || input > MAX_SAMPLING_DOWN_FACTOR || input < 1)
+> > +     if (ret || input > MAX_SAMPLING_DOWN_FACTOR || input < 1)
+> >               return -EINVAL;
+> >
+> >       dbs_data->sampling_down_factor =3D input;
+> > @@ -168,9 +168,9 @@ static ssize_t up_threshold_store(struct gov_attr_s=
+et *attr_set,
+> >       struct cs_dbs_tuners *cs_tuners =3D dbs_data->tuners;
+> >       unsigned int input;
+> >       int ret;
+> > -     ret =3D sscanf(buf, "%u", &input);
+> > +     ret =3D kstrtouint(buf, 0, &input);
+> >
+> > -     if (ret !=3D 1 || input > 100 || input <=3D cs_tuners->down_thres=
+hold)
+> > +     if (ret || input > 100 || input <=3D cs_tuners->down_threshold)
+> >               return -EINVAL;
+> >
+> >       dbs_data->up_threshold =3D input;
+> > @@ -184,10 +184,10 @@ static ssize_t down_threshold_store(struct gov_at=
+tr_set *attr_set,
+> >       struct cs_dbs_tuners *cs_tuners =3D dbs_data->tuners;
+> >       unsigned int input;
+> >       int ret;
+> > -     ret =3D sscanf(buf, "%u", &input);
+> > +     ret =3D kstrtouint(buf, 0, &input);
+> >
+> >       /* cannot be lower than 1 otherwise freq will not fall */
+> > -     if (ret !=3D 1 || input < 1 || input >=3D dbs_data->up_threshold)
+> > +     if (ret || input < 1 || input >=3D dbs_data->up_threshold)
+> >               return -EINVAL;
+> >
+> >       cs_tuners->down_threshold =3D input;
+> > @@ -201,9 +201,9 @@ static ssize_t ignore_nice_load_store(struct gov_at=
+tr_set *attr_set,
+> >       unsigned int input;
+> >       int ret;
+> >
+> > -     ret =3D sscanf(buf, "%u", &input);
+> > -     if (ret !=3D 1)
+> > -             return -EINVAL;
+> > +     ret =3D kstrtouint(buf, 0, &input);
+> > +     if (ret)
+> > +             return ret;
+> >
+> >       if (input > 1)
+> >               input =3D 1;
+> > @@ -226,10 +226,10 @@ static ssize_t freq_step_store(struct gov_attr_se=
+t *attr_set, const char *buf,
+> >       struct cs_dbs_tuners *cs_tuners =3D dbs_data->tuners;
+> >       unsigned int input;
+> >       int ret;
+> > -     ret =3D sscanf(buf, "%u", &input);
+> > +     ret =3D kstrtouint(buf, 0, &input);
+> >
+> > -     if (ret !=3D 1)
+> > -             return -EINVAL;
+> > +     if (ret)
+> > +             return ret;
+> >
+> >       if (input > 100)
+> >               input =3D 100;
 >
-> Bah, the EPP-related attributes need to be hidden when EPP is not
-> there, even if hwp_forced is set.
->
-> Attached is a new version, please let me know if it works for you.
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-Any chance to have a look at the latest patch?
+Applied as 6.18 material, thanks!
 
