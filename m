@@ -1,247 +1,188 @@
-Return-Path: <linux-pm+bounces-34370-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34371-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8AD8B518A5
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 16:01:08 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 38947B518AD
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 16:02:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 64102563FEE
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 14:01:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C9F6F1C85EE9
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 14:01:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFA46322754;
-	Wed, 10 Sep 2025 13:59:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8ACC7322747;
+	Wed, 10 Sep 2025 14:00:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="bDEftgiu";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="TCt5bNgn";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="bDEftgiu";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="TCt5bNgn"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EF8D322C7C;
-	Wed, 10 Sep 2025 13:59:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 985BA321F54
+	for <linux-pm@vger.kernel.org>; Wed, 10 Sep 2025 14:00:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757512783; cv=none; b=KbhAXat8A2O2x7piTudEw3zpEhfHZxd5mvPcyYOrE1r2UBh7YUSryrP0totTuCXXGLeB8087tTF29dDzT2sB/Y/w35T6/CFrp8lpHzgLX+N2+d9ENUnh9MQrWdCIsgHUDzE1v+yaSxSrjI+C1WY1K8FC6MwTX3D+ViE8XRNIxi4=
+	t=1757512823; cv=none; b=m+8BnGheR/q7/kNZos8xONotuxFmW6zK1k6LRMr3BBIBL4isrL7MbLSxWvP1enYzNRUgLnAXHAzMIvG6H4NVkLtqw0FE9Fp0Zc2onEijBJgCqIT7s+yv+65MGLPmzXOLSRVfP96K9Gs5+6DF6B0zFPqcTwM9M9AZzdG3R6zSVO0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757512783; c=relaxed/simple;
-	bh=1GHlEkk33Hekq4aGD0DoRzQmiiOBAR4VAXYkvid7wZ4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KtzfL95eqvJ9vrx6QpQIywmvbmO9u/P1y31HAhVA6mXPltkQpIje8BSW10NxWqYBcMuFhvvUNW/zwsz2e37DWW8KQXrlzgYonOvH98qLSgHIryUpC0kzj+yVVw81x/tUtXijcxgvLKXwLBieum95yn6z+XP3GdML+45kn5meIXA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1371C16F8;
-	Wed, 10 Sep 2025 06:59:33 -0700 (PDT)
-Received: from [10.1.25.55] (e122027.cambridge.arm.com [10.1.25.55])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E14273F694;
-	Wed, 10 Sep 2025 06:59:35 -0700 (PDT)
-Message-ID: <4670e984-10c2-4c8e-89b3-d3a0217735b3@arm.com>
-Date: Wed, 10 Sep 2025 14:59:29 +0100
+	s=arc-20240116; t=1757512823; c=relaxed/simple;
+	bh=hZzGcVcN94ly8O32Q1TmwTv1UwiqYFdSbdl8QWFm9rw=;
+	h=Date:Message-ID:From:To:Cc:Subject:MIME-Version:Content-Type; b=nwg3UWSmDw2L4/dnkMu3lkSAIisjfzIwt4O4TcE4qSe2uyOR/+e23HvfoZm3newkYEJOWdvGW+T47s3TilGl2RgWIN2RVWyTlpOJVb3M6hjQJsdtVzWHnQAz5WVGu/TBXe3gSeUlnN4mC0vzCf7laBD1+FydKGRvchJQ2X6uvYY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=bDEftgiu; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=TCt5bNgn; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=bDEftgiu; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=TCt5bNgn; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 55FF233D63;
+	Wed, 10 Sep 2025 14:00:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1757512818; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type;
+	bh=kq8QN4/X28sVm2xdbMZ4oxDIMpObhAfGbFK4PDlt4ZE=;
+	b=bDEftgiun6y9bqu+murGJTQublN0iEdZSMxvylAHBMjtcjClORUnBp8gG7C8i6VdjffgNX
+	VvIMcjppMJAW8C0JJrwUwr44rpEO1aEIHWptlFBbjBEcJC2KAgtpjvuIzZdXixcRwo1liK
+	b4NQxLLUCu6Z5+DEN29DmcY2t3PTxKQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1757512818;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type;
+	bh=kq8QN4/X28sVm2xdbMZ4oxDIMpObhAfGbFK4PDlt4ZE=;
+	b=TCt5bNgnO+bQ3aChUvBC7dT2G6y37tYzM4h2VQ1+oazYmJ5GJnb4lQ9JhhfsPa2y7vyhXh
+	78NH3oem6+g2+wAg==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=bDEftgiu;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=TCt5bNgn
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1757512818; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type;
+	bh=kq8QN4/X28sVm2xdbMZ4oxDIMpObhAfGbFK4PDlt4ZE=;
+	b=bDEftgiun6y9bqu+murGJTQublN0iEdZSMxvylAHBMjtcjClORUnBp8gG7C8i6VdjffgNX
+	VvIMcjppMJAW8C0JJrwUwr44rpEO1aEIHWptlFBbjBEcJC2KAgtpjvuIzZdXixcRwo1liK
+	b4NQxLLUCu6Z5+DEN29DmcY2t3PTxKQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1757512818;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type;
+	bh=kq8QN4/X28sVm2xdbMZ4oxDIMpObhAfGbFK4PDlt4ZE=;
+	b=TCt5bNgnO+bQ3aChUvBC7dT2G6y37tYzM4h2VQ1+oazYmJ5GJnb4lQ9JhhfsPa2y7vyhXh
+	78NH3oem6+g2+wAg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 386C513310;
+	Wed, 10 Sep 2025 14:00:18 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id jAtkDHKEwWg3GgAAD6G6ig
+	(envelope-from <tiwai@suse.de>); Wed, 10 Sep 2025 14:00:18 +0000
+Date: Wed, 10 Sep 2025 16:00:17 +0200
+Message-ID: <878qimv24u.wl-tiwai@suse.de>
+From: Takashi Iwai <tiwai@suse.de>
+To: Rafael J. Wysocki <rafael@kernel.org>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: PM runtime auto-cleanup macros
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC 09/10] drm/panthor: devfreq: add pluggable devfreq
- providers
-To: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Boris Brezillon <boris.brezillon@collabora.com>,
- Liviu Dudau <liviu.dudau@arm.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Matthias Brugger
- <matthias.bgg@gmail.com>, MyungJoo Ham <myungjoo.ham@samsung.com>,
- Kyungmin Park <kyungmin.park@samsung.com>,
- Chanwoo Choi <cw00.choi@samsung.com>, Jassi Brar <jassisinghbrar@gmail.com>,
- Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc: Chia-I Wu <olvaffe@gmail.com>, Chen-Yu Tsai <wenst@chromium.org>,
- kernel@collabora.com, dri-devel@lists.freedesktop.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
- linux-pm@vger.kernel.org, linux-hardening@vger.kernel.org
-References: <20250905-mt8196-gpufreq-v1-0-7b6c2d6be221@collabora.com>
- <20250905-mt8196-gpufreq-v1-9-7b6c2d6be221@collabora.com>
-From: Steven Price <steven.price@arm.com>
-Content-Language: en-GB
-In-Reply-To: <20250905-mt8196-gpufreq-v1-9-7b6c2d6be221@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Level: 
+X-Spam-Flag: NO
+X-Rspamd-Queue-Id: 55FF233D63
+X-Rspamd-Action: no action
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Spamd-Result: default: False [-3.51 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_CONTAINS_FROM(1.00)[];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	TO_DN_SOME(0.00)[];
+	ARC_NA(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_THREE(0.00)[3];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim,suse.de:mid];
+	DKIM_TRACE(0.00)[suse.de:+]
+X-Spam-Score: -3.51
 
-On 05/09/2025 11:23, Nicolas Frattaroli wrote:
-> On some devices, devfreq is not controlled directly by DT OPPs and the
-> common clock framework, but through an external devfreq driver. To
-> permit this type of usage, add the concept of devfreq providers.
-> 
-> Devfreq providers for panthor register themselves with panthor as a
-> provider. panthor then gets whatever driver is suckling on its
-> performance-node property, finds the registered devfreq provider init
-> function for it, and calls it.
-> 
-> Should the probe order work out such that panthor probes before the
-> devfreq provider is finished probing and registering itself, then we
-> just defer the probe after adding a device link.
-> 
-> Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+Hi,
 
-Looks fine to me, but I think there are some updates needed due to the
-DT review.
+while I worked on the code cleanups in the drivers with the recent
+auto-cleanup macros, I noticed that pm_runtime_get*() and _put*() can
+be also managed with the auto-cleanup gracefully, too.  Actually we
+already defined the __free(pm_runtime_put) in commit bfa4477751e9, and
+there is a (single) user of it in pci-sysfs.c.
 
-Thanks,
-Steve
+Now I wanted to extend it to pm_runtime_put_autosuspend() as:
 
-> ---
->  drivers/gpu/drm/panthor/panthor_devfreq.c | 74 ++++++++++++++++++++++++++++++-
->  drivers/gpu/drm/panthor/panthor_devfreq.h | 16 +++++++
->  2 files changed, 89 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/panthor/panthor_devfreq.c b/drivers/gpu/drm/panthor/panthor_devfreq.c
-> index d495dd856299826c4bddc205087d8914d01d7fc4..1b0c21f6f069b059b8b0e412a79556c602c5f1e7 100644
-> --- a/drivers/gpu/drm/panthor/panthor_devfreq.c
-> +++ b/drivers/gpu/drm/panthor/panthor_devfreq.c
-> @@ -4,6 +4,7 @@
->  #include <linux/clk.h>
->  #include <linux/devfreq.h>
->  #include <linux/devfreq_cooling.h>
-> +#include <linux/of_platform.h>
->  #include <linux/platform_device.h>
->  #include <linux/pm_opp.h>
->  
-> @@ -12,6 +13,34 @@
->  #include "panthor_devfreq.h"
->  #include "panthor_device.h"
->  
-> +static LIST_HEAD(panthor_devfreq_providers);
-> +static DEFINE_MUTEX(panthor_devfreq_providers_lock);
-> +
-> +int panthor_devfreq_register_provider(struct panthor_devfreq_provider *prov)
-> +{
-> +	guard(mutex)(&panthor_devfreq_providers_lock);
-> +
-> +	list_add(&prov->node, &panthor_devfreq_providers);
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL(panthor_devfreq_register_provider);
-> +
-> +static int panthor_devfreq_init_provider(struct panthor_device *ptdev,
-> +					 struct device *provider_dev)
-> +{
-> +	struct panthor_devfreq_provider *prov;
-> +
-> +	guard(mutex)(&panthor_devfreq_providers_lock);
-> +
-> +	list_for_each_entry(prov, &panthor_devfreq_providers, node) {
-> +		if (prov->dev == provider_dev)
-> +			return prov->init(ptdev, provider_dev);
-> +	}
-> +
-> +	return -EPROBE_DEFER;
-> +}
-> +
->  static void panthor_devfreq_update_utilization(struct panthor_devfreq *pdevfreq)
->  {
->  	ktime_t now, last;
-> @@ -102,7 +131,7 @@ static struct devfreq_dev_profile panthor_devfreq_profile = {
->  	.get_cur_freq = panthor_devfreq_get_cur_freq,
->  };
->  
-> -int panthor_devfreq_init(struct panthor_device *ptdev)
-> +static int panthor_devfreq_init_of(struct panthor_device *ptdev)
->  {
->  	/* There's actually 2 regulators (mali and sram), but the OPP core only
->  	 * supports one.
-> @@ -222,6 +251,49 @@ int panthor_devfreq_init(struct panthor_device *ptdev)
->  	return 0;
->  }
->  
-> +static int panthor_devfreq_init_platform(struct panthor_device *ptdev)
-> +{
-> +	struct device_node *pcnode;
-> +	struct platform_device *pdev;
-> +	struct device_link *link;
-> +	int ret;
-> +
-> +	pcnode = of_parse_phandle(ptdev->base.dev->of_node,
-> +				  "performance-controller", 0);
-> +	if (!pcnode)
-> +		return -EINVAL;
-> +
-> +	pdev = of_find_device_by_node(pcnode);
-> +	of_node_put(pcnode);
-> +	if (!pdev)
-> +		return -ENODEV;
-> +
-> +	link = device_link_add(ptdev->base.dev, &pdev->dev,
-> +			       DL_FLAG_PM_RUNTIME | DL_FLAG_STATELESS);
-> +	if (!link) {
-> +		dev_err(ptdev->base.dev, "failed to add device link\n");
-> +		return -ENODEV;
-> +	}
-> +
-> +	ret = panthor_devfreq_init_provider(ptdev, &pdev->dev);
-> +	if (ret)
-> +		return dev_err_probe(ptdev->base.dev, ret,
-> +				     "failed to initialize devfreq provider\n");
-> +
-> +	DRM_DEV_INFO(ptdev->base.dev, "initialized devfreq provider %s\n",
-> +		     dev_name(&pdev->dev));
-> +
-> +	return 0;
-> +}
-> +
-> +int panthor_devfreq_init(struct panthor_device *ptdev)
-> +{
-> +	if (!of_property_present(ptdev->base.dev->of_node, "performance-controller"))
-> +		return panthor_devfreq_init_of(ptdev);
-> +
-> +	return panthor_devfreq_init_platform(ptdev);
-> +}
-> +
->  void panthor_devfreq_resume(struct panthor_device *ptdev)
->  {
->  	struct panthor_devfreq *pdevfreq = ptdev->devfreq;
-> diff --git a/drivers/gpu/drm/panthor/panthor_devfreq.h b/drivers/gpu/drm/panthor/panthor_devfreq.h
-> index a891cb5fdc34636444f141e10f5d45828fc35b51..94c9768d5d038c4ba8516929edb565a1f13443fb 100644
-> --- a/drivers/gpu/drm/panthor/panthor_devfreq.h
-> +++ b/drivers/gpu/drm/panthor/panthor_devfreq.h
-> @@ -8,6 +8,7 @@
->  
->  struct devfreq;
->  struct thermal_cooling_device;
-> +struct platform_device;
->  
->  struct panthor_device;
->  
-> @@ -43,6 +44,19 @@ struct panthor_devfreq {
->  	spinlock_t lock;
->  };
->  
-> +struct panthor_devfreq_provider {
-> +	/** @dev: device pointer to the provider device */
-> +	struct device *dev;
-> +	/**
-> +	 * @init: the provider's init callback that allocates a
-> +	 * &struct panthor_devfreq, adds it to panthor, and adds a devfreq
-> +	 * device to panthor. Will be called during panthor's probe.
-> +	 */
-> +	int (*init)(struct panthor_device *ptdev, struct device *dev);
-> +
-> +	struct list_head node;
-> +};
-> +
->  
->  int panthor_devfreq_init(struct panthor_device *ptdev);
->  
-> @@ -57,4 +71,6 @@ int panthor_devfreq_get_dev_status(struct device *dev,
->  
->  unsigned long panthor_devfreq_get_freq(struct panthor_device *ptdev);
->  
-> +int panthor_devfreq_register_provider(struct panthor_devfreq_provider *prov);
-> +
->  #endif /* __PANTHOR_DEVFREQ_H__ */
-> 
+DEFINE_FREE(pm_runtime_put_autosuspend, struct device *,
+           if (_T) pm_runtime_put_autosuspend(_T))
 
+Then one can use it like
+
+	ret = pm_runtime_resume_and_get(dev);
+	if (ret < 0)
+		return ret;
+	struct device *pmdev __free(pm_runtime_put_autosuspend) = dev;
+
+that is similar as done in pci-sysfs.c.  So far, so good.
+
+But, I find putting the line like above at each place a bit ugly.
+So I'm wondering whether it'd be better to introduce some helper
+macros, e.g.
+
+#define pm_runtime_auto_clean(dev, var) \
+	struct device *var __free(pm_runtime_put) = (dev)
+
+#define pm_runtime_auto_clean_autosuspend(dev, var) \
+	struct device *var __free(pm_runtime_put_autosuspend) = (dev)
+
+and the code will be like:
+
+	pm_runtime_get_sync(dev);
+	pm_runtime_auto_clean(dev, pmdev);
+
+or
+	ret = pm_runtime_resume_and_get(dev);
+	if (ret < 0)
+		return ret;
+	pm_runtime_auto_clean_autosuspend(dev, pmdev);
+
+Alternatively, we may define a class, e.g.
+
+	CLASS(pm_runtime_resume_and_get, pmdev);
+	if (pmdev.ret < 0)
+		return pmdev.ret;
+
+but it'll be a bit more code to define the full class, and the get*()
+and put*() combination would be fixed with this approach -- which is a
+downside.
+
+All above are an idea for now.  Let me know if I should go further
+along with this, or there is already a better another approach.
+
+(And the macros can be better named, sure :)
+
+
+thanks,
+
+Takashi
 
