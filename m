@@ -1,197 +1,125 @@
-Return-Path: <linux-pm+bounces-34407-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34408-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2DD7EB52039
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 20:23:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C4B71B5203B
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 20:26:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3658B487C67
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 18:23:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 79A635638D5
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 18:26:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5FD9275B1A;
-	Wed, 10 Sep 2025 18:23:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E9E1273D84;
+	Wed, 10 Sep 2025 18:26:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ajblWDlc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jpj7MTdv"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9098E271A7C
-	for <linux-pm@vger.kernel.org>; Wed, 10 Sep 2025 18:23:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5690D329F38;
+	Wed, 10 Sep 2025 18:26:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757528607; cv=none; b=cUi0mSbtuQEcVeQTPkYztJCs43I/WsVoTIJmhhJdGnm1xlV0FiGu6ZfvT+MBqgZxoLGIrWKT80Es5p+RYqxQRAfCu73qUAQD4hISOcG9Au5vJ2m1xH1IyucHjjIfzQIIpVxOYjesuTMbVJ+BKJ79hvrwUMOpYyRf6UoBIfsVlvE=
+	t=1757528790; cv=none; b=n6x4ZvyW0ahC9HRgKPFHPmDhE+he5vTdavOzI/M60D0+y5h8O7WL9iLRXBbaUD8lH2LvBEddwwLgi/Qqqg6yuAFrig0pUwBI9u88FMiFwYCL0tAQOw7Hovmo2z72H2OSip3LQ/0nmI9tKpiW4my7H0Tpt7fciVX9gr9i3GyCpic=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757528607; c=relaxed/simple;
-	bh=+xIR3asJwN5hgErdxA5RKk8TysQZx223OPFxmTPM6wk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=A4iCfWxfNmihjk2ciiodf/Jv9obYmMt5eLMq3ijtqjXN8U4r1KEenUTp9Zg11EoJ3yExk78eyb8TlfSr4VUjNka3ZR4YzREMLDuuvHF9g0pPYFLYIBm/n5bkcXU2vegvD5eMB6epyeJcQDgLPWBCN5rJkLsF7S+WjHT5XOPQVh8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ajblWDlc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DD0AC4CEFA
-	for <linux-pm@vger.kernel.org>; Wed, 10 Sep 2025 18:23:27 +0000 (UTC)
+	s=arc-20240116; t=1757528790; c=relaxed/simple;
+	bh=8zSU8u1AH6DF6zdffsNtTjsbQliu7LsDi1PKEDclH5Q=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PaPlQm4rAAq1WlS85GDYiLjBnSP0udcSWQ72sI53inxOXMtqAhgyWYuD4ld9KNK31Sk+vc85Q6Dk1pS48KJSBS9CF9PR3h0UyktMCI4mM/bUiEPTT1ThoWZuYqvf/Cfh/1SHrWbNjxJqPkAF0/jf5WOATCf+ju0jdiFoGGmEdbs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jpj7MTdv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57980C4CEEB;
+	Wed, 10 Sep 2025 18:26:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757528607;
-	bh=+xIR3asJwN5hgErdxA5RKk8TysQZx223OPFxmTPM6wk=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=ajblWDlcgnGiwv4b+87zSHaRuScxCB1stcp55whAoZulzhoBh1esX9XyuQoyzBH5Q
-	 4GSK+7JtMnuab6uFkuxlZrsgsLsvVBtEuklUFt3xFi95QVTELfNpDebmtYBcLBlo75
-	 0vv4KhNHLZDuIuayscRphfTdctDipKeB2p8aoUoq+xNNkPdksAqsuQLongju4KCmvU
-	 tVrb4MUmP6333fqMik7fkJ244k29ltCTwuXSc+MPNLVCGYMGTwaVtf+GWlbvt6GbGK
-	 jXawRaKAw7vuXbicbM3OsEnJrgvSWwmWMoqlNA+iI02ZC8N3GYfl/+CP19p/Comtxu
-	 OMTqecchv6uKw==
-Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-6205e2b7a8fso2635252eaf.0
-        for <linux-pm@vger.kernel.org>; Wed, 10 Sep 2025 11:23:27 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCX16mJHTSEysqGzijeXOlmDG2qOekuV6AAuT3QkP0adyUXk89k7a7ISHy6A92UxPwBNJZ31m/sw7w==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzUBHscRraa+VkQjWfPlOshrw5vCdoB5WNfgdGgLaU8goAVIz28
-	ih1ZXSOR0F3hs46pzpIXFzD+KDEsvRiP6v/ylw5vbAHGPqHYbDHoQB+CzGtE1CpMRBVOr5t0EBl
-	MADdocxhFJV5r6lg40AMA0azg28lFFWo=
-X-Google-Smtp-Source: AGHT+IHuJvNxF2V1tX1VXNeWzG5+F8V+ZGBMwM/IMnADUgJ2KlwC42wDx0ddU1lVmFJOq6s4hYUdpYwCoggap1Mbof4=
-X-Received: by 2002:a05:6820:828:b0:620:7998:64aa with SMTP id
- 006d021491bc7-621789fd31cmr7712178eaf.1.1757528606440; Wed, 10 Sep 2025
- 11:23:26 -0700 (PDT)
+	s=k20201202; t=1757528789;
+	bh=8zSU8u1AH6DF6zdffsNtTjsbQliu7LsDi1PKEDclH5Q=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Jpj7MTdv5Oqaqig2NCNo6RAZMwqMtLhmQ+QuMjuqF7xqsBOgETgqt26lx/tyuek4M
+	 ILPvuZ3MWkEPlWzh9za/Y5cYoXd4IOEcyzrwh/+4vm2rYEER+V1+2MgAfDTjY/MYN3
+	 6c1guk/Y9s9a+Rn8LVBFfuIKCox22YpJDmVwHmn314y7V6OBADRXaV3SXSgfeZbMVM
+	 a1SJ7DPYOm/K1wWodHIsjsUCjrLK3monpII7Hf3umITvfJeAsZi+P8dgYLW6n+nJ+4
+	 SyzZRUteNz4V5Ggao0RokAtKdbEozIdAnInE72bUyUjFE8lV1/K2FM99td/F/ap1yv
+	 TXJfcpa8Bf0Og==
+Message-ID: <24abb0c2-553c-49a5-8daf-60d3726557df@kernel.org>
+Date: Wed, 10 Sep 2025 13:26:28 -0500
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250909191619.2580169-1-superm1@kernel.org> <CAJZ5v0jZaP41CC_2Q4NfKZWB8VazJbmiOtv55i3QDngh_3YGOw@mail.gmail.com>
- <b013c9bb-cf7c-424e-9ab0-8136bb9dc744@kernel.org>
-In-Reply-To: <b013c9bb-cf7c-424e-9ab0-8136bb9dc744@kernel.org>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 10 Sep 2025 20:23:10 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0jHKp7c7dSQMZr5tmQOV6=fHOygTf-YG6Gx9YmurA9cTA@mail.gmail.com>
-X-Gm-Features: Ac12FXxP4R30XoZ1EAQoBcb1zrTQS_kNI4CD1-JlFf5ha5_0hv061p7vj9zUCZE
-Message-ID: <CAJZ5v0jHKp7c7dSQMZr5tmQOV6=fHOygTf-YG6Gx9YmurA9cTA@mail.gmail.com>
-Subject: Re: [PATCH v7 00/12] Improvements to S5 power consumption
-To: Mario Limonciello <superm1@kernel.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Danilo Krummrich <dakr@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, Pavel Machek <pavel@kernel.org>, 
-	Len Brown <lenb@kernel.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>, 
-	"Martin K . Petersen" <martin.petersen@oracle.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	"open list:HIBERNATION (aka Software Suspend, aka swsusp)" <linux-pm@vger.kernel.org>, 
-	"open list:RADEON and AMDGPU DRM DRIVERS" <amd-gfx@lists.freedesktop.org>, 
-	"open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>, 
-	"open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>, 
-	"open list:SCSI SUBSYSTEM" <linux-scsi@vger.kernel.org>, 
-	"open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>, 
-	"open list:TRACING" <linux-trace-kernel@vger.kernel.org>, AceLan Kao <acelan.kao@canonical.com>, 
-	Kai-Heng Feng <kaihengf@nvidia.com>, Mark Pearson <mpearson-lenovo@squebb.ca>, 
-	=?UTF-8?Q?Merthan_Karaka=C5=9F?= <m3rthn.k@gmail.com>, 
-	Eric Naim <dnaim@cachyos.org>, "Guilherme G . Piccoli" <gpiccoli@igalia.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1] PM: hibernate: Restrict GFP mask in
+ hibernation_snapshot()
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+ Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Todd Brandt <todd.e.brandt@linux.intel.com>,
+ Linus Torvalds <torvalds@linuxfoundation.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Samuel Zhang <guoqing.zhang@amd.com>
+References: <5924662.DvuYhMxLoT@rafael.j.wysocki>
+Content-Language: en-US
+From: Mario Limonciello <superm1@kernel.org>
+In-Reply-To: <5924662.DvuYhMxLoT@rafael.j.wysocki>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Sep 10, 2025 at 8:19=E2=80=AFPM Mario Limonciello <superm1@kernel.o=
-rg> wrote:
->
-> On 9/10/25 1:11 PM, Rafael J. Wysocki wrote:
-> > Hi Mario,
-> >
-> > On Tue, Sep 9, 2025 at 9:16=E2=80=AFPM Mario Limonciello (AMD)
-> > <superm1@kernel.org> wrote:
-> >>
-> >> A variety of issues both in function and in power consumption have bee=
-n
-> >> raised as a result of devices not being put into a low power state whe=
-n
-> >> the system is powered off.
-> >>
-> >> There have been some localized changes[1] to PCI core to help these is=
-sues,
-> >> but they have had various downsides.
-> >>
-> >> This series instead uses the driver hibernate flows when the system is
-> >> being powered off or halted.  This lines up the behavior with what oth=
-er
-> >> operating systems do as well.  If for some reason that fails or is not
-> >> supported, run driver shutdown() callbacks.
-> >>
-> >> Rafael did mention in earlier versions of the series concerns about
-> >> regression risk.  He was looking for thoughts from Greg who isn't agai=
-nst
-> >> it but also isn't sure about how to maintain it. [1]
-> >>
-> >> This has been validated by me and several others in AMD
-> >> on a variety of AMD hardware platforms. It's been validated by some
-> >> community members on their Intel hardware. To my knowledge it has not
-> >> been validated on non-x86.
-> >
-> > Still, the patches need more work (see my replies to the relevant patch=
-es).
->
-> Yes, thanks for the review.
-> >
-> >> On my development laptop I have also contrived failures in the hiberna=
-tion
-> >> callbacks to make sure that the fallback to shutdown callback works.
-> >>
-> >> In order to assist with potential regressions the series also includes
-> >> documentation to help with getting a kernel log at shutdown after
-> >> the disk is unmounted.
-> >>
-> >> Cc: AceLan Kao <acelan.kao@canonical.com>
-> >> Cc: Kai-Heng Feng <kaihengf@nvidia.com>
-> >> Cc: Mark Pearson <mpearson-lenovo@squebb.ca>
-> >> Cc: Merthan Karaka=C5=9F <m3rthn.k@gmail.com>
-> >> Cc: Eric Naim <dnaim@cachyos.org>
-> >> Link: https://lore.kernel.org/linux-usb/2025090852-coma-tycoon-9f37@gr=
-egkh/ [1]
-> >> ---
-> >> v6->v7:
-> >>   * Add documentation on how to debug a shutdown hang
-> >>   * Adjust commit messages per feedback from Bjorn
-> >>
-> >> Mario Limonciello (AMD) (12):
-> >>    PM: Introduce new PMSG_POWEROFF event
-> >>    scsi: Add PM_EVENT_POWEROFF into suspend callbacks
-> >>    usb: sl811-hcd: Add PM_EVENT_POWEROFF into suspend callbacks
-> >>    USB: Pass PMSG_POWEROFF event to suspend_common()
-> >>    PCI/PM: Disable device wakeups when halting or powering off system
-> >>    PCI/PM: Split out code from pci_pm_suspend_noirq() into helper
-> >>    PCI/PM: Run bridge power up actions as part of restore phase
-> >>    PCI/PM: Use pci_power_manageable() in pci_pm_poweroff_noirq()
-> >>    PCI: Put PCIe bridges with downstream devices into D3 at hibernate
-> >>    drm/amd: Avoid evicting resources at S5
-> >>    PM: Use hibernate flows for system power off
-> >>    Documentation: power: Add document on debugging shutdown hangs
-> >
-> > If I were you, I'd split this series into 3 parts.
-> >
-> > The first part would be the addition of PMSG_POWEROFF just for
-> > hibernation, which should not be objectionable (the first 4 patches
-> > above).
-> >
-> > The next one would be changes to allow PCI bridges to go into
-> > D3hot/cold during the last stage of hibernation (the "power-off"
-> > transition).  This can be justified by itself even before starting to
-> > use the same power-off flow for the last stage of hibernation and for
-> > system power-down.
-> >
-> > The last one would be the hibernation/power-down integration.
-> >
-> > Each of the above can be posted separately and arguably you need to
-> > get the first part in before the other two and the second part in
-> > before the third one, preferably not in the same cycle.
-> >
-> > This way, if there are any regressions in the first two parts, there
-> > will be at least some time to address them before the last part goes
-> > in.
-> >
-> > Thanks!
->
-> Thanks for this proposal.
->
-> I do like the idea of splitting it in 3 parts to give time for
-> regression control.
->
-> It's getting close to the end of this cycle, would you be opposed to a
-> re-spun first 4 patches for 6.18?
+On 9/10/25 4:41 AM, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> Commit 12ffc3b1513e ("PM: Restrict swap use to later in the suspend
+> sequence") incorrectly removed a pm_restrict_gfp_mask() call from
+> hibernation_snapshot(), so memory allocations involving swap are not
+> prevented from being carried out in this code path any more which may
+> lead to serious breakage.
+> 
+> The symptoms of such breakage have become visible after adding a
+> shrink_shmem_memory() call to hibernation_snapshot() in commit
+> 2640e819474f ("PM: hibernate: shrink shmem pages after dev_pm_ops.prepare()")
+> which caused this problem to be much more likely to manifest itself.
+> 
+> However, since commit 2640e819474f was initially present in the DRM
+> tree that did not include commit 12ffc3b1513e, the symptoms of this
+> issue were not visible until merge commit 260f6f4fda93 ("Merge tag
+> 'drm-next-2025-07-30' of https://gitlab.freedesktop.org/drm/kernel")
+> that exposed it through an entirely reasonable merge conflict
+> resolution.
+> 
+> Fixes: 12ffc3b1513e ("PM: Restrict swap use to later in the suspend sequence")
+> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=220555
+> Reported-by: Todd Brandt <todd.e.brandt@linux.intel.com>
+> Tested-by: Todd Brandt <todd.e.brandt@linux.intel.com>
+> Cc: 6.16+ <stable@vger.kernel.org> # 6.16+
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+> 
+> This is super-urgent, so I'm going to fast-track it.
 
-No, I wouldn't.
+Thanks.  Looking at the codepaths again it makes sense.
+It's a bit surprising to me this showed up, we had done stress testing 
+before submitting.  Nonetheless, thank you for the fix.
 
-I think that they have been reviewed already.
+Reviewed-by: Mario Limonciello (AMD) <superm1@kernel.org>
+
+> 
+> ---
+>   kernel/power/hibernate.c |    1 +
+>   1 file changed, 1 insertion(+)
+> 
+> --- a/kernel/power/hibernate.c
+> +++ b/kernel/power/hibernate.c
+> @@ -449,6 +449,7 @@ int hibernation_snapshot(int platform_mo
+>   	shrink_shmem_memory();
+>   
+>   	console_suspend_all();
+> +	pm_restrict_gfp_mask();
+>   
+>   	error = dpm_suspend(PMSG_FREEZE);
+>   
+> 
+> 
+> 
+
 
