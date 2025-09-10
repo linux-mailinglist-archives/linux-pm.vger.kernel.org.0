@@ -1,124 +1,161 @@
-Return-Path: <linux-pm+bounces-34364-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34365-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 60BE6B517B2
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 15:14:24 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 86597B51820
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 15:41:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8EF76189D541
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 13:14:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3A2EB174E87
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 13:41:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF6B930FC19;
-	Wed, 10 Sep 2025 13:14:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kbAf2RUe"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFA47319875;
+	Wed, 10 Sep 2025 13:41:43 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41D3C27F747;
-	Wed, 10 Sep 2025 13:14:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CE6B315785;
+	Wed, 10 Sep 2025 13:41:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757510059; cv=none; b=hfAF3pNGaX0CCbLA5HRPZqj2tMqpG542bAkaryO6wG7hclRq7StaSn16UHbH9INDMengdHyO4ZSmcAI2k7x2nE8jcZJoMT7vbxuk+uSAAfYmJ887y1ApS3YWL1eWZE4KeKxTo7+ZEbJXyJ8te23crVmFQ2YywAckBJbXxh3aKnc=
+	t=1757511703; cv=none; b=frsfJ/aZS7tnpu8CDEA0wjQps8ohiYT0/R+OpWtPAxp2DcG5UhMN7QSIO6cGKhpnTa9NYJkGr3ePZPbuwOnKxTzvq5aLAPQMJ0Zvo1pJztStqSX17emCBOtQwkv5hokaj6cl2i87KFq5O48+RpZQ3f8LngD8RN4fV8HesoCe1HA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757510059; c=relaxed/simple;
-	bh=9Pe02Wp9Wa61TyWuZketBjA9b9YjXG6KBrzkRTagEIM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=S+vk5M5jXSDRBC5b1AKODMOWLFg8OLziQGcR6ZQ5qgL/ID7uCju4fBcvcMvmVb51wN0jrNphGRAOnVeygSq75z+WkCCUA/dXy+hyqQeYO3weYiUwaHKo231ZIBQBDm7tlr6IyNV698kvJOavN5Dx3wRfa8WWb1ZmuwECnRTKt8w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kbAf2RUe; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757510058; x=1789046058;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=9Pe02Wp9Wa61TyWuZketBjA9b9YjXG6KBrzkRTagEIM=;
-  b=kbAf2RUeuYl6Mv+bm9REmsVKmJj1zUTo/u6yfp1gCgy3s5AYAUPUppfu
-   84DqvzigUHA0SBw6DNIWXCoT1IoGwbEVNJvulnXqyEqXr5LWOZ8J85UCc
-   uXf/XgyfNLzA6mekiU0zsyAxkx/lpPOvIoPqskMnuiRIRlSp9My7BCGUW
-   Fo8tn9jLry7pX1c4euyeAXIwj6wR40mE+FNs1SSY1S6uRMGMSyqdYuGb1
-   +TA4oK7G5cz+3MTJ7L/Ms75Xx7Vh0X/MtW3yW+b2OmmJx3NWojoWhBIS/
-   4sKjpnLa1PptABOTShDgYmdaZhcJPhHq2A6VmWtVi85jIq2I+OQD82WX8
-   A==;
-X-CSE-ConnectionGUID: X9Cf4j54QQ2qIQGeKXRMtg==
-X-CSE-MsgGUID: WSDFDTEDTnW19IQlRCFPOA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11549"; a="85262895"
-X-IronPort-AV: E=Sophos;i="6.18,254,1751266800"; 
-   d="scan'208";a="85262895"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2025 06:14:17 -0700
-X-CSE-ConnectionGUID: nvYFnd3DSq+q8t+5CqgS5w==
-X-CSE-MsgGUID: h1V5Bt/aSRKm0ETaLO0Hfw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,254,1751266800"; 
-   d="scan'208";a="197062774"
-Received: from qliang3-mobl3.ccr.corp.intel.com (HELO [10.125.65.247]) ([10.125.65.247])
-  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2025 06:14:12 -0700
-Message-ID: <c29abf85-aafe-4cf8-b4e8-6d3b5b250ce6@linux.intel.com>
-Date: Wed, 10 Sep 2025 06:13:59 -0700
+	s=arc-20240116; t=1757511703; c=relaxed/simple;
+	bh=/60SYAM/5dBbuXfohlZHRDxhelvt0nUOOqE7eCNk7RI=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=WpTu5qfGw1r2KgV/abdJHTULG4dzXWhcnXkgC2MMQx1zCziR6KMiePPEGqPj5tGB42yF3qxD9+o3pV1D/TUEf7VLuIX+9w8XaZ1epxkQUWYG0X7eByvaTFTa5E4GaAp4cmDNCIyGzx17RrJAR2jiOUri5uahbz+HZgwelgNA+lc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.216])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4cMMGr0P6xz6LDJl;
+	Wed, 10 Sep 2025 21:39:00 +0800 (CST)
+Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
+	by mail.maildlp.com (Postfix) with ESMTPS id 7B30F1404FD;
+	Wed, 10 Sep 2025 21:41:38 +0800 (CST)
+Received: from localhost (10.203.177.15) by frapeml500008.china.huawei.com
+ (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Wed, 10 Sep
+ 2025 15:41:37 +0200
+Date: Wed, 10 Sep 2025 14:41:36 +0100
+From: Jonathan Cameron <jonathan.cameron@huawei.com>
+To: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+CC: <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<nvdimm@lists.linux.dev>, <linux-fsdevel@vger.kernel.org>,
+	<linux-pm@vger.kernel.org>, Davidlohr Bueso <dave@stgolabs.net>, Dave Jiang
+	<dave.jiang@intel.com>, Alison Schofield <alison.schofield@intel.com>, Vishal
+ Verma <vishal.l.verma@intel.com>, Ira Weiny <ira.weiny@intel.com>, Dan
+ Williams <dan.j.williams@intel.com>, Matthew Wilcox <willy@infradead.org>,
+	Jan Kara <jack@suse.cz>, "Rafael J . Wysocki" <rafael@kernel.org>, Len Brown
+	<len.brown@intel.com>, Pavel Machek <pavel@kernel.org>, Li Ming
+	<ming.li@zohomail.com>, Jeff Johnson <jeff.johnson@oss.qualcomm.com>, Ying
+ Huang <huang.ying.caritas@gmail.com>, Yao Xingtao <yaoxt.fnst@fujitsu.com>,
+	"Peter Zijlstra" <peterz@infradead.org>, Greg KH
+	<gregkh@linuxfoundation.org>, Nathan Fontenot <nathan.fontenot@amd.com>,
+	Terry Bowman <terry.bowman@amd.com>, Robert Richter <rrichter@amd.com>,
+	"Benjamin Cheatham" <benjamin.cheatham@amd.com>, PradeepVineshReddy Kodamati
+	<PradeepVineshReddy.Kodamati@amd.com>, Zhijian Li <lizhijian@fujitsu.com>
+Subject: Re: [PATCH 5/6] dax/hmem: Reintroduce Soft Reserved ranges back
+ into the iomem tree
+Message-ID: <20250910144136.000002e2@huawei.com>
+In-Reply-To: <20250822034202.26896-6-Smita.KoralahalliChannabasappa@amd.com>
+References: <20250822034202.26896-1-Smita.KoralahalliChannabasappa@amd.com>
+	<20250822034202.26896-6-Smita.KoralahalliChannabasappa@amd.com>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v1 1/5] x86/boot: Shift VMXON from KVM init to CPU
- startup phase
-To: "Huang, Kai" <kai.huang@intel.com>, "Gao, Chao" <chao.gao@intel.com>
-Cc: "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
- "brgerst@gmail.com" <brgerst@gmail.com>,
- "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
- "x86@kernel.org" <x86@kernel.org>, "rafael@kernel.org" <rafael@kernel.org>,
- "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "seanjc@google.com" <seanjc@google.com>, "xin@zytor.com" <xin@zytor.com>,
- "pbonzini@redhat.com" <pbonzini@redhat.com>,
- "mingo@redhat.com" <mingo@redhat.com>,
- "tglx@linutronix.de" <tglx@linutronix.de>, "hpa@zytor.com" <hpa@zytor.com>,
- "peterz@infradead.org" <peterz@infradead.org>,
- "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
- "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
- "kprateek.nayak@amd.com" <kprateek.nayak@amd.com>,
- "pavel@kernel.org" <pavel@kernel.org>,
- "david.kaplan@amd.com" <david.kaplan@amd.com>,
- "Williams, Dan J" <dan.j.williams@intel.com>, "bp@alien8.de" <bp@alien8.de>
-References: <20250909182828.1542362-1-xin@zytor.com>
- <20250909182828.1542362-2-xin@zytor.com>
- <1301b802284ed5755fe397f54e1de41638aec49c.camel@intel.com>
- <aMFcwXEWMc2VIzQQ@intel.com>
- <16a9cc439f2826ee99ff1cfc42c9006a7a544dd4.camel@intel.com>
-Content-Language: en-US
-From: Arjan van de Ven <arjan@linux.intel.com>
-In-Reply-To: <16a9cc439f2826ee99ff1cfc42c9006a7a544dd4.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="US-ASCII"
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml100009.china.huawei.com (7.191.174.83) To
+ frapeml500008.china.huawei.com (7.182.85.71)
 
+On Fri, 22 Aug 2025 03:42:01 +0000
+Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com> wrote:
+
+> Reworked from a patch by Alison Schofield <alison.schofield@intel.com>
 > 
-> Since I think doing VMXON when bringing up CPU unconditionally is a
-> dramatic move at this stage, I was actually thinking we don't do VMXON in
-> CPUHP callback, but only do prepare things like sanity check and VMXON
-> region setup etc.  If anything fails, we refuse to online CPU, or mark CPU
-> as VMX not supported, whatever.
-
-the whole point is to always vmxon -- and simplify all the complexity
-from doing this dynamic.
-So yes "dramatic" maybe but needed -- especially as things like TDX
-and TDX connect need vmxon to be enabled outside of KVM context.
-
-
+> Reintroduce Soft Reserved range into the iomem_resource tree for dax_hmem
+> to consume.
 > 
-> The core kernel then provides two APIs to do VMXON/VMXOFF respectively,
-> and KVM can use them.  The APIs needs to handle concurrent requests from
-> multiple users, though.  VMCLEAR could still be in KVM since this is kinda
-> KVM's internal on how to manage vCPUs.
+> This restores visibility in /proc/iomem for ranges actively in use, while
+> avoiding the early-boot conflicts that occurred when Soft Reserved was
+> published into iomem before CXL window and region discovery.
 > 
-> Does this make sense?
+> Link: https://lore.kernel.org/linux-cxl/29312c0765224ae76862d59a17748c8188fb95f1.1692638817.git.alison.schofield@intel.com/
+> Co-developed-by: Alison Schofield <alison.schofield@intel.com>
+> Signed-off-by: Alison Schofield <alison.schofield@intel.com>
+> Signed-off-by: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+A few trivial things inline. Not are important enough to need a change though.
 
-not to me -- the whole point is to not having this dynamic thing
+Reviewed-by: Jonathan Cameron <jonathan.cameron@huawei.com>
+
+> ---
+>  drivers/dax/hmem/hmem.c | 38 ++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 38 insertions(+)
+> 
+> diff --git a/drivers/dax/hmem/hmem.c b/drivers/dax/hmem/hmem.c
+> index 90978518e5f4..24a6e7e3d916 100644
+> --- a/drivers/dax/hmem/hmem.c
+> +++ b/drivers/dax/hmem/hmem.c
+> @@ -93,6 +93,40 @@ static void process_defer_work(struct work_struct *_work)
+>  	walk_hmem_resources(&pdev->dev, handle_deferred_cxl);
+>  }
+>  
+> +static void remove_soft_reserved(void *data)
+> +{
+> +	struct resource *r = data;
+> +
+> +	remove_resource(r);
+
+Type doesn't really help us here so why not skip the local variable.
+	remove_resource(data);
+	kfree(data);
+
+Though I'd rename data to r.
+
+> +	kfree(r);
+> +}
+> +
+> +static int add_soft_reserve_into_iomem(struct device *host,
+> +				       const struct resource *res)
+> +{
+> +	struct resource *soft = kzalloc(sizeof(*soft), GFP_KERNEL);
+> +	int rc;
+> +
+> +	if (!soft)
+> +		return -ENOMEM;
+> +
+> +	*soft = DEFINE_RES_NAMED_DESC(res->start, (res->end - res->start + 1),
+> +				      "Soft Reserved", IORESOURCE_MEM,
+> +				      IORES_DESC_SOFT_RESERVED);
+> +
+> +	rc = insert_resource(&iomem_resource, soft);
+> +	if (rc) {
+> +		kfree(soft);
+
+Could use __free() magic here and steal the pointer when you setup the
+devm action below.  Only a small simplification in this case, so up to
+you.
+
+> +		return rc;
+> +	}
+> +
+> +	rc = devm_add_action_or_reset(host, remove_soft_reserved, soft);
+> +	if (rc)
+> +		return rc;
+> +
+> +	return 0;
+
+Trivial:
+
+	return dev_add_action_or_reset(host...)
+
+> +}
 
 
