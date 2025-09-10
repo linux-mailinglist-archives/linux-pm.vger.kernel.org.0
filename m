@@ -1,149 +1,203 @@
-Return-Path: <linux-pm+bounces-34402-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34403-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 57C99B51F77
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 19:50:45 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 470FAB51F71
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 19:49:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B19A8B60719
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 17:47:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 030923B0AF8
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 17:49:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20E6830EF8B;
-	Wed, 10 Sep 2025 17:48:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B64D31D377;
+	Wed, 10 Sep 2025 17:49:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d6NDtd5A"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FXEWIv2/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E346A24A058;
-	Wed, 10 Sep 2025 17:48:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEDE82BF3CF
+	for <linux-pm@vger.kernel.org>; Wed, 10 Sep 2025 17:49:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757526533; cv=none; b=Omi43LN6BX5sNXr5PvC0sWHIAQfrKuKzPwZ/Ye596LckL5wR2a/kTFpU5ueeArJvRbMIS3alkcWqvffMfaL+IyIq4BPkdlkQeZ+cZmJyOuxhvzTEDC8ap4bBeRH+FMn85KOrSpq793VUFS6NWXIRpYg4hw3+qInEjuDgiJykW88=
+	t=1757526571; cv=none; b=I0XQo+oC7Hv1O/j7/H6gH7k7sWlZunwkbKRLmEqxuRx4N7W1w6l0xnvYARYBgjCqspfY3W94HwjdqviaLDum2vjiDvsThxL29wGf45fMitUPVdb7t/df9mNRVVDtixJ212uWMKIQAfxC/7JlcYVBNeApPEB2alrIfmvN78QIH8M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757526533; c=relaxed/simple;
-	bh=JWkrCD/pUkyX9wjEhNii7+JjAOcFy0ueHFktHUQ0t80=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=L9CZy39Ya0I9YHv2n8oB37u4DFd8enq/3lAhc5ExD16no1xbpe8OhAITHQrjVmcZdrNyE5JCQ9Ix0Q3S1g+i6wavRI4ISPlkwjoifU1ZGjtM3/O/TU44k0EEjajZ1BlhWHKYJKLX3P1tzft60FzrmDvpIF6tcQJqFZU5srcIZTY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d6NDtd5A; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C8F4C4CEF0;
-	Wed, 10 Sep 2025 17:48:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757526531;
-	bh=JWkrCD/pUkyX9wjEhNii7+JjAOcFy0ueHFktHUQ0t80=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=d6NDtd5AvkZ3cAyHiBAlhsfdUR3l9P2CxyKtdFH5/bGkhOLVPbOeOSka+H44aAKBn
-	 K/b1NClF/FVpo7KBFx/V6Lm5W5MqD3jLJcAVwJCwgIma8vkBVngnmL3Rjg5giNXbss
-	 GcsrEwC0wzJF6OlEkbBWdmv+S0xN55czfk1SKsmU5/bbzGwquE1FQ5KxZoNXHh5bV3
-	 DhGcyt2/rm+pcCmSKnhUsCXHRHPuR077rJpQCJTHoPfmo/sQQB/OcdvpLSzJcPI+M4
-	 51KrcuUa7vVoDJFlhhzMvuXO6Gnwfuyuu9tRoBj4EhQG7+YAxu+jIXI6IOdaSG5+ac
-	 HAEB2JxbRjDDg==
-Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-62177052206so2196064eaf.1;
-        Wed, 10 Sep 2025 10:48:51 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVVCiY7YEmXf//AT1snrQyk+A/aJW8w2XGIckcuFszwUAJDsTtyEMkwD8IIYXomJKtwdHCnzzWPJZ+K2OWD3ZoveaQQ@vger.kernel.org, AJvYcCVrGWYqk/k7ifUeAO2pyWzAdslqNLbDBmuncjgG6nx4ZkOj3mD5v8/treVwvO3N38V7AmYoPBHw/cc=@vger.kernel.org, AJvYcCXG6A7fBmrreliZ9tos2HRvpDmHXkZ8ZGysm3FHnnIHMaNhwMsBz1x7wGWGZBe5kDBxFFSk80BGNrk=@vger.kernel.org, AJvYcCXbdhzvfztzdZSsxvyp6U+6+yuFU178kxwiISf4arEFHoiRX92rn8LIX2ivHs0H08+jtG+20583R8CXdA==@vger.kernel.org, AJvYcCXdfG23CaRvalcussxjsbJp3CUQ4OYMRY0y7jxtmhl1MLNqnCOPdBFWf7j2lhsddxSmIW9vDU7bsN76@vger.kernel.org
-X-Gm-Message-State: AOJu0YwVoa/xa7IStNgGaGWsn6v+mpLhncvW1UNMyeKQZUPOdYWRl7RC
-	EtzQ0i2dNlaiVh/N/ctTeugJEpa/ikku4V33HVP6+80Yr9RkyD3Xo8CfSVx9cwE4FXfAer3nWUm
-	kf6RUah09wy4e7f/dBnozb+b9I7cqWyc=
-X-Google-Smtp-Source: AGHT+IHIQIF5cP+OhlL3KucdzEwULKP8UbyHlNW3Z/2yYgUbnpkKJtfuorEsV1W09cBVlr7j0fot96/NnMtI6HNTGd4=
-X-Received: by 2002:a05:6820:221c:b0:621:75a2:6791 with SMTP id
- 006d021491bc7-6217897ccc2mr7019038eaf.0.1757526530846; Wed, 10 Sep 2025
- 10:48:50 -0700 (PDT)
+	s=arc-20240116; t=1757526571; c=relaxed/simple;
+	bh=2TDh7kQNLkaozzjTxM5BRkxxeG3Q69mI76e1tjImguE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=icGIXxwfI8Q90wSBjPrlM9MrtyO3+sSpUa/Nbw24up3vgWykFWzAsWsEBq0Hko0m7JNFk+0xF/u9zJf8Cf6Cs2PXwd/DJZoAJoYsrtz5rsqRovMDXIXx+8Qi3UDbE7GSCd4xExRY6kAtlN1Kzu61VsC2A7vpIJril5JR0ht3haw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FXEWIv2/; arc=none smtp.client-ip=209.85.219.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-70fa947a7acso21606746d6.2
+        for <linux-pm@vger.kernel.org>; Wed, 10 Sep 2025 10:49:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1757526569; x=1758131369; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+HH/sk2u1+avN1Ur0Gsai+wP1pZNmCIVXLH43sOHbyw=;
+        b=FXEWIv2/N3W5lfBTXs3lfo+7cj7szFG3KZX71lQQzG65I/YqRTzG3dSJGVlNcuS+5R
+         ij1GNmEWY1LcJNlMqAfVCgRj2dZRs9kyz8qxzZD1j8cI1TYKYOuTC71lvYRnewxKBKVN
+         8SNUOgTY//namz3b9Vji7vyEahmMsOyfH1pel6shIjcK5ouoCV7iK4vdS1JH+7NqbxdJ
+         XgWfmLNurJUyGVpjZi+dmsmldcbSc2wg+MOaABXaQk9eVZgciYph8rAwz1uH5YEyo6rg
+         BxU8j0TAbHqA4jCRHM7VIJCCIvM9DG4YIXcl3jYOHwtgToNGL699MYPz1qXU+bB6eEJ6
+         9Gog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757526569; x=1758131369;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+HH/sk2u1+avN1Ur0Gsai+wP1pZNmCIVXLH43sOHbyw=;
+        b=tIx3GzlGecaj+WNOg/NxecxX/xDAha3gwd2qmZdtdDpEUs1QH1phqLdu8jawf1sW8d
+         Nd28X1+tflQvq8b1LjNDyA3CWbdr0foxFG2tWJ9YaK9CwktKeGghflduMcoM+ZwL6o4q
+         UOErAVeU7FBaKB/Me1bUov8s6ZvW78hyeHlTLZGJm28o41lEwT3cSQ4diPdDroN3RPZv
+         +I/AfJzYftzOEd6ycj3I6hTwe2xHqbPQ1PxzbMZBMTnXNBMl+39bkLjzw0ejPVRCg5e+
+         cTDQrhXE00IjhaJitV7gaOmzfjlH+y+2Fa/DK74B6bQRTMv7b7yqZImQ6ckydPHcvBS6
+         vTYA==
+X-Forwarded-Encrypted: i=1; AJvYcCWJtMixOvBG2SantSCmEjLrsZJ3rAsLwKoAWCjGX9/ON6msz2ZEW5rGsT1z27XwcCU/JrSVPuLVAQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzs0y6+wGmSjknra7AX19yPOsdGoJsEe8rGpCM5NC3ppdI6udhs
+	bJYEw7a3X9v9dEcWCocV27IF04gi/2MwYpIjL9ewRIEiPTcBbZvO9ZrW
+X-Gm-Gg: ASbGncuLDv+WhKRu5v+dVCsEd0nasIAL1n7uCtwnaUfL3c+DwiY6Zeg4RS8tRKNtTgU
+	sHngG173iui/BWl2TlmfURiidu5hk56JK53JEKCH691pyeURbCYFBWemA9kpFZDYJjKCABDPSjL
+	d5vXPZQPcJ9IaxyplNffZqCYfOUlQs2j5qI1wBgtd/n/bzQIjXDCQSZB4ZH2ZC+YJBrU3LUabx+
+	lbYmw503jFmniYp4nM6daZkZzPzSByB5HwINGZ59JFGvyhdYFNgPoEHHwiTqo11NuZq97FAqYXb
+	3QF6f9d726ESt9fhiKjr7hKfcKDsMEcYiuMDuKFg3datpz1GgK8Z1UOZ6sRy3GdKATA6qeNoQW8
+	u5kiq6HJS7Z/oLw3G+nX3kEyD4+yawn3GVhgCF3XKfq02Fngac4LWr5V3tYq9AB3hG9FlqohPGH
+	7q8gn6aoQ2sUUxDYPmEuf7yfw=
+X-Google-Smtp-Source: AGHT+IEM95swY0kJ4pEE7cWXE27bS1FyfUbGECgZv2e+mr8++Z6Pb1CgEAwNTGOBAf+oZzHMcYO89A==
+X-Received: by 2002:a0c:f092:0:20b0:73b:d22e:14c5 with SMTP id 6a1803df08f44-73bd22e1629mr145693356d6.3.1757526568388;
+        Wed, 10 Sep 2025 10:49:28 -0700 (PDT)
+Received: from fauth-a2-smtp.messagingengine.com (fauth-a2-smtp.messagingengine.com. [103.168.172.201])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-72708307ba3sm132482656d6.42.2025.09.10.10.49.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Sep 2025 10:49:27 -0700 (PDT)
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 560FCF40066;
+	Wed, 10 Sep 2025 13:49:27 -0400 (EDT)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-05.internal (MEProxy); Wed, 10 Sep 2025 13:49:27 -0400
+X-ME-Sender: <xms:J7rBaK5HcTFTz81hNGOjseXYAAi4_PTvlp47SBd0MLQCfiOD4a6MIQ>
+    <xme:J7rBaFUr-X16eBIGVvHEVV4zobkncNrOHvJrH_lliuP14EqcOxaiUA4AYBF8x3_GA
+    7UfNdzM69Z4BkIxcg>
+X-ME-Received: <xmr:J7rBaE0JGE2VLBziKwsmktwKR4XWJkQt0xckApkqLBZSEER9sW-U0os6S_IAHz3B1y9tPR3rLw_wKtzTcsnmPe-mRZRmwy35>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddvfeelfecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhquhhnucfh
+    vghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrfgrthhtvg
+    hrnhephfetvdfgtdeukedvkeeiteeiteejieehvdetheduudejvdektdekfeegvddvhedt
+    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtne
+    curfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquhhnodhmvghsmhhtphgruhhthhhpvghr
+    shhonhgrlhhithihqdeiledvgeehtdeigedqudejjeekheehhedvqdgsohhquhhnrdhfvg
+    hngheppehgmhgrihhlrdgtohhmsehfihigmhgvrdhnrghmvgdpnhgspghrtghpthhtohep
+    udelpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopegurghnihgvlhdrrghlmhgvih
+    gurgestgholhhlrggsohhrrgdrtghomhdprhgtphhtthhopehmthhurhhquhgvthhtvges
+    sggrhihlihgsrhgvrdgtohhmpdhrtghpthhtohepshgsohihugeskhgvrhhnvghlrdhorh
+    hgpdhrtghpthhtohepohhjvggurgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghl
+    vgigrdhgrgihnhhorhesghhmrghilhdrtghomhdprhgtphhtthhopehgrghrhiesghgrrh
+    ihghhuohdrnhgvthdprhgtphhtthhopegsjhhorhhnfegpghhhsehprhhothhonhhmrghi
+    lhdrtghomhdprhgtphhtthhopehlohhsshhinheskhgvrhhnvghlrdhorhhgpdhrtghpth
+    htoheprgdrhhhinhgusghorhhgsehkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:J7rBaEMY8t4bELOzHKRxNeByGs_fRPspa9sAyzgGcfAjR4Vd6coZtQ>
+    <xmx:J7rBaP1ddmN7A4BjsljAGCOjB3daOWNBafoaK_zXVZ3WbhXWl1dvlQ>
+    <xmx:J7rBaD2bX_DP-1yYLdO6Gp-1FaU4-Ow1LB0klvP6NlkqxM0W90o7Xg>
+    <xmx:J7rBaN81bRzOckvOqHBWtllEsVP9qITEtgKNK0vfsls2RWzeq2yiBw>
+    <xmx:J7rBaPYwjk3V5nKNxy2UxplgoFKMY1QwM_7pmuoWVtUEiTjhRztwGwAb>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 10 Sep 2025 13:49:26 -0400 (EDT)
+Date: Wed, 10 Sep 2025 10:49:25 -0700
+From: Boqun Feng <boqun.feng@gmail.com>
+To: Daniel Almeida <daniel.almeida@collabora.com>
+Cc: Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>, linux-clk@vger.kernel.org,
+	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] rust: clk: implement Send and Sync
+Message-ID: <aMG6JVMcMxVuX7De@tardis-2.local>
+References: <20250910-clk-type-state-v2-0-1b97c11bb631@collabora.com>
+ <20250910-clk-type-state-v2-1-1b97c11bb631@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250909191619.2580169-1-superm1@kernel.org> <20250909191619.2580169-8-superm1@kernel.org>
-In-Reply-To: <20250909191619.2580169-8-superm1@kernel.org>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 10 Sep 2025 19:48:39 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0g8Hq4nfrkEPKByesAZ7SmKz4N8Cm9H_AmK_fez=0QtWw@mail.gmail.com>
-X-Gm-Features: Ac12FXyd_vL1lzVAXI-I3rJHVcPaSI6vkfuoiTOhlX1EtvOyF4XzkNpq89iEtOs
-Message-ID: <CAJZ5v0g8Hq4nfrkEPKByesAZ7SmKz4N8Cm9H_AmK_fez=0QtWw@mail.gmail.com>
-Subject: Re: [PATCH v7 07/12] PCI/PM: Run bridge power up actions as part of
- restore phase
-To: "Mario Limonciello (AMD)" <superm1@kernel.org>
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Danilo Krummrich <dakr@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, Pavel Machek <pavel@kernel.org>, 
-	Len Brown <lenb@kernel.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>, 
-	"Martin K . Petersen" <martin.petersen@oracle.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	"open list:HIBERNATION (aka Software Suspend, aka swsusp)" <linux-pm@vger.kernel.org>, 
-	"open list:RADEON and AMDGPU DRM DRIVERS" <amd-gfx@lists.freedesktop.org>, 
-	"open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>, 
-	"open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>, 
-	"open list:SCSI SUBSYSTEM" <linux-scsi@vger.kernel.org>, 
-	"open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>, 
-	"open list:TRACING" <linux-trace-kernel@vger.kernel.org>, AceLan Kao <acelan.kao@canonical.com>, 
-	Kai-Heng Feng <kaihengf@nvidia.com>, Mark Pearson <mpearson-lenovo@squebb.ca>, 
-	=?UTF-8?Q?Merthan_Karaka=C5=9F?= <m3rthn.k@gmail.com>, 
-	Eric Naim <dnaim@cachyos.org>, "Guilherme G . Piccoli" <gpiccoli@igalia.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250910-clk-type-state-v2-1-1b97c11bb631@collabora.com>
 
-On Tue, Sep 9, 2025 at 9:16=E2=80=AFPM Mario Limonciello (AMD)
-<superm1@kernel.org> wrote:
->
-> Suspend resume actions will check the state of the device and whether
-> bus PM should be skipped.  These same actions make sense during hibernati=
-on
-> image restore.
+On Wed, Sep 10, 2025 at 02:28:27PM -0300, Daniel Almeida wrote:
+> From: Alice Ryhl <aliceryhl@google.com>
+> 
+> These traits are required for drivers to embed the Clk type in their own
+> data structures because driver data structures are usually required to
+> be Send. See e.g. [1] for the kind of workaround that drivers currently
+> need due to lacking this annotation.
+> 
+> Link: https://lore.kernel.org/rust-for-linux/20250812-tyr-v2-1-9e0f3dc9da95@collabora.com/ [1]
+> Signed-off-by: Daniel Almeida <daniel.almeida@collabora.com>
+> Signed-off-by: Alice Ryhl <aliceryhl@google.com>
+> Reviewed-by: Danilo Krummrich <dakr@kernel.org>
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+> Reviewed-by: Daniel Almeida <daniel.almeida@collabora.com>
 
-Not really (see below).
+This tag list looks a bit weird to me. Why is there a SoB from you
+before Alice's SoB? At least for the usage I'm familiar with, outside
+the case of Co-developed-bys, multiple SoBs is used for recording how
+the patches are routed. For example, if I have a patch that has my SoB
+and I send it to you, you queue in your tree and then send out to other
+maintainers for merging, in general you would put your SoB after mine in
+that case. But I don't think that's case here? Alice's patch has only
+her SoB:
 
-They kind of would have made sense in the error code path attempting
-to roll back the power-off transition, but I'm not sure if this is
-worth the hassle because it would require ->restore() to be able to
-handle two different cases without knowing which case it is handling.
+	https://lore.kernel.org/rust-for-linux/20250904-clk-send-sync-v1-1-48d023320eb8@google.com/
 
->  Apply them there as well.
->
-> Tested-by: Eric Naim <dnaim@cachyos.org>
-> Signed-off-by: Mario Limonciello (AMD) <superm1@kernel.org>
+What's the intention of the SoB tag here?
+
+Otherwise the patch looks good to me. If we get the tag list resolved,
+feel free to add:
+
+Reviewed-by: Boqun Feng <boqun.feng@gmail.com>
+
+Regards,
+Boqun
+
 > ---
-> v7:
->  * Reword title
-> v5:
->  * Split out patch
-> ---
->  drivers/pci/pci-driver.c | 5 +++++
->  1 file changed, 5 insertions(+)
->
-> diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
-> index 571a3809f163a..fb6f1f60b2f1f 100644
-> --- a/drivers/pci/pci-driver.c
-> +++ b/drivers/pci/pci-driver.c
-> @@ -1246,10 +1246,15 @@ static int pci_pm_restore_noirq(struct device *de=
-v)
->  {
->         struct pci_dev *pci_dev =3D to_pci_dev(dev);
->         const struct dev_pm_ops *pm =3D dev->driver ? dev->driver->pm : N=
-ULL;
-> +       pci_power_t prev_state =3D pci_dev->current_state;
-
-In the hibernation restore case, pci_dev->current_state is irrelevant
-because the system has gone through the entire init in the BIOS and
-boot loader, and the boot (restore) kernel before the control goes
-back to the image kernel which runs the ->restore() callbacks.  It may
-have changed three times since it was set during power-off.
-
-> +       bool skip_bus_pm =3D pci_dev->skip_bus_pm;
-
-This one is irrelevant either in that case.
-
->
->         pci_pm_default_resume_early(pci_dev);
->         pci_fixup_device(pci_fixup_resume_early, pci_dev);
->
-> +       if (!skip_bus_pm && prev_state =3D=3D PCI_D3cold)
-> +               pci_pm_bridge_power_up_actions(pci_dev);
+>  rust/kernel/clk.rs | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/rust/kernel/clk.rs b/rust/kernel/clk.rs
+> index 1e6c8c42fb3a321951e275101848b35e1ae5c2a8..0a290202da69669d670ddad2b6762a1d5f1d912e 100644
+> --- a/rust/kernel/clk.rs
+> +++ b/rust/kernel/clk.rs
+> @@ -129,6 +129,13 @@ mod common_clk {
+>      #[repr(transparent)]
+>      pub struct Clk(*mut bindings::clk);
+>  
+> +    // SAFETY: It is safe to call `clk_put` on another thread than where `clk_get` was called.
+> +    unsafe impl Send for Clk {}
 > +
->         if (pci_has_legacy_pm_support(pci_dev))
->                 return 0;
->
-> --
+> +    // SAFETY: It is safe to call any combination of the `&self` methods in parallel, as the
+> +    // methods are synchronized internally.
+> +    unsafe impl Sync for Clk {}
+> +
+>      impl Clk {
+>          /// Gets [`Clk`] corresponding to a [`Device`] and a connection id.
+>          ///
+> 
+> -- 
+> 2.51.0
+> 
 
