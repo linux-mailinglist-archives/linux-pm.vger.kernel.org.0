@@ -1,168 +1,107 @@
-Return-Path: <linux-pm+bounces-34376-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34377-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 58E60B519BE
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 16:42:15 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A7097B51A86
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 16:58:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B231418901F3
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 14:40:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0E66AB61A78
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 14:53:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED37C33A03E;
-	Wed, 10 Sep 2025 14:37:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12E1D3375A4;
+	Wed, 10 Sep 2025 14:46:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=honor.com header.i=@honor.com header.b="Z+wOMYIu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KW5pM2Fu"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mta22.hihonor.com (mta22.hihonor.com [81.70.192.198])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE0D132CF74;
-	Wed, 10 Sep 2025 14:37:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=81.70.192.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD820334733;
+	Wed, 10 Sep 2025 14:46:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757515063; cv=none; b=FtYOl2cGWvCOsb2b/4lE83jRcVJf9Ez5YKKBCMpyNiqVboAIZou10U/kEiEonLU7kwBCt5gs5FRx9YIzLy70/tnUmJK06w4tEHzKgWqURGLUry4YzHwOOHmDIYmKW4mHz2Xq/FFJg5KhOMGTOOGQvsonIgSfI0dPYzF7tuNMbm8=
+	t=1757515601; cv=none; b=HI9NTD7lxjwO74UTyuBiDtCYZMh2Vgs+wtTL6LhNl9K0HsWVGCkYuHCU+rJmyCZzw8mUWFy0W24JU6U61F/jjvy+dG7vg7Ob3NV1S/41IEn3ziikxpZ1hO094JTq3rK8u3AmusQbtO++rolE0slb9pUCBr9/chVq0hiEG61cFJk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757515063; c=relaxed/simple;
-	bh=sacmCW970u5wmxcvaaMOuhCwrKJCWULfOyvNHjZPBa8=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=HlQW2WF1HkHkhKqX9wvp53WvvtozEpEVOp4Nb0gWV3Qt+sTOKI7vH3sisntZ6yvsSYbjxGUeAIBRpQ1pF7LKs9TGaNV6N7GX3plCq2YUqcx7KWsz1iz/B4BOpIgSvYxP05PXN1x9GlreRbnNbB9jApnZibCGG/dYtb1vYduVHy4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=honor.com; spf=pass smtp.mailfrom=honor.com; dkim=pass (1024-bit key) header.d=honor.com header.i=@honor.com header.b=Z+wOMYIu; arc=none smtp.client-ip=81.70.192.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=honor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=honor.com
-dkim-signature: v=1; a=rsa-sha256; d=honor.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=To:From;
-	bh=Il1AFPpv1ZameRi/y5X+2Ag4jsiAKIDDx/iyk289iXk=;
-	b=Z+wOMYIuwHFyT7srvY1qDquEaLfd2ILQX2wLWRt7gYF4UG6PUeTWb6UcxVjQRkWkFhU2xH/mZ
-	vcBL1SZ7ZG91omU0NZn0l5OZxCcTd7F3oq8iYYQ47pjNryGTNyBEPDUbsG5ogb8rLS8LKbKRePR
-	96r558NQ7HxaqOq7K0VSlak=
-Received: from w013.hihonor.com (unknown [10.68.26.19])
-	by mta22.hihonor.com (SkyGuard) with ESMTPS id 4cMNZ2522PzYlFL0;
-	Wed, 10 Sep 2025 22:37:14 +0800 (CST)
-Received: from a018.hihonor.com (10.68.17.250) by w013.hihonor.com
- (10.68.26.19) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Wed, 10 Sep
- 2025 22:37:31 +0800
-Received: from localhost.localdomain (10.144.20.219) by a018.hihonor.com
- (10.68.17.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Wed, 10 Sep
- 2025 22:37:31 +0800
-From: zhongjinji <zhongjinji@honor.com>
-To: <mhocko@suse.com>
-CC: <rientjes@google.com>, <shakeel.butt@linux.dev>,
-	<akpm@linux-foundation.org>, <tglx@linutronix.de>, <liam.howlett@oracle.com>,
-	<lorenzo.stoakes@oracle.com>, <surenb@google.com>, <lenb@kernel.org>,
-	<rafael@kernel.org>, <pavel@kernel.org>, <linux-mm@kvack.org>,
-	<linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<liulu.liu@honor.com>, <feng.han@honor.com>, <zhongjinji@honor.com>
-Subject: [PATCH v9 2/2] mm/oom_kill: The OOM reaper traverses the VMA maple tree in reverse order
-Date: Wed, 10 Sep 2025 22:37:26 +0800
-Message-ID: <20250910143726.19905-3-zhongjinji@honor.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20250910143726.19905-1-zhongjinji@honor.com>
-References: <20250910143726.19905-1-zhongjinji@honor.com>
+	s=arc-20240116; t=1757515601; c=relaxed/simple;
+	bh=84vkiPKqSEhuvDni8XCaT6y5jo/x6VM2Y2bOu716BLQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=jKiOC8JxrriFW786cbyiID7YT3hQUow7fBOXIKKT0ICCpEpuZHspPEDSv9Yhan6hLPml7C9AhKTMyNOJZ7ng+WEPmubkuNpzYl2a3GM0bYjfRYoRzIioozehzJAc3X0uQ73a3Ia35UHg94+7U+firlCoQyirs+ICWxPto6CNUO0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KW5pM2Fu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 316D6C4CEEB;
+	Wed, 10 Sep 2025 14:46:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757515600;
+	bh=84vkiPKqSEhuvDni8XCaT6y5jo/x6VM2Y2bOu716BLQ=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:From;
+	b=KW5pM2FuSjJKYJW2gxcET8OcAb1Rldc9NmgcN9qu9VVRmQY8OImBUUUXcix8cQckW
+	 jSNVyqFL7amGmUf7wkuDldCw34x5vfC4fs3T9gVytGVRFENaEVt04KcarnAzlwVANz
+	 EZZVR3K9PvKcjR66/8+wda4Gbh22mxm1+1b02Io3rjhsYSpJ0yuZ6X2Mlh0Wlx9OKE
+	 UPYmMZFP2kT+2NusOrtQtR6VBmSZKiLAp0YARN/j0AEH/x1N4414csaGNJAQKkeTZS
+	 xVJ9pFYae9xPnC0wRLL3zV7z/6Tev21LW3sqB5+UN4uprUuhHM9oNAf6/Lx+6uGzIF
+	 Pjs15lLPM32qQ==
+Date: Wed, 10 Sep 2025 09:46:38 -0500
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: "Mario Limonciello (AMD)" <superm1@kernel.org>
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>,
+	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+	"Martin K . Petersen" <martin.petersen@oracle.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	"open list:HIBERNATION (aka Software Suspend, aka swsusp)" <linux-pm@vger.kernel.org>,
+	"open list:RADEON and AMDGPU DRM DRIVERS" <amd-gfx@lists.freedesktop.org>,
+	"open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+	"open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
+	"open list:SCSI SUBSYSTEM" <linux-scsi@vger.kernel.org>,
+	"open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
+	"open list:TRACING" <linux-trace-kernel@vger.kernel.org>,
+	AceLan Kao <acelan.kao@canonical.com>,
+	Kai-Heng Feng <kaihengf@nvidia.com>,
+	Mark Pearson <mpearson-lenovo@squebb.ca>,
+	Merthan =?utf-8?Q?Karaka=C5=9F?= <m3rthn.k@gmail.com>,
+	Eric Naim <dnaim@cachyos.org>,
+	"Guilherme G . Piccoli" <gpiccoli@igalia.com>
+Subject: Re: [PATCH v7 06/12] PCI/PM: Split out code from
+ pci_pm_suspend_noirq() into helper
+Message-ID: <20250910144638.GA1535343@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: w002.hihonor.com (10.68.28.120) To a018.hihonor.com
- (10.68.17.250)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250909191619.2580169-7-superm1@kernel.org>
 
-Although the oom_reaper is delayed and it gives the oom victim chance to
-clean up its address space this might take a while especially for
-processes with a large address space footprint. In those cases
-oom_reaper might start racing with the dying task and compete for shared
-resources - e.g. page table lock contention has been observed.
+On Tue, Sep 09, 2025 at 02:16:13PM -0500, Mario Limonciello (AMD) wrote:
+> In order to unify suspend and hibernate codepaths without code duplication
+> the common code should be in common helpers.  Move it from
+> pci_pm_suspend_noirq() into a helper.  No intended functional changes.
+> 
+> Tested-by: Eric Naim <dnaim@cachyos.org>
+> Signed-off-by: Mario Limonciello (AMD) <superm1@kernel.org>
 
-Reduce those races by reaping the oom victim from the other end of the
-address space.
+Acked-by: Bjorn Helgaas <bhelgaas@google.com>
 
-It is also a significant improvement for process_mrelease(). When a process
-is killed, process_mrelease is used to reap the killed process and often
-runs concurrently with the dying task. The test data shows that after
-applying the patch, lock contention is greatly reduced during the procedure
-of reaping the killed process.
+If you have other reason to repost this, ...
 
-The test is based on arm64.
+> +	if (pci_dev->current_state == PCI_D0) {
+> +		pci_dev->skip_bus_pm = true;
 
-Without the patch:
-|--99.57%-- oom_reaper
-|    |--0.28%-- [hit in function]
-|    |--73.58%-- unmap_page_range
-|    |    |--8.67%-- [hit in function]
-|    |    |--41.59%-- __pte_offset_map_lock
-|    |    |--29.47%-- folio_remove_rmap_ptes
-|    |    |--16.11%-- tlb_flush_mmu
-|    |    |--1.66%-- folio_mark_accessed
-|    |    |--0.74%-- free_swap_and_cache_nr
-|    |    |--0.69%-- __tlb_remove_folio_pages
-|    |--19.94%-- tlb_finish_mmu
-|    |--3.21%-- folio_remove_rmap_ptes
-|    |--1.16%-- __tlb_remove_folio_pages
-|    |--1.16%-- folio_mark_accessed
-|    |--0.36%-- __pte_offset_map_lock
+Add a blank line here.
 
-With the patch:
-|--99.53%-- oom_reaper
-|    |--55.77%-- unmap_page_range
-|    |    |--20.49%-- [hit in function]
-|    |    |--58.30%-- folio_remove_rmap_ptes
-|    |    |--11.48%-- tlb_flush_mmu
-|    |    |--3.33%-- folio_mark_accessed
-|    |    |--2.65%-- __tlb_remove_folio_pages
-|    |    |--1.37%-- _raw_spin_lock
-|    |    |--0.68%-- __mod_lruvec_page_state
-|    |    |--0.51%-- __pte_offset_map_lock
-|    |--32.21%-- tlb_finish_mmu
-|    |--6.93%-- folio_remove_rmap_ptes
-|    |--1.90%-- __tlb_remove_folio_pages
-|    |--1.55%-- folio_mark_accessed
-|    |--0.69%-- __pte_offset_map_lock
-
-Signed-off-by: zhongjinji <zhongjinji@honor.com>
-Reviewed-by: Liam R. Howlett <Liam.Howlett@oracle.com>
-Reviewed-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Reviewed-by: Suren Baghdasaryan <surenb@google.com>
-Acked-by: Shakeel Butt <shakeel.butt@linux.dev>
-Acked-by: Michal Hocko <mhocko@suse.com>
----
- mm/oom_kill.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
-
-diff --git a/mm/oom_kill.c b/mm/oom_kill.c
-index 88356b66cc35..28fb36be332b 100644
---- a/mm/oom_kill.c
-+++ b/mm/oom_kill.c
-@@ -516,7 +516,7 @@ static bool __oom_reap_task_mm(struct mm_struct *mm)
- {
- 	struct vm_area_struct *vma;
- 	bool ret = true;
--	VMA_ITERATOR(vmi, mm, 0);
-+	MA_STATE(mas, &mm->mm_mt, ULONG_MAX, ULONG_MAX);
- 
- 	/*
- 	 * Tell all users of get_user/copy_from_user etc... that the content
-@@ -526,7 +526,13 @@ static bool __oom_reap_task_mm(struct mm_struct *mm)
- 	 */
- 	set_bit(MMF_UNSTABLE, &mm->flags);
- 
--	for_each_vma(vmi, vma) {
-+	/*
-+	 * It might start racing with the dying task and compete for shared
-+	 * resources - e.g. page table lock contention has been observed.
-+	 * Reduce those races by reaping the oom victim from the other end
-+	 * of the address space.
-+	 */
-+	mas_for_each_rev(&mas, vma, 0) {
- 		if (vma->vm_flags & (VM_HUGETLB|VM_PFNMAP))
- 			continue;
- 
--- 
-2.17.1
-
+> +		/*
+> +		 * Per PCI PM r1.2, table 6-1, a bridge must be in D0 if any
+> +		 * downstream device is in D0, so avoid changing the power state
+> +		 * of the parent bridge by setting the skip_bus_pm flag for it.
+> +		 */
+> +		if (pci_dev->bus->self)
+> +			pci_dev->bus->self->skip_bus_pm = true;
+> +	}
 
