@@ -1,175 +1,144 @@
-Return-Path: <linux-pm+bounces-34319-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34320-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 906C4B50641
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Sep 2025 21:18:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id BC7EBB50A46
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 03:33:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4CBEC4E103F
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Sep 2025 19:18:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5934E563A3F
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 01:33:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F47C369341;
-	Tue,  9 Sep 2025 19:17:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C0FA1D7999;
+	Wed, 10 Sep 2025 01:33:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RSkozw1g"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="jRGOMphx"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D604225415;
-	Tue,  9 Sep 2025 19:17:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F2C02E403
+	for <linux-pm@vger.kernel.org>; Wed, 10 Sep 2025 01:33:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757445424; cv=none; b=DTOmIWovHHygKtFUmVLp8K/Yt59fdZ1jv3/o3MERGv5Try95QmP+xPuq/geVd57dYfNHqwZS+oFaKeuSwJdxugQ7qUhZiGTu/1klKx2rIGfLTd+03BDveMacQOVH6uH0/IQ+yqvztifpEphLCvQuHOfsvRDWrXAyv2bSDaJUYrY=
+	t=1757468031; cv=none; b=QYUeZTo0FCTOV89ZuwVyse2lc9dGEkTlLAB8J+97JBcZj8MBm16pUkw6p+G0ogma5xl6GWCcBJMCq+8xZSs/4wooi5Kq/5evhpfKz1yhg3KYFG39MVg6O60H7Bi7AlqQxB9dBCiOh2IIUVLD8oCj5t7dkYrOuZ7KUkGh3aawQGk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757445424; c=relaxed/simple;
-	bh=gVzxOE/pl/exM5/3ViV8ssmW6tGDSsp+WYKa5FxPoEY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=h5olin/UFd7YO21u/deCoR1U8qdN/TWamRtaquA8vH7Bn/qGF7XbjKgJgNzCpqoxjjf8vFAUj3TigdAwBDMsEheTKqAD8SRIZxbQ5ONig36BW2/ivXgAscL726St8Qa4I3aWM3m5WWyWCOqpXM6PahitNeruj8ZVviFUiR9KSuI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RSkozw1g; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB4B2C4CEF4;
-	Tue,  9 Sep 2025 19:17:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757445424;
-	bh=gVzxOE/pl/exM5/3ViV8ssmW6tGDSsp+WYKa5FxPoEY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=RSkozw1g/nG+tUtkLwJcR5YP+2XwvAU++L0WUndrrz/c+jjIsjZLVcIdlHQHNZyg2
-	 il0Xe+pJk7IP0kyenCv5oitFAZB3uHCGXuQHm6eqP21QvXCOIr6y7y99FYK2r0Loa5
-	 /qfrvRMe2yAZDoN+IVzyENwZU+bpO5HxzRu08huVBQr/zmBi27gIPHhHwN82UrNXbg
-	 a/RMIiLygBst9XuqPL0YYkYuE+NzoS9sQD5NHiYvd//Wn87YYFnkGvmrsLgPnnwZpJ
-	 ws4lbjKAoOEzhCJ53lPNJOPQCRSixjZEkaTd6I44jjftM4WyFq77QM6pPyaU7ex/7k
-	 y3uBQcISsATrg==
-From: "Mario Limonciello (AMD)" <superm1@kernel.org>
-To: "Rafael J . Wysocki" <rafael@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Bjorn Helgaas <bhelgaas@google.com>
-Cc: Pavel Machek <pavel@kernel.org>,
-	Len Brown <lenb@kernel.org>,
-	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-	"James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
-	"Martin K . Petersen" <martin.petersen@oracle.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	linux-pm@vger.kernel.org (open list:HIBERNATION (aka Software Suspend, aka swsusp)),
-	amd-gfx@lists.freedesktop.org (open list:RADEON and AMDGPU DRM DRIVERS),
-	dri-devel@lists.freedesktop.org (open list:DRM DRIVERS),
-	linux-pci@vger.kernel.org (open list:PCI SUBSYSTEM),
-	linux-scsi@vger.kernel.org (open list:SCSI SUBSYSTEM),
-	linux-usb@vger.kernel.org (open list:USB SUBSYSTEM),
-	linux-trace-kernel@vger.kernel.org (open list:TRACING),
-	AceLan Kao <acelan.kao@canonical.com>,
-	Kai-Heng Feng <kaihengf@nvidia.com>,
-	Mark Pearson <mpearson-lenovo@squebb.ca>,
-	=?UTF-8?q?Merthan=20Karaka=C5=9F?= <m3rthn.k@gmail.com>,
-	Eric Naim <dnaim@cachyos.org>,
-	"Guilherme G . Piccoli" <gpiccoli@igalia.com>,
-	"Mario Limonciello (AMD)" <superm1@kernel.org>
-Subject: [PATCH v7 12/12] Documentation: power: Add document on debugging shutdown hangs
-Date: Tue,  9 Sep 2025 14:16:19 -0500
-Message-ID: <20250909191619.2580169-13-superm1@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250909191619.2580169-1-superm1@kernel.org>
-References: <20250909191619.2580169-1-superm1@kernel.org>
+	s=arc-20240116; t=1757468031; c=relaxed/simple;
+	bh=UE1dW2vjyCtvAjqcbpkaQjgaA6fRIygDccPoGm5LG1Q=;
+	h=From:To:Cc:In-Reply-To:Subject:Date:Message-ID:MIME-Version:
+	 Content-Type:References; b=CFFQNnwkgNqepDxNxihb1FKVvebXj08dOS5hqg+1q3fw5O0F3CYKhDcrwaTk/I1OSSvvFdRoJCuMNbf7R1WYRPxMnodcGJELYUSieQG1ce+1n9w9INpHBqiPGscp10ljQ/FaL4xeoCv5421Zv0MHtpVyorFb27QyJFowKdmsxjk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=jRGOMphx; arc=none smtp.client-ip=203.254.224.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
+	by mailout3.samsung.com (KnoxPortal) with ESMTP id 20250910013346epoutp038340f6f6143488c5b3cd2f8d0cb3ffbc~jx9vMuZrR1089910899epoutp03_
+	for <linux-pm@vger.kernel.org>; Wed, 10 Sep 2025 01:33:46 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20250910013346epoutp038340f6f6143488c5b3cd2f8d0cb3ffbc~jx9vMuZrR1089910899epoutp03_
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1757468026;
+	bh=B/cQztE6JVsN29H2UCnnOkTaLkGI3st9SaYIAZ0Aj6I=;
+	h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+	b=jRGOMphxr9OlYaJEH6x1gYZyDvpOgTnngtS/3I3ljide5pEQgBPHPyvfPhpoecHxL
+	 MIApyz7+jUfWexphehLhwg6aRsUOj3CAnGERFpgOk5n9bZnwnsZlDyxsipwQ5cWOc5
+	 9MerGn9AbIJGYFCRZ9NMOm1pfNQ3IgfUSKGKrM48=
+Received: from epsnrtp04.localdomain (unknown [182.195.42.156]) by
+	epcas2p1.samsung.com (KnoxPortal) with ESMTPS id
+	20250910013345epcas2p1627ed06365bff0aaf2d6a0810b074777~jx9ui-Lrd2488624886epcas2p1h;
+	Wed, 10 Sep 2025 01:33:45 +0000 (GMT)
+Received: from epcas2p1.samsung.com (unknown [182.195.36.70]) by
+	epsnrtp04.localdomain (Postfix) with ESMTP id 4cM3B075H5z6B9mD; Wed, 10 Sep
+	2025 01:33:44 +0000 (GMT)
+Received: from epsmtip1.samsung.com (unknown [182.195.34.30]) by
+	epcas2p2.samsung.com (KnoxPortal) with ESMTPA id
+	20250910013344epcas2p265fefabdfed14e90b66cc856c559e561~jx9tOknPz1132511325epcas2p2b;
+	Wed, 10 Sep 2025 01:33:44 +0000 (GMT)
+Received: from KORCO115296 (unknown [12.36.150.221]) by epsmtip1.samsung.com
+	(KnoxPortal) with ESMTPA id
+	20250910013344epsmtip1bcef11072703a7ec40ff187ab78578bf~jx9tKKmwA3018230182epsmtip1Y;
+	Wed, 10 Sep 2025 01:33:44 +0000 (GMT)
+From: =?UTF-8?B?7IaQ7Iug?= <shin.son@samsung.com>
+To: "'Krzysztof Kozlowski'" <krzk@kernel.org>, "'Bartlomiej Zolnierkiewicz'"
+	<bzolnier@gmail.com>, "'Rafael J . Wysocki'" <rafael@kernel.org>, "'Daniel
+ Lezcano'" <daniel.lezcano@linaro.org>, "'Zhang Rui'" <rui.zhang@intel.com>,
+	"'Lukasz	Luba'" <lukasz.luba@arm.com>, "'Rob Herring'" <robh@kernel.org>,
+	"'Conor Dooley'" <conor+dt@kernel.org>, "'Alim Akhtar'"
+	<alim.akhtar@samsung.com>
+Cc: <linux-pm@vger.kernel.org>, <linux-samsung-soc@vger.kernel.org>,
+	<devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>
+In-Reply-To: <e71e6f3d-af02-4910-91ae-acf41692ac5b@kernel.org>
+Subject: RE: [PATCH v2 1/3] dt-bindings: thermal: samsung: Add tmu-name and
+ sensor-index-ranges properties
+Date: Wed, 10 Sep 2025 10:33:43 +0900
+Message-ID: <03a301dc21f2$f2236380$d66a2a80$@samsung.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 15.0
+Thread-Index: AQJcDpuT0zWDya8nliyk6vzs/32vBQIURjbqAvLO/ccA7RxvPrNcJnHw
+Content-Language: ko
+X-CMS-MailID: 20250910013344epcas2p265fefabdfed14e90b66cc856c559e561
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+cpgsPolicy: CPGSC10-234,Y
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20250903073653epcas2p4cb25058c97aab9a30c7e68ef5f10fb91
+References: <20250903073634.1898865-1-shin.son@samsung.com>
+	<CGME20250903073653epcas2p4cb25058c97aab9a30c7e68ef5f10fb91@epcas2p4.samsung.com>
+	<20250903073634.1898865-2-shin.son@samsung.com>
+	<e71e6f3d-af02-4910-91ae-acf41692ac5b@kernel.org>
 
-The kernel will attempt hibernation callbacks before shutdown callbacks.
-If there is any problem with this, ideally a UART log should be captured
-to debug the problem.  However if one isn't available users can use the
-pstore functionality to retrieve logs.  Add a document explaining how
-this works.
+Hello, Krzysztof Kozlowski.
 
-Signed-off-by: Mario Limonciello (AMD) <superm1@kernel.org>
----
-v7:
- * New patch
----
- Documentation/power/index.rst              |  1 +
- Documentation/power/shutdown-debugging.rst | 55 ++++++++++++++++++++++
- 2 files changed, 56 insertions(+)
- create mode 100644 Documentation/power/shutdown-debugging.rst
+> -----Original Message-----
+> From: Krzysztof Kozlowski [mailto:krzk@kernel.org]
+> Sent: Saturday, September 6, 2025 9:06 PM
+> To: Shin Son <shin.son@samsung.com>; Bartlomiej Zolnierkiewicz
+> <bzolnier@gmail.com>; Rafael J . Wysocki <rafael@kernel.org>; Daniel
+> Lezcano <daniel.lezcano@linaro.org>; Zhang Rui <rui.zhang@intel.com>;
+> Lukasz Luba <lukasz.luba@arm.com>; Rob Herring <robh@kernel.org>; Conor
+> Dooley <conor+dt@kernel.org>; Alim Akhtar <alim.akhtar@samsung.com>
+> Cc: linux-pm@vger.kernel.org; linux-samsung-soc@vger.kernel.org;
+> devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-
+> kernel@vger.kernel.org
+> Subject: Re: [PATCH v2 1/3] dt-bindings: thermal: samsung: Add tmu-name
+> and sensor-index-ranges properties
+> 
+> On 03/09/2025 09:36, Shin Son wrote:
+> >  > +  samsung,hw-sensor-indices:
+> > +    description: |
+> > +      List of hardware sensor indices that are physically present and
+> usable
+> > +      in this TMU instance. Indices not listed are either unmapped or
+> unused.
+> > +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> > +    minItems: 1
+> > +    maxItems: 16
+> > +    uniqueItems: true
+> 
+> 
+> For v3 you also need:
+> 
+>   items:
+>     maximum: 16
+> (or whatever values are actually correct)
+> 
+> 
+> 
+> Best regards,
+> Krzysztof
 
-diff --git a/Documentation/power/index.rst b/Documentation/power/index.rst
-index a0f5244fb4279..ea70633d9ce6c 100644
---- a/Documentation/power/index.rst
-+++ b/Documentation/power/index.rst
-@@ -19,6 +19,7 @@ Power Management
-     power_supply_class
-     runtime_pm
-     s2ram
-+    shutdown-debugging
-     suspend-and-cpuhotplug
-     suspend-and-interrupts
-     swsusp-and-swap-files
-diff --git a/Documentation/power/shutdown-debugging.rst b/Documentation/power/shutdown-debugging.rst
-new file mode 100644
-index 0000000000000..d4bf12000c1cd
---- /dev/null
-+++ b/Documentation/power/shutdown-debugging.rst
-@@ -0,0 +1,55 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+Debugging Kernel Shutdown Hangs with pstore
-++++++++++++++++++++++++++++++++++++++++++++
-+
-+Overview
-+========
-+When the system is shut down to either a halt or power off, the kernel will
-+attempt to run hibernation calls for all devices. If this fails, the kernel will
-+fall back to shutdown callbacks. If this process fails and the system hangs
-+the kernel logs will need to be retrieved to debug the issue.
-+
-+On systems that have a UART available, it is best to configure the kernel to use
-+this UART for kernel console output.
-+
-+If a UART isn't available, the ``pstore`` subsystem provides a mechanism to
-+persist this data across a system reset, allowing it to be retrieved on the next
-+boot.
-+
-+Kernel Configuration
-+====================
-+To enable ``pstore`` and enable saving kernel ring buffer logs, set the
-+following kernel configuration options:
-+
-+* ``CONFIG_PSTORE=y``
-+* ``CONFIG_PSTORE_CONSOLE=y``
-+
-+Additionally, enable a backend to store the data. Depending upon your platform
-+some options include:
-+
-+* ``CONFIG_EFI_VARS_PSTORE=y``
-+* ``CONFIG_PSTORE_RAM=y``
-+* ``CONFIG_PSTORE_FIRMWARE=y``
-+* ``CONFIG_PSTORE_BLK=y``
-+
-+Kernel Command-line Parameters
-+==============================
-+Add these parameters to your kernel command line:
-+
-+* ``printk.always_kmsg_dump=Y``
-+	* Forces the kernel to dump the entire message buffer to pstore during
-+		shutdown
-+* ``efi_pstore.pstore_disable=N``
-+	* For EFI-based systems, ensures the EFI backend is active
-+
-+Userspace Interaction and Log Retrieval
-+=======================================
-+On the next boot after a hang, pstore logs will be available in the pstore
-+filesystem (``/sys/fs/pstore``) and can be retrieved by userspace.
-+
-+On systemd systems, the ``systemd-pstore`` service will help do the following:
-+
-+#. Locate pstore data in ``/sys/fs/pstore``
-+#. Read and save it to ``/var/lib/systemd/pstore``
-+#. Clear pstore data for the next event
--- 
-2.43.0
+Ok, I understood. I will add it in the next version
+Thank you for your feedback.
+
+Best regards,
+Shin Son
 
 
