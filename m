@@ -1,40 +1,40 @@
-Return-Path: <linux-pm+bounces-34367-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34368-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D036AB51893
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 15:59:27 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E552B51891
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 15:59:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EEF671C85347
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 13:59:43 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id BD8354E35FA
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 13:59:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BCED321423;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EB2032142A;
 	Wed, 10 Sep 2025 13:59:17 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D4F4289358;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D5672C11E1;
 	Wed, 10 Sep 2025 13:59:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757512757; cv=none; b=JDDMXbjQiFPLmcfRzkRMKL5G2sJqM0VkQ0nY3sQL+nHsF9wMhiPxef+sWmR7c6yolbrwoQdw+TrXg85ujyBkLzfT7X+Q8KECNtfiHGeyTZ4O+JYuzPOBJPBCHoS0t9hBw8vkXI61gVNwrdqCwDyUuQr5AiPpgrEPaeDI6aiHmPg=
+	t=1757512757; cv=none; b=QkEkmeuDRnZK10a/cL/0zB5sA1fFzzqOcPIsD/kycfMJU+LtgVf+29i2xmu/UUgujSVB/NCn5BW0ADmmcmLuJCLwQ1dVKLlNM3w5KObobaBUjf5LWAa9/Si0KPumSdPYjDGylNgfsSctpKgxJTL0qaTbikOz/Ext/jLQskzILas=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1757512757; c=relaxed/simple;
-	bh=u+HJQufIiCIozy/YxwbprUuqZZx3WzySTZMP4USJNHA=;
+	bh=U2M+U984KmuW7sRJRH5OzGeyEOOiedqI2X7Dze9Zj1o=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tXapyjKJNwsDxx0gJ9byispWiV4FMMLMcGQK6mgngfFAeKyV283e9mXTNbsVZdkd+5aZRbnbIbJ3YmMhOUxUFIqurd19AJXTu1Pypa66JLgRx051DSryM2pG1VVTOS8NRwUB6rRfk6LikRfTvTEYq/oXFmBV4FmszVQiP5f/SCU=
+	 In-Reply-To:Content-Type; b=kr44hMauKm6IDuBQP9CidNSlAYD86REf4XETcB02PRlbRy/bu2BH5UnLYXYYa+rTXehoEAiHs1RKc+lk1ZTBh99fk2W1Um08H0KQKTZqc1AZ9lCNoYLRpyvn0t5tnBvh1JDVnZ5wM53ak1s+z1dHI/UjhTU+QUpw32stAyoKsHk=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2D0141595;
-	Wed, 10 Sep 2025 06:59:01 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 93C7116F8;
+	Wed, 10 Sep 2025 06:59:06 -0700 (PDT)
 Received: from [10.1.25.55] (e122027.cambridge.arm.com [10.1.25.55])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 461F73F694;
-	Wed, 10 Sep 2025 06:59:03 -0700 (PDT)
-Message-ID: <b4fd2074-d00f-4726-a85d-541105cdc6fd@arm.com>
-Date: Wed, 10 Sep 2025 14:59:00 +0100
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C10343F694;
+	Wed, 10 Sep 2025 06:59:09 -0700 (PDT)
+Message-ID: <3da64b80-ecdc-4b86-a4ca-3b4a9d75d9c4@arm.com>
+Date: Wed, 10 Sep 2025 14:59:02 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -42,8 +42,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC 06/10] drm/panthor: call into devfreq for current
- frequency
+Subject: Re: [PATCH RFC 07/10] drm/panthor: move panthor_devfreq struct to
+ header
 To: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>,
  AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
  Boris Brezillon <boris.brezillon@collabora.com>,
@@ -63,153 +63,124 @@ Cc: Chia-I Wu <olvaffe@gmail.com>, Chen-Yu Tsai <wenst@chromium.org>,
  linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
  linux-pm@vger.kernel.org, linux-hardening@vger.kernel.org
 References: <20250905-mt8196-gpufreq-v1-0-7b6c2d6be221@collabora.com>
- <20250905-mt8196-gpufreq-v1-6-7b6c2d6be221@collabora.com>
+ <20250905-mt8196-gpufreq-v1-7-7b6c2d6be221@collabora.com>
 From: Steven Price <steven.price@arm.com>
 Content-Language: en-GB
-In-Reply-To: <20250905-mt8196-gpufreq-v1-6-7b6c2d6be221@collabora.com>
+In-Reply-To: <20250905-mt8196-gpufreq-v1-7-7b6c2d6be221@collabora.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 05/09/2025 11:23, Nicolas Frattaroli wrote:
-> As it stands, panthor keeps a cached current frequency value for when it
-> wants to retrieve it. This doesn't work well for when things might
-> switch frequency without panthor's knowledge.
+> In order to make files other than panthor_devfreq.c be able to touch the
+> members of a panthor_devfreq instance, it needs to live somewhere other
+> than the .c file.
 > 
-> Instead, implement the get_cur_freq operation, and expose it through a
-> helper function to the rest of panthor.
+> Move it into the panthor_devfreq.h header, so that the upcoming MediaTek
+> MFG devfreq can use it as well.
 > 
 > Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 
 Reviewed-by: Steven Price <steven.price@arm.com>
 
 > ---
->  drivers/gpu/drm/panthor/panthor_devfreq.c | 33 +++++++++++++++++++++++++++----
->  drivers/gpu/drm/panthor/panthor_devfreq.h |  2 ++
->  drivers/gpu/drm/panthor/panthor_device.h  |  3 ---
->  drivers/gpu/drm/panthor/panthor_drv.c     |  4 +++-
->  4 files changed, 34 insertions(+), 8 deletions(-)
+>  drivers/gpu/drm/panthor/panthor_devfreq.c | 32 ---------------------------
+>  drivers/gpu/drm/panthor/panthor_devfreq.h | 36 ++++++++++++++++++++++++++++++-
+>  2 files changed, 35 insertions(+), 33 deletions(-)
 > 
 > diff --git a/drivers/gpu/drm/panthor/panthor_devfreq.c b/drivers/gpu/drm/panthor/panthor_devfreq.c
-> index 3686515d368db5bb329f4858d4a7247a4957cc24..8903f60c0a3f06313ac2008791c210ff32b6bd52 100644
+> index 8903f60c0a3f06313ac2008791c210ff32b6bd52..02eb3ca15d1874e1cbafc6b614b196c5cc75b6a1 100644
 > --- a/drivers/gpu/drm/panthor/panthor_devfreq.c
 > +++ b/drivers/gpu/drm/panthor/panthor_devfreq.c
-> @@ -62,7 +62,6 @@ static void panthor_devfreq_update_utilization(struct panthor_devfreq *pdevfreq)
->  static int panthor_devfreq_target(struct device *dev, unsigned long *freq,
->  				  u32 flags)
+> @@ -12,38 +12,6 @@
+>  #include "panthor_devfreq.h"
+>  #include "panthor_device.h"
+>  
+> -/**
+> - * struct panthor_devfreq - Device frequency management
+> - */
+> -struct panthor_devfreq {
+> -	/** @devfreq: devfreq device. */
+> -	struct devfreq *devfreq;
+> -
+> -	/** @gov_data: Governor data. */
+> -	struct devfreq_simple_ondemand_data gov_data;
+> -
+> -	/** @busy_time: Busy time. */
+> -	ktime_t busy_time;
+> -
+> -	/** @idle_time: Idle time. */
+> -	ktime_t idle_time;
+> -
+> -	/** @time_last_update: Last update time. */
+> -	ktime_t time_last_update;
+> -
+> -	/** @last_busy_state: True if the GPU was busy last time we updated the state. */
+> -	bool last_busy_state;
+> -
+> -	/**
+> -	 * @lock: Lock used to protect busy_time, idle_time, time_last_update and
+> -	 * last_busy_state.
+> -	 *
+> -	 * These fields can be accessed concurrently by panthor_devfreq_get_dev_status()
+> -	 * and panthor_devfreq_record_{busy,idle}().
+> -	 */
+> -	spinlock_t lock;
+> -};
+> -
+>  static void panthor_devfreq_update_utilization(struct panthor_devfreq *pdevfreq)
 >  {
-> -	struct panthor_device *ptdev = dev_get_drvdata(dev);
->  	struct dev_pm_opp *opp;
->  	int err;
->  
-> @@ -72,8 +71,6 @@ static int panthor_devfreq_target(struct device *dev, unsigned long *freq,
->  	dev_pm_opp_put(opp);
->  
->  	err = dev_pm_opp_set_rate(dev, *freq);
-> -	if (!err)
-> -		ptdev->current_frequency = *freq;
->  
->  	return err;
->  }
-> @@ -115,11 +112,21 @@ static int panthor_devfreq_get_dev_status(struct device *dev,
->  	return 0;
->  }
->  
-> +static int panthor_devfreq_get_cur_freq(struct device *dev, unsigned long *freq)
-> +{
-> +	struct panthor_device *ptdev = dev_get_drvdata(dev);
-> +
-> +	*freq = clk_get_rate(ptdev->clks.core);
-> +
-> +	return 0;
-> +}
-> +
->  static struct devfreq_dev_profile panthor_devfreq_profile = {
->  	.timer = DEVFREQ_TIMER_DELAYED,
->  	.polling_ms = 50, /* ~3 frames */
->  	.target = panthor_devfreq_target,
->  	.get_dev_status = panthor_devfreq_get_dev_status,
-> +	.get_cur_freq = panthor_devfreq_get_cur_freq,
->  };
->  
->  int panthor_devfreq_init(struct panthor_device *ptdev)
-> @@ -198,7 +205,6 @@ int panthor_devfreq_init(struct panthor_device *ptdev)
->  		return PTR_ERR(opp);
->  
->  	panthor_devfreq_profile.initial_freq = cur_freq;
-> -	ptdev->current_frequency = cur_freq;
->  
->  	/*
->  	 * Set the recommend OPP this will enable and configure the regulator
-> @@ -296,3 +302,22 @@ void panthor_devfreq_record_idle(struct panthor_device *ptdev)
->  
->  	spin_unlock_irqrestore(&pdevfreq->lock, irqflags);
->  }
-> +
-> +unsigned long panthor_devfreq_get_freq(struct panthor_device *ptdev)
-> +{
-> +	struct panthor_devfreq *pdevfreq = ptdev->devfreq;
-> +	unsigned long freq = 0;
-> +	int ret;
-> +
-> +	if (!pdevfreq || !pdevfreq->devfreq)
-> +		return 0;
-> +
-> +	if (pdevfreq->devfreq->profile->get_cur_freq) {
-> +		ret = pdevfreq->devfreq->profile->get_cur_freq(ptdev->base.dev,
-> +							       &freq);
-> +		if (ret)
-> +			return 0;
-> +	}
-> +
-> +	return freq;
-> +}
+>  	ktime_t now, last;
 > diff --git a/drivers/gpu/drm/panthor/panthor_devfreq.h b/drivers/gpu/drm/panthor/panthor_devfreq.h
-> index b7631de695f7d79456478c87e8af5dc47673cd1d..f8e29e02f66cb3281ed4bb4c75cda9bd4df82b92 100644
+> index f8e29e02f66cb3281ed4bb4c75cda9bd4df82b92..e8b5ccddd45c52ee3215e9c84c6ebd9109640282 100644
 > --- a/drivers/gpu/drm/panthor/panthor_devfreq.h
 > +++ b/drivers/gpu/drm/panthor/panthor_devfreq.h
-> @@ -18,4 +18,6 @@ void panthor_devfreq_suspend(struct panthor_device *ptdev);
->  void panthor_devfreq_record_busy(struct panthor_device *ptdev);
->  void panthor_devfreq_record_idle(struct panthor_device *ptdev);
+> @@ -4,11 +4,45 @@
+>  #ifndef __PANTHOR_DEVFREQ_H__
+>  #define __PANTHOR_DEVFREQ_H__
 >  
-> +unsigned long panthor_devfreq_get_freq(struct panthor_device *ptdev);
+> +#include <linux/devfreq.h>
 > +
->  #endif /* __PANTHOR_DEVFREQ_H__ */
-> diff --git a/drivers/gpu/drm/panthor/panthor_device.h b/drivers/gpu/drm/panthor/panthor_device.h
-> index 4fc7cf2aeed577f623aac73ed287d6327645ecaa..a14239c8f9ca9229d8d6d36d327e6fd6d05f8f2f 100644
-> --- a/drivers/gpu/drm/panthor/panthor_device.h
-> +++ b/drivers/gpu/drm/panthor/panthor_device.h
-> @@ -200,9 +200,6 @@ struct panthor_device {
->  	/** @profile_mask: User-set profiling flags for job accounting. */
->  	u32 profile_mask;
+>  struct devfreq;
+>  struct thermal_cooling_device;
 >  
-> -	/** @current_frequency: Device clock frequency at present. Set by DVFS*/
-> -	unsigned long current_frequency;
-> -
->  	/** @fast_rate: Maximum device clock frequency. Set by DVFS */
->  	unsigned long fast_rate;
+>  struct panthor_device;
+> -struct panthor_devfreq;
+> +
+> +/**
+> + * struct panthor_devfreq - Device frequency management
+> + */
+> +struct panthor_devfreq {
+> +	/** @devfreq: devfreq device. */
+> +	struct devfreq *devfreq;
+> +
+> +	/** @gov_data: Governor data. */
+> +	struct devfreq_simple_ondemand_data gov_data;
+> +
+> +	/** @busy_time: Busy time. */
+> +	ktime_t busy_time;
+> +
+> +	/** @idle_time: Idle time. */
+> +	ktime_t idle_time;
+> +
+> +	/** @time_last_update: Last update time. */
+> +	ktime_t time_last_update;
+> +
+> +	/** @last_busy_state: True if the GPU was busy last time we updated the state. */
+> +	bool last_busy_state;
+> +
+> +	/**
+> +	 * @lock: Lock used to protect busy_time, idle_time, time_last_update and
+> +	 * last_busy_state.
+> +	 *
+> +	 * These fields can be accessed concurrently by panthor_devfreq_get_dev_status()
+> +	 * and panthor_devfreq_record_{busy,idle}().
+> +	 */
+> +	spinlock_t lock;
+> +};
+> +
 >  
-> diff --git a/drivers/gpu/drm/panthor/panthor_drv.c b/drivers/gpu/drm/panthor/panthor_drv.c
-> index 4c202fc5ce0504e3f08bf6c8f18a314890eb88ec..c85a16e1339eaa164a8719ffecf5214cafff1a55 100644
-> --- a/drivers/gpu/drm/panthor/panthor_drv.c
-> +++ b/drivers/gpu/drm/panthor/panthor_drv.c
-> @@ -25,6 +25,7 @@
->  #include <drm/gpu_scheduler.h>
->  #include <drm/panthor_drm.h>
+>  int panthor_devfreq_init(struct panthor_device *ptdev);
 >  
-> +#include "panthor_devfreq.h"
->  #include "panthor_device.h"
->  #include "panthor_fw.h"
->  #include "panthor_gem.h"
-> @@ -1519,7 +1520,8 @@ static void panthor_gpu_show_fdinfo(struct panthor_device *ptdev,
->  		drm_printf(p, "drm-cycles-panthor:\t%llu\n", pfile->stats.cycles);
->  
->  	drm_printf(p, "drm-maxfreq-panthor:\t%lu Hz\n", ptdev->fast_rate);
-> -	drm_printf(p, "drm-curfreq-panthor:\t%lu Hz\n", ptdev->current_frequency);
-> +	drm_printf(p, "drm-curfreq-panthor:\t%lu Hz\n",
-> +		   panthor_devfreq_get_freq(ptdev));
->  }
->  
->  static void panthor_show_internal_memory_stats(struct drm_printer *p, struct drm_file *file)
 > 
 
 
