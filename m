@@ -1,176 +1,286 @@
-Return-Path: <linux-pm+bounces-34390-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34391-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8FB2B51DE6
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 18:37:24 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id F21C6B51E51
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 18:52:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C9F861C270A2
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 16:37:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A76CE483F08
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 16:52:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98C382727E6;
-	Wed, 10 Sep 2025 16:37:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9011E2797B2;
+	Wed, 10 Sep 2025 16:52:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kfocus-org.20230601.gappssmtp.com header.i=@kfocus-org.20230601.gappssmtp.com header.b="MEGx7w4A"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="jHBmzOja"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-il1-f179.google.com (mail-il1-f179.google.com [209.85.166.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2043.outbound.protection.outlook.com [40.107.243.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C31E26E712
-	for <linux-pm@vger.kernel.org>; Wed, 10 Sep 2025 16:37:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.179
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757522236; cv=none; b=okArCV5LNNLeXEQmmaa8dnZpPkm3Kw3egOXKIM0QBPACZy6DvBrJUnloXMpimvztIWwutMpZEjnQWNC+RCttgK827+d1Nw5IxpAGvWJcveDYM9IDgq3FyWrh0TMbZVEAyw0dIvCRhW7C+Sm1bqNCi7r1IdonoeDTQVx1uwb7sDA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757522236; c=relaxed/simple;
-	bh=D7+1Jtko4vGFBtZ3b9PtA52nn3hdE+r4sdDTEiZ9DIo=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=i/f+l3LOjervhHgGMvljG4Kg+67WknOkTCdE1fjD/cHJlztyuabIqdViPnS37aH8XZPnP5bebaimusr65xQNibvwu1tHTc+eRHkseXqh/XrSC+8iIYbbriHuvr9cIIFGVYAD7vVzGlecUFyN7vnQmsThwIqpMg111ezYNDgQWno=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kfocus.org; spf=pass smtp.mailfrom=kfocus.org; dkim=pass (2048-bit key) header.d=kfocus-org.20230601.gappssmtp.com header.i=@kfocus-org.20230601.gappssmtp.com header.b=MEGx7w4A; arc=none smtp.client-ip=209.85.166.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kfocus.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kfocus.org
-Received: by mail-il1-f179.google.com with SMTP id e9e14a558f8ab-412a2fe2f31so9210215ab.3
-        for <linux-pm@vger.kernel.org>; Wed, 10 Sep 2025 09:37:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kfocus-org.20230601.gappssmtp.com; s=20230601; t=1757522232; x=1758127032; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:organization:references
-         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=5PHdX8GAxuQZU4FPQQfLC6oiU9UUSdStUhO8V11U/BI=;
-        b=MEGx7w4ABZdm126HTNA3s4s0PSDKCS3OOLXr47+IaN8cVf/aoJSJyepbAPxjWF3vNt
-         eKEhp+bDQ/cS84luZDF9WrjX/JQSpJS1lSZKJvj1pWrvXeK0PtRTN95hJWUJ4mSjBefo
-         RMoBa5MFEi9cieAPzBBycDMBw25U743V8q8XNwSmtmCwQbD8KX74j6ETivflnUAuYidK
-         UmprWnN+5ZZxSXQsn0mQEK0B/ND2FKctk88eWYC4b11BpH8MdMgDUAmEY9FtE56HhOLU
-         0Jrp5QQEQQiW7RVQXLMOoncdmdi/f8/GHXl2g6ZHnDRY9O7lZ6ii7nWiCuk1j9fLO+Q4
-         TA4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757522232; x=1758127032;
-        h=content-transfer-encoding:mime-version:organization:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5PHdX8GAxuQZU4FPQQfLC6oiU9UUSdStUhO8V11U/BI=;
-        b=fgLn92RSbNaLRdIPj/ai5t5YjZoGh8K9uZqTYLIBBfQeAs5dG1XhefbQaXsi4U5Q+Y
-         Bx6aW+tlfPRbFG0pEXrnWKFmzZK4TrY1asmJ0G1MTv4ZvemjJeXq5gLNcbVPP1FV6gPX
-         2afxgO16z+dw3Di1jV+S6MG45aKL4ntN7KPdOtsbccpndlHalXJ67x8bsVtehjaz4Xzt
-         sWGtbGMhOI+/7NkzPaGOyUlT8yA0ZEnviqjd8R88NKBmiGuKMXy7QR8Pk1n9uvoZCgSQ
-         ae3RhZX7diNd3Sm/0xPmwaI3d0tb2fW59mfb62WdOUnP3gsxnNLMquO/t5vVXvGGD0Gt
-         pS0w==
-X-Forwarded-Encrypted: i=1; AJvYcCXLy4xxjhb+BYh/NsIu1EH/rteMe6BJ0wcZaj/y63LyvhkDDQWMrQC/FTaMmygbEFIqHYBPLmr+yg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxPmOmC9wCTQtZ79RfAk1OYhP2KD82ojOJnv+KWfrixVeZmBiK0
-	lYviSs1QzKIv151wcMbp+DdyjKsF3GLwC2y97D50u3l9eyiqi/JhumZkVcSaR+aGJpE=
-X-Gm-Gg: ASbGncu8Rui2Y2dEEaGwCf55kmtBrm1pU7Vx4fkxSPcFFCi/u71k6QRoNzyDSXiOVZV
-	u2PFPHq6m2Saf59M13FOHoe03BY4ax0nF20qT92ory/V7K0z+QOQEElimtkcdmmco5I9ro3RPJn
-	wqzhmDblwKYhjOXiAlwUZU4jUaBhfS9+WQQ04PQQ52zXq6egSUKOJTjLF+gv+QWnN6KwZ1heK19
-	p3KdIlKDTUlknMQmS1rfJ79QF4EAbON5f7sEvaRfIgTrCt11WmdZlv8uMYBqgNekr9H63QPzHyk
-	rHZvf7k7kLNtGSMcXdVRHk2a2C9iw6hQPghE9VzvsWnLJJcbZ8q1HYGcN8C2unJZievu/K3gQ66
-	e4v87EhM1OFPszLrKDUxnPgynwlgA/A==
-X-Google-Smtp-Source: AGHT+IGBAC+NF9eQWXe2qgtcaHE/zyQFVP7RCp/eYumttsidkm4pYYuSbUHJdDdCHsm7TKN2JhGJKw==
-X-Received: by 2002:a05:6e02:1c0f:b0:418:f658:acbc with SMTP id e9e14a558f8ab-418f658ae4bmr28223245ab.20.1757522232476;
-        Wed, 10 Sep 2025 09:37:12 -0700 (PDT)
-Received: from kf-m2g5 ([2607:fb90:cfaa:41d:4be0:7e8b:71d9:233b])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-4049b300638sm42214305ab.10.2025.09.10.09.37.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Sep 2025 09:37:12 -0700 (PDT)
-Date: Wed, 10 Sep 2025 11:36:50 -0500
-From: Aaron Rainbolt <arainbolt@kfocus.org>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- viresh.kumar@linaro.org, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org, stable@vger.kernel.org, mmikowski@kfocus.org
-Subject: [REGRESSION] Intel Turbo Boost stuck disabled on some Clevo
- machines (was: [PATCH] cpufreq: intel_pstate: Unchecked MSR aceess in
- legacy mode)
-Message-ID: <20250910113650.54eafc2b@kf-m2g5>
-In-Reply-To: <CAJZ5v0h99RFF26qAnJf07LS0t-6ATm9c2zrQVzdi96x3FAPXQg@mail.gmail.com>
-References: <20250429210711.255185-1-srinivas.pandruvada@linux.intel.com>
-	<CAJZ5v0h99RFF26qAnJf07LS0t-6ATm9c2zrQVzdi96x3FAPXQg@mail.gmail.com>
-Organization: Kubuntu Focus
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.41; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DED8D26E16E;
+	Wed, 10 Sep 2025 16:52:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.43
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1757523129; cv=fail; b=Xlp+lQUUqdQFTz6v4ryjraJaraMJZAAoaOnPT12rf+Bca4qhcgzCbFsaUaERXJdOwqIx84D6P3xY/pMb4jZMMGmGA7bzrGpyse4drDkfRwii+gCkFyefIbmqy7agq/CRZjCi1xcC9Zu5Vr9sIbFVP+7woR0/Tz78SwhGo1VtSKU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1757523129; c=relaxed/simple;
+	bh=AamIGNVikwEDBvDlRXP0Wdg2C5T1//o+RKK/FyJPuUU=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=HyNfE2TLAZyS3/Apej+mCbGBDOHl3zutyy4t1p2TynFsil2h84TablfmSyHE1Hb8s1W1m15Rk0vXZiGrKZaDKvTY0mgVjv6ARlZgknutIoDRhJ/L2dS3TvuBr86aUltcfsCJ08JM/0R+8mSkur41dXJKq3loptg3lzCszNJwwJM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=jHBmzOja; arc=fail smtp.client-ip=40.107.243.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=vtKXTJgJJSfLAMZxdf+YW7M+5FP+voVO4DFxPiIO729XPc1YhBx8ISw/xFlAmt/DVaUMbxrTQwM/bR0ptQHXetU2UIVFO/49z+CC2EJvi8VF+OC69/zDZUfPNWpET7d9AbSlpaTFtM+HMJkSk1If2gr7HYecEaAIoil567emuC7HTII40X6/f5q1CDcfxSuCuLHUtlPFW4Shk+5NnJ59iILAu3hbw3Slp9tbYmYMLDZLxaTvUa4gZkwOcQ9p1D97GcOSMuGojnASTabOlzM59nESoC3NKRzgJijKvcqdJU+bxdJk6xMX0xhLpI/HpWNhmNVmYpdOeRTO0oFtw9zLMA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=B2QxeDkt3ULLt1PHw6M0/A2Uc0klUtlh4dvPFGx/cMk=;
+ b=W6E/gP1xoMxEFFa8SlmzO/SaY9CcGFf9RrKCBMdH6d7TTUrFuQ61zz08DVnz3oFES+kLlZwYA7RtgfzHAFWoGMdyln4E585D/fdt52RfPMnSsxyhPh+MNB+/QvqJp6eH6LNpqCFbVSwtxmvaUWzrGQBcURtC1hPlPZB5aaIcxsRJU7AEUSnJAnHJQyiHXIpK4bSWETCtTYIYYCDtCkVc31mPKatW9l8GPniPdZMFf53eDgN8Do45KPmJPD4XMQfW709LRfqNwzdqQ8WdnJfu3boLxBJFk1UNNMVbWYDBebCx0RAcaVUZp8D0zjMAu5/BflhsTjs+phiuVzx4ps8JNw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=B2QxeDkt3ULLt1PHw6M0/A2Uc0klUtlh4dvPFGx/cMk=;
+ b=jHBmzOjaJ6qtGHCeU6IlBJQAVVXkAN+6RRT6Jy8xrFXL6QHtq6OmPKvx2k5tdUN9hwVt7n0AjjIhDonW4mlfr2hMCjY3zMqKZIzE3TEUivWRZ6HfKjArZneaS04OOuILdvhdjyBeoh+7S74VRG/PkgE5owBugQ8jY5Jpo8YyatM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
+ by DM3PR12MB9436.namprd12.prod.outlook.com (2603:10b6:8:1af::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9094.22; Wed, 10 Sep
+ 2025 16:52:03 +0000
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::37ee:a763:6d04:81ca]) by MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::37ee:a763:6d04:81ca%7]) with mapi id 15.20.9094.021; Wed, 10 Sep 2025
+ 16:52:03 +0000
+Message-ID: <e1a46ac1-8e43-4a63-bf59-b9a7c04de40a@amd.com>
+Date: Wed, 10 Sep 2025 11:52:00 -0500
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v7 05/12] PCI/PM: Disable device wakeups when halting or
+ powering off system
+To: Bjorn Helgaas <helgaas@kernel.org>,
+ "Mario Limonciello (AMD)" <superm1@kernel.org>
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Danilo Krummrich <dakr@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+ Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+ "Martin K . Petersen" <martin.petersen@oracle.com>,
+ Steven Rostedt <rostedt@goodmis.org>,
+ "open list:HIBERNATION (aka Software Suspend, aka swsusp)"
+ <linux-pm@vger.kernel.org>,
+ "open list:RADEON and AMDGPU DRM DRIVERS" <amd-gfx@lists.freedesktop.org>,
+ "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+ "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
+ "open list:SCSI SUBSYSTEM" <linux-scsi@vger.kernel.org>,
+ "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
+ "open list:TRACING" <linux-trace-kernel@vger.kernel.org>,
+ AceLan Kao <acelan.kao@canonical.com>, Kai-Heng Feng <kaihengf@nvidia.com>,
+ Mark Pearson <mpearson-lenovo@squebb.ca>,
+ =?UTF-8?Q?Merthan_Karaka=C5=9F?= <m3rthn.k@gmail.com>,
+ Eric Naim <dnaim@cachyos.org>, "Guilherme G . Piccoli" <gpiccoli@igalia.com>
+References: <20250910150603.GA1535543@bhelgaas>
+Content-Language: en-US
+From: Mario Limonciello <mario.limonciello@amd.com>
+In-Reply-To: <20250910150603.GA1535543@bhelgaas>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SA1P222CA0102.NAMP222.PROD.OUTLOOK.COM
+ (2603:10b6:806:35e::10) To MN0PR12MB6101.namprd12.prod.outlook.com
+ (2603:10b6:208:3cb::10)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|DM3PR12MB9436:EE_
+X-MS-Office365-Filtering-Correlation-Id: 12bc817b-0790-410d-2d78-08ddf08a5e18
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014|7416014;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?MlZyV1p2V0NPaWpyTEFQUERQZGd0RTB1cVVEYTBGTlpnZTIycitmc1hqYTFD?=
+ =?utf-8?B?Z2pHOWZxVzVsWU9hamFyNzMzM3k5a3JYZnBRVElwM3UyOCtvTFUwRTJDYnZj?=
+ =?utf-8?B?YVpzZW82cERHTkVBMzFJc0lHSTFjR3N1VVJJM3JObU9hazNyQ3BYR09tb0JZ?=
+ =?utf-8?B?emF4WHFNcTVDY0dsblVVM3gwYjRkTDU1alRLN0lnVGVJUm9Hb1k5Sy9FVUZR?=
+ =?utf-8?B?eW5zaEhQamFiWjhUY2xJdm5EYkorQ2lYTTdxbUZuR0hVQk1aMEpkNDNrVXI5?=
+ =?utf-8?B?SXNiMEp2d0ZjMGtDRWgrdk1RZW9iV3crNjBuc3VPMFpxNzNvSkZ1bTNYdkx2?=
+ =?utf-8?B?V01yY1dQQlIzazA2OEJrcHJRQmlXVEkzTGIwQnBFTjZBT0VjcWNkNTNGdFFS?=
+ =?utf-8?B?U05MUWxpYUhXZXVmOHB3MXdqejJUblFLYkdFb2xQNSs2YllmR1kxRGsrY0gw?=
+ =?utf-8?B?SVpvc0FrVU4xbWpxS1dDbEZpUElYd040QUVJYkVlY1NUR1BCZkYwL2h4anBU?=
+ =?utf-8?B?TkZZcmU3Mm5pYTNTaXBnRnIydTNuNFoyL2YvRWJVOUtkSDNFS1FsM2dxZnRO?=
+ =?utf-8?B?T2NIK1RmZ2Q4Qkc2bnJUZ1dmZWk3SmhvZnQ0V0NLMStCWWxuR2hwMDAvQmJN?=
+ =?utf-8?B?eHpjRkdNVGFsRG9ydThkWm5KVFROelNBU2czK2hMc3FWNm43V2pVS2RPSXhu?=
+ =?utf-8?B?em52aGpRUzZoWHpYVk1wbFVqeVNzei9ScHFKekdmN2M2RHl2ckpaT096RG5x?=
+ =?utf-8?B?czBBa3ZGcDlCRXMwbWtHZ1J5RUJTOFhidTAyQjF0WEtsbW9RdDVlYThWc0tK?=
+ =?utf-8?B?amdhOFA1NGFFVG1VK3N3TnJDSE1rTXdrK202Ry9iUUhJaEN5UHB1K3JPQzRF?=
+ =?utf-8?B?Q21abGlzWkZSOThhZ2kvbUZNbnlYeFRDd21abXdtRFZyWlo1WHRMSFZ5dEoy?=
+ =?utf-8?B?cmdZa01NVkoyS0Y0VmpzbHA5dWhHTTdpckUwQ3dDeWV2bTk2Zk9BcnY3aWpv?=
+ =?utf-8?B?L2tGR00rRWpxcjVZcG5IYWg3a2JaUGdES3pRMThqSG5IUm5hbXJDRkovajd5?=
+ =?utf-8?B?TEhJWGF2VW9JTlhiV2tVRG9tWHNTQUU2Z2dzYjE2TEFNS0lOaEdnTm1nN2Ji?=
+ =?utf-8?B?elBoZk4zOERsU1F2dWtsb0hPQ0JDTXlXQ3FaYnFFUUpQamdqaHZBSFJkelhx?=
+ =?utf-8?B?bktHN0taUkU4SDZVMG1VWU9Cb1pseGdEQWRWcUhXYXh5Y05HK0ZJalNSWlZh?=
+ =?utf-8?B?NktHNEFrYU43VVNVR21ONkZzem93alNhMGFUNzVrc2FZTXFBS3M0Y2JtVlA0?=
+ =?utf-8?B?TGYvUEhQdlV0dytNOFNxUzI0NFMxMHBuRkxoSjFzUHdJbzRiSG1CZm5BV0t1?=
+ =?utf-8?B?azRVYzY3VDZxWnN2TXZ4Tk9EM05BQkhUbXpBOVhDZzFPWU1ub0NZZXpoR25U?=
+ =?utf-8?B?U2hsbXVYN2Jqd0s3Q2pKajdtd0ZueGx5M252c0ZIL2o3S1JiVE9zS2Nua2FC?=
+ =?utf-8?B?cXUvaWdrd0t1Q0NlZ1pGK0N3bElGU1pHVjNHbG9obk8xTnhGZUE3citWUGdh?=
+ =?utf-8?B?TDZUUlB5Zkk2QjBPaVpKbkRueEJKZ29qcnpnYzNnczdVZ1MwSGlJd3pSMHRU?=
+ =?utf-8?B?SlZiZXArK2NBb1huOTFjSG43WUxHQ0NOTFJoMm40NFJsVVA5Ull5SHBnTVUz?=
+ =?utf-8?B?YjhqZldXQVBDZG9lUHRYT252dStVdnZBNFc3WUJndGlSWjJxU2t1T2MyNjhU?=
+ =?utf-8?B?NWRLOVI0OHdpS1pPVWNhOGVjL1BFT2xMNHAwSnFYS2VZM1RFaHJxeHhBUXdP?=
+ =?utf-8?B?S3NFa3IyN2s3bXNFeTMxR3ZvM3ZFT2lHVTJ1MWNwdW1QeTlLWTZCbkM2ODl1?=
+ =?utf-8?B?aW1SM0N1QjFtU0MrN0dVcUEzOU5Dd3A3VW9tZWJuOCtxUEs2NC9GR2ZtekFm?=
+ =?utf-8?Q?Nsm4AqYFsP8=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?MmxKWityRDdoRU1SSUZ1aWFaTmt1VzhOeXNsY0FIMHlpZXV1OE93eXFVaEhI?=
+ =?utf-8?B?bDVyeW1tZU8zMmpDS2Fhc1paQU5iOEVzYWVtSitxNFpoalRTTjRac2RpSC8x?=
+ =?utf-8?B?NDluSVBaUGxFYmtXM1Q5WlpSS3gvV3JWMTlpc2FhaEtzajhEdzRXWFFEbTY2?=
+ =?utf-8?B?ZzQ3aFo3OGZLaGozdU5UbnR0YzdsZFpiemJacWtYdmJGWFFLY3dLTDhzVUdG?=
+ =?utf-8?B?Nkg3SXlpSWdJQXdnWlNkbTF3ZzMrazBLUW1TQ3R1cWg1WGh6N2VYdlJoRzZO?=
+ =?utf-8?B?Y3R3WGJoaWxDY2VScUMzWXNBZHVVdGsxeDlIZWQ3WXJPajROcE1Dc2VQMkVq?=
+ =?utf-8?B?ME0zcVoyT0ViU2dYZnp5ZHh1QTZURjBLVjdQUndkdWdWZXJFWmJWWHIwWXJs?=
+ =?utf-8?B?K1VtUHJ5ZkZRdnMveG42YmRjZVNWVWF4V3p2ckl3RjIwTDRZbVdXSE4wTjN4?=
+ =?utf-8?B?K3RSOStMNk9rZnA1SEpkNlFoNmJacGVhWi9OemlKemdhdUwyZ3VtN1RYR1Ni?=
+ =?utf-8?B?NUxvVmI5aFZTNko5TWh2b3NTTDhLNVorRm9CU1NxWG1acitOVHNXRWVQMG5Z?=
+ =?utf-8?B?VnVsOEYxSzlTa0p2b0RveXkwdXdXbmZOOEhjZm1MUGhTMVM0TFo1R2EzMUYv?=
+ =?utf-8?B?bkpPeTMwMVVMZEVZTVF6Q1creG1nV0ZlbUUweS9SbUNXNFlEZThNUE1hSlNa?=
+ =?utf-8?B?S1BtOEg4SkNQWHBRaDhSbjFtUVZoSGZoMUFoWGtUOGk1TnRKTnNGU09LczN2?=
+ =?utf-8?B?SzhGZFFIajZJeUcyZXgva0Y4dy9UQVh4UDdLZ2dMM1BSdVVGRndXTHFHVmJt?=
+ =?utf-8?B?TWc2MlBnRXZNd2lRdGpwTHhWSU5JVlV4dzBudnlJYTJ6VU8yWlVDT1hJS3hK?=
+ =?utf-8?B?ekVkd0pPMzRRVUdsUWo2R3EwV1RPeFV3SmZPUFZFT2dvalM0RGE5anMzK0xz?=
+ =?utf-8?B?MWYySDNIdnFSK0FIMnVldC9OUFJuNnB3SjdyUE14U2FJR29sRFM1b3BjZ2Rx?=
+ =?utf-8?B?MmROa3RId0JUL1g2cHBpRVptYUI1cjFTUUw2T2xxRXRhemhEZlVKN0ZJdGIv?=
+ =?utf-8?B?YzFwdFN3ak4za2d5OTgvc1BFZ0hyNFdtNmRJYzFtVU1Jc0k0NXFBa3I2T3Q5?=
+ =?utf-8?B?Qi9GeEhIcG05K0FQR2dweVVZWWt1L3ZDUWo2aFY4cG1rUytuZDRZR1Qyd01C?=
+ =?utf-8?B?Z1gwNkF0NWNCRFRVa1ZIVmRodkJxOWZWSlVQSmw2Wnlta1FnQVcxSEV2QWcx?=
+ =?utf-8?B?cEZ2RUV3NkpzemxBRFNqZjh0ZGdtbU9IRVdITC9HWEpvM0JFUFZWNjFRayty?=
+ =?utf-8?B?dnFrOGtTSGg3blpsMlNOZVpoZ0ZlaTVCWWhuSUFQSUVNc0QzOUtmNS9Xd0VI?=
+ =?utf-8?B?N01zaHhzb1o3L0lXaEtZTE9MbWhHeEE4MmxLUmtEeE55VkllQTJSdGMrVnE2?=
+ =?utf-8?B?OUhKWXZqZHJWNEFmS2M1MzhOMmc1THpHTmFFVjQ3TEtJbEVEN21GOUtsclpQ?=
+ =?utf-8?B?YUx4dDI5b21abzFjbm5kK3k1WDJVYy9FQmtZNEJHR1JicG9ReitkQy9neXpI?=
+ =?utf-8?B?SzF3ZWtybVVFbnViZ0c5Nmc3TFQvM1pWdHRZb3FiVTlPNFlqUm5LVXc1VFFo?=
+ =?utf-8?B?NjNyMGExZlNiNEZsbUR3TGJOSEEwN2kwNVFqRmVJYzUzZ2x5eDBCK3J3REsy?=
+ =?utf-8?B?ckEvNXFTSmpmQ2JicUdVUHQ5bTlRVkFQTXdMektpNTFaRzJJTGF0NFBjUElk?=
+ =?utf-8?B?SW1NWGlaWTg3WnNlanc2VHZTRWhGZEZ6d0dQSSsvYVlkeFpzc3BaRkpWak00?=
+ =?utf-8?B?eDBMamJybXRMbWFCdU9MdjA2eDZBQzFYNzlIcHMvVUphQnEzZHl4TldoSzI1?=
+ =?utf-8?B?M2xjNCsvVjRsQlU3SVMzSHB3aHRYWFZ6d0dqN3NHOVdHS3BweDF0eVZLbnFw?=
+ =?utf-8?B?WUNoV0xRb0dqMEJMQmxFSUFQaUZqQW5tS2xqSFVBVkVKVCtscUpJVCtweENq?=
+ =?utf-8?B?d2tCbzJwTFBQOTJUV2liTk4xZ3h1NlYvQ2cremJ2WnN5RnNpdmFhM2Q1OE0r?=
+ =?utf-8?B?Z2dpUk5zOEpaSEpYYTJZZDl6MDh3LzRXTzRTamJZNnlBTW9xd245RElrTFpu?=
+ =?utf-8?Q?coHBXW19Qq95xHHWlAh/iALRl?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 12bc817b-0790-410d-2d78-08ddf08a5e18
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Sep 2025 16:52:03.3261
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: aFZzCSvRkBWjXzFKwwyzpH721eiZgwFEgq/HEaeu92RpdKq/V0C/R+eSkeGjAI7xkaEVJfuIWmQcfQH/4CHDgw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM3PR12MB9436
 
-On Wed, 30 Apr 2025 16:29:09 +0200
-"Rafael J. Wysocki" <rafael@kernel.org> wrote:
+On 9/10/25 10:06 AM, Bjorn Helgaas wrote:
+> On Tue, Sep 09, 2025 at 02:16:12PM -0500, Mario Limonciello (AMD) wrote:
+>> PCI devices can be configured as wakeup sources from low power states.
+>> However, when the system is halting or powering off such wakeups are
+>> not expected and may lead to spurious behavior.
+> 
+> I'm a little unclear on the nomenclature for these low power states,
+> so I think it would be helpful to connect to the user action, e.g.,
+> suspend/hibernate/etc, and the ACPI state, e.g.,
+> 
+>    ... when the system is hibernating (e.g., transitioning to ACPI S4
+>    and halting) or powering off (e.g., transitioning to ACPI S5 soft
+>    off), such wakeups are not expected ...
 
-> On Tue, Apr 29, 2025 at 11:07=E2=80=AFPM Srinivas Pandruvada
-> <srinivas.pandruvada@linux.intel.com> wrote:
-> >
-> > When turbo mode is unavailable on a Skylake-X system, executing the
-> > command:
-> > "echo 1 > /sys/devices/system/cpu/intel_pstate/no_turbo"
-> > results in an unchecked MSR access error: WRMSR to 0x199
-> > (attempted to write 0x0000000100001300).
-> >
-> > This issue was reproduced on an OEM (Original Equipment
-> > Manufacturer) system and is not a common problem across all
-> > Skylake-X systems.
-> >
-> > This error occurs because the MSR 0x199 Turbo Engage Bit (bit 32)
-> > is set when turbo mode is disabled. The issue arises when
-> > intel_pstate fails to detect that turbo mode is disabled. Here
-> > intel_pstate relies on MSR_IA32_MISC_ENABLE bit 38 to determine the
-> > status of turbo mode. However, on this system, bit 38 is not set
-> > even when turbo mode is disabled.
-> >
-> > According to the Intel Software Developer's Manual (SDM), the BIOS
-> > sets this bit during platform initialization to enable or disable
-> > opportunistic processor performance operations. Logically, this bit
-> > should be set in such cases. However, the SDM also specifies that
-> > "OS and applications must use CPUID leaf 06H to detect processors
-> > with opportunistic processor performance operations enabled."
-> >
-> > Therefore, in addition to checking MSR_IA32_MISC_ENABLE bit 38,
-> > verify that CPUID.06H:EAX[1] is 0 to accurately determine if turbo
-> > mode is disabled.
-> >
-> > Fixes: 4521e1a0ce17 ("cpufreq: intel_pstate: Reflect current
-> > no_turbo state correctly") Signed-off-by: Srinivas Pandruvada
-> > <srinivas.pandruvada@linux.intel.com> Cc: stable@vger.kernel.org
-> > ---
-> >  drivers/cpufreq/intel_pstate.c | 3 +++
-> >  1 file changed, 3 insertions(+)
-> >
-> > diff --git a/drivers/cpufreq/intel_pstate.c
-> > b/drivers/cpufreq/intel_pstate.c index f41ed0b9e610..ba9bf06f1c77
-> > 100644 --- a/drivers/cpufreq/intel_pstate.c
-> > +++ b/drivers/cpufreq/intel_pstate.c
-> > @@ -598,6 +598,9 @@ static bool turbo_is_disabled(void)
-> >  {
-> >         u64 misc_en;
-> >
-> > +       if (!cpu_feature_enabled(X86_FEATURE_IDA))
-> > +               return true;
-> > +
-> >         rdmsrl(MSR_IA32_MISC_ENABLE, misc_en);
-> >
-> >         return !!(misc_en & MSR_IA32_MISC_ENABLE_TURBO_DISABLE);
-> > -- =20
->=20
-> Applied as a fix for 6.15-rc, thanks!
->=20
+I will try to firm it up in the commit message.  But yes you're getting 
+the intent, having a wakeup occur at S5 would be unexpected, and would 
+likely change semantics of what people "think" powering off a machine means.
 
-FYI, this seems to have broken turbo boost on some Clevo systems with
-an Intel Core i9-14900HX CPU. These CPUs obviously support turbo boost,
-and kernels without this commit have turbo boost working properly, but
-after this commit turbo boost is stuck disabled and cannot be
-enabled by writing to /sys/devices/system/cpu/intel_pstate/no_turbo. I
-made a bug report about this against Ubuntu's kernel at [1], which is
-the only report I know that is able to point to this commit as having
-broken things. However, it looks like an Arch Linux user [2] and a
-Gentoo user [3] are running into the same thing.
+> 
+> When I suspend or power off my laptop from the GUI user interface, I
+> want to know if keyboard or mouse activity will resume or if I need to
+> press the power button.
 
-[1] https://bugs.launchpad.net/ubuntu/+source/linux-hwe-6.14/+bug/2122531
+The way the kernel is set up today you get a single wakeup sysfs file 
+for a device and that wakeup file means 3 things:
+* abort the process of entering a suspend state or hibernate
+* wake up the machine from a suspend state
+* wake up the machine from hibernate
 
-[2] https://bbs.archlinux.org/viewtopic.php?id=3D305564
+> 
+>> ACPI r6.5, section 16.1.5 notes:
+>>
+>>      "Hardware does allow a transition to S0 due to power button press
+>>       or a Remote Start."
+> 
+> Important to note here that sec 16.1.5 is specifically for "S5 Soft
+> Off State".
+> 
+> S4 is a sleeping state and presumably sec 16.1.6 ("Transitioning from
+> the Working to the Sleeping State") applies.  That section mentions
+> wakeup devices, so it's not obvious to me that PCI device wakeup
+> should be disabled for S4.
 
-[3] https://forums.gentoo.org/viewtopic-p-8866128.html?sid=3De97619cff0d9c7=
-9c2eea2cfe8f60b0d3
+It actually /shouldn't/ be disabled for S4 - it should only be disabled 
+for S5.
+
+Are you implying a bug in the flow?  I didn't think there was one:
+
+During entering hibernate the poweroff() call will have system_state = 
+SYSTEM_SUSPEND so wakeups would be enabled.
+
+For powering off the system using hibernate flows poweroff() call would 
+have system_state = SYSTEM_HALT or SYSTEM_POWER_OFF.
+
+> 
+>> This implies that wakeups from PCI devices should not be relied upon
+>> in these states. To align with this expectation and avoid unintended
+>> wakeups, disable device wakeup capability during these transitions.
+>>
+>> Tested-by: Eric Naim <dnaim@cachyos.org>
+>> Signed-off-by: Mario Limonciello (AMD) <superm1@kernel.org>
+>> ---
+>> v7:
+>>   * Reword title
+>>   * Reword commit
+>> v5:
+>>   * Re-order
+>>   * Add tags
+>> v4:
+>>   * https://lore.kernel.org/linux-pci/20250616175019.3471583-1-superm1@kernel.org/
+>> ---
+>>   drivers/pci/pci-driver.c | 4 ++++
+>>   1 file changed, 4 insertions(+)
+>>
+>> diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
+>> index 63665240ae87f..f201d298d7173 100644
+>> --- a/drivers/pci/pci-driver.c
+>> +++ b/drivers/pci/pci-driver.c
+>> @@ -1139,6 +1139,10 @@ static int pci_pm_poweroff(struct device *dev)
+>>   	struct pci_dev *pci_dev = to_pci_dev(dev);
+>>   	const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+>>   
+>> +	if (device_may_wakeup(dev) &&
+>> +	    (system_state == SYSTEM_HALT || system_state == SYSTEM_POWER_OFF))
+>> +		device_set_wakeup_enable(dev, false);
+>> +
+>>   	if (pci_has_legacy_pm_support(pci_dev))
+>>   		return pci_legacy_suspend(dev, PMSG_HIBERNATE);
+>>   
+>> -- 
+>> 2.43.0
+>>
+
 
