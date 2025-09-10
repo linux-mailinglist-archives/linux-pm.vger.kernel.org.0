@@ -1,183 +1,193 @@
-Return-Path: <linux-pm+bounces-34393-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34394-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F501B51EA8
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 19:11:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A47F1B51EB0
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 19:15:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 55C9B3AD917
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 17:11:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4DE6956701F
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 17:15:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10AF22D8766;
-	Wed, 10 Sep 2025 17:11:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 188D2316910;
+	Wed, 10 Sep 2025 17:15:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XvZ4XwOu"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Rt4H8NEG"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D17FB25C80E;
-	Wed, 10 Sep 2025 17:11:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94405314B89;
+	Wed, 10 Sep 2025 17:15:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757524295; cv=none; b=RMQ0lJVhfHKrsIuBDNGeQjLo4ajx9FPSda38/sWmvkSwq/gn0Hsp8dczoCzhQGg4q7maU0dx4Cu9w75hv7Yq5uCpVEfk1aFY0KeG0h4zuC+EihbGd0cNT5wMVpgYdWIn+87N/gEtkyWuTsz5e/miTzgzqIe3TVgnksNNt2UQ5aQ=
+	t=1757524514; cv=none; b=ThlsdLPK0JGcWkZ9YhBrOTVYMPLToyhH02cJP6eM5eHsOO7c9p9zVZDGrn37Ibl1dR25SFqS+oFz4JgLuZQceVbvN7sggXi8Yu1TDi+t+t40nvpPKjjEMbZBEd10mnPq+gHFoPJS91FkvdG/ctBLKbtRuwB1TXHLKJIrdkzcrcE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757524295; c=relaxed/simple;
-	bh=u8asuC2gU2/ZjNwLkyAWyvgcOHOrCFgpO1+omlyn3is=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=K9cx3jZ2FgKKDZjCzCrkYPxFbngEfwySv0zPyRH5gKKIg602Thy9u9yRQiRtJRS3Y6b5+4bzybvx3pXaEgwzKerwgXauM1BhfyVgiHaTqXHQ84XFovNTmh0a8oAqKuaiOy2AcJwgZBJ4da81yLCqwiyc1QMY9kIgACjiPFyuIoI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XvZ4XwOu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AA17C4CEEB;
-	Wed, 10 Sep 2025 17:11:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757524294;
-	bh=u8asuC2gU2/ZjNwLkyAWyvgcOHOrCFgpO1+omlyn3is=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=XvZ4XwOulMW5msvDbsI/wrpR3R0Mmd5sK5AMvGaUghROwrCIbNeiaj/sUnfo4R9JA
-	 zbzfmGxRD7L8sqqOewL/zNsU/FPLrP3NI66PXKHv9fx45IwE1OT/+zhHjV/YCJMfK3
-	 taVgETSVPDgrfbbD2D0bEBDHgH50tW2SfC0pe4uH7jZZZ4u7bmvbLRbT0/8eT38KER
-	 mcFbsqC7CgTLlg889isJCpKaHQuKb4Ys9HWno/45u3JHCfbG56OVWlPH+EpLVeZq0o
-	 zj+cL2yeR1LjENXsceUodY06I+x/8N0kGf7wH9wMHJrc6CXRt7YpXuXuZ7LH+XlsbN
-	 HgtduWtHAzdlg==
-Date: Wed, 10 Sep 2025 12:11:32 -0500
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: Mario Limonciello <mario.limonciello@amd.com>
-Cc: "Mario Limonciello (AMD)" <superm1@kernel.org>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>,
-	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-	"Martin K . Petersen" <martin.petersen@oracle.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	"open list:HIBERNATION (aka Software Suspend, aka swsusp)" <linux-pm@vger.kernel.org>,
-	"open list:RADEON and AMDGPU DRM DRIVERS" <amd-gfx@lists.freedesktop.org>,
-	"open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-	"open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
-	"open list:SCSI SUBSYSTEM" <linux-scsi@vger.kernel.org>,
-	"open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
-	"open list:TRACING" <linux-trace-kernel@vger.kernel.org>,
-	AceLan Kao <acelan.kao@canonical.com>,
-	Kai-Heng Feng <kaihengf@nvidia.com>,
-	Mark Pearson <mpearson-lenovo@squebb.ca>,
-	Merthan =?utf-8?Q?Karaka=C5=9F?= <m3rthn.k@gmail.com>,
-	Eric Naim <dnaim@cachyos.org>,
-	"Guilherme G . Piccoli" <gpiccoli@igalia.com>
-Subject: Re: [PATCH v7 05/12] PCI/PM: Disable device wakeups when halting or
- powering off system
-Message-ID: <20250910171132.GA1541776@bhelgaas>
+	s=arc-20240116; t=1757524514; c=relaxed/simple;
+	bh=GSzpQXrVsGOkg9n0qjibU8nmSrVRvwep/b24SJElML0=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=moDuRP8n8W1Zo4Ueygsh50FxvKNRBaSi06ERRWegVA36E9Sty6vGV3bsC6I4E0Px2P1V0bt9NhGRv9rXnmN4c8d4ECAXudsJ9QtJuouyr6kV45p8Vcdi6nd7Ne+VAjGI2IZ9tPgF2kvkPtwsLDIFwcxLaWPSakYFTAjkS9ug94g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Rt4H8NEG; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1757524511; x=1789060511;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=GSzpQXrVsGOkg9n0qjibU8nmSrVRvwep/b24SJElML0=;
+  b=Rt4H8NEGRTmLF2Lv7vX7giFJ4TAcydUiyGKKq0286mG9k16yJZm1wCqC
+   yThkn1sZq7C4VDRq4G199yAId+cyUyWxWq720cAZvSspMALUeQdDkcFps
+   7yJrnihPobuIe2fVHs+o6A6v/zNeUOP4O2tDus2jIY/UNRMVRHZx5VSUm
+   m9fAUotDQDMVQhOeulXWdeDEnm8mBgiBzgPxTx2n4BaZKlZV9rUeruAkk
+   P6ecuECKy0HMWigZX6p/dZlg1Ih3jnHJ0CkHe1cleBQ21UoGKWn0H8WyR
+   eHQQ2yxvAesJj5aUU7hC6qfpM/w6njT++mIJbhY6vS7znYKE7s/NliCM4
+   w==;
+X-CSE-ConnectionGUID: zr9FqOkmQ4ezvIReYoBdJw==
+X-CSE-MsgGUID: cGe9EZ6KQ0C7QBG4UwPoVA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11549"; a="85288843"
+X-IronPort-AV: E=Sophos;i="6.18,254,1751266800"; 
+   d="scan'208";a="85288843"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2025 10:15:10 -0700
+X-CSE-ConnectionGUID: nNE5Qo01SxGRSP+zTcxmuQ==
+X-CSE-MsgGUID: q8OXQ+HCTaiG0w0DZwOrAw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,254,1751266800"; 
+   d="scan'208";a="177480945"
+Received: from spandruv-desk.jf.intel.com ([10.54.55.20])
+  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2025 10:15:10 -0700
+Message-ID: <dda1d8d23407623c99e2f22e60ada1872bca98fe.camel@linux.intel.com>
+Subject: Re: [REGRESSION] Intel Turbo Boost stuck disabled on some Clevo
+ machines (was: [PATCH] cpufreq: intel_pstate: Unchecked MSR aceess in
+ legacy mode)
+From: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To: Aaron Rainbolt <arainbolt@kfocus.org>, "Rafael J. Wysocki"
+	 <rafael@kernel.org>
+Cc: viresh.kumar@linaro.org, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org, mmikowski@kfocus.org
+Date: Wed, 10 Sep 2025 10:15:00 -0700
+In-Reply-To: <20250910113650.54eafc2b@kf-m2g5>
+References: <20250429210711.255185-1-srinivas.pandruvada@linux.intel.com>
+		<CAJZ5v0h99RFF26qAnJf07LS0t-6ATm9c2zrQVzdi96x3FAPXQg@mail.gmail.com>
+	 <20250910113650.54eafc2b@kf-m2g5>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.54.3 (3.54.3-2.fc41) 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e1a46ac1-8e43-4a63-bf59-b9a7c04de40a@amd.com>
 
-On Wed, Sep 10, 2025 at 11:52:00AM -0500, Mario Limonciello wrote:
-> On 9/10/25 10:06 AM, Bjorn Helgaas wrote:
-> > On Tue, Sep 09, 2025 at 02:16:12PM -0500, Mario Limonciello (AMD) wrote:
-> > > PCI devices can be configured as wakeup sources from low power states.
-> > > However, when the system is halting or powering off such wakeups are
-> > > not expected and may lead to spurious behavior.
-> > 
-> > I'm a little unclear on the nomenclature for these low power states,
-> > so I think it would be helpful to connect to the user action, e.g.,
-> > suspend/hibernate/etc, and the ACPI state, e.g.,
-> > 
-> >    ... when the system is hibernating (e.g., transitioning to ACPI S4
-> >    and halting) or powering off (e.g., transitioning to ACPI S5 soft
-> >    off), such wakeups are not expected ...
-> 
-> I will try to firm it up in the commit message.  But yes you're getting the
-> intent, having a wakeup occur at S5 would be unexpected, and would likely
-> change semantics of what people "think" powering off a machine means.
-> 
-> > When I suspend or power off my laptop from the GUI user interface, I
-> > want to know if keyboard or mouse activity will resume or if I need to
-> > press the power button.
-> 
-> The way the kernel is set up today you get a single wakeup sysfs file for a
-> device and that wakeup file means 3 things:
-> * abort the process of entering a suspend state or hibernate
-> * wake up the machine from a suspend state
-> * wake up the machine from hibernate
-> 
-> > > ACPI r6.5, section 16.1.5 notes:
-> > > 
-> > >      "Hardware does allow a transition to S0 due to power button press
-> > >       or a Remote Start."
-> > 
-> > Important to note here that sec 16.1.5 is specifically for "S5
-> > Soft Off State".
-> > 
-> > S4 is a sleeping state and presumably sec 16.1.6 ("Transitioning
-> > from the Working to the Sleeping State") applies.  That section
-> > mentions wakeup devices, so it's not obvious to me that PCI device
-> > wakeup should be disabled for S4.
-> 
-> It actually /shouldn't/ be disabled for S4 - it should only be
-> disabled for S5.
-> 
-> Are you implying a bug in the flow?  I didn't think there was one:
-> 
-> During entering hibernate the poweroff() call will have system_state
-> = SYSTEM_SUSPEND so wakeups would be enabled.
-> 
-> For powering off the system using hibernate flows poweroff() call
-> would have system_state = SYSTEM_HALT or SYSTEM_POWER_OFF.
-
-OK.  I assumed that since you check for two states (SYSTEM_HALT or
-SYSTEM_POWER_OFF), one must be hibernate (ending up in S4?) and the
-other a soft power off (ending up in S5?).
-
-But it sounds like there are two ways to power off.  I'm just confused
-about the correspondence between hibernate, soft poweroff, S4, S5,
-SYSTEM_HALT, and SYSTEM_POWER_OFF.
-
-*Do* both SYSTEM_HALT and SYSTEM_POWER_OFF lead to S5 on an ACPI
-system?  If so, what's the difference between them?
-
-> > > This implies that wakeups from PCI devices should not be relied upon
-> > > in these states. To align with this expectation and avoid unintended
-> > > wakeups, disable device wakeup capability during these transitions.
-> > > 
-> > > Tested-by: Eric Naim <dnaim@cachyos.org>
-> > > Signed-off-by: Mario Limonciello (AMD) <superm1@kernel.org>
+On Wed, 2025-09-10 at 11:36 -0500, Aaron Rainbolt wrote:
+> On Wed, 30 Apr 2025 16:29:09 +0200
+> "Rafael J. Wysocki" <rafael@kernel.org> wrote:
+>=20
+> > On Tue, Apr 29, 2025 at 11:07=E2=80=AFPM Srinivas Pandruvada
+> > <srinivas.pandruvada@linux.intel.com> wrote:
+> > >=20
+> > > When turbo mode is unavailable on a Skylake-X system, executing
+> > > the
+> > > command:
+> > > "echo 1 > /sys/devices/system/cpu/intel_pstate/no_turbo"
+> > > results in an unchecked MSR access error: WRMSR to 0x199
+> > > (attempted to write 0x0000000100001300).
+> > >=20
+> > > This issue was reproduced on an OEM (Original Equipment
+> > > Manufacturer) system and is not a common problem across all
+> > > Skylake-X systems.
+> > >=20
+> > > This error occurs because the MSR 0x199 Turbo Engage Bit (bit 32)
+> > > is set when turbo mode is disabled. The issue arises when
+> > > intel_pstate fails to detect that turbo mode is disabled. Here
+> > > intel_pstate relies on MSR_IA32_MISC_ENABLE bit 38 to determine
+> > > the
+> > > status of turbo mode. However, on this system, bit 38 is not set
+> > > even when turbo mode is disabled.
+> > >=20
+> > > According to the Intel Software Developer's Manual (SDM), the
+> > > BIOS
+> > > sets this bit during platform initialization to enable or disable
+> > > opportunistic processor performance operations. Logically, this
+> > > bit
+> > > should be set in such cases. However, the SDM also specifies that
+> > > "OS and applications must use CPUID leaf 06H to detect processors
+> > > with opportunistic processor performance operations enabled."
+> > >=20
+> > > Therefore, in addition to checking MSR_IA32_MISC_ENABLE bit 38,
+> > > verify that CPUID.06H:EAX[1] is 0 to accurately determine if
+> > > turbo
+> > > mode is disabled.
+> > >=20
+> > > Fixes: 4521e1a0ce17 ("cpufreq: intel_pstate: Reflect current
+> > > no_turbo state correctly") Signed-off-by: Srinivas Pandruvada
+> > > <srinivas.pandruvada@linux.intel.com> Cc: stable@vger.kernel.org
 > > > ---
-> > > v7:
-> > >   * Reword title
-> > >   * Reword commit
-> > > v5:
-> > >   * Re-order
-> > >   * Add tags
-> > > v4:
-> > >   * https://lore.kernel.org/linux-pci/20250616175019.3471583-1-superm1@kernel.org/
-> > > ---
-> > >   drivers/pci/pci-driver.c | 4 ++++
-> > >   1 file changed, 4 insertions(+)
-> > > 
-> > > diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
-> > > index 63665240ae87f..f201d298d7173 100644
-> > > --- a/drivers/pci/pci-driver.c
-> > > +++ b/drivers/pci/pci-driver.c
-> > > @@ -1139,6 +1139,10 @@ static int pci_pm_poweroff(struct device *dev)
-> > >   	struct pci_dev *pci_dev = to_pci_dev(dev);
-> > >   	const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
-> > > +	if (device_may_wakeup(dev) &&
-> > > +	    (system_state == SYSTEM_HALT || system_state == SYSTEM_POWER_OFF))
-> > > +		device_set_wakeup_enable(dev, false);
+> > > =C2=A0drivers/cpufreq/intel_pstate.c | 3 +++
+> > > =C2=A01 file changed, 3 insertions(+)
+> > >=20
+> > > diff --git a/drivers/cpufreq/intel_pstate.c
+> > > b/drivers/cpufreq/intel_pstate.c index f41ed0b9e610..ba9bf06f1c77
+> > > 100644 --- a/drivers/cpufreq/intel_pstate.c
+> > > +++ b/drivers/cpufreq/intel_pstate.c
+> > > @@ -598,6 +598,9 @@ static bool turbo_is_disabled(void)
+> > > =C2=A0{
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u64 misc_en;
+> > >=20
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!cpu_feature_enabled(X86_FE=
+ATURE_IDA))
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 return true;
 > > > +
-> > >   	if (pci_has_legacy_pm_support(pci_dev))
-> > >   		return pci_legacy_suspend(dev, PMSG_HIBERNATE);
-> > > -- 
-> > > 2.43.0
-> > > 
-> 
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 rdmsrl(MSR_IA32_MISC_ENABL=
+E, misc_en);
+> > >=20
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return !!(misc_en & MSR_IA=
+32_MISC_ENABLE_TURBO_DISABLE);
+> > > --=C2=A0=20
+> >=20
+> > Applied as a fix for 6.15-rc, thanks!
+> >=20
+>=20
+> FYI, this seems to have broken turbo boost on some Clevo systems with
+> an Intel Core i9-14900HX CPU. These CPUs obviously support turbo
+> boost,
+> and kernels without this commit have turbo boost working properly,
+> but
+> after this commit turbo boost is stuck disabled and cannot be
+> enabled by writing to /sys/devices/system/cpu/intel_pstate/no_turbo.
+> I
+> made a bug report about this against Ubuntu's kernel at [1], which is
+> the only report I know that is able to point to this commit as having
+> broken things. However, it looks like an Arch Linux user [2] and a
+> Gentoo user [3] are running into the same thing.
+>=20
+
+As the bug report suggested, the system boots with no turbo, it must be
+forcefully turned ON by writing to this attribute.
+I wonder if there is a BIOS option to turn ON turbo on this system?
+
+This processor itself is capable of up to 5.8 GHz turbo.
+
+
+I will try to find contact at Clevo.
+
+We can try to reduce scope of this change to non HWP only where there
+is unchecked MSR issue.
+
+Thanks,
+Srinivas
+
+> [1]
+> https://bugs.launchpad.net/ubuntu/+source/linux-hwe-6.14/+bug/2122531
+>=20
+> [2] https://bbs.archlinux.org/viewtopic.php?id=3D305564
+>=20
+> [3]
+> https://forums.gentoo.org/viewtopic-p-8866128.html?sid=3De97619cff0d9c79c=
+2eea2cfe8f60b0d3
+
 
