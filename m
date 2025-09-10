@@ -1,156 +1,150 @@
-Return-Path: <linux-pm+bounces-34409-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34410-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7CD42B52052
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 20:36:57 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C37D0B52064
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 20:48:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 398265E243D
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 18:36:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E8AEB1BC2A9F
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 18:48:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EE7B2C2340;
-	Wed, 10 Sep 2025 18:36:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D66D2D0610;
+	Wed, 10 Sep 2025 18:48:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b/4xex8u"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b="GkcNQmbd"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64FBA23F42D;
-	Wed, 10 Sep 2025 18:36:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757529412; cv=none; b=phHy90D4BUP99YmXsAvVTwnCGtgC1671RR4EkgC/FFwvVg8oQDGYoeBKED4/gYrzNcyAWerALDro2L7ei2XwkmVL5VskZ9txfM7iNZq5BFcOCOo6tE73UVTjYVZmudPqbolBjaMIOBVQ9M7eRfju4Ki0MQiKl/srHClbn2NRGuA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757529412; c=relaxed/simple;
-	bh=3kVUQr3IjP3Mesy9HWtYjb13tpRwVeyf9L8UDLw172Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=AUwMAvOrqN76C7hhv37hDE/FaXvPJbJj2eIn1VtQGDZJh3fRtW/sb5wQKRWoIP4DsIk6UcfvyT3F3/DJxuOf6aQx5x5TJVTpgjS9ZyLbkvayIx04MHClzJ9YLCqUZIHE9E07ftHoQZmwn64x5shU3HNO9vv3ER1sTtW37PlnP34=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b/4xex8u; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F8B1C4CEEB;
-	Wed, 10 Sep 2025 18:36:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757529412;
-	bh=3kVUQr3IjP3Mesy9HWtYjb13tpRwVeyf9L8UDLw172Q=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=b/4xex8ult4IR3AVEwqex6nmknLVOvvt8DWT3q1cC8OlW5fXjllhwFrBDXsj8rEQh
-	 2hlMN2hiOSj+SbfAPUM1nXjF85qiLAQ46Dyc2QRzdbGHO+nNrcraI11giDfzROaxVP
-	 1F6dghUaPGF9SlHP1xKkp9fxb1upDEz/KKdWy/OiAYfx1lN/8ztlwh8tamK1XsBOLU
-	 vYO+9tFC7yIOCyzvFmYyILInOrUwgtD/RWBV0N9jwdM1ZkZQFZC5OhMNY6wYgudnzf
-	 BZT7PS195XxbYEEmsVwlQAfiSNq/Nro37YTISWR20uPaMJCdyoSO2HXS7KWJLGmFES
-	 psVwL6Z1C8Wwg==
-Date: Wed, 10 Sep 2025 19:36:41 +0100
-From: Jonathan Cameron <jic23@kernel.org>
-To: Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc: Sean Nyekjaer <sean@geanix.com>, Jean-Baptiste Maneyrol
- <jean-baptiste.maneyrol@tdk.com>, rafael@kernel.org, David Lechner
- <dlechner@baylibre.com>, Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>, Andy
- Shevchenko <andy@kernel.org>, linux-iio@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, Jean-Baptiste
- Maneyrol <jmaneyrol@invensense.com>, Jonathan Cameron
- <Jonathan.Cameron@huawei.com>
-Subject: Re: [PATCH v4 5/5] iio: imu: inv_icm42600: use guard() to release
- mutexes
-Message-ID: <20250910193641.7c982d46@jic23-huawei>
-In-Reply-To: <aMAoWPAvOmOfgfaR@smile.fi.intel.com>
-References: <20250909-icm42pmreg-v4-0-2bf763662c5c@geanix.com>
-	<20250909-icm42pmreg-v4-5-2bf763662c5c@geanix.com>
-	<aMAR4Jx3pWQ1_rjX@smile.fi.intel.com>
-	<wl4fvd76hjf66k6pmkoce5wg5luspxjjsclxg5pdh7rjycarko@ovddl55mn77l>
-	<aMAoWPAvOmOfgfaR@smile.fi.intel.com>
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.50; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 266692C327D;
+	Wed, 10 Sep 2025 18:48:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1757530088; cv=pass; b=tpEdN0abXrvFlQ3ezMJW/OWvYDv9WqQiXlWVDSpVT2rnET6hKmO6NuQr4QAJ9DvxgSllJN2xGUqe99GkIkRoYsDUB29GliMCkbC+/I2NIDsJg6PJ6u5jXUa6mTBI8ZlQj2RIhfTyC+64zC60asE9Mh8c7ML/+Etx57eaPqtFyJo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1757530088; c=relaxed/simple;
+	bh=kHtbzXKfHdHrysnt3opP0i4Y53tRzGXtXRDDkUtThCY=;
+	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
+	 Message-Id:References:To; b=V0qOpMy8ZCMqwNTPjrBBBetNh2OiONTlZYL/z6oUgkZ3QoduhTAn0UYnRSYhXHO3LklCpMKZP7j+3yyKVBY4PX3CnmBqo3xYsWOwqhqrPQiqNjG/oC/0S6eoGcaH7zgVE3DN2wKJrUl3PJMoh86Tgk4g6idJbLA1an3MhJXAZHY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b=GkcNQmbd; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1757530070; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=DEHYULVKqa84NpaY5mX0necWyQXRRqKVtyHInBjSxbq7JsY4OKKXdEunDua8IkwgmZjaRP36QSWoBWmxxOQWsW8CDOBV0KxIX0cYsMazeFGd8p02TLOjuWalWbSZI/Pg8HHa83fNP+//HJ1XnYDrCXi65xmBeBUK/6Cnp9UtK5M=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1757530070; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=kHtbzXKfHdHrysnt3opP0i4Y53tRzGXtXRDDkUtThCY=; 
+	b=b0WdN9xvHz+MkXLfrtGG088aYKr53XVlKZTNFqDrr7cNNEV3ZTRejDQ9YLpCCXjhtxECu9fg/GxQQ8NvLhaN43WWmeN3P+K15zyLcFtL+SlO5hlmQNNpNo4zYRYNS0UvfSjvybGjpCw/rfA+zJ+qsM/iA+zAijqMQxkNPlS11rg=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=daniel.almeida@collabora.com;
+	dmarc=pass header.from=<daniel.almeida@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1757530070;
+	s=zohomail; d=collabora.com; i=daniel.almeida@collabora.com;
+	h=Content-Type:Mime-Version:Subject:Subject:From:From:In-Reply-To:Date:Date:Cc:Cc:Content-Transfer-Encoding:Message-Id:Message-Id:References:To:To:Reply-To;
+	bh=kHtbzXKfHdHrysnt3opP0i4Y53tRzGXtXRDDkUtThCY=;
+	b=GkcNQmbdQ8xOJJGKK6p2Qe1XPK+A6s5ZtaIn4+kJSPpgNcAaYoqD9+YXoW9jj0IU
+	oJliIdYPAxQZ3Li/yShpgQgvkyPCvF5PtUkhs2ZI/G98hiBjV9RVMG9bQv7/r9i0Fb/
+	zcCc2KVf/H5CnhbQf6V4ZSy3DpQ//j1fYYCZ3KEk=
+Received: by mx.zohomail.com with SMTPS id 1757530067158368.13632757724474;
+	Wed, 10 Sep 2025 11:47:47 -0700 (PDT)
+Content-Type: text/plain;
+	charset=utf-8
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.700.81\))
+Subject: Re: [PATCH v2 1/2] rust: clk: implement Send and Sync
+From: Daniel Almeida <daniel.almeida@collabora.com>
+In-Reply-To: <aMG6JVMcMxVuX7De@tardis-2.local>
+Date: Wed, 10 Sep 2025 15:47:30 -0300
+Cc: Michael Turquette <mturquette@baylibre.com>,
+ Stephen Boyd <sboyd@kernel.org>,
+ Miguel Ojeda <ojeda@kernel.org>,
+ Alex Gaynor <alex.gaynor@gmail.com>,
+ Gary Guo <gary@garyguo.net>,
+ =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ Benno Lossin <lossin@kernel.org>,
+ Andreas Hindborg <a.hindborg@kernel.org>,
+ Alice Ryhl <aliceryhl@google.com>,
+ Trevor Gross <tmgross@umich.edu>,
+ Danilo Krummrich <dakr@kernel.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>,
+ linux-clk@vger.kernel.org,
+ rust-for-linux@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <3D936C1B-FBA9-4964-859C-84BB665BBE3B@collabora.com>
+References: <20250910-clk-type-state-v2-0-1b97c11bb631@collabora.com>
+ <20250910-clk-type-state-v2-1-1b97c11bb631@collabora.com>
+ <aMG6JVMcMxVuX7De@tardis-2.local>
+To: Boqun Feng <boqun.feng@gmail.com>
+X-Mailer: Apple Mail (2.3826.700.81)
+X-ZohoMailClient: External
 
-On Tue, 9 Sep 2025 16:15:04 +0300
-Andy Shevchenko <andriy.shevchenko@intel.com> wrote:
+Hi Boqun,
 
-> On Tue, Sep 09, 2025 at 11:53:02AM +0000, Sean Nyekjaer wrote:
-> > On Tue, Sep 09, 2025 at 02:39:12PM +0100, Andy Shevchenko wrote:  
-> > > On Tue, Sep 09, 2025 at 09:11:11AM +0200, Sean Nyekjaer wrote:  
-> 
-> ...
-> 
-> > > >  	/* exit if FIFO is already on */
-> > > >  	if (st->fifo.on) {
-> > > > -		ret = 0;
-> > > > -		goto out_on;  
-> > > 
-> > > Probably you wanted the same comment here
-> > > 
-> > > 	/* increase FIFO on counter */
-> > >   
-> > > > +		st->fifo.on++;
-> > > > +		return 0;
-> > > >  	}  
-> 
-> ...
-> 
-> > > >  	/* exit if there are several sensors using the FIFO */
-> > > >  	if (st->fifo.on > 1) {
-> > > > -		ret = 0;
-> > > > -		goto out_off;  
-> > > 
-> > > In the similar way
-> > >   
-> > 
-> > Considered it. But isn't it obvious whats happening?  
-> 
-> With the same equality existing ones may be killed. Some of consistency at least :-)
-> 
-> > I will be happy to add them...  
-> 
-> > > 	/* decrease FIFO on counter */
-> > >   
-> > > > +		st->fifo.on--;
-> > > > +		return 0;
-> > > >  	}  
-> 
-Applied with this tweak.  Thanks
+> On 10 Sep 2025, at 14:49, Boqun Feng <boqun.feng@gmail.com> wrote:
+>=20
+> On Wed, Sep 10, 2025 at 02:28:27PM -0300, Daniel Almeida wrote:
+>> From: Alice Ryhl <aliceryhl@google.com>
+>>=20
+>> These traits are required for drivers to embed the Clk type in their =
+own
+>> data structures because driver data structures are usually required =
+to
+>> be Send. See e.g. [1] for the kind of workaround that drivers =
+currently
+>> need due to lacking this annotation.
+>>=20
+>> Link: =
+https://lore.kernel.org/rust-for-linux/20250812-tyr-v2-1-9e0f3dc9da95@coll=
+abora.com/ [1]
+>> Signed-off-by: Daniel Almeida <daniel.almeida@collabora.com>
+>> Signed-off-by: Alice Ryhl <aliceryhl@google.com>
+>> Reviewed-by: Danilo Krummrich <dakr@kernel.org>
+>> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+>> Reviewed-by: Daniel Almeida <daniel.almeida@collabora.com>
+>=20
+> This tag list looks a bit weird to me. Why is there a SoB from you
+> before Alice's SoB? At least for the usage I'm familiar with, outside
+> the case of Co-developed-bys, multiple SoBs is used for recording how
+> the patches are routed. For example, if I have a patch that has my SoB
+> and I send it to you, you queue in your tree and then send out to =
+other
+> maintainers for merging, in general you would put your SoB after mine =
+in
+> that case. But I don't think that's case here? Alice's patch has only
+> her SoB:
+>=20
+> =
+https://lore.kernel.org/rust-for-linux/20250904-clk-send-sync-v1-1-48d0233=
+20eb8@google.com/
+>=20
+> What's the intention of the SoB tag here?
+>=20
+> Otherwise the patch looks good to me. If we get the tag list resolved,
+> feel free to add:
+>=20
+> Reviewed-by: Boqun Feng <boqun.feng@gmail.com>
+>=20
+> Regards,
+> Boqun
+>=20
 
-diff --git a/drivers/iio/imu/inv_icm42600/inv_icm42600_buffer.c b/drivers/iio/imu/inv_icm42600/inv_icm42600_buffer.c
-index 15391961bf96..ada968be954d 100644
---- a/drivers/iio/imu/inv_icm42600/inv_icm42600_buffer.c
-+++ b/drivers/iio/imu/inv_icm42600/inv_icm42600_buffer.c
-@@ -300,7 +300,6 @@ static int inv_icm42600_buffer_postenable(struct iio_dev *indio_dev)
- 
-        guard(mutex)(&st->lock);
- 
--       /* exit if FIFO is already on */
-        if (st->fifo.on) {
-                st->fifo.on++;
-                return 0;
-@@ -329,7 +328,6 @@ static int inv_icm42600_buffer_postenable(struct iio_dev *indio_dev)
-        if (ret)
-                return ret;
- 
--       /* increase FIFO on counter */
-        st->fifo.on++;
- 
-        return 0;
-@@ -342,7 +340,6 @@ static int inv_icm42600_buffer_predisable(struct iio_dev *indio_dev)
- 
-        guard(mutex)(&st->lock);
- 
--       /* exit if there are several sensors using the FIFO */
-        if (st->fifo.on > 1) {
-                st->fifo.on--;
-                return 0;
-@@ -366,7 +363,6 @@ static int inv_icm42600_buffer_predisable(struct iio_dev *indio_dev)
-        if (ret)
-                return ret;
- 
--       /* decrease FIFO on counter */
-        st->fifo.on--;
- 
-        return 0;
+You have to include your SOB when submitting patches from others.
+
+This is something I tend to forget often, so I made sure it was there. =
+The
+order may be indeed off though.
+
+=E2=80=94 Daniel
 
 
