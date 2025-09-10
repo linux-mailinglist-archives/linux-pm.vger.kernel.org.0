@@ -1,39 +1,48 @@
-Return-Path: <linux-pm+bounces-34374-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34376-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D846FB519B8
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 16:41:28 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 58E60B519BE
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 16:42:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 638445E550A
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 14:39:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B231418901F3
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Sep 2025 14:40:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76FDB337681;
-	Wed, 10 Sep 2025 14:37:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED37C33A03E;
+	Wed, 10 Sep 2025 14:37:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=honor.com header.i=@honor.com header.b="Z+wOMYIu"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mta20.hihonor.com (mta20.hihonor.com [81.70.206.69])
+Received: from mta22.hihonor.com (mta22.hihonor.com [81.70.192.198])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C5EC32C316;
-	Wed, 10 Sep 2025 14:37:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=81.70.206.69
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE0D132CF74;
+	Wed, 10 Sep 2025 14:37:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=81.70.192.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757515057; cv=none; b=TqIlnA8T62KXjcfsoG1IWQnYVRlmwLpTTHEta45Ltb8LfNQ6jCyisHuvToTT8BR1o2j13FyJR+cN9AErihoMXu7MB7iVjb2/xPv7m9vj2+ek+akVshU2t+7F8FwlKTVAPayD3P8vjhuDtyF14zwcVOPdd9lSd7jDZf09yyXlQ9c=
+	t=1757515063; cv=none; b=FtYOl2cGWvCOsb2b/4lE83jRcVJf9Ez5YKKBCMpyNiqVboAIZou10U/kEiEonLU7kwBCt5gs5FRx9YIzLy70/tnUmJK06w4tEHzKgWqURGLUry4YzHwOOHmDIYmKW4mHz2Xq/FFJg5KhOMGTOOGQvsonIgSfI0dPYzF7tuNMbm8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757515057; c=relaxed/simple;
-	bh=6zMSJx1ZS2S2OAcyu6zS4iBPLDiystsVvpzsXVfAgBA=;
+	s=arc-20240116; t=1757515063; c=relaxed/simple;
+	bh=sacmCW970u5wmxcvaaMOuhCwrKJCWULfOyvNHjZPBa8=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=URErcqcjatucWDWzVtjENYrYBY52BX2bH2L6b8UsKuVhDgRTixTfW44RfgRRSwlKuwoDYa2g0XKh6bXe4+8Qj858BE213NdFUfRp6tuumMOah36/vilTzNVwKsZ5ZfCl1g1sVqaxsXBuADoe/btOha2VcWzhgwIpBqlt6hC9oO8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=honor.com; spf=pass smtp.mailfrom=honor.com; arc=none smtp.client-ip=81.70.206.69
+	 MIME-Version:Content-Type; b=HlQW2WF1HkHkhKqX9wvp53WvvtozEpEVOp4Nb0gWV3Qt+sTOKI7vH3sisntZ6yvsSYbjxGUeAIBRpQ1pF7LKs9TGaNV6N7GX3plCq2YUqcx7KWsz1iz/B4BOpIgSvYxP05PXN1x9GlreRbnNbB9jApnZibCGG/dYtb1vYduVHy4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=honor.com; spf=pass smtp.mailfrom=honor.com; dkim=pass (1024-bit key) header.d=honor.com header.i=@honor.com header.b=Z+wOMYIu; arc=none smtp.client-ip=81.70.192.198
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=honor.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=honor.com
-Received: from w011.hihonor.com (unknown [10.68.20.122])
-	by mta20.hihonor.com (SkyGuard) with ESMTPS id 4cMNYs4L9jzYlL4Q;
-	Wed, 10 Sep 2025 22:37:05 +0800 (CST)
-Received: from a018.hihonor.com (10.68.17.250) by w011.hihonor.com
- (10.68.20.122) with Microsoft SMTP Server (version=TLS1_2,
+dkim-signature: v=1; a=rsa-sha256; d=honor.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=To:From;
+	bh=Il1AFPpv1ZameRi/y5X+2Ag4jsiAKIDDx/iyk289iXk=;
+	b=Z+wOMYIuwHFyT7srvY1qDquEaLfd2ILQX2wLWRt7gYF4UG6PUeTWb6UcxVjQRkWkFhU2xH/mZ
+	vcBL1SZ7ZG91omU0NZn0l5OZxCcTd7F3oq8iYYQ47pjNryGTNyBEPDUbsG5ogb8rLS8LKbKRePR
+	96r558NQ7HxaqOq7K0VSlak=
+Received: from w013.hihonor.com (unknown [10.68.26.19])
+	by mta22.hihonor.com (SkyGuard) with ESMTPS id 4cMNZ2522PzYlFL0;
+	Wed, 10 Sep 2025 22:37:14 +0800 (CST)
+Received: from a018.hihonor.com (10.68.17.250) by w013.hihonor.com
+ (10.68.26.19) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Wed, 10 Sep
  2025 22:37:31 +0800
 Received: from localhost.localdomain (10.144.20.219) by a018.hihonor.com
@@ -48,9 +57,9 @@ CC: <rientjes@google.com>, <shakeel.butt@linux.dev>,
 	<rafael@kernel.org>, <pavel@kernel.org>, <linux-mm@kvack.org>,
 	<linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
 	<liulu.liu@honor.com>, <feng.han@honor.com>, <zhongjinji@honor.com>
-Subject: [PATCH v9 1/2] mm/oom_kill: Thaw the entire OOM victim process
-Date: Wed, 10 Sep 2025 22:37:25 +0800
-Message-ID: <20250910143726.19905-2-zhongjinji@honor.com>
+Subject: [PATCH v9 2/2] mm/oom_kill: The OOM reaper traverses the VMA maple tree in reverse order
+Date: Wed, 10 Sep 2025 22:37:26 +0800
+Message-ID: <20250910143726.19905-3-zhongjinji@honor.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20250910143726.19905-1-zhongjinji@honor.com>
 References: <20250910143726.19905-1-zhongjinji@honor.com>
@@ -64,125 +73,95 @@ Content-Type: text/plain
 X-ClientProxiedBy: w002.hihonor.com (10.68.28.120) To a018.hihonor.com
  (10.68.17.250)
 
-OOM killer is a mechanism that selects and kills processes when the system
-runs out of memory to reclaim resources and keep the system stable. But the
-oom victim cannot terminate on its own when it is frozen, even if the OOM
-victim task is thawed through __thaw_task(). This is because __thaw_task() can
-only thaw a single OOM victim thread, and cannot thaw the entire OOM victim
-process.
+Although the oom_reaper is delayed and it gives the oom victim chance to
+clean up its address space this might take a while especially for
+processes with a large address space footprint. In those cases
+oom_reaper might start racing with the dying task and compete for shared
+resources - e.g. page table lock contention has been observed.
 
-Also, freezing_slow_path() decides whether a task is an OOM victim by checking
-the task's TIF_MEMDIE flag. When a task is thawed, the freezer bypasses PM
-freezing and cgroup freezing states to thaw it. But TIF_MEMDIE is not a thread
-group shared flag, and only one thread is marked with TIF_MEMDIE. If other
-threads are thawed, they may still remain frozen due to PM freezing and cgroup
-freezing states.
+Reduce those races by reaping the oom victim from the other end of the
+address space.
 
-To solve this, thaw_process() is introduced to thaw all threads of the victim,
-ensuring every thread in the victim process can be thawed. The freezer uses
-tsk_is_oom_victim() to determine whether a task is an OOM victim, because
-tsk->signal->oom_mm is data shared by all threads. This allows all victim threads
-to rely on it to be thawed.
+It is also a significant improvement for process_mrelease(). When a process
+is killed, process_mrelease is used to reap the killed process and often
+runs concurrently with the dying task. The test data shows that after
+applying the patch, lock contention is greatly reduced during the procedure
+of reaping the killed process.
 
-This change will thaw the entire victim process when OOM occurs,
-ensuring that the oom victim can terminate on its own.
+The test is based on arm64.
+
+Without the patch:
+|--99.57%-- oom_reaper
+|    |--0.28%-- [hit in function]
+|    |--73.58%-- unmap_page_range
+|    |    |--8.67%-- [hit in function]
+|    |    |--41.59%-- __pte_offset_map_lock
+|    |    |--29.47%-- folio_remove_rmap_ptes
+|    |    |--16.11%-- tlb_flush_mmu
+|    |    |--1.66%-- folio_mark_accessed
+|    |    |--0.74%-- free_swap_and_cache_nr
+|    |    |--0.69%-- __tlb_remove_folio_pages
+|    |--19.94%-- tlb_finish_mmu
+|    |--3.21%-- folio_remove_rmap_ptes
+|    |--1.16%-- __tlb_remove_folio_pages
+|    |--1.16%-- folio_mark_accessed
+|    |--0.36%-- __pte_offset_map_lock
+
+With the patch:
+|--99.53%-- oom_reaper
+|    |--55.77%-- unmap_page_range
+|    |    |--20.49%-- [hit in function]
+|    |    |--58.30%-- folio_remove_rmap_ptes
+|    |    |--11.48%-- tlb_flush_mmu
+|    |    |--3.33%-- folio_mark_accessed
+|    |    |--2.65%-- __tlb_remove_folio_pages
+|    |    |--1.37%-- _raw_spin_lock
+|    |    |--0.68%-- __mod_lruvec_page_state
+|    |    |--0.51%-- __pte_offset_map_lock
+|    |--32.21%-- tlb_finish_mmu
+|    |--6.93%-- folio_remove_rmap_ptes
+|    |--1.90%-- __tlb_remove_folio_pages
+|    |--1.55%-- folio_mark_accessed
+|    |--0.69%-- __pte_offset_map_lock
 
 Signed-off-by: zhongjinji <zhongjinji@honor.com>
-
+Reviewed-by: Liam R. Howlett <Liam.Howlett@oracle.com>
+Reviewed-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Reviewed-by: Suren Baghdasaryan <surenb@google.com>
+Acked-by: Shakeel Butt <shakeel.butt@linux.dev>
 Acked-by: Michal Hocko <mhocko@suse.com>
 ---
- include/linux/freezer.h |  2 ++
- kernel/freezer.c        | 20 +++++++++++++++++++-
- mm/oom_kill.c           | 10 +++++-----
- 3 files changed, 26 insertions(+), 6 deletions(-)
+ mm/oom_kill.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/freezer.h b/include/linux/freezer.h
-index b303472255be..32884c9721e5 100644
---- a/include/linux/freezer.h
-+++ b/include/linux/freezer.h
-@@ -47,6 +47,7 @@ extern int freeze_processes(void);
- extern int freeze_kernel_threads(void);
- extern void thaw_processes(void);
- extern void thaw_kernel_threads(void);
-+extern void thaw_process(struct task_struct *p);
- 
- static inline bool try_to_freeze(void)
- {
-@@ -80,6 +81,7 @@ static inline int freeze_processes(void) { return -ENOSYS; }
- static inline int freeze_kernel_threads(void) { return -ENOSYS; }
- static inline void thaw_processes(void) {}
- static inline void thaw_kernel_threads(void) {}
-+static inline void thaw_process(struct task_struct *p) {}
- 
- static inline bool try_to_freeze(void) { return false; }
- 
-diff --git a/kernel/freezer.c b/kernel/freezer.c
-index 6a96149aede9..ddc11a8bd2ea 100644
---- a/kernel/freezer.c
-+++ b/kernel/freezer.c
-@@ -10,6 +10,7 @@
- #include <linux/export.h>
- #include <linux/syscalls.h>
- #include <linux/freezer.h>
-+#include <linux/oom.h>
- #include <linux/kthread.h>
- 
- /* total number of freezing conditions in effect */
-@@ -40,7 +41,7 @@ bool freezing_slow_path(struct task_struct *p)
- 	if (p->flags & (PF_NOFREEZE | PF_SUSPEND_TASK))
- 		return false;
- 
--	if (test_tsk_thread_flag(p, TIF_MEMDIE))
-+	if (tsk_is_oom_victim(p))
- 		return false;
- 
- 	if (pm_nosig_freezing || cgroup_freezing(p))
-@@ -206,6 +207,23 @@ void __thaw_task(struct task_struct *p)
- 		wake_up_state(p, TASK_FROZEN);
- }
- 
-+/*
-+ * thaw_process - Thaw a frozen process
-+ * @p: the process to be thawed
-+ *
-+ * Iterate over all threads of @p and call __thaw_task() on each.
-+ */
-+void thaw_process(struct task_struct *p)
-+{
-+	struct task_struct *t;
-+
-+	rcu_read_lock();
-+	for_each_thread(p, t) {
-+		__thaw_task(t);
-+	}
-+	rcu_read_unlock();
-+}
-+
- /**
-  * set_freezable - make %current freezable
-  *
 diff --git a/mm/oom_kill.c b/mm/oom_kill.c
-index 25923cfec9c6..88356b66cc35 100644
+index 88356b66cc35..28fb36be332b 100644
 --- a/mm/oom_kill.c
 +++ b/mm/oom_kill.c
-@@ -772,12 +772,12 @@ static void mark_oom_victim(struct task_struct *tsk)
- 		mmgrab(tsk->signal->oom_mm);
+@@ -516,7 +516,7 @@ static bool __oom_reap_task_mm(struct mm_struct *mm)
+ {
+ 	struct vm_area_struct *vma;
+ 	bool ret = true;
+-	VMA_ITERATOR(vmi, mm, 0);
++	MA_STATE(mas, &mm->mm_mt, ULONG_MAX, ULONG_MAX);
  
  	/*
--	 * Make sure that the task is woken up from uninterruptible sleep
--	 * if it is frozen because OOM killer wouldn't be able to free
--	 * any memory and livelock. freezing_slow_path will tell the freezer
--	 * that TIF_MEMDIE tasks should be ignored.
-+	 * Make sure that the process is woken up from uninterruptible sleep
-+	 * if it is frozen because OOM killer wouldn't be able to free any
-+	 * memory and livelock. The freezer will thaw the tasks that are OOM
-+	 * victims regardless of the PM freezing and cgroup freezing states.
+ 	 * Tell all users of get_user/copy_from_user etc... that the content
+@@ -526,7 +526,13 @@ static bool __oom_reap_task_mm(struct mm_struct *mm)
  	 */
--	__thaw_task(tsk);
-+	thaw_process(tsk);
- 	atomic_inc(&oom_victims);
- 	cred = get_task_cred(tsk);
- 	trace_mark_victim(tsk, cred->uid.val);
+ 	set_bit(MMF_UNSTABLE, &mm->flags);
+ 
+-	for_each_vma(vmi, vma) {
++	/*
++	 * It might start racing with the dying task and compete for shared
++	 * resources - e.g. page table lock contention has been observed.
++	 * Reduce those races by reaping the oom victim from the other end
++	 * of the address space.
++	 */
++	mas_for_each_rev(&mas, vma, 0) {
+ 		if (vma->vm_flags & (VM_HUGETLB|VM_PFNMAP))
+ 			continue;
+ 
 -- 
 2.17.1
 
