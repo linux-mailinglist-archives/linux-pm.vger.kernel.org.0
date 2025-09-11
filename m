@@ -1,98 +1,116 @@
-Return-Path: <linux-pm+bounces-34489-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34490-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C8DCB536CA
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 17:02:08 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49994B536FB
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 17:10:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 933331CC1036
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 15:00:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8AC4B188E283
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 15:11:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 967CF34DCDB;
-	Thu, 11 Sep 2025 14:59:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AEEC3469E6;
+	Thu, 11 Sep 2025 15:10:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Du6b4hpM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LqXsidjq"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E1FC3469E4;
-	Thu, 11 Sep 2025 14:59:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7C7234575B;
+	Thu, 11 Sep 2025 15:10:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757602780; cv=none; b=hbXmrrUgz3w75ffpSv5dH/jtUdFxDexJM0/hnxVEccWnEa8FqiojyvJNSBj/d7cTVz89XB4lJWmLRKYtPyt686Gto+QLXazYb6PKu9+O+LSWMk1WWj6lRFDPYIAzSZjik4OTyfeAhcTvcjfGYNzy+UkQaNxUflmtkCHDQZuNfV4=
+	t=1757603447; cv=none; b=tkKNT9VMwBzdgppkUQnfgM0ySE/nJsGPh/3Yn87NRgPZlXsl7rsbAXQHXN/qMQKAeQGMWHr8Lri+cjx/RCAuZJDoAQxZiGrEKnIaKZGyXatfZhXwr0Xp/KhWckarBhC/gqC5mp1ItmcBaUYZ4tS/0iJVdoWhZpL6C4aYisYa2Tc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757602780; c=relaxed/simple;
-	bh=dwdaLEAjnH3HKkai+U9OrOZJ12DWW8piJIVwD4P+moM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rpWAyjaMGUCoGE/SrjNwqMU5+zYxEtwaga6VpR4t2cOn0oz3yFuoYYJEMGy85Bd56PDxOvazI97LmIJfYmyZZqHk+lJXTu/tttXND0SwkT7bV3yVtyXa7qMgIfGufNOKQ76sNL82UeLwz6jF2Up5roKifnYaq1cUsHrK3AJzXvo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Du6b4hpM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92A27C4CEF0;
-	Thu, 11 Sep 2025 14:59:37 +0000 (UTC)
+	s=arc-20240116; t=1757603447; c=relaxed/simple;
+	bh=vESIC3H1d33KdZFzxixmTx3M3eMgo+ACg9D5yt4PcCg=;
+	h=Message-ID:Date:MIME-Version:From:To:Cc:Subject:Content-Type; b=fcz+PtNFzUmNOGZvEYuZRjTyVeI9MoiLGBnvF0iEb1iwWgyN7+GQVT6zdQclNq/1Ln7kABf40qeHCFNH0LysgI2jlIFv3UPFNCUiO13jPylg9+urxvCpe9qXToiTH4xtmZKBT7aNqKF4GNSU8LO9/kQqjsVHs5JN1Vr7HdeF//A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LqXsidjq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8E05C4CEF0;
+	Thu, 11 Sep 2025 15:10:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757602780;
-	bh=dwdaLEAjnH3HKkai+U9OrOZJ12DWW8piJIVwD4P+moM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Du6b4hpMRlqI1aCbon+AQJ+1kBXG0polcPvf4DE/LsKzWpmcSXdseI3XjfkKCa8Rd
-	 z1ecYtkdWJImyg23H5zjxAdgId3n2wTRhGLvkva5WZ4vhWE/IieiCA23J/o7GOPAya
-	 RwYCWFQhKuibfsYsz3Ia4bEEKFP0071HQx8CGachXhLqNnYcz+WvbREieI/6/pbOaI
-	 SPe4qX+U5g658QNOPA6/VODmEcFBHbOVakJlO+dw2CikuFAYl4TKq6cnr+gpUD9yec
-	 SgO44/dFz+vSnUKDQ1nPBJ54eWK+s/j6SNGkVYSCio0JnPoJjBVVpS0kFPYuzOXQly
-	 kOBcatU2NbGgQ==
-Date: Thu, 11 Sep 2025 15:59:34 +0100
-From: Lee Jones <lee@kernel.org>
-To: linux-rockchip@lists.infradead.org,
-	Chris Morgan <macroalpha82@gmail.com>
-Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-	broonie@kernel.org, lgirdwood@gmail.com, sre@kernel.org,
-	heiko@sntech.de, conor+dt@kernel.org, krzk+dt@kernel.org,
-	robh@kernel.org, Chris Morgan <macromorgan@hotmail.com>
-Subject: Re: (subset) [PATCH v8 0/5] Add Texas Instruments BQ25703A Charger
-Message-ID: <20250911145934.GP9224@google.com>
-References: <20250904160530.66178-1-macroalpha82@gmail.com>
- <175760259503.1582479.14013409824773713781.b4-ty@kernel.org>
+	s=k20201202; t=1757603447;
+	bh=vESIC3H1d33KdZFzxixmTx3M3eMgo+ACg9D5yt4PcCg=;
+	h=Date:From:To:Cc:Subject:From;
+	b=LqXsidjq1YDfMhTjyyakuA68Sau14+CsdPbk3pQa+JSDz5kxLm7YDkVGntQ/4uSAI
+	 dAkVnqb0HX0u6CWNQNaJdzT9BmfotW5DRlHJazp0lsSVsThxnCp45Op3a7khPHZvry
+	 GT3N+DzSKbVP2EiXnWC+mYkIbf058x5V7jbqdmF7WR5TsSXc2xy1cD79c+wtThIIAN
+	 GznqcxdzTIkF/DeBipkrf2l1mcuDELKujjEnT4PVAjT8PCBKZ7nnecAl1erTjnF/xy
+	 f45o2nGeu98bY7PF05jyA1OsiBOXIsDYZ/SGE3bNKaXo2S+gtk/XHEnMDt4bNp6Urj
+	 GXPViTOV9Vwgw==
+Message-ID: <013e03cd-6d8d-4bf9-ba52-5001d10444b7@kernel.org>
+Date: Fri, 12 Sep 2025 00:10:43 +0900
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <175760259503.1582479.14013409824773713781.b4-ty@kernel.org>
+User-Agent: Mozilla Thunderbird
+From: Chanwoo Choi <chanwoo@kernel.org>
+Content-Language: en-US
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ "open list:DEVICE FREQUENCY (DEVFREQ)" <linux-pm@vger.kernel.org>,
+ Chanwoo Choi <cw00.choi@samsung.com>, Chanwoo Choi <chanwoo@kernel.org>,
+ MyungJoo Ham <myungjoo.ham@samsung.com>,
+ Kyungmin Park <kyungmin.park@samsung.com>
+Subject: [GIT PULL] devfreq next for 6.18
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, 11 Sep 2025, Lee Jones wrote:
+Dear Rafael,
 
-> On Thu, 04 Sep 2025 11:05:25 -0500, Chris Morgan wrote:
-> > From: Chris Morgan <macromorgan@hotmail.com>
-> > 
-> > Add support for the Texas Instruments BQ25703A charger manager. The
-> > device integrates a boost converter with the charger manager. This
-> > series adds the device as an MFD with separate regulator and power
-> > supply drivers. This allows us to manage a circular dependency with
-> > a type-c port manager which depends on the regulator for usb-otg
-> > but supplies power to the BQ25703A charger.
-> > 
-> > [...]
-> 
-> Applied, thanks!
-> 
-> [1/5] dt-bindings: mfd: ti,bq25703a: Add TI BQ25703A Charger
->       commit: 76bc2203a46ef704a4cd8003986f6bd74139a367
-> [2/5] mfd: bq257xx: Add support for BQ25703A core driver
->       commit: 3b1bbfb5fce3ca9fffc92ac1b053b0cfbb1f322b
-> [3/5] power: supply: bq257xx: Add support for BQ257XX charger
->       commit: 1cc017b7f9c7b7cd86fdda4aee36b92d91cc2ad2
-> [4/5] regulator: bq257xx: Add bq257xx boost regulator driver
->       commit: 981dd162b63578aee34b5c68795e246734b76d70
+This is devfreq-next pull request. I add detailed description of
+this pull request on the following tag. Please pull devfreq with
+following updates.
 
-Send for build testing.  If successful, I'll ping out a PR shortly.
+Best Regards,
+Chanwoo Choi
 
-Note to self: ib-mfd-power-regulator-6.18
 
--- 
-Lee Jones [李琼斯]
+The following changes since commit 1b237f190eb3d36f52dffe07a40b5eb210280e00:
+
+  Linux 6.17-rc3 (2025-08-24 12:04:12 -0400)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git tags/devfreq-next-for-6.18
+
+for you to fetch changes up to eddb5ba91b289faa15117d4fc1c2fb223f3493c2:
+
+  PM / devfreq: rockchip-dfi: add support for LPDDR5 (2025-09-09 23:37:39 +0900)
+  
+----------------------------------------------------------------
+  
+Update devfreq next for v6.18
+
+Detailed description for this pull request:
+- Add support for LPDDR5 for Rockhip RK3588 SoC on rockchip-dfi devfreq driver.
+
+- Fix an issue where DDR cycle counts on RK3588/RK3528 with LPDDR4(X)
+  are reported as half by adding a cycle multiplier to the DFI driver
+  on rockchip-dfi devfreq-event driver.
+
+- Fix missing error pointer dereference of regulator instance
+  and remove redundant condition on on mtk-cci-devfreq.c devfreq driver.
+
+----------------------------------------------------------------
+Dan Carpenter (1):
+      PM / devfreq: mtk-cci: Fix potential error pointer dereference in probe()
+
+Liao Yuanhong (1):
+      PM / devfreq: mtk-cci: avoid redundant conditions
+
+Nicolas Frattaroli (2):
+      PM / devfreq: rockchip-dfi: double count on RK3588
+      PM / devfreq: rockchip-dfi: add support for LPDDR5
+
+ drivers/devfreq/event/rockchip-dfi.c | 91 ++++++++++++++++++++++++++++--------
+ drivers/devfreq/mtk-cci-devfreq.c    |  5 +-
+ include/soc/rockchip/rk3588_grf.h    |  8 +++-
+ include/soc/rockchip/rockchip_grf.h  |  1 +
+ 4 files changed, 82 insertions(+), 23 deletions(-)
 
