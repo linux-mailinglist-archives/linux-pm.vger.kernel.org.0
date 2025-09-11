@@ -1,201 +1,163 @@
-Return-Path: <linux-pm+bounces-34435-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34436-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id BD515B529FD
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 09:31:55 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7873BB52AAE
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 09:56:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C49B67B0BAA
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 07:30:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 245DF5835A5
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 07:56:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52F8A26F287;
-	Thu, 11 Sep 2025 07:31:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="vvOGN/QO";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="t7uDXEcP";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="vvOGN/QO";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="t7uDXEcP"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C8262BEFEB;
+	Thu, 11 Sep 2025 07:56:17 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from mail-vs1-f43.google.com (mail-vs1-f43.google.com [209.85.217.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B02433F3
-	for <linux-pm@vger.kernel.org>; Thu, 11 Sep 2025 07:31:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D4DF29E114;
+	Thu, 11 Sep 2025 07:56:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757575902; cv=none; b=aJBoS5AHn+gwbAxdE0j2ueJw/7Yf1sWXLipYauBd4MhQ27RnsQsgFxglHbd1A9Fp7GBv6+UkZRFm1ZhMKQODM6/HFOtA38ToR1IRHaL84S/ROvf+DQMKoRJc2prm7+gNriJFcjxQW4W1gsMmqv6UIDmISCe4a8Wk1LMzFzwmFJc=
+	t=1757577377; cv=none; b=YvPJ1YY5XKKeNtSH2T8XvnmPSpKCKL+K8dH412/vVT5gLam4L9B0s8mxOfz/1IO9MUX80NaFihqUp7OAClNzujjny06um/hpRlMPey/qINWUNOXhKWVO5xMOsApBqAukEYuel9KlGNzxqyYy/gsCYHcjNmRkN9ZcuvNjo18nChE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757575902; c=relaxed/simple;
-	bh=106kYwWz75JcHH+vZ8uGQM8hCJIay+/XEnSHUXFkcTs=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=a1bH/buh2/r4NihzADbAyN7C4yH6LFz7ck4ILHnH/wRlBstFY8nfUUlvAdNUQ/qEYG2IQvTXBocn97U+B9+hz194rrvzS+ahzWntMRfh0rALN6cluBxWcyql5Lywbe5INmr90EJQDrBkLvAOJ+cEz3C4fJzWqCFws0Dp3jv4IDk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=vvOGN/QO; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=t7uDXEcP; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=vvOGN/QO; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=t7uDXEcP; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id E0021684CB;
-	Thu, 11 Sep 2025 07:31:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1757575897; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=sDd+7jUWvK2el43OuqFvYUR8GI0VAjvKZfCbClbZiK4=;
-	b=vvOGN/QOT12vylhTU62fihOaKT6pxrCGpY1aosHVpOGcWvA3nL8lLcGMHuIl2w/FmA9+1y
-	kh2uaaBmul32l31BXAA/c4Y2pGwTWlKrfpFKRRJO381/ukXtjkuhNw8fow9NsYbxvxcUt2
-	KhEHNNLl4krobuGYzfWwXm7toVaQXwM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1757575897;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=sDd+7jUWvK2el43OuqFvYUR8GI0VAjvKZfCbClbZiK4=;
-	b=t7uDXEcPWkiNFSAiVOF6B1kGzSLk7jgNY5adqynZ550d4FdK4jcUzxuJ1UA6luDoxh1fSD
-	8L+C5Cs87QB79hDQ==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1757575897; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=sDd+7jUWvK2el43OuqFvYUR8GI0VAjvKZfCbClbZiK4=;
-	b=vvOGN/QOT12vylhTU62fihOaKT6pxrCGpY1aosHVpOGcWvA3nL8lLcGMHuIl2w/FmA9+1y
-	kh2uaaBmul32l31BXAA/c4Y2pGwTWlKrfpFKRRJO381/ukXtjkuhNw8fow9NsYbxvxcUt2
-	KhEHNNLl4krobuGYzfWwXm7toVaQXwM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1757575897;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=sDd+7jUWvK2el43OuqFvYUR8GI0VAjvKZfCbClbZiK4=;
-	b=t7uDXEcPWkiNFSAiVOF6B1kGzSLk7jgNY5adqynZ550d4FdK4jcUzxuJ1UA6luDoxh1fSD
-	8L+C5Cs87QB79hDQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id BFFA213301;
-	Thu, 11 Sep 2025 07:31:37 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id VyGfLdl6wmguXQAAD6G6ig
-	(envelope-from <tiwai@suse.de>); Thu, 11 Sep 2025 07:31:37 +0000
-Date: Thu, 11 Sep 2025 09:31:37 +0200
-Message-ID: <87ikhptpgm.wl-tiwai@suse.de>
-From: Takashi Iwai <tiwai@suse.de>
-To: Rafael J. Wysocki <rafael@kernel.org>
-Cc: linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: PM runtime auto-cleanup macros
-In-Reply-To: <878qimv24u.wl-tiwai@suse.de>
-References: <878qimv24u.wl-tiwai@suse.de>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+	s=arc-20240116; t=1757577377; c=relaxed/simple;
+	bh=dzgZxal19Vqp0wezraV67O5eYSRhr69yaYwwxgc5pl0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=HHMzyWGi/WBMtm0mb9QVsI1Au977XWNSUYJpmgC956D13o5CCqsFe/fgZ9YQPMBgsJUSpTlIgPbAiIZz4ZBAaLtwnMOgNDjHJwYLB9ihvsH564dOZiqe1wdGQ7rCJ94mu0wOpZ7K2PDF/5K3s14EobMjGCJszNelqm9XhTxa1bQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vs1-f43.google.com with SMTP id ada2fe7eead31-5300b29615cso416052137.0;
+        Thu, 11 Sep 2025 00:56:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757577374; x=1758182174;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CXxtbIpMN7aU+UMtLOY1wQvwhq9wcmE2BRs0YRXR44o=;
+        b=C3cTQGYHTfLULxazPn0iTyMe0XwlHzJZwUSm0ddS3hWZdJHkNY6Xr97n/NRdvOTnvI
+         gR4uccLm7pwb72kPniR+pc1e/TF6wu5seP+/xocdu+Ftf0U4RmqbIdeBsIb++68Sn9qh
+         3C0Uk12+l4Rt6424Iaq7PkXllPpdnjGQJUbzIqQterBDQ73jr5aJp+rNKdtvi3c5hTcF
+         DB8+7QpVwgD+XwnCJDUPH4PcNQuIGr+u6NrnWkh65b3W8LbJz1K7rs4HqhWG07s+I/Ky
+         lk3cSjMGgWb3fA5yZv/lKjICZAVmodv2hUHruSWJMHFPnsUdzeL+XMMFM7VgrpPtXSWt
+         zdyw==
+X-Forwarded-Encrypted: i=1; AJvYcCVJKLJVjuWyunD/nhpDuee2iFcesW1AccIsdMxyg6Ova2sNEWzLqBEg2BYBTSuG4iWnlH1GzADef8k=@vger.kernel.org, AJvYcCWWCBHEb4a3o+nn1xIe2FgEerRTanWri2+bR0PJ+SaGqMCT2vsrlQape3TP0z9U/RQW92uM3rCmkZ7eKiY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyfX3JvzcyhmU/F5UwHI1TzHxGJG+IeXJag0YAs/T2wlP5F7K7o
+	O2NVkGUOi2mIxCrDpgAu4588DwW4yMZjAuZc3ZfKY90ysOzwDq4k8waaDt/DKejl
+X-Gm-Gg: ASbGncv8s22dSm6zTmbsbUua6UM6FgbKb+Kwqz/UBt0QyiRGxJdNDFMV9rxGYR9wRTk
+	3RkTfnza4F7NUB0JYOQyYnRZSkLFV7pRcheSe9EipoX2xQ3SuJrksjXthSBw8hPKjfCSMgXeOr5
+	abcPFcUHq+gJ5Cs2thGdm+vWPG/l4nIVX4ojaUNM/zqhMwEH1a1FrhxIszmsp18WuyH7fqq4qQ2
+	LcXDFCB/g/qiG316Aw44mE0HglLFhv3qQSSYTZdxB1HPWHLzy0BYmK8I1C4dYW0XR8aSWM40dAR
+	N9kdd3mrILXR2olj38+Q+VENfnBr5DOeW3PvYr1f7f3Gm6h3zO9OQyE/aUXcToaX6klutqpgwnK
+	r3X4Qq+LcELNbyQHtX8RFvrYhE/KLhNKlkLFOflEuZZUFFbOWsjI5jwO8dRsjYQUUL5r3YMsIOP
+	4=
+X-Google-Smtp-Source: AGHT+IEmaBW3DOYVC19n0pTqKqiSR+C62o7t3ABJ5AdLJaE2v0Ak2+aWw06uoqXZtN+yAlW9wagjEg==
+X-Received: by 2002:a05:6102:809f:b0:4e4:5ed0:19b2 with SMTP id ada2fe7eead31-53d1c3d661dmr278035137.9.1757577373613;
+        Thu, 11 Sep 2025 00:56:13 -0700 (PDT)
+Received: from mail-vk1-f172.google.com (mail-vk1-f172.google.com. [209.85.221.172])
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-5537062ca23sm189728137.6.2025.09.11.00.56.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 11 Sep 2025 00:56:13 -0700 (PDT)
+Received: by mail-vk1-f172.google.com with SMTP id 71dfb90a1353d-5464d3b50e3so162372e0c.1;
+        Thu, 11 Sep 2025 00:56:13 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXptPkb3CHtL0WHP07ljd1Zn6M54XROg7FKmkU/noyW5WjaMVn14i+Y4+6I8F3tIkpo8EBVDNGQL5M=@vger.kernel.org, AJvYcCXscNigPe9y2DCIagjgDcX7OEswZ7FjG9mtCVKxcOuvLvBBmpmEda2J4ofchWzZGGfoJw8MlOVWRllETIQ=@vger.kernel.org
+X-Received: by 2002:a05:6102:3a0e:b0:4fa:25a2:5804 with SMTP id
+ ada2fe7eead31-53d1c3d7886mr6590613137.10.1757577373049; Thu, 11 Sep 2025
+ 00:56:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Level: 
-X-Spamd-Result: default: False [-3.30 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-0.998];
-	MIME_GOOD(-0.10)[text/plain];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ARC_NA(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_THREE(0.00)[3];
-	FROM_EQ_ENVFROM(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,suse.de:mid]
-X-Spam-Flag: NO
-X-Spam-Score: -3.30
+MIME-Version: 1.0
+References: <20250909111130.132976-1-ulf.hansson@linaro.org> <20250909111130.132976-2-ulf.hansson@linaro.org>
+In-Reply-To: <20250909111130.132976-2-ulf.hansson@linaro.org>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Thu, 11 Sep 2025 09:56:00 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUFXioe36r9mzNchHw3DGyEiVA-=ajTp333jowEsrxMNw@mail.gmail.com>
+X-Gm-Features: AS18NWAoOrpJbTee-4MheB9wiiHBjhuIG7cLb2hP-U4LE07BEhE1otcBQ_oHwLc
+Message-ID: <CAMuHMdUFXioe36r9mzNchHw3DGyEiVA-=ajTp333jowEsrxMNw@mail.gmail.com>
+Subject: Re: [PATCH 1/5] pmdomain: core: Restore behaviour for disabling
+ unused PM domains
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>, 
+	Saravana Kannan <saravanak@google.com>, linux-pm@vger.kernel.org, 
+	Stephen Boyd <sboyd@kernel.org>, "Rafael J . Wysocki" <rafael@kernel.org>, Heiko Stuebner <heiko@sntech.de>, 
+	Sebastian Reichel <sebastian.reichel@collabora.com>, Sebin Francis <sebin.francis@ti.com>, 
+	Diederik de Haas <didi.debian@cknow.org>, Bjorn Andersson <andersson@kernel.org>, 
+	Abel Vesa <abel.vesa@linaro.org>, Peng Fan <peng.fan@oss.nxp.com>, 
+	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, Johan Hovold <johan@kernel.org>, 
+	Maulik Shah <maulik.shah@oss.qualcomm.com>, Michal Simek <michal.simek@amd.com>, 
+	Konrad Dybcio <konradybcio@kernel.org>, Thierry Reding <thierry.reding@gmail.com>, 
+	Jonathan Hunter <jonathanh@nvidia.com>, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, 10 Sep 2025 16:00:17 +0200,
-Takashi Iwai wrote:
-> 
-> Hi,
-> 
-> while I worked on the code cleanups in the drivers with the recent
-> auto-cleanup macros, I noticed that pm_runtime_get*() and _put*() can
-> be also managed with the auto-cleanup gracefully, too.  Actually we
-> already defined the __free(pm_runtime_put) in commit bfa4477751e9, and
-> there is a (single) user of it in pci-sysfs.c.
-> 
-> Now I wanted to extend it to pm_runtime_put_autosuspend() as:
-> 
-> DEFINE_FREE(pm_runtime_put_autosuspend, struct device *,
->            if (_T) pm_runtime_put_autosuspend(_T))
-> 
-> Then one can use it like
-> 
-> 	ret = pm_runtime_resume_and_get(dev);
-> 	if (ret < 0)
-> 		return ret;
-> 	struct device *pmdev __free(pm_runtime_put_autosuspend) = dev;
-> 
-> that is similar as done in pci-sysfs.c.  So far, so good.
-> 
-> But, I find putting the line like above at each place a bit ugly.
-> So I'm wondering whether it'd be better to introduce some helper
-> macros, e.g.
-> 
-> #define pm_runtime_auto_clean(dev, var) \
-> 	struct device *var __free(pm_runtime_put) = (dev)
+Hi Ulf,
 
-It can be even simpler by assigning a temporary variable such as:
+On Tue, 9 Sept 2025 at 13:11, Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> Recent changes to genpd prevents those PM domains being powered-on during
+> initialization from being powered-off during the boot sequence. Based upon
+> whether CONFIG_PM_CONFIG_PM_GENERIC_DOMAINS_OF is set of not, genpd relies
+> on the sync_state mechanism or the genpd_power_off_unused() (which is a
+> late_initcall_sync), to understand when it's okay to allow these PM domains
+> to be powered-off.
+>
+> This new behaviour in genpd has lead to problems on different platforms.
+> Let's therefore restore the behavior of genpd_power_off_unused().
+> Moreover, let's introduce GENPD_FLAG_NO_STAY_ON, to allow genpd OF
+> providers to opt-out from the new behaviour.
+>
+> Link: https://lore.kernel.org/all/20250701114733.636510-1-ulf.hansson@linaro.org/
+> Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> Link: https://lore.kernel.org/all/20250902-rk3576-lockup-regression-v1-1-c4a0c9daeb00@collabora.com/
+> Reported-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+> Fixes: 0e789b491ba0 ("pmdomain: core: Leave powered-on genpds on until sync_state")
+> Fixes: 13a4b7fb6260 ("pmdomain: core: Leave powered-on genpds on until late_initcall_sync")
+> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-#define pm_runtime_auto_clean(dev) \
-	struct device *__pm_runtime_var ## __LINE__ __free(pm_runtime_put) = (dev)
+Thanks for your patch!
 
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Takashi
+> --- a/include/linux/pm_domain.h
+> +++ b/include/linux/pm_domain.h
+> @@ -115,6 +115,12 @@ struct dev_pm_domain_list {
+>   *                             genpd provider specific way, likely through a
+>   *                             parent device node. This flag makes genpd to
+>   *                             skip its internal support for this.
+> + *
+> + * GENPD_FLAG_NO_STAY_ON:      For genpd OF providers a powered-on PM domain at
+> + *                             initialization is prevented from being
+> + *                             powered-off until the ->sync_state() callback is
+> + *                             invoked. This flag informs genpd to allow a
+> + *                             power-off without waiting for ->sync_state().
 
-> 
-> #define pm_runtime_auto_clean_autosuspend(dev, var) \
-> 	struct device *var __free(pm_runtime_put_autosuspend) = (dev)
-> 
-> and the code will be like:
-> 
-> 	pm_runtime_get_sync(dev);
-> 	pm_runtime_auto_clean(dev, pmdev);
-> 
-> or
-> 	ret = pm_runtime_resume_and_get(dev);
-> 	if (ret < 0)
-> 		return ret;
-> 	pm_runtime_auto_clean_autosuspend(dev, pmdev);
-> 
-> Alternatively, we may define a class, e.g.
-> 
-> 	CLASS(pm_runtime_resume_and_get, pmdev);
-> 	if (pmdev.ret < 0)
-> 		return pmdev.ret;
-> 
-> but it'll be a bit more code to define the full class, and the get*()
-> and put*() combination would be fixed with this approach -- which is a
-> downside.
-> 
-> All above are an idea for now.  Let me know if I should go further
-> along with this, or there is already a better another approach.
-> 
-> (And the macros can be better named, sure :)
-> 
-> 
-> thanks,
-> 
-> Takashi
+This also restores power-down of pmdomains after a failed device
+probe (due to a real issue, or just -EPROBE_DEFER), possibly
+interfering with other devices that are part of the same pmdomain(s)
+but haven't been probed yet. E.g. what if your serial console is
+part of the same pmdomain?  Probably the pmdomain(s) should not
+be powered down immediately, but only later, when either sync state
+or genpd_power_off_unused() kicks in.
+
+But this is a pre-existing issue, so not a blocked for this patch.
+
+>   */
+>  #define GENPD_FLAG_PM_CLK       (1U << 0)
+>  #define GENPD_FLAG_IRQ_SAFE     (1U << 1)
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
