@@ -1,111 +1,79 @@
-Return-Path: <linux-pm+bounces-34492-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34493-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B3F80B5383B
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 17:52:40 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D320B5385B
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 17:55:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 781ADAA75A8
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 15:51:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 202081C2420E
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 15:54:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9994C34AB16;
-	Thu, 11 Sep 2025 15:51:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 934B03570A8;
+	Thu, 11 Sep 2025 15:53:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AFnDgDqu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mLjM1yaQ"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71417135A53;
-	Thu, 11 Sep 2025 15:51:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C7143570A1;
+	Thu, 11 Sep 2025 15:53:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757605867; cv=none; b=KQG5sThFLuLtmGguRR96BfokJOhaKPyBqnuGQDgF0yvOV2Hoc6MSPpf/CFWqe3P4e3F1orfNMnwIer7BOGFEj2lZJQj+ucd9idKObqPMmyO0XxL7Z81u+USYL28mA2ldszKCdvlb5odqgLkDSnAcUZfYeXVFFzlyiOKSzDdPqQo=
+	t=1757606028; cv=none; b=CS4JisOuVoFQEP7RiEu3MZBuiX80g5O4QETEvkQEgmEQpkwHPRTbAcvIPkAi0LnKv4/r80uJEXg4Xgg/zfhF9LW0PJnYU/T+8uQ1YRjkJZXzJbfYSddUHsKInYTxTtNqITyIkowr2f6gqtfLrOgfDKLEzUgutVtiL78uMb6XiNs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757605867; c=relaxed/simple;
-	bh=D+Kiy6o94m1pRNW35/OkOm3daFa7P2zcK4Au4ZPzqxM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=udqgbWqJKxOxnQCtIUVl8FxP839RdF966teGsj7Qhc14llpR++2rhEI4Y0tGCVNOYnt7Zl4sDlRHrrHLfs8a8ibfQy5RsgiygNUdwC/fAg3hqBpdsSK5+oZulE/l9e7p1Cn2VkNYeDml0pVponU1lpilthNXRGaMe6GdJtJd3fQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AFnDgDqu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A446CC4CEF0;
-	Thu, 11 Sep 2025 15:51:04 +0000 (UTC)
+	s=arc-20240116; t=1757606028; c=relaxed/simple;
+	bh=bytY0CyvfxCV3Ea2rCA5rI2rWAOMQeuj+FvthNFwSD8=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=c1IArTdMfeoPswnrfYanhvnrl9jx7sNnDjIrHUNzJlmfwGLaTHL38HOwrsXs6ZIiZKTx9COmSfiJxHwXIxhHQ1kzLg4/Fncs4h4uf+k5IlGFL2B48u1jUadIVQo4mBDP2dTnbih4p2ypDzpkSw/fkF6hkJSWW+ZzH7ByyzFd5lM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mLjM1yaQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 461FFC4CEF0;
+	Thu, 11 Sep 2025 15:53:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757605867;
-	bh=D+Kiy6o94m1pRNW35/OkOm3daFa7P2zcK4Au4ZPzqxM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=AFnDgDquTQ4yMZNrF/l3efaw61XvagSaqRTcqUNm2kYVUlgPqlHzMggjyZWecy8mr
-	 yqf7yie6CvD2Un7SKUu5Axyk47npfDJfDfPp7/LrAOhnshXgGnes96Vzn9ALEbAQEF
-	 KTt4O7sXRZWjYjik02lYyltg9Qiasu/Z5h1Bd5gJxhqRZ6JoNu0WkAzQGQqzsWGXAR
-	 lOcwjAouDJM7lGgaMcT9dW/XFFnOosZIRye+xBqYwjTAVGer1Ypc5otdezY4T96QRs
-	 eQbm9/yNKZqkN+KYSI/1vFFm2wR3YIIjx188IXYk2UyRkQtE/z3rTgDIt9gumGvNjJ
-	 cqj5lkn5Rn4Hg==
-Date: Thu, 11 Sep 2025 16:51:01 +0100
-From: Lee Jones <lee@kernel.org>
-To: Chris Morgan <macroalpha82@gmail.com>
-Cc: linux-rockchip@lists.infradead.org, linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org, broonie@kernel.org, lgirdwood@gmail.com,
-	sre@kernel.org, heiko@sntech.de, conor+dt@kernel.org,
-	krzk+dt@kernel.org, robh@kernel.org,
-	Chris Morgan <macromorgan@hotmail.com>
-Subject: [GIT PULL] Immutable branch between MFD, Power and Regulator due for
- the v6.18 merge window
-Message-ID: <20250911155101.GA1637058@google.com>
-References: <20250904160530.66178-1-macroalpha82@gmail.com>
+	s=k20201202; t=1757606028;
+	bh=bytY0CyvfxCV3Ea2rCA5rI2rWAOMQeuj+FvthNFwSD8=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=mLjM1yaQDHBwQATmP6lW6WHFHU9/eKxXXBiJgQNWMWwtFg7Dcielp55AU814Ik+xL
+	 LEvSOgUawT1MztbJBjwCYDai+FhsNbTm4GtAuGxXgQ8p/vP1aCZOC98R+XZrkI9A/2
+	 tVc8iWhgKKohAyyNfHXee/V87sD3amqNmmjVWyRS7LXCQyHkXhPeYosx5gzeiV/qIa
+	 pd7Y3qtPwAvVVfTFAn/Cx/vpbg476AcInKzeW1hDtEg72Mee8J7WfT0lUcxAdmqqUq
+	 NshgwC1v7clLID+TOHVXBipw9toCry4PdlXsyEwkxjPWfp0TuFYblDrI3ymxPhu5L3
+	 TS+eKkKNqnCRA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33F94383BF69;
+	Thu, 11 Sep 2025 15:53:52 +0000 (UTC)
+Subject: Re: [GIT PULL] Power management fixes for v6.17-rc4
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <CAJZ5v0j-OGp-djCo7m8Y92v1FOPTYbPp4tw_d1N4jyS_4gfgFA@mail.gmail.com>
+References: <CAJZ5v0j-OGp-djCo7m8Y92v1FOPTYbPp4tw_d1N4jyS_4gfgFA@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-pm.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAJZ5v0j-OGp-djCo7m8Y92v1FOPTYbPp4tw_d1N4jyS_4gfgFA@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-6.17-rc6
+X-PR-Tracked-Commit-Id: bddce1c7a5ab3ec2dd0fc404f4155c0c17e847b2
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: a1228f048a314b9280784a2cbd757cac74705589
+Message-Id: <175760603090.2231751.15229977954314649541.pr-tracker-bot@kernel.org>
+Date: Thu, 11 Sep 2025 15:53:50 +0000
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Linux PM <linux-pm@vger.kernel.org>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Mario Limonciello <mario.limonciello@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250904160530.66178-1-macroalpha82@gmail.com>
 
-Enjoy!
+The pull request you sent on Thu, 11 Sep 2025 14:54:48 +0200:
 
-The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
+> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-6.17-rc6
 
-  Linux 6.17-rc1 (2025-08-10 19:41:16 +0300)
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/a1228f048a314b9280784a2cbd757cac74705589
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git tags/ib-mfd-power-regulator-v6.18
-
-for you to fetch changes up to 981dd162b63578aee34b5c68795e246734b76d70:
-
-  regulator: bq257xx: Add bq257xx boost regulator driver (2025-09-11 15:55:41 +0100)
-
-----------------------------------------------------------------
-Immutable branch between MFD, Power and Regulator due for the v6.18 merge window
-
-----------------------------------------------------------------
-Chris Morgan (4):
-      dt-bindings: mfd: ti,bq25703a: Add TI BQ25703A Charger
-      mfd: bq257xx: Add support for BQ25703A core driver
-      power: supply: bq257xx: Add support for BQ257XX charger
-      regulator: bq257xx: Add bq257xx boost regulator driver
-
- .../devicetree/bindings/mfd/ti,bq25703a.yaml       | 117 ++++
- drivers/mfd/Kconfig                                |  11 +
- drivers/mfd/Makefile                               |   1 +
- drivers/mfd/bq257xx.c                              |  99 +++
- drivers/power/supply/Kconfig                       |   7 +
- drivers/power/supply/Makefile                      |   1 +
- drivers/power/supply/bq257xx_charger.c             | 755 +++++++++++++++++++++
- drivers/regulator/Kconfig                          |   8 +
- drivers/regulator/Makefile                         |   1 +
- drivers/regulator/bq257xx-regulator.c              | 186 +++++
- include/linux/mfd/bq257xx.h                        | 104 +++
- 11 files changed, 1290 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/mfd/ti,bq25703a.yaml
- create mode 100644 drivers/mfd/bq257xx.c
- create mode 100644 drivers/power/supply/bq257xx_charger.c
- create mode 100644 drivers/regulator/bq257xx-regulator.c
- create mode 100644 include/linux/mfd/bq257xx.h
+Thank you!
 
 -- 
-Lee Jones [李琼斯]
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
