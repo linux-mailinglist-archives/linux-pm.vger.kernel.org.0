@@ -1,139 +1,111 @@
-Return-Path: <linux-pm+bounces-34491-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34492-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48030B53791
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 17:23:14 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B3F80B5383B
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 17:52:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A41B258675D
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 15:21:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 781ADAA75A8
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 15:51:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5400343D95;
-	Thu, 11 Sep 2025 15:20:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9994C34AB16;
+	Thu, 11 Sep 2025 15:51:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Pukxu3zH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AFnDgDqu"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 260023D76;
-	Thu, 11 Sep 2025 15:20:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71417135A53;
+	Thu, 11 Sep 2025 15:51:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757604041; cv=none; b=eGZT0RlOfCJRMgljHiDsQza9bn96kijY4tx8iFLbnaXrNR4316f2U2pAMDcQyC46A0ALDdBodfozJiaF57+j1Z4j1B2qk7pvNqzVjSwEFGyGMIrejitrdEQreVjm76ihnMTnmKciR2RG0aZ1ta/o9B0EqL0vU5kUDDS9YGvCB1Q=
+	t=1757605867; cv=none; b=KQG5sThFLuLtmGguRR96BfokJOhaKPyBqnuGQDgF0yvOV2Hoc6MSPpf/CFWqe3P4e3F1orfNMnwIer7BOGFEj2lZJQj+ucd9idKObqPMmyO0XxL7Z81u+USYL28mA2ldszKCdvlb5odqgLkDSnAcUZfYeXVFFzlyiOKSzDdPqQo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757604041; c=relaxed/simple;
-	bh=HiqDHL2cMqFIKeoBOF9jYSt1hGTmD19GND/QjlAlYok=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TxC3qFyYz8WQgmPcadH48o16sQsz2tLNh9rhRfX8jOdlm/jYg8zoqWD2vpIL58iQ85S97eCvHzSds5c2UGlaGAwtj0iNWTg2a9wXLE5bVOYOtn7pp+HFZAZqD2vUMnBumH3F1NOTiUPrceaHKd/4AV4kwBHwdaEzD61Ytj6McsQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Pukxu3zH; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757604040; x=1789140040;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=HiqDHL2cMqFIKeoBOF9jYSt1hGTmD19GND/QjlAlYok=;
-  b=Pukxu3zHWjsQQlcrJgoIv3YQHYXeE/Kbn3Mo/opplx1GovTquTM/V4X5
-   bKAtq8bE4x2HRgdeGwHK58FfQDfaBrXAKti2q39NADCvONyIGNnrcHjCQ
-   CYYdYK3C9kStl+5Tc9fYxiFV0ynX0o9K3EKUrkJnUPzTytQyeiTDrOl/3
-   AFktmmGiWWZgJDLi5w7OWomwC53sI/bDk2utD8EYHdYj/XYI/7mvGMJIw
-   mpSvIFbbUAR19nTLqqep9DpD++mzuvvZYRo573gempGS7RjotYQ+HWvJD
-   znRGVpL81yjv3hQzjtmbUibppJgmNt0MuZJ0SBSt42SUog4rgwip+tRL0
-   Q==;
-X-CSE-ConnectionGUID: IsheSp0mRKSU0BPX2f5SeA==
-X-CSE-MsgGUID: 1KW72Z+DT4yjcSpdc1a2SQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11549"; a="77396684"
-X-IronPort-AV: E=Sophos;i="6.18,257,1751266800"; 
-   d="scan'208";a="77396684"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2025 08:20:39 -0700
-X-CSE-ConnectionGUID: rhUrhgsvRLa8qnQw3ImDGw==
-X-CSE-MsgGUID: osw0e5ryTSSfmkIYfw+ORQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,257,1751266800"; 
-   d="scan'208";a="178031712"
-Received: from gabaabhi-mobl2.amr.corp.intel.com (HELO [10.125.111.4]) ([10.125.111.4])
-  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2025 08:20:39 -0700
-Message-ID: <eacc2a0a-2215-4582-bf08-9c199cf23018@intel.com>
-Date: Thu, 11 Sep 2025 08:20:38 -0700
+	s=arc-20240116; t=1757605867; c=relaxed/simple;
+	bh=D+Kiy6o94m1pRNW35/OkOm3daFa7P2zcK4Au4ZPzqxM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=udqgbWqJKxOxnQCtIUVl8FxP839RdF966teGsj7Qhc14llpR++2rhEI4Y0tGCVNOYnt7Zl4sDlRHrrHLfs8a8ibfQy5RsgiygNUdwC/fAg3hqBpdsSK5+oZulE/l9e7p1Cn2VkNYeDml0pVponU1lpilthNXRGaMe6GdJtJd3fQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AFnDgDqu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A446CC4CEF0;
+	Thu, 11 Sep 2025 15:51:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757605867;
+	bh=D+Kiy6o94m1pRNW35/OkOm3daFa7P2zcK4Au4ZPzqxM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=AFnDgDquTQ4yMZNrF/l3efaw61XvagSaqRTcqUNm2kYVUlgPqlHzMggjyZWecy8mr
+	 yqf7yie6CvD2Un7SKUu5Axyk47npfDJfDfPp7/LrAOhnshXgGnes96Vzn9ALEbAQEF
+	 KTt4O7sXRZWjYjik02lYyltg9Qiasu/Z5h1Bd5gJxhqRZ6JoNu0WkAzQGQqzsWGXAR
+	 lOcwjAouDJM7lGgaMcT9dW/XFFnOosZIRye+xBqYwjTAVGer1Ypc5otdezY4T96QRs
+	 eQbm9/yNKZqkN+KYSI/1vFFm2wR3YIIjx188IXYk2UyRkQtE/z3rTgDIt9gumGvNjJ
+	 cqj5lkn5Rn4Hg==
+Date: Thu, 11 Sep 2025 16:51:01 +0100
+From: Lee Jones <lee@kernel.org>
+To: Chris Morgan <macroalpha82@gmail.com>
+Cc: linux-rockchip@lists.infradead.org, linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org, broonie@kernel.org, lgirdwood@gmail.com,
+	sre@kernel.org, heiko@sntech.de, conor+dt@kernel.org,
+	krzk+dt@kernel.org, robh@kernel.org,
+	Chris Morgan <macromorgan@hotmail.com>
+Subject: [GIT PULL] Immutable branch between MFD, Power and Regulator due for
+ the v6.18 merge window
+Message-ID: <20250911155101.GA1637058@google.com>
+References: <20250904160530.66178-1-macroalpha82@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v1 0/5] x86/boot, KVM: Move VMXON/VMXOFF handling from
- KVM to CPU lifecycle
-To: Sean Christopherson <seanjc@google.com>, "Xin Li (Intel)" <xin@zytor.com>
-Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
- linux-pm@vger.kernel.org, pbonzini@redhat.com, tglx@linutronix.de,
- mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
- hpa@zytor.com, rafael@kernel.org, pavel@kernel.org, brgerst@gmail.com,
- david.kaplan@amd.com, peterz@infradead.org, andrew.cooper3@citrix.com,
- kprateek.nayak@amd.com, arjan@linux.intel.com, chao.gao@intel.com,
- rick.p.edgecombe@intel.com, dan.j.williams@intel.com
-References: <20250909182828.1542362-1-xin@zytor.com>
- <aMLakCwFW1YEWFG4@google.com>
-From: Dave Hansen <dave.hansen@intel.com>
-Content-Language: en-US
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
-In-Reply-To: <aMLakCwFW1YEWFG4@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250904160530.66178-1-macroalpha82@gmail.com>
 
-On 9/11/25 07:20, Sean Christopherson wrote:
-> VPID and ASID allocation need to be managed system-wide, otherwise
-> running KVM alongside another hypervisor-like entity will result in
-> data corruption due to shared TLB state.
-What other hypervisor-like entities are out there?
+Enjoy!
 
-The TDX module needs (or will need) VMXON for some things that aren't
-strictly for virtualization. But what other entities are out there?
+The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
+
+  Linux 6.17-rc1 (2025-08-10 19:41:16 +0300)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git tags/ib-mfd-power-regulator-v6.18
+
+for you to fetch changes up to 981dd162b63578aee34b5c68795e246734b76d70:
+
+  regulator: bq257xx: Add bq257xx boost regulator driver (2025-09-11 15:55:41 +0100)
+
+----------------------------------------------------------------
+Immutable branch between MFD, Power and Regulator due for the v6.18 merge window
+
+----------------------------------------------------------------
+Chris Morgan (4):
+      dt-bindings: mfd: ti,bq25703a: Add TI BQ25703A Charger
+      mfd: bq257xx: Add support for BQ25703A core driver
+      power: supply: bq257xx: Add support for BQ257XX charger
+      regulator: bq257xx: Add bq257xx boost regulator driver
+
+ .../devicetree/bindings/mfd/ti,bq25703a.yaml       | 117 ++++
+ drivers/mfd/Kconfig                                |  11 +
+ drivers/mfd/Makefile                               |   1 +
+ drivers/mfd/bq257xx.c                              |  99 +++
+ drivers/power/supply/Kconfig                       |   7 +
+ drivers/power/supply/Makefile                      |   1 +
+ drivers/power/supply/bq257xx_charger.c             | 755 +++++++++++++++++++++
+ drivers/regulator/Kconfig                          |   8 +
+ drivers/regulator/Makefile                         |   1 +
+ drivers/regulator/bq257xx-regulator.c              | 186 +++++
+ include/linux/mfd/bq257xx.h                        | 104 +++
+ 11 files changed, 1290 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mfd/ti,bq25703a.yaml
+ create mode 100644 drivers/mfd/bq257xx.c
+ create mode 100644 drivers/power/supply/bq257xx_charger.c
+ create mode 100644 drivers/regulator/bq257xx-regulator.c
+ create mode 100644 include/linux/mfd/bq257xx.h
+
+-- 
+Lee Jones [李琼斯]
 
