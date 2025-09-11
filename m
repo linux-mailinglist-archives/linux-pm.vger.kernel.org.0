@@ -1,316 +1,176 @@
-Return-Path: <linux-pm+bounces-34444-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34445-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62AC9B52B4A
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 10:14:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 694CAB52B94
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 10:26:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 28D2C7B2CFC
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 08:12:53 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0BD4D7BBEEB
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 08:24:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D10AD2D94A9;
-	Thu, 11 Sep 2025 08:14:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E832C2DFF18;
+	Thu, 11 Sep 2025 08:26:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="mRxMV0Hs"
+	dkim=pass (2048-bit key) header.d=cknow.org header.i=@cknow.org header.b="UvYXYB38"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from out-182.mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 137C52D8DCA;
-	Thu, 11 Sep 2025 08:14:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08AA52DF158
+	for <linux-pm@vger.kernel.org>; Thu, 11 Sep 2025 08:26:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757578465; cv=none; b=J9elyUi9tL8fztY/FvOsAnnaDmFpByNGjHCaKovgESyF+AnPDdjqQGOm27hpR9pY7+wUoefr3FO4CAn4PxfNpYuYfTSQ1kpO+0M4nr1yC2DA4m226hiD291tp1bwGl7QQQLIL7uucP9bMNIiXjT0C/MxQZ1rnFoFUFXzRXfRvdE=
+	t=1757579182; cv=none; b=PaC8FMloFZgsd8VJ3YunZdoMCsgPlcE76q7/3FVw5jOmnH1ggsgWKt1Zgvujpx5ZugVxK9JVOpUPfMcgH4d2nitpKWA4IiXyqnIBIPyrLptOjjJY0rfHYT8KPJGmTeEtXEA4MCOZYMzQnodw+z18UsQ8AQl+oce/LXlE22nxZKQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757578465; c=relaxed/simple;
-	bh=VbEhs9ZnAQDRP+xllvtAJk7Ut1ZPm+69gJnJ5GoCIi0=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=CTg9XmN6qFde7uEzHBi4j/9W30HduemxRA0dUlOGRZBQL9299AmlucWX14nfDiKIK2fM9890a50M7TVKclq3rlyTI76fa3zKJwCc+Yqajeis7XDfbxFkxN2KsHY8yjitXTurXYCmKgsZtSYkQLDtHnTO0tbxgB+k/G8FquORHtk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=mRxMV0Hs; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58B82xSZ022621;
-	Thu, 11 Sep 2025 08:14:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=XljEHL
-	CHgr1ogBrdIljQtHScO6BIMbWIU0l+4/pmoD8=; b=mRxMV0HsgjsF9oolXibIsS
-	u1KjNrP8aV4FrLJmBatZIwS+aH0qUrbXvbr01AwSmZyp6/306qUnNurZy6AWW8oS
-	mEyLY1XAz8II1wCKjmcAxaLmx0L+33tOe3dqHYY1M/eVsoKMnI0KHGnv1Gin7bLU
-	y2gf/iQkv7/BWbtD8gYq4hMH8DOdq15vFE7jLDzQFmmTflQEDvXeSEkwDI0hVtE5
-	zZWrfBRzD3Z+Bq6C6TCY+Fs500jI9n+4b0B1wHt2Y9Z/OwYsqJ9fLVvB0Ba9zzg0
-	ulGZnyaOp4nKoe+nZh3trAOikUMMnLU62LrnjJxwYb/Vba9LIlyNp5RgYchQyXPA
-	==
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 490cmx3bs7-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 11 Sep 2025 08:14:17 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 58B4lmWe011457;
-	Thu, 11 Sep 2025 08:14:16 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 490y9un2dg-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 11 Sep 2025 08:14:15 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 58B8EE0j17826128
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 11 Sep 2025 08:14:14 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 4896220043;
-	Thu, 11 Sep 2025 08:14:14 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id AF37F20040;
-	Thu, 11 Sep 2025 08:14:12 +0000 (GMT)
-Received: from aboo.ibm.com (unknown [9.109.247.181])
-	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 11 Sep 2025 08:14:12 +0000 (GMT)
-Message-ID: <e4fe86ee4a00e100f5cba550c69d28520ad52d42.camel@linux.ibm.com>
-Subject: Re: [PATCH v3 1/1] cpuidle: menu: Add residency threshold for
- non-polling state selection
-From: Aboorva Devarajan <aboorvad@linux.ibm.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: christian.loehle@arm.com, daniel.lezcano@linaro.org, gautam@linux.ibm.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Date: Thu, 11 Sep 2025 13:44:11 +0530
-In-Reply-To: <CAJZ5v0hLYkeStuZqUsjSphXmBovAxCvvzx4JJJw=3AmDYjdCtQ@mail.gmail.com>
-References: <20250908075443.208570-1-aboorvad@linux.ibm.com>
-	 <CAJZ5v0hLYkeStuZqUsjSphXmBovAxCvvzx4JJJw=3AmDYjdCtQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2 (3.56.2-1.fc42) 
+	s=arc-20240116; t=1757579182; c=relaxed/simple;
+	bh=sGlO0xzqKsKudQJzHT8W9TExdYgCpxAuexAQoa1dev4=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=lm1rbhyxfRkMcBImgD26rwJTB28kN6sDGrKiJ6f7+pVv3JwMzC3Usv1VFcGRGVpJD3J2bwhlmIJSydwsbCPeYj4+l7Ni2jcH5hH9MRbm1TCeYpwD1fjhDdjbJzPsj+PFMj1aC/IusD5Djx+9i51o1nyOFy3FWoYnxLyY5bDpysE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cknow.org; spf=pass smtp.mailfrom=cknow.org; dkim=pass (2048-bit key) header.d=cknow.org header.i=@cknow.org header.b=UvYXYB38; arc=none smtp.client-ip=95.215.58.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cknow.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cknow.org
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: ZopotVTvwN27Yy0DKT1EFqie0LmuVADm
-X-Proofpoint-ORIG-GUID: ZopotVTvwN27Yy0DKT1EFqie0LmuVADm
-X-Authority-Analysis: v=2.4 cv=J52q7BnS c=1 sm=1 tr=0 ts=68c284d9 cx=c_pps
- a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
- a=IkcTkHD0fZMA:10 a=yJojWOMRYYMA:10 a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8
- a=M63XDdRkY7QlEbYjXLMA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTA2MDAyNSBTYWx0ZWRfX+CbYuzKEJ8H8
- +tT+pynkUu/EWUPO4BvrC4luWPiuxywTISlAQEbEZCIwFFp8RNg7rMkyLfQMvkamuchlFUk7Hzx
- 3gybFw3eYKLA9iNU5mr5dSO9g1xRtfA5S7vIkcyzyQdHeQW5wIGt5OGJI7zFasDhPcY59jnYTbU
- RIXk4PUiSlJAghDx2Pc3S7Ll/Rda4NokRCVLSfYSRqMRsbFEXn1XMNmDgUEy6wQIqUguGGqO/Ri
- yreuwmvuupTgRL8fmkT3MrwapE33bYVl0pyJ+bJ6DR7TUhbVNMRRSfEo3p7L1aczmhZnHV+MTvm
- 7LsVli6YCYJuLQyqEgahV9wocYxCOHu4pKtqzTGrQaCJBRSwLpGmppTBnQzMiDMs1uaGAtPeA7+
- t4m1ty5P
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-09-10_04,2025-09-10_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 clxscore=1015 suspectscore=0 spamscore=0 phishscore=0
- bulkscore=0 adultscore=0 malwarescore=0 priorityscore=1501
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2509060025
+Mime-Version: 1.0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cknow.org; s=key1;
+	t=1757579176;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=E0lBJocEKP3lSk1wr86/mwJVJDEiyUS7mBzgQ49GMVs=;
+	b=UvYXYB38THPhssZVA2dz5yQ7+FZptseAx24L6CpmC6aXfLG+i0gREKXUGr1xLnswZ8BFK3
+	9qg9d9RV//SzyO141pSwtZgScqbmc7WjBjxO7XnI5SeIM3yVgvcdIFtj/tf7L9Vpp25go/
+	ZS/NM/lk6h/aF250h9ERX+LRkFGSU05LOoJRp6BLWKhLszqWGMqSvVT+h7zTfEAkrAGTwa
+	6l0BnycrBvwtpak1skf2bPZijXAMlDdPUp8ZK+/LNzDdHbnxGcvjHsAY+D1EN8sPrccYE2
+	G6H8mURCIog9lY4PcjcXYBenx9rg91c0A626gPvm98UM+QISf/KvEorWpUma2A==
+Content-Type: multipart/signed;
+ boundary=c4d98de91abd6d1006b609cb4621827d77940c66045ae6e96f5d64cd32ef;
+ micalg=pgp-sha512; protocol="application/pgp-signature"
+Date: Thu, 11 Sep 2025 10:26:03 +0200
+Message-Id: <DCPTTD0NKOE6.1HKQ87ESFOT6D@cknow.org>
+Cc: "Ulf Hansson" <ulf.hansson@linaro.org>, "Heiko Stuebner"
+ <heiko@sntech.de>, "Rafael J . Wysocki" <rafael@kernel.org>, "Tomi
+ Valkeinen" <tomi.valkeinen@ideasonboard.com>, "Thierry Reding"
+ <thierry.reding@gmail.com>, "Saravana Kannan" <saravanak@google.com>,
+ "Sebastian Reichel" <sebastian.reichel@collabora.com>, "Jonathan Hunter"
+ <jonathanh@nvidia.com>, <linux-rockchip@lists.infradead.org>, "Konrad
+ Dybcio" <konradybcio@kernel.org>, "Peng Fan" <peng.fan@oss.nxp.com>,
+ <linux-pm@vger.kernel.org>, "Johan Hovold" <johan@kernel.org>, "Sebin
+ Francis" <sebin.francis@ti.com>, "Michal Simek" <michal.simek@amd.com>,
+ <linux-arm-kernel@lists.infradead.org>, "Maulik Shah"
+ <maulik.shah@oss.qualcomm.com>, "Stephen Boyd" <sboyd@kernel.org>, "Bjorn
+ Andersson" <andersson@kernel.org>, "Christian Hewitt"
+ <christianshewitt@gmail.com>, <linux-kernel@vger.kernel.org>, "Abel Vesa"
+ <abel.vesa@linaro.org>, "Nicolas Frattaroli"
+ <nicolas.frattaroli@collabora.com>
+Subject: Re: [PATCH 0/5] pmdomain: Restore behaviour for disabling unused PM
+ domains
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: "Diederik de Haas" <didi.debian@cknow.org>
+To: "Geert Uytterhoeven" <geert@linux-m68k.org>
+References: <20250909111130.132976-1-ulf.hansson@linaro.org>
+ <DCPDDIZ3S1CM.3DJYY5U4T6V4U@cknow.org>
+ <CAMuHMdVxjOLZsas4+nmAkZjbJsQjxdkZvZ8tTY9pq2zz3gvFNQ@mail.gmail.com>
+In-Reply-To: <CAMuHMdVxjOLZsas4+nmAkZjbJsQjxdkZvZ8tTY9pq2zz3gvFNQ@mail.gmail.com>
+X-Migadu-Flow: FLOW_OUT
 
-On Wed, 2025-09-10 at 12:47 +0200, Rafael J. Wysocki wrote:
+--c4d98de91abd6d1006b609cb4621827d77940c66045ae6e96f5d64cd32ef
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
 
-Hi Rafael,
+Hi Geert,
 
-> Please change the subject of the patch to something like "cpuidle:
-> menu: Use residency threshold in polling state override decisions"
-> which more precisely reflects the patch purpose IMV.
-
-Sure, I will change this.
-
->=20
-> On Mon, Sep 8, 2025 at 9:54=E2=80=AFAM Aboorva Devarajan <aboorvad@linux.=
-ibm.com> wrote:
-> >=20
-> > On virtualized PowerPC (pseries) systems, where only one polling state
-> > (Snooze) and one deep state (CEDE) are available, selecting CEDE when
-> > the predicted idle duration exceeds the target residency of the CEDE
->=20
-> If the target residency is exceeded by the predicted idle duration, it
-> should be fine to select the given state.
->=20
-> Did you really mean "less than" here?=C2=A0 That would be consistent with
-> the code change.
->=20
-
-yes, I meant "less than" here, will change it.
-
-> > state can hurt performance. In such cases, the entry/exit overhead of
-> > CEDE outweighs the power savings, leading to unnecessary state transiti=
-ons
-> > and higher latency.
-> >=20
-> > Menu governor currently contains a special-case rule that prioritizes
-> > the first non-polling state over polling, even when its target residenc=
-y
-> > is much longer than the predicted idle duration. On PowerPC/pseries,
-> > where the gap between the polling state (Snooze) and the first non-poll=
+On Thu Sep 11, 2025 at 9:18 AM CEST, Geert Uytterhoeven wrote:
+> On Wed, 10 Sept 2025 at 21:33, Diederik de Haas <didi.debian@cknow.org> w=
+rote:
+>> On Tue Sep 9, 2025 at 1:11 PM CEST, Ulf Hansson wrote:
+>> > Recent changes to genpd prevents those PM domains being powered-on dur=
 ing
-> > state (CEDE) is large, this behavior causes performance regressions.
-> >=20
-> > This patch refines the special case by adding an extra requirement:
-> > the first non-polling state may only be chosen if its
-> > target_residency_ns is below the defined RESIDENCY_THRESHOLD_NS. If thi=
-s
-> > condition is not met, the non-polling state is not selected, and pollin=
-g
-> > state is retained instead.
-> >=20
-> > This change is limited to the single special-case condition for the fir=
-st
-> > non-polling state. The general state selection logic in the menu govern=
-or
-> > remains unchanged.
-> >=20
-> > Performance improvement observed with pgbench on PowerPC (pseries)
-> > system:
-> > +---------------------------+------------+------------+------------+
-> > > Metric=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | Baseline=C2=A0=C2=A0 =
-| Patched=C2=A0=C2=A0=C2=A0 | Change (%) |
-> > +---------------------------+------------+------------+------------+
-> > > Transactions/sec (TPS)=C2=A0=C2=A0=C2=A0 | 495,210=C2=A0=C2=A0=C2=A0 =
-| 536,982=C2=A0=C2=A0=C2=A0 | +8.45%=C2=A0=C2=A0=C2=A0=C2=A0 |
-> > > Avg latency (ms)=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 | 0.163=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 0.150=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 | -7.98%=C2=A0=C2=A0=C2=A0=C2=A0 |
-> > +---------------------------+------------+------------+------------+
-> > CPUIdle state usage:
-> > +--------------+--------------+-------------+
-> > > Metric=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | Baseline=C2=A0=C2=A0=C2=
-=A0=C2=A0 | Patched=C2=A0=C2=A0=C2=A0=C2=A0 |
-> > +--------------+--------------+-------------+
-> > > Total usage=C2=A0 | 12,735,820=C2=A0=C2=A0 | 13,918,442=C2=A0 |
-> > > Above usage=C2=A0 | 11,401,520=C2=A0=C2=A0 | 1,598,210=C2=A0=C2=A0 |
-> > > Below usage=C2=A0 | 20,145=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 702,=
-395=C2=A0=C2=A0=C2=A0=C2=A0 |
-> > +--------------+--------------+-------------+
-> >=20
-> > Above/Total and Below/Total usage percentages which indicates
-> > mispredictions:
-> > +------------------------+-----------+---------+
-> > > Metric=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | Baseline=C2=A0 | Patched |
-> > +------------------------+-----------+---------+
-> > > Above % (Above/Total)=C2=A0 | 89.56%=C2=A0=C2=A0=C2=A0 | 11.49%=C2=A0=
- |
-> > > Below % (Below/Total)=C2=A0 | 0.16%=C2=A0=C2=A0=C2=A0=C2=A0 | 5.05%=
-=C2=A0=C2=A0 |
-> > > Total cpuidle miss (%) | 89.72%=C2=A0=C2=A0=C2=A0 | 16.54%=C2=A0 |
-> > +------------------------+-----------+---------+
-> >=20
-> > The results show that restricting non-polling state selection to
-> > cases where its residency is within the threshold reduces misprediction=
-s,
-> > lowers unnecessary state transitions, and improves overall throughput.
-> >=20
-> > Signed-off-by: Aboorva Devarajan <aboorvad@linux.ibm.com>
-> > ---
-> >=20
-> > v2: https://lore.kernel.org/all/20250317060357.29451-1-aboorvad@linux.i=
-bm.com/
-> >=20
-> > Changes in v2 -> v3:
-> > =C2=A0 - Modifed the patch following Rafael's feedback, incorporated a =
-residency threshold check
-> > =C2=A0=C2=A0=C2=A0 (s->target_residency_ns < RESIDENCY_THRESHOLD_NS) as=
- suggested.
-> > =C2=A0 - Updated commit message accordingly.
-> > ---
-> > =C2=A0drivers/cpuidle/governors/menu.c | 8 +++++---
-> > =C2=A01 file changed, 5 insertions(+), 3 deletions(-)
-> >=20
-> > diff --git a/drivers/cpuidle/governors/menu.c b/drivers/cpuidle/governo=
-rs/menu.c
-> > index b2e3d0b0a116..d25b04539109 100644
-> > --- a/drivers/cpuidle/governors/menu.c
-> > +++ b/drivers/cpuidle/governors/menu.c
-> > @@ -316,11 +316,13 @@ static int menu_select(struct cpuidle_driver *drv=
-, struct cpuidle_device *dev,
-> >=20
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 if (s->target_residency_ns > predicted_ns) {
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /*
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * Use=
- a physical idle state, not busy polling, unless
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * a t=
-imer is going to trigger soon enough.
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * Use=
- a physical idle state instead of busy polling
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * if =
-the next timer doesn't expire soon and its
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * tar=
-get residency is below the residency threshold.
->=20
-> I would rephrase this somewhat, like this:
->=20
-> * Use a physical idle state instead of busy polling so long as
-> * its target residency is below the residency threshold and the
-> * next timer doesn't expire soon.
+>> > initialization from being powered-off during the boot sequence. Based =
+upon
+>> > whether CONFIG_PM_CONFIG_PM_GENERIC_DOMAINS_OF is set of not, genpd re=
+lies
+>> > on the sync_state mechanism or the genpd_power_off_unused() (which is =
+a
+>> > late_initcall_sync), to understand when it's okay to allow these PM do=
+mains
+>> > to be powered-off.
+>> >
+>> > This new behaviour in genpd has lead to problems on different platform=
+s [1].
+>> >
+>> > In this series, I am therefore suggesting to restore the behavior of
+>> > genpd_power_off_unused() along with introducing a new genpd config fla=
+g,
+>> > GENPD_FLAG_NO_STAY_ON, to allow genpd OF providers to opt-out from the=
+ new
+>> > behaviour.
+>>
+>> Is it expected that I'm still seeing this on a Rock64 (rk3328), just
+>> like before [1]?
+>>
+>>   [   17.124202] rockchip-pm-domain ff100000.syscon:power-controller: sy=
+nc_state() pending due to ff300000.gpu
+>>   [   17.129799] rockchip-pm-domain ff100000.syscon:power-controller: sy=
+nc_state() pending due to ff350000.video-codec
+>>   [   17.140003] rockchip-pm-domain ff100000.syscon:power-controller: sy=
+nc_state() pending due to ff360000.video-codec
+>
+> Yes, as the sync state is still blocked on them.
+> Disabling unused PM Domains is done independently of sync state.
+>
+>> This is with a 6.17-rc5 kernel with this patch set applied.
+>> And it also has this patch from Christian Hewitt added, now in v3:
+>> https://lore.kernel.org/linux-rockchip/20250906120810.1833016-1-christia=
+nshewitt@gmail.com/
+>>
+>> When I boot into a 6.17-rc5 kernel without any patches applied, I do get
+>> the 2 for ff350000.video-codec and ff360000.video-codec, but not the
+>> ff300000.gpu one.
+>>
+>> Interestingly:
+>> ff300000.gpu -> power-domains =3D <&power RK3328_PD_GPU>;
+>> ff350000.video-codec -> power-domains =3D <&power RK3328_PD_VPU>;
+>> ff360000.video-codec -> power-domains =3D <&power RK3328_PD_VIDEO>;
+>>
+>> I would be surprised if that was a coincidence.
+>
+> Fw_devlinks ignores the index cell (RK3328_PD_*), hence all links are
+> created pointing to the pmdomain controller (in case it has a platform
+> driver) or the first pmdomain (in case it has not). thus blocking the
+> sync state call and power-down for _all_ pmdomains managed by the
+> controller.
 
-Sure, will change this.
+I don't think I fully understand this (not your problem due to lack of
+knowledge on my part), but you mentioning 'fw_devlink' rang a bell.
 
->=20
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
- */
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if ((=
-drv->states[idx].flags & CPUIDLE_FLAG_POLLING) &&
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 s->target_residency_ns <=3D data->next_timer_ns) {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 s->target_residency_ns <=3D data->next_timer_ns &&
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 s->target_residency_ns < RESIDENCY_THRESHOLD_NS) {
->=20
-> And maybe adjust the checks ordering here.
->=20
-> The point is that on the example platform in question
-> s->target_residency_ns is always above RESIDENCY_THRESHOLD_NS, so it
-> is never really necessary to check data->next_timer_ns in which case
-> the HW should be able to optimize this.
+Some time ago Nicolas Frattaroli and I worked on an image for PINE64's
+*Quartz* devices and that added ``fw_devlink=3Doff`` to cmdline.
+I've been using it on all my Rockchip based devices, without
+understanding that parameter ... but (apparently) on my 'rock64-test'
+device, where I tested it with, I had removed that parameter.
+Putting that parameter back ... and those warnings are gone!
 
+Thanks a LOT for that hint!
 
-That's right, I will change the condition as follows:
+Groetjes,
+  Diederik
 
-                        if ((drv->states[idx].flags & CPUIDLE_FLAG_POLLING)=
- &&
-                           s->target_residency_ns < RESIDENCY_THRESHOLD_NS =
-&&
-                           s->target_residency_ns <=3D data->next_timer_ns)=
- {            =20
+--c4d98de91abd6d1006b609cb4621827d77940c66045ae6e96f5d64cd32ef
+Content-Type: application/pgp-signature; name="signature.asc"
 
->=20
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 predicted_ns =3D s->target_resid=
-ency_ns;
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 idx =3D i;
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
-> > --
+-----BEGIN PGP SIGNATURE-----
 
-Thanks for your comments.
+iHUEABYKAB0WIQT1sUPBYsyGmi4usy/XblvOeH7bbgUCaMKHoQAKCRDXblvOeH7b
+bo6/AQDBs8RXL9MZybJJhHinLOCxYw9QduO4Nxl/I3V6lRVjfgD/cp0KvoFONOMG
+zBh0Hr6do6+m3BaFnV2rsF15IgfvlAg=
+=3jJl
+-----END PGP SIGNATURE-----
 
-I will post the next version with the suggested changes.
-
-
-Regards,
-Aboorva
+--c4d98de91abd6d1006b609cb4621827d77940c66045ae6e96f5d64cd32ef--
 
