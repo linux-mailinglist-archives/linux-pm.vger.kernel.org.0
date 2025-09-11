@@ -1,168 +1,131 @@
-Return-Path: <linux-pm+bounces-34453-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34454-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF53DB52E43
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 12:25:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D9E04B52EA1
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 12:36:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E801C1BC7402
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 10:26:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7F7321C825D1
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 10:36:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F002130FF21;
-	Thu, 11 Sep 2025 10:25:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB7F731194A;
+	Thu, 11 Sep 2025 10:31:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="oMfx2t96"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DFiT8THp"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3118B265CC9
-	for <linux-pm@vger.kernel.org>; Thu, 11 Sep 2025 10:25:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9563631158A
+	for <linux-pm@vger.kernel.org>; Thu, 11 Sep 2025 10:31:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757586349; cv=none; b=b0lBAU1Pb2r0og1KgZhAxGdAX5ExBjukWjXvxuBUSJOMIwR9tlzBLuNnIAcFACgFg3b6YpUe6wtozQCDN1S8JvNLN5LZsKZLmVHZ3FznyaMv0pR+HJTInECzwMa2t4cNzsSX2PD4RZWMKRxdpd41Lov3uJt5yP0kD6xB9SYbZkA=
+	t=1757586709; cv=none; b=QcI73tk//8UHsel7ysd5IMN689qrX3WcSTadd7LexYuDD228oVbPkrCnJL7DbeYgg5SrGoYQOlMieyO2JMcTeyJhvhETJYkS19+N/hExMXPiD+ANf/Y995KVpf2bKTtU+sRQYc67TsMBxYOg0+ntWHxASjMzeOg23WK3hbbjlgw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757586349; c=relaxed/simple;
-	bh=HCJdonPKLov6xMKe9itZ7eqPhfT6RLprJ1LItmPQQWQ=;
+	s=arc-20240116; t=1757586709; c=relaxed/simple;
+	bh=xaPe7WTboY6+/tPQNyhe8Htaun8q0KWDYpAJ4c9xb4g=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QJbm6PYvxnBtwkzAjGza5KtymFQBgupkktuLIi8O+Eimd6ylmNPeMKzEyekpKOUGqNwTtkBvg0rVWlf1fbfO2QJMx0FNmcKu/V6fWliq27/gUOSfQPbND+ny3lR8xS3nNiSWyQA9tBnMzEuy1e8k4nUN/UxKhGkbNfUPu5GYjK4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=oMfx2t96; arc=none smtp.client-ip=209.85.219.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-e96ee32f86bso335230276.0
-        for <linux-pm@vger.kernel.org>; Thu, 11 Sep 2025 03:25:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1757586347; x=1758191147; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qh9CoKh+ZXVGj6kTKZS0aB5YRv820luNzFDKgz4XQQE=;
-        b=oMfx2t96EIBA0GOaiaXlDydr2AMGCoXpr3CBKjxXiWG3ukBQAwet32wd8Mmnm/w/yY
-         2gs40oSC/aPOzujogITyeU1iZzr49jz6VLjkIx+3gnyubvbMBxBJ9i8Ti5x2JF32Sc7x
-         JJkTBMH2ykJEEpvw77ctCkx2eVV5dBFpabPT5En4KvCeShH7rFzTXFTwrATymXUu1IKP
-         vJsZ6ZiKS3XMaN9GzIvsA5fIvZDCczJWxO24aClKfH1a0g+nZpLiN9JlZYdP2BW/f459
-         +doJEHGMG+1BjycoEO9O92AOjLXxpi1/2OTGaThrtkGDV7yWmJW85ispAHcxua5dXYSF
-         B7Gw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757586347; x=1758191147;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Qh9CoKh+ZXVGj6kTKZS0aB5YRv820luNzFDKgz4XQQE=;
-        b=iLh0NF+t6pVBWI/loIyHv1v791zhFX5Zd05aJvBk7ujswKGkQy5SkW0yInmteHcXYj
-         6+GLDgAEylHXLzOg3/hX6ROiCtu6RM6sKe4goQezN9DizqYRMbEJ/5955KBoQ1zxMwmA
-         I4TmMDfILd0iDs08pBiENYZURK8YlXvwR3eOeAgCn2JE6tmcdRsPOBzSiM6BoP0I7LIT
-         mpXl7ynv/agLKXW16GiVe58iqnVJ/yLUiaKe06B1o6gGr3D4FmOnOEf8AFO+L8Zc7HaA
-         OqydqQwxC94JV3JbDOju6rNoGC6qCDbJUWNcBEmN0+Heq3c0j0lygbRpxp77cnPn2sVi
-         V5ug==
-X-Forwarded-Encrypted: i=1; AJvYcCXVSSlQmCCTfTuaK2QhVXsod+0P4nx4w7O77M/SNzQgXklctO3m7OCww7zljgI813/jAwLbEAUYfA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxOWkD/HaLPomp0Z4zV0B1Er6RJuR0/kbhJPKAp8cmIUGRxlN8y
-	T3Qnfh9ODpEpfoHMO+8XpZDAIELPNPThTtCO/TY+d2j0ksFNpc7uqHzCFVnfTWIDWNYAID4hoEk
-	grRZo48fVmvIFqCkTqNzvQfTKbvlwvmmZV6c79R6o5Q==
-X-Gm-Gg: ASbGncsjQUEGTdtZJNQNG3OJdEXzGtNKpngh9fD87x76RMVtSuxK/599hviL8FwJ99j
-	e+CvVHKGlYL2FG8GZ2uQoADa6/4+uo2iC/EMpoQuU2HLRuyCViBsDf8iL1KPLbpC37v1ax8Ss+v
-	pisnbFZ9y9EsHQwhQjliT3PBGNa/ra+CN/6CUiKwRXcmvN84UuRjkTJ05JOTNOdtrYFVtza/bv+
-	s5cyi9+
-X-Google-Smtp-Source: AGHT+IG3s4IJNZMJSCEDBH6fNAyZFvVket6EtCNxPtuvOXrrmrIogMrgaGfvzIvNzamapqOCag5fTU5WzoWDmiZ5pgw=
-X-Received: by 2002:a05:6902:2a4a:b0:e98:9926:e5cf with SMTP id
- 3f1490d57ef6-e9f6798f570mr15236689276.24.1757586347029; Thu, 11 Sep 2025
- 03:25:47 -0700 (PDT)
+	 To:Cc:Content-Type; b=FvJeoAVmbGUm+ETQtqsxZ2Sg8W4ARRLO0Ol7BGAWP89weErAqWaTJvBJFmRxTt9SYXdM8q0BpJhr/+Baibtv6dsCY3PxDHjLg4mAcPx4EppavEX71kaXpGAtP0WpNr2T9iIyzJKwGtZwZJQ92wafYcETEPZBE8GzQ4WA8M9s7vs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DFiT8THp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44CB4C4AF09
+	for <linux-pm@vger.kernel.org>; Thu, 11 Sep 2025 10:31:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757586709;
+	bh=xaPe7WTboY6+/tPQNyhe8Htaun8q0KWDYpAJ4c9xb4g=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=DFiT8THp5lZHrVka74NLFyRStJbrTYWBc4EmtpFwYy66jD4REiTMvhBAWpPp/vUPE
+	 IfMUeltYdNawHOcxkgmUPQsukgiewWPRolOOUGCQCqJoqQpFRZJWKfe8FWQDGL0nDf
+	 bzRSgmLWwjfdUbeDfiPFqdYXmTUTIgJ7WXKLrsVEhScF0I/r/I9n7Co73pypwTzqJ+
+	 d4+sjPkouu5J6qZVHevWiZWtWyfQxgZNgBL5zDmOgq+YJ5Jn1hy1oBTaI2OfZ4miWg
+	 kE9p7D6Z9XOjLqrLf4lILkEeVObPVR51m4e9M6Q69YOWayNNlUCBS37Z/pfqQGR8vs
+	 PZPdxfio5q8lg==
+Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-7459fa1ef2aso577954a34.1
+        for <linux-pm@vger.kernel.org>; Thu, 11 Sep 2025 03:31:49 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVKVbgcpz3vvYV2muHSeykKO4NEe10DiIarAksiaYzxW7DwGhF1SCCQEk8oZAuzek4RLfGx/nX7zw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw+JdqklQUFmUPgbeqGVx9uuQ4w9IDFHlnGv6PWJEhibSPXZPCV
+	oBW722UD+oFpOCR4tV+j9XqALUeLhVei4bGGcRyQmB8j//pPbief43c8l1oEgYFgN+VRmXM9qS/
+	L8ckKoRLalfMPznEcrGs8m9AEVsiRPC8=
+X-Google-Smtp-Source: AGHT+IHHqcVDj1OR3RKUpL+hwMYtQNeAHfRxOjE8VI69WXeSCnFBIKD4xZFw5ff9F2oLdfPcCewT212Xf+wkZvrkyjs=
+X-Received: by 2002:a05:6830:348e:b0:74b:3422:f33d with SMTP id
+ 46e09a7af769-74c66acfea9mr10519629a34.0.1757586708559; Thu, 11 Sep 2025
+ 03:31:48 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250909111130.132976-1-ulf.hansson@linaro.org>
- <20250909111130.132976-2-ulf.hansson@linaro.org> <CAMuHMdUFXioe36r9mzNchHw3DGyEiVA-=ajTp333jowEsrxMNw@mail.gmail.com>
-In-Reply-To: <CAMuHMdUFXioe36r9mzNchHw3DGyEiVA-=ajTp333jowEsrxMNw@mail.gmail.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Thu, 11 Sep 2025 12:25:09 +0200
-X-Gm-Features: Ac12FXzECRIqMODIi1UrVX0E7YEVWHDVwJFOM_t49DQAOVwqsE-keud9aiJ5lYc
-Message-ID: <CAPDyKFrTTUs2xwoY+Tmff1SHhsGjj-XmW3maDnO7V6T7m_8H=Q@mail.gmail.com>
-Subject: Re: [PATCH 1/5] pmdomain: core: Restore behaviour for disabling
- unused PM domains
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>, 
-	Saravana Kannan <saravanak@google.com>, linux-pm@vger.kernel.org, 
-	Stephen Boyd <sboyd@kernel.org>, "Rafael J . Wysocki" <rafael@kernel.org>, Heiko Stuebner <heiko@sntech.de>, 
-	Sebastian Reichel <sebastian.reichel@collabora.com>, Sebin Francis <sebin.francis@ti.com>, 
-	Diederik de Haas <didi.debian@cknow.org>, Bjorn Andersson <andersson@kernel.org>, 
-	Abel Vesa <abel.vesa@linaro.org>, Peng Fan <peng.fan@oss.nxp.com>, 
-	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, Johan Hovold <johan@kernel.org>, 
-	Maulik Shah <maulik.shah@oss.qualcomm.com>, Michal Simek <michal.simek@amd.com>, 
-	Konrad Dybcio <konradybcio@kernel.org>, Thierry Reding <thierry.reding@gmail.com>, 
-	Jonathan Hunter <jonathanh@nvidia.com>, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org
+References: <12740505.O9o76ZdvQC@rafael.j.wysocki> <871polxs9c.ffs@tglx>
+ <CAJZ5v0jyN0=aGFOwE8fzuXi=1LgiLR5wgvvsAihGB0qpUp=mUQ@mail.gmail.com>
+ <CAJZ5v0gsiuK5iFY6cHaqEgP8R1sz_pWGoqac2orYvXqLE2xbDQ@mail.gmail.com>
+ <87o6rowrsp.ffs@tglx> <CAJZ5v0htmEeivbQaumRc7zw_Zx68GpUy98ksA9L42LupjO6tWA@mail.gmail.com>
+ <87ldmqwgjc.ffs@tglx>
+In-Reply-To: <87ldmqwgjc.ffs@tglx>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 11 Sep 2025 12:31:36 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0gW+A-eyckySFrHc7=Qr9URdRX6NqvPgkq4gZEvs_uBWg@mail.gmail.com>
+X-Gm-Features: Ac12FXzgGiowTvScHQ01Ay90U85oEzvZ5PQbqDaWOC0Z8BaVn36F5KL13kIgeVI
+Message-ID: <CAJZ5v0gW+A-eyckySFrHc7=Qr9URdRX6NqvPgkq4gZEvs_uBWg@mail.gmail.com>
+Subject: Re: [PATCH v1] cpu: Add missing check to cpuhp_smt_enable()
+To: Thomas Gleixner <tglx@linutronix.de>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Linux PM <linux-pm@vger.kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Christian Loehle <christian.loehle@arm.com>, Dave Hansen <dave.hansen@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, 11 Sept 2025 at 09:56, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+On Sun, Sep 7, 2025 at 3:14=E2=80=AFPM Thomas Gleixner <tglx@linutronix.de>=
+ wrote:
 >
-> Hi Ulf,
->
-> On Tue, 9 Sept 2025 at 13:11, Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> > Recent changes to genpd prevents those PM domains being powered-on during
-> > initialization from being powered-off during the boot sequence. Based upon
-> > whether CONFIG_PM_CONFIG_PM_GENERIC_DOMAINS_OF is set of not, genpd relies
-> > on the sync_state mechanism or the genpd_power_off_unused() (which is a
-> > late_initcall_sync), to understand when it's okay to allow these PM domains
-> > to be powered-off.
+> On Fri, Sep 05 2025 at 22:56, Rafael J. Wysocki wrote:
+> > On Fri, Sep 5, 2025 at 10:47=E2=80=AFPM Thomas Gleixner <tglx@linutroni=
+x.de> wrote:
+> >>
+> >> On Fri, Sep 05 2025 at 15:27, Rafael J. Wysocki wrote:
+> >> > On Fri, Sep 5, 2025 at 3:13=E2=80=AFPM Rafael J. Wysocki <rafael@ker=
+nel.org> wrote:
+> >> >> Well, manual online can be used for onlining the secondary thread o=
+f a
+> >> >> core where the primary thread is offline, so this is technically
+> >> >> possible already.
+> >> >>
+> >> >> > Something like the completely untested below.
+> >> >>
+> >> >> So given the above, shouldn't topology_is_core_online() check if an=
+y
+> >> >> thread in the given core is online?
+> >> >
+> >> > Besides, this would cause the siblings of offline SMT threads to be
+> >> > skipped while enabling SMT via sysfs (using
+> >> > /sys/devices/system/cpu/smt/control), but I'm not sure if this is th=
+e
+> >> > expectation in the field today.  The current behavior is to online a=
+ll
+> >> > secondary SMT threads (and more, but that part is quite arguably
+> >> > broken).
+> >>
+> >> It is broken, because the initial logic is to bring up primary threads
+> >> unconditionally and then refuse to bring up sibling threads.
+> >>
+> >> With "maxcpus=3Dxxx" this obviously limits the amount of primary threa=
+ds,
+> >> so there is arguably no point to online any of the related secondary
+> >> threads of them.
+> >>
+> >> The initial implementation was naively making that assumption, but the
+> >> core check which was added due to PPC made this actually correct.
+> >>
+> >> It just did not snap with me back then, but it's actually the correct
+> >> thing to do, no?
 > >
-> > This new behaviour in genpd has lead to problems on different platforms.
-> > Let's therefore restore the behavior of genpd_power_off_unused().
-> > Moreover, let's introduce GENPD_FLAG_NO_STAY_ON, to allow genpd OF
-> > providers to opt-out from the new behaviour.
-> >
-> > Link: https://lore.kernel.org/all/20250701114733.636510-1-ulf.hansson@linaro.org/
-> > Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> > Link: https://lore.kernel.org/all/20250902-rk3576-lockup-regression-v1-1-c4a0c9daeb00@collabora.com/
-> > Reported-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-> > Fixes: 0e789b491ba0 ("pmdomain: core: Leave powered-on genpds on until sync_state")
-> > Fixes: 13a4b7fb6260 ("pmdomain: core: Leave powered-on genpds on until late_initcall_sync")
-> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> > It would at least be consistent with the existing PPC behavior. :-)
 >
-> Thanks for your patch!
->
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
->
-> > --- a/include/linux/pm_domain.h
-> > +++ b/include/linux/pm_domain.h
-> > @@ -115,6 +115,12 @@ struct dev_pm_domain_list {
-> >   *                             genpd provider specific way, likely through a
-> >   *                             parent device node. This flag makes genpd to
-> >   *                             skip its internal support for this.
-> > + *
-> > + * GENPD_FLAG_NO_STAY_ON:      For genpd OF providers a powered-on PM domain at
-> > + *                             initialization is prevented from being
-> > + *                             powered-off until the ->sync_state() callback is
-> > + *                             invoked. This flag informs genpd to allow a
-> > + *                             power-off without waiting for ->sync_state().
->
-> This also restores power-down of pmdomains after a failed device
-> probe (due to a real issue, or just -EPROBE_DEFER), possibly
-> interfering with other devices that are part of the same pmdomain(s)
-> but haven't been probed yet. E.g. what if your serial console is
-> part of the same pmdomain?  Probably the pmdomain(s) should not
-> be powered down immediately, but only later, when either sync state
-> or genpd_power_off_unused() kicks in.
+> Correct.
 
-That is exactly one of the problems we solve with the new sync_state
-support in genpd.
+So are you going to send a patch or do you want me to do something?
 
-If you have this problem for one of the PM domains, we should not set
-GENPD_FLAG_NO_STAY_ON for it. In fact, that's exactly why I added this
-flag, to allow it to be set on a per genpd basis. Otherwise we might
-as well have used of_genpd_sync_state().
-
-Down the road, if we can improve the sync_state support in genpd,
-especially a more fine-grained control for those providers that use
-of_genpd_add_provider_onecell(), I hope we should be able to remove
-this flag.
-
-[...]
-
-Kind regards
-Uffe
+From a user standpoint, this issue is a regression in 6.16, so it
+would be good to address it before final 6.17.
 
