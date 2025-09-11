@@ -1,172 +1,162 @@
-Return-Path: <linux-pm+bounces-34508-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34509-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB967B53AED
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 19:58:56 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CBB98B53B4D
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 20:21:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 843057BD931
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 17:57:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 14ED3189D687
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 18:21:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C388437058D;
-	Thu, 11 Sep 2025 17:57:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3077135A2B4;
+	Thu, 11 Sep 2025 18:21:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DnusQyDx"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CeHAljJD"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D4DA36C093
-	for <linux-pm@vger.kernel.org>; Thu, 11 Sep 2025 17:57:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04DA847F4A;
+	Thu, 11 Sep 2025 18:21:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757613449; cv=none; b=H/3DzFjk9qls+oiYIQ948oxj3QUGLVD0aF6uyS8SAMzJ1JjoCh+NabAz18LyKKb4p34frpgC4NdgcsuesVX7hkogKDyCvOz66NSGAKKG7I3p5yc4vEI2N9+NLL4fXnv4V2j4lHilQKpMtSqG9xd5xrLs334yXpXQOIwUt2Qlz3M=
+	t=1757614861; cv=none; b=hi5SiViCo+uocWIe8skyc4I0SLMe0U/Kzgapni4iPGT5I1VxpynyIjd9+wurNYmcRC22XDqmCQQAn8qBHeKfFksU7UvT/Mb6BsJVmDtapNooGnfamcPhr2+JJrFj7CYA1cgzZDvJe5BQfITZAabDxf1lAoYOTgnFPXwaIKWfIYI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757613449; c=relaxed/simple;
-	bh=Art95FP4CDMp3B3wO95DSHb+3nyZc8ObS8pqSfOsfws=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=locgB/EoL4h/zk+9ZWlaFUS7MCKvLfNPmwEazXBdL2MnPb+e0Zy6vuGmeN0rmDsBSBk9dqdzExtkYKM1eKHYaq0M/A28FoOrsxs6C8k0apJsR+bTEzNbauATiO+N5L1Z1W7JLCgeEcyOA+IKjVHn4JTw5QNUGSem5yevMpU63tE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DnusQyDx; arc=none smtp.client-ip=209.85.218.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-b07883a5feeso184988066b.1
-        for <linux-pm@vger.kernel.org>; Thu, 11 Sep 2025 10:57:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757613446; x=1758218246; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eeAm2av/mnmRbyLHfv410Kah1AmetvGnLw+tWu4KGQ0=;
-        b=DnusQyDxFyZaEPg75wwx8Xtu3C0WHXfvgiCivreY2Z/12MiSP02LtVHw50apCyx5cD
-         OyM4wxASMEj6531iWY3RT/9yCZMj0SLxeCjMjFu4DtYuzHe4n0ZzoLLBdkqjX5pSqkZV
-         NP5AwKf/Ehxn2DQAz6bFxrlfw+YsSp2fpNfN5S5i5QUBCeaIZi/qABo2Htc/ERZT/f1Y
-         YVPyjY0d/lXwKz+tcSPadmWcFrULfke8I0ki5JyDFq/pnXZel/8DAqvudH6NJyVk0Icn
-         +D7AcmAe/eNOQwbdwyqi73cuyPPao1anJVgsHr8V7GpGG+t7MNbwVej25UBzGx+uVXTE
-         yqYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757613446; x=1758218246;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eeAm2av/mnmRbyLHfv410Kah1AmetvGnLw+tWu4KGQ0=;
-        b=JYDSA/WIx9M3GF5+k9nHsErs2TmvNTZf/m2YtFG37GP7x+AR0BnMQtsjMtLFhS9j/0
-         UuM72XPCcY+RtDOEFnhMq33YE1vyAq6smIxrBY7FIqMLr+tdowe3BCr1QvcJ1AOdCmaP
-         aQQPwrDQguqUrWztKo2x85Egfr+JY6VaKJzUqSeV5+plqUF5ihAvsHX+sh6QQpd38aaw
-         0VpKMN6Dy2Tec0iaBupJuVa6liksfSdLil/6xytWZmYKjkp/XRa6CO+JqB/4cBTqyoMN
-         dhZ7MGp3DJH/Fo4dP9WuMJ+tVWcEGqhVwbCsYbSHFIE0+SCLLCtQPZD1nVF9cvJGV734
-         LElA==
-X-Forwarded-Encrypted: i=1; AJvYcCX/J1goUGcG+iYTk/qSfZr8DukhEbApHqHEMpHnkxMrmQyXpncZPSmIPJYvhNwoHAgah0qREmgDuw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxM7iSYmpEAxLax3QzPpofkeZH2YxCQDwO37KNrKE15LHyUNld5
-	ENTFK2+tQblspww5H1Snz50jKo8P3+DL6SykPxDSLIyg2YH3fveWIc01BSpbDg==
-X-Gm-Gg: ASbGncvOE3AG6u/a95zGq2J+MZFHC/xzTcByRPIUTvLpDprI0kquIFWCjzuhtOY0ewD
-	+NsfMfguUrMh789MuKA4UbdWJRRV5Q9dQjxK08pUFuOp8Jkr4OqOuMze2zWemPmdpztSvUiNzUM
-	4BNRiqKglS7FGegjt8mjplRHWdZRyn7sF4AI2wVoHMa4DtVdQzsZ+yFq4ntoWLoQbWqrcy8zFyE
-	Jjs3XcKqGpgTH0LsTp0KNhi9mXErODntJopBjMqR/13GNiOTWckpGK7x1pULKV7HC4poCfkPv/G
-	dzxxm2G8fH4hJMV6GciaxL5LFUshyMSEb+2jtYabJxzQ2rYz9L33pGwI6C5jMWKIidK9PuRaMcJ
-	pj232jL3vdSfjLmm9aUlATjjyFvsmblM=
-X-Google-Smtp-Source: AGHT+IHWQ/e7gEKIVRbGfVVqsMEfZtLXJsQsAnDauGbX28j0si/mFkkcJRYuSt/yHYH7IiWICpCOKg==
-X-Received: by 2002:a17:907:6ea8:b0:afe:b92b:28e9 with SMTP id a640c23a62f3a-b07c387716amr604066b.49.1757613445575;
-        Thu, 11 Sep 2025 10:57:25 -0700 (PDT)
-Received: from [127.0.1.1] ([46.53.240.27])
-        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-b07b312845esm171377166b.26.2025.09.11.10.57.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Sep 2025 10:57:25 -0700 (PDT)
-From: Dzmitry Sankouski <dsankouski@gmail.com>
-Date: Thu, 11 Sep 2025 20:57:17 +0300
-Subject: [PATCH v3 9/9] power: supply: max77976_charger: fix constant
- current reporting
+	s=arc-20240116; t=1757614861; c=relaxed/simple;
+	bh=o+sxduyxa8P2is/JjSQ9wBtUm8hKM5vkrOVW/URvt50=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=FDIMopsdH+7tGt6hnZqEFtM0Wmkq0k5+v3AMcG5LPwxrp4MJrwnJHK7xRWg7CGrUtObZq6P1/+ao2Iko7v75d218j6VtztvYSH6vtacHBRQAC4wNT3xeNRsQoPCeOVgO8gZNAu10IsTTVieIMyeoYke7Rssw4BRv8iBXjucYwjA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CeHAljJD; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AAA6C4CEF0;
+	Thu, 11 Sep 2025 18:20:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757614860;
+	bh=o+sxduyxa8P2is/JjSQ9wBtUm8hKM5vkrOVW/URvt50=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=CeHAljJDzJdup7w9zQX9/GNFkTzX6d6ORTJhqykt+uG10pc8rhwqpixStBAK6ISou
+	 9ofRSL0uKG0Ey1N33hqbnSyi8KtF5bgXi0bnndxi51NfUzKhN1OpofUEcehsnq+WHD
+	 Yhj9f8iZuSV1iicRNV3S11bcVEwdL7G4DLm4x1mTipYlWLDPeDdeHx5SYwsVjT8LVA
+	 RzDQYilJZ8eyw9XgCePXgw7pqpjsDNcjVSFdoRCRU8PNMq0HNWQZVhN/LCwthHbzXs
+	 9CMMnKcRX4V6y4qZ7fJO1vLw1w+UbkQ8/k4wOC8XVgOw0PlFam+ljNDWcFTlsKQlwC
+	 Egpsg2MIOFmew==
+Message-ID: <2833916c-f4e7-4fd3-9d16-f9b544922921@kernel.org>
+Date: Thu, 11 Sep 2025 13:20:55 -0500
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250911-max77705_77976_charger_improvement-v3-9-35203686fa29@gmail.com>
-References: <20250911-max77705_77976_charger_improvement-v3-0-35203686fa29@gmail.com>
-In-Reply-To: <20250911-max77705_77976_charger_improvement-v3-0-35203686fa29@gmail.com>
-To: Chanwoo Choi <cw00.choi@samsung.com>, 
- Krzysztof Kozlowski <krzk@kernel.org>, Lee Jones <lee@kernel.org>, 
- Sebastian Reichel <sre@kernel.org>, 
- Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
- Sebastian Reichel <sebastian.reichel@collabora.com>, 
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
- Dzmitry Sankouski <dsankouski@gmail.com>
-X-Mailer: b4 0.14.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1757613434; l=2453;
- i=dsankouski@gmail.com; s=20240619; h=from:subject:message-id;
- bh=Art95FP4CDMp3B3wO95DSHb+3nyZc8ObS8pqSfOsfws=;
- b=RN3URw53taYpw1iYJXq138CZsY9siQtErD7Mn6IrOOY6/U2S+nLo0enRQ/OaIiTEk+XrHgZ2r
- qYUc+85oAsUCsrqUENOfJcG2fYPovBV5nYjDZI4pD/m7ez7yIvo8e4W
-X-Developer-Key: i=dsankouski@gmail.com; a=ed25519;
- pk=YJcXFcN1EWrzBYuiE2yi5Mn6WLn6L1H71J+f7X8fMag=
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] PCI/PM: Move ASUS EHCI workaround out of generic code
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+ Bjorn Helgaas <helgaas@kernel.org>
+Cc: Lukas Wunner <lukas@wunner.de>, Alan Stern <stern@rowland.harvard.edu>,
+ linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+ linux-kernel@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>,
+ Timo Jyrinki <timo.jyrinki@iki.fi>, Ernst Persson <ernstp@gmail.com>,
+ Steven Harms <sjharms@gmail.com>, James Ettle <james@ettle.org.uk>,
+ Nick Coghlan <ncoghlan@gmail.com>, Weng Xuetian <wengxt@gmail.com>,
+ Andrey Rahmatullin <wrar@wrar.name>, Boris Barbour <boris.barbour@ens.fr>,
+ Vlastimil Zima <vlastimil.zima@gmail.com>, David Banks <amoebae@gmail.com>,
+ Michal Jaegermann <michal@harddata.com>, Chris Moeller <kode54@gmail.com>,
+ Daniel Fraga <fragabr@gmail.com>, Javier Marcet <jmarcet@gmail.com>,
+ Pavel Pisa <pisa@cmp.felk.cvut.cz>
+References: <75e4ae507fa4faddd063a3a9e17d319ed84529b6.1757562971.git.lukas@wunner.de>
+ <80980751-64db-4dc2-9516-03046e8b4b31@kernel.org>
+ <CAJZ5v0idqEPUpA0uBb_PAaKe0KNqCt0xLskPThPwtsfh3eCdxg@mail.gmail.com>
+ <fd9629df-0718-4968-b22b-cad36d870f63@kernel.org>
+ <CAJZ5v0hJHxVvyNdvDSZg=Pn9=xEqO79T4Ou9toc0Qofi777NcA@mail.gmail.com>
+Content-Language: en-US
+From: Mario Limonciello <superm1@kernel.org>
+In-Reply-To: <CAJZ5v0hJHxVvyNdvDSZg=Pn9=xEqO79T4Ou9toc0Qofi777NcA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-CHARGE_CONTROL_LIMIT is a wrong property to report charge current limit,
-because `CHARGE_*` attributes represents capacity, not current. The
-correct attribute to report and set charge current limit is
-CONSTANT_CHARGE_CURRENT.
+On 9/11/25 8:56 AM, Rafael J. Wysocki wrote:
+> On Thu, Sep 11, 2025 at 3:46 PM Mario Limonciello <superm1@kernel.org> wrote:
+>>
+>> On 9/11/25 8:43 AM, Rafael J. Wysocki wrote:
+>>> On Thu, Sep 11, 2025 at 3:34 PM Mario Limonciello <superm1@kernel.org> wrote:
+>>>>
+>>>> On 9/11/25 8:11 AM, Lukas Wunner wrote:
+>>>>> In 2012, commit dbf0e4c7257f ("PCI: EHCI: fix crash during suspend on ASUS
+>>>>> computers") amended pci_pm_suspend_noirq() to work around a BIOS issue by
+>>>>> clearing the Command register if the suspended device is a USB EHCI host
+>>>>> controller.
+>>>>>
+>>>>> Commit 0b68c8e2c3af ("PCI: EHCI: Fix crash during hibernation on ASUS
+>>>>> computers") subsequently amended pci_pm_poweroff_noirq() to do the same.
+>>>>>
+>>>>> Two years later, commit 7d2a01b87f16 ("PCI: Add pci_fixup_suspend_late
+>>>>> quirk pass") introduced the ability to execute arbitrary quirks
+>>>>> specifically in pci_pm_suspend_noirq() and pci_pm_poweroff_noirq().
+>>>>>
+>>>>> This allows moving the ASUS workaround out of generic code and into a
+>>>>> proper quirk to improve maintainability and readability.  Constrain to x86
+>>>>> since the ASUS BIOS doesn't seem to have been used on other arches.
+>>>>>
+>>>>> lspci output of affected EHCI host controllers reveals that the only bits
+>>>>> set in the Command register are Memory Space Enable and Bus Master Enable:
+>>>>>      https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=658778
+>>>>>
+>>>>> The latter is cleared by:
+>>>>>      hcd_pci_suspend()
+>>>>>        suspend_common()
+>>>>>          pci_disable_device()
+>>>>>
+>>>>> pci_disable_device() does not clear I/O and Memory Space Enable, although
+>>>>> its name suggests otherwise.
+>>>>
+>>>> That was my gut reaction as well.
+>>>>
+>>>>> The kernel has never disabled these bits
+>>>>> once they're enabled.  Doing so would avoid the need for the quirk, but it
+>>>>> is unclear what will break if this fundamental behavior is changed.
+>>>>>
+>>>>
+>>>> It's too late for this cycle to do so, but how would you feel about
+>>>> making this change at the start of the next cycle so it had a whole
+>>>> cycle to bake in linux-next and see if there is a problem in doing so?
+>>>
+>>> One cycle in linux-next may not be sufficient I'm afraid because
+>>> linux-next is not tested on the majority of systems running Linux.
+>>>
+>>> We'd probably learn about the breakage from distro vendors.
+>>>
+>>>> If there is it could certainly be moved back to a quirk.
+>>>
+>>> Most likely, it would work on the majority of systems, but there would
+>>> be a tail of systems where it would break.  That tail would then need
+>>> to be quirked somehow and it may be worse than just one quirk we have
+>>> today.
+>>
+>> But is that a reason not to *try* and rid the tech debt?
+>>
+>> We could just all agree that *if* there is breakage we revert back to
+>> the quirk just for EHCI.
+> 
+> Well, it's not that simple because how much time do you want to wait?
+> 
+> The distro installed on the system I'm using right now ships with a
+> 6.4-based kernel, so it potentially sees and may report breakage
+> introduced into the mainline 2 years ago.
+> 
+> Will you decide to go back to the EHCI quirk if breakage is reported 2
+> years after dropping it?
+> 
+> IMV, if a decision is made to change the pci_disable_device() behavior
+> in this respect, we'll need to stick to it unless the breakage is
+> common and overwhelming (which I don't really expect to be the case).
 
-Rename CHARGE_CONTROL_LIMIT to CONSTANT_CHARGE_CURRENT.
+Thanks, I see your point.  We would only know soon if there was major 
+breakage from it and thus it is not an easy call that it was successful 
+or not.
 
-Fixes: 715ecbc10d6a ("power: supply: max77976: add Maxim MAX77976 charger driver")
-
-Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
----
- drivers/power/supply/max77976_charger.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/power/supply/max77976_charger.c b/drivers/power/supply/max77976_charger.c
-index e6fe68cebc32..3d6ff4005533 100644
---- a/drivers/power/supply/max77976_charger.c
-+++ b/drivers/power/supply/max77976_charger.c
-@@ -292,10 +292,10 @@ static int max77976_get_property(struct power_supply *psy,
- 	case POWER_SUPPLY_PROP_ONLINE:
- 		err = max77976_get_online(chg, &val->intval);
- 		break;
--	case POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT_MAX:
-+	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX:
- 		val->intval = MAX77976_CHG_CC_MAX;
- 		break;
--	case POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT:
-+	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
- 		err = max77976_get_integer(chg, CHG_CC,
- 					   MAX77976_CHG_CC_MIN,
- 					   MAX77976_CHG_CC_MAX,
-@@ -330,7 +330,7 @@ static int max77976_set_property(struct power_supply *psy,
- 	int err = 0;
- 
- 	switch (psp) {
--	case POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT:
-+	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
- 		err = max77976_set_integer(chg, CHG_CC,
- 					   MAX77976_CHG_CC_MIN,
- 					   MAX77976_CHG_CC_MAX,
-@@ -355,7 +355,7 @@ static int max77976_property_is_writeable(struct power_supply *psy,
- 					  enum power_supply_property psp)
- {
- 	switch (psp) {
--	case POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT:
-+	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
- 	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
- 		return true;
- 	default:
-@@ -368,8 +368,8 @@ static enum power_supply_property max77976_psy_props[] = {
- 	POWER_SUPPLY_PROP_CHARGE_TYPE,
- 	POWER_SUPPLY_PROP_HEALTH,
- 	POWER_SUPPLY_PROP_ONLINE,
--	POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT,
--	POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT_MAX,
-+	POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT,
-+	POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX,
- 	POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT,
- 	POWER_SUPPLY_PROP_MODEL_NAME,
- 	POWER_SUPPLY_PROP_MANUFACTURER,
-
--- 
-2.39.5
-
+Bjorn, what are your thoughts here?
 
