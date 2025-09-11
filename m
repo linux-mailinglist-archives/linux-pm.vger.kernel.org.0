@@ -1,171 +1,173 @@
-Return-Path: <linux-pm+bounces-34478-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34479-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A047B53499
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 15:56:17 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B1B4B5349F
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 15:57:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C7B4AB61559
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 13:52:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A727916AE7E
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 13:56:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B30E3314A3;
-	Thu, 11 Sep 2025 13:52:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 853B8322764;
+	Thu, 11 Sep 2025 13:56:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RlT860eg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pBSErB3M"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ua1-f52.google.com (mail-ua1-f52.google.com [209.85.222.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA39F327A00;
-	Thu, 11 Sep 2025 13:52:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60C193148DD
+	for <linux-pm@vger.kernel.org>; Thu, 11 Sep 2025 13:56:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757598725; cv=none; b=f2MdPHMoRmHJHgiJ1mJ7vmbVtP+AZs5f1sXgKuB8FXBEwnlhHeQzl7Sv2E/Lf+EbAfzaUSBAKr7AD6wuIc9A/lJgxrNkTmRx61wON/Qo8ozE2sGZCXaQse0giZ4edWTA80CbagK9NAQTpZjArPa0/Ui0OfTIrQ058b/lVMqU6Tg=
+	t=1757599006; cv=none; b=FoExqQC71aMI7DYAlsRs0QKmIcB0ViB63RLKrClZ1NG1PVn/hKwendMS3eV7mG43lL1Apz5WEHherxhdaBXxtYGwOCBt+QpIZhc3zmharBQHDBXmX2LXLJtIrZRjkcYO4/vl5eayDAg/aNVoIslFqwAimSZNqVW7iSe9ce2TBR8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757598725; c=relaxed/simple;
-	bh=oXQUqn25nnJsMzhF9F1nXOg6Ycgm/P1u5nJ4QuFi05w=;
+	s=arc-20240116; t=1757599006; c=relaxed/simple;
+	bh=XreLRLQA9VQYVf55N1pr7vao9Kkcl1FgTuDhIhX0gt0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JPW9VaVQFpkzJMXGzE+wjA+iNNgFXK+/njHIR2/mrd504zVPGa/XJYI1RtYHo3jlfLsvJVcrSDi8ohBsZmT6HGgN8JbEyzEfclYc7T+b9cwU49MUDaZV1ua1qf5nGnuLWol1abFquxUHgWRaX6IeIKJDe+gkau8DtCHL1gBdJFI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RlT860eg; arc=none smtp.client-ip=209.85.222.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ua1-f52.google.com with SMTP id a1e0cc1a2514c-8a756436f44so404992241.3;
-        Thu, 11 Sep 2025 06:52:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757598722; x=1758203522; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GEE00+6hvF6rmsi4WJZpiTuvESHAQjXYHBJkPHyecw0=;
-        b=RlT860eg2TtMcp+7r8W7yQcwqx17+mZwaDe1NiSt/6zV0Wv1fvrpOsmXRq+bQCWZKP
-         hRI3dyVYkmsgYnzbEbehwyYxz0LEq3hVvXN52gKgpQ7RH0dydlqmP25ENYBJ4X+VwcEc
-         M59nKu5wHc+fZhAJeylEoDvj5+ooMzg2/c4fktScYL2Nc52PcnOVXzcK65pIKtGH4UQi
-         V5kzfqn9z1amYRTqwtpGDKouVUYrUVyIdFuJb6NCqVUAVgXVlUizsk2ZOZhQLiShl6fj
-         Jcq4dChK1gA2MOh8jyr+caBSjd4DWsLg/i6QC05RVo0soWQV4gzwOUt7sfeBK0XkoKGN
-         whFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757598722; x=1758203522;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GEE00+6hvF6rmsi4WJZpiTuvESHAQjXYHBJkPHyecw0=;
-        b=rM7hF4KGe7tSzOePT3jUbkPj8K004oGjq1Ds6Qt/ofQOcCMUXtaev0qnRz9SCUa6TK
-         wpWN+oIOyEdlLgGHlZwXxGM7AGpCGl5mQ5u5+JWdulMcvxTQtTGXXlsZyCAjyJzzI/f8
-         IzlwCSMn+BHzan21xTbfA5BfCMR4itzU3MNKYgPedlVWmmaUd9PhaU3hD4kY8PfhkayS
-         Yi7a1MwuhQO+aKtP/dJkHT0OdMzlE+VejtXRUmyp2TGxfJ2Vrp96qAOhBtWKYml/Fk1o
-         jkNT5pU6ruXzD3d448aRvWATxLkNe/Jgi3DyO58OAJs4/sb97M9XInWxDHZkwrCs4UfQ
-         jR6g==
-X-Forwarded-Encrypted: i=1; AJvYcCUJd136XsbbHg6yg+nyRTNQIVkwyd7+My32nKbUVeqOys2+FnYUXYfsf/amBlQcrBArcv0X4S2h3GE=@vger.kernel.org, AJvYcCUvjsYlYkdv0AWX62lAzHmg+yW2z6nOA9l1dV0b3gdvkJxgLBmeVMdzYliiNtWFzDSJi+vl3nv8zrMK@vger.kernel.org, AJvYcCXI4hZqprNX/1Wr0TMvbZG3MxHNjxtKUYJnhFdG2gZoi/JQDTpU1ajjLzaDwiiLfaTMR5l57kdJB2fztCE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxrsbY1v6e7rBsl6978i+FE5n7iq6iOdJC9xzaC+8SY2IoFQ4aP
-	kT9kqYnoxT1BOTKWWyideTK163xcix0Zfq9JFGAkXeWsFP3kTxxfYlxKEH8C4p/wMYT9ZaVCPhE
-	tDevpzjBIpWkp3Cernk55pZxCtMWOLuHzIPFbm38=
-X-Gm-Gg: ASbGncvTAk0wNyhmEfvB1++orBQxZgCH6L2FQ7GCgCv6coYK4RmHvzsd+/YATcz0R8V
-	EWPG3Kjv4/BWJZq/hOW5/2XhC/CCeYGfpdID/Hi0aLEvJrKFfU5OgKCrUwKqQWO18SpAo7Q1WM+
-	jlUaYI8XkZm4y4EUz3nEoTNQoNNJoKl3ORk7WJB2xhb8sDL7rO8vZxtk8+7XREtD637J0DLGbYT
-	DbuhhPiUECyLPUyZYH8Y8Bn1cF7ndAMvJAyxgavrPNgiA==
-X-Google-Smtp-Source: AGHT+IGIHPz0RBFl/nm1DjVtb9Rh3E0Rvz3E+f3+Bkjasib3i3qRcuIpsUrg8FbZUBt7+s9qysRmXR5UjQTOfOHapuc=
-X-Received: by 2002:a05:6102:3e0b:b0:4fb:fa84:2e64 with SMTP id
- ada2fe7eead31-53d1c8a24f2mr5963295137.14.1757598722320; Thu, 11 Sep 2025
- 06:52:02 -0700 (PDT)
+	 To:Cc:Content-Type; b=pKcOyDTNhOJuW7V8Iulkn3FLW0bub1Egyi6qEIdPeD/KMNL013Qj82bnf18Ac0gvpCkxMosBAfK3qy6Q0J781xboY05TNhCZw4uAtHY/VuMHLL2rWQCuUMIu6h26IOzW+NfAai7gxvCKq/dWtKwSUGiuwb3nSJ449PJebPbnCdo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pBSErB3M; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBD2CC19422
+	for <linux-pm@vger.kernel.org>; Thu, 11 Sep 2025 13:56:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757599006;
+	bh=XreLRLQA9VQYVf55N1pr7vao9Kkcl1FgTuDhIhX0gt0=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=pBSErB3Mq676ZtpVlSSDZH7F1BZSc7zHNrDK9HUhXYrHVQiYOJJsyoZYZWqDLqy8Z
+	 Ji1CX+kDxNl1olUC3EnjAa2ZHt6g89usl5+emNkSof0v5kKY2rhGpuE7xJpCoJPvyS
+	 kYNBvCij9gK+dhGu8drKA24n5lbIvEh5MeyMZiJDKt7l/zI8mgc/IinYn5fhs+AncV
+	 M9GKRsgfwEKK5p3G6C9+E1WVKtlXRSgARNu4zfH+Or7C3Mx6WSs1oi74Y118FC2itk
+	 58tPDNJzmIM4Za+ldBx7jFwsjHC5bwGN98ZBdOjRD5sWpMOz7GrgYCM9IsuXOns8wn
+	 JLa6MkRrBF1XA==
+Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-74595f3852cso539946a34.0
+        for <linux-pm@vger.kernel.org>; Thu, 11 Sep 2025 06:56:45 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUc0vENNzEpg+oJrYuousPVTzzsC19QSXPbV+cNm7NtpE4KU3Zi/vjeEali8UuxhVKnLr1J7mGg0g==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzbmkJ5QSErk7Utz96goD26T1JEOmns30XpDH+eX0UvzglOzVoc
+	4LjW6OWHSCqAb9uiAkzZcrxLCwARZAVtKiqJucUQ5ZbUDr0ZjKEcXfAwjy8tYHIg9jSy0guqfY9
+	Ie9DNQWaQTEwWY28WU8Tb+PZKVVpO3ik=
+X-Google-Smtp-Source: AGHT+IGewrkHSVC2eTTHWTcmKSSrQ5YjkLF2A24xWJgCYYx99uWpX75B43+fO5oF3eNbSRFyBQ04mhd396ycJfKVGeM=
+X-Received: by 2002:a05:6830:348e:b0:74b:7c40:3592 with SMTP id
+ 46e09a7af769-74c6f315077mr10017347a34.6.1757599005085; Thu, 11 Sep 2025
+ 06:56:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <385dccf3-234a-4f83-9610-81ac30bf1466@rowland.harvard.edu>
- <20250909161901.10733-1-ryanzhou54@gmail.com> <20250911013242.oxm2kwfaqvmybbhk@synopsys.com>
- <xbfvykzfi26pyaycd7efbqvmraxcu6zzgqjfxtk33wcsjsnnal@5e3g4pq5qcj3>
-In-Reply-To: <xbfvykzfi26pyaycd7efbqvmraxcu6zzgqjfxtk33wcsjsnnal@5e3g4pq5qcj3>
-From: ryan zhou <ryanzhou54@gmail.com>
-Date: Thu, 11 Sep 2025 21:51:50 +0800
-X-Gm-Features: AS18NWDtmlDggqyp6K0v_e1uqwqAiIfa83fbw9mVmNTcQYr6GUERskSZVB3YZKg
-Message-ID: <CAPwe5RNZuUB0ri=cuO4yMUq2nAwTYy_qwNg+wgfXhTHBFO6baA@mail.gmail.com>
-Subject: Re: [PATCH v2] drvier: usb: dwc3: Fix runtime PM trying to activate
- child device xxx.dwc3 but parent is not active
-To: Xu Yang <xu.yang_2@nxp.com>
-Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
-	"stern@rowland.harvard.edu" <stern@rowland.harvard.edu>, 
-	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, 
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, "rafael@kernel.org" <rafael@kernel.org>, 
-	"royluo@google.com" <royluo@google.com>
+References: <75e4ae507fa4faddd063a3a9e17d319ed84529b6.1757562971.git.lukas@wunner.de>
+ <80980751-64db-4dc2-9516-03046e8b4b31@kernel.org> <CAJZ5v0idqEPUpA0uBb_PAaKe0KNqCt0xLskPThPwtsfh3eCdxg@mail.gmail.com>
+ <fd9629df-0718-4968-b22b-cad36d870f63@kernel.org>
+In-Reply-To: <fd9629df-0718-4968-b22b-cad36d870f63@kernel.org>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 11 Sep 2025 15:56:33 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0hJHxVvyNdvDSZg=Pn9=xEqO79T4Ou9toc0Qofi777NcA@mail.gmail.com>
+X-Gm-Features: Ac12FXzQaZbYxSmuA4gYIQi2t8BWAAduta2HGD5DxcN46xT6wVPS-p3q4c093YQ
+Message-ID: <CAJZ5v0hJHxVvyNdvDSZg=Pn9=xEqO79T4Ou9toc0Qofi777NcA@mail.gmail.com>
+Subject: Re: [PATCH] PCI/PM: Move ASUS EHCI workaround out of generic code
+To: Mario Limonciello <superm1@kernel.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Lukas Wunner <lukas@wunner.de>, 
+	Bjorn Helgaas <helgaas@kernel.org>, Alan Stern <stern@rowland.harvard.edu>, 
+	linux-pci@vger.kernel.org, linux-pm@vger.kernel.org, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org, 
+	Oleksij Rempel <o.rempel@pengutronix.de>, Timo Jyrinki <timo.jyrinki@iki.fi>, 
+	Ernst Persson <ernstp@gmail.com>, Steven Harms <sjharms@gmail.com>, James Ettle <james@ettle.org.uk>, 
+	Nick Coghlan <ncoghlan@gmail.com>, Weng Xuetian <wengxt@gmail.com>, 
+	Andrey Rahmatullin <wrar@wrar.name>, Boris Barbour <boris.barbour@ens.fr>, 
+	Vlastimil Zima <vlastimil.zima@gmail.com>, David Banks <amoebae@gmail.com>, 
+	Michal Jaegermann <michal@harddata.com>, Chris Moeller <kode54@gmail.com>, Daniel Fraga <fragabr@gmail.com>, 
+	Javier Marcet <jmarcet@gmail.com>, Pavel Pisa <pisa@cmp.felk.cvut.cz>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Xu=EF=BC=8C
-
-Xu Yang <xu.yang_2@nxp.com> =E4=BA=8E2025=E5=B9=B49=E6=9C=8811=E6=97=A5=E5=
-=91=A8=E5=9B=9B 18:58=E5=86=99=E9=81=93=EF=BC=9A
+On Thu, Sep 11, 2025 at 3:46=E2=80=AFPM Mario Limonciello <superm1@kernel.o=
+rg> wrote:
 >
-> Hi Ryan,
->
-> On Thu, Sep 11, 2025 at 01:32:47AM +0000, Thinh Nguyen wrote:
-> > On Wed, Sep 10, 2025, Ryan Zhou wrote:
-> > > Issue description:During the wake-up sequence, if the system invokes
-> > >  dwc3->resume and detects that the parent device of dwc3 is in a
-> > > runtime suspend state, the system will generate an error: runtime PM
-> > > trying to activate child device xxx.dwc3 but parent is not active.
-> > >
-> > > Solution:At the dwc3->resume entry point, if the dwc3 controller
-> > > is detected in a suspended state, the function shall return
-> > > immediately without executing any further operations.
-> > >
-> > > Signed-off-by: Ryan Zhou <ryanzhou54@gmail.com>
-> > > ---
-> > >  drivers/usb/dwc3/core.c | 3 +++
-> > >  1 file changed, 3 insertions(+)
-> > >
-> > > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> > > index 370fc524a468..06a6f8a67129 100644
-> > > --- a/drivers/usb/dwc3/core.c
-> > > +++ b/drivers/usb/dwc3/core.c
-> > > @@ -2687,6 +2687,9 @@ int dwc3_pm_resume(struct dwc3 *dwc)
-> > >     struct device *dev =3D dwc->dev;
-> > >     int             ret =3D 0;
-> > >
-> > > +   if (pm_runtime_suspended(dev))
-> > > +           return ret;
-> > > +
-> >
-> > Is this a documented behavior where the device should remain runtime
-> > suspend on system resume? I feel that that this should be configurable
-> > by the user or defined the PM core. I don't think we should change
-> > default behavior here just to workaround the issue that we're facing.
-> >
-> > What if the user wants to keep the old behavior and resume up the devic=
+> On 9/11/25 8:43 AM, Rafael J. Wysocki wrote:
+> > On Thu, Sep 11, 2025 at 3:34=E2=80=AFPM Mario Limonciello <superm1@kern=
+el.org> wrote:
+> >>
+> >> On 9/11/25 8:11 AM, Lukas Wunner wrote:
+> >>> In 2012, commit dbf0e4c7257f ("PCI: EHCI: fix crash during suspend on=
+ ASUS
+> >>> computers") amended pci_pm_suspend_noirq() to work around a BIOS issu=
+e by
+> >>> clearing the Command register if the suspended device is a USB EHCI h=
+ost
+> >>> controller.
+> >>>
+> >>> Commit 0b68c8e2c3af ("PCI: EHCI: Fix crash during hibernation on ASUS
+> >>> computers") subsequently amended pci_pm_poweroff_noirq() to do the sa=
+me.
+> >>>
+> >>> Two years later, commit 7d2a01b87f16 ("PCI: Add pci_fixup_suspend_lat=
 e
-> > on system resume?
+> >>> quirk pass") introduced the ability to execute arbitrary quirks
+> >>> specifically in pci_pm_suspend_noirq() and pci_pm_poweroff_noirq().
+> >>>
+> >>> This allows moving the ASUS workaround out of generic code and into a
+> >>> proper quirk to improve maintainability and readability.  Constrain t=
+o x86
+> >>> since the ASUS BIOS doesn't seem to have been used on other arches.
+> >>>
+> >>> lspci output of affected EHCI host controllers reveals that the only =
+bits
+> >>> set in the Command register are Memory Space Enable and Bus Master En=
+able:
+> >>>     https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=3D658778
+> >>>
+> >>> The latter is cleared by:
+> >>>     hcd_pci_suspend()
+> >>>       suspend_common()
+> >>>         pci_disable_device()
+> >>>
+> >>> pci_disable_device() does not clear I/O and Memory Space Enable, alth=
+ough
+> >>> its name suggests otherwise.
+> >>
+> >> That was my gut reaction as well.
+> >>
+> >>> The kernel has never disabled these bits
+> >>> once they're enabled.  Doing so would avoid the need for the quirk, b=
+ut it
+> >>> is unclear what will break if this fundamental behavior is changed.
+> >>>
+> >>
+> >> It's too late for this cycle to do so, but how would you feel about
+> >> making this change at the start of the next cycle so it had a whole
+> >> cycle to bake in linux-next and see if there is a problem in doing so?
+> >
+> > One cycle in linux-next may not be sufficient I'm afraid because
+> > linux-next is not tested on the majority of systems running Linux.
+> >
+> > We'd probably learn about the breakage from distro vendors.
+> >
+> >> If there is it could certainly be moved back to a quirk.
+> >
+> > Most likely, it would work on the majority of systems, but there would
+> > be a tail of systems where it would break.  That tail would then need
+> > to be quirked somehow and it may be worse than just one quirk we have
+> > today.
 >
-> What about resume the device firstly if it's already runtime suspended wh=
-en
-> call dwc3_pm_suspend(). Therefor, the old behavior can be kept and the is=
-sue
-> can be avoided.
-
-Originally, I also believed that forcing the device to remain active
-before PM suspend
- was necessary. However, this approach has two drawbacks:
-    1. It prolongs the system's sleep transition time.
-    2. Worse, if a USB insertion wakes the system during enumeration,
-the system may
-    re-enter sleep before the USB device is fully recognized.
-
-> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> index 370fc524a468..1b8dbb260017 100644
-> --- a/drivers/usb/dwc3/core.c
-> +++ b/drivers/usb/dwc3/core.c
-> @@ -2672,6 +2672,9 @@ int dwc3_pm_suspend(struct dwc3 *dwc)
->         struct device *dev =3D dwc->dev;
->         int             ret;
+> But is that a reason not to *try* and rid the tech debt?
 >
-> +       if (pm_runtime_suspended(dev))
-> +               pm_runtime_resume(dev);
-> +
->         ret =3D dwc3_suspend_common(dwc, PMSG_SUSPEND);
->         if (ret)
->                 return ret;
+> We could just all agree that *if* there is breakage we revert back to
+> the quirk just for EHCI.
+
+Well, it's not that simple because how much time do you want to wait?
+
+The distro installed on the system I'm using right now ships with a
+6.4-based kernel, so it potentially sees and may report breakage
+introduced into the mainline 2 years ago.
+
+Will you decide to go back to the EHCI quirk if breakage is reported 2
+years after dropping it?
+
+IMV, if a decision is made to change the pci_disable_device() behavior
+in this respect, we'll need to stick to it unless the breakage is
+common and overwhelming (which I don't really expect to be the case).
 
