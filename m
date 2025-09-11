@@ -1,133 +1,202 @@
-Return-Path: <linux-pm+bounces-34466-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34467-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97982B532D2
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 14:55:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 02101B5334F
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 15:11:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E0A151C85FD0
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 12:55:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 37D9C1CC0F19
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 13:11:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DB1931A575;
-	Thu, 11 Sep 2025 12:55:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49668322C66;
+	Thu, 11 Sep 2025 13:10:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T5I3wIMm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RY7o4wJK"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E58BF23AB8A;
-	Thu, 11 Sep 2025 12:55:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FAA11E51D;
+	Thu, 11 Sep 2025 13:10:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757595303; cv=none; b=n+PtN9VXP/2S+GPfcRiuT8BsfeGKSj4mjz790cvvuTeAbPICVIN3EnCagaIAQeJrWuiKt8vs+B1VZavOalCUlSa3DYwgUnmwDcyXYTdYHeNUEC+WTPrJ0lj6KyOzAKUQpUaWVXa34d0+PvFiF34e6ziHNz0tgyjfgxsfE89er6w=
+	t=1757596253; cv=none; b=IzlbYmWCNn9MA5iLfHG3sPRtgPkFeB5npla+Uaepb1Xq3ariy4dFUhgvnnpOdx9+JTFhz1IvdjiYTMG3KYe41OFaYoUAmchWHF8KpIh0AMCbU28jQ7f6JRoQHqOMcDw5aVIE9TRFGPiUkfgZjqrmPJ0SCWqvFjy6uOKTlIc8TVc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757595303; c=relaxed/simple;
-	bh=kUamfGGx5n3Z4g26DreT0zQfkgHhAnmsXNz8Phr6jjk=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=g7vnXaQTY0ZMNwhjfHVq3e+CezWzh8H+AKEGw6sanamVl6geB4Wx2XEBkvub8eyQq6kkIuE/fHl5/GPzJCfUEqai5Lmad4SnPwVHdLvlj5BYbwJIlVTWntgj1yaQ6vw7fpDgHQ74iknu1CnY2L4zRug9Suu73QSmxx/WZ3OakFo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T5I3wIMm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60ED4C4CEF0;
-	Thu, 11 Sep 2025 12:55:00 +0000 (UTC)
+	s=arc-20240116; t=1757596253; c=relaxed/simple;
+	bh=H4k8Q9rq9zdMEl/Dh5piHrCi/KZ2gwLETPP99gB1EbA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ENtVpwpSBfeK13Pi4SaaipZqRWSgfPSNoMxRFM9H1OYiWdUjWAA22ldt/0mivzMNUjdbcdbzWIcvWPBGWg+oQm56kNc+qluruI7fsyImHx6u7wM6XVv9biBK7Ck1jOUfD58oTXqeTyNaiYEL4ryqHx9+lvlOZ+phJYGjh1wqMyY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RY7o4wJK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EFCAC4CEF7;
+	Thu, 11 Sep 2025 13:10:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757595300;
-	bh=kUamfGGx5n3Z4g26DreT0zQfkgHhAnmsXNz8Phr6jjk=;
-	h=From:Date:Subject:To:Cc:From;
-	b=T5I3wIMm5cR8a7a8WIxYydkdkIWoLqIj7V6/zWw71DH25JL9DP9yLQnXHhpi1bWFH
-	 Jon60CTykRcl0LAPokqhcMq4rrRhPfbLsV5zeLoYnn4s07U7FtgkEcuvAbd57nI6ot
-	 KkgssJlfjtGe9P8oQcRuY2OkbhKe74E7fDg7hwftRaohU38Yt6ZRDGUdDnb0esJOz6
-	 KHrz3LIogWUSmr1172LVAly2UiMx73tH4OCx01UbqcQbDmeZHao2EuTWBz0ahn2W6E
-	 5CV4hDY1CaYtVRglDbYgVEmgk28xuWlsInDndYIIaDRffAsqz+kfK2BD9A4X4abTuv
-	 nFnxtKx469X8A==
-Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-746d3b0d926so263800a34.1;
-        Thu, 11 Sep 2025 05:55:00 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXV2Pkk35tqFyWxS6zteP3gR52/sEExyQg7ismuHdodV/dPZgiqGSHnaMSLfxt9oW2xibr8uzMvN1Hmiqw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzeviPbcUjoqUnBIRbQLIbSDfEABHz2OQXeRdcQolFKXY1AOOQl
-	Axw4df2NKFq4JpatCACgXYDHqwhgHFEZyo58Rg5UHYfbPDF6x6BkPLuZymvIoBojbgz0HR3Au58
-	4XGdxlIYHg4DBpCCTGKfLFmcR5Iihj1Q=
-X-Google-Smtp-Source: AGHT+IG98WhLqVCwMY/2AvCS2rEBfCNKgym1hWiGmI+LlUs45ABBWM3HslvA2dJfb4fFE30Rskq85kM3n2B5GVb0bF4=
-X-Received: by 2002:a05:6830:2584:b0:745:a21c:6a6a with SMTP id
- 46e09a7af769-74c7115e030mr11993928a34.12.1757595299560; Thu, 11 Sep 2025
- 05:54:59 -0700 (PDT)
+	s=k20201202; t=1757596252;
+	bh=H4k8Q9rq9zdMEl/Dh5piHrCi/KZ2gwLETPP99gB1EbA=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=RY7o4wJKOjS5DgP78W9KZNIiXa6FdVpifM6A1AWdML9p5GoVE62FIniyCJNzqoQSn
+	 U7Lik8009k1poAP52p4DKEHOa3hBTPhIBlQ67oLuO2VdLD9NvaAdarJr0D+TLldKw1
+	 tEF+/8/bb6y1AjfgaqxwoDjRGBs0Pk9hMiiGJFtQPNjirVah/1GsykSSYbw/6x+FyD
+	 X/tDtiCmuvDv1YI0tFf4qejc1Nx13NEtACWVPBXxJFSpWmv+ts4MPnMwCPWglp4mCa
+	 S0iScmXZ2kGA4y+Zgzq23opwRAuuI4Hh+dCLdZRl6GPxUiKblJdn/qNmrRbiErZEb8
+	 BOQ+bIJjXAgCA==
+Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-61e74e59d8fso337279eaf.0;
+        Thu, 11 Sep 2025 06:10:52 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVRMlCDE6HrUuVwEatFCvIAQ7J2Bnjma4ScJ2ct8cjqD3bnwFQvPT8C+lcVg649Jfd+GI0gnkweOjo=@vger.kernel.org, AJvYcCXEic1ZkyhBvk36kykOlKCDn1UgzFlZrnkRi1nycEwRI7q/xCstGVu+oRwlAZXHSQoMm5ThNfphyhJoftk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxxPyuuYE9jqyPkeYDcOxMS+/LcY64IdZI5WqnlwoJ4JxbDHEpk
+	nBK/ldV+NP00hHFOYJVOMPu/8h4KbEmKOr9b6PNeuoNRFbZKGuJ8ovBX0LfJsjSdclt8rpvFCnM
+	SvYt3y26R44cs50wpD/CTq2An/96b48o=
+X-Google-Smtp-Source: AGHT+IEp4oZb5hKSSK2t02v0yzfkPM/CgXSwAhnURJANNfuQmeKFvSkfxAvZim4eOVOp213gLdLmqFSoqal5A3Zlxto=
+X-Received: by 2002:a05:6820:3307:b0:61b:f98a:2f19 with SMTP id
+ 006d021491bc7-621b2f0f23fmr1129291eaf.2.1757596251914; Thu, 11 Sep 2025
+ 06:10:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <cover.1757577879.git.luoxueqin@kylinos.cn> <86d4e558707e7b03c248ef67cb76ec635a875d9b.1757577879.git.luoxueqin@kylinos.cn>
+In-Reply-To: <86d4e558707e7b03c248ef67cb76ec635a875d9b.1757577879.git.luoxueqin@kylinos.cn>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 11 Sep 2025 14:54:48 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0j-OGp-djCo7m8Y92v1FOPTYbPp4tw_d1N4jyS_4gfgFA@mail.gmail.com>
-X-Gm-Features: Ac12FXwqS_NWGj2I3GSYyJaA8rO-OqDwtZiyLBPTk9_i-irvZti3A1x1AEJMQdk
-Message-ID: <CAJZ5v0j-OGp-djCo7m8Y92v1FOPTYbPp4tw_d1N4jyS_4gfgFA@mail.gmail.com>
-Subject: [GIT PULL] Power management fixes for v6.17-rc4
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Linux PM <linux-pm@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Mario Limonciello <mario.limonciello@amd.com>
+Date: Thu, 11 Sep 2025 15:10:39 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0hL_q9t2Tdu5DVZNqV_YkNpofV9S+N-rRRrAY3er5X_7Q@mail.gmail.com>
+X-Gm-Features: Ac12FXw74ytzQQDwGB4nu1cTpiup9Fq3YTm8PT-v9dUnNGDt7lsHx4oTc4z8Y3s
+Message-ID: <CAJZ5v0hL_q9t2Tdu5DVZNqV_YkNpofV9S+N-rRRrAY3er5X_7Q@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] PM: hibernate: dynamically allocate
+ crc->unc_len/unc for configurable threads
+To: Xueqin Luo <luoxueqin@kylinos.cn>
+Cc: rafael@kernel.org, pavel@kernel.org, lenb@kernel.org, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Linus,
+On Thu, Sep 11, 2025 at 10:10=E2=80=AFAM Xueqin Luo <luoxueqin@kylinos.cn> =
+wrote:
+>
+> The current implementation uses fixed-size arrays for crc->unc_len and
+> crc->unc, which limits the number of compression threads to a compile-tim=
+e
+> constant (CMP_THREADS). This patch converts them to dynamically allocated
+> arrays, sized according to the actual number of threads selected at runti=
+me.
 
-Please pull from the tag
+Please don't say "this patch" (or similar) in patch changelogs.  It's
+better to use imperative sentences like "Convert them to dynamically
+allocated arrays, ...".
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- pm-6.17-rc6
+>
+> Signed-off-by: Xueqin Luo <luoxueqin@kylinos.cn>
+> ---
+>  kernel/power/swap.c | 44 ++++++++++++++++++++++++++++++++++++++++----
+>  1 file changed, 40 insertions(+), 4 deletions(-)
+>
+> diff --git a/kernel/power/swap.c b/kernel/power/swap.c
+> index 0beff7eeaaba..bd149a54c081 100644
+> --- a/kernel/power/swap.c
+> +++ b/kernel/power/swap.c
+> @@ -585,8 +585,8 @@ struct crc_data {
+>         wait_queue_head_t go;                     /* start crc update */
+>         wait_queue_head_t done;                   /* crc update done */
+>         u32 *crc32;                               /* points to handle's c=
+rc32 */
+> -       size_t *unc_len[CMP_THREADS];             /* uncompressed lengths=
+ */
+> -       unsigned char *unc[CMP_THREADS];          /* uncompressed data */
+> +       size_t **unc_len;                                     /* uncompre=
+ssed lengths */
+> +       unsigned char **unc;                              /* uncompressed=
+ data */
+>  };
+>
+>  /*
+> @@ -721,7 +721,21 @@ static int save_compressed_image(struct swap_map_han=
+dle *handle,
+>
+>         crc =3D kzalloc(sizeof(*crc), GFP_KERNEL);
+>         if (!crc) {
+> -               pr_err("Failed to allocate crc\n");
+> +               pr_err("Failed to allocate crc structure\n");
+> +               ret =3D -ENOMEM;
+> +               goto out_clean;
+> +       }
+> +
+> +       crc->unc_len =3D kcalloc(nr_threads, sizeof(size_t *), GFP_KERNEL=
+);
+> +       if (!crc->unc_len) {
+> +               pr_err("Failed to allocate crc->unc_len for %d threads\n"=
+, nr_threads);
+> +               ret =3D -ENOMEM;
+> +               goto out_clean;
+> +       }
+> +
+> +       crc->unc =3D kcalloc(nr_threads, sizeof(unsigned char *), GFP_KER=
+NEL);
+> +       if (!crc->unc) {
+> +               pr_err("Failed to allocate crc->unc for %d threads\n", nr=
+_threads);
+>                 ret =3D -ENOMEM;
+>                 goto out_clean;
+>         }
 
-with top-most commit bddce1c7a5ab3ec2dd0fc404f4155c0c17e847b2
+Can you avoid code duplication by defining helpers for allocating and
+freeing them both and using those helpers where applicable (image
+creation and uncompression)?
 
- Merge branches 'pm-sleep' and 'pm-em'
-
-on top of commit 76eeb9b8de9880ca38696b2fb56ac45ac0a25c6c
-
- Linux 6.17-rc5
-
-to receive power management fixes for 6.17-rc6.
-
-These fix a nasty hibernation regression introduced during the 6.16
-cycle, an issue related to energy model management occurring on Intel
-hybrid systems where some CPUs are offline to start with, and two
-regressions in the amd-pstate driver:
-
- - Restore a pm_restrict_gfp_mask() call in hibernation_snapshot() that
-   was removed incorrectly during the 6.16 development cycle (Rafael
-   Wysocki)
-
- - Introduce a function for registering a perf domain without triggering
-   a system-wide CPU capacity update and make the intel_pstate driver
-   use it to avoid recurring unsuccessful attempts to update capacities
-   of all CPUs in the system (Rafael Wysocki)
-
- - Fix setting of CPPC.min_perf in the active mode with performance
-   governor in the amd-pstate driver to restore its expected behavior
-   changed recently (Gautham Shenoy)
-
- - Avoid mistakenly setting EPP to 0 in the amd-pstate driver after
-   system resume as a result of recent code changes (Mario Limonciello)
-
-Thanks!
-
-
----------------
-
-Gautham R. Shenoy (1):
-      cpufreq/amd-pstate: Fix setting of CPPC.min_perf in active mode
-for performance governor
-
-Mario Limonciello (AMD) (1):
-      cpufreq/amd-pstate: Fix a regression leading to EPP 0 after resume
-
-Rafael J. Wysocki (2):
-      PM: EM: Add function for registering a PD without capacity update
-      PM: hibernate: Restrict GFP mask in hibernation_snapshot()
-
----------------
-
- drivers/cpufreq/amd-pstate.c   | 19 +++++++++++--------
- drivers/cpufreq/intel_pstate.c |  4 ++--
- include/linux/energy_model.h   | 10 ++++++++++
- kernel/power/energy_model.c    | 29 +++++++++++++++++++++++++----
- kernel/power/hibernate.c       |  1 +
- 5 files changed, 49 insertions(+), 14 deletions(-)
+> @@ -886,6 +900,10 @@ static int save_compressed_image(struct swap_map_han=
+dle *handle,
+>  out_clean:
+>         hib_finish_batch(&hb);
+>         if (crc) {
+> +               if (crc->unc)
+> +                       kfree(crc->unc);
+> +               if (crc->unc_len)
+> +                       kfree(crc->unc_len);
+>                 if (crc->thr)
+>                         kthread_stop(crc->thr);
+>                 kfree(crc);
+> @@ -1241,7 +1259,21 @@ static int load_compressed_image(struct swap_map_h=
+andle *handle,
+>
+>         crc =3D kzalloc(sizeof(*crc), GFP_KERNEL);
+>         if (!crc) {
+> -               pr_err("Failed to allocate crc\n");
+> +               pr_err("Failed to allocate crc structure\n");
+> +               ret =3D -ENOMEM;
+> +               goto out_clean;
+> +       }
+> +
+> +       crc->unc_len =3D kcalloc(nr_threads, sizeof(size_t *), GFP_KERNEL=
+);
+> +       if (!crc->unc_len) {
+> +               pr_err("Failed to allocate crc->unc_len for %d threads\n"=
+, nr_threads);
+> +               ret =3D -ENOMEM;
+> +               goto out_clean;
+> +       }
+> +
+> +       crc->unc =3D kcalloc(nr_threads, sizeof(unsigned char *), GFP_KER=
+NEL);
+> +       if (!crc->unc) {
+> +               pr_err("Failed to allocate crc->unc for %d threads\n", nr=
+_threads);
+>                 ret =3D -ENOMEM;
+>                 goto out_clean;
+>         }
+> @@ -1507,6 +1539,10 @@ static int load_compressed_image(struct swap_map_h=
+andle *handle,
+>         for (i =3D 0; i < ring_size; i++)
+>                 free_page((unsigned long)page[i]);
+>         if (crc) {
+> +               if (crc->unc)
+> +                       kfree(crc->unc);
+> +               if (crc->unc_len)
+> +                       kfree(crc->unc_len);
+>                 if (crc->thr)
+>                         kthread_stop(crc->thr);
+>                 kfree(crc);
+> --
+> 2.43.0
+>
 
