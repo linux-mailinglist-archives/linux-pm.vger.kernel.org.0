@@ -1,152 +1,127 @@
-Return-Path: <linux-pm+bounces-34482-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34483-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E5D4B5350B
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 16:18:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D987B53511
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 16:20:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BDDFD164961
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 14:18:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C0CA95A3C35
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 14:20:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 373B1212B0A;
-	Thu, 11 Sep 2025 14:18:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEEA121ABB9;
+	Thu, 11 Sep 2025 14:20:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Fd7oOyA6"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="N/D3kTRV"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF31417AE1D;
-	Thu, 11 Sep 2025 14:17:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 534B3212B0A
+	for <linux-pm@vger.kernel.org>; Thu, 11 Sep 2025 14:20:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757600280; cv=none; b=A086FUSIHNKyzwWMj3DsYs3X2Dc198hKmIg7DqaXkitj2iOcvUjKl38HS5EZHc6twGg+6MgtGQ1VMbQndYen1X/Lhmxs0AKB3UV+RUMeIjLI3HDQdSGRkoMphiv0tzQ1FHFpavUUvvnYPYhuOWE2VcS41x30j8/vyG8TBwksZQo=
+	t=1757600403; cv=none; b=mjw9DrkOrjZ6khAUfgAYos/2j2JbAce4Sp0ekUq9Y2SPRxGIYTl3wrv5llaQNxaZMyRqWYACu+f0MkVExjL8hiYRaipCN58H5LWw4ffHwTkBmEc+IfqvsieAEP7HbaWseJtH4oz4xKIH3LfKSxuI/N5XEMO5m5xcktH69YvgDoo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757600280; c=relaxed/simple;
-	bh=HblPOjZem8RNfqmFhs/s0Ce09qOoWVvo08EXRTZP8lo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ABVadueR5SC6x5/gYx3zfEbrNQX6P4SvTiUEcSiQtXlPrynUccfkLNG42Jq8lv1aYWBpZ3FsGX7FHRAltRsWOhtbnX25vtnWe8DM5Dxwl+e904HWjgcu64DyVUegvz/TlxoO0gcx6jVOtaAq3bnoTnHdOK3NMz4ui+9QekdnlEU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Fd7oOyA6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FEF4C4CEF0;
-	Thu, 11 Sep 2025 14:17:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757600278;
-	bh=HblPOjZem8RNfqmFhs/s0Ce09qOoWVvo08EXRTZP8lo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Fd7oOyA6lgB3Gua29I7OyPMYztxzfY367vujWpHxeNLcandWM3Ft/oKdKT2IrYjcI
-	 56bjwqfzsaST/osz2unhU+qycUzEujZmWXFyewCDoODQzMMibpFcSdWqdS/f8tjcon
-	 QnZ5jq+iyGALNGWqyyKADC0rXLSRvvQqO5Oad45KuEgX6Jz9U8blnt3UYm7dolYZJO
-	 4MjXnhcNw636PWwmSTyPUVuDLZhqb7h8c8yqSZMMkZSlEnQLvbhbMF9lOsLsjTqW5o
-	 3vFO1ZLNYt5jamqmaljZF32ECeQPFatPU7MjAqB1orLmOjQT77519yk3fjbulE5CN4
-	 7HovARcrM69ig==
-Date: Thu, 11 Sep 2025 16:17:55 +0200
-From: Frederic Weisbecker <frederic@kernel.org>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Linux PM <linux-pm@vger.kernel.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Christian Loehle <christian.loehle@arm.com>
-Subject: Re: [PATCH v1 3/3] cpuidle: governors: menu: Special-case nohz_full
- CPUs
-Message-ID: <aMLaEwBHwiDhgaWM@localhost.localdomain>
-References: <2804546.mvXUDI8C0e@rafael.j.wysocki>
- <2244365.irdbgypaU6@rafael.j.wysocki>
+	s=arc-20240116; t=1757600403; c=relaxed/simple;
+	bh=pwt3sKMZTwzi5oyWxEN+3RjXfWcYCwF9ayzyhmI5SI4=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=XdJueiMpLnkR7LW03nbjrJLsjcCDUdSrfhg1ls259WMESA6OgNgzuYorFHxG1HR31WJP/srt37fE8fs0tyx6/cfuqYNlKgCE8v20ZSYo0SxjzIasJQ7GO4NhrY1/zxI5M6Ar7nekyMFHw1tAapuzV1BohqX3U0E+C0rP8F1kftw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=N/D3kTRV; arc=none smtp.client-ip=209.85.216.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-329ccb59ef6so721192a91.0
+        for <linux-pm@vger.kernel.org>; Thu, 11 Sep 2025 07:20:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1757600402; x=1758205202; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=DrndfxQ6TSaH0WN9cPCMXVX2wBUepc9wx8k6s7n8/YI=;
+        b=N/D3kTRVJ0Md3+4rJA2zr2UqhttOJGt4rNlPBF260FaGnE2MpP7SzBmDt8bla/gFYN
+         NtRZ3gufW3x7wxyAApRnDVDLiKpcTraAL7Szr61YLZAtwqGrxFAAuu1nxGJ9E3BfBZOB
+         jBPyyoDI4/jX2y0LKWt/h7ooOiMx5YUwcLKxgTVVdanl9WfYxCfG6BJW/jKtVRB/sRL7
+         kh3bPiSFCr9r9nexa3Mrn1FLmwK1dPDJpD5I6WyqT9NdUKRxiv3ycvq5FIjcJimwTouI
+         yctrR+QXhf2Kszu2aiZuk97CtmuC1HfINxEAcXwonFrxrGne630y0++tWxc39+3rLBwT
+         B06A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757600402; x=1758205202;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DrndfxQ6TSaH0WN9cPCMXVX2wBUepc9wx8k6s7n8/YI=;
+        b=gyUNfCXAuHr8gBJ6PgWEFfyjORyTjpjXCVV7EqfzKsAUo6RC0S35yG1cHXWuK0QL+C
+         YsS3Anxv/srI8ZQvaEnmoWQjBA+pqLeMhqwmGpEwzdgZK49Fyw8KSd1ZWqVLNpl7r/2H
+         atXN1AdmShJL6L98Ek7Zsuz7TT5XmriUeMLgOP1uggBruzeFwqPJJBiJB475pM+eO2Ft
+         UIC7GiEzJyadrv4pVL2MBSQWlAmJFANqChuBARlUkWGphw6EhOB1+swps55w3lIY2lqV
+         u+XlA/lXWhIcV+v/Q8zTkojtV2hfeHWEcP3kmNcx31bTFx2L14Ew/DrbwIPQYwB6a1xB
+         4RXw==
+X-Forwarded-Encrypted: i=1; AJvYcCXrzSL2UhrXdo1ZrzGj5ZncRJC1lPBpBi/0csSi6kISx8yqYzUzcbhM5cPkDGZbMujyBelRN5D7Og==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxHrMDhYjnvyM4/QgJ1kAMaGvaAl8lfkz9RmM7JdlHxe+qrv8nf
+	9VbsAZjdAlXMPRQbQRCIa+4uVzOd0/tbFUJFWWmfjq5RB6TVE4+asUWLn8YjirHWQKabR1Gkbmd
+	/DlPmlw==
+X-Google-Smtp-Source: AGHT+IGoY4XzeimX4Qx5PFV5aBnqr9j6/zervU1TviGGl7Q4s1fC/e4Znd1pw4jlyG8vHmJxWf0THQuaDkQ=
+X-Received: from pjbso14.prod.google.com ([2002:a17:90b:1f8e:b0:327:4fa6:eaa1])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90a:d448:b0:32b:5dbf:e48
+ with SMTP id 98e67ed59e1d1-32d43f045bbmr22319570a91.1.1757600401669; Thu, 11
+ Sep 2025 07:20:01 -0700 (PDT)
+Date: Thu, 11 Sep 2025 07:20:00 -0700
+In-Reply-To: <20250909182828.1542362-1-xin@zytor.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2244365.irdbgypaU6@rafael.j.wysocki>
+Mime-Version: 1.0
+References: <20250909182828.1542362-1-xin@zytor.com>
+Message-ID: <aMLakCwFW1YEWFG4@google.com>
+Subject: Re: [RFC PATCH v1 0/5] x86/boot, KVM: Move VMXON/VMXOFF handling from
+ KVM to CPU lifecycle
+From: Sean Christopherson <seanjc@google.com>
+To: "Xin Li (Intel)" <xin@zytor.com>
+Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
+	linux-pm@vger.kernel.org, pbonzini@redhat.com, tglx@linutronix.de, 
+	mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org, 
+	hpa@zytor.com, rafael@kernel.org, pavel@kernel.org, brgerst@gmail.com, 
+	david.kaplan@amd.com, peterz@infradead.org, andrew.cooper3@citrix.com, 
+	kprateek.nayak@amd.com, arjan@linux.intel.com, chao.gao@intel.com, 
+	rick.p.edgecombe@intel.com, dan.j.williams@intel.com
+Content-Type: text/plain; charset="us-ascii"
 
-Le Wed, Aug 13, 2025 at 12:29:51PM +0200, Rafael J. Wysocki a écrit :
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Tue, Sep 09, 2025, Xin Li (Intel) wrote:
+> There is now broad consensus that TDX should be decoupled from KVM. To
+> achieve this separation, it is necessary to move VMXON/VMXOFF handling
+> out of KVM. Sean has also discussed this approach in several TDX patch
+> series threads, e.g. [1], and has already done a round of refactoring
+> in KVM [2].
 > 
-> When the menu governor runs on a nohz_full CPU and there are no user
-> space timers in the workload on that CPU, it ends up selecting idle
-> states with target residency values above TICK_NSEC all the time due to
-> a tick_nohz_tick_stopped() check designed for a different use case.
->
-> Namely, on nohz_full CPUs the fact that the tick has been stopped does
-> not actually mean anything in particular, whereas in the other case it
-> indicates that previously the CPU was expected to be idle sufficiently
-> long for the tick to be stopped, so it is not unreasonable to expect
-> it to be idle beyond the tick period length again.
-
-I understand what you mean but it may be hard to figure out for
-reviewers. Can we rephrase it to something like:
-
-When nohz_full is not running, the fact that the tick is stopped
-indicates the CPU has been idle for sufficiently long so that
-nohz has deferred it to the next timer callback. So it is
-not unreasonable to expect the CPU to be idle beyond the tick
-period length again.
-
-However when nohz_full is running, the CPU may enter idle with the
-tick already stopped. But this doesn't tell anything about the future
-CPU's idleness.
-
->   
-> In some cases, this behavior causes latency in the workload to grow
-> undesirably.  It may also cause the workload to consume more energy
-> than necessary if the CPU does not spend enough time in the selected
-> deep idle states.
+> The simplest thing we could think of is to execute VMXON during the CPU
+> startup phase and VMXOFF during the CPU shutdown phase, even although
+> this leaves VMX on when it doesn't strictly need to be on.
 > 
-> Address this by amending the tick_nohz_tick_stopped() check in question
-> with a tick_nohz_full_cpu() one to avoid using the time till the next
-> timer event as the predicted_ns value all the time on nohz_full CPUs.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
->  drivers/cpuidle/governors/menu.c |   12 +++++++++++-
->  1 file changed, 11 insertions(+), 1 deletion(-)
-> 
-> --- a/drivers/cpuidle/governors/menu.c
-> +++ b/drivers/cpuidle/governors/menu.c
-> @@ -293,8 +293,18 @@
->  	 * in a shallow idle state for a long time as a result of it.  In that
->  	 * case, say we might mispredict and use the known time till the closest
->  	 * timer event for the idle state selection.
-> +	 *
-> +	 * However, on nohz_full CPUs the tick does not run as a rule and the
-> +	 * time till the closest timer event may always be effectively infinite,
-> +	 * so using it as a replacement for the predicted idle duration would
-> +	 * effectively always cause the prediction results to be discarded and
-> +	 * deep idle states to be selected all the time.  That might introduce
-> +	 * unwanted latency into the workload and cause more energy than
-> +	 * necessary to be consumed if the discarded prediction results are
-> +	 * actually accurate, so skip nohz_full CPUs here.
->  	 */
-> -	if (tick_nohz_tick_stopped() && predicted_ns < TICK_NSEC)
-> +	if (tick_nohz_tick_stopped() && !tick_nohz_full_cpu(dev->cpu) &&
-> +	    predicted_ns < TICK_NSEC)
->  		predicted_ns = data->next_timer_ns;
+> This RFC series demonstrates the idea and seeks feedback from the KVM
+> community on its viability.
 
-So, when !tick_nohz_full_cpu(dev->cpu), what is the purpose of this tick stopped
-special case?
+Sorry, but this is not at all aligned with where I want things to go.  I don't
+want to simply move VMXON into the kernel, I want to extract *all* of the system-
+wide management code from KVM and into a separate base module.  That is obviously
+a much more invasive and difficult series to develop, but it's where we need to
+go to truly decouple core virtualization functionality from KVM.
 
-Is it because the next dynamic tick is a better prediction than the typical
-interval once the tick is stopped?
+VPID and ASID allocation need to be managed system-wide, otherwise running KVM
+alongside another hypervisor-like entity will result in data corruption due to
+shared TLB state.
 
-Does that mean we might become more "pessimistic" concerning the predicted idle
-time for nohz_full CPUs?
+Ditto for user-return MSRs, AMD's MSR_AMD64_TSC_RATIO, and probably a few other
+things I'm forgetting.
 
-I guess too shallow C-states are still better than too deep but there should be
-a word about that introduced side effect (if any).
+I also want to keep the code as a module, both to avoid doing VMXON unconditionally,
+and for debug/testing purposes (being able to unload and reload is tremendously
+valuable on that front).  This one isn't negotiable for me.
 
-Thanks!
+And most importantly, all of that needs to be done in a way that is fully
+bisectable.  As proposed, this series will break horribly due to enabling VMXON
+during early boot without any way to do VMXOFF.
 
->  	/*
-> 
-> 
-> 
-
--- 
-Frederic Weisbecker
-SUSE Labs
+In short, I don't want to half-ass this just so that I can get overwhelmed with
+more TDX patches.
 
