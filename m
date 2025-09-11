@@ -1,158 +1,195 @@
-Return-Path: <linux-pm+bounces-34459-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34460-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 60391B530CD
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 13:38:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 088AEB531AA
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 14:02:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D2EC3189BA44
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 11:38:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AE1C25621D5
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 12:02:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E884331AF3B;
-	Thu, 11 Sep 2025 11:36:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 851822E6CD4;
+	Thu, 11 Sep 2025 12:02:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LpZBJPfx"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XKojiEf0"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB78131A067;
-	Thu, 11 Sep 2025 11:36:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AD0E1A2387;
+	Thu, 11 Sep 2025 12:02:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757590571; cv=none; b=sML8Z5yATc1KPsDixhYM9Mjvuft+p2BokA66CunDSnzfipWGngNF+1mVGLizxRi9AFne7vPPYC2pIbTkn+FfkrpU7hHtuDQH3ui3j2Hfv6gge07b5rG+D3GnbyJ3Da6ix3EQAu8NcIOqXL85tt/E9LumyluYiYtiGCGFshYTEbI=
+	t=1757592156; cv=none; b=ayDgiHX8bWKavBg2t2/JIF9GwRkryrdkxLeLVtcZY+BxQRhYmCZ9WbgdIcOeuEN+jO+C0dpHX8wcLF9P4/N3D1F3rJNtgQBtdg+2x3fVBqo9+a7Qy2DyGf2nSSRADxwJ0GISHiik5SnUDLi5k0YR9uGaO3ea91MVEYJvJiNziYI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757590571; c=relaxed/simple;
-	bh=CNpV22T8AswRhrpiLRxkJUzKe8iNuebBhrTWXhnyZYk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gsEDz0p9uE1PcWbzxFgtO9QUs5AGMXPSdZwDAGzLmtBcQEdQJdnEE5ppibaRrkWQmRUkCLVdw/TqsT5kdghNk+CPmBsqa3vrchxZ3TLGZSeLP2eTpF4nyBP4Ru0/vj44IjsiP2OUKSdooRXnhTnSVW7C0xj/7hNNYQAwsQ6ZVd8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LpZBJPfx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BF5FC4CEF9;
-	Thu, 11 Sep 2025 11:36:11 +0000 (UTC)
+	s=arc-20240116; t=1757592156; c=relaxed/simple;
+	bh=zpM+DhWj9YA1TN35eXjLmbBj8/Oaj6d6nonmt/fS7vU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=iVD/rXcVWvgAYj8+iZBO76gYwq8W+x3JsYpqcBRQDqz2aEhl6pfd2H2kfINIWVuCdGKsT/HvwX7Js3+G7L6z7BNSg6v+oS3P7Qfw9Atl8hlkkGFjZo+ZTrGwXoV9iucZIg0m5rPJLEG1azmP7VziFSGQnt1iVulfil84LHkn5KU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XKojiEf0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 325FDC4CEF0;
+	Thu, 11 Sep 2025 12:02:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757590571;
-	bh=CNpV22T8AswRhrpiLRxkJUzKe8iNuebBhrTWXhnyZYk=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=LpZBJPfxwsrKIXWYj30aaWqO+d+TUSw6TfUWJdVzWgT/uhshobmE/XjzNqkkjx7gf
-	 c+D31pPsvR4elLEJy4+Z+q5PDK1G2uATe2mUkai3kIFcdLMhVQboQ1EdODHjaGDNjh
-	 KYGQ2qTCuFBNxnVKZlRtLbXDIut0uwvwwTtc623H77GawAjqxJ71cfNP11Gw/UblWU
-	 QAd+YG7xog1oSJiqOaJaM1CubGxR0C5lXw8GoPWyTF0KWUU4V5rqSo21BXFOqdkM/w
-	 pLGRWU2pB60iMTzhyuBgoQ+q+Mw0XMAoClusfM0RHEXh+0VEdmaA/nNZCB1XlLM8DE
-	 YJERSEMYq/quw==
-Received: by mail-ot1-f41.google.com with SMTP id 46e09a7af769-745a415bf72so215270a34.2;
-        Thu, 11 Sep 2025 04:36:11 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUeYMenxx2J9IrwOfKXLUMvP9Ru9IZzS3oa+FA0KwlXDhIsqSSBW6ogoJawfP7lxQJvJZ7qTQK2SnKFhHM=@vger.kernel.org, AJvYcCW9jNylzvtn7HOWp88HUwMu3KvzsxzxYJWDrIPgG4cLZaSwKA1nQwYjxmzohER8nFyCXe4w1H4f2ns=@vger.kernel.org, AJvYcCWLKLmvUhKGEgeLY0xlvrEMJ8/Z08qvRKFv3ti7UJL+ERRSFysBYtUuXfT+dWLhZWbe0+xHrp68dE8j@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy2gk9BUiJryll8/Tf1kpWChEj8pMr0MeiPxc+Xoc771wY3peOH
-	bSi8g9Z1EqO/jvx+efXQh/5Z40tYi1RXHJp49zF2g6Txq04O1NPbwilH9IMNUg5o2cyEx406ifJ
-	IReS6Pd5AlQJsYVbRXJ4leIbH/uhNpLg=
-X-Google-Smtp-Source: AGHT+IHqgnkh2OWQWfy0kZC+r/sWfXUgOMIve2iTBUboctBeQ8xCunXip+WdacLIRpUxIMq60eEynLI3cVNClcPNozs=
-X-Received: by 2002:a05:6830:34a9:b0:745:606d:a515 with SMTP id
- 46e09a7af769-74c6e47a84fmr7636308a34.1.1757590570810; Thu, 11 Sep 2025
- 04:36:10 -0700 (PDT)
+	s=k20201202; t=1757592155;
+	bh=zpM+DhWj9YA1TN35eXjLmbBj8/Oaj6d6nonmt/fS7vU=;
+	h=From:To:Cc:Subject:Date:From;
+	b=XKojiEf0wXIYGMnKK31tkYHyJWLDp7WB+ZpauArW9aR+PmsnUXkKkX6WFzI+fmR1n
+	 KjqAYmyo5aP0Je16w/fETeZJUtpTuWO8AL2tzbmNy2KOoggrCEkQVa/rmWVVwf1WdX
+	 LrHd1XVWGRC3aqkhyumBGvU/sXIuBF5AerGJG28GTlJTpz6iX4FyBlKZj4Pcjf6+Pp
+	 X/fynI0Kkup6yW6jjf2MauOU8cGfqRpwUwr3BBuPZN0jo2H1Vu54SCF4WuctcgsOqH
+	 TSD/dkDCXkXsRnrzlaj6TbOlAe2c8eYMFJdhe8BSCjXf+/K2E9P0SngeYBwmzqoXym
+	 oHGq7X8bndMbw==
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+To: Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject:
+ [PATCH v1] cpufreq: intel_pstate: Enable HWP without EPP if DEC is enabled
+Date: Thu, 11 Sep 2025 14:02:33 +0200
+Message-ID: <12744761.O9o76ZdvQC@rafael.j.wysocki>
+Organization: Linux Kernel Development
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <385dccf3-234a-4f83-9610-81ac30bf1466@rowland.harvard.edu>
- <20250909161901.10733-1-ryanzhou54@gmail.com> <20250911013242.oxm2kwfaqvmybbhk@synopsys.com>
- <xbfvykzfi26pyaycd7efbqvmraxcu6zzgqjfxtk33wcsjsnnal@5e3g4pq5qcj3>
-In-Reply-To: <xbfvykzfi26pyaycd7efbqvmraxcu6zzgqjfxtk33wcsjsnnal@5e3g4pq5qcj3>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 11 Sep 2025 13:35:59 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0gT26VK-sHmgK_S4RjjO3Uc-ZmoAYos43S5yWh0zWc9DA@mail.gmail.com>
-X-Gm-Features: Ac12FXyYq6TGze2lEaGahV6ycs6T8Gj-NY9mhxuAe6ZfTmot6HAePuEoaNbA1Jc
-Message-ID: <CAJZ5v0gT26VK-sHmgK_S4RjjO3Uc-ZmoAYos43S5yWh0zWc9DA@mail.gmail.com>
-Subject: Re: [PATCH v2] drvier: usb: dwc3: Fix runtime PM trying to activate
- child device xxx.dwc3 but parent is not active
-To: Xu Yang <xu.yang_2@nxp.com>
-Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>, Ryan Zhou <ryanzhou54@gmail.com>, 
-	"stern@rowland.harvard.edu" <stern@rowland.harvard.edu>, 
-	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, 
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, "rafael@kernel.org" <rafael@kernel.org>, 
-	"royluo@google.com" <royluo@google.com>
+Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Sep 11, 2025 at 12:58=E2=80=AFPM Xu Yang <xu.yang_2@nxp.com> wrote:
->
-> Hi Ryan,
->
-> On Thu, Sep 11, 2025 at 01:32:47AM +0000, Thinh Nguyen wrote:
-> > On Wed, Sep 10, 2025, Ryan Zhou wrote:
-> > > Issue description:During the wake-up sequence, if the system invokes
-> > >  dwc3->resume and detects that the parent device of dwc3 is in a
-> > > runtime suspend state, the system will generate an error: runtime PM
-> > > trying to activate child device xxx.dwc3 but parent is not active.
-> > >
-> > > Solution:At the dwc3->resume entry point, if the dwc3 controller
-> > > is detected in a suspended state, the function shall return
-> > > immediately without executing any further operations.
-> > >
-> > > Signed-off-by: Ryan Zhou <ryanzhou54@gmail.com>
-> > > ---
-> > >  drivers/usb/dwc3/core.c | 3 +++
-> > >  1 file changed, 3 insertions(+)
-> > >
-> > > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> > > index 370fc524a468..06a6f8a67129 100644
-> > > --- a/drivers/usb/dwc3/core.c
-> > > +++ b/drivers/usb/dwc3/core.c
-> > > @@ -2687,6 +2687,9 @@ int dwc3_pm_resume(struct dwc3 *dwc)
-> > >     struct device *dev =3D dwc->dev;
-> > >     int             ret =3D 0;
-> > >
-> > > +   if (pm_runtime_suspended(dev))
-> > > +           return ret;
-> > > +
-> >
-> > Is this a documented behavior where the device should remain runtime
-> > suspend on system resume? I feel that that this should be configurable
-> > by the user or defined the PM core. I don't think we should change
-> > default behavior here just to workaround the issue that we're facing.
-> >
-> > What if the user wants to keep the old behavior and resume up the devic=
-e
-> > on system resume?
->
-> What about resume the device firstly if it's already runtime suspended wh=
-en
-> call dwc3_pm_suspend(). Therefor, the old behavior can be kept and the is=
-sue
-> can be avoided.
->
-> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> index 370fc524a468..1b8dbb260017 100644
-> --- a/drivers/usb/dwc3/core.c
-> +++ b/drivers/usb/dwc3/core.c
-> @@ -2672,6 +2672,9 @@ int dwc3_pm_suspend(struct dwc3 *dwc)
->         struct device *dev =3D dwc->dev;
->         int             ret;
->
-> +       if (pm_runtime_suspended(dev))
-> +               pm_runtime_resume(dev);
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-You can just call pm_runtime_resume() here without the preliminary check.
+So far, HWP has never been enabled without EPP (Energy-Performance
+Preference) interface support, since the lack of the latter indicates an
+incomplete implementation of HWP, which was the case on early development
+vehicle platforms.  However, HWP can be expected to work if DEC (Dynamic
+Efficiency Control) is enabled as indicated by setting bit 27 in
+MSR_IA32_POWER_CTL (DEC enable bit).
 
-> +
->         ret =3D dwc3_suspend_common(dwc, PMSG_SUSPEND);
->         if (ret)
->                 return ret;
->
-> Thanks,
-> Xu Yang
->
-> >
-> > BR,
-> > Thinh
-> >
-> > >     pinctrl_pm_select_default_state(dev);
-> > >
-> > >     pm_runtime_disable(dev);
-> > > --
+Accordingly, allow HWP to be enabled if the EPP interface is not
+supported so long as DEC is enabled in the processor.
+
+Still, the EPP control sysfs interface is useless when EPP is not
+supported, so do not expose it in that case.
+
+Link: https://lore.kernel.org/linux-pm/20250904000608.260817-2-srinivas.pandruvada@linux.intel.com/
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Co-developed-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/cpufreq/intel_pstate.c |   72 +++++++++++++++++++++++++++++++----------
+ 1 file changed, 56 insertions(+), 16 deletions(-)
+
+--- a/drivers/cpufreq/intel_pstate.c
++++ b/drivers/cpufreq/intel_pstate.c
+@@ -897,11 +897,19 @@ static ssize_t show_base_frequency(struc
+ 
+ cpufreq_freq_attr_ro(base_frequency);
+ 
++enum hwp_cpufreq_attr_index {
++	HWP_BASE_FREQUENCY_INDEX = 0,
++	HWP_PERFORMANCE_PREFERENCE_INDEX,
++	HWP_PERFORMANCE_AVAILABLE_PREFERENCES_INDEX,
++	HWP_CPUFREQ_ATTR_COUNT,
++};
++
+ static struct freq_attr *hwp_cpufreq_attrs[] = {
+-	&energy_performance_preference,
+-	&energy_performance_available_preferences,
+-	&base_frequency,
+-	NULL,
++	[HWP_BASE_FREQUENCY_INDEX] = &base_frequency,
++	[HWP_PERFORMANCE_PREFERENCE_INDEX] = &energy_performance_preference,
++	[HWP_PERFORMANCE_AVAILABLE_PREFERENCES_INDEX] =
++				&energy_performance_available_preferences,
++	[HWP_CPUFREQ_ATTR_COUNT] = NULL,
+ };
+ 
+ static bool no_cas __ro_after_init;
+@@ -1370,6 +1378,9 @@ static void intel_pstate_hwp_offline(str
+ #define POWER_CTL_EE_ENABLE	1
+ #define POWER_CTL_EE_DISABLE	2
+ 
++/* Enable bit for Dynamic Efficiency Control (DEC) */
++#define POWER_CTL_DEC_ENABLE	27
++
+ static int power_ctl_ee_state;
+ 
+ static void set_power_ctl_ee_state(bool input)
+@@ -3758,6 +3769,26 @@ static const struct x86_cpu_id intel_hyb
+ 	{}
+ };
+ 
++static bool hwp_check_epp(void)
++{
++	if (boot_cpu_has(X86_FEATURE_HWP_EPP))
++		return true;
++
++	/* Without EPP support, don't expose EPP-related sysfs attributes. */
++	hwp_cpufreq_attrs[HWP_PERFORMANCE_PREFERENCE_INDEX] = NULL;
++	hwp_cpufreq_attrs[HWP_PERFORMANCE_AVAILABLE_PREFERENCES_INDEX] = NULL;
++
++	return false;
++}
++
++static bool hwp_check_dec(void)
++{
++	u64 power_ctl;
++
++	rdmsrq(MSR_IA32_POWER_CTL, power_ctl);
++	return !!(power_ctl & BIT(POWER_CTL_DEC_ENABLE));
++}
++
+ static int __init intel_pstate_init(void)
+ {
+ 	static struct cpudata **_all_cpu_data;
+@@ -3778,23 +3809,32 @@ static int __init intel_pstate_init(void
+ 
+ 	id = x86_match_cpu(hwp_support_ids);
+ 	if (id) {
+-		hwp_forced = intel_pstate_hwp_is_enabled();
++		bool epp_present = hwp_check_epp();
+ 
+-		if (hwp_forced)
++		/*
++		 * If HWP is enabled already, there is no choice but to deal
++		 * with it.
++		 */
++		hwp_forced = intel_pstate_hwp_is_enabled();
++		if (hwp_forced) {
+ 			pr_info("HWP enabled by BIOS\n");
+-		else if (no_load)
++			no_hwp = 0;
++		} else if (no_load) {
+ 			return -ENODEV;
++		} else if (!epp_present && !hwp_check_dec()) {
++			/*
++			 * Avoid enabling HWP for processors without EPP support
++			 * unless the Dynamic Efficiency Control (DEC) enable
++			 * bit (MSR_IA32_POWER_CTL, bit 27) is set because that
++			 * means incomplete HWP implementation which is a corner
++			 * case and supporting it is generally problematic.
++			 */
++			no_hwp = 1;
++		}
+ 
+ 		copy_cpu_funcs(&core_funcs);
+-		/*
+-		 * Avoid enabling HWP for processors without EPP support,
+-		 * because that means incomplete HWP implementation which is a
+-		 * corner case and supporting it is generally problematic.
+-		 *
+-		 * If HWP is enabled already, though, there is no choice but to
+-		 * deal with it.
+-		 */
+-		if ((!no_hwp && boot_cpu_has(X86_FEATURE_HWP_EPP)) || hwp_forced) {
++
++		if (!no_hwp) {
+ 			hwp_active = true;
+ 			hwp_mode_bdw = id->driver_data;
+ 			intel_pstate.attr = hwp_cpufreq_attrs;
+
+
+
 
