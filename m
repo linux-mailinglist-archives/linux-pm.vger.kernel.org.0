@@ -1,114 +1,73 @@
-Return-Path: <linux-pm+bounces-34461-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34462-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B3A0B531B4
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 14:05:03 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD28DB5320D
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 14:28:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 49D5D484B53
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 12:05:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 870B75867FE
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 12:28:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F390E31D759;
-	Thu, 11 Sep 2025 12:04:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D273320CDD;
+	Thu, 11 Sep 2025 12:28:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="psZsUwZt"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="j0OsoiFs"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C870E3128D4;
-	Thu, 11 Sep 2025 12:04:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 640372D238F;
+	Thu, 11 Sep 2025 12:28:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757592296; cv=none; b=SPx5QsHjuIcfjuSrO739i0VkbHYTACJGPQ2rpbO4yOO/FxSUJXWCwQSyLxxIdbVLikN+eRJE8kFcecyJkB0xc44lVbtUYRbPyx3zXuQ1QkFE11CW4CDx2suBE6U+a0h/+BVDzSv5VNh1+Rotn5kIJRI8iH/C9BWuYdOLGF1vJQc=
+	t=1757593698; cv=none; b=OOkocSK/x+i4WevttSZzov+4hhEXxdRZ2cNLsXOfgwiXHpABgvZcyIO3TsPY0QoXyvCUs5L0zk2WkXSaJZhgxxpIoR+noYnloM5O4voWP0suqjp/BuUHeWIt8aLYH4hK8refnRSdYoA1JEM0J14hbDRtSMe6Ewx/u2s6moiVXrI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757592296; c=relaxed/simple;
-	bh=PfSG7J+D1YXvousTbGjSna3BrbXANzA+C2Uksj373fI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=pYxHYmv79ovHTxpOU6U8rXaA66/E8KuUvTTmdMTo2BjsfdWott7BYB/Ziv/9IIcrU9bFPI9eO/CPanenqjbGG9TaMHbf69Z4YFxx2cOO00KgfHcqkapVtMAkVdquzLypx3UCcCqBTCHOANOXGGJaeIEyaUydLJzOyBVwzTSwkyg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=psZsUwZt; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63C91C4CEF0;
-	Thu, 11 Sep 2025 12:04:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757592296;
-	bh=PfSG7J+D1YXvousTbGjSna3BrbXANzA+C2Uksj373fI=;
-	h=From:To:Cc:Subject:Date:From;
-	b=psZsUwZtyah2SCutNeT6o8/7OoRfHDDNXdZ3AJk3u1T4sfHQQJIO8PpovNfJYMsmU
-	 0SiopT3PTQRlVuebAYQGIOkXsb/gqSNEmFv5KS3bWHaPzV+gyVKolMNepRSB0R/YDa
-	 oiQDJboMN4GwDkCuQRHE1UpKGa00Wi78J0CsnteBdJb/CWRaLiPK/MZqLnsOxDtwsP
-	 OsbkR8xukRqU8h6bn4lm/EG1DnZwFhB05tN8PxSjKIuNO5ttOE9HGUTsJeYuhT5fTq
-	 xTgf3uNHpj/aHTfL7UzLHDHrHYBokbSO6txAOrnYug6OW9IbhQtCKt4eya8TUf4ER4
-	 7mWLhwZmxXUaw==
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-To: Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>,
- Linux ACPI <linux-acpi@vger.kernel.org>,
- Viresh Kumar <viresh.kumar@linaro.org>,
- Mario Limonciello <mario.limonciello@amd.com>,
- "Shenoy, Gautham Ranjal" <gautham.shenoy@amd.com>
-Subject: [PATCH v2] cpufreq: ACPI: Use on_each_cpu_mask() in drv_write()
-Date: Thu, 11 Sep 2025 14:04:53 +0200
-Message-ID: <5044667.31r3eYUQgx@rafael.j.wysocki>
-Organization: Linux Kernel Development
+	s=arc-20240116; t=1757593698; c=relaxed/simple;
+	bh=yMm15wm7p6yVRRHMtojewEs35ZvuYj2fnBFo76gA58c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qq/fLD9IARhy/X/aulLc+CCWLiyg3C2tKvVcwViRjA8D5MxcJz9CJ2U8CF9Oip6s4ibExGQ0wPgECdI5CI2sGm1Swdk3AbG8vS3V2zOVuU9cmUrXriEYA9RYFgtgVgnaXeWBsOiMiyy1byXKfnoMm77CT0mXfEATpwPQSxSXXS4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=j0OsoiFs; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B6DAC4CEF0;
+	Thu, 11 Sep 2025 12:28:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1757593698;
+	bh=yMm15wm7p6yVRRHMtojewEs35ZvuYj2fnBFo76gA58c=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=j0OsoiFs4yi/hN07JhGsEabSS1Rfga8QjhFg9Ke98bZ+/xQq44QL1R/7mlGLhuZD9
+	 0beK5Sn4H48gkBetSowIsis3enXM2rhZ5Yc5LihPMu3x61TT3Pi16EjxSK3MYVuELs
+	 pf8tSbh3zqrwgXfP+QT502buCklQ2E3jNRnL2isg=
+Date: Thu, 11 Sep 2025 14:28:15 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Pin-yen Lin <treapking@chromium.org>
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>,
+	Pavel Machek <pavel@kernel.org>, Danilo Krummrich <dakr@kernel.org>,
+	Saravana Kannan <saravanak@google.com>,
+	Hsin-Te Yuan <yuanhsinte@chromium.org>, linux-pm@vger.kernel.org,
+	Chen-Yu Tsai <wenst@chromium.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] driver core: Export
+ device_link_flag_is_sync_state_only()
+Message-ID: <2025091137-breeding-cannon-1384@gregkh>
+References: <20250911112058.3610201-1-treapking@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250911112058.3610201-1-treapking@chromium.org>
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Thu, Sep 11, 2025 at 07:16:02PM +0800, Pin-yen Lin wrote:
+> Export device_link_flag_is_sync_state_only() for future patches.
 
-Make drv_write() call on_each_cpu_mask() instead of using an open-coded
-equivalent of the latter.
+That says what, but not why.  This feels like an odd thing to export,
+what should care about this type of thing?  What should a driver do
+based on that information?  We need more information here.
 
-Also remove a comment mentioning the smp_call_function_many() usage
-which is not particularly useful anyway.
+thanks,
 
-No intentional functional impact.
-
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Reviewed-by: Mario Limonciello (AMD) <superm1@kernel.org>
----
-
-v1 -> v2:
-   * Drop a comment mentioning smp_call_function_many() usage (Mario)
-   * Update changelog
-
----
- drivers/cpufreq/acpi-cpufreq.c |    9 +--------
- 1 file changed, 1 insertion(+), 8 deletions(-)
-
---- a/drivers/cpufreq/acpi-cpufreq.c
-+++ b/drivers/cpufreq/acpi-cpufreq.c
-@@ -318,7 +318,6 @@ static u32 drv_read(struct acpi_cpufreq_
- 	return cmd.val;
- }
- 
--/* Called via smp_call_function_many(), on the target CPUs */
- static void do_drv_write(void *_cmd)
- {
- 	struct drv_cmd *cmd = _cmd;
-@@ -335,14 +334,8 @@ static void drv_write(struct acpi_cpufre
- 		.val = val,
- 		.func.write = data->cpu_freq_write,
- 	};
--	int this_cpu;
- 
--	this_cpu = get_cpu();
--	if (cpumask_test_cpu(this_cpu, mask))
--		do_drv_write(&cmd);
--
--	smp_call_function_many(mask, do_drv_write, &cmd, 1);
--	put_cpu();
-+	on_each_cpu_mask(mask, do_drv_write, &cmd, true);
- }
- 
- static u32 get_cur_val(const struct cpumask *mask, struct acpi_cpufreq_data *data)
-
-
-
+greg k-h
 
