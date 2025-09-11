@@ -1,198 +1,153 @@
-Return-Path: <linux-pm+bounces-34498-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34499-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C1275B539F9
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 19:08:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB716B53AD5
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 19:57:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 816C73B0C6D
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 17:08:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 974B0AA450F
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 17:57:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 651BD35FC20;
-	Thu, 11 Sep 2025 17:07:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9DB036209B;
+	Thu, 11 Sep 2025 17:57:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CheQUR/i"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gTuzZz+O"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40FBB35FC18
-	for <linux-pm@vger.kernel.org>; Thu, 11 Sep 2025 17:07:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25B86362097
+	for <linux-pm@vger.kernel.org>; Thu, 11 Sep 2025 17:57:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757610476; cv=none; b=g/ClF9dEnDJd0queqJIdPrA8t1k+iIiefe2iowQHer2QPOQa4e0EzBPK6ru1S6x5I1hjOcH7XGa0tv2wju1zd+3Zn5ASRL0tRyHn4BPcTgm2eu9C3zNi7ETWvr86uloHvCx8KwX6PSHSM2dHlVwEguKDlYZipxUPxuuSpMCEBOI=
+	t=1757613439; cv=none; b=i2M1skPTRUwvBPL7IML0LWfgGY3RG3h/a5Z5pnnJfq0AL5gnElW8qqUyn7jN+WdHV2UXfem8HNTVoClJ1MXsJ8GA90WLg1kk+hDOpL8jvYDITB9X0HbEGeFeaBcwZ93Hd2UL3YInAZquouxQDp/LiCj0GO4oTGpBwKplyosqSJw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757610476; c=relaxed/simple;
-	bh=hegmbTdn1yNC2UBMwnCcFb/Ouc5cQ0RQwUD/oCv3AUI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Tr0mJruBF59f4GQqoV/id8JMO9o7Q5GV4AOB/t0lREwoD/mC6Kb2O9f1bXtGdJAPZEohQv3yloIxX5txc/0G4hmtdB98lDrgZgBfTdShNiIHT9r71/rwIMGfJ9dWlQA1ZBPi5LRBGwVM6y20U8t94SkeGpo854vMojI32R+O4Vs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CheQUR/i; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1995C4CEFA
-	for <linux-pm@vger.kernel.org>; Thu, 11 Sep 2025 17:07:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757610474;
-	bh=hegmbTdn1yNC2UBMwnCcFb/Ouc5cQ0RQwUD/oCv3AUI=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=CheQUR/iGx5FEuclHQn8fvVBJb+v09aAJZeHAeYpoHEaihoOaHiUSIvDW3wlCdbcX
-	 CyDQCLcIqm5YMUjWhySZPl5HxCFQorjanUufWx9Ziz9WFjuk6TYHnaPrLRXb+7xhli
-	 FMBURZrAD+uMmHqLzGH8ViqUa3Dd+0dO01bUETPI2PfP/lctQdH0ixw0W5IfuFWZvt
-	 nZcpExqyHbKaKsBH0AfhrQuxtWMDIfsOUQKumNqCPluQs8b5zhGdgBi0HTCky6Srrz
-	 kVbOl+O0iOswbv99re0GKoXOl2QUD+GUos9X3Cgn5oV67LnVgCe6zzATJ/KGyTTLpN
-	 JxHiMalba6hJA==
-Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-74595f3852cso710664a34.0
-        for <linux-pm@vger.kernel.org>; Thu, 11 Sep 2025 10:07:54 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVfVR+FlywTOeU54ahV4I3r5b9wNX2oldbMr/10oKTXAP8hXwK5EHjdPIbdRR9O0GbAEyrOcP9RcA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzKk+oiLIiAuaxwShZkgqVZu79t8Ps89SwwL4CAwgO0B3ixMh+S
-	jw6hlPpzLuMZ21WulWuOWVzDv7r52Ar9PUbRTZj3B5fwKxKq+VqPY771bCe2Gf5AA+tmr/ihkeS
-	x5C/ckqP0KPSEY1r2jmvUeNpmMzmvzoU=
-X-Google-Smtp-Source: AGHT+IHz7kFoI9nYZzdWf0EGe+F1PRDSTVqUP4uQIQDaa3hMRCOhQvgGPrv71EgXCT3iu5J7L2/KGoniXH5P7s/3qFs=
-X-Received: by 2002:a05:6830:67e3:b0:745:a336:7265 with SMTP id
- 46e09a7af769-7534fe7141amr183400a34.0.1757610474026; Thu, 11 Sep 2025
- 10:07:54 -0700 (PDT)
+	s=arc-20240116; t=1757613439; c=relaxed/simple;
+	bh=Plmdu1fxwjxVp5gRnzqd0H2THbz1pc3AN+8geukbwMM=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=uv22ECI5oPi6Am38apcu6qyXeah7G9h9Lv3pjfM+8TGRgq2wHekxvG2pMNrHPrB+6/Q4AFYelSO6//NCMiiK894Z/q76wSvUWlKIkek6zt+R4QNVr6S4sPmDo8u3dTR7/w+SYMJMOC5w+sUqIvKCqvPuyyvs+yTmCQ6Z/l7XTGM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gTuzZz+O; arc=none smtp.client-ip=209.85.218.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-afcb78ead12so146455466b.1
+        for <linux-pm@vger.kernel.org>; Thu, 11 Sep 2025 10:57:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1757613436; x=1758218236; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jz5ONOLYuuEKVIS5PKxv/MfvHRUbGH54YF0vEhe629Y=;
+        b=gTuzZz+OZuXRqpT9Lkwbkcf+MxFDSGG5XXYV0WUUjRMY8wUtMUA9uiHrnlBy5bPexh
+         q0i7auqZFzdpLM1xBxdZGTGXtdlnSHOir6DqAlf3e29ha/vcZtn1eFgha5psJEieG7gT
+         L80VH0E5ez747bKb/if05df6g37DASbORVtJCHAr6uzvHsqcvlUult0J2OhxG5dRMEMP
+         zZGKA0Q3F1R0AzRGQVI6LYBPsFZpS+htHUS483/t6zzMtLNSRHBdtUCYTmvdQbYFCcMa
+         Lihw+OE/4PHQD9ZFpRJWOQSmMDSn8Rlb/so7VAvmQ2SYF34O1+h4i1CjWldNA2PnpGfR
+         hENw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757613436; x=1758218236;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jz5ONOLYuuEKVIS5PKxv/MfvHRUbGH54YF0vEhe629Y=;
+        b=JPUvJTcssIBZCopbPFEoROw4bWkuoPTcewDMaWAPg/EancNISbhLa8Scxl+ufOeGwl
+         2Pv+RxuPmSgkrDppq1mIqniBu05TOm7GEFr73usMFk0jofNQW7T0BfVRORvDVuVwO4oc
+         D5jGT3ITJ7gOKKvO1TMsMfRxfSSo6N8P8c1ysOccZr6DUEBgEYO7Lz7xU97cE0u1UJ1L
+         9NApNCR6vwODdtvaLuLF++Lqhy5684IgP2Q6+ECb+/BuQN3bqRCHWKi9fx7ufb5YohNQ
+         aEUhnWgbLcpJ8c+lKaX/TRN8gjt8QOKjNf9xLFkz2gwvIhq/vD1Tn6LiFqRS6W/xPVou
+         0g1A==
+X-Forwarded-Encrypted: i=1; AJvYcCX5ptMDnErZGrLeTmdOpHXezhdnu48ZPELwZMzmO8buzeaR0w2FoyJAGnY26FJngDRfMbcCtbmedg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyOsu/VWmhddq1ke8Zey3x2CDyBr7CV/WWquqKGPwma6OluxyqZ
+	BXBEh6k2QFKRI6RQXU4Akk+jGEZ8nPU7FK00BWWb6u+PG9t6lIEhRtxXYQpDAw==
+X-Gm-Gg: ASbGncvP3YndgvStyGrKhu+oVIqyIfuwnB9ah/Nyqmm5sqqpzqhP9JGK9lQ3PpxbJ/J
+	ubz8UNJ+lfl9JylJIIpTifszpknaAaXbXgMHILfGo7SGRHBu6+Ue6Em7WJWpkd3HXX4WpbtXiNV
+	yaF5zur1jkhUi+I+F3YU00iM8APdpr/P6lG7ig+mPOB2wkO1y6NcwtD+sxwrU1wyQrkMGN4NjsQ
+	ZNEqrzDb9Of9lQhKB5dwXNEsXaRNA2lKCjMCi7Ban5yMGDpCCUSOnfzMVfq89gI6h+cO7891mvI
+	MUESVI5NrWHuSxM8neWaghTYy5IoZX6Utlb67m2zqtMAdhIleHbIK3hlZDP5R88TT8+wEVaxFxH
+	lEh0aoGeCbxx5Z15vqaAO3dR7QAhlL+Q=
+X-Google-Smtp-Source: AGHT+IE6tG226p8U2j8J7QUEBsfL5Q4SzQz0JzTkVNSqDcfA3J302DZfTEABr71yEKF6aUpkT+tYMg==
+X-Received: by 2002:a17:907:f818:b0:afe:d055:7531 with SMTP id a640c23a62f3a-b07c3841de1mr564966b.48.1757613435970;
+        Thu, 11 Sep 2025 10:57:15 -0700 (PDT)
+Received: from [127.0.1.1] ([46.53.240.27])
+        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-b07b312845esm171377166b.26.2025.09.11.10.57.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Sep 2025 10:57:15 -0700 (PDT)
+From: Dzmitry Sankouski <dsankouski@gmail.com>
+Subject: [PATCH v3 0/9] power: supply: fixes and improvements for
+ max77(705,976) chargers
+Date: Thu, 11 Sep 2025 20:57:08 +0300
+Message-Id: <20250911-max77705_77976_charger_improvement-v3-0-35203686fa29@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <2804546.mvXUDI8C0e@rafael.j.wysocki> <2244365.irdbgypaU6@rafael.j.wysocki>
- <aMLaEwBHwiDhgaWM@localhost.localdomain>
-In-Reply-To: <aMLaEwBHwiDhgaWM@localhost.localdomain>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 11 Sep 2025 19:07:42 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0h3eWw3B15SamchCVWfxfEEbOOgjm4ZbmkTt9ijZvvHMA@mail.gmail.com>
-X-Gm-Features: Ac12FXw2h4F5WqWDGdQx79WJRXefZH6-kLNIMbIhFCvYNYkK5mZJ6omJ417od6g
-Message-ID: <CAJZ5v0h3eWw3B15SamchCVWfxfEEbOOgjm4ZbmkTt9ijZvvHMA@mail.gmail.com>
-Subject: Re: [PATCH v1 3/3] cpuidle: governors: menu: Special-case nohz_full CPUs
-To: Frederic Weisbecker <frederic@kernel.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Christian Loehle <christian.loehle@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAHQNw2gC/5XOTW7DIBAF4KtErEuDwQ5xVr1HVFkDHmwkAy44N
+ FXkuxe6aLtsl29+Pr0HSRgtJnI5PEjEbJMNvgTxdCB6Bj8htWPJhDPesbNg1MFdSsm6QcpenoZ
+ yFCeMg3VrDBkd+o2iMG0jlQHoTqRAChJSFcHruVKqPaYN4tuyoZ798Ru8JaWHNbwXbcTFZowf9
+ XuNaOz9q+L1teTZpi2UVW2cmzr9V7ncUEaxbEclzNgK/jI5sMuzDo5UPvMfsmf9n0heSDiP3Ch
+ oZdP1v8l93z8BC4lkDGUBAAA=
+To: Chanwoo Choi <cw00.choi@samsung.com>, 
+ Krzysztof Kozlowski <krzk@kernel.org>, Lee Jones <lee@kernel.org>, 
+ Sebastian Reichel <sre@kernel.org>, 
+ Luca Ceresoli <luca.ceresoli@bootlin.com>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+ Sebastian Reichel <sebastian.reichel@collabora.com>, 
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+ Dzmitry Sankouski <dsankouski@gmail.com>
+X-Mailer: b4 0.14.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1757613433; l=1912;
+ i=dsankouski@gmail.com; s=20240619; h=from:subject:message-id;
+ bh=Plmdu1fxwjxVp5gRnzqd0H2THbz1pc3AN+8geukbwMM=;
+ b=Xu0hQXOl6rwFqcVQmgIv/BMndyYjvKAZ9DZIYi2N/YtuBjelB/hEfnfIoLmLIFWlI9soY06PD
+ 87zeasQ/iQvCNSn38ShMe9al5DYBU2SHvyk9hwnU6s8pbBwvwTETzl/
+X-Developer-Key: i=dsankouski@gmail.com; a=ed25519;
+ pk=YJcXFcN1EWrzBYuiE2yi5Mn6WLn6L1H71J+f7X8fMag=
 
-On Thu, Sep 11, 2025 at 4:17=E2=80=AFPM Frederic Weisbecker <frederic@kerne=
-l.org> wrote:
->
-> Le Wed, Aug 13, 2025 at 12:29:51PM +0200, Rafael J. Wysocki a =C3=A9crit =
-:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > When the menu governor runs on a nohz_full CPU and there are no user
-> > space timers in the workload on that CPU, it ends up selecting idle
-> > states with target residency values above TICK_NSEC all the time due to
-> > a tick_nohz_tick_stopped() check designed for a different use case.
-> >
-> > Namely, on nohz_full CPUs the fact that the tick has been stopped does
-> > not actually mean anything in particular, whereas in the other case it
-> > indicates that previously the CPU was expected to be idle sufficiently
-> > long for the tick to be stopped, so it is not unreasonable to expect
-> > it to be idle beyond the tick period length again.
->
-> I understand what you mean but it may be hard to figure out for
-> reviewers. Can we rephrase it to something like:
->
-> When nohz_full is not running, the fact that the tick is stopped
-> indicates the CPU has been idle for sufficiently long so that
-> nohz has deferred it to the next timer callback. So it is
-> not unreasonable to expect the CPU to be idle beyond the tick
-> period length again.
->
-> However when nohz_full is running, the CPU may enter idle with the
-> tick already stopped. But this doesn't tell anything about the future
-> CPU's idleness.
+This series consists of:
+- max77705: interrupt handling fix
+- max77705: make input current limit and charge current limit properties
+  writable
+- max77705: add adaptive input current limit feature
+- max77705: switch to regfields
+- max77705: refactoring
+- max77976: change property for current charge limit value
 
-Sure, thanks for the hint.
+Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
+---
+Changes in v3:
+- move interrupt request before interrupt handler work initialization
+- Link to v2: https://lore.kernel.org/r/20250909-max77705_77976_charger_improvement-v2-0-a8d2fba47159@gmail.com
 
-> >
-> > In some cases, this behavior causes latency in the workload to grow
-> > undesirably.  It may also cause the workload to consume more energy
-> > than necessary if the CPU does not spend enough time in the selected
-> > deep idle states.
-> >
-> > Address this by amending the tick_nohz_tick_stopped() check in question
-> > with a tick_nohz_full_cpu() one to avoid using the time till the next
-> > timer event as the predicted_ns value all the time on nohz_full CPUs.
-> >
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
-> >  drivers/cpuidle/governors/menu.c |   12 +++++++++++-
-> >  1 file changed, 11 insertions(+), 1 deletion(-)
-> >
-> > --- a/drivers/cpuidle/governors/menu.c
-> > +++ b/drivers/cpuidle/governors/menu.c
-> > @@ -293,8 +293,18 @@
-> >        * in a shallow idle state for a long time as a result of it.  In=
- that
-> >        * case, say we might mispredict and use the known time till the =
-closest
-> >        * timer event for the idle state selection.
-> > +      *
-> > +      * However, on nohz_full CPUs the tick does not run as a rule and=
- the
-> > +      * time till the closest timer event may always be effectively in=
-finite,
-> > +      * so using it as a replacement for the predicted idle duration w=
-ould
-> > +      * effectively always cause the prediction results to be discarde=
-d and
-> > +      * deep idle states to be selected all the time.  That might intr=
-oduce
-> > +      * unwanted latency into the workload and cause more energy than
-> > +      * necessary to be consumed if the discarded prediction results a=
-re
-> > +      * actually accurate, so skip nohz_full CPUs here.
-> >        */
-> > -     if (tick_nohz_tick_stopped() && predicted_ns < TICK_NSEC)
-> > +     if (tick_nohz_tick_stopped() && !tick_nohz_full_cpu(dev->cpu) &&
-> > +         predicted_ns < TICK_NSEC)
-> >               predicted_ns =3D data->next_timer_ns;
->
-> So, when !tick_nohz_full_cpu(dev->cpu), what is the purpose of this tick =
-stopped
-> special case?
->
-> Is it because the next dynamic tick is a better prediction than the typic=
-al
-> interval once the tick is stopped?
+Changes in v2:
+- fix charger register protection unlock
+- Link to v1: https://lore.kernel.org/r/20250830-max77705_77976_charger_improvement-v1-0-e976db3fd432@gmail.com
 
-When !tick_nohz_full_cpu(dev->cpu), the tick is a safety net against
-getting stuck in a shallow idle state for too long.  In that case, if
-the tick is stopped, the safety net is not there and it is better to
-use a deep state.
+---
+Dzmitry Sankouski (9):
+      power: supply: max77705_charger: move active discharge setting to mfd parent
+      power: supply: max77705_charger: refactoring: rename charger to chg
+      power: supply: max77705_charger: use regfields for config registers
+      power: supply: max77705_charger: return error when config fails
+      power: supply: max77705_charger: add writable properties
+      power: supply: max77705_charger: rework interrupts
+      power: supply: max77705_charger: use REGMAP_IRQ_REG_LINE macro
+      power: supply: max77705_charger: implement aicl feature
+      power: supply: max77976_charger: fix constant current reporting
 
-However, data->next_timer_ns is a lower limit for the idle state
-target residency because this is when the next timer is going to
-trigger.
+ drivers/mfd/max77705.c                  |   3 +
+ drivers/power/supply/max77705_charger.c | 396 ++++++++++++++++++++++----------
+ drivers/power/supply/max77976_charger.c |  12 +-
+ include/linux/power/max77705_charger.h  | 149 ++++++------
+ 4 files changed, 355 insertions(+), 205 deletions(-)
+---
+base-commit: be5d4872e528796df9d7425f2bd9b3893eb3a42c
+change-id: 20250830-max77705_77976_charger_improvement-e3f417bfaa56
 
-> Does that mean we might become more "pessimistic" concerning the predicte=
-d idle
-> time for nohz_full CPUs?
+Best regards,
+-- 
+Dzmitry Sankouski <dsankouski@gmail.com>
 
-Yes, and not just we might, but we do unless the idle periods in the
-workload are "long".
-
-> I guess too shallow C-states are still better than too deep but there sho=
-uld be
-> a word about that introduced side effect (if any).
-
-Yeah, I agree.
-
-That said, on a nohz_full CPU there is no safety net against getting
-stuck in a shallow idle state because the tick is not present.  That's
-why currently the governors don't allow shallow states to be used on
-nohz_full CPUs.
-
-The lack of a safety net is generally not a problem when the CPU has
-been isolated to run something doing real work all the time, with
-possible idle periods in the workload, but there are people who
-isolate CPUs for energy-saving reasons and don't run anything on them
-on purpose.  For those folks, the current behavior to select deep idle
-states every time is actually desirable.
-
-So there are two use cases that cannot be addressed at once and I'm
-thinking about adding a control knob to allow the user to decide which
-way to go.
 
