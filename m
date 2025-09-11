@@ -1,316 +1,156 @@
-Return-Path: <linux-pm+bounces-34450-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34451-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8AAB7B52D31
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 11:26:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A731AB52D75
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 11:42:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A629317DB53
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 09:26:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 68AE458412F
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 09:42:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 921742EA46C;
-	Thu, 11 Sep 2025 09:26:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 709AF2EA72E;
+	Thu, 11 Sep 2025 09:42:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=microsoft.com header.i=@microsoft.com header.b="THHGlCXu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IxKiLP4a"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2117.outbound.protection.outlook.com [40.107.255.117])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D8C222126D;
-	Thu, 11 Sep 2025 09:26:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.255.117
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757582799; cv=fail; b=X3vw5xupiG+XjLy0IZ6JKNbWTIBK/F9vAT9Ru32CINP+4uCFlEIGB4blXgozkxmxTi2+di/OpxqwxnmdeKK0wFmhknxoWWqG16zXxLQhyCD/nB31jJ/VF2cXWVLgQJmd1jSlfzIfBI6hCuMGHpHNzYzxd1XM83LJPJ46CufM5Ss=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757582799; c=relaxed/simple;
-	bh=F1mojV1QRje5qK4gtwMlZK6B4ewfsktQR4HhPq0xMLk=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=ulCgpMhpZ4GSUBUD1FWke+GS0sxgYwI2JvUfNIOJ43teNXoaeSL2pmtl47pEg+O90Px0dyfCztbsrrDemGA/R0FlGjAmgwhe6i6sey3Z9d69eWE2/soiCzRnLO9ENyJFdOD0EmYkjFrXvHfL5s+M4vM45E0yXMP3VThcAoZMRhw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microsoft.com; spf=pass smtp.mailfrom=microsoft.com; dkim=pass (1024-bit key) header.d=microsoft.com header.i=@microsoft.com header.b=THHGlCXu; arc=fail smtp.client-ip=40.107.255.117
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microsoft.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=zVqiE8qodyznrED14QiOexcCgbUz90kslW4vxybxF0H0OCY4A4mRV68tnUDmAcipUiOHVEwOYc82WMnrXRW4kDXkg89hyzq4BdCC/dkGeuxmyIk06Di+/Qh8+Or9cx09FABAYU4b1C01g5EEluz+mqxVoXHqNiWXM6Ujf0Ddj6abBb1SncEOzgRHEFJmvITJVOsboCz+g1FYZIaG44Sc0kOj8b+YyR+/Bd5OyNBJJz5Rd7DcrAUCxZqrjqu2qIGn1wefArYcbU4rozzfHRA2nxcQJXaw5zddH2FTY4UfRgWIJ9EWJnbYTrFvtNs43Hi9vahZ2atUirsbiV7ONeWSng==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TBK23OXsywbgw4hVPUHA5LcDKuySojQzSE8m3JGbyWo=;
- b=MdcQzeTSVW9lz095en1Z1eLFHBfeNDRqyEJW/hZ+MaqfCWTSEU+TQH/We2v7DYo/JJFUWIY5nvE+k33CgOOqG3EMw5KUTkeIf19z+Bl7eSanROHhAp7VQKPYRxkQnDyPLoxM8lP+tgcEBl2p689n5IADwnMR28yNuvPBkMb7jX0hwzchk1HQvoiABPVtxZ8ZdnLyRuh5wZnQlfU9zwHqXnZOPtL5eiDhBWvW6EdLbg0IUfkIC+06GvYRUt9ByD03cHb5jw9A/t9m5cdwA0sonVWieHOLhfdZdyQfDU4YxBPUhMfQ2iOA3yQnrxA5ybcIuFexRWIDsCElmFSgY8HuFw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TBK23OXsywbgw4hVPUHA5LcDKuySojQzSE8m3JGbyWo=;
- b=THHGlCXuSMHLnGrxypQ6yWrgIzlZPIYT7B6SXRlDMomSS6ZF58as7JLQLmnDts7Di7IaXx+kWQSziD/WIMIHCEU0dG4qe9dwhrbOqT1ch7wwbD8eS/C840p6aP6053o7zzH1pbKq8R8joQa3+oY30EY3iGSHKdFmRxjp6qkRdpc=
-Received: from OSQP153MB1330.APCP153.PROD.OUTLOOK.COM (2603:1096:604:372::16)
- by TYZP153MB0692.APCP153.PROD.OUTLOOK.COM (2603:1096:400:25e::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9115.15; Thu, 11 Sep
- 2025 09:26:31 +0000
-Received: from OSQP153MB1330.APCP153.PROD.OUTLOOK.COM
- ([fe80::2b00:49bb:7d41:c2dc]) by OSQP153MB1330.APCP153.PROD.OUTLOOK.COM
- ([fe80::2b00:49bb:7d41:c2dc%6]) with mapi id 15.20.9115.010; Thu, 11 Sep 2025
- 09:26:30 +0000
-From: Meetakshi Setiya <msetiya@microsoft.com>
-To: Bagas Sanjaya <bagasdotme@gmail.com>, Linux Kernel Mailing List
-	<linux-kernel@vger.kernel.org>, Linux Documentation
-	<linux-doc@vger.kernel.org>, Linux DAMON <damon@lists.linux.dev>, Linux
- Memory Management List <linux-mm@kvack.org>, Linux Power Management
-	<linux-pm@vger.kernel.org>, Linux Block Devices
-	<linux-block@vger.kernel.org>, Linux BPF <bpf@vger.kernel.org>, Linux Kernel
- Workflows <workflows@vger.kernel.org>, Linux KASAN
-	<kasan-dev@googlegroups.com>, Linux Devicetree <devicetree@vger.kernel.org>,
-	Linux fsverity <fsverity@lists.linux.dev>, Linux MTD
-	<linux-mtd@lists.infradead.org>, Linux DRI Development
-	<dri-devel@lists.freedesktop.org>, Linux Kernel Build System
-	<linux-kbuild@vger.kernel.org>, Linux Networking <netdev@vger.kernel.org>,
-	Linux Sound <linux-sound@vger.kernel.org>
-CC: Thomas Gleixner <tglx@linutronix.de>, Borislav Petkov <bp@alien8.de>,
-	Peter Zijlstra <peterz@infradead.org>, Josh Poimboeuf <jpoimboe@kernel.org>,
-	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>, Jonathan Corbet
-	<corbet@lwn.net>, SeongJae Park <sj@kernel.org>, Andrew Morton
-	<akpm@linux-foundation.org>, David Hildenbrand <david@redhat.com>, Lorenzo
- Stoakes <lorenzo.stoakes@oracle.com>, "Liam R. Howlett"
-	<Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport
-	<rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal Hocko
-	<mhocko@suse.com>, Huang Rui <ray.huang@amd.com>, "Gautham R. Shenoy"
-	<gautham.shenoy@amd.com>, Mario Limonciello <mario.limonciello@amd.com>,
-	Perry Yuan <perry.yuan@amd.com>, Jens Axboe <axboe@kernel.dk>, Alexei
- Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii
- Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Eduard
- Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong Song
-	<yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, KP
- Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo
-	<haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Dwaipayan Ray
-	<dwaipayanray1@gmail.com>, Lukas Bulwahn <lukas.bulwahn@gmail.com>, Joe
- Perches <joe@perches.com>, Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-	Alexander Potapenko <glider@google.com>, Andrey Konovalov
-	<andreyknvl@gmail.com>, Dmitry Vyukov <dvyukov@google.com>, Vincenzo Frascino
-	<vincenzo.frascino@arm.com>, Rob Herring <robh@kernel.org>, Krzysztof
- Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Eric
- Biggers <ebiggers@kernel.org>, "tytso@mit.edu" <tytso@mit.edu>, Richard
- Weinberger <richard@nod.at>, Zhihao Cheng <chengzhihao1@huawei.com>, Maarten
- Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard
-	<mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, David Airlie
-	<airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, Nathan Chancellor
-	<nathan@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>, Ingo Molnar
-	<mingo@redhat.com>, Will Deacon <will@kernel.org>, Boqun Feng
-	<boqun.feng@gmail.com>, Waiman Long <longman@redhat.com>, "David S. Miller"
-	<davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
-	<kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
-	<horms@kernel.org>, Shay Agroskin <shayagr@amazon.com>, Arthur Kiyanovski
-	<akiyano@amazon.com>, David Arinzon <darinzon@amazon.com>, Saeed Bishara
-	<saeedb@amazon.com>, Andrew Lunn <andrew@lunn.ch>, Alexandru Ciobotaru
-	<alcioa@amazon.com>, The AWS Nitro Enclaves Team
-	<aws-nitro-enclaves-devel@amazon.com>, Jesper Dangaard Brouer
-	<hawk@kernel.org>, Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Ranganath V N <vnranganath.20@gmail.com>, Steven French
-	<Steven.French@microsoft.com>, Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>, "Martin K. Petersen"
-	<martin.petersen@oracle.com>, Bart Van Assche <bvanassche@acm.org>,
-	=?iso-8859-1?Q?Thomas_Wei=DFschuh?= <linux@weissschuh.net>, Masahiro Yamada
-	<masahiroy@kernel.org>, Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-	Jani Nikula <jani.nikula@intel.com>
-Subject: Re: [EXTERNAL] [PATCH v2 10/13] Documentation: smb: smbdirect:
- Convert KSMBD docs link
-Thread-Topic: [EXTERNAL] [PATCH v2 10/13] Documentation: smb: smbdirect:
- Convert KSMBD docs link
-Thread-Index: AQHcIf3l00Mre1nk0UWLjBtxz9dfZLSNt5un
-Date: Thu, 11 Sep 2025 09:26:30 +0000
-Message-ID:
- <OSQP153MB133044C12B6FFB86DF108725BF09A@OSQP153MB1330.APCP153.PROD.OUTLOOK.COM>
-References: <20250910024328.17911-1-bagasdotme@gmail.com>
- <20250910024328.17911-11-bagasdotme@gmail.com>
-In-Reply-To: <20250910024328.17911-11-bagasdotme@gmail.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-GB
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-msip_labels:
- MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=True;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2025-09-11T09:26:29.396Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=General;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=1;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: OSQP153MB1330:EE_|TYZP153MB0692:EE_
-x-ms-office365-filtering-correlation-id: 3ed9e36f-e82c-4f44-c11d-08ddf1154a8b
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|1800799024|10070799003|366016|376014|7416014|921020|38070700021;
-x-microsoft-antispam-message-info:
- =?iso-8859-1?Q?mBGWFTSdoxNR/lbkIR4Da4kAYHa7ahZ6YLFDpVQrpGkWnct1CUpv6frV9F?=
- =?iso-8859-1?Q?YefFV1I20zaV7aTiNolrmYyUTiO7QB0TC/yBs9DHs+PG/LUsjYw9ip83i7?=
- =?iso-8859-1?Q?EEqcpIEWT8MM2coNRzuzYEcqMgeNgJoADT1kuG5OMOxI1c7zLJpJnrUsGz?=
- =?iso-8859-1?Q?ORPLPnPmdKwKdhy9QVkf30jDeVaM5ZQXOA5BJ+PXHeu7cYLC7i6Sdpijx1?=
- =?iso-8859-1?Q?qVK8Q5A3K4k2vEaxdkwws1wYnBkSjJ8m7SNdkPMhXlPAAu2HZa3QSZx67z?=
- =?iso-8859-1?Q?3Bq0As8R1ropE86mEAoA0+iUBLxxSaNCnChCTWP7H24WPUIlAMkH6KLGZ7?=
- =?iso-8859-1?Q?bDIyNqFJ6oMD/MzMDCt8IW/Qlshf9HBqgszA6vvVUsA5ujLnYmfXiA7RxS?=
- =?iso-8859-1?Q?tpSgc38qmp8Yf797+C2yfkuermU8H+ThlDEXnJ5EckFLGnB/ZHpqz+e7Aa?=
- =?iso-8859-1?Q?A8vM20s0yMgcqf9CbsNYpvVcsY5qqp7+EsUK6ea3xcxRYOhmqgXD3M5yvS?=
- =?iso-8859-1?Q?CZl2hQrRnzybM8dTMwxZyhqf8ScNC3r8fbC4PvXqFIRcsbsDeA+dM3uufo?=
- =?iso-8859-1?Q?xG6IclfbR/wcptNl55AFOtqWFy/rpETPm7Kg0Ndf9klt1KUGSDnE1Ukp2b?=
- =?iso-8859-1?Q?0mIMFRD1+wjIS+quDiqG/nAe2vQQFDV7DVWRxi3FG60leUAujbLIZ5mmzl?=
- =?iso-8859-1?Q?Mo3hdvWsHOKdytIkmPhD6JK/4Z65aQmmqVoyVONcMRLQ/kOZ2ng4fPc3un?=
- =?iso-8859-1?Q?MfmimQ3WorMOHs5FYbdPLCpTT5oVILsdd/XVorFdjPgZYUSFwJE/IyC0ZZ?=
- =?iso-8859-1?Q?LwkPMJPAoOt5edepJxpsrnjW/wLkuo+63/yBwvpeE3u6ajkuGrNOMkaNpn?=
- =?iso-8859-1?Q?p47gG/91oxU13IiyAwKhMEziA0NYKLShdRM1BmJ3Mnt9HRW2uxztU1+dAb?=
- =?iso-8859-1?Q?z3JkHj2xNZitl16GYp3MWkET0pgqg6GDDjwrisTyBWPdU3xqov5NDxrkkE?=
- =?iso-8859-1?Q?9DxiZPXKNxrFpCv92Kgw3A0UVjjVxEV+ztwilOQyUeSYXYeHLJkH13hlpE?=
- =?iso-8859-1?Q?yvsDjHz4lIFTPiDWqDLkZLAz5VMZ/h06zRS7p+cDaY08K/8bm5Vudz7rYo?=
- =?iso-8859-1?Q?pC5SABvJqX8GTzUNq5pNN9cYbtCCOkvZsunoyPiFfmj7c2eyHr+Q+NV44j?=
- =?iso-8859-1?Q?kBkw7jh0whjzxzLrbUmI4CD2Kp9CEFZ2xIJ4kQoI0riWZ74GyvB11Yy3bd?=
- =?iso-8859-1?Q?VKiJD+9c/J8eGG1T/s4LjlO1kYpW2sEjQhtgd/UFkS0UOo5qPa6Gj1Xz0C?=
- =?iso-8859-1?Q?4wQ9/GvQN3ru8ws+yc1TUZsuRKX2byIiYTkfG9lZ+9f/KDYyEjtO8C1nY6?=
- =?iso-8859-1?Q?TtD3A5GBQhIEAxGjdsy4Yr8aO3d6jd/RqYr3X8iDZzknixGduJaHyndJvj?=
- =?iso-8859-1?Q?a+WRo4EiikWBXt2IkSQVLWkGiT32phDB0AlaOJdH02UPcZDr9xTDZU1WKh?=
- =?iso-8859-1?Q?Y2mozr2vdoxTb/li2MnmOG?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OSQP153MB1330.APCP153.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(10070799003)(366016)(376014)(7416014)(921020)(38070700021);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?iso-8859-1?Q?j4kHAkDUeD6Kepjp54gD2pRReXc3fZLHne+imB/QQoWmrH60eLudcMJ2+1?=
- =?iso-8859-1?Q?hEi4BUaLwtassZEuzaizG6Zr1att6tPtPudpYVWYrMe9OvjevKC1MPmS/d?=
- =?iso-8859-1?Q?dKyhPvAYh5NIHgoVCVBuNK5ffRCD61c+u86quLp63raBxmrfk7/zWjzAn7?=
- =?iso-8859-1?Q?1/JAE5NiCV4YOt8Bh/IE0oSfVeD4GJrKY9AGvW7zsoeWPEaA+PUzTzcFWP?=
- =?iso-8859-1?Q?GIZURXawycmjsXaXLipx1NWz5yL9zlmjh17egPbviAg1nHFLuPt75xaos3?=
- =?iso-8859-1?Q?Kx7eXhA5cOzV60Xl3KJvEenbxFQe6VhB9lo6frZv52S0qFQqF7zZypfREq?=
- =?iso-8859-1?Q?yyONhdDxAphIasOqe4hd4xtgqYDWs25+0fSQHqlYqFXeUvZD69IDJhgCsj?=
- =?iso-8859-1?Q?LCyZfiyyqZofo94QPVDJHKkHcB0H+IBLzEN55qCmT1sKThaaxWnK49A8lW?=
- =?iso-8859-1?Q?FgiQad8xVs13fAIGiF4HMOV46AjkjHwZ5DuznCzR99yUs4Uj51YbwwDx+5?=
- =?iso-8859-1?Q?SyVcwYoEzBu6aIfSpICH32C2dQI1DMZtzz1sTi3A0XMilUKm96ACIajnLN?=
- =?iso-8859-1?Q?OmAmJNSRdufr2LK8gJEIRRtlyJHU0ljSs2IwBSGeSplmJZAv2qCixFm78L?=
- =?iso-8859-1?Q?k7DDRh8myW8cCSRRwpmFkmfiQG6o1e8NlFOljR5S2dQaXaQtNTGyNm1EWa?=
- =?iso-8859-1?Q?V+2oy4M1QSAdKdyAG6A4scQCOPJA7tAdQzmPmZOTgtnOBn0cU+PFRwSIBY?=
- =?iso-8859-1?Q?WtZOTUO7WbX2r8Iy0XbJ/sBMQnmCm9iu40EOQrDGTPBRJCWRWVKk1hhpqE?=
- =?iso-8859-1?Q?0cULcOpjftDD8Gdx5Bc7OdDxQgKG8SZmIev+rU4q83Hv6rsELEtUupEEW0?=
- =?iso-8859-1?Q?IP66mjE2MFiTU4Ux9VyFUEg9msyiI1WG9JJxRNJJ9OZuox6ejVurSJBL/k?=
- =?iso-8859-1?Q?4CxWn44FMqdHHMGsZPw8pQQCQL7scobgIISBjImAvp1CyWHvSPE1nQWtGO?=
- =?iso-8859-1?Q?kG4RrCl8TO9VItEOhdAG0GbJTJuiw7xu/DA220cXhKHz7lzkZCgkWbuEeR?=
- =?iso-8859-1?Q?2wbS9JHNdthL1RjVa6Pd1jQ/Pkv1QIvcTXhq5HzK9QhiKe8MfVp0+TauJb?=
- =?iso-8859-1?Q?aXr/f2FncE8Zndf0bPTB8qqhKpW0ow/o5Ln7MQdLWrlybVx2UJcN6U7doM?=
- =?iso-8859-1?Q?z9ShcgL+KCt6U5Qgnqklw6AOiwwTJoXSiirIP/w8AfH+XTWTOx1+CivlI1?=
- =?iso-8859-1?Q?gQyfvDtb0BLZ8B8zEw0+XWqtrl9EjStuULlLYgnTCjUVFIKTYTQ1M1vyhl?=
- =?iso-8859-1?Q?Ufi9RHy6c0QTPKAB4B75qCsdNNTHY0p+xtpiDt6jRxeYupf7boep0jvrb7?=
- =?iso-8859-1?Q?xQLhSVa8OLV0TQzzmDQdO4+sAHvEFZ4cpiw6egt5Wpt94JWroS8pNQJVvg?=
- =?iso-8859-1?Q?ISfbBgmOTFUbvz6ydDY3WqjgL1DIG8oP45KWiVyww+hOZcOQ4+u0s49Roo?=
- =?iso-8859-1?Q?bLU6EzLRJeSkCOvNLtuRbt25B4f5SPXgZgFZsCML2q3cuXDpx31FFlEgqn?=
- =?iso-8859-1?Q?CjafVAwQM/cPx18NRnGmSrcIFHY//TeBh4NGMesYHG3FOc96sUW0ILj8qK?=
- =?iso-8859-1?Q?1CBMihiV0Xoxw=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C61D22126D
+	for <linux-pm@vger.kernel.org>; Thu, 11 Sep 2025 09:42:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1757583758; cv=none; b=SXypasKdGG8AdD1znArYdjtWfSK6IpM1RMtK0QZIGXA6RRfu3GURtxDsppKzr4HAZ1v8fAW+m7Hqdzvt6CupKNjazzO9BS9j32O7KHEWDCaKSPd5Ip2wQ3dC/FSChAnMwzN0Ycqa7UVYZ8sPL4IrLswzPCeoOAFBubz+maGw/6s=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1757583758; c=relaxed/simple;
+	bh=EScqyVuWwnuUYZ7dA9WB/8RNsN8dYaXzUoZsHdGe1vk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=U2vP+U8M2YM/neDdQV8/Qz2xGQq8ScRoh1cKrq31MbS4TLaiPfZLznsVZUi+jzKl6AMkKiJKB3Mri9A77O6SomRmG5ou9VrVqmXIlFza0VlPIV/QvTUHCEdMjC7edv2C7fHTP1hwmQQ7pVjK9e6vBsSGJeZOdJ7LWMajkXV7q3c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IxKiLP4a; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2AE2C4CEF0
+	for <linux-pm@vger.kernel.org>; Thu, 11 Sep 2025 09:42:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757583757;
+	bh=EScqyVuWwnuUYZ7dA9WB/8RNsN8dYaXzUoZsHdGe1vk=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=IxKiLP4acfUIEcPpePNBW9wuSSLWfkolJ1bTvQLDZRETuRVvb5OK96av8y5gQkwcQ
+	 unNtO8E4yX1V/UUc6hw3eTyBuDiM+jOlB3RPozYsZgbUorbZrX+HZQRNFd2GBwqGKm
+	 18IGVS4PaSo65cRjaQmd90iXvbvb373rAap1KSSOkB+bt5Op8LqowgX5kqTxS6TDR3
+	 B4yjj7Cpu6brII6vDLTQtCe7CBmLSucEZ0hMSpLPRXdh5ZLKpCVArfUZTseR+60ofL
+	 iZj6cszoHIuaBaBnDnOWqBsPhWybTGHGfse+x2exsCNfAUPHZGG31el+qdx1q5kM3A
+	 NTbqnTSl1aYHg==
+Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-621b50dca6eso174809eaf.2
+        for <linux-pm@vger.kernel.org>; Thu, 11 Sep 2025 02:42:37 -0700 (PDT)
+X-Gm-Message-State: AOJu0YyWLPFDvqccZh98tm43xwOCtx7KxZSrjmbXu/5fwiTd0X5emEhM
+	v8yWLNpv3Yn59CnofNKx1KGdoJVUlLMK+W/NfT86fa+cpjTSAynoQunkYxYoAD4vH14FeR27Igz
+	azsZ26jNDtBIssMICMJGmC7VDaFZD5yY=
+X-Google-Smtp-Source: AGHT+IGfXfDpVkv4JDVyDVpxshNNbneBxYZJ6fn133a4p4WsTMHPv2mdUXwQuFo2rHeAuQ7Gh68C9HKFej/echvP46k=
+X-Received: by 2002:a05:6820:1ca6:b0:621:b76e:66b9 with SMTP id
+ 006d021491bc7-621b76e6989mr384850eaf.3.1757583757188; Thu, 11 Sep 2025
+ 02:42:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: OSQP153MB1330.APCP153.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3ed9e36f-e82c-4f44-c11d-08ddf1154a8b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Sep 2025 09:26:30.3194
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: U/Q8DJoatsv2sSbzzxhnTu+diP/JdGZvQa8EpnmBnmF4xCP5rfCXyVfhnTj1QLr+6Ma0IZQMVGeQWUBCJlsc0g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZP153MB0692
+References: <8ce4578e-6913-4dbe-9573-433e69925bc1@panix.com>
+In-Reply-To: <8ce4578e-6913-4dbe-9573-433e69925bc1@panix.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 11 Sep 2025 11:42:25 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0i4gNcir8sDunPbpSP367tN=PvrsrP61puv954XEtMBKQ@mail.gmail.com>
+X-Gm-Features: Ac12FXzBQnQR7ZXKcdLECD_wCYjF3Jots-eHazm5Qwgn9UCX1szpkvNbrck_riw
+Message-ID: <CAJZ5v0i4gNcir8sDunPbpSP367tN=PvrsrP61puv954XEtMBKQ@mail.gmail.com>
+Subject: Re: Sometimes I only see 3 RAPL (out of 4) Counters
+To: Kenneth Crudup <kenny@panix.com>, 
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, "Zhang, Rui" <rui.zhang@intel.com>
+Cc: "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Meetakshi Setiya <msetiya@microsoft.com>
++Srinivas & Rui
 
-Thanks
-Meetakshi
-
-________________________________________
-From: Bagas Sanjaya <bagasdotme@gmail.com>
-Sent: 10 September 2025 08:13
-To: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>; Linux Documen=
-tation <linux-doc@vger.kernel.org>; Linux DAMON <damon@lists.linux.dev>; Li=
-nux Memory Management List <linux-mm@kvack.org>; Linux Power Management <li=
-nux-pm@vger.kernel.org>; Linux Block Devices <linux-block@vger.kernel.org>;=
- Linux BPF <bpf@vger.kernel.org>; Linux Kernel Workflows <workflows@vger.ke=
-rnel.org>; Linux KASAN <kasan-dev@googlegroups.com>; Linux Devicetree <devi=
-cetree@vger.kernel.org>; Linux fsverity <fsverity@lists.linux.dev>; Linux M=
-TD <linux-mtd@lists.infradead.org>; Linux DRI Development <dri-devel@lists.=
-freedesktop.org>; Linux Kernel Build System <linux-kbuild@vger.kernel.org>;=
- Linux Networking <netdev@vger.kernel.org>; Linux Sound <linux-sound@vger.k=
-ernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>; Borislav Petkov <bp@alien8.de>; P=
-eter Zijlstra <peterz@infradead.org>; Josh Poimboeuf <jpoimboe@kernel.org>;=
- Pawan Gupta <pawan.kumar.gupta@linux.intel.com>; Jonathan Corbet <corbet@l=
-wn.net>; SeongJae Park <sj@kernel.org>; Andrew Morton <akpm@linux-foundatio=
-n.org>; David Hildenbrand <david@redhat.com>; Lorenzo Stoakes <lorenzo.stoa=
-kes@oracle.com>; Liam R. Howlett <Liam.Howlett@oracle.com>; Vlastimil Babka=
- <vbabka@suse.cz>; Mike Rapoport <rppt@kernel.org>; Suren Baghdasaryan <sur=
-enb@google.com>; Michal Hocko <mhocko@suse.com>; Huang Rui <ray.huang@amd.c=
-om>; Gautham R. Shenoy <gautham.shenoy@amd.com>; Mario Limonciello <mario.l=
-imonciello@amd.com>; Perry Yuan <perry.yuan@amd.com>; Jens Axboe <axboe@ker=
-nel.dk>; Alexei Starovoitov <ast@kernel.org>; Daniel Borkmann <daniel@iogea=
-rbox.net>; Andrii Nakryiko <andrii@kernel.org>; Martin KaFai Lau <martin.la=
-u@linux.dev>; Eduard Zingerman <eddyz87@gmail.com>; Song Liu <song@kernel.o=
-rg>; Yonghong Song <yonghong.song@linux.dev>; John Fastabend <john.fastaben=
-d@gmail.com>; KP Singh <kpsingh@kernel.org>; Stanislav Fomichev <sdf@fomich=
-ev.me>; Hao Luo <haoluo@google.com>; Jiri Olsa <jolsa@kernel.org>; Dwaipaya=
-n Ray <dwaipayanray1@gmail.com>; Lukas Bulwahn <lukas.bulwahn@gmail.com>; J=
-oe Perches <joe@perches.com>; Andrey Ryabinin <ryabinin.a.a@gmail.com>; Ale=
-xander Potapenko <glider@google.com>; Andrey Konovalov <andreyknvl@gmail.co=
-m>; Dmitry Vyukov <dvyukov@google.com>; Vincenzo Frascino <vincenzo.frascin=
-o@arm.com>; Rob Herring <robh@kernel.org>; Krzysztof Kozlowski <krzk+dt@ker=
-nel.org>; Conor Dooley <conor+dt@kernel.org>; Eric Biggers <ebiggers@kernel=
-.org>; tytso@mit.edu <tytso@mit.edu>; Richard Weinberger <richard@nod.at>; =
-Zhihao Cheng <chengzhihao1@huawei.com>; Maarten Lankhorst <maarten.lankhors=
-t@linux.intel.com>; Maxime Ripard <mripard@kernel.org>; Thomas Zimmermann <=
-tzimmermann@suse.de>; David Airlie <airlied@gmail.com>; Simona Vetter <simo=
-na@ffwll.ch>; Nathan Chancellor <nathan@kernel.org>; Nicolas Schier <nicola=
-s.schier@linux.dev>; Ingo Molnar <mingo@redhat.com>; Will Deacon <will@kern=
-el.org>; Boqun Feng <boqun.feng@gmail.com>; Waiman Long <longman@redhat.com=
->; David S. Miller <davem@davemloft.net>; Eric Dumazet <edumazet@google.com=
->; Jakub Kicinski <kuba@kernel.org>; Paolo Abeni <pabeni@redhat.com>; Simon=
- Horman <horms@kernel.org>; Shay Agroskin <shayagr@amazon.com>; Arthur Kiya=
-novski <akiyano@amazon.com>; David Arinzon <darinzon@amazon.com>; Saeed Bis=
-hara <saeedb@amazon.com>; Andrew Lunn <andrew@lunn.ch>; Alexandru Ciobotaru=
- <alcioa@amazon.com>; The AWS Nitro Enclaves Team <aws-nitro-enclaves-devel=
-@amazon.com>; Jesper Dangaard Brouer <hawk@kernel.org>; Bagas Sanjaya <baga=
-sdotme@gmail.com>; Laurent Pinchart <laurent.pinchart@ideasonboard.com>; Ra=
-nganath V N <vnranganath.20@gmail.com>; Steven French <Steven.French@micros=
-oft.com>; Meetakshi Setiya <msetiya@microsoft.com>; Greg Kroah-Hartman <gre=
-gkh@linuxfoundation.org>; Martin K. Petersen <martin.petersen@oracle.com>; =
-Bart Van Assche <bvanassche@acm.org>; Thomas Wei=DFschuh <linux@weissschuh.=
-net>; Masahiro Yamada <masahiroy@kernel.org>; Mauro Carvalho Chehab <mcheha=
-b+huawei@kernel.org>; Jani Nikula <jani.nikula@intel.com>
-Subject: [EXTERNAL] [PATCH v2 10/13] Documentation: smb: smbdirect: Convert=
- KSMBD docs link
-
-Convert KSMBD docs link to internal link.
-
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
----
- Documentation/filesystems/smb/smbdirect.rst | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/Documentation/filesystems/smb/smbdirect.rst b/Documentation/fi=
-lesystems/smb/smbdirect.rst
-index ca6927c0b2c084..6258de919511fa 100644
---- a/Documentation/filesystems/smb/smbdirect.rst
-+++ b/Documentation/filesystems/smb/smbdirect.rst
-@@ -76,8 +76,8 @@ Installation
- Setup and Usage
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-
--- Set up and start a KSMBD server as described in the `KSMBD documentation
--  <https://www.kernel.org/doc/Documentation/filesystems/smb/ksmbd.rst>`_.
-+- Set up and start a KSMBD server as described in the :doc:`KSMBD document=
-ation
-+  <ksmbd>`.
-   Also add the "server multi channel support =3D yes" parameter to ksmbd.c=
-onf.
-
- - On the client, mount the share with `rdma` mount option to use SMB Direc=
-t
---
-An old man doll... just what I always wanted! - Clara
+On Thu, Sep 11, 2025 at 2:20=E2=80=AFAM Kenneth Crudup <kenny@panix.com> wr=
+ote:
+>
+> I have a Dell XPS-9320, with a i7-1280P (family: 0x6, model: 0x9a,
+> stepping: 0x3) CPU. Sometimes I'll only see 3 RAPL counters instead of
+> the normal 4. (It used to happen a lot more often, BTW):
+>
+> ----
+> gunzip --force --stdout /var/log/syslog* | fgrep -i rapl | fgrep fixed
+> 2025-09-08T12:09:05.915989-07:00 xps-9320 kernel: [    T1] RAPL PMU: API
+> unit is 2^-32 Joules, 3 fixed counters, 655360 ms ovfl timer
+> 2025-09-09T08:52:19.098522-07:00 xps-9320 kernel: [    T1] RAPL PMU: API
+> unit is 2^-32 Joules, 4 fixed counters, 655360 ms ovfl timer
+> 2025-09-09T17:25:24.377784-07:00 xps-9320 kernel: [    T1] RAPL PMU: API
+> unit is 2^-32 Joules, 4 fixed counters, 655360 ms ovfl timer
+> 2025-09-09T17:50:09.334140-07:00 xps-9320 kernel: [    T1] RAPL PMU: API
+> unit is 2^-32 Joules, 4 fixed counters, 655360 ms ovfl timer
+> 2025-09-10T16:42:13.259270-07:00 xps-9320 kernel: [    T1] RAPL PMU: API
+> unit is 2^-32 Joules, 3 fixed counters, 655360 ms ovfl timer
+> 2025-09-10T16:46:36.322016-07:00 xps-9320 kernel: [    T1] RAPL PMU: API
+> unit is 2^-32 Joules, 4 fixed counters, 655360 ms ovfl timer
+> 2025-09-02T13:05:02.632218-07:00 xps-9320 kernel: [    T1] RAPL PMU: API
+> unit is 2^-32 Joules, 4 fixed counters, 655360 ms ovfl timer
+> 2025-09-02T14:07:19.683466-07:00 xps-9320 kernel: [    T1] RAPL PMU: API
+> unit is 2^-32 Joules, 4 fixed counters, 655360 ms ovfl timer
+> 2025-09-02T14:20:43.602483-07:00 xps-9320 kernel: [    T1] RAPL PMU: API
+> unit is 2^-32 Joules, 4 fixed counters, 655360 ms ovfl timer
+> 2025-09-04T13:13:38.636326-07:00 xps-9320 kernel: [    T1] RAPL PMU: API
+> unit is 2^-32 Joules, 4 fixed counters, 655360 ms ovfl timer
+> 2025-09-05T09:21:50.147180-07:00 xps-9320 kernel: [    T1] RAPL PMU: API
+> unit is 2^-32 Joules, 4 fixed counters, 655360 ms ovfl timer
+> 2025-08-29T10:57:14.419740-07:00 xps-9320 kernel: [    T1] RAPL PMU: API
+> unit is 2^-32 Joules, 4 fixed counters, 655360 ms ovfl timer
+> 2025-08-17T11:52:55.733943-07:00 xps-9320 kernel: [    T1] RAPL PMU: API
+> unit is 2^-32 Joules, 4 fixed counters, 655360 ms ovfl timer
+> 2025-08-19T07:52:30.696326-07:00 xps-9320 kernel: [    T1] RAPL PMU: API
+> unit is 2^-32 Joules, 4 fixed counters, 655360 ms ovfl timer
+> 2025-08-19T07:55:49.083600-07:00 xps-9320 kernel: [    T1] RAPL PMU: API
+> unit is 2^-32 Joules, 4 fixed counters, 655360 ms ovfl timer
+> 2025-08-20T10:53:54.601680-07:00 xps-9320 kernel: [    T1] RAPL PMU: API
+> unit is 2^-32 Joules, 4 fixed counters, 655360 ms ovfl timer
+> 2025-08-20T11:00:09.560496-07:00 xps-9320 kernel: [    T1] RAPL PMU: API
+> unit is 2^-32 Joules, 4 fixed counters, 655360 ms ovfl timer
+> 2025-08-20T11:12:30.580414-07:00 xps-9320 kernel: [    T1] RAPL PMU: API
+> unit is 2^-32 Joules, 4 fixed counters, 655360 ms ovfl timer
+> ----
+>
+> ... and it's always(?) the GPU RAPL:
+>
+> ----
+> gunzip --force --stdout /var/log/syslog* | fgrep -i rapl | cut -d\] -f2-
+> | sort -f | uniq -c
+> grep: (standard input): binary file matches
+>       18  intel_rapl_common: Found RAPL domain core
+>       36  intel_rapl_common: Found RAPL domain package
+>       18  intel_rapl_common: Found RAPL domain psys
+>       16  intel_rapl_common: Found RAPL domain uncore
+>       18  intel_rapl_msr: PL4 support detected.
+>        2  RAPL PMU: API unit is 2^-32 Joules, 3 fixed counters, 655360
+> ms ovfl timer
+>       16  RAPL PMU: API unit is 2^-32 Joules, 4 fixed counters, 655360
+> ms ovfl timer
+>       18  RAPL PMU: hw unit of domain package 2^-14 Joules
+>       18  RAPL PMU: hw unit of domain pp0-core 2^-14 Joules
+>       16  RAPL PMU: hw unit of domain pp1-gpu 2^-14 Joules
+>       18  RAPL PMU: hw unit of domain psys 2^-14 Joules
+> ----
+>
+> A reboot fixes it up again (and that's if I even notice), but what would
+> cause this to happen? What's the effect of it missing the RAPL counter, B=
+TW?
+>
+> LMK if you need more info,
+>
+> -Kenny
+>
+> --
+> Kenneth R. Crudup / Sr. SW Engineer, Scott County Consulting, Orange
+> County CA
+>
+>
 
