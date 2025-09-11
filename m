@@ -1,148 +1,145 @@
-Return-Path: <linux-pm+bounces-34448-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34449-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B599B52C81
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 11:02:25 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F018B52CF1
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 11:18:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A5A66582FBF
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 09:02:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CF09C1C209D7
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 09:19:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58FDC2E7BA0;
-	Thu, 11 Sep 2025 09:02:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EC292EA147;
+	Thu, 11 Sep 2025 09:18:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="yBHad4Al"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-vk1-f171.google.com (mail-vk1-f171.google.com [209.85.221.171])
+Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B0F62E7187
-	for <linux-pm@vger.kernel.org>; Thu, 11 Sep 2025 09:02:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C38BC2E8DE2
+	for <linux-pm@vger.kernel.org>; Thu, 11 Sep 2025 09:18:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757581326; cv=none; b=TTrxCIaTsBmEdNEx2621t/PzLZNBVkQH3BMWYnuX7bhw895ajIS2ggY3WVUz6L6XJn0LyuGhJZRpz/q90lIU3/eN4aqjDLpJMTZA5wo1XSchq/f0vb7qVhWiGgmA66w8te6lBsMfPTfI80OluZiLaMm0gpQm4Fg27ujxBPmDwn0=
+	t=1757582303; cv=none; b=kmiyN9Vgf+qmL1Vv6iw1JDYPtS5RJcEJM7K2opjvxxZmbHx6fOCAiz1dtjIlv2oyUtOGICsRhxLtVYDWgY1A+EaHvz99suuWRyl99uKZvyiG8xvozBB6rd/f5KsLnx0C3NrfAgk3CEgjJUI6cbjkNDoGa6QS60JnU10jUQAHRgA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757581326; c=relaxed/simple;
-	bh=ICmlsaYKwcvKV+REXNGRI/oYch0wW2QWDCRm+WbsTt0=;
+	s=arc-20240116; t=1757582303; c=relaxed/simple;
+	bh=1B3D6WIyM4uKCWTK+JvwjK5rmKnBn1DsJarcuewJmQY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HO1GvWNiTaMtRKk6Y4ZHmR78lWWhu9X3APDSmomgTmpwp+9HDVXC2T0N6vfI9hJuEwxOIYIuU4AOxQDG8wYYra9/MzNQlegGVE9S8bZk38SMGaBMLqB0y4IXL4SVtPpkFmCe+eq6m8q5q/d5W7YLgxQ5b+7CpXP+djJJ++lhTPc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vk1-f171.google.com with SMTP id 71dfb90a1353d-544af5b745cso323127e0c.0
-        for <linux-pm@vger.kernel.org>; Thu, 11 Sep 2025 02:02:04 -0700 (PDT)
+	 To:Cc:Content-Type; b=DvPdliXukY0wXJoaOm2sUqfl5Lc7PvcsfNSjm1Y9MGt41iY4q6MxJqJKl5JZuKQz6tk0MkKADKgIslv+B6IMtvRIhcTJ2Tskdnl05aKQjnZpTy+Sn+M/x6Osk6c6mPw60z4i1854koXq4ItqW4jG4rX08acVtuAnWA5wxzY1jA4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=yBHad4Al; arc=none smtp.client-ip=209.85.222.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qk1-f173.google.com with SMTP id af79cd13be357-80e3612e1a7so82098685a.0
+        for <linux-pm@vger.kernel.org>; Thu, 11 Sep 2025 02:18:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1757582299; x=1758187099; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1B3D6WIyM4uKCWTK+JvwjK5rmKnBn1DsJarcuewJmQY=;
+        b=yBHad4AlHhN6xy1ETyIXTUjHUNyn8b1AyhTsMHAfhIed9rD2urdwr25RkJl/3nbDmo
+         1VWACUkvD7U3dYFobURlyHBwJJdDnpOtUHDT6WMqkM9y4XeoGBhk2Ru9hfAdfBfoTBqO
+         mJ2sJEeVKNHoSwzDgOZD34o0CJ4wsOwF45aUg8OsHxQOV6BMVRBPjlHEPc3y1eg3xuWz
+         w3lZ4EqqzNuLbF8ir0bMPq6eWdsBtOO4CNcj0NhrJ6o2WZw4K2d9JZIRCOMXo+ckdvK2
+         WlHQ8DAKM5F5YmF8fLW7d3BWgiLPrKXsjMA72uWERZna9hnOKwmoDz9alq8MGWJg27kC
+         ZA9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757581323; x=1758186123;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ma/6vP6cw0Ynsztpbgjyb4FEYEjAJYKzRW150ld1Q7A=;
-        b=nyUxxnkVFQHt9Y8mEBAdUUMO4AftwJmcSBDpbMs6rlBpwS53sGb6isa7PLhuhTBQRe
-         eJHeqVJOoiKPUOpv1NrpcjNk0zOZwmNx5JrY/GP/+3FdsPSuP6zllNMVrs/yqw9N+24I
-         mH9lzSrEEv/n5eo7Hv4epd2Do/hX5vqZpmHx8mcu+JOxngho1LLmpaX2pZfi1w69P08N
-         r1pYM0CeRsf6eTyUxSX+1+KCBQAhJg6MgYV89llnrCB5cxV3uBk4DIEFWsn/HDOeKnpv
-         j4UBsr3x57TE4kHzKz8UXyvUEAAHTF49QojEmkwdZnjmaKXu7E3OgCrcI+FEty2FN8M0
-         Iz/Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUmaEn0vlwyp0plEITxBvry1ykw1bw7RtzepPyYBV39ua9QOD43T48MDuvBcMVfHZF0YkV2/JCEYQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwKcdOk0DWjilvKGrcssHfsc4eG9Cnp5dqM6UEqmmoGuSM6He/7
-	d+0BMTsIT+H3F1Rz8HgndejVhPuh0b1ycYpObeO2IMT6Sl62UHFx8+kKz1BrlaBM
-X-Gm-Gg: ASbGncsz28Xnif6bMpbPL70FVzgEiIH122trs06hpn4HGylUnj5X+2/EoRuUEWF6IDJ
-	qevgGo2oYg05cfT+YBds03HQ6kUnAjAcpdz/o1JXckoo8aAmLtciZYjKZFI8OZo9c1+ro4Abhpf
-	Qtta/bDLqgVQJSKsO+UF27DQFBn2xtdf5BxSeEGOBN4ZW7ncKPhrQF5cohUeO4c2ZqjnbTrLtw2
-	j28alIciNlmylmKQehbusdws6YWRX7uBUStdRuasPqMhljMWtEobfNGV+KEZfP/52zrN3WxRnz8
-	JUxUZxMNEzc5fAr3gTg8e6G7UvboGUL3XWXjecHLc432e8orbyNbpe85NfLzl+gCaIT5xNESNQ0
-	n69vX8/iEH2/5uin9Rqs1EFPf5FcRW713+mlpTcxMRCgQ1MU8FEmQ3gQ+w1SH
-X-Google-Smtp-Source: AGHT+IGh1KVKupz6BIA2wEowZmwdAyuJAJuxJ9IWJg8HiPxEP+ie6fG7nGnjayhCHOufRI6k/eSu6A==
-X-Received: by 2002:a67:e7cc:0:b0:51c:77b:2999 with SMTP id ada2fe7eead31-53d1aead9a3mr6366925137.2.1757581323114;
-        Thu, 11 Sep 2025 02:02:03 -0700 (PDT)
-Received: from mail-ua1-f43.google.com (mail-ua1-f43.google.com. [209.85.222.43])
-        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-55375d5bd54sm218515137.14.2025.09.11.02.02.01
-        for <linux-pm@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Sep 2025 02:02:02 -0700 (PDT)
-Received: by mail-ua1-f43.google.com with SMTP id a1e0cc1a2514c-890190d9f89so293980241.2
-        for <linux-pm@vger.kernel.org>; Thu, 11 Sep 2025 02:02:01 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVyILFFtSNElRFYK5F63tlQMcpq/FEgZibT14Mhdq8NP8eBAVgaqS3FibFDIWx5k/BePWL5VjWtBg==@vger.kernel.org
-X-Received: by 2002:a05:6102:3e0b:b0:522:1013:cace with SMTP id
- ada2fe7eead31-53d1c2e1cbamr6471994137.10.1757581321304; Thu, 11 Sep 2025
- 02:02:01 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1757582299; x=1758187099;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1B3D6WIyM4uKCWTK+JvwjK5rmKnBn1DsJarcuewJmQY=;
+        b=tzgD9raf4g1quVdwJufcAvUH4+U8XNCxb2vRX4PXNuIdaEyKL+QA9ZpBfqfh7R47rc
+         Gbxsy9EaJ6AzKNnqhCwWhm9Ywoz5MmXTo8s4IxPXi6Z3RxNxcVDrvyQmjCgt+B375UuU
+         S69DtH20T8Igp/+PiorISuIjM3PhuW2WOqX8+abQ5XjURKk01y7QL0C2RvUP0AZ5qJzk
+         q3ZuSRc3SYShsEAyFxFeYyEe0vCMZPpKcEVsQnt1gqpKvRfa6hc85SuPnOJu+2OnS5rY
+         Sk+GI3ALmjDRBqc3BxvfH0DxsUj7VbDd56VvcuLs9RePED8dg1P4x8M3iiIwZSkN17kD
+         XrEQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWiF+BkFjVUWxHk/h+4zh5ZoUycACYIno2p/R/TBVciWUGFChsEu3UAipWWw4r4iEtnnVPeRp2/jg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwsywA0U45dVcHp89v72kiLRa31FXJjeQAT0jJ+24v9pp1lX+n3
+	Vy8KFbNEyVIlJs1I9inKdoVIJXEA+d1lXPAnrXPjWV6Bvngo7UlksYIgqvtchmeSzpwSuQeRNNR
+	G0FwqZ6mYz3BA4XoAT/KzScfVqngb1Qe/8Yb6mpGe
+X-Gm-Gg: ASbGncs+mYFAqH9dHzjAHWw9TI2ApqRSHi0KuCRAn/dvhUhYCpUm2mf1tzUX9TFYinR
+	1VoIFlWRIvj9203N8394+sMQPF22XM711MhBy8kNlTazEVpCE0R3qh5A4JOmRjC7zzC29wkUMhw
+	GZpPZ9ytbCL0Nslpr8NhA9n8AA21vbwlFHPf/FV3uOjaJ+i91WRv3PgThKSyoLBa+pGg5VFjEgj
+	N6Xtsd8QeMZw196f6V+DHFIaPAklaNHHlEuwSJ5HX/C
+X-Google-Smtp-Source: AGHT+IEAdn2JRKDnhaL2qmt37A4l17luV2CMhXbLee/vFTGYZd/pxxVUthlBX8HJQeQEoIdvrbi8slCg3eRXyv3n/Qs=
+X-Received: by 2002:a05:620a:45a7:b0:813:8842:93bf with SMTP id
+ af79cd13be357-813c1e8e0femr1958044985a.40.1757582298381; Thu, 11 Sep 2025
+ 02:18:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250909111130.132976-1-ulf.hansson@linaro.org> <20250909111130.132976-4-ulf.hansson@linaro.org>
-In-Reply-To: <20250909111130.132976-4-ulf.hansson@linaro.org>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 11 Sep 2025 11:01:50 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWB05sQpv0nKgU2NNn4=KAmNCpHhAnz3s15Gopu8FKVkQ@mail.gmail.com>
-X-Gm-Features: AS18NWB_6gJmqKrqPl8hBI-saW-lKUrGeAKCkd2NAqUJ0GfWChjmTWPU1ec2v1s
-Message-ID: <CAMuHMdWB05sQpv0nKgU2NNn4=KAmNCpHhAnz3s15Gopu8FKVkQ@mail.gmail.com>
-Subject: Re: [PATCH 3/5] pmdomain: renesas: rcar-sysc: Don't keep unused PM
- domains powered-on
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>, 
-	Saravana Kannan <saravanak@google.com>, linux-pm@vger.kernel.org, 
-	Stephen Boyd <sboyd@kernel.org>, "Rafael J . Wysocki" <rafael@kernel.org>, Heiko Stuebner <heiko@sntech.de>, 
-	Sebastian Reichel <sebastian.reichel@collabora.com>, Sebin Francis <sebin.francis@ti.com>, 
-	Diederik de Haas <didi.debian@cknow.org>, Bjorn Andersson <andersson@kernel.org>, 
-	Abel Vesa <abel.vesa@linaro.org>, Peng Fan <peng.fan@oss.nxp.com>, 
-	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, Johan Hovold <johan@kernel.org>, 
-	Maulik Shah <maulik.shah@oss.qualcomm.com>, Michal Simek <michal.simek@amd.com>, 
-	Konrad Dybcio <konradybcio@kernel.org>, Thierry Reding <thierry.reding@gmail.com>, 
-	Jonathan Hunter <jonathanh@nvidia.com>, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org
+References: <20250910024328.17911-1-bagasdotme@gmail.com> <20250910024328.17911-8-bagasdotme@gmail.com>
+In-Reply-To: <20250910024328.17911-8-bagasdotme@gmail.com>
+From: Alexander Potapenko <glider@google.com>
+Date: Thu, 11 Sep 2025 11:17:41 +0200
+X-Gm-Features: AS18NWC9Ax6HJ7xE41xsztIAoL9MxJcZhppucVI7C3-6QUaMqtQ6glgozKyha94
+Message-ID: <CAG_fn=WPCtL2Knk7_so+9QMcUPY2wCG93BZN-rwJC+ELLgJ4nQ@mail.gmail.com>
+Subject: Re: [PATCH v2 07/13] Documentation: kasan: Use internal link to kunit
+To: Bagas Sanjaya <bagasdotme@gmail.com>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Documentation <linux-doc@vger.kernel.org>, Linux DAMON <damon@lists.linux.dev>, 
+	Linux Memory Management List <linux-mm@kvack.org>, Linux Power Management <linux-pm@vger.kernel.org>, 
+	Linux Block Devices <linux-block@vger.kernel.org>, Linux BPF <bpf@vger.kernel.org>, 
+	Linux Kernel Workflows <workflows@vger.kernel.org>, Linux KASAN <kasan-dev@googlegroups.com>, 
+	Linux Devicetree <devicetree@vger.kernel.org>, Linux fsverity <fsverity@lists.linux.dev>, 
+	Linux MTD <linux-mtd@lists.infradead.org>, 
+	Linux DRI Development <dri-devel@lists.freedesktop.org>, 
+	Linux Kernel Build System <linux-kbuild@vger.kernel.org>, Linux Networking <netdev@vger.kernel.org>, 
+	Linux Sound <linux-sound@vger.kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
+	Borislav Petkov <bp@alien8.de>, Peter Zijlstra <peterz@infradead.org>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, Pawan Gupta <pawan.kumar.gupta@linux.intel.com>, 
+	Jonathan Corbet <corbet@lwn.net>, SeongJae Park <sj@kernel.org>, 
+	Andrew Morton <akpm@linux-foundation.org>, David Hildenbrand <david@redhat.com>, 
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
+	Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
+	Michal Hocko <mhocko@suse.com>, Huang Rui <ray.huang@amd.com>, 
+	"Gautham R. Shenoy" <gautham.shenoy@amd.com>, Mario Limonciello <mario.limonciello@amd.com>, 
+	Perry Yuan <perry.yuan@amd.com>, Jens Axboe <axboe@kernel.dk>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Dwaipayan Ray <dwaipayanray1@gmail.com>, 
+	Lukas Bulwahn <lukas.bulwahn@gmail.com>, Joe Perches <joe@perches.com>, 
+	Andrey Ryabinin <ryabinin.a.a@gmail.com>, Andrey Konovalov <andreyknvl@gmail.com>, 
+	Dmitry Vyukov <dvyukov@google.com>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Eric Biggers <ebiggers@kernel.org>, tytso@mit.edu, Richard Weinberger <richard@nod.at>, 
+	Zhihao Cheng <chengzhihao1@huawei.com>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>, 
+	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, Boqun Feng <boqun.feng@gmail.com>, 
+	Waiman Long <longman@redhat.com>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Simon Horman <horms@kernel.org>, Shay Agroskin <shayagr@amazon.com>, 
+	Arthur Kiyanovski <akiyano@amazon.com>, David Arinzon <darinzon@amazon.com>, 
+	Saeed Bishara <saeedb@amazon.com>, Andrew Lunn <andrew@lunn.ch>, 
+	Alexandru Ciobotaru <alcioa@amazon.com>, 
+	The AWS Nitro Enclaves Team <aws-nitro-enclaves-devel@amazon.com>, 
+	Jesper Dangaard Brouer <hawk@kernel.org>, Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
+	Ranganath V N <vnranganath.20@gmail.com>, Steve French <stfrench@microsoft.com>, 
+	Meetakshi Setiya <msetiya@microsoft.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	"Martin K. Petersen" <martin.petersen@oracle.com>, Bart Van Assche <bvanassche@acm.org>, 
+	=?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Mauro Carvalho Chehab <mchehab+huawei@kernel.org>, 
+	Jani Nikula <jani.nikula@intel.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Ulf,
-
-On Tue, 9 Sept 2025 at 13:11, Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> The recent changes to genpd makes a genpd OF provider that is powered-on at
-> initialization to stay powered-on, until the ->sync_state() callback is
-> invoked for it.
+On Wed, Sep 10, 2025 at 4:44=E2=80=AFAM Bagas Sanjaya <bagasdotme@gmail.com=
+> wrote:
 >
-> This may not happen at all, if we wait for a consumer device to be probed,
-> leading to wasting energy. There are ways to enforce the ->sync_state()
-> callback to be invoked, through sysfs or via the probe-defer-timeout, but
-> none of them in its current form are a good fit for rcar-sysc PM domains.
+> Use internal linking to KUnit documentation.
 >
-> Let's therefore opt-out from this behaviour of genpd for now, by using the
-> GENPD_FLAG_NO_STAY_ON.
->
-> Link: https://lore.kernel.org/all/20250701114733.636510-1-ulf.hansson@linaro.org/
-> Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> Fixes: 0e789b491ba0 ("pmdomain: core: Leave powered-on genpds on until sync_state")
-> Fixes: 13a4b7fb6260 ("pmdomain: core: Leave powered-on genpds on until late_initcall_sync")
-> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-
-> --- a/drivers/pmdomain/renesas/rcar-sysc.c
-> +++ b/drivers/pmdomain/renesas/rcar-sysc.c
-> @@ -241,6 +241,7 @@ static int __init rcar_sysc_pd_setup(struct rcar_sysc_pd *pd)
->                 }
->         }
->
-> +       genpd->flags |= GENPD_FLAG_NO_STAY_ON;
-
-So this applies to all PM Domains.  While this doesn't hurt, perhaps it
-should not be set for always-on domains, and thus moved up, to become
-an "else" branch in the "if/else if/..."-logic handling always-on
-domains at the top of the function?
-
-This applies to rar-gen4-sysc.c, too.
-
->         genpd->power_off = rcar_sysc_pd_power_off;
->         genpd->power_on = rcar_sysc_pd_power_on;
->
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+Reviewed-by: Alexander Potapenko <glider@google.com>
 
