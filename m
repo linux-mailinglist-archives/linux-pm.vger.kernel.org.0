@@ -1,130 +1,133 @@
-Return-Path: <linux-pm+bounces-34465-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34466-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49C73B532C2
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 14:51:02 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 97982B532D2
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 14:55:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 06609585AB9
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 12:51:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E0A151C85FD0
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 12:55:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B58E322A08;
-	Thu, 11 Sep 2025 12:50:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DB1931A575;
+	Thu, 11 Sep 2025 12:55:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cNlaDRcg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T5I3wIMm"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26C7C32252A
-	for <linux-pm@vger.kernel.org>; Thu, 11 Sep 2025 12:50:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E58BF23AB8A;
+	Thu, 11 Sep 2025 12:55:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757595049; cv=none; b=bfxtAvbxm2/CKf4WWbQHO0vucQx1mOOR8Mzms6VOJrkIpfubjqWSAADXv0kGUlRJ6hYbQcyA7baVpqVkt0+YXa/E1DCvLtZScHETzQT/IYz9rOrlmXMtdW6Qvj5u3zsjecOjjbJ6Fh8z3vXoeOTGKXndNK8kQCsPCl7bg15zemw=
+	t=1757595303; cv=none; b=n+PtN9VXP/2S+GPfcRiuT8BsfeGKSj4mjz790cvvuTeAbPICVIN3EnCagaIAQeJrWuiKt8vs+B1VZavOalCUlSa3DYwgUnmwDcyXYTdYHeNUEC+WTPrJ0lj6KyOzAKUQpUaWVXa34d0+PvFiF34e6ziHNz0tgyjfgxsfE89er6w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757595049; c=relaxed/simple;
-	bh=tJGoCAXqOzuddBjl4jN3Sc3VycflEXLnDPekZVtOt+4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gLTEPO85S/OgjdZnxOsW6MvmBscdI/LlR2xGmUfStxwQ03H0a5r63AYh2W1Kyr9fAnQGLyn9YWIUbty3tcZcVs9unHXCg0PqAduJqwHsmQ4q8H1XqVesobnTyATe3eIhGop7WPGkyjJB2CSdPdXy9A/IHFRyDVV6Yx9nJTlRzFg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cNlaDRcg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF8D1C4AF0B
-	for <linux-pm@vger.kernel.org>; Thu, 11 Sep 2025 12:50:48 +0000 (UTC)
+	s=arc-20240116; t=1757595303; c=relaxed/simple;
+	bh=kUamfGGx5n3Z4g26DreT0zQfkgHhAnmsXNz8Phr6jjk=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=g7vnXaQTY0ZMNwhjfHVq3e+CezWzh8H+AKEGw6sanamVl6geB4Wx2XEBkvub8eyQq6kkIuE/fHl5/GPzJCfUEqai5Lmad4SnPwVHdLvlj5BYbwJIlVTWntgj1yaQ6vw7fpDgHQ74iknu1CnY2L4zRug9Suu73QSmxx/WZ3OakFo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T5I3wIMm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60ED4C4CEF0;
+	Thu, 11 Sep 2025 12:55:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757595048;
-	bh=tJGoCAXqOzuddBjl4jN3Sc3VycflEXLnDPekZVtOt+4=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=cNlaDRcgWbChNThLzsHJ0nSPSPwbSBoZs1iK1fDrhnZ/mROkqzmdcUkZdn5wTfWho
-	 jpg0Nps06leWAHtJ1leacWlB9HcLbNgMvG9D1C7USUjSLyzbj2KoQi6PVyDGZ2mrHJ
-	 a6DtEJzpmP+EfBr6ToU+qmYUcUelwjqg9fFXRRvNzGdkNydus1PLdDfpisQQu0X4LP
-	 g5KXJQ5VNCfIrx14LcF8hBlXKHOlklrIpUD6n39Fzn7/Lm506FQ+Z3o5yMf3HiZW0u
-	 YQT7UOTWycWQfWnSRiQheq1eUc2eW3r1gPPmHIvW1mec2dtAACms3tZgVETOiTsMiW
-	 ouqN+ObMLMgBA==
-Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-61e6ee53d2dso141249eaf.3
-        for <linux-pm@vger.kernel.org>; Thu, 11 Sep 2025 05:50:48 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVEfi4F4mSeKnZgQE2Ai8EYqkPVx7XW7Sj4URXT9/Mcdya7D3csN7biYwYb4xCyU/rNGja0MGUnww==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx7UgydMlQ3wXq7e+B96VcBwmDV1D6pUXen235SIXupFKCRGfI8
-	qcZfsOJNXqjFwQ5AP5B5epwxf+cIuWk4bSSdJJR38WAl4G5H4zwNHMX+F2/vsN+OYbKI/sTXHdh
-	jE8HosOZmbgXEU9GMfUirlOElL8kulmo=
-X-Google-Smtp-Source: AGHT+IHxJsKUfu0kNJmQcWf2p4gCIbzxH4/zmcLfjneUPJkQ11l+6BwO9/YIzjCoKy5wdYDt3DB/P7BJc9MXRsm29dE=
-X-Received: by 2002:a05:6820:168d:b0:621:a8cc:3a6d with SMTP id
- 006d021491bc7-621a8cc3fafmr2679459eaf.3.1757595048159; Thu, 11 Sep 2025
- 05:50:48 -0700 (PDT)
+	s=k20201202; t=1757595300;
+	bh=kUamfGGx5n3Z4g26DreT0zQfkgHhAnmsXNz8Phr6jjk=;
+	h=From:Date:Subject:To:Cc:From;
+	b=T5I3wIMm5cR8a7a8WIxYydkdkIWoLqIj7V6/zWw71DH25JL9DP9yLQnXHhpi1bWFH
+	 Jon60CTykRcl0LAPokqhcMq4rrRhPfbLsV5zeLoYnn4s07U7FtgkEcuvAbd57nI6ot
+	 KkgssJlfjtGe9P8oQcRuY2OkbhKe74E7fDg7hwftRaohU38Yt6ZRDGUdDnb0esJOz6
+	 KHrz3LIogWUSmr1172LVAly2UiMx73tH4OCx01UbqcQbDmeZHao2EuTWBz0ahn2W6E
+	 5CV4hDY1CaYtVRglDbYgVEmgk28xuWlsInDndYIIaDRffAsqz+kfK2BD9A4X4abTuv
+	 nFnxtKx469X8A==
+Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-746d3b0d926so263800a34.1;
+        Thu, 11 Sep 2025 05:55:00 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXV2Pkk35tqFyWxS6zteP3gR52/sEExyQg7ismuHdodV/dPZgiqGSHnaMSLfxt9oW2xibr8uzMvN1Hmiqw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzeviPbcUjoqUnBIRbQLIbSDfEABHz2OQXeRdcQolFKXY1AOOQl
+	Axw4df2NKFq4JpatCACgXYDHqwhgHFEZyo58Rg5UHYfbPDF6x6BkPLuZymvIoBojbgz0HR3Au58
+	4XGdxlIYHg4DBpCCTGKfLFmcR5Iihj1Q=
+X-Google-Smtp-Source: AGHT+IG98WhLqVCwMY/2AvCS2rEBfCNKgym1hWiGmI+LlUs45ABBWM3HslvA2dJfb4fFE30Rskq85kM3n2B5GVb0bF4=
+X-Received: by 2002:a05:6830:2584:b0:745:a21c:6a6a with SMTP id
+ 46e09a7af769-74c7115e030mr11993928a34.12.1757595299560; Thu, 11 Sep 2025
+ 05:54:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250911112058.3610201-1-treapking@chromium.org>
-In-Reply-To: <20250911112058.3610201-1-treapking@chromium.org>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 11 Sep 2025 14:50:36 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0jMXzka7XgG7eXHOFntbSupHrhYvUsLP_YvDz10HpbMcQ@mail.gmail.com>
-X-Gm-Features: Ac12FXy1al6eSJJVOZe39AB-nzoBqzW7cKPlPDQxDvKD9wP_zx2hUDROhAJfMXY
-Message-ID: <CAJZ5v0jMXzka7XgG7eXHOFntbSupHrhYvUsLP_YvDz10HpbMcQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] driver core: Export device_link_flag_is_sync_state_only()
-To: Pin-yen Lin <treapking@chromium.org>
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, Pavel Machek <pavel@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, 
-	Saravana Kannan <saravanak@google.com>, Hsin-Te Yuan <yuanhsinte@chromium.org>, linux-pm@vger.kernel.org, 
-	Chen-Yu Tsai <wenst@chromium.org>, linux-kernel@vger.kernel.org
+Date: Thu, 11 Sep 2025 14:54:48 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0j-OGp-djCo7m8Y92v1FOPTYbPp4tw_d1N4jyS_4gfgFA@mail.gmail.com>
+X-Gm-Features: Ac12FXwqS_NWGj2I3GSYyJaA8rO-OqDwtZiyLBPTk9_i-irvZti3A1x1AEJMQdk
+Message-ID: <CAJZ5v0j-OGp-djCo7m8Y92v1FOPTYbPp4tw_d1N4jyS_4gfgFA@mail.gmail.com>
+Subject: [GIT PULL] Power management fixes for v6.17-rc4
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Linux PM <linux-pm@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Mario Limonciello <mario.limonciello@amd.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Sep 11, 2025 at 1:21=E2=80=AFPM Pin-yen Lin <treapking@chromium.org=
-> wrote:
->
-> Export device_link_flag_is_sync_state_only() for future patches.
->
-> Signed-off-by: Pin-yen Lin <treapking@chromium.org>
->
-> ---
->
-> Changes in v2:
-> - New in v2
->
->  drivers/base/core.c    | 3 ++-
->  include/linux/device.h | 1 +
->  2 files changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/base/core.c b/drivers/base/core.c
-> index d22d6b23e758..cc6af9b0d59d 100644
-> --- a/drivers/base/core.c
-> +++ b/drivers/base/core.c
-> @@ -287,10 +287,11 @@ static bool device_is_ancestor(struct device *dev, =
-struct device *target)
->  #define DL_MARKER_FLAGS                (DL_FLAG_INFERRED | \
->                                  DL_FLAG_CYCLE | \
->                                  DL_FLAG_MANAGED)
-> -static inline bool device_link_flag_is_sync_state_only(u32 flags)
-> +bool device_link_flag_is_sync_state_only(u32 flags)
->  {
->         return (flags & ~DL_MARKER_FLAGS) =3D=3D DL_FLAG_SYNC_STATE_ONLY;
->  }
-> +EXPORT_SYMBOL_GPL(device_link_flag_is_sync_state_only);
+Hi Linus,
 
-As Greg said, this isn't necessary.
+Please pull from the tag
 
->
->  /**
->   * device_is_dependent - Check if one device depends on another one
-> diff --git a/include/linux/device.h b/include/linux/device.h
-> index 0470d19da7f2..e27d0bf7c43d 100644
-> --- a/include/linux/device.h
-> +++ b/include/linux/device.h
-> @@ -1197,6 +1197,7 @@ const char *dev_driver_string(const struct device *=
-dev);
->  struct device_link *device_link_add(struct device *consumer,
->                                     struct device *supplier, u32 flags);
->  void device_link_del(struct device_link *link);
-> +bool device_link_flag_is_sync_state_only(u32 flags);
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ pm-6.17-rc6
 
-No, you only need it in drivers/base/base.h
+with top-most commit bddce1c7a5ab3ec2dd0fc404f4155c0c17e847b2
 
->  void device_link_remove(void *consumer, struct device *supplier);
->  void device_links_supplier_sync_state_pause(void);
->  void device_links_supplier_sync_state_resume(void);
-> --
+ Merge branches 'pm-sleep' and 'pm-em'
+
+on top of commit 76eeb9b8de9880ca38696b2fb56ac45ac0a25c6c
+
+ Linux 6.17-rc5
+
+to receive power management fixes for 6.17-rc6.
+
+These fix a nasty hibernation regression introduced during the 6.16
+cycle, an issue related to energy model management occurring on Intel
+hybrid systems where some CPUs are offline to start with, and two
+regressions in the amd-pstate driver:
+
+ - Restore a pm_restrict_gfp_mask() call in hibernation_snapshot() that
+   was removed incorrectly during the 6.16 development cycle (Rafael
+   Wysocki)
+
+ - Introduce a function for registering a perf domain without triggering
+   a system-wide CPU capacity update and make the intel_pstate driver
+   use it to avoid recurring unsuccessful attempts to update capacities
+   of all CPUs in the system (Rafael Wysocki)
+
+ - Fix setting of CPPC.min_perf in the active mode with performance
+   governor in the amd-pstate driver to restore its expected behavior
+   changed recently (Gautham Shenoy)
+
+ - Avoid mistakenly setting EPP to 0 in the amd-pstate driver after
+   system resume as a result of recent code changes (Mario Limonciello)
+
+Thanks!
+
+
+---------------
+
+Gautham R. Shenoy (1):
+      cpufreq/amd-pstate: Fix setting of CPPC.min_perf in active mode
+for performance governor
+
+Mario Limonciello (AMD) (1):
+      cpufreq/amd-pstate: Fix a regression leading to EPP 0 after resume
+
+Rafael J. Wysocki (2):
+      PM: EM: Add function for registering a PD without capacity update
+      PM: hibernate: Restrict GFP mask in hibernation_snapshot()
+
+---------------
+
+ drivers/cpufreq/amd-pstate.c   | 19 +++++++++++--------
+ drivers/cpufreq/intel_pstate.c |  4 ++--
+ include/linux/energy_model.h   | 10 ++++++++++
+ kernel/power/energy_model.c    | 29 +++++++++++++++++++++++++----
+ kernel/power/hibernate.c       |  1 +
+ 5 files changed, 49 insertions(+), 14 deletions(-)
 
