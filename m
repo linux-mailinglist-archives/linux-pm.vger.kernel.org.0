@@ -1,64 +1,64 @@
-Return-Path: <linux-pm+bounces-34442-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34443-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 172E2B52B3B
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 10:10:38 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 86FCFB52B3C
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 10:10:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A0CFC3A4C17
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 08:10:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0378E7B98C2
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 08:09:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A19962D8793;
-	Thu, 11 Sep 2025 08:10:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5D042D77E5;
+	Thu, 11 Sep 2025 08:10:33 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f196.google.com (mail-pl1-f196.google.com [209.85.214.196])
+Received: from mail-pl1-f193.google.com (mail-pl1-f193.google.com [209.85.214.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19AF22D663B
-	for <linux-pm@vger.kernel.org>; Thu, 11 Sep 2025 08:10:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F6C12D8774;
+	Thu, 11 Sep 2025 08:10:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757578225; cv=none; b=p33ADZIRjnZW8vXXBVNp+BWfW7Z2X5XHo6nxAK6Ezopwb9toC0vCpeckNt978aqeneYn5AzSzt41BU28yBUpMrlV73vgsxRIZdMJL3UeJrjQFasROjzA/KwWqwC8qfhVdOKXcwHmm0eG742RVtox4zZb2f1OjFHHZTdfdXMfAoM=
+	t=1757578233; cv=none; b=q7Njsk+IpY3XPUa4U1NysxjSYOrHdwtunzCF6KdVM3eFDv0v8CkBKyDQy9G5doMOcPUW2xM9GKy4otBCpLdyoTHoNjkA6pYSim9dvbgPwysJfwTAYsj3GqIeZxQ3L1PdIrOTgOOdVEmNQY4UL+4unmcBRDOcaL6er3FV+tBi+cg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757578225; c=relaxed/simple;
-	bh=ExUU+pGBfpALU11Z5pEd1vR0hoXiz55jE/WtOaShvMk=;
+	s=arc-20240116; t=1757578233; c=relaxed/simple;
+	bh=8XXqdXfPe6eWtsQlvfmXCzjN4ohaMWABdqQKsH/HD+w=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=lX+LRdudsYw89LZx9RFFmDVQt+63fCnbjiiDOoSu8lUrs7pSherkzcAClS3vekO5EQHVQpEB2ifObBZirWjytvp022yvseUIWwgF5j8TBZIgECpe/Q43mb+9ay/1UuiTMVUmKS7BVQnE+Mw+QfSIXfL2gnotze2G1bXxuDgUUd0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.214.196
+	 MIME-Version:Content-Type; b=fi6qNshtItUJDcd+fkD6LYqZh25YTHjqEoNos18q8XOdJf7XagPqrye+hXLX8jhIUV0ZrrI0XLsHEwETaVRyh8AlKut0eb1UJ9LY4CCryRa4G3YaQUjN4h9UOxNhnIZboUhUMPsUrVIVEMT/9qQROIKdY10/jyoFFinZ7ouCuMY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.214.193
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f196.google.com with SMTP id d9443c01a7336-2445826fd9dso5154835ad.3
-        for <linux-pm@vger.kernel.org>; Thu, 11 Sep 2025 01:10:22 -0700 (PDT)
+Received: by mail-pl1-f193.google.com with SMTP id d9443c01a7336-25221fa3c9bso12408745ad.0;
+        Thu, 11 Sep 2025 01:10:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757578222; x=1758183022;
+        d=1e100.net; s=20230601; t=1757578231; x=1758183031;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=lvA6blgC4IX6hj9NKO9nOSzXLhviVfQZFwPkL/QABho=;
-        b=qSBxtUCsKCPbFGuaLl409tVtH8d2NNITPsHYRxQY8YARnnrQmdkMR8wq7ZuZ0+LtUC
-         jz1z36+Tr4kQUexcTpTXQDtlSYp/Z/dRTqFDcLiqsA3Mb8AtdrNOus5Uv6wmNHEy9x9M
-         1vIiJRbH7rZZMhbCq7BEEXpoxSl+fLbvMe4SK7pdDIRpBUk/IOT4Qe2NnCm2PrhJ/dDi
-         PeqTC2H4KHbkclnlZzg5bnURLXo0EpknhfWTwr/QiQ1PhumDjE+VJmH2SrGtvn28TcyI
-         MyGIYPDpnzyx8fNmkIJRKpCqgatL6etz4ciJIrm9sKNeQFC0SIpWlRB+T6ZBp1f1fVC8
-         VvNw==
-X-Forwarded-Encrypted: i=1; AJvYcCUIK3Nw2I4X7Ebf6wDX9aRpdUPiVWxlN29G9KtMPNIUzULj1ovbHU7FoVqzW0nYFr3BB6Ssjto5qA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzHxbcBQvYGzCTeEoTS07SNNfVc2I/v2C9zaHxwx2zEzLxejMV1
-	GJaiX59C4f67clmC/x1W1AYtVXOzvqNo1id2G4y1TYrVOV+/8+c43gG6
-X-Gm-Gg: ASbGncu6nyk7LX56RmixrxtMxxdYuKWm3KWpwgwi15EqkoozQ08htOYyEoHMpD1wfWl
-	WGUbmSeY4GscakaoO78EBvxZmnnA+A9Hq2D9viDhUR1e9DsCOBsszzs+2Rm2uLuGSzJqwK2F3wI
-	Yb7pCvM8856Fm+wGzIx1tUbX4lNj1WkuRHSviaLaRSMptL5l4+5ze/9RsrejK6H/REB4M1MZeL0
-	gmRrzhfCX3PtELRsn/0cwAoZqBS469FCyVqnFcxpiCt17vHMTQ+RnzpoJfeCqKZ854BoPrvG1wr
-	CKmiMFUI50wZtX53h8ShGPZJHiyqrLlr81xWuc+lUjhhpMi1meFXpWpj+GRHd3iV4SLToJlgnkQ
-	npEeNTZKmAtf1Do/sTR1a9H4lskPTVAIRAO7uGp9iruClmvoKtlt9/o9V5PBPBTzthZ8=
-X-Google-Smtp-Source: AGHT+IEazcvj6u3pgAilsxX3V6tb275sE9wo2VIGekxnEjbg5FCeyDwj2jKeAT3aOOHRd55yYAmptQ==
-X-Received: by 2002:a17:902:f550:b0:24b:270e:56f4 with SMTP id d9443c01a7336-251736df030mr234774675ad.37.1757578222320;
-        Thu, 11 Sep 2025 01:10:22 -0700 (PDT)
+        bh=Q+08KUqZSRhNIhJzyo8CBa+9NHM0qanryXoG/IYYe2I=;
+        b=CCYgjj5TrmwHqSqG+L4706I0BZxTwRWdjduThupsIOw7p6DCgRN5SO9OR+8sLjypku
+         xtt+IHaGjhw1wuPDRVGXpFdx+hPHrQ7XvPIRrayZZC+t+CFit8Z/lc1khHPM3+CGBl6z
+         Bz953lXKd+z90iJKfoQYtyg3eYR2Udz8b0X9q7PFJ6eUzM0tBFA0dizZlXbc8YI97iaN
+         EvIGlBMdkLzB8At0kmFWwQj6QPKNX9M88VrdqJo1k/+9yQA8QtF6ggSergSIG/BIxWQ7
+         UVQPp2UOeT/ciUqKmuLtD/eqOKA7WPsObvjqZ9nylLtDIIK7jmsvQ8sBRe4FuL4MMsuA
+         CZig==
+X-Forwarded-Encrypted: i=1; AJvYcCVcp10PyqCTEhUp0XumcVL6G6SyRDYq7r6CFoVvppgLUCk7J6pLk2z7eYgWlOaAUC0IFSIwfmIHetg=@vger.kernel.org, AJvYcCWsJVsetymmpbRxyOg51hKYT7tXRO+2EkCPO7C+1CTIubK2ije6mz6nXmOy3E3rIhgLcgpy3mVNhemeu4o=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxsp+VRPfgpRkqLEBHN1xhDQG5TR7XovDpSmLMu38O5wWCg3E8D
+	5Wg07Jn+ZrQvvr0YVn5Nvm2MAFwbXN+ILtnKxPAHlL5RGE3fyWMBjjNY
+X-Gm-Gg: ASbGncskGmADWi7q50VGjgY81z7CGSTxyBrS01Awmvnd+MCbCMEOM1FY2RpGD/34ma+
+	VPwLhFdW1zu2LLSslAcW29AMvsii6dUHOc9QlJ6hpUwTNuJUfzpLT2E1h8Zpbfnfk+3SYEyqtV2
+	R5xEhpSZ6gWKQ4YJyat9niLkibwamwySpIv40dlukuqwmIoHRggcsF2H1fNa34XupLMleQN464d
+	oKwOeRofcsXpdFgx+njgshptXnpYCQjkt59Eoh0s1/sAly877OVzDcquro+JTec/jmJGfILBW+P
+	kbdkTh19lk+qV2yswBXbm9ka3+x3OJba/QCSQv6ykPJtUu4pPp46lWdjpQ7vobgBbJhuwMnRyA+
+	uih9sIGv/IjgZeV2Qmdrs7kJRHUvjJGD743FBzWyyGUfJNw==
+X-Google-Smtp-Source: AGHT+IEY/3/qFSoSXZTdy4dss/0vPhLEGYLy8mBFQiBp648JiB/Y5hcZqmGb/lWb8JIaUEsQT0SxWQ==
+X-Received: by 2002:a17:903:2f92:b0:24c:b571:6f70 with SMTP id d9443c01a7336-25bace93a20mr28437475ad.15.1757578231099;
+        Thu, 11 Sep 2025 01:10:31 -0700 (PDT)
 Received: from power-ThinkBook-15-G2-ITL.. ([116.128.244.171])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-25c36cc5671sm11129925ad.22.2025.09.11.01.10.17
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-25c36cc5671sm11129925ad.22.2025.09.11.01.10.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Sep 2025 01:10:22 -0700 (PDT)
+        Thu, 11 Sep 2025 01:10:30 -0700 (PDT)
 From: Xueqin Luo <luoxueqin@kylinos.cn>
 To: rafael@kernel.org,
 	pavel@kernel.org,
@@ -66,9 +66,9 @@ To: rafael@kernel.org,
 	linux-pm@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Cc: Xueqin Luo <luoxueqin@kylinos.cn>
-Subject: [PATCH v2 1/2] PM: hibernate: dynamically allocate crc->unc_len/unc for configurable threads
-Date: Thu, 11 Sep 2025 16:09:50 +0800
-Message-ID: <86d4e558707e7b03c248ef67cb76ec635a875d9b.1757577879.git.luoxueqin@kylinos.cn>
+Subject: [PATCH v2 2/2] PM: hibernate: make compression threads configurable
+Date: Thu, 11 Sep 2025 16:09:51 +0800
+Message-ID: <b512fe39fc6c03714fb23bf241f9e8d4b6be4ff2.1757577879.git.luoxueqin@kylinos.cn>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1757577879.git.luoxueqin@kylinos.cn>
 References: <cover.1757577879.git.luoxueqin@kylinos.cn>
@@ -78,101 +78,91 @@ List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-The current implementation uses fixed-size arrays for crc->unc_len and
-crc->unc, which limits the number of compression threads to a compile-time
-constant (CMP_THREADS). This patch converts them to dynamically allocated
-arrays, sized according to the actual number of threads selected at runtime.
+The number of compression/decompression threads has a direct impact on
+hibernate image generation and resume latency. Using more threads can
+reduce overall resume time, but on systems with fewer CPU cores it may
+also introduce contention and reduce efficiency.
+
+Performance was evaluated on an 8-core ARM system, averaged over 10 runs:
+
+    cmp_threads   hibernate time (s)   resume time (s)
+    --------------------------------------------------
+          3             12.14              18.86
+          4             12.28              17.48
+          5             11.09              16.77
+          6             11.08              16.44
+
+With 5–6 threads, resume latency improves by approximately 12% compared
+to the default 3-thread configuration, with negligible impact on
+hibernate time.
+
+This patch introduces a new kernel parameter, `cmp_threads=`, that allows
+users and integrators to tune the number of compression/decompression
+threads at boot. This provides a way to balance performance and CPU
+utilization across a wide range of hardware without recompiling the
+kernel.
 
 Signed-off-by: Xueqin Luo <luoxueqin@kylinos.cn>
 ---
- kernel/power/swap.c | 44 ++++++++++++++++++++++++++++++++++++++++----
- 1 file changed, 40 insertions(+), 4 deletions(-)
+ kernel/power/swap.c | 24 ++++++++++++++++++++----
+ 1 file changed, 20 insertions(+), 4 deletions(-)
 
 diff --git a/kernel/power/swap.c b/kernel/power/swap.c
-index 0beff7eeaaba..bd149a54c081 100644
+index bd149a54c081..bf17363ff331 100644
 --- a/kernel/power/swap.c
 +++ b/kernel/power/swap.c
-@@ -585,8 +585,8 @@ struct crc_data {
- 	wait_queue_head_t go;                     /* start crc update */
- 	wait_queue_head_t done;                   /* crc update done */
- 	u32 *crc32;                               /* points to handle's crc32 */
--	size_t *unc_len[CMP_THREADS];             /* uncompressed lengths */
--	unsigned char *unc[CMP_THREADS];          /* uncompressed data */
-+	size_t **unc_len;			              /* uncompressed lengths */
-+	unsigned char **unc;			          /* uncompressed data */
- };
+@@ -519,8 +519,8 @@ static int swap_writer_finish(struct swap_map_handle *handle,
+ 				CMP_HEADER, PAGE_SIZE)
+ #define CMP_SIZE	(CMP_PAGES * PAGE_SIZE)
  
- /*
-@@ -721,7 +721,21 @@ static int save_compressed_image(struct swap_map_handle *handle,
+-/* Maximum number of threads for compression/decompression. */
+-#define CMP_THREADS	3
++/* Default number of threads for compression/decompression. */
++static int cmp_threads = 3;
  
- 	crc = kzalloc(sizeof(*crc), GFP_KERNEL);
- 	if (!crc) {
--		pr_err("Failed to allocate crc\n");
-+		pr_err("Failed to allocate crc structure\n");
-+		ret = -ENOMEM;
-+		goto out_clean;
-+	}
-+
-+	crc->unc_len = kcalloc(nr_threads, sizeof(size_t *), GFP_KERNEL);
-+	if (!crc->unc_len) {
-+		pr_err("Failed to allocate crc->unc_len for %d threads\n", nr_threads);
-+		ret = -ENOMEM;
-+		goto out_clean;
-+	}
-+
-+	crc->unc = kcalloc(nr_threads, sizeof(unsigned char *), GFP_KERNEL);
-+	if (!crc->unc) {
-+		pr_err("Failed to allocate crc->unc for %d threads\n", nr_threads);
- 		ret = -ENOMEM;
- 		goto out_clean;
- 	}
-@@ -886,6 +900,10 @@ static int save_compressed_image(struct swap_map_handle *handle,
- out_clean:
- 	hib_finish_batch(&hb);
- 	if (crc) {
-+		if (crc->unc)
-+			kfree(crc->unc);
-+		if (crc->unc_len)
-+			kfree(crc->unc_len);
- 		if (crc->thr)
- 			kthread_stop(crc->thr);
- 		kfree(crc);
-@@ -1241,7 +1259,21 @@ static int load_compressed_image(struct swap_map_handle *handle,
+ /* Minimum/maximum number of pages for read buffering. */
+ #define CMP_MIN_RD_PAGES	1024
+@@ -703,7 +703,7 @@ static int save_compressed_image(struct swap_map_handle *handle,
+ 	 * footprint.
+ 	 */
+ 	nr_threads = num_online_cpus() - 1;
+-	nr_threads = clamp_val(nr_threads, 1, CMP_THREADS);
++	nr_threads = clamp_val(nr_threads, 1, cmp_threads);
  
- 	crc = kzalloc(sizeof(*crc), GFP_KERNEL);
- 	if (!crc) {
--		pr_err("Failed to allocate crc\n");
-+		pr_err("Failed to allocate crc structure\n");
-+		ret = -ENOMEM;
-+		goto out_clean;
-+	}
+ 	page = (void *)__get_free_page(GFP_NOIO | __GFP_HIGH);
+ 	if (!page) {
+@@ -1241,7 +1241,7 @@ static int load_compressed_image(struct swap_map_handle *handle,
+ 	 * footprint.
+ 	 */
+ 	nr_threads = num_online_cpus() - 1;
+-	nr_threads = clamp_val(nr_threads, 1, CMP_THREADS);
++	nr_threads = clamp_val(nr_threads, 1, cmp_threads);
+ 
+ 	page = vmalloc_array(CMP_MAX_RD_PAGES, sizeof(*page));
+ 	if (!page) {
+@@ -1703,3 +1703,19 @@ static int __init swsusp_header_init(void)
+ }
+ 
+ core_initcall(swsusp_header_init);
 +
-+	crc->unc_len = kcalloc(nr_threads, sizeof(size_t *), GFP_KERNEL);
-+	if (!crc->unc_len) {
-+		pr_err("Failed to allocate crc->unc_len for %d threads\n", nr_threads);
-+		ret = -ENOMEM;
-+		goto out_clean;
-+	}
++static int __init cmp_threads_setup(char *str)
++{
++	int rc = kstrtouint(str, 0, &cmp_threads);
 +
-+	crc->unc = kcalloc(nr_threads, sizeof(unsigned char *), GFP_KERNEL);
-+	if (!crc->unc) {
-+		pr_err("Failed to allocate crc->unc for %d threads\n", nr_threads);
- 		ret = -ENOMEM;
- 		goto out_clean;
- 	}
-@@ -1507,6 +1539,10 @@ static int load_compressed_image(struct swap_map_handle *handle,
- 	for (i = 0; i < ring_size; i++)
- 		free_page((unsigned long)page[i]);
- 	if (crc) {
-+		if (crc->unc)
-+			kfree(crc->unc);
-+		if (crc->unc_len)
-+			kfree(crc->unc_len);
- 		if (crc->thr)
- 			kthread_stop(crc->thr);
- 		kfree(crc);
++	if (rc)
++		return rc;
++
++	if (cmp_threads < 1)
++		cmp_threads = 1;
++
++	return 1;
++
++}
++
++__setup("cmp_threads=", cmp_threads_setup);
 -- 
 2.43.0
 
