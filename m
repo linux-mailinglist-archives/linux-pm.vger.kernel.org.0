@@ -1,86 +1,85 @@
-Return-Path: <linux-pm+bounces-34436-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34437-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7873BB52AAE
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 09:56:21 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E2BEDB52ACE
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 09:57:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 245DF5835A5
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 07:56:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2C1181C8191F
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 07:58:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C8262BEFEB;
-	Thu, 11 Sep 2025 07:56:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 318DB2D0C97;
+	Thu, 11 Sep 2025 07:57:05 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-vs1-f43.google.com (mail-vs1-f43.google.com [209.85.217.43])
+Received: from mail-vk1-f182.google.com (mail-vk1-f182.google.com [209.85.221.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D4DF29E114;
-	Thu, 11 Sep 2025 07:56:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6350F2BF3DB;
+	Thu, 11 Sep 2025 07:57:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757577377; cv=none; b=YvPJ1YY5XKKeNtSH2T8XvnmPSpKCKL+K8dH412/vVT5gLam4L9B0s8mxOfz/1IO9MUX80NaFihqUp7OAClNzujjny06um/hpRlMPey/qINWUNOXhKWVO5xMOsApBqAukEYuel9KlGNzxqyYy/gsCYHcjNmRkN9ZcuvNjo18nChE=
+	t=1757577425; cv=none; b=ExKSiu+SD257XAgp+XvSosM0joUdcQaIuppq59KcTG2rMUWL3tM/Qn/8X2PIHousgoZsBnGyZyrauKzeC28/ggYy8QM3zcJsbBrBilWk3k9j0Pkw803INp5hzU5g0YBnYYKF8xW+F7RIv7Nwk/e4OhT6XaqSZTJzPJpRU036+oU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757577377; c=relaxed/simple;
-	bh=dzgZxal19Vqp0wezraV67O5eYSRhr69yaYwwxgc5pl0=;
+	s=arc-20240116; t=1757577425; c=relaxed/simple;
+	bh=K19jgcBrR2Y9+vW0QCX5N7p0aZ/+WikGlXHBbrIbX/8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HHMzyWGi/WBMtm0mb9QVsI1Au977XWNSUYJpmgC956D13o5CCqsFe/fgZ9YQPMBgsJUSpTlIgPbAiIZz4ZBAaLtwnMOgNDjHJwYLB9ihvsH564dOZiqe1wdGQ7rCJ94mu0wOpZ7K2PDF/5K3s14EobMjGCJszNelqm9XhTxa1bQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.43
+	 To:Cc:Content-Type; b=DSKvBi0MR7gZSFLBrdGpq4k2o7FQlXsoQsucVp8EeFa/wv8PoN2kZyfa3DQk/OsaHy83ybL1m1rhhkGSDnvcAFUy7fJuultatnDdxHO/atMyBS3edgQqdJLgp1eXNj2i7rMk/Ss9SUJAIrFNWu5L3EsGBVpjuKyqF2oOiSR9CUU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f43.google.com with SMTP id ada2fe7eead31-5300b29615cso416052137.0;
-        Thu, 11 Sep 2025 00:56:14 -0700 (PDT)
+Received: by mail-vk1-f182.google.com with SMTP id 71dfb90a1353d-54492cc6eb1so258257e0c.2;
+        Thu, 11 Sep 2025 00:57:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757577374; x=1758182174;
+        d=1e100.net; s=20230601; t=1757577422; x=1758182222;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=CXxtbIpMN7aU+UMtLOY1wQvwhq9wcmE2BRs0YRXR44o=;
-        b=C3cTQGYHTfLULxazPn0iTyMe0XwlHzJZwUSm0ddS3hWZdJHkNY6Xr97n/NRdvOTnvI
-         gR4uccLm7pwb72kPniR+pc1e/TF6wu5seP+/xocdu+Ftf0U4RmqbIdeBsIb++68Sn9qh
-         3C0Uk12+l4Rt6424Iaq7PkXllPpdnjGQJUbzIqQterBDQ73jr5aJp+rNKdtvi3c5hTcF
-         DB8+7QpVwgD+XwnCJDUPH4PcNQuIGr+u6NrnWkh65b3W8LbJz1K7rs4HqhWG07s+I/Ky
-         lk3cSjMGgWb3fA5yZv/lKjICZAVmodv2hUHruSWJMHFPnsUdzeL+XMMFM7VgrpPtXSWt
-         zdyw==
-X-Forwarded-Encrypted: i=1; AJvYcCVJKLJVjuWyunD/nhpDuee2iFcesW1AccIsdMxyg6Ova2sNEWzLqBEg2BYBTSuG4iWnlH1GzADef8k=@vger.kernel.org, AJvYcCWWCBHEb4a3o+nn1xIe2FgEerRTanWri2+bR0PJ+SaGqMCT2vsrlQape3TP0z9U/RQW92uM3rCmkZ7eKiY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyfX3JvzcyhmU/F5UwHI1TzHxGJG+IeXJag0YAs/T2wlP5F7K7o
-	O2NVkGUOi2mIxCrDpgAu4588DwW4yMZjAuZc3ZfKY90ysOzwDq4k8waaDt/DKejl
-X-Gm-Gg: ASbGncv8s22dSm6zTmbsbUua6UM6FgbKb+Kwqz/UBt0QyiRGxJdNDFMV9rxGYR9wRTk
-	3RkTfnza4F7NUB0JYOQyYnRZSkLFV7pRcheSe9EipoX2xQ3SuJrksjXthSBw8hPKjfCSMgXeOr5
-	abcPFcUHq+gJ5Cs2thGdm+vWPG/l4nIVX4ojaUNM/zqhMwEH1a1FrhxIszmsp18WuyH7fqq4qQ2
-	LcXDFCB/g/qiG316Aw44mE0HglLFhv3qQSSYTZdxB1HPWHLzy0BYmK8I1C4dYW0XR8aSWM40dAR
-	N9kdd3mrILXR2olj38+Q+VENfnBr5DOeW3PvYr1f7f3Gm6h3zO9OQyE/aUXcToaX6klutqpgwnK
-	r3X4Qq+LcELNbyQHtX8RFvrYhE/KLhNKlkLFOflEuZZUFFbOWsjI5jwO8dRsjYQUUL5r3YMsIOP
-	4=
-X-Google-Smtp-Source: AGHT+IEmaBW3DOYVC19n0pTqKqiSR+C62o7t3ABJ5AdLJaE2v0Ak2+aWw06uoqXZtN+yAlW9wagjEg==
-X-Received: by 2002:a05:6102:809f:b0:4e4:5ed0:19b2 with SMTP id ada2fe7eead31-53d1c3d661dmr278035137.9.1757577373613;
-        Thu, 11 Sep 2025 00:56:13 -0700 (PDT)
-Received: from mail-vk1-f172.google.com (mail-vk1-f172.google.com. [209.85.221.172])
-        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-5537062ca23sm189728137.6.2025.09.11.00.56.13
+        bh=OM7u0Uj1YJW3iv2n6lyWxvkWnG5a2qj+fgkKwtq326Q=;
+        b=rWoulzyAPmSgRCxhRtAH1bKTQxukErbdCDInrMhEbq5KyOeikJypX3taSDQEpKchM5
+         mLQOgzofuKu5ottRC2nKDL4UWe3xVTVG0JqtKrTLzuDDnDWnQjZ949m3egdlX78MtglO
+         lW4URiktZMyuEq3Dsq/L147dXIWrw1Cd0Gplp1RuqKs1AayHlJna8yZ+U27k7yb52oxE
+         dOI/Dm1phq5Yr5r9lDR8iJVsuOcuiojtAfw1+m6Qf64KZd71Pm7y1X54/MCevws4JQ+s
+         qoXQAe7qA4zCdc+tEkuD27clGZAH19hI7g1Lgm1OVpPyN2I5B75oAHwvqMxUE3H1wNgY
+         WH+A==
+X-Forwarded-Encrypted: i=1; AJvYcCUOJgpHt4VDaiZUmx6R73yXod4begNvFvePN1ZIbeTzssO7CKUlTQC4y2zdXWnTgJ8ZJ88mOdIa61ALKlc=@vger.kernel.org, AJvYcCXUQ1VYK15k7EJrUBM3XQhbGyEBCutWzAsT7ylX5trm16tX1rJjHkvLQmjrz8OVOCJwD6HaMP4EauU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyciu6/6DW/Lq+1uJR2xD2XPlHKnxag3yIBCuLilQWZH1XdvEFc
+	M0oPYSOw/pfSD8sK9G6cmabJ0wxYC8Qtlm7NuJ5Ds/zosXLVivyYJ4s2OtZM0QGJ
+X-Gm-Gg: ASbGnctegfVV2iV9+tTV4S3MMatNJ5ssRbFcOvfjZ/dctdRwagp4tQ6QK/GKy/aQVUr
+	JVWkT2AMi/WLItC3aDggfpVIitcedXCHYvdw/+CRa543Ml/VgTzY4hGtoW+bwgG9+V0X7coSUhJ
+	bmXCbp5hpudWHM/WuZFMAd/SwMOb13XuYvla+tx40/Qvsojy9YxbAPuNnyWLFog5zRLkL6hKSJO
+	LAmoD0Ry5uXO++PCH4dfOzGi+2UbuRCfid3ZkbEv+qMPUlSFt5Fo1ZHlKieghx+LgbUh90p2+fy
+	SOaTYxZhdC1oODWHcnTVYQKo/Rf2K/g/yR5QseG83V48AquFsjTfsRfEexS+0rL9r3bFJWHDIql
+	DJLb8BY5cAV90JbKNtwlCIiPy9oo+LXPjoB3J7VTsp2Nc4ywYa+Kk90qwwyjpUEaU4gRXQv8=
+X-Google-Smtp-Source: AGHT+IGT6D7lR5N+aDFSn3Yp3Ym9WU9SSOC1kmA0KPzcjsl6NLorJcCV+jVoTELEwXzF6/BKL3AEMQ==
+X-Received: by 2002:a05:6122:1309:b0:543:e5b7:85c5 with SMTP id 71dfb90a1353d-54737c54231mr6597687e0c.15.1757577422223;
+        Thu, 11 Sep 2025 00:57:02 -0700 (PDT)
+Received: from mail-ua1-f48.google.com (mail-ua1-f48.google.com. [209.85.222.48])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-54a0d424df1sm142916e0c.27.2025.09.11.00.57.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Sep 2025 00:56:13 -0700 (PDT)
-Received: by mail-vk1-f172.google.com with SMTP id 71dfb90a1353d-5464d3b50e3so162372e0c.1;
-        Thu, 11 Sep 2025 00:56:13 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXptPkb3CHtL0WHP07ljd1Zn6M54XROg7FKmkU/noyW5WjaMVn14i+Y4+6I8F3tIkpo8EBVDNGQL5M=@vger.kernel.org, AJvYcCXscNigPe9y2DCIagjgDcX7OEswZ7FjG9mtCVKxcOuvLvBBmpmEda2J4ofchWzZGGfoJw8MlOVWRllETIQ=@vger.kernel.org
-X-Received: by 2002:a05:6102:3a0e:b0:4fa:25a2:5804 with SMTP id
- ada2fe7eead31-53d1c3d7886mr6590613137.10.1757577373049; Thu, 11 Sep 2025
- 00:56:13 -0700 (PDT)
+        Thu, 11 Sep 2025 00:57:01 -0700 (PDT)
+Received: by mail-ua1-f48.google.com with SMTP id a1e0cc1a2514c-8b32453d838so260518241.2;
+        Thu, 11 Sep 2025 00:57:01 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU6AXEmPZ30dSsJPwSgpWQGl34NgS0nZk2TY9SVjYKGOVzlhJl1bsbp90qz1BeBuk32ynilnjci5EqtL6c=@vger.kernel.org, AJvYcCWcLz6jFaD/w2uc0ixmH+2wdDyAI2ZHWEmHbYheaPPN4p+VSmdS5rhy7F7LaIjt0qwRpSAgW6Fh8aI=@vger.kernel.org
+X-Received: by 2002:a05:6102:1612:b0:524:2917:61aa with SMTP id
+ ada2fe7eead31-53d2490d7a8mr6761631137.32.1757577420966; Thu, 11 Sep 2025
+ 00:57:00 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250909111130.132976-1-ulf.hansson@linaro.org> <20250909111130.132976-2-ulf.hansson@linaro.org>
-In-Reply-To: <20250909111130.132976-2-ulf.hansson@linaro.org>
+References: <20250909111130.132976-1-ulf.hansson@linaro.org> <20250909111130.132976-4-ulf.hansson@linaro.org>
+In-Reply-To: <20250909111130.132976-4-ulf.hansson@linaro.org>
 From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 11 Sep 2025 09:56:00 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUFXioe36r9mzNchHw3DGyEiVA-=ajTp333jowEsrxMNw@mail.gmail.com>
-X-Gm-Features: AS18NWAoOrpJbTee-4MheB9wiiHBjhuIG7cLb2hP-U4LE07BEhE1otcBQ_oHwLc
-Message-ID: <CAMuHMdUFXioe36r9mzNchHw3DGyEiVA-=ajTp333jowEsrxMNw@mail.gmail.com>
-Subject: Re: [PATCH 1/5] pmdomain: core: Restore behaviour for disabling
- unused PM domains
+Date: Thu, 11 Sep 2025 09:56:49 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWprnV+fAwFg0_zRbtq9JJj2UBLZK5tA4Rjv9L0qrc1XA@mail.gmail.com>
+X-Gm-Features: AS18NWBIwzRqk9J7_ivbOFeNxxqUAVJ6xAfIH84kpYPPIAO0BE8jYNFp9s_zvpo
+Message-ID: <CAMuHMdWprnV+fAwFg0_zRbtq9JJj2UBLZK5tA4Rjv9L0qrc1XA@mail.gmail.com>
+Subject: Re: [PATCH 3/5] pmdomain: renesas: rcar-sysc: Don't keep unused PM
+ domains powered-on
 To: Ulf Hansson <ulf.hansson@linaro.org>
 Cc: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>, 
 	Saravana Kannan <saravanak@google.com>, linux-pm@vger.kernel.org, 
@@ -95,60 +94,30 @@ Cc: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>,
 	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Hi Ulf,
-
 On Tue, 9 Sept 2025 at 13:11, Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> Recent changes to genpd prevents those PM domains being powered-on during
-> initialization from being powered-off during the boot sequence. Based upon
-> whether CONFIG_PM_CONFIG_PM_GENERIC_DOMAINS_OF is set of not, genpd relies
-> on the sync_state mechanism or the genpd_power_off_unused() (which is a
-> late_initcall_sync), to understand when it's okay to allow these PM domains
-> to be powered-off.
+> The recent changes to genpd makes a genpd OF provider that is powered-on at
+> initialization to stay powered-on, until the ->sync_state() callback is
+> invoked for it.
 >
-> This new behaviour in genpd has lead to problems on different platforms.
-> Let's therefore restore the behavior of genpd_power_off_unused().
-> Moreover, let's introduce GENPD_FLAG_NO_STAY_ON, to allow genpd OF
-> providers to opt-out from the new behaviour.
+> This may not happen at all, if we wait for a consumer device to be probed,
+> leading to wasting energy. There are ways to enforce the ->sync_state()
+> callback to be invoked, through sysfs or via the probe-defer-timeout, but
+> none of them in its current form are a good fit for rcar-sysc PM domains.
+>
+> Let's therefore opt-out from this behaviour of genpd for now, by using the
+> GENPD_FLAG_NO_STAY_ON.
 >
 > Link: https://lore.kernel.org/all/20250701114733.636510-1-ulf.hansson@linaro.org/
 > Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> Link: https://lore.kernel.org/all/20250902-rk3576-lockup-regression-v1-1-c4a0c9daeb00@collabora.com/
-> Reported-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 > Fixes: 0e789b491ba0 ("pmdomain: core: Leave powered-on genpds on until sync_state")
 > Fixes: 13a4b7fb6260 ("pmdomain: core: Leave powered-on genpds on until late_initcall_sync")
 > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-
-Thanks for your patch!
+> ---
+>  drivers/pmdomain/renesas/rcar-sysc.c | 1 +
 
 Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-> --- a/include/linux/pm_domain.h
-> +++ b/include/linux/pm_domain.h
-> @@ -115,6 +115,12 @@ struct dev_pm_domain_list {
->   *                             genpd provider specific way, likely through a
->   *                             parent device node. This flag makes genpd to
->   *                             skip its internal support for this.
-> + *
-> + * GENPD_FLAG_NO_STAY_ON:      For genpd OF providers a powered-on PM domain at
-> + *                             initialization is prevented from being
-> + *                             powered-off until the ->sync_state() callback is
-> + *                             invoked. This flag informs genpd to allow a
-> + *                             power-off without waiting for ->sync_state().
-
-This also restores power-down of pmdomains after a failed device
-probe (due to a real issue, or just -EPROBE_DEFER), possibly
-interfering with other devices that are part of the same pmdomain(s)
-but haven't been probed yet. E.g. what if your serial console is
-part of the same pmdomain?  Probably the pmdomain(s) should not
-be powered down immediately, but only later, when either sync state
-or genpd_power_off_unused() kicks in.
-
-But this is a pre-existing issue, so not a blocked for this patch.
-
->   */
->  #define GENPD_FLAG_PM_CLK       (1U << 0)
->  #define GENPD_FLAG_IRQ_SAFE     (1U << 1)
+on R-Car M2-W (koelsch) and R-Car H3 ES2.0 (salvator-xs).
 
 Gr{oetje,eeting}s,
 
