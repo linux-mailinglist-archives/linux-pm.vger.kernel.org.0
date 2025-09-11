@@ -1,202 +1,161 @@
-Return-Path: <linux-pm+bounces-34467-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34468-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 02101B5334F
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 15:11:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E735B5336C
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 15:18:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 37D9C1CC0F19
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 13:11:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6BC8B189C723
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 13:18:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49668322C66;
-	Thu, 11 Sep 2025 13:10:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RY7o4wJK"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A31D031986E;
+	Thu, 11 Sep 2025 13:18:28 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailout3.hostsharing.net (mailout3.hostsharing.net [176.9.242.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FAA11E51D;
-	Thu, 11 Sep 2025 13:10:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B847D2E401;
+	Thu, 11 Sep 2025 13:18:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=176.9.242.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757596253; cv=none; b=IzlbYmWCNn9MA5iLfHG3sPRtgPkFeB5npla+Uaepb1Xq3ariy4dFUhgvnnpOdx9+JTFhz1IvdjiYTMG3KYe41OFaYoUAmchWHF8KpIh0AMCbU28jQ7f6JRoQHqOMcDw5aVIE9TRFGPiUkfgZjqrmPJ0SCWqvFjy6uOKTlIc8TVc=
+	t=1757596708; cv=none; b=FaFYQ4RYxfgYjLb6bcFfNVuuLZFraOckR6HzYHj3NcSNzIZxJ14MJVbnya9324KG27ayMLaB2S4tEzP3lNm9y/XHs8f1oIoOouuqYPiOC8K8cbLT58OAphfoaGgxPEgO7/fVTtRkwLHnB96DfXJvXxCnmb7n9TDQGmPwldArW54=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757596253; c=relaxed/simple;
-	bh=H4k8Q9rq9zdMEl/Dh5piHrCi/KZ2gwLETPP99gB1EbA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ENtVpwpSBfeK13Pi4SaaipZqRWSgfPSNoMxRFM9H1OYiWdUjWAA22ldt/0mivzMNUjdbcdbzWIcvWPBGWg+oQm56kNc+qluruI7fsyImHx6u7wM6XVv9biBK7Ck1jOUfD58oTXqeTyNaiYEL4ryqHx9+lvlOZ+phJYGjh1wqMyY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RY7o4wJK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EFCAC4CEF7;
-	Thu, 11 Sep 2025 13:10:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757596252;
-	bh=H4k8Q9rq9zdMEl/Dh5piHrCi/KZ2gwLETPP99gB1EbA=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=RY7o4wJKOjS5DgP78W9KZNIiXa6FdVpifM6A1AWdML9p5GoVE62FIniyCJNzqoQSn
-	 U7Lik8009k1poAP52p4DKEHOa3hBTPhIBlQ67oLuO2VdLD9NvaAdarJr0D+TLldKw1
-	 tEF+/8/bb6y1AjfgaqxwoDjRGBs0Pk9hMiiGJFtQPNjirVah/1GsykSSYbw/6x+FyD
-	 X/tDtiCmuvDv1YI0tFf4qejc1Nx13NEtACWVPBXxJFSpWmv+ts4MPnMwCPWglp4mCa
-	 S0iScmXZ2kGA4y+Zgzq23opwRAuuI4Hh+dCLdZRl6GPxUiKblJdn/qNmrRbiErZEb8
-	 BOQ+bIJjXAgCA==
-Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-61e74e59d8fso337279eaf.0;
-        Thu, 11 Sep 2025 06:10:52 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVRMlCDE6HrUuVwEatFCvIAQ7J2Bnjma4ScJ2ct8cjqD3bnwFQvPT8C+lcVg649Jfd+GI0gnkweOjo=@vger.kernel.org, AJvYcCXEic1ZkyhBvk36kykOlKCDn1UgzFlZrnkRi1nycEwRI7q/xCstGVu+oRwlAZXHSQoMm5ThNfphyhJoftk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxxPyuuYE9jqyPkeYDcOxMS+/LcY64IdZI5WqnlwoJ4JxbDHEpk
-	nBK/ldV+NP00hHFOYJVOMPu/8h4KbEmKOr9b6PNeuoNRFbZKGuJ8ovBX0LfJsjSdclt8rpvFCnM
-	SvYt3y26R44cs50wpD/CTq2An/96b48o=
-X-Google-Smtp-Source: AGHT+IEp4oZb5hKSSK2t02v0yzfkPM/CgXSwAhnURJANNfuQmeKFvSkfxAvZim4eOVOp213gLdLmqFSoqal5A3Zlxto=
-X-Received: by 2002:a05:6820:3307:b0:61b:f98a:2f19 with SMTP id
- 006d021491bc7-621b2f0f23fmr1129291eaf.2.1757596251914; Thu, 11 Sep 2025
- 06:10:51 -0700 (PDT)
+	s=arc-20240116; t=1757596708; c=relaxed/simple;
+	bh=5UhE74WdbzLugadaIkZBsDKJhzSTo6uvVRhz+xIgPAM=;
+	h=Message-ID:From:Date:Subject:To:Cc; b=seijvBoOnXa/xFncBxPEvCd7tiH9q8RT3eiIfc2XQvAMxFjzFI5RwekBpPgi+Rh54XSNSu5OYdyefm8q+RjMrwZ0weDmiTpA0GjEEb0QRh+sWFCv+f1l2NReGhNImKQFz3KS0kPaFF65aT9eb3J+RGNNC4bV1M9k0g7go8NA7kE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de; spf=pass smtp.mailfrom=wunner.de; arc=none smtp.client-ip=176.9.242.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wunner.de
+Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
+	(Client CN "*.hostsharing.net", Issuer "RapidSSL TLS RSA CA G1" (verified OK))
+	by mailout3.hostsharing.net (Postfix) with UTF8SMTPS id 05753300679A;
+	Thu, 11 Sep 2025 15:11:45 +0200 (CEST)
+Received: from localhost (unknown [89.246.108.87])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by h08.hostsharing.net (Postfix) with UTF8SMTPSA id A724060B09B2;
+	Thu, 11 Sep 2025 15:11:44 +0200 (CEST)
+X-Mailbox-Line: From 75e4ae507fa4faddd063a3a9e17d319ed84529b6 Mon Sep 17 00:00:00 2001
+Message-ID: <75e4ae507fa4faddd063a3a9e17d319ed84529b6.1757562971.git.lukas@wunner.de>
+From: Lukas Wunner <lukas@wunner.de>
+Date: Thu, 11 Sep 2025 15:11:46 +0200
+Subject: [PATCH] PCI/PM: Move ASUS EHCI workaround out of generic code
+To: Bjorn Helgaas <helgaas@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Alan Stern <stern@rowland.harvard.edu>, linux-pci@vger.kernel.org, linux-pm@vger.kernel.org
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org, Mario Limonciello <superm1@kernel.org>,
+    Oleksij Rempel <o.rempel@pengutronix.de>, Timo Jyrinki <timo.jyrinki@iki.fi>, Ernst Persson <ernstp@gmail.com>, Steven Harms <sjharms@gmail.com>, James Ettle <james@ettle.org.uk>, Nick Coghlan <ncoghlan@gmail.com>, Weng Xuetian <wengxt@gmail.com>, Andrey Rahmatullin <wrar@wrar.name>, Boris Barbour <boris.barbour@ens.fr>, Vlastimil Zima <vlastimil.zima@gmail.com>, David Banks <amoebae@gmail.com>, Michal Jaegermann <michal@harddata.com>, Chris Moeller <kode54@gmail.com>, Daniel Fraga <fragabr@gmail.com>, Javier Marcet <jmarcet@gmail.com>, Pavel Pisa <pisa@cmp.felk.cvut.cz>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <cover.1757577879.git.luoxueqin@kylinos.cn> <86d4e558707e7b03c248ef67cb76ec635a875d9b.1757577879.git.luoxueqin@kylinos.cn>
-In-Reply-To: <86d4e558707e7b03c248ef67cb76ec635a875d9b.1757577879.git.luoxueqin@kylinos.cn>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 11 Sep 2025 15:10:39 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0hL_q9t2Tdu5DVZNqV_YkNpofV9S+N-rRRrAY3er5X_7Q@mail.gmail.com>
-X-Gm-Features: Ac12FXw74ytzQQDwGB4nu1cTpiup9Fq3YTm8PT-v9dUnNGDt7lsHx4oTc4z8Y3s
-Message-ID: <CAJZ5v0hL_q9t2Tdu5DVZNqV_YkNpofV9S+N-rRRrAY3er5X_7Q@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] PM: hibernate: dynamically allocate
- crc->unc_len/unc for configurable threads
-To: Xueqin Luo <luoxueqin@kylinos.cn>
-Cc: rafael@kernel.org, pavel@kernel.org, lenb@kernel.org, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Sep 11, 2025 at 10:10=E2=80=AFAM Xueqin Luo <luoxueqin@kylinos.cn> =
-wrote:
->
-> The current implementation uses fixed-size arrays for crc->unc_len and
-> crc->unc, which limits the number of compression threads to a compile-tim=
-e
-> constant (CMP_THREADS). This patch converts them to dynamically allocated
-> arrays, sized according to the actual number of threads selected at runti=
-me.
+In 2012, commit dbf0e4c7257f ("PCI: EHCI: fix crash during suspend on ASUS
+computers") amended pci_pm_suspend_noirq() to work around a BIOS issue by
+clearing the Command register if the suspended device is a USB EHCI host
+controller.
 
-Please don't say "this patch" (or similar) in patch changelogs.  It's
-better to use imperative sentences like "Convert them to dynamically
-allocated arrays, ...".
+Commit 0b68c8e2c3af ("PCI: EHCI: Fix crash during hibernation on ASUS
+computers") subsequently amended pci_pm_poweroff_noirq() to do the same.
 
->
-> Signed-off-by: Xueqin Luo <luoxueqin@kylinos.cn>
-> ---
->  kernel/power/swap.c | 44 ++++++++++++++++++++++++++++++++++++++++----
->  1 file changed, 40 insertions(+), 4 deletions(-)
->
-> diff --git a/kernel/power/swap.c b/kernel/power/swap.c
-> index 0beff7eeaaba..bd149a54c081 100644
-> --- a/kernel/power/swap.c
-> +++ b/kernel/power/swap.c
-> @@ -585,8 +585,8 @@ struct crc_data {
->         wait_queue_head_t go;                     /* start crc update */
->         wait_queue_head_t done;                   /* crc update done */
->         u32 *crc32;                               /* points to handle's c=
-rc32 */
-> -       size_t *unc_len[CMP_THREADS];             /* uncompressed lengths=
- */
-> -       unsigned char *unc[CMP_THREADS];          /* uncompressed data */
-> +       size_t **unc_len;                                     /* uncompre=
-ssed lengths */
-> +       unsigned char **unc;                              /* uncompressed=
- data */
->  };
->
->  /*
-> @@ -721,7 +721,21 @@ static int save_compressed_image(struct swap_map_han=
-dle *handle,
->
->         crc =3D kzalloc(sizeof(*crc), GFP_KERNEL);
->         if (!crc) {
-> -               pr_err("Failed to allocate crc\n");
-> +               pr_err("Failed to allocate crc structure\n");
-> +               ret =3D -ENOMEM;
-> +               goto out_clean;
-> +       }
-> +
-> +       crc->unc_len =3D kcalloc(nr_threads, sizeof(size_t *), GFP_KERNEL=
-);
-> +       if (!crc->unc_len) {
-> +               pr_err("Failed to allocate crc->unc_len for %d threads\n"=
-, nr_threads);
-> +               ret =3D -ENOMEM;
-> +               goto out_clean;
-> +       }
-> +
-> +       crc->unc =3D kcalloc(nr_threads, sizeof(unsigned char *), GFP_KER=
-NEL);
-> +       if (!crc->unc) {
-> +               pr_err("Failed to allocate crc->unc for %d threads\n", nr=
-_threads);
->                 ret =3D -ENOMEM;
->                 goto out_clean;
->         }
+Two years later, commit 7d2a01b87f16 ("PCI: Add pci_fixup_suspend_late
+quirk pass") introduced the ability to execute arbitrary quirks
+specifically in pci_pm_suspend_noirq() and pci_pm_poweroff_noirq().
 
-Can you avoid code duplication by defining helpers for allocating and
-freeing them both and using those helpers where applicable (image
-creation and uncompression)?
+This allows moving the ASUS workaround out of generic code and into a
+proper quirk to improve maintainability and readability.  Constrain to x86
+since the ASUS BIOS doesn't seem to have been used on other arches.
 
-> @@ -886,6 +900,10 @@ static int save_compressed_image(struct swap_map_han=
-dle *handle,
->  out_clean:
->         hib_finish_batch(&hb);
->         if (crc) {
-> +               if (crc->unc)
-> +                       kfree(crc->unc);
-> +               if (crc->unc_len)
-> +                       kfree(crc->unc_len);
->                 if (crc->thr)
->                         kthread_stop(crc->thr);
->                 kfree(crc);
-> @@ -1241,7 +1259,21 @@ static int load_compressed_image(struct swap_map_h=
-andle *handle,
->
->         crc =3D kzalloc(sizeof(*crc), GFP_KERNEL);
->         if (!crc) {
-> -               pr_err("Failed to allocate crc\n");
-> +               pr_err("Failed to allocate crc structure\n");
-> +               ret =3D -ENOMEM;
-> +               goto out_clean;
-> +       }
-> +
-> +       crc->unc_len =3D kcalloc(nr_threads, sizeof(size_t *), GFP_KERNEL=
-);
-> +       if (!crc->unc_len) {
-> +               pr_err("Failed to allocate crc->unc_len for %d threads\n"=
-, nr_threads);
-> +               ret =3D -ENOMEM;
-> +               goto out_clean;
-> +       }
-> +
-> +       crc->unc =3D kcalloc(nr_threads, sizeof(unsigned char *), GFP_KER=
-NEL);
-> +       if (!crc->unc) {
-> +               pr_err("Failed to allocate crc->unc for %d threads\n", nr=
-_threads);
->                 ret =3D -ENOMEM;
->                 goto out_clean;
->         }
-> @@ -1507,6 +1539,10 @@ static int load_compressed_image(struct swap_map_h=
-andle *handle,
->         for (i =3D 0; i < ring_size; i++)
->                 free_page((unsigned long)page[i]);
->         if (crc) {
-> +               if (crc->unc)
-> +                       kfree(crc->unc);
-> +               if (crc->unc_len)
-> +                       kfree(crc->unc_len);
->                 if (crc->thr)
->                         kthread_stop(crc->thr);
->                 kfree(crc);
-> --
-> 2.43.0
->
+lspci output of affected EHCI host controllers reveals that the only bits
+set in the Command register are Memory Space Enable and Bus Master Enable:
+  https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=658778
+
+The latter is cleared by:
+  hcd_pci_suspend()
+    suspend_common()
+      pci_disable_device()
+
+pci_disable_device() does not clear I/O and Memory Space Enable, although
+its name suggests otherwise.  The kernel has never disabled these bits
+once they're enabled.  Doing so would avoid the need for the quirk, but it
+is unclear what will break if this fundamental behavior is changed.
+
+Signed-off-by: Lukas Wunner <lukas@wunner.de>
+---
+ arch/x86/pci/fixup.c     | 19 +++++++++++++++++++
+ drivers/pci/pci-driver.c | 19 -------------------
+ 2 files changed, 19 insertions(+), 19 deletions(-)
+
+diff --git a/arch/x86/pci/fixup.c b/arch/x86/pci/fixup.c
+index e7e71490bd25..c34ff72434f2 100644
+--- a/arch/x86/pci/fixup.c
++++ b/arch/x86/pci/fixup.c
+@@ -1041,3 +1041,22 @@ static void quirk_tuxeo_rp_d3(struct pci_dev *pdev)
+ }
+ DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_AMD, 0x1502, quirk_tuxeo_rp_d3);
+ #endif /* CONFIG_SUSPEND */
++
++#ifdef CONFIG_PM_SLEEP
++/*
++ * Some BIOSes from ASUS have a bug: If a USB EHCI host controller's Command
++ * register is not 0 on suspend, the BIOS assumes that the controller has not
++ * been quiesced and tries to turn it off.  If the controller is already in D3,
++ * this can hang or cause memory corruption.
++ *
++ * Since the value of the Command register does not matter once the device has
++ * been suspended, it can safely be set to 0.
++ */
++static void quirk_clear_command_reg(struct pci_dev *pdev)
++{
++	pci_write_config_word(pdev, PCI_COMMAND, 0);
++}
++DECLARE_PCI_FIXUP_CLASS_SUSPEND_LATE(PCI_ANY_ID, PCI_ANY_ID,
++				     PCI_CLASS_SERIAL_USB_EHCI, 0,
++				     quirk_clear_command_reg);
++#endif /* CONFIG_PM_SLEEP */
+diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
+index 63665240ae87..e1089dfeb419 100644
+--- a/drivers/pci/pci-driver.c
++++ b/drivers/pci/pci-driver.c
+@@ -914,18 +914,6 @@ static int pci_pm_suspend_noirq(struct device *dev)
+ 
+ 	pci_pm_set_unknown_state(pci_dev);
+ 
+-	/*
+-	 * Some BIOSes from ASUS have a bug: If a USB EHCI host controller's
+-	 * PCI COMMAND register isn't 0, the BIOS assumes that the controller
+-	 * hasn't been quiesced and tries to turn it off.  If the controller
+-	 * is already in D3, this can hang or cause memory corruption.
+-	 *
+-	 * Since the value of the COMMAND register doesn't matter once the
+-	 * device has been suspended, we can safely set it to 0 here.
+-	 */
+-	if (pci_dev->class == PCI_CLASS_SERIAL_USB_EHCI)
+-		pci_write_config_word(pci_dev, PCI_COMMAND, 0);
+-
+ Fixup:
+ 	pci_fixup_device(pci_fixup_suspend_late, pci_dev);
+ 
+@@ -1205,13 +1193,6 @@ static int pci_pm_poweroff_noirq(struct device *dev)
+ 	if (!pci_dev->state_saved && !pci_has_subordinate(pci_dev))
+ 		pci_prepare_to_sleep(pci_dev);
+ 
+-	/*
+-	 * The reason for doing this here is the same as for the analogous code
+-	 * in pci_pm_suspend_noirq().
+-	 */
+-	if (pci_dev->class == PCI_CLASS_SERIAL_USB_EHCI)
+-		pci_write_config_word(pci_dev, PCI_COMMAND, 0);
+-
+ 	pci_fixup_device(pci_fixup_suspend_late, pci_dev);
+ 
+ 	return 0;
+-- 
+2.51.0
+
 
