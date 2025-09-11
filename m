@@ -1,131 +1,152 @@
-Return-Path: <linux-pm+bounces-34454-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34455-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9E04B52EA1
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 12:36:31 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF3DAB52E9F
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 12:36:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7F7321C825D1
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 10:36:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AE5AF7B48FA
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Sep 2025 10:34:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB7F731194A;
-	Thu, 11 Sep 2025 10:31:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 362EF3126BC;
+	Thu, 11 Sep 2025 10:32:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DFiT8THp"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="sPbD/j+G"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9563631158A
-	for <linux-pm@vger.kernel.org>; Thu, 11 Sep 2025 10:31:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F73E3126A6
+	for <linux-pm@vger.kernel.org>; Thu, 11 Sep 2025 10:32:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757586709; cv=none; b=QcI73tk//8UHsel7ysd5IMN689qrX3WcSTadd7LexYuDD228oVbPkrCnJL7DbeYgg5SrGoYQOlMieyO2JMcTeyJhvhETJYkS19+N/hExMXPiD+ANf/Y995KVpf2bKTtU+sRQYc67TsMBxYOg0+ntWHxASjMzeOg23WK3hbbjlgw=
+	t=1757586746; cv=none; b=Q//ulk31tBSd7mZ0/KwXbTeTqP6g4YLOirA5DecGGSGk3EoG3kjqd31bgF/kvVgRTzknr+cd6u+f9pqVEAON98k/ixEvVqvRuhGLL8wAGgP2KYYte2ApZSkAVzeTV9Fa6uBLomuRkyotKCq2ovZ3/2nRxxV94kxewmEewG+sxOw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757586709; c=relaxed/simple;
-	bh=xaPe7WTboY6+/tPQNyhe8Htaun8q0KWDYpAJ4c9xb4g=;
+	s=arc-20240116; t=1757586746; c=relaxed/simple;
+	bh=AfzBOkfw/f+2HpXW9nRIV2Am+WTp1lRBGmzAonEDKng=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FvJeoAVmbGUm+ETQtqsxZ2Sg8W4ARRLO0Ol7BGAWP89weErAqWaTJvBJFmRxTt9SYXdM8q0BpJhr/+Baibtv6dsCY3PxDHjLg4mAcPx4EppavEX71kaXpGAtP0WpNr2T9iIyzJKwGtZwZJQ92wafYcETEPZBE8GzQ4WA8M9s7vs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DFiT8THp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44CB4C4AF09
-	for <linux-pm@vger.kernel.org>; Thu, 11 Sep 2025 10:31:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757586709;
-	bh=xaPe7WTboY6+/tPQNyhe8Htaun8q0KWDYpAJ4c9xb4g=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=DFiT8THp5lZHrVka74NLFyRStJbrTYWBc4EmtpFwYy66jD4REiTMvhBAWpPp/vUPE
-	 IfMUeltYdNawHOcxkgmUPQsukgiewWPRolOOUGCQCqJoqQpFRZJWKfe8FWQDGL0nDf
-	 bzRSgmLWwjfdUbeDfiPFqdYXmTUTIgJ7WXKLrsVEhScF0I/r/I9n7Co73pypwTzqJ+
-	 d4+sjPkouu5J6qZVHevWiZWtWyfQxgZNgBL5zDmOgq+YJ5Jn1hy1oBTaI2OfZ4miWg
-	 kE9p7D6Z9XOjLqrLf4lILkEeVObPVR51m4e9M6Q69YOWayNNlUCBS37Z/pfqQGR8vs
-	 PZPdxfio5q8lg==
-Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-7459fa1ef2aso577954a34.1
-        for <linux-pm@vger.kernel.org>; Thu, 11 Sep 2025 03:31:49 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVKVbgcpz3vvYV2muHSeykKO4NEe10DiIarAksiaYzxW7DwGhF1SCCQEk8oZAuzek4RLfGx/nX7zw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw+JdqklQUFmUPgbeqGVx9uuQ4w9IDFHlnGv6PWJEhibSPXZPCV
-	oBW722UD+oFpOCR4tV+j9XqALUeLhVei4bGGcRyQmB8j//pPbief43c8l1oEgYFgN+VRmXM9qS/
-	L8ckKoRLalfMPznEcrGs8m9AEVsiRPC8=
-X-Google-Smtp-Source: AGHT+IHHqcVDj1OR3RKUpL+hwMYtQNeAHfRxOjE8VI69WXeSCnFBIKD4xZFw5ff9F2oLdfPcCewT212Xf+wkZvrkyjs=
-X-Received: by 2002:a05:6830:348e:b0:74b:3422:f33d with SMTP id
- 46e09a7af769-74c66acfea9mr10519629a34.0.1757586708559; Thu, 11 Sep 2025
- 03:31:48 -0700 (PDT)
+	 To:Cc:Content-Type; b=euPF2HfZqj5iaDSgv/vG7Wx65uXb+kZCbz9W/dq1mzpFLwzXwyYaCltNWeDKuGYUr8OX7PxRndUgqrDlZujvdzPisN8Ocu9sQCvKgASpPFyjXb1KBV+if+NVqzzDxQ0pcdFVEP59NmNWDl/Io7m+LGZYrlrqdlx6tylD+nHU+Iw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=sPbD/j+G; arc=none smtp.client-ip=209.85.219.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-e96fbf400c0so683133276.0
+        for <linux-pm@vger.kernel.org>; Thu, 11 Sep 2025 03:32:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1757586743; x=1758191543; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=c4ZOsSgcttRMvxWFSgVRWx9LXQHTbGG8yJSj2/0idLs=;
+        b=sPbD/j+GrXua7SyQ7s/2a1wNSlaLGwJNK+AI6A65uVSFOMOcy/wfCBh86QkKIRo4p+
+         f4ONOMHKEVHSHl85WBJOkqmEegYJXNCkdaod5nkX0OxKQysCmO3HafpeUzZSLYrPDXDm
+         NE4YZwpghcd4+/1Q60oLxfYne/xgGnfCvWup/+ivYvg7ZI45HBlbHHSYmWxyLY2ARGBw
+         qZvnrCeEywXqGnCmG+EySkdSwhs0ZijdO3r/yQlAdHydtpq64/EKw0cnicAwLl04j/PC
+         ygeKv3MTvTyyktGHnUl6YfsAB3zjt6DZ2sBCrMbhlY4emPGSSnRIzyUrs4wON9ali+4v
+         LqIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757586743; x=1758191543;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=c4ZOsSgcttRMvxWFSgVRWx9LXQHTbGG8yJSj2/0idLs=;
+        b=wN9XoZuCeACPNeqnWKxzscNy5ogN89b7ASWZIPYbs6wHP0sGgHCb9hL00YZ3ieo15a
+         q2CBkDFLmolCEhYe5Oy+BKup0qtVMXPDqCQdNLt5tPYgnugiVthlUIcV/qdUquqbF990
+         0Bw9j3J+FVSG/JNa0oxyJtyKDIUtaJb+LFsCU2fX+8lHZgKfa7+wr0zcCBeuFEawI23d
+         GEgC+qxXOKOwFPAD+Qt0/KA1zCDB2vIa/HxHBURRoQmLvR+Ta4fYJ0ozzdlfkbYh67RD
+         mozg/FqUkhgpZVfOQ+e8BxbMlhWfzlbuIP+LUvW/Wg5mR0yDBMWFH5cxO97GdhwmgjnL
+         wiEQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU3U1U5+DUSbabGjvJ7w8dnOeunWlX82xmwZOYsXLlcoS4VcZWzqvHOw5+pDEK24eDzU5qFiqId0g==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxhoeDxeU6SIm8ggIQPqHajKW2W79dC2XdM6JOiPwOI08cpRzRZ
+	kg2IsTNjH9ogWx7+Mm8F5nINZkf8yOg/J69l+PGi5YiP2rnHO87F/8BLjIGNKWvvNGNUcQendsh
+	AjGr+dARK5yJw6dNdvVYeUGhMaenX8wmOzMqlYVOpNpd/0NXTgwnNAz0=
+X-Gm-Gg: ASbGncvyS1um841a5o4NOJ/qIrDatGV0ziHjHXhOo6aQrQKlTjEZ+EJtzdJ2dFwXspg
+	blrVZqpzoSmVRG+ATCj28/zDqxPLDDrFqHcEMNNZrrHmmyQXY+1tP3mSPvbddzO3+kCg1weRB1v
+	XPNcfL7Hk5c/BzsqnQj1siVw5e0ROFQu8OwkvlU1KaLrmEP/9x+0/t+KFDFaVjpfxiQkTsIDvxu
+	VAftsT9yeDg6A2riF0=
+X-Google-Smtp-Source: AGHT+IF6/FMvfkM2t/XH6c5AXnqivQugM2HMLBN1/u9XexbnBojnOfBcCiOm0kb7ITvQxJ9JRgM1J9hGYF+YRqPfZm4=
+X-Received: by 2002:a25:ab45:0:b0:e97:398:43a with SMTP id 3f1490d57ef6-ea3ca7088f6mr1978662276.19.1757586743140;
+ Thu, 11 Sep 2025 03:32:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <12740505.O9o76ZdvQC@rafael.j.wysocki> <871polxs9c.ffs@tglx>
- <CAJZ5v0jyN0=aGFOwE8fzuXi=1LgiLR5wgvvsAihGB0qpUp=mUQ@mail.gmail.com>
- <CAJZ5v0gsiuK5iFY6cHaqEgP8R1sz_pWGoqac2orYvXqLE2xbDQ@mail.gmail.com>
- <87o6rowrsp.ffs@tglx> <CAJZ5v0htmEeivbQaumRc7zw_Zx68GpUy98ksA9L42LupjO6tWA@mail.gmail.com>
- <87ldmqwgjc.ffs@tglx>
-In-Reply-To: <87ldmqwgjc.ffs@tglx>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 11 Sep 2025 12:31:36 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0gW+A-eyckySFrHc7=Qr9URdRX6NqvPgkq4gZEvs_uBWg@mail.gmail.com>
-X-Gm-Features: Ac12FXzgGiowTvScHQ01Ay90U85oEzvZ5PQbqDaWOC0Z8BaVn36F5KL13kIgeVI
-Message-ID: <CAJZ5v0gW+A-eyckySFrHc7=Qr9URdRX6NqvPgkq4gZEvs_uBWg@mail.gmail.com>
-Subject: Re: [PATCH v1] cpu: Add missing check to cpuhp_smt_enable()
-To: Thomas Gleixner <tglx@linutronix.de>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Linux PM <linux-pm@vger.kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Christian Loehle <christian.loehle@arm.com>, Dave Hansen <dave.hansen@linux.intel.com>
+References: <20250909111130.132976-1-ulf.hansson@linaro.org>
+ <20250909111130.132976-4-ulf.hansson@linaro.org> <CAMuHMdWB05sQpv0nKgU2NNn4=KAmNCpHhAnz3s15Gopu8FKVkQ@mail.gmail.com>
+In-Reply-To: <CAMuHMdWB05sQpv0nKgU2NNn4=KAmNCpHhAnz3s15Gopu8FKVkQ@mail.gmail.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Thu, 11 Sep 2025 12:31:47 +0200
+X-Gm-Features: Ac12FXx4q_7O4EKT7jwetBM883Ai-tYxqwF2ULDV_qJob3VYY3KUktShD0zBpHM
+Message-ID: <CAPDyKFrZ4hA0O3PRUJwwetQYsgAt50tPo_hL90epUx1T8kFDEQ@mail.gmail.com>
+Subject: Re: [PATCH 3/5] pmdomain: renesas: rcar-sysc: Don't keep unused PM
+ domains powered-on
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>, 
+	Saravana Kannan <saravanak@google.com>, linux-pm@vger.kernel.org, 
+	Stephen Boyd <sboyd@kernel.org>, "Rafael J . Wysocki" <rafael@kernel.org>, Heiko Stuebner <heiko@sntech.de>, 
+	Sebastian Reichel <sebastian.reichel@collabora.com>, Sebin Francis <sebin.francis@ti.com>, 
+	Diederik de Haas <didi.debian@cknow.org>, Bjorn Andersson <andersson@kernel.org>, 
+	Abel Vesa <abel.vesa@linaro.org>, Peng Fan <peng.fan@oss.nxp.com>, 
+	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, Johan Hovold <johan@kernel.org>, 
+	Maulik Shah <maulik.shah@oss.qualcomm.com>, Michal Simek <michal.simek@amd.com>, 
+	Konrad Dybcio <konradybcio@kernel.org>, Thierry Reding <thierry.reding@gmail.com>, 
+	Jonathan Hunter <jonathanh@nvidia.com>, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Sun, Sep 7, 2025 at 3:14=E2=80=AFPM Thomas Gleixner <tglx@linutronix.de>=
- wrote:
+On Thu, 11 Sept 2025 at 11:02, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
 >
-> On Fri, Sep 05 2025 at 22:56, Rafael J. Wysocki wrote:
-> > On Fri, Sep 5, 2025 at 10:47=E2=80=AFPM Thomas Gleixner <tglx@linutroni=
-x.de> wrote:
-> >>
-> >> On Fri, Sep 05 2025 at 15:27, Rafael J. Wysocki wrote:
-> >> > On Fri, Sep 5, 2025 at 3:13=E2=80=AFPM Rafael J. Wysocki <rafael@ker=
-nel.org> wrote:
-> >> >> Well, manual online can be used for onlining the secondary thread o=
-f a
-> >> >> core where the primary thread is offline, so this is technically
-> >> >> possible already.
-> >> >>
-> >> >> > Something like the completely untested below.
-> >> >>
-> >> >> So given the above, shouldn't topology_is_core_online() check if an=
-y
-> >> >> thread in the given core is online?
-> >> >
-> >> > Besides, this would cause the siblings of offline SMT threads to be
-> >> > skipped while enabling SMT via sysfs (using
-> >> > /sys/devices/system/cpu/smt/control), but I'm not sure if this is th=
-e
-> >> > expectation in the field today.  The current behavior is to online a=
-ll
-> >> > secondary SMT threads (and more, but that part is quite arguably
-> >> > broken).
-> >>
-> >> It is broken, because the initial logic is to bring up primary threads
-> >> unconditionally and then refuse to bring up sibling threads.
-> >>
-> >> With "maxcpus=3Dxxx" this obviously limits the amount of primary threa=
-ds,
-> >> so there is arguably no point to online any of the related secondary
-> >> threads of them.
-> >>
-> >> The initial implementation was naively making that assumption, but the
-> >> core check which was added due to PPC made this actually correct.
-> >>
-> >> It just did not snap with me back then, but it's actually the correct
-> >> thing to do, no?
+> Hi Ulf,
+>
+> On Tue, 9 Sept 2025 at 13:11, Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> > The recent changes to genpd makes a genpd OF provider that is powered-on at
+> > initialization to stay powered-on, until the ->sync_state() callback is
+> > invoked for it.
 > >
-> > It would at least be consistent with the existing PPC behavior. :-)
+> > This may not happen at all, if we wait for a consumer device to be probed,
+> > leading to wasting energy. There are ways to enforce the ->sync_state()
+> > callback to be invoked, through sysfs or via the probe-defer-timeout, but
+> > none of them in its current form are a good fit for rcar-sysc PM domains.
+> >
+> > Let's therefore opt-out from this behaviour of genpd for now, by using the
+> > GENPD_FLAG_NO_STAY_ON.
+> >
+> > Link: https://lore.kernel.org/all/20250701114733.636510-1-ulf.hansson@linaro.org/
+> > Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> > Fixes: 0e789b491ba0 ("pmdomain: core: Leave powered-on genpds on until sync_state")
+> > Fixes: 13a4b7fb6260 ("pmdomain: core: Leave powered-on genpds on until late_initcall_sync")
+> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 >
-> Correct.
+> > --- a/drivers/pmdomain/renesas/rcar-sysc.c
+> > +++ b/drivers/pmdomain/renesas/rcar-sysc.c
+> > @@ -241,6 +241,7 @@ static int __init rcar_sysc_pd_setup(struct rcar_sysc_pd *pd)
+> >                 }
+> >         }
+> >
+> > +       genpd->flags |= GENPD_FLAG_NO_STAY_ON;
+>
+> So this applies to all PM Domains.  While this doesn't hurt, perhaps it
+> should not be set for always-on domains, and thus moved up, to become
+> an "else" branch in the "if/else if/..."-logic handling always-on
+> domains at the top of the function?
+>
+> This applies to rar-gen4-sysc.c, too.
 
-So are you going to send a patch or do you want me to do something?
+You have a point, but currently this doesn't really matter. Genpd will
+not power-off always-on-domains no matter whether
+GENPD_FLAG_NO_STAY_ON is set or not.
 
-From a user standpoint, this issue is a regression in 6.16, so it
-would be good to address it before final 6.17.
+The whole purpose from my side was to restore the behaviour we had
+before, for the Reneas PM domains. I tend to think that it's better to
+apply the $subject patch as is - and leave improvements to be made on
+top.
+
+Thanks a lot for testing and reviewing!
+
+[...]
+
+Kind regards
+Uffe
 
