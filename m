@@ -1,120 +1,110 @@
-Return-Path: <linux-pm+bounces-34526-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34527-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB613B543CF
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Sep 2025 09:26:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 998E1B543FD
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Sep 2025 09:35:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5E57516DC14
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Sep 2025 07:26:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EBCB6188CD2D
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Sep 2025 07:35:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 637C92BFC73;
-	Fri, 12 Sep 2025 07:26:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 632E72C2369;
+	Fri, 12 Sep 2025 07:35:25 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from bmailout2.hostsharing.net (bmailout2.hostsharing.net [83.223.78.240])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE45728726D;
-	Fri, 12 Sep 2025 07:26:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.223.78.240
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B496261393;
+	Fri, 12 Sep 2025 07:35:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757661986; cv=none; b=jNvib9zfEp+bRRqAkukdWIsviaRLUm8YHRkvwDSD6357MLfjDB4qLdz7RH26Aztjmk+Dm+pa3BAbxylOGtCJhT/D6+rrkXywr8+rVrWSgnbfKS0gedFEPqwXl+xnbZC7W+lLW5i6psDhRtK9+gsS3b+CxJzL3EJT58DqsBiLk+E=
+	t=1757662525; cv=none; b=MyDNraeV7XUQyxOacW6OD/dr9dMB+vLvzLZswUeO+TxUUODYq6ryXRvH5dOmqpobqi4kNxat9Ggy0namtjyI2COdID3PdFEHQqgICweZ2GZ6as/5tMkyk6AMZm8ESP40EdjiUhWHhEVqY5g2D5X4lB1E7zTs7FpvBnRqDN+WviY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757661986; c=relaxed/simple;
-	bh=8nuinajrhFNvduXuneZuWtF6AEKEMnItNe5WjWRWBOk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OCyW9oHkV1/sphGRWg7eMM2cxblhQjSfnPlSnCuS5gk9K8//bvhzlWqiPa6PvdfhUc9uBoGq2Xq/jvd58Dun1WgOD/IEnHzuI2YxxSFMFEyAF1pzDrZEIpj4gUKjE79ABG3S8hw3PCGqNya48W7dKj32FikGfv/LSg+Pk+r8kVE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de; spf=none smtp.mailfrom=h08.hostsharing.net; arc=none smtp.client-ip=83.223.78.240
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=h08.hostsharing.net
-Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
-	(Client CN "*.hostsharing.net", Issuer "RapidSSL TLS RSA CA G1" (verified OK))
-	by bmailout2.hostsharing.net (Postfix) with ESMTPS id 1D864201D1B8;
-	Fri, 12 Sep 2025 09:26:04 +0200 (CEST)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-	id 08C831F4A8; Fri, 12 Sep 2025 09:26:04 +0200 (CEST)
-Date: Fri, 12 Sep 2025 09:26:04 +0200
-From: Lukas Wunner <lukas@wunner.de>
-To: Mario Limonciello <superm1@kernel.org>
-Cc: Bjorn Helgaas <helgaas@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Alan Stern <stern@rowland.harvard.edu>, linux-pci@vger.kernel.org,
-	linux-pm@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-	Oleksij Rempel <o.rempel@pengutronix.de>,
-	Timo Jyrinki <timo.jyrinki@gmail.com>,
-	Ernst Persson <ernstp@gmail.com>, Steven Harms <sjharms@gmail.com>,
-	James Ettle <james@ettle.org.uk>, Nick Coghlan <ncoghlan@gmail.com>,
-	Weng Xuetian <wengxt@gmail.com>,
-	Andrey Rahmatullin <wrar@wrar.name>,
-	Boris Barbour <boris.barbour@ens.fr>,
-	Vlastimil Zima <vlastimil.zima@gmail.com>,
-	David Banks <amoebae@gmail.com>, Chris Moeller <kode54@gmail.com>,
-	Daniel Fraga <fragabr@gmail.com>, Javier Marcet <jmarcet@gmail.com>,
-	Pavel Pisa <pisa@cmp.felk.cvut.cz>
-Subject: Re: [PATCH] PCI/PM: Move ASUS EHCI workaround out of generic code
-Message-ID: <aMPLDLYpeVXO1y6R@wunner.de>
-References: <75e4ae507fa4faddd063a3a9e17d319ed84529b6.1757562971.git.lukas@wunner.de>
- <80980751-64db-4dc2-9516-03046e8b4b31@kernel.org>
+	s=arc-20240116; t=1757662525; c=relaxed/simple;
+	bh=7IPfACRdpSZ7D75hs7sK1nm6Ya8/sZT+rnsWbIuVTKY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ohUNzoxjEmdgTFBt6Hl+yxNDFPWGJdFR4kcWaGpGphbqAI+XHY8OB7eKknOTxT6scQtLpJs2ptgOTt5cW2oZbDjaUZzACoCVJ7p7DQNoyplvVb9EDcHxhGKZSkutaWUguw/UeNhxQr0aexnHgRDAhHHVGiMI2aMGmtoP16+SZ4M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 0556282c8fab11f0b29709d653e92f7d-20250912
+X-CTIC-Tags:
+	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
+	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
+	HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE
+	HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT, HR_TO_NO_NAME
+	IP_UNTRUSTED, SRC_UNTRUSTED, IP_UNFAMILIAR, SRC_UNFAMILIAR, DN_TRUSTED
+	SRC_TRUSTED, SA_EXISTED, SN_TRUSTED, SN_EXISTED, SPF_NOPASS
+	DKIM_NOPASS, DMARC_NOPASS
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.45,REQID:164ef7b0-15c0-49e5-8ec6-deb8b8ff4385,IP:10,
+	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+	N:release,TS:5
+X-CID-INFO: VERSION:1.1.45,REQID:164ef7b0-15c0-49e5-8ec6-deb8b8ff4385,IP:10,UR
+	L:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:5
+X-CID-META: VersionHash:6493067,CLOUDID:9d423894fc4ca7d662ffb4edc7f9ea16,BulkI
+	D:250912153516235QZX6V,BulkQuantity:0,Recheck:0,SF:17|19|23|38|43|66|74|78
+	|102|850,TC:nil,Content:0|50,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,Bulk:nil,Q
+	S:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,
+	ARC:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD
+X-UUID: 0556282c8fab11f0b29709d653e92f7d-20250912
+X-User: tianyaxiong@kylinos.cn
+Received: from localhost.localdomain [(175.2.17.114)] by mailgw.kylinos.cn
+	(envelope-from <tianyaxiong@kylinos.cn>)
+	(Generic MTA)
+	with ESMTP id 1921609153; Fri, 12 Sep 2025 15:35:14 +0800
+From: Yaxiong Tian <tianyaxiong@kylinos.cn>
+To: srinivas.pandruvada@linux.intel.com,
+	lenb@kernel.org,
+	rafael@kernel.org,
+	viresh.kumar@linaro.org
+Cc: linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Yaxiong Tian <tianyaxiong@kylinos.cn>
+Subject: [PATCH] cpufreq: intel_pstate: Use likely() optimization in intel_pstate_sample()
+Date: Fri, 12 Sep 2025 15:35:02 +0800
+Message-Id: <20250912073502.743735-1-tianyaxiong@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <80980751-64db-4dc2-9516-03046e8b4b31@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Sep 11, 2025 at 08:34:56AM -0500, Mario Limonciello wrote:
-> On 9/11/25 8:11 AM, Lukas Wunner wrote:
-> > pci_disable_device() does not clear I/O and Memory Space Enable, although
-> > its name suggests otherwise.  The kernel has never disabled these bits
-> > once they're enabled.  Doing so would avoid the need for the quirk, but it
-> > is unclear what will break if this fundamental behavior is changed.
-> 
-> It's too late for this cycle to do so, but how would you feel about making
-> this change at the start of the next cycle so it had a whole cycle to bake
-> in linux-next and see if there is a problem in doing so?
+The comment above the condition `if (cpu->last_sample_time)` clearly
+indicates that the branch is taken for the vast majority of invocations
+after the first sample in a cycle. The first sample is a one-time
+initialization case.
 
-I can look into it.
+Add likely() hint to the condition to improve branch prediction for
+this performance-critical path in intel_pstate_sample().
 
-The change could be justified as a security enhancement to prevent
-unauthorized traffic between devices through peer-to-peer transactions.
+Signed-off-by: Yaxiong Tian <tianyaxiong@kylinos.cn>
+---
+ drivers/cpufreq/intel_pstate.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-pci_disable_device() was introduced with v2.4.3.5 in 2002:
-https://git.kernel.org/tglx/history/c/9102e0eb3e9e
+diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+index 2519eb527468..d540f2ab9a52 100644
+--- a/drivers/cpufreq/intel_pstate.c
++++ b/drivers/cpufreq/intel_pstate.c
+@@ -2531,7 +2531,7 @@ static inline bool intel_pstate_sample(struct cpudata *cpu, u64 time)
+ 	 * that sample.time will always be reset before setting the utilization
+ 	 * update hook and make the caller skip the sample then.
+ 	 */
+-	if (cpu->last_sample_time) {
++	if (likely(cpu->last_sample_time)) {
+ 		intel_pstate_calc_avg_perf(cpu);
+ 		return true;
+ 	}
+-- 
+2.25.1
 
-I suspect back in the day, clearing Bus Master Enable seemed sufficient
-because the only concern was to prevent DMA (and by extension MSIs)
-from broken devices.  Attacks *between* devices were probably not
-considered realistic.
-
-ACS is meant to prevent such attacks, but is an optional capability
-and might be configured incorrectly.  A zero trust, defense in depth
-approach as is common today requires not leaving doors open without need.
-
-If the kernel would clear Memory Space Enable, a malicious device could
-not re-enable it on its own because "propagation of Configuration Requests
-from Downstream to Upstream as well as peer-to-peer are not supported"
-(PCIe r7.0 sec 7.3.3).
-
-It seemed too risky to make such a sweeping change only to get rid of
-the EHCI quirk.  The present patch is meant as a low-risk refactoring,
-but we can consider clearing IO + Memory Space Enable as a long-term
-solution.  I've cc'ed all the people who reported issues with ASUS
-machines back in 2012 in the hope that some of them still have the
-(now 13 years old) hardware to test the patch.  They might also be
-able to test whether the long-term change doesn't regress anything.
-
-Thanks,
-
-Lukas
 
