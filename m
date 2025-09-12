@@ -1,700 +1,224 @@
-Return-Path: <linux-pm+bounces-34562-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34563-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4ECAEB5557E
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Sep 2025 19:31:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C9D7B5562F
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Sep 2025 20:30:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A3E2DAC6FE4
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Sep 2025 17:31:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 567333A75E6
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Sep 2025 18:30:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53D00322751;
-	Fri, 12 Sep 2025 17:30:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99293302CB2;
+	Fri, 12 Sep 2025 18:30:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h6vG1CXJ"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Kcgjsho7"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
+Received: from mail-ua1-f54.google.com (mail-ua1-f54.google.com [209.85.222.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA04F31D365
-	for <linux-pm@vger.kernel.org>; Fri, 12 Sep 2025 17:30:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA24B2264BB
+	for <linux-pm@vger.kernel.org>; Fri, 12 Sep 2025 18:30:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757698256; cv=none; b=IAZdfJ483OfBBAX9sInYb7XxDRoWA2Gol0rk912tG+R2EJzUjBLdaoSQRsrGai2NjQ7bGkS1MGJojCckX06kCWPBvoqFr/shMI73vDAZuIVtltPsDcdekJ9WaMF26F8tDttFc1TKAKOugDT9qvrUPgO3VJJzynqmqV2WWjK/WGc=
+	t=1757701808; cv=none; b=Qc+iiwSTyZSalIwuNQPK7yuLeS0wOFb9zNCm94mJWnIzkIYCA63jl4QQkWAxrU+wFiqh22uynqvfWv7VNoyxtG77qmsGymhgHajnygwcD1Dn4eD1EOEZmY0UMNJD7jWTScXhPDkQr3Sd08IcLPBBwwFRe3x9XVmZBB1dD+ajohU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757698256; c=relaxed/simple;
-	bh=cidTMhiSt13JIcsablIwkX+2tpP9KBEHSyO59DfIG9I=;
+	s=arc-20240116; t=1757701808; c=relaxed/simple;
+	bh=+IX8OUBo+6XzloxAZe7AlqdtVnVRNRI6i1SY6T2Sepc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rXFF/C4rRUNBXyx/uaaYV35UfILKdf33nlErHis16EHe6sODDsD4+pTImm8tw9Q0+g24MkbcRWcZ8+gBmJWavIZPRzSdsqWX160SGp78QJ2pcyC2OCnvFaG1V9fI7thKEN4Kro4lrvyOo3Jkfr+Ldkspvu0Yr9S+WoUJj2crea8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h6vG1CXJ; arc=none smtp.client-ip=209.85.128.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-71d71bcab6fso19731427b3.0
-        for <linux-pm@vger.kernel.org>; Fri, 12 Sep 2025 10:30:52 -0700 (PDT)
+	 To:Cc:Content-Type; b=lyWzZ2W1blZx4p4yJ7ZUYRHFrDObxE9VZMx60/h00v2SCtBth0/IZs0y+GxTR3vFMLebNcVyIEll+3M7SXzJLVYQcfLE2MtLQQcOYc4MXJrDbYEx3+BZ+iiv0NC+fusHBVSDr4OF4SQx0PUIiz5/JMTnTwVwVkoml5d8woSIYdw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Kcgjsho7; arc=none smtp.client-ip=209.85.222.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ua1-f54.google.com with SMTP id a1e0cc1a2514c-8988b982245so1070763241.1
+        for <linux-pm@vger.kernel.org>; Fri, 12 Sep 2025 11:30:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757698252; x=1758303052; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1757701806; x=1758306606; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=auNBcvl3SEsbJHPnjRRhDj6Gi+NyPWlHhGeNvhbSGjI=;
-        b=h6vG1CXJBcbFddEv7sdKZh4hKXQEyqSic+DECnABygA4fdcqKWU1cHrIR3EmGb/YUc
-         0rHK4PlNdgYG+JkP986/J7DQqF3KJE75xzUTxa/fB7RiXHOlh3hxz0uOvhTBYoK74NSx
-         fA4vASAiZTpk87fU3KBDwve1QfIXuYvrAxVlflQo+RMNz6HPhqVUxIciXx4CG98/5pDh
-         ZdjHf+ThKnW6cGgAZYxWVclzRAkkJH+IyeMrFqQMslTWqUIB/zPIItg11fHzBi0PHJtV
-         2Jadez78ma7drQOGEDlkgq6deT4rJDbL2UumtKPvROKMfKDKN803QhUV90OyxEhdcgbg
-         mxlQ==
+        bh=qRevzUKnmamoxUQtNVHn3e2NLqtGP9Hi8zLLoZd4kwQ=;
+        b=Kcgjsho7tH03tDGuMV5wa2Shz5m9czlmAcwe0ldBkO1YC9x+fheJk1Orp148g761Uv
+         HhMyu0iZ/HEwrTyqq8qAL/W8R5dGY+0M8+zgRahxtxqWVw+zOZVVuy/qm+z39gRX0jgv
+         pXnEEg2K5wbIqQXSXkvGlwnBzUUKHc5FJG88qcSrnP7wihJstbxjZF5KCIeRqpL+Bmeg
+         qzgRT91SeEiBN9y0cdLLgCPbyEHOcp0llIDUEoi+E2oZDcGuOWANlMW2p9C56gq7wrGK
+         vmo4p8q/kYTMZDxzB1V/7eFWCiBqIjzsAB9rbtJZJp9m6mfCeV0p6Npd9phW9/4aQ6Ba
+         tA+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757698252; x=1758303052;
+        d=1e100.net; s=20230601; t=1757701806; x=1758306606;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=auNBcvl3SEsbJHPnjRRhDj6Gi+NyPWlHhGeNvhbSGjI=;
-        b=kzWrbBDOpkRCmJxCWhbmHc64qSWd7n+bBYE8js8Hbt+oalOPTIhd0PMvM6uaBMZNlr
-         JAJ3xu++erD3GoexVnF3U5rh9JWBTQhMd3WEpmRW1NA7T+HLGtJYUMzQGO03ZYjr9/fZ
-         40sObs0USt7Bx1xN6g7Mij3HvBe7GgkAhK2Yl6sK5ER7QiMIWAmFFAgDOq3wF0D2oI+F
-         XnUrgs8+0DNiURoqLEgDa3g8bM+wX0shCQsxo/ERzXvteKLc4SQyXXmlG6uKxQOCTxfM
-         KjgwcXwpA9uj1oTg3crt7mSSiRmjNZb3MA/r7apuMWZAmdqdWJVrvjYr2wmVdCDIig8X
-         MpxA==
-X-Forwarded-Encrypted: i=1; AJvYcCXt2Hrw7KQM2Eqri0sEOlzury9ebOWpD7y/Kyb70tFGaxE8An3HVf2b97P6v35mfAtGRLzNg+hzEA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzFu8Pn077BV2QDAaJq+fmEklad9NVDkYQyzfU1Ao27/VAe5JtG
-	LZ4PmGMG1weu5lbq/HlzinvEcfBkGefAt9v/wyxKlAsfRaBBHcbPQi5NvK6O0TKze3mUv84AODt
-	iaHgPuDZjIDOGlm/UteRNAtJ8UnI/VqE=
-X-Gm-Gg: ASbGnctPSLangaC/E1CFLPhVHec9Q+7cfPlW9eZbyI6vhn8nfP1UkYTp6JIFGL4IWbw
-	Cr8SUyboo6YCO/sQllXDnZ5vXc0iVMqXzifLJ7TaQL1AFvsf0NWPVcKPtjA9B74P87keIOJ8bzy
-	BYBH2lLOe1r4I82lJ9GzWcxVqJPL0ZeVf5s0YffqMN6AhIiz7mQ2SvZOPwZG7p+jLPfG9sruZqb
-	vhR7UlRTSRsWcRsya5CsHhSGR6sQyzUiy+ph5ZJ/HgyCLKF4H3rC0hEyZ5/n8R3y0BM
-X-Google-Smtp-Source: AGHT+IGITU3lo0Nc85OeLoKMyjH9+RFM86LRFnrm71Cg8EK1RTjnVlzcFez7i+udct1W4V2JM5TERjHI8MgSCWBrz5o=
-X-Received: by 2002:a05:690c:7092:b0:71f:efa8:587a with SMTP id
- 00721157ae682-730659c09c0mr38811187b3.44.1757698250349; Fri, 12 Sep 2025
- 10:30:50 -0700 (PDT)
+        bh=qRevzUKnmamoxUQtNVHn3e2NLqtGP9Hi8zLLoZd4kwQ=;
+        b=GAEZNgfR388poJw0bLOCO9skSppqyV1dtF9n6ZulxaJTO3Bc+FghX5WG1zHAo+Ed+s
+         wRdUcswzmEw6zKozvbMPRY4TpBaigYdTu78pKKxdESJuktN6k6xPWVOPfj7V2OauFxVU
+         n5Jv3wkHuV7X7tqJ0WEtiGF5R+qrwKbVI4BiYrS/EztxyadLQcO0Oe1eZbFJYe4QS/Rb
+         8eFUY1JI4e8opsrwWOfbJNF3KrmephOelIL2fSVFarLy0teZXiLuIrvwqy9nMR4eGYin
+         9CRvdxSejWO8AVGu2RUctnVHvxFX00+HRRZ6IBs/fQ7r1GvONR5tOuWKPkBwsg1iSVlQ
+         wt0w==
+X-Forwarded-Encrypted: i=1; AJvYcCVzHuSGkfK7MY/ox4sVVDgSgFZ7EUPvFtEr0zBjQ7wNFP4gZb1/T57zgTc0PBjrZMQZgwuhaZ8Vdg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx8LapzV+gBX6d4waCAclr467L90UBFxf8EDc6S1C6J0eAMEYcT
+	1lihHEWEd8t/A0FU7pj2OZIbUvTPbwnWKT9jPMWQpTgd2tMq+M8GCYQZKWtnLQhwzz9znxTyHfV
+	yZlrqroNj/krnOGcoIRW0eG2A4MtFsIc9x0PZOLgc
+X-Gm-Gg: ASbGncszR8E9HnN6MSk69+tUYS8D82YzfAeXhhnU8QEgDUsNPQWLZF1x58kWaHrSBBh
+	T4I4yvh7R1a7KVywlvnTHH9yr5MevBs2mU47zC1kPa32kbvtV49P0wNlG/llnT4OI7TTMABFMmg
+	T6gtjDAmLmTezSXd7qAa7braooai7XVHdLlwJCrv0Nh/Mt0Zf1ab040lQEMbPIOfgh26vWGTYq2
+	w4rBssn7bdkR3NkCPBjnnA=
+X-Google-Smtp-Source: AGHT+IHxsa+70uHWqJpGA1Rf1RQgQInzrnlKv38jo++DlHDxlcaEfPbXudoHo8pkOm2mFFUdmxC9MpI+uufU86ag8as=
+X-Received: by 2002:a05:6102:441a:b0:536:7bfa:22bc with SMTP id
+ ada2fe7eead31-55608e9ed8cmr1997283137.4.1757701805263; Fri, 12 Sep 2025
+ 11:30:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250905-mt8196-gpufreq-v1-0-7b6c2d6be221@collabora.com>
- <20250905-mt8196-gpufreq-v1-5-7b6c2d6be221@collabora.com> <CAPaKu7RUx6KHyvdvrfX3u-7Lk=Wa3nmTh6-tD3CbReNAwNtgoQ@mail.gmail.com>
- <4506669.X9hSmTKtgW@workhorse>
-In-Reply-To: <4506669.X9hSmTKtgW@workhorse>
-From: Chia-I Wu <olvaffe@gmail.com>
-Date: Fri, 12 Sep 2025 10:30:39 -0700
-X-Gm-Features: AS18NWA3g27VWsDg6RRczXJZXbzk7vegWWvE1nw-YT0mXkpVh9cJ-UmAELnMQuY
-Message-ID: <CAPaKu7R_VUnX0TibokX0edQPVjritJgABEVZ-Sy=6EiVt7GrAw@mail.gmail.com>
-Subject: Re: [PATCH RFC 05/10] mailbox: add MediaTek GPUEB IPI mailbox
-To: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	Boris Brezillon <boris.brezillon@collabora.com>, Steven Price <steven.price@arm.com>, 
-	Liviu Dudau <liviu.dudau@arm.com>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, MyungJoo Ham <myungjoo.ham@samsung.com>, 
-	Kyungmin Park <kyungmin.park@samsung.com>, Chanwoo Choi <cw00.choi@samsung.com>, 
-	Jassi Brar <jassisinghbrar@gmail.com>, Kees Cook <kees@kernel.org>, 
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Chen-Yu Tsai <wenst@chromium.org>, kernel@collabora.com, 
-	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org, 
-	linux-hardening@vger.kernel.org
+References: <20250912143911.445452-1-treapking@chromium.org>
+In-Reply-To: <20250912143911.445452-1-treapking@chromium.org>
+From: Saravana Kannan <saravanak@google.com>
+Date: Fri, 12 Sep 2025 11:29:27 -0700
+X-Gm-Features: AS18NWBW3aCWBhJQCTV-8BCU8dkmnVAlT-JEQvndeTlARqf407TWPOkWdwyderI
+Message-ID: <CAGETcx_bzjiLcQSXhCGM1gg2Xy=fgD2FPAdt3ZHDJmY357WnHg@mail.gmail.com>
+Subject: Re: [PATCH v3] PM: sleep: Don't wait for SYNC_STATE_ONLY device links
+To: Pin-yen Lin <treapking@chromium.org>
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, Pavel Machek <pavel@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, 
+	linux-kernel@vger.kernel.org, Chen-Yu Tsai <wenst@chromium.org>, 
+	Hsin-Te Yuan <yuanhsinte@chromium.org>, linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Sep 12, 2025 at 3:59=E2=80=AFAM Nicolas Frattaroli
-<nicolas.frattaroli@collabora.com> wrote:
+On Fri, Sep 12, 2025 at 7:48=E2=80=AFAM Pin-yen Lin <treapking@chromium.org=
+> wrote:
 >
-> On Friday, 12 September 2025 06:48:17 Central European Summer Time Chia-I=
- Wu wrote:
-> > On Fri, Sep 5, 2025 at 3:24=E2=80=AFAM Nicolas Frattaroli
-> > <nicolas.frattaroli@collabora.com> wrote:
-> > >
-> > > The MT8196 SoC uses an embedded MCU to control frequencies and power =
-of
-> > > the GPU. This controller is referred to as "GPUEB".
-> > >
-> > > It communicates to the application processor, among other ways, throu=
-gh
-> > > a mailbox.
-> > >
-> > > The mailbox exposes one interrupt, which appears to only be fired whe=
-n a
-> > > response is received, rather than a transaction is completed. For us,
-> > > this means we unfortunately need to poll for txdone.
-> > >
-> > > The mailbox also requires the EB clock to be on when touching any of =
-the
-> > > mailbox registers.
-> > >
-> > > Add a simple driver for it based on the common mailbox framework.
-> > >
-> > > Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-> > > ---
-> > >  drivers/mailbox/Kconfig             |  10 ++
-> > >  drivers/mailbox/Makefile            |   2 +
-> > >  drivers/mailbox/mtk-gpueb-mailbox.c | 330 ++++++++++++++++++++++++++=
-++++++++++
-> > >  3 files changed, 342 insertions(+)
-> > >
-> > > diff --git a/drivers/mailbox/Kconfig b/drivers/mailbox/Kconfig
-> > > index 02432d4a5ccd46a16156a09c7f277fb03e4013f5..2016defda1fabb5c0fcc8=
-078f84a52d4e4e00167 100644
-> > > --- a/drivers/mailbox/Kconfig
-> > > +++ b/drivers/mailbox/Kconfig
-> > > @@ -294,6 +294,16 @@ config MTK_CMDQ_MBOX
-> > >           critical time limitation, such as updating display configur=
-ation
-> > >           during the vblank.
-> > >
-> > > +config MTK_GPUEB_MBOX
-> > > +       tristate "MediaTek GPUEB Mailbox Support"
-> > > +       depends on ARCH_MEDIATEK || COMPILE_TEST
-> > > +       help
-> > > +         The MediaTek GPUEB mailbox is used to communicate with the =
-embedded
-> > > +         controller in charge of GPU frequency and power management =
-on some
-> > > +         MediaTek SoCs, such as the MT8196.
-> > > +         Say Y or m here if you want to support the MT8196 SoC in yo=
-ur kernel
-> > > +         build.
-> > > +
-> > >  config ZYNQMP_IPI_MBOX
-> > >         tristate "Xilinx ZynqMP IPI Mailbox"
-> > >         depends on ARCH_ZYNQMP && OF
-> > > diff --git a/drivers/mailbox/Makefile b/drivers/mailbox/Makefile
-> > > index 98a68f838486eed117d24296138bf59fda3f92e4..564d06e71313e6d1972e4=
-a6036e1e78c8c7ec450 100644
-> > > --- a/drivers/mailbox/Makefile
-> > > +++ b/drivers/mailbox/Makefile
-> > > @@ -63,6 +63,8 @@ obj-$(CONFIG_MTK_ADSP_MBOX)   +=3D mtk-adsp-mailbox=
-.o
-> > >
-> > >  obj-$(CONFIG_MTK_CMDQ_MBOX)    +=3D mtk-cmdq-mailbox.o
-> > >
-> > > +obj-$(CONFIG_MTK_GPUEB_MBOX)   +=3D mtk-gpueb-mailbox.o
-> > > +
-> > >  obj-$(CONFIG_ZYNQMP_IPI_MBOX)  +=3D zynqmp-ipi-mailbox.o
-> > >
-> > >  obj-$(CONFIG_SUN6I_MSGBOX)     +=3D sun6i-msgbox.o
-> > > diff --git a/drivers/mailbox/mtk-gpueb-mailbox.c b/drivers/mailbox/mt=
-k-gpueb-mailbox.c
-> > > new file mode 100644
-> > > index 0000000000000000000000000000000000000000..0236fb358136e434a09a2=
-1ef293fe949ced94123
-> > > --- /dev/null
-> > > +++ b/drivers/mailbox/mtk-gpueb-mailbox.c
-> > > @@ -0,0 +1,330 @@
-> > > +// SPDX-License-Identifier: GPL-2.0-only
-> > > +/*
-> > > + * MediaTek GPUEB mailbox driver for SoCs such as the MT8196
-> > > + *
-> > > + * Copyright (C) 2025, Collabora Ltd.
-> > > + *
-> > > + * Developers harmed in the making of this driver:
-> > > + *  - Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-> > > + */
-> > > +
-> > > +#include <linux/atomic.h>
-> > > +#include <linux/clk.h>
-> > > +#include <linux/device.h>
-> > > +#include <linux/interrupt.h>
-> > > +#include <linux/io.h>
-> > > +#include <linux/iopoll.h>
-> > > +#include <linux/mailbox_controller.h>
-> > > +#include <linux/module.h>
-> > > +#include <linux/of.h>
-> > > +#include <linux/platform_device.h>
-> > > +
-> > > +#define MBOX_CTL_TX_STS 0x0000
-> > > +#define MBOX_CTL_IRQ_SET 0x0004
-> > > +#define MBOX_CTL_IRQ_CLR 0x0074
-> > > +#define MBOX_CTL_RX_STS 0x0078
-> > > +
-> > > +#define MBOX_FULL BIT(0) /* i.e. we've received data */
-> > > +#define MBOX_CLOGGED BIT(1) /* i.e. the channel is shutdown */
-> > > +
-> > > +struct mtk_gpueb_mbox {
-> > > +       struct device *dev;
-> > > +       struct clk *clk;
-> > > +       void __iomem *mbox_mmio;
-> > > +       void __iomem *mbox_ctl;
-> > > +       void **rx_buf;
-> > > +       atomic_t *rx_status;
-> > > +       struct mbox_controller mbox;
-> > > +       unsigned int *chn;
-> > > +       int irq;
-> > > +       const struct mtk_gpueb_mbox_variant *v;
-> > > +};
-> > > +
-> > > +struct mtk_gpueb_mbox_ch {
-> > > +       const char *name;
-> > > +       const int num;
-> > > +       const unsigned int tx_offset;
-> > > +       const unsigned int tx_len;
-> > > +       const unsigned int rx_offset;
-> > > +       const unsigned int rx_len;
-> > > +       const bool no_response;
-> > > +};
-> > > +
-> > > +struct mtk_gpueb_mbox_variant {
-> > > +       unsigned int num_channels;
-> > > +       const struct mtk_gpueb_mbox_ch channels[] __counted_by(num_ch=
-annels);
-> > > +};
-> > > +
-> > > +/**
-> > > + * mtk_gpueb_mbox_read_rx - read RX buffer from MMIO into ebm's RX b=
-uffer
-> > > + * @ebm: pointer to &struct mtk_gpueb_mbox instance
-> > > + * @channel: number of channel to read
-> > > + */
-> > > +static void mtk_gpueb_mbox_read_rx(struct mtk_gpueb_mbox *ebm,
-> > > +                                  unsigned int channel)
-> > > +{
-> > > +       const struct mtk_gpueb_mbox_ch *ch;
-> > > +
-> > > +       ch =3D &ebm->v->channels[channel];
-> > > +
-> > > +       memcpy_fromio(ebm->rx_buf[channel], ebm->mbox_mmio + ch->rx_o=
-ffset,
-> > > +                     ch->rx_len);
-> > > +
-> > > +}
-> > > +
-> > > +static irqreturn_t mtk_gpueb_mbox_isr(int irq, void *data)
-> > > +{
-> > > +       struct mtk_gpueb_mbox *ebm =3D data;
-> > > +       u32 rx_handled =3D 0;
-> > > +       u32 rx_sts;
-> > > +       int i;
-> > > +
-> > > +       rx_sts =3D readl(ebm->mbox_ctl + MBOX_CTL_RX_STS);
-> > > +
-> > > +       for (i =3D 0; i < ebm->v->num_channels; i++) {
-> > > +               if (rx_sts & BIT(i)) {
-> > > +                       if (!atomic_cmpxchg(&ebm->rx_status[i], 0,
-> > > +                                           MBOX_FULL | MBOX_CLOGGED)=
-)
-> > > +                               rx_handled |=3D BIT(i);
-> > > +               }
-> > > +       }
-> > We can loop over bits that are set in rx_sts, if we expect that only a
-> > few bits are set most of the time.
+> Device links with DL_FLAG_SYNC_STATE_ONLY should not affect suspend
+> and resume, and functions like device_reorder_to_tail() and
+> device_link_add() doesn't try to reorder the consumers with such flag.
 >
-> Could you elaborate on your preferred approach? num_channels will be
-> smaller than the bit width of rx_sts. I could loop from __fls down to
-> 0 checking for (!rx_sts ^ rx_handled) for an early exit, but I'm not
-> sure if this microoptimisation is what you meant or if that even makes
-> much sense instruction cost wise.
+> However, dpm_wait_for_consumers() and dpm_wait_for_suppliers() doesn't
+> check this flag before triggering dpm_wait, leading to potential hang
+> during suspend/resume.
 >
-> Alternatively, I could loop from __fss to num_channels.
+> This can be reproduced on MT8186 Corsola Chromebook with devicetree like:
 >
-> Is there some commonly used hyper-optimised "loop over set bits" macro
-> that I'm unfamiliar with?
-Not sure if there is a macro, but panthor open-codes something like
+> usb-a-connector {
+>         compatible =3D "usb-a-connector";
+>         port {
+>                 usb_a_con: endpoint {
+>                         remote-endpoint =3D <&usb_hs>;
+>                 };
+>         };
+> };
+>
+> usb_host {
+>         compatible =3D "mediatek,mt8186-xhci", "mediatek,mtk-xhci";
+>         port {
+>                 usb_hs: endpoint {
+>                         remote-endpoint =3D <&usb_a_con>;
+>                 };
+>         };
+> };
 
-  while (rx_sts) {
-    int chan =3D ffs(rx_sts) - 1;
-    rx_sts &=3D ~BIT(chan);
-    // do away with chan
-  }
+We've had SYNC_STATE_ONLY devlink for years in the kernel. Also,
+SYNC_STATE_ONLY device links get deleted once the consumer device
+probes. You also can't suspend a device before it probes.
+
+Why are you hitting this issue only now? Something doesn't sound
+right. I'm asking this because I'm wondering if some other recent
+change broke any of my statements/design decisions above.
+
+Not to fix this, but to also ensure better suspend/resume ordering in
+the future, you might want to add a "post-init-suppliers" to the real
+supplier node here and point it to the real consumer here. This will
+also help break the cycle here. Because even with this fix, all it
+does is avoid enforcing any ordering between these two devices. It is
+just working based on the order in DT, which you shouldn't count on
+for correctness.
+
+Thanks,
+Saravana
 
 >
-> > > +
-> > > +       writel(rx_handled, ebm->mbox_ctl + MBOX_CTL_IRQ_CLR);
-> > > +
-> > > +       if (!(rx_sts ^ rx_handled))
-> > "rx_sts =3D=3D rx_handled" should be more direct.
+> In this case, the two nodes form a cycle and a SYNC_STATE_ONLY devlink
+> between usb_host (supplier) and usb-a-connector (consumer) is created.
 >
-> Good point, will change.
+> Export device_link_flag_is_sync_state_only() and use it to check this in
+> dpm_wait_for_consumers() and dpm_wait_for_suppliers() to fix this.
 >
-> > > +               return IRQ_WAKE_THREAD;
-> > > +
-> > > +       dev_warn_ratelimited(ebm->dev, "spurious interrupts on 0x%04X=
-\n",
-> > > +                            rx_sts ^ rx_handled);
-> > > +       return IRQ_NONE;
-> > It seems a bit too punishing when there are spurious interrupts. I
-> > wonder if we should warn, but return IRQ_WAKE_THREAD as long as
-> > rx_handled !=3D 0.
-> >
-> > Also, if another interrupt can fire before mtk_gpueb_mbox_thread runs,
-> > that's data dropping rather than spurious interrupts.
-> >
+> Fixes: 05ef983e0d65a ("driver core: Add device link support for SYNC_STAT=
+E_ONLY flag")
+> Signed-off-by: Pin-yen Lin <treapking@chromium.org>
+> ---
 >
-> Yeah, I agree that this is bad. As wens pointed out, my IRQ clearing
-> earlier would most certainly open us up to losing data. I'll
-> definitely look into changing this; iirc the current code resulted
-> from me being unsure whether partially handled IRQs should still
-> be counted as a handled IRQ or not.
-If we only get rx data (response) as a result of tx data (request),
-this would be fine. But if there can be unsolicited tx data (looking
-at fast_dvfs_event), yeah, we are clearing irq too early.
-
+> Changes in v3:
+> - Squash to one patch and fix the export approach
 >
-> > > +}
-> > > +
-> > > +static irqreturn_t mtk_gpueb_mbox_thread(int irq, void *data)
-> > > +{
-> > > +       struct mtk_gpueb_mbox *ebm =3D data;
-> > > +       irqreturn_t ret =3D IRQ_NONE;
-> > > +       int status;
-> > > +       int i;
-> > > +
-> > > +       for (i =3D 0; i < ebm->v->num_channels; i++) {
-> > > +               status =3D atomic_cmpxchg(&ebm->rx_status[i],
-> > > +                                       MBOX_FULL | MBOX_CLOGGED, MBO=
-X_FULL);
-> > > +               if (status =3D=3D (MBOX_FULL | MBOX_CLOGGED)) {
-> > We could also save rx_handled from mtk_gpueb_mbox_isr and loop over
-> > bits that are set.  If we do that, ebm->rx_status[i] is guaranteed to
-> > be MBOX_FULL | MBOX_CLOGGED.
-> >
+> Changes in v2:
+> - Update commit message
+> - Use device_link_flag_is_sync_state_only()
 >
-> Wouldn't storing rx_handled open us up to data races with unpleasant
-> code to try and prevent them? As far as I understand, the ISR is allowed
-> to fire again before the thread has completed. Having the rx_status bits
-> as individual atomics gives us finer granularity than needing to protect
-> the entire set of bits.
+>  drivers/base/base.h       | 1 +
+>  drivers/base/core.c       | 2 +-
+>  drivers/base/power/main.c | 6 ++++--
+>  3 files changed, 6 insertions(+), 3 deletions(-)
 >
-> If there is some way to pass data from the ISR to the awoken thread
-> directly as a per-invocation parameter rather than a squirreled away
-> member of the driver private struct, then I agree doing it your way
-> seems better.
+> diff --git a/drivers/base/base.h b/drivers/base/base.h
+> index 123031a757d9..80415b140ce7 100644
+> --- a/drivers/base/base.h
+> +++ b/drivers/base/base.h
+> @@ -248,6 +248,7 @@ void device_links_driver_cleanup(struct device *dev);
+>  void device_links_no_driver(struct device *dev);
+>  bool device_links_busy(struct device *dev);
+>  void device_links_unbind_consumers(struct device *dev);
+> +bool device_link_flag_is_sync_state_only(u32 flags);
+>  void fw_devlink_drivers_done(void);
+>  void fw_devlink_probing_done(void);
 >
-> > > +                       mtk_gpueb_mbox_read_rx(ebm, i);
-> > > +                       mbox_chan_received_data(&ebm->mbox.chans[i],
-> > > +                                               ebm->rx_buf[i]);
-> > It looks like we read the data and pass it on to the client
-> > immediately. Does each channel need its own rx_buf?
-> >
+> diff --git a/drivers/base/core.c b/drivers/base/core.c
+> index d22d6b23e758..741aa0571fc7 100644
+> --- a/drivers/base/core.c
+> +++ b/drivers/base/core.c
+> @@ -287,7 +287,7 @@ static bool device_is_ancestor(struct device *dev, st=
+ruct device *target)
+>  #define DL_MARKER_FLAGS                (DL_FLAG_INFERRED | \
+>                                  DL_FLAG_CYCLE | \
+>                                  DL_FLAG_MANAGED)
+> -static inline bool device_link_flag_is_sync_state_only(u32 flags)
+> +inline bool device_link_flag_is_sync_state_only(u32 flags)
+>  {
+>         return (flags & ~DL_MARKER_FLAGS) =3D=3D DL_FLAG_SYNC_STATE_ONLY;
+>  }
+> diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
+> index 2ea6e05e6ec9..73a1916170ae 100644
+> --- a/drivers/base/power/main.c
+> +++ b/drivers/base/power/main.c
+> @@ -282,7 +282,8 @@ static void dpm_wait_for_suppliers(struct device *dev=
+, bool async)
+>          * walking.
+>          */
+>         list_for_each_entry_rcu_locked(link, &dev->links.suppliers, c_nod=
+e)
+> -               if (READ_ONCE(link->status) !=3D DL_STATE_DORMANT)
+> +               if (READ_ONCE(link->status) !=3D DL_STATE_DORMANT &&
+> +                   !device_link_flag_is_sync_state_only(link->flags))
+>                         dpm_wait(link->supplier, async);
 >
-> Yeah, common mailbox framework does not do a copy here, it just passes
-> the pointer. Which is good, because nobody likes copies, and it
-> prevents the mailbox core from needing to know the size of received
-> data.
+>         device_links_read_unlock(idx);
+> @@ -339,7 +340,8 @@ static void dpm_wait_for_consumers(struct device *dev=
+, bool async)
+>          * unregistration).
+>          */
+>         list_for_each_entry_rcu_locked(link, &dev->links.consumers, s_nod=
+e)
+> -               if (READ_ONCE(link->status) !=3D DL_STATE_DORMANT)
+> +               if (READ_ONCE(link->status) !=3D DL_STATE_DORMANT &&
+> +                   !device_link_flag_is_sync_state_only(link->flags))
+>                         dpm_wait(link->consumer, async);
 >
-> So the individual rx_bufs are needed to prevent channel cross-talk.
-I checked a few other mailbox drivers. The data pointer could even
-point to local variables in some cases. It seems, in general,
-mbox_client cannot expect the data to be valid after
-mbox_chan_received_data returns.
-
->
-> > > +                       /* FIXME: When does MBOX_FULL get cleared? He=
-re? */
-> > > +                       atomic_set(&ebm->rx_status[i], 0);
-> > > +                       ret =3D IRQ_HANDLED;
-> > > +               }
-> > > +       }
-> > > +
-> > > +       return ret;
-> > > +}
-> > > +
-> > > +static int mtk_gpueb_mbox_send_data(struct mbox_chan *chan, void *da=
-ta)
-> > > +{
-> > > +       struct mtk_gpueb_mbox *ebm =3D dev_get_drvdata(chan->mbox->de=
-v);
-> > > +       unsigned int *num =3D chan->con_priv;
-> > > +       int i;
-> > > +       u32 *values =3D data;
-> > > +
-> > > +       if (*num >=3D ebm->v->num_channels)
-> > > +               return -ECHRNG;
-> > Can this ever happen? (I am not familiar with the mbox subsystem)
->
-> Only if someone with a pointer to chan modifies con_priv outside of
-> what the mailbox driver set. It's an unlikely scenario, so I do think
-> I can remove this check, but the downside is that if someone ever does
-> manage to do this then the next line is a convenient read primitive.
-That should be an invalid usage that we hopefully don't need to worry
-about. Otherwise, as things are, *num can also be modified after the
-check so the check is not sufficient.
-
->
-> > > +
-> > > +       if (!ebm->v->channels[*num].no_response &&
-> > > +           atomic_read(&ebm->rx_status[*num]))
-> > > +               return -EBUSY;
-> > When no_response is true, rx_status is 0. We probably don't need to
-> > check no_response.
->
-> Now that I'm thinking about it, I can probably get rid of no_response
-> altogether. It was originally added because I conflated txdone with
-> response received, and one particular command on the sleep channel,
-> namely powering off the MFG, is unable to ever cause a response
-> interrupt to fire.
->
-> Since we now poll for txdone anyway using the TX status register, I
-> don't think this is needed at all anymore, so I'll try and get
-> rid of it.
->
-> > > +
-> > > +       writel(BIT(*num), ebm->mbox_ctl + MBOX_CTL_IRQ_CLR);
-> > > +
-> > > +       /*
-> > > +        * We don't want any fancy nonsense, just write the 32-bit va=
-lues in
-> > > +        * order. memcpy_toio/__iowrite32_copy don't work here, becau=
-se fancy.
-> > > +        */
-> > > +       for (i =3D 0; i < ebm->v->channels[*num].tx_len; i +=3D 4) {
-> > > +               writel(values[i / 4],
-> > > +                      ebm->mbox_mmio + ebm->v->channels[*num].tx_off=
-set + i);
-> > > +       }
-> > > +
-> > > +       writel(BIT(*num), ebm->mbox_ctl + MBOX_CTL_IRQ_SET);
-> > > +
-> > > +       return 0;
-> > > +}
-> > > +
-> > > +static int mtk_gpueb_mbox_startup(struct mbox_chan *chan)
-> > > +{
-> > > +       struct mtk_gpueb_mbox *ebm =3D dev_get_drvdata(chan->mbox->de=
-v);
-> > > +       unsigned int *num =3D chan->con_priv;
-> > > +
-> > > +       if (*num >=3D ebm->v->num_channels)
-> > > +               return -ECHRNG;
-> > > +
-> > > +       atomic_set(&ebm->rx_status[*num], 0);
-> > > +
-> > > +       return 0;
-> > > +}
-> > > +
-> > > +static void mtk_gpueb_mbox_shutdown(struct mbox_chan *chan)
-> > > +{
-> > > +       struct mtk_gpueb_mbox *ebm =3D dev_get_drvdata(chan->mbox->de=
-v);
-> > > +       unsigned int *num =3D chan->con_priv;
-> > > +
-> > > +       atomic_set(&ebm->rx_status[*num], MBOX_CLOGGED);
-> > > +}
-> > > +
-> > > +static bool mtk_gpueb_mbox_last_tx_done(struct mbox_chan *chan)
-> > > +{
-> > > +       struct mtk_gpueb_mbox *ebm =3D dev_get_drvdata(chan->mbox->de=
-v);
-> > > +       unsigned int *num =3D chan->con_priv;
-> > > +
-> > > +       return !(readl(ebm->mbox_ctl + MBOX_CTL_TX_STS) & BIT(*num));
-> > > +}
-> > > +
-> > > +const struct mbox_chan_ops mtk_gpueb_mbox_ops =3D {
-> > > +       .send_data =3D mtk_gpueb_mbox_send_data,
-> > > +       .startup =3D mtk_gpueb_mbox_startup,
-> > > +       .shutdown =3D mtk_gpueb_mbox_shutdown,
-> > > +       .last_tx_done =3D mtk_gpueb_mbox_last_tx_done,
-> > > +};
-> > > +
-> > > +static struct mbox_chan *
-> > > +mtk_gpueb_mbox_of_xlate(struct mbox_controller *mbox,
-> > > +                       const struct of_phandle_args *sp)
-> > > +{
-> > > +       struct mtk_gpueb_mbox *ebm =3D dev_get_drvdata(mbox->dev);
-> > > +
-> > > +       if (!sp->args_count)
-> > > +               return ERR_PTR(-EINVAL);
-> > > +
-> > > +       if (sp->args[0] >=3D ebm->v->num_channels)
-> > > +               return ERR_PTR(-ECHRNG);
-> > > +
-> > > +       return &mbox->chans[sp->args[0]];
-> > > +}
-> > > +
-> > > +static int mtk_gpueb_mbox_probe(struct platform_device *pdev)
-> > > +{
-> > > +       struct mtk_gpueb_mbox *ebm;
-> > > +       unsigned int rx_buf_sz;
-> > > +       void *buf;
-> > > +       unsigned int i;
-> > > +       int ret;
-> > > +
-> > > +       ebm =3D devm_kzalloc(&pdev->dev, sizeof(*ebm), GFP_KERNEL);
-> > > +       if (!ebm)
-> > > +               return -ENOMEM;
-> > > +
-> > > +       ebm->dev =3D &pdev->dev;
-> > > +       ebm->v =3D of_device_get_match_data(ebm->dev);
-> > > +
-> > > +       dev_set_drvdata(ebm->dev, ebm);
-> > > +
-> > > +       ebm->clk =3D devm_clk_get_enabled(ebm->dev, NULL);
-> > > +       if (IS_ERR(ebm->clk))
-> > > +               return dev_err_probe(ebm->dev, PTR_ERR(ebm->clk),
-> > > +                                    "Failed to get 'eb' clock\n");
-> > > +
-> > > +       ebm->mbox_mmio =3D devm_platform_ioremap_resource_byname(pdev=
-, "mbox");
-> > > +       if (IS_ERR(ebm->mbox_mmio))
-> > > +               return dev_err_probe(ebm->dev, PTR_ERR(ebm->mbox_mmio=
-),
-> > > +                                    "Couldn't map mailbox registers\=
-n");
-> > > +
-> > > +       ebm->mbox_ctl =3D devm_platform_ioremap_resource_byname(pdev,=
- "mbox_ctl");
-> > > +       if (IS_ERR(ebm->mbox_ctl))
-> > > +               return dev_err_probe(
-> > > +                       ebm->dev, PTR_ERR(ebm->mbox_ctl),
-> > > +                       "Couldn't map mailbox control registers\n");
-> > > +
-> > > +       rx_buf_sz =3D (ebm->v->channels[ebm->v->num_channels - 1].rx_=
-offset +
-> > > +                    ebm->v->channels[ebm->v->num_channels - 1].rx_le=
-n);
-> > rx is after tx in mmio. The first half of the space is wasted.
-> >
-> > We follow mtk_gpueb_mbox_read_rx by mbox_chan_received_data. It seems
-> > we only need max of rx_len's.
->
-> We do need the sum of all rx_len's but you're correct that the current co=
-de
-> allocates too much memory. What I think it should do is
->
-> last rx_offset + last rx_len - first rx_offset
->
-> to get the total amount of MMIO occupied by RX.
->
-> > > +
-> > > +       buf =3D devm_kzalloc(ebm->dev, rx_buf_sz, GFP_KERNEL);
-> > > +       if (!buf)
-> > > +               return -ENOMEM;
-> > > +
-> > > +       ebm->rx_buf =3D devm_kmalloc_array(ebm->dev, ebm->v->num_chan=
-nels,
-> > > +                                        sizeof(*ebm->rx_buf), GFP_KE=
-RNEL);
-> > > +       if (!ebm->rx_buf)
-> > > +               return -ENOMEM;
-> > > +
-> > > +       ebm->mbox.chans =3D devm_kcalloc(ebm->dev, ebm->v->num_channe=
-ls,
-> > > +                                      sizeof(struct mbox_chan), GFP_=
-KERNEL);
-> > > +       if (!ebm->mbox.chans)
-> > > +               return -ENOMEM;
-> > > +
-> > > +       ebm->rx_status =3D devm_kcalloc(ebm->dev, ebm->v->num_channel=
-s,
-> > > +                                     sizeof(atomic_t), GFP_KERNEL);
-> > > +       if (!ebm->rx_status)
-> > > +               return -ENOMEM;
-> > > +
-> > > +       ebm->chn =3D devm_kcalloc(ebm->dev, ebm->v->num_channels,
-> > > +                               sizeof(*ebm->chn), GFP_KERNEL);
-> > > +
-> > > +       for (i =3D 0; i < ebm->v->num_channels; i++) {
-> > > +               ebm->rx_buf[i] =3D buf + ebm->v->channels[i].rx_offse=
-t;
-> > > +               spin_lock_init(&ebm->mbox.chans[i].lock);
-> > > +               /* the things you do to avoid explicit casting void* =
-*/
-> > I actually prefer an inline helper that casts chan->con_priv to the
-> > channel number. Another option is "chan - ebm->mox.chans".
->
-> Hmmm, yeah. Though, I don't enjoy chan - ebm->mbox.chans because now we'r=
-e
-> in the woods regarding pointer arithmetics.
->
-> I think the inline helper makes more sense, even if explicitly using a
-> pointer as an integer gives me the heebie-jeebies.
->
-> > > +               ebm->chn[i] =3D i;
-> > > +               ebm->mbox.chans[i].con_priv =3D &ebm->chn[i];
-> > > +               atomic_set(&ebm->rx_status[i], MBOX_CLOGGED);
-> > > +       }
-> > > +
-> > > +       ebm->mbox.dev =3D ebm->dev;
-> > > +       ebm->mbox.num_chans =3D ebm->v->num_channels;
-> > > +       ebm->mbox.txdone_poll =3D true;
-> > > +       ebm->mbox.txpoll_period =3D 0; /* minimum hrtimer interval */
-> > > +       ebm->mbox.of_xlate =3D mtk_gpueb_mbox_of_xlate;
-> > > +       ebm->mbox.ops =3D &mtk_gpueb_mbox_ops;
-> > > +
-> > > +       ebm->irq =3D platform_get_irq(pdev, 0);
-> > > +       if (ebm->irq < 0)
-> > > +               return ebm->irq;
-> > > +
-> > > +       ret =3D devm_request_threaded_irq(ebm->dev, ebm->irq, mtk_gpu=
-eb_mbox_isr,
-> > > +                                       mtk_gpueb_mbox_thread, 0, NUL=
-L, ebm);
-> > > +       if (ret)
-> > > +               return dev_err_probe(ebm->dev, ret, "failed to reques=
-t IRQ\n");
-> > > +
-> > > +       ret =3D devm_mbox_controller_register(ebm->dev, &ebm->mbox);
-> > > +
-> > > +       return 0;
-> > > +}
-> > > +
-> > > +static const struct mtk_gpueb_mbox_variant mtk_gpueb_mbox_mt8196 =3D=
- {
-> > > +       .num_channels =3D 12,
-> > > +       .channels =3D {
-> > > +               { "fast_dvfs_event", 0, 0x0000, 16, 0x00e0, 16, false=
- },
-> > > +               { "gpufreq",         1, 0x0010, 32, 0x00f0, 32, false=
- },
-> > > +               { "sleep",           2, 0x0030, 12, 0x0110,  4, true =
- },
-> > > +               { "timer",           3, 0x003c, 24, 0x0114,  4, false=
- },
-> > > +               { "fhctl",           4, 0x0054, 36, 0x0118,  4, false=
- },
-> > > +               { "ccf",             5, 0x0078, 16, 0x011c, 16, false=
- },
-> > > +               { "gpumpu",          6, 0x0088, 24, 0x012c,  4, false=
- },
-> > > +               { "fast_dvfs",       7, 0x00a0, 24, 0x0130, 24, false=
- },
-> > > +               { "ipir_c_met",      8, 0x00b8,  4, 0x0148, 16, false=
- },
-> > > +               { "ipis_c_met",      9, 0x00bc, 16, 0x0158,  4, false=
- },
-> > > +               { "brisket",        10, 0x00cc, 16, 0x015c, 16, false=
- },
-> > > +               { "ppb",            11, 0x00dc,  4, 0x016c,  4, false=
- },
-> > > +       },
-> > > +};
-> > > +
-> > > +static const struct of_device_id mtk_gpueb_mbox_of_ids[] =3D {
-> > > +       { .compatible =3D "mediatek,mt8196-gpueb-mbox",
-> > > +         .data =3D &mtk_gpueb_mbox_mt8196 },
-> > > +       { /* Sentinel */ }
-> > > +};
-> > > +MODULE_DEVICE_TABLE(of, mtk_gpueb_mbox_of_ids);
-> > > +
-> > > +static struct platform_driver mtk_gpueb_mbox_drv =3D {
-> > > +       .probe =3D mtk_gpueb_mbox_probe,
-> > > +       .driver =3D {
-> > > +               .name =3D "mtk-gpueb-mbox",
-> > > +               .of_match_table =3D mtk_gpueb_mbox_of_ids,
-> > > +       }
-> > > +};
-> > > +module_platform_driver(mtk_gpueb_mbox_drv);
-> > > +
-> > > +MODULE_AUTHOR("Nicolas Frattaroli <nicolas.frattaroli@collabora.com>=
-");
-> > > +MODULE_DESCRIPTION("MediaTek GPUEB mailbox driver for SoCs such as t=
-he MT8196");
-> > > +MODULE_LICENSE("GPL");
-> > >
-> > > --
-> > > 2.51.0
-> > >
-> >
->
-> Thank you for your review!
->
-> Kind regards,
-> Nicolas Frattaroli
->
+>         device_links_read_unlock(idx);
+> --
+> 2.51.0.384.g4c02a37b29-goog
 >
 
