@@ -1,125 +1,193 @@
-Return-Path: <linux-pm+bounces-34581-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34582-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15307B558D3
-	for <lists+linux-pm@lfdr.de>; Sat, 13 Sep 2025 00:07:58 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 736BFB558FD
+	for <lists+linux-pm@lfdr.de>; Sat, 13 Sep 2025 00:15:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C48045679A8
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Sep 2025 22:07:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 91CF21893C6C
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Sep 2025 22:15:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F5CE2836A6;
-	Fri, 12 Sep 2025 22:07:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0080D3680B8;
+	Fri, 12 Sep 2025 22:11:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="U/TSqtgk"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H4I8qU5z"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8130274668
-	for <linux-pm@vger.kernel.org>; Fri, 12 Sep 2025 22:07:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8EA62D541E
+	for <linux-pm@vger.kernel.org>; Fri, 12 Sep 2025 22:11:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757714873; cv=none; b=ZqH7tRh+KCHBbXrRzJ7vZueCK5s3k+jGPVcatejEyG9QMXFcIFhreFYtJy9fZl2qMhaYs/Wj4dhkh9CZ90nKkc6RfPaQkBwxbcaH40LnB2vOM707J4Nl8JDxR2GS2PPNAGG+m1pc+HCyxuNjp7I6JRDFc5ytqlrTKaKddaWzfdQ=
+	t=1757715084; cv=none; b=SKy8D/z20mmog0M6AW+TAoA21Nt9hMSSJ5SE/IYDz+3rWD5MW+PlPtgB2MuqlTzawGkaSe5mlcGwoldk3A6zcDB5IapigHiFgFm1QqxT4bvI7Ao5sah4mlFm7wzRFj7U+LdDxPt2wX+GcqvwlZEEgACEAsavmzxbC5mqpQ8GbhY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757714873; c=relaxed/simple;
-	bh=+yph0vA7hH7D2dOH8dcz8OTQ5zI8ZyZYi0J1x57wbuc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RSFGa977XX/WAjTvhjtixhVG4gbq2hpZ/1g+S001jZjRGLwR52emz16cuLD8PR+DkIAW1zuW7Ph31yxMhlsdpWavzGsj9CjZ4F03+LGf3eM7v+xyCJFQXXUZ0Or3nzCSiWk1VQYwgGjOd+Ho0SR/i/WS3+ZI8XAMkjVdwTeFRzI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=U/TSqtgk; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=XtZM
-	38dcKGfPDowHADfBNhN+yZMd/DBKAr/Q56lBQhU=; b=U/TSqtgky9mRHKpLYuTy
-	UfXd7XedJP9Hk+5/2IqTWU+ncNGhELZK0Vc0RXbSYaIz7Hw6VMZAT5JoyMYY6z4g
-	WzMES95KXJxGoQ7e6ctjM2JN/2k4u/gVXKL/EPXHHKnINEvdgPhLK+f+fB3cHt9L
-	BpsliJIKV+ndVoI8YPP2/7JNqgTQ5aLQNm6R5gAL99+5MFMbIChu6laV+I2f8W3m
-	RpmupwmKLyH5mtQ8NSf2xEebzmoGbDEbi8by9Z1l1UyIN+iGY8UbAOXQISM6qt8c
-	5VvYJPYCkQGivyZtg4DnvEdmEwmxNTAeKfuH6DGfDaXfeL6rCKUkNLis+l/AE6hJ
-	Eg==
-Received: (qmail 1499859 invoked from network); 13 Sep 2025 00:07:43 +0200
-Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 13 Sep 2025 00:07:43 +0200
-X-UD-Smtp-Session: l3s3148p1@dRQG4qE+rtYgAQnoAHJ8AC93OVDMgFWg
-Date: Sat, 13 Sep 2025 00:07:42 +0200
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Janne Grunau <j@jannau.net>
-Cc: Sven Peter <sven@kernel.org>, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-	Neal Gompa <neal@gompa.dev>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Hector Martin <marcan@marcan.st>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Mark Kettenis <kettenis@openbsd.org>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Jassi Brar <jassisinghbrar@gmail.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Sasha Finkelstein <fnkl.kernel@gmail.com>,
-	Marcel Holtmann <marcel@holtmann.org>,
-	Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	van Spriel <arend@broadcom.com>, Lee Jones <lee@kernel.org>,
-	Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>,
-	Vinod Koul <vkoul@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>, Marc Zyngier <maz@kernel.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-	Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>,
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-	asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org, iommu@lists.linux.dev,
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, linux-bluetooth@vger.kernel.org,
-	linux-wireless@vger.kernel.org, linux-pwm@vger.kernel.org,
-	linux-watchdog@vger.kernel.org, linux-clk@vger.kernel.org,
-	dmaengine@vger.kernel.org, linux-sound@vger.kernel.org,
-	linux-spi@vger.kernel.org, linux-nvme@lists.infradead.org
-Subject: Re: [PATCH 10/37] dt-bindings: i2c: apple,i2c: Add apple,t6020-i2c
- compatible
-Message-ID: <aMSZrp3pbS2CeBOE@shikoro>
-References: <20250828-dt-apple-t6020-v1-0-507ba4c4b98e@jannau.net>
- <20250828-dt-apple-t6020-v1-10-507ba4c4b98e@jannau.net>
+	s=arc-20240116; t=1757715084; c=relaxed/simple;
+	bh=SbE2cgv2kQcmjvErb4P8aWuTkv80m0Jw5VHNYIRdjbE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=u4Z6xWPy1mSTGUfvfdpka5FarYe7eCJmAmvQYMPvQY0iyzlUXgKyy5dNb7qTODFWqXbjY5areBpIgUu32wARdUoSvIulmB4VDtIqDLA50Wu7fsXRejg5c9EN9GCZw8XktPJHx3dYUm+dyjr2f3AyFRDMB3wjYfOi/jf0EXyCwqQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H4I8qU5z; arc=none smtp.client-ip=209.85.219.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-ea0297e9cd4so1547377276.3
+        for <linux-pm@vger.kernel.org>; Fri, 12 Sep 2025 15:11:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1757715081; x=1758319881; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PKCZT/K4e4byUQqhyOs9c8fQ3Jbf6/69LbbDKjwZwLE=;
+        b=H4I8qU5zYYIajG0cFBKg9XLkC+arvjtzsJSFXvheCL6rEFjkBDjc3hegecUkfboRZJ
+         o+YKR91VOx5F4mC0NBXl1rGgTBplAfhta0YJG18OPylwKqPOunK7HTNz2EPsOewmiZ7b
+         Bqxs/BsbSOTDAngNZiMnuhnORI7pSDWuf/FyvtAF5G0cFF+NNpjd7VBXJNIYdLsxy3tO
+         8unUO2ooWffSDOCwop9ER6npWKnjKYm/uQ+3wcxMTLVNmoQ/tJ6Z3aQsDPRp6pM/gWsV
+         f8qbeVEPO+hCJ7RRpn+rf90Ejl0TJuM2dxqhA2pdPJCfpeoHGBh8ew8oti7p0xQn2yYz
+         HH9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757715081; x=1758319881;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PKCZT/K4e4byUQqhyOs9c8fQ3Jbf6/69LbbDKjwZwLE=;
+        b=GC24OuFtgeFUBF+SYHcOKdCNV1t/785HfGclcd1Gf0L6SLYv3gIRcUbyXiGd3ivnQx
+         1fbBrD7fU/H6fJ6t764YoX3VHUmk0SuLKA+Bnab6eU07TnXsXr0oCFz4QPLcsxGg4BnJ
+         x1DLY74eX63SHNEsx88uSIUynsuTTIEFwknuKnrybm88g8ZNkxpt8uMj49ZsagQe2BVU
+         KKutJGEW5o3qPYpaBjKlL53dYuoA9qvq210E1Lo1KZv6csMpi+218R3HTwx49eXoHmoJ
+         NxTT6GrIyC3l5ZAQgFQ5sL1Qzn4/3kkzwUQcNuYGukIcZu8BwgNVRMF08zqOqQB9Xcsb
+         7kOA==
+X-Forwarded-Encrypted: i=1; AJvYcCW5DzpmCgpt5a+sqjZ3A0OVau9PAUiWSc2GHT6huBoxK8XAvF61EdbfeUKXhpZXrRX6P8icNeBgSg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzuqesQ5fBF5JqTy7ZYpLfRv3EfycRYWZHucFm2CUl3bKtk2/nB
+	383KE/RR0GtFT90FoXbbtV8wjZHRomGTNCd3CQtHqor3pOsh+IeFCTQvVGSc3YmXVA8Ij7NPHBU
+	bV/lwGGPqvXnrfYBVb1Fk/iGY8xpg9Ic=
+X-Gm-Gg: ASbGncvPwQjSCmy3AZ9tse8Mo76XIsWF6FsIErmvDgK30ORl7KikgsjQqLPCmv0URdu
+	Ts6dDSAOMt85NLRBTlfcpx8pR2XdpDp50AyyX+wH+Shf+MIrhChQxwd5VVb8qeuwqaK0oDxjIZa
+	hqhYmdCYggIIV3YS3TpR0EUS9GvXFB6e4ZwV5rOMqFUcs6xcwcfa8t/99I1gE6OeCDRJTFEvfcR
+	EF4Xykw0xJUGcc5cYVmvE9m2kY85CHqFcmUG1WbVo44BBktmaUJGHg23pKY3S85coq7yZDr
+X-Google-Smtp-Source: AGHT+IHvIYQO4e+EnIIRJTQWJn4b+DyuGOUZd4hIxE3/1w0g4hnoPddMFEkakoXj6yfAPLr17VsI/RA83QQAwziujdk=
+X-Received: by 2002:a05:690c:4c09:b0:723:bd6c:4f2a with SMTP id
+ 00721157ae682-730625cd9f7mr37664467b3.7.1757715080775; Fri, 12 Sep 2025
+ 15:11:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250828-dt-apple-t6020-v1-10-507ba4c4b98e@jannau.net>
+References: <20250912-mt8196-gpufreq-v2-0-779a8a3729d9@collabora.com> <20250912-mt8196-gpufreq-v2-5-779a8a3729d9@collabora.com>
+In-Reply-To: <20250912-mt8196-gpufreq-v2-5-779a8a3729d9@collabora.com>
+From: Chia-I Wu <olvaffe@gmail.com>
+Date: Fri, 12 Sep 2025 15:11:10 -0700
+X-Gm-Features: Ac12FXxS_5OX767ts7gHLmsyJJeyNECHrzeeo_cAOYq8vugrFis3NtJYNr5wYEs
+Message-ID: <CAPaKu7Q+KAzEtKBWy8KO2Kp+H4y-Mqo34uo=jgH1_iooaDq3hA@mail.gmail.com>
+Subject: Re: [PATCH v2 05/10] mailbox: add MediaTek GPUEB IPI mailbox
+To: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+	Boris Brezillon <boris.brezillon@collabora.com>, Steven Price <steven.price@arm.com>, 
+	Liviu Dudau <liviu.dudau@arm.com>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Matthias Brugger <matthias.bgg@gmail.com>, MyungJoo Ham <myungjoo.ham@samsung.com>, 
+	Kyungmin Park <kyungmin.park@samsung.com>, Chanwoo Choi <cw00.choi@samsung.com>, 
+	Jassi Brar <jassisinghbrar@gmail.com>, Kees Cook <kees@kernel.org>, 
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Chen-Yu Tsai <wenst@chromium.org>, kernel@collabora.com, 
+	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org, 
+	linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Aug 28, 2025 at 04:01:29PM +0200, Janne Grunau wrote:
-> After discussion with the devicetree maintainers we agreed to not extend
-> lists with the generic compatible "apple,i2c" anymore [1]. Use
-> "apple,t8103-i2c" as fallback compatible as it is the SoC the driver
-> and bindings were written for.
-> 
-> This block is compatible with t8103, so just add the new per-SoC
-> compatible using apple,t8103-i2c as base.
-> 
-> [1]: https://lore.kernel.org/asahi/12ab93b7-1fc2-4ce0-926e-c8141cfe81bf@kernel.org/
-> 
-> Signed-off-by: Janne Grunau <j@jannau.net>
-> Acked-by: Andi Shyti <andi.shyti@kernel.org>
+On Fri, Sep 12, 2025 at 11:38=E2=80=AFAM Nicolas Frattaroli
+<nicolas.frattaroli@collabora.com> wrote:
+<snipped>
+> +static irqreturn_t mtk_gpueb_mbox_thread(int irq, void *data)
+> +{
+> +       struct mtk_gpueb_mbox_chan *ch =3D data;
+> +       int status;
+> +
+> +       status =3D atomic_cmpxchg(&ch->rx_status,
+> +                               MBOX_FULL | MBOX_CLOGGED, MBOX_FULL);
+> +       if (status =3D=3D (MBOX_FULL | MBOX_CLOGGED)) {
+> +               mtk_gpueb_mbox_read_rx(ch);
+> +               writel(BIT(ch->num), ch->ebm->mbox_ctl + MBOX_CTL_IRQ_CLR=
+);
+> +               mbox_chan_received_data(&ch->ebm->mbox.chans[ch->num],
+> +                                       ch->rx_buf);
+Given what other drivers do, and how mtk_mfg consumes the data, we should
 
-Applied to for-next, thanks!
+  char buf[MAX_OF_RX_LEN]; //  MAX_OF_RX_LEN is 32; we can also
+allocate it during probe
+  mtk_gpueb_mbox_read_rx(ch);
+  mbox_chan_received_data(..., buf);
 
+mtx_mfg makes a copy eventually anyway. We don't need to maintain any
+extra copy.
+
+Then we might not need rx_status.
+
+> +               atomic_set(&ch->rx_status, 0);
+> +               return IRQ_HANDLED;
+> +       }
+> +
+> +       return IRQ_NONE;
+> +}
+> +
+> +static int mtk_gpueb_mbox_send_data(struct mbox_chan *chan, void *data)
+> +{
+> +       struct mtk_gpueb_mbox_chan *ch =3D chan->con_priv;
+> +       int i;
+> +       u32 *values =3D data;
+> +
+> +       if (atomic_read(&ch->rx_status))
+> +               return -EBUSY;
+> +
+> +       /*
+> +        * We don't want any fancy nonsense, just write the 32-bit values=
+ in
+> +        * order. memcpy_toio/__iowrite32_copy don't work here, because f=
+ancy.
+> +        */
+> +       for (i =3D 0; i < ch->c->tx_len; i +=3D 4)
+> +               writel(values[i / 4], ch->ebm->mbox_mmio + ch->c->tx_offs=
+et + i);
+> +
+> +       writel(BIT(ch->num), ch->ebm->mbox_ctl + MBOX_CTL_IRQ_SET);
+> +
+> +       return 0;
+> +}
+> +
+> +static int mtk_gpueb_mbox_startup(struct mbox_chan *chan)
+> +{
+> +       struct mtk_gpueb_mbox_chan *ch =3D chan->con_priv;
+> +       int ret;
+> +
+> +       atomic_set(&ch->rx_status, 0);
+> +
+> +       ret =3D clk_enable(ch->ebm->clk);
+> +       if (ret) {
+> +               dev_err(ch->ebm->dev, "Failed to enable EB clock: %pe\n",
+> +                       ERR_PTR(ret));
+> +               goto err_clog;
+> +       }
+> +
+> +       writel(BIT(ch->num), ch->ebm->mbox_ctl + MBOX_CTL_IRQ_CLR);
+> +
+> +       ret =3D devm_request_threaded_irq(ch->ebm->dev, ch->ebm->irq, mtk=
+_gpueb_mbox_isr,
+> +                                       mtk_gpueb_mbox_thread, IRQF_SHARE=
+D | IRQF_ONESHOT,
+> +                                       ch->full_name, ch);
+I don't think this warrants a per-channel irq thread.
+
+mbox_chan_received_data is atomic. I think wecan start simple with
+just a devm_request_irq for all channels. mtk_gpueb_mbox_isr can
+
+  read bits from MBOX_CTL_RX_STS
+  for each bit set:
+    read data from rx
+    mbox_chan_received_data
+  write bits to MBOX_CTL_IRQ_CLR
 
