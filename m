@@ -1,110 +1,96 @@
-Return-Path: <linux-pm+bounces-34527-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34528-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 998E1B543FD
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Sep 2025 09:35:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AFD9AB54400
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Sep 2025 09:36:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EBCB6188CD2D
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Sep 2025 07:35:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 67F673BA08E
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Sep 2025 07:36:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 632E72C2369;
-	Fri, 12 Sep 2025 07:35:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DFD92D0275;
+	Fri, 12 Sep 2025 07:36:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="t0BOt3Qy"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B496261393;
-	Fri, 12 Sep 2025 07:35:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 672BB2C324D;
+	Fri, 12 Sep 2025 07:36:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757662525; cv=none; b=MyDNraeV7XUQyxOacW6OD/dr9dMB+vLvzLZswUeO+TxUUODYq6ryXRvH5dOmqpobqi4kNxat9Ggy0namtjyI2COdID3PdFEHQqgICweZ2GZ6as/5tMkyk6AMZm8ESP40EdjiUhWHhEVqY5g2D5X4lB1E7zTs7FpvBnRqDN+WviY=
+	t=1757662616; cv=none; b=NEoO2NaBh5dtmrZE1MNDBoUKymZ47rwURMqjG1xa1ftGZBBCVq360ShRTcWgi7983GLnNdVTCQ2HlQf4D4LVvd3NyDsik5lxHfeyPgxAJOR9LK5Kqcs8X0gcDqB48pJJz7mx7I8OAAGdzXgnULqG6IXM0SNXi1a17Dw9VSUz7yI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757662525; c=relaxed/simple;
-	bh=7IPfACRdpSZ7D75hs7sK1nm6Ya8/sZT+rnsWbIuVTKY=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ohUNzoxjEmdgTFBt6Hl+yxNDFPWGJdFR4kcWaGpGphbqAI+XHY8OB7eKknOTxT6scQtLpJs2ptgOTt5cW2oZbDjaUZzACoCVJ7p7DQNoyplvVb9EDcHxhGKZSkutaWUguw/UeNhxQr0aexnHgRDAhHHVGiMI2aMGmtoP16+SZ4M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 0556282c8fab11f0b29709d653e92f7d-20250912
-X-CTIC-Tags:
-	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
-	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
-	HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE
-	HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT, HR_TO_NO_NAME
-	IP_UNTRUSTED, SRC_UNTRUSTED, IP_UNFAMILIAR, SRC_UNFAMILIAR, DN_TRUSTED
-	SRC_TRUSTED, SA_EXISTED, SN_TRUSTED, SN_EXISTED, SPF_NOPASS
-	DKIM_NOPASS, DMARC_NOPASS
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.45,REQID:164ef7b0-15c0-49e5-8ec6-deb8b8ff4385,IP:10,
-	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-	N:release,TS:5
-X-CID-INFO: VERSION:1.1.45,REQID:164ef7b0-15c0-49e5-8ec6-deb8b8ff4385,IP:10,UR
-	L:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:5
-X-CID-META: VersionHash:6493067,CLOUDID:9d423894fc4ca7d662ffb4edc7f9ea16,BulkI
-	D:250912153516235QZX6V,BulkQuantity:0,Recheck:0,SF:17|19|23|38|43|66|74|78
-	|102|850,TC:nil,Content:0|50,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,Bulk:nil,Q
-	S:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,
-	ARC:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD
-X-UUID: 0556282c8fab11f0b29709d653e92f7d-20250912
-X-User: tianyaxiong@kylinos.cn
-Received: from localhost.localdomain [(175.2.17.114)] by mailgw.kylinos.cn
-	(envelope-from <tianyaxiong@kylinos.cn>)
-	(Generic MTA)
-	with ESMTP id 1921609153; Fri, 12 Sep 2025 15:35:14 +0800
-From: Yaxiong Tian <tianyaxiong@kylinos.cn>
-To: srinivas.pandruvada@linux.intel.com,
-	lenb@kernel.org,
-	rafael@kernel.org,
-	viresh.kumar@linaro.org
-Cc: linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Yaxiong Tian <tianyaxiong@kylinos.cn>
-Subject: [PATCH] cpufreq: intel_pstate: Use likely() optimization in intel_pstate_sample()
-Date: Fri, 12 Sep 2025 15:35:02 +0800
-Message-Id: <20250912073502.743735-1-tianyaxiong@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1757662616; c=relaxed/simple;
+	bh=GWhgaIJNcX5gJ7ylYTfAO0G7hC/dPv5MnjLr/ldEdkE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=gB3uX3LFcE+A8fwcfy99sgcMWIEm15JkNIxYZiwRkg/2MLBOLjek+vlAabaRbYZfAZvRQDS/TinMXrixi9Ro4h5XrhEHtEZW5nqF5QvxjfHa4ibXO5e/0wIj+wwBuTF6zJyP5Kbmkm7mH7DD/nbTRR1yHZgwcxRte1/UH+UFgEM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=t0BOt3Qy; arc=none smtp.client-ip=185.11.138.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
+	s=gloria202408; h=Content-Transfer-Encoding:Content-Type:MIME-Version:
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Reply-To;
+	bh=iQePpiySKBUe3OfKkAmoPumu7+44E19hPRb0KlPpFxY=; b=t0BOt3Qy+23zPozlFwGCraLr/E
+	FK80ST+EDMKRX47D1X8qtqiWYZK9unYaxhxMy2WzG38G2o6LBNfw2xsg5iWA+DCSdF+Z4xkrT6K8L
+	7qxtZVz0+7fidgX+xbQeDCEciaegFFMCpqTnnLSvBGhi5y4I7KSjNOsn2vAMbhdAuvtpffvrISGyV
+	9G2+OoYOhxlee5FNCZ1hLO55TpPzdnYc4bBX07xL6sDOIdh/Ag9NnrYwoY1tJzwEr0JHmRAl8IQO1
+	8yC7/CJiNmCcx5CjBgPpJtMCx8nSruu4j1RVuxE104S7dyJW3J4Hv6o2K5+n9o2BgBSQ+dHi1J6ku
+	DmCipxhg==;
+Received: from i53875a48.versanet.de ([83.135.90.72] helo=localhost.localdomain)
+	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <heiko@sntech.de>)
+	id 1uwyKr-00085j-5d; Fri, 12 Sep 2025 09:36:45 +0200
+From: Heiko Stuebner <heiko@sntech.de>
+To: linux-rockchip@lists.infradead.org,
+	Chris Morgan <macroalpha82@gmail.com>
+Cc: Heiko Stuebner <heiko@sntech.de>,
+	linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	broonie@kernel.org,
+	lee@kernel.org,
+	lgirdwood@gmail.com,
+	sre@kernel.org,
+	conor+dt@kernel.org,
+	krzk+dt@kernel.org,
+	robh@kernel.org,
+	Chris Morgan <macromorgan@hotmail.com>
+Subject: Re: (subset) [PATCH v8 0/5] Add Texas Instruments BQ25703A Charger
+Date: Fri, 12 Sep 2025 09:36:30 +0200
+Message-ID: <175766258325.683160.13363723166042765380.b4-ty@sntech.de>
+X-Mailer: git-send-email 2.47.2
+In-Reply-To: <20250904160530.66178-1-macroalpha82@gmail.com>
+References: <20250904160530.66178-1-macroalpha82@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-The comment above the condition `if (cpu->last_sample_time)` clearly
-indicates that the branch is taken for the vast majority of invocations
-after the first sample in a cycle. The first sample is a one-time
-initialization case.
 
-Add likely() hint to the condition to improve branch prediction for
-this performance-critical path in intel_pstate_sample().
+On Thu, 04 Sep 2025 11:05:25 -0500, Chris Morgan wrote:
+> Add support for the Texas Instruments BQ25703A charger manager. The
+> device integrates a boost converter with the charger manager. This
+> series adds the device as an MFD with separate regulator and power
+> supply drivers. This allows us to manage a circular dependency with
+> a type-c port manager which depends on the regulator for usb-otg
+> but supplies power to the BQ25703A charger.
+> 
+> [...]
 
-Signed-off-by: Yaxiong Tian <tianyaxiong@kylinos.cn>
----
- drivers/cpufreq/intel_pstate.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Applied, thanks!
 
-diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-index 2519eb527468..d540f2ab9a52 100644
---- a/drivers/cpufreq/intel_pstate.c
-+++ b/drivers/cpufreq/intel_pstate.c
-@@ -2531,7 +2531,7 @@ static inline bool intel_pstate_sample(struct cpudata *cpu, u64 time)
- 	 * that sample.time will always be reset before setting the utilization
- 	 * update hook and make the caller skip the sample then.
- 	 */
--	if (cpu->last_sample_time) {
-+	if (likely(cpu->last_sample_time)) {
- 		intel_pstate_calc_avg_perf(cpu);
- 		return true;
- 	}
+[5/5] arm64: dts: rockchip: Add USB and charger to Gameforce Ace
+      commit: 36d05f21da4d1879f7e81f18eae85f34e9c64aa5
+
+Best regards,
 -- 
-2.25.1
-
+Heiko Stuebner <heiko@sntech.de>
 
