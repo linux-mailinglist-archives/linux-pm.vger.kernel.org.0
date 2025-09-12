@@ -1,559 +1,185 @@
-Return-Path: <linux-pm+bounces-34520-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34519-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41238B541BD
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Sep 2025 06:48:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AED8BB5411A
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Sep 2025 05:41:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E0E3B163BD8
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Sep 2025 04:48:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 60CEB562C5A
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Sep 2025 03:41:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 792732620FC;
-	Fri, 12 Sep 2025 04:48:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1104A19644B;
+	Fri, 12 Sep 2025 03:41:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DfR8AaM3"
+	dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="LQE4gsmh"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from DU2PR03CU002.outbound.protection.outlook.com (mail-northeuropeazon11011037.outbound.protection.outlook.com [52.101.65.37])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58EE323ABB0
-	for <linux-pm@vger.kernel.org>; Fri, 12 Sep 2025 04:48:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.171
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757652511; cv=none; b=PP/zpeauFcuzuDD7hstG4ol25HEe0xeCX1xXOyhHfCqPEdPdK4w7Xy2FDN+AXU8nRdiVxAnTHom+BCqK/dKW7pUe7Q0hb4uCVnlpiIUQIkmOs/ObE5OTL+OORQa8zxL28eK/j7L38nEGnne9gLPEmMUmjprkSKybNrPVux2qbqs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757652511; c=relaxed/simple;
-	bh=0m+ZUREXoM9QO7g9fTXNznVij+Z8JCQSZ3tV1XsePNo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rwtfdJkhrPoweqS0nciHrD59cFBsQ3Q6Dq9Sxae439eF+ZwtjX5O105hLXrAD2p6XM89VpkdzTEMiiW+7SWZZ1OS5u/vwaQuh+DBApth6y8s9BpPaLx+HeQMWBGX2iM7Lc72E4qd3fCWGzmaPi9CHQgLu1NkvysJqYpN+4vxGUY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DfR8AaM3; arc=none smtp.client-ip=209.85.128.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-71d60528734so10400297b3.2
-        for <linux-pm@vger.kernel.org>; Thu, 11 Sep 2025 21:48:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757652508; x=1758257308; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VF3hxUP89M2xeRagbS0iD4lceo8KItzDOcIGcx9L3Pc=;
-        b=DfR8AaM3/SsKzFmUd0+EcouSRos2QJ8xmze+p9PEgLHMx9+1Tu800gM2xP1uQeGQ5t
-         ZPft6I+C/NRgVUfsP+ZSL3k1THLKfgp6yOHYK2GGi5jiKjOFFFDdxOGT5LoEt5cUsF1e
-         3dlgveRT40JD+zJWE6zW2HaUitC1rIK5S25p0S7tZnxQ3S64Te53SaySJn6uN3QiZZs1
-         ebKHCIt5mWfQduUjEh5LGvPF7JD9VC3TRzKYI6MqgH6MYNyAFahk7HXjzlaTYfKrc9ZS
-         pUNDqxXRQk3hjoGaDdMG4NKF+XQXClRmWhIV0znoFfKECfKT+6ezF58sNqVOQpYJPxRf
-         1bxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757652508; x=1758257308;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VF3hxUP89M2xeRagbS0iD4lceo8KItzDOcIGcx9L3Pc=;
-        b=g2j9rjbVeiiY62plBuVtMVsE6EAl4QWIiEIhtheW/RgZT63quHAwIGyajT+VP4QWe8
-         lIKmRNVCnxuatw35U53nXF+bOtwuy98J++HnKNJmSuqEvok/U0rJTLwT5izfN5sTYq1h
-         qjGVoHHGNBSIpJpgKg4P+1URn7+NE3Ldl35l8lGMjWjHBp/eU2VIVEFdBbazLhEahoo2
-         uH5PE2z6dFCCxBy3Wqp51UkQYi8HnCxsNjFkvbkvsOT0tSPdAkEThh4O4DfieJPz48Z7
-         betRJr+NpxRCiVK4hZ2BDsPbWqgUjxjHrDID0qPYhn79DWfH46+WtpvmdORxzoasRsdA
-         UnzQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWZOgnG5pXtWV4ZXTzzYoNQFgqy27rspyQFRNhFI7s+LgtBUNYdxumQMobcfTg+g0qXhVRCRY2J5Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxQ9IVpp/vxI+QB6VUM4hfLTHeXN7CglQRyD1fkF3nM65fJeqaK
-	f7mDRHaxWSQLKxov+YkLNRMlpZd/kEhVCS/LzTIrchNKxqB20z5L9oK+7lXHoI8+r/60btU/2o+
-	r+qx5wEAJvY137mzy5SwZm+7j+wmB+Xs=
-X-Gm-Gg: ASbGncuJIoBC234D2C/S/CJb/9q1dYqsmTI+MP2HLNzu8ikEttgpGWdWIMTVdYbwDPW
-	VgwboUa5Em7fn5c/fgbnMXklPeGCsNqoS1Mcdg/vMVwSK/XjahUEFVwDgrd3abQILdpoBd3ssUV
-	sDsJEYAiia/5W6NsQriVaeV83Lrj5rjYe7o5rZ4yBXNS6dyq7ssvUHWAO5cICPDfWqh6Pxbv1oy
-	vfZ1Wo8Orp+uTQkzIhGa4XNEtU6Zykng9l3zYS6DPqjv7C8+9cfcveSYu0LiNvjg38weE4V
-X-Google-Smtp-Source: AGHT+IGfMeaPI79hB9XGXj+VWShVRybLbMRXi8iFn/oVf7vhmrVqp8SVoJqR/A1uYGGvnpfLhXNKeEUkL/F7JfbVOX4=
-X-Received: by 2002:a05:690c:3511:b0:722:6920:5933 with SMTP id
- 00721157ae682-730655c3de8mr16335977b3.44.1757652508216; Thu, 11 Sep 2025
- 21:48:28 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2244A800;
+	Fri, 12 Sep 2025 03:41:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.65.37
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1757648515; cv=fail; b=alQC0iM2sHXopI0AGxKNkQgZ4+dA7FJ/5FJsB1RBnR5UZOGap4pEjc4IeQ+5sAEbGaVH1ZD2FYv5NGhkuFds2Oh6jqwTfoX/pPfgptrqNadRkPVVOUs10Xvptf9B822ulYa9TwaJbKVRonPzFmPC9HOfv97OlqostnALW+e4em0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1757648515; c=relaxed/simple;
+	bh=4qUsy6RnXe6vvIaWj7vrKidO4//0ogHWm08/PPlfl8M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=h/Cd6iQF3/W1OGdcgFZm60k4MzXGjbWk2N5DTF9qXom2J5/n0AKJA7KWakwLlWwNnV4QG6NYHYIMR0nv+W4zHGP2DmL8+hs33Grs2+1EBdStc0/Rz6gGjeBST78S4cPYn9X7J8uqA8FVicPrflQfcc3i92iESiUyJUEQvVsg9HI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com; spf=pass smtp.mailfrom=oss.nxp.com; dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b=LQE4gsmh; arc=fail smtp.client-ip=52.101.65.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=DYBk/CoEAcfm+g1arhWboJEGAqobeptwMCiYL1LxIFiLH7PsZ8hmT6GelTzRXE7QaHe1734jYuGijMoBgjJZiAKQuAHswlyM28Xsxd2NwEgaYc5KWFDXXvfjdI3VVAE4ixwHDNKya4ivl+jsy8rVmIk4iyhJ3iw1znwxrdLuyInil/FOPGkRckekJxntpjy0jkh52iiXEvQQeuvYinV13LRBkqqhbbbnzRr04FunBfTixhCYdzr12Fv4pvz7kVeZH6Q2EhvXIkmP2eUeOpn4UczRgoQsofSOjAj+LysSNCh3Xjd4p9luK4Llrt5RDDLWV90shTMsBdbMyZ7KSMTynQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4qUsy6RnXe6vvIaWj7vrKidO4//0ogHWm08/PPlfl8M=;
+ b=QV0PhRCIjE3IVaDQUI6ULuesF3uos6nWxmAtUB8Wo2irGN3ube9hZ7NumXEQdQkHN54VG0UYv++fIkIU+f/amoRnhBh+lag9g2peUWIZrU5iPQjrrEBgVFmVhgzROu7rq/ULRaJ6HMrggshTGHOg/yU236fK7xkTasTT6GNdJ+6xWHzP7JZl8vCNs4LNtOde6w2cSVYuOxvhoXcpjLMWKaBGOAFGNLLvyQrdrEU1xS3EzMlvRVHEDWfLgnVnNU+GbjZLGHyiOnm9WrIY8GM0eYJFycGjBKITCqJjYHB7ARCeoN1IQg9i7SY/ngVLwVjy9tP22qfC9BDgVukj4aE0Nw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector1-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4qUsy6RnXe6vvIaWj7vrKidO4//0ogHWm08/PPlfl8M=;
+ b=LQE4gsmhubbFKdP/m5r0DSq2+wG6DzDEPUqkQEV3+phcWZKgye0qxPpWqjt2vjzJcgqefB/+Wp7mFwNWjnzc4u2n5nKSXof5yEZZ9o0JsS1ZcskNBLBv9f0RQ9PcMK+6ED1W8LHrevLl6QGfrF1r2hEwJG+kZ8RQKR6HfJFrpoDkrBLXUTy7+pxcn7znRn2hWIyNwauYQRHJzcXTTPCE23iDmArZ+8a1Y7tzMaiSTonfPJQs7B8jSaGVjBSt1r6NJnTBuR4AxR1MFvVJcoVL8Zpi72JFnJ6beUBsOcI+66hsjhMOrngRUwxRnTMagSB/SRqr6vT0YdrIY2+r0jXrwA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from PAXPR04MB8459.eurprd04.prod.outlook.com (2603:10a6:102:1da::15)
+ by PAXPR04MB8526.eurprd04.prod.outlook.com (2603:10a6:102:211::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9115.15; Fri, 12 Sep
+ 2025 03:41:51 +0000
+Received: from PAXPR04MB8459.eurprd04.prod.outlook.com
+ ([fe80::165a:30a2:5835:9630]) by PAXPR04MB8459.eurprd04.prod.outlook.com
+ ([fe80::165a:30a2:5835:9630%4]) with mapi id 15.20.9115.010; Fri, 12 Sep 2025
+ 03:41:51 +0000
+Date: Fri, 12 Sep 2025 12:53:16 +0800
+From: Peng Fan <peng.fan@oss.nxp.com>
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Peng Fan <peng.fan@nxp.com>, "Rafael J. Wysocki" <rafael@kernel.org>,
+	Len Brown <lenb@kernel.org>, Pavel Machek <pavel@kernel.org>,
+	Peter Chen <peter.chen@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Xu Yang <xu.yang_2@nxp.com>, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	imx@lists.linux.dev, arm-scmi@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v3 0/4] pmdomain: core: Introduce
+ device_set/get_out_band_wakeup and use it in usb
+Message-ID: <20250912045316.GK5808@nxa18884-linux.ap.freescale.net>
+References: <20250902-pm-v3-0-ffadbb454cdc@nxp.com>
+ <CAPDyKFqBJQ92HH1tSq1rfbXV1OwbyvgChyHfv7ykJqf2A6qYpw@mail.gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFqBJQ92HH1tSq1rfbXV1OwbyvgChyHfv7ykJqf2A6qYpw@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-ClientProxiedBy: MA0PR01CA0055.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:a01:ac::11) To PAXPR04MB8459.eurprd04.prod.outlook.com
+ (2603:10a6:102:1da::15)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250905-mt8196-gpufreq-v1-0-7b6c2d6be221@collabora.com> <20250905-mt8196-gpufreq-v1-5-7b6c2d6be221@collabora.com>
-In-Reply-To: <20250905-mt8196-gpufreq-v1-5-7b6c2d6be221@collabora.com>
-From: Chia-I Wu <olvaffe@gmail.com>
-Date: Thu, 11 Sep 2025 21:48:17 -0700
-X-Gm-Features: AS18NWD8okQNNAWKEPC_FiRm82LzNdOhqRvucMQKYn4L8mtB5aobTrQyZ8yiMKE
-Message-ID: <CAPaKu7RUx6KHyvdvrfX3u-7Lk=Wa3nmTh6-tD3CbReNAwNtgoQ@mail.gmail.com>
-Subject: Re: [PATCH RFC 05/10] mailbox: add MediaTek GPUEB IPI mailbox
-To: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	Boris Brezillon <boris.brezillon@collabora.com>, Steven Price <steven.price@arm.com>, 
-	Liviu Dudau <liviu.dudau@arm.com>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, MyungJoo Ham <myungjoo.ham@samsung.com>, 
-	Kyungmin Park <kyungmin.park@samsung.com>, Chanwoo Choi <cw00.choi@samsung.com>, 
-	Jassi Brar <jassisinghbrar@gmail.com>, Kees Cook <kees@kernel.org>, 
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Chen-Yu Tsai <wenst@chromium.org>, kernel@collabora.com, 
-	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org, 
-	linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PAXPR04MB8459:EE_|PAXPR04MB8526:EE_
+X-MS-Office365-Filtering-Correlation-Id: d5b1f297-be13-4ddb-c013-08ddf1ae4f17
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|52116014|376014|1800799024|19092799006|366016|7416014|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?OWxpaF/JAxoMJ+rvIxG5CIKm5SA8xK8uXzUxNFKQBVDyKirnSGlwPq1fNSj0?=
+ =?us-ascii?Q?GtA3Bge27SBVb9L2xiNv6IUTCwXoiUURgjxHQt44LTewPxS6sXg+rv1vdcTP?=
+ =?us-ascii?Q?AsXhcJmWYSHiBnv4GQIHxiPw3da5lufrjiVrGA2rWFkLmlG+uvpRpKmiUPqr?=
+ =?us-ascii?Q?2z0a4YgT/XZSINC7knpIGRmmT2auqgrFMsqXiqmK5NCbmTDtdQJmxmcd5T+0?=
+ =?us-ascii?Q?g6vnL+G6xW8TKarZzsBTHSO6aQ758FH+n08gOvnD4R2BQ2iOYDho8cQlrbC8?=
+ =?us-ascii?Q?NJgo3dkWTkUI61tVetSU1Bf3yripftIS+ORc+C7p8Sy7hI7C7nn9Jyu4JlB6?=
+ =?us-ascii?Q?O+ztIClxsF8wMqcE6Fh/hxoV4KiDWpdn7ZdoNoa9UjLxLgTQMHrVIYtR/6QR?=
+ =?us-ascii?Q?iogGscct+PtWrDiHdP0djh4ihgv+BEHheTzqSUaXnrsXYLshSdDCnK9DENYo?=
+ =?us-ascii?Q?AIIHoVAGPFRGHs1vETGgOwbG/a9O2P4HiKkNbjHAd/FUNpM7QY5JWvdhtpS9?=
+ =?us-ascii?Q?rfDGZktph2FaF9GE37VWO22PvAXvTgbXHe0oczaaH1CmrNfc+mCiEx6pc3oU?=
+ =?us-ascii?Q?Dy5zIY8k8mo9ur2KUarZgaBrQvVp03b6jELzkWOTU4r4iTQM3tr1XRiRl1Jc?=
+ =?us-ascii?Q?c70l8mkUFZrDiJXYNXjHZQPZmcDm1+AnjuUKFbpGUpWarhFfmi1B5SjO8Inm?=
+ =?us-ascii?Q?RDy8X5oJPzA4ezihtoPtC0V/8cmcOrMemgzUDaISYCsdHAAolziposXXv0+P?=
+ =?us-ascii?Q?i+ZoDFRHIi8V2hpGdrk3RKzIp6QpH3dLxkBTfyU3LGWpj2G5kD2sFsiA53ww?=
+ =?us-ascii?Q?1tOjkZtk0f5kv0E6xvZmpF/mwsr19k3MTesRtaZgkZmtYjEGCJSRwulK5CnJ?=
+ =?us-ascii?Q?UbDOyOtKlRzti6fKhUBTriv71a1HbWfV1KzRgm3907C1tI1c2kB8rEGzVcYT?=
+ =?us-ascii?Q?/oPkopn8hNQX5/H2IH+BZJlvV28qCIthETyIyOv0Nh73SHba67FYk9IRs1Z3?=
+ =?us-ascii?Q?/H1eHn87cbtfL1P8AHxaMZYs0SD2z0errvNZAmex+Uaxxfy7tt7s9brU66OK?=
+ =?us-ascii?Q?OThCeDl6EDhUGJHDMEfYsL67gQLe97NhSr7tw7fmp2vXJZii6duuE6Wv8Bmd?=
+ =?us-ascii?Q?6CuOU+Bz1nHFx/GWYE7SGHr1lPbqATYr35YgptWYrfH4kAn/++s2o+obPPoo?=
+ =?us-ascii?Q?o0HQOX7sq5BMobBHeLWShOdU3GM/SkuhQZvmmQ7wvjrO6b+YuzXRMAIMmIK6?=
+ =?us-ascii?Q?nZmMWrVxHYkneNaLErkPTRBY5i5UxsMJ9MOoE0Rr0rd8mhLujhcJIjmWhNyF?=
+ =?us-ascii?Q?VrPboisvVG/YymGdA7rhtxiQlc2R/2s7fXBKWd1ShD9pZmN68z0HgFNS3qIG?=
+ =?us-ascii?Q?W8/s0uKukQ/LrDziOzchJdrHyzJu0lxDWNOURNiXj3/JFXno49f6p/2jweRC?=
+ =?us-ascii?Q?04BUBMloi24CwnPuaK15EajYCE76xGd0wiz4LnXyiJCZ3Jwp/mZ4XA=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8459.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(52116014)(376014)(1800799024)(19092799006)(366016)(7416014)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?bBZ7JKN+bmWfaTJgWbJ4WTVw+yrwJ/3O6KlkurO3ficZVIE9gEnh7b7/EIvg?=
+ =?us-ascii?Q?UuLoqS2tdZv34qpY/Y9m2K/dBbFfOnVNd7PdFHAxJQQ+oElJqOZ+89SomKa0?=
+ =?us-ascii?Q?+Rbq8o69lvfA5TGeL4IilHaaieOh/ta7/+JVjHE1wzrOzgC1+3jhmizK73Pw?=
+ =?us-ascii?Q?ArTEEsk7pnq7E2EqPyiUrW7s+fS0rq4GlJ0hTEXciZD6UnuAN4r1d/WpCzyU?=
+ =?us-ascii?Q?kAJEVRVzCMHIQZREb6gs+xilxgTYLgvhcJihwr5rSDWNB1cEdiPPLHSLH9bQ?=
+ =?us-ascii?Q?rOjI/QmkKuidOXEikuVafpSCSogWqkQqpx5l3Fm+vx9oj4PUGZ04H7+COYjF?=
+ =?us-ascii?Q?bdLBP1v759NeiNpxXPJRUBULLrkH/TtV8ZsmhajgdIsQqbYf1PYP3dNGyNvV?=
+ =?us-ascii?Q?pjztxMVU0tcoXNZTIST9JMGpQzlJWdiqH+2XB16651vXts3V06VPmUMTlwg6?=
+ =?us-ascii?Q?xqsO6eEjAx/yJpRcZZ9dTv+S4HoEGBN+bSD+FyF1L9yKavQ70p8B8mXOOUuV?=
+ =?us-ascii?Q?0KPShm5DF8l9is5stsx2L0CKZ/8q3+NZQ0bzve6+O+jVVWaT+hMGN883Xodg?=
+ =?us-ascii?Q?x5E1g/yBT9EaSkTvKHIa9pWXbE2Ctw1OC0ygjiH9mrdXU7k6+mTK62R48SHz?=
+ =?us-ascii?Q?kOdjDQ8w6vDYdpb2Z8XHodCzQyLog8k2/47TCQliHBaiSn10I8moFBC3yFp2?=
+ =?us-ascii?Q?1yFXaJkxDM0VeRZvayJMfpbP8UMztJ/dd3Xk8F+VjBtkzxXVngLEXhCyHyr4?=
+ =?us-ascii?Q?CE1u+8Gxs+k4gnl5G1LWnW6PBmH72m/dtVuW9A3nzaIJoty5TEW12fR4cZMq?=
+ =?us-ascii?Q?ZEYRjD3ftqRQUjKr/m5EVwrfukOLda1LaUS9hJckPYhgGgRPrwJMn40F+yaj?=
+ =?us-ascii?Q?eYVhQjTqcxjEPAUXAcnQmaFyQZ5HuSMiKSyH1qjdtOWhmKyE2SlA4mw1qRwg?=
+ =?us-ascii?Q?elilF5Djwh7+t0H1+67w8TN0mTN4YZn1ECRIf3oee6wqUQaPlQkXsw5ZfFPy?=
+ =?us-ascii?Q?jXhId5GMB1wdPcQ2n6DVSOAXTGr/wLORwrtXREAFOSU/ppbiJ187IPeNA9vM?=
+ =?us-ascii?Q?yUFwy3FYGvzrTTt3GSx4LrrpeLPwD9aBQ2wy32e5DDiARCfaHMfvVgDqfdMd?=
+ =?us-ascii?Q?VkeaD/rCFSuNYRM4nleRUO3otcMbFfhserBms3FxkHJA90n0DmbLvPJjQ5fd?=
+ =?us-ascii?Q?IeK0Le8D71+ZaxC6ItJSNekIAigFUSkGTF7OMDENPc8HyUbsQfLFphofeisL?=
+ =?us-ascii?Q?AOSLbNRcCWCI5Gkj8ruNsvBUHN/cHgRtUviXWYTY4hS08mx8dI5wrlLLMI7y?=
+ =?us-ascii?Q?ER+i8lkX+x51lTYqNx9byc9CJknequkM+gl6WJ7F6QAXUwUHaapZg7wiR7aP?=
+ =?us-ascii?Q?lzNFeBxwBz+9YStqpffWWoBe2rUz2lsifci81Gpo4AdpTha5zZwIbvTtSP1i?=
+ =?us-ascii?Q?REliIaGJsm7qsVOV6QLrzkBDUpNqB95n0V+yU2tuePL6yd+QhbrOmPAk6deV?=
+ =?us-ascii?Q?ZZh8812ibnTHZPbTuiCcROikEvhGA/QwrrmfMJl755/nsuZIeBBcVVPNWxvE?=
+ =?us-ascii?Q?8WPfYXmOge0L44i/47VKDKI1ax0B5D/CcM3H8yiP?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d5b1f297-be13-4ddb-c013-08ddf1ae4f17
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8459.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Sep 2025 03:41:51.1913
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: gFzzJIY3O4bkX+rGmB5MYhsutwCZHM4QrWihVxe0Xq8MHLDVBxGXbvOBecmdqoJkF5p75DG7UuQSRlp7Mt0VWQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8526
 
-On Fri, Sep 5, 2025 at 3:24=E2=80=AFAM Nicolas Frattaroli
-<nicolas.frattaroli@collabora.com> wrote:
+Hi Ulf
+On Thu, Sep 11, 2025 at 04:45:31PM +0200, Ulf Hansson wrote:
+[...]
 >
-> The MT8196 SoC uses an embedded MCU to control frequencies and power of
-> the GPU. This controller is referred to as "GPUEB".
->
-> It communicates to the application processor, among other ways, through
-> a mailbox.
->
-> The mailbox exposes one interrupt, which appears to only be fired when a
-> response is received, rather than a transaction is completed. For us,
-> this means we unfortunately need to poll for txdone.
->
-> The mailbox also requires the EB clock to be on when touching any of the
-> mailbox registers.
->
-> Add a simple driver for it based on the common mailbox framework.
->
-> Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-> ---
->  drivers/mailbox/Kconfig             |  10 ++
->  drivers/mailbox/Makefile            |   2 +
->  drivers/mailbox/mtk-gpueb-mailbox.c | 330 ++++++++++++++++++++++++++++++=
-++++++
->  3 files changed, 342 insertions(+)
->
-> diff --git a/drivers/mailbox/Kconfig b/drivers/mailbox/Kconfig
-> index 02432d4a5ccd46a16156a09c7f277fb03e4013f5..2016defda1fabb5c0fcc8078f=
-84a52d4e4e00167 100644
-> --- a/drivers/mailbox/Kconfig
-> +++ b/drivers/mailbox/Kconfig
-> @@ -294,6 +294,16 @@ config MTK_CMDQ_MBOX
->           critical time limitation, such as updating display configuratio=
-n
->           during the vblank.
->
-> +config MTK_GPUEB_MBOX
-> +       tristate "MediaTek GPUEB Mailbox Support"
-> +       depends on ARCH_MEDIATEK || COMPILE_TEST
-> +       help
-> +         The MediaTek GPUEB mailbox is used to communicate with the embe=
-dded
-> +         controller in charge of GPU frequency and power management on s=
-ome
-> +         MediaTek SoCs, such as the MT8196.
-> +         Say Y or m here if you want to support the MT8196 SoC in your k=
-ernel
-> +         build.
-> +
->  config ZYNQMP_IPI_MBOX
->         tristate "Xilinx ZynqMP IPI Mailbox"
->         depends on ARCH_ZYNQMP && OF
-> diff --git a/drivers/mailbox/Makefile b/drivers/mailbox/Makefile
-> index 98a68f838486eed117d24296138bf59fda3f92e4..564d06e71313e6d1972e4a603=
-6e1e78c8c7ec450 100644
-> --- a/drivers/mailbox/Makefile
-> +++ b/drivers/mailbox/Makefile
-> @@ -63,6 +63,8 @@ obj-$(CONFIG_MTK_ADSP_MBOX)   +=3D mtk-adsp-mailbox.o
->
->  obj-$(CONFIG_MTK_CMDQ_MBOX)    +=3D mtk-cmdq-mailbox.o
->
-> +obj-$(CONFIG_MTK_GPUEB_MBOX)   +=3D mtk-gpueb-mailbox.o
-> +
->  obj-$(CONFIG_ZYNQMP_IPI_MBOX)  +=3D zynqmp-ipi-mailbox.o
->
->  obj-$(CONFIG_SUN6I_MSGBOX)     +=3D sun6i-msgbox.o
-> diff --git a/drivers/mailbox/mtk-gpueb-mailbox.c b/drivers/mailbox/mtk-gp=
-ueb-mailbox.c
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..0236fb358136e434a09a21ef2=
-93fe949ced94123
-> --- /dev/null
-> +++ b/drivers/mailbox/mtk-gpueb-mailbox.c
-> @@ -0,0 +1,330 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * MediaTek GPUEB mailbox driver for SoCs such as the MT8196
-> + *
-> + * Copyright (C) 2025, Collabora Ltd.
-> + *
-> + * Developers harmed in the making of this driver:
-> + *  - Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-> + */
-> +
-> +#include <linux/atomic.h>
-> +#include <linux/clk.h>
-> +#include <linux/device.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/io.h>
-> +#include <linux/iopoll.h>
-> +#include <linux/mailbox_controller.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/platform_device.h>
-> +
-> +#define MBOX_CTL_TX_STS 0x0000
-> +#define MBOX_CTL_IRQ_SET 0x0004
-> +#define MBOX_CTL_IRQ_CLR 0x0074
-> +#define MBOX_CTL_RX_STS 0x0078
-> +
-> +#define MBOX_FULL BIT(0) /* i.e. we've received data */
-> +#define MBOX_CLOGGED BIT(1) /* i.e. the channel is shutdown */
-> +
-> +struct mtk_gpueb_mbox {
-> +       struct device *dev;
-> +       struct clk *clk;
-> +       void __iomem *mbox_mmio;
-> +       void __iomem *mbox_ctl;
-> +       void **rx_buf;
-> +       atomic_t *rx_status;
-> +       struct mbox_controller mbox;
-> +       unsigned int *chn;
-> +       int irq;
-> +       const struct mtk_gpueb_mbox_variant *v;
-> +};
-> +
-> +struct mtk_gpueb_mbox_ch {
-> +       const char *name;
-> +       const int num;
-> +       const unsigned int tx_offset;
-> +       const unsigned int tx_len;
-> +       const unsigned int rx_offset;
-> +       const unsigned int rx_len;
-> +       const bool no_response;
-> +};
-> +
-> +struct mtk_gpueb_mbox_variant {
-> +       unsigned int num_channels;
-> +       const struct mtk_gpueb_mbox_ch channels[] __counted_by(num_channe=
-ls);
-> +};
-> +
-> +/**
-> + * mtk_gpueb_mbox_read_rx - read RX buffer from MMIO into ebm's RX buffe=
-r
-> + * @ebm: pointer to &struct mtk_gpueb_mbox instance
-> + * @channel: number of channel to read
-> + */
-> +static void mtk_gpueb_mbox_read_rx(struct mtk_gpueb_mbox *ebm,
-> +                                  unsigned int channel)
-> +{
-> +       const struct mtk_gpueb_mbox_ch *ch;
-> +
-> +       ch =3D &ebm->v->channels[channel];
-> +
-> +       memcpy_fromio(ebm->rx_buf[channel], ebm->mbox_mmio + ch->rx_offse=
-t,
-> +                     ch->rx_len);
-> +
-> +}
-> +
-> +static irqreturn_t mtk_gpueb_mbox_isr(int irq, void *data)
-> +{
-> +       struct mtk_gpueb_mbox *ebm =3D data;
-> +       u32 rx_handled =3D 0;
-> +       u32 rx_sts;
-> +       int i;
-> +
-> +       rx_sts =3D readl(ebm->mbox_ctl + MBOX_CTL_RX_STS);
-> +
-> +       for (i =3D 0; i < ebm->v->num_channels; i++) {
-> +               if (rx_sts & BIT(i)) {
-> +                       if (!atomic_cmpxchg(&ebm->rx_status[i], 0,
-> +                                           MBOX_FULL | MBOX_CLOGGED))
-> +                               rx_handled |=3D BIT(i);
-> +               }
-> +       }
-We can loop over bits that are set in rx_sts, if we expect that only a
-few bits are set most of the time.
+>Overall I think the series looks nice, but I will make some more
+>thinking of this in the next few days and come back with some proper
+>comments, at latest in the middle of next week.
 
-> +
-> +       writel(rx_handled, ebm->mbox_ctl + MBOX_CTL_IRQ_CLR);
-> +
-> +       if (!(rx_sts ^ rx_handled))
-"rx_sts =3D=3D rx_handled" should be more direct.
-> +               return IRQ_WAKE_THREAD;
-> +
-> +       dev_warn_ratelimited(ebm->dev, "spurious interrupts on 0x%04X\n",
-> +                            rx_sts ^ rx_handled);
-> +       return IRQ_NONE;
-It seems a bit too punishing when there are spurious interrupts. I
-wonder if we should warn, but return IRQ_WAKE_THREAD as long as
-rx_handled !=3D 0.
+Thanks a lot for the review! I'll stay tuned for your comments next week.
 
-Also, if another interrupt can fire before mtk_gpueb_mbox_thread runs,
-that's data dropping rather than spurious interrupts.
-
-> +}
-> +
-> +static irqreturn_t mtk_gpueb_mbox_thread(int irq, void *data)
-> +{
-> +       struct mtk_gpueb_mbox *ebm =3D data;
-> +       irqreturn_t ret =3D IRQ_NONE;
-> +       int status;
-> +       int i;
-> +
-> +       for (i =3D 0; i < ebm->v->num_channels; i++) {
-> +               status =3D atomic_cmpxchg(&ebm->rx_status[i],
-> +                                       MBOX_FULL | MBOX_CLOGGED, MBOX_FU=
-LL);
-> +               if (status =3D=3D (MBOX_FULL | MBOX_CLOGGED)) {
-We could also save rx_handled from mtk_gpueb_mbox_isr and loop over
-bits that are set.  If we do that, ebm->rx_status[i] is guaranteed to
-be MBOX_FULL | MBOX_CLOGGED.
-
-> +                       mtk_gpueb_mbox_read_rx(ebm, i);
-> +                       mbox_chan_received_data(&ebm->mbox.chans[i],
-> +                                               ebm->rx_buf[i]);
-It looks like we read the data and pass it on to the client
-immediately. Does each channel need its own rx_buf?
-
-> +                       /* FIXME: When does MBOX_FULL get cleared? Here? =
-*/
-> +                       atomic_set(&ebm->rx_status[i], 0);
-> +                       ret =3D IRQ_HANDLED;
-> +               }
-> +       }
-> +
-> +       return ret;
-> +}
-> +
-> +static int mtk_gpueb_mbox_send_data(struct mbox_chan *chan, void *data)
-> +{
-> +       struct mtk_gpueb_mbox *ebm =3D dev_get_drvdata(chan->mbox->dev);
-> +       unsigned int *num =3D chan->con_priv;
-> +       int i;
-> +       u32 *values =3D data;
-> +
-> +       if (*num >=3D ebm->v->num_channels)
-> +               return -ECHRNG;
-Can this ever happen? (I am not familiar with the mbox subsystem)
-
-> +
-> +       if (!ebm->v->channels[*num].no_response &&
-> +           atomic_read(&ebm->rx_status[*num]))
-> +               return -EBUSY;
-When no_response is true, rx_status is 0. We probably don't need to
-check no_response.
-
-> +
-> +       writel(BIT(*num), ebm->mbox_ctl + MBOX_CTL_IRQ_CLR);
-> +
-> +       /*
-> +        * We don't want any fancy nonsense, just write the 32-bit values=
- in
-> +        * order. memcpy_toio/__iowrite32_copy don't work here, because f=
-ancy.
-> +        */
-> +       for (i =3D 0; i < ebm->v->channels[*num].tx_len; i +=3D 4) {
-> +               writel(values[i / 4],
-> +                      ebm->mbox_mmio + ebm->v->channels[*num].tx_offset =
-+ i);
-> +       }
-> +
-> +       writel(BIT(*num), ebm->mbox_ctl + MBOX_CTL_IRQ_SET);
-> +
-> +       return 0;
-> +}
-> +
-> +static int mtk_gpueb_mbox_startup(struct mbox_chan *chan)
-> +{
-> +       struct mtk_gpueb_mbox *ebm =3D dev_get_drvdata(chan->mbox->dev);
-> +       unsigned int *num =3D chan->con_priv;
-> +
-> +       if (*num >=3D ebm->v->num_channels)
-> +               return -ECHRNG;
-> +
-> +       atomic_set(&ebm->rx_status[*num], 0);
-> +
-> +       return 0;
-> +}
-> +
-> +static void mtk_gpueb_mbox_shutdown(struct mbox_chan *chan)
-> +{
-> +       struct mtk_gpueb_mbox *ebm =3D dev_get_drvdata(chan->mbox->dev);
-> +       unsigned int *num =3D chan->con_priv;
-> +
-> +       atomic_set(&ebm->rx_status[*num], MBOX_CLOGGED);
-> +}
-> +
-> +static bool mtk_gpueb_mbox_last_tx_done(struct mbox_chan *chan)
-> +{
-> +       struct mtk_gpueb_mbox *ebm =3D dev_get_drvdata(chan->mbox->dev);
-> +       unsigned int *num =3D chan->con_priv;
-> +
-> +       return !(readl(ebm->mbox_ctl + MBOX_CTL_TX_STS) & BIT(*num));
-> +}
-> +
-> +const struct mbox_chan_ops mtk_gpueb_mbox_ops =3D {
-> +       .send_data =3D mtk_gpueb_mbox_send_data,
-> +       .startup =3D mtk_gpueb_mbox_startup,
-> +       .shutdown =3D mtk_gpueb_mbox_shutdown,
-> +       .last_tx_done =3D mtk_gpueb_mbox_last_tx_done,
-> +};
-> +
-> +static struct mbox_chan *
-> +mtk_gpueb_mbox_of_xlate(struct mbox_controller *mbox,
-> +                       const struct of_phandle_args *sp)
-> +{
-> +       struct mtk_gpueb_mbox *ebm =3D dev_get_drvdata(mbox->dev);
-> +
-> +       if (!sp->args_count)
-> +               return ERR_PTR(-EINVAL);
-> +
-> +       if (sp->args[0] >=3D ebm->v->num_channels)
-> +               return ERR_PTR(-ECHRNG);
-> +
-> +       return &mbox->chans[sp->args[0]];
-> +}
-> +
-> +static int mtk_gpueb_mbox_probe(struct platform_device *pdev)
-> +{
-> +       struct mtk_gpueb_mbox *ebm;
-> +       unsigned int rx_buf_sz;
-> +       void *buf;
-> +       unsigned int i;
-> +       int ret;
-> +
-> +       ebm =3D devm_kzalloc(&pdev->dev, sizeof(*ebm), GFP_KERNEL);
-> +       if (!ebm)
-> +               return -ENOMEM;
-> +
-> +       ebm->dev =3D &pdev->dev;
-> +       ebm->v =3D of_device_get_match_data(ebm->dev);
-> +
-> +       dev_set_drvdata(ebm->dev, ebm);
-> +
-> +       ebm->clk =3D devm_clk_get_enabled(ebm->dev, NULL);
-> +       if (IS_ERR(ebm->clk))
-> +               return dev_err_probe(ebm->dev, PTR_ERR(ebm->clk),
-> +                                    "Failed to get 'eb' clock\n");
-> +
-> +       ebm->mbox_mmio =3D devm_platform_ioremap_resource_byname(pdev, "m=
-box");
-> +       if (IS_ERR(ebm->mbox_mmio))
-> +               return dev_err_probe(ebm->dev, PTR_ERR(ebm->mbox_mmio),
-> +                                    "Couldn't map mailbox registers\n");
-> +
-> +       ebm->mbox_ctl =3D devm_platform_ioremap_resource_byname(pdev, "mb=
-ox_ctl");
-> +       if (IS_ERR(ebm->mbox_ctl))
-> +               return dev_err_probe(
-> +                       ebm->dev, PTR_ERR(ebm->mbox_ctl),
-> +                       "Couldn't map mailbox control registers\n");
-> +
-> +       rx_buf_sz =3D (ebm->v->channels[ebm->v->num_channels - 1].rx_offs=
-et +
-> +                    ebm->v->channels[ebm->v->num_channels - 1].rx_len);
-rx is after tx in mmio. The first half of the space is wasted.
-
-We follow mtk_gpueb_mbox_read_rx by mbox_chan_received_data. It seems
-we only need max of rx_len's.
-
-> +
-> +       buf =3D devm_kzalloc(ebm->dev, rx_buf_sz, GFP_KERNEL);
-> +       if (!buf)
-> +               return -ENOMEM;
-> +
-> +       ebm->rx_buf =3D devm_kmalloc_array(ebm->dev, ebm->v->num_channels=
-,
-> +                                        sizeof(*ebm->rx_buf), GFP_KERNEL=
-);
-> +       if (!ebm->rx_buf)
-> +               return -ENOMEM;
-> +
-> +       ebm->mbox.chans =3D devm_kcalloc(ebm->dev, ebm->v->num_channels,
-> +                                      sizeof(struct mbox_chan), GFP_KERN=
-EL);
-> +       if (!ebm->mbox.chans)
-> +               return -ENOMEM;
-> +
-> +       ebm->rx_status =3D devm_kcalloc(ebm->dev, ebm->v->num_channels,
-> +                                     sizeof(atomic_t), GFP_KERNEL);
-> +       if (!ebm->rx_status)
-> +               return -ENOMEM;
-> +
-> +       ebm->chn =3D devm_kcalloc(ebm->dev, ebm->v->num_channels,
-> +                               sizeof(*ebm->chn), GFP_KERNEL);
-> +
-> +       for (i =3D 0; i < ebm->v->num_channels; i++) {
-> +               ebm->rx_buf[i] =3D buf + ebm->v->channels[i].rx_offset;
-> +               spin_lock_init(&ebm->mbox.chans[i].lock);
-> +               /* the things you do to avoid explicit casting void* */
-I actually prefer an inline helper that casts chan->con_priv to the
-channel number. Another option is "chan - ebm->mox.chans".
-> +               ebm->chn[i] =3D i;
-> +               ebm->mbox.chans[i].con_priv =3D &ebm->chn[i];
-> +               atomic_set(&ebm->rx_status[i], MBOX_CLOGGED);
-> +       }
-> +
-> +       ebm->mbox.dev =3D ebm->dev;
-> +       ebm->mbox.num_chans =3D ebm->v->num_channels;
-> +       ebm->mbox.txdone_poll =3D true;
-> +       ebm->mbox.txpoll_period =3D 0; /* minimum hrtimer interval */
-> +       ebm->mbox.of_xlate =3D mtk_gpueb_mbox_of_xlate;
-> +       ebm->mbox.ops =3D &mtk_gpueb_mbox_ops;
-> +
-> +       ebm->irq =3D platform_get_irq(pdev, 0);
-> +       if (ebm->irq < 0)
-> +               return ebm->irq;
-> +
-> +       ret =3D devm_request_threaded_irq(ebm->dev, ebm->irq, mtk_gpueb_m=
-box_isr,
-> +                                       mtk_gpueb_mbox_thread, 0, NULL, e=
-bm);
-> +       if (ret)
-> +               return dev_err_probe(ebm->dev, ret, "failed to request IR=
-Q\n");
-> +
-> +       ret =3D devm_mbox_controller_register(ebm->dev, &ebm->mbox);
-> +
-> +       return 0;
-> +}
-> +
-> +static const struct mtk_gpueb_mbox_variant mtk_gpueb_mbox_mt8196 =3D {
-> +       .num_channels =3D 12,
-> +       .channels =3D {
-> +               { "fast_dvfs_event", 0, 0x0000, 16, 0x00e0, 16, false },
-> +               { "gpufreq",         1, 0x0010, 32, 0x00f0, 32, false },
-> +               { "sleep",           2, 0x0030, 12, 0x0110,  4, true  },
-> +               { "timer",           3, 0x003c, 24, 0x0114,  4, false },
-> +               { "fhctl",           4, 0x0054, 36, 0x0118,  4, false },
-> +               { "ccf",             5, 0x0078, 16, 0x011c, 16, false },
-> +               { "gpumpu",          6, 0x0088, 24, 0x012c,  4, false },
-> +               { "fast_dvfs",       7, 0x00a0, 24, 0x0130, 24, false },
-> +               { "ipir_c_met",      8, 0x00b8,  4, 0x0148, 16, false },
-> +               { "ipis_c_met",      9, 0x00bc, 16, 0x0158,  4, false },
-> +               { "brisket",        10, 0x00cc, 16, 0x015c, 16, false },
-> +               { "ppb",            11, 0x00dc,  4, 0x016c,  4, false },
-> +       },
-> +};
-> +
-> +static const struct of_device_id mtk_gpueb_mbox_of_ids[] =3D {
-> +       { .compatible =3D "mediatek,mt8196-gpueb-mbox",
-> +         .data =3D &mtk_gpueb_mbox_mt8196 },
-> +       { /* Sentinel */ }
-> +};
-> +MODULE_DEVICE_TABLE(of, mtk_gpueb_mbox_of_ids);
-> +
-> +static struct platform_driver mtk_gpueb_mbox_drv =3D {
-> +       .probe =3D mtk_gpueb_mbox_probe,
-> +       .driver =3D {
-> +               .name =3D "mtk-gpueb-mbox",
-> +               .of_match_table =3D mtk_gpueb_mbox_of_ids,
-> +       }
-> +};
-> +module_platform_driver(mtk_gpueb_mbox_drv);
-> +
-> +MODULE_AUTHOR("Nicolas Frattaroli <nicolas.frattaroli@collabora.com>");
-> +MODULE_DESCRIPTION("MediaTek GPUEB mailbox driver for SoCs such as the M=
-T8196");
-> +MODULE_LICENSE("GPL");
->
-> --
-> 2.51.0
->
+Thanks,
+Peng
 
