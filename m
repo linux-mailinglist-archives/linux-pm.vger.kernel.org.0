@@ -1,630 +1,342 @@
-Return-Path: <linux-pm+bounces-34545-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34546-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16FB0B54A7C
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Sep 2025 12:59:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8010CB54ACF
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Sep 2025 13:16:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B1F361794A8
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Sep 2025 10:59:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 25F8568352B
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Sep 2025 11:16:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55B802FD7CF;
-	Fri, 12 Sep 2025 10:59:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 877292FF67A;
+	Fri, 12 Sep 2025 11:16:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="SWunbdIX"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="CHQnELay"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCCB41EA7DD;
-	Fri, 12 Sep 2025 10:59:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757674788; cv=pass; b=D4s1yKfMIKLOizEiPt/ZUN/2qQRVviVHDeL6kdSyqkmXzgltTySRD8Qp5cqlK1nlLOH+rRoQe34VgzFLKgqbj/WCwnjW4PkPhLJsLewKVzQcEGKROPJrgjkqQtgozbC/x/NBpPkASSWE4tr55mTGMQlDdMqpVtN16lsF7GBhVMc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757674788; c=relaxed/simple;
-	bh=dfqv03NeK6sZvQ5PcSGW6oPy7w+hVO5V+pWRUbS6FVM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=GByG+9XHyyHvuyUYVNzw9EkrLnxYsOHkuuX9dCMZmlcqdJFO+PPKnB7EZeYJv26mejZ++mFmYsDwJf/oV5Uf0+WZbLNSBV6IQTY9SaQat/z8cf2Njf75a06bEQ2SsVa8qpKuqp6wslJewkiuLKGBoOPGVdYD9jUwa5F435s0kD8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=SWunbdIX; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1757674755; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=E6/1DG8WrAY75UakpxDmhKbrxrf5zSJePUut+IxSO+QVSKzsML34iXZUQ+m6j/eVTrvCFj6qQEW5YAHN7KzZO+pWwC4mWyAMqmcmMWIDVnIzGMr1uQbOTaV+Ll3+Q9rDxSL8pwhM5k94opYrSrqz2rJeWCLcBdpfzCL/Y0jWYW4=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1757674755; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=Kuus9WkOzKNAJUiWF7HiS3jmu57cJ6ZFPn774V4O+ow=; 
-	b=iq/hdzpBi45qBfvpZCSjt23TIPcWqzk6lLBl2cl47gTDQmN1OY5U9p5+JhmGVWAVxTJR3CjwuDhF3SCVqc4oRS0VRvB83AWEotDBJx83ggIGJ3shRjaMY2wxVDo5M2XRO9/OcZSSz/AzsZ5E1zETkf1/nDLa4Ry3C/vBqmNx5zo=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
-	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1757674755;
-	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
-	bh=Kuus9WkOzKNAJUiWF7HiS3jmu57cJ6ZFPn774V4O+ow=;
-	b=SWunbdIXnqksvknSPQ7Nd6CbWlKumM8UkQDE4huCokATci7Xqgmnrgr2bh8qeVpo
-	5AEy0PZdAf+P6SqEUe8wwOIwIJ0A7NgjJQdBxpK6JfYL1uPkgG8XY3foIpajmQX9OMD
-	SiCN+OrL+hLNarfJw4pJU7XnV7tC+PElz4LQfPJk=
-Received: by mx.zohomail.com with SMTPS id 175767475236216.54884001202231;
-	Fri, 12 Sep 2025 03:59:12 -0700 (PDT)
-From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-To: Chia-I Wu <olvaffe@gmail.com>
-Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Boris Brezillon <boris.brezillon@collabora.com>,
- Steven Price <steven.price@arm.com>, Liviu Dudau <liviu.dudau@arm.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- MyungJoo Ham <myungjoo.ham@samsung.com>,
- Kyungmin Park <kyungmin.park@samsung.com>,
- Chanwoo Choi <cw00.choi@samsung.com>, Jassi Brar <jassisinghbrar@gmail.com>,
- Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- Chen-Yu Tsai <wenst@chromium.org>, kernel@collabora.com,
- dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
- linux-hardening@vger.kernel.org
-Subject: Re: [PATCH RFC 05/10] mailbox: add MediaTek GPUEB IPI mailbox
-Date: Fri, 12 Sep 2025 12:59:03 +0200
-Message-ID: <4506669.X9hSmTKtgW@workhorse>
-In-Reply-To:
- <CAPaKu7RUx6KHyvdvrfX3u-7Lk=Wa3nmTh6-tD3CbReNAwNtgoQ@mail.gmail.com>
-References:
- <20250905-mt8196-gpufreq-v1-0-7b6c2d6be221@collabora.com>
- <20250905-mt8196-gpufreq-v1-5-7b6c2d6be221@collabora.com>
- <CAPaKu7RUx6KHyvdvrfX3u-7Lk=Wa3nmTh6-tD3CbReNAwNtgoQ@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B90111F872D
+	for <linux-pm@vger.kernel.org>; Fri, 12 Sep 2025 11:16:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.53
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1757675794; cv=none; b=oigHC5NJsQ/Nps+TqHWXLdqOGVsuHFEekxnF0YOY7+fbbeNgF8CTS7nz8qSm3YwttHAlVilLjSxawUyE4isuzcMmkhrtJVOnf10Dgpq5PQFA0K9hCKySMPRcZQ0PCgzgCBLADYeKPe/F1k8r6w8nhLY+mxrscddLTjtk1Iv4ABI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1757675794; c=relaxed/simple;
+	bh=pS2ACXCvk66dWOzSh2+WcS1GHKgHXyHyhM1OWcHLpkw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=I//KWi+Fgb/bvfJOvVjFkkIWJiOgbgISym/H4aG4d+4cB7fwYEJBAnQiwMlYzd4s4X1gPbygBTuSZnD7KGGnVwhxemZi2Y2NOZVDJelb82OchX/wJOnovQdU/hFHo04MYPu4PCMovG0TZJ9QnN58KTofC2JbbkAVbhfl5gk3AyE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=CHQnELay; arc=none smtp.client-ip=209.85.210.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-7459fa1ef2aso1811632a34.1
+        for <linux-pm@vger.kernel.org>; Fri, 12 Sep 2025 04:16:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1757675791; x=1758280591; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=s9raa4UnWp7S98pmKgOEBKVBBsQu0EJl6gJVzoGdYgQ=;
+        b=CHQnELaytbomx29pg30RljJeItXpI3oXPRKeRVdEEj18mR2GY8MaQIXu4Ub8KB3X3S
+         M8QPkyHaeaHaTpRzu00Xp3VawWZAxoGykXbT/AGvIh3q3JX+W21ATw7sREVlcfeLTF1c
+         aSqTWpCYZLV/cR0HGR9Dh+Dd9U/44jBTixkmPmNpmw+3u76IVYCsijLjaDompkGb2Rbf
+         q6BG+PRg7O1yT4OuGra4sQuNsAf7easyLwfmbHm3x02YyJ0ybpdj8Vn6jJAvDklHU53W
+         mi0lpiCcnUSFUt4+LBfrqlv2qNWCSVNpxhBdGwzC7c057mM3T/vD+POTJo65IZCdonz8
+         CbSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757675791; x=1758280591;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=s9raa4UnWp7S98pmKgOEBKVBBsQu0EJl6gJVzoGdYgQ=;
+        b=bfxEK88ul+HGmFFHQkAk88uzIUwpWZ5+kkkvzRdQcu5yl72IJ0Uqz6lBE3tuYsjH1Y
+         tMtzUCACqlNvZGezhi5sTRXEqwXf+z77+EWvZyAhPOkf+/X3zYu0Y72uC9nKxut2wq6t
+         7uhgFBJUrZ7UWn5D+36MIyj8raNzzVuO6vkROQAkhqnp3uLcqClv7TynUXWZ92TA/5vd
+         PyNXtHI4oumrUBbO5UeDKbP0Jf/D2tz4GJikSvlWYX/ucZkw7qWWAO6FxRrvJS3LF2KJ
+         gOJxfv43WkUkBWmZNwP3BrjNICpDoO4UQu4j1pUPEOKLEnXZvZYLUAX1pvcC67ZidiVV
+         KgFw==
+X-Forwarded-Encrypted: i=1; AJvYcCUBIIat0UAC9B79p+D1LYj5qDMszCyAw8fuX0Q6LDekvBqCxUamF8/w3+dzAT17IeLQNnF4jmhk0Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxHtY5cSnEOXseYedGf6v3fs3hUtN67mLNTp+d0C7ZuiOoy/gOV
+	Bbc8PLgD4/gwqNpq8M9oyePwNHcsxKW0d3t+wiv3OM3EO+eE3lVjNkXb1fCPjjMbQQL6j/3hvgv
+	ZHVBJRdf+H3VS3KVvzs2kEpn5asCVvBNPTKklKsI1SA==
+X-Gm-Gg: ASbGncvA7HHwD7ppa2hRoHz3FfosBN+twfEXrdLwKmK9UgT7jk05qr2mZkWMb5lwc6P
+	p8DL7garFFas9GVbXA5+pQsnqCd2wNUkAklZXU58lEVllIBo5bbGEtmpJkr8C7Glx5d6By2G0sy
+	B6k50xr/tt1ZdOzbRHpXFusa0rLHxZNczgU4VcRqk/H/kVzDfiXCW2wbKrPy2SPpD55G1evLMcI
+	ZFlRgIqRxcw0r2qTf2qDDgl05RM
+X-Google-Smtp-Source: AGHT+IF+6KDhxF/Nv9wIPe93Lse4duQguZZlNPVnH8YGAzn5f8KKXL2caupjcfX/resj9T72psSu60bapr4zRsCqOX4=
+X-Received: by 2002:a05:6808:1a1e:b0:439:40ed:1927 with SMTP id
+ 5614622812f47-43b8da9120amr1190971b6e.51.1757675790664; Fri, 12 Sep 2025
+ 04:16:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20250804-b4-gs101_max77759_fg-v5-0-03a40e6c0e3d@uclouvain.be> <20250804-b4-gs101_max77759_fg-v5-1-03a40e6c0e3d@uclouvain.be>
+In-Reply-To: <20250804-b4-gs101_max77759_fg-v5-1-03a40e6c0e3d@uclouvain.be>
+From: Peter Griffin <peter.griffin@linaro.org>
+Date: Fri, 12 Sep 2025 12:16:19 +0100
+X-Gm-Features: Ac12FXyOFnYMp2b4OuaR1npoXk0x3GKafYhZlOCgGWPVm0PFMJpZl8toEpgiLuo
+Message-ID: <CADrjBPqe6JsT_yKTazRn-Ro2V4ZHQ1=6LX304CyVxgzLBqXrew@mail.gmail.com>
+Subject: Re: [PATCH v5 1/4] power: supply: add support for MAX77759 fuel gauge
+To: t.antoine@uclouvain.be
+Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Dimitri Fedrau <dima.fedrau@gmail.com>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
+	Tudor Ambarus <tudor.ambarus@linaro.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-samsung-soc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
 
-On Friday, 12 September 2025 06:48:17 Central European Summer Time Chia-I W=
-u wrote:
-> On Fri, Sep 5, 2025 at 3:24=E2=80=AFAM Nicolas Frattaroli
-> <nicolas.frattaroli@collabora.com> wrote:
-> >
-> > The MT8196 SoC uses an embedded MCU to control frequencies and power of
-> > the GPU. This controller is referred to as "GPUEB".
-> >
-> > It communicates to the application processor, among other ways, through
-> > a mailbox.
-> >
-> > The mailbox exposes one interrupt, which appears to only be fired when a
-> > response is received, rather than a transaction is completed. For us,
-> > this means we unfortunately need to poll for txdone.
-> >
-> > The mailbox also requires the EB clock to be on when touching any of the
-> > mailbox registers.
-> >
-> > Add a simple driver for it based on the common mailbox framework.
-> >
-> > Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-> > ---
-> >  drivers/mailbox/Kconfig             |  10 ++
-> >  drivers/mailbox/Makefile            |   2 +
-> >  drivers/mailbox/mtk-gpueb-mailbox.c | 330 ++++++++++++++++++++++++++++=
-++++++++
-> >  3 files changed, 342 insertions(+)
-> >
-> > diff --git a/drivers/mailbox/Kconfig b/drivers/mailbox/Kconfig
-> > index 02432d4a5ccd46a16156a09c7f277fb03e4013f5..2016defda1fabb5c0fcc807=
-8f84a52d4e4e00167 100644
-> > --- a/drivers/mailbox/Kconfig
-> > +++ b/drivers/mailbox/Kconfig
-> > @@ -294,6 +294,16 @@ config MTK_CMDQ_MBOX
-> >           critical time limitation, such as updating display configurat=
-ion
-> >           during the vblank.
-> >
-> > +config MTK_GPUEB_MBOX
-> > +       tristate "MediaTek GPUEB Mailbox Support"
-> > +       depends on ARCH_MEDIATEK || COMPILE_TEST
-> > +       help
-> > +         The MediaTek GPUEB mailbox is used to communicate with the em=
-bedded
-> > +         controller in charge of GPU frequency and power management on=
- some
-> > +         MediaTek SoCs, such as the MT8196.
-> > +         Say Y or m here if you want to support the MT8196 SoC in your=
- kernel
-> > +         build.
-> > +
-> >  config ZYNQMP_IPI_MBOX
-> >         tristate "Xilinx ZynqMP IPI Mailbox"
-> >         depends on ARCH_ZYNQMP && OF
-> > diff --git a/drivers/mailbox/Makefile b/drivers/mailbox/Makefile
-> > index 98a68f838486eed117d24296138bf59fda3f92e4..564d06e71313e6d1972e4a6=
-036e1e78c8c7ec450 100644
-> > --- a/drivers/mailbox/Makefile
-> > +++ b/drivers/mailbox/Makefile
-> > @@ -63,6 +63,8 @@ obj-$(CONFIG_MTK_ADSP_MBOX)   +=3D mtk-adsp-mailbox.o
-> >
-> >  obj-$(CONFIG_MTK_CMDQ_MBOX)    +=3D mtk-cmdq-mailbox.o
-> >
-> > +obj-$(CONFIG_MTK_GPUEB_MBOX)   +=3D mtk-gpueb-mailbox.o
-> > +
-> >  obj-$(CONFIG_ZYNQMP_IPI_MBOX)  +=3D zynqmp-ipi-mailbox.o
-> >
-> >  obj-$(CONFIG_SUN6I_MSGBOX)     +=3D sun6i-msgbox.o
-> > diff --git a/drivers/mailbox/mtk-gpueb-mailbox.c b/drivers/mailbox/mtk-=
-gpueb-mailbox.c
-> > new file mode 100644
-> > index 0000000000000000000000000000000000000000..0236fb358136e434a09a21e=
-f293fe949ced94123
-> > --- /dev/null
-> > +++ b/drivers/mailbox/mtk-gpueb-mailbox.c
-> > @@ -0,0 +1,330 @@
-> > +// SPDX-License-Identifier: GPL-2.0-only
-> > +/*
-> > + * MediaTek GPUEB mailbox driver for SoCs such as the MT8196
-> > + *
-> > + * Copyright (C) 2025, Collabora Ltd.
-> > + *
-> > + * Developers harmed in the making of this driver:
-> > + *  - Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-> > + */
-> > +
-> > +#include <linux/atomic.h>
-> > +#include <linux/clk.h>
-> > +#include <linux/device.h>
-> > +#include <linux/interrupt.h>
-> > +#include <linux/io.h>
-> > +#include <linux/iopoll.h>
-> > +#include <linux/mailbox_controller.h>
-> > +#include <linux/module.h>
-> > +#include <linux/of.h>
-> > +#include <linux/platform_device.h>
-> > +
-> > +#define MBOX_CTL_TX_STS 0x0000
-> > +#define MBOX_CTL_IRQ_SET 0x0004
-> > +#define MBOX_CTL_IRQ_CLR 0x0074
-> > +#define MBOX_CTL_RX_STS 0x0078
-> > +
-> > +#define MBOX_FULL BIT(0) /* i.e. we've received data */
-> > +#define MBOX_CLOGGED BIT(1) /* i.e. the channel is shutdown */
-> > +
-> > +struct mtk_gpueb_mbox {
-> > +       struct device *dev;
-> > +       struct clk *clk;
-> > +       void __iomem *mbox_mmio;
-> > +       void __iomem *mbox_ctl;
-> > +       void **rx_buf;
-> > +       atomic_t *rx_status;
-> > +       struct mbox_controller mbox;
-> > +       unsigned int *chn;
-> > +       int irq;
-> > +       const struct mtk_gpueb_mbox_variant *v;
-> > +};
-> > +
-> > +struct mtk_gpueb_mbox_ch {
-> > +       const char *name;
-> > +       const int num;
-> > +       const unsigned int tx_offset;
-> > +       const unsigned int tx_len;
-> > +       const unsigned int rx_offset;
-> > +       const unsigned int rx_len;
-> > +       const bool no_response;
-> > +};
-> > +
-> > +struct mtk_gpueb_mbox_variant {
-> > +       unsigned int num_channels;
-> > +       const struct mtk_gpueb_mbox_ch channels[] __counted_by(num_chan=
-nels);
-> > +};
-> > +
-> > +/**
-> > + * mtk_gpueb_mbox_read_rx - read RX buffer from MMIO into ebm's RX buf=
-fer
-> > + * @ebm: pointer to &struct mtk_gpueb_mbox instance
-> > + * @channel: number of channel to read
-> > + */
-> > +static void mtk_gpueb_mbox_read_rx(struct mtk_gpueb_mbox *ebm,
-> > +                                  unsigned int channel)
-> > +{
-> > +       const struct mtk_gpueb_mbox_ch *ch;
-> > +
-> > +       ch =3D &ebm->v->channels[channel];
-> > +
-> > +       memcpy_fromio(ebm->rx_buf[channel], ebm->mbox_mmio + ch->rx_off=
-set,
-> > +                     ch->rx_len);
-> > +
-> > +}
-> > +
-> > +static irqreturn_t mtk_gpueb_mbox_isr(int irq, void *data)
-> > +{
-> > +       struct mtk_gpueb_mbox *ebm =3D data;
-> > +       u32 rx_handled =3D 0;
-> > +       u32 rx_sts;
-> > +       int i;
-> > +
-> > +       rx_sts =3D readl(ebm->mbox_ctl + MBOX_CTL_RX_STS);
-> > +
-> > +       for (i =3D 0; i < ebm->v->num_channels; i++) {
-> > +               if (rx_sts & BIT(i)) {
-> > +                       if (!atomic_cmpxchg(&ebm->rx_status[i], 0,
-> > +                                           MBOX_FULL | MBOX_CLOGGED))
-> > +                               rx_handled |=3D BIT(i);
-> > +               }
-> > +       }
-> We can loop over bits that are set in rx_sts, if we expect that only a
-> few bits are set most of the time.
+Hi Thomas,
 
-Could you elaborate on your preferred approach? num_channels will be
-smaller than the bit width of rx_sts. I could loop from __fls down to
-0 checking for (!rx_sts ^ rx_handled) for an early exit, but I'm not
-sure if this microoptimisation is what you meant or if that even makes
-much sense instruction cost wise.
+Thanks for your patch, and working on this!
 
-Alternatively, I could loop from __fss to num_channels.
+On Mon, 4 Aug 2025 at 15:25, Thomas Antoine via B4 Relay
+<devnull+t.antoine.uclouvain.be@kernel.org> wrote:
+>
+> From: Thomas Antoine <t.antoine@uclouvain.be>
+>
+> The Maxim MAX77759 is a PMIC used in gs101-oriole and gs101-raven
+> (Google Pixel 6 and 6 Pro). It contains a fuel gauge on a separate
+> I2C address. Add basic support for this fuel gauge. The driver is
+> based on the driver for the MAX17201 and MAX17205 which also use
+> the MAX M5 fuel gauge. There is a lot of common between the two
 
-Is there some commonly used hyper-optimised "loop over set bits" macro
-that I'm unfamiliar with?
+small nit: "in common"                             ^^^^^^
 
-> > +
-> > +       writel(rx_handled, ebm->mbox_ctl + MBOX_CTL_IRQ_CLR);
-> > +
-> > +       if (!(rx_sts ^ rx_handled))
-> "rx_sts =3D=3D rx_handled" should be more direct.
+> devices with some key differences. The main one is the lack of nvmem
+> in the fuel gauge of the MAX77759.
+>
+> The initialization of the chip is very basic and mostly hardcoded.
+> Loading the model of the fuel gauge is not implemented here.
+>
+> On both gs101-oriole and gs101-raven, the same EEPROM as for the
+> battery id is used to backup some of the state of the fuel gauge.
+> Use a standard nvmem binding to access this data. The CRC8 is
+> computed to allow to go from linux to a stock android without
+> apparent data corruption. If other devices using the MAX77759 are
+> found/created, a similar nvmem layout should be made or the driver
+> should be extended to support those devices.
+>
+> The current, capacity, temperature and charge have all been tested.
+> The charge full design and capacity equal the ones seen on android,
+> the ratio between average charge and average current does predict
+> pretty accurately the time to empty under a constant workload and
+> temperature is coherent with the dynamic state of the device.
+>
+> Health is not enabled as it always reports overheating. The time to
+> empty is wrong by about a factor 2. The voltage reporting is
+> correct when using VCELL (which reports the lowest voltage of all
+> cells) when considering that the device is connected to a single
+> cell. It could be enabled by either confirming that the device is
+> connected to a single cell or finding an alternative reporting mean.
+>
+> Modifications have been made to it since but the regmap was
+> originally proposed by Andr=C3=A9 Draszik in
+>
+> Link: https://lore.kernel.org/all/d1bade77b5281c1de6b2ddcb4dbbd033e455a11=
+6.camel@linaro.org/
+>
+> Signed-off-by: Thomas Antoine <t.antoine@uclouvain.be>
+> ---
+>  drivers/power/supply/Kconfig            |  14 +
+>  drivers/power/supply/Makefile           |   1 +
+>  drivers/power/supply/max77759_battery.c | 649 ++++++++++++++++++++++++++=
+++++++
+>  3 files changed, 664 insertions(+)
+>
+> diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
+> index 79ddb006e2dad6bf96b71ed570a37c006b5f9433..147d049b836c3fbb24b762dba=
+f31eebb8ba041f7 100644
+> --- a/drivers/power/supply/Kconfig
+> +++ b/drivers/power/supply/Kconfig
+> @@ -458,6 +458,20 @@ config BATTERY_MAX1721X
+>           Say Y here to enable support for the MAX17211/MAX17215 standalo=
+ne
+>           battery gas-gauge.
+>
+> +config BATTERY_MAX77759
+> +       tristate "Maxim Integrated MAX77759 Fuel Gauge"
+> +       depends on I2C
+> +       select REGMAP_I2C
+> +       help
+> +         Say yes to enable support for the Fuel gauge of the Maxim Integ=
+rated
+> +         MAX77759. It is a companion Power Management IC for USB Type-C
+> +         applications with Battery Charger, Fuel Gauge, temperature sens=
+ors,
+> +         USB Type-C Port Controller (TCPC), NVMEM, and additional GPIO
+> +         interfaces.
+> +
+> +         To compile this driver as module, choose M here: the
+> +         module will be called max77759_fg.
+> +
+>  config BATTERY_TWL4030_MADC
+>         tristate "TWL4030 MADC battery driver"
+>         depends on TWL4030_MADC
+> diff --git a/drivers/power/supply/Makefile b/drivers/power/supply/Makefil=
+e
+> index 4f5f8e3507f80da02812f0d08c2d81ddff0a272f..114578fa4fd08356822f13ce1=
+fbad29923defad8 100644
+> --- a/drivers/power/supply/Makefile
+> +++ b/drivers/power/supply/Makefile
+> @@ -57,6 +57,7 @@ obj-$(CONFIG_BATTERY_MAX17040)        +=3D max17040_bat=
+tery.o
+>  obj-$(CONFIG_BATTERY_MAX17042) +=3D max17042_battery.o
+>  obj-$(CONFIG_BATTERY_MAX1720X) +=3D max1720x_battery.o
+>  obj-$(CONFIG_BATTERY_MAX1721X) +=3D max1721x_battery.o
+> +obj-$(CONFIG_BATTERY_MAX77759) +=3D max77759_battery.o
+>  obj-$(CONFIG_BATTERY_RT5033)   +=3D rt5033_battery.o
+>  obj-$(CONFIG_CHARGER_RT5033)   +=3D rt5033_charger.o
+>  obj-$(CONFIG_CHARGER_RT9455)   +=3D rt9455_charger.o
+> diff --git a/drivers/power/supply/max77759_battery.c b/drivers/power/supp=
+ly/max77759_battery.c
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..d8d702af607211e391733cd14=
+323698b54be734c
+> --- /dev/null
+> +++ b/drivers/power/supply/max77759_battery.c
+> @@ -0,0 +1,649 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * Fuel gauge driver for Maxim 777759
+> + *
+> + * based on max1720x_battery.c
+> + *
+> + * Copyright (C) 2024 Liebherr-Electronics and Drives GmbH
+> + */
+> +
 
-Good point, will change.
+[..]
 
-> > +               return IRQ_WAKE_THREAD;
-> > +
-> > +       dev_warn_ratelimited(ebm->dev, "spurious interrupts on 0x%04X\n=
-",
-> > +                            rx_sts ^ rx_handled);
-> > +       return IRQ_NONE;
-> It seems a bit too punishing when there are spurious interrupts. I
-> wonder if we should warn, but return IRQ_WAKE_THREAD as long as
-> rx_handled !=3D 0.
->=20
-> Also, if another interrupt can fire before mtk_gpueb_mbox_thread runs,
-> that's data dropping rather than spurious interrupts.
->=20
+> +       switch (psp) {
+> +       case POWER_SUPPLY_PROP_PRESENT:
+> +               /*
+> +                * POWER_SUPPLY_PROP_PRESENT will always readable via
+> +                * sysfs interface. Value return 0 if battery not
+> +                * present or unaccesable via I2c.
 
-Yeah, I agree that this is bad. As wens pointed out, my IRQ clearing
-earlier would most certainly open us up to losing data. I'll
-definitely look into changing this; iirc the current code resulted
-from me being unsure whether partially handled IRQs should still
-be counted as a handled IRQ or not.
+small nit: inaccessible      ^^^^^^
 
-> > +}
-> > +
-> > +static irqreturn_t mtk_gpueb_mbox_thread(int irq, void *data)
-> > +{
-> > +       struct mtk_gpueb_mbox *ebm =3D data;
-> > +       irqreturn_t ret =3D IRQ_NONE;
-> > +       int status;
-> > +       int i;
-> > +
-> > +       for (i =3D 0; i < ebm->v->num_channels; i++) {
-> > +               status =3D atomic_cmpxchg(&ebm->rx_status[i],
-> > +                                       MBOX_FULL | MBOX_CLOGGED, MBOX_=
-=46ULL);
-> > +               if (status =3D=3D (MBOX_FULL | MBOX_CLOGGED)) {
-> We could also save rx_handled from mtk_gpueb_mbox_isr and loop over
-> bits that are set.  If we do that, ebm->rx_status[i] is guaranteed to
-> be MBOX_FULL | MBOX_CLOGGED.
->=20
+> +                */
+> +               ret =3D regmap_read(info->regmap, MAX77759_FG_STATUS, &re=
+g_val);
+> +               if (ret < 0) {
+> +                       val->intval =3D 0;
+> +                       return 0;
+> +               }
+> +
+> +               val->intval =3D !FIELD_GET(MAX77759_FG_STATUS_BAT_ABSENT,=
+ reg_val);
+> +               break;
+> +       case POWER_SUPPLY_PROP_CAPACITY:
+> +               ret =3D regmap_read(info->regmap, MAX77759_FG_REPSOC, &re=
+g_val);
+> +               val->intval =3D max77759_fg_percent_to_ps(reg_val);
+> +               break;
+> +       case POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN:
+> +               ret =3D regmap_read(info->regmap, MAX77759_FG_DESIGN_CAP,=
+ &reg_val);
+> +               if (ret < 0)
+> +                       return ret;
+> +
+> +               val->intval =3D max77759_fg_capacity_to_ps(reg_val, info)=
+;
+> +               ret =3D max77759_fg_capacity_lsb(info, &reg_val);
+> +               val->intval *=3D reg_val;
+> +               break;
+> +       case POWER_SUPPLY_PROP_CHARGE_AVG:
+> +               ret =3D regmap_read(info->regmap, MAX77759_FG_REPCAP, &re=
+g_val);
+> +               if (ret < 0)
+> +                       return ret;
+> +
+> +               val->intval =3D max77759_fg_capacity_to_ps(reg_val, info)=
+;
+> +               ret =3D max77759_fg_capacity_lsb(info, &reg_val);
+> +               val->intval *=3D reg_val;
+> +               break;
+> +       case POWER_SUPPLY_PROP_TEMP:
+> +               ret =3D regmap_read(info->regmap, MAX77759_FG_TEMP, &reg_=
+val);
+> +               val->intval =3D max77759_fg_temperature_to_ps(reg_val);
+> +               break;
+> +       case POWER_SUPPLY_PROP_CURRENT_NOW:
+> +               ret =3D regmap_read(info->regmap, MAX77759_FG_CURRENT, &r=
+eg_val);
+> +               val->intval =3D max77759_fg_current_to_voltage(reg_val) /=
+ info->rsense;
+> +               break;
+> +       case POWER_SUPPLY_PROP_CURRENT_AVG:
+> +               ret =3D regmap_read(info->regmap, MAX77759_FG_AVG_CURRENT=
+, &reg_val);
+> +               val->intval =3D max77759_fg_current_to_voltage(reg_val) /=
+ info->rsense;
+> +               break;
+> +       case POWER_SUPPLY_PROP_CHARGE_FULL:
+> +               ret =3D regmap_read(info->regmap, MAX77759_FG_FULL_CAP, &=
+reg_val);
+> +               if (ret < 0)
+> +                       return ret;
+> +
+> +               val->intval =3D max77759_fg_capacity_to_ps(reg_val, info)=
+;
+> +               ret =3D max77759_fg_capacity_lsb(info, &reg_val);
+> +               val->intval *=3D reg_val;
+> +               break;
+> +       case POWER_SUPPLY_PROP_MODEL_NAME:
+> +               ret =3D regmap_read(info->regmap, MAX77759_FG_DEV_NAME, &=
+reg_val);
+> +               if (ret < 0)
+> +                       return ret;
+> +
+> +               reg_val =3D FIELD_GET(MAX77759_FG_DEV_NAME_TYPE_MASK, reg=
+_val);
+> +               if (reg_val =3D=3D MAX77759_FG_DEV_NAME_TYPE)
+> +                       val->strval =3D max77759_fg_model;
+> +               else
+> +                       return -ENODEV;
+> +               break;
+> +       case POWER_SUPPLY_PROP_MANUFACTURER:
+> +               val->strval =3D max77759_fg_manufacturer;
+> +               break;
+> +       default:
+> +               return -EINVAL;
+> +       }
+> +
+> +       return ret;
+> +}
+> +
+> +static int max77759_fg_init(struct device *dev,
+> +                           struct max77759_fg_device_info *info,
+> +                           struct power_supply *bat_psy)
+> +{
+> +       struct max77759_fg_state_save *state;
+> +       struct power_supply_battery_info *bat_info;
+> +       struct nvmem_cell *cell;
+> +       unsigned int val;
+> +       int ret;
+> +       size_t len;
+> +
+> +       power_supply_get_battery_info(bat_psy, &bat_info);
 
-Wouldn't storing rx_handled open us up to data races with unpleasant
-code to try and prevent them? As far as I understand, the ISR is allowed
-to fire again before the thread has completed. Having the rx_status bits
-as individual atomics gives us finer granularity than needing to protect
-the entire set of bits.
+Should check the return code here and exit if not present as if the
+battery info is missing in DT it will crash in max77759_fg_init().
 
-If there is some way to pass data from the ISR to the awoken thread
-directly as a per-invocation parameter rather than a squirreled away
-member of the driver private struct, then I agree doing it your way
-seems better.
+With that addressed:
+Reviewed-by: Peter Griffin <peter.griffin@linaro.org>
 
-> > +                       mtk_gpueb_mbox_read_rx(ebm, i);
-> > +                       mbox_chan_received_data(&ebm->mbox.chans[i],
-> > +                                               ebm->rx_buf[i]);
-> It looks like we read the data and pass it on to the client
-> immediately. Does each channel need its own rx_buf?
->=20
+I think there was also some feedback from Krysztof on the binding, but
+aside from that I think Sebastian was ready to queue this.
 
-Yeah, common mailbox framework does not do a copy here, it just passes
-the pointer. Which is good, because nobody likes copies, and it
-prevents the mailbox core from needing to know the size of received
-data.
+regards,
 
-So the individual rx_bufs are needed to prevent channel cross-talk.
-
-> > +                       /* FIXME: When does MBOX_FULL get cleared? Here=
-? */
-> > +                       atomic_set(&ebm->rx_status[i], 0);
-> > +                       ret =3D IRQ_HANDLED;
-> > +               }
-> > +       }
-> > +
-> > +       return ret;
-> > +}
-> > +
-> > +static int mtk_gpueb_mbox_send_data(struct mbox_chan *chan, void *data)
-> > +{
-> > +       struct mtk_gpueb_mbox *ebm =3D dev_get_drvdata(chan->mbox->dev);
-> > +       unsigned int *num =3D chan->con_priv;
-> > +       int i;
-> > +       u32 *values =3D data;
-> > +
-> > +       if (*num >=3D ebm->v->num_channels)
-> > +               return -ECHRNG;
-> Can this ever happen? (I am not familiar with the mbox subsystem)
-
-Only if someone with a pointer to chan modifies con_priv outside of
-what the mailbox driver set. It's an unlikely scenario, so I do think
-I can remove this check, but the downside is that if someone ever does
-manage to do this then the next line is a convenient read primitive.
-
-> > +
-> > +       if (!ebm->v->channels[*num].no_response &&
-> > +           atomic_read(&ebm->rx_status[*num]))
-> > +               return -EBUSY;
-> When no_response is true, rx_status is 0. We probably don't need to
-> check no_response.
-
-Now that I'm thinking about it, I can probably get rid of no_response
-altogether. It was originally added because I conflated txdone with
-response received, and one particular command on the sleep channel,
-namely powering off the MFG, is unable to ever cause a response
-interrupt to fire.
-
-Since we now poll for txdone anyway using the TX status register, I
-don't think this is needed at all anymore, so I'll try and get
-rid of it.
-
-> > +
-> > +       writel(BIT(*num), ebm->mbox_ctl + MBOX_CTL_IRQ_CLR);
-> > +
-> > +       /*
-> > +        * We don't want any fancy nonsense, just write the 32-bit valu=
-es in
-> > +        * order. memcpy_toio/__iowrite32_copy don't work here, because=
- fancy.
-> > +        */
-> > +       for (i =3D 0; i < ebm->v->channels[*num].tx_len; i +=3D 4) {
-> > +               writel(values[i / 4],
-> > +                      ebm->mbox_mmio + ebm->v->channels[*num].tx_offse=
-t + i);
-> > +       }
-> > +
-> > +       writel(BIT(*num), ebm->mbox_ctl + MBOX_CTL_IRQ_SET);
-> > +
-> > +       return 0;
-> > +}
-> > +
-> > +static int mtk_gpueb_mbox_startup(struct mbox_chan *chan)
-> > +{
-> > +       struct mtk_gpueb_mbox *ebm =3D dev_get_drvdata(chan->mbox->dev);
-> > +       unsigned int *num =3D chan->con_priv;
-> > +
-> > +       if (*num >=3D ebm->v->num_channels)
-> > +               return -ECHRNG;
-> > +
-> > +       atomic_set(&ebm->rx_status[*num], 0);
-> > +
-> > +       return 0;
-> > +}
-> > +
-> > +static void mtk_gpueb_mbox_shutdown(struct mbox_chan *chan)
-> > +{
-> > +       struct mtk_gpueb_mbox *ebm =3D dev_get_drvdata(chan->mbox->dev);
-> > +       unsigned int *num =3D chan->con_priv;
-> > +
-> > +       atomic_set(&ebm->rx_status[*num], MBOX_CLOGGED);
-> > +}
-> > +
-> > +static bool mtk_gpueb_mbox_last_tx_done(struct mbox_chan *chan)
-> > +{
-> > +       struct mtk_gpueb_mbox *ebm =3D dev_get_drvdata(chan->mbox->dev);
-> > +       unsigned int *num =3D chan->con_priv;
-> > +
-> > +       return !(readl(ebm->mbox_ctl + MBOX_CTL_TX_STS) & BIT(*num));
-> > +}
-> > +
-> > +const struct mbox_chan_ops mtk_gpueb_mbox_ops =3D {
-> > +       .send_data =3D mtk_gpueb_mbox_send_data,
-> > +       .startup =3D mtk_gpueb_mbox_startup,
-> > +       .shutdown =3D mtk_gpueb_mbox_shutdown,
-> > +       .last_tx_done =3D mtk_gpueb_mbox_last_tx_done,
-> > +};
-> > +
-> > +static struct mbox_chan *
-> > +mtk_gpueb_mbox_of_xlate(struct mbox_controller *mbox,
-> > +                       const struct of_phandle_args *sp)
-> > +{
-> > +       struct mtk_gpueb_mbox *ebm =3D dev_get_drvdata(mbox->dev);
-> > +
-> > +       if (!sp->args_count)
-> > +               return ERR_PTR(-EINVAL);
-> > +
-> > +       if (sp->args[0] >=3D ebm->v->num_channels)
-> > +               return ERR_PTR(-ECHRNG);
-> > +
-> > +       return &mbox->chans[sp->args[0]];
-> > +}
-> > +
-> > +static int mtk_gpueb_mbox_probe(struct platform_device *pdev)
-> > +{
-> > +       struct mtk_gpueb_mbox *ebm;
-> > +       unsigned int rx_buf_sz;
-> > +       void *buf;
-> > +       unsigned int i;
-> > +       int ret;
-> > +
-> > +       ebm =3D devm_kzalloc(&pdev->dev, sizeof(*ebm), GFP_KERNEL);
-> > +       if (!ebm)
-> > +               return -ENOMEM;
-> > +
-> > +       ebm->dev =3D &pdev->dev;
-> > +       ebm->v =3D of_device_get_match_data(ebm->dev);
-> > +
-> > +       dev_set_drvdata(ebm->dev, ebm);
-> > +
-> > +       ebm->clk =3D devm_clk_get_enabled(ebm->dev, NULL);
-> > +       if (IS_ERR(ebm->clk))
-> > +               return dev_err_probe(ebm->dev, PTR_ERR(ebm->clk),
-> > +                                    "Failed to get 'eb' clock\n");
-> > +
-> > +       ebm->mbox_mmio =3D devm_platform_ioremap_resource_byname(pdev, =
-"mbox");
-> > +       if (IS_ERR(ebm->mbox_mmio))
-> > +               return dev_err_probe(ebm->dev, PTR_ERR(ebm->mbox_mmio),
-> > +                                    "Couldn't map mailbox registers\n"=
-);
-> > +
-> > +       ebm->mbox_ctl =3D devm_platform_ioremap_resource_byname(pdev, "=
-mbox_ctl");
-> > +       if (IS_ERR(ebm->mbox_ctl))
-> > +               return dev_err_probe(
-> > +                       ebm->dev, PTR_ERR(ebm->mbox_ctl),
-> > +                       "Couldn't map mailbox control registers\n");
-> > +
-> > +       rx_buf_sz =3D (ebm->v->channels[ebm->v->num_channels - 1].rx_of=
-fset +
-> > +                    ebm->v->channels[ebm->v->num_channels - 1].rx_len);
-> rx is after tx in mmio. The first half of the space is wasted.
->=20
-> We follow mtk_gpueb_mbox_read_rx by mbox_chan_received_data. It seems
-> we only need max of rx_len's.
-
-We do need the sum of all rx_len's but you're correct that the current code
-allocates too much memory. What I think it should do is
-
-last rx_offset + last rx_len - first rx_offset
-
-to get the total amount of MMIO occupied by RX.
-
-> > +
-> > +       buf =3D devm_kzalloc(ebm->dev, rx_buf_sz, GFP_KERNEL);
-> > +       if (!buf)
-> > +               return -ENOMEM;
-> > +
-> > +       ebm->rx_buf =3D devm_kmalloc_array(ebm->dev, ebm->v->num_channe=
-ls,
-> > +                                        sizeof(*ebm->rx_buf), GFP_KERN=
-EL);
-> > +       if (!ebm->rx_buf)
-> > +               return -ENOMEM;
-> > +
-> > +       ebm->mbox.chans =3D devm_kcalloc(ebm->dev, ebm->v->num_channels,
-> > +                                      sizeof(struct mbox_chan), GFP_KE=
-RNEL);
-> > +       if (!ebm->mbox.chans)
-> > +               return -ENOMEM;
-> > +
-> > +       ebm->rx_status =3D devm_kcalloc(ebm->dev, ebm->v->num_channels,
-> > +                                     sizeof(atomic_t), GFP_KERNEL);
-> > +       if (!ebm->rx_status)
-> > +               return -ENOMEM;
-> > +
-> > +       ebm->chn =3D devm_kcalloc(ebm->dev, ebm->v->num_channels,
-> > +                               sizeof(*ebm->chn), GFP_KERNEL);
-> > +
-> > +       for (i =3D 0; i < ebm->v->num_channels; i++) {
-> > +               ebm->rx_buf[i] =3D buf + ebm->v->channels[i].rx_offset;
-> > +               spin_lock_init(&ebm->mbox.chans[i].lock);
-> > +               /* the things you do to avoid explicit casting void* */
-> I actually prefer an inline helper that casts chan->con_priv to the
-> channel number. Another option is "chan - ebm->mox.chans".
-
-Hmmm, yeah. Though, I don't enjoy chan - ebm->mbox.chans because now we're
-in the woods regarding pointer arithmetics.
-
-I think the inline helper makes more sense, even if explicitly using a
-pointer as an integer gives me the heebie-jeebies.
-
-> > +               ebm->chn[i] =3D i;
-> > +               ebm->mbox.chans[i].con_priv =3D &ebm->chn[i];
-> > +               atomic_set(&ebm->rx_status[i], MBOX_CLOGGED);
-> > +       }
-> > +
-> > +       ebm->mbox.dev =3D ebm->dev;
-> > +       ebm->mbox.num_chans =3D ebm->v->num_channels;
-> > +       ebm->mbox.txdone_poll =3D true;
-> > +       ebm->mbox.txpoll_period =3D 0; /* minimum hrtimer interval */
-> > +       ebm->mbox.of_xlate =3D mtk_gpueb_mbox_of_xlate;
-> > +       ebm->mbox.ops =3D &mtk_gpueb_mbox_ops;
-> > +
-> > +       ebm->irq =3D platform_get_irq(pdev, 0);
-> > +       if (ebm->irq < 0)
-> > +               return ebm->irq;
-> > +
-> > +       ret =3D devm_request_threaded_irq(ebm->dev, ebm->irq, mtk_gpueb=
-_mbox_isr,
-> > +                                       mtk_gpueb_mbox_thread, 0, NULL,=
- ebm);
-> > +       if (ret)
-> > +               return dev_err_probe(ebm->dev, ret, "failed to request =
-IRQ\n");
-> > +
-> > +       ret =3D devm_mbox_controller_register(ebm->dev, &ebm->mbox);
-> > +
-> > +       return 0;
-> > +}
-> > +
-> > +static const struct mtk_gpueb_mbox_variant mtk_gpueb_mbox_mt8196 =3D {
-> > +       .num_channels =3D 12,
-> > +       .channels =3D {
-> > +               { "fast_dvfs_event", 0, 0x0000, 16, 0x00e0, 16, false },
-> > +               { "gpufreq",         1, 0x0010, 32, 0x00f0, 32, false },
-> > +               { "sleep",           2, 0x0030, 12, 0x0110,  4, true  },
-> > +               { "timer",           3, 0x003c, 24, 0x0114,  4, false },
-> > +               { "fhctl",           4, 0x0054, 36, 0x0118,  4, false },
-> > +               { "ccf",             5, 0x0078, 16, 0x011c, 16, false },
-> > +               { "gpumpu",          6, 0x0088, 24, 0x012c,  4, false },
-> > +               { "fast_dvfs",       7, 0x00a0, 24, 0x0130, 24, false },
-> > +               { "ipir_c_met",      8, 0x00b8,  4, 0x0148, 16, false },
-> > +               { "ipis_c_met",      9, 0x00bc, 16, 0x0158,  4, false },
-> > +               { "brisket",        10, 0x00cc, 16, 0x015c, 16, false },
-> > +               { "ppb",            11, 0x00dc,  4, 0x016c,  4, false },
-> > +       },
-> > +};
-> > +
-> > +static const struct of_device_id mtk_gpueb_mbox_of_ids[] =3D {
-> > +       { .compatible =3D "mediatek,mt8196-gpueb-mbox",
-> > +         .data =3D &mtk_gpueb_mbox_mt8196 },
-> > +       { /* Sentinel */ }
-> > +};
-> > +MODULE_DEVICE_TABLE(of, mtk_gpueb_mbox_of_ids);
-> > +
-> > +static struct platform_driver mtk_gpueb_mbox_drv =3D {
-> > +       .probe =3D mtk_gpueb_mbox_probe,
-> > +       .driver =3D {
-> > +               .name =3D "mtk-gpueb-mbox",
-> > +               .of_match_table =3D mtk_gpueb_mbox_of_ids,
-> > +       }
-> > +};
-> > +module_platform_driver(mtk_gpueb_mbox_drv);
-> > +
-> > +MODULE_AUTHOR("Nicolas Frattaroli <nicolas.frattaroli@collabora.com>");
-> > +MODULE_DESCRIPTION("MediaTek GPUEB mailbox driver for SoCs such as the=
- MT8196");
-> > +MODULE_LICENSE("GPL");
-> >
-> > --
-> > 2.51.0
-> >
->=20
-
-Thank you for your review!
-
-Kind regards,
-Nicolas Frattaroli
-
-
+Peter
 
