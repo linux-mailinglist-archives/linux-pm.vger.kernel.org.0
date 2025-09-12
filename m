@@ -1,224 +1,97 @@
-Return-Path: <linux-pm+bounces-34559-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34560-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1382FB55426
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Sep 2025 17:50:42 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D9D4AB5543A
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Sep 2025 17:57:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 308631D66636
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Sep 2025 15:50:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 95C533B528A
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Sep 2025 15:57:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29AB8263F32;
-	Fri, 12 Sep 2025 15:50:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A62A30AADC;
+	Fri, 12 Sep 2025 15:57:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="W/3Jch3J"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="p+n4HTYT"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DD6C242D9E;
-	Fri, 12 Sep 2025 15:49:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F9117B3E1;
+	Fri, 12 Sep 2025 15:57:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757692204; cv=none; b=SHlcu202c0PWD4Wti3M/1s6rN7ImQUd5x+JCtI3VV7058csNxPy1sTSHm/abvynnKkxeD6uwzPsiTAGzRKvIhGhQIhEOlpXOWEXC9Hn+GtKZrHR8hC3WwWc3WY6Ig+J/DW9b05IaarecMG6aje8wSVgWLuJe6cj4+Q3airk0gC8=
+	t=1757692643; cv=none; b=SCkZYDtSyX/FDkFtYqhuJso6iysWg+uWcOUadfEcDVp8HFQ9zsy0Ajc9XfrT+c2feg201AUvkL/4DDX38wuDBsFFE+1Kf42c5RJtGM1F+REKc+qZt8TWzF7nvR/XUi/hGJm4TAf69jcxQFSPGfTq4VRXwjeaxv/MBSYd7OdhS5I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757692204; c=relaxed/simple;
-	bh=z9uAsmfBj6dmWMvQluLmhw+61bpPP3h84ryhGAbd5YY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kdFyg9Nh7Hn/5kBXvqM7QeTd78iOpnKuYvPSCJjYep1K339++p4m0vIU/zjVQUOITTXmHKtx9gPMZVmINEjjrOWiFQ2D7HclQ5kfvT35WfJeQgVbPafsS3vXNWXjRhc2VLJqmYyFUxR6ZKMaUrRuj2XmiNwAO6+QP9yAuQce2Ds=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=W/3Jch3J; arc=none smtp.client-ip=220.197.31.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=tw
-	rGnHUvuVYfW9J7DplxEo87ueOxsYlfI2VeXdeJMww=; b=W/3Jch3JYVmIkOpU3V
-	KIn2B0jnWW7YNGa23Fcx8o6ATasKr9hUBLDEnpEXRfgemU3B42GD4Mup+PjIk0Tu
-	cya4+5C2EGQBD592Nb18ykdcvWCQYoqn3z1vh9QAPtH8c956fAvfqqhp4BxY5xA7
-	vYErGxp71RrQUK08gOheB/BQY=
-Received: from MS-CMFLBWVCLQRG.localdomain (unknown [])
-	by gzga-smtp-mtada-g1-2 (Coremail) with SMTP id _____wD3_4XsQMRo42sVAw--.1965S2;
-	Fri, 12 Sep 2025 23:49:01 +0800 (CST)
-From: GuangFei Luo <luogf2025@163.com>
-To: "Rafael J . Wysocki" <rafael@kernel.org>
-Cc: Len Brown <lenb@kernel.org>,
-	linux-acpi@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org,
-	Sebastian Reichel <sre@kernel.org>,
-	linux-pm@vger.kernel.org,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	luogf2025@163.com,
+	s=arc-20240116; t=1757692643; c=relaxed/simple;
+	bh=VdpnpXpvffnFkbv+UhY7JbF26A542XO4sx9mfnd6nQM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BgazkMtECfVw1wJZRwTk96rpOjpA40Qgr96tYL5qj+XoAOV7kD2VgLk4Gzohs4RfsdL1la0dzaMdoq6MgJl2G5yA7KKGkLIaPAYNtanJLricidJ3xCrDyYRKobEK22g+iivV3fUqU2D31vRBb6wARMokK8A2ZKv3e4lMTJEjVpw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=p+n4HTYT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 454F5C4CEF1;
+	Fri, 12 Sep 2025 15:57:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1757692642;
+	bh=VdpnpXpvffnFkbv+UhY7JbF26A542XO4sx9mfnd6nQM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=p+n4HTYTpyj4GG1Tk4ZndzRLon9XNHKXFQoguPN0K5dSFzDu9fa14cwLff13P1URP
+	 FYbihAhMeL0AujfAFXc8L8n2c6sdmIxZbnh37Cw/jqxWSJdHDd9B3kaqEcIlP/DfpA
+	 fErgBYucIS2VXIp2PTArzGorbC3jq9RxwCDbFUB4=
+Date: Fri, 12 Sep 2025 17:57:19 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: GuangFei Luo <luogf2025@163.com>
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>,
+	linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org, Sebastian Reichel <sre@kernel.org>,
+	linux-pm@vger.kernel.org, Dan Carpenter <dan.carpenter@linaro.org>,
 	kernel test robot <lkp@intel.com>
-Subject: [PATCH v3] ACPI: battery: prevent sysfs_add_battery re-entry on rapid events
-Date: Fri, 12 Sep 2025 23:48:59 +0800
-Message-ID: <20250912154859.692750-1-luogf2025@163.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250910142653.313360-1-luogf2025@163.com>
+Subject: Re: [PATCH v3] ACPI: battery: prevent sysfs_add_battery re-entry on
+ rapid events
+Message-ID: <2025091242-waltz-gruffly-0936@gregkh>
 References: <20250910142653.313360-1-luogf2025@163.com>
+ <20250912154859.692750-1-luogf2025@163.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wD3_4XsQMRo42sVAw--.1965S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW3Gw1DAr4rtF1xAw1Uury7Awb_yoWxWF13pa
-	1rCayUtrW8JF48JwsF9F4jgFy5Wan0qF9rWr95Grn2ka9rur1DAryIqFyUXF47GrykC3yx
-	ZFn5t3Z5tw1xWw7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07U8OzfUUUUU=
-X-CM-SenderInfo: poxrwwisqskqqrwthudrp/1tbiPQHGmWjENKIE-gABsi
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250912154859.692750-1-luogf2025@163.com>
 
-v3:
-  - Modified the earlier approach: since sysfs_add_battery() is invoked
-    from multiple places, the most reliable way is to add the lock inside
-    the function itself.
-  - sysfs_remove_battery() had a similar race issue in the past, which was
-    fixed by adding a lock as well. Reference:
-    https://lore.kernel.org/all/9c921c22a7f33397a6774d7fa076db9b6a0fd669
-	.1312318300.git.len.brown@intel.com/
+On Fri, Sep 12, 2025 at 11:48:59PM +0800, GuangFei Luo wrote:
+> v3:
+>   - Modified the earlier approach: since sysfs_add_battery() is invoked
+>     from multiple places, the most reliable way is to add the lock inside
+>     the function itself.
+>   - sysfs_remove_battery() had a similar race issue in the past, which was
+>     fixed by adding a lock as well. Reference:
+>     https://lore.kernel.org/all/9c921c22a7f33397a6774d7fa076db9b6a0fd669
+> 	.1312318300.git.len.brown@intel.com/
+> 
+> v2:
+>  - Fix missing mutex_unlock in acpi_battery_update()
+>    (Reported-by: kernel test robot)
+> 
+> v1:
+> When removing and reinserting the laptop battery, ACPI can trigger
+> two notifications in quick succession:
+> 
+>   - ACPI_BATTERY_NOTIFY_STATUS (0x80)
+>   - ACPI_BATTERY_NOTIFY_INFO   (0x81)
 
-v2:
- - Fix missing mutex_unlock in acpi_battery_update()
-   (Reported-by: kernel test robot)
+Changelog should go below the --- line.
 
-v1:
-When removing and reinserting the laptop battery, ACPI can trigger
-two notifications in quick succession:
+>  static int sysfs_add_battery(struct acpi_battery *battery)
+>  {
+> +	mutex_lock(&battery->sysfs_lock);
 
-  - ACPI_BATTERY_NOTIFY_STATUS (0x80)
-  - ACPI_BATTERY_NOTIFY_INFO   (0x81)
+Why not just use a guard() here?  That would make the logic elsewhere
+much simpler.
 
-Both notifications call acpi_battery_update(). Because the events
-happen very close in time, sysfs_add_battery() can be re-entered
-before battery->bat is set, causing a duplicate sysfs entry error.
+thanks,
 
-This patch ensures that sysfs_add_battery() is not re-entered
-when battery->bat is already non-NULL, preventing the duplicate
-sysfs creation and stabilizing battery hotplug handling.
-
-[  476.117945] sysfs: cannot create duplicate filename '/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0C0A:00/power_supply/BAT1'
-[  476.118896] CPU: 1 UID: 0 PID: 185 Comm: kworker/1:4 Kdump: loaded Not tainted 6.12.38+deb13-amd64 #1  Debian 6.12.38-1
-[  476.118903] Hardware name: Gateway          NV44             /SJV40-MV        , BIOS V1.3121 04/08/2009
-[  476.118906] Workqueue: kacpi_notify acpi_os_execute_deferred
-[  476.118917] Call Trace:
-[  476.118922]  <TASK>
-[  476.118929]  dump_stack_lvl+0x5d/0x80
-[  476.118938]  sysfs_warn_dup.cold+0x17/0x23
-[  476.118943]  sysfs_create_dir_ns+0xce/0xe0
-[  476.118952]  kobject_add_internal+0xba/0x250
-[  476.118959]  kobject_add+0x96/0xc0
-[  476.118964]  ? get_device_parent+0xde/0x1e0
-[  476.118970]  device_add+0xe2/0x870
-[  476.118975]  __power_supply_register.part.0+0x20f/0x3f0
-[  476.118981]  ? wake_up_q+0x4e/0x90
-[  476.118990]  sysfs_add_battery+0xa4/0x1d0 [battery]
-[  476.118998]  acpi_battery_update+0x19e/0x290 [battery]
-[  476.119002]  acpi_battery_notify+0x50/0x120 [battery]
-[  476.119006]  acpi_ev_notify_dispatch+0x49/0x70
-[  476.119012]  acpi_os_execute_deferred+0x1a/0x30
-[  476.119015]  process_one_work+0x177/0x330
-[  476.119022]  worker_thread+0x251/0x390
-[  476.119026]  ? __pfx_worker_thread+0x10/0x10
-[  476.119030]  kthread+0xd2/0x100
-[  476.119033]  ? __pfx_kthread+0x10/0x10
-[  476.119035]  ret_from_fork+0x34/0x50
-[  476.119040]  ? __pfx_kthread+0x10/0x10
-[  476.119042]  ret_from_fork_asm+0x1a/0x30
-[  476.119049]  </TASK>
-[  476.142552] kobject: kobject_add_internal failed for BAT1 with -EEXIST, don't try to register things with the same name in the same directory.
-[  476.415022] ata1.00: unexpected _GTF length (8)
-[  476.428076] sd 0:0:0:0: [sda] Starting disk
-[  476.835035] ata1.00: unexpected _GTF length (8)
-[  476.839720] ata1.00: configured for UDMA/133
-[  491.328831] sysfs: cannot create duplicate filename '/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0C0A:00/power_supply/BAT1'
-[  491.329720] CPU: 1 UID: 0 PID: 185 Comm: kworker/1:4 Kdump: loaded Not tainted 6.12.38+deb13-amd64 #1  Debian 6.12.38-1
-[  491.329727] Hardware name: Gateway          NV44             /SJV40-MV        , BIOS V1.3121 04/08/2009
-[  491.329731] Workqueue: kacpi_notify acpi_os_execute_deferred
-[  491.329741] Call Trace:
-[  491.329745]  <TASK>
-[  491.329751]  dump_stack_lvl+0x5d/0x80
-[  491.329758]  sysfs_warn_dup.cold+0x17/0x23
-[  491.329762]  sysfs_create_dir_ns+0xce/0xe0
-[  491.329770]  kobject_add_internal+0xba/0x250
-[  491.329775]  kobject_add+0x96/0xc0
-[  491.329779]  ? get_device_parent+0xde/0x1e0
-[  491.329784]  device_add+0xe2/0x870
-[  491.329790]  __power_supply_register.part.0+0x20f/0x3f0
-[  491.329797]  sysfs_add_battery+0xa4/0x1d0 [battery]
-[  491.329805]  acpi_battery_update+0x19e/0x290 [battery]
-[  491.329809]  acpi_battery_notify+0x50/0x120 [battery]
-[  491.329812]  acpi_ev_notify_dispatch+0x49/0x70
-[  491.329817]  acpi_os_execute_deferred+0x1a/0x30
-[  491.329820]  process_one_work+0x177/0x330
-[  491.329826]  worker_thread+0x251/0x390
-[  491.329830]  ? __pfx_worker_thread+0x10/0x10
-[  491.329833]  kthread+0xd2/0x100
-[  491.329836]  ? __pfx_kthread+0x10/0x10
-[  491.329838]  ret_from_fork+0x34/0x50
-[  491.329842]  ? __pfx_kthread+0x10/0x10
-[  491.329844]  ret_from_fork_asm+0x1a/0x30
-[  491.329850]  </TASK>
-[  491.329855] kobject: kobject_add_internal failed for BAT1 with -EEXIST, don't try to register things with the same name in the same directory.
-
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/r/202509101620.yI0HZ5gT-lkp@intel.com/
-Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-Closes: https://lore.kernel.org/r/202509101620.yI0HZ5gT-lkp@intel.com/
-Fixes: 508df92d1f8d ("ACPI: battery: register power_supply subdevice only when battery is present")
-Signed-off-by: GuangFei Luo <luogf2025@163.com>
-Cc: stable@vger.kernel.org
----
- drivers/acpi/battery.c | 16 +++++++++++-----
- 1 file changed, 11 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/acpi/battery.c b/drivers/acpi/battery.c
-index 6905b56bf3e4..f6d4a8b39a9c 100644
---- a/drivers/acpi/battery.c
-+++ b/drivers/acpi/battery.c
-@@ -850,6 +850,12 @@ static void __exit battery_hook_exit(void)
- 
- static int sysfs_add_battery(struct acpi_battery *battery)
- {
-+	mutex_lock(&battery->sysfs_lock);
-+	if (battery->bat) {
-+		mutex_unlock(&battery->sysfs_lock);
-+		return 0;
-+	}
-+
- 	struct power_supply_config psy_cfg = {
- 		.drv_data = battery,
- 		.attr_grp = acpi_battery_groups,
-@@ -896,9 +902,11 @@ static int sysfs_add_battery(struct acpi_battery *battery)
- 		int result = PTR_ERR(battery->bat);
- 
- 		battery->bat = NULL;
-+		mutex_unlock(&battery->sysfs_lock);
- 		return result;
- 	}
- 	battery_hook_add_battery(battery);
-+	mutex_unlock(&battery->sysfs_lock);
- 	return 0;
- }
- 
-@@ -1026,11 +1034,9 @@ static int acpi_battery_update(struct acpi_battery *battery, bool resume)
- 		return result;
- 	acpi_battery_quirks(battery);
- 
--	if (!battery->bat) {
--		result = sysfs_add_battery(battery);
--		if (result)
--			return result;
--	}
-+	result = sysfs_add_battery(battery);
-+	if (result)
-+		return result;
- 
- 	/*
- 	 * Wakeup the system if battery is critical low
--- 
-2.43.0
-
+greg k-h
 
