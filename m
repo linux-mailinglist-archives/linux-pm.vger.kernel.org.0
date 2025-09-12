@@ -1,167 +1,232 @@
-Return-Path: <linux-pm+bounces-34565-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34566-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 445ADB55650
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Sep 2025 20:37:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C82F0B55655
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Sep 2025 20:38:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CF0AF7C4C0F
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Sep 2025 18:37:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6EEED16306F
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Sep 2025 18:38:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86C37322DA1;
-	Fri, 12 Sep 2025 18:37:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FCA5324B25;
+	Fri, 12 Sep 2025 18:37:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="UaePTPzt"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="GlFy5cAF"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-vk1-f176.google.com (mail-vk1-f176.google.com [209.85.221.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0FCC18E25
-	for <linux-pm@vger.kernel.org>; Fri, 12 Sep 2025 18:37:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.176
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757702234; cv=none; b=Tkwe+1kMeoJcQuH2gP0KKaYUBowYBqXrjNyYSTQq79/AY74wurcsDWx1g02CEp2jBcRTyoW52SKSmY8C1eOomX+g//SIclnufbd6af0eB2KSvaABHjIn9Dq9n6KorVkiRtjEvr1c1ZnFzpwEXHzrj4AhOSJCobyeNC13s4NT9Jg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757702234; c=relaxed/simple;
-	bh=+uLL73ESbQiAGHCJIihKVzb4SWfooEbOCP6UJcEcy2Q=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=h1LOfQ9kdlkdPA8xYs3FXT1aborVoIGpP+2IkTi+1mP03b2o1Uy5U0RenmhaAYK0BFpi2xNvta/KD+NWnX4CXyECtiFJzJDwflrRTdzUUD2vj/Y5y4AZp5x+jt1+ZZueZENzQrRM0vOSz6SEchk423CqY13iWHIi1TkpVrQOjEo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=UaePTPzt; arc=none smtp.client-ip=209.85.221.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-vk1-f176.google.com with SMTP id 71dfb90a1353d-544c620d486so1524525e0c.1
-        for <linux-pm@vger.kernel.org>; Fri, 12 Sep 2025 11:37:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1757702232; x=1758307032; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=L5LpCqgd6cuTc0c8Co1kvdyn21Z6xUMeh+u0WbfeIVU=;
-        b=UaePTPztSeWrg3Sba+DqsU2RM2fVzVF5j+qzJFqS9RY23owhOVHYqKUWin0i+Xj7rv
-         TQw9Dfp4LjepuvvIL2opMHwtqANq56feFetX3UtIifOsft68LB4ksFc7Y92dmLOn96ct
-         PgRe/BJJIghp8SC31HA2Oo2UxjzhHGZHaKf7E+uHUapnBYL4Dex1NkvjzhPgTAKyQCSi
-         i/1QbN7TCX/CS0JJeEs9pEgdQ8BY314Y8xOHiYeSLcTFUTXSWRgiPbWakFWi9cbSwdF/
-         vOS8ftCb5LEQJ/uX9j0uiCdNrPdHs2AC8gtL/WH1iAkshl9tGufwTvaPrGe8kbYeSekc
-         7/LQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757702232; x=1758307032;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=L5LpCqgd6cuTc0c8Co1kvdyn21Z6xUMeh+u0WbfeIVU=;
-        b=QtzlaczyBJFReWpzNG3RZz4oXNTCxyLNOcEs4oxduW3EkzYGExJ8ngQzapy0NjKjLn
-         Vh/FF9vfIifL0/CYm/i+eoN0vXcj5/ULz5A9uO+BJRqXHWuHQ3jQH1IcbUFPNeWBhUQL
-         dHgIZmauM9qxapv9i/sbFB78Na3Or2af9zJU9YGX1Dpf+yIZ+t7BRK6iCl3W5arzD9Zx
-         XWpTPf5a+98Na1yIP9aSSCtIGvcGrvwmkUgeKezCNIuvWj3wEG4hlhuKE9+qTQYYmrNU
-         U6PXmZt0Ufwp9G5xcGJ1rygFeZg1nqgTM7SeWz5s3ODNowGgdOIuV5lJVTk2IntX5tui
-         XO/A==
-X-Forwarded-Encrypted: i=1; AJvYcCXDjbKnisqmyt1xEE/ByLRkn8rqeVjcFa34YZrDn/feeNADyjKGp9ISuThSUMibuZTCYghh6uBN4A==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzBxbQgijU5Vgh/UoeL9uHSndo6AlmcFp7yZMqnRSZVc7d6HqbH
-	VqrOEsAOUqA6CbffX+SckdAHWSssRDsPItpNSvP84d8mzspzRQrFVSPRru+Y36op31MViADiz+p
-	JFJkh7NoVesPDg8LQYgwRcRyq3AO0bNzJHj/2w0Tl
-X-Gm-Gg: ASbGncugXe/Bt+El/8BB1mgGhACh0XMr/aWkUlxNdzTaQcv7Y9WAR5O7IvuPkPBRdtO
-	RM/JvtAZF/JECxMmL96NwMo7+6OKDiGcfrjM7Nkbr7wNUp5M1wP4wLhM5+/v6sDdrZsQ9I6NW3G
-	BkkodHqoiv+sGtaPYKoUMMkDnbDCYJmVvkJGcG+6BTDzsXhwomRy8HqSg5Q2tQ7xoNaYEYS6ZSp
-	6gZ2owA0daLZvrDWLwb9O0=
-X-Google-Smtp-Source: AGHT+IHUXgE+IihNEnKdjmOQEwLekUUvu3+aWzgDFOUfZi4sULxM7CrV7gKrH879sJaDGgzOnRIOHdgF+J3gqIizJi4=
-X-Received: by 2002:a05:6102:3a09:b0:525:3802:c260 with SMTP id
- ada2fe7eead31-55608e9e69cmr2203452137.3.1757702231508; Fri, 12 Sep 2025
- 11:37:11 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 532E418E25;
+	Fri, 12 Sep 2025 18:37:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1757702278; cv=pass; b=ctChG3dYyFhjkwKX7FGxDU0I6xC2z2da5Iy5AXFU1CrCjUXlxAjd2aDbZ/d3TD0EhfMJoX/wbl58AxAcTPq7kwOKdEl6YcA7ymFtAiSrWOWA/iN54FMMSmBgIerdemmoe2GfiEx60X7NQIPb7O8UqC81C80oBCVqqBmBXrQ5V74=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1757702278; c=relaxed/simple;
+	bh=t1RmeNTyxGwlEIIhQkoCfwoh7UwYxgx1i5ScbcGVMHM=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=gtRgB+2GyRMRnx1MI+/jQB2mNT88kHCu+pvxnugRPDXYTkD7a3QZ05IiKZ4+p/iaLaolfRBaTrtt5VenYqSjaKVN1l8oypVbMVc3SJhb4n8Xgndh8U4gmaSPNh61fyEHTWalLr+5cn+nSuCfZWlqwfm+Xp2zLxjqO3s9kDh7SMA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=GlFy5cAF; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1757702248; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=nu4KmJ2N60G1yz9Eoen/X7PRUvdZnlBGj10lG600mM1PncXXeZPImMcX6/F+4vSOLNFYjDHqU13/MM19syF/2QBzDpM34efjuWR0qHz6quxh8eqrxECM2B+JD3FXEmv7DUBO5sC79kd1GCqet9vi/AxbM/plaTg7uW+s0E6HQKs=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1757702248; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=YUFMpPGqjfxLBE7yXeP/sK6tUiLACLKXHEb7VBkFoTA=; 
+	b=TUXkOLJ4rl1MbCUXHoemH9podesbAURBZCatyDTZYoe4uabfPsv/rPfVTokyYjepLxv77YNr5JhTsMNIjvudexAv8YFsVdtyWUHGpD7c3Tvug+LKKppbRFxsIiIcPrbiSCmqzrnfc+r/ggZDuJjoV8X4J1GNd9mE+mfD9g7x/gc=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
+	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1757702248;
+	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
+	h=From:From:Subject:Subject:Date:Date:Message-Id:Message-Id:MIME-Version:Content-Type:Content-Transfer-Encoding:To:To:Cc:Cc:Reply-To;
+	bh=YUFMpPGqjfxLBE7yXeP/sK6tUiLACLKXHEb7VBkFoTA=;
+	b=GlFy5cAFjHCT4hRn2VPCL3CP6PhxVlbvLKpm0LpJSbuD0DP4J9JBA5/Q+f++pHV4
+	w4r5GDZ/CZmQRQyyG1j40whOAcrp8SALg4oXNh+Tx+izLy0PYF5/eCIxeom1RX57/hW
+	SCquv7+oiTZHRY6ITHxL3ntLerBUNyKWHI/BAnHo=
+Received: by mx.zohomail.com with SMTPS id 1757702245899650.0983092702398;
+	Fri, 12 Sep 2025 11:37:25 -0700 (PDT)
+From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+Subject: [PATCH v2 00/10] MT8196 GPU Frequency/Power Control Support
+Date: Fri, 12 Sep 2025 20:36:59 +0200
+Message-Id: <20250912-mt8196-gpufreq-v2-0-779a8a3729d9@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250909111130.132976-1-ulf.hansson@linaro.org>
-In-Reply-To: <20250909111130.132976-1-ulf.hansson@linaro.org>
-From: Saravana Kannan <saravanak@google.com>
-Date: Fri, 12 Sep 2025 11:36:35 -0700
-X-Gm-Features: AS18NWBJYwHlx6gFzPDiQm-A363FKAFgsm5_uMk29VFYTcWjd5qUP9Ell1HnVXs
-Message-ID: <CAGETcx9W5MXyHA2r1kDh9=WJiQWLF1xdPaSCH=jXYeAHqQW60w@mail.gmail.com>
-Subject: Re: [PATCH 0/5] pmdomain: Restore behaviour for disabling unused PM domains
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>, 
-	Nicolas Frattaroli <nicolas.frattaroli@collabora.com>, linux-pm@vger.kernel.org, 
-	Stephen Boyd <sboyd@kernel.org>, "Rafael J . Wysocki" <rafael@kernel.org>, Heiko Stuebner <heiko@sntech.de>, 
-	Sebastian Reichel <sebastian.reichel@collabora.com>, Sebin Francis <sebin.francis@ti.com>, 
-	Diederik de Haas <didi.debian@cknow.org>, Bjorn Andersson <andersson@kernel.org>, 
-	Abel Vesa <abel.vesa@linaro.org>, Peng Fan <peng.fan@oss.nxp.com>, 
-	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, Johan Hovold <johan@kernel.org>, 
-	Maulik Shah <maulik.shah@oss.qualcomm.com>, Michal Simek <michal.simek@amd.com>, 
-	Konrad Dybcio <konradybcio@kernel.org>, Thierry Reding <thierry.reding@gmail.com>, 
-	Jonathan Hunter <jonathanh@nvidia.com>, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAExoxGgC/12P226DMAyGXwX5eq5id4SDqmnvMfUigNtGAtIlA
+ XWqePdlQbvYLn8fvs9+QhBvJUBbPMHLaoN1cwr8UkB/M/NV0A4pAysuVc0NTrGmRuP1vly8fKK
+ p9GupKzVQzZCW7l4u9pGBH+c9p7ElceNehM4Ewd5Nk41tMcsjYmY3lPcnCcFka1ucfqWp2dDxQ
+ EcquUbC0SzeHGbj3ns3jqZzKSXiG/wYbzZE57/yRytl5S5Q5f/jV0KFVad7HnQnzPSXB+dt274
+ Bw/P0wCIBAAA=
+X-Change-ID: 20250829-mt8196-gpufreq-a7645670d182
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+ Boris Brezillon <boris.brezillon@collabora.com>, 
+ Steven Price <steven.price@arm.com>, Liviu Dudau <liviu.dudau@arm.com>, 
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Matthias Brugger <matthias.bgg@gmail.com>, 
+ MyungJoo Ham <myungjoo.ham@samsung.com>, 
+ Kyungmin Park <kyungmin.park@samsung.com>, 
+ Chanwoo Choi <cw00.choi@samsung.com>, Jassi Brar <jassisinghbrar@gmail.com>, 
+ Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
+ Chia-I Wu <olvaffe@gmail.com>, Chen-Yu Tsai <wenst@chromium.org>
+Cc: kernel@collabora.com, dri-devel@lists.freedesktop.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
+ linux-pm@vger.kernel.org, linux-hardening@vger.kernel.org, 
+ Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+X-Mailer: b4 0.14.2
 
-On Tue, Sep 9, 2025 at 4:11=E2=80=AFAM Ulf Hansson <ulf.hansson@linaro.org>=
- wrote:
->
-> Recent changes to genpd prevents those PM domains being powered-on during
-> initialization from being powered-off during the boot sequence. Based upo=
-n
-> whether CONFIG_PM_CONFIG_PM_GENERIC_DOMAINS_OF is set of not, genpd relie=
-s
-> on the sync_state mechanism or the genpd_power_off_unused() (which is a
-> late_initcall_sync), to understand when it's okay to allow these PM domai=
-ns
-> to be powered-off.
->
-> This new behaviour in genpd has lead to problems on different platforms [=
-1].
->
-> In this series, I am therefore suggesting to restore the behavior of
-> genpd_power_off_unused() along with introducing a new genpd config flag,
-> GENPD_FLAG_NO_STAY_ON, to allow genpd OF providers to opt-out from the ne=
-w
-> behaviour.
->
-> Kind regards
-> Ulf Hansson
->
-> [1]
-> https://lore.kernel.org/all/20250701114733.636510-1-ulf.hansson@linaro.or=
-g/
-> https://lore.kernel.org/all/20250902-rk3576-lockup-regression-v1-1-c4a0c9=
-daeb00@collabora.com/
+This series introduces two new drivers to accomplish controlling the
+frequency and power of the Mali GPU on MediaTek MT8196 SoCs.
 
-I'm surprised this is happening. The default behavior of sync_state()
-is to never turn off a power domain until all the consumers have
-probed.
+The reason why it's not as straightforward as with other SoCs is that
+the MT8196 has quite complex glue logic in order to squeeze the maximum
+amount of performance possible out of the silicon. There's an additional
+MCU running a specialised firmware, which communicates with the
+application processor through a mailbox and some SRAM, and is in charge
+of controlling the regulators, the PLL clocks, and the power gating of
+the GPU, all while also being in charge of any DVFS control.
 
-Is there a consumer that's not captured correctly? If so, can we add them?
+This set of drivers is enough to communicate desired OPP index limits to
+the aforementioned MCU, referred to as "GPUEB" from here on out. The
+GPUEB is still free to lower the effective frequency if the GPU has no
+jobs going on at all, even when a higher OPP is set. There's also
+several more powerful OPPs it seemingly refuses to apply. The downstream
+chromeos kernel also doesn't reach the frequencies of those OPPs, so we
+assume this is expected.
 
-Also, there are already sync_state related kernel configs, command
-line options and sysfs files that should allow people to power off
-devices (at different levels of granularity) even if its consumers
-haven't probed.
+The frequency control driver lives in panthor's subdirectory, as it
+registers a devfreq device for the panthor GPU device, and needs to
+mingle with it somewhat closely. I've kept the tie-in parts generic
+enough however to not make this a complete hack; mediatek_mfg (the
+frequency control driver) registers itself as a "devfreq provider" with
+panthor, and panthor picks it up during its probe function (or defers if
+mediatek_mfg is not ready yet, after adding a device link first).
 
-Thanks,
-Saravana
+The mailbox driver is a fairly bog-standard common mailbox framework
+driver, just specific to the firmware that runs on the GPUEB.
 
->
-> Ulf Hansson (5):
->   pmdomain: core: Restore behaviour for disabling unused PM domains
->   pmdomain: rockchip: Fix regulator dependency with
->     GENPD_FLAG_NO_STAY_ON
->   pmdomain: renesas: rcar-sysc: Don't keep unused PM domains powered-on
->   pmdomain: renesas: rcar-gen4-sysc: Don't keep unused PM domains
->     powered-on
->   pmdomain: renesas: rmobile-sysc: Don't keep unused PM domains
->     powered-on
->
->  drivers/pmdomain/core.c                   | 20 ++++++++++++++------
->  drivers/pmdomain/renesas/rcar-gen4-sysc.c |  1 +
->  drivers/pmdomain/renesas/rcar-sysc.c      |  1 +
->  drivers/pmdomain/renesas/rmobile-sysc.c   |  3 ++-
->  drivers/pmdomain/rockchip/pm-domains.c    |  2 +-
->  include/linux/pm_domain.h                 |  7 +++++++
->  6 files changed, 26 insertions(+), 8 deletions(-)
->
-> --
-> 2.43.0
->
+Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+---
+Changes in v2:
+- mali-valhall-csf binding: move from performance-controller to
+  performance-domains property
+- mali-valhall-csf binding: fix vendor name oopsie in compatible of if
+  condition
+- mt8196-gpufreq binding: move from performance-controller to
+  performance-domains by adding the cells property
+- mt8196-gpufreq binding: rename e2_id to hw_revision
+- mt8196-gpufreq binding: add description that mentions "MediaTek
+  Flexible Graphics"
+- mt8196-gpufreq binding: get rid of mailbox channels we're unlikely to
+  use any time soon, if ever
+- mt8196-gpufreq binding: change name of mailbox channels to use -
+  instead of _
+- mailbox binding: change reg-names to "data" and "ctl"
+- drm/panthor: mediatek_mfg: rename e2_id to hw_revision
+- drm/panthor: devfreq: switch from performance-controller to
+  performance-domains
+- drm/panthor: devfreq: get rid of the accidental get_cur_freq function
+  move
+- mailbox: rename mtk_gpueb_mbox_ch to mtk_gpueb_mbox_chan_desc
+- mailbox: use smaller types in mtk_gpueb_mbox_chan_desc where possible
+- mailbox: add per-channel runtime data struct
+- mailbox: request one threaded IRQ per channel, pass channel struct as
+  data
+- mailbox: make num_channels in variant struct u8
+- mailbox: get rid of no_response, as it was redundant
+- mailbox: enable and disable clock in mailbox startup/shutdown
+- mailbox: point con_priv of mailbox framework channel struct to this
+  driver's channel struct
+- mailbox: request and free the threaded IRQ in startup/shutdown
+- mailbox: only clear IRQ bit flag once RX data has been read from MMIO
+- mailbox: reduce needlessly large receive buffer size
+- mailbox: handle allocation errors wherever they could pop up
+- mailbox: style cleanups in mtk_gpueb_mbox_read_rx
+- mailbox: call platform_get_irq earlier on in probe
+- mailbox: set drvdata later on in probe
+- mailbox: ioremap resources by index, not name
+- mailbox: handle devm_mbox_controller_register errors
+- mailbox: rename channels to correspond to bindings
+- mailbox: document a few of the private driver structs to be kind to
+  the next person who will look at this code
+- Link to v1: https://lore.kernel.org/r/20250905-mt8196-gpufreq-v1-0-7b6c2d6be221@collabora.com
+
+---
+Nicolas Frattaroli (10):
+      dt-bindings: gpu: mali-valhall-csf: add mediatek,mt8196-mali variant
+      dt-bindings: devfreq: add mt8196-gpufreq binding
+      dt-bindings: sram: Add compatible for mediatek,mt8196-gpufreq-sram
+      dt-bindings: mailbox: Add MT8196 GPUEB Mailbox
+      mailbox: add MediaTek GPUEB IPI mailbox
+      drm/panthor: call into devfreq for current frequency
+      drm/panthor: move panthor_devfreq struct to header
+      drm/panthor: devfreq: expose get_dev_status and make it more generic
+      drm/panthor: devfreq: add pluggable devfreq providers
+      drm/panthor: add support for MediaTek MFlexGraphics
+
+ .../bindings/devfreq/mediatek,mt8196-gpufreq.yaml  |  113 +++
+ .../bindings/gpu/arm,mali-valhall-csf.yaml         |   32 +-
+ .../mailbox/mediatek,mt8196-gpueb-mbox.yaml        |   64 ++
+ Documentation/devicetree/bindings/sram/sram.yaml   |    1 +
+ drivers/gpu/drm/panthor/Kconfig                    |   13 +
+ drivers/gpu/drm/panthor/Makefile                   |    2 +
+ drivers/gpu/drm/panthor/mediatek_mfg.c             | 1053 ++++++++++++++++++++
+ drivers/gpu/drm/panthor/panthor_devfreq.c          |  136 ++-
+ drivers/gpu/drm/panthor/panthor_devfreq.h          |   57 +-
+ drivers/gpu/drm/panthor/panthor_device.h           |    3 -
+ drivers/gpu/drm/panthor/panthor_drv.c              |    4 +-
+ drivers/mailbox/Kconfig                            |   10 +
+ drivers/mailbox/Makefile                           |    2 +
+ drivers/mailbox/mtk-gpueb-mailbox.c                |  337 +++++++
+ 14 files changed, 1788 insertions(+), 39 deletions(-)
+---
+base-commit: 51095600e8c19d53729a7fbd273abc4435a25e9b
+change-id: 20250829-mt8196-gpufreq-a7645670d182
+prerequisite-message-id: <20250829091913.131528-1-laura.nao@collabora.com>
+prerequisite-patch-id: 441c4c2e3d22f83a41241a1ab5c9be1a442f742e
+prerequisite-patch-id: 852bfc3d13e2bccc4d6f4813a71c42f329dadb0c
+prerequisite-patch-id: 0bc5b7bf268e88a6ef22e46c91db7645e2ce6189
+prerequisite-patch-id: 442533e316e46ecd47cd0b7fb410b58fad2b3bf9
+prerequisite-patch-id: 6d6d70ccb7d718b3bcca6662cdaf1e8b64b6ddc2
+prerequisite-patch-id: d61046e2cd2f33024092e96e8a987b9c34c24e73
+prerequisite-patch-id: c27ca28bb3df435c98fe02438264188d6fa52b7c
+prerequisite-patch-id: 27fadb12ce15099a684c08d4f8c785bedc87cef2
+prerequisite-patch-id: 7796ec9a0162ae96b708ea513742016657c69e14
+prerequisite-patch-id: f7549078f3702acdf1e6dcd36ddebab0e543b5db
+prerequisite-patch-id: b123fb15cb8c97cf0896b826820f4ce33085170c
+prerequisite-patch-id: fa96e18eae90efc14e4b9f13534c013b448a3f84
+prerequisite-patch-id: 1e53ad7341ddb67c9788252456068cc14ab2f610
+prerequisite-patch-id: ffff2977d8f2a3a44c3606f77d38f8745cb3c60a
+prerequisite-patch-id: 71d23f4f096e424ae3aa59a23695f5b1e488fab0
+prerequisite-patch-id: 3c12631f22a39d6def9340ed840e9e55e1a76304
+prerequisite-patch-id: caec6572d5d9a37183601b8e38f50af797df635e
+prerequisite-patch-id: d5b3d5719675a1e3be26e028b5596d39e839bc09
+prerequisite-patch-id: da7b826d56ac70b3b72be58d64e7c2107445478f
+prerequisite-patch-id: f3f789e0d919dd92b7d811a4e11c57bb05f71617
+prerequisite-patch-id: 79cca92633ca3d9cc2f1f38b6fc977a8d8543d60
+prerequisite-patch-id: f663f8f3bddf198d0cab083bac7ebb88689ffc82
+prerequisite-patch-id: a0ffc5b88c5eb88c491f6187672012c621bd520c
+prerequisite-patch-id: e6c6d67b034d06b6158a0e0f8299ad28f0e59134
+prerequisite-patch-id: 25f658fbd1238bd57e05ff299d0436f942bdcc4d
+prerequisite-patch-id: 7be8439e241a320b0eb0a264a8a59a9beef383d6
+prerequisite-patch-id: b903714dbe7d6a44fbe18faa02d59862ceadf217
+
+Best regards,
+-- 
+Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+
 
