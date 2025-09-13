@@ -1,170 +1,170 @@
-Return-Path: <linux-pm+bounces-34591-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34592-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01672B560E1
-	for <lists+linux-pm@lfdr.de>; Sat, 13 Sep 2025 14:43:52 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CAA27B5630B
+	for <lists+linux-pm@lfdr.de>; Sat, 13 Sep 2025 23:16:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 33C4A1C80F5A
-	for <lists+linux-pm@lfdr.de>; Sat, 13 Sep 2025 12:44:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0B09F1639B3
+	for <lists+linux-pm@lfdr.de>; Sat, 13 Sep 2025 21:16:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A30842ECE86;
-	Sat, 13 Sep 2025 12:43:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53148280CFB;
+	Sat, 13 Sep 2025 21:16:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I0Yu6R2r"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F0MHyTu1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E2F8E555
-	for <linux-pm@vger.kernel.org>; Sat, 13 Sep 2025 12:43:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6632127FB06
+	for <linux-pm@vger.kernel.org>; Sat, 13 Sep 2025 21:16:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757767427; cv=none; b=ZpDiDxxHQFCYOdjgUMv8UHMGlBnethscGBNPAPx+2WTyOpzA+cqhud3BZZC0RS+vMQrGZC3KzaMp/NFFD5bI7+rswZcioUMZKTzKjrC8Gtv5W2l/TTnviy1f/bMuUTQ6jfee6EX8o32CiH/OUSA2mfYvroaQPlfTPZnY7nLH/NA=
+	t=1757798184; cv=none; b=kmh+AZItudvSiFoCdwwo5m7MyAiap8RQlycsHYzzQkC5LtYy945Gj2mQF9QTkmm4Udp2FPdSKa9x/XAmT8XBAn9ftT7vO/3ZwroLm+GxNfSRlC3dmhrd529JkgQdqzMfxXZ9KZjKXRaTE1N21XU8A/biLahZdyp3THbzcp+Xcno=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757767427; c=relaxed/simple;
-	bh=jfB70gQONh76s9eOb2k7EuWL0y+TqUWsvIBuoaHEIgk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PvI3IIk36uQ//zfn3rETZHnX3bQ2S2UCpjoqEpWtA0WR8FQcHnD8x4MB8AL39DKTJMKHt0011GAm0j7nq4dPtqFWO9mdxvKJtPre2BUZ+2pqkSOD6uxwzI48fhZj0Yo4bmkcHpwctorgeN5zBdTN3P6u8i5PIPidQ9KnzbV0Cwg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I0Yu6R2r; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 369CAC4CEFC
-	for <linux-pm@vger.kernel.org>; Sat, 13 Sep 2025 12:43:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757767427;
-	bh=jfB70gQONh76s9eOb2k7EuWL0y+TqUWsvIBuoaHEIgk=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=I0Yu6R2ra4/DT88cl44PVNrMfOeFPiljiPHENl5VxvrHmS+ej9ozfV7A8c/PYgBZe
-	 scUc3sbvYnHIGJ9IRQlt3IPC3bgrWTQriV20RfRklMtvd2pKgOYr44J1FsReV0SFzf
-	 RpFIXWz7Ad0dwnisoRvoYb5ZuaRaRy8wEdnWRXHwlqtKjzpjoDD9dsJXXW+Pzr7amJ
-	 SiyjHa/c8jR0EDfSLQdHaGyTJkuyeTOXGMQOslwjJlNgvRHmrQo1mXp9PsMMoFDTww
-	 Cf7+FFrNDAwPze3x1i9OXPhy4ZJ9hDmFEjZzdaaHOrvLhlhwlH5nk6ww1MfqwWNOm8
-	 ayyXZeQdMi8Gw==
-Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-74c1251df00so1486773a34.0
-        for <linux-pm@vger.kernel.org>; Sat, 13 Sep 2025 05:43:47 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXo6Xcdvas1VGuOohRITBfEKr/bHlXfLvpn0btSk0Xhe/46S3b7g245nC3xlV5mlek4xFlBtIBVwg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YykopBbiK0I+gX/AzwtlUrc7+VbQhOMPjICuUhiWdOfX75XqItv
-	bln8Xppkz+eNYRjkfvodiVPwhlj7cKAVu5Lmc8uedtm32duKQ8x2g3CulRKNwon6ot6WoYNs76f
-	Bo0aFN45zHZBRFmP97ZGuBFO67mdEIQs=
-X-Google-Smtp-Source: AGHT+IEAmiMQnLcYLV/Pkj3NHYryOaXFljpsolHDj1IzK9H2zh00ir+lNbAaqOUzWhVVfMZ1hKEiamyleS7v2ajPG3Y=
-X-Received: by 2002:a05:6830:6d15:b0:746:f391:9d71 with SMTP id
- 46e09a7af769-753550e2c12mr3640920a34.23.1757767426497; Sat, 13 Sep 2025
- 05:43:46 -0700 (PDT)
+	s=arc-20240116; t=1757798184; c=relaxed/simple;
+	bh=NFuqNBQauhkiyeY7IkiHmVa5Tu4iy3YfrYEFWAqHXWU=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=kL0E1pbc24+DipWhvMkU9lHrkLcsbuCuOHVm/l2W15ZD3bD7EhQw6Uwq8rakkjUE/Ht2VZ3xpeSWLbsXGNdU5gPJpwquwqMrGkL0bMxwQxopDArZ0c315aB99F9e29ffTOGqlEbhFOzX7g/3uumqA1d5mdWFsMIiWY8mcc332B0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F0MHyTu1; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-45de1084868so15684425e9.2
+        for <linux-pm@vger.kernel.org>; Sat, 13 Sep 2025 14:16:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1757798181; x=1758402981; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=FL4ZfQetDLny0SAdvUxGm2UtwwSFvWNNL5D/nGtc7bY=;
+        b=F0MHyTu1koRbtMvrwPStZyfZFrUxl19Pph9yz9vhSKBfIsClaEY6dy2wmd2JmInOrz
+         tvT3yonuLCce+48CuNZdDv0VBHk/QE9Qmop7iu9Te9mmklw6rdkCIeBXLefn2tHww1/W
+         CkcCeMaMowrJM4LbdTanmLBsfhuqhqLCSrui4jF0j1yy9HhfCpisVNVUNyJfLEbrM7ZE
+         GujZpM1lI9cjFg36oOGIzsr8QUb08Qaq1iRc7Wbwre28S97BgrZcGjPMvrh7NJsuhqbE
+         +x5CBE8RM2FpOEywRBzAyFs0lpEp64BZnlgEUats7zx8/bu+aW3nZeESvZnn6HN9lNLZ
+         j1Nw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757798181; x=1758402981;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FL4ZfQetDLny0SAdvUxGm2UtwwSFvWNNL5D/nGtc7bY=;
+        b=guuFwczkfT6npkh50duNtlztAowiIA53LkykXpqmnAVFCacD0lGw8TxKl8bjUXfgRs
+         zsyuYf/Iz4uAovRx61S2X7y7bf2bjqWQ3CYELS9kdXyB73+i0JlTTPhCdt1+/P3l2+vl
+         hSo++SY4dzx+sk2V2gtntnsQ+LPj5pglXSTSMkNRM5troRMpV0LU5R0lav6g3PZhpGP7
+         5rbgKTFOsWwtbPK5H8tR7FZrMZta9VwVCZvusSAPjQLXIj36xCwpzpFViDsLWHCCg/y2
+         Qv8HMvgTNemI8osZOS4UFjrRQU+z1jFNogNDkMA1g5T4Kh8+Z2gpCKfy6RpUtxs7Za1/
+         qc1Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVcpJhU/itzJ1vCe81JZ6jC16PD5rGqTeVeu8wKtp6JDjTVpCQJ2QE9NBduio56WbGeoiGfPyT9mA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzvh+7knplINShpqobFzXKrGh7JhANK/E8TJ+F6ku05UFqQNzXJ
+	UIO4h0VFCMcwbA7kupCa+kQJKHxI5derjFUJp/d9IFzLyRZbXGoRVGDE
+X-Gm-Gg: ASbGncv1t7mA1iMDFRSTuhEotmAeAAUfbRv3SbsIAjxDfGij52oJZT4Axt38OAK5okC
+	fvQ0o2D/r4iSfTtyLRHwSLhmpp1BRMonSfhRvg0Ur+JsBIdCJ40x07mWjK53UdtIOXfpTblQjCm
+	bbWJPW65rU1a0eh8x82jjgrafBdBzST8hJu/KAAaSv/KaTzBq7cIT/nltc8zO8zGyN+2DRpmUJS
+	K/i5qiBn2qjytZy1VRWNCZRmAMfxIQ62ohnwBrWjxdER9Vlri9l1v4+gOZ41SfZpsR2vpu5Xb3J
+	yB4w8mya/zHcjNwShGroOZ3JreIg7jXf72YOxVMGC4a3hjziXEglc2KRyy372P7K5RMYIjmNDmq
+	7TZ7hXdaUItB7s+vXmgerTXAOtwyxkPIoUaHW/btCZA==
+X-Google-Smtp-Source: AGHT+IFSzRmP9ZjHIjUVjf8clDm3UnyBhZdE1uuyQ69zI3ytWPwOS582vzr0QJUt7Jd9hnVlvfQiDA==
+X-Received: by 2002:a05:600c:6dc8:b0:45d:f88f:9304 with SMTP id 5b1f17b1804b1-45f211fbf54mr52945275e9.30.1757798180367;
+        Sat, 13 Sep 2025 14:16:20 -0700 (PDT)
+Received: from Radijator.localdomain ([93.140.65.23])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45e014ac468sm65403145e9.0.2025.09.13.14.16.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 13 Sep 2025 14:16:19 -0700 (PDT)
+From: =?utf-8?q?Duje_Mihanovi=C4=87?= <dujemihanovic32@gmail.com>
+Subject: [PATCH v4 0/4] Marvell PXA1908 power domains
+Date: Sat, 13 Sep 2025 23:12:47 +0200
+Message-Id: <20250913-pxa1908-genpd-v4-0-55e4cf32f619@dujemihanovic.xyz>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <f8965cfe-de9a-439c-84e3-63da066aa74f@rowland.harvard.edu>
- <CAJZ5v0g9nip2KUs2hoa7yMMAow-WsS-4EYX6FvEbpRFw10C2wQ@mail.gmail.com>
- <CAJZ5v0gzFWW6roYTjUFeL2Tt8kKJ_g5Q=tp2=s87dy05x-Hvww@mail.gmail.com>
- <38b706cc-5966-4766-9165-51935fdcd790@rowland.harvard.edu>
- <CAJZ5v0h=i9XF_SQMOhz3P+4SAH3Qy-r1oUiiw7Bp=PcRnJjVbQ@mail.gmail.com>
- <59951c2d-60e8-47a8-a43c-00b92e095043@rowland.harvard.edu>
- <CAJZ5v0i6aFarDU8OTZ_3VS9dp4SaqKJ0SuiN4gFSxrRoAAV5CQ@mail.gmail.com>
- <24a69e4d-2f10-43fb-81d4-f7eea44a6b8d@rowland.harvard.edu>
- <CAJZ5v0gUjgY45WFye5STJ7kv30O4rQ=23qkOsHEMSxfwg8jO4g@mail.gmail.com>
- <385dccf3-234a-4f83-9610-81ac30bf1466@rowland.harvard.edu> <20250912222321.ct5ezgvsgyvos2ah@synopsys.com>
-In-Reply-To: <20250912222321.ct5ezgvsgyvos2ah@synopsys.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Sat, 13 Sep 2025 14:43:32 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0jvDxpB_8Um=SgWWFU8S8YVe4jmLa+yP_676sj+NNM5Bw@mail.gmail.com>
-X-Gm-Features: Ac12FXzJER_E5HTgLjQMRgzyIRC7l3RKWw6eF7pJn9dN0S6FsvStekeOeK0QqhY
-Message-ID: <CAJZ5v0jvDxpB_8Um=SgWWFU8S8YVe4jmLa+yP_676sj+NNM5Bw@mail.gmail.com>
-Subject: Re: [PATCH] drvier: usb: dwc3: Fix runtime PM trying to activate
- child device xxx.dwc3 but parent is not active
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Alan Stern <stern@rowland.harvard.edu>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	ryan zhou <ryanzhou54@gmail.com>, Roy Luo <royluo@google.com>, 
-	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>, 
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAE/exWgC/3XOTQqDMBAF4KtI1k3JTPxLV71H6SImY02hKtoGr
+ Xj3RqEg0i5m8Qbex5tYT52jnp2iiXXkXe+aOoT4EDFT6fpG3NmQGQpMRC4kbwcNSuT8RnVrOSQ
+ KclskmArDQqftqHTD6l2uIVeufzbduPIelu9XSneSBy44pLFQUqjSZHi2rzs9XBjReGeOw/hmi
+ +hxoyDsFQwKFToGSdaGWf8UuVXUXpFBQa2NXg4z+KXM8/wB3gylqT4BAAA=
+X-Change-ID: 20250803-pxa1908-genpd-15918db5260c
+To: Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>
+Cc: David Wronek <david@mainlining.org>, Karel Balej <balejk@matfyz.cz>, 
+ phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht, 
+ linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-pm@vger.kernel.org, 
+ =?utf-8?q?Duje_Mihanovi=C4=87?= <duje@dujemihanovic.xyz>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2335;
+ i=duje@dujemihanovic.xyz; s=20240706; h=from:subject:message-id;
+ bh=NFuqNBQauhkiyeY7IkiHmVa5Tu4iy3YfrYEFWAqHXWU=;
+ b=owGbwMvMwCW21nBykGv/WmbG02pJDBlH7yuF9s7vMfgZzqzvorz3b0xhim5akoa5/JqgLr07z
+ okfFjh2lLIwiHExyIopsuT+d7zG+1lk6/bsZQYwc1iZQIYwcHEKwEQ2XGP477fhfNizJWKTv/lu
+ 9Wqbq64YNXnbHw3jVfyutnPvGS6ek8fw35+VS5k14Mck5YCvPktemd+7cvbT2UVZmf3TrVNevvH
+ dwAMA
+X-Developer-Key: i=duje@dujemihanovic.xyz; a=openpgp;
+ fpr=6DFF41D60DF314B5B76BA630AD319352458FAD03
 
-On Sat, Sep 13, 2025 at 12:23=E2=80=AFAM Thinh Nguyen <Thinh.Nguyen@synopsy=
-s.com> wrote:
->
-> On Thu, Sep 04, 2025, Alan Stern wrote:
-> > On Thu, Sep 04, 2025 at 07:34:22PM +0200, Rafael J. Wysocki wrote:
-> > > On Thu, Sep 4, 2025 at 4:19=E2=80=AFPM Alan Stern <stern@rowland.harv=
-ard.edu> wrote:
-> > > >
-> > > > On Thu, Sep 04, 2025 at 04:08:47PM +0200, Rafael J. Wysocki wrote:
-> >
-> > > > > Say this is not the case and say that the device is runtime-suspe=
-nded
-> > > > > to start with.  Then the "suspend" callback has two choices: eith=
-er
-> > > > > (1) it can runtime-resume the device before doing anything to it,
-> > > > > which will also cause the device's parent and suppliers to
-> > > > > runtime-resume, or (2) it can update the device's state without
-> > > > > resuming it.
-> > > > >
-> > > > > If it chooses (1), then "resume" is straightforward.  If it choos=
-es
-> > > > > (2), "resume" may just reverse the changes made by "suspend" and
-> > > > > declare that the device is runtime-suspended.  And if it really r=
-eally
-> > > > > wants to resume the device then, why not call runtime_resume() on=
- it?
-> > > >
-> > > > That's what I meant by needing "cooperation from the driver".  The
-> > > > driver's ->resume callback needs to do this check to see which path=
-way
-> > > > to follow: (1) or (2).
-> > >
-> > > Unless "suspend" always does the same thing, so it always does (1) or
-> > > it always does (2).
-> > >
-> > > In that case, "resume" will know what to do without checking.
-> >
-> > It still has to check whether the device is runtime suspended.
-> >
-> > > I'd like to mention that if "suspend" chooses (2), it may need to
-> > > resume the suspended parent or suppliers to be able to access the
-> > > device even though the device itself won't be resumed.  I'm not sure
-> > > if (2) is really attractive then, though.
-> >
-> > True.
-> >
-> > > Also, in the example we've been considering so far, the assumption is
-> > > that B can just stay in runtime suspend, so why would it need to be
-> > > resumed by "resume"?  And if there is a specific reason for resuming
-> > > it, "resume" can just call runtime_resume() on it AFAICS.
-> >
-> > So it appears to boil down to this, as far as ->resume is concerned: At
-> > the start of the callback routine, there should be something like:
-> >
-> >       if (pm_runtime_suspended(dev)) {
-> >               if (the device needs to be woken up) {
-> >                       pm_runtime_resume(dev);
-> >                       ... whatever else is needed ...
-> >               }
-> >               return 0;
-> >       }
-> >
-> > If ->suspend is clever, it can clear or set the SMART_SUSPEND flag
-> > according to whether the device will need to be woken up.  Then the
-> > second conditional above will always be true whenever the callback runs=
-,
-> > so the test can be skipped.
-> >
->
-> So, can this solution be the default behavior in the PM core? That it
-> would initiate pm_runtime_resume by default?
+Hello,
 
-Not really because there are drivers that don't want that to be done.
-For example, everybody pointing their suspend/resume callbacks to
-pm_runtime_force_suspend/resume(), respectively, and not setting
-SMART_SUSPEND.
+This series implements support for the power domains found in Marvell's
+PXA1908 SoC. The domains control power for the graphics, video and image
+processors along with the DSI PHY.
 
-> Seems you want this to be handled in the device driver and not PM core
-> right? ie. the condition "the device needs to be woken up" will not be a
-> PM user flag/config but the device driver needs to check that itself.
+Signed-off-by: Duje Mihanović <duje@dujemihanovic.xyz>
+---
+Changes in v4:
+- Address maintainer comments
+- Rebase on v6.17-rc5
+- Link to v3: https://lore.kernel.org/r/20250829-pxa1908-genpd-v3-0-2aacaaaca271@dujemihanovic.xyz
 
-Not necessarily.  I'll write more about this next week (well, hopefully).
+Changes in v3:
+- Move driver back to pmdomain subsystem
+- Instantiate using auxiliary bus
+- Small fixes and refactors
+- Rebase on v6.17-rc3
+- Link to v2: https://lore.kernel.org/r/20250821-pxa1908-genpd-v2-0-eba413edd526@dujemihanovic.xyz
+
+Changes in v2:
+- Move driver to clk subsystem (domains are instantiated by clock
+  driver)
+- Drop power controller schema
+- Drop RFC prefix
+- Rebase on v6.17-rc2
+- Link to v1: https://lore.kernel.org/r/20250806-pxa1908-genpd-v1-0-16409309fc72@dujemihanovic.xyz
+
+---
+Duje Mihanović (4):
+      dt-bindings: clock: marvell,pxa1908: Add syscon compatible to apmu
+      pmdomain: marvell: Add PXA1908 power domains
+      clk: mmp: pxa1908: Instantiate power driver through auxiliary bus
+      arm64: dts: marvell: pxa1908: Add power domains
+
+ .../devicetree/bindings/clock/marvell,pxa1908.yaml |  30 ++-
+ MAINTAINERS                                        |   4 +
+ .../marvell/mmp/pxa1908-samsung-coreprimevelte.dts |   1 +
+ arch/arm64/boot/dts/marvell/mmp/pxa1908.dtsi       |   5 +-
+ drivers/clk/Kconfig                                |   1 +
+ drivers/clk/mmp/Kconfig                            |  10 +
+ drivers/clk/mmp/Makefile                           |   5 +-
+ drivers/clk/mmp/clk-pxa1908-apmu.c                 |   7 +
+ drivers/pmdomain/Kconfig                           |   1 +
+ drivers/pmdomain/Makefile                          |   1 +
+ drivers/pmdomain/marvell/Kconfig                   |  18 ++
+ drivers/pmdomain/marvell/Makefile                  |   3 +
+ .../pmdomain/marvell/pxa1908-power-controller.c    | 274 +++++++++++++++++++++
+ include/dt-bindings/power/marvell,pxa1908-power.h  |  17 ++
+ 14 files changed, 369 insertions(+), 8 deletions(-)
+---
+base-commit: 76eeb9b8de9880ca38696b2fb56ac45ac0a25c6c
+change-id: 20250803-pxa1908-genpd-15918db5260c
+
+Best regards,
+-- 
+Duje Mihanović <duje@dujemihanovic.xyz>
+
 
