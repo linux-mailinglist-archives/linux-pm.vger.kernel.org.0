@@ -1,247 +1,245 @@
-Return-Path: <linux-pm+bounces-34597-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34598-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0639FB567E0
-	for <lists+linux-pm@lfdr.de>; Sun, 14 Sep 2025 13:29:00 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 47FA0B5680D
+	for <lists+linux-pm@lfdr.de>; Sun, 14 Sep 2025 13:46:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A9DAE172DEB
-	for <lists+linux-pm@lfdr.de>; Sun, 14 Sep 2025 11:28:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A0A0E3ADF5B
+	for <lists+linux-pm@lfdr.de>; Sun, 14 Sep 2025 11:46:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5695248F52;
-	Sun, 14 Sep 2025 11:28:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F96C72618;
+	Sun, 14 Sep 2025 11:46:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="RqFQkaMl"
+	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="O2sSYI98"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.3])
+Received: from TYDPR03CU002.outbound.protection.outlook.com (mail-japaneastazon11013027.outbound.protection.outlook.com [52.101.127.27])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E8521EEA31;
-	Sun, 14 Sep 2025 11:28:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.3
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757849334; cv=none; b=Jf6dVrioHozc+PPcKGMaL7ZiUwYgFHSGDLj33lS9PUdyq9vYXSBqwX65FvlBgKwGwkcSyGIDEvVnnP6IOyCvdBSsoOeSWsq6sZfgG2SjczQqm36+AfIAGbLXUGq9fhpxz9Tg0K8TGHE0S23Ert0b2S8ebq56mXRgR+uuViPa7do=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757849334; c=relaxed/simple;
-	bh=sbbiQC5idlV79e5VJuSDrpNy3nbNksDDZ7ieLP3a9Ys=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=UOFltky+kyD1reNx98teTdFg3B9vPb762k5cnZYV7lI+UbiJw71iPeNsLjhR/6uaxACPlK2lyAD7srIEGyNL4vfk+HH0mOLIj0IZrxSL9sNOmwe6Kkma8p8AXx80smyKuaGiucYN9b+SnMklMbg/VVOV9D8MiEVZ8xIXK0S0dRg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=RqFQkaMl; arc=none smtp.client-ip=117.135.210.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=jp
-	U/nK/QiVXIUpvfuILcBhsqzSqu6VBvY4LCmLMP+fc=; b=RqFQkaMlzez5oqnrSf
-	x+fq6pGLMgdelDStFABECMJ4HjYVL6ckEHP9+Z/3LXwkqW9RZz69/YhrI+CioAmX
-	FS8xOA7D1GRLQ6VO6HbZiCQbveemYReYKRY5otrf+f3BFrs/ZMQTde3huXjj0lzG
-	9edtSH3TJc0QQtGvBxL6pdlQ8=
-Received: from MS-CMFLBWVCLQRG.localdomain (unknown [])
-	by gzsmtp2 (Coremail) with SMTP id PSgvCgB3AgYMo8ZoNtYUDA--.21814S2;
-	Sun, 14 Sep 2025 19:12:13 +0800 (CST)
-From: GuangFei Luo <luogf2025@163.com>
-To: rafael@kernel.org
-Cc: michal.wilczynski@intel.com,
-	gregkh@linuxfoundation.org,
-	dan.carpenter@linaro.org,
-	lenb@kernel.org,
-	linux-acpi@vger.kernel.org,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7555E55A;
+	Sun, 14 Sep 2025 11:46:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.127.27
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1757850371; cv=fail; b=em5RRfjfYDvO5TDVc0fhCn96ozV0+3ntBjNkjykKdPmFeOiuhLTeMSq0FKDwIAh8MBrMEsToI2r5nDiVodJP72lS08IfsMuLW3k/Nda+6aAtUEynZHvNDnOGtwJhccZW9KLYEU44jc3Tc0pPDXyxOR8d98tz9aGri6vU9UwJkQg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1757850371; c=relaxed/simple;
+	bh=fnwRcbmKMfBJAWNWTa+Zzpj6WArf4FVeb41h/kMPWyI=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=UvU07dWY+Hb5sfaUyvQskpaphmKE5qvKwz0Q60l4o1xe0YZsk6nvRlQoPPGTQIxV5RZo0E9rmxlJjdFpJGq3xzfncLO4trrFtwKOpOx4NVCVyzZwHm1Ovkvb9G4AwlfBTkKee4KbQi6RhgUogxN4PlO45Qu4F4IFhet1R7EUll8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=O2sSYI98; arc=fail smtp.client-ip=52.101.127.27
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=ffe9lu690CSqBSW6NZW3VQmJz+xL4FRFJYhaIwpgU3CXVfnmkEh22m5GJUb0xKgVHcSxALFtas9YL7mRoJ4pc5HPAcHBzcPz1nUyXHofIq/U3c7O/mfWYutbaa0hEMFlnm6mfWU8S145txFI7l04qwV7a9yejSqeiw3S4+U9KKBOv8c1oYMp26ZyGiytCINjddnjCubwdsM7MvLaQve4QyXsD7d2I/pO9YXIqnWq7FnNS6Z/NrXiEB4Z+TA6lJd/i64tH1yJoXTjoEjXqlNll2kez2aEK2xGvzMFbSHjHG5BKx35AyobQ37u0sx3IwmcWYZMcsn+aS01KqYoEYcUZw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9X5yc7CYmUAd0/keyRbiSginyhRrctGPW8ft+QW+ocg=;
+ b=x4dZ6g7q6MKz7BkpJnoItt48t9N/EV7Lw5hQfqhZStGDQZwf2dqV4lTnBa5KPseMvkXaoWChzm6vdI4P/6fM+33cuc7SrlBfCqetfrDGYxKJL1QF9bW+JIzoIpN80ai5SjG9layTXf0ujv2MTMGMDfQEEFCfVEKUkAmFW8ONbna0aRqrUbWadYfQHyINSmEdefyAlO5PDEfbEekanzbb9adCQOoDwv4H1uRt07p7ulnicGV1KNOi9aPQXrU1qFU6dhbE7SXCfUv9oNki3BqjQuMwj/RwPTsZBslPDwJ0wbyueDdOpaZ2ya5p9CP1CTaXsCHegnyExD+Eay3KKorsvQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9X5yc7CYmUAd0/keyRbiSginyhRrctGPW8ft+QW+ocg=;
+ b=O2sSYI98+kfXgIoac3sTw7tien7erR8fmM9+OZdMQPQFT8IsKLmcTog675VQLmjzWVfULZe1EP8KF/i2TddNh+al0a1Tw3puun78qEFf30O3C8zUzOna3Bagb+0GzC1UhX8eFSKrrbCLzFgt94yfEvOpTVJLGbHS97p280vaXrbf52KCuSfgQ5CSWrxJjgHj41lunB1uSHxgNItYIISQomNB4rGm9j88aFLeOBZxQDE8vxmUZCxvDYYgIXYO2VK8OTaVUDX1SG1X1HhwHdh+c4rH6ihPn7dMcxt/ZubfWQ+Xo9EzOqQ63v1diWouc45Ut4mnS5QxExkGhASvkOAnxg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SI6PR06MB7475.apcprd06.prod.outlook.com (2603:1096:4:242::11)
+ by KL1PR06MB6044.apcprd06.prod.outlook.com (2603:1096:820:d2::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9115.18; Sun, 14 Sep
+ 2025 11:46:04 +0000
+Received: from SI6PR06MB7475.apcprd06.prod.outlook.com
+ ([fe80::a41:1dd9:dc0e:5cd0]) by SI6PR06MB7475.apcprd06.prod.outlook.com
+ ([fe80::a41:1dd9:dc0e:5cd0%3]) with mapi id 15.20.9094.021; Sun, 14 Sep 2025
+ 11:46:04 +0000
+From: Wang Jianzheng <wangjianzheng@vivo.com>
+To: Jens Axboe <axboe@kernel.dk>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Avri Altman <avri.altman@wdc.com>,
+	Bart Van Assche <bvanassche@acm.org>,
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Peter Wang <peter.wang@mediatek.com>,
+	Bean Huo <beanhuo@micron.com>,
+	"Bao D. Nguyen" <quic_nguyenb@quicinc.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	linux-block@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	lkp@intel.com,
-	luogf2025@163.com,
-	sre@kernel.org,
-	stable@vger.kernel.org
-Subject: [PATCH v6] ACPI: battery: prevent sysfs_add_battery re-entry on rapid events
-Date: Sun, 14 Sep 2025 19:12:11 +0800
-Message-ID: <20250914111211.1570889-1-luogf2025@163.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250910142653.313360-1-luogf2025@163.com>
-References: <20250910142653.313360-1-luogf2025@163.com>
+	linux-scsi@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Cc: Wang Jianzheng <wangjianzheng@vivo.com>
+Subject: [PATCH 0/3] block: device frequency PM QoS tuning
+Date: Sun, 14 Sep 2025 19:45:43 +0800
+Message-Id: <20250914114549.650671-1-wangjianzheng@vivo.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: TY4P301CA0024.JPNP301.PROD.OUTLOOK.COM
+ (2603:1096:405:2b1::11) To SI6PR06MB7475.apcprd06.prod.outlook.com
+ (2603:1096:4:242::11)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:PSgvCgB3AgYMo8ZoNtYUDA--.21814S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW3AF43ur1kWw4fWF43uF18Grg_yoWxKFW5pa
-	yrCayUKrW8JF48JwsF9F1UKryfurs0qF9rWr95Cr92k3srur1DAr4IqFyUAF47Gry8C3y8
-	XFn5t3WYyw18Ww7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07U04iUUUUUU=
-X-CM-SenderInfo: poxrwwisqskqqrwthudrp/xtbBXxTHmWjFEa7oRwADsr
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SI6PR06MB7475:EE_|KL1PR06MB6044:EE_
+X-MS-Office365-Filtering-Correlation-Id: 01b4a632-1abc-4669-8188-08ddf38448d3
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|7416014|376014|52116014|1800799024|38350700014|921020;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?y4oyXamFcF+9wGvQdci/1if0E/MFgS1q0t4piecR08RCHXMfSc3I+XyrioUJ?=
+ =?us-ascii?Q?fCginWGs4m8GXl8FL6feOXAHhRSpXYwL1eeX6YKuWRMTYWMnTH8WrCqf9uyk?=
+ =?us-ascii?Q?xr0+uMvKQaqeTF62bisNa9KdbifYRT3+/5JcsV0fT6Qn7516RW3Lf2ki1/1D?=
+ =?us-ascii?Q?VY8Sezi7Mp3EGluyHZh0nFfSYqpVVoXfb9NrkiKnrM5ejLCDE7HYJcMnSoiS?=
+ =?us-ascii?Q?EPk27gdhIVvbcgaqIKI2ypMpzMpG4fc4NrXZbdT/SlG3uz0+61oPHFhGO2QN?=
+ =?us-ascii?Q?c8S2Qp763Xo9SLxuzZ4fhfRE3BSIAoihvaIu6Io2vM9HuTQVuPfXXVjwr0G/?=
+ =?us-ascii?Q?0xE+Y1ewHGeBJ6xizzssncWzQCzvEJTzUzORPhXjmvg+TtaEx/6Itl4OubDL?=
+ =?us-ascii?Q?Kpi4ciV9X92Jvb1q1EjNA76s0hS2Qy5QHyBWY1dO69UbBuAr2W67xmqEPJVg?=
+ =?us-ascii?Q?4gLtUTDDQ7Q+7cONhoHljaUxPa6dNxqJBeK/QoctZqzvGPpgAntZSpma+Js4?=
+ =?us-ascii?Q?mqNjRingR5Ejnin96zONkvAK612z54t1WXN7R7Pf50MiCg9zlxybVFyhNx6H?=
+ =?us-ascii?Q?diBbYqudKFo9stWbMwEhNPCi6rRr0iz6jwLO0iggeP9NTZJdNlXVdIKkbW6M?=
+ =?us-ascii?Q?PyOOIQIy8eK6qjBE3gmYfDFxQxrf9eXMguPyBsB5MlS8omSZow+/bNNm+F3C?=
+ =?us-ascii?Q?qyVROwADrOfltc9gV1N073bahugLgyrGM3814l6fxs3dtZlzSzbQCchyoLgU?=
+ =?us-ascii?Q?xt+Df/ZFaXHR3oGOoUUAahB5sEkHaI4eTFJHE8toHXEojhL8/JgVJ/OXQrZ7?=
+ =?us-ascii?Q?Bv9m51ftTMg5aNis9dnbJhps3LY/OAFiU7fBT0xnGpaXBUmUybSpsECHz0kk?=
+ =?us-ascii?Q?Ev+B0tZeica3o8nWoX3+I/pLRcU2qQq6jK9M0nsqRENuCt+8uxCoerRtqvS2?=
+ =?us-ascii?Q?7IrLUL2G+SmXS4NcLgOPjKgecPANlkVP1yofpBdIk/lau+FuDlK5C9ops0i6?=
+ =?us-ascii?Q?yji/WIo4dmBpUJa/orrNVABmgfcKtrmW0p+OLc9qELSzZPsI1X40aA5rD3A+?=
+ =?us-ascii?Q?lRRAqco2qWYhZRWa/2T/WPAYCbUUcqkiX6GoYk5AYTCckWUUZYD3cjeC//oB?=
+ =?us-ascii?Q?yqvwL0MP7ctMbffuI57YnED7/wUq6djQ5tgYdCODSILNdwJ+yb1ksAFMKNcW?=
+ =?us-ascii?Q?sCiMuDmPJ7afNHp7ID77Ref70LRzvKQCqwJd46ZAZH8LytAQP4HxPRPGMJjm?=
+ =?us-ascii?Q?QptogIiWcFRghOtbX5/5xlRV1XANptmkTe4onggrRz2ty1G1DCg/JFPLcvgH?=
+ =?us-ascii?Q?ct35qCjIYLGuqII5b6+Sk2Qg3dpQatjC7SSp6SFDADQRcwZsluE/wCcxWso2?=
+ =?us-ascii?Q?zWcnhTVnkygL3pYSI0ljQ2O4ye74SYqBzVPMNepom6dvZK+4AHPAIb0NzzFW?=
+ =?us-ascii?Q?TpwZITT6MLn7Vpjx/Y68xKGvDZvPs9LqeD8jOb568pGE/pqGolZFuzfLIJ7a?=
+ =?us-ascii?Q?XaeJ3ONcupSim9w=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SI6PR06MB7475.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(52116014)(1800799024)(38350700014)(921020);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?XSg4zWUh2j6c0rgV20TdSMqfH3ComDR8XqR3DD/bbgb+W24gR/t/UKDzJKV6?=
+ =?us-ascii?Q?ljEVGMAg+ABdSRDMW5zEf3tWooWS6MyFiTKnkBXd2tRVDMctTjhy/y7o9ESe?=
+ =?us-ascii?Q?dF1RIsC6zxCt8GDOzmx2FYcmrfG+hnszcVcMReKhelawPc21em9dM5shQSEU?=
+ =?us-ascii?Q?oO4TpP2NCL9X5CpT3myqdj5aF+iCGxj2SSYElWP9I0kLcscrjsizgi1fIkc7?=
+ =?us-ascii?Q?Su467qr6GlKUt5BVWNHTN88rq2Xp4R2PzrL8jPbD2l2YioElr4tfkZe90jQN?=
+ =?us-ascii?Q?8FDeeM1n0bs2KznEm+qYB8MyC7dfrxHuoVDbV1w1fusuwRIz4pGfOvf0+EVz?=
+ =?us-ascii?Q?8bsLBeiARm/CfLVwJjNhsBcf0WlR/hW+7qEBTrBundCfLkAlb7QZCzVIvYue?=
+ =?us-ascii?Q?Qwg44g5oUQNQgMh9hwdYSrDJNFpNw2b/9tJKVIhZtdbnHI1AJHZ2yzz2M8bY?=
+ =?us-ascii?Q?aIxVieri/+xJmRnETQ5GglF5pzJty2BD+DFxUf/aED2hk7qnqEOe1xRADAHU?=
+ =?us-ascii?Q?7WICWQTwRXUZTQ+mdu1MjJfPXH6iiRNPv+Axcj3ZKxpW/tlWEeHg3x/0KecB?=
+ =?us-ascii?Q?QlSr/cJTARk1pcNm2MOdn3GWcBp/HqlVXx5/l0C04sxoKYdICHgd+VTPs4zk?=
+ =?us-ascii?Q?klL7+fubg5ofFTVdtaRBaOXrLlSr4RupX89yMZPUIYgtzV9KUU9f2NSRCMhf?=
+ =?us-ascii?Q?Xcms2zdaBGI3uUObF/hk9fex0lc0ji3PFPEqTEQuPJOX5CIp9/ERsn3LGK6B?=
+ =?us-ascii?Q?z4PzkQxwV+N+qWWfBI1eH3iU5lFs8s8XrkmQX+PrVl0V5V2MRWS34u6xnKns?=
+ =?us-ascii?Q?UQ4us29l25NmvTWY37LHnu7YSbi6TiKwQ+ZS3Iqp0iuqDj53KjM72nKxGkTd?=
+ =?us-ascii?Q?d7EY6a+TsqbQFrY7e27zsEQ2gfUp00qUV+95TgslaR1qk8eH+KBNIy1mKi/Y?=
+ =?us-ascii?Q?LXFOT/2HI5lP8vz6aJpp87NUOwq8yYZPk6zrViLPDcA3jJMpHY/YugftHxzr?=
+ =?us-ascii?Q?+XD6PTUTHH3kkMcrj6y6uB9ujzKijiOZv2z4MUIcY+MT3nE49mpM7Ok9+4Nb?=
+ =?us-ascii?Q?gR86kG3XLVWbxhgSnzcuyW1c9uVAb9QjVOZCw//d9RVmRt4Zdd9pbKA9lU+a?=
+ =?us-ascii?Q?fbeUkluUk+YrALCPktbnVSaEWqEFs8i2DtrYq8jRjOWsUN+fyATUhDhrf1f0?=
+ =?us-ascii?Q?RICSQLvvp7z/XEpQSQOis/uFPJH/LWu0VT/Xi64sLqNTBqOVmMirGREvRJit?=
+ =?us-ascii?Q?S6a//4hxAyxF6KKt3OVPFBCqcM7FFT3U5j1mj0M/i5hWPhEH/OLQALeTJ+jL?=
+ =?us-ascii?Q?FR4xRlaGnnbHWu3tP0WAtzDOfMFKnMd6Qh/7TKwCLWMGNo41wGErUqPh2dGg?=
+ =?us-ascii?Q?yIiW1OKpTmEPSoH/1sUEG5LU7s+HIOu0R7W/BX0y6Kixr+2iBBhp8xqBM+/w?=
+ =?us-ascii?Q?CqNuDDidJdYFguo6aMibqI7Xf4Q/IokUL+Rh0vdXY1A9YxibeOSrF5rox9cv?=
+ =?us-ascii?Q?VC02JGMEh7EQQ8gK17eaNwL1rv3eEaJuE4zGBAlHyUMTRjvvM3kFGNR9XHMd?=
+ =?us-ascii?Q?G5zp3BNe1JfOCCCAjfftXpBR8PE80/GFJyXqSWyB?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 01b4a632-1abc-4669-8188-08ddf38448d3
+X-MS-Exchange-CrossTenant-AuthSource: SI6PR06MB7475.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Sep 2025 11:46:04.1065
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: KF1zf1aeQQ0fvaup9iS3DTg6hFNuRWKp/2mKs4XP79QIJ68DtRuWM/Fi38ovQFwcC3BD0wLpf3P8lLvl9dl75g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR06MB6044
 
-When removing and reinserting the laptop battery, ACPI can trigger
-two notifications in quick succession:
-  - ACPI_BATTERY_NOTIFY_STATUS (0x80)
-  - ACPI_BATTERY_NOTIFY_INFO   (0x81)
+Hello,
 
-Both notifications call acpi_battery_update(). Because the events
-happen very close in time, sysfs_add_battery() can be re-entered
-before battery->bat is set, causing a duplicate sysfs entry error.
-
-This patch ensures that sysfs_add_battery() is not re-entered
-when battery->bat is already non-NULL, preventing the duplicate
-sysfs creation and stabilizing battery hotplug handling.
-
-[  476.117945] sysfs: cannot create duplicate filename '/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0C0A:00/power_supply/BAT1'
-[  476.118896] CPU: 1 UID: 0 PID: 185 Comm: kworker/1:4 Kdump: loaded Not tainted 6.12.38+deb13-amd64 #1  Debian 6.12.38-1
-[  476.118903] Hardware name: Gateway          NV44             /SJV40-MV        , BIOS V1.3121 04/08/2009
-[  476.118906] Workqueue: kacpi_notify acpi_os_execute_deferred
-[  476.118917] Call Trace:
-[  476.118922]  <TASK>
-[  476.118929]  dump_stack_lvl+0x5d/0x80
-[  476.118938]  sysfs_warn_dup.cold+0x17/0x23
-[  476.118943]  sysfs_create_dir_ns+0xce/0xe0
-[  476.118952]  kobject_add_internal+0xba/0x250
-[  476.118959]  kobject_add+0x96/0xc0
-[  476.118964]  ? get_device_parent+0xde/0x1e0
-[  476.118970]  device_add+0xe2/0x870
-[  476.118975]  __power_supply_register.part.0+0x20f/0x3f0
-[  476.118981]  ? wake_up_q+0x4e/0x90
-[  476.118990]  sysfs_add_battery+0xa4/0x1d0 [battery]
-[  476.118998]  acpi_battery_update+0x19e/0x290 [battery]
-[  476.119002]  acpi_battery_notify+0x50/0x120 [battery]
-[  476.119006]  acpi_ev_notify_dispatch+0x49/0x70
-[  476.119012]  acpi_os_execute_deferred+0x1a/0x30
-[  476.119015]  process_one_work+0x177/0x330
-[  476.119022]  worker_thread+0x251/0x390
-[  476.119026]  ? __pfx_worker_thread+0x10/0x10
-[  476.119030]  kthread+0xd2/0x100
-[  476.119033]  ? __pfx_kthread+0x10/0x10
-[  476.119035]  ret_from_fork+0x34/0x50
-[  476.119040]  ? __pfx_kthread+0x10/0x10
-[  476.119042]  ret_from_fork_asm+0x1a/0x30
-[  476.119049]  </TASK>
-[  476.142552] kobject: kobject_add_internal failed for BAT1 with -EEXIST, don't try to register things with the same name in the same directory.
-[  476.415022] ata1.00: unexpected _GTF length (8)
-[  476.428076] sd 0:0:0:0: [sda] Starting disk
-[  476.835035] ata1.00: unexpected _GTF length (8)
-[  476.839720] ata1.00: configured for UDMA/133
-[  491.328831] sysfs: cannot create duplicate filename '/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0C0A:00/power_supply/BAT1'
-[  491.329720] CPU: 1 UID: 0 PID: 185 Comm: kworker/1:4 Kdump: loaded Not tainted 6.12.38+deb13-amd64 #1  Debian 6.12.38-1
-[  491.329727] Hardware name: Gateway          NV44             /SJV40-MV        , BIOS V1.3121 04/08/2009
-[  491.329731] Workqueue: kacpi_notify acpi_os_execute_deferred
-[  491.329741] Call Trace:
-[  491.329745]  <TASK>
-[  491.329751]  dump_stack_lvl+0x5d/0x80
-[  491.329758]  sysfs_warn_dup.cold+0x17/0x23
-[  491.329762]  sysfs_create_dir_ns+0xce/0xe0
-[  491.329770]  kobject_add_internal+0xba/0x250
-[  491.329775]  kobject_add+0x96/0xc0
-[  491.329779]  ? get_device_parent+0xde/0x1e0
-[  491.329784]  device_add+0xe2/0x870
-[  491.329790]  __power_supply_register.part.0+0x20f/0x3f0
-[  491.329797]  sysfs_add_battery+0xa4/0x1d0 [battery]
-[  491.329805]  acpi_battery_update+0x19e/0x290 [battery]
-[  491.329809]  acpi_battery_notify+0x50/0x120 [battery]
-[  491.329812]  acpi_ev_notify_dispatch+0x49/0x70
-[  491.329817]  acpi_os_execute_deferred+0x1a/0x30
-[  491.329820]  process_one_work+0x177/0x330
-[  491.329826]  worker_thread+0x251/0x390
-[  491.329830]  ? __pfx_worker_thread+0x10/0x10
-[  491.329833]  kthread+0xd2/0x100
-[  491.329836]  ? __pfx_kthread+0x10/0x10
-[  491.329838]  ret_from_fork+0x34/0x50
-[  491.329842]  ? __pfx_kthread+0x10/0x10
-[  491.329844]  ret_from_fork_asm+0x1a/0x30
-[  491.329850]  </TASK>
-[  491.329855] kobject: kobject_add_internal failed for BAT1 with -EEXIST, don't try to register things with the same name in the same directory.
-
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/r/202509101620.yI0HZ5gT-lkp@intel.com/
-Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-Closes: https://lore.kernel.org/r/202509101620.yI0HZ5gT-lkp@intel.com/
-Fixes: 10666251554c ("ACPI: battery: Install Notify() handler directly")
-Signed-off-by: GuangFei Luo <luogf2025@163.com>
-Cc: stable@vger.kernel.org
----
-v6:
-  - Update Fixes tag: point to commit 10666251554c ("ACPI: battery: Install
-    Notify() handler directly"), which introduced the sysfs_add_battery()
-    re-entry issue when acpi_battery_notify is registered via
-    acpi_dev_install_notify_handler(). The problem does not occur with
-    acpi_bus_register_driver().
-
-v5:
-  - Move changelog above the '---' line as per submission guidelines.
-
-v4:
-  - Uses guard(mutex) for battery->sysfs_lock in sysfs_add_battery().
-  - Since sysfs_add_battery() now handles the battery->bat check with
-    proper locking,the extra if (!battery->bat) check at the call site
-    has become redundant.
-
-v3:
-  - Modified the earlier approach: since sysfs_add_battery() is invoked
-    from multiple places, the most reliable way is to add the lock inside
-    the function itself.
-  - sysfs_remove_battery() had a similar race issue in the past, which was
-    fixed by adding a lock as well. Reference:
-    https://lore.kernel.org/all/9c921c22a7f33397a6774d7fa076db9b6a0fd669
-        .1312318300.git.len.brown@intel.com/
-
-v2:
- - Fix missing mutex_unlock in acpi_battery_update()
-   (Reported-by: kernel test robot)
-
-v1:
- - Initial patch to handle race when hotplugging battery, preventing
-   duplicate sysfs entries.
----
- drivers/acpi/battery.c | 20 +++++++++++---------
- 1 file changed, 11 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/acpi/battery.c b/drivers/acpi/battery.c
-index 6905b56bf3e4..20d68f3e881f 100644
---- a/drivers/acpi/battery.c
-+++ b/drivers/acpi/battery.c
-@@ -850,6 +850,10 @@ static void __exit battery_hook_exit(void)
+These patches intruduce a mechanism for limiting device frequencies via
+PM QoS when latency-sensitive threads block on IO. Stroage device (like
+UFS) use the "devfreq_monitor" mechanism to automatically scale
+frequency based on IO workloads. However, the hysteresis in IO workload
+detection, it will lead IO request to be processed at low frequency. 
  
- static int sysfs_add_battery(struct acpi_battery *battery)
- {
-+	guard(mutex)(&battery->sysfs_lock);
-+	if (battery->bat)
-+		return 0;
-+
- 	struct power_supply_config psy_cfg = {
- 		.drv_data = battery,
- 		.attr_grp = acpi_battery_groups,
-@@ -1026,11 +1030,9 @@ static int acpi_battery_update(struct acpi_battery *battery, bool resume)
- 		return result;
- 	acpi_battery_quirks(battery);
- 
--	if (!battery->bat) {
--		result = sysfs_add_battery(battery);
--		if (result)
--			return result;
--	}
-+	result = sysfs_add_battery(battery);
-+	if (result)
-+		return result;
- 
- 	/*
- 	 * Wakeup the system if battery is critical low
-@@ -1112,12 +1114,12 @@ static int battery_notify(struct notifier_block *nb,
- 			result = acpi_battery_get_info(battery);
- 			if (result)
- 				return result;
--
--			result = sysfs_add_battery(battery);
--			if (result)
--				return result;
- 		}
- 
-+		result = sysfs_add_battery(battery);
-+		if (result)
-+			return result;
-+
- 		acpi_battery_init_alarm(battery);
- 		acpi_battery_get_state(battery);
- 		break;
+Original devfreq_monitir frequency scaling timeline:
+       |--- latency-intensive process working ------------
+  |****+**+**|***+++*++*|*++++++++*|**+++++***|*++++++++*|
+       |                           |- high load and scale up frequency
+       |-------- low frequency ----|-- high frequency ---|
+([+] have IO request   [*] nothing to do)
+
+Now, the patches provided here intruduce a mechanism for the block layer
+to add constraints to device frequecny through PM QoS framework, with
+configurable sysfs knobs per block device. Doing following config in my
+test system:
+
+  /sys/block/sda/dev_freq_timeout_ms = 30
+
+This constraints is removed if there is no block IO for 30ms.
+
+Enhanced frequency scaling timeline:
+       |--- latency-intensive process working ------------
+  |****+**+**|***+++*++*|*++++++++*|**+++++***|*++++++++*|
+       |- add device frequecy PM QoS constraints----------
+             |- scale up frequency
+       |-low-|------------ high frequency ---------------|
+
+Here are my example system detail:
+  - SoC: Qualcomm Snapdragon (1+3+4 core cluster)
+  - Stroage: UFS 4.1
+  - Fio Version: 3.9
+  - Global fio config:
+           --rw=randread --bs=64k --iodepth=1 \
+           --numjobs=5 --time_based --runtime=10 \
+           --ioengine=libaio --hipri --cpus_allowed=3
+           (job1~5 startdelay = [0s, 20s, 40s, 60s, 80s])
+  - Local fio config:
+      -Test case 1:
+           --rate=10ms
+      -Test case 2:
+           --rate=0ms
+
+Runing the same fio test used above with enhanced frequency scaling
+enabled/disabled, I get:
+
+  Test case 1:
+     enabled: 	clat (usec): min=141, max=872, avg=550
+     disabled:	clat (usec): min=210, max=899, avg=635
+  Test case 2:
+     enabled: 	BW=388.6(MB/s)
+     disabled:	BW=378.2(MB/s)
+
+So the intermittent workloads test(case 1) show >10% latency
+improvement. The continuous workloads test(case2) show about 5%
+bandwidth improvement.This mechanism delivers greater performance gains
+under intermittent workloads compared to continuous workloads scenarios.
+
+Any thoughts about the patches and the approach taken?
+
+Wang Jianzheng (3):
+  block/genhd: add sysfs knobs for the device frequency PM QoS
+  block: add support for device frequency PM QoS tuning
+  scsi: ufs: core: Add support for frequency PM QoS tuning
+
+ block/blk-mq.c            | 58 +++++++++++++++++++++++++++++++++++++++
+ block/genhd.c             | 23 ++++++++++++++++
+ drivers/ufs/core/ufshcd.c | 44 +++++++++++++++++++++++++++++
+ include/linux/blkdev.h    | 11 ++++++++
+ include/linux/pm_qos.h    |  6 ++++
+ 5 files changed, 142 insertions(+)
+
 -- 
-2.43.0
+2.34.1
 
 
