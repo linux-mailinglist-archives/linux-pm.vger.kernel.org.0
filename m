@@ -1,126 +1,150 @@
-Return-Path: <linux-pm+bounces-34602-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34603-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92DC8B56822
-	for <lists+linux-pm@lfdr.de>; Sun, 14 Sep 2025 13:52:02 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 805C6B5683B
+	for <lists+linux-pm@lfdr.de>; Sun, 14 Sep 2025 14:04:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 595277A4EA3
-	for <lists+linux-pm@lfdr.de>; Sun, 14 Sep 2025 11:50:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 01505189C75C
+	for <lists+linux-pm@lfdr.de>; Sun, 14 Sep 2025 12:04:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E154E246BA9;
-	Sun, 14 Sep 2025 11:51:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56D61235072;
+	Sun, 14 Sep 2025 12:04:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gTkjKwx5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YcDojBRQ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C4E2243371
-	for <linux-pm@vger.kernel.org>; Sun, 14 Sep 2025 11:51:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FE2211CBA;
+	Sun, 14 Sep 2025 12:04:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757850714; cv=none; b=a63Utx/lfHTHOq1VxMrNhAKUbipAnqlT4XhhZpVd+J61YIBREgdDgr/slQImRri2Y/7Uz3mB34y4nHds2tiRKPBtgHzFlZIEzJuh/2V5VOAgxFdGvc7NO4xwu7L3vzkxb70Ley7myN1UIPxFhs4CXNxyMclBIXjQUg1fgofVxBA=
+	t=1757851444; cv=none; b=DEmJfyWfJFmLsxw7SXNl8M15br15Ua5o4BhB99ViPieMJIOGwu44Of2UhbN2aXJX8cJ9i7ih+2fQIeiclTxrT324LN6eg7ebksPEN3c47gSdruQhK3BKhE79ptLS3Tz3zSeApNlX0e2SlUThVx33f/m7FTU5XW26ELmq/vMT6BQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757850714; c=relaxed/simple;
-	bh=AIPYSOx0428xiqsH5Zw0f1PRbiXpWTgmcLOnuEvukws=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UAd9rHOrNDdaaMGWSNJjiZtgtha8gTKg59+H34PrvrSFGvwLK2Bt07f5wV54VD27wFgAmebAKRsCGd3jpchnVZutnJptDyBr17OKiN/JWlA5membCazGxpP5sDV+VGA5qLzMfa8GvGhT3FQHrARSt3wAJB2OhiGlcPPxiJZzT1Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gTkjKwx5; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1757850711;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=05ZWoSoCpXTd7kMo2D7eZ+9NOL3Ymr4GMs5H07grvQg=;
-	b=gTkjKwx56HG3L/6Jd8p8Zge5zRjHrLS1m4v3+nYZxqxyIOsbJYkcQtSR3FvHTV/3bAkH9l
-	qxM5L7Oson5P2UoxpOILEXTUscojoy75ZahCLE7kV9Vdbu3LvHgZOVmSZxYbxRe3a4wz3L
-	NfLO7jNYT+bT6OyO50CzINcoKHjX/zw=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-124-cOvGWGbnOJKSXZoDK5cN0w-1; Sun, 14 Sep 2025 07:51:50 -0400
-X-MC-Unique: cOvGWGbnOJKSXZoDK5cN0w-1
-X-Mimecast-MFC-AGG-ID: cOvGWGbnOJKSXZoDK5cN0w_1757850710
-Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-4b5e5f80723so70672571cf.1
-        for <linux-pm@vger.kernel.org>; Sun, 14 Sep 2025 04:51:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757850710; x=1758455510;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=05ZWoSoCpXTd7kMo2D7eZ+9NOL3Ymr4GMs5H07grvQg=;
-        b=e/nLOy0LlU8SByTTypl9RdxISEJVqmogPaiMMVutHMdAQa1g0uXrq/4G3wbqtTzcM3
-         VXaKDEj8u07Cv6vcdQO2L41Bl787toUEvhiTaP8D4D/VaLGhNXmPRp3mYi04+GOnRqN/
-         TGiBYf6TfROIqjztLjy+gDV6XfkC8P+knqMDa1OuMrrZEm4harOOplMJ/VNgGiuxa0W2
-         +qZ00CRKU9M+heRLwQ2fSZCGj1eYM9dkaGQxaobbVEYAW0vinPuW1BerBF4LAwHBSqmU
-         j1IYioFSHPgep7oJfkqXcaVceZlLeuEqFvKLpIu7erSFklkOmJ5B8YWCnUgzAWxXvujl
-         3jbw==
-X-Forwarded-Encrypted: i=1; AJvYcCU4lvbZ6qYecA8SXOq3uwQNidxID1qdkY32qLm+s7LqAkH3YJTuSlj0zW8VqgJlmvQPW9Y8jUcGNw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyWdGOWPWC/5eXmua5zG8Jq5Hh/HI9Yuna3DnSFiUjY1mUBCBMS
-	dT8CGF5Apx5ic3h3EAXZljGAsTe8N54tSEcxvSCqu0RsHZ2ytkPPEPGnu8NEAFGWzXrwf6sNhVM
-	53/CK9VHMks85vjIm5uYkIPbMYjA3YsojfxfFi0Ua0nXHcWevpfKNZ6My0QHZ
-X-Gm-Gg: ASbGnct8JBp3leCghDDLR5KRWeCaWJ3CNcw8nTf8jGIhCuA2It1Qei9lXc+6EhDMSHC
-	dp7J5q4vazWzkkYyIzL+pC5jVlrlykQnyP+AyGAlG0nHC+W+dncZvjx9h0aWbnFECTDlFdPklhH
-	tIefcdNzaWSxQvaJG66kcbZlm4MMzwJQCHkpOmE0a6qpoliG+3O6loBeFloj7RyolGhhMpZw3tU
-	xH5vcX1T5Slbfn9xEIr0AsNd/uC3gyxEKtzRJYPV3/JZbmKwBRsKI5F132kFRw4EeQq3mHIFcoB
-	igG/XRn5QYZv3Wxzu9qJIzaCsit3ujZu+5eFrvg09qvr+1tStWqxQL8VGUvAQuwLaf6kXLuGU1h
-	k/GZGyvvFW/0TR2wmWs5XYqhpkRDANtA=
-X-Received: by 2002:a05:622a:409:b0:4b4:8eb7:a461 with SMTP id d75a77b69052e-4b77d14bab4mr135163531cf.58.1757850709651;
-        Sun, 14 Sep 2025 04:51:49 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHL+XRwnX6jGuwsu4a3hT4crD8COQvyH3Zc5Sbne0Nd2VMEI38oG/sulJqcdFsNqwfss3aWZQ==
-X-Received: by 2002:a05:622a:409:b0:4b4:8eb7:a461 with SMTP id d75a77b69052e-4b77d14bab4mr135163311cf.58.1757850709265;
-        Sun, 14 Sep 2025 04:51:49 -0700 (PDT)
-Received: from redhat.com (c-73-183-52-120.hsd1.pa.comcast.net. [73.183.52.120])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4b639da9e99sm51613881cf.29.2025.09.14.04.51.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 Sep 2025 04:51:48 -0700 (PDT)
-Date: Sun, 14 Sep 2025 07:51:45 -0400
-From: Brian Masney <bmasney@redhat.com>
-To: Ulf Hansson <ulf.hansson@linaro.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Maxime Ripard <mripard@kernel.org>, Stephen Boyd <sboyd@kernel.org>
-Cc: linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH] pmdomain: mediatek: airoha: convert from round_rate() to
- determine_rate()
-Message-ID: <aMasUV14w0Dc1ki0@redhat.com>
-References: <20250810-pmdomain-round-rate-v1-1-1a90dbacdeb6@redhat.com>
+	s=arc-20240116; t=1757851444; c=relaxed/simple;
+	bh=4myotyVuRITMouHUJMNVZ2fFIw98mFgLtin3s3hcLD0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HXyStNppPEYaRo6K2+MKXduvoNFF3O0b2M6kJM2rh6OegHlNLr1TOGu+9hWZLASgsE9c70d+8oFIy53mbLGkEq+rbzb/o4L8Iz8xrueG3+gvxyc5SDcf6ogYcw5dYUhCNfmhafGQY6vDno6OB5QpmoWH3BfvNrdqKdY/gdVLUTU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YcDojBRQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AF78C4CEF0;
+	Sun, 14 Sep 2025 12:03:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757851443;
+	bh=4myotyVuRITMouHUJMNVZ2fFIw98mFgLtin3s3hcLD0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=YcDojBRQTdMOypQlP05lDD9/Z5sxn5W5ajRF+PBxaR0JC+tXGWEWph7Hbtl8qOiXX
+	 aDqy9ryvaUl74Xekih0iBqlD3hHqBJaikuF4eu0hECD9qCQJbivNQe/ZoTMC3xMp2Y
+	 L1fXAY92/vPUVBRZn2bTRjNUkHjmjC5zSu58OxAcs7JtSIxf6A/ODevGbAHFf+iDVu
+	 1m8jc0mU2rBblkvykdplhFB6kuufOOZStbGuF4rhxOL0dUHXYx5UcOhxOyw1Kju0Je
+	 GbEirzAK+4ylNYLTAsTAcsqkXz69dyJNWfQUNfQl9NUdu6FieO01C4/7xnIYbpr7Ik
+	 DlkxL7KUSWb4A==
+Message-ID: <82391eba-263d-42d8-9335-6b4bab6a3412@kernel.org>
+Date: Sun, 14 Sep 2025 14:03:56 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250810-pmdomain-round-rate-v1-1-1a90dbacdeb6@redhat.com>
-User-Agent: Mutt/2.2.14 (2025-02-20)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/4] dt-bindings: clock: mediatek: Add MT8189 clock
+ definitions
+To: "irving.ch.lin" <irving-ch.lin@mediatek.com>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ Ulf Hansson <ulf.hansson@linaro.org>,
+ Richard Cochran <richardcochran@gmail.com>
+Cc: Qiqi Wang <qiqi.wang@mediatek.com>, linux-clk@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
+ linux-pm@vger.kernel.org, netdev@vger.kernel.org,
+ Project_Global_Chrome_Upstream_Group@mediatek.com, sirius.wang@mediatek.com,
+ vince-wl.liu@mediatek.com, jh.hsu@mediatek.com
+References: <20250912120508.3180067-1-irving-ch.lin@mediatek.com>
+ <20250912120508.3180067-2-irving-ch.lin@mediatek.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20250912120508.3180067-2-irving-ch.lin@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Ulf,
-
-On Sun, Aug 10, 2025 at 06:16:19PM -0400, Brian Masney wrote:
-> The round_rate() clk ops is deprecated, so migrate this driver from
-> round_rate() to determine_rate() using the Coccinelle semantic patch
-> appended to the "under-the-cut" portion of the patch.
+On 12/09/2025 14:04, irving.ch.lin wrote:
+> From: Irving-ch Lin <irving-ch.lin@mediatek.com>
 > 
-> Note that prior to running the Coccinelle,
-> airoha_cpu_pmdomain_clk_round() was renamed to
-> airoha_cpu_pmdomain_clk_round_rate().
+> Add device tree bindings for the clock of MediaTek MT8189 SoC.
+> These definitions will be used to describe the clock topology in
+> device tree sources.
+
+Drop last sentence, completely redundant. It cannot be anything else...
+
 > 
-> Signed-off-by: Brian Masney <bmasney@redhat.com>
+> Signed-off-by: Irving-ch Lin <irving-ch.lin@mediatek.com>
+> ---
 
-Would it be possible to get this picked up for v6.18? I'd like to remove
-this API from drivers/clk in v6.19.
+That's a v2, so where is any changelog? Nothing here nor in cover
+letter. No changes, so you did not fix any of the bugs you had last time?
 
-Thanks,
+Why aren't you using b4 to submit patches which would handle this? If
+you prefer to use older method, then fine but do it right.
 
-Brian
 
+>  .../bindings/clock/mediatek,mt8189-clock.yaml |  89 +++
+>  .../clock/mediatek,mt8189-sys-clock.yaml      |  58 ++
+>  .../dt-bindings/clock/mediatek,mt8189-clk.h   | 580 ++++++++++++++++++
+>  3 files changed, 727 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/mediatek,mt8189-clock.yaml
+>  create mode 100644 Documentation/devicetree/bindings/clock/mediatek,mt8189-sys-clock.yaml
+>  create mode 100644 include/dt-bindings/clock/mediatek,mt8189-clk.h
+> 
+Best regards,
+Krzysztof
 
