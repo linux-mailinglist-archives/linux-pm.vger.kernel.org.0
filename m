@@ -1,176 +1,221 @@
-Return-Path: <linux-pm+bounces-34672-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34673-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EBC29B57CA8
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Sep 2025 15:20:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A56CB57D76
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Sep 2025 15:36:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8AFC1189B0F6
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Sep 2025 13:20:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 36FC81887CF9
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Sep 2025 13:35:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7F4E315D5C;
-	Mon, 15 Sep 2025 13:18:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24214315D44;
+	Mon, 15 Sep 2025 13:34:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I97rt8Wy"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="JaPRdf93"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98ED6315789
-	for <linux-pm@vger.kernel.org>; Mon, 15 Sep 2025 13:18:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757942336; cv=none; b=YULA+Pls8fyVV4uwKwsMIh2QDtkbSKPZsswk8OvmOf9Enaz8gvXrE6mYWGMlpClvkMufpeeSIo/jLhwmSt8EV6BvUF8yKTWk0JS7SGJbRgSlMB9W34VlMOb/MTR6LFVLL6yBGZoqUuJJugZK8EoNIiQ+oeeAwhLQ4Or38TaWNA8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757942336; c=relaxed/simple;
-	bh=coOwMyQHXkTz8FDu4+hP/GBgwN4J5NtDSuvxSzgJTgU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qkyiWGe7YnXX9tnFZTg9bOa6k5tAmxSa/Hh+d1p1O8Aaza8n9wVmIyp42ev5IvDUkVeYsEBEKRXhSTqu45A8HFJtMeZNhirYeIWNjDZ9LZ+KvN50bH91hH6oAVOSuHNB1bgHpVDaTSHL9fcnYgMLb+2LKvHq1zqyyUCSC1h/6U8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I97rt8Wy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 423EDC4CEF5
-	for <linux-pm@vger.kernel.org>; Mon, 15 Sep 2025 13:18:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757942336;
-	bh=coOwMyQHXkTz8FDu4+hP/GBgwN4J5NtDSuvxSzgJTgU=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=I97rt8Wy/HHyb6Jf09V1zJXWto0w0vNSlKzz5aSR4qpNptlGuHqaQkNo+QA3hTBev
-	 jlFmnqbGvrfkro5DdG45KAf5is9c8Jfk9ziGqqJqJ9+Oj9rD6RYruICf/5AppYF4Yz
-	 H+lkblPSUv+O5NqNZymziuQKz/OeavBGHjeRCtqMYLCG+yKNtOL4IUlhodqyhuxzqT
-	 yPOz+m4j/MKvbVsK5YvIgCa/nrL2mBmOEf+hNqhLQEJEstjZDoAR657PZfAzRgI130
-	 C3r678zl49iNII/XPyPo/NbAvBglhMvR1kwAlG/Qg25fRtSlpdv2FmMWA3rU05tKgf
-	 2xGuvSifuIE7g==
-Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-7459d088020so2012752a34.3
-        for <linux-pm@vger.kernel.org>; Mon, 15 Sep 2025 06:18:56 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWYk/Lber6YtYHEjO0am60E6vcJ3chHufPlOiJRFg2JD9JfRXkQnDxMPOG773oYIMRQHR1HANrxVg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzsEEWMUzpH9CJLY1EaBD8uCG+velrHBiuqSUPhs6Ecr4AcMXWV
-	PQvWoEev6RlwskI3pVzsSyPjc4FV+fhNAlcHglsbeGlhoa9ZvCNlw4eM8AGPihdLGc6iOAZC3vd
-	ORydKBveNlmb0rfAlLl/mZJgWdD95cAE=
-X-Google-Smtp-Source: AGHT+IEpcuRSc3MDHlFe9TDySxc24ll0ZsZy+5Xvb8x8nLaNBT9Lv9dKicdTazMGgmSAUaLhaDM/ulAOWO9IeV6FrUg=
-X-Received: by 2002:a05:6830:8d2:b0:73e:94d4:ec6 with SMTP id
- 46e09a7af769-75355daf04dmr7268800a34.28.1757942335532; Mon, 15 Sep 2025
- 06:18:55 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3123630DEB4;
+	Mon, 15 Sep 2025 13:34:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1757943293; cv=pass; b=ZZd2fg7b3Ryev9d1rALQfenm4hlhRTRkApkMMoURkfzYEQNCJRgf1Z15Jzjbfe/wl8UwRtFMqZWclC2BuqScauRScP8s2kNKEojEOXi5EuNZ6VJsYlgxpn8bDUcvVnyLHYuWOYjns7wMIdhDZHh9Vj8CFDHx2zJ3LI092OOeKMI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1757943293; c=relaxed/simple;
+	bh=20jyikSBUeyT4vng1BVzWe3sjyLs9KnrE87dBoLvcs8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=qh4yUZAH55JeQPwe66fpt8U5oN1vWy25/ggeexIVdZDdjRzyKEeXMVyy9rmHBHUnDyGcyKe4la5NIScSk+9ibxK5CTHoTO7xSq3Xx7nq/nm20IdSkfT1NC6444P85F6nxc85geYBJtQQ51qhSvllbuJigk0cz0z/7mGnuveOF1Q=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=JaPRdf93; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1757943252; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=VcDt09apkXkUPqUSPhPe0SRA9p6NfI7eRJdyWIzzMch+7gA70FlWYClpkVNNIDkCRiW8FjSk4Z4B0ESJYO6ee3Mlz/gkfx/iJWer9WbPVPEtVsJXiEcOoEjm7g2UC7Ot+rHWU+Fl0cau77lVf/DMf4j8OHIwf3C+ZHKk35G4tX4=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1757943252; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=JXcBaV2RAfDhKm8EZS+sK4enClIyf2ne3a1dilgi9xY=; 
+	b=TLTGdSYp4xC65jkTH8EN2lCbZa8kV7SXj7dnEKDproxSS9RjaoOppJIrePAdJmvnR7je8IyXb3JZZR8D6CA1Q0tB4xBalsHeEpAr4aeyiqmq5RabIjYC+ea5kgJd8cBYQhDku2sTVXW9FNPPms9YH4I+nIUxYMN8esoQEuGg1Zg=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
+	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1757943252;
+	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
+	bh=JXcBaV2RAfDhKm8EZS+sK4enClIyf2ne3a1dilgi9xY=;
+	b=JaPRdf93LIE/7iVb2KC2EHXu+4sEUuVS7aGz2C8x1og5DPXPLyjvMplIhLuE8pZ3
+	sQZuJgHphctSz/4SpJF+nPCqdjLwyZ+xH6or/X5vg//iZsA6ebKGVWP762yzDUtydcm
+	ruB1tsNh7YV1r7BrDX9IbzmU+/qmOAPgM+fOii0k=
+Received: by mx.zohomail.com with SMTPS id 1757943250997458.89106567723354;
+	Mon, 15 Sep 2025 06:34:10 -0700 (PDT)
+From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+To: Boris Brezillon <boris.brezillon@collabora.com>,
+ Steven Price <steven.price@arm.com>, Liviu Dudau <liviu.dudau@arm.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Matthias Brugger <matthias.bgg@gmail.com>,
+ MyungJoo Ham <myungjoo.ham@samsung.com>,
+ Kyungmin Park <kyungmin.park@samsung.com>,
+ Chanwoo Choi <cw00.choi@samsung.com>, Jassi Brar <jassisinghbrar@gmail.com>,
+ Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+ Chia-I Wu <olvaffe@gmail.com>, Chen-Yu Tsai <wenst@chromium.org>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: kernel@collabora.com, dri-devel@lists.freedesktop.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
+ linux-pm@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject:
+ Re: [PATCH v2 10/10] drm/panthor: add support for MediaTek MFlexGraphics
+Date: Mon, 15 Sep 2025 15:32:23 +0200
+Message-ID: <117198807.nniJfEyVGO@workhorse>
+In-Reply-To: <ae482072-c13f-4cb4-be26-50592b086fe6@collabora.com>
+References:
+ <20250912-mt8196-gpufreq-v2-0-779a8a3729d9@collabora.com>
+ <20250912-mt8196-gpufreq-v2-10-779a8a3729d9@collabora.com>
+ <ae482072-c13f-4cb4-be26-50592b086fe6@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250910065312.176934-1-shawnguo2@yeah.net> <CAJZ5v0gL5s99h0eq1U4ngaUfPq_AcfgPruSD096JtBWVMjSZwQ@mail.gmail.com>
- <aMQbIu5QNvPoAsSF@dragon> <20250914174326.i7nqmrzjtjq7kpqm@airbuntu> <aMfAQXE4sRjru9I_@dragon>
-In-Reply-To: <aMfAQXE4sRjru9I_@dragon>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 15 Sep 2025 15:18:44 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0i8L8w_ojua1ir3CGcwGSvE+3Jj0Sh5Cs1Yi8i4BX1Lbw@mail.gmail.com>
-X-Gm-Features: Ac12FXyAwdW-riCrTAP42SIBJxPCzjL2s62SpRjg0mEC2Yp-NeONok5neIsFcF4
-Message-ID: <CAJZ5v0i8L8w_ojua1ir3CGcwGSvE+3Jj0Sh5Cs1Yi8i4BX1Lbw@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: cap the default transition delay at 10 ms
-To: Shawn Guo <shawnguo2@yeah.net>
-Cc: Qais Yousef <qyousef@layalina.io>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="utf-8"
 
-On Mon, Sep 15, 2025 at 9:29=E2=80=AFAM Shawn Guo <shawnguo2@yeah.net> wrot=
-e:
->
-> On Sun, Sep 14, 2025 at 06:43:26PM +0100, Qais Yousef wrote:
-> > > > Why do you want to address the issue in the cpufreq core instead of
-> > > > doing that in the cpufreq-dt driver?
-> > >
-> > > My intuition was to fix the regression at where the regression was
-> > > introduced by recovering the code behavior.
-> >
-> > Isn't the right fix here is at the driver level still? We can only give=
- drivers
-> > what they ask for. If they ask for something wrong and result in someth=
-ing
-> > wrong, it is still their fault, no?
->
-> I'm not sure.  The cpufreq-dt driver is following suggestion to use
-> CPUFREQ_ETERNAL,
+On Monday, 15 September 2025 12:28:09 Central European Summer Time AngeloGioacchino Del Regno wrote:
+> Il 12/09/25 20:37, Nicolas Frattaroli ha scritto:
+> > MediaTek uses some glue logic to control frequency and power on some of
+> > their GPUs. This is best exposed as a devfreq driver, as it saves us
+> > from having to hardcode OPPs into the device tree, and can be extended
+> > with additional devfreq-y logic like more clever governors that use the
+> > hardware's GPUEB MCU to set frame time targets and power limits.
+> > 
+> > Add this driver to the panthor subdirectory. It needs to live here as it
+> > needs to call into panthor's devfreq layer, and panthor for its part
+> > also needs to call into this driver during probe to get a devfreq device
+> > registered. Solving the cyclical dependency by having mediatek_mfg live
+> > without knowledge of what a panthor is would require moving the devfreq
+> > provider stuff into a generic devfreq subsystem solution, which I didn't
+> > want to do.
+> > 
+> > Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+> > ---
+> >   drivers/gpu/drm/panthor/Kconfig        |   13 +
+> >   drivers/gpu/drm/panthor/Makefile       |    2 +
+> >   drivers/gpu/drm/panthor/mediatek_mfg.c | 1053 ++++++++++++++++++++++++++++++++
+> >   3 files changed, 1068 insertions(+)
+> > 
+> [ ... snip ...]
+> > +static int mtk_mfg_eb_on(struct mtk_mfg *mfg)
+> > +{
+> > +	struct device *dev = &mfg->pdev->dev;
+> > +	u32 val;
+> > +	int ret;
+> > +
+> > +	/*
+> > +	 * If MFG is already on from e.g. the bootloader, we should skip doing
+> > +	 * the power-on sequence, as it wouldn't work without powering it off
+> > +	 * first.
+> > +	 */
+> > +	if ((readl(mfg->rpc + RPC_PWR_CON) & PWR_ACK_M) == PWR_ACK_M)
+> > +		return 0;
+> > +
+> > +	ret = readl_poll_timeout(mfg->rpc + RPC_GHPM_RO0_CON, val,
+> > +				 !(val & (GHPM_PWR_STATE_M | GHPM_STATE_M)),
+> > +				 GPUEB_POLL_US, GPUEB_TIMEOUT_US);
+> > +	if (ret) {
+> > +		dev_err(dev, "timed out waiting for EB to power on\n");
+> > +		return ret;
+> > +	}
+> > +
+> > +	mtk_mfg_update_reg_bits(mfg->rpc + mfg->ghpm_en_reg, GHPM_ENABLE_M,
+> > +				GHPM_ENABLE_M);
+> > +
+> > +	mtk_mfg_update_reg_bits(mfg->rpc + RPC_GHPM_CFG0_CON, GHPM_ON_SEQ_M, 0);
+> > +	mtk_mfg_update_reg_bits(mfg->rpc + RPC_GHPM_CFG0_CON, GHPM_ON_SEQ_M,
+> > +				GHPM_ON_SEQ_M);
+> > +
+> > +	mtk_mfg_update_reg_bits(mfg->rpc + mfg->ghpm_en_reg, GHPM_ENABLE_M, 0);
+> > +
+> > +
+> > +	ret = readl_poll_timeout(mfg->rpc + RPC_PWR_CON, val,
+> > +				 (val & PWR_ACK_M) == PWR_ACK_M,
+> > +				 GPUEB_POLL_US, GPUEB_TIMEOUT_US);
+> 
+> I wonder if you can check how much time does the GPUEB really take to poweron,
+> just so that we might be able to reduce delay_us here.
 
-Fair enough.
+I already did, that's where the 50us value is from as far as I remember.
 
-Actually, there are a few other drivers that fall back to
-CPUFREQ_ETERNAL if they cannot determine transition_latency.
+> 
+> > +	if (ret) {
+> > +		dev_err(dev, "timed out waiting for EB power ack, val = 0x%X\n",
+> > +			val);
+> > +		return ret;
+> > +	}
+> > +
+> > +	ret = readl_poll_timeout(mfg->gpr + GPR_LP_STATE, val,
+> > +				 (val == EB_ON_RESUME),
+> > +				 GPUEB_POLL_US, GPUEB_TIMEOUT_US);
+> 
+> Same here - and I think this one is more critical, as I can see this suspend/resume
+> control being used more extensively in the future.
+> 
+> Specifically, I'm wondering if we could add runtime PM ops that will request EB
+> suspend/resume - and also if doing so would make any sense.
+> 
+> I am guessing that the "suspend" LP_STATE stops the internal state machine, making
+> the EB MCU to either go in a low-power state or to anyway lower its power usage by
+> at least suspending the iterations.
 
-> which has the implication that core will figure out a reasonable default =
-value for
-> platforms where the latency is unknown.
+I think I briefly fiddled with this but then it did nothing other than
+break everything. Is the current time it takes to resume a problem?
 
-Is this expectation realistic, though?  I'm not sure.
+> 
+> Of course - here I mean that we could have
+> 1. System suspend ops that powers off the EB completely like you're doing here and
+> 2. Runtime PM op that may be called (very) aggressively
+> 
+> ...this would obviously not be feasible if the EB suspend/resume (without complete
+> poweron/off) takes too much time to actually happen.
 
-The core can only use a hard-coded default fallback number, but would
-that number be really suitable for all of the platforms in question?
+We probably don't want to aggressively suspend the thing doing DVFS
+while a workload is running, and if no workload is running, it
+already suspends. I can't really say how normal desktop usage will
+play out yet, but generally speaking I think it's a bit early to
+find a comfortable place on the transition latency vs power draw
+curve at this point.
 
-> And that was exactly the situation before the regression.  How does it
-> become the fault of cpufreq-dt driver?
+> [... snip ...]
+> > +static int mtk_mfg_init_shared_mem(struct mtk_mfg *mfg)
+> > +{
+> > [... snip ...]
+> > +
+> > +	dev_info(dev, "initialised mem at phys 0x%016llX\n", mfg->sram_phys);
+> 
+> I don't like exposing addresses in kmsg. Please just don't.
 
-The question is not about who's fault it is, but what's the best place
-to address this issue.
+It's a physical address. This is not a kernel pointer, but something
+that can be read from the DTS. But sure, I'll remove it I guess?
 
-I think that addressing it in cpufreq_policy_transition_delay_us() is
-a bit confusing because it is related to initialization and the new
-branch becomes pure overhead for the drivers that don't set
-cpuinfo.transition_latency to CPUFREQ_ETERNAL.
+> [... snip ...]
+> 
+> Cheers,
+> Angelo
+> 
 
-However, addressing it at the initialization time would effectively
-mean that the core would do something like:
+You can assume me not responding to a part of the feedback in this
+e-mail means I'll address it in the next revision of the patch
+series.
 
-if (policy->cpuinfo.transition_latency =3D=3D CPUFREQ_ETERNAL)
-        policy->cpuinfo.transition_latency =3D
-CPUFREQ_DEFAULT_TANSITION_LATENCY_NS;
+Kind regards,
+Nicolas Frattaroli
 
-but then it would be kind of more straightforward to update everybody
-using CPUFREQ_ETERNAL to set cpuinfo.transition_latency to
-CPUFREQ_DEFAULT_TANSITION_LATENCY_NS directly (and then get rid of
-CPUFREQ_ETERNAL entirely).
 
-> > Alternatively maybe we can add special handling for CPUFREQ_ETERNAL val=
-ue,
-> > though I'd suggest to return 1ms (similar to the case of value being 0)=
-. Maybe
-> > we can redefine CPUFREQ_ETERNAL to be 0, but not sure if this can have =
-side
-> > effects.
->
-> Changing CPUFREQ_ETERNAL to 0 looks so risky to me.  What about adding
-> an explicit check for CPUFREQ_ETERNAL?
->
-> ---8<---
->
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index fc7eace8b65b..053f3a0288bc 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -549,11 +549,15 @@ unsigned int cpufreq_policy_transition_delay_us(str=
-uct cpufreq_policy *policy)
->         if (policy->transition_delay_us)
->                 return policy->transition_delay_us;
->
-> +       if (policy->cpuinfo.transition_latency =3D=3D CPUFREQ_ETERNAL)
-> +               goto default_delay;
-
-Can't USEC_PER_MSEC be just returned directly from here?
-
-> +
->         latency =3D policy->cpuinfo.transition_latency / NSEC_PER_USEC;
->         if (latency)
->                 /* Give a 50% breathing room between updates */
->                 return latency + (latency >> 1);
-
-Side note for self: The computation above can be done once at the
-policy initialization time and transition_latency can be stored in us
-(and only converted to ns when the corresponding sysfs attribute is
-read).  It can be even set to USEC_PER_MSEC if zero.
-
-> +default_delay:
->         return USEC_PER_MSEC;
->  }
->  EXPORT_SYMBOL_GPL(cpufreq_policy_transition_delay_us);
->
-> --->8---
 
