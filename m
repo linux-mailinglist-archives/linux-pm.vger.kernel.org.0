@@ -1,151 +1,124 @@
-Return-Path: <linux-pm+bounces-34625-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34627-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AFD47B57159
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Sep 2025 09:25:21 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D125FB57183
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Sep 2025 09:30:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0461E18821A5
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Sep 2025 07:25:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5442F18915EE
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Sep 2025 07:30:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3E5C2D5921;
-	Mon, 15 Sep 2025 07:24:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20557279784;
+	Mon, 15 Sep 2025 07:30:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xteqf3u4"
+	dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b="J3gk/IUn"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail-m16.yeah.net (mail-m16.yeah.net [220.197.32.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 931272D4B66;
-	Mon, 15 Sep 2025 07:24:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 553F71F4174;
+	Mon, 15 Sep 2025 07:30:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.32.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757921070; cv=none; b=j5ecjH5e8XeqJ0dKtTtYwvm80CziOqaZ7+sP3fDuLwjPmo4q4jnx4WhWCdy3KS8V9RKGBlViS5/0wTL/L9F7mQwqCtjzIbbROE+st+zg/NpXbCv6DXvdPq3k0N5KAZ5SxCL5vEvDnRjWVluqWpiDAywZ2xBhJU7QxhCeIOcpz44=
+	t=1757921430; cv=none; b=u7SO5+t2xEUMURg54uz4nNAigtUwXHHdrWY/Jn2YexNZZNbKFWPNqeoc5mb0/z0mdYqTvxXSqHmUfA0YYiHq0YKlWRtpX4sf3fTxJEXtTUIDNtVYhZQLLk7JK9Xsxi42BaKyGatyyVHfo1SNWFU9LDKcMTyphnnQqiFtNzJ5Y74=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757921070; c=relaxed/simple;
-	bh=zuvzgkYNweR5jUGWIKB6w4d1SpfzDuqMu95Rq8yDKww=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=m8J/oX+n1SBjLC245LwSYnpxyMVmN7fHc+s3LQzrIyNWt/2pSvpkC1lRtkb1QRQZkHDETXstDT0KhlO5oCI25QEHpRieHLaevmUSuWkWxJLhrCrNG/N+pQWA7ojsAgBglyfUX8LlH22g8K6C+m4ju6kAzJG3iy26SjIXaA/7+5g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xteqf3u4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7ECE7C4CEF1;
-	Mon, 15 Sep 2025 07:24:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757921070;
-	bh=zuvzgkYNweR5jUGWIKB6w4d1SpfzDuqMu95Rq8yDKww=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Xteqf3u4yVaLwOZJ0BXR7kC/Jt/PyJsGYCmrarQHTWKLUEz5rRWhaBE8yUUX0P4nm
-	 8m74kye43GqYAwaQbvCOu0X88doZl5p2O2DQMrcUYoUTBCt3Xz03J/kkooUwz6Apux
-	 9iroOkqwIUfmm1jSqxqZMD08MvOfsBK4qSxA4ftj+XAb12196UaxL3gMoT4t/SkEZ1
-	 1haSA9i5uShXwqZg88SQUH7f18Zpza/v/uK6Sw9Sav67/gvtxFi79Z+yD10a+xiN2k
-	 ALMVIT0Htu1qWJ2pEToCliPaUutC56p+nSA86U33eQL2hLqJyhTRyOCxFOqFeHHymZ
-	 J4cnSI57efjog==
-Message-ID: <bf72ff58-f149-4f99-9d74-abd4ec314774@kernel.org>
-Date: Mon, 15 Sep 2025 09:24:25 +0200
+	s=arc-20240116; t=1757921430; c=relaxed/simple;
+	bh=XcH7i1NU1nkQKzNcmQPjDrqXYBVW64HelzyptMyKuVY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GdDyFPnjrhg1eW8m+OYx+CeITy2BLCtXzUM2owPZiYJPVOHsxqR7HNP3nvR/+7oM4UUtqGlxjq8d9Wb5gOJh1NREyZTNYbekUPvpClYX2Fj6D19sZtgS2AxCoYQOfkEU66/Xpd2TAvlh3Njk1PqpNrf2WMQ8kzzy/qnCy50rWfY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net; spf=pass smtp.mailfrom=yeah.net; dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b=J3gk/IUn; arc=none smtp.client-ip=220.197.32.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yeah.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yeah.net;
+	s=s110527; h=Date:From:To:Subject:Message-ID:MIME-Version:
+	Content-Type; bh=iiG+4BPtqocqvD5BfQ1WbBJoY22xYm8SxsvFP5Qb9Pk=;
+	b=J3gk/IUnjqDdVtZ1I9NEOZQysOSsqYMikjXTU/ngPgIunKH+pNW7fHmAmMpX/T
+	WyvWE5WUjMZqcIoAPbyW6U0PW9HMw6zWQF2JC203DUyiTL+VQ+X9/XMyvEPR6FxB
+	JqC2ZCqC8PXET/hu0thZQ6CnKtDpeRe75Shg6UBSQtAUc=
+Received: from dragon (unknown [])
+	by gzsmtp3 (Coremail) with SMTP id M88vCgC3dW9CwMdoe7d5BA--.6943S3;
+	Mon, 15 Sep 2025 15:29:07 +0800 (CST)
+Date: Mon, 15 Sep 2025 15:29:05 +0800
+From: Shawn Guo <shawnguo2@yeah.net>
+To: Qais Yousef <qyousef@layalina.io>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>,
+	stable@vger.kernel.org
+Subject: Re: [PATCH] cpufreq: cap the default transition delay at 10 ms
+Message-ID: <aMfAQXE4sRjru9I_@dragon>
+References: <20250910065312.176934-1-shawnguo2@yeah.net>
+ <CAJZ5v0gL5s99h0eq1U4ngaUfPq_AcfgPruSD096JtBWVMjSZwQ@mail.gmail.com>
+ <aMQbIu5QNvPoAsSF@dragon>
+ <20250914174326.i7nqmrzjtjq7kpqm@airbuntu>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 5/9] memory: tegra210: Support interconnect framework
-To: Aaron Kling <webgeek1234@gmail.com>
-Cc: Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
- Thierry Reding <thierry.reding@gmail.com>,
- Jonathan Hunter <jonathanh@nvidia.com>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>,
- MyungJoo Ham <myungjoo.ham@samsung.com>,
- Kyungmin Park <kyungmin.park@samsung.com>,
- Chanwoo Choi <cw00.choi@samsung.com>, Dmitry Osipenko <digetx@gmail.com>,
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
- linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20250906-t210-actmon-v3-0-1403365d571e@gmail.com>
- <20250906-t210-actmon-v3-5-1403365d571e@gmail.com>
- <29ec10fa-1ca4-43eb-a865-7219d39c7140@kernel.org>
- <c1b0bffe-f5d4-4d71-bfb6-b047d3d2866e@kernel.org>
- <CALHNRZ9G_OA0+quNP=NwnwX43iaV1JWxjJFM0Aoect9Y8jGjWw@mail.gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <CALHNRZ9G_OA0+quNP=NwnwX43iaV1JWxjJFM0Aoect9Y8jGjWw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250914174326.i7nqmrzjtjq7kpqm@airbuntu>
+X-CM-TRANSID:M88vCgC3dW9CwMdoe7d5BA--.6943S3
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Cw43JF1UAw4rXr17Xry3CFg_yoW8Cw43pF
+	WUu3y2y34kWa1Dtws2ya18u3WFvan8J3yjkFyUurnYvwsxJ3WYg3WUGa1UAFZ8A3ykG3Wq
+	qr1Ut39rXF4jkaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07Uz6wZUUUUU=
+X-CM-SenderInfo: pvkd40hjxrjqh1hdxhhqhw/1tbiIARNsmjHwEQhQAAA3R
 
-On 15/09/2025 08:08, Aaron Kling wrote:
-> On Wed, Sep 10, 2025 at 5:07 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
->>>> +    icc_provider_init(&emc->icc_provider);
->>>> +
->>>> +    /* create External Memory Controller node */
->>>> +    node = icc_node_create(TEGRA_ICC_EMC);
->>>> +    if (IS_ERR(node)) {
->>>> +            err = PTR_ERR(node);
->>>> +            goto err_msg;
->>>
->>> return dev_err_probe
->>
->>
->> I will send patches to fix existing code. I also found some more issues
->> which I would like to implement here.
->>
->> I apologize for coming with all this at v3. I should point out things a
->> bit earlier, although how this patchset was organized also affected review.
->>
->> Anyway my comments are mostly non-critical things, so v3 is late to
->> bring these, I understand. That's on me. I appreciate your work and
->> please do not get discouraged with my comments.
+On Sun, Sep 14, 2025 at 06:43:26PM +0100, Qais Yousef wrote:
+> > > Why do you want to address the issue in the cpufreq core instead of
+> > > doing that in the cpufreq-dt driver?
+> > 
+> > My intuition was to fix the regression at where the regression was
+> > introduced by recovering the code behavior.
 > 
-> I understand and that's fine. Get it done right the first time so it
-> doesn't have to be redone later. I will try to get a new revision out
-> this week once I cycle back around to the relevant devices here.
-> 
+> Isn't the right fix here is at the driver level still? We can only give drivers
+> what they ask for. If they ask for something wrong and result in something
+> wrong, it is still their fault, no?
 
-Just FYI, I closed my tree already so I will take anything after merge
-window earliest.
+I'm not sure.  The cpufreq-dt driver is following suggestion to use
+CPUFREQ_ETERNAL, which has the implication that core will figure out
+a reasonable default value for platforms where the latency is unknown.
+And that was exactly the situation before the regression.  How does it
+become the fault of cpufreq-dt driver?
 
-Best regards,
-Krzysztof
+> Alternatively maybe we can add special handling for CPUFREQ_ETERNAL value,
+> though I'd suggest to return 1ms (similar to the case of value being 0). Maybe
+> we can redefine CPUFREQ_ETERNAL to be 0, but not sure if this can have side
+> effects.
+
+Changing CPUFREQ_ETERNAL to 0 looks so risky to me.  What about adding
+an explicit check for CPUFREQ_ETERNAL?
+
+---8<---
+
+diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+index fc7eace8b65b..053f3a0288bc 100644
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -549,11 +549,15 @@ unsigned int cpufreq_policy_transition_delay_us(struct cpufreq_policy *policy)
+        if (policy->transition_delay_us)
+                return policy->transition_delay_us;
+ 
++       if (policy->cpuinfo.transition_latency == CPUFREQ_ETERNAL)
++               goto default_delay;
++
+        latency = policy->cpuinfo.transition_latency / NSEC_PER_USEC;
+        if (latency)
+                /* Give a 50% breathing room between updates */
+                return latency + (latency >> 1);
+ 
++default_delay:
+        return USEC_PER_MSEC;
+ }
+ EXPORT_SYMBOL_GPL(cpufreq_policy_transition_delay_us);
+
+--->8---
+
+Shawn
+
 
