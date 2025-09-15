@@ -1,79 +1,103 @@
-Return-Path: <linux-pm+bounces-34693-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34694-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 969BEB58651
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Sep 2025 23:04:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D1ECB5866F
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Sep 2025 23:13:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 254A91B23A6C
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Sep 2025 21:04:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DD9A51AA450D
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Sep 2025 21:14:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B366296BDF;
-	Mon, 15 Sep 2025 21:04:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A444299928;
+	Mon, 15 Sep 2025 21:13:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LD/cGwjr"
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="V9M3mHny"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from 003.mia.mailroute.net (003.mia.mailroute.net [199.89.3.6])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3B3F1E9B1C;
-	Mon, 15 Sep 2025 21:04:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CC8E21ADA4;
+	Mon, 15 Sep 2025 21:13:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.3.6
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757970273; cv=none; b=o+SsIab8PIEeC3rawbnivfxF0QCrtfdOfnxKVredH3F57tHHuWDG7k4lUkRULiMJ7nZJz+KMAR0i5viP1xi/r7f3kF6BE2GqEBbBbteGjis7vnhEz0QfRRlhPLdeEh8uoXNj6BjDvrNO5C/ciIB1EuFXMNq5z/yDYMNe3C+fULA=
+	t=1757970820; cv=none; b=ZVHPerex1mFsX4EodBkITwfyCZpaLdFIr5xc70j73eMAjFKi2ySsYYV0vU9mBNJW2kGhLRBYC+BkSLBv+sVDJ14iin20LcC7NZSAFMocrr+lyJKv9FQIIHMVM4gRkSVSs/XoK3vG1YAr4QVGFDNKTPKKL1uXbNiRzp+ARFwL9U4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757970273; c=relaxed/simple;
-	bh=UmLiIB8qN0/00eqy8FuM9tN3FFds3XAu9YaFW+EzaPA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JeGCEvp3ALEN3YBvc4QAo3QmX/pRTwaIYSXvaHjgl/ubOdn69/NTjLeljnEJJv1paMOJxxQ8TaqnYXELxJvqNtd2+FLsGK2/BkicK5scs84PbjG8PYwcuhMsgGFGVX/1fHI2a75bll9/gIi5TBNgZzbAOnBSqSWDrESzj9ccwMU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LD/cGwjr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46C68C4CEF1;
-	Mon, 15 Sep 2025 21:04:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757970272;
-	bh=UmLiIB8qN0/00eqy8FuM9tN3FFds3XAu9YaFW+EzaPA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LD/cGwjrGAVqC+iA4IkDrKh5dsnvRF5zsSX2oNAx2xfxEUVnKzTHDbCDrd1ljonRi
-	 IvPmqeWtIh6YSUeYsTxYiBngGUJEAx4li4v1O/+G2KgmzsvT/gFQSGMxgh0nvbftK7
-	 1l8uiO8KWCwMnphUCXI00ZRtDW9scvuG0+AgqA4IfnvBsslRJNIspB+KODnS0kzpui
-	 YcGlUmj2oS9FKwoAoz167+8ev67tPVAHBbYpjV1Sy7t/GUTdOC+5wJ5fufo66gv9yd
-	 5kROWpWM6SKEP+gyJ8IXYr1W8veRbE0EwGXPLQ/vpQL9wRfLCT90ZmA6bMfA5D5SbK
-	 GvbgZMgas2Zmg==
-Date: Mon, 15 Sep 2025 16:04:31 -0500
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Svyatoslav Ryhel <clamor95@gmail.com>
-Cc: Sebastian Reichel <sre@kernel.org>, devicetree@vger.kernel.org,
-	Conor Dooley <conor+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v1 1/1] dt-bindings: power: supply: bq24190: document
- charge enable pin
-Message-ID: <175797027095.3390698.12269460822380409041.robh@kernel.org>
-References: <20250912065146.28059-1-clamor95@gmail.com>
- <20250912065146.28059-2-clamor95@gmail.com>
+	s=arc-20240116; t=1757970820; c=relaxed/simple;
+	bh=b7j6GZi412ueow51HzKyXGMlHBRPqzhaWxnJ8uOLJis=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=iQ6oKuiena0iQq/gD2X4EeqNWsR0YueLYuR5epFHhMMhoShDYmRCzjyAH0T2f8Nln0yw8D0sIbjM4CFFfxL/s6gnLzofGyZIb96vXDac8DqwQS/50ONUBf/ZpMYa6fGd1KXpKUnU6TaD4xGCD2E5REZaau1zyCeSRHlIjWMrWn0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=V9M3mHny; arc=none smtp.client-ip=199.89.3.6
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
+Received: from localhost (localhost [127.0.0.1])
+	by 003.mia.mailroute.net (Postfix) with ESMTP id 4cQd750Y9bzlgqym;
+	Mon, 15 Sep 2025 21:13:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
+	content-transfer-encoding:content-type:content-type:in-reply-to
+	:from:from:content-language:references:subject:subject
+	:user-agent:mime-version:date:date:message-id:received:received;
+	 s=mr01; t=1757970814; x=1760562815; bh=MZofNrSVrRxRHA0wbrVBt74B
+	lOQHfAgc3sQoZn9Cj6k=; b=V9M3mHnywilQ2XJ/fnoyGOf4D/BAKWqEAvvy7aSD
+	xMSUAy/sIrrDW8MKDX6TMJe4RcOHYsd5YJyu8M3NapN3kmF9OGbHcIga+gkCtRH8
+	6X9/fVOEaCBDXZLyvVfYZlU1TBnjxV9iRSA8quPGNqSvHHLafw05rKXpbVzukt0J
+	6umug0CgPuT2bZHnoNooxK2PzsAhyvgDdZdAYwW+VMmjr/kMZzvlmQkD14VPPdTd
+	11bE7HGs6Vax8AZ9xy5CrQtP4rDyoNgf8RGaiGeV1PyJ278abFfuVDr34dIYDecG
+	H6HIZLbtnA37XoQVT2vNyAR6PAbvSnlcPsuDfNvdoboJvQ==
+X-Virus-Scanned: by MailRoute
+Received: from 003.mia.mailroute.net ([127.0.0.1])
+ by localhost (003.mia [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
+ id aDwpiAhHXHrd; Mon, 15 Sep 2025 21:13:34 +0000 (UTC)
+Received: from [100.66.154.22] (unknown [104.135.204.82])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: bvanassche@acm.org)
+	by 003.mia.mailroute.net (Postfix) with ESMTPSA id 4cQd6r24Q8zltKFh;
+	Mon, 15 Sep 2025 21:13:23 +0000 (UTC)
+Message-ID: <de099236-8c97-4ecc-9af7-740f09c2b0b2@acm.org>
+Date: Mon, 15 Sep 2025 14:13:22 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250912065146.28059-2-clamor95@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/3] block: device frequency PM QoS tuning
+To: Wang Jianzheng <wangjianzheng@vivo.com>, Jens Axboe <axboe@kernel.dk>,
+ Alim Akhtar <alim.akhtar@samsung.com>, Avri Altman <avri.altman@wdc.com>,
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+ "Martin K. Petersen" <martin.petersen@oracle.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Peter Wang
+ <peter.wang@mediatek.com>, Bean Huo <beanhuo@micron.com>,
+ "Bao D. Nguyen" <quic_nguyenb@quicinc.com>,
+ Adrian Hunter <adrian.hunter@intel.com>, linux-block@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+ linux-pm@vger.kernel.org
+References: <20250914114549.650671-1-wangjianzheng@vivo.com>
+Content-Language: en-US
+From: Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20250914114549.650671-1-wangjianzheng@vivo.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-
-On Fri, 12 Sep 2025 09:51:46 +0300, Svyatoslav Ryhel wrote:
-> Document active low Charge Enable pin. Battery charging is enabled when
-> REG01[5:4] = 01 and CE pin = Low. CE pin must be pulled high or low.
+On 9/14/25 4:45 AM, Wang Jianzheng wrote:
+> Now, the patches provided here intruduce a mechanism for the block layer
+> to add constraints to device frequecny through PM QoS framework, with
+> configurable sysfs knobs per block device. Doing following config in my
+> test system:
 > 
-> Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
-> ---
->  Documentation/devicetree/bindings/power/supply/bq24190.yaml | 6 ++++++
->  1 file changed, 6 insertions(+)
+>    /sys/block/sda/dev_freq_timeout_ms = 30
 > 
+> This constraints is removed if there is no block IO for 30ms.
 
-Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+Why a new sysfs attribute? Is this attribute really necessary? How are
+users expected to determine what value to write into that attribute to
+achieve optimal results?
 
+Thanks,
+
+Bart.
 
