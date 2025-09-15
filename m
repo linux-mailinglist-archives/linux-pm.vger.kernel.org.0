@@ -1,63 +1,63 @@
-Return-Path: <linux-pm+bounces-34697-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34698-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D8C2FB58692
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Sep 2025 23:20:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D956B586B9
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Sep 2025 23:27:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1CF337A92CD
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Sep 2025 21:18:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E5D3416D4C0
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Sep 2025 21:27:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3F282BEC57;
-	Mon, 15 Sep 2025 21:20:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC3142C029D;
+	Mon, 15 Sep 2025 21:26:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="OjjO4xIP"
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="wkvea9OY"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from 003.mia.mailroute.net (003.mia.mailroute.net [199.89.3.6])
+Received: from 004.mia.mailroute.net (004.mia.mailroute.net [199.89.3.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B50D1DB95E;
-	Mon, 15 Sep 2025 21:20:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.3.6
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBD062DC78E;
+	Mon, 15 Sep 2025 21:26:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.3.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757971225; cv=none; b=RtDbkkwqjZO8NXO/RmjIiXfXgknIzqls21nPzYHHFB+ydef9GZYn8JT7qSIpEG1ZwjexyGNSCKzO1mwTRmm5IZz0Id44Z/URlsyhNEE6iNT9sf1sLBPcFkXPOWM5f6EjlqCLtUhvbybsLbWbaZSC6S/NDjdj/hsuVHFyNrXcbeI=
+	t=1757971612; cv=none; b=h+PhxaotZcCeXwn5E3InePPIaISAbyk5XO0JtRtZHT2W/P9yF2Qs4b5GAtbfatmkq0gGbrRslzdshdScz35lsSFqCqp4NEKD92IQQhZOHZzRQ0kEagG9SmLjDQV1gYKpHwvrztjhmOEXw5Nr9ayS9OekPRxgC8mSYHO86QhEMo0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757971225; c=relaxed/simple;
-	bh=f58/b7yV2x5rpzB0Y5TRwwYqR5RkcYg3q7BpprX3nS8=;
+	s=arc-20240116; t=1757971612; c=relaxed/simple;
+	bh=F1ipfS8UGPGTKCo2J4DQxAs8vmHs6cZPnkAiHnP/5Hg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=MVO7Vz3iB2azISjh5PeWsB9iN5vwesCAj3zXtqvtutTIWxz8CqSyIF042WleqItMZRggtVM9bLzwe/c3BhXGB3rHUzL4o2JM5K4dYvEZmUdnScYvo05Y+xCXKpKZpmz0cDI/x0B0sAVktd8yVvdPSJ4uqQSvytLgJ/QXxmsKbqo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=OjjO4xIP; arc=none smtp.client-ip=199.89.3.6
+	 In-Reply-To:Content-Type; b=UoCDZL23NdMf7/9WGJcJK2KTB+YR+PmVGFHfzeMssT55706lmrS+RFqQ/0bA+x07OUKMsJXqCyQzSBVTF2Ind3vHiQjFFxd/mgAylbs2xpt719C6UEQkPrqmjEuL+FQXPuozoVGu2CtxyZMTwjEtYldtu2Q47MKuGiIBNN9E8vs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=wkvea9OY; arc=none smtp.client-ip=199.89.3.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
 Received: from localhost (localhost [127.0.0.1])
-	by 003.mia.mailroute.net (Postfix) with ESMTP id 4cQdGv20jGzltH70;
-	Mon, 15 Sep 2025 21:20:23 +0000 (UTC)
+	by 004.mia.mailroute.net (Postfix) with ESMTP id 4cQdQK606Vzm0ySc;
+	Mon, 15 Sep 2025 21:26:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
 	content-transfer-encoding:content-type:content-type:in-reply-to
 	:from:from:content-language:references:subject:subject
 	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1757971220; x=1760563221; bh=1YsImEJ8KY5xc8Yvi4EEa0dg
-	Mjg/tAk0qeWCsYpfois=; b=OjjO4xIPxgW99q2LPF/Qow22DpVXG1EDFtPaWYOv
-	woQHRlSioqUuM1v1QFvj5uhwLP1sm+bgRV6e2CR3P/9ZuZnfq5iJN5NsKWBBpV4X
-	6CM6w1RqPyRiV/J2wDYS5Oe1EuiAFOcE19EzJt57J3tLv7vVwHt+nTLkndvkLmRm
-	rGwh/oB2/eol9huTM/YtAZPHTFZB+6opJivDK2rcMeIfLtrlrHfhHXod9X1l/uNy
-	vLj7oxd/q7Z8kFadPaByuUs4gHdpCQEzgGER27OuAzYojswU7/0JRvFkj5R/BaTa
-	XP1iLTriRAjRZpotrD/3eq6xDCDqvAXXqtHrC7UlX5n5XQ==
+	 s=mr01; t=1757971607; x=1760563608; bh=23miGv/7QuDmfuZP+/ZrmchU
+	VWkCWSYajP4qSG4TBvQ=; b=wkvea9OYD7LrQtPQZS+KNEDFppoqKn1W/cjEM0q5
+	ZuPeio2I25eY5AGxpk5XMasEYEwIUI9/547r2FOruI9PYelB1PKKA4iKezmP0N68
+	A15uemDg1FK2vfFCa6iYWftjQwsXeuk6tP2cyELgBN9cfQ+FQIKaBrRh6iMvla7j
+	91NxQa0g7E7XlqtIS77eQenkEv/UvetMICX+tKIxMt1tdLmjLuy6s8L3k+Ka9QiG
+	Y+If7nWmgX4nkFz1/ZjPxr9oXtl/xQELWy5Z4AjqZXHdG29dVVrLPtfk9FPMrCBX
+	E3nyrheu/lSgb6/c03+OwBd0gwpwsrs4LuqZLqiZEJitnA==
 X-Virus-Scanned: by MailRoute
-Received: from 003.mia.mailroute.net ([127.0.0.1])
- by localhost (003.mia [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id hZGj7X9H7u8E; Mon, 15 Sep 2025 21:20:20 +0000 (UTC)
+Received: from 004.mia.mailroute.net ([127.0.0.1])
+ by localhost (004.mia [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
+ id BaI7MOOtGWAV; Mon, 15 Sep 2025 21:26:47 +0000 (UTC)
 Received: from [100.66.154.22] (unknown [104.135.204.82])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: bvanassche@acm.org)
-	by 003.mia.mailroute.net (Postfix) with ESMTPSA id 4cQdGg2NxJzlsxCp;
-	Mon, 15 Sep 2025 21:20:10 +0000 (UTC)
-Message-ID: <dd78b859-5f1b-499c-9578-03b8a18418cc@acm.org>
-Date: Mon, 15 Sep 2025 14:20:09 -0700
+	by 004.mia.mailroute.net (Postfix) with ESMTPSA id 4cQdQ51p48zm0yT2;
+	Mon, 15 Sep 2025 21:26:35 +0000 (UTC)
+Message-ID: <191ca54f-0faa-4615-967a-7b4c86d59e0e@acm.org>
+Date: Mon, 15 Sep 2025 14:26:34 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -65,8 +65,7 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/3] scsi: ufs: core: Add support for frequency PM QoS
- tuning
+Subject: Re: [PATCH 2/3] block: add support for device frequency PM QoS tuning
 To: Wang Jianzheng <wangjianzheng@vivo.com>, Jens Axboe <axboe@kernel.dk>,
  Alim Akhtar <alim.akhtar@samsung.com>, Avri Altman <avri.altman@wdc.com>,
  "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
@@ -78,37 +77,57 @@ To: Wang Jianzheng <wangjianzheng@vivo.com>, Jens Axboe <axboe@kernel.dk>,
  linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
  linux-pm@vger.kernel.org
 References: <20250914114549.650671-1-wangjianzheng@vivo.com>
- <20250914114549.650671-4-wangjianzheng@vivo.com>
+ <20250914114549.650671-3-wangjianzheng@vivo.com>
 Content-Language: en-US
 From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20250914114549.650671-4-wangjianzheng@vivo.com>
+In-Reply-To: <20250914114549.650671-3-wangjianzheng@vivo.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 9/14/25 4:45 AM, Wang Jianzheng wrote:
-> +	if (!shost)
+> +#ifdef CONFIG_PM
+> +static void blk_mq_dev_frequency_work(struct work_struct *work)
+> +{
+> +	struct request_queue *q =
+> +			container_of(work, struct request_queue, dev_freq_work.work);
+> +	unsigned long timeout;
+> +	struct dev_pm_qos_request *qos = q->dev_freq_qos;
+> +
+> +	timeout = msecs_to_jiffies(q->disk->dev_freq_timeout);
+> +	if (!q || IS_ERR_OR_NULL(q->dev) || IS_ERR_OR_NULL(qos))
 > +		return;
-
-Please remove the above if-statement and make sure that the
-initialization order guarantees that hba->host is set before
-ufshcd_pm_qos_freq_read_value() can be called.
-
-> +	shost_for_each_device(sdev, shost) {
-
-Why a loop over all logical units? Isn't it sufficient to check the
-WLUN?
-
-> +		if (!sdev)
-> +			continue;
 > +
-> +		q = sdev->request_queue;
-> +		if (IS_ERR_OR_NULL(q))
-> +			continue;
+> +	if (q->pm_qos_status == PM_QOS_ACTIVE) {
+> +		q->pm_qos_status = PM_QOS_FREQ_SET;
+> +		dev_pm_qos_add_request(q->dev, qos, DEV_PM_QOS_MIN_FREQUENCY,
+> +				       FREQ_QOS_MAX_DEFAULT_VALUE);
+> +	} else {
+> +		if (time_after(jiffies, READ_ONCE(q->last_active) + timeout))
+> +			q->pm_qos_status = PM_QOS_FREQ_REMOV;
+> +	}
 > +
-> +		if (q->disk && !IS_ERR_OR_NULL(q->dev)) {
+> +	if (q->pm_qos_status == PM_QOS_FREQ_REMOV) {
+> +		dev_pm_qos_remove_request(qos);
+> +		q->pm_qos_status = PM_QOS_ACTIVE;
+> +	} else {
+> +		schedule_delayed_work(&q->dev_freq_work,
+> +				      q->last_active + timeout - jiffies);
+> +	}
+> +}
 
-The above three if-statements are not necessary. Please remove these
-three if-statements to improve code clarity.
+The above code is similar in nature to the activity detection by the
+run-time power management (RPM) code. Why a new timer mechanism instead
+of adding more code in the UFS driver RPM callbacks?
+
+> @@ -3161,6 +3211,8 @@ void blk_mq_submit_bio(struct bio *bio)
+>   		goto queue_exit;
+>   	}
+>   
+> +	blk_pm_qos_dev_freq_update(q, bio);
+
+Good luck with adding power-management code in the block layer hot path
+... I'm not sure anyone will be enthusiast seeing code being added in
+blk_mq_submit_bio().
 
 Thanks,
 
