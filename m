@@ -1,109 +1,90 @@
-Return-Path: <linux-pm+bounces-34677-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34678-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E97DEB57E4D
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Sep 2025 16:03:49 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D431B57F02
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Sep 2025 16:32:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 94AD0164D0F
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Sep 2025 14:01:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0E62D1885E56
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Sep 2025 14:32:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C8FA20B800;
-	Mon, 15 Sep 2025 14:01:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 684BD272E42;
+	Mon, 15 Sep 2025 14:31:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="h7SWvRLo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HpWQljDp"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E19C126281
-	for <linux-pm@vger.kernel.org>; Mon, 15 Sep 2025 14:01:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4331F1D79BE
+	for <linux-pm@vger.kernel.org>; Mon, 15 Sep 2025 14:31:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757944910; cv=none; b=JsiUIIVXD7Sn9nRdE8KHUnq2c86ExqgxCHtEGlKlfTgO0kg4ZBaTM4eLoMu6ROWEg5hehL9QVAOllPGZrgX2mwPuAkTLSe/wlYuoBLp3SFis5Z2qgpQPy04YPzFkMs+2f7slw92EucDvOtEb1ftOC+wBBmmm+ltWoN/Pp3pG5gc=
+	t=1757946714; cv=none; b=qeLNqEX/eq2iMHz8nzkL6ZpmoNbup0BlpyZIGqXna4RGj0NjqR96UUCjZ80UbbXeG/8O8UwMHfvpjR+00R2I2/oEWTasAlCGUeHjzYViyi2jDoXLNQHI4yuDBlig9tuL74Cf4fcPq6XGmbxDAFU1ezVNp5rfhPxz7tFogx+TJx4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757944910; c=relaxed/simple;
-	bh=CwUy7xI3aeGV2jHi752NlVRGAmuCtCfD9OUAYRdA1bA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LYvFtA4usdC4ujElVULNOghDCMF/9fJTZaNShXXIkXNpS/hzhXwDYDRdbz0A7X406HLPGtDh8eu22VkPlePOIBpmlHBzriHzJX1mH95vUF/M8ltiVFPCCoQscohyhXik/GjelxCFH2J+q9qBcxoU1wiqXC85q3vwwZ1N/9DZjmo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=h7SWvRLo; arc=none smtp.client-ip=91.218.175.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1757944905;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=AhJ4pkDiJ0lWkmhamxXqTKU3eDM1TJhpY4CZ/P9eJwI=;
-	b=h7SWvRLorPI/hS+JB+Q5OH1c0BtLwcdyC1iqMl/fC/0e6SMC/9ih8/4d4iySxlDt58aOsW
-	GE43IfUiziAt0TrrZ5P7OsJE+575EuEad6mh1NNL17DeLS4bJbIf+dhJA6H38TuOWMRE9p
-	g0P3cavDxaeaC6BHAOthYONZlIltqKs=
-From: Thorsten Blum <thorsten.blum@linux.dev>
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Gary Guo <gary@garyguo.net>,
-	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>
-Cc: Thorsten Blum <thorsten.blum@linux.dev>,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	rust-for-linux@vger.kernel.org
-Subject: [PATCH] rust: cpufreq: streamline find_supply_names
-Date: Mon, 15 Sep 2025 15:59:54 +0200
-Message-ID: <20250915135954.2329723-2-thorsten.blum@linux.dev>
+	s=arc-20240116; t=1757946714; c=relaxed/simple;
+	bh=e+aCqHVKJ7dJBf75rc1ndifsfC04NmgRfdjtZ5Qj96c=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=WSTOLXAOFWe19NeXrulJcpm6ssNYbr4dWYA0H5HaUOiHCln/TE6OITrK/YE/SeLPUF/E4voZc10+8iaznli6hOl+gx1O/WfpgBX9ZC+XKyFKuMSAqCMGjUzdcqdvUwdBnFtxBXV0BsaZcFukUEpizu9pqktk1EyNEiPEqdpLeJc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HpWQljDp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D58A0C4CEF1
+	for <linux-pm@vger.kernel.org>; Mon, 15 Sep 2025 14:31:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757946713;
+	bh=e+aCqHVKJ7dJBf75rc1ndifsfC04NmgRfdjtZ5Qj96c=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=HpWQljDp+XDYt4SbLHQes88yOd8e4HYn81PYXEdDWdrI+AOP8jdatxR/0FJjXuwpX
+	 +VTcsyhQR4ivRSLGqAz72EmESuUE8vzi2fPvZ658Ak3AnzfXpngNPBZ4gPVOKKt5Nn
+	 VILR0X6XOZ8dXvcCw7twjBCNm+0Q/Hww4IA2pFD/Qjtoe252Zqbyt4GYFmKUmLvrqW
+	 UKN+gNF0cXjSozHUMw/3GIGixsCf2LHW8X0KF3idD5qOCFSOPEbpmLh/i1q3C/RQv2
+	 kp1ogR0FKDyVTuqW9LT+NQLnDvRAJQ6YsuxRywAGWPuqe5l5By3/2SQZm/pafN5LeD
+	 mSTVNpiNn1h4g==
+Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-746c06937c3so2383299a34.0
+        for <linux-pm@vger.kernel.org>; Mon, 15 Sep 2025 07:31:53 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVhIa1C6nOd3jMLZiBjn7zdJD/Gu4B3jrJXGis5wrJjh8cFmM9bveVSGINbY4sSxhw9+dr/ubLd8A==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx4MVXJEX3CBUNmRykRWblVpQJXKYKb11XQFMZR5WWdos7M+aYw
+	RH2eKnBv4V2k3Oxn33fUinFfju/JRa7VBdICv4i7iNZYhIpALDO4bQKEa3zU6UOFRYv0PF2AftF
+	P6xatx8BCUwRjbScrueU6WjEx1zvfBEc=
+X-Google-Smtp-Source: AGHT+IFLtTr4eynOJEwpWbv9jqHw7njjay2+yWb6qsR0EoZiFWYmBrhnEhqXUCW123Dxew55TFs52IQ3TIznM40VBl0=
+X-Received: by 2002:a05:6830:6c0b:b0:745:9907:3fb5 with SMTP id
+ 46e09a7af769-751df0bee5amr11202269a34.7.1757946713198; Mon, 15 Sep 2025
+ 07:31:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+References: <20250825185807.57668-1-vivekyadav1207731111@gmail.com>
+ <CAJZ5v0gfrTvLgs=PdmRbRRN05GE4Bk8Q7hJdtQfyk3VqaOz7FQ@mail.gmail.com>
+ <CABPSWR5cG=xTA72BHayYQTb=24VS3N+=dbsiMcU+gyqTKvNXAQ@mail.gmail.com>
+ <2fb11c0970da307cf8cf4f35d35c49f78f82ee72.camel@perches.com>
+ <CAJZ5v0iAfgE4RkVXH7GaG9SqvGa0VfVuFi_cLd0utC8oPY0Fkg@mail.gmail.com>
+ <99c1c03a9f7fe55b8f73e5574612dc3e1cd1af55.camel@perches.com>
+ <CABPSWR6uKR0fz1-jJcJ1_JCsBbXhHioUe3o02DMSP8T18y1T1Q@mail.gmail.com> <CABPSWR4kcdwEvC6zMTOGgME4ZDPpOsdtjheD8ZgTa0iaTqQwhA@mail.gmail.com>
+In-Reply-To: <CABPSWR4kcdwEvC6zMTOGgME4ZDPpOsdtjheD8ZgTa0iaTqQwhA@mail.gmail.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 15 Sep 2025 16:31:40 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0gTtTZt7oE0vME0qRo8nZ=KX3DwF46PhyUVe7e85uZaNA@mail.gmail.com>
+X-Gm-Features: Ac12FXwvSHrkpD6oRgoIBwD0II_TD2HP5L0R7ONoO5lfRb3bDZcJG2moMarRhmQ
+Message-ID: <CAJZ5v0gTtTZt7oE0vME0qRo8nZ=KX3DwF46PhyUVe7e85uZaNA@mail.gmail.com>
+Subject: Re: [PATCH] cpuidle: sysfs: Use sysfs_emit/sysfs_emit_at instead of sprintf/scnprintf
+To: vivek yadav <vivekyadav1207731111@gmail.com>
+Cc: Joe Perches <joe@perches.com>, "Rafael J. Wysocki" <rafael@kernel.org>, daniel.lezcano@linaro.org, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Remove local variables from find_supply_names() and use .and_then() with
-the more concise kernel::kvec![] macro, instead of KVec::with_capacity()
-followed by .push() and Some().
+On Sun, Sep 14, 2025 at 5:20=E2=80=AFPM vivek yadav
+<vivekyadav1207731111@gmail.com> wrote:
+>
+> Hi @Rafael J. Wysocki ,
+>
+> Is there any update for me on this patch ?
 
-No functional changes intended.
+As I said before, please do not rename the variable.
 
-Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
----
- drivers/cpufreq/rcpufreq_dt.rs | 10 +++-------
- 1 file changed, 3 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/cpufreq/rcpufreq_dt.rs b/drivers/cpufreq/rcpufreq_dt.rs
-index 7e1fbf9a091f..224d063c7cec 100644
---- a/drivers/cpufreq/rcpufreq_dt.rs
-+++ b/drivers/cpufreq/rcpufreq_dt.rs
-@@ -28,15 +28,11 @@ fn find_supply_name_exact(dev: &Device, name: &str) -> Option<CString> {
- /// Finds supply name for the CPU from DT.
- fn find_supply_names(dev: &Device, cpu: cpu::CpuId) -> Option<KVec<CString>> {
-     // Try "cpu0" for older DTs, fallback to "cpu".
--    let name = (cpu.as_u32() == 0)
-+    (cpu.as_u32() == 0)
-         .then(|| find_supply_name_exact(dev, "cpu0"))
-         .flatten()
--        .or_else(|| find_supply_name_exact(dev, "cpu"))?;
--
--    let mut list = KVec::with_capacity(1, GFP_KERNEL).ok()?;
--    list.push(name, GFP_KERNEL).ok()?;
--
--    Some(list)
-+        .or_else(|| find_supply_name_exact(dev, "cpu"))
-+        .and_then(|name| kernel::kvec![name].ok())
- }
- 
- /// Represents the cpufreq dt device.
--- 
-2.51.0
-
+Thanks!
 
