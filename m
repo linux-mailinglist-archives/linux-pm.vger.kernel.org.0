@@ -1,103 +1,105 @@
-Return-Path: <linux-pm+bounces-34670-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34671-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AEED3B57995
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Sep 2025 13:59:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id F3DC1B57AC6
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Sep 2025 14:25:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CD21E3B7056
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Sep 2025 11:57:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3105B1AA1111
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Sep 2025 12:24:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 842702F90EA;
-	Mon, 15 Sep 2025 11:57:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29BAE307AD9;
+	Mon, 15 Sep 2025 12:21:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="m7lzQF6b"
+	dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b="jrFESGPW"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
+Received: from mail-m16.yeah.net (mail-m16.yeah.net [220.197.32.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD5612C376B
-	for <linux-pm@vger.kernel.org>; Mon, 15 Sep 2025 11:57:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9BC92FF15D;
+	Mon, 15 Sep 2025 12:21:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.32.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757937426; cv=none; b=Ho7geGcIoJhNvG4JIBY2VQDqURbuH4aTIcR4r4LObX7T4sQIiynuw5Qcu5vQQd596YUPLPkhL2dswJH/RRClSJrOHpXHDekCNJkyADwtQKjSnvcDKn5h7dLkeeG76619SlRrksww6Nu/EBWl7TP+0nD44/uvWZNDkklmAzNtJes=
+	t=1757938908; cv=none; b=qWRGAHV9GrZ2XJ1XZZc/n51uhOK/GNpJWDm6q5CLW7TWXW41o15eHwC+mr99ur9/dtwqin/sT1p55LJpUwQXoiPvfcfJE7BQxkfndkQMAuPkTHGhLyCjTRSo/YyBwLtScF4E1oAUqsuHnQ3Ej0cl3zVwm1OPNBtqj1lHFTv2Fag=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757937426; c=relaxed/simple;
-	bh=fA4MlAIn7P1pBX/89vOZIi4pnvENU8A6OalvZ9lhyUQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ivFHpzhE5jAAbaFlo7fvMWeJZklRwnGx9EaJZk2NhOzwPjTPcXVKj24/2zvER4FIRHD/kqGqpkMsCW/e6SG1CEzokkjE1nDDYD3/eIfLzS2UJMM0BOILyL0AWTbXYRFrMxXcgNu1ljQldzFiZs+q5n8tU738G9ssoiuqMoKUgx4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=m7lzQF6b; arc=none smtp.client-ip=91.218.175.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1757937410;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=JVVGhrqsmL4odmIDg4NNn1VRpJaq1RD433dc/e6m7/I=;
-	b=m7lzQF6bpIU0zWTJt4VYQVIVA5KoWH3Oha1hmVSrZEtMQYWjg3kW7Hm+dYfGTh8JudNVrJ
-	fSL4UxEAOoeJsp2jwXemfRNXbxPh4LGp9Jdd44m4/7CLvDvRzdeGP8Nc/kJm+va1WRSJG8
-	68Ts/yJrq7PM2lIdeI/peOOK5+IueG0=
-From: Thorsten Blum <thorsten.blum@linux.dev>
-To: Dmitry Osipenko <digetx@gmail.com>,
-	MyungJoo Ham <myungjoo.ham@samsung.com>,
-	Kyungmin Park <kyungmin.park@samsung.com>,
-	Chanwoo Choi <cw00.choi@samsung.com>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>
-Cc: Thorsten Blum <thorsten.blum@linux.dev>,
-	linux-pm@vger.kernel.org,
-	linux-tegra@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] PM / devfreq: tegra30: use designated initializers for tegra_actmon_emc_ratio
-Date: Mon, 15 Sep 2025 13:55:55 +0200
-Message-ID: <20250915115554.2150603-2-thorsten.blum@linux.dev>
+	s=arc-20240116; t=1757938908; c=relaxed/simple;
+	bh=z2kNIlcXBW6MfC2xnrcVa0oHxwllCrJCejQCNVLE0eQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZiH9A/Vmohr2aOxV5Bv8HE1n1yWRhdHuv31Wr9lJ/6dYcwoQNJK1s/z8ASoiaZmLiSt5Ro7Pl72S7eR5W23nILJCCfwjDq8oJmGN2mckG1yJA0FUzPYJ5liVCxJR+7fH5sxjlLYSRa8VCwsY+KH+dZ+jWT94p9x1TddCqCry9ic=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net; spf=pass smtp.mailfrom=yeah.net; dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b=jrFESGPW; arc=none smtp.client-ip=220.197.32.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yeah.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yeah.net;
+	s=s110527; h=Date:From:To:Subject:Message-ID:MIME-Version:
+	Content-Type; bh=OOyfLZgtX27UDIP2iLeBPK7IHVGLm6yCXP8suJxPQlk=;
+	b=jrFESGPWhXpollyfx2m2Rmh87nxknxI0bHyUfUBTA7k8Zz0Jk6COaBKi03L4dr
+	I/WOcZ6ziU5uN2cHpS83VNHtD/12Jduq12MQIgeUSo9BAs7jjeUHXdEG6fBpvZa0
+	aa5V28EzrTFTAgUQpbIXpKUut6KGamE3qez/pMsnrO1SQ=
+Received: from dragon (unknown [])
+	by gzsmtp1 (Coremail) with SMTP id Mc8vCgB3b7qDBMhoodmEBA--.36439S3;
+	Mon, 15 Sep 2025 20:20:20 +0800 (CST)
+Date: Mon, 15 Sep 2025 20:20:18 +0800
+From: Shawn Guo <shawnguo2@yeah.net>
+To: Qais Yousef <qyousef@layalina.io>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>,
+	stable@vger.kernel.org
+Subject: Re: [PATCH] cpufreq: cap the default transition delay at 10 ms
+Message-ID: <aMgEgvTyHEzaEJ1v@dragon>
+References: <20250910065312.176934-1-shawnguo2@yeah.net>
+ <CAJZ5v0gL5s99h0eq1U4ngaUfPq_AcfgPruSD096JtBWVMjSZwQ@mail.gmail.com>
+ <aMQbIu5QNvPoAsSF@dragon>
+ <20250914174326.i7nqmrzjtjq7kpqm@airbuntu>
+ <aMfAQXE4sRjru9I_@dragon>
+ <20250915100207.5amkmknirijnvuoh@airbuntu>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250915100207.5amkmknirijnvuoh@airbuntu>
+X-CM-TRANSID:Mc8vCgB3b7qDBMhoodmEBA--.36439S3
+X-Coremail-Antispam: 1Uf129KBjvJXoW7try8Ww1fWrWDKFyDAw48Crg_yoW8GF43pF
+	W7K3W2kF1kGF4Dtws2yw4Uuw1Ykwn5tr4UGry8WF1rA398Wrn0gw4Iga1Y9FW3Jr4DCw1q
+	qr40g3srZayYyaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07Ut9N3UUUUU=
+X-CM-SenderInfo: pvkd40hjxrjqh1hdxhhqhw/1tbiEh3JZWjHo9vN3AABsk
 
-Switch actmon_emc_ratios[] to the more modern and flexible designated
-initializers. This improves readability and allows struct fields to be
-reordered.
+On Mon, Sep 15, 2025 at 11:02:07AM +0100, Qais Yousef wrote:
+> On 09/15/25 15:29, Shawn Guo wrote:
+> > On Sun, Sep 14, 2025 at 06:43:26PM +0100, Qais Yousef wrote:
+> > > > > Why do you want to address the issue in the cpufreq core instead of
+> > > > > doing that in the cpufreq-dt driver?
+> > > > 
+> > > > My intuition was to fix the regression at where the regression was
+> > > > introduced by recovering the code behavior.
+> > > 
+> > > Isn't the right fix here is at the driver level still? We can only give drivers
+> > > what they ask for. If they ask for something wrong and result in something
+> > > wrong, it is still their fault, no?
+> > 
+> > I'm not sure.  The cpufreq-dt driver is following suggestion to use
+> > CPUFREQ_ETERNAL, which has the implication that core will figure out
+> > a reasonable default value for platforms where the latency is unknown.
+> > And that was exactly the situation before the regression.  How does it
+> > become the fault of cpufreq-dt driver?
+> 
+> Rafael and Viresh would know better, but amd-pstate chooses to fallback to
+> specific values if cppc returned CPUFREQ_ETERNAL.
+> 
+> Have you tried to look why dev_pm_opp_get_max_transition_latency() returns
+> 0 for your platform? I think this is the problem that was being masked before.
 
-Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
----
- drivers/devfreq/tegra30-devfreq.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+My platform doesn't scale voltage along with frequency, and the platform
+DT doesn't specify 'clock-latency-ns' which is an optional property
+after all.
 
-diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
-index 4a4f0106ab9d..890990e03335 100644
---- a/drivers/devfreq/tegra30-devfreq.c
-+++ b/drivers/devfreq/tegra30-devfreq.c
-@@ -206,13 +206,13 @@ struct tegra_actmon_emc_ratio {
- };
- 
- static const struct tegra_actmon_emc_ratio actmon_emc_ratios[] = {
--	{ 1400000,    KHZ_MAX },
--	{ 1200000,    750000 },
--	{ 1100000,    600000 },
--	{ 1000000,    500000 },
--	{  800000,    375000 },
--	{  500000,    200000 },
--	{  250000,    100000 },
-+	{ .cpu_freq = 1400000, .emc_freq = KHZ_MAX },
-+	{ .cpu_freq = 1200000, .emc_freq = 750000 },
-+	{ .cpu_freq = 1100000, .emc_freq = 600000 },
-+	{ .cpu_freq = 1000000, .emc_freq = 500000 },
-+	{ .cpu_freq =  800000, .emc_freq = 375000 },
-+	{ .cpu_freq =  500000, .emc_freq = 200000 },
-+	{ .cpu_freq =  250000, .emc_freq = 100000 },
- };
- 
- static u32 actmon_readl(struct tegra_devfreq *tegra, u32 offset)
--- 
-2.51.0
+Shawn
 
 
