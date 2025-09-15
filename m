@@ -1,239 +1,109 @@
-Return-Path: <linux-pm+bounces-34676-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34677-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0DF1AB57D81
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Sep 2025 15:37:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E97DEB57E4D
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Sep 2025 16:03:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7168D1884E55
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Sep 2025 13:36:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 94AD0164D0F
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Sep 2025 14:01:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46DCB3164BC;
-	Mon, 15 Sep 2025 13:36:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C8FA20B800;
+	Mon, 15 Sep 2025 14:01:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="g44Ap7LR"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="h7SWvRLo"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F2E0288C14;
-	Mon, 15 Sep 2025 13:36:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E19C126281
+	for <linux-pm@vger.kernel.org>; Mon, 15 Sep 2025 14:01:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757943389; cv=none; b=doMnxa6ELmdJdHveUn1vEtY2Efz3O8D4TAI1h+4oFVzQ2ztKg6qVDnCG59sxYQ0hX8AnFt+cVyBlT7q/zNHxrSIoAzbFWK9i8LDsKdZtBmQFWSb8haJBVmbY4NmvAgYhUJC/YnoDu3UqZ336sWyLTtxyWuWtule+E4IU02aGESI=
+	t=1757944910; cv=none; b=JsiUIIVXD7Sn9nRdE8KHUnq2c86ExqgxCHtEGlKlfTgO0kg4ZBaTM4eLoMu6ROWEg5hehL9QVAOllPGZrgX2mwPuAkTLSe/wlYuoBLp3SFis5Z2qgpQPy04YPzFkMs+2f7slw92EucDvOtEb1ftOC+wBBmmm+ltWoN/Pp3pG5gc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757943389; c=relaxed/simple;
-	bh=RrQWimjg2kK8bT3Tfn+05zZzA3ddMAkW4+eVTyyOWPI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HnKk/aFOE8hu2AIoSEI3MHa4XxFyELVM71n7eRVJavYdpZtTrePCKTA6mLMNdf/rZ/gk6vOsEWTAgK3Vhhm5Z+jamL+hYLfvPibeua7+q2QXHBA8Qg/Sqg23/T/3YjyjCdn2FuqP977VZ9cHDOOwrzMqbEjQh4TsuJGVs55ez0E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=g44Ap7LR; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1757943385;
-	bh=RrQWimjg2kK8bT3Tfn+05zZzA3ddMAkW4+eVTyyOWPI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=g44Ap7LRaJTyVhfQoQoHGsejO64m2J31G53D78xrOr4+FFz4z3xOCvP4AfA6tvVkx
-	 gp1dmAgOLj1cWESNMyhHcijNuakbwwWg5vSW+8ly1TrM1ECoCeEw7H5AhQ8SYNRm+n
-	 UH58C+OeagVyoxteY4LZyXDhSflPlQtiHkW7d1f0URvTQk32T+EvxdkjLliRgQ8Qn3
-	 9zLZvdGDFfpNhwIYwGDsyZsy6vQTy7nzeXTPkS6qSP/c4gSJS8q3nnLsXlcs+Uic+U
-	 KP7ROkE2G8EfPe56NT6tMariLZl7QG8EklpWtbeehk8aqjpLe+HXBsdVi9X/TJz5N0
-	 lwH/OvYImXJhA==
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 3D73C17E1067;
-	Mon, 15 Sep 2025 15:36:24 +0200 (CEST)
-Message-ID: <a2f77d1b-26aa-47cb-a2b3-9495abbe78be@collabora.com>
-Date: Mon, 15 Sep 2025 15:36:23 +0200
+	s=arc-20240116; t=1757944910; c=relaxed/simple;
+	bh=CwUy7xI3aeGV2jHi752NlVRGAmuCtCfD9OUAYRdA1bA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LYvFtA4usdC4ujElVULNOghDCMF/9fJTZaNShXXIkXNpS/hzhXwDYDRdbz0A7X406HLPGtDh8eu22VkPlePOIBpmlHBzriHzJX1mH95vUF/M8ltiVFPCCoQscohyhXik/GjelxCFH2J+q9qBcxoU1wiqXC85q3vwwZ1N/9DZjmo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=h7SWvRLo; arc=none smtp.client-ip=91.218.175.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1757944905;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=AhJ4pkDiJ0lWkmhamxXqTKU3eDM1TJhpY4CZ/P9eJwI=;
+	b=h7SWvRLorPI/hS+JB+Q5OH1c0BtLwcdyC1iqMl/fC/0e6SMC/9ih8/4d4iySxlDt58aOsW
+	GE43IfUiziAt0TrrZ5P7OsJE+575EuEad6mh1NNL17DeLS4bJbIf+dhJA6H38TuOWMRE9p
+	g0P3cavDxaeaC6BHAOthYONZlIltqKs=
+From: Thorsten Blum <thorsten.blum@linux.dev>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Gary Guo <gary@garyguo.net>,
+	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>
+Cc: Thorsten Blum <thorsten.blum@linux.dev>,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	rust-for-linux@vger.kernel.org
+Subject: [PATCH] rust: cpufreq: streamline find_supply_names
+Date: Mon, 15 Sep 2025 15:59:54 +0200
+Message-ID: <20250915135954.2329723-2-thorsten.blum@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 10/10] drm/panthor: add support for MediaTek
- MFlexGraphics
-To: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>,
- Boris Brezillon <boris.brezillon@collabora.com>,
- Steven Price <steven.price@arm.com>, Liviu Dudau <liviu.dudau@arm.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Matthias Brugger
- <matthias.bgg@gmail.com>, MyungJoo Ham <myungjoo.ham@samsung.com>,
- Kyungmin Park <kyungmin.park@samsung.com>,
- Chanwoo Choi <cw00.choi@samsung.com>, Jassi Brar <jassisinghbrar@gmail.com>,
- Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- Chia-I Wu <olvaffe@gmail.com>, Chen-Yu Tsai <wenst@chromium.org>
-Cc: kernel@collabora.com, dri-devel@lists.freedesktop.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
- linux-pm@vger.kernel.org, linux-hardening@vger.kernel.org
-References: <20250912-mt8196-gpufreq-v2-0-779a8a3729d9@collabora.com>
- <20250912-mt8196-gpufreq-v2-10-779a8a3729d9@collabora.com>
- <ae482072-c13f-4cb4-be26-50592b086fe6@collabora.com>
- <117198807.nniJfEyVGO@workhorse>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Content-Language: en-US
-In-Reply-To: <117198807.nniJfEyVGO@workhorse>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Il 15/09/25 15:32, Nicolas Frattaroli ha scritto:
-> On Monday, 15 September 2025 12:28:09 Central European Summer Time AngeloGioacchino Del Regno wrote:
->> Il 12/09/25 20:37, Nicolas Frattaroli ha scritto:
->>> MediaTek uses some glue logic to control frequency and power on some of
->>> their GPUs. This is best exposed as a devfreq driver, as it saves us
->>> from having to hardcode OPPs into the device tree, and can be extended
->>> with additional devfreq-y logic like more clever governors that use the
->>> hardware's GPUEB MCU to set frame time targets and power limits.
->>>
->>> Add this driver to the panthor subdirectory. It needs to live here as it
->>> needs to call into panthor's devfreq layer, and panthor for its part
->>> also needs to call into this driver during probe to get a devfreq device
->>> registered. Solving the cyclical dependency by having mediatek_mfg live
->>> without knowledge of what a panthor is would require moving the devfreq
->>> provider stuff into a generic devfreq subsystem solution, which I didn't
->>> want to do.
->>>
->>> Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
->>> ---
->>>    drivers/gpu/drm/panthor/Kconfig        |   13 +
->>>    drivers/gpu/drm/panthor/Makefile       |    2 +
->>>    drivers/gpu/drm/panthor/mediatek_mfg.c | 1053 ++++++++++++++++++++++++++++++++
->>>    3 files changed, 1068 insertions(+)
->>>
->> [ ... snip ...]
->>> +static int mtk_mfg_eb_on(struct mtk_mfg *mfg)
->>> +{
->>> +	struct device *dev = &mfg->pdev->dev;
->>> +	u32 val;
->>> +	int ret;
->>> +
->>> +	/*
->>> +	 * If MFG is already on from e.g. the bootloader, we should skip doing
->>> +	 * the power-on sequence, as it wouldn't work without powering it off
->>> +	 * first.
->>> +	 */
->>> +	if ((readl(mfg->rpc + RPC_PWR_CON) & PWR_ACK_M) == PWR_ACK_M)
->>> +		return 0;
->>> +
->>> +	ret = readl_poll_timeout(mfg->rpc + RPC_GHPM_RO0_CON, val,
->>> +				 !(val & (GHPM_PWR_STATE_M | GHPM_STATE_M)),
->>> +				 GPUEB_POLL_US, GPUEB_TIMEOUT_US);
->>> +	if (ret) {
->>> +		dev_err(dev, "timed out waiting for EB to power on\n");
->>> +		return ret;
->>> +	}
->>> +
->>> +	mtk_mfg_update_reg_bits(mfg->rpc + mfg->ghpm_en_reg, GHPM_ENABLE_M,
->>> +				GHPM_ENABLE_M);
->>> +
->>> +	mtk_mfg_update_reg_bits(mfg->rpc + RPC_GHPM_CFG0_CON, GHPM_ON_SEQ_M, 0);
->>> +	mtk_mfg_update_reg_bits(mfg->rpc + RPC_GHPM_CFG0_CON, GHPM_ON_SEQ_M,
->>> +				GHPM_ON_SEQ_M);
->>> +
->>> +	mtk_mfg_update_reg_bits(mfg->rpc + mfg->ghpm_en_reg, GHPM_ENABLE_M, 0);
->>> +
->>> +
->>> +	ret = readl_poll_timeout(mfg->rpc + RPC_PWR_CON, val,
->>> +				 (val & PWR_ACK_M) == PWR_ACK_M,
->>> +				 GPUEB_POLL_US, GPUEB_TIMEOUT_US);
->>
->> I wonder if you can check how much time does the GPUEB really take to poweron,
->> just so that we might be able to reduce delay_us here.
-> 
-> I already did, that's where the 50us value is from as far as I remember.
-> 
+Remove local variables from find_supply_names() and use .and_then() with
+the more concise kernel::kvec![] macro, instead of KVec::with_capacity()
+followed by .push() and Some().
 
-Ah, perfect.
+No functional changes intended.
 
->>
->>> +	if (ret) {
->>> +		dev_err(dev, "timed out waiting for EB power ack, val = 0x%X\n",
->>> +			val);
->>> +		return ret;
->>> +	}
->>> +
->>> +	ret = readl_poll_timeout(mfg->gpr + GPR_LP_STATE, val,
->>> +				 (val == EB_ON_RESUME),
->>> +				 GPUEB_POLL_US, GPUEB_TIMEOUT_US);
->>
->> Same here - and I think this one is more critical, as I can see this suspend/resume
->> control being used more extensively in the future.
->>
->> Specifically, I'm wondering if we could add runtime PM ops that will request EB
->> suspend/resume - and also if doing so would make any sense.
->>
->> I am guessing that the "suspend" LP_STATE stops the internal state machine, making
->> the EB MCU to either go in a low-power state or to anyway lower its power usage by
->> at least suspending the iterations.
-> 
-> I think I briefly fiddled with this but then it did nothing other than
-> break everything. Is the current time it takes to resume a problem?
-> 
->>
->> Of course - here I mean that we could have
->> 1. System suspend ops that powers off the EB completely like you're doing here and
->> 2. Runtime PM op that may be called (very) aggressively
->>
->> ...this would obviously not be feasible if the EB suspend/resume (without complete
->> poweron/off) takes too much time to actually happen.
-> 
-> We probably don't want to aggressively suspend the thing doing DVFS
-> while a workload is running, and if no workload is running, it
-> already suspends. I can't really say how normal desktop usage will
-> play out yet, but generally speaking I think it's a bit early to
-> find a comfortable place on the transition latency vs power draw
-> curve at this point.
-> 
+Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
+---
+ drivers/cpufreq/rcpufreq_dt.rs | 10 +++-------
+ 1 file changed, 3 insertions(+), 7 deletions(-)
 
-Okay let's leave it for now and revisit that after everything is upstreamed.
-It's only an improvement anyway, not critical for functionality, and maybe
-not even feasible.
-
->> [... snip ...]
->>> +static int mtk_mfg_init_shared_mem(struct mtk_mfg *mfg)
->>> +{
->>> [... snip ...]
->>> +
->>> +	dev_info(dev, "initialised mem at phys 0x%016llX\n", mfg->sram_phys);
->>
->> I don't like exposing addresses in kmsg. Please just don't.
-> 
-> It's a physical address. This is not a kernel pointer, but something
-> that can be read from the DTS. But sure, I'll remove it I guess?
-> 
-
-Yeah, please.
-
->> [... snip ...]
->>
->> Cheers,
->> Angelo
->>
-> 
-> You can assume me not responding to a part of the feedback in this
-> e-mail means I'll address it in the next revision of the patch
-> series.
-> 
-
-Alright!
-
-Cheers,
-Angelo
-
-> Kind regards,
-> Nicolas Frattaroli
-> 
-> 
-
+diff --git a/drivers/cpufreq/rcpufreq_dt.rs b/drivers/cpufreq/rcpufreq_dt.rs
+index 7e1fbf9a091f..224d063c7cec 100644
+--- a/drivers/cpufreq/rcpufreq_dt.rs
++++ b/drivers/cpufreq/rcpufreq_dt.rs
+@@ -28,15 +28,11 @@ fn find_supply_name_exact(dev: &Device, name: &str) -> Option<CString> {
+ /// Finds supply name for the CPU from DT.
+ fn find_supply_names(dev: &Device, cpu: cpu::CpuId) -> Option<KVec<CString>> {
+     // Try "cpu0" for older DTs, fallback to "cpu".
+-    let name = (cpu.as_u32() == 0)
++    (cpu.as_u32() == 0)
+         .then(|| find_supply_name_exact(dev, "cpu0"))
+         .flatten()
+-        .or_else(|| find_supply_name_exact(dev, "cpu"))?;
+-
+-    let mut list = KVec::with_capacity(1, GFP_KERNEL).ok()?;
+-    list.push(name, GFP_KERNEL).ok()?;
+-
+-    Some(list)
++        .or_else(|| find_supply_name_exact(dev, "cpu"))
++        .and_then(|name| kernel::kvec![name].ok())
+ }
+ 
+ /// Represents the cpufreq dt device.
+-- 
+2.51.0
 
 
