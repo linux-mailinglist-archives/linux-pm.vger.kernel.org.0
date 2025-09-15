@@ -1,231 +1,176 @@
-Return-Path: <linux-pm+bounces-34674-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34672-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C1190B57D7D
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Sep 2025 15:37:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EBC29B57CA8
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Sep 2025 15:20:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DA1C6170DBC
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Sep 2025 13:35:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8AFC1189B0F6
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Sep 2025 13:20:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54C1D31A57A;
-	Mon, 15 Sep 2025 13:34:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7F4E315D5C;
+	Mon, 15 Sep 2025 13:18:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="fyI3FnhQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I97rt8Wy"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 312B5312804;
-	Mon, 15 Sep 2025 13:34:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757943294; cv=pass; b=YaRL1YNIWj77qxz2lbiY3TVFh1i3WFINFfMPSSJibnGNuF5UBDjax7EFpdBDX1UJMJt+eNGlLQKNNGOp/zwFjHOYv+Y66pCXu0GDw88/jevJ3iM4gTBz8n+2l0BoE+a2yXURyzTNGb5j/P6TbZsvhVrohthm1+xxHZv6u7RF0Vc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757943294; c=relaxed/simple;
-	bh=uXelXmVecP0Kqw+0zkV1JM96ps5WyaV3Nq+mEOJy9gc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=g61QNSde2eTxUHwAE9NLlpOE2lsyZ5ApzdMheR/vvIOw8GBL7G17zSCup0ITaMXeCrKdimCQBlHlJ7AQy95jFc1pNiK2ttuE05nx4X6dctmI1+/hARK7wB7f3JbhesXOg9UzxTnaUFey8NYNQLvtxGghUutnVk+rA1uhu8+C3aE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=fyI3FnhQ; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1757943260; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=bhJcqyqaJf6fbb3wRy49gzrnP/jNHvzkV3C6IbBWWbpj76HcJ30Im2V6QFjc3xr8WihnltlgvHoicCrcqFkBqpTCy5WD4+CpXQNwi1S4IOUbDievVhxqcDIpbv+xwM30SUDbjjGcN6tEltRyzMjGr4sGdnoD5UxkLMBIpbrMqug=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1757943260; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=FmQQaI5thj9GN9UIWV3zSwQzaVhJ4atEslX7ELWl7hI=; 
-	b=JTjpnyG0DIu0VCtIBYr4vNMuWUKVfHYXvlgjK3f8XTqynZDRpLrFVLGYARLrx9S8omXl7IeL7LZj/rQTlKz/S+um16FWoqldrGJdl7l77ZDWBCA6mWDamfXGXcsYGr5wdCswbeN1xSB4VzYUHsc3UNOxpZrp0qcXIrzXdYO4gZs=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
-	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1757943260;
-	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
-	bh=FmQQaI5thj9GN9UIWV3zSwQzaVhJ4atEslX7ELWl7hI=;
-	b=fyI3FnhQR5rKmaNNyvARvYaV2U4W3knN1mJ3Ej13dXI2ltCUB68fTvtj3BWR9hci
-	2o9rwMOsfvsJFJgASAIkOA7DivNiyrvpwvJ0yPD7txUGWv2nm508GLYKT0TGnWRLtPL
-	VCVR+V3Gxpa9bxqHObC70rrpPZHcl8XmPLygJypk=
-Received: by mx.zohomail.com with SMTPS id 1757943257975999.7821234845057;
-	Mon, 15 Sep 2025 06:34:17 -0700 (PDT)
-From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-To: Chia-I Wu <olvaffe@gmail.com>
-Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Boris Brezillon <boris.brezillon@collabora.com>,
- Steven Price <steven.price@arm.com>, Liviu Dudau <liviu.dudau@arm.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- MyungJoo Ham <myungjoo.ham@samsung.com>,
- Kyungmin Park <kyungmin.park@samsung.com>,
- Chanwoo Choi <cw00.choi@samsung.com>, Jassi Brar <jassisinghbrar@gmail.com>,
- Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- Chen-Yu Tsai <wenst@chromium.org>, kernel@collabora.com,
- dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
- linux-hardening@vger.kernel.org
-Subject:
- Re: [PATCH v2 09/10] drm/panthor: devfreq: add pluggable devfreq providers
-Date: Mon, 15 Sep 2025 15:09:38 +0200
-Message-ID: <24083992.6Emhk5qWAg@workhorse>
-In-Reply-To:
- <CAPaKu7TEN++z8r68k_4-iCyMLMthqJBUX35pgXupAHPdfttrYg@mail.gmail.com>
-References:
- <20250912-mt8196-gpufreq-v2-0-779a8a3729d9@collabora.com>
- <20250912-mt8196-gpufreq-v2-9-779a8a3729d9@collabora.com>
- <CAPaKu7TEN++z8r68k_4-iCyMLMthqJBUX35pgXupAHPdfttrYg@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98ED6315789
+	for <linux-pm@vger.kernel.org>; Mon, 15 Sep 2025 13:18:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1757942336; cv=none; b=YULA+Pls8fyVV4uwKwsMIh2QDtkbSKPZsswk8OvmOf9Enaz8gvXrE6mYWGMlpClvkMufpeeSIo/jLhwmSt8EV6BvUF8yKTWk0JS7SGJbRgSlMB9W34VlMOb/MTR6LFVLL6yBGZoqUuJJugZK8EoNIiQ+oeeAwhLQ4Or38TaWNA8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1757942336; c=relaxed/simple;
+	bh=coOwMyQHXkTz8FDu4+hP/GBgwN4J5NtDSuvxSzgJTgU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qkyiWGe7YnXX9tnFZTg9bOa6k5tAmxSa/Hh+d1p1O8Aaza8n9wVmIyp42ev5IvDUkVeYsEBEKRXhSTqu45A8HFJtMeZNhirYeIWNjDZ9LZ+KvN50bH91hH6oAVOSuHNB1bgHpVDaTSHL9fcnYgMLb+2LKvHq1zqyyUCSC1h/6U8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I97rt8Wy; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 423EDC4CEF5
+	for <linux-pm@vger.kernel.org>; Mon, 15 Sep 2025 13:18:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757942336;
+	bh=coOwMyQHXkTz8FDu4+hP/GBgwN4J5NtDSuvxSzgJTgU=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=I97rt8Wy/HHyb6Jf09V1zJXWto0w0vNSlKzz5aSR4qpNptlGuHqaQkNo+QA3hTBev
+	 jlFmnqbGvrfkro5DdG45KAf5is9c8Jfk9ziGqqJqJ9+Oj9rD6RYruICf/5AppYF4Yz
+	 H+lkblPSUv+O5NqNZymziuQKz/OeavBGHjeRCtqMYLCG+yKNtOL4IUlhodqyhuxzqT
+	 yPOz+m4j/MKvbVsK5YvIgCa/nrL2mBmOEf+hNqhLQEJEstjZDoAR657PZfAzRgI130
+	 C3r678zl49iNII/XPyPo/NbAvBglhMvR1kwAlG/Qg25fRtSlpdv2FmMWA3rU05tKgf
+	 2xGuvSifuIE7g==
+Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-7459d088020so2012752a34.3
+        for <linux-pm@vger.kernel.org>; Mon, 15 Sep 2025 06:18:56 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWYk/Lber6YtYHEjO0am60E6vcJ3chHufPlOiJRFg2JD9JfRXkQnDxMPOG773oYIMRQHR1HANrxVg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzsEEWMUzpH9CJLY1EaBD8uCG+velrHBiuqSUPhs6Ecr4AcMXWV
+	PQvWoEev6RlwskI3pVzsSyPjc4FV+fhNAlcHglsbeGlhoa9ZvCNlw4eM8AGPihdLGc6iOAZC3vd
+	ORydKBveNlmb0rfAlLl/mZJgWdD95cAE=
+X-Google-Smtp-Source: AGHT+IEpcuRSc3MDHlFe9TDySxc24ll0ZsZy+5Xvb8x8nLaNBT9Lv9dKicdTazMGgmSAUaLhaDM/ulAOWO9IeV6FrUg=
+X-Received: by 2002:a05:6830:8d2:b0:73e:94d4:ec6 with SMTP id
+ 46e09a7af769-75355daf04dmr7268800a34.28.1757942335532; Mon, 15 Sep 2025
+ 06:18:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20250910065312.176934-1-shawnguo2@yeah.net> <CAJZ5v0gL5s99h0eq1U4ngaUfPq_AcfgPruSD096JtBWVMjSZwQ@mail.gmail.com>
+ <aMQbIu5QNvPoAsSF@dragon> <20250914174326.i7nqmrzjtjq7kpqm@airbuntu> <aMfAQXE4sRjru9I_@dragon>
+In-Reply-To: <aMfAQXE4sRjru9I_@dragon>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 15 Sep 2025 15:18:44 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0i8L8w_ojua1ir3CGcwGSvE+3Jj0Sh5Cs1Yi8i4BX1Lbw@mail.gmail.com>
+X-Gm-Features: Ac12FXyAwdW-riCrTAP42SIBJxPCzjL2s62SpRjg0mEC2Yp-NeONok5neIsFcF4
+Message-ID: <CAJZ5v0i8L8w_ojua1ir3CGcwGSvE+3Jj0Sh5Cs1Yi8i4BX1Lbw@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: cap the default transition delay at 10 ms
+To: Shawn Guo <shawnguo2@yeah.net>
+Cc: Qais Yousef <qyousef@layalina.io>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
 
-On Saturday, 13 September 2025 00:53:50 Central European Summer Time Chia-I=
- Wu wrote:
-> On Fri, Sep 12, 2025 at 11:38=E2=80=AFAM Nicolas Frattaroli
-> <nicolas.frattaroli@collabora.com> wrote:
-> <snipped>
-> > diff --git a/drivers/gpu/drm/panthor/panthor_devfreq.h b/drivers/gpu/dr=
-m/panthor/panthor_devfreq.h
-> > index a891cb5fdc34636444f141e10f5d45828fc35b51..94c9768d5d038c4ba851692=
-9edb565a1f13443fb 100644
-> > --- a/drivers/gpu/drm/panthor/panthor_devfreq.h
-> > +++ b/drivers/gpu/drm/panthor/panthor_devfreq.h
-> > @@ -8,6 +8,7 @@
+On Mon, Sep 15, 2025 at 9:29=E2=80=AFAM Shawn Guo <shawnguo2@yeah.net> wrot=
+e:
+>
+> On Sun, Sep 14, 2025 at 06:43:26PM +0100, Qais Yousef wrote:
+> > > > Why do you want to address the issue in the cpufreq core instead of
+> > > > doing that in the cpufreq-dt driver?
+> > >
+> > > My intuition was to fix the regression at where the regression was
+> > > introduced by recovering the code behavior.
 > >
-> >  struct devfreq;
-> >  struct thermal_cooling_device;
-> > +struct platform_device;
-> >
-> >  struct panthor_device;
-> >
-> > @@ -43,6 +44,19 @@ struct panthor_devfreq {
-> >         spinlock_t lock;
-> >  };
-> >
-> > +struct panthor_devfreq_provider {
-> > +       /** @dev: device pointer to the provider device */
-> > +       struct device *dev;
-> > +       /**
-> > +        * @init: the provider's init callback that allocates a
-> > +        * &struct panthor_devfreq, adds it to panthor, and adds a devf=
-req
-> > +        * device to panthor. Will be called during panthor's probe.
-> > +        */
-> > +       int (*init)(struct panthor_device *ptdev, struct device *dev);
-> > +
-> > +       struct list_head node;
-> > +};
-> On mt8196, we have performance-domains to replace several other
-> properties: clocks, *-supply, power-domains, operating-points-v2.
-> There are also quirks, such as GPU_SHADER_PRESENT should be masked by
-> GF_REG_SHADER_PRESENT. It feels like that the scope of
-> panthor_devfreq_provider is more broader, and at least the naming is
-> not right.
+> > Isn't the right fix here is at the driver level still? We can only give=
+ drivers
+> > what they ask for. If they ask for something wrong and result in someth=
+ing
+> > wrong, it is still their fault, no?
+>
+> I'm not sure.  The cpufreq-dt driver is following suggestion to use
+> CPUFREQ_ETERNAL,
 
-True, though I'm still not entirely sure whether mtk_mfg needs to do
-the GF_REG_SHADER_PRESENT thing. It's entirely possible this is just
-an efuse value the GPUEB reads and then puts in SRAM for us, and we
-could simply read this efuse cell ourselves. Among a list of questions
-about the hardware we're sending to MediaTek, whether this is an efuse
-cell and where it is placed is one of them.
+Fair enough.
 
-If it turns out to be the case that we can simply read an efuse in
-panthor in the other mt8196 integration code, then we can keep
-mtk_mfg basically entirely focused on the devfreq-y part. I'd really
-prefer this solution.
+Actually, there are a few other drivers that fall back to
+CPUFREQ_ETERNAL if they cannot determine transition_latency.
 
-However, assuming we can't go down this path either because this is
-not how the hardware works, or because MediaTek never replies, or
-because someone doesn't like reading efuses in panthor, I think
-generalising "devfreq_provider" to "performance_controller" or
-something like that would be a good move.
+> which has the implication that core will figure out a reasonable default =
+value for
+> platforms where the latency is unknown.
 
-In a way, the fused off core mask is part of the vague domain of
-"performance", and it'll also allow us to extend it with other
-things relevant to performance control in different vendor integration
-logic designs. I'm thinking memory bandwidth control and job scheduling
-preferences. E.g. if the interconnect tells us one core is spending a
-lot of time waiting on the interconnect, maybe because a different
-piece of the SoC that's active shares the same path on the
-interconnect, we could then communicate a scheduling preference for
-the other cores that have bandwidth headroom even if they are busier
-in compute. Maybe this doesn't make sense though because interconnect
-designs are fully switched these days or panthor's scheduler will
-already figure this out from job completion times.
+Is this expectation realistic, though?  I'm not sure.
 
-If any other SoC vendor or people working on hardware of those vendors
-want to chime in and say whether they've got any other uses for
-communicating more than just devfreq from glue logic to panthor, then
-this would be a great time to do it, so that we can get this interface
-right from the beginning.
+The core can only use a hard-coded default fallback number, but would
+that number be really suitable for all of the platforms in question?
 
-> Another issue is I am not sure if we need to expose panthor_device
-> internals to the provider. mtk_mfg accesses very few fields of
-> panthor_device. It seems we can make the two less coupled.
->=20
-> I might change my view as mtk_mfg evolves and requires tigher
-> integration with panthor. But as is, I might prefer for mtk_mfg to
-> live under drivers/soc/mediatek and provide a header for panthor to
-> use in soc-specific path.
+> And that was exactly the situation before the regression.  How does it
+> become the fault of cpufreq-dt driver?
 
-I'm not very confident it's possible to cleanly decouple them without
-inventing a bunch of very panthor-and-mfg specific interfaces that
-masquerade as general solutions in the process. It'd also mean I'd
-have to duplicate all of `panthor_devfreq_get_dev_status` instead of
-just being able to reuse it, unless that is also exposed in said
-header file, which would need a better justification than "well there
-is one other user of it and we're trying to couple it more loosely".
+The question is not about who's fault it is, but what's the best place
+to address this issue.
 
-I know that it's almost independent, but unfortunately, even a tiny
-dependency between the two will mean that mediatek_mfg will need to
-know about panthor.
+I think that addressing it in cpufreq_policy_transition_delay_us() is
+a bit confusing because it is related to initialization and the new
+branch becomes pure overhead for the drivers that don't set
+cpuinfo.transition_latency to CPUFREQ_ETERNAL.
 
-Other things needed from panthor are the pdevfreq->gov_data, and
-the panthor struct device* itself, as well as stuff like "fast_rate"
-in the panthor_device struct.
+However, addressing it at the initialization time would effectively
+mean that the core would do something like:
 
-In the future, we may want to expand this driver with governors
-beyond SIMPLE_ONDEMAND, based on the job completion duration targets
-we can communicate to the GPUEB. That may either make the driver
-more tightly coupled or more loosely coupled, I don't really know
-yet.
+if (policy->cpuinfo.transition_latency =3D=3D CPUFREQ_ETERNAL)
+        policy->cpuinfo.transition_latency =3D
+CPUFREQ_DEFAULT_TANSITION_LATENCY_NS;
 
-One advantage of looking to completely decouple them (though again,
-I doubt that's possible at the moment without questionable refactors)
-could be that we could also support panfrost devices that need this.
+but then it would be kind of more straightforward to update everybody
+using CPUFREQ_ETERNAL to set cpuinfo.transition_latency to
+CPUFREQ_DEFAULT_TANSITION_LATENCY_NS directly (and then get rid of
+CPUFREQ_ETERNAL entirely).
 
->=20
->=20
-> > +
-> >
-> >  int panthor_devfreq_init(struct panthor_device *ptdev);
-> >
-> > @@ -57,4 +71,6 @@ int panthor_devfreq_get_dev_status(struct device *dev,
-> >
-> >  unsigned long panthor_devfreq_get_freq(struct panthor_device *ptdev);
-> >
-> > +int panthor_devfreq_register_provider(struct panthor_devfreq_provider =
-*prov);
-> > +
-> >  #endif /* __PANTHOR_DEVFREQ_H__ */
-> >
-> > --
-> > 2.51.0
-> >
->=20
+> > Alternatively maybe we can add special handling for CPUFREQ_ETERNAL val=
+ue,
+> > though I'd suggest to return 1ms (similar to the case of value being 0)=
+. Maybe
+> > we can redefine CPUFREQ_ETERNAL to be 0, but not sure if this can have =
+side
+> > effects.
+>
+> Changing CPUFREQ_ETERNAL to 0 looks so risky to me.  What about adding
+> an explicit check for CPUFREQ_ETERNAL?
+>
+> ---8<---
+>
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index fc7eace8b65b..053f3a0288bc 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -549,11 +549,15 @@ unsigned int cpufreq_policy_transition_delay_us(str=
+uct cpufreq_policy *policy)
+>         if (policy->transition_delay_us)
+>                 return policy->transition_delay_us;
+>
+> +       if (policy->cpuinfo.transition_latency =3D=3D CPUFREQ_ETERNAL)
+> +               goto default_delay;
 
+Can't USEC_PER_MSEC be just returned directly from here?
 
+> +
+>         latency =3D policy->cpuinfo.transition_latency / NSEC_PER_USEC;
+>         if (latency)
+>                 /* Give a 50% breathing room between updates */
+>                 return latency + (latency >> 1);
 
+Side note for self: The computation above can be done once at the
+policy initialization time and transition_latency can be stored in us
+(and only converted to ns when the corresponding sysfs attribute is
+read).  It can be even set to USEC_PER_MSEC if zero.
 
+> +default_delay:
+>         return USEC_PER_MSEC;
+>  }
+>  EXPORT_SYMBOL_GPL(cpufreq_policy_transition_delay_us);
+>
+> --->8---
 
