@@ -1,216 +1,166 @@
-Return-Path: <linux-pm+bounces-34654-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34655-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82CDDB5739A
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Sep 2025 10:53:39 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A311B57413
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Sep 2025 11:07:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2B75817332F
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Sep 2025 08:53:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0FAA07B1302
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Sep 2025 09:04:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 314A52F28EC;
-	Mon, 15 Sep 2025 08:51:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 907AC2F548C;
+	Mon, 15 Sep 2025 09:02:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="MedraKfH"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="eg1VOmR7"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA9AE2F28E7
-	for <linux-pm@vger.kernel.org>; Mon, 15 Sep 2025 08:51:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B7372F5304
+	for <linux-pm@vger.kernel.org>; Mon, 15 Sep 2025 09:02:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757926305; cv=none; b=KpsXXDBJhm0epTVCESo82vUBmN/CLhuS+FqdKz8+wH9hGqvhkY/2N4S24YZv+Hu1JvP4wkSb00vVyQ2qWg6KHGZLb/AHPb+307eAlpF+y569TtrqQI+Txjh/m1c4tJw9KhXghn/W5uP8q6/G0YN1DS86f4WjCw3swpN7adWmRnU=
+	t=1757926969; cv=none; b=nfstibCYhGJpBw8GiveIgUvgC/KtgQ2TQKWpsaykTtkDPbPYNAgsSIYCrTCNs0B0MKTu/bETJgVDw5DM5DNoMg0SL5BqAcgZW0/vSISG+ZieoOD2SEYt9fvsbvfFa4joMEo18IS5cXE0ABKR/8rx2jO1VaXKozVSFZ2cwzMq03I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757926305; c=relaxed/simple;
-	bh=V3y54E2BdymNuc5NY8vOwonPsgJIAekAN7zO4zsTLCU=;
-	h=From:To:Cc:In-Reply-To:Subject:Date:Message-ID:MIME-Version:
-	 Content-Type:References; b=JNtolulLmLdUR7WR6Gn+cqwkeimWdGanKmrfQGSB3eC4jZWiCYkPCUpN7m3SYrJC7p0Xn0x2S8b6Np6C8QXcPH/hlcxgF/i6CH9Qw71QhvgkFtUPMMq5BJhq+/iw0c0xpf8m205Vf4qPF8+0tfqTbSQ1gvLd93CMByVhh7j7NIk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=MedraKfH; arc=none smtp.client-ip=203.254.224.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
-	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20250915085140epoutp04fdb9e16358766379216994b4d947332a~laKgVykJp0143501435epoutp04Z
-	for <linux-pm@vger.kernel.org>; Mon, 15 Sep 2025 08:51:40 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20250915085140epoutp04fdb9e16358766379216994b4d947332a~laKgVykJp0143501435epoutp04Z
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1757926300;
-	bh=QBZQ2T2IZb9DQ5IKJhfncUR/bMicrgAtY+dpr/zeHT0=;
-	h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-	b=MedraKfHUyaAHFSN+Kx1D0w1PiBwWeuUJtEb0nhh2T26ar+2y1uoeFj6p8U0/biIU
-	 67PCxuds34yT2r7l0oXQGFmV/MliMedPiKUKLqO7iAW/kSmSIABnfzWS6sWkHqTMXn
-	 Gk2xM46Z91lriMnGEsMpMYImXq0X6JRrOIcsSjzc=
-Received: from epsnrtp04.localdomain (unknown [182.195.42.156]) by
-	epcas2p2.samsung.com (KnoxPortal) with ESMTPS id
-	20250915085140epcas2p264ea28075622118bb8178354436c2cfc~laKfzCsiN1521415214epcas2p2M;
-	Mon, 15 Sep 2025 08:51:40 +0000 (GMT)
-Received: from epcas2p4.samsung.com (unknown [182.195.36.92]) by
-	epsnrtp04.localdomain (Postfix) with ESMTP id 4cQJfz3k27z6B9mK; Mon, 15 Sep
-	2025 08:51:39 +0000 (GMT)
-Received: from epsmtip1.samsung.com (unknown [182.195.34.30]) by
-	epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
-	20250915085138epcas2p4b3b2f8058172efd14ca4438ccb232a7c~laKefpnwd1110011100epcas2p46;
-	Mon, 15 Sep 2025 08:51:38 +0000 (GMT)
-Received: from KORCO115296 (unknown [12.80.207.128]) by epsmtip1.samsung.com
-	(KnoxPortal) with ESMTPA id
-	20250915085138epsmtip19453fc15026e8e8a191121d4eb7d3f4f~laKeaRwwd1433914339epsmtip1J;
-	Mon, 15 Sep 2025 08:51:38 +0000 (GMT)
-From: =?UTF-8?B?7IaQ7Iug?= <shin.son@samsung.com>
-To: "'Krzysztof Kozlowski'" <krzk@kernel.org>, "'Bartlomiej Zolnierkiewicz'"
-	<bzolnier@gmail.com>, "'Rafael J . Wysocki'" <rafael@kernel.org>, "'Daniel
- Lezcano'" <daniel.lezcano@linaro.org>, "'Zhang Rui'" <rui.zhang@intel.com>,
-	"'Lukasz	Luba'" <lukasz.luba@arm.com>, "'Rob Herring'" <robh@kernel.org>,
-	"'Conor Dooley'" <conor+dt@kernel.org>, "'Alim Akhtar'"
-	<alim.akhtar@samsung.com>, "'Henrik Grimler'" <henrik@grimler.se>
-Cc: <linux-pm@vger.kernel.org>, <linux-samsung-soc@vger.kernel.org>,
-	<devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>
-In-Reply-To: <b453e64b-b3db-4b8f-ba9d-0da7e55fe057@kernel.org>
-Subject: RE: [PATCH v3 1/3] dt-bindings: thermal: samsung: Add a
- hw-sensor-indices property
-Date: Mon, 15 Sep 2025 17:51:38 +0900
-Message-ID: <060601dc261d$f2f2d5a0$d8d880e0$@samsung.com>
+	s=arc-20240116; t=1757926969; c=relaxed/simple;
+	bh=C0YkUmrHajMk+TIUliZWVchR3y+Q8yUcd/+iydBLkn4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JiQGZ6ZJy0dhCCU6n5b7LUmBn2dMmrNa9Q9JLhP3ciTAAGPDisQQLqY/TOm/WYQ7bW7SrTLYpIKV/JpE8Ioqnqj7A91zZ6MbBejN4vRvKJ6T7fXIiHjZX6VwMwkhKJVLLYa0c/c30XeBHBEhjDSrPnmK/4QhnzkOgvMqU6H5Jm4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=eg1VOmR7; arc=none smtp.client-ip=209.85.218.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-b07ba1c3df4so574828066b.3
+        for <linux-pm@vger.kernel.org>; Mon, 15 Sep 2025 02:02:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1757926966; x=1758531766; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4ApShfXQF2Oi6G8dmAOghgnsvmVSLzQLwz5wXFZQiKw=;
+        b=eg1VOmR7zShmn+hHiqoCSBy9ccujENIgSGAfLe204EOGU+XnJDTA3uYY8umymARXlN
+         mJiY1n1EO+fP2t/Yv9+0vIPcSgNHdjRCF0a9bbhCFjuDH4rhR1sWlo30kRcfOH/R0OOI
+         ICqhmxH2Vt+03zkTpaeq9H2WkOO2S4PO2l3Y0MrGiBlSLkqn74zgfRTD9/M6DEXBNfmT
+         wEkZQ5AVpYlW77o1vaZxEo6SDDGHcAmb6wQ4JQ3BbUiWbFWqLJi7+KX48YYXrFQ8KKNL
+         xEM3y9sv2DBW6OBq+2WGpC8ujzyJuGSMaN7LbOZ5S+PgKMdbuFfsqbIVQZS5XOptyuG3
+         g7qQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757926966; x=1758531766;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4ApShfXQF2Oi6G8dmAOghgnsvmVSLzQLwz5wXFZQiKw=;
+        b=P9Xhwj4VqKkiQeF6xXfkqFmvrSsgptxxPl1W94Fgzj+JgDhM5kJDHvp3BfTS/6glA6
+         5BkOO1k5SRFn6NDMfaRZSyfIjwG/V3di3VDtOD+gLjQGuDl11WoZsUMhfrKAWXOWF3A0
+         8ay4bRi7uwY7ZWPPL9yHmyZGtAutm+QsW+HDQrCrvzQZCd1/VIB0UFd6iPpIbQVtjs9D
+         +z8d2eXNXMXNaIB7qSH6fBTKfA0ENNkVXLO8qBXkaQiPNj6NT33YBi818nkroijAB49Q
+         6MBDQXs/d1RSc2CldRR51Ltlv1eZefpmVT+s/WR5hVU51vi2mcfsjfOpSSQc/eAi8VSQ
+         QGgQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVQTPK4j2bUORag0tu/QaxeVZYgrcV9DBSh/+CVbGagynSM3UextlT2fByolKgBkj95OkGZm5fAwQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwGMYxa28Vg5cpmy68uO8Iarx2wHPI+vau2hkQSuwiIqMOFQTgh
+	QW5RF98yNxDFJRr4jro/MMnN6oi2duxpbYe1ln8bnngs6jraPFOIStlvgoUykFuEyAI=
+X-Gm-Gg: ASbGncsFp3jz7FjlMB1f5ObXJI7cSrpsgSDaLyUpkrtWM1Q2csqy7LV1l1UWmyVgMQL
+	4P9mzgmmLoI3Chm/65PA9gn3Tijg6sn66X0yo8JrNW5YHEf1mBT9LlTfN1IMxDBKOcIvED5KzZj
+	dMTf9uaU0uoL4sEA8CC7TpwztIciw3J0Mz89KwxvElsPgeyq97xPL6jSMxxUb4v43rOGTe9iN9u
+	GU6qvHXRICJLYDUB0CPpamCQ7vPNfzG0gVyMM7N+Aez32/FwyKW1CbGM/jEZfz8XZMSPu+EFdG5
+	gqTpPGd53DzB8zLqz5nKcSL2/PrCmfErcMkC+nlDGPuLr3sIvLkK84BFZ7hcSj87DuX6p1CGrEV
+	eDy6SCX1hwHrnucpgR3xb//oQxoxsMYNggqS+vMxGl8A=
+X-Google-Smtp-Source: AGHT+IFJqW4ATs8hpOqhKur7nNuySu2I9qWO2KqW58kjbzZTek7UpaV471VVvj9InZNl3XX07WRoUQ==
+X-Received: by 2002:a17:907:86a0:b0:afc:a190:848a with SMTP id a640c23a62f3a-b07c3a78fb9mr1146716866b.60.1757926965242;
+        Mon, 15 Sep 2025 02:02:45 -0700 (PDT)
+Received: from linaro.org ([2a02:2454:ff21:30:ab20:75dc:ab3e:bbb9])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b07d2870da1sm574403366b.13.2025.09.15.02.02.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Sep 2025 02:02:44 -0700 (PDT)
+Date: Mon, 15 Sep 2025 11:02:34 +0200
+From: Stephan Gerhold <stephan.gerhold@linaro.org>
+To: fenglin.wu@oss.qualcomm.com
+Cc: Sebastian Reichel <sre@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+	Subbaraman Narayanamurthy <subbaraman.narayanamurthy@oss.qualcomm.com>,
+	David Collins <david.collins@oss.qualcomm.com>,
+	=?iso-8859-1?Q?Gy=F6rgy?= Kurucz <me@kuruczgy.com>,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, kernel@oss.qualcomm.com,
+	devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
+	Neil Armstrong <neil.armstrong@linaro.org>
+Subject: Re: [PATCH v4 5/8] power: supply: qcom_battmgr: update compats for
+ SM8550 and X1E80100
+Message-ID: <aMfWKobwM5bhJEAd@linaro.org>
+References: <20250915-qcom_battmgr_update-v4-0-6f6464a41afe@oss.qualcomm.com>
+ <20250915-qcom_battmgr_update-v4-5-6f6464a41afe@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 15.0
-Thread-Index: AQI2gN6OiEY8j6d92YCX64Q86w41mAJQEA6QAjvruSIB3AjCg7Or+Kxw
-Content-Language: ko
-X-CMS-MailID: 20250915085138epcas2p4b3b2f8058172efd14ca4438ccb232a7c
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-cpgsPolicy: CPGSC10-234,Y
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20250915040742epcas2p4ddc37eb56eb9d96313a5c3fac8befe5d
-References: <20250915040715.486733-1-shin.son@samsung.com>
-	<CGME20250915040742epcas2p4ddc37eb56eb9d96313a5c3fac8befe5d@epcas2p4.samsung.com>
-	<20250915040715.486733-2-shin.son@samsung.com>
-	<b453e64b-b3db-4b8f-ba9d-0da7e55fe057@kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250915-qcom_battmgr_update-v4-5-6f6464a41afe@oss.qualcomm.com>
 
-Hello, Krzysztof Kozlowski.
+On Mon, Sep 15, 2025 at 04:49:57PM +0800, Fenglin Wu via B4 Relay wrote:
+> From: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
+> 
+> Add variant definitions for SM8550 and X1E80100 platforms. Add a compat
+> for SM8550 and update match data for X1E80100 specifically so that they
+> could be handled differently in supporting charge control functionality.
+> 
+> Tested-by: Neil Armstrong <neil.armstrong@linaro.org> # on Thinkpad T14S OLED
+> Signed-off-by: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
+> ---
+>  drivers/power/supply/qcom_battmgr.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/power/supply/qcom_battmgr.c b/drivers/power/supply/qcom_battmgr.c
+> index 008e241e3eac3574a78459a2256e006e48c9f508..174d3f83ac2b070bb90c21a498686e91cc629ebe 100644
+> --- a/drivers/power/supply/qcom_battmgr.c
+> +++ b/drivers/power/supply/qcom_battmgr.c
+> @@ -19,8 +19,10 @@
+>  #define BATTMGR_STRING_LEN	128
+>  
+>  enum qcom_battmgr_variant {
+> -	QCOM_BATTMGR_SM8350,
+>  	QCOM_BATTMGR_SC8280XP,
+> +	QCOM_BATTMGR_SM8350,
+> +	QCOM_BATTMGR_SM8550,
+> +	QCOM_BATTMGR_X1E80100,
+>  };
+>  
+>  #define BATTMGR_BAT_STATUS		0x1
+> @@ -1333,7 +1335,8 @@ static void qcom_battmgr_pdr_notify(void *priv, int state)
+>  static const struct of_device_id qcom_battmgr_of_variants[] = {
+>  	{ .compatible = "qcom,sc8180x-pmic-glink", .data = (void *)QCOM_BATTMGR_SC8280XP },
+>  	{ .compatible = "qcom,sc8280xp-pmic-glink", .data = (void *)QCOM_BATTMGR_SC8280XP },
+> -	{ .compatible = "qcom,x1e80100-pmic-glink", .data = (void *)QCOM_BATTMGR_SC8280XP },
+> +	{ .compatible = "qcom,sm8550-pmic-glink", .data = (void *)QCOM_BATTMGR_SM8550 },
+> +	{ .compatible = "qcom,x1e80100-pmic-glink", .data = (void *)QCOM_BATTMGR_X1E80100 },
+>  	/* Unmatched devices falls back to QCOM_BATTMGR_SM8350 */
+>  	{}
+>  };
 
-> -----Original Message-----
-> From: Krzysztof Kozlowski =5Bmailto:krzk=40kernel.org=5D
-> Sent: Monday, September 15, 2025 1:29 PM
-> To: Shin Son <shin.son=40samsung.com>; Bartlomiej Zolnierkiewicz
-> <bzolnier=40gmail.com>; Rafael J . Wysocki <rafael=40kernel.org>; Daniel
-> Lezcano <daniel.lezcano=40linaro.org>; Zhang Rui <rui.zhang=40intel.com>;
-> Lukasz Luba <lukasz.luba=40arm.com>; Rob Herring <robh=40kernel.org>; Con=
-or
-> Dooley <conor+dt=40kernel.org>; Alim Akhtar <alim.akhtar=40samsung.com>;
-> Henrik Grimler <henrik=40grimler.se>
-> Cc: linux-pm=40vger.kernel.org; linux-samsung-soc=40vger.kernel.org;
-> devicetree=40vger.kernel.org; linux-arm-kernel=40lists.infradead.org; lin=
-ux-
-> kernel=40vger.kernel.org
-> Subject: Re: =5BPATCH v3 1/3=5D dt-bindings: thermal: samsung: Add a hw-
-> sensor-indices property
->=20
-> On 15/09/2025 06:07, Shin Son wrote:
-> > The exynosautov920 TMU requires per-sensor interrupt enablement for
-> > its critical trip points.
-> >
-> > - **samsung,hw-sensor-indices**: List of sensor indices physically
-> >                                  monitored by this TMU block.
-> > 				 Indicies not listed exist in the SoC
-> > 				 register map but are not part of
-> > 				 this TMU instance
->=20
-> Not much improved here. Same comment as before. That's not even correct
-> syntax but some oddly formatted code. I asked to drop it and instead
-> describe hardware. This is not a place to write some **code** or whatever
-> this paragraph is about to represent.
+I think you need to squash this with "[PATCH 7/8] power: supply:
+qcom_battmgr: Add charge control support", or move the modified checks
+for
 
-Understood=E2=80=94sorry=20for=20the=20confusion.=20I'll=20remove=20the=20c=
-ode-like=20formatting=20and=20replace=20it=20with=20a=20plain,=20hardware-f=
-ocused=0D=0ADescription=20as=20requested.=0D=0A=0D=0A>=20=0D=0A>=20>=0D=0A>=
-=20>=20Additionally,=20add=20myself=20to=20the=20bindings'=20maintainers=20=
-list,=20as=20I=20plan=0D=0A>=20>=20to=20actively=20work=20on=20the=20exynos=
-autov920=20TMU=20support=20and=20handle=20further=0D=0A>=20>=20updates=20in=
-=20this=20area.=0D=0A>=20>=20I=20also=20restrict=20'samsung,hw-sensor-indic=
-es'=20to=20the=20V920=20variant.=20To=0D=0A>=20>=20ensure=20properties=20in=
-troduced=20in=20'if/then'=20blocks=20are=20recognized,=20I=0D=0A>=20>=20rep=
-lace=20'addtionalProperties:=20false'=20with=20'unevaluatedProperties:=20fa=
-lse'.=0D=0A>=20=0D=0A>=20No,=20don't=20do=20that.=0D=0A=0D=0AUnderstood.=20=
-I'll=20keep=20'addtionalProperties:=20false'=20as=20is=20and=20promote=20's=
-amsung,hw-sensor-indices'=20to=20the=20common=20sections.=0D=0A=0D=0A>=20=
-=0D=0A>=20>=0D=0A>=20>=20Signed-off-by:=20Shin=20Son=20<shin.son=40samsung.=
-com>=0D=0A>=20>=20---=0D=0A>=20>=20=20.../thermal/samsung,exynos-thermal.ya=
-ml=20=20=20=20=20=20=20=7C=2040=20++++++++++++++++++-=0D=0A>=20>=20=201=20f=
-ile=20changed,=2038=20insertions(+),=202=20deletions(-)=0D=0A>=20>=0D=0A>=
-=20>=20diff=20--git=0D=0A>=20>=20a/Documentation/devicetree/bindings/therma=
-l/samsung,exynos-thermal.yam=0D=0A>=20>=20l=0D=0A>=20>=20b/Documentation/de=
-vicetree/bindings/thermal/samsung,exynos-thermal.yam=0D=0A>=20>=20l=20index=
-=2029a08b0729ee..448c68986b10=20100644=0D=0A>=20>=20---=0D=0A>=20>=20a/Docu=
-mentation/devicetree/bindings/thermal/samsung,exynos-thermal.yam=0D=0A>=20>=
-=20l=0D=0A>=20>=20+++=20b/Documentation/devicetree/bindings/thermal/samsung=
-,exynos-thermal=0D=0A>=20>=20+++=20.yaml=0D=0A>=20>=20=40=40=20-8,6=20+8,7=
-=20=40=40=20title:=20Samsung=20Exynos=20SoC=20Thermal=20Management=20Unit=
-=0D=0A>=20>=20(TMU)=0D=0A>=20>=0D=0A>=20>=20=20maintainers:=0D=0A>=20>=20=
-=20=20=20-=20Krzysztof=20Kozlowski=20<krzk=40kernel.org>=0D=0A>=20>=20+=20=
-=20-=20Shin=20Son=20<shin.son=40samsung.com>=0D=0A>=20>=0D=0A>=20>=20=20des=
-cription:=20=7C=0D=0A>=20>=20=20=20=20For=20multi-instance=20tmu=20each=20i=
-nstance=20should=20have=20an=20alias=20correctly=0D=0A>=20>=20numbered=20=
-=40=40=20-27,6=20+28,7=20=40=40=20properties:=0D=0A>=20>=20=20=20=20=20=20=
-=20=20-=20samsung,exynos5420-tmu-ext-triminfo=0D=0A>=20>=20=20=20=20=20=20=
-=20=20-=20samsung,exynos5433-tmu=0D=0A>=20>=20=20=20=20=20=20=20=20-=20sams=
-ung,exynos7-tmu=0D=0A>=20>=20+=20=20=20=20=20=20-=20samsung,exynosautov920-=
-tmu=0D=0A>=20>=0D=0A>=20>=20=20=20=20clocks:=0D=0A>=20>=20=20=20=20=20=20mi=
-nItems:=201=0D=0A>=20>=20=40=40=20-62,7=20+64,7=20=40=40=20properties:=0D=
-=0A>=20>=20=20=20=20=20=20minItems:=201=0D=0A>=20>=0D=0A>=20>=20=20=20=20'=
-=23thermal-sensor-cells':=0D=0A>=20>=20-=20=20=20=20const:=200=0D=0A>=20>=
-=20+=20=20=20=20enum:=20=5B0,=201=5D=0D=0A>=20>=0D=0A>=20>=20=20=20=20vtmu-=
-supply:=0D=0A>=20>=20=20=20=20=20=20description:=20The=20regulator=20node=
-=20supplying=20voltage=20to=20TMU.=0D=0A>=20>=20=40=40=20-97,6=20+99,8=20=
-=40=40=20allOf:=0D=0A>=20>=20=20=20=20=20=20=20=20=20=20reg:=0D=0A>=20>=20=
-=20=20=20=20=20=20=20=20=20=20=20minItems:=202=0D=0A>=20>=20=20=20=20=20=20=
-=20=20=20=20=20=20maxItems:=202=0D=0A>=20>=20+=20=20=20=20=20=20=20=20'=23t=
-hermal-sensor-cells':=0D=0A>=20>=20+=20=20=20=20=20=20=20=20=20=20const:=20=
-0=0D=0A>=20>=20=20=20=20-=20if:=0D=0A>=20>=20=20=20=20=20=20=20=20propertie=
-s:=0D=0A>=20>=20=20=20=20=20=20=20=20=20=20compatible:=0D=0A>=20>=20=40=40=
-=20-119,6=20+123,8=20=40=40=20allOf:=0D=0A>=20>=20=20=20=20=20=20=20=20=20=
-=20reg:=0D=0A>=20>=20=20=20=20=20=20=20=20=20=20=20=20minItems:=201=0D=0A>=
-=20>=20=20=20=20=20=20=20=20=20=20=20=20maxItems:=201=0D=0A>=20>=20+=20=20=
-=20=20=20=20=20=20'=23thermal-sensor-cells':=0D=0A>=20>=20+=20=20=20=20=20=
-=20=20=20=20=20const:=200=0D=0A>=20>=0D=0A>=20>=20=20=20=20-=20if:=0D=0A>=
-=20>=20=20=20=20=20=20=20=20properties:=0D=0A>=20>=20=40=40=20-139,8=20+145=
-,38=20=40=40=20allOf:=0D=0A>=20>=20=20=20=20=20=20=20=20=20=20reg:=0D=0A>=
-=20>=20=20=20=20=20=20=20=20=20=20=20=20minItems:=201=0D=0A>=20>=20=20=20=
-=20=20=20=20=20=20=20=20=20maxItems:=201=0D=0A>=20>=20+=20=20=20=20=20=20=
-=20=20'=23thermal-sensor-cells':=0D=0A>=20>=20+=20=20=20=20=20=20=20=20=20=
-=20const:=200=0D=0A>=20>=0D=0A>=20>=20-additionalProperties:=20false=0D=0A>=
-=20>=20+=20=20-=20if:=0D=0A>=20>=20+=20=20=20=20=20=20properties:=0D=0A>=20=
->=20+=20=20=20=20=20=20=20=20compatible:=0D=0A>=20>=20+=20=20=20=20=20=20=
-=20=20=20=20contains:=0D=0A>=20>=20+=20=20=20=20=20=20=20=20=20=20=20=20con=
-st:=20samsung,exynosautov920-tmu=0D=0A>=20>=20+=20=20=20=20then:=0D=0A>=20>=
-=20+=20=20=20=20=20=20properties:=0D=0A>=20>=20+=20=20=20=20=20=20=20=20clo=
-cks:=0D=0A>=20>=20+=20=20=20=20=20=20=20=20=20=20minItems:=201=0D=0A>=20>=
-=20+=20=20=20=20=20=20=20=20=20=20maxItems:=201=0D=0A>=20>=20+=20=20=20=20=
-=20=20=20=20reg:=0D=0A>=20>=20+=20=20=20=20=20=20=20=20=20=20minItems:=201=
-=0D=0A>=20>=20+=20=20=20=20=20=20=20=20=20=20maxItems:=201=0D=0A>=20>=20+=
-=20=20=20=20=20=20=20=20'=23thermal-sensor-cells':=0D=0A>=20>=20+=20=20=20=
-=20=20=20=20=20=20=20const:=201=0D=0A>=20>=20+=20=20=20=20=20=20=20=20samsu=
-ng,hw-sensor-indices:=0D=0A>=20>=20+=20=20=20=20=20=20=20=20=20=20descripti=
-on:=0D=0A>=20>=20+=20=20=20=20=20=20=20=20=20=20=20=20List=20of=20thermal=
-=20sensor=20indices=20physically=20monitored=20by=20this=0D=0A>=20TMU=20ins=
-tance.=0D=0A>=20>=20+=20=20=20=20=20=20=20=20=20=20=20=20Indices=20not=20li=
-sted=20correspond=20to=20registers=20that=20exist=20in=20the=0D=0A>=20SoC=
-=0D=0A>=20>=20+=20=20=20=20=20=20=20=20=20=20=20=20but=20are=20not=20connec=
-ted=20to=20this=20TMU=20hardware=20block.=0D=0A>=20>=20+=20=20=20=20=20=20=
-=20=20=20=20=24ref:=20/schemas/types.yaml=23/definitions/uint32-array=0D=0A=
->=20=0D=0A>=20I=20don't=20understand=20what=20is=20happening=20here=20with=
-=20this=20binding.=20See=20writing=0D=0A>=20schema=20and=20example-schema.=
-=0D=0A>=20=0D=0A>=20=0D=0A>=20=0D=0A>=20Best=20regards,=0D=0A>=20Krzysztof=
-=0D=0A=0D=0AUnderstood.=20I'll=20rework=20the=20binding=20to=20follow=20the=
-=20'writing=20schema'=20and=20'example-schema'=20guidance=0D=0Aand=20includ=
-e=20these=20changes=20in=20v4.=0D=0A=0D=0AThanks.=0D=0ABest=20regards,=0D=
-=0AShin=20Son=0D=0A=0D=0A
+	if (battmgr->variant == QCOM_BATTMGR_SC8280XP ||
+	    battmgr->variant == QCOM_BATTMGR_X1E80100) {
+
+into this patch.
+
+With this patch right now, I would expect that your series is not
+bisectable: The wrong code paths are chosen if you only apply this patch
+because e.g. X1E doesn't use the QCOM_BATTMGR_SC8280XP code anymore.
+
+Thanks,
+Stephan
 
