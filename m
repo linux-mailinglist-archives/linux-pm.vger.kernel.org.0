@@ -1,78 +1,78 @@
-Return-Path: <linux-pm+bounces-34632-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34633-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6AE73B5724D
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Sep 2025 10:03:30 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73687B57250
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Sep 2025 10:03:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 211493B06B2
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Sep 2025 08:03:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0980D189FCF3
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Sep 2025 08:03:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 980522EC08E;
-	Mon, 15 Sep 2025 08:02:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B45582EC0B3;
+	Mon, 15 Sep 2025 08:02:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DosSW2gp"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FpA8AWJD"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CF7B2EB874
-	for <linux-pm@vger.kernel.org>; Mon, 15 Sep 2025 08:02:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D7C72EBBB5
+	for <linux-pm@vger.kernel.org>; Mon, 15 Sep 2025 08:02:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757923351; cv=none; b=bB3czN5rKMX/wXzcdoQzC+CMD2qWOEwuturQnMUK+p2QeBv5kQnhjaqj8JqbuTqf9UBn0LSlHKSte6XHgYI/mwJpsJVka/bIbo2u3M9T0ekICTxOSMOd4z0LK4wYJRNyISPqPDJBvpCVvdv5Ovd/5ll2InkEcDpiNYPGubyk0lM=
+	t=1757923352; cv=none; b=KVyMxa/66ikfV2uHSXBiX5rSfziiOFO7O/tzjhHXyTQxos+VVRPX7NaVgBmUUYzOFwDR99c2bCyqetChWkbyLVtaZz4W1ioepgGYRKnvUdNXE1CRUlh0ko5TR+3b/DQlYTRVDTP2q/g07hfb+ECivXcsTdnqm2Iv60PS8jSXlyY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757923351; c=relaxed/simple;
-	bh=ye9UTh3DGTIR2GXSy9SPAJZIcahY1wHdNVmZ/3VEzHw=;
+	s=arc-20240116; t=1757923352; c=relaxed/simple;
+	bh=beKfTwsNCPyE7PSl0N23EKF859Qyx63lSZI0D1sTGRs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=T1jNlbAahAxFOE8nDcmYvbKWmjTg8b+49CnOfL3zyNPFY+aMEW9WnzNai6a2a2dqyTy8oDdeTF6IYVnuZCdWlzCIVWa8Mwo+PDW221Lze8JVOLbwbHXQv5MGW+GmuwRhrrE0N7RjJt12FLhKDwD7AwpvYWMm/qw16g5hukwHGLY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DosSW2gp; arc=none smtp.client-ip=209.85.167.42
+	 MIME-Version; b=qf4f+tyOMuzI9Siis/f51LbTn/Ey4ZBvYBVvI+UO18TCef9XPRVQ+xlDLIqfbII8X0hLxtssMiVh8Wpilpmqnu59OzVZDYjfvtwthuVfwvjI9Qz0+UO4aRvDLdFChEqiothRKAKs2gfjKBovNk95tjfBqk0M0hHMRyoUBZdSeYU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FpA8AWJD; arc=none smtp.client-ip=209.85.167.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-55f7ab2a84eso3684931e87.1
-        for <linux-pm@vger.kernel.org>; Mon, 15 Sep 2025 01:02:29 -0700 (PDT)
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-56088927dcbso4872516e87.3
+        for <linux-pm@vger.kernel.org>; Mon, 15 Sep 2025 01:02:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757923347; x=1758528147; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1757923348; x=1758528148; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ATEPApqyTT3jVHOmbw/KgRu7Cv8Hn9TFPWpJMkbUBLE=;
-        b=DosSW2gp9e50j/9LysjVps0WKRPolXJ1QIj7yRTQfaDqRCkXij3sqbMspnyvTPB+U1
-         aYqEwHIk8eV4He35auNMcDyzw7DnQpPdZ5jq71zcN4H2kR3b0QFQW8JZyhUBuSMd+y94
-         p6znGuYIp/Hairdx34BfzZJdIMQzhSYEsZeddpyulQwvC9xo0pZVTKkDXjTFM77mP5ml
-         ZJqLRAjUHMeBEBSM8OhrKfd6lbIpI1zleyErl3qC54IB9NaYAPG2xQozeUodIwAFKU/C
-         GM7sHQLKStkLS0CZWq87tjBEvmuaht7kR6zqzCJm3AOZaE5+rgdhIWURngWN0jj+93w5
-         67jA==
+        bh=dckPa8UvKXh/PkQbc3E4s0LWUnXV82LbXi43pcGDFzg=;
+        b=FpA8AWJDyGEFSr0KZFv0KkL8IpistoFE1ZOvdo4AgXVmSGmfMMlQ/PQntDe5wSobiR
+         vfYakOndEq45mHmnY9lkvuomlin7e6ZNUhHe7Ylb/OGdI5OhAo4/7gNQAbrwiX/nQYyQ
+         D9HiRwAj7ZkDqS8c2hiMqFW0N0kn3P2oyynNCq5F9rR3xPt+eYNqIWCnv/UG6o2mQtwN
+         YHXLOF/sBY4uVCGNT4nTPz08M8y596+mnppFxInvSeXLNya3KDzOT0/7abe5e/dHS/24
+         sKJKjRdoxp/eOKZL3uxcqXOTLgOUu7yB9Fr+7hcXEfjZYai/nBCVzJ4szRArSLCnphUP
+         xvVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757923347; x=1758528147;
+        d=1e100.net; s=20230601; t=1757923348; x=1758528148;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ATEPApqyTT3jVHOmbw/KgRu7Cv8Hn9TFPWpJMkbUBLE=;
-        b=j8Lf5ozUj4+WQL+9gp/4JoL3D49EZ3Ytun2TPSimw2l8Is4r4A3Z2fKxeaYGOOxzgD
-         nGVZbKvZecLbuJl90+i+WvhQY0PJLlmvCycS5hd1/9TqELWDS3eHkj/EfTMhnlOu18Qz
-         TrgKwqU0uBUvCMoZAFKU2t63VE8sW4jP4Ot9PNna3WHdOavhhPzbvLQNo7hTX5m9Kx+t
-         Ajkm7UPSq5lcNok3GF31jV3A5BO8fL8QQdJo8Eb8uVy3GSn82XlKM5bKiW3WGynKL30u
-         s3z07xWWK6BcQKrgH4Pc5pLESdIUVRyDJGYwX+GEEwfh4wwFoKcaw2AAYPtLVQCJhnpd
-         3vog==
-X-Forwarded-Encrypted: i=1; AJvYcCWR3ALOkGGbv5SgJyC35A71GiEmxtFRvCy+hWCHMkqdD98jIlVxeT7Zm2MURGGH5WO1ScBuCqPVnA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwAe+OjE+rB227W1Kn+EoVfss9yhy9fPPF6APsMBbLNx91rpJ5D
-	5MPylSwDuPEDXqeegf1tbzwTUjtEVZsQIYwMstntJ1xHZtZM9C3CCUSa
-X-Gm-Gg: ASbGncvkLdo26AMnN7gghCDHJeFJd4WFxYucZD5YLT8nJ28T4yXd9yXa+05w2Zjw6kz
-	mZnNB1R3t834CO4Ngpy7lm218lo0V0+Ebm69SUpvcGnj/qOl32FHWykZ348ep9nBOGs0BefGX81
-	4/5dZYXcMI0n8Gn8Evp9BsmXs2GfJeJ2t7YCMmTwrFcR0wPY+4Rxlmk2XBUuB0AJwBCytfx5jYF
-	Ll3+3919RDR64CS0S+5UZst/euWks2S+LDCUltZ1QAnhDaPz/jV9lFTcKgnNORSv8raE2Sbf1SA
-	u8zthHlUBZRRRY+lZ6oqVpnioo/Q/6GAZAHeOFl8QEWZACUnRcjAqT3Ue8A89XRsjlDuwfIvXvu
-	Ys/xtebVFhN7sPJvZp/2V7ZEo
-X-Google-Smtp-Source: AGHT+IFE2b9fNGrtXtktFaLnqY0Wj56OIzV2rKxcVX1YbWplFFMNHaFswaLdAdbTgGawmGgAW0AddQ==
-X-Received: by 2002:a05:6512:2585:b0:55f:43ba:9410 with SMTP id 2adb3069b0e04-5704b52f23emr3336414e87.15.1757923346893;
-        Mon, 15 Sep 2025 01:02:26 -0700 (PDT)
+        bh=dckPa8UvKXh/PkQbc3E4s0LWUnXV82LbXi43pcGDFzg=;
+        b=Riwz1KxoGST0sEQblmhaEQdSP5eY1sTtsY4ixQ02a51MQlUwG9K87yZ6VO4W5qrVkE
+         f+zQIxHKNe/711P1LcglhryXC2gWiMMUPZ5hbWhaPMOGkh9e7WKX8mHEVWOpedHkP3bG
+         w2sh6qxD6HwtSddSAKJ1V8YCzssjOstE2WiTdFZiFI4VrZEeOg4FycmRzcanXWEdTxrj
+         Yp1jqqYootaF/ZcNxfh22a36hEx4TE7D9aXt79aWNrcJApuOMwNiB9DRo3vmP/acXGos
+         a3TndOYl7Sm9VM9X4dLTshWH7ok85AYEX09RF1msdn98zmyI8BjoLzy4C24D+mXk0Amv
+         3PxQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXha/VUqqUEag++aVf8n3kIAEX8Upo45eCVGLbumghvnpqRdD08bTaeUQUhiv+11hGr+6+PJ6IK8Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy4GJVOmLpiNWjFA3XmZe9GTr70N4xg8nU4X9Z0snNEJSMreJLo
+	mpD5aaEIRFImJacxiKGE8Do6Wu68iIpi28nln6FyNhXAGZBaQy9ngFLX
+X-Gm-Gg: ASbGnctxGbfWaFb2gyUk83QDOhngnUG0SxA0NBwY1SlZNihMKQNmzCUaXsXRPtOGjp0
+	wAQUn2+0qwHxaKS4sAL2JU/AIdlJRi6PrjKHE9mDv3c2pz6cKyuxx1cIwjEwmxP2XhVhmDI2MbI
+	lR32CjHJGlDCaESDXHsOtXrjvzQzQ5WSNVlWnVwM3QE1JeW3NCvAw1Ro7hc2pKLRkRGzUjhr/xL
+	ilq/6YCVzUuYdldmdyqXNFVMGQ3FSXT6DZdUn/SRDD5nsR9AeM9kSIZRXfA9UAbr2qeES0RskoX
+	BrSo2Bl+Bkx2OU4A7awQ+Iv986lzT1Y+N0opfGkqH7PP06qCSMyfKQmzbjnKW2hAvZF8l78tGIe
+	XFj8qwORltJsryg==
+X-Google-Smtp-Source: AGHT+IGazCIVLo0zyQ0tjWsm7GZ9jY72tbH4I+oPJP5mjUoJWYRI8uNVJSkfeTbN7VhlxwayTzD4Cg==
+X-Received: by 2002:a05:6512:3055:b0:55f:4413:6f69 with SMTP id 2adb3069b0e04-5705197a783mr3371473e87.50.1757923348259;
+        Mon, 15 Sep 2025 01:02:28 -0700 (PDT)
 Received: from xeon.. ([188.163.112.70])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-56e6460dec4sm3392381e87.103.2025.09.15.01.02.25
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-56e6460dec4sm3392381e87.103.2025.09.15.01.02.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Sep 2025 01:02:26 -0700 (PDT)
+        Mon, 15 Sep 2025 01:02:27 -0700 (PDT)
 From: Svyatoslav Ryhel <clamor95@gmail.com>
 To: Krzysztof Kozlowski <krzk@kernel.org>,
 	Rob Herring <robh@kernel.org>,
@@ -94,9 +94,9 @@ Cc: linux-kernel@vger.kernel.org,
 	linux-tegra@vger.kernel.org,
 	linux-clk@vger.kernel.org,
 	linux-pm@vger.kernel.org
-Subject: [PATCH v3 04/11] memory: tegra: implement EMEM regs and ICC ops for Tegra114
-Date: Mon, 15 Sep 2025 11:01:50 +0300
-Message-ID: <20250915080157.28195-5-clamor95@gmail.com>
+Subject: [PATCH v3 05/11] dt-bindings: memory: Add Tegra114 memory client IDs
+Date: Mon, 15 Sep 2025 11:01:51 +0300
+Message-ID: <20250915080157.28195-6-clamor95@gmail.com>
 X-Mailer: git-send-email 2.48.1
 In-Reply-To: <20250915080157.28195-1-clamor95@gmail.com>
 References: <20250915080157.28195-1-clamor95@gmail.com>
@@ -108,236 +108,90 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Prepare Internal Memory Controller for introduction of External Memory
-Controller.
+Each memory client has unique hardware ID, add these IDs.
 
 Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
+Acked-by: Rob Herring (Arm) <robh@kernel.org>
 ---
- drivers/memory/tegra/tegra114.c | 193 ++++++++++++++++++++++++++++++++
- 1 file changed, 193 insertions(+)
+ include/dt-bindings/memory/tegra114-mc.h | 67 ++++++++++++++++++++++++
+ 1 file changed, 67 insertions(+)
 
-diff --git a/drivers/memory/tegra/tegra114.c b/drivers/memory/tegra/tegra114.c
-index d03a5d162dbd..c615857f7fad 100644
---- a/drivers/memory/tegra/tegra114.c
-+++ b/drivers/memory/tegra/tegra114.c
-@@ -3,6 +3,7 @@
-  * Copyright (C) 2014 NVIDIA CORPORATION.  All rights reserved.
-  */
+diff --git a/include/dt-bindings/memory/tegra114-mc.h b/include/dt-bindings/memory/tegra114-mc.h
+index dfe99c8a5ba5..5e0d6a1b91f2 100644
+--- a/include/dt-bindings/memory/tegra114-mc.h
++++ b/include/dt-bindings/memory/tegra114-mc.h
+@@ -40,4 +40,71 @@
+ #define TEGRA114_MC_RESET_VDE		14
+ #define TEGRA114_MC_RESET_VI		15
  
-+#include <linux/device.h>
- #include <linux/of.h>
- #include <linux/mm.h>
- 
-@@ -1165,6 +1166,195 @@ static const struct tegra_mc_reset tegra114_mc_resets[] = {
- 	TEGRA114_MC_RESET(VI,       0x200, 0x204, 17),
- };
- 
-+static void tegra114_mc_tune_client_latency(struct tegra_mc *mc,
-+					    const struct tegra_mc_client *client,
-+					    unsigned int bandwidth_mbytes_sec)
-+{
-+	u32 arb_tolerance_compensation_nsec, arb_tolerance_compensation_div;
-+	unsigned int fifo_size = client->fifo_size;
-+	u32 arb_nsec, la_ticks, value;
++#define TEGRA114_MC_PTCR		0
++#define TEGRA114_MC_DISPLAY0A		1
++#define TEGRA114_MC_DISPLAY0AB		2
++#define TEGRA114_MC_DISPLAY0B		3
++#define TEGRA114_MC_DISPLAY0BB		4
++#define TEGRA114_MC_DISPLAY0C		5
++#define TEGRA114_MC_DISPLAY0CB		6
++#define TEGRA114_MC_DISPLAY1B		7
++#define TEGRA114_MC_DISPLAY1BB		8
++#define TEGRA114_MC_EPPUP		9
++#define TEGRA114_MC_G2PR		10
++#define TEGRA114_MC_G2SR		11
++#define TEGRA114_MC_MPEUNIFBR		12
++#define TEGRA114_MC_VIRUV		13
++#define TEGRA114_MC_AFIR		14
++#define TEGRA114_MC_AVPCARM7R		15
++#define TEGRA114_MC_DISPLAYHC		16
++#define TEGRA114_MC_DISPLAYHCB		17
++#define TEGRA114_MC_FDCDRD		18
++#define TEGRA114_MC_FDCDRD2		19
++#define TEGRA114_MC_G2DR		20
++#define TEGRA114_MC_HDAR		21
++#define TEGRA114_MC_HOST1XDMAR		22
++#define TEGRA114_MC_HOST1XR		23
++#define TEGRA114_MC_IDXSRD		24
++#define TEGRA114_MC_IDXSRD2		25
++#define TEGRA114_MC_MPE_IPRED		26
++#define TEGRA114_MC_MPEAMEMRD		27
++#define TEGRA114_MC_MPECSRD		28
++#define TEGRA114_MC_PPCSAHBDMAR		29
++#define TEGRA114_MC_PPCSAHBSLVR		30
++#define TEGRA114_MC_SATAR		31
++#define TEGRA114_MC_TEXSRD		32
++#define TEGRA114_MC_TEXSRD2		33
++#define TEGRA114_MC_VDEBSEVR		34
++#define TEGRA114_MC_VDEMBER		35
++#define TEGRA114_MC_VDEMCER		36
++#define TEGRA114_MC_VDETPER		37
++#define TEGRA114_MC_MPCORELPR		38
++#define TEGRA114_MC_MPCORER		39
++#define TEGRA114_MC_EPPU		40
++#define TEGRA114_MC_EPPV		41
++#define TEGRA114_MC_EPPY		42
++#define TEGRA114_MC_MPEUNIFBW		43
++#define TEGRA114_MC_VIWSB		44
++#define TEGRA114_MC_VIWU		45
++#define TEGRA114_MC_VIWV		46
++#define TEGRA114_MC_VIWY		47
++#define TEGRA114_MC_G2DW		48
++#define TEGRA114_MC_AFIW		49
++#define TEGRA114_MC_AVPCARM7W		50
++#define TEGRA114_MC_FDCDWR		51
++#define TEGRA114_MC_FDCDWR2		52
++#define TEGRA114_MC_HDAW		53
++#define TEGRA114_MC_HOST1XW		54
++#define TEGRA114_MC_ISPW		55
++#define TEGRA114_MC_MPCORELPW		56
++#define TEGRA114_MC_MPCOREW		57
++#define TEGRA114_MC_MPECSWR		58
++#define TEGRA114_MC_PPCSAHBDMAW		59
++#define TEGRA114_MC_PPCSAHBSLVW		60
++#define TEGRA114_MC_SATAW		61
++#define TEGRA114_MC_VDEBSEVW		62
++#define TEGRA114_MC_VDEDBGW		63
++#define TEGRA114_MC_VDEMBEW		64
++#define TEGRA114_MC_VDETPMW		65
 +
-+	/* see 20.3.1.1 Client Configuration in Tegra4 TRM v01p */
-+	if (bandwidth_mbytes_sec)
-+		arb_nsec = fifo_size * NSEC_PER_USEC / bandwidth_mbytes_sec;
-+	else
-+		arb_nsec = U32_MAX;
-+
-+	/*
-+	 * Latency allowness should be set with consideration for the module's
-+	 * latency tolerance and internal buffering capabilities.
-+	 *
-+	 * Display memory clients use isochronous transfers and have very low
-+	 * tolerance to a belated transfers. Hence we need to compensate the
-+	 * memory arbitration imperfection for them in order to prevent FIFO
-+	 * underflow condition when memory bus is busy.
-+	 *
-+	 * VI clients also need a stronger compensation.
-+	 */
-+	switch (client->swgroup) {
-+	case TEGRA_SWGROUP_MPCORE:
-+	case TEGRA_SWGROUP_PTC:
-+		/*
-+		 * We always want lower latency for these clients, hence
-+		 * don't touch them.
-+		 */
-+		return;
-+
-+	case TEGRA_SWGROUP_DC:
-+	case TEGRA_SWGROUP_DCB:
-+		arb_tolerance_compensation_nsec = 1050;
-+		arb_tolerance_compensation_div = 2;
-+		break;
-+
-+	case TEGRA_SWGROUP_VI:
-+		arb_tolerance_compensation_nsec = 1050;
-+		arb_tolerance_compensation_div = 1;
-+		break;
-+
-+	default:
-+		arb_tolerance_compensation_nsec = 150;
-+		arb_tolerance_compensation_div = 1;
-+		break;
-+	}
-+
-+	if (arb_nsec > arb_tolerance_compensation_nsec)
-+		arb_nsec -= arb_tolerance_compensation_nsec;
-+	else
-+		arb_nsec = 0;
-+
-+	arb_nsec /= arb_tolerance_compensation_div;
-+
-+	/*
-+	 * Latency allowance is a number of ticks a request from a particular
-+	 * client may wait in the EMEM arbiter before it becomes a high-priority
-+	 * request.
-+	 */
-+	la_ticks = arb_nsec / mc->tick;
-+	la_ticks = min(la_ticks, client->regs.la.mask);
-+
-+	value = mc_readl(mc, client->regs.la.reg);
-+	value &= ~(client->regs.la.mask << client->regs.la.shift);
-+	value |= la_ticks << client->regs.la.shift;
-+	mc_writel(mc, value, client->regs.la.reg);
-+}
-+
-+static int tegra114_mc_icc_set(struct icc_node *src, struct icc_node *dst)
-+{
-+	struct tegra_mc *mc = icc_provider_to_tegra_mc(src->provider);
-+	const struct tegra_mc_client *client = &mc->soc->clients[src->id];
-+	u64 peak_bandwidth = icc_units_to_bps(src->peak_bw);
-+
-+	/*
-+	 * Skip pre-initialization that is done by icc_node_add(), which sets
-+	 * bandwidth to maximum for all clients before drivers are loaded.
-+	 *
-+	 * This doesn't make sense for us because we don't have drivers for all
-+	 * clients and it's okay to keep configuration left from bootloader
-+	 * during boot, at least for today.
-+	 */
-+	if (src == dst)
-+		return 0;
-+
-+	/* convert bytes/sec to megabytes/sec */
-+	do_div(peak_bandwidth, 1000000);
-+
-+	tegra114_mc_tune_client_latency(mc, client, peak_bandwidth);
-+
-+	return 0;
-+}
-+
-+static int tegra114_mc_icc_aggreate(struct icc_node *node, u32 tag, u32 avg_bw,
-+				    u32 peak_bw, u32 *agg_avg, u32 *agg_peak)
-+{
-+	/*
-+	 * ISO clients need to reserve extra bandwidth up-front because
-+	 * there could be high bandwidth pressure during initial filling
-+	 * of the client's FIFO buffers.  Secondly, we need to take into
-+	 * account impurities of the memory subsystem.
-+	 */
-+	if (tag & TEGRA_MC_ICC_TAG_ISO)
-+		peak_bw = tegra_mc_scale_percents(peak_bw, 400);
-+
-+	*agg_avg += avg_bw;
-+	*agg_peak = max(*agg_peak, peak_bw);
-+
-+	return 0;
-+}
-+
-+static struct icc_node_data *
-+tegra114_mc_of_icc_xlate_extended(const struct of_phandle_args *spec, void *data)
-+{
-+	struct tegra_mc *mc = icc_provider_to_tegra_mc(data);
-+	const struct tegra_mc_client *client;
-+	unsigned int i, idx = spec->args[0];
-+	struct icc_node_data *ndata;
-+	struct icc_node *node;
-+
-+	list_for_each_entry(node, &mc->provider.nodes, node_list) {
-+		if (node->id != idx)
-+			continue;
-+
-+		ndata = kzalloc(sizeof(*ndata), GFP_KERNEL);
-+		if (!ndata)
-+			return ERR_PTR(-ENOMEM);
-+
-+		client = &mc->soc->clients[idx];
-+		ndata->node = node;
-+
-+		switch (client->swgroup) {
-+		case TEGRA_SWGROUP_DC:
-+		case TEGRA_SWGROUP_DCB:
-+		case TEGRA_SWGROUP_PTC:
-+		case TEGRA_SWGROUP_VI:
-+			/* these clients are isochronous by default */
-+			ndata->tag = TEGRA_MC_ICC_TAG_ISO;
-+			break;
-+
-+		default:
-+			ndata->tag = TEGRA_MC_ICC_TAG_DEFAULT;
-+			break;
-+		}
-+
-+		return ndata;
-+	}
-+
-+	for (i = 0; i < mc->soc->num_clients; i++) {
-+		if (mc->soc->clients[i].id == idx)
-+			return ERR_PTR(-EPROBE_DEFER);
-+	}
-+
-+	dev_err(mc->dev, "invalid ICC client ID %u\n", idx);
-+
-+	return ERR_PTR(-EINVAL);
-+}
-+
-+static const struct tegra_mc_icc_ops tegra114_mc_icc_ops = {
-+	.xlate_extended = tegra114_mc_of_icc_xlate_extended,
-+	.aggregate = tegra114_mc_icc_aggreate,
-+	.set = tegra114_mc_icc_set,
-+};
-+
-+static const unsigned long tegra114_mc_emem_regs[] = {
-+	MC_EMEM_ARB_CFG,
-+	MC_EMEM_ARB_OUTSTANDING_REQ,
-+	MC_EMEM_ARB_TIMING_RCD,
-+	MC_EMEM_ARB_TIMING_RP,
-+	MC_EMEM_ARB_TIMING_RC,
-+	MC_EMEM_ARB_TIMING_RAS,
-+	MC_EMEM_ARB_TIMING_FAW,
-+	MC_EMEM_ARB_TIMING_RRD,
-+	MC_EMEM_ARB_TIMING_RAP2PRE,
-+	MC_EMEM_ARB_TIMING_WAP2PRE,
-+	MC_EMEM_ARB_TIMING_R2R,
-+	MC_EMEM_ARB_TIMING_W2W,
-+	MC_EMEM_ARB_TIMING_R2W,
-+	MC_EMEM_ARB_TIMING_W2R,
-+	MC_EMEM_ARB_DA_TURNS,
-+	MC_EMEM_ARB_DA_COVERS,
-+	MC_EMEM_ARB_MISC0,
-+	MC_EMEM_ARB_RING1_THROTTLE,
-+};
-+
- const struct tegra_mc_soc tegra114_mc_soc = {
- 	.clients = tegra114_mc_clients,
- 	.num_clients = ARRAY_SIZE(tegra114_mc_clients),
-@@ -1172,10 +1362,13 @@ const struct tegra_mc_soc tegra114_mc_soc = {
- 	.atom_size = 32,
- 	.client_id_mask = 0x7f,
- 	.smmu = &tegra114_smmu_soc,
-+	.emem_regs = tegra114_mc_emem_regs,
-+	.num_emem_regs = ARRAY_SIZE(tegra114_mc_emem_regs),
- 	.intmask = MC_INT_INVALID_SMMU_PAGE | MC_INT_SECURITY_VIOLATION |
- 		   MC_INT_DECERR_EMEM,
- 	.reset_ops = &tegra_mc_reset_ops_common,
- 	.resets = tegra114_mc_resets,
- 	.num_resets = ARRAY_SIZE(tegra114_mc_resets),
-+	.icc_ops = &tegra114_mc_icc_ops,
- 	.ops = &tegra30_mc_ops,
- };
+ #endif
 -- 
 2.48.1
 
