@@ -1,172 +1,255 @@
-Return-Path: <linux-pm+bounces-34658-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34659-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF7EEB5756B
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Sep 2025 12:02:18 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC2C0B575F1
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Sep 2025 12:15:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 896D43A8EE2
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Sep 2025 10:02:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 20D441886E33
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Sep 2025 10:15:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 934042EFD90;
-	Mon, 15 Sep 2025 10:02:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F4832FC86B;
+	Mon, 15 Sep 2025 10:14:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b="aiHspCza"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TwIOS4MH"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADAA527280E
-	for <linux-pm@vger.kernel.org>; Mon, 15 Sep 2025 10:02:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03C422FB615;
+	Mon, 15 Sep 2025 10:14:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757930533; cv=none; b=Ikc9uc+k2NeghaF1GzSMSEv401dl4HSBVt+ZD+L42tOMM5WoiM+YRTl8E6eOuef01J8yABrQtc23Hymjj7feS/aFkl3dO8N7cI9nLZBCIIsxdYXWjv8ur+Xe9EzG1vAw7Q08ahdNVi7WQZv/Hv+l6gNA08lXiGt8QAOfOGPjhq4=
+	t=1757931258; cv=none; b=cIOtg5Y+zq3hzGxZLbpqveLhWaObg05ZqXEjUndRyHRJrFyzYo23lj7eeBl32X/KGApCWUnpaVNKQn5YBtdAQVYaB6Ig7EJntWpqoTbikOY1LR8m+5IcaHPG+vItrySjOomOCtqea6yy/rd6mWAgB5XOu1S7792vHy3pmYlGrVc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757930533; c=relaxed/simple;
-	bh=E3+oVjwbyn39N5bbJ8PtDEtoLjERba4fXbVGOjw/WDQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ENCa40Lf20gKhYI5FgiTJjolUq1ImAiGmffroB3g9MtnmKU8A3vYAvX0JHLw7SZWVqd4AJgIHRFYCSjQBU+YsZgET0CARE33zU2AOrQUSbQEqQ3eFSnuJFXg7Q4kOsuYhZ/c0prM6ubcABINouHY/BOYaeOb3MneXgWkb2MkuL4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io; spf=pass smtp.mailfrom=layalina.io; dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b=aiHspCza; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=layalina.io
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-45dd505a1dfso32528415e9.2
-        for <linux-pm@vger.kernel.org>; Mon, 15 Sep 2025 03:02:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1757930530; x=1758535330; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=aRVL9IUAAqgHrjK9nkhZ1Oduj9r/xQ7fhJ7EmcfoG/8=;
-        b=aiHspCzalk7rtf1PwXf86Uny47ZFswkpGATv2fmnFHHPUh76nA3cr3kXBJmbIAauLW
-         bGflJwF4qDjLEl4T4l7QXxRhAP4W7tL8xjlOJSuRnHfe5w3/10NeGldnlke6hcaOHzi3
-         E9Crf32imTfbeIWf6yJLSptDEzIHH7ipE7rmcaxR1RptzRVdtkbK/B1CiumIjGMhVrEQ
-         8trowDztboYB7tcdrENMGFQNO18LcJfBwl/CAc8Vgb3NTYZdaRYvLHTes9mo5T373tIa
-         7VSnxARPM34RUI3ACoO92V2olg1+ZCqRveARdwgz3NeT9R/3Sp+df6rjV5xKHzTgJ+Yh
-         K3Ow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757930530; x=1758535330;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aRVL9IUAAqgHrjK9nkhZ1Oduj9r/xQ7fhJ7EmcfoG/8=;
-        b=HcXZZ+mlyQQZ7RFpYw/TfDEO7JHtS//rzVj8K7+8+X3BhFzs4Avto2B977s9zQNp57
-         3/qV/ER2yuaYnW6+3ALRqVjYrgVKcoeMjH5hjkcJ7qmUxKS/MC2p0ofxPfxit1DkUxhY
-         DhZFHRoYCuG1K6JqQgta1y9zuTDubZk7x0zkXJLMRNUmmACM+LprkalAtqmxbFTOSQfP
-         oIlANfLQr0Fy7w0Jp1xVeP2z5zB2bRRNWCa3GQPnKOrahR7KDTGN3ctcRQcTirk0U4AV
-         EuMu2J8dU50LcSbozXuMwwioerhhQncg7kZXIdT5UgXVm9ZCCaqu9sPTDdRz/Jl0gRaD
-         61/g==
-X-Forwarded-Encrypted: i=1; AJvYcCW+LGA2cMv7T/P7+HflPbvmLNkqQNHv8J9yfxhxg+2GF4jTcteOOS1YwgUpT9byt35SarwBccjLYA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyP/eZI6pN5HJTFCF4KLn0ksYukp7P6z9gmFXOw2Oy8DHNm8olD
-	KBdzZn4jap9FXHzO2kfJ5bVFG/uodIzc4rgo1lHID44bglPf5UN3QBGDRKFXa3PXUGqiHyFhJuO
-	Woz4q
-X-Gm-Gg: ASbGnct9nhqksTt/oxnKsy6C2tGRkQRzj09Zg6rMg0B0KYCfpU1eDgA/PsvMQ+CZ6r6
-	IFOD8wxBZNTiFPEm65n1CnQ29O0NJ5bebB4/zcTUj5EiB4X19OMlKf6QeJKoGJRbo70ywHuAl5q
-	XB66nn9h58NtLlX1GxDoF2tG1MjfeWTDjRglh5ST6DKl46EVkOF0HJQ3jWZZ5m5b5yvUSy55hsY
-	gb+5TuwXnLFd0sMK+Po30cn9hwx33kQ4eaa/4AryW4CwQmgjtA2HYmoTsh+tNXirgmgfZ5oDS69
-	EUO9AzQsQv79k0Vgo/jVxLgQQG5fMj/OxhgfOOFoCw34vcM4erDC2foLx1pm2HtCtpT5uIxGQlq
-	iCUIEAev8WTHyXzKigLdm6MXIf5ZiT/AxBOrMrhAK+nBMMcxw1hiAeIcz7LuKyFtOWepavu/HI6
-	uU59Dw7w==
-X-Google-Smtp-Source: AGHT+IFWv6FkVBTnKeZEQb3UM8U1+lQXiSAg03mu+qCRATFWX8WcP+0O2Dka4KG3lOwejUMfLpLyjg==
-X-Received: by 2002:a05:600c:6b15:b0:45d:d88d:9ed9 with SMTP id 5b1f17b1804b1-45f2120568fmr70439915e9.34.1757930529767;
-        Mon, 15 Sep 2025 03:02:09 -0700 (PDT)
-Received: from airbuntu (host86-160-23-239.range86-160.btcentralplus.com. [86.160.23.239])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3e9c2954b10sm5957250f8f.50.2025.09.15.03.02.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Sep 2025 03:02:09 -0700 (PDT)
-Date: Mon, 15 Sep 2025 11:02:07 +0100
-From: Qais Yousef <qyousef@layalina.io>
-To: Shawn Guo <shawnguo2@yeah.net>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>,
-	stable@vger.kernel.org
-Subject: Re: [PATCH] cpufreq: cap the default transition delay at 10 ms
-Message-ID: <20250915100207.5amkmknirijnvuoh@airbuntu>
-References: <20250910065312.176934-1-shawnguo2@yeah.net>
- <CAJZ5v0gL5s99h0eq1U4ngaUfPq_AcfgPruSD096JtBWVMjSZwQ@mail.gmail.com>
- <aMQbIu5QNvPoAsSF@dragon>
- <20250914174326.i7nqmrzjtjq7kpqm@airbuntu>
- <aMfAQXE4sRjru9I_@dragon>
+	s=arc-20240116; t=1757931258; c=relaxed/simple;
+	bh=SIEs9n6hrG+yng86tGVw2VfwaKQOVNscQokfGNTf4Hk=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=eGHcE7VN1kLHjPZDm/DnriYmTcDWkCEswpnGXD4CGllBA2loOSv6Wrnc1ecGuN8qfTjPtVdTMg86g3qFf+FGurqoky64GKTUja0UTtr27yHFT4KzI/G1HyhrV0Sy7wk6++801Rg+ojs/r0o7ZlsM/Fcy4Xl6b5bboa5rBoUz6J4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TwIOS4MH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 92835C4CEF9;
+	Mon, 15 Sep 2025 10:14:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757931257;
+	bh=SIEs9n6hrG+yng86tGVw2VfwaKQOVNscQokfGNTf4Hk=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=TwIOS4MHaBwkszOsilzkclSsQ7JUZQ9SMwnB6AGNRiOwkwYP4QRqnLlu+8uu68wNC
+	 zJugYKAxZhnkWMpUY5KNCgzqBIRhXtzOTU8duLQr9C6RyuM9LgF51pPV1rJp6t/sdw
+	 vPXMTsYfYyfcYnQmXVrAExFE4hopeF1LpeoTEfy8IFnjB+WT8QYQMTkPQbNA2s3dd9
+	 bQWXo6xjINeR8MMJs0RCzBYRPsrP3nrGvl//RBEXRI08Iqat+ZtJocWfYM+Dce4BAN
+	 ewHwQr7I/8xL4QuVNCgs3Qc8e3AubdwUmSHcK13K4tGGq0ctplhjZMRzUYgDSjfvOW
+	 NCwlucvDLwCgA==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8090FCAC597;
+	Mon, 15 Sep 2025 10:14:17 +0000 (UTC)
+From: Thomas Antoine via B4 Relay <devnull+t.antoine.uclouvain.be@kernel.org>
+Subject: [PATCH v6 0/2] MAX77759 Fuel Gauge driver support
+Date: Mon, 15 Sep 2025 12:14:09 +0200
+Message-Id: <20250915-b4-gs101_max77759_fg-v6-0-31d08581500f@uclouvain.be>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <aMfAQXE4sRjru9I_@dragon>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAPHmx2gC/4XRwWrDMAwG4FcpPs9DtuU47mnvMUqxEzk1bMlmN
+ 6al5N3ndhuF0bCL4BfoE0gXlilFymy7ubBEJeY4jTU0TxvWHdw4EI99zUyCRFEL98iHLEDs393
+ JGKPtPgwcQZJUwqFXitXRj0Qhnm7s667mQ8zHKZ1vW4q4dv8Bi+DAbdvL4IwPpOBl7t6mubg4P
+ ntiV7PIX0eDWHVkdVpjtXWevAnhgYN3R0u14mB1PFoLSEo7hQ+c5u60gCuOrg4oh0BNB6T6P87
+ yfbxEn3N9xfHngsvyBQrqcxyoAQAA
+X-Change-ID: 20241202-b4-gs101_max77759_fg-402e231a4b33
+To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Sebastian Reichel <sre@kernel.org>, 
+ Peter Griffin <peter.griffin@linaro.org>, 
+ =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+ devicetree@vger.kernel.org, Thomas Antoine <t.antoine@uclouvain.be>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1757931256; l=7205;
+ i=t.antoine@uclouvain.be; s=20241202; h=from:subject:message-id;
+ bh=SIEs9n6hrG+yng86tGVw2VfwaKQOVNscQokfGNTf4Hk=;
+ b=g2M3SOd04Q0Pg8cjMAaTjzMFSeU0J/YFyAfuve6C1EkvzBBgrOEKN7b+02evxbVmn/6MmWZ/9
+ WYbfdWoq0xsDkZuMXzrJ4sZ006ZFo5lmC3NUpIxwcVH+Z38WE9AD/sx
+X-Developer-Key: i=t.antoine@uclouvain.be; a=ed25519;
+ pk=sw7UYl31W1LTpgWRiX4xIF5x6ok7YWZ6XZnHqy/d3dY=
+X-Endpoint-Received: by B4 Relay for t.antoine@uclouvain.be/20241202 with
+ auth_id=289
+X-Original-From: Thomas Antoine <t.antoine@uclouvain.be>
+Reply-To: t.antoine@uclouvain.be
 
-On 09/15/25 15:29, Shawn Guo wrote:
-> On Sun, Sep 14, 2025 at 06:43:26PM +0100, Qais Yousef wrote:
-> > > > Why do you want to address the issue in the cpufreq core instead of
-> > > > doing that in the cpufreq-dt driver?
-> > > 
-> > > My intuition was to fix the regression at where the regression was
-> > > introduced by recovering the code behavior.
-> > 
-> > Isn't the right fix here is at the driver level still? We can only give drivers
-> > what they ask for. If they ask for something wrong and result in something
-> > wrong, it is still their fault, no?
-> 
-> I'm not sure.  The cpufreq-dt driver is following suggestion to use
-> CPUFREQ_ETERNAL, which has the implication that core will figure out
-> a reasonable default value for platforms where the latency is unknown.
-> And that was exactly the situation before the regression.  How does it
-> become the fault of cpufreq-dt driver?
+The gs101-oriole (Google Pixel 6) and gs101-raven (Google Pixel 6 Pro)
+have a Maxim MAX77759 which provides a fuel gauge functionality based
+on the MAX M5 fuel gauge.
 
-Rafael and Viresh would know better, but amd-pstate chooses to fallback to
-specific values if cppc returned CPUFREQ_ETERNAL.
+Add a driver for the fuel gauge of the Maxim MAX77759 based on the
+one for the Maxim MAX1720x which also uses the MAX M5 fuel gauge.
 
-Have you tried to look why dev_pm_opp_get_max_transition_latency() returns
-0 for your platform? I think this is the problem that was being masked before.
+A future patch will add both gs101-oriole and gs101-raven as clients.
 
-> 
-> > Alternatively maybe we can add special handling for CPUFREQ_ETERNAL value,
-> > though I'd suggest to return 1ms (similar to the case of value being 0). Maybe
-> > we can redefine CPUFREQ_ETERNAL to be 0, but not sure if this can have side
-> > effects.
-> 
-> Changing CPUFREQ_ETERNAL to 0 looks so risky to me.  What about adding
-> an explicit check for CPUFREQ_ETERNAL?
+Signed-off-by: Thomas Antoine <t.antoine@uclouvain.be>
+---
+Changes in v6:
+- Remove devicetree and defconfig changes from patch
+- Driver: Check return of power_supply_get_battery_info (Peter Griffin)
+- Binding: Fix properties order of the example and add power supply ref
+(Krzysztof Kozlowski)
+- Link to v5: https://lore.kernel.org/all/20250804-b4-gs101_max77759_fg-v5-0-03a40e6c0e3d@uclouvain.be
 
-Yeah this is what I had in mind. I think treating CPUFREQ_ETERNAL like 0 where
-we don't know the right value and end up with a sensible default makes sense to
-me.
+Changes in v5:
+- Separate MAX77759 from MAX1720x for clarity
+- Remove voltage reporting
+- Add initialization of the chip
+- Add device dependent initialization data
+- Add access to eeprom for access to non-volatile backup data.
+- Link to v4: https://lore.kernel.org/r/20250523-b4-gs101_max77759_fg-v4-0-b49904e35a34@uclouvain.be
 
-I think printing info/warn message that the driver is not specifying the actual
-hardware transition delay would be helpful for admins. A driver/DT file is
-likely needs to be updated.
+Changes in v4:
+- Make first patch standalone
+- Separate MAX77759 defines from MAX1720x defines (Dimitri Fedrau)
+- Inline device name property (Dimitri Fedrau)
+- Separate MAX77759 capacity lsb logic from the MAX1720x capacity
+  computation (Dimitri Fedrau)
+- Use device_property_read_u32 instead of of_property_read_u32
+  (Sebastian Reichel)
+- Removed leftover debugs
+- Move shunt-resistor-micro-ohms to out of allOf:if: (Krzysztof Kozlowski)
+- Fix reg-names constraints
+- Fix style errors
+- Link to v3: https://lore.kernel.org/r/20250421-b4-gs101_max77759_fg-v3-0-50cd8caf9017@uclouvain.be
 
-Better hear from Rafael first to make sure it makes sense to him too.
+Changes in v3:
+- Update base tree to avoid conflicts
+- Fix capacity computation for max1720x
+- Add separate properties for the max7759 to disable non-functional ones
+- Take TASKPERIOD into account for voltage computation of max77759
+- Simplify vcell computation (Dimitri Fedrau)
+- Switch has_nvmem to bool and keep it only in chip_data (Dimitri Fedrau)
+- Drop the yes_range from the write table (Sebastian Reichel)
+- Add test_power_supply_properties.sh to cover letter (Sebastian Reichel)
+- Switch back some changes to binding and actually use allOf:if: to
+  restrict constraints (Krzysztof Kozlowski)
+- Fix style errors
+- Link to v2: https://lore.kernel.org/r/20250102-b4-gs101_max77759_fg-v2-0-87959abeb7ff@uclouvain.be
 
-> 
-> ---8<---
-> 
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index fc7eace8b65b..053f3a0288bc 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -549,11 +549,15 @@ unsigned int cpufreq_policy_transition_delay_us(struct cpufreq_policy *policy)
->         if (policy->transition_delay_us)
->                 return policy->transition_delay_us;
->  
-> +       if (policy->cpuinfo.transition_latency == CPUFREQ_ETERNAL)
-> +               goto default_delay;
-> +
->         latency = policy->cpuinfo.transition_latency / NSEC_PER_USEC;
->         if (latency)
->                 /* Give a 50% breathing room between updates */
->                 return latency + (latency >> 1);
->  
-> +default_delay:
->         return USEC_PER_MSEC;
->  }
->  EXPORT_SYMBOL_GPL(cpufreq_policy_transition_delay_us);
-> 
-> --->8---
-> 
-> Shawn
-> 
+Changes in v2:
+- Add fallback for voltage measurement (André Draszik)
+- Add regmap for the max77759 (André Draszik)
+- Add chip identification for the max77759 (André Draszik, Peter Griffin)
+- Move RSense value to a devicetree property shunt-resistor-micro-ohms
+  (Dimitri Fedrau, André Draszik)
+- Use allOf:if to narrow binding per variant (Krzysztof Kozlowski)
+- Remove binding example (Krzysztof Kozlowski)
+- Change defconfig order to follow savedefconfig (Krzysztof Kozlowski)
+- Fix style errors
+- Link to v1: https://lore.kernel.org/r/20241202-b4-gs101_max77759_fg-v1-0-98d2fa7bfe30@uclouvain.be
+
+tools/testing/selftests/power_supply/test_power_supply_properties.sh:
+gs101-oriole:
+  # Testing device max77759-fg
+  ok 1 max77759-fg.exists
+  ok 2 max77759-fg.uevent.NAME
+  ok 3 max77759-fg.sysfs.type
+  ok 4 max77759-fg.uevent.TYPE
+  ok 5 max77759-fg.sysfs.usb_type # SKIP
+  ok 6 max77759-fg.sysfs.online # SKIP
+  # Reported: '1' ()
+  ok 7 max77759-fg.sysfs.present
+  ok 8 max77759-fg.sysfs.status # SKIP
+  # Reported: '99' % ()
+  ok 9 max77759-fg.sysfs.capacity
+  ok 10 max77759-fg.sysfs.capacity_level # SKIP
+  # Reported: 'MAX77759' ()
+  ok 11 max77759-fg.sysfs.model_name
+  # Reported: 'Maxim Integrated' ()
+  ok 12 max77759-fg.sysfs.manufacturer
+  ok 13 max77759-fg.sysfs.serial_number # SKIP
+  ok 14 max77759-fg.sysfs.technology # SKIP
+  ok 15 max77759-fg.sysfs.cycle_count # SKIP
+  ok 16 max77759-fg.sysfs.scope # SKIP
+  ok 17 max77759-fg.sysfs.input_current_limit # SKIP
+  ok 18 max77759-fg.sysfs.input_voltage_limit # SKIP
+  ok 19 max77759-fg.sysfs.voltage_now # SKIP
+  ok 20 max77759-fg.sysfs.voltage_min # SKIP
+  ok 21 max77759-fg.sysfs.voltage_max # SKIP
+  ok 22 max77759-fg.sysfs.voltage_min_design # SKIP
+  ok 23 max77759-fg.sysfs.voltage_max_design # SKIP
+  # Reported: '1562' uA (1.562 mA)
+  ok 24 max77759-fg.sysfs.current_now
+  ok 25 max77759-fg.sysfs.current_max # SKIP
+  ok 26 max77759-fg.sysfs.charge_now # SKIP
+  # Reported: '4562000' uAh (4.562 Ah)
+  ok 27 max77759-fg.sysfs.charge_full
+  # Reported: '4524000' uAh (4.524 Ah)
+  ok 28 max77759-fg.sysfs.charge_full_design
+  ok 29 max77759-fg.sysfs.power_now # SKIP
+  ok 30 max77759-fg.sysfs.energy_now # SKIP
+  ok 31 max77759-fg.sysfs.energy_full # SKIP
+  ok 32 max77759-fg.sysfs.energy_full_design # SKIP
+  ok 33 max77759-fg.sysfs.energy_full_design # SKIP
+
+  gs101-raven:
+  # Testing device max77759-fg
+  ok 1 max77759-fg.exists
+  ok 2 max77759-fg.uevent.NAME
+  ok 3 max77759-fg.sysfs.type
+  ok 4 max77759-fg.uevent.TYPE
+  ok 5 max77759-fg.sysfs.usb_type # SKIP
+  ok 6 max77759-fg.sysfs.online # SKIP
+  # Reported: '1' ()
+  ok 7 max77759-fg.sysfs.present
+  ok 8 max77759-fg.sysfs.status # SKIP
+  # Reported: '100' % ()
+  ok 9 max77759-fg.sysfs.capacity
+  ok 10 max77759-fg.sysfs.capacity_level # SKIP
+  # Reported: 'MAX77759' ()
+  ok 11 max77759-fg.sysfs.model_name
+  # Reported: 'Maxim Integrated' ()
+  ok 12 max77759-fg.sysfs.manufacturer
+  ok 13 max77759-fg.sysfs.serial_number # SKIP
+  ok 14 max77759-fg.sysfs.technology # SKIP
+  ok 15 max77759-fg.sysfs.cycle_count # SKIP
+  ok 16 max77759-fg.sysfs.scope # SKIP
+  ok 17 max77759-fg.sysfs.input_current_limit # SKIP
+  ok 18 max77759-fg.sysfs.input_voltage_limit # SKIP
+  ok 19 max77759-fg.sysfs.voltage_now # SKIP
+  ok 20 max77759-fg.sysfs.voltage_min # SKIP
+  ok 21 max77759-fg.sysfs.voltage_max # SKIP
+  ok 22 max77759-fg.sysfs.voltage_min_design # SKIP
+  ok 23 max77759-fg.sysfs.voltage_max_design # SKIP
+  # Reported: '4375' uA (4.375 mA)
+  ok 24 max77759-fg.sysfs.current_now
+  ok 25 max77759-fg.sysfs.current_max # SKIP
+  ok 26 max77759-fg.sysfs.charge_now # SKIP
+  # Reported: '4676000' uAh (4.676 Ah)
+  ok 27 max77759-fg.sysfs.charge_full
+  # Reported: '4904000' uAh (4.904 Ah)
+  ok 28 max77759-fg.sysfs.charge_full_design
+  ok 29 max77759-fg.sysfs.power_now # SKIP
+  ok 30 max77759-fg.sysfs.energy_now # SKIP
+  ok 31 max77759-fg.sysfs.energy_full # SKIP
+  ok 32 max77759-fg.sysfs.energy_full_design # SKIP
+  ok 33 max77759-fg.sysfs.energy_full_design # SKIP
+
+---
+Thomas Antoine (2):
+      power: supply: add support for MAX77759 fuel gauge
+      dt-bindings: power: supply: add support for MAX77759 fuel gauge
+
+ .../bindings/power/supply/maxim,max77759.yaml      |  78 +++
+ drivers/power/supply/Kconfig                       |  14 +
+ drivers/power/supply/Makefile                      |   1 +
+ drivers/power/supply/max77759_battery.c            | 652 +++++++++++++++++++++
+ 4 files changed, 745 insertions(+)
+---
+base-commit: 590b221ed4256fd6c34d3dea77aa5bd6e741bbc1
+change-id: 20241202-b4-gs101_max77759_fg-402e231a4b33
+
+Best regards,
+-- 
+Thomas Antoine <t.antoine@uclouvain.be>
+
+
 
