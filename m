@@ -1,190 +1,172 @@
-Return-Path: <linux-pm+bounces-34657-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34658-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35E3BB5753A
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Sep 2025 11:48:57 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF7EEB5756B
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Sep 2025 12:02:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8B031188BE8B
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Sep 2025 09:49:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 896D43A8EE2
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Sep 2025 10:02:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14EA12FABE8;
-	Mon, 15 Sep 2025 09:48:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 934042EFD90;
+	Mon, 15 Sep 2025 10:02:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="f4LuR0YO"
+	dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b="aiHspCza"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f66.google.com (mail-ed1-f66.google.com [209.85.208.66])
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E1EF2C3257
-	for <linux-pm@vger.kernel.org>; Mon, 15 Sep 2025 09:48:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADAA527280E
+	for <linux-pm@vger.kernel.org>; Mon, 15 Sep 2025 10:02:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757929718; cv=none; b=d/WqR6Iy3S31Yq/5JNImSRWIghyeuAZh6/uVp+ggtAV6og0OrVnUGDTruo5plGwtoYMJPy964DD7c5gpYyGlSPVsdFgoHOWNhx2P3iqRJfGBrqjlFNOytuxc6ffHdpi4iTGXDVRax5G4mcqOK8oLfz9hlEzi3e7ZTCzIUWKDZR8=
+	t=1757930533; cv=none; b=Ikc9uc+k2NeghaF1GzSMSEv401dl4HSBVt+ZD+L42tOMM5WoiM+YRTl8E6eOuef01J8yABrQtc23Hymjj7feS/aFkl3dO8N7cI9nLZBCIIsxdYXWjv8ur+Xe9EzG1vAw7Q08ahdNVi7WQZv/Hv+l6gNA08lXiGt8QAOfOGPjhq4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757929718; c=relaxed/simple;
-	bh=/LYSOpOOPqvNcXEEZn5XwCOqw0wWb07v6/+f7MdgBos=;
+	s=arc-20240116; t=1757930533; c=relaxed/simple;
+	bh=E3+oVjwbyn39N5bbJ8PtDEtoLjERba4fXbVGOjw/WDQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rCji6fHi8sExSL6k8Gn5c0LmLprLmh6DolI2DMzLeKE+LAMbYGTFUtJJQ295Tz3v69dqY5oZP30Tv7PCtsTxyNIhTjx12msz9lf9rauO3bZoteILc5YnVWkfmpAI8LJZVLvRKtqVM89oDyPNiVaDiTHqkpGGHzzCs5ms/9M3d+s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=f4LuR0YO; arc=none smtp.client-ip=209.85.208.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f66.google.com with SMTP id 4fb4d7f45d1cf-61a8c134533so7574276a12.3
-        for <linux-pm@vger.kernel.org>; Mon, 15 Sep 2025 02:48:34 -0700 (PDT)
+	 Content-Type:Content-Disposition:In-Reply-To; b=ENCa40Lf20gKhYI5FgiTJjolUq1ImAiGmffroB3g9MtnmKU8A3vYAvX0JHLw7SZWVqd4AJgIHRFYCSjQBU+YsZgET0CARE33zU2AOrQUSbQEqQ3eFSnuJFXg7Q4kOsuYhZ/c0prM6ubcABINouHY/BOYaeOb3MneXgWkb2MkuL4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io; spf=pass smtp.mailfrom=layalina.io; dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b=aiHspCza; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=layalina.io
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-45dd505a1dfso32528415e9.2
+        for <linux-pm@vger.kernel.org>; Mon, 15 Sep 2025 03:02:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1757929713; x=1758534513; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=fGusVWyXCqe6ZR64zsDRe9g6dv6szqe6e9/gXZqBwGw=;
-        b=f4LuR0YO7vpmUv708BOaG0ruD191kjv3oOC9g7Zqr+w7AOuwrbBhxohMys+MjIP9ok
-         TRfGr/sOvanku/o7em1flBmtgpfoWNqY5sOTy/dNVapCsu0Hr+Ph0LNh7gJJaNa9Xrzk
-         ZM5ioFO1kl/auUYaJGV+l+KJHl7Ost1cozUJnHhRcpSwUIQsdLZbtRH/4H70BFq4oWff
-         v7u6RJen4atF8wIz/Yh1UIoKXARzT+xZ/dEfZfTv1QNbeweavsFqjhBV4r6KuLO2VaFl
-         iunXrMgXAzFQ+wqnabUsHL4w0oynz0tfEEaoEF99131Gmh913EGkHjRknykKVWErJ7xW
-         3Tdg==
+        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1757930530; x=1758535330; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=aRVL9IUAAqgHrjK9nkhZ1Oduj9r/xQ7fhJ7EmcfoG/8=;
+        b=aiHspCzalk7rtf1PwXf86Uny47ZFswkpGATv2fmnFHHPUh76nA3cr3kXBJmbIAauLW
+         bGflJwF4qDjLEl4T4l7QXxRhAP4W7tL8xjlOJSuRnHfe5w3/10NeGldnlke6hcaOHzi3
+         E9Crf32imTfbeIWf6yJLSptDEzIHH7ipE7rmcaxR1RptzRVdtkbK/B1CiumIjGMhVrEQ
+         8trowDztboYB7tcdrENMGFQNO18LcJfBwl/CAc8Vgb3NTYZdaRYvLHTes9mo5T373tIa
+         7VSnxARPM34RUI3ACoO92V2olg1+ZCqRveARdwgz3NeT9R/3Sp+df6rjV5xKHzTgJ+Yh
+         K3Ow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757929713; x=1758534513;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fGusVWyXCqe6ZR64zsDRe9g6dv6szqe6e9/gXZqBwGw=;
-        b=OnvTbko0maYn84W2yp5AT2ecsQVIlvoj5HWRfW2P1db2jyCtVOSVKofa9JH+l0Af9j
-         8/bhgEIsDfdl+Y0t5t4hJ4L5VNt9/Wgrs7X5lVXXL4NhuHxVh7tQD0xiD36ItqAuq2OM
-         AYRa5/q5XS/Y7A5IrSgpNcuLhIVnzEA5lX+lo7h55NZLdsOzIRWTKjfY/hiXH92J1FtD
-         647fRAahhuEA0yIJMUqIPSegdM3f/3GObrQoSexBPDMKMvjseA4Y3WAiCDfIhNKiMpQk
-         vEk+dZLMat2XkN4rov5CR/vhrlAu0fYGMfAobhOVekICshtlqPOvt6t/psj/D2UBlkxR
-         NdEw==
-X-Forwarded-Encrypted: i=1; AJvYcCUdeYVIWyTAm0z1wYcyWYS09+CCXiciarr11E2+lIyPYGC2k/zrYQrntGdwGqz2Br7pFI2plPIN4Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyJ15qbWr+TLB7/NQCFQiKBs+jwMiCXAmogz4ddEx0G1yTpvjAJ
-	wkLklimi9x8UrvLJGLAlYwfI3RGWmia2hdNBlHjmQ7XdKjvGCeKgg9XnY1NE1OWwjOQ=
-X-Gm-Gg: ASbGncuXZZhhirfeArzJTFtcBs6rOX9LYHljL8OP6gFfoshqJI03yO5AkgiaUFUbhbM
-	/Nu8FRAWiCbblAbq5a+KZMefjz0kvUOUQSvx41ZNKCOfJtvQDeKg6XhzT1TMF3JOJO/il6KsIrx
-	z1b7yMvXOSTqNHfEtiuH33RJmOoB7e5lyFvKl/N+cqkKtXvAY6lBUbvvvBt/bCA2ZOVvhPWHzZs
-	0AilxZcz51MCx/Uo7Gaqi9ZZAhWF6Koo9iHdajbQwT8isN6E3LH4t6TJ7RTloPWL3kDhe07ehuz
-	w/Ve7xMvayuzsQLdwh+mHVaGrEV0leL1jPenaewnbA7Ys62lnf1TctVm20NY6aDpj68vZH4OCmA
-	BbAzIET47C5RYOPdFu+xPMAGjtRDHWxGKPCjjSE1yX7o=
-X-Google-Smtp-Source: AGHT+IF+NlznyOGggwQj3KyFsitg1+o/PgvLt2K+8mej1rfCe1KkaHTdY/LMOod7hUMEDatMyfUGkw==
-X-Received: by 2002:a17:907:3c8e:b0:b04:6412:95ec with SMTP id a640c23a62f3a-b07c3554da5mr1217317266b.10.1757929713359;
-        Mon, 15 Sep 2025 02:48:33 -0700 (PDT)
-Received: from linaro.org ([2a02:2454:ff21:30:ab20:75dc:ab3e:bbb9])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b07b3333e81sm915322866b.94.2025.09.15.02.48.32
+        d=1e100.net; s=20230601; t=1757930530; x=1758535330;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aRVL9IUAAqgHrjK9nkhZ1Oduj9r/xQ7fhJ7EmcfoG/8=;
+        b=HcXZZ+mlyQQZ7RFpYw/TfDEO7JHtS//rzVj8K7+8+X3BhFzs4Avto2B977s9zQNp57
+         3/qV/ER2yuaYnW6+3ALRqVjYrgVKcoeMjH5hjkcJ7qmUxKS/MC2p0ofxPfxit1DkUxhY
+         DhZFHRoYCuG1K6JqQgta1y9zuTDubZk7x0zkXJLMRNUmmACM+LprkalAtqmxbFTOSQfP
+         oIlANfLQr0Fy7w0Jp1xVeP2z5zB2bRRNWCa3GQPnKOrahR7KDTGN3ctcRQcTirk0U4AV
+         EuMu2J8dU50LcSbozXuMwwioerhhQncg7kZXIdT5UgXVm9ZCCaqu9sPTDdRz/Jl0gRaD
+         61/g==
+X-Forwarded-Encrypted: i=1; AJvYcCW+LGA2cMv7T/P7+HflPbvmLNkqQNHv8J9yfxhxg+2GF4jTcteOOS1YwgUpT9byt35SarwBccjLYA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyP/eZI6pN5HJTFCF4KLn0ksYukp7P6z9gmFXOw2Oy8DHNm8olD
+	KBdzZn4jap9FXHzO2kfJ5bVFG/uodIzc4rgo1lHID44bglPf5UN3QBGDRKFXa3PXUGqiHyFhJuO
+	Woz4q
+X-Gm-Gg: ASbGnct9nhqksTt/oxnKsy6C2tGRkQRzj09Zg6rMg0B0KYCfpU1eDgA/PsvMQ+CZ6r6
+	IFOD8wxBZNTiFPEm65n1CnQ29O0NJ5bebB4/zcTUj5EiB4X19OMlKf6QeJKoGJRbo70ywHuAl5q
+	XB66nn9h58NtLlX1GxDoF2tG1MjfeWTDjRglh5ST6DKl46EVkOF0HJQ3jWZZ5m5b5yvUSy55hsY
+	gb+5TuwXnLFd0sMK+Po30cn9hwx33kQ4eaa/4AryW4CwQmgjtA2HYmoTsh+tNXirgmgfZ5oDS69
+	EUO9AzQsQv79k0Vgo/jVxLgQQG5fMj/OxhgfOOFoCw34vcM4erDC2foLx1pm2HtCtpT5uIxGQlq
+	iCUIEAev8WTHyXzKigLdm6MXIf5ZiT/AxBOrMrhAK+nBMMcxw1hiAeIcz7LuKyFtOWepavu/HI6
+	uU59Dw7w==
+X-Google-Smtp-Source: AGHT+IFWv6FkVBTnKeZEQb3UM8U1+lQXiSAg03mu+qCRATFWX8WcP+0O2Dka4KG3lOwejUMfLpLyjg==
+X-Received: by 2002:a05:600c:6b15:b0:45d:d88d:9ed9 with SMTP id 5b1f17b1804b1-45f2120568fmr70439915e9.34.1757930529767;
+        Mon, 15 Sep 2025 03:02:09 -0700 (PDT)
+Received: from airbuntu (host86-160-23-239.range86-160.btcentralplus.com. [86.160.23.239])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3e9c2954b10sm5957250f8f.50.2025.09.15.03.02.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Sep 2025 02:48:32 -0700 (PDT)
-Date: Mon, 15 Sep 2025 11:48:28 +0200
-From: Stephan Gerhold <stephan.gerhold@linaro.org>
-To: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
-Cc: Sebastian Reichel <sre@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
-	Subbaraman Narayanamurthy <subbaraman.narayanamurthy@oss.qualcomm.com>,
-	David Collins <david.collins@oss.qualcomm.com>,
-	=?iso-8859-1?Q?Gy=F6rgy?= Kurucz <me@kuruczgy.com>,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, kernel@oss.qualcomm.com,
-	devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-	Neil Armstrong <neil.armstrong@linaro.org>
-Subject: Re: [PATCH v4 5/8] power: supply: qcom_battmgr: update compats for
- SM8550 and X1E80100
-Message-ID: <aMfg7O2qmpKCiq18@linaro.org>
-References: <20250915-qcom_battmgr_update-v4-0-6f6464a41afe@oss.qualcomm.com>
- <20250915-qcom_battmgr_update-v4-5-6f6464a41afe@oss.qualcomm.com>
- <aMfWKobwM5bhJEAd@linaro.org>
- <3559cbe4-b2e2-42d4-85ad-554258fc9dec@oss.qualcomm.com>
+        Mon, 15 Sep 2025 03:02:09 -0700 (PDT)
+Date: Mon, 15 Sep 2025 11:02:07 +0100
+From: Qais Yousef <qyousef@layalina.io>
+To: Shawn Guo <shawnguo2@yeah.net>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>,
+	stable@vger.kernel.org
+Subject: Re: [PATCH] cpufreq: cap the default transition delay at 10 ms
+Message-ID: <20250915100207.5amkmknirijnvuoh@airbuntu>
+References: <20250910065312.176934-1-shawnguo2@yeah.net>
+ <CAJZ5v0gL5s99h0eq1U4ngaUfPq_AcfgPruSD096JtBWVMjSZwQ@mail.gmail.com>
+ <aMQbIu5QNvPoAsSF@dragon>
+ <20250914174326.i7nqmrzjtjq7kpqm@airbuntu>
+ <aMfAQXE4sRjru9I_@dragon>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <3559cbe4-b2e2-42d4-85ad-554258fc9dec@oss.qualcomm.com>
+In-Reply-To: <aMfAQXE4sRjru9I_@dragon>
 
-On Mon, Sep 15, 2025 at 05:44:40PM +0800, Fenglin Wu wrote:
-> 
-> On 9/15/2025 5:02 PM, Stephan Gerhold wrote:
-> > On Mon, Sep 15, 2025 at 04:49:57PM +0800, Fenglin Wu via B4 Relay wrote:
-> > > From: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
+On 09/15/25 15:29, Shawn Guo wrote:
+> On Sun, Sep 14, 2025 at 06:43:26PM +0100, Qais Yousef wrote:
+> > > > Why do you want to address the issue in the cpufreq core instead of
+> > > > doing that in the cpufreq-dt driver?
 > > > 
-> > > Add variant definitions for SM8550 and X1E80100 platforms. Add a compat
-> > > for SM8550 and update match data for X1E80100 specifically so that they
-> > > could be handled differently in supporting charge control functionality.
-> > > 
-> > > Tested-by: Neil Armstrong <neil.armstrong@linaro.org> # on Thinkpad T14S OLED
-> > > Signed-off-by: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
-> > > ---
-> > >   drivers/power/supply/qcom_battmgr.c | 7 +++++--
-> > >   1 file changed, 5 insertions(+), 2 deletions(-)
-> > > 
-> > > diff --git a/drivers/power/supply/qcom_battmgr.c b/drivers/power/supply/qcom_battmgr.c
-> > > index 008e241e3eac3574a78459a2256e006e48c9f508..174d3f83ac2b070bb90c21a498686e91cc629ebe 100644
-> > > --- a/drivers/power/supply/qcom_battmgr.c
-> > > +++ b/drivers/power/supply/qcom_battmgr.c
-> > > @@ -19,8 +19,10 @@
-> > >   #define BATTMGR_STRING_LEN	128
-> > >   enum qcom_battmgr_variant {
-> > > -	QCOM_BATTMGR_SM8350,
-> > >   	QCOM_BATTMGR_SC8280XP,
-> > > +	QCOM_BATTMGR_SM8350,
-> > > +	QCOM_BATTMGR_SM8550,
-> > > +	QCOM_BATTMGR_X1E80100,
-> > >   };
-> > >   #define BATTMGR_BAT_STATUS		0x1
-> > > @@ -1333,7 +1335,8 @@ static void qcom_battmgr_pdr_notify(void *priv, int state)
-> > >   static const struct of_device_id qcom_battmgr_of_variants[] = {
-> > >   	{ .compatible = "qcom,sc8180x-pmic-glink", .data = (void *)QCOM_BATTMGR_SC8280XP },
-> > >   	{ .compatible = "qcom,sc8280xp-pmic-glink", .data = (void *)QCOM_BATTMGR_SC8280XP },
-> > > -	{ .compatible = "qcom,x1e80100-pmic-glink", .data = (void *)QCOM_BATTMGR_SC8280XP },
-> > > +	{ .compatible = "qcom,sm8550-pmic-glink", .data = (void *)QCOM_BATTMGR_SM8550 },
-> > > +	{ .compatible = "qcom,x1e80100-pmic-glink", .data = (void *)QCOM_BATTMGR_X1E80100 },
-> > >   	/* Unmatched devices falls back to QCOM_BATTMGR_SM8350 */
-> > >   	{}
-> > >   };
-> > I think you need to squash this with "[PATCH 7/8] power: supply:
-> > qcom_battmgr: Add charge control support", or move the modified checks
-> > for
+> > > My intuition was to fix the regression at where the regression was
+> > > introduced by recovering the code behavior.
 > > 
-> > 	if (battmgr->variant == QCOM_BATTMGR_SC8280XP ||
-> > 	    battmgr->variant == QCOM_BATTMGR_X1E80100) {
-> > 
-> > into this patch.
-> > 
-> > With this patch right now, I would expect that your series is not
-> > bisectable: The wrong code paths are chosen if you only apply this patch
-> > because e.g. X1E doesn't use the QCOM_BATTMGR_SC8280XP code anymore.
-> > 
-> > Thanks,
-> > Stephan
+> > Isn't the right fix here is at the driver level still? We can only give drivers
+> > what they ask for. If they ask for something wrong and result in something
+> > wrong, it is still their fault, no?
 > 
-> I see.
-> 
-> I was making it this way to address the review comment from Bryan in patch
-> v2 about separating the compats change. See here:
-> https://lore.kernel.org/all/7f001134-e099-492d-8ce5-4122d83a3de3@linaro.org/
-> 
-> If I revise it according to your 2nd suggestion, would it conflict with
-> Bryan's feedback?
-> 
+> I'm not sure.  The cpufreq-dt driver is following suggestion to use
+> CPUFREQ_ETERNAL, which has the implication that core will figure out
+> a reasonable default value for platforms where the latency is unknown.
+> And that was exactly the situation before the regression.  How does it
+> become the fault of cpufreq-dt driver?
 
-I would expect that Bryan had my second suggestion in mind - separating
-the refactoring (without functional change) from the new feature
-addition.
+Rafael and Viresh would know better, but amd-pstate chooses to fallback to
+specific values if cppc returned CPUFREQ_ETERNAL.
 
-You need to add the new cases to the if statements in this patch, or you
-will (temporarily) change and break functionality.
+Have you tried to look why dev_pm_opp_get_max_transition_latency() returns
+0 for your platform? I think this is the problem that was being masked before.
 
-Thanks,
-Stephan
+> 
+> > Alternatively maybe we can add special handling for CPUFREQ_ETERNAL value,
+> > though I'd suggest to return 1ms (similar to the case of value being 0). Maybe
+> > we can redefine CPUFREQ_ETERNAL to be 0, but not sure if this can have side
+> > effects.
+> 
+> Changing CPUFREQ_ETERNAL to 0 looks so risky to me.  What about adding
+> an explicit check for CPUFREQ_ETERNAL?
+
+Yeah this is what I had in mind. I think treating CPUFREQ_ETERNAL like 0 where
+we don't know the right value and end up with a sensible default makes sense to
+me.
+
+I think printing info/warn message that the driver is not specifying the actual
+hardware transition delay would be helpful for admins. A driver/DT file is
+likely needs to be updated.
+
+Better hear from Rafael first to make sure it makes sense to him too.
+
+> 
+> ---8<---
+> 
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index fc7eace8b65b..053f3a0288bc 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -549,11 +549,15 @@ unsigned int cpufreq_policy_transition_delay_us(struct cpufreq_policy *policy)
+>         if (policy->transition_delay_us)
+>                 return policy->transition_delay_us;
+>  
+> +       if (policy->cpuinfo.transition_latency == CPUFREQ_ETERNAL)
+> +               goto default_delay;
+> +
+>         latency = policy->cpuinfo.transition_latency / NSEC_PER_USEC;
+>         if (latency)
+>                 /* Give a 50% breathing room between updates */
+>                 return latency + (latency >> 1);
+>  
+> +default_delay:
+>         return USEC_PER_MSEC;
+>  }
+>  EXPORT_SYMBOL_GPL(cpufreq_policy_transition_delay_us);
+> 
+> --->8---
+> 
+> Shawn
+> 
 
