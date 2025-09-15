@@ -1,168 +1,129 @@
-Return-Path: <linux-pm+bounces-34614-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34615-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D142B56E4A
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Sep 2025 04:24:14 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2685B56F28
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Sep 2025 06:07:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 47E1B3BDA54
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Sep 2025 02:24:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2F8391898531
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Sep 2025 04:08:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED8242367D7;
-	Mon, 15 Sep 2025 02:23:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2F55255E40;
+	Mon, 15 Sep 2025 04:07:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="hfFuUruA"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f66.google.com (mail-pj1-f66.google.com [209.85.216.66])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C34122A7F9
-	for <linux-pm@vger.kernel.org>; Mon, 15 Sep 2025 02:23:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D7BA38DE1
+	for <linux-pm@vger.kernel.org>; Mon, 15 Sep 2025 04:07:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.24
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757903025; cv=none; b=i61jsNYGabRBryLSls4Yz8B5LN965ik+tnBH/5qae7lfgTN2fZVKswgUODbhDs5o3LcTbI4IRu6atmerv/4TOjNg+JXrNbXFaB8jnV+/rNHkUMOyxNVY104h1Erdpyrzpd5sTGeLG8ZfcpFoEo4R2njd2PZAp6vq9gr/fa9JY0Q=
+	t=1757909266; cv=none; b=hlWy2QKLT0aeQv7pnaQGwj0zM6eNYBOxnNZ7HDBlp6pKx3A41kRaMT3tlkERPEwDEgebcgMgfKyrOhZ8V+6wQ7HwiBVHk5GKCIvqMEtSQFtRcYwXQ/i95awRhJS2fV1t7TrQQ+NRUR1lSnrTji9z6HVXf1rqQWKMfa1f3pTo9To=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757903025; c=relaxed/simple;
-	bh=bTB9DzoWH3QIpeBu4xYDTQAzXlJCXk6gbv+o+fe1N3s=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=hQuqfzl598dxamSPFodCq6HuUuOx5B/uDm772y8cdSViURul3t97PkRX4YjbKx6g7Q0sNGgIx4pfppJZTR3VfutVbAHKWD7qy0kNCw6r/k4NTI1hNeN5OuNVlN4PFBBh8MZ9J3Kg/BGNGVNaFWvHGkLSnx/4zqypmxSgyyX6rpQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.216.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f66.google.com with SMTP id 98e67ed59e1d1-32e64d54508so354412a91.0
-        for <linux-pm@vger.kernel.org>; Sun, 14 Sep 2025 19:23:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757903022; x=1758507822;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TVV/uiMu0xHtlKgwsYx2mXd0JzCW14CDL0hbQStIbj4=;
-        b=Kcsb5fhGMnsTwUQXSVZIPSK3TM0TpxXdMl26+iI4dcluo7i95xQ70i5MVql64/c1dT
-         oO/09Fzey4fzQZ5CxUSHKZi0GlzeW0uhtkwZDfrz+bbwc/xte8kHYCmzOhK/ax8MdNjx
-         EH5yndXxocSLbTfwNJw9GKXIh5jecB5e1QkfUTRxS2G1Txru4VaUCdXSAFK2OG9vwGRf
-         Ma1QMu1p2Cqg1FXQgbbCrik0jHIlXVeBbC2pe8jo9/RX4VSidLt5r1lse59GRJENH9wH
-         sjAPXj3AVzsgPJElCobGgiHnoFt/RmROpNTm3WZjE78/1v5I3nKmm1ols823GRNRPmGi
-         mnkQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWp+IUX3EjNkfhFCqS+gt/lq9zCULLBtNoaeTvxQuDLt/rp40eGld0JJ9ZOklCUSy5tatZt46iMjw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yycd6S+r6Q2UyO49MA/55uzmr9ySFNET0jnEGzwgtXRxcDU43Zs
-	FZrwiDhzPXUAcG0iD3Unnp2PGtuxObEnUoTCRYG04jIk89nUpqxPgs7w
-X-Gm-Gg: ASbGncuKuujqRuGivIzdDzF/FSMV2Di5ccUj7Fh/tbrsiqPqlBGQcI5Knr13dKt0PXO
-	DUTQjOaLdAqhBmMaBw0JaEeqQyX4wlNHhDMdIweDENMliRuNeQgUXG/XFzDjQktgRg/l1I448Ps
-	aim2ECTBWQ0rJglE2VoR5/2MBS6r8iYJVmjw2fNHucgw2tIijgjKEgn6x2pA9/ishMU/SRDC3Lg
-	mha8XN19pjlns9TzrJk/gYA9g3nozRc5kXHUbYrpuz7dfkoDkxtTbuM7wdlKLT6YsL3z2+Pl5us
-	ik8rgQg15X4t/kWCh5eHWIwEmlCIClVq4nxj95O5N8JbMlxacRf53y7zmidWPlBKPnouGm/BUEb
-	UUMPgzq+Q5xRV/TnoOXOeqFzzwD5dcxFV3qj+KQzp1UfN/YAHiZ+0ZGo=
-X-Google-Smtp-Source: AGHT+IF+Y1ivvZp4pAmaUG3hCpveTcj5pGelQEzRTJOfLOyRR4gRbVeT03JbaIBxDc6kfYZUfAWuQg==
-X-Received: by 2002:a17:90b:48:b0:32e:42bb:dc58 with SMTP id 98e67ed59e1d1-32e42bbe0c2mr2998665a91.26.1757903022477;
-        Sun, 14 Sep 2025 19:23:42 -0700 (PDT)
-Received: from power-ThinkBook-15-G2-ITL.. ([39.144.194.130])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-32e37005a82sm2969607a91.16.2025.09.14.19.23.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 Sep 2025 19:23:42 -0700 (PDT)
-From: Xueqin Luo <luoxueqin@kylinos.cn>
-To: rafael@kernel.org,
-	pavel@kernel.org,
-	lenb@kernel.org,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Xueqin Luo <luoxueqin@kylinos.cn>
-Subject: [PATCH v3 2/2] PM: hibernate: make compression threads configurable
-Date: Mon, 15 Sep 2025 10:21:25 +0800
-Message-ID: <1764e5db50a9e6a7809f0ec59a7b59e66c1f155f.1757680816.git.luoxueqin@kylinos.cn>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1757680816.git.luoxueqin@kylinos.cn>
-References: <cover.1757680816.git.luoxueqin@kylinos.cn>
+	s=arc-20240116; t=1757909266; c=relaxed/simple;
+	bh=niYSmtyyUlruk4dkrHY/anirHG38e8wf6rtLr8ewLg4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type:
+	 References; b=WslN3qKYoKZWygGwf+hxX0iQBSTMwD2zxeBp8RqXzW2xaDxRkkwGIWm5aCP3XgAJcWnSZQaCixi5zl054GFe5Sx3pINUiruwRrOpg95gwo9JxT5Wdj1LubwRywB1/R4bU0JVjDlnvWG6E7TSgn7T8QnXGOfbFwCAR213igDSVtU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=hfFuUruA; arc=none smtp.client-ip=203.254.224.24
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
+	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20250915040736epoutp01887ed770610ba6678c0717fa21ff238d~lWSe-9PE60633106331epoutp01e
+	for <linux-pm@vger.kernel.org>; Mon, 15 Sep 2025 04:07:36 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20250915040736epoutp01887ed770610ba6678c0717fa21ff238d~lWSe-9PE60633106331epoutp01e
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1757909256;
+	bh=btKaJBlrNnrUR0+zJOQEy3Co8PN8ii1OF5xNJWEYFBk=;
+	h=From:To:Cc:Subject:Date:References:From;
+	b=hfFuUruAsZlkr8fXb8kb9pJVMcYmXdiNY1oIwltR5cC3S4YGpWpgxYy+Yx1zbEFyz
+	 Db5qw/hCacPEyetWWnNOq6jV4Hc3bEhDVG57+utO3eL1tO/Cw+Ah/sfI5RRpa529Vg
+	 khrGGNUGKzQni0MI3YodvNLyZ4reL/OJwVysoeko=
+Received: from epsnrtp02.localdomain (unknown [182.195.42.154]) by
+	epcas2p1.samsung.com (KnoxPortal) with ESMTPS id
+	20250915040736epcas2p118d7925c640c42f3435e05266b26f931~lWSeUBN5m2098120981epcas2p1b;
+	Mon, 15 Sep 2025 04:07:36 +0000 (GMT)
+Received: from epcas2p4.samsung.com (unknown [182.195.36.102]) by
+	epsnrtp02.localdomain (Postfix) with ESMTP id 4cQBMC3Qbdz2SSKg; Mon, 15 Sep
+	2025 04:07:35 +0000 (GMT)
+Received: from epsmtip1.samsung.com (unknown [182.195.34.30]) by
+	epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
+	20250915040734epcas2p4746a8f668f570e362f65ae39cc9e11ef~lWSdKAssU0669406694epcas2p4K;
+	Mon, 15 Sep 2025 04:07:34 +0000 (GMT)
+Received: from asswp60 (unknown [10.229.9.60]) by epsmtip1.samsung.com
+	(KnoxPortal) with ESMTPA id
+	20250915040734epsmtip10b64002befbd74060737ba3518b84b22~lWSdFILZ73237632376epsmtip1O;
+	Mon, 15 Sep 2025 04:07:34 +0000 (GMT)
+From: Shin Son <shin.son@samsung.com>
+To: Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>, Krzysztof Kozlowski
+	<krzk@kernel.org>, "Rafael J . Wysocki" <rafael@kernel.org>, Daniel Lezcano
+	<daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, Lukasz Luba
+	<lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>, Conor Dooley
+	<conor+dt@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>, Henrik Grimler
+	<henrik@grimler.se>
+Cc: Shin Son <shin.son@samsung.com>, linux-pm@vger.kernel.org,
+	linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/3] Add exynosautov920 thermal support
+Date: Mon, 15 Sep 2025 13:07:12 +0900
+Message-ID: <20250915040715.486733-1-shin.son@samsung.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-CMS-MailID: 20250915040734epcas2p4746a8f668f570e362f65ae39cc9e11ef
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+cpgsPolicy: CPGSC10-234,Y
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20250915040734epcas2p4746a8f668f570e362f65ae39cc9e11ef
+References: <CGME20250915040734epcas2p4746a8f668f570e362f65ae39cc9e11ef@epcas2p4.samsung.com>
 
-The number of compression/decompression threads has a direct impact on
-hibernate image generation and resume latency. Using more threads can
-reduce overall resume time, but on systems with fewer CPU cores it may
-also introduce contention and reduce efficiency.
+This change merges the new exynosautov920-specific register definitions and
+timing parameters into the exynos-tmu driver, ensuring consistent behavior
+across all Exynos series. All new code paths have been tested on a
+exynosautov920 board and verified to correctly read temperatures and
+emulate behavior.
 
-Performance was evaluated on an 8-core ARM system, averaged over 10 runs:
+Changes in v3:
+- Removed redundant commit message.
+- Rephrased the sentences to describe the hardware clearly.
+- Restricted sensor indices to V920.
+- Set #thermal-sensor-celss per variant.
+- Replaced 'additionalProperties' with 'unevaluatedProperties'.
+- Removed the duplicate #define and use the original.
+- Used lowercase hex in #define.
+- Simplified 'temp_to_code' and 'code_to_temp' to one computation
+  path by normalizing calib_temp.
 
-    cmp_threads   hibernate time (s)   resume time (s)
-    --------------------------------------------------
-          3             12.14              18.86
-          4             12.28              17.48
-          5             11.09              16.77
-          6             11.08              16.44
+Changes in v2:
+- Replace the generic property with a vendor-specific one.
+- Added an indices property instead of ranges.
+- Shortened thermal node name and made them more generic.
+- Updated the indices logic accordingly after removing the ranges property.
 
-With 5–6 threads, resume latency improves by approximately 12% compared
-to the default 3-thread configuration, with negligible impact on
-hibernate time.
+Shin Son (3):
+  dt-bindings: thermal: samsung: Add a hw-sensor-indices property
+  thermal: exynos_tmu: Support new hardware and update TMU interface
+  arm64: dts: exynosautov920: Add tmu hardware binding
 
-Introduce a new kernel parameter `cmp_threads=` that allows users and
-integrators to tune the number of compression/decompression threads at
-boot. This provides a way to balance performance and CPU utilization
-across a wide range of hardware without recompiling the kernel.
+ .../thermal/samsung,exynos-thermal.yaml       |  40 ++-
+ .../boot/dts/exynos/exynosautov920-tmu.dtsi   |  97 ++++++
+ .../arm64/boot/dts/exynos/exynosautov920.dtsi |  31 ++
+ drivers/thermal/samsung/exynos_tmu.c          | 324 ++++++++++++++++--
+ 4 files changed, 453 insertions(+), 39 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/exynos/exynosautov920-tmu.dtsi
 
-Signed-off-by: Xueqin Luo <luoxueqin@kylinos.cn>
----
- kernel/power/swap.c | 24 ++++++++++++++++++++----
- 1 file changed, 20 insertions(+), 4 deletions(-)
-
-diff --git a/kernel/power/swap.c b/kernel/power/swap.c
-index f8c13f5672ec..dfa9b7c0f96c 100644
---- a/kernel/power/swap.c
-+++ b/kernel/power/swap.c
-@@ -519,8 +519,8 @@ static int swap_writer_finish(struct swap_map_handle *handle,
- 				CMP_HEADER, PAGE_SIZE)
- #define CMP_SIZE	(CMP_PAGES * PAGE_SIZE)
- 
--/* Maximum number of threads for compression/decompression. */
--#define CMP_THREADS	3
-+/* Default number of threads for compression/decompression. */
-+static int cmp_threads = 3;
- 
- /* Minimum/maximum number of pages for read buffering. */
- #define CMP_MIN_RD_PAGES	1024
-@@ -741,7 +741,7 @@ static int save_compressed_image(struct swap_map_handle *handle,
- 	 * footprint.
- 	 */
- 	nr_threads = num_online_cpus() - 1;
--	nr_threads = clamp_val(nr_threads, 1, CMP_THREADS);
-+	nr_threads = clamp_val(nr_threads, 1, cmp_threads);
- 
- 	page = (void *)__get_free_page(GFP_NOIO | __GFP_HIGH);
- 	if (!page) {
-@@ -1257,7 +1257,7 @@ static int load_compressed_image(struct swap_map_handle *handle,
- 	 * footprint.
- 	 */
- 	nr_threads = num_online_cpus() - 1;
--	nr_threads = clamp_val(nr_threads, 1, CMP_THREADS);
-+	nr_threads = clamp_val(nr_threads, 1, cmp_threads);
- 
- 	page = vmalloc_array(CMP_MAX_RD_PAGES, sizeof(*page));
- 	if (!page) {
-@@ -1697,3 +1697,19 @@ static int __init swsusp_header_init(void)
- }
- 
- core_initcall(swsusp_header_init);
-+
-+static int __init cmp_threads_setup(char *str)
-+{
-+	int rc = kstrtouint(str, 0, &cmp_threads);
-+
-+	if (rc)
-+		return rc;
-+
-+	if (cmp_threads < 1)
-+		cmp_threads = 1;
-+
-+	return 1;
-+
-+}
-+
-+__setup("cmp_threads=", cmp_threads_setup);
 -- 
-2.43.0
+2.50.1
 
 
