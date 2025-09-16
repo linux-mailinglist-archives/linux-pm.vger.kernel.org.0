@@ -1,102 +1,134 @@
-Return-Path: <linux-pm+bounces-34700-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34701-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5528EB58AE3
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Sep 2025 03:11:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CBAD1B58B85
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Sep 2025 03:53:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2678E1B20786
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Sep 2025 01:11:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 66E151A20FB4
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Sep 2025 01:54:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B58931D31B9;
-	Tue, 16 Sep 2025 01:10:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CF99212560;
+	Tue, 16 Sep 2025 01:53:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b="IubZfCkp"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
+Received: from mail-m16.yeah.net (mail-m16.yeah.net [220.197.32.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E9981C84C0;
-	Tue, 16 Sep 2025 01:10:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08C135C96;
+	Tue, 16 Sep 2025 01:53:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.32.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757985030; cv=none; b=kk6OtZiC3/KuE9W6M4YJW0XI+FVsZYP85aXG8DNXEeRSQSWgHxuDhh57A0Pqr5Rmd7MM9Hbp60LjtwAiew021rv+2poRqacu57k+XIaoN4jJgDKKCom1AHDNS8+hhqNEgPwRwxrLo1Uk+yTl1eoggeRA26CffS4Wcgm+6INpU6g=
+	t=1757987616; cv=none; b=Avbpz9i5LhXnNnF/4wCfrbO+MPhD4phfubIiIaXPx6vFyv/Nhzd6zuOkqi1PVQWambOZfOglZq69ikGAkWjosIKSOepcY/ZJIE/LB42+I4ggqXbxLU2eGDprs1K6hM+mwz/78cnjNKHmsQ7AM9R0Sv1Y8c5eJv4DgYsAytJTC+w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757985030; c=relaxed/simple;
-	bh=y3MeIsefnG5tLWf7LJp6Nrk2brtQsFgp+68E4kEaiDA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=JxwRiwWESSco8z4jN1unpFcjV0QBuVO4vEs7pRE3K+Gbce/NVPWumYr4whyM7Zb3BUg+H7UqgVghv8R3uL9R8o0+uAX9VTLHEcH1DG5BA/BA+pqIrwlpwd6Z1C1FdzRgU1pc2P/RAy4eA/y3XoMd2D2/Ekvb2IuILMoCCeu/4iE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com; spf=pass smtp.mailfrom=hisilicon.com; arc=none smtp.client-ip=45.249.212.190
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hisilicon.com
-Received: from mail.maildlp.com (unknown [172.19.162.112])
-	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4cQkJP1973z2VRcm;
-	Tue, 16 Sep 2025 09:07:01 +0800 (CST)
-Received: from kwepemr500004.china.huawei.com (unknown [7.202.195.141])
-	by mail.maildlp.com (Postfix) with ESMTPS id 495251400CB;
-	Tue, 16 Sep 2025 09:10:24 +0800 (CST)
-Received: from [10.67.121.58] (10.67.121.58) by kwepemr500004.china.huawei.com
- (7.202.195.141) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Tue, 16 Sep
- 2025 09:10:23 +0800
-Message-ID: <bdc702db-a898-4b92-bc5f-db802fe235b5@hisilicon.com>
-Date: Tue, 16 Sep 2025 09:10:22 +0800
+	s=arc-20240116; t=1757987616; c=relaxed/simple;
+	bh=+WC97bJV2feID+JAMJ7EpHO+HiaXV2tmzHdqaD9C6eA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PbFkw1HnBbR/L5ALa/sIeaU8CwjWMYzbkphltJcmT4WEKvLBb8IAWQc8IMgsr4Zi2qpXHvC9yM4KEuuqrai0k0lNZChWID9vSdwbarNjlsJQLCS7oif6ElZT2YTeLT1EX8ZAShqWNmrAjsDAmk5/xCPcDuGvxRAIncc6fMCj94I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net; spf=pass smtp.mailfrom=yeah.net; dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b=IubZfCkp; arc=none smtp.client-ip=220.197.32.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yeah.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yeah.net;
+	s=s110527; h=Date:From:To:Subject:Message-ID:MIME-Version:
+	Content-Type; bh=l6mMRQRQgJNTDEgOEAjOL4ukZGtOO3ve5WWGMFpFwsE=;
+	b=IubZfCkp+y3i0Zn1VNHhEEJjR94YNbfb3FgcUJt5Fv8AyIafbrHS2C4xcLSHF2
+	97sGvdUaPnjqKgr1Hkmm0CAHjzGYnkXZdvGo9KqJOl57syyV3AzxNhvK6r1//H6w
+	csZe2wfnGLXKbKoLK0lmdP5kFwm5sptbAls1WeTpUusRo=
+Received: from dragon (unknown [])
+	by gzsmtp2 (Coremail) with SMTP id Ms8vCgDXTwb4wshoJtOeBA--.45753S3;
+	Tue, 16 Sep 2025 09:52:58 +0800 (CST)
+Date: Tue, 16 Sep 2025 09:52:56 +0800
+From: Shawn Guo <shawnguo2@yeah.net>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Qais Yousef <qyousef@layalina.io>,
+	Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>,
+	stable@vger.kernel.org
+Subject: Re: [PATCH] cpufreq: cap the default transition delay at 10 ms
+Message-ID: <aMjC-BHKXjZkFmvj@dragon>
+References: <20250910065312.176934-1-shawnguo2@yeah.net>
+ <CAJZ5v0gL5s99h0eq1U4ngaUfPq_AcfgPruSD096JtBWVMjSZwQ@mail.gmail.com>
+ <aMQbIu5QNvPoAsSF@dragon>
+ <20250914174326.i7nqmrzjtjq7kpqm@airbuntu>
+ <aMfAQXE4sRjru9I_@dragon>
+ <CAJZ5v0i8L8w_ojua1ir3CGcwGSvE+3Jj0Sh5Cs1Yi8i4BX1Lbw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] PM / devfreq: hisi: Fix potential UAF in OPP handling
-To: Pengjie Zhang <zhangpengjie2@huawei.com>, <myungjoo.ham@samsung.com>,
-	<kyungmin.park@samsung.com>, <cw00.choi@samsung.com>
-CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<zhenglifeng1@huawei.com>, <lihuisong@huawei.com>, <yubowen8@huawei.com>,
-	<linhongye@h-partners.com>, <linuxarm@huawei.com>,
-	<jonathan.cameron@huawei.com>
-References: <20250915062135.748653-1-zhangpengjie2@huawei.com>
-Content-Language: en-US
-From: Jie Zhan <zhanjie9@hisilicon.com>
-In-Reply-To: <20250915062135.748653-1-zhangpengjie2@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
- kwepemr500004.china.huawei.com (7.202.195.141)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0i8L8w_ojua1ir3CGcwGSvE+3Jj0Sh5Cs1Yi8i4BX1Lbw@mail.gmail.com>
+X-CM-TRANSID:Ms8vCgDXTwb4wshoJtOeBA--.45753S3
+X-Coremail-Antispam: 1Uf129KBjvJXoW7CF4kZw1fuw1fur4xXrWDArb_yoW8trWxpF
+	W5WwsFya4kXayqgwsFkw48ur1FqanYvFy7Ka4UurnYyw47JFnYg3WDKrWjyF95Aw1kJa1Y
+	qFyqk39rGFWUArDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07Uz6wZUUUUU=
+X-CM-SenderInfo: pvkd40hjxrjqh1hdxhhqhw/1tbiIBo7oGjIwvrUKQAA3E
 
-
-
-On 9/15/2025 2:21 PM, Pengjie Zhang wrote:
-> Ensure all required data is acquired before calling dev_pm_opp_put(opp)
-> to maintain correct resource acquisition and release order.
+On Mon, Sep 15, 2025 at 03:18:44PM +0200, Rafael J. Wysocki wrote:
+> The question is not about who's fault it is, but what's the best place
+> to address this issue.
 > 
-> Fixes: 7da2fdaaa1e6 ("PM / devfreq: Add HiSilicon uncore frequency scaling driver")
-> Signed-off-by: Pengjie Zhang <zhangpengjie2@huawei.com>
-> ---
->  drivers/devfreq/hisi_uncore_freq.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-Hi Pengjie,
-
-Yeah dev_pm_opp_put() should be after dev_pm_opp_get_freq().
-Thanks for spotting this.
-
-Reviewed-by: Jie Zhan <zhanjie9@hisilicon.com>
+> I think that addressing it in cpufreq_policy_transition_delay_us() is
+> a bit confusing because it is related to initialization and the new
+> branch becomes pure overhead for the drivers that don't set
+> cpuinfo.transition_latency to CPUFREQ_ETERNAL.
 > 
-> diff --git a/drivers/devfreq/hisi_uncore_freq.c b/drivers/devfreq/hisi_uncore_freq.c
-> index 96d1815059e3..c1ed70fa0a40 100644
-> --- a/drivers/devfreq/hisi_uncore_freq.c
-> +++ b/drivers/devfreq/hisi_uncore_freq.c
-> @@ -265,10 +265,11 @@ static int hisi_uncore_target(struct device *dev, unsigned long *freq,
->  		dev_err(dev, "Failed to get opp for freq %lu hz\n", *freq);
->  		return PTR_ERR(opp);
->  	}
-> -	dev_pm_opp_put(opp);
->  
->  	data = (u32)(dev_pm_opp_get_freq(opp) / HZ_PER_MHZ);
->  
-> +	dev_pm_opp_put(opp);
-> +
->  	return hisi_uncore_cmd_send(uncore, HUCF_PCC_CMD_SET_FREQ, &data);
->  }
->  
+> However, addressing it at the initialization time would effectively
+> mean that the core would do something like:
+> 
+> if (policy->cpuinfo.transition_latency == CPUFREQ_ETERNAL)
+>         policy->cpuinfo.transition_latency =
+> CPUFREQ_DEFAULT_TANSITION_LATENCY_NS;
+> 
+> but then it would be kind of more straightforward to update everybody
+> using CPUFREQ_ETERNAL to set cpuinfo.transition_latency to
+> CPUFREQ_DEFAULT_TANSITION_LATENCY_NS directly (and then get rid of
+> CPUFREQ_ETERNAL entirely).
+
+So we fix the regression with an immediate change like below, and then
+plan to remove CPUFREQ_ETERNAL entirely with another development series.
+Do I get you right?
+
+---8<---
+
+diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+index d873ff9add49..e37722ce7aec 100644
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -574,6 +574,10 @@ unsigned int cpufreq_policy_transition_delay_us(struct cpufreq_policy *policy)
+        if (policy->transition_delay_us)
+                return policy->transition_delay_us;
+ 
++       if (policy->cpuinfo.transition_latency == CPUFREQ_ETERNAL)
++               policy->cpuinfo.transition_latency =
++                       CPUFREQ_DEFAULT_TANSITION_LATENCY_NS;
++
+        latency = policy->cpuinfo.transition_latency / NSEC_PER_USEC;
+        if (latency)
+                /*
+diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+index 7fe0981a7e46..7331bc06f161 100644
+--- a/include/linux/cpufreq.h
++++ b/include/linux/cpufreq.h
+@@ -36,6 +36,8 @@
+ /* Print length for names. Extra 1 space for accommodating '\n' in prints */
+ #define CPUFREQ_NAME_PLEN              (CPUFREQ_NAME_LEN + 1)
+ 
++#define CPUFREQ_DEFAULT_TANSITION_LATENCY_NS   NSEC_PER_MSEC
++
+ struct cpufreq_governor;
+ 
+ enum cpufreq_table_sorting {
+
+--->8---
+
+Shawn
+
 
