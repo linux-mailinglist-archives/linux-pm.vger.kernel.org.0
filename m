@@ -1,111 +1,173 @@
-Return-Path: <linux-pm+bounces-34762-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34763-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 63968B5A1A9
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Sep 2025 21:51:25 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E490B5A1D0
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Sep 2025 22:06:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 2BD9D4E2E51
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Sep 2025 19:51:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3CB9F17B641
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Sep 2025 20:06:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B10D3304BCE;
-	Tue, 16 Sep 2025 19:50:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33E8C2D061E;
+	Tue, 16 Sep 2025 20:06:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="HRWZGMG4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pGytgli2"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1057A2E54BB;
-	Tue, 16 Sep 2025 19:50:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FC3A283FE1
+	for <linux-pm@vger.kernel.org>; Tue, 16 Sep 2025 20:06:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758052253; cv=none; b=eFJBB/3T7GGD+7J6+ddXBCXmOXEKzWVC4jOYne39tRl6VMJt9WWK45a4gkRhlVKUlvlvGKxTn+dzUwf41Y11u/nNM5zq2KOLlmi81qahW9okJkOzZPh6sN20F0xo64xNZ0Pr6TH6vej2D/BfpKjeA8V6obrJDSXIgkNjzQdidr8=
+	t=1758053199; cv=none; b=EQaJQ0SzC30aPbD/RH0I++JHYlabjCMmiz27jAdUUsXIEOCQIDhGTA3aTWtw8jx8iV0aS1mmIPetXFrpC+SvDXvntZli7wZYclujLMjjVjjT8f3wvAA0PfZehRn8Wstu/NHvYexyw3g3DfyL99A8QpjlQKfmlL0zl/UR4os4EoU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758052253; c=relaxed/simple;
-	bh=rxU6PVmG83yicsKvP+6XTEJSdKPkh2zwzFo9IUSgHhg=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=pfhkXBzbDYPPdQqKHecRH/sB2GC7dNSK5GpdQcfHXnP+aaGjHrvODipbEiHsJ9iWqxYoYwyyPY29aBJ9LVZd8chZ/njOhjVkjm1lHAOTGQHsIiwr+C8rzIyrIZiasc7iaIBisoXPZJZAu/GgIEQKDmEn25kNWnarYGuDhgq+oa0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=HRWZGMG4; arc=none smtp.client-ip=68.232.154.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1758052252; x=1789588252;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=rxU6PVmG83yicsKvP+6XTEJSdKPkh2zwzFo9IUSgHhg=;
-  b=HRWZGMG4/IC5cDhjbXiVRIz3jU6i06cuyWFGO+PZSYKegVLAmIxj7+O/
-   W0iosH1DZzmOL/QjxcfomItshIZRhOQdP6Khq7Ain5CrixTJlc5Fp87V/
-   J+T61Xz8LOEEgXsbsO/7j4xyLTse0AKrp1JJ2l+lwhaJ6opYN1H1H/Y5f
-   uIcu7D8pGLVb2ddmg9id1/AGkU8EER6GKd5nLW24Cr7Agrdx5bdcLt2N/
-   37RiGjGqdf6RNQdqqSgN8j022d311cDJvnok6+9O47By/L9zItYhgwWAH
-   a8RV7lB9IqlZ0czXDmrQhMrF/RNE8e8S7zEM/tmm/p7exHH0Dj/Dp+d5h
-   Q==;
-X-CSE-ConnectionGUID: OpVEzCAsSoaW6AVT1s3wKQ==
-X-CSE-MsgGUID: iEhMxX1lQ0qgWColzJt/pQ==
-X-IronPort-AV: E=Sophos;i="6.18,269,1751266800"; 
-   d="scan'208";a="47129849"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 16 Sep 2025 12:50:49 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.58; Tue, 16 Sep 2025 12:50:17 -0700
-Received: from ryan-Precision-3630-Tower.microchip.com (10.10.85.11) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.58 via Frontend Transport; Tue, 16 Sep 2025 12:50:17 -0700
-From: <Ryan.Wanner@microchip.com>
-To: <claudiu.beznea@tuxon.dev>, <sre@kernel.org>, <robh@kernel.org>,
-	<krzk+dt@kernel.org>, <conor+dt@kernel.org>, <nicolas.ferre@microchip.com>,
-	<alexandre.belloni@bootlin.com>, <linux@armlinux.org.uk>
-CC: <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-	Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: [PATCH v2 3/3] ARM: dts: at91: sama7g5ek: add microchip,lpm-connection on shdwc node
-Date: Tue, 16 Sep 2025 12:50:32 -0700
-Message-ID: <e7b5108c07bd2b0b2bd83b22b373f0edeb6adc1a.1758051358.git.Ryan.Wanner@microchip.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1758051358.git.Ryan.Wanner@microchip.com>
-References: <cover.1758051358.git.Ryan.Wanner@microchip.com>
+	s=arc-20240116; t=1758053199; c=relaxed/simple;
+	bh=sgYmSPXr5fJEn+ksoOyt6N70CNWy742OaZOeIXzvKEk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=nEL5Pwcz9tiw8rIthc9BR/qX0bPokxP4vfXp1y0prMP1lRlJD2J513SZImRmOSIQ6Ta2u1Xa/1FS/9XOIXq3I0HKxT7kVUe56JiC1jInga7WNckrrGydj75ofiAO3bdzccRoqIMgMhn37X519Wk7nJWudregJw743VizycsG95A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pGytgli2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0512C4CEF7
+	for <linux-pm@vger.kernel.org>; Tue, 16 Sep 2025 20:06:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1758053198;
+	bh=sgYmSPXr5fJEn+ksoOyt6N70CNWy742OaZOeIXzvKEk=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=pGytgli2fZqIFFSPD4nEJRarafpTfU7+HzOmQ4CrN2CjEOk4ppBUfuubssvHpkzrF
+	 Yq1Fu3JhenEJhBau9+SeBigC14UAXOKsIezP4Fx7i+c2SSYg7JmRNu0H+7xAQEjo71
+	 rg7BXNu5OtLeDuJtpfEqyONbSEfwBrBKai/4f3qtNYNZFKyEs0XUriJ7IUEsVYR1l3
+	 sgi7Um57l/zNJ55jX7gV8lA9nsst8AZcGh+Lr1JpsYDXDKsADdMKhLSbEKryyd1axR
+	 K3vczRqSxgpFXlvYuZ6R54wUd/hu+zQa8K+QEPSaOlYmNzqghDusF5TeByeZsS7KsJ
+	 /4SEXhXmAz//g==
+Received: by mail-ot1-f51.google.com with SMTP id 46e09a7af769-74c1251df00so2989027a34.0
+        for <linux-pm@vger.kernel.org>; Tue, 16 Sep 2025 13:06:38 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWAQwDoaGseMPg8p7UnjYdJcqK+rgIN4oOmxnopsnM7J/k37igPALAXrwuATsVrhdVE0XCd9OjI1g==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyhdQVxXeZ89gT8Ceazt6zB2EabP6/0NyRpZIX17mO2N/54c6mu
+	QtrpPXx+qHSE0BLIp/vZW8KVw8+guUITVCxvDm9Xi9kskdhlQoRcu2AmHSNp60PQ6L3tIGj4qa7
+	GbE1OvAbTAziphv1wW8lC5550vHY0lwA=
+X-Google-Smtp-Source: AGHT+IEgzjAAkbMDY4awbYDp3Kq0/fxmVwsoGjHomqpd9a5KNX9ogTaPcgxeatr4pPDlCJhtFOK6MLyI7Ue0IaNcehc=
+X-Received: by 2002:a05:6808:689b:10b0:439:b491:401b with SMTP id
+ 5614622812f47-43b8d87c7bbmr8034409b6e.10.1758053197833; Tue, 16 Sep 2025
+ 13:06:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+References: <20250830053404.763995-1-srosek@google.com> <CAJZ5v0hShKgPB42p4dOgKoRuMCkGhe+ZHMeAuFQO0Soa1ty_LQ@mail.gmail.com>
+ <CAF3aWvHTXiODVE72Q33KDS51j4QA7gXVSsvdRnvsHdBv4NzCfw@mail.gmail.com>
+In-Reply-To: <CAF3aWvHTXiODVE72Q33KDS51j4QA7gXVSsvdRnvsHdBv4NzCfw@mail.gmail.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 16 Sep 2025 22:06:26 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0gTUj0zj3rZP+0iQAhsqMaLnN0K5RYpeH+ViS+GMKPHfw@mail.gmail.com>
+X-Gm-Features: AS18NWDo9e7e7lAfAdBG6Gzab9UFwhygJIWaLVvGXMJwbkP1bC1WNNPO2W6V_JU
+Message-ID: <CAJZ5v0gTUj0zj3rZP+0iQAhsqMaLnN0K5RYpeH+ViS+GMKPHfw@mail.gmail.com>
+Subject: Re: [PATCH v1 00/12] ACPI: DPTF: Move INT340X enumeration from DPTF
+ core to thermal drivers
+To: =?UTF-8?Q?S=C5=82awomir_Rosek?= <srosek@google.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Alex Hung <alexhung@gmail.com>, 
+	Hans de Goede <hansg@kernel.org>, Ilpo Jarvinen <ilpo.jarvinen@linux.intel.com>, 
+	AceLan Kao <acelan.kao@canonical.com>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Zhang Rui <rui.zhang@intel.com>, 
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Tomasz Nowicki <tnowicki@google.com>, 
+	Stanislaw Kardach <skardach@google.com>, Michal Krawczyk <mikrawczyk@google.com>, 
+	linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org, 
+	platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Claudiu Beznea <claudiu.beznea@microchip.com>
+Hi,
 
-Add microchip,lpm-connection binding to shdwc node. On SAMA7G5-EK REV4
-LPM is connected to GMAC1's PHY, 24MHz oscillator and PMIC. On board
-PMIC is not listed here as it is only treated on BSR mode
-uncoditionally.
+On Mon, Sep 15, 2025 at 7:13=E2=80=AFPM S=C5=82awomir Rosek <srosek@google.=
+com> wrote:
+>
+> Hi Rafael,
+>
+> First of all I would like to apologize for the late reply and thank
+> you for your comments.
+>
+> On Mon, Sep 1, 2025 at 10:49=E2=80=AFAM Rafael J. Wysocki <rafael@kernel.=
+org> wrote:
+> >
+> > On Sat, Aug 30, 2025 at 7:34=E2=80=AFAM Slawomir Rosek <srosek@google.c=
+om> wrote:
+> > >
+> > > The Intel Dynamic Platform and Thermal Framework (DPTF) relies on
+> > > the INT340X ACPI device objects. The temperature information and
+> > > cooling ability are exposed to the userspace via those objects.
+> > >
+> > > Since kernel v3.17 the ACPI bus scan handler is introduced to prevent
+> > > enumeration of INT340X ACPI device objects on the platform bus unless
+> > > related thermal drivers are enabled. However, using the IS_ENABLED()
+> > > macro in the ACPI scan handler forces the kernel to be recompiled
+> > > when thermal drivers are enabled or disabled, which is a significant
+> > > limitation of its modularity. The IS_ENABLED() macro is particularly
+> > > problematic for the Android Generic Kernel Image (GKI) project which
+> > > uses unified core kernel while SoC/board support is moved to loadable
+> > > vendor modules.
+> > >
+> > > This patch set moves enumeration of INT340X ACPI device objects on
+> > > the platform bus from DPTF core to thermal drivers. It starts with
+> > > some code cleanup and reorganization to eventually remove IS_ENABLED(=
+)
+> > > macro from the ACPI bus scan handler. Brief list of changes is listed
+> > > below:
+> > >
+> > > 1) Remove SOC DTS thermal driver case from the ACPI scan handler
+> > >    since its dependency on INT340X driver is unrelated to DPTF
+> > > 2) Move all INT340X ACPI device ids to the common header and update
+> > >    the DPTF core and thermal drivers accordingly
+> > > 3) Move dynamic enumeration of ACPI device objects on the platform bu=
+s
+> > >    from the intel-hid and intel-vbtn drivers to the ACPI platform cor=
+e
+> > > 4) Move enumeration of INT340X ACPI device objects on the platform bu=
+s
+> > >    from DPTF core to thermal drivers using ACPI platform core methods
+> > >
+> > >
+> > > Slawomir Rosek (12):
+> > >   ACPI: DPTF: Ignore SoC DTS thermal while scanning
+> > >   ACPI: DPTF: Move INT3400 device IDs to header
+> > >   ACPI: DPTF: Move INT3401 device IDs to header
+> > >   ACPI: DPTF: Move INT3402 device IDs to header
+> > >   ACPI: DPTF: Move INT3403 device IDs to header
+> > >   ACPI: DPTF: Move INT3404 device IDs to header
+> > >   ACPI: DPTF: Move INT3406 device IDs to header
+> > >   ACPI: DPTF: Move INT3407 device IDs to header
+> >
+> > Please avoid sending multiple patches with the same subject,
+> > especially in one patch series.
+> >
+> > Thanks!
+> >
+>
+> The subjects are quite similar but they are not exactly the same.
+>
+> Originally the ACPI bus scan handler was added in 3230bbfce8a9
+> ("ACPI: introduce ACPI int340x thermal scan handler") to prevent
+> enumeration of ACPI device objects in range INT3401~INT340B
+> and only the INT3400 master device had their platform driver added
+> in 816cab931f28 ("Thermal: introduce int3400 thermal driver").
+>
+> These days, however, each of INT3400~INT3407 device ID, representing
+> a different kind of thermal device, has its own platform driver.
+> Most of them, depending on X Lake generation, can also be enumerated
+> on the ACPI bus using INTC1XXXX device ID. In addition INT3408~INT340B
+> and some of The Wildcat Lake device IDs are not supported by any
+> platform driver.
+>
+> To make the review process easier and minimize the risk of mistakes
+> I decided to create separe patch for each ID in range INT3400~INT3407.
+> The INT3400, INT3404 and INT3407 device ID can probably be renamed to
+> Thermal Core, Fan and Power device ID, respectively, but I am not sure
+> about the others.
+>
+> Alternatively they can be squashed into a single patch which moves
+> all INT340X device IDs to the common header.
 
-Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
----
- arch/arm/boot/dts/microchip/at91-sama7g5ek.dts | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/arch/arm/boot/dts/microchip/at91-sama7g5ek.dts b/arch/arm/boot/dts/microchip/at91-sama7g5ek.dts
-index 3924f62ff0fb..50e9a5a5732a 100644
---- a/arch/arm/boot/dts/microchip/at91-sama7g5ek.dts
-+++ b/arch/arm/boot/dts/microchip/at91-sama7g5ek.dts
-@@ -872,6 +872,7 @@ &sdmmc2 {
- 
- &shdwc {
- 	debounce-delay-us = <976>;
-+	microchip,lpm-connection = <&gmac1 &main_xtal>;
- 	status = "okay";
- 
- 	input@0 {
--- 
-2.43.0
-
+Yes, please.
 
