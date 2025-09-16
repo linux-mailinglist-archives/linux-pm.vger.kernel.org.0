@@ -1,123 +1,200 @@
-Return-Path: <linux-pm+bounces-34709-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34710-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8410B5910C
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Sep 2025 10:43:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B3EA3B59116
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Sep 2025 10:45:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5E1F8522C12
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Sep 2025 08:43:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1C0EB188B2C2
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Sep 2025 08:45:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF90128000F;
-	Tue, 16 Sep 2025 08:43:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA27E28C85B;
+	Tue, 16 Sep 2025 08:45:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NgQl69UE"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="CfVk7WH1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 983D0199939;
-	Tue, 16 Sep 2025 08:43:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C921288C21;
+	Tue, 16 Sep 2025 08:45:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758012208; cv=none; b=OXm2uB7Q0Hlvo4aQlTjg0s0OFIaryj5iVH96tT3QgdZ/Tdh3AUjV9Q4Bqjr5UjGwZ8bFw2zm1DvbOF8gncFRKPhhX/0Ryy3BXt8fBVCLWvWZy7D2Q5VZ0az1Bcv6Pmmeqald+rfdGbV2mmUU8qVvNxV3/cyki91An1mdzS6fE8c=
+	t=1758012307; cv=none; b=roQIdX4XncO2uU0tCm58+If5OcJWzk2ddUitB0+yl4sv5xOutIMxG7VYEHIKAQd1Cr8xaMC7E0qG85fHlK+SlTEW+/CLnNR3fOS7EYSaJneAjfJGP3Tukx5z/6vgoZ999TELFPzDUctRKjm/LRQSCVn35wtWLCcZZpPaoJAuq4A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758012208; c=relaxed/simple;
-	bh=UT9Y547qxU148/h+9nigpRNINW+rzTYKRz1weK+iQ4c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LafbG3mtv5JkiPVb5pZcYRPaAVHC4KNvUetjV1kmyP1992ib0NjtT7672SkOHf4wBg9prDD6zWdXk+BZD0xBBsuQG9p4kQLrHM+IBPQuM07HrYIhn+PSqfoa/yHJ5OkxstKE3Yx4Zs1dzI+wNiy1jhy7eh1yqRnif0HfMG8eY9Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NgQl69UE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DBF0C4CEEB;
-	Tue, 16 Sep 2025 08:43:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758012208;
-	bh=UT9Y547qxU148/h+9nigpRNINW+rzTYKRz1weK+iQ4c=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NgQl69UE/EnaEsBt3QJybqQJ7BUyqhyru9vtJ6qVAlyyUwFwhpAECVPzm7ByZoOOq
-	 M8L/pmqmYV+/PJ2S9iZQDNBerdDbaQ+VZYu0g6q60y5GwqvBIKouDN7dOCWeEju5W6
-	 x94WZ9iojLw6ioFhxx5dwHYkDSTG3AU5GwoS0/bMlINyykkA3JcLLdtpPZZu52Wx3i
-	 XCbPZskbYHLKYEi3lV+dOGf8rOwrePctBjBjeAYrZR2Am9Lz315KAXahowvAUMCcnE
-	 xdWQadTsZvCyc5mZr3qqK4wvepJE+dXvXAsfCbkgkjnMpn9XHbGQ8+930T/VDKkIvz
-	 r0msymbebcYAg==
-Date: Tue, 16 Sep 2025 09:43:23 +0100
-From: Lee Jones <lee@kernel.org>
-To: Dzmitry Sankouski <dsankouski@gmail.com>
-Cc: Chanwoo Choi <cw00.choi@samsung.com>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Sebastian Reichel <sre@kernel.org>,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Sebastian Reichel <sebastian.reichel@collabora.com>,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v3 1/9] power: supply: max77705_charger: move active
- discharge setting to mfd parent
-Message-ID: <20250916084323.GH1637058@google.com>
-References: <20250911-max77705_77976_charger_improvement-v3-0-35203686fa29@gmail.com>
- <20250911-max77705_77976_charger_improvement-v3-1-35203686fa29@gmail.com>
+	s=arc-20240116; t=1758012307; c=relaxed/simple;
+	bh=UBOIyNfe42W6Sn7uUEhp8dhLd/RfTwae+m5RTwAW0SE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=exl1rN8Jpze/FnEe8jv9LLCXJZc1vajGA92pID4tJ/2MLSERhUlN6fB6lofp54HCx+y/+Hver/SnibRbsrbUlpmBbN57X+kmyGBXKSCLiFjZ/2qq380zUvJcDVHKcziQiNv138HH4htVziCQeUVQU+cvQXZZ+k3KGixM2RSA/tg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=CfVk7WH1; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1758012297;
+	bh=UBOIyNfe42W6Sn7uUEhp8dhLd/RfTwae+m5RTwAW0SE=;
+	h=From:To:Cc:Subject:Date:From;
+	b=CfVk7WH14RuqNI2qW1i5xKVKFTWvLlZnHndmy4R9QGtfMM5ue0e9HGSvHxTXwuA74
+	 gbbVbWoA58tNzL4pi2HH6KM276EaBAIxmik7w301qWkPpy+zhhAjZHw2DP3rIw5nVJ
+	 YS1FWwRU8Tv6JqbYY5OwnJHjs8FnsGBEaEoImEIeHaQpjaZdsp9z0MiKCb2cvALVco
+	 pmYOTxIyuoRcVMrnBXeelaL+/uWV29yDO33GouqaYvb/cdv3gzEO/jNDjyL8F7mKep
+	 4NxfbObZBkuzMdmDqIVlZ4uksiH2x1F2ki2PnHYaer6Sg2gC/osQb5px9ITm2uAYvx
+	 0CTnI5Z1ZEoUg==
+Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 0E49917E0F88;
+	Tue, 16 Sep 2025 10:44:57 +0200 (CEST)
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+To: sboyd@kernel.org
+Cc: jic23@kernel.org,
+	dlechner@baylibre.com,
+	nuno.sa@analog.com,
+	andy@kernel.org,
+	arnd@arndb.de,
+	gregkh@linuxfoundation.org,
+	srini@kernel.org,
+	vkoul@kernel.org,
+	kishon@kernel.org,
+	sre@kernel.org,
+	krzysztof.kozlowski@linaro.org,
+	u.kleine-koenig@baylibre.com,
+	angelogioacchino.delregno@collabora.com,
+	linux-arm-msm@vger.kernel.org,
+	linux-iio@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-phy@lists.infradead.org,
+	linux-pm@vger.kernel.org,
+	kernel@collabora.com,
+	wenst@chromium.org,
+	casey.connolly@linaro.org
+Subject: [PATCH v4 0/7] SPMI: Implement sub-devices and migrate drivers
+Date: Tue, 16 Sep 2025 10:44:38 +0200
+Message-ID: <20250916084445.96621-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250911-max77705_77976_charger_improvement-v3-1-35203686fa29@gmail.com>
 
-On Thu, 11 Sep 2025, Dzmitry Sankouski wrote:
+Changes in v4:
+ - Added selection of REGMAP_SPMI in Kconfig for qcom-coincell and
+   for phy-qcom-eusb2-repeater to resolve undefined references when
+   compiled with some randconfig
 
-> Active discharge setting is a part of MFD top level i2c device, hence
-> cannot be controlled by charger. Writing to MAX77705_PMIC_REG_MAINCTRL1
-> register from charger driver is a mistake.
-> 
-> Move active discharge setting to MFD parent driver.
-> 
-> Fixes: a6a494c8e3ce ("power: supply: max77705: Add charger driver for Maxim 77705")
-> 
-> Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
-> ---
->  drivers/mfd/max77705.c                  | 3 +++
->  drivers/power/supply/max77705_charger.c | 3 ---
->  2 files changed, 3 insertions(+), 3 deletions(-)
+Changes in v3:
+ - Fixed importing "SPMI" namespace in spmi-devres.c
+ - Removed all instances of defensive programming, as pointed out by
+   jic23 and Sebastian
+ - Removed explicit casting as pointed out by jic23
+ - Moved ida_free call to spmi_subdev_release() and simplified error
+   handling in spmi_subdevice_alloc_and_add() as pointed out by jic23
 
-Acked-by: Lee Jones <lee@kernel.org>
+Changes in v2:
+ - Fixed missing `sparent` initialization in phy-qcom-eusb2-repeater
+ - Changed val_bits to 8 in all Qualcomm drivers to ensure
+   compatibility as suggested by Casey
+ - Added struct device pointer in all conversion commits as suggested
+   by Andy
+ - Exported newly introduced functions with a new "SPMI" namespace
+   and imported the same in all converted drivers as suggested by Andy
+ - Added missing error checking for dev_set_name() call in spmi.c
+   as suggested by Andy
+ - Added comma to last entry of regmap_config as suggested by Andy
 
-> diff --git a/drivers/mfd/max77705.c b/drivers/mfd/max77705.c
-> index 6b263bacb8c2..ff07d0e0d5f8 100644
-> --- a/drivers/mfd/max77705.c
-> +++ b/drivers/mfd/max77705.c
-> @@ -108,6 +108,9 @@ static int max77705_i2c_probe(struct i2c_client *i2c)
->  	if (pmic_rev != MAX77705_PASS3)
->  		return dev_err_probe(dev, -ENODEV, "Rev.0x%x is not tested\n", pmic_rev);
->  
-> +	/* Active Discharge Enable */
-> +	regmap_update_bits(max77705->regmap, MAX77705_PMIC_REG_MAINCTRL1, 1, 1);
-> +
->  	ret = devm_regmap_add_irq_chip(dev, max77705->regmap,
->  					i2c->irq,
->  					IRQF_ONESHOT | IRQF_SHARED, 0,
-> diff --git a/drivers/power/supply/max77705_charger.c b/drivers/power/supply/max77705_charger.c
-> index 329b430d0e50..3b75c82b9b9e 100644
-> --- a/drivers/power/supply/max77705_charger.c
-> +++ b/drivers/power/supply/max77705_charger.c
-> @@ -487,9 +487,6 @@ static void max77705_charger_initialize(struct max77705_charger_data *chg)
->  	regmap_update_bits(regmap, MAX77705_CHG_REG_CNFG_00,
->  				MAX77705_WDTEN_MASK, 0);
->  
-> -	/* Active Discharge Enable */
-> -	regmap_update_bits(regmap, MAX77705_PMIC_REG_MAINCTRL1, 1, 1);
-> -
->  	/* VBYPSET=5.0V */
->  	regmap_update_bits(regmap, MAX77705_CHG_REG_CNFG_11, MAX77705_VBYPSET_MASK, 0);
->  
-> 
-> -- 
-> 2.39.5
-> 
+While adding support for newer MediaTek platforms, featuring complex
+SPMI PMICs, I've seen that those SPMI-connected chips are internally
+divided in various IP blocks, reachable in specific contiguous address
+ranges... more or less like a MMIO, but over a slow SPMI bus instead.
+
+I recalled that Qualcomm had something similar... and upon checking a
+couple of devicetrees, yeah - indeed it's the same over there.
+
+What I've seen then is a common pattern of reading the "reg" property
+from devicetree in a struct member and then either
+ A. Wrapping regmap_{read/write/etc}() calls in a function that adds
+    the register base with "base + ..register", like it's done with
+    writel()/readl() calls; or
+ B. Doing the same as A. but without wrapper functions.
+
+Even though that works just fine, in my opinion it's wrong.
+
+The regmap API is way more complex than MMIO-only readl()/writel()
+functions for multiple reasons (including supporting multiple busses
+like SPMI, of course) - but everyone seemed to forget that regmap
+can manage register base offsets transparently and automatically in
+its API functions by simply adding a `reg_base` to the regmap_config
+structure, which is used for initializing a `struct regmap`.
+
+So, here we go: this series implements the software concept of an SPMI
+Sub-Device (which, well, also reflects how Qualcomm and MediaTek's
+actual hardware is laid out anyway).
+
+               SPMI Controller
+                     |                ______
+                     |               /       Sub-Device 1
+                     V              /
+              SPMI Device (PMIC) ----------- Sub-Device 2
+                                    \
+                                     \______ Sub-Device 3
+
+As per this implementation, an SPMI Sub-Device can be allocated/created
+and added in any driver that implements a... well.. subdevice (!) with
+an SPMI "main" device as its parent: this allows to create and finally
+to correctly configure a regmap that is specific to the sub-device,
+operating on its specific address range and reading, and writing, to
+its registers with the regmap API taking care of adding the base address
+of a sub-device's registers as per regmap API design.
+
+All of the SPMI Sub-Devices are therefore added as children of the SPMI
+Device (usually a PMIC), as communication depends on the PMIC's SPMI bus
+to be available (and the PMIC to be up and running, of course).
+
+Summarizing the dependency chain (which is obvious to whoever knows what
+is going on with Qualcomm and/or MediaTek SPMI PMICs):
+    "SPMI Sub-Device x...N" are children "SPMI Device"
+    "SPMI Device" is a child of "SPMI Controller"
+
+(that was just another way to say the same thing as the graph above anyway).
+
+Along with the new SPMI Sub-Device registration functions, I have also
+performed a conversion of some Qualcomm SPMI drivers and only where the
+actual conversion was trivial.
+
+I haven't included any conversion of more complex Qualcomm SPMI drivers
+because I don't have the required bandwidth to do so (and besides, I think,
+but haven't exactly verified, that some of those require SoCs that I don't
+have for testing anyway).
+
+AngeloGioacchino Del Regno (7):
+  spmi: Implement spmi_subdevice_alloc_and_add() and devm variant
+  nvmem: qcom-spmi-sdam: Migrate to devm_spmi_subdevice_alloc_and_add()
+  power: reset: qcom-pon: Migrate to devm_spmi_subdevice_alloc_and_add()
+  phy: qualcomm: eusb2-repeater: Migrate to
+    devm_spmi_subdevice_alloc_and_add()
+  misc: qcom-coincell: Migrate to devm_spmi_subdevice_alloc_and_add()
+  iio: adc: qcom-spmi-iadc: Migrate to
+    devm_spmi_subdevice_alloc_and_add()
+  iio: adc: qcom-spmi-iadc: Remove regmap R/W wrapper functions
+
+ drivers/iio/adc/qcom-spmi-iadc.c              | 109 ++++++++----------
+ drivers/misc/Kconfig                          |   1 +
+ drivers/misc/qcom-coincell.c                  |  38 ++++--
+ drivers/nvmem/qcom-spmi-sdam.c                |  37 ++++--
+ drivers/phy/qualcomm/Kconfig                  |   1 +
+ .../phy/qualcomm/phy-qcom-eusb2-repeater.c    |  53 ++++++---
+ drivers/power/reset/qcom-pon.c                |  34 ++++--
+ drivers/spmi/spmi-devres.c                    |  24 ++++
+ drivers/spmi/spmi.c                           |  79 +++++++++++++
+ include/linux/spmi.h                          |  16 +++
+ 10 files changed, 281 insertions(+), 111 deletions(-)
 
 -- 
-Lee Jones [李琼斯]
+2.51.0
+
 
