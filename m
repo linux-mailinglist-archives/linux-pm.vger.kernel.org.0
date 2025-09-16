@@ -1,268 +1,201 @@
-Return-Path: <linux-pm+bounces-34706-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34707-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61E6CB58E56
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Sep 2025 08:17:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B7094B58FCB
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Sep 2025 09:59:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CD8461B2318F
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Sep 2025 06:17:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8D81F1882F50
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Sep 2025 08:00:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D3612673B7;
-	Tue, 16 Sep 2025 06:17:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91E7528469B;
+	Tue, 16 Sep 2025 07:59:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jPBdqu+O"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="aZqfDEOl"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2913522D4D3
-	for <linux-pm@vger.kernel.org>; Tue, 16 Sep 2025 06:17:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD505284688
+	for <linux-pm@vger.kernel.org>; Tue, 16 Sep 2025 07:59:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758003453; cv=none; b=Ki8bp70jcg0o0tzClOe0SXS8Mn8tU1i6hXi8M+6wuU+lCuuErVkoSJYdcoto8Ql4hJJdQ79ZEjNpuz38EEKFY/K7B86XjuW2/oiaTrhesxyIaplXOcJew/gFsZAzWHi0Oz3ucy3AzW/ABuUpQoVHZwrJyIRr/XWvBvnaDacLqUA=
+	t=1758009551; cv=none; b=nIxFaqbYSD2wet5Gpzn2Qjs3gtn9XmnBOH1svuXG0ikznxWHloRvZ8TBRKnTDD79Mpc4pMeHEZ6E5X7wM11VOfPdwuF4nCihd0iEd1USu//cFhhpsMXthAg7ovJrdq8KexLhFVOEO4J2diUwXCFT+aGyZvf+hutPMnTMJF5SjVU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758003453; c=relaxed/simple;
-	bh=deByhQqm1cMxd3U8TR2cG0vXVWNzGx1ca9c9khKTVxc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ajUijul8pkgdG9/TPxiuiOCq33gK/u3/ORz2tyuZijcdwBBeX1dPK0PtHzdVybRd2y4YlGV2A0p1guYL1uF5JFzUj25jdRIsvVcWu0rGF67DD3H9WkHh/S9q2UHUWecjTwC6POtITsJfitg66f8GpDMe2arpaIA8c7u+wTG5mn4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jPBdqu+O; arc=none smtp.client-ip=209.85.219.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-ea3fc715bc9so1897559276.3
-        for <linux-pm@vger.kernel.org>; Mon, 15 Sep 2025 23:17:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758003449; x=1758608249; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HDaii2Wdk1Ox7/nqut8hlOiulSUANPWpY7ZmxRlktsA=;
-        b=jPBdqu+O0+JiQ5dfYi9QkFepJTSOnsqyCWgM/J9rhafQjT1zSPdddhgm1/FLOWbvgF
-         6DGG0OTF3s98siFGAZG2qz8GjkJc0BlbLLJ1HKAirP3Ti741DVIZ8A0GIGWtRVKF+5t5
-         9OuWfBrTy1PFqPU3UCbatDFI7nM5uQrO4KJHBf85kbvwfRN5JVXiPMWQd/YlBQhXDa+h
-         mewKFX6QOCfRqpnkqUW98k+Uqlk8QXy7pkAaWwgf0HM17Jh3dIezDs6+FdsQJQ7xvnNg
-         4bO7IlPxW6gM9n/LNUUqgi3SSJ8eiRoEXuPBN9qvyd/KFSZCWFmkBzqwgmFDLI5uHSh3
-         a4DQ==
+	s=arc-20240116; t=1758009551; c=relaxed/simple;
+	bh=luXA3BAxwfQykxsWgqlH1n5LzWlMt8n5hBlB3Owwr/I=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Fco6q/xP3r6PbLIcBVzF9uCIbyBpw7inf3mYwyGBP5X6+x7JWoUuVf07bYzEUNqx8dY61/l7b5qNDyFoAVDvmolAT9n+6C54MpqyJL3jQheBrAn2KnAp29/t6+PUVoXCZxOxDuTpdjjzAtGoJkdigw+/xZ0wCKoPswN8J6PBK9Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=aZqfDEOl; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58G3plvr003735
+	for <linux-pm@vger.kernel.org>; Tue, 16 Sep 2025 07:59:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	Bl6XIkWkFljciR/SPXMo9xgXQdmc9fkaHnQt4AwcHd8=; b=aZqfDEOlATWoThDM
+	ovnK8QdibZ7MoP6MD4xtyQjIMUXl5SGGabYbOV0MOFfRcCtNDw1M4lwluURmWhKm
+	iRLViQFxuKsDeTUoEFgpX4h6P0Qc4V+g4S16QTRdV4bozcGIXbbcNt8bNR0iOQ/n
+	KXurKArH5gI0jOf/XdBpKcVmvJV9dPPb3YChdbIrJBjRs9+rUT9Xre3Sjv7DQimj
+	11KucwtHUmvuDfIiZlVI3rRoBs7AaqThTRrwHVk4rrW/daJfMGJ+7DTBmG8r37us
+	yipYnAwNOOG+xRAvLiIFtQG3HWw3Ox/VKdnogaOKwe2ZLYuvm1do6iwXRFfuel2k
+	VGCn2Q==
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com [209.85.160.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 494wyr872q-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Tue, 16 Sep 2025 07:59:08 +0000 (GMT)
+Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-4b600d0a59bso20569891cf.0
+        for <linux-pm@vger.kernel.org>; Tue, 16 Sep 2025 00:59:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758003449; x=1758608249;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HDaii2Wdk1Ox7/nqut8hlOiulSUANPWpY7ZmxRlktsA=;
-        b=cR7bJfoEyaWmBVvfX/DBMZjAoix/Pxtv2FY/Ui0oXXOuwfVtpvR0bbMCOcdbPqyVFk
-         pIqeGKumParb+Jenlsc9qj6PtZK0/r9ektKNvteNKHUGYIHyfn0mdRL6t382UOzkvs6e
-         dnDOH6D6wgg1gdCT+RjWDgWdyDAPWMkIy9ImStAfCnRAYHXMHPvKjhocFajNrNp1tZjt
-         13sHrQ/yXjxpDLJebEm3oLNsmTM/3E0lc1wx4PGjv/7tp1k1/W1yy8PpdnbTdhGs62Ao
-         A+u19BlzWldyOlddXE2uNpiWQZrFggRnT8GPVFMW8ahO18I7Nv5WxPrV4GCn5flzyAak
-         8ImQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUsLIaxGN1xQa/sYHGIJ321j3uW1VBIg9KtGZVsJEVhd+iJz5we7KIeuFSGUDlNt/D865QOMpZsGA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyX18eH5AeibbCtPnsoJFzHGK5rkLPqVCVZfn0C0QK+7xrNOfqB
-	+0xNJvBYUJnbKEn25DvGc3ZnIoiZZgFb6fQudecQp9pmJ0uhT+ZVrA6lEPQP8209DgPXLQs74tv
-	7+xXBqZwAjDcui4T7Mm7Is1yGSbkNiSM=
-X-Gm-Gg: ASbGncsKTSHcWxqZkqWiC0DHE9xBsVf6zLMlOCcF5lg8esozx0UP3d7RBQQYFOR/K2+
-	wcVoUO2GyppjUJ8MKKRcOXXVb1sw//RdJ698ugjLx/Ls//NwOSabNzHuFup1ORAC+sDAIuZQ27D
-	+/ZcvLko/iFQ9YLCa6ZQKi8tv/UPWNtToDMF04BJiPhy5uN8u2PZR3P4A77HLBRo9yCxtc+m7VH
-	QOSZkjwirty8Wq40OnKUi8CUK2po43xpzFDsbUDdfWIHVOUfCYHGkL0WCRmS5O/dlqKJ0eD
-X-Google-Smtp-Source: AGHT+IF+Xiqik1tR0vXGQ+PFRyD1S4moq1IqD/LOHDIbRGhH8BmE3q7KjrCrPnOYGKNgwkeY1K1KRVmqmymVnMlyYJM=
-X-Received: by 2002:a05:6902:610c:b0:e9d:77de:c50a with SMTP id
- 3f1490d57ef6-ea3d9a4e64dmr13041781276.17.1758003448858; Mon, 15 Sep 2025
- 23:17:28 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1758009548; x=1758614348;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Bl6XIkWkFljciR/SPXMo9xgXQdmc9fkaHnQt4AwcHd8=;
+        b=Sz91CuGPv+OZhFBTDmQDSGSiJlW0f1uykqmv1ajUzB9OGZ+NKtdWWZp3gBy0JnB1/A
+         WAwj8Nnb5dx6GymKw4iNujpdCE+GRf270ToNARWEg1ZJTKtVhMe6JT3o4WXAsudGVqce
+         0iOCVdUNpjGhoIRflpdwbsyi/3izOuS7l/ulmTyN17bB3ajoF5JdpNW67OQ91Gn1aARm
+         e6M6bf1ipGYWn51QgyXYhXXRAJlsi5kQ+dc2G+qJhBG+/vIGvvKPMpfZgAaj8W8nTY/U
+         rwHneW17H0F1C3YzZnUGGAm69z10mjaWseyBTjVX30M39st8LQi3tCd28s1tdYz7WrY/
+         OAWA==
+X-Forwarded-Encrypted: i=1; AJvYcCVeceG2HkJ63CojtOt8qkYb/xjxsyvKxX9nZVCLvoDvQgDCX50XRX4GP5347qcaZKm5PpIgEwxzSg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwfZAE4rKfFf0XFgdpx5x6wOEu8kvehGFoTZnlEnzexI9jxvSw5
+	mFYXPt9znfvdaQkI2dTRJJf47kFTbkF99mUzKNxfsg9OtJlFiyyZFhc3IdH4TLItGe0PLYhUdkk
+	GETpxoFlrMhVPH5TTI0SyXvacJu15TgRT/KWRgOeZPYSdr/VGMxXV+FmiJ/QIoA==
+X-Gm-Gg: ASbGncu5Zo7axd/XIi3hsNqKIa6oloArE94oZz5TmbJ07WCxVZ9EWy2CFCEGG1yONrH
+	fnEdbTslVY+NyixE2W5hOm1JtAnZoRsSbjtEw/UCIVBbQ9cER7xUu6cmddWscBhBezRAluqplUd
+	KpD09diRr8yRu5ycTWfv/RvpAYf7pIw3J0l1LJBj57r+MRPO29cPr+ceU7isOATXRo8ZUMU0uP8
+	e5WR+pT3ybqpVsGlvOzKffWrqhSCYBowi0QeKVRoNJsImGMaEtwRc1eR7/X0VhK3f0cf7kiQRFd
+	EiS23g5125fUR0LfZ8YQMaZECxaaFYC9vSp/JOzBazv3Oqr/2+djoEZt0GkeSg6r6tYGB8P05rX
+	L0jvINy11BJvpMUqWc1bAHw==
+X-Received: by 2002:a05:622a:1819:b0:4b7:9ae7:4cdd with SMTP id d75a77b69052e-4b79ae7518amr65238501cf.8.1758009547469;
+        Tue, 16 Sep 2025 00:59:07 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHmODftrEEwDnmk4gqtDucReWHiHbxT+KlMqX2icp9tsQ6afSGP7fT1h5VI8YPit50d0g7z1w==
+X-Received: by 2002:a05:622a:1819:b0:4b7:9ae7:4cdd with SMTP id d75a77b69052e-4b79ae7518amr65238401cf.8.1758009546833;
+        Tue, 16 Sep 2025 00:59:06 -0700 (PDT)
+Received: from [192.168.149.223] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-62f416db508sm3528606a12.32.2025.09.16.00.59.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Sep 2025 00:59:06 -0700 (PDT)
+Message-ID: <5736df73-c90e-4f11-b461-c38da4e811e1@oss.qualcomm.com>
+Date: Tue, 16 Sep 2025 09:59:04 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250912-mt8196-gpufreq-v2-0-779a8a3729d9@collabora.com>
- <20250912-mt8196-gpufreq-v2-9-779a8a3729d9@collabora.com> <CAPaKu7TEN++z8r68k_4-iCyMLMthqJBUX35pgXupAHPdfttrYg@mail.gmail.com>
- <24083992.6Emhk5qWAg@workhorse>
-In-Reply-To: <24083992.6Emhk5qWAg@workhorse>
-From: Chia-I Wu <olvaffe@gmail.com>
-Date: Mon, 15 Sep 2025 23:17:18 -0700
-X-Gm-Features: AS18NWCXWyl_YVRXpDa8LQOU9lM5ZjkiSFaFNztoIDgFSKKxEgJ3VR2PFYeYjBk
-Message-ID: <CAPaKu7QKUnTx-jRYfHEUJx_3bkgQ_=vEC=siTOigtQAnu4NxcQ@mail.gmail.com>
-Subject: Re: [PATCH v2 09/10] drm/panthor: devfreq: add pluggable devfreq providers
-To: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	Boris Brezillon <boris.brezillon@collabora.com>, Steven Price <steven.price@arm.com>, 
-	Liviu Dudau <liviu.dudau@arm.com>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, MyungJoo Ham <myungjoo.ham@samsung.com>, 
-	Kyungmin Park <kyungmin.park@samsung.com>, Chanwoo Choi <cw00.choi@samsung.com>, 
-	Jassi Brar <jassisinghbrar@gmail.com>, Kees Cook <kees@kernel.org>, 
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Chen-Yu Tsai <wenst@chromium.org>, kernel@collabora.com, 
-	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org, 
-	linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 3/8] power: supply: qcom_battmgr: Add resistance power
+ supply property
+To: Fenglin Wu <fenglin.wu@oss.qualcomm.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+Cc: Sebastian Reichel <sre@kernel.org>,
+        Bjorn Andersson
+ <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Subbaraman Narayanamurthy <subbaraman.narayanamurthy@oss.qualcomm.com>,
+        David Collins <david.collins@oss.qualcomm.com>,
+        =?UTF-8?Q?Gy=C3=B6rgy_Kurucz?= <me@kuruczgy.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, kernel@oss.qualcomm.com,
+        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
+        Neil Armstrong <neil.armstrong@linaro.org>
+References: <20250915-qcom_battmgr_update-v4-0-6f6464a41afe@oss.qualcomm.com>
+ <20250915-qcom_battmgr_update-v4-3-6f6464a41afe@oss.qualcomm.com>
+ <gk2ho7ugp35kb4x65meqsm3aufnry6srr4p7jspf6xyn7ywzkh@vd5ca7txjdk6>
+ <0cf4b0fd-e468-4aab-9ec2-38da93435557@oss.qualcomm.com>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <0cf4b0fd-e468-4aab-9ec2-38da93435557@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-ORIG-GUID: dfCZk6RjyKXyfs1n04DLmUtoj0NCkIsN
+X-Authority-Analysis: v=2.4 cv=SouQ6OO0 c=1 sm=1 tr=0 ts=68c918cc cx=c_pps
+ a=WeENfcodrlLV9YRTxbY/uA==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
+ a=IkcTkHD0fZMA:10 a=yJojWOMRYYMA:10 a=EUspDBNiAAAA:8 a=KKAkSRfTAAAA:8
+ a=mNYpJT6RAAAA:8 a=BliEHdnzWw9z4Hsov9QA:9 a=QEXdDO2ut3YA:10
+ a=kacYvNCVWA4VmyqE58fU:22 a=cvBusfyB2V15izCimMoJ:22 a=eybOJ6GWDyyBfQoUqdmp:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTEzMDAwMCBTYWx0ZWRfX4caV38OaD4Mq
+ eHCt4Qvbz98RXXu8Cu6GV9AwiSB0AyIt5orAul0nfUiDLdC88eLnwbbUbyAEfero6ZAe7dNU9kK
+ t9azJhOneMmb29BJD5dsVDLUUiQ/YrEs7Im8xNcSfU+z8P00ehsRMKckWPvCL/0iieyA7DT+FW4
+ XTf/I3ObokO+Lom1OVJw8M/AaGU5/+tuhZhO7huhjTnlkrchnrhSyJPvyZ3QfErMjodixdCAFTr
+ bnLcdQhXdaaVAVQfpAgBRKGhdQiQewNF5+lx9fmPoROPHTCtrpziNJJ9vDR9HnmKwVJ2MNy1+VM
+ 3e/IM9KBCBv1bLUBXi+oYTq7FIHJNs+ibte+/P1vyWHYceUhXPnfArhzg9LlamWcACislVDPJLU
+ NHiI7QuI
+X-Proofpoint-GUID: dfCZk6RjyKXyfs1n04DLmUtoj0NCkIsN
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-09-16_02,2025-09-12_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 spamscore=0 phishscore=0 adultscore=0 suspectscore=0
+ priorityscore=1501 malwarescore=0 bulkscore=0 clxscore=1015
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2509130000
 
-On Mon, Sep 15, 2025 at 6:34=E2=80=AFAM Nicolas Frattaroli
-<nicolas.frattaroli@collabora.com> wrote:
->
-> On Saturday, 13 September 2025 00:53:50 Central European Summer Time Chia=
--I Wu wrote:
-> > On Fri, Sep 12, 2025 at 11:38=E2=80=AFAM Nicolas Frattaroli
-> > <nicolas.frattaroli@collabora.com> wrote:
-> > <snipped>
-> > > diff --git a/drivers/gpu/drm/panthor/panthor_devfreq.h b/drivers/gpu/=
-drm/panthor/panthor_devfreq.h
-> > > index a891cb5fdc34636444f141e10f5d45828fc35b51..94c9768d5d038c4ba8516=
-929edb565a1f13443fb 100644
-> > > --- a/drivers/gpu/drm/panthor/panthor_devfreq.h
-> > > +++ b/drivers/gpu/drm/panthor/panthor_devfreq.h
-> > > @@ -8,6 +8,7 @@
-> > >
-> > >  struct devfreq;
-> > >  struct thermal_cooling_device;
-> > > +struct platform_device;
-> > >
-> > >  struct panthor_device;
-> > >
-> > > @@ -43,6 +44,19 @@ struct panthor_devfreq {
-> > >         spinlock_t lock;
-> > >  };
-> > >
-> > > +struct panthor_devfreq_provider {
-> > > +       /** @dev: device pointer to the provider device */
-> > > +       struct device *dev;
-> > > +       /**
-> > > +        * @init: the provider's init callback that allocates a
-> > > +        * &struct panthor_devfreq, adds it to panthor, and adds a de=
-vfreq
-> > > +        * device to panthor. Will be called during panthor's probe.
-> > > +        */
-> > > +       int (*init)(struct panthor_device *ptdev, struct device *dev)=
-;
-> > > +
-> > > +       struct list_head node;
-> > > +};
-> > On mt8196, we have performance-domains to replace several other
-> > properties: clocks, *-supply, power-domains, operating-points-v2.
-> > There are also quirks, such as GPU_SHADER_PRESENT should be masked by
-> > GF_REG_SHADER_PRESENT. It feels like that the scope of
-> > panthor_devfreq_provider is more broader, and at least the naming is
-> > not right.
->
-> True, though I'm still not entirely sure whether mtk_mfg needs to do
-> the GF_REG_SHADER_PRESENT thing. It's entirely possible this is just
-> an efuse value the GPUEB reads and then puts in SRAM for us, and we
-> could simply read this efuse cell ourselves. Among a list of questions
-> about the hardware we're sending to MediaTek, whether this is an efuse
-> cell and where it is placed is one of them.
->
-> If it turns out to be the case that we can simply read an efuse in
-> panthor in the other mt8196 integration code, then we can keep
-> mtk_mfg basically entirely focused on the devfreq-y part. I'd really
-> prefer this solution.
->
-> However, assuming we can't go down this path either because this is
-> not how the hardware works, or because MediaTek never replies, or
-> because someone doesn't like reading efuses in panthor, I think
-> generalising "devfreq_provider" to "performance_controller" or
-> something like that would be a good move.
-Yeah, let's see what MTK has to say on shader core mask.
+On 9/16/25 4:31 AM, Fenglin Wu wrote:
+> 
+> On 9/15/2025 6:18 PM, Dmitry Baryshkov wrote:
+>> On Mon, Sep 15, 2025 at 04:49:55PM +0800, Fenglin Wu via B4 Relay wrote:
+>>> From: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
+>>>
+>>> Add power supply property to get battery internal resistance from
+>>> the battery management firmware.
+>>>
+>>> Tested-by: Neil Armstrong <neil.armstrong@linaro.org> # on Thinkpad T14S OLED
+>> T14S is X1E80100, which uses SC8280XP-specific sets of properties. This
+>> patch changes only SM8350-related data. How was it tested?
+> 
+> I assumed that Neil has picked the series of the changes and tested the charge control limit functionality on his T14S device.
+> 
+> When I run "b4 trailers -u", the tag was added on all patches. I will remove the "Tested-by" trailer for the patches with functionality not applicable for X1E80100 platform.
 
-Another thing is that panthor still requires a "core" clk. Is it also
-required on mt8196?
++ Konstantin
 
->
-> In a way, the fused off core mask is part of the vague domain of
-> "performance", and it'll also allow us to extend it with other
-> things relevant to performance control in different vendor integration
-> logic designs. I'm thinking memory bandwidth control and job scheduling
-> preferences. E.g. if the interconnect tells us one core is spending a
-> lot of time waiting on the interconnect, maybe because a different
-> piece of the SoC that's active shares the same path on the
-> interconnect, we could then communicate a scheduling preference for
-> the other cores that have bandwidth headroom even if they are busier
-> in compute. Maybe this doesn't make sense though because interconnect
-> designs are fully switched these days or panthor's scheduler will
-> already figure this out from job completion times.
->
-> If any other SoC vendor or people working on hardware of those vendors
-> want to chime in and say whether they've got any other uses for
-> communicating more than just devfreq from glue logic to panthor, then
-> this would be a great time to do it, so that we can get this interface
-> right from the beginning.
->
-> > Another issue is I am not sure if we need to expose panthor_device
-> > internals to the provider. mtk_mfg accesses very few fields of
-> > panthor_device. It seems we can make the two less coupled.
-> >
-> > I might change my view as mtk_mfg evolves and requires tigher
-> > integration with panthor. But as is, I might prefer for mtk_mfg to
-> > live under drivers/soc/mediatek and provide a header for panthor to
-> > use in soc-specific path.
->
-> I'm not very confident it's possible to cleanly decouple them without
-> inventing a bunch of very panthor-and-mfg specific interfaces that
-> masquerade as general solutions in the process. It'd also mean I'd
-> have to duplicate all of `panthor_devfreq_get_dev_status` instead of
-> just being able to reuse it, unless that is also exposed in said
-> header file, which would need a better justification than "well there
-> is one other user of it and we're trying to couple it more loosely".
->
-> I know that it's almost independent, but unfortunately, even a tiny
-> dependency between the two will mean that mediatek_mfg will need to
-> know about panthor.
->
-> Other things needed from panthor are the pdevfreq->gov_data, and
-> the panthor struct device* itself, as well as stuff like "fast_rate"
-> in the panthor_device struct.
->
-> In the future, we may want to expand this driver with governors
-> beyond SIMPLE_ONDEMAND, based on the job completion duration targets
-> we can communicate to the GPUEB. That may either make the driver
-> more tightly coupled or more loosely coupled, I don't really know
-> yet.
->
-> One advantage of looking to completely decouple them (though again,
-> I doubt that's possible at the moment without questionable refactors)
-> could be that we could also support panfrost devices that need this.
-There is also tyr, although I don't follow its status.
+It's quite common to see someone leaving a T-b on the cover letter,
+trying to say "I gave this series a spin" and then seeing the tag
+appear on unrelated commits within the series (e.g. bindings or some
+cosmetic fixes". Maybe some sort of an interactive (opt-in is fine)
+dialog for "which patches to apply t-b/tags to" could be worth the
+effort?
 
-I can see the concern over "very panthor-and-mfg specific interfaces
-that masquerade as general solutions" or "questionable refactors". But
-I also don't like, for example, how mtk_mfg_init_devfreq inits
-panthor_devfreq manually. Beyond initialization, the remaining
-coupling comes from that we need panthor to provide get_dev_status
-callback for devfreq_dev_profile, and we need mtk_mfg to provide
-target and get_cur_freq callbacks. That seems like something solvable
-too.
+I was imagining two options:
 
-I really appreciate the work and I don't want to block it by vague
-concerns. If others have no preference, we should start with what we
-have.
+$ b4 trailers -u --lalala
+> Grabbing tags..
+> Found:
+> [Patch 0/n] Very Nice Changeset
+>   Tested-by: Foo Bar <foo@bar.com>
 >
-> >
-> >
-> > > +
-> > >
-> > >  int panthor_devfreq_init(struct panthor_device *ptdev);
-> > >
-> > > @@ -57,4 +71,6 @@ int panthor_devfreq_get_dev_status(struct device *d=
-ev,
-> > >
-> > >  unsigned long panthor_devfreq_get_freq(struct panthor_device *ptdev)=
-;
-> > >
-> > > +int panthor_devfreq_register_provider(struct panthor_devfreq_provide=
-r *prov);
-> > > +
-> > >  #endif /* __PANTHOR_DEVFREQ_H__ */
-> > >
-> > > --
-> > > 2.51.0
-> > >
-> >
->
->
->
->
+> Which patches do you want the Tested-by tags to apply to? [all]: 2-5
+
+or:
+
+$ b4 trailers -u --lalala2
+> Grabbing tagsd..
+> Found:
+> [Patch 0/n] Very Nice Changeset
+>   Apply to Patch 1 ("soc: qcom: Fix all bugs")? [Y/n/a] y
+>   Apply to Patch 2 ("dt-bindings: foobarbaz")? [Y/n/a] n
+>   Apply to Patch 3 ("clk: qcom: Fix ABCD")? [Y/n/a] a
+>   Applying to Patch 4 ("clk: qcom: Fix DEFG")
+>   . . .
+>   Applying to Patch n ("clk: qcom: Fix XYZ")
+> Tags applied!
+
+As I'm writing this, I'm thinking option 2 offers much more
+fine-grained control, which is always nice to see..
+
+Konrad
+
 
