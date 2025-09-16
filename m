@@ -1,292 +1,148 @@
-Return-Path: <linux-pm+bounces-34749-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34750-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB410B5A06E
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Sep 2025 20:22:38 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0FE92B5A078
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Sep 2025 20:26:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 871C84866FF
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Sep 2025 18:22:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9BAE61BC5370
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Sep 2025 18:26:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDB75285CBD;
-	Tue, 16 Sep 2025 18:22:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F79829C33C;
+	Tue, 16 Sep 2025 18:25:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="Q0ir9bX+"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Y9cg8I5U"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED0D7219E8D;
-	Tue, 16 Sep 2025 18:22:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758046953; cv=pass; b=ef78bqpQ3WfHMVBE75mVRsnSjYbMLttP3IDE/bLiyBFzbZoJP4odp263rwu/LvF3YzENG46L9iEkTVJyZWPpjxGsLpZ67IRlzbAmHWh+5FkWoGB/tGhf9XgV9LNNGZSUQKdp2XW8fosX1lEle/asV+R93Xfpbfls/RFs4cAzl9E=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758046953; c=relaxed/simple;
-	bh=ck1stxpUEghTVhCWuaD2ALNlnwlHoBDPnSHhS7rTAlw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YARyDLKwY2BsnJDrWIdJuiLfhd7ANHZZRqA7giZIb5GUJrb29V8ugY/5WNBRJnfPxcVS4F0i42Y0fW9trA6lcMQjgE4EOHGI2pReNbTb5s8UN9JFatuRE4Jnbjin5xHNZ4QLM2smCmnTvsLgrfoI2q8NaI24getZ8SwxjXUWdSk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=Q0ir9bX+; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1758046935; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=Fgmxy5E0ctPoUJ0TQE/08pxAMYnLVrXTw7LKxUKJ7ojdELpTU/z0co0en1NIgJMULH0Qw8h4+2nfgH+mh1rqrSq36gagG4+AdpOqQTMJ9hDycHUBlJ4ZrR0lyJLa15CfifY3awyHaX+S4wDUq01TUjrZQdyezZvFa1UpQ31Wbck=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1758046935; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=7Zdii59csrnw3oi5ffFxtLKvVki1YW4SPTo2ODMbysE=; 
-	b=MRoCBPim5HmBrnxux4dCjIGrmDWO0r2yFkYacDKteYAxdciY1fbUDoYZO87RfCUQ2yn6luHHNjJwHUJOt2QgROpdQ4nfBhxHXLPOOXVl2VHy+6eBReLjLj+fWoOtgUrpY1SuhMis9KnaaiyNYB5t4ckVg6FR/PQq4Cfx7qW3FUc=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
-	dmarc=pass header.from=<sebastian.reichel@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1758046935;
-	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
-	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
-	bh=7Zdii59csrnw3oi5ffFxtLKvVki1YW4SPTo2ODMbysE=;
-	b=Q0ir9bX+SO+wQd5fWvphLUM732R6TjiMCLpEUNOyMS/1kQlZjFSatb8BT8slE0Kz
-	01M1ZMVj49hErooVHSeLf5L+tAx6y4VDGhdfsdhXFGQ5ujUXCkb1CmhmFaAJnKhHOnM
-	GVYzkxm1MBsf+v41brHLs+TAg6psMB5ZFajS84cA=
-Received: by mx.zohomail.com with SMTPS id 1758046932947661.3912322672463;
-	Tue, 16 Sep 2025 11:22:12 -0700 (PDT)
-Received: by venus (Postfix, from userid 1000)
-	id C8C84180733; Tue, 16 Sep 2025 20:22:02 +0200 (CEST)
-Date: Tue, 16 Sep 2025 20:22:02 +0200
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Icenowy Zheng <uwu@icenowy.me>
-Cc: Drew Fustini <fustini@kernel.org>, Guo Ren <guoren@kernel.org>, 
-	Fu Wei <wefu@redhat.com>, Michal Wilczynski <m.wilczynski@samsung.com>, 
-	Ulf Hansson <ulf.hansson@linaro.org>, Han Gao <rabenda.cn@gmail.com>, Yao Zi <ziyao@disroot.org>, 
-	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 1/2] driver: reset: th1520-aon: add driver for
- poweroff/reboot via AON FW
-Message-ID: <i6slr5csro54ys5g7diqyacq4deidwm6f2nhpm2uwmgjlu6tyn@otrbpij4vdya>
-References: <20250818074906.2907277-1-uwu@icenowy.me>
- <20250818074906.2907277-2-uwu@icenowy.me>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E00032D5D6
+	for <linux-pm@vger.kernel.org>; Tue, 16 Sep 2025 18:25:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1758047157; cv=none; b=YuHhTUsg4pBRIgQyJqU2Q8CSYRWmAOFCjW7SEWKkVZVR5gbmAoUAz1WBqKGuD9rtgi26uujr3cmm51vVL0O01suZse0FHSYxNXSsiyy3JGFBUClblKu3N4VkeA2hxmLZCnrtEMZGvh3x4Ew4iL53DM70ZBuFrCati2ekpnECTso=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1758047157; c=relaxed/simple;
+	bh=JnWXlQLI/J5WtQGKFgA4eTmeUFQy+BjOATh2dzHmKG8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=WoG7s5vBdbVV+rQDn9aGmYPgS9WbNzcHwqRW0pTVwUlHsYDwcZKfqvm2smz3XVqjacpeQneSdpHnLpd8i+jKbGQ6PBCCEb5Sjjq6iKuah0nFkgCM6FVjl0ZRZCTALpEUFeZE1+uBdVBBwtnifunm6jxKTeDTZee4gOdGIjE8A4Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Y9cg8I5U; arc=none smtp.client-ip=209.85.208.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-62f37300fcbso1522a12.1
+        for <linux-pm@vger.kernel.org>; Tue, 16 Sep 2025 11:25:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1758047154; x=1758651954; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=L0VcLk74dR9yFqPkcnr7kuHB/f+/2YKwO0n6eHIar3s=;
+        b=Y9cg8I5Unkd586eexpIkkrltIOzj3xpS6i2wzcZM56N0pZ1/cCFQvQD58omsE349ZQ
+         B+5K86/dNMp7SW82VtmKRYb/eZMFfzqgAXwg2v3VHAdvAxnsSSBmOrQ4juRtw2nQmwa5
+         FbVmP4NpL448fBnfWcwGsxz9GkAYLN1ZOo3NTBCVsFZSu88cOTaQ+cQ0rZtdxpwO7slE
+         S3xe40HsnsHAqfFLr1YNSrp58RjUruMkilYgDfKkAVZCYlokf/308PG4ziSrIR7gqblf
+         sCWorwy49vsmy+pr8kypcHncY7YBwrxDdZ9npwvUVvJhkJXv9WneQ41gnLGooAd1rqN7
+         TZ8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758047154; x=1758651954;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=L0VcLk74dR9yFqPkcnr7kuHB/f+/2YKwO0n6eHIar3s=;
+        b=XIUDckXtbHyWFrDJBlvKwKDii6U/4sPeBRad4l+VfS44qQqSz0T6be2KYmXBvcdFNI
+         BoEnO5attjyV9HT2JRXeN1Iz7+b/FiKlJOsHgVlwi3yWwggj3ClxT/pcedYWxg7A8+1Q
+         y9RhaMzEQGLLVLuXXUUCsxcHHYf+6J99ahSAe7LbL9iz6vWVfUIhp0cfCmpDup/2558K
+         RpFr/QXQ3PQ4ZAkmY69O8140VIS1nQEGBR2A+OI33ZTq8tK7hMnO3SIUJ8PoEXmKO6F9
+         GXQYxN7BXYQrIouRANIHdvvuhmFhe4DbK9KPqOqvFbWxENHimgcb2FGGySqXiWpdip8D
+         vONQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVkyRGXJd5haTDzi+4rrywIsqQZVBiLQnMpPQ7xhjeeXpYfERnGRknvqv7Qu1yrhLU7KaB+UonNMg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxi5n2QhHfR0y8+e5uSHVeXI5aOJiOUJj1XaIzP+dIB2sQ8BlGw
+	FRqAV6W12dILuuDZ/iTa/XotRyjVq8nA9gk9aEke20QTTBZP4z5sL2s41mu7jFmO/f2dFRRQyBC
+	RUzwHr5fATapCqzdN3MPG3JCoOb4fZbOqcgRTWubU
+X-Gm-Gg: ASbGncvBsPgdwJbaps6hqG7fJ+ZX+vK1VHxXw2y5//n4DzRGf5J/P4b8/80MZdn6xEw
+	zPF2s1o/xyrL75eVy1NLOfOX7nNp8zckmqm1kV48Y7iwl9/AeP9xYaMZVJgFkeilIni1awoLsQ/
+	AZu4SU3VcjKTtjAIrJ3YzpVNrpxOyYBabSd2t1oMK8lUkrHvK7O0yiWs2whlz5wZpFDajH3fGbq
+	W5etqAaSbPcLFvjwz5udhjR
+X-Google-Smtp-Source: AGHT+IGB++uGP92/3eX+DzpcCYzC7w6FRYx7GVwU2UvS8bV9IgfnXF9imW/DEk57JYWkyi2iUzVE/ZMr5wpsPSunReQ=
+X-Received: by 2002:a05:6402:24d2:b0:62f:155b:5e8 with SMTP id
+ 4fb4d7f45d1cf-62f7e2f8f92mr9478a12.3.1758047153784; Tue, 16 Sep 2025 11:25:53
+ -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="32snbj5fo7anp2ks"
-Content-Disposition: inline
-In-Reply-To: <20250818074906.2907277-2-uwu@icenowy.me>
-X-Zoho-Virus-Status: 1
-X-Zoho-Virus-Status: 1
-X-Zoho-AV-Stamp: zmail-av-1.4.3/258.4.7
-X-ZohoMailClient: External
-X-ZohoMail-Owner: <i6slr5csro54ys5g7diqyacq4deidwm6f2nhpm2uwmgjlu6tyn@otrbpij4vdya>+zmo_0_sebastian.reichel@collabora.com
-
-
---32snbj5fo7anp2ks
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
+References: <20250909182828.1542362-1-xin@zytor.com> <aMLakCwFW1YEWFG4@google.com>
+ <0387b08a-a8b0-4632-abfc-6b8189ded6b4@linux.intel.com> <aMmkZlWl4TiS2qm8@google.com>
+In-Reply-To: <aMmkZlWl4TiS2qm8@google.com>
+From: Jim Mattson <jmattson@google.com>
+Date: Tue, 16 Sep 2025 11:25:41 -0700
+X-Gm-Features: AS18NWA0y0Y3-CfH_AYL3ReELcTLiz_cc9fscGdmhgbQD8z2XBP9Wg0cvjgDVBk
+Message-ID: <CALMp9eTZ7TA8RLSkJYPAawQjVVT9pFxB4QzAjs6XhzHJvQ=V3w@mail.gmail.com>
+Subject: Re: [RFC PATCH v1 0/5] x86/boot, KVM: Move VMXON/VMXOFF handling from
+ KVM to CPU lifecycle
+To: Sean Christopherson <seanjc@google.com>
+Cc: Arjan van de Ven <arjan@linux.intel.com>, "Xin Li (Intel)" <xin@zytor.com>, linux-kernel@vger.kernel.org, 
+	kvm@vger.kernel.org, linux-pm@vger.kernel.org, pbonzini@redhat.com, 
+	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, 
+	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, rafael@kernel.org, 
+	pavel@kernel.org, brgerst@gmail.com, david.kaplan@amd.com, 
+	peterz@infradead.org, andrew.cooper3@citrix.com, kprateek.nayak@amd.com, 
+	chao.gao@intel.com, rick.p.edgecombe@intel.com, dan.j.williams@intel.com
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH 1/2] driver: reset: th1520-aon: add driver for
- poweroff/reboot via AON FW
-MIME-Version: 1.0
 
-Hi,
+On Tue, Sep 16, 2025 at 10:54=E2=80=AFAM Sean Christopherson <seanjc@google=
+.com> wrote:
+>
+> On Thu, Sep 11, 2025, Arjan van de Ven wrote:
+> > Hi,
+> > > I also want to keep the code as a module, both to avoid doing VMXON u=
+nconditionally,
+> >
+> > can you expand on what the problem is with having VMXON unconditionally=
+ enabled?
+>
+> Unlike say EFER.SVME, VMXON fundamentally changes CPU behavior.  E.g. blo=
+cks INIT,
+> activates VMCS caches (which aren't cleared by VMXOFF on pre-SPR CPUs, an=
+d AFAIK
+> Intel hasn't even publicly committed to that behavior for SPR+), restrict=
+s allowed
+> CR0 and CR4 values, raises questions about ucode patch updates, triggers =
+unique
+> flows in SMI/RSM, prevents Intel PT from tracing on certain CPUs, and pro=
+bably a
+> few other things I'm forgetting.
 
-On Mon, Aug 18, 2025 at 03:49:05PM +0800, Icenowy Zheng wrote:
-> This driver implements poweroff/reboot support for T-Head TH1520 SoCs
-> running the AON firmware by sending a message to the AON firmware's WDG
-> part.
->=20
-> This is a auxiliary device driver, and expects the AON channel to be
-> passed via the platform_data of the auxiliary device.
->=20
-> Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
-> ---
+Do we leave VMX operation today when applying a late-load microcode patch?
 
-Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-
-Greetings,
-
--- Sebastian
-
->  MAINTAINERS                             |  1 +
->  drivers/power/reset/Kconfig             |  7 ++
->  drivers/power/reset/Makefile            |  1 +
->  drivers/power/reset/th1520-aon-reboot.c | 98 +++++++++++++++++++++++++
->  4 files changed, 107 insertions(+)
->  create mode 100644 drivers/power/reset/th1520-aon-reboot.c
->=20
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index daf520a13bdf6..e138a1e96ceea 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -21730,6 +21730,7 @@ F:	drivers/mailbox/mailbox-th1520.c
->  F:	drivers/net/ethernet/stmicro/stmmac/dwmac-thead.c
->  F:	drivers/pinctrl/pinctrl-th1520.c
->  F:	drivers/pmdomain/thead/
-> +F:	drivers/power/reset/th1520-aon-reboot.c
->  F:	drivers/power/sequencing/pwrseq-thead-gpu.c
->  F:	drivers/reset/reset-th1520.c
->  F:	include/dt-bindings/clock/thead,th1520-clk-ap.h
-> diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
-> index 77ea3129c7080..8248895ca9038 100644
-> --- a/drivers/power/reset/Kconfig
-> +++ b/drivers/power/reset/Kconfig
-> @@ -225,6 +225,13 @@ config POWER_RESET_ST
->  	help
->  	  Reset support for STMicroelectronics boards.
-> =20
-> +config POWER_RESET_TH1520_AON
-> +	tristate "T-Head TH1520 AON firmware poweroff and reset driver"
-> +	depends on TH1520_PM_DOMAINS
-> +	help
-> +	  This driver supports power-off and reset operations for T-Head
-> +	  TH1520 SoCs running the AON firmware.
-> +
->  config POWER_RESET_TORADEX_EC
->  	tristate "Toradex Embedded Controller power-off and reset driver"
->  	depends on ARCH_MXC || COMPILE_TEST
-> diff --git a/drivers/power/reset/Makefile b/drivers/power/reset/Makefile
-> index b7c2b5940be99..51da87e05ce76 100644
-> --- a/drivers/power/reset/Makefile
-> +++ b/drivers/power/reset/Makefile
-> @@ -25,6 +25,7 @@ obj-$(CONFIG_POWER_RESET_QNAP) +=3D qnap-poweroff.o
->  obj-$(CONFIG_POWER_RESET_REGULATOR) +=3D regulator-poweroff.o
->  obj-$(CONFIG_POWER_RESET_RESTART) +=3D restart-poweroff.o
->  obj-$(CONFIG_POWER_RESET_ST) +=3D st-poweroff.o
-> +obj-$(CONFIG_POWER_RESET_TH1520_AON) +=3D th1520-aon-reboot.o
->  obj-$(CONFIG_POWER_RESET_TORADEX_EC) +=3D tdx-ec-poweroff.o
->  obj-$(CONFIG_POWER_RESET_TPS65086) +=3D tps65086-restart.o
->  obj-$(CONFIG_POWER_RESET_VERSATILE) +=3D arm-versatile-reboot.o
-> diff --git a/drivers/power/reset/th1520-aon-reboot.c b/drivers/power/rese=
-t/th1520-aon-reboot.c
-> new file mode 100644
-> index 0000000000000..8256c1703ebe8
-> --- /dev/null
-> +++ b/drivers/power/reset/th1520-aon-reboot.c
-> @@ -0,0 +1,98 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * T-HEAD TH1520 AON Firmware Reboot Driver
-> + *
-> + * Copyright (c) 2025 Icenowy Zheng <uwu@icenowy.me>
-> + */
-> +
-> +#include <linux/auxiliary_bus.h>
-> +#include <linux/firmware/thead/thead,th1520-aon.h>
-> +#include <linux/module.h>
-> +#include <linux/notifier.h>
-> +#include <linux/of.h>
-> +#include <linux/reboot.h>
-> +#include <linux/slab.h>
-> +
-> +#define TH1520_AON_REBOOT_PRIORITY 200
-> +
-> +struct th1520_aon_msg_empty_body {
-> +	struct th1520_aon_rpc_msg_hdr hdr;
-> +	u16 reserved[12];
-> +} __packed __aligned(1);
-> +
-> +static int th1520_aon_pwroff_handler(struct sys_off_data *data)
-> +{
-> +	struct th1520_aon_chan *aon_chan =3D data->cb_data;
-> +	struct th1520_aon_msg_empty_body msg =3D {};
-> +
-> +	msg.hdr.svc =3D TH1520_AON_RPC_SVC_WDG;
-> +	msg.hdr.func =3D TH1520_AON_WDG_FUNC_POWER_OFF;
-> +	msg.hdr.size =3D TH1520_AON_RPC_MSG_NUM;
-> +
-> +	th1520_aon_call_rpc(aon_chan, &msg);
-> +
-> +	return NOTIFY_DONE;
-> +}
-> +
-> +static int th1520_aon_restart_handler(struct sys_off_data *data)
-> +{
-> +	struct th1520_aon_chan *aon_chan =3D data->cb_data;
-> +	struct th1520_aon_msg_empty_body msg =3D {};
-> +
-> +	msg.hdr.svc =3D TH1520_AON_RPC_SVC_WDG;
-> +	msg.hdr.func =3D TH1520_AON_WDG_FUNC_RESTART;
-> +	msg.hdr.size =3D TH1520_AON_RPC_MSG_NUM;
-> +
-> +	th1520_aon_call_rpc(aon_chan, &msg);
-> +
-> +	return NOTIFY_DONE;
-> +}
-> +
-> +static int th1520_aon_reboot_probe(struct auxiliary_device *adev,
-> +				  const struct auxiliary_device_id *id)
-> +{
-> +	struct device *dev =3D &adev->dev;
-> +	int ret;
-> +
-> +	/* Expect struct th1520_aon_chan to be passed via platform_data */
-> +	ret =3D devm_register_sys_off_handler(dev, SYS_OFF_MODE_POWER_OFF,
-> +					    TH1520_AON_REBOOT_PRIORITY,
-> +					    th1520_aon_pwroff_handler,
-> +					    adev->dev.platform_data);
-> +
-> +	if (ret) {
-> +		dev_err(dev, "Failed to register power off handler\n");
-> +		return ret;
-> +	}
-> +
-> +	ret =3D devm_register_sys_off_handler(dev, SYS_OFF_MODE_RESTART,
-> +					    TH1520_AON_REBOOT_PRIORITY,
-> +					    th1520_aon_restart_handler,
-> +					    adev->dev.platform_data);
-> +
-> +	if (ret) {
-> +		dev_err(dev, "Failed to register restart handler\n");
-> +		return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct auxiliary_device_id th1520_aon_reboot_id_table[] =3D=
- {
-> +	{ .name =3D "th1520_pm_domains.reboot" },
-> +	{},
-> +};
-> +MODULE_DEVICE_TABLE(auxiliary, th1520_aon_reboot_id_table);
-> +
-> +static struct auxiliary_driver th1520_aon_reboot_driver =3D {
-> +	.driver =3D {
-> +		.name =3D "th1520-aon-reboot",
-> +	},
-> +	.probe =3D th1520_aon_reboot_probe,
-> +	.id_table =3D th1520_aon_reboot_id_table,
-> +};
-> +module_auxiliary_driver(th1520_aon_reboot_driver);
-> +
-> +MODULE_AUTHOR("Icenowy Zheng <uwu@icenowy.me>");
-> +MODULE_DESCRIPTION("T-HEAD TH1520 AON-firmware-based reboot driver");
-> +MODULE_LICENSE("GPL");
-> --=20
-> 2.50.1
->=20
-
---32snbj5fo7anp2ks
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmjJqsoACgkQ2O7X88g7
-+ppT6hAAmwlFj8ocXSPVhmF7KbvyppRfxrJm4WmWJLMx2P38T0TScYKRRFbSOHiA
-05BMM39pP5UmminoYfIuF7dQCNzUi3s3Z3kXKZcsgRtxEnZDbAK4UnMk+Z4WslQN
-hBKG40WyAYXm63LLSl/errms4DalJlXy+0vTxMy5ygAB7rP8/NL7nCDrZ4FYnJt6
-SXrzGxItZoSHJbXNiCaxKdqUvyhIWpvteh6F6qC9scl4BAUwHR0owXTqqQyoeA6w
-Ikl4sD2KOFRfvfuTS+JooinIS+IPhp57ycLb3CuH5x/OhYxw2C9OCdXUKfwHMof9
-TQDya+VNdWaRf5mX7gGd2mwbHHCBxM7/PuC25z3yAWDcCcTu+vpMcujNP6IxZXxN
-BNVoxDMDYpHPPAYrBaCTur5KIokrIiOX6zQeb/UvEC3JAgUKB0Paz3X89lqI4TXH
-/0Wx3EJM5j0Pduz0QKOr/IqmvlCU/KL3p61pYxd3NhyC4/htEPq660YoaPIhnJ4E
-kSiKX6HMjITUc0OjpNexVZgcAqJGH7/52xH7rMolR2r1/pQfjcnnusIOG7MYw8NA
-oXfxgVw9R7GqJujwWWg6q7/zk9IofFKPoHcgw2WH1beAC8GCRBAIwul/kHlQ/p7q
-L3l6uTBHnN+1wzgfJL9jlYHSeYJ3CDcAd66geMHYqKGEOE5Lua8=
-=T58L
------END PGP SIGNATURE-----
-
---32snbj5fo7anp2ks--
+> > A lot of things are much simpler if it's on at cpu up, and turned off o=
+nly at the
+> > down path (be it offline of kexec).. no refcounting, no locking, etc...
+>
+> For Intel.  Unless _all_ vendors and architectures follow suit, KVM will =
+need
+> the refcounting and locking.  And while it's not anyone's fault, the *vas=
+t*
+> majority of complexity around enabling virtualization in KVM is due to VM=
+X.
+> I.e. KVM added a bunch of code to deal with the aformentioned side effect=
+s of
+> VMXON, and as a result, all other vendors/architectures have had to deal =
+with
+> that complexity.
+>
+> > so would be good to understand what the problem would be with having it=
+ always on
+>
+> Doing VMXON unconditionally is a minor objection.  My primary objection i=
+s that
+> this series does what's easiest for TDX, and leaves behind all of the VMX=
+-induced
+> technical debt in KVM.
+>
 
