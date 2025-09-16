@@ -1,136 +1,123 @@
-Return-Path: <linux-pm+bounces-34708-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34709-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A9A17B5903B
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Sep 2025 10:18:30 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A8410B5910C
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Sep 2025 10:43:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 599101654E8
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Sep 2025 08:18:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5E1F8522C12
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Sep 2025 08:43:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CEFA2641CA;
-	Tue, 16 Sep 2025 08:18:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF90128000F;
+	Tue, 16 Sep 2025 08:43:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="VbQXZaum"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NgQl69UE"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mout-p-103.mailbox.org (mout-p-103.mailbox.org [80.241.56.161])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6561928467B;
-	Tue, 16 Sep 2025 08:18:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.161
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 983D0199939;
+	Tue, 16 Sep 2025 08:43:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758010709; cv=none; b=I5n/HwnZYYgsRAspZVOB7l7WI1YyQN5xyeKGDvaYuT0Zsi4ICOF50vs638z+MMJdsiXmerJ+4g0sqtrvKzbvdMsN6mDviQQD5a21IUqlEt0MWdzkVJgDRMvUpIpjdx5sGzn26zo4UQ7ZOzJN87sr5g3mhtwhNVHqZxaWWu0NpDc=
+	t=1758012208; cv=none; b=OXm2uB7Q0Hlvo4aQlTjg0s0OFIaryj5iVH96tT3QgdZ/Tdh3AUjV9Q4Bqjr5UjGwZ8bFw2zm1DvbOF8gncFRKPhhX/0Ryy3BXt8fBVCLWvWZy7D2Q5VZ0az1Bcv6Pmmeqald+rfdGbV2mmUU8qVvNxV3/cyki91An1mdzS6fE8c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758010709; c=relaxed/simple;
-	bh=TmqQY6BbZjKaQA1hi6SW+pBZMY/quwU3/0S8doXUFiU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UCNyYtxE9n+AYssmQHv0WIjdLKa62SRaPa9NsJ3hGJHrK6I+994YxyjBXePLPnHV4vdmXmuY84JpL+T5b+GU3bGz7wERsPenmVW0VL8JDijgG+YIM/Od8TmWi/x3Qf2BafsXpH9u+jjgzMSAcgxUgj6M3edyhsrv834RphonXXg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=VbQXZaum; arc=none smtp.client-ip=80.241.56.161
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailbox.org
-Received: from smtp202.mailbox.org (smtp202.mailbox.org [10.196.197.202])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-103.mailbox.org (Postfix) with ESMTPS id 4cQvt75Jvsz9tgv;
-	Tue, 16 Sep 2025 10:18:23 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-	t=1758010703;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=HqXqKCY0qebI5fxiZNfbPweUXhgaa6GZB+v8rBjD+RQ=;
-	b=VbQXZaumHCFgUdGJO7CopdN9wPUNt1ZtzdgRjKXiZCjh677REUkO+9tS3iT9gppvtgM+zQ
-	zCIcRzhkgrE23Wl405TGELiLqu0wfVCZyd0+GkrDRTkFc1RY7CskMCkZ7AbdsS+5FtT9nh
-	gV28jILyL2urq8ptHF22SNJv0+LIheCSotFEyuVZ7gZL2QuT2hkHVJOaPAqzqDHnodmdLr
-	TSP4tLyzu/zJgTE+M94eRYksUByQoPds42cIP2WxcA7Lk/DdNg3RHrlyKUTxL6yB098mlN
-	A/zFzCnrVOaVRZEhS7hnA1QZKDUrAQ6iDTdzLmrZFuHpngjlq4s3A4TVnLKy6w==
-Message-ID: <89957015-5b28-4fb1-8218-5dbdac2b009f@mailbox.org>
-Date: Tue, 16 Sep 2025 10:17:52 +0200
+	s=arc-20240116; t=1758012208; c=relaxed/simple;
+	bh=UT9Y547qxU148/h+9nigpRNINW+rzTYKRz1weK+iQ4c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LafbG3mtv5JkiPVb5pZcYRPaAVHC4KNvUetjV1kmyP1992ib0NjtT7672SkOHf4wBg9prDD6zWdXk+BZD0xBBsuQG9p4kQLrHM+IBPQuM07HrYIhn+PSqfoa/yHJ5OkxstKE3Yx4Zs1dzI+wNiy1jhy7eh1yqRnif0HfMG8eY9Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NgQl69UE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DBF0C4CEEB;
+	Tue, 16 Sep 2025 08:43:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1758012208;
+	bh=UT9Y547qxU148/h+9nigpRNINW+rzTYKRz1weK+iQ4c=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=NgQl69UE/EnaEsBt3QJybqQJ7BUyqhyru9vtJ6qVAlyyUwFwhpAECVPzm7ByZoOOq
+	 M8L/pmqmYV+/PJ2S9iZQDNBerdDbaQ+VZYu0g6q60y5GwqvBIKouDN7dOCWeEju5W6
+	 x94WZ9iojLw6ioFhxx5dwHYkDSTG3AU5GwoS0/bMlINyykkA3JcLLdtpPZZu52Wx3i
+	 XCbPZskbYHLKYEi3lV+dOGf8rOwrePctBjBjeAYrZR2Am9Lz315KAXahowvAUMCcnE
+	 xdWQadTsZvCyc5mZr3qqK4wvepJE+dXvXAsfCbkgkjnMpn9XHbGQ8+930T/VDKkIvz
+	 r0msymbebcYAg==
+Date: Tue, 16 Sep 2025 09:43:23 +0100
+From: Lee Jones <lee@kernel.org>
+To: Dzmitry Sankouski <dsankouski@gmail.com>
+Cc: Chanwoo Choi <cw00.choi@samsung.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Sebastian Reichel <sre@kernel.org>,
+	Luca Ceresoli <luca.ceresoli@bootlin.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Sebastian Reichel <sebastian.reichel@collabora.com>,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v3 1/9] power: supply: max77705_charger: move active
+ discharge setting to mfd parent
+Message-ID: <20250916084323.GH1637058@google.com>
+References: <20250911-max77705_77976_charger_improvement-v3-0-35203686fa29@gmail.com>
+ <20250911-max77705_77976_charger_improvement-v3-1-35203686fa29@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH] thermal/drivers/rcar_gen3: Document Gen4 support in
- Kconfig entry
-To: =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
- Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
- Geert Uytterhoeven <geert+renesas@glider.be>,
- Lukasz Luba <lukasz.luba@arm.com>, Magnus Damm <magnus.damm@gmail.com>,
- Zhang Rui <rui.zhang@intel.com>, linux-renesas-soc@vger.kernel.org
-References: <20250905193322.148115-1-marek.vasut+renesas@mailbox.org>
- <20250905195904.GA2033628@ragnatech.se>
-Content-Language: en-US
-From: Marek Vasut <marek.vasut@mailbox.org>
-In-Reply-To: <20250905195904.GA2033628@ragnatech.se>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-MBO-RS-ID: 8f5999ab8efe036ee83
-X-MBO-RS-META: 7dzdwda8t4qn4y3dd38ksepxumxmn7qc
+In-Reply-To: <20250911-max77705_77976_charger_improvement-v3-1-35203686fa29@gmail.com>
 
-On 9/5/25 9:59 PM, Niklas Söderlund wrote:
+On Thu, 11 Sep 2025, Dzmitry Sankouski wrote:
 
-Hello Daniel,
+> Active discharge setting is a part of MFD top level i2c device, hence
+> cannot be controlled by charger. Writing to MAX77705_PMIC_REG_MAINCTRL1
+> register from charger driver is a mistake.
+> 
+> Move active discharge setting to MFD parent driver.
+> 
+> Fixes: a6a494c8e3ce ("power: supply: max77705: Add charger driver for Maxim 77705")
+> 
+> Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
+> ---
+>  drivers/mfd/max77705.c                  | 3 +++
+>  drivers/power/supply/max77705_charger.c | 3 ---
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-> Hi Marek,
-> 
-> Thanks for your patch.
-> 
-> On 2025-09-05 21:32:56 +0200, Marek Vasut wrote:
->> The R-Car Gen3 thermal driver supports both R-Car Gen3 and Gen4 SoCs.
->> Update the Kconfig entry.
->>
->> Signed-off-by: Marek Vasut <marek.vasut+renesas@mailbox.org>
-> 
-> Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-> 
->> ---
->> Cc: "Niklas Söderlund" <niklas.soderlund@ragnatech.se>
->> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
->> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
->> Cc: Geert Uytterhoeven <geert+renesas@glider.be>
->> Cc: Lukasz Luba <lukasz.luba@arm.com>
->> Cc: Magnus Damm <magnus.damm@gmail.com>
->> Cc: Zhang Rui <rui.zhang@intel.com>
->> Cc: linux-pm@vger.kernel.org
->> Cc: linux-renesas-soc@vger.kernel.org
->> ---
->>   drivers/thermal/renesas/Kconfig | 6 +++---
->>   1 file changed, 3 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/thermal/renesas/Kconfig b/drivers/thermal/renesas/Kconfig
->> index dcf5fc5ae08e4..f4af8c7f28b05 100644
->> --- a/drivers/thermal/renesas/Kconfig
->> +++ b/drivers/thermal/renesas/Kconfig
->> @@ -10,13 +10,13 @@ config RCAR_THERMAL
->>   	  thermal framework.
->>   
->>   config RCAR_GEN3_THERMAL
->> -	tristate "Renesas R-Car Gen3 and RZ/G2 thermal driver"
->> +	tristate "Renesas R-Car Gen3/Gen4 and RZ/G2 thermal driver"
->>   	depends on ARCH_RENESAS || COMPILE_TEST
->>   	depends on HAS_IOMEM
->>   	depends on OF
->>   	help
->> -	  Enable this to plug the R-Car Gen3 or RZ/G2 thermal sensor driver into
->> -	  the Linux thermal framework.
->> +	  Enable this to plug the R-Car Gen3/Gen4 or RZ/G2 thermal sensor
->> +	  driver into the Linux thermal framework.
->>   
->>   config RZG2L_THERMAL
->>   	tristate "Renesas RZ/G2L thermal driver"
->> -- 
->> 2.50.1
-If this is OK with you, could you please pick up this trivial fix and 
-push to kernel.org, so the other trivial fix for rcar_gen3 would be 
-included in next ?
+Acked-by: Lee Jones <lee@kernel.org>
 
-Thank you
+> diff --git a/drivers/mfd/max77705.c b/drivers/mfd/max77705.c
+> index 6b263bacb8c2..ff07d0e0d5f8 100644
+> --- a/drivers/mfd/max77705.c
+> +++ b/drivers/mfd/max77705.c
+> @@ -108,6 +108,9 @@ static int max77705_i2c_probe(struct i2c_client *i2c)
+>  	if (pmic_rev != MAX77705_PASS3)
+>  		return dev_err_probe(dev, -ENODEV, "Rev.0x%x is not tested\n", pmic_rev);
+>  
+> +	/* Active Discharge Enable */
+> +	regmap_update_bits(max77705->regmap, MAX77705_PMIC_REG_MAINCTRL1, 1, 1);
+> +
+>  	ret = devm_regmap_add_irq_chip(dev, max77705->regmap,
+>  					i2c->irq,
+>  					IRQF_ONESHOT | IRQF_SHARED, 0,
+> diff --git a/drivers/power/supply/max77705_charger.c b/drivers/power/supply/max77705_charger.c
+> index 329b430d0e50..3b75c82b9b9e 100644
+> --- a/drivers/power/supply/max77705_charger.c
+> +++ b/drivers/power/supply/max77705_charger.c
+> @@ -487,9 +487,6 @@ static void max77705_charger_initialize(struct max77705_charger_data *chg)
+>  	regmap_update_bits(regmap, MAX77705_CHG_REG_CNFG_00,
+>  				MAX77705_WDTEN_MASK, 0);
+>  
+> -	/* Active Discharge Enable */
+> -	regmap_update_bits(regmap, MAX77705_PMIC_REG_MAINCTRL1, 1, 1);
+> -
+>  	/* VBYPSET=5.0V */
+>  	regmap_update_bits(regmap, MAX77705_CHG_REG_CNFG_11, MAX77705_VBYPSET_MASK, 0);
+>  
+> 
+> -- 
+> 2.39.5
+> 
+
+-- 
+Lee Jones [李琼斯]
 
