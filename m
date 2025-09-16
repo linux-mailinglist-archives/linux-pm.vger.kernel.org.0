@@ -1,77 +1,77 @@
-Return-Path: <linux-pm+bounces-34802-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34803-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8697BB6207E
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 00:11:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D15CB7D8AE
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 14:30:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 156BF526158
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Sep 2025 22:11:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 658215840AB
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Sep 2025 22:24:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C612129B778;
-	Tue, 16 Sep 2025 22:11:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93FBF323F42;
+	Tue, 16 Sep 2025 22:24:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="WJv59My3"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ZvQiXy2V"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A95C329A31D
-	for <linux-pm@vger.kernel.org>; Tue, 16 Sep 2025 22:11:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8673F24A06A
+	for <linux-pm@vger.kernel.org>; Tue, 16 Sep 2025 22:24:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758060697; cv=none; b=DIsFBnW4uUsU9qV07+9jXaL2/5TBkLFC9gDVF7yra08PUNqXD0G3y3D9sw1U6sSchsVnVnXFOzEj/VrNEhjy8ltDdrl35P/sZji1WuHqZsRJ64pz1pUVBnebaXCPLf6kzusUcEB2TnC0x5ajMvpzFZWpyOpx+/gY4l4HocR9Ui4=
+	t=1758061465; cv=none; b=jc7j67O8gHnjpoSVX0/LfFI1840MRj71Y8YzMRFA4fNad1GnRZwUvOn/4LrwpsJ9vfVsLMXV3wdioy2SUtXnur+yzI66R/CTkb+JF0dFFWyxaPgfFl3jEaITuu4G9ozX3SLlUtbykTFx4vU44cehlsS3rVfsTLHBiEh8Vr9tNeQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758060697; c=relaxed/simple;
-	bh=I8wyRRLvbiMDBl8pklNldZigpLPCz9T9o6aSgEKTqvg=;
+	s=arc-20240116; t=1758061465; c=relaxed/simple;
+	bh=4s4ZgC4M5BH+orbhF6KbIfMqkVLyi01PYlq5QKie7ro=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=l2nIPn47U7KTMALfKdwl6sqiNc2JdtHlvMLWc6CVLLBEoYZaztuS1dLr2ANalZBJIGjOeDU/dkXJb9E8QYU5q0oRpssqf4s8RxKVnWEeSouTLlwlXktyCvkreBzt0OxHIIOGqoal1B7r/k/hujaHg8bQZZo8zuKG1n4CwaswY0A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=WJv59My3; arc=none smtp.client-ip=209.85.219.51
+	 In-Reply-To:Content-Type; b=DB5GtwhfglOl7CMGYEe6PRHCLhCdGhlg02sEgwt87H5YeU+aMirCZdTadKeXEbovTN6mhdFT0kQMq8QN0BcM2F34Q7EI03EHQm4l7hhW+Xvz9S3p1GxgCDtaC17xrki5QOK78+GhTokvk9/b8ajhL3afjMwmBa2PHC/MUl1AJMg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ZvQiXy2V; arc=none smtp.client-ip=209.85.160.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-71b9d805f2fso56017166d6.0
-        for <linux-pm@vger.kernel.org>; Tue, 16 Sep 2025 15:11:35 -0700 (PDT)
+Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-4b7a434b2d0so21377691cf.0
+        for <linux-pm@vger.kernel.org>; Tue, 16 Sep 2025 15:24:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1758060694; x=1758665494; darn=vger.kernel.org;
+        d=linuxfoundation.org; s=google; t=1758061462; x=1758666262; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=d00RcpMSyaxo5uctkiUad7Ihu0StiE54G0FuRNxP3k8=;
-        b=WJv59My3xtLKxrxf0DAuu53Hz2JA5asUEIvPNbFF9Ux6gue204UnV/zo3Nwg6jF5Od
-         HMdoES20m0M577oo/D+p75jhtQeIeDY+3BzY5XisYphM/Suv3SSAG/ZyCy0TgBknIBry
-         jywDXOWKvBmgkMgk52/WWvBqLBMJv+sdyG/4o=
+        bh=2GxFW9so94RE+J7EOaUFS+5EFWT1bvxImITo3j0A4OY=;
+        b=ZvQiXy2VjAe9SdE208h0UuPB9uvCOQrDmWliVt0u9RO3lD8voV7AI3Crmk0kjxf7DZ
+         LKXaim4M55GcrOrhUWPIBdk+S39WGFD8tNInPc3ww1M39scE2foSsZ+bUAsCGtjn0e8y
+         1XnoSKdUxQ+IUzRF1kwc6Lqo6Ic8D7w/6ch2w=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758060694; x=1758665494;
+        d=1e100.net; s=20230601; t=1758061462; x=1758666262;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=d00RcpMSyaxo5uctkiUad7Ihu0StiE54G0FuRNxP3k8=;
-        b=RBNFBBmc6nMbZGP+XvzW8uQEcj/EhYAQNgjdADTD370nweac+WMSOgHKS2lD7ymCbd
-         k9G83PRVY1om92Yt2wQVWGW/3OQlwxegnu4Bx9qt04hBctei0t+Zqe0xDH7eNm9eerN4
-         QEuPaBO8Goi31CrOq/OnPQWE1jiTtVhUDEtCAtaE6OHrJ/5lCGwWlKSGHAlso/YckDLG
-         YP8F3UOI2xi2BxtNGUc5uabzauGrwqVvd3p4QqYam/+Y7QoLWBRFdvj87ocvt+lgxvvN
-         qJzDp7oOC6fwYtk1rN0PhZjw6cYyJFnC+thY4jl28QjMYd+t2iFa4CNPhB3YAPNnfPOD
-         YAQg==
-X-Gm-Message-State: AOJu0Yz48nZrLg5kWF3O6nsC9x6qx1wh0TBulrC1ZoagtEjQJ4njayJJ
-	uiNDafq9JTf4ecbJyyKUAeaR4TD3N/gsB7wg7Hkxe4GBCqRu9Hf/FgaoohHrQ857lxc=
-X-Gm-Gg: ASbGncvkjaEpGm2gQjjxcc9vfwXDinpYe7snLfgulHTHzy9DOIb0i01zDcJBcIfXmHW
-	EvrB2mPGu7Hiaj+4YWwux2uvpMPEuADS1Rdx6RKftpmhhqYYZASGLeLPVmxnfhgEbnGmRjWoHpv
-	Sr3Lth82u5m2nuyLx+bidEDZ035HSpu4E0LCXuEhNUkyCl26HwBgT+Z07mpFkP4JkM5EvrD6or/
-	G1y4I9Z0qyR52pZV87UPw/ZgZakVxB88tLTz0/iSBkZ4ctpNeoWgi6cS7hEo3kFucZa9LWyjEIf
-	mX+dl8O9qM4TP7RmVW5dAWCJeApNNZrF/labL/4acCz2TyPG2C4Oy9pC6dDCY7wkFuka2EjcDNt
-	pQp35QI0Tn4b4RzawpoFzq3+TwA2f8DtaqbncLF8PfZrfBrCo5E6gdpBbog3FizRtL1os6CzIxE
-	kOM3ydrwVw7263yfi8blO5gx4fy0ICb4faWMZAuCbWFoQ=
-X-Google-Smtp-Source: AGHT+IGMUpImZ6crknRGU2PsJlxv8cDUNX2ZESpVJbIPemvPjmHSaTDNVGyZfiAaKH0MKZWsfkHuzg==
-X-Received: by 2002:a05:6214:2249:b0:779:b212:3efa with SMTP id 6a1803df08f44-779b21240aamr129726246d6.3.1758060693830;
-        Tue, 16 Sep 2025 15:11:33 -0700 (PDT)
+        bh=2GxFW9so94RE+J7EOaUFS+5EFWT1bvxImITo3j0A4OY=;
+        b=BfMV9OHeM4954+PQc56668z50WYxsAwxIw7ajs162J8ZR2fdVs+YIXDZmUQPM7Vq98
+         bavkPaYOqQXRLXK0/JSUlmSBhESB35+hJankNxpClYHtCZi6QRObJgcKFL8CK5z7I3wV
+         1Zi7zUmaFa/Zpd5nmMT/j68smb1ZYpZNYQ57RY6IV+MNw7meQmUZzKUwekBkEPrK2uq7
+         KZoKi01pLFRSIPiOoj2/fdUd8+BCQyOr1o2enajpEj6zwSscth0bziwW7oOhAKiW9Upr
+         yElYYAuVKmMFp1w3bdxyDFCdEmpy0LNYkI0gWz1hKWt8bAY2qwzGsVYdm5Gdd1w6t5/7
+         vxdQ==
+X-Gm-Message-State: AOJu0YzXQAlIVEgJkNHjJ01S4Ogp1B8evpqB/Y0CbT+OpwAzM4qGzoqS
+	n2P8GWE8ZjBdBIEr0BXIxMmenwPDYaAzxPz5vFawyeDnbZFcf5Em1//qJcCr6LA6ydY=
+X-Gm-Gg: ASbGncuxQfyFturadMCfHuH0QnM0g8bVnApFRwVqhNe0MUZTOMdDziUBU8usg5Bfqf9
+	vRaMxP9xu1w/XGfhq5VwtQVWiTTDlhMqcNXAefhtmhFgXNy+rjAWwmtZP9zLOYa6p2ux/9odCiS
+	qNrYRitLc/yUVeiPD0Z052nZVMBQPGDL00prYzwsKNA19W3rzjQJXatelaiNe33PYAxysled9zn
+	CW2czE9KV0qLLIjJZmQhfxsbs+eTrJe3Xr7vnGZmEhIaZzAv2M3M4BVC8s6gZf4i+H6FVXsrIz9
+	lKCC3Zi+d1iqwAyzCmMr58ErUfn+OXFoLvhc7pYwxhkfqJc9qvzgQrpdJiVZpfz0BpfvOcUN5V1
+	iEiPD+fSEeS9Pj8ZweMknkz8Ql+cUdZS4tieNFlYi1CpzqXbZ0Uy4Kacjr1ZA/SFpIeQ1HF9RGd
+	6IlA2BpOFGqoiF1jnUfMabFjdITREC+UFH9zZcyIlFQjI=
+X-Google-Smtp-Source: AGHT+IFylLwHUsMF4PtSfoDduboaI7wmCV9wKNqPUp+M97cfstrzr6Cc4zmnTg7Ae0XVGUvueURFWA==
+X-Received: by 2002:ac8:5f08:0:b0:4b5:d67c:1a7c with SMTP id d75a77b69052e-4ba68715bcdmr1509731cf.18.1758061462232;
+        Tue, 16 Sep 2025 15:24:22 -0700 (PDT)
 Received: from [192.168.226.35] (207-181-222-53.s5939.c3-0.hnc-cbr1.chi-hnc.il.cable.rcncustomer.com. [207.181.222.53])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-763bfedb916sm100684966d6.57.2025.09.16.15.11.33
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4b639dab221sm90414901cf.27.2025.09.16.15.24.21
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Sep 2025 15:11:33 -0700 (PDT)
-Message-ID: <61f224bd-c82b-4f16-a127-f337bc60fb4b@linuxfoundation.org>
-Date: Tue, 16 Sep 2025 16:11:32 -0600
+        Tue, 16 Sep 2025 15:24:21 -0700 (PDT)
+Message-ID: <0e8a0862-3801-4b11-b695-694f9de7cb88@linuxfoundation.org>
+Date: Tue, 16 Sep 2025 16:24:20 -0600
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -79,55 +79,35 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] tools/cpupower: Fix incorrect size in
- cpuidle_state_disable()
+Subject: Re: [PATCH] tools/cpupower: fix error return value in
+ cpupower_write_sysfs()
 To: Kaushlendra Kumar <kaushlendra.kumar@intel.com>, trenn@suse.com,
  shuah@kernel.org, jwyatt@redhat.com, jkacur@redhat.com
 Cc: linux-pm@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
-References: <20250826065440.2908389-1-kaushlendra.kumar@intel.com>
+References: <20250828063000.803229-1-kaushlendra.kumar@intel.com>
 Content-Language: en-US
 From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20250826065440.2908389-1-kaushlendra.kumar@intel.com>
+In-Reply-To: <20250828063000.803229-1-kaushlendra.kumar@intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 8/26/25 00:54, Kaushlendra Kumar wrote:
-> Fix incorrect size parameter passed to cpuidle_state_write_file() in
-> cpuidle_state_disable().
+On 8/28/25 00:30, Kaushlendra Kumar wrote:
+> The cpupower_write_sysfs() function currently returns -1 on
+> write failure, but the function signature indicates it should
+> return an unsigned int. Returning -1 from an unsigned function
+> results in a large positive value rather than indicating
+> an error condition.
 > 
-> The function was incorrectly using sizeof(disable) which returns the
-> size of the unsigned int variable (4 bytes) instead of the actual
-> length of the string stored in the 'value' buffer.
-> 
-> Since 'value' is populated with snprintf() to contain the string
-> representation of the disable value, we should use strlen(value) to
-> get the correct string length for writing to the sysfs file.
-> 
-> This ensures the correct number of bytes is written to the cpuidle
-> state disable file in sysfs.
+> Fix this by returning 0 on failure, which is more appropriate
+> for an unsigned return type and maintains consistency with typical
+> success/failure semantics where 0 indicates failure and non-zero
+> indicates success (bytes written).
 > 
 > Signed-off-by: Kaushlendra Kumar <kaushlendra.kumar@intel.com>
 > ---
->   tools/power/cpupower/lib/cpuidle.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/power/cpupower/lib/cpuidle.c b/tools/power/cpupower/lib/cpuidle.c
-> index 0ecac009273c..2180e63c963a 100644
-> --- a/tools/power/cpupower/lib/cpuidle.c
-> +++ b/tools/power/cpupower/lib/cpuidle.c
-> @@ -244,7 +244,7 @@ int cpuidle_state_disable(unsigned int cpu,
->   	snprintf(value, SYSFS_PATH_MAX, "%u", disable);
 
-Can't you get the length from snprintf return? You can avoid calling
-strlen()
-
->   
->   	bytes_written = cpuidle_state_write_file(cpu, idlestate, "disable",
-> -						   value, sizeof(disable));
-> +						   value, strlen(value));
->   	if (bytes_written)
->   		return 0;
->   	return -3;
+Thanks. Applied to git.kernel.org/pub/scm/linux/kernel/git/shuah/linux.git
+cpupower branch.
 
 thanks,
 -- Shuah
