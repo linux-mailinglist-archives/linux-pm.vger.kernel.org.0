@@ -1,74 +1,74 @@
-Return-Path: <linux-pm+bounces-34705-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34706-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA2C4B58DAF
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Sep 2025 06:59:50 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 61E6CB58E56
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Sep 2025 08:17:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6A1EF4869E8
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Sep 2025 04:57:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CD8461B2318F
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Sep 2025 06:17:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABEBB26B973;
-	Tue, 16 Sep 2025 04:55:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D3612673B7;
+	Tue, 16 Sep 2025 06:17:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LtsrrG2k"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jPBdqu+O"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
+Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B43B426561D
-	for <linux-pm@vger.kernel.org>; Tue, 16 Sep 2025 04:55:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2913522D4D3
+	for <linux-pm@vger.kernel.org>; Tue, 16 Sep 2025 06:17:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757998545; cv=none; b=NeLKLvI7emT+B1D+oiBUqFvweOmO3lb3JVlB4wqbhRmHrYMfbrTuW3dxpApjDMt9eYvRTKDmZ0je2S0PV2Hx/vcVzVqPXjOE/CaMCNFeIznwYH/uyj/6PP6Cs5hjLIEwX/P2sV7DAUXxbmi2M1nSFuAjfvHeuyiYzbxGnyNPZ8o=
+	t=1758003453; cv=none; b=Ki8bp70jcg0o0tzClOe0SXS8Mn8tU1i6hXi8M+6wuU+lCuuErVkoSJYdcoto8Ql4hJJdQ79ZEjNpuz38EEKFY/K7B86XjuW2/oiaTrhesxyIaplXOcJew/gFsZAzWHi0Oz3ucy3AzW/ABuUpQoVHZwrJyIRr/XWvBvnaDacLqUA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757998545; c=relaxed/simple;
-	bh=5rE76gQgJQKBWzXKcgUF0aME2xKJUWOEZnpj27dj58s=;
+	s=arc-20240116; t=1758003453; c=relaxed/simple;
+	bh=deByhQqm1cMxd3U8TR2cG0vXVWNzGx1ca9c9khKTVxc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oO7Pvm9SKDgUiGGFJNLceHlnT78m5dqOPZid9xXVoY3hYDT8H4HBBGk8jv3gmU8az+g8ZuC6wdZTheBHqGC3aCulpUmpXWtlezYgNaSMP5rOBLTJyABiquvD1sJxWvlQesK2L2UH2eIlzNz0DM4bfql6O4PujyX2TIeS4VMSQEQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LtsrrG2k; arc=none smtp.client-ip=209.85.219.174
+	 To:Cc:Content-Type; b=ajUijul8pkgdG9/TPxiuiOCq33gK/u3/ORz2tyuZijcdwBBeX1dPK0PtHzdVybRd2y4YlGV2A0p1guYL1uF5JFzUj25jdRIsvVcWu0rGF67DD3H9WkHh/S9q2UHUWecjTwC6POtITsJfitg66f8GpDMe2arpaIA8c7u+wTG5mn4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jPBdqu+O; arc=none smtp.client-ip=209.85.219.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-e94d678e116so5158493276.2
-        for <linux-pm@vger.kernel.org>; Mon, 15 Sep 2025 21:55:43 -0700 (PDT)
+Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-ea3fc715bc9so1897559276.3
+        for <linux-pm@vger.kernel.org>; Mon, 15 Sep 2025 23:17:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757998543; x=1758603343; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1758003449; x=1758608249; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=GBcjRbm3FVwYUlOZdbgLY3RSHrk0clAp1Nkb0I9SPZU=;
-        b=LtsrrG2kPLIwwR71JmQyCe02cf4X+I8llghjpAOPsRFd+h62zT3iDIyz0ravAftmCo
-         cFXlr5+JvP/6sfBg8IgjHtLNQx7wufqxyjtsnZb9kRq6xPMVRagc2UnVNJNZgoFxuLkO
-         zm4F2IgBryMCEupRBBW0FYNW5ngtfpZ6hpnm8pGXCuDMjUohc/RPZ5r4bv9Fxhe/DRID
-         Bv95sldw4iQE0cwmtUodxEpfpRqvaWW4yugQ+I2fERAtUYyGVhShMs01dUkemLBXZrSQ
-         QXprEfM7HpqNKZTC3pZDmxJy9/d65zKOBTRyOkW5jgCAO9BYn2uKCBmcO/pv+xiGrcOG
-         LiFA==
+        bh=HDaii2Wdk1Ox7/nqut8hlOiulSUANPWpY7ZmxRlktsA=;
+        b=jPBdqu+O0+JiQ5dfYi9QkFepJTSOnsqyCWgM/J9rhafQjT1zSPdddhgm1/FLOWbvgF
+         6DGG0OTF3s98siFGAZG2qz8GjkJc0BlbLLJ1HKAirP3Ti741DVIZ8A0GIGWtRVKF+5t5
+         9OuWfBrTy1PFqPU3UCbatDFI7nM5uQrO4KJHBf85kbvwfRN5JVXiPMWQd/YlBQhXDa+h
+         mewKFX6QOCfRqpnkqUW98k+Uqlk8QXy7pkAaWwgf0HM17Jh3dIezDs6+FdsQJQ7xvnNg
+         4bO7IlPxW6gM9n/LNUUqgi3SSJ8eiRoEXuPBN9qvyd/KFSZCWFmkBzqwgmFDLI5uHSh3
+         a4DQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757998543; x=1758603343;
+        d=1e100.net; s=20230601; t=1758003449; x=1758608249;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=GBcjRbm3FVwYUlOZdbgLY3RSHrk0clAp1Nkb0I9SPZU=;
-        b=Nk7wnxZVpugqHlUtrj0j7KpUcHnQtwsEoBTpek1S3BWdmT+TKsvTSjNJFhANN7hL6A
-         /FNt9lbuzpt0eg+7Aa1XOyzEvKxxdMdz56aknu+DIk8OxPPvdDzthIoRUf6JOg8xrutN
-         lSZPrlPjRmEJXpR9BDx9EdRdOI2NA1H2Ya4TTlthXav0U2hPFPbVI7p7qQQg8CKAHjwh
-         iXaeKbdFw8RvZ+c88iOqW2MlE+YORdTszvuuOy1lT1rMg07LKZbSrNTtislSCRG85Cue
-         aBlfOK6yfsYJINynh2URY7wNCRwEpumPFtj9vvPrbHZO00LCgN91017j+jPm1vM60Yi3
-         /KPA==
-X-Forwarded-Encrypted: i=1; AJvYcCUa39MWkeNy0BwxFuP1sgWs6KcHqUdA1944MDkB5Nx2CsJSC131oBHHscf8gPggaxUvT+Y50QEeww==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyoYGhG4gHuQyonf8GrLuyT7WfWHQwe7x9z6xaQ0iUCeBm3VmS3
-	/LlH852stUW34vIerQzJGnbTe7ks5cIti0yYUXkxWbEwCRK3fOctBt6/dyNiBaUqvilF/ha2VdT
-	MDM4TneHRuIJa2FfnC7I6Tl31f8DgMY0=
-X-Gm-Gg: ASbGncv9B/ShZOywlEbplz5C8swYlI8PoAqk3s3TZkFC26VCuuqYxD0rWwp1DXESbfg
-	tnQr0dTzvDYy3cGJUacBp4iclfwmID49cpeejieqFak2emNCZ812RxODno7fnrszRDdiolQCoVq
-	XYtL7K0uOmqmVDiLygq06qIm7jBAyB5JWR8BnAWrmiJJ/p+ffrLSE4ZSWiiEqj3hEejMgwrBsKW
-	I3MQMCMyvhesgAzygUq4Z2GDSJxgvivrQ576n4DIQtWwrFYX83PEA9Idzjv4HJEJa2uN8I+
-X-Google-Smtp-Source: AGHT+IFXVrlkAw4hIUMkjDUsgYvyK7EgpmYsPWpx/dWgsCW+cokg9VHakZyQIrCx9AHlixfNXCZ76u+Wtg35mXq2D/U=
-X-Received: by 2002:a53:cb41:0:b0:612:891a:9ecc with SMTP id
- 956f58d0204a3-627202230a3mr10138013d50.9.1757998542602; Mon, 15 Sep 2025
- 21:55:42 -0700 (PDT)
+        bh=HDaii2Wdk1Ox7/nqut8hlOiulSUANPWpY7ZmxRlktsA=;
+        b=cR7bJfoEyaWmBVvfX/DBMZjAoix/Pxtv2FY/Ui0oXXOuwfVtpvR0bbMCOcdbPqyVFk
+         pIqeGKumParb+Jenlsc9qj6PtZK0/r9ektKNvteNKHUGYIHyfn0mdRL6t382UOzkvs6e
+         dnDOH6D6wgg1gdCT+RjWDgWdyDAPWMkIy9ImStAfCnRAYHXMHPvKjhocFajNrNp1tZjt
+         13sHrQ/yXjxpDLJebEm3oLNsmTM/3E0lc1wx4PGjv/7tp1k1/W1yy8PpdnbTdhGs62Ao
+         A+u19BlzWldyOlddXE2uNpiWQZrFggRnT8GPVFMW8ahO18I7Nv5WxPrV4GCn5flzyAak
+         8ImQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUsLIaxGN1xQa/sYHGIJ321j3uW1VBIg9KtGZVsJEVhd+iJz5we7KIeuFSGUDlNt/D865QOMpZsGA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyX18eH5AeibbCtPnsoJFzHGK5rkLPqVCVZfn0C0QK+7xrNOfqB
+	+0xNJvBYUJnbKEn25DvGc3ZnIoiZZgFb6fQudecQp9pmJ0uhT+ZVrA6lEPQP8209DgPXLQs74tv
+	7+xXBqZwAjDcui4T7Mm7Is1yGSbkNiSM=
+X-Gm-Gg: ASbGncsKTSHcWxqZkqWiC0DHE9xBsVf6zLMlOCcF5lg8esozx0UP3d7RBQQYFOR/K2+
+	wcVoUO2GyppjUJ8MKKRcOXXVb1sw//RdJ698ugjLx/Ls//NwOSabNzHuFup1ORAC+sDAIuZQ27D
+	+/ZcvLko/iFQ9YLCa6ZQKi8tv/UPWNtToDMF04BJiPhy5uN8u2PZR3P4A77HLBRo9yCxtc+m7VH
+	QOSZkjwirty8Wq40OnKUi8CUK2po43xpzFDsbUDdfWIHVOUfCYHGkL0WCRmS5O/dlqKJ0eD
+X-Google-Smtp-Source: AGHT+IF+Xiqik1tR0vXGQ+PFRyD1S4moq1IqD/LOHDIbRGhH8BmE3q7KjrCrPnOYGKNgwkeY1K1KRVmqmymVnMlyYJM=
+X-Received: by 2002:a05:6902:610c:b0:e9d:77de:c50a with SMTP id
+ 3f1490d57ef6-ea3d9a4e64dmr13041781276.17.1758003448858; Mon, 15 Sep 2025
+ 23:17:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -76,14 +76,14 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20250912-mt8196-gpufreq-v2-0-779a8a3729d9@collabora.com>
- <20250912-mt8196-gpufreq-v2-5-779a8a3729d9@collabora.com> <CAPaKu7Q+KAzEtKBWy8KO2Kp+H4y-Mqo34uo=jgH1_iooaDq3hA@mail.gmail.com>
- <8577914.T7Z3S40VBb@workhorse>
-In-Reply-To: <8577914.T7Z3S40VBb@workhorse>
+ <20250912-mt8196-gpufreq-v2-9-779a8a3729d9@collabora.com> <CAPaKu7TEN++z8r68k_4-iCyMLMthqJBUX35pgXupAHPdfttrYg@mail.gmail.com>
+ <24083992.6Emhk5qWAg@workhorse>
+In-Reply-To: <24083992.6Emhk5qWAg@workhorse>
 From: Chia-I Wu <olvaffe@gmail.com>
-Date: Mon, 15 Sep 2025 21:55:30 -0700
-X-Gm-Features: AS18NWCUMIgi23a5SaUlUvMdo-ihykJDXaO9mGCW6rE2ZLrI7uXsuBJkrMkP79E
-Message-ID: <CAPaKu7STDDp6D_fDGVfAKFrb5aWcxtwsT3nYtYDQQYCs7G9upA@mail.gmail.com>
-Subject: Re: [PATCH v2 05/10] mailbox: add MediaTek GPUEB IPI mailbox
+Date: Mon, 15 Sep 2025 23:17:18 -0700
+X-Gm-Features: AS18NWCXWyl_YVRXpDa8LQOU9lM5ZjkiSFaFNztoIDgFSKKxEgJ3VR2PFYeYjBk
+Message-ID: <CAPaKu7QKUnTx-jRYfHEUJx_3bkgQ_=vEC=siTOigtQAnu4NxcQ@mail.gmail.com>
+Subject: Re: [PATCH v2 09/10] drm/panthor: devfreq: add pluggable devfreq providers
 To: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
 	Boris Brezillon <boris.brezillon@collabora.com>, Steven Price <steven.price@arm.com>, 
@@ -105,163 +105,164 @@ Content-Transfer-Encoding: quoted-printable
 On Mon, Sep 15, 2025 at 6:34=E2=80=AFAM Nicolas Frattaroli
 <nicolas.frattaroli@collabora.com> wrote:
 >
-> On Saturday, 13 September 2025 00:11:10 Central European Summer Time Chia=
+> On Saturday, 13 September 2025 00:53:50 Central European Summer Time Chia=
 -I Wu wrote:
 > > On Fri, Sep 12, 2025 at 11:38=E2=80=AFAM Nicolas Frattaroli
 > > <nicolas.frattaroli@collabora.com> wrote:
 > > <snipped>
-> > > +static irqreturn_t mtk_gpueb_mbox_thread(int irq, void *data)
-> > > +{
-> > > +       struct mtk_gpueb_mbox_chan *ch =3D data;
-> > > +       int status;
-> > > +
-> > > +       status =3D atomic_cmpxchg(&ch->rx_status,
-> > > +                               MBOX_FULL | MBOX_CLOGGED, MBOX_FULL);
-> > > +       if (status =3D=3D (MBOX_FULL | MBOX_CLOGGED)) {
-> > > +               mtk_gpueb_mbox_read_rx(ch);
-> > > +               writel(BIT(ch->num), ch->ebm->mbox_ctl + MBOX_CTL_IRQ=
-_CLR);
-> > > +               mbox_chan_received_data(&ch->ebm->mbox.chans[ch->num]=
-,
-> > > +                                       ch->rx_buf);
-> > Given what other drivers do, and how mtk_mfg consumes the data, we shou=
-ld
-> >
-> >   char buf[MAX_OF_RX_LEN]; //  MAX_OF_RX_LEN is 32; we can also
-> > allocate it during probe
-> >   mtk_gpueb_mbox_read_rx(ch);
-> >   mbox_chan_received_data(..., buf);
-> >
-> > mtx_mfg makes a copy eventually anyway.
->
-> We don't right now, at least not until after the callback returns.
-> So we need to have the copy in the mtk_mfg callback, not after the
-> completion. That's fine and I do want to do this as this is what
-> the mailbox framework seems to expect clients to do.
->
-> > We don't need to maintain any
-> > extra copy.
-> >
-> > Then we might not need rx_status.
->
-> We can probably get rid of it if we keep the per-channel
-> interrupt handler. Otherwise, we may still need clogged,
-> as we don't want to process interrupts on channels we have
-> no user for.
->
-> >
-> > > +               atomic_set(&ch->rx_status, 0);
-> > > +               return IRQ_HANDLED;
-> > > +       }
-> > > +
-> > > +       return IRQ_NONE;
-> > > +}
-> > > +
-> > > +static int mtk_gpueb_mbox_send_data(struct mbox_chan *chan, void *da=
-ta)
-> > > +{
-> > > +       struct mtk_gpueb_mbox_chan *ch =3D chan->con_priv;
-> > > +       int i;
-> > > +       u32 *values =3D data;
-> > > +
-> > > +       if (atomic_read(&ch->rx_status))
-> > > +               return -EBUSY;
-> > > +
-> > > +       /*
-> > > +        * We don't want any fancy nonsense, just write the 32-bit va=
-lues in
-> > > +        * order. memcpy_toio/__iowrite32_copy don't work here, becau=
-se fancy.
+> > > diff --git a/drivers/gpu/drm/panthor/panthor_devfreq.h b/drivers/gpu/=
+drm/panthor/panthor_devfreq.h
+> > > index a891cb5fdc34636444f141e10f5d45828fc35b51..94c9768d5d038c4ba8516=
+929edb565a1f13443fb 100644
+> > > --- a/drivers/gpu/drm/panthor/panthor_devfreq.h
+> > > +++ b/drivers/gpu/drm/panthor/panthor_devfreq.h
+> > > @@ -8,6 +8,7 @@
+> > >
+> > >  struct devfreq;
+> > >  struct thermal_cooling_device;
+> > > +struct platform_device;
+> > >
+> > >  struct panthor_device;
+> > >
+> > > @@ -43,6 +44,19 @@ struct panthor_devfreq {
+> > >         spinlock_t lock;
+> > >  };
+> > >
+> > > +struct panthor_devfreq_provider {
+> > > +       /** @dev: device pointer to the provider device */
+> > > +       struct device *dev;
+> > > +       /**
+> > > +        * @init: the provider's init callback that allocates a
+> > > +        * &struct panthor_devfreq, adds it to panthor, and adds a de=
+vfreq
+> > > +        * device to panthor. Will be called during panthor's probe.
 > > > +        */
-> > > +       for (i =3D 0; i < ch->c->tx_len; i +=3D 4)
-> > > +               writel(values[i / 4], ch->ebm->mbox_mmio + ch->c->tx_=
-offset + i);
+> > > +       int (*init)(struct panthor_device *ptdev, struct device *dev)=
+;
 > > > +
-> > > +       writel(BIT(ch->num), ch->ebm->mbox_ctl + MBOX_CTL_IRQ_SET);
-> > > +
-> > > +       return 0;
-> > > +}
-> > > +
-> > > +static int mtk_gpueb_mbox_startup(struct mbox_chan *chan)
-> > > +{
-> > > +       struct mtk_gpueb_mbox_chan *ch =3D chan->con_priv;
-> > > +       int ret;
-> > > +
-> > > +       atomic_set(&ch->rx_status, 0);
-> > > +
-> > > +       ret =3D clk_enable(ch->ebm->clk);
-> > > +       if (ret) {
-> > > +               dev_err(ch->ebm->dev, "Failed to enable EB clock: %pe=
-\n",
-> > > +                       ERR_PTR(ret));
-> > > +               goto err_clog;
-> > > +       }
-> > > +
-> > > +       writel(BIT(ch->num), ch->ebm->mbox_ctl + MBOX_CTL_IRQ_CLR);
-> > > +
-> > > +       ret =3D devm_request_threaded_irq(ch->ebm->dev, ch->ebm->irq,=
- mtk_gpueb_mbox_isr,
-> > > +                                       mtk_gpueb_mbox_thread, IRQF_S=
-HARED | IRQF_ONESHOT,
-> > > +                                       ch->full_name, ch);
-> > I don't think this warrants a per-channel irq thread.
+> > > +       struct list_head node;
+> > > +};
+> > On mt8196, we have performance-domains to replace several other
+> > properties: clocks, *-supply, power-domains, operating-points-v2.
+> > There are also quirks, such as GPU_SHADER_PRESENT should be masked by
+> > GF_REG_SHADER_PRESENT. It feels like that the scope of
+> > panthor_devfreq_provider is more broader, and at least the naming is
+> > not right.
+>
+> True, though I'm still not entirely sure whether mtk_mfg needs to do
+> the GF_REG_SHADER_PRESENT thing. It's entirely possible this is just
+> an efuse value the GPUEB reads and then puts in SRAM for us, and we
+> could simply read this efuse cell ourselves. Among a list of questions
+> about the hardware we're sending to MediaTek, whether this is an efuse
+> cell and where it is placed is one of them.
+>
+> If it turns out to be the case that we can simply read an efuse in
+> panthor in the other mt8196 integration code, then we can keep
+> mtk_mfg basically entirely focused on the devfreq-y part. I'd really
+> prefer this solution.
+>
+> However, assuming we can't go down this path either because this is
+> not how the hardware works, or because MediaTek never replies, or
+> because someone doesn't like reading efuses in panthor, I think
+> generalising "devfreq_provider" to "performance_controller" or
+> something like that would be a good move.
+Yeah, let's see what MTK has to say on shader core mask.
+
+Another thing is that panthor still requires a "core" clk. Is it also
+required on mt8196?
+
+>
+> In a way, the fused off core mask is part of the vague domain of
+> "performance", and it'll also allow us to extend it with other
+> things relevant to performance control in different vendor integration
+> logic designs. I'm thinking memory bandwidth control and job scheduling
+> preferences. E.g. if the interconnect tells us one core is spending a
+> lot of time waiting on the interconnect, maybe because a different
+> piece of the SoC that's active shares the same path on the
+> interconnect, we could then communicate a scheduling preference for
+> the other cores that have bandwidth headroom even if they are busier
+> in compute. Maybe this doesn't make sense though because interconnect
+> designs are fully switched these days or panthor's scheduler will
+> already figure this out from job completion times.
+>
+> If any other SoC vendor or people working on hardware of those vendors
+> want to chime in and say whether they've got any other uses for
+> communicating more than just devfreq from glue logic to panthor, then
+> this would be a great time to do it, so that we can get this interface
+> right from the beginning.
+>
+> > Another issue is I am not sure if we need to expose panthor_device
+> > internals to the provider. mtk_mfg accesses very few fields of
+> > panthor_device. It seems we can make the two less coupled.
 > >
-> > mbox_chan_received_data is atomic. I think wecan start simple with
-> > just a devm_request_irq for all channels. mtk_gpueb_mbox_isr can
+> > I might change my view as mtk_mfg evolves and requires tigher
+> > integration with panthor. But as is, I might prefer for mtk_mfg to
+> > live under drivers/soc/mediatek and provide a header for panthor to
+> > use in soc-specific path.
+>
+> I'm not very confident it's possible to cleanly decouple them without
+> inventing a bunch of very panthor-and-mfg specific interfaces that
+> masquerade as general solutions in the process. It'd also mean I'd
+> have to duplicate all of `panthor_devfreq_get_dev_status` instead of
+> just being able to reuse it, unless that is also exposed in said
+> header file, which would need a better justification than "well there
+> is one other user of it and we're trying to couple it more loosely".
+>
+> I know that it's almost independent, but unfortunately, even a tiny
+> dependency between the two will mean that mediatek_mfg will need to
+> know about panthor.
+>
+> Other things needed from panthor are the pdevfreq->gov_data, and
+> the panthor struct device* itself, as well as stuff like "fast_rate"
+> in the panthor_device struct.
+>
+> In the future, we may want to expand this driver with governors
+> beyond SIMPLE_ONDEMAND, based on the job completion duration targets
+> we can communicate to the GPUEB. That may either make the driver
+> more tightly coupled or more loosely coupled, I don't really know
+> yet.
+>
+> One advantage of looking to completely decouple them (though again,
+> I doubt that's possible at the moment without questionable refactors)
+> could be that we could also support panfrost devices that need this.
+There is also tyr, although I don't follow its status.
+
+I can see the concern over "very panthor-and-mfg specific interfaces
+that masquerade as general solutions" or "questionable refactors". But
+I also don't like, for example, how mtk_mfg_init_devfreq inits
+panthor_devfreq manually. Beyond initialization, the remaining
+coupling comes from that we need panthor to provide get_dev_status
+callback for devfreq_dev_profile, and we need mtk_mfg to provide
+target and get_cur_freq callbacks. That seems like something solvable
+too.
+
+I really appreciate the work and I don't want to block it by vague
+concerns. If others have no preference, we should start with what we
+have.
+>
 > >
-> >   read bits from MBOX_CTL_RX_STS
-> >   for each bit set:
-> >     read data from rx
-> >     mbox_chan_received_data
-> >   write bits to MBOX_CTL_IRQ_CLR
+> >
+> > > +
+> > >
+> > >  int panthor_devfreq_init(struct panthor_device *ptdev);
+> > >
+> > > @@ -57,4 +71,6 @@ int panthor_devfreq_get_dev_status(struct device *d=
+ev,
+> > >
+> > >  unsigned long panthor_devfreq_get_freq(struct panthor_device *ptdev)=
+;
+> > >
+> > > +int panthor_devfreq_register_provider(struct panthor_devfreq_provide=
+r *prov);
+> > > +
+> > >  #endif /* __PANTHOR_DEVFREQ_H__ */
+> > >
+> > > --
+> > > 2.51.0
+> > >
 > >
 >
-> I don't like this approach. It brings us back to having to process
-> multiple channels per ISR, keep track of when the interrupt should
-> be enabled and disabled based on how many channels are in use, and
-> also is not in line with what e.g. omap-mailbox.c does.
 >
-> Remember that `mbox_chan_received_data` synchronously calls the
-> mailbox client's rx_callback. In mediatek_mfg's case, this is
-> fairly small, though with the request to not make the rx buffer
-> persist beyond the rx_callback it will gain an additional memory
-> copy. But we can't guarantee that someone isn't going to put a
-> slow operation in the path. Sure, it's going to be atomic, but
-> waiting for a spinlock is atomic and not something an ISR would
-> enjoy. I don't think mailbox clients would expect that if they
-> take their time they'll stall the interrupt handler for every
-> other channel.
 >
-> So we'd keep the interrupt disabled for all channels until the
-> client that received a message has processed it.
 >
-> I can see myself getting rid of the handler and just having the
-> thread function as the bottom half, but I'd really like to keep
-> the one-IRQ-request-per-channel thing I've got going now as it
-> made the code a lot easier to reason about. However, doing this
-> would mean the interrupt is re-enabled after the generic upper
-> half, when all the business logic that needs to not run
-> concurrently for an individual channel is in the bottom half.
->
-> As far as I can tell, this would then mean we'd have to add
-> some concurrency exclusion mechanism to the bottom half.
->
-> Moving all the logic into the upper half handler function
-> would make that handler somewhat longer, and I don't know
-> if IRQF_ONESHOT masks the interrupt for all users of that
-> IRQ number or just for those with that dev_id. If it's per
-> dev_id, then I'm fine with moving stuff up there. But from
-> my reading of the core IRQ handling code, that does not
-> appear to be the case; one channel getting a reply would
-> mask *all* channels of the mailbox until the upper half is
-> completed, and if the upper half calls into a driver
-> callback synchronously, that may take a hot minute.
->
-> Put differently: Is there a problem with one thread per used
-> channel, or are we going off vibes here? The way it currently
-> works uses the shared interrupt to mark just that one channel
-> as busy with rx_status before letting the IRQ for all channels
-> be unmasked again, which seems ideal to me.
-No, one thread per used channel can work. I can't say I like it, but I
-also don't know the hw as well as you do.
 
