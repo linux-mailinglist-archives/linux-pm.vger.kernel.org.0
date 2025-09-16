@@ -1,284 +1,182 @@
-Return-Path: <linux-pm+bounces-34720-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34721-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C794B591CF
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Sep 2025 11:11:51 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 46266B591DB
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Sep 2025 11:14:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0A84F189E3A3
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Sep 2025 09:12:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EC4C7166568
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Sep 2025 09:14:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 690CB28D8E8;
-	Tue, 16 Sep 2025 09:11:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF22C285CA1;
+	Tue, 16 Sep 2025 09:14:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="QMtBzxKT"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="aXaU/CYW"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39CC7286433;
-	Tue, 16 Sep 2025 09:11:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758013907; cv=pass; b=s0bfg9F7fvxEBuertrs6p6ThdtvvCAVjoiQ3S57CbeSmcS3zRPXgbl6q7c1VohqBhkj/EZwO94Dy0dwBR8/6yI60YUoYv+lOQAwNjlcjg4psyTvLXVm+qu565lIxoWldyabrSdkdnKPo94pg8X2usG2NWavrXtY8gFWuql2CbcA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758013907; c=relaxed/simple;
-	bh=HM/w6ATe8sbAGY/o03VQ+rUz+yzxBeZLf2by0b6bUKE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=QfFrIQgTs9IJMcNmGmrdTmtwI3qvqp6w2wJowwJwEl9My+kcsHi1WQXbJFxS8IVcOhRF+8gAaMQb/UbIlkp+eqAj2h/lOGJ6ULGqTy8Ek0FAWre9onzzVThayG4s54kTsOXALKcd+ywIBoM1vaH+uSmoT5ogys4SUOitK3S280o=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=QMtBzxKT; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1758013876; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=D8EjaGJtJwuhjPyTCJY1Ui2FU697WRN1Mlj23NVwVIC51V5MW/3YViERIMTSpTzeOJVls64TUv7/E84em55Aqr5j3onc95u3D/k+UAS3hS+kxZ1BPidhZlHR3B7MzxxfqAKaiyxqft3io7m4vKAdMtidsVy7UqHdSY7/HesfTMI=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1758013876; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=KRPXZxJSBjsHPFbLQz/6kAFyVFuDb0rIVWEooQ0HKQE=; 
-	b=XvvrDgQZw08gE/qffNmFDgkfrdzAKNaIgxJu7T3SqTHVVOEBf8pb5wK0HqtD5avLYMJPYvfkQgccx5Em6Bwo0hfc7lBotL7oQjjS8YZ4nZF62Gv4s3g12nOB+8x8bzY3ar1NalD0UBu4aHJKx/BW72zhDm2JNSrtWxUsiUHVHXo=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
-	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1758013876;
-	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
-	bh=KRPXZxJSBjsHPFbLQz/6kAFyVFuDb0rIVWEooQ0HKQE=;
-	b=QMtBzxKTdUCmPjvNodR30Ij/nfEYFpt8yxa3QqeyzdPvxvwVFPmYxIQyn30y/Zfr
-	WSwhj54B9ITSRJDiMC/pRZBKj+lOtZbVQhWT5tH2jjG5/QBwudpL/qPCN56dG6ybwzB
-	5Fw+6jwkvvD4xYDijph2+O0eiPlvyr3gEji5oXcw=
-Received: by mx.zohomail.com with SMTPS id 1758013874343122.59157949348514;
-	Tue, 16 Sep 2025 02:11:14 -0700 (PDT)
-From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-To: Chia-I Wu <olvaffe@gmail.com>
-Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Boris Brezillon <boris.brezillon@collabora.com>,
- Steven Price <steven.price@arm.com>, Liviu Dudau <liviu.dudau@arm.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- MyungJoo Ham <myungjoo.ham@samsung.com>,
- Kyungmin Park <kyungmin.park@samsung.com>,
- Chanwoo Choi <cw00.choi@samsung.com>, Jassi Brar <jassisinghbrar@gmail.com>,
- Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- Chen-Yu Tsai <wenst@chromium.org>, kernel@collabora.com,
- dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
- linux-hardening@vger.kernel.org
-Subject:
- Re: [PATCH v2 09/10] drm/panthor: devfreq: add pluggable devfreq providers
-Date: Tue, 16 Sep 2025 11:11:07 +0200
-Message-ID: <3595790.aeNJFYEL58@workhorse>
-In-Reply-To:
- <CAPaKu7QKUnTx-jRYfHEUJx_3bkgQ_=vEC=siTOigtQAnu4NxcQ@mail.gmail.com>
-References:
- <20250912-mt8196-gpufreq-v2-0-779a8a3729d9@collabora.com>
- <24083992.6Emhk5qWAg@workhorse>
- <CAPaKu7QKUnTx-jRYfHEUJx_3bkgQ_=vEC=siTOigtQAnu4NxcQ@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D36811E47B3;
+	Tue, 16 Sep 2025 09:14:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1758014066; cv=none; b=PueXl/yRiLgkUDoG5/nMV2ewktCfc/muA23R9asB8THG1USr0joDc4Jq/oYvbVUHBhbVrtoFfTL4oQ9kmg301G7xMWS4K/Xlk1FJR82u9xv+UJgAjl+KEcKCI1lrNmV5f1W7G5U/JTREIFnsSldQtBMqYJbjTElJDhwMFJ3kZoU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1758014066; c=relaxed/simple;
+	bh=MUmLjdC6+9Cut1Kj9JY2ktVSjt81KSam9K5LKJOK/E0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NEjN1iKynIo78sUs36Kda10zot/wA+54HDgUlDMTeARK0daK1t9rNzQ7AJk76X0sQvfv/tfRzFLNdyJ151J/5b/KPRpor+oAfG5zJb2QvCy3RN7uQfEXq4b0tl3UB+jHXs6Bg+iLmSRpXjXVtES7AexSk6sJ67oWO/4/N6khL4g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=aXaU/CYW; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+Received: from [192.168.88.20] (91-158-153-178.elisa-laajakaista.fi [91.158.153.178])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 05F5A19D6;
+	Tue, 16 Sep 2025 11:13:03 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1758013984;
+	bh=MUmLjdC6+9Cut1Kj9JY2ktVSjt81KSam9K5LKJOK/E0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=aXaU/CYWeRBnPkP/4g6a3Sil3cZLudjVzBDjLw8JvOLmxacLE1fTO1Wm/Oyzs9RjG
+	 OI19kCqqlCw0nry0YU0V1Oh6b6JOvojVTP99SAWDmkOMl/z86lR+k9L3diOPayDUKR
+	 ZcVbustUWB/Hh7josSloJCADciIuHAgg80NnfW0Y=
+Message-ID: <cb0f50a9-9e63-40ea-973e-937086d38136@ideasonboard.com>
+Date: Tue, 16 Sep 2025 12:14:18 +0300
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC v2] pmdomain: ti-sci: Set PD on/off state according to
+ the HW state
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
+ Santosh Shilimkar <ssantosh@kernel.org>,
+ linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Kevin Hilman <khilman@baylibre.com>,
+ vishalm@ti.com, sebin.francis@ti.com, d-gole@ti.com,
+ Devarsh Thakkar <devarsht@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>
+References: <20250908-tisci-pd-boot-state-v2-1-a1a4173cf859@ideasonboard.com>
+ <CAPDyKFqj1Ed85z8Zwt5hioOGhiCxX95JZcHz98b6=zXm8tjR0A@mail.gmail.com>
+Content-Language: en-US
+From: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Autocrypt: addr=tomi.valkeinen@ideasonboard.com; keydata=
+ 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
+In-Reply-To: <CAPDyKFqj1Ed85z8Zwt5hioOGhiCxX95JZcHz98b6=zXm8tjR0A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tuesday, 16 September 2025 08:17:18 Central European Summer Time Chia-I =
-Wu wrote:
-> On Mon, Sep 15, 2025 at 6:34=E2=80=AFAM Nicolas Frattaroli
-> <nicolas.frattaroli@collabora.com> wrote:
-> >
-> > On Saturday, 13 September 2025 00:53:50 Central European Summer Time Ch=
-ia-I Wu wrote:
-> > > On Fri, Sep 12, 2025 at 11:38=E2=80=AFAM Nicolas Frattaroli
-> > > <nicolas.frattaroli@collabora.com> wrote:
-> > > <snipped>
-> > > > diff --git a/drivers/gpu/drm/panthor/panthor_devfreq.h b/drivers/gp=
-u/drm/panthor/panthor_devfreq.h
-> > > > index a891cb5fdc34636444f141e10f5d45828fc35b51..94c9768d5d038c4ba85=
-16929edb565a1f13443fb 100644
-> > > > --- a/drivers/gpu/drm/panthor/panthor_devfreq.h
-> > > > +++ b/drivers/gpu/drm/panthor/panthor_devfreq.h
-> > > > @@ -8,6 +8,7 @@
-> > > >
-> > > >  struct devfreq;
-> > > >  struct thermal_cooling_device;
-> > > > +struct platform_device;
-> > > >
-> > > >  struct panthor_device;
-> > > >
-> > > > @@ -43,6 +44,19 @@ struct panthor_devfreq {
-> > > >         spinlock_t lock;
-> > > >  };
-> > > >
-> > > > +struct panthor_devfreq_provider {
-> > > > +       /** @dev: device pointer to the provider device */
-> > > > +       struct device *dev;
-> > > > +       /**
-> > > > +        * @init: the provider's init callback that allocates a
-> > > > +        * &struct panthor_devfreq, adds it to panthor, and adds a =
-devfreq
-> > > > +        * device to panthor. Will be called during panthor's probe.
-> > > > +        */
-> > > > +       int (*init)(struct panthor_device *ptdev, struct device *de=
-v);
-> > > > +
-> > > > +       struct list_head node;
-> > > > +};
-> > > On mt8196, we have performance-domains to replace several other
-> > > properties: clocks, *-supply, power-domains, operating-points-v2.
-> > > There are also quirks, such as GPU_SHADER_PRESENT should be masked by
-> > > GF_REG_SHADER_PRESENT. It feels like that the scope of
-> > > panthor_devfreq_provider is more broader, and at least the naming is
-> > > not right.
-> >
-> > True, though I'm still not entirely sure whether mtk_mfg needs to do
-> > the GF_REG_SHADER_PRESENT thing. It's entirely possible this is just
-> > an efuse value the GPUEB reads and then puts in SRAM for us, and we
-> > could simply read this efuse cell ourselves. Among a list of questions
-> > about the hardware we're sending to MediaTek, whether this is an efuse
-> > cell and where it is placed is one of them.
-> >
-> > If it turns out to be the case that we can simply read an efuse in
-> > panthor in the other mt8196 integration code, then we can keep
-> > mtk_mfg basically entirely focused on the devfreq-y part. I'd really
-> > prefer this solution.
-> >
-> > However, assuming we can't go down this path either because this is
-> > not how the hardware works, or because MediaTek never replies, or
-> > because someone doesn't like reading efuses in panthor, I think
-> > generalising "devfreq_provider" to "performance_controller" or
-> > something like that would be a good move.
-> Yeah, let's see what MTK has to say on shader core mask.
->=20
-> Another thing is that panthor still requires a "core" clk. Is it also
-> required on mt8196?
+Hi,
 
-Nope, I'm planning on getting rid of it in v3.
+On 11/09/2025 17:38, Ulf Hansson wrote:
+> On Mon, 8 Sept 2025 at 10:35, Tomi Valkeinen
+> <tomi.valkeinen@ideasonboard.com> wrote:
+>>
+>> At the moment the driver sets the power state of all the PDs it creates
+>> to off, regardless of the actual HW state. This has two drawbacks:
+>>
+>> 1) The kernel cannot disable unused PDs automatically for power saving,
+>>    as it thinks they are off already
+>>
+>> 2) A more specific case (but perhaps applicable to other scenarios
+>>    also): bootloader enabled splash-screen cannot be kept on the screen.
+>>
+>> The issue in 2) is that the driver framework automatically enables the
+>> device's PD before calling probe() and disables it after the probe().
+>> This means that when the display subsystem (DSS) driver probes, but e.g.
+>> fails due to deferred probing, the DSS PD gets turned off and the driver
+>> cannot do anything to affect that.
+>>
+>> Solving the 2) requires more changes to actually keep the PD on during
+>> the boot, but a prerequisite for it is to have the correct power state
+>> for the PD.
+>>
+>> The downside with this patch is that it takes time to call the 'is_on'
+>> op, and we need to call it for each PD. In my tests with AM62 SK, using
+>> defconfig, I see an increase from ~3.5ms to ~7ms. However, the added
+>> feature is valuable, so in my opinion it's worth it.
+>>
+>> The performance could probably be improved with a new firmware API which
+>> returns the power states of all the PDs.
+>>
+>> There's also a related HW issue at play here: if the DSS IP is enabled
+>> and active, and its PD is turned off without first disabling the DSS
+>> display outputs, the DSS IP will hang and causes the kernel to halt if
+>> and when the DSS driver accesses the DSS registers the next time.
+>>
+>> With the current upstream kernel, with this patch applied, this means
+>> that if the bootloader enables the display, and the DSS driver is
+>> compiled as a module, the kernel will at some point disable unused PDs,
+>> including the DSS PD. When the DSS module is later loaded, it will hang
+>> the kernel.
+>>
+>> The same issue is already there, even without this patch, as the DSS
+>> driver may hit deferred probing, which causes the PD to be turned off,
+>> and leading to kernel halt when the DSS driver is probed again. This
+>> issue has been made quite rare with some arrangements in the DSS
+>> driver's probe, but it's still there.
+>>
+>> With recent change from Ulf (e.g. commit 13a4b7fb6260 ("pmdomain: core:
+>> Leave powered-on genpds on until late_initcall_sync")), the sync state
+>> mechanism comes to rescue. It will keep the power domains enabled, until
+>> the drivers have probed, or the sync-state is triggered via some other
+>> mechanism (e.g. manually by the boot scripts).
+>>
+>> Reviewed-by: Kevin Hilman <khilman@baylibre.com>
+>> Tested-by: Kevin Hilman <khilman@baylibre.com>
+>> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+> 
+> Makes perfect sense to me! Applied for next, thanks!
 
-> >
-> > In a way, the fused off core mask is part of the vague domain of
-> > "performance", and it'll also allow us to extend it with other
-> > things relevant to performance control in different vendor integration
-> > logic designs. I'm thinking memory bandwidth control and job scheduling
-> > preferences. E.g. if the interconnect tells us one core is spending a
-> > lot of time waiting on the interconnect, maybe because a different
-> > piece of the SoC that's active shares the same path on the
-> > interconnect, we could then communicate a scheduling preference for
-> > the other cores that have bandwidth headroom even if they are busier
-> > in compute. Maybe this doesn't make sense though because interconnect
-> > designs are fully switched these days or panthor's scheduler will
-> > already figure this out from job completion times.
-> >
-> > If any other SoC vendor or people working on hardware of those vendors
-> > want to chime in and say whether they've got any other uses for
-> > communicating more than just devfreq from glue logic to panthor, then
-> > this would be a great time to do it, so that we can get this interface
-> > right from the beginning.
-> >
-> > > Another issue is I am not sure if we need to expose panthor_device
-> > > internals to the provider. mtk_mfg accesses very few fields of
-> > > panthor_device. It seems we can make the two less coupled.
-> > >
-> > > I might change my view as mtk_mfg evolves and requires tigher
-> > > integration with panthor. But as is, I might prefer for mtk_mfg to
-> > > live under drivers/soc/mediatek and provide a header for panthor to
-> > > use in soc-specific path.
-> >
-> > I'm not very confident it's possible to cleanly decouple them without
-> > inventing a bunch of very panthor-and-mfg specific interfaces that
-> > masquerade as general solutions in the process. It'd also mean I'd
-> > have to duplicate all of `panthor_devfreq_get_dev_status` instead of
-> > just being able to reuse it, unless that is also exposed in said
-> > header file, which would need a better justification than "well there
-> > is one other user of it and we're trying to couple it more loosely".
-> >
-> > I know that it's almost independent, but unfortunately, even a tiny
-> > dependency between the two will mean that mediatek_mfg will need to
-> > know about panthor.
-> >
-> > Other things needed from panthor are the pdevfreq->gov_data, and
-> > the panthor struct device* itself, as well as stuff like "fast_rate"
-> > in the panthor_device struct.
-> >
-> > In the future, we may want to expand this driver with governors
-> > beyond SIMPLE_ONDEMAND, based on the job completion duration targets
-> > we can communicate to the GPUEB. That may either make the driver
-> > more tightly coupled or more loosely coupled, I don't really know
-> > yet.
-> >
-> > One advantage of looking to completely decouple them (though again,
-> > I doubt that's possible at the moment without questionable refactors)
-> > could be that we could also support panfrost devices that need this.
-> There is also tyr, although I don't follow its status.
->=20
-> I can see the concern over "very panthor-and-mfg specific interfaces
-> that masquerade as general solutions" or "questionable refactors". But
-> I also don't like, for example, how mtk_mfg_init_devfreq inits
-> panthor_devfreq manually. Beyond initialization, the remaining
-> coupling comes from that we need panthor to provide get_dev_status
-> callback for devfreq_dev_profile, and we need mtk_mfg to provide
-> target and get_cur_freq callbacks. That seems like something solvable
-> too.
+Thanks!
 
-Yeah I agree, I think the panthor_devfreq initialisation should happen
-within panthor_devfreq. It's independent of registering the actual
-devfreq device.
+I just noticed that the patch was marked RFC. Just for the record, the
+v1 was RFC, this wasn't.
 
-I'll note that down as something I will refactor. Once that's done,
-I'll have a clearer picture of whether moving the driver out of
-panthor is feasible.
-
->=20
-> I really appreciate the work and I don't want to block it by vague
-> concerns. If others have no preference, we should start with what we
-> have.
-
-Thanks! Don't worry, this is in no rush to be merged, since mainline
-still doesn't have everything to boot on this platform, so we're not
-in a hurry to get GPU enablement done I don't think. The important
-part is getting this right in a way where panthor doesn't carry my
-technical debt for years to come, so I'm grateful for the reviews.
-
-Kind regards,
-Nicolas Frattaroli
-
-> >
-> > >
-> > >
-> > > > +
-> > > >
-> > > >  int panthor_devfreq_init(struct panthor_device *ptdev);
-> > > >
-> > > > @@ -57,4 +71,6 @@ int panthor_devfreq_get_dev_status(struct device =
-*dev,
-> > > >
-> > > >  unsigned long panthor_devfreq_get_freq(struct panthor_device *ptde=
-v);
-> > > >
-> > > > +int panthor_devfreq_register_provider(struct panthor_devfreq_provi=
-der *prov);
-> > > > +
-> > > >  #endif /* __PANTHOR_DEVFREQ_H__ */
-> > > >
-> > > > --
-> > > > 2.51.0
-> > > >
-> > >
-> >
-> >
-> >
-> >
->=20
-
-
-
+ Tomi
 
 
