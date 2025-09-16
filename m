@@ -1,56 +1,56 @@
-Return-Path: <linux-pm+bounces-34719-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34720-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1776BB591A9
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Sep 2025 11:05:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C794B591CF
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Sep 2025 11:11:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A3AC5188CC71
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Sep 2025 09:05:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0A84F189E3A3
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Sep 2025 09:12:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC60F28CF4A;
-	Tue, 16 Sep 2025 09:04:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 690CB28D8E8;
+	Tue, 16 Sep 2025 09:11:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="VYZoQfha"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="QMtBzxKT"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 871F92877E7;
-	Tue, 16 Sep 2025 09:04:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39CC7286433;
+	Tue, 16 Sep 2025 09:11:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758013478; cv=pass; b=F9AxcX4oJMFFZl6VEJ/0A3OTuc3HlaZveapIoWPYN8w2oBjSpb90nuJZQad9Hgi9idvbE28W5lFCPmLKfBgSqaf/Mh3x4uWhvGYvNUaWwTCg5E4bd8kn/6l5kXQ1Pjc2qVaGqeHdWhZpyC+GUhtjGws/A4r2pRG+4ODgOtYG+VE=
+	t=1758013907; cv=pass; b=s0bfg9F7fvxEBuertrs6p6ThdtvvCAVjoiQ3S57CbeSmcS3zRPXgbl6q7c1VohqBhkj/EZwO94Dy0dwBR8/6yI60YUoYv+lOQAwNjlcjg4psyTvLXVm+qu565lIxoWldyabrSdkdnKPo94pg8X2usG2NWavrXtY8gFWuql2CbcA=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758013478; c=relaxed/simple;
-	bh=kIuAVuoQsObrmznGhBdA+4YPK55LyLy1IsuoSloBp4E=;
+	s=arc-20240116; t=1758013907; c=relaxed/simple;
+	bh=HM/w6ATe8sbAGY/o03VQ+rUz+yzxBeZLf2by0b6bUKE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=gE7aAX/wd9djSe9jdflqV0ymn2VGSpRSiuOvo+NOsaGX6NkzYYlbbmGEKkX3xtVB5rbULM21/jGj+lZfbbyD/FiyBEYDTTGRavskZffEBNGYonzXZsQT+QbJBwOrZKPNosvM8xH6XdodLeXygosmGlsmI0DLAI9Zcw7Gm2r+M4w=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=VYZoQfha; arc=pass smtp.client-ip=136.143.188.112
+	 MIME-Version:Content-Type; b=QfFrIQgTs9IJMcNmGmrdTmtwI3qvqp6w2wJowwJwEl9My+kcsHi1WQXbJFxS8IVcOhRF+8gAaMQb/UbIlkp+eqAj2h/lOGJ6ULGqTy8Ek0FAWre9onzzVThayG4s54kTsOXALKcd+ywIBoM1vaH+uSmoT5ogys4SUOitK3S280o=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=QMtBzxKT; arc=pass smtp.client-ip=136.143.188.112
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1758013447; cv=none; 
+ARC-Seal: i=1; a=rsa-sha256; t=1758013876; cv=none; 
 	d=zohomail.com; s=zohoarc; 
-	b=KphIoxkx3Cqj0qXKv+QONEdYHdi7TOxjXMeIFjDfloMVupb2o61pMUqjZ4bqfTOQhqGIbUK8DbxXjGqxV5x0TexDs9hNGMEDerN5hu6QXGL214QmPFbdz9IwyTXArIYA3WiNexkebwTvf4u6Vz9Oloa8Sh8ghlxeKCt8uTUG/aU=
+	b=D8EjaGJtJwuhjPyTCJY1Ui2FU697WRN1Mlj23NVwVIC51V5MW/3YViERIMTSpTzeOJVls64TUv7/E84em55Aqr5j3onc95u3D/k+UAS3hS+kxZ1BPidhZlHR3B7MzxxfqAKaiyxqft3io7m4vKAdMtidsVy7UqHdSY7/HesfTMI=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1758013447; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=vvB9uFwSO71J5u5suf9LzDD3AAOVAFdkQHjXMqw5dYs=; 
-	b=I/Gp8xb6pw6GnZQNdmmrEloJ+xsjI7JPL7JdONc0SPrqZE+QQDrTy2hnhmlIM1nhDbCwuqDBojz83VOKZ5+G4bBX6EKx2Bpi0HlKGZ6BTi5Rbq16jcH/wAruVDvzg/yWvtZBiyLWxyaPHSRhhhP+nriwk13Iu23ejuSz5brnzQs=
+	t=1758013876; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=KRPXZxJSBjsHPFbLQz/6kAFyVFuDb0rIVWEooQ0HKQE=; 
+	b=XvvrDgQZw08gE/qffNmFDgkfrdzAKNaIgxJu7T3SqTHVVOEBf8pb5wK0HqtD5avLYMJPYvfkQgccx5Em6Bwo0hfc7lBotL7oQjjS8YZ4nZF62Gv4s3g12nOB+8x8bzY3ar1NalD0UBu4aHJKx/BW72zhDm2JNSrtWxUsiUHVHXo=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
 	dkim=pass  header.i=collabora.com;
 	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
 	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1758013447;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1758013876;
 	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
 	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
-	bh=vvB9uFwSO71J5u5suf9LzDD3AAOVAFdkQHjXMqw5dYs=;
-	b=VYZoQfhaOxFZl7gpYmtPRLiRUkgTVYFaa6Td3m/0wyTVx6ttkq5K7psZ/2urwqCL
-	XCWZCkcz0LaT7xSAjw86BWu2urnKCyzUilLfARa5y6dBH2nj21gyNG3u/ScGSxaBIr3
-	qzZSU3LkTgXPn83JtA/HRG2LCAODFg/qgxxD5yvE=
-Received: by mx.zohomail.com with SMTPS id 1758013446090111.71149807332927;
-	Tue, 16 Sep 2025 02:04:06 -0700 (PDT)
+	bh=KRPXZxJSBjsHPFbLQz/6kAFyVFuDb0rIVWEooQ0HKQE=;
+	b=QMtBzxKTdUCmPjvNodR30Ij/nfEYFpt8yxa3QqeyzdPvxvwVFPmYxIQyn30y/Zfr
+	WSwhj54B9ITSRJDiMC/pRZBKj+lOtZbVQhWT5tH2jjG5/QBwudpL/qPCN56dG6ybwzB
+	5Fw+6jwkvvD4xYDijph2+O0eiPlvyr3gEji5oXcw=
+Received: by mx.zohomail.com with SMTPS id 1758013874343122.59157949348514;
+	Tue, 16 Sep 2025 02:11:14 -0700 (PDT)
 From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 To: Chia-I Wu <olvaffe@gmail.com>
 Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
@@ -71,15 +71,16 @@ Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
  linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
  linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2 05/10] mailbox: add MediaTek GPUEB IPI mailbox
-Date: Tue, 16 Sep 2025 11:03:57 +0200
-Message-ID: <5236533.GXAFRqVoOG@workhorse>
+Subject:
+ Re: [PATCH v2 09/10] drm/panthor: devfreq: add pluggable devfreq providers
+Date: Tue, 16 Sep 2025 11:11:07 +0200
+Message-ID: <3595790.aeNJFYEL58@workhorse>
 In-Reply-To:
- <CAPaKu7STDDp6D_fDGVfAKFrb5aWcxtwsT3nYtYDQQYCs7G9upA@mail.gmail.com>
+ <CAPaKu7QKUnTx-jRYfHEUJx_3bkgQ_=vEC=siTOigtQAnu4NxcQ@mail.gmail.com>
 References:
  <20250912-mt8196-gpufreq-v2-0-779a8a3729d9@collabora.com>
- <8577914.T7Z3S40VBb@workhorse>
- <CAPaKu7STDDp6D_fDGVfAKFrb5aWcxtwsT3nYtYDQQYCs7G9upA@mail.gmail.com>
+ <24083992.6Emhk5qWAg@workhorse>
+ <CAPaKu7QKUnTx-jRYfHEUJx_3bkgQ_=vEC=siTOigtQAnu4NxcQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -89,190 +90,194 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset="utf-8"
 
-On Tuesday, 16 September 2025 06:55:30 Central European Summer Time Chia-I =
+On Tuesday, 16 September 2025 08:17:18 Central European Summer Time Chia-I =
 Wu wrote:
 > On Mon, Sep 15, 2025 at 6:34=E2=80=AFAM Nicolas Frattaroli
 > <nicolas.frattaroli@collabora.com> wrote:
 > >
-> > On Saturday, 13 September 2025 00:11:10 Central European Summer Time Ch=
+> > On Saturday, 13 September 2025 00:53:50 Central European Summer Time Ch=
 ia-I Wu wrote:
 > > > On Fri, Sep 12, 2025 at 11:38=E2=80=AFAM Nicolas Frattaroli
 > > > <nicolas.frattaroli@collabora.com> wrote:
 > > > <snipped>
-> > > > +static irqreturn_t mtk_gpueb_mbox_thread(int irq, void *data)
-> > > > +{
-> > > > +       struct mtk_gpueb_mbox_chan *ch =3D data;
-> > > > +       int status;
-> > > > +
-> > > > +       status =3D atomic_cmpxchg(&ch->rx_status,
-> > > > +                               MBOX_FULL | MBOX_CLOGGED, MBOX_FULL=
-);
-> > > > +       if (status =3D=3D (MBOX_FULL | MBOX_CLOGGED)) {
-> > > > +               mtk_gpueb_mbox_read_rx(ch);
-> > > > +               writel(BIT(ch->num), ch->ebm->mbox_ctl + MBOX_CTL_I=
-RQ_CLR);
-> > > > +               mbox_chan_received_data(&ch->ebm->mbox.chans[ch->nu=
-m],
-> > > > +                                       ch->rx_buf);
-> > > Given what other drivers do, and how mtk_mfg consumes the data, we sh=
-ould
-> > >
-> > >   char buf[MAX_OF_RX_LEN]; //  MAX_OF_RX_LEN is 32; we can also
-> > > allocate it during probe
-> > >   mtk_gpueb_mbox_read_rx(ch);
-> > >   mbox_chan_received_data(..., buf);
-> > >
-> > > mtx_mfg makes a copy eventually anyway.
-> >
-> > We don't right now, at least not until after the callback returns.
-> > So we need to have the copy in the mtk_mfg callback, not after the
-> > completion. That's fine and I do want to do this as this is what
-> > the mailbox framework seems to expect clients to do.
-> >
-> > > We don't need to maintain any
-> > > extra copy.
-> > >
-> > > Then we might not need rx_status.
-> >
-> > We can probably get rid of it if we keep the per-channel
-> > interrupt handler. Otherwise, we may still need clogged,
-> > as we don't want to process interrupts on channels we have
-> > no user for.
-> >
-> > >
-> > > > +               atomic_set(&ch->rx_status, 0);
-> > > > +               return IRQ_HANDLED;
-> > > > +       }
-> > > > +
-> > > > +       return IRQ_NONE;
-> > > > +}
-> > > > +
-> > > > +static int mtk_gpueb_mbox_send_data(struct mbox_chan *chan, void *=
-data)
-> > > > +{
-> > > > +       struct mtk_gpueb_mbox_chan *ch =3D chan->con_priv;
-> > > > +       int i;
-> > > > +       u32 *values =3D data;
-> > > > +
-> > > > +       if (atomic_read(&ch->rx_status))
-> > > > +               return -EBUSY;
-> > > > +
-> > > > +       /*
-> > > > +        * We don't want any fancy nonsense, just write the 32-bit =
-values in
-> > > > +        * order. memcpy_toio/__iowrite32_copy don't work here, bec=
-ause fancy.
+> > > > diff --git a/drivers/gpu/drm/panthor/panthor_devfreq.h b/drivers/gp=
+u/drm/panthor/panthor_devfreq.h
+> > > > index a891cb5fdc34636444f141e10f5d45828fc35b51..94c9768d5d038c4ba85=
+16929edb565a1f13443fb 100644
+> > > > --- a/drivers/gpu/drm/panthor/panthor_devfreq.h
+> > > > +++ b/drivers/gpu/drm/panthor/panthor_devfreq.h
+> > > > @@ -8,6 +8,7 @@
+> > > >
+> > > >  struct devfreq;
+> > > >  struct thermal_cooling_device;
+> > > > +struct platform_device;
+> > > >
+> > > >  struct panthor_device;
+> > > >
+> > > > @@ -43,6 +44,19 @@ struct panthor_devfreq {
+> > > >         spinlock_t lock;
+> > > >  };
+> > > >
+> > > > +struct panthor_devfreq_provider {
+> > > > +       /** @dev: device pointer to the provider device */
+> > > > +       struct device *dev;
+> > > > +       /**
+> > > > +        * @init: the provider's init callback that allocates a
+> > > > +        * &struct panthor_devfreq, adds it to panthor, and adds a =
+devfreq
+> > > > +        * device to panthor. Will be called during panthor's probe.
 > > > > +        */
-> > > > +       for (i =3D 0; i < ch->c->tx_len; i +=3D 4)
-> > > > +               writel(values[i / 4], ch->ebm->mbox_mmio + ch->c->t=
-x_offset + i);
+> > > > +       int (*init)(struct panthor_device *ptdev, struct device *de=
+v);
 > > > > +
-> > > > +       writel(BIT(ch->num), ch->ebm->mbox_ctl + MBOX_CTL_IRQ_SET);
-> > > > +
-> > > > +       return 0;
-> > > > +}
-> > > > +
-> > > > +static int mtk_gpueb_mbox_startup(struct mbox_chan *chan)
-> > > > +{
-> > > > +       struct mtk_gpueb_mbox_chan *ch =3D chan->con_priv;
-> > > > +       int ret;
-> > > > +
-> > > > +       atomic_set(&ch->rx_status, 0);
-> > > > +
-> > > > +       ret =3D clk_enable(ch->ebm->clk);
-> > > > +       if (ret) {
-> > > > +               dev_err(ch->ebm->dev, "Failed to enable EB clock: %=
-pe\n",
-> > > > +                       ERR_PTR(ret));
-> > > > +               goto err_clog;
-> > > > +       }
-> > > > +
-> > > > +       writel(BIT(ch->num), ch->ebm->mbox_ctl + MBOX_CTL_IRQ_CLR);
-> > > > +
-> > > > +       ret =3D devm_request_threaded_irq(ch->ebm->dev, ch->ebm->ir=
-q, mtk_gpueb_mbox_isr,
-> > > > +                                       mtk_gpueb_mbox_thread, IRQF=
-_SHARED | IRQF_ONESHOT,
-> > > > +                                       ch->full_name, ch);
-> > > I don't think this warrants a per-channel irq thread.
-> > >
-> > > mbox_chan_received_data is atomic. I think wecan start simple with
-> > > just a devm_request_irq for all channels. mtk_gpueb_mbox_isr can
-> > >
-> > >   read bits from MBOX_CTL_RX_STS
-> > >   for each bit set:
-> > >     read data from rx
-> > >     mbox_chan_received_data
-> > >   write bits to MBOX_CTL_IRQ_CLR
-> > >
+> > > > +       struct list_head node;
+> > > > +};
+> > > On mt8196, we have performance-domains to replace several other
+> > > properties: clocks, *-supply, power-domains, operating-points-v2.
+> > > There are also quirks, such as GPU_SHADER_PRESENT should be masked by
+> > > GF_REG_SHADER_PRESENT. It feels like that the scope of
+> > > panthor_devfreq_provider is more broader, and at least the naming is
+> > > not right.
 > >
-> > I don't like this approach. It brings us back to having to process
-> > multiple channels per ISR, keep track of when the interrupt should
-> > be enabled and disabled based on how many channels are in use, and
-> > also is not in line with what e.g. omap-mailbox.c does.
+> > True, though I'm still not entirely sure whether mtk_mfg needs to do
+> > the GF_REG_SHADER_PRESENT thing. It's entirely possible this is just
+> > an efuse value the GPUEB reads and then puts in SRAM for us, and we
+> > could simply read this efuse cell ourselves. Among a list of questions
+> > about the hardware we're sending to MediaTek, whether this is an efuse
+> > cell and where it is placed is one of them.
 > >
-> > Remember that `mbox_chan_received_data` synchronously calls the
-> > mailbox client's rx_callback. In mediatek_mfg's case, this is
-> > fairly small, though with the request to not make the rx buffer
-> > persist beyond the rx_callback it will gain an additional memory
-> > copy. But we can't guarantee that someone isn't going to put a
-> > slow operation in the path. Sure, it's going to be atomic, but
-> > waiting for a spinlock is atomic and not something an ISR would
-> > enjoy. I don't think mailbox clients would expect that if they
-> > take their time they'll stall the interrupt handler for every
-> > other channel.
+> > If it turns out to be the case that we can simply read an efuse in
+> > panthor in the other mt8196 integration code, then we can keep
+> > mtk_mfg basically entirely focused on the devfreq-y part. I'd really
+> > prefer this solution.
 > >
-> > So we'd keep the interrupt disabled for all channels until the
-> > client that received a message has processed it.
-> >
-> > I can see myself getting rid of the handler and just having the
-> > thread function as the bottom half, but I'd really like to keep
-> > the one-IRQ-request-per-channel thing I've got going now as it
-> > made the code a lot easier to reason about. However, doing this
-> > would mean the interrupt is re-enabled after the generic upper
-> > half, when all the business logic that needs to not run
-> > concurrently for an individual channel is in the bottom half.
-> >
-> > As far as I can tell, this would then mean we'd have to add
-> > some concurrency exclusion mechanism to the bottom half.
-> >
-> > Moving all the logic into the upper half handler function
-> > would make that handler somewhat longer, and I don't know
-> > if IRQF_ONESHOT masks the interrupt for all users of that
-> > IRQ number or just for those with that dev_id. If it's per
-> > dev_id, then I'm fine with moving stuff up there. But from
-> > my reading of the core IRQ handling code, that does not
-> > appear to be the case; one channel getting a reply would
-> > mask *all* channels of the mailbox until the upper half is
-> > completed, and if the upper half calls into a driver
-> > callback synchronously, that may take a hot minute.
-> >
-> > Put differently: Is there a problem with one thread per used
-> > channel, or are we going off vibes here? The way it currently
-> > works uses the shared interrupt to mark just that one channel
-> > as busy with rx_status before letting the IRQ for all channels
-> > be unmasked again, which seems ideal to me.
-> No, one thread per used channel can work. I can't say I like it, but I
-> also don't know the hw as well as you do.
+> > However, assuming we can't go down this path either because this is
+> > not how the hardware works, or because MediaTek never replies, or
+> > because someone doesn't like reading efuses in panthor, I think
+> > generalising "devfreq_provider" to "performance_controller" or
+> > something like that would be a good move.
+> Yeah, let's see what MTK has to say on shader core mask.
 >=20
+> Another thing is that panthor still requires a "core" clk. Is it also
+> required on mt8196?
 
-Your knowledge is probably not far behind mine on this hardware :(
+Nope, I'm planning on getting rid of it in v3.
 
-I'll keep the per-channel thread for v3 for now, so that it's
-clearer as to how this will look. It'll also give us both an
-opportunity to run the code and add some measurements to see if
-this causes any problems, and to experiment with your proposed
-solution.
+> >
+> > In a way, the fused off core mask is part of the vague domain of
+> > "performance", and it'll also allow us to extend it with other
+> > things relevant to performance control in different vendor integration
+> > logic designs. I'm thinking memory bandwidth control and job scheduling
+> > preferences. E.g. if the interconnect tells us one core is spending a
+> > lot of time waiting on the interconnect, maybe because a different
+> > piece of the SoC that's active shares the same path on the
+> > interconnect, we could then communicate a scheduling preference for
+> > the other cores that have bandwidth headroom even if they are busier
+> > in compute. Maybe this doesn't make sense though because interconnect
+> > designs are fully switched these days or panthor's scheduler will
+> > already figure this out from job completion times.
+> >
+> > If any other SoC vendor or people working on hardware of those vendors
+> > want to chime in and say whether they've got any other uses for
+> > communicating more than just devfreq from glue logic to panthor, then
+> > this would be a great time to do it, so that we can get this interface
+> > right from the beginning.
+> >
+> > > Another issue is I am not sure if we need to expose panthor_device
+> > > internals to the provider. mtk_mfg accesses very few fields of
+> > > panthor_device. It seems we can make the two less coupled.
+> > >
+> > > I might change my view as mtk_mfg evolves and requires tigher
+> > > integration with panthor. But as is, I might prefer for mtk_mfg to
+> > > live under drivers/soc/mediatek and provide a header for panthor to
+> > > use in soc-specific path.
+> >
+> > I'm not very confident it's possible to cleanly decouple them without
+> > inventing a bunch of very panthor-and-mfg specific interfaces that
+> > masquerade as general solutions in the process. It'd also mean I'd
+> > have to duplicate all of `panthor_devfreq_get_dev_status` instead of
+> > just being able to reuse it, unless that is also exposed in said
+> > header file, which would need a better justification than "well there
+> > is one other user of it and we're trying to couple it more loosely".
+> >
+> > I know that it's almost independent, but unfortunately, even a tiny
+> > dependency between the two will mean that mediatek_mfg will need to
+> > know about panthor.
+> >
+> > Other things needed from panthor are the pdevfreq->gov_data, and
+> > the panthor struct device* itself, as well as stuff like "fast_rate"
+> > in the panthor_device struct.
+> >
+> > In the future, we may want to expand this driver with governors
+> > beyond SIMPLE_ONDEMAND, based on the job completion duration targets
+> > we can communicate to the GPUEB. That may either make the driver
+> > more tightly coupled or more loosely coupled, I don't really know
+> > yet.
+> >
+> > One advantage of looking to completely decouple them (though again,
+> > I doubt that's possible at the moment without questionable refactors)
+> > could be that we could also support panfrost devices that need this.
+> There is also tyr, although I don't follow its status.
+>=20
+> I can see the concern over "very panthor-and-mfg specific interfaces
+> that masquerade as general solutions" or "questionable refactors". But
+> I also don't like, for example, how mtk_mfg_init_devfreq inits
+> panthor_devfreq manually. Beyond initialization, the remaining
+> coupling comes from that we need panthor to provide get_dev_status
+> callback for devfreq_dev_profile, and we need mtk_mfg to provide
+> target and get_cur_freq callbacks. That seems like something solvable
+> too.
 
-What I mainly am worried about is that if we go back to one IRQ
-for all channels, then we have to do our own "how many channels
-are enabled?" accounting to disable the IRQ later, because the
-enable_irq/disable_irq accounting works the opposite way where
-you can disable as many times as you want but your enables can't
-exceed disables + 1.
+Yeah I agree, I think the panthor_devfreq initialisation should happen
+within panthor_devfreq. It's independent of registering the actual
+devfreq device.
+
+I'll note that down as something I will refactor. Once that's done,
+I'll have a clearer picture of whether moving the driver out of
+panthor is feasible.
+
+>=20
+> I really appreciate the work and I don't want to block it by vague
+> concerns. If others have no preference, we should start with what we
+> have.
+
+Thanks! Don't worry, this is in no rush to be merged, since mainline
+still doesn't have everything to boot on this platform, so we're not
+in a hurry to get GPU enablement done I don't think. The important
+part is getting this right in a way where panthor doesn't carry my
+technical debt for years to come, so I'm grateful for the reviews.
 
 Kind regards,
 Nicolas Frattaroli
+
+> >
+> > >
+> > >
+> > > > +
+> > > >
+> > > >  int panthor_devfreq_init(struct panthor_device *ptdev);
+> > > >
+> > > > @@ -57,4 +71,6 @@ int panthor_devfreq_get_dev_status(struct device =
+*dev,
+> > > >
+> > > >  unsigned long panthor_devfreq_get_freq(struct panthor_device *ptde=
+v);
+> > > >
+> > > > +int panthor_devfreq_register_provider(struct panthor_devfreq_provi=
+der *prov);
+> > > > +
+> > > >  #endif /* __PANTHOR_DEVFREQ_H__ */
+> > > >
+> > > > --
+> > > > 2.51.0
+> > > >
+> > >
+> >
+> >
+> >
+> >
+>=20
+
 
 
 
