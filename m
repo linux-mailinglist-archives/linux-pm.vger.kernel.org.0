@@ -1,87 +1,87 @@
-Return-Path: <linux-pm+bounces-34735-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34736-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AAB6BB59A54
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Sep 2025 16:36:17 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A0323B59A6E
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Sep 2025 16:38:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 83DED1C05461
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Sep 2025 14:30:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BFFD41771FE
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Sep 2025 14:29:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56DCB33A01D;
-	Tue, 16 Sep 2025 14:28:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E156341655;
+	Tue, 16 Sep 2025 14:28:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="g9+0IlNU"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="TR9rpoOw"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F2EF2882B2
-	for <linux-pm@vger.kernel.org>; Tue, 16 Sep 2025 14:28:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E6ED276045
+	for <linux-pm@vger.kernel.org>; Tue, 16 Sep 2025 14:28:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758032891; cv=none; b=fwFzRRaLCf74qWTCMIBRDkLe9Y3trlPHUJPd58J/Ru83UKUENuc5hKjBXQNhFm3leCzdTjIia60Ror69MB6Ml0m6tcsy91RN/9sBGfQ7kEVv6z3Be8I6QK2MAahqIgxOxiEgsZS0jrwG+fFISEowsXfmjBJJeNVolPkj+d7WuQ0=
+	t=1758032913; cv=none; b=QjDk/Zz74rhw4jlvBxuvGV9kbqRaWRrD+cvZqPl1k6N4WROQbMrxEY1TlcbS2+n5rstM6+3pu8cHyNxB9ajJW2KOC+l997IuEm8N+NrOwfLshFt3gVHYZHl2AFYqaPdkgGcXQs04rFXDRsaFzDKmJidrHf+jc5ShEi30itdgSC0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758032891; c=relaxed/simple;
-	bh=MvB5R+g1Y5UMwU5wpYAtG6LHzlXTMocT+4+xJ12AnMQ=;
+	s=arc-20240116; t=1758032913; c=relaxed/simple;
+	bh=TGwn+qZGfOX+MW0qfzMQE+Xk3Fp2SmWLOYAprwwIKmg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kAp5KYO8e6pA/cN/hZwlrSQhJ5/eriDb2rsVn7X7GsHMS+rtn5+s4U7k34FdxNG9a3lGLkrecwKAwVjcqjFIdMSlgGbFI6CBmjX2/CY5AO6CC+jpRhsTrcDaXeuegNyfoJ/xmSVhvyDF8oFdw2prxhl0epjcXQ9sy49MDACmLLQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=g9+0IlNU; arc=none smtp.client-ip=205.220.180.131
+	 In-Reply-To:Content-Type; b=D48oyvFlow8EZHxXBRXaK3ttrZ04InZYHM88Y9evTEJp1Tiio7yF0mqFyQiTpJaZfshLB9Twd7v5Uv/UkjALDXrFHQD5j89F7O4xuugc3fVDwn7kdXco6R5uNZhHgejLqh9PNfzyP2PX2/pLkyyJMO4Rzfm27NK55GlvbFZWEvs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=TR9rpoOw; arc=none smtp.client-ip=205.220.180.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58GAKM18018535
-	for <linux-pm@vger.kernel.org>; Tue, 16 Sep 2025 14:28:08 GMT
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58G9d8br014280
+	for <linux-pm@vger.kernel.org>; Tue, 16 Sep 2025 14:28:29 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	wVazFxrBiaVWPr5/+h7Ed2VEmDRhLsCV8X1mrq96m1g=; b=g9+0IlNU/+nURk93
-	+Smop83hTIb4LZ97NCbh+1tie8EpaIF4IDvh0/p5O0SODYIsRATFQI7KUW52+p/N
-	tbO542Q9FrN7VZIN8t68Km2AEHM78lN278SVOoJoYtqFxT8KgH6e+mZOdHovzd3q
-	NzoQskBV8fAmlaEfJx6uehPSzxSxLMFLTO6GsKPP9EWM7o8vop72qC8Y5wQqwoxP
-	74eMuiFS6jgcj9y445GG3G1Pz++TvnZHWzaqMnX440zY23gNYjKm4/0xXS37jM59
-	LiahGidMhYElLZpMatS+RdpA4Uiy0wLPv7mhmLfPSZwOhzoiHo5zveeEzscTqfyr
-	0/OjrQ==
-Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com [209.85.216.70])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 496da9dj3m-1
+	ccCP+yCNIjixDrCZqrWb8pSS4BdGxszDeBOi4Pe3O4k=; b=TR9rpoOwhJV4dkrm
+	7RWVU8L5SQmMyr2iyOZXyEsR8+q5IsPuR7jzSWiUnd67vJeWIrtR3/u48Vg2nj6Q
+	9V8CZ4oGxThhtvMhZOeoSBajb0aGu59/dcOEU/jZcvWrs6W9MmTHGsbWAop+utvR
+	KeNUaBResHNykpXG7wSSt9coLFTNYKOJy0EzMSTGJzmsynTxFi0ZOQXxjwlF84T/
+	5qxuiWFjSz0HpJWwBQ+qAH9e7E0qSl5blRnQgp8qL6cqu+l86ynwEOPvO9mKJGsd
+	rlmIQyIeUfytnPrT0GMOg87tcRAIzrQa8XazEuKY8goqz0n93DIFBUoSLmA536vS
+	UpIy5g==
+Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com [209.85.214.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 496x5at9q6-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Tue, 16 Sep 2025 14:28:08 +0000 (GMT)
-Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-32e0b00138cso3116331a91.3
-        for <linux-pm@vger.kernel.org>; Tue, 16 Sep 2025 07:28:08 -0700 (PDT)
+	for <linux-pm@vger.kernel.org>; Tue, 16 Sep 2025 14:28:29 +0000 (GMT)
+Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-24ca417fb41so54066325ad.1
+        for <linux-pm@vger.kernel.org>; Tue, 16 Sep 2025 07:28:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758032887; x=1758637687;
+        d=1e100.net; s=20230601; t=1758032908; x=1758637708;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wVazFxrBiaVWPr5/+h7Ed2VEmDRhLsCV8X1mrq96m1g=;
-        b=AOhwtxL41WhgaClO062RONvBNlMJF3doPRhDHQxCiUxc6TVKHRZkmWFpZz/oZJ+2xD
-         zTBFfOVp/AsVhNjrkuO/zgRotMaqCashoHQOFv8oUtIq6HXxR4TtB/748yCzuqTcU37u
-         fqwCLQhX9Y3zl9s5GjBT9FcS2Ahxv+DtI03AsWKANdvIdRM6CBpFNi90Qn5fLJeofIdT
-         H+chedaKxV5XMbROiHLFGP6qx8rBdUb8RXSzJnYjftzrheRFC8V4BrFdhpZ32p92O1BP
-         52x2BLKBpp2yFOTRuaYJ9zy1aaSra+XlC0IfjHGqJkyvWOOrhX3k06EJFcgMwJJg4hcD
-         VtPg==
-X-Forwarded-Encrypted: i=1; AJvYcCUeLAG4wAjaOyWx9rt+LUU73KxyagQc5DBV2aXDHsw4di4HOGvG11KfmfN9gUoY78c1ktbGKym4Hw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YztGULISQxNsnJZ5Y5YU/xZrr4iXQH5vwUO+LzT76romK9LzK2c
-	TWec97dRPocOEp7ocEw0Sxh1+qTXA3RUlLC5/FlRrz7gM7WfSqiegjRxrAuvrOiBmGYnGOMvW+z
-	hfg4z9vj7PyvYR6gI+Uwk2j7kB46nQjBZaeUAFKtgqFdv+71DMBlMPiXH6btTcg==
-X-Gm-Gg: ASbGncuAZcBpuHN0NCuxg80VmhURNoiTsvfgs7K7bk+7tyK5G+S7HVEJ6SJHSyRQa6K
-	omFkS9ffConEuzS8fdkzqiFpfVUayvk35QkDTqfTn3bXzegL4z1ClUxpTo5wx1DQD5T0t1+V1U2
-	BqPLkphhQHCoCKeU4GyPvy/xQMh0R2HqzlKFdQZ3ssLhBB8/vpNJ9cR6jHyQ2sbnUT/RFtTI6Zs
-	ovBs7QHMQde+BP00lWuEq8C3cygHnsPxt4A39STInip6kTmBI2G6Bvj8QAW9YWIIKxUyt9m8iJt
-	GYq1vrku2qzDT5lEc2n+Gasm483ez+OFj6xo6MnF60Uvu0ae/bWDdEabD1W7Mg9C00Gu7jTb
-X-Received: by 2002:a17:90b:4b02:b0:327:b2a1:2964 with SMTP id 98e67ed59e1d1-32de4edd5c0mr24271853a91.15.1758032887090;
-        Tue, 16 Sep 2025 07:28:07 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFaRdyreAXTN3R4VZO/4YJ07pyOClNXcalPfMJAt0v6xilHbu5B83Umf7EFNgBl+2P0ENNgmA==
-X-Received: by 2002:a17:90b:4b02:b0:327:b2a1:2964 with SMTP id 98e67ed59e1d1-32de4edd5c0mr24271789a91.15.1758032886468;
-        Tue, 16 Sep 2025 07:28:06 -0700 (PDT)
+        bh=ccCP+yCNIjixDrCZqrWb8pSS4BdGxszDeBOi4Pe3O4k=;
+        b=MAw93tSQFHYqJe2/Kuq44UMVohaEkqanPBgpCqnxDnwT7B9YfLft0h8MgSMhsGJnfZ
+         2XWwIegS3hfZxGAEKGbD0kugucbohviOPEcDl+2ABOE2RxIUrz84yXsLsH7VpYYfTC5p
+         IO4uVhioupaxtRiPUa1VS2OpKOI4K9+7divO307LjUyh/1qfH7T/DrYPkdl7Gn/EXMw6
+         rsH55wAg98TwHWSTymSsnw5FTDL0VAIL3dUp+NVc7uz7uVMjbBs6KtmiabHN/qY9ayLG
+         TjekrzxDz0WkdSFEqaeyZkXICN4OEf3I0C5Xgq+ij+jAhyo4tCNMNtdWllJzdvO4vlmc
+         OJRg==
+X-Forwarded-Encrypted: i=1; AJvYcCWpNdk/YeX36wGF77Wa6SF2TSZIcov4MmtSIDSYRYwdBtBa75rrqayfkKav0BE/je+hLy5wI0fozw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx8n9WVTl+c6ueCR1rVHw7PKm29oNejUUT0X8eSe83Y7BzJTk+i
+	zAYSbHeLYEPTwOIIx9lna4YedqDWmIfZpwLSBppOQYGL5pkupsglM2bLu4jOHsx5hsuLwrWh1Qu
+	b2kPX8jxteyztUscuXAmjs0nMD7OybyqyOKVO18hoT0b1Kju3Wbk12JtIQ2uuCA==
+X-Gm-Gg: ASbGncuz75m+uqjQkq4wLzKiyc+9zyRx775U+lJ8b/ouTqriGK8k+NcX6EWDaZam1T/
+	eol6xYNvcJ6KKGeAnJGSUIE0LYq/+KHlOM5f0unIJC2p5prcmO1AyTM15iMtcuobyFBDmvaatYl
+	BmeBY2O0xbwOM0NYh3h/WV5ETuN9FQ6D/aHp1rLNQ7/uSrcFrdhNiFeMz7qMy9DtUYLFnly2Lff
+	8h0Ht+iCSseT+CwdP7ihPPuv2DYsxJSwjN7+uYzvBnYTJvVcH+7GSoBRt9MdLXxKKwqivKkMYxF
+	bOYQFx/tmfGDBt+pNK2Ll+zG3zufAL2jsryGI/Dqo176bMycQPZx1tTpXuzlXgmzjt7NdCPJ
+X-Received: by 2002:a17:903:230a:b0:267:e8a9:7e72 with SMTP id d9443c01a7336-267e8a98193mr20321755ad.12.1758032908017;
+        Tue, 16 Sep 2025 07:28:28 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEXZ/OLgiEOc7ZsA33aPYfpDR5hJxcewlrm4+2ZHd+0WezSt0QCPDrGqDniIYPdLk4UlZzVgg==
+X-Received: by 2002:a17:903:230a:b0:267:e8a9:7e72 with SMTP id d9443c01a7336-267e8a98193mr20321365ad.12.1758032907504;
+        Tue, 16 Sep 2025 07:28:27 -0700 (PDT)
 Received: from [10.217.217.28] ([202.46.22.19])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b54a387cc21sm14557763a12.28.2025.09.16.07.27.58
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2651d2df15esm73585485ad.45.2025.09.16.07.28.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Sep 2025 07:28:05 -0700 (PDT)
-Message-ID: <d662d014-5970-4d6a-b5c5-1722cb8a1a86@oss.qualcomm.com>
-Date: Tue, 16 Sep 2025 19:57:56 +0530
+        Tue, 16 Sep 2025 07:28:27 -0700 (PDT)
+Message-ID: <5d662148-408f-49e1-a769-2a5d61371cae@oss.qualcomm.com>
+Date: Tue, 16 Sep 2025 19:58:18 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -89,7 +89,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V7 0/5] Add support for QCOM SPMI PMIC5 Gen3 ADC
+Subject: Re: [PATCH V7 3/5] dt-bindings: iio: adc: Add support for QCOM PMIC5
+ Gen3 ADC
 To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc: jic23@kernel.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
         agross@kernel.org, andersson@kernel.org, lumag@kernel.org,
@@ -103,92 +104,189 @@ Cc: jic23@kernel.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
         linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         cros-qcom-dts-watchers@chromium.org, quic_kotarake@quicinc.com,
-        neil.armstrong@linaro.org, stephan.gerhold@linaro.org
+        neil.armstrong@linaro.org, stephan.gerhold@linaro.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
 References: <20250826083657.4005727-1-jishnu.prakash@oss.qualcomm.com>
- <20250829-imaginary-dove-of-music-afdb36@kuoka>
+ <20250826083657.4005727-4-jishnu.prakash@oss.qualcomm.com>
+ <20250829-classic-dynamic-clam-addbd8@kuoka>
 Content-Language: en-US
 From: Jishnu Prakash <jishnu.prakash@oss.qualcomm.com>
-In-Reply-To: <20250829-imaginary-dove-of-music-afdb36@kuoka>
+In-Reply-To: <20250829-classic-dynamic-clam-addbd8@kuoka>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Authority-Analysis: v=2.4 cv=M+5NKzws c=1 sm=1 tr=0 ts=68c973f8 cx=c_pps
- a=0uOsjrqzRL749jD1oC5vDA==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
- a=IkcTkHD0fZMA:10 a=yJojWOMRYYMA:10 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8
- a=a0YOPMXbwBXd-ClgL4oA:9 a=QEXdDO2ut3YA:10 a=mQ_c8vxmzFEMiUWkPHU9:22
-X-Proofpoint-GUID: Oudhep0fa16kh6vL_FKnrooii45dgmf4
-X-Proofpoint-ORIG-GUID: Oudhep0fa16kh6vL_FKnrooii45dgmf4
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTE1MDA1NiBTYWx0ZWRfX9CvEjiOBBwZM
- xNAY1Ufx/Q4srgVE4Wpb5HXKsMLXX2o0nJTZFDjzKb5wqIxYMfWG/rsT+qU8NxD80inC9sdIK/t
- zKlNZtrYxckd7BiIsdKg/VV9kX3eJAHLCjT9DISUUFgq5ndXd+V5ifAl+aMkJQVazutT7Y05Q2k
- Nmt9mEgODTx3yyJ3CwbMMi1IXcAncx59E5yCcoJFHSHKIJVtdzSi3ObORw8d2TzvzjTetc480zs
- DKFMxUS6bKVPFiFXovT4QBOg6YZ4qE3hLFlZfQD9Z/ulFMzU6GzPLsMTU8NjjAyDYMsc/QNuRTQ
- zzJbMZcmgRQ+02nmArGauuqTc3RdJGbvJQlytPZPCBPeEnmmOgiLOlrH6CI36UVCuI7CR53ifUn
- mw/GPAfl
+X-Proofpoint-GUID: zqohaoXKch5ny-0DGPdTGAi8uEJbuUYK
+X-Proofpoint-ORIG-GUID: zqohaoXKch5ny-0DGPdTGAi8uEJbuUYK
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTE2MDAxMCBTYWx0ZWRfX6ZdoAdSBgkZ9
+ 1EvyENScQFU4YTCbHnswsAzfMyTRGPIhdwWljlw+VX96CZlYC7hOVxSUK/xYbhXGZD7PPuZc89v
+ V8Hud//ECqm4LgrDm0+6ry0SA9dM9BJwYiVh8h5CmEmuFTGtyIJLVqC+OYECcoxe+V5NmLUMfWx
+ /i9ZmsuVLT1LuwSaBqSCpZIS5KCho0c7uB5m1K3V58bFVs5bgWTt5wSNahrxv/TNVaXdgXelPFO
+ skzT2TFBZ0vCSDwV2ekTPTF1je4a8a68DmzVvP5GjMXEBXiV07iAa5iZ2bULNEic2ojL5453Rl2
+ ykBZLDCm9p+5B/qwjw65HyT+7UFXY5T/CiCxVwjeJVkfh+3ddS/YxGs2OPLjb8yoMpIvVP78fPz
+ YbAFbjXq
+X-Authority-Analysis: v=2.4 cv=WpQrMcfv c=1 sm=1 tr=0 ts=68c9740d cx=c_pps
+ a=IZJwPbhc+fLeJZngyXXI0A==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
+ a=IkcTkHD0fZMA:10 a=yJojWOMRYYMA:10 a=i0EeH86SAAAA:8 a=EUspDBNiAAAA:8
+ a=NBYwllkvtaGzK6LsQGIA:9 a=QEXdDO2ut3YA:10 a=uG9DUKGECoFWVXl0Dc02:22
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
  definitions=2025-09-16_02,2025-09-12_01,2025-03-28_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 spamscore=0 clxscore=1015 suspectscore=0 priorityscore=1501
- phishscore=0 adultscore=0 bulkscore=0 impostorscore=0 classifier=typeunknown
- authscore=0 authtc= authcc= route=outbound adjust=0 reason=mlx scancount=1
- engine=8.19.0-2507300000 definitions=main-2509150056
+ malwarescore=0 suspectscore=0 clxscore=1015 impostorscore=0
+ priorityscore=1501 adultscore=0 phishscore=0 bulkscore=0 spamscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2509160010
 
 Hi Krzysztof,
 
-On 8/29/2025 12:41 PM, Krzysztof Kozlowski wrote:
-> On Tue, Aug 26, 2025 at 02:06:52PM +0530, Jishnu Prakash wrote:
->> PMIC5 Gen3 has a similar ADC architecture to that on PMIC5 Gen2,
->> with all SW communication to ADC going through PMK8550 which
->> communicates with other PMICs through PBS. The major difference is
->> that the register interface used here is that of an SDAM present on
->> PMK8550, rather than a dedicated ADC peripheral. There may be more than one
->> SDAM used for ADC5 Gen3. Each ADC SDAM has eight channels, each of which may
->> be used for either immediate reads (same functionality as previous PMIC5 and
->> PMIC5 Gen2 ADC peripherals) or recurring measurements (same as PMIC5 and PMIC5
->> Gen2 ADC_TM functionality). In this case, we have VADC and ADC_TM functionality
->> combined into the same driver.
+On 8/29/2025 12:49 PM, Krzysztof Kozlowski wrote:
+> On Tue, Aug 26, 2025 at 02:06:55PM +0530, Jishnu Prakash wrote:
+>> For the PMIC5-Gen3 type PMICs, ADC peripheral is present in HW for the
+>> following PMICs: PMK8550, PM8550, PM8550B and PM8550VX PMICs.
 >>
->> Patch 1 is a cleanup, to move the QCOM ADC dt-bindings files from
->> dt-bindings/iio to dt-bindings/iio/adc folder, as they are
->> specifically for ADC devices. It also fixes all compilation errors
->> with this change in driver and devicetree files and similar errors
->> in documentation for dtbinding check.
+>> It is similar to PMIC5-Gen2, with SW communication to ADCs on all PMICs
+>> going through PBS(Programmable Boot Sequence) firmware through a single
+>> register interface. This interface is implemented on SDAM (Shared
+>> Direct Access Memory) peripherals on the master PMIC PMK8550 rather
+>> than a dedicated ADC peripheral.
 >>
->> Patch 2 splits out the common ADC channel properties used on older
->> VADC devices, which would also be reused on ADC5 Gen3.
+>> Add documentation for PMIC5 Gen3 ADC and macro definitions for ADC
+>> channels and virtual channels (combination of ADC channel number and
+>> PMIC SID number) per PMIC, to be used by clients of this device. Also
+>> update SPMI PMIC bindings to allow ADC5 Gen3 as adc@ subnode.
 >>
->> Patch 3 adds bindings for ADC5 Gen3 peripheral.
->>
->> Patch 4 adds the main driver for ADC5 Gen3.
->>
->> Patch 5 adds the auxiliary thermal driver which supports the ADC_TM
->> functionality of ADC5 Gen3.
->>
+>> Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+>> Signed-off-by: Jishnu Prakash <jishnu.prakash@oss.qualcomm.com>
+>> ---
 >> Changes since v6:
->> - Updated auxiliary device cleanup handling to fix memory freeing issues
->> - Updated copyright license in newly added files
+>> - Updated SPMI PMIC bindings to allow ADC5 Gen3 as adc@ subnode and
+>>   copyright license in newly added files.
 > 
-> Eveyrthing is an update.... What did you change in copyright and
-> license? And why?
+> So you did not implement my requests/comments from v5? I did not request
+> above, I had many, many other comments.
+> 
+> 
 
-I replaced the 2025 copyright with the new yearless one in newly added files,
-following our new internal guidelines. There was no change in the license, I'll
-fix this line.
+In my v6 patch, I had implemented all the changes you requested in
+my v5 patch, that is what I had meant by the last part ('addressed other reviewer comments').
+I will update the below section when pushing my next patch series
+to list out all the changes explicitly.
 
 > 
->> - Addressed some reviewer comments in documentation and driver patches.
-> 
-> What changed specifically?
+>>
+>> Changes since v5:
+>> - Added more details in binding description explaining how number
+>>   of SDAM peripherals used for ADC is allocated per SoC.
+>> - Renamed per-PMIC binding files listing ADC channel macro names 
+>>   and addressed other reviewer comments.
+>>
+>> Changes since v4:
+>> - Added ADC5 Gen3 documentation in a separate new file to avoid complicating
+>>   existing VADC documentation file further to accomodate this device, as
+>>   suggested by reviewer.
+>>
+>> Changes since v3:
+>> - Added ADC5 Gen3 documentation changes in existing qcom,spmi-vadc.yaml file
+>>   instead of adding separate file and updated top-level constraints in documentation
+>>   file based on discussion with reviewers.
+>> - Dropped default SID definitions.
+>> - Addressed other reviewer comments.
+>>
+>> Changes since v2:
+>> - Moved ADC5 Gen3 documentation into a separate new file.
+>>
 
-I'll update the changelog here and in other patches to
-list all the changes clearly when pushing the next patch series.
+...
+
+>> +
+>> +  The interface is implemented on SDAM (Shared Direct Access Memory) peripherals
+>> +  on the master PMIC rather than a dedicated ADC peripheral. The number of PMIC
+>> +  SDAM peripherals allocated for ADC is not correlated with the PMIC used, it is
+>> +  programmed in FW (PBS) and is fixed per SOC, based on the SOC requirements.
+>> +  All boards using a particular (SOC + master PMIC) combination will have the
+>> +  same number of ADC SDAMs supported on that PMIC.
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: qcom,spmi-adc5-gen3
+>> +
+>> +  reg:
+>> +    items:
+>> +      - description: SDAM0 base address in the SPMI PMIC register map
+>> +      - description: SDAM1 base address
+>> +    minItems: 1
+>> +
+>> +  '#address-cells':
+>> +    const: 1
+>> +
+>> +  '#size-cells':
+>> +    const: 0
+>> +
+>> +  '#io-channel-cells':
+>> +    const: 1
+>> +
+>> +  "#thermal-sensor-cells":
+> 
+> Nothing improved here, still mess with quotes.
+
+I will fix this and check for any other things to fix
+before pushing the next patch.
+
+> 
+> I am not going to check the rest of comments, because:
+> 1. Your changelog is vague and claims you did not implement them,
+> 2. b4 diff does not work, base-commit is unknown.
+> 3. Main changelog is even more vague.
+> 
+> You make it difficult for us to review your patches, fine. You will get:
+> 
+> NAK (plus one more comment below)
+> 
+>> diff --git a/include/dt-bindings/iio/adc/qcom,spmi-vadc.h b/include/dt-bindings/iio/adc/qcom,spmi-vadc.h
+>> index ef07ecd4d585..b1b89e874316 100644
+>> --- a/include/dt-bindings/iio/adc/qcom,spmi-vadc.h
+>> +++ b/include/dt-bindings/iio/adc/qcom,spmi-vadc.h
+>> @@ -300,4 +300,83 @@
+>>  #define ADC7_SBUx				0x94
+>>  #define ADC7_VBAT_2S_MID			0x96
+>>  
+>> +/* ADC channels for PMIC5 Gen3 */
+>> +
+>> +#define ADC5_GEN3_REF_GND			0x00
+>> +#define ADC5_GEN3_1P25VREF			0x01
+>> +#define ADC5_GEN3_VREF_VADC			0x02
+>> +#define ADC5_GEN3_DIE_TEMP			0x03
+>> +
+>> +#define ADC5_GEN3_AMUX1_THM			0x04
+>> +#define ADC5_GEN3_AMUX2_THM			0x05
+>> +#define ADC5_GEN3_AMUX3_THM			0x06
+>> +#define ADC5_GEN3_AMUX4_THM			0x07
+>> +#define ADC5_GEN3_AMUX5_THM			0x08
+>> +#define ADC5_GEN3_AMUX6_THM			0x09
+>> +#define ADC5_GEN3_AMUX1_GPIO			0x0a
+>> +#define ADC5_GEN3_AMUX2_GPIO			0x0b
+>> +#define ADC5_GEN3_AMUX3_GPIO			0x0c
+>> +#define ADC5_GEN3_AMUX4_GPIO			0x0d
+>> +
+>> +#define ADC5_GEN3_CHG_TEMP			0x10
+>> +#define ADC5_GEN3_USB_SNS_V_16			0x11
+>> +#define ADC5_GEN3_VIN_DIV16_MUX			0x12
+>> +#define ADC5_GEN3_VREF_BAT_THERM		0x15
+> 
+> You cannot have empty spaces in ID constants. These are abstract
+> numbers.
+> 
+> Otherwise please point me to driver using this constant.
+
+These constants are for ADC channel numbers, which are fixed in HW.
+
+They are used in this driver: drivers/iio/adc/qcom-spmi-adc5-gen3.c,
+which is added in patch 4 of this series.
+
+They can be found in the array named adc5_gen3_chans_pmic[].
 
 Thanks,
 Jishnu
 
-> 
->> - Link to v6: https://lore.kernel.org/all/20250509110959.3384306-1-jishnu.prakash@oss.qualcomm.com/
->>
 > 
 > Best regards,
 > Krzysztof
