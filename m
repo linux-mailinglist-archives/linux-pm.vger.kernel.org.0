@@ -1,183 +1,134 @@
-Return-Path: <linux-pm+bounces-34801-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34802-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E30F5B5A35D
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Sep 2025 22:40:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8697BB6207E
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 00:11:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E9A11521B0F
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Sep 2025 20:37:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 156BF526158
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Sep 2025 22:11:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A065A31BCBC;
-	Tue, 16 Sep 2025 20:36:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C612129B778;
+	Tue, 16 Sep 2025 22:11:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="QYC890Jq";
-	dkim=permerror (0-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="5LVDcZRo"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="WJv59My3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail.mainlining.org (mail.mainlining.org [5.75.144.95])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CDA131BC9F;
-	Tue, 16 Sep 2025 20:36:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.75.144.95
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A95C329A31D
+	for <linux-pm@vger.kernel.org>; Tue, 16 Sep 2025 22:11:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758054992; cv=none; b=j1qRxH6qwhWAKjdUh3HcQ+KF3SyX1ZzDLJb8n43qsFS8pzVdRfJkKayiiE5SCTvoo8ItXpNku9/Nlyfp9WeEtasQWX7AuKGdd6KFLjPM5wagI4ELGJSAeaIugHqzJTTg2qP9bfrFbfBO1Ajd7AR0vPyrudWp2uh049dTZRFoj2M=
+	t=1758060697; cv=none; b=DIsFBnW4uUsU9qV07+9jXaL2/5TBkLFC9gDVF7yra08PUNqXD0G3y3D9sw1U6sSchsVnVnXFOzEj/VrNEhjy8ltDdrl35P/sZji1WuHqZsRJ64pz1pUVBnebaXCPLf6kzusUcEB2TnC0x5ajMvpzFZWpyOpx+/gY4l4HocR9Ui4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758054992; c=relaxed/simple;
-	bh=bvBuTVi6aDRmqQt6s8gCawcYt5/NLCH3CkL+959SCAk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=TXk+Negwn1DDUq0LC3PAqSojlmJcx8DSfzVCEvyz5hJYs6bioGPOSi9Yoajyewp7NahB0gcEG1BpRT7YcH6H7b9pGs2MLMRTggsVYU8AYHxd0YbiaqlIGuVfgmSMFpooVC97GW05foSkSCU4t+QA6ec9VyRY2wKe0hdv8UYiNCU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org; spf=pass smtp.mailfrom=mainlining.org; dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=QYC890Jq; dkim=permerror (0-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=5LVDcZRo; arc=none smtp.client-ip=5.75.144.95
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mainlining.org
-DKIM-Signature: v=1; a=rsa-sha256; s=202507r; d=mainlining.org; c=relaxed/relaxed;
-	h=Message-ID:Date:Subject:To:From; t=1758054802; bh=wx0QdjxydDmrBFDNOoQQ5/u
-	IBMbJD/oNitoYkWZcuC0=; b=QYC890JqZyfvPL4vqX1iuAz85TSGvZNs5qAS35MYC+22MBvW7W
-	iskQ/WenBh0sSTeuVw2g4lZHoYPoiv2GGsiFUWUKFSkU2zjwAoKIfhh6KCfgHkaD/kzS8GS68rS
-	5QxPQHc77pqj7NtCJnL98hSHNC/QK6suWUKMCY1iS34BYG6fYsZQ/3dpcvNdRz6I2AV2MVmHjwu
-	YuaU6JaX/xZbIKJ6+kGLuBOfuRai4gyokobGwnVBSAZFlMDcIGJhjDWqDCzz5y0qkraPWvzgro4
-	KM9+tBTzW+WGrtu1sDguiqrnfvt9vS5JK5S2VnGn8CNEa8jaBdqwZu+SFboo2ClciJw==;
-DKIM-Signature: v=1; a=ed25519-sha256; s=202507e; d=mainlining.org; c=relaxed/relaxed;
-	h=Message-ID:Date:Subject:To:From; t=1758054802; bh=wx0QdjxydDmrBFDNOoQQ5/u
-	IBMbJD/oNitoYkWZcuC0=; b=5LVDcZRoMcSN9ktKl9Pg4tEUVZHPmNTbYq67qVDbHUTddPsvdm
-	Jrh1Ji00j9vzj2yndXJA43uiUpoeW80faoDg==;
-From: Dang Huynh <dang.huynh@mainlining.org>
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: Manivannan Sadhasivam <mani@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
- Linus Walleij <linus.walleij@linaro.org>,
- Bartosz Golaszewski <brgl@bgdev.pl>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>,
- Philipp Zabel <p.zabel@pengutronix.de>, Sebastian Reichel <sre@kernel.org>,
- Vinod Koul <vkoul@kernel.org>, Kees Cook <kees@kernel.org>,
- "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- Ulf Hansson <ulf.hansson@linaro.org>, linux-arm-kernel@lists.infradead.org,
- linux-unisoc@lists.infradead.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-rtc@vger.kernel.org, linux-clk@vger.kernel.org,
- linux-pm@vger.kernel.org, dmaengine@vger.kernel.org,
- linux-hardening@vger.kernel.org, linux-mmc@vger.kernel.org
-Subject: Re: [PATCH 00/25] RDA8810PL Clock, RTC and MMC driver
-Date: Tue, 16 Sep 2025 20:33:16 +0000
-Message-ID: <14470724.O9o76ZdvQC@melttower>
-In-Reply-To: <2025091620264900a32db6@mail.local>
-References:
- <20250917-rda8810pl-drivers-v1-0-74866def1fe3@mainlining.org>
- <2025091620264900a32db6@mail.local>
+	s=arc-20240116; t=1758060697; c=relaxed/simple;
+	bh=I8wyRRLvbiMDBl8pklNldZigpLPCz9T9o6aSgEKTqvg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=l2nIPn47U7KTMALfKdwl6sqiNc2JdtHlvMLWc6CVLLBEoYZaztuS1dLr2ANalZBJIGjOeDU/dkXJb9E8QYU5q0oRpssqf4s8RxKVnWEeSouTLlwlXktyCvkreBzt0OxHIIOGqoal1B7r/k/hujaHg8bQZZo8zuKG1n4CwaswY0A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=WJv59My3; arc=none smtp.client-ip=209.85.219.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-71b9d805f2fso56017166d6.0
+        for <linux-pm@vger.kernel.org>; Tue, 16 Sep 2025 15:11:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1758060694; x=1758665494; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=d00RcpMSyaxo5uctkiUad7Ihu0StiE54G0FuRNxP3k8=;
+        b=WJv59My3xtLKxrxf0DAuu53Hz2JA5asUEIvPNbFF9Ux6gue204UnV/zo3Nwg6jF5Od
+         HMdoES20m0M577oo/D+p75jhtQeIeDY+3BzY5XisYphM/Suv3SSAG/ZyCy0TgBknIBry
+         jywDXOWKvBmgkMgk52/WWvBqLBMJv+sdyG/4o=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758060694; x=1758665494;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=d00RcpMSyaxo5uctkiUad7Ihu0StiE54G0FuRNxP3k8=;
+        b=RBNFBBmc6nMbZGP+XvzW8uQEcj/EhYAQNgjdADTD370nweac+WMSOgHKS2lD7ymCbd
+         k9G83PRVY1om92Yt2wQVWGW/3OQlwxegnu4Bx9qt04hBctei0t+Zqe0xDH7eNm9eerN4
+         QEuPaBO8Goi31CrOq/OnPQWE1jiTtVhUDEtCAtaE6OHrJ/5lCGwWlKSGHAlso/YckDLG
+         YP8F3UOI2xi2BxtNGUc5uabzauGrwqVvd3p4QqYam/+Y7QoLWBRFdvj87ocvt+lgxvvN
+         qJzDp7oOC6fwYtk1rN0PhZjw6cYyJFnC+thY4jl28QjMYd+t2iFa4CNPhB3YAPNnfPOD
+         YAQg==
+X-Gm-Message-State: AOJu0Yz48nZrLg5kWF3O6nsC9x6qx1wh0TBulrC1ZoagtEjQJ4njayJJ
+	uiNDafq9JTf4ecbJyyKUAeaR4TD3N/gsB7wg7Hkxe4GBCqRu9Hf/FgaoohHrQ857lxc=
+X-Gm-Gg: ASbGncvkjaEpGm2gQjjxcc9vfwXDinpYe7snLfgulHTHzy9DOIb0i01zDcJBcIfXmHW
+	EvrB2mPGu7Hiaj+4YWwux2uvpMPEuADS1Rdx6RKftpmhhqYYZASGLeLPVmxnfhgEbnGmRjWoHpv
+	Sr3Lth82u5m2nuyLx+bidEDZ035HSpu4E0LCXuEhNUkyCl26HwBgT+Z07mpFkP4JkM5EvrD6or/
+	G1y4I9Z0qyR52pZV87UPw/ZgZakVxB88tLTz0/iSBkZ4ctpNeoWgi6cS7hEo3kFucZa9LWyjEIf
+	mX+dl8O9qM4TP7RmVW5dAWCJeApNNZrF/labL/4acCz2TyPG2C4Oy9pC6dDCY7wkFuka2EjcDNt
+	pQp35QI0Tn4b4RzawpoFzq3+TwA2f8DtaqbncLF8PfZrfBrCo5E6gdpBbog3FizRtL1os6CzIxE
+	kOM3ydrwVw7263yfi8blO5gx4fy0ICb4faWMZAuCbWFoQ=
+X-Google-Smtp-Source: AGHT+IGMUpImZ6crknRGU2PsJlxv8cDUNX2ZESpVJbIPemvPjmHSaTDNVGyZfiAaKH0MKZWsfkHuzg==
+X-Received: by 2002:a05:6214:2249:b0:779:b212:3efa with SMTP id 6a1803df08f44-779b21240aamr129726246d6.3.1758060693830;
+        Tue, 16 Sep 2025 15:11:33 -0700 (PDT)
+Received: from [192.168.226.35] (207-181-222-53.s5939.c3-0.hnc-cbr1.chi-hnc.il.cable.rcncustomer.com. [207.181.222.53])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-763bfedb916sm100684966d6.57.2025.09.16.15.11.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Sep 2025 15:11:33 -0700 (PDT)
+Message-ID: <61f224bd-c82b-4f16-a127-f337bc60fb4b@linuxfoundation.org>
+Date: Tue, 16 Sep 2025 16:11:32 -0600
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] tools/cpupower: Fix incorrect size in
+ cpuidle_state_disable()
+To: Kaushlendra Kumar <kaushlendra.kumar@intel.com>, trenn@suse.com,
+ shuah@kernel.org, jwyatt@redhat.com, jkacur@redhat.com
+Cc: linux-pm@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
+References: <20250826065440.2908389-1-kaushlendra.kumar@intel.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20250826065440.2908389-1-kaushlendra.kumar@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi,
+On 8/26/25 00:54, Kaushlendra Kumar wrote:
+> Fix incorrect size parameter passed to cpuidle_state_write_file() in
+> cpuidle_state_disable().
+> 
+> The function was incorrectly using sizeof(disable) which returns the
+> size of the unsigned int variable (4 bytes) instead of the actual
+> length of the string stored in the 'value' buffer.
+> 
+> Since 'value' is populated with snprintf() to contain the string
+> representation of the disable value, we should use strlen(value) to
+> get the correct string length for writing to the sysfs file.
+> 
+> This ensures the correct number of bytes is written to the cpuidle
+> state disable file in sysfs.
+> 
+> Signed-off-by: Kaushlendra Kumar <kaushlendra.kumar@intel.com>
+> ---
+>   tools/power/cpupower/lib/cpuidle.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/power/cpupower/lib/cpuidle.c b/tools/power/cpupower/lib/cpuidle.c
+> index 0ecac009273c..2180e63c963a 100644
+> --- a/tools/power/cpupower/lib/cpuidle.c
+> +++ b/tools/power/cpupower/lib/cpuidle.c
+> @@ -244,7 +244,7 @@ int cpuidle_state_disable(unsigned int cpu,
+>   	snprintf(value, SYSFS_PATH_MAX, "%u", disable);
 
-On Tuesday, September 16, 2025 8:26:49=E2=80=AFPM Coordinated Universal Tim=
-e Alexandre=20
-Belloni wrote:
-> Hello,
->=20
-> On 17/09/2025 03:07:17+0700, Dang Huynh wrote:
-> > This patch series aims to add support for Clock/Reset, Real-Time Clock =
-and
-> > SDMMC on the RDA Micro RDA8810PL platform.
->=20
-> What are the dependencies between the various drivers? Ho< do you expect
-> the patches to be merged?
-The MMC driver depends on the clock controller (for getting APB2 rates) and=
-=20
-IFC for transferring data.
->=20
-> If the RTC patches are independent, please send them separately.
-They're independent. Noted.
->=20
-> > It also adds Intelligent Flow Controller (IOW, a DMA controller) which =
-is
-> > important for working with this MMC IP.
-> >=20
-> > Tested on the Orange Pi 2G-IOT.
-> >=20
-> > Signed-off-by: Dang Huynh <dang.huynh@mainlining.org>
-> > ---
-> >=20
-> > Dang Huynh (25):
-> >       ARM: dts: unisoc: rda8810pl: Add label to GPIO nodes
-> >       drivers: gpio: rda: Make IRQ optional
-> >       dt-bindings: gpio: rda: Make interrupts optional
-> >       rtc: Add timestamp for the end of 2127
-> >       dt-bindings: rtc: Add RDA Micro RDA8810PL RTC
-> >       rtc: Add driver for RDA Micro SoC
-> >       ARM: dts: unisoc: rda8810pl: Enable Real-Time Clock
-> >       ARM: dts: unisoc: rda8810pl: Enable ARM PMU
-> >       dt-bindings: clock: Add RDA Micro RDA8810PL clock/reset controller
-> >       drivers: clk: Add Clock and Reset Driver for RDA Micro RDA8810PL =
-SoC
-> >       dts: unisoc: rda8810pl: Enable clock/reset driver
-> >       dts: unisoc: rda8810pl: Add OPP for CPU and define L2 cache
-> >       dts: unisoc: orangepi: Disable UART with no users
-> >       dt-bindings: power: reset: Add RDA Micro Modem Reset
-> >       power: reset: Add basic power reset driver for RDA8810PL
-> >       dts: unisoc: rda8810pl: Enable modem reset
-> >       drivers: gpio: rda: Make direction register unreadable
-> >       dt-bindings: dma: Add RDA IFC DMA
-> >       dmaengine: Add RDA IFC driver
-> >       dts: unisoc: rda8810pl: Enable IFC
-> >       dt-bindings: mmc: Add RDA SDMMC controller
-> >       mmc: host: Add RDA Micro SD/MMC driver
-> >       dts: unisoc: rda8810pl: Add SDMMC controllers
-> >       dts: unisoc: orangepi-2g: Enable SD Card
-> >       dts: unisoc: orangepi-i96: Enable SD Card
-> > =20
-> >  .../bindings/clock/rda,8810pl-apsyscon.yaml        |  44 ++
-> >  Documentation/devicetree/bindings/dma/rda,ifc.yaml |  42 +
-> >  .../devicetree/bindings/gpio/gpio-rda.yaml         |   3 -
-> >  Documentation/devicetree/bindings/mmc/rda,mmc.yaml |  91 +++
-> >  .../bindings/power/reset/rda,md-reset.yaml         |  36 +
-> >  .../devicetree/bindings/rtc/rda,8810pl-rtc.yaml    |  30 +
-> >  MAINTAINERS                                        |  30 +
-> >  .../boot/dts/unisoc/rda8810pl-orangepi-2g-iot.dts  |  24 +-
-> >  .../arm/boot/dts/unisoc/rda8810pl-orangepi-i96.dts |  24 +-
-> >  arch/arm/boot/dts/unisoc/rda8810pl.dtsi            | 115 ++-
-> >  drivers/clk/Kconfig                                |   1 +
-> >  drivers/clk/Makefile                               |   1 +
-> >  drivers/clk/rda/Kconfig                            |  14 +
-> >  drivers/clk/rda/Makefile                           |   2 +
-> >  drivers/clk/rda/clk-rda8810.c                      | 770
-> >  +++++++++++++++++++ drivers/dma/Kconfig                               =
- |
-> >   10 +
-> >  drivers/dma/Makefile                               |   1 +
-> >  drivers/dma/rda-ifc.c                              | 450 +++++++++++
-> >  drivers/gpio/gpio-rda.c                            |   4 +-
-> >  drivers/mmc/host/Kconfig                           |  12 +
-> >  drivers/mmc/host/Makefile                          |   1 +
-> >  drivers/mmc/host/rda-mmc.c                         | 853
-> >  +++++++++++++++++++++ drivers/power/reset/Kconfig                     =
- =20
-> >  |   9 +
-> >  drivers/power/reset/Makefile                       |   1 +
-> >  drivers/power/reset/rda-reboot.c                   |  58 ++
-> >  drivers/rtc/Kconfig                                |  11 +
-> >  drivers/rtc/Makefile                               |   1 +
-> >  drivers/rtc/rtc-rda.c                              | 356 +++++++++
-> >  include/dt-bindings/clock/rda,8810pl-apclk.h       |  79 ++
-> >  include/dt-bindings/dma/rda-ifc.h                  |  28 +
-> >  include/linux/rtc.h                                |   1 +
-> >  31 files changed, 3079 insertions(+), 23 deletions(-)
-> >=20
-> > ---
-> > base-commit: 590b221ed4256fd6c34d3dea77aa5bd6e741bbc1
-> > change-id: 20250916-rda8810pl-drivers-9a5271452635
-> >=20
-> > Best regards,
+Can't you get the length from snprintf return? You can avoid calling
+strlen()
 
-Best regards,
-Dang
+>   
+>   	bytes_written = cpuidle_state_write_file(cpu, idlestate, "disable",
+> -						   value, sizeof(disable));
+> +						   value, strlen(value));
+>   	if (bytes_written)
+>   		return 0;
+>   	return -3;
 
-
+thanks,
+-- Shuah
 
