@@ -1,153 +1,109 @@
-Return-Path: <linux-pm+bounces-34758-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34759-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33DF7B5A187
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Sep 2025 21:36:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 20DB6B5A1A0
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Sep 2025 21:50:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 261E47B636E
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Sep 2025 19:34:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C970A163DA7
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Sep 2025 19:50:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8025B2E093C;
-	Tue, 16 Sep 2025 19:36:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 785BE29D27D;
+	Tue, 16 Sep 2025 19:50:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="IyJWJaCy"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="ZgG9cg+P"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74D5927A907;
-	Tue, 16 Sep 2025 19:36:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758051371; cv=pass; b=pRebJjowyi2SqM/TxCTKMTKmaVF0Q9vcp91d8N9a8M5GYOkEKTuY1yQmHqD8wKlcd8Zt/iCCaz6IBj8TrNvFQpjHKQutWELn5MUBzU5lAMgMxM6m3dOYH9w1WGGDQyvbMHB0XvpBrbbw88YmYjjy4vFQFTr0R4l4wt7s7W8CuFg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758051371; c=relaxed/simple;
-	bh=EPKW0Hv4jB6StlyVkeD8DuM/FdXIbHZ/uCo3nGrmUYA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VSaqbfOj4SPn0K/FYV1ITuFtLdM+9qE6DHZ9mly+GlT51W5PIjB4M0Ia+BK6DtlDoXHOXuPrHaCaHMhF+04tQFPmKtwai1JV6lVT6dfYtVa0T5jifIft8pOjVPMQS5kpnB2/ZUQUi3FWZnjiBVFfOXflGcH2Qmmm5oIFaAuK+wE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=IyJWJaCy; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1758051347; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=AMGRqJTbSPtwOV7oRnaCTlZ6S7Okj4t3dm1mb19NFRlOAV0vPO7oJPvpK0EWhBhdxOSb06EsTGM6+/6eU+uJL3ktbWhXfwFn7ChlnKVMXjFulbzlkuxCLaAEuTDF7i7+Y1yhRvPEC+0iQtVnzEPyqLbbeRHHTfDiQXy67Bc+WNs=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1758051347; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=8ntexXLv31C2JME2WNT4kxVTkVYgJZZd07oFmq0TU+g=; 
-	b=eFupUJsTE2TLzq3zRcINnT7Lq/LNDEOeYtWDaOrWv5uOEqjGRI1ExvdahZ0qq9O+17SNuV0/VxZPy2QWYQ+dKdc7sqGWEPFNmj0t7l9S8a/mlqmVMh/4OWY9sulT6irX6QSHTylNBZ+h67YhkDoJnWHDqGtrcfn5kgIgnAcw3XE=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
-	dmarc=pass header.from=<sebastian.reichel@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1758051347;
-	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
-	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
-	bh=8ntexXLv31C2JME2WNT4kxVTkVYgJZZd07oFmq0TU+g=;
-	b=IyJWJaCyiRuthMad1/PqnHsCUv/TOQwHDmG9EBCCu01jC+kCg7uo/o+6S8TqVKle
-	Din0vV50/GjWU7W6RecfskzLSDzBj60XlXNi11l3q7hbv+6XMgsDGZGItHTfrs1Xrvj
-	90QixqwZCkM9qGPSb2tGe9YQkyP7Bo1yW4+daW6c=
-Received: by mx.zohomail.com with SMTPS id 1758051344739982.4683264465028;
-	Tue, 16 Sep 2025 12:35:44 -0700 (PDT)
-Received: by venus (Postfix, from userid 1000)
-	id 6DA9B180733; Tue, 16 Sep 2025 21:35:31 +0200 (CEST)
-Date: Tue, 16 Sep 2025 21:35:31 +0200
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: fenglin.wu@oss.qualcomm.com
-Cc: Bjorn Andersson <andersson@kernel.org>, 
-	Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>, 
-	Subbaraman Narayanamurthy <subbaraman.narayanamurthy@oss.qualcomm.com>, David Collins <david.collins@oss.qualcomm.com>, 
-	=?utf-8?Q?Gy=C3=B6rgy?= Kurucz <me@kuruczgy.com>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-msm@vger.kernel.org, kernel@oss.qualcomm.com, devicetree@vger.kernel.org, 
-	linux-usb@vger.kernel.org, Neil Armstrong <neil.armstrong@linaro.org>
-Subject: Re: [PATCH v4 0/8] power: supply: Add several features support in
- qcom-battmgr driver
-Message-ID: <r65idyc4of5obo6untebw4iqfj2zteiggnnzabrqtlcinvtddx@xc4aig5abesu>
-References: <20250915-qcom_battmgr_update-v4-0-6f6464a41afe@oss.qualcomm.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0622238178;
+	Tue, 16 Sep 2025 19:50:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1758052250; cv=none; b=rzCvSxaP6ogVvF0qWyPf0XCAX/okW4cwaXWCIRUQJOz7wzEQGrbajsQaixQEbs1MC3p/tn/7fmCZc+r0JDy6viWxeh03y+PSH74n87bJ4ejwbbM4q3r/2U3lsVAEOat/ANzTwszIOlNcCXKuejol1tXMWowwlkTgASr/nA48rF8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1758052250; c=relaxed/simple;
+	bh=Hseq//EDsBEnv5NDrY+cP9+6SHkGyS860cCT1WxT8j4=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=lJ6+K4ovLS3u3WlYLzd4WPwr9MbrpXFTzklaFm0jzR+LDv0wYEX8E87m4fyA0Xhn+7aKqIsZNwh3umyxQTra+5YgeawEu3nahdd4YPOZRtdxKqzKxhbI4l6/U38FiJ1UNySKht9Zg4DKHVG6cArxTFFZ+ywi0Nd+729IXPmPXIY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=ZgG9cg+P; arc=none smtp.client-ip=68.232.154.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1758052248; x=1789588248;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Hseq//EDsBEnv5NDrY+cP9+6SHkGyS860cCT1WxT8j4=;
+  b=ZgG9cg+P6zBAo7hLAmZzwwv+zQF5xKdNFhZzdeM7GxHsw9WBpybeJFZx
+   /0JkT7GONSGem435xqgL/Jq+ImJ4jEiKyud6wGXVR9KLqcCXxbrgtJQbE
+   90SdSHtudkfyAnLzjIAmeN6FEfzfL6KhQLXN1BU2NZztcVK6tg/aV6ztM
+   wvjbopR8E3B9MqKYXzlxriZXAYoXwOFMJx/+HFeSLvUava1CM0n1dLiGX
+   74h16huwk0j2bH5KieNDari7b78nK3D0K/lULDQagiWWpI2KyghQtRyV8
+   MYK4B0YhLKhQNhU5LgcBC9ZCnEYB+uJ23QQ+UvG4Ww0YltmYoIA3oJlw8
+   Q==;
+X-CSE-ConnectionGUID: OpVEzCAsSoaW6AVT1s3wKQ==
+X-CSE-MsgGUID: 8eDFBDG6T+uCphA8wzxghA==
+X-IronPort-AV: E=Sophos;i="6.18,269,1751266800"; 
+   d="scan'208";a="47129844"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 16 Sep 2025 12:50:47 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.58; Tue, 16 Sep 2025 12:50:16 -0700
+Received: from ryan-Precision-3630-Tower.microchip.com (10.10.85.11) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2507.58 via Frontend Transport; Tue, 16 Sep 2025 12:50:16 -0700
+From: <Ryan.Wanner@microchip.com>
+To: <claudiu.beznea@tuxon.dev>, <sre@kernel.org>, <robh@kernel.org>,
+	<krzk+dt@kernel.org>, <conor+dt@kernel.org>, <nicolas.ferre@microchip.com>,
+	<alexandre.belloni@bootlin.com>, <linux@armlinux.org.uk>
+CC: <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>, "Ryan
+ Wanner" <Ryan.Wanner@microchip.com>
+Subject: [PATCH v2 0/3] AT91 Low Power Mode adjustments
+Date: Tue, 16 Sep 2025 12:50:29 -0700
+Message-ID: <cover.1758051358.git.Ryan.Wanner@microchip.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="7yyu3k5bxetq5asm"
-Content-Disposition: inline
-In-Reply-To: <20250915-qcom_battmgr_update-v4-0-6f6464a41afe@oss.qualcomm.com>
-X-Zoho-Virus-Status: 1
-X-Zoho-Virus-Status: 1
-X-Zoho-AV-Stamp: zmail-av-1.4.3/258.4.7
-X-ZohoMailClient: External
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
+From: Ryan Wanner <Ryan.Wanner@microchip.com>
 
---7yyu3k5bxetq5asm
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v4 0/8] power: supply: Add several features support in
- qcom-battmgr driver
-MIME-Version: 1.0
+This patch set adds the Low Power Mode pin feature to the SAMA7 SoCs.
 
-Hi,
+Changes v1 -> v2:
+- The 2.5v regulator has been removed as it has been applied.
+- Adjust the dt-binding to allow more than 1 phandle.
+- Adjust the commit message to explain better what the Low power mode
+  pin does.
+- Simplify the how the lpm pin property is parsed from the DT.
 
-On Mon, Sep 15, 2025 at 04:49:52PM +0800, Fenglin Wu via B4 Relay wrote:
-> Add following features in qcom-battmgr drivers as the battery management
-> firmware has provided such capabilities:
->  - Add resistance power supply property in core driver and qcom-battmgr
->    driver to get battery resistance
->  - Add state_of_health power supply property in core driver and
->    qcom-battmgr driver to get battery health percentage
->  - Add charge control start/end threshold control by using
->    charge_control_start_threshold and charge_control_end_threshold power
->    supply properties
->=20
-> The changes have been tested on QRD8650 and X1E80100-CRD devices based on
-> qcom/linux.git for-next commit a679f3f6931cdb0c2ef5dc0c26f895ae3f6c1ddc.
->=20
-> Signed-off-by: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
-> ---
+Claudiu Beznea (2):
+  ARM: at91: PM: implement selection of LPM
+  ARM: dts: at91: sama7g5ek: add microchip,lpm-connection on shdwc node
 
-Unrelated to this series specifically, but can you look into fixing
-the following errors (appearing at least on X1E based Thinkpad T14s)?
+Varshini Rajendran (1):
+  dt-bindings: power: reset: atmel,sama5d2-shdwc: add lpm binding
 
-qcom_battmgr.pmic_glink_power_supply pmic_glink.power-supply.0: unknown not=
-ification: 0x283
-qcom_battmgr.pmic_glink_power_supply pmic_glink.power-supply.0: unknown not=
-ification: 0x283
-qcom_battmgr.pmic_glink_power_supply pmic_glink.power-supply.0: unknown not=
-ification: 0x483
-qcom_battmgr.pmic_glink_power_supply pmic_glink.power-supply.0: unknown not=
-ification: 0x83
+ .../power/reset/atmel,sama5d2-shdwc.yaml      | 19 ++++
+ .../arm/boot/dts/microchip/at91-sama7g5ek.dts |  1 +
+ arch/arm/mach-at91/pm.c                       | 96 ++++++++++++++++++-
+ arch/arm/mach-at91/pm.h                       |  1 +
+ arch/arm/mach-at91/pm_data-offsets.c          |  1 +
+ arch/arm/mach-at91/pm_suspend.S               | 48 +++++++++-
+ 6 files changed, 158 insertions(+), 8 deletions(-)
 
-Thanks,
+-- 
+2.43.0
 
--- Sebastian
-
---7yyu3k5bxetq5asm
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmjJu/wACgkQ2O7X88g7
-+prvHg/7BJXwOEfENpjb+Lvn03BDEtvTKwc1pWwW9nTsVTOz2q8Y3/uroczVeoWy
-UpinHAxIRPLl0UVqR9kcCIPn1R8NJgnNnibV0hiczlm3LdYGeuCLuF1DULcX8MXI
-hWeNdsT9ql5IKpdUtwyilxy9tX4/NKt5bOioDcAluMrrJMAObQCjEwv1IcKNbn/6
-8TxIeuv9K+wwBekx+5Jzz/Xyx5UfPqvkkwkM0kLW6mrZH3RWTuXqJrJHfB9J+FPG
-vUA+QA/djKjV2K78s0XYSai02qOQ2Gpnc5esAPH1NQJivCRRxjm75likH0g2bgFC
-9y3JSzUmbkiCd5PkBf2NvHUjedXdVRM1F8+ggFt4rLvJj+5ty5QW8HKVe+aXxZCP
-jCDi4avGcSzZFtZg7RSUA4ZJbEqXcMlZMXPvZ04hGrWnOFv+Ku93wouUuhYmA5hK
-+R5zM64lrtrpOuHb8P5n5DSJNdgQfDNj35lM3dNEpyMWRJGK5PWqHQWHhZgyYhtg
-62ezZra7P7CAFtiq+XyUOIzZMFBw5vnkjCMxZfyz5R8k7NFJIZTpkP/tmLfcKAEs
-foFyol14MgGPuN1nqGqoUHxJW1UhGreqvYLvgJRlTMqC62KLLdrH+KGd7ZAp3v9v
-XlaE7dveUDUaDHtUAo1vhrlUOk9iDifrM7T4HxXL522Mn0NMavY=
-=Sioo
------END PGP SIGNATURE-----
-
---7yyu3k5bxetq5asm--
 
