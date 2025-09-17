@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-34805-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34806-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C608B7F8BD
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 15:49:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 548BCB7D083
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 14:16:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C9670460773
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 00:01:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 763502A7747
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 00:29:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E85A3205AB6;
-	Wed, 17 Sep 2025 00:00:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 712A51D5170;
+	Wed, 17 Sep 2025 00:29:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UlHy8TZh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mvoaDK0O"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DF5610F1;
-	Wed, 17 Sep 2025 00:00:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33FFF8F58;
+	Wed, 17 Sep 2025 00:29:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758067255; cv=none; b=UoDMEOI2edCFgkJTvmfEav/fPPEPD6CGI6gMD/eLNPmQcK3OltfbL2sbyuPf+9lOOw4g4pGVJUa+65HC936iga9WMuGUKOevLzG1o3FT6Em0YVdgJkevxbxNF1U5hwc3hl8n2djKaYgrZX65M7OZ71xZkSfPTJ+CHMxgLzHCbGY=
+	t=1758068978; cv=none; b=BPaUvJDqrDo91ZJucDZdGm9n+8FlbJAhAod8Yo8NfXteFDcg1rjTm2AEzNARmOGyRlJhu0Zar6IC6F+ofnFMv6mL9V71k4sz5P35WhmmWwVVAGIyOuHws5zMWU/etG+lxRgtDk1/i1suO+GDSS2WYJVnlVKdRph0vPddXPFjrjI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758067255; c=relaxed/simple;
-	bh=ke9zmmhKs5eb5v+Alg5/XjhaLlirlLoeVZXpSuibMM8=;
+	s=arc-20240116; t=1758068978; c=relaxed/simple;
+	bh=J7xTYVXnYwrd+XPGHYzN6OydM5MB4QpApRFK0vXwZZ8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MSIUlZMpLmjkdLIXRnNP/vTxuWhQYGsvvd7/4Iq8ovDX+TnbAPiBLe+6pjfrRkWwgU8weuoxYZbnq/6cGFhBHX4qL4RVh72tLw0660s5sMDqG3H5lJq/o2W67098BFTKQRmYuSsbkJaQnMG4vyCpQk7kWdudl3ML4nOvkCgv0Iw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UlHy8TZh; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA362C4CEEB;
-	Wed, 17 Sep 2025 00:00:49 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=Hdf8H5BYpZsS2KIZ2b3v5ST+OkeTAwZ6xHN9QeJU2djoUCjXGEmZrG3VN3JkiqpeRhRtzTz3VjLWcr8Rd2jHK4TKmd8RYq1FJE2wNabGPVzNQcaKbd+EzphrenIEPiWmLHGf8Y2+XOV6/dVGipOG3LyyGjMfObLdkdkNa8lt/J0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mvoaDK0O; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECAE6C4CEEB;
+	Wed, 17 Sep 2025 00:29:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758067255;
-	bh=ke9zmmhKs5eb5v+Alg5/XjhaLlirlLoeVZXpSuibMM8=;
+	s=k20201202; t=1758068977;
+	bh=J7xTYVXnYwrd+XPGHYzN6OydM5MB4QpApRFK0vXwZZ8=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=UlHy8TZhlJV57BFKSbW5+rOp3Es6ZL9g1CiUvHbGF+8iP91AcPlsQt85/baStMxC5
-	 Uxhjk5MNwG48opHIfX/mcN7HvDoy39NRIZa+JSEKGg0TrJmFDE8+xt498TLeJA1/Zd
-	 7cUUtfwPNRIS2jwGgExYxhL06VehJTXXzUFuo2OKWHofLCGLAjIO7+9kiBIAjsY5zx
-	 Qv6j4UkQdJsGDgF/9WJciW0u0A4psyAhPZ0Va9uHbbv33P4ZcjzbAl1/+tKn/oLsx3
-	 eosExh7i6QSE0k+pxPKmvz/0sDTnnafIe9kY5Tz2YHsgJX5aJLt9nNVUGydWpXDNjM
-	 sYCPNmgIb9YdQ==
-Message-ID: <689d2f80-40e8-49c4-8aca-7a5d21e62b0c@kernel.org>
-Date: Wed, 17 Sep 2025 09:00:48 +0900
+	b=mvoaDK0OXGq2ERZDx/W2/luIOP/+Q+7Y1nU1kSmuJn22KYl7nn15XTHR/JBQWXEwy
+	 d7DEAFzUAqnyug/qsSWYxQ5A5zJ+jTfp97O72UYy2R2f9dQ0bqJhHiaO4PaYgrQwww
+	 bmloQLuNDuCIVWC5Up27o3pNaM6+hAmnKYStihO2VYNfvVyyv4oBv+bRyIYvc0Rft/
+	 z1XeLZT/qM1H8v2xImMMZAtn2UQMwz95304rEkPj8PH0VGZAGklMV+PeR93tbYUeWT
+	 m5F++ktBomUPQX9Eb5O2pherwiwuPLXJ1gvTCZZ80gnozBAYtx6SOikk7oxGOUHqw4
+	 yregAWP1b4sTw==
+Message-ID: <4e974e77-adfc-49e5-90c8-cf8996ded513@kernel.org>
+Date: Wed, 17 Sep 2025 09:29:31 +0900
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,25 +50,27 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 21/25] dt-bindings: mmc: Add RDA SDMMC controller
-To: dang.huynh@mainlining.org, Manivannan Sadhasivam <mani@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Linus Walleij
- <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>,
- Sebastian Reichel <sre@kernel.org>, Vinod Koul <vkoul@kernel.org>,
- Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- Ulf Hansson <ulf.hansson@linaro.org>
-Cc: linux-arm-kernel@lists.infradead.org, linux-unisoc@lists.infradead.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
- linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
- dmaengine@vger.kernel.org, linux-hardening@vger.kernel.org,
- linux-mmc@vger.kernel.org
-References: <20250917-rda8810pl-drivers-v1-0-9ca9184ca977@mainlining.org>
- <20250917-rda8810pl-drivers-v1-21-9ca9184ca977@mainlining.org>
+Subject: Re: [PATCH V7 3/5] dt-bindings: iio: adc: Add support for QCOM PMIC5
+ Gen3 ADC
+To: Jishnu Prakash <jishnu.prakash@oss.qualcomm.com>,
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: jic23@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, agross@kernel.org, andersson@kernel.org,
+ lumag@kernel.org, dmitry.baryshkov@oss.qualcomm.com, konradybcio@kernel.org,
+ daniel.lezcano@linaro.org, sboyd@kernel.org, amitk@kernel.org,
+ thara.gopinath@gmail.com, lee@kernel.org, rafael@kernel.org,
+ subbaraman.narayanamurthy@oss.qualcomm.com, david.collins@oss.qualcomm.com,
+ anjelique.melendez@oss.qualcomm.com, kamal.wadhwa@oss.qualcomm.com,
+ rui.zhang@intel.com, lukasz.luba@arm.com, devicetree@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ cros-qcom-dts-watchers@chromium.org, quic_kotarake@quicinc.com,
+ neil.armstrong@linaro.org, stephan.gerhold@linaro.org,
+ Jonathan Cameron <Jonathan.Cameron@huawei.com>
+References: <20250826083657.4005727-1-jishnu.prakash@oss.qualcomm.com>
+ <20250826083657.4005727-4-jishnu.prakash@oss.qualcomm.com>
+ <20250829-classic-dynamic-clam-addbd8@kuoka>
+ <5d662148-408f-49e1-a769-2a5d61371cae@oss.qualcomm.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -114,128 +116,40 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20250917-rda8810pl-drivers-v1-21-9ca9184ca977@mainlining.org>
+In-Reply-To: <5d662148-408f-49e1-a769-2a5d61371cae@oss.qualcomm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 17/09/2025 22:25, Dang Huynh via B4 Relay wrote:
-> From: Dang Huynh <dang.huynh@mainlining.org>
+On 16/09/2025 16:28, Jishnu Prakash wrote:
+>> You cannot have empty spaces in ID constants. These are abstract
+>> numbers.
+>>
+>> Otherwise please point me to driver using this constant.
 > 
-> Add documentation describing the SD/MMC controller in RDA Micro
-> RDA8810PL SoC.
+> These constants are for ADC channel numbers, which are fixed in HW.
 > 
-> Signed-off-by: Dang Huynh <dang.huynh@mainlining.org>
-> ---
->  Documentation/devicetree/bindings/mmc/rda,mmc.yaml | 91 ++++++++++++++++++++++
->  1 file changed, 91 insertions(+)
+> They are used in this driver: drivers/iio/adc/qcom-spmi-adc5-gen3.c,
+> which is added in patch 4 of this series.
 > 
-> diff --git a/Documentation/devicetree/bindings/mmc/rda,mmc.yaml b/Documentation/devicetree/bindings/mmc/rda,mmc.yaml
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..dfdd9c6d3044061c342519e35e39c7751874bb03
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mmc/rda,mmc.yaml
+> They can be found in the array named adc5_gen3_chans_pmic[].
 
-filename based on compatible.
+Really? So point me to the line there using ADC5_GEN3_VREF_BAT_THERM.
 
-> @@ -0,0 +1,91 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mmc/rda,mmc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: RDA Micro SD/MMC Controller
-> +
-> +allOf:
-> +  - $ref: mmc-controller.yaml
-> +
-> +maintainers:
-> +  - Dang Huynh <dang.huynh@mainlining.org>
-> +
-> +properties:
-> +  compatible:
-> +    const: rda,8810pl-mmc
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  clock-names:
-> +    const: apb
-> +
-> +  resets:
-> +    maxItems: 1
-> +
-> +  dmas:
-> +    minItems: 2
+You responded three weeks after review, this patch goes nowhere and way
+you handle upstream work makes it difficult for us and probably for you.
 
-Drop
+NAK
 
-> +    maxItems: 2
-> +
-> +  dma-names:
-> +    items:
-> +      - const: tx
-> +      - const: rx
-> +
-> +  rda,mclk-adj:
-> +    $ref: /schemas/types.yaml#/definitions/uint8
-> +    description:
-> +      Some board need MCLK to be adjusted for the card to work.
-> +      If not present, MCLK will be handled by an external PCLK.
+> 
+> Thanks,
+> Jishnu
+> 
+>>
+>> Best regards,
+>> Krzysztof
+>>
+> 
 
-Adjusted for what? What is the value exactly? Where is the MCLK located?
-
-> +    minimum: 0
-> +    maximum: 255
-> +
-> +  rda,mclk-inv:
-> +    $ref: /schemas/types.yaml#/definitions/flag
-> +    description:
-> +      Some board need MCLK to be inverted for the card to work.
-> +      If not present, MCLK is not inverted.
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +  - clock-names
-> +  - resets
-> +  - dmas
-> +  - dma-names
-> +  - vmmc-supply
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    #include <dt-bindings/clock/rda,8810pl-apclk.h>
-> +    #include <dt-bindings/dma/rda-ifc.h>
-> +    mmc1: mmc@20950000 {
-
-Drop unused label.
-
-> +      compatible = "rda,8810pl-mmc";
-> +      reg = <0x20950000 0x1000>;
-> +      interrupts = <3 IRQ_TYPE_LEVEL_HIGH>;
-> +      clocks = <&ap_syscon CLK_APB2>;
-> +      clock-names = "apb";
-> +      resets = <&ap_syscon RST_APB2_SDMMC1>;
-> +      dmas = <&ifc IFC_SDMMC1_TX>, <&ifc IFC_SDMMC1_RX>;
-> +      dma-names = "tx", "rx";
-> +      vmmc-supply = <&vdd_sdmmc>;
-> +      rda,mclk-adj = /bits/ 8 <1>;
-> +      rda,mclk-inv;
-> +      status = "disabled";
-Cannot be disabled.
 
 Best regards,
 Krzysztof
