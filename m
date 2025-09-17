@@ -1,202 +1,179 @@
-Return-Path: <linux-pm+bounces-34913-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34914-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82222B819A0
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 21:25:23 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F62AB81A33
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 21:31:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3EA6A165EF9
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 19:25:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5B133188FF8A
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 19:31:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3C1C2FCBF3;
-	Wed, 17 Sep 2025 19:24:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E69C22D662D;
+	Wed, 17 Sep 2025 19:31:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T5VU0dxO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nFBRx0CE"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F0AA2FC894
-	for <linux-pm@vger.kernel.org>; Wed, 17 Sep 2025 19:24:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B839820E03F;
+	Wed, 17 Sep 2025 19:31:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758137097; cv=none; b=INBk55ML01eMUb7xrqOjhuwYnlGujFdudVIN6syQ8ssJMI2zC3lKJCxKNv1FifVwev2SFNhtD38/nLiRF5y21Lv4mx7W+MCxR6f0GlzhPz74OHuFDA2jrMxf0+iwQzJKMuPXafKy/HPGZeDzNxb5GCwwBXrquSYYIRLHgljgMwY=
+	t=1758137467; cv=none; b=sJqKVgw0BSxXLcv/JiXrw0bs2gmYMyJgAD1ONQaw+QqlUabBprs2fGK5uIVURBnkcGFF1jKHL4X2jxBGmKeX7iKsDQhJIyJJBH0tMQaiHn/kUtvIGdrFjUTz4Ptf4zb4Q12mEE3wKnItcAm+7KxVJMrcgIG+EOia6pSivFjrnMM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758137097; c=relaxed/simple;
-	bh=MkXdp5H1QizaH7xbpVpdsbU78Mw7LqyxRZxu3pFlAHQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fk1RAyzqGVn6DKnKNu1Rpj1f6CXFxSUGdUKLBLLUML9CrKbFmr2rvKU3Z2YasWmIjh8OD3Hn/z2UYqA1udzCAlbSvfjpCDKufuEaHQK7MOZs7R4RXc4l2vMPdosxvROlyEtGa2/JZwHgqP/mWGWkvLzZds/tfxuJs4jrMBj+0t4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T5VU0dxO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BB92C4CEFF
-	for <linux-pm@vger.kernel.org>; Wed, 17 Sep 2025 19:24:57 +0000 (UTC)
+	s=arc-20240116; t=1758137467; c=relaxed/simple;
+	bh=CqHwmT9jquJeX+EOuVFi/0NzpVRGCzy+hiZmGgVtW60=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WDGnjMD6Y+l2RcpKH44lqlGMkffqKM0+13ADI64UU2X9tmjWwN4ivcR8zeA0W2vnZ1FPA1Htm0ohiBu0EccTlR7kQoHo4fBJpqNVdqrpu9krGKcHQVMBEahQwnI+IaObkPxo2c+nRCEebs6HgYx5v0LNdsefzZmGGgMxBMTlQ9U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nFBRx0CE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F9F4C4CEF7;
+	Wed, 17 Sep 2025 19:31:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758137097;
-	bh=MkXdp5H1QizaH7xbpVpdsbU78Mw7LqyxRZxu3pFlAHQ=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=T5VU0dxOFrWrfxNgJWgMV4FGBsKbQ9U3SvtJriDRYLf9wnjO+kawn5JvOIg3CoMwC
-	 fBjR1fBjfaRJPbSmqoKlUci5+g02vaI2xBfRDASP0dbil9s9qix+J3O2Mf4fxML3l6
-	 vmPFZVUvr+WYUjDVs+L81L96vyFhr5KyxFa1+8baaoFwQa0/OFgJJFjDdw7qYVBe26
-	 eRzkdY5QsV6fGq7BovNtrBSXtb9TEnjaGrDLJfpPQYeY8/kSP2AlfycYKuulP1wAjP
-	 l5L7VzpNBeNMJXoOUHahF2eT4HOghjfIZ4nlRM02tffhJAEWzMPOIJgZ7MLH0ArtuR
-	 cqJKVgA20kAeQ==
-Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-621132816c8so103449eaf.2
-        for <linux-pm@vger.kernel.org>; Wed, 17 Sep 2025 12:24:57 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXfCpkrfog9Z7Dx66o9NrcCNISc3Jr/xdIOhGQluZM7r8nOI44Ej0n/5slzix68zXlfEp2j19oHWw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyU1beXXGx6nGHDCkWcC/c59JMO124aVUa4XqDhPnoyo9wBxgbf
-	7pBkczVeYgXyMw+rDSqzlWORNodmcuRmpT6rj5XfVVuaAmP4cKK4rMk1/B463Hq76EvdUyj3WYC
-	47lsLCdhkdrp0x01ULo8R1QyISUWBZUg=
-X-Google-Smtp-Source: AGHT+IETE6XaTQ10uIZrWGowaqdYF0YKB6mD5x4nZTrZAEKpPxRu7UPLchElkP0/N7Qt6VAMt9vHa2laz1aT4trGBaA=
-X-Received: by 2002:a05:6808:4f60:b0:437:eb1d:cddb with SMTP id
- 5614622812f47-43d50a810e7mr1695229b6e.1.1758137096275; Wed, 17 Sep 2025
- 12:24:56 -0700 (PDT)
+	s=k20201202; t=1758137467;
+	bh=CqHwmT9jquJeX+EOuVFi/0NzpVRGCzy+hiZmGgVtW60=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=nFBRx0CEoMoBxb7hu4YJFHjQFHjSbGtjzre87bEBhm34jP6xjcJiUEwdATpcjUYkw
+	 SRG2RoHicyG/894mlK9TWuGmMNM475o19F2JfEEIc85onRIivFD7NHqeABm7hUKCOC
+	 s5SsRpTIZgCyA0+NK1AhDUCr4o/pBURjCjE4wc89Bae4c1W7FESfXqhEtqAO6grm8D
+	 Q4eaF08o+ZUJWcxHT+lk1Nc9QQa/+IVtUrY+r8HnlyMmAajwCNRoqWi+pkO36em7YR
+	 hAunXLRVwqzVVRTAYM4dqxS86uL295XAeCrBfb1rp8b4YKwhD7bXQMzZhrle/3gSr9
+	 RNKFWLo3RPHVA==
+Date: Wed, 17 Sep 2025 20:31:01 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Stanimir Varbanov <svarbanov@suse.de>
+Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rpi-kernel@lists.infradead.org,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	linux-pm@vger.kernel.org, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+	Lee Jones <lee@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
+	Willow Cunningham <willow.e.cunningham@gmail.com>,
+	Stefan Wahren <wahrenst@gmx.net>,
+	Saenz Julienne <nsaenz@kernel.org>,
+	Andrea della Porta <andrea.porta@suse.com>,
+	Phil Elwell <phil@raspberrypi.com>,
+	Jonathan Bell <jonathan@raspberrypi.com>,
+	Dave Stevenson <dave.stevenson@raspberrypi.com>
+Subject: Re: [PATCH 2/4] dt-bindings: soc: bcm: Add bcm2712 compatible
+Message-ID: <20250917-crept-romp-8c02570c1d6f@spud>
+References: <20250917063233.1270-1-svarbanov@suse.de>
+ <20250917063233.1270-3-svarbanov@suse.de>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250716123323.65441-1-ulf.hansson@linaro.org>
- <20250716123323.65441-2-ulf.hansson@linaro.org> <CAJZ5v0iq7UODJ83fkwnzfFR3HpG2_R-YRnip_cLwyUHZZ+rXyg@mail.gmail.com>
- <7hldnp6apf.fsf@baylibre.com> <CAJZ5v0j=9RXHrcVEBp0yy1Ae4_kC1y-WFQyBf89r3NtoL-tYQw@mail.gmail.com>
- <CAPDyKFpeVF_EHJDQ9u=LDuJ56g7ykYUQWHXV2WXTYLa-mYahVA@mail.gmail.com> <CAPDyKFpc-PHC1QhoSrNt9KnaGov749H1AwFZUwnDDzG7RDYBRw@mail.gmail.com>
-In-Reply-To: <CAPDyKFpc-PHC1QhoSrNt9KnaGov749H1AwFZUwnDDzG7RDYBRw@mail.gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 17 Sep 2025 21:24:45 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0hC=sEcC-mU8jArwVN3EA6+U=EmCa2e7TKO0sg6LJiz7g@mail.gmail.com>
-X-Gm-Features: AS18NWDYb399cWlUNG8aNGGu8-I0YDNj2FcRr7Wo8J3qWzgzNb67RsnHzjNVCYM
-Message-ID: <CAJZ5v0hC=sEcC-mU8jArwVN3EA6+U=EmCa2e7TKO0sg6LJiz7g@mail.gmail.com>
-Subject: Re: [RFC/PATCH 1/3] PM: QoS: Introduce a system-wakeup QoS limit
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Kevin Hilman <khilman@baylibre.com>, linux-pm@vger.kernel.org, 
-	Pavel Machek <pavel@kernel.org>, Len Brown <len.brown@intel.com>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, Saravana Kannan <saravanak@google.com>, 
-	Maulik Shah <quic_mkshah@quicinc.com>, Prasad Sodagudi <psodagud@quicinc.com>, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="hsLFofKKl/aa/7Bd"
+Content-Disposition: inline
+In-Reply-To: <20250917063233.1270-3-svarbanov@suse.de>
+
+
+--hsLFofKKl/aa/7Bd
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi,
+On Wed, Sep 17, 2025 at 09:32:31AM +0300, Stanimir Varbanov wrote:
+> Add bcm2712-pm compatible and update the bindings to satisfy it's
+> requirements. The PM hardware block inside bcm2712 lacks the "asb"
+> and "rpivid_asb" register ranges and also does not has clocks, update
+> the bindings accordingly.
+>=20
+> Signed-off-by: Stanimir Varbanov <svarbanov@suse.de>
+> ---
+>  .../bindings/soc/bcm/brcm,bcm2835-pm.yaml     | 28 +++++++++++++++----
+>  1 file changed, 23 insertions(+), 5 deletions(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/soc/bcm/brcm,bcm2835-pm.ya=
+ml b/Documentation/devicetree/bindings/soc/bcm/brcm,bcm2835-pm.yaml
+> index e28ef198a801..c8d3d6131a8d 100644
+> --- a/Documentation/devicetree/bindings/soc/bcm/brcm,bcm2835-pm.yaml
+> +++ b/Documentation/devicetree/bindings/soc/bcm/brcm,bcm2835-pm.yaml
+> @@ -13,8 +13,7 @@ description: |
+>  maintainers:
+>    - Nicolas Saenz Julienne <nsaenz@kernel.org>
+> =20
+> -allOf:
+> -  - $ref: /schemas/watchdog/watchdog.yaml#
+> +$ref: /schemas/watchdog/watchdog.yaml#
 
-Sorry for the delay.
+Please move this down with the allof.
 
-On Fri, Sep 12, 2025 at 3:58=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro.org=
-> wrote:
->
-> On Tue, 12 Aug 2025 at 11:26, Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> >
-> > On Mon, 11 Aug 2025 at 21:16, Rafael J. Wysocki <rafael@kernel.org> wro=
-te:
-> > >
-> > > On Mon, Aug 11, 2025 at 7:16=E2=80=AFPM Kevin Hilman <khilman@baylibr=
-e.com> wrote:
-> > > >
-> > > > "Rafael J. Wysocki" <rafael@kernel.org> writes:
-> > > >
-> > > > > On Wed, Jul 16, 2025 at 2:33=E2=80=AFPM Ulf Hansson <ulf.hansson@=
-linaro.org> wrote:
-> > > > >>
-> > > > >> Some platforms and devices supports multiple low-power-states th=
-an can be
-> > > > >> used for system-wide suspend. Today these states are selected on=
- per
-> > > > >> subsystem basis and in most cases it's the deepest possible stat=
-e that
-> > > > >> becomes selected.
-> > > > >>
-> > > > >> For some use-cases this is a problem as it isn't suitable or eve=
-n breaks
-> > > > >> the system-wakeup latency constraint, when we decide to enter th=
-ese deeper
-> > > > >> states during system-wide suspend.
-> > > > >>
-> > > > >> Therefore, let's introduce an interface for user-space, allowing=
- us to
-> > > > >> specify the system-wakeup QoS limit. Subsequent changes will sta=
-rt taking
-> > > > >> into account the QoS limit.
-> > > > >
-> > > > > Well, this is not really a system-wakeup limit, but a CPU idle st=
-ate
-> > > > > latency limit for states entered in the last step of suspend-to-i=
-dle.
-> > > > >
-> > > > > It looks like the problem is that the existing CPU latency QoS is=
- not
-> > > > > taken into account by suspend-to-idle, so instead of adding an
-> > > > > entirely new interface to overcome this, would it make sense to a=
-dd an
-> > > > > ioctl() to the existing one that would allow the user of it to
-> > > > > indicate that the given request should also be respected by
-> > > > > suspend-to-idle?
-> > > > >
-> > > > > There are two basic reasons why I think so:
-> > > > > (1) The requests that you want to be respected by suspend-to-idle
-> > > > > should also be respected by the regular "runtime" idle, or at lea=
-st I
-> > > > > don't see a reason why it wouldn't be the case.
-> > > > > (2) The new interface introduced by this patch basically duplicat=
-es
-> > > > > the existing one.
-> > > >
-> > > > I also think that just using the existing /dev/cpu_dma_latency is t=
-he
-> > > > right approach here, and simply teaching s2idle to respect this val=
-ue.
-> > > >
-> > > > I'm curious about the need for a new ioctl() though.  Under what
-> > > > conditions do you want normal/runtime CPUidle to respect this value=
- and
-> > > > s2idle to not respect this value?
-> > >
-> > > In a typical PC environment s2idle is a replacement for ACPI S3 which
-> > > does not take any QoS constraints into account, so users may want to
-> > > set QoS limits for run-time and then suspend with the expectation tha=
-t
-> > > QoS will not affect it.
-> >
-> > Yes, I agree. To me, these are orthogonal use-cases which could have
-> > different wakeup latency constraints.
-> >
-> > Adding an ioctl for /dev/cpu_dma_latency, as suggested by Rafael would
-> > allow this to be managed, I think.
-> >
-> > Although, I am not fully convinced yet that re-using
-> > /dev/cpu_dma_latency is the right path. The main reason is that I
-> > don't want us to limit the use-case to CPU latencies, but rather allow
-> > the QoS constraint to be system-wide for any type of device. For
-> > example, it could be used by storage drivers too (like NVMe, UFS,
-> > eMMC), as a way to understand what low power state to pick as system
-> > wide suspend. If you have a closer look at patch2 [1] , I suggest we
-> > extend the genpd-governor for *both* CPU-cluster-PM-domains and for
-> > other PM-domains too.
-> >
-> > Interested to hear your thoughts around this.
->
-> Hey, just wanted to see if you have managed to digest this and have
-> any possible further comment?
+> =20
+>  properties:
+>    compatible:
+> @@ -22,14 +21,15 @@ properties:
+>        - enum:
+>            - brcm,bcm2835-pm
+>            - brcm,bcm2711-pm
+> +          - brcm,bcm2712-pm
+>        - const: brcm,bcm2835-pm-wdt
+> =20
+>    reg:
+> -    minItems: 2
+> +    minItems: 1
+>      maxItems: 3
+> =20
+>    reg-names:
+> -    minItems: 2
+> +    minItems: 1
+>      items:
+>        - const: pm
+>        - const: asb
+> @@ -62,7 +62,25 @@ required:
+>    - reg
+>    - "#power-domain-cells"
+>    - "#reset-cells"
+> -  - clocks
+> +
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - brcm,bcm2835-pm
+> +              - brcm,bcm2711-pm
+> +    then:
+> +      required:
+> +        - clocks
+> +
+> +      properties:
+> +        reg:
+> +          minItems: 2
+> +
+> +        reg-names:
+> +          minItems: 2
 
-The reason why I thought about reusing /dev/cpu_dma_latency is because
-I think that the s2idle limit should also apply to cpuidle.  Of
-course, cpuidle may be limited further, but IMV it should observe the
-limit set on system suspend (it would be kind of inconsistent to allow
-cpuidle to use deeper idle states than can be used by s2idle).
+If the new device doesn't have clocks or the extra reg ranges, please
+add an else clause that enforces it.
 
-I also don't think that having a per-CPU s2idle limit would be
-particularly useful (and it might be problematic).
+> =20
+>  additionalProperties: false
+> =20
+> --=20
+> 2.47.0
+>=20
 
-Now, it is not as straightforward as I thought because someone may
-want to set a more restrictive limit on cpuidle, in which case they
-would need to open the same special device file twice etc and that
-would be quite cumbersome.
+--hsLFofKKl/aa/7Bd
+Content-Type: application/pgp-signature; name="signature.asc"
 
-So in the end I think that what you did in the $subject patch is
-better, but I still would like it to also affect cpuidle.
+-----BEGIN PGP SIGNATURE-----
 
-And it needs to be made clear that this is a limit on the resume
-latency of one device.  Worst case, the system wakeup latency may be a
-sum of those limits if the devices in question are resumed
-sequentially, so in fact this is a limit on the contribution of a
-given device to the system wakeup latency.
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaMsMdQAKCRB4tDGHoIJi
+0oEUAP96o7GTUuuNQybMRhkNw285zZaGo8XaVxkYQ3BLGFgV6wD/RPPmf9sqKXEb
+fpXxJZcldGF1WuzX8uE8HjH1H+SKgAU=
+=7ERd
+-----END PGP SIGNATURE-----
+
+--hsLFofKKl/aa/7Bd--
 
