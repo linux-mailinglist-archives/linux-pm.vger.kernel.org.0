@@ -1,170 +1,149 @@
-Return-Path: <linux-pm+bounces-34844-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34845-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18F40B7C605
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 13:59:59 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 915D0B7CA8F
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 14:07:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8CD37188E02E
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 11:42:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4999F580CE1
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 12:07:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C699369964;
-	Wed, 17 Sep 2025 11:41:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7498A37C0E8;
+	Wed, 17 Sep 2025 12:07:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="OgsObV8Y"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="euMQjirx"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f74.google.com (mail-ed1-f74.google.com [209.85.208.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BC9E22D78A;
-	Wed, 17 Sep 2025 11:41:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8B3C37428C
+	for <linux-pm@vger.kernel.org>; Wed, 17 Sep 2025 12:07:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758109306; cv=none; b=h1ojiu3sHqx5hWVEaN3vYcOHIGJEHW5YxaGme3GfU05WI5ZBtzVbRCgSfJxsNEUNanSF5GcCMELoHFH5+L+AZrlQO5DHIZUVX2ujVe49XBEYT9yx4qAd5en4N70nsyLfoKRSGjKtHpZeBPQ35Ul/ci0VdGuc326oaDZHy2AZKts=
+	t=1758110849; cv=none; b=B5LoJTRMEHDmvkbgDtnUje880YceS0+7rws4JzKOeh+CmNSyeSmH7mQNX1e2LhCD0CXDzuDw9eGGKmgMIWThCketQvVwW1GyNfiyQxEnfi+71+pudX8Q2eSXf/5yxQvGzoozYw6YKbQ7PdkLGI6yw1hnbzmMDv6eqelmkJR5w5Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758109306; c=relaxed/simple;
-	bh=0OtD0Y91eraXp7qlae6rfKOz1LeKFfNmCmaZ1OElvSI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jF3KQ9OTKHVMUopSxuqpAf64gdycgG8N1uHlj+RTMTrNCth2MPaL9DjEWiyfBh7aQaPdkPaX5Q7FEBKc6zrcGiwozByLuQM79cX1KXPSjtO7pzubHIfLXwrm1LkVmnfkzHzQ6ZLhyRzCseQgv3XZQDy+X/J402D6zbo26Q2cRKk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=OgsObV8Y; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1758109302;
-	bh=0OtD0Y91eraXp7qlae6rfKOz1LeKFfNmCmaZ1OElvSI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=OgsObV8YW7tOY5+PL28HwItU/FdPf6MHC4mP4i613Caz1L/lU2AKXzio9nx+qjykZ
-	 C3X7qT+n+A2gpIo6dPrCSdsecp6k4lbQyCGEUHpJnuup2V6zoK+atoFaY7bFvbm8FF
-	 /cwuWNvMSDp70uMeD1uiUA86GbGkwX9WC39Fqgw6z08vVFx0uowzHqMBJfSzyuqpH/
-	 Dwfvs2LGSvQM85kAQhlxrPFLvLXTkcHFxPp/a3IRM78Ev6WUgqpoLhoGb4BdiGWlCR
-	 vxXQch2XyjzydceRQfztY4bXwHNcq0iRCr/rlr0qTQjZiG7WqpKzbIF9Z/i9TpceB0
-	 S4vEPuGN/zcQA==
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 49AA317E10F3;
-	Wed, 17 Sep 2025 13:41:41 +0200 (CEST)
-Message-ID: <a16cafd4-4d6c-45be-b241-45d2d6479bb1@collabora.com>
-Date: Wed, 17 Sep 2025 13:41:40 +0200
+	s=arc-20240116; t=1758110849; c=relaxed/simple;
+	bh=9YsOK7xOkBmqSXAsGz41A8TfQISRyzo2HhwCFSvVyL8=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=S3mzxkj4IzGQdBHclK9fR6bfsLrlaR58JPCVSHSPXCLMKuN1oI/HegXQeDiPg3s6fVe7uh9zWnJB6HudYfy6UWL3NQL7k4NAZN4vefbF4VQXitRsWNVWbpvb6utj4poyMpyfFrr+AV7HR1vUi/KTx/jto7RmRA/J55q+vXWtCaw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--srosek.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=euMQjirx; arc=none smtp.client-ip=209.85.208.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--srosek.bounces.google.com
+Received: by mail-ed1-f74.google.com with SMTP id 4fb4d7f45d1cf-627eaf68bbfso9253703a12.1
+        for <linux-pm@vger.kernel.org>; Wed, 17 Sep 2025 05:07:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1758110845; x=1758715645; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=oUSdiy6K/FdW7+NZhKD0MWSuKUWi3Six21x+wvEODfc=;
+        b=euMQjirxt+darB1wsav+RBep6Q23AjZOnzloiQ9fttRr6DuuNoXnBrSViRYCMx/oG8
+         /CLTKrkf6FFadgFoDy/mVoYtd0eR/xsSvQMTFRco1GD8t1CWJSB0pXA+LGY0XOtFTkJ6
+         ACcTZ4mNBSWFR/SqlUqTvOJghdTcO2HD0PNext0cTz0/8wkyACSxeY4w6w6wN9OTDagu
+         jn6zi/sU9W2ctPwSWITQ7iCAEn2VgOMw4wQywWoW8PV88OT/kVc2JlBArtLy3AI7LeAG
+         imixOmCh4fkgPuVSdgkEwD+HntSQvS2xrZd9IV7VELZqffMz1MjkmJhUsnMmQRtZVTmw
+         Cf6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758110845; x=1758715645;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=oUSdiy6K/FdW7+NZhKD0MWSuKUWi3Six21x+wvEODfc=;
+        b=ZD0iStUkfA8pxfdJRBFi47QO0A/tf1Ro+uSy9cAbvKu6bg9S0JrVMkP4lgB6NtlCIw
+         gtHURwHDbCbbFapNvhEb1bgMgxBlnBd2q+ud48sKHVKF9iY2ZYyYvIG+RzoKriSOI//n
+         91E3/uGBckRQJXbLPh5fWzsMrB49jqjTwWJJGlOXu2htvfrYAlWj64/wGWbleRop6+Is
+         jqXEOMNEErzHUOI8pl3Eq+k1KTioS8p52diybJqEOFn98S/Cp/VhfftaBqRr4tAiDxyu
+         6CfugXuvadLN0ZD4cKWzHF8+QeR94tDerH2kP5g25yxSnZoXDky4KRbJi9d7nZzFAhwI
+         s3zw==
+X-Forwarded-Encrypted: i=1; AJvYcCUz7Dwwx0sXEKn8scGrJW9jGw48Npm3vqjpDXAW7JWZ8FsRbtBeuZV8/f8YbeXp7vW/FL1WEfktFQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyv1JMJN31T2Bs0eOJQQtefOF/vdNiTKYQ1YvO8GlhUcptnmKYW
+	fHI0rfwIi/+NY+dANfEdP/pkS/2W2HmT8Qut4Ip0ofoU1QM2VgIOyey7vnZqmHT8BX4B/45r1ZY
+	IjmgUEw==
+X-Google-Smtp-Source: AGHT+IF/Up2kM8AayYk2fWIelBsJluwkobfI62XMvAqfgyqmhTCwPUqTNtia/rvIr6vUEF42cBfglmWXKmI=
+X-Received: from edj19.prod.google.com ([2002:a05:6402:3253:b0:61e:ed05:2161])
+ (user=srosek job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6402:21cb:b0:62f:9cfb:7d75
+ with SMTP id 4fb4d7f45d1cf-62f9cfb7f95mr226755a12.2.1758110845149; Wed, 17
+ Sep 2025 05:07:25 -0700 (PDT)
+Date: Wed, 17 Sep 2025 12:07:13 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 1/7] spmi: Implement spmi_subdevice_alloc_and_add() and
- devm variant
-To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
-Cc: sboyd@kernel.org, jic23@kernel.org, dlechner@baylibre.com,
- nuno.sa@analog.com, andy@kernel.org, arnd@arndb.de,
- gregkh@linuxfoundation.org, srini@kernel.org, vkoul@kernel.org,
- kishon@kernel.org, sre@kernel.org, krzysztof.kozlowski@linaro.org,
- linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
- linux-pm@vger.kernel.org, kernel@collabora.com, wenst@chromium.org,
- casey.connolly@linaro.org, Jonathan Cameron <jonathan.cameron@huawei.com>,
- Neil Armstrong <neil.armstrong@linaro.org>
-References: <20250916084445.96621-1-angelogioacchino.delregno@collabora.com>
- <20250916084445.96621-2-angelogioacchino.delregno@collabora.com>
- <mr7gqhvom5soofn2oujzxtsuczsnx2yizkushar64cojwnvhd6@dt64ojgjqdxw>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Content-Language: en-US
-In-Reply-To: <mr7gqhvom5soofn2oujzxtsuczsnx2yizkushar64cojwnvhd6@dt64ojgjqdxw>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.51.0.384.g4c02a37b29-goog
+Message-ID: <20250917120719.2390847-1-srosek@google.com>
+Subject: [PATCH v2 0/6] ACPI: DPTF: Move INT340X enumeration from DPTF core to
+ thermal drivers
+From: Slawomir Rosek <srosek@google.com>
+To: "Rafael J . Wysocki" <rafael@kernel.org>, Alex Hung <alexhung@gmail.com>, 
+	Hans de Goede <hansg@kernel.org>, Ilpo Jarvinen <ilpo.jarvinen@linux.intel.com>, 
+	AceLan Kao <acelan.kao@canonical.com>, Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Zhang Rui <rui.zhang@intel.com>, 
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Tomasz Nowicki <tnowicki@google.com>, 
+	Stanislaw Kardach <skardach@google.com>, Michal Krawczyk <mikrawczyk@google.com>, 
+	linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org, 
+	platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org, 
+	Slawomir Rosek <srosek@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Il 16/09/25 15:25, Uwe Kleine-König ha scritto:
-> Hello AngeloGioacchino,
-> 
-> On Tue, Sep 16, 2025 at 10:44:39AM +0200, AngeloGioacchino Del Regno wrote:
->> +/**
->> + * spmi_subdevice_alloc_and_add(): Allocate and add a new SPMI sub-device
->> + * @sparent:	SPMI parent device with previously registered SPMI controller
->> + *
->> + * Returns:
->> + * Pointer to newly allocated SPMI sub-device for success or negative ERR_PTR.
->> + */
->> +struct spmi_subdevice *spmi_subdevice_alloc_and_add(struct spmi_device *sparent)
->> +{
->> +	struct spmi_subdevice *sub_sdev;
->> +	struct spmi_device *sdev;
->> +	int ret;
->> +
->> +	sub_sdev = kzalloc(sizeof(*sub_sdev), GFP_KERNEL);
->> +	if (!sub_sdev)
->> +		return ERR_PTR(-ENOMEM);
->> +
->> +	ret = ida_alloc(&spmi_subdevice_ida, GFP_KERNEL);
->> +	if (ret < 0) {
->> +		kfree(sub_sdev);
->> +		return ERR_PTR(ret);
->> +	}
->> +
->> +	sdev = &sub_sdev->sdev;
->> +	sdev->ctrl = sparent->ctrl;
->> +	device_initialize(&sdev->dev);
->> +	sdev->dev.parent = &sparent->dev;
->> +	sdev->dev.bus = &spmi_bus_type;
->> +	sdev->dev.type = &spmi_subdev_type;
->> +
->> +	sub_sdev->devid = ret;
->> +	sdev->usid = sparent->usid;
->> +
->> +	ret = dev_set_name(&sdev->dev, "%d-%02x.%d.auto",
->> +			   sdev->ctrl->nr, sdev->usid, sub_sdev->devid);
-> 
-> If I understand correctly sub_sdev->devid is globally unique. I wonder
-> if a namespace that is specific to the parent spmi device would be more
-> sensible?!
-> 
+The Intel Dynamic Platform and Thermal Framework (DPTF) relies on
+the INT340X ACPI device objects. The temperature information and
+cooling ability are exposed to the userspace via those objects.
 
-Only in the context of the children of sdev. I'm not sure of what you're proposing
-here, looks like it would complicate the code for no big reason - unless I am
-misunderstanding something here.
+Since kernel v3.17 the ACPI bus scan handler is introduced to prevent
+enumeration of INT340X ACPI device objects on the platform bus unless
+related thermal drivers are enabled. However, using the IS_ENABLED()
+macro in the ACPI scan handler forces the kernel to be recompiled
+when thermal drivers are enabled or disabled, which is a significant
+limitation of its modularity. The IS_ENABLED() macro is particularly
+problematic for the Android Generic Kernel Image (GKI) project which
+uses unified core kernel while SoC/board support is moved to loadable
+vendor modules.
 
->> +	if (ret)
->> +		goto err_put_dev;
->> +
->> +	ret = device_add(&sdev->dev);
->> +	if (ret) {
->> +		dev_err(&sdev->dev, "Can't add %s, status %d\n",
-> 
-> I'd use %pe instead of %d here.
-> 
+This patch set moves enumeration of INT340X ACPI device objects on
+the platform bus from DPTF core to thermal drivers. It starts with
+some code cleanup and reorganization to eventually remove IS_ENABLED()
+macro from the ACPI bus scan handler. Brief list of changes is listed
+below:
 
-The only reason why I am using %d is for consistency with the rest of the code that
-is in SPMI - there is another device_add() call in spmi_device_add() which prints
-the same error in the very same way as I'm doing here.
+1) Remove SOC DTS thermal driver case from the ACPI scan handler
+   since its dependency on INT340X driver is unrelated to DPTF
+2) Move all INT340X ACPI device ids to the common header and update
+   the DPTF core and thermal drivers accordingly
+3) Move dynamic enumeration of ACPI device objects on the platform bus
+   from the intel-hid and intel-vbtn drivers to the ACPI platform core
+4) Move enumeration of INT340X ACPI device objects on the platform bus
+   from DPTF core to thermal drivers using ACPI platform core methods
 
-I agree that using %pe makes error prints more readable, but perhaps that should be
-done as a later cleanup to keep prints consistent (and perhaps that should not be
-done only in SPMI anyway).
 
-If you have really strong opinions about doing that right now I can do it, but I
-anyway prefer seeing that as a later commit doing that in the entire SPMI codebase.
+Slawomir Rosek (6):
+  ACPI: DPTF: Ignore SoC DTS thermal while scanning
+  ACPI: DPTF: Move INT340X device IDs to header
+  ACPI: DPTF: Move PCH FIVR device IDs to header
+  ACPI: DPTF: Remove not supported INT340X IDs
+  ACPI: platform: Add macro for acpi platform driver
+  ACPI: DPTF: Move INT340X enumeration to modules
 
-Cheers,
-Angelo
+ drivers/acpi/acpi_platform.c                  | 27 +++++++
+ drivers/acpi/dptf/dptf_pch_fivr.c             | 10 +--
+ drivers/acpi/dptf/dptf_power.c                | 20 +----
+ drivers/acpi/dptf/int340x_thermal.c           | 76 ++++---------------
+ drivers/acpi/fan.h                            | 10 +--
+ drivers/acpi/fan_core.c                       |  2 +-
+ drivers/acpi/int340x_thermal.h                | 76 +++++++++++++++++++
+ drivers/platform/x86/intel/hid.c              | 33 +-------
+ drivers/platform/x86/intel/vbtn.c             | 30 +-------
+ drivers/thermal/intel/Kconfig                 |  1 +
+ .../intel/int340x_thermal/int3400_thermal.c   | 12 +--
+ .../intel/int340x_thermal/int3401_thermal.c   |  5 +-
+ .../intel/int340x_thermal/int3402_thermal.c   |  5 +-
+ .../intel/int340x_thermal/int3403_thermal.c   | 12 +--
+ .../intel/int340x_thermal/int3406_thermal.c   |  5 +-
+ include/linux/platform_device.h               | 17 +++++
+ 16 files changed, 163 insertions(+), 178 deletions(-)
+ create mode 100644 drivers/acpi/int340x_thermal.h
 
->> +			dev_name(&sdev->dev), ret);
->> +		goto err_put_dev;
->> +	}
->> +
->> +	return sub_sdev;
->> +
->> +err_put_dev:
->> +	put_device(&sdev->dev);
->> +	return ERR_PTR(ret);
->> +}
->> +EXPORT_SYMBOL_NS_GPL(spmi_subdevice_alloc_and_add, "SPMI");
->> +
-> 
-> Best regards
-> Uwe
+-- 
+2.51.0.384.g4c02a37b29-goog
 
 
