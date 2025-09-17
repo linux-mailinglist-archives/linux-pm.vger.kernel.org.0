@@ -1,352 +1,186 @@
-Return-Path: <linux-pm+bounces-34895-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34896-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 60461B80F82
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 18:26:04 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D91EFB80FF4
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 18:30:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3D7953B4D99
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 16:25:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B75CB7B3106
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 16:28:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABBCB285C80;
-	Wed, 17 Sep 2025 16:25:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D0AE28E5F3;
+	Wed, 17 Sep 2025 16:29:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="B1+cRPXk"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="ZiHXr1VS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A65CF34BA42;
-	Wed, 17 Sep 2025 16:25:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758126340; cv=pass; b=HtHaP+xXLyU6SsgohBcnTOJuZj1Z28B8wPDLB8CDPc8FIbFPu0fRxIMcQwZ1vFJpaq+wxp/oBrWdT1Y2oNFTaYlMf16e9ofMWHd+l0M0BiIzMC5lx7fwyPwNfma0gS7+++BX9oMyP9z30ZyTNTysolCPE7LNMtY4V1Cz4hcITME=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758126340; c=relaxed/simple;
-	bh=E2xoPDGeSVO0PLklH+sUA3dvhuCum19UEvEz2dbu8jg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KuVCIepGp4Es0zIbsJ/Bkjte2i2VlAJUOGjxpACTwmdFfsEBGcyRj45DYNQNO8M9UqdcdT9hBKjPaVtvX5/tYqZY3O00OtTy9KuEvdWADTahYTIxm+/1KWWj2kwQ0h7WJBUqqNOkRVwp46VD5ur0Xc8NMzbfieCsZIO5i3ge6lY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=B1+cRPXk; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1758126283; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=UoUxm3TG+Xdqdt4n6U36BzI+ZArx0id4xIhPohYJk3DcYQKQ3gFw6Bm+XpQRDTul+ELzmkXOAwgOG8WJMQ2VP6txBjz7QSu79IYoaJBOCb8gtqfyzlYEtIDLEqQHjmEyRQhIUhE3LKHczAiNtmLZHMA+NHtnQMAIjLMRZckikOc=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1758126283; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=dUV4xEya8An9AsAZIkFaG1G41M6EhB9SXM95Zf2aVOs=; 
-	b=T5ygtmluYn6j1nGKR6dCuqGrwo8jgjwQ7HRQB1kFGDR3TV+ZbvUMPUXLreIpws72ahMaTDVRpM468xuR2abHclMk96T83OxFmhWZagKCIEXxY0Y5u6rKK5JZ6nACNBsBrS5rc4a4DcuA8sQhNGqkJVyS2tjCWSwQsJZkBMKk/a4=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
-	dmarc=pass header.from=<sebastian.reichel@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1758126283;
-	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
-	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
-	bh=dUV4xEya8An9AsAZIkFaG1G41M6EhB9SXM95Zf2aVOs=;
-	b=B1+cRPXk0cJs3HmKjgPbf4rOEZkW5FzCMbo/y7pyOUdeGT0CNzMTg53IAdty9WTR
-	hkgBpU6u3XxrNpbfC9M+rPMZjNW+rjJ6GMIenoAQ6iP/OhbeJGjoGGkOLa6kO6KB/R5
-	PveNckwFRHSTIxxLF7cHSDs38Qchjg+1BPit9+sE=
-Received: by mx.zohomail.com with SMTPS id 1758126271855414.6769814303776;
-	Wed, 17 Sep 2025 09:24:31 -0700 (PDT)
-Received: by venus (Postfix, from userid 1000)
-	id 0F592180265; Wed, 17 Sep 2025 18:24:26 +0200 (CEST)
-Date: Wed, 17 Sep 2025 18:24:26 +0200
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: sboyd@kernel.org, jic23@kernel.org, dlechner@baylibre.com, 
-	nuno.sa@analog.com, andy@kernel.org, arnd@arndb.de, gregkh@linuxfoundation.org, 
-	srini@kernel.org, vkoul@kernel.org, kishon@kernel.org, 
-	krzysztof.kozlowski@linaro.org, u.kleine-koenig@baylibre.com, linux-arm-msm@vger.kernel.org, 
-	linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org, 
-	linux-pm@vger.kernel.org, kernel@collabora.com, wenst@chromium.org, 
-	casey.connolly@linaro.org, Jonathan Cameron <jonathan.cameron@huawei.com>, 
-	Neil Armstrong <neil.armstrong@linaro.org>
-Subject: Re: [PATCH v4 1/7] spmi: Implement spmi_subdevice_alloc_and_add()
- and devm variant
-Message-ID: <zfe2q5sw5pphfyzidhe6d564j6yw32lnxzv4etxcr3hhi2ychy@34qka6dllzxe>
-References: <20250916084445.96621-1-angelogioacchino.delregno@collabora.com>
- <20250916084445.96621-2-angelogioacchino.delregno@collabora.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89EC434BA5C
+	for <linux-pm@vger.kernel.org>; Wed, 17 Sep 2025 16:29:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1758126599; cv=none; b=l/0+EcKVM219t5aDKQXWRWN2B1qMrmyql03Ur+TD2Aa7fW+o8yzo6nPc3e9h6bnVgbuHDIqewQDLDzJj7+brwe4JdxqU1ZdJXShX3MoWfMbVIpUAEjbmRZlfYZ/9EMSrQaqwclTgrQ88MWdGkl85vYGg5Kdmpp1hpa/nrPhSWJc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1758126599; c=relaxed/simple;
+	bh=j/kIpr44aITpYwfRH5MGrbeYBzQDUseVMB6E+aFtzw4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=htzI4ThQtkTvN4fcQgcyacytpCbWoDdTVVhEv2/O6AtivQU199CGasW0OaKJwl6pK1IjDiLIjlYHNEsJDz4ha5ay6xLXKuLmetqHEHhZH1rOhNZytLYHw1WUPZGtyG1+pd1LxaEOqm6fzLN1UzBP9IDyafQIV7WjvgYkjajTb6o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=ZiHXr1VS; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58H8XfUg029750
+	for <linux-pm@vger.kernel.org>; Wed, 17 Sep 2025 16:29:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	aPbliOpcCjIzayrMLkNw1FIe5VlXIVH9kvQijQYZm20=; b=ZiHXr1VSwLPkG2/M
+	uN4aJnP3sUlNJHPGAh3ELOm4kQ4P2lX+AdVXRyMYk27T7PcAAhrVYwvHjtwZjgHF
+	uhuOh6Vaga2zVy0qbAVoknjr2A8srxFLICJWEY8Az8eL8D26lVz1ipfyB/knPy+c
+	Da0bx9l7qK2KqhohTPupv/taCjPhHh+M1NatXt3JMlxX+kA5Jm3XcYilL/PrlDlP
+	9BYLM72CjrJBhFMpW4UwRBQNImIzZL4c+7a75wZVGjDypcZu0PitzLFjaTDDo8p/
+	hxNDhMB4Xd2wobqCu7aH/QKoK07FdCpEX5kIu1EemxR72AIlYDL0IDdA+8s9lCkr
+	CVrLBA==
+Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com [209.85.210.198])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 497fy0u4bd-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Wed, 17 Sep 2025 16:29:55 +0000 (GMT)
+Received: by mail-pf1-f198.google.com with SMTP id d2e1a72fcca58-77cb7607cfcso69581b3a.0
+        for <linux-pm@vger.kernel.org>; Wed, 17 Sep 2025 09:29:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758126595; x=1758731395;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aPbliOpcCjIzayrMLkNw1FIe5VlXIVH9kvQijQYZm20=;
+        b=RMV8IUN7HxDlTZdQOAUHra2TMm8zFIMTMlhoUddxttkRBIKuGqZ4Op55hRKmf5tTMJ
+         Lfp3o/ReN9KbjZoHSfXLvZCC8OiKXoLK+59bzLjsq8i+U/839zloqyMc4JW3NeBjUS7n
+         EOywaI3/ILmjeVErxRfkVJI80koUtSJbMwyOoNLAFxVrCINigVK1pR12exmvUxuaES6R
+         T3QWWBX/GvxVIg8M6CthT57w+MehrPlimhG2Qnvf1QXaqXbCOfTqayZ6WXvqrMEXMAyP
+         AKELM76N//cBSvaDlneuVm+y7ir3HH6uwy9MsXkEejWi6b5sXSXgvhPUeDRot3GZYqH3
+         3/PA==
+X-Forwarded-Encrypted: i=1; AJvYcCWslcqrtuE9IBWPdGUCpMlDTYbKoTnG5NPkOfhk8RB3yz+vY95KoJqgYlVSdvt3Nq4lk6fQUbkWmw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzpRU871PtnfRkYMBiy/o8cy9DbtbzWyc/3rA94UH0N7RPuZGpw
+	170yCcjN/tCdd9N83+F+fp2j9QkZBv3VZR0mjQNNPVCgQP2SEE2IzM2PJY+myBtz5g9hkK/u8H7
+	2vEg18q+a4BB7MkNVrFau3v3vR5+omelO4lBrr/07D6zJ+ShiJZQg0/K2lQeT3Q==
+X-Gm-Gg: ASbGncuB1B3iP8K9khvIBOi/ONmZal78rlvf6ecHddCVFl6dT7wJ1k9ILq5u4mG8wYx
+	hco6EUIoozPgE+iWOvUcaeJr11qekP/2AYg1Y/f++IxRP9L8kqeLHRYzGgWajUBaNxtOX9GSa7i
+	ebFuFZU6LnJ6+N+bZsMlZuSZ3lhzHFFehNdXSI5K8LGgcyXIX/qDT77NW63gbPpqSMkDBN5emo2
+	HOUzUyR1HjGn60wAf4XHQtwIhTvzwPKsdMR5RXiXsm6mZ7KhIxScBx2hax3wrAmlf3rxiBPT9Fm
+	OsyyM0RoJbQIREuydTKn0dMYqGtt92uBoF4aJBweeSHigdGnO/froytrA7pMfOc=
+X-Received: by 2002:a05:6a00:8d0:b0:776:1f45:904f with SMTP id d2e1a72fcca58-77bf9268104mr3162361b3a.28.1758126594840;
+        Wed, 17 Sep 2025 09:29:54 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHSAETCbSP3vIIE9VWiyL8Alz3IwaM2MYDhGvePBLrTzg5i1/2OcH9B9+r9HC87lkyc+hFW4Q==
+X-Received: by 2002:a05:6a00:8d0:b0:776:1f45:904f with SMTP id d2e1a72fcca58-77bf9268104mr3162319b3a.28.1758126594363;
+        Wed, 17 Sep 2025 09:29:54 -0700 (PDT)
+Received: from [10.216.34.136] ([202.46.23.19])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-77607b3603asm18872680b3a.84.2025.09.17.09.29.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 Sep 2025 09:29:54 -0700 (PDT)
+Message-ID: <3c56cd00-770f-019a-d93b-5ebaa6b9374d@oss.qualcomm.com>
+Date: Wed, 17 Sep 2025 21:59:44 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="b73zeyu7mpwvdb3l"
-Content-Disposition: inline
-In-Reply-To: <20250916084445.96621-2-angelogioacchino.delregno@collabora.com>
-X-Zoho-Virus-Status: 1
-X-Zoho-Virus-Status: 1
-X-Zoho-AV-Stamp: zmail-av-1.4.3/258.96.42
-X-ZohoMailClient: External
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v14 02/10] power: reset: reboot-mode: Add device tree
+ node-based registration
+Content-Language: en-US
+To: Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>, Rob Herring <robh@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Souvik Chakravarty <Souvik.Chakravarty@arm.com>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+ <conor+dt@kernel.org>,
+        Andy Yan <andy.yan@rock-chips.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Konrad Dybcio <konradybcio@kernel.org>,
+        cros-qcom-dts-watchers@chromium.org, Vinod Koul <vkoul@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+        Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Andre Draszik
+ <andre.draszik@linaro.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        Elliot Berman <quic_eberman@quicinc.com>,
+        Srinivas Kandagatla <srini@kernel.org>
+References: <20250815-arm-psci-system_reset2-vendor-reboots-v14-0-37d29f59ac9a@oss.qualcomm.com>
+ <20250815-arm-psci-system_reset2-vendor-reboots-v14-2-37d29f59ac9a@oss.qualcomm.com>
+ <in6bqvemnscvuxbumpxogxiiav7odmsc3iazktifninh6iqen7@qwhrhdidcx7y>
+From: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
+In-Reply-To: <in6bqvemnscvuxbumpxogxiiav7odmsc3iazktifninh6iqen7@qwhrhdidcx7y>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-ORIG-GUID: b6jc1VW2RIEfR0QdQUF9PZiZbNI3bkoY
+X-Authority-Analysis: v=2.4 cv=btZMBFai c=1 sm=1 tr=0 ts=68cae203 cx=c_pps
+ a=m5Vt/hrsBiPMCU0y4gIsQw==:117 a=j4ogTh8yFefVWWEFDRgCtg==:17
+ a=IkcTkHD0fZMA:10 a=yJojWOMRYYMA:10 a=EUspDBNiAAAA:8 a=6ImPWgPuv615vBLeUzsA:9
+ a=QEXdDO2ut3YA:10 a=IoOABgeZipijB_acs4fv:22
+X-Proofpoint-GUID: b6jc1VW2RIEfR0QdQUF9PZiZbNI3bkoY
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTE2MDIwMiBTYWx0ZWRfXyEV0xI+IW0gM
+ IiTyT6d0U+zNJjU9WuTviZ3fr4s9aKYSqcuqgXZeTua96X4bcIaMhP+u/oeJIbFoOZPoGdjhAZm
+ lq9MR5nVIcwRfOy6afhas7XRU6s1LOModJ2K73Q+/t/WurZvwxE3plkjaKjmknKXPzsnI5v50Yp
+ xVrOfzLjdEmSrs0wzhyQvTVlzKsCef1nl+15i2at1ucuo/ShyHGtYIvBkMwIuEnqDhRnrPIufJr
+ OsrSC8bP8EG0LSxyveuyP3CsaWr9Rxim6PvVLMTudIejqhHqzeSOjZLGXSPKczAiwtRGglvSfu/
+ yXKYY7qtAs/wiuW9+ym0SzcdFcfw44Fy7FaArcg5FhwkPNcrhuHdCqfxLOqB+Yd/0lCZDxX1sAx
+ 8DhCVxD5
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-09-17_01,2025-09-17_02,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ bulkscore=0 priorityscore=1501 impostorscore=0 clxscore=1015 malwarescore=0
+ spamscore=0 adultscore=0 phishscore=0 suspectscore=0 classifier=typeunknown
+ authscore=0 authtc= authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2507300000 definitions=main-2509160202
 
 
---b73zeyu7mpwvdb3l
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v4 1/7] spmi: Implement spmi_subdevice_alloc_and_add()
- and devm variant
-MIME-Version: 1.0
 
-Hi,
+On 9/17/2025 12:18 AM, Sebastian Reichel wrote:
+> Hi,
+> 
+> On Fri, Aug 15, 2025 at 08:05:07PM +0530, Shivendra Pratap wrote:
+>> The reboot-mode driver does not have a strict requirement for
+>> device-based registration. It primarily uses the device's of_node
+>> to read mode-<cmd> properties and the device pointer for logging.
+>>
+>> Remove the dependency on struct device and introduce support for
+>> Device Tree (DT) node-based registration. This enables drivers
+>> that are not associated with a struct device to leverage the
+>> reboot-mode framework.
+>>
+>> Signed-off-by: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
+>> ---
+> 
+> Please use fwnode instead of device_node, so that the same thing
+> can be used with non DT setups, if that becomes necessary. Otherwise
+> LGTM.
 
-On Tue, Sep 16, 2025 at 10:44:39AM +0200, AngeloGioacchino Del Regno wrote:
-> Some devices connected over the SPMI bus may be big, in the sense
-> that those may be a complex of devices managed by a single chip
-> over the SPMI bus, reachable through a single SID.
->=20
-> Add new functions aimed at managing sub-devices of a SPMI device
-> spmi_subdevice_alloc_and_add() and a spmi_subdevice_put_and_remove()
-> for adding a new subdevice and removing it respectively, and also
-> add their devm_* variants.
->=20
-> The need for such functions comes from the existance of	those
-> complex Power Management ICs (PMICs), which feature one or many
-> sub-devices, in some cases with these being even addressable on
-> the chip in form of SPMI register ranges.
->=20
-> Examples of those devices can be found in both Qualcomm platforms
-> with their PMICs having PON, RTC, SDAM, GPIO controller, and other
-> sub-devices, and in newer MediaTek platforms showing similar HW
-> features and a similar layout with those also having many subdevs.
->=20
-> Also, instead of generally exporting symbols, export them with a
-> new "SPMI" namespace: all users will have to import this namespace
-> to make use of the newly introduced exports.
->=20
-> Link: https://lore.kernel.org/r/20250722101317.76729-2-angelogioacchino.d=
-elregno@collabora.com
-> Reviewed-by: Jonathan Cameron <jonathan.cameron@huawei.com>
-> Tested-by: Neil Armstrong <neil.armstrong@linaro.org> # on SM8650-QRD
-> Link: https://lore.kernel.org/r/20250730112645.542179-2-angelogioacchino.=
-delregno@collabora.com
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@coll=
-abora.com>
-> ---
+To be more clear on this, have one question: the current unmodified
+design of reboot-mode is dt based:
 
-It would be nice, if this patch lands in the 6.18 merge window. That
-way we don't need to do an immutable branch for the different involved
-subsystems.
+struct device_node *np = reboot->dev->of_node;
+and then parses the node using for_each_property_of_node(np, prop).
 
-Greetings,
+We want to refactor reboot-mode to support non-DT setups by adding
+support for fwnode-based approach (struct fwnode_handle *fwnode)?
 
--- Sebastian
+Can you please explain a bit? Some more details would be helpful to
+make the change.
 
->  drivers/spmi/spmi-devres.c | 24 ++++++++++++
->  drivers/spmi/spmi.c        | 79 ++++++++++++++++++++++++++++++++++++++
->  include/linux/spmi.h       | 16 ++++++++
->  3 files changed, 119 insertions(+)
->=20
-> diff --git a/drivers/spmi/spmi-devres.c b/drivers/spmi/spmi-devres.c
-> index 62c4b3f24d06..8feebab0365b 100644
-> --- a/drivers/spmi/spmi-devres.c
-> +++ b/drivers/spmi/spmi-devres.c
-> @@ -60,5 +60,29 @@ int devm_spmi_controller_add(struct device *parent, st=
-ruct spmi_controller *ctrl
->  }
->  EXPORT_SYMBOL_GPL(devm_spmi_controller_add);
-> =20
-> +static void devm_spmi_subdevice_remove(void *res)
-> +{
-> +	spmi_subdevice_remove(res);
-> +}
-> +
-> +struct spmi_subdevice *devm_spmi_subdevice_alloc_and_add(struct device *=
-dev,
-> +							 struct spmi_device *sparent)
-> +{
-> +	struct spmi_subdevice *sub_sdev;
-> +	int ret;
-> +
-> +	sub_sdev =3D spmi_subdevice_alloc_and_add(sparent);
-> +	if (IS_ERR(sub_sdev))
-> +		return sub_sdev;
-> +
-> +	ret =3D devm_add_action_or_reset(dev, devm_spmi_subdevice_remove, sub_s=
-dev);
-> +	if (ret)
-> +		return ERR_PTR(ret);
-> +
-> +	return sub_sdev;
-> +}
-> +EXPORT_SYMBOL_NS_GPL(devm_spmi_subdevice_alloc_and_add, "SPMI");
-> +
->  MODULE_LICENSE("GPL");
->  MODULE_DESCRIPTION("SPMI devres helpers");
-> +MODULE_IMPORT_NS("SPMI");
-> diff --git a/drivers/spmi/spmi.c b/drivers/spmi/spmi.c
-> index 3cf8d9bd4566..e011876c3187 100644
-> --- a/drivers/spmi/spmi.c
-> +++ b/drivers/spmi/spmi.c
-> @@ -19,6 +19,7 @@
-> =20
->  static bool is_registered;
->  static DEFINE_IDA(ctrl_ida);
-> +static DEFINE_IDA(spmi_subdevice_ida);
-> =20
->  static void spmi_dev_release(struct device *dev)
->  {
-> @@ -31,6 +32,19 @@ static const struct device_type spmi_dev_type =3D {
->  	.release	=3D spmi_dev_release,
->  };
-> =20
-> +static void spmi_subdev_release(struct device *dev)
-> +{
-> +	struct spmi_device *sdev =3D to_spmi_device(dev);
-> +	struct spmi_subdevice *sub_sdev =3D container_of(sdev, struct spmi_subd=
-evice, sdev);
-> +
-> +	ida_free(&spmi_subdevice_ida, sub_sdev->devid);
-> +	kfree(sub_sdev);
-> +}
-> +
-> +static const struct device_type spmi_subdev_type =3D {
-> +	.release	=3D spmi_subdev_release,
-> +};
-> +
->  static void spmi_ctrl_release(struct device *dev)
->  {
->  	struct spmi_controller *ctrl =3D to_spmi_controller(dev);
-> @@ -90,6 +104,18 @@ void spmi_device_remove(struct spmi_device *sdev)
->  }
->  EXPORT_SYMBOL_GPL(spmi_device_remove);
-> =20
-> +/**
-> + * spmi_subdevice_remove() - Remove an SPMI subdevice
-> + * @sub_sdev:	spmi_device to be removed
-> + */
-> +void spmi_subdevice_remove(struct spmi_subdevice *sub_sdev)
-> +{
-> +	struct spmi_device *sdev =3D &sub_sdev->sdev;
-> +
-> +	device_unregister(&sdev->dev);
-> +}
-> +EXPORT_SYMBOL_NS_GPL(spmi_subdevice_remove, "SPMI");
-> +
->  static inline int
->  spmi_cmd(struct spmi_controller *ctrl, u8 opcode, u8 sid)
->  {
-> @@ -431,6 +457,59 @@ struct spmi_device *spmi_device_alloc(struct spmi_co=
-ntroller *ctrl)
->  }
->  EXPORT_SYMBOL_GPL(spmi_device_alloc);
-> =20
-> +/**
-> + * spmi_subdevice_alloc_and_add(): Allocate and add a new SPMI sub-device
-> + * @sparent:	SPMI parent device with previously registered SPMI controll=
-er
-> + *
-> + * Returns:
-> + * Pointer to newly allocated SPMI sub-device for success or negative ER=
-R_PTR.
-> + */
-> +struct spmi_subdevice *spmi_subdevice_alloc_and_add(struct spmi_device *=
-sparent)
-> +{
-> +	struct spmi_subdevice *sub_sdev;
-> +	struct spmi_device *sdev;
-> +	int ret;
-> +
-> +	sub_sdev =3D kzalloc(sizeof(*sub_sdev), GFP_KERNEL);
-> +	if (!sub_sdev)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	ret =3D ida_alloc(&spmi_subdevice_ida, GFP_KERNEL);
-> +	if (ret < 0) {
-> +		kfree(sub_sdev);
-> +		return ERR_PTR(ret);
-> +	}
-> +
-> +	sdev =3D &sub_sdev->sdev;
-> +	sdev->ctrl =3D sparent->ctrl;
-> +	device_initialize(&sdev->dev);
-> +	sdev->dev.parent =3D &sparent->dev;
-> +	sdev->dev.bus =3D &spmi_bus_type;
-> +	sdev->dev.type =3D &spmi_subdev_type;
-> +
-> +	sub_sdev->devid =3D ret;
-> +	sdev->usid =3D sparent->usid;
-> +
-> +	ret =3D dev_set_name(&sdev->dev, "%d-%02x.%d.auto",
-> +			   sdev->ctrl->nr, sdev->usid, sub_sdev->devid);
-> +	if (ret)
-> +		goto err_put_dev;
-> +
-> +	ret =3D device_add(&sdev->dev);
-> +	if (ret) {
-> +		dev_err(&sdev->dev, "Can't add %s, status %d\n",
-> +			dev_name(&sdev->dev), ret);
-> +		goto err_put_dev;
-> +	}
-> +
-> +	return sub_sdev;
-> +
-> +err_put_dev:
-> +	put_device(&sdev->dev);
-> +	return ERR_PTR(ret);
-> +}
-> +EXPORT_SYMBOL_NS_GPL(spmi_subdevice_alloc_and_add, "SPMI");
-> +
->  /**
->   * spmi_controller_alloc() - Allocate a new SPMI controller
->   * @parent:	parent device
-> diff --git a/include/linux/spmi.h b/include/linux/spmi.h
-> index 28e8c8bd3944..7cea0a5b034b 100644
-> --- a/include/linux/spmi.h
-> +++ b/include/linux/spmi.h
-> @@ -69,6 +69,22 @@ int spmi_device_add(struct spmi_device *sdev);
-> =20
->  void spmi_device_remove(struct spmi_device *sdev);
-> =20
-> +/**
-> + * struct spmi_subdevice - Basic representation of an SPMI sub-device
-> + * @sdev:	Sub-device representation of an SPMI device
-> + * @devid:	Platform Device ID of an SPMI sub-device
-> + */
-> +struct spmi_subdevice {
-> +	struct spmi_device	sdev;
-> +	unsigned int		devid;
-> +};
-> +
-> +struct spmi_subdevice *spmi_subdevice_alloc_and_add(struct spmi_device *=
-sparent);
-> +void spmi_subdevice_remove(struct spmi_subdevice *sdev);
-> +
-> +struct spmi_subdevice *devm_spmi_subdevice_alloc_and_add(struct device *=
-dev,
-> +							 struct spmi_device *sparent);
-> +
->  /**
->   * struct spmi_controller - interface to the SPMI master controller
->   * @dev:	Driver model representation of the device.
-> --=20
-> 2.51.0
->=20
-
---b73zeyu7mpwvdb3l
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmjK4LMACgkQ2O7X88g7
-+pquRQ//fllBLsQUj+gMWiKvHca0QRVBivSZq0aVidiaTPryqzJ/vEJWq/KjpSJP
-W8Kx9YHDiHh3cBqBQ+KW1EyQRmYhUmhGeuwVbYdjdtWpPKDcCcsPo1QqBFQL+Z0U
-V4Kd1WGg1Gwf5FEXAXFrsCKhdBasWoRlyMsyNUiwbEDi92hLq/t8dOdmyuQH+EcA
-a/KRM7YmIBIeej6E7lx3pdizHPBdVKijMK4pd8j+4fNOxUBpPi/7XT81K9X2Nzic
-lEyUcgsjpjTs2FJbFW8+EZODMLmgd6UGyA5Pv3jzHPgZBWZI6zZubgfFuVVCNttu
-qxXskmzHKyF9rman3tvWVbFL/CC/m5f11hxJstG1sBPmrrgOpsD5iN0XerOuta24
-tnxIQQMjrVG/1+1uMVRuBy2v7OqBnP7PBHkK1icudPB2zxTZN6XVaULOS+htaYJc
-jAPDSKS4wjOULAg4vLQORtXIBhN1lBBbgRNH+jXCtBA6W1HmWwI0NJ3MaippHMjw
-Nqeo50Tv7xEgIWn8ZiS+AP0+xBR1bBXqNaydZuf/plzklqFl/Sk9x1qGKCZZZOLW
-jufnq18D9wxl53JHztTwLIlNILdxwvIVDrkhbFgrHk/BaeXIT4txniES2lq0FLFf
-CeBsQeBJ3GHT+HaUQnOcRJwqfUZo7Y8mqMeImzZCnTAgL6NDvtI=
-=AZLG
------END PGP SIGNATURE-----
-
---b73zeyu7mpwvdb3l--
+thanks,
+Shivendra
 
