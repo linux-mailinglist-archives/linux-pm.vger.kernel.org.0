@@ -1,125 +1,100 @@
-Return-Path: <linux-pm+bounces-34884-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34885-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4CC50B806D3
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 17:12:39 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 671D4B808FC
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 17:30:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BBB261C27274
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 15:05:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 359521C281CA
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 15:29:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4D59332A43;
-	Wed, 17 Sep 2025 15:02:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69EA030C0E8;
+	Wed, 17 Sep 2025 15:28:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sPT4O+Xv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KlsKh/KO"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB6E6332A39;
-	Wed, 17 Sep 2025 15:02:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C49930C0E0;
+	Wed, 17 Sep 2025 15:28:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758121361; cv=none; b=ACSeIGDeOAtNYLCTep6Rb/ix4nHEt0XA30qRZXIcJ16zcdL7lAVTEejQIco9MKGj1GNNlksYIboO7IM3LyoNoOVdC+jvimUCXHzK8/H/daKp6NWvxGnr76bAa1qIJh1SCMiZIbwTUnjTUNx7DPsr1lGpnPmlsy82x5BvHsbBqIU=
+	t=1758122904; cv=none; b=Xvoy5DG7hL0JrTsOH5/Lnr0xdGnCrUv18aJTg7D+caxiMAE9Tz1DcvaookLfd7S+EwVAwqosgmSM79YfRGABxExq67gYwaKBPJBc9hVmQrQdiRzbctaV0dovJEopnGwmso/UXP5N2JL2KaGbDl3CLYJekaotN1fcEUl6FRXtRzE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758121361; c=relaxed/simple;
-	bh=DkAob/mYPV+ZNAEqdno0NyXMgOtH4pnIcMp+zpKJAxo=;
-	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
-	 Message-Id:Subject; b=ETIURkWlzygAZ5X8pl6Z99kENYKuvTRSIG1J/nrGPBBVgOkxg5IR9LAofWZAj2oJ2wDVEYcTmaI64Xw1zvGIg/2vv1dbgK5DkkXPZO3YWYwdEpzRlgdaCOmoUVvGkhm2V5T9XuBAsnokQrnpAMEZw148L6RABQE7QoRFIwnTXGY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sPT4O+Xv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DCF7C4CEF0;
-	Wed, 17 Sep 2025 15:02:41 +0000 (UTC)
+	s=arc-20240116; t=1758122904; c=relaxed/simple;
+	bh=tCpYKYOs1RRFEZTeEQBT6Jf93AtipOf9WVQbNEp0FSA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RRzVP8ogROkmhiUeE6UGsRepz769vj6zci9O6Y62NCysnhfyxe0j274H5cGQM5Nye7nqAQj6Qycx+xtuHw017VsU10EncJrTa55vWpTcvfK9vOdH0iRChPsQmvYmwLf3ACoRW5GeIDva8JsFeIdSsbEPQ7re4C7mb9h6VVnj8mE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KlsKh/KO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EB7CC4CEE7;
+	Wed, 17 Sep 2025 15:28:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758121361;
-	bh=DkAob/mYPV+ZNAEqdno0NyXMgOtH4pnIcMp+zpKJAxo=;
-	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
-	b=sPT4O+XvDEdrvk/c00OHoqwWJCwrh5WRxwW2tzfT6VyUHJdXBW/vpmYjndvYkUg9Q
-	 4Jj9Bu94e75coQqY0ZAY3DnhFg5EnUERYbd+Vaw8+dHEgY/SaTmvfFtvCWDker95nM
-	 s12OIAXMjopWutHC5B0Za8oNtIDlU7dyKOuKm5ZSCarfmgLIUyiIepAtgS0QXD3Ffc
-	 zs+brP/jrIpbtZnJtf8IuRs5IGUWOWNxBhmesgdnr/BBP+LjJ2EYVPOO49nNr5QV6L
-	 c2FZ4OI4wGqia7QEs/0k4oAvTRgJtumOc1CuOa9RiZ3b+U34Djc9Idi3hiLW4FfUxg
-	 1kQS/hbO4N+tQ==
-Date: Wed, 17 Sep 2025 10:02:40 -0500
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=k20201202; t=1758122903;
+	bh=tCpYKYOs1RRFEZTeEQBT6Jf93AtipOf9WVQbNEp0FSA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=KlsKh/KOWTz9EJsOhxbcsQD1AonOuNxGcDYCaLEvof0go8Kii2EdkTTE3cwzPY4+x
+	 pezqfTuKvi9Fyq8mgaea4SqDfa9UD6PRx+EjdXTuYIXRZBRf44v2XLveKJsGGoCqRP
+	 602qHH66J3aZQttpSl5FEe7O1QIUSnuUChjwlwFkG9xvRbSnJopQl9bpq+fWTNqDWl
+	 PXwste2mqnB34TEm4tS16177xoqY7yOlcrmkPIyBm5rty+gYZd+0D1YEz9+J4mt7UX
+	 2uF+bsk4wVK8zl+k1Sax14G72QagFZhjpimL4OyCtSA/RpByUaOKLlD3Lr0gs92s6v
+	 hUbwmgbk6ZzcA==
+Date: Wed, 17 Sep 2025 16:28:16 +0100
+From: Will Deacon <will@kernel.org>
+To: Yeoreum Yun <yeoreum.yun@arm.com>
+Cc: catalin.marinas@arm.com, broonie@kernel.org, oliver.upton@linux.dev,
+	anshuman.khandual@arm.com, robh@kernel.org, james.morse@arm.com,
+	mark.rutland@arm.com, joey.gouly@arm.com, Dave.Martin@arm.com,
+	ahmed.genidi@arm.com, kevin.brodsky@arm.com,
+	scott@os.amperecomputing.com, mbenes@suse.cz,
+	james.clark@linaro.org, frederic@kernel.org, rafael@kernel.org,
+	pavel@kernel.org, ryan.roberts@arm.com, suzuki.poulose@arm.com,
+	maz@kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+	kvmarm@lists.linux.dev
+Subject: Re: [PATCH v5 0/6] initialize SCTRL2_ELx
+Message-ID: <aMrTkLhLOhas8Viy@willie-the-truck>
+References: <20250917145618.1232329-1-yeoreum.yun@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: Kyungmin Park <kyungmin.park@samsung.com>, 
- Jassi Brar <jassisinghbrar@gmail.com>, Kees Cook <kees@kernel.org>, 
- Chia-I Wu <olvaffe@gmail.com>, Matthias Brugger <matthias.bgg@gmail.com>, 
- linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org, 
- Thomas Zimmermann <tzimmermann@suse.de>, Conor Dooley <conor+dt@kernel.org>, 
- Chanwoo Choi <cw00.choi@samsung.com>, Simona Vetter <simona@ffwll.ch>, 
- linux-arm-kernel@lists.infradead.org, 
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- linux-pm@vger.kernel.org, dri-devel@lists.freedesktop.org, 
- Maxime Ripard <mripard@kernel.org>, Steven Price <steven.price@arm.com>, 
- David Airlie <airlied@gmail.com>, Chen-Yu Tsai <wenst@chromium.org>, 
- MyungJoo Ham <myungjoo.ham@samsung.com>, kernel@collabora.com, 
- Boris Brezillon <boris.brezillon@collabora.com>, 
- linux-hardening@vger.kernel.org, 
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
- devicetree@vger.kernel.org, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
- Liviu Dudau <liviu.dudau@arm.com>
-To: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-In-Reply-To: <20250917-mt8196-gpufreq-v3-1-c4ede4b4399e@collabora.com>
-References: <20250917-mt8196-gpufreq-v3-0-c4ede4b4399e@collabora.com>
- <20250917-mt8196-gpufreq-v3-1-c4ede4b4399e@collabora.com>
-Message-Id: <175812136009.2068624.13991293282844294346.robh@kernel.org>
-Subject: Re: [PATCH v3 01/10] dt-bindings: gpu: mali-valhall-csf: add
- mediatek,mt8196-mali variant
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250917145618.1232329-1-yeoreum.yun@arm.com>
 
-
-On Wed, 17 Sep 2025 14:22:32 +0200, Nicolas Frattaroli wrote:
-> The Mali-based GPU on the MediaTek MT8196 SoC uses a separate MCU to
-> control the power and frequency of the GPU.
+On Wed, Sep 17, 2025 at 03:56:12PM +0100, Yeoreum Yun wrote:
+> This series introduces initial support for the SCTLR2_ELx registers in Linux.
+> The feature is optional starting from ARMv8.8/ARMv9.3,
+> and becomes mandatory from ARMv8.9/ARMv9.4.
 > 
-> It lets us omit the OPP tables from the device tree, as those can now be
-> enumerated at runtime from the MCU. It also means the mali GPU node
-> described in this binding does not have any clocks in this case, as all
-> clock control is delegated to the MCU.
+> Currently, Linux has no strict need to modify SCTLR2_ELx--
+> at least assuming that firmware initializes
+> these registers to reasonable defaults.
 > 
-> Add the mediatek,mt8196-mali compatible, and a performance-domains
-> property which points to the MCU's device tree node in this case. It's
-> required on mt8196 devices.
+> However, several upcoming architectural features will require configuring
+> control bits in these registers.
+> Notable examples include FEAT_PAuth_LR and FEAT_CPA2.
 > 
-> Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-> ---
->  .../bindings/gpu/arm,mali-valhall-csf.yaml         | 32 ++++++++++++++++++++--
->  1 file changed, 30 insertions(+), 2 deletions(-)
-> 
+> Patch History
+> ==============
+> from v4 to v5:
+>   - using .ifc in set_sctlr2_elx
+>   - change (re)initialise position after SCTLR_ELx
+>   - add docs for SCTRL2_ELx
+>   - rebase to v6.17-rc6
+>   - https://lore.kernel.org/all/20250821172408.2101870-1-yeoreum.yun@arm.com/
 
-My bot found errors running 'make dt_binding_check' on your patch:
+Sorry, this is a really pedantic nit, but please can you fix the typo in
+the subject if/when you next post this?
 
-yamllint warnings/errors:
+More importantly, as Dave says, I don't see the point in merging this
+until we have a use for the register. At that point, your patches can
+hopefully be a prefix of the series that uses it.
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/gpu/arm,mali-valhall-csf.example.dtb: gpu@48000000 (mediatek,mt8196-mali): 'clocks' is a required property
-	from schema $id: http://devicetree.org/schemas/gpu/arm,mali-valhall-csf.yaml#
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20250917-mt8196-gpufreq-v3-1-c4ede4b4399e@collabora.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+Will
 
