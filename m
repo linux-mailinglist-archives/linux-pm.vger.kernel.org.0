@@ -1,152 +1,141 @@
-Return-Path: <linux-pm+bounces-34915-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34916-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C73CB81A93
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 21:38:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE9F2B81AAE
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 21:44:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F1676487FDD
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 19:38:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 72772582D94
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 19:44:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2245A3002B6;
-	Wed, 17 Sep 2025 19:38:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9669301024;
+	Wed, 17 Sep 2025 19:43:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XFbRYeMG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Yi67W+xl"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E90A22FDC47;
-	Wed, 17 Sep 2025 19:38:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C18C18D656;
+	Wed, 17 Sep 2025 19:43:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758137914; cv=none; b=KObQ724JlV82++g/8VymxotZcVfrQExxdz45HNh0/SOU541A9f2JNqqeGoxeXeHJw3aH1TrGmvGK3Ub9pGxxg2srket6NABZi89Dl4571JirrJq/YpZYJI9FgfBuRl0ot+pGM8roNuDxYH829xLEwYF39M0QQ9ohYzpzqifv4TE=
+	t=1758138236; cv=none; b=NzgoMZyCPgma9lpgcsB8TOCALbmtwAnZkI1EBW304wPvhLU5u3PZq6inQuxWZ9RRlonL+zu+eGPRi3JH0zV3a66+NzzVcNQyi4Bl3snNsT+Kh7budw53C838g5m4DG45T92gF5dJm4ukAXCoXrW7wF9fDueFZtWgjjWgn9cH8To=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758137914; c=relaxed/simple;
-	bh=I2AI4BKkKagGVUrVHimGZofS8/2mTShePgfHGGxipNA=;
+	s=arc-20240116; t=1758138236; c=relaxed/simple;
+	bh=q+Lt8bH7T373kamJB5/tW5TmCsjbKI0EIvvyC2SNLBU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IqsCB2woXKMcSsB61vgvRaq6OX7aK0Yvlr+P5DJHnF7ZG9aVjZWZ6H+vZVFsmGQ8/fnhobv7Jg2Xium3KOhQliiEW3Ekmlnarm5UZH2331t63I0b8p6BbH0JH9D1mQDx5PMME+wXu8225mh140wM2gRMlsyof7Lkuuno/BwMTUs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XFbRYeMG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF4B6C4CEE7;
-	Wed, 17 Sep 2025 19:38:30 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=lwrg6bFz9xrsBR146YJPFf6xEGq9r7E9o4TZg9uxwL3+qWN28NbiXN5qz0SVCmOLBeAxE9fPs5cJcpJaRZhT41Z88aL/pyPVUi3fKTK0Z6mxUMuswXdPCYbBkWqcP1QJYtm4/VILwDftDfjBe1vfwaBaol/OIb0cGraLydpRnFg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Yi67W+xl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14C9AC4CEE7;
+	Wed, 17 Sep 2025 19:43:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758137913;
-	bh=I2AI4BKkKagGVUrVHimGZofS8/2mTShePgfHGGxipNA=;
+	s=k20201202; t=1758138235;
+	bh=q+Lt8bH7T373kamJB5/tW5TmCsjbKI0EIvvyC2SNLBU=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=XFbRYeMGR/o/BJukbFrXOw9dXANO1Q319+ChFzDZz1efuhl2AvFA4ZkUpf9Ja5Byj
-	 kAs2X3gD0hX3u+p+r5xqeicUbv6YWx4CRoURTLTM31KVA8xnO1fKX2kbOZT3k/pzzx
-	 SJFUNlBfWm0cugPN5PMsh8WVgZSWouoWOyEQ/3S1Wn5WB10C/e8sAABoEeynKJIWxJ
-	 MpDSc/I2Kr86NiO58vERp3J9nVueHTa0VzHluvRKyRywO5PXfA8DVz1rdCTpOQ9nYS
-	 WNveoFVE18QI60NNTM3cs4H/LXBZgPzL7nSVQ9RCqgzhEcBz01dE5xTJw77myyQozJ
-	 vtcHLQtlQnumA==
-Date: Wed, 17 Sep 2025 20:38:28 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Ryan.Wanner@microchip.com
-Cc: claudiu.beznea@tuxon.dev, sre@kernel.org, robh@kernel.org,
-	krzk+dt@kernel.org, conor+dt@kernel.org,
-	nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-	linux@armlinux.org.uk, linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	Varshini Rajendran <varshini.rajendran@microchip.com>
-Subject: Re: [PATCH v2 1/3] dt-bindings: power: reset: atmel,sama5d2-shdwc:
- add lpm binding
-Message-ID: <20250917-zeppelin-stoppage-0d0f876df93e@spud>
-References: <cover.1758051358.git.Ryan.Wanner@microchip.com>
- <d8fc40a97008cb0b4001684b3c9e1cc4bf3fb706.1758051358.git.Ryan.Wanner@microchip.com>
+	b=Yi67W+xlyLhhvg7XND+78Cx7G7AW4F9jGoY5/Kd9uVeWBMKDBf1iMzIwktyPSbibR
+	 hmEE8+7Rg/Dn7EjkUIl+9dVmyYg2PADd3MlugSPmwTk5IiMx2zUauAn2QNBwrMnEV+
+	 mZXO3Qv6vW9zWmSNxlhP8G7Nrb6uyL9iUo2zdKzUTK1rBt/QZKET7df+/rEPOtfSTZ
+	 CBxM88mVDHzCM2/UdCBbITHLnZuqYsCy3OnChqVUiJssJpaqSE/IpEAyRWXM/NQlTw
+	 Tkwl/YwctXk2/ACsm271DrynM5sZ8sFl/bBHmyked2o3HryaxSYO3Px0QzqXUfyo1c
+	 RKF90lq6nfOZw==
+Date: Wed, 17 Sep 2025 14:43:51 -0500
+From: Bjorn Andersson <andersson@kernel.org>
+To: Jonathan Cameron <jonathan.cameron@huawei.com>
+Cc: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Jishnu Prakash <jishnu.prakash@oss.qualcomm.com>, 
+	jic23@kernel.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
+	agross@kernel.org, lumag@kernel.org, konradybcio@kernel.org, 
+	daniel.lezcano@linaro.org, sboyd@kernel.org, amitk@kernel.org, thara.gopinath@gmail.com, 
+	lee@kernel.org, rafael@kernel.org, subbaraman.narayanamurthy@oss.qualcomm.com, 
+	david.collins@oss.qualcomm.com, anjelique.melendez@oss.qualcomm.com, 
+	kamal.wadhwa@oss.qualcomm.com, rui.zhang@intel.com, lukasz.luba@arm.com, 
+	devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, cros-qcom-dts-watchers@chromium.org, 
+	quic_kotarake@quicinc.com, neil.armstrong@linaro.org, stephan.gerhold@linaro.org
+Subject: Re: [PATCH V7 0/5] Add support for QCOM SPMI PMIC5 Gen3 ADC
+Message-ID: <uvgeuxf7cpnlypif35lvzatdkwrnxynhvf43qw2nc2bvt3zcf3@75kkwp3raqfm>
+References: <20250826083657.4005727-1-jishnu.prakash@oss.qualcomm.com>
+ <20250829-demonic-soft-guppy-512c13@kuoka>
+ <zgm2k2osmasdal6anba66pw24a7fiypgwlf3c36kvteshz7uef@wee4had7x54u>
+ <8fdc99b6-4ad2-4a08-9dca-6289c8fdddd6@linaro.org>
+ <nsyhau4pnn2nbxdf35npwq4gvjiphocrftrwi4seirxqzurww6@6jgyzzmjyg7q>
+ <20250829173117.000029e6@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="b4L9u9zjttjH2OaC"
-Content-Disposition: inline
-In-Reply-To: <d8fc40a97008cb0b4001684b3c9e1cc4bf3fb706.1758051358.git.Ryan.Wanner@microchip.com>
-
-
---b4L9u9zjttjH2OaC
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20250829173117.000029e6@huawei.com>
 
-On Tue, Sep 16, 2025 at 12:50:30PM -0700, Ryan.Wanner@microchip.com wrote:
-> From: Varshini Rajendran <varshini.rajendran@microchip.com>
->=20
-> Add microchip,lpm-connection binding which allows to specify the devices
-> the SHDWC's Low Power Mode pin is connected to.
->=20
-> Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
-> [ryan.wanner@microchip.com: Add sam9x7-shdwc SoC to properties check]
-> Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
-> ---
->  .../power/reset/atmel,sama5d2-shdwc.yaml      | 19 +++++++++++++++++++
->  1 file changed, 19 insertions(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/power/reset/atmel,sama5d2-=
-shdwc.yaml b/Documentation/devicetree/bindings/power/reset/atmel,sama5d2-sh=
-dwc.yaml
-> index 9c34249b2d6d..668b541eb44c 100644
-> --- a/Documentation/devicetree/bindings/power/reset/atmel,sama5d2-shdwc.y=
-aml
-> +++ b/Documentation/devicetree/bindings/power/reset/atmel,sama5d2-shdwc.y=
-aml
-> @@ -56,6 +56,13 @@ properties:
->      description: enable real-time timer wake-up
->      type: boolean
-> =20
-> +  microchip,lpm-connection:
-> +    description:
-> +      List of phandles to devices which are connected to SHDWC's Low Pow=
-er Mode Pin.
-> +      The LPM pin is used to idicate to an external power supply or devi=
-ce to enter
-> +      or exit a special powering state.
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+On Fri, Aug 29, 2025 at 05:31:17PM +0100, Jonathan Cameron wrote:
+> On Fri, 29 Aug 2025 12:20:45 +0300
+> Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com> wrote:
+> 
+> > On Fri, Aug 29, 2025 at 11:11:48AM +0200, Krzysztof Kozlowski wrote:
+> > > On 29/08/2025 10:09, Dmitry Baryshkov wrote:  
+> > > > On Fri, Aug 29, 2025 at 09:12:59AM +0200, Krzysztof Kozlowski wrote:  
+> > > >> On Tue, Aug 26, 2025 at 02:06:52PM +0530, Jishnu Prakash wrote:  
+> > > >>>  create mode 100644 drivers/iio/adc/qcom-spmi-adc5-gen3.c
+> > > >>>  create mode 100644 drivers/thermal/qcom/qcom-spmi-adc-tm5-gen3.c
+> > > >>>  create mode 100644 include/dt-bindings/iio/adc/qcom,pm8550-adc5-gen3.h
+> > > >>>  create mode 100644 include/dt-bindings/iio/adc/qcom,pm8550b-adc5-gen3.h
+> > > >>>  create mode 100644 include/dt-bindings/iio/adc/qcom,pm8550vx-adc5-gen3.h
+> > > >>>  create mode 100644 include/dt-bindings/iio/adc/qcom,pmk8550-adc5-gen3.h
+> > > >>>  rename include/dt-bindings/iio/{ => adc}/qcom,spmi-adc7-pm7325.h (98%)
+> > > >>>  rename include/dt-bindings/iio/{ => adc}/qcom,spmi-adc7-pm8350.h (98%)
+> > > >>>  rename include/dt-bindings/iio/{ => adc}/qcom,spmi-adc7-pm8350b.h (99%)
+> > > >>>  rename include/dt-bindings/iio/{ => adc}/qcom,spmi-adc7-pmk8350.h (97%)
+> > > >>>  rename include/dt-bindings/iio/{ => adc}/qcom,spmi-adc7-pmr735a.h (95%)
+> > > >>>  rename include/dt-bindings/iio/{ => adc}/qcom,spmi-adc7-pmr735b.h (95%)
+> > > >>>  rename include/dt-bindings/iio/{ => adc}/qcom,spmi-adc7-smb139x.h (93%)
+> > > >>>  rename include/dt-bindings/iio/{ => adc}/qcom,spmi-vadc.h (78%)
+> > > >>>  create mode 100644 include/linux/iio/adc/qcom-adc5-gen3-common.h
+> > > >>>
+> > > >>>
+> > > >>> base-commit: 0f4c93f7eb861acab537dbe94441817a270537bf  
+> > > >>
+> > > >> What's the base commit?
+> > > >>
+> > > >> git show 0f4c93f7eb861acab537dbe94441817a270537bf
+> > > >> fatal: bad object 0f4c93f7eb861acab537dbe94441817a270537bf  
+> > > > 
+> > > > https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?h=next-20250822&id=0f4c93f7eb861acab537dbe94441817a270537bf  
+> > > 
+> > > I see:
+> > > "Notice: this object is not reachable from any branch."
+> > > 
+> > > I guess you think this is 20250822?  
+> > 
+> > Well, it kinda is. It's a commit by Stephen, it has proper contents,
+> > etc.  next-20250822 is not a branch, but a tag, that's why you observe
+> > the warning from gitweb. You can verify it yourself by manually pulling
+> > the tag from the repo.
+> > 
+> 
+> Kind of immaterial.  Typically subsystem maintainers want a base of
+> *-rc1 unless there is a dependency in their tree.
+> 
 
-This sounds like you're some kind of power-domain provider. Why doesn't
-that generic kind of thing work for you?
+Basing the work on -rc1 is nice, but unless I'm missing something, patch
+1 depend on changes that only exists in your -next branch and changes
+that only exists in my (the qcom/dts) -next branch.
 
-> +
->  patternProperties:
->    "^input@[0-15]$":
->      description:
-> @@ -96,6 +103,18 @@ allOf:
->        properties:
->          atmel,wakeup-rtt-timer: false
-> =20
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - atmel,sama5d2-shdwc
-> +              - microchip,sam9x60-shdwc
-> +              - microchip,sam9x7-shdwc
-> +    then:
-> +      properties:
-> +        microchip,lpm-connection: false
-> +
->  additionalProperties: false
-> =20
->  examples:
-> --=20
-> 2.43.0
->=20
+So, it seems that this can only be merged into next-20250822, not into
+any actual maintainer's branch.
 
---b4L9u9zjttjH2OaC
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+In the current form, the only sensible way I see to merge this is to get
+a version freshly rebased on v6.18-rc1 (before we pile up any other
+conflicts), we merge patch 1 into a immutable branch and then you take
+the rest of the patches on top of this in your tree. Does this sound
+reasonable? I'm open for suggestions...
 
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaMsONAAKCRB4tDGHoIJi
-0khOAP4w+nqJZTDRdwIeHuDir6MUFS8oTf5bETZiaLu4/AUpSgD/X3WcFvUR5xsN
-MyuU9dCTT8Z0XR1E5SE8px0sU/PsJgs=
-=OrR5
------END PGP SIGNATURE-----
-
---b4L9u9zjttjH2OaC--
+Regards,
+Bjorn
 
