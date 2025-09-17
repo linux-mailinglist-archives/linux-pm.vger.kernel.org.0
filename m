@@ -1,168 +1,140 @@
-Return-Path: <linux-pm+bounces-34925-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34926-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 159F8B822A4
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 00:33:05 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D098FB822CE
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 00:40:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9FAFF1C80F86
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 22:33:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 85B363BEE2C
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 22:40:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0593130DED7;
-	Wed, 17 Sep 2025 22:33:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96FCE30F950;
+	Wed, 17 Sep 2025 22:40:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="f1wkZLCF"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="xScshUvX"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8AA92FB991;
-	Wed, 17 Sep 2025 22:32:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758148379; cv=pass; b=oWPOjiAj3+65zvFTA/Szitu44FgU0ypFARMQBOi6/8XpygKQCUZjkPt6Bo5o60jpB70F4EKxYQwcP34/ZceTkj7bNmMrPTijz55t1PIf4Ks9iTVU+coV4gzLixWQQokA5SK06DK3bBZuDxMETc7YZPioV1fh58Hkuf43kI8Ma4Y=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758148379; c=relaxed/simple;
-	bh=znX0wfJrHVXZiPMAukCX4OIy8l6PjtgaOLRfY5RPUME=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ODLiw1xif8xhIqvAmdhYsB5ezz4GRKDXU7mLjhpQA+rrZGuxknjPzOiKdLK4dW1l6JWTqczagTUWDItNmtI5EppLdqDe4zecRIMO7TKkzfyi6IQymwFz26uO6ydlJB0yXmHgtW4fPxtSAocQnhgUImtLLxnrITLse6CzbGbQP3g=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=f1wkZLCF; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1758148355; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=bCxyIqp89NV/9zp2f1W2doyMdsW5a/oS4lHZ6EeW7CIVSZJR3aIjv2fT5j5HFR8e+Et+ze+qKPlgEeI8dLsFenFbRliSQ7DUrQbxbm1gqtdlUvLn6kmtTB6O9ynP3CeL7eBdbmf1+GQ233o+OLAkNSoOYO4HxwihjbCUPtDUdY8=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1758148355; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=znX0wfJrHVXZiPMAukCX4OIy8l6PjtgaOLRfY5RPUME=; 
-	b=D4vjkZ13IGJMfMK1SzTSj2iqAyRlwmI8BPfBRAEf9du6ZXpwTx3GD8VlYyupTwad9Xtet9GvovcjsfLEeX/pjW/PVLpPlFgC+WvsH8WlrvaTLGVobapLof7wgFswAeGHaaiEHqkIdi+XzM0sjdfL3mcmM3dUVUsxxWhHI9JZYr4=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
-	dmarc=pass header.from=<sebastian.reichel@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1758148354;
-	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
-	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
-	bh=znX0wfJrHVXZiPMAukCX4OIy8l6PjtgaOLRfY5RPUME=;
-	b=f1wkZLCFtAO+8kdrY433OzA3P2THDnewPONSmGOqI3YoNAs84dlGmmgdtHy0XGy6
-	fL/yaQn62HWHREgrRFovuT3orQmII9a8V+VEqJx8EqjsIVAjPgiip48sSZyrN9yUs3E
-	CgSkItHQ3t+73NpUDSqDeITKX78KN6n7AnDUqOCw=
-Received: by mx.zohomail.com with SMTPS id 1758148351679297.874876738947;
-	Wed, 17 Sep 2025 15:32:31 -0700 (PDT)
-Received: by venus (Postfix, from userid 1000)
-	id 9E3BF18067C; Thu, 18 Sep 2025 00:32:24 +0200 (CEST)
-Date: Thu, 18 Sep 2025 00:32:24 +0200
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
-Cc: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, 
-	Bjorn Andersson <andersson@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Sudeep Holla <sudeep.holla@arm.com>, Souvik Chakravarty <Souvik.Chakravarty@arm.com>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Andy Yan <andy.yan@rock-chips.com>, Mark Rutland <mark.rutland@arm.com>, 
-	Lorenzo Pieralisi <lpieralisi@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Konrad Dybcio <konradybcio@kernel.org>, cros-qcom-dts-watchers@chromium.org, 
-	Vinod Koul <vkoul@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Florian Fainelli <florian.fainelli@broadcom.com>, 
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>, 
-	Stephen Boyd <swboyd@chromium.org>, Andre Draszik <andre.draszik@linaro.org>, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org, 
-	Elliot Berman <quic_eberman@quicinc.com>, Srinivas Kandagatla <srini@kernel.org>
-Subject: Re: [PATCH v14 02/10] power: reset: reboot-mode: Add device tree
- node-based registration
-Message-ID: <wsig6dm7jbnx2pzt5l3uhhgywsa4jsdyunmd5aqn43bbciqiov@4y6mnd25pbeg>
-References: <20250815-arm-psci-system_reset2-vendor-reboots-v14-0-37d29f59ac9a@oss.qualcomm.com>
- <20250815-arm-psci-system_reset2-vendor-reboots-v14-2-37d29f59ac9a@oss.qualcomm.com>
- <in6bqvemnscvuxbumpxogxiiav7odmsc3iazktifninh6iqen7@qwhrhdidcx7y>
- <3c56cd00-770f-019a-d93b-5ebaa6b9374d@oss.qualcomm.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2432230F92C
+	for <linux-pm@vger.kernel.org>; Wed, 17 Sep 2025 22:40:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1758148822; cv=none; b=qTPCexp6rl3t6GzJN992D0hlHxHVj8OsKtQn9yh87tTS84KeCH49g+9jUE0C68L5B05i65IsX3QptHmCJ3DfoNCp7Zj9YLAAkTYGbsKg/xtw8a4Xoe1wUHWqS92bpqqMu9AAH1FhccCrO/ZnmHEupZwyxE5axXBxcDE6eCf19RQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1758148822; c=relaxed/simple;
+	bh=WSfFooN5Bw7kAHcBSRwXJG4k3j5I4pDgZn1B6oXDRa0=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=MKAj5hMcleF89/jfPwkGcG03ATP0Q6b0yN6Mn7LUhgWKrT2hQT4sCvbsICvmEgfR/7cSO70VicA9sLpSz9t365UxkYENZcG+y6TmAbapXwQoYL1gNLVrA2IYzB4+rboEoWAcc08clN/UT5N6LPu6wfbcdcq7694/+sT5ovV6U2g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=xScshUvX; arc=none smtp.client-ip=209.85.215.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-b54fe1d849aso286866a12.2
+        for <linux-pm@vger.kernel.org>; Wed, 17 Sep 2025 15:40:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1758148820; x=1758753620; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=m2gITbjAhZLVDTe91+pv60FMHVz/PyRihO/dG6TrQ1g=;
+        b=xScshUvXozX1uxER7qZsO8p7Ucy0JMRPftF2Qc4iW+jUzt2v+z7shzzTO01oxCZEkq
+         051hR+Gj4XdNfQu3CBsi2wZ/EH6w9tdtqjod+Kc1XRG0O89bnsuI7loyoUxiUnZGJjMe
+         RCcV2iaR48KpLhO0wVK0FVGOFqVC0u6SHuSflHNj9mda6XvYExKSVhsTN67EiEq1Idi5
+         0xmZ5a+QInviQ7LhmASPABrbGQyWowkK6Dj7GE/ISc3Z7Thrvt6udxsJEK7A9GUwwmqc
+         SYYllHDx/tEr61hZr1eAqBMi0W5M25jIPqfsNYUNmR3C0R2D5r1NtYnjirXfnjWeOKcx
+         cHyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758148820; x=1758753620;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=m2gITbjAhZLVDTe91+pv60FMHVz/PyRihO/dG6TrQ1g=;
+        b=Cl36Zg/8gaS5evWHO/9rPTpdEcbqyhexk41NXxZ0v/ibxI/Q+YePE88R+F2wkiGrtm
+         HQsw43AzqWtfAdawR3l7cAqeFkJqFi5NDzMbOYf/RGyrNEWd8F4PlJ41XtwwYt3qeBlG
+         nZKtDkOXndZwr5Dhl78JmS/cJMEVSULYKSzfYrpb0UFp8/VH8iy5xVX3IYDjoNtqUyRx
+         v9i1m77PblSWoLXTSwfTmDI+OL1Wz2bGydRC42izPIYMgOoxDKwb845pZTe8PIglV5+c
+         ttxCzo8FfVb/VGQtwQ4sBiG3Ep5GWhZMUKJzlr3MYq2ne8Vanfpl46lDyhxztw7HGtfm
+         BPqQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVxUaMZItXHYj5Q2AZhWB/E793fEsX+4UOL/+ueT5vT2xaLnHUCojYBUGhiR90qhUwpbAcj6/AyuA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzHnqRrR4Glw5bjv3WvEanmECkFc8k2QkAHkqoANX4v4g9NPuBp
+	cPRqF151Nh4AYEaaQ4Ws+8oCm4Pjs8q4Kie7qbRdjWSHDlf1NIgQCIhwzKIa07BN4jQpJiCRoAh
+	FAVTmaQ==
+X-Google-Smtp-Source: AGHT+IFI0s+9qm/ZBuqtuCHVVai9MRluhJYduJgd1o773c0GWF5zKPkcHTokW+JlTa7DRlVZN5DukGxMcIA=
+X-Received: from pjzz6.prod.google.com ([2002:a17:90b:58e6:b0:327:e172:e96])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a21:e082:b0:262:8bce:33bd
+ with SMTP id adf61e73a8af0-27aa12ef6ffmr5224302637.28.1758148820303; Wed, 17
+ Sep 2025 15:40:20 -0700 (PDT)
+Date: Wed, 17 Sep 2025 15:40:18 -0700
+In-Reply-To: <f533d3a4-183e-4b3d-9b3a-95defb1876e0@zytor.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="luhwbfkc5nm4f2sl"
-Content-Disposition: inline
-In-Reply-To: <3c56cd00-770f-019a-d93b-5ebaa6b9374d@oss.qualcomm.com>
-X-Zoho-Virus-Status: 1
-X-Zoho-Virus-Status: 1
-X-Zoho-AV-Stamp: zmail-av-1.4.3/258.96.42
-X-ZohoMailClient: External
-
-
---luhwbfkc5nm4f2sl
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
+Mime-Version: 1.0
+References: <20250909182828.1542362-1-xin@zytor.com> <aMLakCwFW1YEWFG4@google.com>
+ <0387b08a-a8b0-4632-abfc-6b8189ded6b4@linux.intel.com> <aMmkZlWl4TiS2qm8@google.com>
+ <f533d3a4-183e-4b3d-9b3a-95defb1876e0@zytor.com>
+Message-ID: <aMs40gVA4DAHex6A@google.com>
+Subject: Re: [RFC PATCH v1 0/5] x86/boot, KVM: Move VMXON/VMXOFF handling from
+ KVM to CPU lifecycle
+From: Sean Christopherson <seanjc@google.com>
+To: Xin Li <xin@zytor.com>
+Cc: Arjan van de Ven <arjan@linux.intel.com>, linux-kernel@vger.kernel.org, 
+	kvm@vger.kernel.org, linux-pm@vger.kernel.org, pbonzini@redhat.com, 
+	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, 
+	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, rafael@kernel.org, 
+	pavel@kernel.org, brgerst@gmail.com, david.kaplan@amd.com, 
+	peterz@infradead.org, andrew.cooper3@citrix.com, kprateek.nayak@amd.com, 
+	chao.gao@intel.com, rick.p.edgecombe@intel.com, dan.j.williams@intel.com, 
+	"adrian.hunter@intel.com" <adrian.hunter@intel.com>
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v14 02/10] power: reset: reboot-mode: Add device tree
- node-based registration
-MIME-Version: 1.0
 
-Hi,
-
-On Wed, Sep 17, 2025 at 09:59:44PM +0530, Shivendra Pratap wrote:
-> On 9/17/2025 12:18 AM, Sebastian Reichel wrote:
-> > On Fri, Aug 15, 2025 at 08:05:07PM +0530, Shivendra Pratap wrote:
-> >> The reboot-mode driver does not have a strict requirement for
-> >> device-based registration. It primarily uses the device's of_node
-> >> to read mode-<cmd> properties and the device pointer for logging.
-> >>
-> >> Remove the dependency on struct device and introduce support for
-> >> Device Tree (DT) node-based registration. This enables drivers
-> >> that are not associated with a struct device to leverage the
-> >> reboot-mode framework.
-> >>
-> >> Signed-off-by: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
-> >> ---
+On Wed, Sep 17, 2025, Xin Li wrote:
+> On 9/16/2025 10:54 AM, Sean Christopherson wrote:
+> > On Thu, Sep 11, 2025, Arjan van de Ven wrote:
+> > > Hi,
+> > > > I also want to keep the code as a module, both to avoid doing VMXON=
+ unconditionally,
+> > >=20
+> > > can you expand on what the problem is with having VMXON unconditional=
+ly enabled?
 > >=20
-> > Please use fwnode instead of device_node, so that the same thing
-> > can be used with non DT setups, if that becomes necessary. Otherwise
-> > LGTM.
+> > Unlike say EFER.SVME, VMXON fundamentally changes CPU behavior.  E.g. b=
+locks INIT,
+> > activates VMCS caches (which aren't cleared by VMXOFF on pre-SPR CPUs, =
+and AFAIK
+> > Intel hasn't even publicly committed to that behavior for SPR+), restri=
+cts allowed
+> > CR0 and CR4 values, raises questions about ucode patch updates, trigger=
+s unique
+> > flows in SMI/RSM, prevents Intel PT from tracing on certain CPUs, and p=
+robably a
+> > few other things I'm forgetting.
 >=20
-> To be more clear on this, have one question: the current unmodified
-> design of reboot-mode is dt based:
->=20
-> struct device_node *np =3D reboot->dev->of_node;
-> and then parses the node using for_each_property_of_node(np, prop).
->=20
-> We want to refactor reboot-mode to support non-DT setups by adding
-> support for fwnode-based approach (struct fwnode_handle *fwnode)?
->=20
-> Can you please explain a bit? Some more details would be helpful to
-> make the change.
+> Regarding Intel PT, if VMXON/VMXOFF are moved to CPU startup/shutdown, as
+> Intel PT is initialized during arch_initcall() stage, entering and leavin=
+g
+> VMX operation no longer happen while Intel PT is _active_, thus
+> intel_pt_handle_vmx() no longer needs to "handles" VMX state transitions.
 
-It's fine to keep using of_node internally. But the external API
-(include/linux/reboot-mode.h) should use fwnode. Just like the
-current external API is not DT specific as it just gets a struct
-device. This keeps the external API somewhat ready for non-DT users
-and avoids having to change all API users again in the future.
+The issue isn't handling transitions, it's that some CPUs don't support Int=
+el PT
+post-VMXON:
 
-Greetings,
+  If bit 14 is read as 1, Intel=C2=AE Processor Trace (Intel PT) can be use=
+d in VMX
+  operation. If the processor supports Intel PT but does not allow it to be=
+ used
+  in VMX operation, execution of VMXON clears IA32_RTIT_CTL.TraceEn (see
+  =E2=80=9CVMXON=E2=80=94Enter VMX Operation=E2=80=9D in Chapter 32); any a=
+ttempt to write IA32_RTIT_CTL
+  while in VMX operation (including VMX root operation) causes a general-pr=
+otection
+  exception.
 
--- Sebastian
-
---luhwbfkc5nm4f2sl
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmjLNvEACgkQ2O7X88g7
-+poQJA//S0EEioAN/VF4J/lYtmOcBv99Crrgs/3l9I46szqCWPOAqla+K3ns0A8U
-3djWdGcDMNenrYhJ3ZjC0xgGi1YGTN4Q6IjfwWqOP9oo44mFt7A8QxoautbyjIs+
-8z0yFHFroRs2jYwHGKT1fygXnRIlqjQ/k9xyeCU588/TLKXON/fZFt2B659i0Jg4
-bkZGhdngcA7xp5rcXzgf7MfdvawEGJF5psr31yfb6KyB0qUffc8R6tEy/l0VJdSW
-HPA2cp8+f2/9V9MIMHLANsy7BP4giRS8K7Iwh5cFLIVPpVcGk6HOjcoF4qIRk4NF
-xYQmK9MS1U84txNiagtw9viFMKdQVd4xxJa3zMZPsQLBOh8rD06y7MLbAz2StI+7
-cFvDgoClE8QeFphHAAL6I38JSFKp2PIbqJNZReetSiN9yg9DZusxR0uwHyCcuIA3
-AVQricmFanjiTPKekGMU56Va6Bnfo13APfYCrhgZhobpi+JBq560TCZJ/kFCB79L
-6hKEuUw42eKIzjYdvRgr16ElQMZ2WFQsHPH3vVPDp/gxV8nycR6eMhokGm9VgguA
-0ma/I1zagFBmThPhlA5EGGKMVsFKUpKIeqMBk0eY4D3ZbiJtap+Ypd9uyGCoPBtg
-OS57Q5OEWiEqUdw6WxSRb5btgwEuXF/+uJP3DXxJuw8cziP3coc=
-=iDeP
------END PGP SIGNATURE-----
-
---luhwbfkc5nm4f2sl--
+And again, unconditionally doing VMXON is a minor objection in all of this.
 
