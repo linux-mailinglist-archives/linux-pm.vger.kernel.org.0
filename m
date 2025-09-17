@@ -1,173 +1,283 @@
-Return-Path: <linux-pm+bounces-34905-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34906-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 916FAB811E9
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 19:06:41 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id F0871B812D4
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 19:31:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4D085487C47
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 17:06:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A3C19464811
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 17:31:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F3502FC881;
-	Wed, 17 Sep 2025 17:06:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46C422EAB61;
+	Wed, 17 Sep 2025 17:31:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="TUEtssX0"
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="NIUKOpyX"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 981D32FC87E
-	for <linux-pm@vger.kernel.org>; Wed, 17 Sep 2025 17:06:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E1C1533D6;
+	Wed, 17 Sep 2025 17:31:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758128796; cv=none; b=FIYhqDHq3UcER1PZR5Xt/deRdvk/Tt1SJ6ZQL2K/sZkrLOruxUEC4YXyuAS8Y6Llq0JsHkftqYKnwRZKRueRjBRDYQkefNph2q9JcSB0ZVsZwUZaWENx4rWi6DQWM0rJ2d7DutRVV2mvD7I8sulxUzqLm0Fja7NHUlCM7thLnb0=
+	t=1758130281; cv=none; b=jCYcTdoRnfCzfVH3ucxJ+n6jYIgyBTJSFp8mHlKJigGsN9YvvZ7A1s8b/4O5tQcHsh2aT62OG46egLto5jW6I2EZlEbLxCriwfdUKeCRIYpz4r8h7V+P8GaMhHTtydb3wRwDSPDCbmK5ZCTrRyXb0s5diEWgIVn1JHRb1Yve9sY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758128796; c=relaxed/simple;
-	bh=76CbFOoG7fO8/knkAO5zHOpDO4lOmZ2qmfgZf2rMkng=;
+	s=arc-20240116; t=1758130281; c=relaxed/simple;
+	bh=O/BoVsg3dFQqJJiPyV0KD/FrOE4b9haumLKJNAFUYVA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RBNsRBLPmyfxN8+YrMOc9Thj2TvMIfJv6SLePaUEgxOACZxS0z5tCrR+QVupH2n91pvCDg+I6Ih4gsvDPM1/LFTAkljg2LGRa7bjhxJXGR9aU/LCY0F9GEK8OxpqDUZ6m6ujg/EnMzC7EoqJbkU4Cu0ulhmmocQ0d/RIWhuHxdg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=TUEtssX0; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58HG4d0Z029815
-	for <linux-pm@vger.kernel.org>; Wed, 17 Sep 2025 17:06:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	CldjWF1Kec39RRy7IefPImhF3OKmtV3emAzZ2/VbBsc=; b=TUEtssX0LEp4+Yxj
-	JKISkX+yfP9FaUzYI7MnA84nLIbPhWzkDwswuy06e9tZtu1ufEXn9TY5FHq5KtEQ
-	QOk2Sj2p4JsG31ZA20mZYG5t9YHKpHhhAVoVeBjdF/eLpsxoUHYoORtpDBHE+DJ0
-	8chO+dMThHKCxYrIZ61qXJLb84+83OE+DDc6ZvHWTGHUKtyQ2molI6e45D4FmTWh
-	KIlhcFt37AQzo8ZA/XrIFFK/5ZM2U02MzhYZUWb9D1ATL8BYQ0P/S3RVy/sWfa+W
-	MaBeAURM1jxhrpN+VzmWeh1tOj9sGaKmamNMjLTXLuk+1nyG7hkXQdrphs2VQmIx
-	7Evx6g==
-Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 497fxxk873-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Wed, 17 Sep 2025 17:06:33 +0000 (GMT)
-Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-2659a7488a2so245695ad.3
-        for <linux-pm@vger.kernel.org>; Wed, 17 Sep 2025 10:06:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758128792; x=1758733592;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CldjWF1Kec39RRy7IefPImhF3OKmtV3emAzZ2/VbBsc=;
-        b=FqtC/4jiThI2ADeSlbtphrYFOk0nk3sgYgeIzfeNKxLsQSCNM4x3B0I4R4trskoK82
-         vs0zUhv63Z7uiB8eA3Z/tBXuThaknWxvfKZbnnyaRpMUOoinxK6nrNSqcEcY3Vj2Xe93
-         TqBEYgRgUb4Rn6vNimPVEHzpZF5nYC3m9UrZ6LLKgjDH8CRkmmd3kcT4Su+AX+xYN3Xx
-         gOTaOkmSNg8lQwfv+R6Lhn/Bo+9tlEWYWcg1WEG3HQHgvjL7PqAiZ3HP9Wz0f9funmiF
-         3d7EPpAD5EI7ozkQM2vsHHQJFKrU8sVK8LQjfDnySomNGUP2W7e8/VmT2CTBo3ARuSpF
-         9Qww==
-X-Forwarded-Encrypted: i=1; AJvYcCXYLO+rveHS5LdHip0cUXu93GXT3P/NVIyxqqqfNwUY8uXOUTxzQYJJrvw/b/NcfYyEDmeop6aCdg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YypFJGO2Cv30DwRIFwFpPsrLL8NP0lT7d/j3u4j7MO1aRxXUVOv
-	fNJZ+lj4KnfNMNTuxSfem89r1BRJgnnF0sAy8T7c74VbPNHabF07JPeDOYimF7mSlqW2ZpVxKo5
-	p8N3ZgzVovNGZvXJpfki1euhoTVOg1HCjStkAvFlcV4v2ftCQR/6URJDFWb9NOw==
-X-Gm-Gg: ASbGncs9j5xfw2fFbiGVo4iPFONCBJaDDR05Ybfj0jvQnEnRRXj4QJFHiu7MehF2gTy
-	VcIjFRQXWa/ouLHd01dr8CIsCfvICt3xeXJ3TUBuoQByL/H3TeQPEKKhEhMMl1M+U7nzAwHZvF7
-	Jr7E24wCa7jGTiBB1KN9A7wzuWnId9fIwfN6ecSwBBty0xFrg6TRdVNmFZT3K0hCufhULMhA5/H
-	CxwMaRYtbzuBiO5P0dUPwM4B/LqKvICasi0ds4gKePrKy0WN1iElZG1+aQ2sMGXekS8OFfQt2IW
-	NHWGFq/W+Y4vc9MonodbAC5cb+ceqDsGzOWuPcYZD1Bx9gyz79WCPdgjpn2r3zE=
-X-Received: by 2002:a17:903:3d0d:b0:266:2e6b:f5a7 with SMTP id d9443c01a7336-26813d04f4bmr37704355ad.58.1758128792189;
-        Wed, 17 Sep 2025 10:06:32 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEiYS06pnxVlJyVc8usIQK/iQa6m8Xw/xXXNj5CZpC/OXWCWIJ7/dsM3zh0SSUhq8YicFepBA==
-X-Received: by 2002:a17:903:3d0d:b0:266:2e6b:f5a7 with SMTP id d9443c01a7336-26813d04f4bmr37703845ad.58.1758128791682;
-        Wed, 17 Sep 2025 10:06:31 -0700 (PDT)
-Received: from [10.216.34.136] ([202.46.23.19])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-26980053dbdsm1270735ad.9.2025.09.17.10.06.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Sep 2025 10:06:31 -0700 (PDT)
-Message-ID: <472265f5-8463-e0ed-6386-f52478d4f2fd@oss.qualcomm.com>
-Date: Wed, 17 Sep 2025 22:36:22 +0530
+	 In-Reply-To:Content-Type; b=ogg6ss/AV/jwBfmawXxB/astlxdxLXDNfLfEu6ntLDPwDPpwKHu/T4WeBN7QXmeMidP2u0bp62x0tq5Os7/UP9/ugrQDNOCc3HQEJ3bmocuFxir7gRdMvXL3tEuhKZwuJt0LoJvNppCgJ5CRHsx8aOyLCHBOyeDCt7Vd9nbLdqA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=NIUKOpyX; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+Received: from [0.0.0.0] ([134.134.139.75])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 58HHUarm2428029
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Wed, 17 Sep 2025 10:30:37 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 58HHUarm2428029
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2025082201; t=1758130239;
+	bh=nGr7w88ouYlRzd9FYKvTf6O4gCs8sXXy40bKMufJTU0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=NIUKOpyXetlWfcS5MaJVH7FMhEgy0os19VGvtca8x7nSHttYy01UIOy5exxthJIAn
+	 XPUHPcKgSPdm5AcCIfWmYKMQsTeNmAbzaaGv7sj2efcyjKWUMMD4X8+R+fOI6TSkhu
+	 fP1qwvGuY7fPaI1RCfhsWVQkkUI2aRfkIwNlGRUA9I3x/BWz/5B6J6bCB6zirik7XH
+	 NDBJzGwBLRr+KBqGMG9K/Au7sR7uMAle6VkWpDbvM+Vh8iH3qTCjgiEnB019h4aouB
+	 5o0Ey5X2MOtA9nTBUcu2g/5IeLCD3jzDa+RxNPrHGPdS1Tuucd9j4wOjO8kVk6XrW5
+	 77LyZhzIgy+gw==
+Message-ID: <f533d3a4-183e-4b3d-9b3a-95defb1876e0@zytor.com>
+Date: Wed, 17 Sep 2025 10:30:31 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v14 01/10] power: reset: reboot-mode: Synchronize list
- traversal
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v1 0/5] x86/boot, KVM: Move VMXON/VMXOFF handling from
+ KVM to CPU lifecycle
+To: Sean Christopherson <seanjc@google.com>,
+        Arjan van de Ven <arjan@linux.intel.com>
+Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-pm@vger.kernel.org, pbonzini@redhat.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, rafael@kernel.org, pavel@kernel.org,
+        brgerst@gmail.com, david.kaplan@amd.com, peterz@infradead.org,
+        andrew.cooper3@citrix.com, kprateek.nayak@amd.com, chao.gao@intel.com,
+        rick.p.edgecombe@intel.com, dan.j.williams@intel.com,
+        "adrian.hunter@intel.com" <adrian.hunter@intel.com>
+References: <20250909182828.1542362-1-xin@zytor.com>
+ <aMLakCwFW1YEWFG4@google.com>
+ <0387b08a-a8b0-4632-abfc-6b8189ded6b4@linux.intel.com>
+ <aMmkZlWl4TiS2qm8@google.com>
 Content-Language: en-US
-To: Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>, Rob Herring <robh@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Souvik Chakravarty <Souvik.Chakravarty@arm.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
- <conor+dt@kernel.org>,
-        Andy Yan <andy.yan@rock-chips.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Konrad Dybcio <konradybcio@kernel.org>,
-        cros-qcom-dts-watchers@chromium.org, Vinod Koul <vkoul@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Florian Fainelli <florian.fainelli@broadcom.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-        Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Andre Draszik
- <andre.draszik@linaro.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        Elliot Berman <quic_eberman@quicinc.com>,
-        Srinivas Kandagatla <srini@kernel.org>
-References: <20250815-arm-psci-system_reset2-vendor-reboots-v14-0-37d29f59ac9a@oss.qualcomm.com>
- <20250815-arm-psci-system_reset2-vendor-reboots-v14-1-37d29f59ac9a@oss.qualcomm.com>
- <7eqa3rs3nvy7htvrkwyh5m7ok34n6c3h2dxn7xm2abdjzav4hp@i275ed4owgru>
-From: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
-In-Reply-To: <7eqa3rs3nvy7htvrkwyh5m7ok34n6c3h2dxn7xm2abdjzav4hp@i275ed4owgru>
-Content-Type: text/plain; charset=UTF-8
+From: Xin Li <xin@zytor.com>
+Autocrypt: addr=xin@zytor.com; keydata=
+ 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
+ l75w1xInsg==
+In-Reply-To: <aMmkZlWl4TiS2qm8@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTE2MDIwMiBTYWx0ZWRfX7zKQzYPK+BaN
- TrqyMd+lJpwwuG3hjb9mesC/mIvfayEt7P4njVwvL5DSax9qnTKAcFtL0WdVJ5Cr60d+Rye58yg
- ehzKrH0FWHD7GnUvETJ4Sy8od7qwE74IZVHb+I2bfS1MdTpwOojtqHVQJ5uocGzKwUavdbkgb2K
- 07rK9Dq4mAYGc8xvuuR6V2d1zjUjEPvh6RbM22ySb+zcOYW1ajTumgbt7ikxDsBIwzVdW5UqR9p
- n9naxg/JzLU1ULj3WZ7rKN5Iykz/+cqXNRiawi5iXbWeUg1KxFdPW+ENzFQbDrKeSikqVy4SveK
- L8Hk+Sote6tqIORY44bMRqhq67bWenvXvvVw+LPTfZFunnHSBSR9og190kequg360WBHQ8qV4zQ
- iD0e4zSQ
-X-Authority-Analysis: v=2.4 cv=MMFgmNZl c=1 sm=1 tr=0 ts=68caea99 cx=c_pps
- a=cmESyDAEBpBGqyK7t0alAg==:117 a=j4ogTh8yFefVWWEFDRgCtg==:17
- a=IkcTkHD0fZMA:10 a=yJojWOMRYYMA:10 a=EUspDBNiAAAA:8 a=hMdzhsAlQAsAiGmCIg0A:9
- a=QEXdDO2ut3YA:10 a=zZCYzV9kfG8A:10 a=1OuFwYUASf3TG4hYMiVC:22
-X-Proofpoint-ORIG-GUID: MYJ09uUQ9-4_rtG2xbpYDwy2YS3Z3tuN
-X-Proofpoint-GUID: MYJ09uUQ9-4_rtG2xbpYDwy2YS3Z3tuN
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-09-17_01,2025-09-17_02,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 clxscore=1015 suspectscore=0 bulkscore=0 spamscore=0
- malwarescore=0 phishscore=0 impostorscore=0 adultscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2509160202
 
-
-
-On 9/17/2025 12:14 AM, Sebastian Reichel wrote:
-> Hi,
-> 
-> On Fri, Aug 15, 2025 at 08:05:06PM +0530, Shivendra Pratap wrote:
->> List traversals must be synchronized to prevent race conditions
->> and data corruption. The reboot-mode list is not protected by a
->> lock currently, which can lead to concurrent access and race.
+On 9/16/2025 10:54 AM, Sean Christopherson wrote:
+> On Thu, Sep 11, 2025, Arjan van de Ven wrote:
+>> Hi,
+>>> I also want to keep the code as a module, both to avoid doing VMXON unconditionally,
 >>
->> Introduce a mutex lock to guard all operations on the reboot-mode
->> list and ensure thread-safe access. The change prevents unsafe
->> concurrent access on reboot-mode list.
->>
->> Signed-off-by: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
->> ---
+>> can you expand on what the problem is with having VMXON unconditionally enabled?
 > 
-> This should use scoped_guard() and a Fixes: tag. Otherwise LGTM.
+> Unlike say EFER.SVME, VMXON fundamentally changes CPU behavior.  E.g. blocks INIT,
+> activates VMCS caches (which aren't cleared by VMXOFF on pre-SPR CPUs, and AFAIK
+> Intel hasn't even publicly committed to that behavior for SPR+), restricts allowed
+> CR0 and CR4 values, raises questions about ucode patch updates, triggers unique
+> flows in SMI/RSM, prevents Intel PT from tracing on certain CPUs, and probably a
+> few other things I'm forgetting.
 
-ACK. Will update this patch based on scoped_guard() and add a Fixes tag.
 
-thanks,
-Shivendra
+Regarding Intel PT, if VMXON/VMXOFF are moved to CPU startup/shutdown, as
+Intel PT is initialized during arch_initcall() stage, entering and leaving
+VMX operation no longer happen while Intel PT is _active_, thus
+intel_pt_handle_vmx() no longer needs to "handles" VMX state transitions.
+
+Thus, the function's purpose is simplified to signaling Intel pt not to
+write to IA32_RTIT_CTL during VMX operation if the processor supports Intel
+PT but disallows its use in VMX operation, indicated by IA32_VMX_MISC[14]
+being cleared.  Otherwise, it does nothing and leaves pt_ctx.vmx_on as 0.
+
+If the following patch is correct, it's more of a simplification then :)
+
+diff --git a/arch/x86/events/intel/pt.c b/arch/x86/events/intel/pt.c
+index e8cf29d2b10c..8325a824700a 100644
+--- a/arch/x86/events/intel/pt.c
++++ b/arch/x86/events/intel/pt.c
+@@ -225,17 +225,6 @@ static int __init pt_pmu_hw_init(void)
+  		break;
+  	}
+
+-	if (boot_cpu_has(X86_FEATURE_VMX)) {
+-		/*
+-		 * Intel SDM, 36.5 "Tracing post-VMXON" says that
+-		 * "IA32_VMX_MISC[bit 14]" being 1 means PT can trace
+-		 * post-VMXON.
+-		 */
+-		rdmsrq(MSR_IA32_VMX_MISC, reg);
+-		if (reg & BIT(14))
+-			pt_pmu.vmx = true;
+-	}
+-
+  	for (i = 0; i < PT_CPUID_LEAVES; i++) {
+  		cpuid_count(20, i,
+  			    &pt_pmu.caps[CPUID_EAX + i*PT_CPUID_REGS_NUM],
+@@ -1556,41 +1545,39 @@ void intel_pt_interrupt(void)
+  	}
+  }
+
+-void intel_pt_handle_vmx(int on)
++/*
++ * VMXON is done in the CPU startup phase, thus pt is initialized later.
++ *
++ * Signal pt to not write IA32_RTIT_CTL while in VMX operation if the
++ * processor supports Intel PT but does not allow it to be used in VMX
++ * operation, i.e. IA32_VMX_MISC[bit 14] is cleared.
++ *
++ * Note: If IA32_VMX_MISC[bit 14] is set, vmx_on in pt_ctx remains 0.
++ */
++void intel_pt_set_vmx(int on)
+  {
+  	struct pt *pt = this_cpu_ptr(&pt_ctx);
+-	struct perf_event *event;
+-	unsigned long flags;
++	int cpu = raw_smp_processor_id();
++
++	if (!cpu && cpu_feature_enabled(X86_FEATURE_VMX)) {
++		u64 misc;
++
++		/*
++		 * Intel SDM, 36.5 "Tracing post-VMXON" says that
++		 * "IA32_VMX_MISC[bit 14]" being 1 means PT can trace
++		 * post-VMXON.
++		 */
++		rdmsrq(MSR_IA32_VMX_MISC, misc);
++		if (misc & BIT(14))
++			pt_pmu.vmx = true;
++	}
+
+  	/* PT plays nice with VMX, do nothing */
+  	if (pt_pmu.vmx)
+  		return;
+
+-	/*
+-	 * VMXON will clear RTIT_CTL.TraceEn; we need to make
+-	 * sure to not try to set it while VMX is on. Disable
+-	 * interrupts to avoid racing with pmu callbacks;
+-	 * concurrent PMI should be handled fine.
+-	 */
+-	local_irq_save(flags);
+  	WRITE_ONCE(pt->vmx_on, on);
+-
+-	/*
+-	 * If an AUX transaction is in progress, it will contain
+-	 * gap(s), so flag it PARTIAL to inform the user.
+-	 */
+-	event = pt->handle.event;
+-	if (event)
+-		perf_aux_output_flag(&pt->handle,
+-		                     PERF_AUX_FLAG_PARTIAL);
+-
+-	/* Turn PTs back on */
+-	if (!on && event)
+-		wrmsrq(MSR_IA32_RTIT_CTL, event->hw.aux_config);
+-
+-	local_irq_restore(flags);
+  }
+-EXPORT_SYMBOL_GPL(intel_pt_handle_vmx);
+
+  /*
+   * PMU callbacks
+diff --git a/arch/x86/include/asm/perf_event.h 
+b/arch/x86/include/asm/perf_event.h
+index 70d1d94aca7e..9140796e6268 100644
+--- a/arch/x86/include/asm/perf_event.h
++++ b/arch/x86/include/asm/perf_event.h
+@@ -659,12 +659,9 @@ static inline void x86_perf_get_lbr(struct x86_pmu_lbr 
+*lbr)
+  #endif
+
+  #ifdef CONFIG_CPU_SUP_INTEL
+- extern void intel_pt_handle_vmx(int on);
++extern void intel_pt_set_vmx(int on);
+  #else
+-static inline void intel_pt_handle_vmx(int on)
+-{
+-
+-}
++static inline void intel_pt_set_vmx(int on) { }
+  #endif
+
+  #if defined(CONFIG_PERF_EVENTS) && defined(CONFIG_CPU_SUP_AMD)
+diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+index 03b28fa2e91e..9dad23c86152 100644
+--- a/arch/x86/kernel/cpu/common.c
++++ b/arch/x86/kernel/cpu/common.c
+@@ -2009,7 +2009,7 @@ void cpu_enable_virtualization(void)
+  	rdmsrq(MSR_IA32_VMX_BASIC, basic_msr);
+  	this_cpu_ptr(&vmxon_vmcs)->hdr.revision_id = 
+vmx_basic_vmcs_revision_id(basic_msr);
+
+-	intel_pt_handle_vmx(1);
++	intel_pt_set_vmx(1);
+
+  	cr4_set_bits(X86_CR4_VMXE);
+
+@@ -2023,7 +2023,7 @@ void cpu_enable_virtualization(void)
+  fault:
+  	pr_err("VMXON faulted on CPU%d\n", cpu);
+  	cr4_clear_bits(X86_CR4_VMXE);
+-	intel_pt_handle_vmx(0);
++	intel_pt_set_vmx(0);
+  }
+
+  /*
+@@ -2055,7 +2055,7 @@ void cpu_disable_virtualization(void)
+
+  exit:
+  	cr4_clear_bits(X86_CR4_VMXE);
+-	intel_pt_handle_vmx(0);
++	intel_pt_set_vmx(0);
+  	return;
+
+  fault:
 
