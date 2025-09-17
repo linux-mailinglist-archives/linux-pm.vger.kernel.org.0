@@ -1,79 +1,54 @@
-Return-Path: <linux-pm+bounces-34898-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34899-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 882F6B81153
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 18:51:20 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9CC3CB81159
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 18:52:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C48FF17F8AB
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 16:51:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 570633B6D0F
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 16:52:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AE5D2FB08C;
-	Wed, 17 Sep 2025 16:51:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED2182FA0D4;
+	Wed, 17 Sep 2025 16:52:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="lwLe+kEw"
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="V/LDiHD5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 061922FA0F0
-	for <linux-pm@vger.kernel.org>; Wed, 17 Sep 2025 16:51:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF4E22F25F4;
+	Wed, 17 Sep 2025 16:52:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758127873; cv=none; b=dY9bAd7yonuz/GjTvJAf0HEugnF5T0+WoGgU2jFHbRil+uTuAg4f8x+nlb+1vwf6cOVBnJ0va8ggjgmSEbjVduKsMP23OzvcJnDkTCEaYW9geIo/kvki5FSbMi9L6YEPnoOT1UnXBCdW+eGLvBi4vzu1SPWmrpjYn9F7bWQgO34=
+	t=1758127969; cv=none; b=O/mH2JsOKr3kwkj89QfUNE1/Fo2gEtsM5gcX2HpRI/dcZLSDbPv9eIJyzgBgMBIaUzGMetBdhI7rd7u+sK94l/vOBMJBRNFTBPLWWHBdIjaG/kaiTKrwKF5g8brDSYvFvu2FY83Ye8x26XBgAtxavjNcUYk1xdIbijhW0Perl28=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758127873; c=relaxed/simple;
-	bh=gwDqeO9pTlUdpXA9Yz5i6ic6vnRjW6m7pH/Sogrghyg=;
+	s=arc-20240116; t=1758127969; c=relaxed/simple;
+	bh=9ZuIhxb7j89AL3MoU7yuTqHNkjqkJwhrbEz4OeA/DGg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cY0eofSJEFVHuWQNYBGQHd/lrUJSljIGXheyWK7urXbGbm5Gu1JThusmB/bOPaNno+w+KF/ASuhnzRIv+w0l/z44kO1dj0QBvybrMKOF3UdeLX8gJUKK4uWJpXLs1LrAL6dPMyhvbCC7qqqzossF2VyLC7/yqourMZPDqXW1Dh4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=lwLe+kEw; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-45cb6428c46so67815e9.1
-        for <linux-pm@vger.kernel.org>; Wed, 17 Sep 2025 09:51:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1758127868; x=1758732668; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4ZNcucLNP4mR46I0TWwPFtv0PUd9VAWxLOjNJ+Jrcyo=;
-        b=lwLe+kEw9UJ+bGa96NfYgUtD61zui7E11GrMzUvFnicHQAA2n8YmEpr9ayWoIXvSzy
-         12+PFUJJVdZOUirqmBhaLOCOXjbxrxTZ14L7btrj4LntTIPQujH/hthVQivA3bs0JDem
-         KXJvqE4/tzWF6CkQXOW6o/92QxtdwN6vx1wsLvRzoqOnkUVGA5OEZR4bturRK4AR3vdm
-         uUgqFTkcS6sFy6IIL2/MyIuDAMeb3h9gPxLkgQmEFvX5S78C8P8dlb+ntIg6nN5D5x56
-         zWdFYsMYDghW9bqNiw3BpkVfBR5yuPdOw8RLW73HSaOpUSeR9uzbgXebpILellfVWBeO
-         ddbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758127868; x=1758732668;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4ZNcucLNP4mR46I0TWwPFtv0PUd9VAWxLOjNJ+Jrcyo=;
-        b=WLydPaL6bvxLZXDTm4/WweuEtTqHCNW743crTYNRoEJCR3ESqFXhVJK6Nbryho/pTS
-         KslDSUFygQtrrMk5Km6ztswpnLfDKI6u9WZkrb6l0n2rf55pgLJ3vcuSyM9wlVSa1E7t
-         AN/FSCJCZgGWx8DpiowHFtO8DdG3chH+a5ywvG/4pL4JWPLyM1CL5dtq/0SdV/nD0UF1
-         FF2cM2kb1zdlqBOSHKbye0DKC1LkDu0Ju0JzR0N/ghhZIpXOFsbea4x41dDluQ6SAm0v
-         Tt+zbkGUnfVdv0z0IkiDFN+pf/A+YvmkeIo8WZ2CP1izqARwc8hZLQqJywXt3bkecgJC
-         fmBQ==
-X-Gm-Message-State: AOJu0Yz7SE8l1fh+74Qi5uJ71gCsWqiaoJFhrxew8qWwM+kUVTowGJ5N
-	LatDn4hOT1K/n4n2THBcRy2DfBMELKFlX+wK6nNMxDA2I9asUMwl0vg2LE5MGNlYT1Y=
-X-Gm-Gg: ASbGncvnOhmAOQbHZVittAroIPYsNxJiRlzxGHBjHlPRf5UZyquoGtYwtTF92UHjqsa
-	/5xlvWfXC6ph3dRz8l8GnHvZ/iDKTXyDqmKPhwIwDsrzQeKAa61j2MP3hwUb6M2Rci2tjKFsJzA
-	6cudHl5e/FefGGPih/QuWyho1mKTQaBJczomup6x6I2UMMAKvkgcp+mjs4aZdMtfpleBxjENwaA
-	Lg5kAGTcbAwB65W651qeXYY+9IRMWjW6hUFJjT6o0aMlEStyTvogzMqMHRv+OeS6h0qGZjTudbY
-	ayBsHWyUy24Yxe2WHfJVv+pxycRWDM1brpPnG8pKlh7yY8QJ2AOO/a2f7RWxwRDFWfi3+u536nn
-	NEft3fO1QuPDKTmK65q+pTRYJ4qdtRK0=
-X-Google-Smtp-Source: AGHT+IF1nrUouqCOeE6wDOtkdHMD2AWyWimjxHxsQ94F2pzaPGFfHQDSxdsvbeXDPczFHDXsujKBhw==
-X-Received: by 2002:a05:600c:3587:b0:45d:e285:c4c6 with SMTP id 5b1f17b1804b1-46207a83da5mr28634175e9.37.1758127868023;
-        Wed, 17 Sep 2025 09:51:08 -0700 (PDT)
-Received: from [192.168.50.4] ([82.78.167.153])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3ee07411f4dsm64874f8f.26.2025.09.17.09.51.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Sep 2025 09:51:07 -0700 (PDT)
-Message-ID: <a59d7be5-f767-4ce5-9a88-5a9b340c6643@tuxon.dev>
-Date: Wed, 17 Sep 2025 19:51:06 +0300
+	 In-Reply-To:Content-Type; b=YDGCtWGKVa/6QX+mcGyk/IxzTqE7WCrdzN9hJ/kkwc5QNZuPV/iRSGKm4a8ARylmDmqctqgr9kIc5uwx2qi5Slh6BiK5+zQ3Zje+sbnoThtXE3760v0IFCsvz9/YJHQdf9NZahwCbOo5P9CQoHttLZJ4n3Vi+CWncwSjlWta2Rw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=V/LDiHD5; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+Received: from [0.0.0.0] ([134.134.139.75])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 58HGpYZn2409694
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Wed, 17 Sep 2025 09:51:35 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 58HGpYZn2409694
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2025082201; t=1758127897;
+	bh=75+BjUw+9gU0MekRd3BMbsTFQce4HYaUBo14zvUMfuA=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=V/LDiHD5kB599xzhqiSbqt2KQ36sG3F2s/T+fdwDNVVSlfl6LIVnffivj32U3d4fp
+	 XEkXSrcUYePnD0g8S2c5hQqjyvgt1HhN1DDbvBAvdjCTt9jtA1FUn3Q6CWAS3N3scm
+	 A3qaYPp5m9sRjtj0DI3FgZ07lF3iSD2M2CQ7RGJwdxSPIWeSctQIYKbetjUS+DCgSS
+	 BYpWmZP5fSpJWN2nuBJsBDVlIam9uvxwatiNsTf7Lr29P9AvFlqlJSCOqfRgR/3tUB
+	 Klww7aW6Ls92bP/qVHo+3YkJW4b1Wv0PVDCe/avKmbe1d0jWPyodsNmLqcKLAayH4o
+	 mM/9ubxfVILQQ==
+Message-ID: <e0ce7a92-f8e4-406c-a7dd-c59c8d541d0b@zytor.com>
+Date: Wed, 17 Sep 2025 09:51:29 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -81,43 +56,76 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/3] ARM: at91: PM: implement selection of LPM
-To: Ryan.Wanner@microchip.com, sre@kernel.org, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, nicolas.ferre@microchip.com,
- alexandre.belloni@bootlin.com, linux@armlinux.org.uk
-Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- Claudiu Beznea <claudiu.beznea@microchip.com>
-References: <cover.1758051358.git.Ryan.Wanner@microchip.com>
- <98b7e9347fd15e45e2606d0e89f09095887079fc.1758051358.git.Ryan.Wanner@microchip.com>
-From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
+Subject: Re: [RFC PATCH v1 5/5] KVM: Remove kvm_rebooting and its references
+To: Sean Christopherson <seanjc@google.com>
+Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-pm@vger.kernel.org, pbonzini@redhat.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, rafael@kernel.org, pavel@kernel.org,
+        brgerst@gmail.com, david.kaplan@amd.com, peterz@infradead.org,
+        andrew.cooper3@citrix.com, kprateek.nayak@amd.com,
+        arjan@linux.intel.com, chao.gao@intel.com, rick.p.edgecombe@intel.com,
+        dan.j.williams@intel.com
+References: <20250909182828.1542362-1-xin@zytor.com>
+ <20250909182828.1542362-6-xin@zytor.com> <aMmk0lUJ8gs7OBw-@google.com>
 Content-Language: en-US
-In-Reply-To: <98b7e9347fd15e45e2606d0e89f09095887079fc.1758051358.git.Ryan.Wanner@microchip.com>
-Content-Type: text/plain; charset=UTF-8
+From: Xin Li <xin@zytor.com>
+Autocrypt: addr=xin@zytor.com; keydata=
+ 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
+ l75w1xInsg==
+In-Reply-To: <aMmk0lUJ8gs7OBw-@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-
-
-On 9/16/25 22:50, Ryan.Wanner@microchip.com wrote:
-> From: Claudiu Beznea <claudiu.beznea@microchip.com>
+On 9/16/2025 10:56 AM, Sean Christopherson wrote:
+> On Tue, Sep 09, 2025, Xin Li (Intel) wrote:
+>> Drop kvm_rebooting and all related uses.  Virtualization is now disabled
+>> immediately before a CPU shuts down, eliminating any chance of executing
+>> virtualization instructions during reboot.
 > 
-> The LPM shutdown controller output could signal the transition to PM
-> state for different devices connected on board. On different boards
-> LPM could be connected to different devices (e.g. on SAMA7G5-EK REV4
-> the LPM is connected to on main crystal oscillator, KSZ8081 PHY and
-> to MCP16502 PMIC). Toggling LPM on BSR PM mode is done unconditionally
-> and it helps PMIC to transition to a power saving mode. Toggling LPM
-> on ULP0 and ULP1 should be done conditionally based on user defined
-> wakeup sources, available wakeup source for PM mode and connections to
-> SHDWC's LPM pin. On ULP0 any device could act as wakeup sources. On ULP1
-> only some of the on SoC controllers could act as wakeup sources. For this
-> the architecture specific PM code parses board specific LPM devices,
-> check them against possible wakeup source (in case of ULP1) and tells
-> assembly code to act properly on SHDWC's LPM pin.
+> Wrong.  KVM clears EFER.SVME in reponse to kvm_shutdown(), and thus can trip
+> #UDs on e.g. VMRUN.
 > 
-> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-> [ryan.wanner@microchip.com: Fixed conflicts when applying.]
-> Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
 
-Reviewed-by: Claudiu Beznea <claudiu.beznea@tuxon.dev>
+This patch assumes that AMD SVM enable/disable has been moved to the CPU
+startup and shutdown routines.  Accordingly, kvm_shutdown() no longer 
+clears EFER.SVME, and the patch demonstrates the resulting simplification 
+from removing kvm_rebooting.  However, as noted in the cover letter, no 
+actual modifications were made to AMD SVM.
+
+Is this what seems wrong to you?
+
+Thanks!
+     Xin
 
