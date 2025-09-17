@@ -1,144 +1,133 @@
-Return-Path: <linux-pm+bounces-34828-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34829-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5DF2FB7F41E
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 15:28:14 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 03320B7EA30
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 14:55:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D26783A7C41
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 08:00:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AA4B332727A
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 09:15:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 893243054D8;
-	Wed, 17 Sep 2025 08:00:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 549C428C864;
+	Wed, 17 Sep 2025 09:15:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="lkePpMzL"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="L2Xmnn24"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC90130507B
-	for <linux-pm@vger.kernel.org>; Wed, 17 Sep 2025 08:00:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 404981E51F6;
+	Wed, 17 Sep 2025 09:15:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758096010; cv=none; b=C2TXpk3MjNMoiFxUEXoVtJ25JnHpnoUVkw3QZf+Ph9HKil5mUMdRq4mYItURalrJdnhxR7Ub5wrmxg4m8KLWaWOLGGCrlW8RVJTPulaUynsFZRnu53WaPKNATaTedwBe9wcuTIe8KkwS+g/MdaRxMWEiNPlVkE4ITVF7LeRm8GI=
+	t=1758100543; cv=none; b=KD7tLpFoA9fREMRT1OE7Bt8Hyw08LxyLMF+ZwaFaQ8B5TseXaa7OPjZ/HvOw704GMtREx126ErvxTWPwkrvf1ine6Q68DNzchIbCTh3ZboOM1obUGZRPcbIgFP7mjODveoy9uHXXtZrIpZ3cYQ259foJWbgjCW/XqJd5aLi7AQY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758096010; c=relaxed/simple;
-	bh=dq3u9o5VWwtiIVB9KcK9a0uDpon6l3TwOmFBbD+ZsXQ=;
-	h=From:In-Reply-To:MIME-Version:References:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=h86ks7hEy41DdnWBpXqk6Ti7ZExy8Jy6hlkW0m6p9Nwfbd7gQsbSeTBlRwVcEZFsPgL6QyAQJrzeuuaw8rBw3L6cgPt71AQkAW19JGR97mT5Wd8goVcYnAVCBDFHUZHJ90vHUgUf8xZjyv+dWQq7Bnq6RLZLuFZuGskXnRYDamI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=lkePpMzL; arc=none smtp.client-ip=209.85.167.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-5688ac2f39dso7694969e87.3
-        for <linux-pm@vger.kernel.org>; Wed, 17 Sep 2025 01:00:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1758096007; x=1758700807; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:references:mime-version:in-reply-to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=UEKtnillVVFfRZ+5u504JAMAMZFI1GIHyIZay2lch2M=;
-        b=lkePpMzLNcm7aCq272zukiz/FVDmvMyQlS67iwrPiPQOXg44ECBVrtKATxCROLXrPg
-         UEfhItceDdfZFf4tyG8LN4L0Hs2ZddvbYwXOzfLty0jTvVJCigbDP0hWkaav5ftIqp80
-         i4A11ruQpDhXCpBAchMuU6XdF//4OS51z/u/kkAab/+wsCc4YLMN6+2Ob/ttMZRej/cT
-         vRNa0qUAd/kQChcXtlOzyZc3Wq/wKAQhOs0p7p6liV2vpDWYGhcLSV2FmusnNpz05Wbl
-         vz8WKXGxBfnynnSYfAP81dljJWUdNmSSKnRoNUL3CdiyeJCrLkyTtKEZ5rZcOqm3ntyq
-         LFEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758096007; x=1758700807;
-        h=cc:to:subject:message-id:date:references:mime-version:in-reply-to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UEKtnillVVFfRZ+5u504JAMAMZFI1GIHyIZay2lch2M=;
-        b=h0OqDU+RS83mZ89adL4X+yv10KCVIa/9mnRcuqH98fq/cZjXoRzzz6on2eO6Jwn2Ed
-         NHhvv3o8z347IqxfPbNONV5jfDCjbtiDR4Qh6SLiN/UcmzEDF+k8mto12/NAflDXIWsI
-         Mn8mxjUt+d/cfq20euNzRJueIrNSrKWVs02WnaYa5jSncemtftkBioSpya+kXWDtKht7
-         v9NLnOkzKcM/jMnQasFMZ3eQkjbYuUXjR2UfjDIrSRZg2tYIaWbBeIEByz3Vkj+fMH22
-         WjA907/6W8kkfdTL7AcIfrXYXLQTonyzbCudkNRNbAQ27vPUJAFxc6NLISTkmWBI9RV5
-         1M1w==
-X-Forwarded-Encrypted: i=1; AJvYcCVbvH3stK2Bp03oB/aCkkguhUiWeq5t/BMzESdtRC5O0MVTa7UHFYgROSeQFAbke/WpKMBiIXRfdg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxKlEPQ4wE9HhBb8C7ywDhu18aF6wCXyUraX2VnDZNrGLmVpdsS
-	EPmlqQYK6XLxitqQnWd/S97192wTpAc8CkoO0ge9Y5Ze8H+G/1eZmSQuWCUv3cxaAB/vqncl71B
-	Yo7ItemnxtHn7yD8gKzjCKaop/8ATQakqNvQZCl23KQ==
-X-Gm-Gg: ASbGnctFMH/Vn2hKH03/tlEIBQkNR6ZTeWHCZTpjAqcoTiBPV+g+0v4h4cCMRMCahBa
-	zCN2WOzX64hvwhtkf+3rJ2jd0/N+f/qj74P3z93hD4kuBWvHebGcseCR7GxQaQByqrDPx6k9uIQ
-	3zRBgfRBKQcVRDB7JdX5UQihFX15XY19uHB8iiOGunRQTnQHXmvKNrXMopk1JIrBUrO/VCF6Kdg
-	0VRMYo=
-X-Google-Smtp-Source: AGHT+IFb7uT1amCYEcbDk/aG1gXDqhuVxynj2vweh0X8HkHwURxRRNA23Yw7fUXf7MR74tQK3DcqqGV4vVXMX6Mmtb8=
-X-Received: by 2002:a05:651c:1503:b0:35e:401e:a8a2 with SMTP id
- 38308e7fff4ca-35f653c888emr3283521fa.39.1758096006643; Wed, 17 Sep 2025
- 01:00:06 -0700 (PDT)
-Received: from 969154062570 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 17 Sep 2025 04:00:03 -0400
-Received: from 969154062570 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 17 Sep 2025 04:00:03 -0400
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-In-Reply-To: <20250917-rda8810pl-drivers-v1-17-9ca9184ca977@mainlining.org>
+	s=arc-20240116; t=1758100543; c=relaxed/simple;
+	bh=XXSmMhiIJwxEgzQuWSUYkqPOP5y8v9qGIfTlmLL2PFI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=jieGIh+LvVLg1G1BIAFTL6haMoeddKeuf5ZN3dbjhcb4q5KZRjS4w+rdIn/26OOEV5eduP/Ovu0UVOre9SnmilpiOHPBSXk+YSV5oPU0sArFBrCx0O/+sr7UQPe88OgUFJSWqJ4UfS/YV4gemNmQy0MVr4kGdrcmlWJmoBxM5WA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=L2Xmnn24; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1758100539;
+	bh=XXSmMhiIJwxEgzQuWSUYkqPOP5y8v9qGIfTlmLL2PFI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=L2Xmnn24q18lCp584jc3DJ3aArQTX0Q97EwLeCn3gjtunVHCT+VCz8J59OyoRJRXb
+	 J6E2VIIP+SpjyRvytPAkuXuBab8plMjreqyXG4r62yWvFYC/GgVKew8qFVTN8wqEi7
+	 cHLBtuaXLQ49gL79nfIC1DQSkd5BKuibCrHrBtIp1ozBC/55FV50OsL4lsJ/9d/G+R
+	 D+xinyMOJga2aTtZJrHpRahN2aHbzA5KD76lgmLrcSiwQOcG91iCfs3R06RXp/ujG/
+	 XOjr2a4cuI9zpH7lYnDdCoE40xrh9yjYtRCU50u0SAIN0qhgTGb4XYkT5eQm6kQCJ/
+	 0Q4fjPfECOKnQ==
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 8555E17E0109;
+	Wed, 17 Sep 2025 11:15:38 +0200 (CEST)
+Message-ID: <a10685e2-e4af-4097-b432-778e83e0b3bf@collabora.com>
+Date: Wed, 17 Sep 2025 11:15:37 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250917-rda8810pl-drivers-v1-0-9ca9184ca977@mainlining.org> <20250917-rda8810pl-drivers-v1-17-9ca9184ca977@mainlining.org>
-Date: Wed, 17 Sep 2025 04:00:03 -0400
-X-Gm-Features: AS18NWCZjow2-dnpLe_oaxtKdrNMg3nTySj8u9HPhpYEQB-s6-z3-oDqLWpwlyY
-Message-ID: <CAMRc=MeHQf_Oa2DRR0T7tum-Tuk3qPh5r5gimxGY3EXTyvoKZQ@mail.gmail.com>
-Subject: Re: [PATCH 17/25] drivers: gpio: rda: Make direction register unreadable
-To: dang.huynh@mainlining.org
-Cc: Dang Huynh via B4 Relay <devnull+dang.huynh.mainlining.org@kernel.org>, 
-	linux-arm-kernel@lists.infradead.org, linux-unisoc@lists.infradead.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org, 
-	linux-clk@vger.kernel.org, linux-pm@vger.kernel.org, 
-	dmaengine@vger.kernel.org, linux-hardening@vger.kernel.org, 
-	linux-mmc@vger.kernel.org, Manivannan Sadhasivam <mani@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Michael Turquette <mturquette@baylibre.com>, 
-	Stephen Boyd <sboyd@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>, 
-	Sebastian Reichel <sre@kernel.org>, Vinod Koul <vkoul@kernel.org>, Kees Cook <kees@kernel.org>, 
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 2/7] nvmem: qcom-spmi-sdam: Migrate to
+ devm_spmi_subdevice_alloc_and_add()
+To: Andy Shevchenko <andy.shevchenko@gmail.com>,
+ =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+Cc: Andy Shevchenko <andriy.shevchenko@intel.com>, sboyd@kernel.org,
+ jic23@kernel.org, dlechner@baylibre.com, nuno.sa@analog.com,
+ andy@kernel.org, arnd@arndb.de, gregkh@linuxfoundation.org,
+ srini@kernel.org, vkoul@kernel.org, kishon@kernel.org, sre@kernel.org,
+ krzysztof.kozlowski@linaro.org, linux-arm-msm@vger.kernel.org,
+ linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-phy@lists.infradead.org, linux-pm@vger.kernel.org,
+ kernel@collabora.com, wenst@chromium.org, casey.connolly@linaro.org,
+ Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+ Neil Armstrong <neil.armstrong@linaro.org>
+References: <20250916084445.96621-1-angelogioacchino.delregno@collabora.com>
+ <20250916084445.96621-3-angelogioacchino.delregno@collabora.com>
+ <t3uk3k4h3l53yajoe3xog2njmdn3jhkmdphv3c4wnpvcqniz4n@opgigzazycot>
+ <aMlnp4x-1MUoModr@smile.fi.intel.com>
+ <mknxgesog6aghc6cjzm63g63zqbqvysxf6ktmnbrbtafervveg@uoiohk3yclso>
+ <CAHp75Vf7KrsN7Ec9zOvJoRuKvkbrJ5sMv7pVv6+88tPX-j_9ZA@mail.gmail.com>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Content-Language: en-US
+In-Reply-To: <CAHp75Vf7KrsN7Ec9zOvJoRuKvkbrJ5sMv7pVv6+88tPX-j_9ZA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Tue, 16 Sep 2025 22:25:14 +0200, Dang Huynh via B4 Relay
-<devnull+dang.huynh.mainlining.org@kernel.org> said:
-> From: Dang Huynh <dang.huynh@mainlining.org>
->
-> The register doesn't like to be read, this causes the SD Card
-> Card Detect GPIO to misbehaves in the OS.
->
+Il 16/09/25 18:20, Andy Shevchenko ha scritto:
+> On Tue, Sep 16, 2025 at 6:11 PM Uwe Kleine-König
+> <u.kleine-koenig@baylibre.com> wrote:
+>> On Tue, Sep 16, 2025 at 04:35:35PM +0300, Andy Shevchenko wrote:
+>>> On Tue, Sep 16, 2025 at 03:24:56PM +0200, Uwe Kleine-König wrote:
+>>>> On Tue, Sep 16, 2025 at 10:44:40AM +0200, AngeloGioacchino Del Regno wrote:
+> 
+> ...
+> 
+>>>>> +MODULE_IMPORT_NS("SPMI");
+>>>>
+>>>> If it's exactly the files that #include <linux/spmi.h> should have that
+>>>> namespace import, you can put the MODULE_IMPORT_NS into that header.
+>>>
+>>> Which makes anyone to import namespace even if they just want to use some types
+>>> out of the header.
+>>
+>> Notice that I carefully formulated my suggestion to cope for this case.
+> 
+> And I carefully answered. Your proposal won't prevent _other_ files to
+> use the same header in the future without needing a namespace to be
+> imported.
+> 
+>>> This is not good solution generally speaking. Also this will
+>>> diminish one of the purposes of _NS variants of MODULE*/EXPORT*, i.e. make it
+>>> invisible that some of the code may become an abuser of the API just by someone
+>>> include the header (for a reason or by a mistake).
+>>
+>> Yeah, opinions differ. In my eyes it's quite elegant.
+> 
+> It's not a pure opinion, it has a technical background that I
+> explained. The explicit usage of MODULE_IMPORT_NS() is better than
+> some header somewhere that might even be included by another and be
+> proxied to the code that doesn't need / want to have this namespace to
+> be present. Puting MODULE_IMPORT_NS() into a _header_ is a minefield
+> for the future.
+> 
 
-Hi!
+Uwe, thanks for your review - much appreciated.
 
-Sorry but this message is unintelligible, please say precisely what is going
-on and why you need this and why it won't break existing users.
+Even though I get your point... Sorry, but here I do agree with Andy, and I think
+he explained some of the reasons pretty well.
 
-Also: the title should be "gpio: rda: ...".
+Cheers,
+Angelo
 
-Bartosz
 
-> Signed-off-by: Dang Huynh <dang.huynh@mainlining.org>
-> ---
->  drivers/gpio/gpio-rda.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/gpio/gpio-rda.c b/drivers/gpio/gpio-rda.c
-> index b4db8553a2371ae407fdb7e681d0f82c4d9f74b7..56aaa9f33d29469dfb1bf86ed7b63c54b413c89c 100644
-> --- a/drivers/gpio/gpio-rda.c
-> +++ b/drivers/gpio/gpio-rda.c
-> @@ -245,7 +245,7 @@ static int rda_gpio_probe(struct platform_device *pdev)
->  		.clr = rda_gpio->base + RDA_GPIO_CLR,
->  		.dirout = rda_gpio->base + RDA_GPIO_OEN_SET_OUT,
->  		.dirin = rda_gpio->base + RDA_GPIO_OEN_SET_IN,
-> -		.flags = BGPIOF_READ_OUTPUT_REG_SET,
-> +		.flags = BGPIOF_READ_OUTPUT_REG_SET | BGPIOF_UNREADABLE_REG_DIR,
->  	};
->
->  	ret = gpio_generic_chip_init(&rda_gpio->chip, &config);
->
-> --
-> 2.51.0
->
->
->
 
