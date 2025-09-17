@@ -1,194 +1,144 @@
-Return-Path: <linux-pm+bounces-34827-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34828-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F8E4B7DB8C
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 14:33:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5DF2FB7F41E
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 15:28:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1C2307A7449
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 06:32:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D26783A7C41
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 08:00:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93DED29B8D8;
-	Wed, 17 Sep 2025 06:33:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 893243054D8;
+	Wed, 17 Sep 2025 08:00:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="ONdXD2SI";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="VBMjT73d";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="ONdXD2SI";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="VBMjT73d"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="lkePpMzL"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E96372D24B8
-	for <linux-pm@vger.kernel.org>; Wed, 17 Sep 2025 06:33:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC90130507B
+	for <linux-pm@vger.kernel.org>; Wed, 17 Sep 2025 08:00:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758090812; cv=none; b=Cgvj4uMwNbMS7eMxGH209iPyt7+Bku7tBQaMQDEU8X9U52w6o9tAptL1oUvGEfVOpELY6Lub0q2zJzCMv2YJxusPeCCCx0bt1PYw9cBd2dYaALmlLiQGvTYQz9vYJSU6F5nWyGGIHLXlrmePSxLDBla5nwivFSnmgtnrnQHZDwY=
+	t=1758096010; cv=none; b=C2TXpk3MjNMoiFxUEXoVtJ25JnHpnoUVkw3QZf+Ph9HKil5mUMdRq4mYItURalrJdnhxR7Ub5wrmxg4m8KLWaWOLGGCrlW8RVJTPulaUynsFZRnu53WaPKNATaTedwBe9wcuTIe8KkwS+g/MdaRxMWEiNPlVkE4ITVF7LeRm8GI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758090812; c=relaxed/simple;
-	bh=bVA3eY/iw2XIOGWDFuc8E2fmrH5pn6xk2tupN/0aKRE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ry9EhcFQB5B3K32qiB0Wl1fJ3j1wViGGlRPOP8oCzFzqEw5sNDm/evGOdhW4QC/UYsJyROZOe1rnX8yB3IqTqzqKLO7wk0ZaC8X5xRAgmSPfZQto9iCK8Bj/xNXR1s2FUYXQHmYQTjLjExXw8IoqiX5JnQGCGJFivLSd+IMvUUM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=ONdXD2SI; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=VBMjT73d; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=ONdXD2SI; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=VBMjT73d; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 48C8C21E93;
-	Wed, 17 Sep 2025 06:33:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1758090788; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=XZgR9nYmkkKQYZ8BnmvdxFr3mBxEAURL3WOMRrhNIUk=;
-	b=ONdXD2SIvcJwMBKG0yhcOdyemLWSIbGXGc8aBFzsuXCckMR4DntLTeCaUwuhIXDPUHXMwz
-	7PFgklBK0Es5v430wD1CBdJnj+KqsBY8hIK2mmIhMGMFS6L9vT5PxWOh6DuS6gR2ERSOeS
-	Z2jC6q3kN6rQu29oDYeYG6DxSjNeVwk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1758090788;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=XZgR9nYmkkKQYZ8BnmvdxFr3mBxEAURL3WOMRrhNIUk=;
-	b=VBMjT73dNvf+TZeKkER4w60PrdtKbNIay+Bb2vv3zQqrg9LODoN4R7EbvhkrDMG1drzSDI
-	CmMTWDzEvHbhc1AQ==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=ONdXD2SI;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=VBMjT73d
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1758090788; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=XZgR9nYmkkKQYZ8BnmvdxFr3mBxEAURL3WOMRrhNIUk=;
-	b=ONdXD2SIvcJwMBKG0yhcOdyemLWSIbGXGc8aBFzsuXCckMR4DntLTeCaUwuhIXDPUHXMwz
-	7PFgklBK0Es5v430wD1CBdJnj+KqsBY8hIK2mmIhMGMFS6L9vT5PxWOh6DuS6gR2ERSOeS
-	Z2jC6q3kN6rQu29oDYeYG6DxSjNeVwk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1758090788;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=XZgR9nYmkkKQYZ8BnmvdxFr3mBxEAURL3WOMRrhNIUk=;
-	b=VBMjT73dNvf+TZeKkER4w60PrdtKbNIay+Bb2vv3zQqrg9LODoN4R7EbvhkrDMG1drzSDI
-	CmMTWDzEvHbhc1AQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 580341368D;
-	Wed, 17 Sep 2025 06:33:07 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id mLpJEyNWymiIXwAAD6G6ig
-	(envelope-from <svarbanov@suse.de>); Wed, 17 Sep 2025 06:33:07 +0000
-From: Stanimir Varbanov <svarbanov@suse.de>
-To: linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-rpi-kernel@lists.infradead.org,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	linux-pm@vger.kernel.org
-Cc: Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Ray Jui <rjui@broadcom.com>,
-	Scott Branden <sbranden@broadcom.com>,
-	Lee Jones <lee@kernel.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Willow Cunningham <willow.e.cunningham@gmail.com>,
-	Stefan Wahren <wahrenst@gmx.net>,
-	Saenz Julienne <nsaenz@kernel.org>,
-	Andrea della Porta <andrea.porta@suse.com>,
-	Phil Elwell <phil@raspberrypi.com>,
-	Jonathan Bell <jonathan@raspberrypi.com>,
-	Dave Stevenson <dave.stevenson@raspberrypi.com>,
-	Stanimir Varbanov <svarbanov@suse.de>
-Subject: [PATCH 4/4] arm64: dts: broadcom: bcm2712: Add watchdog DT node
-Date: Wed, 17 Sep 2025 09:32:33 +0300
-Message-ID: <20250917063233.1270-5-svarbanov@suse.de>
-X-Mailer: git-send-email 2.47.0
-In-Reply-To: <20250917063233.1270-1-svarbanov@suse.de>
-References: <20250917063233.1270-1-svarbanov@suse.de>
+	s=arc-20240116; t=1758096010; c=relaxed/simple;
+	bh=dq3u9o5VWwtiIVB9KcK9a0uDpon6l3TwOmFBbD+ZsXQ=;
+	h=From:In-Reply-To:MIME-Version:References:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=h86ks7hEy41DdnWBpXqk6Ti7ZExy8Jy6hlkW0m6p9Nwfbd7gQsbSeTBlRwVcEZFsPgL6QyAQJrzeuuaw8rBw3L6cgPt71AQkAW19JGR97mT5Wd8goVcYnAVCBDFHUZHJ90vHUgUf8xZjyv+dWQq7Bnq6RLZLuFZuGskXnRYDamI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=lkePpMzL; arc=none smtp.client-ip=209.85.167.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-5688ac2f39dso7694969e87.3
+        for <linux-pm@vger.kernel.org>; Wed, 17 Sep 2025 01:00:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1758096007; x=1758700807; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:references:mime-version:in-reply-to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=UEKtnillVVFfRZ+5u504JAMAMZFI1GIHyIZay2lch2M=;
+        b=lkePpMzLNcm7aCq272zukiz/FVDmvMyQlS67iwrPiPQOXg44ECBVrtKATxCROLXrPg
+         UEfhItceDdfZFf4tyG8LN4L0Hs2ZddvbYwXOzfLty0jTvVJCigbDP0hWkaav5ftIqp80
+         i4A11ruQpDhXCpBAchMuU6XdF//4OS51z/u/kkAab/+wsCc4YLMN6+2Ob/ttMZRej/cT
+         vRNa0qUAd/kQChcXtlOzyZc3Wq/wKAQhOs0p7p6liV2vpDWYGhcLSV2FmusnNpz05Wbl
+         vz8WKXGxBfnynnSYfAP81dljJWUdNmSSKnRoNUL3CdiyeJCrLkyTtKEZ5rZcOqm3ntyq
+         LFEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758096007; x=1758700807;
+        h=cc:to:subject:message-id:date:references:mime-version:in-reply-to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UEKtnillVVFfRZ+5u504JAMAMZFI1GIHyIZay2lch2M=;
+        b=h0OqDU+RS83mZ89adL4X+yv10KCVIa/9mnRcuqH98fq/cZjXoRzzz6on2eO6Jwn2Ed
+         NHhvv3o8z347IqxfPbNONV5jfDCjbtiDR4Qh6SLiN/UcmzEDF+k8mto12/NAflDXIWsI
+         Mn8mxjUt+d/cfq20euNzRJueIrNSrKWVs02WnaYa5jSncemtftkBioSpya+kXWDtKht7
+         v9NLnOkzKcM/jMnQasFMZ3eQkjbYuUXjR2UfjDIrSRZg2tYIaWbBeIEByz3Vkj+fMH22
+         WjA907/6W8kkfdTL7AcIfrXYXLQTonyzbCudkNRNbAQ27vPUJAFxc6NLISTkmWBI9RV5
+         1M1w==
+X-Forwarded-Encrypted: i=1; AJvYcCVbvH3stK2Bp03oB/aCkkguhUiWeq5t/BMzESdtRC5O0MVTa7UHFYgROSeQFAbke/WpKMBiIXRfdg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxKlEPQ4wE9HhBb8C7ywDhu18aF6wCXyUraX2VnDZNrGLmVpdsS
+	EPmlqQYK6XLxitqQnWd/S97192wTpAc8CkoO0ge9Y5Ze8H+G/1eZmSQuWCUv3cxaAB/vqncl71B
+	Yo7ItemnxtHn7yD8gKzjCKaop/8ATQakqNvQZCl23KQ==
+X-Gm-Gg: ASbGnctFMH/Vn2hKH03/tlEIBQkNR6ZTeWHCZTpjAqcoTiBPV+g+0v4h4cCMRMCahBa
+	zCN2WOzX64hvwhtkf+3rJ2jd0/N+f/qj74P3z93hD4kuBWvHebGcseCR7GxQaQByqrDPx6k9uIQ
+	3zRBgfRBKQcVRDB7JdX5UQihFX15XY19uHB8iiOGunRQTnQHXmvKNrXMopk1JIrBUrO/VCF6Kdg
+	0VRMYo=
+X-Google-Smtp-Source: AGHT+IFb7uT1amCYEcbDk/aG1gXDqhuVxynj2vweh0X8HkHwURxRRNA23Yw7fUXf7MR74tQK3DcqqGV4vVXMX6Mmtb8=
+X-Received: by 2002:a05:651c:1503:b0:35e:401e:a8a2 with SMTP id
+ 38308e7fff4ca-35f653c888emr3283521fa.39.1758096006643; Wed, 17 Sep 2025
+ 01:00:06 -0700 (PDT)
+Received: from 969154062570 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 17 Sep 2025 04:00:03 -0400
+Received: from 969154062570 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 17 Sep 2025 04:00:03 -0400
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+In-Reply-To: <20250917-rda8810pl-drivers-v1-17-9ca9184ca977@mainlining.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Level: 
-X-Spam-Flag: NO
-X-Rspamd-Queue-Id: 48C8C21E93
-X-Rspamd-Action: no action
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spamd-Result: default: False [-1.51 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	ARC_NA(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[22];
-	MIME_TRACE(0.00)[0:+];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	RCVD_TLS_ALL(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo,suse.de:dkim,suse.de:mid,suse.de:email];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[kernel.org,broadcom.com,linaro.org,gmail.com,gmx.net,suse.com,raspberrypi.com,suse.de];
-	DNSWL_BLOCKED(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[dt];
-	DKIM_TRACE(0.00)[suse.de:+];
-	R_RATELIMIT(0.00)[to_ip_from(RLw7mkaud87zuqqztkur5718rm)];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com,gmx.net]
-X-Spam-Score: -1.51
+References: <20250917-rda8810pl-drivers-v1-0-9ca9184ca977@mainlining.org> <20250917-rda8810pl-drivers-v1-17-9ca9184ca977@mainlining.org>
+Date: Wed, 17 Sep 2025 04:00:03 -0400
+X-Gm-Features: AS18NWCZjow2-dnpLe_oaxtKdrNMg3nTySj8u9HPhpYEQB-s6-z3-oDqLWpwlyY
+Message-ID: <CAMRc=MeHQf_Oa2DRR0T7tum-Tuk3qPh5r5gimxGY3EXTyvoKZQ@mail.gmail.com>
+Subject: Re: [PATCH 17/25] drivers: gpio: rda: Make direction register unreadable
+To: dang.huynh@mainlining.org
+Cc: Dang Huynh via B4 Relay <devnull+dang.huynh.mainlining.org@kernel.org>, 
+	linux-arm-kernel@lists.infradead.org, linux-unisoc@lists.infradead.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org, 
+	linux-clk@vger.kernel.org, linux-pm@vger.kernel.org, 
+	dmaengine@vger.kernel.org, linux-hardening@vger.kernel.org, 
+	linux-mmc@vger.kernel.org, Manivannan Sadhasivam <mani@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, Michael Turquette <mturquette@baylibre.com>, 
+	Stephen Boyd <sboyd@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>, 
+	Sebastian Reichel <sre@kernel.org>, Vinod Koul <vkoul@kernel.org>, Kees Cook <kees@kernel.org>, 
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Add watchdog device-tree node for bcm2712 SoC.
+On Tue, 16 Sep 2025 22:25:14 +0200, Dang Huynh via B4 Relay
+<devnull+dang.huynh.mainlining.org@kernel.org> said:
+> From: Dang Huynh <dang.huynh@mainlining.org>
+>
+> The register doesn't like to be read, this causes the SD Card
+> Card Detect GPIO to misbehaves in the OS.
+>
 
-Signed-off-by: Stanimir Varbanov <svarbanov@suse.de>
----
- arch/arm64/boot/dts/broadcom/bcm2712.dtsi | 9 +++++++++
- 1 file changed, 9 insertions(+)
+Hi!
 
-diff --git a/arch/arm64/boot/dts/broadcom/bcm2712.dtsi b/arch/arm64/boot/dts/broadcom/bcm2712.dtsi
-index 0a9212d3106f..3094a8e69f35 100644
---- a/arch/arm64/boot/dts/broadcom/bcm2712.dtsi
-+++ b/arch/arm64/boot/dts/broadcom/bcm2712.dtsi
-@@ -243,6 +243,15 @@ uart10: serial@7d001000 {
- 			status = "disabled";
- 		};
- 
-+		pm: watchdog@7d200000 {
-+			compatible = "brcm,bcm2712-pm", "brcm,bcm2835-pm-wdt";
-+			reg = <0x7d200000 0x308>;
-+			reg-names = "pm";
-+			#power-domain-cells = <1>;
-+			#reset-cells = <1>;
-+			system-power-controller;
-+		};
-+
- 		interrupt-controller@7d517000 {
- 			compatible = "brcm,bcm7271-l2-intc";
- 			reg = <0x7d517000 0x10>;
--- 
-2.47.0
+Sorry but this message is unintelligible, please say precisely what is going
+on and why you need this and why it won't break existing users.
 
+Also: the title should be "gpio: rda: ...".
+
+Bartosz
+
+> Signed-off-by: Dang Huynh <dang.huynh@mainlining.org>
+> ---
+>  drivers/gpio/gpio-rda.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpio/gpio-rda.c b/drivers/gpio/gpio-rda.c
+> index b4db8553a2371ae407fdb7e681d0f82c4d9f74b7..56aaa9f33d29469dfb1bf86ed7b63c54b413c89c 100644
+> --- a/drivers/gpio/gpio-rda.c
+> +++ b/drivers/gpio/gpio-rda.c
+> @@ -245,7 +245,7 @@ static int rda_gpio_probe(struct platform_device *pdev)
+>  		.clr = rda_gpio->base + RDA_GPIO_CLR,
+>  		.dirout = rda_gpio->base + RDA_GPIO_OEN_SET_OUT,
+>  		.dirin = rda_gpio->base + RDA_GPIO_OEN_SET_IN,
+> -		.flags = BGPIOF_READ_OUTPUT_REG_SET,
+> +		.flags = BGPIOF_READ_OUTPUT_REG_SET | BGPIOF_UNREADABLE_REG_DIR,
+>  	};
+>
+>  	ret = gpio_generic_chip_init(&rda_gpio->chip, &config);
+>
+> --
+> 2.51.0
+>
+>
+>
 
