@@ -1,77 +1,48 @@
-Return-Path: <linux-pm+bounces-34804-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34805-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 532CBB7DD41
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 14:35:11 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C608B7F8BD
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 15:49:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2A0044809BC
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Sep 2025 22:27:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C9670460773
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 00:01:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C8432F9DB8;
-	Tue, 16 Sep 2025 22:27:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E85A3205AB6;
+	Wed, 17 Sep 2025 00:00:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="fr2M5uBR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UlHy8TZh"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4785131BC8C
-	for <linux-pm@vger.kernel.org>; Tue, 16 Sep 2025 22:27:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DF5610F1;
+	Wed, 17 Sep 2025 00:00:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758061625; cv=none; b=InkGV1Kx+KXMUebyak2gVvy1Q0PYhcXoPyHEhpMAePGDE71Jz+aWEqNpPb0kd1fvBrRnVUhMMuYUR5pjEv06y4VmRHvgc2vRD/AOlLjrXDMwD3Ou3xhC4+uzgK+OuhSdVfLqLdhxWVqTDkqRP9fm6idEP1OwPIfl3WXNEBme1VM=
+	t=1758067255; cv=none; b=UoDMEOI2edCFgkJTvmfEav/fPPEPD6CGI6gMD/eLNPmQcK3OltfbL2sbyuPf+9lOOw4g4pGVJUa+65HC936iga9WMuGUKOevLzG1o3FT6Em0YVdgJkevxbxNF1U5hwc3hl8n2djKaYgrZX65M7OZ71xZkSfPTJ+CHMxgLzHCbGY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758061625; c=relaxed/simple;
-	bh=WlaeWQkVe2LAkLTFg0HhhUwZq/eeWI5aMBXjarmFyNg=;
+	s=arc-20240116; t=1758067255; c=relaxed/simple;
+	bh=ke9zmmhKs5eb5v+Alg5/XjhaLlirlLoeVZXpSuibMM8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DYWR5jEO52qlEdorGkO9NEwDObhU2IQuH56oRw070HdZPCeiwjL33zgPVRxJS0tlg9QgG0gmC/hmbwgqtZLowule4xvOTaZCgNyV+G1xvkdgYu7yNAYQUEe6pYOHQPkqwVYMeisyIGlJKQ5OVOIVJZgLeFx6jP7jRdz3bJCwPIQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=fr2M5uBR; arc=none smtp.client-ip=209.85.222.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-qk1-f173.google.com with SMTP id af79cd13be357-81076e81aabso498538785a.3
-        for <linux-pm@vger.kernel.org>; Tue, 16 Sep 2025 15:27:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1758061622; x=1758666422; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=u+C7+Zt8EwqQNYjKFusHO5J9TEKhU19Ov+C897qHSB8=;
-        b=fr2M5uBRr6Y3huoYNuH7MLpeTMkAVyUHL2zcYpioCgRl/Ar/zoJgHOhdEuFMTWM6Ad
-         /tckOfipGFAHEwqs/EHwELXTK20aYChHKSMItHvnO4OzcE9pEPU3T32gsBQn5M8L9T3e
-         dP3+Ets4kl4jePyv6jndHH3Ltw409xm7M00iw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758061622; x=1758666422;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=u+C7+Zt8EwqQNYjKFusHO5J9TEKhU19Ov+C897qHSB8=;
-        b=CqItYKFZ1/aQwn/OnUwUF4DnFaEARxpTMhbWXLQCi0a5BikQevbuOWKZsm7uBDtCtM
-         OCb+MWawUnf4uMyGAiRBnZPiCmFdARAqQrCYYcNlnM/0GrzfqT7Dk3pZtMGORIJoylLm
-         WmrsC/5HPxbjI0JILvEZj1xfYBMml0VHHvnv6RdE2LuLBa8z29c0iIs7LU1vtIewe0K6
-         B9JVBDfFAd8NzdraYcFh608asxXCihHoErHTiDqIBxcTOv8iUouW9gRuQPjTl3D9+I1v
-         4jhpjgELuE9XS6jTTptwOVWNN/07Z72LS00zz8G1ATQodpfZrEUtyqluexRrlkCRqwe8
-         xN1g==
-X-Gm-Message-State: AOJu0YzxVX4vpCUgyw0F9wLfzX/RGBHR5OrlN5SW20UPxGFbRNz1g48b
-	rD1ejnRG4Fye7kyAcgptWJX+K37IhXYVKLmb287y1XglkSiKT+WkjPHF/8/tiK3JQgo=
-X-Gm-Gg: ASbGncsfkb1SsypFcSitxTK53sCs9wcmaHTTCJG2PjscgBFwVDlHWrrVHn5PoNCPq7w
-	O615QZJEBiRrsYuxUkE2YB+ETX67m+g3P3cCs6xXscP3ZOV6Wn0h5UGnHPtOLZaD1ltDcBlZsNz
-	kmKGUR0sq8Usk0wApnOJY9eTW9FsxLLH7htY2P4ykBiBMi5Y4NWkOrhQJQmkjokCTEdRpe9wEWG
-	0dR8CdxGkDaGjkeX5RemyjPKPQZO7yK+atnkciN8crWC76zw7ku/TvwC4WgNGRpG6MPHzuiqa6o
-	ACkNxnN+P2ZiTex0lmo3cfG3x1R9sljvoq2YF4gYvHxt9vUdsi2ymKPjoyFFefw4cQYGao4AAjG
-	8W1CI8Lv+jc6a6Q5VV2lC6N14PRxqwMA4gDDkb4Ey2xbu6SjMKFE0rp1HYdrRAJRHGaOB6W9qCM
-	rMCKtXciR0TPHMZ2HgNML+VpB/lZL+5HWcwa/rFpVBHgM=
-X-Google-Smtp-Source: AGHT+IF8A//xxU9vWTH1NoQ844ar3JLd4TAf1UCHnEk5uY15aQNnLfP/3PdhKcb9dUMPQUzrxddg7A==
-X-Received: by 2002:a05:620a:4629:b0:828:ee0c:64df with SMTP id af79cd13be357-828ee0c7269mr1213078385a.57.1758061622245;
-        Tue, 16 Sep 2025 15:27:02 -0700 (PDT)
-Received: from [192.168.226.35] (207-181-222-53.s5939.c3-0.hnc-cbr1.chi-hnc.il.cable.rcncustomer.com. [207.181.222.53])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-827e59af36asm645591885a.46.2025.09.16.15.27.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Sep 2025 15:27:01 -0700 (PDT)
-Message-ID: <5a9e1ecb-2905-4318-8669-c515568e1d42@linuxfoundation.org>
-Date: Tue, 16 Sep 2025 16:27:00 -0600
+	 In-Reply-To:Content-Type; b=MSIUlZMpLmjkdLIXRnNP/vTxuWhQYGsvvd7/4Iq8ovDX+TnbAPiBLe+6pjfrRkWwgU8weuoxYZbnq/6cGFhBHX4qL4RVh72tLw0660s5sMDqG3H5lJq/o2W67098BFTKQRmYuSsbkJaQnMG4vyCpQk7kWdudl3ML4nOvkCgv0Iw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UlHy8TZh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA362C4CEEB;
+	Wed, 17 Sep 2025 00:00:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1758067255;
+	bh=ke9zmmhKs5eb5v+Alg5/XjhaLlirlLoeVZXpSuibMM8=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=UlHy8TZhlJV57BFKSbW5+rOp3Es6ZL9g1CiUvHbGF+8iP91AcPlsQt85/baStMxC5
+	 Uxhjk5MNwG48opHIfX/mcN7HvDoy39NRIZa+JSEKGg0TrJmFDE8+xt498TLeJA1/Zd
+	 7cUUtfwPNRIS2jwGgExYxhL06VehJTXXzUFuo2OKWHofLCGLAjIO7+9kiBIAjsY5zx
+	 Qv6j4UkQdJsGDgF/9WJciW0u0A4psyAhPZ0Va9uHbbv33P4ZcjzbAl1/+tKn/oLsx3
+	 eosExh7i6QSE0k+pxPKmvz/0sDTnnafIe9kY5Tz2YHsgJX5aJLt9nNVUGydWpXDNjM
+	 sYCPNmgIb9YdQ==
+Message-ID: <689d2f80-40e8-49c4-8aca-7a5d21e62b0c@kernel.org>
+Date: Wed, 17 Sep 2025 09:00:48 +0900
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -79,59 +50,193 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] cpupower: fix memory leak in print_{on,off}line_cpus()
-To: cryolitia@uniontech.com, Thomas Renninger <trenn@suse.com>,
- Shuah Khan <shuah@kernel.org>, "John B. Wyatt IV" <jwyatt@redhat.com>,
- John Kacur <jkacur@redhat.com>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- niecheng1@uniontech.com, zhanjun@uniontech.com,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20250827-power-memoryleak-v1-1-e4baf7b59a41@uniontech.com>
+Subject: Re: [PATCH 21/25] dt-bindings: mmc: Add RDA SDMMC controller
+To: dang.huynh@mainlining.org, Manivannan Sadhasivam <mani@kernel.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Linus Walleij
+ <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>,
+ Sebastian Reichel <sre@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+ Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+ Ulf Hansson <ulf.hansson@linaro.org>
+Cc: linux-arm-kernel@lists.infradead.org, linux-unisoc@lists.infradead.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
+ linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
+ dmaengine@vger.kernel.org, linux-hardening@vger.kernel.org,
+ linux-mmc@vger.kernel.org
+References: <20250917-rda8810pl-drivers-v1-0-9ca9184ca977@mainlining.org>
+ <20250917-rda8810pl-drivers-v1-21-9ca9184ca977@mainlining.org>
+From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20250827-power-memoryleak-v1-1-e4baf7b59a41@uniontech.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20250917-rda8810pl-drivers-v1-21-9ca9184ca977@mainlining.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 8/27/25 03:46, Cryolitia PukNgae via B4 Relay wrote:
-> From: Cryolitia PukNgae <cryolitia@uniontech.com>
+On 17/09/2025 22:25, Dang Huynh via B4 Relay wrote:
+> From: Dang Huynh <dang.huynh@mainlining.org>
 > 
-> {on,off}online_cpus_str not free after use
-
-How did you find this problem? The memory is released when cpupower
-exits - do you need this free?
-
+> Add documentation describing the SD/MMC controller in RDA Micro
+> RDA8810PL SoC.
 > 
-> Suggested-by: Jun Zhan <zhanjun@uniontech.com>
-> Signed-off-by: Cryolitia PukNgae <cryolitia@uniontech.com>
+> Signed-off-by: Dang Huynh <dang.huynh@mainlining.org>
 > ---
->   tools/power/cpupower/utils/helpers/misc.c | 4 ++++
->   1 file changed, 4 insertions(+)
+>  Documentation/devicetree/bindings/mmc/rda,mmc.yaml | 91 ++++++++++++++++++++++
+>  1 file changed, 91 insertions(+)
 > 
-> diff --git a/tools/power/cpupower/utils/helpers/misc.c b/tools/power/cpupower/utils/helpers/misc.c
-> index 166dc1e470ea6d70079fea6570750885d549603a..f3b4fe95520ff96a1be8b1ba8e7be1ec116b1bc0 100644
-> --- a/tools/power/cpupower/utils/helpers/misc.c
-> +++ b/tools/power/cpupower/utils/helpers/misc.c
-> @@ -213,6 +213,8 @@ void print_online_cpus(void)
->   		bitmask_displaylist(online_cpus_str, str_len, online_cpus);
->   		printf(_("Following CPUs are online:\n%s\n"), online_cpus_str);
->   	}
-> +
-> +	free(online_cpus_str);
->   }
->   
->   /* print_offline_cpus
-> @@ -232,6 +234,8 @@ void print_offline_cpus(void)
->   		printf(_("Following CPUs are offline:\n%s\n"), offline_cpus_str);
->   		printf(_("cpupower set operation was not performed on them\n"));
->   	}
-> +
-> +	free(offline_cpus_str);
->   }
->   
->   /*
-> 
+> diff --git a/Documentation/devicetree/bindings/mmc/rda,mmc.yaml b/Documentation/devicetree/bindings/mmc/rda,mmc.yaml
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..dfdd9c6d3044061c342519e35e39c7751874bb03
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mmc/rda,mmc.yaml
 
-thanks,
--- Shuah
+filename based on compatible.
+
+> @@ -0,0 +1,91 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mmc/rda,mmc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: RDA Micro SD/MMC Controller
+> +
+> +allOf:
+> +  - $ref: mmc-controller.yaml
+> +
+> +maintainers:
+> +  - Dang Huynh <dang.huynh@mainlining.org>
+> +
+> +properties:
+> +  compatible:
+> +    const: rda,8810pl-mmc
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  clock-names:
+> +    const: apb
+> +
+> +  resets:
+> +    maxItems: 1
+> +
+> +  dmas:
+> +    minItems: 2
+
+Drop
+
+> +    maxItems: 2
+> +
+> +  dma-names:
+> +    items:
+> +      - const: tx
+> +      - const: rx
+> +
+> +  rda,mclk-adj:
+> +    $ref: /schemas/types.yaml#/definitions/uint8
+> +    description:
+> +      Some board need MCLK to be adjusted for the card to work.
+> +      If not present, MCLK will be handled by an external PCLK.
+
+Adjusted for what? What is the value exactly? Where is the MCLK located?
+
+> +    minimum: 0
+> +    maximum: 255
+> +
+> +  rda,mclk-inv:
+> +    $ref: /schemas/types.yaml#/definitions/flag
+> +    description:
+> +      Some board need MCLK to be inverted for the card to work.
+> +      If not present, MCLK is not inverted.
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +  - clock-names
+> +  - resets
+> +  - dmas
+> +  - dma-names
+> +  - vmmc-supply
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    #include <dt-bindings/clock/rda,8810pl-apclk.h>
+> +    #include <dt-bindings/dma/rda-ifc.h>
+> +    mmc1: mmc@20950000 {
+
+Drop unused label.
+
+> +      compatible = "rda,8810pl-mmc";
+> +      reg = <0x20950000 0x1000>;
+> +      interrupts = <3 IRQ_TYPE_LEVEL_HIGH>;
+> +      clocks = <&ap_syscon CLK_APB2>;
+> +      clock-names = "apb";
+> +      resets = <&ap_syscon RST_APB2_SDMMC1>;
+> +      dmas = <&ifc IFC_SDMMC1_TX>, <&ifc IFC_SDMMC1_RX>;
+> +      dma-names = "tx", "rx";
+> +      vmmc-supply = <&vdd_sdmmc>;
+> +      rda,mclk-adj = /bits/ 8 <1>;
+> +      rda,mclk-inv;
+> +      status = "disabled";
+Cannot be disabled.
+
+Best regards,
+Krzysztof
 
