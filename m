@@ -1,224 +1,125 @@
-Return-Path: <linux-pm+bounces-34883-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34884-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF081B805FE
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 17:08:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4CC50B806D3
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 17:12:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 45ACB1C809CF
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 15:01:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BBB261C27274
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 15:05:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 535E0333AB9;
-	Wed, 17 Sep 2025 14:57:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4D59332A43;
+	Wed, 17 Sep 2025 15:02:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="rcgaLz0B"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sPT4O+Xv"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C443833592D
-	for <linux-pm@vger.kernel.org>; Wed, 17 Sep 2025 14:57:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB6E6332A39;
+	Wed, 17 Sep 2025 15:02:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758121078; cv=none; b=Z2NR0Jj+wllDycJenm/q5xZvajTnJ0K8R6/zWEKeGpqabNSQ1gop5GG0V5iBOM+zOR1wrbylYch/1vYSfT3G97szdb2HY69c1xw6aSobVQCSrmGvkyg6DebAd8eOOymqKNUwuMtZYbbJOMiOMNrcChu+6sMlikHGEFPDKXk6QOc=
+	t=1758121361; cv=none; b=ACSeIGDeOAtNYLCTep6Rb/ix4nHEt0XA30qRZXIcJ16zcdL7lAVTEejQIco9MKGj1GNNlksYIboO7IM3LyoNoOVdC+jvimUCXHzK8/H/daKp6NWvxGnr76bAa1qIJh1SCMiZIbwTUnjTUNx7DPsr1lGpnPmlsy82x5BvHsbBqIU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758121078; c=relaxed/simple;
-	bh=0lm6it3QlZzl73ho+O20bHsFQIQ20Ploay6fb04E/yE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NwXYzW+IPrOxefRx+ELS7iVh4hhw9siyqYnmDRXjHa6pwgsjBBGXc18ofOyAPyi9RrBPi3JTcpVEWyuoTOdzHHiqCfGPvOFkqeg8IjEF2zcXHtse8rIxpGcRsc19hu7mAapBslQj2NMmRpRt0clnPhbopB+lK+XjFyuIStBoLaU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=rcgaLz0B; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-45f2acb5f42so9126495e9.1
-        for <linux-pm@vger.kernel.org>; Wed, 17 Sep 2025 07:57:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1758121074; x=1758725874; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=VNJiPyXScWAskCoPGIAYsTwf0lJxfeavCsADGNiPscs=;
-        b=rcgaLz0BHQKyc7WirFsDkS0I9eFiWcE8R3p9tGxUZssQa23U++uWvHGBwe+9aK1Gd+
-         KbjTzolnBBfjOmknuthuVHMKhAoQr9blURtBJGfXrxeVx3qfRSCQqUVTyZ0n8yGeWnmo
-         BNNMd/bg06wV8GQO7lgfHo4qIEgy5MjHWO+3fLtpbcFKGxO+LfMQ6RSY0AtXod85IIhY
-         NhgZdbd7v2PJZSyQFFE4SlJyB4xtaHRAKi7YyTlNT3JifO9V9uIuOgGX3pDhyWNTz7xz
-         NAAUrOHghLsRT5yDbw13IL+A4pFunU9hvpWX+ANE395o4Ak5ugY4ciw1b8iigs5K0dKV
-         H1tg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758121074; x=1758725874;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VNJiPyXScWAskCoPGIAYsTwf0lJxfeavCsADGNiPscs=;
-        b=KvpsGNPfbilJiZZ2TP/wg/pikD9UWraKuEEbCAt4kqxQrEabtgCYCDnrvJ1mPg8c47
-         Pcf7So/VUWI5EbPaihTFI5gYmxfGtDDpcBv3nPdFrqP71g+Bhl4bT2E6dOB3gJY4e097
-         BmvQ7BEng8WGzfFAPS8ltib7a4t0WA6HHEJQQvCPfHCG08pE+mqO3XgGQivNpBaWMO7F
-         8qVg65GR5EzKlPwx/1InZ29LugLJGJPd4gs8pHdyPwHu6J83CdAQsEinHjjNv7dEZFrI
-         dL/u6YdmNv9HNp0it6OHZuDcAeoyNE65CzUAUx8KBZH6q76P0lmCsEEbNHtqZdibFcH5
-         GaPA==
-X-Forwarded-Encrypted: i=1; AJvYcCU6XQfVWrlo9jNcixl5nurlRkf/u50HDTkkJlQiPj5sH4LF4d2Lo9GhAhk+CdDM55LT8E1Kk9/C1w==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwHeal5gCD4ZAe7yTtlpfbRVIiK5kJtCFMV4iZpuRel4Cv7NIpK
-	6uRdl1wx3N1XGPH/PPauOSBvqC7cjIIooEf2obhxTVWPUh4HZi6wwFrMEWGCMf1qd5o=
-X-Gm-Gg: ASbGncuBgbjuRndDiQhx7yY2STQE0oEbr5YIiRfHtYDaNIlO5lBqk2lD73+fmZB2a7a
-	60+OlD1aLS63azzjrJNKDiX60kDK9MHW/5eDOrLaKf6nVHDEW0dUtsqdrO77bgpMVMnTrgkv/Hy
-	bUsArn3WMxBnSOGJZO9kHaM8F+QS7EOkazjiD3UdhFqTJazb9nN+zWPzaEnSYrQe8TGNLKAuQt9
-	3jm3jJH0fLNWvnbhkTTpWCM37GvnxRlHwjLDagubjEojFHRTA+6cCU9CIO6vM1WeD7lqochGH9l
-	A5AS9HB0zapRur9SmppbCkCKRhjqpDjqPdg/YcBaU4Lgu5VtAVdq67MUa+O/D/vUB7HnQ5d5yie
-	xs5t4GCa9TMBAUT5vG4t1HbdGy6DlsO4h/fbkwJWrLKqb81z0Q5tqGkzQzvMzSZoN
-X-Google-Smtp-Source: AGHT+IHaJ8RLGRWJjGkWj3mOlv4MrMyQtredyYklN46lH/3oMjKK5GoSCinEm44gnypkzxXye6/JJg==
-X-Received: by 2002:a05:600c:608b:b0:45d:e775:d8b8 with SMTP id 5b1f17b1804b1-45f32d002bamr73775275e9.1.1758121074054;
-        Wed, 17 Sep 2025 07:57:54 -0700 (PDT)
-Received: from localhost (p200300f65f06ab0400000000000001b9.dip0.t-ipconnect.de. [2003:f6:5f06:ab04::1b9])
-        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-46137930274sm39496035e9.6.2025.09.17.07.57.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Sep 2025 07:57:53 -0700 (PDT)
-Date: Wed, 17 Sep 2025 16:57:52 +0200
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: sboyd@kernel.org, jic23@kernel.org, dlechner@baylibre.com, 
-	nuno.sa@analog.com, andy@kernel.org, arnd@arndb.de, gregkh@linuxfoundation.org, 
-	srini@kernel.org, vkoul@kernel.org, kishon@kernel.org, sre@kernel.org, 
-	krzysztof.kozlowski@linaro.org, linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org, linux-pm@vger.kernel.org, 
-	kernel@collabora.com, wenst@chromium.org, casey.connolly@linaro.org, 
-	Jonathan Cameron <jonathan.cameron@huawei.com>, Neil Armstrong <neil.armstrong@linaro.org>
-Subject: Re: [PATCH v4 1/7] spmi: Implement spmi_subdevice_alloc_and_add()
- and devm variant
-Message-ID: <hsemgg5s3nptxeh3jyim6ahgb37yb3h3hcbdtwixiisyf7ehqk@r7zlg23yz5cv>
-References: <20250916084445.96621-1-angelogioacchino.delregno@collabora.com>
- <20250916084445.96621-2-angelogioacchino.delregno@collabora.com>
- <mr7gqhvom5soofn2oujzxtsuczsnx2yizkushar64cojwnvhd6@dt64ojgjqdxw>
- <a16cafd4-4d6c-45be-b241-45d2d6479bb1@collabora.com>
+	s=arc-20240116; t=1758121361; c=relaxed/simple;
+	bh=DkAob/mYPV+ZNAEqdno0NyXMgOtH4pnIcMp+zpKJAxo=;
+	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
+	 Message-Id:Subject; b=ETIURkWlzygAZ5X8pl6Z99kENYKuvTRSIG1J/nrGPBBVgOkxg5IR9LAofWZAj2oJ2wDVEYcTmaI64Xw1zvGIg/2vv1dbgK5DkkXPZO3YWYwdEpzRlgdaCOmoUVvGkhm2V5T9XuBAsnokQrnpAMEZw148L6RABQE7QoRFIwnTXGY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sPT4O+Xv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DCF7C4CEF0;
+	Wed, 17 Sep 2025 15:02:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1758121361;
+	bh=DkAob/mYPV+ZNAEqdno0NyXMgOtH4pnIcMp+zpKJAxo=;
+	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
+	b=sPT4O+XvDEdrvk/c00OHoqwWJCwrh5WRxwW2tzfT6VyUHJdXBW/vpmYjndvYkUg9Q
+	 4Jj9Bu94e75coQqY0ZAY3DnhFg5EnUERYbd+Vaw8+dHEgY/SaTmvfFtvCWDker95nM
+	 s12OIAXMjopWutHC5B0Za8oNtIDlU7dyKOuKm5ZSCarfmgLIUyiIepAtgS0QXD3Ffc
+	 zs+brP/jrIpbtZnJtf8IuRs5IGUWOWNxBhmesgdnr/BBP+LjJ2EYVPOO49nNr5QV6L
+	 c2FZ4OI4wGqia7QEs/0k4oAvTRgJtumOc1CuOa9RiZ3b+U34Djc9Idi3hiLW4FfUxg
+	 1kQS/hbO4N+tQ==
+Date: Wed, 17 Sep 2025 10:02:40 -0500
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="vd4q4xt757pbxzqi"
-Content-Disposition: inline
-In-Reply-To: <a16cafd4-4d6c-45be-b241-45d2d6479bb1@collabora.com>
+From: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: Kyungmin Park <kyungmin.park@samsung.com>, 
+ Jassi Brar <jassisinghbrar@gmail.com>, Kees Cook <kees@kernel.org>, 
+ Chia-I Wu <olvaffe@gmail.com>, Matthias Brugger <matthias.bgg@gmail.com>, 
+ linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ Thomas Zimmermann <tzimmermann@suse.de>, Conor Dooley <conor+dt@kernel.org>, 
+ Chanwoo Choi <cw00.choi@samsung.com>, Simona Vetter <simona@ffwll.ch>, 
+ linux-arm-kernel@lists.infradead.org, 
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ linux-pm@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+ Maxime Ripard <mripard@kernel.org>, Steven Price <steven.price@arm.com>, 
+ David Airlie <airlied@gmail.com>, Chen-Yu Tsai <wenst@chromium.org>, 
+ MyungJoo Ham <myungjoo.ham@samsung.com>, kernel@collabora.com, 
+ Boris Brezillon <boris.brezillon@collabora.com>, 
+ linux-hardening@vger.kernel.org, 
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+ devicetree@vger.kernel.org, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
+ Liviu Dudau <liviu.dudau@arm.com>
+To: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+In-Reply-To: <20250917-mt8196-gpufreq-v3-1-c4ede4b4399e@collabora.com>
+References: <20250917-mt8196-gpufreq-v3-0-c4ede4b4399e@collabora.com>
+ <20250917-mt8196-gpufreq-v3-1-c4ede4b4399e@collabora.com>
+Message-Id: <175812136009.2068624.13991293282844294346.robh@kernel.org>
+Subject: Re: [PATCH v3 01/10] dt-bindings: gpu: mali-valhall-csf: add
+ mediatek,mt8196-mali variant
 
 
---vd4q4xt757pbxzqi
-Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v4 1/7] spmi: Implement spmi_subdevice_alloc_and_add()
- and devm variant
-MIME-Version: 1.0
+On Wed, 17 Sep 2025 14:22:32 +0200, Nicolas Frattaroli wrote:
+> The Mali-based GPU on the MediaTek MT8196 SoC uses a separate MCU to
+> control the power and frequency of the GPU.
+> 
+> It lets us omit the OPP tables from the device tree, as those can now be
+> enumerated at runtime from the MCU. It also means the mali GPU node
+> described in this binding does not have any clocks in this case, as all
+> clock control is delegated to the MCU.
+> 
+> Add the mediatek,mt8196-mali compatible, and a performance-domains
+> property which points to the MCU's device tree node in this case. It's
+> required on mt8196 devices.
+> 
+> Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+> ---
+>  .../bindings/gpu/arm,mali-valhall-csf.yaml         | 32 ++++++++++++++++++++--
+>  1 file changed, 30 insertions(+), 2 deletions(-)
+> 
 
-Hello AngeloGioacchino,
+My bot found errors running 'make dt_binding_check' on your patch:
 
-On Wed, Sep 17, 2025 at 01:41:40PM +0200, AngeloGioacchino Del Regno wrote:
-> Il 16/09/25 15:25, Uwe Kleine-K=F6nig ha scritto:
-> > Hello AngeloGioacchino,
-> >=20
-> > On Tue, Sep 16, 2025 at 10:44:39AM +0200, AngeloGioacchino Del Regno wr=
-ote:
-> > > +/**
-> > > + * spmi_subdevice_alloc_and_add(): Allocate and add a new SPMI sub-d=
-evice
-> > > + * @sparent:	SPMI parent device with previously registered SPMI cont=
-roller
-> > > + *
-> > > + * Returns:
-> > > + * Pointer to newly allocated SPMI sub-device for success or negativ=
-e ERR_PTR.
-> > > + */
-> > > +struct spmi_subdevice *spmi_subdevice_alloc_and_add(struct spmi_devi=
-ce *sparent)
-> > > +{
-> > > +	struct spmi_subdevice *sub_sdev;
-> > > +	struct spmi_device *sdev;
-> > > +	int ret;
-> > > +
-> > > +	sub_sdev =3D kzalloc(sizeof(*sub_sdev), GFP_KERNEL);
-> > > +	if (!sub_sdev)
-> > > +		return ERR_PTR(-ENOMEM);
-> > > +
-> > > +	ret =3D ida_alloc(&spmi_subdevice_ida, GFP_KERNEL);
-> > > +	if (ret < 0) {
-> > > +		kfree(sub_sdev);
-> > > +		return ERR_PTR(ret);
-> > > +	}
-> > > +
-> > > +	sdev =3D &sub_sdev->sdev;
-> > > +	sdev->ctrl =3D sparent->ctrl;
-> > > +	device_initialize(&sdev->dev);
-> > > +	sdev->dev.parent =3D &sparent->dev;
-> > > +	sdev->dev.bus =3D &spmi_bus_type;
-> > > +	sdev->dev.type =3D &spmi_subdev_type;
-> > > +
-> > > +	sub_sdev->devid =3D ret;
-> > > +	sdev->usid =3D sparent->usid;
-> > > +
-> > > +	ret =3D dev_set_name(&sdev->dev, "%d-%02x.%d.auto",
-> > > +			   sdev->ctrl->nr, sdev->usid, sub_sdev->devid);
-> >=20
-> > If I understand correctly sub_sdev->devid is globally unique. I wonder
-> > if a namespace that is specific to the parent spmi device would be more
-> > sensible?!
->=20
-> Only in the context of the children of sdev. I'm not sure of what you're =
-proposing
-> here, looks like it would complicate the code for no big reason - unless =
-I am
-> misunderstanding something here.
+yamllint warnings/errors:
 
-The thing that I wondered about is: Why use sdev->usid if
-sub_sdev->devid is already a unique description of the subdevice? And
-for other device types (platform devices, mfd) the device identifiers
-are not globally unique. So I just wondered why spmi is different here.
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/gpu/arm,mali-valhall-csf.example.dtb: gpu@48000000 (mediatek,mt8196-mali): 'clocks' is a required property
+	from schema $id: http://devicetree.org/schemas/gpu/arm,mali-valhall-csf.yaml#
 
-> > > +	if (ret)
-> > > +		goto err_put_dev;
-> > > +
-> > > +	ret =3D device_add(&sdev->dev);
-> > > +	if (ret) {
-> > > +		dev_err(&sdev->dev, "Can't add %s, status %d\n",
-> >=20
-> > I'd use %pe instead of %d here.
-> >=20
->=20
-> The only reason why I am using %d is for consistency with the rest of the=
- code that
-> is in SPMI - there is another device_add() call in spmi_device_add() whic=
-h prints
-> the same error in the very same way as I'm doing here.
->=20
-> I agree that using %pe makes error prints more readable, but perhaps that=
- should be
-> done as a later cleanup to keep prints consistent (and perhaps that shoul=
-d not be
-> done only in SPMI anyway).
->=20
-> If you have really strong opinions about doing that right now I can do it=
-, but I
-> anyway prefer seeing that as a later commit doing that in the entire SPMI=
- codebase.
+doc reference errors (make refcheckdocs):
 
-My approach would be to first convert the driver to use %pe and then
-add the new code. But I don't feel strong.
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20250917-mt8196-gpufreq-v3-1-c4ede4b4399e@collabora.com
 
-Best regards
-Uwe
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
 
---vd4q4xt757pbxzqi
-Content-Type: application/pgp-signature; name="signature.asc"
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
------BEGIN PGP SIGNATURE-----
+pip3 install dtschema --upgrade
 
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmjKzG0ACgkQj4D7WH0S
-/k6QAwgAjFK8Yjwpa5jj8yoQmTljLuhXr3CuLMG/fOZmijXiT4J5ufD4aliJbr4c
-zkNE7I3gWE8MV1guDtw7WULdaj7y1RnKRvOVADynBNQpXb6TuHwp8Gwf9IEZNbtJ
-Vi+wPP46epW94GY1SGjJHd6SJzg3ZqIO5LAAuEQwlXcrm4Y513Kv9pflqChHkr2D
-rNpkyVdzDbrIjBpnmqbpYsi/bMShr0GL0/PIzE0wd/0cFYjLRc+PsjvTtXmnJ6SW
-NC4IDWqztRVrsKZJNYc4mI8oD/ysZDjKGs62xmrcNrJxnYuZO0bzIZXGctuailWF
-faHHEN/aOhC5FVoar9BuOkvPukStTQ==
-=HAfP
------END PGP SIGNATURE-----
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
---vd4q4xt757pbxzqi--
 
