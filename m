@@ -1,208 +1,111 @@
-Return-Path: <linux-pm+bounces-34815-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34818-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B1C47B7DE75
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 14:36:35 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 955FBB7F3BE
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 15:27:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 67AC13256F5
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 00:48:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7CD1F5279B1
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 02:28:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8F9D1D7995;
-	Wed, 17 Sep 2025 00:48:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B0662F4A0F;
+	Wed, 17 Sep 2025 02:28:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K0t/livV"
+	dkim=pass (2048-bit key) header.d=richtek.com header.i=@richtek.com header.b="y3rcKqy8";
+	dkim=pass (2048-bit key) header.d=richtek.com header.i=@richtek.com header.b="ZkWECd8F"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 988613C38;
-	Wed, 17 Sep 2025 00:48:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from mg.richtek.com (mg.richtek.com [220.130.44.152])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF52DA945;
+	Wed, 17 Sep 2025 02:28:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.130.44.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758070095; cv=none; b=eHp75BNQ0ZlRrN5eg2HnLjSZd+DTb/2LJpC2lFk5Npk0PhwRK/+DavIrhlXHIAeAc3kBlsV6xedJZKFIfjcRQ9oisgAHMjfN/yC76WxUW8NPxwqHr18iReo55Aw6J0lBc8cGIPNz1ZqYuCsqrOrk9qZu4InSAt3Tpaz1XF3z1PA=
+	t=1758076107; cv=none; b=MZ0d1kOEQo/PwV6Jg0tpjisD7TDQk+LyL4ElFKrVRGaPMaq93m/xGj/HSXKz/FOZFs0jfuqVvVFJ27wEAlmoSusg170OznY8NA2Y33uMpOLtdOtEmnF/D5G/95OpRPDRTKWu0V4XM2YsWwAIg9SSj52VuI90EPz01wDP35mN0+0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758070095; c=relaxed/simple;
-	bh=vRAIdXOKpdVJ8Lf99sSrDe0C/XqGhJEXcMlToVAczkw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mHWwqjYjYeSJcqCkcsAlhMtNTUxt2peMaCxtZn3AmG07jgw8/HogOM0GP8nanbNbk0N289IsvHDy1bj41YsmdYr8KvD0GoyH1Bk8gLYACQwKB/wdb3bxJP12cf6MGIkRXtKdsx2jmoyzCd5S83P0UDNG1EranWb/Twc3gPAe7b8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K0t/livV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E2B4C4CEEB;
-	Wed, 17 Sep 2025 00:48:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758070093;
-	bh=vRAIdXOKpdVJ8Lf99sSrDe0C/XqGhJEXcMlToVAczkw=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=K0t/livV7JVeClOD327d/qqH+7bPLmtwCtUAJNyAbwUbdBxrXnNKuIqZ+AwNdd2BV
-	 cQA3K4NJbV7X8PX/wvADs8uoeeOhoZE7q9OazCNkWER+VCC1//CMSVaZxONa2lXbpR
-	 pX428vSOZrA9aUEjFRQmxrfYu0a90uAtjUQYNQhyalHdhpbjxPMeRmZWbydFr6qMlp
-	 v5nfn4927S1ISQ7YbXS7oRU3TSJ0MbdgFYdMqnzG9owOAt/yFvPQgmt8J+EIz6DkY+
-	 Biz2db5mCyl/NN16pk+LfwEsDc4qrnnNfcInhj9lZxmItZjv7gDRjn57U/aCdjrOtM
-	 1uxvsDOVHOLoA==
-Message-ID: <d2f4d539-ebd2-4871-ba76-74b38dd41395@kernel.org>
-Date: Wed, 17 Sep 2025 09:48:06 +0900
+	s=arc-20240116; t=1758076107; c=relaxed/simple;
+	bh=OnpiZSO0b+Sxjgg34yMJ7AAqILDqY4/TGFhPauWwkdg=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=h/uzYNlqZ7YDFWJgPRjcUJ+XTrBfB3bktYn9zRsX250gs2r2/u7d/D8RJ+5GnkUggt+ykBcf2M7RrQz+kiy2EZyWoDorx0ZjFP4oOfWWvgX+qbPj91mB0uxmf1eW55JoMpzxWwAsmdk2B3KiVE2n2yJK82yoIGCT6FUmnNj0R5g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=richtek.com; spf=pass smtp.mailfrom=richtek.com; dkim=pass (2048-bit key) header.d=richtek.com header.i=@richtek.com header.b=y3rcKqy8; dkim=pass (2048-bit key) header.d=richtek.com header.i=@richtek.com header.b=ZkWECd8F; arc=none smtp.client-ip=220.130.44.152
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=richtek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=richtek.com
+X-MailGates: (SIP:2,PASS,NONE)(compute_score:DELIVER,40,3)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=richtek.com;
+	s=richtek; t=1758076102;
+	bh=+TW4aUZsbAAxJpYRNd4uBBxUv/b/AscrjcBfhNX6yts=; l=617;
+	h=Date:From:To:Subject:Message-ID:MIME-Version;
+	b=y3rcKqy8LsZm7aH00g8hocbILVzuKiweCuNIN4YCVk2W1EYBm21HE4VzPZ8Qto2B8
+	 2q8Umj35U72y8xsMpykTU8wF8XXUfKl7M27+ygFucAHrDIDT55yHhUAWI7o34N6wGA
+	 pIsO0Ch57cTos+qFhjgTTNQAWZjBu9fs1We+xqz48YsJgqxxMJ7Rwm0EPUqV5bKXzV
+	 NPIukXJHES2grvesbIRd+XEYjg6Pl/XVmoykd1ICFctEnhzL0eXfinKiDI9dsRpkTf
+	 nl5Mq4hZQGeiYH8H11Ilc4kuX7Grox8gYMXUuMCqcnLeuKgiMmBouOQ9qTdvsfPiqn
+	 B15qlGpFWKEzw==
+Received: from 192.168.8.21
+	by mg.richtek.com with MailGates ESMTP Server V3.0(1128080:0:AUTH_RELAY)
+	(envelope-from <prvs=13528E3224=cy_huang@richtek.com>); Wed, 17 Sep 2025 10:28:19 +0800 (CST)
+X-MailGates: (compute_score:DELIVER,40,3)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=richtek.com;
+	s=richtek; t=1758076099;
+	bh=+TW4aUZsbAAxJpYRNd4uBBxUv/b/AscrjcBfhNX6yts=; l=617;
+	h=Date:From:To:Subject:Message-ID:MIME-Version;
+	b=ZkWECd8FZM49zNKNCqNfRYfZGFICPA+ZCrWiuQG1eY9qPSf6EVO7pAA5NIdiinBI8
+	 Ab05PX5JnykuFqeJkOm+mT3gSDB/ATAvn9ZAf+8mw9i0SVVbONH5jJkfW0gyJDivOu
+	 x8HSy08jfNZUbA5AKMSWCNkhgK9Ul2uynoI4bHWVnN68UKyfo/uaHi9A0ZCbLI6IRu
+	 6yx8kGCOkJxGuhOzPmwUR1aiEYXefdGeGKvJtP+Eb2ejqkLQ4w/m8ErS9Plyw/P9ub
+	 c/UAfvy9u3WaDSRjUgnriuxX0asNLJGk2SVZrCN+ckpYLGue3AVGPLEoleQG/WISxi
+	 h2lpNVM5MKmKQ==
+Received: from 192.168.10.46
+	by mg.richtek.com with MailGates ESMTPS Server V6.0(2461095:0:AUTH_RELAY)
+	(envelope-from <cy_huang@richtek.com>)
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256/256); Wed, 17 Sep 2025 10:18:33 +0800 (CST)
+Received: from ex3.rt.l (192.168.10.46) by ex3.rt.l (192.168.10.46) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1748.26; Wed, 17 Sep
+ 2025 10:18:33 +0800
+Received: from git-send.richtek.com (192.168.10.154) by ex3.rt.l
+ (192.168.10.45) with Microsoft SMTP Server id 15.2.1748.26 via Frontend
+ Transport; Wed, 17 Sep 2025 10:18:33 +0800
+Date: Wed, 17 Sep 2025 10:19:44 +0800
+From: ChiYuan Huang <cy_huang@richtek.com>
+To: Sebastian Reichel <sre@kernel.org>, Krzysztof Kozlowski
+	<krzk+dt@kernel.org>
+CC: Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+	<devicetree@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH RESEND v2 0/3] Add Richtek RT9756 Smart-Cap divider
+ charger
+Message-ID: <aMoawDH7V/ea4i62@git-send.richtek.com>
+References: <cover.1755154950.git.cy_huang@richtek.com>
+ <aLY3/dNLdF/Iiwq6@git-send.richtek.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 22/25] mmc: host: Add RDA Micro SD/MMC driver
-To: dang.huynh@mainlining.org, Manivannan Sadhasivam <mani@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Linus Walleij
- <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>,
- Sebastian Reichel <sre@kernel.org>, Vinod Koul <vkoul@kernel.org>,
- Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- Ulf Hansson <ulf.hansson@linaro.org>
-Cc: linux-arm-kernel@lists.infradead.org, linux-unisoc@lists.infradead.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
- linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
- dmaengine@vger.kernel.org, linux-hardening@vger.kernel.org,
- linux-mmc@vger.kernel.org
-References: <20250917-rda8810pl-drivers-v1-0-9ca9184ca977@mainlining.org>
- <20250917-rda8810pl-drivers-v1-22-9ca9184ca977@mainlining.org>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20250917-rda8810pl-drivers-v1-22-9ca9184ca977@mainlining.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <aLY3/dNLdF/Iiwq6@git-send.richtek.com>
 
-On 17/09/2025 22:25, Dang Huynh via B4 Relay wrote:
-> From: Dang Huynh <dang.huynh@mainlining.org>
+On Tue, Sep 02, 2025 at 08:19:09AM +0800, ChiYuan Huang wrote:
+> On Thu, Aug 14, 2025 at 03:31:05PM +0800, cy_huang@richtek.com wrote:
+> > From: ChiYuan Huang <cy_huang@richtek.com>
+> > 
+> > This patch series adds support for RT9756 charger.
+> > 
+> > RESEND V2
+> > - Add 'Reviewed-by' tag in dt-binding patch
+> > 
+> > V2
+> > - Add reference to 'power-supply.yaml'
+> > - Remove 'wakeup-source' from required property list
+> > - Use 'unevaluatedProperties' to replace 'additionalProperties'
 > 
-> RDA Micro RDA8810PL includes an SD/MMC controller. This controller
-> supports SD/SDIO/MMC interface.
+> Ping......
+> It's been one month not receive any patch review comment.
 > 
-> Signed-off-by: Dang Huynh <dang.huynh@mainlining.org>
-> ---
->  MAINTAINERS                |   6 +
->  drivers/mmc/host/Kconfig   |  12 +
->  drivers/mmc/host/Makefile  |   1 +
->  drivers/mmc/host/rda-mmc.c | 853 +++++++++++++++++++++++++++++++++++++++++++++
->  4 files changed, 872 insertions(+)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 91be43782f4ba8aacb629002d357a66704f10b2b..33e04ce35dcc4cbadd715ec9199f2453237b8002 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -21417,6 +21417,12 @@ S:	Maintained
->  F:	Documentation/devicetree/bindings/rtc/rda,8810pl-rtc.yaml
->  F:	drivers/rtc/rtc-rda.c
->  
-> +RDA MICRO SECURE DIGITAL AND MULTIMEDIA CARD DRIVER
-> +M:	Dang Huynh <dang.huynh@mainlining.org>
-> +S:	Maintained
-> +F:	Documentation/devicetree/bindings/mmc/rda,mmc.yaml
-> +F:	drivers/mmc/host/rda-mmc.c
-> +
->  RDACM20 Camera Sensor
->  M:	Jacopo Mondi <jacopo+renesas@jmondi.org>
->  M:	Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-> diff --git a/drivers/mmc/host/Kconfig b/drivers/mmc/host/Kconfig
-> index 4afa0130779d97ca9d1c0ed2102b0babdedcaeeb..352a6eb4e30793b7311c7877c238a7fe31121123 100644
-> --- a/drivers/mmc/host/Kconfig
-> +++ b/drivers/mmc/host/Kconfig
-> @@ -1040,6 +1040,18 @@ config MMC_MTK
->  	  This is needed if support for any SD/SDIO/MMC devices is required.
->  	  If unsure, say N.
->  
-> +config MMC_RDA
-> +	tristate "RDA Micro SD/MMC Card Interface support"
-> +	depends on ARCH_RDA
-
-Missing compile test
-
-> +	depends on COMMON_CLK
-> +	depends on HAS_DMA
-> +	help
-> +	  This selects the RDA Micro Secure digital and Multimedia card interface. The
-> +	  controller supports SD/SDIO/MMC interface.
-> +	  If you have a board with RDA SoC and it uses this interface, say Y or M here.
-> +
-> +	  If unsure, say N.
-
-
-...
-
-> +};
-> +MODULE_DEVICE_TABLE(of, rda_mmc_dt_ids);
-> +
-> +static struct platform_driver rda_mmc_driver = {
-> +	.probe		= rda_mmc_probe,
-> +	.remove		= rda_mmc_remove,
-> +	.driver		= {
-> +		.name	= "rda-mmc",
-> +		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
-> +		.of_match_table = rda_mmc_dt_ids,
-> +	},
-> +};
-> +module_platform_driver(rda_mmc_driver);
-> +
-> +MODULE_AUTHOR("Dang Huynh <dang.huynh@mainlining.org>");
-> +MODULE_LICENSE("GPL");
-> +MODULE_DESCRIPTION("MMC/SD driver for RDA platform");
-> +MODULE_ALIAS("platform:rda-mmc");
-
-You should not need MODULE_ALIAS() in normal cases. If you need it,
-usually it means your device ID table is wrong (e.g. misses either
-entries or MODULE_DEVICE_TABLE()). MODULE_ALIAS() is not a substitute
-for incomplete ID table.
-
-
-> 
-
-
-Best regards,
-Krzysztof
+Ping again.
+> Regards,
+> ChiYuan.
 
