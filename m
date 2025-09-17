@@ -1,59 +1,60 @@
-Return-Path: <linux-pm+bounces-34854-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34855-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4B5EB7D657
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 14:27:32 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45391B7D59A
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 14:25:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EE66D18887DD
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 12:24:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DACCE584F23
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 12:24:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 151EC30CB51;
-	Wed, 17 Sep 2025 12:23:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AAAE2FBDFE;
+	Wed, 17 Sep 2025 12:23:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="S5CaLcum"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="i4DCo5WY"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CF952FBDF1;
-	Wed, 17 Sep 2025 12:23:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 536DD31A7FC;
+	Wed, 17 Sep 2025 12:23:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758111820; cv=pass; b=Ur1GPT1eB05Tnwe8yEkAYVf+UO9iGv1RlkapM3IWdogyJc46UyqHtpZP/QYVEkWNgaBZsAY0alGbkhgn+AfvdJHaD1jA9LVbacSZzFuzBIno8ZGAoLdFgLmXP4KWnDxc0bJQg5npnaXEFMRDL9BThJouSC4MemoX5idPeA/UP7I=
+	t=1758111826; cv=pass; b=fqDCHcejekrxDi3yEiKjZLT46wd18JnIVt6avfqcLU2KRyN0Ud2/5zg49KzoxDGXq9lvpxHW1XU6ngILwkzlfWDSt4po237UkrZdmrz5TdLRwk3pdCvEnyaY6VrAfffda5//TvGRmJzqwa32FMCMrkRF7ynT5SaMmyjr6gTYcoI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758111820; c=relaxed/simple;
-	bh=9f6gmPt02hURiCDSOZMJjp6AiCDZWoTKE4B2L93oIl0=;
+	s=arc-20240116; t=1758111826; c=relaxed/simple;
+	bh=421VgOvXlFdib7pr2C3QvpqejdW2jnU9weK0/zlHcCo=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=uqhwtoOSHuXZTLdzDTcLGf0ou7bckbLnIGLaD+vSU4/pu6sGATI3Ec3CAZvCrV2a2nWxncH7DIQuiGlU6duEootTssiYMz3VgzGRB+ChZq+x7FPGnaEiqjnd3Ui2MoE6oZMJDxPP13JzxMqkXZTfBg470+FaFWpD0d0QaOA9Oww=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=S5CaLcum; arc=pass smtp.client-ip=136.143.188.112
+	 In-Reply-To:To:Cc; b=B+0UIIQeCGDwAlDmppvYKHvHFhhdZ3POsOik3qwyngZTpJ+1zrLqq7ecDIL+YDM2/puBRB4BoRw9iHkqGaOF7YULUz890DYt+Rqp+LcGTIzKsnuN7hjnX3tVh0Dz3fmpnrwvu0t21U4sO6mXTcoSXWm1c3QggRhr8TFHH2Ilsi8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=i4DCo5WY; arc=pass smtp.client-ip=136.143.188.112
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1758111792; cv=none; 
+ARC-Seal: i=1; a=rsa-sha256; t=1758111798; cv=none; 
 	d=zohomail.com; s=zohoarc; 
-	b=QnWCOGsclrlkOoC4bYtcIHMJLCnzcOWM6YhnWHWO5Dyhyo7eF2rNlvw9zKQ9BSHpkZtw6/NysgTYVmuUAzkNl4Zi91NQd5GRe6J1z+W8K3hdKemkq7qde4EL4scfxa+MUScteFkjxLM98S5ZRI6vmIqJBFSYXUohMn5QDXuw8as=
+	b=W26Gva+bHpne6WMF5uKZgSqyBdL92tU9AnT3VLV5vReGApyw/lpS1kfdh/F6CkLxYx3E7kPKFVjY6cNjhXv4jEthGME0FEOcHfTIEzqnmGyUX/M4C+mY/aq7Ka3H1NUJfdSK/domA/9lt4PMszsYzlipsSCGUZlC/JGOmeK2ils=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1758111792; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=TSOOSd0q3nKiD0MBVwkJ48zGfTq+ks978YmNhkmC9YQ=; 
-	b=hRSrA2kA/tSk+NX+0d1Zb5anC1B7ESaFGVF1AOreEfo7DGbZUGGIZisxOKkClYicQlxEQVcz3IR6CNOkhMGIPnHIhyLPh+VzrrFD+4zJRWbN/pNqVG5AOTKnwC+0Xx+/7zJmpKIYSsLeKmzYhH4/jQqkJgEfl8/ElFgdQpOZiCU=
+	t=1758111798; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=5o2cb+RS3e9vM6xcSLE475S0MGwfkgp0FUKoEaEDRlU=; 
+	b=SmYBeiKwTHFMvt+H/brPs39DJxvj1ox6WWx4ySNfIkpA4gfJRsTNbLsZ9MuoB5bFRgYsTM7dbM17z2efC0TPFlQWckP9e29o92rALU0/qPGM9+Bjf+B0F/F324ZL3wWMgNruGG9hSkMaH4KXH20S3hJIdk3yQ+VvYf5JBpr27lU=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
 	dkim=pass  header.i=collabora.com;
 	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
 	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1758111792;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1758111798;
 	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
 	h=From:From:Date:Date:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Message-Id:References:In-Reply-To:To:To:Cc:Cc:Reply-To;
-	bh=TSOOSd0q3nKiD0MBVwkJ48zGfTq+ks978YmNhkmC9YQ=;
-	b=S5CaLcumJ7rs6Md6yy14/YJvYczWvvUpwNFjmMUjD0g7S1Wj+04QKuS1T0IUFd9B
-	GgHD85qqt9/veXEPcVgF+sjXfLQ6Wc0UdNrcB4N2T1YiW82lXghQczAKnqqoJ/C4xkK
-	PKqkvKOS80BM9h8ZjVE4oEEyRJRUEKkb2qU/rt0M=
-Received: by mx.zohomail.com with SMTPS id 1758111789568560.3619392555413;
-	Wed, 17 Sep 2025 05:23:09 -0700 (PDT)
+	bh=5o2cb+RS3e9vM6xcSLE475S0MGwfkgp0FUKoEaEDRlU=;
+	b=i4DCo5WY9wx1Nlz15PunPPIbyzf93vuMZIhJwrDhzSI5Wmmku+h22ChhntkLQUIK
+	KCr1/t17NX8VhRZtHzJkN1j7D9GcCrFNI6ZquzDaxpWr+iM18TTDAnXyADGrFzxT8p3
+	gWXtFg4aEu+p44OupSMXYAQlDQVCnF2PK4adFufk=
+Received: by mx.zohomail.com with SMTPS id 1758111796622265.07880855548797;
+	Wed, 17 Sep 2025 05:23:16 -0700 (PDT)
 From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-Date: Wed, 17 Sep 2025 14:22:33 +0200
-Subject: [PATCH v3 02/10] dt-bindings: devfreq: add mt8196-gpufreq binding
+Date: Wed, 17 Sep 2025 14:22:34 +0200
+Subject: [PATCH v3 03/10] dt-bindings: sram: Add compatible for
+ mediatek,mt8196-gpufreq-sram
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -62,7 +63,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250917-mt8196-gpufreq-v3-2-c4ede4b4399e@collabora.com>
+Message-Id: <20250917-mt8196-gpufreq-v3-3-c4ede4b4399e@collabora.com>
 References: <20250917-mt8196-gpufreq-v3-0-c4ede4b4399e@collabora.com>
 In-Reply-To: <20250917-mt8196-gpufreq-v3-0-c4ede4b4399e@collabora.com>
 To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
@@ -86,140 +87,31 @@ Cc: kernel@collabora.com, dri-devel@lists.freedesktop.org,
  Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 X-Mailer: b4 0.14.2
 
-On the MediaTek MT8196 SoC, the GPU has its power and frequency
-dynamically controlled by an embedded special-purpose MCU. This MCU is
-in charge of powering up the GPU silicon. It also provides us with a
-list of available OPPs at runtime, and is fully in control of all the
-regulator and clock fiddling it takes to reach a certain level of
-performance. It's also in charge of enforcing limits on power draw or
-temperature.
+This compatible is used for an SRAM section that's shared between the
+MT8196's application processor cores and the embedded GPUEB MCU that
+controls the GPU frequency.
 
-Add a binding for this device in the devfreq subdirectory, where it
-seems to fit in best considering its tasks.
+Through this SRAM section, things about the GPU frequency controller
+like the OPP table can be read.
 
+Acked-by: Rob Herring (Arm) <robh@kernel.org>
 Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 ---
- .../bindings/devfreq/mediatek,mt8196-gpufreq.yaml  | 112 +++++++++++++++++++++
- 1 file changed, 112 insertions(+)
+ Documentation/devicetree/bindings/sram/sram.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/devfreq/mediatek,mt8196-gpufreq.yaml b/Documentation/devicetree/bindings/devfreq/mediatek,mt8196-gpufreq.yaml
-new file mode 100644
-index 0000000000000000000000000000000000000000..b1c6751662c085eccdead038a2edc61e4bfc5f5f
---- /dev/null
-+++ b/Documentation/devicetree/bindings/devfreq/mediatek,mt8196-gpufreq.yaml
-@@ -0,0 +1,112 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/devfreq/mediatek,mt8196-gpufreq.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: MediaTek MFlexGraphics Performance Controller
-+
-+maintainers:
-+  - Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-+
-+description: |
-+  A special-purpose embedded MCU to control power and frequency of GPU devices
-+  using MediaTek Flexible Graphics integration hardware.
-+
-+properties:
-+  $nodename:
-+    pattern: '^performance-controller@[a-f0-9]+$'
-+
-+  compatible:
-+    enum:
-+      - mediatek,mt8196-gpufreq
-+
-+  reg:
-+    items:
-+      - description: GPR memory area
-+      - description: RPC memory area
-+      - description: SoC variant ID register
-+
-+  reg-names:
-+    items:
-+      - const: gpr
-+      - const: rpc
-+      - const: hw-revision
-+
-+  clocks:
-+    items:
-+      - description: main clock of the embedded controller (EB)
-+      - description: core PLL
-+      - description: stack 0 PLL
-+      - description: stack 1 PLL
-+
-+  clock-names:
-+    items:
-+      - const: eb
-+      - const: core
-+      - const: stack0
-+      - const: stack1
-+
-+  mboxes:
-+    items:
-+      - description: FastDVFS events
-+      - description: frequency control
-+      - description: sleep control
-+      - description: timer control
-+      - description: frequency hopping control
-+      - description: hardware voter control
-+      - description: FastDVFS control
-+
-+  mbox-names:
-+    items:
-+      - const: fast-dvfs-event
-+      - const: gpufreq
-+      - const: sleep
-+      - const: timer
-+      - const: fhctl
-+      - const: ccf
-+      - const: fast-dvfs
-+
-+  shmem:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description: phandle to the shared memory region of the GPUEB MCU
-+
-+  "#performance-domain-cells":
-+    const: 0
-+
-+required:
-+  - compatible
-+  - reg
-+  - reg-names
-+  - clocks
-+  - clock-names
-+  - mboxes
-+  - mbox-names
-+  - shmem
-+  - "#performance-domain-cells"
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/mediatek,mt8196-clock.h>
-+
-+    performance-controller@4b09fd00 {
-+        compatible = "mediatek,mt8196-gpufreq";
-+        reg = <0x4b09fd00 0x80>,
-+              <0x4b800000 0x1000>,
-+              <0x4b860128 0x4>;
-+        reg-names = "gpr", "rpc", "hw-revision";
-+        clocks = <&topckgen CLK_TOP_MFG_EB>,
-+                 <&mfgpll CLK_MFG_AO_MFGPLL>,
-+                 <&mfgpll_sc0 CLK_MFGSC0_AO_MFGPLL_SC0>,
-+                 <&mfgpll_sc1 CLK_MFGSC1_AO_MFGPLL_SC1>;
-+        clock-names = "eb", "core", "stack0", "stack1";
-+        mboxes = <&gpueb_mbox 0>, <&gpueb_mbox 1>, <&gpueb_mbox 2>,
-+                 <&gpueb_mbox 3>, <&gpueb_mbox 4>, <&gpueb_mbox 5>,
-+                 <&gpueb_mbox 7>;
-+        mbox-names = "fast-dvfs-event", "gpufreq", "sleep", "timer", "fhctl",
-+                     "ccf", "fast-dvfs";
-+        shmem = <&gpufreq_shmem>;
-+        #performance-domain-cells = <0>;
-+    };
+diff --git a/Documentation/devicetree/bindings/sram/sram.yaml b/Documentation/devicetree/bindings/sram/sram.yaml
+index 7c1337e159f2371401ae99313375656fff014ed4..6ba0dd6a66def11f56a1d5276d7397b655bff11e 100644
+--- a/Documentation/devicetree/bindings/sram/sram.yaml
++++ b/Documentation/devicetree/bindings/sram/sram.yaml
+@@ -89,6 +89,7 @@ patternProperties:
+             - arm,juno-scp-shmem
+             - arm,scmi-shmem
+             - arm,scp-shmem
++            - mediatek,mt8196-gpufreq-sram
+             - renesas,smp-sram
+             - rockchip,rk3066-smp-sram
+             - samsung,exynos4210-sysram
 
 -- 
 2.51.0
