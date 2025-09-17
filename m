@@ -1,135 +1,167 @@
-Return-Path: <linux-pm+bounces-34874-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34875-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48C0BB800B0
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 16:35:52 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 95118B800C2
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 16:36:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1FE4216B1ED
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 14:33:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3A2C917E9BC
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 14:33:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 924842F066A;
-	Wed, 17 Sep 2025 14:32:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8D342F0C59;
+	Wed, 17 Sep 2025 14:33:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ZAzfgnhf"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="C3UUbFRm"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B65CD2D46A4
-	for <linux-pm@vger.kernel.org>; Wed, 17 Sep 2025 14:32:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 117662EF667
+	for <linux-pm@vger.kernel.org>; Wed, 17 Sep 2025 14:33:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758119579; cv=none; b=tMMQ0j3hdvScF6bZvF0TM+bkFSLOKJuYIxdiHe9AUjk2JW5/H8tzZJWGUSQzb0Dyi1RfeRdY40peZz9hz9koc3qSveEed2esK57W6loTNFjEATr2QI7yum+EJgxIA20XOHv3XYze4XfY1t57k66V2prSK+yafYrpCSQjNTlifIE=
+	t=1758119590; cv=none; b=dMFdlc276T34gd8LjUCod6lBpI+RehvR3nuD2pa/Iy3Fv3KXLUqsgWCkDE9mQZUk/3vNISy1X5Rc6EtD4Bim9GV1LehCqUOk0xogm6EE8wCGH/22gdwOW5rE4jjzPohdMnex6Y+GEYqXfe5N0HYvSCDPPosdPD0dIRg/7NbSvVY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758119579; c=relaxed/simple;
-	bh=tcnHxortbdFdgmr9duRFABSbgVONmqvd0HPd6fDcn/A=;
+	s=arc-20240116; t=1758119590; c=relaxed/simple;
+	bh=RKaFL/f/x+BpU4Xk7oekVWLIrBOIODf0tIBd2+YRAto=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=d6wa6ORwvdN0OnSa/2ggGwI8FnLYIzizzYbAheDizxIr8tHgsVX3XY3+jJmwwiE+Mg6attQc8C3KRNOKe9YDDKBcxCeC4VJfxtueumD+zmkLKeKX5q2P+iLmJF8aqgQMP1nmj9s5r8rHfBZfLShOLxxTnR2mYFKRZDnkiY1Xi3w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ZAzfgnhf; arc=none smtp.client-ip=209.85.219.177
+	 To:Cc:Content-Type; b=p0+3LthRa4nlJquBGNsa7IdHteLYpBE4P46zdoiGG+koNvDEoooGMGtPyrtzYpHjbo8fea/jxitGQ1/xd2Y8sm+wLlbvgRORVlSUg715urMVuLS+csIkkqnlBRCek+TcihQj0A5cPMxU7fL1w39qXSD2zv6YMyh/Iz78mmfUKjE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=C3UUbFRm; arc=none smtp.client-ip=209.85.219.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-ea5c1a18acfso719531276.0
-        for <linux-pm@vger.kernel.org>; Wed, 17 Sep 2025 07:32:57 -0700 (PDT)
+Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-e931c71a1baso6456244276.0
+        for <linux-pm@vger.kernel.org>; Wed, 17 Sep 2025 07:33:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1758119577; x=1758724377; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=dCz4bFinyR1BieLUIHZQZV0TDdidYv9V2bEcGI7xH7o=;
-        b=ZAzfgnhfmlHY3kWDrEgfGpTFDQM5zNLAp4u0yML2KyRy2y6Q+93SKmnEWvz7UEgTWz
-         /OcjGzC6pAvm+ddVkNAW9+6YhnW6NQH8JzBVL3qbtFYSLVGQ29mDhQRWIfWJfZrGWLcC
-         uQw3fC1w7r70oKqh342UuABIEmEcTD0a4KxehjL+1JoqsUG8pjfQW2C2P3855vWZtMIi
-         7LlCwmu5WrBBHAcGh5dIfediBCTeaMJxw6U5DLPItpyZbBq2GNAWTU9ZAPMeIcPoamt2
-         QnjFP8rRQf07Oy6+oNw6KkSvrDPLP81G+cRiPcr4p4tnkJi7qYiyJ4W84cCEgHOrDdZs
-         423A==
+        d=linaro.org; s=google; t=1758119588; x=1758724388; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cjiYB/uowYFXiRivyJJw9KQxslDZjaml/1h2OkBzYY8=;
+        b=C3UUbFRm3acP+0gd7vxBXz6Z3ef402pRo2XadWFzpB/mpXuKLW7vRWbB4zfivlFst8
+         GoFZp1CMYZq2QABwCDUoiOSiBoZr10VhVEneXxJPE6qF7z8tJSamZikSv2lyZRwq34i8
+         WnSbeTp9SjJ+zGRONoG3aiK0lATCddxAxq6ypvl9zWUwTUCTxj+IoJDZwAex5ACmyGdB
+         l4aEfSz0+2npRMBWyEz7AHjfwhcvD/ioeyfpfBktFQE+sDh6dM/iNu3MIoCCXpmWOp5u
+         BxOWT6HUdbUBzBO7QgWUWG6Pr3QtzNoSjAfRk+X7xQiUEo5bNCB3O9uYHiLHsg+AcmUJ
+         FJwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758119577; x=1758724377;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dCz4bFinyR1BieLUIHZQZV0TDdidYv9V2bEcGI7xH7o=;
-        b=WvES5a8JtaauvBu5U44oN4Nu8FRfUli/ioRKhEUBkfL4+UO7YIYgNt2uCH2mp1A7Rj
-         hi0Xg9hg4IP6grB1sOs69bOn/PrAPlEsEg2GvMChdmJKf9AdHGKqno7iF4M7vzKo1ksz
-         yWj23tEVDFCyhpvSQV7ixecGIv38QebB4a19aSNrB4xlr6CA6ACgz5JOO4ksMBO9h75v
-         +qqCEHhTPwAmoCrbFNPjexd4inTZhnIsTqhU0fsnt/SU4kB3Pwx6jQtc6CHhs1OMQBd9
-         3io19YUfH04uQEcn8bwcSnp9ddp8jzVtBDZLaJF6rZpb8s4OYSWhb4YFF7DexylaQ3q0
-         xz8w==
-X-Gm-Message-State: AOJu0YxCXqCKcWrWCKqYDCdjyhzjA+K6aLGMGJ/TyMOqQ4SgkXlNCF7x
-	iWFs6Rj5H/K36y4NADbhNDBvNMAeLswd4PnaD/Tk0y7E5k/4bmMq51JOfBM44lmjTR/33L/LTaX
-	3+pkVUujA4LxuoVy76nWXOR7mVTqwt8k8TKyjuLdmDQ==
-X-Gm-Gg: ASbGnctEhwozjPxs4M8wH0INQEUHSJgZYSA2NIKhYWQolWDWFDV0bg0gFNijPkTF58C
-	UizUFDkLBauQPWXonfyKC9nSlNk9ox/7Rv1YnJDQ1+blMiKQ+qZTOKqX/abILOGKzI/XqscpKBQ
-	0W9Q2gnV983EA5lSG1I5rlOz0qIzQa0IPF4GGK0YPvmkIMwd62de2E0SbT5/anrJ0wB9GUaab4u
-	oy7UDO1
-X-Google-Smtp-Source: AGHT+IGYd75X0Qf3WTxoJJzFk2/YdrBkHI2rWEVx/WssCazdqocK2S+85yiq6AsUYraILKbckm2rz5VkDvdIi7Gceg0=
-X-Received: by 2002:a05:6902:124c:b0:ea5:c97c:3182 with SMTP id
- 3f1490d57ef6-ea5c97c50bcmr1102726276.36.1758119576502; Wed, 17 Sep 2025
- 07:32:56 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1758119588; x=1758724388;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cjiYB/uowYFXiRivyJJw9KQxslDZjaml/1h2OkBzYY8=;
+        b=qEzFImHxe3vKbg///86u1U7aOunt0/ONNLA3RPeczw9vo3XI9jRlEkqj9lt7qLUzLZ
+         /4n3GAIAVDdqu+UbRSiaM5+6Uz6RLlT9eGI885jABonPOiDGGwgTFbwihye5ebsHOmZ2
+         T9iLudYCtupcqqi0VvX9VnAPdDIlyi0GEn4Lx1w0oCr+F/AEcU120C9PTdufWxuu3iq3
+         2B6ShxVDBjRLdN2J8Ija3ggay6qKDnU0qBYWN2sm28jJtlXerKkRCAUXCkBT2BMafqm8
+         XHETTXC0HPrJ+yn+phN6wZ0xnrmi/cscTmLvlt0b0+bCD39tM4Cbl1eAOFgCoEk6hudl
+         qCkA==
+X-Forwarded-Encrypted: i=1; AJvYcCW0mqDOUvY2VDOFT2OZIhQqNk+zeI6k3wapLGhSkDdtK8xFuV9xWR5Y1QNOLphjB1EW+LXabsBiTg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxf4Wc/aiuCswd3tTIZMYrJyS45Jd5KSOYPpMzv3nHCnxT+blRu
+	vNfrK8d4FUry7eAc3/PjXEq4LtRidNo9U6at7sWyTcDSmpaGR2LvV4dtRVb8fyfrkvcZxQsp4ha
+	lAXW7Hu1vzE3nt0yqnID0XYE/hpOxC/Y+wSRprbXsxg==
+X-Gm-Gg: ASbGncvehqkgufjV28i1nB60JJk9UqYQL2VDPlLGfRt4MhrgdizbWP2JbeOcGVEQQlO
+	lBq+srSXtIOZQj0xybItEFKPkGeQn3MmITQgZZD+w7DAQqtA/5UnVaa3wxk/cnwUR2gRdTHKgxM
+	30beYhT1M0+Lt+NPOWS1hoGMcTxxvuiC2mDK+zHricfxgSPQllePXeb19+T7XEiFjqSdvaYtUrk
+	BMwLDY/
+X-Google-Smtp-Source: AGHT+IFQl4sxW4LUcoi3bIXsptHrliwBwP5f8RO+yo+IAgyckDyrm2VPVmx1uys1O5NAXNsLjZqsLa4xcMjhuXJl5zs=
+X-Received: by 2002:a05:6902:3101:b0:ea4:6:9024 with SMTP id
+ 3f1490d57ef6-ea5c03aecffmr2119553276.8.1758119587602; Wed, 17 Sep 2025
+ 07:33:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250915083317.2885761-1-mikko.rapeli@linaro.org>
-In-Reply-To: <20250915083317.2885761-1-mikko.rapeli@linaro.org>
+References: <20250913-pxa1908-genpd-v4-0-55e4cf32f619@dujemihanovic.xyz>
+In-Reply-To: <20250913-pxa1908-genpd-v4-0-55e4cf32f619@dujemihanovic.xyz>
 From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Wed, 17 Sep 2025 16:32:20 +0200
-X-Gm-Features: AS18NWBqAAb3pOa1iLGjs8mbJODRThiYyAWA34gbcKMC5sx254a7Jh6zE5vInCA
-Message-ID: <CAPDyKFpR+uueS16P7OZi6-1NVrEyPbizuSnMHWMyROfqzPjarg@mail.gmail.com>
-Subject: Re: [PATCH v4 0/4] enable ROCKCHIP_PM_DOMAINS
-To: Mikko Rapeli <mikko.rapeli@linaro.org>, Heiko Stuebner <heiko@sntech.de>
-Cc: linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-mmc@vger.kernel.org
+Date: Wed, 17 Sep 2025 16:32:30 +0200
+X-Gm-Features: AS18NWB4VWSVduLAS3dHprEYP38MnWvLvmP0MGgnFO0V0b-XHaevM6W4A6ssrDo
+Message-ID: <CAPDyKFri+vsC9U7hhPukgWR2sRec5M0i8XtmyA7dVgJ-8Ewe_A@mail.gmail.com>
+Subject: Re: [PATCH v4 0/4] Marvell PXA1908 power domains
+To: =?UTF-8?Q?Duje_Mihanovi=C4=87?= <dujemihanovic32@gmail.com>
+Cc: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	David Wronek <david@mainlining.org>, Karel Balej <balejk@matfyz.cz>, phone-devel@vger.kernel.org, 
+	~postmarketos/upstreaming@lists.sr.ht, linux-arm-kernel@lists.infradead.org, 
+	linux-clk@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	=?UTF-8?Q?Duje_Mihanovi=C4=87?= <duje@dujemihanovic.xyz>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-+ Heiko
+On Sat, 13 Sept 2025 at 23:16, Duje Mihanovi=C4=87 <dujemihanovic32@gmail.c=
+om> wrote:
+>
+> Hello,
+>
+> This series implements support for the power domains found in Marvell's
+> PXA1908 SoC. The domains control power for the graphics, video and image
+> processors along with the DSI PHY.
+>
+> Signed-off-by: Duje Mihanovi=C4=87 <duje@dujemihanovic.xyz>
+> ---
+> Changes in v4:
+> - Address maintainer comments
+> - Rebase on v6.17-rc5
+> - Link to v3: https://lore.kernel.org/r/20250829-pxa1908-genpd-v3-0-2aaca=
+aaca271@dujemihanovic.xyz
+>
+> Changes in v3:
+> - Move driver back to pmdomain subsystem
+> - Instantiate using auxiliary bus
+> - Small fixes and refactors
+> - Rebase on v6.17-rc3
+> - Link to v2: https://lore.kernel.org/r/20250821-pxa1908-genpd-v2-0-eba41=
+3edd526@dujemihanovic.xyz
+>
+> Changes in v2:
+> - Move driver to clk subsystem (domains are instantiated by clock
+>   driver)
+> - Drop power controller schema
+> - Drop RFC prefix
+> - Rebase on v6.17-rc2
+> - Link to v1: https://lore.kernel.org/r/20250806-pxa1908-genpd-v1-0-16409=
+309fc72@dujemihanovic.xyz
+>
+> ---
+> Duje Mihanovi=C4=87 (4):
+>       dt-bindings: clock: marvell,pxa1908: Add syscon compatible to apmu
+>       pmdomain: marvell: Add PXA1908 power domains
+>       clk: mmp: pxa1908: Instantiate power driver through auxiliary bus
+>       arm64: dts: marvell: pxa1908: Add power domains
+>
+>  .../devicetree/bindings/clock/marvell,pxa1908.yaml |  30 ++-
+>  MAINTAINERS                                        |   4 +
+>  .../marvell/mmp/pxa1908-samsung-coreprimevelte.dts |   1 +
+>  arch/arm64/boot/dts/marvell/mmp/pxa1908.dtsi       |   5 +-
+>  drivers/clk/Kconfig                                |   1 +
+>  drivers/clk/mmp/Kconfig                            |  10 +
+>  drivers/clk/mmp/Makefile                           |   5 +-
+>  drivers/clk/mmp/clk-pxa1908-apmu.c                 |   7 +
+>  drivers/pmdomain/Kconfig                           |   1 +
+>  drivers/pmdomain/Makefile                          |   1 +
+>  drivers/pmdomain/marvell/Kconfig                   |  18 ++
+>  drivers/pmdomain/marvell/Makefile                  |   3 +
+>  .../pmdomain/marvell/pxa1908-power-controller.c    | 274 +++++++++++++++=
+++++++
+>  include/dt-bindings/power/marvell,pxa1908-power.h  |  17 ++
+>  14 files changed, 369 insertions(+), 8 deletions(-)
+> ---
+> base-commit: 76eeb9b8de9880ca38696b2fb56ac45ac0a25c6c
+> change-id: 20250803-pxa1908-genpd-15918db5260c
+>
+> Best regards,
+> --
+> Duje Mihanovi=C4=87 <duje@dujemihanovic.xyz>
 
-On Mon, 15 Sept 2025 at 10:33, Mikko Rapeli <mikko.rapeli@linaro.org> wrote:
->
-> Hi,
->
-> MMC_DW_ROCKCHIP needs ROCKCHIP_PM_DOMAINS before MMC is detected
-> on Rockchip rk3399 rockpi4b and similar devices. Make this dependency
-> more visible, or the default with ARCH_ROCKCHIP if possible.
->
-> v4: fixed Kconfig whitespace, added select REGMAP_MMIO to MMC_LOONGSON2
->     instead of disabling COMPILE_TEST
->
-> v3: use "default ARCH_ROCKCHIP" in ROCKCHIP_PM_DOMAINS as suggested
->     by Arnd Bergmann <arnd@arndb.de>, enable more MMC drivers for
->     COMPILE_TEST and remove MMC_LOONGSON2 which doesn't link,
->     remove PM dependency as suggested by
->     Geert Uytterhoeven <geert@linux-m68k.org>
->     https://lore.kernel.org/linux-mmc/aMQv1V49xa_MThGq@nuoska/T/#md2b3252f9dce14f3f79a493c426f2761cba1dc25
->
-> v2: changed from "depend on" in MMC driver to "select" as default
->     on ARCH_ROCKCHIP as suggested by Ulf and Heiko
->     https://marc.info/?i=20250912084112.2795848-1-mikko.rapeli%20()%20linaro%20!%20org
->
-> v1: https://lore.kernel.org/linux-mmc/20250911144313.2774171-1-mikko.rapeli@linaro.org/
->
-> Mikko Rapeli (4):
->   pmdomain: rockchip: enable ROCKCHIP_PM_DOMAINS with ARCH_ROCKCHIP
->   mmc: add COMPILE_TEST to multiple drivers
->   mmc: select REGMAP_MMIO with MMC_LOONGSON2
->   ARM: rockchip: remove REGULATOR conditional to PM
->
->  arch/arm/mach-rockchip/Kconfig    |  2 +-
->  drivers/mmc/host/Kconfig          | 10 ++++++----
->  drivers/pmdomain/rockchip/Kconfig |  1 +
->  3 files changed, 8 insertions(+), 5 deletions(-)
->
+Patch 1 -> 2 applied for next, thanks!
 
-Patch 1 applied for next to my pmdomain tree. Patch 2 and 3 applied
-for next on my mmc tree. Thanks!
-
-Heiko, can you pick up patch 4 via your Rockchip tree? Or if you
-prefer me to pick it, I can funnel it via my pmdomain tree. Let me
-know please.
+Note, the DT patch (patch 1) is available on the immutable dt branch
+too for clock/soc maintainers to pull, if needed.
 
 Kind regards
 Uffe
