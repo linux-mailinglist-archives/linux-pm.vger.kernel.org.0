@@ -1,38 +1,38 @@
-Return-Path: <linux-pm+bounces-34880-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34881-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 735F3B80586
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 17:03:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8DB0EB8058F
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 17:04:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4D6FB625070
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 14:59:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9D77E627D66
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Sep 2025 15:00:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A71435FC1D;
-	Wed, 17 Sep 2025 14:56:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51224369983;
+	Wed, 17 Sep 2025 14:56:45 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22B5A3195F1;
-	Wed, 17 Sep 2025 14:56:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2A9533AEB7;
+	Wed, 17 Sep 2025 14:56:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758121001; cv=none; b=RdAnEexcuOXjcsmjucHX6R+1F6uhsmyRN0heNX01zVDXVrjkBCdj9p2i4NoPlqNxYKFSlyd5/qzmIW3RgtAcjApSVrjSlx6nXo/4KnAuWtykutzFDrmyO9NrRTuXPm6163PFmpvKRwRBg/nFx6ixNBhOTOQH72dW7fV5ddnOouQ=
+	t=1758121005; cv=none; b=SGNaDkVBzM9fpYBo9iPGmuaYP4/8IVddHVu151hzOb03Tu7G24q2IgW/z6QRDVJbw878hXmCXzKbe/NmNqG6XbGAIe6Xixlzk1m+efPmDffBOLZ/WLLdkOnMg0yub+7y+VzdfjUzBl/52nCtghEnKWQ3tzcqxA6WTd0LTCmtAVM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758121001; c=relaxed/simple;
-	bh=aITkWGOBS37TSRZ45joX1KaJcqBbWgQMFBXQ/ZLns4I=;
+	s=arc-20240116; t=1758121005; c=relaxed/simple;
+	bh=jpG4OioajyvO9e69rzujynWFs3I89Xv/VGW/yDdnHLY=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Mqt2yIw+3gOIm4vFV9WFpxFM1+7thy/djb7sNHqcHYAmBS1v4bFUbU90a5eEry9WPcGssS4yl4zBhJN8zVm6ZHyPvb6iyPo0tfxbqoakdzHe3egqOcqnEGeJK89b7p/TGMyf7+04yMPILCwYlrjtiEcg4uSVHXqwpViRKCyoNvo=
+	 MIME-Version; b=JSE3VGRDHrmi9dK2bL/CY+d38VjER+UBF11H3kjBEcuNeYcmeGXTfpY2EU7/ZPzo0PKnk3jCvFarABb8htlbcwIsqfcLnYzzNwIlh/Fi0kgpBzG/lRkaVzSqxa0A8sK7boCah/IZAuXXy62Sqbmq39Vx2T48qaXHrq6DjfDlJ/0=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 484E3267F;
-	Wed, 17 Sep 2025 07:56:31 -0700 (PDT)
-Received: from e129823.cambridge.arm.com (e129823.arm.com [10.1.197.6])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id EBAAE3F66E;
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1A134267F;
 	Wed, 17 Sep 2025 07:56:35 -0700 (PDT)
+Received: from e129823.cambridge.arm.com (e129823.arm.com [10.1.197.6])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id C6D8D3F66E;
+	Wed, 17 Sep 2025 07:56:39 -0700 (PDT)
 From: Yeoreum Yun <yeoreum.yun@arm.com>
 To: catalin.marinas@arm.com,
 	will@kernel.org,
@@ -60,9 +60,9 @@ Cc: linux-arm-kernel@lists.infradead.org,
 	linux-pm@vger.kernel.org,
 	kvmarm@lists.linux.dev,
 	Yeoreum Yun <yeoreum.yun@arm.com>
-Subject: [PATCH v5 4/6] arm64: initialise SCTLR2_EL1 at cpu_soft_restart()
-Date: Wed, 17 Sep 2025 15:56:16 +0100
-Message-Id: <20250917145618.1232329-5-yeoreum.yun@arm.com>
+Subject: [PATCH v5 5/6] arm64: make the per-task SCTLR2_EL1
+Date: Wed, 17 Sep 2025 15:56:17 +0100
+Message-Id: <20250917145618.1232329-6-yeoreum.yun@arm.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20250917145618.1232329-1-yeoreum.yun@arm.com>
 References: <20250917145618.1232329-1-yeoreum.yun@arm.com>
@@ -74,44 +74,68 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Explicitly initialize the SCTLR2_ELx register before launching
-a new kernel via kexec() to avoid leaving SCTLR2_ELx with an
-arbitrary value when the new kernel runs.
+Some bits in SCTLR2_EL1 that control system behavior can be
+configured on a per-task basis (e.g., fields related to FEAT_CPA2).
+To support future use of these fields, SCTLR2_EL1 is maintained
+per task.
+
+On platforms without FEAT_SCTLR2 support, there is no functional
+change and only minimal performance overhead.
 
 Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
 ---
- arch/arm64/kernel/cpu-reset.S      | 3 +++
- arch/arm64/kvm/hyp/nvhe/hyp-init.S | 3 +++
- 2 files changed, 6 insertions(+)
+ arch/arm64/include/asm/processor.h | 3 +++
+ arch/arm64/kernel/process.c        | 9 +++++++++
+ 2 files changed, 12 insertions(+)
 
-diff --git a/arch/arm64/kernel/cpu-reset.S b/arch/arm64/kernel/cpu-reset.S
-index c87445dde674..e2abc8f8c067 100644
---- a/arch/arm64/kernel/cpu-reset.S
-+++ b/arch/arm64/kernel/cpu-reset.S
-@@ -30,6 +30,9 @@
-  * flat identity mapping.
+diff --git a/arch/arm64/include/asm/processor.h b/arch/arm64/include/asm/processor.h
+index 61d62bfd5a7b..e066116735c6 100644
+--- a/arch/arm64/include/asm/processor.h
++++ b/arch/arm64/include/asm/processor.h
+@@ -184,6 +184,7 @@ struct thread_struct {
+ 	u64			mte_ctrl;
+ #endif
+ 	u64			sctlr_user;
++	u64			sctlr2_user;
+ 	u64			svcr;
+ 	u64			tpidr2_el0;
+ 	u64			por_el0;
+@@ -258,6 +259,8 @@ static inline void task_set_sve_vl_onexec(struct task_struct *task,
+ 	(SCTLR_ELx_ENIA | SCTLR_ELx_ENIB | SCTLR_ELx_ENDA | SCTLR_ELx_ENDB |   \
+ 	 SCTLR_EL1_TCF0_MASK)
+ 
++#define SCTLR2_USER_MASK	(0)
++
+ static inline void arch_thread_struct_whitelist(unsigned long *offset,
+ 						unsigned long *size)
+ {
+diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
+index 96482a1412c6..e54f192c0629 100644
+--- a/arch/arm64/kernel/process.c
++++ b/arch/arm64/kernel/process.c
+@@ -698,6 +698,11 @@ void update_sctlr_el1(u64 sctlr)
+ 	isb();
+ }
+ 
++static void update_sctlr2_el1(u64 sctlr2)
++{
++	sysreg_clear_set_s(SYS_SCTLR2_EL1, SCTLR2_USER_MASK, sctlr2);
++}
++
+ /*
+  * Thread switching.
   */
- SYM_TYPED_FUNC_START(cpu_soft_restart)
-+	mov_q	x12, INIT_SCTLR2_EL1
-+	set_sctlr2_elx	1, x12, x8
+@@ -737,6 +742,10 @@ struct task_struct *__switch_to(struct task_struct *prev,
+ 	if (prev->thread.sctlr_user != next->thread.sctlr_user)
+ 		update_sctlr_el1(next->thread.sctlr_user);
+ 
++	if (alternative_has_cap_unlikely(ARM64_HAS_SCTLR2) &&
++	    prev->thread.sctlr2_user != next->thread.sctlr2_user)
++		update_sctlr2_el1(next->thread.sctlr2_user);
 +
- 	mov_q	x12, INIT_SCTLR_EL1_MMU_OFF
- 	pre_disable_mmu_workaround
- 	/*
-diff --git a/arch/arm64/kvm/hyp/nvhe/hyp-init.S b/arch/arm64/kvm/hyp/nvhe/hyp-init.S
-index aada42522e7b..cc569656fe35 100644
---- a/arch/arm64/kvm/hyp/nvhe/hyp-init.S
-+++ b/arch/arm64/kvm/hyp/nvhe/hyp-init.S
-@@ -255,6 +255,9 @@ SYM_CODE_START(__kvm_handle_stub_hvc)
- 	mov	x0, xzr
- reset:
- 	/* Reset kvm back to the hyp stub. */
-+	mov_q 	x5, INIT_SCTLR2_EL2
-+	set_sctlr2_elx	2, x5, x4
-+
- 	mov_q	x5, INIT_SCTLR_EL2_MMU_OFF
- 	pre_disable_mmu_workaround
- 	msr	sctlr_el2, x5
+ 	/* the actual thread switch */
+ 	last = cpu_switch_to(prev, next);
+ 
 -- 
 LEVI:{C3F47F37-75D8-414A-A8BA-3980EC8A46D7}
 
