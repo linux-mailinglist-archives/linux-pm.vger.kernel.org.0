@@ -1,147 +1,187 @@
-Return-Path: <linux-pm+bounces-34963-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34964-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 60031B84F27
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 16:02:40 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD5F3B853B1
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 16:29:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BE97D7A2FE6
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 14:00:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 201051C87E8F
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 14:24:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4778E21FF23;
-	Thu, 18 Sep 2025 14:02:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B891030C34F;
+	Thu, 18 Sep 2025 14:19:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="hAogMFSP"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="FY1PXBLQ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A0D4212566;
-	Thu, 18 Sep 2025 14:02:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758204140; cv=pass; b=PL3EP3JhqdkpyfJZG3oxyHORnqEF+/zlqpOJNfNYi3LewNMRQvI+hFvzcQqrtOtYadwQhIMDCD4sOb6r3xySiysdekriiJlvn9EhHtmnH5pBR8Ws+jiidz3BkfPwuvCRqLH8l5rVdkm2TNXB0kYRI3q265X9LobDbAWNNF7KWBI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758204140; c=relaxed/simple;
-	bh=B5K/UPnWupbru9h0H9/zvNShGLKsQiiUktaCENK/6U8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=HphNDWLOa9MFCD6zMZEKhGaawc40hkdXbNmkscqIkOkkRsN9a9jDNv1a4eKYyTx6s10tf4Egm3WqSUHbJEncF0Q0JFGU6eOon3nW29zvkubbelmr7yN16USWZqxEWt9qI52e66a3NfJG/9No7BFlHrWuJtBHcwjWWUfgtLLp/zA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=hAogMFSP; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1758204103; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=nYwqjkuaJd7z0MOkUp0DgfN53CXjxJ8VD6pq4qgAghNfmvnA3vgnX5pK17ASOg1fr82DmoBQiEwzoIcEOU0kMcH/IXTOc3x4mOmsA1BE4UWokJ5VwMw3JbW0UIGi57KnolqmBLNbrQF08F9nxwd01FMcbj6E2CAqV15MVEGLk+s=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1758204103; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=D+h5guwEJBXYPr6x/4BoU3yk32WsocIYZRObOc2SD7E=; 
-	b=Cu5B0fFQGxjhlexh70bmK9sj0JsAbY8IHD9Sn6ukiIq6IIBUQ85Y7OgndtebASrN5nnDV54v8AUXQIN3AwUH8rQQhSs12nsRNRvVSOr+hsO/WCgXWFyUGK+tUKLwuoRVNCCi35FZC0QANVXWBuJVQoja3ApO8EM2o7hXGv3cCVM=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
-	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1758204103;
-	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
-	bh=D+h5guwEJBXYPr6x/4BoU3yk32WsocIYZRObOc2SD7E=;
-	b=hAogMFSPwKq/tEvbgDxEAdbZWwp+FACMmjl1d2HM2d9ucBx6Nct3HTBzQRdCcPX3
-	Q14+J4hiqYfWRQ+3mZzqx1+2bVa9ts2cpR1a2MFl28notvkZLDxQ8Zk3A2H/iVa1V7j
-	vMYYWOob+ruYusn+fJBEnGV4TP2+rk+mU3Mntpco=
-Received: by mx.zohomail.com with SMTPS id 1758204100007491.1116048037495;
-	Thu, 18 Sep 2025 07:01:40 -0700 (PDT)
-From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Boris Brezillon <boris.brezillon@collabora.com>,
- Steven Price <steven.price@arm.com>, Liviu Dudau <liviu.dudau@arm.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- MyungJoo Ham <myungjoo.ham@samsung.com>,
- Kyungmin Park <kyungmin.park@samsung.com>,
- Chanwoo Choi <cw00.choi@samsung.com>, Jassi Brar <jassisinghbrar@gmail.com>,
- Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- Chia-I Wu <olvaffe@gmail.com>, Chen-Yu Tsai <wenst@chromium.org>,
- kernel@collabora.com, dri-devel@lists.freedesktop.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
- linux-pm@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject:
- Re: [PATCH v3 01/10] dt-bindings: gpu: mali-valhall-csf: add
- mediatek,mt8196-mali variant
-Date: Thu, 18 Sep 2025 16:01:31 +0200
-Message-ID: <5749727.31r3eYUQgx@workhorse>
-In-Reply-To: <20250918-festive-chowchow-of-joy-5a51de@kuoka>
-References:
- <20250917-mt8196-gpufreq-v3-0-c4ede4b4399e@collabora.com>
- <20250917-mt8196-gpufreq-v3-1-c4ede4b4399e@collabora.com>
- <20250918-festive-chowchow-of-joy-5a51de@kuoka>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA39A30FF27
+	for <linux-pm@vger.kernel.org>; Thu, 18 Sep 2025 14:19:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.176
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1758205151; cv=none; b=E9zxhz494wsDuzGb80p2KBzgjefoBvVX0WvfTPHuMwnQ7OcUYJ4se87W7Gc/roiY98q0S5lgRqJ+fPvLKz5NMr0xETCJTwhbO1qayAmV9c2JBdqdkOpkyAaD207BXM4UM9RtGbyL4TjJQzF6lDrrJCBnCVVEjwMrGYJxFT9s5Xo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1758205151; c=relaxed/simple;
+	bh=efV7ND5peOzZ6wFre05dZsI2sW9Mwg+FnrXTj0ULe04=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=NeA1p1e1KMSucytk0+XAHMyjXqZ/JPKLFBpWBcPPWgL5eRyOg9o+Fjgh/lI1Wn3uVrxda/mxmcV8f7kCZ5UjTsMeRKL2Og54mYV3R+8JyPau2uSYID0AMwuUgCrsaoWuFke/Hpeyz7SRzrOFMZ6omezv1bvorQ0OP1KwxO7pgBs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=FY1PXBLQ; arc=none smtp.client-ip=209.85.128.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-71d60501806so8390757b3.2
+        for <linux-pm@vger.kernel.org>; Thu, 18 Sep 2025 07:19:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1758205149; x=1758809949; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=rwnJ7MfncjQZZqEO7RPiB5wvlA6TdyUbKRJ/WpUXEpc=;
+        b=FY1PXBLQW7nyZrUWVKrDHMIsBsJSdJjNWVsRJRCKwHuSlAwV9XIxG7Pr40MjxY4/wm
+         7rwDY/TNygK4sLnCKqN4moCCuhjbEwdc5/fkDJk5h1KD8CDb1auRcHmeqy00tXn9gj5w
+         R/3zF40CbHsvkzpJZQ+g71AgvBg8IuFwX/hjKzde9N4ptRmc4RM6igGaVd8CCp6MeycS
+         KzjnMgQ7QZaqIjlcUtmKpkJjIuWYRJyqptse0It3YUADaAeO6tbtMiH0xDRdgIzj1kGU
+         tNO1D4tx19AZ7v39laPYSMERNAgR4UHqXbMAvog/OqJWE/grfwxqddymT99aOBS/YK7Z
+         Qk3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758205149; x=1758809949;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rwnJ7MfncjQZZqEO7RPiB5wvlA6TdyUbKRJ/WpUXEpc=;
+        b=FxBmIThNiAuBDCYT+g5Vj/HcwVtXxM3VjB89X9K6VE3CQ77j9Q7bH5/36+UKT6LC2f
+         p7JvjYkP0HpFxSpu1NuKgUVtbgMRvW3TDtTwg5kmkUJlAF//Vehyo8pNhRQEWcMBS4F1
+         fPXK0yhCXwQdZZOTRxJJtSFrEQY/+KFBD0IGtqBXQhIZqmZkMn2PAH1HR9LUavS7qlgo
+         hM9vowrhGfMbhGxL/xIv6DZTUPcmh1p7UaWAc7m29JfXyROh6lfdcN4u9jdVBFs+HPsv
+         rmtBddlNy9Pp6YS/kX8znRc31QC9CofCt3T8tvDAtyGIXR7TTJU1M2RO7xVv5U51wY4t
+         McUA==
+X-Forwarded-Encrypted: i=1; AJvYcCUOFukZGtMhvC20ftgfi5+q39faLL3FxLLnFqT0ODF2Qn7yfoaG0Vh7w6toL8fLDH5AQLodkQfHLg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxgWAmPN+9i3r8Wu4Eo9at/snXLBEk4MQxPCFlJ/fTpqShJOF8R
+	e93ka2zUR8SZj3bDYo7I7JillEGVJF6SXQ3Fg6kHaPCQV4V2vMHhql0LDUOfc5mLn6TGnnWWFGG
+	ntsgehWIpv/rK76+BvYkeeRkT/67UavEWw6nnVE7Ymg==
+X-Gm-Gg: ASbGncsB6DWCttHHQLDTKrbiJLR/QNTEVgGt+R4RYOy81huOJRmfnK6vVCECkciZneI
+	d1uZ6d4PLd9caVk7Fzal955ZeD7qvcBlIuy/VbeVPCxnlxaDWqGS3pp4IdfKEhQxM0gvA7PIiSH
+	F5sP+qPMVfqtS65Lsz/nc0Syq5FLtkxQGu0T/3X48+L/I4dJ+WpsJ1FZCrfFe7AXMi0z9X5wSwH
+	Xl+gCIPI61BIpBolX5eWgO85X4=
+X-Google-Smtp-Source: AGHT+IFja2SGfrTtCyPdRJCCefTmrgo0mQhH1O6x561N6cabqmvG2QM8w3ohhfxToBTf2XJdX84zA191m+AeXdLVuso=
+X-Received: by 2002:a05:690c:3582:b0:735:8634:be68 with SMTP id
+ 00721157ae682-73890cb0553mr52912587b3.23.1758205148353; Thu, 18 Sep 2025
+ 07:19:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="utf-8"
+References: <20250902-pm-v3-0-ffadbb454cdc@nxp.com> <20250902-pm-v3-1-ffadbb454cdc@nxp.com>
+ <20250918095950.h7wmz2qj5e6khtwr@lcpd911> <20250918131230.GD9196@nxa18884-linux.ap.freescale.net>
+ <20250918134039.zkpeqsbf6m2ymxvt@lcpd911>
+In-Reply-To: <20250918134039.zkpeqsbf6m2ymxvt@lcpd911>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Thu, 18 Sep 2025 16:18:32 +0200
+X-Gm-Features: AS18NWB-C7Q2eLiy5k262B4Ual4xN_o15_I0cJZ8lRcTd3E2RvJskp1XeHp2s5E
+Message-ID: <CAPDyKFrweJTBHfOOU5r8Lcfs-dsTj94A=JK8+jKDqwJ0jNfiQw@mail.gmail.com>
+Subject: Re: [PATCH v3 1/4] pmdomain: core: Introduce device_set/get_out_band_wakeup()
+To: Peng Fan <peng.fan@oss.nxp.com>, Dhruva Gole <d-gole@ti.com>
+Cc: Peng Fan <peng.fan@nxp.com>, "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, 
+	Pavel Machek <pavel@kernel.org>, Peter Chen <peter.chen@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Shawn Guo <shawnguo@kernel.org>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
+	Fabio Estevam <festevam@gmail.com>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
+	Vincent Guittot <vincent.guittot@linaro.org>, Xu Yang <xu.yang_2@nxp.com>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, imx@lists.linux.dev, 
+	arm-scmi@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Thursday, 18 September 2025 02:30:09 Central European Summer Time Krzysztof Kozlowski wrote:
-> On Wed, Sep 17, 2025 at 02:22:32PM +0200, Nicolas Frattaroli wrote:
-> > The Mali-based GPU on the MediaTek MT8196 SoC uses a separate MCU to
-> > control the power and frequency of the GPU.
-> > 
-> > It lets us omit the OPP tables from the device tree, as those can now be
-> > enumerated at runtime from the MCU. It also means the mali GPU node
-> > described in this binding does not have any clocks in this case, as all
-> > clock control is delegated to the MCU.
-> > 
-> > Add the mediatek,mt8196-mali compatible, and a performance-domains
-> > property which points to the MCU's device tree node in this case. It's
-> > required on mt8196 devices.
-> > 
-> > Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-> > ---
-> >  .../bindings/gpu/arm,mali-valhall-csf.yaml         | 32 ++++++++++++++++++++--
-> >  1 file changed, 30 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/gpu/arm,mali-valhall-csf.yaml b/Documentation/devicetree/bindings/gpu/arm,mali-valhall-csf.yaml
-> > index 7ad5a3ffc5f5c753322eda9e74cc65de89d11c73..ccab2dd0ea852187e3ab75923e19739622b2b3b8 100644
-> > --- a/Documentation/devicetree/bindings/gpu/arm,mali-valhall-csf.yaml
-> > +++ b/Documentation/devicetree/bindings/gpu/arm,mali-valhall-csf.yaml
-> > @@ -38,7 +38,6 @@ properties:
-> >        - const: gpu
-> >  
-> >    clocks:
-> > -    minItems: 1
-> 
-> I don't understand why.
-> 
-> Best regards,
-> Krzysztof
-> 
-> 
+On Thu, 18 Sept 2025 at 15:40, Dhruva Gole <d-gole@ti.com> wrote:
+>
+> Hi Peng,
+>
+> On Sep 18, 2025 at 21:12:30 +0800, Peng Fan wrote:
+> > Hi Dhruva,
+> >
+> > On Thu, Sep 18, 2025 at 03:29:50PM +0530, Dhruva Gole wrote:
+> > >On Sep 02, 2025 at 11:33:00 +0800, Peng Fan wrote:
+> > >> For some cases, a device could still wakeup the system even if its power
+> > >> domain is in off state, because the device's wakeup hardware logic is
+> > >> in an always-on domain.
+> > >>
+> > >> To support this case, introduce device_set/get_out_band_wakeup() to
+> > >> allow device drivers to control the behaviour in genpd for a device
+> > >> that is attached to it.
+> > >>
+> > >
+> > >Thinking more into it, to me it seems like if the intent here is to only
+> > >allow the device drivers to figure out whether they should be or not be
+> > >executing the suspend/resume_noirqs then that can still be checked by
+> > >wisely using the device set_wakeup APIs in the driver itself.
+> > >
+> > >Not sure why this patch should be necessary for a
+> > >driver to execute the suspend_noirq or not. That decision can very well
+> > >be taken inside the driver's suspend resume_noirq hooks based on wakeup
+> > >capability and wake_enabled statuses.
+> >
+> > I should join today's SCMI meeting, but something else caught me (:
+>
+> It's alright, maybe see you in the next one ;)
+>
+> >
+> > Thanks for looking into this.
+> >
+> > In genpd_suspend_finish, genpd_sync_power_off will be called if
+> > "(device_awake_path(dev) && genpd_is_active_wakeup(genpd))" is false.
+> > So if the device is enabled wakeup, the genpd will not be turned off because
+> > the check return true.
+>
+> Umm I think this device_awake_path stuff is only going to be true when
+> someone calls device_set_wakeup_path, I don't think it is going to
+> return true for a wakeup_capable device. I know all these "wakeup"
+> terminology and APIs have become all too confusing :( , so maybe Ulf can
+> correct me.
 
-I am executing a Convex hull algorithm on the 3D space of "dt-bindings
-maintainer opinions" to get a convex hull of acceptable dt-bindings
-choices where two different choices are functionally equivalent.
+The PM core checks device_may_wakeup() in device_suspend() and then
+sets dev->power.wakeup_path = true;
 
-With this additional opinion on the krzk axis, I now know that having
-the base properties accurate for the general case is not required if
-the per-compatible case sets the property to false anyway.
+The device_set_awake_path() and device_awake_path(), is to allow
+drivers/subsystems to enforce its device to stay powered-on during
+system-wide suspend. This may be needed even if the device isn't
+configured to deliver system-wakeups.
 
-I hope no two opinions are collinear, as this would surely be my
-undoing.
+> I maybe misremembering, but I have seen in some cases where a driver may
+> have marked itself wakeup_capable but the suspend hooks still do get
+> called... So your concern about genpd_sync_power_off not being called
+> due to wakeup capable device driver may not be valid... Again please
+> feel to correct me if I am wrong.
 
-You get to pick which axis (X, Y, Z) you are. Right-hand rule, of
-course.
+The system PM callbacks should get called no matter what.
 
-Kind regards,
-Nicolas Frattaroli
+The problem Peng pointing out, is when genpd_suspend_noirq() (which
+calls genpd_finish_suspend()) is called for a device that is attached
+to a genpd, we may end up bailing out, preventing the power-off for
+its PM domain, while it may be perfectly fine to allow the PM domain
+to be powered-off.
 
+The particular code we are looking at, is in genpd_finish_suspend():
 
+        if (device_awake_path(dev) && genpd_is_active_wakeup(genpd))
+                return 0;
+
+>
+> Did you also look at the wake IRQ stuff I mentioned?
+> In the path you're talking about it just checks
+> device_awake_path(dev) && genpd_is_active_wakeup(genpd)
+> However if the device irq is just marked as a wake IRQ, I don't think
+> that is checked anywhere in this path. So definitely if the IRQ of your
+> device is set as a wake IRQ, it will still get suspended and resumed as
+> usual and that's what you want right?
+
+The missing piece for the wake_irq, is to know whether the interrupt
+can be delivered via an out-band-powered-on-logic, thus without
+requiring the device to stay powered-on during system suspend.
+
+[...]
+
+Kind regards
+Uffe
 
