@@ -1,91 +1,179 @@
-Return-Path: <linux-pm+bounces-35002-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35003-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 10765B8702F
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 23:09:46 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC873B8706B
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 23:11:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CE230167728
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 21:09:45 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3D69F7ABAB8
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 21:09:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6EF92EC081;
-	Thu, 18 Sep 2025 21:09:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CE582EC09C;
+	Thu, 18 Sep 2025 21:10:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="mqdAqbuM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aUk00Vbw"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7925F2DAFA5;
-	Thu, 18 Sep 2025 21:09:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C50824501B;
+	Thu, 18 Sep 2025 21:10:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758229779; cv=none; b=MOqxf3YLe88RKX2N5ZV2n7maHFDCZn1m5xSVNucP1da+8unmIAc8qNo2gEiCG8zlbzL1BB9Ytv4SLimb1LZHwxFAmf9QcD4nUAzzA26BLN4u9nvE0dU17I65KWQeHrGoTIwLRodTyD9O/wCOgqTtNKBy/KMOkjb5Dr8EOdznEI0=
+	t=1758229850; cv=none; b=kD4jlA1tLAAxz7cCvwf7wmsfsXcxgsonuOWWPQ2/rSWWGMTMo+t4xoMpI0uu9rSE+XCbODPC2StEYHsF8lUgBerCgbzYFUTZge9WVJ5qE7lOJNgB2lHlA4DGBtKTWzUZafxXUNXC1SksIjkfY4Lf+I7hdNi3igQCfyydF105MpM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758229779; c=relaxed/simple;
-	bh=6ksAn3H91O94k8DweiUh/m3t93Gdss8WZmDpjPojFDc=;
+	s=arc-20240116; t=1758229850; c=relaxed/simple;
+	bh=wlNjaTZImKf2AeG6/odvaHilnkAGYMvkVffoJRmrn70=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=QCYMv+Vv0c+OeT0vKExre+igyJpp52/IjmU9qZBYSEW/Kbffn5IOd1P5wRVn+AQlxxUhOuBEAEn3NACnsbcOTV/CHaWqdC2D6d8wxC+LtQGbKjbeekglDWALWQ20qPxPZnbgtI80+OKWTeTdg3d/qxNN5XK8hhYhbtEiG/2xx0Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=mqdAqbuM; arc=none smtp.client-ip=185.11.138.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
-	s=gloria202408; h=Content-Transfer-Encoding:Content-Type:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Reply-To;
-	bh=IhRFq4UtJ1FWApnkqY6mEgaYN11X3Y0mXj4sL73koYk=; b=mqdAqbuMhaX05+AVwIxaxZi0TB
-	htLdqDt30MiAqnjBZnHKqLauhIC1vFJ+3unudCP6cWxJr9zFi2uNnUxSjVHjRiReiT3/TK7EHOdZb
-	f0z5+XPJNg2kx3+N0nPkjjpB5UyoQYVk57Vsznj70YGQ8zUghwV9+k4KhQKblO/RtbXoEKg82aDRD
-	LhmYH4cqRM7qXCOwP6ce+fFgjd/Czsns7wf5zWvyw2eLT+PvRwVjbtb3Hb4goFS+ia5d+0WNrJgjC
-	saPGLtXUnj7S098virm7a0VhHbtt5BYjO+E4uEbZZr4EI3hHfE8zY8rQhQn93hP+/9h38SEy5elCX
-	mUaTg40g==;
-Received: from i53875b0a.versanet.de ([83.135.91.10] helo=localhost.localdomain)
-	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <heiko@sntech.de>)
-	id 1uzLsk-0003SC-3D; Thu, 18 Sep 2025 23:09:34 +0200
-From: Heiko Stuebner <heiko@sntech.de>
-To: linux-pm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-mmc@vger.kernel.org,
-	Mikko Rapeli <mikko.rapeli@linaro.org>
-Cc: Heiko Stuebner <heiko@sntech.de>,
-	Ulf Hansson <ulf.hansson@linaro.org>
-Subject: Re: (subset) [PATCH v4 0/4] enable ROCKCHIP_PM_DOMAINS
-Date: Thu, 18 Sep 2025 23:09:22 +0200
-Message-ID: <175822973681.1568500.10556154418854538683.b4-ty@sntech.de>
-X-Mailer: git-send-email 2.47.2
-In-Reply-To: <20250915083317.2885761-1-mikko.rapeli@linaro.org>
-References: <20250915083317.2885761-1-mikko.rapeli@linaro.org>
+	 MIME-Version:Content-Type; b=KM9UxOi4BaYDHj5fOLDZI8pMvko6SUnPHiF+rpkOGqhR/VZnlT86ilCYp30IaOCv1dOkGY6UHgaC96qt7t4VfvhxqqNtQQlPH21wevOgvPHJGic44uC0GTvLRh3neV+7U8aAvNwB+fSysW/rzv/eh8cCTcyLvVWVUczm9ybgPIw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aUk00Vbw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58984C4CEE7;
+	Thu, 18 Sep 2025 21:10:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1758229849;
+	bh=wlNjaTZImKf2AeG6/odvaHilnkAGYMvkVffoJRmrn70=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=aUk00Vbwlm/AgYDloeJEF0n1g05Ksb4/qtHx8wCKS/Wh+DyVnJwXG4q+xUw1tbJEY
+	 d47PTPbffMdIuVmHoikcrvZHyGs3p46TFO2GgJkaZy6pbmEiB/hRULt4To6ZZXwDKp
+	 aR0PnxehpjIx0zH6Yfi03LygrpQpF1O6QtGE3cfV4oQkfMTMr3oeyr6tTiDpCZ8qb4
+	 X66/RvzHnWK4zqESNRUtyVKZ/2k05Tq3KyiyQbGGo/NrYCbANloJxqzynxozOqatvn
+	 fvf6CJ57d+XjF0Uz1Idb65Bc128JEsLRR3N4DWGUAG62eS2pIrXDdt9/T11tzegY9l
+	 oGtiBcbX4eYKg==
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+To: Linux ACPI <linux-acpi@vger.kernel.org>
+Cc: Huisong Li <lihuisong@huawei.com>, LKML <linux-kernel@vger.kernel.org>,
+ Linux PM <linux-pm@vger.kernel.org>,
+ Mario Limonciello <mario.limonciello@amd.com>,
+ "Shenoy, Gautham Ranjal" <gautham.shenoy@amd.com>
+Subject: [PATCH v1 2/2] ACPI: processor: idle: Redefine two functions as void
+Date: Thu, 18 Sep 2025 23:10:31 +0200
+Message-ID: <2385759.ElGaqSPkdT@rafael.j.wysocki>
+Organization: Linux Kernel Development
+In-Reply-To: <5926523.DvuYhMxLoT@rafael.j.wysocki>
+References: <5926523.DvuYhMxLoT@rafael.j.wysocki>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+
+Notice that acpi_processor_power_init() and acpi_processor_power_exit()
+don't need to return any values because their callers don't check them
+anyway, so redefine those functions as void.
+
+While at it, rearrange the code in acpi_processor_power_init() to
+reduce the indentation level, get rid of a redundant local variable
+in that function, and rephrase a code comment in it.
+
+No intentional functional impact.
+
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/acpi/processor_idle.c |   47 +++++++++++++++++++-----------------------
+ include/acpi/processor.h      |    4 +--
+ 2 files changed, 24 insertions(+), 27 deletions(-)
+
+--- a/drivers/acpi/processor_idle.c
++++ b/drivers/acpi/processor_idle.c
+@@ -1137,47 +1137,45 @@ void acpi_processor_unregister_idle_driv
+ 	cpuidle_unregister_driver(&acpi_idle_driver);
+ }
+ 
+-int acpi_processor_power_init(struct acpi_processor *pr)
++void acpi_processor_power_init(struct acpi_processor *pr)
+ {
+-	int retval;
+ 	struct cpuidle_device *dev;
+ 
+ 	if (disabled_by_idle_boot_param())
+-		return 0;
++		return;
+ 
+ 	acpi_processor_cstate_first_run_checks();
+ 
+ 	if (!acpi_processor_get_power_info(pr))
+ 		pr->flags.power_setup_done = 1;
+ 
+-	if (pr->flags.power) {
+-		dev = kzalloc(sizeof(*dev), GFP_KERNEL);
+-		if (!dev)
+-			return -ENOMEM;
+-		per_cpu(acpi_cpuidle_device, pr->id) = dev;
+-
+-		acpi_processor_setup_cpuidle_dev(pr, dev);
+-
+-		/* Register per-cpu cpuidle_device. Cpuidle driver
+-		 * must already be registered before registering device
+-		 */
+-		retval = cpuidle_register_device(dev);
+-		if (retval) {
+-
+-			per_cpu(acpi_cpuidle_device, pr->id) = NULL;
+-			kfree(dev);
+-			return retval;
+-		}
++	if (!pr->flags.power)
++		return;
++
++	dev = kzalloc(sizeof(*dev), GFP_KERNEL);
++	if (!dev)
++		return;
++
++	per_cpu(acpi_cpuidle_device, pr->id) = dev;
++
++	acpi_processor_setup_cpuidle_dev(pr, dev);
++
++	/*
++	 * Register a cpuidle device for this CPU.  The cpuidle driver using
++	 * this device is expected to be registered.
++	 */
++	if (cpuidle_register_device(dev)) {
++		per_cpu(acpi_cpuidle_device, pr->id) = NULL;
++		kfree(dev);
+ 	}
+-	return 0;
+ }
+ 
+-int acpi_processor_power_exit(struct acpi_processor *pr)
++void acpi_processor_power_exit(struct acpi_processor *pr)
+ {
+ 	struct cpuidle_device *dev = per_cpu(acpi_cpuidle_device, pr->id);
+ 
+ 	if (disabled_by_idle_boot_param())
+-		return 0;
++		return;
+ 
+ 	if (pr->flags.power) {
+ 		cpuidle_unregister_device(dev);
+@@ -1185,7 +1183,6 @@ int acpi_processor_power_exit(struct acp
+ 	}
+ 
+ 	pr->flags.power_setup_done = 0;
+-	return 0;
+ }
+ 
+ MODULE_IMPORT_NS("ACPI_PROCESSOR_IDLE");
+--- a/include/acpi/processor.h
++++ b/include/acpi/processor.h
+@@ -419,8 +419,8 @@ static inline void acpi_processor_thrott
+ /* in processor_idle.c */
+ extern struct cpuidle_driver acpi_idle_driver;
+ #ifdef CONFIG_ACPI_PROCESSOR_IDLE
+-int acpi_processor_power_init(struct acpi_processor *pr);
+-int acpi_processor_power_exit(struct acpi_processor *pr);
++void acpi_processor_power_init(struct acpi_processor *pr);
++void acpi_processor_power_exit(struct acpi_processor *pr);
+ int acpi_processor_power_state_has_changed(struct acpi_processor *pr);
+ int acpi_processor_hotplug(struct acpi_processor *pr);
+ void acpi_processor_register_idle_driver(void);
 
 
-On Mon, 15 Sep 2025 11:33:13 +0300, Mikko Rapeli wrote:
-> MMC_DW_ROCKCHIP needs ROCKCHIP_PM_DOMAINS before MMC is detected
-> on Rockchip rk3399 rockpi4b and similar devices. Make this dependency
-> more visible, or the default with ARCH_ROCKCHIP if possible.
-> 
-> v4: fixed Kconfig whitespace, added select REGMAP_MMIO to MMC_LOONGSON2
->     instead of disabling COMPILE_TEST
-> 
-> [...]
 
-Applied, thanks!
-
-[4/4] ARM: rockchip: remove REGULATOR conditional to PM
-      commit: a1b20e062245571c128ec521c4df56ad1bff9bd0
-
-Best regards,
--- 
-Heiko Stuebner <heiko@sntech.de>
 
