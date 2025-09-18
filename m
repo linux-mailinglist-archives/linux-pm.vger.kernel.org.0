@@ -1,70 +1,78 @@
-Return-Path: <linux-pm+bounces-35010-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35011-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 709AEB8751F
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Sep 2025 01:08:01 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A3CF9B87586
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Sep 2025 01:19:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9F2577AE5E5
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 23:06:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5FD9F5241A0
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 23:19:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76EEA285404;
-	Thu, 18 Sep 2025 23:07:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C02E62309B9;
+	Thu, 18 Sep 2025 23:18:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="f/44jdJp"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="MepmCO20"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sender4-op-o12.zoho.com (sender4-op-o12.zoho.com [136.143.188.12])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 806342F2E;
-	Thu, 18 Sep 2025 23:07:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8B6F4A2D;
+	Thu, 18 Sep 2025 23:18:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758236874; cv=pass; b=A61BqXjzr6eRyVCTf20zitTCWEJzQMrAaDoIKiCRd4HoFeC5UHOtGPm82/l4FnbDjYQVvbGLi8a4ajEHc1eFBu9HmSDRzUinnSMrHXqOwjuJJNkUxd21oG4Qo5S2hgx0q2Gsk5JPO9vxTkc6O9xUElYXDz1PV7D/jICEXexmbqI=
+	t=1758237539; cv=pass; b=HAMzxyHz9ufTeorV3zlW2h4bOswmwl0N5UlYWjs5zR0RFs4+ojT4Wnl5n4ynWQoe69AWNmqSxDoBT8Vdnv2GRroQgTf3Be3IBIKlRLfPH3xlAN9aZ+B/LWu7gJkqnUXz4MOFiGdEbhTCuIPAbGbf2PLcGP7AMpAUVMFY/bXKjLo=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758236874; c=relaxed/simple;
-	bh=Di69+3xAurKfacfP8puUgoBd+aL2EAtdQ3uafgJuZSU=;
+	s=arc-20240116; t=1758237539; c=relaxed/simple;
+	bh=5iJGPs6vcEGywKPGkLdblZZi+nX/oYrCVtOfsRMrNrw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ik7adueYbqzbCqR6P6t3M0dGebg8UQt4yDnXqusFzoNXkCsjajftJVPXYKjCSRW4rP9EIHEPMIZeh6weA67X6joP4jzdjX7UOR4zjfTmGHQGh2SoTGBV9xhuKAtHj3Wsgw71cHsamqZpb5yDMS96uexmajHlSFjYkTb4wD5Gyls=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=f/44jdJp; arc=pass smtp.client-ip=136.143.188.12
+	 Content-Type:Content-Disposition:In-Reply-To; b=Yun8CgoqTRXzjcALxnG4djKakihm1P79+Fp8TRf8Zi5ZYcjDy3V7bOARugJmrUY8y2yFCyNT7ffOpvBc16iOeOgDNB7ljfH+/kEAFMDTJxA8xfpnxpjNXbQJoTOzsWkzVGQhfrRAdFMK7YC8ivjuQB3/UzksolbyVWIRRNlw9ms=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=MepmCO20; arc=pass smtp.client-ip=136.143.188.112
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1758236853; cv=none; 
+ARC-Seal: i=1; a=rsa-sha256; t=1758237508; cv=none; 
 	d=zohomail.com; s=zohoarc; 
-	b=dqebnjUb2kmT1+WAe/W8RSC3z3MasPZX/nJ8TxGT3ArTBLWktlGBZwZdg+Qy5oToJiXLfjw9Uw+n9t999jfsbRhjeqepeoezmyX5ZeMDAjB/oXxVw5MQZ5be4o86gyaUKGVV6+nKuhYarDak97nzoixYmdw1gweymuDimu59eN0=
+	b=eWUw3ZFSZkaOGqkvPkt58f11mCaojnfzoco2m3GDejMcZkkir8nmXmASCGMiUjMEFI6yHQjK+2Rgnb6P766jooFfj4flJZyZQL70JkSn9Wn+lfpsNsTr9IrNJmvTZ6hzCK3dhyd8guTw3JF8M99vh9R9YdYXBRlfXVwfX/W97Xs=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1758236853; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=H4r4kdckYteex6L4AXkP4SeaEi4CQAP9o0saVu48T/E=; 
-	b=FPH7OJPd8KLKqZE44Toda/9m+8HEzsletaSBK6iv9WeFm6I1irqSlAvpZIqzSygofX7fKlDNnLa3fIso+rZLKUmQZNlzzlVAKfi3W1GZKVf4oeWns73GZUYXB+om2VU9PTUbkFnb8eF3LKoDKVl5RmbTHrSxavGSnG4qY+e9bU8=
+	t=1758237507; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=5iJGPs6vcEGywKPGkLdblZZi+nX/oYrCVtOfsRMrNrw=; 
+	b=MqHoOMhTefu1WmEPJywpu/MRI071IOIuuOOapI7fayqpLqoEPkqWkJ2iF8KB1yJtjpUoxNBXR2NMiOqJhZ4aQ8shhwO8FnGFbAvNVTjy6ZsvGn/tH3G1K7xujNoWTgegV1RSIOxsMDsus8370VCJ4zByMsyGsyycEg9t7Ds0lOA=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
 	dkim=pass  header.i=collabora.com;
 	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
 	dmarc=pass header.from=<sebastian.reichel@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1758236853;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1758237507;
 	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
 	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
-	bh=H4r4kdckYteex6L4AXkP4SeaEi4CQAP9o0saVu48T/E=;
-	b=f/44jdJpZbW33D3WSDM0DChDCjq/CkLL9FZsbC+67V7L6ZXhf9Z2Ab6JMl5PjPM+
-	WGi4HkpwRE51OS/RFyrCvqHzr52z1uVWViNS4shqwoIPZKSB5tkwSlP1XiCawqfsku9
-	c+w3ugDUverJvZ+Xlz6R56ok37Zj9fciWdG7XHyM=
-Received: by mx.zohomail.com with SMTPS id 1758236851024804.9593862824289;
-	Thu, 18 Sep 2025 16:07:31 -0700 (PDT)
+	bh=5iJGPs6vcEGywKPGkLdblZZi+nX/oYrCVtOfsRMrNrw=;
+	b=MepmCO20SYiw8AKHbcsT60UEli4QFi2Uzu8R1pBWBlO7t5J+55XfdujA/qMK1wUi
+	rucR3lwpVSgA5VgsOwGU0YFgZESGDXuQ52xfX7Xg16EcECWQttdkq11Xpf62TtFVwFE
+	swVy+qOXrznSDVhvO3KsB79qH7Y/qUQ3JOWZXgmQ=
+Received: by mx.zohomail.com with SMTPS id 1758237504693973.1672975828773;
+	Thu, 18 Sep 2025 16:18:24 -0700 (PDT)
 Received: by venus (Postfix, from userid 1000)
-	id 4F224180517; Fri, 19 Sep 2025 01:07:18 +0200 (CEST)
-Date: Fri, 19 Sep 2025 01:07:18 +0200
+	id B72F8180517; Fri, 19 Sep 2025 01:17:55 +0200 (CEST)
+Date: Fri, 19 Sep 2025 01:17:55 +0200
 From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Dzmitry Sankouski <dsankouski@gmail.com>
-Cc: Chanwoo Choi <cw00.choi@samsung.com>, 
-	Krzysztof Kozlowski <krzk@kernel.org>, Lee Jones <lee@kernel.org>, 
-	Luca Ceresoli <luca.ceresoli@bootlin.com>, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v4 9/9] power: supply: max77705_charger: implement aicl
- feature
-Message-ID: <ykyi4qot6nh5nickidkpepwxoeoxey3fdfsybjj4edmldn73no@x3c3cytyzo6n>
-References: <20250918-max77705_77976_charger_improvement-v4-0-11ec9188f489@gmail.com>
- <20250918-max77705_77976_charger_improvement-v4-9-11ec9188f489@gmail.com>
+To: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
+Cc: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>, 
+	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
+	Subbaraman Narayanamurthy <subbaraman.narayanamurthy@oss.qualcomm.com>, David Collins <david.collins@oss.qualcomm.com>, 
+	=?utf-8?Q?Gy=C3=B6rgy?= Kurucz <me@kuruczgy.com>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-msm@vger.kernel.org, kernel@oss.qualcomm.com, devicetree@vger.kernel.org, 
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH v5 9/9] power: supply: qcom_battmgr: handle charging
+ state change notifications
+Message-ID: <mub3b5r3zpcgsisicjbbl2kudefibj7t2n3jz5pgshlqsglnlw@5a7gc3trlnn5>
+References: <20250917-qcom_battmgr_update-v5-0-270ade9ffe13@oss.qualcomm.com>
+ <20250917-qcom_battmgr_update-v5-9-270ade9ffe13@oss.qualcomm.com>
+ <fa258ad4-1efa-4fe8-9636-d70c5ea9c8e1@oss.qualcomm.com>
+ <d9db8b82-9000-478b-a7b5-93792f1e1bea@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -72,205 +80,99 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="pr3ucwdquctonocm"
+	protocol="application/pgp-signature"; boundary="kybmdzwa6byyxpic"
 Content-Disposition: inline
-In-Reply-To: <20250918-max77705_77976_charger_improvement-v4-9-11ec9188f489@gmail.com>
+In-Reply-To: <d9db8b82-9000-478b-a7b5-93792f1e1bea@oss.qualcomm.com>
 X-Zoho-Virus-Status: 1
 X-Zoho-Virus-Status: 1
 X-Zoho-AV-Stamp: zmail-av-1.4.3/258.211.62
 X-ZohoMailClient: External
 
 
---pr3ucwdquctonocm
+--kybmdzwa6byyxpic
 Content-Type: text/plain; protected-headers=v1; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v4 9/9] power: supply: max77705_charger: implement aicl
- feature
+Subject: Re: [PATCH v5 9/9] power: supply: qcom_battmgr: handle charging
+ state change notifications
 MIME-Version: 1.0
 
 Hi,
 
-On Thu, Sep 18, 2025 at 08:06:53PM +0300, Dzmitry Sankouski wrote:
-> Adaptive input current allows charger to reduce it's current
-> consumption, when source is not able to provide enough power.
+On Thu, Sep 18, 2025 at 10:01:24AM +0800, Fenglin Wu wrote:
+> On 9/17/2025 7:14 PM, Konrad Dybcio wrote:
+> > On 9/17/25 12:15 PM, Fenglin Wu via B4 Relay wrote:
+> > > From: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
+> > >=20
+> > > The X1E80100 battery management firmware sends a notification with
+> > > code 0x83 when the battery charging state changes, such as switching
+> > > between fast charge, taper charge, end of charge, or any other error
+> > > charging states. The same notification code is used with bit[16] set
+> > > if charging stops due to reaching the charge control end threshold.
+> > > Additionally, a 2-bit value is added in bit[18:17] with the same code
+> > > and used to indicate the charging source capability: a value of 2
+> > > represents a strong charger, 1 is a weak charger, and 0 is no charging
+> > > source. The 3-MSB [18:16] in the notification code is not much useful
+> > > for now, hence just ignore them and trigger a power supply change eve=
+nt
+> > > whenever 0x83 notification code is received. This helps to eliminate =
+the
+> > > unknown notification error messages.
+> > Thank you for explaining the technical background.
+> >=20
+> > Please hit enter somewhere in your commit message, this is a very
+> > long paragraph, making it difficult to read.
+> I just realized I made a mistake on the bit position, it should be bit[8]
+> for reaching to the charge control threshold, bit[10:9] for charging sour=
+ce
+> capability. I don't know what I was thinking when writing the commit text
+> :(. I will correct them in the next patch.
+> >=20
+> > I believe this maps to:
+> >=20
+> > 0 -> POWER_SUPPLY_CHARGE_TYPE_NONE
+> > 1 -> POWER_SUPPLY_CHARGE_TYPE_TRICKLE
+> > 2 -> POWER_SUPPLY_CHARGE_TYPE_FAST (or _STANDARD, I see battmgr code
+> > reports them both as 2)
+> >=20
+> > However, we already set it to none/trickle/standard(taper) based on
+> > the usual notifications, so I'm not sure if these are more common or
+> > arrive outside the normal state changes - if so, perhaps we can take
+> > them into account as well?
 >=20
-> Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
-> ---
-> Changes in v4:
-> - fix intendation
-> - use IRQF_TRIGGER_NONE, because this is not physical irq
-> - use dev_err_probe instead of pr_err
-> - remove excessive chgin irq request
-> - remove pr_infos
-> ---
->  drivers/power/supply/max77705_charger.c | 58 +++++++++++++++++++++++++++=
-++++++
->  include/linux/power/max77705_charger.h  |  5 +++
->  2 files changed, 63 insertions(+)
->=20
-> diff --git a/drivers/power/supply/max77705_charger.c b/drivers/power/supp=
-ly/max77705_charger.c
-> index 8032dfa0c9a2..168a67819a51 100644
-> --- a/drivers/power/supply/max77705_charger.c
-> +++ b/drivers/power/supply/max77705_charger.c
-> @@ -40,6 +40,16 @@ static enum power_supply_property max77705_charger_pro=
-ps[] =3D {
->  	POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT,
->  };
-> =20
-> +static irqreturn_t max77705_aicl_irq(int irq, void *irq_drv_data)
-> +{
-> +	struct max77705_charger_data *chg =3D irq_drv_data;
+> This is not related with the real charging status. I double checked in the
+> battery management firmware, it is checking the charging source power
+> capability by multiplying maximum voltage and current reading from the PD=
+Os.
+> Any charger adapter with a maximum power below 60W is identified as a
+> slow/weak charger.
 
-If you do this here:
+Please include that info in the commit message when sending a v6.
+The code change itself LGTM.
 
-disable_irq(chg->aicl_irq);
-
-[...]
-
-> +	queue_delayed_work(chg->wqueue, &chg->aicl_work,
-> +		     msecs_to_jiffies(AICL_WORK_DELAY));
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
->  static irqreturn_t max77705_chgin_irq(int irq, void *irq_drv_data)
->  {
->  	struct max77705_charger_data *chg =3D irq_drv_data;
-> @@ -445,6 +455,38 @@ static const struct power_supply_desc max77705_charg=
-er_psy_desc =3D {
->  	.set_property		=3D max77705_set_property,
->  };
-> =20
-> +static void max77705_aicl_isr_work(struct work_struct *work)
-> +{
-> +	unsigned int regval, irq_status;
-> +	int err;
-> +	struct max77705_charger_data *chg =3D
-> +		container_of(work, struct max77705_charger_data, aicl_work.work);
-> +
-> +	regmap_read(chg->regmap, MAX77705_CHG_REG_INT_OK, &irq_status);
-
-[...] You can drop the following code block and completley get rid
-of the is_aicl_irq_disabled variable.
-
-> +	if (!chg->is_aicl_irq_disabled) {
-> +		disable_irq(chg->aicl_irq);
-> +		chg->is_aicl_irq_disabled =3D true;
-> +	}
-> +
-> +	if (!(irq_status & BIT(MAX77705_AICL_I))) {
-> +		err =3D regmap_field_read(chg->rfield[MAX77705_CHG_CHGIN_LIM], &regval=
-);
-> +		if (err < 0)
-> +			return;
-> +
-> +		regval--;
-> +
-> +		err =3D regmap_field_write(chg->rfield[MAX77705_CHG_CHGIN_LIM], regval=
-);
-> +		if (err < 0)
-> +			return;
-> +
-> +		queue_delayed_work(chg->wqueue, &chg->aicl_work,
-> +		     msecs_to_jiffies(AICL_WORK_DELAY));
-> +	} else {
-> +		enable_irq(chg->aicl_irq);
-> +		chg->is_aicl_irq_disabled =3D false;
-> +	}
-> +}
-> +
->  static void max77705_chgin_isr_work(struct work_struct *work)
->  {
->  	struct max77705_charger_data *chg =3D
-> @@ -617,6 +659,12 @@ static int max77705_charger_probe(struct i2c_client =
-*i2c)
->  		goto destroy_wq;
->  	}
-> =20
-> +	ret =3D devm_delayed_work_autocancel(dev, &chg->aicl_work, max77705_aic=
-l_isr_work);
-> +	if (ret) {
-> +		dev_err_probe(dev, ret, "failed to initialize interrupt work\n");
-> +		goto destroy_wq;
-> +	}
-> +
->  	ret =3D max77705_charger_initialize(chg);
->  	if (ret) {
->  		dev_err_probe(dev, ret, "failed to initialize charger IC\n");
-> @@ -632,6 +680,16 @@ static int max77705_charger_probe(struct i2c_client =
-*i2c)
->  		goto destroy_wq;
->  	}
-> =20
-> +	chg->aicl_irq =3D regmap_irq_get_virq(irq_data, MAX77705_AICL_I);
-> +	ret =3D devm_request_threaded_irq(dev, chg->aicl_irq,
-> +					NULL, max77705_aicl_irq,
-> +					IRQF_TRIGGER_NONE,
-> +					"aicl-irq", chg);
-> +	if (ret) {
-> +		dev_err_probe(dev, ret, "Failed to Request aicl IRQ\n");
-> +		goto destroy_wq;
-> +	}
-> +
->  	ret =3D max77705_charger_enable(chg);
->  	if (ret) {
->  		dev_err_probe(dev, ret, "failed to enable charge\n");
-> diff --git a/include/linux/power/max77705_charger.h b/include/linux/power=
-/max77705_charger.h
-> index 6653abfdf747..92fef95e4ac4 100644
-> --- a/include/linux/power/max77705_charger.h
-> +++ b/include/linux/power/max77705_charger.h
-> @@ -123,6 +123,8 @@
->  #define MAX77705_DISABLE_SKIP		1
->  #define MAX77705_AUTO_SKIP		0
-> =20
-> +#define AICL_WORK_DELAY		100
-
-Add _MS suffix
-
-> +
->  /* uA */
->  #define MAX77705_CURRENT_CHGIN_STEP	25000
->  #define MAX77705_CURRENT_CHG_STEP	50000
-> @@ -185,7 +187,10 @@ struct max77705_charger_data {
->  	struct power_supply_battery_info *bat_info;
->  	struct workqueue_struct *wqueue;
->  	struct work_struct	chgin_work;
-> +	struct delayed_work	aicl_work;
->  	struct power_supply	*psy_chg;
-> +	int			is_aicl_irq_disabled;
-> +	int			aicl_irq;
->  };
-> =20
->  #endif /* __MAX77705_CHARGER_H */
-
-Otherwise LGTM.
-
-Greetings,
+Thanks,
 
 -- Sebastian
 
---pr3ucwdquctonocm
+--kybmdzwa6byyxpic
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmjMkJoACgkQ2O7X88g7
-+prASxAAmQkPy6v96FCAD8OFFK74FN/koiHT9S7M/Aivj0hHYnjubYlvbrBJFME0
-qZnqCo/aek9eLetF3PE3unOH3zKUzeMlKc/W/756ob4l6hME27ecekB/3sgeOsgE
-MJ74O1aqeYui8I4YM2zUkRzbOO/evOId8q9+xrY3bl71reulWoL7aM+ZFEgtuYi5
-wl4/rWRvvaZTgs/PXAc8bcuzogP4iha7yZsyFpZccFJ81qHZe5fJrCVpvb6kQCcS
-PNbH/gj5HIoIlZnhH2gwdv7cHNDEmEiOsn4UsWpua1jgdkukoqxRRoJV7qDwpJHN
-rVxzlxFOGuuQWo70ByNLihIHKbYz9EXMvIMV5JCKR7sv63BJ1IcxWYiCzaOSbPbw
-EZV3LyMGSIodQlB4/JK1O4zvUBJlQqYs/glqAJO7eZCc6N0bacKopUjXzmbpn/fI
-/lxFQnNXAmElYpuIdBIgGONa4hknipHfd3I9gqfTVPSf15IzYi+QsGIy0tbPL9Bs
-j6tTYGR9e7hG6c9PCOpM6nIwFYy5msGjnIFJej1rlTRgzQjf7m+KJtnM10rpMUd8
-4IdU2FAGm4iUA5Pwzguzm2hyDU2kCksCf/qRV/6Gn3lKzESYeAlUXVMGDkjSBdrB
-nkXmmi5qiOhgiwi8ywqAJ2XrXJ2duYPQ51kUvjimr7ArP5AJRr8=
-=jSN7
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmjMkx8ACgkQ2O7X88g7
++pqwLg/8DogotcprKe+ff5MNlSQgo3S8L5Bo8a46PQ6yojTQC7i5j/2A5mIwMJOw
+YbEDu4okwunPYtLjOvcQDbyx3QwnB8Rgl0KkqQ8aOc/t9HxcuDDfVALsqooGKNuC
+6z/PIA+XzH91Dxi9pUaVwlt6gobgCVcxze2uoOOnWjWhPnQvg14NRSFirmZ1bLV3
+nUQAbOs7bPOodecSPOmlEAtFBeMOGQxsV0wfh8tzF1JwxsxaMsdlLET00OgKsyvv
+jNL9I1X8wx2dno6kzjRDKVsqFKMewweTCMrjJaExGeFN/2gsSyhYR8GbMKcUVyUK
+deuA5/j+FxL3DBzNp0DD76DhCWRz63QtOI3foyEcSlhOXSeUP+omKiVImtNl3L6i
+Jaif8Tl5v3qVag8hYcvx9y/t6GQmadaJ0yw53uEKtF6XTlQAs4zuPWyxaCJ2Y0o5
+ZEstSYigPM5nqcBtw9fepVu0uRNKT1DPRkO2sg0CZ6SAsKAoOH7ztQxDUp2UNinv
+dG/HxbB7iU2WNEOiRbX5VXT8F9AiqgOgAsA8+6vy901rsjvxe5NRTiWk+mfcNO5Q
+xhyj/gEMbA3U8Y7z4Na84lUopjpFqWqSixUlGcb9waP/pCIkiumwpu6ORTcUuF/E
+LHdrTtRYAMSKTDUcUfinMhnzdKFSidGEMmzoOIBDH56OXCuDsFY=
+=v/vi
 -----END PGP SIGNATURE-----
 
---pr3ucwdquctonocm--
+--kybmdzwa6byyxpic--
 
