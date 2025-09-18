@@ -1,103 +1,102 @@
-Return-Path: <linux-pm+bounces-34949-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34951-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61109B83623
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 09:45:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 851E8B83854
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 10:31:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B243D1C26FB0
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 07:46:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 520F22A498B
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 08:31:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1E252EE61D;
-	Thu, 18 Sep 2025 07:45:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49A492F067F;
+	Thu, 18 Sep 2025 08:31:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b="NRIxXyCQ"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="lu4vPTDS";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="frcmEIKN"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [178.238.236.174])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AC692ED845;
-	Thu, 18 Sep 2025 07:45:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.238.236.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC8472ED17A;
+	Thu, 18 Sep 2025 08:31:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758181532; cv=none; b=HOtsiIQSsBtLw3NMqj3KgClvAFBAH8hn5EI9xeojs+rkQHKbS7E5mHj5zvZB2FODrTVlQZfduIbMmwz4LRvQbF09bCyj5RKa3OwTN8S20rJOqldJqSw9jU6YYUblyXVgdw6yQH4NbcM3X8PSZGJyhwRE7rZpBRlfGTOd7TDF7m8=
+	t=1758184271; cv=none; b=CFzsejgdr+7BphX3T54KfWb35rVpND/rTaTpp9IwylyRSXaOgXfO6nOvn8PNioRYKGaayZbPsK4a+n84xeuYLDQnwXTWvdVKgo7afK7xZJUXzALGX5PTtfoK8os62Vp38wiuG3VjcN49/A2sb+9OR94CmeS5LroGIn/6PBnD3Bw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758181532; c=relaxed/simple;
-	bh=/tS5VN8wqJ0W6f79Uht7zyfEMcAvhg6Jn1SC8qgkuXk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=O2GDXLg/OkmTeTAN307SHMG1RhqyKBRpMVd3svfF3RkJGz8m2+3qf7RCswV4sAiXkBiaiC6iRCzkLd/j/U7Sbmn942ioHsgddt1egmuqLyU1ppF3hcoL7FNElj/pReCKRjF3HWRe10sfxtYb/dECMU0/gSGl+7XbzFCMdefUfbg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info; spf=pass smtp.mailfrom=kemnade.info; dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b=NRIxXyCQ; arc=none smtp.client-ip=178.238.236.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kemnade.info
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=kemnade.info; s=20220719; h=Cc:In-Reply-To:References:From:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=3q5kiib1kd62l3L+MK1D9QnKWb3L2UjvT/k4OiP6KHs=; b=NRIxXyCQ/HBB+lrJkjGwh/Qi9J
-	Sl0pV0V5oZq0UHi+HfnP13h/14EDB8P3j/FyyCVW4nVCOrJ68XUG6WFPHD9InvseSbT+883rRFWVH
-	1q6iJuMziXBJsUFdb27E0QnqY3kmeyJGlEaWKH/rmRxidgs31XscnjS6swajgzWGfHpfJJbbpQR21
-	+iHlTbO/fT4dURmjPaXpu8Xa0Uec0Zpvz2Cw645XeDTlodQxE/xnML/FiRmHvd8b54q9B7lMhVkYT
-	gdYcW+k6bviIvRL+Hnez3MJKb7NxJcPHzzTj+w985P6l2V4WC4yPxMyUpx3eJ5tGYa2F7j6G8SScF
-	663V4NSQ==;
-From: Andreas Kemnade <andreas@kemnade.info>
-Date: Thu, 18 Sep 2025 09:45:11 +0200
-Subject: [PATCH v5 3/3] MAINTAINERS: Add entry for BD71828 charger
+	s=arc-20240116; t=1758184271; c=relaxed/simple;
+	bh=G4M2r631pn7Zt96E0MYNERhodv6pTD5S3MULZ7MUpBQ=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=e8R8FzH0Kz/4orFqGwBGTI477KICTx+aJdT8PXYmBZpJnIlYpcZDj4SsVxUZ/H7FbLrx3dvO8TvAKA6DOi5/xwjoCFGPBLOgZfm5Fb6KZxRtmiLCD9Kbm3JLjOVc5wM9etpMtWXgS2BnERUTdyWeQfhWaOI8BTjldKgqD5dafts=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=lu4vPTDS; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=frcmEIKN; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1758184267;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=G4M2r631pn7Zt96E0MYNERhodv6pTD5S3MULZ7MUpBQ=;
+	b=lu4vPTDSDrmy1XdWHB/sLy0SqaZOEv6ADAZtGJcbBWuiqi3NXackrLMUa4tY70nStxmHQA
+	f8GocqMXu9uQQHpWm8RQ1MnUjy/yB223tXLGwSPWpLvbe+bG77ut89Sa2dbqm0Dj7zPl5/
+	KjSY9Fztu2dN7qEPPiKmjZy3/KrXHpbUyd3eyNcVyw9wRuHqEU4HlAPWLzlLeex2tPABhn
+	/F/KzbMjHWTYSpb+FXU43HSdfmRwjlFJyi0g4EOQ424a8idA/64/at4BA99lxMRWdQ50hM
+	8h3x/NRaUtu5mekRqCYs/6m7W1bp7plPQv5hefziiscO21wnV9LRIbeKIZeXYg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1758184267;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=G4M2r631pn7Zt96E0MYNERhodv6pTD5S3MULZ7MUpBQ=;
+	b=frcmEIKN8MoYfH2Xt5r/GzN/HG2lhTn34uPmygvDmSBBiNytSkGd5EZuf12+Z2VFeRcl2h
+	Nbh+prw79Xw3v1AQ==
+To: "Rafael J. Wysocki" <rafael@kernel.org>, LKML
+ <linux-kernel@vger.kernel.org>
+Cc: Randy Dunlap <rdunlap@infradead.org>, Linux PM
+ <linux-pm@vger.kernel.org>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH v1] smp: Fix up and expand the smp_call_function_many()
+ kerneldoc
+In-Reply-To: <CAJZ5v0gEh-xoKdgAgUvnGzPV6AO51=ZagHXNCrC4BfRZk6Oydw@mail.gmail.com>
+References: <6191405.lOV4Wx5bFT@rafael.j.wysocki>
+ <CAJZ5v0gEh-xoKdgAgUvnGzPV6AO51=ZagHXNCrC4BfRZk6Oydw@mail.gmail.com>
+Date: Thu, 18 Sep 2025 10:31:06 +0200
+Message-ID: <87h5x088mt.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250918-bd71828-charger-v5-3-851164839c28@kemnade.info>
-References: <20250918-bd71828-charger-v5-0-851164839c28@kemnade.info>
-In-Reply-To: <20250918-bd71828-charger-v5-0-851164839c28@kemnade.info>
-To: Matti Vaittinen <mazziesaccount@gmail.com>, Lee Jones <lee@kernel.org>, 
- Sebastian Reichel <sre@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
- Krzysztof Kozlowski <krzk@kernel.org>, 
- Andreas Kemnade <andreas@kemnade.info>
-X-Mailer: b4 0.15-dev-50721
-X-Developer-Signature: v=1; a=openpgp-sha256; l=782; i=andreas@kemnade.info;
- h=from:subject:message-id; bh=/tS5VN8wqJ0W6f79Uht7zyfEMcAvhg6Jn1SC8qgkuXk=;
- b=owGbwMvMwCUm/rzkS6lq2x3G02pJDBmnd0xunaLH6fnQrt/t8MLU2RF563fNfiXExaJjmfhIy
- LBr25HIjlIWBjEuBlkxRZZf1gpun1Se5QZPjbCHmcPKBDKEgYtTACaifo6R4fXuupATM//ZVtTs
- +ujvIOGrk3oiZJvU3MJgvUa7ef1fOxn+J8SYHAzZtKH+BV/8JX/ddfubF0h1eAcaSm6QCLl1x4u
- NCwA=
-X-Developer-Key: i=andreas@kemnade.info; a=openpgp;
- fpr=EEC0DB858E66C0DA70620AC07DBD6AC74DE29324
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Add an entry for BD71828 charger driver.
+On Tue, Sep 16 2025 at 16:13, Rafael J. Wysocki wrote:
 
-Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
-Suggested-by: Matti Vaittinen <mazziesaccount@gmail.com>
-Reviewed-by: Matti Vaittinen <mazziesaccount@gmail.com>
----
- MAINTAINERS | 6 ++++++
- 1 file changed, 6 insertions(+)
+> On Tue, Sep 9, 2025 at 1:44=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.o=
+rg> wrote:
+>>
+>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>>
+>> The smp_call_function_many() kerneldoc comment got out of sync with the
+>> function definition (bool parameter "wait" is incorrectly described as a
+>> bitmask in it), so fix it up by copying the "wait" description from the
+>> smp_call_function() kerneldoc and add information regarding the handling
+>> of the local CPU to it.
+>>
+>> Fixes: 49b3bd213a9f ("smp: Fix all kernel-doc warnings")
+>> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>
+> It's been a week and no feedback.
+>
+> Well, in the further absence of any, I'll assume no concerns and just
+> queue this up.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index fe168477caa45..044eb41ba4797 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -21848,6 +21848,12 @@ L:	linux-serial@vger.kernel.org
- S:	Odd Fixes
- F:	drivers/tty/serial/rp2.*
- 
-+ROHM BD71828 CHARGER
-+M:	Andreas Kemnade <andreas@kemnade.info>
-+M:	Matti Vaittinen <mazziesaccount@gmail.com>
-+S:	Maintained
-+F:	drivers/power/supply/bd71828-charger.c
-+
- ROHM BD79703 DAC
- M:	Matti Vaittinen <mazziesaccount@gmail.com>
- S:	Supported
-
--- 
-2.47.3
+Sorry, was distracted. No objections from my side. Did you queue it
+already?
 
 
