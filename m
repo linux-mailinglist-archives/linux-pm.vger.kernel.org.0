@@ -1,171 +1,162 @@
-Return-Path: <linux-pm+bounces-34977-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34978-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9727FB85DDB
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 18:03:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E6EFBB8625E
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 19:06:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 775B22A52BD
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 15:57:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A52CF3ACEF4
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 17:06:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A634316197;
-	Thu, 18 Sep 2025 15:56:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 943C830FC0F;
+	Thu, 18 Sep 2025 17:06:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="XE2F37dI"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QusXKV+B"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yx1-f43.google.com (mail-yx1-f43.google.com [74.125.224.43])
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 037A630F529
-	for <linux-pm@vger.kernel.org>; Thu, 18 Sep 2025 15:56:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D97CD2F7ADC
+	for <linux-pm@vger.kernel.org>; Thu, 18 Sep 2025 17:06:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758210965; cv=none; b=ckZSq6quoQP6tsZ4+2hZabGa1mlsNtSHK3bRpqNWsrZiqP5sSU+d7vZQSD/9v5N7klp9GuYTAZsFGsXVl7e5J2Iz5TDADeAIXY6/SesLHCIFTIgSVuj8Upqf/5A0CrPCAwOMC1ihrV6m5/r6lJa4bj9bzv8CSUeFRO6F8IO0MfQ=
+	t=1758215212; cv=none; b=EGnCYjmqsoRtsEVUfOGPiTxPxMTuzLsyv34eiXo9JZUQGXY3F9sER2Lt2x4CpmirQhMiHTQsqdJQvRL7QDt7RkWjDsblCvGgoM+2mr7NwgqQQZxkI4+mak/2tlV/4FYAyFhg6D/7PjNnYoyCGERFdw5ccyggX+Qf0Mu6aTg65C4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758210965; c=relaxed/simple;
-	bh=UeZq0pHTduP+iZFoeFnOKXM6Oxja1vWxpxZAhP3BxT4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QAmQA5zQEv/+LQEwVDCDhpkeH2PQxFq+wzSTl+6OXrt/py6D8gVuldqG3IJnP+zzfJrrw+vfTacOotLQUoueeXnfibweQtZ1Jo/npU3Tuz8iBdgRH/OWxE51ho4hBJQ1GRRkJ6pjRI+CEnCbkgo2iFTlceZ1LGnbHnrkuVTS33o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=XE2F37dI; arc=none smtp.client-ip=74.125.224.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yx1-f43.google.com with SMTP id 956f58d0204a3-6294ff16bacso506255d50.2
-        for <linux-pm@vger.kernel.org>; Thu, 18 Sep 2025 08:56:00 -0700 (PDT)
+	s=arc-20240116; t=1758215212; c=relaxed/simple;
+	bh=Snu3DlC7DX4VFV981Eh74gFnhCpjPpOJJ95LxP+JvLE=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Jm4QN5qMltM+RtsNQ19f3cMcGKc5vXMo8QRybCOrPNJbqN2WpGlO+UD74YMkKilxuLpGVf/y89RQL53Tv3uXYsDYqoIslL/+cBnkqWyiGlOy4IU+UxyP2lZRU4vAvl73tJ+dmORe+Nkd1rJdABcgqawNygbxP4P6j9wLXjkhzLs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QusXKV+B; arc=none smtp.client-ip=209.85.218.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-b042cc3954fso237238466b.0
+        for <linux-pm@vger.kernel.org>; Thu, 18 Sep 2025 10:06:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1758210960; x=1758815760; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EdfK/q+Pwfof78/WFiIzEJbNGwk57mdR4QjuAR4qnWM=;
-        b=XE2F37dIX2AnItBOkWF2X8l4MTBSpb916/0bPK1aVh0+24FL22SKy+YpsDrjiiZ+g1
-         pmyhULYGE2jtjowr67HFz6ZeAaS4Bw+3sMQlaCZiuoG0QalJtctIuuPgg8oclytYzCpC
-         n5e+mEjMvEEEpITHeQP926DV9raNPSm/5sx3RFwWYI0Qtgj8LvRqYo4tsIKs22t1zq9G
-         GGp+ruIu6HVKWAphx5qkrVGi+xdrGbHjkjrfAO8FYi2RMUs6HGTvDFKZlLg40g4QokFy
-         tmiGcSRpjzQ0pKYpRkJy4h2yFB9HUpJIipwECTuZ+2EcmLQuUwmddkoSy55twkJo5ZMS
-         ZXqQ==
+        d=gmail.com; s=20230601; t=1758215209; x=1758820009; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OgEPdidWZUCKfjqucDbsRTdLfQYdNUkekhd18tzklWA=;
+        b=QusXKV+BbPx+vg7lQlQjo5tg2fjbqYHtsgpENpDA7+SOcx7Nz/EwGYkoHZXummEm/o
+         1fx0+636QcWyPax4lb6gkO3X4TeWRObzLhth9k/mOc/XnvPgYLzAUw73eInEDxkjM0Sa
+         hSE26wPahO3QaMmTi6+MOU2shsk1wJ+wM+jzQZCOLQpixMFj4XIMbdVzFtMrfUsDh5Zh
+         qfaANS8SK6WbRLojbsH8grx1a5eTZy2a5Xq/aeFlAFYG+NM2y0YrJeD9FczfjG0me+XK
+         XztUvEHBDIDj8JypvruiX/3oUa8S0EanuSJKx5XJIZE2mlnaQb5t3H1Tax6CMC/7PJ6l
+         KglA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758210960; x=1758815760;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EdfK/q+Pwfof78/WFiIzEJbNGwk57mdR4QjuAR4qnWM=;
-        b=Rz8Gdkvwk7lhvBw+t7VN13LMk/kn8eAkoML44z5ahSjS0JfXn2jO0Ak/v6t1WTQ4gy
-         Um+EZl18SgPSGpZ843f+ztHHALtWYDRsWvMRkoLShtR6Iw5H4lzS1l5T1pCiRck5GFm8
-         R26xdEzw1sQLZOWjHUW+A0GXPCiJ6tdEO/43xDnfRPUfyRU0bRHg6qmAr0+2PGg/UM4h
-         1Yuo26fGWR/R9c8GuNriawBIgefULzZwSFDYMAbQCiSW5S3bwpM3PXNClBoTIBoEYru1
-         U/f4KOy5x1q6Jp70htJdkEggXoBkAu7c6R5ERaCVrYdAu7gzzUn7nILkUp0GY5wNoF1Q
-         s/mg==
-X-Forwarded-Encrypted: i=1; AJvYcCWlfI2NWD1hUuwHd43NOzEJdOjkTwgvCJJKIixHOVgBmzzwUorBCbjWJSDKxyVMalEG/B7IacFytg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyUZMjaUjfwLRzoLIUR9QpjB9bSNGPFrlAvdXPJcg56AtRyoJUj
-	I1ARuyHKYdfdbpJ0Isu2vWzrrcVUSZUljI1LFzkCcI/7wawM1Hu2tSzY0mLSW1kwN+1Dl8Yb+Y5
-	LghtafPnFNWzQpwJK0EHgmXt3LRFi2QJQOqwnF8kPVQ==
-X-Gm-Gg: ASbGncv1a/r8F+5CJ2DHrzyPbcX2SlNDa0m7Y3hJOosclrt3W2puOddwxrlLITrac2B
-	t6od5Cy/C5CebrUEGL6nUBorBgaux2rOxQvu3ZZBuWnzvCq0XD5BYX/ntgbDaFZPWdeGVCoJu1g
-	VCqY4EEZ2Jy4Eoq1lSXlnpCpbyVFN/1UwoD6orgcQiQfHypudqFFgNRXItaP+aSOMcgZEaJBiLC
-	+pYOZvzChJ9d2/t4GUm/+WwAlE=
-X-Google-Smtp-Source: AGHT+IEECGH2G8e/CDH9F0qac/7FZa5yDye+HQmQVSLPgRHzbQeecfKUO0vMmnt8GIhKDbVRf8GMagQg2WceGWP5ZzQ=
-X-Received: by 2002:a05:690e:1559:20b0:628:9b45:5e29 with SMTP id
- 956f58d0204a3-6347f544d01mr24918d50.15.1758210958918; Thu, 18 Sep 2025
- 08:55:58 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1758215209; x=1758820009;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OgEPdidWZUCKfjqucDbsRTdLfQYdNUkekhd18tzklWA=;
+        b=YVu/gxfrQFPER9V6PTf5WF8TBx727AepzEI2R3I+6/0IHJFZUqBBIel79WkNS4VzHk
+         SXViYZxZP20jNcGVms9zOnWLXj9cftdoU7CHrtd+d+yrWc95zJXs4Cg3iViTn9MP9DHb
+         DNGyjUuiu+FPxQL2Phf9AsicuFNyLPKL5nFn65H0LummGpr181fdkOElGhcVsm8oWthY
+         FaxLumTastINidVWfApG8C1e1rRNG71qnHJPZKxa8acH9K+qIia8RcJll9+W4vhr97UR
+         eN/IYkrCpuKyNUnUH3NAxYgTk+ybLg0xvCAFtLDtnCRfiyltQPRiSh+MD2g8SIss/1Hi
+         Cmag==
+X-Forwarded-Encrypted: i=1; AJvYcCWYlm8GwooozwMWF7Rd7atJMjmUZX18kY7xdGKuW+zdiJ/yhnQjsGKAZ+HZ2uAQRYhSVDQsePqHSg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzJkDDmBhAskpgyk0X9Alp2yJGWfpFut611q0Yl8AjETC8aTrQ1
+	jsr7Fkst+tKDhFNGxOFaK/Dm5/ZLzbEfiMqmzvQUjaJZvu4GA1DNN6co
+X-Gm-Gg: ASbGnctVnxyK2xueAosuN6WBVagZb6vBaBmkp+qmXDrWuEwAyGyP7ABnSerjMwVvwg6
+	LxLDpAnUJCYxtiUp5vz9KcdxIy892TqQPP2KB2SrPwgidaFgPuMatBB1e64g0jkI+RA7lDgkMK+
+	TQL5ql854yjlH+ZkW4/jWz0C8FFJ4SbfMUFGo5yYO8ZXziFSpqkvH01vw+SqUw4Tqe7BoChQokw
+	eAh6yR54TSLimO1HAIGAzzPiDmkYg1kBjITAzEBDNsRYHt5CRRaScPhP9hkcnJi/s1cNpQne5VW
+	HC/RdHa0XQAJOHcRBaJfZPxFBkwfeoMI01MRmX3MV58ej/S+XSKsJ1BVr2HZVUQU0gtbvY5g9jC
+	Pib3VEScFxKnMC/3pYUmDIoSmFF0W3HjygTo68UY=
+X-Google-Smtp-Source: AGHT+IEa80hbsr27dP86R8EESZ/NUboAc4XQo4V5MaLrIyBAxmcmVYTLCjC7KQgkEfYpTXVruphemQ==
+X-Received: by 2002:a17:907:f497:b0:b07:6454:53f7 with SMTP id a640c23a62f3a-b1bb7f2ad5bmr626407566b.52.1758215208966;
+        Thu, 18 Sep 2025 10:06:48 -0700 (PDT)
+Received: from [127.0.1.1] ([46.53.240.27])
+        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-b1fd271f895sm225845366b.97.2025.09.18.10.06.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Sep 2025 10:06:48 -0700 (PDT)
+From: Dzmitry Sankouski <dsankouski@gmail.com>
+Subject: [PATCH v4 0/9] power: supply: fixes and improvements for
+ max77(705,976) chargers
+Date: Thu, 18 Sep 2025 20:06:44 +0300
+Message-Id: <20250918-max77705_77976_charger_improvement-v4-0-11ec9188f489@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250818074906.2907277-1-uwu@icenowy.me> <20250818074906.2907277-3-uwu@icenowy.me>
- <CAPDyKFombYNFvTsChewQ6cFY2woS+vSb1YUV0Bp_+DcigrFFXA@mail.gmail.com> <89ed15328b73b191fe152cf8559b92239b5596bd.camel@icenowy.me>
-In-Reply-To: <89ed15328b73b191fe152cf8559b92239b5596bd.camel@icenowy.me>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Thu, 18 Sep 2025 17:55:23 +0200
-X-Gm-Features: AS18NWAOrRn2SPBMcr_jo91dsxsIlLlmmb44l-SPKPjXdyTcSw8dHOMtiv-1B0s
-Message-ID: <CAPDyKFoQuLKwf69YK7ynj-HeWXsMzguYBtbOy8HE5X_jb1dUpQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] pmdomain: thead: create auxiliary device for rebooting
-To: Icenowy Zheng <uwu@icenowy.me>
-Cc: Drew Fustini <fustini@kernel.org>, Guo Ren <guoren@kernel.org>, Fu Wei <wefu@redhat.com>, 
-	Michal Wilczynski <m.wilczynski@samsung.com>, Sebastian Reichel <sre@kernel.org>, 
-	Han Gao <rabenda.cn@gmail.com>, Yao Zi <ziyao@disroot.org>, linux-kernel@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIACQ8zGgC/5XOy06EMBQG4FeZdG2dXoCCK9/DGHJaTqEJFGyxj
+ pnw7rYuvK3G5X8uX/4riRgcRvJwupKAyUW3+hyquxMxE/gRqRtyJoKJmrWS0QUuSilW90p1qun
+ zURgx9G7ZwppwQb9TlLbiSluAuiEZ0hCR6gDeTIXS1TnuEF7mHc3kz1/ga9Sm39a3rA04u4Thv
+ XxvAa27fFZ8es55cnFf86o0TrxM/1Uuccoo5u2gpR0qKR7HBdx8b9aFFD6Jb7Jj3U2kyCS0g7A
+ aKsXr7i8pf5Cc30TKTMpaMNm0jQXxizyO4wMVfcMUuAEAAA==
+To: Chanwoo Choi <cw00.choi@samsung.com>, 
+ Krzysztof Kozlowski <krzk@kernel.org>, Lee Jones <lee@kernel.org>, 
+ Sebastian Reichel <sre@kernel.org>, 
+ Luca Ceresoli <luca.ceresoli@bootlin.com>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+ Sebastian Reichel <sebastian.reichel@collabora.com>, 
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+ Dzmitry Sankouski <dsankouski@gmail.com>
+X-Mailer: b4 0.14.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1758215207; l=2240;
+ i=dsankouski@gmail.com; s=20240619; h=from:subject:message-id;
+ bh=Snu3DlC7DX4VFV981Eh74gFnhCpjPpOJJ95LxP+JvLE=;
+ b=PgajctlOTxV+Mbi/NAuoRUD72DElTHIGyiCp37Ks7HUicZKgSsAfKH3/jHZ7wlJR3Ge3v12lL
+ 6L9fYjoxc+XCdWewUXZIq2DS6k2s01Yaa/DsE4KR64mhjPbeRK+8Twa
+X-Developer-Key: i=dsankouski@gmail.com; a=ed25519;
+ pk=YJcXFcN1EWrzBYuiE2yi5Mn6WLn6L1H71J+f7X8fMag=
 
-On Thu, 18 Sept 2025 at 17:44, Icenowy Zheng <uwu@icenowy.me> wrote:
->
-> =E5=9C=A8 2025-09-04=E6=98=9F=E6=9C=9F=E5=9B=9B=E7=9A=84 12:14 +0200=EF=
-=BC=8CUlf Hansson=E5=86=99=E9=81=93=EF=BC=9A
-> > On Mon, 18 Aug 2025 at 09:49, Icenowy Zheng <uwu@icenowy.me> wrote:
-> > >
-> > > The reboot / power off operations require communication with the
-> > > AON
-> > > firmware too.
-> > >
-> > > As the driver is already present, create an auxiliary device with
-> > > name
-> > > "reboot" to match that driver, and pass the AON channel by using
-> > > platform_data.
-> > >
-> > > Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
-> > > ---
-> > >  drivers/pmdomain/thead/th1520-pm-domains.c | 35
-> > > ++++++++++++++++++++--
-> > >  1 file changed, 33 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/drivers/pmdomain/thead/th1520-pm-domains.c
-> > > b/drivers/pmdomain/thead/th1520-pm-domains.c
-> > > index 9040b698e7f7f..8285f552897b0 100644
-> > > --- a/drivers/pmdomain/thead/th1520-pm-domains.c
-> > > +++ b/drivers/pmdomain/thead/th1520-pm-domains.c
-> > > @@ -129,12 +129,39 @@ static void th1520_pd_init_all_off(struct
-> > > generic_pm_domain **domains,
-> > >         }
-> > >  }
-> > >
-> > > -static void th1520_pd_pwrseq_unregister_adev(void *adev)
-> > > +static void th1520_pd_unregister_adev(void *adev)
-> > >  {
-> > >         auxiliary_device_delete(adev);
-> > >         auxiliary_device_uninit(adev);
-> > >  }
-> > >
-> > > +static int th1520_pd_reboot_init(struct device *dev, struct
-> > > th1520_aon_chan *aon_chan)
-> > > +{
-> > > +       struct auxiliary_device *adev;
-> > > +       int ret;
-> > > +
-> > > +       adev =3D devm_kzalloc(dev, sizeof(*adev), GFP_KERNEL);
-> > > +       if (!adev)
-> > > +               return -ENOMEM;
-> > > +
-> > > +       adev->name =3D "reboot";
-> > > +       adev->dev.parent =3D dev;
-> > > +       adev->dev.platform_data =3D aon_chan;
-> > > +
-> > > +       ret =3D auxiliary_device_init(adev);
-> > > +       if (ret)
-> > > +               return ret;
-> > > +
-> > > +       ret =3D auxiliary_device_add(adev);
-> > > +       if (ret) {
-> > > +               auxiliary_device_uninit(adev);
-> > > +               return ret;
-> > > +       }
-> > > +
-> > > +       return devm_add_action_or_reset(dev,
-> > > th1520_pd_unregister_adev,
-> > > +                                       adev);
-> >
-> > We have devm_auxiliary_device_create() now, I suggest we use that
-> > instead.
->
-> Should I send a v2 to convert to use this?
+This series consists of:
+- max77705: interrupt handling fix
+- max77705: make input current limit and charge current limit properties
+  writable
+- max77705: add adaptive input current limit feature
+- max77705: switch to regfields
+- max77705: refactoring
+- max77976: change property for current charge limit value
 
-Please do, then I am ready to pick up the series.
+Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
+---
+Changes in v4:
+- fix commit message
+- use IRQF_TRIGGER_NONE, because non physical irqs
+- minor rename refactoring
+- rebase on latest linux-next
+- patch reorder: put fixes patch first
+- aicl feature cleanup
+- Link to v3: https://lore.kernel.org/r/20250911-max77705_77976_charger_improvement-v3-0-35203686fa29@gmail.com
 
-[...]
+Changes in v3:
+- move interrupt request before interrupt handler work initialization
+- Link to v2: https://lore.kernel.org/r/20250909-max77705_77976_charger_improvement-v2-0-a8d2fba47159@gmail.com
 
-Kind regards
-Uffe
+Changes in v2:
+- fix charger register protection unlock
+- Link to v1: https://lore.kernel.org/r/20250830-max77705_77976_charger_improvement-v1-0-e976db3fd432@gmail.com
+
+---
+Dzmitry Sankouski (9):
+      power: supply: max77976_charger: fix constant current reporting
+      mfd: max77705: max77705_charger: move active discharge setting to mfd parent
+      power: supply: max77705_charger: refactoring: rename charger to chg
+      power: supply: max77705_charger: use regfields for config registers
+      power: supply: max77705_charger: return error when config fails
+      power: supply: max77705_charger: add writable properties
+      power: supply: max77705_charger: rework interrupts
+      power: supply: max77705_charger: use REGMAP_IRQ_REG_LINE macro
+      power: supply: max77705_charger: implement aicl feature
+
+ drivers/mfd/max77705.c                  |   3 +
+ drivers/power/supply/max77705_charger.c | 386 +++++++++++++++++++++-----------
+ drivers/power/supply/max77976_charger.c |  12 +-
+ include/linux/power/max77705_charger.h  | 149 ++++++------
+ 4 files changed, 344 insertions(+), 206 deletions(-)
+---
+base-commit: ae2d20002576d2893ecaff25db3d7ef9190ac0b6
+change-id: 20250830-max77705_77976_charger_improvement-e3f417bfaa56
+
+Best regards,
+-- 
+Dzmitry Sankouski <dsankouski@gmail.com>
+
 
