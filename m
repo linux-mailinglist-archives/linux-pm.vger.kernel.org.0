@@ -1,221 +1,145 @@
-Return-Path: <linux-pm+bounces-34966-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34967-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2796AB8564D
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 16:58:17 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D13D6B85747
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 17:09:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B238218937BB
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 14:58:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 566151791E9
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 15:08:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42A7C30C11A;
-	Thu, 18 Sep 2025 14:58:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0617230E0CE;
+	Thu, 18 Sep 2025 15:07:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="KTjnLpmQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J49zAjBu"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 476BB2FABFA
-	for <linux-pm@vger.kernel.org>; Thu, 18 Sep 2025 14:58:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1F1A30E0C6;
+	Thu, 18 Sep 2025 15:07:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758207494; cv=none; b=Q9S8LYGYe0cl+TYKiJeZUY/fbaNTVO7cVzLy7oSgdb2wPNU5XcfSlXY8B1b0h+KAOSC+ee5soUzeMf4i8bd62d6x2N4g4Cs3er8B2ZXwcjUnSsSSnln1XLNuzIAnfWMlrUXZCbf1zv65TzEQ35DjVomYRLSr9iwtvudZyckOTgM=
+	t=1758208059; cv=none; b=BrFGK37jqbYpD7WXBGiGwlZ3KcFyLmCK5yOE40XvQeOrk913zS8dOM+MmpVbQOaMs0EuiOZb+TzJ15ECP6Be0OJ8/SIQND2P2pM/IUWFt+aOq7yus9IxuDD5D5OBUR9VS5CEvvi0xcuO9EPLpdlUVJs1nEzccavSv6nuLRi+Tas=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758207494; c=relaxed/simple;
-	bh=r0MGZelkWDq9qnTXZ+PtPpNy5y8QjpGTSGrDqVUOhN8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dsG23jSqrCQY6gA6qLhCBBcg+9sft+xxBRm2CXsbXmQgmkfsuii+EXPpFIyhaUzauSjrEDcMEvnGFboHsTzd7xHVbTFYDxqAZPAwIsG1eO1AdTaD1Z5qfRAsMb6mYjQ1OqtC9p6BHO53yKhtd/uIBpoaCQVoMhxcBK17BiOfHf8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=KTjnLpmQ; arc=none smtp.client-ip=209.85.219.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-ea473582bcaso2603906276.1
-        for <linux-pm@vger.kernel.org>; Thu, 18 Sep 2025 07:58:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1758207491; x=1758812291; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=au0N8UjUCdJyaXYgEI+pwEcqeIAVB1l8ChmB40Jysug=;
-        b=KTjnLpmQUIeqm2raaWe6qNyibsxlZN8FZte2/ssyfJIPnkv/AkVX4TlEveGIdgBWbP
-         IxKUqKVAxvaeoW8nFCPb6xhPrsLbwL4tdMw8T5EP9iqbZsyx1Furpq+nDEJ2D+L6HKUL
-         xtrEtKte+TgBNtOyb22QmM2WUxRokpLrGo5ehTYgfSfrX3d/8bSUwOicLEe/X33ZWfnE
-         Kc6yhDTciV862LufcdFPAWGuTIUI747uqovYO8HPfAMDCffbOWZNaAZVSSE6JLWOaTxM
-         84HegmcPOVfuexhma0UjG5cWotSqG/bsnMJbqSuGbOvI/z9vUk17YJEFYpQ+KVwwM5rQ
-         Jt4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758207491; x=1758812291;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=au0N8UjUCdJyaXYgEI+pwEcqeIAVB1l8ChmB40Jysug=;
-        b=iftagQGd1hDweJ4Z+zIck4ENbsuZ5KyEHCGAbSCfJgPXhyRNdRX5Mk1m3zA+6azcpJ
-         I8ETfnL9Bt912h+8G9Au9kGO9M6z8mWmJkjQH7TMx2SoiK8HpX8okZJFFDgq5iRqlfFd
-         lumB53vyipJy32zwmKNHiekp4FMX/8RftBJce7un39xz1xiQK2mSMOQMn1wmOLQrECA6
-         so3/3hvLOr/x8E3xegyvTIcDCYFTLUAoQKhsbzLasEjUclE/UBIBqhPsgB6Wgg1nKuoj
-         4Ap229dD7kqwaP1+k1ES+tM8avrrgzL3xPXgDWfgiRjUETBXPXGkZk0zUe/x231YPzqp
-         DX9g==
-X-Forwarded-Encrypted: i=1; AJvYcCUaiJVTdA+tI4Rkcb+t6tx/iOgsMNYLnp1UMKRt4cCnVa9+uKSmvIs/tuSJhlgPwGT7hAd9yC0bSg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzY3bE9lKN2QeeVN3+n+McjdbGp7bPZbnqZJJfKHvG7NL3AbY92
-	ExGJjPQABaNRN0U2C+0t2aummSFVtq/XRmEU/i1B0WAcIjWAS+WWLRp9dal9AzkKmJAh9gHfcuF
-	uOwubeDnhmUcJYHlI7/0YX3SmXb2vehLDMjzdqlMLKw==
-X-Gm-Gg: ASbGnctFBm2VcpnVQTiV3B/6I56rlRRjdLOWT3PyTKgcyVLqE4JWU0S0+CzKjtl5AlM
-	gyrT/HO+s1pdsgd+azORl6Z9gMxzxiUNR2N+nFstu4byHuOfb/3yqmz13V/MNZpkS1myos0x+oD
-	X3MB1dUTUVGfVCo9MKNs89ljDVDv6PSG+hGSn1sKtIc2xJAinJAbEbGxmeh6+vdcTyva9yvHFNZ
-	/wLRJ9GsqZaDCdz7EvoaMPircI=
-X-Google-Smtp-Source: AGHT+IFu/Hil6zUPihFVRvZ9DUy8R4zMDZj2S8OaE0GEEgl5Uq2FPzOER6rzX/6cmX1azbC/FOh27T6/OPOtiqBGMW4=
-X-Received: by 2002:a05:690e:2515:b0:633:bc86:a1d2 with SMTP id
- 956f58d0204a3-634773d6120mr24947d50.0.1758207490799; Thu, 18 Sep 2025
- 07:58:10 -0700 (PDT)
+	s=arc-20240116; t=1758208059; c=relaxed/simple;
+	bh=Nd/9GkL+qkT14w7XNwikMbqgds8mmQ2AdtXlZv+hUOA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rJ/JpiEB5KzlWSbVtq7TdCZOpAZdWIBSnjfCyPp8CAgae9vy1TfVltVKMcy/KpJ9U3oh4yOMt6ShqFVfRD9Zve9GxYDZIYVUAKXMfmRK/8ClOhq5IbUnRv6cJQQ1vjwe+aF0zEOm6V8r4oJZ1YfPTJM4vnOrmjXAGSXVCpOp8qk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J49zAjBu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E02EC4CEE7;
+	Thu, 18 Sep 2025 15:07:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1758208059;
+	bh=Nd/9GkL+qkT14w7XNwikMbqgds8mmQ2AdtXlZv+hUOA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=J49zAjBuUFRsSs1ZINVWyLbNPB0bESrlzlFyZhFZ3uaAHVCz+dw+jnv5jB8L4reIf
+	 mPaStDuVdhWWEDEDZlO0YiAfO4Dt9j6mv/qGBD52/INUslaATmBwn70PkAJyEC1gHw
+	 PRdJgfJJVXXLnDNKkCdBS+1eHQPKdpU2vnxRde4Ip+f6vKJsQxXyAf61HcmUwvkL6n
+	 ZG/PRCgGTTSjMbjwRbX1pMfUlj1rtPk+MO2qNQwIKdAyM+mHIA9WQ7H6d1TmitdE2H
+	 a9xGkNO8NW1WNA6G/5iZ6yMws3bAkaHxAdDNb2Ot7LIED8qM3Y33AzhPe41Q2qsBLc
+	 b6hNrm6c/vqrQ==
+Date: Thu, 18 Sep 2025 17:07:36 +0200
+From: Frederic Weisbecker <frederic@kernel.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Linux PM <linux-pm@vger.kernel.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Christian Loehle <christian.loehle@arm.com>
+Subject: Re: [PATCH v1 3/3] cpuidle: governors: menu: Special-case nohz_full
+ CPUs
+Message-ID: <aMwgOJc6Hq17uFzj@localhost.localdomain>
+References: <2804546.mvXUDI8C0e@rafael.j.wysocki>
+ <2244365.irdbgypaU6@rafael.j.wysocki>
+ <aMLaEwBHwiDhgaWM@localhost.localdomain>
+ <CAJZ5v0h3eWw3B15SamchCVWfxfEEbOOgjm4ZbmkTt9ijZvvHMA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250902-pm-v3-0-ffadbb454cdc@nxp.com> <20250902-pm-v3-1-ffadbb454cdc@nxp.com>
-In-Reply-To: <20250902-pm-v3-1-ffadbb454cdc@nxp.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Thu, 18 Sep 2025 16:57:34 +0200
-X-Gm-Features: AS18NWDnkEmKtjLXZgraEdCqo9-wmrIQesU05v7Yd2QIwo9qUnvKejYI9I4FOEI
-Message-ID: <CAPDyKFrui-Vr1rvE01w+n4ttWeUk4cmr2jqgqk0BWe98eQtkcg@mail.gmail.com>
-Subject: Re: [PATCH v3 1/4] pmdomain: core: Introduce device_set/get_out_band_wakeup()
-To: Peng Fan <peng.fan@nxp.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, Pavel Machek <pavel@kernel.org>, 
-	Peter Chen <peter.chen@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
-	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
-	Xu Yang <xu.yang_2@nxp.com>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, imx@lists.linux.dev, arm-scmi@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0h3eWw3B15SamchCVWfxfEEbOOgjm4ZbmkTt9ijZvvHMA@mail.gmail.com>
 
-On Tue, 2 Sept 2025 at 05:33, Peng Fan <peng.fan@nxp.com> wrote:
->
-> For some cases, a device could still wakeup the system even if its power
-> domain is in off state, because the device's wakeup hardware logic is
-> in an always-on domain.
->
-> To support this case, introduce device_set/get_out_band_wakeup() to
-> allow device drivers to control the behaviour in genpd for a device
-> that is attached to it.
+Le Thu, Sep 11, 2025 at 07:07:42PM +0200, Rafael J. Wysocki a écrit :
+> On Thu, Sep 11, 2025 at 4:17 PM Frederic Weisbecker <frederic@kernel.org> wrote:
+> > So, when !tick_nohz_full_cpu(dev->cpu), what is the purpose of this tick stopped
+> > special case?
+> >
+> > Is it because the next dynamic tick is a better prediction than the typical
+> > interval once the tick is stopped?
+> 
+> When !tick_nohz_full_cpu(dev->cpu), the tick is a safety net against
+> getting stuck in a shallow idle state for too long.  In that case, if
+> the tick is stopped, the safety net is not there and it is better to
+> use a deep state.
 
-Would you mind trying to extend/clarify this commit-msg a bit more, to
-make the benefit more clear.
+Right.
 
-For example, today we may be wasting energy, by unnecessarily keeping
-PM domains powered-on during system-wide suspend, when a device has
-been enabled for system-wakeup...
+> However, data->next_timer_ns is a lower limit for the idle state
+> target residency because this is when the next timer is going to
+> trigger.
 
-In regards to terminology, I would appreciate if we could use
-"system-wakeup" and "out-band system-wakeup logic" and "system-wide
-suspend".
+Ok.
 
->
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  drivers/pmdomain/core.c   |  6 ++++--
->  include/linux/pm.h        |  1 +
->  include/linux/pm_wakeup.h | 17 +++++++++++++++++
+> 
+> > Does that mean we might become more "pessimistic" concerning the predicted idle
+> > time for nohz_full CPUs?
+> 
+> Yes, and not just we might, but we do unless the idle periods in the
+> workload are "long".
 
-Please split this into two separate patches.
+Ok.
 
->  3 files changed, 22 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
-> index 0006ab3d078972cc72a6dd22a2144fb31443e3da..8e37758cea88a9ee051ad9fb13bdd3feb4f8745e 100644
-> --- a/drivers/pmdomain/core.c
-> +++ b/drivers/pmdomain/core.c
-> @@ -1549,7 +1549,8 @@ static int genpd_finish_suspend(struct device *dev,
->         if (ret)
->                 return ret;
->
-> -       if (device_awake_path(dev) && genpd_is_active_wakeup(genpd))
-> +       if (device_awake_path(dev) && genpd_is_active_wakeup(genpd) &&
-> +           !device_get_out_band_wakeup(dev))
->                 return 0;
->
->         if (genpd->dev_ops.stop && genpd->dev_ops.start &&
-> @@ -1604,7 +1605,8 @@ static int genpd_finish_resume(struct device *dev,
->         if (IS_ERR(genpd))
->                 return -EINVAL;
->
-> -       if (device_awake_path(dev) && genpd_is_active_wakeup(genpd))
-> +       if (device_awake_path(dev) && genpd_is_active_wakeup(genpd) &&
-> +           !device_get_out_band_wakeup(dev))
->                 return resume_noirq(dev);
->
->         genpd_lock(genpd);
-> diff --git a/include/linux/pm.h b/include/linux/pm.h
-> index cc7b2dc28574c24ece2f651352d4d23ecaf15f31..5b28a4f2e87e2aa34acc709e146ce729acace344 100644
-> --- a/include/linux/pm.h
-> +++ b/include/linux/pm.h
-> @@ -684,6 +684,7 @@ struct dev_pm_info {
->         bool                    smart_suspend:1;        /* Owned by the PM core */
->         bool                    must_resume:1;          /* Owned by the PM core */
->         bool                    may_skip_resume:1;      /* Set by subsystems */
-> +       bool                    out_band_wakeup:1;
->         bool                    strict_midlayer:1;
->  #else
->         bool                    should_wakeup:1;
-> diff --git a/include/linux/pm_wakeup.h b/include/linux/pm_wakeup.h
-> index c838b4a30f876ef5a66972d16f461cfba9ff2814..c461c7edef6f7927d696b7d18b59a6a1147f53a3 100644
-> --- a/include/linux/pm_wakeup.h
-> +++ b/include/linux/pm_wakeup.h
-> @@ -94,6 +94,16 @@ static inline void device_set_wakeup_path(struct device *dev)
->         dev->power.wakeup_path = true;
->  }
->
-> +static inline void device_set_out_band_wakeup(struct device *dev, bool capable)
-> +{
-> +       dev->power.out_band_wakeup = capable;
+> 
+> > I guess too shallow C-states are still better than too deep but there should be
+> > a word about that introduced side effect (if any).
+> 
+> Yeah, I agree.
+> 
+> That said, on a nohz_full CPU there is no safety net against getting
+> stuck in a shallow idle state because the tick is not present.  That's
+> why currently the governors don't allow shallow states to be used on
+> nohz_full CPUs.
+> 
+> The lack of a safety net is generally not a problem when the CPU has
+> been isolated to run something doing real work all the time, with
+> possible idle periods in the workload, but there are people who
+> isolate CPUs for energy-saving reasons and don't run anything on them
+> on purpose.  For those folks, the current behavior to select deep idle
+> states every time is actually desirable.
 
-I suggest we drop the bool as in-parameter and just do:
-dev->power.out_band_wakeup = true;
+So far I haven't heard from anybody using nohz_full for powersavings. If
+you have I'd be curious about it. Whether a task runs tickless or not, it
+still runs and the CPU isn't sleeping. Also CPU 0 stays periodic on nohz_full,
+which alone is a problem for powersaving but also prevents a whole package
+from entering low power mode on NUMA.
 
-Moreover, I think we should clear the flag in device_prepare(), next
-to where dev->power.wakeup_path is cleared.
+Let's say it not optimized toward powersaving...
 
-This makes the behavior better aligned for users of these flags.
+> So there are two use cases that cannot be addressed at once and I'm
+> thinking about adding a control knob to allow the user to decide which
+> way to go.
 
-> +}
-> +
-> +static inline bool device_get_out_band_wakeup(struct device *dev)
+I'm tempted to say we should focus on having not too deep states,
+at the expense of having too shallow. Of course I'm not entirely
+comfortable with the idea because nohz_full CPUs may be idle for a while
+on some workloads. And everyone deserves a rest at some point after
+a long day.
 
-Nitpick: I would rename this into device_out_band_wakeup(). At least
-the "get" part is a confusing in my opinion, as indicates there is
-reference taken too.
+I guess force restarting the tick upon idle entry would probably be
+bad for tiny idle round-trips?
 
-> +{
-> +       return dev->power.out_band_wakeup;
-> +}
-> +
->  /* drivers/base/power/wakeup.c */
->  extern struct wakeup_source *wakeup_source_register(struct device *dev,
->                                                     const char *name);
-> @@ -162,6 +172,13 @@ static inline bool device_wakeup_path(struct device *dev)
->
->  static inline void device_set_wakeup_path(struct device *dev) {}
->
-> +static inline void device_set_out_band_wakeup(struct device *dev, bool capable) {}
-> +
-> +static inline bool device_get_out_band_wakeup(struct device *dev)
-> +{
-> +       return false;
-> +}
-> +
->  static inline void __pm_stay_awake(struct wakeup_source *ws) {}
->
->  static inline void pm_stay_awake(struct device *dev) {}
->
-> --
-> 2.37.1
->
+As for such a knob, I'm not sure anybody would use it.
 
-Otherwise, from an overall functionality point of view, this makes sense to me!
+Thanks.
 
-Kind regards
-Uffe
+-- 
+Frederic Weisbecker
+SUSE Labs
 
