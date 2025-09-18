@@ -1,108 +1,126 @@
-Return-Path: <linux-pm+bounces-34953-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34954-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 87F2BB83F5A
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 12:05:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E5FCB8407A
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 12:21:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C37811C0522B
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 10:05:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 15721520599
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 10:20:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 979CD2475D0;
-	Thu, 18 Sep 2025 10:05:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A3mlRpTa"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9B332F60A6;
+	Thu, 18 Sep 2025 10:15:57 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7274427726
-	for <linux-pm@vger.kernel.org>; Thu, 18 Sep 2025 10:05:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 982CE2EFDB7;
+	Thu, 18 Sep 2025 10:15:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758189927; cv=none; b=MbC2GQMpjDCkC7QJOVE1v1Ow0Aip1d3pn9FKNNKJtfj76j5xX1dnA0Kyhpl+7lWC1O3EZqBAw2lUsmI2XiO6+PNPA9TKXnz/gJ5sySd+NlszK4y4sKWd14rKdJhoEbePiqHh/GHLKgSKkGuIGbbpEKztkLS41NLGmBiSlLApD6k=
+	t=1758190557; cv=none; b=ExoqEXaxhnGVCvF+yJ4Mb7ybgxrgIADaK0+4+W/6KCvmFK01mfLPRc3a4tBp73a9I7TbqDH7/7oHAGoEuRvxrWMIS2dPC8x6R7wwAolJfcXTjMaqwAKNigaILwXZmy9gUXq38YK4ulvWl2CRCo42yILpgBdyOSGx39gdWDrNwfE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758189927; c=relaxed/simple;
-	bh=yHZg7E3K6d2YcLik+EA4wtgpp4DJ5xBkllPVHjfBqMQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JSkoRbBfslHqPLO8A0G2u3v3bO/Oi7mb4VA5StYyDxfb1j/YHcjBzz1tCCT905XCzLS16CT0xyWXAluayXMUdJ1q87lxPTyy6b+73PX4tD8nKEgDospis+c5/8e7hbCOszVeDW62Gbw/pE1WQZdhonSiAkjKefpNDH26bKkqArY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A3mlRpTa; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FEE4C4CEFC
-	for <linux-pm@vger.kernel.org>; Thu, 18 Sep 2025 10:05:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758189927;
-	bh=yHZg7E3K6d2YcLik+EA4wtgpp4DJ5xBkllPVHjfBqMQ=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=A3mlRpTa7oEOUbgua0nsSo703yUbq9YO88eQ7cDMKuGM9sQs/GiY+CcaLRoeLdj7i
-	 T4CHrvr19uKPHsVFjfRormVLGiuogt5c5gPXz0fUQffseoHN7j7jzvydx9L9EZeetG
-	 nyoPJGklIkc/8dJ7lRNc7HyiQFTKOXVBP4bvSG/cE2nnj6jZdoP3Il8dXXeMEmVr15
-	 RMXw3WEgf+NjSSUHqYOZ8CnYEzqa3llX8cQwmHja4JzVre2fuDZQ9rZ7AfPS6BZbs3
-	 qamilhIJpDSXByqsFgyEP7EoB4Uu9F52UL7DtMhdPx7EBOEeHepgoSE7TPW5CdJ9rA
-	 FIjVCdCHSHuFA==
-Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-74a61973bedso706634a34.0
-        for <linux-pm@vger.kernel.org>; Thu, 18 Sep 2025 03:05:27 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCV8724w19LIVOW/aBf+zr3UK1/EylEbbnTklyxTLftVa+OW111MvfdOC02Y0TEV7V5sQ6GRmIAgTw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxP90YQDjVZ3hSE/jNFxqJd1I0mHJ5G4leZLxY2lAIz7r3WPTZF
-	K4/8VLFeyetYo8FZcSH08PtIQ4aWG0S8/+w/3a0g853Blan1KC9kGPPpYx5PXQXN9x4hI0kPBsu
-	smk5eBnSmhUIo2/eJP9b+d6CvTz+88go=
-X-Google-Smtp-Source: AGHT+IEPe+INRvhVzC1m5Sod1iKYNWcSFjc9f+McH5EIIs/1IuJG8CQVjUjpp0g11hyYud3XkLCARtsEo3f9zFkVRf0=
-X-Received: by 2002:a05:6830:2b0d:b0:75a:ae3b:777a with SMTP id
- 46e09a7af769-76313356781mr2903315a34.10.1758189926614; Thu, 18 Sep 2025
- 03:05:26 -0700 (PDT)
+	s=arc-20240116; t=1758190557; c=relaxed/simple;
+	bh=ESgooQkzpnuj6/HlASLv8n2pp82wSV61KRfw5RjKnVw=;
+	h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type; b=qFmHvxaZcj7jB/X5y06poqvdroqos+hU/ZKL3BhVH2p3H+sZV5e37Sb+J/tw3/M/HxfFUO5igPmvAMhgjoflQzSgdtZOhme/iYCWjzNf6dTasngXPhUmO6SImM3mxl7uKQrECl5LTP4CL1YGsk+TKSmO693BbLLw+Mvr6uCRH7Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A8BB916A3;
+	Thu, 18 Sep 2025 03:15:46 -0700 (PDT)
+Received: from [10.57.80.59] (unknown [10.57.80.59])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 33C883F673;
+	Thu, 18 Sep 2025 03:15:54 -0700 (PDT)
+Message-ID: <85e3df99-7ba5-4654-9148-5fff25ea0e5a@arm.com>
+Date: Thu, 18 Sep 2025 11:15:52 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <6191405.lOV4Wx5bFT@rafael.j.wysocki> <CAJZ5v0gEh-xoKdgAgUvnGzPV6AO51=ZagHXNCrC4BfRZk6Oydw@mail.gmail.com>
- <87h5x088mt.ffs@tglx>
-In-Reply-To: <87h5x088mt.ffs@tglx>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 18 Sep 2025 12:05:14 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0h1DgQ2xWSEXjbiwAUES4DMKL8S+B5+ed9muWTwsfeNsA@mail.gmail.com>
-X-Gm-Features: AS18NWAe_B-yQRdSp9aaQCx6krlTCfTW0SQdDJGiiMl9Szo-23iKagiwZkerVDg
-Message-ID: <CAJZ5v0h1DgQ2xWSEXjbiwAUES4DMKL8S+B5+ed9muWTwsfeNsA@mail.gmail.com>
-Subject: Re: [PATCH v1] smp: Fix up and expand the smp_call_function_many() kerneldoc
-To: Thomas Gleixner <tglx@linutronix.de>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Randy Dunlap <rdunlap@infradead.org>, Linux PM <linux-pm@vger.kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ linux-pm <linux-pm@vger.kernel.org>, "Rafael J. Wysocki"
+ <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>,
+ "zhenglifeng (A)" <zhenglifeng1@huawei.com>
+From: Christian Loehle <christian.loehle@arm.com>
+Subject: [PATCH] cpufreq: Initialize cpufreq-based invariance before subsys
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Sep 18, 2025 at 10:31=E2=80=AFAM Thomas Gleixner <tglx@linutronix.d=
-e> wrote:
->
-> On Tue, Sep 16 2025 at 16:13, Rafael J. Wysocki wrote:
->
-> > On Tue, Sep 9, 2025 at 1:44=E2=80=AFPM Rafael J. Wysocki <rafael@kernel=
-.org> wrote:
-> >>
-> >> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >>
-> >> The smp_call_function_many() kerneldoc comment got out of sync with th=
-e
-> >> function definition (bool parameter "wait" is incorrectly described as=
- a
-> >> bitmask in it), so fix it up by copying the "wait" description from th=
-e
-> >> smp_call_function() kerneldoc and add information regarding the handli=
-ng
-> >> of the local CPU to it.
-> >>
-> >> Fixes: 49b3bd213a9f ("smp: Fix all kernel-doc warnings")
-> >> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > It's been a week and no feedback.
-> >
-> > Well, in the further absence of any, I'll assume no concerns and just
-> > queue this up.
->
-> Sorry, was distracted. No objections from my side. Did you queue it
-> already?
+commit 2a6c72738706 ("cpufreq: Initialize cpufreq-based
+frequency-invariance later") postponed the frequency invariance
+initialization to avoid disabling it in the error case.
+This isn't locking safe, instead move the initialization up before
+the subsys interface is registered (which will rebuild the
+sched_domains) and add the corresponding disable on the error path.
 
-No, I didn't.
+Observed lockdep without this patch:
+[    0.989686] ======================================================
+[    0.989688] WARNING: possible circular locking dependency detected
+[    0.989690] 6.17.0-rc4-cix-build+ #31 Tainted: G S
+[    0.989691] ------------------------------------------------------
+[    0.989692] swapper/0/1 is trying to acquire lock:
+[    0.989693] ffff800082ada7f8 (sched_energy_mutex){+.+.}-{4:4}, at: rebuild_sched_domains_energy+0x30/0x58
+[    0.989705]
+               but task is already holding lock:
+[    0.989706] ffff000088c89bc8 (&policy->rwsem){+.+.}-{4:4}, at: cpufreq_online+0x7f8/0xbe0
+[    0.989713]
+               which lock already depends on the new lock.
+
+Fixes: 2a6c72738706 ("cpufreq: Initialize cpufreq-based frequency-invariance later")
+Signed-off-by: Christian Loehle <christian.loehle@arm.com>
+---
+ drivers/cpufreq/cpufreq.c | 20 +++++++++++---------
+ 1 file changed, 11 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+index fc7eace8b65b..58e3839a2140 100644
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -2953,6 +2953,15 @@ int cpufreq_register_driver(struct cpufreq_driver *driver_data)
+ 			goto err_null_driver;
+ 	}
+ 
++	/*
++	 * Mark support for the scheduler's frequency invariance engine for
++	 * drivers that implement target(), target_index() or fast_switch().
++	 */
++	if (!cpufreq_driver->setpolicy) {
++		static_branch_enable_cpuslocked(&cpufreq_freq_invariance);
++		pr_debug("cpufreq: supports frequency invariance\n");
++	}
++
+ 	ret = subsys_interface_register(&cpufreq_interface);
+ 	if (ret)
+ 		goto err_boost_unreg;
+@@ -2974,21 +2983,14 @@ int cpufreq_register_driver(struct cpufreq_driver *driver_data)
+ 	hp_online = ret;
+ 	ret = 0;
+ 
+-	/*
+-	 * Mark support for the scheduler's frequency invariance engine for
+-	 * drivers that implement target(), target_index() or fast_switch().
+-	 */
+-	if (!cpufreq_driver->setpolicy) {
+-		static_branch_enable_cpuslocked(&cpufreq_freq_invariance);
+-		pr_debug("supports frequency invariance");
+-	}
+-
+ 	pr_debug("driver %s up and running\n", driver_data->name);
+ 	goto out;
+ 
+ err_if_unreg:
+ 	subsys_interface_unregister(&cpufreq_interface);
+ err_boost_unreg:
++	if (!cpufreq_driver->setpolicy)
++		static_branch_disable_cpuslocked(&cpufreq_freq_invariance);
+ 	remove_boost_sysfs_file();
+ err_null_driver:
+ 	write_lock_irqsave(&cpufreq_driver_lock, flags);
+-- 
+2.34.1
 
