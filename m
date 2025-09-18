@@ -1,166 +1,195 @@
-Return-Path: <linux-pm+bounces-34959-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34960-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B5448B84AE6
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 14:52:57 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E20FCB84BAE
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 15:03:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5ECB81C20533
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 12:53:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ED6FE7A4F9A
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 13:01:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D58F12FB622;
-	Thu, 18 Sep 2025 12:52:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F0C72882A9;
+	Thu, 18 Sep 2025 13:03:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G4qE3o8h"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="UXxzNZJl"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EE4F191F72
-	for <linux-pm@vger.kernel.org>; Thu, 18 Sep 2025 12:52:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F2293064A2
+	for <linux-pm@vger.kernel.org>; Thu, 18 Sep 2025 13:02:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758199973; cv=none; b=FvrwINESrFBFVsd1qfQ1ZYELJOHVD2pI13XpSwmHaPgQFx8pE4TdPDJzNJO6EX5X7QYAYjrZqcisVgm7R1YUQ73Nn4g9a2mB+9K8zbLxuShjqs2HBIq5DLzGiHgzzD1Ghy2CHWluQHsH5FAHz+m6w1sqvqFVNbWPwocvpHLFiNM=
+	t=1758200581; cv=none; b=BqhYKt93SvBelJ1sPBbHWcyBJFXSfvM14LfhWcw/5WAUpDdsccNQ7ZouDCELEgsgbTJynz0VGRNOOez8S1DTkuSkuqnZapqCmY574LN0y6E1hJE4feAbrmG/djWTfHV8oHhQlYfK4Kjxeihx/c7yQKg1seODnd7l/w/trWavQgs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758199973; c=relaxed/simple;
-	bh=l4jvn6aXx33cUflG4BWjr4dX1HYkZKhcsuT1j8BtDbY=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=O+nqSxih7Pd6w7V0dfvghMtgsfUOgfCgotl/qGqZCsFTz7EBVda/cjuS1zjpbwZ8HjjTUrN4zrDOAH8B9PB36Ex8A1eaDJjmqeDMZ8kQgcQ/XTq9g+eapKbTo3BgcJ7x2DdYfB7G13KHn/rV4/zEgJYxrXmFDsV5AKzKT4QqnDI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G4qE3o8h; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-77287fb79d3so940858b3a.1
-        for <linux-pm@vger.kernel.org>; Thu, 18 Sep 2025 05:52:52 -0700 (PDT)
+	s=arc-20240116; t=1758200581; c=relaxed/simple;
+	bh=xFgFQQBU+eaUTlmzE+vuY2J0SoHpSu7LpdqT0cdq3tI=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=uNwzo4LQCv/NDiXdh8WEBgXUBchYhGKK8DYkbZWJh/DPlQK7q24djfhqjkNsv6W2r8Di9O1D/OSBuFcXKsxoT4/wWXwfseaaj/GHo7PZdIBOAyOzBt5TsgdpzG5xBer/CZlNZYQhCwGCyLYnOcy0nLlt7YUDKi64zBZxGk1jk3Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=UXxzNZJl; arc=none smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-3ecde0be34eso1100217f8f.1
+        for <linux-pm@vger.kernel.org>; Thu, 18 Sep 2025 06:02:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758199971; x=1758804771; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+soGoTKEKPCIsNMCnKS6u8d5Eq71cxzpukoczL5FpQ0=;
-        b=G4qE3o8hpp+Hg1oJy9A26Jo+K9pYwhwA2tstfjpbU7LnO/U1fyIF7dkvWC31Hm4wiE
-         9rhMAZXy8ReINFlkRIPb/EKRJU8TDXq1gh2lNNWgQCAKmAFGae1QG/yGFXA5mEbhpKR6
-         DrypkorhvN9730KVp9RLvglXzmtC7pIdFdccE3HElReQ7ZivP+pufsdyvCY8DGDLSwXK
-         QWKPPVDXNWDvCFp3uF3wyoe7/LqI79bamDw/b+HfTkX9F9DsQ87Nm9RF9ZzSgOznzCIM
-         yE2NaIpli2XmcM33CThydG2I847J8PbKtXlt7XQujIgcdgxhrJwI19l3nuIsrPZ6rNqr
-         btNA==
+        d=linaro.org; s=google; t=1758200577; x=1758805377; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=xFgFQQBU+eaUTlmzE+vuY2J0SoHpSu7LpdqT0cdq3tI=;
+        b=UXxzNZJlYwxqS2aMQJXXt8XjFFN2AyuJBeVxiD7DURnzmV79/h1WTluOjRLohmzf5t
+         EMbQbp4uPeHECQ6mfYvFdyiBqAU6fLodUxyHBgRAjSKOCUMsXevchLbkz4GXUwJbj2Ms
+         l4zBeTvBvCsn7+vcdKFymJGzR5NRNiCaqLV07fjpem4HY9kCtT1I930N+DxS3A5ZVHj1
+         E235VkEc834jUZozXnMbXVJC7wACBfGjCN6H+rDDtAhpKMJmQHJdr+m5trzZ8gX7s/8h
+         oD+C2Ch5aJLs7kK0I4/LinfIOVvcuR3QFxiQdOWuIadva57XtxpwnFHt+ssJe4+E6oc+
+         9JcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758199971; x=1758804771;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+soGoTKEKPCIsNMCnKS6u8d5Eq71cxzpukoczL5FpQ0=;
-        b=O79Gs+FFIvSiLVNta+tFVY/gbuJ5d6/u65HvNFSaOPmrOvaVo5mD8UQKdcuLZ4FBXE
-         J3npXfpkKaROwl4u6tZyIvb6X2kBfwt83rUX/+IMMRhD76/6XwtE1lyS2keiU5105gfm
-         n4+7QuhoZztAdEDvucw4lnxR9/oLjBu7qDkIl1uxT/4QzjFMMwZNVEm8H0GlgatVQKVR
-         02iFrmj9ABKtxwqW63Qbk+Wk7gzHQIQi3wU0PT9h+SbHmDOKalNQO9HR9XhGvySnpwG9
-         LxQwlhdr5x1M6HnTXxH9VuwbrMOz+iu3I0O+e+jaHn+w42xrm+l78z+es0CDh9706U8a
-         BL0g==
-X-Gm-Message-State: AOJu0Yxu4ZLaSa+mAvdhIta2olPgmW9bwidpBL+xkZ4kYMeKWjM9atJB
-	NJJ+P9pSXdO1+kv6AVjEvRu9C9QAq4TjYWh5DTddCH7VRevZAM8lmMu8nD07thyp
-X-Gm-Gg: ASbGncvmM1WsOj76Toyv/+DL0g/Fb8EqoxYZdcUR9l+DzOqACZDkfRHvjrIscUyzSct
-	pDMCHDr5xShCRVk4iJtzSSZyPZhivovsc0DDLWZznKNt4hXtQS7TWwCqNP/XVkag/MHuQ1fXvbj
-	zh+LXp4eNQfKtbAHW2MPdNwBB+ERph53Z05cfh+UPesrlKJFXTH6nO6RTe7idZhUfwAJezPsTh7
-	XlBNmYKGV2Pevw0vAESJqFku0tNhIB7Z5hkm7cwD2+erhq/DHB+YKcb7Eu3jBfZOCNzklAWcxFy
-	bCQkwXj7cz1rDDQATmq1yl9RLPhROPlI6QImc8woLTy2CHneeKt/Nimvct8yNKNM9PVXniEfFeA
-	ZkGzOB1uPNUTMAQiV/pcBf4wQT0Zi2w45wCIa21YZ0FTmEZr8j5FR2ySKNaGrPHgWe0eydbtp
-X-Google-Smtp-Source: AGHT+IESQJcBetHwGqWeWnfiLA0N9lJ/u4rM5jArsuldA1nsqCJOm5/erhH2PKpvmc6TYrRuKdn0Nw==
-X-Received: by 2002:a05:6a20:2591:b0:245:fdeb:d261 with SMTP id adf61e73a8af0-27aac4ce90amr9585400637.54.1758199971435;
-        Thu, 18 Sep 2025 05:52:51 -0700 (PDT)
-Received: from zojnhg-virtual-machine.. ([112.3.192.32])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-77cff22ba98sm2333201b3a.91.2025.09.18.05.52.49
+        d=1e100.net; s=20230601; t=1758200577; x=1758805377;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xFgFQQBU+eaUTlmzE+vuY2J0SoHpSu7LpdqT0cdq3tI=;
+        b=La6aM5z8WOWC/3URTSMUww8mlNRKlZdYDjFMQfZ6DN4bQH2uhgKNqQ7Ti/n2IS9Vf8
+         qXWffJ5KFq5DJ/ryteafi8ifn+Esq+PguRY3Oy2jKwj6QgzWiP6L0tQ+lZndV+Takoa7
+         Am9S6CoObPkY0dKgrhrZjp2EBqKIZwzGCl49IRcZYgOsJLMygm81ezy+jiePPw5039Sb
+         ubDGuPSp3g5cWQBTsGAqREbZLS0Bqec0H77mwNNEd8Pj+ULogYbgyDyoRrkn5H5q3ycO
+         ur9gTIL5fylxN7SfXyfFbFSbB0ovkm5NNy80Rac6JxyUJGi9nuCI9j7i/XsXjWU62btH
+         WBPg==
+X-Forwarded-Encrypted: i=1; AJvYcCWy00BMOeoyC/ZCcYkvxoSsjzHlrcDw09M8bAir4gktLksUnAr20nD57fjQunEKMnSmUfyNuGUXXg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw+2qQ/FgVBTu5FhKnLB4upLzRuR74kpVluhRxTgzocBxdT7371
+	i9KmHTllJ7kqxNW3C4YmeKignI3Bw3jHSbgo1O6jET4RRrXFzJ80ZFvAxIW9ByGWs14=
+X-Gm-Gg: ASbGncsJWtkWuBTR03mYTV36R4MvqpaF76d3rUtnvkpb9IhRdyPLWkuFVu+NUtEjulO
+	HDglUGcym9QQHRCirADB/ZsrkEYby62bW5xq4nsDqyV9suwP57KXHkPUUgbm6K8FWEcXNAtCNWv
+	hWbJdYarRUhIDpdi7h1YnCI2OhA5yj/25X1lZtMioX4kC5psc/wET/NWaSzi3Buyp+XkoxwaXsy
+	IXmSQoPAIi/8Ga1wG0032BtQV04Tenbz+Yi3UhNl2PFBovccEGEOZLEn/MGOOUfPoip9Uqe6NB/
+	kmmIw2DqhT+TfaOzK30Bu2uo+/LuzZHuYWDiKrlziZ6Ks9x5dJmBxEe8XSOZzKpwKxJLEHdCdYK
+	2B9Groyfh/v/AKP7/DQ/hWvJEJS9WPlWObgKTyzYCVnlvSOXhvPI+pn4=
+X-Google-Smtp-Source: AGHT+IH4qQOMI9kRkElC4uk5etAMC5b6ho5cgmHk+GAS+1rAKNDqsnHvTpg/dVWhQwEl7v3wwQvq3g==
+X-Received: by 2002:a05:6000:2501:b0:3ed:8e48:640f with SMTP id ffacd0b85a97d-3edd43b5ffbmr2760931f8f.8.1758200577315;
+        Thu, 18 Sep 2025 06:02:57 -0700 (PDT)
+Received: from draszik.lan ([80.111.64.44])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3ee07407d0asm3646419f8f.17.2025.09.18.06.02.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Sep 2025 05:52:51 -0700 (PDT)
-From: Jinghao Zhou <zhoujinghao24b@gmail.com>
-To: linux-pm@vger.kernel.org
-Cc: rafael@kernel.org,
-	viresh.kumar@linaro.org,
-	linux-kernel@vger.kernel.org,
-	zouyipeng@huawei.com,
-	Jinghao Zhou <zhoujinghao24b@gmail.com>
-Subject: [PATCH] cpufreq: ext: fix NULL deref in ext_gov_update()
-Date: Thu, 18 Sep 2025 20:52:41 +0800
-Message-Id: <20250918125241.80968-1-zhoujinghao24b@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240927101342.3240263-1-zouyipeng@huawei.com>
-References: <20240927101342.3240263-1-zouyipeng@huawei.com>
+        Thu, 18 Sep 2025 06:02:56 -0700 (PDT)
+Message-ID: <a55d7e6e6d9515293ca735f25ffd5c925a6ec617.camel@linaro.org>
+Subject: Re: [PATCH v6 2/2] dt-bindings: power: supply: add support for
+ MAX77759 fuel gauge
+From: =?ISO-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
+To: Thomas Antoine <t.antoine@uclouvain.be>, Conor Dooley <conor@kernel.org>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+  Conor Dooley <conor+dt@kernel.org>, Sebastian Reichel <sre@kernel.org>,
+ Peter Griffin	 <peter.griffin@linaro.org>, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, devicetree@vger.kernel.org
+Date: Thu, 18 Sep 2025 14:02:55 +0100
+In-Reply-To: <c5f2e6e8-2ada-476a-8557-85273b9a93b7@uclouvain.be>
+References: <20250915-b4-gs101_max77759_fg-v6-0-31d08581500f@uclouvain.be>
+	 <20250915-b4-gs101_max77759_fg-v6-2-31d08581500f@uclouvain.be>
+	 <20250915-presoak-answering-2df6fca532ad@spud>
+	 <c5f2e6e8-2ada-476a-8557-85273b9a93b7@uclouvain.be>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.1-1+build2 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Switching to the 'ext' governor can trigger a NULL pointer dereference
-in ext_gov_update().
+Hi,
 
-Two problems were present in this function:
-  1) policy_dbs was derived via container_of(policy, ...), which is not
-     a valid way to obtain CPUFreq dbs-governor per-policy state. Use
-     policy->governor_data instead.
-  2) When the BPF hook returns 0 for get_sampling_rate, the code fell
-     back to gov->gdbs_data->sampling_rate, which may be NULL or stale
-     depending on initialization/teardown ordering. The robust pattern
-     is to fetch the per-policy sampling rate from policy_dbs->dbs_data.
+On Thu, 2025-09-18 at 14:36 +0200, Thomas Antoine wrote:
+> Hello,
+>=20
+>=20
+> On 9/15/25 7:31 PM, Conor Dooley wrote:
+> > On Mon, Sep 15, 2025 at 12:14:11PM +0200, Thomas Antoine via B4 Relay w=
+rote:
+> > > From: Thomas Antoine <t.antoine@uclouvain.be>
+> > >=20
+> > > The Maxim MAX77759 is a companion PMIC for USB Type-C. It contains
+> > > Battery Charger, Fuel Gauge, temperature sensors, USB Type-C Port
+> > > Controller (TCPC), NVMEM, and additional GPIO interfaces
+> > >=20
+> > > Use max77759-fg compatible to avoid conflict with drivers for other
+> > > functions.
+> > >=20
+> > > The battery node is used to pass the REPCAP and ICHGTERM values
+> > > needed for the initialization of the fuel gauge.
+> > >=20
+> > > The nvmem cells are used to get initialization values and to backup
+> > > the learning and the number of cycles. It should work out of the box
+> > > with gs101-oriole and gs101-raven which were previously running
+> > > Android.
+> > >=20
+> > > Signed-off-by: Thomas Antoine <t.antoine@uclouvain.be>
+> > > ---
+> > > =C2=A0.../bindings/power/supply/maxim,max77759.yaml=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 | 78 ++++++++++++++++++++++
+> > > =C2=A01 file changed, 78 insertions(+)
+> > >=20
+> > > diff --git a/Documentation/devicetree/bindings/power/supply/maxim,max=
+77759.yaml
+> > > b/Documentation/devicetree/bindings/power/supply/maxim,max77759.yaml
+> > > new file mode 100644
+> > > index 0000000000000000000000000000000000000000..4d45739fcaf26273ec57b=
+60049d6d0421df38efb
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/power/supply/maxim,max77759.y=
+aml
+> > > @@ -0,0 +1,78 @@
+> > > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> > > +%YAML 1.2
+> > > +---
+> > > +$id: http://devicetree.org/schemas/power/supply/maxim,max77759.yaml#
+> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > +
+> > > +title: Maxim Integrated MAX77759 fuel gauge
+> > > +
+> > > +maintainers:
+> > > +=C2=A0 - Thomas Antoine <t.antoine@uclouvain.be>
+> > > +
+> > > +allOf:
+> > > +=C2=A0 - $ref: power-supply.yaml#
+> > > +
+> > > +properties:
+> > > +=C2=A0 compatible:
+> > > +=C2=A0=C2=A0=C2=A0 const: maxim,max77759-fg
+> >=20
+> > Compatible doesn't match the filename, why?
+> > I assume the "fg" is fuel-gauge, but can this device be anything else?
+>=20
+> The max77759 is a multifunction chip.
+> The following compatibles are already used for some of those functions:
+> - maxim,max77759 (for the pmic)
+> - maxim,max77759-gpio
+> - maxim,max77759-nvmem
+> - maxim,max77759-tcpci
+>=20
+> The fuel gauge functionality that is added with this patch is very simila=
+r
+> to the functionality of the max1720x which is why the filename was chosen
+> to fit other maxim fuel gauge chips pattern.
+>=20
+> Maybe it would be better to use the maxim,max77759-battery compatible to
+> match the filename? It would also fit with the already existing
+> maxim,max77705-battery and maxim,max77849-battery compatibles.
 
-This patch switches ext_gov_update() to the per-policy path
-(policy->governor_data -> policy_dbs->dbs_data) and adds minimal NULL
-checks. After this change, switching to the 'ext' governor no longer
-panics in testing.
+It also has a (battery) charger, a -battery compatible could be misleading.
+The datasheet refers to these subblocks as FG (for fuelgauge) and CHARGER.
+I'd suggest keeping those terms.
 
-Observed on: Pixel 6 (oriole, arm64), Android kernel
-  6.12.0-mainline-g0a53f54ba5c5 (Jun 11, 2025), after applying the
-  cpufreq_ext RFC series. Also revalidated on a PC build.
+Additionally, the FG block can also measure temperature and battery ID. For
+those, a combination of (top-level) PMIC and FG registers are needed
+unfortunately. Which means that the FG should probably be an MFD child
+device, even though the FG itself doesn't depend on the top-level. Otherwis=
+e
+it'd be hard to access the top-level PMIC register.
 
-Reproducer:
-  for cpu in /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor; do
-      echo ext > "$cpu"
-  done
 
-Link: https://lore.kernel.org/linux-pm/20240927101342.3240263-1-zouyipeng@huawei.com/
-Signed-off-by: Jinghao Zhou <zhoujinghao24b@gmail.com>
----
- drivers/cpufreq/cpufreq_ext.c | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/cpufreq/cpufreq_ext.c b/drivers/cpufreq/cpufreq_ext.c
-index 310f13aca70a..c79068e86c27 100644
---- a/drivers/cpufreq/cpufreq_ext.c
-+++ b/drivers/cpufreq/cpufreq_ext.c
-@@ -409,11 +409,18 @@ static unsigned int ext_gov_update(struct cpufreq_policy *policy)
- {
- 	struct ext_policy *ext;
- 	struct policy_dbs_info *policy_dbs;
-+	struct dbs_data *dbs_data;
- 	unsigned int update_sampling_rate = 0;
--	struct dbs_governor *gov = dbs_governor_of(policy);
- 
--	/* Only need to update current policy freq */
--	policy_dbs = container_of((void *)policy, struct policy_dbs_info, policy);
-+	/* Get policy_dbs_info from policy's governor_data */
-+	policy_dbs = policy->governor_data;
-+	if (!policy_dbs)
-+		return 0;
-+
-+	/* Get dbs_data directly from policy_dbs for better stability */
-+	dbs_data = policy_dbs->dbs_data;
-+	if (!dbs_data)
-+		return 0;
- 
- 	ext = to_ext_policy(policy_dbs);
- 
-@@ -431,7 +438,7 @@ static unsigned int ext_gov_update(struct cpufreq_policy *policy)
- 		update_sampling_rate = ext_ops_global.get_sampling_rate(policy);
- 
- 	/* If get_sampling_rate return 0, means we don't modify sampling_rate any more. */
--	return update_sampling_rate == 0 ? gov->gdbs_data->sampling_rate : update_sampling_rate;
-+	return update_sampling_rate == 0 ? dbs_data->sampling_rate : update_sampling_rate;
- }
- 
- static struct policy_dbs_info *ext_gov_alloc(void)
--- 
-2.34.1
+Cheers,
+Andre'
 
 
