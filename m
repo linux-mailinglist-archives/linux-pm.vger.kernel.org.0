@@ -1,212 +1,317 @@
-Return-Path: <linux-pm+bounces-34956-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34958-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8001B845A8
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 13:29:00 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6EA09B849B7
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 14:36:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E9A6F1BC465C
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 11:29:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 228EC4A668F
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 12:36:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A9F930102A;
-	Thu, 18 Sep 2025 11:28:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A60F02F5461;
+	Thu, 18 Sep 2025 12:36:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Sl2XmFWz"
+	dkim=pass (2048-bit key) header.d=uclouvain.be header.i=@uclouvain.be header.b="UULKuDDN"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from AM0PR02CU008.outbound.protection.outlook.com (mail-westeuropeazon11023103.outbound.protection.outlook.com [52.101.72.103])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06320296BDA
-	for <linux-pm@vger.kernel.org>; Thu, 18 Sep 2025 11:28:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758194932; cv=none; b=mrwuLAuIMoIbKV0yq4sOeEdGDYMN/TN7kSPH56ZdB5rwbNUyvDqmpLnWECedUFNxG+iEWhMqFc/RHkB+WBa/fBw0RewSJNSmPm7lX0V9kru+sGHHVt99ltrebEnPaWdmUP0vibjk0Mp9Ut+vOpu2aSb3NAow/VPJDZhbzDmeijs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758194932; c=relaxed/simple;
-	bh=aGX4zFbu6ixCH3Tv8vvb+Ir1zlZCuHzA62pjtMb8H9U=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XL5k0Hqg0QLPQ2TBj8WYwkTi+Uww0jC57LRER2NvgSxbNF1JDVEha/uMZdz3/uPyYYqoT/GSFoVhot9ZlMa8JaUm+mitrIXg1sgoMkJfOteLDBWX+QexnmkAP0uvOUCdd83vn8cPyA2J7qX0wpuQbux6fXCzTJB27G6lXstkr5k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Sl2XmFWz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 905DDC4AF09
-	for <linux-pm@vger.kernel.org>; Thu, 18 Sep 2025 11:28:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758194931;
-	bh=aGX4zFbu6ixCH3Tv8vvb+Ir1zlZCuHzA62pjtMb8H9U=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Sl2XmFWziQwzMxXE4tAL7uEPE4V11Hf8IaCAsWJDZ0YQBRLZzEgMdeCZIMpHyu20d
-	 gNqX+5NlxMIrrtCDuEpNlma4oC7v2fE25cUx1itTYKYsHfwJQPpoWrN3w9GjdSX4mi
-	 iF1QdbkWNvSvVmTxc44xKpdsgnWETPBH/zUKt1GzYfjm7mKa9byRjWV9RQ3Q7FUxkx
-	 eloZUCZaCbFZo00WWk/g2aXVwi0y8YKYdVggu3kaahtGhK3uBz3LWJ8aPVO6YKarar
-	 qAJTr+Tn4DPqzOYAN9jD2hkFl8+CWfDUoXFDXdTz0QIAkCo8kCnqXbVlJ/FCfxJpnS
-	 f21l8veoIYuSA==
-Received: by mail-ot1-f41.google.com with SMTP id 46e09a7af769-746d7c469a8so703301a34.3
-        for <linux-pm@vger.kernel.org>; Thu, 18 Sep 2025 04:28:51 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUJhbOpRqIJm3CCaRNwsDzH5MMLISgcqvJvukyE1QNvH7Bb11e+LrRzkVn2x8H9PRzIKk68RGAokQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxF8ooPIPQuazKNdOh3Pm9sPc4CZtxsJXILOcTjoZfknk45TtMl
-	PpS3jWUL6vOx44w+bi9SfvsX4rI4KM9hvTfdan0yC6MYN5fhNQgJymDhS+Hjj6Ls0KPN8vlUmw3
-	xLrj9rerSRYzPAQ3GERU//z42EvnpQoI=
-X-Google-Smtp-Source: AGHT+IHe7GVU0yxBg/xdy5kAVi+cnsgH8FVocDQJtOYW5b+idqPIhO8Ey8RCPsDzzIJoKeHKDMqWERmGkh05IbRrmiw=
-X-Received: by 2002:a05:6808:f94:b0:43d:2dc4:9d16 with SMTP id
- 5614622812f47-43d50a8e97bmr2588108b6e.9.1758194930823; Thu, 18 Sep 2025
- 04:28:50 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6301285043;
+	Thu, 18 Sep 2025 12:36:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.72.103
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1758198972; cv=fail; b=ETi8t9I7CEIjuitbb3J4mC+zG+bpX32EHvmqGWOfsfLCrqcX4wbCdPZ/Z+gPKacqR/RdnbaJ3tEE85iRdY1axbTapTyOQ17TH0dRgwADF6lpKw4zuZJK211niEf0iFU8XX4HSOECAmeZDCAF+jUIpXhHpTB+VZE5km73Ymk9F+8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1758198972; c=relaxed/simple;
+	bh=XRXlXwTh0atVMx9+yHDhHxWz2ARPVQzkCNNF0FXWE28=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=K1UEMJMEcWxtKsw4jhrZGweVIVpzypSbIaqJIg0uyRimSX2T8KWe3DXfYfyNRMqMJNr5cxp98dUGMgLTSZ8nHcXP3Kl8vNC/jzv09UNtJ7dq2Hd9o5/TtQOOU7PtKJRj3pm1XsLn4znH24u/9RsEfh3e1tUlcqCVszu4OQdAdg0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=uclouvain.be; spf=pass smtp.mailfrom=uclouvain.be; dkim=pass (2048-bit key) header.d=uclouvain.be header.i=@uclouvain.be header.b=UULKuDDN; arc=fail smtp.client-ip=52.101.72.103
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=uclouvain.be
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uclouvain.be
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Ah2NQqexgdIaeUeOUgk3+CnglzTISdun5zXYvURlYvjR2cRJiT1PZTuZBwc970jox1n8uXfQ4Ww726qlRzbUPsZsfPBbtbusVIzijhYWjEOqr4NYv3pJ3qpNFc3iPVwwaKhFFY9pznmGuyZmVbLeDxXbGeeS8CAza4C0lZIA2uWeX2h8zjvJqZUKRe3J7SgJ5w1fIlns6vDbmMolj3Yf8BO9YyyUS2UOqU0CsDWeHC0jubZyJAyDlKpvGBsJKaWSQ14hgFfMiZ3B8a2W0TXCDbd4v6nNEmFjCJuBPRU1lwF/t3x3rX+PbOvWXMTsZ8XDroYQKfAyJLi4slyllNhRGQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=kFMVRcGiIG7EznEyktP/liE8SaL08VaO/m7qTSCF1XQ=;
+ b=HTUbcjTQp01cM+lH2F/JSs7WgNB4k/q610dXhMMw6b97J+X7OkysrR6yCNK9CPOXh2CV74mvOr2mjYuHMEmXZPyL5T1Z7tU2YMWSUh/dYrhf17sUBdAcuZuEk4GDwe+QctDbNVbxir+85bxRgQE0qjDvSeF+31sbjkdS/ihc2AZI6yh3LC65YdFPOjci3QiVZN6bMEOmw0GqrQRyPXvSosqC1idstYhh5d0EUKEqschW42fp8hCelN5vRK0dSvkQe/Gkbmpf897hExn/8UzgPAQ+YQ8xM+SFZcF4rw8NfVJcApCmgCgGxrFIaPE25Ey76Y7K0gAsMZ6bvUNII+dlwQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=uclouvain.be; dmarc=pass action=none header.from=uclouvain.be;
+ dkim=pass header.d=uclouvain.be; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uclouvain.be;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kFMVRcGiIG7EznEyktP/liE8SaL08VaO/m7qTSCF1XQ=;
+ b=UULKuDDN1HiSAvcM791E4wgXhjW6YrwqlCTp02EjvmizUaW4JZIFMQZn6GExH0Oz+j/6pnly7XVf2RQk4BH0yroNXwJI6KK2xD7rXtnDLh+DbF9pTN26H2OVU63gbz4Tj9RU8g9+1T3EOcHdYHvVuZL2bLhhfMO8yToAoZoRWtkOaeG7puzPU6QRZ0PwnD9HbNTCMIOIdEql3yPmaLha03msIU7iA2LwT/6B/LK73UI4XPTn+YTG82tHJrkMtwIIo1/p6oObdFIiR5eria4kMaaS4bjU1OIffzQeC8CXUiByWxR/6HUu4GcJvo7mVgmvSzJaOomO/1Zrj4RfjtqOIg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=uclouvain.be;
+Received: from AS8PR03MB9047.eurprd03.prod.outlook.com (2603:10a6:20b:5b6::13)
+ by DB5PR03MB9928.eurprd03.prod.outlook.com (2603:10a6:10:3c1::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9137.13; Thu, 18 Sep
+ 2025 12:36:06 +0000
+Received: from AS8PR03MB9047.eurprd03.prod.outlook.com
+ ([fe80::a45:7933:dd0a:8889]) by AS8PR03MB9047.eurprd03.prod.outlook.com
+ ([fe80::a45:7933:dd0a:8889%7]) with mapi id 15.20.9137.012; Thu, 18 Sep 2025
+ 12:36:06 +0000
+Message-ID: <c5f2e6e8-2ada-476a-8557-85273b9a93b7@uclouvain.be>
+Date: Thu, 18 Sep 2025 14:36:05 +0200
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 2/2] dt-bindings: power: supply: add support for
+ MAX77759 fuel gauge
+To: Conor Dooley <conor@kernel.org>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Sebastian Reichel <sre@kernel.org>,
+ Peter Griffin <peter.griffin@linaro.org>,
+ =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ devicetree@vger.kernel.org
+References: <20250915-b4-gs101_max77759_fg-v6-0-31d08581500f@uclouvain.be>
+ <20250915-b4-gs101_max77759_fg-v6-2-31d08581500f@uclouvain.be>
+ <20250915-presoak-answering-2df6fca532ad@spud>
+Content-Language: en-US
+From: Thomas Antoine <t.antoine@uclouvain.be>
+In-Reply-To: <20250915-presoak-answering-2df6fca532ad@spud>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PR1P264CA0003.FRAP264.PROD.OUTLOOK.COM
+ (2603:10a6:102:19e::8) To AS8PR03MB9047.eurprd03.prod.outlook.com
+ (2603:10a6:20b:5b6::13)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <878qimv24u.wl-tiwai@suse.de> <87ikhptpgm.wl-tiwai@suse.de>
- <CAJZ5v0htMKOcCoKts-B9BaE0VpS2oc9-cp=5VnNwS2Qe2iB+Kg@mail.gmail.com> <87tt10b5hq.wl-tiwai@suse.de>
-In-Reply-To: <87tt10b5hq.wl-tiwai@suse.de>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 18 Sep 2025 13:28:39 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0hUTByfxkE=-SGSHDDd=mPw694yD7PuuJ1LLRjp-H4=uA@mail.gmail.com>
-X-Gm-Features: AS18NWA4sJvRMM6lzUoIW98fo5qumY39WEP-CzBbiU-mbi_9Mil7xxpLJakcxfk
-Message-ID: <CAJZ5v0hUTByfxkE=-SGSHDDd=mPw694yD7PuuJ1LLRjp-H4=uA@mail.gmail.com>
-Subject: Re: PM runtime auto-cleanup macros
-To: Takashi Iwai <tiwai@suse.de>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AS8PR03MB9047:EE_|DB5PR03MB9928:EE_
+X-MS-Office365-Filtering-Correlation-Id: 178eeb73-9478-4294-f18e-08ddf6aff001
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|10070799003|7416014|376014|1800799024|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?WnN5bkFXcWRHaHJPRUFrUUpyT3ppa2QrT1NueFNsWXFLRUNyRE84UEdOZVZH?=
+ =?utf-8?B?WDlxZklYUGh4c1RjTmFGdSswTkZrejhRV2czSE1CTTZaRFZWUkIxN2MyNEZ2?=
+ =?utf-8?B?OFBIenFkNDRtWWhobTVJWWFmRDBGeW9TYzRheVFjS09Zc09IRjRybk00V0NL?=
+ =?utf-8?B?NlRSV0xaeS81L0NUNTJEWStNV1ZyQTArRG5xSTBqUk9URXk2RW1ib1paMlJD?=
+ =?utf-8?B?WHFTV1lVK3pQMHMwV2lPaGJQbXo1cC9PSjZoN2JqNUtQMVVlS1dhZkxYcUcr?=
+ =?utf-8?B?bmVvY2oyRXVVUVUzU1kzNHIzdGJwc2hYM0pHaFhES0tiR2EvQ2h3bHdWV3oy?=
+ =?utf-8?B?SUl5d3ZnSlVGZ3I4RUxiSmdPY1lIV0VFeHVRNXcwSi9UVG1HQWoxQkx5VU1L?=
+ =?utf-8?B?ZTlRWVUwZmhsRGRab2ZuMXVJbHZpZXZTak5ydk96M0M1Y2poQUY1RkJ2amE1?=
+ =?utf-8?B?eWsrMVNUajUxd1V2T3NNSUloUjdNM3o1U29vT3YrSHltUjQvNGdyaEY3cmE4?=
+ =?utf-8?B?QTZ4eVc4em9NTmxMZHpucDV6UkVOSE1McXZJQU5GMVBKWElJbkU2MUsyd3h5?=
+ =?utf-8?B?SU50ZE1aL045L1FDMVFjTU1RUnd5eGpBMWlWL25NSG1tZFp3SEtVUFRhNlFD?=
+ =?utf-8?B?Z2ZRelVXRDhDZFhZd28zNzE4bFRLZ0NQRVJmS21YN2t3YzBHZDVQTjZQOWZi?=
+ =?utf-8?B?U3IrdWRtMEErS1Z1UUVkMXFGbS9FUU1WS0dLWWlEZVMrMGxRWUgwdWNzc2w4?=
+ =?utf-8?B?TGUyQkN1T3RuZmQ2a2EvMUJlZGpwY0tLcHRDUVZaaEhsMHFRNWhjdTZjbHhX?=
+ =?utf-8?B?RitUbE5ub2RteHBxQVdvS0RTZ3MrY3RnSnJWeHFpS2lHYmF5QkN6VmtsYlRn?=
+ =?utf-8?B?cVovd1VQcTBRbDdPWktkVll1WlFqR3JqOEJNN0xWVmx1RlMxWnBoRGJLU3dN?=
+ =?utf-8?B?dG1GelV0OVhDMkVEY2lrRDZFSXhGQ0VaVGxIRXJzY3p6ZjVGeENYajBIdUZO?=
+ =?utf-8?B?dmxPdERsRGVNOHZlZ2N1WUdLblVjT0VHK3cyOHNyU1RHTzN3NWR6d0tvVUIv?=
+ =?utf-8?B?UE85NUlCSGRUWENlU0I5NUVCdVg3ZEtLbjNkTmJnemNsNzlYTk8xNXNaSHor?=
+ =?utf-8?B?T2NsbVVSRnRVL0xhYXVTUER0T3Z4elNIMllBZG5RL0tQNlAzMFd5Yndrb2N2?=
+ =?utf-8?B?QnpWTmg5RldoUjdFNUNSMy8yUVdlS0Uyb1VxNUdrVGxQWEZTNU5qNjcveFcv?=
+ =?utf-8?B?S09tME5wSlM5MFY0bmxrUGpmc05ySmhieXp5aGZWTmVkSFBLZ3NoMW9OSEpt?=
+ =?utf-8?B?b2J5eWl6ckJ2SjhvbmlIZy9sdWtUem13VjZmSzVGcTVQSmhDREpVTFhsUEI0?=
+ =?utf-8?B?QU9wMHU5WCtOM0xYSGZIdjJSM2o5YWZydnBhYzcxZjhmbU4wZ3NPaUtqT2x5?=
+ =?utf-8?B?Q3lqbys5ZkNmRmhmL0lqRkxjSlFVVDJqdDI0QXJnWlFBdkl2U2tmUlp4SS9N?=
+ =?utf-8?B?TENGREZscmE5QVpYbXM3TlR4SXRaMGlYbXFrNTNoNGJXRlN4MnUrL29NK1Zv?=
+ =?utf-8?B?bTZkK051b0ZFVTlHYTByc24wTXhpTGR6Y1ZnWEliUTk2dWJkUUsrSy9KbTdO?=
+ =?utf-8?B?dnFkRkdUN0RuSTV1TzR5L2puWHNwdGpnOVhrZzVkd3dLb3ZaUW1hZWt0MW5J?=
+ =?utf-8?B?M2FjOEQ4dVVLZHNCZzhVRVp4TWFKcFFyTmk3Z3JzeHNaRnY0R0dybWIwMEVQ?=
+ =?utf-8?B?MUtONy9RM05aNk0vQVUyUkNhVTBlK2Z0emFGK0IzYVdMNEtBRWM4empzM2hR?=
+ =?utf-8?Q?l/mFJl/eXVI+ambnllF5WR/1TjqRX9AwbtYOU=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR03MB9047.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(10070799003)(7416014)(376014)(1800799024)(366016);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?T3hKL2pLMUpzb091SGNiUjExbTNVV2ZOUXE3SG9lcTliN1JBcVJPY0E4WU5N?=
+ =?utf-8?B?V2RXVWtaMW9XR0hTaTRZNjA0dE1oNzY2Myt5bExHNW9iN296c3pPSDZzcWFm?=
+ =?utf-8?B?TUE0c3V2bDBVb21BRnZQcG1kSW5OWlRxVnpJL09XcTlRMVlrcW1hT3VJYk52?=
+ =?utf-8?B?OHZaNmlRTVMxN1k0NExhRTFML0pObjB3bzBvbGxpYXkyb25SNFd3OHIwWUhN?=
+ =?utf-8?B?L2RMWjNnZXg2eURXVnVlcXJrOFQ5eTc3bTJrU3dqNU82MUxKbVdBNnkzNDNr?=
+ =?utf-8?B?TFRxUjlOUFVDcUx2TkVUQVRqeXQ0a2ZhblQvUWoxTklIQkR4dDh0WDZtUVFT?=
+ =?utf-8?B?VS8wSFdjSDVrdEtVQ2J1aXFlblY4Qnd2c0lWeWJZdERQbTlRdkk0OFNad0Nm?=
+ =?utf-8?B?VmJmSGdyOFV0NjJEN2FIWWhvTDVrOGNORnl1eGdZc25xQkJhaEltRy84c29v?=
+ =?utf-8?B?UVBjQmhycFV2NFkvcFdqeE9aVnpZanUzTVRkUUwyeUxOQi84VUdwU0hITjVh?=
+ =?utf-8?B?NnNzVXVZQmZXb0JpcG5iZXd5czVQZHBDb3AycGJsbkJHYzZlS25heTFrR2M1?=
+ =?utf-8?B?RHZKYU16SUxnWnY3RVBvSUU2YlJXQ1NhMUlTcTFIRFdSa2drMU5SamxvemFO?=
+ =?utf-8?B?Q2RDa2pDRDYvS0xtazE0U2ZUYmJ2dzlsK3dEMlZhUmsvZlBkdkE2N2VKUzhq?=
+ =?utf-8?B?K0MvNmxHMUhBZm95S3dLRnZhak5wR3JBa0puQkV2S0wwQ2VwTndMQTNXams3?=
+ =?utf-8?B?eHFNZGpYTEtvYjRwWll1S3NSYWtlTjY2RUpQTW5BMDYwREx2REZvaUIzcitw?=
+ =?utf-8?B?cDZ2elI1b3VFdzhDYzRLSDk5M1JYVWVpSEhtbDJleFFlaitZSkoycEJ1MnRZ?=
+ =?utf-8?B?WVl2OTZQYzVsUGF5VVg3SU44YXNuVWI0Y0s1eVBmSTVXVjlXQlJWTXhQVHUw?=
+ =?utf-8?B?cW0ra08vNzBMSXNKNlVWdkdhbWZTanIwRjZwRjR0SlJaWTJpdHFSTytrS0Zj?=
+ =?utf-8?B?U01lY0Q3ZmNUMUpuM1lWWlRlYnpHbnEvNDNpa0dUSnFqTkNwbDhxcGpBTG8y?=
+ =?utf-8?B?ZlNKV2UwQ3V1Ylo5ZGc3dzRyYnNEV1VrWlZ3S3JVVUpKZmtrYzZ2Mjl4ZGN6?=
+ =?utf-8?B?NXFjZklHV2RtcVhRYVArWU1tNmVnNGFXcld4U2REWkQ3ZjVDREFHK2hiSlZh?=
+ =?utf-8?B?ak9jd2lSeHAvd3NGSkc3THp3WlpSRWs5dHdQL0ZValk3NXdVR2Ywd2pXVG1I?=
+ =?utf-8?B?VWlCQSsvMmpRM0JEVklMUkxOYnI4dW85NDB6YnQrQmNJbDlreFM0Sy9tQVpu?=
+ =?utf-8?B?NldkbmpQVmE1aWw2MEhDcWFjbHVNVGFUZzN0RXRod3BEV0tIQm1mTWlEaFlm?=
+ =?utf-8?B?aStmNzJzY2w1dGQ0RS9qQm1GRjljV3JZekNTWEFnaXRXaS8zYnNZM3VLV0tz?=
+ =?utf-8?B?M25PK002K1RBM2xlOTRXZDJxbTk5L1pCZSt0a1pIRGJONm1BdkVGT1V5OHQz?=
+ =?utf-8?B?WEpWTGRvYS8xY2RpYW1kMXMvbUM5M3BjYnhnWTZYc0ZWSjQ2YXdBcG9USC85?=
+ =?utf-8?B?UzQ3RGo3QWw2OUV1Q1M3MXNSaGtRSkpUZGl0WWdHSnliRlJqUlF0aUtmODk4?=
+ =?utf-8?B?cUllSitVeTRBVzJRbHEyY2Zmc0lXYUdsVE9xSEQyRnZQQ1MvOElnYVdjaU44?=
+ =?utf-8?B?WEFvZkU0c3FRY251KzFqdWFHL2xxUXdNeGlEMkt3d3ZJYWc3M3NmWVhYcnIx?=
+ =?utf-8?B?Y20zNUthcjI3NkRkdlJVRXZhY0JsY2kxSmJXNXFKYnhoOXduODRRUUtsRlFo?=
+ =?utf-8?B?UWVFcy9UWng3NEtOQ3c4aWRWL0xyNXgybW5OKytqZ2lUNXBrZGV2S0t0bzFX?=
+ =?utf-8?B?VzUyQUI4bFNaMzlvRWRZUWx0ZGlIbWZPMWgyNUJyY0pVaENYeWVuUzRrNFha?=
+ =?utf-8?B?bjQwT0hFeitXNXZLTW42THdjaDRSemRlYWlUaHU5SC9CVnBwMU03OWs2eFYw?=
+ =?utf-8?B?R2ZMcnpRcnRWVHJLYWVPckpJNk4vS0p5bjhZQXJwazg4aHRNdXRXUUxMM3lC?=
+ =?utf-8?B?UytCWDVwU201Ky9sUzk3VXFJR2RlZnhETEJyZFEzYTNBaWR4T1BuY2hmQ0tM?=
+ =?utf-8?B?eGVmT1F1WnRPR2xXOEVpMENpcVpRdzFNUjVJK2JBbmt1K01LN3Iyajk5NzIv?=
+ =?utf-8?B?U28wbzFUSG9iV2JCV0w0ajQvK0xSR0UyUjZzam0yUkUwcWc3SUgySCt0a3NO?=
+ =?utf-8?B?cERKMzRtWFpnV1BaMWYvYUFXb2VBPT0=?=
+X-OriginatorOrg: uclouvain.be
+X-MS-Exchange-CrossTenant-Network-Message-Id: 178eeb73-9478-4294-f18e-08ddf6aff001
+X-MS-Exchange-CrossTenant-AuthSource: AS8PR03MB9047.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Sep 2025 12:36:06.5876
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 7ab090d4-fa2e-4ecf-bc7c-4127b4d582ec
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: eYD4IzAuh9Xw5egEcZNbpS7BzzKT7c6/XXICprGgLw8R2eCVi6U4PQ6c15FSYge7lPKXveaXVz7KKsVRh4iMsQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB5PR03MB9928
 
-On Thu, Sep 18, 2025 at 9:10=E2=80=AFAM Takashi Iwai <tiwai@suse.de> wrote:
->
-> On Wed, 17 Sep 2025 20:58:36 +0200,
-> Rafael J. Wysocki wrote:
-> >
-> > Hi,
-> >
-> > Sorry for the delay.
-> >
-> > On Thu, Sep 11, 2025 at 9:31=E2=80=AFAM Takashi Iwai <tiwai@suse.de> wr=
-ote:
-> > >
-> > > On Wed, 10 Sep 2025 16:00:17 +0200,
-> > > Takashi Iwai wrote:
-> > > >
-> > > > Hi,
-> > > >
-> > > > while I worked on the code cleanups in the drivers with the recent
-> > > > auto-cleanup macros, I noticed that pm_runtime_get*() and _put*() c=
-an
-> > > > be also managed with the auto-cleanup gracefully, too.  Actually we
-> > > > already defined the __free(pm_runtime_put) in commit bfa4477751e9, =
-and
-> > > > there is a (single) user of it in pci-sysfs.c.
-> > > >
-> > > > Now I wanted to extend it to pm_runtime_put_autosuspend() as:
-> > > >
-> > > > DEFINE_FREE(pm_runtime_put_autosuspend, struct device *,
-> > > >            if (_T) pm_runtime_put_autosuspend(_T))
-> > > >
-> > > > Then one can use it like
-> > > >
-> > > >       ret =3D pm_runtime_resume_and_get(dev);
-> > > >       if (ret < 0)
-> > > >               return ret;
-> > > >       struct device *pmdev __free(pm_runtime_put_autosuspend) =3D d=
-ev;
-> > > >
-> > > > that is similar as done in pci-sysfs.c.  So far, so good.
-> > > >
-> > > > But, I find putting the line like above at each place a bit ugly.
-> > > > So I'm wondering whether it'd be better to introduce some helper
-> > > > macros, e.g.
-> > > >
-> > > > #define pm_runtime_auto_clean(dev, var) \
-> > > >       struct device *var __free(pm_runtime_put) =3D (dev)
-> > >
-> > > It can be even simpler by assigning a temporary variable such as:
-> > >
-> > > #define pm_runtime_auto_clean(dev) \
-> > >         struct device *__pm_runtime_var ## __LINE__ __free(pm_runtime=
-_put) =3D (dev)
-> >
-> > Well, if there's something like
-> >
-> > struct device *pm_runtime_resume_and_get_dev(struct device *dev)
-> > {
-> >         int ret =3D pm_runtime_resume_and_get(dev);
-> >         if (ret < 0)
-> >                 return ERR_PTR(ret);
-> >
-> >         return dev;
-> > }
-> >
-> > It would be a matter of redefining the FREE to also take error
-> > pointers into account and you could do
-> >
-> > struct device *__dev __free(pm_runtim_put) =3D pm_runtime_resume_and_ge=
-t_dev(dev);
-> > if (IS_ERR(__dev))
-> >         return PTR_ERR(__dev);
->
-> That'll work, too.  Though, I find the notion of __free() and a
-> temporary variable __dev a bit too cumbersome; it's used only for
-> auto-clean stuff, so it could be somewhat anonymous.
+Hello,
 
-No, it is not used only for auto-clean, it is also used for return
-value checking and it represents a reference on the original dev.  It
-cannot be entirely anonymous because of the error checking part.
 
-The point is that this is one statement instead of two and so it is
-arguably harder to mess up with.
+On 9/15/25 7:31 PM, Conor Dooley wrote:
+> On Mon, Sep 15, 2025 at 12:14:11PM +0200, Thomas Antoine via B4 Relay wrote:
+>> From: Thomas Antoine <t.antoine@uclouvain.be>
+>>
+>> The Maxim MAX77759 is a companion PMIC for USB Type-C. It contains
+>> Battery Charger, Fuel Gauge, temperature sensors, USB Type-C Port
+>> Controller (TCPC), NVMEM, and additional GPIO interfaces
+>>
+>> Use max77759-fg compatible to avoid conflict with drivers for other
+>> functions.
+>>
+>> The battery node is used to pass the REPCAP and ICHGTERM values
+>> needed for the initialization of the fuel gauge.
+>>
+>> The nvmem cells are used to get initialization values and to backup
+>> the learning and the number of cycles. It should work out of the box
+>> with gs101-oriole and gs101-raven which were previously running
+>> Android.
+>>
+>> Signed-off-by: Thomas Antoine <t.antoine@uclouvain.be>
+>> ---
+>>  .../bindings/power/supply/maxim,max77759.yaml      | 78 ++++++++++++++++++++++
+>>  1 file changed, 78 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/power/supply/maxim,max77759.yaml b/Documentation/devicetree/bindings/power/supply/maxim,max77759.yaml
+>> new file mode 100644
+>> index 0000000000000000000000000000000000000000..4d45739fcaf26273ec57b60049d6d0421df38efb
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/power/supply/maxim,max77759.yaml
+>> @@ -0,0 +1,78 @@
+>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/power/supply/maxim,max77759.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Maxim Integrated MAX77759 fuel gauge
+>> +
+>> +maintainers:
+>> +  - Thomas Antoine <t.antoine@uclouvain.be>
+>> +
+>> +allOf:
+>> +  - $ref: power-supply.yaml#
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: maxim,max77759-fg
+> 
+> Compatible doesn't match the filename, why?
+> I assume the "fg" is fuel-gauge, but can this device be anything else?
 
-> But it's all about a matter of taste, and I'd follow what you and
-> other guys suggest.
->
-> FWIW, there are lots of code doing like
->
->         pm_runtime_get_sync(dev);
->         mutex_lock(&foo);
->         ....
->         mutex_unlock(&foo);
->         pm_runtime_put(dev);
->         return;
->
-> or
->
->         ret =3D pm_runtime_resume_and_get(dev);
->         if (ret)
->                 return ret;
->         mutex_lock(&foo);
->         ....
->         mutex_unlock(&foo);
->         pm_runtime_put_autosuspend(dev);
->         return 0;
->
-> and they can be converted nicely with guard() once when PM runtime can
-> be automatically unreferenced.  With my proposed change, it would
-> become like:
->
->         pm_runtime_get_sync(dev);
->         pm_runtime_auto_clean(dev);
+The max77759 is a multifunction chip.
+The following compatibles are already used for some of those functions:
+- maxim,max77759 (for the pmic)
+- maxim,max77759-gpio
+- maxim,max77759-nvmem
+- maxim,max77759-tcpci
 
-For the case in which the pm_runtime_get_sync() return value is
-discarded, you could define a guard and do
+The fuel gauge functionality that is added with this patch is very similar
+to the functionality of the max1720x which is why the filename was chosen
+to fit other maxim fuel gauge chips pattern.
 
-guard(pm_runtime_get_sync)(dev);
+Maybe it would be better to use the maxim,max77759-battery compatible to
+match the filename? It would also fit with the already existing
+maxim,max77705-battery and maxim,max77849-battery compatibles.
 
-here.
-
-The case checking the return value is less straightforward.
-
->         guard(mutex)(&foo);
->         ....
->         return;
->
-> or
->
->         ret =3D pm_runtime_resume_and_get(dev);
->         if (ret)
->                 return ret;
->         pm_runtime_auto_clean_autosuspend(dev);
->         guard(mutex)(&foo);
->         ....
->         return 0;
->
->
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  interrupts:
+>> +    maxItems: 1
+>> +
+>> +  shunt-resistor-micro-ohms:
+>> +    description: The value of the current sense resistor in microohms.
+>> +
+>> +  monitored-battery:
+>> +    description: |
+>> +      The fuel gauge needs the following battery properties:
+>> +      - charge-full-design-microamp-hours
+>> +      - charge-term-current-microamp
+>> +
+>> +  nvmem-cells:
+>> +    maxItems: 1
+>> +    description: |
+>> +      Saved fuel gauge state. This state will be used during the initialization
+>> +      and saved on exit. It must be initialized beforehand.
+>> +      Its layout must be composed of
+>> +        - RCOMP0 (characterization of the open-circuit voltage)
+>> +        - TCOMPO (temperature compensation information)
+>> +        - FULLCAPREP (reported full capacity)
+>> +        - QRTABLE00, QRTABLE10, QRTABLE20, QRTABLE30 (cell capacity information)
+>> +        - cv_mixcap (remaining capacity of the cell without empty compensation)
+>> +        - cv_halftime (time-to-full characterization time constant)
+>> +      They must all be aligned on 2 bytes. A valid CRC8 checksum must
+>> +      also be found at the end (polynomial x^8 + x^2 + x + 1).
+>> +
+>> +  nvmem-cell-names:
+>> +    const: fg_state
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +  - shunt-resistor-micro-ohms
+>> +  - monitored-battery
+>> +  - nvmem-cells
+>> +  - nvmem-cell-names
+>> +
+>> +unevaluatedProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    #include <dt-bindings/interrupt-controller/irq.h>
+>> +    i2c {
+>> +      #address-cells = <1>;
+>> +      #size-cells = <0>;
+>> +
+>> +      fuel-gauge@36 {
+>> +        compatible = "maxim,max77759-fg";
+>> +        reg = <0x36>;
+>> +        interrupts-extended = <&gpa9 3 IRQ_TYPE_LEVEL_LOW>;
+>> +        shunt-resistor-micro-ohms = <5000>;
+>> +        monitored-battery = <&battery>;
+>> +        nvmem-cells = <&fg_state>;
+>> +        nvmem-cell-names = "fg_state";
+>> +      };
+>> +    };
+>>
+>> -- 
+>> 2.51.0
+>>
+>>
 
