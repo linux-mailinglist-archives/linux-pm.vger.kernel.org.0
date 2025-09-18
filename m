@@ -1,58 +1,54 @@
-Return-Path: <linux-pm+bounces-35003-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35006-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC873B8706B
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 23:11:49 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C604AB87189
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 23:23:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3D69F7ABAB8
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 21:09:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8FDB0582EFF
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 21:23:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CE582EC09C;
-	Thu, 18 Sep 2025 21:10:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F1C92ED848;
+	Thu, 18 Sep 2025 21:19:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aUk00Vbw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jEpdzMxg"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C50824501B;
-	Thu, 18 Sep 2025 21:10:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4736D2E0905;
+	Thu, 18 Sep 2025 21:19:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758229850; cv=none; b=kD4jlA1tLAAxz7cCvwf7wmsfsXcxgsonuOWWPQ2/rSWWGMTMo+t4xoMpI0uu9rSE+XCbODPC2StEYHsF8lUgBerCgbzYFUTZge9WVJ5qE7lOJNgB2lHlA4DGBtKTWzUZafxXUNXC1SksIjkfY4Lf+I7hdNi3igQCfyydF105MpM=
+	t=1758230364; cv=none; b=IvZGwLkvqlJ+PS5BpvVDYdHUOrS0Op2EnGPHW3nSxsU0kTJAmxvRR9NUtBMzdMUVBmtD+pDD/2X+Dv2ubO1kEeW7+RSqjR8rFVzDZsG6chIEbELQ3ciBUfkgYcN9/ZiyfyHZy7Ik8GyXTnUsg4qfh1ZbqlGB4jGlQ9yQnF3dlt4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758229850; c=relaxed/simple;
-	bh=wlNjaTZImKf2AeG6/odvaHilnkAGYMvkVffoJRmrn70=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=KM9UxOi4BaYDHj5fOLDZI8pMvko6SUnPHiF+rpkOGqhR/VZnlT86ilCYp30IaOCv1dOkGY6UHgaC96qt7t4VfvhxqqNtQQlPH21wevOgvPHJGic44uC0GTvLRh3neV+7U8aAvNwB+fSysW/rzv/eh8cCTcyLvVWVUczm9ybgPIw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aUk00Vbw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58984C4CEE7;
-	Thu, 18 Sep 2025 21:10:48 +0000 (UTC)
+	s=arc-20240116; t=1758230364; c=relaxed/simple;
+	bh=iTkv4/jd5yTn1fHHuhHFJZgChsiArWlObzMiZKolph8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ufmv7w+qmE6/vAsVCNdOgN1283gmzsgpi5aSerGaXgsJdRroppU5jdV7XdQ8vQ/UmgV6kRIbOjdq3AB9dGKAopfJeMtVXgUz9YGSmRl0nE6E7PLCDOoRwbvWFzILaTUDa+BPq1turd+tmg08wnWGaITSGHYD2DkPDWLWY8A+b3o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jEpdzMxg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFFECC4CEE7;
+	Thu, 18 Sep 2025 21:19:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758229849;
-	bh=wlNjaTZImKf2AeG6/odvaHilnkAGYMvkVffoJRmrn70=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=aUk00Vbwlm/AgYDloeJEF0n1g05Ksb4/qtHx8wCKS/Wh+DyVnJwXG4q+xUw1tbJEY
-	 d47PTPbffMdIuVmHoikcrvZHyGs3p46TFO2GgJkaZy6pbmEiB/hRULt4To6ZZXwDKp
-	 aR0PnxehpjIx0zH6Yfi03LygrpQpF1O6QtGE3cfV4oQkfMTMr3oeyr6tTiDpCZ8qb4
-	 X66/RvzHnWK4zqESNRUtyVKZ/2k05Tq3KyiyQbGGo/NrYCbANloJxqzynxozOqatvn
-	 fvf6CJ57d+XjF0Uz1Idb65Bc128JEsLRR3N4DWGUAG62eS2pIrXDdt9/T11tzegY9l
-	 oGtiBcbX4eYKg==
+	s=k20201202; t=1758230363;
+	bh=iTkv4/jd5yTn1fHHuhHFJZgChsiArWlObzMiZKolph8=;
+	h=From:To:Cc:Subject:Date:From;
+	b=jEpdzMxgjcpf2Ds7XVlFkbFyRu83CKD+Bo5MdQiQIh1FE84EgJ3+JjpFGmxoLb3BJ
+	 QFkqqSVVZbimerKNTXQd6bo30FtYUyLFRuHoNyuO5NyIluhkBu/3ZAoPpttkFOMrTw
+	 S5IuVK86nhPezZc0km0xQKfK3tR6pH/DeYnlBi2Q61b9NhTixG2OcXhnx218x8qKrc
+	 pokmC9WDjhOWcaR0beBmtyQPznLn6maPaGLtAQPxAINkvPXo8V/v5+6Lxwj52AWKLL
+	 8+fy1JtousTenOntUmx0jublh0Utljoit+46p1aemZ7KQKyTfFF5LIFI3Ud3QNLUpe
+	 iHSrMyLEWqhrA==
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-To: Linux ACPI <linux-acpi@vger.kernel.org>
-Cc: Huisong Li <lihuisong@huawei.com>, LKML <linux-kernel@vger.kernel.org>,
- Linux PM <linux-pm@vger.kernel.org>,
- Mario Limonciello <mario.limonciello@amd.com>,
- "Shenoy, Gautham Ranjal" <gautham.shenoy@amd.com>
-Subject: [PATCH v1 2/2] ACPI: processor: idle: Redefine two functions as void
-Date: Thu, 18 Sep 2025 23:10:31 +0200
-Message-ID: <2385759.ElGaqSPkdT@rafael.j.wysocki>
+To: Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject:
+ [PATCH v1] cpuidle: Fail cpuidle device registration if there is one already
+Date: Thu, 18 Sep 2025 23:19:20 +0200
+Message-ID: <3374815.aeNJFYEL58@rafael.j.wysocki>
 Organization: Linux Kernel Development
-In-Reply-To: <5926523.DvuYhMxLoT@rafael.j.wysocki>
-References: <5926523.DvuYhMxLoT@rafael.j.wysocki>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -64,115 +60,47 @@ Content-Type: text/plain; charset="UTF-8"
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Notice that acpi_processor_power_init() and acpi_processor_power_exit()
-don't need to return any values because their callers don't check them
-anyway, so redefine those functions as void.
+Refuse to register a cpuidle device if the given CPU has a cpuidle
+device already and print a message regarding it.
 
-While at it, rearrange the code in acpi_processor_power_init() to
-reduce the indentation level, get rid of a redundant local variable
-in that function, and rephrase a code comment in it.
-
-No intentional functional impact.
+Without this, an attempt to register a new cpuidle device without
+unregistering the existing one leads to the removal of the existing
+cpuidle device without removing its sysfs interface.
 
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/acpi/processor_idle.c |   47 +++++++++++++++++++-----------------------
- include/acpi/processor.h      |    4 +--
- 2 files changed, 24 insertions(+), 27 deletions(-)
+ drivers/cpuidle/cpuidle.c |    8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
---- a/drivers/acpi/processor_idle.c
-+++ b/drivers/acpi/processor_idle.c
-@@ -1137,47 +1137,45 @@ void acpi_processor_unregister_idle_driv
- 	cpuidle_unregister_driver(&acpi_idle_driver);
- }
- 
--int acpi_processor_power_init(struct acpi_processor *pr)
-+void acpi_processor_power_init(struct acpi_processor *pr)
+--- a/drivers/cpuidle/cpuidle.c
++++ b/drivers/cpuidle/cpuidle.c
+@@ -635,11 +635,17 @@ static void __cpuidle_device_init(struct
+ static int __cpuidle_register_device(struct cpuidle_device *dev)
  {
--	int retval;
- 	struct cpuidle_device *dev;
+ 	struct cpuidle_driver *drv = cpuidle_get_cpu_driver(dev);
++	unsigned int cpu = dev->cpu;
+ 	int i, ret;
  
- 	if (disabled_by_idle_boot_param())
--		return 0;
-+		return;
+ 	if (!try_module_get(drv->owner))
+ 		return -EINVAL;
  
- 	acpi_processor_cstate_first_run_checks();
- 
- 	if (!acpi_processor_get_power_info(pr))
- 		pr->flags.power_setup_done = 1;
- 
--	if (pr->flags.power) {
--		dev = kzalloc(sizeof(*dev), GFP_KERNEL);
--		if (!dev)
--			return -ENOMEM;
--		per_cpu(acpi_cpuidle_device, pr->id) = dev;
--
--		acpi_processor_setup_cpuidle_dev(pr, dev);
--
--		/* Register per-cpu cpuidle_device. Cpuidle driver
--		 * must already be registered before registering device
--		 */
--		retval = cpuidle_register_device(dev);
--		if (retval) {
--
--			per_cpu(acpi_cpuidle_device, pr->id) = NULL;
--			kfree(dev);
--			return retval;
--		}
-+	if (!pr->flags.power)
-+		return;
++	if (per_cpu(cpuidle_devices, cpu)) {
++		pr_info("CPU%d: cpuidle device already registered\n", cpu);
++		return -EEXIST;
++	}
 +
-+	dev = kzalloc(sizeof(*dev), GFP_KERNEL);
-+	if (!dev)
-+		return;
-+
-+	per_cpu(acpi_cpuidle_device, pr->id) = dev;
-+
-+	acpi_processor_setup_cpuidle_dev(pr, dev);
-+
-+	/*
-+	 * Register a cpuidle device for this CPU.  The cpuidle driver using
-+	 * this device is expected to be registered.
-+	 */
-+	if (cpuidle_register_device(dev)) {
-+		per_cpu(acpi_cpuidle_device, pr->id) = NULL;
-+		kfree(dev);
- 	}
--	return 0;
- }
- 
--int acpi_processor_power_exit(struct acpi_processor *pr)
-+void acpi_processor_power_exit(struct acpi_processor *pr)
- {
- 	struct cpuidle_device *dev = per_cpu(acpi_cpuidle_device, pr->id);
- 
- 	if (disabled_by_idle_boot_param())
--		return 0;
-+		return;
- 
- 	if (pr->flags.power) {
- 		cpuidle_unregister_device(dev);
-@@ -1185,7 +1183,6 @@ int acpi_processor_power_exit(struct acp
+ 	for (i = 0; i < drv->state_count; i++) {
+ 		if (drv->states[i].flags & CPUIDLE_FLAG_UNUSABLE)
+ 			dev->states_usage[i].disable |= CPUIDLE_STATE_DISABLED_BY_DRIVER;
+@@ -648,7 +654,7 @@ static int __cpuidle_register_device(str
+ 			dev->states_usage[i].disable |= CPUIDLE_STATE_DISABLED_BY_USER;
  	}
  
- 	pr->flags.power_setup_done = 0;
--	return 0;
- }
+-	per_cpu(cpuidle_devices, dev->cpu) = dev;
++	per_cpu(cpuidle_devices, cpu) = dev;
+ 	list_add(&dev->device_list, &cpuidle_detected_devices);
  
- MODULE_IMPORT_NS("ACPI_PROCESSOR_IDLE");
---- a/include/acpi/processor.h
-+++ b/include/acpi/processor.h
-@@ -419,8 +419,8 @@ static inline void acpi_processor_thrott
- /* in processor_idle.c */
- extern struct cpuidle_driver acpi_idle_driver;
- #ifdef CONFIG_ACPI_PROCESSOR_IDLE
--int acpi_processor_power_init(struct acpi_processor *pr);
--int acpi_processor_power_exit(struct acpi_processor *pr);
-+void acpi_processor_power_init(struct acpi_processor *pr);
-+void acpi_processor_power_exit(struct acpi_processor *pr);
- int acpi_processor_power_state_has_changed(struct acpi_processor *pr);
- int acpi_processor_hotplug(struct acpi_processor *pr);
- void acpi_processor_register_idle_driver(void);
+ 	ret = cpuidle_coupled_register_device(dev);
 
 
 
