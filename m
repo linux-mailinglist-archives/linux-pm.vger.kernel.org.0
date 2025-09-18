@@ -1,272 +1,260 @@
-Return-Path: <linux-pm+bounces-34945-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34946-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4DCDDB830B5
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 07:49:26 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C353B8346C
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 09:11:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E4AAF7A4C65
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 05:47:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CDA933B637E
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 07:11:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0040275AFE;
-	Thu, 18 Sep 2025 05:49:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E0C72EA752;
+	Thu, 18 Sep 2025 07:10:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Iujtcaa5"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="TwCal60E";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="EHCr+7k9";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="TwCal60E";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="EHCr+7k9"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD6AC34BA25;
-	Thu, 18 Sep 2025 05:49:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7627E2EA49C
+	for <linux-pm@vger.kernel.org>; Thu, 18 Sep 2025 07:10:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758174557; cv=none; b=lsI7gnHD6mugpiSw57b0lQfQWuiSXoLwbgGhNTkc62OVIzDHHVIeVM5kOouBCsrKv6V67sxtI195YbtWcVq+dpenirboToXnfSgS2aaysowND8ZkZtNz/03+bWdUaUEXE/Z/H+1NYeah6o67DwKuPqaq03RGpdo0BO8zLb5a1xs=
+	t=1758179451; cv=none; b=nAnp1I5DoJjN7n44DZPHV2n9ZMJmWJc40lGrhoJ0cBimBE3of9bv7sKtFGIjTeXTT5NVbYToJvIK1wMpKEzOjQaOOiDAszIYwBBTkw/jU4XuDdaFJg64xaDi3eMtOE0Ag6vPAxYJu4d3se9Tc46mxiv4OXr+yifc84IgafezvC8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758174557; c=relaxed/simple;
-	bh=FMI5vLJhbLQPMMxIl/P/O+8VDOpxYiBvnU54PY056v8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BnXaQmI/ig9CeQjA+Y1ae6pIyekaad10Bo0wBAKCjVWBMXHc1KO+1GjuCP+MXJk8fvIZPaM6jqnjWOXBnoyo8/lp7cH3OtCGFEy2UUATibwsW2IzEETb+pgVz+YWVWQ7REynAPn7DxayV9M4Vp7YIVV+5eTRZyeFck5CVHe3V5Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Iujtcaa5; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758174556; x=1789710556;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=FMI5vLJhbLQPMMxIl/P/O+8VDOpxYiBvnU54PY056v8=;
-  b=Iujtcaa5NxlZYLLfROrr3Vv+V+a4HgdsLpbwZHxKO2JN+pe0OqzLhDy4
-   iszHQZ6zfGIyMOEKyKr8YaRwHSpWeOB9i8lfOE5Se67AuhciAOnymvlQH
-   McP+koRV8xFmsTf/ODLLvIs/GVDGET39kKCf9mK2IWJHy30xlxqDp+F6m
-   HneErw3q7F3Mza/NAt8W4MbYshqiFIc2f4wudRIJvBFSV2GtAXqzUpa9O
-   TZEiw6jukK0uwz9iahWAolUqeeSbj4eEScfBZsjGTwmSAZw8f3MDQ4vM/
-   oyTkzSSf4i8G3DZ7HrKIvGvyYJtycKBAXTcQ0P0R3+rQ6PiwnvtPMtuXj
-   w==;
-X-CSE-ConnectionGUID: 8wjpIxVERn+bzXAiv5tcTQ==
-X-CSE-MsgGUID: EyN64aGTSoucOr5lAI0qHg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11556"; a="71862285"
-X-IronPort-AV: E=Sophos;i="6.18,274,1751266800"; 
-   d="scan'208";a="71862285"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2025 22:49:14 -0700
-X-CSE-ConnectionGUID: sYjqVjXCRVqCzBW3JWT55w==
-X-CSE-MsgGUID: G3tz06RZQhOc0MLkJsdMIQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,274,1751266800"; 
-   d="scan'208";a="175019165"
-Received: from lkp-server01.sh.intel.com (HELO 84a20bd60769) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 17 Sep 2025 22:49:09 -0700
-Received: from kbuild by 84a20bd60769 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uz7Vy-0002nr-0N;
-	Thu, 18 Sep 2025 05:49:06 +0000
-Date: Thu, 18 Sep 2025 13:49:02 +0800
-From: kernel test robot <lkp@intel.com>
-To: Slawomir Rosek <srosek@google.com>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Alex Hung <alexhung@gmail.com>, Hans de Goede <hansg@kernel.org>,
-	Ilpo Jarvinen <ilpo.jarvinen@linux.intel.com>,
-	AceLan Kao <acelan.kao@canonical.com>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: oe-kbuild-all@lists.linux.dev,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Zhang Rui <rui.zhang@intel.com>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	Tomasz Nowicki <tnowicki@google.com>,
-	Stanislaw Kardach <skardach@google.com>,
-	Michal Krawczyk <mikrawczyk@google.com>,
-	linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-	platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org,
-	Slawomir Rosek <srosek@google.com>
-Subject: Re: [PATCH v2 1/6] ACPI: DPTF: Ignore SoC DTS thermal while scanning
-Message-ID: <202509181359.fLTuROj6-lkp@intel.com>
-References: <20250917120719.2390847-2-srosek@google.com>
+	s=arc-20240116; t=1758179451; c=relaxed/simple;
+	bh=afbZiTITWiDPxpVDFuaq7hIxA4pu1Ma8IO/vh9BBM6w=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ZAZU8aktp1Mmt4S9kPnSyKzuHJ4S63bgL+DKR97Av5IZfv7LDzUbX1k/auf/EmbHB84b/4TdZRaRWZWO6/plAjcTIPK0X6zLBD8/tlXd9KQpWLOiidCjjnM9cm1wvh4bcXi1soUin14pdW29fT8Cy33Q8cPW/wXdGZxAOyY8v2Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=TwCal60E; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=EHCr+7k9; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=TwCal60E; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=EHCr+7k9; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 2738B336B0;
+	Thu, 18 Sep 2025 07:10:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1758179442; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=pit2StEZvDVJ127lc63LyjBnZcAyarkm35ZsvFwG3Ug=;
+	b=TwCal60EKp1MDOYLxoKy6YjdPtPkSczXK7B7bK3rOpV76PRPfJMOkOowlhCljGbcUzP/cK
+	j+FfczXwY+wOCeTs+OU1fDqaqcgucBb5vw44Meu9+gu/i5sockbhOqxJlksJY5HslRufD5
+	vUGsrw4qdAW3MvT8hnOMyGi7qNeRQ/s=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1758179442;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=pit2StEZvDVJ127lc63LyjBnZcAyarkm35ZsvFwG3Ug=;
+	b=EHCr+7k9hyySXBNOFAuI8v3Jc7tuniPCQowjRMA+7x2ERLpmAcF2dz/fMsMQuaNZy5iw8w
+	ovAJf6kyNBBOCyCQ==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=TwCal60E;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=EHCr+7k9
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1758179442; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=pit2StEZvDVJ127lc63LyjBnZcAyarkm35ZsvFwG3Ug=;
+	b=TwCal60EKp1MDOYLxoKy6YjdPtPkSczXK7B7bK3rOpV76PRPfJMOkOowlhCljGbcUzP/cK
+	j+FfczXwY+wOCeTs+OU1fDqaqcgucBb5vw44Meu9+gu/i5sockbhOqxJlksJY5HslRufD5
+	vUGsrw4qdAW3MvT8hnOMyGi7qNeRQ/s=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1758179442;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=pit2StEZvDVJ127lc63LyjBnZcAyarkm35ZsvFwG3Ug=;
+	b=EHCr+7k9hyySXBNOFAuI8v3Jc7tuniPCQowjRMA+7x2ERLpmAcF2dz/fMsMQuaNZy5iw8w
+	ovAJf6kyNBBOCyCQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id F3BDE13A39;
+	Thu, 18 Sep 2025 07:10:41 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id VzApOnGwy2irKQAAD6G6ig
+	(envelope-from <tiwai@suse.de>); Thu, 18 Sep 2025 07:10:41 +0000
+Date: Thu, 18 Sep 2025 09:10:41 +0200
+Message-ID: <87tt10b5hq.wl-tiwai@suse.de>
+From: Takashi Iwai <tiwai@suse.de>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Takashi Iwai <tiwai@suse.de>,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: PM runtime auto-cleanup macros
+In-Reply-To: <CAJZ5v0htMKOcCoKts-B9BaE0VpS2oc9-cp=5VnNwS2Qe2iB+Kg@mail.gmail.com>
+References: <878qimv24u.wl-tiwai@suse.de>
+	<87ikhptpgm.wl-tiwai@suse.de>
+	<CAJZ5v0htMKOcCoKts-B9BaE0VpS2oc9-cp=5VnNwS2Qe2iB+Kg@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250917120719.2390847-2-srosek@google.com>
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Level: 
+X-Spam-Flag: NO
+X-Rspamd-Queue-Id: 2738B336B0
+X-Rspamd-Action: no action
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Spamd-Result: default: False [-3.51 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ARC_NA(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	RCVD_TLS_ALL(0.00)[];
+	RCPT_COUNT_THREE(0.00)[4];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	DKIM_TRACE(0.00)[suse.de:+]
+X-Spam-Score: -3.51
 
-Hi Slawomir,
+On Wed, 17 Sep 2025 20:58:36 +0200,
+Rafael J. Wysocki wrote:
+> 
+> Hi,
+> 
+> Sorry for the delay.
+> 
+> On Thu, Sep 11, 2025 at 9:31 AM Takashi Iwai <tiwai@suse.de> wrote:
+> >
+> > On Wed, 10 Sep 2025 16:00:17 +0200,
+> > Takashi Iwai wrote:
+> > >
+> > > Hi,
+> > >
+> > > while I worked on the code cleanups in the drivers with the recent
+> > > auto-cleanup macros, I noticed that pm_runtime_get*() and _put*() can
+> > > be also managed with the auto-cleanup gracefully, too.  Actually we
+> > > already defined the __free(pm_runtime_put) in commit bfa4477751e9, and
+> > > there is a (single) user of it in pci-sysfs.c.
+> > >
+> > > Now I wanted to extend it to pm_runtime_put_autosuspend() as:
+> > >
+> > > DEFINE_FREE(pm_runtime_put_autosuspend, struct device *,
+> > >            if (_T) pm_runtime_put_autosuspend(_T))
+> > >
+> > > Then one can use it like
+> > >
+> > >       ret = pm_runtime_resume_and_get(dev);
+> > >       if (ret < 0)
+> > >               return ret;
+> > >       struct device *pmdev __free(pm_runtime_put_autosuspend) = dev;
+> > >
+> > > that is similar as done in pci-sysfs.c.  So far, so good.
+> > >
+> > > But, I find putting the line like above at each place a bit ugly.
+> > > So I'm wondering whether it'd be better to introduce some helper
+> > > macros, e.g.
+> > >
+> > > #define pm_runtime_auto_clean(dev, var) \
+> > >       struct device *var __free(pm_runtime_put) = (dev)
+> >
+> > It can be even simpler by assigning a temporary variable such as:
+> >
+> > #define pm_runtime_auto_clean(dev) \
+> >         struct device *__pm_runtime_var ## __LINE__ __free(pm_runtime_put) = (dev)
+> 
+> Well, if there's something like
+> 
+> struct device *pm_runtime_resume_and_get_dev(struct device *dev)
+> {
+>         int ret = pm_runtime_resume_and_get(dev);
+>         if (ret < 0)
+>                 return ERR_PTR(ret);
+> 
+>         return dev;
+> }
+> 
+> It would be a matter of redefining the FREE to also take error
+> pointers into account and you could do
+> 
+> struct device *__dev __free(pm_runtim_put) = pm_runtime_resume_and_get_dev(dev);
+> if (IS_ERR(__dev))
+>         return PTR_ERR(__dev);
 
-kernel test robot noticed the following build errors:
+That'll work, too.  Though, I find the notion of __free() and a
+temporary variable __dev a bit too cumbersome; it's used only for
+auto-clean stuff, so it could be somewhat anonymous.
 
-[auto build test ERROR on rafael-pm/linux-next]
-[also build test ERROR on rafael-pm/bleeding-edge rafael-pm/thermal driver-core/driver-core-testing driver-core/driver-core-next driver-core/driver-core-linus linus/master v6.17-rc6 next-20250917]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+But it's all about a matter of taste, and I'd follow what you and
+other guys suggest.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Slawomir-Rosek/ACPI-DPTF-Ignore-SoC-DTS-thermal-while-scanning/20250917-201033
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/20250917120719.2390847-2-srosek%40google.com
-patch subject: [PATCH v2 1/6] ACPI: DPTF: Ignore SoC DTS thermal while scanning
-config: i386-randconfig-003-20250918 (https://download.01.org/0day-ci/archive/20250918/202509181359.fLTuROj6-lkp@intel.com/config)
-compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250918/202509181359.fLTuROj6-lkp@intel.com/reproduce)
+FWIW, there are lots of code doing like
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509181359.fLTuROj6-lkp@intel.com/
+	pm_runtime_get_sync(dev);
+	mutex_lock(&foo);
+	....
+	mutex_unlock(&foo);
+	pm_runtime_put(dev);
+	return;
 
-All errors (new ones prefixed by >>):
+or
 
-   drivers/thermal/intel/int340x_thermal/platform_temperature_control.c: In function 'ptc_mmio_show':
->> drivers/thermal/intel/int340x_thermal/platform_temperature_control.c:110:19: error: implicit declaration of function 'readq'; did you mean 'readl'? [-Wimplicit-function-declaration]
-     110 |         reg_val = readq((void __iomem *) (proc_priv->mmio_base + data->offset));
-         |                   ^~~~~
-         |                   readl
-   drivers/thermal/intel/int340x_thermal/platform_temperature_control.c: In function 'ptc_mmio_write':
->> drivers/thermal/intel/int340x_thermal/platform_temperature_control.c:142:9: error: implicit declaration of function 'writeq'; did you mean 'writel'? [-Wimplicit-function-declaration]
-     142 |         writeq(reg_val, (void __iomem *) (proc_priv->mmio_base + offset));
-         |         ^~~~~~
-         |         writel
---
-   drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c: In function 'int340x_thermal_read_trips':
->> drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c:72:15: error: implicit declaration of function 'thermal_acpi_critical_trip_temp'; did you mean 'thermal_zone_set_trip_temp'? [-Wimplicit-function-declaration]
-      72 |         ret = thermal_acpi_critical_trip_temp(zone_adev,
-         |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |               thermal_zone_set_trip_temp
->> drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c:79:15: error: implicit declaration of function 'thermal_acpi_hot_trip_temp'; did you mean 'thermal_zone_set_trip_temp'? [-Wimplicit-function-declaration]
-      79 |         ret = thermal_acpi_hot_trip_temp(zone_adev,
-         |               ^~~~~~~~~~~~~~~~~~~~~~~~~~
-         |               thermal_zone_set_trip_temp
->> drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c:86:15: error: implicit declaration of function 'thermal_acpi_passive_trip_temp'; did you mean 'thermal_zone_set_trip_temp'? [-Wimplicit-function-declaration]
-      86 |         ret = thermal_acpi_passive_trip_temp(zone_adev,
-         |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |               thermal_zone_set_trip_temp
->> drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c:94:23: error: implicit declaration of function 'thermal_acpi_active_trip_temp'; did you mean 'thermal_zone_set_trip_temp'? [-Wimplicit-function-declaration]
-      94 |                 ret = thermal_acpi_active_trip_temp(zone_adev, i,
-         |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                       thermal_zone_set_trip_temp
---
-   drivers/thermal/intel/int340x_thermal/processor_thermal_power_floor.c: In function 'proc_thermal_read_power_floor_status':
->> drivers/thermal/intel/int340x_thermal/processor_thermal_power_floor.c:42:18: error: implicit declaration of function 'readq'; did you mean 'readl'? [-Wimplicit-function-declaration]
-      42 |         status = readq(proc_priv->mmio_base + SOC_WT_RES_INT_STATUS_OFFSET);
-         |                  ^~~~~
-         |                  readl
-   In file included from include/linux/bits.h:5,
-                    from include/linux/ratelimit_types.h:5,
-                    from include/linux/printk.h:9,
-                    from include/asm-generic/bug.h:22,
-                    from arch/x86/include/asm/bug.h:103,
-                    from include/linux/bug.h:5,
-                    from include/linux/fortify-string.h:6,
-                    from include/linux/string.h:382,
-                    from include/linux/uuid.h:11,
-                    from include/linux/mod_devicetable.h:14,
-                    from include/linux/pci.h:27,
-                    from drivers/thermal/intel/int340x_thermal/processor_thermal_power_floor.c:29:
-   include/vdso/bits.h:7:40: warning: left shift count >= width of type [-Wshift-count-overflow]
-       7 | #define BIT(nr)                 (UL(1) << (nr))
-         |                                        ^~
-   drivers/thermal/intel/int340x_thermal/processor_thermal_power_floor.c:32:41: note: in expansion of macro 'BIT'
-      32 | #define SOC_POWER_FLOOR_STATUS          BIT(39)
-         |                                         ^~~
-   drivers/thermal/intel/int340x_thermal/processor_thermal_power_floor.c:43:26: note: in expansion of macro 'SOC_POWER_FLOOR_STATUS'
-      43 |         return (status & SOC_POWER_FLOOR_STATUS) >> SOC_POWER_FLOOR_SHIFT;
-         |                          ^~~~~~~~~~~~~~~~~~~~~~
---
-   drivers/thermal/intel/int340x_thermal/processor_thermal_wt_hint.c: In function 'workload_type_index_show':
->> drivers/thermal/intel/int340x_thermal/processor_thermal_wt_hint.c:69:18: error: implicit declaration of function 'readq'; did you mean 'readl'? [-Wimplicit-function-declaration]
-      69 |         status = readq(proc_priv->mmio_base + SOC_WT_RES_INT_STATUS_OFFSET);
-         |                  ^~~~~
-         |                  readl
---
-   drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c: In function 'proc_thermal_clear_soc_int_status':
->> drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c:145:18: error: implicit declaration of function 'readq'; did you mean 'readl'? [-Wimplicit-function-declaration]
-     145 |         status = readq(proc_priv->mmio_base + SOC_WT_RES_INT_STATUS_OFFSET);
-         |                  ^~~~~
-         |                  readl
->> drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c:146:9: error: implicit declaration of function 'writeq'; did you mean 'writel'? [-Wimplicit-function-declaration]
-     146 |         writeq(status & ~SOC_WT_RES_INT_STATUS_MASK,
-         |         ^~~~~~
-         |         writel
---
-   drivers/thermal/intel/int340x_thermal/processor_thermal_soc_slider.c: In function 'read_soc_slider':
->> drivers/thermal/intel/int340x_thermal/processor_thermal_soc_slider.c:166:16: error: implicit declaration of function 'readq'; did you mean 'readl'? [-Wimplicit-function-declaration]
-     166 |         return readq(proc_priv->mmio_base + SOC_POWER_SLIDER_OFFSET);
-         |                ^~~~~
-         |                readl
-   drivers/thermal/intel/int340x_thermal/processor_thermal_soc_slider.c: In function 'write_soc_slider':
->> drivers/thermal/intel/int340x_thermal/processor_thermal_soc_slider.c:171:9: error: implicit declaration of function 'writeq'; did you mean 'writel'? [-Wimplicit-function-declaration]
-     171 |         writeq(val, proc_priv->mmio_base + SOC_POWER_SLIDER_OFFSET);
-         |         ^~~~~~
-         |         writel
+	ret = pm_runtime_resume_and_get(dev);
+	if (ret)
+		return ret;
+	mutex_lock(&foo);
+	....
+	mutex_unlock(&foo);
+	pm_runtime_put_autosuspend(dev);
+	return 0;
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for INT340X_THERMAL
-   Depends on [n]: THERMAL [=y] && (X86 [=y] || X86_INTEL_QUARK [=n] || COMPILE_TEST [=n]) && X86_64 [=n] && ACPI [=y] && PCI [=y] && NET [=y]
-   Selected by [y]:
-   - INTEL_SOC_DTS_THERMAL [=y] && THERMAL [=y] && (X86 [=y] || X86_INTEL_QUARK [=n] || COMPILE_TEST [=n]) && X86 [=y] && PCI [=y] && ACPI [=y]
+and they can be converted nicely with guard() once when PM runtime can
+be automatically unreferenced.  With my proposed change, it would
+become like:
+
+	pm_runtime_get_sync(dev);
+	pm_runtime_auto_clean(dev);
+	guard(mutex)(&foo);
+	....
+	return;
+
+or
+
+	ret = pm_runtime_resume_and_get(dev);
+	if (ret)
+		return ret;
+	pm_runtime_auto_clean_autosuspend(dev);
+	guard(mutex)(&foo);
+	....
+	return 0;
 
 
-vim +110 drivers/thermal/intel/int340x_thermal/platform_temperature_control.c
+thanks,
 
-9befea30133ca4 Srinivas Pandruvada 2025-04-28   90  
-9befea30133ca4 Srinivas Pandruvada 2025-04-28   91  static ssize_t ptc_mmio_show(struct ptc_data *data, struct device *dev,
-9befea30133ca4 Srinivas Pandruvada 2025-04-28   92  			     struct device_attribute *attr, char *buf)
-9befea30133ca4 Srinivas Pandruvada 2025-04-28   93  {
-9befea30133ca4 Srinivas Pandruvada 2025-04-28   94  	struct pci_dev *pdev = to_pci_dev(dev);
-9befea30133ca4 Srinivas Pandruvada 2025-04-28   95  	struct proc_thermal_device *proc_priv;
-9befea30133ca4 Srinivas Pandruvada 2025-04-28   96  	const struct mmio_reg *mmio_regs;
-9befea30133ca4 Srinivas Pandruvada 2025-04-28   97  	int ret, units;
-9befea30133ca4 Srinivas Pandruvada 2025-04-28   98  	u64 reg_val;
-9befea30133ca4 Srinivas Pandruvada 2025-04-28   99  
-9befea30133ca4 Srinivas Pandruvada 2025-04-28  100  	proc_priv = pci_get_drvdata(pdev);
-9befea30133ca4 Srinivas Pandruvada 2025-04-28  101  	mmio_regs = ptc_mmio_regs;
-9befea30133ca4 Srinivas Pandruvada 2025-04-28  102  	ret = match_string(ptc_strings, -1, attr->attr.name);
-9befea30133ca4 Srinivas Pandruvada 2025-04-28  103  	if (ret < 0)
-9befea30133ca4 Srinivas Pandruvada 2025-04-28  104  		return ret;
-9befea30133ca4 Srinivas Pandruvada 2025-04-28  105  
-9befea30133ca4 Srinivas Pandruvada 2025-04-28  106  	units = mmio_regs[ret].units;
-9befea30133ca4 Srinivas Pandruvada 2025-04-28  107  
-9befea30133ca4 Srinivas Pandruvada 2025-04-28  108  	guard(mutex)(&ptc_lock);
-9befea30133ca4 Srinivas Pandruvada 2025-04-28  109  
-9befea30133ca4 Srinivas Pandruvada 2025-04-28 @110  	reg_val = readq((void __iomem *) (proc_priv->mmio_base + data->offset));
-9befea30133ca4 Srinivas Pandruvada 2025-04-28  111  	ret = (reg_val >> mmio_regs[ret].shift) & mmio_regs[ret].mask;
-9befea30133ca4 Srinivas Pandruvada 2025-04-28  112  	if (units)
-9befea30133ca4 Srinivas Pandruvada 2025-04-28  113  		ret *= units;
-9befea30133ca4 Srinivas Pandruvada 2025-04-28  114  
-9befea30133ca4 Srinivas Pandruvada 2025-04-28  115  	return sysfs_emit(buf, "%d\n", ret);
-9befea30133ca4 Srinivas Pandruvada 2025-04-28  116  }
-9befea30133ca4 Srinivas Pandruvada 2025-04-28  117  
-9befea30133ca4 Srinivas Pandruvada 2025-04-28  118  #define PTC_SHOW(suffix)\
-9befea30133ca4 Srinivas Pandruvada 2025-04-28  119  static ssize_t suffix##_show(struct device *dev,\
-9befea30133ca4 Srinivas Pandruvada 2025-04-28  120  			     struct device_attribute *attr,\
-9befea30133ca4 Srinivas Pandruvada 2025-04-28  121  			     char *buf)\
-9befea30133ca4 Srinivas Pandruvada 2025-04-28  122  {\
-9befea30133ca4 Srinivas Pandruvada 2025-04-28  123  	struct ptc_data *data = container_of(attr, struct ptc_data, suffix##_attr);\
-9befea30133ca4 Srinivas Pandruvada 2025-04-28  124  	return ptc_mmio_show(data, dev, attr, buf);\
-9befea30133ca4 Srinivas Pandruvada 2025-04-28  125  }
-9befea30133ca4 Srinivas Pandruvada 2025-04-28  126  
-9befea30133ca4 Srinivas Pandruvada 2025-04-28  127  static void ptc_mmio_write(struct pci_dev *pdev, u32 offset, int index, u32 value)
-9befea30133ca4 Srinivas Pandruvada 2025-04-28  128  {
-9befea30133ca4 Srinivas Pandruvada 2025-04-28  129  	struct proc_thermal_device *proc_priv;
-9befea30133ca4 Srinivas Pandruvada 2025-04-28  130  	u64 mask, reg_val;
-9befea30133ca4 Srinivas Pandruvada 2025-04-28  131  
-9befea30133ca4 Srinivas Pandruvada 2025-04-28  132  	proc_priv = pci_get_drvdata(pdev);
-9befea30133ca4 Srinivas Pandruvada 2025-04-28  133  
-9befea30133ca4 Srinivas Pandruvada 2025-04-28  134  	mask = GENMASK_ULL(ptc_mmio_regs[index].shift + ptc_mmio_regs[index].bits - 1,
-9befea30133ca4 Srinivas Pandruvada 2025-04-28  135  			   ptc_mmio_regs[index].shift);
-9befea30133ca4 Srinivas Pandruvada 2025-04-28  136  
-9befea30133ca4 Srinivas Pandruvada 2025-04-28  137  	guard(mutex)(&ptc_lock);
-9befea30133ca4 Srinivas Pandruvada 2025-04-28  138  
-9befea30133ca4 Srinivas Pandruvada 2025-04-28  139  	reg_val = readq((void __iomem *) (proc_priv->mmio_base + offset));
-9befea30133ca4 Srinivas Pandruvada 2025-04-28  140  	reg_val &= ~mask;
-9befea30133ca4 Srinivas Pandruvada 2025-04-28  141  	reg_val |= (value << ptc_mmio_regs[index].shift);
-9befea30133ca4 Srinivas Pandruvada 2025-04-28 @142  	writeq(reg_val, (void __iomem *) (proc_priv->mmio_base + offset));
-9befea30133ca4 Srinivas Pandruvada 2025-04-28  143  }
-9befea30133ca4 Srinivas Pandruvada 2025-04-28  144  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Takashi
 
