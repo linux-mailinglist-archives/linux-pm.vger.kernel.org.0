@@ -1,260 +1,142 @@
-Return-Path: <linux-pm+bounces-34946-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34947-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C353B8346C
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 09:11:07 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 89A6FB83619
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 09:45:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CDA933B637E
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 07:11:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 507CE16BFAC
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 07:45:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E0C72EA752;
-	Thu, 18 Sep 2025 07:10:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F6632ECE8F;
+	Thu, 18 Sep 2025 07:45:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="TwCal60E";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="EHCr+7k9";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="TwCal60E";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="EHCr+7k9"
+	dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b="iymhw7p9"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [178.238.236.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7627E2EA49C
-	for <linux-pm@vger.kernel.org>; Thu, 18 Sep 2025 07:10:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 150AC2EBDCF;
+	Thu, 18 Sep 2025 07:45:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.238.236.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758179451; cv=none; b=nAnp1I5DoJjN7n44DZPHV2n9ZMJmWJc40lGrhoJ0cBimBE3of9bv7sKtFGIjTeXTT5NVbYToJvIK1wMpKEzOjQaOOiDAszIYwBBTkw/jU4XuDdaFJg64xaDi3eMtOE0Ag6vPAxYJu4d3se9Tc46mxiv4OXr+yifc84IgafezvC8=
+	t=1758181529; cv=none; b=KQ+Eu7hXWW6b6EBjvaaikIsgvE9mWDhzWxYqNSVoXCBMMf3O6YuRC1hAEtr+R5NfvvOAOMeDjBSKIbFllAQWUuDZhEGKOVyRpVhCRu15nQBMGa0EzHavCbSpvZUFDoyKBSJn3V7jIbd02QnBkdFq0aC5vkcEmClYCEdgrLFeBxo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758179451; c=relaxed/simple;
-	bh=afbZiTITWiDPxpVDFuaq7hIxA4pu1Ma8IO/vh9BBM6w=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ZAZU8aktp1Mmt4S9kPnSyKzuHJ4S63bgL+DKR97Av5IZfv7LDzUbX1k/auf/EmbHB84b/4TdZRaRWZWO6/plAjcTIPK0X6zLBD8/tlXd9KQpWLOiidCjjnM9cm1wvh4bcXi1soUin14pdW29fT8Cy33Q8cPW/wXdGZxAOyY8v2Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=TwCal60E; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=EHCr+7k9; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=TwCal60E; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=EHCr+7k9; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 2738B336B0;
-	Thu, 18 Sep 2025 07:10:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1758179442; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=pit2StEZvDVJ127lc63LyjBnZcAyarkm35ZsvFwG3Ug=;
-	b=TwCal60EKp1MDOYLxoKy6YjdPtPkSczXK7B7bK3rOpV76PRPfJMOkOowlhCljGbcUzP/cK
-	j+FfczXwY+wOCeTs+OU1fDqaqcgucBb5vw44Meu9+gu/i5sockbhOqxJlksJY5HslRufD5
-	vUGsrw4qdAW3MvT8hnOMyGi7qNeRQ/s=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1758179442;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=pit2StEZvDVJ127lc63LyjBnZcAyarkm35ZsvFwG3Ug=;
-	b=EHCr+7k9hyySXBNOFAuI8v3Jc7tuniPCQowjRMA+7x2ERLpmAcF2dz/fMsMQuaNZy5iw8w
-	ovAJf6kyNBBOCyCQ==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=TwCal60E;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=EHCr+7k9
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1758179442; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=pit2StEZvDVJ127lc63LyjBnZcAyarkm35ZsvFwG3Ug=;
-	b=TwCal60EKp1MDOYLxoKy6YjdPtPkSczXK7B7bK3rOpV76PRPfJMOkOowlhCljGbcUzP/cK
-	j+FfczXwY+wOCeTs+OU1fDqaqcgucBb5vw44Meu9+gu/i5sockbhOqxJlksJY5HslRufD5
-	vUGsrw4qdAW3MvT8hnOMyGi7qNeRQ/s=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1758179442;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=pit2StEZvDVJ127lc63LyjBnZcAyarkm35ZsvFwG3Ug=;
-	b=EHCr+7k9hyySXBNOFAuI8v3Jc7tuniPCQowjRMA+7x2ERLpmAcF2dz/fMsMQuaNZy5iw8w
-	ovAJf6kyNBBOCyCQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id F3BDE13A39;
-	Thu, 18 Sep 2025 07:10:41 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id VzApOnGwy2irKQAAD6G6ig
-	(envelope-from <tiwai@suse.de>); Thu, 18 Sep 2025 07:10:41 +0000
-Date: Thu, 18 Sep 2025 09:10:41 +0200
-Message-ID: <87tt10b5hq.wl-tiwai@suse.de>
-From: Takashi Iwai <tiwai@suse.de>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Takashi Iwai <tiwai@suse.de>,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: PM runtime auto-cleanup macros
-In-Reply-To: <CAJZ5v0htMKOcCoKts-B9BaE0VpS2oc9-cp=5VnNwS2Qe2iB+Kg@mail.gmail.com>
-References: <878qimv24u.wl-tiwai@suse.de>
-	<87ikhptpgm.wl-tiwai@suse.de>
-	<CAJZ5v0htMKOcCoKts-B9BaE0VpS2oc9-cp=5VnNwS2Qe2iB+Kg@mail.gmail.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+	s=arc-20240116; t=1758181529; c=relaxed/simple;
+	bh=NB7xAjO4tMiy7knpfZpr8sLB2fm7/Qi17xHEb9HkCMM=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=f9U+OO6EGIMiB630NCkECL8dqB3NWRU+PZhknCBloOVAwG4j3zHH4EvCQE00LFjHkkuPsZ/kN5upD/Upx1fnDs2mlEs1YjObSMQVlv6L7496hB6XYHBbRQx5Qrf+nbfFFKn2JM+ADqp0TfJ0/jl8G5Jrf4lRr0lPRO0nTJ7+vFQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info; spf=pass smtp.mailfrom=kemnade.info; dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b=iymhw7p9; arc=none smtp.client-ip=178.238.236.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kemnade.info
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=kemnade.info; s=20220719; h=Cc:From:Sender:Reply-To:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References;
+	bh=dQBaVu6WYznOiPZIWET5HI2UvRXh/gGIzQMif1x7+GQ=; b=iymhw7p95orw5qBYuiq4K8GZsU
+	tW7Lx2nlaDbuT/ya3m+DP4/N64ICyEyUH5L/kw2S2uk+4muuhmRMyZ3KUJTLDZE8zqgQRawHu3A85
+	GG369iNoaZC/beAZudNI48B91XY5M50J0Yo2SmC8JsGymlr5Hlb5iZ2W1A18REKXUmSwERsZVR3yC
+	LeTPidh68G27sY9LCNpiAhLQUFb51zzrlnC2eGtiSjeNPwyTF2UtMY2uB16aXs3/GdFa194zIXPND
+	KjFn4yld90FQ3q9wdMV+OmqC2hkfp6z6gWAZc41PW8xHIvjsaK0ileQMEBYce0HuXuix0ij/YtqXs
+	ARuhqsuw==;
+From: Andreas Kemnade <andreas@kemnade.info>
+Subject: [PATCH v5 0/3] power: supply: add charger for BD71828
+Date: Thu, 18 Sep 2025 09:45:08 +0200
+Message-Id: <20250918-bd71828-charger-v5-0-851164839c28@kemnade.info>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Level: 
-X-Spam-Flag: NO
-X-Rspamd-Queue-Id: 2738B336B0
-X-Rspamd-Action: no action
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spamd-Result: default: False [-3.51 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ARC_NA(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	RCVD_TLS_ALL(0.00)[];
-	RCPT_COUNT_THREE(0.00)[4];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	DKIM_TRACE(0.00)[suse.de:+]
-X-Spam-Score: -3.51
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAIW4y2gC/3XNQY7CMAwF0KugrAmKnbRJWHGPEYsmcSBCtChF1
+ SDUu49hM4jCxtL3l5/vYqRaaBTb1V1UmspYhp5Ds16JeOz6A8mSOAtU2CgHrQzJgkMnua0HqtI
+ ncFabNvMQfHWplMvvU/zZcz6W8TrU2/PBBI/td2sCqaSFABASNdHq3YnOfZdoU/o8iAc34QuBa
+ kkgExpz9K1CSx4/EPqVgCWhmYjRmi4aUjn4D4T5JzzYJWGYyCG6pvOgjH8n5nn+AyyA8U96AQA
+ A
+X-Change-ID: 20250816-bd71828-charger-9d187346f734
+To: Matti Vaittinen <mazziesaccount@gmail.com>, Lee Jones <lee@kernel.org>, 
+ Sebastian Reichel <sre@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+ Krzysztof Kozlowski <krzk@kernel.org>, 
+ Andreas Kemnade <andreas@kemnade.info>, 
+ Sebastian Reichel <sebastian.reichel@collabora.com>, 
+ Matti Vaittinen <mazziesaccount@gmail.com>
+X-Mailer: b4 0.15-dev-50721
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2330; i=andreas@kemnade.info;
+ h=from:subject:message-id; bh=NB7xAjO4tMiy7knpfZpr8sLB2fm7/Qi17xHEb9HkCMM=;
+ b=owGbwMvMwCUm/rzkS6lq2x3G02pJDBmnd/SXvn13iFHH9c+Ez2Hd2uFyjKKvtA/pi63aInV0m
+ /nqhYHcHaUsDGJcDLJiiiy/rBXcPqk8yw2eGmEPM4eVCWQIAxenAEwk/DbDP6ONIQdPPLFWfTON
+ 9eqTzRUhAjNjk2af1mG4vyDM1Pn63wpGhuMHWl96rqnSD3IMmtC4edW/lGUViTmu/bM+R4S7Sag
+ 95gQA
+X-Developer-Key: i=andreas@kemnade.info; a=openpgp;
+ fpr=EEC0DB858E66C0DA70620AC07DBD6AC74DE29324
 
-On Wed, 17 Sep 2025 20:58:36 +0200,
-Rafael J. Wysocki wrote:
-> 
-> Hi,
-> 
-> Sorry for the delay.
-> 
-> On Thu, Sep 11, 2025 at 9:31 AM Takashi Iwai <tiwai@suse.de> wrote:
-> >
-> > On Wed, 10 Sep 2025 16:00:17 +0200,
-> > Takashi Iwai wrote:
-> > >
-> > > Hi,
-> > >
-> > > while I worked on the code cleanups in the drivers with the recent
-> > > auto-cleanup macros, I noticed that pm_runtime_get*() and _put*() can
-> > > be also managed with the auto-cleanup gracefully, too.  Actually we
-> > > already defined the __free(pm_runtime_put) in commit bfa4477751e9, and
-> > > there is a (single) user of it in pci-sysfs.c.
-> > >
-> > > Now I wanted to extend it to pm_runtime_put_autosuspend() as:
-> > >
-> > > DEFINE_FREE(pm_runtime_put_autosuspend, struct device *,
-> > >            if (_T) pm_runtime_put_autosuspend(_T))
-> > >
-> > > Then one can use it like
-> > >
-> > >       ret = pm_runtime_resume_and_get(dev);
-> > >       if (ret < 0)
-> > >               return ret;
-> > >       struct device *pmdev __free(pm_runtime_put_autosuspend) = dev;
-> > >
-> > > that is similar as done in pci-sysfs.c.  So far, so good.
-> > >
-> > > But, I find putting the line like above at each place a bit ugly.
-> > > So I'm wondering whether it'd be better to introduce some helper
-> > > macros, e.g.
-> > >
-> > > #define pm_runtime_auto_clean(dev, var) \
-> > >       struct device *var __free(pm_runtime_put) = (dev)
-> >
-> > It can be even simpler by assigning a temporary variable such as:
-> >
-> > #define pm_runtime_auto_clean(dev) \
-> >         struct device *__pm_runtime_var ## __LINE__ __free(pm_runtime_put) = (dev)
-> 
-> Well, if there's something like
-> 
-> struct device *pm_runtime_resume_and_get_dev(struct device *dev)
-> {
->         int ret = pm_runtime_resume_and_get(dev);
->         if (ret < 0)
->                 return ERR_PTR(ret);
-> 
->         return dev;
-> }
-> 
-> It would be a matter of redefining the FREE to also take error
-> pointers into account and you could do
-> 
-> struct device *__dev __free(pm_runtim_put) = pm_runtime_resume_and_get_dev(dev);
-> if (IS_ERR(__dev))
->         return PTR_ERR(__dev);
+Add basic charger which does just read out simple registers without
+doing any sophisticated things. 
 
-That'll work, too.  Though, I find the notion of __free() and a
-temporary variable __dev a bit too cumbersome; it's used only for
-auto-clean stuff, so it could be somewhat anonymous.
+This is a stripped down version of
+https://lore.kernel.org/lkml/dbd97c1b0d715aa35a8b4d79741e433d97c562aa.1637061794.git.matti.vaittinen@fi.rohmeurope.com/
 
-But it's all about a matter of taste, and I'd follow what you and
-other guys suggest.
+That version includes all the bells-and-whistles you might imagine
+around coloumb counter handling and capacity measurement which includes
+changes no the power supply core.
+Rather do a step by step approach to keep that reviewable.
 
-FWIW, there are lots of code doing like
+Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
+---
+Changes in v5:
+- include cleanup in the power driver
+- Link to v4: https://lore.kernel.org/r/20250917-bd71828-charger-v4-0-fbc85a910499@kemnade.info
 
-	pm_runtime_get_sync(dev);
-	mutex_lock(&foo);
-	....
-	mutex_unlock(&foo);
-	pm_runtime_put(dev);
-	return;
+Changes in v4:
+- applied mfd part kept for better overview
+- clean up messy file header
+- remove some superfluous ret = 0
+- move a define to the top
+- Link to v3: https://lore.kernel.org/r/20250821-bd71828-charger-v3-0-cc74ac4e0fb9@kemnade.info
 
-or
+Changes in v3:
+- remove unused defines
+- some minor style nits
+- add MAINTAINER entry
+- Link to v2: https://lore.kernel.org/r/20250820-bd71828-charger-v2-0-32fc96027e92@kemnade.info
 
-	ret = pm_runtime_resume_and_get(dev);
-	if (ret)
-		return ret;
-	mutex_lock(&foo);
-	....
-	mutex_unlock(&foo);
-	pm_runtime_put_autosuspend(dev);
-	return 0;
+Changes in v2:
+- fix some be16 handling reported by bots
+- fix some style issues
+- do not sneak in additional chip ids
+- remove useless debug output 
+- remove wrong/useless alias
+- remove fuel gauge remains
+- fix error checks in temperature reading
+- sync properties in switch/case with list
+- Link to v1: https://lore.kernel.org/r/20250816-bd71828-charger-v1-0-71b11bde5c73@kemnade.info
 
-and they can be converted nicely with guard() once when PM runtime can
-be automatically unreferenced.  With my proposed change, it would
-become like:
+---
+Andreas Kemnade (2):
+      power: supply: Add bd718(15/28/78) charger driver
+      MAINTAINERS: Add entry for BD71828 charger
 
-	pm_runtime_get_sync(dev);
-	pm_runtime_auto_clean(dev);
-	guard(mutex)(&foo);
-	....
-	return;
+Matti Vaittinen (1):
+      mfd: bd71828, bd71815 prepare for power-supply support
 
-or
+ MAINTAINERS                          |    6 +
+ drivers/mfd/rohm-bd71828.c           |   44 +-
+ drivers/power/supply/Kconfig         |    9 +
+ drivers/power/supply/Makefile        |    1 +
+ drivers/power/supply/bd71828-power.c | 1049 ++++++++++++++++++++++++++++++++++
+ include/linux/mfd/rohm-bd71828.h     |   63 ++
+ 6 files changed, 1163 insertions(+), 9 deletions(-)
+---
+base-commit: 8f5ae30d69d7543eee0d70083daf4de8fe15d585
+change-id: 20250816-bd71828-charger-9d187346f734
 
-	ret = pm_runtime_resume_and_get(dev);
-	if (ret)
-		return ret;
-	pm_runtime_auto_clean_autosuspend(dev);
-	guard(mutex)(&foo);
-	....
-	return 0;
+Best regards,
+--  
+Andreas Kemnade <andreas@kemnade.info>
 
-
-thanks,
-
-Takashi
 
