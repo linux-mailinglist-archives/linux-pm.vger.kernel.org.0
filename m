@@ -1,82 +1,82 @@
-Return-Path: <linux-pm+bounces-34982-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34983-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18652B86279
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 19:07:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B0BD9B8627F
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 19:07:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 321067E280E
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 17:07:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CD1957E29B6
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 17:07:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B4523191B4;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B3FF3191C2;
 	Thu, 18 Sep 2025 17:06:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SQsMH6mq"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EibF7KxY"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63E393161B7
-	for <linux-pm@vger.kernel.org>; Thu, 18 Sep 2025 17:06:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6745B317701
+	for <linux-pm@vger.kernel.org>; Thu, 18 Sep 2025 17:06:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758215217; cv=none; b=JPOkIaunfmoRIUhoMuveL2Hpz5qQxudvNQBOY/q6mbsfuwMVy17arfvZl9X2ykyIaJjtlabQY6CtjqApLsa7KlCQsXnqTguYikLI9WyoY4h8ETFt9RabzPX2sJVWpd9t9UJuZbS0C8Iw4tY+1hIXtBAitQCsuc5Z9h/2oiTDpq8=
+	t=1758215218; cv=none; b=iKvptFhmC2fpNETEtHOh51jtwByqTc0DFx7hPZ51+TpQOU7lmZnNiYfiCnSjts08zbRQLWfw9GtwvxUoMCAVYn+SmFkFwjOah9HxttUTr+jN8QM/8Ig65Yfe7KeVDgZpraBKPaYRw+u8Qy8UGp9v03HAfFszmkZM/XW3ykBiYds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758215217; c=relaxed/simple;
-	bh=MhMWYCiSaAWyIB6+TXocIBYNACnUcnuCGp0sKqfkFBc=;
+	s=arc-20240116; t=1758215218; c=relaxed/simple;
+	bh=9bF4jHQg+lKxivFJXmJBwxTSnTVvmDzKxFzLgdySb40=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=T6b6RRZLY0w+takOEaw5wEA8QHHhvE/9wZsyuz76J1turATsJo0x+tQws2DTPm4Rtfs29GgU2m2w2sfQEHgjHvj9BF86iXpr/vJ5808ZB6Qb9HHhVefd9tr6uskd0CTrPSSRAHlPDN9FK2V4nZk1eSzM90Zo50reZkuDo6qf2x0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SQsMH6mq; arc=none smtp.client-ip=209.85.218.43
+	 In-Reply-To:To:Cc; b=gjlNy8jjGrbkQKtea5uDwZSX9+VUuuq3lOx4O7q/SOOSW+LZJMvc13nngCGbU3cj/4EZan6HWbPYB9HFmebci9D5Fhr0UInGl272X+xvWRSSj3P/FEOfKmsZLLdjdZhQIPEQMKP5qlG7Y/pOtgiDSIzU4gLWJq2H3XmgeNCzubo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EibF7KxY; arc=none smtp.client-ip=209.85.218.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-b07dac96d1eso346877466b.1
-        for <linux-pm@vger.kernel.org>; Thu, 18 Sep 2025 10:06:55 -0700 (PDT)
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-b0787fa12e2so192623566b.2
+        for <linux-pm@vger.kernel.org>; Thu, 18 Sep 2025 10:06:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758215214; x=1758820014; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1758215215; x=1758820015; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=5HqYjSemBOxXz5+EPZCbm8rU9DvfCrCp3HRGX+s5xnE=;
-        b=SQsMH6mqGQx/FcQiO+B18UycnTM50vCZCsiT6SbjZoxv1HLOekyecJ9poaykw2X2YH
-         fSoMQMVjfDAAUBPTwZ13lIJeYgew3ZhbHveVmE9kVWxqLigPJjFC8rT2wYthmq5uKWnT
-         G0ZnhZSurvqewXCOvHvxsQOCDuf+yEvEDR9VHuOQEAZUtO9e6PRdWBbUoOvs7psJn+kt
-         TPYhEx2nTS9DWoHipzA/y66AB6JVxkX+nrmHAdN9UjnMyDkKo8NuDgT5QGz4aZR9WbyO
-         IlXzms3WRszGxtXqcZRkFttp5OBHVG7qGsfzExHUxs0wBt/3rLPT1IlEhGkK8wa05l25
-         kplw==
+        bh=r2tEsyP+iygj2egzFvz4bKYsMR6EihtAp1HSImtRQx4=;
+        b=EibF7KxYJE1KNBRmYccy+fewGJxlHhYJYpGZpVnH94V0CxlQ465BPzmAb5fBgut00T
+         G1bnn31rNR1rgGxmvrd3XgYfhOiQdc8AMYZsNWUY1Y9NDrFl4hAYB25D7FPhIYM2gY5o
+         bnS2GgdO1J8Mib60S36UWHu10lZcC0WKNecDZRPZ9jrvGgYO7qI2vkMIR1spmYHng9yL
+         ijnR5bdUXtyNPbkEL3A/HH8IyMGOmMKNutS3LQV9nsXSNOy14nUehtL7/V0FalZ4lavO
+         zuUXwjI6A3vvgINfD+C9Zk9ig8D5E3cpPXNbmQdKdMYZU1+zKfeqbqkE8zxVs8yB0ngT
+         lGSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758215214; x=1758820014;
+        d=1e100.net; s=20230601; t=1758215215; x=1758820015;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=5HqYjSemBOxXz5+EPZCbm8rU9DvfCrCp3HRGX+s5xnE=;
-        b=kNA/+gfL2PGy2QLBYGxiB6b6z+UeNGLZe9AmC0+gjdD+PACVKaY6PMc/ARcRV6tgsM
-         b1qtX6gBit2ICx/OwB6Q3rjsMD+TC4xzKWqShJcdI7rPbWbeE0gphV61KKXKB+hkLiU3
-         carnFCCzv0QB3SUrIrlyFXCh3v3RsV+jSgYSdxi+rIgqbRINtJSPrSQUCuwVpZ8XcJ4I
-         NoHIPWrUFcx3KZ1NDpfQNt5/x0JCqL/eh3pJqg0aN4p6UCjoXGkkgu0z92JjHMmF8RNC
-         4T6hnfry/fwXCF0Xhq04uSa/YuGppCbG3FsriZRrGb/nNfiE9qJGtNsAHVm8aOs7p68u
-         p8SA==
-X-Forwarded-Encrypted: i=1; AJvYcCVsJMw1Fz7k9ift3IO8huFE1HhLIosVX/+YUjC7HbXmtA18KBknGzmWi8iJgvxQgQLeNgdhxEi9Fg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyEqNrWWG3Zu1LYjXdN8QaTdYXRUYz3snZdiq4jAGPzmkjX9x0d
-	/YSH4pdkuu01HlpHVAnZFLZ5+aDSEK35D3f88nwPYMAiYFMezJyMz8rs
-X-Gm-Gg: ASbGncssKvaStV8xzXpcumf08JCTRmSYANWL6Py1sKth1OX+ZLl9MPPEk9JB/3ZEBZ2
-	wGee1JKI8a8NdJLsvS3aYeslum04Tjzy1+2Hp083IyKbsYpLT4oh5nCU8VX50WigXDmi+8UJFxN
-	lWvJBktRhEWIb9FNNcUPJsDez9yD0TCC8Cmjjz6EgsJjBWJ098ynrSIiONmakyxh2OJK46mZ9CC
-	VmEAvjOzBKj/RKShTFjiXEUx4biPVEM6Nli7jWJKrehUqeQK/ohcTYSZ4vd/bSac1fmveOVHsL1
-	gZuWz39FXgSucgaTUxBZ7u4GCP3zVP+vECw9mBkE1RGuwi7qWxqe9c/TFswx66rbsLZS8dJd2BN
-	U3JIcT965CW0SoHfx/6iKO/J21Kqp67okqQ2wAUtU9M/q0rhTNA==
-X-Google-Smtp-Source: AGHT+IH1hkvP0c2e1o589Zbbe8D5QlB7yjo/P2uz4e1meTDvQTq3LmQ6HPgZBNT9jByddi4/JY0ZUA==
-X-Received: by 2002:a17:907:e916:b0:b11:3760:95b4 with SMTP id a640c23a62f3a-b1fa844ee00mr421942366b.2.1758215213466;
-        Thu, 18 Sep 2025 10:06:53 -0700 (PDT)
+        bh=r2tEsyP+iygj2egzFvz4bKYsMR6EihtAp1HSImtRQx4=;
+        b=bybKGRO3azA+N/Bk2JCQ03C4YzheUMX1PZ4ypovtP6YiXbAPtZrhPW8nKJN8E8UfCS
+         tIhzpe8EZ1H3odQO/dbnmaiOFYVPRXuwc72mQ/uOiOdkacxlaQQUobYlS8Ku0ieWuvZe
+         cpfI+ZbAIRaCDlVkYuLs5wXtTwVagkJnqh/fwSITk7zKUvnPx+8MKV7RiUoqwlGo+NJj
+         LmeueSEt68H7nzpQFXpIr7FIOv6lyXDYfzNsdFfmtVi9velzToY4Nw5eeesNvGVeCXeb
+         ezNU6PIHoNdGSt4KuJtnztF276lkMa5dFanniudyK9IE28h8m6Oc59WFXz/NDdBq29xk
+         2mfg==
+X-Forwarded-Encrypted: i=1; AJvYcCXZWUvfTVBVikf3GJdeaFUbgRbrI+JHpJIuNItF/oJPnh26pUn9riIbTmaW62HWIU1JFyj6Z0zS4Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw0HjJwCNJrTUfsXqomfNvw1cMkOlx8QzAUwIS4QLzo9W347oa7
+	TBzSgUPx1zJWd1dWrXaWvj1vbWNWfmuDaknbU/CvT8+tN2dp6kvP/b00
+X-Gm-Gg: ASbGncul627g7kmXJ8aKS9bdo09j/F3cvfSfPYhE832tVZymPHUENaikgmUT5wMwTgZ
+	Ay0vNIJJu0bLTwRElv1B3V+As2g1DsOeweT98aXtmfDGogzPkzJaiWrUkHuGGVFxhEujbc0Zmp3
+	E/EVJBXFtgkog1HbD1nKbPCkRb58ZS1QadtPSX4Vbm8joOvOdqbBNNy4iPVbVZPqgC/4++Twwbs
+	5o0cFw0DgEysd1ug64Y/TaveyXYKia7PnmCIK9EJSVFqPPKtDQUoR7QxMv8hbHLFJTPCVEw2r1o
+	Z/VRHRimB6/MBmTn1wWu/RGRJt0w4srUtOfczQdFwjdV4PNAE2rWeIeveHtHtdFF3nplCZNhvh3
+	W8FKqahWjg3d1JgFngJ2vRba1xnyBwJv3x1iE380=
+X-Google-Smtp-Source: AGHT+IFGi7Cu+9N7wK3GfO8a5CVp2HtPyS0xOXk5eyDGdkQAtqEJjjRjf8h2IeoDdHdHLj4kdG1Llg==
+X-Received: by 2002:a17:906:4fc9:b0:b04:67f3:890f with SMTP id a640c23a62f3a-b1bb7d41a10mr719096966b.33.1758215214544;
+        Thu, 18 Sep 2025 10:06:54 -0700 (PDT)
 Received: from [127.0.1.1] ([46.53.240.27])
-        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-b1fd271f895sm225845366b.97.2025.09.18.10.06.52
+        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-b1fd271f895sm225845366b.97.2025.09.18.10.06.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Sep 2025 10:06:53 -0700 (PDT)
+        Thu, 18 Sep 2025 10:06:54 -0700 (PDT)
 From: Dzmitry Sankouski <dsankouski@gmail.com>
-Date: Thu, 18 Sep 2025 20:06:48 +0300
-Subject: [PATCH v4 4/9] power: supply: max77705_charger: use regfields for
- config registers
+Date: Thu, 18 Sep 2025 20:06:49 +0300
+Subject: [PATCH v4 5/9] power: supply: max77705_charger: return error when
+ config fails
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -85,7 +85,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250918-max77705_77976_charger_improvement-v4-4-11ec9188f489@gmail.com>
+Message-Id: <20250918-max77705_77976_charger_improvement-v4-5-11ec9188f489@gmail.com>
 References: <20250918-max77705_77976_charger_improvement-v4-0-11ec9188f489@gmail.com>
 In-Reply-To: <20250918-max77705_77976_charger_improvement-v4-0-11ec9188f489@gmail.com>
 To: Chanwoo Choi <cw00.choi@samsung.com>, 
@@ -97,438 +97,169 @@ Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
  linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
  Dzmitry Sankouski <dsankouski@gmail.com>
 X-Mailer: b4 0.14.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1758215207; l=16663;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1758215207; l=5448;
  i=dsankouski@gmail.com; s=20240619; h=from:subject:message-id;
- bh=MhMWYCiSaAWyIB6+TXocIBYNACnUcnuCGp0sKqfkFBc=;
- b=ANOMxVKWlZ3hhESRUZTOxw6/jrYFhVOf2ll0t/4lKDDfZYIF2PhjqPsZvhAs3VcfsKjy9hQoA
- bOJO7q2+4h3AwK12gqhmxPKxz97Qm4V6G4F+T7jJAZWwVbrQhjYS+ra
+ bh=9bF4jHQg+lKxivFJXmJBwxTSnTVvmDzKxFzLgdySb40=;
+ b=PjF5Mu2/DzyIkWYeXkpf3Z5tcMhfw7f5vliJpO8ZAHw8RG7etXJVXGNXxA2KQINWINIZjrbsz
+ 1w5o+6m983bCe0qEnKDaZHugPXNlzsSi7oiyaK+td924u+PNW0XpH3P
 X-Developer-Key: i=dsankouski@gmail.com; a=ed25519;
  pk=YJcXFcN1EWrzBYuiE2yi5Mn6WLn6L1H71J+f7X8fMag=
 
-Using regfields allows to cleanup masks and register offset definition,
-allowing to access register info by it's functional name.
+Handle error, returned from register writes in init function.
 
 Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
 ---
-Changes to v2:
-- fix MAX77705_CHGPROT_UNLOCKED value: GENMASK(3, 2) -> 3, because it's
-  now used in regfield
-- remove MAX77705_CHGPROT_MASK because it's unused now
----
- drivers/power/supply/max77705_charger.c | 105 ++++++++++++--------------------
- include/linux/power/max77705_charger.h  | 102 ++++++++++++++++---------------
- 2 files changed, 93 insertions(+), 114 deletions(-)
+ drivers/power/supply/max77705_charger.c | 90 +++++++++++++++++++++++++--------
+ 1 file changed, 70 insertions(+), 20 deletions(-)
 
 diff --git a/drivers/power/supply/max77705_charger.c b/drivers/power/supply/max77705_charger.c
-index 883affd18c8d..837e03bafcc6 100644
+index 837e03bafcc6..23c643a307bd 100644
 --- a/drivers/power/supply/max77705_charger.c
 +++ b/drivers/power/supply/max77705_charger.c
-@@ -74,8 +74,7 @@ static int max77705_charger_enable(struct max77705_charger_data *chg)
- {
- 	int rv;
- 
--	rv = regmap_update_bits(chg->regmap, MAX77705_CHG_REG_CNFG_09,
--				MAX77705_CHG_EN_MASK, MAX77705_CHG_EN_MASK);
-+	rv = regmap_field_write(chg->rfield[MAX77705_CHG_EN], 1);
- 	if (rv)
- 		dev_err(chg->dev, "unable to enable the charger: %d\n", rv);
- 
-@@ -87,10 +86,7 @@ static void max77705_charger_disable(void *data)
- 	struct max77705_charger_data *chg = data;
- 	int rv;
- 
--	rv = regmap_update_bits(chg->regmap,
--				MAX77705_CHG_REG_CNFG_09,
--				MAX77705_CHG_EN_MASK,
--				MAX77705_CHG_DISABLE);
-+	rv = regmap_field_write(chg->rfield[MAX77705_CHG_EN], MAX77705_CHG_DISABLE);
- 	if (rv)
- 		dev_err(chg->dev, "unable to disable the charger: %d\n", rv);
- }
-@@ -134,10 +130,10 @@ static int max77705_check_battery(struct max77705_charger_data *chg, int *val)
- static int max77705_get_charge_type(struct max77705_charger_data *chg, int *val)
- {
- 	struct regmap *regmap = chg->regmap;
--	unsigned int reg_data;
-+	unsigned int reg_data, chg_en;
- 
--	regmap_read(regmap, MAX77705_CHG_REG_CNFG_09, &reg_data);
--	if (!MAX77705_CHARGER_CHG_CHARGING(reg_data)) {
-+	regmap_field_read(chg->rfield[MAX77705_CHG_EN], &chg_en);
-+	if (!chg_en) {
- 		*val = POWER_SUPPLY_CHARGE_TYPE_NONE;
- 		return 0;
- 	}
-@@ -162,10 +158,10 @@ static int max77705_get_charge_type(struct max77705_charger_data *chg, int *val)
- static int max77705_get_status(struct max77705_charger_data *chg, int *val)
- {
- 	struct regmap *regmap = chg->regmap;
--	unsigned int reg_data;
-+	unsigned int reg_data, chg_en;
- 
--	regmap_read(regmap, MAX77705_CHG_REG_CNFG_09, &reg_data);
--	if (!MAX77705_CHARGER_CHG_CHARGING(reg_data)) {
-+	regmap_field_read(chg->rfield[MAX77705_CHG_EN], &chg_en);
-+	if (!chg_en) {
- 		*val = POWER_SUPPLY_CHARGE_TYPE_NONE;
- 		return 0;
- 	}
-@@ -295,16 +291,11 @@ static int max77705_get_input_current(struct max77705_charger_data *chg,
- {
- 	unsigned int reg_data;
- 	int get_current = 0;
--	struct regmap *regmap = chg->regmap;
- 
--	regmap_read(regmap, MAX77705_CHG_REG_CNFG_09, &reg_data);
--
--	reg_data &= MAX77705_CHG_CHGIN_LIM_MASK;
-+	regmap_field_read(chg->rfield[MAX77705_CHG_CHGIN_LIM], &reg_data);
- 
- 	if (reg_data <= 3)
- 		get_current = MAX77705_CURRENT_CHGIN_MIN;
--	else if (reg_data >= MAX77705_CHG_CHGIN_LIM_MASK)
--		get_current = MAX77705_CURRENT_CHGIN_MAX;
- 	else
- 		get_current = (reg_data + 1) * MAX77705_CURRENT_CHGIN_STEP;
- 
-@@ -317,10 +308,8 @@ static int max77705_get_charge_current(struct max77705_charger_data *chg,
- 					int *val)
- {
- 	unsigned int reg_data;
--	struct regmap *regmap = chg->regmap;
- 
--	regmap_read(regmap, MAX77705_CHG_REG_CNFG_02, &reg_data);
--	reg_data &= MAX77705_CHG_CC;
-+	regmap_field_read(chg->rfield[MAX77705_CHG_CC_LIM], &reg_data);
- 
- 	*val = reg_data <= 0x2 ? MAX77705_CURRENT_CHGIN_MIN : reg_data * MAX77705_CURRENT_CHG_STEP;
- 
-@@ -332,7 +321,6 @@ static int max77705_set_float_voltage(struct max77705_charger_data *chg,
- {
- 	int float_voltage_mv;
- 	unsigned int reg_data = 0;
--	struct regmap *regmap = chg->regmap;
- 
- 	float_voltage_mv = float_voltage / 1000;
- 	reg_data = float_voltage_mv <= 4000 ? 0x0 :
-@@ -340,9 +328,7 @@ static int max77705_set_float_voltage(struct max77705_charger_data *chg,
- 		(float_voltage_mv <= 4200) ? (float_voltage_mv - 4000) / 50 :
- 		(((float_voltage_mv - 4200) / 10) + 0x04);
- 
--	return regmap_update_bits(regmap, MAX77705_CHG_REG_CNFG_04,
--				MAX77705_CHG_CV_PRM_MASK,
--				(reg_data << MAX77705_CHG_CV_PRM_SHIFT));
-+	return regmap_field_write(chg->rfield[MAX77705_CHG_CV_PRM], reg_data);
+@@ -400,43 +400,72 @@ static void max77705_chgin_isr_work(struct work_struct *work)
+ 	power_supply_changed(chg->psy_chg);
  }
  
- static int max77705_get_float_voltage(struct max77705_charger_data *chg,
-@@ -350,10 +336,8 @@ static int max77705_get_float_voltage(struct max77705_charger_data *chg,
+-static void max77705_charger_initialize(struct max77705_charger_data *chg)
++static int max77705_charger_initialize(struct max77705_charger_data *chg)
  {
- 	unsigned int reg_data = 0;
- 	int voltage_mv;
--	struct regmap *regmap = chg->regmap;
- 
--	regmap_read(regmap, MAX77705_CHG_REG_CNFG_04, &reg_data);
--	reg_data &= MAX77705_CHG_PRM_MASK;
-+	regmap_field_read(chg->rfield[MAX77705_CHG_CV_PRM], &reg_data);
- 	voltage_mv = reg_data <= 0x04 ? reg_data * 50 + 4000 :
- 					(reg_data - 4) * 10 + 4200;
- 	*val = voltage_mv * 1000;
-@@ -418,7 +402,6 @@ static void max77705_chgin_isr_work(struct work_struct *work)
- 
- static void max77705_charger_initialize(struct max77705_charger_data *chg)
- {
--	u8 reg_data;
  	struct power_supply_battery_info *info;
  	struct regmap *regmap = chg->regmap;
++	int err;
  
-@@ -429,45 +412,31 @@ static void max77705_charger_initialize(struct max77705_charger_data *chg)
+-	if (power_supply_get_battery_info(chg->psy_chg, &info) < 0)
+-		return;
++	err = power_supply_get_battery_info(chg->psy_chg, &info);
++	if (err)
++		return dev_err_probe(chg->dev, err, "error on getting battery info");
+ 
+ 	chg->bat_info = info;
  
  	/* unlock charger setting protect */
  	/* slowest LX slope */
--	reg_data = MAX77705_CHGPROT_MASK | MAX77705_SLOWEST_LX_SLOPE;
--	regmap_update_bits(regmap, MAX77705_CHG_REG_CNFG_06, reg_data,
--						reg_data);
-+	regmap_field_write(chg->rfield[MAX77705_CHGPROT], MAX77705_CHGPROT_UNLOCKED);
-+	regmap_field_write(chg->rfield[MAX77705_LX_SLOPE], MAX77705_SLOWEST_LX_SLOPE);
+-	regmap_field_write(chg->rfield[MAX77705_CHGPROT], MAX77705_CHGPROT_UNLOCKED);
+-	regmap_field_write(chg->rfield[MAX77705_LX_SLOPE], MAX77705_SLOWEST_LX_SLOPE);
++	err = regmap_field_write(chg->rfield[MAX77705_CHGPROT], MAX77705_CHGPROT_UNLOCKED);
++	if (err)
++		goto err;
++
++	err = regmap_field_write(chg->rfield[MAX77705_LX_SLOPE], MAX77705_SLOWEST_LX_SLOPE);
++	if (err)
++		goto err;
  
  	/* fast charge timer disable */
  	/* restart threshold disable */
  	/* pre-qual charge disable */
--	reg_data = (MAX77705_FCHGTIME_DISABLE << MAX77705_FCHGTIME_SHIFT) |
--			(MAX77705_CHG_RSTRT_DISABLE << MAX77705_CHG_RSTRT_SHIFT) |
--			(MAX77705_CHG_PQEN_DISABLE << MAX77705_PQEN_SHIFT);
--	regmap_update_bits(regmap, MAX77705_CHG_REG_CNFG_01,
--						(MAX77705_FCHGTIME_MASK |
--						MAX77705_CHG_RSTRT_MASK |
--						MAX77705_PQEN_MASK),
--						reg_data);
--
--	/* OTG off(UNO on), boost off */
--	regmap_update_bits(regmap, MAX77705_CHG_REG_CNFG_00,
--				MAX77705_OTG_CTRL, 0);
-+	regmap_field_write(chg->rfield[MAX77705_FCHGTIME], MAX77705_FCHGTIME_DISABLE);
-+	regmap_field_write(chg->rfield[MAX77705_CHG_RSTRT], MAX77705_CHG_RSTRT_DISABLE);
-+	regmap_field_write(chg->rfield[MAX77705_CHG_PQEN], MAX77705_CHG_PQEN_DISABLE);
+-	regmap_field_write(chg->rfield[MAX77705_FCHGTIME], MAX77705_FCHGTIME_DISABLE);
+-	regmap_field_write(chg->rfield[MAX77705_CHG_RSTRT], MAX77705_CHG_RSTRT_DISABLE);
+-	regmap_field_write(chg->rfield[MAX77705_CHG_PQEN], MAX77705_CHG_PQEN_DISABLE);
++	err = regmap_field_write(chg->rfield[MAX77705_FCHGTIME], MAX77705_FCHGTIME_DISABLE);
++	if (err)
++		goto err;
 +
-+	regmap_field_write(chg->rfield[MAX77705_MODE],
-+			MAX77705_CHG_MASK | MAX77705_BUCK_MASK);
++	err = regmap_field_write(chg->rfield[MAX77705_CHG_RSTRT], MAX77705_CHG_RSTRT_DISABLE);
++	if (err)
++		goto err;
+ 
+-	regmap_field_write(chg->rfield[MAX77705_MODE],
++	err = regmap_field_write(chg->rfield[MAX77705_CHG_PQEN], MAX77705_CHG_PQEN_DISABLE);
++	if (err)
++		goto err;
++
++	err = regmap_field_write(chg->rfield[MAX77705_MODE],
+ 			MAX77705_CHG_MASK | MAX77705_BUCK_MASK);
++	if (err)
++		goto err;
  
  	/* charge current 450mA(default) */
  	/* otg current limit 900mA */
--	regmap_update_bits(regmap, MAX77705_CHG_REG_CNFG_02,
--				MAX77705_OTG_ILIM_MASK,
--				MAX77705_OTG_ILIM_900 << MAX77705_OTG_ILIM_SHIFT);
-+	regmap_field_write(chg->rfield[MAX77705_OTG_ILIM], MAX77705_OTG_ILIM_900);
+-	regmap_field_write(chg->rfield[MAX77705_OTG_ILIM], MAX77705_OTG_ILIM_900);
++	err = regmap_field_write(chg->rfield[MAX77705_OTG_ILIM], MAX77705_OTG_ILIM_900);
++	if (err)
++		goto err;
  
  	/* BAT to SYS OCP 4.80A */
--	regmap_update_bits(regmap, MAX77705_CHG_REG_CNFG_05,
--				MAX77705_REG_B2SOVRC_MASK,
--				MAX77705_B2SOVRC_4_8A << MAX77705_REG_B2SOVRC_SHIFT);
-+	regmap_field_write(chg->rfield[MAX77705_REG_B2SOVRC], MAX77705_B2SOVRC_4_8A);
-+
+-	regmap_field_write(chg->rfield[MAX77705_REG_B2SOVRC], MAX77705_B2SOVRC_4_8A);
++	err = regmap_field_write(chg->rfield[MAX77705_REG_B2SOVRC], MAX77705_B2SOVRC_4_8A);
++	if (err)
++		goto err;
+ 
  	/* top off current 150mA */
  	/* top off timer 30min */
--	reg_data = (MAX77705_TO_ITH_150MA << MAX77705_TO_ITH_SHIFT) |
--			(MAX77705_TO_TIME_30M << MAX77705_TO_TIME_SHIFT) |
--			(MAX77705_SYS_TRACK_DISABLE << MAX77705_SYS_TRACK_DIS_SHIFT);
--	regmap_update_bits(regmap, MAX77705_CHG_REG_CNFG_03,
--			   (MAX77705_TO_ITH_MASK |
--			   MAX77705_TO_TIME_MASK |
--			   MAX77705_SYS_TRACK_DIS_MASK), reg_data);
-+	regmap_field_write(chg->rfield[MAX77705_TO], MAX77705_TO_ITH_150MA);
-+	regmap_field_write(chg->rfield[MAX77705_TO_TIME], MAX77705_TO_TIME_30M);
-+	regmap_field_write(chg->rfield[MAX77705_SYS_TRACK], MAX77705_SYS_TRACK_DISABLE);
+-	regmap_field_write(chg->rfield[MAX77705_TO], MAX77705_TO_ITH_150MA);
+-	regmap_field_write(chg->rfield[MAX77705_TO_TIME], MAX77705_TO_TIME_30M);
+-	regmap_field_write(chg->rfield[MAX77705_SYS_TRACK], MAX77705_SYS_TRACK_DISABLE);
++	err = regmap_field_write(chg->rfield[MAX77705_TO], MAX77705_TO_ITH_150MA);
++	if (err)
++		goto err;
++
++	err = regmap_field_write(chg->rfield[MAX77705_TO_TIME], MAX77705_TO_TIME_30M);
++	if (err)
++		goto err;
++
++	err = regmap_field_write(chg->rfield[MAX77705_SYS_TRACK], MAX77705_SYS_TRACK_DISABLE);
++	if (err)
++		goto err;
  
  	/* cv voltage 4.2V or 4.35V */
  	/* MINVSYS 3.6V(default) */
-@@ -478,25 +447,21 @@ static void max77705_charger_initialize(struct max77705_charger_data *chg)
+@@ -447,21 +476,38 @@ static void max77705_charger_initialize(struct max77705_charger_data *chg)
  		max77705_set_float_voltage(chg, info->voltage_max_design_uv);
  	}
  
--	regmap_update_bits(regmap, MAX77705_CHG_REG_CNFG_12,
--				MAX77705_VCHGIN_REG_MASK, MAX77705_VCHGIN_4_5);
--	regmap_update_bits(regmap, MAX77705_CHG_REG_CNFG_12,
--				MAX77705_WCIN_REG_MASK, MAX77705_WCIN_4_5);
-+	regmap_field_write(chg->rfield[MAX77705_VCHGIN], MAX77705_VCHGIN_4_5);
-+	regmap_field_write(chg->rfield[MAX77705_WCIN], MAX77705_WCIN_4_5);
+-	regmap_field_write(chg->rfield[MAX77705_VCHGIN], MAX77705_VCHGIN_4_5);
+-	regmap_field_write(chg->rfield[MAX77705_WCIN], MAX77705_WCIN_4_5);
++	err = regmap_field_write(chg->rfield[MAX77705_VCHGIN], MAX77705_VCHGIN_4_5);
++	if (err)
++		goto err;
++
++	err = regmap_field_write(chg->rfield[MAX77705_WCIN], MAX77705_WCIN_4_5);
++	if (err)
++		goto err;
  
  	/* Watchdog timer */
  	regmap_update_bits(regmap, MAX77705_CHG_REG_CNFG_00,
  				MAX77705_WDTEN_MASK, 0);
  
  	/* VBYPSET=5.0V */
--	regmap_update_bits(regmap, MAX77705_CHG_REG_CNFG_11, MAX77705_VBYPSET_MASK, 0);
-+	regmap_field_write(chg->rfield[MAX77705_VBYPSET], 0);
+-	regmap_field_write(chg->rfield[MAX77705_VBYPSET], 0);
++	err = regmap_field_write(chg->rfield[MAX77705_VBYPSET], 0);
++	if (err)
++		goto err;
  
  	/* Switching Frequency : 1.5MHz */
--	regmap_update_bits(regmap, MAX77705_CHG_REG_CNFG_08, MAX77705_REG_FSW_MASK,
--				(MAX77705_CHG_FSW_1_5MHz << MAX77705_REG_FSW_SHIFT));
-+	regmap_field_write(chg->rfield[MAX77705_REG_FSW], MAX77705_CHG_FSW_1_5MHz);
+-	regmap_field_write(chg->rfield[MAX77705_REG_FSW], MAX77705_CHG_FSW_1_5MHz);
++	err = regmap_field_write(chg->rfield[MAX77705_REG_FSW], MAX77705_CHG_FSW_1_5MHz);
++	if (err)
++		goto err;
  
  	/* Auto skip mode */
--	regmap_update_bits(regmap, MAX77705_CHG_REG_CNFG_12, MAX77705_REG_DISKIP_MASK,
--				(MAX77705_AUTO_SKIP << MAX77705_REG_DISKIP_SHIFT));
-+	regmap_field_write(chg->rfield[MAX77705_REG_DISKIP], MAX77705_AUTO_SKIP);
+-	regmap_field_write(chg->rfield[MAX77705_REG_DISKIP], MAX77705_AUTO_SKIP);
++	err = regmap_field_write(chg->rfield[MAX77705_REG_DISKIP], MAX77705_AUTO_SKIP);
++	if (err)
++		goto err;
++
++	return 0;
++
++err:
++	return dev_err_probe(chg->dev, err, "error while configuring");
++
  }
  
  static int max77705_charger_probe(struct i2c_client *i2c)
-@@ -520,6 +485,14 @@ static int max77705_charger_probe(struct i2c_client *i2c)
- 	if (IS_ERR(chg->regmap))
- 		return PTR_ERR(chg->regmap);
+@@ -524,7 +570,11 @@ static int max77705_charger_probe(struct i2c_client *i2c)
+ 		goto destroy_wq;
+ 	}
  
-+	for (int i = 0; i < MAX77705_N_REGMAP_FIELDS; i++) {
-+		chg->rfield[i] = devm_regmap_field_alloc(dev, chg->regmap,
-+							 max77705_reg_field[i]);
-+		if (IS_ERR(chg->rfield[i]))
-+			return dev_err_probe(dev, PTR_ERR(chg->rfield[i]),
-+					     "cannot allocate regmap field\n");
+-	max77705_charger_initialize(chg);
++	ret = max77705_charger_initialize(chg);
++	if (ret) {
++		dev_err_probe(dev, ret, "failed to initialize charger IC\n");
++		goto destroy_wq;
 +	}
-+
- 	ret = regmap_update_bits(chg->regmap,
- 				MAX77705_CHG_REG_INT_MASK,
- 				MAX77705_CHGIN_IM, 0);
-diff --git a/include/linux/power/max77705_charger.h b/include/linux/power/max77705_charger.h
-index fdec9af9c541..a612795577b6 100644
---- a/include/linux/power/max77705_charger.h
-+++ b/include/linux/power/max77705_charger.h
-@@ -9,6 +9,8 @@
- #ifndef __MAX77705_CHARGER_H
- #define __MAX77705_CHARGER_H __FILE__
  
-+#include <linux/regmap.h>
-+
- /* MAX77705_CHG_REG_CHG_INT */
- #define MAX77705_BYP_I		BIT(0)
- #define MAX77705_INP_LIMIT_I	BIT(1)
-@@ -63,7 +65,6 @@
- #define MAX77705_BUCK_SHIFT	2
- #define MAX77705_BOOST_SHIFT	3
- #define MAX77705_WDTEN_SHIFT	4
--#define MAX77705_MODE_MASK	GENMASK(3, 0)
- #define MAX77705_CHG_MASK	BIT(MAX77705_CHG_SHIFT)
- #define MAX77705_UNO_MASK	BIT(MAX77705_UNO_SHIFT)
- #define MAX77705_OTG_MASK	BIT(MAX77705_OTG_SHIFT)
-@@ -74,34 +75,19 @@
- #define MAX77705_OTG_CTRL	(MAX77705_OTG_MASK | MAX77705_BOOST_MASK)
- 
- /* MAX77705_CHG_REG_CNFG_01 */
--#define MAX77705_FCHGTIME_SHIFT		0
--#define MAX77705_FCHGTIME_MASK		GENMASK(2, 0)
--#define MAX77705_CHG_RSTRT_SHIFT	4
--#define MAX77705_CHG_RSTRT_MASK		GENMASK(5, 4)
- #define MAX77705_FCHGTIME_DISABLE	0
- #define MAX77705_CHG_RSTRT_DISABLE	0x3
- 
--#define MAX77705_PQEN_SHIFT		7
--#define MAX77705_PQEN_MASK		BIT(7)
- #define MAX77705_CHG_PQEN_DISABLE	0
- #define MAX77705_CHG_PQEN_ENABLE	1
- 
- /* MAX77705_CHG_REG_CNFG_02 */
--#define MAX77705_OTG_ILIM_SHIFT		6
--#define MAX77705_OTG_ILIM_MASK		GENMASK(7, 6)
- #define MAX77705_OTG_ILIM_500		0
- #define MAX77705_OTG_ILIM_900		1
- #define MAX77705_OTG_ILIM_1200		2
- #define MAX77705_OTG_ILIM_1500		3
--#define MAX77705_CHG_CC			GENMASK(5, 0)
- 
- /* MAX77705_CHG_REG_CNFG_03 */
--#define MAX77705_TO_ITH_SHIFT		0
--#define MAX77705_TO_ITH_MASK		GENMASK(2, 0)
--#define MAX77705_TO_TIME_SHIFT		3
--#define MAX77705_TO_TIME_MASK		GENMASK(5, 3)
--#define MAX77705_SYS_TRACK_DIS_SHIFT	7
--#define MAX77705_SYS_TRACK_DIS_MASK	BIT(7)
- #define MAX77705_TO_ITH_150MA		0
- #define MAX77705_TO_TIME_30M		3
- #define MAX77705_SYS_TRACK_ENABLE	0
-@@ -110,15 +96,8 @@
- /* MAX77705_CHG_REG_CNFG_04 */
- #define MAX77705_CHG_MINVSYS_SHIFT	6
- #define MAX77705_CHG_MINVSYS_MASK	GENMASK(7, 6)
--#define MAX77705_CHG_PRM_SHIFT		0
--#define MAX77705_CHG_PRM_MASK		GENMASK(5, 0)
--
--#define MAX77705_CHG_CV_PRM_SHIFT	0
--#define MAX77705_CHG_CV_PRM_MASK	GENMASK(5, 0)
- 
- /* MAX77705_CHG_REG_CNFG_05 */
--#define MAX77705_REG_B2SOVRC_SHIFT	0
--#define MAX77705_REG_B2SOVRC_MASK	GENMASK(3, 0)
- #define MAX77705_B2SOVRC_DISABLE	0
- #define MAX77705_B2SOVRC_4_5A		6
- #define MAX77705_B2SOVRC_4_8A		8
-@@ -128,9 +107,8 @@
- #define MAX77705_WDTCLR_SHIFT		0
- #define MAX77705_WDTCLR_MASK		GENMASK(1, 0)
- #define MAX77705_WDTCLR			1
--#define MAX77705_CHGPROT_MASK		GENMASK(3, 2)
--#define MAX77705_CHGPROT_UNLOCKED	GENMASK(3, 2)
--#define MAX77705_SLOWEST_LX_SLOPE	GENMASK(6, 5)
-+#define MAX77705_CHGPROT_UNLOCKED	3
-+#define MAX77705_SLOWEST_LX_SLOPE	3
- 
- /* MAX77705_CHG_REG_CNFG_07 */
- #define MAX77705_CHG_FMBST		4
-@@ -140,36 +118,14 @@
- #define MAX77705_REG_FGSRC_MASK		BIT(MAX77705_REG_FGSRC_SHIFT)
- 
- /* MAX77705_CHG_REG_CNFG_08 */
--#define MAX77705_REG_FSW_SHIFT		0
--#define MAX77705_REG_FSW_MASK		GENMASK(1, 0)
- #define MAX77705_CHG_FSW_3MHz		0
- #define MAX77705_CHG_FSW_2MHz		1
- #define MAX77705_CHG_FSW_1_5MHz		2
- 
- /* MAX77705_CHG_REG_CNFG_09 */
--#define MAX77705_CHG_CHGIN_LIM_MASK		GENMASK(6, 0)
--#define MAX77705_CHG_EN_MASK			BIT(7)
- #define MAX77705_CHG_DISABLE			0
--#define MAX77705_CHARGER_CHG_CHARGING(_reg) \
--				(((_reg) & MAX77705_CHG_EN_MASK) > 1)
--
--
--/* MAX77705_CHG_REG_CNFG_10 */
--#define MAX77705_CHG_WCIN_LIM		GENMASK(5, 0)
--
--/* MAX77705_CHG_REG_CNFG_11 */
--#define MAX77705_VBYPSET_SHIFT		0
--#define MAX77705_VBYPSET_MASK		GENMASK(6, 0)
- 
- /* MAX77705_CHG_REG_CNFG_12 */
--#define MAX77705_CHGINSEL_SHIFT		5
--#define MAX77705_CHGINSEL_MASK		BIT(MAX77705_CHGINSEL_SHIFT)
--#define MAX77705_WCINSEL_SHIFT		6
--#define MAX77705_WCINSEL_MASK		BIT(MAX77705_WCINSEL_SHIFT)
--#define MAX77705_VCHGIN_REG_MASK	GENMASK(4, 3)
--#define MAX77705_WCIN_REG_MASK		GENMASK(2, 1)
--#define MAX77705_REG_DISKIP_SHIFT	0
--#define MAX77705_REG_DISKIP_MASK	BIT(MAX77705_REG_DISKIP_SHIFT)
- /* REG=4.5V, UVLO=4.7V */
- #define MAX77705_VCHGIN_4_5		0
- /* REG=4.5V, UVLO=4.7V */
-@@ -183,9 +139,59 @@
- #define MAX77705_CURRENT_CHGIN_MIN	100000
- #define MAX77705_CURRENT_CHGIN_MAX	3200000
- 
-+enum max77705_field_idx {
-+	MAX77705_CHGPROT,
-+	MAX77705_CHG_EN,
-+	MAX77705_CHG_CC_LIM,
-+	MAX77705_CHG_CHGIN_LIM,
-+	MAX77705_CHG_CV_PRM,
-+	MAX77705_CHG_PQEN,
-+	MAX77705_CHG_RSTRT,
-+	MAX77705_CHG_WCIN,
-+	MAX77705_FCHGTIME,
-+	MAX77705_LX_SLOPE,
-+	MAX77705_MODE,
-+	MAX77705_OTG_ILIM,
-+	MAX77705_REG_B2SOVRC,
-+	MAX77705_REG_DISKIP,
-+	MAX77705_REG_FSW,
-+	MAX77705_SYS_TRACK,
-+	MAX77705_TO,
-+	MAX77705_TO_TIME,
-+	MAX77705_VBYPSET,
-+	MAX77705_VCHGIN,
-+	MAX77705_WCIN,
-+	MAX77705_N_REGMAP_FIELDS,
-+};
-+
-+static const struct reg_field max77705_reg_field[MAX77705_N_REGMAP_FIELDS] = {
-+	[MAX77705_MODE]			= REG_FIELD(MAX77705_CHG_REG_CNFG_00,   0, 3),
-+	[MAX77705_FCHGTIME]		= REG_FIELD(MAX77705_CHG_REG_CNFG_01,   0, 2),
-+	[MAX77705_CHG_RSTRT]		= REG_FIELD(MAX77705_CHG_REG_CNFG_01,   4, 5),
-+	[MAX77705_CHG_PQEN]		= REG_FIELD(MAX77705_CHG_REG_CNFG_01,   7, 7),
-+	[MAX77705_CHG_CC_LIM]		= REG_FIELD(MAX77705_CHG_REG_CNFG_02,   0, 5),
-+	[MAX77705_OTG_ILIM]		= REG_FIELD(MAX77705_CHG_REG_CNFG_02,   6, 7),
-+	[MAX77705_TO]			= REG_FIELD(MAX77705_CHG_REG_CNFG_03,   0, 2),
-+	[MAX77705_TO_TIME]		= REG_FIELD(MAX77705_CHG_REG_CNFG_03,   3, 5),
-+	[MAX77705_SYS_TRACK]		= REG_FIELD(MAX77705_CHG_REG_CNFG_03,   7, 7),
-+	[MAX77705_CHG_CV_PRM]		= REG_FIELD(MAX77705_CHG_REG_CNFG_04,   0, 5),
-+	[MAX77705_REG_B2SOVRC]		= REG_FIELD(MAX77705_CHG_REG_CNFG_05,   0, 3),
-+	[MAX77705_CHGPROT]		= REG_FIELD(MAX77705_CHG_REG_CNFG_06,   2, 3),
-+	[MAX77705_LX_SLOPE]		= REG_FIELD(MAX77705_CHG_REG_CNFG_06,   5, 6),
-+	[MAX77705_REG_FSW]		= REG_FIELD(MAX77705_CHG_REG_CNFG_08,   0, 1),
-+	[MAX77705_CHG_CHGIN_LIM]	= REG_FIELD(MAX77705_CHG_REG_CNFG_09,   0, 6),
-+	[MAX77705_CHG_EN]		= REG_FIELD(MAX77705_CHG_REG_CNFG_09,   7, 7),
-+	[MAX77705_CHG_WCIN]		= REG_FIELD(MAX77705_CHG_REG_CNFG_10,   0, 5),
-+	[MAX77705_VBYPSET]		= REG_FIELD(MAX77705_CHG_REG_CNFG_11,   0, 6),
-+	[MAX77705_REG_DISKIP]		= REG_FIELD(MAX77705_CHG_REG_CNFG_12,   0, 0),
-+	[MAX77705_WCIN]			= REG_FIELD(MAX77705_CHG_REG_CNFG_12,   1, 2),
-+	[MAX77705_VCHGIN]		= REG_FIELD(MAX77705_CHG_REG_CNFG_12,   3, 4),
-+};
-+
- struct max77705_charger_data {
- 	struct device			*dev;
- 	struct regmap		*regmap;
-+	struct regmap_field	*rfield[MAX77705_N_REGMAP_FIELDS];
- 	struct power_supply_battery_info *bat_info;
- 	struct workqueue_struct *wqueue;
- 	struct work_struct	chgin_work;
+ 	ret = max77705_charger_enable(chg);
+ 	if (ret) {
 
 -- 
 2.39.5
