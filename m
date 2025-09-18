@@ -1,87 +1,87 @@
-Return-Path: <linux-pm+bounces-34968-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34969-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A5DCB85839
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 17:19:05 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D8DB2B8585E
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 17:19:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 478571C87EFD
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 15:13:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 12E743AD268
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 15:15:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FC48224AE8;
-	Thu, 18 Sep 2025 15:12:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7CB0307AFE;
+	Thu, 18 Sep 2025 15:15:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="G0Pvj4mc"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="zp/SOqSq"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 880F260B8A
-	for <linux-pm@vger.kernel.org>; Thu, 18 Sep 2025 15:12:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D655923B60A
+	for <linux-pm@vger.kernel.org>; Thu, 18 Sep 2025 15:15:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758208344; cv=none; b=Qt8+ujQQLzukph4Su7xz3GBPb5fe7myB99dcdZFMCqFBA2eaqlxdMmlE9wPGEZsQB2fMHgKS8UqzBHs3J6pcPOcS5S5uVHaNqcHDaANRB5HlrXz08Zf1E2BzWvXLfBr7dzYsVCBKVVIYW0MTUeydZvA4rCy0MsWRASmOhkdhhxs=
+	t=1758208507; cv=none; b=VKBziPm7wh2ZCSylBvfooa4ROni5FLULU7YxZmT2T6f2iK7gtvNRSReSj7NSeCA/ZpHB0QQ6HxUjRLjayTlgA6e+5jMSmos9jpaPoD3haD87uE6IWpEM67r96phsh6Vpd/MKa+Pggszp3B/iHITsvktjAt2HHQuBI8o2TyezwSo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758208344; c=relaxed/simple;
-	bh=JKfm6NN2B2hHRdonJoxuB513WOjuDHT7I18uTla7p1c=;
+	s=arc-20240116; t=1758208507; c=relaxed/simple;
+	bh=W5nTjMEiqZnba5g8e3Gi7lUj7gQH38jU4DdLi32iJEw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fOEkfzT9iuE1u8hjm1F/lAR/VazgqswGUg2jM6bVtz77o6F7HBiDPGzjB7qex9qoY3mZf38iIMYTgjWK3NL8XYmbXo9ShaR316SlPkUQF37/CazYhFO/qrU21+ADK66wn3zQs2N7XlqcuPnSBPlIBvio/wWDFNZM8iBZroOPXfM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=G0Pvj4mc; arc=none smtp.client-ip=209.85.128.175
+	 To:Cc:Content-Type; b=sw7Hw6mw353pE3ytAwA/6HIL+16SCjiDl6olU5bG+aLX7PTyKDiu/d5Ujfjn8nHRJ27qLJQ/8wlhW7yxceTyBd9nSDRXXugqBftT/7evfgSaNmdfH6CSBwauXeVgHx9CHYLc7op9t/ZdI9GwNgZJ8NoPz/OwWh4PPAYjPi6mw78=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=zp/SOqSq; arc=none smtp.client-ip=209.85.128.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-724b9ba77d5so11558727b3.3
-        for <linux-pm@vger.kernel.org>; Thu, 18 Sep 2025 08:12:21 -0700 (PDT)
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-73b4e3d0756so3433037b3.3
+        for <linux-pm@vger.kernel.org>; Thu, 18 Sep 2025 08:15:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1758208340; x=1758813140; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1758208504; x=1758813304; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=jzEB3oyqwg8o4qvK1OgqXlnhNgSoMuFMpP/k/75t3xc=;
-        b=G0Pvj4mccHzwuYV+T73SVAtcgCz2GmGWizbF97pCuU6JO7qTtllZs5hFpr1+X1yTzH
-         Yt6DXgCI0Z9dYdmyfFJwQcxOj9PotF1kn+mpe2jEoV6N8APfa8t1MXOuaIVl021FunhM
-         711fdERrvAoBAeUEiHngD/DzM2cLihvIeqzBKYD4N4n/t+AUIQ2yvYBPh0B9+0Tw1dwM
-         cWUTUZ0lsh7GLE9D1gC2MZxdxvGMObNv7aLfBQIf0R/5D+/1MYQ1BlQ7cEQBwyo+qVcI
-         jThbei/hAPMFHmsUa5xVPdf6PTdtLMtiveq0k7RwX9gssqwi0cr9IBiRy0oYKsqdhmDW
-         /UIA==
+        bh=OFt6YzhskfMz4G5ASFBcNJdSZpqtygY9kyuCw6Wbqgk=;
+        b=zp/SOqSqSMI5TW4vac7YZCkoM9yhF0pMqb0QTI0ezQjs1cYd0yO6U+s5kfa6TAT35K
+         EuEhHFpdmfWDaWGY/EQkP/ejyIhf+H8vvhUMfYXBq/x0xjBcU+Bllk6lXsr2eccMd528
+         4P8EpBsktYPSTCPwv3th5y8rtpFaUwFMwSoiRSGleDnx/TXO5dJE1t0VXgLBnE8L+02i
+         gUChk7v08DwLvgwe0mwyPBWDCSFgqvUwk4fN5kwbX4ZaknTZmMS5Qo4UFxrqcm+KagT2
+         Unnl6S72aYIYHH5+vX0CFZ6YeXuRLd+WSz1LsN310YMoO608Hk4933mL1tRto5OOVAyC
+         KuDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758208340; x=1758813140;
+        d=1e100.net; s=20230601; t=1758208504; x=1758813304;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=jzEB3oyqwg8o4qvK1OgqXlnhNgSoMuFMpP/k/75t3xc=;
-        b=MPZGWj33JmO5OmFOBRhoUPoEZQPEndFmqKv2SpRvV44k0z9SnuUkHfy5lwGkRXexKa
-         6z8PVCdDXvYrHA/XZBEs9m2ngvNw/qsnO09/z6CWhU7yGizyVW33CqDzVoWAPwlxzJNV
-         WNbxVUW7FiQSARCHzivfo/bxSq5IqEl1a1/2TONaZP/yJiqaaPOVhzQaJjPj9YrDd5H7
-         24DiH8k9nlh4jMevyFEJg2wnvE5K1fU/TsfywH2zU6o0FtWfjEwNaNS0K3RVN/Ps9o89
-         LTI04Ite3L8PCUWQ01J6wYu2MwtKjofO7riOM3O2sDqGG50eG5rxJj3Hbg/EO8X/c0Ku
-         moug==
-X-Forwarded-Encrypted: i=1; AJvYcCXtTcFsFHgaSu2Gmq/mMVRsQq2Wdftvk+D/8/bVd7h69HsMKMviBNOom5iqasbugpoS4ize4TVocg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwTMnURzZVXmVA8HI0AXW64+6ciEDZti33TQDwjvRdKlsc/eNrU
-	S8mdiNwwAeAh8cz+QZVEq+iThJWMhpRm1y9Rxsm3otbUht3C6TtmFC5+3Bqxh0rWszv5Zw7vS/A
-	dhapajA4KNYJ0afJ9/SE91gkYh2wq5ysRFWstViSjnA==
-X-Gm-Gg: ASbGncvVoVo1ka7an6QpedotI0GBjU9FpsTVZNd+CAI/oLZqRTwL6zID5cEN69+8VFv
-	M2D7AxL8cxEy8AGzP8A3vfipJo3d/5tukk/CiNfigRLtaSLkbWXXwCS+490vPojOMxfVBDXD4QA
-	7vlZ9pZaGOkPNZDIbv22jdW8IX+BVbBN3QyLSh07qDeFXZgHe0j9Kj3JLfNVGeAyjk67ju+tPpo
-	E3b1VeRv9c6oHrq0vaQ4ARJYB5y9U601Qok7A==
-X-Google-Smtp-Source: AGHT+IFOOt5NOlhICVzaBKD3GERcW4IuNpGDCitHn0o/LFtu2/I5P/MFLfzOEfmO/oH8TvqHphqHmXeYL1qjVazMwlA=
-X-Received: by 2002:a05:690e:4287:10b0:633:b6b5:ef2c with SMTP id
- 956f58d0204a3-633b6b5f5bbmr4133202d50.27.1758208340325; Thu, 18 Sep 2025
- 08:12:20 -0700 (PDT)
+        bh=OFt6YzhskfMz4G5ASFBcNJdSZpqtygY9kyuCw6Wbqgk=;
+        b=Yc52VPIGo5zKCPTCOICSsp1Ln44nI5EgJ2d1fuWeA/EjdOJr71dk5KvURBVmF+inmy
+         viTElDUAQHE9QmG5+8HhhfrIJvx3mBBJxnUIBNqG3H8ObosAreOr92sq9jlG4rl/Hj/P
+         U5JD+H/QPs0gYyjV2V5bU8O2CASN7/3HSvOezoiEuMT7ZduWnW+3nt4LXP3JN+YjH7/0
+         h+8zfWHYBoQC8NULZPrR/nhJ1Ots8n1Tzh7mMnBUONOb1FLXBv7qs/edJxm3OP7HF5ut
+         Ncy/eND9+Is+uIezLpbtW0qhEChv7KyX2llhM4bEaPdXA+zrMA1LuYdBep6y+yNHIp/v
+         +3Ew==
+X-Forwarded-Encrypted: i=1; AJvYcCVHxMvwFeVx0/7tdK5tUYQ6Pa8UUA2Brb6MHtIg8pFWzkShTW7NpIF6OiT9kOIeYoqo5tU3tK2Q0Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz1ER7KSU8fvsslpuX1ZN+LNyPLdjUXzuZBc5i3MVKVqhrl2Bce
+	pWi+6VZ2G+PAlQSeW01MqgGoB1gMIzroXFY3Hn4htBHyR3f7xF2fOQHaBkK2/OF6296dgOicF/j
+	t40sbVtE7ffql3Ip3yq/FkJEo1pF9OUUeNw8Ye7uNuw==
+X-Gm-Gg: ASbGncvc1UHYtKiBHRrtoivQYWcodeUBFa8nSsqoYL6VVeH54xdmgKsoIg5WG+1UjQM
+	gzGlb76c0mm+A6IbutxC+pRgYQptKYiKSK4a6h4HVrhJBpyxq1DK621q5A/YOr64KPQXH1DFgVF
+	XOvRlM8kv04vfUPELOOJa09fxEJyQfMZsvczlWsAqtUUY4aQH5/ACapBBkKxisuCKN/PiI8qUoH
+	mcSxhRXffuTJ9gjaANPOOnjkmg=
+X-Google-Smtp-Source: AGHT+IFWx6n1PzkYYp5utqUHYs3cajDfg2GyxSlUHuEjN16hnOdbRT6rrrmIdLRynF4h/+ErT5T1ASVcKks2d63Qrt8=
+X-Received: by 2002:a05:690c:7281:b0:731:6570:132 with SMTP id
+ 00721157ae682-73891b87069mr62837047b3.35.1758208503588; Thu, 18 Sep 2025
+ 08:15:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250902-pm-v3-0-ffadbb454cdc@nxp.com> <20250902-pm-v3-2-ffadbb454cdc@nxp.com>
-In-Reply-To: <20250902-pm-v3-2-ffadbb454cdc@nxp.com>
+References: <20250902-pm-v3-0-ffadbb454cdc@nxp.com> <20250902-pm-v3-3-ffadbb454cdc@nxp.com>
+In-Reply-To: <20250902-pm-v3-3-ffadbb454cdc@nxp.com>
 From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Thu, 18 Sep 2025 17:11:44 +0200
-X-Gm-Features: AS18NWAvbbmow72oBLB0fop6cXMFfTOtiltZJomLBqlvFFcV_ry6i4BBGlzd4Ow
-Message-ID: <CAPDyKFqyLV7UF0E4WxYQrqv3HNuSZCet=F62Lvt7nBYJMOZQeg@mail.gmail.com>
-Subject: Re: [PATCH v3 2/4] usb: chipidea: core: detach power domain for
- ci_hdrc platform device
+Date: Thu, 18 Sep 2025 17:14:27 +0200
+X-Gm-Features: AS18NWCdTZsclOkAHpdSQCQjKeMfCrt_EDcLieD3X8xYbm6A6ARROAgFxf2mSRY
+Message-ID: <CAPDyKFq1Coz4rbdam01s3pOCDa=Et2ePmf7niLSgOdjCbnEANg@mail.gmail.com>
+Subject: Re: [PATCH v3 3/4] usb: chipidea: ci_hdrc_imx: Set out of band wakeup
+ for i.MX95
 To: Peng Fan <peng.fan@nxp.com>
 Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, Pavel Machek <pavel@kernel.org>, 
 	Peter Chen <peter.chen@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
@@ -95,58 +95,55 @@ Content-Type: text/plain; charset="UTF-8"
 
 On Tue, 2 Sept 2025 at 05:33, Peng Fan <peng.fan@nxp.com> wrote:
 >
-> From: Xu Yang <xu.yang_2@nxp.com>
+> i.MX95 USB2 inside HSIOMIX could still wakeup Linux, even if HSIOMIX
+> power domain(Digital logic) is off. There is still always on logic
+> have the wakeup capability which is out band wakeup capbility.
 >
-> When add a platform device by calling ci_hdrc_add_device(), this device
-> will reuse OF node of its parent device. If power-domains property is
-> provided in the OF node, both two platform devices will be attached to
-> the same power domain. This should be unnecessary and may bring other
-> inconsistent behavior. For example, to support wakeup capability, these
-> two platform device need different power domain state. The parent device
-> need NOT power domain on for out-band interrupt, but the ci_hdrc device
-> need power domain on for in-band interrupt. The i.MX95 Soc support
-> out-band wakeup interrupt, the user need to enable wakeup for the parent
-> device, but if the user also enable wakeup for ci_hdrc device, the power
-> domain will keep at on state finally. To exclude such inconsistent
-> behavior and simplify the power management, detach power domain for ci_hdrc
-> platform device.
+> So use device_set_out_band_wakeup for i.MX95 to make sure usb2 could
+> wakeup system even if HSIOMIX power domain is in off state.
 >
-> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>  drivers/usb/chipidea/ci_hdrc_imx.c | 8 ++++++++
+>  include/linux/usb/chipidea.h       | 1 +
+>  2 files changed, 9 insertions(+)
+>
+> diff --git a/drivers/usb/chipidea/ci_hdrc_imx.c b/drivers/usb/chipidea/ci_hdrc_imx.c
+> index d7c2a1a3c2715967203b98c819fa864e06a00a32..a2b3f673dfc1183a02783bf6ef92f8570c6042cf 100644
+> --- a/drivers/usb/chipidea/ci_hdrc_imx.c
+> +++ b/drivers/usb/chipidea/ci_hdrc_imx.c
+> @@ -79,6 +79,10 @@ static const struct ci_hdrc_imx_platform_flag imx8ulp_usb_data = {
+>                 CI_HDRC_HAS_PORTSC_PEC_MISSED,
+>  };
+>
+> +static const struct ci_hdrc_imx_platform_flag imx95_usb_data = {
+> +       .flags = CI_HDRC_SUPPORTS_RUNTIME_PM | CI_HDRC_OUT_BAND_WAKEUP,
+> +};
+> +
+>  static const struct ci_hdrc_imx_platform_flag s32g_usb_data = {
+>         .flags = CI_HDRC_DISABLE_HOST_STREAMING,
+>  };
+> @@ -94,6 +98,7 @@ static const struct of_device_id ci_hdrc_imx_dt_ids[] = {
+>         { .compatible = "fsl,imx7d-usb", .data = &imx7d_usb_data},
+>         { .compatible = "fsl,imx7ulp-usb", .data = &imx7ulp_usb_data},
+>         { .compatible = "fsl,imx8ulp-usb", .data = &imx8ulp_usb_data},
+> +       { .compatible = "fsl,imx95-usb", .data = &imx95_usb_data},
+>         { .compatible = "nxp,s32g2-usb", .data = &s32g_usb_data},
+>         { /* sentinel */ }
+>  };
+> @@ -570,6 +575,9 @@ static int ci_hdrc_imx_probe(struct platform_device *pdev)
+>
+>         device_set_wakeup_capable(dev, true);
+>
+> +       if (pdata.flags & CI_HDRC_OUT_BAND_WAKEUP)
+> +               device_set_out_band_wakeup(dev, true);
+> +
 
-Seems reasonable to me!
+Based on my comment in patch1, I think we should set this flag from
+within a system suspend callback for the device in question.
 
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+[...]
 
 Kind regards
 Uffe
-
-> ---
->  drivers/usb/chipidea/core.c | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/drivers/usb/chipidea/core.c b/drivers/usb/chipidea/core.c
-> index 694b4a8e4e1d8583dcbf4a42f8c2dfd785d5745c..70597f40b9997a9766934c67bbbed38e96c210f8 100644
-> --- a/drivers/usb/chipidea/core.c
-> +++ b/drivers/usb/chipidea/core.c
-> @@ -27,6 +27,7 @@
->  #include <linux/kernel.h>
->  #include <linux/slab.h>
->  #include <linux/pm_runtime.h>
-> +#include <linux/pm_domain.h>
->  #include <linux/pinctrl/consumer.h>
->  #include <linux/usb/ch9.h>
->  #include <linux/usb/gadget.h>
-> @@ -915,6 +916,8 @@ struct platform_device *ci_hdrc_add_device(struct device *dev,
->         if (ret)
->                 goto err;
->
-> +       dev_pm_domain_detach(&pdev->dev, false);
-> +
->         return pdev;
->
->  err:
->
-> --
-> 2.37.1
->
 
