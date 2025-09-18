@@ -1,180 +1,202 @@
-Return-Path: <linux-pm+bounces-34943-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34944-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9530AB82F10
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 07:07:26 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 08FC6B83079
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 07:40:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2C4F45837E2
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 05:06:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8BFA918980A4
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 05:40:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 645F926B0B3;
-	Thu, 18 Sep 2025 05:06:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6E702D3756;
+	Thu, 18 Sep 2025 05:40:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="pE5jBfSv";
-	dkim=permerror (0-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="g46MYSrN"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="Jn+/3YUR"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail.mainlining.org (mail.mainlining.org [5.75.144.95])
+Received: from fllvem-ot03.ext.ti.com (fllvem-ot03.ext.ti.com [198.47.19.245])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAA9A1F3FEC;
-	Thu, 18 Sep 2025 05:06:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.75.144.95
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0683A34BA2C;
+	Thu, 18 Sep 2025 05:40:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.245
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758171975; cv=none; b=YOTIBMKfwLpcSvT/T95r672wl6a9O0lEMeNBTIzNmp/Ytxd2occM8UtuWMslvujpSAMYVnsDPyJMCn1JOeBnbcghlB7hpJ9ngQhrV6n6efKUD6a8ZPvQ0xMmpzXHlchBMFrmCwDipbw2GTORpu26FYwxivJdOqOU6EQP3XEhFvI=
+	t=1758174013; cv=none; b=LihxyOimijpdZKrTszIJLjkrSHy4Z/2L5wE+C9gBzbOrYadAFSm8CpT9Bz+IYWgAuE9zj1Ed3+5cdfrxpG2FA//40JqckIxxoQsi2bJFZWcXrUV6QOD9WuM2ec4x9dTEUof5wjmbmH7ZWciXWHZAWWLFT1L7oB8/6nTNPndJ81g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758171975; c=relaxed/simple;
-	bh=f+/zAaJ0teiDY3KPMj73HZGvo94OMDlTnUVHWKEzMZY=;
-	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
-	 Message-ID:Content-Type; b=O9h1osaDTa53SzZ0nCJcSoYkuEmLrv3DNrVJEjuqNzBEX6w3v2W8vhJ6ndvmbX4/0l+AvVcLg8Mzad+9XfxWq7+MkfMgFEE0mQe3wNXEH39IhAUWg8EdnbDkqcpPRLrX8qBsuEDx9UDL5FhwD4dNN8p+y9AIaFX5UYmLmwD3wa4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org; spf=pass smtp.mailfrom=mainlining.org; dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=pE5jBfSv; dkim=permerror (0-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=g46MYSrN; arc=none smtp.client-ip=5.75.144.95
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mainlining.org
-DKIM-Signature: v=1; a=rsa-sha256; s=202507r; d=mainlining.org; c=relaxed/relaxed;
-	h=Message-ID:Subject:To:From:Date; t=1758171735; bh=ILJJ/4RQIN/3m+STfmaTRfX
-	8whGDO74Pn1jtvUnbn8s=; b=pE5jBfSvsZUrjCB9VH6XNAMZoNEICEMvUDFtf4Z5OJj9cKIyXD
-	7qdg9SdfyvHtVx8KHdFdvp/lp/7vz3QsASIZiUEdJHe+RNdDlyCxi3xC8skGngfqxPUI28SVA3U
-	JAEh1wL/k4xi61M7u1hZb/UW6rR/pROpxF24/K1q7CJ5S0g79l6tpY13aNJFxntzea2f7ZLhzBb
-	hL8ilZX8Z0jkT02I77hRQrzWidUfEY3jZtWxfU8KExf5nZ6xCYU7/iB2zm1I+lmcvW6i6hM38Tc
-	e4N6D5ulDIft3V4zm999O4KQ4mUhtmYCuO6NngPSmiA0xXnlS9Jl8vNvNvX+3CBAwgA==;
-DKIM-Signature: v=1; a=ed25519-sha256; s=202507e; d=mainlining.org; c=relaxed/relaxed;
-	h=Message-ID:Subject:To:From:Date; t=1758171735; bh=ILJJ/4RQIN/3m+STfmaTRfX
-	8whGDO74Pn1jtvUnbn8s=; b=g46MYSrNOlMn39zgBFesxBeZplRiG9bUuue5Tshga8eHr6e40B
-	CeEgiAoFZ+JDUeIGMWGo3oFQR5qxRlcizNBg==;
+	s=arc-20240116; t=1758174013; c=relaxed/simple;
+	bh=DHo36Nw9Mhb8OSdyfEa69N5hMrs1OO6ojIUqj1gz0sE=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=u7dV92keZX352Y8n4P3ZTFIaXskvl5pMz/zdoJF9aDrAAYZ96oADUtouuyuUgUyhInfjXydxiHJA3gpXFSgxbAkRPYX/zknuV3E9E9ZvVUnOFsyas0StAyiSXjws29D/am1YG6JSO1JWvigWlbl4ZCp8J0IDLzPXMCIfbVSKTSw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=Jn+/3YUR; arc=none smtp.client-ip=198.47.19.245
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from lelvem-sh02.itg.ti.com ([10.180.78.226])
+	by fllvem-ot03.ext.ti.com (8.15.2/8.15.2) with ESMTP id 58I5dad41676466;
+	Thu, 18 Sep 2025 00:39:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1758173976;
+	bh=DKjp6N/ixan1BjatOrTjluVvM3Lvf9IQYxDJwVkTHGI=;
+	h=Date:From:To:CC:Subject:References:In-Reply-To;
+	b=Jn+/3YUR2Waxjc9kICUNeTvsLCWZ4SzptzZzI552+gi1e+Q2RL8vnGaY9mJvRB210
+	 IBO/CfMwq6N3MSR4jYnGhI4HH7PNUrWg5OaAvNzXbiZrzAR++zhdOj5N7ozg9HZlXF
+	 ng1LpS5A5lLuaRU1bZCJWi9aSylBGdVhX1NZzp+A=
+Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
+	by lelvem-sh02.itg.ti.com (8.18.1/8.18.1) with ESMTPS id 58I5da5Q1878417
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-SHA256 bits=128 verify=FAIL);
+	Thu, 18 Sep 2025 00:39:36 -0500
+Received: from DFLE211.ent.ti.com (10.64.6.69) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55; Thu, 18
+ Sep 2025 00:39:35 -0500
+Received: from lelvem-mr06.itg.ti.com (10.180.75.8) by DFLE211.ent.ti.com
+ (10.64.6.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
+ Transport; Thu, 18 Sep 2025 00:39:35 -0500
+Received: from localhost (lcpd911.dhcp.ti.com [172.24.233.130])
+	by lelvem-mr06.itg.ti.com (8.18.1/8.18.1) with ESMTP id 58I5dYu7066935;
+	Thu, 18 Sep 2025 00:39:35 -0500
+Date: Thu, 18 Sep 2025 11:09:34 +0530
+From: Dhruva Gole <d-gole@ti.com>
+To: Peng Fan <peng.fan@nxp.com>
+CC: Ulf Hansson <ulf.hansson@linaro.org>,
+        "Rafael J. Wysocki"
+	<rafael@kernel.org>, Len Brown <lenb@kernel.org>,
+        Pavel Machek
+	<pavel@kernel.org>, Peter Chen <peter.chen@kernel.org>,
+        Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer
+	<s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Xu Yang <xu.yang_2@nxp.com>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <imx@lists.linux.dev>, <arm-scmi@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v3 1/4] pmdomain: core: Introduce
+ device_set/get_out_band_wakeup()
+Message-ID: <20250918053934.dweerdmcqdkr342w@lcpd911>
+References: <20250902-pm-v3-0-ffadbb454cdc@nxp.com>
+ <20250902-pm-v3-1-ffadbb454cdc@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Thu, 18 Sep 2025 12:02:14 +0700
-From: Dang Huynh <dang.huynh@mainlining.org>
-To: Manivannan Sadhasivam <mani@kernel.org>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Linus Walleij
- <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, Alexandre
- Belloni <alexandre.belloni@bootlin.com>, Michael Turquette
- <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, Philipp Zabel
- <p.zabel@pengutronix.de>, Sebastian Reichel <sre@kernel.org>, Vinod Koul
- <vkoul@kernel.org>, Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva"
- <gustavoars@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
- linux-arm-kernel@lists.infradead.org, linux-unisoc@lists.infradead.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
- linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
- dmaengine@vger.kernel.org, linux-hardening@vger.kernel.org,
- linux-mmc@vger.kernel.org
-Subject: Re: [PATCH 00/25] RDA8810PL Clock, RTC and MMC driver
-In-Reply-To: <lnfervvwctvemjdmyue2aohlsqpfd5gsuzjho3u6mtdtewl4vr@saqnionh72am>
-References: <20250917-rda8810pl-drivers-v1-0-9ca9184ca977@mainlining.org>
- <lnfervvwctvemjdmyue2aohlsqpfd5gsuzjho3u6mtdtewl4vr@saqnionh72am>
-Message-ID: <bf5b90c8a03765a7145b6e985c3e23f9@mainlining.org>
-X-Sender: dang.huynh@mainlining.org
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20250902-pm-v3-1-ffadbb454cdc@nxp.com>
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-On 2025-09-17 17:03, Manivannan Sadhasivam wrote:
-> On Wed, Sep 17, 2025 at 03:24:57AM GMT, Dang Huynh via B4 Relay wrote:
->> This patch series aims to add support for Clock/Reset, Real-Time Clock 
->> and
->> SDMMC on the RDA Micro RDA8810PL platform.
->> 
->> It also adds Intelligent Flow Controller (IOW, a DMA controller) which 
->> is
->> important for working with this MMC IP.
->> 
->> Tested on the Orange Pi 2G-IOT.
->> 
-> 
-> Thanks for work! Is it possible to split this patchset logically to 
-> ease
-> reviewing and also merging? It currently touches different subsystems 
-> and has 25
-> patches.
-> 
-> You could easily split this into different series adding Clock/Reset, 
-> RTC, IFC,
-> SDMMC and other misc patches in one series.
-Will do. Is it possible for you to test it on your i96 board?
+On Sep 02, 2025 at 11:33:00 +0800, Peng Fan wrote:
+> For some cases, a device could still wakeup the system even if its power
+> domain is in off state, because the device's wakeup hardware logic is
+> in an always-on domain.
+
+Don't we already have something like wake IRQs [1] for such purposes?
+
+8<----------------------------------------------------------------------
+That may involve turning on a special signal handling logic within the
+platform (such as an SoC) so that signals from a given line are routed
+in a different way during system sleep so as to trigger a system wakeup
+when needed
+----------------------------------------------------------------------->8
+
+[1] https://docs.kernel.org/power/suspend-and-interrupts.html#system-wakeup-interrupts-enable-irq-wake-and-disable-irq-wake
 
 > 
-> - Mani
+> To support this case, introduce device_set/get_out_band_wakeup() to
+> allow device drivers to control the behaviour in genpd for a device
+> that is attached to it.
+
+Do you have any explanation as to why wake IRQ is not solving this
+problem and you need to introduce these new APIs?
+
 > 
->> Signed-off-by: Dang Huynh <dang.huynh@mainlining.org>
->> ---
->> Dang Huynh (25):
->>       ARM: dts: unisoc: rda8810pl: Add label to GPIO nodes
->>       drivers: gpio: rda: Make IRQ optional
->>       dt-bindings: gpio: rda: Make interrupts optional
->>       rtc: Add timestamp for the end of 2127
->>       dt-bindings: rtc: Add RDA Micro RDA8810PL RTC
->>       rtc: Add driver for RDA Micro SoC
->>       ARM: dts: unisoc: rda8810pl: Enable Real-Time Clock
->>       ARM: dts: unisoc: rda8810pl: Enable ARM PMU
->>       dt-bindings: clock: Add RDA Micro RDA8810PL clock/reset 
->> controller
->>       drivers: clk: Add Clock and Reset Driver for RDA Micro RDA8810PL 
->> SoC
->>       dts: unisoc: rda8810pl: Enable clock/reset driver
->>       dts: unisoc: rda8810pl: Add OPP for CPU and define L2 cache
->>       dts: unisoc: orangepi: Disable UART with no users
->>       dt-bindings: power: reset: Add RDA Micro Modem Reset
->>       power: reset: Add basic power reset driver for RDA8810PL
->>       dts: unisoc: rda8810pl: Enable modem reset
->>       drivers: gpio: rda: Make direction register unreadable
->>       dt-bindings: dma: Add RDA IFC DMA
->>       dmaengine: Add RDA IFC driver
->>       dts: unisoc: rda8810pl: Enable IFC
->>       dt-bindings: mmc: Add RDA SDMMC controller
->>       mmc: host: Add RDA Micro SD/MMC driver
->>       dts: unisoc: rda8810pl: Add SDMMC controllers
->>       dts: unisoc: orangepi-2g: Enable SD Card
->>       dts: unisoc: orangepi-i96: Enable SD Card
->> 
->>  .../bindings/clock/rda,8810pl-apsyscon.yaml        |  44 ++
->>  Documentation/devicetree/bindings/dma/rda,ifc.yaml |  42 +
->>  .../devicetree/bindings/gpio/gpio-rda.yaml         |   3 -
->>  Documentation/devicetree/bindings/mmc/rda,mmc.yaml |  91 +++
->>  .../bindings/power/reset/rda,md-reset.yaml         |  36 +
->>  .../devicetree/bindings/rtc/rda,8810pl-rtc.yaml    |  30 +
->>  MAINTAINERS                                        |  30 +
->>  .../boot/dts/unisoc/rda8810pl-orangepi-2g-iot.dts  |  24 +-
->>  .../arm/boot/dts/unisoc/rda8810pl-orangepi-i96.dts |  24 +-
->>  arch/arm/boot/dts/unisoc/rda8810pl.dtsi            | 115 ++-
->>  drivers/clk/Kconfig                                |   1 +
->>  drivers/clk/Makefile                               |   1 +
->>  drivers/clk/rda/Kconfig                            |  14 +
->>  drivers/clk/rda/Makefile                           |   2 +
->>  drivers/clk/rda/clk-rda8810.c                      | 770 
->> +++++++++++++++++++
->>  drivers/dma/Kconfig                                |  10 +
->>  drivers/dma/Makefile                               |   1 +
->>  drivers/dma/rda-ifc.c                              | 450 +++++++++++
->>  drivers/gpio/gpio-rda.c                            |   4 +-
->>  drivers/mmc/host/Kconfig                           |  12 +
->>  drivers/mmc/host/Makefile                          |   1 +
->>  drivers/mmc/host/rda-mmc.c                         | 853 
->> +++++++++++++++++++++
->>  drivers/power/reset/Kconfig                        |   9 +
->>  drivers/power/reset/Makefile                       |   1 +
->>  drivers/power/reset/rda-reboot.c                   |  58 ++
->>  drivers/rtc/Kconfig                                |  11 +
->>  drivers/rtc/Makefile                               |   1 +
->>  drivers/rtc/rtc-rda.c                              | 356 +++++++++
->>  include/dt-bindings/clock/rda,8810pl-apclk.h       |  79 ++
->>  include/dt-bindings/dma/rda-ifc.h                  |  28 +
->>  include/linux/rtc.h                                |   1 +
->>  31 files changed, 3079 insertions(+), 23 deletions(-)
->> ---
->> base-commit: 590b221ed4256fd6c34d3dea77aa5bd6e741bbc1
->> change-id: 20250916-rda8810pl-drivers-9a5271452635
->> 
->> Best regards,
->> --
->> Dang Huynh <dang.huynh@mainlining.org>
->> 
->> 
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>  drivers/pmdomain/core.c   |  6 ++++--
+>  include/linux/pm.h        |  1 +
+>  include/linux/pm_wakeup.h | 17 +++++++++++++++++
+>  3 files changed, 22 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
+> index 0006ab3d078972cc72a6dd22a2144fb31443e3da..8e37758cea88a9ee051ad9fb13bdd3feb4f8745e 100644
+> --- a/drivers/pmdomain/core.c
+> +++ b/drivers/pmdomain/core.c
+> @@ -1549,7 +1549,8 @@ static int genpd_finish_suspend(struct device *dev,
+>  	if (ret)
+>  		return ret;
+>  
+> -	if (device_awake_path(dev) && genpd_is_active_wakeup(genpd))
+> +	if (device_awake_path(dev) && genpd_is_active_wakeup(genpd) &&
+> +	    !device_get_out_band_wakeup(dev))
+>  		return 0;
+>  
+>  	if (genpd->dev_ops.stop && genpd->dev_ops.start &&
+> @@ -1604,7 +1605,8 @@ static int genpd_finish_resume(struct device *dev,
+>  	if (IS_ERR(genpd))
+>  		return -EINVAL;
+>  
+> -	if (device_awake_path(dev) && genpd_is_active_wakeup(genpd))
+> +	if (device_awake_path(dev) && genpd_is_active_wakeup(genpd) &&
+> +	    !device_get_out_band_wakeup(dev))
+>  		return resume_noirq(dev);
+>  
+>  	genpd_lock(genpd);
+> diff --git a/include/linux/pm.h b/include/linux/pm.h
+> index cc7b2dc28574c24ece2f651352d4d23ecaf15f31..5b28a4f2e87e2aa34acc709e146ce729acace344 100644
+> --- a/include/linux/pm.h
+> +++ b/include/linux/pm.h
+> @@ -684,6 +684,7 @@ struct dev_pm_info {
+>  	bool			smart_suspend:1;	/* Owned by the PM core */
+>  	bool			must_resume:1;		/* Owned by the PM core */
+>  	bool			may_skip_resume:1;	/* Set by subsystems */
+> +	bool			out_band_wakeup:1;
+>  	bool			strict_midlayer:1;
+>  #else
+>  	bool			should_wakeup:1;
+> diff --git a/include/linux/pm_wakeup.h b/include/linux/pm_wakeup.h
+> index c838b4a30f876ef5a66972d16f461cfba9ff2814..c461c7edef6f7927d696b7d18b59a6a1147f53a3 100644
+> --- a/include/linux/pm_wakeup.h
+> +++ b/include/linux/pm_wakeup.h
+> @@ -94,6 +94,16 @@ static inline void device_set_wakeup_path(struct device *dev)
+>  	dev->power.wakeup_path = true;
+>  }
+>  
+> +static inline void device_set_out_band_wakeup(struct device *dev, bool capable)
+> +{
+> +	dev->power.out_band_wakeup = capable;
+> +}
+> +
+> +static inline bool device_get_out_band_wakeup(struct device *dev)
+> +{
+> +	return dev->power.out_band_wakeup;
+> +}
+> +
+>  /* drivers/base/power/wakeup.c */
+>  extern struct wakeup_source *wakeup_source_register(struct device *dev,
+>  						    const char *name);
+> @@ -162,6 +172,13 @@ static inline bool device_wakeup_path(struct device *dev)
+>  
+>  static inline void device_set_wakeup_path(struct device *dev) {}
+>  
+> +static inline void device_set_out_band_wakeup(struct device *dev, bool capable) {}
+> +
+> +static inline bool device_get_out_band_wakeup(struct device *dev)
+> +{
+> +	return false;
+> +}
+> +
+>  static inline void __pm_stay_awake(struct wakeup_source *ws) {}
+
+-- 
+Best regards,
+Dhruva Gole
+Texas Instruments Incorporated
 
