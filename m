@@ -1,102 +1,140 @@
-Return-Path: <linux-pm+bounces-34951-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34952-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 851E8B83854
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 10:31:15 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 75DA3B83F18
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 12:00:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 520F22A498B
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 08:31:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 050A23AE63B
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 10:00:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49A492F067F;
-	Thu, 18 Sep 2025 08:31:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 883892566E9;
+	Thu, 18 Sep 2025 10:00:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="lu4vPTDS";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="frcmEIKN"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="tsgj5sal"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from fllvem-ot03.ext.ti.com (fllvem-ot03.ext.ti.com [198.47.19.245])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC8472ED17A;
-	Thu, 18 Sep 2025 08:31:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CC4B2EF660;
+	Thu, 18 Sep 2025 10:00:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.245
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758184271; cv=none; b=CFzsejgdr+7BphX3T54KfWb35rVpND/rTaTpp9IwylyRSXaOgXfO6nOvn8PNioRYKGaayZbPsK4a+n84xeuYLDQnwXTWvdVKgo7afK7xZJUXzALGX5PTtfoK8os62Vp38wiuG3VjcN49/A2sb+9OR94CmeS5LroGIn/6PBnD3Bw=
+	t=1758189615; cv=none; b=jpzBV1D6b17VAtF2yBAng0nt2SBhViBOBVQg/9edFZrW+5AJAeGxY05rj67e9r8y662qtNP+BOMtHuxzTnMPPBErlAWXwhXO071tQHh6R3LAX9OHmLxsypZuDk1xP8aMRT11ZjFA4uXVHUTrbeQnznESjfK1amTB46UaGUXpjrE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758184271; c=relaxed/simple;
-	bh=G4M2r631pn7Zt96E0MYNERhodv6pTD5S3MULZ7MUpBQ=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=e8R8FzH0Kz/4orFqGwBGTI477KICTx+aJdT8PXYmBZpJnIlYpcZDj4SsVxUZ/H7FbLrx3dvO8TvAKA6DOi5/xwjoCFGPBLOgZfm5Fb6KZxRtmiLCD9Kbm3JLjOVc5wM9etpMtWXgS2BnERUTdyWeQfhWaOI8BTjldKgqD5dafts=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=lu4vPTDS; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=frcmEIKN; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1758184267;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=G4M2r631pn7Zt96E0MYNERhodv6pTD5S3MULZ7MUpBQ=;
-	b=lu4vPTDSDrmy1XdWHB/sLy0SqaZOEv6ADAZtGJcbBWuiqi3NXackrLMUa4tY70nStxmHQA
-	f8GocqMXu9uQQHpWm8RQ1MnUjy/yB223tXLGwSPWpLvbe+bG77ut89Sa2dbqm0Dj7zPl5/
-	KjSY9Fztu2dN7qEPPiKmjZy3/KrXHpbUyd3eyNcVyw9wRuHqEU4HlAPWLzlLeex2tPABhn
-	/F/KzbMjHWTYSpb+FXU43HSdfmRwjlFJyi0g4EOQ424a8idA/64/at4BA99lxMRWdQ50hM
-	8h3x/NRaUtu5mekRqCYs/6m7W1bp7plPQv5hefziiscO21wnV9LRIbeKIZeXYg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1758184267;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=G4M2r631pn7Zt96E0MYNERhodv6pTD5S3MULZ7MUpBQ=;
-	b=frcmEIKN8MoYfH2Xt5r/GzN/HG2lhTn34uPmygvDmSBBiNytSkGd5EZuf12+Z2VFeRcl2h
-	Nbh+prw79Xw3v1AQ==
-To: "Rafael J. Wysocki" <rafael@kernel.org>, LKML
- <linux-kernel@vger.kernel.org>
-Cc: Randy Dunlap <rdunlap@infradead.org>, Linux PM
- <linux-pm@vger.kernel.org>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v1] smp: Fix up and expand the smp_call_function_many()
- kerneldoc
-In-Reply-To: <CAJZ5v0gEh-xoKdgAgUvnGzPV6AO51=ZagHXNCrC4BfRZk6Oydw@mail.gmail.com>
-References: <6191405.lOV4Wx5bFT@rafael.j.wysocki>
- <CAJZ5v0gEh-xoKdgAgUvnGzPV6AO51=ZagHXNCrC4BfRZk6Oydw@mail.gmail.com>
-Date: Thu, 18 Sep 2025 10:31:06 +0200
-Message-ID: <87h5x088mt.ffs@tglx>
+	s=arc-20240116; t=1758189615; c=relaxed/simple;
+	bh=Bse43jyzR8nZcEl4pAQd2Sdp31p7Bh/3Ilo+I2o2rJA=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XkhUp/KuaVn+3qS1IelpY1V0rYksfrD8xieJof0GF2xju9Jr6sa+bju8SxLPIeGvuAWQHpXZMPURE/AF52J1JlS//q7Ka7wWxH2TqDJXe9rmbxuZJ6fzQZYwr8rioxfiMXGbWcs+oYUJqyVHjxfYmLQiVP1/RjLZIYSkjkbCx34=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=tsgj5sal; arc=none smtp.client-ip=198.47.19.245
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from lelvem-sh01.itg.ti.com ([10.180.77.71])
+	by fllvem-ot03.ext.ti.com (8.15.2/8.15.2) with ESMTP id 58I9xqX71721643;
+	Thu, 18 Sep 2025 04:59:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1758189592;
+	bh=38CN86+v/N3yFeHrI8mpeV2lMrT0UcLaFt3ugTYePww=;
+	h=Date:From:To:CC:Subject:References:In-Reply-To;
+	b=tsgj5salexCwGPpZCXDQDFIU1+Hr0BUPeO100cAx0k7uv3bkMyqjLbtZfon1aGGY3
+	 vZxWPSG+FkIFsunHQRfvFwJ3gDfKIN/qIduzHHRcPi8limvOKOu3QZa5mzYqTx9MhC
+	 15bPn/eNvj+Gj96Smuc0Ig7TRDH7LE1COliYUPp4=
+Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
+	by lelvem-sh01.itg.ti.com (8.18.1/8.18.1) with ESMTPS id 58I9xqTX1465831
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-SHA256 bits=128 verify=FAIL);
+	Thu, 18 Sep 2025 04:59:52 -0500
+Received: from DFLE209.ent.ti.com (10.64.6.67) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55; Thu, 18
+ Sep 2025 04:59:52 -0500
+Received: from lelvem-mr05.itg.ti.com (10.180.75.9) by DFLE209.ent.ti.com
+ (10.64.6.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
+ Transport; Thu, 18 Sep 2025 04:59:52 -0500
+Received: from localhost (lcpd911.dhcp.ti.com [172.24.233.130])
+	by lelvem-mr05.itg.ti.com (8.18.1/8.18.1) with ESMTP id 58I9xoAl683748;
+	Thu, 18 Sep 2025 04:59:51 -0500
+Date: Thu, 18 Sep 2025 15:29:50 +0530
+From: Dhruva Gole <d-gole@ti.com>
+To: Peng Fan <peng.fan@nxp.com>
+CC: Ulf Hansson <ulf.hansson@linaro.org>,
+        "Rafael J. Wysocki"
+	<rafael@kernel.org>, Len Brown <lenb@kernel.org>,
+        Pavel Machek
+	<pavel@kernel.org>, Peter Chen <peter.chen@kernel.org>,
+        Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer
+	<s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Xu Yang <xu.yang_2@nxp.com>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <imx@lists.linux.dev>, <arm-scmi@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v3 1/4] pmdomain: core: Introduce
+ device_set/get_out_band_wakeup()
+Message-ID: <20250918095950.h7wmz2qj5e6khtwr@lcpd911>
+References: <20250902-pm-v3-0-ffadbb454cdc@nxp.com>
+ <20250902-pm-v3-1-ffadbb454cdc@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20250902-pm-v3-1-ffadbb454cdc@nxp.com>
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-On Tue, Sep 16 2025 at 16:13, Rafael J. Wysocki wrote:
+On Sep 02, 2025 at 11:33:00 +0800, Peng Fan wrote:
+> For some cases, a device could still wakeup the system even if its power
+> domain is in off state, because the device's wakeup hardware logic is
+> in an always-on domain.
+> 
+> To support this case, introduce device_set/get_out_band_wakeup() to
+> allow device drivers to control the behaviour in genpd for a device
+> that is attached to it.
+> 
 
-> On Tue, Sep 9, 2025 at 1:44=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.o=
-rg> wrote:
->>
->> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->>
->> The smp_call_function_many() kerneldoc comment got out of sync with the
->> function definition (bool parameter "wait" is incorrectly described as a
->> bitmask in it), so fix it up by copying the "wait" description from the
->> smp_call_function() kerneldoc and add information regarding the handling
->> of the local CPU to it.
->>
->> Fixes: 49b3bd213a9f ("smp: Fix all kernel-doc warnings")
->> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->
-> It's been a week and no feedback.
->
-> Well, in the further absence of any, I'll assume no concerns and just
-> queue this up.
+Thinking more into it, to me it seems like if the intent here is to only
+allow the device drivers to figure out whether they should be or not be
+executing the suspend/resume_noirqs then that can still be checked by
+wisely using the device set_wakeup APIs in the driver itself.
 
-Sorry, was distracted. No objections from my side. Did you queue it
-already?
+Not sure why this patch should be necessary for a
+driver to execute the suspend_noirq or not. That decision can very well
+be taken inside the driver's suspend resume_noirq hooks based on wakeup
+capability and wake_enabled statuses.
 
+Just a pseudo code:
+```
+driver_suspend_noirq () {
+	if (device_may_wakeup()) {
+		// do the sequence where the power domain might get turned off
+		// but like you say device can do some out band wakeup
+		return XXX;
+	}
+	// regular suspend sequence here... maybe inband wakeup config / clk
+	// disable etc...
+}
+ ```
+
+And something similar in resume_noirq?
+
+Just need to make sure that the probe func does the
+device_set_wakeup_enable or capable stuff correctly as per your H/w and
+wakeup requirements...
+
+
+-- 
+Best regards,
+Dhruva Gole
+Texas Instruments Incorporated
 
