@@ -1,183 +1,144 @@
-Return-Path: <linux-pm+bounces-34992-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-34993-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB024B869A9
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 21:00:50 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 70457B86B05
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 21:33:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 684D656446D
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 19:00:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D5AE0480518
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Sep 2025 19:33:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DD022D3ED0;
-	Thu, 18 Sep 2025 19:00:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E15A22D838B;
+	Thu, 18 Sep 2025 19:33:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Oowgo4YY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YlGWVZsw"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 319EF23AE62;
-	Thu, 18 Sep 2025 19:00:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EE8621B9E7;
+	Thu, 18 Sep 2025 19:33:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758222042; cv=none; b=mhYvnbMUmmmXniQVRnbBa4T/BWHohi0oWLboS4ZcfgRx8wXXZ89fLEXGFC5n/m0fSTu9nOfIlRIKzBTC5HezBfOy6g+nsj8RqDWo924j+qK/0vqdNVebGk1gmLzfz9SBsIumXHcHrwaQpqxguk3A9Mh47zUg5avUILyCkFdf41k=
+	t=1758223993; cv=none; b=qOD9q2ldcS0dBKvCKfAbGyrgHq9BMJQ9+SjwM05+f8DhrQCXEmCbNjIYaJP0xtUjwaD7fiSPnfYdUVZBpvrDh+UGTh4Qkc3PxBg97D7rNzcGJekrLf9a16bq4H2ix47vlhk/dvcSWhWwCCYPENCGXSJwZ7jjYwtN7XvLtZm5wWk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758222042; c=relaxed/simple;
-	bh=ef0mTUC0aOMKx4QFCiLnqXP82GZHO1F+FgK59dzSrlg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fzQsMmob2TnVnILm+fCkYt6gwXUKS852rJtXt+U1VThTcMADRFf2OF2Nwqs9hYQSIzGS0ucsjdHVVzhvABeoTYPLWE3Q8ThoXkp6vMHWHFY6Wdbh7C33SN0MUQwp0ZsrqkEcqD1GwH9NYWDtVemAwb1691ZbCz+aIAe0s/q+GXY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Oowgo4YY; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758222040; x=1789758040;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=ef0mTUC0aOMKx4QFCiLnqXP82GZHO1F+FgK59dzSrlg=;
-  b=Oowgo4YYfVh2MruJgeRr5276ZAaKB/9coD93mJZaDxDt8NQ/RmJtmRMs
-   x0N4MVKwwe7NNGPJnGvaprmb8akvEDgfeCZ1RIJlFpoubGbKdYw/EtcVy
-   QQUN9z1seEnYxZ/cis8TqNB6Ui4DMEpnLI5NXRaDTnLO9K3rDTxaPSa3S
-   YsSbMUkC7pe8y6DWYNkUvkpBxVYQkGrVaEvZtZ0egFG1TBKakAENpeKmv
-   jji2V/bwAqw+aS5T1BAFER5uTbkbyHb5HgzlNi5rL9zKvRKKrCOWSNLNb
-   Jh9/UqQ86ti9JAhT0soEbynQBDRaDe0QCWG+f16Shih9e+1ditd+jx5za
-   g==;
-X-CSE-ConnectionGUID: v50uP0dsTkGaSEkklLpPDQ==
-X-CSE-MsgGUID: XikY+1EBS+G3CYMKaV4mvw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11557"; a="59785092"
-X-IronPort-AV: E=Sophos;i="6.18,275,1751266800"; 
-   d="scan'208";a="59785092"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2025 12:00:40 -0700
-X-CSE-ConnectionGUID: lsksx+3EQUqb4vrXiQW2XA==
-X-CSE-MsgGUID: qfVbTbAJQF+iIHcpl+feOQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,275,1751266800"; 
-   d="scan'208";a="174747856"
-Received: from smile.fi.intel.com ([10.237.72.51])
-  by orviesa006.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2025 12:00:33 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
-	(envelope-from <andriy.shevchenko@intel.com>)
-	id 1uzJrp-00000004Ad0-3os0;
-	Thu, 18 Sep 2025 22:00:29 +0300
-Date: Thu, 18 Sep 2025 22:00:29 +0300
-From: Andy Shevchenko <andriy.shevchenko@intel.com>
-To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>
-Cc: Andy Shevchenko <andy.shevchenko@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	sboyd@kernel.org, jic23@kernel.org, dlechner@baylibre.com,
-	nuno.sa@analog.com, andy@kernel.org, arnd@arndb.de,
-	gregkh@linuxfoundation.org, srini@kernel.org, vkoul@kernel.org,
-	kishon@kernel.org, sre@kernel.org, krzysztof.kozlowski@linaro.org,
-	linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-	linux-pm@vger.kernel.org, kernel@collabora.com, wenst@chromium.org,
-	casey.connolly@linaro.org,
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>
-Subject: Re: [PATCH v4 2/7] nvmem: qcom-spmi-sdam: Migrate to
- devm_spmi_subdevice_alloc_and_add()
-Message-ID: <aMxWzTxvMLsVWbDB@smile.fi.intel.com>
-References: <20250916084445.96621-1-angelogioacchino.delregno@collabora.com>
- <20250916084445.96621-3-angelogioacchino.delregno@collabora.com>
- <t3uk3k4h3l53yajoe3xog2njmdn3jhkmdphv3c4wnpvcqniz4n@opgigzazycot>
- <aMlnp4x-1MUoModr@smile.fi.intel.com>
- <mknxgesog6aghc6cjzm63g63zqbqvysxf6ktmnbrbtafervveg@uoiohk3yclso>
- <CAHp75Vf7KrsN7Ec9zOvJoRuKvkbrJ5sMv7pVv6+88tPX-j_9ZA@mail.gmail.com>
- <er7dkmzutsu3ooegeihjzngi6l3hol5iaohecr3n5bolfse3tj@xeedlx2utwym>
+	s=arc-20240116; t=1758223993; c=relaxed/simple;
+	bh=SiTsMJ0sXAvpCnRX8FDPv8MfV2YWSlcEA47DenlZULY=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=fGhViwm+q2NMeUEu8m7/lJLhrFTxPZKdVYccF8r4IdjBUh+DTeKFxa3tWjq6INQZSV1rJfpZkEYVG4TzvWXZWDR15GevwTUDVspB0r5gGWlUkSQ+nHJyykfswEBmUjQQkR6dm8lNsTQhH8VIV9x4HeCuGHXuh4QDdDLDKi+FwSc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YlGWVZsw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6849EC4CEE7;
+	Thu, 18 Sep 2025 19:33:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1758223993;
+	bh=SiTsMJ0sXAvpCnRX8FDPv8MfV2YWSlcEA47DenlZULY=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=YlGWVZsw4RvC4JibN0EA6ibUfzsD04RlN5WeB4D1zYQJ9gFHptEmnMVPmNBfSr3bB
+	 HH0XQZaLMzje1GGD7MwYt/JCmyf05k0dQ6elVo0kMqFC6RFQERQ2PASS0IlJFTGjkC
+	 TM63BT3RirjMC9mwtoe83aVhq5IgPpoiCWPo3XrZAvth7Ae6b/S0KHw5UclcLM357T
+	 vBP+w/K7TuYScKef3bSEN7M147yQI0P5i48fs3CaLS+hEszfe9jT4ZharfxIxLD6Rf
+	 OBJrM7gKQOK0jhPAl/N8uNKTH4OqrvrxhtqD04A7yLGkDGjRLWIlXn6DNb0lwSs5lw
+	 A4+l3vl0alafw==
+From: Sven Peter <sven@kernel.org>
+To: Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+	Neal Gompa <neal@gompa.dev>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Hector Martin <marcan@marcan.st>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Joerg Roedel <joro@8bytes.org>,
+	Will Deacon <will@kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Mark Kettenis <kettenis@openbsd.org>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Jassi Brar <jassisinghbrar@gmail.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>,
+	Simona Vetter <simona@ffwll.ch>,
+	Sasha Finkelstein <fnkl.kernel@gmail.com>,
+	Marcel Holtmann <marcel@holtmann.org>,
+	Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	van Spriel <arend@broadcom.com>,
+	Lee Jones <lee@kernel.org>,
+	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Michael Turquette <mturquette@baylibre.com>,
+	=?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>,
+	Vinod Koul <vkoul@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Marc Zyngier <maz@kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Keith Busch <kbusch@kernel.org>,
+	Jens Axboe <axboe@kernel.dk>,
+	Christoph Hellwig <hch@lst.de>,
+	Sagi Grimberg <sagi@grimberg.me>,
+	Jaroslav Kysela <perex@perex.cz>,
+	Takashi Iwai <tiwai@suse.com>,
+	Janne Grunau <j@jannau.net>
+Cc: Sven Peter <sven@kernel.org>,
+	asahi@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	iommu@lists.linux.dev,
+	linux-gpio@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	linux-bluetooth@vger.kernel.org,
+	linux-wireless@vger.kernel.org,
+	linux-pwm@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	linux-clk@vger.kernel.org,
+	dmaengine@vger.kernel.org,
+	linux-sound@vger.kernel.org,
+	linux-spi@vger.kernel.org,
+	linux-nvme@lists.infradead.org
+Subject: Re: (subset) [PATCH 00/37] arm64: Add initial device trees for Apple M2 Pro/Max/Ultra devices
+Date: Thu, 18 Sep 2025 21:32:52 +0200
+Message-Id: <175822390213.30186.12188566922096991002.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
+In-Reply-To: <20250828-dt-apple-t6020-v1-0-507ba4c4b98e@jannau.net>
+References: <20250828-dt-apple-t6020-v1-0-507ba4c4b98e@jannau.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <er7dkmzutsu3ooegeihjzngi6l3hol5iaohecr3n5bolfse3tj@xeedlx2utwym>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-On Wed, Sep 17, 2025 at 02:47:22PM +0200, Uwe Kleine-König wrote:
-> On Tue, Sep 16, 2025 at 07:20:20PM +0300, Andy Shevchenko wrote:
-> > On Tue, Sep 16, 2025 at 6:11 PM Uwe Kleine-König
-> > <u.kleine-koenig@baylibre.com> wrote:
-> > > On Tue, Sep 16, 2025 at 04:35:35PM +0300, Andy Shevchenko wrote:
-> > > > On Tue, Sep 16, 2025 at 03:24:56PM +0200, Uwe Kleine-König wrote:
-> > > > > On Tue, Sep 16, 2025 at 10:44:40AM +0200, AngeloGioacchino Del Regno wrote:
-
-...
-
-> > > > > > +MODULE_IMPORT_NS("SPMI");
-> > > > >
-> > > > > If it's exactly the files that #include <linux/spmi.h> should have that
-> > > > > namespace import, you can put the MODULE_IMPORT_NS into that header.
-> > > >
-> > > > Which makes anyone to import namespace even if they just want to use some types
-> > > > out of the header.
-> > >
-> > > Notice that I carefully formulated my suggestion to cope for this case.
-> > 
-> > And I carefully answered.
+On Thu, 28 Aug 2025 16:01:19 +0200, Janne Grunau wrote:
+> This series adds device trees for Apple's M2 Pro, Max and Ultra based
+> devices. The M2 Pro (t6020), M2 Max (t6021) and M2 Ultra (t6022) SoCs
+> follow design of the t600x family so copy the structure of SoC *.dtsi
+> files.
 > 
-> I tend to disagree. If that anyone only wants some type from the header
-> but not the namespace, the if part of my statement isn't given any more.
-> Still your reply felt like objection while logically it's not.
-
-You assumed that in case that the header that is *currently* included in the
-users, may be the one that used by the same users that needs an imported
-namespace. Okay, *now* (or today) it's not a problem, but *in the future* it
-might be *when* one wants to use *just* types from it.
-I don't think this is likely to happen, but in general including something
-"by default" is not a good idea. That's what I'm objecting to.
-
-> > Your proposal won't prevent _other_ files to
-> > use the same header in the future without needing a namespace to be
-> > imported.
+> t6020 is a cut-down version of t6021, so the former just includes the
+> latter and disables the missing bits.
 > 
-> Oh yes. But that's true for every change: If you change it further you
-> have to cope for what is already there.
-> 
-> > > > This is not good solution generally speaking. Also this will
-> > > > diminish one of the purposes of _NS variants of MODULE*/EXPORT*, i.e. make it
-> > > > invisible that some of the code may become an abuser of the API just by someone
-> > > > include the header (for a reason or by a mistake).
-> > >
-> > > Yeah, opinions differ. In my eyes it's quite elegant.
-> > 
-> > It's not a pure opinion,
-> 
-> That's your opinion :-)
+> [...]
 
-All we said is just set of opinions. Facts are provided by scientific
-experiments.
+Applied to git@github.com:AsahiLinux/linux.git (apple-soc/drivers-6.18), thanks!
 
-> > it has a technical background that I
-> > explained. The explicit usage of MODULE_IMPORT_NS() is better than
-> > some header somewhere that might even be included by another and be
-> > proxied to the code that doesn't need / want to have this namespace to
-> > be present. Puting MODULE_IMPORT_NS() into a _header_ is a minefield
-> > for the future.
-> 
-> Well, for a deliberate abuser the hurdle to have to add the explicit
-> MODULE_IMPORT_NS() isn't that big. And a mistaken abuser won't explode,
-> just generate a few bytes overhead that can be fixed when noticed.
-> 
-> In my opinion that is an ok cost for the added elegance.
+[03/37] pmdomain: apple: Add "apple,t8103-pmgr-pwrstate"
+        https://github.com/AsahiLinux/linux/commit/442816f97a4f
 
-I tend to disagree. The practice to include (be lazy) something just in case is
-a bad practice. Developer has to know what they are doing. We have already too
-much bad code in the kernel and opening new ways for more "vibe:ish" coding is
-a road to accumulated issues in the future.
-
-I,o.w. I principally disagree on putting MODULE_IMPORT_NS() into the header
-file.
-
+Best regards,
 -- 
-With Best Regards,
-Andy Shevchenko
-
+Sven Peter <sven@kernel.org>
 
 
