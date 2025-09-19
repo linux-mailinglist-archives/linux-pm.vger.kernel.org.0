@@ -1,334 +1,238 @@
-Return-Path: <linux-pm+bounces-35048-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35049-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EAECDB8A698
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Sep 2025 17:50:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BFED9B8A6D7
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Sep 2025 17:53:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4F5E01CC528D
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Sep 2025 15:50:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C6B487E7EF6
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Sep 2025 15:51:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A31232126F;
-	Fri, 19 Sep 2025 15:49:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D0ED31E0ED;
+	Fri, 19 Sep 2025 15:51:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m8H4AVhb"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="TQnS83S5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 685C1321264
-	for <linux-pm@vger.kernel.org>; Fri, 19 Sep 2025 15:49:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8226318146
+	for <linux-pm@vger.kernel.org>; Fri, 19 Sep 2025 15:51:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758296969; cv=none; b=NiaEuaPZL5+MbC/zRhhr93GETALzicJVfhQF7ZDvbFh6AR6Npy8xluNEl7g+b0lUvy/aXghvaOAjUb/qkH/NxhQ7LzPx7sOmMXyQ6+VosOl0Le45iXXbE+UpWPa3HgQ9QPtGxDQ/BfjJ0ngAB63hthn83tBPrVDO/uV66MmfX+c=
+	t=1758297086; cv=none; b=kMuC3iVDZ7zcgejZqSJofgVJymEK046HMMxXL96+m6fuBtPJs6YoEeIJO8T0DJKz8ZduyboyHmUQ4MInKAS5d0HkKlBcWBtCMjxyMhs8eWxM8uaNOJE7bY9kqGFSNMkZ+/s3r/m+4zTq1Ev6Rgn8sCrzNme5/9lmqBePz+PSjKk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758296969; c=relaxed/simple;
-	bh=OjeUS1xUO9VKQqDyPDEKkqWfbtIP9n1TJO8kyFgx4Fo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ajzdPk+BC778WaTBql0l5SJGiFh8nBPPpVBrqulqffTuVuef5LbI8lEsVX18Af15hK7jlVb88GCmre/AtZFs0d34sQoaHI01YZi+jFCG7tAiPDMnCTU9gnTKnlXSs8uaecqtum7Mw0475OQD3JZwFqkBzUbJRyg0ZZ2EvUsY/LY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m8H4AVhb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16A02C4CEF1
-	for <linux-pm@vger.kernel.org>; Fri, 19 Sep 2025 15:49:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758296969;
-	bh=OjeUS1xUO9VKQqDyPDEKkqWfbtIP9n1TJO8kyFgx4Fo=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=m8H4AVhbdj79oX4PtqPt6/LsXicElgzLJlU65dEcUvYdqgh+kzzQdma3aLQrWrTsl
-	 tKtGSAGfLgGwl8uk4AqA087EVjchomJT1Qq54Y91zGvCYBiHUZ2jhw2ffxq8Z3s1WH
-	 xoUA7DRcfjCnRS06JIAVUa5F3lOLqW2aVLeBRmyp6T57m6xJAtFyEtLEmsREOCjEjM
-	 a3Mx0P5ZhG/O2OHNH7nPTCh+lfmiXsbtzx09nWtUfpiiK/5nnhANq+TZ9rBRDIoawn
-	 Y1S1jO6YEb+dti4b7wvNVWCkBDP+4VWw3zY8Q9MByerRP3K70RMS9Vu8NtIWe4Bmyv
-	 t2oTwXvHu6IcA==
-Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-62355a687e6so1582847eaf.1
-        for <linux-pm@vger.kernel.org>; Fri, 19 Sep 2025 08:49:29 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUFfm9v47GEIBtW3fU3Rdew21U1fOrSQHsj1/qZWg8xUNYsVJFqqwLpG0jfmXh58ZeTUfQ+HDLBVw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywa9fQJh+wy9gcrpz0hfmk2SpH4iSCgkPjDTFWCcvNJ8IJn7KM8
-	pvPEaGjWfMINMZRjZch+mizqIQdGT4fQaPzwWYwK6stfMm1skQm1+61ujgeZkHPxqp2T+nCJmG1
-	vo5QtMBooa+ecxkqkKrVoDJQNieszyck=
-X-Google-Smtp-Source: AGHT+IG0LxZ/DsMKuutYisOP3A4z7jBmYhlzCwVDoi7MSN6EsWz+45UfZ9ff30swMbXGa2XMvHFdAq1gt8b2ZSXJnxQ=
-X-Received: by 2002:a05:6808:11cd:b0:43d:2454:b69f with SMTP id
- 5614622812f47-43d6c115e33mr1815898b6e.10.1758296968354; Fri, 19 Sep 2025
- 08:49:28 -0700 (PDT)
+	s=arc-20240116; t=1758297086; c=relaxed/simple;
+	bh=TK+FiTveEwrbiejIKycFmZ6vZ/ypwSUiSrrtTb1yXb4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MvPQ8ZufURAfIJTYQd0LPv0oFX4+BMCZ4+nl/92xPI6muKSZLVmh8b3715dWPBQo9s1gYddUwcJLAwpNv0bTPyUES7/4G19gLPd2g5uNf3Fa+ZNr6kxS9XV6HsFmErWDUUDXw1TaGeYVtTj3K9vo1Wi623L0GFIQ3yjALbvkAMw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=TQnS83S5; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-45f2b062b86so14664865e9.1
+        for <linux-pm@vger.kernel.org>; Fri, 19 Sep 2025 08:51:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1758297082; x=1758901882; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mk5UbU1vmdkhvVI9gXoWyB4lbjlenJW2I4nrsVx97aE=;
+        b=TQnS83S56EOiwL9IqqlLIN9Sa3T6Fonx/MtQ5MzaWdRCE33s6OZnTn38qu3r5TEJoN
+         jNhay7pgS+tdkVeEUv9L40EzV6/u9U1PRIucSQ56jMzI8mr68n6y6nRipDmFNDVB4VrA
+         d3txarGYTOSiiJ1/KvfuVCMXOm6gp829d3iCpXT12gTi6X2T2l1CzJw8x/Vf0N5e/zc1
+         wCKrhGDtLqT3cPDoCU1ntVoXZ/tGwaVa0IB5ZD4thUUWiwoAW2uuRO2m813vgGLa4FhU
+         fzIYzw1DGp/79ae9R7PhhSIHfXvpoWjqqaq161YpXWrQXRjzC/WpqN83TaU/VHRvm9hM
+         72rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758297082; x=1758901882;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mk5UbU1vmdkhvVI9gXoWyB4lbjlenJW2I4nrsVx97aE=;
+        b=SFa7L3UWh6/ouOPMWf2x9FGSjvimv3jJnAyyJ5+jNpT5UcOS0kRmBMdBi8ej9TWpgi
+         4g1ydYDP1DvxM8g/0jAX7YZmNBLtGdd7hr2Eld3cnqM7Hatw8S63Hk9MiflXIpvo0v5R
+         4xFCQTg8D9aAJWvj8kakF/ql0BX6lLGXfjN0fFu8Xsc2nRc07/GQGvUdMb2nJIe03zrW
+         +PvqxQbvOiwdEm9C1C/fs8XCM/JMpiXPuxXTUy6Zu04d2640xoEHVXP83TdmC2SWQRZY
+         Rb3ocC8J5l7WfNp+wxMRz6aOki5h59w+Yw5CWeneoPifIV5JfmhydfAYK8vuBpGDjhPp
+         s3hQ==
+X-Gm-Message-State: AOJu0Yyp23JQMPRpDTuDPzSmCvjn8rqXhFvl46RvKLXMygh+xVysCdcx
+	6UNnp8CdqCFl7jwQVH9/sXHntu4t0SM+kwbJxwM+2EKX72zjraftBiHdeOeZDXLbv2o=
+X-Gm-Gg: ASbGncvfP9L7ZUEPlM4l6sMoS79+IkZD+X2p3XVyJEf8IBFTpBb4oyFCicdBWSYbHIS
+	J1ugqtoWEE3OXjoWWApM9HUIZku2TtlKXqd8SykKXqfSKW7e017otvLYZecaTB0I2v1xGqLWiBF
+	fXbDtOB6koCyI7Ih5wLD2GmBVPzDY1IgXwkaReEA9v7OtKN7z/aN0Mm9eyx9NiPaR0ouvkCMaQP
+	KoDuWiaelX6RMRM1gD2wgZPhiayoMBzJ8AXdMKgmiz03I7t2lG2vjRb9urIqS7cwhg4zRT+NDQB
+	0bVhMQ+xY/nczTMhOWMad6Pas+8Hy10caCrnuW+ybWyEXZqJEdHmqDn4t4z/3TM72ErRo7OifsB
+	v4R8ojsfeFPzzJlU+r+hpB7GVk61p/W5sJnEq85KryUA1qRUz5JW/kURNoC//6ajLfAua+zG8t4
+	hjFg==
+X-Google-Smtp-Source: AGHT+IEottwmKNmGH3CS9GghPYQKwlqbFMuq8pbSqNH1dciybusPD40QQuLbFVR/u9qMf8tPOI+eLA==
+X-Received: by 2002:a05:600c:350d:b0:45f:2843:e779 with SMTP id 5b1f17b1804b1-467ee3057d8mr35673815e9.8.1758297082008;
+        Fri, 19 Sep 2025 08:51:22 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:8ffd:205a:6719:49c1? ([2a05:6e02:1041:c10:8ffd:205a:6719:49c1])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-469bd07268csm13103315e9.14.2025.09.19.08.51.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 Sep 2025 08:51:21 -0700 (PDT)
+Message-ID: <d9392dbc-806a-41df-8992-28c3d6132309@linaro.org>
+Date: Fri, 19 Sep 2025 17:51:20 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <878qimv24u.wl-tiwai@suse.de> <CAJZ5v0hJvsuOTj5j-0Jn-c9TPnbm70wPvdBkop2hRrdweoncDg@mail.gmail.com>
- <87jz1uao65.wl-tiwai@suse.de> <12751070.O9o76ZdvQC@rafael.j.wysocki>
- <87ldma8sq1.wl-tiwai@suse.de> <87jz1u8sn9.wl-tiwai@suse.de>
-In-Reply-To: <87jz1u8sn9.wl-tiwai@suse.de>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 19 Sep 2025 17:49:16 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0ggvL420OmU2G=0kEGeiJct3hiBPTHCn5wFwwLkQpugCw@mail.gmail.com>
-X-Gm-Features: AS18NWDicNoivABKnZkYyPyfwGfiStk5PMDvvuyS4L5rsYDOpnP5PW5u-umpprA
-Message-ID: <CAJZ5v0ggvL420OmU2G=0kEGeiJct3hiBPTHCn5wFwwLkQpugCw@mail.gmail.com>
-Subject: Re: PM runtime auto-cleanup macros
-To: Takashi Iwai <tiwai@suse.de>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 2/4] thermal: qoriq: add i.MX93 tmu support
+To: Jacky Bai <ping.bai@nxp.com>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+ Sascha Hauer <s.hauer@pengutronix.de>, Fabio Estevam <festevam@gmail.com>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>
+Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+ Alice Guo <alice.guo@nxp.com>, Frank Li <Frank.Li@nxp.com>
+References: <20250821-imx93_tmu-v4-0-6cf5688bf016@nxp.com>
+ <20250821-imx93_tmu-v4-2-6cf5688bf016@nxp.com>
+Content-Language: en-US
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20250821-imx93_tmu-v4-2-6cf5688bf016@nxp.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Fri, Sep 19, 2025 at 3:43=E2=80=AFPM Takashi Iwai <tiwai@suse.de> wrote:
->
-> On Fri, 19 Sep 2025 15:41:42 +0200,
-> Takashi Iwai wrote:
-> >
-> > On Fri, 19 Sep 2025 15:05:04 +0200,
-> > Rafael J. Wysocki wrote:
-> > >
-> > > On Friday, September 19, 2025 9:37:06 AM CEST Takashi Iwai wrote:
-> > > > On Thu, 18 Sep 2025 22:41:32 +0200,
-> > > > Rafael J. Wysocki wrote:
-> > > > >
-> > > > > On Thu, Sep 18, 2025 at 10:19=E2=80=AFPM Rafael J. Wysocki <rafae=
-l@kernel.org> wrote:
-> > > > > >
-> > > > > > On Thu, Sep 18, 2025 at 1:28=E2=80=AFPM Rafael J. Wysocki <rafa=
-el@kernel.org> wrote:
-> > > > > > >
-> > > > > > > On Thu, Sep 18, 2025 at 9:10=E2=80=AFAM Takashi Iwai <tiwai@s=
-use.de> wrote:
-> > > > > > > >
-> > > > > > > > On Wed, 17 Sep 2025 20:58:36 +0200,
-> > > > > > > > Rafael J. Wysocki wrote:
-> > > > > > > > >
-> > > > > > > > > Hi,
-> > > > > > > > >
-> > > > > > > > > Sorry for the delay.
-> > > > > > > > >
-> > > > > > > > > On Thu, Sep 11, 2025 at 9:31=E2=80=AFAM Takashi Iwai <tiw=
-ai@suse.de> wrote:
-> > > > > > > > > >
-> > > > > > > > > > On Wed, 10 Sep 2025 16:00:17 +0200,
-> > > > > > > > > > Takashi Iwai wrote:
-> > > > > > > > > > >
-> > > > > > > > > > > Hi,
-> > > > > > > > > > >
-> > > > > > > > > > > while I worked on the code cleanups in the drivers wi=
-th the recent
-> > > > > > > > > > > auto-cleanup macros, I noticed that pm_runtime_get*()=
- and _put*() can
-> > > > > > > > > > > be also managed with the auto-cleanup gracefully, too=
-.  Actually we
-> > > > > > > > > > > already defined the __free(pm_runtime_put) in commit =
-bfa4477751e9, and
-> > > > > > > > > > > there is a (single) user of it in pci-sysfs.c.
-> > > > > > > > > > >
-> > > > > > > > > > > Now I wanted to extend it to pm_runtime_put_autosuspe=
-nd() as:
-> > > > > > > > > > >
-> > > > > > > > > > > DEFINE_FREE(pm_runtime_put_autosuspend, struct device=
- *,
-> > > > > > > > > > >            if (_T) pm_runtime_put_autosuspend(_T))
-> > > > > > > > > > >
-> > > > > > > > > > > Then one can use it like
-> > > > > > > > > > >
-> > > > > > > > > > >       ret =3D pm_runtime_resume_and_get(dev);
-> > > > > > > > > > >       if (ret < 0)
-> > > > > > > > > > >               return ret;
-> > > > > > > > > > >       struct device *pmdev __free(pm_runtime_put_auto=
-suspend) =3D dev;
-> > > > > > > > > > >
-> > > > > > > > > > > that is similar as done in pci-sysfs.c.  So far, so g=
-ood.
-> > > > > > > > > > >
-> > > > > > > > > > > But, I find putting the line like above at each place=
- a bit ugly.
-> > > > > > > > > > > So I'm wondering whether it'd be better to introduce =
-some helper
-> > > > > > > > > > > macros, e.g.
-> > > > > > > > > > >
-> > > > > > > > > > > #define pm_runtime_auto_clean(dev, var) \
-> > > > > > > > > > >       struct device *var __free(pm_runtime_put) =3D (=
-dev)
-> > > > > > > > > >
-> > > > > > > > > > It can be even simpler by assigning a temporary variabl=
-e such as:
-> > > > > > > > > >
-> > > > > > > > > > #define pm_runtime_auto_clean(dev) \
-> > > > > > > > > >         struct device *__pm_runtime_var ## __LINE__ __f=
-ree(pm_runtime_put) =3D (dev)
-> > > > > > > > >
-> > > > > > > > > Well, if there's something like
-> > > > > > > > >
-> > > > > > > > > struct device *pm_runtime_resume_and_get_dev(struct devic=
-e *dev)
-> > > > > > > > > {
-> > > > > > > > >         int ret =3D pm_runtime_resume_and_get(dev);
-> > > > > > > > >         if (ret < 0)
-> > > > > > > > >                 return ERR_PTR(ret);
-> > > > > > > > >
-> > > > > > > > >         return dev;
-> > > > > > > > > }
-> > > > > > > > >
-> > > > > > > > > It would be a matter of redefining the FREE to also take =
-error
-> > > > > > > > > pointers into account and you could do
-> > > > > > > > >
-> > > > > > > > > struct device *__dev __free(pm_runtim_put) =3D pm_runtime=
-_resume_and_get_dev(dev);
-> > > > > > > > > if (IS_ERR(__dev))
-> > > > > > > > >         return PTR_ERR(__dev);
-> > > > > > > >
-> > > > > > > > That'll work, too.  Though, I find the notion of __free() a=
-nd a
-> > > > > > > > temporary variable __dev a bit too cumbersome; it's used on=
-ly for
-> > > > > > > > auto-clean stuff, so it could be somewhat anonymous.
-> > > > > > >
-> > > > > > > No, it is not used only for auto-clean, it is also used for r=
-eturn
-> > > > > > > value checking and it represents a reference on the original =
-dev.  It
-> > > > > > > cannot be entirely anonymous because of the error checking pa=
-rt.
-> > > > > > >
-> > > > > > > The point is that this is one statement instead of two and so=
- it is
-> > > > > > > arguably harder to mess up with.
-> > > > > > >
-> > > > > > > > But it's all about a matter of taste, and I'd follow what y=
-ou and
-> > > > > > > > other guys suggest.
-> > > > > > > >
-> > > > > > > > FWIW, there are lots of code doing like
-> > > > > > > >
-> > > > > > > >         pm_runtime_get_sync(dev);
-> > > > > > > >         mutex_lock(&foo);
-> > > > > > > >         ....
-> > > > > > > >         mutex_unlock(&foo);
-> > > > > > > >         pm_runtime_put(dev);
-> > > > > > > >         return;
-> > > > > > > >
-> > > > > > > > or
-> > > > > > > >
-> > > > > > > >         ret =3D pm_runtime_resume_and_get(dev);
-> > > > > > > >         if (ret)
-> > > > > > > >                 return ret;
-> > > > > > > >         mutex_lock(&foo);
-> > > > > > > >         ....
-> > > > > > > >         mutex_unlock(&foo);
-> > > > > > > >         pm_runtime_put_autosuspend(dev);
-> > > > > > > >         return 0;
-> > > > > > > >
-> > > > > > > > and they can be converted nicely with guard() once when PM =
-runtime can
-> > > > > > > > be automatically unreferenced.  With my proposed change, it=
- would
-> > > > > > > > become like:
-> > > > > > > >
-> > > > > > > >         pm_runtime_get_sync(dev);
-> > > > > > > >         pm_runtime_auto_clean(dev);
-> > > > > > >
-> > > > > > > For the case in which the pm_runtime_get_sync() return value =
-is
-> > > > > > > discarded, you could define a guard and do
-> > > > > > >
-> > > > > > > guard(pm_runtime_get_sync)(dev);
-> > > > > > >
-> > > > > > > here.
-> > > > > > >
-> > > > > > > The case checking the return value is less straightforward.
-> > > > > > >
-> > > > > > > >         guard(mutex)(&foo);
-> > > > > > > >         ....
-> > > > > > > >         return;
-> > > > > > > >
-> > > > > > > > or
-> > > > > > > >
-> > > > > > > >         ret =3D pm_runtime_resume_and_get(dev);
-> > > > > > > >         if (ret)
-> > > > > > > >                 return ret;
-> > > > > > > >         pm_runtime_auto_clean_autosuspend(dev);
-> > > > > > > >         guard(mutex)(&foo);
-> > > > > > > >         ....
-> > > > > > > >         return 0;
-> > > > > > > >
-> > > > > >
-> > > > > > I guess what I'm saying means basically something like this:
-> > > > > >
-> > > > > > DEFINE_CLASS(pm_runtime_resume_and_get, struct device *,
-> > > > > >          if (!IS_ERR_OR_NULL(_T)) pm_tuntime_put(_T),
-> > > > > > pm_runtime_resume_and_get_dev(dev), struct device *dev)
-> > > > > >
-> > > > > > DEFINE_CLASS(pm_runtime_resume_and_get_auto, struct device *,
-> > > > > >          if (!IS_ERR_OR_NULL(_T)) pm_tuntime_put_autosuspend(_T=
-),
-> > > > > > pm_runtime_resume_and_get_dev(dev), struct device *dev)
-> > > > > >
-> > > > > > and analogously for pm_runtime_get_sync().
-> > > > >
-> > > > > And it kind of makes sense either.  Do
-> > > > >
-> > > > > CLASS(pm_runtime_resume_and_get, active_dev)(dev);
-> > > > > if (IS_ERR(active_dev))
-> > > > >         return PTR_ERR(active_dev);
-> > > > >
-> > > > > and now use active_dev for representing the device until it gets =
-out
-> > > > > of the scope.
-> > > >
-> > > > Yes, that's what I thought of as an alternative, too, but I didn't
-> > > > consider using only pm_runtime_resume_and_get().  Actually by this
-> > > > action, we can also "clean up" the API usage at the same time to us=
-e a
-> > > > single recommended API function, which is a good thing.
-> > > >
-> > > > That said, I like this way :)
-> > > >
-> > > > It'd be nice if this change can go into 6.18, then I can put the
-> > > > driver cleanup works for 6.19.  It's a bit late stage for 6.18, but
-> > > > this change is definitely safe and can't break, per se.
-> > >
-> > > OK, do you mean something like the patch below?
-> >
-> > Yes!
-> >
-> > An easy follower is the patch like below.
->
-> Err, I forgot to refresh before generating a patch.
-> The proper one is below.
->
->
-> Takashi
->
-> -- 8< --
-> Subject: [PATCH] PCI: Use PM runtime class macro for the auto cleanup
->
-> The newly introduced class macro can simplify the code.
-> Also, add the proper error handling for the PM runtime get, too.
->
-> Signed-off-by: Takashi Iwai <tiwai@suse.de>
+On 21/08/2025 08:23, Jacky Bai wrote:
+> For Thermal monitor unit(TMU) used on i.MX93, the HW revision info read
+> from the ID register is the same the one used on some of the QorIQ
+> platform, but the config has some slight differance. Add i.MX93 compatible
+> string and corresponding code for it.
+> 
+> Signed-off-by: Alice Guo <alice.guo@nxp.com>
+> Reviewed-by: Frank Li <Frank.Li@nxp.com>
+> Signed-off-by: Jacky Bai <ping.bai@nxp.com>
 > ---
->  drivers/pci/pci-sysfs.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/pci/pci-sysfs.c b/drivers/pci/pci-sysfs.c
-> index 5eea14c1f7f5..87c2311494bf 100644
-> --- a/drivers/pci/pci-sysfs.c
-> +++ b/drivers/pci/pci-sysfs.c
-> @@ -1475,8 +1475,9 @@ static ssize_t reset_method_store(struct device *de=
-v,
->                 return count;
->         }
->
-> -       pm_runtime_get_sync(dev);
-> -       struct device *pmdev __free(pm_runtime_put) =3D dev;
-> +       CLASS(pm_runtime_resume_and_get, pmdev)(dev);
-> +       if (IS_ERR(pmdev))
-> +               return PTR_ERR(pmdev);
+>   - v4 changes:
+>    - no
+> 
+>   - v3 changes:
+>    - use the drv data struct for match data and refine the code
+>    - update the copyright
+> 
+>   - v2 changes:
+>    - use the compatible match data to identify the i.MX93 TMU variant
+> ---
+>   drivers/thermal/qoriq_thermal.c | 18 +++++++++++++++++-
+>   1 file changed, 17 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/thermal/qoriq_thermal.c b/drivers/thermal/qoriq_thermal.c
+> index 01b58be0dcc64d14ca5e4bba654eed8f15e827fc..b2e634547271dcf512c714907baa162921d2d527 100644
+> --- a/drivers/thermal/qoriq_thermal.c
+> +++ b/drivers/thermal/qoriq_thermal.c
+> @@ -1,6 +1,7 @@
+>   // SPDX-License-Identifier: GPL-2.0
+>   //
+>   // Copyright 2016 Freescale Semiconductor, Inc.
+> +// Copyright 2025 NXP
+>   
+>   #include <linux/clk.h>
+>   #include <linux/err.h>
+> @@ -24,6 +25,7 @@
+>   #define TMTMIR_DEFAULT	0x0000000f
+>   #define TIER_DISABLE	0x0
+>   #define TEUMR0_V2		0x51009c00
+> +#define TEUMR0_V21		0x55000c00
+>   #define TMSARA_V2		0xe
+>   #define TMU_VER1		0x1
+>   #define TMU_VER2		0x2
+> @@ -66,6 +68,8 @@
+>   						   */
+>   #define REGS_V2_TEUMR(n)	(0xf00 + 4 * (n))
+>   
+> +#define GET_TEUMR0(drvdata)	(drvdata && drvdata->teumr0 ? drvdata->teumr0 : TEUMR0_V2)
 
-This error will propagate to user space AFAICS and some of the values
-may be confusing in that respect, so it may be better to return -ENXIO
-here.
+This is not adequate for code which will evolve. Please don't use this 
+macro.
 
->
->         if (sysfs_streq(buf, "default")) {
->                 pci_init_reset_methods(pdev);
-> --
+>   /*
+>    * Thermal zone data
+>    */
+> @@ -73,12 +77,17 @@ struct qoriq_sensor {
+>   	int				id;
+>   };
+>   
+> +struct tmu_drvdata {
+> +	u32 teumr0;
+> +};
+> +
+>   struct qoriq_tmu_data {
+>   	int ver;
+>   	u32 ttrcr[NUM_TTRCR_MAX];
+>   	struct regmap *regmap;
+>   	struct clk *clk;
+>   	struct qoriq_sensor	sensor[SITES_MAX];
+> +	const struct tmu_drvdata *drvdata;
+
+The drvdata pointer is not usually used.
+
+	u32 model;
+
+>   };
+>   
+>   static struct qoriq_tmu_data *qoriq_sensor_to_data(struct qoriq_sensor *s)
+> @@ -234,7 +243,7 @@ static void qoriq_tmu_init_device(struct qoriq_tmu_data *data)
+>   		regmap_write(data->regmap, REGS_TMTMIR, TMTMIR_DEFAULT);
+>   	} else {
+>   		regmap_write(data->regmap, REGS_V2_TMTMIR, TMTMIR_DEFAULT);
+> -		regmap_write(data->regmap, REGS_V2_TEUMR(0), TEUMR0_V2);
+> +		regmap_write(data->regmap, REGS_V2_TEUMR(0), GET_TEUMR0(data->drvdata));
+
+		
+	regmap_write(data->regmap, REGS_V2_TEUMR(0), data->model);
+>   	}
+>   
+>   	/* Disable monitoring */
+> @@ -319,6 +328,8 @@ static int qoriq_tmu_probe(struct platform_device *pdev)
+>   
+>   	data->ver = (ver >> 8) & 0xff;
+>   
+> +	data->drvdata = of_device_get_match_data(&pdev->dev);
+> +
+>   	qoriq_tmu_init_device(data);	/* TMU initialization */
+>   
+>   	ret = qoriq_tmu_calibration(dev, data);	/* TMU calibration */
+> @@ -376,9 +387,14 @@ static int qoriq_tmu_resume(struct device *dev)
+>   static DEFINE_SIMPLE_DEV_PM_OPS(qoriq_tmu_pm_ops,
+>   				qoriq_tmu_suspend, qoriq_tmu_resume);
+>   
+> +static const struct tmu_drvdata imx93_data = {
+> +	.teumr0 = TEUMR0_V21,
+> +};
+> +
+
+Do the change for everyone
+
+static const struct tmu_drvdata imx8mq_data = {
+	.model = TEUMR0_V2,
+};
+
+static const struct tmu_drvdata qoriq_data = {
+	.model = TEUMR0_V2,
+};
+
+>   static const struct of_device_id qoriq_tmu_match[] = {
+>   	{ .compatible = "fsl,qoriq-tmu", },
+>   	{ .compatible = "fsl,imx8mq-tmu", },
+> +	{ .compatible = "fsl,imx93-tmu", .data = &imx93_data },
+>   	{},
+>   };
+>   MODULE_DEVICE_TABLE(of, qoriq_tmu_match);
+
+Thanks
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
