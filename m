@@ -1,120 +1,317 @@
-Return-Path: <linux-pm+bounces-35028-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35029-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB6F0B897E9
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Sep 2025 14:40:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D58EEB89877
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Sep 2025 14:47:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 34AE13B9C98
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Sep 2025 12:40:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CC28C623166
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Sep 2025 12:46:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D311B1F3BBB;
-	Fri, 19 Sep 2025 12:40:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E31B51487E9;
+	Fri, 19 Sep 2025 12:46:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vp3gn7bA"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TL4zGo7v"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE3CC1EFF8D
-	for <linux-pm@vger.kernel.org>; Fri, 19 Sep 2025 12:40:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5090278F26
+	for <linux-pm@vger.kernel.org>; Fri, 19 Sep 2025 12:46:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758285624; cv=none; b=JafyMvAGrmpoIw4zH1vg46SygVNR+ReYppeM5xT1hdA0L674PMtduWFnOosHh6L9UyTrar6Kh/TuXB939Srm4mmaSplDhgDu0hzTCSRRhFdR7hBdy1EgQLy4RR/nrNP0MDvh+88onOLCK3TIc405JYZ6+3w/4/nwQWF17b8CsDk=
+	t=1758285982; cv=none; b=hcHPdWhVREaCNwbHcEYlu1IKWBxaFwwGvlSU4I+vt2oY53fwn0JYODJSRRXluJ7YPaz+lCDg75uF7xC2iD6Mr83epIhaBoMIJ3TYt3luf66jln6+2D9y9cvYJlf7A5DckC/T0hE4iryBc2TTS0C6zwj47/QzqD0PbOuxw6Fpp1k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758285624; c=relaxed/simple;
-	bh=IkhiQvxSVJBNEXYwVrCccUG3TFRY4PESJjnaQR6FiqY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=iPNLpx7yXLC3UT8MTabG7oMrC3a5PqgxLqZNtg3TAMIgMQUkEoivK8EShEPZZHzcP5wd3RpAo+TnNG/IfWJQM/lhwhGpqPXALH3EsMlk8SpjexcriI09Y4MD9egPRJbqv9WEPdJpGsLLxdOIJzIV+ofjH03ZtvpuPwy482wbbx0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vp3gn7bA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DF16C4CEF1
-	for <linux-pm@vger.kernel.org>; Fri, 19 Sep 2025 12:40:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758285624;
-	bh=IkhiQvxSVJBNEXYwVrCccUG3TFRY4PESJjnaQR6FiqY=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Vp3gn7bAQCSFP2rTtO+Egh2VmMfniuDrPcFxR0zdw5I2kIMjAUXHmvMEjS3VaHT3R
-	 RqFy8DlqsE2OMKIIalednDbl4IU/jAOc8gWHKHsEU9GScuRDdaO1du4nzcqr77WN67
-	 W01FPkbfe/NFk6GlFAtCtB9Df0KkbVjZchfkS6+615JJyHxJb2GfWwF+kPMyF27/6w
-	 NyYUnln7r63Z05ado5w/AO5TxA0pKJW+xB2XoIaJqJWdggw8cD5Uip0H+xyGWaU+it
-	 IUX4sfX9+WamWCuaaxX7uB0bODccJtEa3oaOiKiF2wgCWf6hJLPCL9FnR1uvcwFDlo
-	 Sz2NIgE+Ci+3Q==
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-328466c2aedso1852884fac.2
-        for <linux-pm@vger.kernel.org>; Fri, 19 Sep 2025 05:40:24 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWZxQYRGVksv4D3dYcqny4U+5Nb0ejxhSuVZYihrHIgYTuonBvWhJ4inD2TOX2zZjrIipnwlL97iA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwQ5ML8/PcQSCla6Pw/uSOdhAkCb/eRy1Dh8dDvVbBPIJ5bffaH
-	cvI93QT49GerGCw/VRsnoxnDwouR37DQiMq4u7wfJ8hRiPTUuKLzagQEnMxZHVdQD5SXUql9CRe
-	LFJfADrFaSwlLNZdBfwuua7+y++4eZtY=
-X-Google-Smtp-Source: AGHT+IGN6yKheRKFWPzTBebZECqkVSf5jQ9sRYeDfhkyJi3xILFaY9CJLuH+Txi2bawvjGDTvzV+EzhA/dpIsY+2+nk=
-X-Received: by 2002:a05:6808:bc8:b0:438:257d:6663 with SMTP id
- 5614622812f47-43d6c2bd39amr1474905b6e.48.1758285623777; Fri, 19 Sep 2025
- 05:40:23 -0700 (PDT)
+	s=arc-20240116; t=1758285982; c=relaxed/simple;
+	bh=aQEgwSY13ekEp5mp2iQW3WTm+DikfSHP74nHINR53GI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=SvQwFvnoDiQf4+auwuzOljrTxF6+U7W9kvITzeeldGXldnAd+001hupIf7wSOaqm+cM35BHr5rqcosOisvnrym7Bkr6QkTH8J7ulqR76oDLW0Qi6RScSa6RMw1aQoIQ+aoz3cRgIXspWmqEdPRu9ldG32T6dTQgpSked5bIe9Kg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TL4zGo7v; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1758285980; x=1789821980;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=aQEgwSY13ekEp5mp2iQW3WTm+DikfSHP74nHINR53GI=;
+  b=TL4zGo7v2qcr1zyb7c7t5O8NH5yN0L9xR7G72Ojh+C3HulUQHelAoYpA
+   X7Tz2cC36QrTuKK7DRFrhiI3xor6ZuWxuaN8MNHG0BgC7gkbLYEm/759i
+   lsF6zt43bK/dqXTsOqig/Hwe+GcI4WREcR3FZ1C8QPxeljjAQQisChFmy
+   1FNZDXSY0vFTR6aNdclhe2wsbUug6eeW8w6jL/IKKpEIMesgDTSHEOZRx
+   X3ju4zyZ/AHBNOd0LuFr9xeEbQck9YWt6TUHuyNxmJGJ3JOf9k97PB36y
+   lqgFwtWmneTrf8p57G5Xoj2OsE98PqCwXJ2Wz/Fgjm5K/NbTfFWlsETLc
+   Q==;
+X-CSE-ConnectionGUID: jrHgmhVZR0eaClmtnnHTeA==
+X-CSE-MsgGUID: ptvnDGlMTme9uRnlNNnbdA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11557"; a="59672359"
+X-IronPort-AV: E=Sophos;i="6.18,278,1751266800"; 
+   d="scan'208";a="59672359"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2025 05:46:19 -0700
+X-CSE-ConnectionGUID: K6qvEDgDQ++ODbKv4qsdxw==
+X-CSE-MsgGUID: wgFIDcBHTH+jgFkE7iIvnQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,278,1751266800"; 
+   d="scan'208";a="175083537"
+Received: from baandr0id001.iind.intel.com ([10.66.253.151])
+  by orviesa010.jf.intel.com with ESMTP; 19 Sep 2025 05:46:17 -0700
+From: Kaushlendra Kumar <kaushlendra.kumar@intel.com>
+To: rafael@kernel.org,
+	pavel@kernel.org,
+	gregkh@linuxfoundation.org,
+	dakr@kernel.org
+Cc: linux-pm@vger.kernel.org,
+	Kaushlendra Kumar <kaushlendra.kumar@intel.com>
+Subject: [PATCH] PM: Introduce CALL_PM_OP macro to reduce code duplication
+Date: Fri, 19 Sep 2025 18:14:37 +0530
+Message-Id: <20250919124437.3075016-1-kaushlendra.kumar@intel.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <12749587.O9o76ZdvQC@rafael.j.wysocki> <20250919113922.7tozmbts6cs3y5va@lcpd911>
-In-Reply-To: <20250919113922.7tozmbts6cs3y5va@lcpd911>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 19 Sep 2025 14:40:11 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0himPgJrg7s0G7HbgFTtawEMRCJBXiuvaZnT1z9MB_mqw@mail.gmail.com>
-X-Gm-Features: AS18NWD3a-WCHk-dCiI2bNf5gF2oTgLdUlcM3Mm6h19fD9EBjsdnibTPASziZu8
-Message-ID: <CAJZ5v0himPgJrg7s0G7HbgFTtawEMRCJBXiuvaZnT1z9MB_mqw@mail.gmail.com>
-Subject: Re: [PATCH v2] cpuidle: Fail cpuidle device registration if there is
- one already
-To: Dhruva Gole <d-gole@ti.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Fri, Sep 19, 2025 at 1:39=E2=80=AFPM Dhruva Gole <d-gole@ti.com> wrote:
->
-> Hi Rafael,
->
-> On Sep 19, 2025 at 13:22:20 +0200, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > Refuse to register a cpuidle device if the given CPU has a cpuidle
-> > device already and print a message regarding it.
-> >
-> > Without this, an attempt to register a new cpuidle device without
-> > unregistering the existing one leads to the removal of the existing
-> > cpuidle device without removing its sysfs interface.
-> >
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
-> >
-> > v1 -> v2:
-> >    * Add the new check before the driver module reference counting (Dhr=
-uva).
->
-> Thanks for addressing!
->
-> >
-> > ---
-> >  drivers/cpuidle/cpuidle.c |    8 +++++++-
-> >  1 file changed, 7 insertions(+), 1 deletion(-)
-> >
-> > --- a/drivers/cpuidle/cpuidle.c
-> > +++ b/drivers/cpuidle/cpuidle.c
-> > @@ -635,8 +635,14 @@ static void __cpuidle_device_init(struct
-> >  static int __cpuidle_register_device(struct cpuidle_device *dev)
-> >  {
-> >       struct cpuidle_driver *drv =3D cpuidle_get_cpu_driver(dev);
-> > +     unsigned int cpu =3D dev->cpu;
-> >       int i, ret;
-> >
-> > +     if (per_cpu(cpuidle_devices, cpu)) {
-> > +             pr_info("CPU%d: cpuidle device already registered\n", cpu=
-);
->
-> Sorry for not pointing this earlier,
-> perhaps pr_err makes more sense?
+Add CALL_PM_OP macro to eliminate repetitive code patterns in power
+management generic operations. Replace identical driver PM callback
+invocation logic across all pm_generic_* functions with a single
+macro that handles the NULL pointer checks and function calls.
 
-No, this need not mean a functional issue.
+This reduces code duplication significantly while maintaining the
+same functionality and improving code maintainability.
+
+Signed-off-by: Kaushlendra Kumar <kaushlendra.kumar@intel.com>
+---
+ drivers/base/power/generic_ops.c | 85 ++++++++++----------------------
+ 1 file changed, 25 insertions(+), 60 deletions(-)
+
+diff --git a/drivers/base/power/generic_ops.c b/drivers/base/power/generic_ops.c
+index 6502720bb564..c4fc802b8c65 100644
+--- a/drivers/base/power/generic_ops.c
++++ b/drivers/base/power/generic_ops.c
+@@ -8,6 +8,13 @@
+ #include <linux/pm_runtime.h>
+ #include <linux/export.h>
+ 
++#define CALL_PM_OP(dev, op) \
++({ \
++struct device *_dev = (dev); \
++const struct dev_pm_ops *pm = _dev->driver ? _dev->driver->pm : NULL; \
++pm && pm->op ? pm->op(_dev) : 0; \
++})
++
+ #ifdef CONFIG_PM
+ /**
+  * pm_generic_runtime_suspend - Generic runtime suspend callback for subsystems.
+@@ -19,12 +26,7 @@
+  */
+ int pm_generic_runtime_suspend(struct device *dev)
+ {
+-	const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+-	int ret;
+-
+-	ret = pm && pm->runtime_suspend ? pm->runtime_suspend(dev) : 0;
+-
+-	return ret;
++	return CALL_PM_OP(dev, runtime_suspend);
+ }
+ EXPORT_SYMBOL_GPL(pm_generic_runtime_suspend);
+ 
+@@ -38,12 +40,7 @@ EXPORT_SYMBOL_GPL(pm_generic_runtime_suspend);
+  */
+ int pm_generic_runtime_resume(struct device *dev)
+ {
+-	const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+-	int ret;
+-
+-	ret = pm && pm->runtime_resume ? pm->runtime_resume(dev) : 0;
+-
+-	return ret;
++	return CALL_PM_OP(dev, runtime_resume);
+ }
+ EXPORT_SYMBOL_GPL(pm_generic_runtime_resume);
+ #endif /* CONFIG_PM */
+@@ -72,9 +69,7 @@ int pm_generic_prepare(struct device *dev)
+  */
+ int pm_generic_suspend_noirq(struct device *dev)
+ {
+-	const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+-
+-	return pm && pm->suspend_noirq ? pm->suspend_noirq(dev) : 0;
++	return CALL_PM_OP(dev, suspend_noirq);
+ }
+ EXPORT_SYMBOL_GPL(pm_generic_suspend_noirq);
+ 
+@@ -84,9 +79,7 @@ EXPORT_SYMBOL_GPL(pm_generic_suspend_noirq);
+  */
+ int pm_generic_suspend_late(struct device *dev)
+ {
+-	const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+-
+-	return pm && pm->suspend_late ? pm->suspend_late(dev) : 0;
++	return CALL_PM_OP(dev, suspend_late);
+ }
+ EXPORT_SYMBOL_GPL(pm_generic_suspend_late);
+ 
+@@ -96,9 +89,7 @@ EXPORT_SYMBOL_GPL(pm_generic_suspend_late);
+  */
+ int pm_generic_suspend(struct device *dev)
+ {
+-	const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+-
+-	return pm && pm->suspend ? pm->suspend(dev) : 0;
++	return CALL_PM_OP(dev, suspend);
+ }
+ EXPORT_SYMBOL_GPL(pm_generic_suspend);
+ 
+@@ -108,9 +99,7 @@ EXPORT_SYMBOL_GPL(pm_generic_suspend);
+  */
+ int pm_generic_freeze_noirq(struct device *dev)
+ {
+-	const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+-
+-	return pm && pm->freeze_noirq ? pm->freeze_noirq(dev) : 0;
++	return CALL_PM_OP(dev, freeze_noirq);
+ }
+ EXPORT_SYMBOL_GPL(pm_generic_freeze_noirq);
+ 
+@@ -120,9 +109,7 @@ EXPORT_SYMBOL_GPL(pm_generic_freeze_noirq);
+  */
+ int pm_generic_freeze(struct device *dev)
+ {
+-	const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+-
+-	return pm && pm->freeze ? pm->freeze(dev) : 0;
++	return CALL_PM_OP(dev, freeze);
+ }
+ EXPORT_SYMBOL_GPL(pm_generic_freeze);
+ 
+@@ -132,9 +119,7 @@ EXPORT_SYMBOL_GPL(pm_generic_freeze);
+  */
+ int pm_generic_poweroff_noirq(struct device *dev)
+ {
+-	const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+-
+-	return pm && pm->poweroff_noirq ? pm->poweroff_noirq(dev) : 0;
++	return CALL_PM_OP(dev, poweroff_noirq);
+ }
+ EXPORT_SYMBOL_GPL(pm_generic_poweroff_noirq);
+ 
+@@ -144,9 +129,7 @@ EXPORT_SYMBOL_GPL(pm_generic_poweroff_noirq);
+  */
+ int pm_generic_poweroff_late(struct device *dev)
+ {
+-	const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+-
+-	return pm && pm->poweroff_late ? pm->poweroff_late(dev) : 0;
++	return CALL_PM_OP(dev, poweroff_late);
+ }
+ EXPORT_SYMBOL_GPL(pm_generic_poweroff_late);
+ 
+@@ -156,9 +139,7 @@ EXPORT_SYMBOL_GPL(pm_generic_poweroff_late);
+  */
+ int pm_generic_poweroff(struct device *dev)
+ {
+-	const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+-
+-	return pm && pm->poweroff ? pm->poweroff(dev) : 0;
++	return CALL_PM_OP(dev, poweroff);
+ }
+ EXPORT_SYMBOL_GPL(pm_generic_poweroff);
+ 
+@@ -168,9 +149,7 @@ EXPORT_SYMBOL_GPL(pm_generic_poweroff);
+  */
+ int pm_generic_thaw_noirq(struct device *dev)
+ {
+-	const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+-
+-	return pm && pm->thaw_noirq ? pm->thaw_noirq(dev) : 0;
++	return CALL_PM_OP(dev, thaw_noirq);
+ }
+ EXPORT_SYMBOL_GPL(pm_generic_thaw_noirq);
+ 
+@@ -180,9 +159,7 @@ EXPORT_SYMBOL_GPL(pm_generic_thaw_noirq);
+  */
+ int pm_generic_thaw(struct device *dev)
+ {
+-	const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+-
+-	return pm && pm->thaw ? pm->thaw(dev) : 0;
++	return CALL_PM_OP(dev, thaw);
+ }
+ EXPORT_SYMBOL_GPL(pm_generic_thaw);
+ 
+@@ -192,9 +169,7 @@ EXPORT_SYMBOL_GPL(pm_generic_thaw);
+  */
+ int pm_generic_resume_noirq(struct device *dev)
+ {
+-	const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+-
+-	return pm && pm->resume_noirq ? pm->resume_noirq(dev) : 0;
++	return CALL_PM_OP(dev, resume_noirq);
+ }
+ EXPORT_SYMBOL_GPL(pm_generic_resume_noirq);
+ 
+@@ -204,9 +179,7 @@ EXPORT_SYMBOL_GPL(pm_generic_resume_noirq);
+  */
+ int pm_generic_resume_early(struct device *dev)
+ {
+-	const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+-
+-	return pm && pm->resume_early ? pm->resume_early(dev) : 0;
++	return CALL_PM_OP(dev, resume_early);
+ }
+ EXPORT_SYMBOL_GPL(pm_generic_resume_early);
+ 
+@@ -216,9 +189,7 @@ EXPORT_SYMBOL_GPL(pm_generic_resume_early);
+  */
+ int pm_generic_resume(struct device *dev)
+ {
+-	const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+-
+-	return pm && pm->resume ? pm->resume(dev) : 0;
++	return CALL_PM_OP(dev, resume);
+ }
+ EXPORT_SYMBOL_GPL(pm_generic_resume);
+ 
+@@ -228,9 +199,7 @@ EXPORT_SYMBOL_GPL(pm_generic_resume);
+  */
+ int pm_generic_restore_noirq(struct device *dev)
+ {
+-	const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+-
+-	return pm && pm->restore_noirq ? pm->restore_noirq(dev) : 0;
++	return CALL_PM_OP(dev, restore_noirq);
+ }
+ EXPORT_SYMBOL_GPL(pm_generic_restore_noirq);
+ 
+@@ -240,9 +209,7 @@ EXPORT_SYMBOL_GPL(pm_generic_restore_noirq);
+  */
+ int pm_generic_restore_early(struct device *dev)
+ {
+-	const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+-
+-	return pm && pm->restore_early ? pm->restore_early(dev) : 0;
++	return CALL_PM_OP(dev, restore_early);
+ }
+ EXPORT_SYMBOL_GPL(pm_generic_restore_early);
+ 
+@@ -252,9 +219,7 @@ EXPORT_SYMBOL_GPL(pm_generic_restore_early);
+  */
+ int pm_generic_restore(struct device *dev)
+ {
+-	const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+-
+-	return pm && pm->restore ? pm->restore(dev) : 0;
++	return CALL_PM_OP(dev, restore);
+ }
+ EXPORT_SYMBOL_GPL(pm_generic_restore);
+ 
+-- 
+2.34.1
+
 
