@@ -1,296 +1,127 @@
-Return-Path: <linux-pm+bounces-35050-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35051-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BDE0AB8A6F2
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Sep 2025 17:53:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F5C3B8A728
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Sep 2025 17:56:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1DA053A7585
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Sep 2025 15:52:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4C4763BE96B
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Sep 2025 15:56:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E49D631CA4E;
-	Fri, 19 Sep 2025 15:52:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC81C31E89C;
+	Fri, 19 Sep 2025 15:55:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZFDLpFO5"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="zJN5yQZM"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C015031A577
-	for <linux-pm@vger.kernel.org>; Fri, 19 Sep 2025 15:52:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7762F270553
+	for <linux-pm@vger.kernel.org>; Fri, 19 Sep 2025 15:55:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758297165; cv=none; b=aQ8DIaXvPsjTkJd0lwglp2PjbDVpWHBuUSwSbtKUpRnqOdpa1FrvyoF4nnxx3/i0M24aCF+rzPM3DnGUAdHk3nKy1Rfk3oWdIlJHC6Nvvfl3GJHvDJw37VVnIcN+7v67w8s0xHfEjzqUmDClYfGgEcDzGKn52DIP9oyOiBSfyIo=
+	t=1758297354; cv=none; b=cG0WWVvKdTczjgnGhdOxkq9Q8zZvvgVJ6ntID+jBbf8AzViXq2AO5ShpWDGPidgX2LlS+1S7BWfchL1gN7NioIwp+U7WyclIjuDeMCmKRfpOVbu1EF+cJI8pe0HFqSXU5Ch4OdSUy+JPmkXBBt7xypKMs/pRONW9mA2a7ZN7an8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758297165; c=relaxed/simple;
-	bh=yu0BaAlhHdF9NB/b7woVzAzP1He1KTkForkbJthVWbs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mn2g+53GYX3k9VHmaznFsZNREq4K1u0+MUsferHMh3GzIhm3fdIlOHXvX9TnUQxyxy5HzeVlSmIdAHMgZIfN7v8LCCtNqhWXXmE5Xxtj3EzWweoAJb2X8Zk6ELAK+E+Ne/WGmTJn5uEf305IymCiy8NllTpDosgXo4vYUKOCQUk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZFDLpFO5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F6F2C4CEF0
-	for <linux-pm@vger.kernel.org>; Fri, 19 Sep 2025 15:52:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758297165;
-	bh=yu0BaAlhHdF9NB/b7woVzAzP1He1KTkForkbJthVWbs=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=ZFDLpFO5ifI7BRfGjmsMtgaJeRQSz947wRrt2PQMPyKbHA4SJqH1JXZufTwgCQKK3
-	 g524lwIdYXr178bzBD+GWGO530kDB5BkTAfBodrkmMWrcS9t7pbrBHZPQnzWb7sH00
-	 Y1oBgnjGlVXfUrMc4j1mxXdo8v0NT7B4CcVvoj7UROnz78NLwageN946qeDGvR0ojt
-	 TWZ/S/FilN3qMcFxBRkYEnneWqcc/ja27xK5GCSYWbU/lHiuiaYG3AULa7H+NAcM4Z
-	 cfKZEpEYccV8jayeQfWWxdZ9QdS8V0MXFFdKv/+SohkA4+2rk5dSwfKxVHvyYOOTX+
-	 MDK3+QZCUBsPQ==
-Received: by mail-ot1-f49.google.com with SMTP id 46e09a7af769-757fda06b0cso1431307a34.0
-        for <linux-pm@vger.kernel.org>; Fri, 19 Sep 2025 08:52:45 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVE/MYsYd9ukznzDkdFMGIe/PT9RbWIZMDdPgbT1Or+jrjMdR2JLfelbukfdQGv4+NK61cDLUVkOg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz4x38YwX25PgLK2H1yOGGsaoZNmbOk/BnZc0mzOInle2AUhX0P
-	MXN9TdWsFv6ApkZlcUtdPeaxBZEOQHI+4iLbwBWM0pZ8qOzNuXDlXFeJud8L6copxG8kn16/ikr
-	2wm/i8BvPbFKt2E8M+dakHqJ3i6z7KWc=
-X-Google-Smtp-Source: AGHT+IElFXgKPDJwIEbMIM/4QUHaRTFINLDiOMLhSlUDLMtp0jDVeYP+yeLmhyxPqd7xkKqoDPfbtToid0vtwInpRHw=
-X-Received: by 2002:a05:6808:140a:b0:43b:252e:f7a4 with SMTP id
- 5614622812f47-43d6c11294emr1727897b6e.1.1758297164666; Fri, 19 Sep 2025
- 08:52:44 -0700 (PDT)
+	s=arc-20240116; t=1758297354; c=relaxed/simple;
+	bh=u1c6nCIa+ln/6nkb438PUoWQZcIf7juEYcKr7Yqz1hI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gDTcL1Mp1pfZP1LENFFmM1RGqjlJfYOtOcvpCUQYim12f05bHPLLK4sEulkmVfSqCjhejZtyxwJRHLFwgAbLYz4FavZbeezB/1o6eJkSVgHhKeQAXD0hCxrHDhtat3tVycf6cFcc8FyZlezKqsbJ731YZtiYKlv0MuWfL3mnR4k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=zJN5yQZM; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-45dde353b47so12362925e9.3
+        for <linux-pm@vger.kernel.org>; Fri, 19 Sep 2025 08:55:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1758297350; x=1758902150; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BhZDrVrImTATkIwPwVSPaOLUpr64DrnZU8w+ycyCg88=;
+        b=zJN5yQZMN2vC0/I+GKAMjxFTyF9oRfEZY5BX4wwP6x/wl9P0/rMB0VLRob6goZuNRK
+         lNigmVhAHjWVaIhGY1y1YAOV7Cdj6BPcvUgIVhphjNqK3eGBB6e3+JiR9v29hZ8KXdIE
+         Ngjq7d2AhUtA1y+KBvDGQH8CEme4uJN5bbP1l4ppDariOEMIJUn9yuuewvHw2g7Cr7Bk
+         RUDRvd2guWK5VjRq1fK9nGq3FmAaa/DONYWGKDHzG2zxJuQJ5c/szQV/leYVFHic7zVN
+         UbSHNlc4qADnHxLxUfgL/Dl/iOvdJucWfaJVbOLpWmiQRiZe8GBXSUQme4O2Q3TGP0Pj
+         u/0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758297350; x=1758902150;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BhZDrVrImTATkIwPwVSPaOLUpr64DrnZU8w+ycyCg88=;
+        b=uaaS8HO/nr4VY2PRQLjenxVQJt1Fm12gbW8aeBZr2wNDPzsNxIIBgD/7OYYMjhHn0E
+         /71WIUzRfATqd7NqwMKTeutJEstdLcWqcBoJt/q0cWeuE83TNuE/xdV2ehncKGtctQWQ
+         V8jvSiDlWLW+Y/7bzPkwQn6HgAAsCNdgvVro26QV/Grilem5ZbweuaeW4vJxwH0FoON6
+         3fwiuUSEOlDxb+UgN8FXpGcyazVUjIKsAFUCWRgPFs7+Y5+fg1sxYXaVkM5h6Me8nhmX
+         iFNbX/s31+670wmG1rn+Kg1WTjrIvmocMkxiCUIBDXzMuISF0QlX2Oz02LCybYF3pjql
+         A9jA==
+X-Forwarded-Encrypted: i=1; AJvYcCX5xaorkOPFFFDRm7DEAxkXKLBB0BYacEYrIJOy2g3yXc5NoJprXbRCEJxw8QXtF8jkj8o3TZcehQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxHltBW8q5wtDuyOs6Ne4yLV1zPXrUVhv3e8xHExpfDm6//pJ2I
+	6UQdUqqJQaOlVO3e/TeZCvT+3mKYJmRTGCqVS6sE9RSFq0yRrDEopNUoDaoHADeDDMU=
+X-Gm-Gg: ASbGncvS8DnPjmngXblgo+v5SHJzKvM0hQwABhXgetm9tXifur8uNNseRaAXPplBPiK
+	sB+Rdiz6wR/2niuZaW9ofnmUQeJe3eFZKcWr3fYVF3wnS3h88kr5pmUBqYgzhK8zfeAyAdPVrS6
+	NENuk/Uzs/YlMy4gGwmG28RbCmOwvZ7wwhAe8I6FzP9ZpwpsrJt9Gq54291O2Sdskc334SCKMmC
+	ShoHXYdMT4nv683Ntwohxxq9SSv0J31vzlYD92Lq4DthZpunZrSwpicXGVBmKKedM78A+tgbnsk
+	r9lJYND9tyvAMs0SKPG/msTvB9q4cd8gSXOBlmCN+V4aP9oYWe9YuTXgDFlo94uILD+uVwYQ8PT
+	XlU8tAZ2A+pgH/LmGjJeVxCCSRlp1RCC1cu1PMPiuMxPL6lV/vPxV1SqnC4P0czWv5gOnEj5Xjg
+	LXfA==
+X-Google-Smtp-Source: AGHT+IEl+5i/c6BvX7hOfCLASA8xl2fHCvuhOjlzavUKXNsTQAa1+nFKeMdI1YW8d1Qlc7m1YSon4A==
+X-Received: by 2002:a05:600c:548e:b0:456:18cf:66b5 with SMTP id 5b1f17b1804b1-467f205a5a1mr35666935e9.22.1758297349484;
+        Fri, 19 Sep 2025 08:55:49 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:8ffd:205a:6719:49c1? ([2a05:6e02:1041:c10:8ffd:205a:6719:49c1])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-3ee07411f4dsm8371825f8f.26.2025.09.19.08.55.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 Sep 2025 08:55:48 -0700 (PDT)
+Message-ID: <20f38803-ea03-49e5-ada1-9998eb815f84@linaro.org>
+Date: Fri, 19 Sep 2025 17:55:48 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <878qimv24u.wl-tiwai@suse.de> <CAJZ5v0hJvsuOTj5j-0Jn-c9TPnbm70wPvdBkop2hRrdweoncDg@mail.gmail.com>
- <87jz1uao65.wl-tiwai@suse.de> <12751070.O9o76ZdvQC@rafael.j.wysocki> <87ldma8sq1.wl-tiwai@suse.de>
-In-Reply-To: <87ldma8sq1.wl-tiwai@suse.de>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 19 Sep 2025 17:52:32 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0jJjYoTceD2_pgvKgKuPypo+8osnAuCefgAjrzY_w2n8A@mail.gmail.com>
-X-Gm-Features: AS18NWBbFanpIdD1FMjuGOYTBF45GYJUQFzReMhjN3B3PMyQPSWVM_rvJQkPXcM
-Message-ID: <CAJZ5v0jJjYoTceD2_pgvKgKuPypo+8osnAuCefgAjrzY_w2n8A@mail.gmail.com>
-Subject: Re: PM runtime auto-cleanup macros
-To: Takashi Iwai <tiwai@suse.de>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 0/3] thermal: rockchip: shut up GRF warning
+To: Sebastian Reichel <sebastian.reichel@collabora.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>, Heiko Stuebner <heiko@sntech.de>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>
+Cc: Robin Murphy <robin.murphy@arm.com>,
+ Diederik de Haas <didi.debian@cknow.org>, linux-pm@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org,
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ kernel@collabora.com
+References: <20250820-thermal-rockchip-grf-warning-v2-0-c7e2d35017b8@kernel.org>
+Content-Language: en-US
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20250820-thermal-rockchip-grf-warning-v2-0-c7e2d35017b8@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Fri, Sep 19, 2025 at 3:41=E2=80=AFPM Takashi Iwai <tiwai@suse.de> wrote:
->
-> On Fri, 19 Sep 2025 15:05:04 +0200,
-> Rafael J. Wysocki wrote:
-> >
-> > On Friday, September 19, 2025 9:37:06 AM CEST Takashi Iwai wrote:
-> > > On Thu, 18 Sep 2025 22:41:32 +0200,
-> > > Rafael J. Wysocki wrote:
-> > > >
-> > > > On Thu, Sep 18, 2025 at 10:19=E2=80=AFPM Rafael J. Wysocki <rafael@=
-kernel.org> wrote:
-> > > > >
-> > > > > On Thu, Sep 18, 2025 at 1:28=E2=80=AFPM Rafael J. Wysocki <rafael=
-@kernel.org> wrote:
-> > > > > >
-> > > > > > On Thu, Sep 18, 2025 at 9:10=E2=80=AFAM Takashi Iwai <tiwai@sus=
-e.de> wrote:
-> > > > > > >
-> > > > > > > On Wed, 17 Sep 2025 20:58:36 +0200,
-> > > > > > > Rafael J. Wysocki wrote:
-> > > > > > > >
-> > > > > > > > Hi,
-> > > > > > > >
-> > > > > > > > Sorry for the delay.
-> > > > > > > >
-> > > > > > > > On Thu, Sep 11, 2025 at 9:31=E2=80=AFAM Takashi Iwai <tiwai=
-@suse.de> wrote:
-> > > > > > > > >
-> > > > > > > > > On Wed, 10 Sep 2025 16:00:17 +0200,
-> > > > > > > > > Takashi Iwai wrote:
-> > > > > > > > > >
-> > > > > > > > > > Hi,
-> > > > > > > > > >
-> > > > > > > > > > while I worked on the code cleanups in the drivers with=
- the recent
-> > > > > > > > > > auto-cleanup macros, I noticed that pm_runtime_get*() a=
-nd _put*() can
-> > > > > > > > > > be also managed with the auto-cleanup gracefully, too. =
- Actually we
-> > > > > > > > > > already defined the __free(pm_runtime_put) in commit bf=
-a4477751e9, and
-> > > > > > > > > > there is a (single) user of it in pci-sysfs.c.
-> > > > > > > > > >
-> > > > > > > > > > Now I wanted to extend it to pm_runtime_put_autosuspend=
-() as:
-> > > > > > > > > >
-> > > > > > > > > > DEFINE_FREE(pm_runtime_put_autosuspend, struct device *=
-,
-> > > > > > > > > >            if (_T) pm_runtime_put_autosuspend(_T))
-> > > > > > > > > >
-> > > > > > > > > > Then one can use it like
-> > > > > > > > > >
-> > > > > > > > > >       ret =3D pm_runtime_resume_and_get(dev);
-> > > > > > > > > >       if (ret < 0)
-> > > > > > > > > >               return ret;
-> > > > > > > > > >       struct device *pmdev __free(pm_runtime_put_autosu=
-spend) =3D dev;
-> > > > > > > > > >
-> > > > > > > > > > that is similar as done in pci-sysfs.c.  So far, so goo=
-d.
-> > > > > > > > > >
-> > > > > > > > > > But, I find putting the line like above at each place a=
- bit ugly.
-> > > > > > > > > > So I'm wondering whether it'd be better to introduce so=
-me helper
-> > > > > > > > > > macros, e.g.
-> > > > > > > > > >
-> > > > > > > > > > #define pm_runtime_auto_clean(dev, var) \
-> > > > > > > > > >       struct device *var __free(pm_runtime_put) =3D (de=
-v)
-> > > > > > > > >
-> > > > > > > > > It can be even simpler by assigning a temporary variable =
-such as:
-> > > > > > > > >
-> > > > > > > > > #define pm_runtime_auto_clean(dev) \
-> > > > > > > > >         struct device *__pm_runtime_var ## __LINE__ __fre=
-e(pm_runtime_put) =3D (dev)
-> > > > > > > >
-> > > > > > > > Well, if there's something like
-> > > > > > > >
-> > > > > > > > struct device *pm_runtime_resume_and_get_dev(struct device =
-*dev)
-> > > > > > > > {
-> > > > > > > >         int ret =3D pm_runtime_resume_and_get(dev);
-> > > > > > > >         if (ret < 0)
-> > > > > > > >                 return ERR_PTR(ret);
-> > > > > > > >
-> > > > > > > >         return dev;
-> > > > > > > > }
-> > > > > > > >
-> > > > > > > > It would be a matter of redefining the FREE to also take er=
-ror
-> > > > > > > > pointers into account and you could do
-> > > > > > > >
-> > > > > > > > struct device *__dev __free(pm_runtim_put) =3D pm_runtime_r=
-esume_and_get_dev(dev);
-> > > > > > > > if (IS_ERR(__dev))
-> > > > > > > >         return PTR_ERR(__dev);
-> > > > > > >
-> > > > > > > That'll work, too.  Though, I find the notion of __free() and=
- a
-> > > > > > > temporary variable __dev a bit too cumbersome; it's used only=
- for
-> > > > > > > auto-clean stuff, so it could be somewhat anonymous.
-> > > > > >
-> > > > > > No, it is not used only for auto-clean, it is also used for ret=
-urn
-> > > > > > value checking and it represents a reference on the original de=
-v.  It
-> > > > > > cannot be entirely anonymous because of the error checking part=
-.
-> > > > > >
-> > > > > > The point is that this is one statement instead of two and so i=
-t is
-> > > > > > arguably harder to mess up with.
-> > > > > >
-> > > > > > > But it's all about a matter of taste, and I'd follow what you=
- and
-> > > > > > > other guys suggest.
-> > > > > > >
-> > > > > > > FWIW, there are lots of code doing like
-> > > > > > >
-> > > > > > >         pm_runtime_get_sync(dev);
-> > > > > > >         mutex_lock(&foo);
-> > > > > > >         ....
-> > > > > > >         mutex_unlock(&foo);
-> > > > > > >         pm_runtime_put(dev);
-> > > > > > >         return;
-> > > > > > >
-> > > > > > > or
-> > > > > > >
-> > > > > > >         ret =3D pm_runtime_resume_and_get(dev);
-> > > > > > >         if (ret)
-> > > > > > >                 return ret;
-> > > > > > >         mutex_lock(&foo);
-> > > > > > >         ....
-> > > > > > >         mutex_unlock(&foo);
-> > > > > > >         pm_runtime_put_autosuspend(dev);
-> > > > > > >         return 0;
-> > > > > > >
-> > > > > > > and they can be converted nicely with guard() once when PM ru=
-ntime can
-> > > > > > > be automatically unreferenced.  With my proposed change, it w=
-ould
-> > > > > > > become like:
-> > > > > > >
-> > > > > > >         pm_runtime_get_sync(dev);
-> > > > > > >         pm_runtime_auto_clean(dev);
-> > > > > >
-> > > > > > For the case in which the pm_runtime_get_sync() return value is
-> > > > > > discarded, you could define a guard and do
-> > > > > >
-> > > > > > guard(pm_runtime_get_sync)(dev);
-> > > > > >
-> > > > > > here.
-> > > > > >
-> > > > > > The case checking the return value is less straightforward.
-> > > > > >
-> > > > > > >         guard(mutex)(&foo);
-> > > > > > >         ....
-> > > > > > >         return;
-> > > > > > >
-> > > > > > > or
-> > > > > > >
-> > > > > > >         ret =3D pm_runtime_resume_and_get(dev);
-> > > > > > >         if (ret)
-> > > > > > >                 return ret;
-> > > > > > >         pm_runtime_auto_clean_autosuspend(dev);
-> > > > > > >         guard(mutex)(&foo);
-> > > > > > >         ....
-> > > > > > >         return 0;
-> > > > > > >
-> > > > >
-> > > > > I guess what I'm saying means basically something like this:
-> > > > >
-> > > > > DEFINE_CLASS(pm_runtime_resume_and_get, struct device *,
-> > > > >          if (!IS_ERR_OR_NULL(_T)) pm_tuntime_put(_T),
-> > > > > pm_runtime_resume_and_get_dev(dev), struct device *dev)
-> > > > >
-> > > > > DEFINE_CLASS(pm_runtime_resume_and_get_auto, struct device *,
-> > > > >          if (!IS_ERR_OR_NULL(_T)) pm_tuntime_put_autosuspend(_T),
-> > > > > pm_runtime_resume_and_get_dev(dev), struct device *dev)
-> > > > >
-> > > > > and analogously for pm_runtime_get_sync().
-> > > >
-> > > > And it kind of makes sense either.  Do
-> > > >
-> > > > CLASS(pm_runtime_resume_and_get, active_dev)(dev);
-> > > > if (IS_ERR(active_dev))
-> > > >         return PTR_ERR(active_dev);
-> > > >
-> > > > and now use active_dev for representing the device until it gets ou=
-t
-> > > > of the scope.
-> > >
-> > > Yes, that's what I thought of as an alternative, too, but I didn't
-> > > consider using only pm_runtime_resume_and_get().  Actually by this
-> > > action, we can also "clean up" the API usage at the same time to use =
-a
-> > > single recommended API function, which is a good thing.
-> > >
-> > > That said, I like this way :)
-> > >
-> > > It'd be nice if this change can go into 6.18, then I can put the
-> > > driver cleanup works for 6.19.  It's a bit late stage for 6.18, but
-> > > this change is definitely safe and can't break, per se.
-> >
-> > OK, do you mean something like the patch below?
->
-> Yes!
+On 20/08/2025 19:40, Sebastian Reichel wrote:
+> Changes in v2:
+> - Link to v1: https://lore.kernel.org/r/20250818-thermal-rockchip-grf-warning-v1-1-134152c97097@kernel.org
+> - Add patch droping extra newlines in older chip info structures (Heiko)
+> - Add patch updating DT bindings to make GRF either mandatory or unallowed (Heiko, Robin)
+> - Update previous patch to only differntiate between mandatory and no GRF (Heiko, Robin)
+> - Update struct documentation (kernel test robot)
+> - Do not collect Tested-by from Diederik, as too much changed in this version
+> 
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> ---
 
-OK
+Applied, patch 1,2
 
-> An easy follower is the patch like below.
-> (It's the only user of __free(pm_runtime_*) in linux-next as of now.)
+Thanks
 
-So the __free(pm_runtime_*) could be dropped after this patch I suppose?
 
-In that case, let me send a series of 3 patches which will add the new
-class definitions, switch over PCI to using them (your patch), and
-drop the existing pm_runtime_put FREE.
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
