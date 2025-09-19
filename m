@@ -1,237 +1,199 @@
-Return-Path: <linux-pm+bounces-35035-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35036-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1914B89C6C
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Sep 2025 16:01:35 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7902BB8A115
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Sep 2025 16:48:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C12093B8215
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Sep 2025 14:00:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 341B53AAE96
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Sep 2025 14:48:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5BBC258EFB;
-	Fri, 19 Sep 2025 14:00:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 123F5257849;
+	Fri, 19 Sep 2025 14:47:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IYmZ8UPD"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="TSoOv53s"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C546246327;
-	Fri, 19 Sep 2025 14:00:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D8AE242D70
+	for <linux-pm@vger.kernel.org>; Fri, 19 Sep 2025 14:47:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758290448; cv=none; b=IS4/nKrG6YKn0XwJuXfcjeRn5x8W0Cb5yrVkRVE5SkK/l/qrnHIht5zsJAATMChI7jkbdjgpaqKu8USkWNig9dppVtqO0ZEYFpr/jRDnGII82MHPQ3n8LqxEjN1hSyYB5/PIZeI8t5qqjvRsM/GyoNsACGXeAyGS/RgQHEJ3tUI=
+	t=1758293279; cv=none; b=fbKOqUv+GxnS5QQ7Xdok98eIB8wQurCAovOWq/FxqUeb9jNUaSRUM4soErDRrTNg+Kur19A4tgc5nZpIHnQ/E+U2WDXz5omCj31EcV6AOt8XSzPpxwXTVvVGu8PRiabSe4eZ6yvgZsptHaqVXFR0tPncoL1AANjuitOfrAJ63dY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758290448; c=relaxed/simple;
-	bh=2Fw6+9wC1pe/2aHJyHIT5pgPlo5xcUmfFXENMUNHfqk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NS3/aWbccHvQS3Sj26GPyhlkX7ZS0afffeLQ2Gr+CsdGHELrSVnxEUHc79EX2kB0p0rO3SYkV9q7QfRUQbxCdnDMVO6AKkagItmVwUnyfPMOsBq+0pd7AWjr7xFh7yx7cgywivO60Jj1YtjFcRj//vcxwrFK7EoHynOaIFNaZbc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IYmZ8UPD; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758290447; x=1789826447;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2Fw6+9wC1pe/2aHJyHIT5pgPlo5xcUmfFXENMUNHfqk=;
-  b=IYmZ8UPDVLRSFePSrHiSKVhVvRIgRs1HU26zTUyYq/t7jWyQKBlILFZR
-   /MY/o1ObMsTXjiihP7MUAF57o/4T0b/xGZrBWfVz1y/4nW+/BWwacx1eC
-   e0gcY2elE5eMXEBefDTPzSXiJIgZLfHTg1SO3uVNgc5HqxwiurbdN2Boz
-   E8KsBX78vdz4kgqBOcay7Rr1U7spdfNR2MEfmkz/48oB/huNYKQpSwxEA
-   sfzOI4FxVcOoqybRQfzVyhYmTX9W91VZ13TumkHQlwRTx6vW9/tRVDqkk
-   ozj2IwGfR/EjlE9AZGi/j3vcJlIMB4GwcJdpcsgY/r6CzkFigxfYS7WX7
-   g==;
-X-CSE-ConnectionGUID: GtM1mu5CR2qhw9j2+YosuQ==
-X-CSE-MsgGUID: 742BhsfcSHqbzEEbxK0uTQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11557"; a="60523789"
-X-IronPort-AV: E=Sophos;i="6.18,278,1751266800"; 
-   d="scan'208";a="60523789"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2025 07:00:45 -0700
-X-CSE-ConnectionGUID: KLjTf8AqQCqudD5ECbxUSQ==
-X-CSE-MsgGUID: 8I+0wv0HRzSTzVRIDmNthQ==
-X-ExtLoop1: 1
-Received: from lkp-server01.sh.intel.com (HELO 84a20bd60769) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 19 Sep 2025 07:00:39 -0700
-Received: from kbuild by 84a20bd60769 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uzbfB-0004Ln-1N;
-	Fri, 19 Sep 2025 14:00:37 +0000
-Date: Fri, 19 Sep 2025 21:59:58 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dang Huynh via B4 Relay <devnull+dang.huynh.mainlining.org@kernel.org>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Sebastian Reichel <sre@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-	Kees Cook <kees@kernel.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>
-Cc: oe-kbuild-all@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	linux-unisoc@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-rtc@vger.kernel.org, linux-clk@vger.kernel.org,
-	linux-pm@vger.kernel.org, dmaengine@vger.kernel.org,
-	linux-hardening@vger.kernel.org, linux-mmc@vger.kernel.org,
-	Dang Huynh <dang.huynh@mainlining.org>
-Subject: Re: [PATCH 06/25] rtc: Add driver for RDA Micro SoC
-Message-ID: <202509192152.OXdK6bpd-lkp@intel.com>
-References: <20250917-rda8810pl-drivers-v1-6-9ca9184ca977@mainlining.org>
+	s=arc-20240116; t=1758293279; c=relaxed/simple;
+	bh=Fl5lFtsaSa0aoM45do82bT/2mdUhsFtwUajVfM1OfJM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=seIWAl3WS3vtJqlQutLwv2WpBIrenGqQ1HFnSOyn99V7IlB2qGUjpK8S4cX4Sq0atXI0/5yZYznyiB+kJuLgdXw+XAeY1y4uSZXC7hAgou2VC/V8jg3ZPiXIkA+RmX6LIPEuMzN+WrZZ6zWbL5hS86hawHxNNv4HtRXFvIJdE24=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=TSoOv53s; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58JDwoRk029580
+	for <linux-pm@vger.kernel.org>; Fri, 19 Sep 2025 14:47:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	pK2jgFklNvRIcwSxKwSrC3IauNiUyVaZo9Kihcuf/aM=; b=TSoOv53s95HnPGUZ
+	G9ZPE3fkYDb8rK+oDBaGytclIOY9/aj7djbQYx61LabICSlgXRLu5IFUqPXd1sYk
+	27ZTtmYgEb2NmFDfhZYvP3VV9n72wDA9bs5pVcvxAlPi4R0vslN3/Xp7x9qJ12L0
+	fUE0B/kNyhlh/QOncVdMmdYAnRaM/sLCSmcyeTWd7vCgzJ7Dsqmdi69NQsC95cHc
+	4mE23Fs0bav6Rq0Lzi+167lhCMrOxWoC6x9l4s3uo9I1aPy+8OjyRHIJzVFRoltv
+	Cl7NGrxSjcTSqVA8jI+ohs6hAztWrVTfVb7/8U73MvARARgiWR1Ih/j3pB2lAzZj
+	sGGIJg==
+Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com [209.85.210.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 497fy12rc5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Fri, 19 Sep 2025 14:47:56 +0000 (GMT)
+Received: by mail-pf1-f200.google.com with SMTP id d2e1a72fcca58-77b73bddbdcso2396733b3a.1
+        for <linux-pm@vger.kernel.org>; Fri, 19 Sep 2025 07:47:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758293275; x=1758898075;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pK2jgFklNvRIcwSxKwSrC3IauNiUyVaZo9Kihcuf/aM=;
+        b=GwPSuQTmgBNqffqsKG8p6NRjobnntqsh0e+pzuC2zastUggmtv41tr35bnDRoaDtHs
+         fJIyjzg3IFG4sBnCzJY8RsyqKsgRxC7ciTDjhmPuMmSw31Ib2B5y6Ac9YFr1Aon91DLq
+         GnfNSYlIVYqtvHGCDEWUlbt3MiljT7/qZ7+ewyEHbW3jObQKf0qKJvAHv9oSn5awFB5C
+         D1PCba7k7XYUACjXAXyDMrw1ueqcMZeEberjp5LoXeer68x/emrQJZCQmN1LkkIc186b
+         b4WjD2NWVJG94vWi/UdSIUqXmLupbead3i2dwBd1YdfLdj0fMbIOVeR6X8hUFfYvkcsg
+         EBtg==
+X-Forwarded-Encrypted: i=1; AJvYcCX4fy4rKvZzwbCp8zXVDcTNyjGYnpqRgi6wN5BJHbo+aJ/TXFhfVWwPfMZq9c1grKxQ+OhZMNf2ZA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyJAvCSB8nDwgrIRv+fzar4/pXPWf8cYaxPEDft1jrdTkxqAHCY
+	dg/ls3Tywq7c6qspHaVmNCPQFKGuOx/D961pAM8RKXb/SQAS2Os4tVCMTbSEPPEephIl/+rP8uQ
+	K3VsuBZe1OMTkabOziQGrK8B/o9FN5UTSx8LoWJPneOXA/q6cDKYUkx30iaqimw==
+X-Gm-Gg: ASbGncvlgrFC2tZDc6VrHw4dqiTagUTmokb19FRKvO1L2ilBcQkJRBNnpx9QpBIbgry
+	ULI6mUskO8fz68+6g6cdIohQUy99BkeatCCQT2M8dPBIBK/EmqfOIA9s8JgAbGJQnV9CSkFsBUz
+	OGbW8qXrFm5FopTvWBmHZ6HkdnxW860tMEqPFWLngfSC0lVLNKL0mYRo3ht/hICvPq1YXPAf/GG
+	g+8wf9c5oSjeN3iG7FqTz0A5kRL9Wvbl720i/8DSTsnjwWWDpNtnxomZimeZcGI0Sgj9KYEhMwp
+	5JsZpufmfVmXD+GiuWTHSNIWNYwYrptooOGWsN2E9Ksa45af0+lQbg/u7hn5ZZe31p+D1WmL
+X-Received: by 2002:a05:6a00:bd13:b0:771:e5f3:8840 with SMTP id d2e1a72fcca58-77e36935457mr4738823b3a.13.1758293275514;
+        Fri, 19 Sep 2025 07:47:55 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGDki/w/fEHcXQU3dq0la/SG+rDFch45lCNFYev7lQ2LKW5H7+gmQs1YUohBh/js4fBRzZI7g==
+X-Received: by 2002:a05:6a00:bd13:b0:771:e5f3:8840 with SMTP id d2e1a72fcca58-77e36935457mr4738768b3a.13.1758293274969;
+        Fri, 19 Sep 2025 07:47:54 -0700 (PDT)
+Received: from [10.217.217.28] ([202.46.22.19])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-77f097b60e7sm1386902b3a.1.2025.09.19.07.47.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 Sep 2025 07:47:54 -0700 (PDT)
+Message-ID: <5d4edecf-51f3-4d4a-861f-fce419e3a314@oss.qualcomm.com>
+Date: Fri, 19 Sep 2025 20:17:43 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250917-rda8810pl-drivers-v1-6-9ca9184ca977@mainlining.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V7 3/5] dt-bindings: iio: adc: Add support for QCOM PMIC5
+ Gen3 ADC
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Cc: jic23@kernel.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+        agross@kernel.org, andersson@kernel.org, lumag@kernel.org,
+        dmitry.baryshkov@oss.qualcomm.com, konradybcio@kernel.org,
+        daniel.lezcano@linaro.org, sboyd@kernel.org, amitk@kernel.org,
+        thara.gopinath@gmail.com, lee@kernel.org, rafael@kernel.org,
+        subbaraman.narayanamurthy@oss.qualcomm.com,
+        david.collins@oss.qualcomm.com, anjelique.melendez@oss.qualcomm.com,
+        kamal.wadhwa@oss.qualcomm.com, rui.zhang@intel.com,
+        lukasz.luba@arm.com, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        cros-qcom-dts-watchers@chromium.org, quic_kotarake@quicinc.com,
+        neil.armstrong@linaro.org, stephan.gerhold@linaro.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+References: <20250826083657.4005727-1-jishnu.prakash@oss.qualcomm.com>
+ <20250826083657.4005727-4-jishnu.prakash@oss.qualcomm.com>
+ <20250829-classic-dynamic-clam-addbd8@kuoka>
+ <5d662148-408f-49e1-a769-2a5d61371cae@oss.qualcomm.com>
+ <4e974e77-adfc-49e5-90c8-cf8996ded513@kernel.org>
+ <a0e885be-e87d-411a-884e-3e38a0d761e5@oss.qualcomm.com>
+ <8c90cc3f-115e-4362-9293-05d9bee24214@linaro.org>
+Content-Language: en-US
+From: Jishnu Prakash <jishnu.prakash@oss.qualcomm.com>
+In-Reply-To: <8c90cc3f-115e-4362-9293-05d9bee24214@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-ORIG-GUID: GYSAR7hmDjMmOyx_anlBbG6Re8-Zqjcp
+X-Authority-Analysis: v=2.4 cv=btZMBFai c=1 sm=1 tr=0 ts=68cd6d1c cx=c_pps
+ a=mDZGXZTwRPZaeRUbqKGCBw==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
+ a=IkcTkHD0fZMA:10 a=yJojWOMRYYMA:10 a=zIrsKRvHLvAX-MREBNgA:9
+ a=QEXdDO2ut3YA:10 a=zc0IvFSfCIW2DFIPzwfm:22
+X-Proofpoint-GUID: GYSAR7hmDjMmOyx_anlBbG6Re8-Zqjcp
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTE2MDIwMiBTYWx0ZWRfX7ojbPFVUpFo2
+ QsZRCn92Vy36aDMxQHTgBldhR3iihNjugkvb/UF4/nQigHsJXjLHoPAj/akx97rxh/onuql6JVl
+ 7v5kL4oyE8RtW7gptBVMse0zA6oEe4uQpChRF/4NzEozyUezA/iE5w2uDdWlxcF4kgW9pw4weWA
+ 7i4SLy1JRa1Vgu6L1oiWDhL7QjV9Jzy8mUr5fXP6MuEvdOqRewtPygVH544/18/xwVx3vhpredo
+ C9RGysF5W91R2F9XULPbLMA48OJsMArvIaDHEfhHDKq1UrAKvgPQjAT8SmVo6NlTXQRQJ8ykw6X
+ JmefD+877nnToeThi7cFgvqt2f5Mw8ZDU6l8vOQLTMyJhCxXKzAL17xchE1P7SUE3v9rfbAY5fp
+ 8kV1J0pr
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-09-19_01,2025-09-19_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ bulkscore=0 priorityscore=1501 impostorscore=0 clxscore=1015 malwarescore=0
+ spamscore=0 adultscore=0 phishscore=0 suspectscore=0 classifier=typeunknown
+ authscore=0 authtc= authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2507300000 definitions=main-2509160202
 
-Hi Dang,
+Hi Krzysztof,
 
-kernel test robot noticed the following build errors:
+On 9/18/2025 5:45 AM, Krzysztof Kozlowski wrote:
+> On 18/09/2025 04:47, Jishnu Prakash wrote:
+>> Hi Krzysztof,
+>>
+>> On 9/17/2025 5:59 AM, Krzysztof Kozlowski wrote:
+>>> On 16/09/2025 16:28, Jishnu Prakash wrote:
+>>>>> You cannot have empty spaces in ID constants. These are abstract
+>>>>> numbers.
+>>>>>
+>>>>> Otherwise please point me to driver using this constant.
+>>>>
+>>>> These constants are for ADC channel numbers, which are fixed in HW.
+>>>>
+>>>> They are used in this driver: drivers/iio/adc/qcom-spmi-adc5-gen3.c,
+>>>> which is added in patch 4 of this series.
+>>>>
+>>>> They can be found in the array named adc5_gen3_chans_pmic[].
+>>>
+>>> Really? So point me to the line there using ADC5_GEN3_VREF_BAT_THERM.
+>>>
+>>
+>> We may not be using all of these channels right now - we can add them
+>> later based on requirements coming up. For now, I'll remove the channels
+>> not used in adc5_gen3_chans_pmic[].
+> 
+> You are not implementing the feedback then. Please read it carefully.
+> 
 
-[auto build test ERROR on 590b221ed4256fd6c34d3dea77aa5bd6e741bbc1]
+Sorry, I misunderstood - so you actually meant I should remove the
+empty spaces in the definitions, like this?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Dang-Huynh-via-B4-Relay/ARM-dts-unisoc-rda8810pl-Add-label-to-GPIO-nodes/20250917-043025
-base:   590b221ed4256fd6c34d3dea77aa5bd6e741bbc1
-patch link:    https://lore.kernel.org/r/20250917-rda8810pl-drivers-v1-6-9ca9184ca977%40mainlining.org
-patch subject: [PATCH 06/25] rtc: Add driver for RDA Micro SoC
-config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20250919/202509192152.OXdK6bpd-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 15.1.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250919/202509192152.OXdK6bpd-lkp@intel.com/reproduce)
+-#define ADC5_GEN3_VREF_BAT_THERM               0x15
++#define ADC5_GEN3_VREF_BAT_THERM 0x15
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509192152.OXdK6bpd-lkp@intel.com/
+I thought this at first, but I somehow doubted this later, as I saw some
+other recently added files with empty spaces in #define lines, like:
 
-All errors (new ones prefixed by >>):
+include/dt-bindings/iio/adc/mediatek,mt6373-auxadc.h
+include/dt-bindings/regulator/st,stm32mp15-regulator.h
 
-   drivers/rtc/rtc-rda.c: In function 'rda_rtc_settime':
->> drivers/rtc/rtc-rda.c:67:15: error: implicit declaration of function 'FIELD_PREP' [-Wimplicit-function-declaration]
-      67 |         low = FIELD_PREP(RDA_SEC_MASK, tm->tm_sec) |
-         |               ^~~~~~~~~~
-   drivers/rtc/rtc-rda.c: In function 'rda_rtc_readtime':
->> drivers/rtc/rtc-rda.c:128:22: error: implicit declaration of function 'FIELD_GET' [-Wimplicit-function-declaration]
-     128 |         tm->tm_sec = FIELD_GET(RDA_SEC_MASK, low);
-         |                      ^~~~~~~~~
+I can make this change, if you prefer this. Please let me know
+if I'm still missing something.
 
+Also please let me know if you want me to remove the unused
+channels - I would prefer to keep them if there's no issue,
+as we might need them later.
 
-vim +/FIELD_PREP +67 drivers/rtc/rtc-rda.c
+Thanks,
+Jishnu
 
-    50	
-    51	static int rda_rtc_settime(struct device *dev, struct rtc_time *tm)
-    52	{
-    53		struct rda_rtc *rtc = dev_get_drvdata(dev);
-    54		u32 high, low;
-    55		int ret;
-    56	
-    57		ret = rtc_valid_tm(tm);
-    58		if (ret < 0)
-    59			return ret;
-    60	
-    61		/*
-    62		 * The number of years since 1900 in kernel,
-    63		 * but it is defined since 2000 by HW.
-    64		 * The number of mons' range is from 0 to 11 in kernel,
-    65		 * but it is defined from 1 to 12 by HW.
-    66		 */
-  > 67		low = FIELD_PREP(RDA_SEC_MASK, tm->tm_sec) |
-    68			FIELD_PREP(RDA_MIN_MASK, tm->tm_min) |
-    69			FIELD_PREP(RDA_HRS_MASK, tm->tm_hour);
-    70	
-    71		high = FIELD_PREP(RDA_MDAY_MASK, tm->tm_mday) |
-    72			FIELD_PREP(RDA_MON_MASK, tm->tm_mon + 1) |
-    73			FIELD_PREP(RDA_YEAR_MASK, tm->tm_year - 100) |
-    74			FIELD_PREP(RDA_WDAY_MASK, tm->tm_wday);
-    75	
-    76		ret = regmap_write(rtc->regmap, RDA_RTC_CAL_LOAD_LOW_REG, low);
-    77		if (ret < 0) {
-    78			dev_err(dev, "Failed to update RTC low register: %d\n", ret);
-    79			return ret;
-    80		}
-    81	
-    82		ret = regmap_write(rtc->regmap, RDA_RTC_CAL_LOAD_HIGH_REG, high);
-    83		if (ret < 0) {
-    84			dev_err(dev, "Failed to update RTC low register: %d\n", ret);
-    85			return ret;
-    86		}
-    87	
-    88		ret = regmap_update_bits(rtc->regmap, RDA_RTC_CMD_REG, RDA_RTC_CMD_CAL_LOAD, 1);
-    89		if (ret < 0) {
-    90			dev_err(dev, "Failed to update RTC cal load register: %d\n", ret);
-    91			return ret;
-    92		}
-    93	
-    94		return 0;
-    95	}
-    96	
-    97	static int rda_rtc_readtime(struct device *dev, struct rtc_time *tm)
-    98	{
-    99		struct rda_rtc *rtc = dev_get_drvdata(dev);
-   100		unsigned int high, low;
-   101		int ret;
-   102	
-   103		/*
-   104		 * Check if RTC data is valid.
-   105		 *
-   106		 * When this bit is set, it means the data in the RTC is invalid
-   107		 * or not configured.
-   108		 */
-   109		ret = regmap_test_bits(rtc->regmap, RDA_RTC_STA_REG, RDA_RTC_STA_NOT_PROG);
-   110		if (ret < 0) {
-   111			dev_err(dev, "Failed to read RTC status: %d\n", ret);
-   112			return ret;
-   113		} else if (ret > 0)
-   114			return -EINVAL;
-   115	
-   116		ret = regmap_read(rtc->regmap, RDA_RTC_CUR_LOAD_HIGH_REG, &high);
-   117		if (ret) {
-   118			dev_err(dev, "Failed to read RTC high reg: %d\n", ret);
-   119			return ret;
-   120		}
-   121	
-   122		ret = regmap_read(rtc->regmap, RDA_RTC_CUR_LOAD_LOW_REG, &low);
-   123		if (ret) {
-   124			dev_err(dev, "Failed to read RTC low reg: %d\n", ret);
-   125			return ret;
-   126		}
-   127	
- > 128		tm->tm_sec = FIELD_GET(RDA_SEC_MASK, low);
-   129		tm->tm_min = FIELD_GET(RDA_MIN_MASK, low);
-   130		tm->tm_hour = FIELD_GET(RDA_HRS_MASK, low);
-   131		tm->tm_mday = FIELD_GET(RDA_MDAY_MASK, high);
-   132		tm->tm_mon = FIELD_GET(RDA_MON_MASK, high);
-   133		tm->tm_year = FIELD_GET(RDA_YEAR_MASK, high);
-   134		tm->tm_wday = FIELD_GET(RDA_WDAY_MASK, high);
-   135	
-   136		/*
-   137		 * The number of years since 1900 in kernel,
-   138		 * but it is defined since 2000 by HW.
-   139		 */
-   140		tm->tm_year += 100;
-   141		/*
-   142		 * The number of mons' range is from 0 to 11 in kernel,
-   143		 * but it is defined from 1 to 12 by HW.
-   144		 */
-   145		tm->tm_mon -= 1;
-   146	
-   147		return 0;
-   148	}
-   149	
+> Best regards,
+> Krzysztof
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
 
