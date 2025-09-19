@@ -1,184 +1,139 @@
-Return-Path: <linux-pm+bounces-35016-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35017-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E90AAB87DBE
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Sep 2025 06:29:07 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9BAF5B87E3D
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Sep 2025 07:09:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D84C11C8267D
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Sep 2025 04:29:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6D0C11B287F4
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Sep 2025 05:10:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B7AF26E16A;
-	Fri, 19 Sep 2025 04:29:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3506278E53;
+	Fri, 19 Sep 2025 05:09:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b1kfQhR2"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="XHLOVMEB"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fllvem-ot03.ext.ti.com (fllvem-ot03.ext.ti.com [198.47.19.245])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD5D310957;
-	Fri, 19 Sep 2025 04:29:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8CCE2773F1;
+	Fri, 19 Sep 2025 05:09:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.245
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758256141; cv=none; b=W21esT2hQozHbsplVE0LbGfbvKuL3FWu3XE9MZ1ITyyhBvPGTxJNRJoKHEvqMkQnN+yn76Qs/IMua1A5GV0hJSDf8mupksGWhzLsbibGq9hMB0plDFlHSP0fxCmfx3xJYAG2X2Edir9+tu7U+X/9mJeJ+yw+1D8S8PnoVbqsx+4=
+	t=1758258578; cv=none; b=RLgt+4ceIJlFvL8jkGlnjhA0P6ygzUljhuLClGWJK2tLSG5KDhb8uthctlH/aMWUehKMyXn+D138CjmKOX19uF4OMiDxN6KaJbEeo+LoyoGGr8ipF77YzTdjjShdgsZRJry3UlFLWWUIOv83dkx6NV3QUZngRw7K/E96JnZ9NbU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758256141; c=relaxed/simple;
-	bh=BPmNRDunTtPkrxCpxbQ/GYyrPJg/8IsQ3qWIqttlIo8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SEjTDErP/WKE8q/w4MSuBerL1r5xrcghpyq9amjBzQpCM5G1cMyZv2xPRlT0SWeVPK2AypEycht2eeHmBxTOH87cdbsPEqamMcl8f/BZhmLC1M1N5SlzVrqyVqj69iI8PaHsDKkTL5JdB57nxCGWld0i0y6kQv0dIQdqwhBvRjc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b1kfQhR2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EC7BC4CEF0;
-	Fri, 19 Sep 2025 04:28:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758256141;
-	bh=BPmNRDunTtPkrxCpxbQ/GYyrPJg/8IsQ3qWIqttlIo8=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=b1kfQhR287O7htaKiXuIZMmrxDm/ASTPAwE4Bb/3Zho/A2vZ/2MJzN/k/2YZF7IRd
-	 WA41uB53cxwSE7r5aAjuoxiUGlSG/g7qCJ2TcTR8N9/PqJa6omkHLOvlHR4RwGLpwi
-	 fJJtKutSm0kjypZvURtd7e6lj6MbibZOP2sIX3s38hDGk4FOCaTDdhv1xIrkqw8VjU
-	 VJtCGGxk2qzH1PR3cz2Ct3WVMK0rdaefBU5hypwLWUgz8HhPv3QqymA8tbxS96N9r4
-	 ps/ai0d1EMVECAH3WQVBOAbqlZOxPeqDIASj5SCB8ZMmz/AqKoH61ZkTK7CBDKBTt4
-	 16J4FKOikaJpA==
-Message-ID: <c210de74-6eb5-40a4-b87d-a4a5c3123e65@kernel.org>
-Date: Fri, 19 Sep 2025 13:28:54 +0900
+	s=arc-20240116; t=1758258578; c=relaxed/simple;
+	bh=F5Jn/Mw/73cU80/MsvIS8ddwx6SEJwWBFV97LvLrvuk=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FCxI5BN6tSn9nYy04l2QF7E/k6T1+DQ8M1w7qegSYGYg94AMJTU+NvJrZV6j+UbBs0SEGd/16Ow5xc52Or7Y8nJX1WQ16z/XM/bFIvAOki5EHqeXuIbE44sSLDkCQIjMFxJ3xFa/j4HXek7h9eXgUFOWjbGQphlxog0ChJEKwxw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=XHLOVMEB; arc=none smtp.client-ip=198.47.19.245
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from fllvem-sh04.itg.ti.com ([10.64.41.54])
+	by fllvem-ot03.ext.ti.com (8.15.2/8.15.2) with ESMTP id 58J59U8J166712;
+	Fri, 19 Sep 2025 00:09:30 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1758258570;
+	bh=6HUcjp3FlOUvL5hKJJeDh2/Ly9RvpAMmBbfH7nsNabg=;
+	h=Date:From:To:CC:Subject:References:In-Reply-To;
+	b=XHLOVMEB6/jMFHCd/GsCXR9F/TFETn2jtrmeVUfzmHTYw+tipQm2QPnkri/45wZIh
+	 8sXgV4DBcBD3cO3kYqBYVkBnxSOGUztYvUwfPtLVhT5K+q1t0LgV6oU70iBWvfiJKQ
+	 6YYPChw/yVSFWxo8FVQ/UIO3WPPpJBhwcLaGK9nA=
+Received: from DLEE207.ent.ti.com (dlee207.ent.ti.com [157.170.170.95])
+	by fllvem-sh04.itg.ti.com (8.18.1/8.18.1) with ESMTPS id 58J59U2U3694328
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Fri, 19 Sep 2025 00:09:30 -0500
+Received: from DLEE201.ent.ti.com (157.170.170.76) by DLEE207.ent.ti.com
+ (157.170.170.95) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Fri, 19 Sep
+ 2025 00:09:29 -0500
+Received: from lelvem-mr06.itg.ti.com (10.180.75.8) by DLEE201.ent.ti.com
+ (157.170.170.76) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
+ Transport; Fri, 19 Sep 2025 00:09:29 -0500
+Received: from localhost (lcpd911.dhcp.ti.com [172.24.233.130])
+	by lelvem-mr06.itg.ti.com (8.18.1/8.18.1) with ESMTP id 58J59ScT1741305;
+	Fri, 19 Sep 2025 00:09:29 -0500
+Date: Fri, 19 Sep 2025 10:39:28 +0530
+From: Dhruva Gole <d-gole@ti.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+CC: Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: Re: [PATCH v1] cpuidle: Fail cpuidle device registration if there is
+ one already
+Message-ID: <20250919050928.6sprmdpz2pwgydcc@lcpd911>
+References: <3374815.aeNJFYEL58@rafael.j.wysocki>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 01/10] dt-bindings: gpu: mali-valhall-csf: add
- mediatek,mt8196-mali variant
-To: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Boris Brezillon <boris.brezillon@collabora.com>,
- Steven Price <steven.price@arm.com>, Liviu Dudau <liviu.dudau@arm.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Matthias Brugger
- <matthias.bgg@gmail.com>, MyungJoo Ham <myungjoo.ham@samsung.com>,
- Kyungmin Park <kyungmin.park@samsung.com>,
- Chanwoo Choi <cw00.choi@samsung.com>, Jassi Brar <jassisinghbrar@gmail.com>,
- Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- Chia-I Wu <olvaffe@gmail.com>, Chen-Yu Tsai <wenst@chromium.org>,
- kernel@collabora.com, dri-devel@lists.freedesktop.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
- linux-pm@vger.kernel.org, linux-hardening@vger.kernel.org
-References: <20250917-mt8196-gpufreq-v3-0-c4ede4b4399e@collabora.com>
- <20250917-mt8196-gpufreq-v3-1-c4ede4b4399e@collabora.com>
- <20250918-festive-chowchow-of-joy-5a51de@kuoka>
- <5749727.31r3eYUQgx@workhorse>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <5749727.31r3eYUQgx@workhorse>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <3374815.aeNJFYEL58@rafael.j.wysocki>
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-On 18/09/2025 23:01, Nicolas Frattaroli wrote:
-> On Thursday, 18 September 2025 02:30:09 Central European Summer Time Krzysztof Kozlowski wrote:
->> On Wed, Sep 17, 2025 at 02:22:32PM +0200, Nicolas Frattaroli wrote:
->>> The Mali-based GPU on the MediaTek MT8196 SoC uses a separate MCU to
->>> control the power and frequency of the GPU.
->>>
->>> It lets us omit the OPP tables from the device tree, as those can now be
->>> enumerated at runtime from the MCU. It also means the mali GPU node
->>> described in this binding does not have any clocks in this case, as all
->>> clock control is delegated to the MCU.
->>>
->>> Add the mediatek,mt8196-mali compatible, and a performance-domains
->>> property which points to the MCU's device tree node in this case. It's
->>> required on mt8196 devices.
->>>
->>> Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
->>> ---
->>>  .../bindings/gpu/arm,mali-valhall-csf.yaml         | 32 ++++++++++++++++++++--
->>>  1 file changed, 30 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/Documentation/devicetree/bindings/gpu/arm,mali-valhall-csf.yaml b/Documentation/devicetree/bindings/gpu/arm,mali-valhall-csf.yaml
->>> index 7ad5a3ffc5f5c753322eda9e74cc65de89d11c73..ccab2dd0ea852187e3ab75923e19739622b2b3b8 100644
->>> --- a/Documentation/devicetree/bindings/gpu/arm,mali-valhall-csf.yaml
->>> +++ b/Documentation/devicetree/bindings/gpu/arm,mali-valhall-csf.yaml
->>> @@ -38,7 +38,6 @@ properties:
->>>        - const: gpu
->>>  
->>>    clocks:
->>> -    minItems: 1
->>
->> I don't understand why.
->>
->> Best regards,
->> Krzysztof
->>
->>
-> 
-> I am executing a Convex hull algorithm on the 3D space of "dt-bindings
-> maintainer opinions" to get a convex hull of acceptable dt-bindings
-> choices where two different choices are functionally equivalent.
-> 
-> With this additional opinion on the krzk axis, I now know that having
-> the base properties accurate for the general case is not required if
-> the per-compatible case sets the property to false anyway.
-> 
-> I hope no two opinions are collinear, as this would surely be my
-> undoing.
-> 
-> You get to pick which axis (X, Y, Z) you are. Right-hand rule, of
-> course.
+Hi Rafael,
 
+On Sep 18, 2025 at 23:19:20 +0200, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> Refuse to register a cpuidle device if the given CPU has a cpuidle
+> device already and print a message regarding it.
+> 
+> Without this, an attempt to register a new cpuidle device without
+> unregistering the existing one leads to the removal of the existing
+> cpuidle device without removing its sysfs interface.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>  drivers/cpuidle/cpuidle.c |    8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+> 
+> --- a/drivers/cpuidle/cpuidle.c
+> +++ b/drivers/cpuidle/cpuidle.c
+> @@ -635,11 +635,17 @@ static void __cpuidle_device_init(struct
+>  static int __cpuidle_register_device(struct cpuidle_device *dev)
+>  {
+>  	struct cpuidle_driver *drv = cpuidle_get_cpu_driver(dev);
+> +	unsigned int cpu = dev->cpu;
+>  	int i, ret;
+>  
+>  	if (!try_module_get(drv->owner))
+>  		return -EINVAL;
+>  
+> +	if (per_cpu(cpuidle_devices, cpu)) {
+> +		pr_info("CPU%d: cpuidle device already registered\n", cpu);
+> +		return -EEXIST;
 
-This piece of code is wrong and I could not deduce the reason. That's
-why I asked why you need that change. If you intend to waste my time, I
-will don't bother with this, but code is still wrong.
+Here we return prematurely after a try_module_get right?
+Do we need a module_put() similar to how you do it later by calling
+unregister_device function by checking ret = cpuidle_coupled_register_device ?
 
+> +	}
+> +
+>  	for (i = 0; i < drv->state_count; i++) {
+>  		if (drv->states[i].flags & CPUIDLE_FLAG_UNUSABLE)
+>  			dev->states_usage[i].disable |= CPUIDLE_STATE_DISABLED_BY_DRIVER;
+> @@ -648,7 +654,7 @@ static int __cpuidle_register_device(str
+>  			dev->states_usage[i].disable |= CPUIDLE_STATE_DISABLED_BY_USER;
+>  	}
+>  
+> -	per_cpu(cpuidle_devices, dev->cpu) = dev;
+> +	per_cpu(cpuidle_devices, cpu) = dev;
+>  	list_add(&dev->device_list, &cpuidle_detected_devices);
+>  
+>  	ret = cpuidle_coupled_register_device(dev);
+> 
+> 
+> 
+> 
+
+-- 
 Best regards,
-Krzysztof
+Dhruva Gole
+Texas Instruments Incorporated
 
