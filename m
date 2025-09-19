@@ -1,137 +1,110 @@
-Return-Path: <linux-pm+bounces-35079-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35080-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C55DB8B502
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Sep 2025 23:18:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 99231B8B535
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Sep 2025 23:23:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 656F51C8299B
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Sep 2025 21:19:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 59D14A029DE
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Sep 2025 21:23:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99B99283FE6;
-	Fri, 19 Sep 2025 21:18:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 116CF2C21E2;
+	Fri, 19 Sep 2025 21:23:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XkPkluym"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PUt3O2Zl"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74D8A35942
-	for <linux-pm@vger.kernel.org>; Fri, 19 Sep 2025 21:18:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF95F223702
+	for <linux-pm@vger.kernel.org>; Fri, 19 Sep 2025 21:23:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758316718; cv=none; b=Akz2yBeAXZIB9mY0L4ltH57ba4wOy1gfjP2RZZ0nA8GMdlAijQvehIwtT2oPuL3PIuma9uRIxwR7JPPWaTd3kCb1QMzkhbFAvhrtlMZltO5vntX9pmfujklulQZ+mXDvmheAbP7s4O6AJpE1N1X+q8I2P3Ili0wZIaaxoJ1XGJ4=
+	t=1758317012; cv=none; b=DX0yWS3sYv0XDFHtfWN9ykdn6pfDMcB7Uw7Ibe/hGVQbwpdd4HfkIuhYN4/0y5djMKGszjElf8emW4jF2gfMrRuX0wB9nQV4/fjx61WLuAqg1Voni22aEUGnl7sNNh/Et81VEpxrIDKv2bXvUrPDM1fI7yjE1xgE1PU+bHMyPV4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758316718; c=relaxed/simple;
-	bh=VWhVVsKPXQmKSTE/YpJOpJ4/wxJWWS1WWkQWAjV/pgQ=;
+	s=arc-20240116; t=1758317012; c=relaxed/simple;
+	bh=Mus4C9esnPUAx29I8Ebsex+Cx5Mb25n/skDJMlwEYWQ=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BUBx2eSPzLXsjwFJivsWeNaN8t1DOLn5aQCGL6YebD9KUWz+dcwoWcHhw+XkDQ82Gw5htd/h4TLvWlZZ6WFdp1hq+njkguwFgzY9F12hA5WGPyM9OhzUt/zOdEk4RFRA5ThYnUMWEsZWCGPEyZWz9jA5ERQAoTT1nyxImrQyfGI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XkPkluym; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C6E2C4CEFD
-	for <linux-pm@vger.kernel.org>; Fri, 19 Sep 2025 21:18:38 +0000 (UTC)
+	 To:Cc:Content-Type; b=F04O2EHEz28B+j2mscadn/H6oS3+LRdimVzR4uaVVW7Z2kfV8Q1g2z6XdOukB/D0AOUipghyn9y6pvNeB0pdAN6zixgFwEKdPm3i9nnMooXthxE4CYc35pJ5lifjG1otJPtE/vVS7Q8msdYdC2B8V0Dnrt8sRaeYmEy4cuMSI9s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PUt3O2Zl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE143C4CEFD
+	for <linux-pm@vger.kernel.org>; Fri, 19 Sep 2025 21:23:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758316718;
-	bh=VWhVVsKPXQmKSTE/YpJOpJ4/wxJWWS1WWkQWAjV/pgQ=;
+	s=k20201202; t=1758317011;
+	bh=Mus4C9esnPUAx29I8Ebsex+Cx5Mb25n/skDJMlwEYWQ=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=XkPkluymf4/RnWnwk4NluJMKaeo32Zahupxjh5qWxznfhVhbsaJunCTW+FJABvEZh
-	 t4GBlV75jUUvrQV/Mh8WAZ+MkAzlgViyI/TmAgiq1yhCeHaP9DoIy+gOL21wBCHJOa
-	 rhJHrfiQI0docUehM0+yCUq+FmmsnnJu7bqlh+omUtQIjJ6pWSbExz9Gnv0lPNB/UX
-	 nGxkVO0RRgVn4TMenpbeIyZNN9yx/uJdTaak1xvMfZ6PWj8cEafe+OWu3suZDYdvkv
-	 baOEOOb9gOlvQM8DuihsVG4L0FH5Yef3mVOaoEKgn8OTXI/rKca8wkN0vfKFH/q/Up
-	 bmvpIG96xRpbQ==
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-31d75b4d485so1472476fac.0
-        for <linux-pm@vger.kernel.org>; Fri, 19 Sep 2025 14:18:38 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVb+Xuq7TETRro82HU0xYVexO5i8rf65/EJJW/U0/i6vx+ruB1QaGZlSXwjR4WtUEZy6712pAd5qg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxvU3D2XyFNtIzsNp6G8dFmjY0Bm8ImBo0yqGOXM71Goan/rR7Q
-	UXdh3NTK7N2lathrXPuiEiqMMJjyuA1b41kgbrm71hUEiJPMAJu6bUPM9Ika3tq7U6j8k0x5pTH
-	PMJOcI/iRFIIu6uoF4avzJdTOctbOVQw=
-X-Google-Smtp-Source: AGHT+IHOcRkStXEvU/UDmJJ0KW1jphVIgoFFDb68U8uwojftCCW7Ubd8b32AMvWaONyE5WoAyPpMPTJOMCuyqXnRUJU=
-X-Received: by 2002:a05:6808:11cd:b0:43d:2454:b69f with SMTP id
- 5614622812f47-43d6c115e33mr2383359b6e.10.1758316717432; Fri, 19 Sep 2025
- 14:18:37 -0700 (PDT)
+	b=PUt3O2ZltJFMDOto5TUuBLGCXN69100NbGt9ksqtjCqEiGg5ayjnrtY+2EDFA3bnA
+	 7CZ9G9HebqcsQmUTbFvkzjBYdClvfXYqA0e6cIbK4eVYI0YDNaq0HviEJV4QT+npQd
+	 7/qxx7Ia+45cSTHHj+sFwG3f9KePscGdv8sg6PHxnF6VvdVah5+qQEnLZvN4j7AUzH
+	 l0r5panWybfblueub9x7FWacjIxoEOdixqD12VZ6hTYgXiq/nkJt+okY/gomsc2450
+	 CV2ycSCnoAKe8V7Gd89Vx9PgoBhLx+qAkYEx+lk7CkhpkMuYIwfwC6zmfbIkTTdKE5
+	 qAIk+7pzpxkvQ==
+Received: by mail-oi1-f176.google.com with SMTP id 5614622812f47-439b8c30864so88691b6e.1
+        for <linux-pm@vger.kernel.org>; Fri, 19 Sep 2025 14:23:31 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXQls8Uf2Uq7q5OSfRq8by01bc4qWw/fCHjTp97WtduTrlVuZ9PAu6AIWGW2dF9HJ2uOUsaot558A==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz8fO/rXJ37TzB9YUw5pQ9VHZLJjGCQfez105z58tn6jkNKfczw
+	fDPEFn1H49W13thHreHxodb3nDGiHrC7Ka3sYYkp0xT41e2ArG18UAwkpkE2bE1zEs+1I2NzfYa
+	b8Q1AVQkT+CWZ2iyKvOI2qg1RuLV4uNY=
+X-Google-Smtp-Source: AGHT+IE7ElRHaRGRktvVK45BptE2BVF7iG4w75CjDKLH0k31Wvji/o6p+tJtDxVaRRPQEDgd4RIBbt9jHs4wY6NlADU=
+X-Received: by 2002:a05:6808:bca:b0:438:8c9:5f4 with SMTP id
+ 5614622812f47-43d6c19c11bmr2321873b6e.19.1758317011042; Fri, 19 Sep 2025
+ 14:23:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250915070250.416423-1-zhangzihuan@kylinos.cn>
-In-Reply-To: <20250915070250.416423-1-zhangzihuan@kylinos.cn>
+References: <20250912073502.743735-1-tianyaxiong@kylinos.cn>
+In-Reply-To: <20250912073502.743735-1-tianyaxiong@kylinos.cn>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 19 Sep 2025 23:18:26 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0i4V=ayEXRfJXduR-15jvVHgP_Cmc80WfhQoDv7N5xGjw@mail.gmail.com>
-X-Gm-Features: AS18NWCv7xrYZHNlJnFt8d_URS0ZeCcGF5OtJtum09A_RS7WmlieUWXU1zfkwx4
-Message-ID: <CAJZ5v0i4V=ayEXRfJXduR-15jvVHgP_Cmc80WfhQoDv7N5xGjw@mail.gmail.com>
-Subject: Re: [PATCH v1] cpufreq: Replace pointer subtraction with iteration macros
-To: Zihuan Zhang <zhangzihuan@kylinos.cn>
-Cc: "Rafael J . wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
-	zhenglifeng <zhenglifeng1@huawei.com>, linux-pm@vger.kernel.org, 
+Date: Fri, 19 Sep 2025 23:23:19 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0iwyvdiuiKhXh79jwQe=1G+=mohrdtnSo2f8+s6-KZWjg@mail.gmail.com>
+X-Gm-Features: AS18NWBsNWC5hi6eVw9L4pzpnBy4Mqr8BLjyCBprj5irs95Urhyiv8ZP-KTDmyI
+Message-ID: <CAJZ5v0iwyvdiuiKhXh79jwQe=1G+=mohrdtnSo2f8+s6-KZWjg@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: intel_pstate: Use likely() optimization in intel_pstate_sample()
+To: Yaxiong Tian <tianyaxiong@kylinos.cn>
+Cc: srinivas.pandruvada@linux.intel.com, lenb@kernel.org, rafael@kernel.org, 
+	viresh.kumar@linaro.org, linux-pm@vger.kernel.org, 
 	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-In the subject, this is just one macro, not multiple macros.
-
-On Mon, Sep 15, 2025 at 9:03=E2=80=AFAM Zihuan Zhang <zhangzihuan@kylinos.c=
+On Fri, Sep 12, 2025 at 9:35=E2=80=AFAM Yaxiong Tian <tianyaxiong@kylinos.c=
 n> wrote:
 >
-> The cpufreq documentation suggests avoiding direct pointer
-> subtraction when working with entries in driver_freq_table, as
-> it is relatively costly. Instead, the recommended approach is
-> to use the provided iteration macros:
+> The comment above the condition `if (cpu->last_sample_time)` clearly
+> indicates that the branch is taken for the vast majority of invocations
+> after the first sample in a cycle. The first sample is a one-time
+> initialization case.
 >
->   - cpufreq_for_each_valid_entry_idx()
+> Add likely() hint to the condition to improve branch prediction for
+> this performance-critical path in intel_pstate_sample().
 >
-> Update freq_table.c accordingly to replace pointer difference
-> calculations with the proper macros.
-
-And here too.
-
-> This improves code clarity
-> and follows the established cpufreq coding style.
->
-> No functional change intended.
->
-> Signed-off-by: Zihuan Zhang <zhangzihuan@kylinos.cn>
+> Signed-off-by: Yaxiong Tian <tianyaxiong@kylinos.cn>
 > ---
->  drivers/cpufreq/freq_table.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
+>  drivers/cpufreq/intel_pstate.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/drivers/cpufreq/freq_table.c b/drivers/cpufreq/freq_table.c
-> index d5111ee56e38..ca06a0236e70 100644
-> --- a/drivers/cpufreq/freq_table.c
-> +++ b/drivers/cpufreq/freq_table.c
-> @@ -33,16 +33,17 @@ int cpufreq_frequency_table_cpuinfo(struct cpufreq_po=
-licy *policy)
->         struct cpufreq_frequency_table *pos, *table =3D policy->freq_tabl=
-e;
->         unsigned int min_freq =3D ~0;
->         unsigned int max_freq =3D 0;
-> +       unsigned int i =3D 0;
-
-This initialization isn't necessary because
-cpufreq_for_each_valid_entry_idx() will initialize i to 0 to start
-with AFAICS.
-
->         unsigned int freq;
->
-> -       cpufreq_for_each_valid_entry(pos, table) {
-> +       cpufreq_for_each_valid_entry_idx(pos, table, i) {
->                 freq =3D pos->frequency;
->
->                 if ((!cpufreq_boost_enabled() || !policy->boost_enabled)
->                     && (pos->flags & CPUFREQ_BOOST_FREQ))
->                         continue;
->
-> -               pr_debug("table entry %u: %u kHz\n", (int)(pos - table), =
-freq);
-> +               pr_debug("table entry %u: %u kHz\n", i, freq);
->                 if (freq < min_freq)
->                         min_freq =3D freq;
->                 if (freq > max_freq)
+> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstat=
+e.c
+> index 2519eb527468..d540f2ab9a52 100644
+> --- a/drivers/cpufreq/intel_pstate.c
+> +++ b/drivers/cpufreq/intel_pstate.c
+> @@ -2531,7 +2531,7 @@ static inline bool intel_pstate_sample(struct cpuda=
+ta *cpu, u64 time)
+>          * that sample.time will always be reset before setting the utili=
+zation
+>          * update hook and make the caller skip the sample then.
+>          */
+> -       if (cpu->last_sample_time) {
+> +       if (likely(cpu->last_sample_time)) {
+>                 intel_pstate_calc_avg_perf(cpu);
+>                 return true;
+>         }
 > --
-> 2.25.1
->
+
+Applied as 6.18 material, thanks!
 
