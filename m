@@ -1,126 +1,166 @@
-Return-Path: <linux-pm+bounces-35044-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35045-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A3C6B8A56C
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Sep 2025 17:38:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 74874B8A581
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Sep 2025 17:39:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 90BB6B64831
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Sep 2025 15:36:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F01B7188BEF3
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Sep 2025 15:38:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 035C631A80A;
-	Fri, 19 Sep 2025 15:36:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B43C31AF27;
+	Fri, 19 Sep 2025 15:37:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="olAimwhx"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="UJi2x2Kz"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13BDD31A564
-	for <linux-pm@vger.kernel.org>; Fri, 19 Sep 2025 15:36:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4A3331A7E0;
+	Fri, 19 Sep 2025 15:37:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758296190; cv=none; b=QeTw2PJH2F9I5bKlcADhCHnHeKln1YwmkT8U5nfc2FCp9YRsY4BbiOQZ9ydPkp52UmMV0XYiz1AvD1MzMy/4Sxa4asY12Y6THumtHE1kjOnInpEIIYMsMQRiwEGTuFDGQWKXzpyhF7ElrX3jQWUS3oEWuTdXBbH+s64vRetinLI=
+	t=1758296227; cv=none; b=FGm0Uzu5NWSYzKiqx+EHalOQTxxAgQLHY0T630NKxr5F0sdfIb2khgHNx0tff5OW2UglxHTCguAZ+jVmQSuSeUbNYRnLVXJF5ZzPcHPa7weZsGbc0Kr9ESxDcu0G2+GDSFOOYEkDfWidSh3Q38Ar6nNV1e+NYX+W+BzWkVyr/4A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758296190; c=relaxed/simple;
-	bh=QQ13y357KdcEoMsg6bRgvQuNzIHdWlBZTLLZM/2ttNo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=efczkUBHVMFBUs2sBY8N/EhH2Thvzqtayc4PeH0Pi+3TMHe7xS3OeWoMZu+16QIVmuXnQlCJMxbe8RKBKDjxO0Wuu7F8no9F/omEr+oW0vTDU/6C2QvTe3FEDtY8vLW6397S7/mmDXN9L11Hy/5lH7uDnnDtqukbyWcWk9BvBM0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=olAimwhx; arc=none smtp.client-ip=209.85.221.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-3ee1381b835so1237940f8f.1
-        for <linux-pm@vger.kernel.org>; Fri, 19 Sep 2025 08:36:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1758296187; x=1758900987; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=f2pRpE/45sP9niRYSRq9qImpVKIDTIafU8gzww+a/cI=;
-        b=olAimwhxLsKMhKYeqjqMZvqxn071mQyq0ldUX5QgkcLSzXtBsBqRHbSAGScekEdTU+
-         MGeKRZoRPGyIycDGUzu4hIs9xjb51px4qgFatcI28GGL3ixLuZ9289r4aJtFsbawrk1w
-         choirb1DyaXSd/XwmZ67senyHvZkBdUOQnUef/320a6Y8GgP7SNzHEBF4ickCRidcAkq
-         Ts5SyCHyMJNHWgi90qP4yM7ShZ0LJxxu1EMaYd0igXZIutrxE6xlJ4nED6tfvDdh/4+t
-         wV/p3mML4z4DN4PsFA0/67+fcm78wM3zxtmFQmYQoVRq32aAr2cx5jojUcMzgqV3nFLZ
-         odjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758296187; x=1758900987;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=f2pRpE/45sP9niRYSRq9qImpVKIDTIafU8gzww+a/cI=;
-        b=mO1ROamYFzhIn05Sq1YRt/sxdf0OVYfi/o8jzSRq+4OOrg+Ao+CqSckf7oi7bdVjti
-         RN8yDh5h8mqBekvmh5n+wAGwpvxr1LrgowYKVrhVnlmIOS0qiHblLcgU5h6nhtGfTU8J
-         93K2c5JSywmEnfGuFQmBIa3xq7oKv8iNzTjmTa1hJSzAvX1GdI6nJTO5pAJh9ALPgjsu
-         G1Vc9j6YJ+/Gl08T2pR/LCSfiSrhTHz9VUwLZ+Yfg4Si+DT6GdTnZ+NA0gH+GnvIFzDq
-         l451m97dXIvojQm8wRQuKKL3yCLs0NhoslyyFZO+51AhKE5i6rK3ER8D1oyXbqIMUXz6
-         N36A==
-X-Forwarded-Encrypted: i=1; AJvYcCURXJ23QeQie2DPQhE3M/MNZnBl0enjhzQ4G/EKgvh3Wfq6kjzpt4PHYZkIRTMaVzjRQ6ZpH/1VMA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx37bfkUvMl/Vi+xf1y7EMxpmjXjPwOpQ5ZKC6H8DaI8TzEkCMN
-	cqnHPmcTan3/DXWGo3r+sUI+LEYoyb+xU1n5v4D2mi7uLpz/zWkJGW9Ikok9iLKc4Ew=
-X-Gm-Gg: ASbGncuDRsKtaj69W41AtBWY4l4xKBjYki8199Et2/SoUQztzFu/LTK6+JtiYuWIbxf
-	5wPM5MOyY7t7H2QYKXz6U0dnk5kueyxeua9WDi0vYZRuiiwZfaLdOM9JIh6tgDnA1XJNhuJE1KG
-	4FY0vKb96CHgQRIPt1of/RDi5roIph7eoUxqBNLL6XsrIftLsiwjPkZ+aHf6zr/bXlbWQr60ocw
-	DgTPSHBN6WrsNI/3hTwK6WEtRqlFkGdxStF1THE0Vs+OH7lOmWWVNEtp9q178wDfC3bHmIvvL7D
-	s3oVHBGEXm+OKcuRUJJVh7KXPPV4AHzmJiILxkL9QclKyNRQhRuS3vIUhKUp+cuLeI0FwmNCjnF
-	/kFDLz229DiURCZCcHiaRqJNuoram/ufjr3kSZwdrYxkMd3Ss4sDKu2BwQduvl6QcrJFLgQaEZT
-	qtAg==
-X-Google-Smtp-Source: AGHT+IG3N6yDffPIIsvlc2hrfvII+0O+KrDC9YtG2RKsx3+KurTsZNXbENU81ur2gTzujZrnIC6z3A==
-X-Received: by 2002:a05:6000:1862:b0:3ec:1b42:1f8d with SMTP id ffacd0b85a97d-3ee7c5542c6mr2990681f8f.10.1758296187269;
-        Fri, 19 Sep 2025 08:36:27 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:8ffd:205a:6719:49c1? ([2a05:6e02:1041:c10:8ffd:205a:6719:49c1])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-464f0d8a2bfsm93035635e9.2.2025.09.19.08.36.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Sep 2025 08:36:26 -0700 (PDT)
-Message-ID: <3613157b-8c98-44b4-89b3-75eb7fe397ac@linaro.org>
-Date: Fri, 19 Sep 2025 17:36:26 +0200
+	s=arc-20240116; t=1758296227; c=relaxed/simple;
+	bh=xyJKsvc0j5co7gCX4zKZ8pNCOTw4jF2Tw20isUfWHrk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SATzTVUm/W4CCOzNa5bHwgtPkG3XwCciVQFrGfCA+qxcrBrOHRWFwT4Et5LMbv6kuwKNWuC8gFArDbakLHkLvps94H1xPnkJ2xGqg1qic4/GlO1y6unmjB+ePViEFaXMBUcDrx5WqirVPJ6F07Z+3uioychjdvrsDSg4qkY5KJk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=UJi2x2Kz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2991C4CEF0;
+	Fri, 19 Sep 2025 15:37:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1758296226;
+	bh=xyJKsvc0j5co7gCX4zKZ8pNCOTw4jF2Tw20isUfWHrk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=UJi2x2Kz0tOs8xaJZPDz37rTz9jEt33mJvVtKKq7/cIMf6TjK3Jzn04Rzx8CQJ2CY
+	 UVmAeyhxs1yriV1zQ9rcOG3NmKPHZbNNhcwYdVnZoDo6zhMwRDqiDT/mhatajgNTiI
+	 HZU6XL8c4r85dNfL3Vg7KEFwCw03qtMMgB1D6LjI=
+Date: Fri, 19 Sep 2025 17:37:03 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: David Lechner <dlechner@baylibre.com>
+Cc: Andy Shevchenko <andriy.shevchenko@intel.com>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>,
+	Andy Shevchenko <andy.shevchenko@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	sboyd@kernel.org, jic23@kernel.org, nuno.sa@analog.com,
+	andy@kernel.org, arnd@arndb.de, srini@kernel.org, vkoul@kernel.org,
+	kishon@kernel.org, sre@kernel.org, krzysztof.kozlowski@linaro.org,
+	linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+	linux-pm@vger.kernel.org, kernel@collabora.com, wenst@chromium.org,
+	casey.connolly@linaro.org,
+	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>
+Subject: Re: [PATCH v4 2/7] nvmem: qcom-spmi-sdam: Migrate to
+ devm_spmi_subdevice_alloc_and_add()
+Message-ID: <2025091902-dwelled-calculate-c755@gregkh>
+References: <t3uk3k4h3l53yajoe3xog2njmdn3jhkmdphv3c4wnpvcqniz4n@opgigzazycot>
+ <aMlnp4x-1MUoModr@smile.fi.intel.com>
+ <mknxgesog6aghc6cjzm63g63zqbqvysxf6ktmnbrbtafervveg@uoiohk3yclso>
+ <CAHp75Vf7KrsN7Ec9zOvJoRuKvkbrJ5sMv7pVv6+88tPX-j_9ZA@mail.gmail.com>
+ <er7dkmzutsu3ooegeihjzngi6l3hol5iaohecr3n5bolfse3tj@xeedlx2utwym>
+ <aMxWzTxvMLsVWbDB@smile.fi.intel.com>
+ <2025091925-thirsting-underuse-14ab@gregkh>
+ <f16ea5eb-cbda-4788-956b-d41c2af51745@baylibre.com>
+ <2025091918-glancing-uptown-7d63@gregkh>
+ <8702fd35-945a-4d20-bc37-410c74c70da6@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] thermal/drivers/rcar_gen3: fix mapping SoCs to generic
- Gen4 entry
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
- linux-renesas-soc@vger.kernel.org
-Cc: =?UTF-8?Q?Niklas_S=C3=B6derlund?=
- <niklas.soderlund+renesas@ragnatech.se>,
- Geert Uytterhoeven <geert+renesas@glider.be>,
- =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>, Magnus Damm <magnus.damm@gmail.com>,
- linux-pm@vger.kernel.org
-References: <20250911070254.2214-2-wsa+renesas@sang-engineering.com>
-Content-Language: en-US
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20250911070254.2214-2-wsa+renesas@sang-engineering.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8702fd35-945a-4d20-bc37-410c74c70da6@baylibre.com>
 
-On 11/09/2025 09:00, Wolfram Sang wrote:
-> S4 was added first so it was assumed to be the blueprint for R-Car Gen4.
-> It turned out now, that S4 is a special mix between Gen3 and Gen4. V4H
-> and V4M are the similar ones as confirmed by HW engineers.
+On Fri, Sep 19, 2025 at 10:20:29AM -0500, David Lechner wrote:
+> On 9/19/25 10:13 AM, Greg KH wrote:
+> > On Fri, Sep 19, 2025 at 10:05:28AM -0500, David Lechner wrote:
+> >> On 9/19/25 8:59 AM, Greg KH wrote:
+> >>> On Thu, Sep 18, 2025 at 10:00:29PM +0300, Andy Shevchenko wrote:
+> >>>> I,o.w. I principally disagree on putting MODULE_IMPORT_NS() into the header
+> >>>> file.
+> >>>
+> >>> Yes, please never do that, it defeats the purpose of module namespaces
+> >>> completly.  If you don't want to have module namespaces, don't use them
+> >>> for your subsytem.  Don't use them and then make them moot by putting
+> >>> MODULE_IMPORT_NS() in the .h file for the symbols as that's pointless.
+> >>>
+> >>> thanks,
+> >>>
+> >>> greg k-h
+> >>
+> >>
+> >> Could someone suggest some additional explanation to add to
+> >> Documentation/core-api/symbol-namespaces.rst to explain the
+> >> reasoning behind this?
+> >>
+> >> Right now, the only part of that document that say _why_ we have
+> >> module namespces says:
+> >>
+> >> 	That is useful for documentation purposes (think of the
+> >> 	SUBSYSTEM_DEBUG namespace) as well as for limiting the
+> >> 	availability of a set of symbols for use in other parts
+> >> 	of the kernel.
+> >>
+> >> So I don't see the connection between this explanation and and:
+> >>
+> >> 	[Putting MODULE_IMPORT_NS() into the header] defeats
+> >> 	the purpose of module namespaces completely.
+> >>
+> >> I am guilty of putting it in a header, so if I need to fix that
+> >> I would like to actually understand why first. Andy has mentioned
+> >> something about potential abuses, but without any example, I haven't
+> >> been able to understand what this would actually actually look like.
+> >> Or maybe there is some other reason that Greg is thinking of that
+> >> hasn't been mentioned yet?
+> > 
+> > Let me turn it around, _why_ would you want your exports in a namespace
+> > at all if you just are putting a MODULE_IMPORT_NS() in the .h file at
+> > the same time?  What is this giving you at all compared to just a normal
+> > MODULE_EXPORT() marking for your exports?
+> > 
+> > I know what it gives me when I don't put it in a .h file, but I think
+> > that might be different from what you are thinking here :)
+> > 
+> > thanks,
+> > 
+> > greg k-h
 > 
-> So, rename the S4 entry to be specific instead of generic. Rename the
-> V4H entry to be the new generic one, so V4M will use it as well now.
-> 
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-> Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> ---
+> Up to now, my (naive) understanding was that the point module namespaces
+> is to reduce the number of symbols in the global namespace because having
+> too many symbols there was starting to cause problems. So moving symbols
+> to another namespace was a "good thing".
 
-Applied, thanks
+Yes, it is a "good thing" overall, but by just making all of your
+symbols in a namespace, and then including it in the .h file, that does
+the same exact thing as before (i.e. anyone that includes that .h file
+puts the symbols into the global namespace with that prefix.)
 
+Ideally, the goal was to be able to easily see in a module, what symbol
+namespaces they depend on, which requires them to put MODULE_IMPORT_NS()
+in the module to get access to those symbols.  dmabuf has done this very
+well, making it obvious to the maintainers of that subsystem that they
+should be paying attention to those users.
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+For other "tiny" subsystems, it just slots away their symbols so that no
+one else should ever be using them, and it makes it blindingly obvious
+if they do.  For example, the usb-storage symbols, anyone that does:
+	MODULE_IMPORT_NS("USB_STORAGE");
+had better be living in drivers/usb/storage/ otherwise I need to have a
+word with those offenders :)
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+So it's a way of "tidying" up things, and to make things more explicit
+than just having to rely on searching a tree and looking for .h include
+usage.  Right now, you are kind of defeating that by just allowing a .h
+to be included and you don't get any benifit of being able to watch out
+for who is actually using those symbols overall.
+
+Hope this helps,
+
+greg k-h
 
