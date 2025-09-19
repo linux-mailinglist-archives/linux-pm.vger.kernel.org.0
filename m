@@ -1,143 +1,117 @@
-Return-Path: <linux-pm+bounces-35021-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35022-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 31344B88FC4
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Sep 2025 12:31:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DF6F3B892A0
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Sep 2025 12:58:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7D17B5A4739
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Sep 2025 10:30:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A71E358355F
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Sep 2025 10:58:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47F6030C351;
-	Fri, 19 Sep 2025 10:28:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6634B309EF9;
+	Fri, 19 Sep 2025 10:57:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="YO3VnQy/"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="iQc1KjTX"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24AAC30C109
-	for <linux-pm@vger.kernel.org>; Fri, 19 Sep 2025 10:28:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADB08275B12
+	for <linux-pm@vger.kernel.org>; Fri, 19 Sep 2025 10:57:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758277716; cv=none; b=Kfhefku7xRQ/A5XHIJYYrjsxltchRn3hqq2tuSsaL8B3yAySsl9orS/iq5kX+7S4pqKdAjfnAAZ8zwNRLzB/Cjgfwb2BK528nClsWeQZYKJEhB9HysiH/Mpy4z/PkjHanHql78b+GcMUFaad7/u+39r1u1G1g9+UncVUjcaqQNo=
+	t=1758279477; cv=none; b=orYRb8EbvTwrj6LQFeeSnOBPBrHN9LtLOuVVvttQjRe8q279jTJGSxolC1De4nmW+z60OGAJHy+xk7NPjtCKXopiWmwGfrk5kTh05l09srli3eowoxVE0uZomHYjwPL6QWo0lfWUUddHOko9h9HaRZK/DCB0Wh5YyziNeDZ6/Jk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758277716; c=relaxed/simple;
-	bh=jPptXR8NGJB64pS2KaBD1Hd4nTNBbsT4o5H8w9yHHrg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JS5rfv7waftGKvfKKELQ0SF2I43QsFZ6hjaJ7ZNJLWhEJ75wYgb1rc4LOyRzJVsJg44swLxhabhqH3pZQ0Jf7fHgrXZggrJjCCYYT/O0lx5CmzBIT4/DBOhWom/lfbiCflZoRUOcWr+JZRDTckPVHFBir15RDVfPDH6ivoqjFpo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=YO3VnQy/; arc=none smtp.client-ip=209.85.167.54
+	s=arc-20240116; t=1758279477; c=relaxed/simple;
+	bh=dyaK275FFJPRupwFOZJFha2dT0/fk+JjTVNxDnrMlAo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=L41G0GljbAt3MQsPljP9HvyEwbLjiKX0ai76ozUPushcHzL2Y14K8kYPoKDvXL6J34EhxOFDpUGCdLmqLeqGlRHg3do0p/O23cRq7Bya98FjlY+AFpmohDiYDalsStM8YUvgSRe6GZqVE20G174nuQCj3tukoDigicZZkwjzPrE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=iQc1KjTX; arc=none smtp.client-ip=209.85.219.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-57992ba129eso1333330e87.3
-        for <linux-pm@vger.kernel.org>; Fri, 19 Sep 2025 03:28:33 -0700 (PDT)
+Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-ea9d7bf38a4so678807276.1
+        for <linux-pm@vger.kernel.org>; Fri, 19 Sep 2025 03:57:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1758277712; x=1758882512; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=qQQVvpAmXSFXhkPIfMzRXcNKNt7LSya8fPUUSNlSXhk=;
-        b=YO3VnQy/UCZXDNmtBP/IpOgHKs6heyNppYtUAEegtIaeyQkpehG5iiCLNnU9hh8K1d
-         UNBOKjJRCuSpcKar1auLQatgeH8Xe3tDzXfUSYa9Hd9HZPLoVGP6iqrvQfo5M4pSWeXt
-         o+Ci5kWZFZ0IAzVBSUecgRLUqoiGQ8JvxL+ss1nKpW8WI7JLFSJDErrJ4N5RG9M3EGoQ
-         DIx51u/TMkWkhxT9KLhvAjCDEwP9QrjPIZ+A5fNnYvs0i2Zo56+BbwO0d+M51KLdt6n/
-         bFjatjMADg33SKaYA+iN5IGghd/6Hbc38OaDLX/8e/S0qlWwqgt9T8eX/eT6gfSMXFUw
-         rPLQ==
+        d=linaro.org; s=google; t=1758279475; x=1758884275; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=PDlYVh7GTbh+tgCNXodsPOOiwVHg3s+VohI00r8zodg=;
+        b=iQc1KjTXf8JoNrSb288v6J2dQSYz6GvN1IkiNl69ZFrWTU0M9B7Bkzj0YoowY9cqID
+         zv4Kj7ye3oQr91neZafkuqC6w9E/u7StHPl3qPly/et8m76JdhF9kfXDKGR7XQdbVKQD
+         ACAy21unPgvnMQblE/ulpGbANsqSe7wJXmajmyohsHbY7GIf6El7LjX1FTdh5OemO67b
+         tVk+L4CXs6e47CZqmTh8NRvyQbvlvPWIX/Gnkube/Cv7Mvf0sDI26MvRjyfNs7TpF6mb
+         PJ36codXRLqBlUY2WLQudA6jEU8gotBIOlg/eAsa/ohyVfxRTmcc1jLQ5Hdl7kT7CCPe
+         VOWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758277712; x=1758882512;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1758279475; x=1758884275;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=qQQVvpAmXSFXhkPIfMzRXcNKNt7LSya8fPUUSNlSXhk=;
-        b=leOx85slNle7iv1IXTwjMaj9uo6pWROIBbds4KHM/seJs2yRfOpbqGVjMtD5n6shZF
-         hF3sedID9zWeJryytSwnFbSAkCsrDff+jUsJBjYT83ygdfTvHfoD3dkVGgDlv1FF/YDN
-         xVX0IbjtltkRLt5sumI3Pcp2X1FfoldLv1dR9nxHjr7SvaEfQHpzAseZwVLPNS63TwS0
-         b6k7C4wwRo0/Y8mioX2SFeTgags1b0GNlfxVwfhXIDjrUpNBMLP65ddtGsah2lH3OgpF
-         VtC8HpA8t+SUuYiiLxfW6ApSn/JZdbnp3jJxN0nOoAo5XDxBi20DSy77W+8zsXXT2ziu
-         LvqQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWZiwrODG54b5UFdbUBPXtu5e5t3nA3lOdDc0PUYPFIQ8PDyxjIA63NVMVcupW447JO4SFSbn5B0g==@vger.kernel.org
-X-Gm-Message-State: AOJu0YziRvTIsG1wqrFa0LFeM0mvLQE51EerM440KKSkvXxKprdaw8q/
-	g2+n9woAHoBADhOHJmbaSXIuxlX/2aqDsnt+YThllPLUUnaUBDmAK0vHqeRfUj7WwgNvarFsxQ9
-	0/M0G
-X-Gm-Gg: ASbGncuJDejHh7LnKlCJ+GXfcyW8CvXmDwdMNQ504I9KoP3DyvoLX8gIYCTnP2N2p0c
-	5GsECgKDT8vUt5mxFWCXQx0l4H+2u1xARFBls2NfUZ9zlwRg6OASIccM1TdZJEuw2X3EP73585d
-	vyEJxMW7kRi7VmHXNAMas67eYumh+/zqfUEKVEEkHY4+hsAmiIAq3eBq8iIDaAOT/AyK4NDDTqY
-	w++KaiaO/KY/zWqAZlreeqPElJMr+EK0a0GxgsWdv/r47fpQUkFBo+x0fsEJHjC+b7Eemmu5NR6
-	lsZwK4EaZiyt4BUl/ecuxIhZlMmvdPCbmVjenmei1sofQQ7S/CiFPdXs4ycY3JB8NrosOLlTqE1
-	KDwyPURIP2c4RQ0H8pwMPsgmL2DKqkeCUp2DZEAHz+MxWiwi3QMeMl6ydNNU3I0i5qmwzafsm
-X-Google-Smtp-Source: AGHT+IETmUnQlGUARBZSFBOrd6464VLoS8WXVDGEarMvcetfBwFqWJjqKJS/dx8EIEPRIYxLAxnydg==
-X-Received: by 2002:a05:6512:79a:b0:55f:595f:9a3f with SMTP id 2adb3069b0e04-579e1c5f94amr819145e87.15.1758277712193;
-        Fri, 19 Sep 2025 03:28:32 -0700 (PDT)
-Received: from uffe-tuxpro14.. (h-178-174-189-39.A498.priv.bahnhof.se. [178.174.189.39])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-578a9950683sm1280054e87.114.2025.09.19.03.28.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Sep 2025 03:28:31 -0700 (PDT)
-From: Ulf Hansson <ulf.hansson@linaro.org>
-To: Linus <torvalds@linux-foundation.org>,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Ulf Hansson <ulf.hansson@linaro.org>,
-	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] pmdomain fixes for v6.17-rc7
-Date: Fri, 19 Sep 2025 12:28:29 +0200
-Message-ID: <20250919102829.151957-1-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.43.0
+        bh=PDlYVh7GTbh+tgCNXodsPOOiwVHg3s+VohI00r8zodg=;
+        b=fd6/jOhaqqFl6tRe6m411HPyWGKApNKKZVE3QYwzhJxTa+Fe/JlZfbNwUj6oYDYnZr
+         /Cj9xsKbgEvJMvk0cHOIY4iSoQIRuh4aD5feyZtFeOUKoFKEaSSOo2nrFLI/ecBxZHNG
+         K8pFOiKktAXIhYWfIPoQx+wypwpSkZrtluQvhFrVMwWMq8ULNruwxJErOVFh4CUm/Z8K
+         OghERQRnCV3L8szSSYP8qd1Tbpyq7oACCukpvfdgAm1yS4CoKjpBMFmKK6NyusSwqTqn
+         EnnB2owzUO+UpwHcQ/1bNCNw9WZdG4lmmI0dfAdo6w/pO8v6iSrusFIpanypa5ms3Zik
+         Anag==
+X-Forwarded-Encrypted: i=1; AJvYcCX+rgM0iXNGlbqgbvVnP0B8e/ni1FMaSRLUT1HGpGYLkDhQFmsBzzk5aaIaiYyIhX2TH6kyzMILJg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzeypdQ9HmARTNjpAEVQPow+KJvxVJx3CCO8JGp5hCT7rcYkAW5
+	ySDdlRl+DksMuONSI3G3l1yQUumSr87Z1SU2TFhvxkpj3s1MEIawBANeSArT9QjfAvzMm3ILnjf
+	K0SPl2LyDhJyTmrcOLiteyrdrRPdhAgmxaxTeo0bMKg==
+X-Gm-Gg: ASbGncsyIoqIwXdD99scumEvlct/lqbVhb1cAX64Zd2a/rT0CuDfEzBeNfefoWkUMPU
+	m8Q83oPym3XndBfGljLn5kPvzHhmGXiFbNtBwASX3KoOg3iLZ6Pf1zgX3mHYWCh6DEfXDphtbs0
+	JZRqhfMtGp2gi+a3JJgYdp/BK+3e5vLbxVRcvDAN6GK+lXJwGVnT6wNF3OODyPsOzyd7lMaIZpn
+	wepIkYs
+X-Google-Smtp-Source: AGHT+IErTnWgZxsd2J1EC6Faj4gYfD5qobVd3VLWos0tsTxFU2Dylts0CyodcC1JPhxZlPN7R/LgecNfJDI31clkpQc=
+X-Received: by 2002:a53:cf0b:0:b0:5fb:cf0:9151 with SMTP id
+ 956f58d0204a3-63477703065mr1941255d50.11.1758279474618; Fri, 19 Sep 2025
+ 03:57:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250918173323.340738-1-uwu@icenowy.me>
+In-Reply-To: <20250918173323.340738-1-uwu@icenowy.me>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Fri, 19 Sep 2025 12:57:18 +0200
+X-Gm-Features: AS18NWDfr4pqweeSDolF_LptT5gjyy5EtVR79t2lNhAD5snr7qdfOv4ibHayFqg
+Message-ID: <CAPDyKFrGyDiPZk7BZYAon+xG7S83SPvp59TNMjyXWX7Okhp=Jg@mail.gmail.com>
+Subject: Re: [PATCH v2 0/2] Poweroff/reboot support for TH1520 via AON
+To: Icenowy Zheng <uwu@icenowy.me>
+Cc: Drew Fustini <fustini@kernel.org>, Guo Ren <guoren@kernel.org>, Fu Wei <wefu@redhat.com>, 
+	Michal Wilczynski <m.wilczynski@samsung.com>, Sebastian Reichel <sre@kernel.org>, 
+	Han Gao <rabenda.cn@gmail.com>, Yao Zi <ziyao@disroot.org>, linux-kernel@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Linus,
+On Thu, 18 Sept 2025 at 19:33, Icenowy Zheng <uwu@icenowy.me> wrote:
+>
+> This patchset tries to add support for poweroff/reboot on T-Head TH1520
+> SoC by calling the AON firmware.
+>
+> The first patch creates an auxiliary driver for this, and the second
+> patch makes the driver currently matching thead,th1520-aon create an
+> auxiliary device.
+>
+> Icenowy Zheng (2):
+>   driver: reset: th1520-aon: add driver for poweroff/reboot via AON FW
+>   pmdomain: thead: create auxiliary device for rebooting
+>
+>  MAINTAINERS                                |  1 +
+>  drivers/pmdomain/thead/th1520-pm-domains.c | 14 ++++
+>  drivers/power/reset/Kconfig                |  7 ++
+>  drivers/power/reset/Makefile               |  1 +
+>  drivers/power/reset/th1520-aon-reboot.c    | 98 ++++++++++++++++++++++
+>  5 files changed, 121 insertions(+)
+>  create mode 100644 drivers/power/reset/th1520-aon-reboot.c
+>
 
-Here's a pull-request with a couple of pmdomain fixes intended for v6.17-rc7.
-Details about the highlights are as usual found in the signed tag.
-
-Please pull this in!
+Applied for next, thanks!
 
 Kind regards
-Ulf Hansson
-
-
-The following changes since commit c17b750b3ad9f45f2b6f7e6f7f4679844244f0b9:
-
-  Linux 6.17-rc2 (2025-08-17 15:22:10 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/linux-pm.git tags/pmdomain-v6.17-rc2
-
-for you to fetch changes up to 303010f4658cb134eb27cee88026fb5d065a48cd:
-
-  pmdomain: renesas: rmobile-sysc: Don't keep unused PM domains powered-on (2025-09-11 12:36:55 +0200)
-
-----------------------------------------------------------------
-pmdomain core:
- - Restore behaviour for disabling unused PM domains and introduce the
-GENPD_FLAG_NO_STAY_ON configuration bit
-
-pmdomain providers:
- - renesas: Don't keep unused PM domains powered-on
- - rockchip: Fix regulator dependency with GENPD_FLAG_NO_STAY_ON
-
-----------------------------------------------------------------
-Geert Uytterhoeven (1):
-      pmdomain: renesas: rcar-sysc: Make rcar_sysc_onecell_np __initdata
-
-Ulf Hansson (5):
-      pmdomain: core: Restore behaviour for disabling unused PM domains
-      pmdomain: rockchip: Fix regulator dependency with GENPD_FLAG_NO_STAY_ON
-      pmdomain: renesas: rcar-sysc: Don't keep unused PM domains powered-on
-      pmdomain: renesas: rcar-gen4-sysc: Don't keep unused PM domains powered-on
-      pmdomain: renesas: rmobile-sysc: Don't keep unused PM domains powered-on
-
- drivers/pmdomain/core.c                   | 20 ++++++++++++++------
- drivers/pmdomain/renesas/rcar-gen4-sysc.c |  1 +
- drivers/pmdomain/renesas/rcar-sysc.c      |  3 ++-
- drivers/pmdomain/renesas/rmobile-sysc.c   |  3 ++-
- drivers/pmdomain/rockchip/pm-domains.c    |  2 +-
- include/linux/pm_domain.h                 |  7 +++++++
- 6 files changed, 27 insertions(+), 9 deletions(-)
+Uffe
 
