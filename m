@@ -1,53 +1,53 @@
-Return-Path: <linux-pm+bounces-35014-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35013-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3CF09B87C8A
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Sep 2025 05:19:07 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C4101B87C81
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Sep 2025 05:19:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 18FA31C855EA
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Sep 2025 03:19:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8E45C58101E
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Sep 2025 03:19:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DF3B2580E2;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C3E3257826;
 	Fri, 19 Sep 2025 03:19:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LpZrw5N2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lHiL0BN5"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45D9D22F755;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4462522D7A1;
 	Fri, 19 Sep 2025 03:19:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758251940; cv=none; b=NNY0gt+A762ZWDlws+QWxHbY8/wJfZpkGOM6KbQf62yRD4A0iTORrFdI94Gay4mmia9EMXcvCVi4MWMRKOLOnl2h/xeAxcPZQXOy9+G38rjdyNOhOJ8iizC9gbMAxVe/I7K0u1o7aM68sAMgfVeK65ewj6WUw7+hohBMijb6FDU=
+	t=1758251940; cv=none; b=WJCpG0TimDjGxt9qwJg56qXCCw5huQVfJSzZsoXMsW9RNkIW8IodBfVA2QFGUble+LKvznkWT7A2lIxNfCLz6D5dffBNyWCUOmxo0gAvJp7l/CncEQrDOC/pV9+EVzATNmDvaSfx0j408wa+FeuzW5zvUM1xAhQ5GmMsS3MLNFg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1758251940; c=relaxed/simple;
-	bh=4y7Qat4TBsdLXPPTnpkcAV5ZsirjHTUE90pFEsVfYQU=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=p3o2+ZlmtYdsZx+//iO2wNMQZx6QWK9IBC58E/Zcp4iKTmB45l2sf88uKe1xht7Nxdy6l3zagxfMKBYbe2Ilbksf4krxbPh/08Xgenmfy5gGOSzg5J/G8FUvN8BzLDyea9/OthDZngbFMnlxirBSRSfQ4gvSwkAGAc4mfk6DfQs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LpZrw5N2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D3949C4CEE7;
+	bh=gAv/gWsQ2Cl0kOldV7g5ft4pBj0bRxTan5ynAs/Ai3Y=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=Jonj/inv80gFcaStSKo75eWHgoefKDYGvIdzRJm1rVZsdL1tCNylXSHeysVY3fTOLNijfxyNGnRM48x+3d2y7aPmxXTtWUNsNkM9nq3iniPv55h5AFR67IsdboXgzMIHA+Z2h8VDcJHMO+24CcD7Xb0BvnG57gmb/0gHCLPHWAw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lHiL0BN5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id ED6C3C4CEF7;
 	Fri, 19 Sep 2025 03:18:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758251939;
-	bh=4y7Qat4TBsdLXPPTnpkcAV5ZsirjHTUE90pFEsVfYQU=;
-	h=From:Subject:Date:To:Cc:Reply-To:From;
-	b=LpZrw5N2NMcaS44qvfLLKQGVNdtu1PGChzYuCBlRTn0ORcb4kyqdbnIMebNtS0moo
-	 Kojltwj3zp7LSyPJC+JUmg2E7zhfLr/rw+AH0bEE7tVgDJptTpwjnad4wSuklYoC1n
-	 4pIJ8rfYx0k3lZcgHftma3eXgO+smZadYT6h14lgClKLgcBIQXh2VYzA4awXsTOHjL
-	 YOJoffmWrIqudTBLjUmFBEN5dL9XY65QP6jRxHNmCMMwBOZptqt2W9l8wzS1GMEPph
-	 rT6oO9R/PxzgnHY6A6n2EDYCAybHNbwq3VaaUMPkoa3ihmJrSH/GFTjOlS+pOGTLRj
-	 akfYDoaJA5Q+w==
+	s=k20201202; t=1758251940;
+	bh=gAv/gWsQ2Cl0kOldV7g5ft4pBj0bRxTan5ynAs/Ai3Y=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=lHiL0BN5glP0kfHhMPE9I1M+DBjKGDaRXz5YWcsetzcdBK+RBA7XqKTpmDlPVAvep
+	 jIsafS0RrYZerS48oAam5LFyXl7CCtOWu1yM69+UqtscGfJRt9zmRjrcu3qVmuHONw
+	 TDgrUjRWO21+vR+Ih4L7aTZZ908/JSNvk1ElFXEDar58FutLgOby/L9pjFPDQIbUjv
+	 IWIBJLJzGCZQ4L84BW9XfnV05PReYhBMNSCrhD7mRmR2iCBmcWHL4q+mKNTDv0p3Qb
+	 J8/wK08Fh3xCp31XqaTIw5bS1nXhDxheO5ZlrfKNEj0xnBG5cFIRKkvmxeyXsOGaJw
+	 0gtJljouzKYTQ==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C1DB7CAC5A5;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D1BA3CA1013;
 	Fri, 19 Sep 2025 03:18:59 +0000 (UTC)
 From: Fenglin Wu via B4 Relay <devnull+fenglin.wu.oss.qualcomm.com@kernel.org>
-Subject: [PATCH v6 0/2] power: supply: Add several features support in
- qcom-battmgr driver
-Date: Fri, 19 Sep 2025 11:18:49 +0800
-Message-Id: <20250919-qcom_battmgr_update_new-v6-0-ed5c38867614@oss.qualcomm.com>
+Date: Fri, 19 Sep 2025 11:18:50 +0800
+Subject: [PATCH v6 1/2] arm64: dts: qcom: x1e80100-crd: Add charge limit
+ nvmem
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -56,10 +56,9 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAJnLzGgC/x3MOQqAMBBA0avI1AaMG+pVREKWUacwahIXEO9us
- HzF/w94dIQeuuQBhyd5Wm1EnSagZ2knZGSiIc/yKmt5w3a9LkLJEJbJiWMzMqCweDEz8koVJS8
- b1BDrzeFI93/uh/f9ANHoCARpAAAA
-X-Change-ID: 20250918-qcom_battmgr_update_new-df15b34148ec
+Message-Id: <20250919-qcom_battmgr_update_new-v6-1-ed5c38867614@oss.qualcomm.com>
+References: <20250919-qcom_battmgr_update_new-v6-0-ed5c38867614@oss.qualcomm.com>
+In-Reply-To: <20250919-qcom_battmgr_update_new-v6-0-ed5c38867614@oss.qualcomm.com>
 To: kernel@oss.qualcomm.com, Bjorn Andersson <andersson@kernel.org>, 
  Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>, 
  Krzysztof Kozlowski <krzk+dt@kernel.org>, 
@@ -71,14 +70,13 @@ Cc: Subbaraman Narayanamurthy <subbaraman.narayanamurthy@oss.qualcomm.com>,
  linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
  linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
  Fenglin Wu <fenglin.wu@oss.qualcomm.com>, 
- Neil Armstrong <neil.armstrong@linaro.org>, 
- Sebastian Reichel <sebastian.reichel@collabora.com>
+ Neil Armstrong <neil.armstrong@linaro.org>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1758251938; l=2035;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1758251938; l=2081;
  i=fenglin.wu@oss.qualcomm.com; s=20240327; h=from:subject:message-id;
- bh=4y7Qat4TBsdLXPPTnpkcAV5ZsirjHTUE90pFEsVfYQU=;
- b=WOa6mruhpl/a5xoK0bbi5B7WSOB8GVBHub+Ew2/i4Jf2teFL57OaUJls5SUrt/sj6vZ22ME4i
- 4tAFtj1DwqmCEl+u+Ezmk4KQ20wxFled2523tPSQhmWmd0ghBIRhRGI
+ bh=nPLGHoTJ5NTWoHSd8PH9bD21pqqTFHYPJjavOYsTnQM=;
+ b=Qp3/B+LF3wqioqgmabrMHJVOowVh8ukpc4RgSqGleDq4wKLqjAuYJnP6TjFOGdig2SSHGFqzv
+ rwXgC4/m20nCC4bkKA4hSx4apR2QwABRpioEVkbFdc4+s5MU9s9/qlq
 X-Developer-Key: i=fenglin.wu@oss.qualcomm.com; a=ed25519;
  pk=BF8SA4IVDk8/EBCwlBehKtn2hp6kipuuAuDAHh9s+K4=
 X-Endpoint-Received: by B4 Relay for fenglin.wu@oss.qualcomm.com/20240327
@@ -86,49 +84,71 @@ X-Endpoint-Received: by B4 Relay for fenglin.wu@oss.qualcomm.com/20240327
 X-Original-From: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
 Reply-To: fenglin.wu@oss.qualcomm.com
 
-This continues the effort of updating changes which haven't been accepted
-in patch v5. Including:
-  1. Add nvmem cells for x1-crd device to enable reading back charger
-     control threshold.
-  2. Add handling for notification 0x83 to avoid unexpected error messages.
+From: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
 
-Rebase the changes on linux-power-supply.git@for-next
+Add nvmem cells for getting charge control thresholds if they have
+been set previously.
 
+Tested-by: Neil Armstrong <neil.armstrong@linaro.org> # on Thinkpad T14S OLED
+Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 Signed-off-by: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
 ---
-Changes in v6:
-- Dropped patch[1-7] as they have been accepted and present in linux-power-supply.git@for-next.
-- Formatted the commit text for easy reading, and correct the bit positions for the additional
-  notifications coming along with code 0x83.
-- Added "Reported-by" trailer.
-- Link to v5: https://lore.kernel.org/r/20250917-qcom_battmgr_update-v5-0-270ade9ffe13@oss.qualcomm.com
-
-Changes in v5:
-- Added additional explanation for "state_of_health" in ABI document as Sebastian suggested.
-- Removed "Tested-by" trailers in the patches unrelated to charge control feature.
-- Updated the copyright statement in qcom_battmgr.c according to the latest guidelines.
-- In [PATCH v4 5/8], add "X1E80100" in the "if" variant checks to ensure
-  the correctness even if only this patch is applied.
-- Format the entries for "nvmem-cells" DT properties.
-- Add a new change at last to fix the error messages for unsupported notifications
-- Link to v4: https://lore.kernel.org/r/20250915-qcom_battmgr_update-v4-0-6f6464a41afe@oss.qualcomm.com
-
----
-Fenglin Wu (2):
-      arm64: dts: qcom: x1e80100-crd: Add charge limit nvmem
-      power: supply: qcom_battmgr: handle charging state change notifications
-
  arch/arm64/boot/dts/qcom/x1-crd.dtsi         |  7 +++++++
  arch/arm64/boot/dts/qcom/x1e80100-pmics.dtsi | 20 ++++++++++++++++++++
- drivers/power/supply/qcom_battmgr.c          |  5 ++++-
- 3 files changed, 31 insertions(+), 1 deletion(-)
----
-base-commit: cc3e883a06251ba835f15672dbe8724f2687971b
-change-id: 20250918-qcom_battmgr_update_new-df15b34148ec
+ 2 files changed, 27 insertions(+)
 
-Best regards,
+diff --git a/arch/arm64/boot/dts/qcom/x1-crd.dtsi b/arch/arm64/boot/dts/qcom/x1-crd.dtsi
+index c9f0d505267081af66b0973fe6c1e33832a2c86b..cd3c071624ce66f8c28ee4521fe3db8b737757a6 100644
+--- a/arch/arm64/boot/dts/qcom/x1-crd.dtsi
++++ b/arch/arm64/boot/dts/qcom/x1-crd.dtsi
+@@ -82,6 +82,13 @@ pmic-glink {
+ 				    <&tlmm 123 GPIO_ACTIVE_HIGH>,
+ 				    <&tlmm 125 GPIO_ACTIVE_HIGH>;
+ 
++		nvmem-cells = <&charge_limit_en>,
++			      <&charge_limit_end>,
++			      <&charge_limit_delta>;
++		nvmem-cell-names = "charge_limit_en",
++				   "charge_limit_end",
++				   "charge_limit_delta";
++
+ 		/* Left-side rear port */
+ 		connector@0 {
+ 			compatible = "usb-c-connector";
+diff --git a/arch/arm64/boot/dts/qcom/x1e80100-pmics.dtsi b/arch/arm64/boot/dts/qcom/x1e80100-pmics.dtsi
+index e3888bc143a0aaae23c92d400d48ea94423e0366..cc4994f890f83540c4fb238811bc879ac9356256 100644
+--- a/arch/arm64/boot/dts/qcom/x1e80100-pmics.dtsi
++++ b/arch/arm64/boot/dts/qcom/x1e80100-pmics.dtsi
+@@ -240,6 +240,26 @@ reboot_reason: reboot-reason@48 {
+ 			};
+ 		};
+ 
++		pmk8550_sdam_15: nvram@7e00 {
++			compatible = "qcom,spmi-sdam";
++			reg = <0x7e00>;
++			#address-cells = <1>;
++			#size-cells = <1>;
++			ranges = <0 0x7e00 0x100>;
++
++			charge_limit_en: charge-limit-en@73 {
++				reg = <0x73 0x1>;
++			};
++
++			charge_limit_end: charge-limit-end@75 {
++				reg = <0x75 0x1>;
++			};
++
++			charge_limit_delta: charge-limit-delta@76 {
++				reg = <0x76 0x1>;
++			};
++		};
++
+ 		pmk8550_gpios: gpio@8800 {
+ 			compatible = "qcom,pmk8550-gpio", "qcom,spmi-gpio";
+ 			reg = <0xb800>;
+
 -- 
-Fenglin Wu <fenglin.wu@oss.qualcomm.com>
+2.34.1
 
 
 
