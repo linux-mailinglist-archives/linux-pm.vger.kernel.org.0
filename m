@@ -1,166 +1,113 @@
-Return-Path: <linux-pm+bounces-35045-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35046-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74874B8A581
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Sep 2025 17:39:11 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 12FE7B8A5BA
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Sep 2025 17:41:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F01B7188BEF3
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Sep 2025 15:38:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C70C3189A957
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Sep 2025 15:40:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B43C31AF27;
-	Fri, 19 Sep 2025 15:37:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC10031C589;
+	Fri, 19 Sep 2025 15:40:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="UJi2x2Kz"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="zPHAfUDd"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4A3331A7E0;
-	Fri, 19 Sep 2025 15:37:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0DF631AF23
+	for <linux-pm@vger.kernel.org>; Fri, 19 Sep 2025 15:40:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758296227; cv=none; b=FGm0Uzu5NWSYzKiqx+EHalOQTxxAgQLHY0T630NKxr5F0sdfIb2khgHNx0tff5OW2UglxHTCguAZ+jVmQSuSeUbNYRnLVXJF5ZzPcHPa7weZsGbc0Kr9ESxDcu0G2+GDSFOOYEkDfWidSh3Q38Ar6nNV1e+NYX+W+BzWkVyr/4A=
+	t=1758296410; cv=none; b=cnqzOB/0REtxlN0utP9RZU1usAdk7Yo37LUyTKZSKUoOnfvu3wGb4y/O7aet6fJ+9M+84ljxwjNVU2V6zwozijDENis1hd3yXGRu0juUIcqo5FvA7Px0Y9B40FkE/GjmCpsyOmr8M6LZdZYBN4KWIrT4haIJJS9INBYz47FWvto=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758296227; c=relaxed/simple;
-	bh=xyJKsvc0j5co7gCX4zKZ8pNCOTw4jF2Tw20isUfWHrk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SATzTVUm/W4CCOzNa5bHwgtPkG3XwCciVQFrGfCA+qxcrBrOHRWFwT4Et5LMbv6kuwKNWuC8gFArDbakLHkLvps94H1xPnkJ2xGqg1qic4/GlO1y6unmjB+ePViEFaXMBUcDrx5WqirVPJ6F07Z+3uioychjdvrsDSg4qkY5KJk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=UJi2x2Kz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2991C4CEF0;
-	Fri, 19 Sep 2025 15:37:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1758296226;
-	bh=xyJKsvc0j5co7gCX4zKZ8pNCOTw4jF2Tw20isUfWHrk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UJi2x2Kz0tOs8xaJZPDz37rTz9jEt33mJvVtKKq7/cIMf6TjK3Jzn04Rzx8CQJ2CY
-	 UVmAeyhxs1yriV1zQ9rcOG3NmKPHZbNNhcwYdVnZoDo6zhMwRDqiDT/mhatajgNTiI
-	 HZU6XL8c4r85dNfL3Vg7KEFwCw03qtMMgB1D6LjI=
-Date: Fri, 19 Sep 2025 17:37:03 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: David Lechner <dlechner@baylibre.com>
-Cc: Andy Shevchenko <andriy.shevchenko@intel.com>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>,
-	Andy Shevchenko <andy.shevchenko@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	sboyd@kernel.org, jic23@kernel.org, nuno.sa@analog.com,
-	andy@kernel.org, arnd@arndb.de, srini@kernel.org, vkoul@kernel.org,
-	kishon@kernel.org, sre@kernel.org, krzysztof.kozlowski@linaro.org,
-	linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-	linux-pm@vger.kernel.org, kernel@collabora.com, wenst@chromium.org,
-	casey.connolly@linaro.org,
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>
-Subject: Re: [PATCH v4 2/7] nvmem: qcom-spmi-sdam: Migrate to
- devm_spmi_subdevice_alloc_and_add()
-Message-ID: <2025091902-dwelled-calculate-c755@gregkh>
-References: <t3uk3k4h3l53yajoe3xog2njmdn3jhkmdphv3c4wnpvcqniz4n@opgigzazycot>
- <aMlnp4x-1MUoModr@smile.fi.intel.com>
- <mknxgesog6aghc6cjzm63g63zqbqvysxf6ktmnbrbtafervveg@uoiohk3yclso>
- <CAHp75Vf7KrsN7Ec9zOvJoRuKvkbrJ5sMv7pVv6+88tPX-j_9ZA@mail.gmail.com>
- <er7dkmzutsu3ooegeihjzngi6l3hol5iaohecr3n5bolfse3tj@xeedlx2utwym>
- <aMxWzTxvMLsVWbDB@smile.fi.intel.com>
- <2025091925-thirsting-underuse-14ab@gregkh>
- <f16ea5eb-cbda-4788-956b-d41c2af51745@baylibre.com>
- <2025091918-glancing-uptown-7d63@gregkh>
- <8702fd35-945a-4d20-bc37-410c74c70da6@baylibre.com>
+	s=arc-20240116; t=1758296410; c=relaxed/simple;
+	bh=xlyfj68UTIz6kURnqgzznzyubwaDnjAFQK2Dyp3Ar98=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=b9T6jyeVC7XKkCezHFWfknbyNpxbq9O3rifAksm7QWUy8TF0IhXg2LLjY9mv1+FsgHjGyO06foEuiZYVj7b2uxJ7GVz7TnfEKxzSJ3veJmK6epWELKOpPMCAWzcbs6DcPEISfyU8MxVfLC4/xOku9KVrFk4SEv5Zzr206y6HuEM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=zPHAfUDd; arc=none smtp.client-ip=209.85.167.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-57b35e176dbso46949e87.1
+        for <linux-pm@vger.kernel.org>; Fri, 19 Sep 2025 08:40:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1758296406; x=1758901206; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ny4YeOUQ6SJeOcdkVzBU+J+zALLv/bmY7hQjTyaoqpE=;
+        b=zPHAfUDddoexEw3n4O0q61SKuroVrsmPpckv6MAXSeln4a4FYRNRVvd8bWJFGpWeeo
+         uLqYJOYQrEwbIpk3cAyh0LqQJ6ZdEUHmgw6nyHsidNLLTBttL/YJarTGVosjmzlLF6rn
+         TdwEowabHAbiJkifVqbQbgsRGC+7LnlMSGk8zd/9wmuEXeHWt+JJgh49dICNywuds9u2
+         uyIMIm4PFR38DXWP3rg68DT4+a0dqQ4MyverEqMYkH/mEsT9KjkjXzFJMU9yAt3mGoHp
+         bqnBV06kDW6Vy6pTX3UgN49ulpRhzMrZMMtQe8/j1g87iSMCycWxg0PR/HN1ghhm/H4u
+         qYGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758296406; x=1758901206;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ny4YeOUQ6SJeOcdkVzBU+J+zALLv/bmY7hQjTyaoqpE=;
+        b=GghMIZWiPC+U8qHSBxSi00EO/ILIb9Hnzszg+T8HgIlKglhJc7NfxywwT16fI1Ivh5
+         lv+Lo3eMYskTX6euguz6ZWWubygEBKqQFXJ4kSbQqJBjCvS0J8HCSu3nMV9i1paoDGH9
+         EbT4PdJ94iD8+sq4F4QsQGOWGR05m1jD6An1+BTmMqVTAzQ40kqED91N52KkSPfysjFF
+         IQncmLJA+Yh1Tkwppdi5A2NCpxGT7+gDhVqfoxtISWDVIzhZZlorUr8aOfTT4zyLmwSW
+         mlmmiDar3aZqHPcb19dbrZh5qam+9hmTU3Nf9iojnlRx4lLb9XP1Zlm0vW1teofsToz3
+         TEvw==
+X-Gm-Message-State: AOJu0Yxo8Gp5RjPMRgsb89Fb4rNf1IsWfKDOT3TG/xmQIiddsx58HAsu
+	mdK4T59La500ksz4s1gfqlRoyoDnEL13294n4+MAqdEPn+jQkFBvjgpGnM2FrEn6/Ro=
+X-Gm-Gg: ASbGncsI64oH9e56FaDoalQmJUX3p4hyU+GWNJn4nn0p5h5X4B2u1hERLKdzRbxrUfG
+	17rktmoO02emtgFGR5xW5MnG4x8YNSUtGThlcKC10X40GlnLT3Cf7wTqLhY9sra4TBtUluDZFk9
+	+Z+MRg21xjKKu+vYHs728I7nGJ0ULgWjq+L2NqJE+yp9+RZRdsxGTndlNecvqIAaOeaHcO5wS8s
+	zaTwfjXD5KFOFH3CdG/pcEESk9IyElUXp8vU6xesvXIA95gx66Gd8pAqXI7PoFUFrS5s6j9WO1Q
+	nBAz5bu6SCxqlBzxAzJm5nPjxvAkEf31FwEWONv5aEmIcDsWyPy6Zz4jUm7mgWUatLK1nfgpwFL
+	/LigbE1o5iEgZKpXcJLMZsBqQ32qameEpBzzdg5UhYLjIzbeG7uMJl6wZX2dyavInJC24BnmUP0
+	SSKA==
+X-Google-Smtp-Source: AGHT+IGqJck6LcstS4NmmCegoanyc2XQaxhlYv4R/aMb3C7/Q4mLfE5SNfvUL59aj72O8yd3QXIqkg==
+X-Received: by 2002:a05:6512:2356:b0:571:eaf:aa64 with SMTP id 2adb3069b0e04-579e05c65ffmr1339653e87.20.1758296404201;
+        Fri, 19 Sep 2025 08:40:04 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:8ffd:205a:6719:49c1? ([2a05:6e02:1041:c10:8ffd:205a:6719:49c1])
+        by smtp.googlemail.com with ESMTPSA id 2adb3069b0e04-578a68e87fesm1480557e87.60.2025.09.19.08.40.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 Sep 2025 08:40:02 -0700 (PDT)
+Message-ID: <8ca1cd7e-e7c2-4a25-9b5f-d04c94d7915a@linaro.org>
+Date: Fri, 19 Sep 2025 17:40:01 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8702fd35-945a-4d20-bc37-410c74c70da6@baylibre.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] thermal: k3_j72xx_bandgap: register sensors with hwmon
+To: Michael Walle <mwalle@kernel.org>, "Rafael J . Wysocki"
+ <rafael@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250828124042.1680853-1-mwalle@kernel.org>
+Content-Language: en-US
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20250828124042.1680853-1-mwalle@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Fri, Sep 19, 2025 at 10:20:29AM -0500, David Lechner wrote:
-> On 9/19/25 10:13 AM, Greg KH wrote:
-> > On Fri, Sep 19, 2025 at 10:05:28AM -0500, David Lechner wrote:
-> >> On 9/19/25 8:59 AM, Greg KH wrote:
-> >>> On Thu, Sep 18, 2025 at 10:00:29PM +0300, Andy Shevchenko wrote:
-> >>>> I,o.w. I principally disagree on putting MODULE_IMPORT_NS() into the header
-> >>>> file.
-> >>>
-> >>> Yes, please never do that, it defeats the purpose of module namespaces
-> >>> completly.  If you don't want to have module namespaces, don't use them
-> >>> for your subsytem.  Don't use them and then make them moot by putting
-> >>> MODULE_IMPORT_NS() in the .h file for the symbols as that's pointless.
-> >>>
-> >>> thanks,
-> >>>
-> >>> greg k-h
-> >>
-> >>
-> >> Could someone suggest some additional explanation to add to
-> >> Documentation/core-api/symbol-namespaces.rst to explain the
-> >> reasoning behind this?
-> >>
-> >> Right now, the only part of that document that say _why_ we have
-> >> module namespces says:
-> >>
-> >> 	That is useful for documentation purposes (think of the
-> >> 	SUBSYSTEM_DEBUG namespace) as well as for limiting the
-> >> 	availability of a set of symbols for use in other parts
-> >> 	of the kernel.
-> >>
-> >> So I don't see the connection between this explanation and and:
-> >>
-> >> 	[Putting MODULE_IMPORT_NS() into the header] defeats
-> >> 	the purpose of module namespaces completely.
-> >>
-> >> I am guilty of putting it in a header, so if I need to fix that
-> >> I would like to actually understand why first. Andy has mentioned
-> >> something about potential abuses, but without any example, I haven't
-> >> been able to understand what this would actually actually look like.
-> >> Or maybe there is some other reason that Greg is thinking of that
-> >> hasn't been mentioned yet?
-> > 
-> > Let me turn it around, _why_ would you want your exports in a namespace
-> > at all if you just are putting a MODULE_IMPORT_NS() in the .h file at
-> > the same time?  What is this giving you at all compared to just a normal
-> > MODULE_EXPORT() marking for your exports?
-> > 
-> > I know what it gives me when I don't put it in a .h file, but I think
-> > that might be different from what you are thinking here :)
-> > 
-> > thanks,
-> > 
-> > greg k-h
+On 28/08/2025 14:40, Michael Walle wrote:
+> Make the sensors available in the hwmon subsystem (if
+> CONFIG_THERMAL_HWMON is enabled).
 > 
-> Up to now, my (naive) understanding was that the point module namespaces
-> is to reduce the number of symbols in the global namespace because having
-> too many symbols there was starting to cause problems. So moving symbols
-> to another namespace was a "good thing".
+> Signed-off-by: Michael Walle <mwalle@kernel.org>
+> ---
 
-Yes, it is a "good thing" overall, but by just making all of your
-symbols in a namespace, and then including it in the .h file, that does
-the same exact thing as before (i.e. anyone that includes that .h file
-puts the symbols into the global namespace with that prefix.)
+Applied, thanks
 
-Ideally, the goal was to be able to easily see in a module, what symbol
-namespaces they depend on, which requires them to put MODULE_IMPORT_NS()
-in the module to get access to those symbols.  dmabuf has done this very
-well, making it obvious to the maintainers of that subsystem that they
-should be paying attention to those users.
 
-For other "tiny" subsystems, it just slots away their symbols so that no
-one else should ever be using them, and it makes it blindingly obvious
-if they do.  For example, the usb-storage symbols, anyone that does:
-	MODULE_IMPORT_NS("USB_STORAGE");
-had better be living in drivers/usb/storage/ otherwise I need to have a
-word with those offenders :)
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-So it's a way of "tidying" up things, and to make things more explicit
-than just having to rely on searching a tree and looking for .h include
-usage.  Right now, you are kind of defeating that by just allowing a .h
-to be included and you don't get any benifit of being able to watch out
-for who is actually using those symbols overall.
-
-Hope this helps,
-
-greg k-h
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
