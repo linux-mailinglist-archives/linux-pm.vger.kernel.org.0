@@ -1,330 +1,140 @@
-Return-Path: <linux-pm+bounces-35030-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35031-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF84EB89922
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Sep 2025 15:05:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A9588B89A2E
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Sep 2025 15:17:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 681AF3A32EE
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Sep 2025 13:05:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 631DE3A86D0
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Sep 2025 13:17:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 424A1223DF1;
-	Fri, 19 Sep 2025 13:05:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34ED62264B2;
+	Fri, 19 Sep 2025 13:17:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IQ01YdCc"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Eyed/DFU"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1935E14A60C;
-	Fri, 19 Sep 2025 13:05:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 624CD1C862E
+	for <linux-pm@vger.kernel.org>; Fri, 19 Sep 2025 13:17:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758287108; cv=none; b=ScY2kMq+iSS6CJj2iEV73QWro7htWevperpu2je7pYoyXccr+xanfMf0DHNtS/CnbIOMN8vVPtjlrsLbzCCldwSWQE7ryjIt37HjjBR0l6PAfrbg8TOBMLPUuvJJtIPVOaQEgzPljDJojdEI41rJjwhAwH2Mf/X1fkkOfMWrk9s=
+	t=1758287851; cv=none; b=aZAzYxVLyhyIHCRFKtzS2fMR8jtM8DcbYf8cUquHq5JhKgqqZLh1lnzj4ceHKgCCm2zBhvwXldBxe5Pprs+qv9otenFOY6dOWtgJla2pqYplPMCkgkydBfWmoD4vEtChh6w/jTxIrtRnlmbOFbF34sYNuHBzhhIVD8SlivycZzM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758287108; c=relaxed/simple;
-	bh=YlVgAyYZLBI4i4As4VZ2YkhXsCbsQ7l/n3ea7NwzeSI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=aEzjdr5e4OlFwUFrbXmER98zmKNM00CLMMhmEgFLj7lorEuU0k37r6f2GQblbdl63TZs9FosUHEAv7PyEIM9Ci18kC7+Mc+s54AKE82REZ7yZtIEnh0mW6TM9Th4ENAWMiE8dE1o/W9ktwCjNfWMCmsUB6nGqfh2r5pI8b5IsL8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IQ01YdCc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C40CC4CEF0;
-	Fri, 19 Sep 2025 13:05:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758287107;
-	bh=YlVgAyYZLBI4i4As4VZ2YkhXsCbsQ7l/n3ea7NwzeSI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=IQ01YdCcxvhfAJBXrwnIMYEcuvwBMfREDONqFBNPZCFSrzsgXUDTdTVFtnrdC0n0l
-	 SiKr6Ybl9lMgZZ5eBCqyuDH7N5oVE4/4v/8XtwfQbF/u/iywzrHi+gtqCK9EUO4T0g
-	 kq/lazNnFEaYiSyTTs8Ja/xEdzevm7qjv+0QRPqy14fD0oaoUMvhkK91e8Bm9e0b8H
-	 7en+FZ7Pz9n319D5jdUMcfF9GWzPIShMulDgUvtc8m2ZUi1/6LOgnIjVNqEXw1FLKA
-	 9nIqW+qoafXM8Z4wha7Z4xcycvBxViRk5B1T04OoqoAReEFTxErL7AlQ6pecW6xzKw
-	 1pZPrKUFFWBLw==
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-To: Takashi Iwai <tiwai@suse.de>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: PM runtime auto-cleanup macros
-Date: Fri, 19 Sep 2025 15:05:04 +0200
-Message-ID: <12751070.O9o76ZdvQC@rafael.j.wysocki>
-Organization: Linux Kernel Development
-In-Reply-To: <87jz1uao65.wl-tiwai@suse.de>
-References:
- <878qimv24u.wl-tiwai@suse.de>
- <CAJZ5v0hJvsuOTj5j-0Jn-c9TPnbm70wPvdBkop2hRrdweoncDg@mail.gmail.com>
- <87jz1uao65.wl-tiwai@suse.de>
+	s=arc-20240116; t=1758287851; c=relaxed/simple;
+	bh=eSREDETOuCirK9j7pp0KaT4IL5H8FAZmt4obtpK9FwU=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=samypQ1vtb9W2BpMabTBGHMZJcPCgVbu3cawblbT8/j3XjosKtzvQaOyNZKR0mRxTKTEaKq/gRUqfGJEbA46WeC0GCNfMyxo8uM3mtiRdBT+XEHCUhzMpzlvRe3O/a1Kq6dR8cbqlvM/7s6JHZVoaaRbRAFQr/flSGvU1Ao01Xs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Eyed/DFU; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-45dcff2f313so13538005e9.0
+        for <linux-pm@vger.kernel.org>; Fri, 19 Sep 2025 06:17:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1758287848; x=1758892648; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=eSREDETOuCirK9j7pp0KaT4IL5H8FAZmt4obtpK9FwU=;
+        b=Eyed/DFUcHC/eY9Dwk4WEIuNjwmF9UxRzgbac3/eRs7vXT7HafKOX9/WmJtUm81cNU
+         16D8oo56DzfuODKP4SnAWxfuawbSO6wrbOP/S29XpuW7QlTl5CLAe2AcDhxsAcvWLtWp
+         sO2wgGz60g91ftbQY/TyVOzIcsOwE/ANEEFKYDxJ+UtuCryb2KAqjWcsjMgUOZiVOlkM
+         oZxAtnmMUnqtcRirGwMxeTIkBuZ0oCn8ET/gfBcTDzzQfCmKEcwjssSWaVjMy0pPEg53
+         iAzCLx/TxSbsgn7IbZrKaCf35X0ILKQBPyonYzO694lTAFZHLrnCthURULfH8ECwFrli
+         OEKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758287848; x=1758892648;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eSREDETOuCirK9j7pp0KaT4IL5H8FAZmt4obtpK9FwU=;
+        b=Y/ek90EYqnTd7YR+XZusQE3cMD+1/RCUXHvfjtjLLSVqTS5CGobev0VhLt/8xtvoC9
+         0L7m/usfpkTtLbaeFkJeYzIuXZ7BqSEBVZuJXfTWg48X3FrJ+cBdwKsH9d0meGhK9owT
+         oxNHIn4POK8P4atbuhOuoK5HWFh/uCzdo7Il/t0TNR5pNE3o1W61Bw/Btonpiezip0Mg
+         s4LdQEIs+SQhqpg1/9BmCMeQnTfsRelLXvReKjhxNEGxvHtiCKGJkcpUVyLG5HqdMBbg
+         0WJrgjfTN1cjcq0NFFRj4UW29Znc9dxYu08nnRAne8OFK054K8HzRdRKQx4k066YbR1f
+         BA+g==
+X-Forwarded-Encrypted: i=1; AJvYcCU7eXU5OaEUpqjOT1zfcU6G0gyqTP5ert+BoJswXr4zT8E0fT5jYoDwi9qyEJB7liP6bqnkoDliaQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwaHC1ZYMLVpbqTobYh+1tRxMaaYUapd7Pe9P4CHJkvC2a43Pd6
+	ex6ODLGBi/VA+r7zSuBFSltmw1EjPEL+eynuB2eP9pVJVIUZaluxkR7/pRGTJ23khGY=
+X-Gm-Gg: ASbGncuEdU+fgxvexpP/Zt/3x3vCG4JsJUZT8lxIgQ3jXFrYgmPShhyWYqqX94xg/Fp
+	GwC02iEPpi5WgGXgiWBZgwCeVC2YpWkQJyrD3sr1iKR3VrPE85pygN7gXw9tftUuiFoRxGvaHA7
+	S0ZNCUOhlDABTAiYue9irFC6jwv0Q63J+IoR1JTUnYYuS04i+bpIXJkdurPC9+WOSRCZ6LuaZzo
+	u0QVUM8a/IwO7CpgUUJBtotJPEqJFJwNlrrMs7bVRj0dmUdAo9Wa93JKpYL7gryVgiK2+yQa5/h
+	Ug/AnxvDR0B5USrBtaeWTcfcytRfiohWGGsKWSupMSZH0bCrh3lWDvO5uKYYG7qwAYl5kR8ggPr
+	jS1+BqkiL22YLZbPeBWKXnHqzosfzceVd1EYo
+X-Google-Smtp-Source: AGHT+IFOEEL5rr0JEeFyk2H6x0E84IJDnhVN8O14E2Hi/9ffavovVbWpQzybBfB+MObNjmkLFHYNTA==
+X-Received: by 2002:a05:600c:6305:b0:45b:868e:7f7f with SMTP id 5b1f17b1804b1-467ee8c56d6mr37027415e9.17.1758287847647;
+        Fri, 19 Sep 2025 06:17:27 -0700 (PDT)
+Received: from [10.1.1.59] ([80.111.64.44])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-464f6695a9dsm88797825e9.24.2025.09.19.06.17.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Sep 2025 06:17:27 -0700 (PDT)
+Message-ID: <dfde0a91359b87d4eff88815b4112ad17cca9935.camel@linaro.org>
+Subject: Re: [PATCH v6 2/2] dt-bindings: power: supply: add support for
+ MAX77759 fuel gauge
+From: =?ISO-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
+To: Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc: Thomas Antoine <t.antoine@uclouvain.be>, Conor Dooley
+ <conor@kernel.org>,  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
+ <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,  Peter Griffin
+ <peter.griffin@linaro.org>, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org, 	devicetree@vger.kernel.org
+Date: Fri, 19 Sep 2025 14:17:26 +0100
+In-Reply-To: <65xrumpt7ug5mqd7mkcknwyqmljrn4sofrqymg46bwvcmjoarr@wmt5fhsj3viz>
+References: <20250915-b4-gs101_max77759_fg-v6-0-31d08581500f@uclouvain.be>
+	 <20250915-b4-gs101_max77759_fg-v6-2-31d08581500f@uclouvain.be>
+	 <20250915-presoak-answering-2df6fca532ad@spud>
+	 <c5f2e6e8-2ada-476a-8557-85273b9a93b7@uclouvain.be>
+	 <a55d7e6e6d9515293ca735f25ffd5c925a6ec617.camel@linaro.org>
+	 <65xrumpt7ug5mqd7mkcknwyqmljrn4sofrqymg46bwvcmjoarr@wmt5fhsj3viz>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2-2 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
 
-On Friday, September 19, 2025 9:37:06 AM CEST Takashi Iwai wrote:
-> On Thu, 18 Sep 2025 22:41:32 +0200,
-> Rafael J. Wysocki wrote:
-> >=20
-> > On Thu, Sep 18, 2025 at 10:19=E2=80=AFPM Rafael J. Wysocki <rafael@kern=
-el.org> wrote:
-> > >
-> > > On Thu, Sep 18, 2025 at 1:28=E2=80=AFPM Rafael J. Wysocki <rafael@ker=
-nel.org> wrote:
-> > > >
-> > > > On Thu, Sep 18, 2025 at 9:10=E2=80=AFAM Takashi Iwai <tiwai@suse.de=
-> wrote:
-> > > > >
-> > > > > On Wed, 17 Sep 2025 20:58:36 +0200,
-> > > > > Rafael J. Wysocki wrote:
-> > > > > >
-> > > > > > Hi,
-> > > > > >
-> > > > > > Sorry for the delay.
-> > > > > >
-> > > > > > On Thu, Sep 11, 2025 at 9:31=E2=80=AFAM Takashi Iwai <tiwai@sus=
-e.de> wrote:
-> > > > > > >
-> > > > > > > On Wed, 10 Sep 2025 16:00:17 +0200,
-> > > > > > > Takashi Iwai wrote:
-> > > > > > > >
-> > > > > > > > Hi,
-> > > > > > > >
-> > > > > > > > while I worked on the code cleanups in the drivers with the=
- recent
-> > > > > > > > auto-cleanup macros, I noticed that pm_runtime_get*() and _=
-put*() can
-> > > > > > > > be also managed with the auto-cleanup gracefully, too.  Act=
-ually we
-> > > > > > > > already defined the __free(pm_runtime_put) in commit bfa447=
-7751e9, and
-> > > > > > > > there is a (single) user of it in pci-sysfs.c.
-> > > > > > > >
-> > > > > > > > Now I wanted to extend it to pm_runtime_put_autosuspend() a=
-s:
-> > > > > > > >
-> > > > > > > > DEFINE_FREE(pm_runtime_put_autosuspend, struct device *,
-> > > > > > > >            if (_T) pm_runtime_put_autosuspend(_T))
-> > > > > > > >
-> > > > > > > > Then one can use it like
-> > > > > > > >
-> > > > > > > >       ret =3D pm_runtime_resume_and_get(dev);
-> > > > > > > >       if (ret < 0)
-> > > > > > > >               return ret;
-> > > > > > > >       struct device *pmdev __free(pm_runtime_put_autosuspen=
-d) =3D dev;
-> > > > > > > >
-> > > > > > > > that is similar as done in pci-sysfs.c.  So far, so good.
-> > > > > > > >
-> > > > > > > > But, I find putting the line like above at each place a bit=
- ugly.
-> > > > > > > > So I'm wondering whether it'd be better to introduce some h=
-elper
-> > > > > > > > macros, e.g.
-> > > > > > > >
-> > > > > > > > #define pm_runtime_auto_clean(dev, var) \
-> > > > > > > >       struct device *var __free(pm_runtime_put) =3D (dev)
-> > > > > > >
-> > > > > > > It can be even simpler by assigning a temporary variable such=
- as:
-> > > > > > >
-> > > > > > > #define pm_runtime_auto_clean(dev) \
-> > > > > > >         struct device *__pm_runtime_var ## __LINE__ __free(pm=
-_runtime_put) =3D (dev)
-> > > > > >
-> > > > > > Well, if there's something like
-> > > > > >
-> > > > > > struct device *pm_runtime_resume_and_get_dev(struct device *dev)
-> > > > > > {
-> > > > > >         int ret =3D pm_runtime_resume_and_get(dev);
-> > > > > >         if (ret < 0)
-> > > > > >                 return ERR_PTR(ret);
-> > > > > >
-> > > > > >         return dev;
-> > > > > > }
-> > > > > >
-> > > > > > It would be a matter of redefining the FREE to also take error
-> > > > > > pointers into account and you could do
-> > > > > >
-> > > > > > struct device *__dev __free(pm_runtim_put) =3D pm_runtime_resum=
-e_and_get_dev(dev);
-> > > > > > if (IS_ERR(__dev))
-> > > > > >         return PTR_ERR(__dev);
-> > > > >
-> > > > > That'll work, too.  Though, I find the notion of __free() and a
-> > > > > temporary variable __dev a bit too cumbersome; it's used only for
-> > > > > auto-clean stuff, so it could be somewhat anonymous.
-> > > >
-> > > > No, it is not used only for auto-clean, it is also used for return
-> > > > value checking and it represents a reference on the original dev.  =
-It
-> > > > cannot be entirely anonymous because of the error checking part.
-> > > >
-> > > > The point is that this is one statement instead of two and so it is
-> > > > arguably harder to mess up with.
-> > > >
-> > > > > But it's all about a matter of taste, and I'd follow what you and
-> > > > > other guys suggest.
-> > > > >
-> > > > > FWIW, there are lots of code doing like
-> > > > >
-> > > > >         pm_runtime_get_sync(dev);
-> > > > >         mutex_lock(&foo);
-> > > > >         ....
-> > > > >         mutex_unlock(&foo);
-> > > > >         pm_runtime_put(dev);
-> > > > >         return;
-> > > > >
-> > > > > or
-> > > > >
-> > > > >         ret =3D pm_runtime_resume_and_get(dev);
-> > > > >         if (ret)
-> > > > >                 return ret;
-> > > > >         mutex_lock(&foo);
-> > > > >         ....
-> > > > >         mutex_unlock(&foo);
-> > > > >         pm_runtime_put_autosuspend(dev);
-> > > > >         return 0;
-> > > > >
-> > > > > and they can be converted nicely with guard() once when PM runtim=
-e can
-> > > > > be automatically unreferenced.  With my proposed change, it would
-> > > > > become like:
-> > > > >
-> > > > >         pm_runtime_get_sync(dev);
-> > > > >         pm_runtime_auto_clean(dev);
-> > > >
-> > > > For the case in which the pm_runtime_get_sync() return value is
-> > > > discarded, you could define a guard and do
-> > > >
-> > > > guard(pm_runtime_get_sync)(dev);
-> > > >
-> > > > here.
-> > > >
-> > > > The case checking the return value is less straightforward.
-> > > >
-> > > > >         guard(mutex)(&foo);
-> > > > >         ....
-> > > > >         return;
-> > > > >
-> > > > > or
-> > > > >
-> > > > >         ret =3D pm_runtime_resume_and_get(dev);
-> > > > >         if (ret)
-> > > > >                 return ret;
-> > > > >         pm_runtime_auto_clean_autosuspend(dev);
-> > > > >         guard(mutex)(&foo);
-> > > > >         ....
-> > > > >         return 0;
-> > > > >
-> > >
-> > > I guess what I'm saying means basically something like this:
-> > >
-> > > DEFINE_CLASS(pm_runtime_resume_and_get, struct device *,
-> > >          if (!IS_ERR_OR_NULL(_T)) pm_tuntime_put(_T),
-> > > pm_runtime_resume_and_get_dev(dev), struct device *dev)
-> > >
-> > > DEFINE_CLASS(pm_runtime_resume_and_get_auto, struct device *,
-> > >          if (!IS_ERR_OR_NULL(_T)) pm_tuntime_put_autosuspend(_T),
-> > > pm_runtime_resume_and_get_dev(dev), struct device *dev)
-> > >
-> > > and analogously for pm_runtime_get_sync().
-> >=20
-> > And it kind of makes sense either.  Do
-> >=20
-> > CLASS(pm_runtime_resume_and_get, active_dev)(dev);
-> > if (IS_ERR(active_dev))
-> >         return PTR_ERR(active_dev);
-> >=20
-> > and now use active_dev for representing the device until it gets out
-> > of the scope.
+Hi,
+
+On Fri, 2025-09-19 at 00:32 +0200, Sebastian Reichel wrote:
+> Hi,
 >=20
-> Yes, that's what I thought of as an alternative, too, but I didn't
-> consider using only pm_runtime_resume_and_get().  Actually by this
-> action, we can also "clean up" the API usage at the same time to use a
-> single recommended API function, which is a good thing.
+> On Thu, Sep 18, 2025 at 02:02:55PM +0100, Andr=C3=A9 Draszik wrote:
+> >=20
+> > Additionally, the FG block can also measure temperature and battery ID.=
+ For
+> > those, a combination of (top-level) PMIC and FG registers are needed
+> > unfortunately. Which means that the FG should probably be an MFD child
+> > device, even though the FG itself doesn't depend on the top-level. Othe=
+rwise
+> > it'd be hard to access the top-level PMIC register.
 >=20
-> That said, I like this way :)
->=20
-> It'd be nice if this change can go into 6.18, then I can put the
-> driver cleanup works for 6.19.  It's a bit late stage for 6.18, but
-> this change is definitely safe and can't break, per se.
+> My understanding is, that the FG has a dedicated I2C device address
 
-OK, do you mean something like the patch below?
+Yes, that is correct. It also has its own dedicated interrupt output.
 
-=2D--
- include/linux/pm_runtime.h |   43 ++++++++++++++++++++++++++++++++++++++++=
-+++
- 1 file changed, 43 insertions(+)
+> and thus cannot be a simple MFD child of the PMIC.
 
-=2D-- a/include/linux/pm_runtime.h
-+++ b/include/linux/pm_runtime.h
-@@ -533,6 +533,30 @@ static inline int pm_runtime_resume_and_
- }
-=20
- /**
-+ * pm_runtime_resume_and_get_dev - Resume device and bump up its usage cou=
-nter.
-+ * @dev: Target device.
-+ *
-+ * Resume @dev synchronously and if that is successful, increment its runt=
-ime
-+ * PM usage counter.
-+ *
-+ * Return:
-+ * * 0 if the runtime PM usage counter of @dev has been incremented.
-+ * * Negative error code otherwise.
-+ */
-+static inline struct device *pm_runtime_resume_and_get_dev(struct device *=
-dev)
-+{
-+	int ret;
-+
-+	ret =3D __pm_runtime_resume(dev, RPM_GET_PUT);
-+	if (ret < 0) {
-+		pm_runtime_put_noidle(dev);
-+		return ERR_PTR(ret);
-+	}
-+
-+	return dev;
-+}
-+
-+/**
-  * pm_runtime_put - Drop device usage counter and queue up "idle check" if=
- 0.
-  * @dev: Target device.
-  *
-@@ -606,6 +630,25 @@ static inline int pm_runtime_put_autosus
- 	return __pm_runtime_put_autosuspend(dev);
- }
-=20
-+/*
-+ * The way to use the classes defined below is to define a class variable =
-and
-+ * use it going forward for representing the target device until it goes o=
-ut of
-+ * the scope.  For example:
-+ *
-+ * CLASS(pm_runtime_resume_and_get, active_dev)(dev);
-+ * if (IS_ERR(active_dev))
-+ *         return PTR_ERR(active_dev);
-+ *
-+ * ... do something with active_dev (which is guaranteed to never suspend)=
- ...
-+ */
-+DEFINE_CLASS(pm_runtime_resume_and_get, struct device *,
-+	     if (!IS_ERR_OR_NULL(_T)) pm_runtime_put(_T),
-+	     pm_runtime_resume_and_get_dev(dev), struct device *dev)
-+
-+DEFINE_CLASS(pm_runtime_resume_and_get_auto, struct device *,
-+	     if (!IS_ERR_OR_NULL(_T)) pm_runtime_put_autosuspend(_T),
-+	     pm_runtime_resume_and_get_dev(dev), struct device *dev)
-+
- /**
-  * pm_runtime_put_sync - Drop device usage counter and run "idle check" if=
- 0.
-  * @dev: Target device.
+The core can still create child devices if a child uses a different
+i2c address, as already done by the max77759 core driver for the charger
+(which e.g. doesn't have its own interrupt). Some MFD other core drivers
+also use such an approach.
 
 
+[...]
 
+> Assuming I understood things correctly, I think I suggest to model
+> things like this for the battery temperature/ID:
+
+Nice, yes, that should work - didn't think of that...
+
+Cheers,
+Andre'
 
