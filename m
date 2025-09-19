@@ -1,121 +1,124 @@
-Return-Path: <linux-pm+bounces-35024-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35025-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15921B8936F
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Sep 2025 13:14:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id CF04FB89379
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Sep 2025 13:17:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CED42176895
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Sep 2025 11:14:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 99AE8587F9D
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Sep 2025 11:17:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C717730C617;
-	Fri, 19 Sep 2025 11:14:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C88525C822;
+	Fri, 19 Sep 2025 11:17:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WpnUCH5/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lWcfFmck"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A23C330C100
-	for <linux-pm@vger.kernel.org>; Fri, 19 Sep 2025 11:14:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0788B34BA4C
+	for <linux-pm@vger.kernel.org>; Fri, 19 Sep 2025 11:17:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758280462; cv=none; b=eAkPUZV4ksi28S9vr7tdX5ubTO5Tm4lJJ7U7/o6b70eVxXjFNDj8xLxs+MEALorwTOJ2lXWrD7OUZNG/jQnAOxXlhYkxVp6rj40DgJeRUjHOhUxraFOr7OhqnoXlykSLAIQrZAG4ii2ROAIBl31p012a1ByJTDIinxti+GXXeGk=
+	t=1758280660; cv=none; b=R5VROQiriV977PE34bu+IYegg6+NVYahkclP2B9lpBzSiIOXM1cEz1uJOjc5QIh+W1a0M9J4MqtEZG9z/XT+UryZfZvmlN7ohOSsgWl6SBmYrOhzN/hjxAyD/rkPLR3gcQRM1tFKTQNAGQIKDTSMoh5mjiMNJrpZJRxcG23klew=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758280462; c=relaxed/simple;
-	bh=3oHB5M17fAPCaUOWIy7staPxRqP0sgNkjBo8MB8iCs0=;
+	s=arc-20240116; t=1758280660; c=relaxed/simple;
+	bh=Vaud0O8IF+cM6zsU7m0GAhHij4l8NSs29t6OEhwoN6E=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Y5ePVxcORXp/L4mFC8tTn3SOi4aqFfAHaBMLNJif+W9RExGFvMm8tmGBs10Brd1l/NYHwBObyoYhJ277RdPuhDR0qAbHJyjT+FT3ZrOufOfe6Lfz1m46neWvhYqk6RX+RmkdmBE5znQ/3jzCHvz9DSSqH51sjvvgv3hheMuLeTg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WpnUCH5/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 801F6C4CEF1
-	for <linux-pm@vger.kernel.org>; Fri, 19 Sep 2025 11:14:22 +0000 (UTC)
+	 To:Cc:Content-Type; b=LXTGqirtZAPg3UVCDYi2AQ35BndyJ3ya97pKx1z4Gxrejl75/bDpy8XOAabboD4GiNJwnsFeOl6sC/sYYDNasvioxd3NaSwGAeAzbpc6xqL7fHpoV7gQSlJVDUl78PxAYqLNe/qtr5cGWnFVyOT1uUdIVSYVlHcBZyGC1kQiDq8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lWcfFmck; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9D88C4CEF0
+	for <linux-pm@vger.kernel.org>; Fri, 19 Sep 2025 11:17:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758280462;
-	bh=3oHB5M17fAPCaUOWIy7staPxRqP0sgNkjBo8MB8iCs0=;
+	s=k20201202; t=1758280659;
+	bh=Vaud0O8IF+cM6zsU7m0GAhHij4l8NSs29t6OEhwoN6E=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=WpnUCH5/wpB4XM7KLfs/VUxv7oKPLNgE2dxYCejXjYtIEUx68aIdvITg1tw3tCUs7
-	 h4GgP85w62aUvSikFmho9cRWhoVCSmUFbmq3QMHiQ8bjnPB9cwmvbXGsYqFhxB7Wd2
-	 eMMQbQsefKlqpdEP8TxRr3/ALnA0qxTKf53kLWc6LuE3RMu7WBe6Kid3W7No2OxXg4
-	 QVjMj2u9mRcGbMuCAhuwGTwfvfsJ2bTnQErGleHF0x5qz2n4ugj/pylZFAr1MQVKyg
-	 15mHJdH6FvgdBgYcX2hmYvI77+CZdlDDRPx+UVc+YtePC/UY4qNJaMxiPDctucI+dc
-	 e2zvacGDZPEow==
-Received: by mail-ot1-f49.google.com with SMTP id 46e09a7af769-752f88e0b59so1447637a34.1
-        for <linux-pm@vger.kernel.org>; Fri, 19 Sep 2025 04:14:22 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXzxhYifEIae/OXr2wIXqP1WarMY9n9EeJ/rdrQZhiAlEMXhVlohZhlMHfuCHcexxgZOYTrXZ/NPg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx3KP7wwKy1kJJI2IykSejNpm60UJgRcuPa5xrm1MMVD1u4mKez
-	tWqLgChyf6W9EsNd1o8Abmj05gWaMq4NgnuaCXstikUKZNaRxQqYdHYGi8Iquj9AVsG2pmPyodd
-	JR/Kudb/GfFa4/3DYi7aqkrdgXcdQjVo=
-X-Google-Smtp-Source: AGHT+IGLpj/lQRwBPOEbZHrxrK3WqjA8s9QwnWqC1dbMSAnpOxnRlgLPlZlXUMZqO7PDq4hzKwhSrE/rAfQ02rJ74jM=
-X-Received: by 2002:a05:6830:631b:b0:756:d6ab:e7a9 with SMTP id
- 46e09a7af769-76902d5b77fmr3868391a34.13.1758280461874; Fri, 19 Sep 2025
- 04:14:21 -0700 (PDT)
+	b=lWcfFmckr790LqTCMGYE+AL1AIF/8SqGJsge1klImtZm4DwB+eUUy6ey2bJaUGpSH
+	 9HzDpUIy+MGtaSOwnIv+abNw0TIlujl4HnX/W47Wt2xyJT0quTLGDLNubTmwhskfAw
+	 3WowSFJb9oJcWFu6QKSO66tz1HuTxQ2pN+xV6vWEREmXb7wsop7XsiFRt1n3kEprC7
+	 xzYQGx/qpWbxM51DdtfWiq21cUhNcmQxSW4GFpbsWWWBSNqxG69vZEV4Tej/U66caY
+	 SRHIVk7jjEgKAPH5QzX9447/eUrDujAMrw6U7vo8W5OVW9XnET9ULILO1uEDBRGQmD
+	 kPr7Nr6clgpQQ==
+Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-74be52f5447so849256a34.1
+        for <linux-pm@vger.kernel.org>; Fri, 19 Sep 2025 04:17:39 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCULW5sUHbyBvE6W1Woi5kpBPbkeDwJXfNyrdPYslSxOvpLVnlQSTBLDZGLwHuXURpnGHLtDYQs0UQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw+nPVrZSkrYnXSOTsGnEZsjfBK63w7Ztj8+Cqu3c1WNOcL4FXL
+	ScJRdfzQVO3lZx1FPF72vNsYmFqm88Ok975u0ra1D8Dib1GpwMVSdD0H2jh2UI9v2YlVrwWF5E5
+	pA1UARUyIoUfzfuLXYURWeRsTsvV6gjw=
+X-Google-Smtp-Source: AGHT+IFHub8sAhDtx00+bZA9mzQXjdt2cEFV/Pwup6zDiM5Pg/pEUPft9nLsR2ahNSrGmpZztuhjghOoJorynxxbYWQ=
+X-Received: by 2002:a05:6808:4f11:b0:43d:1fcc:1f95 with SMTP id
+ 5614622812f47-43d6c1afb0cmr1227513b6e.17.1758280659033; Fri, 19 Sep 2025
+ 04:17:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <3374815.aeNJFYEL58@rafael.j.wysocki> <20250919050928.6sprmdpz2pwgydcc@lcpd911>
-In-Reply-To: <20250919050928.6sprmdpz2pwgydcc@lcpd911>
+References: <5926523.DvuYhMxLoT@rafael.j.wysocki> <5044465.31r3eYUQgx@rafael.j.wysocki>
+In-Reply-To: <5044465.31r3eYUQgx@rafael.j.wysocki>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 19 Sep 2025 13:14:10 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0hCaLebTwtm36dxxG0NBOc1DVPj9cjYHKOWm5kApNa1TQ@mail.gmail.com>
-X-Gm-Features: AS18NWBzT6h889TaE7l6WW4Iz6YZGG6Dk_VjK05Co-aXWxzmQI-FiRCRfLLeNjU
-Message-ID: <CAJZ5v0hCaLebTwtm36dxxG0NBOc1DVPj9cjYHKOWm5kApNa1TQ@mail.gmail.com>
-Subject: Re: [PATCH v1] cpuidle: Fail cpuidle device registration if there is
- one already
-To: Dhruva Gole <d-gole@ti.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>
+Date: Fri, 19 Sep 2025 13:17:28 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0gXHedm9WwwMuTN7vYyf5fNB6yOGLp_-GxSoZAEhSx5aw@mail.gmail.com>
+X-Gm-Features: AS18NWBm-VmRoWBy_7-K7-h195TkFeNXXbDtndqHGxwT6hO2srJMeO9xZMiNJqw
+Message-ID: <CAJZ5v0gXHedm9WwwMuTN7vYyf5fNB6yOGLp_-GxSoZAEhSx5aw@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] ACPI: processor: Update cpuidle driver check in __acpi_processor_start()
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Linux ACPI <linux-acpi@vger.kernel.org>, Huisong Li <lihuisong@huawei.com>, 
+	LKML <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
+	Mario Limonciello <mario.limonciello@amd.com>, 
+	"Shenoy, Gautham Ranjal" <gautham.shenoy@amd.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi,
-
-On Fri, Sep 19, 2025 at 7:09=E2=80=AFAM Dhruva Gole <d-gole@ti.com> wrote:
+On Thu, Sep 18, 2025 at 11:10=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.o=
+rg> wrote:
 >
-> Hi Rafael,
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 >
-> On Sep 18, 2025 at 23:19:20 +0200, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > Refuse to register a cpuidle device if the given CPU has a cpuidle
-> > device already and print a message regarding it.
-> >
-> > Without this, an attempt to register a new cpuidle device without
-> > unregistering the existing one leads to the removal of the existing
-> > cpuidle device without removing its sysfs interface.
-> >
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
-> >  drivers/cpuidle/cpuidle.c |    8 +++++++-
-> >  1 file changed, 7 insertions(+), 1 deletion(-)
-> >
-> > --- a/drivers/cpuidle/cpuidle.c
-> > +++ b/drivers/cpuidle/cpuidle.c
-> > @@ -635,11 +635,17 @@ static void __cpuidle_device_init(struct
-> >  static int __cpuidle_register_device(struct cpuidle_device *dev)
-> >  {
-> >       struct cpuidle_driver *drv =3D cpuidle_get_cpu_driver(dev);
-> > +     unsigned int cpu =3D dev->cpu;
-> >       int i, ret;
-> >
-> >       if (!try_module_get(drv->owner))
-> >               return -EINVAL;
-> >
-> > +     if (per_cpu(cpuidle_devices, cpu)) {
-> > +             pr_info("CPU%d: cpuidle device already registered\n", cpu=
-);
-> > +             return -EEXIST;
+> Commit 7a8c994cbb2d ("ACPI: processor: idle: Optimize ACPI idle
+> driver registration") moved the ACPI idle driver registration to
+> acpi_processor_driver_init() and acpi_processor_power_init() does
+> not register an idle driver any more, so the cpuidle driver check
+> in __acpi_processor_start() needs to be updated to avoid calling
+> acpi_processor_power_init() without a cpuidle driver (in which
+> case the registration of the cpuidle device in that function
+> would fail anyway).
+
+It's worse, it won't just fail, it'll lead to a NULL pointer
+dereference in __cpuidle_register_device().
+
+I'll update the changelog while applying the patch.
+
+
+> Fixes: 7a8c994cbb2d ("ACPI: processor: idle: Optimize ACPI idle driver re=
+gistration")
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
 >
-> Here we return prematurely after a try_module_get right?
-> Do we need a module_put() similar to how you do it later by calling
-> unregister_device function by checking ret =3D cpuidle_coupled_register_d=
-evice ?
-
-Good catch, thanks!
-
-I need to move the new check above the driver module reference counting.
+> Commit 7a8c994cbb2d is only in linux-next at this point.
+>
+> ---
+>  drivers/acpi/processor_driver.c |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> --- a/drivers/acpi/processor_driver.c
+> +++ b/drivers/acpi/processor_driver.c
+> @@ -166,7 +166,7 @@ static int __acpi_processor_start(struct
+>         if (result && !IS_ENABLED(CONFIG_ACPI_CPU_FREQ_PSS))
+>                 dev_dbg(&device->dev, "CPPC data invalid or not present\n=
+");
+>
+> -       if (!cpuidle_get_driver() || cpuidle_get_driver() =3D=3D &acpi_id=
+le_driver)
+> +       if (cpuidle_get_driver() =3D=3D &acpi_idle_driver)
+>                 acpi_processor_power_init(pr);
+>
+>         acpi_pss_perf_init(pr);
+>
+>
+>
+>
 
