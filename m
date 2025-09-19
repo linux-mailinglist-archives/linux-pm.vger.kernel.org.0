@@ -1,349 +1,222 @@
-Return-Path: <linux-pm+bounces-35054-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35055-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D63A7B8A7F9
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Sep 2025 18:06:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 85D2FB8A89F
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Sep 2025 18:18:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6F3A016150A
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Sep 2025 16:06:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3A8C75A7708
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Sep 2025 16:18:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F3A531A543;
-	Fri, 19 Sep 2025 16:06:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D22D31A052;
+	Fri, 19 Sep 2025 16:18:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="WNzOav2N";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="hlvBFp6z";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="WNzOav2N";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="hlvBFp6z"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="EZqkadce"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73CB323C4F3
-	for <linux-pm@vger.kernel.org>; Fri, 19 Sep 2025 16:06:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D55232C2AA2
+	for <linux-pm@vger.kernel.org>; Fri, 19 Sep 2025 16:18:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758297984; cv=none; b=J1xI14JNUBDQQtdkrzqI+jsmIlG3nyuXJbT6XfDvFo/o8KYlg2ukD8ajAtKZC3oIRsA22WVd6qJBGcqUP1MQptiVdUJtgQ9RitSvh4Bibv7fd2XMc4u2xmnX9QqF53+Bgd7dwlHNZIHAnH/bTy+QA9pE+CXMcQmYkNTsTOn5zjA=
+	t=1758298700; cv=none; b=J7yzLaJOm+ZBuOh5YbfKj3EZB8PochAt7KWW8JPvmm+W1jRSDi2DJa0wxZagtZbdzVAg0wDf95jPnvZoZTc59FtQCoACAT/NPmgEY17TYzirvlkSspVIE7KHXMp+cHtBy3reV0NrjIM+jhMfIXroN6Wi2Fx6n/pmncWtYpNNzJA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758297984; c=relaxed/simple;
-	bh=DMj2fKg23DwYf73juw4+Sr+8OGK4EW7M3Y7RF9KL8qs=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Mkd/CEV0x1beeSCdKAi+JG0Cn4oo8+BWNRxkHS8sN+8tC6tg0egz/MU3Svo7FF17ywgeFBZkjugd3MYLdDUsxF7Ge+ciw0mJu/pkX880elCK6qJDUrniErQhBJ7we+JGisBkH+T67Fd7JwXxudjD05MlpGiB+nlOOCFceHpVK2k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=WNzOav2N; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=hlvBFp6z; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=WNzOav2N; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=hlvBFp6z; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id A5B79220B2;
-	Fri, 19 Sep 2025 16:06:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1758297980; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ucOqcRQjLG2lr6EznCJzeShpyd167oEDoWFpYd0D44g=;
-	b=WNzOav2N9oHYhUjdb2XJ7x4svGgDrWCn+IUEJqTVaKr95gIq5At0uTZhIT7BQtGsk7pd5U
-	p2RwMkck0hzm9wPv1mDPLOkArtWEfAeCUw5ULXfyXC9+jlOyLqqMCNqcVzfxbf6vXUYIpt
-	fh2NGV6lhSprvPGysxcGOK//XvQGjvw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1758297980;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ucOqcRQjLG2lr6EznCJzeShpyd167oEDoWFpYd0D44g=;
-	b=hlvBFp6zC8G+6HxvoyBR1yoIuIvuMiguYTeH556FulJ59zEC5dq4SNZmc8bTP1Sijk+bq7
-	97PapnG2RKbnqaDA==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=WNzOav2N;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=hlvBFp6z
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1758297980; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ucOqcRQjLG2lr6EznCJzeShpyd167oEDoWFpYd0D44g=;
-	b=WNzOav2N9oHYhUjdb2XJ7x4svGgDrWCn+IUEJqTVaKr95gIq5At0uTZhIT7BQtGsk7pd5U
-	p2RwMkck0hzm9wPv1mDPLOkArtWEfAeCUw5ULXfyXC9+jlOyLqqMCNqcVzfxbf6vXUYIpt
-	fh2NGV6lhSprvPGysxcGOK//XvQGjvw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1758297980;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ucOqcRQjLG2lr6EznCJzeShpyd167oEDoWFpYd0D44g=;
-	b=hlvBFp6zC8G+6HxvoyBR1yoIuIvuMiguYTeH556FulJ59zEC5dq4SNZmc8bTP1Sijk+bq7
-	97PapnG2RKbnqaDA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 81A9313A39;
-	Fri, 19 Sep 2025 16:06:20 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id WZdQHnx/zWglSwAAD6G6ig
-	(envelope-from <tiwai@suse.de>); Fri, 19 Sep 2025 16:06:20 +0000
-Date: Fri, 19 Sep 2025 18:06:20 +0200
-Message-ID: <878qia8m0z.wl-tiwai@suse.de>
-From: Takashi Iwai <tiwai@suse.de>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Takashi Iwai <tiwai@suse.de>,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: PM runtime auto-cleanup macros
-In-Reply-To: <CAJZ5v0jJjYoTceD2_pgvKgKuPypo+8osnAuCefgAjrzY_w2n8A@mail.gmail.com>
-References: <878qimv24u.wl-tiwai@suse.de>
-	<CAJZ5v0hJvsuOTj5j-0Jn-c9TPnbm70wPvdBkop2hRrdweoncDg@mail.gmail.com>
-	<87jz1uao65.wl-tiwai@suse.de>
-	<12751070.O9o76ZdvQC@rafael.j.wysocki>
-	<87ldma8sq1.wl-tiwai@suse.de>
-	<CAJZ5v0jJjYoTceD2_pgvKgKuPypo+8osnAuCefgAjrzY_w2n8A@mail.gmail.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+	s=arc-20240116; t=1758298700; c=relaxed/simple;
+	bh=WxQ0B4IlsgTIq4DWFmrJtf+73r29i4Kp+qGE9Unb6OU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ukfpF6iKpjV1KJRuJz9DRgMxmoPqj96KmAw48mDGRVvrWScEHyeD/N9Unw4VA8VSHptRsIGCgRa1K/RGgeOcn63OXD7/cFSIjXsOJiM1kkvdG9BdVx9g5GJhOoPooMhpO3OABN/IdlLskiD0hAFji7fDDy4+GeZMJ+iLiIbILs0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=EZqkadce; arc=none smtp.client-ip=209.85.221.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-3ef166e625aso783508f8f.2
+        for <linux-pm@vger.kernel.org>; Fri, 19 Sep 2025 09:18:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1758298696; x=1758903496; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=rCMQiFsm4hsxlP+tNTYkhaVGT0aEA2D4RKsC3Gwmrs0=;
+        b=EZqkadceqFxerreYBdqwFV5YJ44n7V/slvuzf41+//RfCO4ImSUEhNlXJra+tXl6Kv
+         3ZN6bEPT8bu5KeHN8FwZ9yHVJIMQMvyxZCW1zW+UqiF7G0GETN6NH7/bM31wgBdmiJSq
+         Dxn1+G8bZHXZFqs16sfPc8MOCpsmR3QPWLpMzqL+fj8EJWNMjk4D6RFld3jOGbQnEiUs
+         l7b0e2KV0GAxRsmS/c6mzfpf2c11Ld81JnhWP4wv9N6lzoiy92ARa97lWCyH0kT/+io5
+         vhCiL/BYEFebmwFUrrO6PwRQ8p/qtZVXgKPhjgTS2jDQCZPqHKmszTi2BGTDOrU/swpi
+         ppug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758298696; x=1758903496;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rCMQiFsm4hsxlP+tNTYkhaVGT0aEA2D4RKsC3Gwmrs0=;
+        b=DMlsi+fCniEnL3vYOBSHdzvCasj89uWfpP3uMMcp8tgLLIPmx069M530yZNx3ESKIm
+         CdZ59x+kebkTLu/gutUoiSlAIOKqvp70wfLKcQ6nr36IH8qCEJNHcXanm/0gCvNsTr8o
+         eD2VoKmhyhMKdg07cQl5+IbmSZhKLmxCoeT7jd9mLG337LTBwGOxWUbtVa1tqiu6FEih
+         3lzKhEzAST2YenGJSdtveC4Z36JWGNBst0MWGSx09Al5l14SWfS8Vx3KGyraUTcVefAq
+         bDp5gXneZCqzSssuVZQpNZj3Gb8WbKJEGui4YFjhESK0MyrKMB6TrZX1eYEKmBWrYqTD
+         9V1g==
+X-Forwarded-Encrypted: i=1; AJvYcCWo7AovH59G68AkLpqGQdr+P1Lcm259hM+kl4YZKaZCvwnC5Eyd+rwmvmd8sLdTC9+OdysglOVkXA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwbI46nsg6VjvYc0WSUh4Ahk3RVVtFM1FZVOv26X5S4NSL2NTHD
+	TRT2nEBlvzXO9fAKAI2pNuUGoZk+7IlK3RwRgIHWrqxRxWviE6yq8fsbMbTA3Rgo3SI=
+X-Gm-Gg: ASbGncteZrGJS7SWIKQ3dEZTqRCgB5ra1NAXe5bnXZK+NIOkRs9SvWuNhxuKawaxksK
+	yg6Tj2ldXSYSAgaHn7CIQfZOs3aDkhjP3qWZOBPmJf6nNtNIVvE2NqjnnCYysI1L/oY2FrYve8k
+	yt3qNCucFcE0EpSsG675l+VGbYv5cuNs82ucKlli5Vr0UZkAVsjX+ufQx3OVSCkyNKT8thunGz6
+	8RA8Tz12vobEH2MRmz1Y8C0SjnZ4bBSK1HZ4NPPyHJaLEvrhFLrzHD7311XcoBYM3Ulcssqi8DN
+	OVVQ7n79XOjo+ceeiXpN+/AHZQbc0I2AkNjQuJ2p7ZKh56Jqvc0Yzb2To4wB3l1YdEdfZpRlUvg
+	5XOinlxWcvjCIujcqzl2odwCr3nJ4+NffRTy0KVrh+yJZkkwn3ZE1dF2Vp3xumu2+
+X-Google-Smtp-Source: AGHT+IHeDyqCwZEwmBRMLgDcVcjTaBDuQhje8qnjQHoNKHQszsQBAbYzFqO5E0qmktZp1YKSObnQbQ==
+X-Received: by 2002:a05:6000:248a:b0:3ec:b384:322b with SMTP id ffacd0b85a97d-3ee8585f513mr3310968f8f.46.1758298696034;
+        Fri, 19 Sep 2025 09:18:16 -0700 (PDT)
+Received: from localhost (p200300f65f06ab0400000000000001b9.dip0.t-ipconnect.de. [2003:f6:5f06:ab04::1b9])
+        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-3ee07412111sm8325227f8f.28.2025.09.19.09.18.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Sep 2025 09:18:15 -0700 (PDT)
+Date: Fri, 19 Sep 2025 18:18:14 +0200
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: David Lechner <dlechner@baylibre.com>, 
+	Andy Shevchenko <andriy.shevchenko@intel.com>, Andy Shevchenko <andy.shevchenko@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, sboyd@kernel.org, jic23@kernel.org, nuno.sa@analog.com, 
+	andy@kernel.org, arnd@arndb.de, srini@kernel.org, vkoul@kernel.org, 
+	kishon@kernel.org, sre@kernel.org, krzysztof.kozlowski@linaro.org, 
+	linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-phy@lists.infradead.org, linux-pm@vger.kernel.org, kernel@collabora.com, 
+	wenst@chromium.org, casey.connolly@linaro.org, 
+	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>, Neil Armstrong <neil.armstrong@linaro.org>
+Subject: Re: [PATCH v4 2/7] nvmem: qcom-spmi-sdam: Migrate to
+ devm_spmi_subdevice_alloc_and_add()
+Message-ID: <lq4rgzue6uah67nc7lob7eexsquk7qhr22wr4xwymzrvvopgc4@mkzyvadgd3qs>
+References: <20250916084445.96621-3-angelogioacchino.delregno@collabora.com>
+ <t3uk3k4h3l53yajoe3xog2njmdn3jhkmdphv3c4wnpvcqniz4n@opgigzazycot>
+ <aMlnp4x-1MUoModr@smile.fi.intel.com>
+ <mknxgesog6aghc6cjzm63g63zqbqvysxf6ktmnbrbtafervveg@uoiohk3yclso>
+ <CAHp75Vf7KrsN7Ec9zOvJoRuKvkbrJ5sMv7pVv6+88tPX-j_9ZA@mail.gmail.com>
+ <er7dkmzutsu3ooegeihjzngi6l3hol5iaohecr3n5bolfse3tj@xeedlx2utwym>
+ <aMxWzTxvMLsVWbDB@smile.fi.intel.com>
+ <2025091925-thirsting-underuse-14ab@gregkh>
+ <f16ea5eb-cbda-4788-956b-d41c2af51745@baylibre.com>
+ <2025091918-glancing-uptown-7d63@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Level: 
-X-Spam-Flag: NO
-X-Rspamd-Queue-Id: A5B79220B2
-X-Rspamd-Action: no action
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spamd-Result: default: False [-3.51 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ARC_NA(0.00)[];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	RCVD_TLS_ALL(0.00)[];
-	RCPT_COUNT_THREE(0.00)[4];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo,suse.de:dkim,suse.de:mid,suse.de:email];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	DKIM_TRACE(0.00)[suse.de:+]
-X-Spam-Score: -3.51
-
-On Fri, 19 Sep 2025 17:52:32 +0200,
-Rafael J. Wysocki wrote:
-> 
-> On Fri, Sep 19, 2025 at 3:41 PM Takashi Iwai <tiwai@suse.de> wrote:
-> >
-> > On Fri, 19 Sep 2025 15:05:04 +0200,
-> > Rafael J. Wysocki wrote:
-> > >
-> > > On Friday, September 19, 2025 9:37:06 AM CEST Takashi Iwai wrote:
-> > > > On Thu, 18 Sep 2025 22:41:32 +0200,
-> > > > Rafael J. Wysocki wrote:
-> > > > >
-> > > > > On Thu, Sep 18, 2025 at 10:19 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > > > > >
-> > > > > > On Thu, Sep 18, 2025 at 1:28 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > > > > > >
-> > > > > > > On Thu, Sep 18, 2025 at 9:10 AM Takashi Iwai <tiwai@suse.de> wrote:
-> > > > > > > >
-> > > > > > > > On Wed, 17 Sep 2025 20:58:36 +0200,
-> > > > > > > > Rafael J. Wysocki wrote:
-> > > > > > > > >
-> > > > > > > > > Hi,
-> > > > > > > > >
-> > > > > > > > > Sorry for the delay.
-> > > > > > > > >
-> > > > > > > > > On Thu, Sep 11, 2025 at 9:31 AM Takashi Iwai <tiwai@suse.de> wrote:
-> > > > > > > > > >
-> > > > > > > > > > On Wed, 10 Sep 2025 16:00:17 +0200,
-> > > > > > > > > > Takashi Iwai wrote:
-> > > > > > > > > > >
-> > > > > > > > > > > Hi,
-> > > > > > > > > > >
-> > > > > > > > > > > while I worked on the code cleanups in the drivers with the recent
-> > > > > > > > > > > auto-cleanup macros, I noticed that pm_runtime_get*() and _put*() can
-> > > > > > > > > > > be also managed with the auto-cleanup gracefully, too.  Actually we
-> > > > > > > > > > > already defined the __free(pm_runtime_put) in commit bfa4477751e9, and
-> > > > > > > > > > > there is a (single) user of it in pci-sysfs.c.
-> > > > > > > > > > >
-> > > > > > > > > > > Now I wanted to extend it to pm_runtime_put_autosuspend() as:
-> > > > > > > > > > >
-> > > > > > > > > > > DEFINE_FREE(pm_runtime_put_autosuspend, struct device *,
-> > > > > > > > > > >            if (_T) pm_runtime_put_autosuspend(_T))
-> > > > > > > > > > >
-> > > > > > > > > > > Then one can use it like
-> > > > > > > > > > >
-> > > > > > > > > > >       ret = pm_runtime_resume_and_get(dev);
-> > > > > > > > > > >       if (ret < 0)
-> > > > > > > > > > >               return ret;
-> > > > > > > > > > >       struct device *pmdev __free(pm_runtime_put_autosuspend) = dev;
-> > > > > > > > > > >
-> > > > > > > > > > > that is similar as done in pci-sysfs.c.  So far, so good.
-> > > > > > > > > > >
-> > > > > > > > > > > But, I find putting the line like above at each place a bit ugly.
-> > > > > > > > > > > So I'm wondering whether it'd be better to introduce some helper
-> > > > > > > > > > > macros, e.g.
-> > > > > > > > > > >
-> > > > > > > > > > > #define pm_runtime_auto_clean(dev, var) \
-> > > > > > > > > > >       struct device *var __free(pm_runtime_put) = (dev)
-> > > > > > > > > >
-> > > > > > > > > > It can be even simpler by assigning a temporary variable such as:
-> > > > > > > > > >
-> > > > > > > > > > #define pm_runtime_auto_clean(dev) \
-> > > > > > > > > >         struct device *__pm_runtime_var ## __LINE__ __free(pm_runtime_put) = (dev)
-> > > > > > > > >
-> > > > > > > > > Well, if there's something like
-> > > > > > > > >
-> > > > > > > > > struct device *pm_runtime_resume_and_get_dev(struct device *dev)
-> > > > > > > > > {
-> > > > > > > > >         int ret = pm_runtime_resume_and_get(dev);
-> > > > > > > > >         if (ret < 0)
-> > > > > > > > >                 return ERR_PTR(ret);
-> > > > > > > > >
-> > > > > > > > >         return dev;
-> > > > > > > > > }
-> > > > > > > > >
-> > > > > > > > > It would be a matter of redefining the FREE to also take error
-> > > > > > > > > pointers into account and you could do
-> > > > > > > > >
-> > > > > > > > > struct device *__dev __free(pm_runtim_put) = pm_runtime_resume_and_get_dev(dev);
-> > > > > > > > > if (IS_ERR(__dev))
-> > > > > > > > >         return PTR_ERR(__dev);
-> > > > > > > >
-> > > > > > > > That'll work, too.  Though, I find the notion of __free() and a
-> > > > > > > > temporary variable __dev a bit too cumbersome; it's used only for
-> > > > > > > > auto-clean stuff, so it could be somewhat anonymous.
-> > > > > > >
-> > > > > > > No, it is not used only for auto-clean, it is also used for return
-> > > > > > > value checking and it represents a reference on the original dev.  It
-> > > > > > > cannot be entirely anonymous because of the error checking part.
-> > > > > > >
-> > > > > > > The point is that this is one statement instead of two and so it is
-> > > > > > > arguably harder to mess up with.
-> > > > > > >
-> > > > > > > > But it's all about a matter of taste, and I'd follow what you and
-> > > > > > > > other guys suggest.
-> > > > > > > >
-> > > > > > > > FWIW, there are lots of code doing like
-> > > > > > > >
-> > > > > > > >         pm_runtime_get_sync(dev);
-> > > > > > > >         mutex_lock(&foo);
-> > > > > > > >         ....
-> > > > > > > >         mutex_unlock(&foo);
-> > > > > > > >         pm_runtime_put(dev);
-> > > > > > > >         return;
-> > > > > > > >
-> > > > > > > > or
-> > > > > > > >
-> > > > > > > >         ret = pm_runtime_resume_and_get(dev);
-> > > > > > > >         if (ret)
-> > > > > > > >                 return ret;
-> > > > > > > >         mutex_lock(&foo);
-> > > > > > > >         ....
-> > > > > > > >         mutex_unlock(&foo);
-> > > > > > > >         pm_runtime_put_autosuspend(dev);
-> > > > > > > >         return 0;
-> > > > > > > >
-> > > > > > > > and they can be converted nicely with guard() once when PM runtime can
-> > > > > > > > be automatically unreferenced.  With my proposed change, it would
-> > > > > > > > become like:
-> > > > > > > >
-> > > > > > > >         pm_runtime_get_sync(dev);
-> > > > > > > >         pm_runtime_auto_clean(dev);
-> > > > > > >
-> > > > > > > For the case in which the pm_runtime_get_sync() return value is
-> > > > > > > discarded, you could define a guard and do
-> > > > > > >
-> > > > > > > guard(pm_runtime_get_sync)(dev);
-> > > > > > >
-> > > > > > > here.
-> > > > > > >
-> > > > > > > The case checking the return value is less straightforward.
-> > > > > > >
-> > > > > > > >         guard(mutex)(&foo);
-> > > > > > > >         ....
-> > > > > > > >         return;
-> > > > > > > >
-> > > > > > > > or
-> > > > > > > >
-> > > > > > > >         ret = pm_runtime_resume_and_get(dev);
-> > > > > > > >         if (ret)
-> > > > > > > >                 return ret;
-> > > > > > > >         pm_runtime_auto_clean_autosuspend(dev);
-> > > > > > > >         guard(mutex)(&foo);
-> > > > > > > >         ....
-> > > > > > > >         return 0;
-> > > > > > > >
-> > > > > >
-> > > > > > I guess what I'm saying means basically something like this:
-> > > > > >
-> > > > > > DEFINE_CLASS(pm_runtime_resume_and_get, struct device *,
-> > > > > >          if (!IS_ERR_OR_NULL(_T)) pm_tuntime_put(_T),
-> > > > > > pm_runtime_resume_and_get_dev(dev), struct device *dev)
-> > > > > >
-> > > > > > DEFINE_CLASS(pm_runtime_resume_and_get_auto, struct device *,
-> > > > > >          if (!IS_ERR_OR_NULL(_T)) pm_tuntime_put_autosuspend(_T),
-> > > > > > pm_runtime_resume_and_get_dev(dev), struct device *dev)
-> > > > > >
-> > > > > > and analogously for pm_runtime_get_sync().
-> > > > >
-> > > > > And it kind of makes sense either.  Do
-> > > > >
-> > > > > CLASS(pm_runtime_resume_and_get, active_dev)(dev);
-> > > > > if (IS_ERR(active_dev))
-> > > > >         return PTR_ERR(active_dev);
-> > > > >
-> > > > > and now use active_dev for representing the device until it gets out
-> > > > > of the scope.
-> > > >
-> > > > Yes, that's what I thought of as an alternative, too, but I didn't
-> > > > consider using only pm_runtime_resume_and_get().  Actually by this
-> > > > action, we can also "clean up" the API usage at the same time to use a
-> > > > single recommended API function, which is a good thing.
-> > > >
-> > > > That said, I like this way :)
-> > > >
-> > > > It'd be nice if this change can go into 6.18, then I can put the
-> > > > driver cleanup works for 6.19.  It's a bit late stage for 6.18, but
-> > > > this change is definitely safe and can't break, per se.
-> > >
-> > > OK, do you mean something like the patch below?
-> >
-> > Yes!
-> 
-> OK
-> 
-> > An easy follower is the patch like below.
-> > (It's the only user of __free(pm_runtime_*) in linux-next as of now.)
-> 
-> So the __free(pm_runtime_*) could be dropped after this patch I suppose?
-
-Yes, for now it seems so.  It was the only user as far as I can see in
-linux-next.
-
-> In that case, let me send a series of 3 patches which will add the new
-> class definitions, switch over PCI to using them (your patch), and
-> drop the existing pm_runtime_put FREE.
-
-OK, will do that.
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="enuyknrtw4cq5eeq"
+Content-Disposition: inline
+In-Reply-To: <2025091918-glancing-uptown-7d63@gregkh>
 
 
-Takashi
+--enuyknrtw4cq5eeq
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v4 2/7] nvmem: qcom-spmi-sdam: Migrate to
+ devm_spmi_subdevice_alloc_and_add()
+MIME-Version: 1.0
+
+Hello Greg,
+
+On Fri, Sep 19, 2025 at 05:13:35PM +0200, Greg KH wrote:
+> On Fri, Sep 19, 2025 at 10:05:28AM -0500, David Lechner wrote:
+> > On 9/19/25 8:59 AM, Greg KH wrote:
+> > > On Thu, Sep 18, 2025 at 10:00:29PM +0300, Andy Shevchenko wrote:
+> > >> I,o.w. I principally disagree on putting MODULE_IMPORT_NS() into the=
+ header
+> > >> file.
+> > >=20
+> > > Yes, please never do that, it defeats the purpose of module namespaces
+> > > completly.  If you don't want to have module namespaces, don't use th=
+em
+> > > for your subsytem.  Don't use them and then make them moot by putting
+> > > MODULE_IMPORT_NS() in the .h file for the symbols as that's pointless.
+> > >=20
+> > > thanks,
+> > >=20
+> > > greg k-h
+> >=20
+> >=20
+> > Could someone suggest some additional explanation to add to
+> > Documentation/core-api/symbol-namespaces.rst to explain the
+> > reasoning behind this?
+> >=20
+> > Right now, the only part of that document that say _why_ we have
+> > module namespces says:
+> >=20
+> > 	That is useful for documentation purposes (think of the
+> > 	SUBSYSTEM_DEBUG namespace) as well as for limiting the
+> > 	availability of a set of symbols for use in other parts
+> > 	of the kernel.
+> >=20
+> > So I don't see the connection between this explanation and and:
+> >=20
+> > 	[Putting MODULE_IMPORT_NS() into the header] defeats
+> > 	the purpose of module namespaces completely.
+> >=20
+> > I am guilty of putting it in a header, so if I need to fix that
+> > I would like to actually understand why first. Andy has mentioned
+> > something about potential abuses, but without any example, I haven't
+> > been able to understand what this would actually actually look like.
+> > Or maybe there is some other reason that Greg is thinking of that
+> > hasn't been mentioned yet?
+>=20
+> Let me turn it around, _why_ would you want your exports in a namespace
+> at all if you just are putting a MODULE_IMPORT_NS() in the .h file at
+> the same time?  What is this giving you at all compared to just a normal
+> MODULE_EXPORT() marking for your exports?
+>=20
+> I know what it gives me when I don't put it in a .h file, but I think
+> that might be different from what you are thinking here :)
+
+For me (who still today thinks it's elegant to put the MODULE_IMPORT_NS
+in a header next to the declarations of the symbols in that namespace)
+it's the documentation thing quoted above (e.g. modinfo lists the used
+namespaces) and to unclutter the global namespace.
+
+The latter was essentially the motivation to introduce symbol
+namespaces, see the cover letter from back then[1].
+
+Personally I don't see the relevance of making it harder for abusers.
+
+A non-GPL module should be stopped by the symbol being exported using
+EXPORT_SYMBOL_GPL() with or without namespaces. And for a binary
+distribution of a module the need to add the MODULE_IMPORT_NS statement
+in the source code is a quite low barrier for the evil binary module
+distributor that IMHO doesn't justify to burden all regular users of a
+namespace to have to do two things (#include + MODULE_IMPORT_NS) instead
+of only one (include which implies the MODULE_IMPORT_NS) to make use of
+said namespace.
+
+And for GPL code: Who is actually an abuser of say devm_pwm_get()?
+In my eyes any module should be free to use that function. And if it's
+not sensible to do so, I would expect this to be discovered even without
+the needed MODULE_IMPORT_NS("PWM") in the code. And if it's not
+discovered that's fine for me, too. For me that's the spirit of Open
+Source: If someone finds devm_pwm_get() useful, let them use it. Please
+even tell me if you use it in a way I didn't expect, I'm glad to hear
+about it.
+
+I'm probably missing something.
+
+Best regards
+Uwe
+
+--enuyknrtw4cq5eeq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmjNgkMACgkQj4D7WH0S
+/k50wggAm2DTHJtv28WePL2zBaXONs/0AtzDza8lXQgPQoUVHUJXsRVsYbdK+5Te
+R8MYd6+n8hqXv/pnvnZRwd81Wv0yFwJOJtUzAlqiXYr2tfvSfe785liM73qS3JNs
+MI5i+z0WoWyRTqGTmPxJjJ1r/SgcvGFl+CHm9j1vDehiPVRnPalOS+y1JzYBezf3
+CTfbDpMOfi4y6a9u/6GX+UrUMxe7arfGlBB7Sy3dOoxlXSWqoQ1hzjlTo4YrsYwU
+ulHe6jKB+OI6xyUPqM0xXCphVFUZFacH+RitcWEFsTWH6Dt2vv8muCeB8jzPFkYc
+QRkS8BwIA/n7bOdJgYaEtTcUyCIa4g==
+=568Y
+-----END PGP SIGNATURE-----
+
+--enuyknrtw4cq5eeq--
 
