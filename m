@@ -1,46 +1,46 @@
-Return-Path: <linux-pm+bounces-35063-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35062-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D072B8A9AA
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Sep 2025 18:41:29 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B3F2B8A9A1
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Sep 2025 18:41:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 31EEF1B214BF
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Sep 2025 16:41:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E27AA1898593
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Sep 2025 16:41:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2C9E2737E1;
-	Fri, 19 Sep 2025 16:40:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F1C02F83BA;
+	Fri, 19 Sep 2025 16:40:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FsDBoMQ3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WOUCMEA2"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 930CA26D4C0;
-	Fri, 19 Sep 2025 16:40:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 647D926CE2B;
+	Fri, 19 Sep 2025 16:40:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758300046; cv=none; b=c7dir0k946aQpaHu3xtl+/2u/8jClDTZYEGdKRf0H6BJ2dXq+cpW3dhyQbWte68rP6RFhVwf9urzIxbrJ9iKu94lZX1vyxt0qJSyZq2nQTwfBQgD3jge+DjTpOHyJXn59SbFTG7oL5CSTQsB46+kVArjbPCG37sM0hJsTQ4XP2Y=
+	t=1758300042; cv=none; b=tZ2EKtVtSRznPfWhC0Yj1mfw8VWwFeqBMnpAJymCjlY3Yrd5cKyFM4DUHeZFjHYFS4XubLx0CSMSztsYHljx4677tmn4Y+gjQILLTa8HffndNC5FnL2nrC0F/XWFxMYwOlurP5HLpo1lh1qXFR56gUK/uHG8bobsC5lMN46FZD8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758300046; c=relaxed/simple;
-	bh=Lk0O1L7hjdO97zvfG/KEfg0A1cK285Y7YOABL3BKAts=;
+	s=arc-20240116; t=1758300042; c=relaxed/simple;
+	bh=5gTnW3I/NqFh1bOYgEo3YvuTdJlKrTDdYrhiKlb663U=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=dSazh9+73VciOWNvWhl3DRIUAj0lMV6jYa4imQBCkmLH3QIrjIdr2DJzaF3orBq7XAXXs9uimVawhliI8r4sOStriv8u+zXEoUfpo06AYXtU8yiqHp4KoPO1M5MBpzCFdZf4sLXLAkGzy8/jCeyvzM447fnGfHA1qAcgA08zbSc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FsDBoMQ3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88FF7C4CEF9;
-	Fri, 19 Sep 2025 16:40:44 +0000 (UTC)
+	 MIME-Version:Content-Type; b=IrB+fjgStG8liHICxfXj2q32kjrCkuod1RcPvJa/T/rVViGqk4SlqHRfJjmXX7kEJ9qxBXkOWvlL6u1y2H2e82n2VcB5gHfbucnLuCuo3InUgCIYnCM7TdSkWazMmteRBEEcEjhxoTy7fBXlmEH66swnG0lGOF5iuYJr4aaSATk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WOUCMEA2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2790AC4CEF0;
+	Fri, 19 Sep 2025 16:40:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758300046;
-	bh=Lk0O1L7hjdO97zvfG/KEfg0A1cK285Y7YOABL3BKAts=;
+	s=k20201202; t=1758300042;
+	bh=5gTnW3I/NqFh1bOYgEo3YvuTdJlKrTDdYrhiKlb663U=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=FsDBoMQ3eM/YDaPQ27O5WLI7O0LIXCmMiXB8Nki5+P6wVSFI/10BrVTIlsuqamfuJ
-	 5yvvEf/UhkZYWumrwChVo1rAP8Zgmmf/fGugR2bZrshIJ+lOsOKD/L8xedW1IQRX92
-	 UD4UgqpGYjDOs8yz/as20CodJmDkKI7QMADYPVIWZDKoOl8KSyEbxvm30zDHig4dFP
-	 fBX+dbfTUxcMNYpP4ROgtPNbNIZ/mZ7rJvGWfJ4eGyP4wl7NOIJBXZByyXMQaJBAom
-	 8ZkuXcp8+rIz/sgnK3vapLn+Cf+c9/nrXbnxBxwOJKnaZsEEpkGP0SrrCGBnRXlPh8
-	 ZaQVhVxfId1lw==
+	b=WOUCMEA2aOsF3N+VblkjSlxzwfQZ4DeqqBg59NJZRhrk7tEpVBVYTjI4FPXFim4c4
+	 UzWe9D1b8lCyACTKvWwxS+2D/WwYsyHPO3EvISxURmU2Yq8Rkf6oemtbhH9qclSdEQ
+	 opTxnDuxvhzQKIL7bzbBDFF1t1jtrf/SrUVwcv4qBcSKKS0hsgtSwqGxArSh1ehhj8
+	 VYjUzoTNTB1gpFSpu1Jkvb0tXwjGdzufyv4EkTg6zxTqgcH6LnQKKejUCHpuzTq3+/
+	 cO0A7QwZ9q6d8g0psIXNs7/B5gzvK/yoHOAntaQgBuWGsht1IFXWWkmMNgx1O4X38w
+	 ELuFJ3M9RnkOA==
 From: "Rafael J. Wysocki" <rafael@kernel.org>
 To: Linux PM <linux-pm@vger.kernel.org>
 Cc: LKML <linux-kernel@vger.kernel.org>,
@@ -48,11 +48,9 @@ Cc: LKML <linux-kernel@vger.kernel.org>,
  Alex Williamson <alex.williamson@redhat.com>,
  Bjorn Helgaas <helgaas@kernel.org>, Takashi Iwai <tiwai@suse.de>,
  Zhang Qilong <zhangqilong3@huawei.com>, Ulf Hansson <ulf.hansson@linaro.org>
-Subject:
- [PATCH v1 2/3] PCI/sysfs: Use PM runtime class macro for auto cleanup in
- reset_method_store()
-Date: Fri, 19 Sep 2025 18:38:42 +0200
-Message-ID: <2245131.irdbgypaU6@rafael.j.wysocki>
+Subject: [PATCH v1 3/3] PM: runtime: Drop DEFINE_FREE() for pm_runtime_put
+Date: Fri, 19 Sep 2025 18:40:13 +0200
+Message-ID: <3016592.e9J7NaK4W3@rafael.j.wysocki>
 Organization: Linux Kernel Development
 In-Reply-To: <5049058.31r3eYUQgx@rafael.j.wysocki>
 References: <5049058.31r3eYUQgx@rafael.j.wysocki>
@@ -65,33 +63,28 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="UTF-8"
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-The newly introduced class macro can simplify the code.
+The DEFINE_FREE() for pm_runtime_put has been superseded by recently
+introduced runtime PM auto-cleanup macros and its only user has been
+converted to using one of the new macros, so drop it.
 
-Also, add the proper error handling for the PM runtime get.
-
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
-[ rjw: Adjust subject and error handling ]
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/pci/pci-sysfs.c |    5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ include/linux/pm_runtime.h |    2 --
+ 1 file changed, 2 deletions(-)
 
---- a/drivers/pci/pci-sysfs.c
-+++ b/drivers/pci/pci-sysfs.c
-@@ -1475,8 +1475,9 @@ static ssize_t reset_method_store(struct
- 		return count;
- 	}
+--- a/include/linux/pm_runtime.h
++++ b/include/linux/pm_runtime.h
+@@ -579,8 +579,6 @@ static inline int pm_runtime_put(struct
+ 	return __pm_runtime_idle(dev, RPM_GET_PUT | RPM_ASYNC);
+ }
  
--	pm_runtime_get_sync(dev);
--	struct device *pmdev __free(pm_runtime_put) = dev;
-+	CLASS(pm_runtime_resume_and_get, pmdev)(dev);
-+	if (IS_ERR(pmdev))
-+		return -ENXIO;
- 
- 	if (sysfs_streq(buf, "default")) {
- 		pci_init_reset_methods(pdev);
+-DEFINE_FREE(pm_runtime_put, struct device *, if (_T) pm_runtime_put(_T))
+-
+ /**
+  * __pm_runtime_put_autosuspend - Drop device usage counter and queue autosuspend if 0.
+  * @dev: Target device.
 
 
 
