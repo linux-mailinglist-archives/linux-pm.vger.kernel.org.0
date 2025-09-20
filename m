@@ -1,254 +1,145 @@
-Return-Path: <linux-pm+bounces-35094-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35095-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F8D8B8C688
-	for <lists+linux-pm@lfdr.de>; Sat, 20 Sep 2025 13:07:59 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3529CB8C6B4
+	for <lists+linux-pm@lfdr.de>; Sat, 20 Sep 2025 13:31:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BDBB47A9882
-	for <lists+linux-pm@lfdr.de>; Sat, 20 Sep 2025 11:06:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D03597E0301
+	for <lists+linux-pm@lfdr.de>; Sat, 20 Sep 2025 11:31:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 914832F9982;
-	Sat, 20 Sep 2025 11:07:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFE702FABF5;
+	Sat, 20 Sep 2025 11:31:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jmAKnuPe"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="kYTlVtsc"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C2FE1FBEB9
-	for <linux-pm@vger.kernel.org>; Sat, 20 Sep 2025 11:07:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BE731DC9B1
+	for <linux-pm@vger.kernel.org>; Sat, 20 Sep 2025 11:31:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758366471; cv=none; b=dE16NbHMIQ5bz988XO8O8PSuRhzSq87Z8MyApDYZg00VOkytHZrAS7xxxNY5QX4hjsF+8zj5syyuCz3k6L8SGw3/rD5QnDgpd2fOg0Wz0nMDL1lz1rNevWoWTQl/7ujo/9LBRFvpgaVQSBmtZBsE11Q7RlRznUX4py0UQwgpAec=
+	t=1758367883; cv=none; b=RgXrEdSZP4KhVR/tHbo+66sv4cfJZb4661Sag/o2/BSIjWQW1YChaEQ6oXeA3zWzs/MNk/GUQUo77fPnGDcFs7e45+KiPzphzYu3qq2FGqL2WI9e/beeT2xvjxNYMBOIWjAS8tv6fc03NyNyKDxRt7n/+7XeLtwWDDZkVZQRqgc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758366471; c=relaxed/simple;
-	bh=TpfP0VJ11G7QI0AQg4mLtUM4/jK7WE+IVpgAzVkuN/U=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FxvYMFq4M1XHbCZKILZ7uUaIrkZtvZ4/kmkPz0BIEU3dGXeEemDyO4Ho/mZV2xBa1XM4MnAGVEs0hlkN+FnvJ4S3oKV/juqbpjJzKxj+uCCkOAJVYLFjYWPuitBHOGpbY8tDgCFive7oNHFNvE96bC0HC1DWqyvHaQ8s7tQthCU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jmAKnuPe; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20823C4CEFB
-	for <linux-pm@vger.kernel.org>; Sat, 20 Sep 2025 11:07:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758366471;
-	bh=TpfP0VJ11G7QI0AQg4mLtUM4/jK7WE+IVpgAzVkuN/U=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=jmAKnuPeKu1VZuehGomrPgrOdZYCfyVXrQz3X6+MiybZvrU3BEKF4PHo0Akm/HXlS
-	 xuif77Mpc7fHBq1nA0YRze6Hg6Xyz8oW9RDYhjXah3X9yZislowUk1MaT8dIpqgnnI
-	 C0driG/G6hP7Auz23PPVO8uO/kdyZRjjdViamvD44CGOnPkcyffy/6sNrMhFv0WCBS
-	 AoqLippn4waSIWrkPmKVfyfc1aayaiRDLc8k2JdiCYMVP9Sx453qQpBrW46v+otuUI
-	 IzHmzDmoRRWx8JLcrrU9Xbj/fUEIZjU3T2SYcs1heXchgX/ZGfxI5Jb38bEsiossXM
-	 szZD/HMCHOzKg==
-Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-620b2171204so1514173eaf.0
-        for <linux-pm@vger.kernel.org>; Sat, 20 Sep 2025 04:07:51 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCX2fCKnOAN2ci9Ss4nemSGa4WJZPbcI9GaTyfD8rFwIuhpnG4XahD7+uNp4ip5zerNLBGiiM+Q7YA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywa+QnTnPbADjgIs0aQTQRfpMnQaxD3vBx7GN1lzI0O7cqUeGu8
-	UyPfGAwyYiAr9NGQ7aSq++l7rFkJPwceyL/9KIOkIdhCX8jkHzJ2z8IF+aKKV8JOpnnstNh6nES
-	9YYUodK4nqtJugYnTR8e9DJBTjxsEvjY=
-X-Google-Smtp-Source: AGHT+IF2uVqf5GAFrjNgl9l1aViZuBf9EzFUZwKFo5HyttmeemXFkxkW+7cNc1rWNoBCpeE2Iu3UZ3uahJkvkn37kQM=
-X-Received: by 2002:a05:6808:1394:b0:43b:2829:e642 with SMTP id
- 5614622812f47-43d6c2824f7mr2448689b6e.24.1758366470409; Sat, 20 Sep 2025
- 04:07:50 -0700 (PDT)
+	s=arc-20240116; t=1758367883; c=relaxed/simple;
+	bh=wRFzW4gTxw8RSbwpMQZx26SwQa/TSHZp7SP5PI7C/IA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Xc77wnqde2kGrmGpZTvSMdj1IFCNzgsMNU6XZVxUjid4XetW9aKTi7Tap+SRijUX6Nh88NYCysMTqoXGOiEowRcqioU4OuDK5z1UTUXnM96Zc3Bc/0vtR156i/6cIXVj+u/rNsDuEXgThjAEGUlQxKRF/eh1GTGN1qAkM0CgXnI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=kYTlVtsc; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58K3FYug000535
+	for <linux-pm@vger.kernel.org>; Sat, 20 Sep 2025 11:31:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=qcppdkim1; bh=t2PWzWr+rmTAvxWPqAkysS0sBuB2h0DCVbB
+	pWs6MT24=; b=kYTlVtscNrzvQuS/Nwh+4aZA/gfZ32XyClXtFdtfoejSUezMiKf
+	TSk3wj0It1Auae/zTngf7dispx4oOGBx6t/lPmLzOMl7sLP73RzkQSqJSqFsndyY
+	xBfEkzogyJhnwdm1txuHg4XN3A/SZZhXlNAn/D6IyvJR+w81oiajEPKpKX0NtXD2
+	nZPUqKBPtdc+gI2Bn3Z6JNX0+ymgXtr566yo4CjUjJwLiSdkoKHukrKGHGHJvebj
+	2PoP1vICOWKeLmYPmVz6Smh1WanWIt7g0359JQbH6kzGubkKLmpKDiQPH2wk6Isv
+	Sv5srQXMSN+lF5OK1ZGWj6htkQY5k4u6klQ==
+Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 499hmngvw2-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Sat, 20 Sep 2025 11:31:15 +0000 (GMT)
+Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-2681642efd9so26155495ad.2
+        for <linux-pm@vger.kernel.org>; Sat, 20 Sep 2025 04:31:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758367874; x=1758972674;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=t2PWzWr+rmTAvxWPqAkysS0sBuB2h0DCVbBpWs6MT24=;
+        b=l6GFMeg3tD2TaJMIiH44EzNVSvtkEnSxadAzrc2yusSRrhS8fSrB7wZvzlpE8S08t0
+         T05NBVRUcewZ7yOuhqu4PfvL3oUOsIeiRFhDEfvBzbdOLpPGx2NfRKhC3ynC2E1mUOEf
+         Fnz6mrEbcYfSsqhYLLSe/BTb9StS5o5yZPSYsN1IVw86varE4SAZ7tgmz+HEvZsha/4I
+         eC0pa33pzr9t+ObDv5ZmsgxT0ZNzIDTBWxp7J05HFSYyxi4G/swftVwHz/2n/lHV9RsW
+         oIXi+Wk+Tt0dxJjIrUEYIdZoVHQGY4UmcBPYOx7JtUPf9AnZo5iU+JwFtOZBWeqQmTYt
+         Ls4Q==
+X-Gm-Message-State: AOJu0YyPHjUKMvKFMaZZIHbrKH/I52sPplDcayvMCWaGIDOAKKmta1wd
+	0R8zFlXw+cJh3bEXiVav95m/HKmqx2kXMVxwQgfKBpnR+vDpxtsWz0fKUe0MQWR8n3qN+sPfi1C
+	SUTCCl+lmn6vxTEZXCgYCv87llBWcFJbt8f1uKGKvTIuKaRLIgqeRLG92WfSPEg==
+X-Gm-Gg: ASbGncuTjRsOrS0NymdSp+6cXbcHIIsbynaLae2E7GdbZYdf6FmnZDFfNxwo8oBf1i7
+	PrqzFXSKDdaih1Ppni2/n7IpPAvuTmvKBjIIe0edHzzb07xWBYRFfQt1dwRxBvS2oYFlXa//q34
+	5qb9WDPhcEdy581K0CBturplsSHGAOUgLg7b0VnCHawDFWcESXvTWPmp+1NVP8EMSvuazxIyhkN
+	mWxbjP7gdsE2G0StqaKoL0uC71mY0TCFg0Q2gt0NoFf/O9xNN+pzDNBA5eImYpb4fOHTRDHMMX+
+	OMdUgz32WdjO9x95O1ZJMi8iBo41cEe0lqGNogExLgPg0nQtJKtsnqzjYyvg1Nzbjm4hZB+J4jB
+	YWKj2T3hOwfoeAI89DTbhssM4lKHTTCnlwUCBAzbol7XBA7NLidx3/gpl+nCb
+X-Received: by 2002:a17:903:40cb:b0:26b:61d3:cd66 with SMTP id d9443c01a7336-26b62201c03mr69924775ad.29.1758367874214;
+        Sat, 20 Sep 2025 04:31:14 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGHhe73x0XLBwB2louUzFMWyY5HexOtrXj3J/yR43zYP6wQ+HGnLlOCgGTD/Jfpqkyg5lA9rQ==
+X-Received: by 2002:a17:903:40cb:b0:26b:61d3:cd66 with SMTP id d9443c01a7336-26b62201c03mr69924465ad.29.1758367873744;
+        Sat, 20 Sep 2025 04:31:13 -0700 (PDT)
+Received: from hu-pankpati-blr.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com. [103.229.18.19])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-269802deb3dsm81109635ad.93.2025.09.20.04.31.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 20 Sep 2025 04:31:13 -0700 (PDT)
+From: Pankaj Patil <pankaj.patil@oss.qualcomm.com>
+To: amitk@kernel.org, thara.gopinath@gmail.com, rafael@kernel.org,
+        daniel.lezcano@linaro.org, rui.zhang@intel.com, lukasz.luba@arm.com,
+        robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org
+Cc: linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: thermal: qcom-tsens: document the glymur Temperature Sensor
+Date: Sat, 20 Sep 2025 17:00:52 +0530
+Message-Id: <20250920113052.151370-1-pankaj.patil@oss.qualcomm.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAJZ5v0gTtTZt7oE0vME0qRo8nZ=KX3DwF46PhyUVe7e85uZaNA@mail.gmail.com>
- <20250919165657.233349-1-vivekyadav1207731111@gmail.com>
-In-Reply-To: <20250919165657.233349-1-vivekyadav1207731111@gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Sat, 20 Sep 2025 13:07:39 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0gooWpNra-EzT1xB+vsL9hLD_1eQm+DS_Jfw8dEtZoRJw@mail.gmail.com>
-X-Gm-Features: AS18NWA2wIGm6rW53tbOvfILtPGvc_KCP2IRAYMaTfaPPBtIE1EsaLwVMvUjfdM
-Message-ID: <CAJZ5v0gooWpNra-EzT1xB+vsL9hLD_1eQm+DS_Jfw8dEtZoRJw@mail.gmail.com>
-Subject: Re: [PATCH v2] cpuidle: sysfs: Use sysfs_emit/sysfs_emit_at instead
- of sprintf/scnprintf
-To: vivekyadav1207731111@gmail.com
-Cc: joe@perches.com, rafael@kernel.org, daniel.lezcano@linaro.org, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	skhan@linuxfoundation.org, linux-kernel-mentees@lists.linuxfoundation.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Authority-Analysis: v=2.4 cv=YPqfyQGx c=1 sm=1 tr=0 ts=68ce9083 cx=c_pps
+ a=cmESyDAEBpBGqyK7t0alAg==:117 a=Ou0eQOY4+eZoSc0qltEV5Q==:17
+ a=yJojWOMRYYMA:10 a=COk6AnOGAAAA:8 a=EUspDBNiAAAA:8 a=zzSzb4EmsE6u5SiZLnAA:9
+ a=1OuFwYUASf3TG4hYMiVC:22 a=TjNXssC_j7lpFel5tvFf:22
+X-Proofpoint-ORIG-GUID: 5HbKMZDe8UGOKiTfqKasTLWWpnpFtXMh
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTIwMDAwMCBTYWx0ZWRfX0+vSzMYIQoq6
+ o0TZcecWVBT7Y7oAPKH/4e1Go3wjvxlh0Fw8mb+PPUGvrus3hVv3UEbbhQbSe/sIledsT8OWdP9
+ OjHk8RQ2KvqgxUOb8PnFNX9ERG13AJ0g42f8s/2diW35vtC2OvH4l3MWdZ940zB05pRvrxHNrXf
+ dgAQkEvof3QsewITeDauVSa3kEB7as1yCnpMPWoaYWtDPP5wii/nfZp4R0WV5Ag8wJqaJleuECe
+ HiP+SAX82EoJiH+4qLcOhhBHIqZsTf/qBDYrDaUqxgDaIt28xpQgw7Ou5SM9BqTKe0+dSPmOMLY
+ z+Gnm19J0YZum8xb8s0BabPtH4YqdzE6Y9Rhyib775/KR4DBz8aXqBLEmEZiodwlc3Mr1fqoiSZ
+ sD8uZfcv
+X-Proofpoint-GUID: 5HbKMZDe8UGOKiTfqKasTLWWpnpFtXMh
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-09-20_02,2025-09-19_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ suspectscore=0 bulkscore=0 priorityscore=1501 phishscore=0 adultscore=0
+ clxscore=1011 impostorscore=0 spamscore=0 malwarescore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2509200000
 
-On Fri, Sep 19, 2025 at 6:57=E2=80=AFPM <vivekyadav1207731111@gmail.com> wr=
-ote:
->
-> From: Vivek Yadav <vivekyadav1207731111@gmail.com>
->
-> The ->show() callbacks in sysfs should use sysfs_emit() or
-> sysfs_emit_at() when formatting values for user space. These helpers
-> are the recommended way to ensure correct buffer handling and
-> consistency across the kernel.
->
-> See Documentation/filesystems/sysfs.rst for details.
->
-> No functional change intended.
->
-> Suggested-by: Joe Perches <joe@perches.com>
-> Signed-off-by: Vivek Yadav <vivekyadav1207731111@gmail.com>
-> ---
->  drivers/cpuidle/sysfs.c | 34 +++++++++++++++++-----------------
->  1 file changed, 17 insertions(+), 17 deletions(-)
->
-> diff --git a/drivers/cpuidle/sysfs.c b/drivers/cpuidle/sysfs.c
-> index d6f5da61cb7d..61de64817604 100644
-> --- a/drivers/cpuidle/sysfs.c
-> +++ b/drivers/cpuidle/sysfs.c
-> @@ -27,14 +27,14 @@ static ssize_t show_available_governors(struct device=
- *dev,
->
->         mutex_lock(&cpuidle_lock);
->         list_for_each_entry(tmp, &cpuidle_governors, governor_list) {
-> -               if (i >=3D (ssize_t) (PAGE_SIZE - (CPUIDLE_NAME_LEN + 2))=
-)
-> +               if (i >=3D (ssize_t)(PAGE_SIZE - (CPUIDLE_NAME_LEN + 2)))
->                         goto out;
->
-> -               i +=3D scnprintf(&buf[i], CPUIDLE_NAME_LEN + 1, "%s ", tm=
-p->name);
-> +               i +=3D sysfs_emit_at(buf, i, "%.*s ", CPUIDLE_NAME_LEN, t=
-mp->name);
->         }
->
->  out:
-> -       i+=3D sprintf(&buf[i], "\n");
-> +       i +=3D sysfs_emit_at(buf, i, "\n");
->         mutex_unlock(&cpuidle_lock);
->         return i;
->  }
-> @@ -49,9 +49,9 @@ static ssize_t show_current_driver(struct device *dev,
->         spin_lock(&cpuidle_driver_lock);
->         drv =3D cpuidle_get_driver();
->         if (drv)
-> -               ret =3D sprintf(buf, "%s\n", drv->name);
-> +               ret =3D sysfs_emit(buf, "%s\n", drv->name);
->         else
-> -               ret =3D sprintf(buf, "none\n");
-> +               ret =3D sysfs_emit(buf, "none\n");
->         spin_unlock(&cpuidle_driver_lock);
->
->         return ret;
-> @@ -65,9 +65,9 @@ static ssize_t show_current_governor(struct device *dev=
-,
->
->         mutex_lock(&cpuidle_lock);
->         if (cpuidle_curr_governor)
-> -               ret =3D sprintf(buf, "%s\n", cpuidle_curr_governor->name)=
-;
-> +               ret =3D sysfs_emit(buf, "%s\n", cpuidle_curr_governor->na=
-me);
->         else
-> -               ret =3D sprintf(buf, "none\n");
-> +               ret =3D sysfs_emit(buf, "none\n");
->         mutex_unlock(&cpuidle_lock);
->
->         return ret;
-> @@ -230,7 +230,7 @@ static struct cpuidle_state_attr attr_##_name =3D __A=
-TTR(_name, 0644, show, store)
->  static ssize_t show_state_##_name(struct cpuidle_state *state, \
->                          struct cpuidle_state_usage *state_usage, char *b=
-uf) \
->  { \
-> -       return sprintf(buf, "%u\n", state->_name);\
-> +       return sysfs_emit(buf, "%u\n", state->_name);\
->  }
->
->  #define define_show_state_ull_function(_name) \
-> @@ -238,7 +238,7 @@ static ssize_t show_state_##_name(struct cpuidle_stat=
-e *state, \
->                                   struct cpuidle_state_usage *state_usage=
-, \
->                                   char *buf)                            \
->  { \
-> -       return sprintf(buf, "%llu\n", state_usage->_name);\
-> +       return sysfs_emit(buf, "%llu\n", state_usage->_name);\
->  }
->
->  #define define_show_state_str_function(_name) \
-> @@ -247,8 +247,8 @@ static ssize_t show_state_##_name(struct cpuidle_stat=
-e *state, \
->                                   char *buf)                            \
->  { \
->         if (state->_name[0] =3D=3D '\0')\
-> -               return sprintf(buf, "<null>\n");\
-> -       return sprintf(buf, "%s\n", state->_name);\
-> +               return sysfs_emit(buf, "<null>\n");\
-> +       return sysfs_emit(buf, "%s\n", state->_name);\
->  }
->
->  #define define_show_state_time_function(_name) \
-> @@ -256,7 +256,7 @@ static ssize_t show_state_##_name(struct cpuidle_stat=
-e *state, \
->                                   struct cpuidle_state_usage *state_usage=
-, \
->                                   char *buf) \
->  { \
-> -       return sprintf(buf, "%llu\n", ktime_to_us(state->_name##_ns)); \
-> +       return sysfs_emit(buf, "%llu\n", ktime_to_us(state->_name##_ns));=
- \
->  }
->
->  define_show_state_time_function(exit_latency)
-> @@ -273,14 +273,14 @@ static ssize_t show_state_time(struct cpuidle_state=
- *state,
->                                struct cpuidle_state_usage *state_usage,
->                                char *buf)
->  {
-> -       return sprintf(buf, "%llu\n", ktime_to_us(state_usage->time_ns));
-> +       return sysfs_emit(buf, "%llu\n", ktime_to_us(state_usage->time_ns=
-));
->  }
->
->  static ssize_t show_state_disable(struct cpuidle_state *state,
->                                   struct cpuidle_state_usage *state_usage=
-,
->                                   char *buf)
->  {
-> -       return sprintf(buf, "%llu\n",
-> +       return sysfs_emit(buf, "%llu\n",
->                        state_usage->disable & CPUIDLE_STATE_DISABLED_BY_U=
-SER);
->  }
->
-> @@ -310,7 +310,7 @@ static ssize_t show_state_default_status(struct cpuid=
-le_state *state,
->                                           struct cpuidle_state_usage *sta=
-te_usage,
->                                           char *buf)
->  {
-> -       return sprintf(buf, "%s\n",
-> +       return sysfs_emit(buf, "%s\n",
->                        state->flags & CPUIDLE_FLAG_OFF ? "disabled" : "en=
-abled");
->  }
->
-> @@ -358,7 +358,7 @@ static ssize_t show_state_s2idle_##_name(struct cpuid=
-le_state *state, \
->                                          struct cpuidle_state_usage *stat=
-e_usage, \
->                                          char *buf)                      =
-       \
->  { \
-> -       return sprintf(buf, "%llu\n", state_usage->s2idle_##_name);\
-> +       return sysfs_emit(buf, "%llu\n", state_usage->s2idle_##_name);\
->  }
->
->  define_show_state_s2idle_ull_function(usage);
-> @@ -550,7 +550,7 @@ static ssize_t show_driver_name(struct cpuidle_driver=
- *drv, char *buf)
->         ssize_t ret;
->
->         spin_lock(&cpuidle_driver_lock);
-> -       ret =3D sprintf(buf, "%s\n", drv ? drv->name : "none");
-> +       ret =3D sysfs_emit(buf, "%s\n", drv ? drv->name : "none");
->         spin_unlock(&cpuidle_driver_lock);
->
->         return ret;
-> --
+From: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
 
-Applied as 6.18 material, thanks!
+Document the Temperature Sensor (TSENS) on the glymur Platform.
+
+Signed-off-by: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
+Signed-off-by: Pankaj Patil <pankaj.patil@oss.qualcomm.com>
+---
+ Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+index f65dc829574c..bfbacba1dc55 100644
+--- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
++++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+@@ -50,6 +50,7 @@ properties:
+         items:
+           - enum:
+               - qcom,milos-tsens
++              - qcom,glymur-tsens
+               - qcom,msm8953-tsens
+               - qcom,msm8996-tsens
+               - qcom,msm8998-tsens
+-- 
+2.34.1
+
 
