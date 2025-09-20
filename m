@@ -1,148 +1,210 @@
-Return-Path: <linux-pm+bounces-35096-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35097-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16F7BB8C84A
-	for <lists+linux-pm@lfdr.de>; Sat, 20 Sep 2025 14:36:59 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7821CB8CD62
+	for <lists+linux-pm@lfdr.de>; Sat, 20 Sep 2025 18:42:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CF4C8170677
-	for <lists+linux-pm@lfdr.de>; Sat, 20 Sep 2025 12:36:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2A03C7E0B6F
+	for <lists+linux-pm@lfdr.de>; Sat, 20 Sep 2025 16:42:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73B282F2908;
-	Sat, 20 Sep 2025 12:36:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DA682874FF;
+	Sat, 20 Sep 2025 16:42:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="VJuF/4PD"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="yS0M+6ww"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA3E62EB87F
-	for <linux-pm@vger.kernel.org>; Sat, 20 Sep 2025 12:36:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AB8253363
+	for <linux-pm@vger.kernel.org>; Sat, 20 Sep 2025 16:42:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758371814; cv=none; b=jduA6D0DPg8QJBaY69c4QyCOP83fSh/+qCqGmu/ui6Rbwn283vMZdouXPkPztLPoHXW/JwuspXenOGlrmMx7z0LRPf0JW9/5D+glb3PhA8W0myEvVTSYsplvzZYLhddiWlOFLfQP/pIv542c9xbkAerYWVzgpQxgKiaNq16m7Xs=
+	t=1758386524; cv=none; b=GEI3XIqty8RYbXzyqk4gY7fUS7211zAmbriM3OiMlNrLRGfZVO+6bl0jz+TXbcWr7yAztVqmOVnjEqtbJxGZf4PuhpNWP0OiHlaV0o+K13KMyWyk+Skq5Ap2+oa0IRQY6/InVZXyIfh07Sd/RtwZDlMy0gYmETTRELdU+6/OWaE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758371814; c=relaxed/simple;
-	bh=NlAyY6gwj3GgebzwwaWrY6Q6kn6D5Bsn1jK4HrmHOC0=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=bDkrVGuoMZZQ/zhtCtB5fTfTZESwubtLTolNY75rAXi7sVH9Hj0M4asS3BoLS330m+CL/WVzcAhupuzdTncCyikLkeHXndy4xtjflP/0HRpaip0VwgtfCjaWHbas2EbffIlg19NaVIGEoLy1DvVAPfRHgHpOc8x5nx/n9eA1uGs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=VJuF/4PD; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58KAu5O9014610
-	for <linux-pm@vger.kernel.org>; Sat, 20 Sep 2025 12:36:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=qcppdkim1; bh=kQEsxxv9s/GhWRr7hiHaTvJE9W1ROnl+URj
-	6ByZUdys=; b=VJuF/4PD18F/7WIjaN88QgYYik45597UonMuLRqhx29D+ZdW5Xv
-	9u2rMCS0bi/iJYIrBQftBA+DGrMYviAN/PgsASh6O041JQ7OlWDo00Z3QjjSjHqy
-	dAL6xl4C6SHiMWDFdqeazvSEUkB/G8QqQ3CrCeKmxKA32Wn4MN9RWBLI3KjjyTmY
-	jlrMHgkhiStxPwpguJbQ9oX65mi7noXHNt/6vskAbwMaSpAEnVAQ1NDw5OtUqfPK
-	+njqbmzuEIS1caUVDDLhI0r+SjwxO5nv8oLPpTHHJ0mFJWr5hmR1fSf1T4u1Epc/
-	s6OP1tvt/ksly1O6O7tgeAkqUKeU+nm76qg==
-Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com [209.85.210.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 499k7srt4t-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Sat, 20 Sep 2025 12:36:51 +0000 (GMT)
-Received: by mail-pf1-f199.google.com with SMTP id d2e1a72fcca58-77dff701fb8so1771603b3a.1
-        for <linux-pm@vger.kernel.org>; Sat, 20 Sep 2025 05:36:51 -0700 (PDT)
+	s=arc-20240116; t=1758386524; c=relaxed/simple;
+	bh=8yxUmsnX9yOq7CyqhC2sAV111qny6SgsS0lVVp0vL/I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KBoDTaFDMbUltgu6lQonM8DQX0rEQgnGarJ3Mfa1I4tYutqM0Y0QzP8VkVWWVwTreyj4SIUstG4GJbnDw6XFIKg3K37B8rvHGFNZPP3gXEeIBtHukksY7ke+0u4cMz8ZIxR6/mqIsqsvVeSo3aiCupdKaLNEGh4UDepqHxcPtUY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=yS0M+6ww; arc=none smtp.client-ip=209.85.208.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-62f24b7be4fso5144993a12.0
+        for <linux-pm@vger.kernel.org>; Sat, 20 Sep 2025 09:42:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1758386520; x=1758991320; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=7uzS/vyKL78XLGJYkf20HiEkzzRuN4BWxhwOr5TgLy8=;
+        b=yS0M+6ww/YPK2CkMWuQnHdODGXlQLo0i9T61SmpHCdkjld2vLUZmVnyu/kiIy0QY2V
+         MydMXHeLMvKxqoMc4x4RE0oJiLYYiSqx0F745Z5FRv/Zt3GWy9HLFI+vC+6mcU9Zhvg/
+         grKxRw83QgKNp1XzH2HIdEM0qT6H7quH8wzWxty5knLNRGuD2FgjfuWLG36LB5WaT13T
+         32vGReGV2X6+l4c04XiR7ZpDHRHnys7KSMNBQgUYdKwl9jPJ3wtfxpn+1dGJ9mpYV4QP
+         2BjQaY1cTtoVCQK2naL6LciSribJd1i/9vcN6cSiVTyItr7j89bUUB/o62VEvAApkFr5
+         1/xQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758371810; x=1758976610;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kQEsxxv9s/GhWRr7hiHaTvJE9W1ROnl+URj6ByZUdys=;
-        b=fkQo0BOWPVZv1/6YDNLrcXN8l552thl9eYR50PSjYvIiAErTXidAcYXk4QNgIsEHce
-         pkolijKxe7yPElF4Oa1m3Co/OqpCF7sq8XxHjLoMXXc/n7Yvsj/ucVWLz8FHzmXqUqmY
-         iHDw3ltJJL10osGNMtSRC8JJ0GULcj4ZVPQ/DJnki0M6BEibCIllmYuFWVviC7pZDjCT
-         kDf9WLlw3gcrL7LP9dnMb9l6s0wNF4+VYCOkW9WlbIzOZo/FuNzmebt/p4fe2r7B9iqL
-         hU+wt6IIaOLPPjp/9HQJFH9v7pa2iy+k4i35fU1avZP/Qv5hn9a8Jbqb/QxhFh6VUGoG
-         ZdCA==
-X-Gm-Message-State: AOJu0YxRNh79ouhYyks1RbJsLsI0/efC8I1DAAJTVuc/a/NYy8qqeq+C
-	KJSM+CLuud1GccnTuCbW/1khxKCZH/mhOU/pb2MCpa1TsfTHeK8T/Prp74xW0kCpqpRjNq7lgL3
-	2sCYV08To7Jb/AYTrFE28QP3KH23uLUCLRiLc7uR5vpibtMq3/twOtfT8FuYUKA==
-X-Gm-Gg: ASbGnctWqU5IMtwV40uEJ5JE+Oipi98BT00078UhB60rCjBbrXkOnKYvzn3c6p8OGrb
-	k1Ub4heBKcu+bpiRerW3rnErQ6kF3nGn/bS45TqUbYGFnsjFtloFLsCsFOJ7w7InA1f7OnJVExD
-	a9hjGRPyWzrHILaqPz73qnBnyc5X4Yb3dgv2v/MxjS1lfr1MXvDRG4rLeMQBHvyemc3oP9WoDVK
-	E0WaW20JumyATDNURHiIOrnJMea9K8+J+u81SExCDXlrAs1xAmDk9hSbXUs+xl2aYd+Ge+j+esn
-	NKEGS4cVYWtwLllwVVEnuGduZshf0AeuhTNbrlSIHkUzSOE7phaGYExfkTjKnZfe7keeV/tbxFS
-	nLarc9ivscHSExgxAdbl1MGszqH5/Toq2fPRPE3HqKk2cmQR8ivH2GMLWLq4C
-X-Received: by 2002:a05:6a00:1889:b0:77e:325b:f614 with SMTP id d2e1a72fcca58-77e4d21fd65mr8295115b3a.12.1758371810337;
-        Sat, 20 Sep 2025 05:36:50 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGgWzB5nkqqfDCZX9CuCLhkrbY8TKa9vwIXS5YrzuVH3x6awEHxf0i/Xsr/JFw/xJ+CoTCA+A==
-X-Received: by 2002:a05:6a00:1889:b0:77e:325b:f614 with SMTP id d2e1a72fcca58-77e4d21fd65mr8295094b3a.12.1758371809932;
-        Sat, 20 Sep 2025 05:36:49 -0700 (PDT)
-Received: from hu-pankpati-blr.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com. [103.229.18.19])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-77f1550f70asm2911274b3a.13.2025.09.20.05.36.46
+        d=1e100.net; s=20230601; t=1758386520; x=1758991320;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7uzS/vyKL78XLGJYkf20HiEkzzRuN4BWxhwOr5TgLy8=;
+        b=vUZyr61XuzvI2oqnh5G4LFWlp0rpBYIrzIHqsxnwqVl9sT6OXmggLCtErT9KTkI5wS
+         ipUt4+eJHf+x3VB0AJl1tJbwmMxqrfFSCCP24HCZEVt/7DUMxCZAg1JHopdjmHTqHoC4
+         TUVrPy4Zdp95FZhzZKyXgwzzzeE5cQpHCgMLmcaE2m32KoeBRb7vixviVpy15kE82zK/
+         O9CSXVDspUdVpGBfR8xnTv1BHIWvTtQKCOn54iKWL9mzXfEjQBjI5nRklXQYY97xNBWw
+         CCkqwGz91wskMsRSCjkXSUU4atNysd6Zc6Twvb8oaPxwBApfHnXpkzY4mE5rCLlio8Dg
+         3pqg==
+X-Forwarded-Encrypted: i=1; AJvYcCUELPZsohJ6gcxYrGLsKqHDQaHWjgh89jOz/P3hON6sIByBkfVRu35oNBzE+OOsmaLMlGSCW47AZA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxskxAR7WI26IEg8SjCydjmZxW34GwcYcl/RbAfRaQCBOKMttd6
+	6lXFzrWnnGZ8L/DlmpnoaKX3UZFq9BEcCo35P3xlRsq/yLAgMGGC38KkLxGgbUX13TQ=
+X-Gm-Gg: ASbGncv8cc/GVe0gYMMIM30gEVOWR3+yDR44HsWmSjnVIoGEqWwNnL79xYmGYoMzxZo
+	bOFzFoqg0A/02J5Ggo5GMFbNuqcjkBdCo7AM+G7P1raBlMxs2iKeDeTTK9G0ZN9dt/k9fS1kZSg
+	sy472aP09ohCvXkq5qim6gQjtLm/Uvc3PLgeCg+zbMCwxS0cqGgH+Hwhnw11hK582HURMl+HEhv
+	nu7IgwNxSsREBf3hi2WYocj/HwJUZu8bSF0bZG8Riepk4DE9gk26toD4EmkQ75Y7+PkHvmfvx/w
+	JoNGMw4NO0negR6YL6aNIb5V6ogj/Kn1IS1R+a0SFpbP2cjko7T+uWJaRAz1NAKqvkXM/j671Nl
+	CJTqphzDM9ntgNwOj2smlzbs4QrQ=
+X-Google-Smtp-Source: AGHT+IGKt39UQn5jzBEhjnHbjhGMHaeA/VyK514j5LVq6YZ3WWPLFkMfByunXzny8uptDg8fNtpVnA==
+X-Received: by 2002:a05:6402:3202:b0:61c:bfa7:5d0 with SMTP id 4fb4d7f45d1cf-62fc0a78f7fmr7798031a12.30.1758386520260;
+        Sat, 20 Sep 2025 09:42:00 -0700 (PDT)
+Received: from localhost ([2a02:8071:b783:6940:36f3:9aff:fec2:7e46])
+        by smtp.gmail.com with UTF8SMTPSA id 4fb4d7f45d1cf-62fa5f28672sm5489248a12.43.2025.09.20.09.41.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 20 Sep 2025 05:36:49 -0700 (PDT)
-From: Pankaj Patil <pankaj.patil@oss.qualcomm.com>
-To: amitk@kernel.org, thara.gopinath@gmail.com, rafael@kernel.org,
-        daniel.lezcano@linaro.org, rui.zhang@intel.com, lukasz.luba@arm.com,
-        robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org
-Cc: linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] dt-bindings: thermal: qcom-tsens: Document the Glymur temperature Sensor
-Date: Sat, 20 Sep 2025 18:06:31 +0530
-Message-Id: <20250920123631.281153-1-pankaj.patil@oss.qualcomm.com>
-X-Mailer: git-send-email 2.34.1
+        Sat, 20 Sep 2025 09:41:59 -0700 (PDT)
+Date: Sat, 20 Sep 2025 18:41:57 +0200
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: David Lechner <dlechner@baylibre.com>, 
+	Andy Shevchenko <andriy.shevchenko@intel.com>, Andy Shevchenko <andy.shevchenko@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, sboyd@kernel.org, jic23@kernel.org, nuno.sa@analog.com, 
+	andy@kernel.org, arnd@arndb.de, srini@kernel.org, vkoul@kernel.org, 
+	kishon@kernel.org, sre@kernel.org, krzysztof.kozlowski@linaro.org, 
+	linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-phy@lists.infradead.org, linux-pm@vger.kernel.org, kernel@collabora.com, 
+	wenst@chromium.org, casey.connolly@linaro.org, 
+	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>, Neil Armstrong <neil.armstrong@linaro.org>
+Subject: Re: [PATCH v4 2/7] nvmem: qcom-spmi-sdam: Migrate to
+ devm_spmi_subdevice_alloc_and_add()
+Message-ID: <x5ot622jqzz67imvswtdacqeeclqaw7my3pj6ne7tureec6ufg@fuzltifrkcae>
+References: <aMlnp4x-1MUoModr@smile.fi.intel.com>
+ <mknxgesog6aghc6cjzm63g63zqbqvysxf6ktmnbrbtafervveg@uoiohk3yclso>
+ <CAHp75Vf7KrsN7Ec9zOvJoRuKvkbrJ5sMv7pVv6+88tPX-j_9ZA@mail.gmail.com>
+ <er7dkmzutsu3ooegeihjzngi6l3hol5iaohecr3n5bolfse3tj@xeedlx2utwym>
+ <aMxWzTxvMLsVWbDB@smile.fi.intel.com>
+ <2025091925-thirsting-underuse-14ab@gregkh>
+ <f16ea5eb-cbda-4788-956b-d41c2af51745@baylibre.com>
+ <2025091918-glancing-uptown-7d63@gregkh>
+ <8702fd35-945a-4d20-bc37-410c74c70da6@baylibre.com>
+ <2025091902-dwelled-calculate-c755@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTIwMDAxOCBTYWx0ZWRfX9ZiM/sdiQ08n
- 1FL06C1e+2bLPlSpCKoBWlYYouKaz++p+YBCR2cwCf7F/rE09Usc6cUiIVDGdb3qTVcQ83STCCk
- 2I7ezy3Pvqx1mxqwVNdcfLPsG9Ac6kqLn10fsx5DQuw3Zh/FrHDP4RCtwA0O7bKmFLtZfhSGE7M
- DDX4XrWV/frzkLKnuSJODC3X1qSnh/jZsPOsjDdekH51FWtq1sd62Ld7JXZ7egpPogIBNl09qTx
- saDsjBpgstZY8wBH76Fbq9UmrLqdMZEoIbQc5P8VPMh4LXu57aGBq8oPUAOT5G1REhsLpHMSNgc
- LMzEhWhzbmhUiyFpuvmYfVlzFqBqExhIcSV5CfVM/GH0H3zHGHGts0yZ0Y6t7NIb8mMET2wJQP3
- hkrvohXI
-X-Proofpoint-ORIG-GUID: d7NRfvtGgANI1V6Y_Q5ZT5BaE7SGk7HB
-X-Authority-Analysis: v=2.4 cv=bvpMBFai c=1 sm=1 tr=0 ts=68ce9fe3 cx=c_pps
- a=WW5sKcV1LcKqjgzy2JUPuA==:117 a=Ou0eQOY4+eZoSc0qltEV5Q==:17
- a=yJojWOMRYYMA:10 a=COk6AnOGAAAA:8 a=EUspDBNiAAAA:8 a=8GdNKlHnjaA04NifdkAA:9
- a=OpyuDcXvxspvyRM73sMx:22 a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-GUID: d7NRfvtGgANI1V6Y_Q5ZT5BaE7SGk7HB
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-09-20_04,2025-09-19_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 phishscore=0 bulkscore=0 clxscore=1015 suspectscore=0
- malwarescore=0 impostorscore=0 adultscore=0 priorityscore=1501
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2509200018
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="7d2frku4wfk7wjvb"
+Content-Disposition: inline
+In-Reply-To: <2025091902-dwelled-calculate-c755@gregkh>
 
-From: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
 
-Document the Temperature Sensor (TSENS) on Glymur Platform.
+--7d2frku4wfk7wjvb
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v4 2/7] nvmem: qcom-spmi-sdam: Migrate to
+ devm_spmi_subdevice_alloc_and_add()
+MIME-Version: 1.0
 
-Signed-off-by: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
-Signed-off-by: Pankaj Patil <pankaj.patil@oss.qualcomm.com>
----
-Changes in v2:
-Fixed to sort entry in alphabetical order.
+Hello Greg,
 
- Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 1 +
- 1 file changed, 1 insertion(+)
+it seems we agree on the advantage of module namespaces that the pool of
+global symbols is reduced, right? That is given with and without the
+module import in a header.
 
-diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-index f65dc829574c..78e2f6573b96 100644
---- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-+++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-@@ -49,6 +49,7 @@ properties:
-       - description: v2 of TSENS
-         items:
-           - enum:
-+              - qcom,glymur-tsens
-               - qcom,milos-tsens
-               - qcom,msm8953-tsens
-               - qcom,msm8996-tsens
--- 
-2.34.1
+On Fri, Sep 19, 2025 at 05:37:03PM +0200, Greg KH wrote:
+> On Fri, Sep 19, 2025 at 10:20:29AM -0500, David Lechner wrote:
+> > Up to now, my (naive) understanding was that the point module namespaces
+> > is to reduce the number of symbols in the global namespace because havi=
+ng
+> > too many symbols there was starting to cause problems. So moving symbols
+> > to another namespace was a "good thing".
+>=20
+> Yes, it is a "good thing" overall, but by just making all of your
+> symbols in a namespace, and then including it in the .h file, that does
+> the same exact thing as before (i.e. anyone that includes that .h file
+> puts the symbols into the global namespace with that prefix.)
 
+I fail to parse the part in parenthesis. The symbols of the pwm
+subsystem are defined in the "PWM" namespace (using `#define
+DEFAULT_SYMBOL_NAMESPACE "PWM"` in drivers/pwm/core.c). In <linux/pwm.h>
+there is a `MODULE_IMPORT_NS("PWM");`, so a consumer (say
+`drivers/regulator/pwm-regulator.c`) only needs
+
+	#include <linux/pwm.h>
+
+to import the "PWM" namespace. So pwm-regulator.c puts the symbols
+into the global namespace with that prefix. What symbols? What prefix?
+
+The thing that is different is that the pwm functions are in the "PWM"
+namespace, so a module without an import for "PWM" has a smaller pool of
+global symbols and so loading that module is a tad more effective,
+right?
+
+I agree that for the consumer source it doesn't make a difference if pwm
+is using a namespace or not. I'd count that as an advantage of the
+"import in a header" approach.
+
+> Ideally, the goal was to be able to easily see in a module, what symbol
+> namespaces they depend on, which requires them to put MODULE_IMPORT_NS()
+> in the module to get access to those symbols.  dmabuf has done this very
+> well, making it obvious to the maintainers of that subsystem that they
+> should be paying attention to those users.
+
+For me as pwm maintainer it doesn't matter much if I pay attention to
+`MODULE_IMPORT_NS("PWM");` or `#include <linux/pwm.h>`.
+=20
+> For other "tiny" subsystems, it just slots away their symbols so that no
+> one else should ever be using them, and it makes it blindingly obvious
+> if they do.  For example, the usb-storage symbols, anyone that does:
+> 	MODULE_IMPORT_NS("USB_STORAGE");
+> had better be living in drivers/usb/storage/ otherwise I need to have a
+> word with those offenders :)
+
+All symbols in the "USB_STORAGE" namespace (apart from
+`fill_inquiry_response`) start with `usb_stor_`. If you grep for that
+string you find all the (probably illegitimate) users of the usb-storage
+symbols, but also those that define their own symbols with that prefix.
+
+Do you actually look out for such offenders, i.e. have a lei mailbox
+with `MODULE_IMPORT_NS("USB_STORAGE")` as search string or a cron job
+grepping your tree for that?
+
+> So it's a way of "tidying" up things, and to make things more explicit
+> than just having to rely on searching a tree and looking for .h include
+> usage.=20
+
+For some reason in your eyes grepping for MODULE_IMPORT_NS is superior
+to grepping for an #include. Can you explain that?
+
+Best regards
+Uwe
+
+--7d2frku4wfk7wjvb
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmjO2S4ACgkQj4D7WH0S
+/k4IhQf/UtPUTnhbxWROvnPeLQVLBT7LYDoSGOyTSyXtAb7AtAQeUqfa7EOc+mbs
+9mnVB/2Tv8YaD+bCuGpjvR2UPbbitvNteBfOKlyq/VoLROElZ9C/muciDIkTDqzt
+a3u+lJJaxf9nhWtJHj35qZ3OUc5Uq3kLBBW4TGxz021/qFWdfa2FzPXuWkaPN43I
+PR7RIvLA7Wn1xzEUYoWCTrHA1oc+iHIwgn1Gisr3dzxVl3ouIEssExI2fULWb/8U
+6MjMbiAXkqKXJF9GP7ugR1oyf9Ia+EV+XwWy0h263ozE+LdoqcBRtobGEjMsW/lG
+VhUonqtHTK4KWOq7bew5fEBs52y4KA==
+=AIm3
+-----END PGP SIGNATURE-----
+
+--7d2frku4wfk7wjvb--
 
