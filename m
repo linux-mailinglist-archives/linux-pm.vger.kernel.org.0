@@ -1,165 +1,254 @@
-Return-Path: <linux-pm+bounces-35093-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35094-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 86C5CB8C66D
-	for <lists+linux-pm@lfdr.de>; Sat, 20 Sep 2025 13:04:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F8D8B8C688
+	for <lists+linux-pm@lfdr.de>; Sat, 20 Sep 2025 13:07:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BDBCA7A28AD
-	for <lists+linux-pm@lfdr.de>; Sat, 20 Sep 2025 11:02:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BDBB47A9882
+	for <lists+linux-pm@lfdr.de>; Sat, 20 Sep 2025 11:06:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C0A62F617A;
-	Sat, 20 Sep 2025 11:03:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 914832F9982;
+	Sat, 20 Sep 2025 11:07:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e28VyjiN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jmAKnuPe"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBB8134BA2A
-	for <linux-pm@vger.kernel.org>; Sat, 20 Sep 2025 11:03:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C2FE1FBEB9
+	for <linux-pm@vger.kernel.org>; Sat, 20 Sep 2025 11:07:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758366231; cv=none; b=Kekn7mfyN58qw0x+uja9kFLBfXgVs3l0AO3DNg5KGnbPqqjaJ6KKSj6yBU1JnUgKxD2WwnTEAvLGQn0DxWnvPuyKpVrpmgNzlgPwdkVIvfICOAQKqmFfOBek4C6+/rexESVvdjFI151Oqwx27EgGcQhcvsZR54nl3/oD4PUZtRw=
+	t=1758366471; cv=none; b=dE16NbHMIQ5bz988XO8O8PSuRhzSq87Z8MyApDYZg00VOkytHZrAS7xxxNY5QX4hjsF+8zj5syyuCz3k6L8SGw3/rD5QnDgpd2fOg0Wz0nMDL1lz1rNevWoWTQl/7ujo/9LBRFvpgaVQSBmtZBsE11Q7RlRznUX4py0UQwgpAec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758366231; c=relaxed/simple;
-	bh=oajWz/Pk5//uqUY2wQW5300sN6tGzd7WzqJWxKlkJmM=;
+	s=arc-20240116; t=1758366471; c=relaxed/simple;
+	bh=TpfP0VJ11G7QI0AQg4mLtUM4/jK7WE+IVpgAzVkuN/U=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fllFYf9MO8LTRFCjd6fjwIFPEeVlwYthEnhogL0JaBW4pTkdJcYQhviK47xYeTrRoUIurHTVkBlUOaqB7sU+6pVfBpKIBtPBcAuisKQzqBJ+cfJPM/trg1BOE5NmEmQ8x/g+uzyLj0pCXaaIeRPLsinnqXzx4qsmvVrw/GajvUQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e28VyjiN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81F8BC4CEEB
-	for <linux-pm@vger.kernel.org>; Sat, 20 Sep 2025 11:03:50 +0000 (UTC)
+	 To:Cc:Content-Type; b=FxvYMFq4M1XHbCZKILZ7uUaIrkZtvZ4/kmkPz0BIEU3dGXeEemDyO4Ho/mZV2xBa1XM4MnAGVEs0hlkN+FnvJ4S3oKV/juqbpjJzKxj+uCCkOAJVYLFjYWPuitBHOGpbY8tDgCFive7oNHFNvE96bC0HC1DWqyvHaQ8s7tQthCU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jmAKnuPe; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20823C4CEFB
+	for <linux-pm@vger.kernel.org>; Sat, 20 Sep 2025 11:07:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758366230;
-	bh=oajWz/Pk5//uqUY2wQW5300sN6tGzd7WzqJWxKlkJmM=;
+	s=k20201202; t=1758366471;
+	bh=TpfP0VJ11G7QI0AQg4mLtUM4/jK7WE+IVpgAzVkuN/U=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=e28VyjiNSIAS0l/4H0ncXv5azpGYAcRh7Joy3yn/A0H9VPuLYXL4F0jV7Xr4FSAfJ
-	 hLAMhuJIp0DNYryTyjOwGVAkHxyciBL5C3jpWSKeYN4HLHHjcJcs0MMGHJus6LlxxP
-	 ZrQr/UmIdQgySWMTJ0zuZ2gMqMxwStCCiGeGDmRpABz1KhgcGHX4JrFrTDPfMghUIG
-	 Fo/GBM4szakiUPRboDt0TwhFjwUV5whPpb56igvIH3Q+cRC5rSyHfc6saZp5qdU60E
-	 Gr6GYbqFzPGgczvCgIKcZua6PucMNx6p4CO1OJf85WBHFLcD7n+mmnTcupFLGlDMRx
-	 SJErwThrh6zvw==
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-330d1565844so2015247fac.1
-        for <linux-pm@vger.kernel.org>; Sat, 20 Sep 2025 04:03:50 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVuHn7azPknKnPv/JI8yjQ0lPbt8/NYa6bzGfdFtX5XgfudxZO9lI82x6fEYXiaoZzpg+mxIZfvZw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy8mJUhOa3aTK89pzpdsptaHkKgkfNrq5gvLJXF3yVg0mPzyhZr
-	JafxwTfksRxLxpcZ+jG4xnPBpAIILy5f3Fh8R3Bvjyx93d/JYr83A/9e93LRdum/rBIOfEMo9l+
-	jHLrMlnwioYIOBGcbWkZHCflNaAD3N3s=
-X-Google-Smtp-Source: AGHT+IFo5wLTIp9z4ZtxJcN2+S7aBhlvWJYB1uLZuzmKp6vzgq+f7gKV3PHe2XmRoIhwfYQkopZtFPS5z+RoDTQIyQM=
-X-Received: by 2002:a05:6808:4fd0:b0:438:4356:b533 with SMTP id
- 5614622812f47-43d6c252629mr2757924b6e.29.1758366229809; Sat, 20 Sep 2025
- 04:03:49 -0700 (PDT)
+	b=jmAKnuPeKu1VZuehGomrPgrOdZYCfyVXrQz3X6+MiybZvrU3BEKF4PHo0Akm/HXlS
+	 xuif77Mpc7fHBq1nA0YRze6Hg6Xyz8oW9RDYhjXah3X9yZislowUk1MaT8dIpqgnnI
+	 C0driG/G6hP7Auz23PPVO8uO/kdyZRjjdViamvD44CGOnPkcyffy/6sNrMhFv0WCBS
+	 AoqLippn4waSIWrkPmKVfyfc1aayaiRDLc8k2JdiCYMVP9Sx453qQpBrW46v+otuUI
+	 IzHmzDmoRRWx8JLcrrU9Xbj/fUEIZjU3T2SYcs1heXchgX/ZGfxI5Jb38bEsiossXM
+	 szZD/HMCHOzKg==
+Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-620b2171204so1514173eaf.0
+        for <linux-pm@vger.kernel.org>; Sat, 20 Sep 2025 04:07:51 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCX2fCKnOAN2ci9Ss4nemSGa4WJZPbcI9GaTyfD8rFwIuhpnG4XahD7+uNp4ip5zerNLBGiiM+Q7YA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywa+QnTnPbADjgIs0aQTQRfpMnQaxD3vBx7GN1lzI0O7cqUeGu8
+	UyPfGAwyYiAr9NGQ7aSq++l7rFkJPwceyL/9KIOkIdhCX8jkHzJ2z8IF+aKKV8JOpnnstNh6nES
+	9YYUodK4nqtJugYnTR8e9DJBTjxsEvjY=
+X-Google-Smtp-Source: AGHT+IF2uVqf5GAFrjNgl9l1aViZuBf9EzFUZwKFo5HyttmeemXFkxkW+7cNc1rWNoBCpeE2Iu3UZ3uahJkvkn37kQM=
+X-Received: by 2002:a05:6808:1394:b0:43b:2829:e642 with SMTP id
+ 5614622812f47-43d6c2824f7mr2448689b6e.24.1758366470409; Sat, 20 Sep 2025
+ 04:07:50 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <85e3df99-7ba5-4654-9148-5fff25ea0e5a@arm.com>
-In-Reply-To: <85e3df99-7ba5-4654-9148-5fff25ea0e5a@arm.com>
+References: <CAJZ5v0gTtTZt7oE0vME0qRo8nZ=KX3DwF46PhyUVe7e85uZaNA@mail.gmail.com>
+ <20250919165657.233349-1-vivekyadav1207731111@gmail.com>
+In-Reply-To: <20250919165657.233349-1-vivekyadav1207731111@gmail.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Sat, 20 Sep 2025 13:03:39 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0hWTtQWVJ1VkC9AH4jtCLWFhak0adaiE0Yq=ZwVo+fscA@mail.gmail.com>
-X-Gm-Features: AS18NWBP1spJEghYNvK9qzPaRQ8BzYpKBwjGyM3qU2Xj-HbouQM7YfpOWK6PtAM
-Message-ID: <CAJZ5v0hWTtQWVJ1VkC9AH4jtCLWFhak0adaiE0Yq=ZwVo+fscA@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: Initialize cpufreq-based invariance before subsys
-To: Christian Loehle <christian.loehle@arm.com>
-Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, linux-pm <linux-pm@vger.kernel.org>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
-	"zhenglifeng (A)" <zhenglifeng1@huawei.com>
+Date: Sat, 20 Sep 2025 13:07:39 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0gooWpNra-EzT1xB+vsL9hLD_1eQm+DS_Jfw8dEtZoRJw@mail.gmail.com>
+X-Gm-Features: AS18NWA2wIGm6rW53tbOvfILtPGvc_KCP2IRAYMaTfaPPBtIE1EsaLwVMvUjfdM
+Message-ID: <CAJZ5v0gooWpNra-EzT1xB+vsL9hLD_1eQm+DS_Jfw8dEtZoRJw@mail.gmail.com>
+Subject: Re: [PATCH v2] cpuidle: sysfs: Use sysfs_emit/sysfs_emit_at instead
+ of sprintf/scnprintf
+To: vivekyadav1207731111@gmail.com
+Cc: joe@perches.com, rafael@kernel.org, daniel.lezcano@linaro.org, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	skhan@linuxfoundation.org, linux-kernel-mentees@lists.linuxfoundation.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Sep 18, 2025 at 12:15=E2=80=AFPM Christian Loehle
-<christian.loehle@arm.com> wrote:
+On Fri, Sep 19, 2025 at 6:57=E2=80=AFPM <vivekyadav1207731111@gmail.com> wr=
+ote:
 >
-> commit 2a6c72738706 ("cpufreq: Initialize cpufreq-based
-> frequency-invariance later") postponed the frequency invariance
-> initialization to avoid disabling it in the error case.
-> This isn't locking safe, instead move the initialization up before
-> the subsys interface is registered (which will rebuild the
-> sched_domains) and add the corresponding disable on the error path.
+> From: Vivek Yadav <vivekyadav1207731111@gmail.com>
 >
-> Observed lockdep without this patch:
-> [    0.989686] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> [    0.989688] WARNING: possible circular locking dependency detected
-> [    0.989690] 6.17.0-rc4-cix-build+ #31 Tainted: G S
-> [    0.989691] ------------------------------------------------------
-> [    0.989692] swapper/0/1 is trying to acquire lock:
-> [    0.989693] ffff800082ada7f8 (sched_energy_mutex){+.+.}-{4:4}, at: reb=
-uild_sched_domains_energy+0x30/0x58
-> [    0.989705]
->                but task is already holding lock:
-> [    0.989706] ffff000088c89bc8 (&policy->rwsem){+.+.}-{4:4}, at: cpufreq=
-_online+0x7f8/0xbe0
-> [    0.989713]
->                which lock already depends on the new lock.
+> The ->show() callbacks in sysfs should use sysfs_emit() or
+> sysfs_emit_at() when formatting values for user space. These helpers
+> are the recommended way to ensure correct buffer handling and
+> consistency across the kernel.
 >
-> Fixes: 2a6c72738706 ("cpufreq: Initialize cpufreq-based frequency-invaria=
-nce later")
-> Signed-off-by: Christian Loehle <christian.loehle@arm.com>
+> See Documentation/filesystems/sysfs.rst for details.
+>
+> No functional change intended.
+>
+> Suggested-by: Joe Perches <joe@perches.com>
+> Signed-off-by: Vivek Yadav <vivekyadav1207731111@gmail.com>
 > ---
->  drivers/cpufreq/cpufreq.c | 20 +++++++++++---------
->  1 file changed, 11 insertions(+), 9 deletions(-)
+>  drivers/cpuidle/sysfs.c | 34 +++++++++++++++++-----------------
+>  1 file changed, 17 insertions(+), 17 deletions(-)
 >
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index fc7eace8b65b..58e3839a2140 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -2953,6 +2953,15 @@ int cpufreq_register_driver(struct cpufreq_driver =
-*driver_data)
->                         goto err_null_driver;
+> diff --git a/drivers/cpuidle/sysfs.c b/drivers/cpuidle/sysfs.c
+> index d6f5da61cb7d..61de64817604 100644
+> --- a/drivers/cpuidle/sysfs.c
+> +++ b/drivers/cpuidle/sysfs.c
+> @@ -27,14 +27,14 @@ static ssize_t show_available_governors(struct device=
+ *dev,
+>
+>         mutex_lock(&cpuidle_lock);
+>         list_for_each_entry(tmp, &cpuidle_governors, governor_list) {
+> -               if (i >=3D (ssize_t) (PAGE_SIZE - (CPUIDLE_NAME_LEN + 2))=
+)
+> +               if (i >=3D (ssize_t)(PAGE_SIZE - (CPUIDLE_NAME_LEN + 2)))
+>                         goto out;
+>
+> -               i +=3D scnprintf(&buf[i], CPUIDLE_NAME_LEN + 1, "%s ", tm=
+p->name);
+> +               i +=3D sysfs_emit_at(buf, i, "%.*s ", CPUIDLE_NAME_LEN, t=
+mp->name);
 >         }
 >
-> +       /*
-> +        * Mark support for the scheduler's frequency invariance engine f=
-or
-> +        * drivers that implement target(), target_index() or fast_switch=
-().
-> +        */
-> +       if (!cpufreq_driver->setpolicy) {
-> +               static_branch_enable_cpuslocked(&cpufreq_freq_invariance)=
-;
-> +               pr_debug("cpufreq: supports frequency invariance\n");
-> +       }
-> +
->         ret =3D subsys_interface_register(&cpufreq_interface);
->         if (ret)
->                 goto err_boost_unreg;
-> @@ -2974,21 +2983,14 @@ int cpufreq_register_driver(struct cpufreq_driver=
- *driver_data)
->         hp_online =3D ret;
->         ret =3D 0;
+>  out:
+> -       i+=3D sprintf(&buf[i], "\n");
+> +       i +=3D sysfs_emit_at(buf, i, "\n");
+>         mutex_unlock(&cpuidle_lock);
+>         return i;
+>  }
+> @@ -49,9 +49,9 @@ static ssize_t show_current_driver(struct device *dev,
+>         spin_lock(&cpuidle_driver_lock);
+>         drv =3D cpuidle_get_driver();
+>         if (drv)
+> -               ret =3D sprintf(buf, "%s\n", drv->name);
+> +               ret =3D sysfs_emit(buf, "%s\n", drv->name);
+>         else
+> -               ret =3D sprintf(buf, "none\n");
+> +               ret =3D sysfs_emit(buf, "none\n");
+>         spin_unlock(&cpuidle_driver_lock);
 >
-> -       /*
-> -        * Mark support for the scheduler's frequency invariance engine f=
-or
-> -        * drivers that implement target(), target_index() or fast_switch=
-().
-> -        */
-> -       if (!cpufreq_driver->setpolicy) {
-> -               static_branch_enable_cpuslocked(&cpufreq_freq_invariance)=
-;
-> -               pr_debug("supports frequency invariance");
-> -       }
-> -
->         pr_debug("driver %s up and running\n", driver_data->name);
->         goto out;
+>         return ret;
+> @@ -65,9 +65,9 @@ static ssize_t show_current_governor(struct device *dev=
+,
 >
->  err_if_unreg:
->         subsys_interface_unregister(&cpufreq_interface);
->  err_boost_unreg:
-> +       if (!cpufreq_driver->setpolicy)
-> +               static_branch_disable_cpuslocked(&cpufreq_freq_invariance=
-);
->         remove_boost_sysfs_file();
->  err_null_driver:
->         write_lock_irqsave(&cpufreq_driver_lock, flags);
+>         mutex_lock(&cpuidle_lock);
+>         if (cpuidle_curr_governor)
+> -               ret =3D sprintf(buf, "%s\n", cpuidle_curr_governor->name)=
+;
+> +               ret =3D sysfs_emit(buf, "%s\n", cpuidle_curr_governor->na=
+me);
+>         else
+> -               ret =3D sprintf(buf, "none\n");
+> +               ret =3D sysfs_emit(buf, "none\n");
+>         mutex_unlock(&cpuidle_lock);
+>
+>         return ret;
+> @@ -230,7 +230,7 @@ static struct cpuidle_state_attr attr_##_name =3D __A=
+TTR(_name, 0644, show, store)
+>  static ssize_t show_state_##_name(struct cpuidle_state *state, \
+>                          struct cpuidle_state_usage *state_usage, char *b=
+uf) \
+>  { \
+> -       return sprintf(buf, "%u\n", state->_name);\
+> +       return sysfs_emit(buf, "%u\n", state->_name);\
+>  }
+>
+>  #define define_show_state_ull_function(_name) \
+> @@ -238,7 +238,7 @@ static ssize_t show_state_##_name(struct cpuidle_stat=
+e *state, \
+>                                   struct cpuidle_state_usage *state_usage=
+, \
+>                                   char *buf)                            \
+>  { \
+> -       return sprintf(buf, "%llu\n", state_usage->_name);\
+> +       return sysfs_emit(buf, "%llu\n", state_usage->_name);\
+>  }
+>
+>  #define define_show_state_str_function(_name) \
+> @@ -247,8 +247,8 @@ static ssize_t show_state_##_name(struct cpuidle_stat=
+e *state, \
+>                                   char *buf)                            \
+>  { \
+>         if (state->_name[0] =3D=3D '\0')\
+> -               return sprintf(buf, "<null>\n");\
+> -       return sprintf(buf, "%s\n", state->_name);\
+> +               return sysfs_emit(buf, "<null>\n");\
+> +       return sysfs_emit(buf, "%s\n", state->_name);\
+>  }
+>
+>  #define define_show_state_time_function(_name) \
+> @@ -256,7 +256,7 @@ static ssize_t show_state_##_name(struct cpuidle_stat=
+e *state, \
+>                                   struct cpuidle_state_usage *state_usage=
+, \
+>                                   char *buf) \
+>  { \
+> -       return sprintf(buf, "%llu\n", ktime_to_us(state->_name##_ns)); \
+> +       return sysfs_emit(buf, "%llu\n", ktime_to_us(state->_name##_ns));=
+ \
+>  }
+>
+>  define_show_state_time_function(exit_latency)
+> @@ -273,14 +273,14 @@ static ssize_t show_state_time(struct cpuidle_state=
+ *state,
+>                                struct cpuidle_state_usage *state_usage,
+>                                char *buf)
+>  {
+> -       return sprintf(buf, "%llu\n", ktime_to_us(state_usage->time_ns));
+> +       return sysfs_emit(buf, "%llu\n", ktime_to_us(state_usage->time_ns=
+));
+>  }
+>
+>  static ssize_t show_state_disable(struct cpuidle_state *state,
+>                                   struct cpuidle_state_usage *state_usage=
+,
+>                                   char *buf)
+>  {
+> -       return sprintf(buf, "%llu\n",
+> +       return sysfs_emit(buf, "%llu\n",
+>                        state_usage->disable & CPUIDLE_STATE_DISABLED_BY_U=
+SER);
+>  }
+>
+> @@ -310,7 +310,7 @@ static ssize_t show_state_default_status(struct cpuid=
+le_state *state,
+>                                           struct cpuidle_state_usage *sta=
+te_usage,
+>                                           char *buf)
+>  {
+> -       return sprintf(buf, "%s\n",
+> +       return sysfs_emit(buf, "%s\n",
+>                        state->flags & CPUIDLE_FLAG_OFF ? "disabled" : "en=
+abled");
+>  }
+>
+> @@ -358,7 +358,7 @@ static ssize_t show_state_s2idle_##_name(struct cpuid=
+le_state *state, \
+>                                          struct cpuidle_state_usage *stat=
+e_usage, \
+>                                          char *buf)                      =
+       \
+>  { \
+> -       return sprintf(buf, "%llu\n", state_usage->s2idle_##_name);\
+> +       return sysfs_emit(buf, "%llu\n", state_usage->s2idle_##_name);\
+>  }
+>
+>  define_show_state_s2idle_ull_function(usage);
+> @@ -550,7 +550,7 @@ static ssize_t show_driver_name(struct cpuidle_driver=
+ *drv, char *buf)
+>         ssize_t ret;
+>
+>         spin_lock(&cpuidle_driver_lock);
+> -       ret =3D sprintf(buf, "%s\n", drv ? drv->name : "none");
+> +       ret =3D sysfs_emit(buf, "%s\n", drv ? drv->name : "none");
+>         spin_unlock(&cpuidle_driver_lock);
+>
+>         return ret;
 > --
 
-Applied as 6.17-rc material, thanks!
+Applied as 6.18 material, thanks!
 
