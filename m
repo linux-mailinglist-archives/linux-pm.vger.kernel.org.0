@@ -1,165 +1,147 @@
-Return-Path: <linux-pm+bounces-35085-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35086-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0953B8C0DC
-	for <lists+linux-pm@lfdr.de>; Sat, 20 Sep 2025 08:38:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 60549B8C121
+	for <lists+linux-pm@lfdr.de>; Sat, 20 Sep 2025 08:50:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 993CB3AB674
-	for <lists+linux-pm@lfdr.de>; Sat, 20 Sep 2025 06:38:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2788A5A0B1F
+	for <lists+linux-pm@lfdr.de>; Sat, 20 Sep 2025 06:50:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 001992D543E;
-	Sat, 20 Sep 2025 06:37:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7935D2EACF8;
+	Sat, 20 Sep 2025 06:50:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="WK+XP40l";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="LM3qWjZc";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="WK+XP40l";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="LM3qWjZc"
+	dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="Mu0WT1kU";
+	dkim=permerror (0-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="sb2pc5UT"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.mainlining.org (mail.mainlining.org [5.75.144.95])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 618DA136349
-	for <linux-pm@vger.kernel.org>; Sat, 20 Sep 2025 06:37:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FBE03D6F;
+	Sat, 20 Sep 2025 06:50:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.75.144.95
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758350279; cv=none; b=R0n9Yq+DsLZuN3PZKuKnfEzCbG6V3AN8HmRXRS8TNH2y2tuw1ahVXfTBvsTEKcwLbuUQsaXZwL583XfG+OOQgdNU0SGl8VNyOZkASVBq4hodabVLZHhgF1jSbyimEiw7vqg2uVV87g3EdtB1gvLOfzRW5n8pXGqZHuz6jzuxxT0=
+	t=1758351034; cv=none; b=etyPG6bG7utYNA6Gp/GMq49/ExhFATKLIx3agLJSh+fc9Wb14YMejPd0ybbZz+m0cn+pdG5qJTSk4y7U3zQikqCxxsnEr603c1Myz2Qw9yX6TnjnFy5mnoIUwycoGVp9llesglZ3UesgKdqIFI2NMbsu9fdd+v3Ufxyh2BQjklo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758350279; c=relaxed/simple;
-	bh=VHOmo69n8KM79KB62I0gjPBk041aV+ckk7iDXW979AI=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=LOppRek0RnOmTR+T2J9S1XLdTMhit8STlIr+qVJgK4cavn7jnN4IGBtvP9dSssGLnhcQIP2x2mh4vEuVAxN2owIQUQXbpOF2SbnCHoWVXNT0qG7gofYSZPUFuTXL7PxECcT6pzXobkAFrfRhTB5XHwzDcvcZAuJiwJjHJmJ1zdA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=WK+XP40l; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=LM3qWjZc; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=WK+XP40l; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=LM3qWjZc; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 989861F7B8;
-	Sat, 20 Sep 2025 06:37:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1758350276; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=6qHPxRcM8hvaooqJhNiXQR+BuEOMUHilV83neFMPBkk=;
-	b=WK+XP40lSGd23Tmu37/pqNoX+yS5icJUdh//mePmA7LIGQDTFVBecY9/spp5kJqxIaMAAo
-	A8hotdn+cWxRO+iNJfo3bYGbE2N+7mBn0O2ag9d6Hz6dmhgpTnkpFIkOTqtyG8D6vpHE1B
-	5ILDcHne6pLJC5PMjQD8zQvq33OvlCc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1758350276;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=6qHPxRcM8hvaooqJhNiXQR+BuEOMUHilV83neFMPBkk=;
-	b=LM3qWjZcrb62Kt6mAlO1WMTpdpg1gAjrG0Q8lKMvi2zihsmbjfpsWxFnvLQU7C6TpE4ywQ
-	iRbyuTMFb/NYQmDw==
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=WK+XP40l;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=LM3qWjZc
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1758350276; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=6qHPxRcM8hvaooqJhNiXQR+BuEOMUHilV83neFMPBkk=;
-	b=WK+XP40lSGd23Tmu37/pqNoX+yS5icJUdh//mePmA7LIGQDTFVBecY9/spp5kJqxIaMAAo
-	A8hotdn+cWxRO+iNJfo3bYGbE2N+7mBn0O2ag9d6Hz6dmhgpTnkpFIkOTqtyG8D6vpHE1B
-	5ILDcHne6pLJC5PMjQD8zQvq33OvlCc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1758350276;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=6qHPxRcM8hvaooqJhNiXQR+BuEOMUHilV83neFMPBkk=;
-	b=LM3qWjZcrb62Kt6mAlO1WMTpdpg1gAjrG0Q8lKMvi2zihsmbjfpsWxFnvLQU7C6TpE4ywQ
-	iRbyuTMFb/NYQmDw==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 55283137D2;
-	Sat, 20 Sep 2025 06:37:56 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id qPZxE8RLzmgVMQAAD6G6ig
-	(envelope-from <tiwai@suse.de>); Sat, 20 Sep 2025 06:37:56 +0000
-Date: Sat, 20 Sep 2025 08:37:55 +0200
-Message-ID: <87y0q97hoc.wl-tiwai@suse.de>
-From: Takashi Iwai <tiwai@suse.de>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Linux PM <linux-pm@vger.kernel.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	Linux PCI <linux-pci@vger.kernel.org>,
-	Alex Williamson <alex.williamson@redhat.com>,
-	Bjorn Helgaas <helgaas@kernel.org>,
-	Takashi Iwai <tiwai@suse.de>,
-	Zhang Qilong <zhangqilong3@huawei.com>,
-	Ulf Hansson <ulf.hansson@linaro.org>
-Subject: Re: [PATCH v1 0/3] PM: runtime: Auto-cleanup macros for pm_runtime_resume_and_get()
-In-Reply-To: <5049058.31r3eYUQgx@rafael.j.wysocki>
-References: <5049058.31r3eYUQgx@rafael.j.wysocki>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+	s=arc-20240116; t=1758351034; c=relaxed/simple;
+	bh=MjWkIR76I1fTlnqtv2BmHI0tJUeHTaAgBYhO8/TTe4M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BR2yb3zRAs8aMWgaedoVL5pIWVZFMpbJcRWo7Xu3+uPaYQnQPoNrczp32qT6avArTLgOnfHJ/aYLwztZYkO94AuZcrKHLk95WbvAT3zygOPPzf8gVMLYhN+SzdF2SKyE0VRU/g0QcbFsnJoDjlPqa68GoPxOWWrEhamq0uvKYSo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org; spf=pass smtp.mailfrom=mainlining.org; dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=Mu0WT1kU; dkim=permerror (0-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=sb2pc5UT; arc=none smtp.client-ip=5.75.144.95
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mainlining.org
+DKIM-Signature: v=1; a=rsa-sha256; s=202507r; d=mainlining.org; c=relaxed/relaxed;
+	h=Message-ID:Subject:To:From:Date; t=1758350983; bh=AW17lv89eSJE61jE0VgMo7I
+	K1f6MgMq0qzbJdrYGhAU=; b=Mu0WT1kUgl5cQlQ5PX2jRN2PMPq/dDr7fRG/j6P0q/F6ULS3KE
+	xoivzs0uuNLw4YbnCqJ/RpZ/PfDofasRt6XK59LmkyQwhHfrYQs5bo3vCn4BfUfSMZCWKBpoxJV
+	vMP/Z2Sr8hc2GauwgD00WGBgzerVfzWAzFlX2DTdBLXVaGuNIxQ6AhMRvo9an2gF8HJZ+IlipSj
+	ZFbt0CEcr+vfPWQLXzlDP1a7ZwX8LCwXd9Zavc+fRk0VUvcp2Vr1vhIGSK2ElWRDGPsIfvXrcrb
+	5MpdxFv/SmLCVSnaS9Ly+kcSIAagZt63ASSYPlG0/PYmKuYDp+HZCucRJi734fkCYdQ==;
+DKIM-Signature: v=1; a=ed25519-sha256; s=202507e; d=mainlining.org; c=relaxed/relaxed;
+	h=Message-ID:Subject:To:From:Date; t=1758350983; bh=AW17lv89eSJE61jE0VgMo7I
+	K1f6MgMq0qzbJdrYGhAU=; b=sb2pc5UTtihwQjvou4NnnaSmANU2soJblZAj9CMKygiR43FHTi
+	g56bTIeDIQPJ5/5lGPQJtPn7nlgAN0FmJpBw==;
+Date: Sat, 20 Sep 2025 13:49:34 +0700
+From: Dang Huynh <dang.huynh@mainlining.org>
+To: Conor Dooley <conor@kernel.org>
+Cc: Manivannan Sadhasivam <mani@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, Michael Turquette <mturquette@baylibre.com>, 
+	Stephen Boyd <sboyd@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>, 
+	Sebastian Reichel <sre@kernel.org>, Vinod Koul <vkoul@kernel.org>, Kees Cook <kees@kernel.org>, 
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, 
+	linux-arm-kernel@lists.infradead.org, linux-unisoc@lists.infradead.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org, 
+	linux-clk@vger.kernel.org, linux-pm@vger.kernel.org, dmaengine@vger.kernel.org, 
+	linux-hardening@vger.kernel.org, linux-mmc@vger.kernel.org
+Subject: Re: [PATCH 05/25] dt-bindings: rtc: Add RDA Micro RDA8810PL RTC
+Message-ID: <cr5gkkckxan2b2x23knfwb35a4ulngsp6gguqhcku3z6ghzkcn@cq4krj5qxy3r>
+References: <20250917-rda8810pl-drivers-v1-0-74866def1fe3@mainlining.org>
+ <20250917-rda8810pl-drivers-v1-5-74866def1fe3@mainlining.org>
+ <20250917-contort-sassy-df07fd7515a0@spud>
+ <c905fb3ace281280f1ac11c7fbe8e0aa@mainlining.org>
+ <20250918-unharmed-bloating-8b573513fce6@spud>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Level: 
-X-Spam-Flag: NO
-X-Rspamd-Queue-Id: 989861F7B8
-X-Rspamd-Action: no action
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spamd-Result: default: False [-3.51 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	MIME_TRACE(0.00)[0:+];
-	ARC_NA(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	RCVD_TLS_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	RCVD_COUNT_TWO(0.00)[2];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	DNSWL_BLOCKED(0.00)[2a07:de40:b281:106:10:150:64:167:received,2a07:de40:b281:104:10:150:64:97:from];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo,suse.de:dkim,suse.de:mid,suse.de:email];
-	TO_DN_ALL(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	URIBL_BLOCKED(0.00)[suse.de:dkim,suse.de:mid,suse.de:email,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo];
-	DKIM_TRACE(0.00)[suse.de:+]
-X-Spam-Score: -3.51
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250918-unharmed-bloating-8b573513fce6@spud>
 
-On Fri, 19 Sep 2025 18:34:40 +0200,
-Rafael J. Wysocki wrote:
+On Thu, Sep 18, 2025 at 04:18:25PM +0100, Conor Dooley wrote:
+> On Thu, Sep 18, 2025 at 11:11:10AM +0700, Dang Huynh wrote:
+> > On 2025-09-18 03:46, Conor Dooley wrote:
+> > > On Wed, Sep 17, 2025 at 03:07:22AM +0700, Dang Huynh wrote:
+> > > > Add documentation describing the RTC found in RDA8810PL SoC.
+> > > > 
+> > > > Signed-off-by: Dang Huynh <dang.huynh@mainlining.org>
+> > > > ---
+> > > >  .../devicetree/bindings/rtc/rda,8810pl-rtc.yaml    | 30
+> > > > ++++++++++++++++++++++
+> > > >  1 file changed, 30 insertions(+)
+> > > > 
+> > > > diff --git
+> > > > a/Documentation/devicetree/bindings/rtc/rda,8810pl-rtc.yaml
+> > > > b/Documentation/devicetree/bindings/rtc/rda,8810pl-rtc.yaml
+> > > > new file mode 100644
+> > > > index 0000000000000000000000000000000000000000..3ceae294921cc3211cd775d9b3890393196faf82
+> > > > --- /dev/null
+> > > > +++ b/Documentation/devicetree/bindings/rtc/rda,8810pl-rtc.yaml
+> > > > @@ -0,0 +1,30 @@
+> > > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > > > +%YAML 1.2
+> > > > +---
+> > > > +$id: http://devicetree.org/schemas/rtc/rda,8810pl-rtc.yaml#
+> > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > > +
+> > > > +title: RDA Micro RDA8810PL Real Time Clock
+> > > > +
+> > > > +maintainers:
+> > > > +  - Dang Huynh <dang.huynh@mainlining.org>
+> > > > +
+> > > > +properties:
+> > > > +  compatible:
+> > > > +    const: rda,8810pl-rtc
+> > > > +
+> > > > +  reg:
+> > > > +    maxItems: 1
+> > > > +
+> > > > +required:
+> > > > +  - compatible
+> > > > +  - reg
+> > > 
+> > > Your driver implements functions that turn on an alarm irq, but there is
+> > > none mentioned here. What's going on there?
+> > The RTC doesn't seem to have an AP IRQ associated. I can't find any
+> > reference to it on downstream kernel and the docs.
+> > 
+> > > 
+> > > Additionally, there's no clocks property? For an onboard RTC I'd have
+> > > expected there to be a clock sourced outside of the block.
 > 
-> Hi All,
+> What about the clock?
+I'll fix this in v2.
+
 > 
-> This series adds two auto-cleanup macros for runtime PM usage counter
-> incrementations carried out by pm_runtime_resume_and_get() ([1/3]),
-> converts the only user of the previously introduced DEFINE_FREE()
-> macro for pm_runtime_put() to using one of the new macros ([2/3]),
-> and drops the DEFINE_FREE() mentioned above ([3/3]).
-> 
-> The new macros should be somewhat more straightforward to use than
-> the existing _FREE and they enforce error handling.
+> > > 
+> > > > +
+> > > > +additionalProperties: false
+> > > > +
+> > > > +examples:
+> > > > +  - |
+> > > > +    rtc@1a06000 {
+> > > > +      compatible = "rda,8810pl-rtc";
+> > > > +      reg = <0x1a06000 0x1000>;
+> > > > +    };
+> > > > 
+> > > > --
+> > > > 2.51.0
 
-For the series:
 
-Reviewed-by: Takashi Iwai <tiwai@suse.de>
-
-
-Thanks!
-
-Takashi
 
