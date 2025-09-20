@@ -1,147 +1,114 @@
-Return-Path: <linux-pm+bounces-35086-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35087-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 60549B8C121
-	for <lists+linux-pm@lfdr.de>; Sat, 20 Sep 2025 08:50:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0652CB8C598
+	for <lists+linux-pm@lfdr.de>; Sat, 20 Sep 2025 12:33:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2788A5A0B1F
-	for <lists+linux-pm@lfdr.de>; Sat, 20 Sep 2025 06:50:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A6DD646456F
+	for <lists+linux-pm@lfdr.de>; Sat, 20 Sep 2025 10:33:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7935D2EACF8;
-	Sat, 20 Sep 2025 06:50:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DFC92D0C78;
+	Sat, 20 Sep 2025 10:33:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="Mu0WT1kU";
-	dkim=permerror (0-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="sb2pc5UT"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b="MhRocBku"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail.mainlining.org (mail.mainlining.org [5.75.144.95])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FBE03D6F;
-	Sat, 20 Sep 2025 06:50:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.75.144.95
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758351034; cv=none; b=etyPG6bG7utYNA6Gp/GMq49/ExhFATKLIx3agLJSh+fc9Wb14YMejPd0ybbZz+m0cn+pdG5qJTSk4y7U3zQikqCxxsnEr603c1Myz2Qw9yX6TnjnFy5mnoIUwycoGVp9llesglZ3UesgKdqIFI2NMbsu9fdd+v3Ufxyh2BQjklo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758351034; c=relaxed/simple;
-	bh=MjWkIR76I1fTlnqtv2BmHI0tJUeHTaAgBYhO8/TTe4M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BR2yb3zRAs8aMWgaedoVL5pIWVZFMpbJcRWo7Xu3+uPaYQnQPoNrczp32qT6avArTLgOnfHJ/aYLwztZYkO94AuZcrKHLk95WbvAT3zygOPPzf8gVMLYhN+SzdF2SKyE0VRU/g0QcbFsnJoDjlPqa68GoPxOWWrEhamq0uvKYSo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org; spf=pass smtp.mailfrom=mainlining.org; dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=Mu0WT1kU; dkim=permerror (0-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=sb2pc5UT; arc=none smtp.client-ip=5.75.144.95
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mainlining.org
-DKIM-Signature: v=1; a=rsa-sha256; s=202507r; d=mainlining.org; c=relaxed/relaxed;
-	h=Message-ID:Subject:To:From:Date; t=1758350983; bh=AW17lv89eSJE61jE0VgMo7I
-	K1f6MgMq0qzbJdrYGhAU=; b=Mu0WT1kUgl5cQlQ5PX2jRN2PMPq/dDr7fRG/j6P0q/F6ULS3KE
-	xoivzs0uuNLw4YbnCqJ/RpZ/PfDofasRt6XK59LmkyQwhHfrYQs5bo3vCn4BfUfSMZCWKBpoxJV
-	vMP/Z2Sr8hc2GauwgD00WGBgzerVfzWAzFlX2DTdBLXVaGuNIxQ6AhMRvo9an2gF8HJZ+IlipSj
-	ZFbt0CEcr+vfPWQLXzlDP1a7ZwX8LCwXd9Zavc+fRk0VUvcp2Vr1vhIGSK2ElWRDGPsIfvXrcrb
-	5MpdxFv/SmLCVSnaS9Ly+kcSIAagZt63ASSYPlG0/PYmKuYDp+HZCucRJi734fkCYdQ==;
-DKIM-Signature: v=1; a=ed25519-sha256; s=202507e; d=mainlining.org; c=relaxed/relaxed;
-	h=Message-ID:Subject:To:From:Date; t=1758350983; bh=AW17lv89eSJE61jE0VgMo7I
-	K1f6MgMq0qzbJdrYGhAU=; b=sb2pc5UTtihwQjvou4NnnaSmANU2soJblZAj9CMKygiR43FHTi
-	g56bTIeDIQPJ5/5lGPQJtPn7nlgAN0FmJpBw==;
-Date: Sat, 20 Sep 2025 13:49:34 +0700
-From: Dang Huynh <dang.huynh@mainlining.org>
-To: Conor Dooley <conor@kernel.org>
-Cc: Manivannan Sadhasivam <mani@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Michael Turquette <mturquette@baylibre.com>, 
-	Stephen Boyd <sboyd@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>, 
-	Sebastian Reichel <sre@kernel.org>, Vinod Koul <vkoul@kernel.org>, Kees Cook <kees@kernel.org>, 
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, 
-	linux-arm-kernel@lists.infradead.org, linux-unisoc@lists.infradead.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org, 
-	linux-clk@vger.kernel.org, linux-pm@vger.kernel.org, dmaengine@vger.kernel.org, 
-	linux-hardening@vger.kernel.org, linux-mmc@vger.kernel.org
-Subject: Re: [PATCH 05/25] dt-bindings: rtc: Add RDA Micro RDA8810PL RTC
-Message-ID: <cr5gkkckxan2b2x23knfwb35a4ulngsp6gguqhcku3z6ghzkcn@cq4krj5qxy3r>
-References: <20250917-rda8810pl-drivers-v1-0-74866def1fe3@mainlining.org>
- <20250917-rda8810pl-drivers-v1-5-74866def1fe3@mainlining.org>
- <20250917-contort-sassy-df07fd7515a0@spud>
- <c905fb3ace281280f1ac11c7fbe8e0aa@mainlining.org>
- <20250918-unharmed-bloating-8b573513fce6@spud>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E2E219CC37;
+	Sat, 20 Sep 2025 10:33:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1758364425; cv=pass; b=nPV9fsnJn3KFZeMf3En+Hzt5dkCBQcMDgRDRnxGDu5vEfeQXEQ1Qz7IlpfdJyCwmD6hGDa61dNyaQQcG+wejP5uFyS8l1DEY6PuVNityviu6zfWezy/HbwJHTYB9S/OPHrGvd07WZlMbrb1fNV6RF1BlATLaoy38cZJzmih60RU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1758364425; c=relaxed/simple;
+	bh=5gbTTGLThCF49SBYHgLCDqqZ8ZxRPZA61AQy7rUHSiY=;
+	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
+	 Message-Id:References:To; b=gdvjs1xfLP3ZQKIHLErjMrh+T1hiATwVvK+Zub6HX4ZzCoN9Wh8akurdqn2+s8F66j2jdNWSDALpmoSiVU+t1hwfh/Jw6P5zAs3RYpsIxHWX+3eJcB0yji7H7PsSGMerlGif65t8371ru7nCfk/jeVL8xr3aYeM3KVIjz6ffcfo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b=MhRocBku; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1758364405; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=FqeKWDVbi/rNVZcN2hBUNLkdAxET5+/lI5cE3nYqcwwV61fmay5oEkEqebmxaO74w2MzgTjQtAox2oqvS0SO0Zmc1X2eF9JG9hm8DDQ4QXdqIcdcsSTQhGuwnjqcAand905BNddLV17WrE/xx752QDa2jMsDiWOUNQ3jjqezJiw=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1758364405; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=5gbTTGLThCF49SBYHgLCDqqZ8ZxRPZA61AQy7rUHSiY=; 
+	b=YILUi2TyGHfWa1wyH4DKUwMQWEqAQb+eeOAa6GrsODPOZjGRg4q0w39NgmaujEc6DYMKumvXSmUUX5fnNc3OWx9ymPWnbLZlmoKeULLxxyDzvrTz5XX1DbOJjp+ddSnSsnZzXNYSTRVGlD39FC5EgE7dIcIYvWE4A6CVQFs8pcg=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=daniel.almeida@collabora.com;
+	dmarc=pass header.from=<daniel.almeida@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1758364405;
+	s=zohomail; d=collabora.com; i=daniel.almeida@collabora.com;
+	h=Content-Type:Mime-Version:Subject:Subject:From:From:In-Reply-To:Date:Date:Cc:Cc:Content-Transfer-Encoding:Message-Id:Message-Id:References:To:To:Reply-To;
+	bh=5gbTTGLThCF49SBYHgLCDqqZ8ZxRPZA61AQy7rUHSiY=;
+	b=MhRocBkuRpmA06kuq+HM7Fc1u1m4HobJJotgxpjUJgTBfyy/ufIBSRm5czhz8I9J
+	qzTmT979B0xlG0hSDALc3xk7dd+Q49D0y9/MOvWGc1qXhubF1gHFhp2jqSMhcwE7bLL
+	aasEwomw5PDzF2pl8+kdOgGcCT0qgtjw6HNLsuls=
+Received: by mx.zohomail.com with SMTPS id 1758364403012665.4098911835472;
+	Sat, 20 Sep 2025 03:33:23 -0700 (PDT)
+Content-Type: text/plain;
+	charset=utf-8
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250918-unharmed-bloating-8b573513fce6@spud>
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.700.81\))
+Subject: Re: [PATCH v2 1/2] rust: clk: implement Send and Sync
+From: Daniel Almeida <daniel.almeida@collabora.com>
+In-Reply-To: <175834480479.4354.6269916774389395049@lazor>
+Date: Sat, 20 Sep 2025 12:33:07 +0200
+Cc: Boqun Feng <boqun.feng@gmail.com>,
+ Michael Turquette <mturquette@baylibre.com>,
+ Miguel Ojeda <ojeda@kernel.org>,
+ Alex Gaynor <alex.gaynor@gmail.com>,
+ Gary Guo <gary@garyguo.net>,
+ =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ Benno Lossin <lossin@kernel.org>,
+ Andreas Hindborg <a.hindborg@kernel.org>,
+ Alice Ryhl <aliceryhl@google.com>,
+ Trevor Gross <tmgross@umich.edu>,
+ Danilo Krummrich <dakr@kernel.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>,
+ linux-clk@vger.kernel.org,
+ rust-for-linux@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <11324A9C-F7CC-47C7-B225-59A96C333A82@collabora.com>
+References: <20250910-clk-type-state-v2-0-1b97c11bb631@collabora.com>
+ <20250910-clk-type-state-v2-1-1b97c11bb631@collabora.com>
+ <aMG6JVMcMxVuX7De@tardis-2.local>
+ <3D936C1B-FBA9-4964-859C-84BB665BBE3B@collabora.com>
+ <175834480479.4354.6269916774389395049@lazor>
+To: Stephen Boyd <sboyd@kernel.org>
+X-Mailer: Apple Mail (2.3826.700.81)
+X-ZohoMailClient: External
 
-On Thu, Sep 18, 2025 at 04:18:25PM +0100, Conor Dooley wrote:
-> On Thu, Sep 18, 2025 at 11:11:10AM +0700, Dang Huynh wrote:
-> > On 2025-09-18 03:46, Conor Dooley wrote:
-> > > On Wed, Sep 17, 2025 at 03:07:22AM +0700, Dang Huynh wrote:
-> > > > Add documentation describing the RTC found in RDA8810PL SoC.
-> > > > 
-> > > > Signed-off-by: Dang Huynh <dang.huynh@mainlining.org>
-> > > > ---
-> > > >  .../devicetree/bindings/rtc/rda,8810pl-rtc.yaml    | 30
-> > > > ++++++++++++++++++++++
-> > > >  1 file changed, 30 insertions(+)
-> > > > 
-> > > > diff --git
-> > > > a/Documentation/devicetree/bindings/rtc/rda,8810pl-rtc.yaml
-> > > > b/Documentation/devicetree/bindings/rtc/rda,8810pl-rtc.yaml
-> > > > new file mode 100644
-> > > > index 0000000000000000000000000000000000000000..3ceae294921cc3211cd775d9b3890393196faf82
-> > > > --- /dev/null
-> > > > +++ b/Documentation/devicetree/bindings/rtc/rda,8810pl-rtc.yaml
-> > > > @@ -0,0 +1,30 @@
-> > > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > > > +%YAML 1.2
-> > > > +---
-> > > > +$id: http://devicetree.org/schemas/rtc/rda,8810pl-rtc.yaml#
-> > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > > +
-> > > > +title: RDA Micro RDA8810PL Real Time Clock
-> > > > +
-> > > > +maintainers:
-> > > > +  - Dang Huynh <dang.huynh@mainlining.org>
-> > > > +
-> > > > +properties:
-> > > > +  compatible:
-> > > > +    const: rda,8810pl-rtc
-> > > > +
-> > > > +  reg:
-> > > > +    maxItems: 1
-> > > > +
-> > > > +required:
-> > > > +  - compatible
-> > > > +  - reg
-> > > 
-> > > Your driver implements functions that turn on an alarm irq, but there is
-> > > none mentioned here. What's going on there?
-> > The RTC doesn't seem to have an AP IRQ associated. I can't find any
-> > reference to it on downstream kernel and the docs.
-> > 
-> > > 
-> > > Additionally, there's no clocks property? For an onboard RTC I'd have
-> > > expected there to be a clock sourced outside of the block.
-> 
-> What about the clock?
-I'll fix this in v2.
+Hi Stephen,
 
-> 
-> > > 
-> > > > +
-> > > > +additionalProperties: false
-> > > > +
-> > > > +examples:
-> > > > +  - |
-> > > > +    rtc@1a06000 {
-> > > > +      compatible = "rda,8810pl-rtc";
-> > > > +      reg = <0x1a06000 0x1000>;
-> > > > +    };
-> > > > 
-> > > > --
-> > > > 2.51.0
+[=E2=80=A6]
 
+>>=20
+>> You have to include your SOB when submitting patches from others.
+>>=20
+>> This is something I tend to forget often, so I made sure it was =
+there. The
+>> order may be indeed off though.
+>=20
+> Yes the order is wrong. The first SoB should be the commit author.
 
+Do you want me to send a new version, or do you prefer fixing this =
+before applying?
+
+For trivial changes some maintainers prefer the latter to reduce the =
+amount of noise.
+
+=E2=80=94 Daniel=
 
