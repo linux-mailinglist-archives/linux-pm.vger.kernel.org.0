@@ -1,149 +1,226 @@
-Return-Path: <linux-pm+bounces-35115-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35116-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A099EB8D80B
-	for <lists+linux-pm@lfdr.de>; Sun, 21 Sep 2025 10:56:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C136B8D8F6
+	for <lists+linux-pm@lfdr.de>; Sun, 21 Sep 2025 11:57:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6748E17100F
-	for <lists+linux-pm@lfdr.de>; Sun, 21 Sep 2025 08:56:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 37B1B1701A8
+	for <lists+linux-pm@lfdr.de>; Sun, 21 Sep 2025 09:57:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 147D6246774;
-	Sun, 21 Sep 2025 08:56:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3E04255F22;
+	Sun, 21 Sep 2025 09:57:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="PhajQONe";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Z0cBn+xH"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cRTp+QIb"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B3761E5B63;
-	Sun, 21 Sep 2025 08:56:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC31C34BA52;
+	Sun, 21 Sep 2025 09:57:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758445005; cv=none; b=SFLeA4reNTN+tUrhJtgfDxZBZ/MkcXt05G/VoOvoy5qjkJiezqYKGPwrq3fqbEEOO+4FTrGmTT3ri2pSHS6r6ZmChFaQppum5kQJhJVsMkmjKvw7jHJK/3cpmPZjKmgKlTH4qcx7zQr2RMwRldo3TkKX3HupDpcPFHLotk7p+Kg=
+	t=1758448652; cv=none; b=p8taJy73c97WhLDUdruOVM2Xisgc5c//PHYdfK3z2RdepvMvgBy7tQMfmsAxgplwyNFTfCCTAq75yVucS9aV9CuTmgZErvSz1Be/eJJyYvrXw56rtLrIwl15eSrEtpHYeGmB9tMg+r/JXmIZvUSVeT63HL07DMLfXrCZE3LBgPw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758445005; c=relaxed/simple;
-	bh=dCUrZDUEc5+DreJ20UhumTmXqXfdGX2j+ZfRG61AAD8=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=cZlU793kmY6dGsIJ9I8xQayR26bYwLlxwfya40MXA+sBm9iXvyAQTLSnM34GBWlRpu5mdS/dVB+dvW3pPubjy8BHQvnCjI6UpqQLgTmsN5PQtzcy0mWzS9u795Cg5x2DtzU3YzKYbW41Wql+JAE1E1tc9y2aCQ+bC8ppvtAlUpU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=PhajQONe; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Z0cBn+xH; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1758445001;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=PH0Bier6+Ggl5FPLln7YaPLjHsHvublgFxYXIHS3ZCw=;
-	b=PhajQONehkB9Wj6JVMiLXn0+zPsdIYZMOOecPDlcw4peQTZYRa3bjfEEvBA2zv9gC4QOb4
-	LcnvwGPBPUL7gnYe0fPej6zkDv/xrpuEvH0UKgjWojCPgm/I/U+nHVOJoAq9QogtSInyxD
-	CT+Mg3VZRErKJHYajQPpJn4VJ+tgzkwsbyiOlVGEfr2lJE8SVafLAsE6RELH03sFf10NDf
-	G2llvOnSZfukqLIBFYGZeOhVH/qHoS//0qwzwDBzWB3K66KyXQRn2hpHw+R2WaH4EU1FTx
-	UHVayxsyNR9PvQor1FTUDOmEqA12mziZjwizi7EeGVXUz/CyMDuXFlYkrNMQpg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1758445001;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=PH0Bier6+Ggl5FPLln7YaPLjHsHvublgFxYXIHS3ZCw=;
-	b=Z0cBn+xH4Vosui8Q6dNcDVnJbzpy1m7SlBS3tk9ozpYXWoxNGgOmcn8EM1ITCvEdSt7fQi
-	68R3qboCiyNvDJDQ==
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, LKML
- <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>, Peter
- Zijlstra <peterz@infradead.org>, Christian Loehle
- <christian.loehle@arm.com>, Dave Hansen <dave.hansen@linux.intel.com>
-Subject: [PATCH] x86/topology: Implement topology_is_core_online() to
- address SMT regression
-In-Reply-To: <CAJZ5v0gW+A-eyckySFrHc7=Qr9URdRX6NqvPgkq4gZEvs_uBWg@mail.gmail.com>
-References: <12740505.O9o76ZdvQC@rafael.j.wysocki> <871polxs9c.ffs@tglx>
- <CAJZ5v0jyN0=aGFOwE8fzuXi=1LgiLR5wgvvsAihGB0qpUp=mUQ@mail.gmail.com>
- <CAJZ5v0gsiuK5iFY6cHaqEgP8R1sz_pWGoqac2orYvXqLE2xbDQ@mail.gmail.com>
- <87o6rowrsp.ffs@tglx>
- <CAJZ5v0htmEeivbQaumRc7zw_Zx68GpUy98ksA9L42LupjO6tWA@mail.gmail.com>
- <87ldmqwgjc.ffs@tglx>
- <CAJZ5v0gW+A-eyckySFrHc7=Qr9URdRX6NqvPgkq4gZEvs_uBWg@mail.gmail.com>
-Date: Sun, 21 Sep 2025 10:56:40 +0200
-Message-ID: <87cy7k5gl3.ffs@tglx>
+	s=arc-20240116; t=1758448652; c=relaxed/simple;
+	bh=HbGmJg649hlHR5pTr3GuS+SBSz7g89U+FtfnhEaxebY=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=XUrY7JVYzehbahpT4fwQGZ3KWkZu9wME3kjWz28cDFtrin53JgUIrT9UKobZH6L7W98SE3EtEhhZFduGt+2A4QxFbZZ1BqURsCpNar7/cTkdzK82hQ7dinVufukLELtxbKOKiaGYCBEBAh7u1qUgUpTd90lMsDyEfpJ/5Ax74OA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cRTp+QIb; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1758448651; x=1789984651;
+  h=date:from:to:cc:subject:message-id;
+  bh=HbGmJg649hlHR5pTr3GuS+SBSz7g89U+FtfnhEaxebY=;
+  b=cRTp+QIb9BT6vMEXfiPy/EmpY0EW1qBDHjx/t4P6nNr5BDaxTaLF9qlH
+   mp2ZsJ3T7GJSMvukVCLFOSTEzn4Qe8BwWsGmAWayquDqCDN07L9auon1p
+   m5WLtdvR2pJ1Ao+6hAWHDQHEJPuys5wpYUQ9Nlp/12gTAYDVOm8HVJhlM
+   dLxMKHagZf+Pa44LHmKTRkjrm7kjHHfo0trb3/5LNiGWLQ2+w80Iph6gh
+   /Lu3QfVQrdNyhTG6EMteuh44Tl4Fiv/nvsyqEFEJMdyXngi6X5/k9NH/q
+   R2NYai9STXg6DltLvJcp8D44PsBe/oLFJZY5tT+fWhsn/naoVIhFGMhB5
+   A==;
+X-CSE-ConnectionGUID: J4n67CM/R12Y2zY4hSYyvA==
+X-CSE-MsgGUID: 0+FoNkCMTAaepnDURTOzTQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11559"; a="48315866"
+X-IronPort-AV: E=Sophos;i="6.18,283,1751266800"; 
+   d="scan'208";a="48315866"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2025 02:57:30 -0700
+X-CSE-ConnectionGUID: RW9ftY5jSj2xICvNieogBA==
+X-CSE-MsgGUID: lEQ5DnhxTYCSOr5wt1X0uQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,283,1751266800"; 
+   d="scan'208";a="175793478"
+Received: from lkp-server02.sh.intel.com (HELO 84c55410ccf6) ([10.239.97.151])
+  by orviesa009.jf.intel.com with ESMTP; 21 Sep 2025 02:57:29 -0700
+Received: from kbuild by 84c55410ccf6 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1v0Gow-0000dh-2S;
+	Sun, 21 Sep 2025 09:57:26 +0000
+Date: Sun, 21 Sep 2025 17:56:55 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ d88d08faafe83a5fd03e7e56d1ac299a5eadbd53
+Message-ID: <202509211744.Aq01hoYE-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain
 
-Christian reported that commit a430c11f4015 ("intel_idle: Rescan "dead" SMT
-siblings during initialization") broke the use case in which both 'nosmt'
-and 'maxcpus' are on the kernel command line because it onlines primary
-threads, which were offline due to the maxcpus limit.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: d88d08faafe83a5fd03e7e56d1ac299a5eadbd53  Merge branch 'pm-cpuidle' into bleeding-edge
 
-The initially proposed fix to skip primary threads in the loop is
-inconsistent. While it prevents the primary thread to be onlined, it then
-onlines the corresponding hyperthread(s), which does not really make sense.
+elapsed time: 1357m
 
-The CPU iterator in cpuhp_smt_enable() contains a check which excludes all
-threads of a core, when the primary thread is offline. The default
-implementation is a NOOP and therefore not effective on x86.
+configs tested: 133
+configs skipped: 5
 
-Implement topology_is_core_online() on x86 to address this issue. This
-makes the behaviour consistent between x86 and PowerPC.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Fixes: a430c11f4015 ("intel_idle: Rescan "dead" SMT siblings during initialization")
-Fixes: f694481b1d31 ("ACPI: processor: Rescan "dead" SMT siblings during initialization")
-Reported-by: Christian Loehle <christian.loehle@arm.com>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/12740505.O9o76ZdvQC@rafael.j.wysocki
-Closes: https://lore.kernel.org/linux-pm/724616a2-6374-4ba3-8ce3-ea9c45e2ae3b@arm.com/
----
- arch/x86/include/asm/topology.h |   10 ++++++++++
- arch/x86/kernel/cpu/topology.c  |   13 +++++++++++++
- 2 files changed, 23 insertions(+)
+tested configs:
+alpha                             allnoconfig    gcc-15.1.0
+alpha                            allyesconfig    gcc-15.1.0
+alpha                               defconfig    gcc-15.1.0
+arc                              allmodconfig    gcc-15.1.0
+arc                               allnoconfig    gcc-15.1.0
+arc                              allyesconfig    gcc-15.1.0
+arc                                 defconfig    gcc-15.1.0
+arc                   randconfig-001-20250920    gcc-9.5.0
+arc                   randconfig-002-20250920    gcc-9.5.0
+arm                              allmodconfig    gcc-15.1.0
+arm                               allnoconfig    clang-22
+arm                              allyesconfig    gcc-15.1.0
+arm                                 defconfig    clang-22
+arm                   randconfig-001-20250920    gcc-12.5.0
+arm                   randconfig-002-20250920    clang-22
+arm                   randconfig-003-20250920    clang-22
+arm                   randconfig-004-20250920    clang-22
+arm                        spear6xx_defconfig    clang-22
+arm64                            allmodconfig    clang-19
+arm64                             allnoconfig    gcc-15.1.0
+arm64                               defconfig    gcc-15.1.0
+arm64                 randconfig-001-20250920    clang-20
+arm64                 randconfig-002-20250920    clang-22
+arm64                 randconfig-003-20250920    clang-18
+arm64                 randconfig-004-20250920    clang-22
+csky                              allnoconfig    gcc-15.1.0
+csky                                defconfig    gcc-15.1.0
+csky                  randconfig-001-20250920    gcc-10.5.0
+csky                  randconfig-002-20250920    gcc-15.1.0
+hexagon                          allmodconfig    clang-17
+hexagon                           allnoconfig    clang-22
+hexagon                          allyesconfig    clang-22
+hexagon                             defconfig    clang-22
+hexagon               randconfig-001-20250920    clang-22
+hexagon               randconfig-002-20250920    clang-22
+i386                             allmodconfig    gcc-14
+i386                              allnoconfig    gcc-14
+i386                             allyesconfig    gcc-14
+i386        buildonly-randconfig-001-20250920    clang-20
+i386        buildonly-randconfig-002-20250920    clang-20
+i386        buildonly-randconfig-003-20250920    clang-20
+i386        buildonly-randconfig-004-20250920    gcc-13
+i386        buildonly-randconfig-005-20250920    clang-20
+i386        buildonly-randconfig-006-20250920    clang-20
+i386                                defconfig    clang-20
+loongarch                        allmodconfig    clang-19
+loongarch                         allnoconfig    clang-22
+loongarch                           defconfig    clang-19
+loongarch             randconfig-001-20250920    clang-22
+loongarch             randconfig-002-20250920    gcc-12.5.0
+m68k                             allmodconfig    gcc-15.1.0
+m68k                              allnoconfig    gcc-15.1.0
+m68k                             allyesconfig    gcc-15.1.0
+m68k                                defconfig    gcc-15.1.0
+m68k                           virt_defconfig    gcc-15.1.0
+microblaze                       allmodconfig    gcc-15.1.0
+microblaze                        allnoconfig    gcc-15.1.0
+microblaze                       allyesconfig    gcc-15.1.0
+microblaze                          defconfig    gcc-15.1.0
+mips                              allnoconfig    gcc-15.1.0
+mips                        omega2p_defconfig    clang-22
+nios2                             allnoconfig    gcc-11.5.0
+nios2                               defconfig    gcc-11.5.0
+nios2                 randconfig-001-20250920    gcc-9.5.0
+nios2                 randconfig-002-20250920    gcc-11.5.0
+openrisc                          allnoconfig    gcc-15.1.0
+openrisc                         allyesconfig    gcc-15.1.0
+openrisc                            defconfig    gcc-15.1.0
+parisc                           allmodconfig    gcc-15.1.0
+parisc                            allnoconfig    gcc-15.1.0
+parisc                           allyesconfig    gcc-15.1.0
+parisc                              defconfig    gcc-15.1.0
+parisc                randconfig-001-20250920    gcc-8.5.0
+parisc                randconfig-002-20250920    gcc-11.5.0
+parisc64                            defconfig    gcc-15.1.0
+powerpc                          allmodconfig    gcc-15.1.0
+powerpc                           allnoconfig    gcc-15.1.0
+powerpc                          allyesconfig    clang-22
+powerpc                      katmai_defconfig    clang-22
+powerpc               randconfig-001-20250920    clang-17
+powerpc               randconfig-002-20250920    clang-22
+powerpc               randconfig-003-20250920    clang-22
+powerpc64             randconfig-001-20250920    clang-16
+powerpc64             randconfig-002-20250920    gcc-10.5.0
+powerpc64             randconfig-003-20250920    gcc-10.5.0
+riscv                            allmodconfig    clang-22
+riscv                             allnoconfig    gcc-15.1.0
+riscv                            allyesconfig    clang-16
+riscv                               defconfig    clang-22
+riscv                 randconfig-001-20250920    clang-22
+riscv                 randconfig-002-20250920    clang-22
+s390                             allmodconfig    clang-18
+s390                              allnoconfig    clang-22
+s390                             allyesconfig    gcc-15.1.0
+s390                                defconfig    clang-22
+s390                  randconfig-001-20250920    clang-20
+s390                  randconfig-002-20250920    gcc-8.5.0
+sh                               allmodconfig    gcc-15.1.0
+sh                                allnoconfig    gcc-15.1.0
+sh                               allyesconfig    gcc-15.1.0
+sh                                  defconfig    gcc-15.1.0
+sh                    randconfig-001-20250920    gcc-14.3.0
+sh                    randconfig-002-20250920    gcc-12.5.0
+sparc                            allmodconfig    gcc-15.1.0
+sparc                             allnoconfig    gcc-15.1.0
+sparc                               defconfig    gcc-15.1.0
+sparc                 randconfig-001-20250920    gcc-8.5.0
+sparc                 randconfig-002-20250920    gcc-14.3.0
+sparc64                             defconfig    clang-20
+sparc64               randconfig-001-20250920    gcc-8.5.0
+sparc64               randconfig-002-20250920    gcc-8.5.0
+um                               allmodconfig    clang-19
+um                                allnoconfig    clang-22
+um                               allyesconfig    gcc-14
+um                                  defconfig    clang-22
+um                             i386_defconfig    gcc-14
+um                    randconfig-001-20250920    clang-22
+um                    randconfig-002-20250920    clang-22
+um                           x86_64_defconfig    clang-22
+x86_64                           alldefconfig    gcc-14
+x86_64                            allnoconfig    clang-20
+x86_64                           allyesconfig    clang-20
+x86_64      buildonly-randconfig-001-20250920    clang-20
+x86_64      buildonly-randconfig-002-20250920    clang-20
+x86_64      buildonly-randconfig-003-20250920    clang-20
+x86_64      buildonly-randconfig-004-20250920    clang-20
+x86_64      buildonly-randconfig-005-20250920    gcc-14
+x86_64      buildonly-randconfig-006-20250920    gcc-14
+x86_64                              defconfig    gcc-14
+x86_64                          rhel-9.4-rust    clang-20
+xtensa                            allnoconfig    gcc-15.1.0
+xtensa                randconfig-001-20250920    gcc-8.5.0
+xtensa                randconfig-002-20250920    gcc-8.5.0
 
---- a/arch/x86/include/asm/topology.h
-+++ b/arch/x86/include/asm/topology.h
-@@ -231,6 +231,16 @@ static inline bool topology_is_primary_t
- }
- #define topology_is_primary_thread topology_is_primary_thread
- 
-+int topology_get_primary_thread(unsigned int cpu);
-+
-+static inline bool topology_is_core_online(unsigned int cpu)
-+{
-+	int pcpu = topology_get_primary_thread(cpu);
-+
-+	return pcpu >= 0 ? cpu_online(pcpu) : false;
-+}
-+#define topology_is_core_online topology_is_core_online
-+
- #else /* CONFIG_SMP */
- static inline int topology_phys_to_logical_pkg(unsigned int pkg) { return 0; }
- static inline int topology_max_smt_threads(void) { return 1; }
---- a/arch/x86/kernel/cpu/topology.c
-+++ b/arch/x86/kernel/cpu/topology.c
-@@ -372,6 +372,19 @@ unsigned int topology_unit_count(u32 api
- 	return topo_unit_count(lvlid, at_level, apic_maps[which_units].map);
- }
- 
-+#ifdef CONFIG_SMP
-+int topology_get_primary_thread(unsigned int cpu)
-+{
-+	u32 apic_id = cpuid_to_apicid[cpu];
-+
-+	/*
-+	 * Get the core domain level APIC id, which is the primary thread
-+	 * and return the CPU number assigned to it.
-+	 */
-+	return topo_lookup_cpuid(topo_apicid(apic_id, TOPO_CORE_DOMAIN));
-+}
-+#endif
-+
- #ifdef CONFIG_ACPI_HOTPLUG_CPU
- /**
-  * topology_hotplug_apic - Handle a physical hotplugged APIC after boot
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
