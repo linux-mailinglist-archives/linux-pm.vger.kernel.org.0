@@ -1,124 +1,149 @@
-Return-Path: <linux-pm+bounces-35114-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35115-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D24F9B8D705
-	for <lists+linux-pm@lfdr.de>; Sun, 21 Sep 2025 09:56:28 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A099EB8D80B
+	for <lists+linux-pm@lfdr.de>; Sun, 21 Sep 2025 10:56:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 91CD63AC81E
-	for <lists+linux-pm@lfdr.de>; Sun, 21 Sep 2025 07:56:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6748E17100F
+	for <lists+linux-pm@lfdr.de>; Sun, 21 Sep 2025 08:56:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3EC02BFC73;
-	Sun, 21 Sep 2025 07:56:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 147D6246774;
+	Sun, 21 Sep 2025 08:56:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PFeOWwEG"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="PhajQONe";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Z0cBn+xH"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA1FB46B5;
-	Sun, 21 Sep 2025 07:56:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B3761E5B63;
+	Sun, 21 Sep 2025 08:56:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758441383; cv=none; b=q7q+sN6NxrBbOPyF1WAniDrJZU1C3HrlgE/Sj9ZjQdlYFLEQKyT0lAtTv67JEfmtbLWzID1x8dPXvXN3SHH2rauKM/qs/U+wQg/QPErwmQgZ2JHfwYTlG4DmzcGP/L0DBdmgT19A8zpCkZ9iXeoKG3vHJcaUzu8WEJ7FOUgaCYg=
+	t=1758445005; cv=none; b=SFLeA4reNTN+tUrhJtgfDxZBZ/MkcXt05G/VoOvoy5qjkJiezqYKGPwrq3fqbEEOO+4FTrGmTT3ri2pSHS6r6ZmChFaQppum5kQJhJVsMkmjKvw7jHJK/3cpmPZjKmgKlTH4qcx7zQr2RMwRldo3TkKX3HupDpcPFHLotk7p+Kg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758441383; c=relaxed/simple;
-	bh=pkXmWMXT97+JSbetdgGN1OksrY17F7X1ivvEOG+Y2Zg=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=mf7gmD4mcRmi694G1lxKCFrxf2vUUrT3oU4Zbwotgud08uoL+sDRAF+YCxlUpEhyv0x19abyEylh2CURYohmKqxbHkPtIs/5nU3Abna2PwElzwxWmmfa37v2mPavT0ubtdO6WaJc60YUB+JltaMjYWhmazqqVkJzm+EOllM4gA8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PFeOWwEG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 309FDC4CEE7;
-	Sun, 21 Sep 2025 07:56:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758441383;
-	bh=pkXmWMXT97+JSbetdgGN1OksrY17F7X1ivvEOG+Y2Zg=;
-	h=From:To:Cc:Subject:Date:From;
-	b=PFeOWwEGGDYMd3n5CWiy7ndYtMKRGSZ3Wi4NfuIlCX5K/tDfuxPz9r+nsPsydld1n
-	 9re96EZn7nBU+u3PAqRXEy+V/RtD4hGMvn6CKHmMlzw5LOT1yf/WZ0vCQod/Q4Q6k7
-	 Wa1Z6nuvZpFVVA+JSjt+6vPbHzutiXunNOjpcEN/KR4hKQZCzVgtuBLTyzywS+rLBD
-	 XNMtoq6gCvRCm8HAtBcX/+lBWOUWVqdX9bttp2Fi4VVy3KdsTq1e33ZWu2wd8r+poD
-	 U0Qy8xqSMm1bRJqSx5oaPwT2hpoT0qel5Qe/S9D39iMTRzqWvwvMMiIHFyOqIxgMWX
-	 hLwvUvG3CGFUw==
-From: Georgi Djakov <djakov@kernel.org>
-To: gregkh@linuxfoundation.org
-Cc: linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	djakov@kernel.org
-Subject: [GIT PULL] interconnect changes for 6.18
-Date: Sun, 21 Sep 2025 10:56:03 +0300
-Message-Id: <20250921075603.14452-1-djakov@kernel.org>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1758445005; c=relaxed/simple;
+	bh=dCUrZDUEc5+DreJ20UhumTmXqXfdGX2j+ZfRG61AAD8=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=cZlU793kmY6dGsIJ9I8xQayR26bYwLlxwfya40MXA+sBm9iXvyAQTLSnM34GBWlRpu5mdS/dVB+dvW3pPubjy8BHQvnCjI6UpqQLgTmsN5PQtzcy0mWzS9u795Cg5x2DtzU3YzKYbW41Wql+JAE1E1tc9y2aCQ+bC8ppvtAlUpU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=PhajQONe; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Z0cBn+xH; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1758445001;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=PH0Bier6+Ggl5FPLln7YaPLjHsHvublgFxYXIHS3ZCw=;
+	b=PhajQONehkB9Wj6JVMiLXn0+zPsdIYZMOOecPDlcw4peQTZYRa3bjfEEvBA2zv9gC4QOb4
+	LcnvwGPBPUL7gnYe0fPej6zkDv/xrpuEvH0UKgjWojCPgm/I/U+nHVOJoAq9QogtSInyxD
+	CT+Mg3VZRErKJHYajQPpJn4VJ+tgzkwsbyiOlVGEfr2lJE8SVafLAsE6RELH03sFf10NDf
+	G2llvOnSZfukqLIBFYGZeOhVH/qHoS//0qwzwDBzWB3K66KyXQRn2hpHw+R2WaH4EU1FTx
+	UHVayxsyNR9PvQor1FTUDOmEqA12mziZjwizi7EeGVXUz/CyMDuXFlYkrNMQpg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1758445001;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=PH0Bier6+Ggl5FPLln7YaPLjHsHvublgFxYXIHS3ZCw=;
+	b=Z0cBn+xH4Vosui8Q6dNcDVnJbzpy1m7SlBS3tk9ozpYXWoxNGgOmcn8EM1ITCvEdSt7fQi
+	68R3qboCiyNvDJDQ==
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, LKML
+ <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>, Peter
+ Zijlstra <peterz@infradead.org>, Christian Loehle
+ <christian.loehle@arm.com>, Dave Hansen <dave.hansen@linux.intel.com>
+Subject: [PATCH] x86/topology: Implement topology_is_core_online() to
+ address SMT regression
+In-Reply-To: <CAJZ5v0gW+A-eyckySFrHc7=Qr9URdRX6NqvPgkq4gZEvs_uBWg@mail.gmail.com>
+References: <12740505.O9o76ZdvQC@rafael.j.wysocki> <871polxs9c.ffs@tglx>
+ <CAJZ5v0jyN0=aGFOwE8fzuXi=1LgiLR5wgvvsAihGB0qpUp=mUQ@mail.gmail.com>
+ <CAJZ5v0gsiuK5iFY6cHaqEgP8R1sz_pWGoqac2orYvXqLE2xbDQ@mail.gmail.com>
+ <87o6rowrsp.ffs@tglx>
+ <CAJZ5v0htmEeivbQaumRc7zw_Zx68GpUy98ksA9L42LupjO6tWA@mail.gmail.com>
+ <87ldmqwgjc.ffs@tglx>
+ <CAJZ5v0gW+A-eyckySFrHc7=Qr9URdRX6NqvPgkq4gZEvs_uBWg@mail.gmail.com>
+Date: Sun, 21 Sep 2025 10:56:40 +0200
+Message-ID: <87cy7k5gl3.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-Hello Greg,
+Christian reported that commit a430c11f4015 ("intel_idle: Rescan "dead" SMT
+siblings during initialization") broke the use case in which both 'nosmt'
+and 'maxcpus' are on the kernel command line because it onlines primary
+threads, which were offline due to the maxcpus limit.
 
-This is the pull request with interconnect changes for the v6.18-rc1 merge
-window. As always, the summary is in the signed tag.
+The initially proposed fix to skip primary threads in the loop is
+inconsistent. While it prevents the primary thread to be onlined, it then
+onlines the corresponding hyperthread(s), which does not really make sense.
 
-All patches have been in linux-next for a full week. There are currently
-no reported issues. Please pull into char-misc-next when possible.
+The CPU iterator in cpuhp_smt_enable() contains a check which excludes all
+threads of a core, when the primary thread is offline. The default
+implementation is a NOOP and therefore not effective on x86.
 
-Thanks,
-Georgi
+Implement topology_is_core_online() on x86 to address this issue. This
+makes the behaviour consistent between x86 and PowerPC.
 
+Fixes: a430c11f4015 ("intel_idle: Rescan "dead" SMT siblings during initialization")
+Fixes: f694481b1d31 ("ACPI: processor: Rescan "dead" SMT siblings during initialization")
+Reported-by: Christian Loehle <christian.loehle@arm.com>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/12740505.O9o76ZdvQC@rafael.j.wysocki
+Closes: https://lore.kernel.org/linux-pm/724616a2-6374-4ba3-8ce3-ea9c45e2ae3b@arm.com/
+---
+ arch/x86/include/asm/topology.h |   10 ++++++++++
+ arch/x86/kernel/cpu/topology.c  |   13 +++++++++++++
+ 2 files changed, 23 insertions(+)
 
-The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
-
-  Linux 6.17-rc1 (2025-08-10 19:41:16 +0300)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/djakov/icc.git tags/icc-6.18-rc1
-
-for you to fetch changes up to bcdf7a064c3c73cd97870a3ef5e4dd6214b28b79:
-
-  Merge branch 'icc-glymur' into icc-next (2025-09-12 13:54:17 +0300)
-
-----------------------------------------------------------------
-interconnect changes for 6.18
-
-This pull request contains the interconnect changes for the 6.18-rc1
-merge window. It contains new driver and a minor core cleanup.
-
-Core change:
-- Use device_match_of_node() instead of open coding it
-
-Driver changes:
-- Add new driver for the Qualcomm Glymur SoC
-- Enable OSM L3 support for the QCS615 SoC
-
-Signed-off-by: Georgi Djakov <djakov@kernel.org>
-
-----------------------------------------------------------------
-Georgi Djakov (1):
-      Merge branch 'icc-glymur' into icc-next
-
-Raviteja Laggyshetty (4):
-      dt-bindings: interconnect: document the RPMh Network-On-Chip interconnect in Glymur SoC
-      interconnect: qcom: icc-rpmh: increase MAX_PORTS to support four QoS ports
-      interconnect: qcom: add glymur interconnect provider driver
-      dt-bindings: interconnect: Add OSM L3 compatible for QCS615 SoC
-
-Zhang Enpei (1):
-      interconnect: core: Use device_match_of_node()
-
- .../devicetree/bindings/interconnect/qcom,glymur-rpmh.yaml     |  172 +
- .../devicetree/bindings/interconnect/qcom,osm-l3.yaml          |    5 +
- drivers/interconnect/core.c                                    |    2 +-
- drivers/interconnect/qcom/Kconfig                              |    9 +
- drivers/interconnect/qcom/Makefile                             |    2 +
- drivers/interconnect/qcom/glymur.c                             | 2543 ++++++++
- drivers/interconnect/qcom/icc-rpmh.h                           |    2 +-
- include/dt-bindings/interconnect/qcom,glymur-rpmh.h            |  205 +
- 8 files changed, 2938 insertions(+), 2 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,glymur-rpmh.yaml
- create mode 100644 drivers/interconnect/qcom/glymur.c
- create mode 100644 include/dt-bindings/interconnect/qcom,glymur-rpmh.h
+--- a/arch/x86/include/asm/topology.h
++++ b/arch/x86/include/asm/topology.h
+@@ -231,6 +231,16 @@ static inline bool topology_is_primary_t
+ }
+ #define topology_is_primary_thread topology_is_primary_thread
+ 
++int topology_get_primary_thread(unsigned int cpu);
++
++static inline bool topology_is_core_online(unsigned int cpu)
++{
++	int pcpu = topology_get_primary_thread(cpu);
++
++	return pcpu >= 0 ? cpu_online(pcpu) : false;
++}
++#define topology_is_core_online topology_is_core_online
++
+ #else /* CONFIG_SMP */
+ static inline int topology_phys_to_logical_pkg(unsigned int pkg) { return 0; }
+ static inline int topology_max_smt_threads(void) { return 1; }
+--- a/arch/x86/kernel/cpu/topology.c
++++ b/arch/x86/kernel/cpu/topology.c
+@@ -372,6 +372,19 @@ unsigned int topology_unit_count(u32 api
+ 	return topo_unit_count(lvlid, at_level, apic_maps[which_units].map);
+ }
+ 
++#ifdef CONFIG_SMP
++int topology_get_primary_thread(unsigned int cpu)
++{
++	u32 apic_id = cpuid_to_apicid[cpu];
++
++	/*
++	 * Get the core domain level APIC id, which is the primary thread
++	 * and return the CPU number assigned to it.
++	 */
++	return topo_lookup_cpuid(topo_apicid(apic_id, TOPO_CORE_DOMAIN));
++}
++#endif
++
+ #ifdef CONFIG_ACPI_HOTPLUG_CPU
+ /**
+  * topology_hotplug_apic - Handle a physical hotplugged APIC after boot
 
