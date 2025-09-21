@@ -1,70 +1,73 @@
-Return-Path: <linux-pm+bounces-35111-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35112-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BD7ECB8D450
-	for <lists+linux-pm@lfdr.de>; Sun, 21 Sep 2025 05:22:22 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F219B8D4C4
+	for <lists+linux-pm@lfdr.de>; Sun, 21 Sep 2025 06:27:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 01F5518A213B
-	for <lists+linux-pm@lfdr.de>; Sun, 21 Sep 2025 03:22:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 578BA17EBA8
+	for <lists+linux-pm@lfdr.de>; Sun, 21 Sep 2025 04:27:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84D8826CE2E;
-	Sun, 21 Sep 2025 03:20:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB1BE226861;
+	Sun, 21 Sep 2025 04:27:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="B6cincJY"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IoT0f80g"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBB41248F64;
-	Sun, 21 Sep 2025 03:20:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1655412E1E9
+	for <linux-pm@vger.kernel.org>; Sun, 21 Sep 2025 04:27:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758424837; cv=none; b=tFzbbR6S+nGEILLhryHq9Uv0z0UOvSXEn0D8BwMlFdZW8X9dK3U/27WjDeejg4XIAfTz2R4em5+mLasAIIZKkhXDwX6j/axN6BGw9SSN739iNkFVtYfxCC6C0JaIsp2NzZXQpwedaQchUQWxAwVdi2XoeiG4Mu6kCCb6jGPKAh4=
+	t=1758428841; cv=none; b=tOBZ1qU+u5yLVp+Ic2O0kZCl3AD5TGllAlcaFpIWI1kqQg5OLgQQIAQn8Vb6A7+bcTMnadAGIdN+9rA+9m1S/20p6xnxuTGsuZX1VaXscqKJtk4SnHaB3HUxEhOiEZb5TYIcIZ73W+ODtQCZnUhvTtLJFDkBA6eBZQOXm3a/vjc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758424837; c=relaxed/simple;
-	bh=y+FOHX/go9wekysNkMc1iPBG8Iy8ApZybO4toHO6X/Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ctTfgGLCmSsub60K+jaGe9e97ZYOxA3lu/SyY/keqkp9tsfRG+xktkqZIVQMCb7VPfd5GMg3V89+y3fWJ2H6cPC3/bI2GYtyfy8mDMzFSEPUjmmU4j6vkvT/aXOFDCdmHe1FL6P95FWBNhjD2PWpsA2kHoAj8MmkEOehJjqv0Ps=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=B6cincJY; arc=none smtp.client-ip=213.97.179.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
-	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=XzaDD1CcznY9UobS3SjpP6e1pWU64vfZ9Xs7KBz8zS4=; b=B6cincJYUySoF3WP5tE1SKk49n
-	YwQb+Hk8fVC6Fa1w1t3IOx8bzcAvD6HyW4CnpxXR9rvXwrf3m/xoEdg3XLuTYwg1+OttWItT7SNmQ
-	KKrUhwik/S9Ww5239Ubojk9JbvaK4vtIcY7lIGKWrpHhL4b21Nw2n753r/ay0BJDPZ291PY/RjT8K
-	/8YL4TenyeZtJaod+y8OiZRnwJ6XcduUvjzI+xFwSaUbBhib7K6jaAPR9IrL+rLce6yqW7Gw+de/O
-	N9FV+Z+ixQAboImBzOz1rXs5vYXjbv5lm6urf8JrO1q5gSUecR+nmMBNpvbIzid5AKDeiisvheMgw
-	Sos6VYuA==;
-Received: from [58.29.143.236] (helo=localhost)
-	by fanzine2.igalia.com with utf8esmtpsa 
-	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-	id 1v0Acm-00Ecjh-Rj; Sun, 21 Sep 2025 05:20:29 +0200
-From: Changwoo Min <changwoo@igalia.com>
-To: lukasz.luba@arm.com,
-	rafael@kernel.org,
-	len.brown@intel.com,
-	pavel@kernel.org
-Cc: christian.loehle@arm.com,
-	tj@kernel.org,
-	kernel-dev@igalia.com,
-	linux-pm@vger.kernel.org,
-	sched-ext@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Changwoo Min <changwoo@igalia.com>
-Subject: [PATCH RESEND v4 10/10] PM: EM: Notify an event when the performance domain changes
-Date: Sun, 21 Sep 2025 12:19:28 +0900
-Message-ID: <20250921031928.205869-11-changwoo@igalia.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20250921031928.205869-1-changwoo@igalia.com>
-References: <20250921031928.205869-1-changwoo@igalia.com>
+	s=arc-20240116; t=1758428841; c=relaxed/simple;
+	bh=H9oadypKOkeIAoJbakTVN2hwOaNJUuRaIQl7knV0/24=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=jPBw4XP5GYQrQB1xOD4FhqHOWZ3Xj2n4Pzc3QNOsqW2np5CxnXcAVejsD6qS5O86LslIMQ2EWe2jiJ/aYeJHKaMQT0SYJ7hdWRTv7BuvL5G/VMOJaKWzbOeXGOttBJ+zGedfEjK7i3GHuHNLYEgqoPNViQq7ek4AbE1cHFCaKdc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IoT0f80g; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1758428840; x=1789964840;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=H9oadypKOkeIAoJbakTVN2hwOaNJUuRaIQl7knV0/24=;
+  b=IoT0f80gWZThX3LTLlc88/8DBd+4siki2GXBu+zb3HAs5oTPcz1uaYYw
+   aH3e0AlPDRSFX1afkYNM+qin5vcSXTvMpfsxWQZsqvSAgkyHT9yY6//uv
+   Le2lJd+WyYSaBGUkq2kKdKgsdHLF8qIdfb09SKALy00VyzvgdzBO3/HlB
+   W1aQ1Mbobv9ZufKpZhaTHEUcXx/4BBkOtnx86LeeSToKJC5xb0dDNLRNo
+   /p/YqI7p1pLyu3Xa+vMfRbJeZeprwssd9EFSAkktHec0kJZ9VGDKduPo0
+   F9XH/rLM2j38WMaQfnG+AAHVDKZfWx/fuQntFe0B3AVJiiBFDk0+aDc6W
+   A==;
+X-CSE-ConnectionGUID: HmXa+HPCTMybC18B42eGyw==
+X-CSE-MsgGUID: +knNxPtaSRKbfEHn9G3LRw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11559"; a="60843983"
+X-IronPort-AV: E=Sophos;i="6.18,282,1751266800"; 
+   d="scan'208";a="60843983"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2025 21:27:19 -0700
+X-CSE-ConnectionGUID: YvKmRz0lQIqausTWiHy3sA==
+X-CSE-MsgGUID: wm3Qy22KQy+f7RdGnEDAwg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,282,1751266800"; 
+   d="scan'208";a="180601079"
+Received: from baandr0id001.iind.intel.com ([10.66.253.151])
+  by fmviesa005.fm.intel.com with ESMTP; 20 Sep 2025 21:27:17 -0700
+From: Kaushlendra Kumar <kaushlendra.kumar@intel.com>
+To: rafael@kernel.org,
+	pavel@kernel.org,
+	gregkh@linuxfoundation.org,
+	dakr@kernel.org
+Cc: linux-pm@vger.kernel.org,
+	Kaushlendra Kumar <kaushlendra.kumar@intel.com>
+Subject: [PATCH] PM: Delete timer before removing wakeup source from list
+Date: Sun, 21 Sep 2025 09:55:37 +0530
+Message-Id: <20250921042537.3118333-1-kaushlendra.kumar@intel.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -73,54 +76,41 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Send an event to userspace when a performance domain is created or deleted,
-or its energy model is updated.
+Move timer_delete_sync() before list_del_rcu() in wakeup_source_remove()
+to ensure proper cleanup ordering. This prevents the timer callback from
+executing after the wakeup source has been removed from the events list.
 
-Signed-off-by: Changwoo Min <changwoo@igalia.com>
+The previous order could allow the timer callback to access the wakeup
+source entry after removal but before timer deletion, potentially causing
+use-after-free issues or list corruption.
+
+Deleting the timer first ensures that no callbacks can execute during
+the wakeup source removal process, providing safer cleanup semantics.
+
+Signed-off-by: Kaushlendra Kumar <kaushlendra.kumar@intel.com>
 ---
- kernel/power/energy_model.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/base/power/wakeup.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
-index 740076d24479..fca32d1c6661 100644
---- a/kernel/power/energy_model.c
-+++ b/kernel/power/energy_model.c
-@@ -17,6 +17,8 @@
- #include <linux/sched/topology.h>
- #include <linux/slab.h>
+diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
+index d1283ff1080b..ae6ec9f04b61 100644
+--- a/drivers/base/power/wakeup.c
++++ b/drivers/base/power/wakeup.c
+@@ -189,12 +189,11 @@ static void wakeup_source_remove(struct wakeup_source *ws)
+ 	if (WARN_ON(!ws))
+ 		return;
  
-+#include "em_netlink.h"
-+
- /*
-  * Mutex serializing the registrations of performance domains and letting
-  * callbacks defined by drivers sleep.
-@@ -350,6 +352,8 @@ int em_dev_update_perf_domain(struct device *dev,
- 	em_table_free(old_table);
- 
- 	mutex_unlock(&em_pd_mutex);
-+
-+	em_notify_pd_updated(pd);
- 	return 0;
- }
- EXPORT_SYMBOL_GPL(em_dev_update_perf_domain);
-@@ -697,6 +701,7 @@ int em_dev_register_pd_no_update(struct device *dev, unsigned int nr_states,
- 	list_add_tail(&dev->em_pd->node, &em_pd_list);
- 	mutex_unlock(&em_pd_list_mutex);
- 
-+	em_notify_pd_created(dev->em_pd);
- 	return ret;
- }
- EXPORT_SYMBOL_GPL(em_dev_register_pd_no_update);
-@@ -719,6 +724,8 @@ void em_dev_unregister_perf_domain(struct device *dev)
- 	list_del_init(&dev->em_pd->node);
- 	mutex_unlock(&em_pd_list_mutex);
- 
-+	em_notify_pd_deleted(dev->em_pd);
-+
++	timer_delete_sync(&ws->timer);
+ 	raw_spin_lock_irqsave(&events_lock, flags);
+ 	list_del_rcu(&ws->entry);
+ 	raw_spin_unlock_irqrestore(&events_lock, flags);
+ 	synchronize_srcu(&wakeup_srcu);
+-
+-	timer_delete_sync(&ws->timer);
  	/*
- 	 * The mutex separates all register/unregister requests and protects
- 	 * from potential clean-up/setup issues in the debugfs directories.
+ 	 * Clear timer.function to make wakeup_source_not_registered() treat
+ 	 * this wakeup source as not registered.
 -- 
-2.51.0
+2.34.1
 
 
