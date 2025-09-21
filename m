@@ -1,81 +1,122 @@
-Return-Path: <linux-pm+bounces-35126-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35127-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95EF3B8E4A3
-	for <lists+linux-pm@lfdr.de>; Sun, 21 Sep 2025 22:04:29 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BEB35B8E893
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Sep 2025 00:21:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3DF5217C871
-	for <lists+linux-pm@lfdr.de>; Sun, 21 Sep 2025 20:04:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CB5D1189C097
+	for <lists+linux-pm@lfdr.de>; Sun, 21 Sep 2025 22:21:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 571F926E718;
-	Sun, 21 Sep 2025 20:04:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61F1B253359;
+	Sun, 21 Sep 2025 22:20:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iCTBvx1y"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AWFQwBZA"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A55B229B38;
-	Sun, 21 Sep 2025 20:04:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 314972AE6A;
+	Sun, 21 Sep 2025 22:20:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758485062; cv=none; b=KfLkcrgOP4T97uynh7avtaN83EIA7YuGtGdyvR1xRdJnoTWrT1NfFnsS92heXNBXBtL+mmg6cpl6aG2F1XTw0tSWrjFAB2yvKGRYUnXFU103mZQ0tJQObL23+bvqX1KBPd+Iu4EVjH9rcsbsuZvOinKjl7zA000p0geo1Kdmb9g=
+	t=1758493257; cv=none; b=X2ysAccpGfaXxme+FC9BUad78sBgfL03NlvVGPTrkwDl3sOmpKK9v8cCsFV4nc/cxZOq3qFabcVs8dluQE70MY5wB/M8s24bncjxBQFyMYyTLoATSPZmlzqKsAtZtaIuXmxeUJIDg/DC7chhdQApXyjoATYYqxZemwnWwkivD2k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758485062; c=relaxed/simple;
-	bh=oK6PNMhjBQuguBf6ZyCDvGmGsPBZFWxojb6mTU595d4=;
-	h=Content-Type:MIME-Version:In-Reply-To:References:Subject:From:Cc:
-	 To:Date:Message-ID; b=AaRp6PBxilph9v1Uvhr1LOETbN1w7tT9hWUoBmM6DBY+lZzqWufW3TIY7TMee/JE9tOKMsJzwVfCL6DWne9g4Rthqwq1sRtnvshjSiPUPDH7kRZXxOu2aJ4qKVOHE2un1cF9kDy4f5iZtuH1HSpT9mjfoBdqDJZIWg7LTVM0BEc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iCTBvx1y; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A835C4CEE7;
-	Sun, 21 Sep 2025 20:04:21 +0000 (UTC)
+	s=arc-20240116; t=1758493257; c=relaxed/simple;
+	bh=deIlNliIFfttHaVaz+a5cZngYOdByEk2eSULIl0DxWs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VrwYuHAePeCPtC5FxtdhES+8Zk7dUxHgOQsRH79U+Ba8BbVh0gU3iNIdBla+ZlkAWr/z2TfV/rkaOvkKpjEHhRvMtqEiwCpzw6FyhOC6F1fUFthWRDC4dDAeEVdSDGDurQM9KawrjK15dmczqDT8+2ouFHfY/tlWZ0+3+segVP0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AWFQwBZA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80F07C4CEE7;
+	Sun, 21 Sep 2025 22:20:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758485061;
-	bh=oK6PNMhjBQuguBf6ZyCDvGmGsPBZFWxojb6mTU595d4=;
-	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=iCTBvx1ycWtFaxbFJjKnE8lmTRV6YKBljeoNPWr3O0f9KOI2wK+gY/chvSLppb2iw
-	 nKDM1jLs/kX3EvgUACM5BKR1e32v5rVmusbFg6REu8gh8nHtL4KnpR4cztPIEWYsyn
-	 85sV5ZWf8I2axh1P00A55pSPIoljTkKeShL0Yo6iD75KN1B4tcxd0MZkgqGmYUT1mQ
-	 IpOfY2l2pbjRNsgwxsBcIB9YfzgZxcgmX2t0tM84PDIkYUJsgjzu0i/zQZHS16n4gv
-	 WrApdIyoKSa91FOKnNUjwHaVFh7bF8WfL1saxL8xffSMJav7UkpqNUB9WhDh8//gHr
-	 V8yFvFNiMSeTQ==
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1758493256;
+	bh=deIlNliIFfttHaVaz+a5cZngYOdByEk2eSULIl0DxWs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=AWFQwBZAhMYUaaA5uo8ILM7NlcErylUxQ0nRkEnKhmzH9SouyhUwUsvmPI8QMRlt9
+	 Jg2/R3gHsr8SZPU31xZDfAd1A63rI4tGgEnOzVNDdm3/rg0soJjO205N0BG6WGf2nW
+	 WW8D7QcD+yi2pqrLhsgwlPIIKEwBhDthWnIoiVFPXf2kxhdRf5Y6Po4bYd+TOsAA7/
+	 Q9ny93JPVwtoGPrSc4xbuu0gY6KwDLYX59A5Ygmq2srNC0wUu7EnWnODFp9RcNmMe4
+	 Yswi79VHYfZLnnz8r8LNOolutZmqspeDlCmODf7uIfi6Ls6u2XBT95jAjtpbXhPU/I
+	 objma6kY4n/pw==
+Date: Sun, 21 Sep 2025 23:20:51 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Diederik de Haas <didi.debian@cknow.org>, linux-pm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org, kernel@collabora.com
+Subject: Re: [PATCH v2 3/3] dt-bindings: thermal: rockchip: tighten grf
+ requirements
+Message-ID: <20250921-abroad-decibel-5b81c0680693@spud>
+References: <20250820-thermal-rockchip-grf-warning-v2-0-c7e2d35017b8@kernel.org>
+ <20250820-thermal-rockchip-grf-warning-v2-3-c7e2d35017b8@kernel.org>
+ <20250820-await-chomp-9812902c0f74@spud>
+ <wtwdpqi4tk3ixzmrvdyv2aguf6pjlmnz6q5gvhlajl2hk6mdys@fmkugriedhqe>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="7v51AzaYiK6X0Wju"
+Content-Disposition: inline
+In-Reply-To: <wtwdpqi4tk3ixzmrvdyv2aguf6pjlmnz6q5gvhlajl2hk6mdys@fmkugriedhqe>
+
+
+--7v51AzaYiK6X0Wju
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20250623-byeword-update-v2-19-cf1fc08a2e1f@collabora.com>
-References: <20250623-byeword-update-v2-0-cf1fc08a2e1f@collabora.com> <20250623-byeword-update-v2-19-cf1fc08a2e1f@collabora.com>
-Subject: Re: [PATCH v2 19/20] clk: sp7021: switch to FIELD_PREP_WM16 macro
-From: Stephen Boyd <sboyd@kernel.org>
-Cc: kernel@collabora.com, linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org, linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, linux-phy@lists.infradead.org, linux-sound@vger.kernel.org, netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, linux-pci@vger.kernel.org, linux-pm@vger.kernel.org, linux-clk@vger.kernel.org, llvm@lists.linux.dev, Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-To: Alexandre Torgue <alexandre.torgue@foss.st.com>, Andrew Lunn <andrew+netdev@lunn.ch>, Andy Yan <andy.yan@rock-chips.com>, Bill Wendling <morbo@google.com>, Bjorn Helgaas <bhelgaas@google.com>, Chanwoo Choi <cw00.choi@samsung.com>, David Airlie <airlied@gmail.com>, David S. Miller <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Heiko Stuebner <heiko@sntech.de>, Jaehoon Chung <jh80.chung@samsung.com>, Jakub Kicinski <kuba@kernel.org>, Jaroslav Kysela <perex@perex.cz>, Justin Stitt <justinstitt@google.com>, Kishon Vijay Abraham I <kishon@kernel.org>, Krzysztof =?utf-8?q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>, Kyungmin Park <kyungmin.park@samsung.com>, Liam Girdwood <lgirdwood@gmail.com>, Lorenzo Pieralisi <lpieralisi@kernel.org>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Manivannan Sadhasivam <mani@kernel.org>, Mark Brown <broonie@kernel.org>, Mauro Carvalho Chehab <mchehab@kernel.org>, Maxime Coquelin <mcoquelin.stm32@gmail.com>, Maxime Ripard <mripard@k
- ernel.org>, Michael Turquette <mturquette@baylibre.com>, MyungJoo Ham <myungjoo.ham@samsung.com>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Nicolas Frattaroli <frattaroli.nicolas@gmail.com>, Nicolas Frattaroli <nicolas.frattaroli@collabora.com>, Paolo Abeni <pabeni@redhat.com>, Qin Jian <qinjian@cqplus1.com>, Rasmus Villemoes <linux@rasmusvillemoes.dk>, Rob Herring <robh@kernel.org>, Sandy Huang <hjc@rock-chips.com>, Shawn Lin <shawn.lin@rock-chips.com>, Shreeya Patel <shreeya.patel@collabora.com>, Simona Vetter <simona@ffwll.ch>, Takashi Iwai <tiwai@suse.com>, Thomas Zimmermann <tzimmermann@suse.de>, Ulf Hansson <ulf.hansson@linaro.org>, Vinod Koul <vkoul@kernel.org>, Yury Norov <yury.norov@gmail.com>
-Date: Sun, 21 Sep 2025 13:04:19 -0700
-Message-ID: <175848505982.4354.2243738737036950081@lazor>
-User-Agent: alot/0.11
 
-Quoting Nicolas Frattaroli (2025-06-23 09:05:47)
-> The sp7021 clock driver has its own shifted high word mask macro,
-> similar to the ones many Rockchip drivers have.
+On Fri, Sep 19, 2025 at 08:35:12PM +0200, Sebastian Reichel wrote:
+> Hi,
 >=20
-> Remove it, and replace instances of it with hw_bitfield.h's
-> FIELD_PREP_WM16 macro, which does the same thing except in a common
-> macro that also does compile-time error checking.
+> On Wed, Aug 20, 2025 at 08:48:23PM +0100, Conor Dooley wrote:
+> > On Wed, Aug 20, 2025 at 07:40:49PM +0200, Sebastian Reichel wrote:
+> > > Instead of having an optional rockchip,grf property, forbid using it =
+on
+> > > platforms without registers in a GRF being needed for thermal monitor=
+ing
+> > > and make it mandatory on the platforms actually needing it.
+> >=20
+> > I am assuming that "needing it" means that it was actually mandatory but
+> > the binding was just missing the required required entry. If so
+> > Acked-by: Conor Dooley <conor.dooley@microchip.com>
 >=20
-> This was compile-tested with 32-bit ARM with Clang, no runtime tests
-> were performed as I lack the hardware. However, I verified that fix
-> commit 5c667d5a5a3e ("clk: sp7021: Adjust width of _m in HWM_FIELD_PREP()=
-")
-> is not regressed. No warning is produced.
->=20
-> Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-> ---
+> I just noticed, that I never replied: The GRF configuration is
+> required for proper functionality as far as I can tell. Technically
+> it might be skipped, if the bootloader already configured the
+> registers correctly. but I don't think this is something anyone wants
+> to rely on and with the same argument we could describe almost any
+> resource as optional :) The upstream kernel DT always had the GRF
+> specified for these platforms (and thus most likely has never been
+> tested without it).
 
-Acked-by: Stephen Boyd <sboyd@kernel.org>
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+
+(ik I gave it already, but for clarity)
+
+--7v51AzaYiK6X0Wju
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaNB6QwAKCRB4tDGHoIJi
+0oeMAP9PVmH8y60xBY5fyeXeZW7A8LvI0TS/a+zumSiuaKg5lwEA1ZC8Pd7dkYva
+SIjnbkEWh1VeQ9wWMnQJof1jJW/IsAY=
+=mGFB
+-----END PGP SIGNATURE-----
+
+--7v51AzaYiK6X0Wju--
 
