@@ -1,46 +1,46 @@
-Return-Path: <linux-pm+bounces-35125-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35126-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 648A0B8E2A4
-	for <lists+linux-pm@lfdr.de>; Sun, 21 Sep 2025 19:54:21 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 95EF3B8E4A3
+	for <lists+linux-pm@lfdr.de>; Sun, 21 Sep 2025 22:04:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2298B3B7F02
-	for <lists+linux-pm@lfdr.de>; Sun, 21 Sep 2025 17:54:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3DF5217C871
+	for <lists+linux-pm@lfdr.de>; Sun, 21 Sep 2025 20:04:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E174126CE2E;
-	Sun, 21 Sep 2025 17:54:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 571F926E718;
+	Sun, 21 Sep 2025 20:04:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dN9EP4k7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iCTBvx1y"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A30122AE6A;
-	Sun, 21 Sep 2025 17:54:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A55B229B38;
+	Sun, 21 Sep 2025 20:04:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758477255; cv=none; b=EVL4u0/U+EDIXd73QteSmZ9ZvL/u/5dcxCglyGWsAlaphSQvulpq2M7ta/KvPar6Q3LBdngVPB9x8bG/A4ysse4QlZyDaRiZFcKqI5ImR01IJa2KOWESOd0oxRHf8/fPlSzsxuAdsFmooSNrqMJh9UmJ3zIlyhhrgs1OEJVFy5U=
+	t=1758485062; cv=none; b=KfLkcrgOP4T97uynh7avtaN83EIA7YuGtGdyvR1xRdJnoTWrT1NfFnsS92heXNBXBtL+mmg6cpl6aG2F1XTw0tSWrjFAB2yvKGRYUnXFU103mZQ0tJQObL23+bvqX1KBPd+Iu4EVjH9rcsbsuZvOinKjl7zA000p0geo1Kdmb9g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758477255; c=relaxed/simple;
-	bh=ypzo+3PMu9bLzVVOUbp8LKYZ7ZW06X9TJgzOBqby/8g=;
+	s=arc-20240116; t=1758485062; c=relaxed/simple;
+	bh=oK6PNMhjBQuguBf6ZyCDvGmGsPBZFWxojb6mTU595d4=;
 	h=Content-Type:MIME-Version:In-Reply-To:References:Subject:From:Cc:
-	 To:Date:Message-ID; b=jbbrDtI/o+1ytNXvTKtOGcDjYmJwDycFgYJuvELuybtYAL/l2kV0BRMvQlLGdIUbiSErESe75RtWyKmOMZcywqGYW59/S9vCOq8JQ2GYnjA36GFe5PBH+UqbCXp4nidbYzo9lDe+yJpp9qC7DPNDHwV8ucFA05/s5TMs9rp+GZA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dN9EP4k7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D94BDC4CEE7;
-	Sun, 21 Sep 2025 17:54:14 +0000 (UTC)
+	 To:Date:Message-ID; b=AaRp6PBxilph9v1Uvhr1LOETbN1w7tT9hWUoBmM6DBY+lZzqWufW3TIY7TMee/JE9tOKMsJzwVfCL6DWne9g4Rthqwq1sRtnvshjSiPUPDH7kRZXxOu2aJ4qKVOHE2un1cF9kDy4f5iZtuH1HSpT9mjfoBdqDJZIWg7LTVM0BEc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iCTBvx1y; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A835C4CEE7;
+	Sun, 21 Sep 2025 20:04:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758477255;
-	bh=ypzo+3PMu9bLzVVOUbp8LKYZ7ZW06X9TJgzOBqby/8g=;
+	s=k20201202; t=1758485061;
+	bh=oK6PNMhjBQuguBf6ZyCDvGmGsPBZFWxojb6mTU595d4=;
 	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=dN9EP4k7trHibwCBzzsM5veaTrH/dC46AzdFdMJxejZ0CV7NFya1PlK9k2f2XyZZJ
-	 fJ4CVcifA1piF6s5izpji5JiuljVxrDNagoAdmgXOo59QMS+xGapjHZytK37J7t7uh
-	 sMdkt5rj5djJhVMEpvwxScYO5KxNxmei4ADIrdHSmc9PbWEme8pnnd0UXLEWJPEHVQ
-	 d+523Yz1Xz0T7YCPct3W/+aDi81G3x/fDAEBZjOB8modZt5DOTy6XvgPDsDjZ8+G/b
-	 nBxd/88YbYKmdMKDPMigyhLfbQBC0EXuRNr6Jn1zNiCqBp5QtXBTpqvIVDtrpkdxDZ
-	 1xh2xEgAWsxVA==
+	b=iCTBvx1ycWtFaxbFJjKnE8lmTRV6YKBljeoNPWr3O0f9KOI2wK+gY/chvSLppb2iw
+	 nKDM1jLs/kX3EvgUACM5BKR1e32v5rVmusbFg6REu8gh8nHtL4KnpR4cztPIEWYsyn
+	 85sV5ZWf8I2axh1P00A55pSPIoljTkKeShL0Yo6iD75KN1B4tcxd0MZkgqGmYUT1mQ
+	 IpOfY2l2pbjRNsgwxsBcIB9YfzgZxcgmX2t0tM84PDIkYUJsgjzu0i/zQZHS16n4gv
+	 WrApdIyoKSa91FOKnNUjwHaVFh7bF8WfL1saxL8xffSMJav7UkpqNUB9WhDh8//gHr
+	 V8yFvFNiMSeTQ==
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -49,50 +49,33 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20250915080157.28195-7-clamor95@gmail.com>
-References: <20250915080157.28195-1-clamor95@gmail.com> <20250915080157.28195-7-clamor95@gmail.com>
-Subject: Re: [PATCH v3 06/11] clk: tegra: remove EMC to MC clock mux in Tegra114
+In-Reply-To: <20250623-byeword-update-v2-19-cf1fc08a2e1f@collabora.com>
+References: <20250623-byeword-update-v2-0-cf1fc08a2e1f@collabora.com> <20250623-byeword-update-v2-19-cf1fc08a2e1f@collabora.com>
+Subject: Re: [PATCH v2 19/20] clk: sp7021: switch to FIELD_PREP_WM16 macro
 From: Stephen Boyd <sboyd@kernel.org>
-Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, linux-tegra@vger.kernel.org, linux-clk@vger.kernel.org, linux-pm@vger.kernel.org
-To: Chanwoo Choi <cw00.choi@samsung.com>, Conor Dooley <conor+dt@kernel.org>, Dmitry Osipenko <digetx@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>, Krzysztof Kozlowski <krzk@kernel.org>, Kyungmin Park <kyungmin.park@samsung.com>, Michael Turquette <mturquette@baylibre.com>, Mikko Perttunen <mperttunen@nvidia.com>, MyungJoo Ham <myungjoo.ham@samsung.com>, Prashant Gaikwad <pgaikwad@nvidia.com>, Rob Herring <robh@kernel.org>, Svyatoslav Ryhel <clamor95@gmail.com>, Thierry Reding <thierry.reding@gmail.com>, Thierry Reding <treding@nvidia.com>
-Date: Sun, 21 Sep 2025 10:54:13 -0700
-Message-ID: <175847725338.4354.4145979844570539358@lazor>
+Cc: kernel@collabora.com, linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org, linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, linux-phy@lists.infradead.org, linux-sound@vger.kernel.org, netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, linux-pci@vger.kernel.org, linux-pm@vger.kernel.org, linux-clk@vger.kernel.org, llvm@lists.linux.dev, Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+To: Alexandre Torgue <alexandre.torgue@foss.st.com>, Andrew Lunn <andrew+netdev@lunn.ch>, Andy Yan <andy.yan@rock-chips.com>, Bill Wendling <morbo@google.com>, Bjorn Helgaas <bhelgaas@google.com>, Chanwoo Choi <cw00.choi@samsung.com>, David Airlie <airlied@gmail.com>, David S. Miller <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Heiko Stuebner <heiko@sntech.de>, Jaehoon Chung <jh80.chung@samsung.com>, Jakub Kicinski <kuba@kernel.org>, Jaroslav Kysela <perex@perex.cz>, Justin Stitt <justinstitt@google.com>, Kishon Vijay Abraham I <kishon@kernel.org>, Krzysztof =?utf-8?q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>, Kyungmin Park <kyungmin.park@samsung.com>, Liam Girdwood <lgirdwood@gmail.com>, Lorenzo Pieralisi <lpieralisi@kernel.org>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Manivannan Sadhasivam <mani@kernel.org>, Mark Brown <broonie@kernel.org>, Mauro Carvalho Chehab <mchehab@kernel.org>, Maxime Coquelin <mcoquelin.stm32@gmail.com>, Maxime Ripard <mripard@k
+ ernel.org>, Michael Turquette <mturquette@baylibre.com>, MyungJoo Ham <myungjoo.ham@samsung.com>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Nicolas Frattaroli <frattaroli.nicolas@gmail.com>, Nicolas Frattaroli <nicolas.frattaroli@collabora.com>, Paolo Abeni <pabeni@redhat.com>, Qin Jian <qinjian@cqplus1.com>, Rasmus Villemoes <linux@rasmusvillemoes.dk>, Rob Herring <robh@kernel.org>, Sandy Huang <hjc@rock-chips.com>, Shawn Lin <shawn.lin@rock-chips.com>, Shreeya Patel <shreeya.patel@collabora.com>, Simona Vetter <simona@ffwll.ch>, Takashi Iwai <tiwai@suse.com>, Thomas Zimmermann <tzimmermann@suse.de>, Ulf Hansson <ulf.hansson@linaro.org>, Vinod Koul <vkoul@kernel.org>, Yury Norov <yury.norov@gmail.com>
+Date: Sun, 21 Sep 2025 13:04:19 -0700
+Message-ID: <175848505982.4354.2243738737036950081@lazor>
 User-Agent: alot/0.11
 
-Quoting Svyatoslav Ryhel (2025-09-15 01:01:52)
-> diff --git a/drivers/clk/tegra/clk-tegra114.c b/drivers/clk/tegra/clk-teg=
-ra114.c
-> index 8bde72aa5e68..6b3a140772c2 100644
-> --- a/drivers/clk/tegra/clk-tegra114.c
-> +++ b/drivers/clk/tegra/clk-tegra114.c
-> @@ -1321,6 +1309,28 @@ static int tegra114_reset_deassert(unsigned long i=
-d)
->         return 0;
->  }
-> =20
-> +#ifdef CONFIG_TEGRA124_CLK_EMC
-> +static struct clk *tegra114_clk_src_onecell_get(struct of_phandle_args *=
-clkspec,
-> +                                               void *data)
-> +{
-> +       struct clk_hw *hw;
-> +       struct clk *clk;
-> +
-> +       clk =3D of_clk_src_onecell_get(clkspec, data);
-> +       if (IS_ERR(clk))
-> +               return clk;
-> +
-> +       hw =3D __clk_get_hw(clk);
+Quoting Nicolas Frattaroli (2025-06-23 09:05:47)
+> The sp7021 clock driver has its own shifted high word mask macro,
+> similar to the ones many Rockchip drivers have.
+>=20
+> Remove it, and replace instances of it with hw_bitfield.h's
+> FIELD_PREP_WM16 macro, which does the same thing except in a common
+> macro that also does compile-time error checking.
+>=20
+> This was compile-tested with 32-bit ARM with Clang, no runtime tests
+> were performed as I lack the hardware. However, I verified that fix
+> commit 5c667d5a5a3e ("clk: sp7021: Adjust width of _m in HWM_FIELD_PREP()=
+")
+> is not regressed. No warning is produced.
+>=20
+> Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+> ---
 
-Can you just use of_clk_hw_onecell_get() instead? Then we don't need to
-use __clk_get_hw(). Or is this whole function used to return a clk
-pointer to something that isn't the clk framework?
-
-> +
-> +       if (clkspec->args[0] =3D=3D TEGRA114_CLK_EMC) {
-> +               if (!tegra124_clk_emc_driver_available(hw))
-> +                       return ERR_PTR(-EPROBE_DEFER);
-> +       }
-> +
-> +       return clk;
+Acked-by: Stephen Boyd <sboyd@kernel.org>
 
