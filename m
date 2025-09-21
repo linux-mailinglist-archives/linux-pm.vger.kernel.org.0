@@ -1,180 +1,174 @@
-Return-Path: <linux-pm+bounces-35100-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35103-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E277B8CEFD
-	for <lists+linux-pm@lfdr.de>; Sat, 20 Sep 2025 20:43:50 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 052CCB8D417
+	for <lists+linux-pm@lfdr.de>; Sun, 21 Sep 2025 05:20:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 201AE7A3BC6
-	for <lists+linux-pm@lfdr.de>; Sat, 20 Sep 2025 18:42:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0511E3A3F6E
+	for <lists+linux-pm@lfdr.de>; Sun, 21 Sep 2025 03:20:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74003313281;
-	Sat, 20 Sep 2025 18:43:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A29823D7C5;
+	Sun, 21 Sep 2025 03:20:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b="iC6oMZYR"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="onVOmkFD"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B1C923AB9C;
-	Sat, 20 Sep 2025 18:43:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758393822; cv=pass; b=oXi3TDThrjO03ORoP1ePn/ICm7nUlySEXi6wI0WLbDCHv3CmDd1+55od62V3Bnjd5EcIxflr3QnWgQH88aADP/20dqMj9TYOTN+LBf/E2oBoMAWvQSfrs7Fw/ycpWoE5UCVAxHSjqAJiSNhk5fLs55h827cyPYT6987k0zrA2lM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758393822; c=relaxed/simple;
-	bh=R5HRn2PgReoUKMx1eBc0jNxUugrZtBDmynmUJ5SSmPw=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=L1A+YFg2WqDNEwXRONETQI9Si59ec9OWe2btxMQ9Z8iz1EWDxJ5g7uLx/tj7bOOya6un3K+cu3ZZGGZOuypG0kscPvrrgTfcTG9hn7/MYkrA/+lTn6OPbGUkGgUlQtn+/JoeDol0NuUgn8I//FsozGEuehDDKlDRbZ2AR/Ys6L8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b=iC6oMZYR; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1758393802; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=cEgYZDLzfRP3m0D9gSl5NMlItx9GewrgEUTZAiHK3nGSyIXs4DaNdHMHzfnKYiIACio1d4WeTBfmRlAWFVRdcfpggn2YdGsPmz1NJY9Vw0PQFLfGOw5lQ3b+8OhhzOtMu5tMEgfrYAlC33/OyhuUlYY6DN4FhcDLXQxEgY5hKlU=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1758393802; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=R5HRn2PgReoUKMx1eBc0jNxUugrZtBDmynmUJ5SSmPw=; 
-	b=DqxVBuq2QpZPyjeW57aAHrzuN/LZRdAqTtRxX2/7pWM9Jt872YpvI4tdTyUKnVMpmZOQcq8mM7oROAo/QcwJro9USQgCZH/3+ISIsouhddS8kGOTlnXkDxBtBZxoCuszdUsNqQlNR6aQ5DbWbF8FZEwThWEFNdCa6hR8Kxou4xs=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=daniel.almeida@collabora.com;
-	dmarc=pass header.from=<daniel.almeida@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1758393802;
-	s=zohomail; d=collabora.com; i=daniel.almeida@collabora.com;
-	h=Content-Type:Mime-Version:Subject:Subject:From:From:In-Reply-To:Date:Date:Cc:Cc:Content-Transfer-Encoding:Message-Id:Message-Id:References:To:To:Reply-To;
-	bh=R5HRn2PgReoUKMx1eBc0jNxUugrZtBDmynmUJ5SSmPw=;
-	b=iC6oMZYRwJzyxocUOTGpkz0W+HXvdWA/p+MCy8s4jLrgF/+jujT7eZb5sndiChgw
-	xzLdjOImTgm74cJIoy6Mip+/rXXKSL1nSEi+dWRHMfO+Ub3UwpbxXxtuMT4omCRgK3R
-	VdatzvX+GUurkMZ4u6vXlFq6VXMKjGTBv+beyh9U=
-Received: by mx.zohomail.com with SMTPS id 1758393800802877.2320752719693;
-	Sat, 20 Sep 2025 11:43:20 -0700 (PDT)
-Content-Type: text/plain;
-	charset=utf-8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ACC11A9FAB;
+	Sun, 21 Sep 2025 03:19:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1758424802; cv=none; b=foSZqALsgfD7eNcCYKZOowKE9ny++M9TzcgHic/XN4ONzb53/EfDqKngampL4kXeegbwrvxANyyCl9Fpchkv+hWJEcmgaTZxndf3fAY8K2aMvB5ICmV4fDgaI4eenFRn3e7S0LjgcLL94Ld1yyKbUFPfeN/RTUUjoCULFyjihdM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1758424802; c=relaxed/simple;
+	bh=yKg/EdmaT2g3V8Kg9AIXOKGf+P7IzfKKOVhAO+PFpcA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pZdrTa5O0pYPb3A30PlAb8tycOXCjiyQrVFgwAgVHafHbAzGdoXKy2m65m/30Hq0DybsAmQgqNrLUepB145Naw4ZU28iILWEivNB+cdw56g+4VwYXcIQi0mOP8VQHyvuWe4/3QUOIubgO4UpqgqbnI8PF0yz2wb0NwzwNAlqLd0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=onVOmkFD; arc=none smtp.client-ip=213.97.179.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:
+	Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=84C0iinDhnhA7DjXWAEPmRL6bo1hZ2IX/hlUcd5dYis=; b=onVOmkFDQDjodACWYgF0c7r1Lq
+	huG/zss0ca/ANDfif8RgGrCHnFMFr7NVynqLWEp6L1uAjzRw5+q2xRTVkJObxBG9VQEs/mLtw9mi4
+	xi5sB+jte7fm03R6QGlbguiHZcG2kJPU0to+dk9y1TIqbwhePzAfSWa7cXWzA8CJn268yfaTTiSGe
+	nEbY6YMukZp7d5RICtZz5e/lQdQZumUn4s+3GdUKjWSuROn/0qj10+xnW039+Is4rtMMl9P9E5UNe
+	dOUgsWp2R88YaqeqZxtx93GtVVbOZS39TboNj3dLnCDmHzhfSYWw27tMacv2dfSAprpPZ+em7YiA/
+	iroBeFxw==;
+Received: from [58.29.143.236] (helo=localhost)
+	by fanzine2.igalia.com with utf8esmtpsa 
+	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+	id 1v0Abw-00Ecfe-TK; Sun, 21 Sep 2025 05:19:38 +0200
+From: Changwoo Min <changwoo@igalia.com>
+To: lukasz.luba@arm.com,
+	rafael@kernel.org,
+	len.brown@intel.com,
+	pavel@kernel.org
+Cc: christian.loehle@arm.com,
+	tj@kernel.org,
+	kernel-dev@igalia.com,
+	linux-pm@vger.kernel.org,
+	sched-ext@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Changwoo Min <changwoo@igalia.com>
+Subject: [PATCH RESEND v4 00/10] PM: EM: Add netlink support for the energy model
+Date: Sun, 21 Sep 2025 12:19:18 +0900
+Message-ID: <20250921031928.205869-1-changwoo@igalia.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.700.81\))
-Subject: Re: [PATCH v2 1/2] rust: clk: implement Send and Sync
-From: Daniel Almeida <daniel.almeida@collabora.com>
-In-Reply-To: <CAH5fLgib2a7UK0cYqy1cM6h_OZDMWf+JX+KpXXCJNTZchyfP5A@mail.gmail.com>
-Date: Sat, 20 Sep 2025 20:43:05 +0200
-Cc: Stephen Boyd <sboyd@kernel.org>,
- Boqun Feng <boqun.feng@gmail.com>,
- Michael Turquette <mturquette@baylibre.com>,
- Miguel Ojeda <ojeda@kernel.org>,
- Alex Gaynor <alex.gaynor@gmail.com>,
- Gary Guo <gary@garyguo.net>,
- =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
- Benno Lossin <lossin@kernel.org>,
- Andreas Hindborg <a.hindborg@kernel.org>,
- Trevor Gross <tmgross@umich.edu>,
- Danilo Krummrich <dakr@kernel.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Viresh Kumar <viresh.kumar@linaro.org>,
- linux-clk@vger.kernel.org,
- rust-for-linux@vger.kernel.org,
- linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <0EAFA337-2E62-489E-9C22-61A6E1813C8A@collabora.com>
-References: <20250910-clk-type-state-v2-0-1b97c11bb631@collabora.com>
- <20250910-clk-type-state-v2-1-1b97c11bb631@collabora.com>
- <aMG6JVMcMxVuX7De@tardis-2.local>
- <3D936C1B-FBA9-4964-859C-84BB665BBE3B@collabora.com>
- <175834480479.4354.6269916774389395049@lazor>
- <CAH5fLgib2a7UK0cYqy1cM6h_OZDMWf+JX+KpXXCJNTZchyfP5A@mail.gmail.com>
-To: Alice Ryhl <aliceryhl@google.com>
-X-Mailer: Apple Mail (2.3826.700.81)
-X-ZohoMailClient: External
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
+Rebased the code to current HEAD of the linus tree.
 
+There is a need to access the energy model from the userspace. One such
+example is the sched_ext schedulers [1]. The userspace part of the
+sched_ext schedules could feed the (post-processed) energy-model
+information to the BPF part of the scheduler.
 
-> On 20 Sep 2025, at 19:12, Alice Ryhl <aliceryhl@google.com> wrote:
->=20
-> On Sat, Sep 20, 2025 at 7:06=E2=80=AFAM Stephen Boyd =
-<sboyd@kernel.org> wrote:
->>=20
->> Quoting Daniel Almeida (2025-09-10 11:47:30)
->>> Hi Boqun,
->>>=20
->>>> On 10 Sep 2025, at 14:49, Boqun Feng <boqun.feng@gmail.com> wrote:
->>>>=20
->>>> On Wed, Sep 10, 2025 at 02:28:27PM -0300, Daniel Almeida wrote:
->>>>> From: Alice Ryhl <aliceryhl@google.com>
->>>>>=20
->>>>> These traits are required for drivers to embed the Clk type in =
-their own
->>>>> data structures because driver data structures are usually =
-required to
->>>>> be Send. See e.g. [1] for the kind of workaround that drivers =
-currently
->>>>> need due to lacking this annotation.
->>>>>=20
->>>>> Link: =
-https://lore.kernel.org/rust-for-linux/20250812-tyr-v2-1-9e0f3dc9da95@coll=
-abora.com/ [1]
->>>>> Signed-off-by: Daniel Almeida <daniel.almeida@collabora.com>
->>>>> Signed-off-by: Alice Ryhl <aliceryhl@google.com>
->>>>> Reviewed-by: Danilo Krummrich <dakr@kernel.org>
->>>>> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
->>>>> Reviewed-by: Daniel Almeida <daniel.almeida@collabora.com>
->>>>=20
->>>> This tag list looks a bit weird to me. Why is there a SoB from you
->>>> before Alice's SoB? At least for the usage I'm familiar with, =
-outside
->>>> the case of Co-developed-bys, multiple SoBs is used for recording =
-how
->>>> the patches are routed. For example, if I have a patch that has my =
-SoB
->>>> and I send it to you, you queue in your tree and then send out to =
-other
->>>> maintainers for merging, in general you would put your SoB after =
-mine in
->>>> that case. But I don't think that's case here? Alice's patch has =
-only
->>>> her SoB:
->>>>=20
->>>> =
-https://lore.kernel.org/rust-for-linux/20250904-clk-send-sync-v1-1-48d0233=
-20eb8@google.com/
->>>>=20
->>>> What's the intention of the SoB tag here?
->>>>=20
->>>> Otherwise the patch looks good to me. If we get the tag list =
-resolved,
->>>> feel free to add:
->>>>=20
->>>> Reviewed-by: Boqun Feng <boqun.feng@gmail.com>
->>>>=20
->>>> Regards,
->>>> Boqun
->>>>=20
->>>=20
->>> You have to include your SOB when submitting patches from others.
->>>=20
->>> This is something I tend to forget often, so I made sure it was =
-there. The
->>> order may be indeed off though.
->>=20
->> Yes the order is wrong. The first SoB should be the commit author.
->=20
-> One optoin is to just land the original patch:
-> =
-https://lore.kernel.org/all/20250904-clk-send-sync-v1-1-48d023320eb8@googl=
-e.com/
->=20
-> Alice
+Currently, debugfs is the only way to read the energy model from userspace;
+however, it lacks proper notification mechanisms when a performance domain
+and its associated energy model change.
 
-I guess this makes even more sense. I was hoping to land these two =
-together,
-but clearly this will not be possible for the time being as the second =
-patch
-has no r-b tags.
+This patch set introduces a generic netlink for the energy model, as
+discussed in [2]. It allows a userspace program to read the performance
+domain and its energy model. It notifies the userspace program when a
+performance domain is created or deleted or its energy model is updated
+through a multicast interface.
 
-=E2=80=94 Daniel=
+Specifically, it supports two commands:
+  - EM_CMD_GET_PDS: Get the list of information for all performance
+    domains.
+  - EM_CMD_GET_PD_TABLE: Get the energy model table of a performance
+    domain.
+
+Also, it supports three notification events:
+  - EM_CMD_PD_CREATED: When a performance domain is created.
+  - EM_CMD_PD_DELETED: When a performance domain is deleted.
+  - EM_CMD_PD_UPDATED: When the energy model table of a performance domain
+    is updated.
+
+This can be tested using the tool, tools/net/ynl/pyynl/cli.py, for example,
+with the following commands:
+
+  $> tools/net/ynl/pyynl/cli.py \
+     --spec Documentation/netlink/specs/em.yaml \
+     --do get-pds
+  $> tools/net/ynl/pyynl/cli.py \
+     --spec Documentation/netlink/specs/em.yaml \
+     --do get-pd-table --json '{"pd-id": 0}'
+  $> tools/net/ynl/pyynl/cli.py \
+     --spec Documentation/netlink/specs/em.yaml \
+     --subscribe event  --sleep 10
+
+[1] https://lwn.net/Articles/922405/
+[2] https://lore.kernel.org/lkml/a82423bc-8c38-4d57-93da-c4f20011cc92@arm.com/
+[3] https://lore.kernel.org/lkml/202506140306.tuIoz8rN-lkp@intel.com/#t
+
+ChangeLog v3 -> v4:
+  - Move patches [3-5] to the first.
+  - Remove the ending period (".") from all of the patch subjects.
+  - Rebase the code to v6.17-rc4.
+
+ChangeLog v2 -> v3:
+  - Properly initialize a return variable in
+    em_notify_pd_created/updated() at an error path (09/10), reported by
+    the kernel test robot [3].
+  - Remove redundant initialization of a return variable in
+    em_notify_pd_deleted() at an error path (08/10).
+
+ChangeLog v1 -> v2:
+  - Use YNL to generate boilerplate code. Overhaul the naming conventions
+    (command, event, notification, attribute) to follow the typical
+    conventions of other YNL-based netlink implementations.
+  - Calculate the exact message size instead of using NLMSG_GOODSIZE
+    when allocating a message (genlmsg_new). This avoids the reallocation
+    of a message.
+  - Remove an unnecessary function, em_netlink_exit(), and initialize the
+    netlink (em_netlink_init) at em_netlink.c without touching energy_model.c.
+
+Changwoo Min (10):
+  PM: EM: Assign a unique ID when creating a performance domain
+  PM: EM: Expose the ID of a performance domain via debugfs
+  PM: EM: Add an iterator and accessor for the performance domain
+  PM: EM: Add em.yaml and autogen files
+  PM: EM: Add a skeleton code for netlink notification
+  PM: EM: Implement em_nl_get_pds_doit()
+  PM: EM: Implement em_nl_get_pd_table_doit()
+  PM: EM: Implement em_notify_pd_deleted()
+  PM: EM: Implement em_notify_pd_created/updated()
+  PM: EM: Notify an event when the performance domain changes
+
+ Documentation/netlink/specs/em.yaml | 113 ++++++++++
+ MAINTAINERS                         |   3 +
+ include/linux/energy_model.h        |  19 ++
+ include/uapi/linux/energy_model.h   |  62 ++++++
+ kernel/power/Makefile               |   5 +-
+ kernel/power/em_netlink.c           | 311 ++++++++++++++++++++++++++++
+ kernel/power/em_netlink.h           |  34 +++
+ kernel/power/em_netlink_autogen.c   |  48 +++++
+ kernel/power/em_netlink_autogen.h   |  23 ++
+ kernel/power/energy_model.c         |  86 +++++++-
+ 10 files changed, 702 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/netlink/specs/em.yaml
+ create mode 100644 include/uapi/linux/energy_model.h
+ create mode 100644 kernel/power/em_netlink.c
+ create mode 100644 kernel/power/em_netlink.h
+ create mode 100644 kernel/power/em_netlink_autogen.c
+ create mode 100644 kernel/power/em_netlink_autogen.h
+
+-- 
+2.51.0
+
 
