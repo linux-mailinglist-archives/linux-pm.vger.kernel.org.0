@@ -1,222 +1,77 @@
-Return-Path: <linux-pm+bounces-35123-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35124-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BAB33B8DF53
-	for <lists+linux-pm@lfdr.de>; Sun, 21 Sep 2025 18:19:02 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 97474B8E293
+	for <lists+linux-pm@lfdr.de>; Sun, 21 Sep 2025 19:51:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 67CC13BEAB5
-	for <lists+linux-pm@lfdr.de>; Sun, 21 Sep 2025 16:19:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 952D71896C20
+	for <lists+linux-pm@lfdr.de>; Sun, 21 Sep 2025 17:51:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3053C23497B;
-	Sun, 21 Sep 2025 16:18:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D959626E6E2;
+	Sun, 21 Sep 2025 17:51:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X0YkirdK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="utnWX05/"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3320232368;
-	Sun, 21 Sep 2025 16:18:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76214258CE5;
+	Sun, 21 Sep 2025 17:51:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758471538; cv=none; b=cq3uyw2ROfEV3ye+1a6UeZRYzHUxJH+H6+TQgZyUyamfubs4WPS6zqTzfNkzKyR+LSsNegCnkXINGGZcHcJI2psMafVrOI7KZDt97KzTlDUrgkUW3RE/E6gDQNtlhNNp0UA9clC8dK5HRV9cwrBZOlPm1K/5YjePZgEK2I1QEoA=
+	t=1758477066; cv=none; b=AP+8zv4kKdo7O/PJUWEoEn+9UERfzS+QHTAa89vd1iZJhCs+qI6NCwKZRx4BHe2i7LIiLMYrjC99TNZa2tdTBMbZkOoeG2m9Fl4xJjhB2Q92VAAWR8I3s6r6dIn3dA6WBwMZhsdOeGScii1yWo2yMuaQQd6LjxVgfG2jWn1ug4g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758471538; c=relaxed/simple;
-	bh=tNt1C79v7ooKxo6ttTiw6plTbXJzVX61mmSGvgXDQRQ=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:From:Subject:Cc:
-	 References:In-Reply-To; b=ZWMN6i5Yp36V1imnpsG2W5nzk7wQUQOwva68QhPDGZCUIrWb39rK+55Qj7ItbzEpo/1+kXdbCQciX+kkftOy8TqZKdNji+TeWk8XlMifTP0IO1vVqUhZp9JT/iGnan34O7vN+k5akgaBa1/qaOiBk7sIyoKpR019pwXUtmMpcdQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X0YkirdK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FED9C116B1;
-	Sun, 21 Sep 2025 16:18:54 +0000 (UTC)
+	s=arc-20240116; t=1758477066; c=relaxed/simple;
+	bh=e/lBJw/pvOeOhA+TnoE8B9EgHverZBvwU1Z9gNAbIbE=;
+	h=Content-Type:MIME-Version:In-Reply-To:References:Subject:From:Cc:
+	 To:Date:Message-ID; b=a+pUn6mln5ePyDeXlR51sagMuNqOxnSv1/9UkdlDG4udvGw2CZ2klTHFWet4nZbyLgaF2jupgNYkcK4oOPxbu7wWdnOYyY+fExR00P+8gH4/L4fVYPygQcwpHC16S4UjzM7OWDlEAK3+FxXai7Zn77p8idiA/qZu6hjHgpdPM6s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=utnWX05/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E615CC4CEE7;
+	Sun, 21 Sep 2025 17:51:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758471537;
-	bh=tNt1C79v7ooKxo6ttTiw6plTbXJzVX61mmSGvgXDQRQ=;
-	h=Date:To:From:Subject:Cc:References:In-Reply-To:From;
-	b=X0YkirdK6o10JyKP5wIFLCySESz7yoxv3vF4kXkgZJEomjk+YhSa6fM1DB5S3Zmsm
-	 ZFVwyaKVAWXFNruvEapkH4rmXBtmLv21+JPTAfgnw58/HPrxaq8CAQUGYE4DsIzWJi
-	 oPTVpOKAyu4tWEjFpYgTPzdxPP0EVQIGmbnPfMnYAlAqWijkpUtB9uLJtGZfigARUv
-	 Pjie0g1WSpvWTkM2itocRdaK2/rL0CyGi4fBc2LmJTw0QAqRfonL2k8NZT47dPLsNb
-	 EnSS0xMKVvj6xd3M054ITh5CE1r8VR3T270IBV8x8Kw6w5auelmBD8nWOPQPMdXrI8
-	 AezPuG+VanBUA==
+	s=k20201202; t=1758477066;
+	bh=e/lBJw/pvOeOhA+TnoE8B9EgHverZBvwU1Z9gNAbIbE=;
+	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+	b=utnWX05/rsIn1ShsYYQQjUjEpkqzGWCNfoKPCRIbfgNZyHfKxFOZtvWJppj6U6cvC
+	 WMvyP9nTRqm4EEonMC8BI0pZLyktz5kDMjV7s4f4TxO5iu5GORbRq8Avv9+wL/dr/z
+	 MCp/Olzf7wjDJSJEIwsWjIL6CkTIdojhXUPG8kksZYbk7txcQwdfV2DVbbE+m5noyu
+	 OGIUOk7ORLhJX9Z3ACX5VXJqhvg7Djc1/3rdkKVJtpflAWzlBPivFRoSqyc6ZbUpQV
+	 8gWRng22bVbrlLSuLGf/emRwdTfSaZALXmyjkcHzgXOpV7e3KPYzQjl7yNUos1/Kgu
+	 5A2cX9kHttFVA==
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sun, 21 Sep 2025 18:18:52 +0200
-Message-Id: <DCYM4TPGMFF5.3J6H7VPADC0W0@kernel.org>
-To: "Daniel Almeida" <daniel.almeida@collabora.com>
-From: "Danilo Krummrich" <dakr@kernel.org>
-Subject: Re: [PATCH v2 2/2] rust: clk: use the type-state pattern
-Cc: "Michael Turquette" <mturquette@baylibre.com>, "Stephen Boyd"
- <sboyd@kernel.org>, "Miguel Ojeda" <ojeda@kernel.org>, "Alex Gaynor"
- <alex.gaynor@gmail.com>, "Boqun Feng" <boqun.feng@gmail.com>, "Gary Guo"
- <gary@garyguo.net>, =?utf-8?q?Bj=C3=B6rn_Roy_Baron?=
- <bjorn3_gh@protonmail.com>, "Benno Lossin" <lossin@kernel.org>, "Andreas
- Hindborg" <a.hindborg@kernel.org>, "Alice Ryhl" <aliceryhl@google.com>,
- "Trevor Gross" <tmgross@umich.edu>, "Rafael J. Wysocki"
- <rafael@kernel.org>, "Viresh Kumar" <viresh.kumar@linaro.org>,
- <linux-clk@vger.kernel.org>, <rust-for-linux@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>
-References: <20250910-clk-type-state-v2-0-1b97c11bb631@collabora.com>
- <20250910-clk-type-state-v2-2-1b97c11bb631@collabora.com>
-In-Reply-To: <20250910-clk-type-state-v2-2-1b97c11bb631@collabora.com>
+In-Reply-To: <20250913-pxa1908-genpd-v4-3-55e4cf32f619@dujemihanovic.xyz>
+References: <20250913-pxa1908-genpd-v4-0-55e4cf32f619@dujemihanovic.xyz> <20250913-pxa1908-genpd-v4-3-55e4cf32f619@dujemihanovic.xyz>
+Subject: Re: [PATCH v4 3/4] clk: mmp: pxa1908: Instantiate power driver through auxiliary bus
+From: Stephen Boyd <sboyd@kernel.org>
+Cc: David Wronek <david@mainlining.org>, Karel Balej <balejk@matfyz.cz>, phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht, linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, Duje =?utf-8?q?Mihanovi=C4=87?= <duje@dujemihanovic.xyz>
+To: Conor Dooley <conor+dt@kernel.org>, Duje =?utf-8?q?Mihanovi=C4=87?= <dujemihanovic32@gmail.com>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Michael Turquette <mturquette@baylibre.com>, Rob Herring <robh@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>
+Date: Sun, 21 Sep 2025 10:51:04 -0700
+Message-ID: <175847706450.4354.2268547686521833352@lazor>
+User-Agent: alot/0.11
 
-On Wed Sep 10, 2025 at 7:28 PM CEST, Daniel Almeida wrote:
-> +    /// Obtains and enables a [`devres`]-managed [`Clk`] for a device.
-> +    ///
-> +    /// [`devres`]: crate::devres::Devres
-> +    pub fn devm_enable(dev: &Device, name: Option<&CStr>) -> Result {
-> +        let name =3D name.map_or(ptr::null(), |n| n.as_ptr());
-> +
-> +        // SAFETY: It is safe to call [`devm_clk_get_enabled`] with a va=
-lid
-> +        // device pointer.
+Quoting Duje Mihanovi=C4=87 (2025-09-13 14:12:50)
+> From: Duje Mihanovi=C4=87 <duje@dujemihanovic.xyz>
+>=20
+> The power domain driver shares the APMU clock controller's registers.
+> Instantiate the power domain driver through the APMU clock driver using
+> the auxiliary bus.
+>=20
+> Also create a separate Kconfig entry for the PXA1908 clock driver to
+> allow (de)selecting the driver at will and selecting
+> CONFIG_AUXILIARY_BUS.
+>=20
+> Signed-off-by: Duje Mihanovi=C4=87 <duje@dujemihanovic.xyz>
+> ---
 
-It's not, since this calls into devres it is only safe with a pointer to a =
-bound
-device, i.e. you need to require &Device<Bound>.
-
-You also need to justify the CStr pointer in terms of being NULL and its
-lifetime.
-
-> +        from_err_ptr(unsafe { bindings::devm_clk_get_enabled(dev.as_raw(=
-), name) })?;
-> +        Ok(())
-> +    }
-> +
-> +    /// Obtains and enables a [`devres`]-managed [`Clk`] for a device.
-> +    ///
-> +    /// This does not print any error messages if the clock is not found=
-.
-> +    ///
-> +    /// [`devres`]: crate::devres::Devres
-> +    pub fn devm_enable_optional(dev: &Device, name: Option<&CStr>) -> Re=
-sult {
-> +        let name =3D name.map_or(ptr::null(), |n| n.as_ptr());
-> +
-> +        // SAFETY: It is safe to call [`devm_clk_get_optional_enabled`] =
-with a
-> +        // valid device pointer.
-> +        from_err_ptr(unsafe { bindings::devm_clk_get_optional_enabled(de=
-v.as_raw(), name) })?;
-> +        Ok(())
-> +    }
-> +
-> +    /// Same as [`devm_enable_optional`], but also sets the rate.
-> +    pub fn devm_enable_optional_with_rate(
-> +        dev: &Device,
-> +        name: Option<&CStr>,
-> +        rate: Hertz,
-> +    ) -> Result {
-> +        let name =3D name.map_or(ptr::null(), |n| n.as_ptr());
-> +
-> +        // SAFETY: It is safe to call
-> +        // [`devm_clk_get_optional_enabled_with_rate`] with a valid devi=
-ce
-> +        // pointer.
-> +        from_err_ptr(unsafe {
-> +            bindings::devm_clk_get_optional_enabled_with_rate(dev.as_raw=
-(), name, rate.as_hz())
-> +        })?;
-> +        Ok(())
-> +    }
-
-I think those should be added in a separate patch.
-
-> +    impl Clk<Unprepared> {
->          /// Gets [`Clk`] corresponding to a [`Device`] and a connection =
-id.
->          ///
->          /// Equivalent to the kernel's [`clk_get`] API.
->          ///
->          /// [`clk_get`]: https://docs.kernel.org/core-api/kernel-api.htm=
-l#c.clk_get
-> -        pub fn get(dev: &Device, name: Option<&CStr>) -> Result<Self> {
-> +        #[inline]
-> +        pub fn get(dev: &Device, name: Option<&CStr>) -> Result<Clk<Unpr=
-epared>> {
-
-Not related to your change, but I'm not sure we should allow drivers to mes=
-s
-with clocks when they can't prove that they're still bound to the correspon=
-ding
-device.
-
-It's not introducing any safety issues or unsoundness, but it's not the cor=
-rect
-thing to do semantically.
-
->              let con_id =3D name.map_or(ptr::null(), |n| n.as_ptr());
-> =20
->              // SAFETY: It is safe to call [`clk_get`] for a valid device=
- pointer.
-> -            //
-> +            let inner =3D from_err_ptr(unsafe { bindings::clk_get(dev.as=
-_raw(), con_id) })?;
-> +
->              // INVARIANT: The reference-count is decremented when [`Clk`=
-] goes out of scope.
-> -            Ok(Self(from_err_ptr(unsafe {
-> -                bindings::clk_get(dev.as_raw(), con_id)
-> -            })?))
-> +            Ok(Self {
-> +                inner,
-> +                _phantom: PhantomData,
-> +            })
->          }
-> =20
-> -        /// Obtain the raw [`struct clk`] pointer.
-> +        /// Behaves the same as [`Self::get`], except when there is no c=
-lock
-> +        /// producer. In this case, instead of returning [`ENOENT`], it =
-returns
-> +        /// a dummy [`Clk`].
->          #[inline]
-> -        pub fn as_raw(&self) -> *mut bindings::clk {
-> -            self.0
-> +        pub fn get_optional(dev: &Device, name: Option<&CStr>) -> Result=
-<Clk<Unprepared>> {
-> +            let con_id =3D name.map_or(ptr::null(), |n| n.as_ptr());
-> +
-> +            // SAFETY: It is safe to call [`clk_get`] for a valid device=
- pointer.
-
-What about con_id?
-
-> +            let inner =3D from_err_ptr(unsafe { bindings::clk_get_option=
-al(dev.as_raw(), con_id) })?;
-> +
-> +            // INVARIANT: The reference-count is decremented when [`Clk`=
-] goes out of scope.
-
-I know you're consistent with other places, but this seems a odd. This does=
-n't
-correspond to: "A [`Clk`] instance holds either a pointer to a valid [`stru=
-ct
-clk`] created by the C portion of the kernel or a NULL pointer."
-
-> +            Ok(Self {
-> +                inner,
-> +                _phantom: PhantomData,
-> +            })
->          }
-
-<snip>
-
-> +            // SAFETY: By the type invariants, self.as_raw() is a valid =
-argument for
-
-Missing backticks (also in a few other places).
-
-> +            // [`clk_put`].
-> +            unsafe { bindings::clk_put(self.as_raw()) };
->          }
->      }
+Applied to clk-next
 
