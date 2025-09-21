@@ -1,80 +1,222 @@
-Return-Path: <linux-pm+bounces-35122-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35123-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE06FB8DF0D
-	for <lists+linux-pm@lfdr.de>; Sun, 21 Sep 2025 18:12:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BAB33B8DF53
+	for <lists+linux-pm@lfdr.de>; Sun, 21 Sep 2025 18:19:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 08B7F189D369
-	for <lists+linux-pm@lfdr.de>; Sun, 21 Sep 2025 16:12:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 67CC13BEAB5
+	for <lists+linux-pm@lfdr.de>; Sun, 21 Sep 2025 16:19:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EFB42765C1;
-	Sun, 21 Sep 2025 16:08:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3053C23497B;
+	Sun, 21 Sep 2025 16:18:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k9VA4+Ov"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X0YkirdK"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48053275B15;
-	Sun, 21 Sep 2025 16:08:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3320232368;
+	Sun, 21 Sep 2025 16:18:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758470923; cv=none; b=XPZUOraAUtJWu+rAcss5RuL8XTCy3wV9Q8EO9bZtfDcZl7Xb+eG9XwyNJaHNlh5D+jvlmvTQWtYWu5NpiuPH0wOS7xyEtWwrwk0w6KlnFVuracks1Ac/qy5kGLzNxCVwv6XYRNY9TrOrEwVhyXDwHO5lR05ygSz2H4To6W6WXik=
+	t=1758471538; cv=none; b=cq3uyw2ROfEV3ye+1a6UeZRYzHUxJH+H6+TQgZyUyamfubs4WPS6zqTzfNkzKyR+LSsNegCnkXINGGZcHcJI2psMafVrOI7KZDt97KzTlDUrgkUW3RE/E6gDQNtlhNNp0UA9clC8dK5HRV9cwrBZOlPm1K/5YjePZgEK2I1QEoA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758470923; c=relaxed/simple;
-	bh=WAbk4PWWXEXWUyECLBWj+jZRHQjNujjT1F6/7IR7Wkc=;
-	h=Content-Type:MIME-Version:In-Reply-To:References:Subject:From:Cc:
-	 To:Date:Message-ID; b=Bw914eV9xNhY0DbIO7dYgnjKMbsASZAsHUNYOahoQlICDghZNAFOPK1SI7NQZtA5qFhtgX0MY3rqlYAFjoPNl6De8l+N1gsBpeMVRc3siWjKtD6Inlm9PDF5M1ih4vaZQrhOLQCY23U8+3eHN/zwKqTUE3oXvCkFzsQQ9j0tGy8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k9VA4+Ov; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F8CDC4CEE7;
-	Sun, 21 Sep 2025 16:08:42 +0000 (UTC)
+	s=arc-20240116; t=1758471538; c=relaxed/simple;
+	bh=tNt1C79v7ooKxo6ttTiw6plTbXJzVX61mmSGvgXDQRQ=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:From:Subject:Cc:
+	 References:In-Reply-To; b=ZWMN6i5Yp36V1imnpsG2W5nzk7wQUQOwva68QhPDGZCUIrWb39rK+55Qj7ItbzEpo/1+kXdbCQciX+kkftOy8TqZKdNji+TeWk8XlMifTP0IO1vVqUhZp9JT/iGnan34O7vN+k5akgaBa1/qaOiBk7sIyoKpR019pwXUtmMpcdQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X0YkirdK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FED9C116B1;
+	Sun, 21 Sep 2025 16:18:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758470922;
-	bh=WAbk4PWWXEXWUyECLBWj+jZRHQjNujjT1F6/7IR7Wkc=;
-	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=k9VA4+OvtF9WMxvlQ8gfo6xoYVgPhME93HuDeyjVf3VJQKg5L51KazbJGvnQm02j3
-	 GEWkqrPtWUqFxr15WM4BpVIZ9dGHMDnsux1aleg52r5KyYv+LHxTGl3b169Cwpso2A
-	 yUbcEIYwho2ZjYgeMp0c05LtDAyQHhYgWuVOQykRCV8P/ZAO0A2xrsHUFcZ1ZYVztd
-	 hVuGVTIdguTJgiGej5woK5cjYGCQTRMU+ddYcO0s3teIMgUWENJJnMWoMVmgI+Xo//
-	 WXIz1Ll5H7P+4YaCUMRhwXoBllRaGg+2qQdNCRdAyyrY7rJGZ0a5/DxMDhjkybdc75
-	 H1Hi9m6Bn3eAQ==
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1758471537;
+	bh=tNt1C79v7ooKxo6ttTiw6plTbXJzVX61mmSGvgXDQRQ=;
+	h=Date:To:From:Subject:Cc:References:In-Reply-To:From;
+	b=X0YkirdK6o10JyKP5wIFLCySESz7yoxv3vF4kXkgZJEomjk+YhSa6fM1DB5S3Zmsm
+	 ZFVwyaKVAWXFNruvEapkH4rmXBtmLv21+JPTAfgnw58/HPrxaq8CAQUGYE4DsIzWJi
+	 oPTVpOKAyu4tWEjFpYgTPzdxPP0EVQIGmbnPfMnYAlAqWijkpUtB9uLJtGZfigARUv
+	 Pjie0g1WSpvWTkM2itocRdaK2/rL0CyGi4fBc2LmJTw0QAqRfonL2k8NZT47dPLsNb
+	 EnSS0xMKVvj6xd3M054ITh5CE1r8VR3T270IBV8x8Kw6w5auelmBD8nWOPQPMdXrI8
+	 AezPuG+VanBUA==
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20250828-dt-apple-t6020-v1-26-507ba4c4b98e@jannau.net>
-References: <20250828-dt-apple-t6020-v1-0-507ba4c4b98e@jannau.net> <20250828-dt-apple-t6020-v1-26-507ba4c4b98e@jannau.net>
-Subject: Re: [PATCH 26/37] dt-bindings: clock: apple,nco: Add t6020-nco compatible
-From: Stephen Boyd <sboyd@kernel.org>
-Cc: asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, iommu@lists.linux.dev, linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, dri-devel@lists.freedesktop.org, linux-bluetooth@vger.kernel.org, linux-wireless@vger.kernel.org, linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org, linux-clk@vger.kernel.org, dmaengine@vger.kernel.org, linux-sound@vger.kernel.org, linux-spi@vger.kernel.org, linux-nvme@lists.infradead.org, Janne Grunau <j@jannau.net>
-To: Alyssa Rosenzweig <alyssa@rosenzweig.io>, Andi Shyti <andi.shyti@kernel.org>, Christoph Hellwig <hch@lst.de>, Conor Dooley <conor+dt@kernel.org>, David Airlie <airlied@gmail.com>, Guenter Roeck <linux@roeck-us.net>, Hector Martin <marcan@marcan.st>, Janne Grunau <j@jannau.net>, Jaroslav Kysela <perex@perex.cz>, Jassi Brar <jassisinghbrar@gmail.com>, Jens Axboe <axboe@kernel.dk>, Joerg Roedel <joro@8bytes.org>, Johannes Berg <johannes@sipsolutions.net>, Keith Busch <kbusch@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Lee Jones <lee@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, Linus Walleij <linus.walleij@linaro.org>, Luiz Augusto von Dentz <luiz.dentz@gmail.com>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Marc Zyngier <maz@kernel.org>, Marcel Holtmann <marcel@holtmann.org>, Mark Brown <broonie@kernel.org>, Mark Kettenis <kettenis@openbsd.org>, Martin =?utf-8?q?Povi=C5=A1er?= <povik+lin@cutebit.org>, Maxime Ripard <mripard@kernel.org>, Michael Turquette <
- mturquette@baylibre.com>, Neal Gompa <neal@gompa.dev>, Rafael J. Wysocki <rafael@kernel.org>, Rob Herring <robh@kernel.org>, Robin Murphy <robin.murphy@arm.com>, Sagi Grimberg <sagi@grimberg.me>, Sasha Finkelstein <fnkl.kernel@gmail.com>, Simona Vetter <simona@ffwll.ch>, Sven Peter <sven@kernel.org>, Takashi Iwai <tiwai@suse.com>, Thomas Gleixner <tglx@linutronix.de>, Thomas Zimmermann <tzimmermann@suse.de>, Ulf Hansson <ulf.hansson@linaro.org>, Uwe =?utf-8?q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>, Vinod Koul <vkoul@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, Will Deacon <will@kernel.org>, Wim Van Sebroeck <wim@linux-watchdog.org>, van Spriel <arend@broadcom.com>
-Date: Sun, 21 Sep 2025 09:08:41 -0700
-Message-ID: <175847092150.4354.4054733553683969208@lazor>
-User-Agent: alot/0.11
+Content-Type: text/plain; charset=UTF-8
+Date: Sun, 21 Sep 2025 18:18:52 +0200
+Message-Id: <DCYM4TPGMFF5.3J6H7VPADC0W0@kernel.org>
+To: "Daniel Almeida" <daniel.almeida@collabora.com>
+From: "Danilo Krummrich" <dakr@kernel.org>
+Subject: Re: [PATCH v2 2/2] rust: clk: use the type-state pattern
+Cc: "Michael Turquette" <mturquette@baylibre.com>, "Stephen Boyd"
+ <sboyd@kernel.org>, "Miguel Ojeda" <ojeda@kernel.org>, "Alex Gaynor"
+ <alex.gaynor@gmail.com>, "Boqun Feng" <boqun.feng@gmail.com>, "Gary Guo"
+ <gary@garyguo.net>, =?utf-8?q?Bj=C3=B6rn_Roy_Baron?=
+ <bjorn3_gh@protonmail.com>, "Benno Lossin" <lossin@kernel.org>, "Andreas
+ Hindborg" <a.hindborg@kernel.org>, "Alice Ryhl" <aliceryhl@google.com>,
+ "Trevor Gross" <tmgross@umich.edu>, "Rafael J. Wysocki"
+ <rafael@kernel.org>, "Viresh Kumar" <viresh.kumar@linaro.org>,
+ <linux-clk@vger.kernel.org>, <rust-for-linux@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>
+References: <20250910-clk-type-state-v2-0-1b97c11bb631@collabora.com>
+ <20250910-clk-type-state-v2-2-1b97c11bb631@collabora.com>
+In-Reply-To: <20250910-clk-type-state-v2-2-1b97c11bb631@collabora.com>
 
-Quoting Janne Grunau (2025-08-28 07:01:45)
-> After discussion with the devicetree maintainers we agreed to not extend
-> lists with the generic compatible "apple,nco" anymore [1]. Use
-> "apple,t8103-nco" as base compatible as it is the SoC the driver and
-> bindings were written for.
->=20
-> The block found on Apple's M2 Pro/Max/Ultra SoCs is compatible with
-> "apple,t8103-nco" so add its per-SoC compatible with the former as
-> fallback used by the existing driver.
->=20
-> [1]: https://lore.kernel.org/asahi/12ab93b7-1fc2-4ce0-926e-c8141cfe81bf@k=
-ernel.org/
->=20
-> Signed-off-by: Janne Grunau <j@jannau.net>
-> ---
+On Wed Sep 10, 2025 at 7:28 PM CEST, Daniel Almeida wrote:
+> +    /// Obtains and enables a [`devres`]-managed [`Clk`] for a device.
+> +    ///
+> +    /// [`devres`]: crate::devres::Devres
+> +    pub fn devm_enable(dev: &Device, name: Option<&CStr>) -> Result {
+> +        let name =3D name.map_or(ptr::null(), |n| n.as_ptr());
+> +
+> +        // SAFETY: It is safe to call [`devm_clk_get_enabled`] with a va=
+lid
+> +        // device pointer.
 
-Acked-by: Stephen Boyd <sboyd@kernel.org>
+It's not, since this calls into devres it is only safe with a pointer to a =
+bound
+device, i.e. you need to require &Device<Bound>.
+
+You also need to justify the CStr pointer in terms of being NULL and its
+lifetime.
+
+> +        from_err_ptr(unsafe { bindings::devm_clk_get_enabled(dev.as_raw(=
+), name) })?;
+> +        Ok(())
+> +    }
+> +
+> +    /// Obtains and enables a [`devres`]-managed [`Clk`] for a device.
+> +    ///
+> +    /// This does not print any error messages if the clock is not found=
+.
+> +    ///
+> +    /// [`devres`]: crate::devres::Devres
+> +    pub fn devm_enable_optional(dev: &Device, name: Option<&CStr>) -> Re=
+sult {
+> +        let name =3D name.map_or(ptr::null(), |n| n.as_ptr());
+> +
+> +        // SAFETY: It is safe to call [`devm_clk_get_optional_enabled`] =
+with a
+> +        // valid device pointer.
+> +        from_err_ptr(unsafe { bindings::devm_clk_get_optional_enabled(de=
+v.as_raw(), name) })?;
+> +        Ok(())
+> +    }
+> +
+> +    /// Same as [`devm_enable_optional`], but also sets the rate.
+> +    pub fn devm_enable_optional_with_rate(
+> +        dev: &Device,
+> +        name: Option<&CStr>,
+> +        rate: Hertz,
+> +    ) -> Result {
+> +        let name =3D name.map_or(ptr::null(), |n| n.as_ptr());
+> +
+> +        // SAFETY: It is safe to call
+> +        // [`devm_clk_get_optional_enabled_with_rate`] with a valid devi=
+ce
+> +        // pointer.
+> +        from_err_ptr(unsafe {
+> +            bindings::devm_clk_get_optional_enabled_with_rate(dev.as_raw=
+(), name, rate.as_hz())
+> +        })?;
+> +        Ok(())
+> +    }
+
+I think those should be added in a separate patch.
+
+> +    impl Clk<Unprepared> {
+>          /// Gets [`Clk`] corresponding to a [`Device`] and a connection =
+id.
+>          ///
+>          /// Equivalent to the kernel's [`clk_get`] API.
+>          ///
+>          /// [`clk_get`]: https://docs.kernel.org/core-api/kernel-api.htm=
+l#c.clk_get
+> -        pub fn get(dev: &Device, name: Option<&CStr>) -> Result<Self> {
+> +        #[inline]
+> +        pub fn get(dev: &Device, name: Option<&CStr>) -> Result<Clk<Unpr=
+epared>> {
+
+Not related to your change, but I'm not sure we should allow drivers to mes=
+s
+with clocks when they can't prove that they're still bound to the correspon=
+ding
+device.
+
+It's not introducing any safety issues or unsoundness, but it's not the cor=
+rect
+thing to do semantically.
+
+>              let con_id =3D name.map_or(ptr::null(), |n| n.as_ptr());
+> =20
+>              // SAFETY: It is safe to call [`clk_get`] for a valid device=
+ pointer.
+> -            //
+> +            let inner =3D from_err_ptr(unsafe { bindings::clk_get(dev.as=
+_raw(), con_id) })?;
+> +
+>              // INVARIANT: The reference-count is decremented when [`Clk`=
+] goes out of scope.
+> -            Ok(Self(from_err_ptr(unsafe {
+> -                bindings::clk_get(dev.as_raw(), con_id)
+> -            })?))
+> +            Ok(Self {
+> +                inner,
+> +                _phantom: PhantomData,
+> +            })
+>          }
+> =20
+> -        /// Obtain the raw [`struct clk`] pointer.
+> +        /// Behaves the same as [`Self::get`], except when there is no c=
+lock
+> +        /// producer. In this case, instead of returning [`ENOENT`], it =
+returns
+> +        /// a dummy [`Clk`].
+>          #[inline]
+> -        pub fn as_raw(&self) -> *mut bindings::clk {
+> -            self.0
+> +        pub fn get_optional(dev: &Device, name: Option<&CStr>) -> Result=
+<Clk<Unprepared>> {
+> +            let con_id =3D name.map_or(ptr::null(), |n| n.as_ptr());
+> +
+> +            // SAFETY: It is safe to call [`clk_get`] for a valid device=
+ pointer.
+
+What about con_id?
+
+> +            let inner =3D from_err_ptr(unsafe { bindings::clk_get_option=
+al(dev.as_raw(), con_id) })?;
+> +
+> +            // INVARIANT: The reference-count is decremented when [`Clk`=
+] goes out of scope.
+
+I know you're consistent with other places, but this seems a odd. This does=
+n't
+correspond to: "A [`Clk`] instance holds either a pointer to a valid [`stru=
+ct
+clk`] created by the C portion of the kernel or a NULL pointer."
+
+> +            Ok(Self {
+> +                inner,
+> +                _phantom: PhantomData,
+> +            })
+>          }
+
+<snip>
+
+> +            // SAFETY: By the type invariants, self.as_raw() is a valid =
+argument for
+
+Missing backticks (also in a few other places).
+
+> +            // [`clk_put`].
+> +            unsafe { bindings::clk_put(self.as_raw()) };
+>          }
+>      }
 
