@@ -1,185 +1,264 @@
-Return-Path: <linux-pm+bounces-35181-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35182-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ADB66B92315
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Sep 2025 18:19:18 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E607B926F1
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Sep 2025 19:30:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 284BF7A72A2
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Sep 2025 16:17:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2178F4460D4
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Sep 2025 17:30:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 301F2311C17;
-	Mon, 22 Sep 2025 16:18:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E6773148A3;
+	Mon, 22 Sep 2025 17:30:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B+y0W5jr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ntXXidV3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FC8D311975
-	for <linux-pm@vger.kernel.org>; Mon, 22 Sep 2025 16:18:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49B65313E37
+	for <linux-pm@vger.kernel.org>; Mon, 22 Sep 2025 17:30:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758557917; cv=none; b=XBlc7Gkgjh1u15Q/ydOoSe3nC440L/clsVm5rqMu14cvhhYYnD4jdQqGP+jMSWPEld9Jz91R/llMG8YhNAWEOZl4jtcYeYrEiMIlx7IBWq0MbNpjAhoy9jnadfaLu1X4DjJhnR8FxtA34J+leIQu2DoU3I9QcZVudyUh6NIS+fw=
+	t=1758562201; cv=none; b=GzshcBpbVXmIYmfA91aY2pczf1+CKOANOAnvmR6gf34HZWmwR/h5GivuEFBUOi8weCIm09cnYLX6ZckQa7Suf02OHLEDYZkk8Q6xtVumJcIJ9zn2vvi8WUlKjtCfy9s+2QPzVEXB+hvnfuNzXV9YEwMafi9P4e00KS7yiksuJ5w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758557917; c=relaxed/simple;
-	bh=/6cwwyx95yFe2VTI7rjAQhARkqn7dtwQ1pD0HDEwEf8=;
+	s=arc-20240116; t=1758562201; c=relaxed/simple;
+	bh=6Al3E7s3Z6hFm5b5miLNSVz7j/KaGcZvja7S18tPyjw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bHXSve1HZxdzGBbEWgGiUkiucAcT1qUQYYA7OTqkWQqeIPf02Twt5NA8HP3h8+EbxaO7TvaHK+s5CeMjkQfzo6dGjNFC7x6vSmxW7rW3c32+ye/rwacFslDawRV4wtVvIWaNmodd6vN/+dq4ZMDp+coem4T2Z/8C/W7t4PdJlVw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B+y0W5jr; arc=none smtp.client-ip=209.85.167.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-57e03279bfeso1858304e87.0
-        for <linux-pm@vger.kernel.org>; Mon, 22 Sep 2025 09:18:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758557913; x=1759162713; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QWRtWQb4tDxw+RDTltwl4oqgAah0j63IckQcO9ISpds=;
-        b=B+y0W5jrON3vUgE9gMEjzzqgeI4CAYy4nBbbY2kwy2f/A4ITKm4642WsSqHc1IOO7e
-         kCfaNepv0TA2wrq50eHN8JORs97F/CWkyN80iYj0zTvTtfFFw80J1JcpskcK9rjvLBnw
-         ZfnqfoBg1IOxhV+nznb386tOUfe0nDG4tTkxWU3Kq8rsEI4WvT6CVftMsqtvitG4CnM+
-         3u4mhK16x0Z4Ltlk8nRYp9OngR9AqX0OglLpLql1cGh+R2IhXef2PBUbBYB+1jLflowd
-         44wWRm9omEbwWDF08trX2f4sJnETtd7KirofR85e6rEMxxl0XCKJNbS+Qiavt+5hlYJa
-         rcNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758557913; x=1759162713;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QWRtWQb4tDxw+RDTltwl4oqgAah0j63IckQcO9ISpds=;
-        b=ZkIS3RsItntDAxnGHfY0bLGGcN7ufhfMvzLDcM1K6Y05yUQS5KCoKorL4qkbvxZvF8
-         9vECrCZPCcBPIhiZMx4Kh2jN3rm/l6C4Tq7WZwaKPhaQBFOuwwQw61RPB3sS4cL2EJTz
-         U3z9dgm4gJLkbJFTAueTBYdl1aqQTs3IGL7gxn/ImJAtuwlM4aiU3BbwoaGBKX0dx5Ww
-         ffj9q+S11RZppRAfR7NYQSNFTWtpetwqTd6GSaNCKQJL9fsmjMhAHH8GysSXg0o6fTF/
-         QVOcr7hidyxugulpqh9wcwt7wosjC3DUgRgOch7sl1F2223do8S2CDpsavOEs1Ng9buD
-         t0VQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVyabveGjLjh9iJ6FwqFEhM2ZcuxIt2ro/12wJgRb8YhZOSjdN0L2rjLHiTVRtuXCwG8C+8YtcnxQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yww2pmTiYuKJwZJKenGrsyuKJpzqomL1iv1MWsVlqsTWg9lUdz9
-	xXxvhDsSswt/g1TcGN1NYA9C7X6Vxwzd4KlvQnruZFev/uHe/sE5TnII4YZtfIy7CuhxwmlPsa0
-	MgiUAO+rd7ihxSTIlFO2PKlO2eHyoCR8=
-X-Gm-Gg: ASbGncu01SnYGwBtB3+iEG6COe4tFMVQD0amtHXEkJ+RX0Ybh5FnHRAta1XrGDfHUog
-	sCmb0MytuUHnUqJaTthPYVnypqpkriIiGXZY08tshBqBL89PWllI8jAZOrPwLRfem4HDM/a3mSD
-	FH+6uaogVy/MsM4QFR+DKl0HJPA5oJxhCgAhFFOUEz42boyLz1BpZ+SNablxf337O17CoICqtLG
-	/PvewA=
-X-Google-Smtp-Source: AGHT+IHbkCgbJFbDcK840KctNsVPKayfAg5z4hva0W8zSa5d3VGIBMvbwMO4roIb9UisDL440+gagdm9md1t8goV1+E=
-X-Received: by 2002:a05:6512:4504:b0:57d:d62e:b1fe with SMTP id
- 2adb3069b0e04-57dd62eb499mr1348510e87.10.1758557912953; Mon, 22 Sep 2025
- 09:18:32 -0700 (PDT)
+	 To:Cc:Content-Type; b=G6NYBxX1RW8ZexEyuWepU/XvsEBt6u2kLU15H2YWrtkRcf6joAoZl0rw1zCk5PfWObo7SQF4Cz1QwnVZMy1NeZTjEYanXH5xlJw/T2s00RI0c6NdsiBra1O4qwyy7BOXt8LNFukktYl+GIn0D2OmkLGE/mEjKwT8+WnF3+yW04Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ntXXidV3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3E88C4CEF5
+	for <linux-pm@vger.kernel.org>; Mon, 22 Sep 2025 17:30:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1758562200;
+	bh=6Al3E7s3Z6hFm5b5miLNSVz7j/KaGcZvja7S18tPyjw=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=ntXXidV3gSfNET1aciD7FZLwAs/cWGkPc6TBD9j6nrBA1RvN01t5JbZR4y0HzRgok
+	 5yAH5iQfTtalv3Sc/fJoh/mGIr9MjoEwhNR5a6m0wi4wGEzqOy9hO7niAjCbGSNPYL
+	 b1kywXHvwLBIS5TUMvYiV9oiGUdoaecCeScEWjzUT5c0+zSnKqCGTtHX+Y/kZTNb1x
+	 moXRhxQQsujncqX6Eg69u2hPSTcqeAQzLvkMvZQ2SP4OxXiAIt7gRURnHIuj5FjQN3
+	 XtoYta6kH2XBCA10aSEhIo+sqNetEftuW/SJDouLDHbaXOFQyqlvC5itvbVx5bf36y
+	 yk++WsHZ0EpWQ==
+Received: by mail-oi1-f182.google.com with SMTP id 5614622812f47-43d2da52291so2292196b6e.1
+        for <linux-pm@vger.kernel.org>; Mon, 22 Sep 2025 10:30:00 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWo68urfwF/9QvI3u6t42mdVlPsKDUUvX+oyu/+54Ceo4apiHYY/HGf0urY9i4wOFqOLvDAi8xiXA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywt40nW30S1nDtU39KyXxZ0eDWxlhHqucOiL4WeUNYvFfqpahi3
+	3fE8h5FHIHMET3m6u0sIzD9YXmmTS9erH9NFrazgoj/9DNeWk9dLAEsUQ93Q5HFEFCe9s9tLFcI
+	L+xgcgPup0uMzCqpKhlh3fpFhdm9VXE4=
+X-Google-Smtp-Source: AGHT+IFlrx8L8oqv9pz//Cs5oDAAIyPzryy+k3Au3ytXII69jPuj4eAQDd6pEEPz5O0zDJRs+VoNeAs0c86wAgaW6f8=
+X-Received: by 2002:a05:6808:4f4f:b0:43f:2500:6536 with SMTP id
+ 5614622812f47-43f25007375mr835643b6e.21.1758562199811; Mon, 22 Sep 2025
+ 10:29:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250731-pci-tegra-module-v7-0-cad4b088b8fb@gmail.com>
- <CALHNRZ9tOJccZ5sQjvkoPe4-+VUtWRxAzAOUainGUCs4+_RBCw@mail.gmail.com>
- <omchhpbmsydfcsm6mzmbdiupsrxmxxvkxqf33fgi563akn76vf@vkc7k2zhlvee> <CALHNRZ8PZzseaTSCvhM6o7jMVYtVdHTczurXh1q+DY5MG62+DA@mail.gmail.com>
-In-Reply-To: <CALHNRZ8PZzseaTSCvhM6o7jMVYtVdHTczurXh1q+DY5MG62+DA@mail.gmail.com>
-From: Aaron Kling <webgeek1234@gmail.com>
-Date: Mon, 22 Sep 2025 11:18:21 -0500
-X-Gm-Features: AS18NWCkrA0Swv5I_sKNAMQ_VfnE8PJr0_nR10ONiX1dW-00lBFelqUkDRsus4A
-Message-ID: <CALHNRZ8mKZRS=ddyuscoTqu4h8GDR3fM8k36gbjth-csd10GGg@mail.gmail.com>
-Subject: Re: [PATCH v7 0/3] PCI: tegra: Allow building as a module
-To: Manivannan Sadhasivam <mani@kernel.org>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>, Thomas Gleixner <tglx@linutronix.de>, 
-	Lorenzo Pieralisi <lpieralisi@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Bjorn Helgaas <bhelgaas@google.com>, Thierry Reding <thierry.reding@gmail.com>, 
-	Jonathan Hunter <jonathanh@nvidia.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	=?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
-	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, 
-	linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20250918135549.1075-1-luogf2025@163.com>
+In-Reply-To: <20250918135549.1075-1-luogf2025@163.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 22 Sep 2025 19:29:48 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0hN52GMte2dCx1u=i_MSuLFMt+2-HYdg+nmU73U9WptDQ@mail.gmail.com>
+X-Gm-Features: AS18NWCGCiHo7Ollt8aSlvAfGn5khT1Z3En1BLf_7-RqYiBBZh4-a20CF_5qNNc
+Message-ID: <CAJZ5v0hN52GMte2dCx1u=i_MSuLFMt+2-HYdg+nmU73U9WptDQ@mail.gmail.com>
+Subject: Re: [PATCH v6] ACPI: battery: prevent sysfs_add_battery re-entry on
+ rapid events
+To: GuangFei Luo <luogf2025@163.com>
+Cc: rafael@kernel.org, michal.wilczynski@intel.com, dan.carpenter@linaro.org, 
+	lenb@kernel.org, linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, lkp@intel.com, sre@kernel.org, 
+	stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Aug 18, 2025 at 1:39=E2=80=AFPM Aaron Kling <webgeek1234@gmail.com>=
- wrote:
+On Thu, Sep 18, 2025 at 3:56=E2=80=AFPM GuangFei Luo <luogf2025@163.com> wr=
+ote:
 >
-> On Fri, Aug 1, 2025 at 1:01=E2=80=AFAM Manivannan Sadhasivam <mani@kernel=
-.org> wrote:
-> >
-> > On Thu, Jul 31, 2025 at 05:01:55PM GMT, Aaron Kling wrote:
-> > > On Thu, Jul 31, 2025 at 4:59=E2=80=AFPM Aaron Kling via B4 Relay
-> > > <devnull+webgeek1234.gmail.com@kernel.org> wrote:
-> > > >
-> > > > Signed-off-by: Aaron Kling <webgeek1234@gmail.com>
-> > > > ---
-> > > > Changes in v7:
-> > > > - Rebased on 6.16
-> > > > - Updated mailing address list
-> > > > - Link to v6: https://lore.kernel.org/r/20250507-pci-tegra-module-v=
-6-0-5fe363eaa302@gmail.com
-> > > >
-> > > > Changes in v6:
-> > > > - Remove unused debugfs cleanup function, as caught by kernel ci
-> > > > - Link to v5: https://lore.kernel.org/r/20250505-pci-tegra-module-v=
-5-0-827aaac998ba@gmail.com
-> > > >
-> > > > Changes in v5:
-> > > > - Copy commit message exactly word for word on patch 1, as required=
- by reviewer
-> > > > - Delete remove callback in patch 3, per request
-> > > > - Don't clean up debugfs, per request, which drops patch 4 entirely
-> > > > - Link to v4: https://lore.kernel.org/r/20250505-pci-tegra-module-v=
-4-0-088b552c4b1a@gmail.com
-> > > >
-> > > > Changes in v4:
-> > > > - Updated commit messages for patches 1 and 2, per review
-> > > > - Link to v3: https://lore.kernel.org/r/20250502-pci-tegra-module-v=
-3-0-556a49732d70@gmail.com
-> > > >
-> > > > Changes in v3:
-> > > > - Add patch to drop remove callback, per request
-> > > > - Link to v2: https://lore.kernel.org/r/20250428-pci-tegra-module-v=
-2-0-c11a4b912446@gmail.com
-> > > >
-> > > > Changes in v2:
-> > > > - Add patch to export tegra_cpuidle_pcie_irqs_in_use as required wh=
-en
-> > > >   building pci-tegra as a module for arm
-> > > > - Drop module exit to prevent module unloading, as requested
-> > > > - Link to v1: https://lore.kernel.org/r/20250420-pci-tegra-module-v=
-1-0-c0a1f831354a@gmail.com
-> > > >
-> > > > ---
-> > > > Aaron Kling (3):
-> > > >       irqdomain: Export irq_domain_free_irqs
-> > > >       cpuidle: tegra: Export tegra_cpuidle_pcie_irqs_in_use
-> > > >       PCI: tegra: Allow building as a module
-> > > >
-> > > >  drivers/cpuidle/cpuidle-tegra.c    |  1 +
-> > > >  drivers/pci/controller/Kconfig     |  2 +-
-> > > >  drivers/pci/controller/pci-tegra.c | 35 ++++----------------------=
----------
-> > > >  kernel/irq/irqdomain.c             |  1 +
-> > > >  4 files changed, 7 insertions(+), 32 deletions(-)
-> > > > ---
-> > > > base-commit: 038d61fd642278bab63ee8ef722c50d10ab01e8f
-> > > > change-id: 20250313-pci-tegra-module-7cbd1c5e70af
-> > > >
-> > > > Best regards,
-> > > > --
-> > > > Aaron Kling <webgeek1234@gmail.com>
-> > > >
-> > > >
-> > >
-> > > Continuing the conversation from the last revision [0]. Is there any
-> > > path forward for this series?
-> > >
-> >
-> > Daniel, could you please look into the cpufreq patch?
+> When removing and reinserting the laptop battery, ACPI can trigger
+> two notifications in quick succession:
+>   - ACPI_BATTERY_NOTIFY_STATUS (0x80)
+>   - ACPI_BATTERY_NOTIFY_INFO   (0x81)
 >
-> Another two weeks with no response to a review request. And over two
-> months total since the cpuidle maintainers were initially asked to
-> look. Is there a policy for dealing with lack of responses?
+> Both notifications call acpi_battery_update(). Because the events
+> happen very close in time, sysfs_add_battery() can be re-entered
+> before battery->bat is set, causing a duplicate sysfs entry error.
+>
+> When the ACPI battery driver uses
+> acpi_dev_install_notify_handler() to register acpi_battery_notify,
+> the callback may be triggered twice in a very short period of time.
+>
+> This patch ensures that sysfs_add_battery() is not re-entered
+> when battery->bat is already non-NULL, preventing the duplicate
+> sysfs creation and stabilizing battery hotplug handling.
+>
+> [  476.117945] sysfs: cannot create duplicate filename '/devices/LNXSYSTM=
+:00/LNXSYBUS:00/PNP0C0A:00/power_supply/BAT1'
+> [  476.118896] CPU: 1 UID: 0 PID: 185 Comm: kworker/1:4 Kdump: loaded Not=
+ tainted 6.12.38+deb13-amd64 #1  Debian 6.12.38-1
+> [  476.118903] Hardware name: Gateway          NV44             /SJV40-MV=
+        , BIOS V1.3121 04/08/2009
+> [  476.118906] Workqueue: kacpi_notify acpi_os_execute_deferred
+> [  476.118917] Call Trace:
+> [  476.118922]  <TASK>
+> [  476.118929]  dump_stack_lvl+0x5d/0x80
+> [  476.118938]  sysfs_warn_dup.cold+0x17/0x23
+> [  476.118943]  sysfs_create_dir_ns+0xce/0xe0
+> [  476.118952]  kobject_add_internal+0xba/0x250
+> [  476.118959]  kobject_add+0x96/0xc0
+> [  476.118964]  ? get_device_parent+0xde/0x1e0
+> [  476.118970]  device_add+0xe2/0x870
+> [  476.118975]  __power_supply_register.part.0+0x20f/0x3f0
+> [  476.118981]  ? wake_up_q+0x4e/0x90
+> [  476.118990]  sysfs_add_battery+0xa4/0x1d0 [battery]
+> [  476.118998]  acpi_battery_update+0x19e/0x290 [battery]
+> [  476.119002]  acpi_battery_notify+0x50/0x120 [battery]
+> [  476.119006]  acpi_ev_notify_dispatch+0x49/0x70
+> [  476.119012]  acpi_os_execute_deferred+0x1a/0x30
+> [  476.119015]  process_one_work+0x177/0x330
+> [  476.119022]  worker_thread+0x251/0x390
+> [  476.119026]  ? __pfx_worker_thread+0x10/0x10
+> [  476.119030]  kthread+0xd2/0x100
+> [  476.119033]  ? __pfx_kthread+0x10/0x10
+> [  476.119035]  ret_from_fork+0x34/0x50
+> [  476.119040]  ? __pfx_kthread+0x10/0x10
+> [  476.119042]  ret_from_fork_asm+0x1a/0x30
+> [  476.119049]  </TASK>
+> [  476.142552] kobject: kobject_add_internal failed for BAT1 with -EEXIST=
+, don't try to register things with the same name in the same directory.
+> [  476.415022] ata1.00: unexpected _GTF length (8)
+> [  476.428076] sd 0:0:0:0: [sda] Starting disk
+> [  476.835035] ata1.00: unexpected _GTF length (8)
+> [  476.839720] ata1.00: configured for UDMA/133
+> [  491.328831] sysfs: cannot create duplicate filename '/devices/LNXSYSTM=
+:00/LNXSYBUS:00/PNP0C0A:00/power_supply/BAT1'
+> [  491.329720] CPU: 1 UID: 0 PID: 185 Comm: kworker/1:4 Kdump: loaded Not=
+ tainted 6.12.38+deb13-amd64 #1  Debian 6.12.38-1
+> [  491.329727] Hardware name: Gateway          NV44             /SJV40-MV=
+        , BIOS V1.3121 04/08/2009
+> [  491.329731] Workqueue: kacpi_notify acpi_os_execute_deferred
+> [  491.329741] Call Trace:
+> [  491.329745]  <TASK>
+> [  491.329751]  dump_stack_lvl+0x5d/0x80
+> [  491.329758]  sysfs_warn_dup.cold+0x17/0x23
+> [  491.329762]  sysfs_create_dir_ns+0xce/0xe0
+> [  491.329770]  kobject_add_internal+0xba/0x250
+> [  491.329775]  kobject_add+0x96/0xc0
+> [  491.329779]  ? get_device_parent+0xde/0x1e0
+> [  491.329784]  device_add+0xe2/0x870
+> [  491.329790]  __power_supply_register.part.0+0x20f/0x3f0
+> [  491.329797]  sysfs_add_battery+0xa4/0x1d0 [battery]
+> [  491.329805]  acpi_battery_update+0x19e/0x290 [battery]
+> [  491.329809]  acpi_battery_notify+0x50/0x120 [battery]
+> [  491.329812]  acpi_ev_notify_dispatch+0x49/0x70
+> [  491.329817]  acpi_os_execute_deferred+0x1a/0x30
+> [  491.329820]  process_one_work+0x177/0x330
+> [  491.329826]  worker_thread+0x251/0x390
+> [  491.329830]  ? __pfx_worker_thread+0x10/0x10
+> [  491.329833]  kthread+0xd2/0x100
+> [  491.329836]  ? __pfx_kthread+0x10/0x10
+> [  491.329838]  ret_from_fork+0x34/0x50
+> [  491.329842]  ? __pfx_kthread+0x10/0x10
+> [  491.329844]  ret_from_fork_asm+0x1a/0x30
+> [  491.329850]  </TASK>
+> [  491.329855] kobject: kobject_add_internal failed for BAT1 with -EEXIST=
+, don't try to register things with the same name in the same directory.
+>
+> Fixes: 10666251554c ("ACPI: battery: Install Notify() handler directly")
+> Signed-off-by: GuangFei Luo <luogf2025@163.com>
+> Cc: stable@vger.kernel.org
+> ---
+> v6:
+>   - Update Fixes tag: point to commit 10666251554c ("ACPI: battery: Insta=
+ll
+>     Notify() handler directly"), which introduced the sysfs_add_battery()
+>     re-entry issue when acpi_battery_notify is registered via
+>     acpi_dev_install_notify_handler(). The problem does not occur with
+>     acpi_bus_register_driver().
+>
+> v5:
+>   - Move changelog above the '---' line as per submission guidelines.
+>
+> v4:
+>   - Uses guard(mutex) for battery->sysfs_lock in sysfs_add_battery().
+>   - Since sysfs_add_battery() now handles the battery->bat check with
+>     proper locking,the extra if (!battery->bat) check at the call site
+>     has become redundant.
+>
+> v3:
+>   - Modified the earlier approach: since sysfs_add_battery() is invoked
+>     from multiple places, the most reliable way is to add the lock inside
+>     the function itself.
+>   - sysfs_remove_battery() had a similar race issue in the past, which wa=
+s
+>     fixed by adding a lock as well. Reference:
+>     https://lore.kernel.org/all/9c921c22a7f33397a6774d7fa076db9b6a0fd669
+>         .1312318300.git.len.brown@intel.com/
+>
+> v2:
+>  - Fix missing mutex_unlock in acpi_battery_update()
+>    (Reported-by: kernel test robot)
+>
+> v1:
+>  - Initial patch to handle race when hotplugging battery, preventing
+>    duplicate sysfs entries.
+> ---
+>  drivers/acpi/battery.c | 20 +++++++++++---------
+>  1 file changed, 11 insertions(+), 9 deletions(-)
+>
+> diff --git a/drivers/acpi/battery.c b/drivers/acpi/battery.c
+> index 6905b56bf3e4..20d68f3e881f 100644
+> --- a/drivers/acpi/battery.c
+> +++ b/drivers/acpi/battery.c
+> @@ -850,6 +850,10 @@ static void __exit battery_hook_exit(void)
+>
+>  static int sysfs_add_battery(struct acpi_battery *battery)
+>  {
+> +       guard(mutex)(&battery->sysfs_lock);
+> +       if (battery->bat)
+> +               return 0;
+> +
+>         struct power_supply_config psy_cfg =3D {
+>                 .drv_data =3D battery,
+>                 .attr_grp =3D acpi_battery_groups,
+> @@ -1026,11 +1030,9 @@ static int acpi_battery_update(struct acpi_battery=
+ *battery, bool resume)
+>                 return result;
+>         acpi_battery_quirks(battery);
+>
+> -       if (!battery->bat) {
+> -               result =3D sysfs_add_battery(battery);
+> -               if (result)
+> -                       return result;
+> -       }
+> +       result =3D sysfs_add_battery(battery);
+> +       if (result)
+> +               return result;
+>
+>         /*
+>          * Wakeup the system if battery is critical low
+> @@ -1112,12 +1114,12 @@ static int battery_notify(struct notifier_block *=
+nb,
+>                         result =3D acpi_battery_get_info(battery);
+>                         if (result)
+>                                 return result;
+> -
+> -                       result =3D sysfs_add_battery(battery);
+> -                       if (result)
+> -                               return result;
+>                 }
+>
+> +               result =3D sysfs_add_battery(battery);
+> +               if (result)
+> +                       return result;
+> +
 
-Another month with no response. Can something be done with this,
-please? If the subsystem maintainers don't respond, can they be
-overridden by anyone? Who would the next step up even be? Does it go
-directly from subsystem maintainers to Torvalds himself?
+Why is this change necessary?
 
-Aaron
+>                 acpi_battery_init_alarm(battery);
+>                 acpi_battery_get_state(battery);
+>                 break;
+> --
 
