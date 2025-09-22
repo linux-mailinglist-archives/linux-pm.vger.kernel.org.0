@@ -1,264 +1,118 @@
-Return-Path: <linux-pm+bounces-35182-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35183-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E607B926F1
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Sep 2025 19:30:05 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4EA66B92787
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Sep 2025 19:47:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2178F4460D4
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Sep 2025 17:30:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5CC031904DB7
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Sep 2025 17:47:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E6773148A3;
-	Mon, 22 Sep 2025 17:30:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64A008634F;
+	Mon, 22 Sep 2025 17:47:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ntXXidV3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RkaEIR8H"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49B65313E37
-	for <linux-pm@vger.kernel.org>; Mon, 22 Sep 2025 17:30:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E54531158E
+	for <linux-pm@vger.kernel.org>; Mon, 22 Sep 2025 17:47:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758562201; cv=none; b=GzshcBpbVXmIYmfA91aY2pczf1+CKOANOAnvmR6gf34HZWmwR/h5GivuEFBUOi8weCIm09cnYLX6ZckQa7Suf02OHLEDYZkk8Q6xtVumJcIJ9zn2vvi8WUlKjtCfy9s+2QPzVEXB+hvnfuNzXV9YEwMafi9P4e00KS7yiksuJ5w=
+	t=1758563232; cv=none; b=Y94vhT4WoVLhkPHL+DAlTFcmyj+6ib+6dKKwNdnm8BWJJTlOvW+VSZg1voSIUTVvW2bmaaUR0FZp/E4+JxbhTBWeFTQucUuTxZM6GuOdCQU0atVxDJJ/ma4lXQ+z75K56+YrrJwTCQIv/ZdkeHACKTT2LNo5s9HO9RksiOeDNco=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758562201; c=relaxed/simple;
-	bh=6Al3E7s3Z6hFm5b5miLNSVz7j/KaGcZvja7S18tPyjw=;
+	s=arc-20240116; t=1758563232; c=relaxed/simple;
+	bh=agdlQ/ANKPbpn5Vd/EimUh+VV7JK+okXeFSmo/mRudU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=G6NYBxX1RW8ZexEyuWepU/XvsEBt6u2kLU15H2YWrtkRcf6joAoZl0rw1zCk5PfWObo7SQF4Cz1QwnVZMy1NeZTjEYanXH5xlJw/T2s00RI0c6NdsiBra1O4qwyy7BOXt8LNFukktYl+GIn0D2OmkLGE/mEjKwT8+WnF3+yW04Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ntXXidV3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3E88C4CEF5
-	for <linux-pm@vger.kernel.org>; Mon, 22 Sep 2025 17:30:00 +0000 (UTC)
+	 To:Cc:Content-Type; b=kF9E1W1riFvMVAWHOEy/PWg7Ddz+MYXAtcCPItJ4WpE08LPp2EhzlOpKjpVV9oYAHEfD0d3xIcuoQB2GIuWMU68zU6GxpwBfWnRys2rskodEXF5QeR18ducMaIXd2d42SQP0u5GsIrNCrrzkJL+THQWy1Q3UY9DrBsUKQVs8uQQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RkaEIR8H; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C05ECC116C6
+	for <linux-pm@vger.kernel.org>; Mon, 22 Sep 2025 17:47:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758562200;
-	bh=6Al3E7s3Z6hFm5b5miLNSVz7j/KaGcZvja7S18tPyjw=;
+	s=k20201202; t=1758563231;
+	bh=agdlQ/ANKPbpn5Vd/EimUh+VV7JK+okXeFSmo/mRudU=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=ntXXidV3gSfNET1aciD7FZLwAs/cWGkPc6TBD9j6nrBA1RvN01t5JbZR4y0HzRgok
-	 5yAH5iQfTtalv3Sc/fJoh/mGIr9MjoEwhNR5a6m0wi4wGEzqOy9hO7niAjCbGSNPYL
-	 b1kywXHvwLBIS5TUMvYiV9oiGUdoaecCeScEWjzUT5c0+zSnKqCGTtHX+Y/kZTNb1x
-	 moXRhxQQsujncqX6Eg69u2hPSTcqeAQzLvkMvZQ2SP4OxXiAIt7gRURnHIuj5FjQN3
-	 XtoYta6kH2XBCA10aSEhIo+sqNetEftuW/SJDouLDHbaXOFQyqlvC5itvbVx5bf36y
-	 yk++WsHZ0EpWQ==
-Received: by mail-oi1-f182.google.com with SMTP id 5614622812f47-43d2da52291so2292196b6e.1
-        for <linux-pm@vger.kernel.org>; Mon, 22 Sep 2025 10:30:00 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWo68urfwF/9QvI3u6t42mdVlPsKDUUvX+oyu/+54Ceo4apiHYY/HGf0urY9i4wOFqOLvDAi8xiXA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywt40nW30S1nDtU39KyXxZ0eDWxlhHqucOiL4WeUNYvFfqpahi3
-	3fE8h5FHIHMET3m6u0sIzD9YXmmTS9erH9NFrazgoj/9DNeWk9dLAEsUQ93Q5HFEFCe9s9tLFcI
-	L+xgcgPup0uMzCqpKhlh3fpFhdm9VXE4=
-X-Google-Smtp-Source: AGHT+IFlrx8L8oqv9pz//Cs5oDAAIyPzryy+k3Au3ytXII69jPuj4eAQDd6pEEPz5O0zDJRs+VoNeAs0c86wAgaW6f8=
-X-Received: by 2002:a05:6808:4f4f:b0:43f:2500:6536 with SMTP id
- 5614622812f47-43f25007375mr835643b6e.21.1758562199811; Mon, 22 Sep 2025
- 10:29:59 -0700 (PDT)
+	b=RkaEIR8Ho7WPL0trl/yW7kOnpLoE9+Jaw9E8zjVujZ5+XM00IhHQjE3TO5ViOy3o/
+	 86RbZXObAukD1NJpLmy1pZCdcq7M4s25GiHoi5NdJKLrniwiMkas+DjVKhKLCY+ULu
+	 AqogfKqQ1s5z5XFec3yZJvSn+XcRAaVbDD086/DvlXLscxn6jog1UF6sMWKDUMxChB
+	 8DmXgwwPkSRAMU0st2UooGz2gyzBIQ6WET3Qh47VRl6SaOMaUwfBtgYlyBKizYKFpg
+	 VmS8EWMWRD0CZ/Q5MYX81KM32vTOLl+t7gT6H8cksNCsSvy7JAIXuceIhcQoC5TWL6
+	 gS3e4Kh3oS0MQ==
+Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-6219b29ed57so2099514eaf.1
+        for <linux-pm@vger.kernel.org>; Mon, 22 Sep 2025 10:47:11 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWcC5drpThDDxObblKPjiQaFlYc2aGJk/E7sXjeLzafR1EAB5ILNVPs6pHxfj0COfpv9xVTzOfI8A==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwJf5dFD8DlpF9cwWZj60BRkliCE9gXrat/ECDyEnnYXnZtoyLA
+	RXTUw8g7gngYgmCYgc+qTs22NI0Ku040D3bkNHMDoKM8e1OZNoxA0SSqKJCEANz13nZLwZg6sDF
+	TuIYRTajxi30ZA4Gr2mfQnt61UTc5x4c=
+X-Google-Smtp-Source: AGHT+IECebZntwOBxZ/uiQAtycqnxbTiqE2gUnkLzMV6I29wPiq364Lz87hgjaxasHfuIftfPXAw53HAB29i82mI4Sc=
+X-Received: by 2002:a05:6820:545:b0:632:da4c:19cf with SMTP id
+ 006d021491bc7-632da4c1b79mr84148eaf.0.1758563231108; Mon, 22 Sep 2025
+ 10:47:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250918135549.1075-1-luogf2025@163.com>
-In-Reply-To: <20250918135549.1075-1-luogf2025@163.com>
+References: <20250921042537.3118333-1-kaushlendra.kumar@intel.com>
+In-Reply-To: <20250921042537.3118333-1-kaushlendra.kumar@intel.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 22 Sep 2025 19:29:48 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0hN52GMte2dCx1u=i_MSuLFMt+2-HYdg+nmU73U9WptDQ@mail.gmail.com>
-X-Gm-Features: AS18NWCGCiHo7Ollt8aSlvAfGn5khT1Z3En1BLf_7-RqYiBBZh4-a20CF_5qNNc
-Message-ID: <CAJZ5v0hN52GMte2dCx1u=i_MSuLFMt+2-HYdg+nmU73U9WptDQ@mail.gmail.com>
-Subject: Re: [PATCH v6] ACPI: battery: prevent sysfs_add_battery re-entry on
- rapid events
-To: GuangFei Luo <luogf2025@163.com>
-Cc: rafael@kernel.org, michal.wilczynski@intel.com, dan.carpenter@linaro.org, 
-	lenb@kernel.org, linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, lkp@intel.com, sre@kernel.org, 
-	stable@vger.kernel.org
+Date: Mon, 22 Sep 2025 19:46:59 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0joEhp9rt1WfN6eHfnuw_d2zrWFvd=Mn4NXRqO41xhsEQ@mail.gmail.com>
+X-Gm-Features: AS18NWDS8aq8x-Yj4mcbDtMVOdzpy_bbMx-vXGiZ8ie-gkxz8e9HeYOAa3m-Iu4
+Message-ID: <CAJZ5v0joEhp9rt1WfN6eHfnuw_d2zrWFvd=Mn4NXRqO41xhsEQ@mail.gmail.com>
+Subject: Re: [PATCH] PM: Delete timer before removing wakeup source from list
+To: Kaushlendra Kumar <kaushlendra.kumar@intel.com>
+Cc: rafael@kernel.org, pavel@kernel.org, gregkh@linuxfoundation.org, 
+	dakr@kernel.org, linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Sep 18, 2025 at 3:56=E2=80=AFPM GuangFei Luo <luogf2025@163.com> wr=
-ote:
+On Sun, Sep 21, 2025 at 6:27=E2=80=AFAM Kaushlendra Kumar
+<kaushlendra.kumar@intel.com> wrote:
 >
-> When removing and reinserting the laptop battery, ACPI can trigger
-> two notifications in quick succession:
->   - ACPI_BATTERY_NOTIFY_STATUS (0x80)
->   - ACPI_BATTERY_NOTIFY_INFO   (0x81)
+> Move timer_delete_sync() before list_del_rcu() in wakeup_source_remove()
+> to ensure proper cleanup ordering. This prevents the timer callback from
+> executing after the wakeup source has been removed from the events list.
 >
-> Both notifications call acpi_battery_update(). Because the events
-> happen very close in time, sysfs_add_battery() can be re-entered
-> before battery->bat is set, causing a duplicate sysfs entry error.
+> The previous order could allow the timer callback to access the wakeup
+> source entry after removal but before timer deletion, potentially causing
+> use-after-free issues or list corruption.
+
+How so?  You need to specify the scenario in which that can happen.
+
+> Deleting the timer first ensures that no callbacks can execute during
+> the wakeup source removal process, providing safer cleanup semantics.
 >
-> When the ACPI battery driver uses
-> acpi_dev_install_notify_handler() to register acpi_battery_notify,
-> the callback may be triggered twice in a very short period of time.
->
-> This patch ensures that sysfs_add_battery() is not re-entered
-> when battery->bat is already non-NULL, preventing the duplicate
-> sysfs creation and stabilizing battery hotplug handling.
->
-> [  476.117945] sysfs: cannot create duplicate filename '/devices/LNXSYSTM=
-:00/LNXSYBUS:00/PNP0C0A:00/power_supply/BAT1'
-> [  476.118896] CPU: 1 UID: 0 PID: 185 Comm: kworker/1:4 Kdump: loaded Not=
- tainted 6.12.38+deb13-amd64 #1  Debian 6.12.38-1
-> [  476.118903] Hardware name: Gateway          NV44             /SJV40-MV=
-        , BIOS V1.3121 04/08/2009
-> [  476.118906] Workqueue: kacpi_notify acpi_os_execute_deferred
-> [  476.118917] Call Trace:
-> [  476.118922]  <TASK>
-> [  476.118929]  dump_stack_lvl+0x5d/0x80
-> [  476.118938]  sysfs_warn_dup.cold+0x17/0x23
-> [  476.118943]  sysfs_create_dir_ns+0xce/0xe0
-> [  476.118952]  kobject_add_internal+0xba/0x250
-> [  476.118959]  kobject_add+0x96/0xc0
-> [  476.118964]  ? get_device_parent+0xde/0x1e0
-> [  476.118970]  device_add+0xe2/0x870
-> [  476.118975]  __power_supply_register.part.0+0x20f/0x3f0
-> [  476.118981]  ? wake_up_q+0x4e/0x90
-> [  476.118990]  sysfs_add_battery+0xa4/0x1d0 [battery]
-> [  476.118998]  acpi_battery_update+0x19e/0x290 [battery]
-> [  476.119002]  acpi_battery_notify+0x50/0x120 [battery]
-> [  476.119006]  acpi_ev_notify_dispatch+0x49/0x70
-> [  476.119012]  acpi_os_execute_deferred+0x1a/0x30
-> [  476.119015]  process_one_work+0x177/0x330
-> [  476.119022]  worker_thread+0x251/0x390
-> [  476.119026]  ? __pfx_worker_thread+0x10/0x10
-> [  476.119030]  kthread+0xd2/0x100
-> [  476.119033]  ? __pfx_kthread+0x10/0x10
-> [  476.119035]  ret_from_fork+0x34/0x50
-> [  476.119040]  ? __pfx_kthread+0x10/0x10
-> [  476.119042]  ret_from_fork_asm+0x1a/0x30
-> [  476.119049]  </TASK>
-> [  476.142552] kobject: kobject_add_internal failed for BAT1 with -EEXIST=
-, don't try to register things with the same name in the same directory.
-> [  476.415022] ata1.00: unexpected _GTF length (8)
-> [  476.428076] sd 0:0:0:0: [sda] Starting disk
-> [  476.835035] ata1.00: unexpected _GTF length (8)
-> [  476.839720] ata1.00: configured for UDMA/133
-> [  491.328831] sysfs: cannot create duplicate filename '/devices/LNXSYSTM=
-:00/LNXSYBUS:00/PNP0C0A:00/power_supply/BAT1'
-> [  491.329720] CPU: 1 UID: 0 PID: 185 Comm: kworker/1:4 Kdump: loaded Not=
- tainted 6.12.38+deb13-amd64 #1  Debian 6.12.38-1
-> [  491.329727] Hardware name: Gateway          NV44             /SJV40-MV=
-        , BIOS V1.3121 04/08/2009
-> [  491.329731] Workqueue: kacpi_notify acpi_os_execute_deferred
-> [  491.329741] Call Trace:
-> [  491.329745]  <TASK>
-> [  491.329751]  dump_stack_lvl+0x5d/0x80
-> [  491.329758]  sysfs_warn_dup.cold+0x17/0x23
-> [  491.329762]  sysfs_create_dir_ns+0xce/0xe0
-> [  491.329770]  kobject_add_internal+0xba/0x250
-> [  491.329775]  kobject_add+0x96/0xc0
-> [  491.329779]  ? get_device_parent+0xde/0x1e0
-> [  491.329784]  device_add+0xe2/0x870
-> [  491.329790]  __power_supply_register.part.0+0x20f/0x3f0
-> [  491.329797]  sysfs_add_battery+0xa4/0x1d0 [battery]
-> [  491.329805]  acpi_battery_update+0x19e/0x290 [battery]
-> [  491.329809]  acpi_battery_notify+0x50/0x120 [battery]
-> [  491.329812]  acpi_ev_notify_dispatch+0x49/0x70
-> [  491.329817]  acpi_os_execute_deferred+0x1a/0x30
-> [  491.329820]  process_one_work+0x177/0x330
-> [  491.329826]  worker_thread+0x251/0x390
-> [  491.329830]  ? __pfx_worker_thread+0x10/0x10
-> [  491.329833]  kthread+0xd2/0x100
-> [  491.329836]  ? __pfx_kthread+0x10/0x10
-> [  491.329838]  ret_from_fork+0x34/0x50
-> [  491.329842]  ? __pfx_kthread+0x10/0x10
-> [  491.329844]  ret_from_fork_asm+0x1a/0x30
-> [  491.329850]  </TASK>
-> [  491.329855] kobject: kobject_add_internal failed for BAT1 with -EEXIST=
-, don't try to register things with the same name in the same directory.
->
-> Fixes: 10666251554c ("ACPI: battery: Install Notify() handler directly")
-> Signed-off-by: GuangFei Luo <luogf2025@163.com>
-> Cc: stable@vger.kernel.org
+> Signed-off-by: Kaushlendra Kumar <kaushlendra.kumar@intel.com>
 > ---
-> v6:
->   - Update Fixes tag: point to commit 10666251554c ("ACPI: battery: Insta=
-ll
->     Notify() handler directly"), which introduced the sysfs_add_battery()
->     re-entry issue when acpi_battery_notify is registered via
->     acpi_dev_install_notify_handler(). The problem does not occur with
->     acpi_bus_register_driver().
+>  drivers/base/power/wakeup.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 >
-> v5:
->   - Move changelog above the '---' line as per submission guidelines.
+> diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
+> index d1283ff1080b..ae6ec9f04b61 100644
+> --- a/drivers/base/power/wakeup.c
+> +++ b/drivers/base/power/wakeup.c
+> @@ -189,12 +189,11 @@ static void wakeup_source_remove(struct wakeup_sour=
+ce *ws)
+>         if (WARN_ON(!ws))
+>                 return;
 >
-> v4:
->   - Uses guard(mutex) for battery->sysfs_lock in sysfs_add_battery().
->   - Since sysfs_add_battery() now handles the battery->bat check with
->     proper locking,the extra if (!battery->bat) check at the call site
->     has become redundant.
->
-> v3:
->   - Modified the earlier approach: since sysfs_add_battery() is invoked
->     from multiple places, the most reliable way is to add the lock inside
->     the function itself.
->   - sysfs_remove_battery() had a similar race issue in the past, which wa=
-s
->     fixed by adding a lock as well. Reference:
->     https://lore.kernel.org/all/9c921c22a7f33397a6774d7fa076db9b6a0fd669
->         .1312318300.git.len.brown@intel.com/
->
-> v2:
->  - Fix missing mutex_unlock in acpi_battery_update()
->    (Reported-by: kernel test robot)
->
-> v1:
->  - Initial patch to handle race when hotplugging battery, preventing
->    duplicate sysfs entries.
-> ---
->  drivers/acpi/battery.c | 20 +++++++++++---------
->  1 file changed, 11 insertions(+), 9 deletions(-)
->
-> diff --git a/drivers/acpi/battery.c b/drivers/acpi/battery.c
-> index 6905b56bf3e4..20d68f3e881f 100644
-> --- a/drivers/acpi/battery.c
-> +++ b/drivers/acpi/battery.c
-> @@ -850,6 +850,10 @@ static void __exit battery_hook_exit(void)
->
->  static int sysfs_add_battery(struct acpi_battery *battery)
->  {
-> +       guard(mutex)(&battery->sysfs_lock);
-> +       if (battery->bat)
-> +               return 0;
-> +
->         struct power_supply_config psy_cfg =3D {
->                 .drv_data =3D battery,
->                 .attr_grp =3D acpi_battery_groups,
-> @@ -1026,11 +1030,9 @@ static int acpi_battery_update(struct acpi_battery=
- *battery, bool resume)
->                 return result;
->         acpi_battery_quirks(battery);
->
-> -       if (!battery->bat) {
-> -               result =3D sysfs_add_battery(battery);
-> -               if (result)
-> -                       return result;
-> -       }
-> +       result =3D sysfs_add_battery(battery);
-> +       if (result)
-> +               return result;
->
->         /*
->          * Wakeup the system if battery is critical low
-> @@ -1112,12 +1114,12 @@ static int battery_notify(struct notifier_block *=
-nb,
->                         result =3D acpi_battery_get_info(battery);
->                         if (result)
->                                 return result;
+> +       timer_delete_sync(&ws->timer);
+>         raw_spin_lock_irqsave(&events_lock, flags);
+>         list_del_rcu(&ws->entry);
+>         raw_spin_unlock_irqrestore(&events_lock, flags);
+>         synchronize_srcu(&wakeup_srcu);
 > -
-> -                       result =3D sysfs_add_battery(battery);
-> -                       if (result)
-> -                               return result;
->                 }
->
-> +               result =3D sysfs_add_battery(battery);
-> +               if (result)
-> +                       return result;
-> +
-
-Why is this change necessary?
-
->                 acpi_battery_init_alarm(battery);
->                 acpi_battery_get_state(battery);
->                 break;
+> -       timer_delete_sync(&ws->timer);
+>         /*
+>          * Clear timer.function to make wakeup_source_not_registered() tr=
+eat
+>          * this wakeup source as not registered.
 > --
+> 2.34.1
+>
 
