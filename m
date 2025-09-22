@@ -1,235 +1,170 @@
-Return-Path: <linux-pm+bounces-35172-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35173-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88489B91954
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Sep 2025 16:08:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B7C0DB919EA
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Sep 2025 16:17:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 36A541900F1C
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Sep 2025 14:08:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D527C42478C
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Sep 2025 14:17:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DEA51D5CF2;
-	Mon, 22 Sep 2025 14:07:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA0851DFE09;
+	Mon, 22 Sep 2025 14:16:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="T5GskFl7";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="Y3Ervkkc";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="T5GskFl7";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="Y3Ervkkc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QSJ5KxWn"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37A21191F9C
-	for <linux-pm@vger.kernel.org>; Mon, 22 Sep 2025 14:07:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4D8B1DFD8F
+	for <linux-pm@vger.kernel.org>; Mon, 22 Sep 2025 14:16:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758550071; cv=none; b=Nc/vE+rs+7ChkDvFihxcWBdk27Jdy1IZwHqTh8Xru6Gp3bS8WV5v4dzGmRQAbyBH7rXEp1OTtMGYRh1XNkvw6P0cQn9NWuqeuvM8EuaMn8IArjgVGRELwavFo1GvWlK8z5oNbecFqWnfeMFGp7b937ihb70cssnyy7YPldDB28Q=
+	t=1758550616; cv=none; b=T4ZxgnmExgIOqv9iPMe0yps5J0dtmUPEar31+TJWi4EJbgnBT0g9ubfidZXNgL1aqKlyz1cWXKTGCdjGdxmYRT+hi2GxjM8nhZuDyvrAFbi3ihj/5Cujpp82AQUP7DJfouUgeQe8V/xvgIOa0scShac3kny8XdsvIMovjVhkoNM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758550071; c=relaxed/simple;
-	bh=WqYi7C7rPVPMchWD3Tm/mWLYvFm7Ms2J7l9sot1F8V4=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Kj+/mHnUhuPfNFRVI/ExE4yoeDdnWgZ4fH0EH1WDAXPPSyruNs3/TWC1wdZAam9U0uRt1tAW5RMCThh2y9Wge5RGLFJxRKtMz/6Q6soNKyNIEyMWiwWA/h2jyNNdbTpqO5N4fgUf2fxdKzASk1+c59e0qm+pUcY2cbGdB5xy/00=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=T5GskFl7; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=Y3Ervkkc; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=T5GskFl7; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=Y3Ervkkc; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 680DC21E89;
-	Mon, 22 Sep 2025 14:07:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1758550068; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=VGHYx5pOu3PjDgbMOcAjQn1OWUKG2IfHDuHiMX4Epn0=;
-	b=T5GskFl792iJc+ydo0xeGMBXRXGfst8/vFHPYscSYhHlez9L6VIXv4u5ksxRo7NCINOPS6
-	O9hwvd2neeDeHkQL0Mm22lxRxo8LNKkHJFN6tHizuVRYCGRDgGHhUeL3Pnk6hEddK2N/vv
-	8oSsO75GD7Vbc6CLC2OAdg+k8wtA7mM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1758550068;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=VGHYx5pOu3PjDgbMOcAjQn1OWUKG2IfHDuHiMX4Epn0=;
-	b=Y3Ervkkc+c9IT/VS6vwPm5mlkV2ozDDrvGYH/D6b8hVfg7X5tbWNBshBrUr3WhSWnn/XfJ
-	Iv0KCW+WAC45UzCg==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=T5GskFl7;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=Y3Ervkkc
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1758550068; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=VGHYx5pOu3PjDgbMOcAjQn1OWUKG2IfHDuHiMX4Epn0=;
-	b=T5GskFl792iJc+ydo0xeGMBXRXGfst8/vFHPYscSYhHlez9L6VIXv4u5ksxRo7NCINOPS6
-	O9hwvd2neeDeHkQL0Mm22lxRxo8LNKkHJFN6tHizuVRYCGRDgGHhUeL3Pnk6hEddK2N/vv
-	8oSsO75GD7Vbc6CLC2OAdg+k8wtA7mM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1758550068;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=VGHYx5pOu3PjDgbMOcAjQn1OWUKG2IfHDuHiMX4Epn0=;
-	b=Y3Ervkkc+c9IT/VS6vwPm5mlkV2ozDDrvGYH/D6b8hVfg7X5tbWNBshBrUr3WhSWnn/XfJ
-	Iv0KCW+WAC45UzCg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 200F713A78;
-	Mon, 22 Sep 2025 14:07:48 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id 8KZ8BjRY0WhCCQAAD6G6ig
-	(envelope-from <tiwai@suse.de>); Mon, 22 Sep 2025 14:07:48 +0000
-Date: Mon, 22 Sep 2025 16:07:47 +0200
-Message-ID: <87zfammvgs.wl-tiwai@suse.de>
-From: Takashi Iwai <tiwai@suse.de>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Takashi Iwai <tiwai@suse.de>,
-	Linux PM <linux-pm@vger.kernel.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	Linux PCI <linux-pci@vger.kernel.org>,
-	Alex Williamson <alex.williamson@redhat.com>,
-	Bjorn Helgaas <helgaas@kernel.org>,
-	Zhang Qilong <zhangqilong3@huawei.com>,
-	Ulf Hansson <ulf.hansson@linaro.org>
-Subject: Re: [PATCH v2 1/3] PM: runtime: Add auto-cleanup macros for "resume and get" operations
-In-Reply-To: <CAJZ5v0iwNuFxiu3x3-fWO9dkLUq_=c3H=G2OgFmPfVguw0U4Sw@mail.gmail.com>
-References: <6204724.lOV4Wx5bFT@rafael.j.wysocki>
-	<3388279.44csPzL39Z@rafael.j.wysocki>
-	<875xdaevab.wl-tiwai@suse.de>
-	<CAJZ5v0hSBDg4fD7Gy6yEX31xO-3USJG_jFps71BRJJ2f0Oh90A@mail.gmail.com>
-	<87348eobnv.wl-tiwai@suse.de>
-	<CAJZ5v0iwNuFxiu3x3-fWO9dkLUq_=c3H=G2OgFmPfVguw0U4Sw@mail.gmail.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+	s=arc-20240116; t=1758550616; c=relaxed/simple;
+	bh=p3VFPh6zlqMPmTv7B8WmCD9EeY5W5Y5bNLdM/OEKTHA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=urGudsfVq+5ySXcuTVg98ZcBylnVtjsRN1gKPpwy+exI6w0E7n+J+qyNjHYF846KAm0mP20OdqlhKNAaOk8X1CtCwOScnEfvU67VufcescLscBHkeNeV8+PDctkvxvyPjsVStcVbnJDoUeZMDpTnY+urncke6b8NvI/nrzjAXBE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QSJ5KxWn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6863DC4CEF7
+	for <linux-pm@vger.kernel.org>; Mon, 22 Sep 2025 14:16:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1758550616;
+	bh=p3VFPh6zlqMPmTv7B8WmCD9EeY5W5Y5bNLdM/OEKTHA=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=QSJ5KxWnDGVuXQVsLeNgRxIi2vUmRhnv5Cs84C7HJIe5EV0YN+jdS4POIR51uSLMD
+	 q7aoDVLdSieVi/Ysg0lBmAkGi63s8Wz671LYAOaK0kd0Evbdyt9kpuDQSa18KoRNLL
+	 DpBUkQyCXx6Hr+6c8Tt8hZM/xR+97mD6d768Ca6Inze88xda7DQeVoevqumd6NP4iE
+	 qh5oG0ZwnzVk1wdC1lUojasyewc6+9NrL8nqZLbjBH/FAjrIMNTl/nqhDOHuJPjSJ/
+	 u62ale+XrMb4DFjWFaXwTeu8e9rundsQV8cMqUd3QELrJhswlrhepShs1hfF0QlZQt
+	 2dp9h2xCEeLWw==
+Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-62ea23446f4so198159eaf.3
+        for <linux-pm@vger.kernel.org>; Mon, 22 Sep 2025 07:16:56 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWXfCwP2nlVT8SBA8p+R/o2Vek+6kZaZD9oa+wkLSn1QatC3Lft1E9v8oY8UUAsso1pQ4WbGHdUJw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwN9oLCI+nCsajhTfwhEeLS8aBo88beeISfQxHKDoltd8Z8S+9r
+	WKK4amEli5BFYN/8FNUd26+E+IE9wFdvjtZ3h4DvU1LdeIatNLZVdK6WJdTnMyckp23xDNmM/t1
+	A7xk3k74qcOP+pKt0okA4lZGKm6J/iX0=
+X-Google-Smtp-Source: AGHT+IETiCQcLSU3PeDydQh7rifOkZY2/e69xVa4uqUWHyP8lQ5K6Dq6B4mRaVxu42sWCzafFCDFQD9SXsgOIheAy8k=
+X-Received: by 2002:a05:6820:1caa:b0:624:b767:e1c4 with SMTP id
+ 006d021491bc7-62724df2f3bmr7336347eaf.0.1758550615446; Mon, 22 Sep 2025
+ 07:16:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Level: 
-X-Spam-Flag: NO
-X-Rspamd-Queue-Id: 680DC21E89
-X-Rspamd-Action: no action
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spamd-Result: default: False [-3.51 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	ARC_NA(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_TLS_ALL(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	DNSWL_BLOCKED(0.00)[2a07:de40:b281:106:10:150:64:167:received,2a07:de40:b281:104:10:150:64:97:from];
-	RCVD_COUNT_TWO(0.00)[2];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo,suse.de:dkim,suse.de:mid,suse.de:email];
-	TO_DN_ALL(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	DKIM_TRACE(0.00)[suse.de:+]
-X-Spam-Score: -3.51
+MIME-Version: 1.0
+References: <6204724.lOV4Wx5bFT@rafael.j.wysocki> <3388279.44csPzL39Z@rafael.j.wysocki>
+ <875xdaevab.wl-tiwai@suse.de> <CAJZ5v0hSBDg4fD7Gy6yEX31xO-3USJG_jFps71BRJJ2f0Oh90A@mail.gmail.com>
+ <87348eobnv.wl-tiwai@suse.de> <CAJZ5v0iwNuFxiu3x3-fWO9dkLUq_=c3H=G2OgFmPfVguw0U4Sw@mail.gmail.com>
+ <87zfammvgs.wl-tiwai@suse.de>
+In-Reply-To: <87zfammvgs.wl-tiwai@suse.de>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 22 Sep 2025 16:16:39 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0iL9V9SC7fQ6_RGCMfUAZzCkCp0kR6zdZWbWtKZ6dQQ2w@mail.gmail.com>
+X-Gm-Features: AS18NWCxsMyEXE-vLTHxPks8l77MEe4zD4P6Z-rZFfww8uT22FI3Ko4a3z3kutc
+Message-ID: <CAJZ5v0iL9V9SC7fQ6_RGCMfUAZzCkCp0kR6zdZWbWtKZ6dQQ2w@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] PM: runtime: Add auto-cleanup macros for "resume
+ and get" operations
+To: Takashi Iwai <tiwai@suse.de>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, Linux PCI <linux-pci@vger.kernel.org>, 
+	Alex Williamson <alex.williamson@redhat.com>, Bjorn Helgaas <helgaas@kernel.org>, 
+	Zhang Qilong <zhangqilong3@huawei.com>, Ulf Hansson <ulf.hansson@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 22 Sep 2025 15:44:51 +0200,
-Rafael J. Wysocki wrote:
-> 
-> On Mon, Sep 22, 2025 at 3:32 PM Takashi Iwai <tiwai@suse.de> wrote:
+On Mon, Sep 22, 2025 at 4:07=E2=80=AFPM Takashi Iwai <tiwai@suse.de> wrote:
+>
+> On Mon, 22 Sep 2025 15:44:51 +0200,
+> Rafael J. Wysocki wrote:
 > >
-> > On Mon, 22 Sep 2025 14:50:32 +0200,
-> > Rafael J. Wysocki wrote:
+> > On Mon, Sep 22, 2025 at 3:32=E2=80=AFPM Takashi Iwai <tiwai@suse.de> wr=
+ote:
 > > >
-> > > On Mon, Sep 22, 2025 at 10:38 AM Takashi Iwai <tiwai@suse.de> wrote:
+> > > On Mon, 22 Sep 2025 14:50:32 +0200,
+> > > Rafael J. Wysocki wrote:
 > > > >
-> > > > On Sat, 20 Sep 2025 12:54:58 +0200,
-> > > > Rafael J. Wysocki wrote:
+> > > > On Mon, Sep 22, 2025 at 10:38=E2=80=AFAM Takashi Iwai <tiwai@suse.d=
+e> wrote:
 > > > > >
-> > > > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > > > On Sat, 20 Sep 2025 12:54:58 +0200,
+> > > > > Rafael J. Wysocki wrote:
+> > > > > >
+> > > > > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > > > >
+> > > > > > It is generally useful to be able to automatically drop a devic=
+e's
+> > > > > > runtime PM usage counter incremented by runtime PM operations t=
+hat
+> > > > > > resume a device and bump up its usage counter [1].
+> > > > > >
+> > > > > > To that end, add DEFINE_CLASS() macros allowing pm_runtime_put(=
+)
+> > > > > > and pm_runtime_put_autosuspend() to be used for the auto-cleanu=
+p in
+> > > > > > those cases.
+> > > > > >
+> > > > > > Simply put, a piece of code like below:
+> > > > > >
+> > > > > >       pm_runtime_get_sync(dev);
+> > > > > >       .....
+> > > > > >       pm_runtime_put(dev);
+> > > > > >       return 0;
+> > > > > >
+> > > > > > can be transformed with CLASS() like:
+> > > > > >
+> > > > > >       CLASS(pm_runtime_get_active, pm)(dev);
+> > > > > >       if (IS_ERR(pm))
+> > > > > >               return PTR_ERR(pm);
+> > > > > >       .....
+> > > > > >       return 0;
+> > > > > >
+> > > > > > (note the new resume error handling).
 > > > > >
-> > > > > It is generally useful to be able to automatically drop a device's
-> > > > > runtime PM usage counter incremented by runtime PM operations that
-> > > > > resume a device and bump up its usage counter [1].
+> > > > > Do we still allow the code without the error check even using CLA=
+SS()?
+> > > > > Although the error check should be handled, it's not mandatory fo=
+r
+> > > > > now.  That said, the above example could be still in a form like:
 > > > > >
-> > > > > To that end, add DEFINE_CLASS() macros allowing pm_runtime_put()
-> > > > > and pm_runtime_put_autosuspend() to be used for the auto-cleanup in
-> > > > > those cases.
+> > > > >         CLASS(pm_runtime_get_active, pm)(dev);
+> > > > >         .....
+> > > > >         return 0;
 > > > > >
-> > > > > Simply put, a piece of code like below:
-> > > > >
-> > > > >       pm_runtime_get_sync(dev);
-> > > > >       .....
-> > > > >       pm_runtime_put(dev);
-> > > > >       return 0;
-> > > > >
-> > > > > can be transformed with CLASS() like:
-> > > > >
-> > > > >       CLASS(pm_runtime_get_active, pm)(dev);
-> > > > >       if (IS_ERR(pm))
-> > > > >               return PTR_ERR(pm);
-> > > > >       .....
-> > > > >       return 0;
-> > > > >
-> > > > > (note the new resume error handling).
+> > > > > while adding the proper error check is recommended?
 > > > >
-> > > > Do we still allow the code without the error check even using CLASS()?
-> > > > Although the error check should be handled, it's not mandatory for
-> > > > now.  That said, the above example could be still in a form like:
+> > > > I'd rather not encourage doing this.
 > > > >
-> > > >         CLASS(pm_runtime_get_active, pm)(dev);
-> > > >         .....
-> > > >         return 0;
-> > > >
-> > > > while adding the proper error check is recommended?
+> > > > While it may still produce working code in some cases, one needs to
+> > > > remember that in case of a runtime resume error it will be running
+> > > > without a runtime PM reference it has attempted to acquire.
 > > >
-> > > I'd rather not encourage doing this.
-> > >
-> > > While it may still produce working code in some cases, one needs to
-> > > remember that in case of a runtime resume error it will be running
-> > > without a runtime PM reference it has attempted to acquire.
+> > > Fair enough.  Then it'd be also good to mention that in the
+> > > description, too.
 > >
-> > Fair enough.  Then it'd be also good to mention that in the
-> > description, too.
-> 
-> I can also add classes for the cases in which resume errors can be
-> neglected, like these:
-> 
-> DEFINE_CLASS(pm_runtime_get_sync, struct device *,
->          if (_T) pm_runtime_put(_T),
->          ({ pm_runtime_get_sync(dev); dev; }), struct device *dev)
-> 
-> DEFINE_CLASS(pm_runtime_get_sync_auto, struct device *,
->          if (_T) pm_runtime_put_autosuspend(_T),
->          ({ pm_runtime_get_sync(dev); dev; }), struct device *dev)
-> 
-> with a comment explaining what they are for.
+> > I can also add classes for the cases in which resume errors can be
+> > neglected, like these:
+> >
+> > DEFINE_CLASS(pm_runtime_get_sync, struct device *,
+> >          if (_T) pm_runtime_put(_T),
+> >          ({ pm_runtime_get_sync(dev); dev; }), struct device *dev)
+> >
+> > DEFINE_CLASS(pm_runtime_get_sync_auto, struct device *,
+> >          if (_T) pm_runtime_put_autosuspend(_T),
+> >          ({ pm_runtime_get_sync(dev); dev; }), struct device *dev)
+> >
+> > with a comment explaining what they are for.
+>
+> It might be helpful, indeed, since the error handling isn't always
+> straightforward, and this still allows us to convert to the
+> auto-cleanup safely.  It's still worth to mention that those aren't
+> recommended options, though.
 
-It might be helpful, indeed, since the error handling isn't always
-straightforward, and this still allows us to convert to the
-auto-cleanup safely.  It's still worth to mention that those aren't
-recommended options, though.
+Agreed.
 
-
-thanks,
-
-Takashi
+I'll send a v3 including these changes.
 
