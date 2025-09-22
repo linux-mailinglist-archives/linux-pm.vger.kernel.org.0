@@ -1,212 +1,185 @@
-Return-Path: <linux-pm+bounces-35180-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35181-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E3F0DB9230C
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Sep 2025 18:19:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id ADB66B92315
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Sep 2025 18:19:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B6A1C7A3F3D
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Sep 2025 16:17:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 284BF7A72A2
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Sep 2025 16:17:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4ED231195F;
-	Mon, 22 Sep 2025 16:18:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 301F2311C17;
+	Mon, 22 Sep 2025 16:18:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CqfXrAFB"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B+y0W5jr"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25D0C3115B0
-	for <linux-pm@vger.kernel.org>; Mon, 22 Sep 2025 16:18:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FC8D311975
+	for <linux-pm@vger.kernel.org>; Mon, 22 Sep 2025 16:18:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758557896; cv=none; b=eaHPoHmNngViE1QpVnYaDpSp1GmxtOdcpa4UwxXCbTGTSwlfzRXIG+T42LuzEt/S1MgyKMPswsGt6/7vzb3yXxyexIKUNvyKI3J5e/I3aus/bMQzK2ISlR3uvjBYfSgcWx6rsBRBfvNtZwbHO3prjqQqlpn0Fc7l1wa0j4dzdHc=
+	t=1758557917; cv=none; b=XBlc7Gkgjh1u15Q/ydOoSe3nC440L/clsVm5rqMu14cvhhYYnD4jdQqGP+jMSWPEld9Jz91R/llMG8YhNAWEOZl4jtcYeYrEiMIlx7IBWq0MbNpjAhoy9jnadfaLu1X4DjJhnR8FxtA34J+leIQu2DoU3I9QcZVudyUh6NIS+fw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758557896; c=relaxed/simple;
-	bh=YDDPtDS5PpaBUTtBuBODfZ787hS7fpBN2ZOWG34B3t4=;
+	s=arc-20240116; t=1758557917; c=relaxed/simple;
+	bh=/6cwwyx95yFe2VTI7rjAQhARkqn7dtwQ1pD0HDEwEf8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RSgpeYIGhzs6pMmCpkg6kQMNLf1b0V3lLtJo3V7X6UWZi7DBa4wLAuVOfwOmnQjYk8QmS6fiDJAQPMPNXZaA5Bu+1UG6/7v88jvPptXYKtizhxl0S+EpNdiMUzrtni857Q/aP3HXaBUkwlL4VY7X/Cp3q+s3jCaR3lbLF1dWB8Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CqfXrAFB; arc=none smtp.client-ip=209.85.128.51
+	 To:Cc:Content-Type; b=bHXSve1HZxdzGBbEWgGiUkiucAcT1qUQYYA7OTqkWQqeIPf02Twt5NA8HP3h8+EbxaO7TvaHK+s5CeMjkQfzo6dGjNFC7x6vSmxW7rW3c32+ye/rwacFslDawRV4wtVvIWaNmodd6vN/+dq4ZMDp+coem4T2Z/8C/W7t4PdJlVw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B+y0W5jr; arc=none smtp.client-ip=209.85.167.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-45df7dc1b98so27765675e9.1
-        for <linux-pm@vger.kernel.org>; Mon, 22 Sep 2025 09:18:13 -0700 (PDT)
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-57e03279bfeso1858304e87.0
+        for <linux-pm@vger.kernel.org>; Mon, 22 Sep 2025 09:18:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758557892; x=1759162692; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1758557913; x=1759162713; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=YRWvsgj06ryKBVe+hXMBpBLtxOsCv8UUnSD06Qt2wRU=;
-        b=CqfXrAFB3hpXtjltSFqS7U6yh8OPdIcytYtO+2v4cHcW69eTMI5BnhQmrBf+1IIw4Q
-         IID1bSZoGHnL4v588s3YGOuAGbVzGOw0o7pgrPDi63hmSveYEkihfxdDTgW+n270NlN2
-         LJbMA/mKTtKOssOevs7q6B6tIhp0YnNjYLN24g9v+egwin1Y6IlnOAK6i9JZljyVAH1y
-         ZINb/LS8wei0A7ua7viogfFRLNy0Usco69ELWIbWmqaUPHRBhC6MuJ5KOLac/ZXhQFtE
-         Rv+QaGbBWhK2acjR+b8/5tX+EE8jWNP9Yfpl0N8oBfAx0Z0O7LtWmBvy/osCcJp/GW1Y
-         Ca+Q==
+        bh=QWRtWQb4tDxw+RDTltwl4oqgAah0j63IckQcO9ISpds=;
+        b=B+y0W5jrON3vUgE9gMEjzzqgeI4CAYy4nBbbY2kwy2f/A4ITKm4642WsSqHc1IOO7e
+         kCfaNepv0TA2wrq50eHN8JORs97F/CWkyN80iYj0zTvTtfFFw80J1JcpskcK9rjvLBnw
+         ZfnqfoBg1IOxhV+nznb386tOUfe0nDG4tTkxWU3Kq8rsEI4WvT6CVftMsqtvitG4CnM+
+         3u4mhK16x0Z4Ltlk8nRYp9OngR9AqX0OglLpLql1cGh+R2IhXef2PBUbBYB+1jLflowd
+         44wWRm9omEbwWDF08trX2f4sJnETtd7KirofR85e6rEMxxl0XCKJNbS+Qiavt+5hlYJa
+         rcNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758557892; x=1759162692;
+        d=1e100.net; s=20230601; t=1758557913; x=1759162713;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=YRWvsgj06ryKBVe+hXMBpBLtxOsCv8UUnSD06Qt2wRU=;
-        b=REEBKVSraZ3h3Ar6nZfY8qseW0M14pGVkt/If+9q5MsdsDQfdmkcUPAvIRwO6OjQes
-         KJ/hwajOMpYJkujd6E/RVwbMi1f73RWYKtoxDoBDsuo9M5XkK6PYuWcmp4mqCIKYFpq9
-         3K5J7nFM3/RT5HmXNOc3EhMiAVI3Nb5FsfFcQOdWKiUSNVmhz8A+2f3d43CgPpj16DrD
-         Yua+o1NYOhAcgjgiOR9pYbfQgmQR8Qqm+jwNGKH7icOUrs5VGxgiZr9cGS7OYKp/Jb/k
-         nqH4qRIRIWFmkzGLexHcAM/CeeCOR2OCgbWFyasEBCCzf1pUNDYHqOBSsqrAkmpEGdTr
-         Fi1g==
-X-Forwarded-Encrypted: i=1; AJvYcCWs2WCD3D+f6NlDclObx6KhaXJD0/G0AOedmIKBhd/vC7/pWKE2CmOGXojIFqsvxeJFMWjiTrg5QQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzKmhO4ueLjVq/HLdSZFG7SHqa6wz5G8QHZUdjBfljragr8grLk
-	CAi2cwwmIQUzB3XjFvgzghXmNbNVgjSZTEyJUsTrc1q4mh0UdMTLi3SeFRof0vsFJJunKxabVQr
-	mrZDj4UD94sMIwDmj/4MrnAqLG/sn+w4=
-X-Gm-Gg: ASbGncs1TUHYxBd2wgZL8UZBcvK9EzdZHT060WL4JvzeY2PahNWLeMh/zIMkEwqtFYx
-	HabluM3g98j4DwK2iXegHKSvCq9TOucCYebNcub9VgOnOGsgZjRf8CSZLVMu6QSTetIjY7zjDzN
-	KROipoFY0O7/rl6W9N6N46aAHW4OaewtGTdnpUn8/op0EnPB0bfEel35s64M9sh9G0j2bz9QjRM
-	zeDC0pG
-X-Google-Smtp-Source: AGHT+IF1OW4Uuo/M1UxtfnKg6qFJMuGj8u/gBh+HyDuVE8SlDhk6/kPaC4q40fTL9VF7L9Z5AE3joelyQN0VbpKBDt0=
-X-Received: by 2002:a05:6000:610:b0:3e7:471c:1de3 with SMTP id
- ffacd0b85a97d-3ee7db4c459mr10915387f8f.14.1758557892173; Mon, 22 Sep 2025
- 09:18:12 -0700 (PDT)
+        bh=QWRtWQb4tDxw+RDTltwl4oqgAah0j63IckQcO9ISpds=;
+        b=ZkIS3RsItntDAxnGHfY0bLGGcN7ufhfMvzLDcM1K6Y05yUQS5KCoKorL4qkbvxZvF8
+         9vECrCZPCcBPIhiZMx4Kh2jN3rm/l6C4Tq7WZwaKPhaQBFOuwwQw61RPB3sS4cL2EJTz
+         U3z9dgm4gJLkbJFTAueTBYdl1aqQTs3IGL7gxn/ImJAtuwlM4aiU3BbwoaGBKX0dx5Ww
+         ffj9q+S11RZppRAfR7NYQSNFTWtpetwqTd6GSaNCKQJL9fsmjMhAHH8GysSXg0o6fTF/
+         QVOcr7hidyxugulpqh9wcwt7wosjC3DUgRgOch7sl1F2223do8S2CDpsavOEs1Ng9buD
+         t0VQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVyabveGjLjh9iJ6FwqFEhM2ZcuxIt2ro/12wJgRb8YhZOSjdN0L2rjLHiTVRtuXCwG8C+8YtcnxQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yww2pmTiYuKJwZJKenGrsyuKJpzqomL1iv1MWsVlqsTWg9lUdz9
+	xXxvhDsSswt/g1TcGN1NYA9C7X6Vxwzd4KlvQnruZFev/uHe/sE5TnII4YZtfIy7CuhxwmlPsa0
+	MgiUAO+rd7ihxSTIlFO2PKlO2eHyoCR8=
+X-Gm-Gg: ASbGncu01SnYGwBtB3+iEG6COe4tFMVQD0amtHXEkJ+RX0Ybh5FnHRAta1XrGDfHUog
+	sCmb0MytuUHnUqJaTthPYVnypqpkriIiGXZY08tshBqBL89PWllI8jAZOrPwLRfem4HDM/a3mSD
+	FH+6uaogVy/MsM4QFR+DKl0HJPA5oJxhCgAhFFOUEz42boyLz1BpZ+SNablxf337O17CoICqtLG
+	/PvewA=
+X-Google-Smtp-Source: AGHT+IHbkCgbJFbDcK840KctNsVPKayfAg5z4hva0W8zSa5d3VGIBMvbwMO4roIb9UisDL440+gagdm9md1t8goV1+E=
+X-Received: by 2002:a05:6512:4504:b0:57d:d62e:b1fe with SMTP id
+ 2adb3069b0e04-57dd62eb499mr1348510e87.10.1758557912953; Mon, 22 Sep 2025
+ 09:18:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250915080157.28195-1-clamor95@gmail.com> <20250915080157.28195-4-clamor95@gmail.com>
- <20250922160040.GA92842-robh@kernel.org>
-In-Reply-To: <20250922160040.GA92842-robh@kernel.org>
-From: Svyatoslav Ryhel <clamor95@gmail.com>
-Date: Mon, 22 Sep 2025 19:18:00 +0300
-X-Gm-Features: AS18NWDpKyD99LSDk4cdtlBB0rRoc7O4fFn4mETqSbvXEWtojMeCyyIIccv8Y9w
-Message-ID: <CAPVz0n3cmFC1PdFnLJ0Vf60i3c6pDO9Lvi8dmAHzBgwgsrPXnA@mail.gmail.com>
-Subject: Re: [PATCH v3 03/11] dt-bindings: memory: Document Tegra114 Memory Controller
-To: Rob Herring <robh@kernel.org>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Thierry Reding <treding@nvidia.com>, Thierry Reding <thierry.reding@gmail.com>, 
-	Jonathan Hunter <jonathanh@nvidia.com>, Prashant Gaikwad <pgaikwad@nvidia.com>, 
-	Mikko Perttunen <mperttunen@nvidia.com>, Michael Turquette <mturquette@baylibre.com>, 
-	Stephen Boyd <sboyd@kernel.org>, Dmitry Osipenko <digetx@gmail.com>, 
-	MyungJoo Ham <myungjoo.ham@samsung.com>, Kyungmin Park <kyungmin.park@samsung.com>, 
-	Chanwoo Choi <cw00.choi@samsung.com>, linux-kernel@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-tegra@vger.kernel.org, 
-	linux-clk@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20250731-pci-tegra-module-v7-0-cad4b088b8fb@gmail.com>
+ <CALHNRZ9tOJccZ5sQjvkoPe4-+VUtWRxAzAOUainGUCs4+_RBCw@mail.gmail.com>
+ <omchhpbmsydfcsm6mzmbdiupsrxmxxvkxqf33fgi563akn76vf@vkc7k2zhlvee> <CALHNRZ8PZzseaTSCvhM6o7jMVYtVdHTczurXh1q+DY5MG62+DA@mail.gmail.com>
+In-Reply-To: <CALHNRZ8PZzseaTSCvhM6o7jMVYtVdHTczurXh1q+DY5MG62+DA@mail.gmail.com>
+From: Aaron Kling <webgeek1234@gmail.com>
+Date: Mon, 22 Sep 2025 11:18:21 -0500
+X-Gm-Features: AS18NWCkrA0Swv5I_sKNAMQ_VfnE8PJr0_nR10ONiX1dW-00lBFelqUkDRsus4A
+Message-ID: <CALHNRZ8mKZRS=ddyuscoTqu4h8GDR3fM8k36gbjth-csd10GGg@mail.gmail.com>
+Subject: Re: [PATCH v7 0/3] PCI: tegra: Allow building as a module
+To: Manivannan Sadhasivam <mani@kernel.org>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>, Thomas Gleixner <tglx@linutronix.de>, 
+	Lorenzo Pieralisi <lpieralisi@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Bjorn Helgaas <bhelgaas@google.com>, Thierry Reding <thierry.reding@gmail.com>, 
+	Jonathan Hunter <jonathanh@nvidia.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	=?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
+	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, 
+	linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-=D0=BF=D0=BD, 22 =D0=B2=D0=B5=D1=80. 2025=E2=80=AF=D1=80. =D0=BE 19:00 Rob =
-Herring <robh@kernel.org> =D0=BF=D0=B8=D1=88=D0=B5:
+On Mon, Aug 18, 2025 at 1:39=E2=80=AFPM Aaron Kling <webgeek1234@gmail.com>=
+ wrote:
 >
-> On Mon, Sep 15, 2025 at 11:01:49AM +0300, Svyatoslav Ryhel wrote:
-> > Add Tegra114 support into existing Tegra124 MC schema with the most
-> > notable difference in the amount of EMEM timings.
+> On Fri, Aug 1, 2025 at 1:01=E2=80=AFAM Manivannan Sadhasivam <mani@kernel=
+.org> wrote:
 > >
-> > Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
-> > ---
-> >  .../nvidia,tegra124-mc.yaml                   | 97 ++++++++++++++-----
-> >  1 file changed, 74 insertions(+), 23 deletions(-)
+> > On Thu, Jul 31, 2025 at 05:01:55PM GMT, Aaron Kling wrote:
+> > > On Thu, Jul 31, 2025 at 4:59=E2=80=AFPM Aaron Kling via B4 Relay
+> > > <devnull+webgeek1234.gmail.com@kernel.org> wrote:
+> > > >
+> > > > Signed-off-by: Aaron Kling <webgeek1234@gmail.com>
+> > > > ---
+> > > > Changes in v7:
+> > > > - Rebased on 6.16
+> > > > - Updated mailing address list
+> > > > - Link to v6: https://lore.kernel.org/r/20250507-pci-tegra-module-v=
+6-0-5fe363eaa302@gmail.com
+> > > >
+> > > > Changes in v6:
+> > > > - Remove unused debugfs cleanup function, as caught by kernel ci
+> > > > - Link to v5: https://lore.kernel.org/r/20250505-pci-tegra-module-v=
+5-0-827aaac998ba@gmail.com
+> > > >
+> > > > Changes in v5:
+> > > > - Copy commit message exactly word for word on patch 1, as required=
+ by reviewer
+> > > > - Delete remove callback in patch 3, per request
+> > > > - Don't clean up debugfs, per request, which drops patch 4 entirely
+> > > > - Link to v4: https://lore.kernel.org/r/20250505-pci-tegra-module-v=
+4-0-088b552c4b1a@gmail.com
+> > > >
+> > > > Changes in v4:
+> > > > - Updated commit messages for patches 1 and 2, per review
+> > > > - Link to v3: https://lore.kernel.org/r/20250502-pci-tegra-module-v=
+3-0-556a49732d70@gmail.com
+> > > >
+> > > > Changes in v3:
+> > > > - Add patch to drop remove callback, per request
+> > > > - Link to v2: https://lore.kernel.org/r/20250428-pci-tegra-module-v=
+2-0-c11a4b912446@gmail.com
+> > > >
+> > > > Changes in v2:
+> > > > - Add patch to export tegra_cpuidle_pcie_irqs_in_use as required wh=
+en
+> > > >   building pci-tegra as a module for arm
+> > > > - Drop module exit to prevent module unloading, as requested
+> > > > - Link to v1: https://lore.kernel.org/r/20250420-pci-tegra-module-v=
+1-0-c0a1f831354a@gmail.com
+> > > >
+> > > > ---
+> > > > Aaron Kling (3):
+> > > >       irqdomain: Export irq_domain_free_irqs
+> > > >       cpuidle: tegra: Export tegra_cpuidle_pcie_irqs_in_use
+> > > >       PCI: tegra: Allow building as a module
+> > > >
+> > > >  drivers/cpuidle/cpuidle-tegra.c    |  1 +
+> > > >  drivers/pci/controller/Kconfig     |  2 +-
+> > > >  drivers/pci/controller/pci-tegra.c | 35 ++++----------------------=
+---------
+> > > >  kernel/irq/irqdomain.c             |  1 +
+> > > >  4 files changed, 7 insertions(+), 32 deletions(-)
+> > > > ---
+> > > > base-commit: 038d61fd642278bab63ee8ef722c50d10ab01e8f
+> > > > change-id: 20250313-pci-tegra-module-7cbd1c5e70af
+> > > >
+> > > > Best regards,
+> > > > --
+> > > > Aaron Kling <webgeek1234@gmail.com>
+> > > >
+> > > >
+> > >
+> > > Continuing the conversation from the last revision [0]. Is there any
+> > > path forward for this series?
+> > >
 > >
-> > diff --git a/Documentation/devicetree/bindings/memory-controllers/nvidi=
-a,tegra124-mc.yaml b/Documentation/devicetree/bindings/memory-controllers/n=
-vidia,tegra124-mc.yaml
-> > index 7b18b4d11e0a..9cc9360d3bd0 100644
-> > --- a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra=
-124-mc.yaml
-> > +++ b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra=
-124-mc.yaml
-> > @@ -19,7 +19,9 @@ description: |
-> >
-> >  properties:
-> >    compatible:
-> > -    const: nvidia,tegra124-mc
-> > +    enum:
-> > +      - nvidia,tegra114-mc
-> > +      - nvidia,tegra124-mc
-> >
-> >    reg:
-> >      maxItems: 1
-> > @@ -64,29 +66,10 @@ patternProperties:
-> >
-> >            nvidia,emem-configuration:
-> >              $ref: /schemas/types.yaml#/definitions/uint32-array
-> > -            description: |
-> > +            description:
-> >                Values to be written to the EMEM register block. See sec=
-tion
-> > -              "15.6.1 MC Registers" in the TRM.
-> > -            items:
-> > -              - description: MC_EMEM_ARB_CFG
-> > -              - description: MC_EMEM_ARB_OUTSTANDING_REQ
-> > -              - description: MC_EMEM_ARB_TIMING_RCD
-> > -              - description: MC_EMEM_ARB_TIMING_RP
-> > -              - description: MC_EMEM_ARB_TIMING_RC
-> > -              - description: MC_EMEM_ARB_TIMING_RAS
-> > -              - description: MC_EMEM_ARB_TIMING_FAW
-> > -              - description: MC_EMEM_ARB_TIMING_RRD
-> > -              - description: MC_EMEM_ARB_TIMING_RAP2PRE
-> > -              - description: MC_EMEM_ARB_TIMING_WAP2PRE
-> > -              - description: MC_EMEM_ARB_TIMING_R2R
-> > -              - description: MC_EMEM_ARB_TIMING_W2W
-> > -              - description: MC_EMEM_ARB_TIMING_R2W
-> > -              - description: MC_EMEM_ARB_TIMING_W2R
-> > -              - description: MC_EMEM_ARB_DA_TURNS
-> > -              - description: MC_EMEM_ARB_DA_COVERS
-> > -              - description: MC_EMEM_ARB_MISC0
-> > -              - description: MC_EMEM_ARB_MISC1
-> > -              - description: MC_EMEM_ARB_RING1_THROTTLE
-> > +              "20.11.1 MC Registers" in the Tegea114 TRM or
-> > +              "15.6.1 MC Registers" in the Tegra124 TRM.
-> >
-> >          required:
-> >            - clock-frequency
-> > @@ -109,6 +92,74 @@ required:
-> >    - "#iommu-cells"
-> >    - "#interconnect-cells"
-> >
-> > +allOf:
-> > +  - if:
-> > +      properties:
-> > +        compatible:
-> > +          contains:
-> > +            enum:
-> > +              - nvidia,tegra114-mc
-> > +    then:
-> > +      patternProperties:
-> > +        "^emc-timings-[0-9]+$":
-> > +          patternProperties:
-> > +            "^timing-[0-9]+$":
-> > +              properties:
-> > +                nvidia,emem-configuration:
-> > +                  items:
-> > +                    - description: MC_EMEM_ARB_CFG
-> > +                    - description: MC_EMEM_ARB_OUTSTANDING_REQ
-> > +                    - description: MC_EMEM_ARB_TIMING_RCD
-> > +                    - description: MC_EMEM_ARB_TIMING_RP
-> > +                    - description: MC_EMEM_ARB_TIMING_RC
-> > +                    - description: MC_EMEM_ARB_TIMING_RAS
-> > +                    - description: MC_EMEM_ARB_TIMING_FAW
-> > +                    - description: MC_EMEM_ARB_TIMING_RRD
-> > +                    - description: MC_EMEM_ARB_TIMING_RAP2PRE
-> > +                    - description: MC_EMEM_ARB_TIMING_WAP2PRE
-> > +                    - description: MC_EMEM_ARB_TIMING_R2R
-> > +                    - description: MC_EMEM_ARB_TIMING_W2W
-> > +                    - description: MC_EMEM_ARB_TIMING_R2W
-> > +                    - description: MC_EMEM_ARB_TIMING_W2R
-> > +                    - description: MC_EMEM_ARB_DA_TURNS
-> > +                    - description: MC_EMEM_ARB_DA_COVERS
-> > +                    - description: MC_EMEM_ARB_MISC0
-> > +                    - description: MC_EMEM_ARB_RING1_THROTTLE
+> > Daniel, could you please look into the cpufreq patch?
 >
-> Like I said before, I don't think it is worth enumerating the list of
-> registers for every variant. If you want to define the length
-> (minItems/maxItems), then that is fine.
->
+> Another two weeks with no response to a review request. And over two
+> months total since the cpuidle maintainers were initially asked to
+> look. Is there a policy for dealing with lack of responses?
 
-It worth because position of value matters when reading and list above
-provides a reference to the order in which register values should be
-grouped.
+Another month with no response. Can something be done with this,
+please? If the subsystem maintainers don't respond, can they be
+overridden by anyone? Who would the next step up even be? Does it go
+directly from subsystem maintainers to Torvalds himself?
 
-> Rob
+Aaron
 
