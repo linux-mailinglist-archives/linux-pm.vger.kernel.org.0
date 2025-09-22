@@ -1,68 +1,68 @@
-Return-Path: <linux-pm+bounces-35138-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35139-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 55C90B8EC54
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Sep 2025 04:21:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 547B6B8EC60
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Sep 2025 04:22:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 58FBD3BC1C8
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Sep 2025 02:21:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 053623BCB7A
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Sep 2025 02:22:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E45632EF676;
-	Mon, 22 Sep 2025 02:21:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D99482F0C68;
+	Mon, 22 Sep 2025 02:21:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="doKL/F1a"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="SFkKmkeq"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from PA4PR04CU001.outbound.protection.outlook.com (mail-francecentralazon11013037.outbound.protection.outlook.com [40.107.162.37])
+Received: from AM0PR02CU008.outbound.protection.outlook.com (mail-westeuropeazon11013006.outbound.protection.outlook.com [52.101.72.6])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2D622EDD63;
-	Mon, 22 Sep 2025 02:21:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.162.37
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1C1B2ECE86;
+	Mon, 22 Sep 2025 02:21:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.72.6
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758507691; cv=fail; b=FiIL3lq6YUYZETV99BcAmSNPLLkHIqwoChvKxR3Zy63HCP1jy8W5VambY/yEJobDiDwO/GVH1km/28RIyaOBBzjgOeuRGZj+DPXKjEy0PAwvPE5CnI2e8G6muJiM5CIk20MzRYxuIwbKL91tkQPi5HhDauTDEEqBiHw38g+bh/o=
+	t=1758507698; cv=fail; b=aOoWR8PNgYMOaYulCsdnmGTaFHWtFD1SM5nFsSjUGGkcPeq+NN4Hxi4OmY6ZMIOyhXOtJaB1Oj3dHW9Cizc6TM0EsZ5z2JqmBTzEXehm5GfNEGwZQh0lM3zdJSbPsUjmExcl1NyUYFAqX0+ZMdwnfTtzweu1VtE/CAxEYadoorU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758507691; c=relaxed/simple;
-	bh=Jfuw4ReqQ48yD6GVrAaD54bMaBD2P0dzQUqUpQGNgBU=;
+	s=arc-20240116; t=1758507698; c=relaxed/simple;
+	bh=oT9Gp2ORJVRd6IFtnNDXwCgxzgI+pxdl81Trau+N2sM=;
 	h=From:Date:Subject:Content-Type:Message-Id:References:In-Reply-To:
-	 To:Cc:MIME-Version; b=bK2Ql2nF6LwJsSSlSmhmLD3sb+5A5WzcFNp8DqpS9gkGKm0gUsellgjgZbY863ypKHBY7McddJTdsUcqf/ZnLODkyphkkwva75pxB1wQjzk+A3A7EZnXlbZzhRyumiF1a7K6UvYwpWY15lmhAgoCXQoCPzLufH06roCJ8GCRmuQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=doKL/F1a; arc=fail smtp.client-ip=40.107.162.37
+	 To:Cc:MIME-Version; b=GTt+gyGZUw5yl2i8vxa3ZcViwnX0LSJn8LpIENGwlqiWuaucDATt1e5zpVexISvvqXev7BOJDUoMDUM2aIVBqVVr6Q+WhdDdvJTYJxAdnDqoSqlGUETr2akckrkx3Cu1ma2LEmy9e3C7xbqOmF6AhSTBD6O7dRfmqjrP55sL10c=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=SFkKmkeq; arc=fail smtp.client-ip=52.101.72.6
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=DMQF6bVfL5xfNi0iaRsMxROgKFapAOCuWriVTOzujuNw78tmST5qcx35rEYcGpQURtEv7bu3llkpehOTSHW5CQSwwCTEB0A/lANXskpZTay80exKuZWr3wtRv2Zwn1ONzv2pusMltKFXGCIO4OlnNbtLPnuBi74xalGEyH/sbco6GJSKNw9GGkJkgnmQyObRZJ0IM6WFTwQBio1ca00ha1XdjxH8pfcpV2A4ogsg7hGJ1mmjqaYJ0nh2yxHww2dkYF5+TRVzT8wm0xkzmJixjWD1a3hRz4h1Bfa5hi4Aewnx3bWE1Kgxf8SgO9PjsGFuv0PAqJRWkFfP+OeBGt4qFA==
+ b=Hz53KrvLt8qCVzDv91rMcIfgHB02n1gYZIoYkZX0b5T/Cbq90G0xXf8XvQJnsrJloqutGv5ToM0yO/3tTDFZ4AMO6OPmMYs7gOQhRg0uv+o4W2RLlU/4v4LngoLxfWIl2d6mh2UvRKzf6T5+Bwn2BZzABQVyuTo/1Q7yBBEOzHu5DZKdJr/IJQRPN95/I/HBr6U+3wr0m58N0uwpjOTJYHCRtsL8waihYYW3D4mSOSC8eWAsEX16bU5X2Ltfl7qHBwSgzr6Fj/RgHNemQ+wl8fqtz929ebO/JE167KAEyk/6BmjjB++oJA81dSwgK+cSZCZ8Fe5mv60lcSen4Qa2iA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=chm9mqzbgpbVnPEeOZgoLWO37PtUmrlCKvpvLIYNyKE=;
- b=qZvoZoZkG8ekNbkf3IuPW1JDGwD8VEnPAuGe7p0htPArdNCVosgvFxtUCP8enyg+3fJrT/J5iZcqOZiYSUDBL1X1IUyki6VpRoh8qLOp6Ooj9eDRo5KaLVAaPKuGWjCiXZJTbCvzEbNp4lrZ9Oz/299RSmtOluxRoY6MK/uGKOWZYotJeC7YzXITqAqNezVLhSFAiKphXGy7hSVDf72+G1YhnUUoLwbWuF++S1VBrTZyFiSamG7RqXGyt5TKiLiiqk2LXQc+PSPHrvkCmUvo+I0blEZXfKyoDANEcjrb/F5aH6puuxm8J9FRcWF165pfFjKZwpao0oYGiWLvjRA7IA==
+ bh=jPz1ZBbyXHtcXfw5XSMg63R/KGLZDFT3o47tjZSJ3/I=;
+ b=FWs34XbAIjXBL9rm3rZu3OJ1OmOwHGSe/1ByHnb6petV7kGeYLkOBMxKa4c1hOgOHVkF94xW+E00YbqUULzfOxIHYJYAIuqv4xmSL/FPe6MZ5uCkd6o7HZJmn0yfYNTw/aL4qJiDi1a9Jz+gKJBDthmH18w6olmnbxSNY3NZMv/3EdrywDEFLSTDSP+J4fE0F93zP2J162Z8oFe+Awu6onj/EFCO+e5c9RL1GG0L6Lz3eljjc947y+6N/ihdKqTkTjDJnR9Rywd2FzlWCHNNxdHHDNNaeDb5dYHGGSSeQOxa21QhfVo//r+3lHCDPywmZojabZ3qMre8WQzNu3jJ0w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=chm9mqzbgpbVnPEeOZgoLWO37PtUmrlCKvpvLIYNyKE=;
- b=doKL/F1aDcR/staAGfyXIoDTs57Vli2mgeRKHXun+HF0XqUs9pWKUfEYqDoO0p94/Z19sk/Sx0ej6JMnZ4sayQBIMfQcVuBzrxhexa8/DrNleS8t5TZH+VgmpxrxQlWci9jyqRJLyNjUdqVo0HmUEobwymIVeM6aOr1CGCg831nOW+SIi2merGi6Kc1LVPDEWhPL1j/lGL72cYgr1aWVEEVVt4z0OU8Heir96Dj1B+rfRYnJgF7duJtYHLydmGXq4z04GV07VV6GddOf29tjfzZYMIcbUlLQgCfeBI0wsNaw3KNvcit089Cc8ArHos4nuGz5O3zTiPqBy/oAOFfkZg==
+ bh=jPz1ZBbyXHtcXfw5XSMg63R/KGLZDFT3o47tjZSJ3/I=;
+ b=SFkKmkeq06xbfuHMiJT6koE9vNgCIV4TdoE9XNX8QQyXif08PNHqXu4tUXvsZ9zDbOrmar8ZRTGlLWFQ/aNdv40HGZ+3xwZhOGQa68fYmTu/z/xXZMamyCA6qomRqxYdOoUuDQWi6weN08xqznVbgMQa3fqNMyBlHRW1QTfbrVnFgufE+BidnzowJHna2ejq8ZmdSf+uobFX3teVsGkR32L0rxoSMbETiltuW/DPBCXpJof2WXGtXhcbrSQ60ogCO5A8iP4syeHptLajyf96zVI89BRfLiv26dOTmmyAQuIa4CQ62ccIOgAvtFGeaOF90PTWIVxYx7rd9RPXYeDWyQ==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from PAXPR04MB8459.eurprd04.prod.outlook.com (2603:10a6:102:1da::15)
  by VI1PR04MB7053.eurprd04.prod.outlook.com (2603:10a6:800:12f::12) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9160.9; Mon, 22 Sep
- 2025 02:21:28 +0000
+ 2025 02:21:33 +0000
 Received: from PAXPR04MB8459.eurprd04.prod.outlook.com
  ([fe80::165a:30a2:5835:9630]) by PAXPR04MB8459.eurprd04.prod.outlook.com
  ([fe80::165a:30a2:5835:9630%4]) with mapi id 15.20.9160.008; Mon, 22 Sep 2025
- 02:21:28 +0000
+ 02:21:33 +0000
 From: Peng Fan <peng.fan@nxp.com>
-Date: Mon, 22 Sep 2025 10:21:06 +0800
-Subject: [PATCH v4 1/5] PM: wakeup: Add out-of-band system wakeup support
- for devices
+Date: Mon, 22 Sep 2025 10:21:07 +0800
+Subject: [PATCH v4 2/5] PM: domains: Allow power-off for out-of-band
+ wakeup-capable devices
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250922-pm-v4-v4-1-ef48428e8fe0@nxp.com>
+Message-Id: <20250922-pm-v4-v4-2-ef48428e8fe0@nxp.com>
 References: <20250922-pm-v4-v4-0-ef48428e8fe0@nxp.com>
 In-Reply-To: <20250922-pm-v4-v4-0-ef48428e8fe0@nxp.com>
 To: "Rafael J. Wysocki" <rafael@kernel.org>, 
@@ -78,11 +78,11 @@ Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-usb@vger.kernel.org, imx@lists.linux.dev, 
  linux-arm-kernel@lists.infradead.org, Peng Fan <peng.fan@nxp.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1758507676; l=3180;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1758507676; l=1751;
  i=peng.fan@nxp.com; s=20230812; h=from:subject:message-id;
- bh=Jfuw4ReqQ48yD6GVrAaD54bMaBD2P0dzQUqUpQGNgBU=;
- b=Uk/YCbFzgc4O5+99Pgncgn1R+/Mi9yX3R3DZQ/lG0EQ21Jl7PmK+BcbOwMCtdQLeAJOhe4DF/
- J0vFSyTcr/XAX4vo4QJmfDzDk5wWFBgILgFBDbqIYPx3zTmDSfmdeSm
+ bh=oT9Gp2ORJVRd6IFtnNDXwCgxzgI+pxdl81Trau+N2sM=;
+ b=NPNk0As/bluxtUyNGjOykMzLeOIzUM503G4la1dDb8D52FnCkS2rb2OIQMY6OYt9S2hgYvFHa
+ 3YOnKxWWRQMCQUJIe441G3wE9OWvL+zt7iU9DTFlB/jm6OUD41yp/0h
 X-Developer-Key: i=peng.fan@nxp.com; a=ed25519;
  pk=I4sJg7atIT1g63H7bb5lDRGR2gJW14RKDD0wFL8TT1g=
 X-ClientProxiedBy: SI2PR02CA0006.apcprd02.prod.outlook.com
@@ -96,182 +96,141 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: PAXPR04MB8459:EE_|VI1PR04MB7053:EE_
-X-MS-Office365-Filtering-Correlation-Id: e7364137-2650-407b-53fb-08ddf97ebcd2
+X-MS-Office365-Filtering-Correlation-Id: 2a2ff6d8-7c3b-4398-e8e9-08ddf97ebfbe
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230040|366016|1800799024|19092799006|376014|52116014|7416014|921020|38350700014;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?WlpBb2J3a3VlWUJ6b2JMQnBLV0dnODFpTGd5NksrYzF1SzVLTHJleGlCVnlq?=
- =?utf-8?B?U21senFpem5SREVRbjJaQzloZXlxS2JjaEFnM1hSR2RnK09WMzJjbWdheGhT?=
- =?utf-8?B?ZjlSOHRZMFc0UjZrQmhmTHZlQS9kNnBsVFhZbzBhaWNrVXlLVmRnZU5sQ0Fo?=
- =?utf-8?B?bEhabzlqTklIZ2t0ditHQnZjV1FVVHFOVHlYSEZ3WERkZzV4VFkrK2tzTnQ1?=
- =?utf-8?B?VkQwd1NXMUp5enJ5YWpTcWs0b1UzMzZ4ZHJ5c3YzTVVTakdWaVhXSHVXRitk?=
- =?utf-8?B?L010ZnNBbWZld0hIclRXb2dLS0hBdkw3T3p5VHRhTTZkczZpWTZQTHZNRVRJ?=
- =?utf-8?B?UTdiZERycE9nQlF0dlJWaE13Znp3bnZQMlpDdW5GMVhCUmMwYjhpbldJVUYx?=
- =?utf-8?B?bVMzczU0alE5ekZmOFNZTXVIaEhzVG5SZWxXdEZQSzhvWm0xMUVFTUF0dGJa?=
- =?utf-8?B?aVZTT3J0ZEd2YmYxZzg2bC9aOHdkRjNIRW1FbjVCbEhPelBBMzhXS1I1MHBR?=
- =?utf-8?B?K3FZTmNhdDVMdW9mRE5Jc0xab3ZwTDA2SDRDdm9JWnRoNFNwT3lud1Y5OXpp?=
- =?utf-8?B?N1R2ZElZdGpCc1ZBYTNaQUxGalZXNWJYZzdiRjRrcEx0OTFlY0hGNjFWQWhM?=
- =?utf-8?B?RllXYzloQ3FEUzZzMk1TbVFzS3pEYm02bVZwZlowS1MxZUpZRGlxTmZaeC8r?=
- =?utf-8?B?ZW55UjVlRWV3ajE1Rzh3emRRRjJIdkUrOEs4S3NKQ0hkN1FhWUVxNVdSNHB0?=
- =?utf-8?B?aUkybkhWZjkxMUVrODQrMWlWT0pGUGZrVFc0aFFyWk5WUndNREpmLzFVUnVI?=
- =?utf-8?B?elJQemh3eStCZjNnc3BGaEdvKzgzNlppamxwN2lvM0hnS3RUUjFENjNoZzA1?=
- =?utf-8?B?VmJVa2Z5MVV4YkpZZ05vWmtjajhWRThNaVA4M24rWVJPcXlody9tUVV3UG1B?=
- =?utf-8?B?Zjh4K1ZWbDFMcXFPUmJNcXg5V2U4NDhiaFdEZVhXdzljTEZ1UG9wOTA2eXRp?=
- =?utf-8?B?cHQ4SG96MGhjOFpFbUx4UUlUOTFJOE9jUVVlTUpFVkxyTTNnaE9wdjh3d0Nn?=
- =?utf-8?B?a0JLZ21SVlB2K3Z1akIzMnRzbzREcllqaHNPWjd5aFVLWFpZenA2Y2RXNEtr?=
- =?utf-8?B?QkFlS2t4TExVdmIwTTVLUnF2Sk04TDEvbEN5TElVSnRZTWc5aCtLQ2dOaU9z?=
- =?utf-8?B?T2ZoMzgyMFdiemZCZ3JudzY4Q2FGaTVtQkR4ek9lL3hCNG1sK0R5c3ZYNk0y?=
- =?utf-8?B?M3l5Tm9NZThVMlY2dEZ6L1Rkd0NiZ3l0T2RKdTV2bXNJbHVSOHpvdGpmaW1r?=
- =?utf-8?B?TzNnb0tnd3FnZmZOV2t1S1g2djNKb1dnbFJFK2ZCNkVuZjNQWGpha2xISC93?=
- =?utf-8?B?YmdoQkl3RFdrZ3J5NGtTVWMxWjl1UDF4anRxemlYUU02RkVzOFBBVmt1WWpS?=
- =?utf-8?B?b1JFb0dZV3NoY2xPWVNhTmtodys4N01NeElmZlhoNVVwT2tnUnRueDErOGg1?=
- =?utf-8?B?eXRXNWxwZ3Y0MjVlODFzYnNzQVlPNERMMlZHcE9MNUtxUStNai9VckQ4WW54?=
- =?utf-8?B?alpuNWlIQURQTGRURHZTcWpHTmwrYmdYdHVRUU8vVTIwMDFrYWlwdHV0ay94?=
- =?utf-8?B?SlRyTnQ4RElRYnU5bUw0QWdqZno1eW14VTg0RHlHRXhVVEZEZXl5OUljSmNo?=
- =?utf-8?B?TVM2a3NrNWFTNG9udVVnR2NzWEpHa24wQi83ZXBUY0NLbHpzZzJHYUxTSWhs?=
- =?utf-8?B?NW9CUmNxZ3Nqd1A2bW5tTjZhdERtdXdoZkhYdDVyaytHU2k4QXd4eGw4TDRH?=
- =?utf-8?B?a3hUVCtWcFRDU1U2TnFXaGIvTzhZRGF4ckRDYlRMemkvSEM0TzBqWWxRSVdm?=
- =?utf-8?B?MWZuaHV5ZjNjTTY3QmhYaFpCd1V5elF4V2pDa2ZMZ2pFK050MVcwMG0zWE5z?=
- =?utf-8?B?VVQxdDJmM2E5RmR1bVRLRzlGc0JFTzFVb2tBNzUzU21ReEhTNjdrRXpnS0sx?=
- =?utf-8?Q?xndObrnDQxpl9xYB5H/s3jp2j9JSkQ=3D?=
+	=?utf-8?B?OU5OZndYZ3I2Y0VTYVh0UlA0U2JuY21zRHBacGZSOHdtTDFaQVhxMVZyeU5B?=
+ =?utf-8?B?clk1dGFGS1FNMVVOZ1BvT0twazlUbm9aMUcxUzNUWmdSRUp3dElWNnAwbkFV?=
+ =?utf-8?B?MGJ1SmsyeVBEZHhpSDNORVZLeld3WjU3TlRLUFRqdHp1RmZhU0hnN1BPeEls?=
+ =?utf-8?B?L01YeWx5cFdzRzRFdGNTMm5KRjh2SWpOZWNBdFg4TDcwdkFwbktWa2dqaDhi?=
+ =?utf-8?B?Wko2V3o3Y0VmT3hUczVteTg2V2ZRNDQ5bEg2ak1rdVd5bSt6WjdLMGlFRGF6?=
+ =?utf-8?B?QjJlUHcxd1ByTGlYTDdPSkd3aVo1NHhBZHVYMVhmekRaQndkQWZraS8zbVly?=
+ =?utf-8?B?eThTOEU5cGw5SGIvU0tPTENYQU9LWVk3dHdBeVVxampHaTBpQmQ2bzRjcEFN?=
+ =?utf-8?B?SU5xOVljYTVsd2E1bm9NSUw2amZWTWUybVlvM1VqejRoam1hamxwM0dBNVlt?=
+ =?utf-8?B?S2lVT3pCQ1d6Ulpna28zWmhEem1FRENONitLZHdMbDBDRHZpUjgrcHRSNnlm?=
+ =?utf-8?B?RHlzakY0cjVzUlRwNVRnZWozOUxYUFhYUWFES0p5UG42cFhHa2lXOVcrMXN3?=
+ =?utf-8?B?Q0FlVnlGTnUzUC9iOS9TWm5GbGlmMCt1QXJFL3BiUkw3VmVTd2VTbkJXQjVD?=
+ =?utf-8?B?S2Z1RVlUald2WDVLNXg4cVRaWkowTW1uSUhSRkhXZHNUYldhcjhFQklWbDY5?=
+ =?utf-8?B?RHQxSlFzNlM4dDJkMUlmdUVzSHhQSi84aFZvTEpXSUw1MzNaMnBlaTF4VDdF?=
+ =?utf-8?B?cmQxUm9COVhtblZjM0R2MG1nWE53cDZHcXp0c3RhZHQ4YlpTeXY0cVN4QVk4?=
+ =?utf-8?B?UU1uenZCUUpHbjlRYTFtUUZYZkpwVUk5Q2E3dmpRNDlpcjdFMFdLZ2tqcmd0?=
+ =?utf-8?B?WXo4NENMeloxc0NkYlorQWVUVCtLWHFMaVk2Z0h4V3h5MlVyNEtndm5MeG1F?=
+ =?utf-8?B?UFFLdGh3RmpJOUJTaWtaTWJPSWs5b0UvQThUN1VQMHh1ZmNFV0thaGVPMEtO?=
+ =?utf-8?B?c2JGQW9pTUpMWno2bVNESVFMdGNUZE1jbk0yYnRxc242dlM1ZzRVVldPRUIw?=
+ =?utf-8?B?YkhJc1pRVlBMZlZLQ3I3R3JrZkIwUURhVHdPSWZENlduSmp3anVmd2ZTakQ0?=
+ =?utf-8?B?WTEyeVIweG5ZQmxUUmsvNWtYRndIdlVIMVlxcHRFTDlDU0h0L2hYUkRLTHhW?=
+ =?utf-8?B?dWI0V1ByNmRaZlAvZUxodGc4cUZMSTBPb0g0S3VaWFlIczFRRjMzMDBPSFFn?=
+ =?utf-8?B?Qk1yUUZWcW1HcU51NDA2RUt3c3FqWnVlUjJURUhQRDBxZXZjQWpkdnB0dGYr?=
+ =?utf-8?B?VzhhNEtnbENTZ1d6UURTY1UzanBUS1hkalRjbDdXK29CNHgvb2EvYVlFbEVa?=
+ =?utf-8?B?elo0ZFc2ZkR6UzYyd213R3VxWXkrbkZ3RGtUYXBtdCsvQWk4dmszQTM3MUtL?=
+ =?utf-8?B?VG1OTFNCWmw4TW1aanhZQzQ4NHgxejBUcWFCMWtGS2NnaU9sTFBNekphM213?=
+ =?utf-8?B?NVBEWkRhdWdtU2NHdzBQSkxkZ1VHMG1mSVU0d3Bua2R5NlRNMkVuN2RtTXdD?=
+ =?utf-8?B?eTM4dHk4MWJBNk1ERHJSMC90aE1WeFVhTFYrRWtSVzh1ck1QOWFOSDBxYUxT?=
+ =?utf-8?B?bzNXL1N4eGtUSlRQYjN1eVNuNmZZVWVTQ0J1bWlPcTB1Z1pzQ1pncjYzQkls?=
+ =?utf-8?B?aGJxcjcyRldObXlwM1hUd2liQ3ZoRzRsVTR2NFRJMkp5eGRUaUw1M281cHdx?=
+ =?utf-8?B?a2hFK01EcDVTNEU1Mm1mZFNqdm1tSEJhOGliTlFJeC9UNmRaeHBNNWthaVc4?=
+ =?utf-8?B?WFVuV2FPRDVodGp2RlAzOC9DazhlZkZCWWlWUnZ5RmJrZEhhNEI0ZkRNeDJH?=
+ =?utf-8?B?citWREpMaUlOajhlcUxZVzFMREIyT1k0M1FuOS96OFBjNkd1Z09oMjFxZTZQ?=
+ =?utf-8?B?QlVXREh4SVVmTVVUaklaeDVMeGljck51NExidlNzUEVRNVlNWThtd25PbGJX?=
+ =?utf-8?Q?G+6O7TPby5CMMmL429qLmHOmccJOxI=3D?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8459.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(19092799006)(376014)(52116014)(7416014)(921020)(38350700014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?V3VEUnU1SkJlU0tLMFI2RnpqemxVNFlseFYrY3VMYXhja1UrS0tGVmR0dFZv?=
- =?utf-8?B?cFNEZ1J4aG1haHY5eHlFM0dpNU1Tb2dDNTFLNnZ3VGhBR2M0U21GamdCenZD?=
- =?utf-8?B?QUZZY0pYcWpSdm5jbG1IeFJyNUZzbjFFcWZHV1pNbURaQzFnazZwbGxnRGd6?=
- =?utf-8?B?Z1N6ZHRVZzg1RkJ4WmdJVDU0bm41UFJ4ZW83alA1L28rWDFMdXRUd3o2VnB2?=
- =?utf-8?B?b2wxWUxaODBTNjA5Y094MXBCMGdRRVp5ai96bXh5QmRlM2VIWmNIcHFzM3NQ?=
- =?utf-8?B?QndSNnZCeGsxSEdqSnZ1ck96WC94UkVqZ1hKVEdaaGtBVWtnbXNVQmZPbkN6?=
- =?utf-8?B?RDVkRnM5YlNlNUFWQnplWmhIQUVTdmxtbXpBcUR5TjJCQk5Ka2E4V0NISHRt?=
- =?utf-8?B?MXRJYkRMamxLM3BoWk5wZHRWbC9tZUNrQTdOZmloa25YZHJxdXRITitoR3pI?=
- =?utf-8?B?NHNmcUVBeFYvcVM0cFJPUEhCSmNrNlNKQ21oKzR3MVBRVzJZMnM3dk9UQmNG?=
- =?utf-8?B?QlUxc1lqdkVQVlNPWXNCL3oyQm1PNTNoUEFST0xzZ2Fkb0s2Rmg5MjNQVzU0?=
- =?utf-8?B?R2x2WDhSa1A4ZkMrMVVvSnZmVzRxU3lacGVxQmJGQ2NMYUx4S3cxWVZYVHZ1?=
- =?utf-8?B?NUo5WnBEZnNhV3VBNWFFT3BMY3pvVWxvMUR2cWlROVpISGhqOU5VYnk3dVBM?=
- =?utf-8?B?OGU4MUJrQlVZRFViTlFTMWljOC9pVlZWQW5PMmNRa0Z0UWVHNFNtYzdzbXVS?=
- =?utf-8?B?UjhOK1BHWUtGWW9YUE1kR0tlV3FVbHNOVVUwMjlNK3JBcnZhNXF4eWU1MTlq?=
- =?utf-8?B?bm43MGxoaU1QMzBydmZySmpSQ2dhdzhUemZQeElLcHNhcFZJS0xPV2RoelBZ?=
- =?utf-8?B?SHBQUjBNdFB3bmVKSGNXTnR6RmlJdlpPQ3RnWkVITDZBMGVRWDRNNkhnR05z?=
- =?utf-8?B?RTRIQWdVdzYyYTBuS2FFZ3U3bDBRY0ZEbzdsbkNnR1prYlcyMUpHRmY5SWFB?=
- =?utf-8?B?d0JROEoyTDBRQlFaQnlsUmJpY01zT3Zudnhnd2IvSzV0Vzl6bTdkbGJ4UVpx?=
- =?utf-8?B?ZGplRHZBYWptQVBOMmthV2dpL0c2SHViQ2FQTEFUSnBrUmUyZGNESUp5NTUr?=
- =?utf-8?B?ckNac3BzekxUTlBwOTY3Qm5OY2dVMTdyZ1lPY1JFOTZqNXhnYVpNckJRUXM2?=
- =?utf-8?B?NDhxNnViNWdSblNFTEpzWXJjN3A0WmdnSnNxSnRmQzlVOEVhc1lwbEx6clNy?=
- =?utf-8?B?d3VTSFU2VzRST2VyeVlIcG5JcTlDTHlvVU55ekFvVWZnSjJyWTRJSTNUb2pM?=
- =?utf-8?B?TkIyWWZsTTRZNEtCSEpURWZNN1gvVE1vNk9jK2dCUHBrd09WdGMzbTU3UlRW?=
- =?utf-8?B?ejJiRHQ2YjM0RHN1MzRTRC83ZlFreHdOOHM3YUVPUW5DN1doRFZZSGhOUmtl?=
- =?utf-8?B?c2hiVVYvNEI1dTFoVlBBNnBQNGkwOVRoeXBRdzBHYisxRFlZbTZOa0dzVVZz?=
- =?utf-8?B?TEU2bm5Qazc5MU1veUF1b2RDaHRvTUt2akpGMHJZd1MwY0N2MzV2UGxKMnlX?=
- =?utf-8?B?TTdXNnJITy93RkZQSTFTSFAyQTZMVGl4VFVoU0U4T3hUYW5jOHJwYkVnQlIz?=
- =?utf-8?B?MDdnT1ExVkEwQlNqQ2lWeWIwODJ4cDZ6R2pENi9EY1o0ZDh0NFF2T3dpMVNa?=
- =?utf-8?B?TlVNMEI3VGYxeFRERDFkTWxMWFpzaDRIUGkwSURxMUhGLzdpT2lieDhnaTJp?=
- =?utf-8?B?aEZDUVV3YmgrbVFhWU9DaTRnMVhiNXE0U0lIdWR4YlBHeEVaVFpMSWpTZzdt?=
- =?utf-8?B?aE1rTnU1eGNwQnh0Ui9HajFrQUVzL0RkSEY1YmZrUmZTT2s1ZDgwNmdvZTBH?=
- =?utf-8?B?cng1YUtOQVVQUVhqQWVobnBNK2JvSmVzTWRrYXlWN3VtNVFBSUt0aU9Sdklq?=
- =?utf-8?B?UkJ4ejBkazFkVWI2aUt1WUR6YUYrWWFoQmZtVDF3U1J0UGFGakFKVXBUSWVy?=
- =?utf-8?B?V3cvVUZaZk1EcUhHejB0Q1h4RkNZYXpWWGJvN1lCNFVFUWFxSUQ5VmkrUnlC?=
- =?utf-8?B?MzJZSmFzWWpLaUlpQ2UvRUNVa255T3ljQ3pHb2ZhSFhqbThHQ3JCb3VzRXht?=
- =?utf-8?Q?5M4hQ0zjqJvxK/8S1mnFtS5QU?=
+	=?utf-8?B?Q045TzdMWE82VVhzc2J1cHN2TTBZYjVRMmlJSlhJS1VJbzBVK2p4SEp0elB6?=
+ =?utf-8?B?c0dxRG9nRGRMUDhUbG50VUVUU2RubDZlSjFCdGFna2xJZEc1WHYva2loQS9s?=
+ =?utf-8?B?dEpKU1lLSzlxVFAwVXh6aEJ5QkhqOXMwNDVUU2V2dWhHV2txTTd1a0UzaDJi?=
+ =?utf-8?B?dFBJdTdSb1hRR3FQNm9DbTMzTTNKVis4OS9vVkFKQ2VSZWQ1UWV3UGZDelVz?=
+ =?utf-8?B?SDNIYjVhZXZPZzNBR2RXc21oR3NoVVV6UEtzclE3bFZkYnVueVFpSVFOdnVO?=
+ =?utf-8?B?T2FrWHJTMXVkbFRJcDdKeGs2cFZwa0xHVHkxU0JBS2xCT1M5OVNUT2l0UmIv?=
+ =?utf-8?B?bEd4OENncDZFRXpWeXRtdTBtN0dGTHdIbzNDNW9BSVY1Zk5JODlpZUhKSnQz?=
+ =?utf-8?B?TXFkdGZoeGt6bFZDOXlPek1CaGQyN0V2aXhrbDF3cG9pcWVyaWQ1OEhabGpp?=
+ =?utf-8?B?blEyL0RVeHBQYUg4YkI1alBHMWJZNk5jdjVYUVUvdUxxMDVVOUZ6MFlGT0hv?=
+ =?utf-8?B?bEZMUjZtVXY5a1E1Zm9oU3J3eTNiMzBheXFjUGwxMUR2Q0JNKzAyK01aK2JU?=
+ =?utf-8?B?dmxsUjZvNU1yVTU1bFdMeXYzbm9VUUowVnU5OTgzdUdWeWdhVzdpWDVWUlVv?=
+ =?utf-8?B?bWRpMG5sekVFMGE0eXk5MnpLQU1XbW1DM2lydHh6aFJQMGNlWXBDWlVXZWlj?=
+ =?utf-8?B?azJkUEpLNWtTdWR4VlJ1cEpmQXJIejRLZFgremtRZlJYeUpwcW1oZ1p6SDhN?=
+ =?utf-8?B?QkRHM3hNcHV6dEF5TE0xYThZckJPY0VNNW9vVWpQYjUrUW1WR0h6Ri9hVXd0?=
+ =?utf-8?B?ZE1JRVExZDlOOHlaN2tsUEdqUHh1aHdtbWJkOUR2RE9JUno2Rm9FaEIvZjRQ?=
+ =?utf-8?B?MVFURVQ3Zng4TzRjNXVIajVVcnJvYS9zQ1h0U0ZrdExsaGFWdU9SODZuakJn?=
+ =?utf-8?B?dTBSL0hxUDcwZmpMb1lkcmplOXZzMEZoeVA1QzR6OFNRbjBranNnbWJVL2dB?=
+ =?utf-8?B?NkViOThkQWYvQjhUSnpKRnhqWCtrZmZBTDZ3cHQrVkxvTUI5WDRjL2ZENFpX?=
+ =?utf-8?B?Ny9sY0p6OCtiQVo2TFl3U0JUdUFac0ZvWUZCODkrRjFaQXNBUjU4L25BM3la?=
+ =?utf-8?B?MkRSRkFjRVdkaDNNK3lVWndmdFJzWmdSKzFBb1RObFExcWtnNFdjSUhuVWJx?=
+ =?utf-8?B?VzV6SllPN2c2UXNFRU4wckZmTE9ZaTB5TFlaQXNmMzByekVqVVFQdGlHVXZ5?=
+ =?utf-8?B?Y3FUS0N2SHorcGhHb3BsMnBVdVZaUGd6dXRjSjFScHRhUzFXVU0rRjhVcHA0?=
+ =?utf-8?B?MHdGdE4xb3VnNGJGekxQTUh3bE11Sk1PbWlWOTJJWE9mNjRmMXpwSlZsbGtF?=
+ =?utf-8?B?TWFSQWdXaFRpWkkwK3cycFhwZGpTcjZTUzlUKzJwT3VEVTljL3pIejRVR1Rl?=
+ =?utf-8?B?N000b0lLeU9sVXI4ZlBtK3YwVU9CTUw5K0xYMU1mZ2tFQ25nZVhicHU4TFdS?=
+ =?utf-8?B?R00zT2laYU5RNVYrVExVUUdhVjJlaEdKbUs5czRiam81VE9nMEw2WStkRWFU?=
+ =?utf-8?B?dEw0M2lzUXd5VmFrU3R4VFB6YkF3K01XOVBjV2I0bUZQcm1WbFc0bTE5aVZh?=
+ =?utf-8?B?L3g4MHhDZlc3SjVjaW1hVFZqbGxMU0FPeCttZnJOcUVVZS9OZWVEUkJYcXF0?=
+ =?utf-8?B?bDVwb3VKZ2llSGpidlNpOU1FME5oQU1TbmJYa21paldoa0tia3lGTWcreXRH?=
+ =?utf-8?B?dmpLUTRLLzVXc0ZPSHJJV2RXT0NmRnhRdVB4d2t1dk9RanE3QW9yQm1lYW8z?=
+ =?utf-8?B?Tld2MUMzalBNMloxRnhRK3BodGJMb0wrcjlaRHRONlN6M2I0NzZPUmN4a00r?=
+ =?utf-8?B?RHd5TytTakRhQ0F3Q2dkYVIrV1FkSjE4NlZSSm9pY1loWm5OQkl6aWc0aVh1?=
+ =?utf-8?B?MjJ2TnBKd0E3bDI4SWJWR0RTMXk0bEYwa1o2Nm8wNkVKS3c3Sm5KVnd5b1E0?=
+ =?utf-8?B?TjUybDYrejFPVC9xeURFM0lJRjJoNkJCaFlvd2poUHpyOXR1SDFER1VpbS9E?=
+ =?utf-8?B?alB0RWo2K3U1VXB4M0Q1b2Q1YVh2ZVQ5dnRxVTNDNUpDMlFzNFNzNks1Yzg5?=
+ =?utf-8?Q?tTR8yMzc74wxu2KvCnxSuZ+i/?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e7364137-2650-407b-53fb-08ddf97ebcd2
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2a2ff6d8-7c3b-4398-e8e9-08ddf97ebfbe
 X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8459.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Sep 2025 02:21:28.6748
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Sep 2025 02:21:33.5818
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: R60GWPniL+QoVPRWM6ZY3DN3MkVWLQs0cIeg1t7doTK7Y1PVBWm+mmGTwSYdVlpFfUzfD7xK6vPYY0ixhWxxUA==
+X-MS-Exchange-CrossTenant-UserPrincipalName: pHhY0ccoNnYFnxa8sO8rAYBaGeGrAiEhxpCm3YOlvS/pZIM8Or+J9MGqsVpB+pSfeFqI1Zy876g2X8VrnCDI1A==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB7053
 
-Some devices can wake up the system from suspend even when their power
-domains are turned off. This is possible because their system-wakeup logic
-resides in an always-on power domain - indicating that they support
-out-of-band system wakeup.
+Currently, if a device is configured as a system wakeup source, the PM
+domain core avoids powering off its power domain during system-wide
+suspend. However, this can lead to unnecessary power consumption,
+especially for devices whose wakeup logic resides in an always-on domain,
+i.e., devices with out-of-band wakeup capability.
 
-Currently, PM domain core doesn't power off such devices if they are marked
-as system wakeup sources. To better represent devices with out-of-band
-wakeup capability, this patch introduces a new flag out_band_wakeup in
-'struct dev_pm_info'.
+To address this, add a check for device_out_band_wakeup() in
+genpd_finish_suspend(). If the device supports out-of-band wakeup, its
+power domain can be safely powered off, just like regular devices without
+wakeup enabled. And same check in genpd_finish_resume().
 
-Two helper APIs are added:
- - device_set_out_band_wakeup() - to mark a device as having out-of-band
-   wakeup capability.
- - device_out_band_wakeup() - to query the flag.
-
-Allow the PM core and drivers to distinguish between regular and
-out-of-band wakeup sources, enable more accurate power management decision.
+This change improves power efficiency without compromising wakeup
+functionality.
 
 Signed-off-by: Peng Fan <peng.fan@nxp.com>
 ---
- drivers/base/power/main.c |  1 +
- include/linux/pm.h        |  1 +
- include/linux/pm_wakeup.h | 17 +++++++++++++++++
- 3 files changed, 19 insertions(+)
+ drivers/pmdomain/core.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
-index b9a34c3425ecfab038097e2c03645157af2e598c..6b1ca729dc3e34292952c9c309aab3f34a0a664a 100644
---- a/drivers/base/power/main.c
-+++ b/drivers/base/power/main.c
-@@ -2124,6 +2124,7 @@ static int device_prepare(struct device *dev, pm_message_t state)
- 	device_lock(dev);
+diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
+index 61c2277c9ce39fcd2f7e77df549626e49a4d5310..4925bc1c441078a8d38600192ee696bf550e80f0 100644
+--- a/drivers/pmdomain/core.c
++++ b/drivers/pmdomain/core.c
+@@ -1545,7 +1545,8 @@ static int genpd_finish_suspend(struct device *dev,
+ 	if (ret)
+ 		return ret;
  
- 	dev->power.wakeup_path = false;
-+	dev->power.out_band_wakeup = false;
+-	if (device_awake_path(dev) && genpd_is_active_wakeup(genpd))
++	if (device_awake_path(dev) && genpd_is_active_wakeup(genpd) &&
++	    !device_out_band_wakeup(dev))
+ 		return 0;
  
- 	if (dev->power.no_pm_callbacks)
- 		goto unlock;
-diff --git a/include/linux/pm.h b/include/linux/pm.h
-index cc7b2dc28574c24ece2f651352d4d23ecaf15f31..5b28a4f2e87e2aa34acc709e146ce729acace344 100644
---- a/include/linux/pm.h
-+++ b/include/linux/pm.h
-@@ -684,6 +684,7 @@ struct dev_pm_info {
- 	bool			smart_suspend:1;	/* Owned by the PM core */
- 	bool			must_resume:1;		/* Owned by the PM core */
- 	bool			may_skip_resume:1;	/* Set by subsystems */
-+	bool			out_band_wakeup:1;
- 	bool			strict_midlayer:1;
- #else
- 	bool			should_wakeup:1;
-diff --git a/include/linux/pm_wakeup.h b/include/linux/pm_wakeup.h
-index c838b4a30f876ef5a66972d16f461cfba9ff2814..41e8f344a20563898e827da62dd240b8cbe657d2 100644
---- a/include/linux/pm_wakeup.h
-+++ b/include/linux/pm_wakeup.h
-@@ -94,6 +94,16 @@ static inline void device_set_wakeup_path(struct device *dev)
- 	dev->power.wakeup_path = true;
- }
+ 	if (genpd->dev_ops.stop && genpd->dev_ops.start &&
+@@ -1600,7 +1601,8 @@ static int genpd_finish_resume(struct device *dev,
+ 	if (IS_ERR(genpd))
+ 		return -EINVAL;
  
-+static inline void device_set_out_band_wakeup(struct device *dev)
-+{
-+	dev->power.out_band_wakeup = true;
-+}
-+
-+static inline bool device_out_band_wakeup(struct device *dev)
-+{
-+	return dev->power.out_band_wakeup;
-+}
-+
- /* drivers/base/power/wakeup.c */
- extern struct wakeup_source *wakeup_source_register(struct device *dev,
- 						    const char *name);
-@@ -162,6 +172,13 @@ static inline bool device_wakeup_path(struct device *dev)
+-	if (device_awake_path(dev) && genpd_is_active_wakeup(genpd))
++	if (device_awake_path(dev) && genpd_is_active_wakeup(genpd) &&
++	    !device_out_band_wakeup(dev))
+ 		return resume_noirq(dev);
  
- static inline void device_set_wakeup_path(struct device *dev) {}
- 
-+static inline void device_set_out_band_wakeup(struct device *dev) {}
-+
-+static inline bool device_out_band_wakeup(struct device *dev)
-+{
-+	return false;
-+}
-+
- static inline void __pm_stay_awake(struct wakeup_source *ws) {}
- 
- static inline void pm_stay_awake(struct device *dev) {}
+ 	genpd_lock(genpd);
 
 -- 
 2.37.1
