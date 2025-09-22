@@ -1,170 +1,87 @@
-Return-Path: <linux-pm+bounces-35173-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35177-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7C0DB919EA
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Sep 2025 16:17:11 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 11931B91F3F
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Sep 2025 17:34:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D527C42478C
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Sep 2025 14:17:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C91D12A218B
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Sep 2025 15:34:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA0851DFE09;
-	Mon, 22 Sep 2025 14:16:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57ACC2E8B94;
+	Mon, 22 Sep 2025 15:33:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QSJ5KxWn"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R77rYcva"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4D8B1DFD8F
-	for <linux-pm@vger.kernel.org>; Mon, 22 Sep 2025 14:16:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B7492E8B9F;
+	Mon, 22 Sep 2025 15:33:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758550616; cv=none; b=T4ZxgnmExgIOqv9iPMe0yps5J0dtmUPEar31+TJWi4EJbgnBT0g9ubfidZXNgL1aqKlyz1cWXKTGCdjGdxmYRT+hi2GxjM8nhZuDyvrAFbi3ihj/5Cujpp82AQUP7DJfouUgeQe8V/xvgIOa0scShac3kny8XdsvIMovjVhkoNM=
+	t=1758555214; cv=none; b=nEPKn/MMW7Z6gF5i8KebDtygOuow2DlhORh+abB0JwnxCWC66rfUqde2hQJysEXVwvMkOXjTs5DKDp1nEkxludXra854KvOsu8BUL8PjGijbXdEQf20+0LEehYd1xEfjsmzMRxkTwCcJld1YsZHZqoMmP4qIoBXSHu1Fzlm4OWw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758550616; c=relaxed/simple;
-	bh=p3VFPh6zlqMPmTv7B8WmCD9EeY5W5Y5bNLdM/OEKTHA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=urGudsfVq+5ySXcuTVg98ZcBylnVtjsRN1gKPpwy+exI6w0E7n+J+qyNjHYF846KAm0mP20OdqlhKNAaOk8X1CtCwOScnEfvU67VufcescLscBHkeNeV8+PDctkvxvyPjsVStcVbnJDoUeZMDpTnY+urncke6b8NvI/nrzjAXBE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QSJ5KxWn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6863DC4CEF7
-	for <linux-pm@vger.kernel.org>; Mon, 22 Sep 2025 14:16:56 +0000 (UTC)
+	s=arc-20240116; t=1758555214; c=relaxed/simple;
+	bh=jkLyg463Vj9+PNamEtH/GMXu9yQe7XDrh0jUJk0k1N8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=s6ZqRkrRyZekmaDMByG7lKQXc9EkUlPH3nJ7gF8zUj0569BwCQ/AdkQqSvoIoQDN/3iI4BqkZ/qeZLbx3qR1V9FHESVACe+DqQbx/g580o2+W1uIrG4zSh1ewlckO9edgT1WAay9+RSmzdJzqGhPHR2MUGJ+FsH2E/R15E4nkUg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R77rYcva; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39649C4CEF0;
+	Mon, 22 Sep 2025 15:33:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758550616;
-	bh=p3VFPh6zlqMPmTv7B8WmCD9EeY5W5Y5bNLdM/OEKTHA=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=QSJ5KxWnDGVuXQVsLeNgRxIi2vUmRhnv5Cs84C7HJIe5EV0YN+jdS4POIR51uSLMD
-	 q7aoDVLdSieVi/Ysg0lBmAkGi63s8Wz671LYAOaK0kd0Evbdyt9kpuDQSa18KoRNLL
-	 DpBUkQyCXx6Hr+6c8Tt8hZM/xR+97mD6d768Ca6Inze88xda7DQeVoevqumd6NP4iE
-	 qh5oG0ZwnzVk1wdC1lUojasyewc6+9NrL8nqZLbjBH/FAjrIMNTl/nqhDOHuJPjSJ/
-	 u62ale+XrMb4DFjWFaXwTeu8e9rundsQV8cMqUd3QELrJhswlrhepShs1hfF0QlZQt
-	 2dp9h2xCEeLWw==
-Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-62ea23446f4so198159eaf.3
-        for <linux-pm@vger.kernel.org>; Mon, 22 Sep 2025 07:16:56 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWXfCwP2nlVT8SBA8p+R/o2Vek+6kZaZD9oa+wkLSn1QatC3Lft1E9v8oY8UUAsso1pQ4WbGHdUJw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwN9oLCI+nCsajhTfwhEeLS8aBo88beeISfQxHKDoltd8Z8S+9r
-	WKK4amEli5BFYN/8FNUd26+E+IE9wFdvjtZ3h4DvU1LdeIatNLZVdK6WJdTnMyckp23xDNmM/t1
-	A7xk3k74qcOP+pKt0okA4lZGKm6J/iX0=
-X-Google-Smtp-Source: AGHT+IETiCQcLSU3PeDydQh7rifOkZY2/e69xVa4uqUWHyP8lQ5K6Dq6B4mRaVxu42sWCzafFCDFQD9SXsgOIheAy8k=
-X-Received: by 2002:a05:6820:1caa:b0:624:b767:e1c4 with SMTP id
- 006d021491bc7-62724df2f3bmr7336347eaf.0.1758550615446; Mon, 22 Sep 2025
- 07:16:55 -0700 (PDT)
+	s=k20201202; t=1758555214;
+	bh=jkLyg463Vj9+PNamEtH/GMXu9yQe7XDrh0jUJk0k1N8=;
+	h=From:To:Cc:Subject:Date:From;
+	b=R77rYcvac8SlRp4g9nv1iIJV3jY9ULKzE5lnr3Qy/NUa0y9RMozFMYTQ87ZCll6xy
+	 osK+dVfxvzt+jE69IvGgoAVVatSYHMhK3QkVEEdFRqLbGcIMrKin/ax3HvEv5f2Y/k
+	 MxasqLXAZoJruOpQd8ta6Gcsh2Ud3R0T3r6qsURTJsFPyiQ23DtvDCusHMu3MT2H7D
+	 GAAhiKbBlFCBHC8JxHm3D/Sit/XlHSi6ahuwd4cdYZ5GKmEqe7sfd4OO2XGbaCYCUC
+	 NkBCPjEFm4L430a2YdjREfwqZOddMJOuBehkJ/dTSdKmEb+D3QakQ71bvsOqScY4Ts
+	 QEtVadkl3+nuA==
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+To: Linux PM <linux-pm@vger.kernel.org>, Takashi Iwai <tiwai@suse.de>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Linux PCI <linux-pci@vger.kernel.org>,
+ Alex Williamson <alex.williamson@redhat.com>,
+ Bjorn Helgaas <helgaas@kernel.org>, Zhang Qilong <zhangqilong3@huawei.com>,
+ Ulf Hansson <ulf.hansson@linaro.org>
+Subject: [PATCH v3 0/3] PM: runtime: Auto-cleanup macros for runtime PM
+Date: Mon, 22 Sep 2025 17:26:54 +0200
+Message-ID: <12763087.O9o76ZdvQC@rafael.j.wysocki>
+Organization: Linux Kernel Development
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <6204724.lOV4Wx5bFT@rafael.j.wysocki> <3388279.44csPzL39Z@rafael.j.wysocki>
- <875xdaevab.wl-tiwai@suse.de> <CAJZ5v0hSBDg4fD7Gy6yEX31xO-3USJG_jFps71BRJJ2f0Oh90A@mail.gmail.com>
- <87348eobnv.wl-tiwai@suse.de> <CAJZ5v0iwNuFxiu3x3-fWO9dkLUq_=c3H=G2OgFmPfVguw0U4Sw@mail.gmail.com>
- <87zfammvgs.wl-tiwai@suse.de>
-In-Reply-To: <87zfammvgs.wl-tiwai@suse.de>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 22 Sep 2025 16:16:39 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0iL9V9SC7fQ6_RGCMfUAZzCkCp0kR6zdZWbWtKZ6dQQ2w@mail.gmail.com>
-X-Gm-Features: AS18NWCxsMyEXE-vLTHxPks8l77MEe4zD4P6Z-rZFfww8uT22FI3Ko4a3z3kutc
-Message-ID: <CAJZ5v0iL9V9SC7fQ6_RGCMfUAZzCkCp0kR6zdZWbWtKZ6dQQ2w@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] PM: runtime: Add auto-cleanup macros for "resume
- and get" operations
-To: Takashi Iwai <tiwai@suse.de>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Linux PCI <linux-pci@vger.kernel.org>, 
-	Alex Williamson <alex.williamson@redhat.com>, Bjorn Helgaas <helgaas@kernel.org>, 
-	Zhang Qilong <zhangqilong3@huawei.com>, Ulf Hansson <ulf.hansson@linaro.org>
+Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Sep 22, 2025 at 4:07=E2=80=AFPM Takashi Iwai <tiwai@suse.de> wrote:
->
-> On Mon, 22 Sep 2025 15:44:51 +0200,
-> Rafael J. Wysocki wrote:
-> >
-> > On Mon, Sep 22, 2025 at 3:32=E2=80=AFPM Takashi Iwai <tiwai@suse.de> wr=
-ote:
-> > >
-> > > On Mon, 22 Sep 2025 14:50:32 +0200,
-> > > Rafael J. Wysocki wrote:
-> > > >
-> > > > On Mon, Sep 22, 2025 at 10:38=E2=80=AFAM Takashi Iwai <tiwai@suse.d=
-e> wrote:
-> > > > >
-> > > > > On Sat, 20 Sep 2025 12:54:58 +0200,
-> > > > > Rafael J. Wysocki wrote:
-> > > > > >
-> > > > > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > > > >
-> > > > > > It is generally useful to be able to automatically drop a devic=
-e's
-> > > > > > runtime PM usage counter incremented by runtime PM operations t=
-hat
-> > > > > > resume a device and bump up its usage counter [1].
-> > > > > >
-> > > > > > To that end, add DEFINE_CLASS() macros allowing pm_runtime_put(=
-)
-> > > > > > and pm_runtime_put_autosuspend() to be used for the auto-cleanu=
-p in
-> > > > > > those cases.
-> > > > > >
-> > > > > > Simply put, a piece of code like below:
-> > > > > >
-> > > > > >       pm_runtime_get_sync(dev);
-> > > > > >       .....
-> > > > > >       pm_runtime_put(dev);
-> > > > > >       return 0;
-> > > > > >
-> > > > > > can be transformed with CLASS() like:
-> > > > > >
-> > > > > >       CLASS(pm_runtime_get_active, pm)(dev);
-> > > > > >       if (IS_ERR(pm))
-> > > > > >               return PTR_ERR(pm);
-> > > > > >       .....
-> > > > > >       return 0;
-> > > > > >
-> > > > > > (note the new resume error handling).
-> > > > >
-> > > > > Do we still allow the code without the error check even using CLA=
-SS()?
-> > > > > Although the error check should be handled, it's not mandatory fo=
-r
-> > > > > now.  That said, the above example could be still in a form like:
-> > > > >
-> > > > >         CLASS(pm_runtime_get_active, pm)(dev);
-> > > > >         .....
-> > > > >         return 0;
-> > > > >
-> > > > > while adding the proper error check is recommended?
-> > > >
-> > > > I'd rather not encourage doing this.
-> > > >
-> > > > While it may still produce working code in some cases, one needs to
-> > > > remember that in case of a runtime resume error it will be running
-> > > > without a runtime PM reference it has attempted to acquire.
-> > >
-> > > Fair enough.  Then it'd be also good to mention that in the
-> > > description, too.
-> >
-> > I can also add classes for the cases in which resume errors can be
-> > neglected, like these:
-> >
-> > DEFINE_CLASS(pm_runtime_get_sync, struct device *,
-> >          if (_T) pm_runtime_put(_T),
-> >          ({ pm_runtime_get_sync(dev); dev; }), struct device *dev)
-> >
-> > DEFINE_CLASS(pm_runtime_get_sync_auto, struct device *,
-> >          if (_T) pm_runtime_put_autosuspend(_T),
-> >          ({ pm_runtime_get_sync(dev); dev; }), struct device *dev)
-> >
-> > with a comment explaining what they are for.
->
-> It might be helpful, indeed, since the error handling isn't always
-> straightforward, and this still allows us to convert to the
-> auto-cleanup safely.  It's still worth to mention that those aren't
-> recommended options, though.
+Hi All,
 
-Agreed.
+This is an update of
 
-I'll send a v3 including these changes.
+https://lore.kernel.org/linux-pm/6204724.lOV4Wx5bFT@rafael.j.wysocki/
+
+that superseded both
+
+https://lore.kernel.org/linux-pm/5049058.31r3eYUQgx@rafael.j.wysocki/
+
+and
+
+https://lore.kernel.org/linux-pm/20250919163147.4743-1-tiwai@suse.de/
+
+The only patch in this series modified since the v2 is patch [1/3]: Two
+additional class definition macros have been added to cover the case in
+which resume failures can be neglected, new comments have been updated
+to clarify usage conditions for the new macros, and the changelog has
+been updated accordingly.
+
+Thanks!
+
+
+
 
