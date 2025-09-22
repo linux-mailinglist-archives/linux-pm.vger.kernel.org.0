@@ -1,128 +1,207 @@
-Return-Path: <linux-pm+bounces-35153-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35154-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 990EDB915D8
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Sep 2025 15:19:36 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id F01C0B9168F
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Sep 2025 15:32:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 531423AC1A0
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Sep 2025 13:19:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 112462A1A8D
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Sep 2025 13:32:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6155230ACF5;
-	Mon, 22 Sep 2025 13:19:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6F7630C35D;
+	Mon, 22 Sep 2025 13:32:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LG/BtI+1"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="SiD+5Lro";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="pmKAPtHH";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="SiD+5Lro";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="pmKAPtHH"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 295EC30AAAD;
-	Mon, 22 Sep 2025 13:19:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02BA030BB91
+	for <linux-pm@vger.kernel.org>; Mon, 22 Sep 2025 13:32:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758547164; cv=none; b=UX+N9/c9dAmrILGTW1Wjj6edreW/5iSMwZC4yWKsYRRCCfko0FL1ehoyCW3IN2WK5aoYdBLwjt0jfesZfNHbrx3gcWebeWH9TtEFbkmpIQvUZiLqEk3yorq2VEGE9XEWozIYwH/U142eGbXgYIRx8gSXObCOhg5CAdoCkRb5JVQ=
+	t=1758547960; cv=none; b=Rf99t1oKAnzqqpWdVeRHIs0rmu6iev47vtu+bGwTcbfyS0pZZVWDl6/vxgndGtuc2mrdc7MQB5wP9QYyayNWF30HcHN+bp+VnTtw3Ufwo9jEPQop+IUP7xI0oG4/ZXcg/0JJ2HJDAQJ/NdaacptxnTSk+r6McyuQSLCyD/ynQUY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758547164; c=relaxed/simple;
-	bh=/2BPc+qmrsh2DgallaqxgQi03F/iwjA/IqFzKaKywSw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kpFCnU77Ps/J8wKbRMw/0pwRzgz2/oEuWz0mPJaH3FivLKkRCzxYrYiW8TI6+UI7k4cusSKUrPwXqcH6+Gy4nxgobzSC+60xh5eMbH3yrEBCbAp+Gv+Ob47WgolwYaCjtn4e2y9ZxouPSMHtRKKiB8TZDBfhpFX1XmW9C2XAseg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LG/BtI+1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1236AC4CEF0;
-	Mon, 22 Sep 2025 13:19:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758547162;
-	bh=/2BPc+qmrsh2DgallaqxgQi03F/iwjA/IqFzKaKywSw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LG/BtI+1o28ZEPga/55ETInxWu6RoXLXJhRGIZVOknyJhj1fvYNbUGyqjdViU14CO
-	 4NIo1Jz6kugezCY7caieIF2+gm0DpIGu0imUPyECzH5W5gjFvs+rKgKtukthw/N8/Q
-	 bx4CYhN1uy747NgWfTZfngQEIkc2GPyBY9J0mZY0HaOASfnHY5clIBprv22ChzIZj3
-	 hKO4LsUXrEUbB0a/IvFsk22pJgFcLigRkGNYe1tlsXWnGf4ePzKGilQsBvmaFTdN2p
-	 pmxKoTFv5oCMqFO4lxCEB6HHmgrRyqKU0WLl9jxgYm47kGQwuADxiJgjSfXq0IuDjP
-	 fPKTXU7AI/kMQ==
-Date: Mon, 22 Sep 2025 15:19:14 +0200
-From: Mark Brown <broonie@kernel.org>
-To: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-Cc: Jassi Brar <jassisinghbrar@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Boris Brezillon <boris.brezillon@collabora.com>,
-	Steven Price <steven.price@arm.com>,
-	Liviu Dudau <liviu.dudau@arm.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	MyungJoo Ham <myungjoo.ham@samsung.com>,
-	Kyungmin Park <kyungmin.park@samsung.com>,
-	Chanwoo Choi <cw00.choi@samsung.com>, Kees Cook <kees@kernel.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Chia-I Wu <olvaffe@gmail.com>, Chen-Yu Tsai <wenst@chromium.org>,
-	kernel@collabora.com, dri-devel@lists.freedesktop.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v3 05/10] mailbox: add MediaTek GPUEB IPI mailbox
-Message-ID: <aNFM0oWk5S38KBRC@finisterre.sirena.org.uk>
-References: <20250917-mt8196-gpufreq-v3-0-c4ede4b4399e@collabora.com>
- <20250917-mt8196-gpufreq-v3-5-c4ede4b4399e@collabora.com>
- <CABb+yY0_TZC0Dd3Rue=6Am4=Urs8hdkaa6RE=42t58SYUsLV0w@mail.gmail.com>
- <1933660.tdWV9SEqCh@workhorse>
+	s=arc-20240116; t=1758547960; c=relaxed/simple;
+	bh=msEtCxPw1Q+NQNP/NUwrNhWFN0iB75jLAt8ym53Z4Is=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=pXqQttHZ/LyGykA1ZJViJ4lO7Q2YOUiUryxmwJIXQNY/x3ZBss2pdGLZR3otLU55fo8F0yumm42FOrqvNy9LTuMag7YwjpON4fPtMb+H5rVUFtX/MaZY3sCmHHxp/ck9BHRoPycS4+TJ4M9X6sZGOvghlQoUW03xJLix+DtTd3o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=SiD+5Lro; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=pmKAPtHH; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=SiD+5Lro; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=pmKAPtHH; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 01E8733772;
+	Mon, 22 Sep 2025 13:32:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1758547957; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ZhEzsNGYvikcV5pZIDnjqvry8vcm585kM1Qo2pcC4/w=;
+	b=SiD+5Lro1DX0jpai6Q1mKi4U8NtLvRpxWqcvNElHwvTAHJFzgIxkKAAa9Zsfr7mnRNWhW4
+	kOn16iSbfZHTu7zI0Uwc5WIDyHzlE4YjL5uyBlTJxvZMHFgwM9DGsM0t2IMDZRVi1jHkoi
+	yaCOP63VV9W6ffdA/V9HcU6Qw4IZVNg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1758547957;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ZhEzsNGYvikcV5pZIDnjqvry8vcm585kM1Qo2pcC4/w=;
+	b=pmKAPtHHCCf37ZysvZ9DkkPVVz6nqk6Dx1FTROONTwPqFxTcFcN2o8wjfdpTQIkjR28KMk
+	Eud4J2As+FBzoABQ==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=SiD+5Lro;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=pmKAPtHH
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1758547957; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ZhEzsNGYvikcV5pZIDnjqvry8vcm585kM1Qo2pcC4/w=;
+	b=SiD+5Lro1DX0jpai6Q1mKi4U8NtLvRpxWqcvNElHwvTAHJFzgIxkKAAa9Zsfr7mnRNWhW4
+	kOn16iSbfZHTu7zI0Uwc5WIDyHzlE4YjL5uyBlTJxvZMHFgwM9DGsM0t2IMDZRVi1jHkoi
+	yaCOP63VV9W6ffdA/V9HcU6Qw4IZVNg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1758547957;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ZhEzsNGYvikcV5pZIDnjqvry8vcm585kM1Qo2pcC4/w=;
+	b=pmKAPtHHCCf37ZysvZ9DkkPVVz6nqk6Dx1FTROONTwPqFxTcFcN2o8wjfdpTQIkjR28KMk
+	Eud4J2As+FBzoABQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id B24D01388C;
+	Mon, 22 Sep 2025 13:32:36 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id n9ndKfRP0WhNewAAD6G6ig
+	(envelope-from <tiwai@suse.de>); Mon, 22 Sep 2025 13:32:36 +0000
+Date: Mon, 22 Sep 2025 15:32:36 +0200
+Message-ID: <87348eobnv.wl-tiwai@suse.de>
+From: Takashi Iwai <tiwai@suse.de>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Takashi Iwai <tiwai@suse.de>,
+	Linux PM <linux-pm@vger.kernel.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Linux PCI <linux-pci@vger.kernel.org>,
+	Alex Williamson <alex.williamson@redhat.com>,
+	Bjorn Helgaas <helgaas@kernel.org>,
+	Zhang Qilong <zhangqilong3@huawei.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>
+Subject: Re: [PATCH v2 1/3] PM: runtime: Add auto-cleanup macros for "resume and get" operations
+In-Reply-To: <CAJZ5v0hSBDg4fD7Gy6yEX31xO-3USJG_jFps71BRJJ2f0Oh90A@mail.gmail.com>
+References: <6204724.lOV4Wx5bFT@rafael.j.wysocki>
+	<3388279.44csPzL39Z@rafael.j.wysocki>
+	<875xdaevab.wl-tiwai@suse.de>
+	<CAJZ5v0hSBDg4fD7Gy6yEX31xO-3USJG_jFps71BRJJ2f0Oh90A@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="hWOioVe/sP5fgiHB"
-Content-Disposition: inline
-In-Reply-To: <1933660.tdWV9SEqCh@workhorse>
-X-Cookie: Filmed before a live audience.
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Level: 
+X-Spam-Flag: NO
+X-Rspamd-Queue-Id: 01E8733772
+X-Rspamd-Action: no action
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Spamd-Result: default: False [-3.51 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_CONTAINS_FROM(1.00)[];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	TO_DN_ALL(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	ARC_NA(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	FROM_HAS_DN(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	DKIM_TRACE(0.00)[suse.de:+];
+	RCVD_COUNT_TWO(0.00)[2];
+	FROM_EQ_ENVFROM(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	DNSWL_BLOCKED(0.00)[2a07:de40:b281:104:10:150:64:97:from,2a07:de40:b281:106:10:150:64:167:received];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,suse.de:dkim,suse.de:mid,suse.de:email]
+X-Spam-Score: -3.51
+
+On Mon, 22 Sep 2025 14:50:32 +0200,
+Rafael J. Wysocki wrote:
+> 
+> On Mon, Sep 22, 2025 at 10:38 AM Takashi Iwai <tiwai@suse.de> wrote:
+> >
+> > On Sat, 20 Sep 2025 12:54:58 +0200,
+> > Rafael J. Wysocki wrote:
+> > >
+> > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > >
+> > > It is generally useful to be able to automatically drop a device's
+> > > runtime PM usage counter incremented by runtime PM operations that
+> > > resume a device and bump up its usage counter [1].
+> > >
+> > > To that end, add DEFINE_CLASS() macros allowing pm_runtime_put()
+> > > and pm_runtime_put_autosuspend() to be used for the auto-cleanup in
+> > > those cases.
+> > >
+> > > Simply put, a piece of code like below:
+> > >
+> > >       pm_runtime_get_sync(dev);
+> > >       .....
+> > >       pm_runtime_put(dev);
+> > >       return 0;
+> > >
+> > > can be transformed with CLASS() like:
+> > >
+> > >       CLASS(pm_runtime_get_active, pm)(dev);
+> > >       if (IS_ERR(pm))
+> > >               return PTR_ERR(pm);
+> > >       .....
+> > >       return 0;
+> > >
+> > > (note the new resume error handling).
+> >
+> > Do we still allow the code without the error check even using CLASS()?
+> > Although the error check should be handled, it's not mandatory for
+> > now.  That said, the above example could be still in a form like:
+> >
+> >         CLASS(pm_runtime_get_active, pm)(dev);
+> >         .....
+> >         return 0;
+> >
+> > while adding the proper error check is recommended?
+> 
+> I'd rather not encourage doing this.
+> 
+> While it may still produce working code in some cases, one needs to
+> remember that in case of a runtime resume error it will be running
+> without a runtime PM reference it has attempted to acquire.
+
+Fair enough.  Then it'd be also good to mention that in the
+description, too.
 
 
---hWOioVe/sP5fgiHB
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+thanks,
 
-On Mon, Sep 22, 2025 at 02:59:43PM +0200, Nicolas Frattaroli wrote:
-> On Sunday, 21 September 2025 07:00:59 Central European Summer Time Jassi Brar wrote:
-
-> > > +#define MBOX_FULL              BIT(0) /* i.e. we've received data */
-> > > +#define MBOX_CLOGGED           BIT(1) /* i.e. the channel is shutdown */
-
-> > This is confusing. CLOGGED usually means malfunction, but it seems you
-> > want to call it STOPPED or UNINIT?
-
-> I don't agree that "CLOGGED usually means malfunction". To clog something
-> is to impede its flow, which in this case is the correct terminology to
-> refer to what's happened to the channel. "UNINIT" is wrong, it's initialised
-> properly. "STOPPED" is also wrong, it's not stopped, it still sends, it just
-> won't pass it on through.
-
-As a native English speaker I'd say that clogged has heavy overtones of
-broken and malfunction, like Jassi says it'd usually describe a fault
-condition.  Something like "blocked" might be more neutral.
-
---hWOioVe/sP5fgiHB
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmjRTMsACgkQJNaLcl1U
-h9BSwgf/UbyytmfMXNaOBq0OXuzH3MlTUpvtouJsg45qiXcqEzcGY0k6+RBIUbc6
-zI4fw9IG0Lv8B4Yrt1hanJqBJ/sKvd/eq065FqSbGMiG9Wyvivn0OGdw9IIP3Wxi
-4TpYVqVul1GtYt3Gp5D4HJbNOaeEZeaOsEUqU0EFD1X5NCviWF7atKprxkvd/e9k
-ZPOQdFVmh48Ln2hsCQ621I8Wemmu+gSVB1aSvD1awF36hp+cCvWz7vSus4z3nX5D
-71oUm+zLms7LtKb9Voz3ReEEmIKjbhG7dUF/xHul+Qg8FQqMxwcBPAyjFzl3g92I
-ZQuum9Wn2rVplW7pwOwJ5YvsRh8BdQ==
-=0rmc
------END PGP SIGNATURE-----
-
---hWOioVe/sP5fgiHB--
+Takashi
 
