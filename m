@@ -1,60 +1,59 @@
-Return-Path: <linux-pm+bounces-35217-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35218-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF34AB95B40
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Sep 2025 13:42:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BD125B95B52
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Sep 2025 13:42:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 67AAF7B2B11
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Sep 2025 11:40:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BE3F91768AD
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Sep 2025 11:42:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21EBA322C98;
-	Tue, 23 Sep 2025 11:41:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA439322DC1;
+	Tue, 23 Sep 2025 11:41:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="bzn6YvXL"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="TQb5dQjb"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39068322C95;
-	Tue, 23 Sep 2025 11:41:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECE23322541;
+	Tue, 23 Sep 2025 11:41:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758627688; cv=pass; b=BeW6lU1jxGXJZMnOuBje82y4IXgPx1ctKkKrzoWZ3HIjm3yExBo4iL76W7Cbn1DTuEG/fB6/Wr7OqmqVN1HycsEH/e7sTe148gmIDQ0M+DaS+GuiXu49wGubYcftRLBo77XD2amYSqIOrNwFNgxsB7rCgnzEAHVoRIRcwaBtAyk=
+	t=1758627691; cv=pass; b=jYYFPZsFYokaWVekmIjxCOYQmUhxalpX9/5Z5OhemKbzDzN/0X7Sc9UNn2jhjEZKDPS6YG6p80q8c36J1xGVLn2T/40vDe2ssdoNbHGn0U6Mr1FDnKWuaEwgUuaNZ8roR/h0ychEY2FqS3BBvKzwzKwG2cRk1q1/986W0HA2ghI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758627688; c=relaxed/simple;
-	bh=J+S5dkYsvaXSvVoWJtH+qdatS47qSJPWCgwwNDAH91E=;
+	s=arc-20240116; t=1758627691; c=relaxed/simple;
+	bh=D0wLemQcKIcoJwNhKy3eQf38Xk5oOAdcWxBYWmVcP6Y=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=GLV8pXRxvP5PjGbaIpwuD07mD6LEu2UtSL8cNo7X6ie+u1Uaby6oYh7LoTsxPzCHaWe6ThApC3shCp5Cr0F6ppgqD2Njitxx5M8P2384D9XjVgxkM8cAIaNCRqovvQdUqiLlkEYkkLYAur36PBzdEr8p2dSWN/EPEn3PS9Vggm0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=bzn6YvXL; arc=pass smtp.client-ip=136.143.188.112
+	 In-Reply-To:To:Cc; b=BRYw6f8Gc3zR8gLw9CJQ+Vi1dQ5LWkGgMRQQusLaryRLAJTdKeGx7c3p3ZvAfdjB3KdBHjt0XJxRXKWsTOZKDh9SswG30l0izPj6bokRpBGyb/1Q6V1FZITzrZJNzbX+aJaAKTM/0JYJS0mp36yoa/7dFpD/J4ZV2H64AjIckp8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=TQb5dQjb; arc=pass smtp.client-ip=136.143.188.112
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1758627660; cv=none; 
+ARC-Seal: i=1; a=rsa-sha256; t=1758627666; cv=none; 
 	d=zohomail.com; s=zohoarc; 
-	b=i4ET9+AyWeMONB8o+tjdRzjDw8n26z6moOAhGe6B+zXccEzNLh09z+ufuCdpEDWqrNCc8ijPmhLAiwK8R4st8JwDzuNU0So3lHztAalsPei02exJhtbGjm5v/7UgbnBccsLEeO9lAbFeO3HNQ+J+pnnLhwYzta9gRz6h7psMBzI=
+	b=h4x9i/tMKd/KpKthl9EQDhvcIF+sEf+qJpyZofv8YccGxStpev1ilk6W7db4/LBWGwCaRzJO/n+q2I/oIMy+yiMgu6kJ3PDzUvHmWLCF296+EoJj67mQGb3NRIwWkXz0Z8Trgb8EDXHKm+ObrK4jF0iViwqgi3z4RZVMfDwLqBM=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1758627660; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=UxZvjhEJCAiuvf/8CnR5ujZ+N4d9oN5GgfPWk3NAFVg=; 
-	b=Y6m3QfORhUuW2GLH9Vff15repNpo6GG7yIP1PyybxHT8E8Z9cGunFfUA/Rk3lz6ompgjbAxwNYIdKw+KHc9W27REqLShPWced84kD8pQoIseC9NGdsqvY0FKg48rUfIRY1Rfv07trSMldHijd3+B31a+BAcp5ABbc1F/e4wFcXA=
+	t=1758627666; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=mbudV7zMvsb7+FwxqOXJAvF7A++Xaqp/S1V/c8KvSeU=; 
+	b=Cbsv2xKRoaAcreQmkml+eLiwrQFwcNBmILh5wfcW7n9aR4QVHAMTvfEZ8knawJltoGPPsnbMszx3e/qHAueIeUz/IcGqnLjfniRtBj6Fsey5F4hgzpUGaldPgM4ySZMnGN4dFrKC0OFkXaw8BVLw6+oqb1M92H4dQSN/lUIEwv4=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
 	dkim=pass  header.i=collabora.com;
 	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
 	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1758627660;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1758627666;
 	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
 	h=From:From:Date:Date:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Message-Id:References:In-Reply-To:To:To:Cc:Cc:Reply-To;
-	bh=UxZvjhEJCAiuvf/8CnR5ujZ+N4d9oN5GgfPWk3NAFVg=;
-	b=bzn6YvXLYDjUpK84V7G/9Tf3laGfLafWt3hqSuflymd+uf5crLUNTZEopO1IDRYl
-	WNYsC2y8Ux7NJ78Gvz5RnjvKx25N5Kj2oqdnsoXgPquK4u6tbjlYh5xgMhrHq5v8Q91
-	wixhwtzUHWQP02hofVR+IfVAPVTa2Mbp4gB9oKt4=
-Received: by mx.zohomail.com with SMTPS id 1758627658431328.6809391981618;
-	Tue, 23 Sep 2025 04:40:58 -0700 (PDT)
+	bh=mbudV7zMvsb7+FwxqOXJAvF7A++Xaqp/S1V/c8KvSeU=;
+	b=TQb5dQjbYsVefqMSK1PNK15OEXRv0p2JmfNeh4a0go1fpXMTsl63jvWkkiQl4Xnv
+	w7cMNYTT5NgeopwmSWKLpeevQUayqzl5pC91vl/UONTWa58H3iEsP9N/x064xNiWbSp
+	ZlUG3NIJEfPDAFR73KFYV5slzsRGYRDCGwXgf0Wk=
+Received: by mx.zohomail.com with SMTPS id 1758627664897363.1328382126669;
+	Tue, 23 Sep 2025 04:41:04 -0700 (PDT)
 From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-Date: Tue, 23 Sep 2025 13:39:59 +0200
-Subject: [PATCH v4 6/8] drm/panthor: call into devfreq for current
- frequency
+Date: Tue, 23 Sep 2025 13:40:00 +0200
+Subject: [PATCH v4 7/8] drm/panthor: Use existing OPP table if present
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -63,7 +62,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250923-mt8196-gpufreq-v4-6-6cd63ade73d6@collabora.com>
+Message-Id: <20250923-mt8196-gpufreq-v4-7-6cd63ade73d6@collabora.com>
 References: <20250923-mt8196-gpufreq-v4-0-6cd63ade73d6@collabora.com>
 In-Reply-To: <20250923-mt8196-gpufreq-v4-0-6cd63ade73d6@collabora.com>
 To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
@@ -86,144 +85,62 @@ Cc: kernel@collabora.com, dri-devel@lists.freedesktop.org,
  Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 X-Mailer: b4 0.14.2
 
-As it stands, panthor keeps a cached current frequency value for when it
-wants to retrieve it. This doesn't work well for when things might
-switch frequency without panthor's knowledge.
+On SoCs where the GPU's power-domain is in charge of setting performance
+levels, the OPP table of the GPU node will have already been populated
+during said power-domain's attach_dev operation.
 
-Instead, implement the get_cur_freq operation, and expose it through a
-helper function to the rest of panthor.
+To avoid initialising an OPP table twice, only set the OPP regulator and
+the OPPs from DT if there's no OPP table present.
 
-Reviewed-by: Steven Price <steven.price@arm.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 ---
- drivers/gpu/drm/panthor/panthor_devfreq.c | 33 +++++++++++++++++++++++++++----
- drivers/gpu/drm/panthor/panthor_devfreq.h |  2 ++
- drivers/gpu/drm/panthor/panthor_device.h  |  3 ---
- drivers/gpu/drm/panthor/panthor_drv.c     |  4 +++-
- 4 files changed, 34 insertions(+), 8 deletions(-)
+ drivers/gpu/drm/panthor/panthor_devfreq.c | 24 +++++++++++++++---------
+ 1 file changed, 15 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/gpu/drm/panthor/panthor_devfreq.c b/drivers/gpu/drm/panthor/panthor_devfreq.c
-index 3686515d368db5bb329f4858d4a7247a4957cc24..8903f60c0a3f06313ac2008791c210ff32b6bd52 100644
+index 8903f60c0a3f06313ac2008791c210ff32b6bd52..4ec46a67db7d4331ac31a249e41ee19378cd411e 100644
 --- a/drivers/gpu/drm/panthor/panthor_devfreq.c
 +++ b/drivers/gpu/drm/panthor/panthor_devfreq.c
-@@ -62,7 +62,6 @@ static void panthor_devfreq_update_utilization(struct panthor_devfreq *pdevfreq)
- static int panthor_devfreq_target(struct device *dev, unsigned long *freq,
- 				  u32 flags)
- {
--	struct panthor_device *ptdev = dev_get_drvdata(dev);
+@@ -143,6 +143,7 @@ int panthor_devfreq_init(struct panthor_device *ptdev)
+ 	struct panthor_devfreq *pdevfreq;
  	struct dev_pm_opp *opp;
- 	int err;
+ 	unsigned long cur_freq;
++	struct opp_table *t;
+ 	unsigned long freq = ULONG_MAX;
+ 	int ret;
  
-@@ -72,8 +71,6 @@ static int panthor_devfreq_target(struct device *dev, unsigned long *freq,
- 	dev_pm_opp_put(opp);
+@@ -152,17 +153,22 @@ int panthor_devfreq_init(struct panthor_device *ptdev)
  
- 	err = dev_pm_opp_set_rate(dev, *freq);
--	if (!err)
--		ptdev->current_frequency = *freq;
+ 	ptdev->devfreq = pdevfreq;
  
- 	return err;
- }
-@@ -115,11 +112,21 @@ static int panthor_devfreq_get_dev_status(struct device *dev,
- 	return 0;
- }
+-	ret = devm_pm_opp_set_regulators(dev, reg_names);
+-	if (ret) {
+-		if (ret != -EPROBE_DEFER)
+-			DRM_DEV_ERROR(dev, "Couldn't set OPP regulators\n");
++	t = dev_pm_opp_get_opp_table(dev);
++	if (IS_ERR_OR_NULL(t)) {
++		ret = devm_pm_opp_set_regulators(dev, reg_names);
++		if (ret) {
++			if (ret != -EPROBE_DEFER)
++				DRM_DEV_ERROR(dev, "Couldn't set OPP regulators\n");
  
-+static int panthor_devfreq_get_cur_freq(struct device *dev, unsigned long *freq)
-+{
-+	struct panthor_device *ptdev = dev_get_drvdata(dev);
-+
-+	*freq = clk_get_rate(ptdev->clks.core);
-+
-+	return 0;
-+}
-+
- static struct devfreq_dev_profile panthor_devfreq_profile = {
- 	.timer = DEVFREQ_TIMER_DELAYED,
- 	.polling_ms = 50, /* ~3 frames */
- 	.target = panthor_devfreq_target,
- 	.get_dev_status = panthor_devfreq_get_dev_status,
-+	.get_cur_freq = panthor_devfreq_get_cur_freq,
- };
+-		return ret;
+-	}
++			return ret;
++		}
  
- int panthor_devfreq_init(struct panthor_device *ptdev)
-@@ -198,7 +205,6 @@ int panthor_devfreq_init(struct panthor_device *ptdev)
- 		return PTR_ERR(opp);
- 
- 	panthor_devfreq_profile.initial_freq = cur_freq;
--	ptdev->current_frequency = cur_freq;
- 
- 	/*
- 	 * Set the recommend OPP this will enable and configure the regulator
-@@ -296,3 +302,22 @@ void panthor_devfreq_record_idle(struct panthor_device *ptdev)
- 
- 	spin_unlock_irqrestore(&pdevfreq->lock, irqflags);
- }
-+
-+unsigned long panthor_devfreq_get_freq(struct panthor_device *ptdev)
-+{
-+	struct panthor_devfreq *pdevfreq = ptdev->devfreq;
-+	unsigned long freq = 0;
-+	int ret;
-+
-+	if (!pdevfreq || !pdevfreq->devfreq)
-+		return 0;
-+
-+	if (pdevfreq->devfreq->profile->get_cur_freq) {
-+		ret = pdevfreq->devfreq->profile->get_cur_freq(ptdev->base.dev,
-+							       &freq);
+-	ret = devm_pm_opp_of_add_table(dev);
+-	if (ret)
+-		return ret;
++		ret = devm_pm_opp_of_add_table(dev);
 +		if (ret)
-+			return 0;
++			return ret;
++	} else {
++		dev_pm_opp_put_opp_table(t);
 +	}
-+
-+	return freq;
-+}
-diff --git a/drivers/gpu/drm/panthor/panthor_devfreq.h b/drivers/gpu/drm/panthor/panthor_devfreq.h
-index b7631de695f7d79456478c87e8af5dc47673cd1d..f8e29e02f66cb3281ed4bb4c75cda9bd4df82b92 100644
---- a/drivers/gpu/drm/panthor/panthor_devfreq.h
-+++ b/drivers/gpu/drm/panthor/panthor_devfreq.h
-@@ -18,4 +18,6 @@ void panthor_devfreq_suspend(struct panthor_device *ptdev);
- void panthor_devfreq_record_busy(struct panthor_device *ptdev);
- void panthor_devfreq_record_idle(struct panthor_device *ptdev);
  
-+unsigned long panthor_devfreq_get_freq(struct panthor_device *ptdev);
-+
- #endif /* __PANTHOR_DEVFREQ_H__ */
-diff --git a/drivers/gpu/drm/panthor/panthor_device.h b/drivers/gpu/drm/panthor/panthor_device.h
-index 9f0649ecfc4fc697a21a8b2fc4dd89c8ecf298df..f32c1868bf6d782d99df9dbd0babcea049c917e0 100644
---- a/drivers/gpu/drm/panthor/panthor_device.h
-+++ b/drivers/gpu/drm/panthor/panthor_device.h
-@@ -214,9 +214,6 @@ struct panthor_device {
- 	/** @profile_mask: User-set profiling flags for job accounting. */
- 	u32 profile_mask;
+ 	spin_lock_init(&pdevfreq->lock);
  
--	/** @current_frequency: Device clock frequency at present. Set by DVFS*/
--	unsigned long current_frequency;
--
- 	/** @fast_rate: Maximum device clock frequency. Set by DVFS */
- 	unsigned long fast_rate;
- 
-diff --git a/drivers/gpu/drm/panthor/panthor_drv.c b/drivers/gpu/drm/panthor/panthor_drv.c
-index ea4a37b566a8b215f2b7a09c333a696f1dcdb58f..4d59d94c353c3ca76f4b98a411c8f8284efafd08 100644
---- a/drivers/gpu/drm/panthor/panthor_drv.c
-+++ b/drivers/gpu/drm/panthor/panthor_drv.c
-@@ -25,6 +25,7 @@
- #include <drm/gpu_scheduler.h>
- #include <drm/panthor_drm.h>
- 
-+#include "panthor_devfreq.h"
- #include "panthor_device.h"
- #include "panthor_fw.h"
- #include "panthor_gem.h"
-@@ -1519,7 +1520,8 @@ static void panthor_gpu_show_fdinfo(struct panthor_device *ptdev,
- 		drm_printf(p, "drm-cycles-panthor:\t%llu\n", pfile->stats.cycles);
- 
- 	drm_printf(p, "drm-maxfreq-panthor:\t%lu Hz\n", ptdev->fast_rate);
--	drm_printf(p, "drm-curfreq-panthor:\t%lu Hz\n", ptdev->current_frequency);
-+	drm_printf(p, "drm-curfreq-panthor:\t%lu Hz\n",
-+		   panthor_devfreq_get_freq(ptdev));
- }
- 
- static void panthor_show_internal_memory_stats(struct drm_printer *p, struct drm_file *file)
 
 -- 
 2.51.0
