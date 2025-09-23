@@ -1,335 +1,359 @@
-Return-Path: <linux-pm+bounces-35191-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35192-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 229F9B937AF
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Sep 2025 00:29:08 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A9EAB93C17
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Sep 2025 02:54:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C3BB43BF3AD
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Sep 2025 22:29:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B8F792E0AF6
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Sep 2025 00:54:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 996442DEA68;
-	Mon, 22 Sep 2025 22:29:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B848B1C54A9;
+	Tue, 23 Sep 2025 00:54:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="fq9emhxZ"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="otohyrUY"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sender4-op-o12.zoho.com (sender4-op-o12.zoho.com [136.143.188.12])
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E45325C810;
-	Mon, 22 Sep 2025 22:29:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.12
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758580143; cv=pass; b=Vg6Z6mJY+2CXqIknws/9URw5Hsohj2b3leEn5OmSNjAuSMPo+iJTCvaD9RK2IPgD5cskcCjJW7aoW/maxUCe/N/xVoEvpo5GHd9Gu+cm1KauZQa6v2hFc9TYen9Im79KmNXeIhRPGJCVHnKUCEc5Tq1gf/gK/1X9UkK3OTDpe5Q=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758580143; c=relaxed/simple;
-	bh=Hni2pb/SWCKrnx1pZrLyZv0XAOBFJ6gEG1PhKYWLPbk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Jgmsh0VpbhIJIXNa6C3I1AcmnnDsEkUJ9zqYAoKGduLwu/MmMkDOAQwAm5YYoNIWMh5Zx3cR7NCNFRQlKImnEknN9LZUOQEFQgNSNkzZG3CBANsDDLIq0uTq9r+piV261mZqjDHQfkjU9QhxfwQ0llBwto4CkYr31zqLVfPcedM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=fq9emhxZ; arc=pass smtp.client-ip=136.143.188.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1758580122; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=DPbNvVlTeHvk4rTzZKxtZIqrCBnffwKyBSn8hOedCksVBKMhnfqpRQGjcbTFOJ7kJV2ex0oDze6zKc974HEQ01cjOhOS/47OEJ+0kbsSa+S8Yldjrlt8fRQHM8dZCAlNCfftFXPNukyxQ/VwIqkf7alSmUybho08RWf3Hh24Elw=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1758580122; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=WGJ9p7ccOI7hAWR8G+9Ww5sw5ElrDPjQ4hRjDgDPqwI=; 
-	b=m3amN5ZroATML53DJiqlu7sIB12+Y6CJR2DQN1RPyi9P+D7CPd4Gqddfew4qSpvdiBzPb6R1KSMd+vg0j12aaKNF+auLUAzq6ta4Wz0gK6PB08N+gJO/MxLXE5v9yEhzBMfTeh/9sv1WmWwAlsaY3AUfQEvV+stJeoT1iJS8ZHc=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
-	dmarc=pass header.from=<sebastian.reichel@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1758580122;
-	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
-	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
-	bh=WGJ9p7ccOI7hAWR8G+9Ww5sw5ElrDPjQ4hRjDgDPqwI=;
-	b=fq9emhxZaF6tZyCTVA0ZNce4XhGQYY0Kg4RBaDvnn8hBJRcUfCqScUE+et0jxA1Q
-	upUntuEvbTe2UoGODPSoXeihyhJWOjG0be9ZGoY4gNW9wItvAEFjjhfRF8GTMaJKQRQ
-	0sod+y87/yBZXxcic4vT12xBAT5AAwL2BO+eVE8I=
-Received: by mx.zohomail.com with SMTPS id 1758580119097740.5010327230345;
-	Mon, 22 Sep 2025 15:28:39 -0700 (PDT)
-Received: by venus (Postfix, from userid 1000)
-	id 67D56180309; Tue, 23 Sep 2025 00:28:33 +0200 (CEST)
-Date: Tue, 23 Sep 2025 00:28:33 +0200
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Dzmitry Sankouski <dsankouski@gmail.com>
-Cc: Chanwoo Choi <cw00.choi@samsung.com>, 
-	Krzysztof Kozlowski <krzk@kernel.org>, Lee Jones <lee@kernel.org>, 
-	Luca Ceresoli <luca.ceresoli@bootlin.com>, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v5] power: supply: max77705_charger: implement aicl
- feature
-Message-ID: <cctdvj7jsf5ng3ab5vyhzjn73u6wqye3kcrgfj4tugpd32zj4f@o5buyuu7mmns>
-References: <20250920-max77705_77976_charger_improvement-v5-1-aab0aef82cc4@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E243418FC97
+	for <linux-pm@vger.kernel.org>; Tue, 23 Sep 2025 00:54:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.34
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1758588846; cv=none; b=hbFASV6rmjbaNU4Hq6UFymBbMO0TbXt4fLpyyIkGxVbWKzQf+uZGFuagfTN+shH1zeFP0nvh95hWpOyRreD2JwkiKGkEzuRfaUZ2th1IxaPCQlOVPGiF6stJQamYrIwR08q2QUuVuvgfweL0JX8sRqVx8EXUKNi6gOAzULeymIc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1758588846; c=relaxed/simple;
+	bh=k3I4yoQWlYW8RaG3vYcx9XWCVtfKEFR4QSZqQ2hTEDI=;
+	h=From:To:Cc:In-Reply-To:Subject:Date:Message-ID:MIME-Version:
+	 Content-Type:References; b=QZs2Irs1YzvUgAPVjt1HLpUnW+jsEdWmoHpxRVHCs12CC1FJD5Y6r/tPwGkWj2XJ4rTzU4349WWDDPr3WjVIk+Z4lX2yM2ityfKPbwD7mmHafns2U0PxqY3xI+gEV1A+i/riSqTW2gEZ1tGrBs1bwi3woYarZ6+2ZJIxV+DNTw0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=otohyrUY; arc=none smtp.client-ip=203.254.224.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
+	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20250923005401epoutp04c0523c5812c20ccb96e1d47973e7b4b9~nwzv6jhwb1350113501epoutp04C
+	for <linux-pm@vger.kernel.org>; Tue, 23 Sep 2025 00:54:01 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20250923005401epoutp04c0523c5812c20ccb96e1d47973e7b4b9~nwzv6jhwb1350113501epoutp04C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1758588841;
+	bh=0icZwGq6l6trj5m8kiyot8z07Evuj931KewICxfmrA0=;
+	h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+	b=otohyrUYrfg89CB6iep/4Blgcw316CaCY9Ze4fGymgPL3NLb4lAHCkiqU7sQZGoBw
+	 s8mB4UZjAndBJCZ09LyTRR5ofZz68puAE2yg7EZnBIba3fIKU0Sp3RixV1UzNpfGUu
+	 WhY8w4lDG50mlvgjH63gHJhONoRrx6lOcqT1xB0I=
+Received: from epsnrtp02.localdomain (unknown [182.195.42.154]) by
+	epcas2p4.samsung.com (KnoxPortal) with ESMTPS id
+	20250923005400epcas2p4d217865e5715affdeab93832c32ea661~nwzu8bTEn1878118781epcas2p4R;
+	Tue, 23 Sep 2025 00:54:00 +0000 (GMT)
+Received: from epcas2p4.samsung.com (unknown [182.195.36.70]) by
+	epsnrtp02.localdomain (Postfix) with ESMTP id 4cW1h76Mw1z2SSKx; Tue, 23 Sep
+	2025 00:53:59 +0000 (GMT)
+Received: from epsmtip2.samsung.com (unknown [182.195.34.31]) by
+	epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
+	20250923005359epcas2p419655d2bdb7de8ea6e0e60556660ac14~nwzte59Ee2370523705epcas2p4p;
+	Tue, 23 Sep 2025 00:53:59 +0000 (GMT)
+Received: from KORCO115296 (unknown [12.80.207.128]) by epsmtip2.samsung.com
+	(KnoxPortal) with ESMTPA id
+	20250923005359epsmtip26a98a0660041a34e46c9d4ee172226d5~nwztZPk940718307183epsmtip27;
+	Tue, 23 Sep 2025 00:53:59 +0000 (GMT)
+From: =?ks_c_5601-1987?B?vNW9xQ==?= <shin.son@samsung.com>
+To: "'Henrik Grimler'" <henrik@grimler.se>
+Cc: "'Bartlomiej Zolnierkiewicz'" <bzolnier@gmail.com>, "'Krzysztof
+ Kozlowski'" <krzk@kernel.org>, "'Rafael J . Wysocki'" <rafael@kernel.org>,
+	"'Daniel Lezcano'" <daniel.lezcano@linaro.org>, "'Zhang Rui'"
+	<rui.zhang@intel.com>, "'Lukasz Luba'" <lukasz.luba@arm.com>, "'Rob
+	Herring'" <robh@kernel.org>, "'Conor Dooley'" <conor+dt@kernel.org>, "'Alim
+	Akhtar'" <alim.akhtar@samsung.com>, <linux-pm@vger.kernel.org>,
+ <linux-samsung-soc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+ <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+In-Reply-To: <20250922200430.GA4697@l14.localdomain>
+Subject: RE: [PATCH v4 2/3] thermal: exynos_tmu: Support new hardware and
+ update TMU interface
+Date: Tue, 23 Sep 2025 09:53:53 +0900
+Message-ID: <000001dc2c24$8be7a090$a3b6e1b0$@samsung.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="apzq35hofjb3hln6"
-Content-Disposition: inline
-In-Reply-To: <20250920-max77705_77976_charger_improvement-v5-1-aab0aef82cc4@gmail.com>
-X-Zoho-Virus-Status: 1
-X-Zoho-Virus-Status: 1
-X-Zoho-AV-Stamp: zmail-av-1.4.3/258.557.22
-X-ZohoMailClient: External
+Content-Type: text/plain; charset="ks_c_5601-1987"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 15.0
+Thread-Index: AQLNrO/s5c6r06mWwaZxWViDEkHfogKWIOg4AX/6Z7UBj0CC7bKPv5FA
+Content-Language: ko
+X-CMS-MailID: 20250923005359epcas2p419655d2bdb7de8ea6e0e60556660ac14
+X-Msg-Generator: CA
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+cpgsPolicy: CPGSC10-234,Y
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20250922041902epcas2p3e40ed58737b22b7af9d09f6ba362928d
+References: <20250922041857.1107445-1-shin.son@samsung.com>
+	<CGME20250922041902epcas2p3e40ed58737b22b7af9d09f6ba362928d@epcas2p3.samsung.com>
+	<20250922041857.1107445-3-shin.son@samsung.com>
+	<20250922200430.GA4697@l14.localdomain>
 
+Hello Henrik Grimler
 
---apzq35hofjb3hln6
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v5] power: supply: max77705_charger: implement aicl
- feature
-MIME-Version: 1.0
+> -----Original Message-----
+> From: Henrik Grimler [mailto:henrik@grimler.se]
+> Sent: Tuesday, September 23, 2025 5:05 AM
+> To: Shin Son <shin.son@samsung.com>
+> Cc: Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>; Krzysztof Kozlowski
+> <krzk@kernel.org>; Rafael J . Wysocki <rafael@kernel.org>; Daniel Lezcano
+> <daniel.lezcano@linaro.org>; Zhang Rui <rui.zhang@intel.com>; Lukasz Luba
+> <lukasz.luba@arm.com>; Rob Herring <robh@kernel.org>; Conor Dooley
+> <conor+dt@kernel.org>; Alim Akhtar <alim.akhtar@samsung.com>; linux-
+> pm@vger.kernel.org; linux-samsung-soc@vger.kernel.org;
+> devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-
+> kernel@vger.kernel.org
+> Subject: Re: [PATCH v4 2/3] thermal: exynos_tmu: Support new hardware and
+> update TMU interface
+> 
+> Hi Shin,
+> 
+> On Mon, Sep 22, 2025 at 01:18:56PM +0900, Shin Son wrote:
+> > The Exynos tmu driver's private data structure has been extended to
+> > support the exynosautov920 hardware, which requires per-sensor
+> > interrupt enablement and multiple-zone handling:
+> >
+> > - Add 'slope_comp' : compensation parameter below 25 degrees.
+> > - Add 'calib_temp' : stores the fused calibaration temperature.
+> > - Add 'sensor_count' : reflects the maximum sensor numbers.
+> > - Rename 'tzd' -> 'tzd_array' to register multiple thermal zones.
+> >
+> > Since splitting this patch causes runtime errors during temperature
+> > emulation or problems where the read temperature feature fails to
+> > retrieve values, I have submitted it as a single commit. To add
+> > support for the exynosautov920 to the exisiting TMU interface, the
+> > following changes are included:
+> >
+> > 1. Simplify "temp_to_code" and "code_to_temp" to one computation path
+> >    by normalizing calib_temp.
+> > 2. Loop over 'sensor_count' in critical-point setup.
+> > 3. Introduce 'update_con_reg' for exynosautov920 control-register
+> updates.
+> > 4. Add exynosautov920-specific branch in 'exynos_tmu_update_temp'
+> function.
+> > 5. Skip high & low temperature threshold setup in exynosautov920.
+> > 6. Enable interrupts via sensor_count in exynosautov920.
+> > 7. Initialize all new members during 'exynosautov920_tmu_initialize'.
+> > 8. Clear IRQs by iterating the sensor_count in exynosautov920.
+> > 9. Register each zone with 'devm_thermal_of_zone_register()'
+> >    based on 'sensor_count'.
+> >
+> > Signed-off-by: Shin Son <shin.son@samsung.com>
+> > ---
+> >  drivers/thermal/samsung/exynos_tmu.c | 322
+> > ++++++++++++++++++++++++---
+> >  1 file changed, 285 insertions(+), 37 deletions(-)
+> >
+> > diff --git a/drivers/thermal/samsung/exynos_tmu.c
+> > b/drivers/thermal/samsung/exynos_tmu.c
+> > index 47a99b3c5395..ebcc38f3fff6 100644
+> > --- a/drivers/thermal/samsung/exynos_tmu.c
+> > +++ b/drivers/thermal/samsung/exynos_tmu.c
+> > @@ -121,8 +121,51 @@
+> >
+> >  #define EXYNOS_NOISE_CANCEL_MODE		4
+> >
+> > +/* ExynosAutov920 specific registers */
+> > +#define EXYNOSAUTOV920_SLOPE_COMP		25
+> > +#define EXYNOSAUTOV920_SLOPE_COMP_MASK		0xf
+> > +#define EXYNOSAUTOV920_CALIB_SEL_TEMP		30
+> > +#define EXYNOSAUTOV920_CALIB_SEL_TEMP_MASK	0x2
+> > +
+> > +#define EXYNOSAUTOV920_SENSOR0_TRIM_INFO	0x10
+> > +#define EXYNOSAUTOV920_TRIM_MASK		0x1ff
+> > +#define EXYNOSAUTOV920_TRIMINFO_25_SHIFT	0
+> > +#define EXYNOSAUTOV920_TRIMINFO_85_SHIFT	9
+> > +
+> > +#define EXYNOSAUTOV920_TMU_REG_TRIMINFO2	0x04
+> > +
+> > +#define EXYNOSAUTOV920_TMU_REG_THRESHOLD(p)	(((p)) * 0x50 +
+0x00d0)
+> > +#define EXYNOSAUTOV920_TMU_REG_INTEN(p)		(((p)) * 0x50 +
+> 0x00f0)
+> > +#define EXYNOSAUTOV920_TMU_REG_INT_PEND(p)	(((p)) * 0x50 + 0x00f8)
+> > +
+> > +#define EXYNOSAUTOV920_CURRENT_TEMP_P1_P0	0x084
+> > +#define EXYNOSAUTOV920_TMU_REG_EMUL_CON		0x0b0
+> > +
+> > +#define EXYNOSAUTOV920_TMU_REG_CONTROL		0x50
+> > +#define EXYNOSAUTOV920_TMU_REG_CONTROL1		0x54
+> > +#define EXYNOSAUTOV920_TMU_REG_AVG_CONTROL	0x58
+> > +#define EXYNOSAUTOV920_TMU_SAMPLING_INTERVAL	0x70
+> > +#define EXYNOSAUTOV920_TMU_REG_COUNTER_VALUE0	0x74
+> > +#define EXYNOSAUTOV920_TMU_REG_COUNTER_VALUE1	0x78
+> > +
+> > +#define EXYNOSAUTOV920_TMU_T_BUF_VREF_SEL_SHIFT		8
+> > +#define EXYNOSAUTOV920_TMU_T_BUF_VREF_SEL_MASK		0x1f
+> > +#define EXYNOSAUTOV920_TMU_T_BUF_SLOPE_SEL_SHIFT	3
+> > +#define EXYNOSAUTOV920_TMU_T_BUF_SLOPE_SEL_MASK		0xf
+> > +#define EXYNOSAUTOV920_TMU_NUM_PROBE_MASK		0xf
+> > +#define EXYNOSAUTOV920_TMU_NUM_PROBE_SHIFT		16
+> > +#define EXYNOSAUTOV920_TMU_LPI_MODE_MASK		1
+> > +#define EXYNOSAUTOV920_TMU_LPI_MODE_SHIFT		10
+> > +
+> > +#define EXYNOSAUTOV920_TMU_AVG_CON_UPDATE		0x0008011a
+> > +#define EXYNOSAUTOV920_TMU_COUNTER_VALUE0_UPDATE	0x030003c0
+> > +#define EXYNOSAUTOV920_TMU_COUNTER_VALUE1_UPDATE	0x03c0004d
+> > +
+> >  #define MCELSIUS	1000
+> >
+> > +#define EXYNOS_DEFAULT_SENSOR_COUNT			1
+> > +#define EXYNOS_MAX_SENSOR_COUNT				16
+> 
+> In patch 1, sensor count is described as a value 0 <= sensor_count <= 15,
+> but here max sensor count value is set to 16. Shouldn't max value be the
+> same in these two places, what is the maximum number of thermal sensors
+> that the hardware can have?
 
-Hi,
+Sorry for the confusion. It actually refers to the maximum number of remote
+sensors.
+I'll change it to 15.
 
-On Sat, Sep 20, 2025 at 09:42:30PM +0300, Dzmitry Sankouski wrote:
-> Adaptive input current allows charger to reduce it's current
-> consumption, when source is not able to provide enough power.
->=20
-> Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
-> ---
-> This series consists of:
-> - max77705: interrupt handling fix
-> - max77705: make input current limit and charge current limit properties
->   writable
-> - max77705: add adaptive input current limit feature
-> - max77705: switch to regfields
-> - max77705: refactoring
-> - max77976: change property for current charge limit value
-> ---
-> Changes in v5:
-> - rebase on latest linux-next, dropping already applied patches
-> - optimize code to drop is_aicl_irq_disabled variable
-> - Link to v4: https://lore.kernel.org/r/20250918-max77705_77976_charger_i=
-mprovement-v4-0-11ec9188f489@gmail.com
->=20
-> Changes in v4:
-> - fix commit message
-> - use IRQF_TRIGGER_NONE, because non physical irqs
-> - minor rename refactoring
-> - rebase on latest linux-next
-> - patch reorder: put fixes patch first
-> - aicl feature cleanup
-> - Link to v3: https://lore.kernel.org/r/20250911-max77705_77976_charger_i=
-mprovement-v3-0-35203686fa29@gmail.com
->=20
-> Changes in v3:
-> - move interrupt request before interrupt handler work initialization
-> - Link to v2: https://lore.kernel.org/r/20250909-max77705_77976_charger_i=
-mprovement-v2-0-a8d2fba47159@gmail.com
->=20
-> Changes in v2:
-> - fix charger register protection unlock
-> - Link to v1: https://lore.kernel.org/r/20250830-max77705_77976_charger_i=
-mprovement-v1-0-e976db3fd432@gmail.com
-> ---
-> Changes in v5:
-> - add _MS suffix to AICL_WORK_DELAY
-> - optimize code to drop is_aicl_irq_disabled variable
->=20
-> Changes in v4:
-> - fix intendation
-> - use IRQF_TRIGGER_NONE, because this is not physical irq
-> - use dev_err_probe instead of pr_err
-> - remove excessive chgin irq request
-> - remove pr_infos
-> ---
->  drivers/power/supply/max77705_charger.c | 55 +++++++++++++++++++++++++++=
-++++++
->  include/linux/power/max77705_charger.h  |  4 +++
->  2 files changed, 59 insertions(+)
->=20
-> diff --git a/drivers/power/supply/max77705_charger.c b/drivers/power/supp=
-ly/max77705_charger.c
-> index b1a227bf72e2..ff1663b414f5 100644
-> --- a/drivers/power/supply/max77705_charger.c
-> +++ b/drivers/power/supply/max77705_charger.c
-> @@ -40,6 +40,18 @@ static enum power_supply_property max77705_charger_pro=
-ps[] =3D {
->  	POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT,
->  };
-> =20
-> +static irqreturn_t max77705_aicl_irq(int irq, void *irq_drv_data)
-> +{
-> +	struct max77705_charger_data *chg =3D irq_drv_data;
-> +
-> +	disable_irq(chg->aicl_irq);
-> +
-> +	queue_delayed_work(chg->wqueue, &chg->aicl_work,
-> +		     msecs_to_jiffies(AICL_WORK_DELAY_MS));
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
->  static irqreturn_t max77705_chgin_irq(int irq, void *irq_drv_data)
->  {
->  	struct max77705_charger_data *chg =3D irq_drv_data;
-> @@ -445,6 +457,33 @@ static const struct power_supply_desc max77705_charg=
-er_psy_desc =3D {
->  	.set_property =3D max77705_set_property,
->  };
-> =20
-> +static void max77705_aicl_isr_work(struct work_struct *work)
-> +{
-> +	unsigned int regval, irq_status;
-> +	int err;
-> +	struct max77705_charger_data *chg =3D
-> +		container_of(work, struct max77705_charger_data, aicl_work.work);
-> +
-> +	regmap_read(chg->regmap, MAX77705_CHG_REG_INT_OK, &irq_status);
-> +
-> +	if (!(irq_status & BIT(MAX77705_AICL_I))) {
-> +		err =3D regmap_field_read(chg->rfield[MAX77705_CHG_CHGIN_LIM], &regval=
-);
-> +		if (err < 0)
-> +			return;
-> +
-> +		regval--;
-> +
-> +		err =3D regmap_field_write(chg->rfield[MAX77705_CHG_CHGIN_LIM], regval=
-);
-> +		if (err < 0)
-> +			return;
-> +
-> +		queue_delayed_work(chg->wqueue, &chg->aicl_work,
-> +		     msecs_to_jiffies(AICL_WORK_DELAY_MS));
-> +	} else {
-> +		enable_irq(chg->aicl_irq);
-> +	}
-> +}
+> 
+> >  enum soc_type {
+> >  	SOC_ARCH_EXYNOS3250 = 1,
+> >  	SOC_ARCH_EXYNOS4210,
+> > @@ -133,6 +176,7 @@ enum soc_type {
+> >  	SOC_ARCH_EXYNOS5420_TRIMINFO,
+> >  	SOC_ARCH_EXYNOS5433,
+> >  	SOC_ARCH_EXYNOS7,
+> > +	SOC_ARCH_EXYNOSAUTOV920,
+> >  };
+> >
 
-After looking at this again in this simpler version: Why do you
-need the delayed work at all? It seems you can simplify to this:
+...
 
-static irqreturn_t max77705_aicl_irq(int irq, void *irq_drv_data)
-{
-    struct max77705_charger_data *chg =3D irq_drv_data;
-    unsigned int regval, irq_status;
-    int err;
+> >  static int temp_to_code(struct exynos_tmu_data *data, u8 temp)  {
+> > +	s32 temp_diff, code;
+> > +
+> >  	if (data->cal_type == TYPE_ONE_POINT_TRIMMING)
+> >  		return temp + data->temp_error1 - EXYNOS_FIRST_POINT_TRIM;
+> >
+> > -	return (temp - EXYNOS_FIRST_POINT_TRIM) *
+> > -		(data->temp_error2 - data->temp_error1) /
+> > -		(EXYNOS_SECOND_POINT_TRIM - EXYNOS_FIRST_POINT_TRIM) +
+> > -		data->temp_error1;
+> > +	temp_diff = temp - EXYNOS_FIRST_POINT_TRIM;
+> > +
+> > +	code = temp_diff * (data->temp_error2 - data->temp_error1) *
+> MCELSIUS /
+> > +	       (data->calib_temp - EXYNOS_FIRST_POINT_TRIM);
+> > +
+> > +	if (data->soc == SOC_ARCH_EXYNOSAUTOV920 && temp_diff < 0)
+> > +		code = code * (57 + data->slope_comp) / 65;
+> > +
+> > +	return code / MCELSIUS + data->temp_error1;
+> >  }
+> >
+> >  /*
+> > @@ -220,13 +277,20 @@ static int temp_to_code(struct exynos_tmu_data
+> *data, u8 temp)
+> >   */
+> >  static int code_to_temp(struct exynos_tmu_data *data, u16 temp_code)
+> > {
+> > +	s32 code_diff, temp;
+> > +
+> >  	if (data->cal_type == TYPE_ONE_POINT_TRIMMING)
+> >  		return temp_code - data->temp_error1 +
+> EXYNOS_FIRST_POINT_TRIM;
+> >
+> > -	return (temp_code - data->temp_error1) *
+> > -		(EXYNOS_SECOND_POINT_TRIM - EXYNOS_FIRST_POINT_TRIM) /
+> > -		(data->temp_error2 - data->temp_error1) +
+> > -		EXYNOS_FIRST_POINT_TRIM;
+> > +	code_diff = temp_code - data->temp_error1;
+> > +
+> > +	temp = code_diff * (data->calib_temp - EXYNOS_FIRST_POINT_TRIM) *
+> MCELSIUS /
+> > +	       (data->temp_error2 - data->temp_error1);
+> > +
+> > +	if (data->soc == SOC_ARCH_EXYNOSAUTOV920 && code_diff < 0)
+> > +		temp = temp * 65 / (57 + data->slope_comp);
+> > +
+> > +	return temp / MCELSIUS + EXYNOS_FIRST_POINT_TRIM;
+> >  }
+> 
+> Nice, these two functions looks much better compared to v2!
 
-    do {
-        regmap_read(chg->regmap, MAX77705_CHG_REG_INT_OK, &irq_status);
-        if (!(irq_status & BIT(MAX77705_AICL_I))) {
-            err =3D regmap_field_read(chg->rfield[MAX77705_CHG_CHGIN_LIM], =
-&regval);
-            if (err < 0)
-                continue;
+Thank you for your advice!
 
-            regval--;
+> 
+> >  static void sanitize_temp_error(struct exynos_tmu_data *data, u32
+> > trim_info) @@ -262,6 +326,9 @@ static int exynos_tmu_initialize(struct
+> platform_device *pdev)
 
-            err =3D regmap_field_write(chg->rfield[MAX77705_CHG_CHGIN_LIM],=
- regval);
-            if (err < 0)
-                continue;
+...
 
-            msleep(AICL_WORK_DELAY_MS);
-        }
-    } while(irq_status & BIT(MAX77705_AICL_I));
-
-    return IRQ_HANDLED;
-}
-
-Greetings,
-
--- Sebastian
-
->  static void max77705_chgin_isr_work(struct work_struct *work)
->  {
->  	struct max77705_charger_data *chg =3D
-> @@ -617,6 +656,12 @@ static int max77705_charger_probe(struct i2c_client =
-*i2c)
->  		goto destroy_wq;
->  	}
-> =20
-> +	ret =3D devm_delayed_work_autocancel(dev, &chg->aicl_work, max77705_aic=
-l_isr_work);
-> +	if (ret) {
-> +		dev_err_probe(dev, ret, "failed to initialize interrupt work\n");
-> +		goto destroy_wq;
-> +	}
-> +
->  	ret =3D max77705_charger_initialize(chg);
->  	if (ret) {
->  		dev_err_probe(dev, ret, "failed to initialize charger IC\n");
-> @@ -632,6 +677,16 @@ static int max77705_charger_probe(struct i2c_client =
-*i2c)
->  		goto destroy_wq;
->  	}
-> =20
-> +	chg->aicl_irq =3D regmap_irq_get_virq(irq_data, MAX77705_AICL_I);
-> +	ret =3D devm_request_threaded_irq(dev, chg->aicl_irq,
-> +					NULL, max77705_aicl_irq,
-> +					IRQF_TRIGGER_NONE,
-> +					"aicl-irq", chg);
-> +	if (ret) {
-> +		dev_err_probe(dev, ret, "Failed to Request aicl IRQ\n");
-> +		goto destroy_wq;
-> +	}
-> +
->  	ret =3D max77705_charger_enable(chg);
->  	if (ret) {
->  		dev_err_probe(dev, ret, "failed to enable charge\n");
-> diff --git a/include/linux/power/max77705_charger.h b/include/linux/power=
-/max77705_charger.h
-> index 6653abfdf747..031c1dc2485d 100644
-> --- a/include/linux/power/max77705_charger.h
-> +++ b/include/linux/power/max77705_charger.h
-> @@ -123,6 +123,8 @@
->  #define MAX77705_DISABLE_SKIP		1
->  #define MAX77705_AUTO_SKIP		0
-> =20
-> +#define AICL_WORK_DELAY_MS		100
-> +
->  /* uA */
->  #define MAX77705_CURRENT_CHGIN_STEP	25000
->  #define MAX77705_CURRENT_CHG_STEP	50000
-> @@ -185,7 +187,9 @@ struct max77705_charger_data {
->  	struct power_supply_battery_info *bat_info;
->  	struct workqueue_struct *wqueue;
->  	struct work_struct	chgin_work;
-> +	struct delayed_work	aicl_work;
->  	struct power_supply	*psy_chg;
-> +	int			aicl_irq;
->  };
-> =20
->  #endif /* __MAX77705_CHARGER_H */
->=20
-> ---
-> base-commit: 846bd2225ec3cfa8be046655e02b9457ed41973e
-> change-id: 20250830-max77705_77976_charger_improvement-e3f417bfaa56
->=20
+> > @@ -865,6 +1079,10 @@ static int exynos_map_dt_data(struct
+> > platform_device *pdev)
+> >
+> >  	data->soc = (uintptr_t)of_device_get_match_data(&pdev->dev);
+> >
+> > +	data->sensor_count = EXYNOS_DEFAULT_SENSOR_COUNT;
+> > +
+> > +	data->calib_temp = EXYNOS_SECOND_POINT_TRIM;
+> > +
+> >  	switch (data->soc) {
+> >  	case SOC_ARCH_EXYNOS4210:
+> >  		data->tmu_set_low_temp = exynos4210_tmu_set_low_temp; @@ -
+> 945,6
+> > +1163,19 @@ static int exynos_map_dt_data(struct platform_device *pdev)
+> >  		data->min_efuse_value = 15;
+> >  		data->max_efuse_value = 100;
+> >  		break;
+> > +	case SOC_ARCH_EXYNOSAUTOV920:
+> > +		data->tmu_set_low_temp = exynosautov920_tmu_set_low_temp;
+> > +		data->tmu_set_high_temp = exynosautov920_tmu_set_high_temp;
+> > +		data->tmu_disable_low = exynosautov920_tmu_disable_low;
+> > +		data->tmu_disable_high = exynosautov920_tmu_disable_high;
+> > +		data->tmu_set_crit_temp = exynosautov920_tmu_set_crit_temp;
+> > +		data->tmu_initialize = exynosautov920_tmu_initialize;
+> > +		data->tmu_control = exynosautov920_tmu_control;
+> > +		data->tmu_read = exynosautov920_tmu_read;
+> > +		data->tmu_set_emulation = exynos4412_tmu_set_emulation;
+> > +		data->tmu_clear_irqs = exynosautov920_tmu_clear_irqs;
+> > +		data->sensor_count = EXYNOS_MAX_SENSOR_COUNT;
+> > +		break;
+> >  	default:
+> >  		dev_err(&pdev->dev, "Platform not supported\n");
+> >  		return -EINVAL;
+> > @@ -952,6 +1183,14 @@ static int exynos_map_dt_data(struct
+> > platform_device *pdev)
+> >
+> >  	data->cal_type = TYPE_ONE_POINT_TRIMMING;
+> >
+> > +	if (data->soc == SOC_ARCH_EXYNOSAUTOV920) {
+> > +		if (of_property_read_u32(pdev->dev.of_node,
+> "samsung,sensors",
+> > +					 &data->sensor_count)) {
+> > +			dev_err(&pdev->dev, "failed to get sensor count\n");
+> > +			return -ENODEV;
+> > +		}
+> > +	}
+> 
+> Do we really need the `if (data->soc == SOC_ARCH_EXYNOSAUTOV920)` here, I
+> am sure there will be more socs that use samsung,sensors. Can't we simply
+> read samsung,sensors for all socs and use EXYNOS_DEFAULT_SENSOR_COUNT if
+> it fails, or would it be potentially dangerous if samsung,sensors is
+> missing for autov920 dtb and default value of 1 is used?
+> 
 > Best regards,
-> --=20
-> Dzmitry Sankouski <dsankouski@gmail.com>
->=20
+> Henrik Grimler
+> 
 
---apzq35hofjb3hln6
-Content-Type: application/pgp-signature; name="signature.asc"
+Yes. Incorrect remote-sensor settings can affect TMU operation. For
+example, when the sensor count is set to 1,
+The thermal zone doesn't function properly and the hardware trip doesn't
+assert on the v920 variant.
+I consider that configuration unsafe, so I added variant-specific handling
+for that SoC.
+Meanwhile, the other variant legitimately uses only a single sensor.
 
------BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmjRzYkACgkQ2O7X88g7
-+pqwkRAAqMCFdV0RLB0wWNB8mejioEGdtJJqmMDWyD2M2+HLPwfqvSYlvKKKFEL8
-eU0MOjpKKdYP1Lo6m0ZbYIpJxPiLoXGToOdbwtjr44/y97QPaf9jF71xYSEnN1Gs
-rsDeSFncD7dBXX1wayjgjfADznImbMOsjRfioRLLrTD7Xd7AjJDJ+eFOc1u5/f0e
-qupMjjF5KkO2mt6X7FSfRwsn3DcEvyHs1lJ1KYwfOnC1i82OfG3QQ1hZ2PtJHUnA
-zoHyAM4Q3GPyn6HejdaBZJH8HhxQrgdv2idKpr51S9Wxzh/JfQ6+Boa9pNLq809G
-T0tyFr06O1vpGWsNAETFmDpxH2qbmHuHCURVP7hccM+ny4i5pZO7W1ic+Ik2TzNQ
-l0jDTD+UjcjATRakHvrCfqA+pLKq1vMs3rFL8YdZTrbqqrweD9FEOtjnAszim1Qg
-8GA8RMaE+urnWTg+D73ZLYhJwztxbQjFSSjEb5AP//qA81wocEkSXXUJq6pm9ryn
-lKuKyoqKBxWWQ+VlhWWeqqgDOrKIVaf7GhCDauie1OHW8Yhd3TybZ7xA8sHRROc5
-u3BNxhizQ/BB6m2OMqF4ZBJxIJjs6N6dqp9EiZy/+Z9GvgklbYBhlHBoUAn4O7cJ
-ky1OR0R/ttTzKKwVJ1X2sHbfhdZ7R28tEu1fXJAuxEgscqRVk7M=
-=2EFx
------END PGP SIGNATURE-----
-
---apzq35hofjb3hln6--
 
