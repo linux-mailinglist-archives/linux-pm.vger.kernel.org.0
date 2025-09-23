@@ -1,360 +1,91 @@
-Return-Path: <linux-pm+bounces-35198-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35199-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C1B0AB9513E
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Sep 2025 10:54:04 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 46788B95146
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Sep 2025 10:54:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6C2221904840
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Sep 2025 08:54:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E76FC19042A1
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Sep 2025 08:54:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C64F30EF7C;
-	Tue, 23 Sep 2025 08:53:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="umvARm4U"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4C6331E0FB;
+	Tue, 23 Sep 2025 08:53:59 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from lelvem-ot01.ext.ti.com (lelvem-ot01.ext.ti.com [198.47.23.234])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79BB02701CF;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94C6B2ECD33;
 	Tue, 23 Sep 2025 08:53:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.234
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758617638; cv=none; b=TpQMlDeyI7B8Ejms34Uw04oZhqeLnEjEaQXtsZdjJqzBY+oQz4C3To4En6VD0XMBrhmlGXYpRBzfJZjkLMVifZcf0LxdOiPmjlNqffP31NgRwzl9ycRxT29ngNTESBbVmi8ATIYHZdPaohn0mR8SmCOrk3AQZJHJmb0xufQNJio=
+	t=1758617639; cv=none; b=UgYMLpqHVURX85mkpxfT6ZRE2cK0p+JI+z7P1eA/8FVELJWPNiklZP/Eg9hYaIHMn5cnx22FA9OnX2z8LID4/5x/3bU2yGYInxGqYEyoiztkunyjPWuNlyumZe02cMCmtXIwoiF5ACbBoQYgM7frteLNVoN5rr34EMH78Txb8yA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758617638; c=relaxed/simple;
-	bh=gM93bNnFGIO/wsx+VqzXpIt/RyJuamcNh4RdDqfFoHk=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qXq68EBT3HobO1OPwy8+NDR7hst5XSgFzItGOtmlwiTMEr/eDpk5XiwD47uqXNFFmoLEX421s9naVGsPTG2d091cjJyCQXcX0QGmk1emRMddJ+MZDC6Boj6N1vrhyQZLh9bMkqYs+fHmnHj71K8XWdBV392z0zx8hqywyRQwkPM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=umvARm4U; arc=none smtp.client-ip=198.47.23.234
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllvem-sh04.itg.ti.com ([10.64.41.54])
-	by lelvem-ot01.ext.ti.com (8.15.2/8.15.2) with ESMTP id 58N8rPk4970823;
-	Tue, 23 Sep 2025 03:53:25 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1758617605;
-	bh=X9S9ewL/z48Jb3cMd5ztxj0pmZs3DnywtEk6GLbOvDY=;
-	h=Date:From:To:CC:Subject:References:In-Reply-To;
-	b=umvARm4U/jDs0n0ZUvsyoiWp+8NIL2zXgrth6mIIMeRcjO6E8BccSj9WPMv45wSFy
-	 7yeUt14WgL/OuunsWxSfi/WykRGyTV/TPfCnCRO/7BHDzuMFEB+aXov0Wgc1eDBMYy
-	 fR/aMGmE+w3y1ug2s+QsaIJ4Vw1rnUJi+AbKO2xc=
-Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
-	by fllvem-sh04.itg.ti.com (8.18.1/8.18.1) with ESMTPS id 58N8rPGX2653061
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-SHA256 bits=128 verify=FAIL);
-	Tue, 23 Sep 2025 03:53:25 -0500
-Received: from DFLE215.ent.ti.com (10.64.6.73) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55; Tue, 23
- Sep 2025 03:53:24 -0500
-Received: from lelvem-mr06.itg.ti.com (10.180.75.8) by DFLE215.ent.ti.com
- (10.64.6.73) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
- Transport; Tue, 23 Sep 2025 03:53:24 -0500
-Received: from localhost (lcpd911.dhcp.ti.com [172.24.233.130])
-	by lelvem-mr06.itg.ti.com (8.18.1/8.18.1) with ESMTP id 58N8rN8j3977318;
-	Tue, 23 Sep 2025 03:53:24 -0500
-Date: Tue, 23 Sep 2025 14:23:23 +0530
-From: Dhruva Gole <d-gole@ti.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-CC: Linux PM <linux-pm@vger.kernel.org>, Takashi Iwai <tiwai@suse.de>,
-        LKML
-	<linux-kernel@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Alex
- Williamson <alex.williamson@redhat.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Zhang Qilong <zhangqilong3@huawei.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Subject: Re: [PATCH v3 1/3] PM: runtime: Add auto-cleanup macros for "resume
- and get" operations
-Message-ID: <20250923085323.sbetukdirhppecz5@lcpd911>
-References: <12763087.O9o76ZdvQC@rafael.j.wysocki>
- <2399578.ElGaqSPkdT@rafael.j.wysocki>
+	s=arc-20240116; t=1758617639; c=relaxed/simple;
+	bh=4tPKjI3An5l1wBqNlztW/imYQlNnEUjqc/C8U+ZQRfI=;
+	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=K4m1QKTBn6JyfDQHWHKfyECGyXVkOe6fXI9HsuwtIHiIOO1NABH7sRTuU5uLtzOBTgiCFP709UJPa2856AR2luCba8PQTzttJQJKaCTwNmuZ0mB8hqjPAsSwz4apUY6mGVvDTJuiz9hNoiLrB5HgxOR1O8R1qcf1o5czyPcVMso=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: d22b4136985a11f08b9f7d2eb6caa7cf-20250923
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.45,REQID:d9e18b8a-24a1-4c5d-8d73-6d70262c6481,IP:0,U
+	RL:0,TC:0,Content:25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:25
+X-CID-META: VersionHash:6493067,CLOUDID:ec635f4d1b978130b1c196cf2dc9acee,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:4|50,EDM:-3,IP:nil,UR
+	L:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,S
+	PR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: d22b4136985a11f08b9f7d2eb6caa7cf-20250923
+X-User: zhangzihuan@kylinos.cn
+Received: from [172.25.120.24] [(10.44.16.150)] by mailgw.kylinos.cn
+	(envelope-from <zhangzihuan@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_128_GCM_SHA256 128/128)
+	with ESMTP id 1897735611; Tue, 23 Sep 2025 16:53:48 +0800
+Message-ID: <e221cef4-a26c-4f9d-ae5c-7dffa78b5e66@kylinos.cn>
+Date: Tue, 23 Sep 2025 16:53:46 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <2399578.ElGaqSPkdT@rafael.j.wysocki>
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
+User-Agent: Mozilla Thunderbird
+To: "Rafael J. wysocki" <rafael@kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>
+Cc: "zhenglifeng (A)" <zhenglifeng1@huawei.com>,
+ Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+From: Zihuan Zhang <zhangzihuan@kylinos.cn>
+Subject: [Question] About unnecessary policy_has_boost_freq() calls in
+ freq_table.c
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Sep 22, 2025 at 17:30:43 +0200, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> It is generally useful to be able to automatically drop a device's
-> runtime PM usage counter incremented by runtime PM operations that
-> resume a device and bump up its usage counter [1].
-> 
-> To that end, add DEFINE_CLASS() macros allowing pm_runtime_put()
-> and pm_runtime_put_autosuspend() to be used for the auto-cleanup in
-> those cases.
-> 
-> Simply put, a piece of code like below:
-> 
-> 	pm_runtime_get_sync(dev);
-> 	.....
-> 	pm_runtime_put(dev);
-> 	return 0;
-> 
-> can be transformed with CLASS(pm_runtime_get_sync) like:
-> 
-> 	guard(pm_runtime_get_sync)(dev);
-> 	.....
-> 	return 0;
-> 
-> (see pm_runtime_put() call is gone).
-> 
-> However, it is better to do proper error handling in the majority of
-> cases, so doing something like this instead of the above is recommended:
-> 
-> 	CLASS(pm_runtime_get_active, pm)(dev);
-> 	if (IS_ERR(pm))
-> 		return PTR_ERR(pm);
-> 	.....
-> 	return 0;
-> 
-> In all of the cases in which runtime PM is known to be enabled for the
-> given device or the device can be regarded as operational (and so it can
-> be accessed) with runtime PM disabled, a piece of code like:
-> 
-> 	ret = pm_runtime_resume_and_get(dev);
-> 	if (ret < 0)
-> 		return ret;
-> 	.....
-> 	pm_runtime_put(dev);
-> 	return 0;
-> 
-> can be simplified with CLASS() like:
-> 
-> 	CLASS(pm_runtime_get_active, pm)(dev);
-> 	if (IS_ERR(pm))
-> 		return PTR_ERR(pm);
-> 	.....
-> 	return 0;
-> 
-> (again, see pm_runtime_put() call is gone).
-> 
-> Still, if the device cannot be accessed unless runtime PM has been
-> enabled for it, the CLASS(pm_runtime_get_active_enabled) variant
-> needs to be used, that is (in the context of the example above):
-> 
-> 	CLASS(pm_runtime_get_active_enabled, pm)(dev);
-> 	if (IS_ERR(pm))
-> 		return PTR_ERR(pm);
-> 	.....
-> 	return 0;
-> 
-> When the original code calls pm_runtime_put_autosuspend(), use one
-> of the "auto" class variants, CLASS(pm_runtime_get_active_auto) or
-> CLASS(pm_runtime_get_active_enabled_auto), so for example, a piece
-> of code like:
-> 
-> 	ret = pm_runtime_resume_and_get(dev);
-> 	if (ret < 0)
-> 		return ret;
-> 	.....
-> 	pm_runtime_put_autosuspend(dev);
-> 	return 0;
-> 
-> will become:
-> 
-> 	CLASS(pm_runtime_get_active_enabled_auto, pm)(dev);
-> 	if (IS_ERR(pm))
-> 		return PTR_ERR(pm);
-> 	.....
-> 	return 0;
-> 
-> Note that the cases in which the return value of pm_runtime_get_sync()
-> is checked can also be handled with the help of the new class macros.
-> For example, a piece of code like:
-> 
-> 	ret = pm_runtime_get_sync(dev);
-> 	if (ret < 0) {
-> 		pm_runtime_put(dev);
-> 		return ret;
-> 	}
-> 	.....
-> 	pm_runtime_put(dev);
-> 	return 0;
-> 
-> can be rewritten as:
-> 
-> 	CLASS(pm_runtime_get_active_enabled, pm)(dev);
-> 	if (IS_ERR(pm))
-> 		return PTR_ERR(pm);
-> 	.....
-> 	return 0;
-> 
-> or CLASS(pm_runtime_get_active) can be used if transparent handling of
-> disabled runtime PM is desirable.
-> 
+Hi all,
 
-Firstly, please can we add all this documentation in runtime_pm [1]
-Otherwise there's just far less developers aware of the new APIs getting
-introduced other than people directly involved. Not everyone is going to
-come down here to look at git log for API docs (even though we proud
-ourselves in having git log as our main source of Documentation in
-kernel ;) )
+While reviewing the cpufreq code, I noticed that in 
+cpufreq_table_validate_and_sort() the function policy_has_boost_freq() 
+is still being called, even though most cpufreq drivers do not make use 
+of the CPUFREQ_BOOST_FREQ flag.
 
-[1] https://docs.kernel.org/power/runtime_pm.html
+code in cpufreq_table_validate_and_sort():
 
-> Link: https://lore.kernel.org/linux-pm/878qimv24u.wl-tiwai@suse.de/ [1]
-> Co-developed-by: Takashi Iwai <tiwai@suse.de>
-> Signed-off-by: Takashi Iwai <tiwai@suse.de>
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
-> 
-> v2 -> v3:
->    * Two more class definitions for the case in which resume errors can be
->      neglected.
->    * Update of new code comments (for more clarity).
->    * Changelog update.
-> 
-> v1 -> v2:
->    * Rename the new classes and the new static inline helper.
->    * Add two classes for handling disabled runtime PM.
->    * Expand the changelog.
->    * Adjust the subject.
-> 
-> ---
->  drivers/base/power/runtime.c |    2 +
->  include/linux/pm_runtime.h   |   82 +++++++++++++++++++++++++++++++++++++++++++
->  2 files changed, 84 insertions(+)
+         /* Driver's may have set this field already */
+         if (policy_has_boost_freq(policy))
+                 policy->boost_supported = true;
 
-> 
-> --- a/drivers/base/power/runtime.c
-> +++ b/drivers/base/power/runtime.c
-> @@ -796,6 +796,8 @@ static int rpm_resume(struct device *dev
->  		if (dev->power.runtime_status == RPM_ACTIVE &&
->  		    dev->power.last_status == RPM_ACTIVE)
->  			retval = 1;
-> +		else if (rpmflags & RPM_TRANSPARENT)
-> +			goto out;
 
-"TRANSPARENT" doesn't tell you exactly what happens. It should be something like
-RPM_IGNORE_DISABLED or RPM_ALLOW_DISABLED IMO.
+For drivers like acpi-cpufreq that don’t rely on CPUFREQ_BOOST_FREQ 
+flag, this extra check looks confusing and possibly unnecessary.
 
->  		else
->  			retval = -EACCES;
->  	}
-> --- a/include/linux/pm_runtime.h
-> +++ b/include/linux/pm_runtime.h
-> @@ -21,6 +21,7 @@
->  #define RPM_GET_PUT		0x04	/* Increment/decrement the
->  					    usage_count */
->  #define RPM_AUTO		0x08	/* Use autosuspend_delay */
-> +#define RPM_TRANSPARENT	0x10	/* Succeed if runtime PM is disabled */
->  
->  /*
->   * Use this for defining a set of PM operations to be used in all situations
-> @@ -533,6 +534,32 @@ static inline int pm_runtime_resume_and_
->  }
->  
->  /**
-> + * pm_runtime_get_active_dev - Resume a device and bump up its usage counter.
+Would it make sense to move this check into cpufreq_boost_set_sw() 
+instead, so that the call is only made when boost is actually relevant?
 
-I am getting no clue as to why this is different than regular
-pm_runtime_get_sync then? Can we describe this API better?
+Thanks,
+Zihuan Zhang
 
-> + * @dev: Target device.
-> + * @rpmflags: Additional runtime PM flags to combine with RPM_GET_PUT.
-> + *
-> + * Resume @dev synchronously and if that is successful, increment its runtime
-> + * PM usage counter.
-> + *
-> + * Return:
-> + * * 0 if the runtime PM usage counter of @dev has been incremented.
-> + * * Negative error code otherwise.
-> + */
-> +static inline struct device *pm_runtime_get_active_dev(struct device *dev,
-> +						       int rpmflags)
-> +{
-> +	int ret;
-> +
-> +	ret = __pm_runtime_resume(dev, RPM_GET_PUT | rpmflags);
-> +	if (ret < 0) {
-> +		pm_runtime_put_noidle(dev);
-> +		return ERR_PTR(ret);
-> +	}
-> +
-> +	return dev;
-> +}
-> +
-> +/**
->   * pm_runtime_put - Drop device usage counter and queue up "idle check" if 0.
->   * @dev: Target device.
->   *
-> @@ -606,6 +633,61 @@ static inline int pm_runtime_put_autosus
->  	return __pm_runtime_put_autosuspend(dev);
->  }
->  
-> +/*
-> + * The way to use the classes defined below is to define a class variable and
-> + * use it going forward for representing the target device until it goes out of
-> + * the scope.  For example:
-> + *
-> + * CLASS(pm_runtime_get_active, active_dev)(dev);
-> + * if (IS_ERR(active_dev))
-> + *         return PTR_ERR(active_dev);
-> + *
-> + * ... do something with active_dev (which is guaranteed to never suspend) ...
-> + *
-> + * If an error occurs, the runtime PM usage counter of dev will not be
-> + * incremented, so using these classes without error handling is not
-> + * recommended.
-> + */
-> +DEFINE_CLASS(pm_runtime_get_active, struct device *,
-> +	     if (!IS_ERR_OR_NULL(_T)) pm_runtime_put(_T),
-> +	     pm_runtime_get_active_dev(dev, RPM_TRANSPARENT), struct device *dev)
-> +
-> +DEFINE_CLASS(pm_runtime_get_active_auto, struct device *,
-> +	     if (!IS_ERR_OR_NULL(_T)) pm_runtime_put_autosuspend(_T),
-> +	     pm_runtime_get_active_dev(dev, RPM_TRANSPARENT), struct device *dev)
-> +
-> +/*
-> + * The following two classes are analogous to the two classes defined above,
-> + * respectively, but they produce an error pointer if runtime PM has been
-> + * disabled for the given device.
-> + *
-> + * They should be used only when runtime PM may be disabled for the given device
-> + * and if that happens, the device is not regarded as operational and so it
-> + * cannot be accessed.  The classes defined above should be used instead in all
-> + * of the other cases.
-> + */
-> +DEFINE_CLASS(pm_runtime_get_active_enabled, struct device *,
-> +	     if (!IS_ERR_OR_NULL(_T)) pm_runtime_put(_T),
-> +	     pm_runtime_get_active_dev(dev, 0), struct device *dev)
-> +
-> +DEFINE_CLASS(pm_runtime_get_active_enabled_auto, struct device *,
-> +	     if (!IS_ERR_OR_NULL(_T)) pm_runtime_put_autosuspend(_T),
-> +	     pm_runtime_get_active_dev(dev, 0), struct device *dev)
-> +
-> +/*
-> + * The following classes may be used instead of the above if resume failures can
-> + * be neglected.  However, such cases are not expected to be prevalent, so using
-> + * one of these classes should always be regarded as an exception and explained
-> + * in an adjacent code comment.
-> + */
-> +DEFINE_CLASS(pm_runtime_get_sync, struct device *,
-> +	     if (_T) pm_runtime_put(_T),
-> +	     ({ pm_runtime_get_sync(dev); dev; }), struct device *dev)
-> +
-> +DEFINE_CLASS(pm_runtime_get_sync_auto, struct device *,
-> +	     if (_T) pm_runtime_put_autosuspend(_T),
-> +	     ({ pm_runtime_get_sync(dev); dev; }), struct device *dev)
-> +
-
-However overall I like the idea of introducing these auto cleanups,
-probably will help drivers get into fewer troubles with RPM :)
-
--- 
-Best regards,
-Dhruva Gole
-Texas Instruments Incorporated
 
