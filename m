@@ -1,212 +1,276 @@
-Return-Path: <linux-pm+bounces-35207-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35208-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EDEC8B9564A
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Sep 2025 12:09:25 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 26154B95783
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Sep 2025 12:43:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D717F19026A7
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Sep 2025 10:09:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E20B12E55E7
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Sep 2025 10:43:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C82A2F2909;
-	Tue, 23 Sep 2025 10:09:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7307C3191B4;
+	Tue, 23 Sep 2025 10:43:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iK2zGZPh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YQ2F43NW"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 178E2126C1E;
-	Tue, 23 Sep 2025 10:09:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D87226F476
+	for <linux-pm@vger.kernel.org>; Tue, 23 Sep 2025 10:43:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758622160; cv=none; b=AEQpQYegX7+UhRddGqAKuKTZFX/4qTM3OahBmP5AB4KnRMy2vDFN9zuORBFuqV/sobPa3Xi+NG3JJYzNaedhmd9RzEEOyaQY37RolcjYptChocrCwrUH/PDn+RQLapzhxz6yNCWKg4yNysZ3isn1Nm8LJM+jflEP1bgd0V0d57s=
+	t=1758624215; cv=none; b=jxYxfWPyL1Ank32pAdAdQWi84qhelNeemvR5bspHJl1g7xzKvdCt7oSrzN5gKDXF1aPBfWgUBEy/FjWD9zwhEk5698vRNUaCRJqFbMkiHLyIKHM9UasWjKfKv6zv1ZjMLzL98n8mlN2g3DCSQBWd9jxdBcL5Ku62iykzzhDzbHQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758622160; c=relaxed/simple;
-	bh=By24cDvoCKBbaeghtkUg6yoVPPfT2pRTl02bn/ctE4U=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=c0YPsjHrr00NEFQ8Bh7M85k6tzX7N72Hj16CVo0+8HEImYWZISB5kCd+mwBI4goQK8eLypoDpI3OnZdlle7M/VEjFbwUSNZ8xfXLQXRA6XWOs99YZWuFU4xH5xNKTa8iHlcCMQCxY17Yu13qm1BOCrEAstg1ygxkEnODGgPDqlg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iK2zGZPh; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758622159; x=1790158159;
-  h=date:from:to:cc:subject:message-id;
-  bh=By24cDvoCKBbaeghtkUg6yoVPPfT2pRTl02bn/ctE4U=;
-  b=iK2zGZPhaFGnlZ0196hEmajmtFu/+MPNwSIPISRR470NWjQ8JZNer4TW
-   n33XziAutye9KXQa3NS6Fc2/OnJtoLGC86vDCi0ZseQps2+36lSyQe0+t
-   4GGczx0GkR4iT9WI3kBYdNzo81IpmWyRDi0/3Qa+ReY3Xv+WQXIVyT6kg
-   F9JTkadda8D2CTkKepvOSw3rXn8SK4TT6P4szPpHLQmbVsbev/Xls+jJS
-   e9biA+cikVGntECg6s9VsnhAbcezF7VrfhtfAM3E049ifW/IYMNIscQnM
-   vxMd3smo3P60KzwjkuMJwDwHpwpo7jdjoKoVRxEXrIpgks0CLNp2sRKCX
-   w==;
-X-CSE-ConnectionGUID: kzVN0ytDTZKV2hnep3iNXg==
-X-CSE-MsgGUID: 9TsVhPEmQZqi4zLxda3XGw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11561"; a="72322205"
-X-IronPort-AV: E=Sophos;i="6.18,287,1751266800"; 
-   d="scan'208";a="72322205"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2025 03:09:18 -0700
-X-CSE-ConnectionGUID: 2C5jz7BbRzazfXIZvtzI1w==
-X-CSE-MsgGUID: oh8uZemZQPmUZYUFgduHYQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,287,1751266800"; 
-   d="scan'208";a="176807779"
-Received: from lkp-server02.sh.intel.com (HELO 84c55410ccf6) ([10.239.97.151])
-  by orviesa008.jf.intel.com with ESMTP; 23 Sep 2025 03:09:17 -0700
-Received: from kbuild by 84c55410ccf6 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1v0zxS-00030D-2e;
-	Tue, 23 Sep 2025 10:09:14 +0000
-Date: Tue, 23 Sep 2025 18:09:00 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- f8254bbe1a14f6a603eb88ff81af41a38c363aab
-Message-ID: <202509231844.JBb2MP2M-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1758624215; c=relaxed/simple;
+	bh=PhQpgWYmL6Ae77aouOTVMF6UGjtRp/UBfJ/i4TcIbd0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=non7lEiJj9N25hSoItfmDZCRec8RPM6AG31bXrKv16Yiwxt2YmNz0z/v/adqNJL+pUwph49Giv/o1wRXHN44rYrwZWsJCZ4Z/hXw+DHwJ+25EUvh7VFspQ696lxsvQqQwfoxDuZio+U+c0Cpr55X/gbaaAESyAyBeon8kzxGNtw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YQ2F43NW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30D6AC2BC87
+	for <linux-pm@vger.kernel.org>; Tue, 23 Sep 2025 10:43:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1758624215;
+	bh=PhQpgWYmL6Ae77aouOTVMF6UGjtRp/UBfJ/i4TcIbd0=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=YQ2F43NWbByqrPCdddc/rVVBmCEvRgTnluFwtJEZv5CaSpjqrTAjdVNMbyYw9O35k
+	 RpeaHf6wbFOfUXNiwmVVJnBvkqdz5RcwN6cxbXrKjblVI9EEA0kazVejxEjDSyRiAT
+	 nAcEwvOeHXtufkX7PZcjBxqxqIlk9TzKhXYL6axRZTFyHwknZ0IVS85slDmFpcj6bB
+	 +8ZF/gxw1Y3Sq4LCAYUluLG4ryAM3o5OkxZjMjGx65GduWRB/omMa4uwxM+O+wGOGS
+	 AJgVNdMIFDP7HOYAhO6OJzUKnCrnVUUh0sY3SNuhGFpnxXA9jXiLU3PWHU6+84fkRC
+	 Xqp3+23OdyYPg==
+Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-62ea23446f4so479288eaf.3
+        for <linux-pm@vger.kernel.org>; Tue, 23 Sep 2025 03:43:35 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCX0yT3RFoUOJS1kJZuv6LnZ0hkj9Jn93H7ef0UUkBUcpoSVDpQTYscnS/P5+vRGykxcqX9EYhda3A==@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywjk4yQbxOBeOm98+JCY/kIRfygfCIvwKQQpzYupTpICIIUYfMN
+	IwLCm0xFUfPbWAK2o4dCOPqmjAjIfvzhgxN+SSiFuGknYaKDT6nyZKdbaHmnODyaPbdbFgFIgHD
+	nqZyPsdv1Nsd7H39QT9YpIwUu7fMIZKs=
+X-Google-Smtp-Source: AGHT+IFyv5x60tWKoEAiSRwgxwhv9eam3iNHMg3iUvzjO4YHNL7dKEIF4G8fxRLk2ZGca7oSTQprEjlgDvrig+jusGk=
+X-Received: by 2002:a05:6808:2f0d:b0:439:27db:51cb with SMTP id
+ 5614622812f47-43f2d11320emr1095633b6e.0.1758624214306; Tue, 23 Sep 2025
+ 03:43:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <12763087.O9o76ZdvQC@rafael.j.wysocki> <2399578.ElGaqSPkdT@rafael.j.wysocki>
+ <20250923085323.sbetukdirhppecz5@lcpd911>
+In-Reply-To: <20250923085323.sbetukdirhppecz5@lcpd911>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 23 Sep 2025 12:43:21 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0gF93Qm0_0jGQjAAo6qBJHmEEzByE243nZAyEccsvj=Bw@mail.gmail.com>
+X-Gm-Features: AS18NWDk9lzGqwPKuYxUK1IyDKA3OtAPmmtEchpQcRPiibkxHOk0SbKyhUU2I38
+Message-ID: <CAJZ5v0gF93Qm0_0jGQjAAo6qBJHmEEzByE243nZAyEccsvj=Bw@mail.gmail.com>
+Subject: Re: [PATCH v3 1/3] PM: runtime: Add auto-cleanup macros for "resume
+ and get" operations
+To: Dhruva Gole <d-gole@ti.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
+	Takashi Iwai <tiwai@suse.de>, LKML <linux-kernel@vger.kernel.org>, 
+	Linux PCI <linux-pci@vger.kernel.org>, Alex Williamson <alex.williamson@redhat.com>, 
+	Bjorn Helgaas <helgaas@kernel.org>, Zhang Qilong <zhangqilong3@huawei.com>, 
+	Ulf Hansson <ulf.hansson@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: f8254bbe1a14f6a603eb88ff81af41a38c363aab  Merge branch 'acpi-x86' into bleeding-edge
+On Tue, Sep 23, 2025 at 10:53=E2=80=AFAM Dhruva Gole <d-gole@ti.com> wrote:
+>
+> On Sep 22, 2025 at 17:30:43 +0200, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > It is generally useful to be able to automatically drop a device's
+> > runtime PM usage counter incremented by runtime PM operations that
+> > resume a device and bump up its usage counter [1].
+> >
+> > To that end, add DEFINE_CLASS() macros allowing pm_runtime_put()
+> > and pm_runtime_put_autosuspend() to be used for the auto-cleanup in
+> > those cases.
+> >
+> > Simply put, a piece of code like below:
+> >
+> >       pm_runtime_get_sync(dev);
+> >       .....
+> >       pm_runtime_put(dev);
+> >       return 0;
+> >
+> > can be transformed with CLASS(pm_runtime_get_sync) like:
+> >
+> >       guard(pm_runtime_get_sync)(dev);
+> >       .....
+> >       return 0;
+> >
+> > (see pm_runtime_put() call is gone).
+> >
+> > However, it is better to do proper error handling in the majority of
+> > cases, so doing something like this instead of the above is recommended=
+:
+> >
+> >       CLASS(pm_runtime_get_active, pm)(dev);
+> >       if (IS_ERR(pm))
+> >               return PTR_ERR(pm);
+> >       .....
+> >       return 0;
+> >
+> > In all of the cases in which runtime PM is known to be enabled for the
+> > given device or the device can be regarded as operational (and so it ca=
+n
+> > be accessed) with runtime PM disabled, a piece of code like:
+> >
+> >       ret =3D pm_runtime_resume_and_get(dev);
+> >       if (ret < 0)
+> >               return ret;
+> >       .....
+> >       pm_runtime_put(dev);
+> >       return 0;
+> >
+> > can be simplified with CLASS() like:
+> >
+> >       CLASS(pm_runtime_get_active, pm)(dev);
+> >       if (IS_ERR(pm))
+> >               return PTR_ERR(pm);
+> >       .....
+> >       return 0;
+> >
+> > (again, see pm_runtime_put() call is gone).
+> >
+> > Still, if the device cannot be accessed unless runtime PM has been
+> > enabled for it, the CLASS(pm_runtime_get_active_enabled) variant
+> > needs to be used, that is (in the context of the example above):
+> >
+> >       CLASS(pm_runtime_get_active_enabled, pm)(dev);
+> >       if (IS_ERR(pm))
+> >               return PTR_ERR(pm);
+> >       .....
+> >       return 0;
+> >
+> > When the original code calls pm_runtime_put_autosuspend(), use one
+> > of the "auto" class variants, CLASS(pm_runtime_get_active_auto) or
+> > CLASS(pm_runtime_get_active_enabled_auto), so for example, a piece
+> > of code like:
+> >
+> >       ret =3D pm_runtime_resume_and_get(dev);
+> >       if (ret < 0)
+> >               return ret;
+> >       .....
+> >       pm_runtime_put_autosuspend(dev);
+> >       return 0;
+> >
+> > will become:
+> >
+> >       CLASS(pm_runtime_get_active_enabled_auto, pm)(dev);
+> >       if (IS_ERR(pm))
+> >               return PTR_ERR(pm);
+> >       .....
+> >       return 0;
+> >
+> > Note that the cases in which the return value of pm_runtime_get_sync()
+> > is checked can also be handled with the help of the new class macros.
+> > For example, a piece of code like:
+> >
+> >       ret =3D pm_runtime_get_sync(dev);
+> >       if (ret < 0) {
+> >               pm_runtime_put(dev);
+> >               return ret;
+> >       }
+> >       .....
+> >       pm_runtime_put(dev);
+> >       return 0;
+> >
+> > can be rewritten as:
+> >
+> >       CLASS(pm_runtime_get_active_enabled, pm)(dev);
+> >       if (IS_ERR(pm))
+> >               return PTR_ERR(pm);
+> >       .....
+> >       return 0;
+> >
+> > or CLASS(pm_runtime_get_active) can be used if transparent handling of
+> > disabled runtime PM is desirable.
+> >
+>
+> Firstly, please can we add all this documentation in runtime_pm [1]
+> Otherwise there's just far less developers aware of the new APIs getting
+> introduced other than people directly involved. Not everyone is going to
+> come down here to look at git log for API docs (even though we proud
+> ourselves in having git log as our main source of Documentation in
+> kernel ;) )
+>
+> [1] https://docs.kernel.org/power/runtime_pm.html
 
-elapsed time: 901m
+That will happen when the early adopters tell me that it works for them.
 
-configs tested: 119
-configs skipped: 4
+> > Link: https://lore.kernel.org/linux-pm/878qimv24u.wl-tiwai@suse.de/ [1]
+> > Co-developed-by: Takashi Iwai <tiwai@suse.de>
+> > Signed-off-by: Takashi Iwai <tiwai@suse.de>
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > ---
+> >
+> > v2 -> v3:
+> >    * Two more class definitions for the case in which resume errors can=
+ be
+> >      neglected.
+> >    * Update of new code comments (for more clarity).
+> >    * Changelog update.
+> >
+> > v1 -> v2:
+> >    * Rename the new classes and the new static inline helper.
+> >    * Add two classes for handling disabled runtime PM.
+> >    * Expand the changelog.
+> >    * Adjust the subject.
+> >
+> > ---
+> >  drivers/base/power/runtime.c |    2 +
+> >  include/linux/pm_runtime.h   |   82 ++++++++++++++++++++++++++++++++++=
++++++++++
+> >  2 files changed, 84 insertions(+)
+>
+> >
+> > --- a/drivers/base/power/runtime.c
+> > +++ b/drivers/base/power/runtime.c
+> > @@ -796,6 +796,8 @@ static int rpm_resume(struct device *dev
+> >               if (dev->power.runtime_status =3D=3D RPM_ACTIVE &&
+> >                   dev->power.last_status =3D=3D RPM_ACTIVE)
+> >                       retval =3D 1;
+> > +             else if (rpmflags & RPM_TRANSPARENT)
+> > +                     goto out;
+>
+> "TRANSPARENT" doesn't tell you exactly what happens. It should be somethi=
+ng like
+> RPM_IGNORE_DISABLED or RPM_ALLOW_DISABLED IMO.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+There is a description in the header file and TRANSPARENT is shorter
+than the alternatives.  Besides, this is mostly for internal use.
 
-tested configs:
-alpha                             allnoconfig    gcc-15.1.0
-alpha                            allyesconfig    gcc-15.1.0
-arc                              allmodconfig    gcc-15.1.0
-arc                               allnoconfig    gcc-15.1.0
-arc                              allyesconfig    gcc-15.1.0
-arc                   randconfig-001-20250923    gcc-12.5.0
-arc                   randconfig-002-20250923    gcc-12.5.0
-arm                              allmodconfig    gcc-15.1.0
-arm                               allnoconfig    clang-22
-arm                              allyesconfig    gcc-15.1.0
-arm                   randconfig-001-20250923    gcc-12.5.0
-arm                   randconfig-002-20250923    clang-17
-arm                   randconfig-003-20250923    gcc-8.5.0
-arm                   randconfig-004-20250923    clang-22
-arm64                            allmodconfig    clang-19
-arm64                             allnoconfig    gcc-15.1.0
-arm64                 randconfig-001-20250923    gcc-8.5.0
-arm64                 randconfig-002-20250923    clang-18
-arm64                 randconfig-003-20250923    gcc-8.5.0
-arm64                 randconfig-004-20250923    gcc-11.5.0
-csky                              allnoconfig    gcc-15.1.0
-csky                  randconfig-001-20250923    gcc-9.5.0
-csky                  randconfig-002-20250923    gcc-15.1.0
-hexagon                          allmodconfig    clang-17
-hexagon                           allnoconfig    clang-22
-hexagon                          allyesconfig    clang-22
-hexagon               randconfig-001-20250923    clang-22
-hexagon               randconfig-002-20250923    clang-22
-i386                             allmodconfig    gcc-14
-i386                              allnoconfig    gcc-14
-i386                             allyesconfig    gcc-14
-i386        buildonly-randconfig-001-20250923    gcc-14
-i386        buildonly-randconfig-002-20250923    clang-20
-i386        buildonly-randconfig-003-20250923    clang-20
-i386        buildonly-randconfig-004-20250923    gcc-14
-i386        buildonly-randconfig-005-20250923    clang-20
-i386        buildonly-randconfig-006-20250923    clang-20
-i386                                defconfig    clang-20
-loongarch                        allmodconfig    clang-19
-loongarch                         allnoconfig    clang-22
-loongarch             randconfig-001-20250923    gcc-15.1.0
-loongarch             randconfig-002-20250923    gcc-15.1.0
-m68k                             allmodconfig    gcc-15.1.0
-m68k                              allnoconfig    gcc-15.1.0
-m68k                             allyesconfig    gcc-15.1.0
-microblaze                       allmodconfig    gcc-15.1.0
-microblaze                        allnoconfig    gcc-15.1.0
-microblaze                       allyesconfig    gcc-15.1.0
-microblaze                          defconfig    gcc-15.1.0
-mips                              allnoconfig    gcc-15.1.0
-mips                          eyeq5_defconfig    gcc-15.1.0
-nios2                             allnoconfig    gcc-11.5.0
-nios2                               defconfig    gcc-11.5.0
-nios2                 randconfig-001-20250923    gcc-11.5.0
-nios2                 randconfig-002-20250923    gcc-11.5.0
-openrisc                          allnoconfig    gcc-15.1.0
-openrisc                         allyesconfig    gcc-15.1.0
-parisc                           allmodconfig    gcc-15.1.0
-parisc                            allnoconfig    gcc-15.1.0
-parisc                           allyesconfig    gcc-15.1.0
-parisc                              defconfig    gcc-15.1.0
-parisc                randconfig-001-20250923    gcc-15.1.0
-parisc                randconfig-002-20250923    gcc-9.5.0
-parisc64                            defconfig    gcc-15.1.0
-powerpc                          allmodconfig    gcc-15.1.0
-powerpc                           allnoconfig    gcc-15.1.0
-powerpc                          allyesconfig    clang-22
-powerpc                  iss476-smp_defconfig    gcc-15.1.0
-powerpc                 mpc832x_rdb_defconfig    gcc-15.1.0
-powerpc               randconfig-001-20250923    gcc-8.5.0
-powerpc               randconfig-002-20250923    clang-16
-powerpc               randconfig-003-20250923    gcc-12.5.0
-powerpc                        warp_defconfig    gcc-15.1.0
-powerpc64             randconfig-001-20250923    gcc-10.5.0
-powerpc64             randconfig-002-20250923    clang-22
-riscv                            allmodconfig    clang-22
-riscv                             allnoconfig    gcc-15.1.0
-riscv                            allyesconfig    clang-16
-riscv                               defconfig    clang-22
-riscv                 randconfig-001-20250923    gcc-12.5.0
-riscv                 randconfig-002-20250923    clang-22
-s390                             allmodconfig    clang-18
-s390                              allnoconfig    clang-22
-s390                             allyesconfig    gcc-15.1.0
-s390                  randconfig-001-20250923    gcc-8.5.0
-s390                  randconfig-002-20250923    clang-22
-sh                               allmodconfig    gcc-15.1.0
-sh                                allnoconfig    gcc-15.1.0
-sh                               allyesconfig    gcc-15.1.0
-sh                    randconfig-001-20250923    gcc-15.1.0
-sh                    randconfig-002-20250923    gcc-10.5.0
-sh                          rsk7201_defconfig    gcc-15.1.0
-sh                          sdk7786_defconfig    gcc-15.1.0
-sparc                            allmodconfig    gcc-15.1.0
-sparc                             allnoconfig    gcc-15.1.0
-sparc                               defconfig    gcc-15.1.0
-sparc                 randconfig-001-20250923    gcc-8.5.0
-sparc                 randconfig-002-20250923    gcc-12.5.0
-sparc64               randconfig-001-20250923    clang-22
-sparc64               randconfig-002-20250923    gcc-8.5.0
-um                               allmodconfig    clang-19
-um                                allnoconfig    clang-22
-um                               allyesconfig    gcc-14
-um                    randconfig-001-20250923    clang-22
-um                    randconfig-002-20250923    clang-22
-x86_64                           alldefconfig    gcc-14
-x86_64                            allnoconfig    clang-20
-x86_64                           allyesconfig    clang-20
-x86_64      buildonly-randconfig-001-20250923    gcc-14
-x86_64      buildonly-randconfig-002-20250923    gcc-14
-x86_64      buildonly-randconfig-003-20250923    gcc-14
-x86_64      buildonly-randconfig-004-20250923    clang-20
-x86_64      buildonly-randconfig-005-20250923    clang-20
-x86_64      buildonly-randconfig-006-20250923    clang-20
-x86_64                              defconfig    gcc-14
-x86_64                          rhel-9.4-rust    clang-20
-xtensa                            allnoconfig    gcc-15.1.0
-xtensa                randconfig-001-20250923    gcc-8.5.0
-xtensa                randconfig-002-20250923    gcc-8.5.0
+> >               else
+> >                       retval =3D -EACCES;
+> >       }
+> > --- a/include/linux/pm_runtime.h
+> > +++ b/include/linux/pm_runtime.h
+> > @@ -21,6 +21,7 @@
+> >  #define RPM_GET_PUT          0x04    /* Increment/decrement the
+> >                                           usage_count */
+> >  #define RPM_AUTO             0x08    /* Use autosuspend_delay */
+> > +#define RPM_TRANSPARENT      0x10    /* Succeed if runtime PM is disab=
+led */
+> >
+> >  /*
+> >   * Use this for defining a set of PM operations to be used in all situ=
+ations
+> > @@ -533,6 +534,32 @@ static inline int pm_runtime_resume_and_
+> >  }
+> >
+> >  /**
+> > + * pm_runtime_get_active_dev - Resume a device and bump up its usage c=
+ounter.
+>
+> I am getting no clue as to why this is different than regular
+> pm_runtime_get_sync then? Can we describe this API better?
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Again, this is for internal use.
+
+I may as well drop the kerneldoc for this function altogether, but I'm
+not going to send a v4 just for this purpose.
 
