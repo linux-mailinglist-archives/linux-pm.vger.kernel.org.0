@@ -1,132 +1,239 @@
-Return-Path: <linux-pm+bounces-35260-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35261-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F035B97AEF
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Sep 2025 00:07:28 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 330C5B97BE0
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Sep 2025 00:40:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 55BD319C7F72
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Sep 2025 22:07:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9A4E07AA329
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Sep 2025 22:38:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B005A30C615;
-	Tue, 23 Sep 2025 22:07:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 013ED3101A3;
+	Tue, 23 Sep 2025 22:38:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="l8tlKK36"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="oBW6V6+E"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 309CA30C36A
-	for <linux-pm@vger.kernel.org>; Tue, 23 Sep 2025 22:07:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F14E230FC1C;
+	Tue, 23 Sep 2025 22:38:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758665242; cv=none; b=JpEov3RV1qpU/kzLO5/7TOAR2eWnsYdAHjKXTnmbSccK0FFbFeL9TYsavf75gT8GNrubZC8C87TvciKEJailgBVIQ/LG/BEZeVq3P6/8y/HL/c1imRXciRu/8Bc4xUjsgEKVVFF+0VO3uHG25rPez7ozgsX2DpCymBX0SrYvwco=
+	t=1758667133; cv=none; b=ktFvNiGGlXWSJ0c0WG+ejP8NR0DAqQbZSQE31cKrver3Oh4uWBg2V5NDr7VQ9UsWOL2wW7yfq06SsIUWYtVJr+rzRFQc2uDmD4Dyw4FHNYoQjGXKO0l1tL3XxNjXNwZZi9FqoyCs9yUU92WaZdLa9WbvI21M6WOJzLpufyxe+w0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758665242; c=relaxed/simple;
-	bh=IctFuTYxR5b2i76fpliDW/duU8uZ4S1DduU8Uaoa2vo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pNt6L3iPbsWipghmFshujDH725HzFhxi1IFSJqxXpjHh3BYf62/+y9pAu2hTXxolP3cdCfs7kITNP+8mXT+9kVAZfyqf95NdLVMcmm2lz2ZsxNjSuccqGqJQaFs6RxVNOQ9iOBJxwn3dl4BO2Mf9fBpSXbZ8ukLXZiE2gFUzMZ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=l8tlKK36; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-269639879c3so60129845ad.2
-        for <linux-pm@vger.kernel.org>; Tue, 23 Sep 2025 15:07:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1758665240; x=1759270040; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=pX7rCi7/xF3CzW2LGTp+sVuxts9A6Ss/MmxTLrjnoqc=;
-        b=l8tlKK36HX4L9oKc2illV2j08MNY9fUC/PDYKU4PY4bXWC8i7jEwIqGAiqYFObJZXx
-         vg9M06ZiFx1fJ8KIi9k7ZffeCPWvguMv6FdrSqLW0fJiHhLk99FQ80tzu4VIpB8Wx8KF
-         Vy6mt7bmq3BFtTR4Ex2a2nQ8jQ8HEoIYKNq3A=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758665240; x=1759270040;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pX7rCi7/xF3CzW2LGTp+sVuxts9A6Ss/MmxTLrjnoqc=;
-        b=Mh+WJB/ZKkRS+DP988EMSkUuVQBNdQfxnRW3k3Oz3yyV4bjsCwv8jyjnkcfSUKH6+c
-         X7T8tZflVOstK+Bica6Xln/x7wpgWcrwhMZAu97oZiXiTL3axHLzQwSYhvVCw3WxrElQ
-         Ecbl0OY+zxhBe2RdWUqach+7lERrckHsNtCWkNbFvME9aZMtduK5E9fZ4LkwnhJ9/+3V
-         SmrhzIi7FYuvDuc/mW5h5IJrF9BHb1ynMoCNsf6b89kMxKmuDBIMR9H+gw+tX5MjIjrU
-         NsJXp8BkU7rCb2PC8GwmpzfgoqmHhkrZpfTrwwJn/HUIUyJwMCytMuEWGvBDL3JPxIVO
-         QmXA==
-X-Forwarded-Encrypted: i=1; AJvYcCUqkWbX/cInzuOgNwj0Qe6Dr1mzK1zPsjr5C7pdSMWgfIJ02kMR5p2eACYBqpVe9tJmNrxUzpBJZg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyCasK8gqj8GGatHJLUcGFwvDxU/3mefJnAtmiwUb02whRBAzQo
-	9eCtwIA/YCwyPW55IkggIDwRJc/PtRA058/RRFtoXay44Af2a7RefIOuQzM7Ro/n+Q==
-X-Gm-Gg: ASbGnctHTjfpYI9pNYiLrp2brDbAZRcChz0zzQZtUO4ty9zQ5WmvxbhnOKkk/XEnXpG
-	I2Pb8EpwANahIXfR3MsO0zezipG/v5aHziNny4ZBpqIs3fGRUg0NUwF9aAHvC+TeJ2/8LSeg5/7
-	8vfzQ7bq00zjHuED+oE2880qx40D4GYnwYb0JJ3BQriinB3Z5x4h+fvzjcrnEFa+xveEPJpbL8I
-	ktQHJJP1n1w5XL88S8LCu8pK2EIgc88lz3qRxuEybidcNTYH7rb3pjl1P5QOlbyLZ3Lhn9+8EBd
-	66dNqdVDEKsZxmm2EfOK8931mUXZOyegR9rx+n70jl8dzkotRw4HZZZNzGzM4JLctdJSSPTfb80
-	1TPTOX3zDi7bWCva4/IZwQFk0FdWmjF/n2gVL2DoA7RaxsKY4FcHEZL86NEjmTcfnFOfOsr8=
-X-Google-Smtp-Source: AGHT+IH7boJUUpyB5XtiGW1q/b1fBgcGs5BDKzeQnQ68gF1GB/zlqoErisxWiIo3r/4bLZrHYq3z6g==
-X-Received: by 2002:a17:902:e750:b0:269:a8a8:4029 with SMTP id d9443c01a7336-27cc09e438emr58305255ad.5.1758665240415;
-        Tue, 23 Sep 2025 15:07:20 -0700 (PDT)
-Received: from localhost ([2a00:79e0:2e7c:8:26d9:5758:328a:50f8])
-        by smtp.gmail.com with UTF8SMTPSA id d9443c01a7336-2698016bedfsm167410205ad.32.2025.09.23.15.07.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Sep 2025 15:07:19 -0700 (PDT)
-From: Brian Norris <briannorris@chromium.org>
-To: "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Arjan van de Ven <arjan@linux.intel.com>,
+	s=arc-20240116; t=1758667133; c=relaxed/simple;
+	bh=3ClJm3GGCbKnrDe8xlc0T1sj5TO27qNztLWoK747IkM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=oe0ByCs9vvKA+e+Ks8dWhosEk2MwWek6wS2gCDP0Q1wLcTUOwyxC/gJuiW3ZAi7etRRwlXS5Iu9JS15BQB4O7Dl3MuCpWPkYvcjI3biJ4WDLHlxNRLlzJyooeMKNlGDKnma0gM3+5yNe5HOdH90sXkQ/9dllPK/srzMP3XeZepo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=oBW6V6+E; arc=none smtp.client-ip=220.197.31.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version:
+	Content-Type; bh=TTWQOmGgkRlfr3lkdxz0rDPCmCvx7LmjjYcHdx7zUf0=;
+	b=oBW6V6+EYRbKWu59T12hc+AVpLa7QEzPlltRgEnLXAgqo5aWHe52DicBIkfqit
+	hkWKq7tMqmPIxKc8r5ZSVBl4tNBW6pmXZ/Za3YizyGEikvdwMfZmAnvgkY+PYA+u
+	g6/EFJVjBJLWinDp42qxFSxj21fK2pofDUd7sNUtRK77g=
+Received: from MS-CMFLBWVCLQRG.localdomain (unknown [])
+	by gzga-smtp-mtada-g1-1 (Coremail) with SMTP id _____wDH2yRoIdNo2NsLDg--.8619S2;
+	Wed, 24 Sep 2025 06:38:33 +0800 (CST)
+From: GuangFei Luo <luogf2025@163.com>
+To: rafael@kernel.org
+Cc: dan.carpenter@linaro.org,
+	linux-acpi@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-pm@vger.kernel.org,
-	Brian Norris <briannorris@chromium.org>
-Subject: [PATCH] ABI: sysfs-devices-power: Document time units for *_time
-Date: Tue, 23 Sep 2025 15:06:26 -0700
-Message-ID: <20250923150625.1.If11a14e33d578369db48d678395d0323bdb01915@changeid>
-X-Mailer: git-send-email 2.51.0.534.gc79095c0ca-goog
+	luogf2025@163.com
+Subject: Re:[PATCH v6] ACPI: battery: prevent sysfs_add_battery re-entry on rapid events
+Date: Wed, 24 Sep 2025 06:38:29 +0800
+Message-ID: <20250923223831.1308685-1-luogf2025@163.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <5944379.DvuYhMxLoT@rafael.j.wysocki>
+References: <5944379.DvuYhMxLoT@rafael.j.wysocki>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wDH2yRoIdNo2NsLDg--.8619S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW3JF1xKrWrGryDuryUKF1kuFg_yoW7Xr45pa
+	yUCFWYkr4UJ3WUXw12qr4Yvry3Z3yFyrWjgr9rury0k34DWF1xJr15tF9rZrZxKryFka1r
+	ZF4xX3W5Zw17ZF7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziDPEfUUUUU=
+X-CM-SenderInfo: poxrwwisqskqqrwthudrp/1tbiPQ-RmWjTEazrCAAAsf
 
-Many .../power/... time-related attributes have an "_ms" suffix and also
-include language in their ABI description to make clear that their time
-is measured in milliseconds. 'runtime_suspended_time' and
-'runtime_active_time' have neither, and it takes me a nontrivial amount
-of time to poke through the source to confirm that they are also
-measured in milliseconds.
+> On Tuesday, September 23, 2025 7:12:03 PM CEST Rafael J. Wysocki wrote:
+> > On Tue, Sep 23, 2025 at 6:14 PM GuangFei Luo <luogf2025@163.com> wrote:
+> > >
+> > > The functions battery_hook_add_battery(), battery_hook_remove_battery(),
+> > > and sysfs_remove_battery() already acquire locks, so their internal
+> > > accesses are safe.
+> > 
+> > In fact, there are two locks in use, battery->sysfs_lock and
+> > hook_mutex.  The latter is used for managing hooks and the former is
+> > only used by sysfs_remove_battery(), so it only prevents that function
+> > from racing with another instance of itself.
+> > 
+> > I would suggest using battery->sysfs_lock for protecting battery->bat
+> > in general.
+> > 
+> > > acpi_battery_refresh() does check battery->bat, but its child
+> > > functions (sysfs_add_battery() and sysfs_remove_battery()) already
+> > > handle locking.
+> > 
+> > What locking?  Before the $subject patch, sysfs_add_battery() doesn't
+> > do any locking at all AFAICS.
+> > 
+> > > In acpi_battery_notify(), battery->bat has no lock. However, the
+> > > check of battery->bat is at the very end of the function. During
+> > > earlier calls, battery->bat has already been protected by locks, so
+> > > re-entry will not cause issues.
+> > 
+> > All of the battery->bat checks and the code depending on them need to
+> > go under the same lock.  I'd use battery->sysfs_lock for this as
+> > already mentioned above.
+> 
+> So my (untested) version of this fix is appended.
+> 
+> Note that it explicitly prevents acpi_battery_notify() from racing with
+> addition/removal, PM notifications, and resume.
+> 
+> ---
+>  drivers/acpi/battery.c |   36 +++++++++++++++++++++++-------------
+>  1 file changed, 23 insertions(+), 13 deletions(-)
+> 
+> --- a/drivers/acpi/battery.c
+> +++ b/drivers/acpi/battery.c
+> @@ -92,7 +92,7 @@ enum {
+>  
+>  struct acpi_battery {
+>  	struct mutex lock;
+> -	struct mutex sysfs_lock;
+> +	struct mutex update_lock;
+>  	struct power_supply *bat;
+>  	struct power_supply_desc bat_desc;
+>  	struct acpi_device *device;
+> @@ -904,15 +904,12 @@ static int sysfs_add_battery(struct acpi
+>  
+>  static void sysfs_remove_battery(struct acpi_battery *battery)
+>  {
+> -	mutex_lock(&battery->sysfs_lock);
+> -	if (!battery->bat) {
+> -		mutex_unlock(&battery->sysfs_lock);
+> +	if (!battery->bat)
+>  		return;
+> -	}
+> +
+>  	battery_hook_remove_battery(battery);
+>  	power_supply_unregister(battery->bat);
+>  	battery->bat = NULL;
+> -	mutex_unlock(&battery->sysfs_lock);
+>  }
+>  
+>  static void find_battery(const struct dmi_header *dm, void *private)
+> @@ -1072,6 +1069,9 @@ static void acpi_battery_notify(acpi_han
+>  
+>  	if (!battery)
+>  		return;
+> +
+> +	guard(mutex)(&battery->update_lock);
+> +
+>  	old = battery->bat;
+>  	/*
+>  	 * On Acer Aspire V5-573G notifications are sometimes triggered too
+> @@ -1094,21 +1094,22 @@ static void acpi_battery_notify(acpi_han
+>  }
+>  
+>  static int battery_notify(struct notifier_block *nb,
+> -			       unsigned long mode, void *_unused)
+> +			  unsigned long mode, void *_unused)
+>  {
+>  	struct acpi_battery *battery = container_of(nb, struct acpi_battery,
+>  						    pm_nb);
+> -	int result;
+>  
+> -	switch (mode) {
+> -	case PM_POST_HIBERNATION:
+> -	case PM_POST_SUSPEND:
+> +	if (mode == PM_POST_SUSPEND || mode == PM_POST_HIBERNATION) {
+> +		guard(mutex)(&battery->update_lock);
+> +
+>  		if (!acpi_battery_present(battery))
+>  			return 0;
+>  
+>  		if (battery->bat) {
+>  			acpi_battery_refresh(battery);
+>  		} else {
+> +			int result;
+> +
+>  			result = acpi_battery_get_info(battery);
+>  			if (result)
+>  				return result;
+> @@ -1120,7 +1121,6 @@ static int battery_notify(struct notifie
+>  
+>  		acpi_battery_init_alarm(battery);
+>  		acpi_battery_get_state(battery);
+> -		break;
+>  	}
+>  
+>  	return 0;
+> @@ -1198,6 +1198,8 @@ static int acpi_battery_update_retry(str
+>  {
+>  	int retry, ret;
+>  
+> +	guard(mutex)(&battery->update_lock);
+> +
+>  	for (retry = 5; retry; retry--) {
+>  		ret = acpi_battery_update(battery, false);
+>  		if (!ret)
+> @@ -1230,7 +1232,7 @@ static int acpi_battery_add(struct acpi_
+>  	if (result)
+>  		return result;
+>  
+> -	result = devm_mutex_init(&device->dev, &battery->sysfs_lock);
+> +	result = devm_mutex_init(&device->dev, &battery->update_lock);
+>  	if (result)
+>  		return result;
+>  
+> @@ -1262,6 +1264,8 @@ fail_pm:
+>  	device_init_wakeup(&device->dev, 0);
+>  	unregister_pm_notifier(&battery->pm_nb);
+>  fail:
+> +	guard(mutex)(&battery->update_lock);
+> +
+>  	sysfs_remove_battery(battery);
+>  
+>  	return result;
+> @@ -1281,6 +1285,9 @@ static void acpi_battery_remove(struct a
+>  
+>  	device_init_wakeup(&device->dev, 0);
+>  	unregister_pm_notifier(&battery->pm_nb);
+> +
+> +	guard(mutex)(&battery->update_lock);
+> +
+>  	sysfs_remove_battery(battery);
+>  }
+>  
+> @@ -1297,6 +1304,9 @@ static int acpi_battery_resume(struct de
+>  		return -EINVAL;
+>  
+>  	battery->update_time = 0;
+> +
+> +	guard(mutex)(&battery->update_lock);
+> +
+>  	acpi_battery_update(battery, true);
+>  	return 0;
+>  }
 
-Update the doc with "millisecond" units.
+Thanks for the detailed explanation and the updated version of the fix.
 
-Signed-off-by: Brian Norris <briannorris@chromium.org>
----
-
- Documentation/ABI/testing/sysfs-devices-power | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/Documentation/ABI/testing/sysfs-devices-power b/Documentation/ABI/testing/sysfs-devices-power
-index e4ec5de9a5dd..9bf7c8a267c5 100644
---- a/Documentation/ABI/testing/sysfs-devices-power
-+++ b/Documentation/ABI/testing/sysfs-devices-power
-@@ -274,15 +274,15 @@ What:		/sys/devices/.../power/runtime_active_time
- Date:		Jul 2010
- Contact:	Arjan van de Ven <arjan@linux.intel.com>
- Description:
--		Reports the total time that the device has been active.
--		Used for runtime PM statistics.
-+		Reports the total time that the device has been active, in
-+		milliseconds. Used for runtime PM statistics.
- 
- What:		/sys/devices/.../power/runtime_suspended_time
- Date:		Jul 2010
- Contact:	Arjan van de Ven <arjan@linux.intel.com>
- Description:
--		Reports total time that the device has been suspended.
--		Used for runtime PM statistics.
-+		Reports total time that the device has been suspended, in
-+		milliseconds. Used for runtime PM statistics.
- 
- What:		/sys/devices/.../power/runtime_usage
- Date:		Apr 2010
--- 
-2.51.0.534.gc79095c0ca-goog
+I will test your suggested changes on my platform.  
+After verification, I will send a v7 based on your suggestion.
 
 
