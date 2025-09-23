@@ -1,118 +1,360 @@
-Return-Path: <linux-pm+bounces-35197-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35198-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72E99B95128
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Sep 2025 10:52:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C1B0AB9513E
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Sep 2025 10:54:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 820BE1902DF7
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Sep 2025 08:53:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6C2221904840
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Sep 2025 08:54:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDCD12F0C5C;
-	Tue, 23 Sep 2025 08:52:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C64F30EF7C;
+	Tue, 23 Sep 2025 08:53:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="C/OJcW2w"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="umvARm4U"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+Received: from lelvem-ot01.ext.ti.com (lelvem-ot01.ext.ti.com [198.47.23.234])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B60C32701CF;
-	Tue, 23 Sep 2025 08:52:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79BB02701CF;
+	Tue, 23 Sep 2025 08:53:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.234
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758617560; cv=none; b=djrBfqvG/TO2SJHpDx2A9txUQ49lfHXzZ31sUlU0+KIjuepnw4/lh6APhl8mUYrjfhgcHBzkb4lsXDb/C2I0lJWhpbU4hDRESPAj71ksjNYxv3fHtnZ/FiN+7f6rCPmQDJ03sN9KR3LN1xTDy9e1YmeMWeA8A38fRgVii0P72G0=
+	t=1758617638; cv=none; b=TpQMlDeyI7B8Ejms34Uw04oZhqeLnEjEaQXtsZdjJqzBY+oQz4C3To4En6VD0XMBrhmlGXYpRBzfJZjkLMVifZcf0LxdOiPmjlNqffP31NgRwzl9ycRxT29ngNTESBbVmi8ATIYHZdPaohn0mR8SmCOrk3AQZJHJmb0xufQNJio=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758617560; c=relaxed/simple;
-	bh=eQ3bgrFsPixYkoX5WF8vxszDEQywePDRPFRChX8eSyw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=M5nFO4jk8jk4qFnUnauNn8SvXmqBBTXN9IQp0WCkhwxpgfg1hcz83v3yYw9JZhVMyUxjjqsKMIJ9GrcPBcup8TnXO94M+ZiE8RP5tp0VkdjkZM8dEAua+oDOPe7h6MovQum42R5Hip2pH/d4t4cwpH6hoL86y/ctcBj/2rUKcdY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=C/OJcW2w; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1758617550;
-	bh=eQ3bgrFsPixYkoX5WF8vxszDEQywePDRPFRChX8eSyw=;
-	h=From:Date:Subject:To:Cc:From;
-	b=C/OJcW2wr0UlSy5iTPEpZ+d530Z8l5Wsiq0TXn6L8RJwC7pO4y0epp/5S2uleH32b
-	 bTh98ZZqQ/MjqrpDjYrEMMTuyg2a0Pa7cTQLtBeoiUedwGxzshq6Jdn4dUrG7w/w59
-	 7MTyHyHK0u0xvxjYzOoKpaUfKjxfB+XDQzo1aVFIW+T4CRSDqYS00Trb/HTxc8/Qj0
-	 L6ZLyKZDg2h8/l5lrcITOa5cs+GfbWTbI8tp3OUL7eyil/OXsMdT184J4JqwizbiIG
-	 g6fFxWcI74qHIjUMz88+PBU+GOdj7tkT2LbxvByV66mg+Ud8iY2m8u+nVNjUTLs8A4
-	 gy3RQdZ9GqUtw==
-Received: from yukiji.home (amontpellier-657-1-116-247.w83-113.abo.wanadoo.fr [83.113.51.247])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: laeyraud)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 3CFC617E0299;
-	Tue, 23 Sep 2025 10:52:30 +0200 (CEST)
-From: Louis-Alexis Eyraud <louisalexis.eyraud@collabora.com>
-Date: Tue, 23 Sep 2025 10:52:12 +0200
-Subject: [PATCH] pmdomain: mediatek: set default off flag for MT8195 AUDIO
- power domain
+	s=arc-20240116; t=1758617638; c=relaxed/simple;
+	bh=gM93bNnFGIO/wsx+VqzXpIt/RyJuamcNh4RdDqfFoHk=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qXq68EBT3HobO1OPwy8+NDR7hst5XSgFzItGOtmlwiTMEr/eDpk5XiwD47uqXNFFmoLEX421s9naVGsPTG2d091cjJyCQXcX0QGmk1emRMddJ+MZDC6Boj6N1vrhyQZLh9bMkqYs+fHmnHj71K8XWdBV392z0zx8hqywyRQwkPM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=umvARm4U; arc=none smtp.client-ip=198.47.23.234
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from fllvem-sh04.itg.ti.com ([10.64.41.54])
+	by lelvem-ot01.ext.ti.com (8.15.2/8.15.2) with ESMTP id 58N8rPk4970823;
+	Tue, 23 Sep 2025 03:53:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1758617605;
+	bh=X9S9ewL/z48Jb3cMd5ztxj0pmZs3DnywtEk6GLbOvDY=;
+	h=Date:From:To:CC:Subject:References:In-Reply-To;
+	b=umvARm4U/jDs0n0ZUvsyoiWp+8NIL2zXgrth6mIIMeRcjO6E8BccSj9WPMv45wSFy
+	 7yeUt14WgL/OuunsWxSfi/WykRGyTV/TPfCnCRO/7BHDzuMFEB+aXov0Wgc1eDBMYy
+	 fR/aMGmE+w3y1ug2s+QsaIJ4Vw1rnUJi+AbKO2xc=
+Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
+	by fllvem-sh04.itg.ti.com (8.18.1/8.18.1) with ESMTPS id 58N8rPGX2653061
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-SHA256 bits=128 verify=FAIL);
+	Tue, 23 Sep 2025 03:53:25 -0500
+Received: from DFLE215.ent.ti.com (10.64.6.73) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55; Tue, 23
+ Sep 2025 03:53:24 -0500
+Received: from lelvem-mr06.itg.ti.com (10.180.75.8) by DFLE215.ent.ti.com
+ (10.64.6.73) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
+ Transport; Tue, 23 Sep 2025 03:53:24 -0500
+Received: from localhost (lcpd911.dhcp.ti.com [172.24.233.130])
+	by lelvem-mr06.itg.ti.com (8.18.1/8.18.1) with ESMTP id 58N8rN8j3977318;
+	Tue, 23 Sep 2025 03:53:24 -0500
+Date: Tue, 23 Sep 2025 14:23:23 +0530
+From: Dhruva Gole <d-gole@ti.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+CC: Linux PM <linux-pm@vger.kernel.org>, Takashi Iwai <tiwai@suse.de>,
+        LKML
+	<linux-kernel@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Alex
+ Williamson <alex.williamson@redhat.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Zhang Qilong <zhangqilong3@huawei.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Subject: Re: [PATCH v3 1/3] PM: runtime: Add auto-cleanup macros for "resume
+ and get" operations
+Message-ID: <20250923085323.sbetukdirhppecz5@lcpd911>
+References: <12763087.O9o76ZdvQC@rafael.j.wysocki>
+ <2399578.ElGaqSPkdT@rafael.j.wysocki>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250923-mt8195-pmdomain-audio-fix-v1-1-782190385f46@collabora.com>
-X-B4-Tracking: v=1; b=H4sIALtf0mgC/zWNQQrDIBBFryKz7kAUpEmuUrLQOKazUFM1IRBy9
- 0pDl+/B/++EQpmpwChOyLRz4RQbyIeA+W3iQsiuMahO6W5QCkPt5aBxDS4FwxHN5jih5wP9k6x
- XxlupPbT9mqnp3/drujnTZ2uJekuwphDOKQSuo4h0VPxnYLquL3bFntucAAAA
-X-Change-ID: 20250922-mt8195-pmdomain-audio-fix-f7ebf2afb15f
-To: Ulf Hansson <ulf.hansson@linaro.org>, 
- Matthias Brugger <matthias.bgg@gmail.com>, 
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: kernel@collabora.com, linux-pm@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-mediatek@lists.infradead.org, 
- Louis-Alexis Eyraud <louisalexis.eyraud@collabora.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1758617550; l=1485;
- i=louisalexis.eyraud@collabora.com; s=20250113; h=from:subject:message-id;
- bh=eQ3bgrFsPixYkoX5WF8vxszDEQywePDRPFRChX8eSyw=;
- b=lG8MR+Jilqa9YvJI4g5WNbwG6A6UqK+1dxOy1mukQ6zReDxsF9ZSp8MjJSLdz7dYlCjb+gHTw
- Ei7/kDTc2ZOCZjuWhIC+g/nPNVHDq3IGkwIKz2djC75wH2f9j8PQ85I
-X-Developer-Key: i=louisalexis.eyraud@collabora.com; a=ed25519;
- pk=CHFBDB2Kqh4EHc6JIqFn69GhxJJAzc0Zr4e8QxtumuM=
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <2399578.ElGaqSPkdT@rafael.j.wysocki>
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-In MT8195 power domain data array, set the KEEP_DEFAULT_OFF and
-ACTIVE_WAKEUP flags for the AUDIO power domain entry to avoid
-having this domain being on during boot sequence when unneeded.
+On Sep 22, 2025 at 17:30:43 +0200, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> It is generally useful to be able to automatically drop a device's
+> runtime PM usage counter incremented by runtime PM operations that
+> resume a device and bump up its usage counter [1].
+> 
+> To that end, add DEFINE_CLASS() macros allowing pm_runtime_put()
+> and pm_runtime_put_autosuspend() to be used for the auto-cleanup in
+> those cases.
+> 
+> Simply put, a piece of code like below:
+> 
+> 	pm_runtime_get_sync(dev);
+> 	.....
+> 	pm_runtime_put(dev);
+> 	return 0;
+> 
+> can be transformed with CLASS(pm_runtime_get_sync) like:
+> 
+> 	guard(pm_runtime_get_sync)(dev);
+> 	.....
+> 	return 0;
+> 
+> (see pm_runtime_put() call is gone).
+> 
+> However, it is better to do proper error handling in the majority of
+> cases, so doing something like this instead of the above is recommended:
+> 
+> 	CLASS(pm_runtime_get_active, pm)(dev);
+> 	if (IS_ERR(pm))
+> 		return PTR_ERR(pm);
+> 	.....
+> 	return 0;
+> 
+> In all of the cases in which runtime PM is known to be enabled for the
+> given device or the device can be regarded as operational (and so it can
+> be accessed) with runtime PM disabled, a piece of code like:
+> 
+> 	ret = pm_runtime_resume_and_get(dev);
+> 	if (ret < 0)
+> 		return ret;
+> 	.....
+> 	pm_runtime_put(dev);
+> 	return 0;
+> 
+> can be simplified with CLASS() like:
+> 
+> 	CLASS(pm_runtime_get_active, pm)(dev);
+> 	if (IS_ERR(pm))
+> 		return PTR_ERR(pm);
+> 	.....
+> 	return 0;
+> 
+> (again, see pm_runtime_put() call is gone).
+> 
+> Still, if the device cannot be accessed unless runtime PM has been
+> enabled for it, the CLASS(pm_runtime_get_active_enabled) variant
+> needs to be used, that is (in the context of the example above):
+> 
+> 	CLASS(pm_runtime_get_active_enabled, pm)(dev);
+> 	if (IS_ERR(pm))
+> 		return PTR_ERR(pm);
+> 	.....
+> 	return 0;
+> 
+> When the original code calls pm_runtime_put_autosuspend(), use one
+> of the "auto" class variants, CLASS(pm_runtime_get_active_auto) or
+> CLASS(pm_runtime_get_active_enabled_auto), so for example, a piece
+> of code like:
+> 
+> 	ret = pm_runtime_resume_and_get(dev);
+> 	if (ret < 0)
+> 		return ret;
+> 	.....
+> 	pm_runtime_put_autosuspend(dev);
+> 	return 0;
+> 
+> will become:
+> 
+> 	CLASS(pm_runtime_get_active_enabled_auto, pm)(dev);
+> 	if (IS_ERR(pm))
+> 		return PTR_ERR(pm);
+> 	.....
+> 	return 0;
+> 
+> Note that the cases in which the return value of pm_runtime_get_sync()
+> is checked can also be handled with the help of the new class macros.
+> For example, a piece of code like:
+> 
+> 	ret = pm_runtime_get_sync(dev);
+> 	if (ret < 0) {
+> 		pm_runtime_put(dev);
+> 		return ret;
+> 	}
+> 	.....
+> 	pm_runtime_put(dev);
+> 	return 0;
+> 
+> can be rewritten as:
+> 
+> 	CLASS(pm_runtime_get_active_enabled, pm)(dev);
+> 	if (IS_ERR(pm))
+> 		return PTR_ERR(pm);
+> 	.....
+> 	return 0;
+> 
+> or CLASS(pm_runtime_get_active) can be used if transparent handling of
+> disabled runtime PM is desirable.
+> 
 
-Fixes: 0e789b491ba0 ("pmdomain: core: Leave powered-on genpds on until sync_state")
-Fixes: 13a4b7fb6260 ("pmdomain: core: Leave powered-on genpds on until late_initcall_sync")
-Signed-off-by: Louis-Alexis Eyraud <louisalexis.eyraud@collabora.com>
----
-Patch tested on Mediatek Genio 1200-EVK board (based on MT8395 SoC)
-with a kernel based on linux-next (tag: next-20250922).
----
- drivers/pmdomain/mediatek/mt8195-pm-domains.h | 1 +
- 1 file changed, 1 insertion(+)
+Firstly, please can we add all this documentation in runtime_pm [1]
+Otherwise there's just far less developers aware of the new APIs getting
+introduced other than people directly involved. Not everyone is going to
+come down here to look at git log for API docs (even though we proud
+ourselves in having git log as our main source of Documentation in
+kernel ;) )
 
-diff --git a/drivers/pmdomain/mediatek/mt8195-pm-domains.h b/drivers/pmdomain/mediatek/mt8195-pm-domains.h
-index 9405e8f62eaf07112d52a28e6545d26a4342c7c6..1d3ca195ac75806c458db71db4538940f37128a8 100644
---- a/drivers/pmdomain/mediatek/mt8195-pm-domains.h
-+++ b/drivers/pmdomain/mediatek/mt8195-pm-domains.h
-@@ -126,6 +126,7 @@ static const struct scpsys_domain_data scpsys_domain_data_mt8195[] = {
- 				    MT8195_TOP_AXI_PROT_EN_2_CLR,
- 				    MT8195_TOP_AXI_PROT_EN_2_STA1),
- 		},
-+		.caps = MTK_SCPD_KEEP_DEFAULT_OFF | MTK_SCPD_ACTIVE_WAKEUP,
- 	},
- 	[MT8195_POWER_DOMAIN_MFG0] = {
- 		.name = "mfg0",
+[1] https://docs.kernel.org/power/runtime_pm.html
 
----
-base-commit: fba389ea7aa6401d3539456123cbadfa1a87231e
-change-id: 20250922-mt8195-pmdomain-audio-fix-f7ebf2afb15f
+> Link: https://lore.kernel.org/linux-pm/878qimv24u.wl-tiwai@suse.de/ [1]
+> Co-developed-by: Takashi Iwai <tiwai@suse.de>
+> Signed-off-by: Takashi Iwai <tiwai@suse.de>
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+> 
+> v2 -> v3:
+>    * Two more class definitions for the case in which resume errors can be
+>      neglected.
+>    * Update of new code comments (for more clarity).
+>    * Changelog update.
+> 
+> v1 -> v2:
+>    * Rename the new classes and the new static inline helper.
+>    * Add two classes for handling disabled runtime PM.
+>    * Expand the changelog.
+>    * Adjust the subject.
+> 
+> ---
+>  drivers/base/power/runtime.c |    2 +
+>  include/linux/pm_runtime.h   |   82 +++++++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 84 insertions(+)
 
-Best regards,
+> 
+> --- a/drivers/base/power/runtime.c
+> +++ b/drivers/base/power/runtime.c
+> @@ -796,6 +796,8 @@ static int rpm_resume(struct device *dev
+>  		if (dev->power.runtime_status == RPM_ACTIVE &&
+>  		    dev->power.last_status == RPM_ACTIVE)
+>  			retval = 1;
+> +		else if (rpmflags & RPM_TRANSPARENT)
+> +			goto out;
+
+"TRANSPARENT" doesn't tell you exactly what happens. It should be something like
+RPM_IGNORE_DISABLED or RPM_ALLOW_DISABLED IMO.
+
+>  		else
+>  			retval = -EACCES;
+>  	}
+> --- a/include/linux/pm_runtime.h
+> +++ b/include/linux/pm_runtime.h
+> @@ -21,6 +21,7 @@
+>  #define RPM_GET_PUT		0x04	/* Increment/decrement the
+>  					    usage_count */
+>  #define RPM_AUTO		0x08	/* Use autosuspend_delay */
+> +#define RPM_TRANSPARENT	0x10	/* Succeed if runtime PM is disabled */
+>  
+>  /*
+>   * Use this for defining a set of PM operations to be used in all situations
+> @@ -533,6 +534,32 @@ static inline int pm_runtime_resume_and_
+>  }
+>  
+>  /**
+> + * pm_runtime_get_active_dev - Resume a device and bump up its usage counter.
+
+I am getting no clue as to why this is different than regular
+pm_runtime_get_sync then? Can we describe this API better?
+
+> + * @dev: Target device.
+> + * @rpmflags: Additional runtime PM flags to combine with RPM_GET_PUT.
+> + *
+> + * Resume @dev synchronously and if that is successful, increment its runtime
+> + * PM usage counter.
+> + *
+> + * Return:
+> + * * 0 if the runtime PM usage counter of @dev has been incremented.
+> + * * Negative error code otherwise.
+> + */
+> +static inline struct device *pm_runtime_get_active_dev(struct device *dev,
+> +						       int rpmflags)
+> +{
+> +	int ret;
+> +
+> +	ret = __pm_runtime_resume(dev, RPM_GET_PUT | rpmflags);
+> +	if (ret < 0) {
+> +		pm_runtime_put_noidle(dev);
+> +		return ERR_PTR(ret);
+> +	}
+> +
+> +	return dev;
+> +}
+> +
+> +/**
+>   * pm_runtime_put - Drop device usage counter and queue up "idle check" if 0.
+>   * @dev: Target device.
+>   *
+> @@ -606,6 +633,61 @@ static inline int pm_runtime_put_autosus
+>  	return __pm_runtime_put_autosuspend(dev);
+>  }
+>  
+> +/*
+> + * The way to use the classes defined below is to define a class variable and
+> + * use it going forward for representing the target device until it goes out of
+> + * the scope.  For example:
+> + *
+> + * CLASS(pm_runtime_get_active, active_dev)(dev);
+> + * if (IS_ERR(active_dev))
+> + *         return PTR_ERR(active_dev);
+> + *
+> + * ... do something with active_dev (which is guaranteed to never suspend) ...
+> + *
+> + * If an error occurs, the runtime PM usage counter of dev will not be
+> + * incremented, so using these classes without error handling is not
+> + * recommended.
+> + */
+> +DEFINE_CLASS(pm_runtime_get_active, struct device *,
+> +	     if (!IS_ERR_OR_NULL(_T)) pm_runtime_put(_T),
+> +	     pm_runtime_get_active_dev(dev, RPM_TRANSPARENT), struct device *dev)
+> +
+> +DEFINE_CLASS(pm_runtime_get_active_auto, struct device *,
+> +	     if (!IS_ERR_OR_NULL(_T)) pm_runtime_put_autosuspend(_T),
+> +	     pm_runtime_get_active_dev(dev, RPM_TRANSPARENT), struct device *dev)
+> +
+> +/*
+> + * The following two classes are analogous to the two classes defined above,
+> + * respectively, but they produce an error pointer if runtime PM has been
+> + * disabled for the given device.
+> + *
+> + * They should be used only when runtime PM may be disabled for the given device
+> + * and if that happens, the device is not regarded as operational and so it
+> + * cannot be accessed.  The classes defined above should be used instead in all
+> + * of the other cases.
+> + */
+> +DEFINE_CLASS(pm_runtime_get_active_enabled, struct device *,
+> +	     if (!IS_ERR_OR_NULL(_T)) pm_runtime_put(_T),
+> +	     pm_runtime_get_active_dev(dev, 0), struct device *dev)
+> +
+> +DEFINE_CLASS(pm_runtime_get_active_enabled_auto, struct device *,
+> +	     if (!IS_ERR_OR_NULL(_T)) pm_runtime_put_autosuspend(_T),
+> +	     pm_runtime_get_active_dev(dev, 0), struct device *dev)
+> +
+> +/*
+> + * The following classes may be used instead of the above if resume failures can
+> + * be neglected.  However, such cases are not expected to be prevalent, so using
+> + * one of these classes should always be regarded as an exception and explained
+> + * in an adjacent code comment.
+> + */
+> +DEFINE_CLASS(pm_runtime_get_sync, struct device *,
+> +	     if (_T) pm_runtime_put(_T),
+> +	     ({ pm_runtime_get_sync(dev); dev; }), struct device *dev)
+> +
+> +DEFINE_CLASS(pm_runtime_get_sync_auto, struct device *,
+> +	     if (_T) pm_runtime_put_autosuspend(_T),
+> +	     ({ pm_runtime_get_sync(dev); dev; }), struct device *dev)
+> +
+
+However overall I like the idea of introducing these auto cleanups,
+probably will help drivers get into fewer troubles with RPM :)
+
 -- 
-Louis-Alexis Eyraud <louisalexis.eyraud@collabora.com>
-
+Best regards,
+Dhruva Gole
+Texas Instruments Incorporated
 
