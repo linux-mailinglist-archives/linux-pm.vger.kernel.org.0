@@ -1,107 +1,115 @@
-Return-Path: <linux-pm+bounces-35274-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35275-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC2DAB999C8
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Sep 2025 13:36:11 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 25677B999E9
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Sep 2025 13:39:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AA1B7320F86
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Sep 2025 11:36:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 44FA51883F5A
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Sep 2025 11:39:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAB342FDC4B;
-	Wed, 24 Sep 2025 11:35:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F25A2E7BA9;
+	Wed, 24 Sep 2025 11:39:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="WLkIaNPp"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XmGKQ3CN"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2B1924DFF4;
-	Wed, 24 Sep 2025 11:35:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAC802E2EE7
+	for <linux-pm@vger.kernel.org>; Wed, 24 Sep 2025 11:39:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758713758; cv=none; b=lYd7bta4oq0NYGSxTN5yz/9+0a6O/+Gwl3IxLIsjoiC2c5nII0kBMI1Z/ITNcGgoNf0UsrFPgS8PghfCY1e1DGycGemAkG6xQZCU5Jux88QjUIiE2PsE3LiPQGGwK0YdDSOpoCALQZlbeS2evWlkd3vgWoLwJraxChdlyDHD8qI=
+	t=1758713965; cv=none; b=nHSQF7hKax7NWRymJXYpOsLxNyJvJufkKEB+gm7AWenjfOFy1mpJqiHI8lIGo4WAKozDiapOX8zpIBEAzAmsKajGdM0/T/0F7RxcqR78PhfqfldBGtZhbqUryGharutk4VjWInPW6pmz67kKG+emh//BEBeuVixPegQwjJLnFJA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758713758; c=relaxed/simple;
-	bh=cwneILn6ZVC29eFS05rUz6lGLlw/AQ/6m5dsiihK55g=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hoSZnKZhlqnLikwKhdtXdSOd2tQFKE3oGrg00HAy3/u6XlpsAHtM48kgWtOPZYIGFB88L4YWEvPoQXlwpDz14x/mLH645uzYx1lkwUDC7DgBXMsXweWwat1ijV5z/vhUSV6XA5YHIKOEUBz6jydseo4qbcPJvSB62SDQK0JMCPU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=WLkIaNPp; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1758713751;
-	bh=cwneILn6ZVC29eFS05rUz6lGLlw/AQ/6m5dsiihK55g=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=WLkIaNPpWRiIekxvXilghkdGQpTr7UPljwSUQQNEy+zQxBZhDdmEl7xtSqm6EYArg
-	 EDFH90PlD/WUere4CBQGzMY1VA9HQHBHs2X/xyXG+WAr1RwBJ4qYtA8obudaz7vJp0
-	 fOtyIKJxBngqmWSkrMtRV6fMAYwWhYK7o3+Zh6KX3dqa1NtueX109ivMZ4bsl/l6O1
-	 7+5nyMDMqY4muqjoHCy8f+kZ3KPX/ucBMm0kAPyg397DDYyJ0dRwJsf36Ee4DssNgb
-	 n59KWdu86YleG0oSLiFgcpc2MiWFx2jDhWT0viE8fa0lXoR9ZdFGAA+HGG6KBe74dC
-	 tSdfdXfBU5Qfw==
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 1D9D717E00EC;
-	Wed, 24 Sep 2025 13:35:50 +0200 (CEST)
-Message-ID: <63be9fee-46b4-4bde-8e42-18966981f165@collabora.com>
-Date: Wed, 24 Sep 2025 13:35:49 +0200
+	s=arc-20240116; t=1758713965; c=relaxed/simple;
+	bh=E9iiZiJDIgxuwpwyDvufAzqDLedD0WMc1GFk0Lctfpo=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=GvNXLjFM5HwC3C6rJg82EoMSPqNIab42FU2Jbuiwct30RzQRvxVppy2v85sRiA6XMkCdRRGRMMhv1zVHRYXfO7B5X2Ijh3SFrN3+6OF4dNCpKb+IrtwWPRBi+bT1pih4z/AGJY88O8TvuZ0DPQ9RaT/oAEElIVC8L+3N+Y9GfAU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XmGKQ3CN; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1758713964; x=1790249964;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=E9iiZiJDIgxuwpwyDvufAzqDLedD0WMc1GFk0Lctfpo=;
+  b=XmGKQ3CNAOS0F/3w9EF0oWeAjzIjk5akSisO0EwGLPxH8VM+5vkIwM2G
+   lPxXl3nBTbFzLAcorxThb3aJC2XrjKiHPJ1je0lbNgxpX0S4JEZqWlrhn
+   nfC3ALqkhqVdkMGXUGHVDA/Lixu+rqh/QlrbnP5ETiM9fv3NzCi3TqPyi
+   Xhc1HUUiYPUhe9V3Ous6PsLGKTiYRC25GDhw5t3Mv4w9DIYWwLTvmYvLX
+   PMg576x6BoDMz6mcS6Uj2W7CT/qrCGy39CnkJGPOiYM3HEKz8nfepjJ7q
+   SBjODxum42ZvOLl1zc8jUi7RWbzTg61eBEUS7SfI4j97xD0CljxqRalqm
+   A==;
+X-CSE-ConnectionGUID: Bfq+DkldTkOFdW0CkpeYLA==
+X-CSE-MsgGUID: JuDLj3/fReatbGqIE0uNRQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11561"; a="64645409"
+X-IronPort-AV: E=Sophos;i="6.18,290,1751266800"; 
+   d="scan'208";a="64645409"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2025 04:39:23 -0700
+X-CSE-ConnectionGUID: GWDdXYT8SOOZR6EF90hfvA==
+X-CSE-MsgGUID: kl9ZdWGNSpi2WtJXqL6T8A==
+X-ExtLoop1: 1
+Received: from baandr0id001.iind.intel.com ([10.66.253.151])
+  by fmviesa003.fm.intel.com with ESMTP; 24 Sep 2025 04:39:20 -0700
+From: Kaushlendra Kumar <kaushlendra.kumar@intel.com>
+To: rafael@kernel.org,
+	pavel@kernel.org,
+	gregkh@linuxfoundation.org,
+	dakr@kernel.org
+Cc: linux-pm@vger.kernel.org,
+	Kaushlendra Kumar <kaushlendra.kumar@intel.com>
+Subject: [PATCH v2] PM: Delete timer before removing wakeup source from list
+Date: Wed, 24 Sep 2025 17:07:37 +0530
+Message-Id: <20250924113738.1956768-1-kaushlendra.kumar@intel.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 5/8] mailbox: add MediaTek GPUEB IPI mailbox
-To: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>,
- Boris Brezillon <boris.brezillon@collabora.com>,
- Jassi Brar <jassisinghbrar@gmail.com>, Chia-I Wu <olvaffe@gmail.com>,
- Chen-Yu Tsai <wenst@chromium.org>, Steven Price <steven.price@arm.com>,
- Liviu Dudau <liviu.dudau@arm.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Matthias Brugger
- <matthias.bgg@gmail.com>, Kees Cook <kees@kernel.org>,
- "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- Ulf Hansson <ulf.hansson@linaro.org>
-Cc: kernel@collabora.com, dri-devel@lists.freedesktop.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
- linux-hardening@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20250923-mt8196-gpufreq-v4-0-6cd63ade73d6@collabora.com>
- <20250923-mt8196-gpufreq-v4-5-6cd63ade73d6@collabora.com>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Content-Language: en-US
-In-Reply-To: <20250923-mt8196-gpufreq-v4-5-6cd63ade73d6@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Il 23/09/25 13:39, Nicolas Frattaroli ha scritto:
-> The MT8196 SoC uses an embedded MCU to control frequencies and power of
-> the GPU. This controller is referred to as "GPUEB".
-> 
-> It communicates to the application processor, among other ways, through
-> a mailbox.
-> 
-> The mailbox exposes one interrupt, which appears to only be fired when a
-> response is received, rather than a transaction is completed. For us,
-> this means we unfortunately need to poll for txdone.
-> 
-> The mailbox also requires the EB clock to be on when touching any of the
-> mailbox registers.
-> 
-> Add a simple driver for it based on the common mailbox framework.
-> 
-> Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+Move timer_delete_sync() before list_del_rcu() in wakeup_source_remove()
+to improve the cleanup ordering and code clarity. This change ensures
+that the timer is stopped before removing the wakeup source from the
+events list, providing a more logical cleanup sequence.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+While the current ordering is functionally correct, stopping the timer
+first makes the cleanup flow more intuitive and follows the general
+pattern of disabling active components before removing data structures.
 
+Signed-off-by: Kaushlendra Kumar <kaushlendra.kumar@intel.com>
+---
+Changes in v2:
+- Reframed as cleanup/improvement rather than fix
+
+ drivers/base/power/wakeup.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
+index d1283ff1080b..ae6ec9f04b61 100644
+--- a/drivers/base/power/wakeup.c
++++ b/drivers/base/power/wakeup.c
+@@ -189,12 +189,11 @@ static void wakeup_source_remove(struct wakeup_source *ws)
+ 	if (WARN_ON(!ws))
+ 		return;
+ 
++	timer_delete_sync(&ws->timer);
+ 	raw_spin_lock_irqsave(&events_lock, flags);
+ 	list_del_rcu(&ws->entry);
+ 	raw_spin_unlock_irqrestore(&events_lock, flags);
+ 	synchronize_srcu(&wakeup_srcu);
+-
+-	timer_delete_sync(&ws->timer);
+ 	/*
+ 	 * Clear timer.function to make wakeup_source_not_registered() treat
+ 	 * this wakeup source as not registered.
+-- 
+2.34.1
 
 
