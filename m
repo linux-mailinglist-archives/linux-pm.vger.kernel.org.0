@@ -1,168 +1,101 @@
-Return-Path: <linux-pm+bounces-35278-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35279-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 392BEB99DB5
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Sep 2025 14:33:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E46AB99DE0
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Sep 2025 14:38:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 810B77B555A
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Sep 2025 12:31:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A93153B4A02
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Sep 2025 12:38:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FC552FC004;
-	Wed, 24 Sep 2025 12:32:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F4922FC038;
+	Wed, 24 Sep 2025 12:38:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ULRDCf0q"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rIjfeuAn"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 185464C6C;
-	Wed, 24 Sep 2025 12:32:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A39F1FB1
+	for <linux-pm@vger.kernel.org>; Wed, 24 Sep 2025 12:38:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758717174; cv=none; b=VK0q65GxcKbdAk+yX3i5bKKEo5QqBYHV3K4EDup8rTzI6xqWRugpLrkQ0sB6vTzvZziEJfrenntZAe38nPxGePvrhwaxNj8QzVFj6HYUqYbDwWnhcvw5upjXtvdeQ4gE3/rqWq2x0BNPjwUXUQ/60GYq7J+U1+xFpIaQBVNJFI4=
+	t=1758717495; cv=none; b=NckWKaggFZXSiHxUFush8tMSwxa5ys58h+K1C7HYYi5ubtBfZ1/tO7oMjQzfa9hvOJQT9aol/qKT86valLGq4mNaJzZpepjGhNEru7U6HwgkM3neuR9T26p8s5EsJlvEKf2HhpnOiXZGnz9kZU9HVWrZgfaRmWsTXA+Y9el/ydU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758717174; c=relaxed/simple;
-	bh=z64hXPjSDDrR9mWwhXNbJvORU06KaAiEuX3IuDczyoU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JC8gXC1pvXjGW9KmJpsh/EYKYdU9EJS9z9dOgY0onFJJt0bJ0899rK59hR2JloKE08/o/5PfKmBOt+gZcqhlqJJrxkvCILteqRRQRw+r/KRO1sFf/X7dxV73R4qi+vfGczYmVB66qWw+tXZL0MZm4+s/r8Dm5AQxQkETwgMgsfU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ULRDCf0q; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0214CC4CEE7;
-	Wed, 24 Sep 2025 12:32:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1758717173;
-	bh=z64hXPjSDDrR9mWwhXNbJvORU06KaAiEuX3IuDczyoU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ULRDCf0qblHajIl5tMOCqW2QlrTPNPQxs85zLgzDM0altTMvFrpfJiVKa3scmEJ6F
-	 rCALDgzahIaRlrKPRDQnFYEuBFYEmZIeu6WvcCI2UepX2/oBj7xUfZrTV4I8bLuMlR
-	 tV65w8AVQ1QduJfuEeknS96zdO4DY0YoNMPRa1Cg=
-Date: Wed, 24 Sep 2025 14:32:47 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>
-Cc: David Lechner <dlechner@baylibre.com>,
-	Andy Shevchenko <andriy.shevchenko@intel.com>,
-	Andy Shevchenko <andy.shevchenko@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	sboyd@kernel.org, jic23@kernel.org, nuno.sa@analog.com,
-	andy@kernel.org, arnd@arndb.de, srini@kernel.org, vkoul@kernel.org,
-	kishon@kernel.org, sre@kernel.org, krzysztof.kozlowski@linaro.org,
-	linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-	linux-pm@vger.kernel.org, kernel@collabora.com, wenst@chromium.org,
-	casey.connolly@linaro.org,
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>
-Subject: Re: [PATCH v4 2/7] nvmem: qcom-spmi-sdam: Migrate to
- devm_spmi_subdevice_alloc_and_add()
-Message-ID: <2025092451-immortal-synopsis-51fa@gregkh>
-References: <mknxgesog6aghc6cjzm63g63zqbqvysxf6ktmnbrbtafervveg@uoiohk3yclso>
- <CAHp75Vf7KrsN7Ec9zOvJoRuKvkbrJ5sMv7pVv6+88tPX-j_9ZA@mail.gmail.com>
- <er7dkmzutsu3ooegeihjzngi6l3hol5iaohecr3n5bolfse3tj@xeedlx2utwym>
- <aMxWzTxvMLsVWbDB@smile.fi.intel.com>
- <2025091925-thirsting-underuse-14ab@gregkh>
- <f16ea5eb-cbda-4788-956b-d41c2af51745@baylibre.com>
- <2025091918-glancing-uptown-7d63@gregkh>
- <8702fd35-945a-4d20-bc37-410c74c70da6@baylibre.com>
- <2025091902-dwelled-calculate-c755@gregkh>
- <x5ot622jqzz67imvswtdacqeeclqaw7my3pj6ne7tureec6ufg@fuzltifrkcae>
+	s=arc-20240116; t=1758717495; c=relaxed/simple;
+	bh=czD1suQinfy+rBLz89im1EB34LEjxwjibqErL74jV8w=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=R8XZeU+5khmrR0WPRthwtWmN/yZJ/SYZBIQ+Vm74385XYCOKaDaURvFko+DSi2g7G8oN87aTO0Wn90Ai4W/woFO8i622knLEoKWJMECO3d0PFA5L14NNBNe9LBO+up4IpSW46E0Zu5Hqtic6Pa9whp0DysCQx2bv6j6kjGMDpAE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rIjfeuAn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E873FC4CEF0
+	for <linux-pm@vger.kernel.org>; Wed, 24 Sep 2025 12:38:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1758717494;
+	bh=czD1suQinfy+rBLz89im1EB34LEjxwjibqErL74jV8w=;
+	h=From:Date:Subject:To:Cc:From;
+	b=rIjfeuAnBdJv/HPy3yIGkL35ouLhxlstO7OkjPw3v3WJPB4xem3qnvVOEA6MR6vnO
+	 g/NtliDkyYyBaSIKKO+pSpVzcbMSLCPColJmYftyKgRO9JJxEio0L2uNILTp4MI/O5
+	 gKvCTl7hiPb0gZvKmLITRQv0AL93f0luk25lJYTFs89sPubk8VFUqpJbS9/i4542VS
+	 gmXZBEsEX7z2hrvlzCL7dx+8Lj1Pt6RVohIT1AFY/7yQZhct1y7F9YLVF5YlItC5Sk
+	 ys8vcRx48EBt2ZsfRtyx2Dw4OnFOmd7F0x9ExzuasR5rC2jfbUA2kCu1OyX3+1/RKk
+	 sMiT85VZa118g==
+Received: by mail-ot1-f45.google.com with SMTP id 46e09a7af769-7859d18aa33so2061666a34.0
+        for <linux-pm@vger.kernel.org>; Wed, 24 Sep 2025 05:38:14 -0700 (PDT)
+X-Gm-Message-State: AOJu0YxIOeGoX0PjcMAXfJsOMM4Clzka5rZQ8RO5hqVlQx2RLv9WTUb/
+	IeSkYuJ3koEcGGocSW3WJ6WapXLWUDgWmhDPY5w5gkRLEppHfoxmPn62KqaRpOZm7MuRNM8sbi0
+	tfwnSmZqZpd2dRCWd9/BcZZAJ+TYtKRk=
+X-Google-Smtp-Source: AGHT+IH4oiQputRouqoqiC1vt+uvYEQ86hVX9sEqhAyohQUCr9e632INcAZEMAkbH+AlDf1Jr76nYYZAxt5YU+wztqc=
+X-Received: by 2002:a05:6830:2653:b0:757:44de:c0c6 with SMTP id
+ 46e09a7af769-79153cb9819mr3497706a34.17.1758717494282; Wed, 24 Sep 2025
+ 05:38:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <x5ot622jqzz67imvswtdacqeeclqaw7my3pj6ne7tureec6ufg@fuzltifrkcae>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 24 Sep 2025 14:38:02 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0jfvPV2cmk0=7G0LyAYvnKmYMG5fM6p_-oCYTgYTgN96Q@mail.gmail.com>
+X-Gm-Features: AS18NWD-I5Uq4FjQUnyU6MYt8XA4c9y3TTHkTdlRaQUlWgzKG7lMPMZTCK7q9Ik
+Message-ID: <CAJZ5v0jfvPV2cmk0=7G0LyAYvnKmYMG5fM6p_-oCYTgYTgN96Q@mail.gmail.com>
+Subject: [GIT PULL] Power management fix for v6.17
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Linux PM <linux-pm@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Sat, Sep 20, 2025 at 06:41:57PM +0200, Uwe Kleine-König wrote:
-> On Fri, Sep 19, 2025 at 05:37:03PM +0200, Greg KH wrote:
-> > On Fri, Sep 19, 2025 at 10:20:29AM -0500, David Lechner wrote:
-> > > Up to now, my (naive) understanding was that the point module namespaces
-> > > is to reduce the number of symbols in the global namespace because having
-> > > too many symbols there was starting to cause problems. So moving symbols
-> > > to another namespace was a "good thing".
-> > 
-> > Yes, it is a "good thing" overall, but by just making all of your
-> > symbols in a namespace, and then including it in the .h file, that does
-> > the same exact thing as before (i.e. anyone that includes that .h file
-> > puts the symbols into the global namespace with that prefix.)
-> 
-> I fail to parse the part in parenthesis. The symbols of the pwm
-> subsystem are defined in the "PWM" namespace (using `#define
-> DEFAULT_SYMBOL_NAMESPACE "PWM"` in drivers/pwm/core.c). In <linux/pwm.h>
-> there is a `MODULE_IMPORT_NS("PWM");`, so a consumer (say
-> `drivers/regulator/pwm-regulator.c`) only needs
-> 
-> 	#include <linux/pwm.h>
-> 
-> to import the "PWM" namespace. So pwm-regulator.c puts the symbols
-> into the global namespace with that prefix. What symbols? What prefix?
-> 
-> The thing that is different is that the pwm functions are in the "PWM"
-> namespace, so a module without an import for "PWM" has a smaller pool of
-> global symbols and so loading that module is a tad more effective,
-> right?
-> 
-> I agree that for the consumer source it doesn't make a difference if pwm
-> is using a namespace or not. I'd count that as an advantage of the
-> "import in a header" approach.
-> 
-> > Ideally, the goal was to be able to easily see in a module, what symbol
-> > namespaces they depend on, which requires them to put MODULE_IMPORT_NS()
-> > in the module to get access to those symbols.  dmabuf has done this very
-> > well, making it obvious to the maintainers of that subsystem that they
-> > should be paying attention to those users.
-> 
-> For me as pwm maintainer it doesn't matter much if I pay attention to
-> `MODULE_IMPORT_NS("PWM");` or `#include <linux/pwm.h>`.
+Hi Linus,
 
-I think this is the primary thing here.  It's easier for some
-maintainers and reviewers to notice the MODULE_IMPORT_NS() thing than a
-simple include line.  Especially as includes are often hidden in other
-include files.
+Please pull from the tag
 
-So sure, as a maintainer, you are free to do things this way, it's just
-not really what we thought about when namespaces were first created.  We
-assumed that an explict MODULE_INPORT_NS() was what would be used, not
-worked around :)
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ pm-6.17-rc8
 
-> > For other "tiny" subsystems, it just slots away their symbols so that no
-> > one else should ever be using them, and it makes it blindingly obvious
-> > if they do.  For example, the usb-storage symbols, anyone that does:
-> > 	MODULE_IMPORT_NS("USB_STORAGE");
-> > had better be living in drivers/usb/storage/ otherwise I need to have a
-> > word with those offenders :)
-> 
-> All symbols in the "USB_STORAGE" namespace (apart from
-> `fill_inquiry_response`) start with `usb_stor_`. If you grep for that
-> string you find all the (probably illegitimate) users of the usb-storage
-> symbols, but also those that define their own symbols with that prefix.
-> 
-> Do you actually look out for such offenders, i.e. have a lei mailbox
-> with `MODULE_IMPORT_NS("USB_STORAGE")` as search string or a cron job
-> grepping your tree for that?
+with top-most commit 8ffe28b4e8d8b18cb2f2933410322c24f039d5d6
 
-Some maintainers do just this, yes.  I think the dmabuf maintainers do
-as an example.
+ cpufreq: Initialize cpufreq-based invariance before subsys
 
-> > So it's a way of "tidying" up things, and to make things more explicit
-> > than just having to rely on searching a tree and looking for .h include
-> > usage. 
-> 
-> For some reason in your eyes grepping for MODULE_IMPORT_NS is superior
-> to grepping for an #include. Can you explain that?
+on top of commit f83ec76bf285bea5727f478a68b894f5543ca76e
 
-#include files are often included in other include files, and can easily
-be "hidden" in the chain of what is needed by what .c file.
+ Linux 6.17-rc6
 
-That's it, nothing major here, if you want to use namespaces this way,
-that's fine, just feels kind of counter-productive :)
+to receive a power management fix for 6.17.
 
-thanks,
+This fixes a locking issue in the cpufreq core introduced recently and
+caught by lockdep (Christian Loehle).
 
-greg k-h
+Thanks!
+
+
+---------------
+
+Christian Loehle (1):
+      cpufreq: Initialize cpufreq-based invariance before subsys
+
+---------------
+
+ drivers/cpufreq/cpufreq.c | 20 +++++++++++---------
+ 1 file changed, 11 insertions(+), 9 deletions(-)
 
