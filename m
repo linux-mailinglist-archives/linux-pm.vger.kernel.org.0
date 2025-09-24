@@ -1,134 +1,122 @@
-Return-Path: <linux-pm+bounces-35301-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35302-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56232B9BD1B
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Sep 2025 22:11:45 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 06B8CB9BD36
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Sep 2025 22:15:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 18C3D16D8D8
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Sep 2025 20:11:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 424A83B2953
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Sep 2025 20:15:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E032322C9F;
-	Wed, 24 Sep 2025 20:11:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Uo/qVJoc"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF81917A2EB;
+	Wed, 24 Sep 2025 20:15:42 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sender4-of-o52.zoho.com (sender4-of-o52.zoho.com [136.143.188.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68C4D322766
-	for <linux-pm@vger.kernel.org>; Wed, 24 Sep 2025 20:11:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758744700; cv=none; b=Of+O5cO3Vf6ztP9dR2AeMKu8aYvkvWHSMToruOTcTt1ikn5+PZsU2sFW6I2Ron3Vy1kvInnm7M1jjdyYC+D9Fm3mrzhzimbARspXOw23AFubwv/ypFsUOHJwruDR/0eQe8beiLaFkWMHHCLNGEYh8BPvqhkYl1J/gPBHBDVS2yA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758744700; c=relaxed/simple;
-	bh=u4LZa19/Ve+5yPLkEZkyhQLSObpFyigeCyV4BriUmY4=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ABC02727F0
+	for <linux-pm@vger.kernel.org>; Wed, 24 Sep 2025 20:15:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.52
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1758744942; cv=pass; b=ICcxHrQNeIb4xpwd9NgUOhB9kk4JZXxkQmnroQFVbYZycU54DIREFmVFi04hqtGTm0+0zokp5D6gclGZzD88ZBaOW2iZJJROVGi/vj3D2mwmNu5KkK0tiNYe38uHRm+VYofm0mbnFMsDvKcVwALB3zNWjo21Wf0jMIelEOKY24c=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1758744942; c=relaxed/simple;
+	bh=T673ykrFqtlACcdavGcdmbULKH6UMXsgZABpuBN2Mvg=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Hcx02whnQlvw9QawFUa03rZ51CTBiEqwLT3A17xO0ItYxjRGNwHKYixUCL5I39Pcpy0eBVpEBGfHgvvojogRS9lE87BrZhG4PZ3b/QEN0Ug9FcS0pncb911DoVNhPyR4EFbWU1RFjC+l6D2Sq6E9pGfZgMBwtoFUDFNPeBVGGw8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Uo/qVJoc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17EF9C113CF
-	for <linux-pm@vger.kernel.org>; Wed, 24 Sep 2025 20:11:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758744700;
-	bh=u4LZa19/Ve+5yPLkEZkyhQLSObpFyigeCyV4BriUmY4=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Uo/qVJocqtCEIJX8yfVvvHQrJMtcWFs4rfO9IU1Q/3ie+D9Q7wRG+poJl2LpCqwfW
-	 h3EtrZhsyoEpu1DUPmXWnwIj3WP2rzrqgNyfXp6LcUQNoxBf0j/EMBfkr35Ax6k9Sv
-	 GK4a499TDYbPCubA4U8LLLB9tbGsrcbjD0OaPC6aoL6Z6kO2M6z9fYfLv46Kyi0+vU
-	 +Nh0dADyZpj35HkOqpYIyt9l+KcXB78aNiilrqycIpweq8orikRnW00KDWGiNy+Kpf
-	 RAuUOEEgcQEL2nGeXOXPBk5XBcQWlKGJBUqHqpQOXjNCNmkFz7P+XwsGkrh0qgzRPE
-	 0mmhv2fNwqPIw==
-Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-79f79e37c04so180060a34.3
-        for <linux-pm@vger.kernel.org>; Wed, 24 Sep 2025 13:11:40 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUzleqnhLGAYsCWdHsFFy6qyF/YJ0Gc3O/QHARPEK0rzaxWVfhGhga5IsS56unjsY1yhMLP6Eh/AQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyyo9jZ0iwC/c3th2X/WiH4BreokFj76FJ9QURzEhHUNEGA1u9g
-	XeGJbEFEtZJhXt60Xr8Y8++U2DOj4d3hMUpBrx4MQeVXNMqWJuiFsY9hv9BBVMbequrJ2ZbhNup
-	pabZgzQo7jLDWxyCDMflsscFInKIMR+0=
-X-Google-Smtp-Source: AGHT+IHs3r5sWOfElWCg0bb17Zy9vhCe4i/yU+cgR6l8lEqR/wK2BYKZTzP+UxdCs+F1wz7yyCOBT39XKNw+TB8oNCs=
-X-Received: by 2002:a05:6830:6a8d:b0:73f:f3a2:212b with SMTP id
- 46e09a7af769-7a03d122d2emr693287a34.5.1758744699405; Wed, 24 Sep 2025
- 13:11:39 -0700 (PDT)
+	 To:Cc:Content-Type; b=SpQ+lToOyoCzXsEEAPbhoBiC6zzmQfrUeQSdEzwLUr8IaaQSD8+ELXmywE++rVV8abYd8N+d5rP+wCWhQKda33xpqwudO2O3qxRRzVS8Nza4fgrxz7N6hifAh+r0N+lWZJX3QuOURaef/h0rzaPJVEokxloi8weaYLgj3/hrVcc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=euphon.net; spf=pass smtp.mailfrom=euphon.net; arc=pass smtp.client-ip=136.143.188.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=euphon.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=euphon.net
+ARC-Seal: i=1; a=rsa-sha256; t=1758744872; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=Ll96S+VDavC9To1qvEFjJGXDCrG6yT5LD8ZUPrsPNMvVnRtT9h7xg29xNUuC1Oy0Lfj2CFyM0n8OqifpADBrR86exqrGJMaHy+qxVCDEaZRB4mKf0J1takf2enxqWVV0jTeB8rFKATLqHBdb/gpDnKapIbpxFK7KCYiI4+VYw14=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1758744872; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:Reply-To:Reply-To:References:Subject:Subject:To:To:Message-Id; 
+	bh=T673ykrFqtlACcdavGcdmbULKH6UMXsgZABpuBN2Mvg=; 
+	b=SIBsd3yScUM1NnS/dDZzFeueef43ac4L7Pzr7taUR/1tOVuDgdX5D6mj309lMGyEdRYGt6tuGGlmGRzSD6g0aDvvBrC+mtgcDiAIdTmelW10X6fSuxuG6eaNuqrctscEnsvpDdWpZsZsa87xLISzEUawtfUCYe3LQJuM13WKdzo=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	spf=pass  smtp.mailfrom=fam@euphon.net;
+	dmarc=pass header.from=<fam@euphon.net>
+Received: by mx.zohomail.com with SMTPS id 1758744869625407.251393709687;
+	Wed, 24 Sep 2025 13:14:29 -0700 (PDT)
+Received: by mail-il1-f177.google.com with SMTP id e9e14a558f8ab-42576a07eeeso1704725ab.0
+        for <linux-pm@vger.kernel.org>; Wed, 24 Sep 2025 13:14:29 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWtmemR0+e0CYSKot0V0KaL+Li3fiXqSqAl9JRqv5FpulElxeFOTzCGnzsfOeGt6JhuhMIJj9UfXw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzMYH4rR37VqbqXS1rdVcVM7Lq3mu+TJncrRHPECafF/pJUStE6
+	POOBu9Wca7NoluxCUulrvOjlDrYzwhy1H5IUkqF/wLuLWLm3mCBXRHwyBrD8AbP6TVR5DQ4KWf8
+	fc3VywHgFHOXFcdu8oz1Fou5yuKdlL+Y=
+X-Google-Smtp-Source: AGHT+IGwHd7d456a9ObtyVhxI7FejIciTmuJiBEpGQjq4YyQsi/0fJ44ZxfgkvgUYnUi+SZBGdYY9ynxMMzTrX70vN8=
+X-Received: by 2002:a05:6e02:491c:b0:424:a3e:d79 with SMTP id
+ e9e14a558f8ab-4259562f4c4mr15800365ab.21.1758744869089; Wed, 24 Sep 2025
+ 13:14:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250923205631.3056590-1-srinivas.pandruvada@linux.intel.com> <CAJZ5v0h4ozxCLE1utLLb=iehJq2m6wkAegP08AdhwucNpe0KvQ@mail.gmail.com>
-In-Reply-To: <CAJZ5v0h4ozxCLE1utLLb=iehJq2m6wkAegP08AdhwucNpe0KvQ@mail.gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 24 Sep 2025 22:11:28 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0jZKfj=MSfFDjk3gnL0rUT08-ixev-y5p9KvwDCpGx3+g@mail.gmail.com>
-X-Gm-Features: AS18NWBI33QzkMjV5qdKdxvdWLow-FRVr81j5KWc3DPRBO3hiRLy37UQNl0UTPE
-Message-ID: <CAJZ5v0jZKfj=MSfFDjk3gnL0rUT08-ixev-y5p9KvwDCpGx3+g@mail.gmail.com>
-Subject: Re: [PATCH] thermal: intel: int340x: Power Slider: Validate
- slider_balance range
-To: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc: daniel.lezcano@linaro.org, lukasz.luba@arm.com, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
+References: <20250923153146.365015-1-fam.zheng@bytedance.com>
+ <40419dea-666e-4a8d-97a7-fa571d7122f4@intel.com> <CAG+v+KZ4bRgVNiMDhNTeiOqqbEXCBD72K5SQZCo=m0xaQ2vauQ@mail.gmail.com>
+ <5490118a-7185-44fe-b816-b01c8ff75979@intel.com> <CABgc4wRgpYNARf+7MhsadfXjDJ0Vd01OoqnVdrW3m6dXMzQSaQ@mail.gmail.com>
+In-Reply-To: <CABgc4wRgpYNARf+7MhsadfXjDJ0Vd01OoqnVdrW3m6dXMzQSaQ@mail.gmail.com>
+Reply-To: fam@euphon.net
+From: Fam Zheng <fam@euphon.net>
+Date: Wed, 24 Sep 2025 21:13:53 +0100
+X-Gmail-Original-Message-ID: <CABgc4wSRMW1UdtqGDEfnD4UTuLGqi3nVHZsJB_hUouAhLvidyQ@mail.gmail.com>
+X-Gm-Features: AS18NWDCDybEd16y0n2a9f0a9iPoDTGd0DoIeZlkTqjZQEcTK9sxEtkJQkucQeo
+Message-ID: <CABgc4wSRMW1UdtqGDEfnD4UTuLGqi3nVHZsJB_hUouAhLvidyQ@mail.gmail.com>
+Subject: Re: [External] Re: [RFC 0/5] parker: PARtitioned KERnel
+To: Dave Hansen <dave.hansen@intel.com>
+Cc: Fam Zheng <fam.zheng@bytedance.com>, linux-kernel@vger.kernel.org, 
+	Lukasz Luba <lukasz.luba@arm.com>, linyongting@bytedance.com, songmuchun@bytedance.com, 
+	satish.kumar@bytedance.com, Borislav Petkov <bp@alien8.de>, 
+	Thomas Gleixner <tglx@linutronix.de>, yuanzhu@bytedance.com, Ingo Molnar <mingo@redhat.com>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
+	"H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org, liangma@bytedance.com, 
+	Dave Hansen <dave.hansen@linux.intel.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	guojinhui.liam@bytedance.com, linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+X-ZohoMailClient: External
 
-On Wed, Sep 24, 2025 at 10:00=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.o=
-rg> wrote:
+On Wed, Sep 24, 2025 at 9:05=E2=80=AFPM Fam Zheng <fam@euphon.net> wrote:
 >
-> On Tue, Sep 23, 2025 at 10:56=E2=80=AFPM Srinivas Pandruvada
-> <srinivas.pandruvada@linux.intel.com> wrote:
-> >
-> > When the module parameter slider_balance is set to the performance
-> > slider value of 0, the SoC slider profile switches to performance mode.
-> > This can cause the Linux power-profiles-daemon to change the system
-> > power mode to performance from balanced mode. This happens when there
-> > is only one platform profile is registered as there will be no conflict
-> > with other platform profiles.
-> >
-> > Same issue occurs when the slider_balance is set to the power-saver
-> > slider value.
-> >
-> > Prevent module parameter slider_balance from overlapping with
-> > performance and power-saver slider values by adding range validation.
-> > Return an error when an invalid value is provided.
-> >
-> > Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com=
 >
-> > ---
-> > Rebased on top of bleeding-edge branch of linux-pm
-> >
-> >  .../intel/int340x_thermal/processor_thermal_soc_slider.c       | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_so=
-c_slider.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_soc_sl=
-ider.c
-> > index 20d70cb01542..49ff3bae7271 100644
-> > --- a/drivers/thermal/intel/int340x_thermal/processor_thermal_soc_slide=
-r.c
-> > +++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_soc_slide=
-r.c
-> > @@ -67,7 +67,8 @@ static int slider_def_balance_set(const char *arg, co=
-nst struct kernel_param *kp
-> >
-> >         ret =3D kstrtou8(arg, 16, &slider_val);
-> >         if (!ret) {
-> > -               if (slider_val > SOC_SLIDER_VALUE_MAXIMUM)
-> > +               if (slider_val <=3D slider_values[SOC_POWER_SLIDER_PERF=
-ORMANCE] ||
-> > +                   slider_val >=3D slider_values[SOC_POWER_SLIDER_POWE=
-RSAVE])
-> >                         return -EINVAL;
-> >
-> >                 slider_balanced_param =3D slider_val;
-> > --
 >
-> Applied, thanks!
+> On Wed, Sep 24, 2025 at 7:32=E2=80=AFPM Dave Hansen <dave.hansen@intel.co=
+m> wrote:
+>>
+>> On 9/24/25 09:21, Fam Zheng wrote:
+>> ...
+>> > The model and motivation here is not to split the domain and give
+>> > different shares to different sysadmins, it's intended for one kernel
+>> > to partition itself. I agree we shouldn't have different kernels here:
+>> > one old, one new, one Linux, one Windows... All partitions should run
+>> > a verified parker-aware kernel. Actually, it may be a good idea to
+>> > force the same buildid in kexec between the boot kernel and secondary
+>> > ones.
+>> Uhhh.... From the cover letter:
+>>
+>> > Another possible use case is for different kernel instances to have
+>> > different performance tunings, CONFIG_ options, FDO/PGO according to
+>> > the workload.
+>>
+>> Wouldn't the buildid change with CONIFG_ options and FDO/PGO?
+>>
 >
-> I'm wondering though what happens if slider_balance is set to
-> SOC_SLIDER_VALUE_BALANCE and there is no other platform profile
-> driver. Will it cause the demon to switch over to the "balanced"
-> profile?
+>
+Discussing goals and non-goals is what we were looking for for this
+RFC, and these were just stretchy ideas that we can decide not to go
+for.
 
-Never mind, slider_balance is only used when the profile is "balanced".
+Thanks for looking at this!
+
+Forgot to turn off email html mode in my previous message..
+
+
+(outside working hours now so replying from personal email)
+Thanks,
+Fam
 
