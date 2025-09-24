@@ -1,281 +1,202 @@
-Return-Path: <linux-pm+bounces-35288-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35289-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2970DB9B0A7
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Sep 2025 19:23:04 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C2BF4B9B127
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Sep 2025 19:33:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D2B323AC852
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Sep 2025 17:23:02 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 83B907B6827
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Sep 2025 17:31:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA3A631329C;
-	Wed, 24 Sep 2025 17:22:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86D233168E3;
+	Wed, 24 Sep 2025 17:32:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BVAWPHOD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pD0747gy"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B50821E0DD9
-	for <linux-pm@vger.kernel.org>; Wed, 24 Sep 2025 17:22:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 618F83148C4
+	for <linux-pm@vger.kernel.org>; Wed, 24 Sep 2025 17:32:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758734579; cv=none; b=kp+b/HGgny0+WDL3CWAZmwkQvrAgyA5snvl0YT0KMRkLB6XRJMHLywIaqKbj4foIWzu1h/o4lnLCVWRV3ohHKKwaC6PgSmmNwaH6q36SqVS41LihGSIltaSUyLrW2IwZkX3yD2JPb/qqxTknBb8vX/AaUrFGCGmArn8IGYM2ujI=
+	t=1758735169; cv=none; b=hR9Siw8qhODNbFinwPw3mKQfQiTsmrZMnOC0iESzedtgT6GRfNOl7oHgF7Eh9raFRlS7eOD4eRtCoAtTTSW2DmD+YVrV839iVGnLFHkAUMpG7Ud6eYA2fsfitXPvQ2Ie36r0JMbsSWqtG0YRAcVj7JBlg8OHm+B71M3qSZv0gPs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758734579; c=relaxed/simple;
-	bh=sXJibV3RmNGOhqObd8QqcATRLnEMoRYEVOmX31QC4Sc=;
+	s=arc-20240116; t=1758735169; c=relaxed/simple;
+	bh=N57ylfp0cpGyGC49q2K6R3Kxlwmiy1WFW/d/WeBrIHM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CsUmY2G3mXTaGjLu5mPbUZY9CNAAsXD6dGYggmmh0Mg4WmJC3YwqVOMwlFgHu3oILmJieNvboe0wz2ql+7EUnqZ9Phxnefv8WYlgLjwcNmQ681zOtp5wSUpdpvu7hg8o6w/ZTZGXIfSwzJ4lWPLUoujpiyA7Dj66g/tQk0XF8vI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BVAWPHOD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67D7CC113CF
-	for <linux-pm@vger.kernel.org>; Wed, 24 Sep 2025 17:22:59 +0000 (UTC)
+	 To:Cc:Content-Type; b=ipoJj+/7Q6fY8o6sE84vyvLYwVZk5hgeve7G4UKdGUeLKgt5wWvyIQyRE7hc6GW0QviS/ouxOouKwtkVaL7ecWSqyYCIsOl+gLa/apk6PjietOAagq7xHmEPeiLZgnr1TSI8xDaBmGg1TLrt48lTsz2Av+O/wPG4/edYm4fOtas=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pD0747gy; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AD9AC4CEF4
+	for <linux-pm@vger.kernel.org>; Wed, 24 Sep 2025 17:32:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758734579;
-	bh=sXJibV3RmNGOhqObd8QqcATRLnEMoRYEVOmX31QC4Sc=;
+	s=k20201202; t=1758735169;
+	bh=N57ylfp0cpGyGC49q2K6R3Kxlwmiy1WFW/d/WeBrIHM=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=BVAWPHODi1axhiE4Mo3YbB9AGxpOV/QnaWXMhDzDtea9XudNXnI/7mQsmhLi6UvH3
-	 7Q1+qvYLRJr3mducAsm7CmPa5OueboXr+a/K3WFXqlkUaDAGGhiT1tfl/OAKCraKdP
-	 scEjtE1CtePBstbEYtiKxBNBbCTuHk1AtcpvBGjmaOIRLgdGrjaER+/aQR7FWP44BX
-	 fUuhWj7AMY0iQ1k17SnV+gtvr7fNcT91g2lXyc5SlmkzCvXa+EZNwYnJKbm5vBuJtm
-	 3o4n9yEA1ceMDWCqsqUpDGW+QDufBGsPwCgi97ds5nUZ755qga4NlaiIIFy4NIK4kc
-	 HLuVZuG5qZp/g==
-Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-746d3b0f7e5so40282a34.2
-        for <linux-pm@vger.kernel.org>; Wed, 24 Sep 2025 10:22:59 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCV3jzeyednQTyw+dn+fwTJLGON9Uwm0wvKTiIKPfc9cjOtEqolEph2Jx3qnlDuv+WsuqRUsK/f6CA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxJ94TNpR0A0Wxi5L8tiUMtlUgzZky9cps//E3Htgp1s+8dPXaE
-	vEG+zkf6Ic4/huST4mbxRxFjTkpm5tU4JlqqR4v/k+fb2fpLZyc6ahHmeFL97E2FhgDtX4M1H9o
-	EYsK656T/vGJ5YUlrFWPqyG/YxALy/tA=
-X-Google-Smtp-Source: AGHT+IFsMJ1GbtbudIup8+r+It8AAZGhqVNeJM6Wnrm04PoSZJSQFSxD8VXScqwc6mYrXE6DFbLEz1uXw0MdJn8pzrI=
-X-Received: by 2002:a05:6830:25c4:b0:79f:19f:805 with SMTP id
- 46e09a7af769-7a03b18de32mr333521a34.7.1758734578673; Wed, 24 Sep 2025
- 10:22:58 -0700 (PDT)
+	b=pD0747gyk4r+iXPyMkwQUmhGKhmVnnN8amRjx8NmUngSwVdPtxYTq4UR1oE1xejJB
+	 9fDeQTVNjMj0qWZE+IosynfP0zN/o4vELw1RRsFMlU0706IsYwXccPH9Zla/0w+naY
+	 rZHT6o7O7gtr6YpEeW1JT+mwBM2rFmJLQg3iu2x+sd3W23rjl2+4JoLTka1N9OQmqz
+	 HJoQRWydhr++xjuFIXuCSfj7fy/RlVNEEyRfygFOEQZ5QIaw8VGw8SQ8war++3CI5O
+	 7E4R1FE6YMX6Xlv9VrUw1JsyaTEp2PuW4P8aX1PzciK0H+O4QLk2UrjkEUf/sQaA1a
+	 tAIC1nEE6iWYQ==
+Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-793ef18e8a3so27609a34.0
+        for <linux-pm@vger.kernel.org>; Wed, 24 Sep 2025 10:32:49 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWDu9MrJ8ASWkKJoytBD8KeWSmtND9BInw0wbmLbe/NJVeq0W5dcWBaz9qXynBHuG3ylrZVOE3i3w==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxdYs/CeV5Sr4jvcKSCvJNuE2hE0fdk8z0Hse8RtXWhcWjUkmYv
+	wFWCVhiRBeuxpu+DNDbh8nSYPSjjmTijp63hOAAcpvG3FgSeR0BiwhBlNeCiRq1Q3WVWkOV+b9/
+	TQBUpAouaZcgEaarCjGIFx6b3JaVqAeY=
+X-Google-Smtp-Source: AGHT+IE17tQHof0YwlFF6INr0qw1UwcmFFp6Nfi25etvxnlaAvXosYHhSYdyymFTj7vcL9okMKZfw4eLABQxoAQjUzY=
+X-Received: by 2002:a05:6830:2c0e:b0:753:7a09:78d5 with SMTP id
+ 46e09a7af769-7a074c216a9mr271125a34.8.1758735168429; Wed, 24 Sep 2025
+ 10:32:48 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAJZ5v0htRTTj1QEEmhxBDxYA8oXkg_KP5YrfwyngELDY+Ns1EQ@mail.gmail.com>
- <20250924141047.1477743-1-luogf2025@163.com>
-In-Reply-To: <20250924141047.1477743-1-luogf2025@163.com>
+References: <20250829003319.2785282-1-briannorris@chromium.org>
+ <CAJZ5v0gGKsR0bVayyTXy1W9FLwVfG1S+gseH7jPKtggzZFNpfA@mail.gmail.com>
+ <aMHjOJGaKi9cwbsn@google.com> <CAJZ5v0iELLPYBS6FKmX=DhoyQ2tDq9F9DAzuV0A8etv0dGeJvQ@mail.gmail.com>
+ <aNMWa0SD5l4Cb6G_@google.com>
+In-Reply-To: <aNMWa0SD5l4Cb6G_@google.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 24 Sep 2025 19:22:47 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0iVPCtPjyyNeNM2uuJYZbMwJQxYEXA7=50dtB+q=6rQ6Q@mail.gmail.com>
-X-Gm-Features: AS18NWDwD2U5p9nKVv3jyqUp9kOCnH64Z1J9L4w236z92ASoL7kdw9C3Qa91Q5M
-Message-ID: <CAJZ5v0iVPCtPjyyNeNM2uuJYZbMwJQxYEXA7=50dtB+q=6rQ6Q@mail.gmail.com>
-Subject: Re: [PATCH v6] ACPI: battery: prevent sysfs_add_battery re-entry on
- rapid events
-To: GuangFei Luo <luogf2025@163.com>
-Cc: rafael@kernel.org, dan.carpenter@linaro.org, linux-acpi@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Date: Wed, 24 Sep 2025 19:32:37 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0jnPsVrULF9+S-e+HvT+bik=+WA7FfXzFg5vfO8WhTy9Q@mail.gmail.com>
+X-Gm-Features: AS18NWAizqE9xg3DJDB8kO1MsPcsbi2ZudRba1wG5FHzgNJxsPJfsrvHWUpou40
+Message-ID: <CAJZ5v0jnPsVrULF9+S-e+HvT+bik=+WA7FfXzFg5vfO8WhTy9Q@mail.gmail.com>
+Subject: Re: [PATCH 1/3] PM: runtime: Add basic kunit tests for API contracts
+To: Brian Norris <briannorris@chromium.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>, 
+	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>, kunit-dev@googlegroups.com, 
+	Len Brown <lenb@kernel.org>, Sakari Ailus <sakari.ailus@linux.intel.com>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 24, 2025 at 4:11=E2=80=AFPM GuangFei Luo <luogf2025@163.com> wr=
-ote:
->
-> > On Wed, Sep 24, 2025 at 12:38=E2=80=AFAM GuangFei Luo <luogf2025@163.co=
-m> wrote:
-> > >
-> > > > On Tuesday, September 23, 2025 7:12:03 PM CEST Rafael J. Wysocki wr=
-ote:
-> > > > > On Tue, Sep 23, 2025 at 6:14=E2=80=AFPM GuangFei Luo <luogf2025@1=
-63.com> wrote:
-> > > > > >
-> > > > > > The functions battery_hook_add_battery(), battery_hook_remove_b=
-attery(),
-> > > > > > and sysfs_remove_battery() already acquire locks, so their inte=
-rnal
-> > > > > > accesses are safe.
-> > > > >
-> > > > > In fact, there are two locks in use, battery->sysfs_lock and
-> > > > > hook_mutex.  The latter is used for managing hooks and the former=
- is
-> > > > > only used by sysfs_remove_battery(), so it only prevents that fun=
-ction
-> > > > > from racing with another instance of itself.
-> > > > >
-> > > > > I would suggest using battery->sysfs_lock for protecting battery-=
->bat
-> > > > > in general.
-> > > > >
-> > > > > > acpi_battery_refresh() does check battery->bat, but its child
-> > > > > > functions (sysfs_add_battery() and sysfs_remove_battery()) alre=
-ady
-> > > > > > handle locking.
-> > > > >
-> > > > > What locking?  Before the $subject patch, sysfs_add_battery() doe=
-sn't
-> > > > > do any locking at all AFAICS.
-> > > > >
-> > > > > > In acpi_battery_notify(), battery->bat has no lock. However, th=
-e
-> > > > > > check of battery->bat is at the very end of the function. Durin=
-g
-> > > > > > earlier calls, battery->bat has already been protected by locks=
-, so
-> > > > > > re-entry will not cause issues.
-> > > > >
-> > > > > All of the battery->bat checks and the code depending on them nee=
-d to
-> > > > > go under the same lock.  I'd use battery->sysfs_lock for this as
-> > > > > already mentioned above.
-> > > >
-> > > > So my (untested) version of this fix is appended.
-> > > >
-> > > > Note that it explicitly prevents acpi_battery_notify() from racing =
-with
-> > > > addition/removal, PM notifications, and resume.
-> > > >
-> > > > ---
-> > > >  drivers/acpi/battery.c |   36 +++++++++++++++++++++++-------------
-> > > >  1 file changed, 23 insertions(+), 13 deletions(-)
-> > > >
-> > > > --- a/drivers/acpi/battery.c
-> > > > +++ b/drivers/acpi/battery.c
-> > > > @@ -92,7 +92,7 @@ enum {
-> > > >
-> > > >  struct acpi_battery {
-> > > >       struct mutex lock;
-> > > > -     struct mutex sysfs_lock;
-> > > > +     struct mutex update_lock;
-> > > >       struct power_supply *bat;
-> > > >       struct power_supply_desc bat_desc;
-> > > >       struct acpi_device *device;
-> > > > @@ -904,15 +904,12 @@ static int sysfs_add_battery(struct acpi
-> > > >
-> > > >  static void sysfs_remove_battery(struct acpi_battery *battery)
-> > > >  {
-> > > > -     mutex_lock(&battery->sysfs_lock);
-> > > > -     if (!battery->bat) {
-> > > > -             mutex_unlock(&battery->sysfs_lock);
-> > > > +     if (!battery->bat)
-> > > >               return;
-> > > > -     }
-> > > > +
-> > > >       battery_hook_remove_battery(battery);
-> > > >       power_supply_unregister(battery->bat);
-> > > >       battery->bat =3D NULL;
-> > > > -     mutex_unlock(&battery->sysfs_lock);
-> > > >  }
-> > > >
-> > > >  static void find_battery(const struct dmi_header *dm, void *privat=
-e)
-> > > > @@ -1072,6 +1069,9 @@ static void acpi_battery_notify(acpi_han
-> > > >
-> > > >       if (!battery)
-> > > >               return;
-> > > > +
-> > > > +     guard(mutex)(&battery->update_lock);
-> > > > +
-> > > >       old =3D battery->bat;
-> > > >       /*
-> > > >        * On Acer Aspire V5-573G notifications are sometimes trigger=
-ed too
-> > > > @@ -1094,21 +1094,22 @@ static void acpi_battery_notify(acpi_han
-> > > >  }
-> > > >
-> > > >  static int battery_notify(struct notifier_block *nb,
-> > > > -                            unsigned long mode, void *_unused)
-> > > > +                       unsigned long mode, void *_unused)
-> > > >  {
-> > > >       struct acpi_battery *battery =3D container_of(nb, struct acpi=
-_battery,
-> > > >                                                   pm_nb);
-> > > > -     int result;
-> > > >
-> > > > -     switch (mode) {
-> > > > -     case PM_POST_HIBERNATION:
-> > > > -     case PM_POST_SUSPEND:
-> > > > +     if (mode =3D=3D PM_POST_SUSPEND || mode =3D=3D PM_POST_HIBERN=
-ATION) {
-> > > > +             guard(mutex)(&battery->update_lock);
-> > > > +
-> > > >               if (!acpi_battery_present(battery))
-> > > >                       return 0;
-> > > >
-> > > >               if (battery->bat) {
-> > > >                       acpi_battery_refresh(battery);
-> > > >               } else {
-> > > > +                     int result;
-> > > > +
-> > > >                       result =3D acpi_battery_get_info(battery);
-> > > >                       if (result)
-> > > >                               return result;
-> > > > @@ -1120,7 +1121,6 @@ static int battery_notify(struct notifie
-> > > >
-> > > >               acpi_battery_init_alarm(battery);
-> > > >               acpi_battery_get_state(battery);
-> > > > -             break;
-> > > >       }
-> > > >
-> > > >       return 0;
-> > > > @@ -1198,6 +1198,8 @@ static int acpi_battery_update_retry(str
-> > > >  {
-> > > >       int retry, ret;
-> > > >
-> > > > +     guard(mutex)(&battery->update_lock);
-> > > > +
-> > > >       for (retry =3D 5; retry; retry--) {
-> > > >               ret =3D acpi_battery_update(battery, false);
-> > > >               if (!ret)
-> > > > @@ -1230,7 +1232,7 @@ static int acpi_battery_add(struct acpi_
-> > > >       if (result)
-> > > >               return result;
-> > > >
-> > > > -     result =3D devm_mutex_init(&device->dev, &battery->sysfs_lock=
-);
-> > > > +     result =3D devm_mutex_init(&device->dev, &battery->update_loc=
-k);
-> > > >       if (result)
-> > > >               return result;
-> > > >
-> > > > @@ -1262,6 +1264,8 @@ fail_pm:
-> > > >       device_init_wakeup(&device->dev, 0);
-> > > >       unregister_pm_notifier(&battery->pm_nb);
-> > > >  fail:
-> > > > +     guard(mutex)(&battery->update_lock);
-> > > > +
-> > > >       sysfs_remove_battery(battery);
-> > > >
-> > > >       return result;
-> > > > @@ -1281,6 +1285,9 @@ static void acpi_battery_remove(struct a
-> > > >
-> > > >       device_init_wakeup(&device->dev, 0);
-> > > >       unregister_pm_notifier(&battery->pm_nb);
-> > > > +
-> > > > +     guard(mutex)(&battery->update_lock);
-> > > > +
-> > > >       sysfs_remove_battery(battery);
-> > > >  }
-> > > >
-> > > > @@ -1297,6 +1304,9 @@ static int acpi_battery_resume(struct de
-> > > >               return -EINVAL;
-> > > >
-> > > >       battery->update_time =3D 0;
-> > > > +
-> > > > +     guard(mutex)(&battery->update_lock);
-> > > > +
-> > > >       acpi_battery_update(battery, true);
-> > > >       return 0;
-> > > >  }
-> > >
-> > > Thanks for the detailed explanation and the updated version of the fi=
-x.
-> > >
-> > > I will test your suggested changes on my platform.
-> > > After verification, I will send a v7 based on your suggestion.
-> >
-> > Please just verify and I'll add a changelog and subject to the patch
-> > and submit it.
-> >
-> > Thanks!
->
-> I have tested your updated patch on my laptop with battery hot-plug scena=
-rios.
-> Everything looks normal and I did not observe any issues.
+Hi Brian,
 
-Thanks for the confirmation!
+On Tue, Sep 23, 2025 at 11:51=E2=80=AFPM Brian Norris <briannorris@chromium=
+.org> wrote:
+>
+> Hi Rafael,
+>
+> On Fri, Sep 19, 2025 at 06:58:50PM +0200, Rafael J. Wysocki wrote:
+> > On Wed, Sep 10, 2025 at 10:44=E2=80=AFPM Brian Norris <briannorris@chro=
+mium.org> wrote:
+> > > On Fri, Sep 05, 2025 at 07:37:38PM +0200, Rafael J. Wysocki wrote:
+> > > > On Fri, Aug 29, 2025 at 2:33=E2=80=AFAM Brian Norris <briannorris@c=
+hromium.org> wrote:
+> > > > > +       /* Flush, in case the above (non-sync) triggered any work=
+. */
+> > > > > +       KUNIT_EXPECT_EQ(test, 0, pm_runtime_barrier(dev)); /* no =
+wakeup needed */
+> > > >
+> > > > Why do you run pm_runtime_barrier(dev) here?  It is guaranteed that=
+ no
+> > > > requests are pending at this point.
+> > >
+> ...
+> > > So IMO, it's a reasonable thing to run in this test, although I proba=
+bly
+> > > should drop the "Flush" comment.
+> >
+> > Yeah, changing the comment would help.
+>
+> Will do.
+>
+> > > > > +
+> > > > > +       KUNIT_EXPECT_TRUE(test, pm_runtime_suspended(dev));
+> > > >
+> > > > This has already been tested above.
+> ...
+> > > Anyway, like I said, it's probably some matter of opinion/style. I ca=
+n
+> > > drop some of these checks if you still think they have no place here.
+> >
+> > I would do just two of them, one at the beginning and one at the end.
+> > It should be an invariant for everything in between.
+>
+> Ack.
+>
+> > > > > +       /*
+> > > > > +        * We never actually left RPM_SUSPENDED, but rpm_idle() s=
+till treats
+> > > > > +        * this as -EAGAIN / "runtime PM status change ongoing".
+> > > >
+> > > > No, this means "Conditions are not suitable, but may change".
+> > >
+> > > I'm just quoting the API docs for put():
+> > >
+> > > """
+> > > * * -EAGAIN: Runtime PM usage_count non-zero or Runtime PM status cha=
+nge ongoing.
+> > > """
+> > >
+> > > If that's the wrong language, then we should update the API doc. At a=
+ny
+> > > rate, I'm not sure what's "unsuitable" about a suspended device when =
+we
+> > > call put(). It's not unsuitable -- it's already in the target state!
+> > >
+> > > Notably, I'm also changing this behavior in patch 2, since I think it=
+'s
+> > > an API bug. And the comment then goes away.
+> >
+> > Yeah, so I'd prefer to change this particular thing entirely,
+> > especially in the face of
+> >
+> > https://lore.kernel.org/linux-pm/5049058.31r3eYUQgx@rafael.j.wysocki/
+> >
+> > which quite obviously doesn't take the return value of
+> > pm_runtime_put() and pm_runtime_put_sutosuspend() into account.
+> >
+> > I would like these two functions to be void.
+>
+> Sure, I think inspecting put() return codes is generally a bad idea.
+> 'void' would be cool with me, although maybe a bit impractical now,
+> considering how many users look at the current return code.
+
+For pm_runtime_put() it's not that bad.  I have ~20 patches changing
+all of the code looking at its return value to stop doing that.
+
+Interestingly enough, there's only one piece of that code (USB core)
+doing anything remotely useful with that return value.  Everything
+else is just garbage IMV.
+
+> So at a minimum, I'd separate "make 'em void" from my "document and test =
+the
+> API" work.
+
+But you can just skip them.
+
+> Really, I'm mostly looking at this area because I have to support driver
+> developers trying to learn how to use the runtime PM API, and they
+> wonder about the return codes. So if they exist, I'd at least like them
+> to make sense.
+
+Sure.
+
+That said, as far as pm_runtime_put() and pm_runtime_put_autosuspend()
+are concerned, you may as well just say "discard their return values,
+you don't want to have to deal with them, and never ever pass them
+verbatim to the callers of your code".
+
+> Anyway, for the particulars of this test: I can try to adapt the comment
+> language a bit. But are you suggesting I shouldn't even try patch 2,
+> which fixes the pm_runtime_put() return codes?
+
+Not really.
+
+> > Of course, there are existing users that check their return values,
+> > but I'm not sure how much of a real advantage from doing that is.
+
+Well, see above. :-)
+
+>  At least some of those users appear to not exactly know what they are
+> doing.
+
+Almost none of them do nonsense.
 
