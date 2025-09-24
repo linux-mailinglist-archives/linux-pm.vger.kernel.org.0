@@ -1,113 +1,251 @@
-Return-Path: <linux-pm+bounces-35281-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35282-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CFC2BB9A2A6
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Sep 2025 16:07:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 517FDB9A2D0
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Sep 2025 16:11:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3473632372F
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Sep 2025 14:07:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4BFF3323584
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Sep 2025 14:11:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4258F3019B8;
-	Wed, 24 Sep 2025 14:07:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FEFF3054F5;
+	Wed, 24 Sep 2025 14:11:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="XWsIeH5m"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 955CA2FBE08
-	for <linux-pm@vger.kernel.org>; Wed, 24 Sep 2025 14:07:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35D783054EB;
+	Wed, 24 Sep 2025 14:11:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758722838; cv=none; b=cDA3QC2XO11wVCg7OmrTDckUAvebRONyD3xRD7PGa1h4JdROy9yWuAiaQHOrl+iL6OcySzWXlFUClzGCEhmxAi54sxxPrUC1J1YmqhCThS0wjKGtZFmu7FzGRFN+xlp7ITBtMFg/JGgTZhto7LArnd/EvwUq4jZO5rhwcxqhOio=
+	t=1758723083; cv=none; b=M6LOz5bxJGBfX57dblzXNWXH7XdyIG+eBl8P0PrxGupjxUB62Wh/l8F2UyhaOlEgzITdXocvBojLoCvwxLBRVVxQGkOLiSAq0Vw3kUYdW2y2kBJkmjAaDQtx9iZ50b6hbp9oNH+2pU+wTzDbCiKFEEX95S+NQgfDQhiyoHDOJNs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758722838; c=relaxed/simple;
-	bh=HBVkixXC6UpLk/eCQCarn8ygZtWWeyWBTNoBVx3DstY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=g4gdGOfS0jla9/wDyqBD8hAdEzpivEzxv8rTNCS4uGQ/SL3PfRgDOz/x/bDTlGNW+bDIVoSzDYcAbTdSTTANV/ewRROT79J4hQl8Jkp+h0C/UW2i3u46/a4vkXPgRXdbeKoNyHaPno7WcBQRUg6Z6rF/6ReISSYXInfNlOEWss4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-8572d7b2457so83610385a.1
-        for <linux-pm@vger.kernel.org>; Wed, 24 Sep 2025 07:07:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758722834; x=1759327634;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YeMFh8fKXfFfV77chei+2rVcM7wYWs2LWA9oczHhuiE=;
-        b=IYJ6CisWVPA7B6HJ/iUldkltE4p08Kg0AHv3RTwwqwKCQ7hzc2Msm+xIPACZUnOjbA
-         YIAfiwN64e/UpDGzRVOdEK1eLtAwPf7gOa/ERFkvRH6bbVQsP8xxqF3KTU94/VpLIoi1
-         3yamNJ8Vtl3lvlsZzgKzjSS4T36zyW4leqSN2WN/E/8YI+kqGMev540fW16bqCiNLRGM
-         4HT/tWMG3IvcFT5rA8xOJO2Qn43M4bqbuGf5VTrgcRDvZwmPNq2W5oT2262UqymP21eK
-         k0bt1y8uaKMKFXi3ybIDWA8uKRanSWJKuvXys1Hmg4xweSjipplHzGC/Dct7yHYBAT8v
-         01OA==
-X-Forwarded-Encrypted: i=1; AJvYcCVwHWIgSp3B5Q5KrCEuO1snNczSakFHG+XPZQaISQ9aGSAZak5yKogCeWp1ngcnsehsn8ijS2Em4A==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyyz1pOce2lumUSQx5KoAWF5HGE48LZyZkRR+TRhk7L2nW+L1vq
-	iH0DxPiNsXvOUMICRbkxlTEFJKY187JwY3TGODWcI2f6LDz/svNzrimAcHWd0HAW
-X-Gm-Gg: ASbGncubXWwvwO1iNEeOTaxwcZvp79mbfiWK0/CWD374mlcvoY7XWZRQsEBAhQVxiWT
-	nwuzVeTY8F8psS1xJU+L3EcpOnmZjKg9OeOvEHMoJFiIBJw1n13pI8XIUYj18A8A00JchyHbpnV
-	3Hw1FFHiyLY2I/gxE2D+acBQGpgT5tpspQlFlYFdTDy1WIkYCoclZJkjmf2cMBrNVq8AlIG0Hrh
-	ISRWE4z1T4N/QQvl1x161hHcq6VdR1hEmkYzPnreSl82OHM+Jl489LcCazrCFnqlkpyqE68Jf6Y
-	yUE4LkIuyq8ABDJJE5aqYdW3DofDfTGwJ+fp+fEN6Tw2BAtS8FnaFiJMYHBPsbhRBPrIJiEvaP+
-	kGJ85BhX5eLYBgKwfPAT6vvGMPW4wAgsDkRsQ6mmbgcaHvMSsI6F+ld0qb/FR3eoy
-X-Google-Smtp-Source: AGHT+IEd5CLqFnO9xH+BbvIjPhjKp8KMRwv58D+3Tt+tU5dvEoGi4RkWuGVYaAYffQKl2n90c30ScA==
-X-Received: by 2002:a05:620a:2982:b0:811:8bbe:7a3c with SMTP id af79cd13be357-856eb3db4acmr284444585a.23.1758722833729;
-        Wed, 24 Sep 2025 07:07:13 -0700 (PDT)
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com. [209.85.160.182])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-856905a07e2sm133226585a.24.2025.09.24.07.07.13
-        for <linux-pm@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Sep 2025 07:07:13 -0700 (PDT)
-Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-4d10f772416so10209091cf.1
-        for <linux-pm@vger.kernel.org>; Wed, 24 Sep 2025 07:07:13 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCW/wynjPaFS+YZOeUSuyImis4dTVwIB88NfiW6JGv6TWmFKAQoUwXtg1l/Y4MciMPZDiD4UXk6W9A==@vger.kernel.org
-X-Received: by 2002:a05:622a:24c:b0:4b2:8ac4:f097 with SMTP id
- d75a77b69052e-4d85bec4dd5mr30176331cf.33.1758722832210; Wed, 24 Sep 2025
- 07:07:12 -0700 (PDT)
+	s=arc-20240116; t=1758723083; c=relaxed/simple;
+	bh=SBJbzI+a5EDCmQJVqd66UPCcUKx8PMbrUQzAs3ufUz4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=WkmZbE9OHMSAm5XJ1b7xZL0CHIH1QzubqU9XNcfwdv/9dbUgf3EgC3cRU4gXJTfNKQiH4ACyQVgeU9ZTCKtDOLzRe236vODykodxYOQqd03m0kuDW1r0OPWsXaKeUYb41iX1jywaHAT2xBJamU9nEwERnUKUQk5KgXVyuayX/lk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=XWsIeH5m; arc=none smtp.client-ip=220.197.31.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version:
+	Content-Type; bh=WqpeQ5qAYFhnm6GasJioV7bqqdYfgWz6OOnhDlY+7+U=;
+	b=XWsIeH5mq6Jnb2vVB5KXB7Lfm5A55xzGPNbED0L+TR5yyAm53MwbfXK5CnJOf5
+	NwcYMTTosJu4YEy+ghe9nDfwpTjL5IJAMd6ZUvO0q7KH/TWIAQYVPVDAc7J+NPib
+	5yVRwJLzG3MWPRLucN9oLCCyIM7IvKOLTAtmviSqgINHM=
+Received: from MS-CMFLBWVCLQRG.localdomain (unknown [])
+	by gzga-smtp-mtada-g1-0 (Coremail) with SMTP id _____wB3u8rm+9NoN1RcDg--.14964S2;
+	Wed, 24 Sep 2025 22:10:47 +0800 (CST)
+From: GuangFei Luo <luogf2025@163.com>
+To: rafael@kernel.org
+Cc: dan.carpenter@linaro.org,
+	linux-acpi@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	luogf2025@163.com
+Subject: Re:[PATCH v6] ACPI: battery: prevent sysfs_add_battery re-entry on rapid events
+Date: Wed, 24 Sep 2025 22:10:45 +0800
+Message-ID: <20250924141047.1477743-1-luogf2025@163.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <CAJZ5v0htRTTj1QEEmhxBDxYA8oXkg_KP5YrfwyngELDY+Ns1EQ@mail.gmail.com>
+References: <CAJZ5v0htRTTj1QEEmhxBDxYA8oXkg_KP5YrfwyngELDY+Ns1EQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250917170202.197929-1-john.madieu.xa@bp.renesas.com> <20250917170202.197929-4-john.madieu.xa@bp.renesas.com>
-In-Reply-To: <20250917170202.197929-4-john.madieu.xa@bp.renesas.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Wed, 24 Sep 2025 16:07:00 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUw+cVtMkfnWjuO6BUNPRd=gZHhiD=KqPxugrJVLOe+Wg@mail.gmail.com>
-X-Gm-Features: AS18NWDN65f91eaOSdFfPam9YAakFHEyWw7q-5E1Mc_B35_vALhwRHePhcWpJeg
-Message-ID: <CAMuHMdUw+cVtMkfnWjuO6BUNPRd=gZHhiD=KqPxugrJVLOe+Wg@mail.gmail.com>
-Subject: Re: [PATCH v9 3/4] arm64: dts: renesas: r9a09g047: Add TSU node
-To: John Madieu <john.madieu.xa@bp.renesas.com>
-Cc: conor+dt@kernel.org, daniel.lezcano@linaro.org, krzk+dt@kernel.org, 
-	lukasz.luba@arm.com, magnus.damm@gmail.com, mturquette@baylibre.com, 
-	robh@kernel.org, rui.zhang@intel.com, sboyd@kernel.org, will@kernel.org, 
-	biju.das.jz@bp.renesas.com, catalin.marinas@arm.com, 
-	devicetree@vger.kernel.org, john.madieu@gmail.com, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
-	p.zabel@pengutronix.de, rafael@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wB3u8rm+9NoN1RcDg--.14964S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxuFWrGF4fCF4xGr1UKFW8Crg_yoW7tr48pa
+	yUCFWYkF4UJF1UXw12qr1YvryYy3yrtryUWr9rGFy0k34q9F1xJr1UtFnrurZ8Cr4IkF48
+	ZF4xXa13Zr13ArJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zirb15UUUUU=
+X-CM-SenderInfo: poxrwwisqskqqrwthudrp/1tbiPQ-SmWjT9ip7EAAAs1
 
-On Wed, 17 Sept 2025 at 19:03, John Madieu
-<john.madieu.xa@bp.renesas.com> wrote:
-> Add TSU node along with thermal zones and keep it enabled in the SoC DTSI.
->
-> Signed-off-by: John Madieu <john.madieu.xa@bp.renesas.com>
+> On Wed, Sep 24, 2025 at 12:38 AM GuangFei Luo <luogf2025@163.com> wrote:
+> >
+> > > On Tuesday, September 23, 2025 7:12:03 PM CEST Rafael J. Wysocki wrote:
+> > > > On Tue, Sep 23, 2025 at 6:14 PM GuangFei Luo <luogf2025@163.com> wrote:
+> > > > >
+> > > > > The functions battery_hook_add_battery(), battery_hook_remove_battery(),
+> > > > > and sysfs_remove_battery() already acquire locks, so their internal
+> > > > > accesses are safe.
+> > > >
+> > > > In fact, there are two locks in use, battery->sysfs_lock and
+> > > > hook_mutex.  The latter is used for managing hooks and the former is
+> > > > only used by sysfs_remove_battery(), so it only prevents that function
+> > > > from racing with another instance of itself.
+> > > >
+> > > > I would suggest using battery->sysfs_lock for protecting battery->bat
+> > > > in general.
+> > > >
+> > > > > acpi_battery_refresh() does check battery->bat, but its child
+> > > > > functions (sysfs_add_battery() and sysfs_remove_battery()) already
+> > > > > handle locking.
+> > > >
+> > > > What locking?  Before the $subject patch, sysfs_add_battery() doesn't
+> > > > do any locking at all AFAICS.
+> > > >
+> > > > > In acpi_battery_notify(), battery->bat has no lock. However, the
+> > > > > check of battery->bat is at the very end of the function. During
+> > > > > earlier calls, battery->bat has already been protected by locks, so
+> > > > > re-entry will not cause issues.
+> > > >
+> > > > All of the battery->bat checks and the code depending on them need to
+> > > > go under the same lock.  I'd use battery->sysfs_lock for this as
+> > > > already mentioned above.
+> > >
+> > > So my (untested) version of this fix is appended.
+> > >
+> > > Note that it explicitly prevents acpi_battery_notify() from racing with
+> > > addition/removal, PM notifications, and resume.
+> > >
+> > > ---
+> > >  drivers/acpi/battery.c |   36 +++++++++++++++++++++++-------------
+> > >  1 file changed, 23 insertions(+), 13 deletions(-)
+> > >
+> > > --- a/drivers/acpi/battery.c
+> > > +++ b/drivers/acpi/battery.c
+> > > @@ -92,7 +92,7 @@ enum {
+> > >
+> > >  struct acpi_battery {
+> > >       struct mutex lock;
+> > > -     struct mutex sysfs_lock;
+> > > +     struct mutex update_lock;
+> > >       struct power_supply *bat;
+> > >       struct power_supply_desc bat_desc;
+> > >       struct acpi_device *device;
+> > > @@ -904,15 +904,12 @@ static int sysfs_add_battery(struct acpi
+> > >
+> > >  static void sysfs_remove_battery(struct acpi_battery *battery)
+> > >  {
+> > > -     mutex_lock(&battery->sysfs_lock);
+> > > -     if (!battery->bat) {
+> > > -             mutex_unlock(&battery->sysfs_lock);
+> > > +     if (!battery->bat)
+> > >               return;
+> > > -     }
+> > > +
+> > >       battery_hook_remove_battery(battery);
+> > >       power_supply_unregister(battery->bat);
+> > >       battery->bat = NULL;
+> > > -     mutex_unlock(&battery->sysfs_lock);
+> > >  }
+> > >
+> > >  static void find_battery(const struct dmi_header *dm, void *private)
+> > > @@ -1072,6 +1069,9 @@ static void acpi_battery_notify(acpi_han
+> > >
+> > >       if (!battery)
+> > >               return;
+> > > +
+> > > +     guard(mutex)(&battery->update_lock);
+> > > +
+> > >       old = battery->bat;
+> > >       /*
+> > >        * On Acer Aspire V5-573G notifications are sometimes triggered too
+> > > @@ -1094,21 +1094,22 @@ static void acpi_battery_notify(acpi_han
+> > >  }
+> > >
+> > >  static int battery_notify(struct notifier_block *nb,
+> > > -                            unsigned long mode, void *_unused)
+> > > +                       unsigned long mode, void *_unused)
+> > >  {
+> > >       struct acpi_battery *battery = container_of(nb, struct acpi_battery,
+> > >                                                   pm_nb);
+> > > -     int result;
+> > >
+> > > -     switch (mode) {
+> > > -     case PM_POST_HIBERNATION:
+> > > -     case PM_POST_SUSPEND:
+> > > +     if (mode == PM_POST_SUSPEND || mode == PM_POST_HIBERNATION) {
+> > > +             guard(mutex)(&battery->update_lock);
+> > > +
+> > >               if (!acpi_battery_present(battery))
+> > >                       return 0;
+> > >
+> > >               if (battery->bat) {
+> > >                       acpi_battery_refresh(battery);
+> > >               } else {
+> > > +                     int result;
+> > > +
+> > >                       result = acpi_battery_get_info(battery);
+> > >                       if (result)
+> > >                               return result;
+> > > @@ -1120,7 +1121,6 @@ static int battery_notify(struct notifie
+> > >
+> > >               acpi_battery_init_alarm(battery);
+> > >               acpi_battery_get_state(battery);
+> > > -             break;
+> > >       }
+> > >
+> > >       return 0;
+> > > @@ -1198,6 +1198,8 @@ static int acpi_battery_update_retry(str
+> > >  {
+> > >       int retry, ret;
+> > >
+> > > +     guard(mutex)(&battery->update_lock);
+> > > +
+> > >       for (retry = 5; retry; retry--) {
+> > >               ret = acpi_battery_update(battery, false);
+> > >               if (!ret)
+> > > @@ -1230,7 +1232,7 @@ static int acpi_battery_add(struct acpi_
+> > >       if (result)
+> > >               return result;
+> > >
+> > > -     result = devm_mutex_init(&device->dev, &battery->sysfs_lock);
+> > > +     result = devm_mutex_init(&device->dev, &battery->update_lock);
+> > >       if (result)
+> > >               return result;
+> > >
+> > > @@ -1262,6 +1264,8 @@ fail_pm:
+> > >       device_init_wakeup(&device->dev, 0);
+> > >       unregister_pm_notifier(&battery->pm_nb);
+> > >  fail:
+> > > +     guard(mutex)(&battery->update_lock);
+> > > +
+> > >       sysfs_remove_battery(battery);
+> > >
+> > >       return result;
+> > > @@ -1281,6 +1285,9 @@ static void acpi_battery_remove(struct a
+> > >
+> > >       device_init_wakeup(&device->dev, 0);
+> > >       unregister_pm_notifier(&battery->pm_nb);
+> > > +
+> > > +     guard(mutex)(&battery->update_lock);
+> > > +
+> > >       sysfs_remove_battery(battery);
+> > >  }
+> > >
+> > > @@ -1297,6 +1304,9 @@ static int acpi_battery_resume(struct de
+> > >               return -EINVAL;
+> > >
+> > >       battery->update_time = 0;
+> > > +
+> > > +     guard(mutex)(&battery->update_lock);
+> > > +
+> > >       acpi_battery_update(battery, true);
+> > >       return 0;
+> > >  }
+> >
+> > Thanks for the detailed explanation and the updated version of the fix.
+> >
+> > I will test your suggested changes on my platform.
+> > After verification, I will send a v7 based on your suggestion.
+> 
+> Please just verify and I'll add a changelog and subject to the patch
+> and submit it.
+> 
+> Thanks!
 
-LGTM, so
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+I have tested your updated patch on my laptop with battery hot-plug scenarios.
+Everything looks normal and I did not observe any issues.
 
-Gr{oetje,eeting}s,
+Thanks!
 
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
 
