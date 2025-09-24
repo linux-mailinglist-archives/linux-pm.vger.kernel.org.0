@@ -1,127 +1,281 @@
-Return-Path: <linux-pm+bounces-35287-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35288-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80299B9ADCA
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Sep 2025 18:21:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2970DB9B0A7
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Sep 2025 19:23:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E461C7AA514
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Sep 2025 16:19:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D2B323AC852
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Sep 2025 17:23:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE1C930E823;
-	Wed, 24 Sep 2025 16:21:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA3A631329C;
+	Wed, 24 Sep 2025 17:22:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="lDGu75/C"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BVAWPHOD"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C80C631327A
-	for <linux-pm@vger.kernel.org>; Wed, 24 Sep 2025 16:21:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B50821E0DD9
+	for <linux-pm@vger.kernel.org>; Wed, 24 Sep 2025 17:22:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758730888; cv=none; b=lnX7OvooVwF/QV37YXCecUZozE8Jgemdkl65DfXvrySYQCZgxLgCln4ms55wmdgnT3s4UHtsRySPkfBUyocqJo5CTPbVtizFR38Qp0YBdLz5F8i1WP4+ZaR570XvGbUd2frWJfNokyjnP8xI4qz5FnFpgmbn/R7X0dbTM8CePBA=
+	t=1758734579; cv=none; b=kp+b/HGgny0+WDL3CWAZmwkQvrAgyA5snvl0YT0KMRkLB6XRJMHLywIaqKbj4foIWzu1h/o4lnLCVWRV3ohHKKwaC6PgSmmNwaH6q36SqVS41LihGSIltaSUyLrW2IwZkX3yD2JPb/qqxTknBb8vX/AaUrFGCGmArn8IGYM2ujI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758730888; c=relaxed/simple;
-	bh=ZcA2jKJiXKnbRwI+0MpjeeiPsAiOH2A641I3YnoiC58=;
+	s=arc-20240116; t=1758734579; c=relaxed/simple;
+	bh=sXJibV3RmNGOhqObd8QqcATRLnEMoRYEVOmX31QC4Sc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XkcOMS3PA7DdZr1Zisrp2yec8RTtzMvDattNZhNP71adHBW71M5th5y92j1Sb44g9rIhfik9EF7Lg/7y7AWT7uwuW0W82Cq7GKW3Y1rH4bCr1j87WiZruLBJc3zPF3oYyiZO24b+0dcog7dVd584IkodtVUOTo+cvW/iy7jUpSg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=lDGu75/C; arc=none smtp.client-ip=209.85.208.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-62fca216e4aso2574688a12.0
-        for <linux-pm@vger.kernel.org>; Wed, 24 Sep 2025 09:21:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1758730885; x=1759335685; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZcA2jKJiXKnbRwI+0MpjeeiPsAiOH2A641I3YnoiC58=;
-        b=lDGu75/CmUU+chrQl3SRXh04l8tU1MPx3VDaJjKh4FMAxZdaWUQiM6JOTs1wB5UFoB
-         qTzqGmc/oU9KcFcfb6NmV72oofiD5kokl1cG5U9izgTL2aWBtO8K/S+B9csLMN90Fs9U
-         tDxtsaqrsgr+gRYzxucJtFeY+4/9wxTB17tRoNCwcfeJd/80g7eS/ee6cY2DRvjs2FTr
-         gGSQjMcfvNrdt6wKkebwyJIWSGh4cgcEvFmyosjCk2/wyXOna6bTzTAf4in+rWHOP77z
-         WE7zjPM2JZ3nkVRH0kif80XGdqmBnLM0khtwbIZdTWhpXR6BoDe7qz/rl/iuxUcrz9PY
-         JSLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758730885; x=1759335685;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZcA2jKJiXKnbRwI+0MpjeeiPsAiOH2A641I3YnoiC58=;
-        b=hdlV5XLsZzHX271x3hUQ7TMgkjtBYIvTeUZtWztSD/3qCWzRAva/Ir6/ICvfsRzvl3
-         f4Am6Npa1G+h3jO7z8DvgSmDSk1aVsg0z1dS6oKXGQPs88FBPv68+KMtYYLCTVBoQ/Vv
-         BADBiJBXa1z4vX6+peVlz1UgysKwpSJZTc4fmMZSi/IgLcf7aRO1Y2sLpMnuxLkBLZ2b
-         Xs+P0K/CCXXzPZbALq440FKIPdH87sibjFio5l62qQEZCPHXzCK2USC05TKWaCZ6kKtK
-         VxdxR9Gb0XXHcOrj2N9tR2ONFenP4tPLQy7lghE463nIg35UwXslqp4VJfDaNyyF3O6L
-         2Z2w==
-X-Forwarded-Encrypted: i=1; AJvYcCUZ5hT5jNou3l16rguRqQU5tXAPH8MrKYj9Kw3OEK65S1EhBNAI4MozIOPaVCRzBLScCwPkx/U14Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwqTj2jTdc8QZfgK+8qxSgFWsHgvD6vttaCJiqZVpv4wRux9OBA
-	L7ZlEVRHev+8cXOTex8KYWOb0iHuS+RifXg6IeEO/LUvgyok2tVOhmhKWOKXzH63i2D6n1OTFaq
-	CZTN1sawGnwr1WbIBI10NYsI34gJWzRv07lzF4uW2+Q==
-X-Gm-Gg: ASbGncuqzSZeOLp3foMUx9FFAPEMJJYLSAx0L71l8iuzJGLDtXgKv+FQX1VlHQnCKpB
-	S5aQPQq0y1ppPrz9dg+2LgohiYWBonaxNdVDyTD28WZEqkJtkJHkSfOfCKjv48UbHr2z7blHkkg
-	T58uWqiXBEa8Ln0Z9U+0RaH7BIT7wfELQPL6en/DRZ9G2W3kd2bAy7VEiL5omIz9llFFjRa3dzp
-	Dick3rbEh1P777EoKzE8LzQRw==
-X-Google-Smtp-Source: AGHT+IGRWpoRX5kieAx8ODfA2c3P5709GPwYpJaUY9gD32LbMuLf1qLMI747P1qalIOpXzd9sueLH/Q8vbfBhoPeM3k=
-X-Received: by 2002:a05:6402:90c:b0:62f:4bf5:2b1 with SMTP id
- 4fb4d7f45d1cf-6349f604f2fmr146057a12.14.1758730884308; Wed, 24 Sep 2025
- 09:21:24 -0700 (PDT)
+	 To:Cc:Content-Type; b=CsUmY2G3mXTaGjLu5mPbUZY9CNAAsXD6dGYggmmh0Mg4WmJC3YwqVOMwlFgHu3oILmJieNvboe0wz2ql+7EUnqZ9Phxnefv8WYlgLjwcNmQ681zOtp5wSUpdpvu7hg8o6w/ZTZGXIfSwzJ4lWPLUoujpiyA7Dj66g/tQk0XF8vI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BVAWPHOD; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67D7CC113CF
+	for <linux-pm@vger.kernel.org>; Wed, 24 Sep 2025 17:22:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1758734579;
+	bh=sXJibV3RmNGOhqObd8QqcATRLnEMoRYEVOmX31QC4Sc=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=BVAWPHODi1axhiE4Mo3YbB9AGxpOV/QnaWXMhDzDtea9XudNXnI/7mQsmhLi6UvH3
+	 7Q1+qvYLRJr3mducAsm7CmPa5OueboXr+a/K3WFXqlkUaDAGGhiT1tfl/OAKCraKdP
+	 scEjtE1CtePBstbEYtiKxBNBbCTuHk1AtcpvBGjmaOIRLgdGrjaER+/aQR7FWP44BX
+	 fUuhWj7AMY0iQ1k17SnV+gtvr7fNcT91g2lXyc5SlmkzCvXa+EZNwYnJKbm5vBuJtm
+	 3o4n9yEA1ceMDWCqsqUpDGW+QDufBGsPwCgi97ds5nUZ755qga4NlaiIIFy4NIK4kc
+	 HLuVZuG5qZp/g==
+Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-746d3b0f7e5so40282a34.2
+        for <linux-pm@vger.kernel.org>; Wed, 24 Sep 2025 10:22:59 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCV3jzeyednQTyw+dn+fwTJLGON9Uwm0wvKTiIKPfc9cjOtEqolEph2Jx3qnlDuv+WsuqRUsK/f6CA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxJ94TNpR0A0Wxi5L8tiUMtlUgzZky9cps//E3Htgp1s+8dPXaE
+	vEG+zkf6Ic4/huST4mbxRxFjTkpm5tU4JlqqR4v/k+fb2fpLZyc6ahHmeFL97E2FhgDtX4M1H9o
+	EYsK656T/vGJ5YUlrFWPqyG/YxALy/tA=
+X-Google-Smtp-Source: AGHT+IFsMJ1GbtbudIup8+r+It8AAZGhqVNeJM6Wnrm04PoSZJSQFSxD8VXScqwc6mYrXE6DFbLEz1uXw0MdJn8pzrI=
+X-Received: by 2002:a05:6830:25c4:b0:79f:19f:805 with SMTP id
+ 46e09a7af769-7a03b18de32mr333521a34.7.1758734578673; Wed, 24 Sep 2025
+ 10:22:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250923153146.365015-1-fam.zheng@bytedance.com> <40419dea-666e-4a8d-97a7-fa571d7122f4@intel.com>
-In-Reply-To: <40419dea-666e-4a8d-97a7-fa571d7122f4@intel.com>
-From: Fam Zheng <fam.zheng@bytedance.com>
-Date: Wed, 24 Sep 2025 17:21:13 +0100
-X-Gm-Features: AS18NWBFLLBlUj7TG1Zl8-MnAWo-Z0AA8d0KVmB7UquRCmlLYJ7gqHCqbgn4mu8
-Message-ID: <CAG+v+KZ4bRgVNiMDhNTeiOqqbEXCBD72K5SQZCo=m0xaQ2vauQ@mail.gmail.com>
-Subject: Re: [External] Re: [RFC 0/5] parker: PARtitioned KERnel
-To: Dave Hansen <dave.hansen@intel.com>
-Cc: linux-kernel@vger.kernel.org, Lukasz Luba <lukasz.luba@arm.com>, 
-	linyongting@bytedance.com, songmuchun@bytedance.com, 
-	satish.kumar@bytedance.com, Borislav Petkov <bp@alien8.de>, 
-	Thomas Gleixner <tglx@linutronix.de>, yuanzhu@bytedance.com, Ingo Molnar <mingo@redhat.com>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, fam@euphon.net, 
-	"H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org, liangma@bytedance.com, 
-	Dave Hansen <dave.hansen@linux.intel.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	guojinhui.liam@bytedance.com, linux-pm@vger.kernel.org, 
-	Thom Hughes <thom.hughes@bytedance.com>
+References: <CAJZ5v0htRTTj1QEEmhxBDxYA8oXkg_KP5YrfwyngELDY+Ns1EQ@mail.gmail.com>
+ <20250924141047.1477743-1-luogf2025@163.com>
+In-Reply-To: <20250924141047.1477743-1-luogf2025@163.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 24 Sep 2025 19:22:47 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0iVPCtPjyyNeNM2uuJYZbMwJQxYEXA7=50dtB+q=6rQ6Q@mail.gmail.com>
+X-Gm-Features: AS18NWDwD2U5p9nKVv3jyqUp9kOCnH64Z1J9L4w236z92ASoL7kdw9C3Qa91Q5M
+Message-ID: <CAJZ5v0iVPCtPjyyNeNM2uuJYZbMwJQxYEXA7=50dtB+q=6rQ6Q@mail.gmail.com>
+Subject: Re: [PATCH v6] ACPI: battery: prevent sysfs_add_battery re-entry on
+ rapid events
+To: GuangFei Luo <luogf2025@163.com>
+Cc: rafael@kernel.org, dan.carpenter@linaro.org, linux-acpi@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 24, 2025 at 4:23=E2=80=AFPM Dave Hansen <dave.hansen@intel.com>=
- wrote:
+On Wed, Sep 24, 2025 at 4:11=E2=80=AFPM GuangFei Luo <luogf2025@163.com> wr=
+ote:
 >
-> On 9/23/25 08:31, Fam Zheng wrote:
-> > In terms of fault isolation or security, all kernel instances share
-> > the same domain, as there is no supervising mechanism. A kernel bug
-> > in any partition can cause problems for the whole physical machine.
-> > This is a tradeoff for low-overhead / low-complexity, but hope in
-> > the future we can take advantage of some hardware mechanism to
-> > introduce some isolation.
-> I just don't think this is approach is viable. The buck needs to stop
-> _somewhere_. You can't just have a bunch of different kernels, with
-> nothing in charge of the system as a whole.
+> > On Wed, Sep 24, 2025 at 12:38=E2=80=AFAM GuangFei Luo <luogf2025@163.co=
+m> wrote:
+> > >
+> > > > On Tuesday, September 23, 2025 7:12:03 PM CEST Rafael J. Wysocki wr=
+ote:
+> > > > > On Tue, Sep 23, 2025 at 6:14=E2=80=AFPM GuangFei Luo <luogf2025@1=
+63.com> wrote:
+> > > > > >
+> > > > > > The functions battery_hook_add_battery(), battery_hook_remove_b=
+attery(),
+> > > > > > and sysfs_remove_battery() already acquire locks, so their inte=
+rnal
+> > > > > > accesses are safe.
+> > > > >
+> > > > > In fact, there are two locks in use, battery->sysfs_lock and
+> > > > > hook_mutex.  The latter is used for managing hooks and the former=
+ is
+> > > > > only used by sysfs_remove_battery(), so it only prevents that fun=
+ction
+> > > > > from racing with another instance of itself.
+> > > > >
+> > > > > I would suggest using battery->sysfs_lock for protecting battery-=
+>bat
+> > > > > in general.
+> > > > >
+> > > > > > acpi_battery_refresh() does check battery->bat, but its child
+> > > > > > functions (sysfs_add_battery() and sysfs_remove_battery()) alre=
+ady
+> > > > > > handle locking.
+> > > > >
+> > > > > What locking?  Before the $subject patch, sysfs_add_battery() doe=
+sn't
+> > > > > do any locking at all AFAICS.
+> > > > >
+> > > > > > In acpi_battery_notify(), battery->bat has no lock. However, th=
+e
+> > > > > > check of battery->bat is at the very end of the function. Durin=
+g
+> > > > > > earlier calls, battery->bat has already been protected by locks=
+, so
+> > > > > > re-entry will not cause issues.
+> > > > >
+> > > > > All of the battery->bat checks and the code depending on them nee=
+d to
+> > > > > go under the same lock.  I'd use battery->sysfs_lock for this as
+> > > > > already mentioned above.
+> > > >
+> > > > So my (untested) version of this fix is appended.
+> > > >
+> > > > Note that it explicitly prevents acpi_battery_notify() from racing =
+with
+> > > > addition/removal, PM notifications, and resume.
+> > > >
+> > > > ---
+> > > >  drivers/acpi/battery.c |   36 +++++++++++++++++++++++-------------
+> > > >  1 file changed, 23 insertions(+), 13 deletions(-)
+> > > >
+> > > > --- a/drivers/acpi/battery.c
+> > > > +++ b/drivers/acpi/battery.c
+> > > > @@ -92,7 +92,7 @@ enum {
+> > > >
+> > > >  struct acpi_battery {
+> > > >       struct mutex lock;
+> > > > -     struct mutex sysfs_lock;
+> > > > +     struct mutex update_lock;
+> > > >       struct power_supply *bat;
+> > > >       struct power_supply_desc bat_desc;
+> > > >       struct acpi_device *device;
+> > > > @@ -904,15 +904,12 @@ static int sysfs_add_battery(struct acpi
+> > > >
+> > > >  static void sysfs_remove_battery(struct acpi_battery *battery)
+> > > >  {
+> > > > -     mutex_lock(&battery->sysfs_lock);
+> > > > -     if (!battery->bat) {
+> > > > -             mutex_unlock(&battery->sysfs_lock);
+> > > > +     if (!battery->bat)
+> > > >               return;
+> > > > -     }
+> > > > +
+> > > >       battery_hook_remove_battery(battery);
+> > > >       power_supply_unregister(battery->bat);
+> > > >       battery->bat =3D NULL;
+> > > > -     mutex_unlock(&battery->sysfs_lock);
+> > > >  }
+> > > >
+> > > >  static void find_battery(const struct dmi_header *dm, void *privat=
+e)
+> > > > @@ -1072,6 +1069,9 @@ static void acpi_battery_notify(acpi_han
+> > > >
+> > > >       if (!battery)
+> > > >               return;
+> > > > +
+> > > > +     guard(mutex)(&battery->update_lock);
+> > > > +
+> > > >       old =3D battery->bat;
+> > > >       /*
+> > > >        * On Acer Aspire V5-573G notifications are sometimes trigger=
+ed too
+> > > > @@ -1094,21 +1094,22 @@ static void acpi_battery_notify(acpi_han
+> > > >  }
+> > > >
+> > > >  static int battery_notify(struct notifier_block *nb,
+> > > > -                            unsigned long mode, void *_unused)
+> > > > +                       unsigned long mode, void *_unused)
+> > > >  {
+> > > >       struct acpi_battery *battery =3D container_of(nb, struct acpi=
+_battery,
+> > > >                                                   pm_nb);
+> > > > -     int result;
+> > > >
+> > > > -     switch (mode) {
+> > > > -     case PM_POST_HIBERNATION:
+> > > > -     case PM_POST_SUSPEND:
+> > > > +     if (mode =3D=3D PM_POST_SUSPEND || mode =3D=3D PM_POST_HIBERN=
+ATION) {
+> > > > +             guard(mutex)(&battery->update_lock);
+> > > > +
+> > > >               if (!acpi_battery_present(battery))
+> > > >                       return 0;
+> > > >
+> > > >               if (battery->bat) {
+> > > >                       acpi_battery_refresh(battery);
+> > > >               } else {
+> > > > +                     int result;
+> > > > +
+> > > >                       result =3D acpi_battery_get_info(battery);
+> > > >                       if (result)
+> > > >                               return result;
+> > > > @@ -1120,7 +1121,6 @@ static int battery_notify(struct notifie
+> > > >
+> > > >               acpi_battery_init_alarm(battery);
+> > > >               acpi_battery_get_state(battery);
+> > > > -             break;
+> > > >       }
+> > > >
+> > > >       return 0;
+> > > > @@ -1198,6 +1198,8 @@ static int acpi_battery_update_retry(str
+> > > >  {
+> > > >       int retry, ret;
+> > > >
+> > > > +     guard(mutex)(&battery->update_lock);
+> > > > +
+> > > >       for (retry =3D 5; retry; retry--) {
+> > > >               ret =3D acpi_battery_update(battery, false);
+> > > >               if (!ret)
+> > > > @@ -1230,7 +1232,7 @@ static int acpi_battery_add(struct acpi_
+> > > >       if (result)
+> > > >               return result;
+> > > >
+> > > > -     result =3D devm_mutex_init(&device->dev, &battery->sysfs_lock=
+);
+> > > > +     result =3D devm_mutex_init(&device->dev, &battery->update_loc=
+k);
+> > > >       if (result)
+> > > >               return result;
+> > > >
+> > > > @@ -1262,6 +1264,8 @@ fail_pm:
+> > > >       device_init_wakeup(&device->dev, 0);
+> > > >       unregister_pm_notifier(&battery->pm_nb);
+> > > >  fail:
+> > > > +     guard(mutex)(&battery->update_lock);
+> > > > +
+> > > >       sysfs_remove_battery(battery);
+> > > >
+> > > >       return result;
+> > > > @@ -1281,6 +1285,9 @@ static void acpi_battery_remove(struct a
+> > > >
+> > > >       device_init_wakeup(&device->dev, 0);
+> > > >       unregister_pm_notifier(&battery->pm_nb);
+> > > > +
+> > > > +     guard(mutex)(&battery->update_lock);
+> > > > +
+> > > >       sysfs_remove_battery(battery);
+> > > >  }
+> > > >
+> > > > @@ -1297,6 +1304,9 @@ static int acpi_battery_resume(struct de
+> > > >               return -EINVAL;
+> > > >
+> > > >       battery->update_time =3D 0;
+> > > > +
+> > > > +     guard(mutex)(&battery->update_lock);
+> > > > +
+> > > >       acpi_battery_update(battery, true);
+> > > >       return 0;
+> > > >  }
+> > >
+> > > Thanks for the detailed explanation and the updated version of the fi=
+x.
+> > >
+> > > I will test your suggested changes on my platform.
+> > > After verification, I will send a v7 based on your suggestion.
+> >
+> > Please just verify and I'll add a changelog and subject to the patch
+> > and submit it.
+> >
+> > Thanks!
 >
-> Just think of bus locks. They affect the whole system. What if one
-> kernel turns off split lock detection? Or has a different rate limit
-> than the others? What if one kernel is a big fan of WBINVD? How about
-> when they use resctrl to partition an L3 cache? How about microcode updat=
-es?
+> I have tested your updated patch on my laptop with battery hot-plug scena=
+rios.
+> Everything looks normal and I did not observe any issues.
 
-The model and motivation here is not to split the domain and give
-different shares to different sysadmins, it's intended for one kernel
-to partition itself. I agree we shouldn't have different kernels here:
-one old, one new, one Linux, one Windows... All partitions should run
-a verified parker-aware kernel. Actually, it may be a good idea to
-force the same buildid in kexec between the boot kernel and secondary
-ones.
-
-Fam
+Thanks for the confirmation!
 
