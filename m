@@ -1,179 +1,99 @@
-Return-Path: <linux-pm+bounces-35386-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35391-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8377BA06D0
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Sep 2025 17:48:07 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 37DE2BA0823
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Sep 2025 17:59:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7D4684A53CD
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Sep 2025 15:48:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E768717AD93
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Sep 2025 15:59:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 747922FB976;
-	Thu, 25 Sep 2025 15:48:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE2C1303C87;
+	Thu, 25 Sep 2025 15:59:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tYG6YoVr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pIh1lUsp"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44231234973;
-	Thu, 25 Sep 2025 15:48:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 868D4302CC0
+	for <linux-pm@vger.kernel.org>; Thu, 25 Sep 2025 15:59:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758815283; cv=none; b=bfpR51njg6u0Z1ymFWyNVQ6WGbZ2dqhJC/uQXh87i01YQxqXlyUgPt6oMliBcVpYo8+x4y9UiyMDd+qGLPq3doz6D+/lvd0xD1C7a8u3IxPU7rpkN0H1VULQUTuRuxRpULzk9F8osVl54b/M/Mn/qQW4srEPlcQcjKEXHiX0NXQ=
+	t=1758815965; cv=none; b=qfMWJFQXElNgtyGKMw6u6wsUMxorXyoTq4ToZ8u1REXzCzVc4btImqE+lGzuF9S4GsG5Y3Ju5+JiLF/RnNuE/mLz+ROWi6Fld0NLR7RKtSVEhshPi6OekFjc9Rsu0zZzJgMvAACo+G+3uSHs3TGHqJwZa1gCHCwSCg1NqMy/hFY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758815283; c=relaxed/simple;
-	bh=wOTmxGtsrYB00Xp5bvu1cK9MEesyYzBVRKQiLZrnjHM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=eVaJXXYoXxSErXNMEAJILS6xkz7ZSa9emIPMzkhHs2bYAcmsfXUTW7mfbBTLzQAkXWHbSxkFzZaBJvFsjr4V+B+EKFDN9IwsGASLJeZtPAUpgwuOqzJ8CRI3Yns6eZ0LdSv61zhUsZThELfNniZkmzkVesoNXxEjqI5yycQMPhg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tYG6YoVr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E78CC4CEF0;
-	Thu, 25 Sep 2025 15:47:59 +0000 (UTC)
+	s=arc-20240116; t=1758815965; c=relaxed/simple;
+	bh=yhOhJkZZYMouooZCDf68+qrRmrCaon7hXJObEYatR+M=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GQ6kjcoTXjehpo+okkIilXOab6wPbOKWMv3s/YhRSm+99CZat4rFMB2JziEf5XFUx2GdmCtC3Z6iKZMfCfMrP+s+ni3ywx6tJwL28m4TrsjyxYYqeLcBmLdRvKTQK35n+tUWw+pSH4A2zuouwgEKqqjx1zYsSHaLpm5w+EdZt7Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pIh1lUsp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F081C4CEF0;
+	Thu, 25 Sep 2025 15:59:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758815281;
-	bh=wOTmxGtsrYB00Xp5bvu1cK9MEesyYzBVRKQiLZrnjHM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=tYG6YoVrAPVV9YhwxVY2jNwS95/9QPjXF2DtoB0yh04iQAkHtDdc58D/SngLNhBV/
-	 4kzm6EiYRX1ObHBWY+fmGtwNz2KEsIjzDWmZSIZaMHpbPltDDQjXJETCom+jSOBsKL
-	 ogHzr3o+X1u0bVNVu2Kq83+nO9wGZrmu5tVN5X9wfHDnVs6NsY50oL+rup5W+z0MKa
-	 jineUIkhTTundrxOa9fO2M2tObs9dO08UOJLaxOrfcxBqhX/k/rPbhJN0CY3ZYbcbw
-	 3eJptOfgOwuq55tENbrCkkimeTpjOpwIJP562O52rOygB/yzrQRjWzmcSeMkbNoLX1
-	 WxWVa6gDa4rBQ==
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-To: Linux PM <linux-pm@vger.kernel.org>
-Cc: Shawn Guo <shawnguo@kernel.org>, Qais Yousef <qyousef@layalina.io>,
- LKML <linux-kernel@vger.kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>,
- Prashanth Prakash <pprakash@codeaurora.org>,
- Pierre Gondois <pierre.gondois@arm.com>,
- Mario Limonciello <mario.limonciello@amd.com>,
- Linux ACPI <linux-acpi@vger.kernel.org>
-Subject: [PATCH v1 4/4] cpufreq: Drop unused symbol CPUFREQ_ETERNAL
-Date: Thu, 25 Sep 2025 17:47:27 +0200
-Message-ID: <9533136.CDJkKcVGEf@rafael.j.wysocki>
-Organization: Linux Kernel Development
-In-Reply-To: <8605612.T7Z3S40VBb@rafael.j.wysocki>
-References: <8605612.T7Z3S40VBb@rafael.j.wysocki>
+	s=k20201202; t=1758815965;
+	bh=yhOhJkZZYMouooZCDf68+qrRmrCaon7hXJObEYatR+M=;
+	h=From:To:Cc:Subject:Date:From;
+	b=pIh1lUspaOok0glq7a3NwhZEtia7yCbFCSfMfqSf7M9225UNmhEdhJlSxmwxCsxv0
+	 LQ5xDsWs8Mp9cXzjKZnDUqMpYZYURZ5LwvqesXoNxZuuR8UURMM1bP9dawUn+gcPoR
+	 soLi5VEgSbel8LbTSs1Z9YD8LRdWJ5zgqyQopPA03FGuHaDdFa71ce3N314xnZGC0d
+	 Anmft5EYlvvgSr4kcPEg5jfcz2FGY/lJjUtGUpzJu688CRwjtuof76oAYcbmK4QnT1
+	 zdPSCSj5GPBiZ4xsczw9IALvSTGiBwrqNKFReqptnNH1tUeQDqARKrEPb3tdz4AhVe
+	 Dpq/engWHZglw==
+From: "Mario Limonciello (AMD)" <superm1@kernel.org>
+To: Alex Deucher <alexander.deucher@amd.com>,
+	"Rafael J . Wysocki" <rafael@kernel.org>
+Cc: Samuel Zhang <guoqing.zhang@amd.com>,
+	amd-gfx@lists.freedesktop.org (open list:RADEON and AMDGPU DRM DRIVERS),
+	linux-pm@vger.kernel.org (open list:HIBERNATION (aka Software Suspend, aka swsusp)),
+	"Mario Limonciello (AMD)" <superm1@kernel.org>
+Subject: [PATCH v2 0/3] Fixes for hybrid sleep
+Date: Thu, 25 Sep 2025 10:59:15 -0500
+Message-ID: <20250925155918.2725474-1-superm1@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-=46rom: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Ionut Nechita reported recently a hibernate failure, but in debugging
+the issue it's actually not a hibernate failure; but a hybrid sleep
+failure.
 
-Drop CPUFREQ_ETERNAL that has no users any more along with all
-references to it in the documentation.
+Multiple changes related to the change of when swap is disabled in
+the suspend sequence contribute to the failure.  See the individual
+patches for details.
 
-No functional impact.
+Link: https://gitlab.freedesktop.org/drm/amd/-/issues/4573
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-=2D--
- Documentation/admin-guide/pm/cpufreq.rst                  |    4 ----
- Documentation/cpu-freq/cpu-drivers.rst                    |    3 +--
- Documentation/translations/zh_CN/cpu-freq/cpu-drivers.rst |    3 +--
- Documentation/translations/zh_TW/cpu-freq/cpu-drivers.rst |    3 +--
- include/linux/cpufreq.h                                   |    5 -----
- 5 files changed, 3 insertions(+), 15 deletions(-)
+NOTE: I realize this is super late in the cycle, so sorry about that,
+but I debugged it as fast as I could as soon as I heard about it.
+If it needs to push out to the next cycle it is what it is.
 
-=2D-- a/Documentation/admin-guide/pm/cpufreq.rst
-+++ b/Documentation/admin-guide/pm/cpufreq.rst
-@@ -274,10 +274,6 @@ are the following:
- 	The time it takes to switch the CPUs belonging to this policy from one
- 	P-state to another, in nanoseconds.
-=20
-=2D	If unknown or if known to be so high that the scaling driver does not
-=2D	work with the `ondemand`_ governor, -1 (:c:macro:`CPUFREQ_ETERNAL`)
-=2D	will be returned by reads from this attribute.
-=2D
- ``related_cpus``
- 	List of all (online and offline) CPUs belonging to this policy.
-=20
-=2D-- a/Documentation/cpu-freq/cpu-drivers.rst
-+++ b/Documentation/cpu-freq/cpu-drivers.rst
-@@ -109,8 +109,7 @@ Then, the driver must fill in the follow
- +-----------------------------------+-------------------------------------=
-=2D+
- |policy->cpuinfo.transition_latency | the time it takes on this CPU to	   |
- |				    | switch between two frequencies in	   |
-=2D|				    | nanoseconds (if appropriate, else	   |
-=2D|				    | specify CPUFREQ_ETERNAL)		   |
-+|				    | nanoseconds                          |
- +-----------------------------------+-------------------------------------=
-=2D+
- |policy->cur			    | The current operating frequency of   |
- |				    | this CPU (if appropriate)		   |
-=2D-- a/Documentation/translations/zh_CN/cpu-freq/cpu-drivers.rst
-+++ b/Documentation/translations/zh_CN/cpu-freq/cpu-drivers.rst
-@@ -112,8 +112,7 @@ CPUfreq=E6=A0=B8=E5=BF=83=E5=B1=82=E6=B3=A8=E5=86=8C=E4=
-=B8=80=E4=B8=AAcpufreq_driv
- |                                   |                                     =
- |
- +-----------------------------------+-------------------------------------=
-=2D+
- |policy->cpuinfo.transition_latency | CPU=E5=9C=A8=E4=B8=A4=E4=B8=AA=E9=A2=
-=91=E7=8E=87=E4=B9=8B=E9=97=B4=E5=88=87=E6=8D=A2=E6=89=80=E9=9C=80=E7=9A=84=
-=E6=97=B6=E9=97=B4=EF=BC=8C=E4=BB=A5  |
-=2D|                                   | =E7=BA=B3=E7=A7=92=E4=B8=BA=E5=8D=
-=95=E4=BD=8D=EF=BC=88=E5=A6=82=E4=B8=8D=E9=80=82=E7=94=A8=EF=BC=8C=E8=AE=BE=
-=E5=AE=9A=E4=B8=BA         |
-=2D|                                   | CPUFREQ_ETERNAL=EF=BC=89          =
-          |
-+|                                   | =E7=BA=B3=E7=A7=92=E4=B8=BA=E5=8D=95=
-=E4=BD=8D                    |
- |                                   |                                     =
- |
- +-----------------------------------+-------------------------------------=
-=2D+
- |policy->cur                        | =E8=AF=A5CPU=E5=BD=93=E5=89=8D=E7=9A=
-=84=E5=B7=A5=E4=BD=9C=E9=A2=91=E7=8E=87(=E5=A6=82=E9=80=82=E7=94=A8)       =
-   |
-=2D-- a/Documentation/translations/zh_TW/cpu-freq/cpu-drivers.rst
-+++ b/Documentation/translations/zh_TW/cpu-freq/cpu-drivers.rst
-@@ -112,8 +112,7 @@ CPUfreq=E6=A0=B8=E5=BF=83=E5=B1=A4=E8=A8=BB=E5=86=8A=E4=
-=B8=80=E5=80=8Bcpufreq_driv
- |                                   |                                     =
- |
- +-----------------------------------+-------------------------------------=
-=2D+
- |policy->cpuinfo.transition_latency | CPU=E5=9C=A8=E5=85=A9=E5=80=8B=E9=A0=
-=BB=E7=8E=87=E4=B9=8B=E9=96=93=E5=88=87=E6=8F=9B=E6=89=80=E9=9C=80=E7=9A=84=
-=E6=99=82=E9=96=93=EF=BC=8C=E4=BB=A5  |
-=2D|                                   | =E7=B4=8D=E7=A7=92=E7=88=B2=E5=96=
-=AE=E4=BD=8D=EF=BC=88=E5=A6=82=E4=B8=8D=E9=81=A9=E7=94=A8=EF=BC=8C=E8=A8=AD=
-=E5=AE=9A=E7=88=B2         |
-=2D|                                   | CPUFREQ_ETERNAL=EF=BC=89          =
-          |
-+|                                   | =E7=B4=8D=E7=A7=92=E7=88=B2=E5=96=AE=
-=E4=BD=8D                    |
- |                                   |                                     =
- |
- +-----------------------------------+-------------------------------------=
-=2D+
- |policy->cur                        | =E8=A9=B2CPU=E7=95=B6=E5=89=8D=E7=9A=
-=84=E5=B7=A5=E4=BD=9C=E9=A0=BB=E7=8E=87(=E5=A6=82=E9=81=A9=E7=94=A8)       =
-   |
-=2D-- a/include/linux/cpufreq.h
-+++ b/include/linux/cpufreq.h
-@@ -26,13 +26,8 @@
-  *********************************************************************/
- /*
-  * Frequency values here are CPU kHz
-=2D *
-=2D * Maximum transition latency is in nanoseconds - if it's unknown,
-=2D * CPUFREQ_ETERNAL shall be used.
-  */
-=20
-=2D#define CPUFREQ_ETERNAL			(-1)
-=2D
- #define CPUFREQ_DEFAULT_TANSITION_LATENCY_NS	NSEC_PER_MSEC
-=20
- #define CPUFREQ_NAME_LEN		16
+As it touches two subsystems it either needs to go through linux-pm
+or drm.  Patch 3 has an Ack from Alex, this should merge through
+linux-pm.
+
+---
+v2:
+ * Fix LKP robot errors without CONFIG_SUSPEND
+ * Add tags
 
 
+Mario Limonciello (AMD) (3):
+  PM: hibernate: Fix hybrid-sleep
+  PM: hibernate: Add pm_hibernation_mode_is_suspend()
+  drm/amd: Fix hybrid sleep
+
+ drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c |  2 +-
+ include/linux/suspend.h                 |  2 ++
+ kernel/power/hibernate.c                | 22 +++++++++++++++++++++-
+ 3 files changed, 24 insertions(+), 2 deletions(-)
+
+-- 
+2.43.0
 
 
