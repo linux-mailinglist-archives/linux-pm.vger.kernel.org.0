@@ -1,156 +1,137 @@
-Return-Path: <linux-pm+bounces-35404-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35405-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 403E5BA0F32
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Sep 2025 19:51:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B350BA0F53
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Sep 2025 19:52:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ECA994A1F03
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Sep 2025 17:51:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 120EF17D572
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Sep 2025 17:52:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B188312804;
-	Thu, 25 Sep 2025 17:51:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4708030FC0C;
+	Thu, 25 Sep 2025 17:52:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bdMlnqs1"
+	dkim=pass (2048-bit key) header.d=cknow.org header.i=@cknow.org header.b="EMq1VUNs"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3449130FC08
-	for <linux-pm@vger.kernel.org>; Thu, 25 Sep 2025 17:51:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96DB51DE3DC
+	for <linux-pm@vger.kernel.org>; Thu, 25 Sep 2025 17:52:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758822675; cv=none; b=Yd6yzKnG/aoJ1BjnmXCRX119x33GT97al/93RITvJlbmUeMV3D1Lsvb/76zHSCAVuRYAE+d4600UBmHx43cH1PzPn+uyeTjIP+PBGLbB3jdhtzwoLOcMgHpvGdpDPfIy/FcSzORcoZc0OUkksGjKR6SSgNzSjyaoBs7bJZfZ3zg=
+	t=1758822755; cv=none; b=BHl2Ze8OIY3DNdL9MWTN5h5oW5iAyYQIh6V66iwvyk+a8rKBb65+tBsbW2M+uM7tbMGXbalwHRjSu2LHVdrTp7gvPQ4ad+S6S58hf6ko15iVuQunb+VK4XOeJT1t5HkQI1G5Jig4SCoSCj9aSMaToo4UIfw9i3gtX912JHCC0Yk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758822675; c=relaxed/simple;
-	bh=gRdOscOTHhI+i0F0NbGwOm6Fee4wavwmKfYcYfw8HB4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=tF1nS6FIZoDI/UUwGPPU/be+9uXQgSNwXJDKy8eaDT37ElxnVvIghBTSDkNkPSW2hX1E8az0wRTd5zU65l2C2FjZT64IFHBKRVzGIQmkZklJFTocdxRNoxwZCIcfgzs+fSKtM2VHX5DvpPMl8ggSt5VDsFm3Y8l1Slhs8YdW+Kc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bdMlnqs1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6D31C16AAE
-	for <linux-pm@vger.kernel.org>; Thu, 25 Sep 2025 17:51:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758822674;
-	bh=gRdOscOTHhI+i0F0NbGwOm6Fee4wavwmKfYcYfw8HB4=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=bdMlnqs13WtqWOYvSEm7QPcF4lZ7BEqkSJ6sWgaI42hlusLhREvEbyjc1YDlT6C7Z
-	 56Cxvfkh9mZl6pmW7H/DC5tUtACHzls2xyPk+0mlyfzx0TEj2ogSUuFXS17Omt9jEC
-	 q9laddRJS3xZxCCPA+zhXpyc8ptELnRtShtSdxbRrSeeMfuT8qVNyPY2ZJyfx/wEXX
-	 CJDxTtzqnpkkK2BXUMm8vHw28ITH3qcbtAXD90VBnl4DTPPt+aIsmaPzXTUkh2/CFH
-	 o1R8xUh1e8EKxmBGbASylTtK81ZKburJTWlzeW9D5tUnuF/Apfp2IN326OjHscc5tj
-	 6YiIcaHM3SDiA==
-Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-332e66cd8e4so649578fac.2
-        for <linux-pm@vger.kernel.org>; Thu, 25 Sep 2025 10:51:14 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVMfEzNHGtwZBU0Fz0j8b4lDOD0q6z2hxmO0vwtmUghtgOetpILBgCi8uU3JmLWuPA0y5Eq/0QYPg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxZdRyivGYV1feSE4b+nVNYvPB9JCvKkOSDcxqGGA8u8viO6YwA
-	uNye5vuJSdEUfzJ/b0KsaDZnS1jzl0vWXK9k2SfNN+s0Pj6L4+iCZ3I2cWOnmRy/MG0yeN7Z5YM
-	FWKuqjz2ZLq8MTju0tZAcAT2T3ql9raU=
-X-Google-Smtp-Source: AGHT+IF+BZnZzFQD0fUzXPwYbYWCPdphHFnalJrklbCIrlGUekVrPspRNbln3iasB+dASXFC5TL7AhzbFjg8JUgNu30=
-X-Received: by 2002:a05:6870:2199:b0:30b:cb2f:bae4 with SMTP id
- 586e51a60fabf-35ebf3f478bmr2024381fac.12.1758822674050; Thu, 25 Sep 2025
- 10:51:14 -0700 (PDT)
+	s=arc-20240116; t=1758822755; c=relaxed/simple;
+	bh=149LhYTDHLpLp8554BrUviuksAp+figbNKDZxF/5+IM=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=I5l+8U9Bvi0ktLazCoMNrOnTTsXHx4xrjx/BWhvBtp0hdDGLenXc+BDFhfLw08QrzQqfx5XrdXOtgSJP7RwxtwuRppjaWX9ytBfWGpevzsaFjl6i/NIbjYO/gk64Bm+iIOcULsbEMhGRZFqZ5AnnQ4ZUgCnOnKyd/WyBHDUKkIg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cknow.org; spf=pass smtp.mailfrom=cknow.org; dkim=pass (2048-bit key) header.d=cknow.org header.i=@cknow.org header.b=EMq1VUNs; arc=none smtp.client-ip=95.215.58.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cknow.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cknow.org
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20250925155918.2725474-1-superm1@kernel.org> <20250925155918.2725474-2-superm1@kernel.org>
- <CAJZ5v0g1rm3w=93mWBRJaFiX9qMOkDMzEsU=_ScLBHSL-2i15A@mail.gmail.com>
-In-Reply-To: <CAJZ5v0g1rm3w=93mWBRJaFiX9qMOkDMzEsU=_ScLBHSL-2i15A@mail.gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 25 Sep 2025 19:51:02 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0i4xMy=y-gXgSnewAYu3uBCWYhhXBP1-MSTBfgCLq80VA@mail.gmail.com>
-X-Gm-Features: AS18NWBYxPcokk8u39pxoHMFexm82rrMjsS6VNFjlb5geOK8p8n90_IqPsrwZiE
-Message-ID: <CAJZ5v0i4xMy=y-gXgSnewAYu3uBCWYhhXBP1-MSTBfgCLq80VA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] PM: hibernate: Fix hybrid-sleep
-To: "Mario Limonciello (AMD)" <superm1@kernel.org>
-Cc: Alex Deucher <alexander.deucher@amd.com>, "Rafael J . Wysocki" <rafael@kernel.org>, 
-	Samuel Zhang <guoqing.zhang@amd.com>, 
-	"open list:RADEON and AMDGPU DRM DRIVERS" <amd-gfx@lists.freedesktop.org>, 
-	"open list:HIBERNATION (aka Software Suspend, aka swsusp)" <linux-pm@vger.kernel.org>, Ionut Nechita <ionut_n2001@yahoo.com>, 
-	Kenneth Crudup <kenny@panix.com>
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cknow.org; s=key1;
+	t=1758822747;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=IB9yQNRgVuz8m2m/oI2qa6ls/IWIUCOFdQtE6J/rfIA=;
+	b=EMq1VUNsJcP9snVahb7nKoWpXIaDE41gqDWsbAG4yWY8Rnu1rMo2FDoiKi/9dfZarIh/+m
+	LL+7sHuW/hw2dFQgEiTMq8vIfTKXyby5P9trym8R8wVkzGXGV+/2ggIAG+J8T2nqPOeWCx
+	I9ulU++zscOBm+xM54yiJckom9/K9rvw6go4Wjs40pw0Q66AUVt3DsUEhXU5UnpNatT2sH
+	qew11Tjar4NMmOBj2Ro8RcgCmPRTE9RYc+st28XVeUMh4kruDtkgh0Xjzs/qFt1sWHCd8Z
+	zDJY9AO0tox9pwPXH+P2KTHVOaFxbGFCWZyv0V/fjzMbVfcJrR+53XJ2McAOEg==
+Content-Type: multipart/signed;
+ boundary=a357dd026792ca33492dc6fb0c6b8bf0ccfe6b9c80285818675682e9f5be;
+ micalg=pgp-sha512; protocol="application/pgp-signature"
+Date: Thu, 25 Sep 2025 19:52:11 +0200
+Message-Id: <DD22MGF3HNLM.Q7S70RX4NZXS@cknow.org>
+Cc: "Saravana Kannan" <saravanak@google.com>, "Rafael J . Wysocki"
+ <rafael@kernel.org>, "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+ <linux-pm@vger.kernel.org>, "Geert Uytterhoeven" <geert@linux-m68k.org>,
+ "Nicolas Frattaroli" <nicolas.frattaroli@collabora.com>, "Heiko Stuebner"
+ <heiko@sntech.de>, "Sebastian Reichel" <sebastian.reichel@collabora.com>,
+ "Sebin Francis" <sebin.francis@ti.com>, "Tomi Valkeinen"
+ <tomi.valkeinen@ideasonboard.com>, "Jon Hunter" <jonathanh@nvidia.com>,
+ <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] driver core: fw_devlink: Don't warn in
+ fw_devlink_dev_sync_state()
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: "Diederik de Haas" <didi.debian@cknow.org>
+To: "Ulf Hansson" <ulf.hansson@linaro.org>
+References: <20250925115924.188257-1-ulf.hansson@linaro.org>
+ <DD1XOHE6P5OC.2JUQRAGAE1KTU@cknow.org>
+ <CAPDyKFrKP2bdpKTHzqDdhEpRAjYu+PFd2Bst=-WPddByxcAX_w@mail.gmail.com>
+In-Reply-To: <CAPDyKFrKP2bdpKTHzqDdhEpRAjYu+PFd2Bst=-WPddByxcAX_w@mail.gmail.com>
+X-Migadu-Flow: FLOW_OUT
+
+--a357dd026792ca33492dc6fb0c6b8bf0ccfe6b9c80285818675682e9f5be
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
 
-On Thu, Sep 25, 2025 at 7:47=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.or=
-g> wrote:
+On Thu Sep 25, 2025 at 4:26 PM CEST, Ulf Hansson wrote:
+> On Thu, 25 Sept 2025 at 15:59, Diederik de Haas <didi.debian@cknow.org> w=
+rote:
+>> On Thu Sep 25, 2025 at 1:59 PM CEST, Ulf Hansson wrote:
+>> > Due to the wider deployment of the ->sync_state() support, for PM doma=
+ins
+>> > for example, we are receiving reports about the messages that are bein=
+g
+>> > logged in fw_devlink_dev_sync_state(). In particular as they are at th=
+e
+>> > warning level, which doesn't seem correct.
+>> >
+>> > Even if it certainly is useful to know that the ->sync_state() conditi=
+on
+>> > could not be met, there may be nothing wrong with it. For example, a d=
+river
+>> > may be built as module and are still waiting to be initialized/probed.
+>>
+>> "there may be nothing wrong with it" doesn't sound very convincing.
+>> So there *can* be something wrong with it, so warning sounds
+>> appropriate? If there is (certainly) something wrong with it, I expect
+>> an error.
 >
-> On Thu, Sep 25, 2025 at 5:59=E2=80=AFPM Mario Limonciello (AMD)
-> <superm1@kernel.org> wrote:
-> >
-> > Hybrid sleep will hibernate the system followed by running through
-> > the suspend routine.  Since both the hibernate and the suspend routine
-> > will call pm_restrict_gfp_mask(), pm_restore_gfp_mask() must be called
-> > before starting the suspend sequence.
-> >
-> > Add an explicit call to pm_restore_gfp_mask() to power_down() before
-> > the suspend sequence starts. Don't call pm_restore_gfp_mask() when
-> > exiting suspend sequence it is already called:
-> >
-> > ```
-> > power_down()
-> > ->suspend_devices_and_enter()
-> > -->dpm_resume_end()
-> > ```
-> >
-> > Reported-by: Ionut Nechita <ionut_n2001@yahoo.com>
-> > Closes: https://gitlab.freedesktop.org/drm/amd/-/issues/4573
-> > Tested-by: Ionut Nechita <ionut_n2001@yahoo.com>
-> > Fixes: 12ffc3b1513eb ("PM: Restrict swap use to later in the suspend se=
-quence")
-> > Tested-by: Kenneth Crudup <kenny@panix.com>
-> > Acked-by: Alex Deucher <alexander.deucher@amd.com>
-> > Signed-off-by: Mario Limonciello (AMD) <superm1@kernel.org>
-> > ---
-> > v2:
-> >  * Move under CONFIG_SUSPEND scope (LKP robot)
-> >  * Add tags
-> > ---
-> >  kernel/power/hibernate.c | 11 ++++++++++-
-> >  1 file changed, 10 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-> > index 2f66ab4538231..52c1818749724 100644
-> > --- a/kernel/power/hibernate.c
-> > +++ b/kernel/power/hibernate.c
-> > @@ -695,6 +695,7 @@ static void power_down(void)
-> >
-> >  #ifdef CONFIG_SUSPEND
-> >         if (hibernation_mode =3D=3D HIBERNATION_SUSPEND) {
-> > +               pm_restore_gfp_mask();
-> >                 error =3D suspend_devices_and_enter(mem_sleep_current);
-> >                 if (error) {
-> >                         hibernation_mode =3D hibernation_ops ?
-> > @@ -862,7 +863,15 @@ int hibernate(void)
-> >                                 power_down();
-> >                 }
-> >                 in_suspend =3D 0;
-> > -               pm_restore_gfp_mask();
-> > +               switch (hibernation_mode) {
-> > +#ifdef CONFIG_SUSPEND
-> > +               case HIBERNATION_SUSPEND:
-> > +                       break;
-> > +#endif
-> > +               default:
-> > +                       pm_restore_gfp_mask();
-> > +                       break;
-> > +               }
+> Sorry if I was too vague. See more below.
 >
-> You're breaking HIBERNATION_TEST_RESUME here AFAICS
-
-Well, not really because of the hibernation_mode check.
-
-> and power_down() doesn't return.
-
-But this still is true.
-
+>> FWIW: most of my drivers/modules are built as modules.
+>> I do seem to run into 'problems' more then average because of that, but
+>> to me it just signals there is something wrong ... which should be
+>> fixed. Not silenced.
 >
-> >         } else {
-> >                 pm_pr_dbg("Hibernation image restored successfully.\n")=
-;
-> >         }
-> > --
+> Well, why is it wrong to have drivers being built as modules? They
+
+Nothing wrong with it at all. It just means I notice issues (like [1])
+that others may not who have modules built-in.
+
+[1] a52dffaa46c2 ("drm/rockchip: vop2: make vp registers nonvolatile")
+
+> just happen to be probed at some point later, then why should we have
+> warnings printed in the log due to this?
+
+I thought the failure of the check was more important then it apparently
+is. Then warning about it does seem excessive.
+
+Cheers,
+  Diederik
+
+--a357dd026792ca33492dc6fb0c6b8bf0ccfe6b9c80285818675682e9f5be
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQT1sUPBYsyGmi4usy/XblvOeH7bbgUCaNWBUwAKCRDXblvOeH7b
+bhxxAQCeedjuz7MzbGyk41Q/ap7bH+8LHheMRHyOxpn9SezY7AD+KZApBH0xFnE/
+3+O2yoRG+dre2ZIK4DMmnaaZXvwd8QM=
+=3Rfs
+-----END PGP SIGNATURE-----
+
+--a357dd026792ca33492dc6fb0c6b8bf0ccfe6b9c80285818675682e9f5be--
 
