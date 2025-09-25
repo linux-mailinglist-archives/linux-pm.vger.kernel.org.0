@@ -1,379 +1,340 @@
-Return-Path: <linux-pm+bounces-35332-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35333-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C444AB9E9E0
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Sep 2025 12:25:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0769AB9EE1B
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Sep 2025 13:16:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E0E631BC5268
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Sep 2025 10:26:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1548F1BC0357
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Sep 2025 11:16:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F04292EAB6D;
-	Thu, 25 Sep 2025 10:25:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EEF82F6560;
+	Thu, 25 Sep 2025 11:16:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="aVYRgIv7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="txvyULf5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8C612EA736
-	for <linux-pm@vger.kernel.org>; Thu, 25 Sep 2025 10:25:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BE352EC560
+	for <linux-pm@vger.kernel.org>; Thu, 25 Sep 2025 11:16:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758795924; cv=none; b=rsmB5xMXXNfbRUr8E3XaFrmCfrSWDKVen24SlKGfqK7PV+/RUIPZGGnvnCn9bleq2h8lVkh9UawQ4EXxMiDSVClg7RdrP8HpAo3riypPqZq1T0/C3X4Q0Q2OQLPXRlzpGhUATiGq8ymNMSfw+n/nGiOz5qCgedjNbKrGjS620O4=
+	t=1758798976; cv=none; b=pXRnmXxNjXcqRlSGRapF2d5iQEV3ESB+J5Dtoh01n6V5ZcRQdJRqoXT70IZBVK7P9OGZOEk/bW3gPTLJCxYC5hn16ZFr5xcCRM+aCLgr8w7XH4CUC6WFSO5F/FnMrwNZCgp1QlcpA35DNWZ7PzBSWbrL6veDiG3mCg+jOlMf1IQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758795924; c=relaxed/simple;
-	bh=XtVkM+2G1gsdVgHt/CWQpbqSQkoB9y5NcQzWL4Ho8rI=;
+	s=arc-20240116; t=1758798976; c=relaxed/simple;
+	bh=fDQLdRzSJmuHNQkxmP5PqXzoQGXsDjWx1inTyaL1AQI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=j3wtkZxjRwPn1dEtW5ShOikYF96oOSlPc3OEyueRtSIIWW2UN+TLf27GYWF/vuyv5hoQWKuXkEVMAefvzuq+1xKM9jduKiMAgcZ4CeY6xLiBdWpba5RgkWushJ5khheF5f78d7Ge8q3YBK+jQt6rhFq0gSoDJ8LMN6Y2j3M/XG0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=aVYRgIv7; arc=none smtp.client-ip=209.85.219.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-ea5bcc26849so634087276.1
-        for <linux-pm@vger.kernel.org>; Thu, 25 Sep 2025 03:25:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1758795922; x=1759400722; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4xKL//qDf/bHFwOcVaHIl5QOFV73BHh6RluSbqnRvZ0=;
-        b=aVYRgIv7FZOdUR/B+syQLPe4G1TI9ffAuu3pX2HmvoFBhwAdJabOKLZ4ZQ8kgi9Zzz
-         UPfjLkEq4bTO8XMuBZrC0gcDKCID80MfyLjYFd0TVxprIk/tUG4TnZaB4RevFTHJGx0N
-         PlCzRbuHpU4wkTkfXsqhKA8orY+5TQtvHHzB7Tnhgjj/5FvNZi0MJOQ/aSZpJNugafN4
-         W1QXYWMgvZzRYgykS53018hPJbDy+nCzPDQKD0O/eqKbjPb5nHoIWNAcFdebbIhImkIo
-         r4P0sX2FwWIVqU51qSssvEZXUDTVBNm7bIXanYwfp4Nfbn3NEv910hiRcx6gFare7uo4
-         4Ebg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758795922; x=1759400722;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4xKL//qDf/bHFwOcVaHIl5QOFV73BHh6RluSbqnRvZ0=;
-        b=ihcfehJqCC/XldIuiEiKk1usJjAxbPtVcfJMVRleADcCSrpIS5UicR23CFdFHnY+2i
-         icP1W5hexPqsH+UjIi+aloyuRJmJI5nUFtWIxol4TYJ4kljN4oGLAO06ePf00n2QHuSw
-         E9lrTzVFPlr3lcsHnFehNSkE2asWQMEF27frA4sr5VqQhAQhHHF9xFUH0TbOtUqDK+BY
-         cL6iQBYkw66+d/ibZYXqiunJ2LDcidADefkMz/NOYE9RzE49SdgCAz7gYUU8kMoxWkGd
-         GsySgy9JIiVS2ok1q6YYHgBL7atUbZ1H2MVj8ZKW9AJCK5CU5UR/7AGtZ+4NY+MTptVd
-         1WjQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUrIJ89XSYAgbn0k1eN+FyCYrrYq0jYtsI61K10IIWBHz9GcL3WLHjpPFj64AtZPCtSMN2ZjO7IHg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzvQMbALBx6RyanCDPjpZLkq1DJoAz5UQeIrqKvidIb2W4rGHji
-	f7smHP1dzxBlABBcbH+J0hZvgIyo26A8QyhrfIJMVH7gcJle5VoYH398N4FcYOl6mKXzxvgm/Hs
-	avux1hahqDMHKLnP5hlwqpceZzXxs+JSBGrk82b3wbg==
-X-Gm-Gg: ASbGncvep1mLKyZUXfTk3gGz2Kr0UAmtHnatFhQgXi3HW0vBxIRw0NOvzH+CD6OBCjt
-	aC1INuNI/zJffvbgfI8UaaGjszfYmzequ6h5xUZqzpY1xNLUO4FAWDXdDR3XjbsPfATRyn4m2Rl
-	9LyCSp9utjuUiMgq8uD/zAuhxVcTaANmU/xVvKYA==
-X-Google-Smtp-Source: AGHT+IG8V3Q7p5Vt1DR2luFePzsg0Km6CytZRwWd8W+sa6jlNcUbpUDNIrxaLDSPg7kCtzuqQEjpM1BofvJxOFFpdhA=
-X-Received: by 2002:a05:690c:640c:b0:71f:f942:8467 with SMTP id
- 00721157ae682-7640624f00amr25865727b3.51.1758795921561; Thu, 25 Sep 2025
- 03:25:21 -0700 (PDT)
+	 To:Cc:Content-Type; b=p1FUDHyYWVb2wupMGHYMZqE5tK1pX9/eGGH6jzLL504t8debOeuXdawbpWiqT/bTqzhEo5h7UpwB3CzwAl6p1hK6p4F9lxvtaiFwtdLbOlG6HzsrCMkZiFr5Sr03Ak7BBfa8MlfQRiFPGW6NR/562W2XRSiyitYLKF9WXC+edU8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=txvyULf5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAD71C4CEF7
+	for <linux-pm@vger.kernel.org>; Thu, 25 Sep 2025 11:16:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1758798975;
+	bh=fDQLdRzSJmuHNQkxmP5PqXzoQGXsDjWx1inTyaL1AQI=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=txvyULf5nbxiObU4BzXZZAzzroRdBTJJspK3mZSPcSM4/1EJ0hmTzcB6Nf6Tid1Mv
+	 aW7zpa82TEcPTi1gSi0z9fDKbySPmICnFio+kjpzQXgWr/jStNpa912Q1hmFb3o3H5
+	 33SH/g+gUMbqz6qezJAQ2CPb/Gr6ZdDcpFaJRTIBMCtt/57OO4zjDDVkIH0ms40jcu
+	 mSifuFXDCGKHkhrw4UIwPd2VP5w7aTBg95t9KxsqxYX1O7vTs1uJIq8wbc1k8A/o2i
+	 W+ZPksKSiBbqXBzbuAipKN9IBCMfNp3KrHUdwbYbQl8Ix50CeXBrEfNdmXZD9jv9+c
+	 cSpMnRudZp9BA==
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-332e66cd8e4so375179fac.2
+        for <linux-pm@vger.kernel.org>; Thu, 25 Sep 2025 04:16:15 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVBsbPqH82yBuBNhxYkRci6VKwxP0twOY9x6v+wGt3NMMTAT6Txw2R+wbtpd98zubQS9fDQIB9sZA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwzKqEDZ/FrJTn75YIi2ij3ERqtBbhOj008B6xbu4AIgcsi2Mxg
+	VdWnX888gkA7gcqAKdtk3y3ps+urkfFj+diG5xHQNHiGkFrTB7DrBN9jXxAdqRfszP/DudfJeLS
+	j9biEC6M5jtScHe47O6iWGBlgWzMCD4E=
+X-Google-Smtp-Source: AGHT+IHafUzhGBmN+xVEK4HkAcLgFcq2k7v2GHK3JiGAIsyUGVGNWDwDdgzwvEPjrjjcrQB8XEQvevxh7iz0rg1Q+2c=
+X-Received: by 2002:a05:6870:6126:b0:34b:27bd:666a with SMTP id
+ 586e51a60fabf-35eeaa48d42mr1141756fac.51.1758798975128; Thu, 25 Sep 2025
+ 04:16:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <7hldnp6apf.fsf@baylibre.com> <CAJZ5v0j=9RXHrcVEBp0yy1Ae4_kC1y-WFQyBf89r3NtoL-tYQw@mail.gmail.com>
- <CAPDyKFpeVF_EHJDQ9u=LDuJ56g7ykYUQWHXV2WXTYLa-mYahVA@mail.gmail.com>
- <CAPDyKFpc-PHC1QhoSrNt9KnaGov749H1AwFZUwnDDzG7RDYBRw@mail.gmail.com>
- <CAJZ5v0hC=sEcC-mU8jArwVN3EA6+U=EmCa2e7TKO0sg6LJiz7g@mail.gmail.com>
- <CAPDyKFqG=bFSP2rJ3PXt5=6_nLdpJ+ir80krU1DrRCCMhwKQng@mail.gmail.com>
- <CAJZ5v0hYN5G_WpA6KDpeDgowc2i9AvrUBCq-egS==8RNVb6N=w@mail.gmail.com>
- <CAPDyKFr0-yh8wt169QanAo3AmuXBq_9p3xiiqeFmmWz-ntNQsw@mail.gmail.com>
- <CAJZ5v0h4nS7fm347ue0Kj_eGwAi=o1vzyJm25_Q67dWzyoXR+Q@mail.gmail.com>
- <CAPDyKFos=rM6Y-6tFbifpFp8XxwA=t_aya-nWhz=6ME1FaBEoA@mail.gmail.com> <20250923164324.mo6gkzlfb6y7spvo@lcpd911>
-In-Reply-To: <20250923164324.mo6gkzlfb6y7spvo@lcpd911>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Thu, 25 Sep 2025 12:24:45 +0200
-X-Gm-Features: AS18NWCuDlHueGZETEUFNZPJuvza6u99iJRdJVkJ1uhEbwCZmVlEliOR9iZl3qA
-Message-ID: <CAPDyKFowed5SdaCN6NRM_g1RtWBhu20SXUiZceBLqHrvmnQT3g@mail.gmail.com>
-Subject: Re: [RFC/PATCH 1/3] PM: QoS: Introduce a system-wakeup QoS limit
-To: Dhruva Gole <d-gole@ti.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Kevin Hilman <khilman@baylibre.com>, linux-pm@vger.kernel.org, 
-	Pavel Machek <pavel@kernel.org>, Len Brown <len.brown@intel.com>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, Saravana Kannan <saravanak@google.com>, 
-	Maulik Shah <quic_mkshah@quicinc.com>, Prasad Sodagudi <psodagud@quicinc.com>, 
-	linux-kernel@vger.kernel.org
+References: <20250922125929.453444-1-shawnguo2@yeah.net> <12764935.O9o76ZdvQC@rafael.j.wysocki>
+ <aNT3k9OK82USu4n8@dragon>
+In-Reply-To: <aNT3k9OK82USu4n8@dragon>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 25 Sep 2025 13:16:02 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0jd+Th7cdbf7arto+spSbdvd37gk0YZEL5mh=0HK2id=Q@mail.gmail.com>
+X-Gm-Features: AS18NWDINpHUc47MEDXGMwzqgVPSTcDn3txgtXlXbHe1JLNEoukN9evapk2uawI
+Message-ID: <CAJZ5v0jd+Th7cdbf7arto+spSbdvd37gk0YZEL5mh=0HK2id=Q@mail.gmail.com>
+Subject: Re: [PATCH v2] cpufreq: Handle CPUFREQ_ETERNAL with a default
+ transition latency
+To: Shawn Guo <shawnguo2@yeah.net>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
+	Qais Yousef <qyousef@layalina.io>, Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, 23 Sept 2025 at 18:43, Dhruva Gole <d-gole@ti.com> wrote:
+On Thu, Sep 25, 2025 at 10:15=E2=80=AFAM Shawn Guo <shawnguo2@yeah.net> wro=
+te:
 >
-> Hi Ulf,
+> On Mon, Sep 22, 2025 at 08:31:56PM +0200, Rafael J. Wysocki wrote:
+> > What about the appended (untested) change instead?
 >
-> On Sep 23, 2025 at 14:36:53 +0200, Ulf Hansson wrote:
-> > On Tue, 23 Sept 2025 at 13:39, Rafael J. Wysocki <rafael@kernel.org> wr=
-ote:
-> > >
-> > > On Tue, Sep 23, 2025 at 11:42=E2=80=AFAM Ulf Hansson <ulf.hansson@lin=
-aro.org> wrote:
-> > > >
-> > > > On Mon, 22 Sept 2025 at 20:55, Rafael J. Wysocki <rafael@kernel.org=
-> wrote:
-> > > > >
-> > > > > On Thu, Sep 18, 2025 at 5:34=E2=80=AFPM Ulf Hansson <ulf.hansson@=
-linaro.org> wrote:
-> > > > > >
-> > > > > > On Wed, 17 Sept 2025 at 21:24, Rafael J. Wysocki <rafael@kernel=
-.org> wrote:
-> > > > > > >
-> > > > > > > Hi,
-> > > > > > >
-> > > > > > > Sorry for the delay.
-> > > > > > >
-> > > > > > > On Fri, Sep 12, 2025 at 3:58=E2=80=AFPM Ulf Hansson <ulf.hans=
-son@linaro.org> wrote:
-> > > > > > > >
-> > > > > > > > On Tue, 12 Aug 2025 at 11:26, Ulf Hansson <ulf.hansson@lina=
-ro.org> wrote:
-> > > > > > > > >
-> > > > > > > > > On Mon, 11 Aug 2025 at 21:16, Rafael J. Wysocki <rafael@k=
-ernel.org> wrote:
-> > > > > > > > > >
-> > > > > > > > > > On Mon, Aug 11, 2025 at 7:16=E2=80=AFPM Kevin Hilman <k=
-hilman@baylibre.com> wrote:
-> > > > > > > > > > >
-> > > > > > > > > > > "Rafael J. Wysocki" <rafael@kernel.org> writes:
-> > > > > > > > > > >
-> > > > > > > > > > > > On Wed, Jul 16, 2025 at 2:33=E2=80=AFPM Ulf Hansson=
- <ulf.hansson@linaro.org> wrote:
-> > > > > > > > > > > >>
-> > > > > > > > > > > >> Some platforms and devices supports multiple low-p=
-ower-states than can be
-> > > > > > > > > > > >> used for system-wide suspend. Today these states a=
-re selected on per
-> > > > > > > > > > > >> subsystem basis and in most cases it's the deepest=
- possible state that
-> > > > > > > > > > > >> becomes selected.
-> > > > > > > > > > > >>
-> > > > > > > > > > > >> For some use-cases this is a problem as it isn't s=
-uitable or even breaks
-> > > > > > > > > > > >> the system-wakeup latency constraint, when we deci=
-de to enter these deeper
-> > > > > > > > > > > >> states during system-wide suspend.
-> > > > > > > > > > > >>
-> > > > > > > > > > > >> Therefore, let's introduce an interface for user-s=
-pace, allowing us to
-> > > > > > > > > > > >> specify the system-wakeup QoS limit. Subsequent ch=
-anges will start taking
-> > > > > > > > > > > >> into account the QoS limit.
-> > > > > > > > > > > >
-> > > > > > > > > > > > Well, this is not really a system-wakeup limit, but=
- a CPU idle state
-> > > > > > > > > > > > latency limit for states entered in the last step o=
-f suspend-to-idle.
-> > > > > > > > > > > >
-> > > > > > > > > > > > It looks like the problem is that the existing CPU =
-latency QoS is not
-> > > > > > > > > > > > taken into account by suspend-to-idle, so instead o=
-f adding an
-> > > > > > > > > > > > entirely new interface to overcome this, would it m=
-ake sense to add an
-> > > > > > > > > > > > ioctl() to the existing one that would allow the us=
-er of it to
-> > > > > > > > > > > > indicate that the given request should also be resp=
-ected by
-> > > > > > > > > > > > suspend-to-idle?
-> > > > > > > > > > > >
-> > > > > > > > > > > > There are two basic reasons why I think so:
-> > > > > > > > > > > > (1) The requests that you want to be respected by s=
-uspend-to-idle
-> > > > > > > > > > > > should also be respected by the regular "runtime" i=
-dle, or at least I
-> > > > > > > > > > > > don't see a reason why it wouldn't be the case.
-> > > > > > > > > > > > (2) The new interface introduced by this patch basi=
-cally duplicates
-> > > > > > > > > > > > the existing one.
-> > > > > > > > > > >
-> > > > > > > > > > > I also think that just using the existing /dev/cpu_dm=
-a_latency is the
-> > > > > > > > > > > right approach here, and simply teaching s2idle to re=
-spect this value.
-> > > > > > > > > > >
-> > > > > > > > > > > I'm curious about the need for a new ioctl() though. =
- Under what
-> > > > > > > > > > > conditions do you want normal/runtime CPUidle to resp=
-ect this value and
-> > > > > > > > > > > s2idle to not respect this value?
-> > > > > > > > > >
-> > > > > > > > > > In a typical PC environment s2idle is a replacement for=
- ACPI S3 which
-> > > > > > > > > > does not take any QoS constraints into account, so user=
-s may want to
-> > > > > > > > > > set QoS limits for run-time and then suspend with the e=
-xpectation that
-> > > > > > > > > > QoS will not affect it.
-> > > > > > > > >
-> > > > > > > > > Yes, I agree. To me, these are orthogonal use-cases which=
- could have
-> > > > > > > > > different wakeup latency constraints.
-> > > > > > > > >
-> > > > > > > > > Adding an ioctl for /dev/cpu_dma_latency, as suggested by=
- Rafael would
-> > > > > > > > > allow this to be managed, I think.
-> > > > > > > > >
-> > > > > > > > > Although, I am not fully convinced yet that re-using
-> > > > > > > > > /dev/cpu_dma_latency is the right path. The main reason i=
-s that I
-> > > > > > > > > don't want us to limit the use-case to CPU latencies, but=
- rather allow
-> > > > > > > > > the QoS constraint to be system-wide for any type of devi=
-ce. For
-> > > > > > > > > example, it could be used by storage drivers too (like NV=
-Me, UFS,
-> > > > > > > > > eMMC), as a way to understand what low power state to pic=
-k as system
-> > > > > > > > > wide suspend. If you have a closer look at patch2 [1] , I=
- suggest we
-> > > > > > > > > extend the genpd-governor for *both* CPU-cluster-PM-domai=
-ns and for
-> > > > > > > > > other PM-domains too.
-> > > > > > > > >
-> > > > > > > > > Interested to hear your thoughts around this.
-> > > > > > > >
-> > > > > > > > Hey, just wanted to see if you have managed to digest this =
-and have
-> > > > > > > > any possible further comment?
-> > > > > > >
-> > > > > > > The reason why I thought about reusing /dev/cpu_dma_latency i=
-s because
-> > > > > > > I think that the s2idle limit should also apply to cpuidle.  =
-Of
-> > > > > > > course, cpuidle may be limited further, but IMV it should obs=
-erve the
-> > > > > > > limit set on system suspend (it would be kind of inconsistent=
- to allow
-> > > > > > > cpuidle to use deeper idle states than can be used by s2idle)=
-.
-> > > > > >
-> > > > > > Agreed!
-> > > > > >
-> > > > > > >
-> > > > > > > I also don't think that having a per-CPU s2idle limit would b=
-e
-> > > > > > > particularly useful (and it might be problematic).
-> > > > > > >
-> > > > > > > Now, it is not as straightforward as I thought because someon=
-e may
-> > > > > > > want to set a more restrictive limit on cpuidle, in which cas=
-e they
-> > > > > > > would need to open the same special device file twice etc and=
- that
-> > > > > > > would be quite cumbersome.
-> > > > > > >
-> > > > > > > So in the end I think that what you did in the $subject patch=
- is
-> > > > > > > better, but I still would like it to also affect cpuidle.
-> > > > > >
-> > > > > > Okay. I will update the patches according to your suggestions!
-> > > > > >
-> > > > > > >
-> > > > > > > And it needs to be made clear that this is a limit on the res=
-ume
-> > > > > > > latency of one device.  Worst case, the system wakeup latency=
- may be a
-> > > > > > > sum of those limits if the devices in question are resumed
-> > > > > > > sequentially, so in fact this is a limit on the contribution =
-of a
-> > > > > > > given device to the system wakeup latency.
-> > > > > >
-> > > > > > Indeed, that's a very good point! I will keep this in mind when
-> > > > > > working on adding the documentation part.
-> > > > >
-> > > > > Well, this also means that using one limit for all of the differe=
-nt
-> > > > > devices is not likely to be very practical because the goal is to=
- save
-> > > > > as much energy as reasonably possible in system suspend while
-> > > > > respecting a global resume latency constraint at the same time.
-> > > > >
-> > > > > Using the same limit on a local contribution from each device to =
-the
-> > > > > combined latency is not likely to be effective here.  Rather, I'd
-> > > > > expect that the best results can be achieved by setting different
-> > > > > resume latency limits on different devices, depending on how much
-> > > > > power they draw in each of their idle states and what the exit la=
-tency
-> > > > > values for all of those states are.  In other words, this appears=
- to
-> > > > > be an optimization problem in which the resume latency limits for
-> > > > > individual devices need to be chosen to satisfy the global resume
-> > > > > latency constraint and minimize the total system power.
-> > > >
-> > > > I am following your reasoning and I agree!
-> > > >
-> > > > Perhaps we should start with extending the cpu_dma_latency with an
-> > > > ioctl after all? This would allow userspace to specify constraints =
-to
-> > > > be applicable for system-wide-suspend (s2idle), but it would still =
-be
-> > > > limited for CPUs/CPU-clusters.
-> > >
-> > > Right.
-> > >
-> > > Adding a separate device special file to represent the limit affectin=
-g
-> > > s2idle may be somewhat cleaner though as mentioned before.
+> I'm trying to address a regression with a fix to be ported for stable
+> kernel.  Not really sure it's a good idea to mix up with cleanup
+> changes.
+
+These are not cleanup changes, just a different way to address the given is=
+sue.
+
+Instead of pretending that it still works as documented even though
+that's not the case strictly speaking, let's just get rid of it and
+let the code be simpler at the same time.
+
+
 > >
-> > Okay, sounds good to me too!
+> > With a follow-up one to replace CPUFREQ_ETERNAL with something internal
+> > to CPPC.
 > >
-> > >
-> > > > For other devices, we should probably explore the per device PM QoS
-> > > > (pm_qos_latency_tolerance_us) instead. Currently the
-> > > > pm_qos_latency_tolerance_us is used for "runtime_suspend", so perha=
-ps
-> > > > adding another per device sysfs file, like
-> > > > "pm_qos_system_wakeup_latency_us",  that we can use for the
-> > > > system-wide-wakeup latency constraint?
-> > > >
-> > > > Would this make better sense, you think?
-> > >
-> > > I think that this can be made work.
+> > ---
+> >  Documentation/admin-guide/pm/cpufreq.rst                  |    4 ----
+> >  Documentation/cpu-freq/cpu-drivers.rst                    |    3 +--
+> >  Documentation/translations/zh_CN/cpu-freq/cpu-drivers.rst |    3 +--
+> >  Documentation/translations/zh_TW/cpu-freq/cpu-drivers.rst |    3 +--
+> >  drivers/cpufreq/cppc_cpufreq.c                            |   14 +++++=
++++++++--
+> >  drivers/cpufreq/cpufreq-dt.c                              |    2 +-
+> >  drivers/cpufreq/imx6q-cpufreq.c                           |    2 +-
+> >  drivers/cpufreq/mediatek-cpufreq-hw.c                     |    2 +-
+> >  drivers/cpufreq/scmi-cpufreq.c                            |    2 +-
+> >  drivers/cpufreq/scpi-cpufreq.c                            |    2 +-
+> >  drivers/cpufreq/spear-cpufreq.c                           |    2 +-
+> >  include/linux/cpufreq.h                                   |    7 ++++-=
+--
+> >  12 files changed, 25 insertions(+), 21 deletions(-)
 > >
-> > Okay, I will explore this approach.
+> > --- a/Documentation/admin-guide/pm/cpufreq.rst
+> > +++ b/Documentation/admin-guide/pm/cpufreq.rst
+> > @@ -274,10 +274,6 @@ are the following:
+> >       The time it takes to switch the CPUs belonging to this policy fro=
+m one
+> >       P-state to another, in nanoseconds.
+> >
+> > -     If unknown or if known to be so high that the scaling driver does=
+ not
+> > -     work with the `ondemand`_ governor, -1 (:c:macro:`CPUFREQ_ETERNAL=
+`)
+> > -     will be returned by reads from this attribute.
+> > -
+> >  ``related_cpus``
+> >       List of all (online and offline) CPUs belonging to this policy.
+> >
+> > --- a/Documentation/cpu-freq/cpu-drivers.rst
+> > +++ b/Documentation/cpu-freq/cpu-drivers.rst
+> > @@ -109,8 +109,7 @@ Then, the driver must fill in the follow
+> >  +-----------------------------------+---------------------------------=
+-----+
+> >  |policy->cpuinfo.transition_latency | the time it takes on this CPU to=
+          |
+> >  |                                | switch between two frequencies in  =
+  |
+> > -|                                | nanoseconds (if appropriate, else  =
+  |
+> > -|                                | specify CPUFREQ_ETERNAL)           =
+  |
+> > +|                                | nanoseconds                        =
+  |
+> >  +-----------------------------------+---------------------------------=
+-----+
+> >  |policy->cur                     | The current operating frequency of =
+  |
+> >  |                                | this CPU (if appropriate)          =
+  |
+> > --- a/Documentation/translations/zh_CN/cpu-freq/cpu-drivers.rst
+> > +++ b/Documentation/translations/zh_CN/cpu-freq/cpu-drivers.rst
+> > @@ -112,8 +112,7 @@ CPUfreq=E6=A0=B8=E5=BF=83=E5=B1=82=E6=B3=A8=E5=86=
+=8C=E4=B8=80=E4=B8=AAcpufreq_driv
+> >  |                                   |                                 =
+     |
+> >  +-----------------------------------+---------------------------------=
+-----+
+> >  |policy->cpuinfo.transition_latency | CPU=E5=9C=A8=E4=B8=A4=E4=B8=AA=
+=E9=A2=91=E7=8E=87=E4=B9=8B=E9=97=B4=E5=88=87=E6=8D=A2=E6=89=80=E9=9C=80=E7=
+=9A=84=E6=97=B6=E9=97=B4=EF=BC=8C=E4=BB=A5  |
+> > -|                                   | =E7=BA=B3=E7=A7=92=E4=B8=BA=E5=
+=8D=95=E4=BD=8D=EF=BC=88=E5=A6=82=E4=B8=8D=E9=80=82=E7=94=A8=EF=BC=8C=E8=AE=
+=BE=E5=AE=9A=E4=B8=BA         |
+> > -|                                   | CPUFREQ_ETERNAL=EF=BC=89        =
+            |
+> > +|                                   | =E7=BA=B3=E7=A7=92=E4=B8=BA=E5=
+=8D=95=E4=BD=8D                    |
+> >  |                                   |                                 =
+     |
+> >  +-----------------------------------+---------------------------------=
+-----+
+> >  |policy->cur                        | =E8=AF=A5CPU=E5=BD=93=E5=89=8D=
+=E7=9A=84=E5=B7=A5=E4=BD=9C=E9=A2=91=E7=8E=87(=E5=A6=82=E9=80=82=E7=94=A8) =
+         |
+> > --- a/Documentation/translations/zh_TW/cpu-freq/cpu-drivers.rst
+> > +++ b/Documentation/translations/zh_TW/cpu-freq/cpu-drivers.rst
+> > @@ -112,8 +112,7 @@ CPUfreq=E6=A0=B8=E5=BF=83=E5=B1=A4=E8=A8=BB=E5=86=
+=8A=E4=B8=80=E5=80=8Bcpufreq_driv
+> >  |                                   |                                 =
+     |
+> >  +-----------------------------------+---------------------------------=
+-----+
+> >  |policy->cpuinfo.transition_latency | CPU=E5=9C=A8=E5=85=A9=E5=80=8B=
+=E9=A0=BB=E7=8E=87=E4=B9=8B=E9=96=93=E5=88=87=E6=8F=9B=E6=89=80=E9=9C=80=E7=
+=9A=84=E6=99=82=E9=96=93=EF=BC=8C=E4=BB=A5  |
+> > -|                                   | =E7=B4=8D=E7=A7=92=E7=88=B2=E5=
+=96=AE=E4=BD=8D=EF=BC=88=E5=A6=82=E4=B8=8D=E9=81=A9=E7=94=A8=EF=BC=8C=E8=A8=
+=AD=E5=AE=9A=E7=88=B2         |
+> > -|                                   | CPUFREQ_ETERNAL=EF=BC=89        =
+            |
+> > +|                                   | =E7=B4=8D=E7=A7=92=E7=88=B2=E5=
+=96=AE=E4=BD=8D                    |
+> >  |                                   |                                 =
+     |
+> >  +-----------------------------------+---------------------------------=
+-----+
+> >  |policy->cur                        | =E8=A9=B2CPU=E7=95=B6=E5=89=8D=
+=E7=9A=84=E5=B7=A5=E4=BD=9C=E9=A0=BB=E7=8E=87(=E5=A6=82=E9=81=A9=E7=94=A8) =
+         |
+> > --- a/drivers/cpufreq/cppc_cpufreq.c
+> > +++ b/drivers/cpufreq/cppc_cpufreq.c
+> > @@ -308,6 +308,16 @@ static int cppc_verify_policy(struct cpu
+> >       return 0;
+> >  }
+> >
+> > +static unsigned int get_transition_latency(unsigned int cpu)
+> > +{
+> > +     unsigned int transition_latency_ns =3D cppc_get_transition_latenc=
+y(cpu);
+> > +
+> > +     if (transition_latency_ns =3D=3D CPUFREQ_ETERNAL)
+> > +             return CPUFREQ_DEFAULT_TRANSITION_LATENCY_NS / NSEC_PER_U=
+SEC;
+> > +
+> > +     return transition_latency_ns / NSEC_PER_USEC;
+> > +}
+> > +
+> >  /*
+> >   * The PCC subspace describes the rate at which platform can accept co=
+mmands
+> >   * on the shared PCC channel (including READs which do not count towar=
+ds freq
+> > @@ -330,12 +340,12 @@ static unsigned int cppc_cpufreq_get_tra
+> >                       return 10000;
+> >               }
+> >       }
+> > -     return cppc_get_transition_latency(cpu) / NSEC_PER_USEC;
+> > +     return get_transition_latency(cpu);
+> >  }
+> >  #else
+> >  static unsigned int cppc_cpufreq_get_transition_delay_us(unsigned int =
+cpu)
+> >  {
+> > -     return cppc_get_transition_latency(cpu) / NSEC_PER_USEC;
+> > +     return get_transition_latency(cpu);
+> >  }
+> >  #endif
+> >
+> > --- a/drivers/cpufreq/cpufreq-dt.c
+> > +++ b/drivers/cpufreq/cpufreq-dt.c
+> > @@ -104,7 +104,7 @@ static int cpufreq_init(struct cpufreq_p
+> >
+> >       transition_latency =3D dev_pm_opp_get_max_transition_latency(cpu_=
+dev);
+> >       if (!transition_latency)
+> > -             transition_latency =3D CPUFREQ_ETERNAL;
+> > +             transition_latency =3D CPUFREQ_DEFAULT_TRANSITION_LATENCY=
+_NS;
+> >
+> >       cpumask_copy(policy->cpus, priv->cpus);
+> >       policy->driver_data =3D priv;
+> > --- a/drivers/cpufreq/imx6q-cpufreq.c
+> > +++ b/drivers/cpufreq/imx6q-cpufreq.c
+> > @@ -442,7 +442,7 @@ soc_opp_out:
+> >       }
+> >
+> >       if (of_property_read_u32(np, "clock-latency", &transition_latency=
+))
+> > -             transition_latency =3D CPUFREQ_ETERNAL;
+> > +             transition_latency =3D CPUFREQ_DEFAULT_TRANSITION_LATENCY=
+_NS;
+> >
+> >       /*
+> >        * Calculate the ramp time for max voltage change in the
+> > --- a/drivers/cpufreq/mediatek-cpufreq-hw.c
+> > +++ b/drivers/cpufreq/mediatek-cpufreq-hw.c
+> > @@ -309,7 +309,7 @@ static int mtk_cpufreq_hw_cpu_init(struc
+> >
+> >       latency =3D readl_relaxed(data->reg_bases[REG_FREQ_LATENCY]) * 10=
+00;
+> >       if (!latency)
+> > -             latency =3D CPUFREQ_ETERNAL;
+> > +             latency =3D CPUFREQ_DEFAULT_TRANSITION_LATENCY_NS;
+> >
+> >       policy->cpuinfo.transition_latency =3D latency;
+> >       policy->fast_switch_possible =3D true;
+> > --- a/drivers/cpufreq/scmi-cpufreq.c
+> > +++ b/drivers/cpufreq/scmi-cpufreq.c
+> > @@ -294,7 +294,7 @@ static int scmi_cpufreq_init(struct cpuf
+> >
+> >       latency =3D perf_ops->transition_latency_get(ph, domain);
+> >       if (!latency)
+> > -             latency =3D CPUFREQ_ETERNAL;
+> > +             latency =3D CPUFREQ_DEFAULT_TRANSITION_LATENCY_NS;
+> >
+> >       policy->cpuinfo.transition_latency =3D latency;
+> >
+> > --- a/drivers/cpufreq/scpi-cpufreq.c
+> > +++ b/drivers/cpufreq/scpi-cpufreq.c
+> > @@ -157,7 +157,7 @@ static int scpi_cpufreq_init(struct cpuf
+> >
+> >       latency =3D scpi_ops->get_transition_latency(cpu_dev);
+> >       if (!latency)
+> > -             latency =3D CPUFREQ_ETERNAL;
+> > +             latency =3D CPUFREQ_DEFAULT_TRANSITION_LATENCY_NS;
+> >
+> >       policy->cpuinfo.transition_latency =3D latency;
+> >
+> > --- a/drivers/cpufreq/spear-cpufreq.c
+> > +++ b/drivers/cpufreq/spear-cpufreq.c
+> > @@ -182,7 +182,7 @@ static int spear_cpufreq_probe(struct pl
+> >
+> >       if (of_property_read_u32(np, "clock-latency",
+> >                               &spear_cpufreq.transition_latency))
+> > -             spear_cpufreq.transition_latency =3D CPUFREQ_ETERNAL;
+> > +             spear_cpufreq.transition_latency =3D CPUFREQ_DEFAULT_TRAN=
+SITION_LATENCY_NS;
+> >
+> >       cnt =3D of_property_count_u32_elems(np, "cpufreq_tbl");
+> >       if (cnt <=3D 0) {
+> > --- a/include/linux/cpufreq.h
+> > +++ b/include/linux/cpufreq.h
+> > @@ -26,12 +26,13 @@
+> >   *********************************************************************=
+/
+> >  /*
+> >   * Frequency values here are CPU kHz
+> > - *
+> > - * Maximum transition latency is in nanoseconds - if it's unknown,
+> > - * CPUFREQ_ETERNAL shall be used.
+> >   */
+> >
+> > +/* Represents unknown transition latency */
+> >  #define CPUFREQ_ETERNAL                      (-1)
+> > +
+> > +#define CPUFREQ_DEFAULT_TANSITION_LATENCY_NS NSEC_PER_MSEC
+> > +
+> >  #define CPUFREQ_NAME_LEN             16
+> >  /* Print length for names. Extra 1 space for accommodating '\n' in pri=
+nts */
+> >  #define CPUFREQ_NAME_PLEN            (CPUFREQ_NAME_LEN + 1)
+> >
+> >
+> >
+> >
 >
-> I think this is kind of similar to how we did it for the TI SCI
-> pmdomains driver for TI SoC. See Kevin's patch [1] where we read from
-> dev_pm_qos_read_value and then based on that we set some constraints on
-> the firmware entity based on which the firmware entity chose which low
-> power mode to enter. It's nice to see that the logic is finally getting
-> into a much more central part of the kernel PM.
->
-> About this series itself, Kevin and I have been working to integrate a
-> branch where we can have some platform specific support for the TI AM62L
-> SoC along with this series applied on it on vendor kernel, but I think
-> it should be good enough to test a proof of concept that we can finally
-> do mode selection while using s2idle.
->
-> So yeah - I was able to write some values into
-> /dev/system_wakeup_latency and then see that before setting any value it
-> picked the deepest idle-state in the DT. When I programmed some latency
-> constraint into /dev/system_wakeup_latency then I could see that the
-> cpuidle_enter_s2idle picked the shallower idle-state.
->
-> These idle-states we had were modelling 2 different low power mode
-> variants of suspend to RAM, and based on the different suspend-param
-> that I recieved in the firmware (in this case TF-A via PSCI), I did the
-> mode selection bits and switched between low power modes purely based on
-> system_wakeup_latency. There's definitely more work to do, and I will
-> continue to closely monitor the next revisions of this series as well,
-> so please feel free to include me in To/CC.
-
-Thanks a lot for sharing your feedback and for confirming your
-test-results, great news!
-
-I will certainly cc you when I post the next revision!
-
-Kind regards
-Uffe
-
->
-> [1] https://lore.kernel.org/linux-pm/20241206-lpm-v6-10-constraints-pmdom=
-ain-v6-1-833980158c68@baylibre.com/
->
-> --
-> Best regards,
-> Dhruva Gole
-> Texas Instruments Incorporated
 
