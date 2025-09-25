@@ -1,74 +1,74 @@
-Return-Path: <linux-pm+bounces-35426-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35427-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D3C7BA1CCF
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Sep 2025 00:32:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B408FBA1E04
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Sep 2025 00:43:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8084F1C2773B
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Sep 2025 22:32:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6A42F62111A
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Sep 2025 22:43:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F839322767;
-	Thu, 25 Sep 2025 22:31:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A7C4321F2F;
+	Thu, 25 Sep 2025 22:41:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jo5lPm05"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="t4noGknX"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-vs1-f51.google.com (mail-vs1-f51.google.com [209.85.217.51])
+Received: from mail-vs1-f53.google.com (mail-vs1-f53.google.com [209.85.217.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CABE7321F27
-	for <linux-pm@vger.kernel.org>; Thu, 25 Sep 2025 22:31:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C4CE320CCF
+	for <linux-pm@vger.kernel.org>; Thu, 25 Sep 2025 22:41:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758839502; cv=none; b=c6RRvaqW0wX4uckC0gzPnrLUdellu35+zB6COVJG7UAAagDq2rd2ZkDYaDavzivTGHfPww3TPhvsE1vfu6C4JewPRwmyltslTFbAnBtzLjyKegDIkQJh4SOU+PYyF1SpvRxxsmu3alWc0qXYbMHwlu6Y5tmrLtvJRQW8eBEyrNQ=
+	t=1758840108; cv=none; b=ml72VaT5cUJyNZHkwkM2CMR6EsRJR3O7GeDQxiIHAOPFvHXZFhKYbFWI5wGpojNYrDIhSM36apHWhqgZ8bUniNFwZn4xho4ygEs2Q9tvzcvvkRfjlGiQ3EyHbT6WqUc2Vw6mNH/retAxBAGS675wHR1DenMusBMRQD1Z1fkvb/s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758839502; c=relaxed/simple;
-	bh=51K/RWydM2PjyVWXirdBujcKFN1Wi7wrBw7jteFADDQ=;
+	s=arc-20240116; t=1758840108; c=relaxed/simple;
+	bh=IMpuqL+3zUJultws4a8raft+G3Pwvu3TMoBeoCFUSog=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JMkP3mQemQXa+s+1ZsQOJkcBT7S1dp6KauMOhoSQUXM4BfJHOOH3Kz2Aka2DlqlUXZjGtiUR/ZCLmfaIBPxBceDFjTnsaJiG/8PJXyzRTucccvUppnMcQjW1H0TUG2STY24C6NEqb6lWHmyDAXBsRjczHgjgPZgZCbj249pgMIs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jo5lPm05; arc=none smtp.client-ip=209.85.217.51
+	 To:Cc:Content-Type; b=bvuadQ7FH9lB0I5F9Kf9scEw9hxFTBASkjzoPydK/YB8zWjjAGgPCX1w3YZaBe453v0TtKtxTl5ioJODnfTY+57Ju9eUXPok1uA9ZtPpuw7ZGPzbqKSnwaMP5N7yY5w2a98R6sqpBqm+qmh5msSAeVHrM/MCmrBd12RsxNuB/CI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=t4noGknX; arc=none smtp.client-ip=209.85.217.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-vs1-f51.google.com with SMTP id ada2fe7eead31-59c662bd660so626854137.3
-        for <linux-pm@vger.kernel.org>; Thu, 25 Sep 2025 15:31:40 -0700 (PDT)
+Received: by mail-vs1-f53.google.com with SMTP id ada2fe7eead31-5a7b2a6b13bso1298530137.3
+        for <linux-pm@vger.kernel.org>; Thu, 25 Sep 2025 15:41:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1758839499; x=1759444299; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1758840105; x=1759444905; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=D8gdJ7wKziz18TkLvoXgJuOhaMotEm6Z4D28IrFTO2s=;
-        b=jo5lPm05a6rpbYb6JiOfO1eURV1VauxR+Yai7yRqZRg7KQr4kT+SkkhZch8OSrKzeO
-         6I/2UfKWTBVZTWO+bWa+gS7m9GPZDygr/TQ1iDIrm81gwhUGQSubUYa8/svnjhLoJM2z
-         lQ/HaMlHMVh/mu6M/z4+Eg7tYRkmNxQkcX66OqayE8YkRgkBqrmgzC5fmyp+scDVoOua
-         cL4TVNqI/yvSk4hISEhgZSgUSfudUVrD2a2ohmVDcLYZUfnrYwzbFJYILjgo+ohAZZM0
-         ARZpjutc/geXYRnl9OAkhP22kCZb4jKAsFgILqnt7eOL2TMiXAZZZ5uYZvgUUlMp3ELd
-         h8lw==
+        bh=wHj+PHiUkQISWl2G0dz1sK7qOqKWgrZbDfjsc28nwu8=;
+        b=t4noGknXG4sgimhqxh412h+45xPXesmb7nZXy32FWrPX2/Cd1uA8jl4jUFa2Ef46UN
+         9YWPfGjFu1cGYV2p9yiVuOy9U61UjcjMuywYyE+74Wz+/rY+CuEAIm15lXKhw7rat9+Y
+         4UmX3QaKdPMkyNujVd1SCKr60i7RZzuzHy4HJUDncGAW39M2UlBVTKATFSebPpKUc7u0
+         /Djbglhd+Y9l5fibAy4gAtHlgOxtsNxm92csb1asTKL5u28kQ4PZMfjVMkrWRGLtlLyg
+         JYWJUXtPNzTRkUBqy+0Iut9hPXPmVVuiH/UDCe734hyVBhZb20tHELaGfiQz6ZarhvpS
+         bnbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758839499; x=1759444299;
+        d=1e100.net; s=20230601; t=1758840105; x=1759444905;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=D8gdJ7wKziz18TkLvoXgJuOhaMotEm6Z4D28IrFTO2s=;
-        b=dQ+PBlO2/oOiY1w8W2bMdvguByaw3gAwj51MzNVschzbklNCb62bgveGUIn+VIjg7D
-         zEABtLaocfpMhM192YC2zXfpdINLkAAL1LehXA3VvqtAdgUUi3uwQa82ZOr0IkMKw1eF
-         PzoHdkyffXfdtPe5PLPV4NVfpJ/U/ZvHjo0UOhmC8SEg7oD3OrMPb62hj2g/lfiYHA8M
-         zlR1Wfac1x4HD/JtYZZ3KVTVgVOY+tIy7FcvAC83/e06DLiOKTJ8cDKVr90CjaNkU6VL
-         zn4HiwfKYKAXatCDfbZSrd47IMmmBjq8WjS7fLBEDtenJkHTJcujwK0w+Z3EwAylFU7M
-         SJ3A==
-X-Forwarded-Encrypted: i=1; AJvYcCW2e18ypjkaf50Qs7KPTJicaUBgvKiAJ8t8tSvaVh5dzfQBnEPWWohCPzUWGT4ioeSqHhaf3kDipA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz2QSQZvMR4bk24VjsdSgf4KKgHw44cwouvfDyDrjldAkCTrWo7
-	X5wlG3/S3HJ5g+5qP99DDUWsHiz7ldgRGtmx/1D5d2IhblAV2L0yKBWmRgLZklX7kP0SEgi/VJ3
-	tf4uBu22o8f72Skg/fmFdxLnUGdmRHQyuV7I5KOwa
-X-Gm-Gg: ASbGnctmnC/RYQFAJTqQlw6cuKP+DmVfTqfXDE1531C95LNQ8Bv038bdWmkn+akeXT0
-	dIrhG8IqDk++BywGZ8qeBrcv0lD5yAUjszKr3nVJWS+aWIHXu+DROe0cRTWt5XBJ8qKan7HrA1Y
-	DQwt1sNNboeYEVZZl4wSL9RpyQ3FsAU14ndFGZQzvByXLUbDGCG0p3RvXsvmFxPU7ErKUsbrUks
-	GmyU+nhfCOddjdX89j7OMhucTQ7Hg/xaFh80Y8kuJ2B
-X-Google-Smtp-Source: AGHT+IFLlk6iDpEvaZjhHPcTDawfBx/XYJFVbUN5Hu8c0lEpBCCCVTWZi91ZCI4VwGOJE/tK3T8mihQAbe8ugPAiQBI=
-X-Received: by 2002:a05:6102:5488:b0:5a2:8ace:c921 with SMTP id
- ada2fe7eead31-5acc4a1eaefmr2368837137.4.1758839499299; Thu, 25 Sep 2025
- 15:31:39 -0700 (PDT)
+        bh=wHj+PHiUkQISWl2G0dz1sK7qOqKWgrZbDfjsc28nwu8=;
+        b=s08SlkzqrJed3VirDdYN+OBt2SE9NdZKEhXPvdSrx7eg2VICdEAk3qnA4WTFJ3yiOh
+         LkXOgvcED+HGk52JdLNvw0tTrzdfOrU8WXbnERaCXXAnJqvnEBNjSxYnY+fufUQQg76F
+         TmHO5/jTq/g9kWExoXZkc/17Err/A2HEdEvN7ccSh+eu7rn9otIs/eO1oQkv7MgCumcg
+         oVZf7X1F6CvrBbrjqQdwNDBmZI6vLGjMqXMPJAlQ5vVzH5BHibUJmh21398VgzcSTeql
+         HwNvWKJ8BLJGbgRxGbQu9FqdWgAD/NyIfONPqj42Dt+E01V314mb8PVBpNClej04BzcM
+         efUQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW6+nVfeFXBzGEbrSDlVG6DGeWSuAc72hV5xW7hF1mtqD6Yaw8wfoVJdFFYAJRNb7btdS8Wfrfojg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx0FwaYp6kpVMOqIrbviBE/uOdFAjBkSVpZ8nRXpuMjdmeKmhB3
+	+8ZgWS8IgU08+Zv5CBLPaJO38DF4zjow3v5NGSezfRDqF9tGYtc4xpyqYf1/gN57YMTklinTZs+
+	OQR6a/i7pw5Hqk2YdJ+pszP+Lp0Vy7xlk1qVGf7AT
+X-Gm-Gg: ASbGncs1ududDFdUHCkAMJYYS/25Hm49w3qriVywPg8xfmcZHbg2USgO+AaRvILWlgi
+	b5Vm1HdbNi1Q6le3gDxUEMNdvd038qB/xzlXg2XmGISXe2H86LTPTVlHzC9CqLARgXEVb98B2hP
+	Rr7hSNgw9IVtid6YPxulCoq+VijgXdmlGg5/ywrfev8DtYY1QsmSLB3jFe5iMqML32WCICK5nkb
+	n/tsajNKbDHrxwdmk3jLr6ikKBJV8vhmhIhHrUkOCXM
+X-Google-Smtp-Source: AGHT+IFi53lokqPUYgNEQzye6iKr3Z/ilnrjsL+SFz2i8CrL+Ky7RsH/7p9qRjXS5BHvCfGU8MEeb5NCJ3UDJIWnMK4=
+X-Received: by 2002:a05:6102:440b:b0:59d:ad3:e1dc with SMTP id
+ ada2fe7eead31-5acc680187emr2556063137.8.1758840104879; Thu, 25 Sep 2025
+ 15:41:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -76,17 +76,16 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20250701114733.636510-1-ulf.hansson@linaro.org>
- <20250701114733.636510-21-ulf.hansson@linaro.org> <4478f28b-47f8-4049-bf17-b7fc95cfac65@nvidia.com>
- <CAPDyKFqSyP3e=JRFYEuFefWVN5SYJWULU8SKzXmrThvyiVGXgg@mail.gmail.com>
- <a904d953-acb2-44f6-81bd-118f7abd22da@nvidia.com> <614f726c-4d6d-463b-a8b3-26d3df590575@nvidia.com>
-In-Reply-To: <614f726c-4d6d-463b-a8b3-26d3df590575@nvidia.com>
+ <CAPDyKFr=u0u2ijczExkntHK1miWZ6hRrEWBMiyUwShS3m6c29g@mail.gmail.com>
+ <CAMuHMdX1BacUfqtmV8g7NpRnY9aTdL=fh+jC7OryMLz4ijaOCg@mail.gmail.com>
+ <CAPDyKFqANQZmGXd8ccA5qWiGrCor2N=W_7dmV+OK8hMd_+zmmw@mail.gmail.com> <CAMuHMdVrkr56XsRsbG7H-tLHVzmP+g-7=5Nrv9asC25ismwiYA@mail.gmail.com>
+In-Reply-To: <CAMuHMdVrkr56XsRsbG7H-tLHVzmP+g-7=5Nrv9asC25ismwiYA@mail.gmail.com>
 From: Saravana Kannan <saravanak@google.com>
-Date: Thu, 25 Sep 2025 15:31:02 -0700
-X-Gm-Features: AS18NWACHkwlAZcjEriaXRqurBvXndQI9uNxb7x206sV9Gbmg4UhlXtVn8x_XjM
-Message-ID: <CAGETcx9CpOgtPSDK_qPRQ_u58w3fedSFAfFzugXW4eYq2TLECw@mail.gmail.com>
-Subject: Re: [PATCH v3 20/24] pmdomain: core: Default to use
- of_genpd_sync_state() for genpd providers
-To: Jon Hunter <jonathanh@nvidia.com>
+Date: Thu, 25 Sep 2025 15:41:07 -0700
+X-Gm-Features: AS18NWC2s6ZZ6wCDx3tWilFSoKlhNIqaCYwvZMZVl4k7rQcUFUWgg_k_mrXSjCs
+Message-ID: <CAGETcx-L-KypYZEkdKRBfZHDhFMTUuwKEGVQ-7QPv=++6uwLSw@mail.gmail.com>
+Subject: Re: [PATCH v3 00/24] pmdomain: Add generic ->sync_state() support to genpd
+To: Geert Uytterhoeven <geert@linux-m68k.org>
 Cc: Ulf Hansson <ulf.hansson@linaro.org>, Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org, 
 	"Rafael J . Wysocki" <rafael@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
 	Michael Grzeschik <m.grzeschik@pengutronix.de>, Bjorn Andersson <andersson@kernel.org>, 
@@ -94,81 +93,134 @@ Cc: Ulf Hansson <ulf.hansson@linaro.org>, Stephen Boyd <sboyd@kernel.org>, linux
 	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, Johan Hovold <johan@kernel.org>, 
 	Maulik Shah <maulik.shah@oss.qualcomm.com>, Michal Simek <michal.simek@amd.com>, 
 	Konrad Dybcio <konradybcio@kernel.org>, Thierry Reding <thierry.reding@gmail.com>, 
-	Hiago De Franco <hiago.franco@toradex.com>, Geert Uytterhoeven <geert@linux-m68k.org>, 
+	Jonathan Hunter <jonathanh@nvidia.com>, Hiago De Franco <hiago.franco@toradex.com>, 
 	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	"linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
+	Linux-Renesas <linux-renesas-soc@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 24, 2025 at 4:41=E2=80=AFAM Jon Hunter <jonathanh@nvidia.com> w=
-rote:
+On Thu, Aug 7, 2025 at 2:43=E2=80=AFAM Geert Uytterhoeven <geert@linux-m68k=
+.org> wrote:
 >
 > Hi Ulf,
 >
-> On 03/09/2025 13:33, Jon Hunter wrote:
+> On Wed, 30 Jul 2025 at 12:29, Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> > On Wed, 30 Jul 2025 at 11:56, Geert Uytterhoeven <geert@linux-m68k.org>=
+ wrote:
+> > > On Wed, 9 Jul 2025 at 13:31, Ulf Hansson <ulf.hansson@linaro.org> wro=
+te:
+> > > > On Tue, 1 Jul 2025 at 13:47, Ulf Hansson <ulf.hansson@linaro.org> w=
+rote:
+> > > > > Changes in v3:
+> > > > >         - Added a couple of patches to adress problems on some Re=
+nesas
+> > > > >         platforms. Thanks Geert and Tomi for helping out!
+> > > > >         - Adressed a few comments from Saravanna and Konrad.
+> > > > >         - Added some tested-by tags.
+> > > >
+> > > > I decided it was time to give this a try, so I have queued this up =
+for
+> > > > v6.17 via the next branch at my pmdomain tree.
+> > > >
+> > > > If you encounter any issues, please let me know so I can help to fi=
+x them.
+> > >
+> > > Thanks for your series!  Due to holidays, I only managed to test
+> > > this very recently.
+> > >
+> > > Unfortunately I have an issue with unused PM Domains no longer being
+> > > disabled on R-Car:
+> > >   - On R-Car Gen1/2/3, using rcar-sysc.c, unused PM Domains are never
+> > >     disabled.
+> > >   - On R-Car Gen4, using rcar-gen4-sysc.c, unused PM Domains are
+> > >     sometimes not disabled.
+> > >     At first, I noticed the IOMMU driver was not enabled in my config=
+,
+> > >     and enabling it did fix the issue.  However, after that I still
+> > >     encountered the issue in a different config that does have the
+> > >     IOMMU driver enabled...
+> > >
+> > > FTR, unused PM Domains are still disabled correctly on R/SH-Mobile
+> > > (using rmobile-sysc.c) and on BeagleBone Black. Note that these use
+> > > of_genpd_add_provider_simple(), while all R-Car drivers use
+> > > of_genpd_add_provider_onecell().  Perhaps there is an issue with
+> > > the latter?  If you don't have a clue, I plan to do some more
+> > > investigation later...
 >
-> ...
+> of_genpd_add_provider_onecell() has:
 >
-> >>> Following this change I am seeing the following warning on our Tegra1=
-94
-> >>> devices ...
-> >>>
-> >>>    WARNING KERN tegra-bpmp bpmp: sync_state() pending due to
-> >>> 17000000.gpu
-> >>>    WARNING KERN tegra-bpmp bpmp: sync_state() pending due to 3960000.=
-cec
-> >>>    WARNING KERN tegra-bpmp bpmp: sync_state() pending due to
-> >>> 15380000.nvjpg
-> >>>    WARNING KERN tegra-bpmp bpmp: sync_state() pending due to
-> >>> 154c0000.nvenc
-> >>>    WARNING KERN tegra-bpmp bpmp: sync_state() pending due to
-> >>> 15a80000.nvenc
-> >>>
-> >>> Per your change [0], the 'GENPD_FLAG_NO_SYNC_STATE' is set for Tegra
-> >>> and so should Tegra be using of_genpd_sync_state() by default?
-> >>
-> >> This is a different power-domain provider (bpmp) in
-> >> drivers/firmware/tegra/bpmp.c and
-> >> drivers/pmdomain/tegra/powergate-bpmp.c.
-> >>
-> >> For the bpmp we don't need GENPD_FLAG_NO_SYNC_STATE, as the
-> >> power-domain provider is described along with the
-> >> "nvidia,tegra186-bpmp" compatible string. In the other case
-> >> (drivers/soc/tegra/pmc.c) the "core-domain" and "powergates" are
-> >> described through child-nodes, while ->sync_state() is managed by the
-> >> parent-device-node.
-> >>
-> >> In the bpmp case there is no ->sync_state() callback assigned, which
-> >> means genpd decides to assign a default one.
-> >>
-> >> The reason for the warnings above is because we are still waiting for
-> >> those devices to be probed, hence the ->sync_state() callback is still
-> >> waiting to be invoked. Enforcing ->sync_state() callback to be invoked
-> >> can be done via user-space if that is needed.
-> >>
-> >> Did that make sense?
-> >
-> > Sorry for the delay, I was on vacation. Yes makes sense and drivers for
-> > some of the above drivers are not yet upstreamed to mainline and so thi=
-s
-> > would be expected for now.
+>     if (!dev)
+>             sync_state =3D true;
+>     else
+>             dev_set_drv_sync_state(dev, genpd_sync_state);
 >
+>     for (i =3D 0; i < data->num_domains; i++) {
+>             ...
+>             if (sync_state && !genpd_is_no_sync_state(genpd)) {
+>                     genpd->sync_state =3D GENPD_SYNC_STATE_ONECELL;
+>                     device_set_node(&genpd->dev, fwnode);
+>                     sync_state =3D false;
+>                     ^^^^^^^^^^^^^^^^^^^
+>             }
+>             ...
+>     }
 >
-> I have been doing more testing and do see a lot of "tegra-bpmp bpmp:
-> sync_state() pending due to" on our platforms for basically are driver
-> that is built as a module.
+> As the R-Car SYSC drivers are not platform drivers, dev is NULL, and
+> genpd->sync_state is set to GENPD_SYNC_STATE_ONECELL for the first PM
+> Domain only.  All other domains have the default value of sync_state
+> (0 =3D GENPD_SYNC_STATE_OFF).  Hence when genpd_provider_sync_state()
+> is called later, it ignores all but the first domain.
+> Apparently this is intentional, as of_genpd_sync_state() tries to
+> power off all domains handled by the same controller anyway (see below)?
+>
+> > > BTW, the "pending due to"-messages look weird to me.
+> > > On R-Car M2-W (r8a7791.dtsi) I see e.g.:
+> > >
+> > >     genpd_provider ca15-cpu0: sync_state() pending due to e6020000.wa=
+tchdog
+> > >     renesas-cpg-mssr e6150000.clock-controller: sync_state() pending
+> > > due to e6020000.watchdog
+> > >
+> > > ca15-cpu0 is the PM Domain holding the first CPU core, while
+> > > the watchdog resides in the always-on Clock Domain, and uses the
+> > > clock-controller for PM_CLK handling.
+>
+> Unfortunately the first PM Domain is "ca15-cpu0", which is blocked on
+> these bogus pending states, and no PM Domain is powered off.
 
-It being "built as a module" is not reason enough for this warning to
-happen though. One of the main points of fw_devlink is for things to
-work just as well with modules.
+Hi Geert,
 
-In this particular system, do you never plan to load the modules? Or
-is the module load just missing this timeout by a few seconds or
-something?
+Thanks for all the reports as ever!
 
-If these can be turned off, why not turn these off using the sysfs
-file or the timeout commandline option to turn them off? You are
-burning power by leaving these on. A warning seems appropriate to me.
+Can you explain why you call these as bogus? Sorry if you already
+explained it. But the reason I'm asking is to see if you can set a
+flag for the watchdog device so fw_devlink will completely ignore it.
 
--Saravana
+It looks like there's a driver for this watchdog node? Why is it not
+probing then?
+
+>
+> If I remove the "sync_state =3D false" above, genpd_provider_sync_state()
+> considers all domains, and does power down all unused domains (even
+> multiple times, as expected).
+>
+> Upon closer look, all "pending due to" messages I see claim that the
+> first (index 0) PM Domain is pending on some devices, while all of
+> these devices are part of a different domain (usually the always-on
+> domain, which is always the last (32 or 64) on R-Car).
+>
+> So I think there are two issues:
+>   1. Devices are not attributed to the correct PM Domain using
+>      fw_devlink sync_state,
+
+Is it a fw_devlink issue? Or is this a multi-domain controller?
+
+>   2. One PM Domain of a multi-domain controller being blocked should
+>      not block all other domains handled by the same controller.
+
+This is going to take a while to sort out. But the current behavior is
+the safest. How grumpy will you be if we don't fix this :)
+
+Thanks,
+Saravana
 
