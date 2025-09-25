@@ -1,251 +1,410 @@
-Return-Path: <linux-pm+bounces-35415-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35416-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 872BABA11EF
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Sep 2025 21:10:08 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B1065BA13D9
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Sep 2025 21:43:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8CB391884FC1
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Sep 2025 19:10:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 66CEE4C1B8E
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Sep 2025 19:43:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FFAA31B11A;
-	Thu, 25 Sep 2025 19:10:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB95131D399;
+	Thu, 25 Sep 2025 19:43:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z/WzRnZU"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="kiXMnWxJ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E16323D7D8
-	for <linux-pm@vger.kernel.org>; Thu, 25 Sep 2025 19:10:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE8E054F81
+	for <linux-pm@vger.kernel.org>; Thu, 25 Sep 2025 19:43:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758827403; cv=none; b=W8/00AdtPlY7U0PNeHxcNOkR7/v8hyeSXK/dv5hkntA+EBWlV49XjsNShgkZscBCWvDvcbMIbNkU11J4LkHAQXGlzkb/mBw3RLWh0RYIpDyW0kH0IHV/KFMdbNr9ULu/sSufGoKrNmKKZ9gQzPO0pMrT1lfG975/1TduoXYoI1c=
+	t=1758829385; cv=none; b=g6+qvEv6lngCIGYphf70U0nVTkv4LVfDkTEOeMz6p9YFNNBaM2E+jZTrJ5NCBTFbeENqx8Xm3Hpb76BkGCpBPMhVY1dIkBOEarVXhYDGks4Vyy5utunkr5IjSFPdmdwJ/lr2l50TzURjCR5W/tOy3EWVyl5dAkXYEccGDoi2bgg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758827403; c=relaxed/simple;
-	bh=RxSCbZsSl6xhKEKTkRIwgi6x4A3W93x4IQZ53BMJA6c=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=YuOBq6v7Fk0CwmTZ/DpB9w2MAoL9XkV7oj5cPC9lvuZrC6HHUJM/t+I1bt4imDwHs1h3F4H1wzcbUHyjBsPPmX1QgM4uEV5J1kbHpcBPBHad/+gjy6KjJ/6nQTJ8GcmHURvyxok1rXwPXG6atjPQMerQSwUK/kS6UjYxrnpud64=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z/WzRnZU; arc=none smtp.client-ip=209.85.208.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-62fa99bcfcdso2744778a12.0
-        for <linux-pm@vger.kernel.org>; Thu, 25 Sep 2025 12:10:01 -0700 (PDT)
+	s=arc-20240116; t=1758829385; c=relaxed/simple;
+	bh=74tY1ELT7zownYIeAAXgYi7gf5wP5xv05LDXflcNJKs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=izVv0BAJ2lWh1cbxe9JPZieEXLaIwtGxeVQxJPq7qKXQLdlBrHtzi5ujy3+sThC7wKtFXjytp6nSA7IvoQJcP9cx29cekawswaYjFixpFDw7QIGeSjZMaHcquepHo+s9xqcQ7AutvLTY+Vo1kyf8RMY6rgkXfiYWxeV4Pc8RXDs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=kiXMnWxJ; arc=none smtp.client-ip=209.85.210.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-77f2e621ef8so1838652b3a.0
+        for <linux-pm@vger.kernel.org>; Thu, 25 Sep 2025 12:43:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758827400; x=1759432200; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=hXhMj6BrB8QKqvvK3wReW+Mmt5XbNJTRqjdCqe1E4g8=;
-        b=Z/WzRnZUW55PkLI4LJ3dK5bGcZ2m06SLYbO8yFheQHE9FuNs7b71Qc68Y5f1ErnBOY
-         P6Le14ANvodpcgV1A43ET08WvjgqEIgZFX4hKziTTx0WPxHdxv2r9KyqfMM19IFArhVv
-         NhNX8zzJB7LKKzWix+BpBZILsWZ8YNN5m0Q7C8KV/MP4pvGLmeGDUrWaOsod+pfLaY8j
-         mg6PeNWM/eh/6abUU4wXfKWrz/Doh8meQvMozZXdnLwWTdrmQZGEDbU1tbsb/QNGT3wY
-         kAx/Rv0IYqildVx6/Qxq8tDXZM9S+59ZVvxwHR9sg0Z2Xh9O6eo/It18TwhzbEjn2vVB
-         A8GA==
+        d=chromium.org; s=google; t=1758829383; x=1759434183; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=G5edo0c5RxfliwGuYbyfUV04HpZukmfrtbIDiUss1FI=;
+        b=kiXMnWxJRsKeFyepzi15tYztNVBGgy7hxVoKOXqEehx8VQ0Er3L8e5ix1mRrIy/KXu
+         azHklymUzBUFVMJn16KRz31t5nW2PAUqEU9X3gbSI0HrnXgUp4Mnf8D9bR2TSlojbak6
+         ZyaiyI1qtnPfqGnY/5ViJR+kxoVOGogpzRFKE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758827400; x=1759432200;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1758829383; x=1759434183;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=hXhMj6BrB8QKqvvK3wReW+Mmt5XbNJTRqjdCqe1E4g8=;
-        b=Yq7F7lioDDKRKY4TgN6yc1kc+7RPBQoNfXhn5GJyLGTY8xlpWHutM9cLOefaefEkjf
-         4b1+mdgvARYs0MJ147LqBVKCVlQxeq2B6vXuJ2yvQ171p1CIaty/qgwEwab45M19jWdM
-         1t6bQC8yEcg320i2CZ4ht4tqkmPyndQ6J23YkX/SkeqZLa4jx8R6o+bJZFoR6VX6aMIt
-         urfm9syCgZa3DnJfloWaKdjmkfc8Gd/rIHvuiWzeS+sx8R7GMT2tRx2m/HO1Wie1UPY9
-         A4SKkAyMybc1ordd3Yyi+7lKNrd9nLdRwLFRrrnrZzp+7JQt/V6/D4XxxhmfxYAAfvIx
-         UDCw==
-X-Forwarded-Encrypted: i=1; AJvYcCVGFNPz7wAYeS2qQ1bczUrLpsBMr+05yvY1sMn1Gb7oXo9MUdmwfHuNG1XMqGdaYcOCgJH62lOlAA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzFEDDnfwpLiyFBo7CNoICXmpnIhmQdNggFjLB2tjt4G9BkZ4K2
-	eBBVt5rehLmJvWx03gRFD/l4TYOrxRpvGGrriDC54MgAqgKVcXcjVn1h
-X-Gm-Gg: ASbGnctEVRhtNAQY71i00hfBJk7CM2NJg6/gXY8hNsIfCKpLve08c8RPvWneRrn0xww
-	ov32C9DK0oypotffEn8Swv8LB8/5wXoPXPVPuAP6SmOfDP980jWZRgzWX2IZbLHaYEITiTabRrO
-	UeSvBt/XhnHLFA60yvXtcQ48YFMggVbFhslwcvXc3hFdXBIZdJYqcDecz3wuL+WenD/7UByqJNA
-	VmXjTIpmCfJ++rWH9hSTbP5GeDGVJBymQogpmU/fs1ttKoQThmy7lmF6XrExqWh1BKk4z/GOuQz
-	a2nNUo1N807aOtlSsfJBwxWkxhb626fAe7f1ms4B8u1iO8UX6DztfPLjMnp7VJh0O4hrOzq+jIE
-	O6PHLrtHczjfWChJLZwXA
-X-Google-Smtp-Source: AGHT+IF3BH7z6/M3diWlDJlUyEYvCxqBYRtFlr3TgPRDHhq1UQzDcB+vNbs1Upae3pmayNI9yibOAA==
-X-Received: by 2002:aa7:dd5a:0:b0:62a:a4f0:7e4f with SMTP id 4fb4d7f45d1cf-6349fa95f85mr2971922a12.29.1758827399655;
-        Thu, 25 Sep 2025 12:09:59 -0700 (PDT)
-Received: from [127.0.1.1] ([46.53.240.27])
-        by smtp.googlemail.com with ESMTPSA id 4fb4d7f45d1cf-634a3b0595fsm1643501a12.52.2025.09.25.12.09.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Sep 2025 12:09:59 -0700 (PDT)
-From: Dzmitry Sankouski <dsankouski@gmail.com>
-Date: Thu, 25 Sep 2025 22:09:56 +0300
-Subject: [PATCH v6] power: supply: max77705_charger: implement aicl feature
+        bh=G5edo0c5RxfliwGuYbyfUV04HpZukmfrtbIDiUss1FI=;
+        b=tiNMF7M86MThN7cM20WxqmKfD/J5hL23KJ2zy8U6su6AkV5CVpBMEjkz3UveHkt29I
+         lpSdkQVZOKLkVcpONVrR7V/vxsn++IAKF5hE4zgaV3tZQ8qMEa3i4h0fSHkaf4ZHHE0Q
+         I10KnvMtrh6pnxhZPF922vuR/myf1IXFKGOKcT4FwK9Xe+LEK4pX0EGAVaGVWe0gYIPX
+         PeRfqv971rM7KtdhxjUqMOeUbyVyF8/dA5lEENfEMryfcF2dua4o/XLnKERyJTHQY3yy
+         AqwypNm5AVyBtaH8H6ZwdGuukoUtdoqtIZ7myLv0MC+5p3mVt+aktf9kSXHdmBJUfrZ1
+         9cQw==
+X-Forwarded-Encrypted: i=1; AJvYcCWx1Ad4YJwLEkGGJjKf5R6eSYQSLX5kWAHFCMooclpTU4bnIZF1YdREmi8IYwc/LID6B0VBd2ftYQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzKjMpAKDJceaKst+Ci2BK1laZ6z16NEDslKtGI2PlmgDgw/lsS
+	Z7F6VDJ7xuLSPET9HHxoBk8wCowE/AjCD4h5ElmmY6nPVh3jTaf7ZKgdq3ErTVFM8ou5F3e1CdQ
+	iEQM=
+X-Gm-Gg: ASbGncuYI/4m9iZVP+ETbI8IpMrZ/qtpgf39Q1x36oV2XshP3vkpbSxkncm5Zp+vLsy
+	W3bJYihOH+dtUlxlfsrllMdiePtVDMQPsYEAS2tK3r1Jpi50ktvfWGf2bdNcOQpKEtjKI+tkY9W
+	hwVl3GwHHkktDoQuM12ZfB9XxjkCFuEdoH/Uan+WHVFXZccvliriL5DHBRHQuWh35bdQ8nMXldQ
+	K0pUGfyxNHZ/CuZFSvcOBaivj/7eVevJCWfJeMReDtwExmGIEQPIIkRVREsRoDbSLhtM1ART1vK
+	pdjVLnapiXZDbVRhSoEX3voQiLWgHVKkjfDWp3ZYK8SseVEhsM4rDrq3f6OX1icyoDoOUmbMbz8
+	clCO5vtm3PGzO4t6/wwjcnIusKvnKfaT6ZSNIcWCMsGibENCy+qnLIwaWIQr9
+X-Google-Smtp-Source: AGHT+IEA4G/PWQo5B8b4huFdT4a5O8BIqPRp211JB0bxrg5wYp/9BSb6ozNlW0nMisWxY+MUvMrSdA==
+X-Received: by 2002:a05:6a20:3d83:b0:263:bee9:1ac8 with SMTP id adf61e73a8af0-2e7d3db6041mr5785570637.28.1758829383044;
+        Thu, 25 Sep 2025 12:43:03 -0700 (PDT)
+Received: from localhost ([2a00:79e0:2e7c:8:ef44:9df6:231a:cd29])
+        by smtp.gmail.com with UTF8SMTPSA id 41be03b00d2f7-b57c55a41b1sm2848378a12.44.2025.09.25.12.43.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 Sep 2025 12:43:02 -0700 (PDT)
+From: Brian Norris <briannorris@chromium.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Pavel Machek <pavel@kernel.org>
+Cc: "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+	Len Brown <lenb@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	kunit-dev@googlegroups.com,
+	linux-pm@vger.kernel.org,
+	Brian Norris <briannorris@chromium.org>
+Subject: [PATCH v2 1/3] PM: runtime: Add basic kunit tests for API contracts
+Date: Thu, 25 Sep 2025 12:42:14 -0700
+Message-ID: <20250925124216.v2.1.I443d97ccd1c67f32670eb93784ad735b11816743@changeid>
+X-Mailer: git-send-email 2.51.0.536.g15c5d4f767-goog
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250925-max77705_77976_charger_improvement-v6-1-972c716c17d1@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAIOT1WgC/5XQy07DMBAF0F+pvMbUz9hhxX8gFI2dcWOpeWCHU
- FT133FYQEQ3YXk946OruZKMKWImT4crSbjEHMehhOrhQHwHwwlpbEsmggnNrGS0h4sxhunGmNp
- UTVlKJ0xN7Kc0LtjjMFOUQXHjAoCuSIEcZKQuweC7lXLqmGdIb+cZfTccf8D37HwzjR9Fa/EcF
- 0yf6+8pYYiX74ovryV3Mc9jGa2NF76+/qvcwimjWKatk6FVUjyfeojnRz/2ZOUX8UvWrN5FikK
- CbUVwoAzX9V9SbkjOd5GykFILJitbBRB3pNqSdhepCsk5+rJvg7J3pN6QYt8tNeUUwDHAYIX3a
- kvebrcvuCWyBV4CAAA=
-To: Chanwoo Choi <cw00.choi@samsung.com>, 
- Krzysztof Kozlowski <krzk@kernel.org>, Lee Jones <lee@kernel.org>, 
- Sebastian Reichel <sre@kernel.org>, 
- Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
- Sebastian Reichel <sebastian.reichel@collabora.com>, 
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
- Dzmitry Sankouski <dsankouski@gmail.com>
-X-Mailer: b4 0.14.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1758827398; l=4784;
- i=dsankouski@gmail.com; s=20240619; h=from:subject:message-id;
- bh=RxSCbZsSl6xhKEKTkRIwgi6x4A3W93x4IQZ53BMJA6c=;
- b=BQuD9pc2jlapGmPlnZ2q4DA0pqyKLXvihdmyDATv21l73HD9GjJBwEjR/TBwCkIm8oVjMrEcn
- 8/ABUl4nT2hBipjjmprugfBuoX5XQ+l35wZeWi21mfG9TolnVB7pF3j
-X-Developer-Key: i=dsankouski@gmail.com; a=ed25519;
- pk=YJcXFcN1EWrzBYuiE2yi5Mn6WLn6L1H71J+f7X8fMag=
+Content-Transfer-Encoding: 8bit
 
-Adaptive input current allows charger to reduce it's current
-consumption, when source is not able to provide enough power.
+In exploring the various return codes and failure modes of runtime PM
+APIs, I found it helpful to verify and codify many of them in unit
+tests, especially given that even the kerneldoc can be rather complex to
+reason through, and it also has had subtle errors of its own.
 
-Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
+Notably, I avoid testing the return codes for pm_runtime_put() and
+pm_runtime_put_autosuspend(), since code that checks them is probably
+wrong, and we're considering making them return 'void' altogether. I
+still test the sync() variants, since those have a bit more meaning to
+them.
+
+Signed-off-by: Brian Norris <briannorris@chromium.org>
 ---
-This series consists of:
-- max77705: interrupt handling fix
-- max77705: make input current limit and charge current limit properties
-  writable
-- max77705: add adaptive input current limit feature
-- max77705: switch to regfields
-- max77705: refactoring
-- max77976: change property for current charge limit value
----
-Changes in v6:
-- simplify aicl feature - remove aicl work
-- rebase on latest linux-next
-- Link to v5: https://lore.kernel.org/r/20250920-max77705_77976_charger_improvement-v5-1-aab0aef82cc4@gmail.com
-
-Changes in v5:
-- rebase on latest linux-next, dropping already applied patches
-- optimize code to drop is_aicl_irq_disabled variable
-- Link to v4: https://lore.kernel.org/r/20250918-max77705_77976_charger_improvement-v4-0-11ec9188f489@gmail.com
-
-Changes in v4:
-- fix commit message
-- use IRQF_TRIGGER_NONE, because non physical irqs
-- minor rename refactoring
-- rebase on latest linux-next
-- patch reorder: put fixes patch first
-- aicl feature cleanup
-- Link to v3: https://lore.kernel.org/r/20250911-max77705_77976_charger_improvement-v3-0-35203686fa29@gmail.com
-
-Changes in v3:
-- move interrupt request before interrupt handler work initialization
-- Link to v2: https://lore.kernel.org/r/20250909-max77705_77976_charger_improvement-v2-0-a8d2fba47159@gmail.com
 
 Changes in v2:
-- fix charger register protection unlock
-- Link to v1: https://lore.kernel.org/r/20250830-max77705_77976_charger_improvement-v1-0-e976db3fd432@gmail.com
----
-Changes in v6:
-- drop aicl work
-- handle current decrease sequence in a loop
+ * Improve comments, per review suggestions
+ * Minor sequence changes, per review suggestions
+ * Stop testing for pm_runtime_put() and pm_runtime_put_autosuspend()
+   return codes
 
-Changes in v5:
-- add _MS suffix to AICL_WORK_DELAY
-- optimize code to drop is_aicl_irq_disabled variable
+ drivers/base/Kconfig              |   6 +
+ drivers/base/power/Makefile       |   1 +
+ drivers/base/power/runtime-test.c | 253 ++++++++++++++++++++++++++++++
+ 3 files changed, 260 insertions(+)
+ create mode 100644 drivers/base/power/runtime-test.c
 
-Changes in v4:
-- fix intendation
-- use IRQF_TRIGGER_NONE, because this is not physical irq
-- use dev_err_probe instead of pr_err
-- remove excessive chgin irq request
-- remove pr_infos
----
- drivers/power/supply/max77705_charger.c | 42 +++++++++++++++++++++++++++++++++
- include/linux/power/max77705_charger.h  |  2 ++
- 2 files changed, 44 insertions(+)
-
-diff --git a/drivers/power/supply/max77705_charger.c b/drivers/power/supply/max77705_charger.c
-index b1a227bf72e2..35cdb10a0e89 100644
---- a/drivers/power/supply/max77705_charger.c
-+++ b/drivers/power/supply/max77705_charger.c
-@@ -40,6 +40,39 @@ static enum power_supply_property max77705_charger_props[] = {
- 	POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT,
- };
+diff --git a/drivers/base/Kconfig b/drivers/base/Kconfig
+index 064eb52ff7e2..1786d87b29e2 100644
+--- a/drivers/base/Kconfig
++++ b/drivers/base/Kconfig
+@@ -167,6 +167,12 @@ config PM_QOS_KUNIT_TEST
+ 	depends on KUNIT=y
+ 	default KUNIT_ALL_TESTS
  
-+static irqreturn_t max77705_aicl_irq(int irq, void *irq_drv_data)
++config PM_RUNTIME_KUNIT_TEST
++	tristate "KUnit Tests for runtime PM" if !KUNIT_ALL_TESTS
++	depends on KUNIT
++	depends on PM
++	default KUNIT_ALL_TESTS
++
+ config HMEM_REPORTING
+ 	bool
+ 	default n
+diff --git a/drivers/base/power/Makefile b/drivers/base/power/Makefile
+index 01f11629d241..2989e42d0161 100644
+--- a/drivers/base/power/Makefile
++++ b/drivers/base/power/Makefile
+@@ -4,5 +4,6 @@ obj-$(CONFIG_PM_SLEEP)	+= main.o wakeup.o wakeup_stats.o
+ obj-$(CONFIG_PM_TRACE_RTC)	+= trace.o
+ obj-$(CONFIG_HAVE_CLK)	+= clock_ops.o
+ obj-$(CONFIG_PM_QOS_KUNIT_TEST) += qos-test.o
++obj-$(CONFIG_PM_RUNTIME_KUNIT_TEST) += runtime-test.o
+ 
+ ccflags-$(CONFIG_DEBUG_DRIVER) := -DDEBUG
+diff --git a/drivers/base/power/runtime-test.c b/drivers/base/power/runtime-test.c
+new file mode 100644
+index 000000000000..2e966fd96664
+--- /dev/null
++++ b/drivers/base/power/runtime-test.c
+@@ -0,0 +1,253 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright 2025 Google, Inc.
++ */
++
++#include <linux/cleanup.h>
++#include <linux/pm_runtime.h>
++#include <kunit/device.h>
++#include <kunit/test.h>
++
++#define DEVICE_NAME "pm_runtime_test_device"
++
++static void pm_runtime_depth_test(struct kunit *test)
 +{
-+	struct max77705_charger_data *chg = irq_drv_data;
-+	unsigned int regval, irq_status;
-+	int err;
++	struct device *dev = kunit_device_register(test, DEVICE_NAME);
 +
-+	err = regmap_read(chg->regmap, MAX77705_CHG_REG_INT_OK, &irq_status);
-+	if (err < 0)
-+		return IRQ_HANDLED;
++	KUNIT_ASSERT_PTR_NE(test, NULL, dev);
 +
-+	// irq is fiered at the end of current decrease sequence too
-+	// early check AICL_I bit to guard against that excess irq call
-+	while (!(irq_status & BIT(MAX77705_AICL_I))) {
-+		err = regmap_field_read(chg->rfield[MAX77705_CHG_CHGIN_LIM], &regval);
-+		if (err < 0)
-+			return IRQ_HANDLED;
++	pm_runtime_enable(dev);
 +
-+		regval--;
-+
-+		err = regmap_field_write(chg->rfield[MAX77705_CHG_CHGIN_LIM], regval);
-+		if (err < 0)
-+			return IRQ_HANDLED;
-+
-+		msleep(AICL_WORK_DELAY_MS);
-+
-+		err = regmap_read(chg->regmap, MAX77705_CHG_REG_INT_OK, &irq_status);
-+		if (err < 0)
-+			return IRQ_HANDLED;
-+	}
-+
-+	return IRQ_HANDLED;
++	KUNIT_EXPECT_TRUE(test, pm_runtime_suspended(dev));
++	KUNIT_EXPECT_EQ(test, 0, pm_runtime_get_sync(dev));
++	KUNIT_EXPECT_TRUE(test, pm_runtime_active(dev));
++	KUNIT_EXPECT_EQ(test, 1, pm_runtime_get_sync(dev)); /* "already active" */
++	KUNIT_EXPECT_EQ(test, 0, pm_runtime_put_sync(dev));
++	KUNIT_EXPECT_EQ(test, 0, pm_runtime_put_sync(dev));
++	KUNIT_EXPECT_TRUE(test, pm_runtime_suspended(dev));
 +}
 +
- static irqreturn_t max77705_chgin_irq(int irq, void *irq_drv_data)
- {
- 	struct max77705_charger_data *chg = irq_drv_data;
-@@ -632,6 +665,15 @@ static int max77705_charger_probe(struct i2c_client *i2c)
- 		goto destroy_wq;
- 	}
- 
-+	ret = devm_request_threaded_irq(dev, regmap_irq_get_virq(irq_data, MAX77705_AICL_I),
-+					NULL, max77705_aicl_irq,
-+					IRQF_TRIGGER_NONE,
-+					"aicl-irq", chg);
-+	if (ret) {
-+		dev_err_probe(dev, ret, "Failed to Request aicl IRQ\n");
-+		goto destroy_wq;
-+	}
++/* Test pm_runtime_put() and friends when already suspended. */
++static void pm_runtime_already_suspended_test(struct kunit *test)
++{
++	struct device *dev = kunit_device_register(test, DEVICE_NAME);
 +
- 	ret = max77705_charger_enable(chg);
- 	if (ret) {
- 		dev_err_probe(dev, ret, "failed to enable charge\n");
-diff --git a/include/linux/power/max77705_charger.h b/include/linux/power/max77705_charger.h
-index 6653abfdf747..b3950ce0625e 100644
---- a/include/linux/power/max77705_charger.h
-+++ b/include/linux/power/max77705_charger.h
-@@ -123,6 +123,8 @@
- #define MAX77705_DISABLE_SKIP		1
- #define MAX77705_AUTO_SKIP		0
- 
-+#define AICL_WORK_DELAY_MS		100
++	KUNIT_ASSERT_PTR_NE(test, NULL, dev);
 +
- /* uA */
- #define MAX77705_CURRENT_CHGIN_STEP	25000
- #define MAX77705_CURRENT_CHG_STEP	50000
-
----
-base-commit: 8e2755d7779a95dd61d8997ebce33ff8b1efd3fb
-change-id: 20250830-max77705_77976_charger_improvement-e3f417bfaa56
-
-Best regards,
++	pm_runtime_enable(dev);
++	KUNIT_EXPECT_TRUE(test, pm_runtime_suspended(dev));
++
++	pm_runtime_get_noresume(dev);
++	KUNIT_EXPECT_EQ(test, 0, pm_runtime_barrier(dev)); /* no wakeup needed */
++	pm_runtime_put(dev);
++
++	pm_runtime_get_noresume(dev);
++	KUNIT_EXPECT_EQ(test, -EAGAIN, pm_runtime_put_sync(dev));
++
++	KUNIT_EXPECT_EQ(test, 1, pm_runtime_suspend(dev));
++	KUNIT_EXPECT_EQ(test, 1, pm_runtime_autosuspend(dev));
++	KUNIT_EXPECT_EQ(test, 1, pm_request_autosuspend(dev));
++
++	pm_runtime_get_noresume(dev);
++	KUNIT_EXPECT_EQ(test, 1, pm_runtime_put_sync_autosuspend(dev));
++
++	pm_runtime_get_noresume(dev);
++	pm_runtime_put_autosuspend(dev);
++
++	/* Grab 2 refcounts */
++	pm_runtime_get_noresume(dev);
++	pm_runtime_get_noresume(dev);
++	/* The first put() sees usage_count 1 */
++	KUNIT_EXPECT_EQ(test, 0, pm_runtime_put_sync_autosuspend(dev));
++	/* The second put() sees usage_count 0 but tells us "already suspended". */
++	KUNIT_EXPECT_EQ(test, 1, pm_runtime_put_sync_autosuspend(dev));
++
++	/* Should have remained suspended the whole time. */
++	KUNIT_EXPECT_TRUE(test, pm_runtime_suspended(dev));
++}
++
++static void pm_runtime_idle_test(struct kunit *test)
++{
++	struct device *dev = kunit_device_register(test, DEVICE_NAME);
++
++	KUNIT_ASSERT_PTR_NE(test, NULL, dev);
++
++	pm_runtime_enable(dev);
++
++	KUNIT_EXPECT_TRUE(test, pm_runtime_suspended(dev));
++	KUNIT_EXPECT_EQ(test, 0, pm_runtime_get_sync(dev));
++	KUNIT_EXPECT_TRUE(test, pm_runtime_active(dev));
++	KUNIT_EXPECT_EQ(test, -EAGAIN, pm_runtime_idle(dev));
++	KUNIT_EXPECT_TRUE(test, pm_runtime_active(dev));
++	pm_runtime_put_noidle(dev);
++	KUNIT_EXPECT_TRUE(test, pm_runtime_active(dev));
++	KUNIT_EXPECT_EQ(test, 0, pm_runtime_idle(dev));
++	KUNIT_EXPECT_TRUE(test, pm_runtime_suspended(dev));
++	KUNIT_EXPECT_EQ(test, -EAGAIN, pm_runtime_idle(dev));
++	KUNIT_EXPECT_EQ(test, -EAGAIN, pm_request_idle(dev));
++}
++
++static void pm_runtime_disabled_test(struct kunit *test)
++{
++	struct device *dev = kunit_device_register(test, DEVICE_NAME);
++
++	KUNIT_ASSERT_PTR_NE(test, NULL, dev);
++
++	/* Never called pm_runtime_enable() */
++	KUNIT_EXPECT_FALSE(test, pm_runtime_enabled(dev));
++
++	/* "disabled" is treated as "active" */
++	KUNIT_EXPECT_TRUE(test, pm_runtime_active(dev));
++	KUNIT_EXPECT_FALSE(test, pm_runtime_suspended(dev));
++
++	/*
++	 * Note: these "fail", but they still acquire/release refcounts, so
++	 * keep them balanced.
++	 */
++	KUNIT_EXPECT_EQ(test, -EACCES, pm_runtime_get(dev));
++	pm_runtime_put(dev);
++
++	KUNIT_EXPECT_EQ(test, -EACCES, pm_runtime_get_sync(dev));
++	KUNIT_EXPECT_EQ(test, -EACCES, pm_runtime_put_sync(dev));
++
++	KUNIT_EXPECT_EQ(test, -EACCES, pm_runtime_get(dev));
++	pm_runtime_put_autosuspend(dev);
++
++	KUNIT_EXPECT_EQ(test, -EACCES, pm_runtime_resume_and_get(dev));
++	KUNIT_EXPECT_EQ(test, -EACCES, pm_runtime_idle(dev));
++	KUNIT_EXPECT_EQ(test, -EACCES, pm_request_idle(dev));
++	KUNIT_EXPECT_EQ(test, -EACCES, pm_request_resume(dev));
++	KUNIT_EXPECT_EQ(test, -EACCES, pm_request_autosuspend(dev));
++	KUNIT_EXPECT_EQ(test, -EACCES, pm_runtime_suspend(dev));
++	KUNIT_EXPECT_EQ(test, -EACCES, pm_runtime_resume(dev));
++	KUNIT_EXPECT_EQ(test, -EACCES, pm_runtime_autosuspend(dev));
++
++	/* Still disabled */
++	KUNIT_EXPECT_TRUE(test, pm_runtime_active(dev));
++	KUNIT_EXPECT_FALSE(test, pm_runtime_enabled(dev));
++}
++
++static void pm_runtime_error_test(struct kunit *test)
++{
++	struct device *dev = kunit_device_register(test, DEVICE_NAME);
++
++	KUNIT_ASSERT_PTR_NE(test, NULL, dev);
++
++	pm_runtime_enable(dev);
++	KUNIT_EXPECT_TRUE(test, pm_runtime_suspended(dev));
++
++	/* Fake a .runtime_resume() error */
++	dev->power.runtime_error = -EIO;
++
++	/*
++	 * Note: these "fail", but they still acquire/release refcounts, so
++	 * keep them balanced.
++	 */
++	KUNIT_EXPECT_EQ(test, -EINVAL, pm_runtime_get(dev));
++	pm_runtime_put(dev);
++
++	KUNIT_EXPECT_EQ(test, -EINVAL, pm_runtime_get_sync(dev));
++	KUNIT_EXPECT_EQ(test, -EINVAL, pm_runtime_put_sync(dev));
++
++	KUNIT_EXPECT_EQ(test, -EINVAL, pm_runtime_get(dev));
++	pm_runtime_put_autosuspend(dev);
++
++	KUNIT_EXPECT_EQ(test, -EINVAL, pm_runtime_get(dev));
++	KUNIT_EXPECT_EQ(test, -EINVAL, pm_runtime_put_sync_autosuspend(dev));
++
++	KUNIT_EXPECT_EQ(test, -EINVAL, pm_runtime_resume_and_get(dev));
++	KUNIT_EXPECT_EQ(test, -EINVAL, pm_runtime_idle(dev));
++	KUNIT_EXPECT_EQ(test, -EINVAL, pm_request_idle(dev));
++	KUNIT_EXPECT_EQ(test, -EINVAL, pm_request_resume(dev));
++	KUNIT_EXPECT_EQ(test, -EINVAL, pm_request_autosuspend(dev));
++	KUNIT_EXPECT_EQ(test, -EINVAL, pm_runtime_suspend(dev));
++	KUNIT_EXPECT_EQ(test, -EINVAL, pm_runtime_resume(dev));
++	KUNIT_EXPECT_EQ(test, -EINVAL, pm_runtime_autosuspend(dev));
++
++	/* Error is still pending */
++	KUNIT_EXPECT_TRUE(test, pm_runtime_suspended(dev));
++	KUNIT_EXPECT_EQ(test, -EIO, dev->power.runtime_error);
++	/* Clear error */
++	KUNIT_EXPECT_EQ(test, 0, pm_runtime_set_suspended(dev));
++	KUNIT_EXPECT_EQ(test, 0, dev->power.runtime_error);
++	/* Still suspended */
++	KUNIT_EXPECT_TRUE(test, pm_runtime_suspended(dev));
++
++	KUNIT_EXPECT_EQ(test, 0, pm_runtime_get(dev));
++	KUNIT_EXPECT_EQ(test, 1, pm_runtime_barrier(dev)); /* resume was pending */
++	pm_runtime_put(dev);
++	pm_runtime_suspend(dev); /* flush the put(), to suspend */
++	KUNIT_EXPECT_TRUE(test, pm_runtime_suspended(dev));
++
++	KUNIT_EXPECT_EQ(test, 0, pm_runtime_get_sync(dev));
++	KUNIT_EXPECT_EQ(test, 0, pm_runtime_put_sync(dev));
++
++	KUNIT_EXPECT_EQ(test, 0, pm_runtime_get_sync(dev));
++	pm_runtime_put_autosuspend(dev);
++
++	KUNIT_EXPECT_EQ(test, 0, pm_runtime_resume_and_get(dev));
++
++	/*
++	 * The following should all return -EAGAIN (usage is non-zero) or 1
++	 * (already resumed).
++	 */
++	KUNIT_EXPECT_EQ(test, -EAGAIN, pm_runtime_idle(dev));
++	KUNIT_EXPECT_EQ(test, -EAGAIN, pm_request_idle(dev));
++	KUNIT_EXPECT_EQ(test, 1, pm_request_resume(dev));
++	KUNIT_EXPECT_EQ(test, -EAGAIN, pm_request_autosuspend(dev));
++	KUNIT_EXPECT_EQ(test, -EAGAIN, pm_runtime_suspend(dev));
++	KUNIT_EXPECT_EQ(test, 1, pm_runtime_resume(dev));
++	KUNIT_EXPECT_EQ(test, -EAGAIN, pm_runtime_autosuspend(dev));
++
++	KUNIT_EXPECT_EQ(test, 0, pm_runtime_put_sync(dev));
++
++	/* Suspended again */
++	KUNIT_EXPECT_TRUE(test, pm_runtime_suspended(dev));
++}
++
++/*
++ * Explore a typical probe() sequence in which a device marks itself powered,
++ * but doesn't hold any runtime PM reference, so it suspends as soon as it goes
++ * idle.
++ */
++static void pm_runtime_probe_active_test(struct kunit *test)
++{
++	struct device *dev = kunit_device_register(test, DEVICE_NAME);
++
++	KUNIT_ASSERT_PTR_NE(test, NULL, dev);
++
++	KUNIT_EXPECT_TRUE(test, pm_runtime_status_suspended(dev));
++
++	KUNIT_EXPECT_EQ(test, 0, pm_runtime_set_active(dev));
++	KUNIT_EXPECT_TRUE(test, pm_runtime_active(dev));
++
++	pm_runtime_enable(dev);
++	KUNIT_EXPECT_TRUE(test, pm_runtime_active(dev));
++
++	/* Nothing to flush. We stay active. */
++	KUNIT_EXPECT_EQ(test, 0, pm_runtime_barrier(dev));
++	KUNIT_EXPECT_TRUE(test, pm_runtime_active(dev));
++
++	/* Ask for idle? Now we suspend. */
++	KUNIT_EXPECT_EQ(test, 0, pm_runtime_idle(dev));
++	KUNIT_EXPECT_TRUE(test, pm_runtime_suspended(dev));
++}
++
++static struct kunit_case pm_runtime_test_cases[] = {
++	KUNIT_CASE(pm_runtime_depth_test),
++	KUNIT_CASE(pm_runtime_already_suspended_test),
++	KUNIT_CASE(pm_runtime_idle_test),
++	KUNIT_CASE(pm_runtime_disabled_test),
++	KUNIT_CASE(pm_runtime_error_test),
++	KUNIT_CASE(pm_runtime_probe_active_test),
++	{}
++};
++
++static struct kunit_suite pm_runtime_test_suite = {
++	.name = "pm_runtime_test_cases",
++	.test_cases = pm_runtime_test_cases,
++};
++
++kunit_test_suite(pm_runtime_test_suite);
++MODULE_DESCRIPTION("Runtime power management unit test suite");
++MODULE_LICENSE("GPL");
 -- 
-Dzmitry Sankouski <dsankouski@gmail.com>
+2.51.0.536.g15c5d4f767-goog
 
 
