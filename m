@@ -1,263 +1,379 @@
-Return-Path: <linux-pm+bounces-35331-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35332-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C267B9E67B
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Sep 2025 11:36:47 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C444AB9E9E0
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Sep 2025 12:25:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 30EAB425887
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Sep 2025 09:36:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E0E631BC5268
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Sep 2025 10:26:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F9672EB84C;
-	Thu, 25 Sep 2025 09:34:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F04292EAB6D;
+	Thu, 25 Sep 2025 10:25:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="HbWAk1IO"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="aVYRgIv7"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from CY7PR03CU001.outbound.protection.outlook.com (mail-westcentralusazon11010005.outbound.protection.outlook.com [40.93.198.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 603292EA464;
-	Thu, 25 Sep 2025 09:34:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.198.5
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758792852; cv=fail; b=fUrmt4+g8i4BxbEUKPNZuKKasD5NYhKVbl44JwMTFOxsVwvZxNR+1g87jVbb9vHyZkTybCxBsrOVGF7fjfURSQisd3ps+RZQx0p3UIL1IUkKQ/11WqdH0dk8WWmPaVKr0lH31lsx71NvTcNxn0mExgNj3Z/Y2cSoEM8N9rBzgL4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758792852; c=relaxed/simple;
-	bh=kZVmz+C8spi9C6D199x+G1wqjf4dfJUPRaIFvNta07M=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=sheaW5nnFD5xYXkfDo7XbGVmo6hNqhj61nmlM5Bh1XP/ns2GBeQGKmFH6IWLGy55EiQa3Q+uIrmzOgzp5lKxWwEk4mOvza3QoEqfwEjp8cHSmglzVjOa8TDI1p8DoRjoCOzBc1ukJf/Nl6j6RNJmuSz2Bt6Z5CymDSYOISYmc2A=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=HbWAk1IO; arc=fail smtp.client-ip=40.93.198.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=NaiKRokq64KXdiy2UY3HAgE7BjhHdfDT4/MbAztWawzAHraCWNQ8xuA231f1s+0iFPXMd7x6P3As5ryHIVK0J13XLu9a7RCIpnOwPP5DKBL9g9sSnRp1EXQfYHUqUAAVCnCHuw7b+y/0TJCTiaDDa9Ae5R3n84OZDXtbqxDUuYYZt2BMJbBodNNbJ3aH4e9xrjA6a0C9HTDbkOueQjHD/1ZJ4lC1+WiuuWlWAgIAsxw0myoz9REl19Ns68cOc7PeNEY9LTy+drlMn4RulZRAodbxCf5UweW2/+XfsV8wRT8t7f+ZExJl3AGC0g//56DdxGYwgHfkaqXAfPe7/OBgqg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mCcr1vAnwo0Zmm5bfE4pYnJ2ToVGNcRv2Yh6fh4N4iI=;
- b=aJ4Sl5vNjFRV4qE+rczI9b6Jt3EjcoOIfmASGcYfSpqHvEchM6xgfikZ371gKgZLbtbrbRcJyAnRoQlKq/oNkvKsIRDjbnR5Vw4LKi7Bbmuxw3nFrEadRZx42tqh7KQAC/xd0y84gfskEQ0JgjT4660HmK1yJj+G30uuNLfFGUDQcK5LEeTFQVZjqOrT4o53Mjo4+n9GPcNLxUm2TxgTFeB0/8LSwR6hEcUjpfrfT07NeqLyeNoj3FvOUawe89TSCzpncB/q61hURCV8qoTV0IQ9anqYoVU3C7s5Rmua4rDa0auz2p+CffpF1ULfdVWmbq7CKBzwUfx8W9S54mfZsA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mCcr1vAnwo0Zmm5bfE4pYnJ2ToVGNcRv2Yh6fh4N4iI=;
- b=HbWAk1IO+GqpAmH5Gr1H3tOVl8qRCqt9g0AKR6KiRMH2w0CJTN3EHy2Kgz1A2xZCCVdxUNh8kfA1b7Kr0lq5QK49sgizjh4wXVNuu+Q735iQeS4gNQKGidKB4L8rO4fWyaasr39pxVNlI6+FzdGafiscYW69zBWQu+N8qYa6rwlS1qZD7k/mTIszhl8/hpcEqiSSAgvSsC1rfTaTSZl+SaDRaj3QmtdJ21W/JoExEfinKVPVVVXaoMKpk4sucHgwf61L+3Pl+fnOgbTg2MA8DApFRGopGObHCaWKliTMBgtshCb9P4/2tvXAsybnw43kho394XXh159l0UyRSBglHA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from SJ2PR12MB8784.namprd12.prod.outlook.com (2603:10b6:a03:4d0::11)
- by DM4PR12MB8570.namprd12.prod.outlook.com (2603:10b6:8:18b::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9160.9; Thu, 25 Sep
- 2025 09:34:07 +0000
-Received: from SJ2PR12MB8784.namprd12.prod.outlook.com
- ([fe80::1660:3173:eef6:6cd9]) by SJ2PR12MB8784.namprd12.prod.outlook.com
- ([fe80::1660:3173:eef6:6cd9%4]) with mapi id 15.20.9160.008; Thu, 25 Sep 2025
- 09:34:07 +0000
-Message-ID: <9d084f85-1368-4974-bbf8-588140422040@nvidia.com>
-Date: Thu, 25 Sep 2025 10:34:00 +0100
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 20/24] pmdomain: core: Default to use
- of_genpd_sync_state() for genpd providers
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: Saravana Kannan <saravanak@google.com>, Stephen Boyd <sboyd@kernel.org>,
- linux-pm@vger.kernel.org, "Rafael J . Wysocki" <rafael@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Michael Grzeschik <m.grzeschik@pengutronix.de>,
- Bjorn Andersson <andersson@kernel.org>, Abel Vesa <abel.vesa@linaro.org>,
- Peng Fan <peng.fan@oss.nxp.com>,
- Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
- Johan Hovold <johan@kernel.org>, Maulik Shah <maulik.shah@oss.qualcomm.com>,
- Michal Simek <michal.simek@amd.com>, Konrad Dybcio <konradybcio@kernel.org>,
- Thierry Reding <thierry.reding@gmail.com>,
- Hiago De Franco <hiago.franco@toradex.com>,
- Geert Uytterhoeven <geert@linux-m68k.org>,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
-References: <20250701114733.636510-1-ulf.hansson@linaro.org>
- <20250701114733.636510-21-ulf.hansson@linaro.org>
- <4478f28b-47f8-4049-bf17-b7fc95cfac65@nvidia.com>
- <CAPDyKFqSyP3e=JRFYEuFefWVN5SYJWULU8SKzXmrThvyiVGXgg@mail.gmail.com>
- <a904d953-acb2-44f6-81bd-118f7abd22da@nvidia.com>
- <614f726c-4d6d-463b-a8b3-26d3df590575@nvidia.com>
- <CAPDyKFoPOejFT+=OBoLTBXj5GYuHFwwnY9qGROTynrtHT=mCAw@mail.gmail.com>
-From: Jon Hunter <jonathanh@nvidia.com>
-Content-Language: en-US
-In-Reply-To: <CAPDyKFoPOejFT+=OBoLTBXj5GYuHFwwnY9qGROTynrtHT=mCAw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO4P123CA0257.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:194::10) To SJ2PR12MB8784.namprd12.prod.outlook.com
- (2603:10b6:a03:4d0::11)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8C612EA736
+	for <linux-pm@vger.kernel.org>; Thu, 25 Sep 2025 10:25:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.182
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1758795924; cv=none; b=rsmB5xMXXNfbRUr8E3XaFrmCfrSWDKVen24SlKGfqK7PV+/RUIPZGGnvnCn9bleq2h8lVkh9UawQ4EXxMiDSVClg7RdrP8HpAo3riypPqZq1T0/C3X4Q0Q2OQLPXRlzpGhUATiGq8ymNMSfw+n/nGiOz5qCgedjNbKrGjS620O4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1758795924; c=relaxed/simple;
+	bh=XtVkM+2G1gsdVgHt/CWQpbqSQkoB9y5NcQzWL4Ho8rI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=j3wtkZxjRwPn1dEtW5ShOikYF96oOSlPc3OEyueRtSIIWW2UN+TLf27GYWF/vuyv5hoQWKuXkEVMAefvzuq+1xKM9jduKiMAgcZ4CeY6xLiBdWpba5RgkWushJ5khheF5f78d7Ge8q3YBK+jQt6rhFq0gSoDJ8LMN6Y2j3M/XG0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=aVYRgIv7; arc=none smtp.client-ip=209.85.219.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-ea5bcc26849so634087276.1
+        for <linux-pm@vger.kernel.org>; Thu, 25 Sep 2025 03:25:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1758795922; x=1759400722; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4xKL//qDf/bHFwOcVaHIl5QOFV73BHh6RluSbqnRvZ0=;
+        b=aVYRgIv7FZOdUR/B+syQLPe4G1TI9ffAuu3pX2HmvoFBhwAdJabOKLZ4ZQ8kgi9Zzz
+         UPfjLkEq4bTO8XMuBZrC0gcDKCID80MfyLjYFd0TVxprIk/tUG4TnZaB4RevFTHJGx0N
+         PlCzRbuHpU4wkTkfXsqhKA8orY+5TQtvHHzB7Tnhgjj/5FvNZi0MJOQ/aSZpJNugafN4
+         W1QXYWMgvZzRYgykS53018hPJbDy+nCzPDQKD0O/eqKbjPb5nHoIWNAcFdebbIhImkIo
+         r4P0sX2FwWIVqU51qSssvEZXUDTVBNm7bIXanYwfp4Nfbn3NEv910hiRcx6gFare7uo4
+         4Ebg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758795922; x=1759400722;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4xKL//qDf/bHFwOcVaHIl5QOFV73BHh6RluSbqnRvZ0=;
+        b=ihcfehJqCC/XldIuiEiKk1usJjAxbPtVcfJMVRleADcCSrpIS5UicR23CFdFHnY+2i
+         icP1W5hexPqsH+UjIi+aloyuRJmJI5nUFtWIxol4TYJ4kljN4oGLAO06ePf00n2QHuSw
+         E9lrTzVFPlr3lcsHnFehNSkE2asWQMEF27frA4sr5VqQhAQhHHF9xFUH0TbOtUqDK+BY
+         cL6iQBYkw66+d/ibZYXqiunJ2LDcidADefkMz/NOYE9RzE49SdgCAz7gYUU8kMoxWkGd
+         GsySgy9JIiVS2ok1q6YYHgBL7atUbZ1H2MVj8ZKW9AJCK5CU5UR/7AGtZ+4NY+MTptVd
+         1WjQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUrIJ89XSYAgbn0k1eN+FyCYrrYq0jYtsI61K10IIWBHz9GcL3WLHjpPFj64AtZPCtSMN2ZjO7IHg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzvQMbALBx6RyanCDPjpZLkq1DJoAz5UQeIrqKvidIb2W4rGHji
+	f7smHP1dzxBlABBcbH+J0hZvgIyo26A8QyhrfIJMVH7gcJle5VoYH398N4FcYOl6mKXzxvgm/Hs
+	avux1hahqDMHKLnP5hlwqpceZzXxs+JSBGrk82b3wbg==
+X-Gm-Gg: ASbGncvep1mLKyZUXfTk3gGz2Kr0UAmtHnatFhQgXi3HW0vBxIRw0NOvzH+CD6OBCjt
+	aC1INuNI/zJffvbgfI8UaaGjszfYmzequ6h5xUZqzpY1xNLUO4FAWDXdDR3XjbsPfATRyn4m2Rl
+	9LyCSp9utjuUiMgq8uD/zAuhxVcTaANmU/xVvKYA==
+X-Google-Smtp-Source: AGHT+IG8V3Q7p5Vt1DR2luFePzsg0Km6CytZRwWd8W+sa6jlNcUbpUDNIrxaLDSPg7kCtzuqQEjpM1BofvJxOFFpdhA=
+X-Received: by 2002:a05:690c:640c:b0:71f:f942:8467 with SMTP id
+ 00721157ae682-7640624f00amr25865727b3.51.1758795921561; Thu, 25 Sep 2025
+ 03:25:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ2PR12MB8784:EE_|DM4PR12MB8570:EE_
-X-MS-Office365-Filtering-Correlation-Id: 64a11d19-0ce7-4952-8b51-08ddfc16acb6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|1800799024|366016;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?MnhoMVpDU2lHK3E2TnpPVEpUZlNaMzdDV3RnY3Z1M21UZFZXdVNoWiszeENw?=
- =?utf-8?B?bVI0YzR3dkdXWS95L1lvb1FMMXMxSlJWYUpUMWREMzFpVUNqZGw3TmhPUnY2?=
- =?utf-8?B?ZmVCYmF4WTRqOVNJN0RTbkNSaVBaQmpLcDRKOW9DY3RDYTVMS1V2NzVybTZC?=
- =?utf-8?B?SEowaEhGanN5eEtCbVVYR3kveEJNZDIvWmRQYkdGL2ZYSytPblpBV3lZQno0?=
- =?utf-8?B?T0VhZHJmR0RYcjBhKzlZVlQwc0huNWF6c2ZSS3RQamRQYWhqR1pKVnNkWDk1?=
- =?utf-8?B?aUFUQTdXRGVmY0RFZk9SYXBiNVJHRHRncTJiK1dZWmxDQzNIb3pyUHdHZDRj?=
- =?utf-8?B?aGx4Qm5SRUdHbDNOUlFOcS9MOXE3Nm9GakJjTzJ5TEVNVW42Z2tUTmhhYWk3?=
- =?utf-8?B?RjdCR2ZUVlloZ2pYK2RDL04yNU1qNUczVmxrSExTanBySnFLditzU3pCL2pv?=
- =?utf-8?B?YWxqVzBuZVoybTRhWnpMQkhGdElYZENjRXVCdHRDZUtPblMrcEV2T2NSUHlG?=
- =?utf-8?B?R3BvWFUxM1NiYkN3WXNJUjQwSFA4amdPVEg1VE5EZTFBZzZId250aDl0UXBX?=
- =?utf-8?B?L3Rmak8xSjNWa0Q3SGxoV1E3S3ZZUXM2SWFOZ0VFWnlqWnB4V2ZRaS9iQTdq?=
- =?utf-8?B?TmtZeEZDYml3SVhVV0o5NVVubEFTblpXektIL0NEbkZyOENSQzJIWjRKalNB?=
- =?utf-8?B?NGZNSFlYWi9rWUY1UlNoY2toTjhKWXJjRzhNbTkzRTExcDlVZTR1S3lZejkz?=
- =?utf-8?B?WlEyWE9MRzdqYUhvRmV3anlkTzU5dG4rTTlOZklrY052QjJUSkxmQkxONWNM?=
- =?utf-8?B?UjloYVoyY1JzTkhkOGcybkZ2QWpuVFFKSmJFc2NIY3lJa0swRmlBTFR5STF4?=
- =?utf-8?B?TmRVbGpaeThvRmd6UmtLcnpGc0RENW5xZ1E3MDhRR2h2bkZ4eGN5bzZFYks0?=
- =?utf-8?B?K2xjV3pXbmJWWDlJN3Fyeng3ekxrN0Q1VS9veFlNYXduUWhpSXh2cVAxNjVt?=
- =?utf-8?B?eUJFdmVmdHFabG1GWktVNG1JR0FsMkZLMFdWaU45b3FKU2tyS2V5YnNtZ0ly?=
- =?utf-8?B?V0llQjQ3TXdqT0JoMklndFZYSHZIQ0JmSCtFUkoweDlhUS9Fdndjak5IZnBP?=
- =?utf-8?B?VFJ6OWpiVFBaR0FtUExGR095MCtwTk5HYXBBTzlxL3Z0SlFHNEs5ZkNkZ1Vq?=
- =?utf-8?B?WnZDZy96RXpnWkN4M21KdG9wQ2krbmNsMDFGWm5maStKTnJVY3FQSWxBZldu?=
- =?utf-8?B?TExkR0FhU2tNbkY1ZUVLMFpBVjZyditaTm1ORUlQYmRzaE54RzdqUk8vR0Nr?=
- =?utf-8?B?ZFVYb1A3VDdLWHRSMGFBQjhvbC8zdm1WY0NXSUhLQjQ1MG1tTWhqK3o0djRN?=
- =?utf-8?B?Sjg2RUxVR3NrYlhRSXM5bzd3MTN4ajZwdWgzL3k4MXlFdEhOQTU2WFhLY3hi?=
- =?utf-8?B?cVlGckFaVUp2dktwZWpqYUJYM1Jtc280VGVvS0NRWmttbDFZazd6S3JWK3Fv?=
- =?utf-8?B?SFRWMDEwajAzNnUwb1IwZ0Z3TzE1NkVQSDIvQjViaWZJeXBNVlRsNThTRE03?=
- =?utf-8?B?MkRGaytld1BJbnNhU01OU3JUdTg5WDQxTi9rNEtzREpTSEh5eks5NitOZlZy?=
- =?utf-8?B?QWFzS3JmOVNOdEM0UmNLbDREazNETnJWOGQvMnllUkdPaitQT3RvUGQ0WFV6?=
- =?utf-8?B?ZnBmOXlKTUlSbkR4anI0ZW5HUkNNNmNXOU1vQVlRaGY4RlE5L1BUbk9ocFE5?=
- =?utf-8?B?dUd0WmtWWTZORHFaTTZjdjVxK1ptY2xzaEZVOFFNMy9UelJTOEE0RGZxa0cv?=
- =?utf-8?B?dDg5anZXRWRHUE5hemNlNDBYdmRrSTJLdm1aNjRLQnZ5NGkxUVdzcUlGbFkw?=
- =?utf-8?B?QW44OFdxd1hMVldWSkFoUkI0OXhqVFVwWEQ1cGwzSHZUNElEcDBtaGJQRE1J?=
- =?utf-8?Q?Q5qkLmADX5M=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR12MB8784.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?MnhKaGNGYjh3bzhhdlk0L1RLVlBWWm1PMXN3ZmV5Q0l3alVrRVNTcmgwZENT?=
- =?utf-8?B?cTB2U0E1K2x5d2FRZU11WGtVUXlPSTdRYnVkMGh4YWZ0SVUxQmhQTTV3RHlB?=
- =?utf-8?B?c2VyTlpGaUNiYVdmNjVUL3B5OFJsRStrTkhHNVliZDh0TjVwY0RDZkhaMGln?=
- =?utf-8?B?MDRnOUdMUWVVVmFUeHJ2YzhRdmNsYWlkeFF3cjM1YU1KYmIvSWNYR3lhamNv?=
- =?utf-8?B?c0VnUXl0c3FoaUw0Rkkwck4veERyaTdlM2hkbzNwTnRKaUQ0N1ZKNlV6MGM5?=
- =?utf-8?B?U2UrMEZ2WjBjdUFtK1VNU0hJdDlnM1UzNkRKR1hacDFtUEVQM2dlNzRwc0w3?=
- =?utf-8?B?Zk5JMi9ST3FYSVArbUdoZ3hRSGRzRWRySnlJemlJWm1RcjFmSHBWR0FpejNN?=
- =?utf-8?B?S0o2MXRVUktweXZQT1pLdmxmdkQwMmg0cCtpRm9qVU5kWFI2SFNzL2FoM29C?=
- =?utf-8?B?aUdRRDVEeHBvUHVMeWkrRUxreXUvK0xDSGtocnlEWnlSRmladFROMmFmSlBV?=
- =?utf-8?B?LzhTRTNySHBCeDJJWmFGZm5ETHluM09OTkdGNytZQnhSTnhqM09IRUtwOG5Q?=
- =?utf-8?B?RklJK1JYZUJ3NFYrc1k3MURnb2JSUDdQL0NHckloUEZFNlkxbFVXWWlUR29Y?=
- =?utf-8?B?L0pwZnBqNHpmNTdNY1p5anhoYlZNcWFiNzVHZkZOUHpQdDh4cC9sR3ZqeEZO?=
- =?utf-8?B?cE9veTR3aDU4MnFqQlhDVktUSHhWUWpDZ29ueGRwejBUZU5zRnBDTnQxamxa?=
- =?utf-8?B?djNVdGNDaDRsSGJ4REVxYUZnemdITjQ0LzgyUUZ6VjQrNWU2M2owa1huREQr?=
- =?utf-8?B?dlNqZHZNeCt6ZjFaUDRtM3VnOUQ4cENtRFZJTWZJNzUxRHBBRmJCOXd1VC9m?=
- =?utf-8?B?MCtHMmlDeDdlVGpMdHBBeW5qWktJU2c4aTFOQ1hlTVdPVmt3QmtTdkZNUXpw?=
- =?utf-8?B?ajhCL2xCSGJGMmV5RC9VT1VYNzFlbXZzRHR4QWNrMXFSalptQWdZMlh4K00r?=
- =?utf-8?B?RHh3YnR2VzZITFV5R3IrVnU1K3JkMjVzL0xzV0UzQ29HSEJZSWJDQmR0S05v?=
- =?utf-8?B?VEtZUGRXSGZhVEljTnZOcWpQbXZwMy9pOXhTSE5MQ3ZvNzE0Si9TQ2tUMmZP?=
- =?utf-8?B?eDNtQVh2UXpkRmRwd2hBMTdPdEVUbGVnMEVXR3FnY25kNGx3YXFVRDkxaFph?=
- =?utf-8?B?RlFYM1MxdjRHV1MxY1dFUjNpRzl3d0tQdlNZL2FCSDNSNmRELzV4emIyTjEr?=
- =?utf-8?B?UVE2UHpESldRYzlvcTNYaVN4cnlrdHhyRld2dmszQUZRSExVNit0b2RKckdC?=
- =?utf-8?B?cFNYTmhyWnFaNEpUZGx2dHcwOTlKOGk4a0kzNHB4YktuNVNPTThNemdkQU9n?=
- =?utf-8?B?OU4vVmRvdFZnVG9XcklQRUJkMk9SYmc1N1cvWFlNTGpDN3FRMFE3WlYzcWxO?=
- =?utf-8?B?L1EyRVdvdzlCaCtVTDR0RTFzVHppMVZaQTMzalE2YmRMNkg1WVNsWWhSSzlh?=
- =?utf-8?B?RGxsMm13enR3TVpWU01PcFB0OHhIRm1GMkI1NWoxWmNSRERQYUo4OUxOKzRT?=
- =?utf-8?B?R0lFREdYaTA0QUNrUkY3ZXV6ZXdQVzA1dXk2WFR3Z1hLNTlYcFd3M3J0ZndF?=
- =?utf-8?B?dUJpNEVOOFN6WGo1YzNta0FDMkhlVThZZDNXRkxjZTZsNEwzM3RZSk5KUlZM?=
- =?utf-8?B?TzdvU3FKSktORDdrTnNFNmhGUGxHcE1TeEZsRHNENjJMY0c4WUdYSFQ2Z1o4?=
- =?utf-8?B?TkhSK1JLTGFpNUU1VUh4YVNwSUJDT2hVNjhwcXMvdGRuRzBTU21QczllczBF?=
- =?utf-8?B?c3pObUlTM1ZLV3o2SEw2NjQ4ZWNPWFJYNDBpZ2NPYjUvdjhYVkxGYWNBVzVM?=
- =?utf-8?B?eE52ZVZMbzB4S1piVUxDOUFRbUpsM0NLc3VvamhmaldtMTBINHR4Y1E3Lzh3?=
- =?utf-8?B?USsxN0VTRGR5U0s1OU5BZFU1VlFzUElObGtzcmkxREg2YXYwNUd4TE5vaGhL?=
- =?utf-8?B?a1Y4cVU4MUt5OWo2Vk9EamhCNDZ4UWd6SVh2U0FhZTF5ZXFFYStyd3JlQVhC?=
- =?utf-8?B?dmR3dWhHSkVEbVZ0Z0xBc01MOTcrSC9hdU1aN0tZWDV5eGZ4VlI4R01IeXl5?=
- =?utf-8?Q?/clxn2jESBlYxl8V6LtJim8LM?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 64a11d19-0ce7-4952-8b51-08ddfc16acb6
-X-MS-Exchange-CrossTenant-AuthSource: SJ2PR12MB8784.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Sep 2025 09:34:07.5873
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /Yj9jsA7Awg+TWQ2Io5mnLNp+0WQSNqP26BBp8Sivj1r16FhHa75bWvdJDPnlRLki7oocXjYiV9WRUh5YtL8Yg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB8570
+References: <7hldnp6apf.fsf@baylibre.com> <CAJZ5v0j=9RXHrcVEBp0yy1Ae4_kC1y-WFQyBf89r3NtoL-tYQw@mail.gmail.com>
+ <CAPDyKFpeVF_EHJDQ9u=LDuJ56g7ykYUQWHXV2WXTYLa-mYahVA@mail.gmail.com>
+ <CAPDyKFpc-PHC1QhoSrNt9KnaGov749H1AwFZUwnDDzG7RDYBRw@mail.gmail.com>
+ <CAJZ5v0hC=sEcC-mU8jArwVN3EA6+U=EmCa2e7TKO0sg6LJiz7g@mail.gmail.com>
+ <CAPDyKFqG=bFSP2rJ3PXt5=6_nLdpJ+ir80krU1DrRCCMhwKQng@mail.gmail.com>
+ <CAJZ5v0hYN5G_WpA6KDpeDgowc2i9AvrUBCq-egS==8RNVb6N=w@mail.gmail.com>
+ <CAPDyKFr0-yh8wt169QanAo3AmuXBq_9p3xiiqeFmmWz-ntNQsw@mail.gmail.com>
+ <CAJZ5v0h4nS7fm347ue0Kj_eGwAi=o1vzyJm25_Q67dWzyoXR+Q@mail.gmail.com>
+ <CAPDyKFos=rM6Y-6tFbifpFp8XxwA=t_aya-nWhz=6ME1FaBEoA@mail.gmail.com> <20250923164324.mo6gkzlfb6y7spvo@lcpd911>
+In-Reply-To: <20250923164324.mo6gkzlfb6y7spvo@lcpd911>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Thu, 25 Sep 2025 12:24:45 +0200
+X-Gm-Features: AS18NWCuDlHueGZETEUFNZPJuvza6u99iJRdJVkJ1uhEbwCZmVlEliOR9iZl3qA
+Message-ID: <CAPDyKFowed5SdaCN6NRM_g1RtWBhu20SXUiZceBLqHrvmnQT3g@mail.gmail.com>
+Subject: Re: [RFC/PATCH 1/3] PM: QoS: Introduce a system-wakeup QoS limit
+To: Dhruva Gole <d-gole@ti.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Kevin Hilman <khilman@baylibre.com>, linux-pm@vger.kernel.org, 
+	Pavel Machek <pavel@kernel.org>, Len Brown <len.brown@intel.com>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, Saravana Kannan <saravanak@google.com>, 
+	Maulik Shah <quic_mkshah@quicinc.com>, Prasad Sodagudi <psodagud@quicinc.com>, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Tue, 23 Sept 2025 at 18:43, Dhruva Gole <d-gole@ti.com> wrote:
+>
+> Hi Ulf,
+>
+> On Sep 23, 2025 at 14:36:53 +0200, Ulf Hansson wrote:
+> > On Tue, 23 Sept 2025 at 13:39, Rafael J. Wysocki <rafael@kernel.org> wr=
+ote:
+> > >
+> > > On Tue, Sep 23, 2025 at 11:42=E2=80=AFAM Ulf Hansson <ulf.hansson@lin=
+aro.org> wrote:
+> > > >
+> > > > On Mon, 22 Sept 2025 at 20:55, Rafael J. Wysocki <rafael@kernel.org=
+> wrote:
+> > > > >
+> > > > > On Thu, Sep 18, 2025 at 5:34=E2=80=AFPM Ulf Hansson <ulf.hansson@=
+linaro.org> wrote:
+> > > > > >
+> > > > > > On Wed, 17 Sept 2025 at 21:24, Rafael J. Wysocki <rafael@kernel=
+.org> wrote:
+> > > > > > >
+> > > > > > > Hi,
+> > > > > > >
+> > > > > > > Sorry for the delay.
+> > > > > > >
+> > > > > > > On Fri, Sep 12, 2025 at 3:58=E2=80=AFPM Ulf Hansson <ulf.hans=
+son@linaro.org> wrote:
+> > > > > > > >
+> > > > > > > > On Tue, 12 Aug 2025 at 11:26, Ulf Hansson <ulf.hansson@lina=
+ro.org> wrote:
+> > > > > > > > >
+> > > > > > > > > On Mon, 11 Aug 2025 at 21:16, Rafael J. Wysocki <rafael@k=
+ernel.org> wrote:
+> > > > > > > > > >
+> > > > > > > > > > On Mon, Aug 11, 2025 at 7:16=E2=80=AFPM Kevin Hilman <k=
+hilman@baylibre.com> wrote:
+> > > > > > > > > > >
+> > > > > > > > > > > "Rafael J. Wysocki" <rafael@kernel.org> writes:
+> > > > > > > > > > >
+> > > > > > > > > > > > On Wed, Jul 16, 2025 at 2:33=E2=80=AFPM Ulf Hansson=
+ <ulf.hansson@linaro.org> wrote:
+> > > > > > > > > > > >>
+> > > > > > > > > > > >> Some platforms and devices supports multiple low-p=
+ower-states than can be
+> > > > > > > > > > > >> used for system-wide suspend. Today these states a=
+re selected on per
+> > > > > > > > > > > >> subsystem basis and in most cases it's the deepest=
+ possible state that
+> > > > > > > > > > > >> becomes selected.
+> > > > > > > > > > > >>
+> > > > > > > > > > > >> For some use-cases this is a problem as it isn't s=
+uitable or even breaks
+> > > > > > > > > > > >> the system-wakeup latency constraint, when we deci=
+de to enter these deeper
+> > > > > > > > > > > >> states during system-wide suspend.
+> > > > > > > > > > > >>
+> > > > > > > > > > > >> Therefore, let's introduce an interface for user-s=
+pace, allowing us to
+> > > > > > > > > > > >> specify the system-wakeup QoS limit. Subsequent ch=
+anges will start taking
+> > > > > > > > > > > >> into account the QoS limit.
+> > > > > > > > > > > >
+> > > > > > > > > > > > Well, this is not really a system-wakeup limit, but=
+ a CPU idle state
+> > > > > > > > > > > > latency limit for states entered in the last step o=
+f suspend-to-idle.
+> > > > > > > > > > > >
+> > > > > > > > > > > > It looks like the problem is that the existing CPU =
+latency QoS is not
+> > > > > > > > > > > > taken into account by suspend-to-idle, so instead o=
+f adding an
+> > > > > > > > > > > > entirely new interface to overcome this, would it m=
+ake sense to add an
+> > > > > > > > > > > > ioctl() to the existing one that would allow the us=
+er of it to
+> > > > > > > > > > > > indicate that the given request should also be resp=
+ected by
+> > > > > > > > > > > > suspend-to-idle?
+> > > > > > > > > > > >
+> > > > > > > > > > > > There are two basic reasons why I think so:
+> > > > > > > > > > > > (1) The requests that you want to be respected by s=
+uspend-to-idle
+> > > > > > > > > > > > should also be respected by the regular "runtime" i=
+dle, or at least I
+> > > > > > > > > > > > don't see a reason why it wouldn't be the case.
+> > > > > > > > > > > > (2) The new interface introduced by this patch basi=
+cally duplicates
+> > > > > > > > > > > > the existing one.
+> > > > > > > > > > >
+> > > > > > > > > > > I also think that just using the existing /dev/cpu_dm=
+a_latency is the
+> > > > > > > > > > > right approach here, and simply teaching s2idle to re=
+spect this value.
+> > > > > > > > > > >
+> > > > > > > > > > > I'm curious about the need for a new ioctl() though. =
+ Under what
+> > > > > > > > > > > conditions do you want normal/runtime CPUidle to resp=
+ect this value and
+> > > > > > > > > > > s2idle to not respect this value?
+> > > > > > > > > >
+> > > > > > > > > > In a typical PC environment s2idle is a replacement for=
+ ACPI S3 which
+> > > > > > > > > > does not take any QoS constraints into account, so user=
+s may want to
+> > > > > > > > > > set QoS limits for run-time and then suspend with the e=
+xpectation that
+> > > > > > > > > > QoS will not affect it.
+> > > > > > > > >
+> > > > > > > > > Yes, I agree. To me, these are orthogonal use-cases which=
+ could have
+> > > > > > > > > different wakeup latency constraints.
+> > > > > > > > >
+> > > > > > > > > Adding an ioctl for /dev/cpu_dma_latency, as suggested by=
+ Rafael would
+> > > > > > > > > allow this to be managed, I think.
+> > > > > > > > >
+> > > > > > > > > Although, I am not fully convinced yet that re-using
+> > > > > > > > > /dev/cpu_dma_latency is the right path. The main reason i=
+s that I
+> > > > > > > > > don't want us to limit the use-case to CPU latencies, but=
+ rather allow
+> > > > > > > > > the QoS constraint to be system-wide for any type of devi=
+ce. For
+> > > > > > > > > example, it could be used by storage drivers too (like NV=
+Me, UFS,
+> > > > > > > > > eMMC), as a way to understand what low power state to pic=
+k as system
+> > > > > > > > > wide suspend. If you have a closer look at patch2 [1] , I=
+ suggest we
+> > > > > > > > > extend the genpd-governor for *both* CPU-cluster-PM-domai=
+ns and for
+> > > > > > > > > other PM-domains too.
+> > > > > > > > >
+> > > > > > > > > Interested to hear your thoughts around this.
+> > > > > > > >
+> > > > > > > > Hey, just wanted to see if you have managed to digest this =
+and have
+> > > > > > > > any possible further comment?
+> > > > > > >
+> > > > > > > The reason why I thought about reusing /dev/cpu_dma_latency i=
+s because
+> > > > > > > I think that the s2idle limit should also apply to cpuidle.  =
+Of
+> > > > > > > course, cpuidle may be limited further, but IMV it should obs=
+erve the
+> > > > > > > limit set on system suspend (it would be kind of inconsistent=
+ to allow
+> > > > > > > cpuidle to use deeper idle states than can be used by s2idle)=
+.
+> > > > > >
+> > > > > > Agreed!
+> > > > > >
+> > > > > > >
+> > > > > > > I also don't think that having a per-CPU s2idle limit would b=
+e
+> > > > > > > particularly useful (and it might be problematic).
+> > > > > > >
+> > > > > > > Now, it is not as straightforward as I thought because someon=
+e may
+> > > > > > > want to set a more restrictive limit on cpuidle, in which cas=
+e they
+> > > > > > > would need to open the same special device file twice etc and=
+ that
+> > > > > > > would be quite cumbersome.
+> > > > > > >
+> > > > > > > So in the end I think that what you did in the $subject patch=
+ is
+> > > > > > > better, but I still would like it to also affect cpuidle.
+> > > > > >
+> > > > > > Okay. I will update the patches according to your suggestions!
+> > > > > >
+> > > > > > >
+> > > > > > > And it needs to be made clear that this is a limit on the res=
+ume
+> > > > > > > latency of one device.  Worst case, the system wakeup latency=
+ may be a
+> > > > > > > sum of those limits if the devices in question are resumed
+> > > > > > > sequentially, so in fact this is a limit on the contribution =
+of a
+> > > > > > > given device to the system wakeup latency.
+> > > > > >
+> > > > > > Indeed, that's a very good point! I will keep this in mind when
+> > > > > > working on adding the documentation part.
+> > > > >
+> > > > > Well, this also means that using one limit for all of the differe=
+nt
+> > > > > devices is not likely to be very practical because the goal is to=
+ save
+> > > > > as much energy as reasonably possible in system suspend while
+> > > > > respecting a global resume latency constraint at the same time.
+> > > > >
+> > > > > Using the same limit on a local contribution from each device to =
+the
+> > > > > combined latency is not likely to be effective here.  Rather, I'd
+> > > > > expect that the best results can be achieved by setting different
+> > > > > resume latency limits on different devices, depending on how much
+> > > > > power they draw in each of their idle states and what the exit la=
+tency
+> > > > > values for all of those states are.  In other words, this appears=
+ to
+> > > > > be an optimization problem in which the resume latency limits for
+> > > > > individual devices need to be chosen to satisfy the global resume
+> > > > > latency constraint and minimize the total system power.
+> > > >
+> > > > I am following your reasoning and I agree!
+> > > >
+> > > > Perhaps we should start with extending the cpu_dma_latency with an
+> > > > ioctl after all? This would allow userspace to specify constraints =
+to
+> > > > be applicable for system-wide-suspend (s2idle), but it would still =
+be
+> > > > limited for CPUs/CPU-clusters.
+> > >
+> > > Right.
+> > >
+> > > Adding a separate device special file to represent the limit affectin=
+g
+> > > s2idle may be somewhat cleaner though as mentioned before.
+> >
+> > Okay, sounds good to me too!
+> >
+> > >
+> > > > For other devices, we should probably explore the per device PM QoS
+> > > > (pm_qos_latency_tolerance_us) instead. Currently the
+> > > > pm_qos_latency_tolerance_us is used for "runtime_suspend", so perha=
+ps
+> > > > adding another per device sysfs file, like
+> > > > "pm_qos_system_wakeup_latency_us",  that we can use for the
+> > > > system-wide-wakeup latency constraint?
+> > > >
+> > > > Would this make better sense, you think?
+> > >
+> > > I think that this can be made work.
+> >
+> > Okay, I will explore this approach.
+>
+> I think this is kind of similar to how we did it for the TI SCI
+> pmdomains driver for TI SoC. See Kevin's patch [1] where we read from
+> dev_pm_qos_read_value and then based on that we set some constraints on
+> the firmware entity based on which the firmware entity chose which low
+> power mode to enter. It's nice to see that the logic is finally getting
+> into a much more central part of the kernel PM.
+>
+> About this series itself, Kevin and I have been working to integrate a
+> branch where we can have some platform specific support for the TI AM62L
+> SoC along with this series applied on it on vendor kernel, but I think
+> it should be good enough to test a proof of concept that we can finally
+> do mode selection while using s2idle.
+>
+> So yeah - I was able to write some values into
+> /dev/system_wakeup_latency and then see that before setting any value it
+> picked the deepest idle-state in the DT. When I programmed some latency
+> constraint into /dev/system_wakeup_latency then I could see that the
+> cpuidle_enter_s2idle picked the shallower idle-state.
+>
+> These idle-states we had were modelling 2 different low power mode
+> variants of suspend to RAM, and based on the different suspend-param
+> that I recieved in the firmware (in this case TF-A via PSCI), I did the
+> mode selection bits and switched between low power modes purely based on
+> system_wakeup_latency. There's definitely more work to do, and I will
+> continue to closely monitor the next revisions of this series as well,
+> so please feel free to include me in To/CC.
 
-On 24/09/2025 16:53, Ulf Hansson wrote:
-> On Wed, 24 Sept 2025 at 13:41, Jon Hunter <jonathanh@nvidia.com> wrote:
->>
->> Hi Ulf,
->>
->> On 03/09/2025 13:33, Jon Hunter wrote:
->>
->> ...
->>
->>>>> Following this change I am seeing the following warning on our Tegra194
->>>>> devices ...
->>>>>
->>>>>     WARNING KERN tegra-bpmp bpmp: sync_state() pending due to
->>>>> 17000000.gpu
->>>>>     WARNING KERN tegra-bpmp bpmp: sync_state() pending due to 3960000.cec
->>>>>     WARNING KERN tegra-bpmp bpmp: sync_state() pending due to
->>>>> 15380000.nvjpg
->>>>>     WARNING KERN tegra-bpmp bpmp: sync_state() pending due to
->>>>> 154c0000.nvenc
->>>>>     WARNING KERN tegra-bpmp bpmp: sync_state() pending due to
->>>>> 15a80000.nvenc
->>>>>
->>>>> Per your change [0], the 'GENPD_FLAG_NO_SYNC_STATE' is set for Tegra
->>>>> and so should Tegra be using of_genpd_sync_state() by default?
->>>>
->>>> This is a different power-domain provider (bpmp) in
->>>> drivers/firmware/tegra/bpmp.c and
->>>> drivers/pmdomain/tegra/powergate-bpmp.c.
->>>>
->>>> For the bpmp we don't need GENPD_FLAG_NO_SYNC_STATE, as the
->>>> power-domain provider is described along with the
->>>> "nvidia,tegra186-bpmp" compatible string. In the other case
->>>> (drivers/soc/tegra/pmc.c) the "core-domain" and "powergates" are
->>>> described through child-nodes, while ->sync_state() is managed by the
->>>> parent-device-node.
->>>>
->>>> In the bpmp case there is no ->sync_state() callback assigned, which
->>>> means genpd decides to assign a default one.
->>>>
->>>> The reason for the warnings above is because we are still waiting for
->>>> those devices to be probed, hence the ->sync_state() callback is still
->>>> waiting to be invoked. Enforcing ->sync_state() callback to be invoked
->>>> can be done via user-space if that is needed.
->>>>
->>>> Did that make sense?
->>>
->>> Sorry for the delay, I was on vacation. Yes makes sense and drivers for
->>> some of the above drivers are not yet upstreamed to mainline and so this
->>> would be expected for now.
->>
->>
->> I have been doing more testing and do see a lot of "tegra-bpmp bpmp:
->> sync_state() pending due to" on our platforms for basically are driver
->> that is built as a module. It seems a bit noisy given that these do
->> eventually probe OK. I am wondering if this should be more of a
->> dev_info() or dev_dbg() print?
-> 
-> Yes, I agree. We have had similar reports for other platforms too.
-> 
-> I intend to send a patch for this in the next day or so.
+Thanks a lot for sharing your feedback and for confirming your
+test-results, great news!
 
-OK great! Please CC me and I will be happy to test.
+I will certainly cc you when I post the next revision!
 
-Cheers
-Jon
+Kind regards
+Uffe
 
--- 
-nvpublic
-
+>
+> [1] https://lore.kernel.org/linux-pm/20241206-lpm-v6-10-constraints-pmdom=
+ain-v6-1-833980158c68@baylibre.com/
+>
+> --
+> Best regards,
+> Dhruva Gole
+> Texas Instruments Incorporated
 
