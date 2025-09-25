@@ -1,81 +1,81 @@
-Return-Path: <linux-pm+bounces-35347-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35348-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DFF7EB9FBF3
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Sep 2025 15:59:10 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4CB5BB9FBF0
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Sep 2025 15:59:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 708534E4758
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Sep 2025 13:58:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 184221C23CBF
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Sep 2025 13:59:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 695B82C11FB;
-	Thu, 25 Sep 2025 13:55:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EB4C2C21FA;
+	Thu, 25 Sep 2025 13:55:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X+cODE8g"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jxkifYJo"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AECB12C08CF
-	for <linux-pm@vger.kernel.org>; Thu, 25 Sep 2025 13:55:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AA612C1589
+	for <linux-pm@vger.kernel.org>; Thu, 25 Sep 2025 13:55:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758808504; cv=none; b=sQXKJTO/tzbImH5lg9nsT4/a3N3gsizIwEtS7cxIuvSo0jZJAGJ/faa2JEjMR/eZZwLb2RR0SRp+KQBopHAeSq1BX1fFV0/s9ZcNuqcU0B9sGN4M8NUBidr4O6ugoIEwY7ghRohQ8FurQcYcEGphYENYtG6AQO5Eh0JorOLtVEc=
+	t=1758808510; cv=none; b=sDAjti5WEKYTCCaiukrPqEQq67cS102kBqdBuvSJF9o+Z5fWBt9FupvGCXNG97lFBqd4XcUgv5kg2fixRqnE+Ye+YTSDYDEl4QuBQyC0qHqn6DHY6G5dvUhwoEeEE0tY1cztTWAuIfQZiGWj0tbYdVbLismlAv0OhSweqIb5fUU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758808504; c=relaxed/simple;
-	bh=tEhBaBJnhQFO++GmUh6w8m63Mr6JSvoXu3wOHmq14e0=;
+	s=arc-20240116; t=1758808510; c=relaxed/simple;
+	bh=bPZeninN2/V/7zw/PYEF64yfGflgZsOfq0JcAWxkVI0=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=YQdxvekB1R3cjnCcI9+kFRSgRDBQoXHcQ7zU1F2SwPIEZxs3gEQuIVWHmDb6Ij1X3YUv0cK+YvqdwE4mQ0b5TBFeaQgwVhpZ5UiaPsrvR1x2XAfRuQLt+HBK/m48LP9TWZ+3VxHBtzW2Djt3dk/kAwXMq5foA9zLPAAxKMp8Kfo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X+cODE8g; arc=none smtp.client-ip=209.85.219.44
+	 In-Reply-To:To:Cc; b=Hctk7PJls4NUncl5AsLR5/YdJNhpr5u5+TfamBNxgirqScb1M/jSADio1BOaYl3hv6GlPpTOMrzJwBkusFPwJRh7/KdbxQdAVNbzjLBXkqCsvY+hp2ZTuKVt/G4xdi6sVrkT6mEdjamypGGLL07dtqEEqJ/R9PkniBPZn36Xs3I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jxkifYJo; arc=none smtp.client-ip=209.85.219.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f44.google.com with SMTP id 6a1803df08f44-78febbe521cso7152476d6.2
-        for <linux-pm@vger.kernel.org>; Thu, 25 Sep 2025 06:55:00 -0700 (PDT)
+Received: by mail-qv1-f44.google.com with SMTP id 6a1803df08f44-7960d69f14bso4703286d6.2
+        for <linux-pm@vger.kernel.org>; Thu, 25 Sep 2025 06:55:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758808499; x=1759413299; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1758808506; x=1759413306; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=XVSYVBz+/C/3yUXq0+Xlzki5tMQiQIQTN1ASo1OgvYI=;
-        b=X+cODE8gpcyrA5FeL130iIoEK2/eyLm4jvpb2LplgGzizzyT5BcZY7Q/Mpmz1VoVAO
-         SJDNVPXmqsZMqD+NQb6+JkQUviwFh1qkH7cIOFoc/xah7Yo19jSz0GZP9qoOZsyu1Uiw
-         8I3n2Fdtzr+mEzFrqoXozNdzbpq0vZbBU8/dt3PWHB32wXAIVjoyNwZHTbWwu/btTQ6d
-         GCWZSbQZUYgU0yFAydilmIm+tQaeSkBeoHNKiDCoNsFFKu/o0odqaC3VHhrMoapxRWAX
-         H/90suxrOSxo151ZsRHOCms0ShPgsFRpVkfnIdH8MaE18pah7e+z3YhErUKAHvL0tQwe
-         lT4A==
+        bh=YqTcvT5yONUFeYmOIO5vRSTnodd8gLQVUhuVrtBW+JA=;
+        b=jxkifYJo+Hqlth5IMZ0ckwB+jZMkZSY7/ck3+l/fKdQym9jDfHP4sSFZKL3pvqeRVy
+         awcwEqkjMfFXU73o/Z4iiE24UnZLQWUIkspE+yT8bPfOvHAT4moOiRhPbvEC/AB4nv3+
+         EkhWXjtyngWTJ8QdHxqg4fDZzCFPidm3Aum92Jd9Vl9dByKlV6FevWiCifjohsT6U81i
+         c8v/gkBBw7YKw8IWCXxoYydPQNCQQd3kNwhRUGjjctRRCCAnL8UOkk+xpAn7yGE2Z6XN
+         /yBnCbL7jM488cln8R6ffaHIvIU+50M2t+2diyUEf2h4HgfnryJKe2cSWwitVa5HYY8M
+         AF1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758808499; x=1759413299;
+        d=1e100.net; s=20230601; t=1758808506; x=1759413306;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=XVSYVBz+/C/3yUXq0+Xlzki5tMQiQIQTN1ASo1OgvYI=;
-        b=krxBzua1YtIBvgHl3tevjDEuCBptM1yWH0f7auQAJWgucqmssTgZ2sRI3jTqjauVFs
-         VyF+6F43rt9g5slXhWikz6FgPLexwRTvPcFFSlYIPTzuSrJ9lGjj9pGaCVLoaqhbhChw
-         FBcNvWJ4maXPwq4H6fRLGPjW1ofiR9Zm0GGZBasIcGUv15NKZEJ+fSwBW+in9Pv6r+zl
-         qJ8qc3vkwEpRgnVYvl9b/IfotdayGJo7c/vAbdMKeoF4qtjVt60keaQHUJb2RFchV7ex
-         6p8AGAt143uCtVo1YF02xIU8sFfgey4UVJaSB9cQziY/j0B48xStZ8NBG2gdmRl1QM4R
-         r52Q==
-X-Gm-Message-State: AOJu0YwVKbbsUsHm76a3iy2AHof5TX3R/o4nE/FYNydIFJK2Be7s0SWy
-	Xa2Pp0SlZPb+u4hK/er6mhmO/C1WljBcPXV5Oij8+pkbkO86xxP94sdr
-X-Gm-Gg: ASbGncupax0A/Y+ixs9JL1C3t756r3WXKnsEq0ypYfqWPKhD4w1Kvt6bACb6n4nYTni
-	xhVo7D1A/r317ejga7wMPjlveM+X/d1HGO0vG3qlmNHMNMJyf8OGEzK+rCaHZoj1gZetrVt6J/a
-	lh4JJHlYuVJhoEF48+z2Fs6blKMOMNSgyD6Rg2Xp++K9suKga3Gnm4Gxh6Q3bRA8MGxKtcxil3O
-	Qx1s3/jUmuNTQdnV6e95cLv5NNwdV/DWqSDDA90/pg1UMufKVyWKlX8l3Isa7c06OAU2YT48yjP
-	LFZRgQ5jVvHev1o1w/RcwwvWq9p95DcmAtqMUsPnPcu7T5hX4KBmx04JT4LCRBZpPmQsU9w77Wr
-	DsVtzkxFtsEs+Md46SgS+ATKlFvPgeVrm+LbSft1Z9XiV/SmZSGKI1RpJ5zb2WG4UyLjGbgVwGN
-	5yqavn9GLMS3ytwrgicMPSCQe8s7yFoHO97pcxdjeKeJHuw7Xbn5jHCTFT1v9Sqv6aeZZF
-X-Google-Smtp-Source: AGHT+IEssEmLNZcem/aKdLWetF1Fs16YPcmtFsn6hozzBuZs4Wn/CLmfl+Df8wHKJRPpg5SfyGzrZA==
-X-Received: by 2002:ad4:5deb:0:b0:78e:c5c7:1209 with SMTP id 6a1803df08f44-7fc3e015bc2mr57974806d6.56.1758808499295;
-        Thu, 25 Sep 2025 06:54:59 -0700 (PDT)
+        bh=YqTcvT5yONUFeYmOIO5vRSTnodd8gLQVUhuVrtBW+JA=;
+        b=hwBQx8BsgluGLM6FogDrUw3QCRpco88nAj0BMQT5Bg7t89HsuXGJLtatFrWxztHlP2
+         6267qhAjU3B2JfFfv6aFRpVCd8npDjpiYpQXJ1L9eWlVh5uA/zUQ+PvaeH/Y8ljQo8kX
+         bKMenBY5UqQK0D6wu3PtYeserXvRj/Wfmz6cbw2KXu4sH6X25yKcArCTjjE/B7Sbou0x
+         whzvakl2ySXHM7jdO/QY9XoW+GuiI46M/4eXjfP6IjWoKOhytcq7Z7zJhbbwz2rXRuPv
+         vV24mn4AilQHK5Ft7KbqJwnFZ2n36MvFcF1vm3HWqY0SuA1igEui6WnYk2T0yFpW79Om
+         01tQ==
+X-Gm-Message-State: AOJu0YxhWLPvNL5laR2FgBCN2SBJNpZ9mGD+k3nGM3Xw3IpWmPqs4NZz
+	suRgvBUpAG96sAFpiaEpYUY9Q2EnLbE3j7uzWqvFnS64F6GXPTkxZAVS
+X-Gm-Gg: ASbGnctRzKbegq9YV2fx0Up/26rh+MS23WFCLafRownvlLIMNP7ljq8wa8SiLo0+EZB
+	U2DhBC+Z2Ic7/3MHfBf2rjpQYzSsSlqk90+yocpBxZrbBq8T+zItoK4zPeEqEx75oa9NX2W4w/r
+	d1mfYmUOS06Rijqnl5X7FZ3u3v0tr1iPAtOrM1tFyXfbQd7vvNCP7rMQDfOjYUluwAa8Mx0qxB9
+	Rc6iLxDSoMt7v7NQX16YkxLdcaXlH3i9EkmNl1iRLQRw1//gZDplnypkQ71QondR0uJye3yRtQE
+	JiNd/DxJ7XbB79oD/gMpOjNEpZKiU6/sFlmSRB/yVVixOOqWM7tR9DUaAij1AGP4OowYTluBqbj
+	JdGs0ZBcNbew7lDZga6G/S6KVVpeDQmoaO28HlV1AzyxbwXgwXKKqfJ0f+AAA8yHLGsgFe6p5Ex
+	tEOHWyQDygcRF9WYmTUZ7QDK1SsVO+9xmpr79cwhf9uvVKAvGI99I2Jl/EkNCjuhFzYs+T
+X-Google-Smtp-Source: AGHT+IG6EzTyEA3INGOgld+kkM2E6bSTO6bhB+H8gEAN47wRnZax/H9RzJp1nvFdm1VelrmNbN2bBg==
+X-Received: by 2002:a05:6214:765:b0:809:5095:4144 with SMTP id 6a1803df08f44-80950954186mr19841926d6.67.1758808505713;
+        Thu, 25 Sep 2025 06:55:05 -0700 (PDT)
 Received: from 137.1.168.192.in-addr.arpa ([2600:4808:6353:5c00:7c:b286:dba3:5ba8])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-80135968d5esm11536916d6.12.2025.09.25.06.54.52
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-80135968d5esm11536916d6.12.2025.09.25.06.54.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Sep 2025 06:54:58 -0700 (PDT)
+        Thu, 25 Sep 2025 06:55:05 -0700 (PDT)
 From: Tamir Duberstein <tamird@gmail.com>
-Date: Thu, 25 Sep 2025 09:53:55 -0400
-Subject: [PATCH v2 07/19] rust: device: replace `kernel::c_str!` with
+Date: Thu, 25 Sep 2025 09:53:56 -0400
+Subject: [PATCH v2 08/19] rust: firmware: replace `kernel::c_str!` with
  C-Strings
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -85,7 +85,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250925-core-cstr-cstrings-v2-7-78e0aaace1cd@gmail.com>
+Message-Id: <20250925-core-cstr-cstrings-v2-8-78e0aaace1cd@gmail.com>
 References: <20250925-core-cstr-cstrings-v2-0-78e0aaace1cd@gmail.com>
 In-Reply-To: <20250925-core-cstr-cstrings-v2-0-78e0aaace1cd@gmail.com>
 To: "Rafael J. Wysocki" <rafael@kernel.org>, 
@@ -125,13 +125,13 @@ Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
  Tamir Duberstein <tamird@gmail.com>
 X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openssh-sha256; t=1758808437; l=2297;
+X-Developer-Signature: v=1; a=openssh-sha256; t=1758808437; l=1629;
  i=tamird@gmail.com; h=from:subject:message-id;
- bh=tEhBaBJnhQFO++GmUh6w8m63Mr6JSvoXu3wOHmq14e0=;
+ bh=bPZeninN2/V/7zw/PYEF64yfGflgZsOfq0JcAWxkVI0=;
  b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgtYz36g7iDMSkY5K7Ab51ksGX7hJgs
  MRt+XVZTrIzMVIAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QFEkzUjb+lD/w38vqtw9O/htNaxJTX/sabnw4QloRojDdlHFE7uz1iz3IfwN44ls/ZjS7SJYOQu
- /SzXo2WM/nAo=
+ QD4rak/xDK1Yk5v1duIKSYGyXctY6/oZ8jehaiqaTOxIbpGhy5zl8Kext0tE9Jsy8CWrpsliDV5
+ 3U5gCpsnnhAA=
 X-Developer-Key: i=tamird@gmail.com; a=openssh;
  fpr=SHA256:264rPmnnrb+ERkS7DDS3tuwqcJss/zevJRzoylqMsbc
 
@@ -144,51 +144,38 @@ Reviewed-by: Benno Lossin <lossin@kernel.org>
 Acked-by: Danilo Krummrich <dakr@kernel.org>
 Signed-off-by: Tamir Duberstein <tamird@gmail.com>
 ---
- rust/kernel/device.rs          | 4 +---
- rust/kernel/device/property.rs | 6 +++---
- 2 files changed, 4 insertions(+), 6 deletions(-)
+ rust/kernel/firmware.rs | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/rust/kernel/device.rs b/rust/kernel/device.rs
-index f3718da11871..242286162c8b 100644
---- a/rust/kernel/device.rs
-+++ b/rust/kernel/device.rs
-@@ -10,8 +10,6 @@
- };
- use core::{marker::PhantomData, ptr};
- 
--#[cfg(CONFIG_PRINTK)]
--use crate::c_str;
- use crate::str::CStrExt as _;
- 
- pub mod property;
-@@ -378,7 +376,7 @@ unsafe fn printk(&self, klevel: &[u8], msg: fmt::Arguments<'_>) {
-             bindings::_dev_printk(
-                 klevel.as_ptr().cast::<crate::ffi::c_char>(),
-                 self.as_raw(),
--                c_str!("%pA").as_char_ptr(),
-+                c"%pA".as_char_ptr(),
-                 core::ptr::from_ref(&msg).cast::<crate::ffi::c_void>(),
-             )
-         };
-diff --git a/rust/kernel/device/property.rs b/rust/kernel/device/property.rs
-index 3a332a8c53a9..3eb3f36d66d0 100644
---- a/rust/kernel/device/property.rs
-+++ b/rust/kernel/device/property.rs
-@@ -178,11 +178,11 @@ pub fn property_count_elem<T: PropertyInt>(&self, name: &CStr) -> Result<usize>
-     /// # Examples
-     ///
-     /// ```
--    /// # use kernel::{c_str, device::{Device, property::FwNode}, str::CString};
-+    /// # use kernel::{device::{Device, property::FwNode}, str::CString};
-     /// fn examples(dev: &Device) -> Result {
-     ///     let fwnode = dev.fwnode().ok_or(ENOENT)?;
--    ///     let b: u32 = fwnode.property_read(c_str!("some-number")).required_by(dev)?;
--    ///     if let Some(s) = fwnode.property_read::<CString>(c_str!("some-str")).optional() {
-+    ///     let b: u32 = fwnode.property_read(c"some-number").required_by(dev)?;
-+    ///     if let Some(s) = fwnode.property_read::<CString>(c"some-str").optional() {
-     ///         // ...
-     ///     }
-     ///     Ok(())
+diff --git a/rust/kernel/firmware.rs b/rust/kernel/firmware.rs
+index 376e7e77453f..71168d8004e2 100644
+--- a/rust/kernel/firmware.rs
++++ b/rust/kernel/firmware.rs
+@@ -51,13 +51,13 @@ fn request_nowarn() -> Self {
+ /// # Examples
+ ///
+ /// ```no_run
+-/// # use kernel::{c_str, device::Device, firmware::Firmware};
++/// # use kernel::{device::Device, firmware::Firmware};
+ ///
+ /// # fn no_run() -> Result<(), Error> {
+ /// # // SAFETY: *NOT* safe, just for the example to get an `ARef<Device>` instance
+ /// # let dev = unsafe { Device::get_device(core::ptr::null_mut()) };
+ ///
+-/// let fw = Firmware::request(c_str!("path/to/firmware.bin"), &dev)?;
++/// let fw = Firmware::request(c"path/to/firmware.bin", &dev)?;
+ /// let blob = fw.data();
+ ///
+ /// # Ok(())
+@@ -204,7 +204,7 @@ macro_rules! module_firmware {
+     ($($builder:tt)*) => {
+         const _: () = {
+             const __MODULE_FIRMWARE_PREFIX: &'static $crate::str::CStr = if cfg!(MODULE) {
+-                $crate::c_str!("")
++                c""
+             } else {
+                 <LocalModule as $crate::ModuleMetadata>::NAME
+             };
 
 -- 
 2.51.0
