@@ -1,65 +1,65 @@
-Return-Path: <linux-pm+bounces-35372-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35373-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 328CCB9FDBE
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Sep 2025 16:12:16 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A2B7B9FEBE
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Sep 2025 16:18:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A1F017A60E9
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Sep 2025 14:10:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3A5D92A3670
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Sep 2025 14:12:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37C732877FC;
-	Thu, 25 Sep 2025 14:06:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6366291C11;
+	Thu, 25 Sep 2025 14:07:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="VMVZUlpb"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="dZD7/YKV"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B23B2868A9;
-	Thu, 25 Sep 2025 14:06:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C08AB287504;
+	Thu, 25 Sep 2025 14:07:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758809215; cv=none; b=I1ByEzgFM/9u2eZ4l/agBgkqgofkfSEI8G5ZOiTIduUYw3xbgSjs+b98wscFntxzddcVYaL6tthfK3LyN5OWwQC2mgqFkVQjhX5Vy9HflDw0b0qp6NR91IUSvX193IOK9rarwyDewvw9clYtv9MrX0yw+H6pdnDRL309UModzZQ=
+	t=1758809226; cv=none; b=Z3z99fZHsD7kAj70cGuCkUD7DMlWYKXC30JOwdhs2LR+viut1KJBdlAZOXB7gSmsy4O9N3wmPJslFhW5lG8rrKOr858aqLM1MiMZXSYD5QmTy4NXmnuRkA0vDBLh7f/woZBU2feV5nmkhIPAtRqBwZ3qgPMX0wkTF9vfPMd8Z5Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758809215; c=relaxed/simple;
-	bh=rHLmWAfzUZke20KB6iYr1I6tLBzkYU5iOgbH2z/HXcA=;
+	s=arc-20240116; t=1758809226; c=relaxed/simple;
+	bh=lo9NHiGSqKEW0mN8oI/sXpmmiJfjM2PTqORGcY+WGck=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=UqAqIQ2U1l+AJDB/enCuJxsa0vcswAYBNQRjS+stkcxjEv6RhhHXw/2oVyISe+jpIiNW14IxyO/FzWhoahp7knOD2tSNhQqnIXCrGBR+TErOE+N7D2OXOB8ea+pTubnKqV6igJifVQmWhk1O59ZhTFULwWZ/hmtWnLsz5g9AskY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=VMVZUlpb; arc=none smtp.client-ip=205.220.168.131
+	 In-Reply-To:To:CC; b=E8v7gqX9teD559NusS14S0mYI5aLMB+KhPj/NB0JNyDjW/RW20d3mE3JMNihD/heiafkpwxmI1gCRF+/MDAIWa7Rhh3JL0BvkvGZU4uceHQuSlAS3npMUgTgWsWc8nQulelb2VesA3QCl1FvbbXn3yNa5kaZ0fLlCxVPJZTuMtY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=dZD7/YKV; arc=none smtp.client-ip=205.220.168.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58P9xtDe002802;
-	Thu, 25 Sep 2025 14:06:35 GMT
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58P9fGZs029712;
+	Thu, 25 Sep 2025 14:06:41 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	paVlMwxwGJ1vb58R5LJ1VHzzjX2z9y57VsG6HXPSHvQ=; b=VMVZUlpbKOTbYOT5
-	WtFk4YGA3s33bhTVDf4TZADa5dvP0oYdT2qLQqkk5hykx1Pnx05yIejmw0Oa/j1Z
-	nRJZLyO3pvwY/fcKg/Rl9khIOxnjVEGBymcADocbMvO6O6Rk0EhH1fooHVo70uvf
-	8vbpGTYmXKQvwmt2N5ucvyrpqi5jqmLOeUYqf8tcDaCgtNSD9LI1ziIq9hE8Y7Oj
-	a6xtALu4/DUkSNV206YLYWr4vM4nsrMCDyfbA9zxJ1O3G5HJ2LCHD6QayIXn7QRQ
-	KCxX9p5Wv0w2U8ekTqIGd/ahiLCBbX1Tz4aF0t+yffQRVc6et7FSNx3sDPHyxwhy
-	poZelw==
+	s1LyuEpdmFydOeAah98JccCD5Cw8ugc//6QQWx4P0TU=; b=dZD7/YKV4zRuJpqb
+	kxL8P/YdD1XKJRbHFxccjPQ+uOaGezUbRePcZmdEj6WBYXwazJBbChS8vX6qXppn
+	7Sn5YNkDO9mMuTfwrgMsx46+wfYRmSOn4YGlWw5QVupiUJoReea0SiUPzAE50XIr
+	pDf2u1OKDNSEOB3z/D4EUjJYL1kBoukffRAFpS4otS6p9PVNbxY5FveXNt2tG5ql
+	nvLoEIuS95Eof1h1g6DlTh3NW1Q1oOG4bXkOr5sT7oQYGsLZ3FCDEaQTaqUM6PF1
+	OA+2RLZezq3JiGJS4D0yyn1Z3Su2TPg1Fbi3om8wvWmJjB4Kdiwg9nWKc1ARbNHk
+	7GpJSw==
 Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 49bajf2vjj-1
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 499n1fr7nv-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 25 Sep 2025 14:06:34 +0000 (GMT)
+	Thu, 25 Sep 2025 14:06:41 +0000 (GMT)
 Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 58PE6XTV018910
+	by NASANPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 58PE6eUH019014
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 25 Sep 2025 14:06:33 GMT
+	Thu, 25 Sep 2025 14:06:40 GMT
 Received: from nsssdc-sh01-lnx.ap.qualcomm.com (10.80.80.8) by
  nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1748.24; Thu, 25 Sep 2025 07:06:26 -0700
+ 15.2.1748.24; Thu, 25 Sep 2025 07:06:33 -0700
 From: Luo Jie <quic_luoj@quicinc.com>
-Date: Thu, 25 Sep 2025 22:05:41 +0800
-Subject: [PATCH v6 07/10] dt-bindings: clock: qcom: Add NSS clock
- controller for IPQ5424 SoC
+Date: Thu, 25 Sep 2025 22:05:42 +0800
+Subject: [PATCH v6 08/10] clk: qcom: Add NSS clock controller driver for
+ IPQ5424
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -68,7 +68,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20250925-qcom_ipq5424_nsscc-v6-7-7fad69b14358@quicinc.com>
+Message-ID: <20250925-qcom_ipq5424_nsscc-v6-8-7fad69b14358@quicinc.com>
 References: <20250925-qcom_ipq5424_nsscc-v6-0-7fad69b14358@quicinc.com>
 In-Reply-To: <20250925-qcom_ipq5424_nsscc-v6-0-7fad69b14358@quicinc.com>
 To: Bjorn Andersson <andersson@kernel.org>,
@@ -101,315 +101,1437 @@ CC: <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
         <quic_kkumarcs@quicinc.com>, <quic_linchen@quicinc.com>,
         <quic_leiwei@quicinc.com>, <quic_pavir@quicinc.com>,
         <quic_suruchia@quicinc.com>, Luo Jie
-	<quic_luoj@quicinc.com>
+	<quic_luoj@quicinc.com>,
+        Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1758809144; l=10111;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1758809144; l=41995;
  i=quic_luoj@quicinc.com; s=20250209; h=from:subject:message-id;
- bh=rHLmWAfzUZke20KB6iYr1I6tLBzkYU5iOgbH2z/HXcA=;
- b=F2g/JBBcHr9aQ9oL5Qgdbm1j+cgy/2TRtfuH1wCDXxiMqNl2etOqxY5G5Uje5IUbQWNP/pYNC
- ZTtWNW0cd1LASKOAY4dXL3qj14WVTE7gHoFG77PbTIW+zmrqUuGN265
+ bh=lo9NHiGSqKEW0mN8oI/sXpmmiJfjM2PTqORGcY+WGck=;
+ b=yVycYQk9Y4ccZqzbU1LwjL98CEI0KC2tcJANM/eKojyKpgt5sHOpXbuFmde2zNl61W2EVeeJV
+ qltBPzm8AB3C3OBsOzPQzvt4aj/No02neI1KadAyum1c5mLNEyQ3DZ0
 X-Developer-Key: i=quic_luoj@quicinc.com; a=ed25519;
  pk=pzwy8bU5tJZ5UKGTv28n+QOuktaWuriznGmriA9Qkfc=
 X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nasanex01b.na.qualcomm.com (10.46.141.250)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: eyLGnN-GIF1jXYAcJFkaN-jzhz2Njs1y
-X-Authority-Analysis: v=2.4 cv=fY2ty1QF c=1 sm=1 tr=0 ts=68d54c6a cx=c_pps
+X-Proofpoint-ORIG-GUID: vY1Khl-lmt4IsN_TAs8kiAC-yUQ2Ckxu
+X-Proofpoint-GUID: vY1Khl-lmt4IsN_TAs8kiAC-yUQ2Ckxu
+X-Authority-Analysis: v=2.4 cv=No/Rc9dJ c=1 sm=1 tr=0 ts=68d54c71 cx=c_pps
  a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17
- a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=yJojWOMRYYMA:10 a=gEfo2CItAAAA:8
- a=KKAkSRfTAAAA:8 a=COk6AnOGAAAA:8 a=VwQbUJbxAAAA:8 a=MNkOokDTngcochq761IA:9
- a=QEXdDO2ut3YA:10 a=sptkURWiP4Gy88Gu7hUp:22 a=cvBusfyB2V15izCimMoJ:22
+ a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=yJojWOMRYYMA:10 a=EUspDBNiAAAA:8
+ a=COk6AnOGAAAA:8 a=Sasp3eNXiZpz1bw--mwA:9 a=QEXdDO2ut3YA:10
  a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTIyMDE2OCBTYWx0ZWRfX3T5LektrVfXk
- 1fGVCLCi8BweOHwyOW4kXfmqaXjKF63D1tTRbnyrsYSqoPzhRt56NmxyWvThx+Vd9hbNFRRb7P5
- 9QfbHXxXqBAop8OPiUH9jCjikP5y6PU0a13t2hlbwck800Vwp7VcAmTfbYQ9GaIJO85PEV/XS10
- sExe0X/wB4Txy0SQAtXkjtvla3P1VeXuUO/EWC7fHZJjrRlpbPwFzAgs/AVfUZ+mscNc69dzNZy
- UVyXknwtXzbJodAwSYafWP4LEIRHSc93gKM1HdczoJDrDkHqcTdU3Fqiy4zR5QGKXuEZhPcGWAf
- I6SmbaJa+xDeZ++5XaGABj+DIkIfnrm6Ha/xIPeMErVDAjJghjFs1f/mIBXwUZ6vUWovBiaH4yA
- MBECCd8m
-X-Proofpoint-ORIG-GUID: eyLGnN-GIF1jXYAcJFkaN-jzhz2Njs1y
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTIwMDAzNyBTYWx0ZWRfXz0xnRN3WyD2g
+ bYmILzngZVfC9P2qwP7a5nNUTdKFesKPRomNX7pdoxMt4RCDkGAvFh1ypHlIYr/PwMmRzNDssJ3
+ m1Ckmpwsars3uUPRRqW0qIUEQFhVWQwmX/y0R4lyj3hPRXyw02wfsBaWuXIMndu1sHg9N4NUxbU
+ nU7O7AJguAFOvb2c+4HkgRvHM9+NMftj3ptybq4aoo7zYjsxQX3EaUjrUxrWJD0X8oXYB1CrbOc
+ TvWs/kfa2fybXJ3UU68Sq0aTBrBbz5wVTBAgUeA0AWbRBRfwLb7sxKvaXe4EK8aB1xR4BzoX60N
+ taD691YAXQoSdd8hcUoBUHAS8+G9GDLElNpRhJg5q0w9JPwwHkN4vb94gcm3TMLE2wlWG76Vpdh
+ tgh39Zce
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
  definitions=2025-09-25_01,2025-09-25_01,2025-03-28_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- suspectscore=0 malwarescore=0 spamscore=0 adultscore=0 impostorscore=0
- phishscore=0 bulkscore=0 priorityscore=1501 clxscore=1015
+ clxscore=1015 spamscore=0 suspectscore=0 adultscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 priorityscore=1501 impostorscore=0
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2509220168
+ reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2509200037
 
-NSS clock controller provides the clocks and resets to the networking
-blocks such as PPE (Packet Process Engine) and UNIPHY (PCS) on IPQ5424
-devices.
+NSS (Network Subsystem) clock controller provides the clocks and resets
+to the networking hardware blocks of the IPQ5424 SoC.
 
-Add support for the compatible string "qcom,ipq5424-nsscc" based on the
-existing IPQ9574 NSS clock controller Device Tree binding. Additionally,
-update the clock names for PPE and NSS for newer SoC additions like
-IPQ5424 to use generic and reusable identifiers "nss" and "ppe" without
-the clock rate suffix.
+The icc-clk framework is used to enable NoC related clocks to create
+paths so that the networking blocks can connect to these NoCs.
 
-Also add master/slave ids for IPQ5424 networking interfaces, which is
-used by nss-ipq5424 driver for providing interconnect services using
-icc-clk framework.
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Acked-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 Signed-off-by: Luo Jie <quic_luoj@quicinc.com>
 ---
- .../bindings/clock/qcom,ipq9574-nsscc.yaml         | 62 ++++++++++++++++++---
- include/dt-bindings/clock/qcom,ipq5424-nsscc.h     | 65 ++++++++++++++++++++++
- include/dt-bindings/interconnect/qcom,ipq5424.h    | 13 +++++
- include/dt-bindings/reset/qcom,ipq5424-nsscc.h     | 46 +++++++++++++++
- 4 files changed, 178 insertions(+), 8 deletions(-)
+ drivers/clk/qcom/Kconfig         |   11 +
+ drivers/clk/qcom/Makefile        |    1 +
+ drivers/clk/qcom/nsscc-ipq5424.c | 1340 ++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 1352 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/clock/qcom,ipq9574-nsscc.yaml b/Documentation/devicetree/bindings/clock/qcom,ipq9574-nsscc.yaml
-index 5d35925e60d0..7ff4ff3587ca 100644
---- a/Documentation/devicetree/bindings/clock/qcom,ipq9574-nsscc.yaml
-+++ b/Documentation/devicetree/bindings/clock/qcom,ipq9574-nsscc.yaml
-@@ -4,7 +4,7 @@
- $id: http://devicetree.org/schemas/clock/qcom,ipq9574-nsscc.yaml#
- $schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
+index aeb6197d7c90..f6bd73613ebd 100644
+--- a/drivers/clk/qcom/Kconfig
++++ b/drivers/clk/qcom/Kconfig
+@@ -290,6 +290,17 @@ config IPQ_GCC_9574
+ 	  i2c, USB, SD/eMMC, etc. Select this for the root clock
+ 	  of ipq9574.
  
--title: Qualcomm Networking Sub System Clock & Reset Controller on IPQ9574
-+title: Qualcomm Networking Sub System Clock & Reset Controller on IPQ9574 and IPQ5424
- 
- maintainers:
-   - Bjorn Andersson <andersson@kernel.org>
-@@ -12,21 +12,29 @@ maintainers:
- 
- description: |
-   Qualcomm networking sub system clock control module provides the clocks,
--  resets on IPQ9574
-+  resets on IPQ9574 and IPQ5424
- 
--  See also::
-+  See also:
-+    include/dt-bindings/clock/qcom,ipq5424-nsscc.h
-     include/dt-bindings/clock/qcom,ipq9574-nsscc.h
-+    include/dt-bindings/reset/qcom,ipq5424-nsscc.h
-     include/dt-bindings/reset/qcom,ipq9574-nsscc.h
- 
- properties:
-   compatible:
--    const: qcom,ipq9574-nsscc
-+    enum:
-+      - qcom,ipq5424-nsscc
-+      - qcom,ipq9574-nsscc
- 
-   clocks:
-     items:
-       - description: Board XO source
--      - description: CMN_PLL NSS 1200MHz (Bias PLL cc) clock source
--      - description: CMN_PLL PPE 353MHz (Bias PLL ubi nc) clock source
-+      - description: CMN_PLL NSS (Bias PLL cc) clock source. This clock rate
-+          can vary for different IPQ SoCs. For example, it is 1200 MHz on the
-+          IPQ9574 and 300 MHz on the IPQ5424.
-+      - description: CMN_PLL PPE (Bias PLL ubi nc) clock source. The clock
-+          rate can vary for different IPQ SoCs. For example, it is 353 MHz
-+          on the IPQ9574 and 375 MHz on the IPQ5424.
-       - description: GCC GPLL0 OUT AUX clock source
-       - description: Uniphy0 NSS Rx clock source
-       - description: Uniphy0 NSS Tx clock source
-@@ -42,8 +50,12 @@ properties:
-   clock-names:
-     items:
-       - const: xo
--      - const: nss_1200
--      - const: ppe_353
-+      - enum:
-+          - nss_1200
-+          - nss
-+      - enum:
-+          - ppe_353
-+          - ppe
-       - const: gpll0_out
-       - const: uniphy0_rx
-       - const: uniphy0_tx
-@@ -60,6 +72,40 @@ required:
- 
- allOf:
-   - $ref: qcom,gcc.yaml#
-+  - if:
-+      properties:
-+        compatible:
-+          const: qcom,ipq9574-nsscc
-+    then:
-+      properties:
-+        clock-names:
-+          items:
-+            - const: xo
-+            - const: nss_1200
-+            - const: ppe_353
-+            - const: gpll0_out
-+            - const: uniphy0_rx
-+            - const: uniphy0_tx
-+            - const: uniphy1_rx
-+            - const: uniphy1_tx
-+            - const: uniphy2_rx
-+            - const: uniphy2_tx
-+            - const: bus
-+    else:
-+      properties:
-+        clock-names:
-+          items:
-+            - const: xo
-+            - const: nss
-+            - const: ppe
-+            - const: gpll0_out
-+            - const: uniphy0_rx
-+            - const: uniphy0_tx
-+            - const: uniphy1_rx
-+            - const: uniphy1_tx
-+            - const: uniphy2_rx
-+            - const: uniphy2_tx
-+            - const: bus
- 
- unevaluatedProperties: false
- 
-diff --git a/include/dt-bindings/clock/qcom,ipq5424-nsscc.h b/include/dt-bindings/clock/qcom,ipq5424-nsscc.h
++config IPQ_NSSCC_5424
++	tristate "IPQ5424 NSS Clock Controller"
++	depends on ARM64 || COMPILE_TEST
++	depends on IPQ_GCC_5424
++	help
++	  Support for NSS clock controller on ipq5424 devices.
++	  NSSCC receives the clock sources from GCC, CMN PLL and UNIPHY (PCS).
++	  It in turn supplies the clocks and resets to the networking hardware.
++	  Say Y or M if you want to enable networking function on the
++	  IPQ5424 devices.
++
+ config IPQ_NSSCC_9574
+         tristate "IPQ9574 NSS Clock Controller"
+         depends on ARM64 || COMPILE_TEST
+diff --git a/drivers/clk/qcom/Makefile b/drivers/clk/qcom/Makefile
+index 98de55eb6402..8ee3d92a020d 100644
+--- a/drivers/clk/qcom/Makefile
++++ b/drivers/clk/qcom/Makefile
+@@ -40,6 +40,7 @@ obj-$(CONFIG_IPQ_GCC_6018) += gcc-ipq6018.o
+ obj-$(CONFIG_IPQ_GCC_806X) += gcc-ipq806x.o
+ obj-$(CONFIG_IPQ_GCC_8074) += gcc-ipq8074.o
+ obj-$(CONFIG_IPQ_GCC_9574) += gcc-ipq9574.o
++obj-$(CONFIG_IPQ_NSSCC_5424) += nsscc-ipq5424.o
+ obj-$(CONFIG_IPQ_NSSCC_9574)	+= nsscc-ipq9574.o
+ obj-$(CONFIG_IPQ_LCC_806X) += lcc-ipq806x.o
+ obj-$(CONFIG_IPQ_NSSCC_QCA8K) += nsscc-qca8k.o
+diff --git a/drivers/clk/qcom/nsscc-ipq5424.c b/drivers/clk/qcom/nsscc-ipq5424.c
 new file mode 100644
-index 000000000000..eeae0dc38042
+index 000000000000..5893c7146180
 --- /dev/null
-+++ b/include/dt-bindings/clock/qcom,ipq5424-nsscc.h
-@@ -0,0 +1,65 @@
-+/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
++++ b/drivers/clk/qcom/nsscc-ipq5424.c
+@@ -0,0 +1,1340 @@
++// SPDX-License-Identifier: GPL-2.0-only
 +/*
 + * Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
 + */
 +
-+#ifndef _DT_BINDINGS_CLOCK_QCOM_IPQ5424_NSSCC_H
-+#define _DT_BINDINGS_CLOCK_QCOM_IPQ5424_NSSCC_H
++#include <linux/clk.h>
++#include <linux/clk-provider.h>
++#include <linux/err.h>
++#include <linux/interconnect-provider.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/of.h>
++#include <linux/of_device.h>
++#include <linux/platform_device.h>
++#include <linux/pm_clock.h>
++#include <linux/pm_runtime.h>
++#include <linux/regmap.h>
 +
-+/* NSS_CC clocks */
-+#define NSS_CC_CE_APB_CLK					0
-+#define NSS_CC_CE_AXI_CLK					1
-+#define NSS_CC_CE_CLK_SRC					2
-+#define NSS_CC_CFG_CLK_SRC					3
-+#define NSS_CC_DEBUG_CLK					4
-+#define NSS_CC_EIP_BFDCD_CLK_SRC				5
-+#define NSS_CC_EIP_CLK						6
-+#define NSS_CC_NSS_CSR_CLK					7
-+#define NSS_CC_NSSNOC_CE_APB_CLK				8
-+#define NSS_CC_NSSNOC_CE_AXI_CLK				9
-+#define NSS_CC_NSSNOC_EIP_CLK					10
-+#define NSS_CC_NSSNOC_NSS_CSR_CLK				11
-+#define NSS_CC_NSSNOC_PPE_CFG_CLK				12
-+#define NSS_CC_NSSNOC_PPE_CLK					13
-+#define NSS_CC_PORT1_MAC_CLK					14
-+#define NSS_CC_PORT1_RX_CLK					15
-+#define NSS_CC_PORT1_RX_CLK_SRC					16
-+#define NSS_CC_PORT1_RX_DIV_CLK_SRC				17
-+#define NSS_CC_PORT1_TX_CLK					18
-+#define NSS_CC_PORT1_TX_CLK_SRC					19
-+#define NSS_CC_PORT1_TX_DIV_CLK_SRC				20
-+#define NSS_CC_PORT2_MAC_CLK					21
-+#define NSS_CC_PORT2_RX_CLK					22
-+#define NSS_CC_PORT2_RX_CLK_SRC					23
-+#define NSS_CC_PORT2_RX_DIV_CLK_SRC				24
-+#define NSS_CC_PORT2_TX_CLK					25
-+#define NSS_CC_PORT2_TX_CLK_SRC					26
-+#define NSS_CC_PORT2_TX_DIV_CLK_SRC				27
-+#define NSS_CC_PORT3_MAC_CLK					28
-+#define NSS_CC_PORT3_RX_CLK					29
-+#define NSS_CC_PORT3_RX_CLK_SRC					30
-+#define NSS_CC_PORT3_RX_DIV_CLK_SRC				31
-+#define NSS_CC_PORT3_TX_CLK					32
-+#define NSS_CC_PORT3_TX_CLK_SRC					33
-+#define NSS_CC_PORT3_TX_DIV_CLK_SRC				34
-+#define NSS_CC_PPE_CLK_SRC					35
-+#define NSS_CC_PPE_EDMA_CFG_CLK					36
-+#define NSS_CC_PPE_EDMA_CLK					37
-+#define NSS_CC_PPE_SWITCH_BTQ_CLK				38
-+#define NSS_CC_PPE_SWITCH_CFG_CLK				39
-+#define NSS_CC_PPE_SWITCH_CLK					40
-+#define NSS_CC_PPE_SWITCH_IPE_CLK				41
-+#define NSS_CC_UNIPHY_PORT1_RX_CLK				42
-+#define NSS_CC_UNIPHY_PORT1_TX_CLK				43
-+#define NSS_CC_UNIPHY_PORT2_RX_CLK				44
-+#define NSS_CC_UNIPHY_PORT2_TX_CLK				45
-+#define NSS_CC_UNIPHY_PORT3_RX_CLK				46
-+#define NSS_CC_UNIPHY_PORT3_TX_CLK				47
-+#define NSS_CC_XGMAC0_PTP_REF_CLK				48
-+#define NSS_CC_XGMAC0_PTP_REF_DIV_CLK_SRC			49
-+#define NSS_CC_XGMAC1_PTP_REF_CLK				50
-+#define NSS_CC_XGMAC1_PTP_REF_DIV_CLK_SRC			51
-+#define NSS_CC_XGMAC2_PTP_REF_CLK				52
-+#define NSS_CC_XGMAC2_PTP_REF_DIV_CLK_SRC			53
++#include <dt-bindings/clock/qcom,ipq5424-nsscc.h>
++#include <dt-bindings/interconnect/qcom,ipq5424.h>
++#include <dt-bindings/reset/qcom,ipq5424-nsscc.h>
 +
-+#endif
-diff --git a/include/dt-bindings/interconnect/qcom,ipq5424.h b/include/dt-bindings/interconnect/qcom,ipq5424.h
-index c5e0dec0b300..07b786bee7d6 100644
---- a/include/dt-bindings/interconnect/qcom,ipq5424.h
-+++ b/include/dt-bindings/interconnect/qcom,ipq5424.h
-@@ -44,4 +44,17 @@
- #define MASTER_CPU			0
- #define SLAVE_L3			1
- 
-+#define MASTER_NSSNOC_PPE		0
-+#define SLAVE_NSSNOC_PPE		1
-+#define MASTER_NSSNOC_PPE_CFG		2
-+#define SLAVE_NSSNOC_PPE_CFG		3
-+#define MASTER_NSSNOC_NSS_CSR		4
-+#define SLAVE_NSSNOC_NSS_CSR		5
-+#define MASTER_NSSNOC_CE_AXI		6
-+#define SLAVE_NSSNOC_CE_AXI		7
-+#define MASTER_NSSNOC_CE_APB		8
-+#define SLAVE_NSSNOC_CE_APB		9
-+#define MASTER_NSSNOC_EIP		10
-+#define SLAVE_NSSNOC_EIP		11
++#include "clk-branch.h"
++#include "clk-rcg.h"
++#include "clk-regmap.h"
++#include "clk-regmap-divider.h"
++#include "common.h"
++#include "reset.h"
 +
- #endif /* INTERCONNECT_QCOM_IPQ5424_H */
-diff --git a/include/dt-bindings/reset/qcom,ipq5424-nsscc.h b/include/dt-bindings/reset/qcom,ipq5424-nsscc.h
-new file mode 100644
-index 000000000000..9627e3b0ad30
---- /dev/null
-+++ b/include/dt-bindings/reset/qcom,ipq5424-nsscc.h
-@@ -0,0 +1,46 @@
-+/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
-+/*
-+ * Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
-+ */
++/* Need to match the order of clocks in DT binding */
++enum {
++	DT_CMN_PLL_XO_CLK,
++	DT_CMN_PLL_NSS_300M_CLK,
++	DT_CMN_PLL_NSS_375M_CLK,
++	DT_GCC_GPLL0_OUT_AUX,
++	DT_UNIPHY0_NSS_RX_CLK,
++	DT_UNIPHY0_NSS_TX_CLK,
++	DT_UNIPHY1_NSS_RX_CLK,
++	DT_UNIPHY1_NSS_TX_CLK,
++	DT_UNIPHY2_NSS_RX_CLK,
++	DT_UNIPHY2_NSS_TX_CLK,
++};
 +
-+#ifndef _DT_BINDINGS_RESET_QCOM_IPQ5424_NSSCC_H
-+#define _DT_BINDINGS_RESET_QCOM_IPQ5424_NSSCC_H
++enum {
++	P_CMN_PLL_XO_CLK,
++	P_CMN_PLL_NSS_300M_CLK,
++	P_CMN_PLL_NSS_375M_CLK,
++	P_GCC_GPLL0_OUT_AUX,
++	P_UNIPHY0_NSS_RX_CLK,
++	P_UNIPHY0_NSS_TX_CLK,
++	P_UNIPHY1_NSS_RX_CLK,
++	P_UNIPHY1_NSS_TX_CLK,
++	P_UNIPHY2_NSS_RX_CLK,
++	P_UNIPHY2_NSS_TX_CLK,
++};
 +
-+#define NSS_CC_CE_APB_CLK_ARES					0
-+#define NSS_CC_CE_AXI_CLK_ARES					1
-+#define NSS_CC_DEBUG_CLK_ARES					2
-+#define NSS_CC_EIP_CLK_ARES					3
-+#define NSS_CC_NSS_CSR_CLK_ARES					4
-+#define NSS_CC_NSSNOC_CE_APB_CLK_ARES				5
-+#define NSS_CC_NSSNOC_CE_AXI_CLK_ARES				6
-+#define NSS_CC_NSSNOC_EIP_CLK_ARES				7
-+#define NSS_CC_NSSNOC_NSS_CSR_CLK_ARES				8
-+#define NSS_CC_NSSNOC_PPE_CLK_ARES				9
-+#define NSS_CC_NSSNOC_PPE_CFG_CLK_ARES				10
-+#define NSS_CC_PORT1_MAC_CLK_ARES				11
-+#define NSS_CC_PORT1_RX_CLK_ARES				12
-+#define NSS_CC_PORT1_TX_CLK_ARES				13
-+#define NSS_CC_PORT2_MAC_CLK_ARES				14
-+#define NSS_CC_PORT2_RX_CLK_ARES				15
-+#define NSS_CC_PORT2_TX_CLK_ARES				16
-+#define NSS_CC_PORT3_MAC_CLK_ARES				17
-+#define NSS_CC_PORT3_RX_CLK_ARES				18
-+#define NSS_CC_PORT3_TX_CLK_ARES				19
-+#define NSS_CC_PPE_BCR						20
-+#define NSS_CC_PPE_EDMA_CLK_ARES				21
-+#define NSS_CC_PPE_EDMA_CFG_CLK_ARES				22
-+#define NSS_CC_PPE_SWITCH_BTQ_CLK_ARES				23
-+#define NSS_CC_PPE_SWITCH_CLK_ARES				24
-+#define NSS_CC_PPE_SWITCH_CFG_CLK_ARES				25
-+#define NSS_CC_PPE_SWITCH_IPE_CLK_ARES				26
-+#define NSS_CC_UNIPHY_PORT1_RX_CLK_ARES				27
-+#define NSS_CC_UNIPHY_PORT1_TX_CLK_ARES				28
-+#define NSS_CC_UNIPHY_PORT2_RX_CLK_ARES				29
-+#define NSS_CC_UNIPHY_PORT2_TX_CLK_ARES				30
-+#define NSS_CC_UNIPHY_PORT3_RX_CLK_ARES				31
-+#define NSS_CC_UNIPHY_PORT3_TX_CLK_ARES				32
-+#define NSS_CC_XGMAC0_PTP_REF_CLK_ARES				33
-+#define NSS_CC_XGMAC1_PTP_REF_CLK_ARES				34
-+#define NSS_CC_XGMAC2_PTP_REF_CLK_ARES				35
++static const struct parent_map nss_cc_parent_map_0[] = {
++	{ P_CMN_PLL_XO_CLK, 0 },
++	{ P_GCC_GPLL0_OUT_AUX, 2 },
++	{ P_CMN_PLL_NSS_300M_CLK, 5 },
++	{ P_CMN_PLL_NSS_375M_CLK, 6 },
++};
 +
-+#endif
++static const struct clk_parent_data nss_cc_parent_data_0[] = {
++	{ .index = DT_CMN_PLL_XO_CLK },
++	{ .index = DT_GCC_GPLL0_OUT_AUX },
++	{ .index = DT_CMN_PLL_NSS_300M_CLK },
++	{ .index = DT_CMN_PLL_NSS_375M_CLK },
++};
++
++static const struct parent_map nss_cc_parent_map_1[] = {
++	{ P_CMN_PLL_XO_CLK, 0 },
++	{ P_GCC_GPLL0_OUT_AUX, 2 },
++	{ P_UNIPHY0_NSS_RX_CLK, 3 },
++	{ P_UNIPHY0_NSS_TX_CLK, 4 },
++	{ P_CMN_PLL_NSS_300M_CLK, 5 },
++	{ P_CMN_PLL_NSS_375M_CLK, 6 },
++};
++
++static const struct clk_parent_data nss_cc_parent_data_1[] = {
++	{ .index = DT_CMN_PLL_XO_CLK },
++	{ .index = DT_GCC_GPLL0_OUT_AUX },
++	{ .index = DT_UNIPHY0_NSS_RX_CLK },
++	{ .index = DT_UNIPHY0_NSS_TX_CLK },
++	{ .index = DT_CMN_PLL_NSS_300M_CLK },
++	{ .index = DT_CMN_PLL_NSS_375M_CLK },
++};
++
++static const struct parent_map nss_cc_parent_map_2[] = {
++	{ P_CMN_PLL_XO_CLK, 0 },
++	{ P_GCC_GPLL0_OUT_AUX, 2 },
++	{ P_UNIPHY1_NSS_RX_CLK, 3 },
++	{ P_UNIPHY1_NSS_TX_CLK, 4 },
++	{ P_CMN_PLL_NSS_300M_CLK, 5 },
++	{ P_CMN_PLL_NSS_375M_CLK, 6 },
++};
++
++static const struct clk_parent_data nss_cc_parent_data_2[] = {
++	{ .index = DT_CMN_PLL_XO_CLK },
++	{ .index = DT_GCC_GPLL0_OUT_AUX },
++	{ .index = DT_UNIPHY1_NSS_RX_CLK },
++	{ .index = DT_UNIPHY1_NSS_TX_CLK },
++	{ .index = DT_CMN_PLL_NSS_300M_CLK },
++	{ .index = DT_CMN_PLL_NSS_375M_CLK },
++};
++
++static const struct parent_map nss_cc_parent_map_3[] = {
++	{ P_CMN_PLL_XO_CLK, 0 },
++	{ P_GCC_GPLL0_OUT_AUX, 2 },
++	{ P_UNIPHY2_NSS_RX_CLK, 3 },
++	{ P_UNIPHY2_NSS_TX_CLK, 4 },
++	{ P_CMN_PLL_NSS_300M_CLK, 5 },
++	{ P_CMN_PLL_NSS_375M_CLK, 6 },
++};
++
++static const struct clk_parent_data nss_cc_parent_data_3[] = {
++	{ .index = DT_CMN_PLL_XO_CLK },
++	{ .index = DT_GCC_GPLL0_OUT_AUX },
++	{ .index = DT_UNIPHY2_NSS_RX_CLK },
++	{ .index = DT_UNIPHY2_NSS_TX_CLK },
++	{ .index = DT_CMN_PLL_NSS_300M_CLK },
++	{ .index = DT_CMN_PLL_NSS_375M_CLK },
++};
++
++static const struct freq_tbl ftbl_nss_cc_ce_clk_src[] = {
++	F(24000000, P_CMN_PLL_XO_CLK, 1, 0, 0),
++	F(375000000, P_CMN_PLL_NSS_375M_CLK, 1, 0, 0),
++	{ }
++};
++
++static struct clk_rcg2 nss_cc_ce_clk_src = {
++	.cmd_rcgr = 0x5e0,
++	.mnd_width = 0,
++	.hid_width = 5,
++	.parent_map = nss_cc_parent_map_0,
++	.freq_tbl = ftbl_nss_cc_ce_clk_src,
++	.clkr.hw.init = &(const struct clk_init_data){
++		.name = "nss_cc_ce_clk_src",
++		.parent_data = nss_cc_parent_data_0,
++		.num_parents = ARRAY_SIZE(nss_cc_parent_data_0),
++		.flags = CLK_SET_RATE_PARENT,
++		.ops = &clk_rcg2_ops,
++	},
++};
++
++static const struct freq_tbl ftbl_nss_cc_cfg_clk_src[] = {
++	F(100000000, P_GCC_GPLL0_OUT_AUX, 8, 0, 0),
++	{ }
++};
++
++static struct clk_rcg2 nss_cc_cfg_clk_src = {
++	.cmd_rcgr = 0x6a8,
++	.mnd_width = 0,
++	.hid_width = 5,
++	.parent_map = nss_cc_parent_map_0,
++	.freq_tbl = ftbl_nss_cc_cfg_clk_src,
++	.clkr.hw.init = &(const struct clk_init_data){
++		.name = "nss_cc_cfg_clk_src",
++		.parent_data = nss_cc_parent_data_0,
++		.num_parents = ARRAY_SIZE(nss_cc_parent_data_0),
++		.flags = CLK_SET_RATE_PARENT,
++		.ops = &clk_rcg2_ops,
++	},
++};
++
++static const struct freq_tbl ftbl_nss_cc_eip_bfdcd_clk_src[] = {
++	F(300000000, P_CMN_PLL_NSS_300M_CLK, 1, 0, 0),
++	F(375000000, P_CMN_PLL_NSS_375M_CLK, 1, 0, 0),
++	{ }
++};
++
++static struct clk_rcg2 nss_cc_eip_bfdcd_clk_src = {
++	.cmd_rcgr = 0x644,
++	.mnd_width = 0,
++	.hid_width = 5,
++	.parent_map = nss_cc_parent_map_0,
++	.freq_tbl = ftbl_nss_cc_eip_bfdcd_clk_src,
++	.clkr.hw.init = &(const struct clk_init_data){
++		.name = "nss_cc_eip_bfdcd_clk_src",
++		.parent_data = nss_cc_parent_data_0,
++		.num_parents = ARRAY_SIZE(nss_cc_parent_data_0),
++		.flags = CLK_SET_RATE_PARENT,
++		.ops = &clk_rcg2_ops,
++	},
++};
++
++static const struct freq_conf ftbl_nss_cc_port1_rx_clk_src_25[] = {
++	C(P_UNIPHY0_NSS_RX_CLK, 12.5, 0, 0),
++	C(P_UNIPHY0_NSS_RX_CLK, 5, 0, 0),
++};
++
++static const struct freq_conf ftbl_nss_cc_port1_rx_clk_src_125[] = {
++	C(P_UNIPHY0_NSS_RX_CLK, 2.5, 0, 0),
++	C(P_UNIPHY0_NSS_RX_CLK, 1, 0, 0),
++};
++
++static const struct freq_multi_tbl ftbl_nss_cc_port1_rx_clk_src[] = {
++	FMS(24000000, P_CMN_PLL_XO_CLK, 1, 0, 0),
++	FM(25000000, ftbl_nss_cc_port1_rx_clk_src_25),
++	FMS(78125000, P_UNIPHY0_NSS_RX_CLK, 4, 0, 0),
++	FM(125000000, ftbl_nss_cc_port1_rx_clk_src_125),
++	FMS(156250000, P_UNIPHY0_NSS_RX_CLK, 2, 0, 0),
++	FMS(312500000, P_UNIPHY0_NSS_RX_CLK, 1, 0, 0),
++	{ }
++};
++
++static struct clk_rcg2 nss_cc_port1_rx_clk_src = {
++	.cmd_rcgr = 0x4b4,
++	.mnd_width = 0,
++	.hid_width = 5,
++	.parent_map = nss_cc_parent_map_1,
++	.freq_multi_tbl = ftbl_nss_cc_port1_rx_clk_src,
++	.clkr.hw.init = &(const struct clk_init_data){
++		.name = "nss_cc_port1_rx_clk_src",
++		.parent_data = nss_cc_parent_data_1,
++		.num_parents = ARRAY_SIZE(nss_cc_parent_data_1),
++		.ops = &clk_rcg2_fm_ops,
++	},
++};
++
++static const struct freq_conf ftbl_nss_cc_port1_tx_clk_src_25[] = {
++	C(P_UNIPHY0_NSS_TX_CLK, 12.5, 0, 0),
++	C(P_UNIPHY0_NSS_TX_CLK, 5, 0, 0),
++};
++
++static const struct freq_conf ftbl_nss_cc_port1_tx_clk_src_125[] = {
++	C(P_UNIPHY0_NSS_TX_CLK, 2.5, 0, 0),
++	C(P_UNIPHY0_NSS_TX_CLK, 1, 0, 0),
++};
++
++static const struct freq_multi_tbl ftbl_nss_cc_port1_tx_clk_src[] = {
++	FMS(24000000, P_CMN_PLL_XO_CLK, 1, 0, 0),
++	FM(25000000, ftbl_nss_cc_port1_tx_clk_src_25),
++	FMS(78125000, P_UNIPHY0_NSS_TX_CLK, 4, 0, 0),
++	FM(125000000, ftbl_nss_cc_port1_tx_clk_src_125),
++	FMS(156250000, P_UNIPHY0_NSS_TX_CLK, 2, 0, 0),
++	FMS(312500000, P_UNIPHY0_NSS_TX_CLK, 1, 0, 0),
++	{ }
++};
++
++static struct clk_rcg2 nss_cc_port1_tx_clk_src = {
++	.cmd_rcgr = 0x4c0,
++	.mnd_width = 0,
++	.hid_width = 5,
++	.parent_map = nss_cc_parent_map_1,
++	.freq_multi_tbl = ftbl_nss_cc_port1_tx_clk_src,
++	.clkr.hw.init = &(const struct clk_init_data){
++		.name = "nss_cc_port1_tx_clk_src",
++		.parent_data = nss_cc_parent_data_1,
++		.num_parents = ARRAY_SIZE(nss_cc_parent_data_1),
++		.ops = &clk_rcg2_fm_ops,
++	},
++};
++
++static const struct freq_conf ftbl_nss_cc_port2_rx_clk_src_25[] = {
++	C(P_UNIPHY1_NSS_RX_CLK, 12.5, 0, 0),
++	C(P_UNIPHY1_NSS_RX_CLK, 5, 0, 0),
++};
++
++static const struct freq_conf ftbl_nss_cc_port2_rx_clk_src_125[] = {
++	C(P_UNIPHY1_NSS_RX_CLK, 2.5, 0, 0),
++	C(P_UNIPHY1_NSS_RX_CLK, 1, 0, 0),
++};
++
++static const struct freq_multi_tbl ftbl_nss_cc_port2_rx_clk_src[] = {
++	FMS(24000000, P_CMN_PLL_XO_CLK, 1, 0, 0),
++	FM(25000000, ftbl_nss_cc_port2_rx_clk_src_25),
++	FMS(78125000, P_UNIPHY1_NSS_RX_CLK, 4, 0, 0),
++	FM(125000000, ftbl_nss_cc_port2_rx_clk_src_125),
++	FMS(156250000, P_UNIPHY1_NSS_RX_CLK, 2, 0, 0),
++	FMS(312500000, P_UNIPHY1_NSS_RX_CLK, 1, 0, 0),
++	{ }
++};
++
++static struct clk_rcg2 nss_cc_port2_rx_clk_src = {
++	.cmd_rcgr = 0x4cc,
++	.mnd_width = 0,
++	.hid_width = 5,
++	.parent_map = nss_cc_parent_map_2,
++	.freq_multi_tbl = ftbl_nss_cc_port2_rx_clk_src,
++	.clkr.hw.init = &(const struct clk_init_data){
++		.name = "nss_cc_port2_rx_clk_src",
++		.parent_data = nss_cc_parent_data_2,
++		.num_parents = ARRAY_SIZE(nss_cc_parent_data_2),
++		.ops = &clk_rcg2_fm_ops,
++	},
++};
++
++static const struct freq_conf ftbl_nss_cc_port2_tx_clk_src_25[] = {
++	C(P_UNIPHY1_NSS_TX_CLK, 12.5, 0, 0),
++	C(P_UNIPHY1_NSS_TX_CLK, 5, 0, 0),
++};
++
++static const struct freq_conf ftbl_nss_cc_port2_tx_clk_src_125[] = {
++	C(P_UNIPHY1_NSS_TX_CLK, 2.5, 0, 0),
++	C(P_UNIPHY1_NSS_TX_CLK, 1, 0, 0),
++};
++
++static const struct freq_multi_tbl ftbl_nss_cc_port2_tx_clk_src[] = {
++	FMS(24000000, P_CMN_PLL_XO_CLK, 1, 0, 0),
++	FM(25000000, ftbl_nss_cc_port2_tx_clk_src_25),
++	FMS(78125000, P_UNIPHY1_NSS_TX_CLK, 4, 0, 0),
++	FM(125000000, ftbl_nss_cc_port2_tx_clk_src_125),
++	FMS(156250000, P_UNIPHY1_NSS_TX_CLK, 2, 0, 0),
++	FMS(312500000, P_UNIPHY1_NSS_TX_CLK, 1, 0, 0),
++	{ }
++};
++
++static struct clk_rcg2 nss_cc_port2_tx_clk_src = {
++	.cmd_rcgr = 0x4d8,
++	.mnd_width = 0,
++	.hid_width = 5,
++	.parent_map = nss_cc_parent_map_2,
++	.freq_multi_tbl = ftbl_nss_cc_port2_tx_clk_src,
++	.clkr.hw.init = &(const struct clk_init_data){
++		.name = "nss_cc_port2_tx_clk_src",
++		.parent_data = nss_cc_parent_data_2,
++		.num_parents = ARRAY_SIZE(nss_cc_parent_data_2),
++		.ops = &clk_rcg2_fm_ops,
++	},
++};
++
++static const struct freq_conf ftbl_nss_cc_port3_rx_clk_src_25[] = {
++	C(P_UNIPHY2_NSS_RX_CLK, 12.5, 0, 0),
++	C(P_UNIPHY2_NSS_RX_CLK, 5, 0, 0),
++};
++
++static const struct freq_conf ftbl_nss_cc_port3_rx_clk_src_125[] = {
++	C(P_UNIPHY2_NSS_RX_CLK, 2.5, 0, 0),
++	C(P_UNIPHY2_NSS_RX_CLK, 1, 0, 0),
++};
++
++static const struct freq_multi_tbl ftbl_nss_cc_port3_rx_clk_src[] = {
++	FMS(24000000, P_CMN_PLL_XO_CLK, 1, 0, 0),
++	FM(25000000, ftbl_nss_cc_port3_rx_clk_src_25),
++	FMS(78125000, P_UNIPHY2_NSS_RX_CLK, 4, 0, 0),
++	FM(125000000, ftbl_nss_cc_port3_rx_clk_src_125),
++	FMS(156250000, P_UNIPHY2_NSS_RX_CLK, 2, 0, 0),
++	FMS(312500000, P_UNIPHY2_NSS_RX_CLK, 1, 0, 0),
++	{ }
++};
++
++static struct clk_rcg2 nss_cc_port3_rx_clk_src = {
++	.cmd_rcgr = 0x4e4,
++	.mnd_width = 0,
++	.hid_width = 5,
++	.parent_map = nss_cc_parent_map_3,
++	.freq_multi_tbl = ftbl_nss_cc_port3_rx_clk_src,
++	.clkr.hw.init = &(const struct clk_init_data){
++		.name = "nss_cc_port3_rx_clk_src",
++		.parent_data = nss_cc_parent_data_3,
++		.num_parents = ARRAY_SIZE(nss_cc_parent_data_3),
++		.ops = &clk_rcg2_fm_ops,
++	},
++};
++
++static const struct freq_conf ftbl_nss_cc_port3_tx_clk_src_25[] = {
++	C(P_UNIPHY2_NSS_TX_CLK, 12.5, 0, 0),
++	C(P_UNIPHY2_NSS_TX_CLK, 5, 0, 0),
++};
++
++static const struct freq_conf ftbl_nss_cc_port3_tx_clk_src_125[] = {
++	C(P_UNIPHY2_NSS_TX_CLK, 2.5, 0, 0),
++	C(P_UNIPHY2_NSS_TX_CLK, 1, 0, 0),
++};
++
++static const struct freq_multi_tbl ftbl_nss_cc_port3_tx_clk_src[] = {
++	FMS(24000000, P_CMN_PLL_XO_CLK, 1, 0, 0),
++	FM(25000000, ftbl_nss_cc_port3_tx_clk_src_25),
++	FMS(78125000, P_UNIPHY2_NSS_TX_CLK, 4, 0, 0),
++	FM(125000000, ftbl_nss_cc_port3_tx_clk_src_125),
++	FMS(156250000, P_UNIPHY2_NSS_TX_CLK, 2, 0, 0),
++	FMS(312500000, P_UNIPHY2_NSS_TX_CLK, 1, 0, 0),
++	{ }
++};
++
++static struct clk_rcg2 nss_cc_port3_tx_clk_src = {
++	.cmd_rcgr = 0x4f0,
++	.mnd_width = 0,
++	.hid_width = 5,
++	.parent_map = nss_cc_parent_map_3,
++	.freq_multi_tbl = ftbl_nss_cc_port3_tx_clk_src,
++	.clkr.hw.init = &(const struct clk_init_data){
++		.name = "nss_cc_port3_tx_clk_src",
++		.parent_data = nss_cc_parent_data_3,
++		.num_parents = ARRAY_SIZE(nss_cc_parent_data_3),
++		.ops = &clk_rcg2_fm_ops,
++	},
++};
++
++static struct clk_rcg2 nss_cc_ppe_clk_src = {
++	.cmd_rcgr = 0x3ec,
++	.mnd_width = 0,
++	.hid_width = 5,
++	.parent_map = nss_cc_parent_map_0,
++	.freq_tbl = ftbl_nss_cc_ce_clk_src,
++	.clkr.hw.init = &(const struct clk_init_data){
++		.name = "nss_cc_ppe_clk_src",
++		.parent_data = nss_cc_parent_data_0,
++		.num_parents = ARRAY_SIZE(nss_cc_parent_data_0),
++		.flags = CLK_SET_RATE_PARENT,
++		.ops = &clk_rcg2_ops,
++	},
++};
++
++static struct clk_regmap_div nss_cc_port1_rx_div_clk_src = {
++	.reg = 0x4bc,
++	.shift = 0,
++	.width = 9,
++	.clkr.hw.init = &(const struct clk_init_data) {
++		.name = "nss_cc_port1_rx_div_clk_src",
++		.parent_hws = (const struct clk_hw*[]){
++			&nss_cc_port1_rx_clk_src.clkr.hw,
++		},
++		.num_parents = 1,
++		.flags = CLK_SET_RATE_PARENT,
++		.ops = &clk_regmap_div_ops,
++	},
++};
++
++static struct clk_regmap_div nss_cc_port1_tx_div_clk_src = {
++	.reg = 0x4c8,
++	.shift = 0,
++	.width = 9,
++	.clkr.hw.init = &(const struct clk_init_data) {
++		.name = "nss_cc_port1_tx_div_clk_src",
++		.parent_hws = (const struct clk_hw*[]){
++			&nss_cc_port1_tx_clk_src.clkr.hw,
++		},
++		.num_parents = 1,
++		.flags = CLK_SET_RATE_PARENT,
++		.ops = &clk_regmap_div_ops,
++	},
++};
++
++static struct clk_regmap_div nss_cc_port2_rx_div_clk_src = {
++	.reg = 0x4d4,
++	.shift = 0,
++	.width = 9,
++	.clkr.hw.init = &(const struct clk_init_data) {
++		.name = "nss_cc_port2_rx_div_clk_src",
++		.parent_hws = (const struct clk_hw*[]){
++			&nss_cc_port2_rx_clk_src.clkr.hw,
++		},
++		.num_parents = 1,
++		.flags = CLK_SET_RATE_PARENT,
++		.ops = &clk_regmap_div_ops,
++	},
++};
++
++static struct clk_regmap_div nss_cc_port2_tx_div_clk_src = {
++	.reg = 0x4e0,
++	.shift = 0,
++	.width = 9,
++	.clkr.hw.init = &(const struct clk_init_data) {
++		.name = "nss_cc_port2_tx_div_clk_src",
++		.parent_hws = (const struct clk_hw*[]){
++			&nss_cc_port2_tx_clk_src.clkr.hw,
++		},
++		.num_parents = 1,
++		.flags = CLK_SET_RATE_PARENT,
++		.ops = &clk_regmap_div_ops,
++	},
++};
++
++static struct clk_regmap_div nss_cc_port3_rx_div_clk_src = {
++	.reg = 0x4ec,
++	.shift = 0,
++	.width = 9,
++	.clkr.hw.init = &(const struct clk_init_data) {
++		.name = "nss_cc_port3_rx_div_clk_src",
++		.parent_hws = (const struct clk_hw*[]){
++			&nss_cc_port3_rx_clk_src.clkr.hw,
++		},
++		.num_parents = 1,
++		.flags = CLK_SET_RATE_PARENT,
++		.ops = &clk_regmap_div_ops,
++	},
++};
++
++static struct clk_regmap_div nss_cc_port3_tx_div_clk_src = {
++	.reg = 0x4f8,
++	.shift = 0,
++	.width = 9,
++	.clkr.hw.init = &(const struct clk_init_data) {
++		.name = "nss_cc_port3_tx_div_clk_src",
++		.parent_hws = (const struct clk_hw*[]){
++			&nss_cc_port3_tx_clk_src.clkr.hw,
++		},
++		.num_parents = 1,
++		.flags = CLK_SET_RATE_PARENT,
++		.ops = &clk_regmap_div_ops,
++	},
++};
++
++static struct clk_regmap_div nss_cc_xgmac0_ptp_ref_div_clk_src = {
++	.reg = 0x3f4,
++	.shift = 0,
++	.width = 4,
++	.clkr.hw.init = &(const struct clk_init_data) {
++		.name = "nss_cc_xgmac0_ptp_ref_div_clk_src",
++		.parent_hws = (const struct clk_hw*[]){
++			&nss_cc_ppe_clk_src.clkr.hw,
++		},
++		.num_parents = 1,
++		.flags = CLK_SET_RATE_PARENT,
++		.ops = &clk_regmap_div_ro_ops,
++	},
++};
++
++static struct clk_regmap_div nss_cc_xgmac1_ptp_ref_div_clk_src = {
++	.reg = 0x3f8,
++	.shift = 0,
++	.width = 4,
++	.clkr.hw.init = &(const struct clk_init_data) {
++		.name = "nss_cc_xgmac1_ptp_ref_div_clk_src",
++		.parent_hws = (const struct clk_hw*[]){
++			&nss_cc_ppe_clk_src.clkr.hw,
++		},
++		.num_parents = 1,
++		.flags = CLK_SET_RATE_PARENT,
++		.ops = &clk_regmap_div_ro_ops,
++	},
++};
++
++static struct clk_regmap_div nss_cc_xgmac2_ptp_ref_div_clk_src = {
++	.reg = 0x3fc,
++	.shift = 0,
++	.width = 4,
++	.clkr.hw.init = &(const struct clk_init_data) {
++		.name = "nss_cc_xgmac2_ptp_ref_div_clk_src",
++		.parent_hws = (const struct clk_hw*[]){
++			&nss_cc_ppe_clk_src.clkr.hw,
++		},
++		.num_parents = 1,
++		.flags = CLK_SET_RATE_PARENT,
++		.ops = &clk_regmap_div_ro_ops,
++	},
++};
++
++static struct clk_branch nss_cc_ce_apb_clk = {
++	.halt_reg = 0x5e8,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x5e8,
++		.enable_mask = BIT(0),
++		.hw.init = &(const struct clk_init_data){
++			.name = "nss_cc_ce_apb_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&nss_cc_ce_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch nss_cc_ce_axi_clk = {
++	.halt_reg = 0x5ec,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x5ec,
++		.enable_mask = BIT(0),
++		.hw.init = &(const struct clk_init_data){
++			.name = "nss_cc_ce_axi_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&nss_cc_ce_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch nss_cc_debug_clk = {
++	.halt_reg = 0x70c,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x70c,
++		.enable_mask = BIT(0),
++		.hw.init = &(const struct clk_init_data){
++			.name = "nss_cc_debug_clk",
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch nss_cc_eip_clk = {
++	.halt_reg = 0x658,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x658,
++		.enable_mask = BIT(0),
++		.hw.init = &(const struct clk_init_data){
++			.name = "nss_cc_eip_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&nss_cc_eip_bfdcd_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch nss_cc_nss_csr_clk = {
++	.halt_reg = 0x6b0,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x6b0,
++		.enable_mask = BIT(0),
++		.hw.init = &(const struct clk_init_data){
++			.name = "nss_cc_nss_csr_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&nss_cc_cfg_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch nss_cc_nssnoc_ce_apb_clk = {
++	.halt_reg = 0x5f4,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x5f4,
++		.enable_mask = BIT(0),
++		.hw.init = &(const struct clk_init_data){
++			.name = "nss_cc_nssnoc_ce_apb_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&nss_cc_ce_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch nss_cc_nssnoc_ce_axi_clk = {
++	.halt_reg = 0x5f8,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x5f8,
++		.enable_mask = BIT(0),
++		.hw.init = &(const struct clk_init_data){
++			.name = "nss_cc_nssnoc_ce_axi_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&nss_cc_ce_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch nss_cc_nssnoc_eip_clk = {
++	.halt_reg = 0x660,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x660,
++		.enable_mask = BIT(0),
++		.hw.init = &(const struct clk_init_data){
++			.name = "nss_cc_nssnoc_eip_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&nss_cc_eip_bfdcd_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch nss_cc_nssnoc_nss_csr_clk = {
++	.halt_reg = 0x6b4,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x6b4,
++		.enable_mask = BIT(0),
++		.hw.init = &(const struct clk_init_data){
++			.name = "nss_cc_nssnoc_nss_csr_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&nss_cc_cfg_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch nss_cc_nssnoc_ppe_cfg_clk = {
++	.halt_reg = 0x444,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x444,
++		.enable_mask = BIT(0),
++		.hw.init = &(const struct clk_init_data){
++			.name = "nss_cc_nssnoc_ppe_cfg_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&nss_cc_ppe_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch nss_cc_nssnoc_ppe_clk = {
++	.halt_reg = 0x440,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x440,
++		.enable_mask = BIT(0),
++		.hw.init = &(const struct clk_init_data){
++			.name = "nss_cc_nssnoc_ppe_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&nss_cc_ppe_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch nss_cc_port1_mac_clk = {
++	.halt_reg = 0x428,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x428,
++		.enable_mask = BIT(0),
++		.hw.init = &(const struct clk_init_data){
++			.name = "nss_cc_port1_mac_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&nss_cc_ppe_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch nss_cc_port1_rx_clk = {
++	.halt_reg = 0x4fc,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x4fc,
++		.enable_mask = BIT(0),
++		.hw.init = &(const struct clk_init_data){
++			.name = "nss_cc_port1_rx_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&nss_cc_port1_rx_div_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch nss_cc_port1_tx_clk = {
++	.halt_reg = 0x504,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x504,
++		.enable_mask = BIT(0),
++		.hw.init = &(const struct clk_init_data){
++			.name = "nss_cc_port1_tx_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&nss_cc_port1_tx_div_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch nss_cc_port2_mac_clk = {
++	.halt_reg = 0x430,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x430,
++		.enable_mask = BIT(0),
++		.hw.init = &(const struct clk_init_data){
++			.name = "nss_cc_port2_mac_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&nss_cc_ppe_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch nss_cc_port2_rx_clk = {
++	.halt_reg = 0x50c,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x50c,
++		.enable_mask = BIT(0),
++		.hw.init = &(const struct clk_init_data){
++			.name = "nss_cc_port2_rx_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&nss_cc_port2_rx_div_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch nss_cc_port2_tx_clk = {
++	.halt_reg = 0x514,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x514,
++		.enable_mask = BIT(0),
++		.hw.init = &(const struct clk_init_data){
++			.name = "nss_cc_port2_tx_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&nss_cc_port2_tx_div_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch nss_cc_port3_mac_clk = {
++	.halt_reg = 0x438,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x438,
++		.enable_mask = BIT(0),
++		.hw.init = &(const struct clk_init_data){
++			.name = "nss_cc_port3_mac_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&nss_cc_ppe_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch nss_cc_port3_rx_clk = {
++	.halt_reg = 0x51c,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x51c,
++		.enable_mask = BIT(0),
++		.hw.init = &(const struct clk_init_data){
++			.name = "nss_cc_port3_rx_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&nss_cc_port3_rx_div_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch nss_cc_port3_tx_clk = {
++	.halt_reg = 0x524,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x524,
++		.enable_mask = BIT(0),
++		.hw.init = &(const struct clk_init_data){
++			.name = "nss_cc_port3_tx_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&nss_cc_port3_tx_div_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch nss_cc_ppe_edma_cfg_clk = {
++	.halt_reg = 0x424,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x424,
++		.enable_mask = BIT(0),
++		.hw.init = &(const struct clk_init_data){
++			.name = "nss_cc_ppe_edma_cfg_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&nss_cc_ppe_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch nss_cc_ppe_edma_clk = {
++	.halt_reg = 0x41c,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x41c,
++		.enable_mask = BIT(0),
++		.hw.init = &(const struct clk_init_data){
++			.name = "nss_cc_ppe_edma_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&nss_cc_ppe_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch nss_cc_ppe_switch_btq_clk = {
++	.halt_reg = 0x408,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x408,
++		.enable_mask = BIT(0),
++		.hw.init = &(const struct clk_init_data){
++			.name = "nss_cc_ppe_switch_btq_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&nss_cc_ppe_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch nss_cc_ppe_switch_cfg_clk = {
++	.halt_reg = 0x418,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x418,
++		.enable_mask = BIT(0),
++		.hw.init = &(const struct clk_init_data){
++			.name = "nss_cc_ppe_switch_cfg_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&nss_cc_ppe_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch nss_cc_ppe_switch_clk = {
++	.halt_reg = 0x410,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x410,
++		.enable_mask = BIT(0),
++		.hw.init = &(const struct clk_init_data){
++			.name = "nss_cc_ppe_switch_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&nss_cc_ppe_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch nss_cc_ppe_switch_ipe_clk = {
++	.halt_reg = 0x400,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x400,
++		.enable_mask = BIT(0),
++		.hw.init = &(const struct clk_init_data){
++			.name = "nss_cc_ppe_switch_ipe_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&nss_cc_ppe_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch nss_cc_uniphy_port1_rx_clk = {
++	.halt_reg = 0x57c,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x57c,
++		.enable_mask = BIT(0),
++		.hw.init = &(const struct clk_init_data){
++			.name = "nss_cc_uniphy_port1_rx_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&nss_cc_port1_rx_div_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch nss_cc_uniphy_port1_tx_clk = {
++	.halt_reg = 0x580,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x580,
++		.enable_mask = BIT(0),
++		.hw.init = &(const struct clk_init_data){
++			.name = "nss_cc_uniphy_port1_tx_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&nss_cc_port1_tx_div_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch nss_cc_uniphy_port2_rx_clk = {
++	.halt_reg = 0x584,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x584,
++		.enable_mask = BIT(0),
++		.hw.init = &(const struct clk_init_data){
++			.name = "nss_cc_uniphy_port2_rx_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&nss_cc_port2_rx_div_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch nss_cc_uniphy_port2_tx_clk = {
++	.halt_reg = 0x588,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x588,
++		.enable_mask = BIT(0),
++		.hw.init = &(const struct clk_init_data){
++			.name = "nss_cc_uniphy_port2_tx_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&nss_cc_port2_tx_div_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch nss_cc_uniphy_port3_rx_clk = {
++	.halt_reg = 0x58c,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x58c,
++		.enable_mask = BIT(0),
++		.hw.init = &(const struct clk_init_data){
++			.name = "nss_cc_uniphy_port3_rx_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&nss_cc_port3_rx_div_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch nss_cc_uniphy_port3_tx_clk = {
++	.halt_reg = 0x590,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x590,
++		.enable_mask = BIT(0),
++		.hw.init = &(const struct clk_init_data){
++			.name = "nss_cc_uniphy_port3_tx_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&nss_cc_port3_tx_div_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch nss_cc_xgmac0_ptp_ref_clk = {
++	.halt_reg = 0x448,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x448,
++		.enable_mask = BIT(0),
++		.hw.init = &(const struct clk_init_data){
++			.name = "nss_cc_xgmac0_ptp_ref_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&nss_cc_xgmac0_ptp_ref_div_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch nss_cc_xgmac1_ptp_ref_clk = {
++	.halt_reg = 0x44c,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x44c,
++		.enable_mask = BIT(0),
++		.hw.init = &(const struct clk_init_data){
++			.name = "nss_cc_xgmac1_ptp_ref_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&nss_cc_xgmac1_ptp_ref_div_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch nss_cc_xgmac2_ptp_ref_clk = {
++	.halt_reg = 0x450,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x450,
++		.enable_mask = BIT(0),
++		.hw.init = &(const struct clk_init_data){
++			.name = "nss_cc_xgmac2_ptp_ref_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&nss_cc_xgmac2_ptp_ref_div_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_regmap *nss_cc_ipq5424_clocks[] = {
++	[NSS_CC_CE_APB_CLK] = &nss_cc_ce_apb_clk.clkr,
++	[NSS_CC_CE_AXI_CLK] = &nss_cc_ce_axi_clk.clkr,
++	[NSS_CC_CE_CLK_SRC] = &nss_cc_ce_clk_src.clkr,
++	[NSS_CC_CFG_CLK_SRC] = &nss_cc_cfg_clk_src.clkr,
++	[NSS_CC_DEBUG_CLK] = &nss_cc_debug_clk.clkr,
++	[NSS_CC_EIP_BFDCD_CLK_SRC] = &nss_cc_eip_bfdcd_clk_src.clkr,
++	[NSS_CC_EIP_CLK] = &nss_cc_eip_clk.clkr,
++	[NSS_CC_NSS_CSR_CLK] = &nss_cc_nss_csr_clk.clkr,
++	[NSS_CC_NSSNOC_CE_APB_CLK] = &nss_cc_nssnoc_ce_apb_clk.clkr,
++	[NSS_CC_NSSNOC_CE_AXI_CLK] = &nss_cc_nssnoc_ce_axi_clk.clkr,
++	[NSS_CC_NSSNOC_EIP_CLK] = &nss_cc_nssnoc_eip_clk.clkr,
++	[NSS_CC_NSSNOC_NSS_CSR_CLK] = &nss_cc_nssnoc_nss_csr_clk.clkr,
++	[NSS_CC_NSSNOC_PPE_CFG_CLK] = &nss_cc_nssnoc_ppe_cfg_clk.clkr,
++	[NSS_CC_NSSNOC_PPE_CLK] = &nss_cc_nssnoc_ppe_clk.clkr,
++	[NSS_CC_PORT1_MAC_CLK] = &nss_cc_port1_mac_clk.clkr,
++	[NSS_CC_PORT1_RX_CLK] = &nss_cc_port1_rx_clk.clkr,
++	[NSS_CC_PORT1_RX_CLK_SRC] = &nss_cc_port1_rx_clk_src.clkr,
++	[NSS_CC_PORT1_RX_DIV_CLK_SRC] = &nss_cc_port1_rx_div_clk_src.clkr,
++	[NSS_CC_PORT1_TX_CLK] = &nss_cc_port1_tx_clk.clkr,
++	[NSS_CC_PORT1_TX_CLK_SRC] = &nss_cc_port1_tx_clk_src.clkr,
++	[NSS_CC_PORT1_TX_DIV_CLK_SRC] = &nss_cc_port1_tx_div_clk_src.clkr,
++	[NSS_CC_PORT2_MAC_CLK] = &nss_cc_port2_mac_clk.clkr,
++	[NSS_CC_PORT2_RX_CLK] = &nss_cc_port2_rx_clk.clkr,
++	[NSS_CC_PORT2_RX_CLK_SRC] = &nss_cc_port2_rx_clk_src.clkr,
++	[NSS_CC_PORT2_RX_DIV_CLK_SRC] = &nss_cc_port2_rx_div_clk_src.clkr,
++	[NSS_CC_PORT2_TX_CLK] = &nss_cc_port2_tx_clk.clkr,
++	[NSS_CC_PORT2_TX_CLK_SRC] = &nss_cc_port2_tx_clk_src.clkr,
++	[NSS_CC_PORT2_TX_DIV_CLK_SRC] = &nss_cc_port2_tx_div_clk_src.clkr,
++	[NSS_CC_PORT3_MAC_CLK] = &nss_cc_port3_mac_clk.clkr,
++	[NSS_CC_PORT3_RX_CLK] = &nss_cc_port3_rx_clk.clkr,
++	[NSS_CC_PORT3_RX_CLK_SRC] = &nss_cc_port3_rx_clk_src.clkr,
++	[NSS_CC_PORT3_RX_DIV_CLK_SRC] = &nss_cc_port3_rx_div_clk_src.clkr,
++	[NSS_CC_PORT3_TX_CLK] = &nss_cc_port3_tx_clk.clkr,
++	[NSS_CC_PORT3_TX_CLK_SRC] = &nss_cc_port3_tx_clk_src.clkr,
++	[NSS_CC_PORT3_TX_DIV_CLK_SRC] = &nss_cc_port3_tx_div_clk_src.clkr,
++	[NSS_CC_PPE_CLK_SRC] = &nss_cc_ppe_clk_src.clkr,
++	[NSS_CC_PPE_EDMA_CFG_CLK] = &nss_cc_ppe_edma_cfg_clk.clkr,
++	[NSS_CC_PPE_EDMA_CLK] = &nss_cc_ppe_edma_clk.clkr,
++	[NSS_CC_PPE_SWITCH_BTQ_CLK] = &nss_cc_ppe_switch_btq_clk.clkr,
++	[NSS_CC_PPE_SWITCH_CFG_CLK] = &nss_cc_ppe_switch_cfg_clk.clkr,
++	[NSS_CC_PPE_SWITCH_CLK] = &nss_cc_ppe_switch_clk.clkr,
++	[NSS_CC_PPE_SWITCH_IPE_CLK] = &nss_cc_ppe_switch_ipe_clk.clkr,
++	[NSS_CC_UNIPHY_PORT1_RX_CLK] = &nss_cc_uniphy_port1_rx_clk.clkr,
++	[NSS_CC_UNIPHY_PORT1_TX_CLK] = &nss_cc_uniphy_port1_tx_clk.clkr,
++	[NSS_CC_UNIPHY_PORT2_RX_CLK] = &nss_cc_uniphy_port2_rx_clk.clkr,
++	[NSS_CC_UNIPHY_PORT2_TX_CLK] = &nss_cc_uniphy_port2_tx_clk.clkr,
++	[NSS_CC_UNIPHY_PORT3_RX_CLK] = &nss_cc_uniphy_port3_rx_clk.clkr,
++	[NSS_CC_UNIPHY_PORT3_TX_CLK] = &nss_cc_uniphy_port3_tx_clk.clkr,
++	[NSS_CC_XGMAC0_PTP_REF_CLK] = &nss_cc_xgmac0_ptp_ref_clk.clkr,
++	[NSS_CC_XGMAC0_PTP_REF_DIV_CLK_SRC] = &nss_cc_xgmac0_ptp_ref_div_clk_src.clkr,
++	[NSS_CC_XGMAC1_PTP_REF_CLK] = &nss_cc_xgmac1_ptp_ref_clk.clkr,
++	[NSS_CC_XGMAC1_PTP_REF_DIV_CLK_SRC] = &nss_cc_xgmac1_ptp_ref_div_clk_src.clkr,
++	[NSS_CC_XGMAC2_PTP_REF_CLK] = &nss_cc_xgmac2_ptp_ref_clk.clkr,
++	[NSS_CC_XGMAC2_PTP_REF_DIV_CLK_SRC] = &nss_cc_xgmac2_ptp_ref_div_clk_src.clkr,
++};
++
++static const struct qcom_reset_map nss_cc_ipq5424_resets[] = {
++	[NSS_CC_CE_APB_CLK_ARES] = { 0x5e8, 2 },
++	[NSS_CC_CE_AXI_CLK_ARES] = { 0x5ec, 2 },
++	[NSS_CC_DEBUG_CLK_ARES] = { 0x70c, 2 },
++	[NSS_CC_EIP_CLK_ARES] = { 0x658, 2 },
++	[NSS_CC_NSS_CSR_CLK_ARES] = { 0x6b0, 2 },
++	[NSS_CC_NSSNOC_CE_APB_CLK_ARES] = { 0x5f4, 2 },
++	[NSS_CC_NSSNOC_CE_AXI_CLK_ARES] = { 0x5f8, 2 },
++	[NSS_CC_NSSNOC_EIP_CLK_ARES] = { 0x660, 2 },
++	[NSS_CC_NSSNOC_NSS_CSR_CLK_ARES] = { 0x6b4, 2 },
++	[NSS_CC_NSSNOC_PPE_CLK_ARES] = { 0x440, 2 },
++	[NSS_CC_NSSNOC_PPE_CFG_CLK_ARES] = { 0x444, 2 },
++	[NSS_CC_PORT1_MAC_CLK_ARES] = { 0x428, 2 },
++	[NSS_CC_PORT1_RX_CLK_ARES] = { 0x4fc, 2 },
++	[NSS_CC_PORT1_TX_CLK_ARES] = { 0x504, 2 },
++	[NSS_CC_PORT2_MAC_CLK_ARES] = { 0x430, 2 },
++	[NSS_CC_PORT2_RX_CLK_ARES] = { 0x50c, 2 },
++	[NSS_CC_PORT2_TX_CLK_ARES] = { 0x514, 2 },
++	[NSS_CC_PORT3_MAC_CLK_ARES] = { 0x438, 2 },
++	[NSS_CC_PORT3_RX_CLK_ARES] = { 0x51c, 2 },
++	[NSS_CC_PORT3_TX_CLK_ARES] = { 0x524, 2 },
++	[NSS_CC_PPE_BCR] = { 0x3e8 },
++	[NSS_CC_PPE_EDMA_CLK_ARES] = { 0x41c, 2 },
++	[NSS_CC_PPE_EDMA_CFG_CLK_ARES] = { 0x424, 2 },
++	[NSS_CC_PPE_SWITCH_BTQ_CLK_ARES] = { 0x408, 2 },
++	[NSS_CC_PPE_SWITCH_CLK_ARES] = { 0x410, 2 },
++	[NSS_CC_PPE_SWITCH_CFG_CLK_ARES] = { 0x418, 2 },
++	[NSS_CC_PPE_SWITCH_IPE_CLK_ARES] = { 0x400, 2 },
++	[NSS_CC_UNIPHY_PORT1_RX_CLK_ARES] = { 0x57c, 2 },
++	[NSS_CC_UNIPHY_PORT1_TX_CLK_ARES] = { 0x580, 2 },
++	[NSS_CC_UNIPHY_PORT2_RX_CLK_ARES] = { 0x584, 2 },
++	[NSS_CC_UNIPHY_PORT2_TX_CLK_ARES] = { 0x588, 2 },
++	[NSS_CC_UNIPHY_PORT3_RX_CLK_ARES] = { 0x58c, 2 },
++	[NSS_CC_UNIPHY_PORT3_TX_CLK_ARES] = { 0x590, 2 },
++	[NSS_CC_XGMAC0_PTP_REF_CLK_ARES] = { 0x448, 2 },
++	[NSS_CC_XGMAC1_PTP_REF_CLK_ARES] = { 0x44c, 2 },
++	[NSS_CC_XGMAC2_PTP_REF_CLK_ARES] = { 0x450, 2 },
++};
++
++static const struct regmap_config nss_cc_ipq5424_regmap_config = {
++	.reg_bits = 32,
++	.reg_stride = 4,
++	.val_bits = 32,
++	.max_register = 0x800,
++	.fast_io = true,
++};
++
++static const struct qcom_icc_hws_data icc_ipq5424_nss_hws[] = {
++	{ MASTER_NSSNOC_PPE, SLAVE_NSSNOC_PPE, NSS_CC_NSSNOC_PPE_CLK },
++	{ MASTER_NSSNOC_PPE_CFG, SLAVE_NSSNOC_PPE_CFG, NSS_CC_NSSNOC_PPE_CFG_CLK },
++	{ MASTER_NSSNOC_NSS_CSR, SLAVE_NSSNOC_NSS_CSR, NSS_CC_NSSNOC_NSS_CSR_CLK },
++	{ MASTER_NSSNOC_CE_AXI, SLAVE_NSSNOC_CE_AXI, NSS_CC_NSSNOC_CE_AXI_CLK},
++	{ MASTER_NSSNOC_CE_APB, SLAVE_NSSNOC_CE_APB, NSS_CC_NSSNOC_CE_APB_CLK},
++	{ MASTER_NSSNOC_EIP, SLAVE_NSSNOC_EIP, NSS_CC_NSSNOC_EIP_CLK},
++};
++
++#define IPQ_NSSCC_ID	(5424 * 2) /* some unique value */
++
++static const struct qcom_cc_desc nss_cc_ipq5424_desc = {
++	.config = &nss_cc_ipq5424_regmap_config,
++	.clks = nss_cc_ipq5424_clocks,
++	.num_clks = ARRAY_SIZE(nss_cc_ipq5424_clocks),
++	.resets = nss_cc_ipq5424_resets,
++	.num_resets = ARRAY_SIZE(nss_cc_ipq5424_resets),
++	.icc_hws = icc_ipq5424_nss_hws,
++	.num_icc_hws = ARRAY_SIZE(icc_ipq5424_nss_hws),
++	.icc_first_node_id = IPQ_NSSCC_ID,
++};
++
++static const struct dev_pm_ops nss_cc_ipq5424_pm_ops = {
++	SET_RUNTIME_PM_OPS(pm_clk_suspend, pm_clk_resume, NULL)
++};
++
++static const struct of_device_id nss_cc_ipq5424_match_table[] = {
++	{ .compatible = "qcom,ipq5424-nsscc" },
++	{ }
++};
++MODULE_DEVICE_TABLE(of, nss_cc_ipq5424_match_table);
++
++static int nss_cc_ipq5424_probe(struct platform_device *pdev)
++{
++	int ret;
++
++	ret = devm_pm_runtime_enable(&pdev->dev);
++	if (ret)
++		return dev_err_probe(&pdev->dev, ret, "Fail to enable runtime PM\n");
++
++	ret = devm_pm_clk_create(&pdev->dev);
++	if (ret)
++		return dev_err_probe(&pdev->dev, ret, "Fail to create PM clock\n");
++
++	ret = pm_clk_add(&pdev->dev, "bus");
++	if (ret)
++		return dev_err_probe(&pdev->dev, ret, "Fail to add bus clock\n");
++
++	ret = pm_runtime_resume_and_get(&pdev->dev);
++	if (ret)
++		return dev_err_probe(&pdev->dev, ret, "Fail to resume\n");
++
++	ret = qcom_cc_probe(pdev, &nss_cc_ipq5424_desc);
++	pm_runtime_put(&pdev->dev);
++
++	return ret;
++}
++
++static struct platform_driver nss_cc_ipq5424_driver = {
++	.probe = nss_cc_ipq5424_probe,
++	.driver = {
++		.name = "qcom,ipq5424-nsscc",
++		.of_match_table = nss_cc_ipq5424_match_table,
++		.pm = &nss_cc_ipq5424_pm_ops,
++		.sync_state = icc_sync_state,
++	},
++};
++module_platform_driver(nss_cc_ipq5424_driver);
++
++MODULE_DESCRIPTION("Qualcomm Technologies, Inc. NSSCC IPQ5424 Driver");
++MODULE_LICENSE("GPL");
 
 -- 
 2.34.1
