@@ -1,224 +1,170 @@
-Return-Path: <linux-pm+bounces-35409-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35410-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3EEFFBA1093
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Sep 2025 20:33:28 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id D2916BA10AB
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Sep 2025 20:36:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 489F81C22642
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Sep 2025 18:33:50 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id A436B4E02DF
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Sep 2025 18:36:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67D863191D3;
-	Thu, 25 Sep 2025 18:33:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D194D31A045;
+	Thu, 25 Sep 2025 18:36:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SR2I3TF/"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="SWw4JtDb"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3774E1DE3DC;
-	Thu, 25 Sep 2025 18:33:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EE68319873
+	for <linux-pm@vger.kernel.org>; Thu, 25 Sep 2025 18:36:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758825197; cv=none; b=t2NZfD4mKKMAvLpMYIQBd46Pv+0C4r9EIpaqIpUHuRcsDfx9OVSgzjzmeDnBS5M772P1PZKJXFvz1qnXdIeG8Pn5tM1Z8M/hWjLgw/Eztm1+OiHwRHqhDrM6vx8VLyvnsmY9yPs9+NcphHuxf8R8Tx3r5pWsbtJD0uHsTfrn4hY=
+	t=1758825379; cv=none; b=HtsRZcZfdoKh1wko5HsKkTMB84YxIZLl+8kz6PTUf1rMLc/IAJ4bELyfXV8sLyxrE/P3TbGmXujBYpa/ITmGkjfnLhjW0ZVifTyMaplD3jU/uwFUJ2X9diVslkN3fz2Ohq7OnNlB7rk9RctZie80wKs7WNAyJ72c69niyWyQUU4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758825197; c=relaxed/simple;
-	bh=2dXXjcfz6yo54Czf0POycwQADijPXlf9dzGU92OlDes=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ReZBggPD3sZHTm8pe1vdXfdMnmRMHXYU/xk5fHN9PoeTglAmuDo4MItNPgy2go++11yn3ODHx9EpDReNyAkrx81OD5VwcVF8Gy+kX/SxLIHKW2k2YQGCmDbEaT7S8uKXIKq5GtkqCCuEyR7HOQ/wUBRXRPDIJfCK+EKP6jsEn3I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SR2I3TF/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5F44C4CEF0;
-	Thu, 25 Sep 2025 18:33:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758825196;
-	bh=2dXXjcfz6yo54Czf0POycwQADijPXlf9dzGU92OlDes=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=SR2I3TF/Ds/kHUzB2cy5A0+kI0XPezSj4XITnqaz80Zr4nCr8KunVC6s0hGMHjTHq
-	 H9ZgYeBnUfY8h5c6JOu3tiZtnSWOWe5iXxewnmaj3sZBKesoQijO7C6w1DO+er+zcZ
-	 AhLOpE2eXn1UpetqAbjrm8GB4mGF7zXf+JUAKeq0pNKuLozzWLDJy/vb/pKosHRHa9
-	 +4z0njWLRykWfuvYKT5UgpsVFB50E/k3/ymX6pTxTcNRoHF2ML9djwSjys6Ma04hq9
-	 J4ezQR+NbUmJAAZfn/FEowIyb4MQRe3YtwUwdyNIZbn7BekhY90XvfMdKUSsvPdjHV
-	 4MknFy7pus1BQ==
-Message-ID: <3b982e8d-4ce7-4186-b5f0-f7495be3a3ed@kernel.org>
-Date: Thu, 25 Sep 2025 13:33:14 -0500
+	s=arc-20240116; t=1758825379; c=relaxed/simple;
+	bh=yTNcLmgvEDy9EISXeXBi6gHdiwI9LV3MmdEt8b5e8bU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=adJgauskNvY7FdCdedEPeM26yrsh2xAyihHgfmdKbCQkLmlnXP2keZnW4cN5IL7kAhB2yORjV70sC6hjUUHp0sWhOO5eeBn5oF8NxPoOcl5GywT5b4D0umH8d+gnKrzjWrxkIn/3GzKo+qIUBHpMzX165ysmy/IOP0m/Gm/Cq/k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=SWw4JtDb; arc=none smtp.client-ip=209.85.216.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-3304dd2f119so1055267a91.2
+        for <linux-pm@vger.kernel.org>; Thu, 25 Sep 2025 11:36:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1758825377; x=1759430177; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=bv1I4Ic9wC08aXBbFZJljZdZZSbHg/OBO6m8rXTaTQA=;
+        b=SWw4JtDbnI5I5wPq+33qixxb/11l6orQ0QZL5Sp5ZzVpec00eZJtfXey5rHg7D8fxI
+         wI5TPYyWlO9L0BRvmSh8QDDi7hbC0sLvdHBXkeouPjDKiq/yemCq7m+mHl3d02ei20z8
+         AgtMaWkOpXWvW0nD9NkSNwscGHy2JUaWz6FWY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758825377; x=1759430177;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bv1I4Ic9wC08aXBbFZJljZdZZSbHg/OBO6m8rXTaTQA=;
+        b=FmPfS10Hz+9rClWts8Ez2OBP8bwcpCIOXgIJBvJ0XVUxJ0QiBGBMsM/cacRCq6VqDg
+         jXfCrFhcSuDnjyeAi2fzOa/6XD8tFU/zSVNBT3JUqI+C6DZEEzNS03nvx9lgrr7edM2m
+         khUKa3QkTjQAl8bL88bL5I/pmeJ6DnxREirYh+NOqm2dbM6lx9OsNRcx6KFaK2V1NQLJ
+         qcBqwP8tVgNfCQVCwFFcuFfHi0g4Bl6akxDKS63tK7R0ELroTVWXzULxasyQKAElgNWR
+         NIWYv2Rt70AgHEum5wIPzMZXyNH2lbp1fhfKW0zUYjLniXtEieRac30OZ0sedU9k7Vbu
+         LPFg==
+X-Forwarded-Encrypted: i=1; AJvYcCVzI1wB6NQzLOYcFe1V4567nORDIwirGDI7J5FD65lwi0PteaVENN1F1OUF8KHrP69cdzBKybQk5g==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwJtNW871Wl+UQa/OszS2kqau/Tug9s02tqb36lWH15uYBDXdn3
+	F5noipY7J0g9TumRDEgiYYlN+yfqdaFjvkj444u2AW6fhJlMbAISx7Nhe16NgBEH3A==
+X-Gm-Gg: ASbGncsTQdaHtwWJKWamSd+XWs5aShoLazRsE72Trpi6crfOJnIbvM2CbUsqxItiQGl
+	2GIhOgo2ghtPEZ6M2kFIUxck8UFC1snvzfWASo0/2uGIv+14K64UVTMqpVpEZZprz9Hrk55C5kF
+	+BJWUITBPRk7gboTapky2Fl+cYadb3absvkveqSR4EwJmYlsI0xnFJX+uCfBD/Vgmp69AAUrt/u
+	qiNHWyp3i9crvCL2tyhcA/B8Ea1gdPtYlRVs6fND4r8B7TJkSTK8odX7pPUrq8kiD9fk6WPTwnE
+	Pu72Oe9WEa60Y9RV2NKey0VoJo4ZSY3Vnz5yacOY4kfcPfp2hLUGW5ZIfAzc083V1UQ9w6Lh/q4
+	Z5GN/zIeFF/TMTNtf9V3vzyt+EK6+H33W8GtzC+odgjegNkym0fLpQhYbqQCg
+X-Google-Smtp-Source: AGHT+IF4Y09r+bkOF6lRkbwV+GQ7Ev0ePJgiaG1Uy2xMtT1jRRDOL9DCdlnx7ksb5G87YR8/J7GrzQ==
+X-Received: by 2002:a17:90b:3884:b0:32e:9a24:2dd4 with SMTP id 98e67ed59e1d1-3342a257202mr4886405a91.14.1758825377384;
+        Thu, 25 Sep 2025 11:36:17 -0700 (PDT)
+Received: from localhost ([2a00:79e0:2e7c:8:ef44:9df6:231a:cd29])
+        by smtp.gmail.com with UTF8SMTPSA id 41be03b00d2f7-b57c55a0ef3sm2756772a12.37.2025.09.25.11.36.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 Sep 2025 11:36:16 -0700 (PDT)
+Date: Thu, 25 Sep 2025 11:36:15 -0700
+From: Brian Norris <briannorris@chromium.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Pavel Machek <pavel@kernel.org>,
+	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+	kunit-dev@googlegroups.com, Len Brown <lenb@kernel.org>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] PM: runtime: Add basic kunit tests for API contracts
+Message-ID: <aNWLnxtxS1tqiqbC@google.com>
+References: <20250829003319.2785282-1-briannorris@chromium.org>
+ <CAJZ5v0gGKsR0bVayyTXy1W9FLwVfG1S+gseH7jPKtggzZFNpfA@mail.gmail.com>
+ <aMHjOJGaKi9cwbsn@google.com>
+ <CAJZ5v0iELLPYBS6FKmX=DhoyQ2tDq9F9DAzuV0A8etv0dGeJvQ@mail.gmail.com>
+ <aNMWa0SD5l4Cb6G_@google.com>
+ <CAJZ5v0jnPsVrULF9+S-e+HvT+bik=+WA7FfXzFg5vfO8WhTy9Q@mail.gmail.com>
+ <CAJZ5v0i0_r_=rsPzLmST7cZtGjHCP73t9aoXdVFa81J9nJmzsQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/4] ACPI: CPPC: Do not use CPUFREQ_ETERNAL as an error
- value
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
- Linux PM <linux-pm@vger.kernel.org>
-Cc: Shawn Guo <shawnguo@kernel.org>, Qais Yousef <qyousef@layalina.io>,
- LKML <linux-kernel@vger.kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>,
- Pierre Gondois <pierre.gondois@arm.com>,
- Linux ACPI <linux-acpi@vger.kernel.org>
-References: <8605612.T7Z3S40VBb@rafael.j.wysocki>
- <3925838.kQq0lBPeGt@rafael.j.wysocki> <12773788.O9o76ZdvQC@rafael.j.wysocki>
-Content-Language: en-US
-From: "Mario Limonciello (AMD) (kernel.org)" <superm1@kernel.org>
-In-Reply-To: <12773788.O9o76ZdvQC@rafael.j.wysocki>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0i0_r_=rsPzLmST7cZtGjHCP73t9aoXdVFa81J9nJmzsQ@mail.gmail.com>
 
+On Wed, Sep 24, 2025 at 07:34:31PM +0200, Rafael J. Wysocki wrote:
+> On Wed, Sep 24, 2025 at 7:32 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> > On Tue, Sep 23, 2025 at 11:51 PM Brian Norris <briannorris@chromium.org> wrote:
+> > > On Fri, Sep 19, 2025 at 06:58:50PM +0200, Rafael J. Wysocki wrote:
+> > > > Yeah, so I'd prefer to change this particular thing entirely,
+> > > > especially in the face of
+> > > >
+> > > > https://lore.kernel.org/linux-pm/5049058.31r3eYUQgx@rafael.j.wysocki/
+> > > >
+> > > > which quite obviously doesn't take the return value of
+> > > > pm_runtime_put() and pm_runtime_put_sutosuspend() into account.
+> > > >
+> > > > I would like these two functions to be void.
+> > >
+> > > Sure, I think inspecting put() return codes is generally a bad idea.
+> > > 'void' would be cool with me, although maybe a bit impractical now,
+> > > considering how many users look at the current return code.
+> >
+> > For pm_runtime_put() it's not that bad.  I have ~20 patches changing
+> > all of the code looking at its return value to stop doing that.
+> >
+> > Interestingly enough, there's only one piece of that code (USB core)
+> > doing anything remotely useful with that return value.  Everything
+> > else is just garbage IMV.
+> >
+> > > So at a minimum, I'd separate "make 'em void" from my "document and test the
+> > > API" work.
+> >
+> > But you can just skip them.
+> >
+> > > Really, I'm mostly looking at this area because I have to support driver
+> > > developers trying to learn how to use the runtime PM API, and they
+> > > wonder about the return codes. So if they exist, I'd at least like them
+> > > to make sense.
+> >
+> > Sure.
+> >
+> > That said, as far as pm_runtime_put() and pm_runtime_put_autosuspend()
+> > are concerned, you may as well just say "discard their return values,
+> > you don't want to have to deal with them, and never ever pass them
+> > verbatim to the callers of your code".
 
+Sounds reasonable.
 
-On 9/25/2025 12:23 PM, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> Instead of using CPUFREQ_ETERNAL for signaling an error condition
-> in cppc_get_transition_latency(), change the return value type of
-> that function to int and make it return a proper negative error
-> code on failures.
-> 
-> No intentional functional impact.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+I'll drop any unit test expectations for pm_runtime_put() and
+pm_runtime_put_autosuspend() return codes. But I'll leave
+pm_runtime_put_sync().
 
-Reviewed-by: Mario Limonciello (AMD) <superm1@kernel.org>
+> > > Anyway, for the particulars of this test: I can try to adapt the comment
+> > > language a bit. But are you suggesting I shouldn't even try patch 2,
+> > > which fixes the pm_runtime_put() return codes?
+> >
+> > Not really.
+> >
+> > > > Of course, there are existing users that check their return values,
+> > > > but I'm not sure how much of a real advantage from doing that is.
+> >
+> > Well, see above. :-)
+> >
+> > >  At least some of those users appear to not exactly know what they are
+> > > doing.
+> >
+> > Almost none of them do nonsense.
+> 
+> s/none/all/ (sorry)
 
-> ---
-> 
-> v1 -> v2:
->     * Change cppc_get_transition_latency() return value data type to int
->     * Make it return -ENODATA on errors (Mario)
->     * Update its callers accordingly
->     * Adjust the subject and changelog
->     * Add a missing empty code line to cppc_get_transition_latency()
-> 
-> The modifications of this patch don't affect any other patches in the series:
-> 
-> https://lore.kernel.org/linux-pm/8605612.T7Z3S40VBb@rafael.j.wysocki/
-> 
-> ---
->   drivers/acpi/cppc_acpi.c       |   15 ++++++++-------
->   drivers/cpufreq/amd-pstate.c   |    8 ++++----
->   drivers/cpufreq/cppc_cpufreq.c |    4 ++--
->   include/acpi/cppc_acpi.h       |    6 +++---
->   4 files changed, 17 insertions(+), 16 deletions(-)
-> 
-> --- a/drivers/acpi/cppc_acpi.c
-> +++ b/drivers/acpi/cppc_acpi.c
-> @@ -1876,7 +1876,7 @@ EXPORT_SYMBOL_GPL(cppc_set_perf);
->    * If desired_reg is in the SystemMemory or SystemIo ACPI address space,
->    * then assume there is no latency.
->    */
-> -unsigned int cppc_get_transition_latency(int cpu_num)
-> +int cppc_get_transition_latency(int cpu_num)
->   {
->   	/*
->   	 * Expected transition latency is based on the PCCT timing values
-> @@ -1889,31 +1889,32 @@ unsigned int cppc_get_transition_latency
->   	 *              completion of a command before issuing the next command,
->   	 *              in microseconds.
->   	 */
-> -	unsigned int latency_ns = 0;
->   	struct cpc_desc *cpc_desc;
->   	struct cpc_register_resource *desired_reg;
->   	int pcc_ss_id = per_cpu(cpu_pcc_subspace_idx, cpu_num);
->   	struct cppc_pcc_data *pcc_ss_data;
-> +	int latency_ns = 0;
->   
->   	cpc_desc = per_cpu(cpc_desc_ptr, cpu_num);
->   	if (!cpc_desc)
-> -		return CPUFREQ_ETERNAL;
-> +		return -ENODATA;
->   
->   	desired_reg = &cpc_desc->cpc_regs[DESIRED_PERF];
->   	if (CPC_IN_SYSTEM_MEMORY(desired_reg) || CPC_IN_SYSTEM_IO(desired_reg))
->   		return 0;
-> +
->   	else if (!CPC_IN_PCC(desired_reg))
-> -		return CPUFREQ_ETERNAL;
-> +		return -ENODATA;
->   
->   	if (pcc_ss_id < 0)
-> -		return CPUFREQ_ETERNAL;
-> +		return -ENODATA;
->   
->   	pcc_ss_data = pcc_data[pcc_ss_id];
->   	if (pcc_ss_data->pcc_mpar)
->   		latency_ns = 60 * (1000 * 1000 * 1000 / pcc_ss_data->pcc_mpar);
->   
-> -	latency_ns = max(latency_ns, pcc_ss_data->pcc_nominal * 1000);
-> -	latency_ns = max(latency_ns, pcc_ss_data->pcc_mrtt * 1000);
-> +	latency_ns = max_t(int, latency_ns, pcc_ss_data->pcc_nominal * 1000);
-> +	latency_ns = max_t(int, latency_ns, pcc_ss_data->pcc_mrtt * 1000);
->   
->   	return latency_ns;
->   }
-> --- a/drivers/cpufreq/amd-pstate.c
-> +++ b/drivers/cpufreq/amd-pstate.c
-> @@ -872,10 +872,10 @@ static void amd_pstate_update_limits(str
->    */
->   static u32 amd_pstate_get_transition_delay_us(unsigned int cpu)
->   {
-> -	u32 transition_delay_ns;
-> +	int transition_delay_ns;
->   
->   	transition_delay_ns = cppc_get_transition_latency(cpu);
-> -	if (transition_delay_ns == CPUFREQ_ETERNAL) {
-> +	if (transition_delay_ns < 0) {
->   		if (cpu_feature_enabled(X86_FEATURE_AMD_FAST_CPPC))
->   			return AMD_PSTATE_FAST_CPPC_TRANSITION_DELAY;
->   		else
-> @@ -891,10 +891,10 @@ static u32 amd_pstate_get_transition_del
->    */
->   static u32 amd_pstate_get_transition_latency(unsigned int cpu)
->   {
-> -	u32 transition_latency;
-> +	int transition_latency;
->   
->   	transition_latency = cppc_get_transition_latency(cpu);
-> -	if (transition_latency  == CPUFREQ_ETERNAL)
-> +	if (transition_latency < 0)
->   		return AMD_PSTATE_TRANSITION_LATENCY;
->   
->   	return transition_latency;
-> --- a/drivers/cpufreq/cppc_cpufreq.c
-> +++ b/drivers/cpufreq/cppc_cpufreq.c
-> @@ -310,9 +310,9 @@ static int cppc_verify_policy(struct cpu
->   
->   static unsigned int get_transition_latency_from_cppc(unsigned int cpu)
->   {
-> -	unsigned int transition_latency_ns = cppc_get_transition_latency(cpu);
-> +	int transition_latency_ns = cppc_get_transition_latency(cpu);
->   
-> -	if (transition_latency_ns == CPUFREQ_ETERNAL)
-> +	if (transition_latency_ns < 0)
->   		return CPUFREQ_DEFAULT_TRANSITION_LATENCY_NS / NSEC_PER_USEC;
->   
->   	return transition_latency_ns / NSEC_PER_USEC;
-> --- a/include/acpi/cppc_acpi.h
-> +++ b/include/acpi/cppc_acpi.h
-> @@ -160,7 +160,7 @@ extern unsigned int cppc_khz_to_perf(str
->   extern bool acpi_cpc_valid(void);
->   extern bool cppc_allow_fast_switch(void);
->   extern int acpi_get_psd_map(unsigned int cpu, struct cppc_cpudata *cpu_data);
-> -extern unsigned int cppc_get_transition_latency(int cpu);
-> +extern int cppc_get_transition_latency(int cpu);
->   extern bool cpc_ffh_supported(void);
->   extern bool cpc_supported_by_cpu(void);
->   extern int cpc_read_ffh(int cpunum, struct cpc_reg *reg, u64 *val);
-> @@ -216,9 +216,9 @@ static inline bool cppc_allow_fast_switc
->   {
->   	return false;
->   }
-> -static inline unsigned int cppc_get_transition_latency(int cpu)
-> +static inline int cppc_get_transition_latency(int cpu)
->   {
-> -	return CPUFREQ_ETERNAL;
-> +	return -ENODATA;
->   }
->   static inline bool cpc_ffh_supported(void)
->   {
-> 
-> 
-> 
+Ha, thanks for the clarification :)
 
+Brian
 
