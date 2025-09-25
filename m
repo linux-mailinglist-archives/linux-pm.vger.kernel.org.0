@@ -1,340 +1,150 @@
-Return-Path: <linux-pm+bounces-35333-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35334-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0769AB9EE1B
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Sep 2025 13:16:20 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6CC06B9EFB2
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Sep 2025 13:46:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1548F1BC0357
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Sep 2025 11:16:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E7FDD3AC3DA
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Sep 2025 11:46:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EEF82F6560;
-	Thu, 25 Sep 2025 11:16:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 900C12FB993;
+	Thu, 25 Sep 2025 11:46:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="txvyULf5"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="BwL9nOEp"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BE352EC560
-	for <linux-pm@vger.kernel.org>; Thu, 25 Sep 2025 11:16:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40D4F2C17A0
+	for <linux-pm@vger.kernel.org>; Thu, 25 Sep 2025 11:46:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758798976; cv=none; b=pXRnmXxNjXcqRlSGRapF2d5iQEV3ESB+J5Dtoh01n6V5ZcRQdJRqoXT70IZBVK7P9OGZOEk/bW3gPTLJCxYC5hn16ZFr5xcCRM+aCLgr8w7XH4CUC6WFSO5F/FnMrwNZCgp1QlcpA35DNWZ7PzBSWbrL6veDiG3mCg+jOlMf1IQ=
+	t=1758800791; cv=none; b=CaVDSVUw+MCtg0D/l89yjV4/1RsPDOdOvc7d6X7Cj5QrZ64OnjUUnWVLJ2wW07mJLDOFLVIu1A+GWbCvHN7HIkgeH/MRkZGBz+8NuS1F6/RHB3Rd28z5hkCyTbyl7TiRiC8fGalYLyfM9Eu1oM1ndIxXjghGvmr9MRx+u1dxCts=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758798976; c=relaxed/simple;
-	bh=fDQLdRzSJmuHNQkxmP5PqXzoQGXsDjWx1inTyaL1AQI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=p1FUDHyYWVb2wupMGHYMZqE5tK1pX9/eGGH6jzLL504t8debOeuXdawbpWiqT/bTqzhEo5h7UpwB3CzwAl6p1hK6p4F9lxvtaiFwtdLbOlG6HzsrCMkZiFr5Sr03Ak7BBfa8MlfQRiFPGW6NR/562W2XRSiyitYLKF9WXC+edU8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=txvyULf5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAD71C4CEF7
-	for <linux-pm@vger.kernel.org>; Thu, 25 Sep 2025 11:16:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758798975;
-	bh=fDQLdRzSJmuHNQkxmP5PqXzoQGXsDjWx1inTyaL1AQI=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=txvyULf5nbxiObU4BzXZZAzzroRdBTJJspK3mZSPcSM4/1EJ0hmTzcB6Nf6Tid1Mv
-	 aW7zpa82TEcPTi1gSi0z9fDKbySPmICnFio+kjpzQXgWr/jStNpa912Q1hmFb3o3H5
-	 33SH/g+gUMbqz6qezJAQ2CPb/Gr6ZdDcpFaJRTIBMCtt/57OO4zjDDVkIH0ms40jcu
-	 mSifuFXDCGKHkhrw4UIwPd2VP5w7aTBg95t9KxsqxYX1O7vTs1uJIq8wbc1k8A/o2i
-	 W+ZPksKSiBbqXBzbuAipKN9IBCMfNp3KrHUdwbYbQl8Ix50CeXBrEfNdmXZD9jv9+c
-	 cSpMnRudZp9BA==
-Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-332e66cd8e4so375179fac.2
-        for <linux-pm@vger.kernel.org>; Thu, 25 Sep 2025 04:16:15 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVBsbPqH82yBuBNhxYkRci6VKwxP0twOY9x6v+wGt3NMMTAT6Txw2R+wbtpd98zubQS9fDQIB9sZA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwzKqEDZ/FrJTn75YIi2ij3ERqtBbhOj008B6xbu4AIgcsi2Mxg
-	VdWnX888gkA7gcqAKdtk3y3ps+urkfFj+diG5xHQNHiGkFrTB7DrBN9jXxAdqRfszP/DudfJeLS
-	j9biEC6M5jtScHe47O6iWGBlgWzMCD4E=
-X-Google-Smtp-Source: AGHT+IHafUzhGBmN+xVEK4HkAcLgFcq2k7v2GHK3JiGAIsyUGVGNWDwDdgzwvEPjrjjcrQB8XEQvevxh7iz0rg1Q+2c=
-X-Received: by 2002:a05:6870:6126:b0:34b:27bd:666a with SMTP id
- 586e51a60fabf-35eeaa48d42mr1141756fac.51.1758798975128; Thu, 25 Sep 2025
- 04:16:15 -0700 (PDT)
+	s=arc-20240116; t=1758800791; c=relaxed/simple;
+	bh=7DUJfiYTs8+x3mc2MkZUdIPuwcqgS8adOyhUYXmp83s=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=dSJX0UM6D49i0xnj/75BKllDD6vSdkfhMC7HDFLRJJwkEDkS619ckvQcrJdECzSABHDyABXqpviA1k6sztWL7zJQb9Fg4dPzARcARxlcrFIpF/xOqW9V7Cj9VNWPv0kAFiakcW5h3Er0umejr0LUFWGqJ/TNwNhauegtphpb/7I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=BwL9nOEp; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58P9W2k2018033
+	for <linux-pm@vger.kernel.org>; Thu, 25 Sep 2025 11:46:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	SuXsHHwcpiqJfT9yqqeUFDXI9jlqCp7KFuFE7uhFDrQ=; b=BwL9nOEpWXZOCVxS
+	MSwnEg3+NGGJz/QjUi2JEUTIE2M/TeLzYM/bHQl+tRcJpy1YANBJAy19WT41iACs
+	a3KqOxg/1/Qr1qksLVLtSLsteL73hBt49YNZhf3/5rjdFIlRZUr3gziNSiloXwmS
+	hyWqE7Je8p1gl7fML9fJ2HoBcCl+YU+OMcGMcglx50q9I0G8YzqcUm4n7qupjl+x
+	i1qk9jj9UlXosc9RjhV65PtVzR1GSc1Ys1nwNA8q4IlSCDrhYpTx8V76klzSwr0L
+	n9YmaQ8t5zJiAwMdaKebboJI8dIfKaBdTDslK1YGQ4r6qr5ZVcJXn3aRU1Q3RSgO
+	UBmRlQ==
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com [209.85.160.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 49b3kkbwa1-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Thu, 25 Sep 2025 11:46:28 +0000 (GMT)
+Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-4cb12718bf7so1926181cf.1
+        for <linux-pm@vger.kernel.org>; Thu, 25 Sep 2025 04:46:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758800787; x=1759405587;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SuXsHHwcpiqJfT9yqqeUFDXI9jlqCp7KFuFE7uhFDrQ=;
+        b=Zm+pubaZPL/vhSEZgBSxaL0RXX29D13hIMT/6A5cB2wrncJODhULmRlQcgGojDvta3
+         WNaoUAHZXSj9Xd/42Xcby1JaNE3D5UTcJuMqhVUeV7RPMhGh0LNNC1oLJf+37EmvArDE
+         mXXiKxA7SRaNS3KMdHx+Iq3KKkBDgydhoFl1X/Mjdt1drzFCB4a7tmR8Jg4IZEL3q19L
+         vqznPt0TLwnkttUfjVrEixmKslgCSjxSBB164xWMTZ+1gzNWGaYd7vMracO61Hs38tS7
+         aehH4oCQR0ZfikkZ86yKGm0piQnq2QDUeBib1fv6VkkSWo/JacBZFFvePSton0DsV/7Z
+         AwZQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWs0yQya3bZ0438MIoD4OdYNrY+vGWFEqoxPMcZRjSG/AEArYymvMzwJuvgosLF5BKBbrBSATxQeg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz2EduOphqUcMCjy7Hd+KY3w1ZsJF0e7rzyP8dbWv92F96w6pCJ
+	QrcgoF9aapWXnRJuw6TMIOnZ1BkuOw+/dWpC6WTbvxseBC+V67tA8Fa2g5ETQPbofqua/k4UKyH
+	NtjxjWtmhcZp+A6oqp8dxwBDAGzG/WUiq6AbB/nml8HkSh0BxWXlpwCKYiIwAHQ==
+X-Gm-Gg: ASbGncuMvI37I7txaD37ueWqonmCo7CDJ+Vm96gM7n3zW+7cwa+7BR3rY/O4qLJqsgi
+	D8WA1nIj4jqxGuUjG8RvBslCN1hJhshGjQWhl1S9HZ3EY1hD2idOL+hlEJHCThnsNkEmJZGn/9w
+	Xh/jIooRDhIup8q92Y0tT1l9ntgbP4XIl4e4xr+XJ1hxO2afjfId4iKgMnUaQ+zorCiRQUMyKOk
+	+KxQB1EtqDjO/JmevmuFHLLEE0uARdCBMmpdMv3+DI7ioTnb9vDhU+9xCP/hfBfCNUiuPBPKHkA
+	8SInElbfh8eMsNp5pSEx6NrPtDpEGFWzKjP6mK+ozHA9iAH/l/OFePr4S/6w1tYLzYdcOd2h8Vf
+	Dhtl4z70nCT96kLgw8sX2ZQ==
+X-Received: by 2002:a05:622a:1905:b0:4d1:7b86:3618 with SMTP id d75a77b69052e-4da47c0cf8emr30175801cf.3.1758800787396;
+        Thu, 25 Sep 2025 04:46:27 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGO/ijx0jrPWvk4fdd8rSVeDWSkOXP0j+0q+c0/jbMYaJrmCFmJzEa0Qx+2CaDRqh27fdMYWQ==
+X-Received: by 2002:a05:622a:1905:b0:4d1:7b86:3618 with SMTP id d75a77b69052e-4da47c0cf8emr30175551cf.3.1758800786949;
+        Thu, 25 Sep 2025 04:46:26 -0700 (PDT)
+Received: from [192.168.149.223] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b370257a5c3sm4126666b.110.2025.09.25.04.46.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 Sep 2025 04:46:26 -0700 (PDT)
+Message-ID: <6f3e528b-0989-4d06-8b28-7d98d9de9548@oss.qualcomm.com>
+Date: Thu, 25 Sep 2025 13:46:23 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250922125929.453444-1-shawnguo2@yeah.net> <12764935.O9o76ZdvQC@rafael.j.wysocki>
- <aNT3k9OK82USu4n8@dragon>
-In-Reply-To: <aNT3k9OK82USu4n8@dragon>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 25 Sep 2025 13:16:02 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0jd+Th7cdbf7arto+spSbdvd37gk0YZEL5mh=0HK2id=Q@mail.gmail.com>
-X-Gm-Features: AS18NWDINpHUc47MEDXGMwzqgVPSTcDn3txgtXlXbHe1JLNEoukN9evapk2uawI
-Message-ID: <CAJZ5v0jd+Th7cdbf7arto+spSbdvd37gk0YZEL5mh=0HK2id=Q@mail.gmail.com>
-Subject: Re: [PATCH v2] cpufreq: Handle CPUFREQ_ETERNAL with a default
- transition latency
-To: Shawn Guo <shawnguo2@yeah.net>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
-	Qais Yousef <qyousef@layalina.io>, Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/3] pmdomain: qcom: rpmhpd: Add RPMh power domain support
+ for Kaanapali
+To: Jingyi Wang <jingyi.wang@oss.qualcomm.com>, Rob Herring
+ <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Cc: aiqun.yu@oss.qualcomm.com, tingwei.zhang@oss.qualcomm.com,
+        trilok.soni@oss.qualcomm.com, yijie.yang@oss.qualcomm.com,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Jishnu Prakash <jishnu.prakash@oss.qualcomm.com>
+References: <20250924-knp-pd-v1-0-b78444125c91@oss.qualcomm.com>
+ <20250924-knp-pd-v1-3-b78444125c91@oss.qualcomm.com>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <20250924-knp-pd-v1-3-b78444125c91@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-GUID: 1AN0AgqbT5kzK7n9u0IczRc0fBz1mpUs
+X-Proofpoint-ORIG-GUID: 1AN0AgqbT5kzK7n9u0IczRc0fBz1mpUs
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTIyMDA4OSBTYWx0ZWRfX04tHmUYZpKGw
+ XevfBIm1VVqDO7Dcma1CkiHa26melTPzXego3NWhu5LzMenrfaFSzaAmnsYXfGK5wG3Tc+YsUqj
+ RimZYhE9pHvjyM/FGNC/hiD+sICJU85AI77/Bjvkeapo/R9uPVxWIDmotEyYl9YxnaO0+J4LsPc
+ ajEFvGtWxJjxY+azaNvqOkeEjgSZjD7La67NQ6M9mCvR1VlXatgtERCk513h0ic4Jv6QsIUtvys
+ Nfb2UGPFo+6udipCn82xEC8WxxqSzpFOBv/MLigaqAlZVZtqbTXJC9iRxq/9cmDPo2Hkan1XgKh
+ INi1382rFLf97sgcr4wssP1oGiCKghWhplJ3/L+XkbEL6TsYWaSEiX4f+XPcltAohz2zyJ0XaFY
+ Y9uPaZVF
+X-Authority-Analysis: v=2.4 cv=BabY0qt2 c=1 sm=1 tr=0 ts=68d52b94 cx=c_pps
+ a=WeENfcodrlLV9YRTxbY/uA==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
+ a=IkcTkHD0fZMA:10 a=yJojWOMRYYMA:10 a=EUspDBNiAAAA:8 a=hka-zFMH_fk-WL56CYAA:9
+ a=QEXdDO2ut3YA:10 a=kacYvNCVWA4VmyqE58fU:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-09-25_01,2025-09-24_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ suspectscore=0 clxscore=1015 phishscore=0 bulkscore=0 priorityscore=1501
+ adultscore=0 malwarescore=0 spamscore=0 impostorscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2509220089
 
-On Thu, Sep 25, 2025 at 10:15=E2=80=AFAM Shawn Guo <shawnguo2@yeah.net> wro=
-te:
->
-> On Mon, Sep 22, 2025 at 08:31:56PM +0200, Rafael J. Wysocki wrote:
-> > What about the appended (untested) change instead?
->
-> I'm trying to address a regression with a fix to be ported for stable
-> kernel.  Not really sure it's a good idea to mix up with cleanup
-> changes.
+On 9/25/25 1:17 AM, Jingyi Wang wrote:
+> From: Jishnu Prakash <jishnu.prakash@oss.qualcomm.com>
+> 
+> Add the RPMh power domains present in Kaanapali SoCs. Also increase the
+> maximum allowed number of levels for ARC resources from 16 to 32, as
+> needed starting on the Kaanapali SoC where the ARC vote registers have been
+> expanded from 4 to 5 bits.
+> 
+> Signed-off-by: Jishnu Prakash <jishnu.prakash@oss.qualcomm.com>
+> Signed-off-by: Jingyi Wang <jingyi.wang@oss.qualcomm.com>
+> ---
 
-These are not cleanup changes, just a different way to address the given is=
-sue.
+Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 
-Instead of pretending that it still works as documented even though
-that's not the case strictly speaking, let's just get rid of it and
-let the code be simpler at the same time.
-
-
-> >
-> > With a follow-up one to replace CPUFREQ_ETERNAL with something internal
-> > to CPPC.
-> >
-> > ---
-> >  Documentation/admin-guide/pm/cpufreq.rst                  |    4 ----
-> >  Documentation/cpu-freq/cpu-drivers.rst                    |    3 +--
-> >  Documentation/translations/zh_CN/cpu-freq/cpu-drivers.rst |    3 +--
-> >  Documentation/translations/zh_TW/cpu-freq/cpu-drivers.rst |    3 +--
-> >  drivers/cpufreq/cppc_cpufreq.c                            |   14 +++++=
-+++++++--
-> >  drivers/cpufreq/cpufreq-dt.c                              |    2 +-
-> >  drivers/cpufreq/imx6q-cpufreq.c                           |    2 +-
-> >  drivers/cpufreq/mediatek-cpufreq-hw.c                     |    2 +-
-> >  drivers/cpufreq/scmi-cpufreq.c                            |    2 +-
-> >  drivers/cpufreq/scpi-cpufreq.c                            |    2 +-
-> >  drivers/cpufreq/spear-cpufreq.c                           |    2 +-
-> >  include/linux/cpufreq.h                                   |    7 ++++-=
---
-> >  12 files changed, 25 insertions(+), 21 deletions(-)
-> >
-> > --- a/Documentation/admin-guide/pm/cpufreq.rst
-> > +++ b/Documentation/admin-guide/pm/cpufreq.rst
-> > @@ -274,10 +274,6 @@ are the following:
-> >       The time it takes to switch the CPUs belonging to this policy fro=
-m one
-> >       P-state to another, in nanoseconds.
-> >
-> > -     If unknown or if known to be so high that the scaling driver does=
- not
-> > -     work with the `ondemand`_ governor, -1 (:c:macro:`CPUFREQ_ETERNAL=
-`)
-> > -     will be returned by reads from this attribute.
-> > -
-> >  ``related_cpus``
-> >       List of all (online and offline) CPUs belonging to this policy.
-> >
-> > --- a/Documentation/cpu-freq/cpu-drivers.rst
-> > +++ b/Documentation/cpu-freq/cpu-drivers.rst
-> > @@ -109,8 +109,7 @@ Then, the driver must fill in the follow
-> >  +-----------------------------------+---------------------------------=
------+
-> >  |policy->cpuinfo.transition_latency | the time it takes on this CPU to=
-          |
-> >  |                                | switch between two frequencies in  =
-  |
-> > -|                                | nanoseconds (if appropriate, else  =
-  |
-> > -|                                | specify CPUFREQ_ETERNAL)           =
-  |
-> > +|                                | nanoseconds                        =
-  |
-> >  +-----------------------------------+---------------------------------=
------+
-> >  |policy->cur                     | The current operating frequency of =
-  |
-> >  |                                | this CPU (if appropriate)          =
-  |
-> > --- a/Documentation/translations/zh_CN/cpu-freq/cpu-drivers.rst
-> > +++ b/Documentation/translations/zh_CN/cpu-freq/cpu-drivers.rst
-> > @@ -112,8 +112,7 @@ CPUfreq=E6=A0=B8=E5=BF=83=E5=B1=82=E6=B3=A8=E5=86=
-=8C=E4=B8=80=E4=B8=AAcpufreq_driv
-> >  |                                   |                                 =
-     |
-> >  +-----------------------------------+---------------------------------=
------+
-> >  |policy->cpuinfo.transition_latency | CPU=E5=9C=A8=E4=B8=A4=E4=B8=AA=
-=E9=A2=91=E7=8E=87=E4=B9=8B=E9=97=B4=E5=88=87=E6=8D=A2=E6=89=80=E9=9C=80=E7=
-=9A=84=E6=97=B6=E9=97=B4=EF=BC=8C=E4=BB=A5  |
-> > -|                                   | =E7=BA=B3=E7=A7=92=E4=B8=BA=E5=
-=8D=95=E4=BD=8D=EF=BC=88=E5=A6=82=E4=B8=8D=E9=80=82=E7=94=A8=EF=BC=8C=E8=AE=
-=BE=E5=AE=9A=E4=B8=BA         |
-> > -|                                   | CPUFREQ_ETERNAL=EF=BC=89        =
-            |
-> > +|                                   | =E7=BA=B3=E7=A7=92=E4=B8=BA=E5=
-=8D=95=E4=BD=8D                    |
-> >  |                                   |                                 =
-     |
-> >  +-----------------------------------+---------------------------------=
------+
-> >  |policy->cur                        | =E8=AF=A5CPU=E5=BD=93=E5=89=8D=
-=E7=9A=84=E5=B7=A5=E4=BD=9C=E9=A2=91=E7=8E=87(=E5=A6=82=E9=80=82=E7=94=A8) =
-         |
-> > --- a/Documentation/translations/zh_TW/cpu-freq/cpu-drivers.rst
-> > +++ b/Documentation/translations/zh_TW/cpu-freq/cpu-drivers.rst
-> > @@ -112,8 +112,7 @@ CPUfreq=E6=A0=B8=E5=BF=83=E5=B1=A4=E8=A8=BB=E5=86=
-=8A=E4=B8=80=E5=80=8Bcpufreq_driv
-> >  |                                   |                                 =
-     |
-> >  +-----------------------------------+---------------------------------=
------+
-> >  |policy->cpuinfo.transition_latency | CPU=E5=9C=A8=E5=85=A9=E5=80=8B=
-=E9=A0=BB=E7=8E=87=E4=B9=8B=E9=96=93=E5=88=87=E6=8F=9B=E6=89=80=E9=9C=80=E7=
-=9A=84=E6=99=82=E9=96=93=EF=BC=8C=E4=BB=A5  |
-> > -|                                   | =E7=B4=8D=E7=A7=92=E7=88=B2=E5=
-=96=AE=E4=BD=8D=EF=BC=88=E5=A6=82=E4=B8=8D=E9=81=A9=E7=94=A8=EF=BC=8C=E8=A8=
-=AD=E5=AE=9A=E7=88=B2         |
-> > -|                                   | CPUFREQ_ETERNAL=EF=BC=89        =
-            |
-> > +|                                   | =E7=B4=8D=E7=A7=92=E7=88=B2=E5=
-=96=AE=E4=BD=8D                    |
-> >  |                                   |                                 =
-     |
-> >  +-----------------------------------+---------------------------------=
------+
-> >  |policy->cur                        | =E8=A9=B2CPU=E7=95=B6=E5=89=8D=
-=E7=9A=84=E5=B7=A5=E4=BD=9C=E9=A0=BB=E7=8E=87(=E5=A6=82=E9=81=A9=E7=94=A8) =
-         |
-> > --- a/drivers/cpufreq/cppc_cpufreq.c
-> > +++ b/drivers/cpufreq/cppc_cpufreq.c
-> > @@ -308,6 +308,16 @@ static int cppc_verify_policy(struct cpu
-> >       return 0;
-> >  }
-> >
-> > +static unsigned int get_transition_latency(unsigned int cpu)
-> > +{
-> > +     unsigned int transition_latency_ns =3D cppc_get_transition_latenc=
-y(cpu);
-> > +
-> > +     if (transition_latency_ns =3D=3D CPUFREQ_ETERNAL)
-> > +             return CPUFREQ_DEFAULT_TRANSITION_LATENCY_NS / NSEC_PER_U=
-SEC;
-> > +
-> > +     return transition_latency_ns / NSEC_PER_USEC;
-> > +}
-> > +
-> >  /*
-> >   * The PCC subspace describes the rate at which platform can accept co=
-mmands
-> >   * on the shared PCC channel (including READs which do not count towar=
-ds freq
-> > @@ -330,12 +340,12 @@ static unsigned int cppc_cpufreq_get_tra
-> >                       return 10000;
-> >               }
-> >       }
-> > -     return cppc_get_transition_latency(cpu) / NSEC_PER_USEC;
-> > +     return get_transition_latency(cpu);
-> >  }
-> >  #else
-> >  static unsigned int cppc_cpufreq_get_transition_delay_us(unsigned int =
-cpu)
-> >  {
-> > -     return cppc_get_transition_latency(cpu) / NSEC_PER_USEC;
-> > +     return get_transition_latency(cpu);
-> >  }
-> >  #endif
-> >
-> > --- a/drivers/cpufreq/cpufreq-dt.c
-> > +++ b/drivers/cpufreq/cpufreq-dt.c
-> > @@ -104,7 +104,7 @@ static int cpufreq_init(struct cpufreq_p
-> >
-> >       transition_latency =3D dev_pm_opp_get_max_transition_latency(cpu_=
-dev);
-> >       if (!transition_latency)
-> > -             transition_latency =3D CPUFREQ_ETERNAL;
-> > +             transition_latency =3D CPUFREQ_DEFAULT_TRANSITION_LATENCY=
-_NS;
-> >
-> >       cpumask_copy(policy->cpus, priv->cpus);
-> >       policy->driver_data =3D priv;
-> > --- a/drivers/cpufreq/imx6q-cpufreq.c
-> > +++ b/drivers/cpufreq/imx6q-cpufreq.c
-> > @@ -442,7 +442,7 @@ soc_opp_out:
-> >       }
-> >
-> >       if (of_property_read_u32(np, "clock-latency", &transition_latency=
-))
-> > -             transition_latency =3D CPUFREQ_ETERNAL;
-> > +             transition_latency =3D CPUFREQ_DEFAULT_TRANSITION_LATENCY=
-_NS;
-> >
-> >       /*
-> >        * Calculate the ramp time for max voltage change in the
-> > --- a/drivers/cpufreq/mediatek-cpufreq-hw.c
-> > +++ b/drivers/cpufreq/mediatek-cpufreq-hw.c
-> > @@ -309,7 +309,7 @@ static int mtk_cpufreq_hw_cpu_init(struc
-> >
-> >       latency =3D readl_relaxed(data->reg_bases[REG_FREQ_LATENCY]) * 10=
-00;
-> >       if (!latency)
-> > -             latency =3D CPUFREQ_ETERNAL;
-> > +             latency =3D CPUFREQ_DEFAULT_TRANSITION_LATENCY_NS;
-> >
-> >       policy->cpuinfo.transition_latency =3D latency;
-> >       policy->fast_switch_possible =3D true;
-> > --- a/drivers/cpufreq/scmi-cpufreq.c
-> > +++ b/drivers/cpufreq/scmi-cpufreq.c
-> > @@ -294,7 +294,7 @@ static int scmi_cpufreq_init(struct cpuf
-> >
-> >       latency =3D perf_ops->transition_latency_get(ph, domain);
-> >       if (!latency)
-> > -             latency =3D CPUFREQ_ETERNAL;
-> > +             latency =3D CPUFREQ_DEFAULT_TRANSITION_LATENCY_NS;
-> >
-> >       policy->cpuinfo.transition_latency =3D latency;
-> >
-> > --- a/drivers/cpufreq/scpi-cpufreq.c
-> > +++ b/drivers/cpufreq/scpi-cpufreq.c
-> > @@ -157,7 +157,7 @@ static int scpi_cpufreq_init(struct cpuf
-> >
-> >       latency =3D scpi_ops->get_transition_latency(cpu_dev);
-> >       if (!latency)
-> > -             latency =3D CPUFREQ_ETERNAL;
-> > +             latency =3D CPUFREQ_DEFAULT_TRANSITION_LATENCY_NS;
-> >
-> >       policy->cpuinfo.transition_latency =3D latency;
-> >
-> > --- a/drivers/cpufreq/spear-cpufreq.c
-> > +++ b/drivers/cpufreq/spear-cpufreq.c
-> > @@ -182,7 +182,7 @@ static int spear_cpufreq_probe(struct pl
-> >
-> >       if (of_property_read_u32(np, "clock-latency",
-> >                               &spear_cpufreq.transition_latency))
-> > -             spear_cpufreq.transition_latency =3D CPUFREQ_ETERNAL;
-> > +             spear_cpufreq.transition_latency =3D CPUFREQ_DEFAULT_TRAN=
-SITION_LATENCY_NS;
-> >
-> >       cnt =3D of_property_count_u32_elems(np, "cpufreq_tbl");
-> >       if (cnt <=3D 0) {
-> > --- a/include/linux/cpufreq.h
-> > +++ b/include/linux/cpufreq.h
-> > @@ -26,12 +26,13 @@
-> >   *********************************************************************=
-/
-> >  /*
-> >   * Frequency values here are CPU kHz
-> > - *
-> > - * Maximum transition latency is in nanoseconds - if it's unknown,
-> > - * CPUFREQ_ETERNAL shall be used.
-> >   */
-> >
-> > +/* Represents unknown transition latency */
-> >  #define CPUFREQ_ETERNAL                      (-1)
-> > +
-> > +#define CPUFREQ_DEFAULT_TANSITION_LATENCY_NS NSEC_PER_MSEC
-> > +
-> >  #define CPUFREQ_NAME_LEN             16
-> >  /* Print length for names. Extra 1 space for accommodating '\n' in pri=
-nts */
-> >  #define CPUFREQ_NAME_PLEN            (CPUFREQ_NAME_LEN + 1)
-> >
-> >
-> >
-> >
->
+Konrad
 
