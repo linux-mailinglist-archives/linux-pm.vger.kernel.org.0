@@ -1,46 +1,46 @@
-Return-Path: <linux-pm+bounces-35392-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35393-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0064BA0829
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Sep 2025 17:59:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C35D8BA083B
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Sep 2025 17:59:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9B12217A234
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Sep 2025 15:59:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7937C3B4768
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Sep 2025 15:59:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 704723043C8;
-	Thu, 25 Sep 2025 15:59:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7E1730597D;
+	Thu, 25 Sep 2025 15:59:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TVfYkQ4A"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kQrYLilY"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B54A302CC0
-	for <linux-pm@vger.kernel.org>; Thu, 25 Sep 2025 15:59:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 940263054FC
+	for <linux-pm@vger.kernel.org>; Thu, 25 Sep 2025 15:59:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758815966; cv=none; b=KckySQfxmtEo18ElJvR8twXwcCRXErUzuz7LO9xqmjt5/GZ27sdB8ClGkghAlPgsmLXkVkXZUw67RFwmfWWBeW9shIyL9ZzJAMSqQQ4R9nWsfaPimgpoDsjk9FrvAi7IESyK9tUYaEQPS8FvMRnafTd+/NL5LAvS2a4BsAhm6CE=
+	t=1758815967; cv=none; b=ZtoVCK5BjtB+ya1wPiDQjhyNOtY/xmARektYAbb+EeTgFDDw2eDhmUpwhq/FX5wxjKnQgNeaOJKyao0ES3Yxh5FIq1bMl0cfCypizMJK/6AGkuetMWfzoMm9XNwmWaJgBuJoFxYgu6/uuUH+wR38FO4eaz5gK4F0JulfbsbFV04=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758815966; c=relaxed/simple;
-	bh=1qVpIW/qhyQp1NzMcZoqBdC2H/v/64nZZsBZmTWFik8=;
+	s=arc-20240116; t=1758815967; c=relaxed/simple;
+	bh=INk8pAkP1MKRcuSN9wuYkgmnh4DJkRPi0ztA4HKAiUU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nzDPBTqOIV7GkbHMyGM2VNJ1/IWips/aPbkqW0q+WcWoNfZ+Ws3/Xoh6zNm3Jec0bR2QkvXXUW2biLqHm6WJ4jExGYGJTUvMezO7a2vEWd1u67GGnRKdOKK8MIv5RklY9GdqvhA8cB8pTBiTWMT3xJIirJ8fl37JLKUGgGqJIr4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TVfYkQ4A; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53393C4CEF5;
-	Thu, 25 Sep 2025 15:59:25 +0000 (UTC)
+	 MIME-Version; b=fFE40s8ZT0o1rqaW41jRB2GM7YnUN3l4gWeNcmBjVQm2BqPCI+Kfu/kh7QGwtaUXLR/Oc7Bv5QPWoPeSHRF/ieeqIvDB+VPmD3ldb5qw2OjXg2ZUr/ERVp3RGVgXOFvI1IU+Bx30hLsUrzDfR4g9zKNcKuh6Bjh8SweeY9buuQU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kQrYLilY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DA8DC4CEF0;
+	Thu, 25 Sep 2025 15:59:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758815966;
-	bh=1qVpIW/qhyQp1NzMcZoqBdC2H/v/64nZZsBZmTWFik8=;
+	s=k20201202; t=1758815967;
+	bh=INk8pAkP1MKRcuSN9wuYkgmnh4DJkRPi0ztA4HKAiUU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=TVfYkQ4AigyKfPmaizC/twS4QDMmckiHoN3Fq4uLxKYYMmhNj+d4e6glkrsuTVyQp
-	 neRBEMUIu+34rsK2JUq4+D3CQWH0VFkvoEUpcZ17FisaMryHQVMfACNE+rOxU8eTDN
-	 Q/H3W+Nf0XjKYL2uYnPjo4Z7gCAQbhkc5ZG563zeUY9vp64P+tTPYdcp24A9FiOV47
-	 +o9+f9+T7cQPMoFAVivJB+QqIJltpXmKKQtrc3QRT7H+K7z1onW4UaXI4U8AijFTuk
-	 44k+WCQVWtRinvbbfEpxwwZHqOmw8LJNXSjQgeMoc7J+FJhmhInrQqlise10tNU4qg
-	 f3qTXeLGAlyjQ==
+	b=kQrYLilY0sI7d0B37e4LLUA+Kip4Xz3sHc+NCAn96xhjxjfbAOMejuhXqv6fuLGSa
+	 CJ+7PyE/aMP4AGuftLxy/AIHUjfmN6HLHl40oNXSbcvBNQLXcaTzXwCuN2VJIOQ5ig
+	 dsO79KIBBDuEfi2HYwKlTD2WeZVHsQ4OuFbUEFqHwmaBTUSXPpWGGWt5kvKNrO515Z
+	 ge6YKEO4Uq+ez5/vdReAg2/+4RNAyJ4wQupGKZnNlQ2pHrV3g/aAROKseSWbZ9goz/
+	 xZlEOUBoNbqmeSmjEYnKUsI5KXmbDkWEs/YTKQbbkPv/ykw1udXGGj32TtwEQbti28
+	 GKcusOwSF5dwA==
 From: "Mario Limonciello (AMD)" <superm1@kernel.org>
 To: Alex Deucher <alexander.deucher@amd.com>,
 	"Rafael J . Wysocki" <rafael@kernel.org>
@@ -50,9 +50,9 @@ Cc: Samuel Zhang <guoqing.zhang@amd.com>,
 	"Mario Limonciello (AMD)" <superm1@kernel.org>,
 	Ionut Nechita <ionut_n2001@yahoo.com>,
 	Kenneth Crudup <kenny@panix.com>
-Subject: [PATCH v2 1/3] PM: hibernate: Fix hybrid-sleep
-Date: Thu, 25 Sep 2025 10:59:16 -0500
-Message-ID: <20250925155918.2725474-2-superm1@kernel.org>
+Subject: [PATCH v2 2/3] PM: hibernate: Add pm_hibernation_mode_is_suspend()
+Date: Thu, 25 Sep 2025 10:59:17 -0500
+Message-ID: <20250925155918.2725474-3-superm1@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250925155918.2725474-1-superm1@kernel.org>
 References: <20250925155918.2725474-1-superm1@kernel.org>
@@ -64,25 +64,14 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hybrid sleep will hibernate the system followed by running through
-the suspend routine.  Since both the hibernate and the suspend routine
-will call pm_restrict_gfp_mask(), pm_restore_gfp_mask() must be called
-before starting the suspend sequence.
+Some drivers have different flows for hibernation and suspend. If
+the driver opportunistically will skip thaw() then it needs a hint
+to know what is happening after the hibernate.
 
-Add an explicit call to pm_restore_gfp_mask() to power_down() before
-the suspend sequence starts. Don't call pm_restore_gfp_mask() when
-exiting suspend sequence it is already called:
+Introduce a new symbol pm_hibernation_mode_is_suspend() that drivers
+can call to determine if suspending the system for this purpose.
 
-```
-power_down()
-->suspend_devices_and_enter()
--->dpm_resume_end()
-```
-
-Reported-by: Ionut Nechita <ionut_n2001@yahoo.com>
-Closes: https://gitlab.freedesktop.org/drm/amd/-/issues/4573
 Tested-by: Ionut Nechita <ionut_n2001@yahoo.com>
-Fixes: 12ffc3b1513eb ("PM: Restrict swap use to later in the suspend sequence")
 Tested-by: Kenneth Crudup <kenny@panix.com>
 Acked-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Mario Limonciello (AMD) <superm1@kernel.org>
@@ -91,38 +80,52 @@ v2:
  * Move under CONFIG_SUSPEND scope (LKP robot)
  * Add tags
 ---
- kernel/power/hibernate.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ include/linux/suspend.h  |  2 ++
+ kernel/power/hibernate.c | 11 +++++++++++
+ 2 files changed, 13 insertions(+)
 
+diff --git a/include/linux/suspend.h b/include/linux/suspend.h
+index 317ae31e89b37..0664c685f0b24 100644
+--- a/include/linux/suspend.h
++++ b/include/linux/suspend.h
+@@ -276,6 +276,7 @@ extern void arch_suspend_enable_irqs(void);
+ 
+ extern int pm_suspend(suspend_state_t state);
+ extern bool sync_on_suspend_enabled;
++bool pm_hibernation_mode_is_suspend(void);
+ #else /* !CONFIG_SUSPEND */
+ #define suspend_valid_only_mem	NULL
+ 
+@@ -288,6 +289,7 @@ static inline bool pm_suspend_via_firmware(void) { return false; }
+ static inline bool pm_resume_via_firmware(void) { return false; }
+ static inline bool pm_suspend_no_platform(void) { return false; }
+ static inline bool pm_suspend_default_s2idle(void) { return false; }
++static inline bool pm_hibernation_mode_is_suspend(void) { return false; }
+ 
+ static inline void suspend_set_ops(const struct platform_suspend_ops *ops) {}
+ static inline int pm_suspend(suspend_state_t state) { return -ENOSYS; }
 diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-index 2f66ab4538231..52c1818749724 100644
+index 52c1818749724..09f5271c98f35 100644
 --- a/kernel/power/hibernate.c
 +++ b/kernel/power/hibernate.c
-@@ -695,6 +695,7 @@ static void power_down(void)
+@@ -80,6 +80,17 @@ static const struct platform_hibernation_ops *hibernation_ops;
  
- #ifdef CONFIG_SUSPEND
- 	if (hibernation_mode == HIBERNATION_SUSPEND) {
-+		pm_restore_gfp_mask();
- 		error = suspend_devices_and_enter(mem_sleep_current);
- 		if (error) {
- 			hibernation_mode = hibernation_ops ?
-@@ -862,7 +863,15 @@ int hibernate(void)
- 				power_down();
- 		}
- 		in_suspend = 0;
--		pm_restore_gfp_mask();
-+		switch (hibernation_mode) {
+ static atomic_t hibernate_atomic = ATOMIC_INIT(1);
+ 
 +#ifdef CONFIG_SUSPEND
-+		case HIBERNATION_SUSPEND:
-+			break;
++/**
++ * pm_hibernation_mode_is_suspend - Check if hibernation has been set to suspend
++ */
++bool pm_hibernation_mode_is_suspend(void)
++{
++	return hibernation_mode == HIBERNATION_SUSPEND;
++}
++EXPORT_SYMBOL_GPL(pm_hibernation_mode_is_suspend);
 +#endif
-+		default:
-+			pm_restore_gfp_mask();
-+			break;
-+		}
- 	} else {
- 		pm_pr_dbg("Hibernation image restored successfully.\n");
- 	}
++
+ bool hibernate_acquire(void)
+ {
+ 	return atomic_add_unless(&hibernate_atomic, -1, 0);
 -- 
 2.43.0
 
