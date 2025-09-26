@@ -1,131 +1,87 @@
-Return-Path: <linux-pm+bounces-35446-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35447-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25F1EBA333C
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Sep 2025 11:41:23 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id C058BBA335F
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Sep 2025 11:45:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DAFD2174687
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Sep 2025 09:41:22 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 8D3344E1C4A
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Sep 2025 09:45:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C07B5291C1E;
-	Fri, 26 Sep 2025 09:41:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53E6527781E;
+	Fri, 26 Sep 2025 09:45:53 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA15D26C391;
-	Fri, 26 Sep 2025 09:41:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DD5B26C3AE;
+	Fri, 26 Sep 2025 09:45:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758879678; cv=none; b=NQ3yhzK5VvsR8oJIyVxLzpA5Cyl+BLIf5msDvsTKYTDuFG8JT9mcGJdIBfpHseu8Yyga2XP1hBSF/HHZ5KPsmvg/JrRVEaPtod7X2Y9Ik5pBFt2uZZ/WQXb9dZ3ZW2talFZ70voAovK99mA85jQgFhcpHmOt1yfgK5PfVrDbgA4=
+	t=1758879953; cv=none; b=ol251s4bFqcn0Jegmf1JjF/fXG0MYFexpcFHk3EX6NXfxAHMaO1HEwWLE8WaYp1bgVywfOMs7teHM8irILTqdm7R1uvRLwl0EV3IJlaos9Y/nd6+JBtem3NA5wM1/LjrneQArfhw22vUHi0DCjpkrNq2X3Nc73JXv4FSg70tvgo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758879678; c=relaxed/simple;
-	bh=VACKunmSgWGIegqrjvsKz7Yahv49ulYM3NKnwvZtZrw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=fY65CNweFDY4BDz0TDjLlr1i8vLkqjKwRxOIG7f3mnO017UaNamdnilzhcyCWAZgFdLwcvJNfIwaxzEcrRmrKEUVUToFpcd7yxibLL2RZN8/m8BRbpa6ggL8dRwKrqwdZSM8V2eS90le4kaZtibK0//py4YLp0+UIQULj7FrPY0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com; spf=pass smtp.mailfrom=hisilicon.com; arc=none smtp.client-ip=45.249.212.187
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hisilicon.com
-Received: from mail.maildlp.com (unknown [172.19.162.254])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4cY5Dh3MXGzvX1j;
-	Fri, 26 Sep 2025 17:40:52 +0800 (CST)
-Received: from kwepemr500004.china.huawei.com (unknown [7.202.195.141])
-	by mail.maildlp.com (Postfix) with ESMTPS id E8874180491;
-	Fri, 26 Sep 2025 17:41:12 +0800 (CST)
-Received: from [10.67.121.58] (10.67.121.58) by kwepemr500004.china.huawei.com
- (7.202.195.141) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Fri, 26 Sep
- 2025 17:41:12 +0800
-Message-ID: <08e83a78-d2d8-46b7-9062-15c898ef85c8@hisilicon.com>
-Date: Fri, 26 Sep 2025 17:41:11 +0800
+	s=arc-20240116; t=1758879953; c=relaxed/simple;
+	bh=W6dmbj3nQuaOh1PvpWfrOaUzQV1DSYuduBdMkyJok1U=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=bUkIXxDboqKL0nZq7kP0EkKVwZ9zkUCVVTjzrvAyMjmqy4/uM6s5jLYsD2Je7NjhNsj4qDdyabcMXP989WAI0d83uddWGsfS4/qSqtxvd+LDaeWZvcWr9J2B1/SS3pFmDSbgwp6SrMGQy/nrTfh8QtmH4CfOMAyZ4k2R65jmhC8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 8dac07389abd11f08b9f7d2eb6caa7cf-20250926
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.45,REQID:8877f317-ac53-4448-93d3-6e10cc58c33d,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:6493067,CLOUDID:186bffe941cd4aec285e7a474c697022,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102|817|850,TC:nil,Content:-
+	10|-8|-5|50,EDM:-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,CO
+	L:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 1,FCT|NGT
+X-CID-BAS: 1,FCT|NGT,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: 8dac07389abd11f08b9f7d2eb6caa7cf-20250926
+X-User: zhangzihuan@kylinos.cn
+Received: from localhost.localdomain [(10.44.16.150)] by mailgw.kylinos.cn
+	(envelope-from <zhangzihuan@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 1705799856; Fri, 26 Sep 2025 17:45:36 +0800
+From: Zihuan Zhang <zhangzihuan@kylinos.cn>
+To: rafael@kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	viresh.kumar@linaro.org,
+	zhangzihuan@kylinos.cn,
+	zhenglifeng1@huawei.com
+Subject: Re: [Question] About unnecessary policy_has_boost_freq() calls in freq_table.c
+Date: Fri, 26 Sep 2025 17:45:33 +0800
+Message-Id: <20250926094533.542873-1-zhangzihuan@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <CAJZ5v0hshbbbTncpkZoS98jq+ChiARSZCNn5P8kaEduADbmHSw@mail.gmail.com>
+References: <CAJZ5v0hshbbbTncpkZoS98jq+ChiARSZCNn5P8kaEduADbmHSw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 2/4] cpufreq: CPPC: Avoid using CPUFREQ_ETERNAL as
- transition delay
-To: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM
-	<linux-pm@vger.kernel.org>
-CC: Shawn Guo <shawnguo@kernel.org>, Qais Yousef <qyousef@layalina.io>, LKML
-	<linux-kernel@vger.kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>,
-	Prashanth Prakash <pprakash@codeaurora.org>, Pierre Gondois
-	<pierre.gondois@arm.com>, Mario Limonciello <mario.limonciello@amd.com>,
-	Linux ACPI <linux-acpi@vger.kernel.org>
-References: <8605612.T7Z3S40VBb@rafael.j.wysocki>
- <22867781.EfDdHjke4D@rafael.j.wysocki>
-Content-Language: en-US
-From: Jie Zhan <zhanjie9@hisilicon.com>
-In-Reply-To: <22867781.EfDdHjke4D@rafael.j.wysocki>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
- kwepemr500004.china.huawei.com (7.202.195.141)
+Content-Transfer-Encoding: 8bit
 
+> First off, setting policy->boost_supported doesn't really belong to
+> cpufreq_table_validate_and_sort(), so the idea of splitting it off
+> that function sounds reasonable to me.
+> 
 
+Agreed.
 
-On 9/25/2025 11:44 PM, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> If cppc_get_transition_latency() returns CPUFREQ_ETERNAL to indicate a
-> failure to retrieve the transition latency value from the platform
-> firmware, the CPPC cpufreq driver will use that value (converted to
-> microseconds) as the policy transition delay, but it is way too large
-> for any practical use.
-> 
-> Address this by making the driver use the cpufreq's default
-> transition latency value (in microseconds) as the transition delay
-> if CPUFREQ_ETERNAL is returned by cppc_get_transition_latency().
-> 
-> Fixes: d4f3388afd48 ("cpufreq / CPPC: Set platform specific transition_delay_us")
-> Cc: 5.19+ <stable@vger.kernel.org> # 5.19
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
->  drivers/cpufreq/cppc_cpufreq.c |   14 ++++++++++++--
->  1 file changed, 12 insertions(+), 2 deletions(-)
-> 
-> --- a/drivers/cpufreq/cppc_cpufreq.c
-> +++ b/drivers/cpufreq/cppc_cpufreq.c
-> @@ -308,6 +308,16 @@ static int cppc_verify_policy(struct cpu
->  	return 0;
->  }
->  
-> +static unsigned int get_transition_latency_from_cppc(unsigned int cpu)
-Minor bit:
-Can we name it as __cppc_cpufreq_get_transition_delay_us() because:
-1. 'get_xxx' naming looks a bit different from other funcs in cppc_cpufreq.c
-2. This is actually the main routine of cppc_cpufreq_get_transition_delay_us().
-It's factored out just for the qualcomm workaround.
-> +{
-> +	unsigned int transition_latency_ns = cppc_get_transition_latency(cpu);
-> +
-> +	if (transition_latency_ns == CPUFREQ_ETERNAL)
-> +		return CPUFREQ_DEFAULT_TRANSITION_LATENCY_NS / NSEC_PER_USEC;
-> +
-> +	return transition_latency_ns / NSEC_PER_USEC;
-> +}
-> +
->  /*
->   * The PCC subspace describes the rate at which platform can accept commands
->   * on the shared PCC channel (including READs which do not count towards freq
-> @@ -330,12 +340,12 @@ static unsigned int cppc_cpufreq_get_tra
->  			return 10000;
->  		}
->  	}
-> -	return cppc_get_transition_latency(cpu) / NSEC_PER_USEC;
-> +	return get_transition_latency_from_cppc(cpu);
->  }
->  #else
->  static unsigned int cppc_cpufreq_get_transition_delay_us(unsigned int cpu)
->  {
-> -	return cppc_get_transition_latency(cpu) / NSEC_PER_USEC;
-> +	return get_transition_latency_from_cppc(cpu);
->  }
->  #endif
->  
+> However, cpufreq_boost_set_sw() is used as a .set_boost() callback, so
+> it gets called every time the "boost enabled" setting is changed.  It
+> doesn't look like a good place for updating policy->boost_supported to
+> me.
+
+Got it, where would you suggest updating policy->boost_supported instead?
+
+Thanks!
+
 
