@@ -1,201 +1,216 @@
-Return-Path: <linux-pm+bounces-35451-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35453-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D0150BA3565
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Sep 2025 12:23:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C071DBA35B5
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Sep 2025 12:32:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1607862648B
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Sep 2025 10:23:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7609D3865D8
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Sep 2025 10:32:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BF632EFDAE;
-	Fri, 26 Sep 2025 10:23:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09BFD2F49E0;
+	Fri, 26 Sep 2025 10:32:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="W/NchGsh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O2Ku2OXw"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70E6327A92A
-	for <linux-pm@vger.kernel.org>; Fri, 26 Sep 2025 10:23:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D29D12D5410;
+	Fri, 26 Sep 2025 10:32:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758882212; cv=none; b=MwyFTNE6sxWK0ioshv3AC1LuumGrM66zzd61bvzQxcKg1yVGUxh9QurhDJXlVNDrKG7cbyjbNUGWjKUtL7rjwQDOaNC4RWxe+ZQgg6kRK9elyRG6HerRBUmxkJAPm/lWScBKQxeohWkJvAAP/uSQ2AVWfsoABNZVN1Hmk4Hk/YQ=
+	t=1758882735; cv=none; b=fzUXrVyjiCMb5eXng+CJ9HD/1wxcKp76YBMSffhM6YLygS6jcln3CJN0x0saoBjUT6THv9KIgnUGaBx1m48CTwA4s2tZq0R0LFcIlEmvIYrueLmKd10PHJFwwXqbQ8a7f+GBBYtQTuS0NgJWdEoZ0+7rAJyldt2mFxdpzvSoFCU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758882212; c=relaxed/simple;
-	bh=4K0wqVJ9eczfWiqnopYF3vVChENOHFUsOcB5QiOAapo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SNN2c8M6nvLALXsZqn3445f26mmNWtM1YpE1TKKQDWwyi5hUOY5sVH64DHCryYLcQqLRTRyU2uPgRK/ssGYa6VbSFUwrdXcCJkmwhObOqsnr3ZHs5G2zkg4cHZL6W2fu4GQqmLeMKLMcm1iYUK/+izoHXpKSytT+sO3o9oZycrU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=W/NchGsh; arc=none smtp.client-ip=209.85.210.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-78115430134so538745b3a.1
-        for <linux-pm@vger.kernel.org>; Fri, 26 Sep 2025 03:23:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1758882209; x=1759487009; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=w5mjd6nLxKs02Ww/P7pqDd7HAKGioYvOr/N7xDzcLcY=;
-        b=W/NchGshZGkPeVP8GG7wOKY5VR+lybtOt9IlroG7tBRzFRTjvtjhl6REcR6cClcOYO
-         6FVQAcXU2VtVyFJG0DE4GEDMM977Lpi+6PKFEOtYOHZTAWSUCpgM0MFj3ReMA7iIrn8G
-         wVQbZvkXzlc+/wzhl0QR3qqYULLjbZ8DV5qro=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758882209; x=1759487009;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=w5mjd6nLxKs02Ww/P7pqDd7HAKGioYvOr/N7xDzcLcY=;
-        b=Nf6SKv6aZ9BEf+kFGRKOP4BpvuMZmrnr8fF9Tz3hBj8FMeXWQjY3/sucDTakRRQnSR
-         lBa+hebkfWaM+9EaSlkIkgYpUyi4F8DuodeTfM88+ysmCLFYuHjHPf9uiEvhto9ln6XP
-         x8DSXoDLZPob9meRXHEMgC88UpWa0ziIDTjpMckB4vfbu0kkiKBDezM0+9QadRjv+XZ4
-         f5jVU8tlYCy7qvutgbjMijKjmLmGhdiQ9pErsk9WRkfWVEaUhq06nt4DuEtEKRhfT0ZI
-         BZTRQ42QGn4iByM0Z65LufpLN6iSCgeaMBHIiPbPQe4P7wGpx4RAnJHfT+LCRZVSUzwa
-         /Mtg==
-X-Forwarded-Encrypted: i=1; AJvYcCXlcBCl2IxqXqqDq0qMMEKBUXFB+xcdQWh+TwE5kujWSiHhCcK33KgSxGwEAuOogsjY7C1dORKxPQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwYsiGSxFadsMA9NLpXXGEUqX7jGjTl8XKmw2SV2RNELJDxRQGE
-	hOIruoig5EvTV88JJ7djb+HRdzy4+BDgLwf7Bu0A8VjlmFFJV08MxgN9RLNFvHGzvw==
-X-Gm-Gg: ASbGncuvupCkZktRpoXT/nDLOh5wivy1vPUQU36Uk1PnUKrxYCtgoGhL/4Or731KDl/
-	+944FbIeOALAnRyPZp88s3v7a/u0hbeR40nCpNiJVMAIOjxbkjRU6LyxAztmXyhoDSwv7BiXhHo
-	WAcz5xkQgM81SR4aQHF5+5KcnWSxsM4clxHD25oyjpapMM81hRLIubt67fUVaIg2ZO1jZCgZTWA
-	T6/f0S2DDh7V9466PuEgcUWVn8dVjbUb+dTdqv20v2un8IACVJ/W1irGT6VCe6QCmsZ2IdmMcWA
-	a7t8dyAbHCDh30qyhKqlMrBb5v4JY1fve8IJvxTGnaXD3CQA2Kj9vrBptir/ciPVwLA7cRGf3j3
-	XUiQQvDF890lKEuBMXrQI3nh0tDAnpkbidH1iDEhPlOWmrWbqD7o6FrdUjcaqKGzEqQba9AEdz2
-	xy/QATzhj/tjBQDkT006I=
-X-Google-Smtp-Source: AGHT+IGYRUggPUFZvLH1WiVKpxyZzaen0jkQTx9Ti3sbPmMgM6KTc3sQs3R4T678nozJvNs7/WD6Ig==
-X-Received: by 2002:a05:6a00:1896:b0:77f:4b9b:8c34 with SMTP id d2e1a72fcca58-780fceeb3b7mr7559015b3a.31.1758882208839;
-        Fri, 26 Sep 2025 03:23:28 -0700 (PDT)
-Received: from treapking.tpe.corp.google.com ([2a00:79e0:201d:8:2900:382d:6893:1b9b])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7810238f11esm4137236b3a.19.2025.09.26.03.23.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Sep 2025 03:23:28 -0700 (PDT)
-From: Pin-yen Lin <treapking@chromium.org>
-To: "Rafael J . Wysocki" <rafael@kernel.org>,
-	Len Brown <lenb@kernel.org>,
-	Pavel Machek <pavel@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Saravana Kannan <saravanak@google.com>
-Cc: linux-kernel@vger.kernel.org,
-	Hsin-Te Yuan <yuanhsinte@chromium.org>,
-	Chen-Yu Tsai <wenst@chromium.org>,
-	linux-pm@vger.kernel.org,
-	Pin-yen Lin <treapking@chromium.org>
-Subject: [PATCH v4] PM: sleep: Don't wait for SYNC_STATE_ONLY device links
-Date: Fri, 26 Sep 2025 18:23:18 +0800
-Message-ID: <20250926102320.4053167-1-treapking@chromium.org>
-X-Mailer: git-send-email 2.51.0.536.g15c5d4f767-goog
+	s=arc-20240116; t=1758882735; c=relaxed/simple;
+	bh=nvfO/ihARasVkSEkSuTvDx8ZpG635NgjIs3JtfpG71o=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=R6qE6EsAj9Yj7jMKYqz8MbBftXSilRgxZBNP1HpvKEFJQV11kAbjKHf3Ul3lHpZ6lB06t2ohItK/putq43pyF7ha1JwHQuOe250L+z/WIuAFHFdzigCF+v73HmLVqp+kA7xkfqNkcSiT5mRWuvL9NdTCJau9TePgcoFf7/o8uRQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O2Ku2OXw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2AD7C4CEF7;
+	Fri, 26 Sep 2025 10:32:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1758882735;
+	bh=nvfO/ihARasVkSEkSuTvDx8ZpG635NgjIs3JtfpG71o=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=O2Ku2OXwVpOYqXMt3WPthb+TFuPePw8jtwVKejrXUHLnXQpkTlKZ5URNeS7a5zctT
+	 eC1CqIkbtbC6D1Ny/FInFzHvf27qkBzkDWGowSDSyAE4to8x3ZtYu5oxE4txcJROF0
+	 7RHcIdixEe5FYwSpJ/4po1oR4GDvTfXyROFR3oXHYNbNra+Qni6GfmHjJdK50d/BiW
+	 SGPyTEf3IH2l+5YfWjKuw7+YJAGTcOfVkJ7KAFJAFNaeNxIB8XvcQXHQg4PccS7cFc
+	 v4Uq8uwlUYs+lmxzDBoGa47PW0sv0217H21DwW32iABgD0IcehXHT7qrWuGaXU+D+I
+	 hYVh12ogPrmPg==
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+To: Linux PM <linux-pm@vger.kernel.org>
+Cc: Shawn Guo <shawnguo@kernel.org>, Qais Yousef <qyousef@layalina.io>,
+ LKML <linux-kernel@vger.kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>,
+ Pierre Gondois <pierre.gondois@arm.com>,
+ Mario Limonciello <mario.limonciello@amd.com>,
+ Linux ACPI <linux-acpi@vger.kernel.org>, Jie Zhan <zhanjie9@hisilicon.com>
+Subject:
+ [PATCH v3 3/4] ACPI: CPPC: Do not use CPUFREQ_ETERNAL as an error value
+Date: Fri, 26 Sep 2025 12:29:50 +0200
+Message-ID: <7882184.EvYhyI6sBW@rafael.j.wysocki>
+Organization: Linux Kernel Development
+In-Reply-To: <5069803.31r3eYUQgx@rafael.j.wysocki>
+References: <5069803.31r3eYUQgx@rafael.j.wysocki>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
 
-Device links with DL_FLAG_SYNC_STATE_ONLY should not affect suspend
-and resume, and functions like device_reorder_to_tail() and
-device_link_add() doesn't try to reorder the consumers with such flag.
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-However, dpm_wait_for_consumers() and dpm_wait_for_suppliers() doesn't
-check this flag before triggering dpm_wait, leading to potential hang
-during suspend/resume.
+Instead of using CPUFREQ_ETERNAL for signaling an error condition
+in cppc_get_transition_latency(), change the return value type of
+that function to int and make it return a proper negative error
+code on failures.
 
-This can be reproduced on MT8186 Corsola Chromebook with devicetree like:
+No intentional functional impact.
 
-usb-a-connector {
-        compatible = "usb-a-connector";
-        port {
-                usb_a_con: endpoint {
-                        remote-endpoint = <&usb_hs>;
-                };
-        };
-};
-
-usb_host {
-        compatible = "mediatek,mt8186-xhci", "mediatek,mtk-xhci";
-        port {
-                usb_hs: endpoint {
-                        remote-endpoint = <&usb_a_con>;
-                };
-        };
-};
-
-In this case, the two nodes form a cycle and a SYNC_STATE_ONLY devlink
-between usb_host (supplier) and usb-a-connector (consumer) is created.
-
-Export device_link_flag_is_sync_state_only() and use it to check this in
-dpm_wait_for_consumers() and dpm_wait_for_suppliers() to fix this.
-
-Fixes: 05ef983e0d65a ("driver core: Add device link support for SYNC_STATE_ONLY flag")
-Signed-off-by: Pin-yen Lin <treapking@chromium.org>
+Reviewed-by: Mario Limonciello (AMD) <superm1@kernel.org>
+Reviewed-by: Jie Zhan <zhanjie9@hisilicon.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
 
-Changes in v4:
-- Remove inline for device_link_flag_is_sync_state_only()
+v2 -> v3:
+   * Combine two if () statements in cppc_get_transition_latency() (Jie Zhan)
+   * Add tags from Mario Limonciello and Jie Zhan
 
-Changes in v3:
-- Squash to one patch and fix the export approach
+v1 -> v2:
+   * Change cppc_get_transition_latency() return value data type to int
+   * Make it return -ENODATA on errors (Mario)
+   * Update its callers accordingly
+   * Adjust the subject and changelog
+   * Add a missing empty code line to cppc_get_transition_latency()
 
-Changes in v2:
-- Update commit message
-- Use device_link_flag_is_sync_state_only()
+---
+ drivers/acpi/cppc_acpi.c       |   16 +++++++---------
+ drivers/cpufreq/amd-pstate.c   |    8 ++++----
+ drivers/cpufreq/cppc_cpufreq.c |    4 ++--
+ include/acpi/cppc_acpi.h       |    6 +++---
+ 4 files changed, 16 insertions(+), 18 deletions(-)
 
- drivers/base/base.h       | 1 +
- drivers/base/core.c       | 2 +-
- drivers/base/power/main.c | 6 ++++--
- 3 files changed, 6 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/base/base.h b/drivers/base/base.h
-index 123031a757d9..80415b140ce7 100644
---- a/drivers/base/base.h
-+++ b/drivers/base/base.h
-@@ -248,6 +248,7 @@ void device_links_driver_cleanup(struct device *dev);
- void device_links_no_driver(struct device *dev);
- bool device_links_busy(struct device *dev);
- void device_links_unbind_consumers(struct device *dev);
-+bool device_link_flag_is_sync_state_only(u32 flags);
- void fw_devlink_drivers_done(void);
- void fw_devlink_probing_done(void);
- 
-diff --git a/drivers/base/core.c b/drivers/base/core.c
-index d22d6b23e758..a54ec6df1058 100644
---- a/drivers/base/core.c
-+++ b/drivers/base/core.c
-@@ -287,7 +287,7 @@ static bool device_is_ancestor(struct device *dev, struct device *target)
- #define DL_MARKER_FLAGS		(DL_FLAG_INFERRED | \
- 				 DL_FLAG_CYCLE | \
- 				 DL_FLAG_MANAGED)
--static inline bool device_link_flag_is_sync_state_only(u32 flags)
-+bool device_link_flag_is_sync_state_only(u32 flags)
+--- a/drivers/acpi/cppc_acpi.c
++++ b/drivers/acpi/cppc_acpi.c
+@@ -1876,7 +1876,7 @@ EXPORT_SYMBOL_GPL(cppc_set_perf);
+  * If desired_reg is in the SystemMemory or SystemIo ACPI address space,
+  * then assume there is no latency.
+  */
+-unsigned int cppc_get_transition_latency(int cpu_num)
++int cppc_get_transition_latency(int cpu_num)
  {
- 	return (flags & ~DL_MARKER_FLAGS) == DL_FLAG_SYNC_STATE_ONLY;
+ 	/*
+ 	 * Expected transition latency is based on the PCCT timing values
+@@ -1889,31 +1889,29 @@ unsigned int cppc_get_transition_latency
+ 	 *              completion of a command before issuing the next command,
+ 	 *              in microseconds.
+ 	 */
+-	unsigned int latency_ns = 0;
+ 	struct cpc_desc *cpc_desc;
+ 	struct cpc_register_resource *desired_reg;
+ 	int pcc_ss_id = per_cpu(cpu_pcc_subspace_idx, cpu_num);
+ 	struct cppc_pcc_data *pcc_ss_data;
++	int latency_ns = 0;
+ 
+ 	cpc_desc = per_cpu(cpc_desc_ptr, cpu_num);
+ 	if (!cpc_desc)
+-		return CPUFREQ_ETERNAL;
++		return -ENODATA;
+ 
+ 	desired_reg = &cpc_desc->cpc_regs[DESIRED_PERF];
+ 	if (CPC_IN_SYSTEM_MEMORY(desired_reg) || CPC_IN_SYSTEM_IO(desired_reg))
+ 		return 0;
+-	else if (!CPC_IN_PCC(desired_reg))
+-		return CPUFREQ_ETERNAL;
+ 
+-	if (pcc_ss_id < 0)
+-		return CPUFREQ_ETERNAL;
++	if (!CPC_IN_PCC(desired_reg) || pcc_ss_id < 0)
++		return -ENODATA;
+ 
+ 	pcc_ss_data = pcc_data[pcc_ss_id];
+ 	if (pcc_ss_data->pcc_mpar)
+ 		latency_ns = 60 * (1000 * 1000 * 1000 / pcc_ss_data->pcc_mpar);
+ 
+-	latency_ns = max(latency_ns, pcc_ss_data->pcc_nominal * 1000);
+-	latency_ns = max(latency_ns, pcc_ss_data->pcc_mrtt * 1000);
++	latency_ns = max_t(int, latency_ns, pcc_ss_data->pcc_nominal * 1000);
++	latency_ns = max_t(int, latency_ns, pcc_ss_data->pcc_mrtt * 1000);
+ 
+ 	return latency_ns;
  }
-diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
-index 2ea6e05e6ec9..73a1916170ae 100644
---- a/drivers/base/power/main.c
-+++ b/drivers/base/power/main.c
-@@ -282,7 +282,8 @@ static void dpm_wait_for_suppliers(struct device *dev, bool async)
- 	 * walking.
- 	 */
- 	list_for_each_entry_rcu_locked(link, &dev->links.suppliers, c_node)
--		if (READ_ONCE(link->status) != DL_STATE_DORMANT)
-+		if (READ_ONCE(link->status) != DL_STATE_DORMANT &&
-+		    !device_link_flag_is_sync_state_only(link->flags))
- 			dpm_wait(link->supplier, async);
+--- a/drivers/cpufreq/amd-pstate.c
++++ b/drivers/cpufreq/amd-pstate.c
+@@ -872,10 +872,10 @@ static void amd_pstate_update_limits(str
+  */
+ static u32 amd_pstate_get_transition_delay_us(unsigned int cpu)
+ {
+-	u32 transition_delay_ns;
++	int transition_delay_ns;
  
- 	device_links_read_unlock(idx);
-@@ -339,7 +340,8 @@ static void dpm_wait_for_consumers(struct device *dev, bool async)
- 	 * unregistration).
- 	 */
- 	list_for_each_entry_rcu_locked(link, &dev->links.consumers, s_node)
--		if (READ_ONCE(link->status) != DL_STATE_DORMANT)
-+		if (READ_ONCE(link->status) != DL_STATE_DORMANT &&
-+		    !device_link_flag_is_sync_state_only(link->flags))
- 			dpm_wait(link->consumer, async);
+ 	transition_delay_ns = cppc_get_transition_latency(cpu);
+-	if (transition_delay_ns == CPUFREQ_ETERNAL) {
++	if (transition_delay_ns < 0) {
+ 		if (cpu_feature_enabled(X86_FEATURE_AMD_FAST_CPPC))
+ 			return AMD_PSTATE_FAST_CPPC_TRANSITION_DELAY;
+ 		else
+@@ -891,10 +891,10 @@ static u32 amd_pstate_get_transition_del
+  */
+ static u32 amd_pstate_get_transition_latency(unsigned int cpu)
+ {
+-	u32 transition_latency;
++	int transition_latency;
  
- 	device_links_read_unlock(idx);
--- 
-2.51.0.536.g15c5d4f767-goog
+ 	transition_latency = cppc_get_transition_latency(cpu);
+-	if (transition_latency  == CPUFREQ_ETERNAL)
++	if (transition_latency < 0)
+ 		return AMD_PSTATE_TRANSITION_LATENCY;
+ 
+ 	return transition_latency;
+--- a/drivers/cpufreq/cppc_cpufreq.c
++++ b/drivers/cpufreq/cppc_cpufreq.c
+@@ -310,9 +310,9 @@ static int cppc_verify_policy(struct cpu
+ 
+ static unsigned int __cppc_cpufreq_get_transition_delay_us(unsigned int cpu)
+ {
+-	unsigned int transition_latency_ns = cppc_get_transition_latency(cpu);
++	int transition_latency_ns = cppc_get_transition_latency(cpu);
+ 
+-	if (transition_latency_ns == CPUFREQ_ETERNAL)
++	if (transition_latency_ns < 0)
+ 		return CPUFREQ_DEFAULT_TRANSITION_LATENCY_NS / NSEC_PER_USEC;
+ 
+ 	return transition_latency_ns / NSEC_PER_USEC;
+--- a/include/acpi/cppc_acpi.h
++++ b/include/acpi/cppc_acpi.h
+@@ -160,7 +160,7 @@ extern unsigned int cppc_khz_to_perf(str
+ extern bool acpi_cpc_valid(void);
+ extern bool cppc_allow_fast_switch(void);
+ extern int acpi_get_psd_map(unsigned int cpu, struct cppc_cpudata *cpu_data);
+-extern unsigned int cppc_get_transition_latency(int cpu);
++extern int cppc_get_transition_latency(int cpu);
+ extern bool cpc_ffh_supported(void);
+ extern bool cpc_supported_by_cpu(void);
+ extern int cpc_read_ffh(int cpunum, struct cpc_reg *reg, u64 *val);
+@@ -216,9 +216,9 @@ static inline bool cppc_allow_fast_switc
+ {
+ 	return false;
+ }
+-static inline unsigned int cppc_get_transition_latency(int cpu)
++static inline int cppc_get_transition_latency(int cpu)
+ {
+-	return CPUFREQ_ETERNAL;
++	return -ENODATA;
+ }
+ static inline bool cpc_ffh_supported(void)
+ {
+
+
 
 
