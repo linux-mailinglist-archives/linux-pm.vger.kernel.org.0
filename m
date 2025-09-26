@@ -1,51 +1,51 @@
-Return-Path: <linux-pm+bounces-35434-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35433-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF50ABA243D
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Sep 2025 04:54:52 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A5A01BA2440
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Sep 2025 04:54:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9F512386F4D
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Sep 2025 02:54:52 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C3BCA7B543B
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Sep 2025 02:53:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E83DF266EEA;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8374266EE7;
 	Fri, 26 Sep 2025 02:54:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G/Muah3Y"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DsZEJ6x0"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4664265621
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C46D7266B40
 	for <linux-pm@vger.kernel.org>; Fri, 26 Sep 2025 02:54:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758855269; cv=none; b=WWgFbEABikJkhNl3CLkT7PKdpJz1eIXuIyzgvYy5Y+7XuoyTMUSqE/DS/59KTHz0KdaxG2JOQXaKIDyM+0cqWVuQhi2lpbZwdLpfJSuRNjj15b+pQIxcwchYCAS392x3xkRPk/QbomUAA2cazwU4X5z4XJx2p0WqRkF45cnnLd0=
+	t=1758855269; cv=none; b=a2kAQOs6b3PJTZ3v/nqypWCNhC1Dj3xV/RHv3DrBrcL48bgOXNB1DaQQvBBI4NZEtHYcxhri33TqP4B3hITSFMQD5UErA0+rjtZQi2rDalzJ3cUM2x3azwKTKcCxP0f3DMZLiJjzakMuYFdNwVqSt4stAt59q75doVKTk6lDGjg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1758855269; c=relaxed/simple;
-	bh=fomFzH41n8L/dmbp9FfpGe6qotw3o+FsX9UHxv5cbis=;
+	bh=uGJU4z8NmVYkeZj2aZtVvRlSD30DqZgmiScbyJwWTro=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fR3+dSYzbpBGwbmFSAbxdyJq5xAqKv05YeRDb8MPAlUhpYHrq59cPJLz21LPs4AV0V0iAu/kJVR6DaI+bJcCvv5Ev29EZEGLNeZX21wVfNffERpMOQmh03ZmPBm/k+bLxIG5TOFZB7PdnifTs5kNmz1mjMElMpBYYqBGNIIsM6s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G/Muah3Y; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2E72C113D0
-	for <linux-pm@vger.kernel.org>; Fri, 26 Sep 2025 02:54:28 +0000 (UTC)
+	 MIME-Version; b=IJkLDYV1eEMB6NvTPE/dhMTYOArq/vR/KTCfFkAIqZd/POcx1fkVEpNI32WyxMffcM0eFm08zi4DdT4vH7T88kZFIXIzQbStK5Eb90wumHQsxGo1rlrym+ekfLlmOtzjMEZJfL4E98tez1gglhFHlNch76KOdiAePoJK+PWl4hQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DsZEJ6x0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45EE4C116B1
+	for <linux-pm@vger.kernel.org>; Fri, 26 Sep 2025 02:54:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1758855269;
-	bh=fomFzH41n8L/dmbp9FfpGe6qotw3o+FsX9UHxv5cbis=;
+	bh=uGJU4z8NmVYkeZj2aZtVvRlSD30DqZgmiScbyJwWTro=;
 	h=From:To:Subject:Date:In-Reply-To:References:Reply-To:From;
-	b=G/Muah3Y4jYmzU+04XWl5SUrxgaoY9ZQM+WVPzgr4Z4apJKNWvaNEkiMjq3YzYYv0
-	 ByLZoE0clW+GG5aSHA6DJnucPRDrS/D4bTJ7S49/B7dMeuQgtwQs1G0EXynall2sfE
-	 Srmlz64FlHKfEHZVJCz75U2bZ0iLmjW6u9W/x5JivCnQc+KeDdfYl2ojMGJChd/ToZ
-	 Z9PG3Cz9YIgylX2GXMu/hmFURU4bQAQn7I6TfPqJiopPULFjCAMpbv9m0GbOywqgLo
-	 03iipP8U5MeXnqtHlcc5ICNd51GEWpDebh/a0GZOBGLtdFMZLy1lrMfrg4EVBgHGYh
-	 2DyJRFKZXf9+A==
+	b=DsZEJ6x0zAVjETPg0UE7AAnJMXi0eyBtKdHmnFA0bktjciAgebBBdOU6XfyIrmV0F
+	 isshg6EHf2Oo2MDi1njP/SL7jfDWDEVjpGJBMorg+byZQofKBKlNZ3zD3gnBs7j0NT
+	 DsAXjbP9fDCRMRt3CSMSu422v5uOE2GIanN2BG8u50dLr9r90HVS85VHGoCnGRc5me
+	 SiNFl+sHho3SGUCd7Q9xD+PHabJZCS9yHMwAz95JHkHvJ55AI7c85MilFKRapfDaJZ
+	 RBnkz+pk/VVF43sX4rcjYSSZOg2AJxBCWvvEuVHcVmt1rhfxtBNMpITaoCketTOLxa
+	 XopSqunonnouA==
 From: Len Brown <lenb@kernel.org>
 To: linux-pm@vger.kernel.org
-Subject: [PATCH 5/7] tools/power x86_energy_perf_policy: Prefer driver HWP limits
-Date: Thu, 25 Sep 2025 22:51:07 -0400
-Message-ID: <908ec95eb51597b66814072889eaa75138c8792e.1758855052.git.len.brown@intel.com>
+Subject: [PATCH 6/7] tools/power x86_energy_perf_policy: Add make snapshot target
+Date: Thu, 25 Sep 2025 22:51:08 -0400
+Message-ID: <b1a127d979f478a833a7688fcc434a68cfa34305.1758855052.git.len.brown@intel.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <4902665808e17a711200c46558803f526cbb154a.1758855052.git.len.brown@intel.com>
 References: <4902665808e17a711200c46558803f526cbb154a.1758855052.git.len.brown@intel.com>
@@ -61,68 +61,64 @@ Content-Transfer-Encoding: 8bit
 
 From: Len Brown <len.brown@intel.com>
 
-When we are successful in using cpufreq min/max limits,
-skip setting the raw MSR limits entirely.
+$ make snapshot
+creates x86_energy_perf_policy-$(DATE).tar.gz
 
-This is necessary to avoid undoing any modification that
-the cpufreq driver makes to our sysfs request.
+Which can be transported to a target machine
+without needing a kernel tree to build on the target.
 
-eg. intel_pstate may take our request for a limit
-that is valid according to HWP.CAP.MIN/MAX and clip
-it to be within the range available in PLATFORM_INFO.
+Useful for creating debug versions.
 
 Signed-off-by: Len Brown <len.brown@intel.com>
 ---
- .../x86_energy_perf_policy/x86_energy_perf_policy.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+ .../power/x86/x86_energy_perf_policy/Makefile | 29 ++++++++++++++++++-
+ 1 file changed, 28 insertions(+), 1 deletion(-)
 
-diff --git a/tools/power/x86/x86_energy_perf_policy/x86_energy_perf_policy.c b/tools/power/x86/x86_energy_perf_policy/x86_energy_perf_policy.c
-index 0267f5ecaa77..150cfed95288 100644
---- a/tools/power/x86/x86_energy_perf_policy/x86_energy_perf_policy.c
-+++ b/tools/power/x86/x86_energy_perf_policy/x86_energy_perf_policy.c
-@@ -62,6 +62,7 @@ unsigned char turbo_update_value;
- unsigned char update_hwp_epp;
- unsigned char update_hwp_min;
- unsigned char update_hwp_max;
-+unsigned char hwp_limits_done_via_sysfs;
- unsigned char update_hwp_desired;
- unsigned char update_hwp_window;
- unsigned char update_hwp_use_pkg;
-@@ -951,8 +952,10 @@ int ratio_2_sysfs_khz(int ratio)
- }
- /*
-  * If HWP is enabled and cpufreq sysfs attribtes are present,
-- * then update sysfs, so that it will not become
-- * stale when we write to MSRs.
-+ * then update via sysfs. The intel_pstate driver may modify (clip)
-+ * this request, say, when HWP_CAP is outside of PLATFORM_INFO limits,
-+ * and the driver-chosen value takes precidence.
-+ *
-  * (intel_pstate's max_perf_pct and min_perf_pct will follow cpufreq,
-  *  so we don't have to touch that.)
-  */
-@@ -1007,6 +1010,8 @@ int update_sysfs(int cpu)
- 	if (update_hwp_max)
- 		update_cpufreq_scaling_freq(1, cpu, req_update.hwp_max);
- 
-+	hwp_limits_done_via_sysfs = 1;
+diff --git a/tools/power/x86/x86_energy_perf_policy/Makefile b/tools/power/x86/x86_energy_perf_policy/Makefile
+index 666b325a62a2..d18284667400 100644
+--- a/tools/power/x86/x86_energy_perf_policy/Makefile
++++ b/tools/power/x86/x86_energy_perf_policy/Makefile
+@@ -1,8 +1,12 @@
+ # SPDX-License-Identifier: GPL-2.0
+ CC		= $(CROSS_COMPILE)gcc
+-BUILD_OUTPUT    := $(CURDIR)
++BUILD_OUTPUT	:= $(CURDIR)
+ PREFIX		:= /usr
+ DESTDIR		:=
++DAY		:= $(shell date +%Y.%m.%d)
++SNAPSHOT	= x86_energy_perf_policy-$(DAY)
 +
- 	return 0;
- }
++
  
-@@ -1085,10 +1090,10 @@ int update_hwp_request_msr(int cpu)
- 	if (debug)
- 		print_hwp_request(cpu, &req, "old: ");
+ ifeq ("$(origin O)", "command line")
+ 	BUILD_OUTPUT := $(O)
+@@ -27,3 +31,26 @@ install : x86_energy_perf_policy
+ 	install -d  $(DESTDIR)$(PREFIX)/share/man/man8
+ 	install -m 644 x86_energy_perf_policy.8 $(DESTDIR)$(PREFIX)/share/man/man8
  
--	if (update_hwp_min)
-+	if (update_hwp_min && !hwp_limits_done_via_sysfs)
- 		req.hwp_min = req_update.hwp_min;
- 
--	if (update_hwp_max)
-+	if (update_hwp_max && !hwp_limits_done_via_sysfs)
- 		req.hwp_max = req_update.hwp_max;
- 
- 	if (update_hwp_desired)
++snapshot: x86_energy_perf_policy
++	@rm -rf $(SNAPSHOT)
++	@mkdir $(SNAPSHOT)
++	@cp x86_energy_perf_policy Makefile x86_energy_perf_policy.c x86_energy_perf_policy.8 $(SNAPSHOT)
++
++	@sed -e 's/^#include <linux\/bits.h>/#include "bits.h"/' -e 's/u64/unsigned long long/' ../../../../arch/x86/include/asm/msr-index.h > $(SNAPSHOT)/msr-index.h
++	@echo '#define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))' >> $(SNAPSHOT)/msr-index.h
++	@echo "#define BIT(x) (1 << (x))" > $(SNAPSHOT)/bits.h
++	@echo "#define BIT_ULL(nr) (1ULL << (nr))" >> $(SNAPSHOT)/bits.h
++	@echo "#define GENMASK(h, l) (((~0UL) << (l)) & (~0UL >> (sizeof(long) * 8 - 1 - (h))))" >> $(SNAPSHOT)/bits.h
++	@echo "#define GENMASK_ULL(h, l) (((~0ULL) << (l)) & (~0ULL >> (sizeof(long long) * 8 - 1 - (h))))" >> $(SNAPSHOT)/bits.h
++
++	@echo '#define BUILD_BUG_ON(cond) do { enum { compile_time_check ## __COUNTER__ = 1/(!(cond)) }; } while (0)' > $(SNAPSHOT)/build_bug.h
++	@echo '#define __must_be_array(arr) 0' >> $(SNAPSHOT)/build_bug.h
++
++	@echo PWD=. > $(SNAPSHOT)/Makefile
++	@echo "CFLAGS +=	-DMSRHEADER='\"msr-index.h\"'" >> $(SNAPSHOT)/Makefile
++	@echo "CFLAGS +=	-DBUILD_BUG_HEADER='\"build_bug.h\"'" >> $(SNAPSHOT)/Makefile
++	@sed -e's/.*MSRHEADER.*//' Makefile >> $(SNAPSHOT)/Makefile
++
++	@rm -f $(SNAPSHOT).tar.gz
++	tar cvzf $(SNAPSHOT).tar.gz $(SNAPSHOT)
++
 -- 
 2.45.2
 
