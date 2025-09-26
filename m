@@ -1,244 +1,168 @@
-Return-Path: <linux-pm+bounces-35466-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35467-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22E35BA3E2D
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Sep 2025 15:26:56 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 34F80BA3EE7
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Sep 2025 15:46:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0DD567B353A
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Sep 2025 13:25:14 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 648B47B05F2
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Sep 2025 13:45:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 880C72EF673;
-	Fri, 26 Sep 2025 13:26:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4D2C18A6CF;
+	Fri, 26 Sep 2025 13:46:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mlqz/49X"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="izW9npQS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC8A82DC346;
-	Fri, 26 Sep 2025 13:26:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 126BF72605
+	for <linux-pm@vger.kernel.org>; Fri, 26 Sep 2025 13:46:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758893208; cv=none; b=D6U4bMKOF59K11f+PyJxLnzjWHVERn2VXWMsNVEZizxA5rrREQ1RjTP2QKTgKcFyc/1yH/WFHy6eo3BES+s1HeKlkhYnfaIHsB2QtQ+1R7y5xtUIuqdklCd8SwH3m+qn/95L3a3M6Tm5TLI7IJIib5psxcbKSI0QRYZtIUk/4JQ=
+	t=1758894403; cv=none; b=rLSpd2I+D0yDDIvlGUlafOCQD7pO2b24vYMjpGyqhG5V+jt9zRszzFHBvvIxrD6JlVkPBz4DPtlNwtsK4DTZ+cPRSQ4hK2ECt/0MFNBZJjDZZCmAnGdSsNVya4yvwQE5o3QyhqN6cs2X3ElCZtlNnKjjGexizONN6IOK/Sscx7M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758893208; c=relaxed/simple;
-	bh=tt8j4f67Myq2x91/cEcHImKhtQzK3hMmMD/sIcbXrSI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=e5PHxKg9z+9ZFc6Iq3jFRArqJz1O+iztB8/KXyETukLIWoWhTGoRxRNxeKYbVuyFNgs9uODCS+/vIaZBz2hWn0VHE+O8r/iviyi0oOJ40oyeRnPj4ls5xPd35MMdCESnWg1GikpHUE2ihdvQOrQwW8K3mw2Rp6fB6Iq7XDXc21g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mlqz/49X; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758893207; x=1790429207;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tt8j4f67Myq2x91/cEcHImKhtQzK3hMmMD/sIcbXrSI=;
-  b=mlqz/49Xws/kSlVR6mmKcYj2FWjmAPxW/HiK8HeaFYVmSXtqGUmN2h0C
-   KHywxcQ4+Lp04jWA/eeW06Ve9lCKT54V0T9O0sIPaxAP6fljfJUuZbO6A
-   PD54ksCVx48yOb5f+cUtjtCR9NnLaW8LbIYjxUmj3YJALJecCxjzSbXgZ
-   FLfxrtPnJyMPLxhrg0RzYk+kWE9So9d9HI627hPcyrLUfigV0IKLQyxp+
-   zlC5QRSXC2v3SH/KNKRNdf3JKkW5bkuUZuK3D8wDXUHcoQQabcDWn3zCJ
-   odQRocxBFVvyiFhLetXuPBdpO01b67B9LLH699WEVR9bRwjz5q8h35efG
-   w==;
-X-CSE-ConnectionGUID: QEDmuES2Qa6xKrYL2STbYw==
-X-CSE-MsgGUID: atCguUkdQ/Snd0P9w5W39g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11564"; a="72324276"
-X-IronPort-AV: E=Sophos;i="6.18,295,1751266800"; 
-   d="scan'208";a="72324276"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2025 06:26:46 -0700
-X-CSE-ConnectionGUID: KyBoOnMDT3WLFyHiLckXHQ==
-X-CSE-MsgGUID: gaUzxMHbRR2LRreEpd9+TQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,295,1751266800"; 
-   d="scan'208";a="181619627"
-Received: from lkp-server02.sh.intel.com (HELO 84c55410ccf6) ([10.239.97.151])
-  by orviesa003.jf.intel.com with ESMTP; 26 Sep 2025 06:26:41 -0700
-Received: from kbuild by 84c55410ccf6 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1v28T9-0006GP-0Q;
-	Fri, 26 Sep 2025 13:26:39 +0000
-Date: Fri, 26 Sep 2025 21:26:01 +0800
-From: kernel test robot <lkp@intel.com>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	ulf.hansson@linaro.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, robh@kernel.org,
-	krzk+dt@kernel.org, conor+dt@kernel.org, matthias.bgg@gmail.com,
-	angelogioacchino.delregno@collabora.com, nfraprado@collabora.com,
-	fshao@chromium.org, y.oudjana@protonmail.com, wenst@chromium.org,
-	mandyjh.liu@mediatek.com, mbrugger@suse.com,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, kernel@collabora.com
-Subject: Re: [PATCH v2 3/5] pmdomain: mediatek: Add support for secure HWCCF
- infra power on
-Message-ID: <202509262155.Ux4J6K4D-lkp@intel.com>
-References: <20250925143122.39796-4-angelogioacchino.delregno@collabora.com>
+	s=arc-20240116; t=1758894403; c=relaxed/simple;
+	bh=0EOjaBswWQvC9XmPVf+lr9JjN3BYmeqPrTnFPJ0cBnQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Ou6IpA8kBTjtIzM06oAB/HiLqj/ogkxaTPSOfbaBAcvOZBW1zjfQS1SICUJRLcvtGZbks/UDY5UIB93fFZpSQoOL7fXKrCAF+jJwTDN3Cv2c3GZBLfSrVerm7RsgSoQTS1+p9Ef+wKSzHnJGjTDpV+z4NPrGhH2n5Y0fAWM/qU4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=izW9npQS; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58Q8vfdf014653
+	for <linux-pm@vger.kernel.org>; Fri, 26 Sep 2025 13:46:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	K7AOC2kVYXtte+/8joVQrCBNjRIRBFVGaIEKx6zbQkQ=; b=izW9npQSUWtSxCLc
+	pEg7K8+BzdwWdQnB8LNP7gDOLBkDqJ/NohaFqQSxHW2mEaLLiKYV5gsVspVxgKQi
+	Hx2y0ZadKq7eESLbdA7bKWAinffirfliMJn6ow/F/Z7w7hOdQ2/1jscNP81Vy0c9
+	exDNJW4iGXKb/6TKLQ23gxH8erIQJf2cCGUTKtu0INSjVrQQqKGyiAuQwVIkCetc
+	kXh2rkyCo5qV+HvF4TLUCJPD1PeCfwugk++GlNWR2n+AMgf3ZyzM76sbLCTZ263d
+	gaVR4IUTUFw4MQ/5mOed1ttHXkoQqqFmEsDxlgUIdqtmceCtzmdTrLoaVRtgc5OL
+	c6XTng==
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com [209.85.219.72])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 49db34k0hy-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Fri, 26 Sep 2025 13:46:39 +0000 (GMT)
+Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-7c51f566163so6160816d6.0
+        for <linux-pm@vger.kernel.org>; Fri, 26 Sep 2025 06:46:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758894399; x=1759499199;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=K7AOC2kVYXtte+/8joVQrCBNjRIRBFVGaIEKx6zbQkQ=;
+        b=Ng7kjFUAYjvNLhRYjbpUA0tJZOxEYhC3rPQMP4XRjhDyjqynfWmGv4Bz01AJBWYiLc
+         iXqE3Y08LszA5GlvWjAwjBZneiPaZWBzRb2FJgO9qVx35PJYd0RLtnIfBNDQqcwKFbZZ
+         G8TxElPDnFMwLOfKP7v3uDl3ZxQXRftZRuqBHEjeGHAU/Q/paNEwfPNlAGVQuRS5fDOD
+         lxY7umZIiOsO4t9nery9Ctgkaw0BiZ2c9faQtDRO41ZSgFyw/6gpCKnzFPgmnKpM1tAW
+         EcTqNQ3zg3s/OWiXMT3VLXVic1A189zi/IwZd3ta780Rmid8NiAuz+RZBJCjj26w50I0
+         d3cQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVFHUouuhbOvuOXNXMF8rV7UhSziBzeQ1hFl47Q16XgDjITd6YxPTvODKiFVxA73IfkzFsNihYHAQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzxRiIsyFoGmcaX3vgnBxzcIn1XIMQzk8JEhgd24LeY/mZzGAgl
+	bTK7QKjAHjQKz9WRYYuBIB4irv0ItQQwsV59VMGSeFV95vEeGslWfqHkOUlx/hkIKpQucDgiHHq
+	ZKEp79rPmac47m9/AiiMVdvKvQ29PQ36nKVC7H4Hk2de8sCb3h1LpdsxtghT6Dw==
+X-Gm-Gg: ASbGncsEFQYl/HYCezbwcu3YB6aKPSLleDhtbmZnuVmBufNKnXA47jrbs07ImIHTXDJ
+	iovRv0S5Yd1m1Ne/RRDsUZgG/7Smo4ChNo4PhGSAc6+PH4/aAQQejUhPJtZ30GfbjMQF0NBnaKv
+	+KXnqGvmQucwNrFXHgRMad8xA30Oi2rgECUzgzplNWKVEEGSCU0iHbBkTz/YLGFcgMserrlmoLb
+	Nj3dxQ4yEkwq44gSU4MrpHQlmkXCr/+1kGBN4z7ZLwaC/vZgQL2mjMJ6T0QsIYVPtvrCuHtNirj
+	XY9mubX77JzuCCv6G8zODY6jcIdUDy09ZjOZhqFCvc6w7b0nqg14NZBXwSXFzghf5CvKmt+pMXI
+	7bVipHjt+DBxR8XaZuN4VMw==
+X-Received: by 2002:a05:622a:587:b0:4b2:b591:4602 with SMTP id d75a77b69052e-4da4b42618amr71328541cf.9.1758894398907;
+        Fri, 26 Sep 2025 06:46:38 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGLtYwLQK9mRezkGeVWZEARoBJCmZbLKmK1lgkPXDI8njEY2QENyEHcYysVVTxAFgAyrj2CFA==
+X-Received: by 2002:a05:622a:587:b0:4b2:b591:4602 with SMTP id d75a77b69052e-4da4b42618amr71328061cf.9.1758894398168;
+        Fri, 26 Sep 2025 06:46:38 -0700 (PDT)
+Received: from [192.168.149.223] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b353e5d7351sm375666366b.7.2025.09.26.06.46.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 Sep 2025 06:46:37 -0700 (PDT)
+Message-ID: <e1427bcc-0502-4cfe-9cb2-bae5bb10208e@oss.qualcomm.com>
+Date: Fri, 26 Sep 2025 15:46:35 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250925143122.39796-4-angelogioacchino.delregno@collabora.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/2] interconnect: qcom: sdx75: Drop QPIC interconnect
+ and BCM nodes
+To: manivannan.sadhasivam@oss.qualcomm.com, Georgi Djakov
+ <djakov@kernel.org>,
+        Rohit Agarwal <quic_rohiagar@quicinc.com>,
+        Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc: linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        devicetree@vger.kernel.org, Manivannan Sadhasivam <mani@kernel.org>,
+        Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>,
+        Lakshmi Sowjanya D <quic_laksd@quicinc.com>, stable@vger.kernel.org
+References: <20250926-sdx75-icc-v2-0-20d6820e455c@oss.qualcomm.com>
+ <20250926-sdx75-icc-v2-1-20d6820e455c@oss.qualcomm.com>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <20250926-sdx75-icc-v2-1-20d6820e455c@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTI1MDE3MiBTYWx0ZWRfX95303U6FfsFR
+ 49D498q+uFims+ejOIyt7a6FUThKN9PYpaRbowX+JiVucHT+KzL4aV3WR33VMbdZca+8W07Mih1
+ 6+aezaWIuVtTrcObLfG8QNkjmgUJzzdL9k7kyqL+IdmfVj+FKQbT4mPsSoz89S9Oic0Nybbn03E
+ UniTVHSZt50ZXDpXLUS8q9LNJK3DA8UgPmL4EzeUkIzD9mBJFcJUX+eA3bm9ELtZ2Ndk5u5nxIY
+ BmObBh7ohcgEOIcJpUB6YA5ytsLk9LNGGdPKeDNJCga7rX8PamxBdIXdN9mlApoUXNDf9Fn0Uv4
+ DXKKV9/aQ7MarFcHwUZeGqp93q8CYtSKo1jOKU7UQggXQjaA3WHtFDGVUtQUTO6JVenuUFLmh/7
+ agsF1C0FB1TPU17SbHhb5182rruNUQ==
+X-Authority-Analysis: v=2.4 cv=Hb0ZjyE8 c=1 sm=1 tr=0 ts=68d6993f cx=c_pps
+ a=7E5Bxpl4vBhpaufnMqZlrw==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
+ a=IkcTkHD0fZMA:10 a=yJojWOMRYYMA:10 a=COk6AnOGAAAA:8 a=VwQbUJbxAAAA:8
+ a=EUspDBNiAAAA:8 a=aH40uDyxLlspqTMSXGwA:9 a=QEXdDO2ut3YA:10
+ a=pJ04lnu7RYOZP9TFuWaZ:22 a=TjNXssC_j7lpFel5tvFf:22
+X-Proofpoint-ORIG-GUID: U_fk2umpGfsOoGk6zPVqILZ6mA_VxK02
+X-Proofpoint-GUID: U_fk2umpGfsOoGk6zPVqILZ6mA_VxK02
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-09-26_04,2025-09-26_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 phishscore=0 adultscore=0 bulkscore=0 impostorscore=0
+ spamscore=0 lowpriorityscore=0 suspectscore=0 malwarescore=0 clxscore=1015
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2509150000 definitions=main-2509250172
 
-Hi AngeloGioacchino,
+On 9/26/25 8:42 AM, Manivannan Sadhasivam via B4 Relay wrote:
+> From: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
+> 
+> As like other SDX SoCs, SDX75 SoC's QPIC BCM resource was modeled as a
+> RPMh clock in clk-rpmh driver. However, for SDX75, this resource was also
+> described as an interconnect and BCM node mistakenly. It is incorrect to
+> describe the same resource in two different providers, as it will lead to
+> votes from clients overriding each other.
+> 
+> Hence, drop the QPIC interconnect and BCM nodes and let the clients use
+> clk-rpmh driver to vote for this resource.
+> 
+> Without this change, the NAND driver fails to probe on SDX75, as the
+> interconnect sync state disables the QPIC nodes as there were no clients
+> voting for this ICC resource. However, the NAND driver had already voted
+> for this BCM resource through the clk-rpmh driver. Since both votes come
+> from Linux, RPMh was unable to distinguish between these two and ends up
+> disabling the QPIC resource during sync state.
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 3642b4e5cbfe ("interconnect: qcom: Add SDX75 interconnect provider driver")
+> Signed-off-by: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
+> [mani: dropped the reference to bcm_qp0, reworded description]
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
+> ---
 
-kernel test robot noticed the following build errors:
+Too bad no one noticed for the 2 years the platform has been upstream..
 
-[auto build test ERROR on next-20250924]
-[cannot apply to robh/for-next linus/master v6.17-rc7 v6.17-rc6 v6.17-rc5 v6.17-rc7]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/AngeloGioacchino-Del-Regno/dt-bindings-power-Add-support-for-MT8196-power-controllers/20250925-223530
-base:   next-20250924
-patch link:    https://lore.kernel.org/r/20250925143122.39796-4-angelogioacchino.delregno%40collabora.com
-patch subject: [PATCH v2 3/5] pmdomain: mediatek: Add support for secure HWCCF infra power on
-config: i386-buildonly-randconfig-001-20250926 (https://download.01.org/0day-ci/archive/20250926/202509262155.Ux4J6K4D-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250926/202509262155.Ux4J6K4D-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509262155.Ux4J6K4D-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/pmdomain/mediatek/mtk-pm-domains.c:124:23: error: variable has incomplete type 'struct arm_smccc_res'
-     124 |         struct arm_smccc_res res;
-         |                              ^
-   drivers/pmdomain/mediatek/mtk-pm-domains.c:124:9: note: forward declaration of 'struct arm_smccc_res'
-     124 |         struct arm_smccc_res res;
-         |                ^
->> drivers/pmdomain/mediatek/mtk-pm-domains.c:127:2: error: call to undeclared function 'arm_smccc_smc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     127 |         arm_smccc_smc(MTK_SIP_KERNEL_HWCCF_CONTROL, cmd, 0, 0, 0, 0, 0, 0, &res);
-         |         ^
->> drivers/pmdomain/mediatek/mtk-pm-domains.c:127:16: error: call to undeclared function 'ARM_SMCCC_CALL_VAL'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     127 |         arm_smccc_smc(MTK_SIP_KERNEL_HWCCF_CONTROL, cmd, 0, 0, 0, 0, 0, 0, &res);
-         |                       ^
-   drivers/pmdomain/mediatek/mtk-pm-domains.c:55:38: note: expanded from macro 'MTK_SIP_KERNEL_HWCCF_CONTROL'
-      55 | #define MTK_SIP_KERNEL_HWCCF_CONTROL    MTK_SIP_SMC_CMD(0x540)
-         |                                         ^
-   include/linux/soc/mediatek/mtk_sip_svc.h:22:2: note: expanded from macro 'MTK_SIP_SMC_CMD'
-      22 |         ARM_SMCCC_CALL_VAL(ARM_SMCCC_FAST_CALL, MTK_SIP_SMC_CONVENTION, \
-         |         ^
->> drivers/pmdomain/mediatek/mtk-pm-domains.c:127:16: error: use of undeclared identifier 'ARM_SMCCC_FAST_CALL'
-   drivers/pmdomain/mediatek/mtk-pm-domains.c:55:38: note: expanded from macro 'MTK_SIP_KERNEL_HWCCF_CONTROL'
-      55 | #define MTK_SIP_KERNEL_HWCCF_CONTROL    MTK_SIP_SMC_CMD(0x540)
-         |                                         ^
-   include/linux/soc/mediatek/mtk_sip_svc.h:22:21: note: expanded from macro 'MTK_SIP_SMC_CMD'
-      22 |         ARM_SMCCC_CALL_VAL(ARM_SMCCC_FAST_CALL, MTK_SIP_SMC_CONVENTION, \
-         |                            ^
->> drivers/pmdomain/mediatek/mtk-pm-domains.c:127:16: error: use of undeclared identifier 'ARM_SMCCC_SMC_32'
-   drivers/pmdomain/mediatek/mtk-pm-domains.c:55:38: note: expanded from macro 'MTK_SIP_KERNEL_HWCCF_CONTROL'
-      55 | #define MTK_SIP_KERNEL_HWCCF_CONTROL    MTK_SIP_SMC_CMD(0x540)
-         |                                         ^
-   include/linux/soc/mediatek/mtk_sip_svc.h:22:42: note: expanded from macro 'MTK_SIP_SMC_CMD'
-      22 |         ARM_SMCCC_CALL_VAL(ARM_SMCCC_FAST_CALL, MTK_SIP_SMC_CONVENTION, \
-         |                                                 ^
-   include/linux/soc/mediatek/mtk_sip_svc.h:18:41: note: expanded from macro 'MTK_SIP_SMC_CONVENTION'
-      18 | #define MTK_SIP_SMC_CONVENTION          ARM_SMCCC_SMC_32
-         |                                         ^
->> drivers/pmdomain/mediatek/mtk-pm-domains.c:127:16: error: use of undeclared identifier 'ARM_SMCCC_OWNER_SIP'
-   drivers/pmdomain/mediatek/mtk-pm-domains.c:55:38: note: expanded from macro 'MTK_SIP_KERNEL_HWCCF_CONTROL'
-      55 | #define MTK_SIP_KERNEL_HWCCF_CONTROL    MTK_SIP_SMC_CMD(0x540)
-         |                                         ^
-   include/linux/soc/mediatek/mtk_sip_svc.h:23:7: note: expanded from macro 'MTK_SIP_SMC_CMD'
-      23 |                            ARM_SMCCC_OWNER_SIP, fn_id)
-         |                            ^
-   6 errors generated.
-
-
-vim +124 drivers/pmdomain/mediatek/mtk-pm-domains.c
-
-    54	
-  > 55	#define MTK_SIP_KERNEL_HWCCF_CONTROL	MTK_SIP_SMC_CMD(0x540)
-    56	
-    57	struct scpsys_domain {
-    58		struct generic_pm_domain genpd;
-    59		const struct scpsys_domain_data *data;
-    60		const struct scpsys_hwv_domain_data *hwv_data;
-    61		struct scpsys *scpsys;
-    62		int num_clks;
-    63		struct clk_bulk_data *clks;
-    64		int num_subsys_clks;
-    65		struct clk_bulk_data *subsys_clks;
-    66		struct regulator *supply;
-    67	};
-    68	
-    69	struct scpsys {
-    70		struct device *dev;
-    71		struct regmap *base;
-    72		const struct scpsys_soc_data *soc_data;
-    73		u8 bus_prot_index[BUS_PROT_BLOCK_COUNT];
-    74		struct regmap **bus_prot;
-    75		struct genpd_onecell_data pd_data;
-    76		struct generic_pm_domain *domains[];
-    77	};
-    78	
-    79	#define to_scpsys_domain(gpd) container_of(gpd, struct scpsys_domain, genpd)
-    80	
-    81	static bool scpsys_domain_is_on(struct scpsys_domain *pd)
-    82	{
-    83		struct scpsys *scpsys = pd->scpsys;
-    84		u32 status, status2;
-    85	
-    86		regmap_read(scpsys->base, pd->data->pwr_sta_offs, &status);
-    87		status &= pd->data->sta_mask;
-    88	
-    89		regmap_read(scpsys->base, pd->data->pwr_sta2nd_offs, &status2);
-    90		status2 &= pd->data->sta_mask;
-    91	
-    92		/* A domain is on when both status bits are set. */
-    93		return status && status2;
-    94	}
-    95	
-    96	static bool scpsys_hwv_domain_is_disable_done(struct scpsys_domain *pd)
-    97	{
-    98		const struct scpsys_hwv_domain_data *hwv = pd->hwv_data;
-    99		u32 regs[2] = { hwv->done, hwv->clr_sta };
-   100		u32 val[2];
-   101		u32 mask = BIT(hwv->setclr_bit);
-   102	
-   103		regmap_multi_reg_read(pd->scpsys->base, regs, val, 2);
-   104	
-   105		/* Disable is done when the bit is set in DONE, cleared in CLR_STA */
-   106		return (val[0] & mask) && !(val[1] & mask);
-   107	}
-   108	
-   109	static bool scpsys_hwv_domain_is_enable_done(struct scpsys_domain *pd)
-   110	{
-   111		const struct scpsys_hwv_domain_data *hwv = pd->hwv_data;
-   112		u32 regs[3] = { hwv->done, hwv->en, hwv->set_sta };
-   113		u32 val[3];
-   114		u32 mask = BIT(hwv->setclr_bit);
-   115	
-   116		regmap_multi_reg_read(pd->scpsys->base, regs, val, 3);
-   117	
-   118		/* Enable is done when the bit is set in DONE and EN, cleared in SET_STA */
-   119		return (val[0] & mask) && (val[1] & mask) && !(val[2] & mask);
-   120	}
-   121	
-   122	static int scpsys_sec_infra_power_on(bool on)
-   123	{
- > 124		struct arm_smccc_res res;
-   125		unsigned long cmd = on ? 1 : 0;
-   126	
- > 127		arm_smccc_smc(MTK_SIP_KERNEL_HWCCF_CONTROL, cmd, 0, 0, 0, 0, 0, 0, &res);
-   128		return res.a0;
-   129	}
-   130	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Konrad
 
