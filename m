@@ -1,171 +1,129 @@
-Return-Path: <linux-pm+bounces-35494-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35495-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D0302BA4E58
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Sep 2025 20:32:06 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B3CBABA4EB2
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Sep 2025 20:46:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CB5E817154C
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Sep 2025 18:32:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6FC61323788
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Sep 2025 18:46:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CE8227A130;
-	Fri, 26 Sep 2025 18:32:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2590830CD8C;
+	Fri, 26 Sep 2025 18:46:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O/jCaOJI"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ir8tCqGS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67A131E49F
-	for <linux-pm@vger.kernel.org>; Fri, 26 Sep 2025 18:32:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8ECD274FD7
+	for <linux-pm@vger.kernel.org>; Fri, 26 Sep 2025 18:46:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758911520; cv=none; b=YKswI2o72Jf/OjsglalgeESsNyXnReASKJxTCeUkDXgcDhne7PIKo3RVHnI8KXLSwIZ+dmdkSKY4dG4JUQo2QP1QFh4ibMEDqHifczXoRkG0G5+k96PARfqt66I2IrfKjC3SzyE0ca7umIdqIBBYZQZL8CY7p1fxUegn5fOmH/8=
+	t=1758912377; cv=none; b=JGOmZao9xCGXYm8QQtquAvS4Z2XtX2tjCjdrAdiC2vMl30ViH+bjiPxih6K9Xfv3Bn2rtOFamdktkZdzPglUl9Dp0rGvmRWtb4x50mwvkY/JAnlwDo/4MybkD/NIZTzpS+j0qcTOFtDsyPuVukEADSYK2SLwJ3ZWQYVNWZpnLgI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758911520; c=relaxed/simple;
-	bh=SIhhC70ZafIZdhpf5QK6kPv8M5FVssRVUsU2SoDh5Xk=;
+	s=arc-20240116; t=1758912377; c=relaxed/simple;
+	bh=99NoFsVWszwLzL0dGnY2jV/Q+uR4we2DXyveOu+4Occ=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EThevtWgeiFn5mdnDFZmFiCXKIRHJHOPAf0AOcP970tED2PXdWtr49jhip5JlO5NwpzmkunoKrssCVUXMjUOZV7o1QeGHa2Z7jztAKMYEyILgr1pwO4lGDq4k0g2snPstWPpW6Vs5cKXP5NnOcxlw1fZcRXecLIXSfKOJ0z5iTc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O/jCaOJI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FEF4C4CEF4
-	for <linux-pm@vger.kernel.org>; Fri, 26 Sep 2025 18:32:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758911520;
-	bh=SIhhC70ZafIZdhpf5QK6kPv8M5FVssRVUsU2SoDh5Xk=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=O/jCaOJIXLZjSllN/2ofZA2RVfSN07j1LaJCip6hRmo4sjeF5khYmnmNc21OErn6h
-	 ioMprt8MURY3XZYyzpEfYO6V3B06G5w1Oi+oCkb7kxfKrDq1xne7cCfIvXkemVRwbA
-	 SO4cJJghx/yzyTOyrwyZE3Um+rWzUAPst22aeKBUXeU1nELwyJHdWwUVFnjySFXCuG
-	 m76Uc1n2MVkrF5FjKKkVoDdRoep+fbAaY/d2ViGvgzrLk2JFWlBh2v78kWLwZahPRe
-	 VukFHJuMg52WppH1rj8dqAwCoDIUVO2nf2WZ21UCS69TVYBkK2EDguhZ7Ztp08Ok2J
-	 G13+SxgCGZaBQ==
-Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-63f03676bdcso401780eaf.0
-        for <linux-pm@vger.kernel.org>; Fri, 26 Sep 2025 11:32:00 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCV8z5yR/v/oxdUbmOYCmykhAKZbMm9OVda1AuEoDUSg6dig/jiBlb0kJfO1ky1dlnwQ+Af2kgA9NA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyPki6G6QkdU5YU4X8YtH+nkyDd/xFjwimWr6oWQZlq/1AZclZC
-	JWO13WYjW+Q+trnHt7T40acWJsnl6y01wQSnsuCLAAS2yxsExXh08sdZw4MaK6W24cMie1i/3zc
-	z4dpRJ0XjAPUYDNcJ59iMjculI5MdyyY=
-X-Google-Smtp-Source: AGHT+IHQ2t6zuV9+X6oQidiodBx57lKDsZJ+8jy7iRJOp5uLHdaHXHPcu6jZPSAQSN/4JeZYKxN1kqBEZI9GddQUzio=
-X-Received: by 2002:a05:6808:4f5f:b0:43f:3eff:1ef3 with SMTP id
- 5614622812f47-43f4cef0c27mr4373992b6e.43.1758911519476; Fri, 26 Sep 2025
- 11:31:59 -0700 (PDT)
+	 To:Cc:Content-Type; b=eZNfO+Ah41iWuUqWnDBNBtld5r5i6JKKhOZCr+b202yXgLTcAAPa9ADgy97sOfxerSKr/ChD3ES/tjjrPEuBQQWIoGioUjjC8yW6kbCY820Qf+iIo9T4tveBDog+x5/zq8zBEfj8maW3rmJtGYJf1WKaQisbXr1ma863wR4hie4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ir8tCqGS; arc=none smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2698d47e6e7so4709135ad.2
+        for <linux-pm@vger.kernel.org>; Fri, 26 Sep 2025 11:46:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1758912375; x=1759517175; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=99NoFsVWszwLzL0dGnY2jV/Q+uR4we2DXyveOu+4Occ=;
+        b=Ir8tCqGSjY7fG2+bMbC96eCICN3DWieYr8p8kZM26oAb8TrwhFr29tYMG/ONxQzbhI
+         puWXlM8u0Q/ag9hzXKOcnG1H1gYk+GWzOmRqMqf7QZRDOhSEBjPgwtjTGkIuxzGNe76m
+         senx55Q/JSlzOXZdLQGNP3dWBDTDFPDc9TqBj2LwayJlJSz85XEg6iYkKtAOn6cEcejK
+         gZdDrDv4o0ljXNe4ocrYkDiz0lHnPxTft6uGPnUXIJA0bMU3+UDSpSEkJrLr5/ipVEZ2
+         k8xjcViUkWhGBy4OvfS093phtP+nnKdokgXmth9qax+zdJJNV6oYPZaGVtL6zKq5gg5o
+         Y6NA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758912375; x=1759517175;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=99NoFsVWszwLzL0dGnY2jV/Q+uR4we2DXyveOu+4Occ=;
+        b=qs2DuwstePUS1boCpWVTpu3iXBhjldXfeIDBvyLwSArc/JtQ2X7rgUAvI4P4bqt9fR
+         U3N3HMQQ3eZzd3SbViXrfYBCBevgWLRHwHRo45zAHs8pX73+fCL1IzOZ0FXPd+e7aFpd
+         AEN6kJt2KBMcyhYRFKLJoBge44klBltRMFz8caZE4mLCOQhDChppOd1rHXQBC/st4hdI
+         E/bgyPZFuTOC018AxGjcWTVqXB5EXTmEugRqRhkMpxrQswG0SAZ3EsIfMXqpyeCxZCCZ
+         oz/tNaAHa0Fsebpxj7FQyEqAET80q/KpOiKkYFMjHw8pI/U1BkPkhpSNtGX+acpTeY6b
+         EPaw==
+X-Forwarded-Encrypted: i=1; AJvYcCXY6RglbtWsigEC9iXSEsguVxJbg8iUe3r1zTveUAmrrMzlRd46U4rrnDmdkFoHa5k9ZjvGpiqLeA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz0LMraKqLxwCyTKJHAiqLMyTTtpbf5G8YqJw2stXqjKj4FLhwv
+	7me/aqNitPVCAC59ez/Qw4OnkOO0lg0JX6nRFws2NNop4I6OwLeZ7dZz3HFTKdU8OzBGT6MTAJZ
+	z/6ubKS79qKjAWvM8wGPWPAYgaL03r84=
+X-Gm-Gg: ASbGncs2BqLrDR20EihoSu81uefYGWNANbCz7SWCNNVr72ZRxCs1bfHueTJgQPIPZdk
+	2bRZAeeky25dMgIfsS5t6Uiwm2ypUWxrz/C74YCeYdoX4lgLlf0DCH5IX9YdLQxYRSP8MGn/eGD
+	FxCCibp2YlJsNxh0mIZYmlZun50xlESledjf3r/hh0ROIQECkwDINirm6ktFTUx0dlf8FIDStjo
+	ZxdZ4XcAXBeWTURCfo2vrYI4hTXK1XhdLuCDKCGjHUgA6mouvwxLfheXoWiFHfhQVoPOBvUIWxE
+	tHNS8VNCoEonQwkjKltw5WXbjA==
+X-Google-Smtp-Source: AGHT+IGICCMscDDR09yJt5H0iPKTO2HVhFlo2/cy7JDDWeiBMU3GNUjCo5LwRgqW0USPT3MDqhixj3g/rTT4Pi3J0GM=
+X-Received: by 2002:a17:902:d508:b0:269:96d2:9c96 with SMTP id
+ d9443c01a7336-27ed5b0a538mr51481475ad.0.1758912374667; Fri, 26 Sep 2025
+ 11:46:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <3303305.5fSG56mABF@rafael.j.wysocki> <3571055.QJadu78ljV@rafael.j.wysocki>
- <e47c4c32-faea-4b24-a77e-9a3ec0e2b757@kernel.org>
-In-Reply-To: <e47c4c32-faea-4b24-a77e-9a3ec0e2b757@kernel.org>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 26 Sep 2025 20:31:48 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0h3r8PKU6Q1bL0yr1seuVH3HRrdBa9-+x5eQUuU0CsYkQ@mail.gmail.com>
-X-Gm-Features: AS18NWCVxPzoRLRx-vXZAbFhFKSYMPd2ncHeSLXFuGvMtf3MBMgkm8qLFbKeCL8
-Message-ID: <CAJZ5v0h3r8PKU6Q1bL0yr1seuVH3HRrdBa9-+x5eQUuU0CsYkQ@mail.gmail.com>
-Subject: Re: [PATCH v1 2/2] PM: hibernate: Combine return paths in power_down()
-To: Mario Limonciello <superm1@kernel.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>
+References: <20250925-core-cstr-cstrings-v2-0-78e0aaace1cd@gmail.com> <111409f1-33cd-4cd1-b3fd-e38402a82c9f@sirena.org.uk>
+In-Reply-To: <111409f1-33cd-4cd1-b3fd-e38402a82c9f@sirena.org.uk>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Fri, 26 Sep 2025 20:46:02 +0200
+X-Gm-Features: AS18NWDpMwmpfdQtAlAM5mfbOpZzjcwdG8Vuf5peZ5dotzDbBFdbC1UDMcnVE7M
+Message-ID: <CANiq72kNr32NKHGn=gfH52C5VLr9S0Xk0HNzroPqYhx4GngkXA@mail.gmail.com>
+Subject: Re: [PATCH v2 00/19] rust: replace `kernel::c_str!` with C-Strings
+To: Mark Brown <broonie@debian.org>
+Cc: Tamir Duberstein <tamird@gmail.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Viresh Kumar <viresh.kumar@linaro.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
+	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	FUJITA Tomonori <fujita.tomonori@gmail.com>, Andrew Lunn <andrew@lunn.ch>, 
+	Heiner Kallweit <hkallweit1@gmail.com>, Russell King <linux@armlinux.org.uk>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Breno Leitao <leitao@debian.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, 
+	Dave Ertman <david.m.ertman@intel.com>, Ira Weiny <ira.weiny@intel.com>, 
+	Leon Romanovsky <leon@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
+	=?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Brendan Higgins <brendan.higgins@linux.dev>, 
+	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, Jens Axboe <axboe@kernel.dk>, 
+	Alexandre Courbot <acourbot@nvidia.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Liam Girdwood <lgirdwood@gmail.com>, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	rust-for-linux@vger.kernel.org, nouveau@lists.freedesktop.org, 
+	dri-devel@lists.freedesktop.org, netdev@vger.kernel.org, 
+	linux-clk@vger.kernel.org, linux-pci@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Sep 26, 2025 at 8:29=E2=80=AFPM Mario Limonciello <superm1@kernel.o=
-rg> wrote:
+On Thu, Sep 25, 2025 at 4:01=E2=80=AFPM Mark Brown <broonie@debian.org> wro=
+te:
 >
-> On 9/26/25 11:41 AM, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > To avoid code duplication and improve clarity, combine the code
-> > paths in power_down() leading to a return from that function.
-> >
-> > No intentional functional impact.
-> >
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->
-> The actual change looks fine to me.
->
-> Since it's used in "both" a success and failure path would you consider
-> using "wakeup" for the label instead of "rollback"?  Or anything else
-> you can think of that doesn't have a connotation of failure.
+> Given that we're almost at the merge window isn't it likely that these
+> will get applied once the current rust tree is in mainline?
 
-Sure, "exit" comes to mind for instance.
+Yeah, I am submitting the PR to Linus very soon anyway.
 
-> Reviewed-by: Mario Limonciello (AMD) <superm1@kernel.org>
-
-Thanks!
-
-> > ---
-> >   kernel/power/hibernate.c |   32 ++++++++++++++------------------
-> >   1 file changed, 14 insertions(+), 18 deletions(-)
-> >
-> > --- a/kernel/power/hibernate.c
-> > +++ b/kernel/power/hibernate.c
-> > @@ -708,21 +708,11 @@ static void power_down(void)
-> >       if (hibernation_mode =3D=3D HIBERNATION_SUSPEND) {
-> >               pm_restore_gfp_mask();
-> >               error =3D suspend_devices_and_enter(mem_sleep_current);
-> > -             if (error) {
-> > -                     hibernation_mode =3D hibernation_ops ?
-> > -                                             HIBERNATION_PLATFORM :
-> > -                                             HIBERNATION_SHUTDOWN;
-> > -             } else {
-> > -                     /* Match pm_restore_gfp_mask() call in hibernate(=
-) */
-> > -                     pm_restrict_gfp_mask();
-> > +             if (!error)
-> > +                     goto rollback;
-> >
-> > -                     /* Restore swap signature. */
-> > -                     error =3D swsusp_unmark();
-> > -                     if (error)
-> > -                             pr_err("Swap will be unusable! Try swapon=
- -a.\n");
-> > -
-> > -                     return;
-> > -             }
-> > +             hibernation_mode =3D hibernation_ops ? HIBERNATION_PLATFO=
-RM :
-> > +                                                  HIBERNATION_SHUTDOWN=
-;
-> >       }
-> >   #endif
-> >
-> > @@ -733,12 +723,9 @@ static void power_down(void)
-> >       case HIBERNATION_PLATFORM:
-> >               error =3D hibernation_platform_enter();
-> >               if (error =3D=3D -EAGAIN || error =3D=3D -EBUSY) {
-> > -                     /* Match pm_restore_gfp_mask() in hibernate(). */
-> > -                     pm_restrict_gfp_mask();
-> > -                     swsusp_unmark();
-> >                       events_check_enabled =3D false;
-> >                       pr_info("Wakeup event detected during hibernation=
-, rolling back.\n");
-> > -                     return;
-> > +                     goto rollback;
-> >               }
-> >               fallthrough;
-> >       case HIBERNATION_SHUTDOWN:
-> > @@ -757,6 +744,15 @@ static void power_down(void)
-> >       pr_crit("Power down manually\n");
-> >       while (1)
-> >               cpu_relax();
-> > +
-> > +rollback:
-> > +     /* Match the pm_restore_gfp_mask() call in hibernate(). */
-> > +     pm_restrict_gfp_mask();
-> > +
-> > +     /* Restore swap signature. */
-> > +     error =3D swsusp_unmark();
-> > +     if (error)
-> > +             pr_err("Swap will be unusable! Try swapon -a.\n");
-> >   }
-> >
-> >   static int load_image_and_restore(void)
-> >
-> >
-> >
->
+Cheers,
+Miguel
 
