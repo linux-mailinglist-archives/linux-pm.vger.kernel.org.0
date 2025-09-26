@@ -1,124 +1,148 @@
-Return-Path: <linux-pm+bounces-35438-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35439-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D88DBA25C7
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Sep 2025 06:03:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C6219BA28B6
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Sep 2025 08:42:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 94B111C0225E
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Sep 2025 04:04:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1EBC51C23B69
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Sep 2025 06:42:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63D4526F2AB;
-	Fri, 26 Sep 2025 04:03:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5265527B342;
+	Fri, 26 Sep 2025 06:42:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Uohg4VZy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kMepNN9U"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EE3926E16A
-	for <linux-pm@vger.kernel.org>; Fri, 26 Sep 2025 04:03:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D48C18DF8D;
+	Fri, 26 Sep 2025 06:42:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758859416; cv=none; b=jjgmY5vfdtQ4+Q8ru388eq1YKiVmrfwVWH7ufZzVA2lMun5Vs2FVkkPGxTUCd21Vg+DrInCPeza9vb0H773FTonpo9pGupZmJtEY4dYgSE/AOefPu1PsoomCFA573IF6g2liNRelYZlT7+x+X5GuEbUy1ZygjwmpIzeewoQ3O3k=
+	t=1758868939; cv=none; b=tzTii1n++Jw+Lw0i0DwlDvd0kBtGrc/K3F+z5pbaOsEAWcFukzx2xyD8g4EuktNrRXnzqgNr/XrmKfdKJqu9YMhakTlruXsoNY0ksHsMoYQMzdVi5IuaW/XuXOyOkEdZSoOaMinXc6pvEd2fFbMCgykp42DVT5mP2Mi+fPN8fRU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758859416; c=relaxed/simple;
-	bh=aDhxeCkC8fJ1lKK66xBz3OEbwpp7thZqdmHZS7jPnLs=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=m4vvu8a4bace6LMMaEyV7+NqQJUViEZ+D9AOZe6JY/xIvssTiouyZoBu7dkztNG/0TiDJN4yaQisfqGIoSTvo/G2+w8bYXvp+3ChqBvMM21Cku6gF+8FILaBCYFyJ3qvnsBHBBwy3t5JjlW4DVcSYctxbXbzaZ42CYsj9+dalVc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Uohg4VZy; arc=none smtp.client-ip=209.85.221.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-414f48bd5a7so177365f8f.2
-        for <linux-pm@vger.kernel.org>; Thu, 25 Sep 2025 21:03:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1758859413; x=1759464213; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jAvxUIgiwZnoN4z0j99g7O5RjAHri0iT1cfvlyji2fc=;
-        b=Uohg4VZySZa6WsDVV2omhDyY2sq4dHlJjpLPnFR0WZ/ZlCPIENZRYFszx7GJUsqNkH
-         0J0Tf3Gv0brDRb8yogpe+WMhJ8tQ8gOCju5mMKuUgN1mAsq7U39It+1dWlZqqTtkT/Bj
-         HRoQVstJHkZGIg3ddBmylNEx+fcgxhJQsIiyKZlhoRFNOc2M1u9u4zQMlUrILkOoX0Mu
-         eV/KnAi9c+ijq3cvvwWoy0dBOWfxcOQ+hqaaP0m4Z0b3+Nv9hJPzaoRcbX+G7/cxDciz
-         7Z2tjZ+6PFPeG2z7SimYbgAssrzbQUFgTJdqWLqbcu9E2YAOVYLm/O8FmukqRl+B/u51
-         zC7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758859413; x=1759464213;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jAvxUIgiwZnoN4z0j99g7O5RjAHri0iT1cfvlyji2fc=;
-        b=hLtx5zCp8/LQoFRaK61Vu1Fsy4OfpeWeIinFZei7nTX6s5gh5GcofXwHvFptZCnpu8
-         fGxJF2jF7yoNEFpZ2FALzIrU48UW7U+fXHpF/APXxtXS0/GcEceMyR1zr7IJJVSxVqJ8
-         yJ5BIJPJUozLxSUxc+5WUff9WgwPe4PGP/ZWrVZEO5vqqU42o1ElrlXHSFr9vwNWxZj8
-         NNiVRcokap0ZWjioUAzqsjH5XErwcIdRM4p9esTNPvZv1iZ1xpX/peFXKh25cx2ygeQA
-         ccGu5ka6s5A6b/bVWw9iUh1RQETFCmvvmd9WIrUzAPY+z5tA0yuR3jUXVC3CPkMNrZdc
-         sAoQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU/RgfUX6oS5BgqGuG3/VHDfliFV0JhTnKHHAzhbY5z5RFtlMba1p9fbqLXM4UeEDn+UycUgIAMEA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzBx7H+xKk1wG3cBx7GAm3N4hFa/GJb4pozuBqn3Tztgt6zJX4D
-	V1LCSPw64cjsA4PV0a46ZevVt46C2p7fkIveDlO3+MKU54bhAL1aDUk71es70vFcjjM=
-X-Gm-Gg: ASbGnctDUsoY5C5gY3NLVrEa98X4zucyiQ8/BybDEU3XAnirfkJ6X7clBIzmAdzrtV/
-	GZog9ZHuLWA2FfYaKKRO0j+Ew3GihfxtJ+EfEGzYOTsgBO6iPhefH7yqmVIAQBJX2fRcCaQHds3
-	kx/4WpS2MWK/p9JuG9IbkjD2V0wbr02Jp6SrzCjAt6bs7nAcDDxuJ/jGiN3YL5SlSRLygB7gTiB
-	w56bC7zLKlFkwD47gfp3UkmeE7kPnMsOseQq3HYqwv9HWgv/IF2/rASQ4Lgp4F4ATWKKHMgnbYy
-	VoQ82Cja+Aw1L1ao6jQMTg44dLc4ZoRrQWauxwDesT6rIdvxuStYz7l1f4u093IkTQxJC++jAfk
-	jP8BiOhAV3Oz8k5l/D3UxfqAkjy1Sm4SI4pzBzcwdk3f3+nnfhQ==
-X-Google-Smtp-Source: AGHT+IG5qSGA+zLmaSVai6Z0wqDL5M4a9N7yHXLm/VuFTKV5wrkMZ8mE7n7IYfhWmV2EMBcPnVktpQ==
-X-Received: by 2002:adf:9bce:0:b0:411:3c14:3aac with SMTP id ffacd0b85a97d-4113c1440f0mr2029219f8f.7.1758859412949;
-        Thu, 25 Sep 2025 21:03:32 -0700 (PDT)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-46e33bf70b5sm56361345e9.21.2025.09.25.21.03.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Sep 2025 21:03:32 -0700 (PDT)
-Date: Fri, 26 Sep 2025 07:03:29 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Icenowy Zheng <uwu@icenowy.me>
-Cc: Drew Fustini <fustini@kernel.org>, Guo Ren <guoren@kernel.org>,
-	Fu Wei <wefu@redhat.com>, Ulf Hansson <ulf.hansson@linaro.org>,
-	linux-riscv@lists.infradead.org, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: [PATCH next] pmdomain: thead: Fix error pointer vs NULL bug in
- th1520_pd_reboot_init()
-Message-ID: <aNYQkVuVpP3Daq7x@stanley.mountain>
+	s=arc-20240116; t=1758868939; c=relaxed/simple;
+	bh=w50rQbsUwHAX7rQjt1NnSquIVsSXVF6HpsxQbh+X4Zo=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=EUNU9PrD4o7K9WjykP3FSt3ua+mY79VUmMBJqQKIQfSvg56nqEIMCcShHZ0cHldNa7EZUW8/EdEmNrlHqKjemxFVC2u7YhOXC2Fed0YaLnKuSgrQ+l3BNzDGP6g/5bR0R7luBdqUPdW06oKoH+vTUMi/aQrm7jMJS3+iT2AhKQo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kMepNN9U; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A1395C4CEF4;
+	Fri, 26 Sep 2025 06:42:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1758868938;
+	bh=w50rQbsUwHAX7rQjt1NnSquIVsSXVF6HpsxQbh+X4Zo=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=kMepNN9UC2aPLOVPTZ5MKfKSZf79LxorNe66eTKPvAXTcQZ3g0NaD9ncRzgjibsiy
+	 YD4AR7sPd+Q0M+QUC7L0nJ9nbkTBm0zBrMH8qRpmU2/Z5MPuTBNhvpCMvtLbEJBqe4
+	 MWWQipCTbxTTVXopTIH7MpzRbL7sbxmoPZXtpN60/iJpINLIksz4gLcHM4MC4FADzT
+	 hm/gCwyUhUEerEMoHGlWLewwsoKMuUH5EPghNIFVYXVsneaFWEZp6SWLPAWUmDpNbB
+	 nCZcOXss6O5CUAQ4MR3XDHxe676/rzD5eIKQFJFoGRSNdA21dlzyx5XEahMVmh1dc7
+	 BOp7Q8UXKQs6w==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8AC74CAC5B8;
+	Fri, 26 Sep 2025 06:42:18 +0000 (UTC)
+From: Manivannan Sadhasivam via B4 Relay <devnull+manivannan.sadhasivam.oss.qualcomm.com@kernel.org>
+Subject: [PATCH v2 0/2] interconnect: qcom: sdx75: Drop QP0 interconnect
+ and BCM nodes
+Date: Fri, 26 Sep 2025 12:12:08 +0530
+Message-Id: <20250926-sdx75-icc-v2-0-20d6820e455c@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Mailer: git-send-email haha only kidding
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAME11mgC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyjHQUlJIzE
+ vPSU3UzU4B8JSMDI1MDSyMz3eKUCnNT3czkZF0z82QjgyTjlFQLk0QloPqCotS0zAqwWdGxtbU
+ A34DkpVsAAAA=
+X-Change-ID: 20250926-sdx75-icc-67c20b3de84a
+To: Georgi Djakov <djakov@kernel.org>, 
+ Rohit Agarwal <quic_rohiagar@quicinc.com>, 
+ Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>
+Cc: linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+ devicetree@vger.kernel.org, Manivannan Sadhasivam <mani@kernel.org>, 
+ Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>, 
+ Lakshmi Sowjanya D <quic_laksd@quicinc.com>, 
+ Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>, 
+ stable@vger.kernel.org
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2092;
+ i=manivannan.sadhasivam@oss.qualcomm.com; h=from:subject:message-id;
+ bh=w50rQbsUwHAX7rQjt1NnSquIVsSXVF6HpsxQbh+X4Zo=;
+ b=owEBbQGS/pANAwAKAVWfEeb+kc71AcsmYgBo1jXImIUMosVMEtE4ghqPdD1MJv1QPBohfPPr7
+ jcaWqgcHH+JATMEAAEKAB0WIQRnpUMqgUjL2KRYJ5dVnxHm/pHO9QUCaNY1yAAKCRBVnxHm/pHO
+ 9frcB/9Zc7MG+v8da1LYI1ZK1cOzGIBzmucX9iVFdcve/fQzbHEVk+Xq1Xuwi0WQZCcMB5HIfRv
+ G0vwDGCkPB46Krt3X35JtJ6b7aiC4i+CGwWSQkFpuuzq9TZNyBT7Tw4EKIAEoLKjXeYQxaS+oLT
+ Rw0Hu4Us1HOHpiiXrDAZguzfrQLgcta8Ck2Jnl1vI6ggK1mO6ffU3rUPsxthIvP+Dv0AX4Fpzc4
+ nc7xJaLYWRTEOAMqaJHuP0NEf6934HaF5SG0481sz8cLPEUFzpgXA7R/PM0DjScLm7vrUmkm4HR
+ uofBSBwY/gYOOAqxCwz7l43Iy4TaKB3YLAFy3ldMViMv0shN
+X-Developer-Key: i=manivannan.sadhasivam@oss.qualcomm.com; a=openpgp;
+ fpr=C668AEC3C3188E4C611465E7488550E901166008
+X-Endpoint-Received: by B4 Relay for
+ manivannan.sadhasivam@oss.qualcomm.com/default with auth_id=461
+X-Original-From: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
+Reply-To: manivannan.sadhasivam@oss.qualcomm.com
 
-The devm_auxiliary_device_create() returns NULL on error.  It never
-returns error pointers.  Using PTR_ERR_OR_ZERO() here means the function
-always returns success.  Replace the PTR_ERR_OR_ZERO() call check with
-a NULL check.
+Hi,
 
-Fixes: 64581f41f4c4 ("pmdomain: thead: create auxiliary device for rebooting")
-Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
+This series drops the QPIC interconnect and BCM nodes for the SDX75 SoC. The
+reason is that this QPIC BCM resource is already defined as a RPMh clock in
+clk-rpmh driver as like other SDX SoCs. So it is wrong to describe the same
+resource in two different providers.
+
+Also, without this series, the NAND driver fails to probe on SDX75 as the
+interconnect sync state disables the QPIC nodes as there were no clients voting
+for this ICC resource. However, the NAND driver had already voted for this BCM
+resource through the clk-rpmh driver. Since both votes come from Linux, RPMh was
+unable to distinguish between these two and ends up disabling the resource
+during sync state.
+
+Cc: linux-arm-msm@vger.kernel.org
+Cc: linux-pm@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: devicetree@vger.kernel.org
+Cc: Manivannan Sadhasivam <mani@kernel.org>
+Cc: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
+Cc: Lakshmi Sowjanya D <quic_laksd@quicinc.com>
+To: Georgi Djakov <djakov@kernel.org>
+To: Konrad Dybcio <konradybcio@kernel.org>
+To: Rob Herring <robh@kernel.org>
+To: Krzysztof Kozlowski <krzk+dt@kernel.org>
+To: Conor Dooley <conor+dt@kernel.org>
+Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
+
+Changes in v2:
+
+- Taken over the series from Raviteja
+- Reordered the patches to avoid breaking build
+- Improved the patch descriptions and kept the values for other defines
+  unchanged
+
 ---
- drivers/pmdomain/thead/th1520-pm-domains.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Raviteja Laggyshetty (2):
+      interconnect: qcom: sdx75: Drop QPIC interconnect and BCM nodes
+      dt-bindings: interconnect: qcom: Drop QPIC_CORE IDs
 
-diff --git a/drivers/pmdomain/thead/th1520-pm-domains.c b/drivers/pmdomain/thead/th1520-pm-domains.c
-index 5213994101a5..d7cb9633c7c8 100644
---- a/drivers/pmdomain/thead/th1520-pm-domains.c
-+++ b/drivers/pmdomain/thead/th1520-pm-domains.c
-@@ -179,8 +179,10 @@ static int th1520_pd_reboot_init(struct device *dev,
- 	struct auxiliary_device *adev;
- 
- 	adev = devm_auxiliary_device_create(dev, "reboot", aon_chan);
-+	if (!adev)
-+		return -ENODEV;
- 
--	return PTR_ERR_OR_ZERO(adev);
-+	return 0;
- }
- 
- static int th1520_pd_probe(struct platform_device *pdev)
+ drivers/interconnect/qcom/sdx75.c             | 26 --------------------------
+ drivers/interconnect/qcom/sdx75.h             |  2 --
+ include/dt-bindings/interconnect/qcom,sdx75.h |  2 --
+ 3 files changed, 30 deletions(-)
+---
+base-commit: 8f5ae30d69d7543eee0d70083daf4de8fe15d585
+change-id: 20250926-sdx75-icc-67c20b3de84a
+
+Best regards,
 -- 
-2.51.0
+Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
+
 
 
