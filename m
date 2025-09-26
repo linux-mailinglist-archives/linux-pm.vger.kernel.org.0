@@ -1,226 +1,244 @@
-Return-Path: <linux-pm+bounces-35497-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35498-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA611BA502D
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Sep 2025 21:57:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B968BA509A
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Sep 2025 22:04:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D98601B24676
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Sep 2025 19:57:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D9B083B9064
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Sep 2025 20:04:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D91B283130;
-	Fri, 26 Sep 2025 19:56:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6980283FC3;
+	Fri, 26 Sep 2025 20:04:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fDrjnqbK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XqXBLH7M"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 486F5280308
-	for <linux-pm@vger.kernel.org>; Fri, 26 Sep 2025 19:56:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C128222F75C
+	for <linux-pm@vger.kernel.org>; Fri, 26 Sep 2025 20:04:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758916617; cv=none; b=ia+RWW2dLoy05asZgSCNE7/LxVEguqof1JnD2dSNFP1mfRwm41fOC4xL2l6gk65bFE+YE+UvGq4Xt3ZEe4gFYN+pWod6eP+xL0fJvdHHxi8ki9hzkP5euuUuXrJs3ROoutyRexxSD9lwkO9inZRO/zIjPfuNLBxRoww0A/dQ+F0=
+	t=1758917056; cv=none; b=m5f92f82Eu5Ar+OgYvh6bUsSpL+DWbn0ngXFNYmDOeUbZDK4LbDSLy5DrFPIplh/J8JHdJ9/+EBQawIGvmqfPNb95zN6jFoNA3FAeTOUoGZUlXmVYpxfDHhPYFSrWeQJLiUdcsw5OZIvTyzUPS9zFhj4IB3fpqa1DD6mrpePncQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758916617; c=relaxed/simple;
-	bh=gcGsUnTOZFpinJGpNbdgg0OIj3E+Jfes84YS3x9qtxQ=;
+	s=arc-20240116; t=1758917056; c=relaxed/simple;
+	bh=u0wXap9HzcbHDc2esJUejmkKTx1774Prm1f8i4eCYL0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fgcTEym7JOhnS7GNXqNL9xevf8rIaCdM3VryQ+5bDPNkcIgLck/cTtdmFuj1tqVudueL8vpDrV995y2Uyi1ZKmNMuS5IeVybz75PbGSwnfhLY/DJetzZ6CDcA0DOSEwkKqySMp1w3BpJHK5rglMOMgCsN+TmCEkewlz1tZeX7/Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fDrjnqbK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07738C113CF
-	for <linux-pm@vger.kernel.org>; Fri, 26 Sep 2025 19:56:56 +0000 (UTC)
+	 To:Cc:Content-Type; b=taoiwyONsy+7/YBpxyNooCILx5LB5WBWcLaws7OYyT894wDAHlUzv7aguiuT3pU8hMulLUFvOKDH0XDYeofw12qgRsdyvD+MFelzALlb1XLnrUBC8dKekZ5qtG/4vogagLCpsszCtqKiFJr1AH5HiJYRRMcsWMbmQZ5JBD2hWaQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XqXBLH7M; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D457C4CEF4
+	for <linux-pm@vger.kernel.org>; Fri, 26 Sep 2025 20:04:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758916617;
-	bh=gcGsUnTOZFpinJGpNbdgg0OIj3E+Jfes84YS3x9qtxQ=;
+	s=k20201202; t=1758917056;
+	bh=u0wXap9HzcbHDc2esJUejmkKTx1774Prm1f8i4eCYL0=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=fDrjnqbKi1REwGPLuCqk77aQ+mPJ2PId/3ZbmQ6+0kMlSIBe89HSdM/Kv1MSijTvB
-	 qH6Ntla8LBHWxNKdVxCohIImXbtkpCtGouJslVo4HyiMdi6cLBnv5fWQBhnM4n54/P
-	 E+40G0XFWSaPJJVEqLxGbFIb9pCXuw07yEjBwPjKs79Bro+FIt4eUA5PLOyE9arHEA
-	 pPGaASQ5L6GRepRHTxKtiQW0z3TLxopjpvzvMENzplXhyVCgbp5Rianc4aZkzugx8X
-	 anZY/f/LN2fktTyBQ/d+y3GTXWi28v9olrpDlqSSckQsIpe4JocUWU+ACKK5L+hxJ0
-	 U656V8rb1OrmQ==
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-36f51ac0595so457422fac.2
-        for <linux-pm@vger.kernel.org>; Fri, 26 Sep 2025 12:56:56 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCV+o3ol5KFu0WpUkc71X1ym4vj2zdnk+UCNbwjKtWOnOyndLniXFChvTJrs2t9X5zaIUx0nev+t0g==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxV6RQwFe1HX1o2I6SADmz57lWth+YKdP6TpN9i+QBZ5CN4FKJm
-	w0g17t3GNOkI+rzzFYlpcFiTHtlOAwT+xCOssEv5KZ6KokxwPG9MLM3vs+CjzYZ6Pxbo07c4eea
-	6H3wXn5xtN/tFASqS8S7fcGWlzxjVnOM=
-X-Google-Smtp-Source: AGHT+IGJ/TxHhBSCdFSnxsLS7fZGkjdX7dT0D8z+pBuvh59HzTsZmy6A7jugzekGBS2nliL1lV4cbhsldt5sqg9JmMk=
-X-Received: by 2002:a05:6870:a79f:b0:2ff:a27f:9c67 with SMTP id
- 586e51a60fabf-35ee91f95f8mr4352546fac.30.1758916616241; Fri, 26 Sep 2025
- 12:56:56 -0700 (PDT)
+	b=XqXBLH7MpPs8v5Nfi99rx8dFVs1C4UzddYm4c9w5E2PsvgD7TyjU8lBxOqxL5CjKL
+	 TPDWBi0l+mqaLNPBozRlDrkYgBPm5cvW6B/Qtin+63GMc+gDOr9MImAdcR+NUlfWjP
+	 gHq6DqF8+bBfdI28XVWocVBnJ0FUNRQ4OAGKtTURhgxL2m5HpKWb3AWSqEKZ4SpEl0
+	 XZwkSHu/E1NXflRVVtyJ4rVCKQRuE1uGKmcZXchDhtG1AWdlkeeiXmKiNDN6EKdWgb
+	 1tS4bYJdjz8SUsJphQXVFeQbXPDbzcr8z24/YF1bS35uR6/yQZTZaV3WP4hJhGPDHy
+	 8T3Hmu15Fj6pg==
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-353f965c048so2086524fac.2
+        for <linux-pm@vger.kernel.org>; Fri, 26 Sep 2025 13:04:16 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWEZU1U0ItCQqmCAQXMs7f78X/+WvRB7kTeCNAySbxI5ifyv8IDAVY0dVc4J+KteXt9M+Svw/qbig==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwVpJ+7BKHd72hnOOWdWQLhhIQioAm+hWOMiIjSYqorog5rAcFa
+	YFJDaQL72ojl57v+RUKzgWi1zzHW8/SaV6MbBj+eNAcfkM27igXvH855pPwT7uVX0bR0Sosiz0z
+	NzS1oGWvUICbjj94Oi4D3KnBmk6w+NaQ=
+X-Google-Smtp-Source: AGHT+IGZF07mr5SO1ZYjdyfGE2jef54MqntMoSpOrobDLjTEYT992teYZDTkICaFnIoXSiM4mqPp/BgEiZIECRbBXWM=
+X-Received: by 2002:a05:6870:fb86:b0:31d:7467:e394 with SMTP id
+ 586e51a60fabf-35ebd6e68e3mr3641805fac.4.1758917055569; Fri, 26 Sep 2025
+ 13:04:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <6196611.lOV4Wx5bFT@rafael.j.wysocki> <2238241.irdbgypaU6@rafael.j.wysocki>
- <68d6edf1cab3b_10520100a5@dwillia2-mobl4.notmuch>
-In-Reply-To: <68d6edf1cab3b_10520100a5@dwillia2-mobl4.notmuch>
+References: <4868ed10-af6d-455d-b5cb-f301c1e81de1@linaro.org>
+In-Reply-To: <4868ed10-af6d-455d-b5cb-f301c1e81de1@linaro.org>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 26 Sep 2025 21:56:45 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0iaEyW743NePaVvZnshpRFtxq3QnCrRb7nJ9oNAJnvVdA@mail.gmail.com>
-X-Gm-Features: AS18NWCYJqFIPAhDtZnyW3qMyNTZNTsvssMQGk-05hTXXDWPyxwVHVeNg4owybg
-Message-ID: <CAJZ5v0iaEyW743NePaVvZnshpRFtxq3QnCrRb7nJ9oNAJnvVdA@mail.gmail.com>
-Subject: Re: [PATCH v4 1/3] PM: runtime: Add auto-cleanup macros for "resume
- and get" operations
-To: dan.j.williams@intel.com
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
-	Jonathan Cameron <jonathan.cameron@huawei.com>, Takashi Iwai <tiwai@suse.de>, 
-	LKML <linux-kernel@vger.kernel.org>, Linux PCI <linux-pci@vger.kernel.org>, 
-	Alex Williamson <alex.williamson@redhat.com>, Bjorn Helgaas <helgaas@kernel.org>, 
-	Zhang Qilong <zhangqilong3@huawei.com>, Ulf Hansson <ulf.hansson@linaro.org>, 
-	Frank Li <Frank.Li@nxp.com>, Dhruva Gole <d-gole@ti.com>
+Date: Fri, 26 Sep 2025 22:04:04 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0j-DYV4XPcJMq+MTq6Ywwb=hzMgkYg_p1GzfxLYsavWUg@mail.gmail.com>
+X-Gm-Features: AS18NWBHLNcSxnJAJoAaxvcg40CwfaqAQeIY0VO-z1TRAMHRepI3dAtoI35v-Yk
+Message-ID: <CAJZ5v0j-DYV4XPcJMq+MTq6Ywwb=hzMgkYg_p1GzfxLYsavWUg@mail.gmail.com>
+Subject: Re: [GIT PULL] thermal driver for v6.18-rc1
+To: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM mailing list <linux-pm@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Gaurav Kohli <quic_gkohli@quicinc.com>, 
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
+	Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, 
+	Marek Vasut <marek.vasut+renesas@mailbox.org>, Sumeet Pawnikar <sumeet4linux@gmail.com>, 
+	Svyatoslav Ryhel <clamor95@gmail.com>, Wolfram Sang <wsa+renesas@sang-engineering.com>, 
+	Michael Walle <mwalle@kernel.org>, Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>, 
+	Sebastian Reichel <sebastian.reichel@collabora.com>, 
+	John Madieu <john.madieu.xa@bp.renesas.com>, 
+	Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Sep 26, 2025 at 9:48=E2=80=AFPM <dan.j.williams@intel.com> wrote:
+Hi Daniel,
+
+On Fri, Sep 26, 2025 at 4:29=E2=80=AFPM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
 >
-> Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > It is generally useful to be able to automatically drop a device's
-> > runtime PM usage counter incremented by runtime PM operations that
-> > resume a device and bump up its usage counter [1].
-> >
-> > To that end, add guard definition macros allowing pm_runtime_put()
-> > and pm_runtime_put_autosuspend() to be used for the auto-cleanup in
-> > those cases.
-> >
-> > Simply put, a piece of code like below:
-> >
-> >       pm_runtime_get_sync(dev);
-> >       .....
-> >       pm_runtime_put(dev);
-> >       return 0;
-> >
-> > can be transformed with guard() like:
-> >
-> >       guard(pm_runtime_active)(dev);
-> >       .....
-> >       return 0;
-> >
-> > (see the pm_runtime_put() call is gone).
-> >
-> > However, it is better to do proper error handling in the majority of
-> > cases, so doing something like this instead of the above is recommended=
-:
-> >
-> >       ACQUIRE(pm_runtime_active_try, pm)(dev);
-> >       if (ACQUIRE_ERR(pm_runtime_active_try, &pm))
-> >               return -ENXIO;
-> >       .....
-> >       return 0;
-> >
-> > In all of the cases in which runtime PM is known to be enabled for the
-> > given device or the device can be regarded as operational (and so it ca=
-n
-> > be accessed) with runtime PM disabled, a piece of code like:
-> >
-> >       ret =3D pm_runtime_resume_and_get(dev);
-> >       if (ret < 0)
-> >               return ret;
-> >       .....
-> >       pm_runtime_put(dev);
-> >       return 0;
-> >
-> > can be changed as follows:
-> >
-> >       ACQUIRE(pm_runtime_active_try, pm)(dev);
-> >       ret =3D ACQUIRE_ERR(pm_runtime_active_try, &pm);
-> >       if (ret < 0)
-> >               return ret;
-> >       .....
-> >       return 0;
-> >
-> > (again, see the pm_runtime_put() call is gone).
-> >
-> > Still, if the device cannot be accessed unless runtime PM has been
-> > enabled for it, the CLASS(pm_runtime_get_active_enabled) variant
+> Hi Rafael,
 >
-> Leftover from CLASS() approach?
-
-Yup.
-
-> s/CLASS(pm_runtime_get_active_enabled)/ACQUIRE(pm_runtime_active_try_enab=
-led)/
-
-I'll fix this when applying.
-
-> > needs to be used, that is (in the context of the example above):
-> >
-> >       ACQUIRE(pm_runtime_active_try_enabled, pm)(dev);
-> >       ret =3D ACQUIRE_ERR(pm_runtime_active_try_enabled, &pm);
-> >       if (ret < 0)
-> >               return ret;
-> >       .....
-> >       return 0;
-> >
-> > When the original code calls pm_runtime_put_autosuspend(), use one
-> > of the "auto" guard variants, pm_runtime_active_auto/_try/_enabled,
-> > so for example, a piece of code like:
-> >
-> >       ret =3D pm_runtime_resume_and_get(dev);
-> >       if (ret < 0)
-> >               return ret;
-> >       .....
-> >       pm_runtime_put_autosuspend(dev);
-> >       return 0;
-> >
-> > will become:
-> >
-> >       ACQUIRE(pm_runtime_active_auto_try_enabled, pm)(dev);
-> >       ret =3D ACQUIRE_ERR(pm_runtime_active_auto_try_enabled, &pm);
-> >       if (ret < 0)
-> >               return ret;
-> >       .....
-> >       return 0;
-> >
-> > Note that the cases in which the return value of pm_runtime_get_sync()
-> > is checked can also be handled with the help of the new class macros.
+> please consider the following changes since commit
+> 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
 >
-> s/class/guard/
-
-Right, thanks!
-
-> > For example, a piece of code like:
-> >
-> >       ret =3D pm_runtime_get_sync(dev);
-> >       if (ret < 0) {
-> >               pm_runtime_put(dev);
-> >               return ret;
-> >       }
-> >       .....
-> >       pm_runtime_put(dev);
-> >       return 0;
-> >
-> > can be rewritten as:
-> >
-> >       ACQUIRE(pm_runtime_active_auto_try_enabled, pm)(dev);
-> >       ret =3D ACQUIRE_ERR(pm_runtime_active_auto_try_enabled, &pm);
-> >       if (ret < 0)
-> >               return ret;
-> >       .....
-> >       return 0;
+>    Linux 6.17-rc1 (2025-08-10 19:41:16 +0300)
 >
-> I like that this appears to unify the pm_runtime_resume_and_get() and
-> pm_runtime_get_sync() usages into common pattern.
-
-That's intentional.
-
-> > or pm_runtime_get_active_try can be used if transparent handling of
-> > disabled runtime PM is desirable.
+> are available in the Git repository at:
 >
-> Do you think the above should go in Documentation too?
-
-It will, when early adopters tell me that they are happy with it.
-
-> Either way, for the usage of ACQUIRE(), looks good to me.
 >
-> Acked-by: Dan Williams <dan.j.williams@intel.com>
+> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git
+> tags/thermal-v6.18-rc1
+>
+> for you to fetch changes up to 79428e60897916401c9ed326f6ada4d7c7c997a3:
+>
+>    dt-bindings: thermal: qcom-tsens: Document the Glymur temperature
+> Sensor (2025-09-26 13:27:44 +0200)
+>
+> ----------------------------------------------------------------
+> - Add the QCS615 compatible DT bindings for QCom platforms (Gaurav
+>    Kohli)
+>
+> - Support fallback trimming values when the fuse is empty in the R-Car
+>    driver (Marek Vasut)
+>
+> - Remove unneeded semicolon in the Mediatek LVTS driver (Jiapeng
+>    Chong)
+>
+> - Fix the LMH Kconfig option by selecting QCOM_SCM and take the
+>    opportunity to add the COMPILE_TEST option for the QCom's LMH
+>    feature (Dmitry Baryshkov)
+>
+> - Fix the missing includes and incorrect error message in the Qcom's
+>    LMH driver (Dmitry Baryshkov)
+>
+> - Fix comment typo and add the documentation in the Kconfig for the
+>    R-Car Gen3 and Gen4 (Marek Vasut)
+>
+> - Add Tegra114 SOCTHERM support (Svyatoslav Ryhel)
+>
+> - Rename the functions name in the driver to be consistent and generic
+>    with the different R-Car platform variants (Wolfram Sang)
+>
+> - Register the TI K3 J72xx bandgap sensor as a hwmon sensor too
+>    (Michael Walle)
+>
+> - Add and document the thermal sensor unit reporting the junction
+>    temperature of the RZ/G3S SoC (Claudiu Beznea)
+>
+> - Support the GRF in the Rockchip driver (Sebastian Reichel)
+>
+> - Add a temperature IIO sensor channel in the generic thermal ADC
+>    driver (Svyatoslav Ryhel)
+>
+> - Document the temperature sensor on the QCOM's Glymur platform (Manaf
+>    Meethalavalappu)
+>
+> - Add and document the thermal sensor unit reporting the junction
+>    temperature of the RZ/G3E SoC (John Madieu)
+>
+> ----------------------------------------------------------------
+> Claudiu Beznea (2):
+>        dt-bindings: thermal: r9a08g045-tsu: Document the TSU unit
+>        thermal/drivers/renesas/rzg3s: Add thermal driver for the Renesas
+> RZ/G3S SoC
+>
+> Dmitry Baryshkov (2):
+>        thermal/drivers/qcom: Make LMH select QCOM_SCM
+>        thermal/drivers/qcom/lmh: Add missing IRQ includes
+>
+> Gaurav Kohli (1):
+>        dt-bindings: thermal: tsens: Add QCS615 compatible
+>
+> Jiapeng Chong (1):
+>        thermal/drivers/mediatek/lvts_thermal: Remove unneeded semicolon
+>
+> John Madieu (2):
+>        dt-bindings: thermal: r9a09g047-tsu: Document the TSU unit
+>        thermal/drivers/renesas/rzg3e: Add thermal driver for the Renesas
+> RZ/G3E SoC
+>
+> Manaf Meethalavalappu Pallikunhi (1):
+>        dt-bindings: thermal: qcom-tsens: Document the Glymur temperature
+> Sensor
+>
+> Marek Vasut (4):
+>        thermal/drivers/rcar_gen3: Add support for per-SoC default trim
+> values
+>        thermal/drivers/rcar_gen3: Add support for R-Car V4H default trim
+> values
+>        thermal/drivers/rcar_gen3: Fix comment typo
+>        thermal/drivers/rcar_gen3: Document Gen4 support in Kconfig entry
+>
+> Michael Walle (1):
+>        thermal/drivers/k3_j72xx_bandgap: Register sensors with hwmon
+>
+> Sebastian Reichel (3):
+>        thermal/drivers/rockchip: Unify struct rockchip_tsadc_chip format
+>        thermal/drivers/rockchip: Shut up GRF warning
+>        dt-bindings: thermal: rockchip: Tighten grf requirements
+>
+> Sumeet Pawnikar (1):
+>        drivers/thermal/qcom/lmh: Fix incorrect error message
+>
+> Svyatoslav Ryhel (5):
+>        dt-bindings: thermal: Document Tegra114 SOCTHERM Thermal
+> Management System
+>        thermal/drivers/tegra/soctherm-fuse: Prepare calibration for
+> Tegra114 support
+>        dt-bindings: thermal: add Tegra114 soctherm header
+>        thermal/drivers/tegra: Add Tegra114 specific SOCTHERM driver
+>        thermal/drivers/thermal-generic-adc: Add temperature sensor channe=
+l
+>
+> Wolfram Sang (1):
+>        thermal/drivers/rcar_gen3: Fix mapping SoCs to generic Gen4 entry
+>
+>   .../bindings/thermal/nvidia,tegra124-soctherm.yaml |   2 +
+>   .../devicetree/bindings/thermal/qcom-tsens.yaml    |   2 +
+>   .../bindings/thermal/renesas,r9a08g045-tsu.yaml    |  93 +++++++
+>   .../bindings/thermal/renesas,r9a09g047-tsu.yaml    |  87 +++++++
+>   .../bindings/thermal/rockchip-thermal.yaml         |  15 ++
+>   MAINTAINERS                                        |  14 ++
+>   drivers/thermal/k3_j72xx_bandgap.c                 |   4 +
+>   drivers/thermal/mediatek/lvts_thermal.c            |   2 +-
+>   drivers/thermal/qcom/Kconfig                       |   3 +-
+>   drivers/thermal/qcom/lmh.c                         |   4 +-
+>   drivers/thermal/renesas/Kconfig                    |  21 +-
+>   drivers/thermal/renesas/Makefile                   |   3 +
+>   drivers/thermal/renesas/rcar_gen3_thermal.c        |  63 +++--
+>   drivers/thermal/renesas/rzg3s_thermal.c            | 272
+> +++++++++++++++++++++
+>   drivers/thermal/rockchip_thermal.c                 |  50 ++--
+>   drivers/thermal/tegra/Makefile                     |   1 +
+>   drivers/thermal/tegra/soctherm-fuse.c              |  18 +-
+>   drivers/thermal/tegra/soctherm.c                   |  13 +
+>   drivers/thermal/tegra/soctherm.h                   |  11 +-
+>   drivers/thermal/tegra/tegra114-soctherm.c          | 209 ++++++++++++++=
+++
+>   drivers/thermal/tegra/tegra124-soctherm.c          |   4 +
+>   drivers/thermal/tegra/tegra132-soctherm.c          |   4 +
+>   drivers/thermal/tegra/tegra210-soctherm.c          |   4 +
+>   drivers/thermal/thermal-generic-adc.c              |  55 ++++-
+>   include/dt-bindings/thermal/tegra114-soctherm.h    |  19 ++
+>   25 files changed, 911 insertions(+), 62 deletions(-)
+>   create mode 100644
+> Documentation/devicetree/bindings/thermal/renesas,r9a08g045-tsu.yaml
+>   create mode 100644
+> Documentation/devicetree/bindings/thermal/renesas,r9a09g047-tsu.yaml
+>   create mode 100644 drivers/thermal/renesas/rzg3s_thermal.c
+>   create mode 100644 drivers/thermal/tegra/tegra114-soctherm.c
+>   create mode 100644 include/dt-bindings/thermal/tegra114-soctherm.h
+>
+>
+> --
 
-Thank you!
+Pulled and added to linux-pm.git/linux-next, thanks!
 
