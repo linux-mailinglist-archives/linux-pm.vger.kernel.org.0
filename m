@@ -1,298 +1,99 @@
-Return-Path: <linux-pm+bounces-35478-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35475-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1DF18BA4A02
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Sep 2025 18:28:51 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64878BA49DE
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Sep 2025 18:27:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CCBDE4C6460
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Sep 2025 16:28:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B3EA5380F10
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Sep 2025 16:27:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01D08296BC4;
-	Fri, 26 Sep 2025 16:27:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W41rJvup"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EE0825FA2D;
+	Fri, 26 Sep 2025 16:27:23 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from srv01.abscue.de (abscue.de [89.58.28.240])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3D36261B7F;
-	Fri, 26 Sep 2025 16:27:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F34125A2CF;
+	Fri, 26 Sep 2025 16:27:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.58.28.240
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758904075; cv=none; b=EMBfP55rRU4UM4U7P3oQhHcPJ5/yDv7hcb06Ze0ORMUBy6QpeqzTEIduCGd32EvoE0M7tWj13KE/k5cI/k4/7pKZuBQyWbXe3QIjfLXLEzTxK71q2KIGCEEex2wTJFyBJ80FtQx3y1OsxH14pYAhkPEwGLvkSkYZ5r5WZJxG5l8=
+	t=1758904043; cv=none; b=QVdAZlKWD7BY70GCDAK2IOxnoytmg/8IV5DrWYAQVTVRfl54OI8ONK/DcR7bUcSpoH3qUQ0Oofq2Ppwa2w9sXgr7+gLVoPQru0Ld/AGMBJrI9WyUl/1KleJSutyme3qeLnZZ9A/q+miqIxEJWEeiVPwULyI1omQeiq1zG3pg1D4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758904075; c=relaxed/simple;
-	bh=teMC0tMk1mLM4Of0idpMUE3tdsOJWZSq9BD6q7gznoA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=GU3mm6hnmG6z0p/8bkJPzT10qawM6cO1xRNQVmsFNId0gh7MzPkGzD014/HEXChhgcAC/KNtvBGr80qq0Sr2NoZXeeenkXr79BkOQv7Tk9gHYSikhgLIY5XOapuaJikq3+eWRLiS+Ig2GWYSv+Rns4fKkjzXw+dUTC6eDvmBFdo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W41rJvup; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36D07C4CEF4;
-	Fri, 26 Sep 2025 16:27:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758904075;
-	bh=teMC0tMk1mLM4Of0idpMUE3tdsOJWZSq9BD6q7gznoA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=W41rJvupOXbqPvxGyRp7j5AeAfrhejdE0HwU9ZmzdSh5mEVveCxWRFFFbR0lr2gSJ
-	 Y1tkKKU27yX4JyhxZIkzyRwwm2OQfVAkMDcMUodgr46zeaPfy7sKsErwtLmMcO79tk
-	 JT8edlZZKWEFHp9lzBRqrj0WpLr6UIf6m9jWmgmIZVx0s48nEGRhvPT+jQUEayPVpW
-	 wfwDoqESldskL+bf5KPBTxmr1XE1OV40kmu02x7TyDr1qddgSIaR7eRJjos6ZE4oti
-	 wIohqrHZDRdpjedNgZbiOeaGSiDqIs0/Krkd0R2ufn8evPhSoeIXGAZn4ZIadAS2uS
-	 xXllXCIsMJ/lA==
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-To: Linux PM <linux-pm@vger.kernel.org>,
- Jonathan Cameron <jonathan.cameron@huawei.com>
-Cc: Takashi Iwai <tiwai@suse.de>, LKML <linux-kernel@vger.kernel.org>,
- Linux PCI <linux-pci@vger.kernel.org>,
- Alex Williamson <alex.williamson@redhat.com>,
- Bjorn Helgaas <helgaas@kernel.org>, Zhang Qilong <zhangqilong3@huawei.com>,
- Ulf Hansson <ulf.hansson@linaro.org>, Frank Li <Frank.Li@nxp.com>,
- Dhruva Gole <d-gole@ti.com>
-Subject:
- [PATCH v4 1/3] PM: runtime: Add auto-cleanup macros for "resume and get"
- operations
-Date: Fri, 26 Sep 2025 17:47:14 +0200
-Message-ID: <2238241.irdbgypaU6@rafael.j.wysocki>
-Organization: Linux Kernel Development
-In-Reply-To: <6196611.lOV4Wx5bFT@rafael.j.wysocki>
-References: <6196611.lOV4Wx5bFT@rafael.j.wysocki>
+	s=arc-20240116; t=1758904043; c=relaxed/simple;
+	bh=try/PAT9gj7u33ZxmLD+vfMHhDbHVLWks0cuFzMy8Es=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=LDOzr6x8nFdElpX9ZLqonLghQ4p/+a2/FDuS85EA6gyc7INQ8fV97MkOTzsQNgmUDPWh9OO3h4iVVu5C7iR/kJXyw3khMycfznY+UFqbJeXLI5FZ06YqwFibizpT7u2gsMN00Z4tmA/z3aFaSYOsXcOkGuvf9zSjt8Q57uIbiaw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=abscue.de; spf=pass smtp.mailfrom=abscue.de; arc=none smtp.client-ip=89.58.28.240
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=abscue.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=abscue.de
+Received: from srv01.abscue.de (localhost [127.0.0.1])
+	by spamfilter.srv.local (Postfix) with ESMTP id 693F61C24F8;
+	Fri, 26 Sep 2025 18:27:06 +0200 (CEST)
+X-Spam-Level: 
+Received: from fluffy-mammal.metal.fwg-cag.de (unknown [IPv6:2001:9e8:cdf8:0:ec51:b786:a581:3dd1])
+	by srv01.abscue.de (Postfix) with ESMTPSA id B7FE51C24F1;
+	Fri, 26 Sep 2025 18:27:05 +0200 (CEST)
+From: =?utf-8?q?Otto_Pfl=C3=BCger?= <otto.pflueger@abscue.de>
+Subject: [PATCH 0/5] power: reset: sc27xx: Add SC2730 and reboot support
+Date: Fri, 26 Sep 2025 18:23:22 +0200
+Message-Id: <20250926-sc2730-reboot-v1-0-62ebfd3d31bb@abscue.de>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAPq91mgC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1MDSyMz3eJkI3NjA92i1KT8/BJd8zRjy0SglKmJeYoSUE9BUWpaZgXYvOj
+ Y2loAcVAmmV8AAAA=
+X-Change-ID: 20250926-sc2730-reboot-7f39a025547d
+To: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Orson Zhai <orsonzhai@gmail.com>, 
+ Baolin Wang <baolin.wang@linux.alibaba.com>, 
+ Chunyan Zhang <zhang.lyra@gmail.com>, Lee Jones <lee@kernel.org>
+Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Otto_Pfl=C3=BCger?= <otto.pflueger@abscue.de>
+X-Mailer: b4 0.14.2
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Implement poweroff and reboot support for the SC2730 PMIC in the
+existing driver for the SC27xx series. Add missing device tree bindings
+and compatibles.
 
-It is generally useful to be able to automatically drop a device's
-runtime PM usage counter incremented by runtime PM operations that
-resume a device and bump up its usage counter [1].
+For some reason, a reboot implementation for SC2731 already exists in
+the SPI driver used for communicating with the PMIC
+(drivers/spi/spi-sprd-adi.c). This obviously does not belong there, but
+it appears that SC2731 has no dedicated reboot registers and requires
+triggering the PMIC watchdog for a reboot. Since there is no driver for
+the PMIC watchdog yet, keep that code unmodified and only implement
+reboot for SC2730 here. Once a watchdog driver is implemented, the
+duplicate code for setting the reboot mode can be removed from the SPI
+driver.
 
-To that end, add guard definition macros allowing pm_runtime_put()
-and pm_runtime_put_autosuspend() to be used for the auto-cleanup in
-those cases.
-
-Simply put, a piece of code like below:
-
-	pm_runtime_get_sync(dev);
-	.....
-	pm_runtime_put(dev);
-	return 0;
-
-can be transformed with guard() like:
-
-	guard(pm_runtime_active)(dev);
-	.....
-	return 0;
-
-(see the pm_runtime_put() call is gone).
-
-However, it is better to do proper error handling in the majority of
-cases, so doing something like this instead of the above is recommended:
-
-	ACQUIRE(pm_runtime_active_try, pm)(dev);
-	if (ACQUIRE_ERR(pm_runtime_active_try, &pm))
-		return -ENXIO;
-	.....
-	return 0;
-
-In all of the cases in which runtime PM is known to be enabled for the
-given device or the device can be regarded as operational (and so it can
-be accessed) with runtime PM disabled, a piece of code like:
-
-	ret = pm_runtime_resume_and_get(dev);
-	if (ret < 0)
-		return ret;
-	.....
-	pm_runtime_put(dev);
-	return 0;
-
-can be changed as follows:
-
-	ACQUIRE(pm_runtime_active_try, pm)(dev);
-	ret = ACQUIRE_ERR(pm_runtime_active_try, &pm);
-	if (ret < 0)
-		return ret;
-	.....
-	return 0;
-
-(again, see the pm_runtime_put() call is gone).
-
-Still, if the device cannot be accessed unless runtime PM has been
-enabled for it, the CLASS(pm_runtime_get_active_enabled) variant
-needs to be used, that is (in the context of the example above):
-
-	ACQUIRE(pm_runtime_active_try_enabled, pm)(dev);
-	ret = ACQUIRE_ERR(pm_runtime_active_try_enabled, &pm);
-	if (ret < 0)
-		return ret;
-	.....
-	return 0;
-
-When the original code calls pm_runtime_put_autosuspend(), use one
-of the "auto" guard variants, pm_runtime_active_auto/_try/_enabled,
-so for example, a piece of code like:
-
-	ret = pm_runtime_resume_and_get(dev);
-	if (ret < 0)
-		return ret;
-	.....
-	pm_runtime_put_autosuspend(dev);
-	return 0;
-
-will become:
-
-	ACQUIRE(pm_runtime_active_auto_try_enabled, pm)(dev);
-	ret = ACQUIRE_ERR(pm_runtime_active_auto_try_enabled, &pm);
-	if (ret < 0)
-		return ret;
-	.....
-	return 0;
-
-Note that the cases in which the return value of pm_runtime_get_sync()
-is checked can also be handled with the help of the new class macros.
-For example, a piece of code like:
-
-	ret = pm_runtime_get_sync(dev);
-	if (ret < 0) {
-		pm_runtime_put(dev);
-		return ret;
-	}
-	.....
-	pm_runtime_put(dev);
-	return 0;
-
-can be rewritten as:
-
-	ACQUIRE(pm_runtime_active_auto_try_enabled, pm)(dev);
-	ret = ACQUIRE_ERR(pm_runtime_active_auto_try_enabled, &pm);
-	if (ret < 0)
-		return ret;
-	.....
-	return 0;
-
-or pm_runtime_get_active_try can be used if transparent handling of
-disabled runtime PM is desirable.
-
-Link: https://lore.kernel.org/linux-pm/878qimv24u.wl-tiwai@suse.de/ [1]
-Link: https://lore.kernel.org/linux-pm/20250926150613.000073a4@huawei.com/
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Otto Pflüger <otto.pflueger@abscue.de>
 ---
+Otto Pflüger (5):
+      dt-bindings: power: reset: Add SC27xx series PMIC poweroff
+      dt-bindings: mfd: sc2731: Reference sprd,sc2731-poweroff
+      power: reset: sc27xx: Use devm_register_sys_off_handler
+      power: reset: sc27xx: Add support for SC2730 and OF match table
+      power: reset: sc27xx: Add reboot support for SC2730
 
-v3 -> v4:
-   * Use guard definition macros instead of raw DEFINE_CLASS() (Jonathan)
-   * Change pm_runtime_get_active() helper definition to return an int instead
-     of a pointer
-   * Update changelog to match the new code
-
-v2 -> v3:
-   * Two more class definitions for the case in which resume errors can be
-     neglected.
-   * Update of new code comments (for more clarity).
-   * Changelog update.
-
-v1 -> v2:
-   * Rename the new classes and the new static inline helper.
-   * Add two classes for handling disabled runtime PM.
-   * Expand the changelog.
-   * Adjust the subject.
-
+ .../devicetree/bindings/mfd/sprd,sc2731.yaml       |   8 +
+ .../bindings/power/reset/sprd,sc2731-poweroff.yaml |  22 +++
+ drivers/power/reset/sc27xx-poweroff.c              | 170 +++++++++++++++++++--
+ 3 files changed, 188 insertions(+), 12 deletions(-)
 ---
- drivers/base/power/runtime.c |    2 +
- include/linux/pm_runtime.h   |   44 ++++++++++++++++++++++++++++++++++---------
- 2 files changed, 37 insertions(+), 9 deletions(-)
+base-commit: 8e2755d7779a95dd61d8997ebce33ff8b1efd3fb
+change-id: 20250926-sc2730-reboot-7f39a025547d
 
---- a/drivers/base/power/runtime.c
-+++ b/drivers/base/power/runtime.c
-@@ -796,6 +796,8 @@ static int rpm_resume(struct device *dev
- 		if (dev->power.runtime_status == RPM_ACTIVE &&
- 		    dev->power.last_status == RPM_ACTIVE)
- 			retval = 1;
-+		else if (rpmflags & RPM_TRANSPARENT)
-+			goto out;
- 		else
- 			retval = -EACCES;
- 	}
---- a/include/linux/pm_runtime.h
-+++ b/include/linux/pm_runtime.h
-@@ -21,6 +21,7 @@
- #define RPM_GET_PUT		0x04	/* Increment/decrement the
- 					    usage_count */
- #define RPM_AUTO		0x08	/* Use autosuspend_delay */
-+#define RPM_TRANSPARENT	0x10	/* Succeed if runtime PM is disabled */
- 
- /*
-  * Use this for defining a set of PM operations to be used in all situations
-@@ -511,6 +512,19 @@ static inline int pm_runtime_get_sync(st
- 	return __pm_runtime_resume(dev, RPM_GET_PUT);
- }
- 
-+static inline int pm_runtime_get_active(struct device *dev, int rpmflags)
-+{
-+	int ret;
-+
-+	ret = __pm_runtime_resume(dev, RPM_GET_PUT | rpmflags);
-+	if (ret < 0) {
-+		pm_runtime_put_noidle(dev);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
- /**
-  * pm_runtime_resume_and_get - Bump up usage counter of a device and resume it.
-  * @dev: Target device.
-@@ -521,15 +535,7 @@ static inline int pm_runtime_get_sync(st
-  */
- static inline int pm_runtime_resume_and_get(struct device *dev)
- {
--	int ret;
--
--	ret = __pm_runtime_resume(dev, RPM_GET_PUT);
--	if (ret < 0) {
--		pm_runtime_put_noidle(dev);
--		return ret;
--	}
--
--	return 0;
-+	return pm_runtime_get_active(dev, 0);
- }
- 
- /**
-@@ -606,6 +612,26 @@ static inline int pm_runtime_put_autosus
- 	return __pm_runtime_put_autosuspend(dev);
- }
- 
-+DEFINE_GUARD(pm_runtime_active, struct device *,
-+	     pm_runtime_get_sync(_T), pm_runtime_put(_T));
-+DEFINE_GUARD(pm_runtime_active_auto, struct device *,
-+	     pm_runtime_get_sync(_T), pm_runtime_put_autosuspend(_T));
-+/*
-+ * Use the following guards with ACQUIRE()/ACQUIRE_ERR().
-+ *
-+ * The difference between the "_try" and "_try_enabled" variants is that the
-+ * former do not produce an error when runtime PM is disabled for the given
-+ * device.
-+ */
-+DEFINE_GUARD_COND(pm_runtime_active, _try,
-+		  pm_runtime_get_active(_T, RPM_TRANSPARENT))
-+DEFINE_GUARD_COND(pm_runtime_active, _try_enabled,
-+		  pm_runtime_resume_and_get(_T))
-+DEFINE_GUARD_COND(pm_runtime_active_auto, _try,
-+		  pm_runtime_get_active(_T, RPM_TRANSPARENT))
-+DEFINE_GUARD_COND(pm_runtime_active_auto, _try_enabled,
-+		  pm_runtime_resume_and_get(_T))
-+
- /**
-  * pm_runtime_put_sync - Drop device usage counter and run "idle check" if 0.
-  * @dev: Target device.
-
-
+Best regards,
+-- 
+Otto Pflüger <otto.pflueger@abscue.de>
 
 
