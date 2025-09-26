@@ -1,176 +1,150 @@
-Return-Path: <linux-pm+bounces-35492-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35493-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2204DBA4E1F
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Sep 2025 20:24:08 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E4531BA4E52
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Sep 2025 20:29:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D6EF13A89A0
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Sep 2025 18:24:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2FBBA1C059E7
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Sep 2025 18:29:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D674027A12C;
-	Fri, 26 Sep 2025 18:24:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FF8030C630;
+	Fri, 26 Sep 2025 18:29:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BQFPgJpx"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ciFsacAK"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0D6022D7B0
-	for <linux-pm@vger.kernel.org>; Fri, 26 Sep 2025 18:24:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74D853090EC;
+	Fri, 26 Sep 2025 18:29:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758911044; cv=none; b=oACb7hVmr50Ysgw51AjO3pfuKjd6p3JULrdB6JYfEkRpzDWyUOmh9IWAuikcePAjDnM/BQiOlzGch4KB57+tuWPT4R9ozY9zVXMaO6R6PfwJypF63V+M+DobC+2r4WqN7xk/SO9P/tDgY7dxml+znuXdvmSE89n/cMEXfg0kcuM=
+	t=1758911370; cv=none; b=Hf+3P+EpHoDBJc6/lRPwEaoU4FmZ5iY2kmmSMA4r+dvOtsKLIVeMIW3YjdooNz1HO1BfZl9T4TufGL4T1ddrv0rtvdpmLwsjLWGnJr9VdCTsV2VI/rLKce6mrqjfKH3f3SRhslcoQFp06TVuESFnDvfNXkK2uS99LzHvUTdsJUk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758911044; c=relaxed/simple;
-	bh=9j6mK8FZFeUuRCm5ZOvz1DgkZxPq6hvgFrBjNRNB14E=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KnidVDwbz9vrEe7VntTTyFerJc/5WZjZ6nRgmp9aQuuoMGHP4mY9lktQ4LoVV/iM1gv8L6A8pAKaT/rlbmDD8s9QTp7chshvC7Us8fale9mxGjtG69STW3wZerJTXjjFIW1PH3/v9ItqRu1aCvOduZFhOpZ2UgE05116KoVM/jE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BQFPgJpx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91304C116D0
-	for <linux-pm@vger.kernel.org>; Fri, 26 Sep 2025 18:24:04 +0000 (UTC)
+	s=arc-20240116; t=1758911370; c=relaxed/simple;
+	bh=IixPxHHIoOB91FusLLycCABHM1SBl3OhA4P69+FGoaI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=GqkpfS/tJZaTIiUTvAjlYJwu2lM9STi31+BmDxlAfE0L74/Lde2QF4UXFserLGCXt9t2+L/fk7qAS/8EVkCyR+/gjICOLFAfUFDF9+M5hZd8tn6pbvHyqFtwTMGQA+NQLbt9oLXVzco1f6GZa3MDDp0k7KG0wcrCj5BIhSf4zdg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ciFsacAK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 577A3C4CEF4;
+	Fri, 26 Sep 2025 18:29:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758911044;
-	bh=9j6mK8FZFeUuRCm5ZOvz1DgkZxPq6hvgFrBjNRNB14E=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=BQFPgJpxPOJODv3Xee+xT7Rs3u0PfBsqnWbEumb5zZ3xdwANczkd4FExzh75C/1dG
-	 zoTTclimXzkL2MNb+3q1QbkhaAOk2kQiRP7es/Diodek60uBnM43aoNqNyAxT9T3gr
-	 smRqUJmZb4ciokuTXmvGfKB7BwNVZYMs2ryXikTOA3EqHllnlF9TbmNssrgNavzAUf
-	 d1bC385YSV8k73OF8TeYsPwiReGyVdmM6+3viYceuAZOry3GSdnqs532xhvziO6VLK
-	 xDtE+MOc9aNcfGrhJ5ZfV8kTLIZ9F3Z8IkgRlWK6jzPFcJ4S+sl2fEA8/nHa6drq5b
-	 OmyPZQNKVof4g==
-Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-30cce50dfb4so2180128fac.0
-        for <linux-pm@vger.kernel.org>; Fri, 26 Sep 2025 11:24:04 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUMo630zwgz1vQSQtTAE+T93je/CBy+73YNsW/z6vnNFcm1Z8v5ex60VnGC43MeKmf9PhyFurpnfg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxhZMjp0VsDbhwMuKpwLD3RVmxqlNe9/OS6ojkuz/rQ4nKMVQWY
-	QftZOfkeo59SL/YfaEPbswisiJDhvxvVgO1dd2Sqt8xzw2APkqg5aZJJHsFHOyEt8RZ/HA6qCXD
-	0m3bQuvFQoV+sWWpm5x+fP0fuyrZXCtA=
-X-Google-Smtp-Source: AGHT+IFHmZiOIDgSSMHpIB312kAThjnMD4yPG9dBopbbEpQcDVj+Z5hduxWMlKK1Krru7E7A5can3wvIOP+MsO+XVq0=
-X-Received: by 2002:a05:6870:819c:b0:36e:f8c2:7454 with SMTP id
- 586e51a60fabf-36ef90ecd76mr1757096fac.37.1758911043746; Fri, 26 Sep 2025
- 11:24:03 -0700 (PDT)
+	s=k20201202; t=1758911369;
+	bh=IixPxHHIoOB91FusLLycCABHM1SBl3OhA4P69+FGoaI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=ciFsacAKEbi+bBHDjMcma3/n3Nf2PLQEagqLs5ESCqK/z9arDXoif85Tw85rUu7jI
+	 wYGbbn1B9JRYcdcCOMgeNbONVekvfSbg+cPHnO9sF2v8Y4OnN6TctCeRtUyyu+H/V1
+	 GWPbVqD8vwSLeSQvzgghxeTCLiEfO4/Q0YupJzIsPJAEmYhR4CCOeTjzyKJwMkr61P
+	 VEOdVNttZ+XY9mog7gEWFwHItwDE2MVXOR3OOMHv5wKdKibiayu8076cMALMY+sLx1
+	 ga1qpFp0cK7rVKE0OxXg22hWrijgwQYr3apPQKkT3WBRC0YFYY8M2iahRmtduZ4MJ0
+	 bfqEYhEYelVCA==
+Message-ID: <e47c4c32-faea-4b24-a77e-9a3ec0e2b757@kernel.org>
+Date: Fri, 26 Sep 2025 13:29:28 -0500
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <5049058.31r3eYUQgx@rafael.j.wysocki> <2245131.irdbgypaU6@rafael.j.wysocki>
- <20250926144947.00002f75@huawei.com> <CAJZ5v0gnqoJ8bALZT61ZvTA=chp8y5QBiA7ZpNQ6fFJuQzZUnA@mail.gmail.com>
- <68d6d7dbd18b4_10520100c8@dwillia2-mobl4.notmuch>
-In-Reply-To: <68d6d7dbd18b4_10520100c8@dwillia2-mobl4.notmuch>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 26 Sep 2025 20:23:51 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0gcr1z_J=b7z-Z22aSOUfubgHpTcYtag778CUQUO8H6OQ@mail.gmail.com>
-X-Gm-Features: AS18NWCQg1vTq06aFYsgxKOY8Nlswy9iDNeDFTht59FbvEtD8udM9-TMj4SOtz4
-Message-ID: <CAJZ5v0gcr1z_J=b7z-Z22aSOUfubgHpTcYtag778CUQUO8H6OQ@mail.gmail.com>
-Subject: Re: [PATCH v1 2/3] PCI/sysfs: Use PM runtime class macro for auto
- cleanup in reset_method_store()
-To: dan.j.williams@intel.com
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Jonathan Cameron <jonathan.cameron@huawei.com>, 
-	Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Linux PCI <linux-pci@vger.kernel.org>, Alex Williamson <alex.williamson@redhat.com>, 
-	Bjorn Helgaas <helgaas@kernel.org>, Takashi Iwai <tiwai@suse.de>, 
-	Zhang Qilong <zhangqilong3@huawei.com>, Ulf Hansson <ulf.hansson@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 2/2] PM: hibernate: Combine return paths in
+ power_down()
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+ Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>
+References: <3303305.5fSG56mABF@rafael.j.wysocki>
+ <3571055.QJadu78ljV@rafael.j.wysocki>
+Content-Language: en-US
+From: Mario Limonciello <superm1@kernel.org>
+In-Reply-To: <3571055.QJadu78ljV@rafael.j.wysocki>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, Sep 26, 2025 at 8:13=E2=80=AFPM <dan.j.williams@intel.com> wrote:
->
-> Rafael J. Wysocki wrote:
-> > On Fri, Sep 26, 2025 at 3:49=E2=80=AFPM Jonathan Cameron
-> > <jonathan.cameron@huawei.com> wrote:
-> > >
-> > > On Fri, 19 Sep 2025 18:38:42 +0200
-> > > "Rafael J. Wysocki" <rafael@kernel.org> wrote:
-> > >
-> > > > From: Takashi Iwai <tiwai@suse.de>
-> > > >
-> > > > The newly introduced class macro can simplify the code.
-> > > >
-> > > > Also, add the proper error handling for the PM runtime get.
-> > > >
-> > > > Signed-off-by: Takashi Iwai <tiwai@suse.de>
-> > > > [ rjw: Adjust subject and error handling ]
-> > > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > > ---
-> > > >  drivers/pci/pci-sysfs.c |    5 +++--
-> > > >  1 file changed, 3 insertions(+), 2 deletions(-)
-> > > >
-> > > > --- a/drivers/pci/pci-sysfs.c
-> > > > +++ b/drivers/pci/pci-sysfs.c
-> > > > @@ -1475,8 +1475,9 @@ static ssize_t reset_method_store(struct
-> > > >               return count;
-> > > >       }
-> > > >
-> > > > -     pm_runtime_get_sync(dev);
-> > > > -     struct device *pmdev __free(pm_runtime_put) =3D dev;
-> > > > +     CLASS(pm_runtime_resume_and_get, pmdev)(dev);
-> > > > +     if (IS_ERR(pmdev))
-> > > > +             return -ENXIO;
-> > > Hi Rafael,
-> > >
-> > > Why this approach rather than treating runtime pm state like a condit=
-ional
-> > > lock (we use it much like one) and using ACQUIRE() / ACQUIRE_ERR()?
-> >
-> > Mostly because devices are not locks.
-> >
-> > > Ultimately that's a wrapper around the same infrastructure but
-> > > perhaps neater as it removes need to have that explicit magic pmdev.
-> >
-> > You'll need to have a magic pmdev or similar regardless IIUC.
-> >
-> > Say there is
-> >
-> > DEFINE_GUARD(pm_runtime_active, struct device *,
-> > pm_runtime_get_sync(_T), pm_runtime_put(_T))
-> > DEFINE_GUARD_COND(pm_runtime_active, _try, pm_runtime_resume_and_get(_T=
-))
-> >
-> > so the user of this will do
-> >
-> > ACQUIRE(pm_runtime_active_try, pm)(dev);
-> > if (ACQUIRE_ERR(pm_runtime_active_try, &pm))
-> >         return -ENXIO;
->
-> FWIW this looks better to me than the open-coded CLASS(). The pattern,
-> admittedly coding-style bending, we are using in drivers/cxl/ for
-> compactness and error code fidelity is:
->
->    ACQUIRE(pm_runtime_active_try, pm)(dev);
->    if ((ret =3D ACQUIRE_ERR(pm_runtime_active_try, &pm)))
->            return ret;
+On 9/26/25 11:41 AM, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> To avoid code duplication and improve clarity, combine the code
+> paths in power_down() leading to a return from that function.
+> 
+> No intentional functional impact.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-I prefer somewhat more traditional
+The actual change looks fine to me.
 
-ret =3D ACQUIRE_ERR(pm_runtime_active_try, &pm);
-if (ret < 0)
-        return ret;
+Since it's used in "both" a success and failure path would you consider 
+using "wakeup" for the label instead of "rollback"?  Or anything else 
+you can think of that doesn't have a connotation of failure.
 
-It would be nice to be able to hide the pm variable somehow, but this
-is not too bad the way it looks now.
+Reviewed-by: Mario Limonciello (AMD) <superm1@kernel.org>
 
-> > and there's a "magic" pm though pm is not a struct device pointer.
-> >
-> > Maybe it's nicer.  I guess people may be more used to dealing with int
-> > error variables.
-> >
-> > Let me try this and see how far I can get with this.
-> >
-> > > +CC Dan as he can probably remember the discussions around ACQUIRE()
-> > > vs the way you have here better than I can.
->
-> Yes, effectively a new open-coded CLASS() prompted the ACQUIRE()
-> proposal [1]. This pm-active-state reference management indeed looks
-> more like a guard() of the active state than an object constructor
-> auto-unwind-on-error case.
->
-> [1]: http://lore.kernel.org/20250507072145.3614298-1-dan.j.williams@intel=
-.com
+> ---
+>   kernel/power/hibernate.c |   32 ++++++++++++++------------------
+>   1 file changed, 14 insertions(+), 18 deletions(-)
+> 
+> --- a/kernel/power/hibernate.c
+> +++ b/kernel/power/hibernate.c
+> @@ -708,21 +708,11 @@ static void power_down(void)
+>   	if (hibernation_mode == HIBERNATION_SUSPEND) {
+>   		pm_restore_gfp_mask();
+>   		error = suspend_devices_and_enter(mem_sleep_current);
+> -		if (error) {
+> -			hibernation_mode = hibernation_ops ?
+> -						HIBERNATION_PLATFORM :
+> -						HIBERNATION_SHUTDOWN;
+> -		} else {
+> -			/* Match pm_restore_gfp_mask() call in hibernate() */
+> -			pm_restrict_gfp_mask();
+> +		if (!error)
+> +			goto rollback;
+>   
+> -			/* Restore swap signature. */
+> -			error = swsusp_unmark();
+> -			if (error)
+> -				pr_err("Swap will be unusable! Try swapon -a.\n");
+> -
+> -			return;
+> -		}
+> +		hibernation_mode = hibernation_ops ? HIBERNATION_PLATFORM :
+> +						     HIBERNATION_SHUTDOWN;
+>   	}
+>   #endif
+>   
+> @@ -733,12 +723,9 @@ static void power_down(void)
+>   	case HIBERNATION_PLATFORM:
+>   		error = hibernation_platform_enter();
+>   		if (error == -EAGAIN || error == -EBUSY) {
+> -			/* Match pm_restore_gfp_mask() in hibernate(). */
+> -			pm_restrict_gfp_mask();
+> -			swsusp_unmark();
+>   			events_check_enabled = false;
+>   			pr_info("Wakeup event detected during hibernation, rolling back.\n");
+> -			return;
+> +			goto rollback;
+>   		}
+>   		fallthrough;
+>   	case HIBERNATION_SHUTDOWN:
+> @@ -757,6 +744,15 @@ static void power_down(void)
+>   	pr_crit("Power down manually\n");
+>   	while (1)
+>   		cpu_relax();
+> +
+> +rollback:
+> +	/* Match the pm_restore_gfp_mask() call in hibernate(). */
+> +	pm_restrict_gfp_mask();
+> +
+> +	/* Restore swap signature. */
+> +	error = swsusp_unmark();
+> +	if (error)
+> +		pr_err("Swap will be unusable! Try swapon -a.\n");
+>   }
+>   
+>   static int load_image_and_restore(void)
+> 
+> 
+> 
 
-OK, so please see
-https://lore.kernel.org/linux-pm/6196611.lOV4Wx5bFT@rafael.j.wysocki/
 
