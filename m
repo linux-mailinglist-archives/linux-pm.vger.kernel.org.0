@@ -1,193 +1,112 @@
-Return-Path: <linux-pm+bounces-35504-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35505-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EBA83BA5EAB
-	for <lists+linux-pm@lfdr.de>; Sat, 27 Sep 2025 14:13:10 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 92AB8BA5FBB
+	for <lists+linux-pm@lfdr.de>; Sat, 27 Sep 2025 15:27:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1CB27189CF34
-	for <lists+linux-pm@lfdr.de>; Sat, 27 Sep 2025 12:13:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id ED3EF189CF4F
+	for <lists+linux-pm@lfdr.de>; Sat, 27 Sep 2025 13:27:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B80732DF703;
-	Sat, 27 Sep 2025 12:13:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 730562E06E4;
+	Sat, 27 Sep 2025 13:27:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LzWCTtg6"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HuPc3xRs"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 934302DF6E6
-	for <linux-pm@vger.kernel.org>; Sat, 27 Sep 2025 12:13:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63F512D6605;
+	Sat, 27 Sep 2025 13:27:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758975185; cv=none; b=j+xSi1rjEufyEeeiZUalkgyljZbuBpKDqRiztVV28IyqbR1+mvNkqdMdfIxzprrrKs1JzSoDyTuPxbi61TqRInOdH0mDZMHPAm5UyIUfkMK6lUID+Oi98cq7rLopHe7aJbONk5dr4vmSLfH/1Z3GUe2c9erDJMpHag2w3JNgBJk=
+	t=1758979623; cv=none; b=cpwzAEsEw2L7tKFO/+bs0hQsTKZsHVwwqMyKBmF3HCSdEFBOyYHmpBNETJR1GeIZnAbDSpBiaH8Orui1PvLzMXGmRKXptsJqYOZ+Q9jZoXaFOZEaIMytW5F8AfffYz7i4vzgg//qdaoGu9UqI9EatrtIpU5TQ+AC8AG39J95Arc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758975185; c=relaxed/simple;
-	bh=TwUpSH1ghbN4SooWUY3F97DHQwyPglI2P8bUTlUvZ8c=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PJsbLn/8GazABao/ZuBZN9QT2TdrKIJCzyC++org0UzHrn2J0XHArZnD/k+EN6C3gzK+oaSsNkvo+dRKFL+Pov3/2StIpGA9VV36vpa6xfWejXDMMYSZ2Tl3/ENar8uA0aeywg+fogm1HluB7VatuuLpnWoq2ds9RsUdGaIyvIU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LzWCTtg6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AEC3C116D0
-	for <linux-pm@vger.kernel.org>; Sat, 27 Sep 2025 12:13:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758975185;
-	bh=TwUpSH1ghbN4SooWUY3F97DHQwyPglI2P8bUTlUvZ8c=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=LzWCTtg6SrncrQJJ/dO2n8mWZnIp2ge5bWfU6wm3Kjvaa5gu/ZOHdu2/hRqqsWPtm
-	 w2YpixIF6bh9vrfTH8BZ3oLWvdNt5kJ3yAJB1L+bNDQXzBuW3GWZDszwAuPyYX4JXc
-	 xL4oM7xU7wwPkvwdr10F0GEGl3HdSeCMb5I9xAIG79rjQHUETdWTWjE749xcpI4DYU
-	 Ho5KbjC5GZzNN0LTAVG9HEWpdXI/DgzNWEdNGGGSjPrEZhTs7Gurmq++1jIM/93gdP
-	 HcTGRrhGDzxOgnlE1dTQaxfXbBAcK6nCUHfT1bep4l2WWLQbIFXkmnXz/EZ6nWN0Lt
-	 9Wbj//Lse+MPA==
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-30ccec59b4bso3002141fac.3
-        for <linux-pm@vger.kernel.org>; Sat, 27 Sep 2025 05:13:05 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVcc3O00MBRr2webJGDbFRBJeviNDoAPVO1n/s0FQiwjSS++sOjdOF6SfRm/hnAw1GgOyL7Qq3ZTA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzQV/dKJ+cbJrfNmdelGRZGbf4U5KhNcjtbuu0fTMpGWzE1rB2Z
-	dY/qogwP/K589GGz1iEeBfKDLu3qgNiqjtGw7U8Q5wt+lt7gmUJGiHIRuqk/OApyKnDJ+ZIjsVH
-	tKdQ2jQPxKFslMBZ9gM8ftWAKjAhHL3M=
-X-Google-Smtp-Source: AGHT+IHoRKUqke8mSmvJOXv9uDQLt0pk9IzOzuSpzXFsfE/+P4NaWq3F/DDodzLSz0UCqlVPTleKEaiS4Ix70Ff81/o=
-X-Received: by 2002:a05:6871:ea8b:b0:372:b8a4:791a with SMTP id
- 586e51a60fabf-372b8a47a83mr2670184fac.21.1758975184446; Sat, 27 Sep 2025
- 05:13:04 -0700 (PDT)
+	s=arc-20240116; t=1758979623; c=relaxed/simple;
+	bh=fRtju74/JSHvPk0SkIzEvZPSjq0GaZdidyiTkuBepG0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=hfBCPzGdFsdepKukKFqHG3aSXfSAaFMSQ2YUvpqOH5fFJC4Q8HhGg9D8FxAu20cNnP4JPkH66fH4XuULfbVUhPiQlCchXc1xoGbTdTTYPhIaqxtXxdEbwvrFZWJ0qqwSaDk8GVKmDUwjjpzW2PC0Lf6agZC0s7lX9566JgWedtY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HuPc3xRs; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1758979621; x=1790515621;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=fRtju74/JSHvPk0SkIzEvZPSjq0GaZdidyiTkuBepG0=;
+  b=HuPc3xRsjE8nZJka/CYjEnQQRssmD5PNc+26W5zF00y8pEPbN6N9PLWu
+   4Gw7Ya5gt7YeDRJVfrK3QC8ZXN7qM4p1uP0IiXLWMkuK3uXk8/8d7vg2e
+   kcBbKfgd7fTQMj1C/cLR6L02YnWPGaK/eBtju8UnHhfv7qwGH47wc24Hp
+   OanUA3urVjy2AGIoEupXREcrrHxviEk+eTmKUV8lwXeSilD/Hlt1OFyJB
+   MQg/dF3UQ4vDCLd0JVNL59YNzVsNhKHtTiX7V7nKH0d0YzXAYUf5WD3II
+   VZXdYzqMHUJJjhKYTi2at98U3Jzp5foxsoq0K9zsmTTeyVVq7wWkDqjZL
+   Q==;
+X-CSE-ConnectionGUID: vD0fN7qKQsC0qbnE+Ps+/Q==
+X-CSE-MsgGUID: UfidrssmRU2U6lyK683UeA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11565"; a="61179982"
+X-IronPort-AV: E=Sophos;i="6.18,297,1751266800"; 
+   d="scan'208";a="61179982"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2025 06:27:00 -0700
+X-CSE-ConnectionGUID: wHWQzKNASMe9ZanJAjKQ3g==
+X-CSE-MsgGUID: 5stGFlKCRlihrurRW2XcYw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,297,1751266800"; 
+   d="scan'208";a="182240115"
+Received: from igk-lkp-server01.igk.intel.com (HELO 0e586ad5e7f7) ([10.91.175.65])
+  by fmviesa005.fm.intel.com with ESMTP; 27 Sep 2025 06:26:58 -0700
+Received: from kbuild by 0e586ad5e7f7 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1v2Uwx-000000005VB-46Qo;
+	Sat, 27 Sep 2025 13:26:55 +0000
+Date: Sat, 27 Sep 2025 15:26:22 +0200
+From: kernel test robot <lkp@intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: oe-kbuild-all@lists.linux.dev, linux-acpi@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	"Mario Limonciello (AMD)" <superm1@kernel.org>,
+	Jie Zhan <zhanjie9@hisilicon.com>
+Subject: [rafael-pm:bleeding-edge 204/212] error[E0425]: cannot find value
+ `CPUFREQ_DEFAULT_TRANSITION_LATENCY_NS` in crate `bindings`
+Message-ID: <202509271504.gmr2aLzD-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250926102320.4053167-1-treapking@chromium.org>
-In-Reply-To: <20250926102320.4053167-1-treapking@chromium.org>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Sat, 27 Sep 2025 14:12:52 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0i-iT-3nEjX7Nm2s91GSm0OTXQ3yZSf2Q3VRNTOseREHw@mail.gmail.com>
-X-Gm-Features: AS18NWB34zB3BLqh9BZedb-rR5nsbi_3-vkJmooiDwdwhYQb4UqYJVwDBhe2Ypo
-Message-ID: <CAJZ5v0i-iT-3nEjX7Nm2s91GSm0OTXQ3yZSf2Q3VRNTOseREHw@mail.gmail.com>
-Subject: Re: [PATCH v4] PM: sleep: Don't wait for SYNC_STATE_ONLY device links
-To: Pin-yen Lin <treapking@chromium.org>
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, Pavel Machek <pavel@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, 
-	Saravana Kannan <saravanak@google.com>, linux-kernel@vger.kernel.org, 
-	Hsin-Te Yuan <yuanhsinte@chromium.org>, Chen-Yu Tsai <wenst@chromium.org>, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Fri, Sep 26, 2025 at 12:23=E2=80=AFPM Pin-yen Lin <treapking@chromium.or=
-g> wrote:
->
-> Device links with DL_FLAG_SYNC_STATE_ONLY should not affect suspend
-> and resume, and functions like device_reorder_to_tail() and
-> device_link_add() doesn't try to reorder the consumers with such flag.
->
-> However, dpm_wait_for_consumers() and dpm_wait_for_suppliers() doesn't
-> check this flag before triggering dpm_wait, leading to potential hang
-> during suspend/resume.
->
-> This can be reproduced on MT8186 Corsola Chromebook with devicetree like:
->
-> usb-a-connector {
->         compatible =3D "usb-a-connector";
->         port {
->                 usb_a_con: endpoint {
->                         remote-endpoint =3D <&usb_hs>;
->                 };
->         };
-> };
->
-> usb_host {
->         compatible =3D "mediatek,mt8186-xhci", "mediatek,mtk-xhci";
->         port {
->                 usb_hs: endpoint {
->                         remote-endpoint =3D <&usb_a_con>;
->                 };
->         };
-> };
->
-> In this case, the two nodes form a cycle and a SYNC_STATE_ONLY devlink
-> between usb_host (supplier) and usb-a-connector (consumer) is created.
->
-> Export device_link_flag_is_sync_state_only() and use it to check this in
-> dpm_wait_for_consumers() and dpm_wait_for_suppliers() to fix this.
->
-> Fixes: 05ef983e0d65a ("driver core: Add device link support for SYNC_STAT=
-E_ONLY flag")
-> Signed-off-by: Pin-yen Lin <treapking@chromium.org>
-> ---
->
-> Changes in v4:
-> - Remove inline for device_link_flag_is_sync_state_only()
->
-> Changes in v3:
-> - Squash to one patch and fix the export approach
->
-> Changes in v2:
-> - Update commit message
-> - Use device_link_flag_is_sync_state_only()
->
->  drivers/base/base.h       | 1 +
->  drivers/base/core.c       | 2 +-
->  drivers/base/power/main.c | 6 ++++--
->  3 files changed, 6 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/base/base.h b/drivers/base/base.h
-> index 123031a757d9..80415b140ce7 100644
-> --- a/drivers/base/base.h
-> +++ b/drivers/base/base.h
-> @@ -248,6 +248,7 @@ void device_links_driver_cleanup(struct device *dev);
->  void device_links_no_driver(struct device *dev);
->  bool device_links_busy(struct device *dev);
->  void device_links_unbind_consumers(struct device *dev);
-> +bool device_link_flag_is_sync_state_only(u32 flags);
->  void fw_devlink_drivers_done(void);
->  void fw_devlink_probing_done(void);
->
-> diff --git a/drivers/base/core.c b/drivers/base/core.c
-> index d22d6b23e758..a54ec6df1058 100644
-> --- a/drivers/base/core.c
-> +++ b/drivers/base/core.c
-> @@ -287,7 +287,7 @@ static bool device_is_ancestor(struct device *dev, st=
-ruct device *target)
->  #define DL_MARKER_FLAGS                (DL_FLAG_INFERRED | \
->                                  DL_FLAG_CYCLE | \
->                                  DL_FLAG_MANAGED)
-> -static inline bool device_link_flag_is_sync_state_only(u32 flags)
-> +bool device_link_flag_is_sync_state_only(u32 flags)
->  {
->         return (flags & ~DL_MARKER_FLAGS) =3D=3D DL_FLAG_SYNC_STATE_ONLY;
->  }
-> diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
-> index 2ea6e05e6ec9..73a1916170ae 100644
-> --- a/drivers/base/power/main.c
-> +++ b/drivers/base/power/main.c
-> @@ -282,7 +282,8 @@ static void dpm_wait_for_suppliers(struct device *dev=
-, bool async)
->          * walking.
->          */
->         list_for_each_entry_rcu_locked(link, &dev->links.suppliers, c_nod=
-e)
-> -               if (READ_ONCE(link->status) !=3D DL_STATE_DORMANT)
-> +               if (READ_ONCE(link->status) !=3D DL_STATE_DORMANT &&
-> +                   !device_link_flag_is_sync_state_only(link->flags))
->                         dpm_wait(link->supplier, async);
->
->         device_links_read_unlock(idx);
-> @@ -339,7 +340,8 @@ static void dpm_wait_for_consumers(struct device *dev=
-, bool async)
->          * unregistration).
->          */
->         list_for_each_entry_rcu_locked(link, &dev->links.consumers, s_nod=
-e)
-> -               if (READ_ONCE(link->status) !=3D DL_STATE_DORMANT)
-> +               if (READ_ONCE(link->status) !=3D DL_STATE_DORMANT &&
-> +                   !device_link_flag_is_sync_state_only(link->flags))
->                         dpm_wait(link->consumer, async);
->
->         device_links_read_unlock(idx);
-> --
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+head:   95b83771c9f38207ff42311ccc4739db76d19f33
+commit: 8cf63e01b6b73132d69c04d35f11738705467281 [204/212] cpufreq: Make drivers using CPUFREQ_ETERNAL specify transition latency
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20250927/202509271504.gmr2aLzD-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250927/202509271504.gmr2aLzD-lkp@intel.com/reproduce)
 
-Rebased on top of linux-pm.git/linux-next and applied as 6.18 material
-with some minor edits in the subject and changelog.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509271504.gmr2aLzD-lkp@intel.com/
 
-Thanks!
+All errors (new ones prefixed by >>):
+
+>> error[E0425]: cannot find value `CPUFREQ_DEFAULT_TRANSITION_LATENCY_NS` in crate `bindings`
+   --> rust/kernel/cpufreq.rs:43:19
+   |
+   43    |         bindings::CPUFREQ_DEFAULT_TRANSITION_LATENCY_NS as u32;
+   |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: a constant with a similar name exists: `CPUFREQ_DEFAULT_TANSITION_LATENCY_NS`
+   |
+   ::: rust/bindings/bindings_generated.rs:12861:1
+   |
+   12861 | pub const CPUFREQ_DEFAULT_TANSITION_LATENCY_NS: u32 = 1000000;
+   | --------------------------------------------------- similarly named constant `CPUFREQ_DEFAULT_TANSITION_LATENCY_NS` defined here
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
