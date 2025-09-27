@@ -1,103 +1,176 @@
-Return-Path: <linux-pm+bounces-35500-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35501-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 112B5BA5322
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Sep 2025 23:25:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D0BA1BA5A7C
+	for <lists+linux-pm@lfdr.de>; Sat, 27 Sep 2025 09:55:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 10BC34E1C19
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Sep 2025 21:25:27 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id B87A04E150B
+	for <lists+linux-pm@lfdr.de>; Sat, 27 Sep 2025 07:55:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E120227A92D;
-	Fri, 26 Sep 2025 21:25:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8BB52D24A9;
+	Sat, 27 Sep 2025 07:55:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t9ANDHgy"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="TFvjg9f+";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="jdh0rg52";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="eI+F+hRe";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="2lTe017r"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACF2581ACA;
-	Fri, 26 Sep 2025 21:25:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E739D2D248F
+	for <linux-pm@vger.kernel.org>; Sat, 27 Sep 2025 07:55:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758921921; cv=none; b=RJgYR+azV4jA7AYZ8YawTNw9Pzq4u2mmnLjCzBOoH52eaCAya+KRTgvSPEkAcpkSvnxiUgZz7PEkgeX4DsdnYwFWH7Th6Y1VEXTC7eCFTirrtB/v686WTogq9e6+Vl6BNPwvBze1PTdgrP7+hwqMHNga6/qiHOHBOtdJAOKyrgc=
+	t=1758959714; cv=none; b=AsHraJqheB1v0ezowAQSZXUtHz7V1XeQsDXYPt17KVn4Wb6XfCPJasZHeBehjLm3iwFCFtIgQrCdrBWzDkpH785Eu/BSB9eJQ1kPQI3+ZWHj51pIQUPcYrcFSbMfY6N+TZXUPnPgNb2MfYTdtVN4k5p3VK4slVvqvVucknzgIec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758921921; c=relaxed/simple;
-	bh=PQumnt7XyXrVYC0j2mqUHUvbODDCGmvh8dmipPDpD7o=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=RRMWyB5Md3z88xd18XgyBENj+mEWclrGg28RXS70p7F4PaAqcvpmn/OV4Zx2pry2zxifD9+74KWmEeIDwBoO7hUqwSdimsfEejO23oP4lSFN0HLnzCZ73GgRhtqEyzQh72AASDBo9LBld0BwO4jbv6iEYEWTa1lgs70z7lC35TE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t9ANDHgy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E15B4C4CEF4;
-	Fri, 26 Sep 2025 21:25:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758921921;
-	bh=PQumnt7XyXrVYC0j2mqUHUvbODDCGmvh8dmipPDpD7o=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=t9ANDHgyhv0ECBteSk6v9OQDSzqchAwI26CuEpIlcgrTJPfqA3gjwDp54B7Pkq56T
-	 gX8pE5rN8XWYHRdh9WoNdzgzAZLLZLRb0/BhI9TUGnhJZ8Rnp+Zbl0oq7MtrSttBap
-	 /85PM93NuKCnaeaLpeJzFL3UuGctNgWCJKSgV8+BUZY2JVX4vdqWNHtkkfb27xJCOF
-	 IfGgdyuWZ7BXaTAeFOSWMmNWtd9oKXidcKmHM6nFdcScB/u0ERfk/k/K5zGy0pvjv9
-	 vdEu4VAz6kzpbWoVbo+1qZDS5t0JK7u5iBk+IBVvHr64OeB9RzBeaVYs3LigM930hI
-	 cChXC1+T2nI4Q==
-Date: Fri, 26 Sep 2025 16:25:19 -0500
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: webgeek1234@gmail.com, "Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-	linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v7 2/3] cpuidle: tegra: Export
- tegra_cpuidle_pcie_irqs_in_use
-Message-ID: <20250926212519.GA2268653@bhelgaas>
+	s=arc-20240116; t=1758959714; c=relaxed/simple;
+	bh=5xKwV3f3A/yfwlo0VWMkjY5for0VtGHR+cnrcypU8t4=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=taOkjbji+g8/2bWP+IsMVjHsU4jWXpoM65QIvhTRGW+kNT0ueRnuL1aaYGieOJ1attOreRl4n4SWK09pyKN6glgkcRmIn1s+bjpzhYzTCLmOsDQAJf6jkVzz9Dp3q84CiVNfpiTdZ8rBzsFlknMe06k1Uky0snQbBbU3wWfJgwY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=TFvjg9f+; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=jdh0rg52; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=eI+F+hRe; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=2lTe017r; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id CD1AB261CC;
+	Sat, 27 Sep 2025 07:55:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1758959711; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Gocbu/f+cw03Lh3Qw7tbrnavs60OWwuBzS7Bc1LX318=;
+	b=TFvjg9f+9UVqyGnt3u8hCCGnyA3U0giQ70k38j2aRsiO5U6MHG5tZa36cPlDbZkOT2hfx3
+	EY7DVIWupVsFgv6s7zruUQFsNjgu3BgHWS0V16VaqCumJ2IWPU/hPLwCvrlkw9axfHBaFc
+	hiyzOLkI1uVKYp3sriLM7jEp24+C2Qs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1758959711;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Gocbu/f+cw03Lh3Qw7tbrnavs60OWwuBzS7Bc1LX318=;
+	b=jdh0rg52Q7c98+6bUFFA2qxQwSEB44A5n6vpQh+nAmbfqPur5otpFqC8MPkFtn2fc/R+5z
+	1R1YZRj87NuRP3Aw==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=eI+F+hRe;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=2lTe017r
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1758959710; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Gocbu/f+cw03Lh3Qw7tbrnavs60OWwuBzS7Bc1LX318=;
+	b=eI+F+hReACQH9YLH8RWkWgkKkiQTtkqAXKnd5w1a4EEjLj84utesmfB/B9ZeKP/gAkT7V5
+	rco9TLftdC2/BF87cPXlDhZryC2lVwQ42gb/J34nOc4+Ff60koGaA8QyciVuqIkuwH986w
+	16qypGt1tXsuFr3yOPYwIQF3WC7TLwY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1758959710;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Gocbu/f+cw03Lh3Qw7tbrnavs60OWwuBzS7Bc1LX318=;
+	b=2lTe017rn6gta6mSmKYWZpP+DK5ixcAdWqD4DmGEprwl6TIvMp4SYtqfRNWq2YjmCkVSE7
+	EQo6wOeGjZumklAQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 7856713782;
+	Sat, 27 Sep 2025 07:55:10 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id Lh4HHF6Y12h9MQAAD6G6ig
+	(envelope-from <tiwai@suse.de>); Sat, 27 Sep 2025 07:55:10 +0000
+Date: Sat, 27 Sep 2025 09:55:10 +0200
+Message-ID: <87ecrsba8x.wl-tiwai@suse.de>
+From: Takashi Iwai <tiwai@suse.de>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Linux PM <linux-pm@vger.kernel.org>,
+	Jonathan Cameron <jonathan.cameron@huawei.com>,
+	Takashi Iwai <tiwai@suse.de>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Linux PCI <linux-pci@vger.kernel.org>,
+	Alex Williamson <alex.williamson@redhat.com>,
+	Bjorn Helgaas <helgaas@kernel.org>,
+	Zhang Qilong <zhangqilong3@huawei.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Frank Li <Frank.Li@nxp.com>,
+	Dhruva Gole <d-gole@ti.com>
+Subject: Re: [PATCH v4 0/3] PM: runtime: Auto-cleanup macros for runtime PM
+In-Reply-To: <6196611.lOV4Wx5bFT@rafael.j.wysocki>
+References: <6196611.lOV4Wx5bFT@rafael.j.wysocki>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250731-pci-tegra-module-v7-2-cad4b088b8fb@gmail.com>
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spamd-Result: default: False [-3.51 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	ARC_NA(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[12];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns,suse.de:mid,suse.de:dkim,suse.de:email];
+	TO_DN_ALL(0.00)[];
+	DKIM_TRACE(0.00)[suse.de:+]
+X-Spam-Flag: NO
+X-Spam-Level: 
+X-Rspamd-Queue-Id: CD1AB261CC
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Rspamd-Action: no action
+X-Spam-Score: -3.51
 
-[cc->to: Rafael, Daniel, any feedback or ack?  Would like to resolve
-this (part of Aaron's series at
-https://lore.kernel.org/r/20250731-pci-tegra-module-v7-0-cad4b088b8fb@gmail.com)]
-
-On Thu, Jul 31, 2025 at 04:59:25PM -0500, Aaron Kling via B4 Relay wrote:
-> From: Aaron Kling <webgeek1234@gmail.com>
+On Fri, 26 Sep 2025 17:40:29 +0200,
+Rafael J. Wysocki wrote:
 > 
-> Add export for tegra_cpuidle_pcie_irqs_in_use() so that drivers like
-> pci-tegra can be loaded as a module.
+> Hi All,
 > 
-> Signed-off-by: Aaron Kling <webgeek1234@gmail.com>
-> ---
->  drivers/cpuidle/cpuidle-tegra.c | 1 +
->  1 file changed, 1 insertion(+)
+> This supersedes
 > 
-> diff --git a/drivers/cpuidle/cpuidle-tegra.c b/drivers/cpuidle/cpuidle-tegra.c
-> index b203a93deac5f378572be90e22c73e7417adb99e..aca907a62bb5de4ee4c71c1900eacedd4b90bc0a 100644
-> --- a/drivers/cpuidle/cpuidle-tegra.c
-> +++ b/drivers/cpuidle/cpuidle-tegra.c
-> @@ -336,6 +336,7 @@ void tegra_cpuidle_pcie_irqs_in_use(void)
->  	pr_info("disabling CC6 state, since PCIe IRQs are in use\n");
->  	tegra_cpuidle_disable_state(TEGRA_CC6);
->  }
-> +EXPORT_SYMBOL_GPL(tegra_cpuidle_pcie_irqs_in_use);
+> https://lore.kernel.org/linux-pm/12763087.O9o76ZdvQC@rafael.j.wysocki/
+> 
+> which was an update of
+> 
+> https://lore.kernel.org/linux-pm/6204724.lOV4Wx5bFT@rafael.j.wysocki/
+> 
+> that superseded both
+> 
+> https://lore.kernel.org/linux-pm/5049058.31r3eYUQgx@rafael.j.wysocki/
+> 
+> and
+> 
+> https://lore.kernel.org/linux-pm/20250919163147.4743-1-tiwai@suse.de/
+> 
+> It follows the Jonathan's suggestion to use ACQUIRE()/ACQUIRE_ERR()
+> instead af raw CLASS() to make the code somewhat cleaner.
 
-tegra_cpuidle_pcie_irqs_in_use() looks like a workaround for a Tegra20
-hardware defect, and having no knowledge of typical Tegra20 systems,
-my questions would be "Why do we even bother with this?  Should
-cpuidle-tegra.c just disable CC6 always, unconditionally?  The whole
-thing, and all of include/soc/tegra/cpuidle.h, looks like it might be
-more trouble than it's worth."
+ACQUIRE() version looks simpler and more suitable, indeed.
 
-Bjorn
+Reviewed-by: Takashi Iwai <tiwai@suse.de>
+
+
+Thanks!
+
+Takashi
 
