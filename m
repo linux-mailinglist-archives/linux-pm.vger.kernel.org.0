@@ -1,76 +1,77 @@
-Return-Path: <linux-pm+bounces-35524-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35525-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42DE1BA7086
-	for <lists+linux-pm@lfdr.de>; Sun, 28 Sep 2025 14:38:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A3CD4BA760C
+	for <lists+linux-pm@lfdr.de>; Sun, 28 Sep 2025 20:01:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9F6061895B92
-	for <lists+linux-pm@lfdr.de>; Sun, 28 Sep 2025 12:38:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 40C12177C8A
+	for <lists+linux-pm@lfdr.de>; Sun, 28 Sep 2025 18:01:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFC8223C38C;
-	Sun, 28 Sep 2025 12:38:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE69924397A;
+	Sun, 28 Sep 2025 18:01:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NfEfCw51"
+	dkim=pass (2048-bit key) header.d=aurel32.net header.i=@aurel32.net header.b="txCqod+7"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from hall.aurel32.net (hall.aurel32.net [195.154.113.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 466B02253EE;
-	Sun, 28 Sep 2025 12:38:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 459D2635;
+	Sun, 28 Sep 2025 18:01:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.154.113.88
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759063087; cv=none; b=SFfiocpPXz6XP9wQj4oYJWc9m1JxMocp1w8ilsSHUluPSookccCfTfth/FiJhTNFnT29kT3iw0e3YJqXN0NglT2VsQ88hAEiyQo83a8KxFSn9eyS9IGZGJvQUGFD/OSjZV3Ik/qYdOFYeLI9+iVRFtQHWY90HajiGAZpiZEF6DA=
+	t=1759082478; cv=none; b=c2/94UM1yoVlYr9pYHemYxNOefcv8OkyUxSpYV8YMF6CkXFcLjWcQyy0S9kNOdu9LKyVOhIDhdWdzwwCktcFCiMTlJc2/qJ0NMLt0Q7v91T0K7CvZgW7C6LrCm4HrouhoVcsLoX+xr0TpPSrx+S0vyyrwhTfRCHZwUWGlbDcICo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759063087; c=relaxed/simple;
-	bh=F+ulgsO9spSctRxlsM4Q8HSh4h0QoKP6pPsI/AWqKPA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=L1QEuT/VC4M7TunWSUepiFmnqmRQ2apqu5Tt3b97GxqXYZFe6k50JtP0VUYpNfTs9T6hAOGJa2jd79Jnnc6EXPw/NqKP1nwYZiXDkr3nHsONTV/dmoAVOXg+iJzuj9cLSXN3PbBi6F7JEY33YYrdv9zYz9i+jFNOn8jy5re23zs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NfEfCw51; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1759063086; x=1790599086;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=F+ulgsO9spSctRxlsM4Q8HSh4h0QoKP6pPsI/AWqKPA=;
-  b=NfEfCw519xVABgctiB5wNZzzf+z69A0Au6zdrJIkIK3aVht/s+wCPa4e
-   3DkKSoGCH05gp5v9TZHcBgJc2bDur7yU3MpoG9TonriovcSpXM+ciyhsE
-   7W78ffG60VSpfzek3otSqQjRDG4P1wDfXBBhmziy/pgtsD/NLzxNgXHF3
-   PZ59ZhRcRazaXALQdvytS3vvot8VLO9at0IPtz6n1QfkAzG1C1wXncL02
-   kdGC8NDAwZvA1POGQhsAJhfvswYsR3Ty/LXa7fZ0OB0wtzBsOfVtvJTVF
-   5TeYtnJ2z53hqUMSLdbejGVEZmoBIKRqMTvSMsufVfgIgdkrMe2VkNwvt
-   w==;
-X-CSE-ConnectionGUID: 97QzFnPhQBaSW9/QjvCWmA==
-X-CSE-MsgGUID: e0lyFie6TbOIjZWemE0h/A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11566"; a="86775368"
-X-IronPort-AV: E=Sophos;i="6.18,299,1751266800"; 
-   d="scan'208";a="86775368"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2025 05:38:05 -0700
-X-CSE-ConnectionGUID: J+BcHAqoQ+6n4LIJV6Hu8w==
-X-CSE-MsgGUID: 3e8t3BgHTfyFhNIz9v7dGA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,299,1751266800"; 
-   d="scan'208";a="178401125"
-Received: from igk-lkp-server01.igk.intel.com (HELO 0e586ad5e7f7) ([10.91.175.65])
-  by fmviesa008.fm.intel.com with ESMTP; 28 Sep 2025 05:38:04 -0700
-Received: from kbuild by 0e586ad5e7f7 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1v2qfC-000000005eP-0iF5;
-	Sun, 28 Sep 2025 12:38:02 +0000
-Date: Sun, 28 Sep 2025 14:37:13 +0200
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: oe-kbuild-all@lists.linux.dev, linux-acpi@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	"Mario Limonciello (AMD)" <superm1@kernel.org>,
-	Jie Zhan <zhanjie9@hisilicon.com>
-Subject: [rafael-pm:bleeding-edge 205/213] warning: casting to the same type
- is unnecessary (`u32` -> `u32`)
-Message-ID: <202509281454.ZTmjIs2S-lkp@intel.com>
+	s=arc-20240116; t=1759082478; c=relaxed/simple;
+	bh=ETGlfgCHn7iTomo7gbPyeKU7/4yXFLWwgSsvm/N4bJc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HdWQo8Ys/xjCiL2vU8kruSSMT63QPySkG5e+PhN7QYkoAkSp+aqy9smGuTk5FcBQU0a1ZVVaCKv8Z9fccGi0vBXK4RffT3xz/y7L3TuJqjeoZNo9mnP6lSMn5ZVSPGan4WJ4BoqF/foZJpJ3YI2teiVYyq2sDvwkrRVY6gfQ0dc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=aurel32.net; spf=pass smtp.mailfrom=aurel32.net; dkim=pass (2048-bit key) header.d=aurel32.net header.i=@aurel32.net header.b=txCqod+7; arc=none smtp.client-ip=195.154.113.88
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=aurel32.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aurel32.net
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=aurel32.net
+	; s=202004.hall; h=In-Reply-To:Content-Type:MIME-Version:References:
+	Message-ID:Subject:Cc:To:From:Date:Content-Transfer-Encoding:From:Reply-To:
+	Subject:Content-ID:Content-Description:X-Debbugs-Cc;
+	bh=p3zwPG2lHdfGT54vRdWzMiWo1GIY+4oyV83lYkTPCSg=; b=txCqod+7lxWDuX9hd4gJshx+rB
+	jLCDSApN3cGlTlr2qpYvhamL3LoECi5F4cqyj44c0gAV+ltxFnBfm0iBvhqi5/cdl5uJ0m9sc995z
+	GwWM8UZJRcGEQjAKV9dRXFf+ZHJWRIx9utw47og7Y0P1a5ZjlasCEtL1/RXjkOUPRaElOwzNSTKVJ
+	XBs6/TeBl3YOETm0A/qiP94hRqi3vLR+NcWeMBdzddiGk5T8/e1cSJrshXG8eoiv/sjFGHtaK6VR8
+	mLE8Ki8VcsL+syGhf3f2lX7mikw5EsBY1OS3NdMTLpbf2Cp02CQL8iSYRsOeGmlv4h4gv5ZEClUOI
+	YINvYD3Q==;
+Received: from [2a01:e34:ec5d:a741:1ee1:92ff:feb4:5ec0] (helo=ohm.rr44.fr)
+	by hall.aurel32.net with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <aurelien@aurel32.net>)
+	id 1v2vhm-001XtX-0B;
+	Sun, 28 Sep 2025 20:01:02 +0200
+Date: Sun, 28 Sep 2025 20:01:01 +0200
+From: Aurelien Jarno <aurelien@aurel32.net>
+To: Yixun Lan <dlan@gentoo.org>
+Cc: linux-kernel@vger.kernel.org, Lee Jones <lee@kernel.org>,
+	Sebastian Reichel <sre@kernel.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+	"open list:SYSTEM RESET/SHUTDOWN DRIVERS" <linux-pm@vger.kernel.org>,
+	"open list:RISC-V SPACEMIT SoC Support" <linux-riscv@lists.infradead.org>,
+	"open list:RISC-V SPACEMIT SoC Support" <spacemit@lists.linux.dev>
+Subject: Re: [PATCH 1/2] driver: reset: spacemit-p1: add driver for
+ poweroff/reboot
+Message-ID: <aNl33eHpr7gd8HJz@aurel32.net>
+Mail-Followup-To: Yixun Lan <dlan@gentoo.org>, linux-kernel@vger.kernel.org,
+	Lee Jones <lee@kernel.org>, Sebastian Reichel <sre@kernel.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+	"open list:SYSTEM RESET/SHUTDOWN DRIVERS" <linux-pm@vger.kernel.org>,
+	"open list:RISC-V SPACEMIT SoC Support" <linux-riscv@lists.infradead.org>,
+	"open list:RISC-V SPACEMIT SoC Support" <spacemit@lists.linux.dev>
+References: <20250927220824.1267318-1-aurelien@aurel32.net>
+ <20250927220824.1267318-2-aurelien@aurel32.net>
+ <20250928000255-GYA1342640@gentoo.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -79,33 +80,66 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250928000255-GYA1342640@gentoo.org>
+User-Agent: Mutt/2.2.13 (2024-03-09)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-head:   11c0c0dd019710f162cd5d246a4efdbaefdac48b
-commit: a11d30de57e312687d103e243f0ce6461ad9a5c0 [205/213] cpufreq: Make drivers using CPUFREQ_ETERNAL specify transition latency
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20250928/202509281454.ZTmjIs2S-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250928/202509281454.ZTmjIs2S-lkp@intel.com/reproduce)
+Hi Yixun,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509281454.ZTmjIs2S-lkp@intel.com/
+On 2025-09-28 08:02, Yixun Lan wrote:
+> Hi Aurelien, 
+> 
+> On 00:07 Sun 28 Sep     , Aurelien Jarno wrote:
+> > This driver implements poweroff/reboot support for the SpacemiT P1 PMIC
+> > chip, which is commonly paired with the SpacemiT K1 SoC.
+> > 
+> > The SpacemiT P1 support is implemented as a MFD driver, so the access is
+> > done directly through the regmap interface. Reboot or poweroff is
+> > triggered by setting a specific bit in a control register, which is
+> > automatically cleared by the hardware afterwards.
+> > 
+> > Signed-off-by: Aurelien Jarno <aurelien@aurel32.net>
+> > ---
+> >  drivers/power/reset/Kconfig              |  9 +++
+> >  drivers/power/reset/Makefile             |  1 +
+> >  drivers/power/reset/spacemit-p1-reboot.c | 88 ++++++++++++++++++++++++
+> >  3 files changed, 98 insertions(+)
+> >  create mode 100644 drivers/power/reset/spacemit-p1-reboot.c
+> > 
+> > diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
+> > index 77ea3129c7080..5afef049760d6 100644
+> > --- a/drivers/power/reset/Kconfig
+> > +++ b/drivers/power/reset/Kconfig
+> [snip]..
+> > +
+> > +static int spacemit_p1_reboot_probe(struct platform_device *pdev)
+> > +{
+> > +	struct device *dev = &pdev->dev;
+> > +	struct regmap *regmap;
+> > +	int ret;
+> > +
+> > +	regmap = dev_get_regmap(dev->parent, NULL);
+> > +	if (!regmap)
+> > +		return -ENODEV;
+> > +
+> > +	ret = devm_register_power_off_handler(dev, &spacemit_p1_pwroff_handler, regmap);
+> > +	if (ret) {
+> > +		dev_err(dev, "Failed to register power off handler: %d\n", ret);
+> > +		return ret;
+> suggest to simplify with dev_err_probe(), which will save few lines
+> > +	}
+> > +
+> > +	ret = devm_register_restart_handler(dev, spacemit_p1_restart_handler, regmap);
+> > +	if (ret) {
+> > +		dev_err(dev, "Failed to register restart handler: %d\n", ret);
+> > +		return ret;
+> ditto
 
-All warnings (new ones prefixed by >>):
+Thanks for the hint, that'll be in the next version.
 
->> warning: casting to the same type is unnecessary (`u32` -> `u32`)
-   --> rust/kernel/cpufreq.rs:43:9
-   |
-   43 |         bindings::CPUFREQ_DEFAULT_TRANSITION_LATENCY_NS as u32;
-   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: try: `bindings::CPUFREQ_DEFAULT_TRANSITION_LATENCY_NS`
-   |
-   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#unnecessary_cast
-   = note: `-W clippy::unnecessary-cast` implied by `-W clippy::all`
-   = help: to override `-W clippy::all` add `#[allow(clippy::unnecessary_cast)]`
+Regards
+Aurelien
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Aurelien Jarno                          GPG: 4096R/1DDD8C9B
+aurelien@aurel32.net                     http://aurel32.net
 
