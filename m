@@ -1,140 +1,101 @@
-Return-Path: <linux-pm+bounces-35513-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35514-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA165BA6502
-	for <lists+linux-pm@lfdr.de>; Sun, 28 Sep 2025 02:03:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A8235BA65DE
+	for <lists+linux-pm@lfdr.de>; Sun, 28 Sep 2025 03:59:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 46E6F3BF333
-	for <lists+linux-pm@lfdr.de>; Sun, 28 Sep 2025 00:03:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 67F1F3ABF94
+	for <lists+linux-pm@lfdr.de>; Sun, 28 Sep 2025 01:59:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 741853C2F;
-	Sun, 28 Sep 2025 00:03:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D3191DDC1D;
+	Sun, 28 Sep 2025 01:59:24 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.gentoo.org (woodpecker.gentoo.org [140.211.166.183])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B11534BA24;
-	Sun, 28 Sep 2025 00:03:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=140.211.166.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CF4742A96;
+	Sun, 28 Sep 2025 01:59:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759017782; cv=none; b=HeECVpvyoW9L46ey83ac+3b4kf1vP/ikpvfTR8puEd7qKr1gvBs1hgA6DDhJhIGL0q5Djt1dBvcOekeMJB+4JGfTYymu8m+Dg7zbJu8CvWziSAah3FC6w53atB6imTisT+zhLtnv1oeeHqPlFvwPxEDQ9towxBJl9dUnJUIpRl0=
+	t=1759024764; cv=none; b=f+YDKb6hGGBD+K2mfe7VpQODzqVoFUhry95JSqhi1g4cLFK4q2t82o/zs4bwBXUMguhGXGvJf5K1MtWy44Q07dXjp/kR+GUAqMHJpWyO9ZfDNoTvamnJqH6fyTlLIUxlYP4nm76e6uH2duI5t87wb8bo/IV3mtIbUZpO9OuA4Oc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759017782; c=relaxed/simple;
-	bh=ChBHW2ts8z1Rw+T1GL1S7mMYhiJYfcHp9vO/hj5eZFk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qBFUOHm9yy3yfIOMGI861rgZzCLtxPxfiA9HZ7zg7TZ8IzJnNk3g+AjpwxFPFuMrBofnlXdNWjWUvvMxi6sIVlCIzAdRrPxh+emXqqKhWtWliItHjqhB5mMyri7OfEnkiCDe2+VQrWNEe2RcxznURUj1sl135PbRko7CdqVA4iU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gentoo.org; spf=pass smtp.mailfrom=gentoo.org; arc=none smtp.client-ip=140.211.166.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gentoo.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gentoo.org
-Received: from localhost (unknown [180.158.240.90])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: dlan)
-	by smtp.gentoo.org (Postfix) with ESMTPSA id 7DF62340B28;
-	Sun, 28 Sep 2025 00:02:59 +0000 (UTC)
-Date: Sun, 28 Sep 2025 08:02:55 +0800
-From: Yixun Lan <dlan@gentoo.org>
-To: Aurelien Jarno <aurelien@aurel32.net>
-Cc: linux-kernel@vger.kernel.org, Lee Jones <lee@kernel.org>,
-	Sebastian Reichel <sre@kernel.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
-	"open list:SYSTEM RESET/SHUTDOWN DRIVERS" <linux-pm@vger.kernel.org>,
-	"open list:RISC-V SPACEMIT SoC Support" <linux-riscv@lists.infradead.org>,
-	"open list:RISC-V SPACEMIT SoC Support" <spacemit@lists.linux.dev>
-Subject: Re: [PATCH 1/2] driver: reset: spacemit-p1: add driver for
- poweroff/reboot
-Message-ID: <20250928000255-GYA1342640@gentoo.org>
-References: <20250927220824.1267318-1-aurelien@aurel32.net>
- <20250927220824.1267318-2-aurelien@aurel32.net>
+	s=arc-20240116; t=1759024764; c=relaxed/simple;
+	bh=N4LPkmwK6smqMMSd9bSdCIg3UiOaiO0ARVFzJHAuoCI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=ACPJJoxmjVubi73+oB0HwBAomT+JP9VPlSFp9Vh7suPDykkgHuHc9b0GDZfbkuY7EGqpvuhq93jiTy9AotGbQJAxtDaHjXgHNv88LpOSgxXa5wBJ5CVXv3F1T24afOEq6Z7JTv5+84u5GfEYuzHpDESxu9pMeEG1B0xkaMPyn+M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com; spf=pass smtp.mailfrom=hisilicon.com; arc=none smtp.client-ip=45.249.212.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hisilicon.com
+Received: from canpmsgout08.his.huawei.com (unknown [172.19.92.156])
+	by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4cZ6ng45S3zJsX5;
+	Sun, 28 Sep 2025 09:54:31 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.88.163])
+	by canpmsgout08.his.huawei.com (SkyGuard) with ESMTPS id 4cZ6tk3yZBzmV71;
+	Sun, 28 Sep 2025 09:58:54 +0800 (CST)
+Received: from kwepemr500004.china.huawei.com (unknown [7.202.195.141])
+	by mail.maildlp.com (Postfix) with ESMTPS id 32916180044;
+	Sun, 28 Sep 2025 09:59:04 +0800 (CST)
+Received: from [10.67.121.58] (10.67.121.58) by kwepemr500004.china.huawei.com
+ (7.202.195.141) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Sun, 28 Sep
+ 2025 09:59:03 +0800
+Message-ID: <e01fef03-65cd-4eb6-be48-974bcd59ae23@hisilicon.com>
+Date: Sun, 28 Sep 2025 09:59:02 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250927220824.1267318-2-aurelien@aurel32.net>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 2/4] cpufreq: CPPC: Avoid using CPUFREQ_ETERNAL as
+ transition delay
+To: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM
+	<linux-pm@vger.kernel.org>
+CC: Shawn Guo <shawnguo@kernel.org>, Qais Yousef <qyousef@layalina.io>, LKML
+	<linux-kernel@vger.kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>,
+	Pierre Gondois <pierre.gondois@arm.com>, Mario Limonciello
+	<mario.limonciello@amd.com>, Linux ACPI <linux-acpi@vger.kernel.org>
+References: <5069803.31r3eYUQgx@rafael.j.wysocki>
+ <3406003.44csPzL39Z@rafael.j.wysocki>
+Content-Language: en-US
+From: Jie Zhan <zhanjie9@hisilicon.com>
+In-Reply-To: <3406003.44csPzL39Z@rafael.j.wysocki>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
+ kwepemr500004.china.huawei.com (7.202.195.141)
 
-Hi Aurelien, 
 
-On 00:07 Sun 28 Sep     , Aurelien Jarno wrote:
-> This driver implements poweroff/reboot support for the SpacemiT P1 PMIC
-> chip, which is commonly paired with the SpacemiT K1 SoC.
+
+On 9/26/2025 6:19 PM, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> The SpacemiT P1 support is implemented as a MFD driver, so the access is
-> done directly through the regmap interface. Reboot or poweroff is
-> triggered by setting a specific bit in a control register, which is
-> automatically cleared by the hardware afterwards.
+> If cppc_get_transition_latency() returns CPUFREQ_ETERNAL to indicate a
+> failure to retrieve the transition latency value from the platform
+> firmware, the CPPC cpufreq driver will use that value (converted to
+> microseconds) as the policy transition delay, but it is way too large
+> for any practical use.
 > 
-> Signed-off-by: Aurelien Jarno <aurelien@aurel32.net>
+> Address this by making the driver use the cpufreq's default
+> transition latency value (in microseconds) as the transition delay
+> if CPUFREQ_ETERNAL is returned by cppc_get_transition_latency().
+> 
+> Fixes: d4f3388afd48 ("cpufreq / CPPC: Set platform specific transition_delay_us")
+> Cc: 5.19+ <stable@vger.kernel.org> # 5.19
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Reviewed-by: Mario Limonciello (AMD) <superm1@kernel.org>
+Reviewed-by: Jie Zhan <zhanjie9@hisilicon.com>
 > ---
->  drivers/power/reset/Kconfig              |  9 +++
->  drivers/power/reset/Makefile             |  1 +
->  drivers/power/reset/spacemit-p1-reboot.c | 88 ++++++++++++++++++++++++
->  3 files changed, 98 insertions(+)
->  create mode 100644 drivers/power/reset/spacemit-p1-reboot.c
 > 
-> diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
-> index 77ea3129c7080..5afef049760d6 100644
-> --- a/drivers/power/reset/Kconfig
-> +++ b/drivers/power/reset/Kconfig
-[snip]..
-> +
-> +static int spacemit_p1_reboot_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct regmap *regmap;
-> +	int ret;
-> +
-> +	regmap = dev_get_regmap(dev->parent, NULL);
-> +	if (!regmap)
-> +		return -ENODEV;
-> +
-> +	ret = devm_register_power_off_handler(dev, &spacemit_p1_pwroff_handler, regmap);
-> +	if (ret) {
-> +		dev_err(dev, "Failed to register power off handler: %d\n", ret);
-> +		return ret;
-suggest to simplify with dev_err_probe(), which will save few lines
-> +	}
-> +
-> +	ret = devm_register_restart_handler(dev, spacemit_p1_restart_handler, regmap);
-> +	if (ret) {
-> +		dev_err(dev, "Failed to register restart handler: %d\n", ret);
-> +		return ret;
-ditto
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct platform_device_id spacemit_p1_reboot_id_table[] = {
-> +	{ "spacemit-p1-reboot", },
-> +	{ /* sentinel */ },
-> +};
-> +MODULE_DEVICE_TABLE(platform, spacemit_p1_reboot_id_table);
-> +
-> +static struct platform_driver spacemit_p1_reboot_driver = {
-> +	.driver = {
-> +		.name = "spacemit-p1-reboot",
-> +	},
-> +	.probe = spacemit_p1_reboot_probe,
-> +	.id_table = spacemit_p1_reboot_id_table,
-> +};
-> +module_platform_driver(spacemit_p1_reboot_driver);
-> +
-> +MODULE_DESCRIPTION("SpacemiT P1 reboot/poweroff driver");
-> +MODULE_LICENSE("GPL");
-> -- 
-> 2.47.2
+> v1 -> v3:
+>    * Change the name of the new function (Jie Zhan)
+>    * Add a tag from Mario Limonciello
 > 
-
--- 
-Yixun Lan (dlan)
+> ---
+>  drivers/cpufreq/cppc_cpufreq.c |   14 ++++++++++++--
+>  1 file changed, 12 insertions(+), 2 deletions(-)
 
