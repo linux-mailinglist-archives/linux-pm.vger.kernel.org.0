@@ -1,49 +1,49 @@
-Return-Path: <linux-pm+bounces-35514-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35515-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8235BA65DE
-	for <lists+linux-pm@lfdr.de>; Sun, 28 Sep 2025 03:59:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 43D4BBA65EB
+	for <lists+linux-pm@lfdr.de>; Sun, 28 Sep 2025 04:02:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 67F1F3ABF94
-	for <lists+linux-pm@lfdr.de>; Sun, 28 Sep 2025 01:59:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DCC501737EA
+	for <lists+linux-pm@lfdr.de>; Sun, 28 Sep 2025 02:02:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D3191DDC1D;
-	Sun, 28 Sep 2025 01:59:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A365E245028;
+	Sun, 28 Sep 2025 02:02:11 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CF4742A96;
-	Sun, 28 Sep 2025 01:59:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 522F233EC;
+	Sun, 28 Sep 2025 02:02:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759024764; cv=none; b=f+YDKb6hGGBD+K2mfe7VpQODzqVoFUhry95JSqhi1g4cLFK4q2t82o/zs4bwBXUMguhGXGvJf5K1MtWy44Q07dXjp/kR+GUAqMHJpWyO9ZfDNoTvamnJqH6fyTlLIUxlYP4nm76e6uH2duI5t87wb8bo/IV3mtIbUZpO9OuA4Oc=
+	t=1759024931; cv=none; b=NlnhrQztiX+DCEV23uBJzgA2KKuXA6F7lA0xvoWxl3mDh1Dc2TpA1EIJPQeBHOoqIK9Gsg7foSargGHzo1GQVGXjyTIRlpOzvbZaqoQ9zVs5BeNBMl48oQH6ki8cslwZSA/DiZYoQvD6McyFqF2LQMvFnsXPhsVl/rp8motMd5E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759024764; c=relaxed/simple;
-	bh=N4LPkmwK6smqMMSd9bSdCIg3UiOaiO0ARVFzJHAuoCI=;
+	s=arc-20240116; t=1759024931; c=relaxed/simple;
+	bh=2Ldqunqua+Ct1DWMfYX/V9YnIxX1ZwBCUQtELFEyUpo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=ACPJJoxmjVubi73+oB0HwBAomT+JP9VPlSFp9Vh7suPDykkgHuHc9b0GDZfbkuY7EGqpvuhq93jiTy9AotGbQJAxtDaHjXgHNv88LpOSgxXa5wBJ5CVXv3F1T24afOEq6Z7JTv5+84u5GfEYuzHpDESxu9pMeEG1B0xkaMPyn+M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com; spf=pass smtp.mailfrom=hisilicon.com; arc=none smtp.client-ip=45.249.212.189
+	 In-Reply-To:Content-Type; b=j4qpjvIDczxapimLq57DmM3xCsePkEpYbLOj2XCBqWcqudErmii6fStjiA6CEJka40Y2CWzCXnU0K01OCb6dE3q26XI4ckeXe2NnUUrQ/kouhmu67bbtSzHBpD80J6x96nZLBCttelWv17kkV0/WQpotY8zcNMyHMmkKMgHSK0c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com; spf=pass smtp.mailfrom=hisilicon.com; arc=none smtp.client-ip=45.249.212.187
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hisilicon.com
-Received: from canpmsgout08.his.huawei.com (unknown [172.19.92.156])
-	by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4cZ6ng45S3zJsX5;
-	Sun, 28 Sep 2025 09:54:31 +0800 (CST)
-Received: from mail.maildlp.com (unknown [172.19.88.163])
-	by canpmsgout08.his.huawei.com (SkyGuard) with ESMTPS id 4cZ6tk3yZBzmV71;
-	Sun, 28 Sep 2025 09:58:54 +0800 (CST)
+Received: from canpmsgout01.his.huawei.com (unknown [172.19.92.178])
+	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4cZ6sL6SMMzWvDH;
+	Sun, 28 Sep 2025 09:57:42 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.162.254])
+	by canpmsgout01.his.huawei.com (SkyGuard) with ESMTPS id 4cZ6xs0Z8mz1T4Gx;
+	Sun, 28 Sep 2025 10:01:37 +0800 (CST)
 Received: from kwepemr500004.china.huawei.com (unknown [7.202.195.141])
-	by mail.maildlp.com (Postfix) with ESMTPS id 32916180044;
-	Sun, 28 Sep 2025 09:59:04 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id A39AB180464;
+	Sun, 28 Sep 2025 10:01:57 +0800 (CST)
 Received: from [10.67.121.58] (10.67.121.58) by kwepemr500004.china.huawei.com
  (7.202.195.141) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Sun, 28 Sep
- 2025 09:59:03 +0800
-Message-ID: <e01fef03-65cd-4eb6-be48-974bcd59ae23@hisilicon.com>
-Date: Sun, 28 Sep 2025 09:59:02 +0800
+ 2025 10:01:56 +0800
+Message-ID: <d694df21-235f-422e-ba08-1eb442b376bd@hisilicon.com>
+Date: Sun, 28 Sep 2025 10:01:56 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -51,19 +51,21 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/4] cpufreq: CPPC: Avoid using CPUFREQ_ETERNAL as
- transition delay
-To: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM
-	<linux-pm@vger.kernel.org>
-CC: Shawn Guo <shawnguo@kernel.org>, Qais Yousef <qyousef@layalina.io>, LKML
-	<linux-kernel@vger.kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>,
-	Pierre Gondois <pierre.gondois@arm.com>, Mario Limonciello
-	<mario.limonciello@amd.com>, Linux ACPI <linux-acpi@vger.kernel.org>
-References: <5069803.31r3eYUQgx@rafael.j.wysocki>
- <3406003.44csPzL39Z@rafael.j.wysocki>
+Subject: Re: [PATCH] devreq: move governor.h to a public header location
+To: Jon Hunter <jonathanh@nvidia.com>, Dmitry Baryshkov
+	<dmitry.baryshkov@oss.qualcomm.com>, MyungJoo Ham <myungjoo.ham@samsung.com>,
+	Kyungmin Park <kyungmin.park@samsung.com>, Chanwoo Choi
+	<cw00.choi@samsung.com>, Dmitry Osipenko <digetx@gmail.com>, Thierry Reding
+	<thierry.reding@gmail.com>
+CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-tegra@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>, Robie Basak
+	<robibasa@qti.qualcomm.com>
+References: <20250903-governor-public-v1-1-111abd89a89a@oss.qualcomm.com>
+ <ae509446-4703-43af-a48d-9c72da0b3813@hisilicon.com>
+ <25692922-7610-49bc-b33d-c799a13995cb@nvidia.com>
 Content-Language: en-US
 From: Jie Zhan <zhanjie9@hisilicon.com>
-In-Reply-To: <3406003.44csPzL39Z@rafael.j.wysocki>
+In-Reply-To: <25692922-7610-49bc-b33d-c799a13995cb@nvidia.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
 X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
@@ -71,31 +73,26 @@ X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
 
 
 
-On 9/26/2025 6:19 PM, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On 9/26/2025 6:33 PM, Jon Hunter wrote:
 > 
-> If cppc_get_transition_latency() returns CPUFREQ_ETERNAL to indicate a
-> failure to retrieve the transition latency value from the platform
-> firmware, the CPPC cpufreq driver will use that value (converted to
-> microseconds) as the policy transition delay, but it is way too large
-> for any practical use.
+> On 26/09/2025 04:16, Jie Zhan wrote:
+>>
+>> Hi Dmitry,
+>>
+>> On 9/3/2025 9:43 PM, Dmitry Baryshkov wrote:
+>>> Some device drivers (and out-of-tree modules) might want to define
+>>> device-specific device governors. Rather than restricting all of them to
+>>> be a part of drivers/devfreq/ (which is not possible for out-of-tree
+>>> drivers anyway) move governor.h to include/linux/devfreq-governor.h and
+>>> update all drivers to use it.
+>>
+>> For out-of-tree module compilation, can it add drivers/devfreq/ to the
+>> include path?
+>> I suppose this is unnecessary.
 > 
-> Address this by making the driver use the cpufreq's default
-> transition latency value (in microseconds) as the transition delay
-> if CPUFREQ_ETERNAL is returned by cppc_get_transition_latency().
+> The kernel header/source package created for most linux distros will not included this header because it is internal and so in that case it is necessary.
 > 
-> Fixes: d4f3388afd48 ("cpufreq / CPPC: Set platform specific transition_delay_us")
-> Cc: 5.19+ <stable@vger.kernel.org> # 5.19
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Reviewed-by: Mario Limonciello (AMD) <superm1@kernel.org>
-Reviewed-by: Jie Zhan <zhanjie9@hisilicon.com>
-> ---
+> Jon
 > 
-> v1 -> v3:
->    * Change the name of the new function (Jie Zhan)
->    * Add a tag from Mario Limonciello
-> 
-> ---
->  drivers/cpufreq/cppc_cpufreq.c |   14 ++++++++++++--
->  1 file changed, 12 insertions(+), 2 deletions(-)
+Got it, thanks.
 
