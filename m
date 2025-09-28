@@ -1,145 +1,168 @@
-Return-Path: <linux-pm+bounces-35525-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35526-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A3CD4BA760C
-	for <lists+linux-pm@lfdr.de>; Sun, 28 Sep 2025 20:01:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 137FDBA779B
+	for <lists+linux-pm@lfdr.de>; Sun, 28 Sep 2025 22:39:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 40C12177C8A
-	for <lists+linux-pm@lfdr.de>; Sun, 28 Sep 2025 18:01:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A5B9B3B8FC9
+	for <lists+linux-pm@lfdr.de>; Sun, 28 Sep 2025 20:39:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE69924397A;
-	Sun, 28 Sep 2025 18:01:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0A1822A4FE;
+	Sun, 28 Sep 2025 20:39:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=aurel32.net header.i=@aurel32.net header.b="txCqod+7"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="GMr3OeS0"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from hall.aurel32.net (hall.aurel32.net [195.154.113.88])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 459D2635;
-	Sun, 28 Sep 2025 18:01:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.154.113.88
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDB1B2236F7
+	for <linux-pm@vger.kernel.org>; Sun, 28 Sep 2025 20:39:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759082478; cv=none; b=c2/94UM1yoVlYr9pYHemYxNOefcv8OkyUxSpYV8YMF6CkXFcLjWcQyy0S9kNOdu9LKyVOhIDhdWdzwwCktcFCiMTlJc2/qJ0NMLt0Q7v91T0K7CvZgW7C6LrCm4HrouhoVcsLoX+xr0TpPSrx+S0vyyrwhTfRCHZwUWGlbDcICo=
+	t=1759091979; cv=none; b=NwbVcvr2dWi4u2Xg1y1/r/KDNgR1PESAqYZ3PVeuJ77Yp1k1Lr9CVQxvyKsMjRatHeQ13ndwcQZbEsQUiqxPEA6zKELn5klAewGT0zA5RlewI5CPbC18/ULlxBzjROINaD1VgyRjt0PHaUD4TT2RwNsOyJGz9r/TcO1LuqrMawg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759082478; c=relaxed/simple;
-	bh=ETGlfgCHn7iTomo7gbPyeKU7/4yXFLWwgSsvm/N4bJc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HdWQo8Ys/xjCiL2vU8kruSSMT63QPySkG5e+PhN7QYkoAkSp+aqy9smGuTk5FcBQU0a1ZVVaCKv8Z9fccGi0vBXK4RffT3xz/y7L3TuJqjeoZNo9mnP6lSMn5ZVSPGan4WJ4BoqF/foZJpJ3YI2teiVYyq2sDvwkrRVY6gfQ0dc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=aurel32.net; spf=pass smtp.mailfrom=aurel32.net; dkim=pass (2048-bit key) header.d=aurel32.net header.i=@aurel32.net header.b=txCqod+7; arc=none smtp.client-ip=195.154.113.88
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=aurel32.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aurel32.net
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=aurel32.net
-	; s=202004.hall; h=In-Reply-To:Content-Type:MIME-Version:References:
-	Message-ID:Subject:Cc:To:From:Date:Content-Transfer-Encoding:From:Reply-To:
-	Subject:Content-ID:Content-Description:X-Debbugs-Cc;
-	bh=p3zwPG2lHdfGT54vRdWzMiWo1GIY+4oyV83lYkTPCSg=; b=txCqod+7lxWDuX9hd4gJshx+rB
-	jLCDSApN3cGlTlr2qpYvhamL3LoECi5F4cqyj44c0gAV+ltxFnBfm0iBvhqi5/cdl5uJ0m9sc995z
-	GwWM8UZJRcGEQjAKV9dRXFf+ZHJWRIx9utw47og7Y0P1a5ZjlasCEtL1/RXjkOUPRaElOwzNSTKVJ
-	XBs6/TeBl3YOETm0A/qiP94hRqi3vLR+NcWeMBdzddiGk5T8/e1cSJrshXG8eoiv/sjFGHtaK6VR8
-	mLE8Ki8VcsL+syGhf3f2lX7mikw5EsBY1OS3NdMTLpbf2Cp02CQL8iSYRsOeGmlv4h4gv5ZEClUOI
-	YINvYD3Q==;
-Received: from [2a01:e34:ec5d:a741:1ee1:92ff:feb4:5ec0] (helo=ohm.rr44.fr)
-	by hall.aurel32.net with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <aurelien@aurel32.net>)
-	id 1v2vhm-001XtX-0B;
-	Sun, 28 Sep 2025 20:01:02 +0200
-Date: Sun, 28 Sep 2025 20:01:01 +0200
-From: Aurelien Jarno <aurelien@aurel32.net>
-To: Yixun Lan <dlan@gentoo.org>
-Cc: linux-kernel@vger.kernel.org, Lee Jones <lee@kernel.org>,
-	Sebastian Reichel <sre@kernel.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
-	"open list:SYSTEM RESET/SHUTDOWN DRIVERS" <linux-pm@vger.kernel.org>,
-	"open list:RISC-V SPACEMIT SoC Support" <linux-riscv@lists.infradead.org>,
-	"open list:RISC-V SPACEMIT SoC Support" <spacemit@lists.linux.dev>
-Subject: Re: [PATCH 1/2] driver: reset: spacemit-p1: add driver for
- poweroff/reboot
-Message-ID: <aNl33eHpr7gd8HJz@aurel32.net>
-Mail-Followup-To: Yixun Lan <dlan@gentoo.org>, linux-kernel@vger.kernel.org,
-	Lee Jones <lee@kernel.org>, Sebastian Reichel <sre@kernel.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
-	"open list:SYSTEM RESET/SHUTDOWN DRIVERS" <linux-pm@vger.kernel.org>,
-	"open list:RISC-V SPACEMIT SoC Support" <linux-riscv@lists.infradead.org>,
-	"open list:RISC-V SPACEMIT SoC Support" <spacemit@lists.linux.dev>
-References: <20250927220824.1267318-1-aurelien@aurel32.net>
- <20250927220824.1267318-2-aurelien@aurel32.net>
- <20250928000255-GYA1342640@gentoo.org>
+	s=arc-20240116; t=1759091979; c=relaxed/simple;
+	bh=bEBztlDiDQm5yl4Shpm/wje5Q6Z0JaMNh9bKKhDYN3o=;
+	h=Content-Type:Message-ID:Date:MIME-Version:To:Cc:From:Subject; b=DYCEmbm3xwT29sctTOoFIC87bNIawTxr7aKNEBbCkn4PKHV5dEsPGh92OqLKfLBglVqyo/BTraGLYaLToiPuWEDpisg50NlR/UBTABjWvn8WRa6pmF9dGXIvmLc8LDJMjcJeyonxy1+gX3Fhb1Do+vNZzS7k4TnevehxPWf2uMA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=GMr3OeS0; arc=none smtp.client-ip=209.85.166.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f54.google.com with SMTP id ca18e2360f4ac-92493f9715fso6865839f.2
+        for <linux-pm@vger.kernel.org>; Sun, 28 Sep 2025 13:39:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1759091977; x=1759696777; darn=vger.kernel.org;
+        h=subject:from:cc:to:content-language:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=0GMHj9QDikQRS38Qefu4a7ROoXVLSiqxW3Ec8xSrjSM=;
+        b=GMr3OeS0rFgk+nf4T1WV4TJi/4xIwo8S+5VRF2uK+pD+ytvX3+YRu3+bmbzbWbHH7X
+         cdurp/IalrWZ0Gss04AGQYVMd8Ro/nbjaVfB8ZtjBHVGbPvfVv+0dd82qqDvT1Frq+p9
+         s/ElrnVCOvUiffXzrkdTyGnQmq4Rm9EqWjTU0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1759091977; x=1759696777;
+        h=subject:from:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0GMHj9QDikQRS38Qefu4a7ROoXVLSiqxW3Ec8xSrjSM=;
+        b=B1KC09gxyLssmDxCn8s8d/pTfD1KgmpiYbZG8aRsoHQa32aoJ3hd928mXXTXd+RWt6
+         O/1DhBObX3ZXpi1tsIeV7Cf96EQjCX7v++GqvyMGjbwaWOzEi3zenoWwzPVaN3orhEBl
+         8qsgOcKvpsbpv7ucior8ztZ9jny6vc4yrJydEkjhTdghP6e+sNEgWuooOOWkp1Vwo3fx
+         1S10EbWsorgVIEkEVt9yyjYxmMhfQhZUHy0c1BUt1Rp0BpZ3NO8tvgXiGp0FDgvmKo6R
+         PJtrwb8WRezbwDEGD1W1owF+kELeXY2V0RocrZYsVjxlXOKTbvKn+ikgikOZMfanpPY5
+         Ry7w==
+X-Forwarded-Encrypted: i=1; AJvYcCVHqn+WEsn87fJSAFpEIaLh+CMSo9VmIhtSVvbN0/paN4u//JN3Q/ZYezr+gttmmSEcSQpeY+9+ng==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyPGUCn6plfX89CKDofbjSFOJBVamt4XTPFRSKZgeQrc3Dx2wA7
+	pcFQ1q2OaXt19LWOZsRvN/E95lL3uYdG9+hvOgFdpeyESNeqdmzhzXI/B+qY+pBK4O4=
+X-Gm-Gg: ASbGncvhlU5bf+Y7u4tYh6hzdbVfa65+20ydf9rvVSzIwUNP+U9k6ZXWwvt3T1vPjRB
+	xDVojBChQNvUAjUIPlpE1h/7wET0GKrPcr8YqrT8yL8x+7f9INudrbhvp+DiH2hDI1KzG1CRGy5
+	SLC0GLxEOByPLXpU4CRNEL47NJW789ts4JSjZRWTHBzZ6/8K2708wV+pl6Am2Dy+HIidP/pR/01
+	PfYsUmopJqB8q9LwMnzAEwacmvO2gfrQnC+0DFyUvmbsUMdChVdhwr4gQITv6Q2LTqQicEoT/lj
+	D18VbNKyj0QGdrJ9mtRYRUhGT1vjYq5IERLYgjcshfOImrHpir4D+B+7FYOYScr00u7kYDXjEvd
+	0Y02ZLHKvBtvnb3GWxY9fn5VumYlKGf+aLIHFSu0bfLfrVw==
+X-Google-Smtp-Source: AGHT+IEbapQwyVOIgQ7km870dTxBRRVMMKUVzWINYLoJVskCwQrcQoBqjUDru19B/4RkCmqucnthFQ==
+X-Received: by 2002:a05:6602:1686:b0:8eb:13e6:aed9 with SMTP id ca18e2360f4ac-90162bb6fbbmr2108581839f.12.1759091976931;
+        Sun, 28 Sep 2025 13:39:36 -0700 (PDT)
+Received: from [192.168.1.14] ([38.175.187.108])
+        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-9040fb05680sm369789639f.24.2025.09.28.13.39.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 28 Sep 2025 13:39:35 -0700 (PDT)
+Content-Type: multipart/mixed; boundary="------------K1Lbt0IglnwyAgKWGOxXakbd"
+Message-ID: <72b9ae1e-18a4-4b59-9c01-1248c38eee43@linuxfoundation.org>
+Date: Sun, 28 Sep 2025 14:39:35 -0600
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250928000255-GYA1342640@gentoo.org>
-User-Agent: Mutt/2.2.13 (2024-03-09)
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: shuah <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
+ Thomas Renninger <trenn@suse.com>, Thomas Renninger <trenn@suse.de>,
+ "John B. Wyatt IV" <jwyatt@redhat.com>, John Kacur <jkacur@redhat.com>,
+ Linux PM <linux-pm@vger.kernel.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+From: Shuah Khan <skhan@linuxfoundation.org>
+Subject: [GIT PULL] cpupower update for Linux 6.18-rc1
 
-Hi Yixun,
+This is a multi-part message in MIME format.
+--------------K1Lbt0IglnwyAgKWGOxXakbd
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On 2025-09-28 08:02, Yixun Lan wrote:
-> Hi Aurelien, 
-> 
-> On 00:07 Sun 28 Sep     , Aurelien Jarno wrote:
-> > This driver implements poweroff/reboot support for the SpacemiT P1 PMIC
-> > chip, which is commonly paired with the SpacemiT K1 SoC.
-> > 
-> > The SpacemiT P1 support is implemented as a MFD driver, so the access is
-> > done directly through the regmap interface. Reboot or poweroff is
-> > triggered by setting a specific bit in a control register, which is
-> > automatically cleared by the hardware afterwards.
-> > 
-> > Signed-off-by: Aurelien Jarno <aurelien@aurel32.net>
-> > ---
-> >  drivers/power/reset/Kconfig              |  9 +++
-> >  drivers/power/reset/Makefile             |  1 +
-> >  drivers/power/reset/spacemit-p1-reboot.c | 88 ++++++++++++++++++++++++
-> >  3 files changed, 98 insertions(+)
-> >  create mode 100644 drivers/power/reset/spacemit-p1-reboot.c
-> > 
-> > diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
-> > index 77ea3129c7080..5afef049760d6 100644
-> > --- a/drivers/power/reset/Kconfig
-> > +++ b/drivers/power/reset/Kconfig
-> [snip]..
-> > +
-> > +static int spacemit_p1_reboot_probe(struct platform_device *pdev)
-> > +{
-> > +	struct device *dev = &pdev->dev;
-> > +	struct regmap *regmap;
-> > +	int ret;
-> > +
-> > +	regmap = dev_get_regmap(dev->parent, NULL);
-> > +	if (!regmap)
-> > +		return -ENODEV;
-> > +
-> > +	ret = devm_register_power_off_handler(dev, &spacemit_p1_pwroff_handler, regmap);
-> > +	if (ret) {
-> > +		dev_err(dev, "Failed to register power off handler: %d\n", ret);
-> > +		return ret;
-> suggest to simplify with dev_err_probe(), which will save few lines
-> > +	}
-> > +
-> > +	ret = devm_register_restart_handler(dev, spacemit_p1_restart_handler, regmap);
-> > +	if (ret) {
-> > +		dev_err(dev, "Failed to register restart handler: %d\n", ret);
-> > +		return ret;
-> ditto
+Hi Rafael,
 
-Thanks for the hint, that'll be in the next version.
+Please pull the following cpupower update for Linux 6.18-rc1.
 
-Regards
-Aurelien
+Fixes incorrect return vale in cpupower_write_sysfs() error path
+and passing incorrect size to cpuidle_state_write_file() while
+writing status to disable file in cpuidle_state_disable().
 
--- 
-Aurelien Jarno                          GPG: 4096R/1DDD8C9B
-aurelien@aurel32.net                     http://aurel32.net
+diff is attached.
+
+thanks,
+-- Shuah
+
+----------------------------------------------------------------
+The following changes since commit f83ec76bf285bea5727f478a68b894f5543ca76e:
+
+   Linux 6.17-rc6 (2025-09-14 14:21:14 -0700)
+
+are available in the Git repository at:
+
+   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux tags/linux-cpupower-6.18-rc1
+
+for you to fetch changes up to 23199d2aa6dcaf6dd2da772f93d2c94317d71459:
+
+   tools/cpupower: Fix incorrect size in cpuidle_state_disable() (2025-09-24 17:15:35 -0600)
+
+----------------------------------------------------------------
+linux-cpupower-6.18-rc1
+
+Fixes incorrect return vale in cpupower_write_sysfs() error path
+and passing incorrect size to cpuidle_state_write_file() while
+writing status to disable file in cpuidle_state_disable().
+
+----------------------------------------------------------------
+Kaushlendra Kumar (2):
+       tools/cpupower: fix error return value in cpupower_write_sysfs()
+       tools/cpupower: Fix incorrect size in cpuidle_state_disable()
+
+  tools/power/cpupower/lib/cpuidle.c  | 5 +++--
+  tools/power/cpupower/lib/cpupower.c | 2 +-
+  2 files changed, 4 insertions(+), 3 deletions(-)
+----------------------------------------------------------------
+--------------K1Lbt0IglnwyAgKWGOxXakbd
+Content-Type: text/x-patch; charset=UTF-8; name="linux-cpupower-6.18-rc1.diff"
+Content-Disposition: attachment; filename="linux-cpupower-6.18-rc1.diff"
+Content-Transfer-Encoding: base64
+
+ZGlmZiAtLWdpdCBhL3Rvb2xzL3Bvd2VyL2NwdXBvd2VyL2xpYi9jcHVpZGxlLmMgYi90b29s
+cy9wb3dlci9jcHVwb3dlci9saWIvY3B1aWRsZS5jCmluZGV4IDBlY2FjMDA5MjczYy4uZjJj
+MTEzOWFkZjcxIDEwMDY0NAotLS0gYS90b29scy9wb3dlci9jcHVwb3dlci9saWIvY3B1aWRs
+ZS5jCisrKyBiL3Rvb2xzL3Bvd2VyL2NwdXBvd2VyL2xpYi9jcHVpZGxlLmMKQEAgLTIzMyw2
+ICsyMzMsNyBAQCBpbnQgY3B1aWRsZV9zdGF0ZV9kaXNhYmxlKHVuc2lnbmVkIGludCBjcHUs
+CiB7CiAJY2hhciB2YWx1ZVtTWVNGU19QQVRIX01BWF07CiAJaW50IGJ5dGVzX3dyaXR0ZW47
+CisJaW50IGxlbjsKIAogCWlmIChjcHVpZGxlX3N0YXRlX2NvdW50KGNwdSkgPD0gaWRsZXN0
+YXRlKQogCQlyZXR1cm4gLTE7CkBAIC0yNDEsMTAgKzI0MiwxMCBAQCBpbnQgY3B1aWRsZV9z
+dGF0ZV9kaXNhYmxlKHVuc2lnbmVkIGludCBjcHUsCiAJCQkJIGlkbGVzdGF0ZV92YWx1ZV9m
+aWxlc1tJRExFU1RBVEVfRElTQUJMRV0pKQogCQlyZXR1cm4gLTI7CiAKLQlzbnByaW50Zih2
+YWx1ZSwgU1lTRlNfUEFUSF9NQVgsICIldSIsIGRpc2FibGUpOworCWxlbiA9IHNucHJpbnRm
+KHZhbHVlLCBTWVNGU19QQVRIX01BWCwgIiV1IiwgZGlzYWJsZSk7CiAKIAlieXRlc193cml0
+dGVuID0gY3B1aWRsZV9zdGF0ZV93cml0ZV9maWxlKGNwdSwgaWRsZXN0YXRlLCAiZGlzYWJs
+ZSIsCi0JCQkJCQkgICB2YWx1ZSwgc2l6ZW9mKGRpc2FibGUpKTsKKwkJCQkJCSAgIHZhbHVl
+LCBsZW4pOwogCWlmIChieXRlc193cml0dGVuKQogCQlyZXR1cm4gMDsKIAlyZXR1cm4gLTM7
+CmRpZmYgLS1naXQgYS90b29scy9wb3dlci9jcHVwb3dlci9saWIvY3B1cG93ZXIuYyBiL3Rv
+b2xzL3Bvd2VyL2NwdXBvd2VyL2xpYi9jcHVwb3dlci5jCmluZGV4IGNlOGRmYjhlNDZhYi4u
+ZDdmN2VjNmYxNTFjIDEwMDY0NAotLS0gYS90b29scy9wb3dlci9jcHVwb3dlci9saWIvY3B1
+cG93ZXIuYworKysgYi90b29scy9wb3dlci9jcHVwb3dlci9saWIvY3B1cG93ZXIuYwpAQCAt
+NTYsNyArNTYsNyBAQCB1bnNpZ25lZCBpbnQgY3B1cG93ZXJfd3JpdGVfc3lzZnMoY29uc3Qg
+Y2hhciAqcGF0aCwgY2hhciAqYnVmLCBzaXplX3QgYnVmbGVuKQogCWlmIChudW13cml0dGVu
+IDwgMSkgewogCQlwZXJyb3IocGF0aCk7CiAJCWNsb3NlKGZkKTsKLQkJcmV0dXJuIC0xOwor
+CQlyZXR1cm4gMDsKIAl9CiAKIAljbG9zZShmZCk7Cg==
+
+--------------K1Lbt0IglnwyAgKWGOxXakbd--
 
