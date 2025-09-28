@@ -1,124 +1,276 @@
-Return-Path: <linux-pm+bounces-35522-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35523-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B92D5BA6EA8
-	for <lists+linux-pm@lfdr.de>; Sun, 28 Sep 2025 12:05:30 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 964B6BA6ED3
+	for <lists+linux-pm@lfdr.de>; Sun, 28 Sep 2025 12:18:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6B5057A838C
-	for <lists+linux-pm@lfdr.de>; Sun, 28 Sep 2025 10:03:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C20FC1899441
+	for <lists+linux-pm@lfdr.de>; Sun, 28 Sep 2025 10:19:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24DD62DC337;
-	Sun, 28 Sep 2025 10:05:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F25E2D7805;
+	Sun, 28 Sep 2025 10:18:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UnVW8d31"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E0FPpTF7"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 004812DC321
-	for <linux-pm@vger.kernel.org>; Sun, 28 Sep 2025 10:05:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FCE022FE02;
+	Sun, 28 Sep 2025 10:18:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759053923; cv=none; b=sNf4E39wSJAAP3Y06n/yoRqc2pJWlv63WVvq9B6D9P7V3Q6uYnf3RHHU9dd787zV/qrqXmYUNKsL4MiSh4pdTX2Z+qlVMxmOz5FWH20zioiLpQI/3YblQvUA3/1K62EmxgzSlAFoviWZ+W4b+pppGiDLPxMlDcBeVgA1FbA3/b0=
+	t=1759054713; cv=none; b=bKpQDKhgCAIS+05x9sHl1+/d8fXQyPkM6XvEZWDjNbghiXghv3gV6HPNECrTees02niFWi0rVuKruEcBKmJSOSrr+sC56CjjA3Eo+wy8vlLT4A7/BetORZIXaSFHDk9yZqUyIMcUTXdh43IyJqDqRzthEsVfvLTlLK/1mRkmrho=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759053923; c=relaxed/simple;
-	bh=FdQdV6EKcysKfdvysmJi8PmEz/o5IuIR05/jzdQQrYY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=O8Dsl32UDNKvpZ9HO2nGMN4S77vUPRTrbZCVE61mB2wyvfGGsZTOdVySP33tjDwgvSjY6kx+NTheO+3nPer9+46E3BXmFFZVgFl4sgeEO4WhaPb0Db5Guv/+Pv5JW4HzzB6W/ybpzrKj6nAGO+WwzkC2W4Pur64IZpcDOu4Oxj4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UnVW8d31; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84410C116C6
-	for <linux-pm@vger.kernel.org>; Sun, 28 Sep 2025 10:05:22 +0000 (UTC)
+	s=arc-20240116; t=1759054713; c=relaxed/simple;
+	bh=qpqNZeseSpoppJPiIQZ8f4guCrUeGX/8HcqAsfo+0UU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=DgqINScjWcTKsqGPCPnKmudUIW4Lb5U1w0mdwJoQPGzjaLNdXfnd0/2r4WAHeLd8slKjOICnZ+pfQJ0WwgqHeSCTjDF8yLJYWmxSiH8uEeGuUxC68VhSL7y6Tuy9JMxqpR/tuMbIn6EfVhqHqy4G+9eudanXpmVvprdSjaF5Fns=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E0FPpTF7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 975BEC4CEF0;
+	Sun, 28 Sep 2025 10:18:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759053922;
-	bh=FdQdV6EKcysKfdvysmJi8PmEz/o5IuIR05/jzdQQrYY=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=UnVW8d31HjkRA8NpSPucGqBJflkwvenhwazprUTtRZz6UagdjtADK7ywERNLPJS9B
-	 lplUgfdGZ8TDBYro00L88gsdQGMOCwbsHdu1fBT4RRrXlx8+/SvHZqeu66RaiI7saN
-	 h2sgzR38VANBXfU0Uma5QtMIwvgHs9K1maVkmugTeWxaqgoV2lDP3J/fv0WEVJImag
-	 MTqAjBkNrzEys2T1s981tow7UkkSFkOCl1kHLNZToQ+NToqLqBAEIBKSvGOXHWX9BF
-	 uosH8ZAnJiSrDeh3V/NovQ7bUZa5bbY/Vbu5FThsK0HAf+U2xFuk21qoxoLsooNsTU
-	 tcnY5lq9W+ayg==
-Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-7abc631ae5cso2046325a34.1
-        for <linux-pm@vger.kernel.org>; Sun, 28 Sep 2025 03:05:22 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWKO1PD7J6S4zVA2I6rz9TTvQ/YeDPYkD5apfCc87mwuBNA9br6CljfhmPRaDiNnjGxhdQQ5SI2RA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywnyi+V9oYC9ZvVmXLtCpXdCsYGttLJn/2RKpqPjXFToiRPDMa+
-	kC9PHdS8ZIktMqCFI63A8QjTpUjv5pwZwHqIqIaaObTKfoMJ9y8KYgT1S34+HOKUWfYMGKYA7/M
-	pVekrjeJ8ohvzyJLJHFVW7EwO2aE3qHs=
-X-Google-Smtp-Source: AGHT+IFCzORk5att9vJ/4iiSnpvi70q5WkKijwIWLiGYgkpl9JJsmcMEMupMwwP8EFtqH6wt4Q5+dfEpOmfuTRpBZfc=
-X-Received: by 2002:a05:6820:8391:b0:640:a3eb:333a with SMTP id
- 006d021491bc7-640a3eb35d9mr3616610eaf.2.1759053921906; Sun, 28 Sep 2025
- 03:05:21 -0700 (PDT)
+	s=k20201202; t=1759054712;
+	bh=qpqNZeseSpoppJPiIQZ8f4guCrUeGX/8HcqAsfo+0UU=;
+	h=From:To:Cc:Subject:Date:From;
+	b=E0FPpTF7GLh91oAXnFoijHrD0X+RJ2ccS6qrx2KJ34l7GWtf9bI7GzmABuKW+snKL
+	 XHTAZcqeEs85gbV53TGDIeA+l6M06Pdcera9aG6XKoAUUDVFsWfrrT0obc9nPORWrh
+	 TebMQrIFkj6RKm2G9OhrUbW99w6wsIg48bPjn38CXRvWJewzabMG4d51HSQnpLuiI/
+	 fTvwpgP8k043Y4T1rSzwf0hm/HgKkKlmIv13UIv+XUpxVoQaBRWgCNBqlbzUx5jRM4
+	 0Atr5c2wjd1RjZglMdUtn26hW6zFojQq77GnBo3sHRJ42wanykGTSB48hQTc8KOe3l
+	 LLgpOpmWpZLwA==
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+To: Linux ACPI <linux-acpi@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ GuangFei Luo <luogf2025@163.com>,
+ Thomas =?ISO-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Subject:
+ [PATCH v2] ACPI: battery: Add synchronization between interface updates
+Date: Sun, 28 Sep 2025 12:18:29 +0200
+Message-ID: <12754933.O9o76ZdvQC@rafael.j.wysocki>
+Organization: Linux Kernel Development
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <40c2a6fc-8dd9-4f6c-9ebb-2f74f7d0b795@linaro.org>
-In-Reply-To: <40c2a6fc-8dd9-4f6c-9ebb-2f74f7d0b795@linaro.org>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Sun, 28 Sep 2025 12:05:11 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0gJe3Hy6mWB+chRbvsCM_xjPX+8XpSjGZ1G8eFr9-rFjA@mail.gmail.com>
-X-Gm-Features: AS18NWD1Lpg7GlAiS-hzXaEsjBRNWMYg6zRF_35ecXG3ljPhW1zbNbtCrvT3VfE
-Message-ID: <CAJZ5v0gJe3Hy6mWB+chRbvsCM_xjPX+8XpSjGZ1G8eFr9-rFjA@mail.gmail.com>
-Subject: Re: [GIT PULL] thermal driver for v6.18-rc1 #2
-To: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, John Madieu <john.madieu.xa@bp.renesas.com>, 
-	"oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>, Biju Das <biju.das.jz@bp.renesas.com>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux PM mailing list <linux-pm@vger.kernel.org>
+Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi Daniel,
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-On Sun, Sep 28, 2025 at 12:34=E2=80=AFAM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> Hi Rafael,
->
-> after an error reported by kbuild test, it appears a file missed when
-> importing the RZ/G3E new driver which stayed locally after a conflict
-> resolution. This change is on top of the previous tag. Alternatively, if
-> you wish to drop the previous PR, I can emit a new PR with this
-> offending change fixed, IOW this fix folded with initial patch (which
-> sounds cleaner to me BTW).
->
-> The following changes since commit 79428e60897916401c9ed326f6ada4d7c7c997=
-a3:
->
->    dt-bindings: thermal: qcom-tsens: Document the Glymur temperature
-> Sensor (2025-09-26 13:27:44 +0200)
->
-> are available in the Git repository at:
->
->
-> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git
-> tags/thermal-v6.18-rc1-2
->
-> for you to fetch changes up to dc67521c20b701b5237ff486ae078829dc1f8fea:
->
->    thermal/drivers/renesas/rzg3e: Fix add thermal driver for the Renesas
-> RZ/G3E SoC (2025-09-28 00:19:53 +0200)
->
-> ----------------------------------------------------------------
-> - Add missing file when importing conflicting change for the Renesas
->    RZ/G3E thermal driver (Daniel Lezcano)
->
-> ----------------------------------------------------------------
-> John Madieu (1):
->        thermal/drivers/renesas/rzg3e: Fix add thermal driver for the
-> Renesas RZ/G3E SoC
->
->   drivers/thermal/renesas/rzg3e_thermal.c | 547
-> ++++++++++++++++++++++++++++++++
->   1 file changed, 547 insertions(+)
->   create mode 100644 drivers/thermal/renesas/rzg3e_thermal.c
->
-> --
+There is no synchronization between different code paths in the ACPI
+battery driver that update its sysfs interface or its power supply
+class device interface.  In some cases this results to functional
+failures due to race conditions.
 
-Pulled and added to linux-pm.git/linux-next, thanks!
+One example of this is when two ACPI notifications:
+
+  - ACPI_BATTERY_NOTIFY_STATUS (0x80)
+  - ACPI_BATTERY_NOTIFY_INFO   (0x81)
+
+are triggered (by the platform firmware) in a row with a little delay
+in between after removing and reinserting a laptop battery.  Both
+notifications cause acpi_battery_update() to be called and if the delay
+between them is sufficiently small, sysfs_add_battery() can be re-entered
+before battery->bat is set which leads to a duplicate sysfs entry error:
+
+ sysfs: cannot create duplicate filename '/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0C0A:00/power_supply/BAT1'
+ CPU: 1 UID: 0 PID: 185 Comm: kworker/1:4 Kdump: loaded Not tainted 6.12.38+deb13-amd64 #1  Debian 6.12.38-1
+ Hardware name: Gateway          NV44             /SJV40-MV        , BIOS V1.3121 04/08/2009
+ Workqueue: kacpi_notify acpi_os_execute_deferred
+ Call Trace:
+  <TASK>
+  dump_stack_lvl+0x5d/0x80
+  sysfs_warn_dup.cold+0x17/0x23
+  sysfs_create_dir_ns+0xce/0xe0
+  kobject_add_internal+0xba/0x250
+  kobject_add+0x96/0xc0
+  ? get_device_parent+0xde/0x1e0
+  device_add+0xe2/0x870
+  __power_supply_register.part.0+0x20f/0x3f0
+  ? wake_up_q+0x4e/0x90
+  sysfs_add_battery+0xa4/0x1d0 [battery]
+  acpi_battery_update+0x19e/0x290 [battery]
+  acpi_battery_notify+0x50/0x120 [battery]
+  acpi_ev_notify_dispatch+0x49/0x70
+  acpi_os_execute_deferred+0x1a/0x30
+  process_one_work+0x177/0x330
+  worker_thread+0x251/0x390
+  ? __pfx_worker_thread+0x10/0x10
+  kthread+0xd2/0x100
+  ? __pfx_kthread+0x10/0x10
+  ret_from_fork+0x34/0x50
+  ? __pfx_kthread+0x10/0x10
+  ret_from_fork_asm+0x1a/0x30
+  </TASK>
+ kobject: kobject_add_internal failed for BAT1 with -EEXIST, don't try to register things with the same name in the same directory.
+
+There are also other scenarios in which analogous issues may occur.
+
+Address this by using a common lock in all of the code paths leading
+to updates of driver interfaces: ACPI Notify () handler, system resume
+callback and post-resume notification, device addition and removal.
+
+This new lock replaces sysfs_lock that has been used only in
+sysfs_remove_battery() which now is going to be always called under
+the new lock, so it doesn't need any internal locking any more.
+
+Fixes: 10666251554c ("ACPI: battery: Install Notify() handler directly")
+Closes: https://lore.kernel.org/linux-acpi/20250910142653.313360-1-luogf2025@163.com/
+Reported-by: GuangFei Luo <luogf2025@163.com>
+Tested-by: GuangFei Luo <luogf2025@163.com>
+Cc: 6.6+ <stable@vger.kernel.org> # 6.6+
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+
+v1 -> v2: Added a new function for acpi_battery_add() failure path to avoid
+   compiler warning regarding defining a new variable after a label.
+
+---
+ drivers/acpi/battery.c |   43 +++++++++++++++++++++++++++++--------------
+ 1 file changed, 29 insertions(+), 14 deletions(-)
+
+--- a/drivers/acpi/battery.c
++++ b/drivers/acpi/battery.c
+@@ -92,7 +92,7 @@ enum {
+ 
+ struct acpi_battery {
+ 	struct mutex lock;
+-	struct mutex sysfs_lock;
++	struct mutex update_lock;
+ 	struct power_supply *bat;
+ 	struct power_supply_desc bat_desc;
+ 	struct acpi_device *device;
+@@ -904,15 +904,12 @@ static int sysfs_add_battery(struct acpi
+ 
+ static void sysfs_remove_battery(struct acpi_battery *battery)
+ {
+-	mutex_lock(&battery->sysfs_lock);
+-	if (!battery->bat) {
+-		mutex_unlock(&battery->sysfs_lock);
++	if (!battery->bat)
+ 		return;
+-	}
++
+ 	battery_hook_remove_battery(battery);
+ 	power_supply_unregister(battery->bat);
+ 	battery->bat = NULL;
+-	mutex_unlock(&battery->sysfs_lock);
+ }
+ 
+ static void find_battery(const struct dmi_header *dm, void *private)
+@@ -1072,6 +1069,9 @@ static void acpi_battery_notify(acpi_han
+ 
+ 	if (!battery)
+ 		return;
++
++	guard(mutex)(&battery->update_lock);
++
+ 	old = battery->bat;
+ 	/*
+ 	 * On Acer Aspire V5-573G notifications are sometimes triggered too
+@@ -1094,21 +1094,22 @@ static void acpi_battery_notify(acpi_han
+ }
+ 
+ static int battery_notify(struct notifier_block *nb,
+-			       unsigned long mode, void *_unused)
++			  unsigned long mode, void *_unused)
+ {
+ 	struct acpi_battery *battery = container_of(nb, struct acpi_battery,
+ 						    pm_nb);
+-	int result;
+ 
+-	switch (mode) {
+-	case PM_POST_HIBERNATION:
+-	case PM_POST_SUSPEND:
++	if (mode == PM_POST_SUSPEND || mode == PM_POST_HIBERNATION) {
++		guard(mutex)(&battery->update_lock);
++
+ 		if (!acpi_battery_present(battery))
+ 			return 0;
+ 
+ 		if (battery->bat) {
+ 			acpi_battery_refresh(battery);
+ 		} else {
++			int result;
++
+ 			result = acpi_battery_get_info(battery);
+ 			if (result)
+ 				return result;
+@@ -1120,7 +1121,6 @@ static int battery_notify(struct notifie
+ 
+ 		acpi_battery_init_alarm(battery);
+ 		acpi_battery_get_state(battery);
+-		break;
+ 	}
+ 
+ 	return 0;
+@@ -1198,6 +1198,8 @@ static int acpi_battery_update_retry(str
+ {
+ 	int retry, ret;
+ 
++	guard(mutex)(&battery->update_lock);
++
+ 	for (retry = 5; retry; retry--) {
+ 		ret = acpi_battery_update(battery, false);
+ 		if (!ret)
+@@ -1208,6 +1210,13 @@ static int acpi_battery_update_retry(str
+ 	return ret;
+ }
+ 
++static void sysfs_battery_cleanup(struct acpi_battery *battery)
++{
++	guard(mutex)(&battery->update_lock);
++
++	sysfs_remove_battery(battery);
++}
++
+ static int acpi_battery_add(struct acpi_device *device)
+ {
+ 	int result = 0;
+@@ -1230,7 +1239,7 @@ static int acpi_battery_add(struct acpi_
+ 	if (result)
+ 		return result;
+ 
+-	result = devm_mutex_init(&device->dev, &battery->sysfs_lock);
++	result = devm_mutex_init(&device->dev, &battery->update_lock);
+ 	if (result)
+ 		return result;
+ 
+@@ -1262,7 +1271,7 @@ fail_pm:
+ 	device_init_wakeup(&device->dev, 0);
+ 	unregister_pm_notifier(&battery->pm_nb);
+ fail:
+-	sysfs_remove_battery(battery);
++	sysfs_battery_cleanup(battery);
+ 
+ 	return result;
+ }
+@@ -1281,6 +1290,9 @@ static void acpi_battery_remove(struct a
+ 
+ 	device_init_wakeup(&device->dev, 0);
+ 	unregister_pm_notifier(&battery->pm_nb);
++
++	guard(mutex)(&battery->update_lock);
++
+ 	sysfs_remove_battery(battery);
+ }
+ 
+@@ -1297,6 +1309,9 @@ static int acpi_battery_resume(struct de
+ 		return -EINVAL;
+ 
+ 	battery->update_time = 0;
++
++	guard(mutex)(&battery->update_lock);
++
+ 	acpi_battery_update(battery, true);
+ 	return 0;
+ }
+
+
+
 
