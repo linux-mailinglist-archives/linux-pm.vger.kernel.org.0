@@ -1,53 +1,53 @@
-Return-Path: <linux-pm+bounces-35516-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35517-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id C1E7FBA660F
-	for <lists+linux-pm@lfdr.de>; Sun, 28 Sep 2025 04:09:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 79602BA6624
+	for <lists+linux-pm@lfdr.de>; Sun, 28 Sep 2025 04:11:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 70AFA4E048C
-	for <lists+linux-pm@lfdr.de>; Sun, 28 Sep 2025 02:09:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C93DC189675C
+	for <lists+linux-pm@lfdr.de>; Sun, 28 Sep 2025 02:11:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDB6724634F;
-	Sun, 28 Sep 2025 02:09:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08E311E1A33;
+	Sun, 28 Sep 2025 02:10:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b="FZQFIzS5"
+	dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b="aX3Iu+WV"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtpbgeu2.qq.com (smtpbgeu2.qq.com [18.194.254.142])
+Received: from smtpbguseast1.qq.com (smtpbguseast1.qq.com [54.204.34.129])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A02BA34BA2D;
-	Sun, 28 Sep 2025 02:09:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.194.254.142
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31A594A01;
+	Sun, 28 Sep 2025 02:10:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.204.34.129
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759025357; cv=none; b=bws6ajoBZoHFsqJVhBD5f0CyuH84VREqftpGIvl1iYLf67Nsx2awH+WhesIpe0xxKcslFqIAlD5g3QbtXeDFlaHDqMkbI5yG5AVouM6FJRa67fQD2eGbUqr04IZSPTNOg/lh1o4gJF/Ox1kxqF4wugtyJ4WUDW0sd6levirj0Cg=
+	t=1759025457; cv=none; b=hruxTRDk5mCStborSvqVtwRDbe2SX3vXNdi/DClBN8XroooB6tKv3Z7hyCozLSWC6OCDnjtwktgpO0BSXmmDSNSKRyQAGuRePKYsIB9Q4cuFw6gjqECg43+BFHSdexlcKM6MXIMTiKTjpMnP0TdUs+B7j1lrPcpNauW9mZBmnLc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759025357; c=relaxed/simple;
-	bh=uXHMtU44g8LdzdaHIpFjnIqp8AVQGjIFBiQtGjTrnt0=;
+	s=arc-20240116; t=1759025457; c=relaxed/simple;
+	bh=bXbecS0IyDLvfvVFyAQIfZWm7g6T5lIqeGstL+ERs8U=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hvfqQzWWvQmn2U1Q2RxbhINIq7RG5a7khPruRR+BX+aLuVpZcBYtYsy0sD0CbpOFUZm5xlOCXBBduaLPHz0UAV91FvrirZ1jiiO4Bwf8gvWxXxblTrxROa2zoKZjzY18ntK66/LbaciwYibXwbjgRimtt07TKr7u1eNf2k1KYdE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com; spf=none smtp.mailfrom=linux.spacemit.com; dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b=FZQFIzS5; arc=none smtp.client-ip=18.194.254.142
+	 Content-Type:Content-Disposition:In-Reply-To; b=rKCqw12R6HQBUP9AYKvyphDZL2Av13/iXaw6CNgPAAtRMQrRDy/jHcDssFUDvzHpahtwVdUAoZf8aB6OeKIjrNYI9jRaIBMkKwCEstuPOLMDn3TZFyt5/IhdAAT0ltxqDm7i76MSmdmNIMmexmIYu7/InXnmHwk/VDGxWUgFidU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com; spf=none smtp.mailfrom=linux.spacemit.com; dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b=aX3Iu+WV; arc=none smtp.client-ip=54.204.34.129
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.spacemit.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.spacemit.com;
-	s=mxsw2412; t=1759025344;
-	bh=r/UU5OjQlNOk+0xgcmwYt26dsbPN+MROc0DRiB48QgY=;
+	s=mxsw2412; t=1759025450;
+	bh=eY0bpTnzgWUlPNePnN5gj3Yr6PlpWRkAzkaXahzV1o8=;
 	h=Date:From:To:Subject:Message-ID:MIME-Version;
-	b=FZQFIzS5wiSIvSZeZJoWSiAaClLiNu3ryCZHZXECPmPaQT4rMd2OyFWr++IgokcKt
-	 gCbi6BfN5SRt+GJsnVde9TSizQ0SWyJN8PoFuSQ8Zu4AsdcfT620+pXCj7j8F7P2Ic
-	 8WRBn0Nl0sO1ZlFqpYDo5OK83dI4IEUYMCLzfjLE=
-X-QQ-mid: esmtpgz14t1759025340tfb5556f0
-X-QQ-Originating-IP: OAcKHgODdTKKwX2NmUA8RS/mvctsKVecQ3y2vidb9Dk=
+	b=aX3Iu+WVXqkaOEt6IYhUzisugto3NkFU0NDjsDI8z/eeHKrMMQ1i8RFzml9N7mwcp
+	 tooixD20fy83WXGkfKgQ3MtsWGC+eb/JefwFrpczYF+jAwpuhQnsPNxP4JdllR8sr9
+	 cXaUkoygOcDG4l0hGHXcnZikCzTEWt4qpzfC5qKs=
+X-QQ-mid: zesmtpgz9t1759025446tf4c98f6b
+X-QQ-Originating-IP: RtsBnZ4ihVU9CHOc9np/4YECKvEAil73OOUAMK5O8B8=
 Received: from = ( [61.145.255.150])
 	by bizesmtp.qq.com (ESMTP) with 
-	id ; Sun, 28 Sep 2025 10:08:59 +0800 (CST)
+	id ; Sun, 28 Sep 2025 10:10:45 +0800 (CST)
 X-QQ-SSF: 0000000000000000000000000000000
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 3441446003025408370
+X-BIZMAIL-ID: 11079297919091120086
 EX-QQ-RecipientCnt: 13
-Date: Sun, 28 Sep 2025 10:08:58 +0800
+Date: Sun, 28 Sep 2025 10:10:45 +0800
 From: Troy Mitchell <troy.mitchell@linux.spacemit.com>
 To: Aurelien Jarno <aurelien@aurel32.net>, linux-kernel@vger.kernel.org,
 	Lee Jones <lee@kernel.org>, Sebastian Reichel <sre@kernel.org>,
@@ -59,73 +59,105 @@ Cc: "open list:SYSTEM RESET/SHUTDOWN DRIVERS" <linux-pm@vger.kernel.org>,
 	"open list:RISC-V SPACEMIT SoC Support" <linux-riscv@lists.infradead.org>,
 	"open list:RISC-V SPACEMIT SoC Support" <spacemit@lists.linux.dev>,
 	Troy Mitchell <troy.mitchell@linux.spacemit.com>
-Subject: Re: [PATCH 2/2] mfd: simple-mfd-i2c: add a reboot cell for the
- SpacemiT P1 chip
-Message-ID: <E15EF3B2FD46EFE7+aNiYuset7FKRo_4C@kernel.org>
+Subject: Re: [PATCH 1/2] driver: reset: spacemit-p1: add driver for
+ poweroff/reboot
+Message-ID: <97073301A892F7D5+aNiZJbY2_WqSZR76@kernel.org>
 References: <20250927220824.1267318-1-aurelien@aurel32.net>
- <20250927220824.1267318-3-aurelien@aurel32.net>
+ <20250927220824.1267318-2-aurelien@aurel32.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250927220824.1267318-3-aurelien@aurel32.net>
+In-Reply-To: <20250927220824.1267318-2-aurelien@aurel32.net>
 X-QQ-SENDSIZE: 520
-Feedback-ID: esmtpgz:linux.spacemit.com:qybglogicsvrsz:qybglogicsvrsz3a-0
-X-QQ-XMAILINFO: MpO6L0LObisWRFUV/rniBlOiGmHoOfXQcM4ziUkH3wvz1nGENeDTIesJ
-	Z6ZvqRK7K17rcOQ17yD3kbwUDs4Ii/gGxkFXapktnGwjC8InF8bBDk0iu+QzkB6+hDAo+Ut
-	0s1ynFSPUBkxeezPVZTgOB1SNOzT6Ej9c6D7IbUJxt7zGpMDo9JGgjEXkxlirQQB12bXCc7
-	j5S6ohU70kKpM+WQP/0E7f/8mGFf8+0Vff5TiFr+vuU88BL8CAZzG0nJy6oDICCuE//6Z5T
-	3Q/EU+lv74ygVKzA4Ao6Sx11leSAsEAmmLFFWiZhlPA5AYyEVEslwssQOAu1i1/5CuFanO+
-	S5/GpIctxbWuSmaJvsJwhT/rDeo5LlgikVhtPhSVata0vJgJy5kJztm5Jv62I361oS2aAP8
-	eFzkiJP5yNwbx/Ax+I5oN1n71o/TvZ66FpU5/umJTyYDWyNxzIvEKon3LUf7xgp1A3c8HzS
-	1IOWiBpxF5mkQcWJQ3Va+fuLy1ChMYMSfc1CASDY1sllU1mkHIFHjYoAv3r8FApzsWmFrBY
-	SE9F41te5Yhw+gHAMyO0O8PT/gpZjMdNRQMw7ZITPpuyUjj5iwIdSXxh/xr7l4pguAnJi+h
-	NNZuCc5PcJHikXxqEea8TCN6RyCXb262/3IDkxQSy9LUexHRTuXMMNeob8Upda+ZHcRrFYs
-	a+m+7OS2R3MVwI38ccQDIMlLbeZ/2TfdzJcW1Il4ylOKVBNTp/FErOUKOg7ADjIUAYchwAy
-	1xDkjeGPSNb9R9wZy22SS5/62CrxpwaXH/W+wKW9tq9SZ6iKNkvIj2F9+T5Xcv+ItdviyO4
-	i2Y9pBAzlo91AL87R+mPn9wuFKkBRqObXo3e6qIZuW0Bd4U3s8FjoT/NoocEpv/Fc3TyW/G
-	x6CWIfepmxAoUm95rCe323Fv6pbzWftlwiMhMeuJ9wUz0qmE9Y6flwxfnO/jDFY6d5llHk/
-	oSrgh/lqDXp0ncN8vfG73FdHIL9Bl2tqCJaHxNyAKE1F3n72Ap6ef6L03NQEy8MKr7X0SYK
-	AGEuhVuTcrgjO9OkISjZG9kGXNGSQlDzhF5FUfasA8McqEwult48sBaX9ph2ArhLcgFIAcU
-	Vh3cVSO/cL0Hnqgh5PaJf0=
-X-QQ-XMRINFO: MPJ6Tf5t3I/ycC2BItcBVIA=
+Feedback-ID: zesmtpgz:linux.spacemit.com:qybglogicsvrsz:qybglogicsvrsz3a-0
+X-QQ-XMAILINFO: OakVxA/3u/8R+RscWecTt98PzYb9aUs3vB+UBNkPt3bRCdLOSVAd4S/A
+	QF98oDqLAcCTe1QTS8A4KkwY1gxNwmFxQl0UQ8Hb4B7kqoU+Kg8qLsuRU45OWYUZK37VneJ
+	+QPjsF7Z2RubYo2koD7xKFCLlywFKWM3xpDEnFTAC5WekUgMDkErU74iqyoi13/rVmNahUP
+	BnRSCCQ4GBPh1G5lOlpchJFwlSjohHnS22TqHhECLEh99yg7VDjdHHk3dz4wObCijOubiAJ
+	AMdufrhe7dDFrhz9dvgVi49EiCxlOIsplVcuXZ8D/WgPdndwBfngN0wcUgdpyAMZb/mPbH6
+	aoF/MSt7dfR2x2wKrn9fHLXGhz3mlB4/BWwFtPIwxtL0GxnBvlQYvKpGvF69kTNM4st/Vc0
+	K6lHfYBCNKE+pERulZOkKQ5dKaJUxbCO2byJGisEiO8WPD2pH0TU355D0L7V8eMexhvBWjI
+	GvU1gxORMfkGNR/24NA+7oPIrmxTjT+FKdnrcSdnWAySieX1eglznhrCpNGZq25C6qqt1Jb
+	AZGhtIPSyAmIyOQlZQ5T5kpIIS/ivC1pkoRsQCUCvh0vxXVdx9tnnCFIXncC5IxXHF9b1/P
+	RIQHGNvhdPV+sEuNBnqN7FHeDqLmllVVj2oMnWo2FzqQc11tKUULayidaiK43eQQGR08Ddc
+	fh3c0ZDa3/7Gt6G6KNYNf4fiEzFvSHbK57N3BhVpdHbCnVOIeJ2VeEmLhsLwyH2IA0L5H75
+	suQbh/3/lXpQSNkmnI1MjqwA9yjA4iKRPX3hbO+amkOoMvykda9p/N28kH2hIQW6glwjvTC
+	EPGAmyOhho8ScW82ar/bWjBU1eULAXobSrQRZk/QpRw2BrkCJyceOcsll12Sk2h1fjCEYnv
+	oBafY02et8kCKOra46pEXo/BExFwPKsh63r2AtBFlSPL4Udc1rciBfJN1+12+nUhZs8ILs+
+	vuAoN1IpMN4tr4S6JjjwgfFJdakIPRb4lgnH5wGrJi+yRoVKhsowI8Mkx38BDMwxJUjYmWB
+	1a0adsk/uAYgZ+D1j7x3XnAVM+l73gxPeMiqiTiyHDH7StaexDKFai5lzQG6WjY4OtHZ1Lz
+	PGek2BfcL9w0PcuOMnqz4ZsolDs5RLiUZanZyu/0nWs
+X-QQ-XMRINFO: NS+P29fieYNw95Bth2bWPxk=
 X-QQ-RECHKSPAM: 0
 
-Hi Aurelien, Thanks for your patch!
-
-On Sun, Sep 28, 2025 at 12:07:41AM +0200, Aurelien Jarno wrote:
-> Add a "spacemit-p1-reboot" cell for the SpacemiT P1 chip.
+On Sun, Sep 28, 2025 at 12:07:40AM +0200, Aurelien Jarno wrote:
+> This driver implements poweroff/reboot support for the SpacemiT P1 PMIC
+> chip, which is commonly paired with the SpacemiT K1 SoC.
+> 
+> The SpacemiT P1 support is implemented as a MFD driver, so the access is
+> done directly through the regmap interface. Reboot or poweroff is
+> triggered by setting a specific bit in a control register, which is
+> automatically cleared by the hardware afterwards.
 > 
 > Signed-off-by: Aurelien Jarno <aurelien@aurel32.net>
 > ---
->  drivers/mfd/simple-mfd-i2c.c | 1 +
->  1 file changed, 1 insertion(+)
+>  drivers/power/reset/Kconfig              |  9 +++
+>  drivers/power/reset/Makefile             |  1 +
+>  drivers/power/reset/spacemit-p1-reboot.c | 88 ++++++++++++++++++++++++
+>  3 files changed, 98 insertions(+)
+>  create mode 100644 drivers/power/reset/spacemit-p1-reboot.c
 > 
-> diff --git a/drivers/mfd/simple-mfd-i2c.c b/drivers/mfd/simple-mfd-i2c.c
-> index 696b602051260..2e86efb0c82b8 100644
-> --- a/drivers/mfd/simple-mfd-i2c.c
-> +++ b/drivers/mfd/simple-mfd-i2c.c
-> @@ -99,6 +99,7 @@ static const struct regmap_config spacemit_p1_regmap_config = {
->  };
->  
->  static const struct mfd_cell spacemit_p1_cells[] = {
-> +	{ .name = "spacemit-p1-reboot", },
-I’m not sure if this name is the best fit here.
-Since the driver also implements reboot and power-off functionality,
-would it make more sense to call it spacemit-p1-power?
-I’ll leave it up to you.
+[...]
+> +static int spacemit_p1_reboot_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct regmap *regmap;
+> +	int ret;
+> +
+> +	regmap = dev_get_regmap(dev->parent, NULL);
+> +	if (!regmap)
+> +		return -ENODEV;
+> +
+> +	ret = devm_register_power_off_handler(dev, &spacemit_p1_pwroff_handler, regmap);
+> +	if (ret) {
+> +		dev_err(dev, "Failed to register power off handler: %d\n", ret);
+> +		return ret;
+> +	}
+With fixing what Yixun said, LGTM.
 
-Otherwise, LGTM.
-
-Reviewed-by: Troy Mitchell <troy.mitchell@linux.spacemit.com>
->  	{ .name = "spacemit-p1-regulator", },
->  	{ .name = "spacemit-p1-rtc", },
->  };
+Acked-by: Troy Mitchell <troy.mitchell@linux.spacemit.com>
+> +
+> +	ret = devm_register_restart_handler(dev, spacemit_p1_restart_handler, regmap);
+> +	if (ret) {
+> +		dev_err(dev, "Failed to register restart handler: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct platform_device_id spacemit_p1_reboot_id_table[] = {
+> +	{ "spacemit-p1-reboot", },
+> +	{ /* sentinel */ },
+> +};
+> +MODULE_DEVICE_TABLE(platform, spacemit_p1_reboot_id_table);
+> +
+> +static struct platform_driver spacemit_p1_reboot_driver = {
+> +	.driver = {
+> +		.name = "spacemit-p1-reboot",
+> +	},
+> +	.probe = spacemit_p1_reboot_probe,
+> +	.id_table = spacemit_p1_reboot_id_table,
+> +};
+> +module_platform_driver(spacemit_p1_reboot_driver);
+> +
+> +MODULE_DESCRIPTION("SpacemiT P1 reboot/poweroff driver");
+> +MODULE_LICENSE("GPL");
 > -- 
 > 2.47.2
 > 
