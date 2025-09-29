@@ -1,107 +1,128 @@
-Return-Path: <linux-pm+bounces-35566-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35567-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DECFEBAA007
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Sep 2025 18:18:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52C6DBAA894
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Sep 2025 21:57:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 638DC7A134A
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Sep 2025 16:17:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 447A8189F8EB
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Sep 2025 19:58:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50AC93093A5;
-	Mon, 29 Sep 2025 16:18:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA8B0253B59;
+	Mon, 29 Sep 2025 19:57:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cnTq070u"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U5RB08Jd"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ACA078F39
-	for <linux-pm@vger.kernel.org>; Mon, 29 Sep 2025 16:18:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF95E246BAA
+	for <linux-pm@vger.kernel.org>; Mon, 29 Sep 2025 19:57:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759162729; cv=none; b=GfZX8/SliTy2jfWWzrSe4Q570FR5QXM2nwYW68mD6gjhpaP35o52BVFg3DO0eiUE3+jqMBXpN3RlVNXu/ZFvoH5OCWmbHg0hYWs4U6opkIOCWmFCilPiosMv5WLWZiBFoBwN7ZTGF7RV+jAuvfLYdYN06JoSfxD5EeqxVwBEtPI=
+	t=1759175864; cv=none; b=qIIzNJKCzG9L9vRINuzWYiJrYIDmFTM/E3p7mnzf8NvA3/SM0y7WU+6hVAniCfVWmOm3cG0HGM9e1jm66hlwyqf3qMtkKWiMVutogZ/gHUlINl+PdHZ/W3fcHRemgmOmAZxlrl8yb5LUfjencpryFTo9SzxPnoZ/gshukKEC+oI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759162729; c=relaxed/simple;
-	bh=y1PFlnpoS8HMdd5eV23Hi5stegF7R3xRHDYNVRVCELc=;
+	s=arc-20240116; t=1759175864; c=relaxed/simple;
+	bh=ILAe+VRfX0Fc+b5qLvaJzfBUJ4qz7jOpbJP92apYs7g=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hq0oE83A4ylQDGPEi2eKB4wEgNRNjqKQtnHel4g8CP9b5qqdrpk0FmHuShtAwKazOLY84e+qsAaUcNybZX0BauVZvdMRBa2Ga+eCHGkIOr0qCcY6TsutFtMJOzlWoXx6ZK69yG/3fhLst92sTzcg5FfiVZZYyh5vDEv3+Ay+PSU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cnTq070u; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8851C4CEF4
-	for <linux-pm@vger.kernel.org>; Mon, 29 Sep 2025 16:18:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759162728;
-	bh=y1PFlnpoS8HMdd5eV23Hi5stegF7R3xRHDYNVRVCELc=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=cnTq070u68mayMVva5/URhtj0CzJoNBR8wl+UpUAivTgjFR6TukurKQzrsCY1HiwA
-	 PmqMMW0IFapZoMa9IcGueprjukyJE3aNcHFGaWd1o3+cp2NxICIpmZ3jBwpujflZGt
-	 amrO6KTTgDyRTcowIqHCfgPsS7rHAoGE2d53R/ZQ2uq8tumW3DR2Z5YxKOiDbYcVnf
-	 C6KbQoubSSr8flfQc2b56uuxKTERwC7UFYlLQ1684XV/5IVCvsC4C2KSpMh2X0djUD
-	 ZH7XLS0E63GqH/QQvJXvbIuUt6hQ3t1cpztVNCdXfIuTnnl1AoMXvbMYHimp/jZ1bM
-	 lBwOEG256kBHQ==
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-61feb87fe26so6958829a12.1
-        for <linux-pm@vger.kernel.org>; Mon, 29 Sep 2025 09:18:48 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCX9X7T5O7J6sXWV9p7RkbDNpfsHpDLr2fLjhWUkmCNN7VnaaQ+1jy32It+ZqkgItSqq6ooWrWEhZQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy9jRy3LrAxo0AJntB73E1cUqJpA9v+GuCTieB4Ulet0KWHDJ8w
-	JAkqSL728TwsUN/K/X8LzUJEBxyQGR5ttmaJ6Wq56jnS/jpNsaw1XwP9G2iQ3sMX0D4mdz9UFDn
-	aI4FCSH6vEKnux10goWCCTL9l26T4qA==
-X-Google-Smtp-Source: AGHT+IH4EdiPSx3uPpATy9sxikDxD325g38BsI88DHXzrLYBuhBcFvhw+KtcPr01sEC29n+VOeQjzjGDu5gZtwRkopk=
-X-Received: by 2002:a17:907:6d29:b0:b40:52:19c2 with SMTP id
- a640c23a62f3a-b4000521c0fmr289546766b.20.1759162727425; Mon, 29 Sep 2025
- 09:18:47 -0700 (PDT)
+	 To:Cc:Content-Type; b=WQMGpaVXlabeFR1oYqUaQLh5XVI1d4V0eK2CMFZj/xn+jUa1b6iiFe++vfVqWGl13mxtUlp5d/sWDszmp9zEPUOWQ1NuBFOkV4hhmGujV3t7WpQdjNkpQPxHLQDh+TDmIbSHAliyjEPzatLRv5UgWsRXGp7GbaQx5sltI60RKVY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U5RB08Jd; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2680ee37b21so9800655ad.0
+        for <linux-pm@vger.kernel.org>; Mon, 29 Sep 2025 12:57:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1759175862; x=1759780662; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ILAe+VRfX0Fc+b5qLvaJzfBUJ4qz7jOpbJP92apYs7g=;
+        b=U5RB08Jdp+02qM+f5Mp+vuiVmfSvgvAx9OiS9eb/dfT+moX3pfMb+UYBBkKAocEnWD
+         lb08aQk8t3PnXYbC6FKFPEpeNN+0C3ZK5K8O+tVbR+xM/l1tcssKZVmm03IKwOTCHEle
+         otJ3pGwplRt2pfEJJEZvwsiu9yLStl62IrDFTM2XX7CeRRpwmQk921H0CmTYR3OS71XF
+         NekIyiGHf8khHUgEJ7/Wg2ZlzVBCZ0wFeOg6ADpKhHUA9qnm0NL23qr46rSElBRBhtmX
+         ruanjoQ1J/SgQ4bkiNZDbqTlMP5Xkn+l9J62YsWvCV6Vi6j5khk+VeQK0XuWqSD6UIog
+         WvXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1759175862; x=1759780662;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ILAe+VRfX0Fc+b5qLvaJzfBUJ4qz7jOpbJP92apYs7g=;
+        b=CkvH+RKZDSgBKwQsocCQv/x0R5mM3EJFLDqzXPiyXtyw7DamYdC42tU3VgWO+eXDZg
+         qMc6XvEMtfQph0OsXNQbciZ9BShm6B18qvgAFUfqTeBXUd0919Ebiy+fKdTLoKvSnGLI
+         /BYXOtVXUm+R1PyQIptuLvU2BHLPLVPv+fcgGQsTQ75W8HpYDVklozMUXGxF8nyo0jE7
+         /l42lP0822ndmUwiuMSs0NdjOrmVaBeMhD6mWL0FrXIQnKuR/xRkewmcQuMb82WssDJj
+         D1oXrvPrzMsPGgICTm7RVUe9dGcPiDl2BbwkwQ0BbQn7Ianir43OKT6r6yjU81bSqsN6
+         KNKw==
+X-Forwarded-Encrypted: i=1; AJvYcCUa9FT6qhxBRXKynUdh4goVPQm/aA+LY6HTkyySxo0ukxoB/nEDaSB1jGw8UO5O/ZsprV0JgtWsDw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzcsAkTheVub7iSNGji6f5q9ZSKoj0vtjjwfoqccHhLnE2mlgMZ
+	iIX/88F/3kR8vWI3vBb8hYR6aYwnLhIG6oPAF1DdCPL0aXS+InyEBAr62jOA68j2Oeo35gPK6mz
+	a8gLvbs7XTWD4J0iqgaehQwxlZZyOfRY=
+X-Gm-Gg: ASbGncur9D3tIWke2QROJRN4fGggneZVync75w0LaSOxC8fzBHK0Qs2S2ykwJG/7FUX
+	S/RL3hkdqkyOqhaxjHeu8Rx8QoBCuKNlo1cTRNgvLmRjBr3jbArqCDoCGV0CJKrbvay0821nSno
+	yCSrG2Vl1wZ5/7qIzvvO7N12cDL7GgMvOr25j2mBdsG1eNLNwGqPXRA59BhbbRGZdXMurjjf66R
+	OY/PLo5so3Q1ojwjbCld+YmOjUsZRJ0oMAcau1kBEjg40ILyjI1RF2I2DMbaFSb9QWVhYRMHh72
+	cGVairXVty3qepOXjdjFZ+m9Tfe0m4UUk/Es
+X-Google-Smtp-Source: AGHT+IGYfATe7mmNTC4A+jEkwD5MzSelb1z0lWF68kS0t/NWgoEWKg6nD9jI4X3FoSNWbDyeH2i7qWWFajxt0X+1x5w=
+X-Received: by 2002:a17:902:d501:b0:277:c230:bfc7 with SMTP id
+ d9443c01a7336-27ed4a5d82bmr113039375ad.11.1759175862141; Mon, 29 Sep 2025
+ 12:57:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250904160530.66178-1-macroalpha82@gmail.com> <175760259503.1582479.14013409824773713781.b4-ty@kernel.org>
-In-Reply-To: <175760259503.1582479.14013409824773713781.b4-ty@kernel.org>
-From: Rob Herring <robh@kernel.org>
-Date: Mon, 29 Sep 2025 11:18:36 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqJy9XwNrcwgk4Dhf40ajn8WwD47v2YqZ3iYZz+CjEdv5g@mail.gmail.com>
-X-Gm-Features: AS18NWD2pj_ibwVEK2mhOAIR-S-PjwlDtBsaiw-02MgcMYvm1KmFWHuD6-1e7ks
-Message-ID: <CAL_JsqJy9XwNrcwgk4Dhf40ajn8WwD47v2YqZ3iYZz+CjEdv5g@mail.gmail.com>
-Subject: Re: (subset) [PATCH v8 0/5] Add Texas Instruments BQ25703A Charger
-To: Lee Jones <lee@kernel.org>
-Cc: linux-rockchip@lists.infradead.org, Chris Morgan <macroalpha82@gmail.com>, 
-	linux-pm@vger.kernel.org, devicetree@vger.kernel.org, broonie@kernel.org, 
-	lgirdwood@gmail.com, sre@kernel.org, heiko@sntech.de, conor+dt@kernel.org, 
-	krzk+dt@kernel.org, Chris Morgan <macromorgan@hotmail.com>
+References: <20250925-core-cstr-cstrings-v2-0-78e0aaace1cd@gmail.com>
+In-Reply-To: <20250925-core-cstr-cstrings-v2-0-78e0aaace1cd@gmail.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Mon, 29 Sep 2025 21:57:28 +0200
+X-Gm-Features: AS18NWCM9kbfT7mylXQdGB8ZyL_b6RmUa1M3XR6zo5RoraO0TPm_DutHWVTmZ7c
+Message-ID: <CANiq72m=TJMWFZhHSSU_-A3+tr5h8vA+X+oKb9TcieXQ6gHyJg@mail.gmail.com>
+Subject: Re: [PATCH v2 00/19] rust: replace `kernel::c_str!` with C-Strings
+To: Tamir Duberstein <tamird@gmail.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
+	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	FUJITA Tomonori <fujita.tomonori@gmail.com>, Andrew Lunn <andrew@lunn.ch>, 
+	Heiner Kallweit <hkallweit1@gmail.com>, Russell King <linux@armlinux.org.uk>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Breno Leitao <leitao@debian.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, 
+	Dave Ertman <david.m.ertman@intel.com>, Ira Weiny <ira.weiny@intel.com>, 
+	Leon Romanovsky <leon@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
+	=?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Brendan Higgins <brendan.higgins@linux.dev>, 
+	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, Jens Axboe <axboe@kernel.dk>, 
+	Alexandre Courbot <acourbot@nvidia.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Liam Girdwood <lgirdwood@gmail.com>, 
+	Mark Brown <broonie@kernel.org>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	rust-for-linux@vger.kernel.org, nouveau@lists.freedesktop.org, 
+	dri-devel@lists.freedesktop.org, netdev@vger.kernel.org, 
+	linux-clk@vger.kernel.org, linux-pci@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Sep 11, 2025 at 9:56=E2=80=AFAM Lee Jones <lee@kernel.org> wrote:
+On Thu, Sep 25, 2025 at 3:54=E2=80=AFPM Tamir Duberstein <tamird@gmail.com>=
+ wrote:
 >
-> On Thu, 04 Sep 2025 11:05:25 -0500, Chris Morgan wrote:
-> > From: Chris Morgan <macromorgan@hotmail.com>
-> >
-> > Add support for the Texas Instruments BQ25703A charger manager. The
-> > device integrates a boost converter with the charger manager. This
-> > series adds the device as an MFD with separate regulator and power
-> > supply drivers. This allows us to manage a circular dependency with
-> > a type-c port manager which depends on the regulator for usb-otg
-> > but supplies power to the BQ25703A charger.
-> >
-> > [...]
->
-> Applied, thanks!
->
-> [1/5] dt-bindings: mfd: ti,bq25703a: Add TI BQ25703A Charger
->       commit: 76bc2203a46ef704a4cd8003986f6bd74139a367
+> Changes in v2:
 
-It seems this is still not in linux-next?
+For future reference, this is v3.
 
-> [2/5] mfd: bq257xx: Add support for BQ25703A core driver
->       commit: 3b1bbfb5fce3ca9fffc92ac1b053b0cfbb1f322b
-> [3/5] power: supply: bq257xx: Add support for BQ257XX charger
->       commit: 1cc017b7f9c7b7cd86fdda4aee36b92d91cc2ad2
-> [4/5] regulator: bq257xx: Add bq257xx boost regulator driver
->       commit: 981dd162b63578aee34b5c68795e246734b76d70
->
-> --
-> Lee Jones [=E6=9D=8E=E7=90=BC=E6=96=AF]
->
+Cheers,
+Miguel
 
