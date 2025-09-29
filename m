@@ -1,326 +1,123 @@
-Return-Path: <linux-pm+bounces-35561-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35562-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BAFBCBA9530
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Sep 2025 15:25:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA69CBA975E
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Sep 2025 16:00:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 070F97A8798
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Sep 2025 13:23:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5A25B1921577
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Sep 2025 14:00:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BA2D30749A;
-	Mon, 29 Sep 2025 13:25:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D901F2D0C73;
+	Mon, 29 Sep 2025 14:00:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="wpsIVqXZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SUPMOORn"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from lelvem-ot01.ext.ti.com (lelvem-ot01.ext.ti.com [198.47.23.234])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABD363074AD;
-	Mon, 29 Sep 2025 13:25:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.234
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7DC227E1A1
+	for <linux-pm@vger.kernel.org>; Mon, 29 Sep 2025 14:00:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759152307; cv=none; b=JtGG1NjNEWo+7m4rw1StxgOwnDh/EX7YrMVe8Ws/L/cNZPZNAc1DrIdyOgClZYA13nUE/QPBnYUTeIQraN9vOWkXaoVbtSYEmh7q64nzaOZ/nvEU76o1q8WWgrMVMCXZWf4FjhTho79GI/8Pv2uufwdJywYBgIC60KbDqFDNBYE=
+	t=1759154407; cv=none; b=hJpDH3kHjNWs1dc2ZgMIxqLKRMfXZgkyd0qjYitu7oGgGaj9JlaBnxevzDxzj3rw/Sqv1orfArOyzjXoUTX46iozHTFxUDCwGITCpk9sLYlFsVxKCyqOr1v07Vu6rr6d1lUk9Pa3wZZK8h4184vyi6cRl0elqVSC5a+NMIVP+VE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759152307; c=relaxed/simple;
-	bh=Y8R7eTAgpcmLv0bh6+fpiJKo902IaLWf/7N5REG9FG8=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mpuWkDkVaM1AE08j72CE2Nz2AwFcZEyy5xJUDaRQkcCmajueGLxMseLaouR2a9HycZeCryobQ8HNBR21SH0e+86wOFAtK2XYHdkuLVkW70uWDs5/+nRBfUyhspvUiyIxKIEQIlq1YvnO+xLFRvU5sd5zq5uKwOVTHUomdjUbDWU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=wpsIVqXZ; arc=none smtp.client-ip=198.47.23.234
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from lelvem-sh02.itg.ti.com ([10.180.78.226])
-	by lelvem-ot01.ext.ti.com (8.15.2/8.15.2) with ESMTP id 58TDOjFD2222671;
-	Mon, 29 Sep 2025 08:24:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1759152285;
-	bh=prcWhDtDFwhm31ZYO0Nm8Fx4HElPWmjDazDTv82UBZs=;
-	h=Date:From:To:CC:Subject:References:In-Reply-To;
-	b=wpsIVqXZkwEZaX6CBQfVBxVDbIiV9kZ3akP6rXAeBkZZn/IzzE6YCuBs2LgZmltXc
-	 1qudjEn9dpCDZ7Zdz46r15yI/og3kIh/nOsBgjrXcTMCJH0++APjyPvuqvGVK2Yl91
-	 J0KIZs6ZZZdJDJKGXJlJr+MCa5QLSmD8WG59YtnI=
-Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
-	by lelvem-sh02.itg.ti.com (8.18.1/8.18.1) with ESMTPS id 58TDOjeq1938466
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-SHA256 bits=128 verify=FAIL);
-	Mon, 29 Sep 2025 08:24:45 -0500
-Received: from DFLE214.ent.ti.com (10.64.6.72) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55; Mon, 29
- Sep 2025 08:24:44 -0500
-Received: from lelvem-mr05.itg.ti.com (10.180.75.9) by DFLE214.ent.ti.com
- (10.64.6.72) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
- Transport; Mon, 29 Sep 2025 08:24:44 -0500
-Received: from localhost (lcpd911.dhcp.ti.com [172.24.233.130])
-	by lelvem-mr05.itg.ti.com (8.18.1/8.18.1) with ESMTP id 58TDOhwb1549244;
-	Mon, 29 Sep 2025 08:24:44 -0500
-Date: Mon, 29 Sep 2025 18:54:43 +0530
-From: Dhruva Gole <d-gole@ti.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-CC: Linux PM <linux-pm@vger.kernel.org>,
-        Jonathan Cameron
-	<jonathan.cameron@huawei.com>,
-        Takashi Iwai <tiwai@suse.de>, LKML
-	<linux-kernel@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Alex
- Williamson <alex.williamson@redhat.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Zhang Qilong <zhangqilong3@huawei.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>, Frank Li <Frank.Li@nxp.com>
-Subject: Re: [PATCH v4 1/3] PM: runtime: Add auto-cleanup macros for "resume
- and get" operations
-Message-ID: <20250929132443.6uueg5uazguvdklc@lcpd911>
-References: <6196611.lOV4Wx5bFT@rafael.j.wysocki>
- <2238241.irdbgypaU6@rafael.j.wysocki>
+	s=arc-20240116; t=1759154407; c=relaxed/simple;
+	bh=mzR02490frUw5bY39+dPtJ88bS4FGXn4GytLIPHkuzQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=EXL0Mmf39zmzOi5GkL+3w/gl4OmxJwdHp2NPVNI2mGMeSobyn1cTvyBzLUbdS3nM/KuwCepR2JpO3BgABSrjYzCrCBSDVkOYRCfk9scYK7KfvR8Ql0nOYKihPBiz5x3CcYbb5TAhsysICCDi/a2cpKCDw9EvNBrdIrrAejT2Tes=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SUPMOORn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F916C19421
+	for <linux-pm@vger.kernel.org>; Mon, 29 Sep 2025 14:00:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1759154407;
+	bh=mzR02490frUw5bY39+dPtJ88bS4FGXn4GytLIPHkuzQ=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=SUPMOORnywuonOe3kEXWUi6bUgBDK3aKsTe3lomIqpIu5Lti+pmZUJFRv/OmZoqQv
+	 oAjUf1A4H14PxB+obwqt4dqd2g8jDnyuRu7phsYxPDA7yJ5yTR6XkdEvQLr97rAzfX
+	 icDQl1yjDIAn8vCUd/dC5Ugwv1PxRSxBCN65e16SBrF15f3UNzimsgC1drfPnIkNe/
+	 61z8vjuKZxAAtNCsQyDAnzhG5hLBN5B3LEUy1z5x1de5i+fvIW0DOPGbNsq50etjzG
+	 FE/zEcnMKCesO9D+H1z7vplLzlt0jtkBLAXrC3DLkOEdaYwZbTqniQ5f7sVGV5QmR2
+	 SBj7ZkbWwpHzA==
+Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-36f51ac0595so1142142fac.2
+        for <linux-pm@vger.kernel.org>; Mon, 29 Sep 2025 07:00:07 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU7bIGPDvFPBSsGL56QWoQ/PQgCGzpGesEvsV1J7oU+yGsTSmUtOMnp97JOxtVM4BQ05WCTqnzVbg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxrrLfX2PFA6fSXeIm+MPAwrAYKJXji3rYvZmUY6YHnzIqdUcVi
+	VwcM7HDhnyT3UP0J7/TNgnCP/vZDxpzswcZ7aaYFlsdDCWh2F3C3ZpAxjjDWhCVJ8murr65IUNO
+	lpDCbQyKCA2pl+CP0IAt40ypzdlF1JNc=
+X-Google-Smtp-Source: AGHT+IGfnuFTAFMJ9mHkX2TvHJ8nsO6B7M6j37TMe9nlj8qXzEM60hjpcDaE5GntJxLQQkeNc61dLuimyEjYEw0vFpY=
+X-Received: by 2002:a05:6871:82c:b0:373:e28e:b08 with SMTP id
+ 586e51a60fabf-373e28e0babmr5415118fac.35.1759154406658; Mon, 29 Sep 2025
+ 07:00:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <2238241.irdbgypaU6@rafael.j.wysocki>
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
+References: <6196611.lOV4Wx5bFT@rafael.j.wysocki> <20250929121525.00001775@huawei.com>
+In-Reply-To: <20250929121525.00001775@huawei.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 29 Sep 2025 15:59:55 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0gd00bRjoDjNdzFMVcQe3yQvy=OC=ZA7Dr-OxL_iP+x6w@mail.gmail.com>
+X-Gm-Features: AS18NWAPSFmy8ggIgPAQd7RfGm4eceQhgU8B7dChIFjalUWtGmmSUIIZRzPPvrk
+Message-ID: <CAJZ5v0gd00bRjoDjNdzFMVcQe3yQvy=OC=ZA7Dr-OxL_iP+x6w@mail.gmail.com>
+Subject: Re: [PATCH v4 0/3] PM: runtime: Auto-cleanup macros for runtime PM
+To: Jonathan Cameron <jonathan.cameron@huawei.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
+	Takashi Iwai <tiwai@suse.de>, LKML <linux-kernel@vger.kernel.org>, 
+	Linux PCI <linux-pci@vger.kernel.org>, Alex Williamson <alex.williamson@redhat.com>, 
+	Bjorn Helgaas <helgaas@kernel.org>, Zhang Qilong <zhangqilong3@huawei.com>, 
+	Ulf Hansson <ulf.hansson@linaro.org>, Frank Li <Frank.Li@nxp.com>, Dhruva Gole <d-gole@ti.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sep 26, 2025 at 17:47:14 +0200, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> It is generally useful to be able to automatically drop a device's
-> runtime PM usage counter incremented by runtime PM operations that
-> resume a device and bump up its usage counter [1].
-> 
-> To that end, add guard definition macros allowing pm_runtime_put()
-> and pm_runtime_put_autosuspend() to be used for the auto-cleanup in
-> those cases.
-> 
-> Simply put, a piece of code like below:
-> 
-> 	pm_runtime_get_sync(dev);
-> 	.....
-> 	pm_runtime_put(dev);
-> 	return 0;
-> 
-> can be transformed with guard() like:
-> 
-> 	guard(pm_runtime_active)(dev);
-> 	.....
-> 	return 0;
-> 
-> (see the pm_runtime_put() call is gone).
-> 
-> However, it is better to do proper error handling in the majority of
-> cases, so doing something like this instead of the above is recommended:
-> 
-> 	ACQUIRE(pm_runtime_active_try, pm)(dev);
-> 	if (ACQUIRE_ERR(pm_runtime_active_try, &pm))
-> 		return -ENXIO;
-> 	.....
-> 	return 0;
-> 
-> In all of the cases in which runtime PM is known to be enabled for the
-> given device or the device can be regarded as operational (and so it can
-> be accessed) with runtime PM disabled, a piece of code like:
-> 
-> 	ret = pm_runtime_resume_and_get(dev);
-> 	if (ret < 0)
-> 		return ret;
-> 	.....
-> 	pm_runtime_put(dev);
-> 	return 0;
-> 
-> can be changed as follows:
-> 
-> 	ACQUIRE(pm_runtime_active_try, pm)(dev);
-> 	ret = ACQUIRE_ERR(pm_runtime_active_try, &pm);
-> 	if (ret < 0)
-> 		return ret;
-> 	.....
-> 	return 0;
-> 
-> (again, see the pm_runtime_put() call is gone).
-> 
-> Still, if the device cannot be accessed unless runtime PM has been
-> enabled for it, the CLASS(pm_runtime_get_active_enabled) variant
-> needs to be used, that is (in the context of the example above):
-> 
-> 	ACQUIRE(pm_runtime_active_try_enabled, pm)(dev);
-> 	ret = ACQUIRE_ERR(pm_runtime_active_try_enabled, &pm);
-> 	if (ret < 0)
-> 		return ret;
-> 	.....
-> 	return 0;
-> 
-> When the original code calls pm_runtime_put_autosuspend(), use one
-> of the "auto" guard variants, pm_runtime_active_auto/_try/_enabled,
-> so for example, a piece of code like:
-> 
-> 	ret = pm_runtime_resume_and_get(dev);
-> 	if (ret < 0)
-> 		return ret;
-> 	.....
-> 	pm_runtime_put_autosuspend(dev);
-> 	return 0;
-> 
-> will become:
-> 
-> 	ACQUIRE(pm_runtime_active_auto_try_enabled, pm)(dev);
-> 	ret = ACQUIRE_ERR(pm_runtime_active_auto_try_enabled, &pm);
-> 	if (ret < 0)
-> 		return ret;
-> 	.....
-> 	return 0;
-> 
-> Note that the cases in which the return value of pm_runtime_get_sync()
-> is checked can also be handled with the help of the new class macros.
-> For example, a piece of code like:
-> 
-> 	ret = pm_runtime_get_sync(dev);
-> 	if (ret < 0) {
-> 		pm_runtime_put(dev);
-> 		return ret;
-> 	}
-> 	.....
-> 	pm_runtime_put(dev);
-> 	return 0;
-> 
-> can be rewritten as:
-> 
-> 	ACQUIRE(pm_runtime_active_auto_try_enabled, pm)(dev);
-> 	ret = ACQUIRE_ERR(pm_runtime_active_auto_try_enabled, &pm);
-> 	if (ret < 0)
-> 		return ret;
-> 	.....
-> 	return 0;
-> 
-> or pm_runtime_get_active_try can be used if transparent handling of
-> disabled runtime PM is desirable.
-> 
-> Link: https://lore.kernel.org/linux-pm/878qimv24u.wl-tiwai@suse.de/ [1]
-> Link: https://lore.kernel.org/linux-pm/20250926150613.000073a4@huawei.com/
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
-> 
-> v3 -> v4:
->    * Use guard definition macros instead of raw DEFINE_CLASS() (Jonathan)
->    * Change pm_runtime_get_active() helper definition to return an int instead
->      of a pointer
->    * Update changelog to match the new code
+On Mon, Sep 29, 2025 at 1:15=E2=80=AFPM Jonathan Cameron
+<jonathan.cameron@huawei.com> wrote:
+>
+> On Fri, 26 Sep 2025 17:40:29 +0200
+> "Rafael J. Wysocki" <rafael@kernel.org> wrote:
+>
+> > Hi All,
+> >
+> > This supersedes
+> >
+> > https://lore.kernel.org/linux-pm/12763087.O9o76ZdvQC@rafael.j.wysocki/
+> >
+> > which was an update of
+> >
+> > https://lore.kernel.org/linux-pm/6204724.lOV4Wx5bFT@rafael.j.wysocki/
+> >
+> > that superseded both
+> >
+> > https://lore.kernel.org/linux-pm/5049058.31r3eYUQgx@rafael.j.wysocki/
+> >
+> > and
+> >
+> > https://lore.kernel.org/linux-pm/20250919163147.4743-1-tiwai@suse.de/
+> >
+> > It follows the Jonathan's suggestion to use ACQUIRE()/ACQUIRE_ERR()
+> > instead af raw CLASS() to make the code somewhat cleaner.
+> >
+> > Thanks!
+>
+> Looks excellent to me.  I've already been pointing a few people at this
+> in driver reviews, so I expect to see a lot of adoption in IIO (and elsew=
+here).
+> That RPM_TRANSPARENT handling is particularly nice.
+>
+> With the tweaks you've already called out.
+>
+> Reviewed-by: Jonathan Cameron <jonathan.cameron@huawei.com>
 
-It does look like a lot has changed since I last gave my R-by so thanks
-for not including it.
+Thanks!
 
-> 
-> v2 -> v3:
->    * Two more class definitions for the case in which resume errors can be
->      neglected.
->    * Update of new code comments (for more clarity).
->    * Changelog update.
-> 
-> v1 -> v2:
->    * Rename the new classes and the new static inline helper.
->    * Add two classes for handling disabled runtime PM.
->    * Expand the changelog.
->    * Adjust the subject.
-> 
-> ---
->  drivers/base/power/runtime.c |    2 +
->  include/linux/pm_runtime.h   |   44 ++++++++++++++++++++++++++++++++++---------
->  2 files changed, 37 insertions(+), 9 deletions(-)
-> 
-> --- a/drivers/base/power/runtime.c
-> +++ b/drivers/base/power/runtime.c
-> @@ -796,6 +796,8 @@ static int rpm_resume(struct device *dev
->  		if (dev->power.runtime_status == RPM_ACTIVE &&
->  		    dev->power.last_status == RPM_ACTIVE)
->  			retval = 1;
-> +		else if (rpmflags & RPM_TRANSPARENT)
-> +			goto out;
->  		else
->  			retval = -EACCES;
->  	}
-> --- a/include/linux/pm_runtime.h
-> +++ b/include/linux/pm_runtime.h
-> @@ -21,6 +21,7 @@
->  #define RPM_GET_PUT		0x04	/* Increment/decrement the
->  					    usage_count */
->  #define RPM_AUTO		0x08	/* Use autosuspend_delay */
-> +#define RPM_TRANSPARENT	0x10	/* Succeed if runtime PM is disabled */
->  
->  /*
->   * Use this for defining a set of PM operations to be used in all situations
-> @@ -511,6 +512,19 @@ static inline int pm_runtime_get_sync(st
->  	return __pm_runtime_resume(dev, RPM_GET_PUT);
->  }
->  
-> +static inline int pm_runtime_get_active(struct device *dev, int rpmflags)
-> +{
-> +	int ret;
-> +
-> +	ret = __pm_runtime_resume(dev, RPM_GET_PUT | rpmflags);
-> +	if (ret < 0) {
-> +		pm_runtime_put_noidle(dev);
-> +		return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  /**
->   * pm_runtime_resume_and_get - Bump up usage counter of a device and resume it.
->   * @dev: Target device.
-> @@ -521,15 +535,7 @@ static inline int pm_runtime_get_sync(st
->   */
->  static inline int pm_runtime_resume_and_get(struct device *dev)
->  {
-> -	int ret;
-> -
-> -	ret = __pm_runtime_resume(dev, RPM_GET_PUT);
-> -	if (ret < 0) {
-> -		pm_runtime_put_noidle(dev);
-> -		return ret;
-> -	}
-> -
-> -	return 0;
-> +	return pm_runtime_get_active(dev, 0);
->  }
+> Given timing, if this ends up as a next cycle thing please could we have
+> an immutable branch?  If it is going to make the merge window then no nee=
+d.
 
-I do like this reuse indeed.
-
->  
->  /**
-> @@ -606,6 +612,26 @@ static inline int pm_runtime_put_autosus
->  	return __pm_runtime_put_autosuspend(dev);
->  }
->  
-> +DEFINE_GUARD(pm_runtime_active, struct device *,
-> +	     pm_runtime_get_sync(_T), pm_runtime_put(_T));
-> +DEFINE_GUARD(pm_runtime_active_auto, struct device *,
-> +	     pm_runtime_get_sync(_T), pm_runtime_put_autosuspend(_T));
-> +/*
-> + * Use the following guards with ACQUIRE()/ACQUIRE_ERR().
-> + *
-> + * The difference between the "_try" and "_try_enabled" variants is that the
-> + * former do not produce an error when runtime PM is disabled for the given
-> + * device.
-> + */
-> +DEFINE_GUARD_COND(pm_runtime_active, _try,
-> +		  pm_runtime_get_active(_T, RPM_TRANSPARENT))
-> +DEFINE_GUARD_COND(pm_runtime_active, _try_enabled,
-> +		  pm_runtime_resume_and_get(_T))
-> +DEFINE_GUARD_COND(pm_runtime_active_auto, _try,
-> +		  pm_runtime_get_active(_T, RPM_TRANSPARENT))
-> +DEFINE_GUARD_COND(pm_runtime_active_auto, _try_enabled,
-> +		  pm_runtime_resume_and_get(_T))
-
-Overall looks better to me than the earlier revisions, thanks.
-Reviewed-by: Dhruva Gole <d-gole@ti.com>
-
--- 
-Best regards,
-Dhruva Gole
-Texas Instruments Incorporated
+I'm actually going to push it for 6.18 during the second half of the
+merge window.
 
