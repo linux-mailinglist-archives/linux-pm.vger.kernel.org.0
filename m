@@ -1,203 +1,704 @@
-Return-Path: <linux-pm+bounces-35559-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35560-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A0883BA924C
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Sep 2025 14:06:16 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 11350BA92FE
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Sep 2025 14:22:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 087E6189499E
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Sep 2025 12:06:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B1357169F3F
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Sep 2025 12:22:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FBCA305040;
-	Mon, 29 Sep 2025 12:06:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 997D23054CB;
+	Mon, 29 Sep 2025 12:22:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="KS0kjnNH"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="F7lKlwBA"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from GVXPR05CU001.outbound.protection.outlook.com (mail-swedencentralazon11013051.outbound.protection.outlook.com [52.101.83.51])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 848F62EC567;
-	Mon, 29 Sep 2025 12:06:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.83.51
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759147571; cv=fail; b=qW3C5Dn+cQNlc8d02s6lx731LQmsRmY0scIJncIum7gUHdrs60ch8onZmXiDC3SnFRFOMw+ObPLSzxWSYAGqPXkoPAC2mWUR69sM8rDzQRwEmnw96pvKUEJpqb5FIY71aVX/6boOuqeYxUElz6mE8QxrbayVtaXXWBL4ZnEI5Ks=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759147571; c=relaxed/simple;
-	bh=RwE1otnQxBTp2ZLyEVam6dykJsa1r0+X5zQCK52tWsg=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=dyutJkmMncpWxJb1GVis67k9wYeZmzd9sfzQcu366Z2jqV0NrwlMSLQKKdN9u8IX9xaSWof7n65qjdN8irYsvazc5wTzDbE1Exi1rHBtSbLSj0Uo4UskRNkq/juPTey3PbplQ2Ff/k/1vzsaFvQwFYxLCx/EphgX2JwMUyqntBM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=KS0kjnNH; arc=fail smtp.client-ip=52.101.83.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=wIPLsAxuin3oT1J2ay4uZ/g3KKsZQI1BN575ke/d4WddqO4UD+nGEHbqrrgGafub4XGICCd/WU65VonfjtDOwI3Nmw5hz28xTuF0IqiIRx87ZZmQcgvIAiaz1l6uCdbSeDWukZJF8e1OdPhd2OdgZVvCIcJdOTpzMOKXMjNAS4Yp+tZqKzmLZg9v8g8uYf8uxCg6zlIm+eTQEGsLrnGiD6J20eGKwwrxtIizBe3dj44qr1ggOQ7nwhcoM2C2L/d3rXZnxIo/daP992YEkgIMkeccibMR8cUndRD2i0Rri4hVyVdaPaJGaZ2EkqJxwuiomImA5cWsJa2Qz+BVYAQsvw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=RwE1otnQxBTp2ZLyEVam6dykJsa1r0+X5zQCK52tWsg=;
- b=wswVkxTAny97MyvX4f1cKIEeeU6mP39szJlbWjdPppIjuHaJnCgF1m0DK3qCUbm6DBvZ2P19NXIaU4piT/hElyTVWglkvmgJj/vm3DCaa7M3fbQ22XYY+7HQt24JLDRnv16Sw7apXmI9if2ogmh/7EpVKWvaeML45QbiHmMtZlIsVDHqflFScWUueyv0/ZvcTOQG6uxnwBjifq2YyKMkAVRMYVD9NQ6CU8nHxZrP3jLKMw6I2hWGYRxnYZzeN7Q0Z11sqyL1IAAmm27zsbIi3sLkKFhvl/Pd/lpSKa+MVA69Irs7SFh7WHP1MJqE2Z0TIXD9rexuCSazK62xROo+9w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RwE1otnQxBTp2ZLyEVam6dykJsa1r0+X5zQCK52tWsg=;
- b=KS0kjnNHEG0nbOxOS0qxah8vYVMi/XCrB1gDm7HLYnKIBkXSJJZ9J9QKx5E5T5K2iXDhQeMgTzRuhKPnzQ5rukJbmZZ8kMHaQ1TfAw622bwstqRCQ9uNMJnDGtXmg+jtXLRm0e9n/ekQ7jRpxBShlI9YipPFs2b4tsSazQPlF0nrQ994JjkvUvVq1qvRewkGfeMMtki6okf5mSg/ok+KV/eD0UkJ559Y3fEjF8ofIlfuYalYBhfsDCIpwXLqSSJr/UMDoYAPEszocdr0CYl/v2uNsrigEo3f9gks+kenuI/jiwfW6WbVYbNLdFNxbADMjvwWHesD71r/xAqpMEcYJQ==
-Received: from PAXPR04MB8459.eurprd04.prod.outlook.com (2603:10a6:102:1da::15)
- by VI0PR04MB11700.eurprd04.prod.outlook.com (2603:10a6:800:2fc::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9160.15; Mon, 29 Sep
- 2025 12:06:06 +0000
-Received: from PAXPR04MB8459.eurprd04.prod.outlook.com
- ([fe80::165a:30a2:5835:9630]) by PAXPR04MB8459.eurprd04.prod.outlook.com
- ([fe80::165a:30a2:5835:9630%4]) with mapi id 15.20.9160.015; Mon, 29 Sep 2025
- 12:06:06 +0000
-From: Peng Fan <peng.fan@nxp.com>
-To: Ulf Hansson <ulf.hansson@linaro.org>, "Peng Fan (OSS)"
-	<peng.fan@oss.nxp.com>
-CC: "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>,
-	Len Brown <lenb@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Danilo Krummrich <dakr@kernel.org>, Peter Chen <peter.chen@kernel.org>, Shawn
- Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix
- Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>, "linux-pm@vger.kernel.org"
-	<linux-pm@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "linux-usb@vger.kernel.org"
-	<linux-usb@vger.kernel.org>, "imx@lists.linux.dev" <imx@lists.linux.dev>,
-	"linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, Xu Yang <xu.yang_2@nxp.com>
-Subject: RE: [PATCH v4 0/5] pmdomain: core: Introduce
- device_set_out_band_wakeup and use it in usb
-Thread-Topic: [PATCH v4 0/5] pmdomain: core: Introduce
- device_set_out_band_wakeup and use it in usb
-Thread-Index: AQHcK2eXc3Qg1iO+uE+ovysSEhEJ9LSgjM0AgAkCFACAAGHMAIAAKxhQ
-Date: Mon, 29 Sep 2025 12:06:06 +0000
-Message-ID:
- <PAXPR04MB845918DD700C45DA1599B7D1881BA@PAXPR04MB8459.eurprd04.prod.outlook.com>
-References: <20250922-pm-v4-v4-0-ef48428e8fe0@nxp.com>
- <CAPDyKFqQgS9j4uGkTL_taPTL96su1tqpyoek1cpZgTiaaBMpCA@mail.gmail.com>
- <20250929034048.GD29690@nxa18884-linux.ap.freescale.net>
- <CAPDyKFp1NrdA6nZMQFrgrpc5Ub4osgYTiSJ=Gf1m1q4X8RYCmA@mail.gmail.com>
-In-Reply-To:
- <CAPDyKFp1NrdA6nZMQFrgrpc5Ub4osgYTiSJ=Gf1m1q4X8RYCmA@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PAXPR04MB8459:EE_|VI0PR04MB11700:EE_
-x-ms-office365-filtering-correlation-id: e2d2c79c-7bee-49d6-28ac-08ddff5091ab
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|1800799024|366016|7416014|376014|19092799006|38070700021;
-x-microsoft-antispam-message-info:
- =?utf-8?B?TzBCSHR4cUFDbzNKQVBoTUVvYXJJQTBKQkJuUXcvdTBlcFRmemdpUm1pWkZ6?=
- =?utf-8?B?Wll4UGU3QmxQekZWUytCQUFITFlZakI2MndTclYrMUl1TTdrY0NiSGJyVXJ2?=
- =?utf-8?B?SDU1MVliL0F2UlR0cVR6VXBjTEhnNGpWNEMrSW1ZQVY0TjNDclEyUDlYNXBI?=
- =?utf-8?B?VkNybFpCc0tzQ1Fvdm1zSVlWM0hqZndOOGRTVjFEVWU3L1FUYk5zZVlibjJX?=
- =?utf-8?B?VnJmNVFwd3BjanVZWEF2UWliM3c1MTZUVWVhNGsrbkl5YXExaFBvM1Jvd1hC?=
- =?utf-8?B?T2krZUdMWnNpTjN1djkyNUpNVFNIRDRlL2JrNkdBaitub2FEbU5rdzBqcTRh?=
- =?utf-8?B?MHNiRDlhK3JaWGNUOUx5RDZ1Y1FTblZEc2dROU9DSlhHNGtXS29lWW13dzRC?=
- =?utf-8?B?SzNrdjJWMUFLdmRwVUI0Mk9OcUxHZzhWUURmNFB0and2anRSaTBpWmdvZWY4?=
- =?utf-8?B?bkhwekcyQ25ZV0ZIM2NGRjg5bWRDdGVFVGVuS0NGZFh5WVBrb3NxbDdHb3BZ?=
- =?utf-8?B?UWFaVmJ1N08xa3FiczZRT3orK3JvN2ZyRTNmL1BVODNvcUExenFydStwWE1L?=
- =?utf-8?B?UkFvRk1jeFNwQVppalRDMU5xcVhnQ2ZvdWJDOE9vYzVHUStkK1pPaTNZZkw4?=
- =?utf-8?B?aWkzZ1R5VGpBKzlDMXNia1d5MEc3MTRpclJRNTMvdUNXMG9icTVXNmd2OFFi?=
- =?utf-8?B?dnVHUU9MQytMcUFrZ0w2aFkvY2hsTW43QTJtM0lxd2kzZkZXRXNYUk1Ca3pB?=
- =?utf-8?B?aDNqd0xqQXZic3JjWm5kQTN2bzdSaWNqQjZldkFTeEViL05BU1dCcHFFL2hz?=
- =?utf-8?B?SDJlenFCOGlvZmUvUlJtb1pzazFVWjdmYnZIVUdqdzdjK05LejhOT0ZRV0tT?=
- =?utf-8?B?dmtEMmxIU3FIck56L2Z0bW9yR3NzVWY2bEJwM1pKbFlEVzdOdyttdjMyaWJF?=
- =?utf-8?B?NXNWR3VHYklQOGxMQVVjRHY4dzc2NDdickhsd2RvQWNGTUtZVnh0WURmL3V4?=
- =?utf-8?B?eVFrNng2YlduenBrSWlXN2FWbnJFaUtFNHRBUjVGNys1Q01ITy8wMWxQTERo?=
- =?utf-8?B?cHlyRTVHVmsrT3ZHM3lta3RhenpNZ2o2U1V5RGtJdFkxb0xkT2p2VktMd2FQ?=
- =?utf-8?B?YnlaSSs3UTZablh4SlloRTUrUHErVFFJYy9OdG1mcTVrWXFsd0JnbjdHOU9h?=
- =?utf-8?B?ejJnemNZaEp6SU04TDBOdFBUQ2JlMFhEYkxTcW1Vc3FRN1dZbjdKMTdxU3JX?=
- =?utf-8?B?V2tSSFIyUWJvTW1oTUlWU2ZuZXUwYVBVdkRjMStlQjhKaTZhMDBRTkxwRW1N?=
- =?utf-8?B?TG4vdXFCYjZ1VGIzLzJWZk1PQzlnTWdwdnhReDd6R052QTFmZC9vTTVWVmFh?=
- =?utf-8?B?YnJiTXZiQ2FBenVHM1F1MW9wZWVrLzVlWkM2NUg3MjZoMTRQYzFBTnRPWVZ5?=
- =?utf-8?B?OGVwSzBrUXRnVW55UDllaWRqQTB5Tkx5RWROdjFHZ0ZQSUN4VFZ5MG1ucVFI?=
- =?utf-8?B?ZWlyMGwzbUtwL1VrdEl4YU5UQVNJUGUwL09SQVJwbmlENmplaGd0UzU0V2gv?=
- =?utf-8?B?Nysxby96SnMwZ0p3YUVqbzAzR0orY0FXMzdTSVJCZnI4dXljMGZLczFHOU11?=
- =?utf-8?B?OWdaWStKQWVoclNVSHNsNXVtcyt5emk2THJOWThlSCtGbWpSWUtoeHNCZmRo?=
- =?utf-8?B?QzFBY3NJaEpsTmpjS0ZJRzdLN1Q1RzcwbDVUdFhqM2xqeGlEbU1vakpSZzJq?=
- =?utf-8?B?c1A5NWw2c1gwUEtsNjFMODlXM2RiZ0YxQjJiOGVQU0JZb1RxbmttNi9oMEoy?=
- =?utf-8?B?bEhwSER0OFNjVGlROUgzR3ZoTTNNSDlGVURpS3pYWjg2TUhEeE1uaE1WamJG?=
- =?utf-8?B?LzRrRHVoWlB5MjhRR3M1RDFYZlFKbnZES1Q4ZHZDaVpOVE14bzdHMEdvODZj?=
- =?utf-8?B?bStSdCtTSVM3TlU1UGVIa2JBMXQ5UllwMVNVb0FyWExlam41NTBadVVtWE5W?=
- =?utf-8?B?VVRORG9vUlhmbGlwM00xTVFjNjhjTWxGK0s3Kzc2S2NROTJSN3FrMFVhS01u?=
- =?utf-8?Q?l1raGG?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8459.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014)(19092799006)(38070700021);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?SG1nbmpBZVJNc0dwQzhlb3IwSTl0VGJLVlgrQml3ZTRVQTFmSHJ4ak1uWnFD?=
- =?utf-8?B?TjZxVWxXWUllclFwcjN0QnZnZWlZWC9MNHJTWFZaYjFINDdqVllOV242ZFVa?=
- =?utf-8?B?S3JHZWRxVXJwSllyWnNQZVVBc1FxWTlPT2FRaVhRSURUcFpsMlJYWlNMQzJP?=
- =?utf-8?B?NTVzNnNmcHdrTTBMaHJRU2N0V2N5Z0hHSDVxMlNpRFoyMVdmRHZyZis3SFlx?=
- =?utf-8?B?bjErbUhaelEzekpMejJzUVBTbkVrWk5MaTJoZ1BCY0F1VjJ5VExpTVpvY2xl?=
- =?utf-8?B?WXVMbnFFMS9KKzlnR1NkbjRsWHlpUWdmNCsyM2wzODIxWUFwaHV4aFFzWTVZ?=
- =?utf-8?B?WUpZdDRSOTY1UzZvWk0rOStybjBVbS9VZytQaXZEdjdjektldWY2bTBCUWxo?=
- =?utf-8?B?czFZaHN6VlgyUUczenJHRGttNVVjamczS2hORlhETjNCclJpbDdwOUJISEx3?=
- =?utf-8?B?cEhOaWJkZk1wRmF4NUQ3ZUthSXE4Snphbk1Pb0E2UXlDRWtmdlVjTzllQWh2?=
- =?utf-8?B?MjhTSlRaT3ZxOTRkU2tKN3FGbitEWUJpbjlzRTV5WFF3Qkt5UDZUMmhlY2J4?=
- =?utf-8?B?Z1U1YmltTCtzU2VtVDJDdFJ5eDFCN01uc3JLVGFoaDJPbGZTQjg1YmIwWTds?=
- =?utf-8?B?bC9FSHQrck1BZGVWUEZMWEY2Rm1lVk1LMUEyaHQrSSsxYjI0aEp1MVJSZTY1?=
- =?utf-8?B?dHFBTllSZDVhdWdQR1h6U0Y4V0ZSTDhLRFhKYm1IVFhZQXJ3ZGl3NnRXZmtQ?=
- =?utf-8?B?MXVFbk1zWVpUNHJJaTU5NVY3dS9GWWdXbG5IZzdITGVTWFlQK2I5aHNDWmt1?=
- =?utf-8?B?eTZXOStJOXVvTVVVdzhpaDYzMUlqeFpMV1ZselkrenU2ZkN4WDRGNGo4NWtO?=
- =?utf-8?B?aXNoL0hndXF4c1c4N2N4VmhoNzVVb0xmZHJEeW00bEpmaURTYXRvU0w0ckJ2?=
- =?utf-8?B?VzBvZFJ2UVhUc2h1NktqM1QxR1ZLRkUzVkJNbnVNYStxWVVvbkVYYmZON3NQ?=
- =?utf-8?B?ZEo3L3RkekhrZVYwR3ZoazBRclFuK2NBbjRQdzhWQVFjTVF1SWQzQWVkNXkx?=
- =?utf-8?B?YU11UXo2SDNYKy9ya3ZRT0JSSldob2hWRVpyelBmU1R1WHk0VUg3VXQ2VzlP?=
- =?utf-8?B?UFR1NEVHd0Joci9kVWM5cHhMb3RLTGhUU05NMTNsUk5xVHcwR0N4MXVnZEU4?=
- =?utf-8?B?dWFRUUNGSFpJYXFXNENEQXFQUnBXWjY3djZSdGhWWHlSK0tFbkFxdnkrMTJF?=
- =?utf-8?B?aWNlQVZPWmxRbFlWVUsveW1Od25WdzFPcCtvSitVY3VZZmpjTngzY2JnRnR5?=
- =?utf-8?B?TTZKNVBkNWY3V0hqWG9nbkpXTDFIWEFRTm9mUXoyTTFOaVVKTFkwVnVad3A5?=
- =?utf-8?B?VWFiUG4vaDE4d2EzRVc5VWhpODRzNnREQklpZ0xMU0luSVVReEtMMUVUN2lV?=
- =?utf-8?B?N3c5WjRrV2dONDduMkZwRHc2OVJ0VDJYd3Fjc2pDRjZXZHAvY21IS01WWEkz?=
- =?utf-8?B?UGV1d3lVV05sMHFpSVhvK2RGdTN1TitCU0NtNmN0OHluT0M0M3diaFpPVVJD?=
- =?utf-8?B?ZU5MaGE0aUZVYUhIMU5uT3hHYXBJQWNwcVYrZmRXWnR1ZG40ZzlHVVlqMk5o?=
- =?utf-8?B?N0dYV2JGTmRxSDcxaFd1RFI1ZnJxNlI0RGMyYVphSnIrLzhRbENJS3ZiajhN?=
- =?utf-8?B?QW5jZFYzbnRkVk4ydjlQRG5mNHJnNU1Dc3JKeXVvMnJraFJVZ3NlYjZtQTVQ?=
- =?utf-8?B?V0kzMUhCRFVKSHFtY0RqM1UxS3FnbVpBbi96NERReHJFT3kveE54eEE3dEZF?=
- =?utf-8?B?d01KV0kvWmNQMmpQbUY0WXBIdFZOTnFmSzhlekpJaWh0c3NuT2NOQUpxT1lu?=
- =?utf-8?B?Q3B2bHhvT1N0MnpJWUxxdE5vZmJlZ1RPaHVzNVEzdHg2c29Jd3RRV1M2Wi9Z?=
- =?utf-8?B?U3JyVVNQS2ZLUktoUG1lWmdVazNUQURnTHJpT1hxbGFwNmZ1U2NReTVnMnh1?=
- =?utf-8?B?NFJKbnlreTIyRE1MNnRxaEM1alNLMzRuSno5M05tYUJrRm9kQzMrN1E0amZV?=
- =?utf-8?B?MlUvUnV4ZktNQmJVVVFXeXhZbVNMTFFselV1b2QvbTJ4YmNTN0tTVTV0aGVY?=
- =?utf-8?Q?VFcI=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCE692EB5AF;
+	Mon, 29 Sep 2025 12:22:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1759148568; cv=none; b=d1EEploTyfSyio9JPRuuj12HieD694qZa5q+aYS+JU/qnpElCbg5aJP+41Wl/auieW8U3pFx+ZWy0r0z9Yoo6Ju4MeKxt4p7T1fBYQV5T6IzeSHvHNTasAl1WjSixgU+0KYtWchUp6mA7bwnmp1QhAMzQdjX/EUSWXI9HY1xjD4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1759148568; c=relaxed/simple;
+	bh=s5IQXqEcgAB5VpUChLCFtweMuTiZxaapht5zwbbuklY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=bMvCj3HORHKM5/k1PvIWCbmUQMKddDfRv/BOqfQ0k7z/FuGER0CbN1vJZmN804ZmXmBAKx4XFt+R6/EbKTSwnrQTff8Iqdy3AoAMwFXGnHo6Ps3dWy0xPj2AHItESlV+HlVBP+tM163Go6DpWr+MPcm8+VBHdAqdafjNdnL2/+I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=F7lKlwBA; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1759148563;
+	bh=s5IQXqEcgAB5VpUChLCFtweMuTiZxaapht5zwbbuklY=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=F7lKlwBA2xIrBex81Up74ZUNZGw4qX5gUCi+Dh9YKgYIMYcYyv90sIuAz8roPE3NL
+	 Pk4KLMxmlZXcc4kUXhbsDiJSnu8aMIJS4z6lOhYXV2G1DTkXXYxWuCQnpkxzKZ3qMQ
+	 ZtVA/PIRVMT2tCCSy4+CCyGxwwwQMawpUQNGsSx+av1hmy0+lyZID1xsK3iFETfWp4
+	 1ARZc/6BjPBam2pbarmowwjQjwBMFhMdQPrEQv3LvUwz6cQhefYpAkjPW0aD1uri6/
+	 TKzyFF4KdlwwnfBw6YvIqcYsp8BST7Wy/ferbgvbenWF9591Mc+wxBs2LQFugRzHEQ
+	 uW9QrTXf5WT5Q==
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id D716317E129E;
+	Mon, 29 Sep 2025 14:22:42 +0200 (CEST)
+Message-ID: <c968c7c7-83b8-49ee-b1a5-b8551d855df4@collabora.com>
+Date: Mon, 29 Sep 2025 14:22:42 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8459.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e2d2c79c-7bee-49d6-28ac-08ddff5091ab
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Sep 2025 12:06:06.2763
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: QLodGI9A57ydEHGIj/FMx8mAXkVN3BtJ8Y/BYDI8y9GXqRXXCDtirB3smLUjudTuFsgeWIrUuDQsPBJc/h1HSQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI0PR04MB11700
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 7/7] pmdomain: mediatek: Add support for MFlexGraphics
+To: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>,
+ Boris Brezillon <boris.brezillon@collabora.com>,
+ Jassi Brar <jassisinghbrar@gmail.com>, Chia-I Wu <olvaffe@gmail.com>,
+ Chen-Yu Tsai <wenst@chromium.org>, Steven Price <steven.price@arm.com>,
+ Liviu Dudau <liviu.dudau@arm.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Matthias Brugger
+ <matthias.bgg@gmail.com>, Kees Cook <kees@kernel.org>,
+ "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+ Ulf Hansson <ulf.hansson@linaro.org>
+Cc: kernel@collabora.com, dri-devel@lists.freedesktop.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
+ linux-hardening@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20250929-mt8196-gpufreq-v5-0-3056e5ecf765@collabora.com>
+ <20250929-mt8196-gpufreq-v5-7-3056e5ecf765@collabora.com>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Content-Language: en-US
+In-Reply-To: <20250929-mt8196-gpufreq-v5-7-3056e5ecf765@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-PiBTdWJqZWN0OiBSZTogW1BBVENIIHY0IDAvNV0gcG1kb21haW46IGNvcmU6IEludHJvZHVjZQ0K
-PiBkZXZpY2Vfc2V0X291dF9iYW5kX3dha2V1cCBhbmQgdXNlIGl0IGluIHVzYg0KPiA+DQo+ID4g
-U29ycnkgZm9yIGFuIGVhcmx5IHBpbmcuIEkgc2VlIHY2LjE3IGlzIHJlbGVhc2VkLiBKdXN0IHdh
-bnQgdG8ga25vdw0KPiA+IHdoZXRoZXIgeW91IHdvdWxkIHBpY2sgdGhpcyB1cCBmb3IgNi4xOC4N
-Cj4gDQo+IElmIHdlIGhhdmUgaGFkIGFub3RoZXIgd2VlaywgdGhlbiB2Ni4xOCBzaG91bGQgaGF2
-ZSB3b3JrZWQuIFRoYXQNCj4gc2FpZCwgSSBwbGFuIHRvIHF1ZXVlIHRoaXMgZm9yIHY2LjE5IGFz
-IHNvb24gYXMgd2UgaGF2ZSB2Ni4xOC1yYzEuDQoNClRoYW5rcyBmb3IgbGV0dGluZyBtZSBrbm93
-LiBBcHByZWNpYXRlIHlvdXIgaGVscC4NCg0KVGhhbmtzLA0KUGVuZy4NCg0KPiANCj4gS2luZCBy
-ZWdhcmRzDQo+IFVmZmUNCg==
+Il 29/09/25 09:46, Nicolas Frattaroli ha scritto:
+> Various MediaTek SoCs use GPU integration silicon named "MFlexGraphics"
+> by MediaTek. On the MT8196 and MT6991 SoCs, interacting with this
+> integration silicon is required to power on the GPU.
+> 
+> This glue silicon is in the form of an embedded microcontroller running
+> special-purpose firmware, which autonomously adjusts clocks and
+> regulators.
+> 
+> Implement a driver, modelled as a pmdomain driver with a
+> set_performance_state operation, to support these SoCs.
+> 
+> The driver also exposes the actual achieved clock rate, as read back
+> from the MCU, as common clock framework clocks, by acting as a clock
+> provider as well.
+> 
+> Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+> ---
+>   drivers/pmdomain/mediatek/Kconfig            |  16 +
+>   drivers/pmdomain/mediatek/Makefile           |   1 +
+>   drivers/pmdomain/mediatek/mtk-mfg-pmdomain.c | 954 +++++++++++++++++++++++++++
+>   3 files changed, 971 insertions(+)
+> 
+> diff --git a/drivers/pmdomain/mediatek/Kconfig b/drivers/pmdomain/mediatek/Kconfig
+> index 0e34a517ab7d5a867bebaab11c0d866282a15e45..b06aaa9690f08f33519595916b8ea3ad9035fc55 100644
+> --- a/drivers/pmdomain/mediatek/Kconfig
+> +++ b/drivers/pmdomain/mediatek/Kconfig
+> @@ -26,6 +26,22 @@ config MTK_SCPSYS_PM_DOMAINS
+>   	  Control Processor System (SCPSYS) has several power management related
+>   	  tasks in the system.
+>   
+> +config MTK_MFG_PM_DOMAIN
+> +	bool "MediaTek MFlexGraphics power domain"
+> +	default ARCH_MEDIATEK
+> +	depends on PM
+> +	depends on OF
+> +	depends on COMMON_CLK
+> +	select PM_GENERIC_DOMAINS
+> +	imply MTK_GPUEB_MBOX
+> +	help
+> +	  Say y or m here to enable the power domains driver for MediaTek
+> +	  MFlexGraphics. This driver allows for power and frequency control of
+> +	  GPUs on MediaTek SoCs such as the MT8196 or MT6991.
+> +
+> +	  This driver is required for the Mali GPU to work at all on MT8196 and
+> +	  MT6991.
+> +
+>   config AIROHA_CPU_PM_DOMAIN
+>   	tristate "Airoha CPU power domain"
+>   	default ARCH_AIROHA
+> diff --git a/drivers/pmdomain/mediatek/Makefile b/drivers/pmdomain/mediatek/Makefile
+> index 18ba92e3c418154e1d428dbc6b59b97b26056d98..b424f1ed867604393b3ff96364855363aedaa40c 100644
+> --- a/drivers/pmdomain/mediatek/Makefile
+> +++ b/drivers/pmdomain/mediatek/Makefile
+> @@ -1,4 +1,5 @@
+>   # SPDX-License-Identifier: GPL-2.0-only
+> +obj-$(CONFIG_MTK_MFG_PM_DOMAIN)		+= mtk-mfg-pmdomain.o
+>   obj-$(CONFIG_MTK_SCPSYS)		+= mtk-scpsys.o
+>   obj-$(CONFIG_MTK_SCPSYS_PM_DOMAINS) 	+= mtk-pm-domains.o
+>   obj-$(CONFIG_AIROHA_CPU_PM_DOMAIN) 	+= airoha-cpu-pmdomain.o
+> diff --git a/drivers/pmdomain/mediatek/mtk-mfg-pmdomain.c b/drivers/pmdomain/mediatek/mtk-mfg-pmdomain.c
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..ba8e493b15edf6f5648deb9bddbc5d63fe0ba43b
+> --- /dev/null
+> +++ b/drivers/pmdomain/mediatek/mtk-mfg-pmdomain.c
+> @@ -0,0 +1,954 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Driver for MediaTek MFlexGraphics Devices
+> + *
+> + * Copyright (C) 2025, Collabora Ltd.
+> + */
+> +
+> +#include <linux/completion.h>
+> +#include <linux/clk.h>
+> +#include <linux/clk-provider.h>
+> +#include <linux/container_of.h>
+> +#include <linux/iopoll.h>
+> +#include <linux/mailbox_client.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/of_address.h>
+> +#include <linux/of_platform.h>
+> +#include <linux/of_reserved_mem.h>
+> +#include <linux/overflow.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/pm_domain.h>
+> +#include <linux/pm_opp.h>
+> +#include <linux/regulator/consumer.h>
+> +#include <linux/units.h>
+> +
+
+..snip..
+
+
+> +
+> +static int mtk_mfg_eb_on(struct mtk_mfg *mfg)
+> +{
+> +	struct device *dev = &mfg->pdev->dev;
+> +	u32 val;
+> +	int ret;
+> +
+> +	/*
+> +	 * If MFG is already on from e.g. the bootloader, we should skip doing
+
+we ... who?
+
+> +	 * the power-on sequence, as it wouldn't work without powering it off
+> +	 * first.
+> +	 */
+> +	if (mtk_mfg_is_powered_on(mfg))
+> +		return 0;
+> +
+> +	ret = readl_poll_timeout(mfg->rpc + RPC_GHPM_RO0_CON, val,
+> +				 !(val & (GHPM_PWR_STATE_M | GHPM_STATE_M)),
+> +				 GPUEB_POLL_US, GPUEB_TIMEOUT_US);
+> +	if (ret) {
+> +		dev_err(dev, "timed out waiting for EB to power on\n");
+> +		return ret;
+> +	}
+> +
+> +	mtk_mfg_update_reg_bits(mfg->rpc + mfg->ghpm_en_reg, GHPM_ENABLE_M,
+> +				GHPM_ENABLE_M);
+> +
+> +	mtk_mfg_update_reg_bits(mfg->rpc + RPC_GHPM_CFG0_CON, GHPM_ON_SEQ_M, 0);
+> +	mtk_mfg_update_reg_bits(mfg->rpc + RPC_GHPM_CFG0_CON, GHPM_ON_SEQ_M,
+> +				GHPM_ON_SEQ_M);
+> +
+> +	mtk_mfg_update_reg_bits(mfg->rpc + mfg->ghpm_en_reg, GHPM_ENABLE_M, 0);
+> +
+> +
+> +	ret = readl_poll_timeout(mfg->rpc + RPC_PWR_CON, val,
+> +				 (val & PWR_ACK_M) == PWR_ACK_M,
+> +				 GPUEB_POLL_US, GPUEB_TIMEOUT_US);
+> +	if (ret) {
+> +		dev_err(dev, "timed out waiting for EB power ack, val = 0x%X\n",
+> +			val);
+> +		return ret;
+> +	}
+> +
+> +	ret = readl_poll_timeout(mfg->gpr + GPR_LP_STATE, val,
+> +				 (val == EB_ON_RESUME),
+> +				 GPUEB_POLL_US, GPUEB_TIMEOUT_US);
+> +	if (ret) {
+> +		dev_err(dev, "timed out waiting for EB to resume, status = 0x%X\n", val);
+> +		return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int mtk_mfg_eb_off(struct mtk_mfg *mfg)
+> +{
+> +	struct device *dev = &mfg->pdev->dev;
+> +	struct mtk_mfg_ipi_sleep_msg msg = {
+> +		.event = 0,
+> +		.state = 0,
+> +		.magic = GPUEB_SLEEP_MAGIC
+> +	};
+> +	u32 val;
+> +	int ret;
+> +
+> +	ret = mbox_send_message(mfg->slp_mbox->ch, &msg);
+> +	if (ret < 0) {
+> +		dev_err(dev, "Cannot send sleep command: %pe\n", ERR_PTR(ret));
+> +		return ret;
+> +	}
+> +
+> +	ret = readl_poll_timeout(mfg->rpc + RPC_PWR_CON, val,
+> +				 !(val & PWR_ACK_M), GPUEB_POLL_US,
+> +				 GPUEB_TIMEOUT_US);
+> +
+> +	if (ret)
+> +		dev_err(dev, "Timed out waiting for EB to power off, val=0x%08X\n", val);
+
+Please be consistent with mtk_mfg_eb_on (and with everything else, actually).
+
+	if (ret) {
+		dev_err...
+		return ret
+	}
+
+	return 0;
+
+> +
+> +	return ret;
+> +}
+> +
+
+..snip..
+
+> +static int mtk_mfg_set_performance(struct generic_pm_domain *pd,
+> +				   unsigned int state)
+> +{
+> +	struct mtk_mfg *mfg = mtk_mfg_from_genpd(pd);
+> +
+> +	/*
+> +	 * pmdomain core intentionally sets a performance state before turning
+> +	 * a domain on, and after turning it off. We don't want to act on those,
+
+We..... who?!?!?!
+
+> +	 * as we only want to set performance states while the domain is on, and
+
+again, who's "we"? :-)
+
+> +	 * can simply defer setting whatever the pmdomain subsystem thinks we
+
+here we go again, who's that group of people? :-)
+
+> +	 * should be at when powering it on.
+> +	 */
+
+Code comments shall be declarative: you describe an action or code behavior - you
+have to explain a reason, not "who".
+
+Example:
+
+The pmdomain code intentionally sets a performance state both before turning
+on a power domain and after turning it off. However, in the case of MediaTek
+EB, the performance states can only be set while the controller is powered ON.
+If any performance request comes while it is OFF, return cleanly without
+taking any immediate action and defer setting the performance level until
+the next poweron.
+
+There's no "we", and describes all of reason, intention and intended code flow. :-)
+
+
+> +	if (mfg->pd.status != GENPD_STATE_ON)
+> +		return 0;
+> +
+> +	return mtk_mfg_set_oppidx(mfg, state);
+> +}
+> +
+> +static int mtk_mfg_power_on(struct generic_pm_domain *pd)
+> +{
+> +	struct mtk_mfg *mfg = mtk_mfg_from_genpd(pd);
+> +	int ret;
+> +
+> +	ret = regulator_bulk_enable(mfg->variant->num_regulators,
+> +				    mfg->gpu_regs);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = clk_prepare_enable(mfg->clk_eb);
+> +	if (ret)
+> +		goto err_disable_regulators;
+> +
+> +	ret = clk_bulk_prepare_enable(mfg->variant->num_clks, mfg->gpu_clks);
+> +	if (ret)
+> +		goto err_disable_eb_clk;
+> +
+> +	ret = mtk_mfg_eb_on(mfg);
+> +	if (ret)
+> +		goto err_disable_clks;
+> +
+> +	mfg->ipi_magic = readl(mfg->gpr + GPR_IPI_MAGIC);
+> +
+> +	ret = mtk_mfg_power_control(mfg, true);
+> +	if (ret)
+> +		goto err_eb_off;
+> +
+> +	/* Don't try to set a OPP in probe before we have the OPPs */
+> +	if (mfg->gpu_opps) {
+> +		/* The aforementioned deferred setting of pmdomain's state */
+> +		ret = mtk_mfg_set_oppidx(mfg, pd->performance_state);
+> +		if (ret)
+> +			dev_warn(&mfg->pdev->dev, "Failed to set oppidx in %s\n", __func__);
+> +	}
+> +
+> +	return 0;
+> +
+> +err_eb_off:
+> +	mtk_mfg_eb_off(mfg);
+> +err_disable_clks:
+> +	clk_bulk_disable_unprepare(mfg->variant->num_clks, mfg->gpu_clks);
+> +err_disable_eb_clk:
+> +	clk_disable_unprepare(mfg->clk_eb);
+> +err_disable_regulators:
+> +	regulator_bulk_disable(mfg->variant->num_regulators, mfg->gpu_regs);
+> +
+> +	return ret;
+> +}
+> +
+> +static int mtk_mfg_power_off(struct generic_pm_domain *pd)
+> +{
+> +	struct mtk_mfg *mfg = mtk_mfg_from_genpd(pd);
+> +	struct device *dev = &mfg->pdev->dev;
+> +	int ret;
+> +
+> +	ret = mtk_mfg_power_control(mfg, false);
+> +	if (ret) {
+> +		dev_err(dev, "power_control failed: %pe\n", ERR_PTR(ret));
+> +		return ret;
+> +	}
+> +
+> +	ret = mtk_mfg_eb_off(mfg);
+> +	if (ret) {
+> +		dev_err(dev, "eb_off failed: %pe\n", ERR_PTR(ret));
+> +		return ret;
+> +	}
+> +
+> +	clk_bulk_disable_unprepare(mfg->variant->num_clks, mfg->gpu_clks);
+> +	clk_disable_unprepare(mfg->clk_eb);
+> +	return regulator_bulk_disable(mfg->variant->num_regulators, mfg->gpu_regs);
+> +}
+> +
+> +static int mtk_mfg_init_mbox(struct mtk_mfg *mfg)
+> +{
+> +	struct device *dev = &mfg->pdev->dev;
+> +	struct mtk_mfg_mbox *gf;
+> +	struct mtk_mfg_mbox *slp;
+> +
+> +	gf = devm_kzalloc(dev, sizeof(*gf), GFP_KERNEL);
+> +	if (!gf)
+> +		return -ENOMEM;
+
+Please aggregate the allocations together. This doesn't guarantee that the
+memory locations are sequential and that's not the target.
+
+The target here is to improve readability, so...
+
+gf = devm_kzalloc(...)
+error_check
+gf->rx_data = devm_kzalloc(...)
+error_check
+
+Then, you can either go with initialization and registration of gf, or you
+can allocate slp here.
+
+so, either:
+- gf and gf->rx_data allocation
+   - gf->mfg, gf.cl assignment
+   - mbox_request_channel_byname(gf)
+- slp allocation
+   - slp->mfg, slp->cl assignment
+   - mbox_request_channel_byname(slp)
+
+or
+
+- gf and gf->rx_data allocation
+- slp allocation
+- gf->mfg, gf.cl assignment
+- mbox_request_channel_byname(gf)
+   - slp->mfg, slp->cl assignment
+- mbox_request_channel_byname(slp)
+
+Honestly, though - I'd go for the first.
+
+> +
+> +	slp = devm_kzalloc(dev, sizeof(*slp), GFP_KERNEL);
+> +	if (!slp)
+> +		return -ENOMEM;
+> +
+> +	gf->mfg = mfg;
+> +	init_completion(&gf->rx_done);
+> +	gf->cl.dev = dev;
+> +	gf->cl.rx_callback = mtk_mfg_mbox_rx_callback;
+> +	gf->cl.tx_tout = GPUEB_TIMEOUT_US / USEC_PER_MSEC;
+> +	gf->rx_data = devm_kzalloc(dev, GPUEB_MBOX_MAX_RX_SIZE, GFP_KERNEL);
+> +	if (!gf->rx_data)
+> +		return -ENOMEM;
+> +	gf->ch = mbox_request_channel_byname(&gf->cl, "gpufreq");
+> +	if (IS_ERR(gf->ch))
+> +		return PTR_ERR(gf->ch);
+> +
+> +	mfg->gf_mbox = gf;
+> +
+> +	slp->mfg = mfg;
+> +	init_completion(&slp->rx_done);
+> +	slp->cl.dev = dev;
+> +	slp->cl.tx_tout = GPUEB_TIMEOUT_US / USEC_PER_MSEC;
+> +	slp->cl.tx_block = true;
+> +	slp->ch = mbox_request_channel_byname(&slp->cl, "sleep");
+> +	if (IS_ERR(slp->ch))
+> +		return PTR_ERR(slp->ch);
+> +
+> +	mfg->slp_mbox = slp;
+> +
+> +	return 0;
+> +}
+> +
+
+..snip..
+
+> +
+> +static int mtk_mfg_probe(struct platform_device *pdev)
+> +{
+> +	struct device_node *shmem __free(device_node);
+> +	struct mtk_mfg *mfg;
+> +	struct device *dev = &pdev->dev;
+> +	const struct mtk_mfg_variant *data = of_device_get_match_data(dev);
+> +	struct resource res;
+> +	int ret, i;
+> +
+> +	mfg = devm_kzalloc(dev, sizeof(*mfg), GFP_KERNEL);
+> +	if (!mfg)
+> +		return -ENOMEM;
+> +
+> +	mfg->pdev = pdev;
+> +	mfg->variant = data;
+> +
+> +	dev_set_drvdata(dev, mfg);
+> +
+> +	mfg->gpr = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(mfg->gpr))
+> +		return dev_err_probe(dev, PTR_ERR(mfg->gpr),
+> +				     "Could not retrieve GPR MMIO registers\n");
+> +
+> +	mfg->rpc = devm_platform_ioremap_resource(pdev, 1);
+> +	if (IS_ERR(mfg->rpc))
+> +		return dev_err_probe(dev, PTR_ERR(mfg->rpc),
+> +				     "Could not retrieve RPC MMIO registers\n");
+> +
+> +	mfg->clk_eb = devm_clk_get(dev, "eb");
+> +	if (IS_ERR(mfg->clk_eb))
+> +		return dev_err_probe(dev, PTR_ERR(mfg->clk_eb),
+> +				     "Could not get 'eb' clock\n");
+> +
+> +	mfg->gpu_clks = devm_kcalloc(dev, data->num_clks, sizeof(*mfg->gpu_clks),
+> +				     GFP_KERNEL);
+> +	if (!mfg->gpu_clks)
+> +		return -ENOMEM;
+> +
+> +	for (i = 0; i < data->num_clks; i++)
+> +		mfg->gpu_clks[i].id = data->clk_names[i];
+> +
+> +	ret = devm_clk_bulk_get(dev, data->num_clks, mfg->gpu_clks);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "couldn't get GPU clocks\n");
+> +
+> +	mfg->gpu_regs = devm_kcalloc(dev, data->num_regulators,
+> +				     sizeof(*mfg->gpu_regs), GFP_KERNEL);
+> +	if (!mfg->gpu_regs)
+> +		return -ENOMEM;
+> +
+> +	for (i = 0; i < data->num_regulators; i++)
+> +		mfg->gpu_regs[i].supply = data->regulator_names[i];
+> +
+> +	ret = devm_regulator_bulk_get(dev, data->num_regulators, mfg->gpu_regs);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "couldn't get GPU regulators\n");
+> +
+> +	ret = of_reserved_mem_region_to_resource(dev->of_node, 0, &res);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret,
+> +				     "failed to get GPUEB shared memory\n");
+
+Good job! ...though, the dev_err_probe call fits in one line just fine (87 columns
+is ok)
+
+> +
+> +	mfg->shared_mem = devm_ioremap(dev, res.start, resource_size(&res));
+> +	if (!mfg->shared_mem)
+> +		return dev_err_probe(dev, -EADDRNOTAVAIL,
+> +				     "failed to ioremap GPUEB shared memory\n");
+
+-EADDRNOTAVAIL == Cannot assign requested address (and that's in the networking
+sense of it).
+
+If devm_ioremap fails, you're most likely out of memory, because we can give for
+granted that the phys addr is validated from the get go.
+
+Just go with -ENOMEM then - and besides, fits in one line if you say instead:
+
+return dev_err_probe(dev, -ENOMEM, "cannot ioremap GPUEB shared mem\n");
+
+> +	mfg->shared_mem_size = resource_size(&res);
+> +	mfg->shared_mem_phys = res.start;
+> +
+> +	if (data->init) {
+> +		ret = data->init(mfg);
+> +		if (ret)
+> +			return dev_err_probe(dev, ret, "Variant init failed\n");
+> +	}
+> +
+> +	mfg->pd.name = dev_name(dev);
+> +	mfg->pd.attach_dev = mtk_mfg_attach_dev;
+> +	mfg->pd.detach_dev = mtk_mfg_detach_dev;
+> +	mfg->pd.power_off = mtk_mfg_power_off;
+> +	mfg->pd.power_on = mtk_mfg_power_on;
+> +	mfg->pd.set_performance_state = mtk_mfg_set_performance;
+> +	mfg->pd.flags = GENPD_FLAG_OPP_TABLE_FW;
+> +
+> +	ret = pm_genpd_init(&mfg->pd, NULL, false);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "Failed to initialise power domain\n");
+> +
+> +	ret = clk_prepare_enable(mfg->clk_eb);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "failed to turn on EB clock\n");
+> +
+> +	ret = mtk_mfg_init_mbox(mfg);
+> +	if (ret) {
+> +		clk_disable_unprepare(mfg->clk_eb);
+> +		return dev_err_probe(dev, ret, "Couldn't initialise mailbox\n");
+> +	}
+> +
+
+Can you please add a comment here, explaining that mtk_mfg_power_on() is also
+responsible for turning on all of the necessary clocks, hence it raises the
+refcount of clk_eb?
+
+All that so it becomes clear that there you're not disabling the clk_eb clock
+but only lowering the refcount.
+
+Saying that because while reviewing this code, after reaching the `out` label
+the first thing that came to mind was "there we go, unclocked access" - but then
+after 30 seconds I realized that the clocks are left on by the call to function
+mtk_mfg_power_on().
+
+A very brief comment explaining what's going on wouldn't have saved those 30
+seconds because this is a review, but it would save those to the next person
+reading a driver that is upstream anyway.
+
+Of course, no strong opinions about having the comment, this is just a suggestion.
+
+> +	ret = mtk_mfg_power_on(&mfg->pd);
+> +	clk_disable_unprepare(mfg->clk_eb);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "Failed to power on MFG\n");
+> +
+> +	ret = mtk_mfg_init_shared_mem(mfg);
+> +	if (ret) {
+> +		dev_err(dev, "Couldn't initialize EB shared memory: %pe\n", ERR_PTR(ret));
+
+Why is this dev_err and not dev_err_probe?
+
+I get that the return value is already set, but nothing prevents you from calling
+dev_err_probe() without assigning the result to anything.
+
+	if (ret) {
+		dev_err_probe(dev, ret, "Couldn't initialize EB shared memory\n");
+		goto out;
+	}
+
+At least - we get the probe error prints consistent :-)
+
+> +		goto out;
+> +	}
+> +
+> +	ret = mtk_mfg_read_opp_tables(mfg);
+> +	if (ret) {
+> +		dev_err(dev, "Error reading OPP tables from EB: %pe\n",
+> +			ERR_PTR(ret));
+
+dev_err_probe.
+
+> +		goto out;
+> +	}
+> +
+> +	ret = mtk_mfg_init_clk_provider(mfg);
+> +	if (ret)
+> +		goto out;
+> +
+> +	ret = of_genpd_add_provider_simple(dev->of_node, &mfg->pd);
+> +	if (ret) {
+> +		ret = dev_err_probe(dev, ret, "Failed to add pmdomain provider\n");
+
+Please avoid this redundant assignment.
+
+> +		goto out;
+> +	}
+> +
+> +	return 0;
+> +
+
+Everything else looks good to me - so after fixing this I'm confident that you'll
+get my R-b tag on this commit.
+
+Cheers,
+Angelo
+
+
+> +out:
+> +	mtk_mfg_power_off(&mfg->pd);
+> +	return ret;
+> +}
+> +
+> +static const struct of_device_id mtk_mfg_of_match[] = {
+> +	{ .compatible = "mediatek,mt8196-gpufreq", .data = &mtk_mfg_mt8196_variant },
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(of, mtk_mfg_of_match);
+> +
+> +static void mtk_mfg_remove(struct platform_device *pdev)
+> +{
+> +	struct mtk_mfg *mfg = dev_get_drvdata(&pdev->dev);
+> +
+> +	if (mtk_mfg_is_powered_on(mfg))
+> +		mtk_mfg_power_off(&mfg->pd);
+> +
+> +	of_genpd_del_provider(pdev->dev.of_node);
+> +	pm_genpd_remove(&mfg->pd);
+> +
+> +	mbox_free_channel(mfg->gf_mbox->ch);
+> +	mfg->gf_mbox->ch = NULL;
+> +
+> +	mbox_free_channel(mfg->slp_mbox->ch);
+> +	mfg->slp_mbox->ch = NULL;
+> +}
+> +
+> +static struct platform_driver mtk_mfg_driver = {
+> +	.driver = {
+> +		.name = "mtk-mfg-pmdomain",
+> +		.of_match_table = mtk_mfg_of_match,
+> +		.suppress_bind_attrs = true,
+> +	},
+> +	.probe = mtk_mfg_probe,
+> +	.remove = mtk_mfg_remove,
+> +};
+> +module_platform_driver(mtk_mfg_driver);
+> +
+> +MODULE_AUTHOR("Nicolas Frattaroli <nicolas.frattaroli@collabora.com>");
+> +MODULE_DESCRIPTION("MediaTek MFlexGraphics Power Domain Driver");
+> +MODULE_LICENSE("GPL");
+> 
+
 
