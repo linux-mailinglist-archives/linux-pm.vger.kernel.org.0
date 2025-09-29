@@ -1,128 +1,141 @@
-Return-Path: <linux-pm+bounces-35543-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35544-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0DC16BA85E0
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Sep 2025 10:12:40 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 895CEBA8845
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Sep 2025 11:05:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C17503B5329
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Sep 2025 08:12:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BFDCD7A31FD
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Sep 2025 09:04:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E46C26D4D7;
-	Mon, 29 Sep 2025 08:12:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5885280A51;
+	Mon, 29 Sep 2025 09:05:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n1bCd8uE"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="pQuT+Sin"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09053239E79
-	for <linux-pm@vger.kernel.org>; Mon, 29 Sep 2025 08:12:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09E5127FD71
+	for <linux-pm@vger.kernel.org>; Mon, 29 Sep 2025 09:05:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759133555; cv=none; b=OrpI4yetvN9AW42FPdoz+TjIrIi7PDRyXFVrSXZVWKp2Dig4GWSf4pYcy8ntJb20x2w3K6/gfuaGCUnvopz+hwIPNZYocX5hi9MTC7P+SzatvhnBAo/rFe0a0tl/e0wGyo9pYve/rHBpH0wdemoqSXtDHv7b1YAkRlBM9cmTJTM=
+	t=1759136729; cv=none; b=sRGitvWXLz0CCtRNl+RVHwdf4qoh4aw2uYI+JRZQrOS7ZcBUdly4afCPKMs6Y0Daz8vfGcnjDu0s+H9SpZ56Tq5S76C/NmSJcUAuHUi1/n8+PhG8MMkU/BCqIgPJMU0wzzcT4CdBRivdggDe4tIM4iI/PTn0wQSe74AeiqXnEww=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759133555; c=relaxed/simple;
-	bh=P3xJLz/33GrYSj1aGgGnKj3afAwcVes4JbpYpwcAf48=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EJeeevVDradX1cdtw2niJ/EjVAHb5pF0btXav9iiNg4risGvTZYbGFTjMETVcZM8ES+r4OOWXiDUMBb05sy5QVO6mxVBZSpXeN1+4CiDyv4//1y2kxxJf74M70oyEvan4NEcgE7v3BuxAglI0njN6wK7WpCC+/Gzs4jwhBZnpYI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n1bCd8uE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7E02C116B1
-	for <linux-pm@vger.kernel.org>; Mon, 29 Sep 2025 08:12:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759133554;
-	bh=P3xJLz/33GrYSj1aGgGnKj3afAwcVes4JbpYpwcAf48=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=n1bCd8uEdDXb3e/m0Ca210ZBSO2VDbnETWstTPb5h6gBhbb4pi98A1KmgZMeRsDAI
-	 cRoiDBnjoIRHbILIMlzLJRGIrdPve3P0MAYdFHUtxSA+6RtNelszXFklOMJfhCbFO1
-	 413S/YXccMidN48uX80gscYW/p30RtdvA/3Gcqhq6tU3OOHmz1Z/uN4roW0fS/nads
-	 YI93pHIFkg45eDp4SerlfkIGnn3LZIeHNQT0f3e49JohCK8o5w0RZUCt6Y/u65lHUZ
-	 tjAedEqF8QsxKegHQrk0WzGjtn6fq8R67vbrEgTCZnEDkURBMa2dL2aeipkwhosL+J
-	 Lm0D2vOZGwl/Q==
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-31d6b8be249so4059700fac.0
-        for <linux-pm@vger.kernel.org>; Mon, 29 Sep 2025 01:12:34 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUcBA/xM2gO3vt3TibiYOSFmjAWKwMwBz5UT0xLBZWFY/rpTT5tBYojgskTwFfgnRCGZLCgjDSHWw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy+IEFNmQ6PRhiDkf7PXcliHR2nVX9GRhlUAhbAEMWM3QnxoGGG
-	4TUbKnxDV6hDFYDrIEz63BrcdNFs5B6Wv1xRwyP43BV4HSjNiJfbyXAgVP9jQX16/SNI8vbX33d
-	QkQjoaqRVk6x/iXK4SP2pn9o5PrkyTjM=
-X-Google-Smtp-Source: AGHT+IHEsUC5Tp8ILZbUVUxIcIq+/7rt16ij/PVeyXnmrLUh0s2P+VnYJUNfj/SPr9b7u07NPicC6tl/WicO+PPfKw0=
-X-Received: by 2002:a05:6870:d6a4:b0:353:f24:e95a with SMTP id
- 586e51a60fabf-35ef0761242mr6682731fac.42.1759133553974; Mon, 29 Sep 2025
- 01:12:33 -0700 (PDT)
+	s=arc-20240116; t=1759136729; c=relaxed/simple;
+	bh=VfNfnv8T6wFQdjBp99fQCp6r0cFMOOnZqrGR1VOZ4Pc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=m4kh+7U784FbY5Kl2+O7E3t3W8GZaxri6VQQ/PSgLFCZeh8Jd0R5i/BfNC8JY9HAYXW8oH8dCAEVH0AxNsd0WW6q5DH2VVX05v66v4S06TTcNCgQZKbTyyyJQvPfRCJvx0P30hD8y2rWDpB7CDZvBtARVmTi3atkN05iroEnaDA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=pQuT+Sin; arc=none smtp.client-ip=209.85.210.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-781997d195aso1119981b3a.3
+        for <linux-pm@vger.kernel.org>; Mon, 29 Sep 2025 02:05:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1759136727; x=1759741527; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=isWBuGrVavExFHtjWRBMLQZSe+K9COO/1eBnPARTDvc=;
+        b=pQuT+SinCmUVQILNLEhC0rLBJxvptZZ68yza29Q7YF/0sFoAWYr6SQWjwa6vnFUKhS
+         Y99axNibcizHwdnGcAtGHb4gpc8z4NsCWzzQ9QZeblAbNzMT8IKOi9KNoGbF/pHH2jA0
+         qTQ3PF8lyGytdBmpPppmZY4C7c7BVFSmaQTM/cJZh0vZtMfxHGNUo7N+QlO/YfOk5klp
+         DkluIIa8avJj/Dk/0AokeWuizv35icsHlI6902MmnpiY/RvlZHZqpEgjTAhVpVeTN1sD
+         mBg5Y2ryeaQgIIdzxo+DoBzDKZ9JBrT4i8Ie7rQrQbxbBavde3UstNvsjcv8WG5boLtw
+         DLGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1759136727; x=1759741527;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=isWBuGrVavExFHtjWRBMLQZSe+K9COO/1eBnPARTDvc=;
+        b=eCeWeLAgB2k9PVrfBPwm7GHKbmpWuM7w8zPz7EYPgTmLuWakhLRJuFDeih7L8A2tNo
+         8qzx190/IDxN0eVGSjGJLb4i6SqopOYgzvyDvv+6W9q05PmoY5KWeykjJLjW2CjUonZh
+         uOwVtU00hSPILHnVzpfo3OWU2YYB8qLLgSxqCbi5WtrHXe/cnEa2vF/hTVeBc8qapqfP
+         ygMN53r7eUCSccMxvfr4AcEtXC35NbWxD/WWZeBNIOKwoVjEo/ms0dHFs3XUb+BJaTGi
+         0DCGdPVSVkaHEUHFeWxbh0mC5XJr3r00ZmEJLkRotFlHi6oSlbBKBzXQ4FC78fwNua9m
+         qYGQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWm6IiAKpEa4QbpSTHOw5XOZaC19cO3fA1iOKm6ADhYd/MyWSu2+tNO1tYUgST4mxV5NfIVezvVKA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxoU0kWQBQBhgkUelw6wZjQTHCbYuYMP48bIoXSPzdpWxUihJvf
+	1YV43XzyIbM6Mh5WYSoRB/dT5G6l87I1wVrIyxVoueXwGHkTSDmexwXmAF1UYbW6DN4=
+X-Gm-Gg: ASbGncu18MOjthTFWZIcuCS600gzUJjmLEeR1uoImuqCJFpVK5Aehz/sxUP2x5qZFMk
+	lMN9SFcUVPNb1nwVkAeD1zE4I9yR9Xw6IYd2/tSKCE4rGRnYjNp/nlB/yfmITSBDF/Qb8ifTloK
+	nMLJu4Z3whuwkpv+6+KgwjxmeKGka/x5vEaVtiVGNaRtoqTonCr8cKko6PTDYmbedTz9YON/xbD
+	NF2JUsH5vTMJT87P5guEFVKoDSeYCO+iZB65TlZy/yDgWujsIBWsEQ/fCSG9hegqWtOdjYKhcnk
+	DJV12XuwB80p13seEAxNc8y+FsO+7+K0IWXl9CVwVEZ189djRMpsNzN/Rn9S23E/KzLGMuvt/mQ
+	yXiyNBavL6UYodcXVTlPfckV+0cm3Rc7VhCs=
+X-Google-Smtp-Source: AGHT+IHI53HjGws/0MGMYg9oIUI1/ZiOD1m0ms5Rmqmk3vyfhObi4885Z5MzNYAXHb1e431NwurN+Q==
+X-Received: by 2002:a05:6a20:394a:b0:24a:1b2d:6414 with SMTP id adf61e73a8af0-2e7c1bc5598mr20471212637.18.1759136727306;
+        Mon, 29 Sep 2025 02:05:27 -0700 (PDT)
+Received: from localhost ([122.172.87.183])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-78102c06981sm10451766b3a.72.2025.09.29.02.05.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Sep 2025 02:05:26 -0700 (PDT)
+Date: Mon, 29 Sep 2025 14:35:24 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Thorsten Blum <thorsten.blum@linux.dev>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org
+Subject: Re: [PATCH] rust: cpufreq: streamline find_supply_names
+Message-ID: <20250929090524.ztcp6o6qndml54lm@vireshk-i7>
+References: <20250915135954.2329723-2-thorsten.blum@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <72b9ae1e-18a4-4b59-9c01-1248c38eee43@linuxfoundation.org>
-In-Reply-To: <72b9ae1e-18a4-4b59-9c01-1248c38eee43@linuxfoundation.org>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 29 Sep 2025 10:12:21 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0gsa3wMJ_xKj1M=vxq3WA0Ksj4TXOxOpRYPz0PDYJb09g@mail.gmail.com>
-X-Gm-Features: AS18NWBW1DK_FG7uJ7i4RTcL2v1WnvaLFMQFkkGn90AurpyckD-me-E65oQJEO4
-Message-ID: <CAJZ5v0gsa3wMJ_xKj1M=vxq3WA0Ksj4TXOxOpRYPz0PDYJb09g@mail.gmail.com>
-Subject: Re: [GIT PULL] cpupower update for Linux 6.18-rc1
-To: Shuah Khan <skhan@linuxfoundation.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, shuah <shuah@kernel.org>, 
-	Thomas Renninger <trenn@suse.com>, Thomas Renninger <trenn@suse.de>, "John B. Wyatt IV" <jwyatt@redhat.com>, 
-	John Kacur <jkacur@redhat.com>, Linux PM <linux-pm@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250915135954.2329723-2-thorsten.blum@linux.dev>
 
-Hi Shuah,
+On 15-09-25, 15:59, Thorsten Blum wrote:
+> Remove local variables from find_supply_names() and use .and_then() with
+> the more concise kernel::kvec![] macro, instead of KVec::with_capacity()
+> followed by .push() and Some().
+> 
+> No functional changes intended.
+> 
+> Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
+> ---
+>  drivers/cpufreq/rcpufreq_dt.rs | 10 +++-------
+>  1 file changed, 3 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/rcpufreq_dt.rs b/drivers/cpufreq/rcpufreq_dt.rs
+> index 7e1fbf9a091f..224d063c7cec 100644
+> --- a/drivers/cpufreq/rcpufreq_dt.rs
+> +++ b/drivers/cpufreq/rcpufreq_dt.rs
+> @@ -28,15 +28,11 @@ fn find_supply_name_exact(dev: &Device, name: &str) -> Option<CString> {
+>  /// Finds supply name for the CPU from DT.
+>  fn find_supply_names(dev: &Device, cpu: cpu::CpuId) -> Option<KVec<CString>> {
+>      // Try "cpu0" for older DTs, fallback to "cpu".
+> -    let name = (cpu.as_u32() == 0)
+> +    (cpu.as_u32() == 0)
+>          .then(|| find_supply_name_exact(dev, "cpu0"))
+>          .flatten()
+> -        .or_else(|| find_supply_name_exact(dev, "cpu"))?;
+> -
+> -    let mut list = KVec::with_capacity(1, GFP_KERNEL).ok()?;
+> -    list.push(name, GFP_KERNEL).ok()?;
+> -
+> -    Some(list)
+> +        .or_else(|| find_supply_name_exact(dev, "cpu"))
+> +        .and_then(|name| kernel::kvec![name].ok())
+>  }
+>  
+>  /// Represents the cpufreq dt device.
 
-On Sun, Sep 28, 2025 at 10:39=E2=80=AFPM Shuah Khan <skhan@linuxfoundation.=
-org> wrote:
->
-> Hi Rafael,
->
-> Please pull the following cpupower update for Linux 6.18-rc1.
->
-> Fixes incorrect return vale in cpupower_write_sysfs() error path
-> and passing incorrect size to cpuidle_state_write_file() while
-> writing status to disable file in cpuidle_state_disable().
->
-> diff is attached.
->
-> thanks,
-> -- Shuah
->
-> ----------------------------------------------------------------
-> The following changes since commit f83ec76bf285bea5727f478a68b894f5543ca7=
-6e:
->
->    Linux 6.17-rc6 (2025-09-14 14:21:14 -0700)
->
-> are available in the Git repository at:
->
->    git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux tags/linux-c=
-pupower-6.18-rc1
->
-> for you to fetch changes up to 23199d2aa6dcaf6dd2da772f93d2c94317d71459:
->
->    tools/cpupower: Fix incorrect size in cpuidle_state_disable() (2025-09=
--24 17:15:35 -0600)
->
-> ----------------------------------------------------------------
-> linux-cpupower-6.18-rc1
->
-> Fixes incorrect return vale in cpupower_write_sysfs() error path
-> and passing incorrect size to cpuidle_state_write_file() while
-> writing status to disable file in cpuidle_state_disable().
->
-> ----------------------------------------------------------------
-> Kaushlendra Kumar (2):
->        tools/cpupower: fix error return value in cpupower_write_sysfs()
->        tools/cpupower: Fix incorrect size in cpuidle_state_disable()
->
->   tools/power/cpupower/lib/cpuidle.c  | 5 +++--
->   tools/power/cpupower/lib/cpupower.c | 2 +-
->   2 files changed, 4 insertions(+), 3 deletions(-)
-> ----------------------------------------------------------------
+Applied. Thanks.
 
-Pulled and added to linux-pm.git/linux-next, thanks!
+-- 
+viresh
 
