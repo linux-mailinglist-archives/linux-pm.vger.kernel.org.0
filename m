@@ -1,128 +1,149 @@
-Return-Path: <linux-pm+bounces-35567-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35571-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52C6DBAA894
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Sep 2025 21:57:58 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B8DCBAAD36
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Sep 2025 02:52:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 447A8189F8EB
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Sep 2025 19:58:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C1C021922BE0
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Sep 2025 00:52:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA8B0253B59;
-	Mon, 29 Sep 2025 19:57:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E50471C861A;
+	Tue, 30 Sep 2025 00:51:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U5RB08Jd"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="F08kBBKZ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF95E246BAA
-	for <linux-pm@vger.kernel.org>; Mon, 29 Sep 2025 19:57:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62CAE18871F
+	for <linux-pm@vger.kernel.org>; Tue, 30 Sep 2025 00:51:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.24
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759175864; cv=none; b=qIIzNJKCzG9L9vRINuzWYiJrYIDmFTM/E3p7mnzf8NvA3/SM0y7WU+6hVAniCfVWmOm3cG0HGM9e1jm66hlwyqf3qMtkKWiMVutogZ/gHUlINl+PdHZ/W3fcHRemgmOmAZxlrl8yb5LUfjencpryFTo9SzxPnoZ/gshukKEC+oI=
+	t=1759193515; cv=none; b=BEcC4+QUOrswutpCGnD5Tl7o5U08tlx9Zqcx/x2Fkizxyp1TYHg34L5uTjt33VHFnbyIKFWLS7fGYpZNXNRyKpXu33aJKXFVImMUBs26KxB+oe3u23b5n8BnGzqcW2e8tI1+GC13wu9RyheP2IURrUAERLaRqbkfqBQGfHup5D8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759175864; c=relaxed/simple;
-	bh=ILAe+VRfX0Fc+b5qLvaJzfBUJ4qz7jOpbJP92apYs7g=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WQMGpaVXlabeFR1oYqUaQLh5XVI1d4V0eK2CMFZj/xn+jUa1b6iiFe++vfVqWGl13mxtUlp5d/sWDszmp9zEPUOWQ1NuBFOkV4hhmGujV3t7WpQdjNkpQPxHLQDh+TDmIbSHAliyjEPzatLRv5UgWsRXGp7GbaQx5sltI60RKVY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U5RB08Jd; arc=none smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2680ee37b21so9800655ad.0
-        for <linux-pm@vger.kernel.org>; Mon, 29 Sep 2025 12:57:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1759175862; x=1759780662; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ILAe+VRfX0Fc+b5qLvaJzfBUJ4qz7jOpbJP92apYs7g=;
-        b=U5RB08Jdp+02qM+f5Mp+vuiVmfSvgvAx9OiS9eb/dfT+moX3pfMb+UYBBkKAocEnWD
-         lb08aQk8t3PnXYbC6FKFPEpeNN+0C3ZK5K8O+tVbR+xM/l1tcssKZVmm03IKwOTCHEle
-         otJ3pGwplRt2pfEJJEZvwsiu9yLStl62IrDFTM2XX7CeRRpwmQk921H0CmTYR3OS71XF
-         NekIyiGHf8khHUgEJ7/Wg2ZlzVBCZ0wFeOg6ADpKhHUA9qnm0NL23qr46rSElBRBhtmX
-         ruanjoQ1J/SgQ4bkiNZDbqTlMP5Xkn+l9J62YsWvCV6Vi6j5khk+VeQK0XuWqSD6UIog
-         WvXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759175862; x=1759780662;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ILAe+VRfX0Fc+b5qLvaJzfBUJ4qz7jOpbJP92apYs7g=;
-        b=CkvH+RKZDSgBKwQsocCQv/x0R5mM3EJFLDqzXPiyXtyw7DamYdC42tU3VgWO+eXDZg
-         qMc6XvEMtfQph0OsXNQbciZ9BShm6B18qvgAFUfqTeBXUd0919Ebiy+fKdTLoKvSnGLI
-         /BYXOtVXUm+R1PyQIptuLvU2BHLPLVPv+fcgGQsTQ75W8HpYDVklozMUXGxF8nyo0jE7
-         /l42lP0822ndmUwiuMSs0NdjOrmVaBeMhD6mWL0FrXIQnKuR/xRkewmcQuMb82WssDJj
-         D1oXrvPrzMsPGgICTm7RVUe9dGcPiDl2BbwkwQ0BbQn7Ianir43OKT6r6yjU81bSqsN6
-         KNKw==
-X-Forwarded-Encrypted: i=1; AJvYcCUa9FT6qhxBRXKynUdh4goVPQm/aA+LY6HTkyySxo0ukxoB/nEDaSB1jGw8UO5O/ZsprV0JgtWsDw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzcsAkTheVub7iSNGji6f5q9ZSKoj0vtjjwfoqccHhLnE2mlgMZ
-	iIX/88F/3kR8vWI3vBb8hYR6aYwnLhIG6oPAF1DdCPL0aXS+InyEBAr62jOA68j2Oeo35gPK6mz
-	a8gLvbs7XTWD4J0iqgaehQwxlZZyOfRY=
-X-Gm-Gg: ASbGncur9D3tIWke2QROJRN4fGggneZVync75w0LaSOxC8fzBHK0Qs2S2ykwJG/7FUX
-	S/RL3hkdqkyOqhaxjHeu8Rx8QoBCuKNlo1cTRNgvLmRjBr3jbArqCDoCGV0CJKrbvay0821nSno
-	yCSrG2Vl1wZ5/7qIzvvO7N12cDL7GgMvOr25j2mBdsG1eNLNwGqPXRA59BhbbRGZdXMurjjf66R
-	OY/PLo5so3Q1ojwjbCld+YmOjUsZRJ0oMAcau1kBEjg40ILyjI1RF2I2DMbaFSb9QWVhYRMHh72
-	cGVairXVty3qepOXjdjFZ+m9Tfe0m4UUk/Es
-X-Google-Smtp-Source: AGHT+IGYfATe7mmNTC4A+jEkwD5MzSelb1z0lWF68kS0t/NWgoEWKg6nD9jI4X3FoSNWbDyeH2i7qWWFajxt0X+1x5w=
-X-Received: by 2002:a17:902:d501:b0:277:c230:bfc7 with SMTP id
- d9443c01a7336-27ed4a5d82bmr113039375ad.11.1759175862141; Mon, 29 Sep 2025
- 12:57:42 -0700 (PDT)
+	s=arc-20240116; t=1759193515; c=relaxed/simple;
+	bh=T4ISR1GIOkbT9BMWirj+as+5c6tDPDqoXja51DTSV2I=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type:
+	 References; b=Ra/rhQd96NHSgoWJ+oxTlgH6vnxwHr3mOrzQhajOacIROSI+QDyYoCoXYQ0m4z+eJaJdfXFcxWQHB4Ax4xwHZK0kfOZN+yyASRqLtq1hIwhL5HC3AnCyfBV/RorT8bRl1xM6TpD5tfoqUjlLnA2CpdR/RuFClzPYSLC53b8aPhw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=F08kBBKZ; arc=none smtp.client-ip=203.254.224.24
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
+	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20250930005149epoutp01425901be88c151d6f5bd3b63ff2dba6c~p6S0XIcAv0349803498epoutp01l
+	for <linux-pm@vger.kernel.org>; Tue, 30 Sep 2025 00:51:49 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20250930005149epoutp01425901be88c151d6f5bd3b63ff2dba6c~p6S0XIcAv0349803498epoutp01l
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1759193509;
+	bh=9ogVqn3pQ7TBJXc/xpq6DvXIo0NamG6SUGhoitEXyNA=;
+	h=From:To:Cc:Subject:Date:References:From;
+	b=F08kBBKZTdXZ9frtXPIw35melJSGt3EdS/fa2bTIZV3d0L8+rC/TtsmGffSmqtajL
+	 SX+SyzGb1zTlJ4rcYGtMf1pDCGxi0ghsemeJpmafDw4E/Q9eV0mAa5POVxUMx/A3yb
+	 Lg5tflLii6PnNpiMaEIICsnaTUqb1EknegRPJgN4=
+Received: from epsnrtp04.localdomain (unknown [182.195.42.156]) by
+	epcas2p1.samsung.com (KnoxPortal) with ESMTPS id
+	20250930005148epcas2p13b5b5974d6039ca2c2edd6afbffeda4c~p6Sz0KEbz0653306533epcas2p1q;
+	Tue, 30 Sep 2025 00:51:48 +0000 (GMT)
+Received: from epcas2p3.samsung.com (unknown [182.195.38.210]) by
+	epsnrtp04.localdomain (Postfix) with ESMTP id 4cbKJN2W9nz6B9m9; Tue, 30 Sep
+	2025 00:51:48 +0000 (GMT)
+Received: from epsmtip2.samsung.com (unknown [182.195.34.31]) by
+	epcas2p3.samsung.com (KnoxPortal) with ESMTPA id
+	20250930005147epcas2p36e57d022e5c2df908550b920aafd41c0~p6Sy5o6091112811128epcas2p3r;
+	Tue, 30 Sep 2025 00:51:47 +0000 (GMT)
+Received: from asswp60 (unknown [10.229.9.60]) by epsmtip2.samsung.com
+	(KnoxPortal) with ESMTPA id
+	20250930005147epsmtip25ee377061c0f74467dad29514b78c7f2~p6SyzpvRW1168411684epsmtip2C;
+	Tue, 30 Sep 2025 00:51:47 +0000 (GMT)
+From: Shin Son <shin.son@samsung.com>
+To: Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>, Krzysztof Kozlowski
+	<krzk@kernel.org>, "Rafael J . Wysocki" <rafael@kernel.org>, Daniel Lezcano
+	<daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, Lukasz Luba
+	<lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>, Conor Dooley
+	<conor+dt@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>, Henrik Grimler
+	<henrik@grimler.se>
+Cc: Shin Son <shin.son@samsung.com>, linux-pm@vger.kernel.org,
+	linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v6 0/3] Add exynosautov920 thermal support
+Date: Tue, 30 Sep 2025 09:51:36 +0900
+Message-ID: <20250930005139.1424963-1-shin.son@samsung.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250925-core-cstr-cstrings-v2-0-78e0aaace1cd@gmail.com>
-In-Reply-To: <20250925-core-cstr-cstrings-v2-0-78e0aaace1cd@gmail.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Mon, 29 Sep 2025 21:57:28 +0200
-X-Gm-Features: AS18NWCM9kbfT7mylXQdGB8ZyL_b6RmUa1M3XR6zo5RoraO0TPm_DutHWVTmZ7c
-Message-ID: <CANiq72m=TJMWFZhHSSU_-A3+tr5h8vA+X+oKb9TcieXQ6gHyJg@mail.gmail.com>
-Subject: Re: [PATCH v2 00/19] rust: replace `kernel::c_str!` with C-Strings
-To: Tamir Duberstein <tamird@gmail.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
-	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	FUJITA Tomonori <fujita.tomonori@gmail.com>, Andrew Lunn <andrew@lunn.ch>, 
-	Heiner Kallweit <hkallweit1@gmail.com>, Russell King <linux@armlinux.org.uk>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Breno Leitao <leitao@debian.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, 
-	Dave Ertman <david.m.ertman@intel.com>, Ira Weiny <ira.weiny@intel.com>, 
-	Leon Romanovsky <leon@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
-	=?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Brendan Higgins <brendan.higgins@linux.dev>, 
-	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, Jens Axboe <axboe@kernel.dk>, 
-	Alexandre Courbot <acourbot@nvidia.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Liam Girdwood <lgirdwood@gmail.com>, 
-	Mark Brown <broonie@kernel.org>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	rust-for-linux@vger.kernel.org, nouveau@lists.freedesktop.org, 
-	dri-devel@lists.freedesktop.org, netdev@vger.kernel.org, 
-	linux-clk@vger.kernel.org, linux-pci@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-CMS-MailID: 20250930005147epcas2p36e57d022e5c2df908550b920aafd41c0
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+cpgsPolicy: CPGSC10-234,Y
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20250930005147epcas2p36e57d022e5c2df908550b920aafd41c0
+References: <CGME20250930005147epcas2p36e57d022e5c2df908550b920aafd41c0@epcas2p3.samsung.com>
 
-On Thu, Sep 25, 2025 at 3:54=E2=80=AFPM Tamir Duberstein <tamird@gmail.com>=
- wrote:
->
-> Changes in v2:
+This patch series adds support for exynosautov920, automotive-grade
+processor. Although the exynosautov920's TMU hardware differs slightly
+from exisiting platform, its read and calibration logic closely follow
+our legacy TMU interface. To prevent runtime and build time errors,
+it is kept as a single change rather than being split.
 
-For future reference, this is v3.
+This change merges the new exynosautov920-specific register definitions and
+timing parameters into the exynos-tmu driver, ensuring consistent behavior
+across all Exynos series. All new code paths have been tested on a
+exynosautov920 board and verified to correctly read temperatures and
+emulate behavior.
 
-Cheers,
-Miguel
+Changes in v6:
+- Add a reviewer for the thermal driver patch.
+
+Changes in v5:
+- Changed the maximum number of thermal sensors to 15.
+
+Changes in v4:
+- Kept 'addtionalProperties: false'.
+- Removed the 'samsung,hw-sensor-indices' property in the binding.
+- Added the 'samsung,sensors' property in the binding.
+- Dropped code-like formatting and rewrote the description in plain,
+  hardware-focused language in the commit message.
+- Removed the bitmap and replaced the tz_count to sensor_count.
+
+Changes in v3:
+- Removed redundant commit message.
+- Rephrased the sentences to describe the hardware clearly.
+- Restricted sensor indices to V920.
+- Set #thermal-sensor-cells per variant.
+- Replaced 'additionalProperties' with 'unevaluatedProperties'.
+- Removed the duplicate #define and use the original.
+- Used lowercase hex in #define.
+- Simplified 'temp_to_code' and 'code_to_temp' to one computation
+  path by normalizing calib_temp.
+
+Changes in v2:
+- Replace the generic property with a vendor-specific one.
+- Added an indices property instead of ranges.
+- Shortened thermal node name and made them more generic.
+- Updated the indices logic accordingly after removing the ranges property.
+
+Shin Son (3):
+  dt-bindings: thermal: samsung: Adjust '#thermal-sensor-cells' to 1
+  thermal: exynos_tmu: Support new hardware and update TMU interface
+  arm64: dts: exynosautov920: Add multiple sensors
+
+ .../thermal/samsung,exynos-thermal.yaml       |  32 +-
+ .../boot/dts/exynos/exynosautov920-tmu.dtsi   | 377 ++++++++++++++++++
+ .../arm64/boot/dts/exynos/exynosautov920.dtsi |  31 ++
+ drivers/thermal/samsung/exynos_tmu.c          | 322 +++++++++++++--
+ 4 files changed, 724 insertions(+), 38 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/exynos/exynosautov920-tmu.dtsi
+
+-- 
+2.50.1
+
 
