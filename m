@@ -1,327 +1,353 @@
-Return-Path: <linux-pm+bounces-35602-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35603-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48E2CBAD2C6
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Sep 2025 16:28:41 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 06375BAE50E
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Sep 2025 20:30:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 025223AB29D
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Sep 2025 14:28:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 187563243F8
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Sep 2025 18:30:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F5992F60D8;
-	Tue, 30 Sep 2025 14:28:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CE55233721;
+	Tue, 30 Sep 2025 18:30:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FOt1zw/l"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="NTpNr6ro"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B891518BBAE;
-	Tue, 30 Sep 2025 14:28:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B72726AA94
+	for <linux-pm@vger.kernel.org>; Tue, 30 Sep 2025 18:30:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759242515; cv=none; b=uX7No+Fxg+qJSgcGdXfzyZc1N4QQvI6VhxqGRSGtGmiM3QUZVl4USA1OTNcdmkcJB5kzf091/YuZbHuuPwnixy9IRy1wxHamYYCd1nTG608IxnBJW0Q5ANeCNi5OmzravR26QEd2x2R/xv4OSh139vwuDF++BvTu0DHfpvqDnd8=
+	t=1759257011; cv=none; b=MM6RZAHHgObd3RQP/73CN1n47j6vbzEFrNbPXhdQmlqNaHpaI4qW6NtcJZWfEDYCz19PHT0NyhS1DD8e/6e5sF0UJFecHDlDv9h0qfhsYjUpBRe3ZiqdFJytCdhO+xB3uZ/4Ztdphxe89EtNU93z1T0Y681YvYHGxMmW7mmzL+g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759242515; c=relaxed/simple;
-	bh=Usmlj1v2+LdEC/uxEcMopBTDkK15sW9XtIK1Py4BKmg=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=r3+t5r/Nwbosawzz+kS7ETjCEDtvoMjTLwj/LlVyOUR3YeMaX3jguQopcJNOHhSJ+hCm7DiDUfSpcRjbNgvKm/HTF0KbEkLLIr9T94/DkyglWLCrLi7lGcctfm4aUMjsLR5kK14/ElUrFFMuyIxuE8oQJo3HlteeFu4XdqA6pGM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FOt1zw/l; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1759242514; x=1790778514;
-  h=date:from:to:cc:subject:message-id;
-  bh=Usmlj1v2+LdEC/uxEcMopBTDkK15sW9XtIK1Py4BKmg=;
-  b=FOt1zw/lqVPPQc97Aqgolr11WgYMo7CixvQCkWo5ryW52Qs0U9SgQrX3
-   i7bZeobe0gCbeJ9QO5tRBWO07l4lSrN5ZKwwrKVe47ev75gt8VI58MC2o
-   yQfWdCRPtdzaH09PYzfSwMctUPU2IS3GzSNZMJzQcELIYI4wQrKzZwt8E
-   ie+AZMbdLCd2rCjuBxobdt91R3wUooe1wHLNo25dGJQdeygU9LlPdMLu/
-   az2cWmLOrKtUFHdY7+OqvQRY0+abyHGcTXLDbHakSKBB20GhPCqkFAo4N
-   xAuuubcgrziNVrGOsao3NzddDt8XRbfW5szPcAiSmkAFr7rbd7iUDkaHT
-   g==;
-X-CSE-ConnectionGUID: 13pZpYOpSimtJ/L5I/t0vQ==
-X-CSE-MsgGUID: LxKJtxpkSBCi5Bhnp1Z87A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11568"; a="79149636"
-X-IronPort-AV: E=Sophos;i="6.18,304,1751266800"; 
-   d="scan'208";a="79149636"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2025 07:28:33 -0700
-X-CSE-ConnectionGUID: 0QxdjBEVQf+4kfoJ2PVzGg==
-X-CSE-MsgGUID: l2vfDSPDTDe1BnZxIs1XUg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,304,1751266800"; 
-   d="scan'208";a="182828374"
-Received: from lkp-server01.sh.intel.com (HELO 2f2a1232a4e4) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 30 Sep 2025 07:28:30 -0700
-Received: from kbuild by 2f2a1232a4e4 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1v3bL7-0001Q1-1z;
-	Tue, 30 Sep 2025 14:28:25 +0000
-Date: Tue, 30 Sep 2025 22:28:22 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- f069ca0d4b00cc7b79c2c483efe72a01794dce3a
-Message-ID: <202509302213.Pl5iMl9j-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1759257011; c=relaxed/simple;
+	bh=2fprUro17ie4PWIC19iF6b3Q4lDTyuS1p+GZtbylDuY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ks3iNZiCJ85QGZfiz6LVEtdIekKaqCXTzxKYl9R+ylAC5eM85ciRI9fLOBoR/ysR+FOkYNiI/iiVWHBbGRdtUZXNPXSIXmCsqciXk8gAjcckQY78SLFlyTZXy1UDDIgmElRhfTbc0P/4DMEifTlz4qot8+NN3oF+RZcKr7JnP+0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=NTpNr6ro; arc=none smtp.client-ip=209.85.218.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-b3e44f22f15so448205766b.2
+        for <linux-pm@vger.kernel.org>; Tue, 30 Sep 2025 11:30:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1759257007; x=1759861807; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Azc7KtpOmq9KDMPymszDCWdQCW8aPtYjtZWF1NvbqVw=;
+        b=NTpNr6roz5c07/YhgskGXEXo0KVr2vR84PxLvVGO256TLL5+kjqM9ChQVW34A5AQJr
+         FlBQ+bjRxvaTEg8/oV3LwLG0UFsC6s1U3npxziIkkPIW9b88MmjFdOypoy7YIt1liuN2
+         PeOSnIIxTDhMY9tKQauI6NR6t4UZcId+3KOrx3d6amrUM5A1RL98qRUnkVPZqEQa0LM3
+         lbDO7VAxA8zToleRms48eQyTNijFYslfOo8pjLlL4kp9ThbDNBXmboqamA51cG2bT6hO
+         HJ1GWlTfdYLvZkwn1eRFVkFt0Dmkw9wzFgCm4bnnhBtTDRDIHFHzI7S2YcQY4zWh6M5P
+         XUkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1759257007; x=1759861807;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Azc7KtpOmq9KDMPymszDCWdQCW8aPtYjtZWF1NvbqVw=;
+        b=rqlj6mf3PB+e1IWzaVdOVKrWLFV+W4O9VLCGloQRTtuQ1+XRk1A6Gw3f81ygSggW2Q
+         rHN67431w4keLmcXw/onjpYvBMHnCrpzoww5Ltzqgcv9jKYSBTN/l5Z9s9E3UnT6obz0
+         58HvFxUimGYlKv+I7y3zvIZl0mVVcqDgkaPRo7g11crgcBKjnLIf3/ecAXrHHhs1/0/w
+         Wf9x0DotGoHap+p7F/ffX2Kf0rJNcaeBdDr3Bkn7k5rNyyfej524mQdeIcJgJCHm41sn
+         NBh5xeSnHpA3n2Pl9NtCTxk1014a9oFtUZ3zcr6lUMfLkFHjgaTeGNrNWMX5SiV63aC3
+         GOQQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUezQfNuEl/emQiJB+QOLm8VAZGbxq4knyK+uNUWorP+j6Xvf+iVx8sgG9Xs9zlCvumGK4BJaryFg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwbC+WLj2vsrqM4gq0gIGlkQLcSfCSGvlptOoVeJLJW+cXjc62A
+	t/8YEDkmmK+gSSykdWIUSmlneDgGfzl2kGT1WURBy8mSfIz+1Q3mthU5XVi5CWE/3hTh+J18s1R
+	eWyPKaO6AfzH0tAxcRVtnvFdwRIbq9meaDtwdDcCxLOtMR0gvwwg4FNqKdK4=
+X-Gm-Gg: ASbGncvtnJncwGcGF0ocrChlkX4AUjAvSKCYPywVOhcXoa5HaEJ13YW/ZHYjWqiiGAu
+	WTk3qS7/B2o5VWV9HYzqU75tlYWeYkp7yfrv72Q2VwwkWlwplLiuIxuiIvYPOg7mhS8nNaEkP4U
+	QQoLlCNBQtXt/wyHKny2+CLvDPQFvo1my204T5uHfnYSLkr4o0H6xKKFLNofPR7zLFSln4Afkku
+	Ah7Ux53OXdSMvIPPeI5rZ51V+BiUfzewn/HezdM+c0yhAUdzlLfz28vA/Awah50+A==
+X-Google-Smtp-Source: AGHT+IFqyjh3mPi6+6FMhbJxPgb4CS8XWaueZwWZ7jmSqYonihtdGx0W4eJbXZ1PgK6LIyQhWOzkc1AMKLrRUFaUZ4k=
+X-Received: by 2002:a17:907:3f07:b0:b3d:656b:9088 with SMTP id
+ a640c23a62f3a-b46e76d4513mr79822066b.54.1759257006426; Tue, 30 Sep 2025
+ 11:30:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20250911185314.2377124-1-wusamuel@google.com>
+In-Reply-To: <20250911185314.2377124-1-wusamuel@google.com>
+From: Samuel Wu <wusamuel@google.com>
+Date: Tue, 30 Sep 2025 11:29:55 -0700
+X-Gm-Features: AS18NWCN3wIoqj5C8qOe4_WKtiqUobJBhX36tYVcGEANfyeWSp89LsVfvj9OYv0
+Message-ID: <CAG2Kctqf=Q+nuuDqzkrOpjp+tOttf079DS_R8Q0pHU-k8DmFvA@mail.gmail.com>
+Subject: Re: [PATCH v4] PM: Support aborting sleep during filesystem sync
+To: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, Pavel Machek <pavel@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>
+Cc: Saravana Kannan <saravanak@google.com>, kernel-team@android.com, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: f069ca0d4b00cc7b79c2c483efe72a01794dce3a  Merge branches 'acpi-battery' and 'acpi-apei-next' into bleeding-edge
+Hi Rafael,
 
-elapsed time: 1335m
+Just a friendly ping on this patch. Please let me know if there's any
+feedback or if you'd like me to make any changes.
 
-configs tested: 234
-configs skipped: 4
+Thanks,
+Sam
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                             allnoconfig    clang-22
-alpha                             allnoconfig    gcc-15.1.0
-alpha                            allyesconfig    clang-19
-alpha                            allyesconfig    gcc-15.1.0
-alpha                               defconfig    clang-19
-arc                              allmodconfig    clang-19
-arc                              allmodconfig    gcc-15.1.0
-arc                               allnoconfig    clang-22
-arc                               allnoconfig    gcc-15.1.0
-arc                              allyesconfig    clang-19
-arc                              allyesconfig    gcc-15.1.0
-arc                                 defconfig    clang-19
-arc                   randconfig-001-20250930    gcc-10.5.0
-arc                   randconfig-001-20250930    gcc-9.5.0
-arc                   randconfig-002-20250930    gcc-10.5.0
-arc                   randconfig-002-20250930    gcc-8.5.0
-arm                              allmodconfig    clang-19
-arm                              allmodconfig    gcc-15.1.0
-arm                               allnoconfig    clang-22
-arm                              allyesconfig    clang-19
-arm                              allyesconfig    gcc-15.1.0
-arm                          collie_defconfig    gcc-15.1.0
-arm                                 defconfig    clang-19
-arm                         orion5x_defconfig    gcc-15.1.0
-arm                   randconfig-001-20250930    gcc-10.5.0
-arm                   randconfig-001-20250930    gcc-13.4.0
-arm                   randconfig-002-20250930    gcc-10.5.0
-arm                   randconfig-002-20250930    gcc-8.5.0
-arm                   randconfig-003-20250930    gcc-10.5.0
-arm                   randconfig-003-20250930    gcc-8.5.0
-arm                   randconfig-004-20250930    gcc-10.5.0
-arm                          sp7021_defconfig    gcc-15.1.0
-arm64                            allmodconfig    clang-19
-arm64                             allnoconfig    clang-22
-arm64                             allnoconfig    gcc-15.1.0
-arm64                               defconfig    clang-19
-arm64                 randconfig-001-20250930    clang-18
-arm64                 randconfig-001-20250930    gcc-10.5.0
-arm64                 randconfig-002-20250930    clang-22
-arm64                 randconfig-002-20250930    gcc-10.5.0
-arm64                 randconfig-003-20250930    clang-18
-arm64                 randconfig-003-20250930    gcc-10.5.0
-arm64                 randconfig-004-20250930    gcc-10.5.0
-arm64                 randconfig-004-20250930    gcc-8.5.0
-csky                              allnoconfig    clang-22
-csky                              allnoconfig    gcc-15.1.0
-csky                                defconfig    clang-19
-csky                  randconfig-001-20250930    gcc-13.4.0
-csky                  randconfig-001-20250930    gcc-8.5.0
-csky                  randconfig-002-20250930    gcc-13.4.0
-csky                  randconfig-002-20250930    gcc-8.5.0
-hexagon                          allmodconfig    clang-17
-hexagon                          allmodconfig    clang-19
-hexagon                           allnoconfig    clang-22
-hexagon                          allyesconfig    clang-19
-hexagon                          allyesconfig    clang-22
-hexagon                             defconfig    clang-19
-hexagon               randconfig-001-20250930    clang-22
-hexagon               randconfig-001-20250930    gcc-8.5.0
-hexagon               randconfig-002-20250930    clang-22
-hexagon               randconfig-002-20250930    gcc-8.5.0
-i386                             allmodconfig    clang-20
-i386                              allnoconfig    clang-20
-i386                             allyesconfig    clang-20
-i386        buildonly-randconfig-001-20250930    clang-20
-i386        buildonly-randconfig-001-20250930    gcc-12
-i386        buildonly-randconfig-002-20250930    clang-20
-i386        buildonly-randconfig-002-20250930    gcc-14
-i386        buildonly-randconfig-003-20250930    clang-20
-i386        buildonly-randconfig-004-20250930    clang-20
-i386        buildonly-randconfig-004-20250930    gcc-14
-i386        buildonly-randconfig-005-20250930    clang-20
-i386        buildonly-randconfig-006-20250930    clang-20
-i386                                defconfig    clang-20
-i386                  randconfig-001-20250930    gcc-14
-i386                  randconfig-002-20250930    gcc-14
-i386                  randconfig-003-20250930    gcc-14
-i386                  randconfig-004-20250930    gcc-14
-i386                  randconfig-005-20250930    gcc-14
-i386                  randconfig-006-20250930    gcc-14
-i386                  randconfig-007-20250930    gcc-14
-i386                  randconfig-011-20250930    gcc-14
-i386                  randconfig-012-20250930    gcc-14
-i386                  randconfig-013-20250930    gcc-14
-i386                  randconfig-014-20250930    gcc-14
-i386                  randconfig-015-20250930    gcc-14
-i386                  randconfig-016-20250930    gcc-14
-i386                  randconfig-017-20250930    gcc-14
-loongarch                        allmodconfig    clang-19
-loongarch                         allnoconfig    clang-22
-loongarch                           defconfig    clang-19
-loongarch             randconfig-001-20250930    clang-22
-loongarch             randconfig-001-20250930    gcc-8.5.0
-loongarch             randconfig-002-20250930    clang-22
-loongarch             randconfig-002-20250930    gcc-8.5.0
-m68k                             allmodconfig    clang-19
-m68k                             allmodconfig    gcc-15.1.0
-m68k                              allnoconfig    gcc-15.1.0
-m68k                             allyesconfig    clang-19
-m68k                             allyesconfig    gcc-15.1.0
-m68k                                defconfig    clang-19
-m68k                        m5307c3_defconfig    gcc-15.1.0
-m68k                           virt_defconfig    gcc-15.1.0
-microblaze                       allmodconfig    clang-19
-microblaze                       allmodconfig    gcc-15.1.0
-microblaze                        allnoconfig    gcc-15.1.0
-microblaze                       allyesconfig    clang-19
-microblaze                       allyesconfig    gcc-15.1.0
-microblaze                          defconfig    gcc-15.1.0
-mips                              allnoconfig    gcc-15.1.0
-nios2                             allnoconfig    gcc-11.5.0
-nios2                             allnoconfig    gcc-15.1.0
-nios2                               defconfig    gcc-11.5.0
-nios2                               defconfig    gcc-15.1.0
-nios2                 randconfig-001-20250930    gcc-8.5.0
-nios2                 randconfig-002-20250930    gcc-8.5.0
-openrisc                          allnoconfig    clang-22
-openrisc                          allnoconfig    gcc-15.1.0
-openrisc                         allyesconfig    gcc-15.1.0
-openrisc                            defconfig    gcc-14
-openrisc                 simple_smp_defconfig    gcc-15.1.0
-parisc                           allmodconfig    gcc-15.1.0
-parisc                            allnoconfig    clang-22
-parisc                            allnoconfig    gcc-15.1.0
-parisc                           allyesconfig    gcc-15.1.0
-parisc                              defconfig    gcc-15.1.0
-parisc                randconfig-001-20250930    gcc-12.5.0
-parisc                randconfig-001-20250930    gcc-8.5.0
-parisc                randconfig-002-20250930    gcc-8.5.0
-parisc                randconfig-002-20250930    gcc-9.5.0
-parisc64                            defconfig    gcc-15.1.0
-powerpc                          allmodconfig    gcc-15.1.0
-powerpc                           allnoconfig    clang-22
-powerpc                           allnoconfig    gcc-15.1.0
-powerpc                          allyesconfig    clang-22
-powerpc               randconfig-001-20250930    gcc-8.5.0
-powerpc               randconfig-002-20250930    gcc-14.3.0
-powerpc               randconfig-002-20250930    gcc-8.5.0
-powerpc               randconfig-003-20250930    gcc-15.1.0
-powerpc               randconfig-003-20250930    gcc-8.5.0
-powerpc64             randconfig-001-20250930    gcc-14.3.0
-powerpc64             randconfig-001-20250930    gcc-8.5.0
-powerpc64             randconfig-002-20250930    gcc-12.5.0
-powerpc64             randconfig-002-20250930    gcc-8.5.0
-powerpc64             randconfig-003-20250930    gcc-11.5.0
-powerpc64             randconfig-003-20250930    gcc-8.5.0
-riscv                            allmodconfig    clang-22
-riscv                             allnoconfig    clang-22
-riscv                             allnoconfig    gcc-15.1.0
-riscv                            allyesconfig    clang-16
-riscv                               defconfig    gcc-14
-riscv                 randconfig-001-20250930    gcc-10.5.0
-riscv                 randconfig-001-20250930    gcc-12
-riscv                 randconfig-002-20250930    clang-22
-riscv                 randconfig-002-20250930    gcc-12
-s390                             allmodconfig    clang-18
-s390                             allmodconfig    gcc-15.1.0
-s390                              allnoconfig    clang-22
-s390                             allyesconfig    gcc-15.1.0
-s390                                defconfig    gcc-14
-s390                  randconfig-001-20250930    gcc-12
-s390                  randconfig-001-20250930    gcc-12.5.0
-s390                  randconfig-002-20250930    clang-22
-s390                  randconfig-002-20250930    gcc-12
-sh                               allmodconfig    gcc-15.1.0
-sh                                allnoconfig    gcc-15.1.0
-sh                               allyesconfig    gcc-15.1.0
-sh                                  defconfig    gcc-14
-sh                        dreamcast_defconfig    gcc-15.1.0
-sh                    randconfig-001-20250930    gcc-12
-sh                    randconfig-001-20250930    gcc-15.1.0
-sh                    randconfig-002-20250930    gcc-12
-sh                    randconfig-002-20250930    gcc-15.1.0
-sh                           se7206_defconfig    gcc-15.1.0
-sparc                            allmodconfig    gcc-15.1.0
-sparc                             allnoconfig    gcc-15.1.0
-sparc                               defconfig    gcc-15.1.0
-sparc                 randconfig-001-20250930    gcc-11.5.0
-sparc                 randconfig-001-20250930    gcc-12
-sparc                 randconfig-002-20250930    gcc-12
-sparc                 randconfig-002-20250930    gcc-8.5.0
-sparc64                             defconfig    gcc-14
-sparc64               randconfig-001-20250930    clang-22
-sparc64               randconfig-001-20250930    gcc-12
-sparc64               randconfig-002-20250930    gcc-12
-sparc64               randconfig-002-20250930    gcc-9.5.0
-um                               allmodconfig    clang-19
-um                                allnoconfig    clang-22
-um                               allyesconfig    clang-19
-um                               allyesconfig    gcc-14
-um                                  defconfig    gcc-14
-um                             i386_defconfig    gcc-14
-um                    randconfig-001-20250930    gcc-12
-um                    randconfig-001-20250930    gcc-14
-um                    randconfig-002-20250930    gcc-12
-um                           x86_64_defconfig    gcc-14
-x86_64                            allnoconfig    clang-20
-x86_64                           allyesconfig    clang-20
-x86_64      buildonly-randconfig-001-20250930    clang-20
-x86_64      buildonly-randconfig-001-20250930    gcc-14
-x86_64      buildonly-randconfig-002-20250930    gcc-14
-x86_64      buildonly-randconfig-003-20250930    gcc-14
-x86_64      buildonly-randconfig-004-20250930    clang-20
-x86_64      buildonly-randconfig-004-20250930    gcc-14
-x86_64      buildonly-randconfig-005-20250930    gcc-14
-x86_64      buildonly-randconfig-006-20250930    clang-20
-x86_64      buildonly-randconfig-006-20250930    gcc-14
-x86_64                              defconfig    clang-20
-x86_64                                  kexec    clang-20
-x86_64                randconfig-001-20250930    clang-20
-x86_64                randconfig-002-20250930    clang-20
-x86_64                randconfig-003-20250930    clang-20
-x86_64                randconfig-004-20250930    clang-20
-x86_64                randconfig-005-20250930    clang-20
-x86_64                randconfig-006-20250930    clang-20
-x86_64                randconfig-007-20250930    clang-20
-x86_64                randconfig-008-20250930    clang-20
-x86_64                randconfig-071-20250930    gcc-12
-x86_64                randconfig-072-20250930    gcc-12
-x86_64                randconfig-073-20250930    gcc-12
-x86_64                randconfig-074-20250930    gcc-12
-x86_64                randconfig-075-20250930    gcc-12
-x86_64                randconfig-076-20250930    gcc-12
-x86_64                randconfig-077-20250930    gcc-12
-x86_64                randconfig-078-20250930    gcc-12
-x86_64                               rhel-9.4    clang-20
-x86_64                          rhel-9.4-func    clang-20
-x86_64                    rhel-9.4-kselftests    clang-20
-x86_64                          rhel-9.4-rust    clang-20
-xtensa                            allnoconfig    gcc-15.1.0
-xtensa                randconfig-001-20250930    gcc-12
-xtensa                randconfig-001-20250930    gcc-12.5.0
-xtensa                randconfig-002-20250930    gcc-11.5.0
-xtensa                randconfig-002-20250930    gcc-12
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+On Thu, Sep 11, 2025 at 11:53=E2=80=AFAM Samuel Wu <wusamuel@google.com> wr=
+ote:
+>
+> At the start of suspend and hibernate, filesystems will sync to save the
+> current state of the device. However, the long tail of the filesystem
+> sync can take upwards of 25 seconds. If during this filesystem sync
+> there is some wakeup or abort signal, it will not be processed until the
+> sync is complete; from a user's perspective, this looks like the device
+> is unresponsive to any form of input.
+>
+> This patch adds functionality to handle a sleep abort signal when in
+> the filesystem sync phase of suspend or hibernate. This topic was first
+> discussed specifically for suspend by Saravana Kannan at LPC 2024 [1],
+> where the general consensus was to allow filesystem sync on a parallel
+> thread. The same logic applies to both suspend and hibernate code paths.
+>
+> There is extra care needed to account for back-to-back sleeps while
+> still maintaining functionality to immediately abort during the
+> filesystem sync stage.
+>
+> This patch handles this by serializing the filesystem sync sequence with
+> an invariant; a subsequent sleep's filesystem sync operation will only
+> start when the previous sleep's filesystem sync has finished. While
+> waiting for the previous sleep's filesystem sync to finish, the
+> subsequent sleep will still abort early if a wakeup event is triggered,
+> solving the original issue of filesystem sync blocking abort.
+>
+> [1]: https://lpc.events/event/18/contributions/1845/
+>
+> Suggested-by: Saravana Kannan <saravanak@google.com>
+> Signed-off-by: Samuel Wu <wusamuel@google.com>
+> ---
+> Changes in v4:
+> - Removed patch 1/3 of v3 as it is already picked up on linux-pm
+> - Squashed patches 2/3 and 3/3 from v3 into this single patch
+> - Added abort during fs_sync functionality to hibernate in addition to su=
+spend
+> - Moved variables and functions for abort from power/suspend.c to power/m=
+ain.c
+> - Renamed suspend_fs_sync_with_abort() to pm_sleep_fs_sync()
+> - Renamed suspend_abort_fs_sync() to abort_sleep_during_fs_sync()
+> - v3 link: https://lore.kernel.org/all/20250821004237.2712312-1-wusamuel@=
+google.com/
+>
+> Changes in v3:
+> - Split v2 patch into 3 patches
+> - Moved pm_wakeup_clear() outside of if(sync_on_suspend_enabled) conditio=
+n
+> - Updated documentation and comments within kernel/power/suspend.c
+> - v2 link: https://lore.kernel.org/all/20250812232126.1814253-1-wusamuel@=
+google.com/
+>
+> Changes in v2:
+> - Added documentation for suspend_abort_fs_sync()
+> - Made suspend_fs_sync_lock and suspend_fs_sync_complete declaration stat=
+ic
+> - v1 link: https://lore.kernel.org/all/20250815004635.3684650-1-wusamuel@=
+google.com
+>
+>  drivers/base/power/wakeup.c |  8 +++++
+>  include/linux/suspend.h     |  4 +++
+>  kernel/power/hibernate.c    |  5 ++-
+>  kernel/power/main.c         | 70 +++++++++++++++++++++++++++++++++++++
+>  kernel/power/suspend.c      |  7 ++--
+>  5 files changed, 91 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
+> index d1283ff1080b..daf07ab7ac3f 100644
+> --- a/drivers/base/power/wakeup.c
+> +++ b/drivers/base/power/wakeup.c
+> @@ -570,6 +570,13 @@ static void wakeup_source_activate(struct wakeup_sou=
+rce *ws)
+>
+>         /* Increment the counter of events in progress. */
+>         cec =3D atomic_inc_return(&combined_event_count);
+> +       /*
+> +        * wakeup_source_activate() aborts sleep only if events_check_ena=
+bled
+> +        * is set (see pm_wakeup_pending()). Similarly, abort sleep durin=
+g
+> +        * fs_sync only if events_check_enabled is set.
+> +        */
+> +       if (events_check_enabled)
+> +               abort_sleep_during_fs_sync();
+>
+>         trace_wakeup_source_activate(ws->name, cec);
+>  }
+> @@ -899,6 +906,7 @@ EXPORT_SYMBOL_GPL(pm_wakeup_pending);
+>  void pm_system_wakeup(void)
+>  {
+>         atomic_inc(&pm_abort_suspend);
+> +       abort_sleep_during_fs_sync();
+>         s2idle_wake();
+>  }
+>  EXPORT_SYMBOL_GPL(pm_system_wakeup);
+> diff --git a/include/linux/suspend.h b/include/linux/suspend.h
+> index 317ae31e89b3..c961bdb00bb6 100644
+> --- a/include/linux/suspend.h
+> +++ b/include/linux/suspend.h
+> @@ -444,6 +444,8 @@ void restore_processor_state(void);
+>  extern int register_pm_notifier(struct notifier_block *nb);
+>  extern int unregister_pm_notifier(struct notifier_block *nb);
+>  extern void ksys_sync_helper(void);
+> +extern void abort_sleep_during_fs_sync(void);
+> +extern int pm_sleep_fs_sync(void);
+>  extern void pm_report_hw_sleep_time(u64 t);
+>  extern void pm_report_max_hw_sleep(u64 t);
+>  void pm_restrict_gfp_mask(void);
+> @@ -499,6 +501,8 @@ static inline void pm_restrict_gfp_mask(void) {}
+>  static inline void pm_restore_gfp_mask(void) {}
+>
+>  static inline void ksys_sync_helper(void) {}
+> +static inline abort_sleep_during_fs_sync(void) {}
+> +static inline int pm_sleep_fs_sync(void) {}
+>
+>  #define pm_notifier(fn, pri)   do { (void)(fn); } while (0)
+>
+> diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
+> index 2f66ab453823..651dcd768644 100644
+> --- a/kernel/power/hibernate.c
+> +++ b/kernel/power/hibernate.c
+> @@ -811,7 +811,10 @@ int hibernate(void)
+>         if (error)
+>                 goto Restore;
+>
+> -       ksys_sync_helper();
+> +       error =3D pm_sleep_fs_sync();
+> +       if (error)
+> +               goto Restore;
+> +
+>         if (filesystem_freeze_enabled)
+>                 filesystems_freeze();
+>
+> diff --git a/kernel/power/main.c b/kernel/power/main.c
+> index 3cf2d7e72567..38b1de295cfe 100644
+> --- a/kernel/power/main.c
+> +++ b/kernel/power/main.c
+> @@ -570,6 +570,76 @@ bool pm_sleep_transition_in_progress(void)
+>  {
+>         return pm_suspend_in_progress() || hibernation_in_progress();
+>  }
+> +
+> +static bool pm_sleep_fs_sync_queued;
+> +static DEFINE_SPINLOCK(pm_sleep_fs_sync_lock);
+> +static DECLARE_COMPLETION(pm_sleep_fs_sync_complete);
+> +
+> +/**
+> + * abort_sleep_during_fs_sync - Abort fs_sync to abort sleep early
+> + *
+> + * This function aborts the fs_sync stage of suspend/hibernate so that
+> + * suspend/hibernate itself can be aborted early.
+> + */
+> +void abort_sleep_during_fs_sync(void)
+> +{
+> +       spin_lock(&pm_sleep_fs_sync_lock);
+> +       complete(&pm_sleep_fs_sync_complete);
+> +       spin_unlock(&pm_sleep_fs_sync_lock);
+> +}
+> +
+> +static void sync_filesystems_fn(struct work_struct *work)
+> +{
+> +       ksys_sync_helper();
+> +
+> +       spin_lock(&pm_sleep_fs_sync_lock);
+> +       pm_sleep_fs_sync_queued =3D false;
+> +       complete(&pm_sleep_fs_sync_complete);
+> +       spin_unlock(&pm_sleep_fs_sync_lock);
+> +}
+> +static DECLARE_WORK(sync_filesystems, sync_filesystems_fn);
+> +
+> +/**
+> + * pm_sleep_fs_sync - Trigger fs_sync with ability to abort
+> + *
+> + * Return 0 on successful file system sync, otherwise returns -EBUSY if =
+file
+> + * system sync was aborted.
+> + */
+> +int pm_sleep_fs_sync(void)
+> +{
+> +       bool need_pm_sleep_fs_sync_requeue;
+> +
+> +Start_fs_sync:
+> +       spin_lock(&pm_sleep_fs_sync_lock);
+> +       reinit_completion(&pm_sleep_fs_sync_complete);
+> +       /*
+> +        * Handle the case where a sleep immediately follows a previous s=
+leep
+> +        * that was aborted during fs_sync. In this case, wait for the pr=
+evious
+> +        * filesystem sync to finish. Then do another filesystem sync so =
+any
+> +        * subsequent filesystem changes are synced before sleeping.
+> +        */
+> +       if (pm_sleep_fs_sync_queued) {
+> +               need_pm_sleep_fs_sync_requeue =3D true;
+> +       } else {
+> +               need_pm_sleep_fs_sync_requeue =3D false;
+> +               pm_sleep_fs_sync_queued =3D true;
+> +               schedule_work(&sync_filesystems);
+> +       }
+> +       spin_unlock(&pm_sleep_fs_sync_lock);
+> +
+> +       /*
+> +        * Completion is triggered by fs_sync finishing or an abort sleep
+> +        * signal, whichever comes first
+> +        */
+> +       wait_for_completion(&pm_sleep_fs_sync_complete);
+> +       if (pm_wakeup_pending())
+> +               return -EBUSY;
+> +       if (need_pm_sleep_fs_sync_requeue)
+> +               goto Start_fs_sync;
+> +
+> +       return 0;
+> +}
+> +
+>  #endif /* CONFIG_PM_SLEEP */
+>
+>  #ifdef CONFIG_PM_SLEEP_DEBUG
+> diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
+> index 4bb4686c1c08..c019a4396c1f 100644
+> --- a/kernel/power/suspend.c
+> +++ b/kernel/power/suspend.c
+> @@ -31,6 +31,7 @@
+>  #include <linux/compiler.h>
+>  #include <linux/moduleparam.h>
+>  #include <linux/fs.h>
+> +#include <linux/workqueue.h>
+>
+>  #include "power.h"
+>
+> @@ -588,14 +589,16 @@ static int enter_state(suspend_state_t state)
+>         if (state =3D=3D PM_SUSPEND_TO_IDLE)
+>                 s2idle_begin();
+>
+> +       pm_wakeup_clear(0);
+>         if (sync_on_suspend_enabled) {
+>                 trace_suspend_resume(TPS("sync_filesystems"), 0, true);
+> -               ksys_sync_helper();
+> +               error =3D pm_sleep_fs_sync();
+>                 trace_suspend_resume(TPS("sync_filesystems"), 0, false);
+> +               if (error)
+> +                       goto Unlock;
+>         }
+>
+>         pm_pr_dbg("Preparing system for sleep (%s)\n", mem_sleep_labels[s=
+tate]);
+> -       pm_wakeup_clear(0);
+>         pm_suspend_clear_flags();
+>         error =3D suspend_prepare(state);
+>         if (error)
+> --
+> 2.51.0.384.g4c02a37b29-goog
+>
 
