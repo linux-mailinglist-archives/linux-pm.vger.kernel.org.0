@@ -1,46 +1,46 @@
-Return-Path: <linux-pm+bounces-35574-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35575-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 526C4BAB258
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Sep 2025 05:23:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 79A7ABAB27C
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Sep 2025 05:30:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E8B4E3BA227
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Sep 2025 03:23:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F1080192183E
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Sep 2025 03:30:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFBE12264CD;
-	Tue, 30 Sep 2025 03:23:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FF2E227BB9;
+	Tue, 30 Sep 2025 03:30:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="Fwu5AsG9"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="Vx6/AK4X"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from out30-124.freemail.mail.aliyun.com (out30-124.freemail.mail.aliyun.com [115.124.30.124])
+Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 166A52940D;
-	Tue, 30 Sep 2025 03:23:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 634C534BA3B;
+	Tue, 30 Sep 2025 03:30:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.113
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759202615; cv=none; b=VLafGFFqImaSr6amCOen6nKC1JpD9bl00gQwaPImx7ySl9QYF32eH4Rp+4F8bEYGp9pmCY/PkxtrrCq9dCZEJ5XbcSIaFR9dammvefF9qPieiWGUGzgxh6lBCJZgcq6cSdv6JjbMpbgnQGs1hhVqByoGJpvi1VWOO9JthYX+k8g=
+	t=1759203030; cv=none; b=Oy1vdoM8pMn/1krMsGgZEIYWGrvAtIZGJGbW8/8QBGVs7YzZ6p/wlrzr2PwObCSqMLcqBLyrnndavRzxBSHljESnou182C7cj9/qExEJS6bx6tVB74zVAK5AwnUe39pMdgn48aOaLi3pYNDgh4BIgZPcUxLo/hMrZNI+/5bYVKU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759202615; c=relaxed/simple;
-	bh=eJh7zhLV5x7Mxn5GEAWbeJPUNyyO3U9W8Qlr8GufUhk=;
+	s=arc-20240116; t=1759203030; c=relaxed/simple;
+	bh=K2CDWWJ0qHeT63F8FnvttaxWUTPHaaRdxaMKMFONkyM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MfOEArYB7J20FBMmPNhwx7ikvxv0YjSwew4YkOedw7jGurUdP2lNDQu4uiG6v0edqt0g/m7tlYk1rC1kv0+Q2zqP8YDu0osxGK7HHfaHIpOjUBhJqU2m1PueOJfeaV+3ddX1UuTImiRADExKiI2f5q9eu9bFLpPe8FcGPPCewVc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=Fwu5AsG9; arc=none smtp.client-ip=115.124.30.124
+	 In-Reply-To:Content-Type; b=H0u4f6wRbLmxTWuZkYltoFApg1uekd1NG0boh2203vu7WjU/Dx6AiZf3CV0H7J+1D8+jRL4t74ryu0M6jaG/9xen3xEFoSL/OziM/bk1FnSkuI111eTn9d5+f4HvGj74apmu8Xt0jWAlarOmUdXNDhaYX6rW1uqCTQ4DsYHd9Cg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=Vx6/AK4X; arc=none smtp.client-ip=115.124.30.113
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=linux.alibaba.com; s=default;
-	t=1759202608; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=rrg8tK/c3UsFS3eLKyUv3jp0wQnj3xFNgYt0DA+mTfU=;
-	b=Fwu5AsG9VwkiDzm/68F6vwNOmggWT5wO729QcqriJJ819apDMcoYXTNGxQzj19tGU5BdWoWu/JdhZG1wOXsAsM5niYmluJNGfVcCA+T4rIZ+03AADWfxQwnB+NTrZSwKTrTBhlSiSXpx/DVJVmVjDtZGLEOUlFC9fcVcWEjvJ3c=
-Received: from 30.74.144.121(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0Wp9xPwB_1759202607 cluster:ay36)
+	t=1759203017; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=3Oem0W+qLeufbGvCLtT0cwgsYSGayEg+bGHSAtmWH8Q=;
+	b=Vx6/AK4Xjg/YrSfU1hZ+YT8oHHDBwp1jirsYyYHc+vAPdC+JMl/VTP76SuSnF2Lr1czqeIf07Yu4xc6wLxVAGjEsVBzZCY/GfCDotvwA2NyOt+TvvhcBvS4zzLI3niHBdW4yXoemQQEcgNX1Lfxsai/Y5904TJI3XVjImNvZYEg=
+Received: from 30.74.144.121(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0Wp9oxBz_1759203016 cluster:ay36)
           by smtp.aliyun-inc.com;
-          Tue, 30 Sep 2025 11:23:27 +0800
-Message-ID: <52756d02-8bb2-42b6-b311-db9c28473623@linux.alibaba.com>
-Date: Tue, 30 Sep 2025 11:23:26 +0800
+          Tue, 30 Sep 2025 11:30:17 +0800
+Message-ID: <58441250-1f00-45ee-8583-9863efc938e0@linux.alibaba.com>
+Date: Tue, 30 Sep 2025 11:30:16 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -48,8 +48,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/5] power: reset: sc27xx: Use
- devm_register_sys_off_handler
+Subject: Re: [PATCH 4/5] power: reset: sc27xx: Add support for SC2730 and OF
+ match table
 To: =?UTF-8?Q?Otto_Pfl=C3=BCger?= <otto.pflueger@abscue.de>,
  Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
@@ -58,91 +58,34 @@ To: =?UTF-8?Q?Otto_Pfl=C3=BCger?= <otto.pflueger@abscue.de>,
 Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <20250926-sc2730-reboot-v1-0-62ebfd3d31bb@abscue.de>
- <20250926-sc2730-reboot-v1-3-62ebfd3d31bb@abscue.de>
+ <20250926-sc2730-reboot-v1-4-62ebfd3d31bb@abscue.de>
 From: Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <20250926-sc2730-reboot-v1-3-62ebfd3d31bb@abscue.de>
+In-Reply-To: <20250926-sc2730-reboot-v1-4-62ebfd3d31bb@abscue.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
 
 
 On 2025/9/27 00:23, Otto Pflüger wrote:
-> Use the new device life-cycle managed register function to remove the
-> need for global variables in the driver.
+> Add register definitions for the SC2730 PMIC. Introduce a new struct
+> sc27xx_poweroff_data for passing register information to the poweroff
+> handler. Implement device tree matching to distinguish between SC2730
+> and SC2731 and to probe the driver automatically.
 > 
 > Signed-off-by: Otto Pflüger <otto.pflueger@abscue.de>
 > ---
 
-LGTM. Thanks.
-Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+If I remember correctly, the original driver supported SC2730 and SC2731 
+chips. Are you sure the current changes are still needed? Have you 
+tested them on the SC2730 chip?
 
->   drivers/power/reset/sc27xx-poweroff.c | 24 +++++++++++++++++-------
->   1 file changed, 17 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/power/reset/sc27xx-poweroff.c b/drivers/power/reset/sc27xx-poweroff.c
-> index 90287c31992c4889f9241e82a21a1949ecca7702..20eb9f32cb2b99adeb16502172adf9d6257cd05f 100644
-> --- a/drivers/power/reset/sc27xx-poweroff.c
-> +++ b/drivers/power/reset/sc27xx-poweroff.c
-> @@ -9,6 +9,7 @@
->   #include <linux/module.h>
->   #include <linux/platform_device.h>
->   #include <linux/pm.h>
-> +#include <linux/reboot.h>
->   #include <linux/regmap.h>
->   #include <linux/syscore_ops.h>
->   
-> @@ -17,8 +18,6 @@
->   #define SC27XX_SLP_CTRL		0xdf0
->   #define SC27XX_LDO_XTL_EN	BIT(3)
->   
-> -static struct regmap *regmap;
-> -
->   /*
->    * On Spreadtrum platform, we need power off system through external SC27xx
->    * series PMICs, and it is one similar SPI bus mapped by regmap to access PMIC,
-> @@ -44,26 +43,37 @@ static struct syscore_ops poweroff_syscore_ops = {
->   	.shutdown = sc27xx_poweroff_shutdown,
->   };
->   
-> -static void sc27xx_poweroff_do_poweroff(void)
-> +static int sc27xx_poweroff_do_poweroff(struct sys_off_data *off_data)
->   {
-> +	struct regmap *regmap = off_data->cb_data;
-> +
->   	/* Disable the external subsys connection's power firstly */
->   	regmap_write(regmap, SC27XX_SLP_CTRL, SC27XX_LDO_XTL_EN);
->   
->   	regmap_write(regmap, SC27XX_PWR_PD_HW, SC27XX_PWR_OFF_EN);
-> +
-> +	mdelay(1000);
-> +
-> +	pr_emerg("Unable to poweroff system\n");
-> +
-> +	return NOTIFY_DONE;
->   }
->   
->   static int sc27xx_poweroff_probe(struct platform_device *pdev)
->   {
-> -	if (regmap)
-> -		return -EINVAL;
-> +	struct regmap *regmap;
->   
->   	regmap = dev_get_regmap(pdev->dev.parent, NULL);
->   	if (!regmap)
->   		return -ENODEV;
->   
-> -	pm_power_off = sc27xx_poweroff_do_poweroff;
->   	register_syscore_ops(&poweroff_syscore_ops);
-> -	return 0;
-> +
-> +	return devm_register_sys_off_handler(&pdev->dev,
-> +					     SYS_OFF_MODE_POWER_OFF,
-> +					     SYS_OFF_PRIO_DEFAULT,
-> +					     sc27xx_poweroff_do_poweroff,
-> +					     regmap);
->   }
->   
->   static struct platform_driver sc27xx_poweroff_driver = {
-> 
 
+config POWER_RESET_SC27XX
+         tristate "Spreadtrum SC27xx PMIC power-off driver"
+         depends on MFD_SC27XX_PMIC || COMPILE_TEST
+         help
+           This driver supports powering off a system through
+           Spreadtrum SC27xx series PMICs. The SC27xx series
+           PMICs includes the SC2720, SC2721, SC2723, SC2730
+           and SC2731 chips.
 
