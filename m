@@ -1,128 +1,125 @@
-Return-Path: <linux-pm+bounces-35627-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35629-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB3D7BB037B
-	for <lists+linux-pm@lfdr.de>; Wed, 01 Oct 2025 13:41:56 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0FC9BB060B
+	for <lists+linux-pm@lfdr.de>; Wed, 01 Oct 2025 14:48:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 71E2B1925317
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Oct 2025 11:42:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 675D54C0085
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Oct 2025 12:48:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE4AE2DC33F;
-	Wed,  1 Oct 2025 11:41:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6C1F26F295;
+	Wed,  1 Oct 2025 12:48:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uqlM3P7r"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1629A2D8DA3
-	for <linux-pm@vger.kernel.org>; Wed,  1 Oct 2025 11:41:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B02793A8F7
+	for <linux-pm@vger.kernel.org>; Wed,  1 Oct 2025 12:48:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759318871; cv=none; b=FJXtFQWa8RWTExD16GDvMgBLgc9x2vUyEp2tbRmS8Yl1IM2hMeCeBq4JCfW4cQN6SxtYbVq6fzV0vGCnKzsb9mlzrkewJzMddRuF2sHh76XFGeTNC23tAZs+7o3QLn5HB2eT6YACpOsiyWmVFB1oyNmt+oFYfgi7bd5aduvCu+c=
+	t=1759322894; cv=none; b=bF4fRX0NaPrja67a91P0WqskuZiK/duBjEqLTlZIjUHiGNZRD9gStlZEa6J9n6VNqTEsei7t55e4wTDAKuyh12EZeiXuhKtUuBV1u7Sfg89I1gHa+BQTH7GS2E++TxtigocCetp/S+KbhTvsaSEKHsGHU/8J2Ck30VSHfvL0ifk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759318871; c=relaxed/simple;
-	bh=sCVcLFGSHBgzzlgCNeih1gUgQqgivxmdb4FjukvBAmE=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=UiBGD41nAdumzxf5u2vehaNxEd0Ytd2MAIV6wepYHjNjWeYFQMYTjjEjxQaVCsE/rswV53vNpMQ4dt6GHFQqc7P5IWyEsD1xWNBBo2hLGQI9eI1kWunTrwekNUWxQlPxhk3Re/tO63fF/0pNUCpto9JRyzYSo7h/0YUx8PlHLOM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <s.hauer@pengutronix.de>)
-	id 1v3vCb-0006lB-Tm; Wed, 01 Oct 2025 13:40:57 +0200
-Received: from dude02.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::28])
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <s.hauer@pengutronix.de>)
-	id 1v3vCa-001PBc-31;
-	Wed, 01 Oct 2025 13:40:56 +0200
-Received: from localhost ([::1] helo=dude02.red.stw.pengutronix.de)
-	by dude02.red.stw.pengutronix.de with esmtp (Exim 4.98.2)
-	(envelope-from <s.hauer@pengutronix.de>)
-	id 1v3vCa-000000081FZ-3ZmJ;
-	Wed, 01 Oct 2025 13:40:56 +0200
-From: Sascha Hauer <s.hauer@pengutronix.de>
-Date: Wed, 01 Oct 2025 13:40:57 +0200
-Subject: [PATCH 3/3] tools: lib: thermal: expose thermal_exit symbols
+	s=arc-20240116; t=1759322894; c=relaxed/simple;
+	bh=0uii14LP1LA92VKfWGfQYjpZpUG578uPPyL31hK9Quw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Rzx29XtO68EirNWc/zk1KMyK0wKGLRaXUa1nFDm2xZlkSacUiocbu9qIJw9Zj/ojlAeJTlNN1FLe93Eaam+2V4R0mFbM/h2N6i0wXHwUOLuXKE+YwnRbmPmn0JN/ObB00Sf6nfKDaHklGr2AG2obBIb4Aks5K4JnDm+BoGQPAUE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uqlM3P7r; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC10CC4CEF4
+	for <linux-pm@vger.kernel.org>; Wed,  1 Oct 2025 12:48:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1759322893;
+	bh=0uii14LP1LA92VKfWGfQYjpZpUG578uPPyL31hK9Quw=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=uqlM3P7rUh0+4CNVBhtt4a4azofdgY5yYfMHcQ3ayXn/wFasa8dblPvyzQWfjAMMk
+	 hjhSVGlPtqFN2e9rcPE0J8SS+cmuHhfyv/H4bmJfDzdkQ7gOCvuRNF5beOyhOl+Qxt
+	 GCV3wJY9woTHaiOouEzKW78DMovoJhfuw2tiwLQmRj5OHTVuAAU+fsjwLxxdw/SGLX
+	 Rk0mAUx3XJo9pDmofNMBFYX6cwGPEHNrUAF5bzkexeomJtWPA7yNrfln3iogoKtmLc
+	 dTDYbEOHPjvayrxc1RseK2wW6lOsVsHENUYlS8+dQSHGiN8vSgaHmXtybzFj4z5IMx
+	 DHItzKJg1SNIQ==
+Received: by mail-oo1-f49.google.com with SMTP id 006d021491bc7-6401f1733d7so2976557eaf.0
+        for <linux-pm@vger.kernel.org>; Wed, 01 Oct 2025 05:48:13 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUAOePIwgpFcyX8LSQAV9rLfko9FAaCuxQl+HC6J7hRXuGgYnyyVx2A/KHfzrG0yRTK+l3elFu6wQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz0OIZIF3NMcwA443KrC0KkdBP+zJaPiOT6qseKnP5zwffsoPDp
+	GT1vmuJcAugqIuv5oFlyMOZ9VUDhI69UnBUKl6wIeT+loZkTue8VaoRxB3yiwjRv1aZ4/obJtdk
+	wVnA52Ly5Vxt0kQY26xO4zu8kzqaJFn8=
+X-Google-Smtp-Source: AGHT+IE0PDlgyrc/KZ+o6fYHXvzHEqU8maawZFuSQLk9j9AAHLsthxk6iO7ndPCFT24oNvs+b2+evShlrNyu4nRPNjI=
+X-Received: by 2002:a05:6808:1815:b0:43f:5e26:6638 with SMTP id
+ 5614622812f47-43fa402ce1cmr1766875b6e.4.1759322893148; Wed, 01 Oct 2025
+ 05:48:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251001-libthermal-install-v1-3-3071fd3f6612@pengutronix.de>
-References: <20251001-libthermal-install-v1-0-3071fd3f6612@pengutronix.de>
-In-Reply-To: <20251001-libthermal-install-v1-0-3071fd3f6612@pengutronix.de>
-To: "Rafael J. Wysocki" <rafael@kernel.org>, 
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
- Lukasz Luba <lukasz.luba@arm.com>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Sascha Hauer <s.hauer@pengutronix.de>, 
- Emil Dahl Juhl <juhl.emildahl@gmail.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1759318856; l=1350;
- i=s.hauer@pengutronix.de; s=20230412; h=from:subject:message-id;
- bh=7+99HolQ3vKPiYZj9kA6mhNE7Y7l1NRpdmL61qkcvDQ=;
- b=ItLahm49/P2FYDQB9rfkpJV7pmpab07SAEAEYHVD+xZTUJ8bG2ut/qYgSd66JTNFDjGAgdrVA
- +bDlDhxye/UDEDlWReOBW3BASv1h3YpIZEj6jpQWQljcguICXW9HwfH
-X-Developer-Key: i=s.hauer@pengutronix.de; a=ed25519;
- pk=4kuc9ocmECiBJKWxYgqyhtZOHj5AWi7+d0n/UjhkwTg=
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: s.hauer@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+References: <20251001083423.5jndpemysufxjx7f@vireshk-i7>
+In-Reply-To: <20251001083423.5jndpemysufxjx7f@vireshk-i7>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 1 Oct 2025 14:48:01 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0h5AJGwG1RAQWMg32H6510JO82VAWh8bw+z0HYNr2LbTg@mail.gmail.com>
+X-Gm-Features: AS18NWDsVfUidyLSFF8ymoMqk1gEG6WB5vBAJQGylXK7cgt8A_kCGuZKXk-2mjk
+Message-ID: <CAJZ5v0h5AJGwG1RAQWMg32H6510JO82VAWh8bw+z0HYNr2LbTg@mail.gmail.com>
+Subject: Re: [GIT PULL] cpufreq/arm fixes for 6.18-rc
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Emil Dahl Juhl <juhl.emildahl@gmail.com>
+Hi Viresh,
 
-Remove duplicate entry for thermal_init and add the missing entries for
-thermal_exit and their respectives in cmd, events, and sampling context.
-
-Signed-off-by: Emil Dahl Juhl <juhl.emildahl@gmail.com>
-Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
+On Wed, Oct 1, 2025 at 10:34=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.o=
+rg> wrote:
+>
+> Hi Rafael,
+>
+> The following changes since commit 3e681899cc6e6c77eca55dd8c7cc57b27868e8=
+a2:
+>
+>   cpufreq: mediatek: avoid redundant conditions (2025-09-04 10:20:44 +053=
+0)
+>
+> are available in the Git repository at:
+>
+>   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git tags/cpufr=
+eq-arm-updates-6.18-rc
+>
+> for you to fetch changes up to ba6018929165fc914c665f071f8e8cdbac844a49:
+>
+>   cpufreq: tegra186: Initialize all cores to max frequencies (2025-09-29 =
+14:55:50 +0530)
+>
+> ----------------------------------------------------------------
+> CPUFreq fixes for 6.18
+>
+> - Update frequency for all tegra CPUs (Aaron Kling).
+>
+> - Fix device leak in mediatek driver (Johan Hovold).
+>
+> - Rust cpufreq helper cleanup (Thorsten Blum).
+>
+> ----------------------------------------------------------------
+> Aaron Kling (2):
+>       cpufreq: tegra186: Set target frequency for all cpus in policy
+>       cpufreq: tegra186: Initialize all cores to max frequencies
+>
+> Johan Hovold (1):
+>       cpufreq: mediatek: fix device leak on probe failure
+>
+> Thorsten Blum (1):
+>       rust: cpufreq: streamline find_supply_names
+>
+>  drivers/cpufreq/mediatek-cpufreq.c | 14 +++++++++++---
+>  drivers/cpufreq/rcpufreq_dt.rs     | 10 +++-------
+>  drivers/cpufreq/tegra186-cpufreq.c | 35 +++++++++++++++++++++++++++-----=
 ---
- tools/lib/thermal/libthermal.map | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+>  3 files changed, 41 insertions(+), 18 deletions(-)
+>
+> --
 
-diff --git a/tools/lib/thermal/libthermal.map b/tools/lib/thermal/libthermal.map
-index d657176aa47fb52f2db0178069624d2feb9d0c27..1d3d0c04e4b6125f81e6e670fe3c10ab79e681d6 100644
---- a/tools/lib/thermal/libthermal.map
-+++ b/tools/lib/thermal/libthermal.map
-@@ -1,6 +1,5 @@
- LIBTHERMAL_0.0.1 {
- 	global:
--		thermal_init;
- 		for_each_thermal_zone;
- 		for_each_thermal_trip;
- 		for_each_thermal_cdev;
-@@ -9,9 +8,12 @@ LIBTHERMAL_0.0.1 {
- 		thermal_zone_find_by_id;
- 		thermal_zone_discover;
- 		thermal_init;
-+		thermal_exit;
-+		thermal_events_exit;
- 		thermal_events_init;
- 		thermal_events_handle;
- 		thermal_events_fd;
-+		thermal_cmd_exit;
- 		thermal_cmd_init;
- 		thermal_cmd_get_tz;
- 		thermal_cmd_get_cdev;
-@@ -22,6 +24,7 @@ LIBTHERMAL_0.0.1 {
- 		thermal_cmd_threshold_add;
- 		thermal_cmd_threshold_delete;
- 		thermal_cmd_threshold_flush;
-+		thermal_sampling_exit;
- 		thermal_sampling_init;
- 		thermal_sampling_handle;
- 		thermal_sampling_fd;
-
--- 
-2.47.3
-
+Pulled and added to linux-pm.git/linux-next, thanks!
 
