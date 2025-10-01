@@ -1,502 +1,269 @@
-Return-Path: <linux-pm+bounces-35638-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35640-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F888BB0F70
-	for <lists+linux-pm@lfdr.de>; Wed, 01 Oct 2025 17:09:56 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 100A2BB1220
+	for <lists+linux-pm@lfdr.de>; Wed, 01 Oct 2025 17:42:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 72E15320485
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Oct 2025 15:06:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9DA35194694A
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Oct 2025 15:43:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E4FB308F30;
-	Wed,  1 Oct 2025 15:03:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B58727FD76;
+	Wed,  1 Oct 2025 15:42:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="p/VMc1TX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mI2Lp/gE"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from BL0PR03CU003.outbound.protection.outlook.com (mail-eastusazon11012048.outbound.protection.outlook.com [52.101.53.48])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 333723081BF;
-	Wed,  1 Oct 2025 15:03:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.53.48
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759331005; cv=fail; b=SGAMWZBFXB9d4ENSHjvLhU1D0B+AsgMpPkyV45iK+ceW/ENPSZ1amu752VTd55QAj2PcXiNLqkVU6eTI1XflZ0DzR57AdxdzLpyE2H8LApYVsJB76EF/mXxrq0q37Uk9964HTEmBfNrU6kpsJDFqBgI/MkF8jgm7m7obo7F8BJE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759331005; c=relaxed/simple;
-	bh=RZBfNAP5PxpzsjhNd6Vo3+74uKc0LhOW5yhmKbmp+Ps=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=IRkX3x9Cg32YmKIH+jm/gc6u0UlRp2xatDwwV5IrNqhrsgRmIxp0wwzql5mtYx/4tmYJwDQSqfqQj3mN+sbEx63spW9yK8Fb4RG17m0tCW9a7c7h0k11wGHpKk0ec7grAkvT8z7c0f0cvHvd8L1enYBRzecsD1vQkoMSyWWkELw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=p/VMc1TX; arc=fail smtp.client-ip=52.101.53.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=lYA+0Dyv/O8oTEf6zY5UEyb0Do5/dS+GpWPJ1pL5Mo/dtU/ZNRw57y2NAHEMehDrwxTe/HeKZb+RP7nz/0Swt+xmCnTEK1a0QJS3AphAG53fC+KXnAcF6VCB7UIclxwXyQmUnLYiHf2gIBe1AtORuUIUmzlKWnykk3o/yupVBzeMjRQGODnXao28sllmQ/j7Ay5sFd8jB3g5kD0o56YM/axRzuDMYoHXCokrLLZvUi9xnFTQ8E7eXOrjyrtsTS6TINmWbQjyh2CRN4OxgeYJ8lTVMfloTFE8gxY/zdD7q5I3Zfvxg4KT1D9TQIXW5ADaiISy6eGYSI42UEUa/JKWVw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sY7/zH9uaici0RmxLrCLn4hHMhc22Jp3a9xHvklFHFY=;
- b=A1iWRR+ryum/KS70QkbmpmPjh6ThKNVxE8bDu4ny879L17AazzkcAI2QVOrGz++hGS/AszJ6UOFzVsqwBZK/IzY9386CHVeClblCKdY+FhsQfVY29fROKcl9bjtA+eL0FphcMYRq75/xGDVkC32hlokjWSvLHtNtQyeBO7s4yadA30oHwtOer6NVK/TSXb8Fe0SvQqQAjXkOEFa3gWGi9dugCHssOxczoMLWBOstc6JlBqWcAB5cxjzVPmkG5COH2SdsWt7qQFJghyeDx2ba19SRscZfUALgXA5iqHuCRpX9zcZ6fXb/uzNWAgDk/q+IlSvol7HyhjWG/MBvsocZFg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sY7/zH9uaici0RmxLrCLn4hHMhc22Jp3a9xHvklFHFY=;
- b=p/VMc1TXdYSErfoOK2t2PnHYmeFR610yStl5G8HZCagI8Znic7dHrPvfPtsrH0iOn5ofXDLg51UUVn8iJJc408pE1NdPDr3NjqSBREmfYsH9xCvIIVgQYlGcc30KeplHiKD10v+rxSUwZY7Sh5ANqCAf1bhqk2gbFsxV1lcziJvGjdvEE9k41JiexQwyqby9JzvDNV33DE9wZBr01E797tQ766ZgpUuWfAxC66nfVdAm/vXOmawiyU3dyVxOZ/sFqBkGqiZr6jSU+JnOY8GwJPRGLgm67K7XA8Dvx8aoTirxzjiaP2s4NDodLlB7rsqmr+WLc68MkhpjOpRKznMg+A==
-Received: from MN2PR15CA0005.namprd15.prod.outlook.com (2603:10b6:208:1b4::18)
- by LV3PR12MB9404.namprd12.prod.outlook.com (2603:10b6:408:219::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9160.18; Wed, 1 Oct
- 2025 15:03:15 +0000
-Received: from BN1PEPF0000468B.namprd05.prod.outlook.com
- (2603:10b6:208:1b4:cafe::f6) by MN2PR15CA0005.outlook.office365.com
- (2603:10b6:208:1b4::18) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9160.17 via Frontend Transport; Wed,
- 1 Oct 2025 15:03:15 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- BN1PEPF0000468B.mail.protection.outlook.com (10.167.243.136) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9182.15 via Frontend Transport; Wed, 1 Oct 2025 15:03:15 +0000
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.34; Wed, 1 Oct
- 2025 08:02:52 -0700
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail205.nvidia.com
- (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 1 Oct
- 2025 08:02:51 -0700
-Received: from sumitg-l4t.nvidia.com (10.127.8.14) by mail.nvidia.com
- (10.129.68.6) with Microsoft SMTP Server id 15.2.2562.20 via Frontend
- Transport; Wed, 1 Oct 2025 08:02:44 -0700
-From: Sumit Gupta <sumitg@nvidia.com>
-To: <rafael@kernel.org>, <viresh.kumar@linaro.org>, <lenb@kernel.org>,
-	<robert.moore@intel.com>, <corbet@lwn.net>, <pierre.gondois@arm.com>,
-	<zhenglifeng1@huawei.com>, <rdunlap@infradead.org>, <ray.huang@amd.com>,
-	<gautham.shenoy@amd.com>, <mario.limonciello@amd.com>, <perry.yuan@amd.com>,
-	<linux-pm@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
-	<linux-doc@vger.kernel.org>, <acpica-devel@lists.linux.dev>,
-	<linux-kernel@vger.kernel.org>
-CC: <linux-tegra@vger.kernel.org>, <treding@nvidia.com>,
-	<jonathanh@nvidia.com>, <vsethi@nvidia.com>, <ksitaraman@nvidia.com>,
-	<sanjayc@nvidia.com>, <bbasu@nvidia.com>, <sumitg@nvidia.com>
-Subject: [PATCH v3 8/8] cpufreq: CPPC: add autonomous mode boot parameter support
-Date: Wed, 1 Oct 2025 20:31:04 +0530
-Message-ID: <20251001150104.1275188-9-sumitg@nvidia.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20251001150104.1275188-1-sumitg@nvidia.com>
-References: <20251001150104.1275188-1-sumitg@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F06B02045B7;
+	Wed,  1 Oct 2025 15:42:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1759333362; cv=none; b=tPiMCuwDCPRiOXup0q8lLjzCByfTNHpKm9gDtpCt8zPnXBhiJ8fKjBdnnxy9E+8s6VOdLnaS6SqdbXzNxprgkiD2678i9bUvQFcm58uhSDOzqyNRxmr2MhTTftGvNTa4sEm55POM7JxE+66/Fqidd5MXtCwX53GZIXY7QgiAKrY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1759333362; c=relaxed/simple;
+	bh=P5cRnlUVXDRgHSrz1R7UALrb6nzM8jdRinrnuIrXiOY=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=fY0FeicsOFfGm/ng5veF2+/e3rpbHtjdVdPbViGZtCWgRL0L9SKQFikoMfRizJH+2lNA0/7t6BAcZJis1tepH4nPkNuIwfnPRFFFKmbJpMLGHgmcawg+N1Qy6n5NiYDEMnugNXwbF0RrmDuaVjbBI0BNjjVEdJ4DJGUUrKfDptI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mI2Lp/gE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 79AC2C4CEF1;
+	Wed,  1 Oct 2025 15:42:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1759333361;
+	bh=P5cRnlUVXDRgHSrz1R7UALrb6nzM8jdRinrnuIrXiOY=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=mI2Lp/gEYBhVKo1G9n+GmH17mO+M/KzAZ1yNWzItsbElFFpJqPmiEroPpVfVcIZDI
+	 oGos0VKS4dXwMztXT46nsXnSTJs+YdX2CldpmWGRTr4wY2UnGFEJkGUlCO3fX0/10+
+	 yoAjPQpcfbBiAKKiGAFU3j6IOeHW8LXIrYPOWtU+j73vYAZY9f/JEunvFoHSsjEbaN
+	 wWhyqBtRaxS6WgGRpA2mDOj/ySgkdeGMNARCD8WM3yQ6LdIBtqBDMWOjnQVXMEl5z6
+	 xnGev8UDwdML7kGkdAJxr2iIs/bnnWGKEePfxKvqj8PHYQe0C/oZL9b9ZGcitbgkRy
+	 a4i97aRDytwLw==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 648FACCA474;
+	Wed,  1 Oct 2025 15:42:41 +0000 (UTC)
+From: Samuel Kayode via B4 Relay <devnull+samuel.kayode.savoirfairelinux.com@kernel.org>
+Subject: [PATCH v12 0/6] add support for pf1550 PMIC MFD-based drivers
+Date: Wed, 01 Oct 2025 11:42:36 -0400
+Message-Id: <20251001-pf1550-v12-0-a3302aa41687@savoirfairelinux.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-NVConfidentiality: public
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN1PEPF0000468B:EE_|LV3PR12MB9404:EE_
-X-MS-Office365-Filtering-Correlation-Id: 04df0b47-98bd-4a7e-2866-08de00fba5f6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|376014|82310400026|7416014|36860700013|921020;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?Gj/kRK9JLN6KfmhtiHr0cuiJxSUDUaak1/nU+rk9xyNIcD3EyZQmnq0CaZfp?=
- =?us-ascii?Q?P9G0UNOudYSXul7q/yUO1kMvS0QqVLDzkToPLz4MRiixmZWr6XHXW81lCanC?=
- =?us-ascii?Q?G+nX06qSpn5Wvwraz2kNsluMBPVwSuywLl2EsOIjbsMl6rhplLussDWsr3Js?=
- =?us-ascii?Q?EMEZAYxMJCrhG6Wc8BgRe9oj+7BlXOaUuuSVtykG4mNeGW8gsznxclbkM3Ke?=
- =?us-ascii?Q?46D+ccAbT7x10s6zf6cbzuAnpSKiSC0KhqARHlNUXUsb7CuZ0yoqwUAh6cKq?=
- =?us-ascii?Q?7EY3UWGRdfBoeOinCNms72ozSRsRHywwdYtOvWxyA0f81pX5y3T01zs0s+H2?=
- =?us-ascii?Q?CWF4m3iusEmquiLDaGdOxOyEaz6ivK4BpNF/xCaV3cja1R0Tmo/vd6C/9iGW?=
- =?us-ascii?Q?JI41IK2dLT0Nq2Y6d/csH9GPzJ8hq/JCfoR8YDnOl8nuOo96DqIoI0GDtL3h?=
- =?us-ascii?Q?DlhfGinljb7ififcnAxv7zpCxWoeeeIqxyn8HHpx0rsuj8S+cNUPvvLe8YPg?=
- =?us-ascii?Q?WuGvZqYqyYicULreUKsVrt/sJwufaSHpz+ta/CsR5UfNFCl5cU9OeT9mJruR?=
- =?us-ascii?Q?ncHRHSCqVigOQKxF9x97g46Ung4vTTWrtDvSUHPSgC31VYKBumtpuR9GvOpX?=
- =?us-ascii?Q?7FdRGQXP8EVWR6YFNk5bZsqSqRELmMha9GQmklmCnGZKOa8h7ATUkBSxM8q3?=
- =?us-ascii?Q?/Qc/G6twgO28RRUCGfCJ6zzX9Hx7ATSQCnebdt7CG6NY3Au6ueF0kUrzyNdv?=
- =?us-ascii?Q?JaNmeyo6CRwsYptVK+wOvIcfs7V+pAeQkPviYkdZlc0W3eAiuE4eSW1H6Ee6?=
- =?us-ascii?Q?j+FYmbamGu+rsR0km5KjkzP1MFGsxwdp35jHbVgKCioXSBUnmfupvSiZYCjP?=
- =?us-ascii?Q?eLPfeG9SPb3puiwgA8TP9n6BfilMslsm1AVo6dHX6PEMu1mgzjLl7gyF9uFn?=
- =?us-ascii?Q?Ez8puD/LmZj6euSqq7MbXi6N6/QYYEwCoO8OFZOQUzvd9SiB0AQaxWfHpDd2?=
- =?us-ascii?Q?yUc4xk0seMfhSmG4/dgPRBKbmq4YEBa5tWGY0YQichp/CauJ5OKcfHvlusOH?=
- =?us-ascii?Q?hXPiRYUgv5txS0tI+onMhEj1yUc2oLLnFuxhARF8yVYU6YX/ueKLDUh80amS?=
- =?us-ascii?Q?606R8C1ItjMlmWx4EkmeXkg8N3A9gNCzkIiHCdpKgS452O8RtHUY/OpS0FWQ?=
- =?us-ascii?Q?n/3uC0r89vC/g4lwGxd1FWn4E+lsp+jWLgk5UNllEcJ1r30WpLFkp72tC5sH?=
- =?us-ascii?Q?L7A7a68zvd1yuTODe+vU/GIe7aknT+lU92C7jJQgEzezMyT/Ut4BqvfbC83z?=
- =?us-ascii?Q?dfYgenAOT4aEKPkhryJQHPyWhRzl9C3TiwAokH1/n0RqvDxXMo7Bo4sbX4ZU?=
- =?us-ascii?Q?m+ah0hXvVo/8Sj+miJEXItsxMNHrEdSiqdKkDH/vvLg5TZBVFDl+a2ZjrfPk?=
- =?us-ascii?Q?NGCzjIW3lt+AXNjuc9Er8PDSppPq2gIHHu0XffGoLQORBYwy3uG/AWyNVmqY?=
- =?us-ascii?Q?tilPX9PPIDpTeGJkVkKW57AtsRgB3O0swz3uS44UWGo4yJaL2FF45w6Kjji+?=
- =?us-ascii?Q?ez8YBydUgRsKNVPCauW6/W5L/nkGBp7iPhcL1IUj?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(376014)(82310400026)(7416014)(36860700013)(921020);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Oct 2025 15:03:15.2450
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 04df0b47-98bd-4a7e-2866-08de00fba5f6
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BN1PEPF0000468B.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV3PR12MB9404
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAOxL3WgC/33RzWrDMAwH8FcpPi9F/o572nuMHRxbXg1r0zlp6
+ Ch992kpxGGwHCXEz/JfdzZgyTiww+7OCk55yP2ZCi5ediwc/fkDmxypwQQIDVrY5pK41tBEBTx
+ BBNu1wGj4UjDl2yy9vT/rgl9XAsdnk3V+wCb0p1MeD7vJ7Lllv4PHPIx9+Z43mOQ8+fetSTbQK
+ J2MU1qGqPnr4Kc+l+Rzwc98vt725M7apKpgQC6CIqFLMWmOqF0IG4JeCRwWQZOAEaJD6b0PdkM
+ wa4EvgiFBqiRiTAhK44Zg14JYBEsCoHSyg6R03NqhrYKFmmRLgukMdsYGkB42BLcSuFkER4IG4
+ Y2yCRSmDYFDJVpRo6RU6Z4BaA+lKAi5ZfBqOF4/QrnSPcAo1wqRQnD/GI/H4wceLgUO5QIAAA=
+ =
+X-Change-ID: 20250527-pf1550-d401f0d07b80
+To: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, 
+ Mark Brown <broonie@kernel.org>, 
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
+ Sebastian Reichel <sre@kernel.org>, Frank Li <Frank.li@nxp.com>
+Cc: imx@lists.linux.dev, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-input@vger.kernel.org, 
+ linux-pm@vger.kernel.org, Abel Vesa <abelvesa@kernel.org>, 
+ Abel Vesa <abelvesa@linux.com>, Robin Gong <b38343@freescale.com>, 
+ Robin Gong <yibin.gong@nxp.com>, 
+ Enric Balletbo i Serra <eballetbo@gmail.com>, 
+ Sean Nyekjaer <sean@geanix.com>, 
+ Christophe JAILLET <christophe.jaillet@wanadoo.fr>, 
+ Samuel Kayode <samuel.kayode@savoirfairelinux.com>, 
+ Abel Vesa <abelvesa@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+ Frank Li <Frank.Li@nxp.com>, 
+ Sebastian Reichel <sebastian.reichel@collabora.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1759333360; l=8102;
+ i=samuel.kayode@savoirfairelinux.com; s=20250527;
+ h=from:subject:message-id;
+ bh=P5cRnlUVXDRgHSrz1R7UALrb6nzM8jdRinrnuIrXiOY=;
+ b=ojBzFaDZzwJLxNFrfzZ8of3V4JRFENLlBRoPkFFXPUhlhXRNsTm9ZV20bn4aFNNwEGI1wjSnh
+ Joi+K0xcwHkBjnf9zEMmvfS6yvAMOGqN/vXGhV42/uao9bciB/7VKk3
+X-Developer-Key: i=samuel.kayode@savoirfairelinux.com; a=ed25519;
+ pk=TPSQGQ5kywnnPyGs0EQqLajLFbdDu17ahXz8/gxMfio=
+X-Endpoint-Received: by B4 Relay for
+ samuel.kayode@savoirfairelinux.com/20250527 with auth_id=412
+X-Original-From: Samuel Kayode <samuel.kayode@savoirfairelinux.com>
+Reply-To: samuel.kayode@savoirfairelinux.com
 
-Add kernel boot parameter 'cppc_cpufreq.auto_sel_mode' to enable CPPC
-autonomous performance selection at system startup. When autonomous mode
-is enabled, the hardware automatically adjusts CPU performance based on
-workload demands using Energy Performance Preference (EPP) hints.
+This series adds support for pf1550 PMIC. It provides the core driver and
+sub-drivers for the regulator, power supply and input subsystems.
 
-This parameter allows to configure the autonomous mode on all CPUs
-without requiring runtime sysfs manipulation if the 'auto_sel' register
-is present.
+Patch 1 adds the DT binding document for the PMIC. Patches 2-5 adds the
+pertinent drivers. Last patch adds a MAINTAINERS entry for the drivers.
 
-When auto_sel_mode=1:
-- All CPUs are configured for autonomous operation during module init
-- EPP is set to performance preference (0x0) by default
-- Min/max performance bounds use defaults
-- CPU frequency scaling is handled by hardware instead of OS governor
+The patches 3-5 depend on the core driver provided in patch 2.
 
-For Documentation/:
-Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
-Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
+Changes since v1:
+   - DT bindings for all devices included
+   - Add onkey driver
+   - Add driver for the regulators
+   - Ensure charger is activated as some variants have it off by default
+   - Update mfd and charger driver per feedback from eballetbo@gmail.com
+   - Add myself as maintainer for these drivers
+   - Link to v1: https://lore.kernel.org/1523974819-8711-1-git-send-email-abel.vesa@nxp.com/
+
+Changes since v2:
+   - Rebase on recent mainline kernel v6.15
+   - Single yaml file containing dt bindings for all pf1550 devices
+   - irq mapping done in MFD driver as suggested by Dmitry Torokhov
+   - Drop unnecessary includes in drivers
+   - Replace dev_err with dev_err_probe in probe method of drivers
+   - Drop compatible string from drivers of the sub-devices
+   - Remove dependency on OF from drivers of the sub-devices
+   - onkey: move driver from input/keyboard into input/misc
+   - onkey: remove dependency on OF
+   - onkey: use onkey virqs instead of central irq
+   - onkey: fix integer overflow for regmap_write when unmasking
+     interrupts during pf1550_onkey_resume
+   - charger: add support for monitored-battery which is used in setting
+     a constant voltage for the charger.
+   - Address other feedback from Dmitry Torokhov and Krzysztof Kozlowski
+   - Link to v2: https://lore.kernel.org/cover.1747409892.git.samuel.kayode@savoirfairelinux.com/
+
+Changes since v3:
+   - Update manufacturer from Freescale to NXP in compatible,
+     dt-binding and Kconfigs
+   - Use C++ style comments for SPDX license in .c code
+   - Add portions copyright to source code
+   - irqs are defined as struct resource in mfd cell such that
+     platform_get_irq is used in the sub-devices
+   - Make struct pf1550_dev of type const in sub-device driver
+   - irq variable dropped from sub-device driver struct
+   - EXPORT_SYMBOL of global pf1550_read_otp function for use in
+     regulator driver
+   - Drop unneeded info in driver_data when defining device table id
+   - regulator: validate ramp_delay
+   - regulator: report overcurrent and over temperature events
+   - onkey: drop unnecessary keycode variable
+   - onkey: change wakeup variable to type bool
+   - onkey: replace (error < 0) with error in if statement when possible
+   - onkey: use pm_sleep_ptr when defining driver.pm
+   - charger: finish handling of some interrupts in threaded irq handler
+   - Link to v3: https://lore.kernel.org/20250527-pf1550-v3-0-45f69453cd51@savoirfairelinux.com/
+
+Changes since v4:
+   - Use top level interrupt to minimize number of registers checked on
+     each interrupt
+   - Fix bad offset for temperature interrupts of regulator irq chip
+   - Address Krzysztof's comments for dt-binding
+   - regulator: add comments to clarify difference in its interrupts
+   - regulator: issue warn event for _LS interrupt and error event for
+     _HS interrupt
+   - regulator: validate maximum and minimum ramp_delay
+   - charger: drop lock in battery and charger delayed_work
+   - charger: more conservative locking for vbus delayed_work
+   - charger: apply lock when setting power_supply type during register
+     intialization
+   - Link to v4: https://lore.kernel.org/r/20250603-pf1550-v4-0-bfdf51ee59cc@savoirfairelinux.com
+
+Changes since v5:
+   - Ensure lowercase when assigning hex values
+   - Add imx@lists.linux.dev to relevant mailing list in MAINTAINERS file
+   - Use GENMASK macro
+   - Drop unused chips variable
+   - Read the OTP in the mfd driver probe for new dvs_enb variable
+   - Hardcode IRQ flags in pf1550_add_child function
+   - charger: drop the mutex entirely
+   - charger: reverse christmas tree style local variable definition in
+     probe
+   - Link to v5: https://lore.kernel.org/r/20250610-pf1550-v5-0-ed0d9e3aaac7@savoirfairelinux.com
+
+Changes since v6:
+   - Use reverse christmas tree order
+   - Drop 0 in table id's driver data
+   - charger: store virq to avoid reinvoking platform_get_irq in ISR
+   - Link to v6: https://lore.kernel.org/r/20250611-pf1550-v6-0-34f2ddfe045e@savoirfairelinux.com
+
+Changes since v7:
+  - Thanks everyone for the reviews
+  - Use C++ comment only for SPDX license header in core, charger and
+    onkey drivers
+  - Drop filenames from comments
+  - Rename pf1550_dev to pf1550_ddata
+  - Define OTP register for accessing status of DVS
+  - core: rename from `mfd driver` to `core driver`
+  - core: add child devices in a cleaner manner
+  - charger: define two power supplies: battery and external power
+  - charger: use devm_delayed_work_autocancel
+  - Link to v7: https://lore.kernel.org/r/20250612-pf1550-v7-0-0e393b0f45d7@savoirfairelinux.com
+
+Changes since v8:
+  - Collect Frank's `Reviewed-by` tags
+  - core: use consistent whitespace
+  - regulator: add standby support for regulators requested by Sean Nyekjaer
+  - regulator: add support for SW1 DVS enable/disable
+  - regulator: fix improper DVS activation
+  - regulator: add map_voltage for regulators
+  - regulator: add enable/disable for regulators
+  - charger: use datasheet thermal regulation temperature ranges
+  - charger: select charger operation mode based on the application
+  - onkey: add support for disabling system power down via onkey
+  - dt-bindings: changed temperature ranges
+  - dt-bindings: added `disable-key-power`
+  - Link to v8: https://lore.kernel.org/r/20250707-pf1550-v8-0-6b6eb67c03a0@savoirfairelinux.com
+
+Changes since v9:
+  - add Sean's Tested-by tag
+  - core: style changes
+  - dt-bindings: add regulator-state-mem to examples
+  - onkey: use regmap_clear_bits to avoid overwriting all bits of the
+    PWRCTRL register
+  - Link to v9: https://lore.kernel.org/r/20250716-pf1550-v9-0-502a647f04ef@savoirfairelinux.com
+
+Changes since v10:
+  - add Sean's Tested-by tag on mfd patch
+  - charger: separate battery properties from charger properties
+  - Link to v10: https://lore.kernel.org/r/20250820-pf1550-v10-0-4c0b6e4445e3@savoirfairelinux.com
+
+Changes since v11:
+  - rebase on v6.17
+  - charger: add Sebastian's `Acked-by` tag
+  - Link to v11: https://lore.kernel.org/r/20250917-pf1550-v11-0-e0649822fcc9@savoirfairelinux.com
+
+Signed-off-by: Samuel Kayode <samuel.kayode@savoirfairelinux.com>
 ---
- .../admin-guide/kernel-parameters.txt         |  12 +
- drivers/cpufreq/cppc_cpufreq.c                | 205 +++++++++++++++---
- 2 files changed, 192 insertions(+), 25 deletions(-)
+Samuel Kayode (6):
+      dt-bindings: mfd: add pf1550
+      mfd: pf1550: add core driver
+      regulator: pf1550: add support for regulator
+      input: pf1550: add onkey support
+      power: supply: pf1550: add battery charger support
+      MAINTAINERS: add an entry for pf1550 mfd driver
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 1b2131d003ce..94950340851e 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -911,6 +911,18 @@
- 			Format:
- 			<first_slot>,<last_slot>,<port>,<enum_bit>[,<debug>]
- 
-+	cppc_cpufreq.auto_sel_mode=
-+			[CPU_FREQ] Enable ACPI CPPC autonomous performance selection.
-+			When enabled, hardware automatically adjusts CPU frequency
-+			on all CPUs based on workload demands. In Autonomous mode,
-+			Energy Performance Preference(EPP) hints guide hardware
-+			toward performance(0x0) or energy efficiency (0xff).
-+			Requires ACPI CPPC autonomous selection register support.
-+			Format: <bool>
-+			Default: 0 (disabled)
-+			0: use cpufreq governors
-+			1: enable if supoorted by hardware
-+
- 	cpuidle.off=1	[CPU_IDLE]
- 			disable the cpuidle sub-system
- 
-diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-index c888733ce5da..8deb51d6bc2c 100644
---- a/drivers/cpufreq/cppc_cpufreq.c
-+++ b/drivers/cpufreq/cppc_cpufreq.c
-@@ -28,6 +28,8 @@
- #include <acpi/cppc_acpi.h>
- 
- static struct cpufreq_driver cppc_cpufreq_driver;
-+/* Autonomous Selection */
-+static bool auto_sel_mode;
- 
- #ifdef CONFIG_ACPI_CPPC_CPUFREQ_FIE
- static enum {
-@@ -273,6 +275,14 @@ static int cppc_cpufreq_set_target(struct cpufreq_policy *policy,
- 	freqs.old = policy->cur;
- 	freqs.new = target_freq;
- 
-+	/*
-+	 * In autonomous mode, hardware handles frequency scaling directly
-+	 * based on workload demands and EPP hints, so OS frequency requests
-+	 * are not needed.
-+	 */
-+	if (cpu_data->perf_caps.auto_sel)
-+		return 0;
-+
- 	cpufreq_freq_transition_begin(policy, &freqs);
- 	ret = cppc_set_perf(cpu, &cpu_data->perf_ctrls);
- 	cpufreq_freq_transition_end(policy, &freqs, ret != 0);
-@@ -556,6 +566,12 @@ static struct cppc_cpudata *cppc_cpufreq_get_cpu_data(unsigned int cpu)
- 		goto free_mask;
- 	}
- 
-+	ret = cppc_get_perf(cpu, &cpu_data->perf_ctrls);
-+	if (ret) {
-+		pr_debug("Err reading CPU%d perf ctrls: ret:%d\n", cpu, ret);
-+		goto free_mask;
-+	}
-+
- 	return cpu_data;
- 
- free_mask:
-@@ -659,11 +675,79 @@ static int cppc_cpufreq_update_autosel_val(struct cpufreq_policy *policy, bool a
- 	return 0;
- }
- 
-+static int cppc_cpufreq_update_epp_val(struct cpufreq_policy *policy, u32 epp)
-+{
-+	struct cppc_cpudata *cpu_data = policy->driver_data;
-+	unsigned int cpu = policy->cpu;
-+	int ret;
-+
-+	pr_debug("cpu%d, epp curr:%u, new:%u\n", cpu, cpu_data->perf_ctrls.energy_perf, epp);
-+
-+	guard(mutex)(&cppc_cpufreq_update_autosel_config_lock);
-+
-+	ret = cppc_set_epp(cpu, epp);
-+	if (ret) {
-+		pr_warn("failed to set energy_perf for cpu:%d (%d)\n", cpu, ret);
-+		return ret;
-+	}
-+	cpu_data->perf_ctrls.energy_perf = epp;
-+
-+	return 0;
-+}
-+
-+/**
-+ * cppc_cpufreq_update_autosel_config - Update Autonomous selection configuration
-+ * @policy: cpufreq policy for the CPU
-+ * @min_perf: minimum performance value to set
-+ * @max_perf: maximum performance value to set
-+ * @auto_sel: autonomous selection mode enable/disable (also controls min/max perf reg updates)
-+ * @epp_val: energy performance preference value
-+ * @update_epp: whether to update EPP register
-+ * @update_policy: whether to update policy constraints
-+ *
-+ * Return: 0 on success, negative error code on failure
-+ */
-+static int cppc_cpufreq_update_autosel_config(struct cpufreq_policy *policy,
-+					      u64 min_perf, u64 max_perf, bool auto_sel,
-+					      u32 epp_val, bool update_epp, bool update_policy)
-+{
-+	const unsigned int cpu = policy->cpu;
-+	int ret;
-+
-+	/*
-+	 * Set min/max performance registers and update policy constraints.
-+	 * When enabling: update both registers and policy.
-+	 * When disabling: update policy only.
-+	 */
-+	ret = cppc_cpufreq_set_min_perf(policy, min_perf, auto_sel, update_policy);
-+	if (ret)
-+		return ret;
-+
-+	ret = cppc_cpufreq_set_max_perf(policy, max_perf, auto_sel, update_policy);
-+	if (ret)
-+		return ret;
-+
-+	if (update_epp) {
-+		ret = cppc_cpufreq_update_epp_val(policy, epp_val);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	ret = cppc_cpufreq_update_autosel_val(policy, auto_sel);
-+	if (ret)
-+		return ret;
-+
-+	pr_debug("Updated autonomous config [%llu-%llu] for CPU%d\n", min_perf, max_perf, cpu);
-+
-+	return 0;
-+}
-+
- static int cppc_cpufreq_cpu_init(struct cpufreq_policy *policy)
- {
- 	unsigned int cpu = policy->cpu;
- 	struct cppc_cpudata *cpu_data;
- 	struct cppc_perf_caps *caps;
-+	u64 min_perf, max_perf;
- 	int ret;
- 
- 	cpu_data = cppc_cpufreq_get_cpu_data(cpu);
-@@ -727,11 +811,31 @@ static int cppc_cpufreq_cpu_init(struct cpufreq_policy *policy)
- 	policy->cur = cppc_perf_to_khz(caps, caps->highest_perf);
- 	cpu_data->perf_ctrls.desired_perf =  caps->highest_perf;
- 
--	ret = cppc_set_perf(cpu, &cpu_data->perf_ctrls);
--	if (ret) {
--		pr_debug("Err setting perf value:%d on CPU:%d. ret:%d\n",
--			 caps->highest_perf, cpu, ret);
--		goto out;
-+	if (cpu_data->perf_caps.auto_sel) {
-+		ret = cppc_set_enable(cpu, true);
-+		if (ret) {
-+			pr_err("Failed to enable CPPC on cpu%d (%d)\n", cpu, ret);
-+			goto out;
-+		}
-+
-+		min_perf = cpu_data->perf_ctrls.min_perf ?
-+			   cpu_data->perf_ctrls.min_perf : caps->lowest_nonlinear_perf;
-+		max_perf = cpu_data->perf_ctrls.max_perf ?
-+			   cpu_data->perf_ctrls.max_perf : caps->nominal_perf;
-+
-+		ret = cppc_cpufreq_update_autosel_config(policy, min_perf, max_perf, true,
-+							 CPPC_EPP_PERFORMANCE_PREF, true, false);
-+		if (ret) {
-+			cppc_set_enable(cpu, false);
-+			goto out;
-+		}
-+	} else {
-+		ret = cppc_set_perf(cpu, &cpu_data->perf_ctrls);
-+		if (ret) {
-+			pr_debug("Err setting perf value:%d on CPU:%d. ret:%d\n",
-+				 caps->highest_perf, cpu, ret);
-+			goto out;
-+		}
- 	}
- 
- 	cppc_cpufreq_cpu_fie_init(policy);
-@@ -933,7 +1037,6 @@ static int cppc_cpufreq_update_auto_select(struct cpufreq_policy *policy, bool e
- 	struct cppc_perf_caps *caps = &cpu_data->perf_caps;
- 	u64 min_perf = caps->lowest_nonlinear_perf;
- 	u64 max_perf = caps->nominal_perf;
--	int ret;
- 
- 	if (enable) {
- 		if (cpu_data->perf_ctrls.min_perf)
-@@ -942,24 +1045,8 @@ static int cppc_cpufreq_update_auto_select(struct cpufreq_policy *policy, bool e
- 			max_perf = cpu_data->perf_ctrls.max_perf;
- 	}
- 
--	/*
--	 * Set min/max performance registers and update policy constraints.
--	 * When enabling: update both registers and policy.
--	 * When disabling: update policy only.
--	 */
--	ret = cppc_cpufreq_set_min_perf(policy, min_perf, enable, true);
--	if (ret)
--		return ret;
--
--	ret = cppc_cpufreq_set_max_perf(policy, max_perf, enable, true);
--	if (ret)
--		return ret;
--
--	ret = cppc_cpufreq_update_autosel_val(policy, enable);
--	if (ret)
--		return ret;
--
--	return 0;
-+	return cppc_cpufreq_update_autosel_config(policy, min_perf, max_perf, enable,
-+						  0, false, true);
- }
- 
- static ssize_t store_auto_select(struct cpufreq_policy *policy, const char *buf, size_t count)
-@@ -996,7 +1083,18 @@ static ssize_t show_energy_performance_preference_val(struct cpufreq_policy *pol
- static ssize_t store_energy_performance_preference_val(struct cpufreq_policy *policy,
- 						       const char *buf, size_t count)
- {
--	return cppc_cpufreq_sysfs_store_u64(buf, count, cppc_set_epp, policy->cpu);
-+	u64 val;
-+	int ret;
-+
-+	ret = kstrtou64(buf, 0, &val);
-+	if (ret)
-+		return ret;
-+
-+	ret = cppc_cpufreq_update_epp_val(policy, (u32)val);
-+	if (ret)
-+		return ret;
-+
-+	return count;
- }
- 
- static ssize_t show_min_perf(struct cpufreq_policy *policy, char *buf)
-@@ -1085,13 +1183,61 @@ static struct cpufreq_driver cppc_cpufreq_driver = {
- 	.name = "cppc_cpufreq",
- };
- 
-+static int cppc_cpufreq_set_epp_autosel_allcpus(bool auto_sel, u64 epp)
-+{
-+	int cpu, ret;
-+
-+	for_each_present_cpu(cpu) {
-+		ret = cppc_set_epp(cpu, epp);
-+		if (ret) {
-+			pr_warn("Failed to set EPP on CPU%d (%d)\n", cpu, ret);
-+			goto disable_all;
-+		}
-+
-+		ret = cppc_set_auto_sel(cpu, auto_sel);
-+		if (ret) {
-+			pr_warn("Failed to set auto_sel on CPU%d (%d)\n", cpu, ret);
-+			goto disable_all;
-+		}
-+	}
-+
-+	return 0;
-+
-+disable_all:
-+	pr_warn("Disabling auto_sel for all CPUs\n");
-+	for_each_present_cpu(cpu)
-+		cppc_set_auto_sel(cpu, false);
-+
-+	return -EIO;
-+}
-+
- static int __init cppc_cpufreq_init(void)
- {
-+	bool auto_sel;
- 	int ret;
- 
- 	if (!acpi_cpc_valid())
- 		return -ENODEV;
- 
-+	if (auto_sel_mode) {
-+		/*
-+		 * Check if autonomous selection is supported by testing CPU 0.
-+		 * If supported, enable autonomous mode on all CPUs.
-+		 */
-+		ret = cppc_get_auto_sel(0, &auto_sel);
-+		if (!ret) {
-+			pr_info("Enabling auto_sel_mode (autonomous selection mode)\n");
-+			ret = cppc_cpufreq_set_epp_autosel_allcpus(true, CPPC_EPP_PERFORMANCE_PREF);
-+			if (ret) {
-+				pr_warn("Disabling auto_sel_mode, fallback to standard\n");
-+				auto_sel_mode = false;
-+			}
-+		} else {
-+			pr_warn("Disabling auto_sel_mode as not supported by hardware\n");
-+			auto_sel_mode = false;
-+		}
-+	}
-+
- 	cppc_freq_invariance_init();
- 	populate_efficiency_class();
- 
-@@ -1104,10 +1250,19 @@ static int __init cppc_cpufreq_init(void)
- 
- static void __exit cppc_cpufreq_exit(void)
- {
-+	int cpu;
-+
-+	for_each_present_cpu(cpu)
-+		cppc_set_auto_sel(cpu, false);
-+	auto_sel_mode = false;
-+
- 	cpufreq_unregister_driver(&cppc_cpufreq_driver);
- 	cppc_freq_invariance_exit();
- }
- 
-+module_param(auto_sel_mode, bool, 0000);
-+MODULE_PARM_DESC(auto_sel_mode, "Enable Autonomous Performance Level Selection");
-+
- module_exit(cppc_cpufreq_exit);
- MODULE_AUTHOR("Ashwin Chaugule");
- MODULE_DESCRIPTION("CPUFreq driver based on the ACPI CPPC v5.0+ spec");
+ .../devicetree/bindings/mfd/nxp,pf1550.yaml        | 161 ++++++
+ MAINTAINERS                                        |  11 +
+ drivers/input/misc/Kconfig                         |  11 +
+ drivers/input/misc/Makefile                        |   1 +
+ drivers/input/misc/pf1550-onkey.c                  | 197 +++++++
+ drivers/mfd/Kconfig                                |  16 +
+ drivers/mfd/Makefile                               |   2 +
+ drivers/mfd/pf1550.c                               | 367 ++++++++++++
+ drivers/power/supply/Kconfig                       |  11 +
+ drivers/power/supply/Makefile                      |   1 +
+ drivers/power/supply/pf1550-charger.c              | 641 +++++++++++++++++++++
+ drivers/regulator/Kconfig                          |   9 +
+ drivers/regulator/Makefile                         |   1 +
+ drivers/regulator/pf1550-regulator.c               | 429 ++++++++++++++
+ include/linux/mfd/pf1550.h                         | 273 +++++++++
+ 15 files changed, 2131 insertions(+)
+---
+base-commit: 6063257da111c7639d020c5f15bfb37fb839d8b6
+change-id: 20250527-pf1550-d401f0d07b80
+
+Best regards,
 -- 
-2.34.1
+Samuel Kayode <samuel.kayode@savoirfairelinux.com>
+
 
 
