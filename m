@@ -1,228 +1,145 @@
-Return-Path: <linux-pm+bounces-35621-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35622-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44359BAFDD9
-	for <lists+linux-pm@lfdr.de>; Wed, 01 Oct 2025 11:30:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A5B36BAFE39
+	for <lists+linux-pm@lfdr.de>; Wed, 01 Oct 2025 11:39:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F2A153B331D
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Oct 2025 09:30:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 671F43A9761
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Oct 2025 09:39:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 990592737FD;
-	Wed,  1 Oct 2025 09:30:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 894BE2D9ED5;
+	Wed,  1 Oct 2025 09:38:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VD+hvNvR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fcqErpp7"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73A5E1F9F7A
-	for <linux-pm@vger.kernel.org>; Wed,  1 Oct 2025 09:30:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FE9C278150;
+	Wed,  1 Oct 2025 09:38:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759311043; cv=none; b=R2fLAemXxV+Oka/xeUAUJyYqrtyc/9thfsB1QyOZCJ3VDTlmwTe9SgbnEzVvno8Ew7CMijDa0V2ry/IuoAxxTP5ktYkQe311A6183jP6mdiGFY8c35c6Gw0fcmmfNxBrO5KEX1G/BGOCkQA0ySf24EUb00y9lGQwZzCHTosT4Mg=
+	t=1759311537; cv=none; b=sR0CYKFEEcqn/DKsuTHV3VijZ5FMwgCOjdHH96bcfKPQHNfrjEvRF60Gmu6HEb3TM6P/tC5XYtB1gxImAe1nIlaEOVC5sAhDHEQryQt/wyI67KXkggtAlnZJ1auoElaTHOj4kbGUTk4sKhfRjPgdVewQZqRC7MDGKFTvjL1pdhw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759311043; c=relaxed/simple;
-	bh=SDnfVM3ubQYBlLvGAuhTvc+aBP5kwXyNhNvMC6/5rII=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=J1SqACYrIjFtLibpahKKN1VyYa1z0ZbeVTQdyqkSirHxMHJCuX55UJpx30DNCUIlmagSWzu153mjV+xaDiOh/1CepgnXgniuUsfuEcp+utLJEYsffKsll4cBsFdExSbFYgcBylhZ8DnrWLeDYLmoqBcphsavPz2qdQSZhpOzGoM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VD+hvNvR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EF81C19421
-	for <linux-pm@vger.kernel.org>; Wed,  1 Oct 2025 09:30:43 +0000 (UTC)
+	s=arc-20240116; t=1759311537; c=relaxed/simple;
+	bh=H6syAT5lGzrU3swJYL8VgnwKi0EYbeSgtN9L4OFu5Z8=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=Y+9gR5iaVmoU9Qtxgex5TQuygtuRkYfhL+ltQUqO9pIKniSGicpKn/8F76NelS3o0QpmCtyoCvTpxwSNZ/xo5Eg/iPT5TzWkeBQN8oiyrefQaJegfRIwOG/usHmwZIfSZPZ5cqAQdmWD7WTcKhtLNTbL/5yg5U2Xhr6k5lhPMJg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fcqErpp7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B3EDC4CEF4;
+	Wed,  1 Oct 2025 09:38:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759311043;
-	bh=SDnfVM3ubQYBlLvGAuhTvc+aBP5kwXyNhNvMC6/5rII=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=VD+hvNvR5lVR8OAgW5XMRwuEYufegwavcNqmmXUU8MmMj3ZQVI2rS9KK2TKRVZOzp
-	 8oGvj5/vhZgTVekJ4Ac60Z2soVHV2m9ZtJ1U7hIlrj4tdA+DwPIu6Dp0P2WLd7CmX5
-	 34/ex68pgQ1tGI69bglVSafCoOzO3eJJBST3xcaTYgjm0+50HUuDItAmr9M49SGA3g
-	 unNzycvkeWagMaWHsFDWxIr/boJ8xZikqaLGelBas0dsCBx64MzEWIKb0ezWii16at
-	 0SKIrXFLc3AAXQkm3BMVgn5o5u72akcJ1rfbH1NnWKMJW7GjmVAYBt/d8k743vv0ag
-	 TaYH0HVg714qQ==
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-30cce5be7d0so2986487fac.0
-        for <linux-pm@vger.kernel.org>; Wed, 01 Oct 2025 02:30:43 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUWMk/v8DLSBORQt/mYAZpSE22DNLqVTY7rI2oHNokWgtXqUZhctENGrXXs+JWd7rTycuisvVOj+w==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx2rU/qIyJLN/WS5kgW9fmCXLhr2wUwjaeccHisrY2KFvKTsHmz
-	sKnpUkHrCh1cGMsEaJiYB5LaIh8jZ88k9ecmrY91pdPQsF1+6+w/5ebvBZQX4e3QOIOb0MteaDN
-	tlDEAYnwUzce2KCIBjprJpvnOPIi0/6Q=
-X-Google-Smtp-Source: AGHT+IFMq6gPIM8p2T5XZpW4CClVk3+8KJLeY5qho96aUc03KRZOpsIj5FDWDPo1KqM47wypNBQ0TV6LKrn1U7P55u0=
-X-Received: by 2002:a05:6870:2056:b0:332:598e:e7b9 with SMTP id
- 586e51a60fabf-39bb3c3ed3emr1390973fac.46.1759311042347; Wed, 01 Oct 2025
- 02:30:42 -0700 (PDT)
+	s=k20201202; t=1759311536;
+	bh=H6syAT5lGzrU3swJYL8VgnwKi0EYbeSgtN9L4OFu5Z8=;
+	h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
+	b=fcqErpp7qrjU9McG/p/HpxRq8Hc/eEK9ROwv483siLY2lhXUhIJ4c10tRVmSipFCy
+	 H1cUoUwY6REYQYV8WZwfdmDRlOhGGnduKJbFWz93kohU/Guq8JtYyLLoPuRM9+k2Hv
+	 GQvQyN+JNnqYbtW7JVcEer1SJyOhrb3ztKSs1aeFSwZHA8vy7a8Obil+4o19c8sqTi
+	 LPaIAjUoYTPSJX1vmEMzX+6OQPM0sPKz6KzJsQMYGs4GR0oonRwRzzlehm64B6DYX3
+	 FSXty0SlySmG4Um4P4euAUBoFTJ3AHrhBhxWcvfu7azQZtRldOU8fu+H9v3hTxPnN4
+	 UPsnsd24Vl83w==
+Message-ID: <50676923-1daf-4c15-a289-a791242664f4@kernel.org>
+Date: Wed, 1 Oct 2025 11:38:45 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250926102320.4053167-1-treapking@chromium.org>
- <CAJZ5v0i-iT-3nEjX7Nm2s91GSm0OTXQ3yZSf2Q3VRNTOseREHw@mail.gmail.com> <CAEXTbpfUEDf_L3wVJEwD=Wjhx05X6Z2F-rbZT5L7vUR8GUAWTQ@mail.gmail.com>
-In-Reply-To: <CAEXTbpfUEDf_L3wVJEwD=Wjhx05X6Z2F-rbZT5L7vUR8GUAWTQ@mail.gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 1 Oct 2025 11:30:30 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0hgOxOFA+LBNm+n3BVhuJOYD4F5LBj2BQA7fwLDAtcD=g@mail.gmail.com>
-X-Gm-Features: AS18NWD5MXCZLHGjgbPUqgbKk5Xv_nA5WrnUDJcqS3Pi5ZCufO045FcJZrPL8cE
-Message-ID: <CAJZ5v0hgOxOFA+LBNm+n3BVhuJOYD4F5LBj2BQA7fwLDAtcD=g@mail.gmail.com>
-Subject: Re: [PATCH v4] PM: sleep: Don't wait for SYNC_STATE_ONLY device links
-To: Pin-yen Lin <treapking@chromium.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, Pavel Machek <pavel@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, 
-	Saravana Kannan <saravanak@google.com>, linux-kernel@vger.kernel.org, 
-	Hsin-Te Yuan <yuanhsinte@chromium.org>, Chen-Yu Tsai <wenst@chromium.org>, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+From: Hans Verkuil <hverkuil+cisco@kernel.org>
+Subject: Re: [PATCH v3 04/20] media: synopsys: hdmirx: replace macros with
+ bitfield variants
+To: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>,
+ Yury Norov <yury.norov@gmail.com>,
+ Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+ Jaehoon Chung <jh80.chung@samsung.com>, Ulf Hansson
+ <ulf.hansson@linaro.org>, Heiko Stuebner <heiko@sntech.de>,
+ Shreeya Patel <shreeya.patel@collabora.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>, Sandy Huang
+ <hjc@rock-chips.com>, Andy Yan <andy.yan@rock-chips.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+ Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
+ Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+ Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+ Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+ Alexandre Torgue <alexandre.torgue@foss.st.com>,
+ Shawn Lin <shawn.lin@rock-chips.com>,
+ Lorenzo Pieralisi <lpieralisi@kernel.org>,
+ =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+ Manivannan Sadhasivam <mani@kernel.org>, Rob Herring <robh@kernel.org>,
+ Bjorn Helgaas <bhelgaas@google.com>, Chanwoo Choi <cw00.choi@samsung.com>,
+ MyungJoo Ham <myungjoo.ham@samsung.com>,
+ Kyungmin Park <kyungmin.park@samsung.com>, Qin Jian <qinjian@cqplus1.com>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: kernel@collabora.com, linux-kernel@vger.kernel.org,
+ linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-rockchip@lists.infradead.org, linux-media@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, linux-phy@lists.infradead.org,
+ linux-sound@vger.kernel.org, netdev@vger.kernel.org,
+ linux-stm32@st-md-mailman.stormreply.com, linux-pci@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-clk@vger.kernel.org, llvm@lists.linux.dev
+References: <20250825-byeword-update-v3-0-947b841cdb29@collabora.com>
+ <20250825-byeword-update-v3-4-947b841cdb29@collabora.com>
+Content-Language: en-US, nl
+In-Reply-To: <20250825-byeword-update-v3-4-947b841cdb29@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi,
+On 25/08/2025 10:28, Nicolas Frattaroli wrote:
+> The era of hand-rolled HIWORD_UPDATE macros is over, at least for those
+> drivers that use constant masks.
+> 
+> Replace the UPDATE macro with bitfield.h's FIELD_PREP, to give us
+> additional error checking.
+> 
+> Also, replace the HIWORD_UPDATE macro at the same time with the new
+> FIELD_PREP_WM16 macro in hw_bitfield.h, which also gives us additional
+> error checking.
+> 
+> The UPDATE/HIWORD_UPDATE macros are left as wrappers around the
+> replacement macros, in order to not rock the boat too much, and keep the
+> changes easy to review.
+> 
+> Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 
-On Wed, Oct 1, 2025 at 1:08=E2=80=AFAM Pin-yen Lin <treapking@chromium.org>=
- wrote:
->
-> Hi Rafael,
->
-> On Sat, Sep 27, 2025 at 8:13=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.=
-org> wrote:
-> >
-> > On Fri, Sep 26, 2025 at 12:23=E2=80=AFPM Pin-yen Lin <treapking@chromiu=
-m.org> wrote:
-> > >
-> > > Device links with DL_FLAG_SYNC_STATE_ONLY should not affect suspend
-> > > and resume, and functions like device_reorder_to_tail() and
-> > > device_link_add() doesn't try to reorder the consumers with such flag=
-.
-> > >
-> > > However, dpm_wait_for_consumers() and dpm_wait_for_suppliers() doesn'=
-t
-> > > check this flag before triggering dpm_wait, leading to potential hang
-> > > during suspend/resume.
-> > >
-> > > This can be reproduced on MT8186 Corsola Chromebook with devicetree l=
-ike:
-> > >
-> > > usb-a-connector {
-> > >         compatible =3D "usb-a-connector";
-> > >         port {
-> > >                 usb_a_con: endpoint {
-> > >                         remote-endpoint =3D <&usb_hs>;
-> > >                 };
-> > >         };
-> > > };
-> > >
-> > > usb_host {
-> > >         compatible =3D "mediatek,mt8186-xhci", "mediatek,mtk-xhci";
-> > >         port {
-> > >                 usb_hs: endpoint {
-> > >                         remote-endpoint =3D <&usb_a_con>;
-> > >                 };
-> > >         };
-> > > };
-> > >
-> > > In this case, the two nodes form a cycle and a SYNC_STATE_ONLY devlin=
-k
-> > > between usb_host (supplier) and usb-a-connector (consumer) is created=
-.
-> > >
-> > > Export device_link_flag_is_sync_state_only() and use it to check this=
- in
-> > > dpm_wait_for_consumers() and dpm_wait_for_suppliers() to fix this.
-> > >
-> > > Fixes: 05ef983e0d65a ("driver core: Add device link support for SYNC_=
-STATE_ONLY flag")
-> > > Signed-off-by: Pin-yen Lin <treapking@chromium.org>
-> > > ---
-> > >
-> > > Changes in v4:
-> > > - Remove inline for device_link_flag_is_sync_state_only()
-> > >
-> > > Changes in v3:
-> > > - Squash to one patch and fix the export approach
-> > >
-> > > Changes in v2:
-> > > - Update commit message
-> > > - Use device_link_flag_is_sync_state_only()
-> > >
-> > >  drivers/base/base.h       | 1 +
-> > >  drivers/base/core.c       | 2 +-
-> > >  drivers/base/power/main.c | 6 ++++--
-> > >  3 files changed, 6 insertions(+), 3 deletions(-)
-> > >
-> > > diff --git a/drivers/base/base.h b/drivers/base/base.h
-> > > index 123031a757d9..80415b140ce7 100644
-> > > --- a/drivers/base/base.h
-> > > +++ b/drivers/base/base.h
-> > > @@ -248,6 +248,7 @@ void device_links_driver_cleanup(struct device *d=
-ev);
-> > >  void device_links_no_driver(struct device *dev);
-> > >  bool device_links_busy(struct device *dev);
-> > >  void device_links_unbind_consumers(struct device *dev);
-> > > +bool device_link_flag_is_sync_state_only(u32 flags);
-> > >  void fw_devlink_drivers_done(void);
-> > >  void fw_devlink_probing_done(void);
-> > >
-> > > diff --git a/drivers/base/core.c b/drivers/base/core.c
-> > > index d22d6b23e758..a54ec6df1058 100644
-> > > --- a/drivers/base/core.c
-> > > +++ b/drivers/base/core.c
-> > > @@ -287,7 +287,7 @@ static bool device_is_ancestor(struct device *dev=
-, struct device *target)
-> > >  #define DL_MARKER_FLAGS                (DL_FLAG_INFERRED | \
-> > >                                  DL_FLAG_CYCLE | \
-> > >                                  DL_FLAG_MANAGED)
-> > > -static inline bool device_link_flag_is_sync_state_only(u32 flags)
-> > > +bool device_link_flag_is_sync_state_only(u32 flags)
-> > >  {
-> > >         return (flags & ~DL_MARKER_FLAGS) =3D=3D DL_FLAG_SYNC_STATE_O=
-NLY;
-> > >  }
-> > > diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
-> > > index 2ea6e05e6ec9..73a1916170ae 100644
-> > > --- a/drivers/base/power/main.c
-> > > +++ b/drivers/base/power/main.c
-> > > @@ -282,7 +282,8 @@ static void dpm_wait_for_suppliers(struct device =
-*dev, bool async)
-> > >          * walking.
-> > >          */
-> > >         list_for_each_entry_rcu_locked(link, &dev->links.suppliers, c=
-_node)
-> > > -               if (READ_ONCE(link->status) !=3D DL_STATE_DORMANT)
-> > > +               if (READ_ONCE(link->status) !=3D DL_STATE_DORMANT &&
-> > > +                   !device_link_flag_is_sync_state_only(link->flags)=
-)
-> > >                         dpm_wait(link->supplier, async);
-> > >
-> > >         device_links_read_unlock(idx);
-> > > @@ -339,7 +340,8 @@ static void dpm_wait_for_consumers(struct device =
-*dev, bool async)
-> > >          * unregistration).
-> > >          */
-> > >         list_for_each_entry_rcu_locked(link, &dev->links.consumers, s=
-_node)
-> > > -               if (READ_ONCE(link->status) !=3D DL_STATE_DORMANT)
-> > > +               if (READ_ONCE(link->status) !=3D DL_STATE_DORMANT &&
-> > > +                   !device_link_flag_is_sync_state_only(link->flags)=
-)
-> > >                         dpm_wait(link->consumer, async);
-> > >
-> > >         device_links_read_unlock(idx);
-> > > --
-> >
-> > Rebased on top of linux-pm.git/linux-next and applied as 6.18 material
-> > with some minor edits in the subject and changelog.
-> >
-> > Thanks!
->
-> Thanks for updating the commit message and applying the patch.
->
-> However, I can't find this patch at
-> https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/log/?=
-h=3Dlinux-next
->
-> Did I check the wrong place for this?
+Acked-by: Hans Verkuil <hverkuil+cisco@kernel.org>
 
-Yes, it was on the bleeding-edge branch for CI build testing coverage.
+> ---
+>  drivers/media/platform/synopsys/hdmirx/snps_hdmirx.h | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/media/platform/synopsys/hdmirx/snps_hdmirx.h b/drivers/media/platform/synopsys/hdmirx/snps_hdmirx.h
+> index 220ab99ca61152b36b0a08b398ddefdb985709a5..b26668a98aafd1682b8342cc11f84666a13f07a3 100644
+> --- a/drivers/media/platform/synopsys/hdmirx/snps_hdmirx.h
+> +++ b/drivers/media/platform/synopsys/hdmirx/snps_hdmirx.h
+> @@ -8,10 +8,12 @@
+>  #ifndef DW_HDMIRX_H
+>  #define DW_HDMIRX_H
+>  
+> +#include <linux/bitfield.h>
+>  #include <linux/bitops.h>
+> +#include <linux/hw_bitfield.h>
+>  
+> -#define UPDATE(x, h, l)		(((x) << (l)) & GENMASK((h), (l)))
+> -#define HIWORD_UPDATE(v, h, l)	(((v) << (l)) | (GENMASK((h), (l)) << 16))
+> +#define UPDATE(x, h, l)		(FIELD_PREP(GENMASK((h), (l)), (x)))
+> +#define HIWORD_UPDATE(v, h, l)	(FIELD_PREP_WM16(GENMASK((h), (l)), (v)))
+>  
+>  /* SYS_GRF */
+>  #define SYS_GRF_SOC_CON1			0x0304
+> 
 
-It has been added to the linux-next branch now.
-
-Thanks!
 
