@@ -1,75 +1,75 @@
-Return-Path: <linux-pm+bounces-35652-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35653-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E05CBB20A3
-	for <lists+linux-pm@lfdr.de>; Thu, 02 Oct 2025 01:02:21 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 70D4FBB2395
+	for <lists+linux-pm@lfdr.de>; Thu, 02 Oct 2025 03:11:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 48766488194
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Oct 2025 23:02:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3DBDA3273CE
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Oct 2025 01:11:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C4C931326A;
-	Wed,  1 Oct 2025 23:00:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3460118D65C;
+	Thu,  2 Oct 2025 01:10:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eWem3NXf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HxbaEXUH"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 760BF311C2A;
-	Wed,  1 Oct 2025 23:00:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C0667E0FF;
+	Thu,  2 Oct 2025 01:10:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759359652; cv=none; b=alDKJLMeEq2J8H6HiEE+q1lDYZD3cqqMZoCGHJW6mJSrEudW6H09xo0ZKM3bDBcJ+Z0KJs5EATwNKZEMsK3UqxvUr+ehUAVNlrJAL635e+iwVDVjDVTrQXp355Gj4dzWvUinn07rw+zab/7frL2T1LBYQsdqLUtkDJdRseWLgxk=
+	t=1759367452; cv=none; b=MMGAZ4XECDU1qca9133X5TwMHI9Z/W5TJ14ewV+T2XgFKzFSqzf0Opts1Pfy2W6AuqzSL5L0sUuxtMJ6BPDNBeFhEWm51jJFLsqzRMQYeh7YFMBW2Dca9RqCqUWnnROo9u5/uKv/vIQzzrUu6OuEFuPXEfNM6xIeB4zUJUqCU5o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759359652; c=relaxed/simple;
-	bh=vQ2dRn9G2+i+CuKYiFX/MF+1U+tSiUPJXbtjAQ15ifo=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=QqmwwbUfj0MHdADpfc6pfp0vA2i4PPTRtOWH6S3uC8JPIzSnwqvNHaBO0/Xbr0Eji+f09tlKiRDV509xve3HzVqFLsO1ZLo492XrUD5dK0fK6PGyL29vpirqUSoCtacnpYd8TvsWKJLZ3yQCuQ+GoN5mPMbDWAMrM7meEdcqAzQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eWem3NXf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59332C4CEF1;
-	Wed,  1 Oct 2025 23:00:52 +0000 (UTC)
+	s=arc-20240116; t=1759367452; c=relaxed/simple;
+	bh=O5GPSnP1HpgUunC+avKoGToaQp1PC2H0lMxEdeMkwqA=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=m5fnqM6CegwkNqs1FrsWc8EK6E6tqt+Zocr0a/EQ1O/lkeX3thARFrZJKtzjWolCN/sHCmTlpMJQDMkf3lBR7ewNmf7OoDGDMUbf5b5vAMCDafPZmuceGJ2XXyCEc77gKL/XMV5X1YyTtpRUpARMGODbdR4NJU9HS7qwvMFPmqA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HxbaEXUH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D54A6C4CEF5;
+	Thu,  2 Oct 2025 01:10:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759359652;
-	bh=vQ2dRn9G2+i+CuKYiFX/MF+1U+tSiUPJXbtjAQ15ifo=;
+	s=k20201202; t=1759367451;
+	bh=O5GPSnP1HpgUunC+avKoGToaQp1PC2H0lMxEdeMkwqA=;
 	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=eWem3NXfJbQx4FPtTxDAZ2+z/EtL2CMZ7KKLC5NTNimE84RsFV7cNSJH/7W75OFPh
-	 mZSxbifXEbD59lqI/uf4TRc6fYxYQ/FL2gYuMTKa1JmQddFhj6ZnoPcnPcCvIJJq5X
-	 BhNUodKTgBHwoh1451senkx5Z80lYjn1ZMt0jSC8+Wnf9IIXgOus3XfwuRttspIk8B
-	 1hFNV8frACbl/HtOh/QLdpDknUCSqFTNPTJhZfQq9aRfbqmBwHDb1eqgLPsoHSqG9O
-	 rOIRlziuCvufcYsTPPNHje3tVpGmKO82+6snCv5SuUyI+toIajzfQHtqTRaKF+1AUa
-	 sPNG8m215cQww==
+	b=HxbaEXUHxJZeeChlJfq9HLox84OdjS2XePvUkzVI+5VexQAtYD4/DMh3rcIuKfBpg
+	 1EiiPUfJuvh2Pks58yVZFFvXfbg0lW7o+yBjpt58krnZVFA9Lo8efnhYHSC0pEHQ9R
+	 EhSU7v8LjwBzGF/xnmftsZn1Dpados/CtR7EWGqCVtagbM/zEIXu3GSGPyx9fnRlCL
+	 S9NsGW+T9iR2Uek22K4lpj7o5Sz0yUCGNlZKUqJHx0C5VDnRlFtD0/UW1wThc2yrFQ
+	 euryKSBsdDiNU6oiVyDVipZLqMUq5hSbOVALNfw2IvUH0eqcVJp6HaskACGSse1q9z
+	 IVNmeMGBFPtaw==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EAEDD39EF947;
-	Wed,  1 Oct 2025 23:00:45 +0000 (UTC)
-Subject: Re: [GIT PULL] power-supply changes for 6.18
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70ED939EE03D;
+	Thu,  2 Oct 2025 01:10:45 +0000 (UTC)
+Subject: Re: [GIT PULL] Power management updates for v6.18-rc1
 From: pr-tracker-bot@kernel.org
-In-Reply-To: <vflh2stqeaa6rnwipi77v2k6cb3jynzja7qf2iznttqz26zbfg@7snfbz5gjdlz>
-References: <vflh2stqeaa6rnwipi77v2k6cb3jynzja7qf2iznttqz26zbfg@7snfbz5gjdlz>
-X-PR-Tracked-List-Id: <linux-pm.vger.kernel.org>
-X-PR-Tracked-Message-Id: <vflh2stqeaa6rnwipi77v2k6cb3jynzja7qf2iznttqz26zbfg@7snfbz5gjdlz>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v6.18
-X-PR-Tracked-Commit-Id: 41307ec7df057239aae3d0f089cc35a0d735cdf8
+In-Reply-To: <CAJZ5v0jNZxcQ26TAPSGX43Psh0P8udTQmkOk+BrKdkS4RhUKmg@mail.gmail.com>
+References: <CAJZ5v0jNZxcQ26TAPSGX43Psh0P8udTQmkOk+BrKdkS4RhUKmg@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAJZ5v0jNZxcQ26TAPSGX43Psh0P8udTQmkOk+BrKdkS4RhUKmg@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-6.18-rc1
+X-PR-Tracked-Commit-Id: 40d2cf9c3c1a5a1a9a443389d6b57a87362e4237
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 3ee22ad492a49303f54d4e1c5168327742ac7aaf
-Message-Id: <175935964457.2650940.3105933798914105304.pr-tracker-bot@kernel.org>
-Date: Wed, 01 Oct 2025 23:00:44 +0000
-To: Sebastian Reichel <sre@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+X-PR-Merge-Commit-Id: 991053178e08fb4d1f80398367db05c2cc4f20b4
+Message-Id: <175936744417.2689671.16906328962189795133.pr-tracker-bot@kernel.org>
+Date: Thu, 02 Oct 2025 01:10:44 +0000
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Linux PM <linux-pm@vger.kernel.org>, ACPI Devel Maling List <linux-acpi@vger.kernel.org>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, "Chanwoo Choi (samsung.com)" <chanwoo@kernel.org>, Mario Limonciello <mario.limonciello@amd.com>, Shuah Khan <skhan@linuxfoundation.org>, Len Brown <lenb@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 
-The pull request you sent on Wed, 1 Oct 2025 02:04:08 +0200:
+The pull request you sent on Mon, 29 Sep 2025 16:52:50 +0200:
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v6.18
+> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-6.18-rc1
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/3ee22ad492a49303f54d4e1c5168327742ac7aaf
+https://git.kernel.org/torvalds/c/991053178e08fb4d1f80398367db05c2cc4f20b4
 
 Thank you!
 
