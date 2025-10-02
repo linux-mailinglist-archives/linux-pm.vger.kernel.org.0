@@ -1,116 +1,168 @@
-Return-Path: <linux-pm+bounces-35660-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35661-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2405ABB2665
-	for <lists+linux-pm@lfdr.de>; Thu, 02 Oct 2025 04:53:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EBF68BB35D5
+	for <lists+linux-pm@lfdr.de>; Thu, 02 Oct 2025 10:55:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CED30327118
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Oct 2025 02:53:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7E2BE3AD1CE
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Oct 2025 08:53:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1AFA157493;
-	Thu,  2 Oct 2025 02:53:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C4E62FD1C1;
+	Thu,  2 Oct 2025 08:53:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RyDfaXMj"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="CAP2GieB"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C46C8335C7;
-	Thu,  2 Oct 2025 02:53:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D0202F9DA1
+	for <linux-pm@vger.kernel.org>; Thu,  2 Oct 2025 08:53:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759373626; cv=none; b=LtecOUzvCpUhsgbYNU1tmHjPWgfBdFbhnh4ErIxD34tL4Bdqcv5P8SFiWFcxhPGf6KBFy97wQhqYuCERzJy5XwWhAQbX/iaAaPY2tCIN/fYbOzJCHdIw99twPlKFSufzScGVS9l7Zec7AqDxahTvw/yHW8j9LhpLdxt51RWr52c=
+	t=1759395188; cv=none; b=kyci34xnJU+2yAEXRnNW08sqEDlRaEK/KOFm0W4RawQ//8NaAjU5+LC4fF1fJTGHA7gDql8x9F/dOpfLqRdrvIGlj6xT7/E2F7uHJp6+OTLXAA1ACOOypErhDLLtjXQ6zbBLvDItPd1jKCm1owFiohaiP+y8QcAReUZ9RNvj5+I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759373626; c=relaxed/simple;
-	bh=k5Fo7WwY3d4EfZhjNQelpmfw9Ke+RYCe8Y1iFx4rh6w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pbcfAIEU4tB0oG2Q10C+j65voPXprB5Jcne70pdoyse10p82x0PpU9UvvcBT4BO8XPtyAZEc5y5WL7Gb+X3y8WFGfJwQFFW/c32J7z9RG0LprAc59vL3+Yhxk9ze50Pknj6F8yIttzc4cnaJthBI6EPxHkH9Rvk8WI2lKyRMDUY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RyDfaXMj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B9B1C4CEF7;
-	Thu,  2 Oct 2025 02:53:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759373626;
-	bh=k5Fo7WwY3d4EfZhjNQelpmfw9Ke+RYCe8Y1iFx4rh6w=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=RyDfaXMjrk99bGqmhy78acCjsU/K613xe7YU9tO0izmOmI4uhnQsY/iZT/2TbIMpE
-	 MoBuwV6NvjgHL5i8YXGAX9DuIsL8pVKi58vNuS7ijeUJbWzhafrtZ1PYkM30AyS8nb
-	 jUv2RIujj7kPYZ3/2XnZZZkGVeCDRaSEbXB4KyygfCo/QZj7K2VsKHPkR8Oc2JJGy2
-	 iDJpL963nA3Atv+S53scx/gWeaBRSdHmu3udIHV4W4P++He3Xq3c9E9e+KpImjfktN
-	 qpQK3XLBWSaJQsdmU0UgLd22yZmO47Y9ELThsU2OhSt0stLM7vzfIn66/WDyIUb8Mf
-	 a3qj3TZLufFFw==
-Date: Wed, 1 Oct 2025 21:53:44 -0500
-From: Rob Herring <robh@kernel.org>
-To: Otto =?iso-8859-1?Q?Pfl=FCger?= <otto.pflueger@abscue.de>
-Cc: Sebastian Reichel <sre@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Orson Zhai <orsonzhai@gmail.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Chunyan Zhang <zhang.lyra@gmail.com>, Lee Jones <lee@kernel.org>,
-	linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/5] dt-bindings: mfd: sc2731: Reference
- sprd,sc2731-poweroff
-Message-ID: <20251002025344.GA2958334-robh@kernel.org>
-References: <20250926-sc2730-reboot-v1-0-62ebfd3d31bb@abscue.de>
- <20250926-sc2730-reboot-v1-2-62ebfd3d31bb@abscue.de>
+	s=arc-20240116; t=1759395188; c=relaxed/simple;
+	bh=4HhiCdtPcD/lAuJiiWVZDNzGfAoGz/T6J5k93s3E1eQ=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=XrYsu3xC/2efqPv9SS/yAucxLnTaDvCp+Q9VSJR5Iiu0ntopJwtgSoRqNyCuv1C347ao2YFVJxUVtiq6Y61CpP+MjaqjMbGhxk4GuxprHc8SmtJji8VheN/3P4eNjhbTr6Uf1iH5sQkx1ViDriT3YyOmtTNOX72sE01vWKR4cmg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=CAP2GieB; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5925kJbg007885
+	for <linux-pm@vger.kernel.org>; Thu, 2 Oct 2025 08:53:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=TASzNO6cx4aY4C3+AUINvs
+	P0m6HCBQVPuXIy+ecED+A=; b=CAP2GieB3AbnC5uPndtMr2krZegxzNq1Cuuyld
+	ESrqYSY9TzqA+eOR97cRjXAOPiMhcToPndkwzI4ZEXJBkH/5el3QRr/4TvvywYW+
+	wuroS8UZNwGzeyVFJHGcnH817CxjrZ5M1X7B0gJBJgsfrzZ4SIEcUvN6lz/ndx91
+	hs39Z7DzcYTpVzrhTkoSWTsBgdDMsoRaLljXVmAxIplxnRhgsZzjC3XGeJNNJu/1
+	b/vwLYfDzoOIA7sh4Rg2VwaDnRuPEsdq847MSydDnt6Hsb9MzO5KhXuABgSFaPf2
+	ln+cfBbBG/57CITqw8+oot7rRYuhwmzB4/W4xd9txNpESsPQ==
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com [209.85.160.198])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 49hkhh0e3h-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Thu, 02 Oct 2025 08:53:03 +0000 (GMT)
+Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-4e484dccaafso19171781cf.1
+        for <linux-pm@vger.kernel.org>; Thu, 02 Oct 2025 01:53:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1759395183; x=1759999983;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TASzNO6cx4aY4C3+AUINvsP0m6HCBQVPuXIy+ecED+A=;
+        b=o27jb30SqO+28s3QxJmTEXj4T79W2m3R8gD/28g5ijhK3f+S/I/u+gL7GmxyEFiRtx
+         7Ews76Qlswx5NeWusZTrrNg1Eo451nHUtwcMP5MkMVofXr2WzBNAuK0gzwcsBToYnY2h
+         Z8N6Wi2QnodQDQIZx+5kNSj4xCtz52ZohF/lnCrvpjT1m2vsXo1B+WNi+fJ9yekkZCgw
+         aCK9v4hNGIXKXnBFscyySaHIiYU5Xf3W6RCASx1IWY8AxKlWQ63ZU+uw1jS+qVLQtaNP
+         eJGbpGFHFIthVwFxOnmwHBKagQKvcOi4eTeePjCgcLDPhJRTv7jwpZBTkRbGYGoNhniJ
+         7jkQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWTN+3JBoGx1OhJS+H594Q7X1H1T43BPnrPq8rQPloaxk4k5twiJUim4p7/sYDp7Siy6VkC2A0FBA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzhTfzow3oPhcqo67h6/lF0GR1nCJWXD+WP0dRXD2oEmywzRaHf
+	kRjbVK8gmGLIKhFken9zSPYPZA7qZcMYDnzo8RAN/c2ZExBSPmCiOPdRX3AL3629LXI9ihbcpcZ
+	11wFiYvm4Ptrf8k5+ldx0cYSmSKLKKHBbtQfdRfSQUA5fvysjU9kqndxy3XWgpw==
+X-Gm-Gg: ASbGncuyjL69V41a0AdJNDcCtXEkN7XJpieAJs5nmGPhKZ9faeDxN09ePbnAd8o5AXl
+	Sj+lWPhgCg0/aqpdxsaBMqiKEIHu3N8ZGxwb3m2uqJhBMtH04xrlyqiUlZVEH7tYyuo6ZxAKPKr
+	Kq69C2PyhOsRDfhyxSfrBtSHzBKevORkoTsR9VJOJ6r/0MC8agKWfGXJt04fj4HBbfYTl25mxK4
+	OPz29L7/szY1dPCfla3wiLCitcShb9UYxMRsihM2IyqRl4oSJgwt5CW81R7YupNKjOubRNxZDKD
+	Kd9kfDoQJ2YGKgmwS9z9ZVm9NzZfEdenDACTmhRG7eiBAmvjekcj+PxMB/ig6kCqIDHobdobdnd
+	ky/pak9Q/eQpAIy4rThyGf3ThHrZCFJkpdeWGhuPkGFjXyupS/DHrgPc11A==
+X-Received: by 2002:a05:622a:178f:b0:4b7:acab:852b with SMTP id d75a77b69052e-4e563187a7dmr35617801cf.26.1759395182878;
+        Thu, 02 Oct 2025 01:53:02 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHNOAfQi87LSJCR34yVxacyKLw6xvoldf4BlPcvjoOelxPVg87GKyqRVsbOCBcClJYp2rXwDA==
+X-Received: by 2002:a05:622a:178f:b0:4b7:acab:852b with SMTP id d75a77b69052e-4e563187a7dmr35617391cf.26.1759395182191;
+        Thu, 02 Oct 2025 01:53:02 -0700 (PDT)
+Received: from umbar.lan (2001-14ba-a0c3-3a00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a0c3:3a00:264b:feff:fe8b:be8a])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-373ba3124bbsm5207351fa.27.2025.10.02.01.53.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Oct 2025 01:53:01 -0700 (PDT)
+From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+Subject: [PATCH 0/2] arm64: dts: qcom: msm8996: fix issues with probing of
+ USB hosts
+Date: Thu, 02 Oct 2025 11:52:59 +0300
+Message-Id: <20251002-fix-msm8996-icc-v1-0-a36a05d1f869@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250926-sc2730-reboot-v1-2-62ebfd3d31bb@abscue.de>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAGs93mgC/x2MQQqAIBAAvyJ7bkGFLPtKdBBdaw9aKEQg/T3pO
+ DAzDSoVpgqLaFDo5spn7qAGAf5weSfk0Bm01KOSUmPkB1NNs7UG2Xv0pEI0yoVJaujVVagr/3H
+ d3vcDh+1ZgmEAAAA=
+X-Change-ID: 20251002-fix-msm8996-icc-ce1df61ad702
+To: Georgi Djakov <djakov@kernel.org>,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        Dmitry Baryshkov <lumag@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc: linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=826;
+ i=dmitry.baryshkov@oss.qualcomm.com; h=from:subject:message-id;
+ bh=4HhiCdtPcD/lAuJiiWVZDNzGfAoGz/T6J5k93s3E1eQ=;
+ b=owEBbQGS/pANAwAKAYs8ij4CKSjVAcsmYgBo3j1sHDRs9Wa78xf7Zro3JM+9I5+e4+9JwUjFg
+ tK/W9+sH9uJATMEAAEKAB0WIQRMcISVXLJjVvC4lX+LPIo+Aiko1QUCaN49bAAKCRCLPIo+Aiko
+ 1edjB/9w0q5npQeXksi6wlcEjIQu25zJ0+LLfiiJgla4Z49TyAgXj6UVL73votEUyO58Gp0OjcW
+ Yx7BQMKPhHZu8RQa8qqDJj/m/VBKkNXIxZ+NalS+lLaHbWqI3JkB5i2OZmOcQfsONl5PIG5dCqY
+ tEfzjlzaQzFXPzhdCoYHMOXyHTOd59m+PdWFM8Pp9rC177WfRdh/gu720rIDpvNsE1B2Gd8VzMr
+ atxAbUY/CPpN5TdEKYzc+EPyf15f64U9HKif0PDSAXbuGo9lcY366BrFL/vkWU5TU/hrlQs+xLi
+ 7XHR1tqMIgh1kh3FzyGieYKpxVD8MoeTifEk8Ee/0ZRkD0D2
+X-Developer-Key: i=dmitry.baryshkov@oss.qualcomm.com; a=openpgp;
+ fpr=8F88381DD5C873E4AE487DA5199BF1243632046A
+X-Proofpoint-GUID: JiPWaOIaMlyiHPlYX7oMvFy5zNDzg0Ve
+X-Authority-Analysis: v=2.4 cv=cILtc1eN c=1 sm=1 tr=0 ts=68de3d6f cx=c_pps
+ a=mPf7EqFMSY9/WdsSgAYMbA==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+ a=x6icFKpwvdMA:10 a=EUspDBNiAAAA:8 a=tC0vjRaNn0V86lLPGsYA:9 a=QEXdDO2ut3YA:10
+ a=dawVfQjAaf238kedN5IG:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDAyMDA0NyBTYWx0ZWRfX0cMcoeKSKFJ1
+ cK40IbF6tjhvpWSXGyr6Czx1ghUTo4skuapfDbicoTysZto9ryVP1V657YB1SQ2iAAEf+/U/Cpd
+ bEp8MzfnENGh9A8QvSy2ZiwgiC9cZN9R4rppVRuGwUMvVkm5Urho+r7CikqIvhQybtP4WrX/dYz
+ MEpi6+WbzaZeMiGn9tIzz0nEUOzJrpMmM8niNdQHKqPTIBzLRi/YMZ3OnutkWvMUP2TtXIQUgC3
+ 28QLr9WhFQ6uChIhMfTh4FRE01pDQNPvdDYtmFoQ53hLjH31lq219YTK6XdLQZ5zxoeuvRA2GdI
+ axpN+yjW4fjGDnKC+iGqYV6yvxO1HH0E/ZxRr8LCZ7XVgWg480qW5oYk3Bz68mt0bW2r/M5j6aQ
+ qJpHh4pbc5XSghUvY5Z+wFsd/gSbeA==
+X-Proofpoint-ORIG-GUID: JiPWaOIaMlyiHPlYX7oMvFy5zNDzg0Ve
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-10-02_03,2025-10-02_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ spamscore=0 phishscore=0 lowpriorityscore=0 priorityscore=1501
+ impostorscore=0 bulkscore=0 clxscore=1015 malwarescore=0 adultscore=0
+ suspectscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2509150000
+ definitions=main-2510020047
 
-On Fri, Sep 26, 2025 at 06:23:24PM +0200, Otto Pflüger wrote:
-> Reference the new sprd,sc2731-poweroff bindings and add an example.
-> 
-> Signed-off-by: Otto Pflüger <otto.pflueger@abscue.de>
-> ---
->  Documentation/devicetree/bindings/mfd/sprd,sc2731.yaml | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/mfd/sprd,sc2731.yaml b/Documentation/devicetree/bindings/mfd/sprd,sc2731.yaml
-> index b023e1ef8d3ccdb1d82d64ed1a60d5a712a1b910..a78d7e26b3a2c77b84da84fc23e52f3a22ab14df 100644
-> --- a/Documentation/devicetree/bindings/mfd/sprd,sc2731.yaml
-> +++ b/Documentation/devicetree/bindings/mfd/sprd,sc2731.yaml
-> @@ -52,6 +52,10 @@ properties:
->    '#size-cells':
->      const: 0
->  
-> +  poweroff:
-> +    type: object
-> +    $ref: /schemas/power/reset/sprd,sc2731-poweroff.yaml#
+The lack of the interconnects for the USB2 host might result in the
+register writes for the PHY not reaching the PHY and thus the PLL not
+locking up, resulting in -EBUSY errors for the USB host on the platform.
+Add missing interconnect link and add interconnect paths to the USB2
+device.
 
-You don't need a child node here as there's no DT resources. Just make 
-the parent node the power off provider.
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+---
+Dmitry Baryshkov (2):
+      interconnect: qcom: msm8996: add missing link to SLAVE_USB_HS
+      arm64: dts: qcom: msm8996: add interconnect paths to USB2 controller
 
-IOW, a node with only a compatible property is pretty much always wrong 
-(though yes, you can find examples).
+ arch/arm64/boot/dts/qcom/msm8996.dtsi | 3 +++
+ drivers/interconnect/qcom/msm8996.c   | 1 +
+ 2 files changed, 4 insertions(+)
+---
+base-commit: bf2602a3cb2381fb1a04bf1c39a290518d2538d1
+change-id: 20251002-fix-msm8996-icc-ce1df61ad702
 
-> +
->    regulators:
->      type: object
->      $ref: /schemas/regulator/sprd,sc2731-regulator.yaml#
-> @@ -221,6 +225,10 @@ examples:
->            reg = <0xec8>;
->          };
->  
-> +        poweroff {
-> +          compatible = "sprd,sc2731-poweroff";
-> +        };
-> +
->          regulators {
->            compatible = "sprd,sc2731-regulator";
->  
-> 
-> -- 
-> 2.50.0
-> 
+Best regards,
+-- 
+With best wishes
+Dmitry
+
 
