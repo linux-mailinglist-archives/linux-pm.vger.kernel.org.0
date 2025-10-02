@@ -1,175 +1,212 @@
-Return-Path: <linux-pm+bounces-35664-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35665-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9AA9BB35F0
-	for <lists+linux-pm@lfdr.de>; Thu, 02 Oct 2025 10:58:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 09E63BB3780
+	for <lists+linux-pm@lfdr.de>; Thu, 02 Oct 2025 11:37:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D51CA7B35FA
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Oct 2025 08:56:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 781F71893C56
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Oct 2025 09:37:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FC892EA73B;
-	Thu,  2 Oct 2025 08:58:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE9392F7462;
+	Thu,  2 Oct 2025 09:37:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="btSCzjks"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="KQHAAV3c"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79A2C2FBE12
-	for <linux-pm@vger.kernel.org>; Thu,  2 Oct 2025 08:58:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 789F412CD8B;
+	Thu,  2 Oct 2025 09:37:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759395494; cv=none; b=N/xLQqZRHvGnfQXRpBw0shR2Q0YZQMfOW+tj/Sc2AfZP6w3gYhIGfRL0QbqmUal92xuIEn+fQplSSSq+JyQoRejbbH5FVNcNNFpQE9p+dT/jhQCXveW7lnw7VM89tovIx0fqwB75r2plEXj24eWHFNGYB1Z5RttpTSiqpUi/2YU=
+	t=1759397829; cv=none; b=obbiQmmMN1jHvN5B+Yp2+9U8iiha6WlIaGCyWI6QPERr0GJeiviHdaHRFr14XzcwM/UDYH7RIsttZdj2QWcFZGCDyvEToZ2hzTKI697T3xZyUaBgNtwUqdei6GDfAGC2DWG5iQs06HZDjK+JkMYN0AgeKRUp1BkE48UFm00+SMk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759395494; c=relaxed/simple;
-	bh=I4SP6KNXP9wNBNDQD45sLrHOkRhFeQz2BrfdEPhIUNM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=k+c86ck66qdeug07cTgCvQNGJMRkohuu+LYrV7j+LtLLhK+s2DpRP4yAMkgxmqHSvdFg11tlUgwAGLuF+o5EF6XG6JBjK16aoV4TxF+PcTs33JI55xQKxzAe2Y56zji9yhzu8pxQA6IIdlzytX0fyZuPdC1wpAlTBVY9jOCz10w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=btSCzjks; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C864C116B1
-	for <linux-pm@vger.kernel.org>; Thu,  2 Oct 2025 08:58:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759395494;
-	bh=I4SP6KNXP9wNBNDQD45sLrHOkRhFeQz2BrfdEPhIUNM=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=btSCzjksCbPVkonNPB29BHRt0fa1sO3TU7OFt947yofwiXOioRH73y+gwEYb3G+WV
-	 +pJFG7+NiBIpNdjtyt5qEB0DAgnTXrXv0DRkiUIMk8UcvE2go2Mnx70GNRt6cgeAxP
-	 P2uerqHp1q3U3TtaCHV2IIZTwsHra5tmNTmYkxk1vmCDLeadS/Mk8g/MUQg2oNzpmZ
-	 tY5gviXk2i+YBzHU5kFX9OiIT5jkrzHAjJ1TttD6vC8PZ+e4GMSxvO0b8/LdoWxY3W
-	 zz3xwBMsFVBcJCBOYOsHi5S1Rrpq+Epuv9xDa9VxynO8vi1OcMPJ7TRK74KO7UOSUw
-	 8FMj7LYHT5CtA==
-Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-646d66626a4so379021eaf.0
-        for <linux-pm@vger.kernel.org>; Thu, 02 Oct 2025 01:58:14 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWekE+Ice2dxP63467R2N5eFv8nShzIzc+WXZQfSSO8kDvQJrV/WU8sQJ2jFbooijwfZjtuaWZhSA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw/E7Bo8pNJYMRx+0rL9SozjeOKCa6BLTA7t1so51ysGiGN04Mq
-	1+/Uxqlzl3Ov5kpE/KGB6GUhKOyfOh6TClWC6a92N0ezyC7UZ6yFkqlULVy7nXn8F01DBaLAyGY
-	FkWdmVWHCdkiy1IJHmmFqYF7+lwrDfDw=
-X-Google-Smtp-Source: AGHT+IEMLxjd9ZUo/Zk/S6ZXeKvQYsV2ZpEB+uhyIKOVPA1BpiREMPXNleuwDOpgKOeWqhEdBohMl5tTdZvgKgUbJ+k=
-X-Received: by 2002:a05:6820:761a:b0:64e:5783:441f with SMTP id
- 006d021491bc7-64e5783480fmr470666eaf.8.1759395493299; Thu, 02 Oct 2025
- 01:58:13 -0700 (PDT)
+	s=arc-20240116; t=1759397829; c=relaxed/simple;
+	bh=pvPudess2AabFQ8lphtvYYh8pAOCEVIGlOU+P+KJ0tE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=dmcXHYsKcUbauS5PvY1bkVFZdexfZPoktbEiJz12D4Y3Ux5Ih8S32ExEWX6bk+TgRtiBx9haOEjdSsaLYaLCvObJg249AKqskTqgRN+NWsbmA/lm/pgQ8a7k81//ZENWwQdoXS7uFlNWCIKijJvdDOgMvzWA75Mba54sO4ZPC8c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=KQHAAV3c; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1759397825;
+	bh=pvPudess2AabFQ8lphtvYYh8pAOCEVIGlOU+P+KJ0tE=;
+	h=From:To:Cc:Subject:Date:From;
+	b=KQHAAV3cCUvVT5an/RpuE5eXUsWrLxOoFT5HjwPeVN+2nWQij5ZKgdfy29kD8jwoD
+	 119Q6ydah+IcnJOoJEQjzGw+HsIhMA7L0hv06wa3k2cDmTmOenfWvJ79vDR2NVQxUB
+	 7ekuF8ze39Ysbf6a7J5jPepv1LXMOQBCPDasoXJoHQu1fsRl6jE8i8ttzfIIaUlj/G
+	 SNtmXd24mUsSsjKnMkVm1wmS56xS18TqU+EUCcpmEo2WKCDDioAIB0m71TQKoNJ66k
+	 3s/PTTkPYs+TAoT/J9x+PEcEIYbSoSmw9ZhVa4BSON5GgL9FU9+v5XqTd17TuZTWaY
+	 LI/1hFAMMdC8A==
+Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id CAB2117E129E;
+	Thu,  2 Oct 2025 11:37:04 +0200 (CEST)
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+To: sboyd@kernel.org
+Cc: jic23@kernel.org,
+	dlechner@baylibre.com,
+	nuno.sa@analog.com,
+	andy@kernel.org,
+	arnd@arndb.de,
+	gregkh@linuxfoundation.org,
+	srini@kernel.org,
+	vkoul@kernel.org,
+	kishon@kernel.org,
+	sre@kernel.org,
+	krzysztof.kozlowski@linaro.org,
+	u.kleine-koenig@baylibre.com,
+	angelogioacchino.delregno@collabora.com,
+	linux-arm-msm@vger.kernel.org,
+	linux-iio@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-phy@lists.infradead.org,
+	linux-pm@vger.kernel.org,
+	kernel@collabora.com,
+	wenst@chromium.org,
+	casey.connolly@linaro.org
+Subject: [PATCH v5 0/7] SPMI: Implement sub-devices and migrate drivers
+Date: Thu,  2 Oct 2025 11:36:50 +0200
+Message-ID: <20251002093657.2055332-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <3f5420c70643d9b35b39d9b336295d589eaf7013.1759239979.git.geert+renesas@glider.be>
-In-Reply-To: <3f5420c70643d9b35b39d9b336295d589eaf7013.1759239979.git.geert+renesas@glider.be>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 2 Oct 2025 10:58:00 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0iu=OYABdXjeYX3GPcUq-LDsq9q1JmGizDi8OX_Uzh4RA@mail.gmail.com>
-X-Gm-Features: AS18NWBBfJP7yjox4AMLuLOrPsFP_Cs7O04kv8bpwFN8HDufe2l_y4eEFFPQjWA
-Message-ID: <CAJZ5v0iu=OYABdXjeYX3GPcUq-LDsq9q1JmGizDi8OX_Uzh4RA@mail.gmail.com>
-Subject: Re: [PATCH] thermal: renesas: Fix RZ/G3E fall-out
-To: Geert Uytterhoeven <geert+renesas@glider.be>
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, 
-	John Madieu <john.madieu.xa@bp.renesas.com>, 
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>, linux-pm@vger.kernel.org, 
-	linux-renesas-soc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Tue, Sep 30, 2025 at 3:47=E2=80=AFPM Geert Uytterhoeven
-<geert+renesas@glider.be> wrote:
->
->   - Restore sort order in MAINTAINERS and Kconfig,
->   - Remove empty trailing line from Makefile.
->
-> Fixes: 19d3a401a617c68e ("thermal/drivers/renesas/rzg3e: Add thermal driv=
-er for the Renesas RZ/G3E SoC")
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> ---
->  MAINTAINERS                      | 14 +++++++-------
->  drivers/thermal/renesas/Kconfig  | 14 +++++++-------
->  drivers/thermal/renesas/Makefile |  1 -
->  3 files changed, 14 insertions(+), 15 deletions(-)
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index eb73b4db917596bd..fc755a50fb150498 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -21881,13 +21881,6 @@ S:     Maintained
->  F:     Documentation/devicetree/bindings/iio/potentiometer/renesas,x9250=
-.yaml
->  F:     drivers/iio/potentiometer/x9250.c
->
-> -RENESAS RZ/G3S THERMAL SENSOR UNIT DRIVER
-> -M:     Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-> -L:     linux-pm@vger.kernel.org
-> -S:     Maintained
-> -F:     Documentation/devicetree/bindings/thermal/renesas,r9a08g045-tsu.y=
-aml
-> -F:     drivers/thermal/renesas/rzg3s_thermal.c
-> -
->  RENESAS RZ/G3E THERMAL SENSOR UNIT DRIVER
->  M:     John Madieu <john.madieu.xa@bp.renesas.com>
->  L:     linux-pm@vger.kernel.org
-> @@ -21895,6 +21888,13 @@ S:     Maintained
->  F:     Documentation/devicetree/bindings/thermal/renesas,r9a09g047-tsu.y=
-aml
->  F:     drivers/thermal/renesas/rzg3e_thermal.c
->
-> +RENESAS RZ/G3S THERMAL SENSOR UNIT DRIVER
-> +M:     Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-> +L:     linux-pm@vger.kernel.org
-> +S:     Maintained
-> +F:     Documentation/devicetree/bindings/thermal/renesas,r9a08g045-tsu.y=
-aml
-> +F:     drivers/thermal/renesas/rzg3s_thermal.c
-> +
->  RESET CONTROLLER FRAMEWORK
->  M:     Philipp Zabel <p.zabel@pengutronix.de>
->  S:     Maintained
-> diff --git a/drivers/thermal/renesas/Kconfig b/drivers/thermal/renesas/Kc=
-onfig
-> index c762c1c30d5a211a..5735c8728a31fcb5 100644
-> --- a/drivers/thermal/renesas/Kconfig
-> +++ b/drivers/thermal/renesas/Kconfig
-> @@ -27,6 +27,13 @@ config RZG2L_THERMAL
->           Enable this to plug the RZ/G2L thermal sensor driver into the L=
-inux
->           thermal framework.
->
-> +config RZG3E_THERMAL
-> +       tristate "Renesas RZ/G3E thermal driver"
-> +       depends on ARCH_RENESAS || COMPILE_TEST
-> +       help
-> +         Enable this to plug the RZ/G3E thermal sensor driver into the L=
-inux
-> +         thermal framework.
-> +
->  config RZG3S_THERMAL
->         tristate "Renesas RZ/G3S thermal driver"
->         depends on ARCH_R9A08G045 || COMPILE_TEST
-> @@ -34,10 +41,3 @@ config RZG3S_THERMAL
->         help
->           Enable this to plug the RZ/G3S thermal sensor driver into the L=
-inux
->           thermal framework.
-> -
-> -config RZG3E_THERMAL
-> -       tristate "Renesas RZ/G3E thermal driver"
-> -       depends on ARCH_RENESAS || COMPILE_TEST
-> -       help
-> -         Enable this to plug the RZ/G3E thermal sensor driver into the L=
-inux
-> -         thermal framework.
-> diff --git a/drivers/thermal/renesas/Makefile b/drivers/thermal/renesas/M=
-akefile
-> index 0ea59224757226cc..8f5ae9af277cab5e 100644
-> --- a/drivers/thermal/renesas/Makefile
-> +++ b/drivers/thermal/renesas/Makefile
-> @@ -5,4 +5,3 @@ obj-$(CONFIG_RCAR_THERMAL)      +=3D rcar_thermal.o
->  obj-$(CONFIG_RZG2L_THERMAL)    +=3D rzg2l_thermal.o
->  obj-$(CONFIG_RZG3E_THERMAL)    +=3D rzg3e_thermal.o
->  obj-$(CONFIG_RZG3S_THERMAL)    +=3D rzg3s_thermal.o
-> -
-> --
+Changes in v5:
+ - Changed dev_err to dev_err_probe in qcom-spmi-sdam (and done
+   that even though I disagree - because I wanted this series to
+   *exclusively* introduce the minimum required changes to
+   migrate to the new API, but okay, whatever....!);
+ - Added missing REGMAP dependency in Kconfig for qcom-spmi-sdam,
+   phy-qcom-eusb2-repeater and qcom-coincell to resolve build
+   issues when the already allowed COMPILE_TEST is enabled
+   as pointed out by the test robot's randconfig builds.
 
-Applied, thanks!
+Changes in v4:
+ - Added selection of REGMAP_SPMI in Kconfig for qcom-coincell and
+   for phy-qcom-eusb2-repeater to resolve undefined references when
+   compiled with some randconfig
+
+Changes in v3:
+ - Fixed importing "SPMI" namespace in spmi-devres.c
+ - Removed all instances of defensive programming, as pointed out by
+   jic23 and Sebastian
+ - Removed explicit casting as pointed out by jic23
+ - Moved ida_free call to spmi_subdev_release() and simplified error
+   handling in spmi_subdevice_alloc_and_add() as pointed out by jic23
+
+Changes in v2:
+ - Fixed missing `sparent` initialization in phy-qcom-eusb2-repeater
+ - Changed val_bits to 8 in all Qualcomm drivers to ensure
+   compatibility as suggested by Casey
+ - Added struct device pointer in all conversion commits as suggested
+   by Andy
+ - Exported newly introduced functions with a new "SPMI" namespace
+   and imported the same in all converted drivers as suggested by Andy
+ - Added missing error checking for dev_set_name() call in spmi.c
+   as suggested by Andy
+ - Added comma to last entry of regmap_config as suggested by Andy
+
+While adding support for newer MediaTek platforms, featuring complex
+SPMI PMICs, I've seen that those SPMI-connected chips are internally
+divided in various IP blocks, reachable in specific contiguous address
+ranges... more or less like a MMIO, but over a slow SPMI bus instead.
+
+I recalled that Qualcomm had something similar... and upon checking a
+couple of devicetrees, yeah - indeed it's the same over there.
+
+What I've seen then is a common pattern of reading the "reg" property
+from devicetree in a struct member and then either
+ A. Wrapping regmap_{read/write/etc}() calls in a function that adds
+    the register base with "base + ..register", like it's done with
+    writel()/readl() calls; or
+ B. Doing the same as A. but without wrapper functions.
+
+Even though that works just fine, in my opinion it's wrong.
+
+The regmap API is way more complex than MMIO-only readl()/writel()
+functions for multiple reasons (including supporting multiple busses
+like SPMI, of course) - but everyone seemed to forget that regmap
+can manage register base offsets transparently and automatically in
+its API functions by simply adding a `reg_base` to the regmap_config
+structure, which is used for initializing a `struct regmap`.
+
+So, here we go: this series implements the software concept of an SPMI
+Sub-Device (which, well, also reflects how Qualcomm and MediaTek's
+actual hardware is laid out anyway).
+
+               SPMI Controller
+                     |                ______
+                     |               /       Sub-Device 1
+                     V              /
+              SPMI Device (PMIC) ----------- Sub-Device 2
+                                    \
+                                     \______ Sub-Device 3
+
+As per this implementation, an SPMI Sub-Device can be allocated/created
+and added in any driver that implements a... well.. subdevice (!) with
+an SPMI "main" device as its parent: this allows to create and finally
+to correctly configure a regmap that is specific to the sub-device,
+operating on its specific address range and reading, and writing, to
+its registers with the regmap API taking care of adding the base address
+of a sub-device's registers as per regmap API design.
+
+All of the SPMI Sub-Devices are therefore added as children of the SPMI
+Device (usually a PMIC), as communication depends on the PMIC's SPMI bus
+to be available (and the PMIC to be up and running, of course).
+
+Summarizing the dependency chain (which is obvious to whoever knows what
+is going on with Qualcomm and/or MediaTek SPMI PMICs):
+    "SPMI Sub-Device x...N" are children "SPMI Device"
+    "SPMI Device" is a child of "SPMI Controller"
+
+(that was just another way to say the same thing as the graph above anyway).
+
+Along with the new SPMI Sub-Device registration functions, I have also
+performed a conversion of some Qualcomm SPMI drivers and only where the
+actual conversion was trivial.
+
+I haven't included any conversion of more complex Qualcomm SPMI drivers
+because I don't have the required bandwidth to do so (and besides, I think,
+but haven't exactly verified, that some of those require SoCs that I don't
+have for testing anyway).
+
+
+AngeloGioacchino Del Regno (7):
+  spmi: Implement spmi_subdevice_alloc_and_add() and devm variant
+  nvmem: qcom-spmi-sdam: Migrate to devm_spmi_subdevice_alloc_and_add()
+  power: reset: qcom-pon: Migrate to devm_spmi_subdevice_alloc_and_add()
+  phy: qualcomm: eusb2-repeater: Migrate to
+    devm_spmi_subdevice_alloc_and_add()
+  misc: qcom-coincell: Migrate to devm_spmi_subdevice_alloc_and_add()
+  iio: adc: qcom-spmi-iadc: Migrate to
+    devm_spmi_subdevice_alloc_and_add()
+  iio: adc: qcom-spmi-iadc: Remove regmap R/W wrapper functions
+
+ drivers/iio/adc/qcom-spmi-iadc.c              | 109 ++++++++----------
+ drivers/misc/Kconfig                          |   2 +
+ drivers/misc/qcom-coincell.c                  |  38 ++++--
+ drivers/nvmem/Kconfig                         |   1 +
+ drivers/nvmem/qcom-spmi-sdam.c                |  36 ++++--
+ drivers/phy/qualcomm/Kconfig                  |   2 +
+ .../phy/qualcomm/phy-qcom-eusb2-repeater.c    |  53 ++++++---
+ drivers/power/reset/qcom-pon.c                |  34 ++++--
+ drivers/spmi/spmi-devres.c                    |  24 ++++
+ drivers/spmi/spmi.c                           |  79 +++++++++++++
+ include/linux/spmi.h                          |  16 +++
+ 11 files changed, 283 insertions(+), 111 deletions(-)
+
+-- 
+2.51.0
+
 
