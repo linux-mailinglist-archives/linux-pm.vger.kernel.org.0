@@ -1,232 +1,162 @@
-Return-Path: <linux-pm+bounces-35679-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35680-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7C17BB3C7C
-	for <lists+linux-pm@lfdr.de>; Thu, 02 Oct 2025 13:35:42 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 47B34BB3D52
+	for <lists+linux-pm@lfdr.de>; Thu, 02 Oct 2025 14:00:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DD46A32366B
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Oct 2025 11:35:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DED7C19C32FA
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Oct 2025 12:01:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 709CA30F950;
-	Thu,  2 Oct 2025 11:34:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="yl9o4QIS"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02FEB3101BD;
+	Thu,  2 Oct 2025 12:00:47 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f74.google.com (mail-ed1-f74.google.com [209.85.208.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8579131076C
-	for <linux-pm@vger.kernel.org>; Thu,  2 Oct 2025 11:34:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 212D03101B0
+	for <linux-pm@vger.kernel.org>; Thu,  2 Oct 2025 12:00:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759404858; cv=none; b=WgY8sPKWHwoGUM0kGHe+2+WYv/T1VBhod1zpCpo7O1ec2t4FcXURc07vamCs/mlR02UW1bVmC+CZDfmH0wqHd585lpvA9j1KycF3bpMT+iBXn6USkEr+duDQZaLsM4ubJVPlyvseFhBUYHNMYR2caFZ/M8bIdCvfJmlAjBuTQSg=
+	t=1759406446; cv=none; b=rOETIkTUF5dsLASUXhOsWUij9z93GkDsqRpCNB+IF8vb8Sck6thXTntNDoKVdzrwaeAuPpPT19iJ9Fn0EQ7BUk4lf0R7EgjBtWafgye4NQ4yO53RAVKsZK6KUAM9PZI8AtbnUcNJFt9izw/UXH3icrrkvwWXFacfbYcBfmR5x14=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759404858; c=relaxed/simple;
-	bh=4OP6QBdFKr1574GZhyc2cb1Lv+GX8ez8QVbJWQWOSGk=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=LCCHYAyidqSqrmt6Gi6ne4Eo7J1dqpXYCX/IzwWthA0O69c2cRvUoOTx8vd7orL6XeTdowxDnPn1sj1DZOPnuA+LMYEuul7W8xe7kMSubpyy4PFPR4b+zl1L+1NhIRTp4vOdJhvcqxzundXD1Lv5txzR2m+pFDm6MZpZXCFyetg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--srosek.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=yl9o4QIS; arc=none smtp.client-ip=209.85.208.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--srosek.bounces.google.com
-Received: by mail-ed1-f74.google.com with SMTP id 4fb4d7f45d1cf-632c9a9ceb1so1058996a12.0
-        for <linux-pm@vger.kernel.org>; Thu, 02 Oct 2025 04:34:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1759404854; x=1760009654; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=kgpUJcZIT53UUziBi2oBrvyEh4rGfYabLqvWzsqp90A=;
-        b=yl9o4QISp/HuDiOBl78uizac9ONNsWBTwjSk7NgXErl4BxfQtpffv2wI5ED6LimNq3
-         z0X0q86LNIKfevGBCGt7SFDuC16e3cZLAtE+5GaMd/v3zNMsyCW8u6NKaf+LdCbu5L+b
-         4b44NeULuk2NrIXQ91iltZaVY6OOu43wvq2h51yFjetvU02ScTDEGf2e8etZFoXj3r6T
-         Xolj7ywxVMmJ7wOS8lB5uXuZTGhSQr8OcXG2i8jz9niRHHC42ygPfBW51IAObukXKfRe
-         Hnc/rPpjaGrwWNQlCnlgGSfq+wly/kJMmJgen3FPvQ6bzO9y0dl1AoQd+ZY3cSCKZfwm
-         mfkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759404854; x=1760009654;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kgpUJcZIT53UUziBi2oBrvyEh4rGfYabLqvWzsqp90A=;
-        b=d+8gRHRtQe9geEcRndtsvmO4QHf2xy8Gnz/YRWyW0nv+9RZpkelxFV8zbXj3fH7BNl
-         I6fFC0mYy6Gv+Z3esg6TG+3JXqCoTLMd2dR02hLE2A/kJgHXqAyvPuCwA8Da3IwAKp4m
-         UHiRHAbCDpWIwwLH4wBuvlpxek6V2TcMUOuIrqWfe4QNahhMEgnJk3iSRhqG+3gXu0Nm
-         9nDgFBpDLr5moxHrRnRRYL4pGV1DXneVD17lBPzojuXyfLsZT7OHgHVTDJVHCIgbMMEK
-         UIysMgx4s6g4n3OJkCffycIQVQGrp+efGvc0M49GmerfRH+GvGPmk7YxRa5Isb58wFX/
-         AfUg==
-X-Forwarded-Encrypted: i=1; AJvYcCVI1VrRAFV3rCR8yQi3JwycPpNzZ7fVQ5A7Ye/SpikB3C6LJhieY11gbdwvGd6THSr1QlJYD/SNSw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzHAf7Ax54yzYAOs1odq5P8gsLoztjI4baJPZjtWYdpIIqVXPnR
-	lbdDGLXFHwCHuIf2mqbtiLG9K218qZ+SQjZYmjMM1siH3EP90DOktC7RoHo5fGTHAceMdASdwB0
-	yiy4i3A==
-X-Google-Smtp-Source: AGHT+IEViJurBgSj1HUwewxJ2lufwYxLh7QiIceZMFqK3KJHnZaS1MP+gTNpl0gquADVo4qzM8B94yHCRDA=
-X-Received: from edqm3.prod.google.com ([2002:aa7:c483:0:b0:636:4ff7:efe])
- (user=srosek job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6402:909:b0:637:ec7d:4d6c
- with SMTP id 4fb4d7f45d1cf-637ec7d4f8cmr859439a12.11.1759404853757; Thu, 02
- Oct 2025 04:34:13 -0700 (PDT)
-Date: Thu,  2 Oct 2025 11:34:04 +0000
-In-Reply-To: <20251002113404.3117429-1-srosek@google.com>
+	s=arc-20240116; t=1759406446; c=relaxed/simple;
+	bh=zlFrpOe0HrWRYD2Vb3aRVlnCqzPgkaXM7sG+IHktRWE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=prtsC1+lgDysezEvfTJNwDkQBVtkTRK5JR4wtjeSBvOYobXEdXLdLlpGzd/7fUBDrNrZSatvvrNIZVYT2tT7X6eZ5GF2ESYtsQIpiFim+p/exAzvX1WxC8xeMF8jzylEBzuDJ/bPDnUMYUNeKZO4gdTAxlE/7hFz2PCyuu+1AgA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ore@pengutronix.de>)
+	id 1v4Hyl-00083q-Gr; Thu, 02 Oct 2025 14:00:11 +0200
+Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <ore@pengutronix.de>)
+	id 1v4Hyj-001ZsI-0p;
+	Thu, 02 Oct 2025 14:00:09 +0200
+Received: from ore by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <ore@pengutronix.de>)
+	id 1v4Hyj-008S1y-0P;
+	Thu, 02 Oct 2025 14:00:09 +0200
+Date: Thu, 2 Oct 2025 14:00:09 +0200
+From: Oleksij Rempel <o.rempel@pengutronix.de>
+To: Sebastian Reichel <sre@kernel.org>,
+	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+	Benson Leung <bleung@chromium.org>,
+	Tzung-Bi Shih <tzungbi@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Kees Cook <kees@kernel.org>,
+	Tony Luck <tony.luck@intel.com>,
+	"Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: kernel@pengutronix.de, linux-kernel@vger.kernel.org,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	linux-pm@vger.kernel.org,
+	=?utf-8?B?U8O4cmVu?= Andersen <san@skov.dk>,
+	Guenter Roeck <groeck@chromium.org>,
+	Matti Vaittinen <mazziesaccount@gmail.com>,
+	Ahmad Fatoum <a.fatoum@pengutronix.de>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	chrome-platform@lists.linux.dev, devicetree@vger.kernel.org,
+	linux-hardening@vger.kernel.org
+Subject: RFC: Selecting an NVMEM cell for Power State Change Reason (PSCR)
+ recording
+Message-ID: <aN5pSWBFRZlNRv3U@pengutronix.de>
+References: <20250618120255.3141862-1-o.rempel@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20251002113404.3117429-1-srosek@google.com>
-X-Mailer: git-send-email 2.51.0.618.g983fd99d29-goog
-Message-ID: <20251002113404.3117429-7-srosek@google.com>
-Subject: [PATCH v3 6/6] ACPI: DPTF: Move INT340X enumeration to modules
-From: Slawomir Rosek <srosek@google.com>
-To: "Rafael J . Wysocki" <rafael@kernel.org>, Alex Hung <alexhung@gmail.com>, 
-	Hans de Goede <hansg@kernel.org>, Ilpo Jarvinen <ilpo.jarvinen@linux.intel.com>, 
-	AceLan Kao <acelan.kao@canonical.com>, Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Zhang Rui <rui.zhang@intel.com>, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Tomasz Nowicki <tnowicki@google.com>, 
-	Stanislaw Kardach <skardach@google.com>, Michal Krawczyk <mikrawczyk@google.com>, 
-	linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org, 
-	platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org, 
-	Slawomir Rosek <srosek@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250618120255.3141862-1-o.rempel@pengutronix.de>
+X-Sent-From: Pengutronix Hildesheim
+X-URL: http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 
-Move enumeration of INT340X ACPI device objects on the platform bus
-from DPTF core to thermal drivers using ACPI platform core methods
+Hi all,
 
-Signed-off-by: Slawomir Rosek <srosek@google.com>
----
- drivers/acpi/dptf/dptf_pch_fivr.c                       | 2 +-
- drivers/acpi/dptf/dptf_power.c                          | 2 +-
- drivers/acpi/dptf/int340x_thermal.c                     | 7 +++++--
- drivers/acpi/fan_core.c                                 | 2 +-
- drivers/thermal/intel/int340x_thermal/int3400_thermal.c | 2 +-
- drivers/thermal/intel/int340x_thermal/int3401_thermal.c | 2 +-
- drivers/thermal/intel/int340x_thermal/int3402_thermal.c | 2 +-
- drivers/thermal/intel/int340x_thermal/int3403_thermal.c | 2 +-
- drivers/thermal/intel/int340x_thermal/int3406_thermal.c | 2 +-
- 9 files changed, 13 insertions(+), 10 deletions(-)
+I'm seeking consensus on a minimal, upstream-acceptable way to identify the
+single NVMEM cell used to persist a Power State Change Reason (PSCR). Typical
+targets are battery-backed RTC scratchpads or small EEPROM. The aim is to have
+a tiny breadcrumb available before userspace, across full power cuts, and
+shared by bootloader/kernel/userspace.
 
-diff --git a/drivers/acpi/dptf/dptf_pch_fivr.c b/drivers/acpi/dptf/dptf_pch_fivr.c
-index cb81636a5d63..f3cd52c89e8d 100644
---- a/drivers/acpi/dptf/dptf_pch_fivr.c
-+++ b/drivers/acpi/dptf/dptf_pch_fivr.c
-@@ -162,7 +162,7 @@ static struct platform_driver pch_fivr_driver = {
- 	},
- };
- 
--module_platform_driver(pch_fivr_driver);
-+module_acpi_platform_driver(pch_fivr_driver);
- 
- MODULE_AUTHOR("Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>");
- MODULE_LICENSE("GPL v2");
-diff --git a/drivers/acpi/dptf/dptf_power.c b/drivers/acpi/dptf/dptf_power.c
-index d7c59f016083..b85e876b2e85 100644
---- a/drivers/acpi/dptf/dptf_power.c
-+++ b/drivers/acpi/dptf/dptf_power.c
-@@ -239,7 +239,7 @@ static struct platform_driver dptf_power_driver = {
- 	},
- };
- 
--module_platform_driver(dptf_power_driver);
-+module_acpi_platform_driver(dptf_power_driver);
- 
- MODULE_AUTHOR("Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>");
- MODULE_LICENSE("GPL v2");
-diff --git a/drivers/acpi/dptf/int340x_thermal.c b/drivers/acpi/dptf/int340x_thermal.c
-index 7d1308b1f513..b2be3a8df9ac 100644
---- a/drivers/acpi/dptf/int340x_thermal.c
-+++ b/drivers/acpi/dptf/int340x_thermal.c
-@@ -27,8 +27,11 @@ static const struct acpi_device_id int340x_thermal_device_ids[] = {
- static int int340x_thermal_handler_attach(struct acpi_device *adev,
- 					const struct acpi_device_id *id)
- {
--	if (IS_ENABLED(CONFIG_INT340X_THERMAL))
--		acpi_create_platform_device(adev, NULL);
-+	/*
-+	 * Do not attach INT340X devices until platform drivers are loaded.
-+	 * Enumeration of INT340X ACPI device objects on the platform bus
-+	 * should be done by thermal drivers.
-+	 */
- 	return 1;
- }
- 
-diff --git a/drivers/acpi/fan_core.c b/drivers/acpi/fan_core.c
-index 04ff608f2ff0..61681ff24477 100644
---- a/drivers/acpi/fan_core.c
-+++ b/drivers/acpi/fan_core.c
-@@ -463,7 +463,7 @@ static struct platform_driver acpi_fan_driver = {
- 	},
- };
- 
--module_platform_driver(acpi_fan_driver);
-+module_acpi_platform_driver(acpi_fan_driver);
- 
- MODULE_AUTHOR("Paul Diefenbaugh");
- MODULE_DESCRIPTION("ACPI Fan Driver");
-diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-index 6311125c3ebd..0005961328fc 100644
---- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-+++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-@@ -699,7 +699,7 @@ static struct platform_driver int3400_thermal_driver = {
- 		   },
- };
- 
--module_platform_driver(int3400_thermal_driver);
-+module_acpi_platform_driver(int3400_thermal_driver);
- 
- MODULE_DESCRIPTION("INT3400 Thermal driver");
- MODULE_AUTHOR("Zhang Rui <rui.zhang@intel.com>");
-diff --git a/drivers/thermal/intel/int340x_thermal/int3401_thermal.c b/drivers/thermal/intel/int340x_thermal/int3401_thermal.c
-index e0603f218d2e..d496f8b171e0 100644
---- a/drivers/thermal/intel/int340x_thermal/int3401_thermal.c
-+++ b/drivers/thermal/intel/int340x_thermal/int3401_thermal.c
-@@ -69,7 +69,7 @@ static struct platform_driver int3401_driver = {
- 	},
- };
- 
--module_platform_driver(int3401_driver);
-+module_acpi_platform_driver(int3401_driver);
- 
- MODULE_AUTHOR("Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>");
- MODULE_DESCRIPTION("Processor Thermal Reporting Device Driver");
-diff --git a/drivers/thermal/intel/int340x_thermal/int3402_thermal.c b/drivers/thermal/intel/int340x_thermal/int3402_thermal.c
-index 213d4535f2c1..d06c06fadce5 100644
---- a/drivers/thermal/intel/int340x_thermal/int3402_thermal.c
-+++ b/drivers/thermal/intel/int340x_thermal/int3402_thermal.c
-@@ -100,7 +100,7 @@ static struct platform_driver int3402_thermal_driver = {
- 		   },
- };
- 
--module_platform_driver(int3402_thermal_driver);
-+module_acpi_platform_driver(int3402_thermal_driver);
- 
- MODULE_DESCRIPTION("INT3402 Thermal driver");
- MODULE_LICENSE("GPL");
-diff --git a/drivers/thermal/intel/int340x_thermal/int3403_thermal.c b/drivers/thermal/intel/int340x_thermal/int3403_thermal.c
-index d246c69d4872..33735515b47d 100644
---- a/drivers/thermal/intel/int340x_thermal/int3403_thermal.c
-+++ b/drivers/thermal/intel/int340x_thermal/int3403_thermal.c
-@@ -284,7 +284,7 @@ static struct platform_driver int3403_driver = {
- 	},
- };
- 
--module_platform_driver(int3403_driver);
-+module_acpi_platform_driver(int3403_driver);
- 
- MODULE_AUTHOR("Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>");
- MODULE_LICENSE("GPL v2");
-diff --git a/drivers/thermal/intel/int340x_thermal/int3406_thermal.c b/drivers/thermal/intel/int340x_thermal/int3406_thermal.c
-index d05ca8bc4061..03cc026cdffb 100644
---- a/drivers/thermal/intel/int340x_thermal/int3406_thermal.c
-+++ b/drivers/thermal/intel/int340x_thermal/int3406_thermal.c
-@@ -203,7 +203,7 @@ static struct platform_driver int3406_thermal_driver = {
- 		   },
- };
- 
--module_platform_driver(int3406_thermal_driver);
-+module_acpi_platform_driver(int3406_thermal_driver);
- 
- MODULE_DESCRIPTION("INT3406 Thermal driver");
- MODULE_LICENSE("GPL v2");
+DT vs Userspace vs ACPI
+
+* DeviceTree (preferred): Describing where the storage lives under a real
+  NVMEM provider (RTC/EEPROM) is early, robust, and OS-agnostic.
+
+* Userspace (fallback): Possible via module/cmdline/sysfs, but leaves an
+  early-boot window unconfigured and reduces usefulness for embedded devices.
+
+* ACPI: No existing shared mechanism for this use case at present (not
+  proposing an ACPI path right now).
+
+What implementations were tried
+
+* A PSCR consumer node in DT -> NACKed as not a HW node.
+
+* Kernel/module parameters or sysfs selection -> tried earlier, but rejected
+  for new designs and cannot guarantee early availability.
+
+* Name-based lookups in NVMEM -> considered fragile and not scalable.
+
+Other options which came in question (seeking guidance)
+
+* cell-level `compatible` on a fixed-cell child (analogous to `mac-base`) to
+  nominate the PSCR cell under the existing NVMEM provider. DT remains purely
+  descriptive (location/size); encoding is documented outside DT and shared
+  across components.
+
+* `/chosen` phandle pointing to the nominated fixed-cell (simple to discover;
+  unsure about policy concerns).
+
+* pstore integration (not tried): a backend that uses a nominated NVMEM cell if
+  such a nomination is acceptable.
+
+* nvmem-layout usage (not tried): provider-side markup of the region to
+  indicate it carries PSCR, if that pattern is acceptable for this purpose.
+
+* Open to any established precedent for nominating a specific NVMEM cell for a
+  system role without introducing software/virtual DT nodes.
+
+Ask
+
+* Is a cell-level `compatible` on a `fixed-cell` child an acceptable way to
+  nominate the PSCR cell?
+
+* If not, is a `/chosen` phandle acceptable here, or is there a preferred
+  alternative?
+
+Thanks for guidance - once the selection mechanism is agreed, I can respin the
+PSCR series accordingly.
+
+Latest patch version: https://lore.kernel.org/all/aHTZTFxfS6Bn4yhz@pengutronix.de/
+
+Best Regards,
+Oleksij
 -- 
-2.51.0.618.g983fd99d29-goog
-
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
