@@ -1,88 +1,88 @@
-Return-Path: <linux-pm+bounces-35695-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35696-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D53E3BB7DDA
-	for <lists+linux-pm@lfdr.de>; Fri, 03 Oct 2025 20:16:11 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id E9215BB7DFF
+	for <lists+linux-pm@lfdr.de>; Fri, 03 Oct 2025 20:19:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 65D3318901BD
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Oct 2025 18:16:34 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 25DE34EE1F9
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Oct 2025 18:19:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4938B2DC760;
-	Fri,  3 Oct 2025 18:16:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39C4D2DCBE2;
+	Fri,  3 Oct 2025 18:19:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HTogVdCm"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QPeMRcCx"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93248255F28
-	for <linux-pm@vger.kernel.org>; Fri,  3 Oct 2025 18:16:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 663392DC339
+	for <linux-pm@vger.kernel.org>; Fri,  3 Oct 2025 18:18:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759515365; cv=none; b=OdxbFh4fPwmDuWex7TN8UZxvn8Tkj2oMMWhaW5QAkA0wNyztB0zWW10xtndZ0TxSEF78oxgKJlbp8ObkJlnNjckspaaoLLe/KrbUloDY6oRl9UBnUAfGqH6KDsyCSMss3YHscfdztsNOAfRsgsnyBMO9Z2DkAws1/CN9muP2QmM=
+	t=1759515540; cv=none; b=D1a3F7YmJXgLTQPS4KLS6CNBEQIV+NSGePgdMfYGfeodt6sGaG6RaPZBJrHiDiz5SEl1gXjmIzBz88EtWM/f1Je1npS+tzvW1O2kgyzz9gcBqF+L6CvcbOu0x/IC3LqiOmWuwUCAwj/micSfpFPj8DiHFtQtLYTfRO5wqJk17w4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759515365; c=relaxed/simple;
-	bh=DWENI6DuXEJ8v7lUaZGvnNMdfDIGbQfCAclwdMGY22A=;
+	s=arc-20240116; t=1759515540; c=relaxed/simple;
+	bh=++WRUe2aDvANfhEeao915TQLwk/Lfp0RbLMHA3rIrF8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qI3eEDMzUWFrNbBprv1dIq0diQuy34oAk+PoFA4bjeLNGKK9vNK91NPCRkYXHc8dEoejqi+MIq4bE9Cv7gpErQ5SNSTlPr9zktEKWWyol8RUCSqO2+aqJ6f+ORf+A2kvM3eE+JwgOiW3zF7bzzYg+ly+z0y4XYFXm2TQpbu1Yak=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HTogVdCm; arc=none smtp.client-ip=209.85.128.174
+	 To:Cc:Content-Type; b=Rxv96F4Yyv2jH/1gV+6vghD+4+YEzT0ualbVUzTUmmV99GPzk95x2U6l3b4rMtxcAo4x9kwJ+y7/ZqFSU+vHRDcBrt1wspOcAHRxSAWXiEaJr/lKT/Epnh6rDeDqblZrSJpMdpXXRbfBiMcFmRrfqytOS6in1DR1dOlmfkwKNEI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QPeMRcCx; arc=none smtp.client-ip=209.85.128.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-77f9fb2d9c5so8615847b3.0
-        for <linux-pm@vger.kernel.org>; Fri, 03 Oct 2025 11:16:03 -0700 (PDT)
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-71d603b60cbso27488077b3.1
+        for <linux-pm@vger.kernel.org>; Fri, 03 Oct 2025 11:18:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1759515362; x=1760120162; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1759515537; x=1760120337; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=hA+2wesaVrYL13Ek9PytzgyCt01NNN1W3ZjSk7cfKyA=;
-        b=HTogVdCmeZbs/su7w+K8BnsdCVVsoGvhgVN4YfVlUSieWK5p1PQoMiWEUCj9h+saV0
-         SPZaf0LHkxsB8FG5ryuriE9z8L/dRF8g+2JInPpb1LTrl425ozWfdkYImxz3Yc3xG5Bc
-         bET4Dca9yz11TGw/u6Gvlb5vISzWzJ7tiLS0cVTIkhzrSkI/F9QtoyQWrHxIkGDgD4xh
-         cC3ILjpy0tbWT2UdavsL5I9XVgHWGAgKX5JA7XsQX81GdGgMNc5eTsUOG/aLcqUuYEa4
-         ILfZmClWS5pOUXFKMKMHfJdt73VMZH+qm6zOuiIhPNWIWbmCp3d+NbdkIkNkBLtgmp+d
-         6Frw==
+        bh=oUQoE2+YrP4Piuppn11V4n/Ge5n4X6vhqEU1SyrhiLY=;
+        b=QPeMRcCxAsaE4KxHd6n5jJZ4nt+2xjdX8Iv8uKJ2BNIU3kmD8FrxjdUMqHFI3tsLNv
+         Llk7CasHt0s84rTncHVZVALtGJlK9gv6a9sb1xjSMPXPd/LWCbAGMNymQHTg8q8WOB4n
+         4kJOfoIoL/WcFH+fxnsje1j2Y6VSn5KpTw4zHc7Yn686PPvJdr0SVbWqfRaY9ajU9jwR
+         CTDTsVo3IsCEwBCG2sfCn2G+pkdRMrmbPvi6msRVQO7nNVHQMpz8iIOaTu8nG28K/vLj
+         r9W2Pu9NdhAz0iw/q57IAPTWakSu4DtBP4lBmxHYe2ex1kShOCA5brWqufxhHlLkpFZx
+         oR3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759515362; x=1760120162;
+        d=1e100.net; s=20230601; t=1759515537; x=1760120337;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=hA+2wesaVrYL13Ek9PytzgyCt01NNN1W3ZjSk7cfKyA=;
-        b=IOBarBkf8JWJEX77UpYhWd4P2hIMK0o5OHrWSAuV4EaqbflceLw9QYF0s6Z1A2wvsZ
-         99U9FkdB1LfgoBmL7vDYL/+vOFCSi9XHUwO+9n5LACcKS0x8gFQGBsFL37aYLanffomf
-         WrOTvsoOpYTIi5GsbdXK3bDBk+uno+jJdiFH9al1tz5sObupoVvLxgemf709p9p1D6Gm
-         vQyU3C7WEJBAuobqSlqxz0tgKMUSj/uuMI+KOvCh/gmY0OaVqJB9X7Ltx2nUSgP87S/o
-         iMEtFNOY7Dsqq7wbRMW9CqMRN/PL3wvbADMKE4fQvY2qeuHg89tQcTs/5lDLN7iLuDHK
-         1GVQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXHNmpSOxZW4XB1LxlorT2JK9Xrjx/nQxGEsYFnqZH8ottyj9t2xrh8OJVUpvuJVL6HHHt8cg7Wkg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxHzPZRdHz14iLJWGd/08GwRe5uDhrxQCKUeloS6VTadxZLz81+
-	xiZ8jv/sAcD6ArUhfZCEUut2UXqUFmA8L+mi51OwqXvPy94ZeR//SPlw87mi7C3u4qNBfNdDOVI
-	O8kcqWEByVntivEt2GwCSY0VMEmrTIjE=
-X-Gm-Gg: ASbGncv3eMxfwJsz47kzQHjJcvf0peBzop66Q8DlKacSUYILKy2jyZtihddOkcWSv8O
-	5VXqDgZcTZnqEcDDnPAZFsYgX+kV1Tt0p9ZR9k+M1E5ucl1bp9vhdjEstdslG0eaPqtw07d63YY
-	810gJ2HwmJX8IueLkQJdBN+OJZ01XvHkUsjndyjCCvcU3WTKrSWxAO+0K36u65IlzGneb+wfiRv
-	2j5WDaRunoqwxJhtkCrr/YdyIidPaXBbV5rKjokGPEq3GUJSN80tiFN7NrjqbWm3+4gaSqsPXkA
-	Uaj5YOQigeOP6e++wjwdtxHR3xZFqYdy
-X-Google-Smtp-Source: AGHT+IHcaFQJqVTztaB0e9RyZeNiAagOyj3g8KNYxpfdC0wTuijqki+QAQ/mSLPGzCBtgMgInYIWdXqQgPlyAlcpaNk=
-X-Received: by 2002:a05:690e:28d:b0:604:3849:89a8 with SMTP id
- 956f58d0204a3-63b9a076118mr3027885d50.16.1759515362277; Fri, 03 Oct 2025
- 11:16:02 -0700 (PDT)
+        bh=oUQoE2+YrP4Piuppn11V4n/Ge5n4X6vhqEU1SyrhiLY=;
+        b=og/SZyD5KHLfHr3s0QQEJpgRudRjJvaal0v6+4AP55GszsOpOtZPNqoE0ZXlR+cUac
+         9mkWoXEbnUYwmzwbB+URKVMTkK2L8llpNi16GhdKJi9I/Vxh9M2Z//JsVwRzx75yYAKV
+         9gaDGjFo3rY5HMAP9G01vXG7wPabp+iKz7XXEu+9XDrmVENIEruKwQkj3cxBzHJyXjmR
+         5y2I/pLUQnxm2ynUjhI14WsNRcM1d9SfffRil/x0HS+40oy80wTNSXFK1VqSqXep6AZe
+         LcXjYLUOVsB6Q2E+AEeXR1HLER0anopx/zzsZ07EtYKZF//ox++u3bb5X9D5qVs3wFF2
+         2X4g==
+X-Forwarded-Encrypted: i=1; AJvYcCXZy3FtLkhkrsvZfqf1n/9ODRoAl7U7ercmxMwF7t1cSzK6sg4S+Rbo1geo2VYTtWywiTwbX/czRw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzpWgbZPwkeRIj8kGO4sQ7xEOuFTGd1AxAfI4yh5dkYx+2DGNqw
+	KguRS456eA45LumG3cq8RZFwLF50ggw29IB5ujxHFtGB/dRM6zZirIIZ13jNFlZCWrRubzFIIVx
+	ZdEYxj0ua8uVG+OQTYB79+jSIJUexkPI=
+X-Gm-Gg: ASbGncsHAn3txXpEkUrN9uWenPypaWWs0Xk7ULmgdlMV0Sk4egl3LPNq0CbP/TNXtkf
+	xevGZufFFswlMCsuvI50rdLiasTp9/e5GVdlykCAsIc0qBUSGhwenTIPDrNUJRjWROzRPdIHoBu
+	++Hx6kWcXvmcrCpEThuKVI1iIaDDXIGp0mfCzEwJQDKBxOB1W1WNrdeExcRbNDZhpFQBUiVVF+P
+	l1IaE8gunnpoAni5G8ltfYkxG/rq1DeyLo+jG5t+cghfup+ubaXXiF2Ew2QVbfBH4BaKheoSKtQ
+	+E9oWDv+rTpo2qgQ0cag3A==
+X-Google-Smtp-Source: AGHT+IGtLMvtFx4RxHoNIBh2x4X8Ab6Ix6GqGCbCEA5mUc1tZP075IB+GlQMmeZfD4IGoIK1kUGSajZNab9Clue8LXg=
+X-Received: by 2002:a53:c043:0:20b0:636:1ee5:7745 with SMTP id
+ 956f58d0204a3-63b99f36944mr3824334d50.0.1759515537310; Fri, 03 Oct 2025
+ 11:18:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250929-mt8196-gpufreq-v5-0-3056e5ecf765@collabora.com> <20250929-mt8196-gpufreq-v5-4-3056e5ecf765@collabora.com>
-In-Reply-To: <20250929-mt8196-gpufreq-v5-4-3056e5ecf765@collabora.com>
+References: <20250929-mt8196-gpufreq-v5-0-3056e5ecf765@collabora.com> <20250929-mt8196-gpufreq-v5-5-3056e5ecf765@collabora.com>
+In-Reply-To: <20250929-mt8196-gpufreq-v5-5-3056e5ecf765@collabora.com>
 From: Chia-I Wu <olvaffe@gmail.com>
-Date: Fri, 3 Oct 2025 11:15:51 -0700
-X-Gm-Features: AS18NWBanN0MXtcDFrnukKn4J7dSEQIT7fLhFbzGJzYOporRHK4S0vyKzeHBSFc
-Message-ID: <CAPaKu7Tz9tw=fbz17kpPn1Pj_YsGRJZR9o28zkfiBgvxL3rdxg@mail.gmail.com>
-Subject: Re: [PATCH v5 4/7] mailbox: add MediaTek GPUEB IPI mailbox
+Date: Fri, 3 Oct 2025 11:18:45 -0700
+X-Gm-Features: AS18NWDjAm-QC4ccunNsvz_U1UXKS_05wvPJ1N_78dxhAoW5d44NTw2whZ6ltCU
+Message-ID: <CAPaKu7S6_0G4rbRP_nCF0Aw9uy1K8ABqi2z8isvpHcVWkWjJaQ@mail.gmail.com>
+Subject: Re: [PATCH v5 5/7] drm/panthor: call into devfreq for current frequency
 To: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
 	Boris Brezillon <boris.brezillon@collabora.com>, Jassi Brar <jassisinghbrar@gmail.com>, 
@@ -100,55 +100,116 @@ Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Sep 29, 2025 at 12:47=E2=80=AFAM Nicolas Frattaroli
+On Mon, Sep 29, 2025 at 12:48=E2=80=AFAM Nicolas Frattaroli
 <nicolas.frattaroli@collabora.com> wrote:
 >
-> The MT8196 SoC uses an embedded MCU to control frequencies and power of
-> the GPU. This controller is referred to as "GPUEB".
+> As it stands, panthor keeps a cached current frequency value for when it
+> wants to retrieve it. This doesn't work well for when things might
+> switch frequency without panthor's knowledge.
 >
-> It communicates to the application processor, among other ways, through
-> a mailbox.
+> Instead, implement the get_cur_freq operation, and expose it through a
+> helper function to the rest of panthor.
 >
-> The mailbox exposes one interrupt, which appears to only be fired when a
-> response is received, rather than a transaction is completed. For us,
-> this means we unfortunately need to poll for txdone.
->
-> The mailbox also requires the EB clock to be on when touching any of the
-> mailbox registers.
->
-> Add a simple driver for it based on the common mailbox framework.
->
+> Reviewed-by: Steven Price <steven.price@arm.com>
 > Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collab=
 ora.com>
 > Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-Reviewed-by: Chia-I Wu <olvaffe@gmail.com>
 > ---
->  drivers/mailbox/Kconfig             |  10 ++
->  drivers/mailbox/Makefile            |   2 +
->  drivers/mailbox/mtk-gpueb-mailbox.c | 318 ++++++++++++++++++++++++++++++=
-++++++
->  3 files changed, 330 insertions(+)
+>  drivers/gpu/drm/panthor/panthor_devfreq.c | 33 +++++++++++++++++++++++++=
+++----
+>  drivers/gpu/drm/panthor/panthor_devfreq.h |  2 ++
+>  drivers/gpu/drm/panthor/panthor_device.h  |  3 ---
+>  drivers/gpu/drm/panthor/panthor_drv.c     |  4 +++-
+>  4 files changed, 34 insertions(+), 8 deletions(-)
+>
 [...]
-> +static irqreturn_t mtk_gpueb_mbox_thread(int irq, void *data)
-> +{
-> +       struct mtk_gpueb_mbox_chan *ch =3D data;
-> +       u8 buf[GPUEB_MBOX_MAX_RX_SIZE] =3D {};
-nit: move to inside the if-block below.
-> +       int status;
 > +
-> +       status =3D atomic_cmpxchg(&ch->rx_status, GPUEB_MBOX_FULL | GPUEB=
-_MBOX_BLOCKED,
-> +                               GPUEB_MBOX_FULL);
-> +       if (status =3D=3D (GPUEB_MBOX_FULL | GPUEB_MBOX_BLOCKED)) {
-> +               mtk_gpueb_mbox_read_rx(buf, ch);
-> +               writel(BIT(ch->num), ch->ebm->mbox_ctl + GPUEB_MBOX_CTL_I=
-RQ_CLR);
-> +               mbox_chan_received_data(&ch->ebm->mbox.chans[ch->num], bu=
-f);
-> +               atomic_set(&ch->rx_status, 0);
-> +               return IRQ_HANDLED;
+> +unsigned long panthor_devfreq_get_freq(struct panthor_device *ptdev)
+> +{
+> +       struct panthor_devfreq *pdevfreq =3D ptdev->devfreq;
+> +       unsigned long freq =3D 0;
+> +       int ret;
+> +
+> +       if (!pdevfreq || !pdevfreq->devfreq)
+> +               return 0;
+> +
+> +       if (pdevfreq->devfreq->profile->get_cur_freq) {
+This and the other two NULL checks above seem unnecessary. But let's
+follow other functions and check for pdevfreq->devfreq only.
+
+With that, Reviewed-by: Chia-I Wu <olvaffe@gmail.com>
+> +               ret =3D pdevfreq->devfreq->profile->get_cur_freq(ptdev->b=
+ase.dev,
+> +                                                              &freq);
+> +               if (ret)
+> +                       return 0;
 > +       }
 > +
-> +       return IRQ_NONE;
+> +       return freq;
 > +}
+> diff --git a/drivers/gpu/drm/panthor/panthor_devfreq.h b/drivers/gpu/drm/=
+panthor/panthor_devfreq.h
+> index b7631de695f7d79456478c87e8af5dc47673cd1d..f8e29e02f66cb3281ed4bb4c7=
+5cda9bd4df82b92 100644
+> --- a/drivers/gpu/drm/panthor/panthor_devfreq.h
+> +++ b/drivers/gpu/drm/panthor/panthor_devfreq.h
+> @@ -18,4 +18,6 @@ void panthor_devfreq_suspend(struct panthor_device *ptd=
+ev);
+>  void panthor_devfreq_record_busy(struct panthor_device *ptdev);
+>  void panthor_devfreq_record_idle(struct panthor_device *ptdev);
+>
+> +unsigned long panthor_devfreq_get_freq(struct panthor_device *ptdev);
+> +
+>  #endif /* __PANTHOR_DEVFREQ_H__ */
+> diff --git a/drivers/gpu/drm/panthor/panthor_device.h b/drivers/gpu/drm/p=
+anthor/panthor_device.h
+> index 9f0649ecfc4fc697a21a8b2fc4dd89c8ecf298df..f32c1868bf6d782d99df9dbd0=
+babcea049c917e0 100644
+> --- a/drivers/gpu/drm/panthor/panthor_device.h
+> +++ b/drivers/gpu/drm/panthor/panthor_device.h
+> @@ -214,9 +214,6 @@ struct panthor_device {
+>         /** @profile_mask: User-set profiling flags for job accounting. *=
+/
+>         u32 profile_mask;
+>
+> -       /** @current_frequency: Device clock frequency at present. Set by=
+ DVFS*/
+> -       unsigned long current_frequency;
+> -
+>         /** @fast_rate: Maximum device clock frequency. Set by DVFS */
+>         unsigned long fast_rate;
+>
+> diff --git a/drivers/gpu/drm/panthor/panthor_drv.c b/drivers/gpu/drm/pant=
+hor/panthor_drv.c
+> index ea4a37b566a8b215f2b7a09c333a696f1dcdb58f..4d59d94c353c3ca76f4b98a41=
+1c8f8284efafd08 100644
+> --- a/drivers/gpu/drm/panthor/panthor_drv.c
+> +++ b/drivers/gpu/drm/panthor/panthor_drv.c
+> @@ -25,6 +25,7 @@
+>  #include <drm/gpu_scheduler.h>
+>  #include <drm/panthor_drm.h>
+>
+> +#include "panthor_devfreq.h"
+>  #include "panthor_device.h"
+>  #include "panthor_fw.h"
+>  #include "panthor_gem.h"
+> @@ -1519,7 +1520,8 @@ static void panthor_gpu_show_fdinfo(struct panthor_=
+device *ptdev,
+>                 drm_printf(p, "drm-cycles-panthor:\t%llu\n", pfile->stats=
+.cycles);
+>
+>         drm_printf(p, "drm-maxfreq-panthor:\t%lu Hz\n", ptdev->fast_rate)=
+;
+> -       drm_printf(p, "drm-curfreq-panthor:\t%lu Hz\n", ptdev->current_fr=
+equency);
+> +       drm_printf(p, "drm-curfreq-panthor:\t%lu Hz\n",
+> +                  panthor_devfreq_get_freq(ptdev));
+>  }
+>
+>  static void panthor_show_internal_memory_stats(struct drm_printer *p, st=
+ruct drm_file *file)
+>
+> --
+> 2.51.0
+>
 
