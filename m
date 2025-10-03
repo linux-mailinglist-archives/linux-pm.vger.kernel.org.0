@@ -1,207 +1,195 @@
-Return-Path: <linux-pm+bounces-35686-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35687-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8FDEEBB664C
-	for <lists+linux-pm@lfdr.de>; Fri, 03 Oct 2025 11:41:17 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id D855FBB6835
+	for <lists+linux-pm@lfdr.de>; Fri, 03 Oct 2025 13:05:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1F4761895F8C
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Oct 2025 09:41:33 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 3984434525F
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Oct 2025 11:05:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE8202DEA90;
-	Fri,  3 Oct 2025 09:40:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 561A92E9729;
+	Fri,  3 Oct 2025 11:05:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UsASRZ8Y"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="K5dSu53T"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0233E19309C;
-	Fri,  3 Oct 2025 09:40:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 245FB283680
+	for <linux-pm@vger.kernel.org>; Fri,  3 Oct 2025 11:05:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759484456; cv=none; b=Yx/B7mP1GAVwbdc1TVd85Nu3PMwLF3jgZDRllBj8MAj5MY6HMXDUqF1zjrajEGYLTzO/6YTAu4cE3+A/31My/SSbZ3gXRkY7kFJJMiS2NXVNr3pwvMa6V2fAy09hs5asD9mUvQoCXcI6ektj2AqmGMCQzLcNziyc0sYh06nEbTo=
+	t=1759489512; cv=none; b=GKi8cvO6Wy5KQbVbNlbuSDTI72bUsPxkD36vO/z9dvsaNC58Pw34hJZ733JthKGjuZfpideJ5lbMyR0fmpV+4oVz1fkX2cHDiXBAUirvCDg94QIOfPNP+76cThByz/ci11CNrNyl5xTuswa4AjcxF0tYhF33HiUj8cH3GgbKN3g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759484456; c=relaxed/simple;
-	bh=CsMCkF+1UHr5u231cwCmhA7BFYXKplKZUyHOIvCy9I0=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=CeADLlbmc+p+7k5twYZYtUkDoqy+xSxn885ek57W2anUrVDmHlcVTgbTdj2aogT91eznJFPSVhO5knGv0KPgLMAp6VriDwgGJAPIZr0N1gCVLG68I2u1u6xhmb1qWwurOEbbe54Gk8AJRrpE9xGU8NtwEJRAVr9C7Xs4U3lJOzA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UsASRZ8Y; arc=none smtp.client-ip=192.198.163.18
+	s=arc-20240116; t=1759489512; c=relaxed/simple;
+	bh=ay4M8DRq1bh6ZMCKSmm3z2G15Pc2p69dwSm7+JMeAlo=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=CHui34OJLuvnxBhIc94VBkNGjuR+CskF49f9RJ9yq/xm2CVsNG0m4AZ2vDA+RaYZHPYFKsK7rc9+rd06MPn/tRt7sqP3ApI+999qmQE9jDFnncflTmPrDVQxib+URaFG5SR7ctUQFTOcOM1C4+4xH93pnLqrI6pTvf+bMq0Fecs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=K5dSu53T; arc=none smtp.client-ip=192.198.163.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1759484455; x=1791020455;
-  h=date:from:to:cc:subject:message-id;
-  bh=CsMCkF+1UHr5u231cwCmhA7BFYXKplKZUyHOIvCy9I0=;
-  b=UsASRZ8YxWCDw5WCN3swyvaWflwNjmbCGzbMNdi6LaGYK3E1HeLTod5k
-   WiihBwpjpX7Edr8qmyzNVkxRDDCSoeoFs9IYnVThkDr6EFs31CRpsuLAK
-   mAqDa7uFKLirMcIQsoWUOaWuGfpLmDpPDjLWReLKQ56w4ZRT+h9/vKQcE
-   gD/9boPN/ILAp5hVg8SLbFHjXiLBAhG1U2p5EBu2WOyUJNAnLX2RRnS/l
-   JxnGfADVHmFz1NhrPDaqrkCYrfRhWAccA1dYXFP/UArsDMSHykXeUVIhg
-   azcGOnwaglb/W5fOzuixeVEChr9ZeXelcpGczbRqBrgwTT/6hW4V/g1px
-   A==;
-X-CSE-ConnectionGUID: Eh4GOy2oQRyBwatfWFxTaw==
-X-CSE-MsgGUID: U4Cd6LCARz+7ZH38pUXiMQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11570"; a="60976750"
+  t=1759489510; x=1791025510;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ay4M8DRq1bh6ZMCKSmm3z2G15Pc2p69dwSm7+JMeAlo=;
+  b=K5dSu53TJKMB4tasHXpMP8ctxMvmOKgLPG/n4OoENrOz0SrPphSnJ4iA
+   5trXrf1qs9brlYfWOVykrQC5RGFyQMwz8ABk8psq11JWiZlI2F7z9YAx4
+   CSHXX54ehQzAo6jvkXnte6GfSPL80Ji7IdO/eLc84XQ2C8y3xbgpJlxWI
+   FYR+/gb8We68277UsuWB4aIMnx46WehYe9/hDNlnVDiS5vUA9/oIXFfME
+   nhI9c+42/qxLgAPGs243Xx/Xfxy+DS4k2Je53mJmhu57RxrVZ05VMrMR5
+   aDA1Rq5tR5Pj9jx2/J6v+HVByxM/zipDSZ6uRwl3jra2l51Dp+/il/WJE
+   g==;
+X-CSE-ConnectionGUID: 3eWv26RXRYSEEvju4wwZOg==
+X-CSE-MsgGUID: aeflyMSJROCM80W5zSxOYQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11570"; a="79421011"
 X-IronPort-AV: E=Sophos;i="6.18,312,1751266800"; 
-   d="scan'208";a="60976750"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2025 02:40:54 -0700
-X-CSE-ConnectionGUID: p38bM7OCTJylt1e90ot3Zw==
-X-CSE-MsgGUID: TWc1jJwJTV6BMh/R6un5cw==
+   d="scan'208";a="79421011"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2025 04:05:09 -0700
+X-CSE-ConnectionGUID: i9v6UjnvTlaNGfRN152Bvg==
+X-CSE-MsgGUID: E3Js46hiSCm2UFQLZkT89A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.18,312,1751266800"; 
-   d="scan'208";a="178891263"
-Received: from lkp-server01.sh.intel.com (HELO 2f2a1232a4e4) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 03 Oct 2025 02:40:53 -0700
-Received: from kbuild by 2f2a1232a4e4 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1v4cHT-0004TT-17;
-	Fri, 03 Oct 2025 09:40:51 +0000
-Date: Fri, 03 Oct 2025 17:40:13 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- ccad82d3c5096fa7a90610ad271ccaf0b984931c
-Message-ID: <202510031702.yahh21Vk-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+   d="scan'208";a="178556099"
+Received: from baandr0id001.iind.intel.com ([10.66.253.151])
+  by orviesa010.jf.intel.com with ESMTP; 03 Oct 2025 04:05:07 -0700
+From: Kaushlendra Kumar <kaushlendra.kumar@intel.com>
+To: lenb@kernel.org
+Cc: linux-pm@vger.kernel.org,
+	Kaushlendra Kumar <kaushlendra.kumar@intel.com>
+Subject: [PATCH] tools/power x86_energy_perf_policy: Add Android MSR device support
+Date: Fri,  3 Oct 2025 16:33:19 +0530
+Message-Id: <20251003110319.515085-1-kaushlendra.kumar@intel.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: ccad82d3c5096fa7a90610ad271ccaf0b984931c  Merge branch 'pm-runtime-next' into bleeding-edge
+Add support for Android MSR device paths which use /dev/msrN format
+instead of the standard Linux /dev/cpu/N/msr format. The tool now
+probes both path formats at startup and uses the appropriate one.
 
-Unverified Warning (likely false positive, kindly check if interested):
+This enables x86_energy_perf_policy to work on Android systems where
+MSR devices follow a different naming convention while maintaining
+full compatibility with standard Linux systems.
 
-    include/linux/pm_runtime.h:631 class_pm_runtime_active_try_constructor() warn: passing zero to 'ERR_PTR'
+Signed-off-by: Kaushlendra Kumar <kaushlendra.kumar@intel.com>
+---
+ .../x86_energy_perf_policy.c                  | 54 ++++++++++++++++---
+ 1 file changed, 46 insertions(+), 8 deletions(-)
 
-Warning ids grouped by kconfigs:
+diff --git a/tools/power/x86/x86_energy_perf_policy/x86_energy_perf_policy.c b/tools/power/x86/x86_energy_perf_policy/x86_energy_perf_policy.c
+index 884a4c746f32..5301efc741ce 100644
+--- a/tools/power/x86/x86_energy_perf_policy/x86_energy_perf_policy.c
++++ b/tools/power/x86/x86_energy_perf_policy/x86_energy_perf_policy.c
+@@ -95,6 +95,9 @@ unsigned int bdx_highest_ratio;
+ #define PATH_TO_CPU "/sys/devices/system/cpu/"
+ #define SYSFS_PATH_MAX 255
+ 
++/* keep Default as a linux path */
++static int use_android_msr_path;
++
+ /*
+  * maintain compatibility with original implementation, but don't document it:
+  */
+@@ -678,16 +681,41 @@ void err_on_hypervisor(void)
+ 		    "not supported on this virtual machine");
+ }
+ 
++static void probe_msr_path_format(void)
++{
++	struct stat sb;
++	char test_path[32];
++
++	/* Test standard Linux path */
++	sprintf(test_path, "/dev/cpu/%d/msr", base_cpu);
++	if (stat(test_path, &sb) == 0) {
++		use_android_msr_path = 0;
++		return;
++	}
++
++	/* Test Android-style path */
++	sprintf(test_path, "/dev/msr%d", base_cpu);
++	if (stat(test_path, &sb) == 0) {
++		use_android_msr_path = 1;
++		return;
++	}
++
++	/* If neither exists, keep the default Linux format */
++	use_android_msr_path = 0;
++}
++
+ int get_msr(int cpu, int offset, unsigned long long *msr)
+ {
+ 	int retval;
+ 	char pathname[32];
+ 	int fd;
+ 
+-	sprintf(pathname, "/dev/cpu/%d/msr", cpu);
++	sprintf(pathname, use_android_msr_path ? "/dev/msr%d" : "/dev/cpu/%d/msr", cpu);
+ 	fd = open(pathname, O_RDONLY);
+ 	if (fd < 0)
+-		err(-1, "%s open failed, try chown or chmod +r /dev/cpu/*/msr, or run as root", pathname);
++		err(-1, "%s open failed, try chown or chmod +r %s, or run as root",
++		   pathname, use_android_msr_path ? "/dev/msr*" : "/dev/cpu/*/msr");
++
+ 
+ 	retval = pread(fd, msr, sizeof(*msr), offset);
+ 	if (retval != sizeof(*msr)) {
+@@ -708,10 +736,11 @@ int put_msr(int cpu, int offset, unsigned long long new_msr)
+ 	int retval;
+ 	int fd;
+ 
+-	sprintf(pathname, "/dev/cpu/%d/msr", cpu);
++	sprintf(pathname, use_android_msr_path ? "/dev/msr%d" : "/dev/cpu/%d/msr", cpu);
+ 	fd = open(pathname, O_RDWR);
+ 	if (fd < 0)
+-		err(-1, "%s open failed, try chown or chmod +r /dev/cpu/*/msr, or run as root", pathname);
++		err(-1, "%s open failed, try chown or chmod +r %s, or run as root",
++		   pathname, use_android_msr_path ? "/dev/msr*" : "/dev/cpu/*/msr");
+ 
+ 	retval = pwrite(fd, &new_msr, sizeof(new_msr), offset);
+ 	if (retval != sizeof(new_msr))
+@@ -1427,10 +1456,15 @@ void probe_dev_msr(void)
+ 	struct stat sb;
+ 	char pathname[32];
+ 
+-	sprintf(pathname, "/dev/cpu/%d/msr", base_cpu);
+-	if (stat(pathname, &sb))
+-		if (system("/sbin/modprobe msr > /dev/null 2>&1"))
+-			err(-5, "no /dev/cpu/0/msr, Try \"# modprobe msr\" ");
++	sprintf(pathname, use_android_msr_path ? "/dev/msr%d" : "/dev/cpu/%d/msr", base_cpu);
++	if (stat(pathname, &sb)) {
++		if (system("/sbin/modprobe msr > /dev/null 2>&1")) {
++			if (use_android_msr_path)
++				err(-5, "no /dev/msr0, Try \"# modprobe msr\" ");
++			else
++				err(-5, "no /dev/cpu/0/msr, Try \"# modprobe msr\" ");
++		}
++	}
+ }
+ 
+ static void get_cpuid_or_exit(unsigned int leaf,
+@@ -1547,6 +1581,10 @@ void parse_cpuid(void)
+ int main(int argc, char **argv)
+ {
+ 	set_base_cpu();
++
++	/* probe MSR path */
++	probe_msr_path_format();
++
+ 	probe_dev_msr();
+ 	init_data_structures();
+ 
+-- 
+2.34.1
 
-recent_errors
-|-- i386-randconfig-141-20251003
-|   `-- include-linux-pm_runtime.h-class_pm_runtime_active_try_constructor()-warn:passing-zero-to-ERR_PTR
-`-- x86_64-randconfig-161-20251002
-    `-- include-linux-pm_runtime.h-class_pm_runtime_active_try_constructor()-warn:passing-zero-to-ERR_PTR
-
-elapsed time: 1455m
-
-configs tested: 102
-configs skipped: 4
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                             allnoconfig    gcc-15.1.0
-alpha                            allyesconfig    gcc-15.1.0
-arc                               allnoconfig    gcc-15.1.0
-arc                      axs103_smp_defconfig    gcc-15.1.0
-arc                   randconfig-001-20251002    gcc-12.5.0
-arc                   randconfig-002-20251002    gcc-12.5.0
-arm                               allnoconfig    clang-22
-arm                          exynos_defconfig    clang-22
-arm                   randconfig-001-20251002    gcc-12.5.0
-arm                   randconfig-002-20251002    clang-22
-arm                   randconfig-003-20251002    clang-22
-arm                   randconfig-004-20251002    clang-20
-arm                           sunxi_defconfig    gcc-15.1.0
-arm64                             allnoconfig    gcc-15.1.0
-arm64                 randconfig-001-20251002    gcc-8.5.0
-arm64                 randconfig-002-20251002    clang-22
-arm64                 randconfig-003-20251002    clang-22
-arm64                 randconfig-004-20251002    clang-22
-csky                              allnoconfig    gcc-15.1.0
-csky                  randconfig-001-20251002    gcc-15.1.0
-csky                  randconfig-002-20251002    gcc-9.5.0
-hexagon                          allmodconfig    clang-17
-hexagon                           allnoconfig    clang-22
-hexagon                          allyesconfig    clang-22
-hexagon               randconfig-001-20251002    clang-22
-hexagon               randconfig-002-20251002    clang-16
-i386        buildonly-randconfig-001-20251002    clang-20
-i386        buildonly-randconfig-002-20251002    gcc-14
-i386        buildonly-randconfig-003-20251002    clang-20
-i386        buildonly-randconfig-004-20251002    clang-20
-i386        buildonly-randconfig-005-20251002    gcc-14
-i386        buildonly-randconfig-006-20251002    clang-20
-loongarch                        allmodconfig    clang-19
-loongarch                         allnoconfig    clang-22
-loongarch             randconfig-001-20251002    gcc-15.1.0
-loongarch             randconfig-002-20251002    clang-18
-m68k                             allmodconfig    gcc-15.1.0
-m68k                              allnoconfig    gcc-15.1.0
-m68k                             allyesconfig    gcc-15.1.0
-microblaze                       allmodconfig    gcc-15.1.0
-microblaze                        allnoconfig    gcc-15.1.0
-microblaze                       allyesconfig    gcc-15.1.0
-microblaze                          defconfig    gcc-15.1.0
-mips                              allnoconfig    gcc-15.1.0
-nios2                             allnoconfig    gcc-11.5.0
-nios2                               defconfig    gcc-11.5.0
-nios2                 randconfig-001-20251002    gcc-11.5.0
-nios2                 randconfig-002-20251002    gcc-10.5.0
-openrisc                          allnoconfig    gcc-15.1.0
-openrisc                            defconfig    gcc-15.1.0
-parisc                            allnoconfig    gcc-15.1.0
-parisc                              defconfig    gcc-15.1.0
-parisc                randconfig-001-20251002    gcc-9.5.0
-parisc                randconfig-002-20251002    gcc-8.5.0
-parisc64                            defconfig    gcc-15.1.0
-powerpc                           allnoconfig    gcc-15.1.0
-powerpc                          g5_defconfig    gcc-15.1.0
-powerpc                    ge_imp3a_defconfig    gcc-15.1.0
-powerpc               randconfig-001-20251002    gcc-8.5.0
-powerpc               randconfig-002-20251002    gcc-9.5.0
-powerpc               randconfig-003-20251002    clang-22
-powerpc                     tqm5200_defconfig    gcc-15.1.0
-powerpc64             randconfig-001-20251002    clang-22
-powerpc64             randconfig-002-20251002    clang-22
-powerpc64             randconfig-003-20251002    clang-22
-riscv                             allnoconfig    gcc-15.1.0
-riscv                    nommu_k210_defconfig    clang-22
-riscv                 randconfig-001-20251002    clang-22
-riscv                 randconfig-002-20251002    clang-22
-s390                             allmodconfig    clang-18
-s390                              allnoconfig    clang-22
-s390                             allyesconfig    gcc-15.1.0
-s390                  randconfig-001-20251002    gcc-14.3.0
-s390                  randconfig-002-20251002    gcc-11.5.0
-sh                               allmodconfig    gcc-15.1.0
-sh                                allnoconfig    gcc-15.1.0
-sh                               allyesconfig    gcc-15.1.0
-sh                    randconfig-001-20251002    gcc-13.4.0
-sh                    randconfig-002-20251002    gcc-15.1.0
-sparc                            allmodconfig    gcc-15.1.0
-sparc                             allnoconfig    gcc-15.1.0
-sparc                               defconfig    gcc-15.1.0
-sparc                 randconfig-001-20251002    gcc-8.5.0
-sparc                 randconfig-002-20251002    gcc-15.1.0
-sparc64               randconfig-001-20251002    clang-22
-sparc64               randconfig-002-20251002    gcc-8.5.0
-um                               allmodconfig    clang-19
-um                                allnoconfig    clang-22
-um                               allyesconfig    gcc-14
-um                    randconfig-001-20251002    clang-22
-um                    randconfig-002-20251002    clang-22
-x86_64                            allnoconfig    clang-20
-x86_64      buildonly-randconfig-001-20251002    gcc-13
-x86_64      buildonly-randconfig-002-20251002    clang-20
-x86_64      buildonly-randconfig-003-20251002    clang-20
-x86_64      buildonly-randconfig-004-20251002    clang-20
-x86_64      buildonly-randconfig-005-20251002    gcc-14
-x86_64      buildonly-randconfig-006-20251002    gcc-14
-x86_64                              defconfig    gcc-14
-xtensa                            allnoconfig    gcc-15.1.0
-xtensa                randconfig-001-20251002    gcc-8.5.0
-xtensa                randconfig-002-20251002    gcc-12.5.0
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
 
