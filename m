@@ -1,215 +1,116 @@
-Return-Path: <linux-pm+bounces-35696-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35697-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9215BB7DFF
-	for <lists+linux-pm@lfdr.de>; Fri, 03 Oct 2025 20:19:04 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD958BB7E0B
+	for <lists+linux-pm@lfdr.de>; Fri, 03 Oct 2025 20:24:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 25DE34EE1F9
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Oct 2025 18:19:01 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 31CDE4E54E6
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Oct 2025 18:24:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39C4D2DCBE2;
-	Fri,  3 Oct 2025 18:19:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8335F2DA777;
+	Fri,  3 Oct 2025 18:24:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QPeMRcCx"
+	dkim=pass (2048-bit key) header.d=cknow.org header.i=@cknow.org header.b="ohtHXZcr"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-171.mta1.migadu.com (out-171.mta1.migadu.com [95.215.58.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 663392DC339
-	for <linux-pm@vger.kernel.org>; Fri,  3 Oct 2025 18:18:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF5241BCA0E
+	for <linux-pm@vger.kernel.org>; Fri,  3 Oct 2025 18:24:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759515540; cv=none; b=D1a3F7YmJXgLTQPS4KLS6CNBEQIV+NSGePgdMfYGfeodt6sGaG6RaPZBJrHiDiz5SEl1gXjmIzBz88EtWM/f1Je1npS+tzvW1O2kgyzz9gcBqF+L6CvcbOu0x/IC3LqiOmWuwUCAwj/micSfpFPj8DiHFtQtLYTfRO5wqJk17w4=
+	t=1759515878; cv=none; b=CSLtuWAH8Hb5BUYKpDdxAb6bYpe0qhFCw7d8udBdt8R74NYZR3koYm+slygEIwCx5Iaa530hcCOYLZveSWZgistYqeCnQTH8QLzkER9nDxClGoKYFJii2AarT39SxHDTvkHyrnX0j4HcV1RREG9BgudmFOETkwdJdem5Z9ePd6o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759515540; c=relaxed/simple;
-	bh=++WRUe2aDvANfhEeao915TQLwk/Lfp0RbLMHA3rIrF8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Rxv96F4Yyv2jH/1gV+6vghD+4+YEzT0ualbVUzTUmmV99GPzk95x2U6l3b4rMtxcAo4x9kwJ+y7/ZqFSU+vHRDcBrt1wspOcAHRxSAWXiEaJr/lKT/Epnh6rDeDqblZrSJpMdpXXRbfBiMcFmRrfqytOS6in1DR1dOlmfkwKNEI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QPeMRcCx; arc=none smtp.client-ip=209.85.128.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-71d603b60cbso27488077b3.1
-        for <linux-pm@vger.kernel.org>; Fri, 03 Oct 2025 11:18:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1759515537; x=1760120337; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oUQoE2+YrP4Piuppn11V4n/Ge5n4X6vhqEU1SyrhiLY=;
-        b=QPeMRcCxAsaE4KxHd6n5jJZ4nt+2xjdX8Iv8uKJ2BNIU3kmD8FrxjdUMqHFI3tsLNv
-         Llk7CasHt0s84rTncHVZVALtGJlK9gv6a9sb1xjSMPXPd/LWCbAGMNymQHTg8q8WOB4n
-         4kJOfoIoL/WcFH+fxnsje1j2Y6VSn5KpTw4zHc7Yn686PPvJdr0SVbWqfRaY9ajU9jwR
-         CTDTsVo3IsCEwBCG2sfCn2G+pkdRMrmbPvi6msRVQO7nNVHQMpz8iIOaTu8nG28K/vLj
-         r9W2Pu9NdhAz0iw/q57IAPTWakSu4DtBP4lBmxHYe2ex1kShOCA5brWqufxhHlLkpFZx
-         oR3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759515537; x=1760120337;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oUQoE2+YrP4Piuppn11V4n/Ge5n4X6vhqEU1SyrhiLY=;
-        b=og/SZyD5KHLfHr3s0QQEJpgRudRjJvaal0v6+4AP55GszsOpOtZPNqoE0ZXlR+cUac
-         9mkWoXEbnUYwmzwbB+URKVMTkK2L8llpNi16GhdKJi9I/Vxh9M2Z//JsVwRzx75yYAKV
-         9gaDGjFo3rY5HMAP9G01vXG7wPabp+iKz7XXEu+9XDrmVENIEruKwQkj3cxBzHJyXjmR
-         5y2I/pLUQnxm2ynUjhI14WsNRcM1d9SfffRil/x0HS+40oy80wTNSXFK1VqSqXep6AZe
-         LcXjYLUOVsB6Q2E+AEeXR1HLER0anopx/zzsZ07EtYKZF//ox++u3bb5X9D5qVs3wFF2
-         2X4g==
-X-Forwarded-Encrypted: i=1; AJvYcCXZy3FtLkhkrsvZfqf1n/9ODRoAl7U7ercmxMwF7t1cSzK6sg4S+Rbo1geo2VYTtWywiTwbX/czRw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzpWgbZPwkeRIj8kGO4sQ7xEOuFTGd1AxAfI4yh5dkYx+2DGNqw
-	KguRS456eA45LumG3cq8RZFwLF50ggw29IB5ujxHFtGB/dRM6zZirIIZ13jNFlZCWrRubzFIIVx
-	ZdEYxj0ua8uVG+OQTYB79+jSIJUexkPI=
-X-Gm-Gg: ASbGncsHAn3txXpEkUrN9uWenPypaWWs0Xk7ULmgdlMV0Sk4egl3LPNq0CbP/TNXtkf
-	xevGZufFFswlMCsuvI50rdLiasTp9/e5GVdlykCAsIc0qBUSGhwenTIPDrNUJRjWROzRPdIHoBu
-	++Hx6kWcXvmcrCpEThuKVI1iIaDDXIGp0mfCzEwJQDKBxOB1W1WNrdeExcRbNDZhpFQBUiVVF+P
-	l1IaE8gunnpoAni5G8ltfYkxG/rq1DeyLo+jG5t+cghfup+ubaXXiF2Ew2QVbfBH4BaKheoSKtQ
-	+E9oWDv+rTpo2qgQ0cag3A==
-X-Google-Smtp-Source: AGHT+IGtLMvtFx4RxHoNIBh2x4X8Ab6Ix6GqGCbCEA5mUc1tZP075IB+GlQMmeZfD4IGoIK1kUGSajZNab9Clue8LXg=
-X-Received: by 2002:a53:c043:0:20b0:636:1ee5:7745 with SMTP id
- 956f58d0204a3-63b99f36944mr3824334d50.0.1759515537310; Fri, 03 Oct 2025
- 11:18:57 -0700 (PDT)
+	s=arc-20240116; t=1759515878; c=relaxed/simple;
+	bh=HX+kpTW6oJpPu802Qe3o1aTuPUw5cnNk0EyKVYCAoO8=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=CdYZtKRpA+LYZT30iRp5QQUF8pYgmyX+22I8MUe13I70UXqIQXh5ccUovjUsG/su/9u+iBmJC80HYl9x2MYvyFT+03GAjky+OlSJ6IfJS01Cd7jT0Tln97xY1xyY5nUZjaKKLHcopP1dqqsy+ujGN4NJjVq5HD7wdqXdyXS+MAk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cknow.org; spf=pass smtp.mailfrom=cknow.org; dkim=pass (2048-bit key) header.d=cknow.org header.i=@cknow.org header.b=ohtHXZcr; arc=none smtp.client-ip=95.215.58.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cknow.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cknow.org
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20250929-mt8196-gpufreq-v5-0-3056e5ecf765@collabora.com> <20250929-mt8196-gpufreq-v5-5-3056e5ecf765@collabora.com>
-In-Reply-To: <20250929-mt8196-gpufreq-v5-5-3056e5ecf765@collabora.com>
-From: Chia-I Wu <olvaffe@gmail.com>
-Date: Fri, 3 Oct 2025 11:18:45 -0700
-X-Gm-Features: AS18NWDjAm-QC4ccunNsvz_U1UXKS_05wvPJ1N_78dxhAoW5d44NTw2whZ6ltCU
-Message-ID: <CAPaKu7S6_0G4rbRP_nCF0Aw9uy1K8ABqi2z8isvpHcVWkWjJaQ@mail.gmail.com>
-Subject: Re: [PATCH v5 5/7] drm/panthor: call into devfreq for current frequency
-To: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	Boris Brezillon <boris.brezillon@collabora.com>, Jassi Brar <jassisinghbrar@gmail.com>, 
-	Chen-Yu Tsai <wenst@chromium.org>, Steven Price <steven.price@arm.com>, 
-	Liviu Dudau <liviu.dudau@arm.com>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, Kees Cook <kees@kernel.org>, 
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, kernel@collabora.com, 
-	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-mediatek@lists.infradead.org, linux-hardening@vger.kernel.org, 
-	linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cknow.org; s=key1;
+	t=1759515872;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=1pZwuT/JLNXJewD2NH2HpDVLKQgrPsuLUQV2Ho86TzI=;
+	b=ohtHXZcrdHCQRHZiN02OlCl0z3COcDpmx2RJFlgqqfGnMnnTAkQhBddhayj9xpSE/NUgDf
+	ewxf87lAqgOPpJYLxMBTg+pjpvOs0qdpnsoW3LHa1OfUS5zTyvhW6c+CABkWzuEF9teVW6
+	3Qo+QcWKihEQrFEyPjWQ+1hEazUl875JRSBgG4QRABl2TxZsn47zqrQQtlAFWpKQlx/YNt
+	dL+vEZxLF/ZRL8d70ZXnzMkm0RDpt+DOHafIFIZ0hQXGOt+x2nd34wzYF3oP2Fq48OX+mf
+	5qxnWUG2+ba36i5woRHH7yfEsQGEBPLCm4Au43JMIs1SnRIPA5lnkKnyEMC3bg==
+Content-Type: multipart/signed;
+ boundary=350687d2fbade414a961dffd460dfe7fc1681636fdd689bcf31c7eb97d01;
+ micalg=pgp-sha512; protocol="application/pgp-signature"
+Date: Fri, 03 Oct 2025 20:24:22 +0200
+Message-Id: <DD8WBG9LXET7.189BAJGVYEOIR@cknow.org>
+Cc: "Geert Uytterhoeven" <geert@linux-m68k.org>, "Nicolas Frattaroli"
+ <nicolas.frattaroli@collabora.com>, "Heiko Stuebner" <heiko@sntech.de>,
+ "Sebastian Reichel" <sebastian.reichel@collabora.com>, "Sebin Francis"
+ <sebin.francis@ti.com>, "Tomi Valkeinen" <tomi.valkeinen@ideasonboard.com>,
+ "Jon Hunter" <jonathanh@nvidia.com>,
+ <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] driver core: fw_devlink: Don't warn in
+ fw_devlink_dev_sync_state()
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: "Diederik de Haas" <didi.debian@cknow.org>
+To: "Diederik de Haas" <didi.debian@cknow.org>, "Ulf Hansson"
+ <ulf.hansson@linaro.org>, "Saravana Kannan" <saravanak@google.com>, "Rafael
+ J . Wysocki" <rafael@kernel.org>, "Greg Kroah-Hartman"
+ <gregkh@linuxfoundation.org>, <linux-pm@vger.kernel.org>
+References: <20250925115924.188257-1-ulf.hansson@linaro.org>
+ <DD1XOHE6P5OC.2JUQRAGAE1KTU@cknow.org>
+In-Reply-To: <DD1XOHE6P5OC.2JUQRAGAE1KTU@cknow.org>
+X-Migadu-Flow: FLOW_OUT
+
+--350687d2fbade414a961dffd460dfe7fc1681636fdd689bcf31c7eb97d01
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
 
-On Mon, Sep 29, 2025 at 12:48=E2=80=AFAM Nicolas Frattaroli
-<nicolas.frattaroli@collabora.com> wrote:
+On Thu Sep 25, 2025 at 3:59 PM CEST, Diederik de Haas wrote:
+> On Fri Sep 12, 2025 at 8:32 PM CEST, Saravana Kannan wrote:
+>> Please don't just disable fw_devlink using fw_devlink=3Doff. We want to
+>> fix any issues you are hitting with it. I might even delete this "off"
+>> option sometime. It was meant as an early debug option.
 >
-> As it stands, panthor keeps a cached current frequency value for when it
-> wants to retrieve it. This doesn't work well for when things might
-> switch frequency without panthor's knowledge.
->
-> Instead, implement the get_cur_freq operation, and expose it through a
-> helper function to the rest of panthor.
->
-> Reviewed-by: Steven Price <steven.price@arm.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collab=
-ora.com>
-> Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-> ---
->  drivers/gpu/drm/panthor/panthor_devfreq.c | 33 +++++++++++++++++++++++++=
-++----
->  drivers/gpu/drm/panthor/panthor_devfreq.h |  2 ++
->  drivers/gpu/drm/panthor/panthor_device.h  |  3 ---
->  drivers/gpu/drm/panthor/panthor_drv.c     |  4 +++-
->  4 files changed, 34 insertions(+), 8 deletions(-)
->
-[...]
-> +
-> +unsigned long panthor_devfreq_get_freq(struct panthor_device *ptdev)
-> +{
-> +       struct panthor_devfreq *pdevfreq =3D ptdev->devfreq;
-> +       unsigned long freq =3D 0;
-> +       int ret;
-> +
-> +       if (!pdevfreq || !pdevfreq->devfreq)
-> +               return 0;
-> +
-> +       if (pdevfreq->devfreq->profile->get_cur_freq) {
-This and the other two NULL checks above seem unnecessary. But let's
-follow other functions and check for pdevfreq->devfreq only.
+> I want to test all my (Rockchip) devices to see if they 'need'
+> that parameter to 'silence' the warning. I have a (vague) recollection
+> that some don't need it (for that).
 
-With that, Reviewed-by: Chia-I Wu <olvaffe@gmail.com>
-> +               ret =3D pdevfreq->devfreq->profile->get_cur_freq(ptdev->b=
-ase.dev,
-> +                                                              &freq);
-> +               if (ret)
-> +                       return 0;
-> +       }
-> +
-> +       return freq;
-> +}
-> diff --git a/drivers/gpu/drm/panthor/panthor_devfreq.h b/drivers/gpu/drm/=
-panthor/panthor_devfreq.h
-> index b7631de695f7d79456478c87e8af5dc47673cd1d..f8e29e02f66cb3281ed4bb4c7=
-5cda9bd4df82b92 100644
-> --- a/drivers/gpu/drm/panthor/panthor_devfreq.h
-> +++ b/drivers/gpu/drm/panthor/panthor_devfreq.h
-> @@ -18,4 +18,6 @@ void panthor_devfreq_suspend(struct panthor_device *ptd=
-ev);
->  void panthor_devfreq_record_busy(struct panthor_device *ptdev);
->  void panthor_devfreq_record_idle(struct panthor_device *ptdev);
->
-> +unsigned long panthor_devfreq_get_freq(struct panthor_device *ptdev);
-> +
->  #endif /* __PANTHOR_DEVFREQ_H__ */
-> diff --git a/drivers/gpu/drm/panthor/panthor_device.h b/drivers/gpu/drm/p=
-anthor/panthor_device.h
-> index 9f0649ecfc4fc697a21a8b2fc4dd89c8ecf298df..f32c1868bf6d782d99df9dbd0=
-babcea049c917e0 100644
-> --- a/drivers/gpu/drm/panthor/panthor_device.h
-> +++ b/drivers/gpu/drm/panthor/panthor_device.h
-> @@ -214,9 +214,6 @@ struct panthor_device {
->         /** @profile_mask: User-set profiling flags for job accounting. *=
-/
->         u32 profile_mask;
->
-> -       /** @current_frequency: Device clock frequency at present. Set by=
- DVFS*/
-> -       unsigned long current_frequency;
-> -
->         /** @fast_rate: Maximum device clock frequency. Set by DVFS */
->         unsigned long fast_rate;
->
-> diff --git a/drivers/gpu/drm/panthor/panthor_drv.c b/drivers/gpu/drm/pant=
-hor/panthor_drv.c
-> index ea4a37b566a8b215f2b7a09c333a696f1dcdb58f..4d59d94c353c3ca76f4b98a41=
-1c8f8284efafd08 100644
-> --- a/drivers/gpu/drm/panthor/panthor_drv.c
-> +++ b/drivers/gpu/drm/panthor/panthor_drv.c
-> @@ -25,6 +25,7 @@
->  #include <drm/gpu_scheduler.h>
->  #include <drm/panthor_drm.h>
->
-> +#include "panthor_devfreq.h"
->  #include "panthor_device.h"
->  #include "panthor_fw.h"
->  #include "panthor_gem.h"
-> @@ -1519,7 +1520,8 @@ static void panthor_gpu_show_fdinfo(struct panthor_=
-device *ptdev,
->                 drm_printf(p, "drm-cycles-panthor:\t%llu\n", pfile->stats=
-.cycles);
->
->         drm_printf(p, "drm-maxfreq-panthor:\t%lu Hz\n", ptdev->fast_rate)=
-;
-> -       drm_printf(p, "drm-curfreq-panthor:\t%lu Hz\n", ptdev->current_fr=
-equency);
-> +       drm_printf(p, "drm-curfreq-panthor:\t%lu Hz\n",
-> +                  panthor_devfreq_get_freq(ptdev));
->  }
->
->  static void panthor_show_internal_memory_stats(struct drm_printer *p, st=
-ruct drm_file *file)
->
-> --
-> 2.51.0
->
+Not trying to revisit the discussion, only to report that data.
+All tests were done with the 6.17 kernel and no 'fw_devlink=3Doff'.
+
+Device				sync_state warning
+Rock64 (rk3328)			yes
+RockPro64 (rk3399)		no
+Quartz64 Model A (rk3566)	no
+Quartz64 Model B (rk3566)	yes
+PineTab2 (rk3566)		yes
+NanoPi R5S (rk3568)		yes
+Rock 5B (rk3588)		yes
+
+Cheers,
+  Diederik
+
+--350687d2fbade414a961dffd460dfe7fc1681636fdd689bcf31c7eb97d01
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQT1sUPBYsyGmi4usy/XblvOeH7bbgUCaOAU2QAKCRDXblvOeH7b
+bi+jAQClFJxngtaff7fByP/1aLRZByopcFs8SEZdCfX0NZgpzwEAjcnsnhLYGu4J
+P6cjkclQbHy9mZ8x+FljMgEw+7fw2A4=
+=1PVj
+-----END PGP SIGNATURE-----
+
+--350687d2fbade414a961dffd460dfe7fc1681636fdd689bcf31c7eb97d01--
 
