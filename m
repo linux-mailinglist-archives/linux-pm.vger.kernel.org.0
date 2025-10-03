@@ -1,106 +1,105 @@
-Return-Path: <linux-pm+bounces-35683-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35684-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E92FBBB4718
-	for <lists+linux-pm@lfdr.de>; Thu, 02 Oct 2025 18:07:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B7EFDBB64C0
+	for <lists+linux-pm@lfdr.de>; Fri, 03 Oct 2025 11:03:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8FE2A19C68C9
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Oct 2025 16:08:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 14E1B4A127E
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Oct 2025 09:02:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 757DA2417C6;
-	Thu,  2 Oct 2025 16:07:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RaW0TUJG"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36727274B55;
+	Fri,  3 Oct 2025 09:02:43 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AE58233722;
-	Thu,  2 Oct 2025 16:07:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 550131F152D;
+	Fri,  3 Oct 2025 09:02:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759421265; cv=none; b=TgoRKxXRwLHEIlU1o3n85t/IDQRgtzmMn1IihOwPgfRPKjVrk/1M2H1z/dlr2449qtXMI+1nuLPysrsaVooMEkgN7Qby8qsa0yi6HK6NzkvA4O59h1eSXYvh2gXbwpxzdPZhNneZWOpakXKMwAzwyd4UuSkiAY2ZY6Qa1cT58tE=
+	t=1759482163; cv=none; b=DKutEppTaP4Wc/SwULQDTHUctKLGWCRoY7d66r93vJ5iwUeXhZvHmSVSssjaF0ldyszS8PwKlKyq9kFUDJeGQXtApsEqmYCYv7E3TUdFHzNUHscu0+xaJC5deOfHy9/IHE5yo9+OySqRRXbH3Zn847fjLSimUj1SaOnWxBlHLO8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759421265; c=relaxed/simple;
-	bh=7HS3xDv56hiDsg1+8hgJy4KB2sJ7ucY4QIiLu0ewozc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XV8xF4I+u1+3+bWxbIH8O0NMpS86rf9+Wz4PtzHoG7fSS7E2JhMccu3OD2crnv95MoK/JLUMQydQA/D/Rv7vOhllsl33WVthyZE/jfXjXOLv3dPykrkNjdBLwogic5qUIvFtHvFLHhFx4zHxJRPN3EzXZefaTk2Ry3eBpeCjHsM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RaW0TUJG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F105BC4CEF4;
-	Thu,  2 Oct 2025 16:07:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759421265;
-	bh=7HS3xDv56hiDsg1+8hgJy4KB2sJ7ucY4QIiLu0ewozc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=RaW0TUJGjtHO6268lGs5FWYM8bDaIXCSLtQU3OQTBfqWK+Bu/YI965Qk/RH77hHhC
-	 BZsET7tPw7jl0bEU18wN/up2OTJtKc8M2jv+0DQ32MJVxsx7TbDp8cojcNESMwRea2
-	 wcWcGGd3edXKE63RYLTUcZgyToeCQMB8m7VYypsofwxaE4Qrf7lsUc7Pe1U09/7/1U
-	 XuNwJi/gtguk59RGBUE+pGb1v41/s8SByzuXvUWx5BxBrwPAqn5CsKfwIcqlqAY3UA
-	 GmlBRjcaxB4L2oV1HxeXgJ8n5mEa2dXUcaLqVEH4cFz1dCJlF9FNiFYiLeCwr49tWe
-	 +f1IhhhmHeFWQ==
-Date: Thu, 2 Oct 2025 09:07:44 -0700
-From: Kees Cook <kees@kernel.org>
-To: Oleksij Rempel <o.rempel@pengutronix.de>
-Cc: Sebastian Reichel <sre@kernel.org>,
-	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-	Benson Leung <bleung@chromium.org>,
-	Tzung-Bi Shih <tzungbi@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Tony Luck <tony.luck@intel.com>,
-	"Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	kernel@pengutronix.de, linux-kernel@vger.kernel.org,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	linux-pm@vger.kernel.org,
-	=?iso-8859-1?Q?S=F8ren?= Andersen <san@skov.dk>,
-	Guenter Roeck <groeck@chromium.org>,
-	Matti Vaittinen <mazziesaccount@gmail.com>,
-	Ahmad Fatoum <a.fatoum@pengutronix.de>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	chrome-platform@lists.linux.dev, devicetree@vger.kernel.org,
-	linux-hardening@vger.kernel.org
-Subject: Re: RFC: Selecting an NVMEM cell for Power State Change Reason
- (PSCR) recording
-Message-ID: <202510020904.1E48B7EB@keescook>
-References: <20250618120255.3141862-1-o.rempel@pengutronix.de>
- <aN5pSWBFRZlNRv3U@pengutronix.de>
+	s=arc-20240116; t=1759482163; c=relaxed/simple;
+	bh=Eavg20eZ88CohzaNKd0NzSoVQIJLLR8NX8lfxSrl9No=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=TfUJjUjGZPxlPOTiJW2DselkRt4RAaYKXety3Er/Dddm65MQkKFwGMfau3n5IFq7kQ0eOVD0h9CMdHufFDHira3KnPvS+5psG1EIrn5Pwwi/qlahffRNubY/Y4iquIfyX+tDzeSgFoiPY76zda739zG2etBoGWLG7BJWT2Yorv0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.216])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4cdN0g3Pdcz6L4tL;
+	Fri,  3 Oct 2025 17:00:19 +0800 (CST)
+Received: from dubpeml100005.china.huawei.com (unknown [7.214.146.113])
+	by mail.maildlp.com (Postfix) with ESMTPS id CE34C1400D9;
+	Fri,  3 Oct 2025 17:02:37 +0800 (CST)
+Received: from localhost (10.203.177.15) by dubpeml100005.china.huawei.com
+ (7.214.146.113) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Fri, 3 Oct
+ 2025 10:02:37 +0100
+Date: Fri, 3 Oct 2025 10:02:35 +0100
+From: Jonathan Cameron <jonathan.cameron@huawei.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+CC: Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>, Takashi Iwai <tiwai@suse.de>, Dhruva
+ Gole <d-gole@ti.com>
+Subject: Re: [PATCH v1] PM: runtime: Introduce one more usage counter guard
+Message-ID: <20251003100235.00003a98@huawei.com>
+In-Reply-To: <12752072.O9o76ZdvQC@rafael.j.wysocki>
+References: <12752072.O9o76ZdvQC@rafael.j.wysocki>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aN5pSWBFRZlNRv3U@pengutronix.de>
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml100010.china.huawei.com (7.191.174.197) To
+ dubpeml100005.china.huawei.com (7.214.146.113)
 
-On Thu, Oct 02, 2025 at 02:00:09PM +0200, Oleksij Rempel wrote:
-> I'm seeking consensus on a minimal, upstream-acceptable way to identify the
-> single NVMEM cell used to persist a Power State Change Reason (PSCR). Typical
-> targets are battery-backed RTC scratchpads or small EEPROM. The aim is to have
-> a tiny breadcrumb available before userspace, across full power cuts, and
-> shared by bootloader/kernel/userspace.
-> [...]
-> * pstore integration (not tried): a backend that uses a nominated NVMEM cell if
->   such a nomination is acceptable.
+On Wed, 01 Oct 2025 19:34:29 +0200
+"Rafael J. Wysocki" <rafael@kernel.org> wrote:
 
-Several years ago I wanted to have tighter integration between pstore
-and nvdimm code. The thread is here, for reference:
-https://lore.kernel.org/lkml/CAGXu5jLtmb3qinZnX3rScUJLUFdf+pRDVPjy=CS4KUtW9tLHtw@mail.gmail.com/
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> Follow previous commit 9a0abc39450a ("PM: runtime: Add auto-cleanup
+> macros for "resume and get" operations") and define a runtime PM
+> usage counter guard in which pm_runtime_get_noresume() and
+> pm_runtime_put_noidle() will be used for incrementing and
+> decrementing it, respectively.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-I'm not sure it it'll be a useful as background, but I thought I'd
-mention it. :)
+Make sense to complete the set.
 
--Kees
+Reviewed-by: Jonathan Cameron <jonathan.cameorn@huawei.com>
 
--- 
-Kees Cook
+> ---
+> 
+> Commit 9a0abc39450a is there in my linux-next branch.
+> 
+> ---
+>  include/linux/pm_runtime.h |    3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> --- a/include/linux/pm_runtime.h
+> +++ b/include/linux/pm_runtime.h
+> @@ -610,6 +610,9 @@ static inline int pm_runtime_put_autosus
+>  	return __pm_runtime_put_autosuspend(dev);
+>  }
+>  
+> +DEFINE_GUARD(pm_runtime_noresume, struct device *,
+> +	     pm_runtime_get_noresume(_T), pm_runtime_put_noidle(_T));
+> +
+>  DEFINE_GUARD(pm_runtime_active, struct device *,
+>  	     pm_runtime_get_sync(_T), pm_runtime_put(_T));
+>  DEFINE_GUARD(pm_runtime_active_auto, struct device *,
+> 
+> 
+> 
+
 
