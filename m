@@ -1,127 +1,248 @@
-Return-Path: <linux-pm+bounces-35711-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35712-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB06CBB83A1
-	for <lists+linux-pm@lfdr.de>; Fri, 03 Oct 2025 23:42:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 882B7BB888C
+	for <lists+linux-pm@lfdr.de>; Sat, 04 Oct 2025 04:42:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4A4CF4A00C7
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Oct 2025 21:42:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 81DB31B20F6D
+	for <lists+linux-pm@lfdr.de>; Sat,  4 Oct 2025 02:42:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4222226B742;
-	Fri,  3 Oct 2025 21:42:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 044D022157B;
+	Sat,  4 Oct 2025 02:42:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aCtGk1XC"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="ft3a855I"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yx1-f41.google.com (mail-yx1-f41.google.com [74.125.224.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9101325F7A7
-	for <linux-pm@vger.kernel.org>; Fri,  3 Oct 2025 21:42:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 406C021A459
+	for <linux-pm@vger.kernel.org>; Sat,  4 Oct 2025 02:42:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759527755; cv=none; b=fkXtEuaVOVOUIwEDdu0JjiuueppmdFmyQYX4rUJ8q5uB2FDW08nR5uabwJ5s+MwQ0sR2zcwXFTiBu4QztkftAdFIBVMDtfjTEX9kmkYmYdirUqd3lsqj896hvM5PRhil6zLUzqY6ZH5BC6iA0DTg+ORT2hXGyLeZsc2WE3v9t3E=
+	t=1759545723; cv=none; b=cWBtPl+HPeWGZ6Ayl5Tg5qZ4nwoh9Y1Mz0Fke9DVd+k9jzMv/pqKc17oXwv9rBbykLTQ2u79Vy29q1H9NQd2HXM0XG07ltDDzdsHDId6HJSv5obFKzpTSWHzBmQKNNQtcXm9gfQpeol9x/oxE/ixWgVpIoLB/NoxPDnqwgZPlaA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759527755; c=relaxed/simple;
-	bh=Qb4Wu82O8H4woRuNaXSp6qi7XmoH0H5VI5tHbH7Spug=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qcftctINVpWC+umO9c1d/Kn/8XadsaboKFqfO9RCjbB+ncLLogB38k7DYFb1Kz22wcQR5hHgNtKHbCz6hyE/C+F4yYPk/KCNvJe9GNlChYBAUGcLZPJDNKLz/Nra9Ea856ss+y2zOkdWJs/70zueyeH8eNhKi87BuNNohDcg6go=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aCtGk1XC; arc=none smtp.client-ip=74.125.224.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yx1-f41.google.com with SMTP id 956f58d0204a3-637dc2292cfso3078927d50.3
-        for <linux-pm@vger.kernel.org>; Fri, 03 Oct 2025 14:42:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1759527752; x=1760132552; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Qb4Wu82O8H4woRuNaXSp6qi7XmoH0H5VI5tHbH7Spug=;
-        b=aCtGk1XC8rRSai9BmOGOVAJin6qeyYLkH35lv2ujQWg0huQq7vywCssunW/EbXOZO8
-         1wVda4MHZbI0KNHHW0YQBQOubZnVfuT/JPAhIMmi8OUamRQCTFrxDnLbWtYoaPsylkGr
-         kwdyu9TjvWi2cFUcR7uWv46N5lIaf0rgQ6Z1gbZqXYZwAJcShlua+BgqWkAvIq3bqbic
-         2hntgmIKwgHfKdMBZIM6pk1HuFnnIlv2EvyHAzxCMJk3aEFhy7q7UJyiRtvZnlXlw1YD
-         Zx/b86ghRw206/wy6+JEzzYipnSgA8OjHIA2zFfNkKICjPI8T5hiUmH8oBq7QtRBs8Wy
-         KjTQ==
+	s=arc-20240116; t=1759545723; c=relaxed/simple;
+	bh=GrG+sZoFKRUNsfWBm/ynu78GdpzwzH9S+BPs1TW4kbo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=OHUwqE9xh1pBQl+9Lj19SB3U+YEi6WY9sGTRi+Tun3VPRMV685gNGpfYTOD7yyq9XVlK7n7YPVNgYA9QE1DCitDAROF0yJZclR9rBmttlhmDumuWg89MaCrUrzBhTZSlHiGR/4BlH2k7HUjJbgu3rtg2Li72NVCBc+TvBi9txTA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=ft3a855I; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 593AhAdq006911
+	for <linux-pm@vger.kernel.org>; Sat, 4 Oct 2025 02:42:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	8LKTW72ANVRWqbBbs1orSLC8F5L2PbgtH5ZHTOYbBuc=; b=ft3a855IBg2OWRMS
+	nbEgEinUC+Q4mu3cLXd85jjLj7n8OO+Ucb94YSBzV9M5iSWwKetL3Jsq4a017sm3
+	cUwHRP5HjLnh0yHLysMi0QaZz40BiJsG+tY4MKyYaSkGLwsw1bDzdS/CGipJqsiY
+	7L2gTQb0941neWt3rAVYORT29ZMYfGyPGsjyNAQdgDcOkbEVECBxvw8eeUiRALnq
+	ei11ZUNXHGrhrTpevLeGySZ6xGBdvFGGSt/+RjFwqSjvI+U2NTgOodJBAHW9HoQe
+	hFrKTcGbHL+aukMz9E71YIsi5Bo7uj2gsJ6GVc9qFoi8h6MsRCr0B67/lsDkNLi1
+	WxBtvg==
+Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com [209.85.210.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 49e851vf4q-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Sat, 04 Oct 2025 02:42:01 +0000 (GMT)
+Received: by mail-pf1-f199.google.com with SMTP id d2e1a72fcca58-77f2466eeb5so2872739b3a.2
+        for <linux-pm@vger.kernel.org>; Fri, 03 Oct 2025 19:42:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759527752; x=1760132552;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Qb4Wu82O8H4woRuNaXSp6qi7XmoH0H5VI5tHbH7Spug=;
-        b=ZtBdfP0nadmpmBy5v1nw3y6CeHWiUYEZs8nvvctTApOGtsi5fdmdBqWFghZiqRu5Zj
-         jFp0Hsc6z1j7gUhYdbNePAx77/PcXylA7Ex3WHpPlvVMDREA5uWPbJQwbzHoGw/lpvlP
-         QhSqcnxWqesu6P0H0Z4VE7Ltzyn0RasgmKoXp/eyC4GnaRn5k/nOb0a2lJGJQJQEVhb0
-         ukR2FZWktiNea3FnOEQ569eU2wjFCzWMebNViAl5BRtHRm/Vp4YKkmnYqyChbHlPkCQV
-         UPvTeqEU/KztVsTZ74idg/SggkrqF5DRMg0PNBRIMWCeIJt7EKnw1sim1QnQI2nfarro
-         byGg==
-X-Forwarded-Encrypted: i=1; AJvYcCXSnwOX2rgJ4q/EhmpkpK+MxNPJKFP1IvnfLXwb3Plq2hNBY29EYg94eW7mp6XshX1XATViiwKjgw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz1Q38eC0RDllINpHhHJM7yfCsjr6cnVnEdranjrLFSWzdOg9HX
-	UU+gTBR7UyaxMT5L+jMJrTJejbnZNY03H+3LWWosW1B+CK5QOuPinu1plMVqiaSNmn3+FNO2CZW
-	dwkjtZ689mh0aTRleXBT22q9nGFFHzB4=
-X-Gm-Gg: ASbGncsfqd+3f3JHtBQL728fHQgZ1BMwrHydEpQx0rvgmkL5oPIcfV1Ucttazj43Dxp
-	wzs9kDKjbKwBYpE+yyT0sVlsycsUY1vtY0Mcp+MptrD3LwrcEew5mA0GR2Op0VB083cH6udZcOU
-	Apz/8FYMcXTK2noXQ8GkpnGyBVURT5m+GF5y2juv02V3g07qBORQxXq6s1DhL+GAjK+lMpRfzSV
-	fm+mOqRgvppa4X3omlz+MqqD9m+aje8Kk+8DEfnS6wvM2jS6ErY0vDaW0TjzZR9a1MT2lBubLGF
-	ZHmdJ6F4SASBqiTUG/bR1g==
-X-Google-Smtp-Source: AGHT+IFpa62J3F001fD6gEmxASZM+7hprfmJdW+U2IPWM14bwbGqXpUXslnfVMopKEr/h/JVkCYbZZaxq7ZVg2GVzCI=
-X-Received: by 2002:a05:690c:6085:b0:726:37ae:95a0 with SMTP id
- 00721157ae682-77f947377dbmr63264647b3.47.1759527752486; Fri, 03 Oct 2025
- 14:42:32 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1759545720; x=1760150520;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8LKTW72ANVRWqbBbs1orSLC8F5L2PbgtH5ZHTOYbBuc=;
+        b=wXMdR7Nwvvdws7TJU+fDGQpPyj6nkofbPwtmEla0Warhr61sXuCbShtvgrzjoJOKCB
+         AqQTNo70YjGK73B8oGQCAaNSctsmDvWzCudtuJAv13oK7CGVPRW4FefKUfCN1lnyTLMv
+         kGzA1Y7I++7yzLLCEM3B+0Tav6rZBf0BX+pzC0AFaHk4YG/ph6LCPX5DFcmiMmPry6Pk
+         B0KvQERKlh5VnXE8lOf5HoZbDQ4lgdljeXBddv2deF1S6oe9lFw9ZZKIhxN6ZxJgYyNf
+         cghHbYSNgA7/irRVXmbIYIloxcR46otfqDEQegiod4eRMpzFYJILUWHzaHotCSQ4Sbs2
+         h79g==
+X-Forwarded-Encrypted: i=1; AJvYcCV5Jn8qzP2EoNYAW3ouHid3uUo0IMlZfpkHo/g+c62MjX0dehEemT7K2sHVNTTwJDyjhZQV8+E9tQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwmzZ7s3HsDRTT1mk/yU2DsZhXIUXn8oixRuusmmFhPefiv7koL
+	l+/a00qIU4twyVwbIYlXhT8pFYiPzwcQI+ld2Yu82DupA4hS7BG9ZH831z2DGjlc/AS9NNtg7X3
+	7OZSN9Mjod4UWp2Y/DgK2ah/Bh9cpnU7yhINNs0pRKUZ6qoJNSptSLRMszmp79Q==
+X-Gm-Gg: ASbGncvzaeI/7UqLMEOPZpv6b02ovIAQYEtADlvS9FZKnaNIJXdUyotNe9YG+PmYH3j
+	4AUNvqmNG1OdhUhmYuY/zKvdBfy3jaeERoXPlSmMB1KBtUB6Ge2X+INqO3LMWMlJIYtlW8QdkHF
+	Xt7TT6maRuI8EGKlUyaHaJ7yviyGNd967FqXrKP1V+4DtadxwBxZsf6Q1POvAdwKe3CCApgzBnZ
+	T2RGxx+6sqxdR9eluS43UTttyD+8kdxPThHsIqCpij32RDJ2EprjV4fmryBWNeBMoiE/693VhRL
+	/lqZyP6KPDau5NIpd6aiVFRt8PWCleQVi1xQxkqYZZvIO9Kg7awYjHMDXnWlDgzBO7eEHJHpchs
+	5fw==
+X-Received: by 2002:a05:6a00:8c6:b0:781:2538:bfb4 with SMTP id d2e1a72fcca58-78c98d5cb4cmr5364049b3a.10.1759545720367;
+        Fri, 03 Oct 2025 19:42:00 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHoqhjBr0QjJZhFy4pINP5TXEFjwtPrvEKpTZgZJvp0XgVHp0FpeliOUWBrj6cq1uLbRLNrvA==
+X-Received: by 2002:a05:6a00:8c6:b0:781:2538:bfb4 with SMTP id d2e1a72fcca58-78c98d5cb4cmr5364023b3a.10.1759545719824;
+        Fri, 03 Oct 2025 19:41:59 -0700 (PDT)
+Received: from [10.216.33.177] ([202.46.23.19])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-78b01f9a2b9sm6189511b3a.19.2025.10.03.19.41.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Oct 2025 19:41:59 -0700 (PDT)
+Message-ID: <a3158843-dfac-4adc-838a-35bb4b0cbea4@oss.qualcomm.com>
+Date: Sat, 4 Oct 2025 08:11:48 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251003-mt8196-gpufreq-v6-0-76498ad61d9e@collabora.com>
- <20251003-mt8196-gpufreq-v6-7-76498ad61d9e@collabora.com> <CAPaKu7QWBShwr+YhFi+nUFo0kJ06k4PK3zggcCefWGjqUmTx5w@mail.gmail.com>
-In-Reply-To: <CAPaKu7QWBShwr+YhFi+nUFo0kJ06k4PK3zggcCefWGjqUmTx5w@mail.gmail.com>
-From: Chia-I Wu <olvaffe@gmail.com>
-Date: Fri, 3 Oct 2025 14:42:21 -0700
-X-Gm-Features: AS18NWBXV7Dg7kjMsva2cG1ZX6ySiRudcCipxqw2a3pxKBvNUjFKzkOnT-TXcr4
-Message-ID: <CAPaKu7SK=st9FkU+i25MOwBnBPQYpiBxS7-1nnerdBCiPnHy3A@mail.gmail.com>
-Subject: Re: [PATCH v6 7/7] pmdomain: mediatek: Add support for MFlexGraphics
-To: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	Boris Brezillon <boris.brezillon@collabora.com>, Jassi Brar <jassisinghbrar@gmail.com>, 
-	Chen-Yu Tsai <wenst@chromium.org>, Steven Price <steven.price@arm.com>, 
-	Liviu Dudau <liviu.dudau@arm.com>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, Kees Cook <kees@kernel.org>, 
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, kernel@collabora.com, 
-	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-mediatek@lists.infradead.org, linux-hardening@vger.kernel.org, 
-	linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V7 3/5] dt-bindings: iio: adc: Add support for QCOM PMIC5
+ Gen3 ADC
+To: Jonathan Cameron <jic23@kernel.org>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>, robh@kernel.org,
+        krzk+dt@kernel.org, conor+dt@kernel.org, agross@kernel.org,
+        andersson@kernel.org, lumag@kernel.org,
+        dmitry.baryshkov@oss.qualcomm.com, konradybcio@kernel.org,
+        daniel.lezcano@linaro.org, sboyd@kernel.org, amitk@kernel.org,
+        thara.gopinath@gmail.com, lee@kernel.org, rafael@kernel.org,
+        subbaraman.narayanamurthy@oss.qualcomm.com,
+        david.collins@oss.qualcomm.com, anjelique.melendez@oss.qualcomm.com,
+        kamal.wadhwa@oss.qualcomm.com, rui.zhang@intel.com,
+        lukasz.luba@arm.com, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        cros-qcom-dts-watchers@chromium.org, quic_kotarake@quicinc.com,
+        neil.armstrong@linaro.org, stephan.gerhold@linaro.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+References: <20250826083657.4005727-1-jishnu.prakash@oss.qualcomm.com>
+ <20250826083657.4005727-4-jishnu.prakash@oss.qualcomm.com>
+ <20250829-classic-dynamic-clam-addbd8@kuoka>
+ <5d662148-408f-49e1-a769-2a5d61371cae@oss.qualcomm.com>
+ <4e974e77-adfc-49e5-90c8-cf8996ded513@kernel.org>
+ <a0e885be-e87d-411a-884e-3e38a0d761e5@oss.qualcomm.com>
+ <8c90cc3f-115e-4362-9293-05d9bee24214@linaro.org>
+ <5d4edecf-51f3-4d4a-861f-fce419e3a314@oss.qualcomm.com>
+ <20250927144757.4d36d5c8@jic23-huawei>
+Content-Language: en-US
+From: Jishnu Prakash <jishnu.prakash@oss.qualcomm.com>
+In-Reply-To: <20250927144757.4d36d5c8@jic23-huawei>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Authority-Analysis: v=2.4 cv=OJoqHCaB c=1 sm=1 tr=0 ts=68e08979 cx=c_pps
+ a=WW5sKcV1LcKqjgzy2JUPuA==:117 a=j4ogTh8yFefVWWEFDRgCtg==:17
+ a=IkcTkHD0fZMA:10 a=x6icFKpwvdMA:10 a=EUspDBNiAAAA:8 a=u19HPSzwk6W4tZ9FH_gA:9
+ a=QEXdDO2ut3YA:10 a=OpyuDcXvxspvyRM73sMx:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTI3MDAzMiBTYWx0ZWRfX37w6cDkA87Ni
+ kzt0zCKY5Sj16oYY3d3FTr3Nar/E86LN+9wAKP46mHoyO9qCZuXj2xSJADz+lzWcVPb5rkvXpAC
+ 4PfHUDWSZHK9WwhAhkHl4yaycmGGkv7X69f7qY5/DWx1bJG8VFPLu46riNnc9kBjVPTT7fmJOKn
+ v/8bB9q4DGBNZ+882WbB+L9/BotmhJhVjy6U6b8OPbwvoFXmuteKzyyHujMYibSLL9qcUrUqbO9
+ XcWCH1ENMKX6WpjeIG5bHeWcJ91g0OEsZAWbauE7uCDIc+KHwyhD2U1Tu0UD7URsHruWWgx7upd
+ spCQB4B2IIqMRt5DfT+p3tU9UQONO7jmMCL7uWU2TtF1dMvhVXxbN/Cf9AClxIzmVAkcTD+4Vlu
+ oZbctQ7WXzK93KKv4qxRCBG9VRxncw==
+X-Proofpoint-ORIG-GUID: T3izTEhm0ZR0QAzuE9U-G6-wdNox1fIP
+X-Proofpoint-GUID: T3izTEhm0ZR0QAzuE9U-G6-wdNox1fIP
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-10-03_07,2025-10-02_03,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ spamscore=0 adultscore=0 priorityscore=1501 bulkscore=0 impostorscore=0
+ suspectscore=0 lowpriorityscore=0 phishscore=0 malwarescore=0 clxscore=1015
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2509150000 definitions=main-2509270032
 
-On Fri, Oct 3, 2025 at 2:41=E2=80=AFPM Chia-I Wu <olvaffe@gmail.com> wrote:
->
-> On Fri, Oct 3, 2025 at 1:16=E2=80=AFPM Nicolas Frattaroli
-> <nicolas.frattaroli@collabora.com> wrote:
-> >
-> > Various MediaTek SoCs use GPU integration silicon named "MFlexGraphics"
-> > by MediaTek. On the MT8196 and MT6991 SoCs, interacting with this
-> > integration silicon is required to power on the GPU.
-> >
-> > This glue silicon is in the form of an embedded microcontroller running
-> > special-purpose firmware, which autonomously adjusts clocks and
-> > regulators.
-> >
-> > Implement a driver, modelled as a pmdomain driver with a
-> > set_performance_state operation, to support these SoCs.
-> I like this model a lot. Thanks!
->
-> panthor might potentially need to interact with this driver beyond
-> what pmdomain provides. I am thinking about querying
-> GF_REG_SHADER_PRESENT. Not sure if we've heard back from the vendor.
-> Have you considered moving this to drivers/soc/mediatek such that we
-> can provide include/linux/mtk-mfg.h to panthor?
-I meant to say include/linux/soc/mediatek/mtk-mfg.h.
+Hi Jonathan,
+
+On 9/27/2025 7:17 PM, Jonathan Cameron wrote:
+> On Fri, 19 Sep 2025 20:17:43 +0530
+> Jishnu Prakash <jishnu.prakash@oss.qualcomm.com> wrote:
+> 
+>> Hi Krzysztof,
+>>
+>> On 9/18/2025 5:45 AM, Krzysztof Kozlowski wrote:
+>>> On 18/09/2025 04:47, Jishnu Prakash wrote:  
+>>>> Hi Krzysztof,
+>>>>
+>>>> On 9/17/2025 5:59 AM, Krzysztof Kozlowski wrote:  
+>>>>> On 16/09/2025 16:28, Jishnu Prakash wrote:  
+>>>>>>> You cannot have empty spaces in ID constants. These are abstract
+>>>>>>> numbers.
+>>>>>>>
+>>>>>>> Otherwise please point me to driver using this constant.  
+>>>>>>
+>>>>>> These constants are for ADC channel numbers, which are fixed in HW.
+>>>>>>
+>>>>>> They are used in this driver: drivers/iio/adc/qcom-spmi-adc5-gen3.c,
+>>>>>> which is added in patch 4 of this series.
+>>>>>>
+>>>>>> They can be found in the array named adc5_gen3_chans_pmic[].  
+>>>>>
+>>>>> Really? So point me to the line there using ADC5_GEN3_VREF_BAT_THERM.
+>>>>>  
+>>>>
+>>>> We may not be using all of these channels right now - we can add them
+>>>> later based on requirements coming up. For now, I'll remove the channels
+>>>> not used in adc5_gen3_chans_pmic[].  
+>>>
+>>> You are not implementing the feedback then. Please read it carefully.
+>>>   
+>>
+>> Sorry, I misunderstood - so you actually meant I should remove the
+>> empty spaces in the definitions, like this?
+>>
+>> -#define ADC5_GEN3_VREF_BAT_THERM               0x15
+>> +#define ADC5_GEN3_VREF_BAT_THERM 0x15
+>>
+>> I thought this at first, but I somehow doubted this later, as I saw some
+>> other recently added files with empty spaces in #define lines, like:
+>>
+>> include/dt-bindings/iio/adc/mediatek,mt6373-auxadc.h
+>> include/dt-bindings/regulator/st,stm32mp15-regulator.h
+>>
+>> I can make this change, if you prefer this. Please let me know
+>> if I'm still missing something.
+>>
+>> Also please let me know if you want me to remove the unused
+>> channels - I would prefer to keep them if there's no issue,
+>> as we might need them later.
+>>
+> He is referring to 0x14 and below not being defined values.  So what
+> do they mean if they turn up in the DT?
+> 
+
+Thanks for your clarification. To address your first point above, the macros
+added here only represent the ADC channel numbers which are supported for
+ADC5 Gen3 devices. If there are numbers missing in between (like 0x14),
+that is because there exist no valid ADC channels in HW matching those
+channel numbers.
+
+For your question above, if any of the undefined channels are used in the DT,
+they should ideally be treated as invalid when parsed in the driver probe and
+lead to an error. When I checked the code again, I saw we do not have such an
+explicit check right now, so I will add that in the next patch series.
+
+And to be clear on which channel numbers are supported, I think it may be
+best if, for now, we only add support for the channel numbers referenced in
+the array adc5_gen3_chans_pmic[] in drivers/iio/adc/qcom-spmi-adc5-gen3.c.
+
+There are only 18 channel numbers used in this array and I would remove
+all channels except for these from the binding files. During parsing, we
+would use this array to confirm if an ADC channel added in DT is supported.
+
+In case we need to add support for any more channels later, we could add
+their macros in the binding file and update the array correspondingly at
+that time.
+
+Does all this sound fine? Please let me know if you have any more concerns
+or queries.
+
+Thanks,
+Jishnu
+
+> Hence the request for context on how this define is being used so that
+> you can get some feedback on how it should be done.
+> 
+> J
+>> Thanks,
+>> Jishnu
+>>
+>>> Best regards,
+>>> Krzysztof  
+>>
+> 
+
 
