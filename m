@@ -1,180 +1,161 @@
-Return-Path: <linux-pm+bounces-35739-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35740-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF61BBBE867
-	for <lists+linux-pm@lfdr.de>; Mon, 06 Oct 2025 17:44:14 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C3E65BBE8EE
+	for <lists+linux-pm@lfdr.de>; Mon, 06 Oct 2025 17:55:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 6E2824EE630
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Oct 2025 15:44:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BCB3C1898439
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Oct 2025 15:56:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B00E52D8DD6;
-	Mon,  6 Oct 2025 15:43:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E9092D0625;
+	Mon,  6 Oct 2025 15:55:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="llB2pjvr"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D5EE2D879B;
-	Mon,  6 Oct 2025 15:43:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5535E2641C6;
+	Mon,  6 Oct 2025 15:55:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759765433; cv=none; b=SZgbfyEHe0NIRyO0JOHpVJy7kcEEg9fyBCz3okETt5ITfduy774MLLksYMoXy5MLZhu/N+pC2ryiMnC0yl7Vnouy+/BOwsVv2G7nOdL+3OGtKEjOXeJah4wUkIrkDmIaOWGS68A3yIgXTvVJe2TaSm2pC26PImTaiqlwD4odUdQ=
+	t=1759766150; cv=none; b=mvJBDslTaikZhvfTRe7ER3YbUZ2XAwcPzLVDGMD51S3xdKbTUqbbzZnMBMG7e32CA1IUrhpXqqaggDu7Sw1sy5yCYTMn1zQrwnx11YI0k2k2d+7oBaBnzzhuBXZTLrob2eDSyi5pO06eREjEOJKtbm+m4vDVBUJPyJ4xJShLfA8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759765433; c=relaxed/simple;
-	bh=9TS8mvHfI1X9G76iPlEBCH6KiBzdkL1LBmUhaIltqjE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DY0Smf1PmIJApMbOS6xDMKURAxWXD9zelL6Si08kN76VrNEg5laNKNEYpyP4px6bZWKqexZKBWO/NW6VhHEVKnC8RpWLTgfOQboxnQwKE3gt5QESsHr2ka5Ik+2+hFcYwbpiwaKNUhWVZ2MPZYIVn5ebJZhXleoPyQBryAabCT4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B54221515;
-	Mon,  6 Oct 2025 08:43:42 -0700 (PDT)
-Received: from [10.57.81.187] (unknown [10.57.81.187])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CE4953F66E;
-	Mon,  6 Oct 2025 08:43:48 -0700 (PDT)
-Message-ID: <2be75031-e7a6-44e8-a096-945947d73631@arm.com>
-Date: Mon, 6 Oct 2025 16:44:10 +0100
+	s=arc-20240116; t=1759766150; c=relaxed/simple;
+	bh=PNewJkNL6CSZlcvcVRzdF4vG0QntxYg8acRL1wWz8xQ=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=e0g/qfGxwrah+d501jjk3NHYWLBqwCooPK/E4Oo6yUQ4FGlCtJm7mj1ol8Jg7UYEkHsx+luLPYyJz36sDH4jUbcauE30Rsf03Ol77Zq5ZlLa/KbRVvDA3f4sDKsO8NswF+YcTRnd6FDMfa83YMjxYzSoX3SbLgnhEbqrqtNqsLI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=llB2pjvr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF5F2C4CEF5;
+	Mon,  6 Oct 2025 15:55:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1759766149;
+	bh=PNewJkNL6CSZlcvcVRzdF4vG0QntxYg8acRL1wWz8xQ=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=llB2pjvrsfAQsrqHn6tONxtl59AYRr+QlQq0ELqOELOEZyntMxjcpFMmkvl4KBGSB
+	 7dvb5gB33pbJd9n3W7WBc12p+LFft9mgaeN9cz5ue6V6v2mZhiKxMRQNPDnFVZznCd
+	 I2mPvizxGNY/GOabl2Aq7QrrBeaqQdFkkcrsogpLWyFxg1ynh9AlJdO/Akalb08deV
+	 8gHGQf1MoH00M/m6l0xJ5ruejk27SCdDvq2GZRScYVk3C2JvKYQvdeTOfsaagkSVgl
+	 oZQvtjHABSDDctU2eG7cNU/i3mCxW3PbfdEiw2qGs0yECldiVnjAK1otZscPZKHcvj
+	 /Vd5kyZJKVisg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.98.2)
+	(envelope-from <maz@kernel.org>)
+	id 1v5nYx-0000000BtEa-23VH;
+	Mon, 06 Oct 2025 15:55:47 +0000
+Date: Mon, 06 Oct 2025 16:55:47 +0100
+Message-ID: <865xcsyqgs.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Maulik Shah <quic_mkshah@quicinc.com>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	linux-pm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/3] arm64: smp: Implement cpus_has_pending_ipi()
+In-Reply-To: <20251003150251.520624-3-ulf.hansson@linaro.org>
+References: <20251003150251.520624-1-ulf.hansson@linaro.org>
+	<20251003150251.520624-3-ulf.hansson@linaro.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RESEND v4 05/10] PM: EM: Add a skeleton code for netlink
- notification
-To: Changwoo Min <changwoo@igalia.com>
-Cc: christian.loehle@arm.com, tj@kernel.org, pavel@kernel.org,
- len.brown@intel.com, rafael@kernel.org, kernel-dev@igalia.com,
- linux-pm@vger.kernel.org, sched-ext@lists.linux.dev,
- linux-kernel@vger.kernel.org
-References: <20250921031928.205869-1-changwoo@igalia.com>
- <20250921031928.205869-6-changwoo@igalia.com>
-Content-Language: en-US
-From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20250921031928.205869-6-changwoo@igalia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: ulf.hansson@linaro.org, rafael@kernel.org, catalin.marinas@arm.com, will@kernel.org, mark.rutland@arm.com, tglx@linutronix.de, quic_mkshah@quicinc.com, sudeep.holla@arm.com, daniel.lezcano@linaro.org, vincent.guittot@linaro.org, linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-
-
-On 9/21/25 04:19, Changwoo Min wrote:
-> Add a boilerplate code for netlink notification to register the new
-> protocol family. Also, initialize and register the netlink during booting.
-> The initialization is called at the postcore level, which is late enough
-> after the generic netlink is initialized.
+On Fri, 03 Oct 2025 16:02:44 +0100,
+Ulf Hansson <ulf.hansson@linaro.org> wrote:
 > 
-> Finally, update MAINTAINERS to include new files.
+> To add support for keeping track of whether there may be a pending IPI
+> scheduled for a CPU or a group of CPUs, let's implement
+> cpus_has_pending_ipi() for arm64.
 > 
-> Signed-off-by: Changwoo Min <changwoo@igalia.com>
+> Note, the implementation is intentionally lightweight and doesn't use any
+> additional lock. This is good enough for cpuidle based decisions.
+> 
+> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 > ---
->   MAINTAINERS               |  2 +-
->   kernel/power/Makefile     |  5 ++++-
->   kernel/power/em_netlink.c | 35 +++++++++++++++++++++++++++++++++++
->   kernel/power/em_netlink.h | 16 ++++++++++++++++
->   4 files changed, 56 insertions(+), 2 deletions(-)
->   create mode 100644 kernel/power/em_netlink.c
->   create mode 100644 kernel/power/em_netlink.h
+>  arch/arm64/kernel/smp.c | 20 ++++++++++++++++++++
+>  1 file changed, 20 insertions(+)
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 0992029d271d..ba528836eac1 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -9034,7 +9034,7 @@ F:	include/linux/energy_model.h
->   F:	Documentation/power/energy-model.rst
->   F:	Documentation/netlink/specs/em.yaml
->   F:	include/uapi/linux/energy_model.h
-> -F:	kernel/power/em_netlink_autogen.*
-> +F:	kernel/power/em_netlink*.*
->   
->   EPAPR HYPERVISOR BYTE CHANNEL DEVICE DRIVER
->   M:	Laurentiu Tudor <laurentiu.tudor@nxp.com>
-> diff --git a/kernel/power/Makefile b/kernel/power/Makefile
-> index 874ad834dc8d..284a760aade7 100644
-> --- a/kernel/power/Makefile
-> +++ b/kernel/power/Makefile
-> @@ -21,4 +21,7 @@ obj-$(CONFIG_PM_WAKELOCKS)	+= wakelock.o
->   
->   obj-$(CONFIG_MAGIC_SYSRQ)	+= poweroff.o
->   
-> -obj-$(CONFIG_ENERGY_MODEL)	+= energy_model.o
-> +obj-$(CONFIG_ENERGY_MODEL)	+= em.o
-> +em-y				:= energy_model.o
-> +em-$(CONFIG_NET)		+= em_netlink_autogen.o em_netlink.o
+> diff --git a/arch/arm64/kernel/smp.c b/arch/arm64/kernel/smp.c
+> index 68cea3a4a35c..dd1acfa91d44 100644
+> --- a/arch/arm64/kernel/smp.c
+> +++ b/arch/arm64/kernel/smp.c
+> @@ -55,6 +55,8 @@
+>  
+>  #include <trace/events/ipi.h>
+>  
+> +static DEFINE_PER_CPU(bool, pending_ipi);
 > +
-> diff --git a/kernel/power/em_netlink.c b/kernel/power/em_netlink.c
-> new file mode 100644
-> index 000000000000..f3fbfeff29a4
-> --- /dev/null
-> +++ b/kernel/power/em_netlink.c
-> @@ -0,0 +1,35 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + *
-> + * Generic netlink for energy model.
-> + *
-> + * Copyright (c) 2025 Valve Corporation.
-> + * Author: Changwoo Min <changwoo@igalia.com>
-> + */
+>  /*
+>   * as from 2.5, kernels no longer have an init_tasks structure
+>   * so we need some other way of telling a new secondary core
+> @@ -1012,6 +1014,8 @@ static void do_handle_IPI(int ipinr)
+>  
+>  	if ((unsigned)ipinr < NR_IPI)
+>  		trace_ipi_exit(ipi_types[ipinr]);
 > +
-> +#define pr_fmt(fmt) "energy_model: " fmt
+> +	per_cpu(pending_ipi, cpu) = false;
+>  }
+>  
+>  static irqreturn_t ipi_handler(int irq, void *data)
+> @@ -1024,10 +1028,26 @@ static irqreturn_t ipi_handler(int irq, void *data)
+>  
+>  static void smp_cross_call(const struct cpumask *target, unsigned int ipinr)
+>  {
+> +	unsigned int cpu;
 > +
-> +#include <linux/energy_model.h>
-> +#include <net/sock.h>
-> +#include <net/genetlink.h>
-> +#include <uapi/linux/energy_model.h>
+> +	for_each_cpu(cpu, target)
+> +		per_cpu(pending_ipi, cpu) = true;
 > +
-> +#include "em_netlink.h"
-> +#include "em_netlink_autogen.h"
-> +
-> +int em_nl_get_pds_doit(struct sk_buff *skb, struct genl_info *info)
+
+Why isn't all of this part of the core IRQ management? We already
+track things like timers, I assume for similar reasons. If IPIs have
+to be singled out, I'd rather this is done in common code, and not on
+a per architecture basis.
+
+>  	trace_ipi_raise(target, ipi_types[ipinr]);
+>  	arm64_send_ipi(target, ipinr);
+>  }
+>  
+> +bool cpus_has_pending_ipi(const struct cpumask *mask)
 > +{
-> +	return -EOPNOTSUPP;
+> +	unsigned int cpu;
+> +
+> +	for_each_cpu(cpu, mask) {
+> +		if (per_cpu(pending_ipi, cpu))
+> +			return true;
+> +	}
+> +	return false;
 > +}
 > +
-> +int em_nl_get_pd_table_doit(struct sk_buff *skb, struct genl_info *info)
-> +{
-> +	return -EOPNOTSUPP;
-> +}
-> +
-> +static int __init em_netlink_init(void)
-> +{
-> +	return genl_register_family(&em_nl_family);
-> +}
-> +postcore_initcall(em_netlink_init);
-> +
-> diff --git a/kernel/power/em_netlink.h b/kernel/power/em_netlink.h
-> new file mode 100644
-> index 000000000000..acd186c92d6b
-> --- /dev/null
-> +++ b/kernel/power/em_netlink.h
-> @@ -0,0 +1,16 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + *
-> + * Generic netlink for energy model.
-> + *
-> + * Copyright (c) 2025 Valve Corporation.
-> + * Author: Changwoo Min <changwoo@igalia.com>
-> + */
-> +#ifndef _EM_NETLINK_H
-> +#define _EM_NETLINK_H
-> +
-> +#if defined(CONFIG_ENERGY_MODEL) && defined(CONFIG_NET)
-> +#else
-> +#endif
-> +
-> +#endif /* _EM_NETLINK_H */
 
-Actually, those declarations of functions from patch 3/10 can
-live in this header. We would avoid creating more local headers
-in such case.
+The lack of memory barriers makes me wonder how reliable this is.
+Maybe this is relying on the IPIs themselves acting as such, but
+that's extremely racy no matter how you look at it.
 
-Then the patch 3/10 would have to go after this patch when
-this header is introduced.
+	M.
 
-Please ignore the comment in the patch 3/10 and try to
-use this header. It is also logically linked to the
-notifications, so belongs to such header IMHO.
+-- 
+Without deviation from the norm, progress is not possible.
 
