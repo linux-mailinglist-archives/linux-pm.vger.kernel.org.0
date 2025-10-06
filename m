@@ -1,161 +1,142 @@
-Return-Path: <linux-pm+bounces-35740-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35742-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C3E65BBE8EE
-	for <lists+linux-pm@lfdr.de>; Mon, 06 Oct 2025 17:55:55 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5117CBBEB14
+	for <lists+linux-pm@lfdr.de>; Mon, 06 Oct 2025 18:43:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BCB3C1898439
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Oct 2025 15:56:18 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 33D3E4EB650
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Oct 2025 16:43:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E9092D0625;
-	Mon,  6 Oct 2025 15:55:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FD3D2DEA73;
+	Mon,  6 Oct 2025 16:43:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="llB2pjvr"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="tMc9fMnW"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5535E2641C6;
-	Mon,  6 Oct 2025 15:55:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BA782DCF46
+	for <linux-pm@vger.kernel.org>; Mon,  6 Oct 2025 16:43:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759766150; cv=none; b=mvJBDslTaikZhvfTRe7ER3YbUZ2XAwcPzLVDGMD51S3xdKbTUqbbzZnMBMG7e32CA1IUrhpXqqaggDu7Sw1sy5yCYTMn1zQrwnx11YI0k2k2d+7oBaBnzzhuBXZTLrob2eDSyi5pO06eREjEOJKtbm+m4vDVBUJPyJ4xJShLfA8=
+	t=1759769013; cv=none; b=ior2HrwNfjo8r7AOMQILlnv6kCry66R4aOjJCL6CV0BdhfXx++gSK8/LB9xyHdBwg4q+/yTgC+EXfxtZ5kbHA49b+aBLkmY8c3sedTRiRFwD9qKtbQLjdQgNGqPrFF17oyOFpz3yDQuX8Ao3/FkJDgy5+XftKOB9a8BdcHwGmV0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759766150; c=relaxed/simple;
-	bh=PNewJkNL6CSZlcvcVRzdF4vG0QntxYg8acRL1wWz8xQ=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=e0g/qfGxwrah+d501jjk3NHYWLBqwCooPK/E4Oo6yUQ4FGlCtJm7mj1ol8Jg7UYEkHsx+luLPYyJz36sDH4jUbcauE30Rsf03Ol77Zq5ZlLa/KbRVvDA3f4sDKsO8NswF+YcTRnd6FDMfa83YMjxYzSoX3SbLgnhEbqrqtNqsLI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=llB2pjvr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF5F2C4CEF5;
-	Mon,  6 Oct 2025 15:55:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759766149;
-	bh=PNewJkNL6CSZlcvcVRzdF4vG0QntxYg8acRL1wWz8xQ=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=llB2pjvrsfAQsrqHn6tONxtl59AYRr+QlQq0ELqOELOEZyntMxjcpFMmkvl4KBGSB
-	 7dvb5gB33pbJd9n3W7WBc12p+LFft9mgaeN9cz5ue6V6v2mZhiKxMRQNPDnFVZznCd
-	 I2mPvizxGNY/GOabl2Aq7QrrBeaqQdFkkcrsogpLWyFxg1ynh9AlJdO/Akalb08deV
-	 8gHGQf1MoH00M/m6l0xJ5ruejk27SCdDvq2GZRScYVk3C2JvKYQvdeTOfsaagkSVgl
-	 oZQvtjHABSDDctU2eG7cNU/i3mCxW3PbfdEiw2qGs0yECldiVnjAK1otZscPZKHcvj
-	 /Vd5kyZJKVisg==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.98.2)
-	(envelope-from <maz@kernel.org>)
-	id 1v5nYx-0000000BtEa-23VH;
-	Mon, 06 Oct 2025 15:55:47 +0000
-Date: Mon, 06 Oct 2025 16:55:47 +0100
-Message-ID: <865xcsyqgs.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Maulik Shah <quic_mkshah@quicinc.com>,
-	Sudeep Holla <sudeep.holla@arm.com>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	linux-pm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] arm64: smp: Implement cpus_has_pending_ipi()
-In-Reply-To: <20251003150251.520624-3-ulf.hansson@linaro.org>
-References: <20251003150251.520624-1-ulf.hansson@linaro.org>
-	<20251003150251.520624-3-ulf.hansson@linaro.org>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	s=arc-20240116; t=1759769013; c=relaxed/simple;
+	bh=HMtcLDEIKjq6G2Zgr0JytIoIw9ewVlt1cHK9VF+l//w=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=l+/hLsOWhLbNK/vR7Vj0Tfkh4Znp4ulfG1yc6oH1RmEKsVbGtgJ3eZO6Gic0CXQVK0TU076wvGBxHKpc5o2qZqWDzHEvuIGaIZX2q3CreTxm0H1lOzcrQB4Wvf3uuBCxI36XxR53YMrB7pmSzS0BpHbu2lrA/Vn0Jk9JLyHYH5w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=tMc9fMnW; arc=none smtp.client-ip=209.85.218.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-b48d8deafaeso1067488866b.1
+        for <linux-pm@vger.kernel.org>; Mon, 06 Oct 2025 09:43:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1759769008; x=1760373808; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=oKtphuJ/4di9yNIsz6yNlkrtQKgCMc1BLXd/ATWAWto=;
+        b=tMc9fMnWJiszVnxWCzpauPGyIxTsvBolcKNfpM2X6yK1w79upYCSF4SuOdm78GkLbl
+         8uTaAwDZziqJrKughTM1EUR7cR5ztBLGVBlcTT1iza5Tvt4l+ZC5ENf2pjHYvhqv3vub
+         7Iqcu3KhnuCzkLuDSf2s+lARm11qdCUgqY2AjXic4HhKgHeA4Y48MkQ/S68k3kMbFoCl
+         Ha042F+gF4iJ3wHFXtz2lMrFMWH38w+6JpSkqGIVYZTkrSwfK2+5h1dmqDUHA4E8Gudn
+         eE+a/972ST2e5F01hWkVBbZR75stysD1C33NDz+paYOYmFYzBZuRLz1W386bsZ79QmVl
+         7bZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1759769008; x=1760373808;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oKtphuJ/4di9yNIsz6yNlkrtQKgCMc1BLXd/ATWAWto=;
+        b=NSJeYl0Vims8a5F1b/ReGkoRS5dJMOU7AMoQ+M0EjevBuZHSdHuYhfIjer5dEoySky
+         7++g9M/1DLT1p74qI2brq5SCgJnlMDkqXz1Yuim5AinhSuQA06lZEr+iNGkQppNyswU2
+         SkVUZoLP3LB0pGhVjuim9AhDAlUWRIXoeayuCrihyIkKwKV6KgOfYhd/lyOTJM7yZYx7
+         rDqX2lR7OEd+Zyx0fkqrMnDdgTPVVUZi61Yg1BErVkLzZZbrxehyXct4fusRuDhZHlZT
+         jmpbhQ9Yh+wo9WUs6eibQqxlfXqHTI0MJcZ91J5WZG8G1f1NBdwjMUX7XcrsqO8TdiiH
+         SAQQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWdfTeqcN/B867WbXreDlL8q7rirEwSTahob8rW1VIZghNmDlo5HZuplq1asKyeo+uSAreg9JAz+g==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxzhlu2aNo9qZPRCky3sGXdJHR4GYAkcdIAzAOSN0skG4e08Qh1
+	XQaDL104F/QHRtXhngzmCJQmbjdnGy3FD5pdHry7J6vUnAmyegMyMDir859Z7wk0c1c=
+X-Gm-Gg: ASbGncv+i3y7IAS0CBxzN/CeTOLTgAoy0l3o21mtxpGz+jsR3Jj2Ct3Bc1vOsyh+F/I
+	lGZzcBVEK/35+JWYqsq/h7WJq2B7yD89FfTK9gDVM9tigQsNsrNzvrO7LUzyB5aHSQmPT1WSZ5m
+	+4FNvKeMT9gk6SGDeDD/SnWmleHX9X+WNk7mWMA3F+chxiLLO+ygRSASwQ3lcEPlezGzji3D2nJ
+	Bi+97r1umVwjsYlqol2/cDE0C2fWcudsmHhj0ldHqfvbsGw+ZflXFH13rcfAj04Q+IBCai/yY2k
+	Jtxo++a56Kwu4f11P93ud251Yi636MHnnssTT5rPgHXPgZKlMeGlk/e/5eP+HBNvNDs3bsjS2jp
+	Q5FwRbFSASw9JQmtI5kPlL/7sf3hhY7KfGLKppD90sgKYcv01JAhOIa2RhtG3H9Lc5cljJNU9ux
+	G29RJ0j8c+8jRcjR/P/jyWuVNIOlZtiMG5CtAzo/kTpalbEFuPJD4=
+X-Google-Smtp-Source: AGHT+IEH9sBJd0VNAAJtz9rRu8u+k/yXhel69FaA4JYwSprBvbLGJFT33oMJuv5fmnK6KbnU7ExmwA==
+X-Received: by 2002:a17:906:7951:b0:b44:7c83:cd9 with SMTP id a640c23a62f3a-b49c47accbdmr1839696566b.40.1759769008357;
+        Mon, 06 Oct 2025 09:43:28 -0700 (PDT)
+Received: from puffmais2.c.googlers.com (224.138.204.35.bc.googleusercontent.com. [35.204.138.224])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b48652aa01esm1193841866b.2.2025.10.06.09.43.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Oct 2025 09:43:28 -0700 (PDT)
+From: =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
+Subject: [PATCH 00/10] pmdomain: samsung: add supoort for Google GS101
+Date: Mon, 06 Oct 2025 17:43:26 +0100
+Message-Id: <20251006-gs101-pd-v1-0-f0cb0c01ea7b@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: ulf.hansson@linaro.org, rafael@kernel.org, catalin.marinas@arm.com, will@kernel.org, mark.rutland@arm.com, tglx@linutronix.de, quic_mkshah@quicinc.com, sudeep.holla@arm.com, daniel.lezcano@linaro.org, vincent.guittot@linaro.org, linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAK7x42gC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1NDAwND3fRiQyBZkKKbYpKSbGmeYm6QaGGiBFReUJSallkBNio6trYWAAe
+ OGYtaAAAA
+X-Change-ID: 20251001-gs101-pd-d4dc97d70a84
+To: Krzysztof Kozlowski <krzk@kernel.org>, 
+ Alim Akhtar <alim.akhtar@samsung.com>, Rob Herring <robh@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Peter Griffin <peter.griffin@linaro.org>, 
+ Tudor Ambarus <tudor.ambarus@linaro.org>, 
+ Will McVicker <willmcvicker@google.com>, kernel-team@android.com, 
+ linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-pm@vger.kernel.org, 
+ =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
+X-Mailer: b4 0.14.2
 
-On Fri, 03 Oct 2025 16:02:44 +0100,
-Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> 
-> To add support for keeping track of whether there may be a pending IPI
-> scheduled for a CPU or a group of CPUs, let's implement
-> cpus_has_pending_ipi() for arm64.
-> 
-> Note, the implementation is intentionally lightweight and doesn't use any
-> additional lock. This is good enough for cpuidle based decisions.
-> 
-> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> ---
->  arch/arm64/kernel/smp.c | 20 ++++++++++++++++++++
->  1 file changed, 20 insertions(+)
-> 
-> diff --git a/arch/arm64/kernel/smp.c b/arch/arm64/kernel/smp.c
-> index 68cea3a4a35c..dd1acfa91d44 100644
-> --- a/arch/arm64/kernel/smp.c
-> +++ b/arch/arm64/kernel/smp.c
-> @@ -55,6 +55,8 @@
->  
->  #include <trace/events/ipi.h>
->  
-> +static DEFINE_PER_CPU(bool, pending_ipi);
-> +
->  /*
->   * as from 2.5, kernels no longer have an init_tasks structure
->   * so we need some other way of telling a new secondary core
-> @@ -1012,6 +1014,8 @@ static void do_handle_IPI(int ipinr)
->  
->  	if ((unsigned)ipinr < NR_IPI)
->  		trace_ipi_exit(ipi_types[ipinr]);
-> +
-> +	per_cpu(pending_ipi, cpu) = false;
->  }
->  
->  static irqreturn_t ipi_handler(int irq, void *data)
-> @@ -1024,10 +1028,26 @@ static irqreturn_t ipi_handler(int irq, void *data)
->  
->  static void smp_cross_call(const struct cpumask *target, unsigned int ipinr)
->  {
-> +	unsigned int cpu;
-> +
-> +	for_each_cpu(cpu, target)
-> +		per_cpu(pending_ipi, cpu) = true;
-> +
+Hi,
 
-Why isn't all of this part of the core IRQ management? We already
-track things like timers, I assume for similar reasons. If IPIs have
-to be singled out, I'd rather this is done in common code, and not on
-a per architecture basis.
+This series adds support for the power domains on Google GS101. It's
+fairly similar to SoCs already supported by this driver, except that
+register acces does not work via plain ioremap() / readl() / writel().
+Instead, the regmap created by the PMU driver must be used (which uses
+Arm SMCC calls under the hood).
 
->  	trace_ipi_raise(target, ipi_types[ipinr]);
->  	arm64_send_ipi(target, ipinr);
->  }
->  
-> +bool cpus_has_pending_ipi(const struct cpumask *mask)
-> +{
-> +	unsigned int cpu;
-> +
-> +	for_each_cpu(cpu, mask) {
-> +		if (per_cpu(pending_ipi, cpu))
-> +			return true;
-> +	}
-> +	return false;
-> +}
-> +
+The DT update to add the new required properties on gs101 will be
+posted separately.
 
-The lack of memory barriers makes me wonder how reliable this is.
-Maybe this is relying on the IPIs themselves acting as such, but
-that's extremely racy no matter how you look at it.
+Signed-off-by: André Draszik <andre.draszik@linaro.org>
+---
+André Draszik (10):
+      dt-bindings: power: samsung: add google,gs101-pd
+      dt-bindings: soc: samsung: exynos-pmu: allow power domains as child on g101
+      pmdomain: samsung: use to devm_kstrdup_const() to simplify error handling
+      pmdomain: samsung: convert to using regmap
+      pmdomain: samsung: convert to regmap_read_poll_timeout()
+      pmdomain: samsung: don't hardcode offset for registers to 0 and 4
+      pmdomain: samsung: selectively handle enforced sync_state
+      pmdomain: samsung: try to get PMU (syscon) regmap
+      pmdomain: samsung: use dev_err() instead of pr_err()
+      pmdomain: samsung: add support for google,gs101-pd
 
-	M.
+ .../devicetree/bindings/power/pd-samsung.yaml      |   1 +
+ .../bindings/soc/samsung/exynos-pmu.yaml           |  53 ++++++++-
+ drivers/pmdomain/samsung/exynos-pm-domains.c       | 126 +++++++++++++++------
+ 3 files changed, 145 insertions(+), 35 deletions(-)
+---
+base-commit: a5f97c90e75f09f24ece2dca34168722b140a798
+change-id: 20251001-gs101-pd-d4dc97d70a84
 
+Best regards,
 -- 
-Without deviation from the norm, progress is not possible.
+André Draszik <andre.draszik@linaro.org>
+
 
