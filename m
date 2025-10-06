@@ -1,90 +1,167 @@
-Return-Path: <linux-pm+bounces-35735-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35736-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 79DC5BBE610
-	for <lists+linux-pm@lfdr.de>; Mon, 06 Oct 2025 16:41:53 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8810EBBE757
+	for <lists+linux-pm@lfdr.de>; Mon, 06 Oct 2025 17:14:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 29CA34EE79E
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Oct 2025 14:41:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4523D3B088D
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Oct 2025 15:14:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AA682D594F;
-	Mon,  6 Oct 2025 14:41:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5464B2D6E54;
+	Mon,  6 Oct 2025 15:14:21 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2FC914386D;
-	Mon,  6 Oct 2025 14:41:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76ED12D6400;
+	Mon,  6 Oct 2025 15:14:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759761707; cv=none; b=vERv4E6vVsjfthobS3/llBk9RPT5zJ+S/Xf4Ye5ri0Za6TLq43qmryzLh4qbnj0eU+fC2b6uLw+RuqwKdtYXqNC/FD5XJUA8Yx5wSuOH7UbKPsy2qJlP3C6awSXObJIftVWTSGmivb5Wou/OzyGxDapcucNAmFf0NNfArqKmSSA=
+	t=1759763661; cv=none; b=PeBBpYyay/X5zJolggNnWwzYPrQWDFNlud9KvOH16xjqbVoK5L14ltjiRcUhk5tnKkQKyN9xElrqf7xNE/AFm+HnZlBPbGXl/4IS2C60si9b8MkZ2EzeRMgaTQaq9tFfMDzzcN2DnHVJ0jiPeMeNJB9kGw0beXl/OyqdzW4yaYw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759761707; c=relaxed/simple;
-	bh=4vfoSLZu0iB+MKr7ng9UfsrwpdlYt9d/We31+FzYPxY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=P1552tRJU8P0gYS0jpSIVAANwRATz088yBE/u6VvzWf3A8FwTgC8NldUvL6V8GTKAyrxjvtdAMnSJuGPUyfiVAVsgHD3UOXUE0pg+aMvZzLkwzHpBrtr9WWjzfuq1VKQRPoYHOO1LqZfeSqYQruzvg/Vkx9H/9G5h62TPqA9fT0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com; spf=none smtp.mailfrom=foss.arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=foss.arm.com
+	s=arc-20240116; t=1759763661; c=relaxed/simple;
+	bh=GLwTmNbaE5ztZ0vdwoTwTWKhIPtRaHXVJ6jDdkayzk0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NBZRDLcy4xDdlLQTsmZldClmHV2iVpcAmwiDao7flvNqiHcXSyADlIzKen0qAdLKbe9BMwCGoSm5RHSqjjuswxvQTs2ttXd4AKyKGzCeqpx5ZsqlFGwCJFMNCZBsd0a/fBF9a3ljK5MBO62lwRivHnIlgARv2yq/SL7bttxyItI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0DBD91515;
-	Mon,  6 Oct 2025 07:41:37 -0700 (PDT)
-Received: from bogus (e133711.arm.com [10.1.196.55])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D62923F738;
-	Mon,  6 Oct 2025 07:41:42 -0700 (PDT)
-Date: Mon, 6 Oct 2025 15:41:40 +0100
-From: Sudeep Holla <sudeep.holla@arm.com>
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
-	Sudeep Holla <sudeep.holla@arm.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Maulik Shah <quic_mkshah@quicinc.com>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] arm64: smp: Implement cpus_has_pending_ipi()
-Message-ID: <20251006-spiked-beige-gecko-6d8748@sudeepholla>
-References: <20251003150251.520624-1-ulf.hansson@linaro.org>
- <20251003150251.520624-3-ulf.hansson@linaro.org>
- <20251006-manipulative-urban-antelope-31101f@sudeepholla>
- <CAPDyKFoz4P6cZWNA-omNtF3XqKKciC07aVXBTVQp8ueyyYxmxA@mail.gmail.com>
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CF8071515;
+	Mon,  6 Oct 2025 08:14:10 -0700 (PDT)
+Received: from [10.57.81.187] (unknown [10.57.81.187])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E8A0B3F66E;
+	Mon,  6 Oct 2025 08:14:16 -0700 (PDT)
+Message-ID: <13c009f6-5fc9-41ef-aa94-acd99b9c774d@arm.com>
+Date: Mon, 6 Oct 2025 16:14:38 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAPDyKFoz4P6cZWNA-omNtF3XqKKciC07aVXBTVQp8ueyyYxmxA@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RESEND v4 03/10] PM: EM: Add an iterator and accessor for
+ the performance domain
+To: Changwoo Min <changwoo@igalia.com>
+Cc: christian.loehle@arm.com, tj@kernel.org, pavel@kernel.org,
+ len.brown@intel.com, rafael@kernel.org, kernel-dev@igalia.com,
+ linux-pm@vger.kernel.org, sched-ext@lists.linux.dev,
+ linux-kernel@vger.kernel.org
+References: <20250921031928.205869-1-changwoo@igalia.com>
+ <20250921031928.205869-4-changwoo@igalia.com>
+Content-Language: en-US
+From: Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20250921031928.205869-4-changwoo@igalia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, Oct 06, 2025 at 02:22:49PM +0200, Ulf Hansson wrote:
-> On Mon, 6 Oct 2025 at 12:54, Sudeep Holla <sudeep.holla@arm.com> wrote:
-> >
-> > 2. I understand this is intended for the DragonBoard 410c, where the firmware
-> >    can’t be updated. However, ideally, the PSCI firmware should handle checking
-> >    for pending IPIs if that’s important for the platform. The firmware could
-> >    perform this check at the CPU PPU/HW level and prevent entering the
-> >    state if needed.
-> 
-> I think this is exactly what is happening on Dragonboard 410c (see the
-> stats I shared in the commit message in patch3).
-> 
-> The PSCI FW refuses to enter the suggested idlestate and the call fails.
-> 
 
-Ah OK, the PSCI FW is doing the job correctly, we are just attempting to
-reduce the failures by catching few cases earlier in the OSPM itself ?
-Sure it only reduces the failures but it can't eliminate those as IPI might
-be issued after this check in the OSPM. I understand the call to firmware
-can be prevented.
 
--- 
-Regards,
-Sudeep
+On 9/21/25 04:19, Changwoo Min wrote:
+> Add an iterator function (for_each_em_perf_domain) that iterates all the
+> performance domains in the global list. A passed callback function (cb) is
+> called for each performance domain.
+> 
+> Additionally, add a lookup function (em_perf_domain_get_by_id) that
+> searches for a performance domain by matching the ID in the global list.
+> 
+> Signed-off-by: Changwoo Min <changwoo@igalia.com>
+> ---
+>   include/linux/energy_model.h | 15 +++++++++++++++
+>   kernel/power/energy_model.c  | 34 ++++++++++++++++++++++++++++++++++
+>   2 files changed, 49 insertions(+)
+> 
+> diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
+> index 43aa6153dc57..21279e779188 100644
+> --- a/include/linux/energy_model.h
+> +++ b/include/linux/energy_model.h
+> @@ -344,6 +344,10 @@ struct em_perf_state *em_perf_state_from_pd(struct em_perf_domain *pd)
+>   	return rcu_dereference(pd->em_table)->state;
+>   }
+>   
+> +int for_each_em_perf_domain(int (*cb)(struct em_perf_domain*, void *),
+> +			    void *data);
+> +struct em_perf_domain *em_perf_domain_get_by_id(int id);
+> +
+
+This doesn't have to go into this header.
+
+>   #else
+>   struct em_data_callback {};
+>   #define EM_ADV_DATA_CB(_active_power_cb, _cost_cb) { }
+> @@ -420,6 +424,17 @@ int em_update_performance_limits(struct em_perf_domain *pd,
+>   }
+>   static inline void em_adjust_cpu_capacity(unsigned int cpu) {}
+>   static inline void em_rebuild_sched_domains(void) {}
+> +static inline
+> +int for_each_em_perf_domain(int (*cb)(struct em_perf_domain*, void *),
+> +			    void *data)
+> +{
+> +	return -EINVAL;
+> +}
+> +static inline
+> +struct em_perf_domain *em_perf_domain_get_by_id(int id)
+> +{
+> +	return NULL;
+> +}
+>   #endif
+
+
+Please create a local helpers header:
+kernel/power/em_helpers.h
+
+and add these two declarations there. In that new
+local header there is no need to implement the empty
+inline functions as well (so would be simpler).
+
+>   
+>   #endif
+> diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
+> index 8998a7f4910a..740076d24479 100644
+> --- a/kernel/power/energy_model.c
+> +++ b/kernel/power/energy_model.c
+> @@ -1000,3 +1000,37 @@ void em_rebuild_sched_domains(void)
+>   	 */
+>   	schedule_work(&rebuild_sd_work);
+>   }
+> +
+> +int for_each_em_perf_domain(int (*cb)(struct em_perf_domain*, void *),
+> +			    void *data)
+> +{
+> +	struct em_perf_domain *pd;
+> +
+> +	lockdep_assert_not_held(&em_pd_mutex);
+> +	guard(mutex)(&em_pd_list_mutex);
+> +
+> +	list_for_each_entry(pd, &em_pd_list, node) {
+> +		int ret;
+> +
+> +		ret = cb(pd, data);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +struct em_perf_domain *em_perf_domain_get_by_id(int id)
+> +{
+> +	struct em_perf_domain *pd;
+> +
+> +	lockdep_assert_not_held(&em_pd_mutex);
+> +	guard(mutex)(&em_pd_list_mutex);
+> +
+> +	list_for_each_entry(pd, &em_pd_list, node) {
+> +		if (pd->id == id)
+> +			return pd;
+> +	}
+> +
+> +	return NULL;
+> +}
+
+That code looks good, you can keep it. Although, please
+add the comments above these functions that they are
+only used locally as helpers for the notifications.
 
