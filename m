@@ -1,138 +1,95 @@
-Return-Path: <linux-pm+bounces-35751-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35752-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64510BBEB71
-	for <lists+linux-pm@lfdr.de>; Mon, 06 Oct 2025 18:44:50 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 85153BBF1E0
+	for <lists+linux-pm@lfdr.de>; Mon, 06 Oct 2025 21:43:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 02F3E3BFD8A
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Oct 2025 16:44:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3A3B83C3DB2
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Oct 2025 19:42:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1E392E0408;
-	Mon,  6 Oct 2025 16:43:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C309E253B40;
+	Mon,  6 Oct 2025 19:42:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="zRiEdQXS"
+	dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b="fkbzrcUe"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailbackend.panix.com (mailbackend.panix.com [166.84.1.89])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56CDA2DF148
-	for <linux-pm@vger.kernel.org>; Mon,  6 Oct 2025 16:43:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0ED22AF1B;
+	Mon,  6 Oct 2025 19:42:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.84.1.89
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759769018; cv=none; b=qzUxi7HRFGPWGRYkOKomHZPmlhvxdoleQPL7sR6dAlZxogHLXICFI1Sixvsmr3iERIP5wFD9T8OrPDBgHeQ07PTbQza55zHtSaeLNVDJuCMrTpKPIUsHzh+iJh8wO+obPTYU99sqsyT53je3iU5cE9Wj+QSTZ6cCKRTGuxGcn74=
+	t=1759779769; cv=none; b=Hr+v092LQHXtIQ3NAZ6eE9GpW71hGLeXCS0zaVwq2LxQeTI/x4AzJRDoM0dsMVvi5rX3joouXjvnZz6nbhMO8ZE3UZgXHXHFoTgzlyG+47NDHotVYWkCo8gteuekD9UAX5vPQSziErzkBAZovew/kpPc6OGgqHVxewRfWhqELYg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759769018; c=relaxed/simple;
-	bh=WRwzPyOkvSFyJq+EK+JnNwxrggXXpznQVjTj0iqWREM=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=oSPudrOfjF82jxFoQJ8wm016hJYAxIcDVJ57L0ncUC4s/2t6Aq9KUNxgm7vgKRPextKhh9L3OqiO/HIsmWNT+hjfoVI0rLY+Ja5476GQoK5HKy7Ge8/c0RyBQwitR0kO11iyMc6fmaQJKTwjQe8x77n22YdW9lsiNT7wYRsTL54=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=zRiEdQXS; arc=none smtp.client-ip=209.85.218.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-b403bb7843eso1059934266b.3
-        for <linux-pm@vger.kernel.org>; Mon, 06 Oct 2025 09:43:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1759769013; x=1760373813; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ioPTwS2f0Ag/7Xgv7v9kcfqmqd+rCK/VtVviQkcgWcs=;
-        b=zRiEdQXSknS7fB2cddTuE5q9MzVvGJwUp/JOTgXRQUoXa+vg3b8sTWlvoiZGlA9IKQ
-         JGNxx+G4nTEpWdG23yVi5wtsv2J3uOS9U4TL+0RWW6dgcB66wFoXZf4rzJrTO+0EX8pz
-         ejY5AN52URLHsLhxKT7hMkzc8/AadDO6pd4Lb9p/bpFGIqGLYYUR+FKmJAd+iK/VhXkA
-         Y39vCGliEI7MnVjnpq/p65XmoI+CKUlRtkdwvSKQ52tsyJYEA1HFT7xR1RHePXonj2+l
-         61NlnT1PRMr99HsFQzmd8DPO50VJgezn6ayjLNycASWa+HZqyQoAjPDxcSR05J3lLkpr
-         6xvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759769014; x=1760373814;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ioPTwS2f0Ag/7Xgv7v9kcfqmqd+rCK/VtVviQkcgWcs=;
-        b=dJFWX3rbOkq8sZOkhXX8maCIm1FPJf0vaa8qg0nv5z3BYg+2bFQ9Et0aXhXcjcaa6J
-         eS9oCb/+WdcfMOZwtbUqEm0rb8o0RYKuLUVMG1DlG8BrxP2GpJFeg8IvoaZSkI6H9XO+
-         DmZ5EcYxYA7CMYkr51oXZfVY1fhqqroFUMnjHwP7ZPxZ7pP5qDEn3lddVIrJKeNu/QKg
-         6in7Y13NJZJfYdeat6BQkwHUX00zRgDRP2nJCgCjicknrB8VIGLZMx1jPw6I+7andXBi
-         uSveYAd8D7Vcez8Dvu6wgq6uLRD7UWpB9jblFqj5DUSea4fugy8XYSku7yjOfJRtrJFv
-         vMlQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWcNbcK49YxYzRq0wk7/N+RF+dit+mnCweWPSysX7008QUbuxVxtk9tnVv71VJzC/eXrqAEVXiJ1g==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxFRepzN5bTskRZ5+Gnv4EhjgGB95hXZrPrwtI6/PGBh0s7AKtV
-	mJ7D/zbnaX374K9yQQ1PsD4wiPapumh8JHRU1yf0pNwOW4x6X9AW95LOXmF2M2nCLP6y54n1j1p
-	gzMZbBxU=
-X-Gm-Gg: ASbGnctXLoo8UCQ/bKvc9fYVEOiNsHILqVdgW4ZaSGYlfzT2vJnAUO4Zh7fCUa1cVav
-	iVvvW3dVyExGGtSFfv7eXb8me17mVVcQsf2Xne5TtwTlrH31PHWamL6hTa4H1J8omU183Y9YofP
-	l2HFfoFaZlBfeUt7jmf2+a0jRUiGx90gHsqp4VYFOzsMomZ7of3S33hKdlexzLYug5AJHpFWB8a
-	FhmUQDopTUAfT9poJ44wOJjL+tDHyLQZIg9dmumZQ6lEj9sdGON8TjSXLPK+pqGOAHX1rPM1Oth
-	FVYBBf6mwyy6dxKecqSeFWH1u2T5ISTvjEsAUykmGDkTTRH2hHvrHc1T9lmJ5q3Gffo8p+Wnokn
-	hZA+TNhqKlMtDGjvvPOV9uaIcDjskX1URQVZ6o1VngE7eC5otdRpuHqjMNcf8NyixzUNnrKpe/X
-	S8qpQd05gXbcwnLf/gPgsRzF2NVlP6wdeFtaq/JIQYmoi1TfzKeok=
-X-Google-Smtp-Source: AGHT+IE5SECCGzL2stnGeMyacolLo8BRZWSL0FXQl2+Uco37ci1RopzDCJHNu/u5f/tWpHXHwAHqpw==
-X-Received: by 2002:a17:907:d90:b0:b3c:3c8e:1896 with SMTP id a640c23a62f3a-b49c47ad11bmr1593290866b.42.1759769013168;
-        Mon, 06 Oct 2025 09:43:33 -0700 (PDT)
-Received: from puffmais2.c.googlers.com (224.138.204.35.bc.googleusercontent.com. [35.204.138.224])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b48652aa01esm1193841866b.2.2025.10.06.09.43.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Oct 2025 09:43:32 -0700 (PDT)
-From: =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
-Date: Mon, 06 Oct 2025 17:43:36 +0100
-Subject: [PATCH 10/10] pmdomain: samsung: add support for google,gs101-pd
+	s=arc-20240116; t=1759779769; c=relaxed/simple;
+	bh=agAOwGGk7/WaedOho35v/y7fkZ6L2K5cWMQgm+4Dw14=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=nwf0va0z281/mv6XaMSdQyRoS2c6rmJo+XkuYKSU0MEhzgcqY4BqooK95aHsL9pqWO/T1lZPLiU6eVukcxF9x2NiLMiGoAaIW4OGgubDLPUX2YneOtqHJGyk7IcXbGiKq6CZqyKSrhy2IySUM/uBjyvHOXmvmDV18mEG+Xjm834=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com; spf=pass smtp.mailfrom=panix.com; dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b=fkbzrcUe; arc=none smtp.client-ip=166.84.1.89
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=panix.com
+Received: from [10.50.4.39] (45-31-46-51.lightspeed.sndgca.sbcglobal.net [45.31.46.51])
+	by mailbackend.panix.com (Postfix) with ESMTPSA id 4cgV6R3H8kz4YbS;
+	Mon,  6 Oct 2025 15:42:39 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=panix.com; s=panix;
+	t=1759779760; bh=agAOwGGk7/WaedOho35v/y7fkZ6L2K5cWMQgm+4Dw14=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=fkbzrcUe0oF6iL72n91Lzd5KQVs4pQoGPto4C1OcdfCEW0GJsEV1bCkWDZ5uvhQhp
+	 chUB3eXfHVWORwYqfxJUYPNJLnwr+HVdQVlYxnxIEstR0Hy5cJxMqqY3OVIDe2F8it
+	 Y20ZU2sHt7dCISBbTqGO4DroK1MoE3Accp2BVReA=
+Message-ID: <b2f03b08-4361-4e5d-aaed-8b63ec7c4870@panix.com>
+Date: Mon, 6 Oct 2025 12:42:38 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20251006-gs101-pd-v1-10-f0cb0c01ea7b@linaro.org>
-References: <20251006-gs101-pd-v1-0-f0cb0c01ea7b@linaro.org>
-In-Reply-To: <20251006-gs101-pd-v1-0-f0cb0c01ea7b@linaro.org>
-To: Krzysztof Kozlowski <krzk@kernel.org>, 
- Alim Akhtar <alim.akhtar@samsung.com>, Rob Herring <robh@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Ulf Hansson <ulf.hansson@linaro.org>
-Cc: Peter Griffin <peter.griffin@linaro.org>, 
- Tudor Ambarus <tudor.ambarus@linaro.org>, 
- Will McVicker <willmcvicker@google.com>, kernel-team@android.com, 
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-pm@vger.kernel.org, 
- =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
-X-Mailer: b4 0.14.2
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V3 1/2] PCI/ASPM: Add host-bridge API to override default
+ ASPM/CLKPM link state
+To: Manivannan Sadhasivam <mani@kernel.org>,
+ "David E. Box" <david.e.box@linux.intel.com>
+Cc: Bjorn Helgaas <helgaas@kernel.org>, rafael@kernel.org,
+ bhelgaas@google.com, vicamo.yang@canonical.com,
+ ilpo.jarvinen@linux.intel.com, nirmal.patel@linux.intel.com,
+ linux-pm@vger.kernel.org, linux-pci@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Kenneth C <kenny@panix.com>
+References: <20250904171158.GA1268495@bhelgaas>
+ <121a26de-b5d4-42a2-ae52-02b386f17109@panix.com>
+ <s7t5duadivgemkwmx4vjrzsaxy3xdeotwve734sq7iy477g2ur@lwusjd2iklxl>
+Content-Language: en-US
+From: Kenneth Crudup <kenny@panix.com>
+In-Reply-To: <s7t5duadivgemkwmx4vjrzsaxy3xdeotwve734sq7iy477g2ur@lwusjd2iklxl>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Compared to other previous designs supported by this driver, the status
-is just one bit. There is nothing unusual here.
 
-Signed-off-by: André Draszik <andre.draszik@linaro.org>
----
- drivers/pmdomain/samsung/exynos-pm-domains.c | 7 +++++++
- 1 file changed, 7 insertions(+)
 
-diff --git a/drivers/pmdomain/samsung/exynos-pm-domains.c b/drivers/pmdomain/samsung/exynos-pm-domains.c
-index 06e1b0eaca18205a549c8e8136ee15279eb3089d..9e62da2162884fbc1f4b3809cdd89181fb534095 100644
---- a/drivers/pmdomain/samsung/exynos-pm-domains.c
-+++ b/drivers/pmdomain/samsung/exynos-pm-domains.c
-@@ -81,8 +81,15 @@ static const struct exynos_pm_domain_config exynos5433_cfg = {
- 	.need_early_sync_state	= true,
- };
- 
-+static const struct exynos_pm_domain_config gs101_cfg = {
-+	.local_pwr_cfg		= BIT(0),
-+};
-+
- static const struct of_device_id exynos_pm_domain_of_match[] = {
- 	{
-+		.compatible = "google,gs101-pd",
-+		.data = &gs101_cfg,
-+	}, {
- 		.compatible = "samsung,exynos4210-pd",
- 		.data = &exynos4210_cfg,
- 	}, {
+On 9/23/25 23:12, Manivannan Sadhasivam wrote:
+
+> ASPM patches targeting devicetree plaforms are now in pci/aspm and merged to
+> pci/next for testing. 
+ > https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git/log/?h=aspm
+
+Yes and I see they're in Linus' master now.
+
+> David could send a followup to add the VMD driver now
+> reusing the pcie_{aspm/clkpm}_override_default_link_state() helpers.
+
+David? Your old commit doesn't apply cleanly now; I'll give it a shot 
+trying to redo it with the new API from above, but as this is your baby 
+maybe you could refactor it as well?
+
+Thanks,
+
+-Kenny
 
 -- 
-2.51.0.618.g983fd99d29-goog
+Kenneth R. Crudup / Sr. SW Engineer, Scott County Consulting, Orange 
+County CA
 
 
