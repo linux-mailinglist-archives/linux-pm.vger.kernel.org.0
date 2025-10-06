@@ -1,88 +1,180 @@
-Return-Path: <linux-pm+bounces-35738-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35739-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E70CBBE815
-	for <lists+linux-pm@lfdr.de>; Mon, 06 Oct 2025 17:36:21 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF61BBBE867
+	for <lists+linux-pm@lfdr.de>; Mon, 06 Oct 2025 17:44:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 6B3DC4E50C7
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Oct 2025 15:36:16 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 6E2824EE630
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Oct 2025 15:44:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 476282D876A;
-	Mon,  6 Oct 2025 15:36:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B00E52D8DD6;
+	Mon,  6 Oct 2025 15:43:53 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98CEA2D8396;
-	Mon,  6 Oct 2025 15:36:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D5EE2D879B;
+	Mon,  6 Oct 2025 15:43:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759764973; cv=none; b=Xc9746Qv/4Q574Ymvgq9s9bynpTjMTYJy1M+XeB2bndPZaTcLvk5YQIpFcrH80/Axhzf7PBgm3PcC37E2KAmc7WWlTW6YP3pkwHkUM80WEUPNTFv43GCbqh6+3spOsn9vSs/Enf1+ryF2WjUNSIzcom4gn6Tk7vzvJMcNCbzRUY=
+	t=1759765433; cv=none; b=SZgbfyEHe0NIRyO0JOHpVJy7kcEEg9fyBCz3okETt5ITfduy774MLLksYMoXy5MLZhu/N+pC2ryiMnC0yl7Vnouy+/BOwsVv2G7nOdL+3OGtKEjOXeJah4wUkIrkDmIaOWGS68A3yIgXTvVJe2TaSm2pC26PImTaiqlwD4odUdQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759764973; c=relaxed/simple;
-	bh=44RVQaJnBFDnVRoOSLJmX0a1UZTl6kzUIy/IPi8csoU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RlgxgmjDS2EtIc+orEgQ3T7mVoG/8/z0w8C7gmeh0EPwzu7MgfbAbzz4VbqX79IcGNoxz56UXl51u0QQxbkNJvEBFU0vCb2d8A2YxAVOKSWOv8tURZnI5ux5Eve1DrLYfxgifb3JAU+uhk+LsUA9+3gG4G8C9lOjjI97xo5bmrE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com; spf=none smtp.mailfrom=foss.arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=foss.arm.com
+	s=arc-20240116; t=1759765433; c=relaxed/simple;
+	bh=9TS8mvHfI1X9G76iPlEBCH6KiBzdkL1LBmUhaIltqjE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=DY0Smf1PmIJApMbOS6xDMKURAxWXD9zelL6Si08kN76VrNEg5laNKNEYpyP4px6bZWKqexZKBWO/NW6VhHEVKnC8RpWLTgfOQboxnQwKE3gt5QESsHr2ka5Ik+2+hFcYwbpiwaKNUhWVZ2MPZYIVn5ebJZhXleoPyQBryAabCT4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0D35B1515;
-	Mon,  6 Oct 2025 08:36:03 -0700 (PDT)
-Received: from bogus (e133711.arm.com [10.1.196.55])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BC6803F66E;
-	Mon,  6 Oct 2025 08:36:08 -0700 (PDT)
-Date: Mon, 6 Oct 2025 16:36:06 +0100
-From: Sudeep Holla <sudeep.holla@arm.com>
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Sudeep Holla <sudeep.holla@arm.com>, Will Deacon <will@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Maulik Shah <quic_mkshah@quicinc.com>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] pmdomain: Improve idlestate selection for CPUs
-Message-ID: <20251006-barnacle-of-pragmatic-faith-e6ca0d@sudeepholla>
-References: <20251003150251.520624-1-ulf.hansson@linaro.org>
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B54221515;
+	Mon,  6 Oct 2025 08:43:42 -0700 (PDT)
+Received: from [10.57.81.187] (unknown [10.57.81.187])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CE4953F66E;
+	Mon,  6 Oct 2025 08:43:48 -0700 (PDT)
+Message-ID: <2be75031-e7a6-44e8-a096-945947d73631@arm.com>
+Date: Mon, 6 Oct 2025 16:44:10 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20251003150251.520624-1-ulf.hansson@linaro.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RESEND v4 05/10] PM: EM: Add a skeleton code for netlink
+ notification
+To: Changwoo Min <changwoo@igalia.com>
+Cc: christian.loehle@arm.com, tj@kernel.org, pavel@kernel.org,
+ len.brown@intel.com, rafael@kernel.org, kernel-dev@igalia.com,
+ linux-pm@vger.kernel.org, sched-ext@lists.linux.dev,
+ linux-kernel@vger.kernel.org
+References: <20250921031928.205869-1-changwoo@igalia.com>
+ <20250921031928.205869-6-changwoo@igalia.com>
+Content-Language: en-US
+From: Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20250921031928.205869-6-changwoo@igalia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, Oct 03, 2025 at 05:02:42PM +0200, Ulf Hansson wrote:
-> Platforms using the genpd governor for CPUs are relying on it to find the most
-> optimal idlestate for a group of CPUs. Although, observations tells us that
-> there are some significant improvement that can be made around this.
+
+
+On 9/21/25 04:19, Changwoo Min wrote:
+> Add a boilerplate code for netlink notification to register the new
+> protocol family. Also, initialize and register the netlink during booting.
+> The initialization is called at the postcore level, which is late enough
+> after the generic netlink is initialized.
 > 
-> These improvement are based upon allowing us to take pending IPIs into account
-> for the group of CPUs that the genpd governor is in control of. If there is
-> pending IPI for any of these CPUs, we should not request an idlestate that
-> affects the group, but rather pick a shallower state that affects only the CPU.
->
+> Finally, update MAINTAINERS to include new files.
+> 
+> Signed-off-by: Changwoo Min <changwoo@igalia.com>
+> ---
+>   MAINTAINERS               |  2 +-
+>   kernel/power/Makefile     |  5 ++++-
+>   kernel/power/em_netlink.c | 35 +++++++++++++++++++++++++++++++++++
+>   kernel/power/em_netlink.h | 16 ++++++++++++++++
+>   4 files changed, 56 insertions(+), 2 deletions(-)
+>   create mode 100644 kernel/power/em_netlink.c
+>   create mode 100644 kernel/power/em_netlink.h
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 0992029d271d..ba528836eac1 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -9034,7 +9034,7 @@ F:	include/linux/energy_model.h
+>   F:	Documentation/power/energy-model.rst
+>   F:	Documentation/netlink/specs/em.yaml
+>   F:	include/uapi/linux/energy_model.h
+> -F:	kernel/power/em_netlink_autogen.*
+> +F:	kernel/power/em_netlink*.*
+>   
+>   EPAPR HYPERVISOR BYTE CHANNEL DEVICE DRIVER
+>   M:	Laurentiu Tudor <laurentiu.tudor@nxp.com>
+> diff --git a/kernel/power/Makefile b/kernel/power/Makefile
+> index 874ad834dc8d..284a760aade7 100644
+> --- a/kernel/power/Makefile
+> +++ b/kernel/power/Makefile
+> @@ -21,4 +21,7 @@ obj-$(CONFIG_PM_WAKELOCKS)	+= wakelock.o
+>   
+>   obj-$(CONFIG_MAGIC_SYSRQ)	+= poweroff.o
+>   
+> -obj-$(CONFIG_ENERGY_MODEL)	+= energy_model.o
+> +obj-$(CONFIG_ENERGY_MODEL)	+= em.o
+> +em-y				:= energy_model.o
+> +em-$(CONFIG_NET)		+= em_netlink_autogen.o em_netlink.o
+> +
+> diff --git a/kernel/power/em_netlink.c b/kernel/power/em_netlink.c
+> new file mode 100644
+> index 000000000000..f3fbfeff29a4
+> --- /dev/null
+> +++ b/kernel/power/em_netlink.c
+> @@ -0,0 +1,35 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + *
+> + * Generic netlink for energy model.
+> + *
+> + * Copyright (c) 2025 Valve Corporation.
+> + * Author: Changwoo Min <changwoo@igalia.com>
+> + */
+> +
+> +#define pr_fmt(fmt) "energy_model: " fmt
+> +
+> +#include <linux/energy_model.h>
+> +#include <net/sock.h>
+> +#include <net/genetlink.h>
+> +#include <uapi/linux/energy_model.h>
+> +
+> +#include "em_netlink.h"
+> +#include "em_netlink_autogen.h"
+> +
+> +int em_nl_get_pds_doit(struct sk_buff *skb, struct genl_info *info)
+> +{
+> +	return -EOPNOTSUPP;
+> +}
+> +
+> +int em_nl_get_pd_table_doit(struct sk_buff *skb, struct genl_info *info)
+> +{
+> +	return -EOPNOTSUPP;
+> +}
+> +
+> +static int __init em_netlink_init(void)
+> +{
+> +	return genl_register_family(&em_nl_family);
+> +}
+> +postcore_initcall(em_netlink_init);
+> +
+> diff --git a/kernel/power/em_netlink.h b/kernel/power/em_netlink.h
+> new file mode 100644
+> index 000000000000..acd186c92d6b
+> --- /dev/null
+> +++ b/kernel/power/em_netlink.h
+> @@ -0,0 +1,16 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + *
+> + * Generic netlink for energy model.
+> + *
+> + * Copyright (c) 2025 Valve Corporation.
+> + * Author: Changwoo Min <changwoo@igalia.com>
+> + */
+> +#ifndef _EM_NETLINK_H
+> +#define _EM_NETLINK_H
+> +
+> +#if defined(CONFIG_ENERGY_MODEL) && defined(CONFIG_NET)
+> +#else
+> +#endif
+> +
+> +#endif /* _EM_NETLINK_H */
 
-Thinking about this further, I’m not sure this issue is really specific to
-pmdomain. In my view, the proposed solution could apply equally well to
-platforms that don’t use pmdomain for cpuidle. Also, I don’t see why the
-solution needs to be architecture-specific.
+Actually, those declarations of functions from patch 3/10 can
+live in this header. We would avoid creating more local headers
+in such case.
 
-Thoughts ?
+Then the patch 3/10 would have to go after this patch when
+this header is introduced.
 
-I understand it won’t handle all IPI cases, but generic helpers like
-local_softirq_pending() and irq_work_needs_cpu()
-should already cover some of them in a platform-independent way.
-
--- 
-Regards,
-Sudeep
+Please ignore the comment in the patch 3/10 and try to
+use this header. It is also logically linked to the
+notifications, so belongs to such header IMHO.
 
