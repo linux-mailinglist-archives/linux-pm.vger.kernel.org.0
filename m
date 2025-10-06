@@ -1,40 +1,88 @@
-Return-Path: <linux-pm+bounces-35719-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35720-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C227BBD51E
-	for <lists+linux-pm@lfdr.de>; Mon, 06 Oct 2025 10:17:31 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8D071BBD6F4
+	for <lists+linux-pm@lfdr.de>; Mon, 06 Oct 2025 11:25:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EFC7A3AFEBA
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Oct 2025 08:17:29 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 997E04E9BAE
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Oct 2025 09:25:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE8B01EC01B;
-	Mon,  6 Oct 2025 08:17:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21D99266EE7;
+	Mon,  6 Oct 2025 09:25:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="OP8VYXp1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57BD51C3BE0;
-	Mon,  6 Oct 2025 08:17:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B390265CA8
+	for <linux-pm@vger.kernel.org>; Mon,  6 Oct 2025 09:25:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759738647; cv=none; b=IJeGD/l3FNxpa1ckCpriQWt/b5QZM5/gxE4vs9SuWng0xEvqXw5MaZIxuFNJPKro4vtqTfof8iC0veAYEpS69AingHzvfCQEjE0pOdFR17fPhXN/7AAo/rklSjjWflUMopoyxt3ridXueauj1D9iqA9U0FtoIrUVKnqs2ARzPrE=
+	t=1759742729; cv=none; b=itomBHsRPQ5k7UHvtZd9WgiuUnPPV9MHeIdx7mHI4N1vNr9AqrGMgwFcU4uacO4qtigBHUa4u43/4ctHeVCH56YsL5IRJweDhYOOKUmBSxhZSB912LgLf2xUUpmWq1dpnmS/7NOPHJEPodZCcsXIClgR87cGJncRemYwtekwoFk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759738647; c=relaxed/simple;
-	bh=91NGgeU0Lxk81ktZH9chiaamZ0sYOIN8XpLkLkr5/v0=;
+	s=arc-20240116; t=1759742729; c=relaxed/simple;
+	bh=Edw6e0og8KO+pLnhJlzP7tQrwfS/fTioEQtVFejS+5Y=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GzQLqfH3THGEJiyRFQxYosCniwZAUUeUanolKqebjnGvnmhSek9e8R/3UGyJRZSAGIKNU7mYId2EHQYHZjhazmgtWf3rQYLrzysdXQ4Zg4f+KgBYgbOPBmjfnszbloQy23zgCbr6sVe0in7b1OX+5734/9DUP+fQHBZNdKSs8JA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7862F1515;
-	Mon,  6 Oct 2025 01:17:15 -0700 (PDT)
-Received: from [10.57.81.187] (unknown [10.57.81.187])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9BDA43F59E;
-	Mon,  6 Oct 2025 01:17:21 -0700 (PDT)
-Message-ID: <05359260-336f-4047-bc3a-003ace5ad7c4@arm.com>
-Date: Mon, 6 Oct 2025 09:17:43 +0100
+	 In-Reply-To:Content-Type; b=t6EjjWMM4IpVyNq3+zTHzV+TmynD+HzPlhTXuYL1u66BEcTDowMa6cQhPonu5vmvJagFrDItXtBrNDLbSv35QcPdNGxAPldDmBkWD1dQEylCJ4/uO27I2eXqpkNjts3BVPRTX2YooypZzGvgK0ipGydUSAh1JOk1vdd5Rr8oaNE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=OP8VYXp1; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5960d3xu004323
+	for <linux-pm@vger.kernel.org>; Mon, 6 Oct 2025 09:25:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	bPnKDCAknnlQ5K1Y7MBqxGeVWc0/KKrFnvmpGWEd/iE=; b=OP8VYXp1NPHQZ1DC
+	PZwp1qm8s20FDro5w/TnwQ6vniSCPH1P1DeqqkSveXDbexOPAHUnEFxByrU1F+qL
+	VFsInYZ4ZXn9ARWgs9bCB4/o9A78k9jNzDliUyoAhBl+4wVusNHD/R4bNjbqmp2O
+	Z8jsHX/SvhbfBX3hZkJ+zndpwEfCFhrVi7ldLJz7RgQRqOYHtymYe8fja64allX2
+	0WXsZO1S9HRy1RvJ0HTqfWLDdaOmK3IVchBYc75kSW0CS6SN3sVzauuNrilh1lC+
+	C9w3hwv945uGMvLrJqPXXAIbUFHz1cZiFfG4kSzdkbeES1UNycF+aB6Z/slejDo3
+	dAQNPg==
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com [209.85.222.197])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 49jtwgkh9q-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Mon, 06 Oct 2025 09:25:26 +0000 (GMT)
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-87d8621e4b5so9394485a.1
+        for <linux-pm@vger.kernel.org>; Mon, 06 Oct 2025 02:25:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1759742725; x=1760347525;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bPnKDCAknnlQ5K1Y7MBqxGeVWc0/KKrFnvmpGWEd/iE=;
+        b=e/5WHRQdVuJzKqkhqhkjQpogJPMasSSRDqqquUoQlXKpnxpZxim95Z1VPGLwjW9uLZ
+         5iezdg++yTNMunoHsjI1uxHoD9Bhs13BSIIRugSI7W5ptrjK5e8WkLGTtYSgAPd1QT+l
+         TZVPbouhmW+bnZSH9fC48FxwVPKF9dVk1/73Zr9OqWBL16YUY+iiYdfgqniHzZnXodqi
+         3bDKLvTi/U2HkKYPhPING7GOgKmbkAyy57g3hS/fg8r2ZVfoRgF7eGFX0Z/oDTMex1C+
+         SLtQ/kjrUc1Ok22n3naRRpgoC12RTMiMrMJKRF4pLBy2/MH0v6QVyv1MocgFOvKSI4Ep
+         C8fw==
+X-Forwarded-Encrypted: i=1; AJvYcCV58CzKF2owQ/hSa7KRLjyyxfFgdpU14EAUb9gLC69P1DF0bwEC3zTDksbpqtVFShmWLUcumejdtA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzLV1s4nm8Vv60OXkdfTwFplvvPctelm1a+R06vbAsrLW6agdCm
+	89m3NDGErplHFXHBKdW8BnMfqhL09FvcPnlDHOYrTSdauvg2tUTgjvyQ5wZPEZjeTgpFnm71AqP
+	9Bfn2Ax4KK00TqI32zETNlJWxFVGNwWPpaDP7UgySpWwX10DPxRM0g0n7DUK0+Q==
+X-Gm-Gg: ASbGnctafqBN7VTtKgZCwmYa2E+jRyM++u3SeBHRtfVOuBfLqIx2NVex035Rv3N3nc3
+	YvBQcpQG9gnjkBwGpVCqHMbcB2asxPlkv4Z0DEv2fsg/gbXpYam7sTQWY8RvXVHyu+QQBs1Nl38
+	IbOKz4YrzJWe9t8Ryh4J/toItPIq5Qb8rR9SzCYSE6sk0eNCqKKY73b0GTr9k4Gx3exS/McfPAv
+	x9NwmpDq4mA0Er9kVKRj3ZH9TobA6lqvCwO2bHpdKmwrbnEe+WKAobqwyLIFLp2E2F6UaM4Cc7w
+	XhlEEJB/KyO6OIIXaBotlpbO7PskrbDOb/ly714ephLvzR3RlwIXIQwvMqG+EVxEANv2TA+aZNk
+	Diu4x0c8Ls+bkOsSD+pQDMtp6ZB8=
+X-Received: by 2002:a05:620a:2808:b0:878:7b3e:7bbf with SMTP id af79cd13be357-87a35ce66c1mr1023296785a.3.1759742725327;
+        Mon, 06 Oct 2025 02:25:25 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFvRfoZ03L6zTgPa9LKXYBO9blV6+FdfAe7dQyAmQoPVuIdAmyD2DdczNNxPH7bp8ruibwQLA==
+X-Received: by 2002:a05:620a:2808:b0:878:7b3e:7bbf with SMTP id af79cd13be357-87a35ce66c1mr1023293885a.3.1759742724700;
+        Mon, 06 Oct 2025 02:25:24 -0700 (PDT)
+Received: from [192.168.149.223] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b486970b422sm1113154466b.54.2025.10.06.02.25.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Oct 2025 02:25:24 -0700 (PDT)
+Message-ID: <fde00935-6475-470d-bfde-4341d15c8441@oss.qualcomm.com>
+Date: Mon, 6 Oct 2025 11:25:21 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -42,163 +90,60 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RESEND v4 01/10] PM: EM: Assign a unique ID when creating
- a performance domain
-To: Changwoo Min <changwoo@igalia.com>
-Cc: christian.loehle@arm.com, tj@kernel.org, pavel@kernel.org,
- len.brown@intel.com, rafael@kernel.org, kernel-dev@igalia.com,
- linux-pm@vger.kernel.org, sched-ext@lists.linux.dev,
- linux-kernel@vger.kernel.org
-References: <20250921031928.205869-1-changwoo@igalia.com>
- <20250921031928.205869-2-changwoo@igalia.com>
+Subject: Re: [PATCH 1/2] interconnect: qcom: msm8996: add missing link to
+ SLAVE_USB_HS
+To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+        Georgi Djakov <djakov@kernel.org>,
+        Yassine Oudjana
+ <y.oudjana@protonmail.com>,
+        Dmitry Baryshkov <lumag@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc: linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20251002-fix-msm8996-icc-v1-0-a36a05d1f869@oss.qualcomm.com>
+ <20251002-fix-msm8996-icc-v1-1-a36a05d1f869@oss.qualcomm.com>
 Content-Language: en-US
-From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20250921031928.205869-2-changwoo@igalia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <20251002-fix-msm8996-icc-v1-1-a36a05d1f869@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDA0MDAxOSBTYWx0ZWRfX2+9rASUMUrmc
+ f5NKAriH3uRHAmzddxHUaACex4xQmZoHo3JXhdsFSEvWHgxvlA3vTlAHGXEGeR4Cl0M6PaTNxoI
+ SV6tm3sJ/3gzw033ytPdRDTyP5wwqogcBsUXiOt1eP2BVM9YBhAVduwS3tuIXDAe0srEOoPLFpL
+ wWelmtU2r7UNoD+87IEfO0k2q5zpK8cDLhlAQfUhbH5Oc/GAsgOPW4bsiSOTlzF2FvUpm0fQeDs
+ YysyWkfaKR8CR5VeyGUDTngtfYfvYsOY6Q5z6X2gfRnNVJAyr8vX1ICaAgmI+B0RwXeOO9DLMh+
+ 7vDqqxmrABOJaj+DeNa1CwEDeAxBnVCUEVojxF7vo1abaAxVL2okTFEtuf/wuK1YVJfrj34VNXn
+ v84rtgyypLxMksXvKi6ifkAaBr70Hg==
+X-Authority-Analysis: v=2.4 cv=B6O0EetM c=1 sm=1 tr=0 ts=68e38b06 cx=c_pps
+ a=50t2pK5VMbmlHzFWWp8p/g==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
+ a=IkcTkHD0fZMA:10 a=x6icFKpwvdMA:10 a=EUspDBNiAAAA:8 a=WPDsOxgxYxYm0iCLz50A:9
+ a=QEXdDO2ut3YA:10 a=IoWCM6iH3mJn3m4BftBB:22
+X-Proofpoint-GUID: aYQCMuhIqPlRv_bUkl3Ygf2n5C9xxLG-
+X-Proofpoint-ORIG-GUID: aYQCMuhIqPlRv_bUkl3Ygf2n5C9xxLG-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-10-06_03,2025-10-02_03,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1015 priorityscore=1501 lowpriorityscore=0 adultscore=0
+ impostorscore=0 spamscore=0 bulkscore=0 phishscore=0 malwarescore=0
+ suspectscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2509150000
+ definitions=main-2510040019
 
-Hi Chanwoo,
-
-My apologies to delay on this topic.
-
-On 9/21/25 04:19, Changwoo Min wrote:
-> It is necessary to refer to a specific performance domain from a
-> userspace. For example, the energy model of a particular performance
-> domain is updated.
+On 10/2/25 10:53 AM, Dmitry Baryshkov wrote:
+> From the initial submission the interconnect driver missed the link from
+> SNOC_PNOC to the USB 2 configuration space. Add missing link in order to
+> let the platform configure and utilize this path.
 > 
-> To this end, assign a unique ID to each performance domain to address it,
-
-Is this related to the sched_ext view on the EM that we cannot re-use
-the allocated ID for the given domain?
-
-> and manage them in a global linked list to look up a specific one by
-> matching ID. IDA is used for ID assignment, and the mutex is used to
-> protect the global list from concurrent access.
-> 
-> Note that the mutex (em_pd_list_mutex) is not supposed to hold while
-> holding em_pd_mutex to avoid ABBA deadlock.
-
-This might be tricky design, but I have seen in some other
-patches you've added the lockdep, so we might have some safety net.
-
-> 
-> Signed-off-by: Changwoo Min <changwoo@igalia.com>
+> Fixes: 7add937f5222 ("interconnect: qcom: Add MSM8996 interconnect provider driver")
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
 > ---
->   include/linux/energy_model.h |  4 ++++
->   kernel/power/energy_model.c  | 33 ++++++++++++++++++++++++++++++++-
->   2 files changed, 36 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
-> index 61d50571ad88..43aa6153dc57 100644
-> --- a/include/linux/energy_model.h
-> +++ b/include/linux/energy_model.h
-> @@ -54,6 +54,8 @@ struct em_perf_table {
->   /**
->    * struct em_perf_domain - Performance domain
->    * @em_table:		Pointer to the runtime modifiable em_perf_table
-> + * @node:		node in	em_pd_list (in energy_model.c)
-> + * @id:			A unique ID number for each performance domain
->    * @nr_perf_states:	Number of performance states
->    * @min_perf_state:	Minimum allowed Performance State index
->    * @max_perf_state:	Maximum allowed Performance State index
-> @@ -71,6 +73,8 @@ struct em_perf_table {
->    */
->   struct em_perf_domain {
->   	struct em_perf_table __rcu *em_table;
-> +	struct list_head node;
-> +	int id;
->   	int nr_perf_states;
->   	int min_perf_state;
->   	int max_perf_state;
-> diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
-> index 8df55397414a..3fe562b6230e 100644
-> --- a/kernel/power/energy_model.c
-> +++ b/kernel/power/energy_model.c
-> @@ -23,6 +23,16 @@
->    */
->   static DEFINE_MUTEX(em_pd_mutex);
->   
-> +/*
-> + * Manage performance domains with IDs. One can iterate the performance domains
-> + * through the list and pick one with their associated ID. The mutex serializes
-> + * the list access. When holding em_pd_list_mutex, em_pd_mutex should not be
-> + * taken to avoid potential deadlock.
-> + */
-> +static DEFINE_IDA(em_pd_ida);
-> +static LIST_HEAD(em_pd_list);
-> +static DEFINE_MUTEX(em_pd_list_mutex);
-> +
->   static void em_cpufreq_update_efficiencies(struct device *dev,
->   					   struct em_perf_state *table);
->   static void em_check_capacity_update(void);
-> @@ -396,7 +406,7 @@ static int em_create_pd(struct device *dev, int nr_states,
->   	struct em_perf_table *em_table;
->   	struct em_perf_domain *pd;
->   	struct device *cpu_dev;
-> -	int cpu, ret, num_cpus;
-> +	int cpu, ret, num_cpus, id;
->   
->   	if (_is_cpu_device(dev)) {
->   		num_cpus = cpumask_weight(cpus);
-> @@ -420,6 +430,13 @@ static int em_create_pd(struct device *dev, int nr_states,
->   
->   	pd->nr_perf_states = nr_states;
->   
-> +	INIT_LIST_HEAD(&pd->node);
-> +
-> +	id = ida_alloc(&em_pd_ida, GFP_KERNEL);
-> +	if (id < 0)
-> +		return -ENOMEM;
-> +	pd->id = id;
-> +
->   	em_table = em_table_alloc(pd);
->   	if (!em_table)
->   		goto free_pd;
-> @@ -444,6 +461,7 @@ static int em_create_pd(struct device *dev, int nr_states,
->   	kfree(em_table);
->   free_pd:
->   	kfree(pd);
-> +	ida_free(&em_pd_ida, id);
->   	return -EINVAL;
->   }
->   
-> @@ -660,6 +678,13 @@ int em_dev_register_pd_no_update(struct device *dev, unsigned int nr_states,
->   unlock:
->   	mutex_unlock(&em_pd_mutex);
->   
-> +	if (_is_cpu_device(dev))
-> +		em_check_capacity_update();
-> +
-> +	mutex_lock(&em_pd_list_mutex);
-> +	list_add_tail(&dev->em_pd->node, &em_pd_list);
-> +	mutex_unlock(&em_pd_list_mutex);
-> +
->   	return ret;
->   }
->   EXPORT_SYMBOL_GPL(em_dev_register_pd_no_update);
-> @@ -678,6 +703,10 @@ void em_dev_unregister_perf_domain(struct device *dev)
->   	if (_is_cpu_device(dev))
->   		return;
->   
-> +	mutex_lock(&em_pd_list_mutex);
-> +	list_del_init(&dev->em_pd->node);
-> +	mutex_unlock(&em_pd_list_mutex);
-> +
->   	/*
->   	 * The mutex separates all register/unregister requests and protects
->   	 * from potential clean-up/setup issues in the debugfs directories.
-> @@ -689,6 +718,8 @@ void em_dev_unregister_perf_domain(struct device *dev)
->   	em_table_free(rcu_dereference_protected(dev->em_pd->em_table,
->   						lockdep_is_held(&em_pd_mutex)));
->   
-> +	ida_free(&em_pd_ida, dev->em_pd->id);
-> +
->   	kfree(dev->em_pd);
->   	dev->em_pd = NULL;
->   	mutex_unlock(&em_pd_mutex);
 
-Apart from that, the code itself looks sane.
+Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 
-Regards,
-Lukasz
+Konrad
+
 
