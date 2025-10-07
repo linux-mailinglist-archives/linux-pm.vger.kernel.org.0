@@ -1,79 +1,79 @@
-Return-Path: <linux-pm+bounces-35799-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35800-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C0D79BC3034
-	for <lists+linux-pm@lfdr.de>; Wed, 08 Oct 2025 01:55:23 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2841CBC303D
+	for <lists+linux-pm@lfdr.de>; Wed, 08 Oct 2025 01:56:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A6D3619E02B6
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Oct 2025 23:55:46 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id B3BCA4E3DEE
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Oct 2025 23:56:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A4CF2777E1;
-	Tue,  7 Oct 2025 23:55:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0000C277CBC;
+	Tue,  7 Oct 2025 23:56:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tLKpnfz3"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Ph5XqRAg"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C02A7241CB6
-	for <linux-pm@vger.kernel.org>; Tue,  7 Oct 2025 23:55:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 616412036E9
+	for <linux-pm@vger.kernel.org>; Tue,  7 Oct 2025 23:56:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759881319; cv=none; b=rSOTkt5cRvtmki78+oC09KQyzRby95ZEgddq9iJ6eEvwEsK87gj163bnaeNUXU9VOARWtAF4es4Gnd7I4tEgTI0e97y2SMp6ir9Hy/+71PhKtBi0O0J1N1rpeAO+7lOIRe5GFSc9ETPdfTwlgHChIUjfZGthBckFWColEL3Y/Tk=
+	t=1759881394; cv=none; b=h26yg14FpfJ7zLC1FEx/ZjUDscwIGdY+2EdOeqychrFHHsdPznJE0JtLdgDnqO5bJe65GhmcfGSUtMa52FhXEHr87OZFv6uDi0Pif7tCwOjrkV8DVEUOUuOSXWssBu61Saw2G+e20sHV5utd07dsN+rq927kyfFBsBHpxtbVaS8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759881319; c=relaxed/simple;
-	bh=aueIMlR5mVedWi0fjNVCibzll+DI67XEJP+YBMNLg9g=;
+	s=arc-20240116; t=1759881394; c=relaxed/simple;
+	bh=zJKXXBSciI+h6+weMkophpbj4m53g4DgXzbXDfHC1CA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sid5DFV2qmSar6oTmQdwbi4/V9oAU/ONkNV0oekkUhxf6JCvaCwvihKU7Oh9Nq5uNFtBp7aGLAGDGvU9UhmiQLIgPOgy6BrmU4ot81qgKr8oXqj7ouXw20cL1hmF1BiENWhj5OrdsrrY9HUbdJa18xlIeOPzWFc28bX5FWCpqDU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tLKpnfz3; arc=none smtp.client-ip=209.85.216.48
+	 Content-Type:Content-Disposition:In-Reply-To; b=lVXynepxKd41ygIwbIlgNhz3icA+cLWoVz3OFx1CdB/MimYW5Ldn4XAkxyfIknkviKdVW9S7GUdkeBfJJYgknUvXLUPog5u9MlZTSBkwDKOADQnFrxCwmqb7q1t83pF/GIJCa9ZAqKBnmhC+dw48LTcswNq+ozEOPwYFEU5oq24=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Ph5XqRAg; arc=none smtp.client-ip=209.85.216.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-33067909400so5138658a91.2
-        for <linux-pm@vger.kernel.org>; Tue, 07 Oct 2025 16:55:17 -0700 (PDT)
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-3306b83ebdaso6646920a91.3
+        for <linux-pm@vger.kernel.org>; Tue, 07 Oct 2025 16:56:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1759881317; x=1760486117; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1759881393; x=1760486193; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=RoPS4zG7i/w1UUCX0a6YHqijn613l2SV4IiIRvG6TwA=;
-        b=tLKpnfz36siqnmt5Uw2nZd3fFoWRm5pBZ5fOxthddgdaAssFNt4V4x608tGwWgXnO6
-         CAZJ55OiYVeWeXWH7sl6z9wWVEos5P3elARtTbDdFcCRsqJBe1RWo7u88RirxlpXmQpv
-         88vYKDQVIr0WWtJBo1aWffmhpduypSb1TOecRxSW5y4r1Sv33kasv93YzOklncw45cZ5
-         1WD5ggtlkf34oQ2DbkTpUY4/3Zdm3LpGbrBiNk8ixRmTBieb8a7XMQjdCGcQ7t/nmImz
-         VZHEey/mtPBOSmX7JbzIqFMcjURK7lP4Y7jnUns3kUFADsCOkJBkR3cmumHM9VDD1K+3
-         +slg==
+        bh=39zXg6tilCKGf5UjV6+AnvBZd7qB5qMcffVx1lnmOy4=;
+        b=Ph5XqRAgll+e6M/Lqj3ievlJMylXOlmyWtmRt/G+ST6KCFsOEm9+yvbTqKpxKOIcrp
+         SQJzIBP1DwV9JpAgVBxIT14jcfSGy1hFIgINzOG4Nc31UobgVsB2KR7n+YyJ53o3KdLf
+         QND01WX+7xCWd5T9ePj4oDrZIM5XwH+kKwZymAkMaMLT/9AEM6xfSoiH1MhV86skx8EV
+         d1vd9SkRROux7JlM4kjT8eoasm0YLwBMmZ9L3pzYXDan+zEsjFt+yfITIh1+CsSUkkti
+         vMEOu/eWEe7hRiqyEAIEJtIZoXs1fl6ClTW6WmjMM2lZuYOQhP3Dzs9H7VKN2634bCL2
+         8Bpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759881317; x=1760486117;
+        d=1e100.net; s=20230601; t=1759881393; x=1760486193;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=RoPS4zG7i/w1UUCX0a6YHqijn613l2SV4IiIRvG6TwA=;
-        b=gieLPrHt7uH73lxVypORIt2NPUXWCfJ40+e8osljce88QgG+T20o6z0twAWiJZcpTc
-         DSC71nDEVTtGqYS3/GIZIonXhr+PIZPas2ZiTcprLaWjaaxnLZQ0pDeEVpPjDUFEZ9AY
-         oCNMH+DdVGG59q9Rd0+jfAdPHmitygaH0C57WWFXKsfJivA0l6pMLwWhOiqOBPhtRckR
-         +rsc3W35BsqNqJhK+KJs2oDgLTrTB/ypE7jbr9sTQOOcq6zq7uPtPCK+GV/hIq+SFu4M
-         gArGjOS91JhTRaxqh+pZapew5FD6UfOKU2U0GpAQpztyWkWMUgreHS8AZHiltUkfsfWr
-         8HZA==
-X-Forwarded-Encrypted: i=1; AJvYcCX50bpjSSar9Ct4zDMvjrJqP2ML75uOwnR2563wYxxN96hrnjrrWeoZbrSn5UWz+yfT3+E/ZCJdRQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw+b9CybHMU/fDLHPBN09Pt8tjaNaObr63PGKin4PQwqtaRc8mL
-	o1IvrIltfcm85dkQn8BIRtXjRfN+UbtgxWJwsugsnwa30mb6+08MFmm+m1BkYY6TeQ==
-X-Gm-Gg: ASbGncv8UnOxCAlk8ReJfFblBJMOK/BTJwWDYz7+3Fo2Uui5NyVgBVp0WkjOtnbihQh
-	oGNwqvKMN1mFUd33CZ6umZZakrfpoNxLeQ3I36u8CU6eCMLX0yvok+CrJsG2t8+/25ezFNIePnC
-	NOALGK2SHX09jp4QiW8Bv14liwSezCivUSC5xWmG4VucTmeTIgsg1L+UNXWrqiNSDA8T5gwBwr0
-	4HISInBYdVcqEZiqzgeN+hqCDVQ/dWNXg+tVWwFmr1pmgJ/0Brixcw1mHD9s3csX7SG+6FAqfIm
-	TVl+v0W8tYyloF5EPWSUITFLYHFp44Y4+ktYXCOySQNrWPRUOUhzWcHm77c97Z8rUzsOVch+Qhf
-	eK/oddg4Wa/WPFYLZuP8dXoZUnCt15LYhv/nLJkIR6Cf8+0Sa4yXwUNU2gXojGmvd88v8NRnJB0
-	XpZYUXp3/9BUiMC+sqwBjJ
-X-Google-Smtp-Source: AGHT+IFyYA4phHap66RvdBt2TrgOq56Z64xSXysMkk6/t4JddY43lUaDViy2aDcxIzhYwOjo1UQo3g==
-X-Received: by 2002:a17:90b:3882:b0:32e:7270:94a1 with SMTP id 98e67ed59e1d1-33b51375992mr1682915a91.17.1759881316103;
-        Tue, 07 Oct 2025 16:55:16 -0700 (PDT)
+        bh=39zXg6tilCKGf5UjV6+AnvBZd7qB5qMcffVx1lnmOy4=;
+        b=bDSvP94YV7NGLPL0UsfuOgCyeg0MEy+5smuVgAtnLgUC6sEC3cvFv62sMdKrEBJatR
+         6Jksk7LNasW3dXT+qfIHhKEptMaGbZlDchzDSHSkMnNYbHeS4LgmcXLOnbVoo2KRbO73
+         fs4ktet7Vp05Wx269RQuq5BIcd/H1gq4QLK4T24db2Sx/T3vbgY98sIJ/Gz0YKJRoKO1
+         s3MdOQ90T0n0vNqolHEGx/9sjqiVPHavaOqYgVUhfIWCGyuycdhQWZdczdPUh6cYcbcm
+         8kFU0bjZ1JoT0zFpR28Dv360B1EpqLh3A/k98NSaYw2/MgxZPMf3GstFyQbHQCNZnFlw
+         Xdcg==
+X-Forwarded-Encrypted: i=1; AJvYcCW7Ipuu5lEplT4sXbk2cndNHgCPGUUuxK1xlY1DvBSwJi4RvNBxjqnH2BZk2tBHB6TSAIcx5Wl4jw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzyODTvhWCSRhOBMGMRAAsMHTa0gPgrJPKLF85DHU/8uNG+RDwM
+	8oacW9F8TQdOxPo0+soq5aZvkgY6spPvi6OYOIU82fJInyyb9dIUYsWMOg9oXj+JPA==
+X-Gm-Gg: ASbGncvyNBHmwF0770iUPprfcaDAPF9G9rPQykwZkOQGzf/FcOLy7NvP+00Dqa8HfxV
+	HpgA+ffx3GaQPRLxr0cQAxvUiMrrNbRIgp0+ofbdgLaWWumjg1IrlDSaQu5btdYEzS6M0A011aM
+	ob2tOvRv4iFOgXjwfolPeDv1viRnERnrzvAOCmWjWeuQcHj36QSaRl6gxsq8KYiJkbo3TP08Vcr
+	Z8RGKTTlOyD3ov6MH1cso0OAQCrh0EVVR1vfoebdaV/xCEbY/O6Nt8m6lcN3rvmWe6LoVWR3J4j
+	7pcXhNlB5sh+VG6Jtk+fVwGPW16bgbvl4POsrj0vm6eOwriTj+xAw6557P4wrgj415iw7/DOZR9
+	ArcKlr5LHTNYV6VA0RdeNqobpS/3S30rO6unZmmHfkTV6VaI0He3DwtbY9scFeOkO42tomL/H2L
+	0Ol2176lqJ+5k41qBmyueR
+X-Google-Smtp-Source: AGHT+IHMC7A37U/WEv3rhyxJXeKzOCdfHy3VqxOSC3aiXgnbwRn0y15wH9ycq+L3ZktBWltzSlIMFQ==
+X-Received: by 2002:a17:90b:3843:b0:334:18f9:8008 with SMTP id 98e67ed59e1d1-33b511174e6mr1562113a91.8.1759881392356;
+        Tue, 07 Oct 2025 16:56:32 -0700 (PDT)
 Received: from google.com (232.92.83.34.bc.googleusercontent.com. [34.83.92.232])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b6099d4d324sm16922776a12.27.2025.10.07.16.55.14
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-33b51395229sm944821a91.17.2025.10.07.16.56.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Oct 2025 16:55:14 -0700 (PDT)
-Date: Tue, 7 Oct 2025 23:55:11 +0000
+        Tue, 07 Oct 2025 16:56:30 -0700 (PDT)
+Date: Tue, 7 Oct 2025 23:56:27 +0000
 From: Benson Leung <bleung@google.com>
 To: Jameson Thies <jthies@google.com>
 Cc: heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
@@ -81,11 +81,11 @@ Cc: heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
 	bleung@chromium.org, gregkh@linuxfoundation.org,
 	akuchynski@chromium.org, abhishekpandit@chromium.org,
 	sebastian.reichel@collabora.com, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 5/6] usb: typec: ucsi: psy: Set max current to zero when
- disconnected
-Message-ID: <aOWoX4cqg3fN-pN1@google.com>
+Subject: Re: [PATCH 6/6] usb: typec: ucsi: pr_swap should check
+ connector_status
+Message-ID: <aOWoq08H-3F66Ozg@google.com>
 References: <20251007000007.3724229-1-jthies@google.com>
- <20251007000007.3724229-6-jthies@google.com>
+ <20251007000007.3724229-7-jthies@google.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -93,63 +93,107 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="fUC004gocSAkhC+0"
+	protocol="application/pgp-signature"; boundary="3vepBb5P5u0ERoW1"
 Content-Disposition: inline
-In-Reply-To: <20251007000007.3724229-6-jthies@google.com>
+In-Reply-To: <20251007000007.3724229-7-jthies@google.com>
 
 
---fUC004gocSAkhC+0
+--3vepBb5P5u0ERoW1
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Oct 07, 2025 at 12:00:06AM +0000, Jameson Thies wrote:
-> The ucsi_psy_get_current_max function defaults to 0.1A when it is not
-> clear how much current the partner device can support. But this does
-> not check the port is connected, and will report 0.1A max current when
-> nothing is connected. Update ucsi_psy_get_current_max to report 0A when
-> there is no connection.
+On Tue, Oct 07, 2025 at 12:00:07AM +0000, Jameson Thies wrote:
+> From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
 >=20
+> Power role swaps initiated by the host system doesn't generate
+> connection status change notifications.
+>=20
+> From UCSIv3.0 spec, section 6.5.10 Set Power Direction Role:
+>=20
+> The execution of this command might require PPM to initiate a power
+> role swap. If the power role swap fails for any reason, the command
+> returns, and error and the power direction should remain unchanged.
+> Note that if the execution of the command resulted in a successful
+> power role swap, it should not result in a connector status change
+> notification.
+>=20
+> Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
 > Signed-off-by: Jameson Thies <jthies@google.com>
 
 Reviewed-by: Benson Leung <bleung@chromium.org>
 
 
 > ---
->  drivers/usb/typec/ucsi/psy.c | 5 +++++
->  1 file changed, 5 insertions(+)
+>  drivers/usb/typec/ucsi/ucsi.c | 30 +++++++++++++++++++++++++-----
+>  1 file changed, 25 insertions(+), 5 deletions(-)
 >=20
-> diff --git a/drivers/usb/typec/ucsi/psy.c b/drivers/usb/typec/ucsi/psy.c
-> index 985a90d3f898..3a209de55c14 100644
-> --- a/drivers/usb/typec/ucsi/psy.c
-> +++ b/drivers/usb/typec/ucsi/psy.c
-> @@ -169,6 +169,11 @@ static int ucsi_psy_get_current_max(struct ucsi_conn=
-ector *con,
->  {
->  	u32 pdo;
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> index 1a7d850b11ea..6e3797d7a144 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -1526,20 +1526,40 @@ static int ucsi_pr_swap(struct typec_port *port, =
+enum typec_role role)
+>  	if (ret < 0)
+>  		goto out_unlock;
 > =20
-> +	if (!UCSI_CONSTAT(con, CONNECTED)) {
-> +		val->intval =3D 0;
-> +		return 0;
-> +	}
+> -	mutex_unlock(&con->lock);
+> +	command =3D UCSI_GET_CONNECTOR_STATUS | UCSI_CONNECTOR_NUMBER(con->num);
+> +	ret =3D ucsi_send_command(con->ucsi, command, &con->status, sizeof(con-=
+>status));
+> +	if (ret < 0)
+> +		goto out_unlock;
+> =20
+> -	if (!wait_for_completion_timeout(&con->complete,
+> -					 msecs_to_jiffies(UCSI_SWAP_TIMEOUT_MS)))
+> -		return -ETIMEDOUT;
+> +	cur_role =3D !!UCSI_CONSTAT(con, PWR_DIR);
+> =20
+> -	mutex_lock(&con->lock);
+> +	/* Execution of SET_PDR should not result in connector status
+> +	 * notifications. However, some legacy implementations may still defer
+> +	 * the actual role swap and return immediately. Thus, check the
+> +	 * connector status in case it immediately succeeded or wait for a later
+> +	 * connector status change.
+> +	 */
+> +	if (cur_role !=3D role) {
+> +		mutex_unlock(&con->lock);
 > +
->  	switch (UCSI_CONSTAT(con, PWR_OPMODE)) {
->  	case UCSI_CONSTAT_PWR_OPMODE_PD:
->  		if (con->num_pdos > 0) {
+> +		if (!wait_for_completion_timeout(
+> +			    &con->complete,
+> +			    msecs_to_jiffies(UCSI_SWAP_TIMEOUT_MS)))
+> +			return -ETIMEDOUT;
+> +
+> +		mutex_lock(&con->lock);
+> +	}
+> =20
+>  	/* Something has gone wrong while swapping the role */
+>  	if (UCSI_CONSTAT(con, PWR_OPMODE) !=3D UCSI_CONSTAT_PWR_OPMODE_PD) {
+>  		ucsi_reset_connector(con, true);
+>  		ret =3D -EPROTO;
+> +		goto out_unlock;
+>  	}
+> =20
+> +	/* Indicate successful power role swap */
+> +	typec_set_pwr_role(con->port, role);
+> +
+>  out_unlock:
+>  	mutex_unlock(&con->lock);
+> =20
 > --=20
 > 2.51.0.618.g983fd99d29-goog
 >=20
 
---fUC004gocSAkhC+0
+--3vepBb5P5u0ERoW1
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYKAB0WIQQCtZK6p/AktxXfkOlzbaomhzOwwgUCaOWoXwAKCRBzbaomhzOw
-wm9jAQDyn4DTkW9BlmrjPEHHrT83cCw7VhufXQoU38YBUFUiXwEAvyLumfxm0ovV
-6bf7rx+85yCgcDBJOgUpY3k5KoXtGAY=
-=UKip
+iHUEABYKAB0WIQQCtZK6p/AktxXfkOlzbaomhzOwwgUCaOWoqwAKCRBzbaomhzOw
+ws1vAQCb90DdZAg6y6j6gxeiXtb3EGaDB+3GnPoYDww9vdtaYQD/ayZXFW+x+d+E
+M5yCHWN8me1+9sGUjPAZlnVttMLEWAg=
+=BpLg
 -----END PGP SIGNATURE-----
 
---fUC004gocSAkhC+0--
+--3vepBb5P5u0ERoW1--
 
