@@ -1,159 +1,147 @@
-Return-Path: <linux-pm+bounces-35780-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35781-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 76B75BC0B95
-	for <lists+linux-pm@lfdr.de>; Tue, 07 Oct 2025 10:40:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E7E7BBC0E1C
+	for <lists+linux-pm@lfdr.de>; Tue, 07 Oct 2025 11:43:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id F007A34E0EF
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Oct 2025 08:40:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A558D3A2BAC
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Oct 2025 09:43:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C99E2DBF52;
-	Tue,  7 Oct 2025 08:35:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEBF3248176;
+	Tue,  7 Oct 2025 09:43:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VTCUXA1+"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="y7Abe05p"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54BFA2DC321
-	for <linux-pm@vger.kernel.org>; Tue,  7 Oct 2025 08:35:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 350363207
+	for <linux-pm@vger.kernel.org>; Tue,  7 Oct 2025 09:43:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759826126; cv=none; b=JMJ6D9CJwWIV62GirDs87yXFmhXAfVyHvflRLe6g9jh2lV01/KqMaF0zeiZjKqna+DqkmMywN4vRLMyJ96XHyeAtDQVMk0JNPZkG6nWv41bLcKgMNuJyF/7ts47SKyUaAdHrYlDFxb72244ngtSQHRiyRSCuJGo8JsNHJzJo/TQ=
+	t=1759830204; cv=none; b=hsIgXc38l6oBYCFCTG0QXYuV6bXI52MXJY02+JMEjMkzYcZ+CVDSjo8W16Ewen1HzKN74+wUvY18rebk+Q3QvY3OlSPs11zjbeGr8OBWM8yLoQFg0EATCo1YGt68/gu8StEk82PABA0OtQApMbcOiS+5DW9itu7KoyOAeVwgS4M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759826126; c=relaxed/simple;
-	bh=ZHDZ/62yyQM2WpcdFkqxEjcI8DLW3Glqgwz1/vt5I0o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EqY29mANYmOfdJWCHZGQzT4VxvCF8LINbcUwh6LIz8VmqejqKTH5I9HD8D3Iy0yo+lkqSi4+VdFozySgs+oj66nsFcwsslH1+n6fG5aSqWsC1Alb/ylYtC2M2RKaMPtB+5Gcw0OsDYpY1HyOf8sHlJMoYzBwdTr0OJgfufiTrCI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VTCUXA1+; arc=none smtp.client-ip=209.85.167.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-57ea78e0618so6755480e87.0
-        for <linux-pm@vger.kernel.org>; Tue, 07 Oct 2025 01:35:24 -0700 (PDT)
+	s=arc-20240116; t=1759830204; c=relaxed/simple;
+	bh=c6HwI8L1IlpZvsCzHGuSxeQ3GszR4eLOsRtO5jFSI+c=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=o5dveAXdK6Oqwopb4WydN/pJXzlQ7vBHSTgpBPLzzJn72+lIRL36ZlTBD8C7+WXWXtFMuMNkru9QbAqB6YR5ylrWWaqdUQRVtFdCZtsiOI/87PBCXNkNfTrB7RwnZABcAbSyRa6Twot3s3W+a8ZXjVXyxdzvDF2xDy23mlgEp5s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=y7Abe05p; arc=none smtp.client-ip=209.85.208.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-36d77ae9de5so57128431fa.2
+        for <linux-pm@vger.kernel.org>; Tue, 07 Oct 2025 02:43:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1759826122; x=1760430922; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lA2K8SX41xRVhtx0TGelIGFHrpKngX8UyetIiKY/xmk=;
-        b=VTCUXA1+FaEj7a+2/oVxdnJNo3BnF/OqvSgUf1HOaNGCamMJjXyoGVmmIX0DegCvvn
-         EaIib6u4cM+JuIk4JXcwxC/7+fL0Y18rEHChyr0tFnZ3FhvkDxSCUjX0crvSNwpsTvGm
-         sNlUswMSOHz7LRZmE7+BUMnlB5TuDl468/P/8DPaRclpP7zY1B5or4B/CyMB8iw2W3VY
-         vfyCB9crDrkUDflJccFbw/HWcM1WyQG+XVVXRlivYuVhJw8DyRJQT4fWDw137MTA+ghK
-         on3iUUeq3DGc5ZcmsG8bd5s7snk2+xkHIQUQu2QRPJs4Aog2RCualAfCDR9Q7tAMS0iD
-         T4qA==
+        d=linaro.org; s=google; t=1759830200; x=1760435000; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=hSmNQbC023YaXpseHaoEKu4/PJTwQxs0VDin5nInWZ8=;
+        b=y7Abe05pFKOPzXObl7W5zVhChsWCXMj7Q9+K0WVRdS4jSpPe6l2DyFvhZmr3cKhtMT
+         9SzZPXPVUO+CgVfmn4dOWvyHWsi3HDya4AEWtatzNfLKvPJPrpgUXaanTUJSilCm5afX
+         rAsAzfHy7KRKGW0l9ihwgTXsrkMD+Vc2PWhuya4Y1QID/+9rC5p+PEzY7mX8hh8sTCPb
+         9csC9oVcxCtYe+bQSPf0qeoOaBK8kvfqn6j71SiuPXAF4hStKUW3NBovakQ3nAU5BIJ0
+         /b77+nzwllkrZ4UE2QoVXtA07JDwcf4vJid7dCLV0korrAW9/kze7ZRxeemsF1ROJZtt
+         xUbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759826122; x=1760430922;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lA2K8SX41xRVhtx0TGelIGFHrpKngX8UyetIiKY/xmk=;
-        b=ONuBC898LhsP9DNS0q8liQG2uOQSesLYjOFDIPwlmUWhJjsQyT4ovTx93LfQqaMRur
-         AAjcsQyaQXlyeU144s3GRma2r1lPlT6rcxNJ5ojVBCrkL0Y21CWqBOTOMUylnfX4Oi8m
-         fJGxoLZKtvTe06wLnBakFKVuYvGZb6ZVj3D5NdQuWl3Mbv6KGHkBA8RgCoBWDfkHp+Cs
-         RH/Bhyo8Qg952SAhIRufDYrKFb2laLzgZtPsHKTjY1hFDJn5xrZKdX3CnkwspGHd2TEZ
-         xZovXHZQ5Q+cwD1RivHEEKyfaOsDjZG+lGzkCy+a8lepvUcORGhCUAD9iD1kDEOokkwa
-         uelg==
-X-Forwarded-Encrypted: i=1; AJvYcCXZK3iWW85k6ntEyvHdW/nBPqVPBpk2P84ZqFBVVBLpAzfkRpG5G/kxRHhOHWMcw0l5XseWEZQTOw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwBp4tcf7TAjlwUY8+FM55AcLfe12LvJdnOKK7hG6ruX+INraib
-	SzjXFVHEfpBpoG9yTeeNV1FJ1y8rX++9qdnkPf2AAAINdNGNZr1XbZhY
-X-Gm-Gg: ASbGncs7hv+Et6uY1D5iD/PdWot0INNvJypnbJ7wLnbi5Ou62jB+qZE30N3kV5rqxyK
-	AE8+wyJ6Qi6t+D/3sE4IYaBLMuV0/nycVWOJhjUQAQlMzpzd7J0mmRNgZDTFmr1gtvlUOikXh7R
-	/XjEntka5PwyY21BB0RvCqK8q5nRDyAWdXf7BBM5jw+2berVwDiKwRru2ARSkIqPTucezb79TdH
-	ESdQnNil5C8r3vmuAqzkNqaIq/FNWiUXSB2aHpFd48lrxdxh+ICYM/yR40Fzh76jAxfGNPybg8J
-	HPw59OumFAlLjZoy4bKtd37L/pf7xYVEyVfaHH347At7TKx2QCDbOGlXvdDzWC+oMNbGS/QK2Cp
-	sdZm7VYE3K/O3mwjT8+scIBPp8OIRJeVs359wvDkdZLBk83Ywb675FF2V/FvdIcle
-X-Google-Smtp-Source: AGHT+IHWvQFZoM0ayT5AgPXGKHGCCpp31nPy7gmVdN+F8yj0NL32bKU7cfG819gEXcZcLzrJj4brIQ==
-X-Received: by 2002:a05:6512:104b:b0:578:ed03:7b87 with SMTP id 2adb3069b0e04-58cbb4416a6mr4798688e87.33.1759826122219;
-        Tue, 07 Oct 2025 01:35:22 -0700 (PDT)
-Received: from mva-rohm ([2a10:a5c0:800d:dd00:8fdf:935a:2c85:d703])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-58b0112462esm5893790e87.3.2025.10.07.01.35.20
+        d=1e100.net; s=20230601; t=1759830200; x=1760435000;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hSmNQbC023YaXpseHaoEKu4/PJTwQxs0VDin5nInWZ8=;
+        b=uD8r3Zl9Y0VyBR/j5lPB/hx4kDaOlhxboylo9VCrJDp/zqE/PGXbWJLhsNNeDykMPA
+         Cv/hWjMb9U5yIhNBMxtL/W5Ftub+alxycDXQgm3gTocWb3EjrpbfLYDUQYdi7yjuAetl
+         N71ZLNuirBxKUNB7PoEihudneT95CQRpizWKz6f+pPuVN/2nH9xFTIPNIroEG8kZcyyj
+         1O7Q/LKyv2o38oS3oT32HZxn/7ibgAhXKEG0E21JKZGVl4DMYybp2nYMDSzk5V11o/iG
+         g2OSQUIcMUa/wX2/arYiARNAoB0fGdtr0avPRJBHU3y1Afel7wY0JvjxOgY33ASNiwwf
+         mVNw==
+X-Forwarded-Encrypted: i=1; AJvYcCUvcCveaR5VBCa0B54/Qx8ZZtXmUbMmNsKNf9j8rXGfy1HXw2I70Oqm3fZSRZyw+0H/lBiJVVs8dQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw42OHSj6Pjous70CxSOlpw2Ex4FBov2hZhjvxE8lYVjeBPxbYN
+	C1IBlQJlt9hEq1mAmMlS/PSAxyiszJkpPA18XZ5SWOHJHNw5B4TtI+ijdPWw12poZ6k=
+X-Gm-Gg: ASbGncu+9uYCMJFcM6fybYT0kKxb7+vQlie2p/W8OWRXSyzdgbIcQgeb7IjPUec8NnF
+	KkPuVkUHjNX41/nIgOrBucgaGdAUeRdXvyI5oht38YecdIedn3Vmh3BUj1tez7l2oCrH4foJcva
+	OKooJRjTbVCakBmaircWsjhSHa+Vb23Y3rPDzk4LR0xVtM+th/LDmBzk7jPlJkyqyFxTlLGCxXg
+	cxzoD7SDNBlzQfyHg1P0PXeQDeYxLclHIX8iMwpDrn9r5T+4NfgPtmQ3Hxmlt3QoerCue01+jbt
+	QnVp94F26anRT3poVK96QwvjDPxvhR2KtemkL7VIHWyIJslhXV7N40+ecQxRUXETXLkSyzXAv/2
+	Wl28t/6aH+YT56mwxSVGijg03++oPeY3pOwzPEcbSVcYiuX9ZNWHmTIeMJyVwH3evVaxopGA8Wz
+	BLX9F2HI6u59/qwX3C9NV8GBi8
+X-Google-Smtp-Source: AGHT+IHun025wmd/VNOXL9AvwM+T6Skk1T6ZSwLUE4guDBJ/m66mfRMTd3uDpjq7T4WB14NukVXiGg==
+X-Received: by 2002:a05:651c:2222:b0:36d:3113:63ac with SMTP id 38308e7fff4ca-374c36c4a1emr49732751fa.7.1759830200228;
+        Tue, 07 Oct 2025 02:43:20 -0700 (PDT)
+Received: from uffe-tuxpro14.. (h-178-174-189-39.A498.priv.bahnhof.se. [178.174.189.39])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-58b0112438fsm5940932e87.14.2025.10.07.02.43.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Oct 2025 01:35:20 -0700 (PDT)
-Date: Tue, 7 Oct 2025 11:35:17 +0300
-From: Matti Vaittinen <mazziesaccount@gmail.com>
-To: Matti Vaittinen <mazziesaccount@gmail.com>,
-	Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc: Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Sebastian Reichel <sre@kernel.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Matti Vaittinen <mazziesaccount@gmail.com>,
-	Andreas Kemnade <andreas@kemnade.info>, linux-leds@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-gpio@vger.kernel.org
-Subject: [RFC PATCH 13/13] MAINTAINERS: Add ROHM BD72720 PMIC
-Message-ID: <e413de5850eba28be024f642a4a7ec26c197662e.1759824376.git.mazziesaccount@gmail.com>
-References: <cover.1759824376.git.mazziesaccount@gmail.com>
+        Tue, 07 Oct 2025 02:43:19 -0700 (PDT)
+From: Ulf Hansson <ulf.hansson@linaro.org>
+To: Saravana Kannan <saravanak@google.com>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-pm@vger.kernel.org
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>,
+	Nicolas Frattaroli <nicolas.frattaroli@collabora.com>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Sebastian Reichel <sebastian.reichel@collabora.com>,
+	Sebin Francis <sebin.francis@ti.com>,
+	Diederik de Haas <didi.debian@cknow.org>,
+	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+	Jon Hunter <jonathanh@nvidia.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2] driver core: fw_devlink: Don't warn about sync_state() pending
+Date: Tue,  7 Oct 2025 11:43:12 +0200
+Message-ID: <20251007094312.590819-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="SlztX/me0LjlXKoG"
-Content-Disposition: inline
-In-Reply-To: <cover.1759824376.git.mazziesaccount@gmail.com>
+Content-Transfer-Encoding: 8bit
 
+Due to the wider deployment of the ->sync_state() support, for PM domains
+for example, we are receiving reports about the sync_state() pending
+message that is being logged in fw_devlink_dev_sync_state(). In particular
+as it's printed at the warning level, which is questionable.
 
---SlztX/me0LjlXKoG
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Even if it certainly is useful to know that the ->sync_state() condition
+could not be met, there may be nothing wrong with it. For example, a driver
+may be built as module and are still waiting to be initialized/probed. For
+this reason let's move to the info level for now.
 
-Add the ROHM BD72720 PMIC driver files to be maintained by undersigned.
-
-Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Reported-by: Sebin Francis <sebin.francis@ti.com>
+Reported-by: Diederik de Haas <didi.debian@cknow.org>
+Reported-by: Jon Hunter <jonathanh@nvidia.com>
+Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 ---
- MAINTAINERS | 2 ++
- 1 file changed, 2 insertions(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 21ec42d93ee4..3afd9cb978cf 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -21940,6 +21940,7 @@ S:	Supported
- F:	drivers/clk/clk-bd718x7.c
- F:	drivers/gpio/gpio-bd71815.c
- F:	drivers/gpio/gpio-bd71828.c
-+F:	drivers/gpio/gpio-bd72720.c
- F:	drivers/mfd/rohm-bd71828.c
- F:	drivers/mfd/rohm-bd718x7.c
- F:	drivers/mfd/rohm-bd9576.c
-@@ -21956,6 +21957,7 @@ F:	drivers/watchdog/bd96801_wdt.c
- F:	include/linux/mfd/rohm-bd71815.h
- F:	include/linux/mfd/rohm-bd71828.h
- F:	include/linux/mfd/rohm-bd718x7.h
-+F:	include/linux/mfd/rohm-bd72720.h
- F:	include/linux/mfd/rohm-bd957x.h
- F:	include/linux/mfd/rohm-bd96801.h
- F:	include/linux/mfd/rohm-bd96802.h
---=20
-2.51.0
+Changes in v2:
+	- Due to discussions on v1 and because the default Kconfig is to use the
+	FW_DEVLINK_SYNC_STATE_STRICT, I suggest that for now it may be best to
+	keep the warning level for the "Timed out.." print and only change the
+	"sync_state pending..." message.
 
+---
+ drivers/base/core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---SlztX/me0LjlXKoG
-Content-Type: application/pgp-signature; name=signature.asc
+diff --git a/drivers/base/core.c b/drivers/base/core.c
+index d22d6b23e758..c62e428b95b0 100644
+--- a/drivers/base/core.c
++++ b/drivers/base/core.c
+@@ -1784,7 +1784,7 @@ static int fw_devlink_dev_sync_state(struct device *dev, void *data)
+ 		return 0;
+ 
+ 	if (fw_devlink_sync_state == FW_DEVLINK_SYNC_STATE_STRICT) {
+-		dev_warn(sup, "sync_state() pending due to %s\n",
++		dev_info(sup, "sync_state() pending due to %s\n",
+ 			 dev_name(link->consumer));
+ 		return 0;
+ 	}
+-- 
+2.43.0
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCgAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmjk0MUACgkQeFA3/03a
-ocURTAgAu6dnmWP/JjZcJMWGUn+hYLg15qVmjQNYJoLBcZtaNezTwNj9uXTJeGp4
-aF3xpHcZtryUyaerjRHwCYmHkyab19+2EgxtORp2dmdqVhsb/bvOcyuNLz2sFfOS
-eDFFRQadRdLwYbi0wx2lhHqfh9/HXUqYQjBwWSaIidlhU5sjVXlsOQYFlkOv/aZe
-E3h6QunJQxBavA27oVpucRouBOxpGzFLt80PyB3LwH1j2+PRN2ugZiW90TDmFZNl
-e8/nPHDTqoF5T3VyxAXleGRLyrfnF8d+VsTF3R6rj7aQCv2jOw2aHoI96AJAjZgO
-DUZUp9dgZicc5YzSzYQmOfchxX1dJg==
-=phW3
------END PGP SIGNATURE-----
-
---SlztX/me0LjlXKoG--
 
