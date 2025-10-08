@@ -1,116 +1,100 @@
-Return-Path: <linux-pm+bounces-35803-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35804-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5592BBC489C
-	for <lists+linux-pm@lfdr.de>; Wed, 08 Oct 2025 13:23:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CE1F4BC4A4D
+	for <lists+linux-pm@lfdr.de>; Wed, 08 Oct 2025 13:56:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E66154E5710
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Oct 2025 11:23:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 54D8D3B130A
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Oct 2025 11:56:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AD042F6191;
-	Wed,  8 Oct 2025 11:23:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5D8E2F744C;
+	Wed,  8 Oct 2025 11:56:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NX4a40xh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="euxddDZa"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 369D72F6180
-	for <linux-pm@vger.kernel.org>; Wed,  8 Oct 2025 11:23:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5B1D1DE3C7;
+	Wed,  8 Oct 2025 11:56:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759922627; cv=none; b=k6gXnob5SYtuCaCQzrfXXjwyqo0LHmsL9jheA/TzG8bMpf332o5KoNq6/rn2CvlsUGc0V0jo5u95lBNYZO2VW9foVIBgDihQCx/WNmO51jViW8jVQu8W9iJmknMSTAmSDiH3GiGoY95yfK4H6b5euPtbyUzjohFED+sMIA6iZlI=
+	t=1759924570; cv=none; b=M9H5B66gs6IpJMrv3v3jSE2DirrWcCaZFMkC3xO7R0Z2VTFmWbMlZBDHYKTS49m7Gi9Mqi9w18Ge2FDpPzILSXC6dgn3gImHJ8Wkait67OTs7q0n9r5bfr1vtkoxf9DjmXnpkFriJm5nV4wpctAiVBi0cY/hbnE16R0vPjE/Qys=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759922627; c=relaxed/simple;
-	bh=KEhEuKwCPJ3dLWcFCbexBiSGqiFxn45TrcIsnxqvYiw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JlqfofhQnOY9s8SJRi3el6A7VTVNc/jKLDtpMNvAy6WjyIYAySyKfZIEjTZ1nsDmAGPbAo4Aj8MhyHZ7L5KU1SPq9+54WLudeOyMUJYoVTg6ew8I5wwmC/VU6a4R/2BRU6TRDMznySMaPGU1JhxI1+Oh2Ai7AVXiKbCqx4oDZbc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NX4a40xh; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC156C116B1
-	for <linux-pm@vger.kernel.org>; Wed,  8 Oct 2025 11:23:46 +0000 (UTC)
+	s=arc-20240116; t=1759924570; c=relaxed/simple;
+	bh=fPe4aF41+U4Pnlt9KF5p+zAC4JgghKrMehUrSb2m82s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Na/LTnPJePgtFLpFYVLafMyOT5cMqAycq6xpUIZDDmckOQSMV2JX43umjsi1igPPw1Gx2xkqYRZ12ClGV7P+7aSJqNo+3sXDNU8fmAcZq1XpWtN2LlGfrwM6CepjYmaS2PvNrLll1KBgMnvBLLz0LZa1qwO84mU3q461A1LMe7E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=euxddDZa; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BD65C4CEF4;
+	Wed,  8 Oct 2025 11:56:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759922626;
-	bh=KEhEuKwCPJ3dLWcFCbexBiSGqiFxn45TrcIsnxqvYiw=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=NX4a40xhNABgkz8Z6R4NxHZTvgo+0Pl0SBI1/3/MBCIgLwjbC3DX22waCZbvr+zoc
-	 MKOuZHZ7vuBgQnXYr0pacrBsO1k4QySTbJXUsr429nqF+LX511+AaEi4vkWrQtihLH
-	 XNWzvGZZ5o/M1npyU9eOHq3mNw2YD5Pq6m/XEVOD1lpnBMOS6HoIvaxpBI3X7bx5n+
-	 0B5M5GZ1x3f/MjP2m1zbFiU5HNLSQZOvOIDtlebMtMjuw7FML6RK1WoeErIGEPBv8D
-	 WLbmp3rMqDWaI3wmnhynko12/BTqMSyTbAnGtFmzG1WXWXn3Y2O/7rMb3aOIMx7K97
-	 Z25KQjg+6DtmQ==
-Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-7a7c1ecd433so3985192a34.3
-        for <linux-pm@vger.kernel.org>; Wed, 08 Oct 2025 04:23:46 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVP0I98EJpTF5v5a++926wClivC1m3PIQUokPSsRzlFewHh2rxMA4L9sgtOlChjup0CQJkipOh8Kg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzYpzAMnBOqKnrYX/JVHhsH+RCfhmBCRZD+JYJtzI+ZepWAfxWO
-	IaFDpFPR49ctbozMgEKRfwEs+gk+61JHIGzBSmshP9SI0CGEEEXihD/MDSF3XxdiPPNO/8osUt6
-	ldzA9LTfa5cLIB5vXA40ZsM98/7MndhA=
-X-Google-Smtp-Source: AGHT+IFfHZ8HGqxj7f466AKKrLHNXLEqnoShIi3UA9a8omxTcg0b+75+V45dqCAudPzoBHdRpOZxL0eWLd6272/GIuA=
-X-Received: by 2002:a05:6808:2201:b0:43f:ac2d:dd3a with SMTP id
- 5614622812f47-4417b38ffd3mr1450551b6e.26.1759922626108; Wed, 08 Oct 2025
- 04:23:46 -0700 (PDT)
+	s=k20201202; t=1759924570;
+	bh=fPe4aF41+U4Pnlt9KF5p+zAC4JgghKrMehUrSb2m82s=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=euxddDZaw0+qUdIKNXxMy/0gEXEJBYYP5D+6qHXUyHhEnPaRTykxvcN3eo18vrO+L
+	 ihipNS4XAJ1f5d7kyEqSDSOKu0ZvVUPlf6mtSghUoJQKG42b1Zr2OsnDRWAIMcIF0S
+	 maIUfeMnUpyHf7hYQUFvKVkaF05PbwPDt2WyGVwemVAIvzbXA+Rn5+RYAPEOwXzIVh
+	 /QiCjh+xR5a5556176npyW4Xgw133KyeksvKp96ZB5yU63P666hQL8Wm0T4bxoCEwr
+	 uk2g+SOYc1m3C3rwPlIOcuNa/Zl41hfGZG1ELJcF74gN1GERoaJAWPueug+cKowAtq
+	 /1xaPlu55PHvA==
+Date: Wed, 8 Oct 2025 12:56:05 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Otto =?iso-8859-1?Q?Pfl=FCger?= <otto.pflueger@abscue.de>
+Cc: Lee Jones <lee@kernel.org>, Orson Zhai <orsonzhai@gmail.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Chunyan Zhang <zhang.lyra@gmail.com>,
+	Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
+	linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Subject: Re: [PATCH 2/3] spi: sprd-adi: Remove code for storing the reboot
+ mode
+Message-ID: <e66bcca7-8bd5-434e-b804-72c8025e2361@sirena.org.uk>
+References: <20251007-sc27xx-mfd-poweroff-v1-0-89a2f919b731@abscue.de>
+ <20251007-sc27xx-mfd-poweroff-v1-2-89a2f919b731@abscue.de>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251007063551.3147937-1-senozhatsky@chromium.org> <20251008101408.dj46r66gcfo26sgl@lcpd911>
-In-Reply-To: <20251008101408.dj46r66gcfo26sgl@lcpd911>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 8 Oct 2025 13:23:33 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0hBzgJP2L0yg4JtP2c=NxA=MqAY_m+9GJ9P8kszb1hWvw@mail.gmail.com>
-X-Gm-Features: AS18NWDaaxCc6gY2WMGLj5YvkDBRtJ44YZ9x_aKJx5HSqrLThkqUCL3iGoGDloo
-Message-ID: <CAJZ5v0hBzgJP2L0yg4JtP2c=NxA=MqAY_m+9GJ9P8kszb1hWvw@mail.gmail.com>
-Subject: Re: [PATCHv2] PM: dpm: add module param to backtrace all CPUs
-To: Dhruva Gole <d-gole@ti.com>
-Cc: Sergey Senozhatsky <senozhatsky@chromium.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Pavel Machek <pavel@kernel.org>, Tomasz Figa <tfiga@chromium.org>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="XkSPenbP86HLZaQl"
+Content-Disposition: inline
+In-Reply-To: <20251007-sc27xx-mfd-poweroff-v1-2-89a2f919b731@abscue.de>
+X-Cookie: 10.0 times 0.1 is hardly ever 1.0.
+
+
+--XkSPenbP86HLZaQl
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Oct 8, 2025 at 12:14=E2=80=AFPM Dhruva Gole <d-gole@ti.com> wrote:
->
-> On Oct 07, 2025 at 15:35:40 +0900, Sergey Senozhatsky wrote:
-> > Add dpm_watchdog_all_cpu_backtrace module parameter which
-> > controls all CPU backtrace dump before DPM panics the system.
-> > This is expected to help understanding what might have caused
-> > device timeout.
->
-> This will indeed be really helpful for debugging some nasty bugs!
->
-> >
-> > Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
-> > ---
-> >  drivers/base/power/main.c | 10 ++++++++++
-> >  1 file changed, 10 insertions(+)
-> >
-> > diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
-> > index e83503bdc1fd..7a8807ec9a5d 100644
-> > --- a/drivers/base/power/main.c
-> > +++ b/drivers/base/power/main.c
-> > @@ -34,6 +34,7 @@
-> >  #include <linux/cpufreq.h>
-> >  #include <linux/devfreq.h>
-> >  #include <linux/timer.h>
-> > +#include <linux/nmi.h>
-> >
-> >  #include "../base.h"
-> >  #include "power.h"
-> > @@ -515,6 +516,11 @@ struct dpm_watchdog {
-> >  #define DECLARE_DPM_WATCHDOG_ON_STACK(wd) \
-> >       struct dpm_watchdog wd
-> >
-> > +static bool __read_mostly dpm_watchdog_all_cpu_backtrace;
-> > +module_param(dpm_watchdog_all_cpu_backtrace, bool, 0644);
-> > +MODULE_PARM_DESC(dpm_watchdog_all_cpu_backtrace,
-> > +              "Backtrace all CPUs on DPM watchdog timeout");
-> > +
->
-> Have you considered runtime configurability instead of a module param?
+On Tue, Oct 07, 2025 at 08:14:20PM +0200, Otto Pfl=FCger wrote:
+> This functionality is now provided by the PMIC driver. Ideally, the
+> entire reboot code should be removed since it does not belong in the bus
+> driver, but it is kept for now since there is no driver for the PMIC
+> watchdog on SC2731 yet.
 
-This one can be updated at run time AFAICS.
+Acked-by: Mark Brown <broonie@kernel.org>
+
+--XkSPenbP86HLZaQl
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmjmUVQACgkQJNaLcl1U
+h9DYJQf9HvcgJljnfdoA9UaCvc0EDuuQwWvPHYHMCvdmVa0hHlQA90jIDpqwcdDA
+3DJHG//dT8dvForOU2SuhNW4GhTJApFP/XVlaB+Llhc8cBUQH9w4hFTVMNfRoYPR
+bgxSFzlVeJgLcA2qPPyLZwKuyZCuMYkdPvvUHhyEuHcB31UOw4Ob7MbiZlcwRZqE
+X2FYzmv14PEl68a1xbrZ1ug3ibT1MQldtMkb+TZE8/C7D9VHC6Q/VM13NCz5dB/f
+SxBB+dFGwWEDWhKSXcnaZ+kLuG5NI7c7o68PHDcQ0X3PhNzWzyCjLO8ZPZrv/8hM
+Nrxu8Fyg8PO4HaLjlLr+S/AJ5woNfw==
+=w96P
+-----END PGP SIGNATURE-----
+
+--XkSPenbP86HLZaQl--
 
