@@ -1,85 +1,65 @@
-Return-Path: <linux-pm+bounces-35814-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35815-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E6D0BC5262
-	for <lists+linux-pm@lfdr.de>; Wed, 08 Oct 2025 15:13:39 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 63D76BC52E9
+	for <lists+linux-pm@lfdr.de>; Wed, 08 Oct 2025 15:24:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 8B72D4F6714
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Oct 2025 13:13:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 290CC19E198D
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Oct 2025 13:25:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37B7E27B345;
-	Wed,  8 Oct 2025 13:13:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4527284B2F;
+	Wed,  8 Oct 2025 13:24:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="NWBqOXDz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nha433Rr"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0A162777E1
-	for <linux-pm@vger.kernel.org>; Wed,  8 Oct 2025 13:13:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3B92284687;
+	Wed,  8 Oct 2025 13:24:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759929202; cv=none; b=alxQ5Y0Bcx0dAtvc76ArUrXsv+bbHsPQs/KdaVA5e7RxAGRFrriXbuBNEjIqii0jZKrXmb6j+tA1jkW4HRKB3EBzqoZ98NZYtpymDarH2Z388kZvpLHguzKn7jqnOWnPaExlPTdU6UTy967hTCNeu9ykgUUqtrtgL0RQwfAnG/Q=
+	t=1759929882; cv=none; b=mDdGdctvU2E/p57jeKUET9ng7HEtFK+8EHaa4M+a0GcgsnTPk07JkPaWIZgNMA7eZqMdC1qnNAIDMFxj8JoBhEDiYVScVgfSrebu0p9kS3fw0o4UDPzQpFVi3fQdsJBfYtmigZkyQGD5x5YcqfCFGepbZbQz4nRRBM0MO12KbMc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759929202; c=relaxed/simple;
-	bh=qdqX9jLMYGejaeiyk6FmUcIC5rmoUQxx8dbODQQWUc4=;
+	s=arc-20240116; t=1759929882; c=relaxed/simple;
+	bh=OEKwf/lJbfWfeTbtO3uye9fKkC4WSWmsENdmeL4Y6Jo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=btL5dtMMdIRJ88Y1CwI3+SnCGZvtNifwuOYERerjuyMHdk1Ke5tmeuE+1etX5x4uTxUPZJltfke2TxWbtQC/uEdc+fwDwVlHL1y3G8g2MdiGU/M380Kor1zs75Ot4UaTxnNlkkAyVdP0b1mzfK/+uKyRz93wcyKrIZeomz0jryQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=NWBqOXDz; arc=none smtp.client-ip=209.85.210.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-77f68fae1a8so9497708b3a.1
-        for <linux-pm@vger.kernel.org>; Wed, 08 Oct 2025 06:13:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1759929200; x=1760534000; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=qhirsJUANkMy26KcoRueNjsC5oBNI6RBwD+2LVkuC8E=;
-        b=NWBqOXDzfumhglTVy2WJadtXAz0e/wAq+c66jaQcjSBqV4knmVJRF9q83AVAHT1xtv
-         B8S4T+35jcQfuGRnd/9Fb8pTNDtkdtezwn2RXZXUQ9izPjZorLp1MXDHLIMW4/tjIm4m
-         vPejQ6VmfNYcVazbYtcpfqL+Q237V3vxfJw1o=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759929200; x=1760534000;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qhirsJUANkMy26KcoRueNjsC5oBNI6RBwD+2LVkuC8E=;
-        b=G34WugukUfmLqvOCPhFVGLJKQf1h/TT5eJ4wzCt4omxqB1EEj9IAu5UuP/k2Nqe6NW
-         Wrc3X9Ea8jJHy63KeL1VFJOXcok4tgh/zKsTjt5aPNdduIVYeytlsu/N5iqqxIqTx+UY
-         TKyiN2N6Oso+a320CQUbwYuVxWazeieGKr6VjCcOBvN21piWjpJv4Ldlt1lNTT0lCfik
-         7+Dwv+geChB3Vje+jFqzIwSYPK+NACGMsYA8/S4ZjJLnncCJspIjVpk4Pxk1ktY25Owt
-         MAlUDSw7/4gIVJcByl703yAiGj9OtnRbhjUX2e8mauwCQwkBdv1HCWjxT0SzhTBxYdvb
-         zZmA==
-X-Forwarded-Encrypted: i=1; AJvYcCWEr+rdmN0WrYb1DuuFB4xrhfoKzYXIqZGAwsjX0IgNcgpwU76KykKkaoLt0rqkmuTbDhcSEV+9Nw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxWczz4wCzS5eidWOwDBcrbhOlxCwuyWA8rbzPfwBVE3UN8DJcm
-	TqhqsfyIJ5rDy9x5mRocmyVNWxQLd+FQrejd6TwKOa9qgxqCBdBv4yDPv5iEtLd0T6QjS2V9jLu
-	ofLM=
-X-Gm-Gg: ASbGnctwFEm3z6uYbAFUK2setcwPIpkb40LR6rA2FYDcp7qFhAznk5sM49chm2g8ivY
-	9RTbU+iaHycbcrJCen1TAxj8ko6CL4ZVJTM1b9xv+RjUDHdxWI4uTdo9eKWVvs4Cnk2CO/nG9qN
-	Y+1p9Jo6hJWLCEhMvY45YvtrEkH72uYqaMY2V3ylW/Qob7VS+YqNZLSbt0j0oeIREy1guMyXUZX
-	674gBmFWGuTFHVMPY63HewjtJu+us8aFvD+dfaZpT3EMv5d1I1NxKSi1D0PQXj+s3v42++Z/l52
-	3NxBdt6Hz93GLyDRSWYLXYyddNA2rqgQ8/Ex4ZT5aPG86fY9S2KMU4Ti+4l8LsAThaRsOjXgPju
-	kwC01DUw8kc527vLtTMdUInAAm+g+kQ8r7vladr3GSlOMXCu98g==
-X-Google-Smtp-Source: AGHT+IEjV9K7Hiy+RpgvzEdGQO4CYiP7IP82yjQEQSkRFO4uHcWCY9san8fxpr1MwP0RF/E0cceMIg==
-X-Received: by 2002:a05:6a20:7353:b0:2e2:9575:3a32 with SMTP id adf61e73a8af0-32da80db40fmr4538147637.7.1759929199831;
-        Wed, 08 Oct 2025 06:13:19 -0700 (PDT)
-Received: from google.com ([2401:fa00:8f:203:465a:c20b:6935:23d8])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b62ea0758b5sm12777442a12.20.2025.10.08.06.13.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Oct 2025 06:13:19 -0700 (PDT)
-Date: Wed, 8 Oct 2025 22:13:14 +0900
-From: Sergey Senozhatsky <senozhatsky@chromium.org>
-To: Dhruva Gole <d-gole@ti.com>
-Cc: Sergey Senozhatsky <senozhatsky@chromium.org>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>, 
-	Tomasz Figa <tfiga@chromium.org>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv2] PM: dpm: add module param to backtrace all CPUs
-Message-ID: <4dsz6s3zfwvfz5iv2labiycqeuu6klry2af4sgzuykpxbzwopg@lulgn7ubg2vu>
-References: <20251007063551.3147937-1-senozhatsky@chromium.org>
- <20251008101408.dj46r66gcfo26sgl@lcpd911>
+	 Content-Type:Content-Disposition:In-Reply-To; b=lRYFC41TUPCj5MoqncoUJm4tinbRmzhRgJCjVRkUe8GfM3kSzh3wNl6IxHAIs91JufOxPDsFAgXFz3ISHfXL39s3UiAgllQAsNvTQ7ldliisWS77eqv0bNE0mJSvWNiSSzSwYrhufNjblYY7y447UCpmK00c83/6w5Sbs83Hhlk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nha433Rr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF175C4CEF4;
+	Wed,  8 Oct 2025 13:24:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1759929882;
+	bh=OEKwf/lJbfWfeTbtO3uye9fKkC4WSWmsENdmeL4Y6Jo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=nha433Rrur5rkFpNoJDDGt3hljCGxefWJjlQ59/V7PVnknhbCUIekG16k2ME9sX2R
+	 ETQ8dgqFgiB3ij8VO16cK0P503S6iYx/myJZvJBvrkzqWXyYX7wMUvv7iwknyyjjTv
+	 4gYIZSll3jQdwQmbybSRY0wq8kpYJmzf6kLfoBU2w5qFyuTaoiaxLzTtSR0hKducOq
+	 02jnsRN8ESTLGYk6D0pTss2I5qy2WcHppaLREmuDM+mSkSEY0i1iXNIi7AprcrETQO
+	 cjHL5+isxIA2Vwf5Bho3h2eXfeLetaphlIzQoVnrrmfiKhjeT+GUM03eGIo9owraLQ
+	 XzkcULFqXCojA==
+Date: Wed, 8 Oct 2025 08:24:40 -0500
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Odelu Kukatla <odelu.kukatla@oss.qualcomm.com>
+Cc: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+	linux-kernel@vger.kernel.org,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Georgi Djakov <djakov@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+	devicetree@vger.kernel.org, Bjorn Andersson <andersson@kernel.org>,
+	linux-arm-msm@vger.kernel.org,
+	Mike Tipton <mike.tipton@oss.qualcomm.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Raviteja Laggyshetty <raviteja.laggyshetty@oss.qualcomm.com>
+Subject: Re: [PATCH v2 1/3] dt-bindings: interconnect: add reg and clocks
+ properties to enable QoS on sa8775p
+Message-ID: <175992988039.3401317.7332721222365860442.robh@kernel.org>
+References: <20251001073344.6599-1-odelu.kukatla@oss.qualcomm.com>
+ <20251001073344.6599-2-odelu.kukatla@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -88,21 +68,31 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251008101408.dj46r66gcfo26sgl@lcpd911>
+In-Reply-To: <20251001073344.6599-2-odelu.kukatla@oss.qualcomm.com>
 
-On (25/10/08 15:44), Dhruva Gole wrote:
-[..]
-> >  		dev_emerg(wd->dev, "**** DPM device timeout ****\n");
-> >  		show_stack(wd->tsk, NULL, KERN_EMERG);
-> > +		if (dpm_watchdog_all_cpu_backtrace)
-> > +			trigger_allbutcpu_cpu_backtrace(this_cpu);
+
+On Wed, 01 Oct 2025 13:03:42 +0530, Odelu Kukatla wrote:
+> Add 'reg' and 'clocks' properties to enable QoS configuration. These
+> properties enable access to QoS registers and necessary clocks for
+> configuration.
 > 
-> IMO it would be useful to check the ret val of this as well, I mean just
-> incase this silently returns false it maybe confusing to figure out what
-> hapenned in the system inspite of setting the mod param.
+> QoS configuration is essential for ensuring that latency sensitive
+> components such as CPUs and multimedia engines receive prioritized
+> access to memory and interconnect resources. This helps to manage
+> bandwidth and latency across subsystems, improving system responsiveness
+> and performance in concurrent workloads.
+> 
+> Both 'reg' and 'clocks' properties are optional. If either is missing,
+> QoS configuration will be skipped. This behavior is controlled by the
+> 'qos_requires_clocks' flag in the driver, which ensures that QoS
+> configuration is bypassed when required clocks are not defined.
+> 
+> Signed-off-by: Odelu Kukatla <odelu.kukatla@oss.qualcomm.com>
+> ---
+>  .../interconnect/qcom,sa8775p-rpmh.yaml       | 50 ++++++++++++++++++-
+>  1 file changed, 49 insertions(+), 1 deletion(-)
+> 
 
-Honestly, I haven't seen a system that constantly modifies
-its modules' params at runtime.  It's usually a pretty static
-configuration, so I'm not sure if this will address any real
-world problem.
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+
 
