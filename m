@@ -1,129 +1,87 @@
-Return-Path: <linux-pm+bounces-35816-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35817-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C2B6BC53CF
-	for <lists+linux-pm@lfdr.de>; Wed, 08 Oct 2025 15:37:30 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CEFA5BC541F
+	for <lists+linux-pm@lfdr.de>; Wed, 08 Oct 2025 15:48:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id F0B694F86DA
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Oct 2025 13:37:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8F8693A8F23
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Oct 2025 13:48:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 644B2285C83;
-	Wed,  8 Oct 2025 13:37:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DB43286408;
+	Wed,  8 Oct 2025 13:48:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mt-integration.ru header.i=@mt-integration.ru header.b="HeAdt0qC"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kKNGTE95"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from ksmg01.maxima.ru (ksmg01.maxima.ru [81.200.124.38])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBB2B285CAD;
-	Wed,  8 Oct 2025 13:37:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=81.200.124.38
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18D9D2586C5
+	for <linux-pm@vger.kernel.org>; Wed,  8 Oct 2025 13:48:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759930633; cv=none; b=fFOYZgiT1qP73o/D58k7m+K+DN+6By6BGTiKgCsmLFBdShpZvWTXffebKYp60xp1PQqaM8q3iwO8OZDV48AJIkHVaHgy2KtLPBYqR7gBRUC88n/Ogyvqd435LY7sqqkMmi3D6Ebny/fdUJdCUIkD0JnvwoKfopoK8AIoeCrFcRw=
+	t=1759931283; cv=none; b=tGDUjpi5UX5f0kzT4HZM8QElsCFdH2s/PjzFjEFFI5x2itgAMD9Dwc24gkRYvw3UHzfy4U02Vz1bMZ1/VOpU8FUGpd/wqOPLc15U32XG178SVyB4SNAzFicnzi2yWc8SZqZdTMhByvz5ctwWjwuD2/VwgIsh6Un/gXAEePOyddY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759930633; c=relaxed/simple;
-	bh=hlVYUy3P6BSlf4FEPSlIuLygUtVLUMPzXgCP+Lr8i4Y=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=MIAezdax5oCcROdFxnrUWgA8h+CFZvBJnpcCGVzkCNeebFSAwzI7Ze9BCMTJq9VgggxA0XVKfI2XEIo/asc+IagoP2Xb+rlIRuasGwHymNF8s4IHYlfHHxsS+CuJEFYtk5IuN3IJu/+ppgg1NxMlAEWYvOfegAI179sohObyoec=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mt-integration.ru; spf=pass smtp.mailfrom=mt-integration.ru; dkim=pass (2048-bit key) header.d=mt-integration.ru header.i=@mt-integration.ru header.b=HeAdt0qC; arc=none smtp.client-ip=81.200.124.38
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mt-integration.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mt-integration.ru
-Received: from ksmg01.maxima.ru (localhost [127.0.0.1])
-	by ksmg01.maxima.ru (Postfix) with ESMTP id B6FBDC0018;
-	Wed,  8 Oct 2025 16:37:06 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ksmg01.maxima.ru B6FBDC0018
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mt-integration.ru;
-	s=sl; t=1759930626; bh=8NrFbemJMQpyQnN2QJdvsYbMfmpY6k0fZOgMiygtL+g=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:From;
-	b=HeAdt0qCdRrPlAi9IouSBhAqNFVPUMWUo50o5RqbNoo7NRF4cGLIeBmXVeCbsFlpW
-	 yqbd8MMXIO+w70/Xt6bZWAEvYiDEjxo1qG4PS7LFKHBx6Mm8hpO4tZnnAzdqPesvuz
-	 SjEzRG6H5ctZNIkCvfuwWEM6cJAg8QuT7itiCcit1ZD+tegsfV2VOnfMq6NsALsIHM
-	 gEr2pHr5tM4h+8656ni4VXKal7sdS6/NNP717SKFp+dBII+0KJSFfdyAn6QKe/UVca
-	 pUTBVNSI5XmV8Y2rkJ0HY+3wgTF1Bz0MyNEJZHLF1D3sMHqtE1XjwOzACxX3/OcPhX
-	 se7thMgpC817Q==
-Received: from ksmg01.maxima.ru (mail.maxima.ru [81.200.124.61])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(Client did not present a certificate)
-	by ksmg01.maxima.ru (Postfix) with ESMTPS;
-	Wed,  8 Oct 2025 16:37:06 +0300 (MSK)
-Received: from db126-1-abramov-14-d-mosos.mti-lab.com (172.25.20.118) by
- mmail-p-exch01.mt.ru (81.200.124.61) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.25; Wed, 8 Oct 2025 16:37:05 +0300
-From: Ivan Abramov <i.abramov@mt-integration.ru>
-To: Iskren Chernev <me@iskren.info>
-CC: Ivan Abramov <i.abramov@mt-integration.ru>, Krzysztof Kozlowski
-	<krzk@kernel.org>, Marek Szyprowski <m.szyprowski@samsung.com>, Matheus
- Castello <matheus@castello.eng.br>, Sebastian Reichel <sre@kernel.org>,
-	Svyatoslav Ryhel <clamor95@gmail.com>, <linux-pm@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <lvc-project@linuxtesting.org>
-Subject: [PATCH 1/1] power: supply: max17040: Check iio_read_channel_processed() return code
-Date: Wed, 8 Oct 2025 16:36:47 +0300
-Message-ID: <20251008133648.559286-1-i.abramov@mt-integration.ru>
-X-Mailer: git-send-email 2.39.5
+	s=arc-20240116; t=1759931283; c=relaxed/simple;
+	bh=TArvezDZEQsjMhaHWIisKml+GzJyRldlLSrXhgHIPb8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PHi7OFViTaOTJVIZAGyQR2A8E7d31SHacxPxB5tEBPjdc7wwPlhFsxUYeAv0GR6oW8UPdEDlurMj3kot+uIArdXCutOGGLU0v+tobzN5jH08motLk6hWwXPOg5IbJbmYGxknZB3iZVgh4w4p+IdCaCFWzhWD5B5lUEw+ihAsz+Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kKNGTE95; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAB74C4CEFF
+	for <linux-pm@vger.kernel.org>; Wed,  8 Oct 2025 13:48:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1759931282;
+	bh=TArvezDZEQsjMhaHWIisKml+GzJyRldlLSrXhgHIPb8=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=kKNGTE95vAq1vaS/BL4oTKjY7jbEX3OEkX/j3GX6GyjVInt6acx2gObwo4cCcpnIF
+	 WolI4vA5wQz11Le2ZOOqMEK+hRz0YSoLv1MXmLB48is8C1NGDFqNBxZ5oyJsPR2o4u
+	 C0tMc8MMfXjVDaHJLzwf+xhJtTcwnJe8n8RYcsddZz4Six9cTwSb1s9GV+kbcyGyDC
+	 iEGQTBxm8YoVRSZoWad05bOEnpqGC1w3mq7yRqdmA9whATdICvCUdj5xDOn2zWbYjn
+	 ++CFPA3ur+y9eM8LOeBH2hE+XsoBZWqBbeP54dLveXIyzJwWxArRJLTI9TqJ5IJ+/H
+	 k5AoWzLznZ0Rw==
+Received: by mail-oi1-f170.google.com with SMTP id 5614622812f47-43f802f8515so3627985b6e.1
+        for <linux-pm@vger.kernel.org>; Wed, 08 Oct 2025 06:48:02 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXwPf7nLpTh+H9+WwWpmouu9m5AkZcBJdU26PuT2mftHLltzvGV04l8t5HYjzucB51w0kV1b0Jtug==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzNQHaMKil20Mlkr2aUBYa/kvJwjYRGcfGBEH3WKtAglHLDETDK
+	HmVSSips1Ficv+T0EARoAXrXOP74598OwIyve7GN672+2DIIOkZG/CmZhsp8Ivrk8mkL3vHScaw
+	B+dvZJddLUkSUuHOBlMjAznmnpA/WHLw=
+X-Google-Smtp-Source: AGHT+IFz5cBg4+T4rL9tuywKBs8c6cm4c/NRWXhnpM1O5tcd8mh0O2hidOMfjxbofOc9Tqa4RWlPyoGWgmjOias/7z0=
+X-Received: by 2002:a05:6808:188b:b0:43d:2197:c1e5 with SMTP id
+ 5614622812f47-4417b1ac054mr1841940b6e.0.1759931282013; Wed, 08 Oct 2025
+ 06:48:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: mmail-p-exch02.mt.ru (81.200.124.62) To
- mmail-p-exch01.mt.ru (81.200.124.61)
-X-KSMG-AntiPhishing: NotDetected
-X-KSMG-AntiSpam-Auth: dmarc=none header.from=mt-integration.ru;spf=none smtp.mailfrom=mt-integration.ru;dkim=none
-X-KSMG-AntiSpam-Envelope-From: i.abramov@mt-integration.ru
-X-KSMG-AntiSpam-Info: LuaCore: 69 0.3.69 3c9ee7b2dda8a12f0d3dc9d3a59fa717913bd018, {rep_avail}, {Tracking_uf_ne_domains}, {Tracking_from_domain_doesnt_match_to}, mt-integration.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;81.200.124.61:7.1.2;127.0.0.199:7.1.2;ksmg01.maxima.ru:7.1.1, {Macro_SMTPFROM_NOT_MATCHES_SMTP}, FromAlignment: s, ApMailHostAddress: 81.200.124.61
-X-KSMG-AntiSpam-Interceptor-Info: scan successful
-X-KSMG-AntiSpam-Lua-Profiles: 196902 [Oct 08 2025]
-X-KSMG-AntiSpam-Method: none
-X-KSMG-AntiSpam-Rate: 0
-X-KSMG-AntiSpam-Status: not_detected
-X-KSMG-AntiSpam-Version: 6.1.1.11
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.1.1.8310, bases: 2025/10/08 08:37:00 #27892411
-X-KSMG-AntiVirus-Status: NotDetected, skipped
-X-KSMG-LinksScanning: NotDetected
-X-KSMG-Message-Action: skipped
-X-KSMG-Rule-ID: 7
+References: <20251007063551.3147937-1-senozhatsky@chromium.org>
+ <20251008101408.dj46r66gcfo26sgl@lcpd911> <CAJZ5v0hBzgJP2L0yg4JtP2c=NxA=MqAY_m+9GJ9P8kszb1hWvw@mail.gmail.com>
+ <20251008130234.mw6k4k7fupxma2t5@lcpd911> <rbap3e2chlgx7zn2uw5fntjfjoqlfdebsautmiaq4oz7y2ecnx@ejmbrvrtbpju>
+In-Reply-To: <rbap3e2chlgx7zn2uw5fntjfjoqlfdebsautmiaq4oz7y2ecnx@ejmbrvrtbpju>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 8 Oct 2025 15:47:50 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0g-f2dzKJZDZ_fxrDL+JYcF3JxjargBVT3RVcXhVVywjw@mail.gmail.com>
+X-Gm-Features: AS18NWDzg6y_ln0VOA3LER6CVKTWcaEQ6TVX12yT9jm_4CrN9aS2IFrcY9Saj2Q
+Message-ID: <CAJZ5v0g-f2dzKJZDZ_fxrDL+JYcF3JxjargBVT3RVcXhVVywjw@mail.gmail.com>
+Subject: Re: [PATCHv2] PM: dpm: add module param to backtrace all CPUs
+To: Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc: Dhruva Gole <d-gole@ti.com>, "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>, 
+	Tomasz Figa <tfiga@chromium.org>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Since iio_read_channel_processed() may fail, return its exit code on error.
+On Wed, Oct 8, 2025 at 3:10=E2=80=AFPM Sergey Senozhatsky
+<senozhatsky@chromium.org> wrote:
+>
+> On (25/10/08 18:32), Dhruva Gole wrote:
+> > What I meant really was to consider another path instead of a mod param=
+,
+> > something like a /sys/kernel/
+>
+> Modules' params are exposed to sysfs and are writeable.
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
-
-Fixes: 814755c48f8b ("power: max17040: get thermal data from adc if available")
-Signed-off-by: Ivan Abramov <i.abramov@mt-integration.ru>
----
- drivers/power/supply/max17040_battery.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/power/supply/max17040_battery.c b/drivers/power/supply/max17040_battery.c
-index c1640bc6accd..48453508688a 100644
---- a/drivers/power/supply/max17040_battery.c
-+++ b/drivers/power/supply/max17040_battery.c
-@@ -388,6 +388,7 @@ static int max17040_get_property(struct power_supply *psy,
- 			    union power_supply_propval *val)
- {
- 	struct max17040_chip *chip = power_supply_get_drvdata(psy);
-+	int ret;
- 
- 	switch (psp) {
- 	case POWER_SUPPLY_PROP_ONLINE:
-@@ -410,7 +411,10 @@ static int max17040_get_property(struct power_supply *psy,
- 		if (!chip->channel_temp)
- 			return -ENODATA;
- 
--		iio_read_channel_processed(chip->channel_temp, &val->intval);
-+		ret = iio_read_channel_processed(chip->channel_temp, &val->intval);
-+		if (ret)
-+			return ret;
-+
- 		val->intval /= 100; /* Convert from milli- to deci-degree */
- 
- 		break;
--- 
-2.39.5
-
+Some of them aren't writable, but this particular one is.
 
