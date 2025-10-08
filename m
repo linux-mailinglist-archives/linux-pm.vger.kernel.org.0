@@ -1,199 +1,140 @@
-Return-Path: <linux-pm+bounces-35800-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35801-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2841CBC303D
-	for <lists+linux-pm@lfdr.de>; Wed, 08 Oct 2025 01:56:39 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD6C8BC4439
+	for <lists+linux-pm@lfdr.de>; Wed, 08 Oct 2025 12:14:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id B3BCA4E3DEE
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Oct 2025 23:56:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BF87A189C979
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Oct 2025 10:14:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0000C277CBC;
-	Tue,  7 Oct 2025 23:56:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3EEC2EC54A;
+	Wed,  8 Oct 2025 10:14:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Ph5XqRAg"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="Y1AsvK+b"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fllvem-ot04.ext.ti.com (fllvem-ot04.ext.ti.com [198.47.19.246])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 616412036E9
-	for <linux-pm@vger.kernel.org>; Tue,  7 Oct 2025 23:56:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CFFA2EB844;
+	Wed,  8 Oct 2025 10:14:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.246
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759881394; cv=none; b=h26yg14FpfJ7zLC1FEx/ZjUDscwIGdY+2EdOeqychrFHHsdPznJE0JtLdgDnqO5bJe65GhmcfGSUtMa52FhXEHr87OZFv6uDi0Pif7tCwOjrkV8DVEUOUuOSXWssBu61Saw2G+e20sHV5utd07dsN+rq927kyfFBsBHpxtbVaS8=
+	t=1759918457; cv=none; b=BUc8UxsMEPiHN/Yy6MuUKbOA29YryCs0UVNhE8QgtpOSgbLAo5XWukp2qA86AfxaEwCPorU/dw8pG6IJioW2E7fGwTVSb+g0oppuWHFlBIUk2qrrNnjZIFrhaYeIkWuejY/ZdjYWsOGuyeJWAmNy0k77ymq+Q9zxNLMzSgeiWSU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759881394; c=relaxed/simple;
-	bh=zJKXXBSciI+h6+weMkophpbj4m53g4DgXzbXDfHC1CA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lVXynepxKd41ygIwbIlgNhz3icA+cLWoVz3OFx1CdB/MimYW5Ldn4XAkxyfIknkviKdVW9S7GUdkeBfJJYgknUvXLUPog5u9MlZTSBkwDKOADQnFrxCwmqb7q1t83pF/GIJCa9ZAqKBnmhC+dw48LTcswNq+ozEOPwYFEU5oq24=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Ph5XqRAg; arc=none smtp.client-ip=209.85.216.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-3306b83ebdaso6646920a91.3
-        for <linux-pm@vger.kernel.org>; Tue, 07 Oct 2025 16:56:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1759881393; x=1760486193; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=39zXg6tilCKGf5UjV6+AnvBZd7qB5qMcffVx1lnmOy4=;
-        b=Ph5XqRAgll+e6M/Lqj3ievlJMylXOlmyWtmRt/G+ST6KCFsOEm9+yvbTqKpxKOIcrp
-         SQJzIBP1DwV9JpAgVBxIT14jcfSGy1hFIgINzOG4Nc31UobgVsB2KR7n+YyJ53o3KdLf
-         QND01WX+7xCWd5T9ePj4oDrZIM5XwH+kKwZymAkMaMLT/9AEM6xfSoiH1MhV86skx8EV
-         d1vd9SkRROux7JlM4kjT8eoasm0YLwBMmZ9L3pzYXDan+zEsjFt+yfITIh1+CsSUkkti
-         vMEOu/eWEe7hRiqyEAIEJtIZoXs1fl6ClTW6WmjMM2lZuYOQhP3Dzs9H7VKN2634bCL2
-         8Bpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759881393; x=1760486193;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=39zXg6tilCKGf5UjV6+AnvBZd7qB5qMcffVx1lnmOy4=;
-        b=bDSvP94YV7NGLPL0UsfuOgCyeg0MEy+5smuVgAtnLgUC6sEC3cvFv62sMdKrEBJatR
-         6Jksk7LNasW3dXT+qfIHhKEptMaGbZlDchzDSHSkMnNYbHeS4LgmcXLOnbVoo2KRbO73
-         fs4ktet7Vp05Wx269RQuq5BIcd/H1gq4QLK4T24db2Sx/T3vbgY98sIJ/Gz0YKJRoKO1
-         s3MdOQ90T0n0vNqolHEGx/9sjqiVPHavaOqYgVUhfIWCGyuycdhQWZdczdPUh6cYcbcm
-         8kFU0bjZ1JoT0zFpR28Dv360B1EpqLh3A/k98NSaYw2/MgxZPMf3GstFyQbHQCNZnFlw
-         Xdcg==
-X-Forwarded-Encrypted: i=1; AJvYcCW7Ipuu5lEplT4sXbk2cndNHgCPGUUuxK1xlY1DvBSwJi4RvNBxjqnH2BZk2tBHB6TSAIcx5Wl4jw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzyODTvhWCSRhOBMGMRAAsMHTa0gPgrJPKLF85DHU/8uNG+RDwM
-	8oacW9F8TQdOxPo0+soq5aZvkgY6spPvi6OYOIU82fJInyyb9dIUYsWMOg9oXj+JPA==
-X-Gm-Gg: ASbGncvyNBHmwF0770iUPprfcaDAPF9G9rPQykwZkOQGzf/FcOLy7NvP+00Dqa8HfxV
-	HpgA+ffx3GaQPRLxr0cQAxvUiMrrNbRIgp0+ofbdgLaWWumjg1IrlDSaQu5btdYEzS6M0A011aM
-	ob2tOvRv4iFOgXjwfolPeDv1viRnERnrzvAOCmWjWeuQcHj36QSaRl6gxsq8KYiJkbo3TP08Vcr
-	Z8RGKTTlOyD3ov6MH1cso0OAQCrh0EVVR1vfoebdaV/xCEbY/O6Nt8m6lcN3rvmWe6LoVWR3J4j
-	7pcXhNlB5sh+VG6Jtk+fVwGPW16bgbvl4POsrj0vm6eOwriTj+xAw6557P4wrgj415iw7/DOZR9
-	ArcKlr5LHTNYV6VA0RdeNqobpS/3S30rO6unZmmHfkTV6VaI0He3DwtbY9scFeOkO42tomL/H2L
-	0Ol2176lqJ+5k41qBmyueR
-X-Google-Smtp-Source: AGHT+IHMC7A37U/WEv3rhyxJXeKzOCdfHy3VqxOSC3aiXgnbwRn0y15wH9ycq+L3ZktBWltzSlIMFQ==
-X-Received: by 2002:a17:90b:3843:b0:334:18f9:8008 with SMTP id 98e67ed59e1d1-33b511174e6mr1562113a91.8.1759881392356;
-        Tue, 07 Oct 2025 16:56:32 -0700 (PDT)
-Received: from google.com (232.92.83.34.bc.googleusercontent.com. [34.83.92.232])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-33b51395229sm944821a91.17.2025.10.07.16.56.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Oct 2025 16:56:30 -0700 (PDT)
-Date: Tue, 7 Oct 2025 23:56:27 +0000
-From: Benson Leung <bleung@google.com>
-To: Jameson Thies <jthies@google.com>
-Cc: heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, dmitry.baryshkov@oss.qualcomm.com,
-	bleung@chromium.org, gregkh@linuxfoundation.org,
-	akuchynski@chromium.org, abhishekpandit@chromium.org,
-	sebastian.reichel@collabora.com, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 6/6] usb: typec: ucsi: pr_swap should check
- connector_status
-Message-ID: <aOWoq08H-3F66Ozg@google.com>
-References: <20251007000007.3724229-1-jthies@google.com>
- <20251007000007.3724229-7-jthies@google.com>
+	s=arc-20240116; t=1759918457; c=relaxed/simple;
+	bh=HmZnMOWyb5P72s2BHSxYZ6XFSBnGmhYyMG/SN2Itv60=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=I0gxFgQ1uo6gU7TsEvsiZn/NsyRP0WL3qdk1qS5akuT7mHvqLkQb1loElO+dHBmgMWaolHPqxoGMrfUzkxNSQqWn3bIhuvUD1XaswOcCUR0yyuCTnNNVBU9ciH/gQLLqFnU9l8ExduIPLRIYnDitDFxLuMnd/9Kc1fq/jx9d6Ic=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=Y1AsvK+b; arc=none smtp.client-ip=198.47.19.246
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from fllvem-sh04.itg.ti.com ([10.64.41.54])
+	by fllvem-ot04.ext.ti.com (8.15.2/8.15.2) with ESMTP id 598AEAa3205373;
+	Wed, 8 Oct 2025 05:14:10 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1759918450;
+	bh=Dg4SyzNBJ3da8Ij16SryqnijGuggPTuSajWGj+7cgko=;
+	h=Date:From:To:CC:Subject:References:In-Reply-To;
+	b=Y1AsvK+b3N8xhN85oTpEqdkTYYcRSldXC/5U3EUmUDucbLnobTGd2hy2U3IgmjmG7
+	 OOTUUNzQ/JUW8X2TU16indiL/VbadwksHvoj6wKG3IQov5r171XmjzRItEiQ8UPwl/
+	 ukst6R5rrbLv3A8cm85RYbn9W8Q+B67q8nY1R52A=
+Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
+	by fllvem-sh04.itg.ti.com (8.18.1/8.18.1) with ESMTPS id 598AEADI1381926
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-SHA256 bits=128 verify=FAIL);
+	Wed, 8 Oct 2025 05:14:10 -0500
+Received: from DFLE214.ent.ti.com (10.64.6.72) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55; Wed, 8
+ Oct 2025 05:14:09 -0500
+Received: from lelvem-mr06.itg.ti.com (10.180.75.8) by DFLE214.ent.ti.com
+ (10.64.6.72) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
+ Transport; Wed, 8 Oct 2025 05:14:10 -0500
+Received: from localhost (lcpd911.dhcp.ti.com [172.24.233.130])
+	by lelvem-mr06.itg.ti.com (8.18.1/8.18.1) with ESMTP id 598AE8nn2380253;
+	Wed, 8 Oct 2025 05:14:09 -0500
+Date: Wed, 8 Oct 2025 15:44:08 +0530
+From: Dhruva Gole <d-gole@ti.com>
+To: Sergey Senozhatsky <senozhatsky@chromium.org>
+CC: "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>,
+        Tomasz Figa <tfiga@chromium.org>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCHv2] PM: dpm: add module param to backtrace all CPUs
+Message-ID: <20251008101408.dj46r66gcfo26sgl@lcpd911>
+References: <20251007063551.3147937-1-senozhatsky@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="3vepBb5P5u0ERoW1"
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20251007000007.3724229-7-jthies@google.com>
+In-Reply-To: <20251007063551.3147937-1-senozhatsky@chromium.org>
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
+On Oct 07, 2025 at 15:35:40 +0900, Sergey Senozhatsky wrote:
+> Add dpm_watchdog_all_cpu_backtrace module parameter which
+> controls all CPU backtrace dump before DPM panics the system.
+> This is expected to help understanding what might have caused
+> device timeout.
 
---3vepBb5P5u0ERoW1
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This will indeed be really helpful for debugging some nasty bugs!
 
-On Tue, Oct 07, 2025 at 12:00:07AM +0000, Jameson Thies wrote:
-> From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
->=20
-> Power role swaps initiated by the host system doesn't generate
-> connection status change notifications.
->=20
-> From UCSIv3.0 spec, section 6.5.10 Set Power Direction Role:
->=20
-> The execution of this command might require PPM to initiate a power
-> role swap. If the power role swap fails for any reason, the command
-> returns, and error and the power direction should remain unchanged.
-> Note that if the execution of the command resulted in a successful
-> power role swap, it should not result in a connector status change
-> notification.
->=20
-> Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-> Signed-off-by: Jameson Thies <jthies@google.com>
-
-Reviewed-by: Benson Leung <bleung@chromium.org>
-
-
+> 
+> Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
 > ---
->  drivers/usb/typec/ucsi/ucsi.c | 30 +++++++++++++++++++++++++-----
->  1 file changed, 25 insertions(+), 5 deletions(-)
->=20
-> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> index 1a7d850b11ea..6e3797d7a144 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.c
-> +++ b/drivers/usb/typec/ucsi/ucsi.c
-> @@ -1526,20 +1526,40 @@ static int ucsi_pr_swap(struct typec_port *port, =
-enum typec_role role)
->  	if (ret < 0)
->  		goto out_unlock;
-> =20
-> -	mutex_unlock(&con->lock);
-> +	command =3D UCSI_GET_CONNECTOR_STATUS | UCSI_CONNECTOR_NUMBER(con->num);
-> +	ret =3D ucsi_send_command(con->ucsi, command, &con->status, sizeof(con-=
->status));
-> +	if (ret < 0)
-> +		goto out_unlock;
-> =20
-> -	if (!wait_for_completion_timeout(&con->complete,
-> -					 msecs_to_jiffies(UCSI_SWAP_TIMEOUT_MS)))
-> -		return -ETIMEDOUT;
-> +	cur_role =3D !!UCSI_CONSTAT(con, PWR_DIR);
-> =20
-> -	mutex_lock(&con->lock);
-> +	/* Execution of SET_PDR should not result in connector status
-> +	 * notifications. However, some legacy implementations may still defer
-> +	 * the actual role swap and return immediately. Thus, check the
-> +	 * connector status in case it immediately succeeded or wait for a later
-> +	 * connector status change.
-> +	 */
-> +	if (cur_role !=3D role) {
-> +		mutex_unlock(&con->lock);
+>  drivers/base/power/main.c | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
+> diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
+> index e83503bdc1fd..7a8807ec9a5d 100644
+> --- a/drivers/base/power/main.c
+> +++ b/drivers/base/power/main.c
+> @@ -34,6 +34,7 @@
+>  #include <linux/cpufreq.h>
+>  #include <linux/devfreq.h>
+>  #include <linux/timer.h>
+> +#include <linux/nmi.h>
+>  
+>  #include "../base.h"
+>  #include "power.h"
+> @@ -515,6 +516,11 @@ struct dpm_watchdog {
+>  #define DECLARE_DPM_WATCHDOG_ON_STACK(wd) \
+>  	struct dpm_watchdog wd
+>  
+> +static bool __read_mostly dpm_watchdog_all_cpu_backtrace;
+> +module_param(dpm_watchdog_all_cpu_backtrace, bool, 0644);
+> +MODULE_PARM_DESC(dpm_watchdog_all_cpu_backtrace,
+> +		 "Backtrace all CPUs on DPM watchdog timeout");
 > +
-> +		if (!wait_for_completion_timeout(
-> +			    &con->complete,
-> +			    msecs_to_jiffies(UCSI_SWAP_TIMEOUT_MS)))
-> +			return -ETIMEDOUT;
+
+Have you considered runtime configurability instead of a module param?
+
+>  /**
+>   * dpm_watchdog_handler - Driver suspend / resume watchdog handler.
+>   * @t: The timer that PM watchdog depends on.
+> @@ -530,8 +536,12 @@ static void dpm_watchdog_handler(struct timer_list *t)
+>  	unsigned int time_left;
+>  
+>  	if (wd->fatal) {
+> +		unsigned int this_cpu = smp_processor_id();
 > +
-> +		mutex_lock(&con->lock);
-> +	}
-> =20
->  	/* Something has gone wrong while swapping the role */
->  	if (UCSI_CONSTAT(con, PWR_OPMODE) !=3D UCSI_CONSTAT_PWR_OPMODE_PD) {
->  		ucsi_reset_connector(con, true);
->  		ret =3D -EPROTO;
-> +		goto out_unlock;
->  	}
-> =20
-> +	/* Indicate successful power role swap */
-> +	typec_set_pwr_role(con->port, role);
-> +
->  out_unlock:
->  	mutex_unlock(&con->lock);
-> =20
-> --=20
-> 2.51.0.618.g983fd99d29-goog
->=20
+>  		dev_emerg(wd->dev, "**** DPM device timeout ****\n");
+>  		show_stack(wd->tsk, NULL, KERN_EMERG);
+> +		if (dpm_watchdog_all_cpu_backtrace)
+> +			trigger_allbutcpu_cpu_backtrace(this_cpu);
 
---3vepBb5P5u0ERoW1
-Content-Type: application/pgp-signature; name="signature.asc"
+IMO it would be useful to check the ret val of this as well, I mean just
+incase this silently returns false it maybe confusing to figure out what
+hapenned in the system inspite of setting the mod param.
 
------BEGIN PGP SIGNATURE-----
 
-iHUEABYKAB0WIQQCtZK6p/AktxXfkOlzbaomhzOwwgUCaOWoqwAKCRBzbaomhzOw
-ws1vAQCb90DdZAg6y6j6gxeiXtb3EGaDB+3GnPoYDww9vdtaYQD/ayZXFW+x+d+E
-M5yCHWN8me1+9sGUjPAZlnVttMLEWAg=
-=BpLg
------END PGP SIGNATURE-----
-
---3vepBb5P5u0ERoW1--
+-- 
+Best regards,
+Dhruva Gole
+Texas Instruments Incorporated
 
