@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-35827-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35828-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7BBF1BC6FBE
-	for <lists+linux-pm@lfdr.de>; Thu, 09 Oct 2025 02:15:37 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id B7200BC6FD5
+	for <lists+linux-pm@lfdr.de>; Thu, 09 Oct 2025 02:18:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id BD5374E413E
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Oct 2025 00:15:35 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 45BA134BFAE
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Oct 2025 00:18:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E55E38DE1;
-	Thu,  9 Oct 2025 00:15:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EFD912CDA5;
+	Thu,  9 Oct 2025 00:18:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CZR0A/iJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AnU0N9/j"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C73CDF6C;
-	Thu,  9 Oct 2025 00:15:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CD9C18626;
+	Thu,  9 Oct 2025 00:18:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759968932; cv=none; b=YJpvwm9QCOd+hJN24gQBOieigUaLKiUPACyCh84INW9IBKlGpSz1mfMDa6baEshkQUwymvdhJ2yBNxSB2pvZJSmpZCnmQ8Ff+XQ36J62B1wR7YKY/4ADmraOcTKf5snG4rH1Qs+SNe9cBqc5Mx5ESDf496nlFoiZljMaTIZEVYo=
+	t=1759969121; cv=none; b=go6ICDjI2ZFEyZhSmDYReFbXZUcahzEFmqeVn/yrAcMFoL/JK4wJVn8aSXYj5qRU9S3/wlIuN59xBVxRJjod8QPlzV/tCRFi6t8ww/J9yOzk2S+j11BfPjR7DPvqL6v5lURDW+n50MzGqKEOjpMPV41TkeRePP4dJOL8U2D8BWU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759968932; c=relaxed/simple;
-	bh=exXCrBhacEtExEyBeo6v3sY+qnYJxKDMlAakPGMX3GU=;
+	s=arc-20240116; t=1759969121; c=relaxed/simple;
+	bh=NYLxRAcLC/ywEU2CMuPt/oxpDd+6pBMrNY6YSH1R0TE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AYYPqVj4DAHcOnvtzDs0lANC2praBsFQi2MEVU0yz6N8Z80gvBQwLdvWK301sF+wcDap1p1YqK8vbHS8m7LM5A6e/kAS9mwm2um/7m2Aq6QLT0C9gtT7sefdRePleIyhoNsHP1dSCGlzQGiQ49K9Fsl1Q5bT82bhOC1BAVKC914=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CZR0A/iJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCD07C4CEE7;
-	Thu,  9 Oct 2025 00:15:25 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=H/oxDNaqRuCxZZ5ZKBJ65v9AGTkohyU2OGDJQ95P/ybS6xiOVi4TZpbu8M7THKPeSzeYDvHM4aVtSoFzgFtmXia/aJuEefzsVB/yrP8wCliLvRlo7VlsG9sqNAIMmKqJtcsMwccyQJRAO+4nPoShT4MPreJqhQx/0fAPfeSl+sE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AnU0N9/j; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7560BC4CEF5;
+	Thu,  9 Oct 2025 00:18:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759968930;
-	bh=exXCrBhacEtExEyBeo6v3sY+qnYJxKDMlAakPGMX3GU=;
+	s=k20201202; t=1759969120;
+	bh=NYLxRAcLC/ywEU2CMuPt/oxpDd+6pBMrNY6YSH1R0TE=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=CZR0A/iJpKjXgLsr1YyoG38bp/BQn7xRkzLwxNil6v/hKCqgV6dPlDZtF05+srI+b
-	 W5oTJ+9PNFFezXvqYnWMz7spZ1Q1qm2fcSv76rjUfMgVy+vkozgkIra7SjLY701sRZ
-	 8P3QvpM433EQSDp8outpUcOMrUs+R5LViqTYfE6GPEAuQdTN4Sn075TJotm+5J/a22
-	 N8Kv/psasiXOhh6kWJcUbaFQSZ3Cqju4iMBgj9uVcRv5pJpAxnsLs9ipbO608U3d8C
-	 ZWGsPmoxurGw6VPE6T7RTosOr92tqE40V/XDF2Tt1NNRX4Jxpcd4Kr4nfjkatncxUu
-	 bpTh6l0OfI7RA==
-Message-ID: <84238581-0c23-4181-818e-a7fb2e7ca870@kernel.org>
-Date: Thu, 9 Oct 2025 09:15:23 +0900
+	b=AnU0N9/jvaW6bgVuDJEZ05a9PkAS4I7Mkh1SMhBxU0ncmpCJ847uC8cyqDDJwO2WY
+	 p9G6yEDPwRI/UOmChjfT16aHgzbYV1pLxm8nowumzR1pWO0Qwylc8+cahdfEu1YdeZ
+	 4YSjofxYwjh0UdzN14xrlM9WnEBVXXosyoPpba8HzbXbFDlwemhFD1icbm4KEXZcyx
+	 7xMal93tKfGezQn/OpFGI/0HgSgIE/6zVrPrztMSRbnjX8kRtrdfcZzK5iatY1Mmjg
+	 u9W15HvaP0oVS/bcX7DZ9pV6MdELzuJnyGzUWmqZoVFS8OJ0kJtz2ju1hgpGWZs1+Z
+	 WmpbgYmwu1L4Q==
+Message-ID: <469c8a7d-a1be-4793-aa88-460db0c1510b@kernel.org>
+Date: Thu, 9 Oct 2025 09:18:29 +0900
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 07/10] pmdomain: samsung: selectively handle enforced
- sync_state
+Subject: Re: [PATCH 09/10] pmdomain: samsung: use dev_err() instead of
+ pr_err()
 To: =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
  Alim Akhtar <alim.akhtar@samsung.com>, Rob Herring <robh@kernel.org>,
  Conor Dooley <conor+dt@kernel.org>, Krzysztof Kozlowski
@@ -63,7 +63,7 @@ Cc: Peter Griffin <peter.griffin@linaro.org>,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-pm@vger.kernel.org
 References: <20251006-gs101-pd-v1-0-f0cb0c01ea7b@linaro.org>
- <20251006-gs101-pd-v1-7-f0cb0c01ea7b@linaro.org>
+ <20251006-gs101-pd-v1-9-f0cb0c01ea7b@linaro.org>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -109,40 +109,18 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20251006-gs101-pd-v1-7-f0cb0c01ea7b@linaro.org>
+In-Reply-To: <20251006-gs101-pd-v1-9-f0cb0c01ea7b@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 On 07/10/2025 01:43, André Draszik wrote:
-> Unconditionally calling of_genpd_sync_state() causes issues on
-> platforms with child domains as the parent domain will be turned off
-> before the child domain was even registered during boot.
-> 
-> This in particular is an issue for the upcoming Google gs101 support -
-> all operations on child domains registered after the parent domain
-> misbehave.
-> 
-> Add a flag to the probe data to be able to sync_state conditionally
-> only, and enable that flag on the two platforms currently supported by
-> this driver.
+> dev_err() gives us more consistent error messages, which include the
+> device. Switch to using dev_err().
 > 
 > Signed-off-by: André Draszik <andre.draszik@linaro.org>
 > ---
->  drivers/pmdomain/samsung/exynos-pm-domains.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/pmdomain/samsung/exynos-pm-domains.c b/drivers/pmdomain/samsung/exynos-pm-domains.c
-> index 638d286b57f716140b2401092415644a6805870e..5a87802cff394945cb0202d08f2cf6bcbbcc774d 100644
-> --- a/drivers/pmdomain/samsung/exynos-pm-domains.c
-> +++ b/drivers/pmdomain/samsung/exynos-pm-domains.c
-> @@ -20,6 +20,7 @@
->  struct exynos_pm_domain_config {
->  	/* Value for LOCAL_PWR_CFG and STATUS fields for each domain */
->  	u32 local_pwr_cfg;
-> +	unsigned int need_early_sync_state:1;
 
-Just bool
-
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
