@@ -1,58 +1,57 @@
-Return-Path: <linux-pm+bounces-35862-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35863-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF75DBC9FAE
-	for <lists+linux-pm@lfdr.de>; Thu, 09 Oct 2025 18:08:47 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 63232BCA10D
+	for <lists+linux-pm@lfdr.de>; Thu, 09 Oct 2025 18:14:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 952C43A450C
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Oct 2025 16:07:41 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 1D6D44FC3FB
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Oct 2025 16:08:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96C092FABF5;
-	Thu,  9 Oct 2025 16:00:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACC2512CDA5;
+	Thu,  9 Oct 2025 16:00:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hicofYhh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ecJTauXM"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DEA82FB99E;
-	Thu,  9 Oct 2025 16:00:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80F11231830;
+	Thu,  9 Oct 2025 16:00:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760025605; cv=none; b=scx+HxWWwzvHW3QqXJUG680igRma0etvQM6WninsbE/dSnzQo5BPGIMg5tQEWpzQg1kqGOE2uT/LRqEtD4MEpVCPjdJGOwyfFULe1xdEOcV/m8KuWk3dJ+CVdp1qBNTjL8xYL1PTdc7EZSp8Sug1+4LXX4XOH4Kg5gdr9DE1ypQ=
+	t=1760025625; cv=none; b=ZOMBUUyUjxgH+BfzstnEcOnvqND5zom1/l1cc2mZM33eE4baZp4k0nrOYFxNW1EK+7ijdj3R5VMPZqz6vf3tUZ8pLXSCErtXcbIJYyoZSsb5zjtKGj3MzmvPiPVdMaGvreoqZ19Mp4p15JAUq2PL+rSU5LGZ73/eeVghKnpZvMM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760025605; c=relaxed/simple;
-	bh=Y0lEqFCh/OtrzyCfm6IZuqcyvjrHHiiSM7TqqV7hQow=;
+	s=arc-20240116; t=1760025625; c=relaxed/simple;
+	bh=smqM7IfJYbOM3LA97TKRF0RTFPNqepnOx+Rf4R8Kglw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=pmEQTs4KBqYXBh8LKXo0mxFfUGh14UkE7b1Q7m97oh9SZXLB/WxL0GtA9ZTff0gNZMW6acl2iXRCfsSFXIviSfNkXDqAjq7ZZhwndoHYtBhqIZAwGkI3Xz8ua9ms+39kKu/RFmPv5f2LfrDk3kfABcqaTixXs/608ZqsrJh66tM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hicofYhh; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67042C4CEE7;
-	Thu,  9 Oct 2025 16:00:04 +0000 (UTC)
+	 MIME-Version:Content-Type; b=Ajbz5zYttdZHuDiGr5C4P426QlZ/4ibzVRG25LV9aA68uVxH57Ix5BEZD2HpG2Nu/0iA7xZPYjJ5ueuEaUTjjHmuFI6zPlFqJ9DNU7aXC3xP6lpWILLD7rHYl8ar0NpdCAunm8AcCyvntYYPCcmJD9CtbNNDt7Ek4vu7+FJuv2Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ecJTauXM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90DB5C4CEF8;
+	Thu,  9 Oct 2025 16:00:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760025605;
-	bh=Y0lEqFCh/OtrzyCfm6IZuqcyvjrHHiiSM7TqqV7hQow=;
+	s=k20201202; t=1760025625;
+	bh=smqM7IfJYbOM3LA97TKRF0RTFPNqepnOx+Rf4R8Kglw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=hicofYhhxXSMM8JgZPdemrc5EKn5P/Ykr5831Mzz/83mAF4t0z4UZnJwAY9F9J7Ng
-	 IiAV26geThxBfEGawJCTMEvhU+q53VGdXDXe4/8C54x54/XcGyxHWBp9s8I6ENW8LX
-	 po7/roB/8eJzlwzStT6ENWTDPqlThuQNjZ2KmWVzzDiwDfJLXT7R/gDi8zId3Y1g68
-	 5M+6IA/2IGodXYJ2cQkGcZN0xegYk+38xF63ymGKxFtEtw4XWpqU4AVbxUX1j1scG/
-	 RWKFKgEY07vNIs6TT7r906jbbneRdcljx98ZIlJi4K9y78lGngdLitLKuV4m+ONmwD
-	 TI5vRWD/U/M9w==
+	b=ecJTauXMb5a1GnvfoaIGhf5xkh75lJ1llfR3/sE4QmgZmUp0Xwkr7j0EkPVHACs/6
+	 HcMbc2mG9y1HJqpf4TzuAdBQXtEqGIITP3tMOkCVBQEcOQoRB6AKUM9m6JQqur1d9W
+	 /RYDDT9DCdd6wchMyvneM1mJZ/sSPWm7WgB40jDALErJ1jEP3KM3oXVrxdV/wQLDt4
+	 zzhwzwZNnItHgXcWQPLNZOBWcf1/GatJF3jFTRJRYl6Y+EFZ+FrAyNbacbmdR2mrhK
+	 ta4t13+Ve9864iDJ632voOoNxohgyds8ZJGOnA78dpSsa3D7OnuCPeEfv2N2zsabDh
+	 xMuvm9JFWUWqg==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
-Cc: Sohil Mehta <sohil.mehta@intel.com>,
-	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+Cc: Kaushlendra Kumar <kaushlendra.kumar@intel.com>,
+	Len Brown <len.brown@intel.com>,
 	Sasha Levin <sashal@kernel.org>,
-	rafael@kernel.org,
-	viresh.kumar@linaro.org,
+	lenb@kernel.org,
 	linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.17-6.12] cpufreq: ondemand: Update the efficient idle check for Intel extended Families
-Date: Thu,  9 Oct 2025 11:55:37 -0400
-Message-ID: <20251009155752.773732-71-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.17-6.16] tools/power turbostat: Fix incorrect sorting of PMT telemetry
+Date: Thu,  9 Oct 2025 11:55:46 -0400
+Message-ID: <20251009155752.773732-80-sashal@kernel.org>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20251009155752.773732-1-sashal@kernel.org>
 References: <20251009155752.773732-1-sashal@kernel.org>
@@ -68,138 +67,102 @@ X-stable-base: Linux 6.17.1
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: Sohil Mehta <sohil.mehta@intel.com>
+From: Kaushlendra Kumar <kaushlendra.kumar@intel.com>
 
-[ Upstream commit 7f3cfb7943d27a7b61bdac8db739cf0bdc28e87d ]
+[ Upstream commit cafb47be3f38ad81306bf894e743bebc2ccf66ab ]
 
-IO time is considered busy by default for modern Intel processors. The
-current check covers recent Family 6 models but excludes the brand new
-Families 18 and 19.
+The pmt_telemdir_sort() comparison function was returning a boolean
+value (0 or 1) instead of the required negative, zero, or positive
+value for proper sorting. This caused unpredictable and incorrect
+ordering of telemetry directories named telem0, telem1, ..., telemN.
+Update the comparison logic to return -1, 0, or 1 based on the
+numerical value extracted from the directory name, ensuring correct
+numerical ordering when using scandir.
 
-According to Arjan van de Ven, the model check was mainly due to a lack
-of testing on systems before INTEL_CORE2_MEROM. He suggests considering
-all Intel processors as having an efficient idle.
+This change improves stability and correctness when iterating PMT
+telemetry directories.
 
-Extend the IO busy classification to all Intel processors starting with
-Family 6, including Family 15 (Pentium 4s) and upcoming Families 18/19.
-
-Use an x86 VFM check and move the function to the header file to avoid
-using arch-specific #ifdefs in the C file.
-
-Signed-off-by: Sohil Mehta <sohil.mehta@intel.com>
-Link: https://patch.msgid.link/20250908230655.2562440-1-sohil.mehta@intel.com
-[ rjw: Added empty line after #include ]
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Kaushlendra Kumar <kaushlendra.kumar@intel.com>
+Signed-off-by: Len Brown <len.brown@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
 
 LLM Generated explanations, may be completely bogus:
 
 YES
-- The old whitelist was removed and `od_init()` now relies on
-  `od_should_io_be_busy()` to set `dbs_data->io_is_busy`
-  (`drivers/cpufreq/cpufreq_ondemand.c:360`), so the ondemand governor
-  no longer ignores I/O wait load on Intel CPUs whose family number is
-  ≥6. Without this, brand‑new Intel families (18/19) and even existing
-  family 15 parts default to “I/O idle”, which keeps frequencies low
-  under storage-heavy workloads—a clear performance regression on
-  shipping hardware that still ships with the ondemand governor.
-- The new helper in the header
-  (`drivers/cpufreq/cpufreq_ondemand.h:29-50`) checks
-  `boot_cpu_data.x86_vfm >= INTEL_PENTIUM_PRO`, effectively covering
-  every Intel CPU from Pentium Pro onward while leaving other vendors
-  untouched. The fallback branch still returns false on non-x86 systems
-  (`drivers/cpufreq/cpufreq_ondemand.h:48-49`), so the change is tightly
-  scoped and backward compatible elsewhere.
-- This is a tiny, self-contained tweak (no ABI or architectural churn)
-  that simply broadens the existing default to match current Intel
-  guidance; users can still override the policy via the existing sysfs
-  knob. The only prerequisite is the `x86_vfm` field (commit
-  a9d0adce6907, in v6.10 and newer); ensure any target stable branch
-  already has it or bring that dependency along.
 
-Next step: 1) If you target a stable series older than v6.10, backport
-a9d0adce6907 (“x86/cpu/vfm: Add/initialize x86_vfm field…”) first so
-this change builds.
+- What it fixes
+  - The comparator `pmt_telemdir_sort()` returned a boolean (`0`/`1`)
+    instead of a strict ordering value (<0, 0, >0). This violates the
+    `scandir()`/`qsort()` contract and can produce non-deterministic and
+    incorrect ordering. In 6.17 the buggy line is `return aidx >= bidx;`
+    in `tools/power/x86/turbostat/turbostat.c:1893`.
+  - The fix changes it to return -1/0/1 based on numeric comparison of
+    the index in the `telem%u` name, ensuring proper ascending numeric
+    order. Mainline shows the corrected code as `return (aidx > bidx) ?
+    1 : (aidx < bidx) ? -1 : 0;` in the same function.
 
- drivers/cpufreq/cpufreq_ondemand.c | 25 +------------------------
- drivers/cpufreq/cpufreq_ondemand.h | 23 +++++++++++++++++++++++
- 2 files changed, 24 insertions(+), 24 deletions(-)
+- Why it matters to users
+  - Turbostat iterates PMT telemetry directories with `scandir()` using
+    this comparator at `tools/power/x86/turbostat/turbostat.c:1921`.
+    With an invalid comparator, entries like `telem10` vs `telem2` can
+    be mis-ordered.
+  - The order is used to construct a linked list of PMT MMIO regions
+    “preserving the ordering from sysfs” in `pmt_mmio_open()` at
+    `tools/power/x86/turbostat/turbostat.c:9668` and
+    `tools/power/x86/turbostat/turbostat.c:9688`. Wrong order can
+    misassociate telemetry regions with the intended domains.
+  - The order is also used to compute a “sequence” for identifying a
+    specific PMT instance in `pmt_parse_from_path()` at
+    `tools/power/x86/turbostat/turbostat.c:10526`. Mis-ordering yields
+    wrong `seq` values and incorrect counter selection.
 
-diff --git a/drivers/cpufreq/cpufreq_ondemand.c b/drivers/cpufreq/cpufreq_ondemand.c
-index 0e65d37c92311..a6ecc203f7b7f 100644
---- a/drivers/cpufreq/cpufreq_ondemand.c
-+++ b/drivers/cpufreq/cpufreq_ondemand.c
-@@ -29,29 +29,6 @@ static struct od_ops od_ops;
+- Scope and risk
+  - Change is a one-line, localized fix in a user-space tool
+    (`tools/power/x86/turbostat/turbostat.c`), no architectural changes,
+    no ABI impact, and no dependency on new kernel features.
+  - It directly corrects comparator semantics expected by `scandir()`;
+    risk of regression is minimal and behavior becomes deterministic.
+  - Security impact is negligible; this corrects ordering logic for
+    sysfs directories, not privilege or memory handling.
+
+- History and applicability
+  - The bug was introduced when the PMT directory iterator helper landed
+    (commit “Add PMT directory iterator helper”); 6.17’s turbostat has
+    the buggy `return aidx >= bidx;` line
+    (tools/power/x86/turbostat/turbostat.c:1893).
+  - The mainline fix (“tools/power turbostat: Fix incorrect sorting of
+    PMT telemetry”) updates the comparator to return -1/0/1.
+  - Any stable branch that includes the PMT directory iterator helper
+    should take this fix.
+
+- Stable backport criteria
+  - Fixes a user-visible correctness bug in turbostat’s PMT handling.
+  - Small, self-contained, and low risk.
+  - No features added; purely a bug fix improving stability/correctness.
+  - Touches only a userspace tool under `tools/`, not core kernel
+    subsystems.
+
+Given the clear correctness fix, minimal scope, and direct user impact
+in PMT telemetry iteration, this is a strong candidate for stable
+backport.
+
+ tools/power/x86/turbostat/turbostat.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
+index 72a280e7a9d59..931bad99277fe 100644
+--- a/tools/power/x86/turbostat/turbostat.c
++++ b/tools/power/x86/turbostat/turbostat.c
+@@ -1890,7 +1890,7 @@ int pmt_telemdir_sort(const struct dirent **a, const struct dirent **b)
+ 	sscanf((*a)->d_name, "telem%u", &aidx);
+ 	sscanf((*b)->d_name, "telem%u", &bidx);
  
- static unsigned int default_powersave_bias;
+-	return aidx >= bidx;
++	return (aidx > bidx) ? 1 : (aidx < bidx) ? -1 : 0;
+ }
  
--/*
-- * Not all CPUs want IO time to be accounted as busy; this depends on how
-- * efficient idling at a higher frequency/voltage is.
-- * Pavel Machek says this is not so for various generations of AMD and old
-- * Intel systems.
-- * Mike Chan (android.com) claims this is also not true for ARM.
-- * Because of this, whitelist specific known (series) of CPUs by default, and
-- * leave all others up to the user.
-- */
--static int should_io_be_busy(void)
--{
--#if defined(CONFIG_X86)
--	/*
--	 * For Intel, Core 2 (model 15) and later have an efficient idle.
--	 */
--	if (boot_cpu_data.x86_vendor == X86_VENDOR_INTEL &&
--			boot_cpu_data.x86 == 6 &&
--			boot_cpu_data.x86_model >= 15)
--		return 1;
--#endif
--	return 0;
--}
--
- /*
-  * Find right freq to be set now with powersave_bias on.
-  * Returns the freq_hi to be used right now and will set freq_hi_delay_us,
-@@ -377,7 +354,7 @@ static int od_init(struct dbs_data *dbs_data)
- 	dbs_data->sampling_down_factor = DEF_SAMPLING_DOWN_FACTOR;
- 	dbs_data->ignore_nice_load = 0;
- 	tuners->powersave_bias = default_powersave_bias;
--	dbs_data->io_is_busy = should_io_be_busy();
-+	dbs_data->io_is_busy = od_should_io_be_busy();
- 
- 	dbs_data->tuners = tuners;
- 	return 0;
-diff --git a/drivers/cpufreq/cpufreq_ondemand.h b/drivers/cpufreq/cpufreq_ondemand.h
-index 1af8e5c4b86fd..2ca8f1aaf2e34 100644
---- a/drivers/cpufreq/cpufreq_ondemand.h
-+++ b/drivers/cpufreq/cpufreq_ondemand.h
-@@ -24,3 +24,26 @@ static inline struct od_policy_dbs_info *to_dbs_info(struct policy_dbs_info *pol
- struct od_dbs_tuners {
- 	unsigned int powersave_bias;
- };
-+
-+#ifdef CONFIG_X86
-+#include <asm/cpu_device_id.h>
-+
-+/*
-+ * Not all CPUs want IO time to be accounted as busy; this depends on
-+ * how efficient idling at a higher frequency/voltage is.
-+ *
-+ * Pavel Machek says this is not so for various generations of AMD and
-+ * old Intel systems. Mike Chan (android.com) claims this is also not
-+ * true for ARM.
-+ *
-+ * Because of this, select a known series of Intel CPUs (Family 6 and
-+ * later) by default, and leave all others up to the user.
-+ */
-+static inline bool od_should_io_be_busy(void)
-+{
-+	return (boot_cpu_data.x86_vendor == X86_VENDOR_INTEL &&
-+		boot_cpu_data.x86_vfm >= INTEL_PENTIUM_PRO);
-+}
-+#else
-+static inline bool od_should_io_be_busy(void) { return false; }
-+#endif
+ const struct dirent *pmt_diriter_next(struct pmt_diriter_t *iter)
 -- 
 2.51.0
 
