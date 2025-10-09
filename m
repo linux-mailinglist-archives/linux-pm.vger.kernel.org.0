@@ -1,103 +1,144 @@
-Return-Path: <linux-pm+bounces-35878-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35879-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id E236CBCAB02
-	for <lists+linux-pm@lfdr.de>; Thu, 09 Oct 2025 21:27:21 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A678BCAB0B
+	for <lists+linux-pm@lfdr.de>; Thu, 09 Oct 2025 21:27:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E7DBD4EF8EF
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Oct 2025 19:27:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 341953B4033
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Oct 2025 19:27:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 106AD259C84;
-	Thu,  9 Oct 2025 19:27:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19E27257846;
+	Thu,  9 Oct 2025 19:27:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ocOfs+N7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fyvgJBpx"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D25352571A0;
-	Thu,  9 Oct 2025 19:27:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2C6C257448;
+	Thu,  9 Oct 2025 19:27:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760038030; cv=none; b=TVIAVvzKXayKkhe/ObFqVtZY7kh5BmB45bk0YUTxOIzoR1ZJUq686Wfg4ty0M3u0NcQ3OoqroheAtvw7KFrTksYVCm7/ADSYFsUBZ/mdz9596hv2Sr2Urvc3jrtaao6U4/Xt4RJRTEOCUi+IvB1TUsqOjQ7kfNj1PzXVmG+6v7E=
+	t=1760038052; cv=none; b=qdZyZudVfv+WK2krSAmkt2FxwhoMdifXj4hVC0DLgy40GN7u1YXoXrTitNYTRtXC9YIh+GyaY4j9ZtLcXYqbHz4WLPS70B7PCFijHf3ePsJ1bCaBnc2QdNjG7ZxtBfhGvLlXZDI9ahpk+YhHK0TKsAyivV1EppvZ80fzeSHH2Ks=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760038030; c=relaxed/simple;
-	bh=J7CUiWc0ADF5tenIxtE4W4RrkCaIIs7aFDIdrQb3yuA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hqihMIat9Y//V9N+ATMmd+/GP9rem0zqSMjDxBRekhcOAP84z+p2IxdQv2nX6+kJxmLYp69o8fdXab6xKMemunxRYWFZLQWtWo7jMCmJCivRvJgF0V49Lx+h/l42hITCKDRNfVgjxthvGVjnx1Maque9MtztnycBPQmhjkou7I4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ocOfs+N7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FEB6C116C6;
-	Thu,  9 Oct 2025 19:27:09 +0000 (UTC)
+	s=arc-20240116; t=1760038052; c=relaxed/simple;
+	bh=UTW2ZGiyy69eDiDpqlp14GE5qGdW3hytlY6efzzvicY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=JA9sSKCW+ZxZ2pCcPVrHGjm51vwxEygKH4EdmEAEtVl/vbIMWl94yc5hi94GYRRcuMstqGSq/o8GOuYeS94/5qrCE/8y6PeYDsBgs1KI7tnUFPPdqwCcPj9aiKTG7nVWx4G7WNX+w+Xcw8cVyo/+uShkc9DKeZOXvaQ5XSNKeFo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fyvgJBpx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F933C4CEF8;
+	Thu,  9 Oct 2025 19:27:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760038029;
-	bh=J7CUiWc0ADF5tenIxtE4W4RrkCaIIs7aFDIdrQb3yuA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ocOfs+N7rtJInE5RqP5OdMODSvcF4BMfHOQ/dcESFUUiWLWZAxbZaF5uNBcC7hENh
-	 qSwKlQWc7ueBC64kW2mHYeok0OYGmn9lyK+JRYDFeqfUUJL++YiR0VukEUdApGwZ4P
-	 06fxejW18TPzKsAf3FaJh5To8Xpr1/s8bqgN9DgXGr/z1ZXFBh272XQyfXUJXlKFAv
-	 4mF3dyXq7P/6ESbB3idH+ngJx9sPFTjCaHZ8861rBV4KfbYP+Zth70YDTTW0kAiNxW
-	 8QJP0JGvJcnnBDViirhzGPJdCFx3Ynf1ASJF8rtJ/rR02QsosocZbskOnujsGkzC/J
-	 /yWABoLKDafzg==
-Date: Thu, 9 Oct 2025 14:27:08 -0500
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-Cc: Maxime Ripard <mripard@kernel.org>, devicetree@vger.kernel.org,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Steven Price <steven.price@arm.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Liviu Dudau <liviu.dudau@arm.com>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	David Airlie <airlied@gmail.com>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Simona Vetter <simona@ffwll.ch>, Kees Cook <kees@kernel.org>,
-	linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	dri-devel@lists.freedesktop.org,
-	Jassi Brar <jassisinghbrar@gmail.com>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, kernel@collabora.com,
-	Chia-I Wu <olvaffe@gmail.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	linux-hardening@vger.kernel.org,
-	Boris Brezillon <boris.brezillon@collabora.com>,
-	Chen-Yu Tsai <wenst@chromium.org>
-Subject: Re: [PATCH v6 2/7] dt-bindings: power: Add MT8196 GPU frequency
- control binding
-Message-ID: <176003802776.3154911.16315672930945564696.robh@kernel.org>
-References: <20251003-mt8196-gpufreq-v6-0-76498ad61d9e@collabora.com>
- <20251003-mt8196-gpufreq-v6-2-76498ad61d9e@collabora.com>
+	s=k20201202; t=1760038051;
+	bh=UTW2ZGiyy69eDiDpqlp14GE5qGdW3hytlY6efzzvicY=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=fyvgJBpxlel4K0G8hQSPenCYoEaIWjFSbfDsvJ7VOJUJPeUEjfjIE9KH0AFg8UpQX
+	 KYdWFIpvtSBqpAiKfz+hj5EU7JUbv381HsWV+3c3OUHNEV6tJBNk3aBIkgfgjDNdS0
+	 EMLmRuF2+ef4vpbpvU6w2SNUoGQwGLW5Wt+Or8G8pDb18HIW8ok+GGDBYP0DQWJ4dt
+	 H8tg2oDqzYd9t3pKCppREmF37H5xg6LT/4tC2cyKuhmfSnl40IRiQn0yxF6bwQumsv
+	 q/6CneJsie18i4SOvXwhPAu/J4atLgHsytTzL03mzc4b6UpLzxrzv2TANpM0B56VFL
+	 ZLKDidAyZ7GJA==
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+To: Linux ACPI <linux-acpi@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+ Mario Limonciello <mario.limonciello@amd.com>
+Subject:
+ [PATCH v1 3/3] ACPI: PM: s2idle: Only retrieve constraints when needed
+Date: Thu, 09 Oct 2025 21:27:11 +0200
+Message-ID: <3027060.e9J7NaK4W3@rafael.j.wysocki>
+Organization: Linux Kernel Development
+In-Reply-To: <4699399.LvFx2qVVIh@rafael.j.wysocki>
+References: <4699399.LvFx2qVVIh@rafael.j.wysocki>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251003-mt8196-gpufreq-v6-2-76498ad61d9e@collabora.com>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+
+The evaluation of LPS0 _DSM Function 1 in lps0_device_attach() may be
+useless if pm_debug_messages_on is never set.
+
+For this reason, instead of evaluating it in lps0_device_attach(), do
+that in a new .begin() callback for s2idle, acpi_s2idle_begin_lps0(),
+only when pm_debug_messages_on is set at that point.
+
+However, never attempt to evaluate LPS0 _DSM Function 1 more than once
+to avoid recurring failures.
+
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/acpi/x86/s2idle.c |   29 +++++++++++++++++++++++------
+ 1 file changed, 23 insertions(+), 6 deletions(-)
+
+--- a/drivers/acpi/x86/s2idle.c
++++ b/drivers/acpi/x86/s2idle.c
+@@ -303,6 +303,9 @@ static void lpi_check_constraints(void)
+ {
+ 	struct lpi_constraints *entry;
+ 
++	if (IS_ERR_OR_NULL(lpi_constraints_table))
++		return;
++
+ 	for_each_lpi_constraint(entry) {
+ 		struct acpi_device *adev = acpi_fetch_acpi_dev(entry->handle);
+ 
+@@ -484,11 +487,6 @@ static int lps0_device_attach(struct acp
+ 
+ 	lps0_device_handle = adev->handle;
+ 
+-	if (acpi_s2idle_vendor_amd())
+-		lpi_device_get_constraints_amd();
+-	else
+-		lpi_device_get_constraints();
+-
+ 	/*
+ 	 * Use suspend-to-idle by default if ACPI_FADT_LOW_POWER_S0 is set in
+ 	 * the FADT and the default suspend mode was not set from the command
+@@ -515,6 +513,25 @@ static struct acpi_scan_handler lps0_han
+ 	.attach = lps0_device_attach,
+ };
+ 
++static int acpi_s2idle_begin_lps0(void)
++{
++	if (pm_debug_messages_on && !lpi_constraints_table) {
++		if (acpi_s2idle_vendor_amd())
++			lpi_device_get_constraints_amd();
++		else
++			lpi_device_get_constraints();
++
++		/*
++		 * Try to retrieve the constraints only once because failures
++		 * to do so usually are sticky.
++		 */
++		if (!lpi_constraints_table)
++			lpi_constraints_table = ERR_PTR(-ENODATA);
++	}
++
++	return acpi_s2idle_begin();
++}
++
+ static int acpi_s2idle_prepare_late_lps0(void)
+ {
+ 	struct acpi_s2idle_dev_ops *handler;
+@@ -612,7 +629,7 @@ static void acpi_s2idle_restore_early_lp
+ }
+ 
+ static const struct platform_s2idle_ops acpi_s2idle_ops_lps0 = {
+-	.begin = acpi_s2idle_begin,
++	.begin = acpi_s2idle_begin_lps0,
+ 	.prepare = acpi_s2idle_prepare,
+ 	.prepare_late = acpi_s2idle_prepare_late_lps0,
+ 	.check = acpi_s2idle_check_lps0,
 
 
-On Fri, 03 Oct 2025 22:15:04 +0200, Nicolas Frattaroli wrote:
-> On the MT8196 and MT6991 SoCs, the GPU power and frequency is controlled
-> by some integration logic, referred to as "MFlexGraphics" by MediaTek,
-> which comes in the form of an embedded controller running
-> special-purpose firmware.
-> 
-> This controller takes care of the regulators and PLL clock frequencies
-> to squeeze the maximum amount of power out of the silicon.
-> 
-> Add a binding which models it as a power domain.
-> 
-> Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-> ---
->  .../bindings/power/mediatek,mt8196-gpufreq.yaml    | 117 +++++++++++++++++++++
->  1 file changed, 117 insertions(+)
-> 
-
-Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 
 
