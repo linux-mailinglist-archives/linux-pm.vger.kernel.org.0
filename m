@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-35837-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35838-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 316FFBC8ADA
-	for <lists+linux-pm@lfdr.de>; Thu, 09 Oct 2025 13:02:50 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 65129BC8B0A
+	for <lists+linux-pm@lfdr.de>; Thu, 09 Oct 2025 13:06:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id F1D80351FE2
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Oct 2025 11:02:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 73505421F14
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Oct 2025 11:03:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EC662DFA24;
-	Thu,  9 Oct 2025 11:00:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0FB92DFF19;
+	Thu,  9 Oct 2025 11:03:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I0Gm2N9V"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EKSN71/n"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D69862DCC06;
-	Thu,  9 Oct 2025 11:00:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B067E2DEA77;
+	Thu,  9 Oct 2025 11:03:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760007622; cv=none; b=Vw0kjQJA7G9VYg1x/ggRoNN5yzjfrZwiHBcqvP+/w5gpYhh99c3Qt2rmWo100bo9S5aibsPWnpNdGGvS7lDrRcWiP3bbao0vFWxkV2J9RbO0El8FHPwq5pbj2XM2WtNAQRAqZpiuXanrORVeWf34FEduqk96rbHxYBm45jnW70k=
+	t=1760007810; cv=none; b=jjdZAaV1x7Vkn9iMUM2MuqR3+NZMwJqMRIhFQs9x5ARgMNOJCU8Z3MIukxT9MVw1a2k3HQmXxxAKnDk6s5lraFx9FKraQPEhScNh6F94y/X2Ig9bYA5/R0g06j1gDHeqjOc5uuLeZawIc+5KRGhCr7QmI63gEbl5synT3/3go+0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760007622; c=relaxed/simple;
-	bh=zm2FFMShcCtjbHJ/RI7i7Pca3Wi8bOnZRjIJddLxJJ0=;
+	s=arc-20240116; t=1760007810; c=relaxed/simple;
+	bh=OqPKmpVaD95RFEBGqXorSNxmID174z0lezPeM+2qtpY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fK0TiCt43GURHufkdX74NXVkQnZ0bBELZwUkrpK5v2N1ZkRCsGUDx1otvC06m67J9QnGUcUx6vl4S7QUBGCmJKxL3unBxqFlhlfEJ7OTOO2hIXonbmAO6nvsUnyF4q1LEmat7R84vFhtFQZ41yvsPALJb8HBAHQIXhkyly6EnRY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I0Gm2N9V; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6BFCC4CEF9;
-	Thu,  9 Oct 2025 11:00:15 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=VCB+x+m+S5pDEe/xrOEhVvpPfPybLnY9hHT6KaL3AnW6RKuon2+FuQenw4JfXyFkpCA/YeCgPo1B+BVZklddBPKBT2x8yQ0gsK7RETFGOe19GSaJXuWgRsH2FBu6tkg3JT65/rcVxiDJ2YB47pL5JuwKzEyRed5fxWF8iMQQpak=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EKSN71/n; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1ED0C4CEE7;
+	Thu,  9 Oct 2025 11:03:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760007621;
-	bh=zm2FFMShcCtjbHJ/RI7i7Pca3Wi8bOnZRjIJddLxJJ0=;
+	s=k20201202; t=1760007810;
+	bh=OqPKmpVaD95RFEBGqXorSNxmID174z0lezPeM+2qtpY=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=I0Gm2N9VKnAia0R1rGUK3ADh/NbHgqyZdER7LDB+bMlniT1DGPvkEifa2Pud7qaDz
-	 2TqDtb6WyvQiWhQ0IEqT6lQWD/y+xySS928xm8CojuI4jvS6E3Swfp5BPU/bc4Oycn
-	 CFY49X9bErl+FM14r24LgxzVB1ieUnEH4V5cMTyX1V5TNPGwTrrOE+JBzsPSdoQ1FE
-	 ZGQEvCppJMAXRjWLxfkdt7vOgCqPdFu9PtH6+FIppJYySgqQD0CKnkC62z+1H8p6LV
-	 pUiOThOTayopCAsauEkqM+E+A8VIjESXDYbsEnnf1dFVToaRAF9BzWpnsZSQBlK8Q6
-	 DJ+BklARDV1uA==
-Message-ID: <e9f67f33-40d5-48b7-b779-47538d48d146@kernel.org>
-Date: Thu, 9 Oct 2025 20:00:13 +0900
+	b=EKSN71/ny+7lRcXJHl3VuaMvgkNqjDW7WuFiac6/JDS6ILUByVwpRY8O6bM8GY3QR
+	 RRNygzyW7lRLPMNob6ZpGfIHHusXHKvrEYLuE5tLEDo5ZLNMaw6PXWEee6kYJDjjUf
+	 jsFz3QW/7n0zT6ADLqg74wdWtzeZg497zDMtSGmg0ooaZqsDrNOSd74VZgYdxO/xyV
+	 0+2hRPbF46vAlZNA+ZdCQG5FFERTMpy+sA2V5/S7ZJ08umLVesIjL6I+sbGy2bbOSL
+	 YW1z68S2ijYkySqC5N1eNxVzxJT/XgTVNnTLIVODWS6Mc4O5o4rak2vRko1H8Ub1P4
+	 VilPpq5eEhwYg==
+Message-ID: <c15b7ee3-cae0-4cbf-8ea6-4d2b6ebee9de@kernel.org>
+Date: Thu, 9 Oct 2025 20:03:21 +0900
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,15 +50,20 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] dt-bindings: thermal: qcom-tsens: Document the Glymur
- temperature Sensor
-To: Pankaj Patil <pankaj.patil@oss.qualcomm.com>, amitk@kernel.org,
- thara.gopinath@gmail.com, rafael@kernel.org, daniel.lezcano@linaro.org,
- rui.zhang@intel.com, lukasz.luba@arm.com, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org
+Subject: Re: [PATCH] dt-bindings: thermal: qcom-tsens: document the Kaanapali
+ Temperature Sensor
+To: Jingyi Wang <jingyi.wang@oss.qualcomm.com>,
+ Amit Kucheria <amitk@kernel.org>, Thara Gopinath <thara.gopinath@gmail.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
 Cc: linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250920123631.281153-1-pankaj.patil@oss.qualcomm.com>
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ aiqun.yu@oss.qualcomm.com, tingwei.zhang@oss.qualcomm.com,
+ trilok.soni@oss.qualcomm.com, yijie.yang@oss.qualcomm.com,
+ Manaf Meethalavalappu Pallikunhi <manaf.pallikunhi@oss.qualcomm.com>
+References: <20250924-knp-tsens-v1-1-ad0cde4bd455@oss.qualcomm.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -104,21 +109,18 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20250920123631.281153-1-pankaj.patil@oss.qualcomm.com>
+In-Reply-To: <20250924-knp-tsens-v1-1-ad0cde4bd455@oss.qualcomm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 20/09/2025 21:36, Pankaj Patil wrote:
-> From: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
+On 25/09/2025 08:37, Jingyi Wang wrote:
+> From: Manaf Meethalavalappu Pallikunhi <manaf.pallikunhi@oss.qualcomm.com>
 > 
-> Document the Temperature Sensor (TSENS) on Glymur Platform.
+> Document the Temperature Sensor (TSENS) on the Kaanapali Platform.
 > 
-> Signed-off-by: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
-> Signed-off-by: Pankaj Patil <pankaj.patil@oss.qualcomm.com>
+> Signed-off-by: Manaf Meethalavalappu Pallikunhi <manaf.pallikunhi@oss.qualcomm.com>
+> Signed-off-by: Jingyi Wang <jingyi.wang@oss.qualcomm.com>
 > ---
-> Changes in v2:
-> Fixed to sort entry in alphabetical order.
-> 
 
 No, conflicting patch with Kaanapali, without any reason. Squash the
 patches.
@@ -137,7 +139,6 @@ so any simplified review will not be possible, and do same work - review
 and applying - twice, instead of having only one?
 
 Why maintainers should accept this?
-
 
 Best regards,
 Krzysztof
