@@ -1,154 +1,189 @@
-Return-Path: <linux-pm+bounces-35855-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35857-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E3ACBC9C8D
-	for <lists+linux-pm@lfdr.de>; Thu, 09 Oct 2025 17:27:33 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 650E3BC9EE0
+	for <lists+linux-pm@lfdr.de>; Thu, 09 Oct 2025 18:04:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 830123A46D8
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Oct 2025 15:26:28 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 8849D35451E
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Oct 2025 16:04:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EB192ECE96;
-	Thu,  9 Oct 2025 15:25:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD29D2ED870;
+	Thu,  9 Oct 2025 15:58:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Af1yyeZA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oRdyzqP2"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCA0F204096
-	for <linux-pm@vger.kernel.org>; Thu,  9 Oct 2025 15:25:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E62C2ED858;
+	Thu,  9 Oct 2025 15:58:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760023517; cv=none; b=eol6vd91/n2v811C3m/Z9fK5CgAs/vObAskwGJgIy0aTov7sGRaXdbOVpcSl9o7yrmccjKNqAbb2QDygOA7HdBM2Gmi3stvqo6zmZOFWdGOj0Eg8oRWDwXzVpi8iBCLulX1joLX2xf1atXn2twkcdYjv2zzIJ6h5OEVVs6Gd2LA=
+	t=1760025497; cv=none; b=Et+o4VXiLmAsI/0tRg6CMgX9CSfMMTpcYJs9NO4+ndib3TbZerJEwd8n4hufp94hVLHoIzkrYFztld4QwnoV7vXeZrxekompWsbQtOAA1lbVO0ERoP1Cx1K5Wx1E4NngPI9NM+1z9UU1XW5Yp/QwV97S8UglUBbcFW3A0v6j4OQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760023517; c=relaxed/simple;
-	bh=QW41kS606/q0M1jPNHEOuZDX62lb/ReQ5t7lhOrXCD4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=lJSt2vzvQMPvas5eXx5xi+C3sFfe9PTEBLjnM1jzeicAnNdd6nDklEyVoANhEMRE9lMLE0jOpWNRAA070B77k+pgYdb/GuouLTw5PLCf1o+MCl9d+4zEANGNpAuQdBuvUzbSSx46ezlE3Unr5Ii3J/cwdryA7ncQEsyt7qJfu+Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Af1yyeZA; arc=none smtp.client-ip=209.85.218.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-afcb7ae31caso183223666b.3
-        for <linux-pm@vger.kernel.org>; Thu, 09 Oct 2025 08:25:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1760023511; x=1760628311; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MC3uJwytBymNcNNUBl3ACIVe5vrNsKsuMCXz3oqIuhI=;
-        b=Af1yyeZAOAqEbOeGgYTym0mDHmPAwMGaoPz1O7eyYQz+Th0zjj+ivDHa0RsntCB4tL
-         wEFlq6qBrVa+eld8SXbwd/ccrNfz9gJt9fPyzShxT9XgMfXKjQkE7lnqvpbX4I8aaNUQ
-         uJeeP/2qDVl2yBHK359MBgqYBescyCVvLFXaL/FWBSYFmVs1smoyfBzcX3Z56QLc5gcM
-         RPlyf+1ZFuEChLJ1shNdr3K8sL8ZvTNiS3Tk90dN4bDLoyNvO4flR9o64PPBMfUXGbYa
-         dVbaFiejbNnYeErTt7svvejGNY983fv0l/z5i1D2YNvJnxZYkcUYUgtRM+Hh/I+0SGtA
-         HqEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760023511; x=1760628311;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MC3uJwytBymNcNNUBl3ACIVe5vrNsKsuMCXz3oqIuhI=;
-        b=SRRGcS13zCCByVs1bXthoeTYE+FO1DLTicbC2qBDmAjLxM5DBVygLpLr72LM+JsmwJ
-         cluyPtkh0eabUGOQhfV7V758OiSF+QLhhvmva3QFlCzWII4S1kgOkD9QUZcLep2zMkOY
-         hw4cmfsxjad7Fcs2RMbs6mXYsUdUFh+LE7Rp93+4Lx4bHQzhnO5t9vVh/maf1S9oB2D3
-         tpPGjpZOnDa4nzJVT4IBakjjGGVq/AL0WBwLVB3Pi2J8TVg7/pkZeI98Gmhqku423sbC
-         R7zoIIC4r24NgJz7Wf8OPqYHvuX3DBD72SePP9HcdqdPwN2ZsaGKbTfCHGNBRXYEmF7S
-         b2Zw==
-X-Forwarded-Encrypted: i=1; AJvYcCUKAe1d4fykqyWO9IhFI8H4zzqJML16W2goFmvNHEX0U2FlOuSWFvk/9Zo3MGNkL/P1eU5nmEMeTw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwSFaXcu2JG2hLsHTlV/yxhA4vPiq2UhPDrRffENNlqgjRJRQ8V
-	54W+IdH7cx6/kSVzfTaozE7bhniPQmZEFymZqb864Cn0nELYcAGbh4uCgRR5K7kjJHw=
-X-Gm-Gg: ASbGnctom3V6JrBHzzPcAMtcdyxNpHZgxJMb3TIBU9xkxtPPFiLDotOF6fngsxyJo8f
-	jFHVag8xT82PtAN2mSOkNgbKEnTm5eaSjqwMMvo9hwcUHipq2TF8EykIWv0p72tu2/2sSQmk49N
-	SqzxH3Mx75V/5im7CfQ02ZDTSeYjUU6pQ4PAFgL0VqU0EoqVOgRc1hYzZlmJH9/A/kiz7sXJ9u7
-	AhEg5gPx/9xamckRZDyqyLh6M1cvIyqS1KUSba1F4nT3+3ByKoMw5lzzu0Ds1uAMvfK1APridxf
-	c8RFAe5vJw6RKnxiG4pc9dBDEG2SUWk+cgNjN1k+7YOm5SkuNj5xJzx3sSRLJb6mPzLK43wVkRw
-	UzdH8ka+wupyomVASyZAQ4YDmGrxxLuAEdLoGAkA+U/spGckqbwF45Ue55mchA70OWWWMULvrRw
-	lZVdM5N9ZQ6apPcGWlphwWecRI0SnPzWWfLuu7DAXa
-X-Google-Smtp-Source: AGHT+IGUCw5TbDsbNDU12n89wz1xnvXjoWKEOoQfEfCs7xti4zjASJ6sSLgSUPyBLFyQO2HMcf/P7g==
-X-Received: by 2002:a17:907:6e8a:b0:b3d:5088:213d with SMTP id a640c23a62f3a-b50abfd4902mr890576066b.42.1760023511315;
-        Thu, 09 Oct 2025 08:25:11 -0700 (PDT)
-Received: from puffmais2.c.googlers.com (224.138.204.35.bc.googleusercontent.com. [35.204.138.224])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b486970b36fsm1908967566b.62.2025.10.09.08.25.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Oct 2025 08:25:10 -0700 (PDT)
-From: =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
-Date: Thu, 09 Oct 2025 16:25:12 +0100
-Subject: [PATCH v2 10/10] pmdomain: samsung: use dev_err() instead of
- pr_err()
+	s=arc-20240116; t=1760025497; c=relaxed/simple;
+	bh=Imkb1krffdVd9dUc09lqWgoj2DlYbxNjjKJINgipLvg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=G2otF5HREUM2S9JpNH9mahP6drepM+UeHiUB2JJGEPQ55qxZPzoOx81py7aJ4twM6wMMIWa4slzSNMPkYl299jDD/OOP+Ghs18mYAvOk2bLRkjyPuRzUic2QZdphH+suzlozBG7wFsbECDujrOCWMEy/7ja7UsADt6dkUO66nqI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oRdyzqP2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92594C4CEF7;
+	Thu,  9 Oct 2025 15:58:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1760025497;
+	bh=Imkb1krffdVd9dUc09lqWgoj2DlYbxNjjKJINgipLvg=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=oRdyzqP2AVdoeZlxsAclgqFZOB4VtkHSnzycFOaiS/xMJCeOHs8TgMRfjByDr5x2w
+	 /2guxGe80fb8+Ix3Tme7z8b1ocKI8hqoTGjRpCxSj6+KcqHdkMaQ81ypWfs0ObH/2P
+	 Qlarzxe2BLmT20UbPo2BTOEPY4vXZ3UddDKpQ/2d7bcwfdt4YfLr4EbGDDYFO0WcmK
+	 n1S7esDEDL9XsS9aDze5oeZhC8FwUKqX4hQFaDVh6w9hsYBva/DGc8NlfPvC4S1XiZ
+	 NHPkELdT18iOhyAKzPhH93Ddyp6WsvSfry9cQ0yNRekXdbYCjCGd5OQ1a4HrvOg7F0
+	 eSVW7C7m/HRwQ==
+From: Sasha Levin <sashal@kernel.org>
+To: patches@lists.linux.dev,
+	stable@vger.kernel.org
+Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+	Sasha Levin <sashal@kernel.org>,
+	rafael@kernel.org,
+	daniel.lezcano@linaro.org,
+	linux-pm@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.17-5.10] cpuidle: Fail cpuidle device registration if there is one already
+Date: Thu,  9 Oct 2025 11:54:43 -0400
+Message-ID: <20251009155752.773732-17-sashal@kernel.org>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20251009155752.773732-1-sashal@kernel.org>
+References: <20251009155752.773732-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.17.1
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Message-Id: <20251009-gs101-pd-v2-10-3f4a6db2af39@linaro.org>
-References: <20251009-gs101-pd-v2-0-3f4a6db2af39@linaro.org>
-In-Reply-To: <20251009-gs101-pd-v2-0-3f4a6db2af39@linaro.org>
-To: Krzysztof Kozlowski <krzk@kernel.org>, 
- Alim Akhtar <alim.akhtar@samsung.com>, Rob Herring <robh@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Ulf Hansson <ulf.hansson@linaro.org>, 
- Marek Szyprowski <m.szyprowski@samsung.com>
-Cc: Peter Griffin <peter.griffin@linaro.org>, 
- Tudor Ambarus <tudor.ambarus@linaro.org>, 
- Will McVicker <willmcvicker@google.com>, kernel-team@android.com, 
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-pm@vger.kernel.org, 
- =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-X-Mailer: b4 0.14.2
 
-dev_err() gives us more consistent error messages, which include the
-device. Switch to using dev_err().
+From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: André Draszik <andre.draszik@linaro.org>
+[ Upstream commit 7b1b7961170e4fcad488755e5ffaaaf9bd527e8f ]
+
+Refuse to register a cpuidle device if the given CPU has a cpuidle
+device already and print a message regarding it.
+
+Without this, an attempt to register a new cpuidle device without
+unregistering the existing one leads to the removal of the existing
+cpuidle device without removing its sysfs interface.
+
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pmdomain/samsung/exynos-pm-domains.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/pmdomain/samsung/exynos-pm-domains.c b/drivers/pmdomain/samsung/exynos-pm-domains.c
-index a7e55624728a62545eac049c9a51012a229f44c2..387ee1c91caeae4519237af2ec659f56782e7bd7 100644
---- a/drivers/pmdomain/samsung/exynos-pm-domains.c
-+++ b/drivers/pmdomain/samsung/exynos-pm-domains.c
-@@ -29,6 +29,7 @@ struct exynos_pm_domain_config {
-  */
- struct exynos_pm_domain {
- 	struct regmap *regmap;
-+	struct device *dev;
- 	struct generic_pm_domain pd;
- 	u32 local_pwr_cfg;
- 	u32 configuration_reg;
-@@ -53,8 +54,9 @@ static int exynos_pd_power(struct generic_pm_domain *domain, bool power_on)
- 				       (val & pd->local_pwr_cfg) == pwr,
- 				       100, 1 * USEC_PER_MSEC);
- 	if (err)
--		pr_err("Power domain %s %sable failed: %d (%#.2x)\n",
--		       domain->name, power_on ? "en" : "dis", err, val);
-+		dev_err(pd->dev,
-+			"Power domain %s %sable failed: %d (%#.2x)\n",
-+			domain->name, power_on ? "en" : "dis", err, val);
+LLM Generated explanations, may be completely bogus:
+
+YES
+
+Explanation
+
+- What it fixes
+  - The patch adds an explicit per-CPU guard in the core registration
+    path to prevent registering a second cpuidle device for a CPU that
+    already has one. Specifically, it introduces an early check in
+    __cpuidle_register_device:
+    - drivers/cpuidle/cpuidle.c:641
+      - if (per_cpu(cpuidle_devices, cpu)) { pr_info(...); return
+        -EEXIST; }
+  - Before this, the code unconditionally replaced the per-CPU pointer
+    with the new device:
+    - drivers/cpuidle/cpuidle.c:657
+      - per_cpu(cpuidle_devices, cpu) = dev;
+  - This “silent replacement” makes the prior device unreachable to the
+    core (and duplicates entries on cpuidle_detected_devices), while its
+    sysfs state remains present and bound to the old device object. The
+    sysfs layer allocates a kobject that keeps a backpointer to the
+    cpuidle_device:
+    - drivers/cpuidle/sysfs.c:697 (cpuidle_add_sysfs) sets kdev->dev =
+      dev and publishes it
+    - drivers/cpuidle/sysfs.c:740 (cpuidle_remove_sysfs) tears it down
+      for the same dev
+  - If a new device is registered without first unregistering the old
+    one, the old sysfs instance is never removed, leaving stale sysfs
+    entries referencing the old cpuidle_device. That is at best user-
+    visible breakage (stale sysfs) and at worst a lifetime hazard if
+    that device is later freed by its owner.
+
+- Why the change is correct and minimal-risk
+  - The new guard is small, contained, and runs under the existing
+    cpuidle_lock (as required by the function’s contract), so it’s race-
+    safe with the unregister path.
+    - The function comment already requires the lock;
+      cpuidle_register_device holds it before calling
+      __cpuidle_register_device (drivers/cpuidle/cpuidle.c:680).
+  - It complements the existing check that only prevents double-
+    registering the same struct (dev->registered):
+    - drivers/cpuidle/cpuidle.c:682
+    - That check does not cover the case of a different struct
+      cpuidle_device for the same CPU. The new per-CPU check closes that
+      gap.
+  - The behavior change is limited to returning -EEXIST instead of
+    proceeding to corrupt state. Callers already treat non-zero returns
+    as failure and back out cleanly (see drivers like ACPI, intel_idle,
+    etc., which unregister the driver or bail on error).
+  - No architectural changes, no new features, no ABI changes. The only
+    user-visible change is a pr_info() when misuse occurs.
+
+- Stable backport considerations
+  - It fixes a real bug with observable user impact (stale sysfs
+    interface) and potential lifetime issues.
+  - The fix is tiny (7 insertions and one trivial local-variable use)
+    and self-contained to drivers/cpuidle/cpuidle.c: no dependencies on
+    new APIs, no cross-subsystem changes.
+  - It aligns with stable rules: important bugfix, minimal risk,
+    confined to the cpuidle core.
+  - It leverages existing per-CPU tracking (include/linux/cpuidle.h:116)
+    and existing unregister semantics that clear the pointer and
+    dev->registered, so it should apply cleanly across maintained stable
+    branches.
+
+Conclusion: This is a clear, contained bug fix that prevents a subtle
+but serious state/lifetime problem in cpuidle registration. It is well-
+suited for stable backport.
+
+ drivers/cpuidle/cpuidle.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
+index 0835da449db8b..56132e843c991 100644
+--- a/drivers/cpuidle/cpuidle.c
++++ b/drivers/cpuidle/cpuidle.c
+@@ -635,8 +635,14 @@ static void __cpuidle_device_init(struct cpuidle_device *dev)
+ static int __cpuidle_register_device(struct cpuidle_device *dev)
+ {
+ 	struct cpuidle_driver *drv = cpuidle_get_cpu_driver(dev);
++	unsigned int cpu = dev->cpu;
+ 	int i, ret;
  
- 	return err;
- }
-@@ -123,6 +125,8 @@ static int exynos_pd_probe(struct platform_device *pdev)
- 	if (!pd)
- 		return -ENOMEM;
- 
-+	pd->dev = dev;
++	if (per_cpu(cpuidle_devices, cpu)) {
++		pr_info("CPU%d: cpuidle device already registered\n", cpu);
++		return -EEXIST;
++	}
 +
- 	pd->pd.name = exynos_get_domain_name(dev, np);
- 	if (!pd->pd.name)
- 		return -ENOMEM;
-
+ 	if (!try_module_get(drv->owner))
+ 		return -EINVAL;
+ 
+@@ -648,7 +654,7 @@ static int __cpuidle_register_device(struct cpuidle_device *dev)
+ 			dev->states_usage[i].disable |= CPUIDLE_STATE_DISABLED_BY_USER;
+ 	}
+ 
+-	per_cpu(cpuidle_devices, dev->cpu) = dev;
++	per_cpu(cpuidle_devices, cpu) = dev;
+ 	list_add(&dev->device_list, &cpuidle_detected_devices);
+ 
+ 	ret = cpuidle_coupled_register_device(dev);
 -- 
-2.51.0.710.ga91ca5db03-goog
+2.51.0
 
 
