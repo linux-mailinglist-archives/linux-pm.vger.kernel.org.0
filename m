@@ -1,46 +1,48 @@
-Return-Path: <linux-pm+bounces-35836-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35837-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1DFBFBC7859
-	for <lists+linux-pm@lfdr.de>; Thu, 09 Oct 2025 08:19:38 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 316FFBC8ADA
+	for <lists+linux-pm@lfdr.de>; Thu, 09 Oct 2025 13:02:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 1311B4E3AD7
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Oct 2025 06:19:37 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id F1D80351FE2
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Oct 2025 11:02:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6D6A29A9C3;
-	Thu,  9 Oct 2025 06:19:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EC662DFA24;
+	Thu,  9 Oct 2025 11:00:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I0Gm2N9V"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from canpmsgout04.his.huawei.com (canpmsgout04.his.huawei.com [113.46.200.219])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FBF9296BBA;
-	Thu,  9 Oct 2025 06:19:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.219
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D69862DCC06;
+	Thu,  9 Oct 2025 11:00:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759990760; cv=none; b=Td8bKL8izc2fSsb5sgnA8ycIystaxmY535xvdnmpDWr8Ev0fdN5jms6Xk9wQ1wQthZfUvgJTkIk5lpaV59V9qwMFB5dawMHZOgHZzXAjT1YPkjKTGMEZnUFrPXj8JY5/VuJlHGH1wnmMURuFkikaKcbjPGE5SmsxmPSBc+kNgdA=
+	t=1760007622; cv=none; b=Vw0kjQJA7G9VYg1x/ggRoNN5yzjfrZwiHBcqvP+/w5gpYhh99c3Qt2rmWo100bo9S5aibsPWnpNdGGvS7lDrRcWiP3bbao0vFWxkV2J9RbO0El8FHPwq5pbj2XM2WtNAQRAqZpiuXanrORVeWf34FEduqk96rbHxYBm45jnW70k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759990760; c=relaxed/simple;
-	bh=D+Rpim04uRYSosMNek/Y8Z/MaSS/5imcokP5FdEqlYM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=Jlj9OiZmBJPJFdyUgD0zqbGYL+dqTgbbKLTaXSpVPBLXEh4ISMABCnUZuCh6davHE/ewxA8EBwcZ7IyF5b0FhfMQ461u0BrH0PHFS7Kssq31qcmeomG1/XvX9VE5D8mdFWM7nGKmVl56KFF1k67i2sNGJrSdEkPa4RKzZeTZ1pc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com; spf=pass smtp.mailfrom=hisilicon.com; arc=none smtp.client-ip=113.46.200.219
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hisilicon.com
-Received: from mail.maildlp.com (unknown [172.19.88.194])
-	by canpmsgout04.his.huawei.com (SkyGuard) with ESMTPS id 4cj07j4Z5hz1prKc;
-	Thu,  9 Oct 2025 14:18:57 +0800 (CST)
-Received: from kwepemr500004.china.huawei.com (unknown [7.202.195.141])
-	by mail.maildlp.com (Postfix) with ESMTPS id 7059F1402C1;
-	Thu,  9 Oct 2025 14:19:14 +0800 (CST)
-Received: from [10.67.121.58] (10.67.121.58) by kwepemr500004.china.huawei.com
- (7.202.195.141) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Thu, 9 Oct
- 2025 14:19:13 +0800
-Message-ID: <477505bc-ce6d-409a-820d-55a46c72ab7d@hisilicon.com>
-Date: Thu, 9 Oct 2025 14:19:13 +0800
+	s=arc-20240116; t=1760007622; c=relaxed/simple;
+	bh=zm2FFMShcCtjbHJ/RI7i7Pca3Wi8bOnZRjIJddLxJJ0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fK0TiCt43GURHufkdX74NXVkQnZ0bBELZwUkrpK5v2N1ZkRCsGUDx1otvC06m67J9QnGUcUx6vl4S7QUBGCmJKxL3unBxqFlhlfEJ7OTOO2hIXonbmAO6nvsUnyF4q1LEmat7R84vFhtFQZ41yvsPALJb8HBAHQIXhkyly6EnRY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I0Gm2N9V; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6BFCC4CEF9;
+	Thu,  9 Oct 2025 11:00:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1760007621;
+	bh=zm2FFMShcCtjbHJ/RI7i7Pca3Wi8bOnZRjIJddLxJJ0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=I0Gm2N9VKnAia0R1rGUK3ADh/NbHgqyZdER7LDB+bMlniT1DGPvkEifa2Pud7qaDz
+	 2TqDtb6WyvQiWhQ0IEqT6lQWD/y+xySS928xm8CojuI4jvS6E3Swfp5BPU/bc4Oycn
+	 CFY49X9bErl+FM14r24LgxzVB1ieUnEH4V5cMTyX1V5TNPGwTrrOE+JBzsPSdoQ1FE
+	 ZGQEvCppJMAXRjWLxfkdt7vOgCqPdFu9PtH6+FIppJYySgqQD0CKnkC62z+1H8p6LV
+	 pUiOThOTayopCAsauEkqM+E+A8VIjESXDYbsEnnf1dFVToaRAF9BzWpnsZSQBlK8Q6
+	 DJ+BklARDV1uA==
+Message-ID: <e9f67f33-40d5-48b7-b779-47538d48d146@kernel.org>
+Date: Thu, 9 Oct 2025 20:00:13 +0900
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -48,81 +50,95 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/2] cpufreq: CPPC: Rework FIE warning prints and
- cppc_scale_freq_tick()
-To: <viresh.kumar@linaro.org>, <rafael@kernel.org>, <ionela.voinescu@arm.com>,
-	<beata.michalska@arm.com>, <zhenglifeng1@huawei.com>, Prashant Malani
-	<pmalani@google.com>
-CC: <linux-pm@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linuxarm@huawei.com>,
-	<jonathan.cameron@huawei.com>
-References: <20250828110212.2108653-1-zhanjie9@hisilicon.com>
- <60f9cafb-2199-4c7b-ba97-7529d0ef5bf8@hisilicon.com>
+Subject: Re: [PATCH v2] dt-bindings: thermal: qcom-tsens: Document the Glymur
+ temperature Sensor
+To: Pankaj Patil <pankaj.patil@oss.qualcomm.com>, amitk@kernel.org,
+ thara.gopinath@gmail.com, rafael@kernel.org, daniel.lezcano@linaro.org,
+ rui.zhang@intel.com, lukasz.luba@arm.com, robh@kernel.org,
+ krzk+dt@kernel.org, conor+dt@kernel.org
+Cc: linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250920123631.281153-1-pankaj.patil@oss.qualcomm.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
-From: Jie Zhan <zhanjie9@hisilicon.com>
-In-Reply-To: <60f9cafb-2199-4c7b-ba97-7529d0ef5bf8@hisilicon.com>
-Content-Type: text/plain; charset="UTF-8"
+Autocrypt: addr=krzk@kernel.org; keydata=
+ xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
+ cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
+ JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
+ gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
+ J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
+ NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
+ BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
+ vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
+ Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
+ TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
+ S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
+ FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJoF1BKBQkWlnSaAAoJEBuTQ307
+ QWKbHukP/3t4tRp/bvDnxJfmNdNVn0gv9ep3L39IntPalBFwRKytqeQkzAju0whYWg+R/rwp
+ +r2I1Fzwt7+PTjsnMFlh1AZxGDmP5MFkzVsMnfX1lGiXhYSOMP97XL6R1QSXxaWOpGNCDaUl
+ ajorB0lJDcC0q3xAdwzRConxYVhlgmTrRiD8oLlSCD5baEAt5Zw17UTNDnDGmZQKR0fqLpWy
+ 786Lm5OScb7DjEgcA2PRm17st4UQ1kF0rQHokVaotxRM74PPDB8bCsunlghJl1DRK9s1aSuN
+ hL1Pv9VD8b4dFNvCo7b4hfAANPU67W40AaaGZ3UAfmw+1MYyo4QuAZGKzaP2ukbdCD/DYnqi
+ tJy88XqWtyb4UQWKNoQqGKzlYXdKsldYqrLHGoMvj1UN9XcRtXHST/IaLn72o7j7/h/Ac5EL
+ 8lSUVIG4TYn59NyxxAXa07Wi6zjVL1U11fTnFmE29ALYQEXKBI3KUO1A3p4sQWzU7uRmbuxn
+ naUmm8RbpMcOfa9JjlXCLmQ5IP7Rr5tYZUCkZz08LIfF8UMXwH7OOEX87Y++EkAB+pzKZNNd
+ hwoXulTAgjSy+OiaLtuCys9VdXLZ3Zy314azaCU3BoWgaMV0eAW/+gprWMXQM1lrlzvwlD/k
+ whyy9wGf0AEPpLssLVt9VVxNjo6BIkt6d1pMg6mHsUEVzsFNBFVDXDQBEADNkrQYSREUL4D3
+ Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
+ MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
+ OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
+ GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
+ 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
+ YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
+ 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
+ BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
+ JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
+ 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
+ YpsFAmgXUF8FCRaWWyoACgkQG5NDfTtBYptO0w//dlXJs5/42hAXKsk+PDg3wyEFb4NpyA1v
+ qmx7SfAzk9Hf6lWwU1O6AbqNMbh6PjEwadKUk1m04S7EjdQLsj/MBSgoQtCT3MDmWUUtHZd5
+ RYIPnPq3WVB47GtuO6/u375tsxhtf7vt95QSYJwCB+ZUgo4T+FV4hquZ4AsRkbgavtIzQisg
+ Dgv76tnEv3YHV8Jn9mi/Bu0FURF+5kpdMfgo1sq6RXNQ//TVf8yFgRtTUdXxW/qHjlYURrm2
+ H4kutobVEIxiyu6m05q3e9eZB/TaMMNVORx+1kM3j7f0rwtEYUFzY1ygQfpcMDPl7pRYoJjB
+ dSsm0ZuzDaCwaxg2t8hqQJBzJCezTOIkjHUsWAK+tEbU4Z4SnNpCyM3fBqsgYdJxjyC/tWVT
+ AQ18NRLtPw7tK1rdcwCl0GFQHwSwk5pDpz1NH40e6lU+NcXSeiqkDDRkHlftKPV/dV+lQXiu
+ jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
+ zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
+ XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
+In-Reply-To: <20250920123631.281153-1-pankaj.patil@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
- kwepemr500004.china.huawei.com (7.202.195.141)
 
-Hi All,
-
-I'm still looking forward to some feedback or tests on this series.
-
-Cheers,
-Jie
-
-On 9/16/2025 10:58 AM, Jie Zhan wrote:
-> A kindly ping on this.
-> Some feedback would be nice if anyone is not on holiday ;)
+On 20/09/2025 21:36, Pankaj Patil wrote:
+> From: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
 > 
-> Jie
+> Document the Temperature Sensor (TSENS) on Glymur Platform.
 > 
-> On 8/28/2025 7:02 PM, Jie Zhan wrote:
->> Reading performance feedback counters on offline or low-power idle CPUs may
->> return 0, which is interpreted as -EFAULT.
->>
->> This leads to two issues related to the CPPC FIE:
->>
->> 1. When booting a subset of CPUs in policy->related_cpus (some CPUs under
->> the cpufreq policy is offline), there are warnings of "failed to read perf
->> counters for cpu" during the CPPC FIE initialization.
->>
->> 2. On our platform with the CPC regs in System Memory and a power-down idle
->> state enabled, if the CPPC FIE is registered successfully, there are
->> repeated warnings of "failed to read perf counters" because
->> cppc_scale_freq_workfn() is trying to access the counters of remote CPUs
->> that enters the idle state.
->>
->> To solve the above issues:
->>
->> Patch 1 removes the warning when the CPPC FIE initialization fails to read
->> counters on offline CPUs and changes the log leve to debug.  This can be
->> applied separately.
->>
->> Patch 2 moves the update of FIE arch_freq_scale into ticks for non-PCC regs
->> and maintains the existing mechanism for PCC regs, such that reading
->> counters would be triggered on the local CPU only.  This inherently solves
->> the issue in [1].  We have tested this on Kunpeng SoCs with the CPC regs
->> both in System Memory and FFH.  More tests on other platforms are welcome
->> though.
->> [1] https://lore.kernel.org/linux-pm/20250730032312.167062-3-yubowen8@huawei.com/
->>
->> Changelog:
->>
->> v2:
->> - Update the cover letter and the commit log based on v1 discussion
->> - Update FIE arch_freq_scale in ticks for non-PCC regs
->>
->> v1:
->> https://lore.kernel.org/linux-pm/20250730032312.167062-1-yubowen8@huawei.com/
->>
->> Jie Zhan (2):
->>   cpufreq: CPPC: Don't warn if FIE init fails to read counters
->>   cpufreq: CPPC: Update FIE arch_freq_scale in ticks for non-PCC regs
->>
->>  drivers/cpufreq/cppc_cpufreq.c | 64 +++++++++++++++++++++-------------
->>  1 file changed, 39 insertions(+), 25 deletions(-)
->>
+> Signed-off-by: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
+> Signed-off-by: Pankaj Patil <pankaj.patil@oss.qualcomm.com>
+> ---
+> Changes in v2:
+> Fixed to sort entry in alphabetical order.
+> 
+
+No, conflicting patch with Kaanapali, without any reason. Squash the
+patches.
+
+This entire split is just huge churn, huge duplication of work and quite
+a lot of review put onto the community. You should have coordinated your
+work better.
+
+I am disappointed because you just don't think about the reviewing
+process, about what maintainers should do with that. You just send what
+was told you to send.
+
+Explain to us - why do we want to have two 99% same patches sent the
+SAME DAY, from the same company, sent in completely separate patchsets
+so any simplified review will not be possible, and do same work - review
+and applying - twice, instead of having only one?
+
+Why maintainers should accept this?
+
+
+Best regards,
+Krzysztof
 
