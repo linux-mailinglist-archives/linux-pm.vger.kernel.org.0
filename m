@@ -1,58 +1,53 @@
-Return-Path: <linux-pm+bounces-35879-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35883-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A678BCAB0B
-	for <lists+linux-pm@lfdr.de>; Thu, 09 Oct 2025 21:27:36 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64769BCAB65
+	for <lists+linux-pm@lfdr.de>; Thu, 09 Oct 2025 21:34:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 341953B4033
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Oct 2025 19:27:35 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id AC5384FCC55
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Oct 2025 19:34:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19E27257846;
-	Thu,  9 Oct 2025 19:27:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FFF9254864;
+	Thu,  9 Oct 2025 19:34:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fyvgJBpx"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ArEfk2SV"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2C6C257448;
-	Thu,  9 Oct 2025 19:27:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65B3D23A9AD;
+	Thu,  9 Oct 2025 19:34:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760038052; cv=none; b=qdZyZudVfv+WK2krSAmkt2FxwhoMdifXj4hVC0DLgy40GN7u1YXoXrTitNYTRtXC9YIh+GyaY4j9ZtLcXYqbHz4WLPS70B7PCFijHf3ePsJ1bCaBnc2QdNjG7ZxtBfhGvLlXZDI9ahpk+YhHK0TKsAyivV1EppvZ80fzeSHH2Ks=
+	t=1760038459; cv=none; b=V0ylW/wWPhhSgMEWgOKxGBM/pqyhAeilLRlpo5La8c6OGgVdUNQ8hlqxn50pNTEaUxuLvAP4fpmvx1W4y6Nna04ihx1MZ8ziQWxLnPS2GRH1ZgCUpiAj/+4Iod9bJb6E3ZVFpNlnyNH13C7kS5MrGuEQo1jiqK2vLrMKyYe9WCg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760038052; c=relaxed/simple;
-	bh=UTW2ZGiyy69eDiDpqlp14GE5qGdW3hytlY6efzzvicY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=JA9sSKCW+ZxZ2pCcPVrHGjm51vwxEygKH4EdmEAEtVl/vbIMWl94yc5hi94GYRRcuMstqGSq/o8GOuYeS94/5qrCE/8y6PeYDsBgs1KI7tnUFPPdqwCcPj9aiKTG7nVWx4G7WNX+w+Xcw8cVyo/+uShkc9DKeZOXvaQ5XSNKeFo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fyvgJBpx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F933C4CEF8;
-	Thu,  9 Oct 2025 19:27:30 +0000 (UTC)
+	s=arc-20240116; t=1760038459; c=relaxed/simple;
+	bh=8HiEbeLQ4eILUOcHGbv+e+VKBDpS1Nnq500kcdoPbsw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=rtFxZq6bRcNmCKH1o0DjVeMUT5fe8ehpZMfMyXQzeGv4454t4vd5k+acCG/RNd8wjgTZGg0drWIcP9v8nQjL/8FnXMYPahdLJkqOQt7NyYThuZka5rzk4NQX+qYt2PquYYY4YipPI8e9MYD7OV0k2R7kcMrWPFygVM1oDAPOjA4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ArEfk2SV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62E24C4CEF8;
+	Thu,  9 Oct 2025 19:34:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760038051;
-	bh=UTW2ZGiyy69eDiDpqlp14GE5qGdW3hytlY6efzzvicY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=fyvgJBpxlel4K0G8hQSPenCYoEaIWjFSbfDsvJ7VOJUJPeUEjfjIE9KH0AFg8UpQX
-	 KYdWFIpvtSBqpAiKfz+hj5EU7JUbv381HsWV+3c3OUHNEV6tJBNk3aBIkgfgjDNdS0
-	 EMLmRuF2+ef4vpbpvU6w2SNUoGQwGLW5Wt+Or8G8pDb18HIW8ok+GGDBYP0DQWJ4dt
-	 H8tg2oDqzYd9t3pKCppREmF37H5xg6LT/4tC2cyKuhmfSnl40IRiQn0yxF6bwQumsv
-	 q/6CneJsie18i4SOvXwhPAu/J4atLgHsytTzL03mzc4b6UpLzxrzv2TANpM0B56VFL
-	 ZLKDidAyZ7GJA==
+	s=k20201202; t=1760038459;
+	bh=8HiEbeLQ4eILUOcHGbv+e+VKBDpS1Nnq500kcdoPbsw=;
+	h=From:To:Cc:Subject:Date:From;
+	b=ArEfk2SVMHYlwTRXt3oSB9ij60lfrDwdFw0kQWHWZrzt4BZ+1oL1NMuIaLd1kaViw
+	 7h6ydT2mD9WuVZkxNeueenPhr4+E6QeWHamz+XMUQ3G32oGSf6Kfy7qoRMFIsT2Rn0
+	 252Er5IJA6XJ3vVvUxc5d6xaOD3mCcZzkKbuI7OYD8FB3+OlEHLGconF9aJEwOL7vc
+	 WV/cmQQfCiQVGEvFBUF5aiyfbSF0lTzwzHaSzRR++Gy5/tG5NmoveTjpeMJSpDFMyN
+	 8WvKVAh0wFNZtBqRCWxNVUwYR6Lv7j7xXNW5yZ3ReAz1Bj042/nnC0JhTYlwh05EEG
+	 6gf8Dj/1pvfLA==
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-To: Linux ACPI <linux-acpi@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Mario Limonciello <mario.limonciello@amd.com>
-Subject:
- [PATCH v1 3/3] ACPI: PM: s2idle: Only retrieve constraints when needed
-Date: Thu, 09 Oct 2025 21:27:11 +0200
-Message-ID: <3027060.e9J7NaK4W3@rafael.j.wysocki>
+To: Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH v1] PM: hibernate: Rework message printing in swsusp_save()
+Date: Thu, 09 Oct 2025 21:34:16 +0200
+Message-ID: <10750389.nUPlyArG6x@rafael.j.wysocki>
 Organization: Linux Kernel Development
-In-Reply-To: <4699399.LvFx2qVVIh@rafael.j.wysocki>
-References: <4699399.LvFx2qVVIh@rafael.j.wysocki>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -64,80 +59,64 @@ Content-Type: text/plain; charset="UTF-8"
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-The evaluation of LPS0 _DSM Function 1 in lps0_device_attach() may be
-useless if pm_debug_messages_on is never set.
+The messages printed by swsusp_save() are basically only useful for
+debug, so printing them every time a hibernation image is created at
+the "info" log level is not particularly useful.  Also printing a
+message on a failing memory allocation is redundant.
 
-For this reason, instead of evaluating it in lps0_device_attach(), do
-that in a new .begin() callback for s2idle, acpi_s2idle_begin_lps0(),
-only when pm_debug_messages_on is set at that point.
+Use pm_deferred_pr_dbg() for printing those messages so they will only
+be printed when requested and the "deferred" variant is used because
+this code runs in a deeply atomic context (one CPU with interrupts
+off, no functional devices).  Also drop the useless message printed
+when memory allocations fails.
 
-However, never attempt to evaluate LPS0 _DSM Function 1 more than once
-to avoid recurring failures.
+While at it, extend one of the messages in question so it is less
+cryptic.
 
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/acpi/x86/s2idle.c |   29 +++++++++++++++++++++++------
- 1 file changed, 23 insertions(+), 6 deletions(-)
+ kernel/power/snapshot.c |   13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
---- a/drivers/acpi/x86/s2idle.c
-+++ b/drivers/acpi/x86/s2idle.c
-@@ -303,6 +303,9 @@ static void lpi_check_constraints(void)
+--- a/kernel/power/snapshot.c
++++ b/kernel/power/snapshot.c
+@@ -2110,22 +2110,20 @@ asmlinkage __visible int swsusp_save(voi
  {
- 	struct lpi_constraints *entry;
+ 	unsigned int nr_pages, nr_highmem;
  
-+	if (IS_ERR_OR_NULL(lpi_constraints_table))
-+		return;
-+
- 	for_each_lpi_constraint(entry) {
- 		struct acpi_device *adev = acpi_fetch_acpi_dev(entry->handle);
+-	pr_info("Creating image:\n");
++	pm_deferred_pr_dbg("Creating image:\n");
  
-@@ -484,11 +487,6 @@ static int lps0_device_attach(struct acp
+ 	drain_local_pages(NULL);
+ 	nr_pages = count_data_pages();
+ 	nr_highmem = count_highmem_pages();
+-	pr_info("Need to copy %u pages\n", nr_pages + nr_highmem);
++	pm_deferred_pr_dbg("Need to copy %u pages\n", nr_pages + nr_highmem);
  
- 	lps0_device_handle = adev->handle;
+ 	if (!enough_free_mem(nr_pages, nr_highmem)) {
+-		pr_err("Not enough free memory\n");
++		pm_deferred_pr_dbg("Not enough free memory for image creation\n");
+ 		return -ENOMEM;
+ 	}
  
--	if (acpi_s2idle_vendor_amd())
--		lpi_device_get_constraints_amd();
--	else
--		lpi_device_get_constraints();
--
+-	if (swsusp_alloc(&copy_bm, nr_pages, nr_highmem)) {
+-		pr_err("Memory allocation failed\n");
++	if (swsusp_alloc(&copy_bm, nr_pages, nr_highmem))
+ 		return -ENOMEM;
+-	}
+ 
  	/*
- 	 * Use suspend-to-idle by default if ACPI_FADT_LOW_POWER_S0 is set in
- 	 * the FADT and the default suspend mode was not set from the command
-@@ -515,6 +513,25 @@ static struct acpi_scan_handler lps0_han
- 	.attach = lps0_device_attach,
- };
+ 	 * During allocating of suspend pagedir, new cold pages may appear.
+@@ -2144,7 +2142,8 @@ asmlinkage __visible int swsusp_save(voi
+ 	nr_zero_pages = nr_pages - nr_copy_pages;
+ 	nr_meta_pages = DIV_ROUND_UP(nr_pages * sizeof(long), PAGE_SIZE);
  
-+static int acpi_s2idle_begin_lps0(void)
-+{
-+	if (pm_debug_messages_on && !lpi_constraints_table) {
-+		if (acpi_s2idle_vendor_amd())
-+			lpi_device_get_constraints_amd();
-+		else
-+			lpi_device_get_constraints();
-+
-+		/*
-+		 * Try to retrieve the constraints only once because failures
-+		 * to do so usually are sticky.
-+		 */
-+		if (!lpi_constraints_table)
-+			lpi_constraints_table = ERR_PTR(-ENODATA);
-+	}
-+
-+	return acpi_s2idle_begin();
-+}
-+
- static int acpi_s2idle_prepare_late_lps0(void)
- {
- 	struct acpi_s2idle_dev_ops *handler;
-@@ -612,7 +629,7 @@ static void acpi_s2idle_restore_early_lp
+-	pr_info("Image created (%d pages copied, %d zero pages)\n", nr_copy_pages, nr_zero_pages);
++	pm_deferred_pr_dbg("Image created (%d pages copied, %d zero pages)\n",
++			   nr_copy_pages, nr_zero_pages);
+ 
+ 	return 0;
  }
- 
- static const struct platform_s2idle_ops acpi_s2idle_ops_lps0 = {
--	.begin = acpi_s2idle_begin,
-+	.begin = acpi_s2idle_begin_lps0,
- 	.prepare = acpi_s2idle_prepare,
- 	.prepare_late = acpi_s2idle_prepare_late_lps0,
- 	.check = acpi_s2idle_check_lps0,
 
 
 
