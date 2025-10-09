@@ -1,82 +1,83 @@
-Return-Path: <linux-pm+bounces-35847-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35848-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25A23BC9C06
-	for <lists+linux-pm@lfdr.de>; Thu, 09 Oct 2025 17:25:42 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67042BC9BFA
+	for <lists+linux-pm@lfdr.de>; Thu, 09 Oct 2025 17:25:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 05AA519E86E9
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Oct 2025 15:25:57 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id E0BD5353A62
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Oct 2025 15:25:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C2741F4CBB;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E006D1F7586;
 	Thu,  9 Oct 2025 15:25:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="fEh42Sh4"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Zp46Duvi"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07B7D1E3DCD
-	for <linux-pm@vger.kernel.org>; Thu,  9 Oct 2025 15:25:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B1981E51FB
+	for <linux-pm@vger.kernel.org>; Thu,  9 Oct 2025 15:25:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760023510; cv=none; b=NmWGqT50Zt8ud2poHI7/dTJHa1UweTBh8vTF7+Q28rr9ybhOA5g7+6Xg05Sa7t07vKtPRbo/tk8/kshTwyEtmIpof5BVwQLIcHYZzmF5Nana+u1cLX909lb/bHmqD6+pJe9WBsRXYHqMlNhWv5BLtRI2POkFg3PXueEIfHoj70w=
+	t=1760023511; cv=none; b=PH/Gs0Yx+pL3Cyj/d3/jkZ0jDFZkIRav+pYviTk9po89t31rN2WCwmW2pBClfya4DTqeIwwTGiClAVl3yiZ1M5gH89fV82wTH7CwfKJnLG2LGbjzHtpjVJdXPGXK2oNqXWuzKaECbzV0MSDhlHJ4paW5dQmBtm0v8Vrn5xONW+U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760023510; c=relaxed/simple;
-	bh=81jybtZ3s587CJJH0yCGA5kZLJlEWI3joc5fyisw8bc=;
+	s=arc-20240116; t=1760023511; c=relaxed/simple;
+	bh=UpDpMfQpflET5V20J4n5YeVt8PTvypCmqoPo7NhX2qE=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=FGzMUOSuRga4zY9q14vQT9jVr8+CwwXFUGTFLWvme246zt4sQO5tydOyKsxemZZmrH0aDb3I9Sxo53E5u+UT979TURqyfM/RWPVCCfHcBFNlP5rkP36Mf3Dhd5u4KtFshMtn+KlUoNIjHGdBR1C5YOaMxDtAcq6rzMLD5Xy/y4A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=fEh42Sh4; arc=none smtp.client-ip=209.85.218.51
+	 In-Reply-To:To:Cc; b=imY81N9AY5XUhfsAp8b57U6mz0NcRJXLB1m6qhNb+J1u1jxSTqdvjPEHnpiDQazUnHNkasAQ1N8RUGxOmCyNQds/XFEL7oUzBYIZNr/gGNqwa9VdLbR5jXSVoZKAYu0bpmiGaCRoBjwnGq2myv7ZFgb5D8Us0XLN8yRABwih9iw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Zp46Duvi; arc=none smtp.client-ip=209.85.218.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-b50645ecfbbso226277466b.1
-        for <linux-pm@vger.kernel.org>; Thu, 09 Oct 2025 08:25:06 -0700 (PDT)
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-b3dbf11fa9eso186209666b.0
+        for <linux-pm@vger.kernel.org>; Thu, 09 Oct 2025 08:25:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1760023505; x=1760628305; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1760023506; x=1760628306; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=B84jNTg7Yo8n7BGFGvQ15A/U09IRq0iw+ObZ/DfjbTI=;
-        b=fEh42Sh4ZTts64I9k2hI4wxmvYV/aV2JAlYlunGkCTwvM9L1hUhnv7+dYxSRe4YS53
-         pj3QAapZrKEXQIPUuCZ7bvfbr8HT51lpgDtkdd1CHWkhq42Zf9WMzdoyfB6CLtUSZsiF
-         6fuIHhLr8YETYNth6R6Cavjvxz8YKrQzoab2cxpXsHMucxSKzQpQTxcXzYbe5ZtyMtCO
-         kZ/xcXEO6gwJQvsPKdR7MBbcT7oXMCELC5KXR/POQ/v6+wquLb0Mxe+yPQ4eRXXkIh+n
-         +EgGyx4mL9FB3Gf6b/MZCemuqlIPSMSHcetaEhukHJcexbl4dH5KJDvNDZSbTPY+Yicx
-         cFCA==
+        bh=cnyuHEM+lsiHCfL6IDRN5IyrCB7LqRf5MK311Pq4COY=;
+        b=Zp46DuviIM/YmcBGz9HgNDhelYZFWxZP2FpROp7MzDWNRG46ikPmK4ve3TFD2pzs5B
+         3YFpbszvBgcChBmsbPozfxF9eeysnNB8vxpp3YUIL/hqFzKdsznLeDpOvv4/YP8F6JY0
+         l+WGqB/nwkStIwLYUiBHl/WzyMaf/1GuRXi/GnFPmMa7FTLZqkahIWpgSw3HoeupC5Oh
+         4kq9HI3sSPMCdNp9dviGXJutBy1z8UYklzqPeO8pauSp7a6A13LxJfYtRPMXNTj6uEFf
+         O6/LiQp21u1+Tr0ekycKXMyzQANtRkH50FmDHXiSZwUi65NHiZZF4c1ia11VKS084cE3
+         vK5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760023505; x=1760628305;
+        d=1e100.net; s=20230601; t=1760023506; x=1760628306;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=B84jNTg7Yo8n7BGFGvQ15A/U09IRq0iw+ObZ/DfjbTI=;
-        b=TEk4CSjF/tCyECIy9hwueYZqCAZJnZWVhFxQ2ldwrWha81j/3inJrQawLKR3zSdZhp
-         /+c8TW7vn+kCrR82pTmKIPi+G4/cC7CbCljdP9sVdBKIdJGPeJnpyubWJhFHozGjrmad
-         +Rwe8ClDwHQH8pEXNvXi50O5Bgkg7vS7VXn8Og8aOSSnDHVWxUo+6ZN8wrwgJHdK3w0d
-         /MIlmpGgAdyREnFE7ZfmGhbgtLNILNqnT9qEnOHHNdZfpzTabCI2lFHZa9pA0nyghRCx
-         Q74anQafSNtFDw6nSM1dnxWuwNkaY/Jh88uLVXuZ2dEhG7mwL34DbQZOYeMvAPegkbR8
-         eLRQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWJ/2Vb2Sb6AMso+pycpv05GEKbn2K2c7k0zH+ShRt9yunCJKLgedLElPJ8+4nJ9e8PRudnuDhAlQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzEGwmsl0IOUB1ixJ7oez3g1zAwBEOW2l9Twgt8G/tVvkRTBrVv
-	Z0FNDlIqx8QmrlgcJbFKY9UK7E3jr8guHd08CK1ALkgV/rmNKxtg8UJYIFOkE+CkeoA=
-X-Gm-Gg: ASbGncs4OUQuoNY2fa0lEWtcIFhMiWsiJ0pQZzwVV9pTPqkaLz6u04ML6y8NZdvIeoU
-	yqCTFTBhB4brFdvwJdeLVoo1xguIstpLx+fDln+mKWOyYP+k8w0M2UEa+HoIZyhLmka7CEVjpPO
-	K8X6FJnsQCOF8yDM7a2k7kBNqH1htyf9OpGas25ccLiDpolZq8G42bysInhYSW75N/heZl7IWUl
-	p4GEjaZ/AexIikgE/blPkqG6C4ZD5+PcOhNDE93cHWY1HPkM/MPARd197vTgIXVSBx2iwWOQXTm
-	yTdGIdS8Kz5ArotZaU/4ko+TKyD+rVdYvn3Ul4YRtCulICfQvQdzyAK3Sr9VP75G3WyLaGrAYX2
-	AEka5gEyKP1m8qcpV1hA8L0KXUOzo0kJ6T+U2KNmtKAPJt23Afsmjibu3I3MggmWCQ4RmAEd6fj
-	8uQSfPFCxuCNX/si2qe7FJNveI6GKuuZ0VhGCTSfuB
-X-Google-Smtp-Source: AGHT+IG4E2/BkqY+k6KCaob1FvNFhboNdxx7lEaSwbr4nblUCdc4u24xC8dmKvD/tTwPIY9VM74oUA==
-X-Received: by 2002:a17:907:6d19:b0:b45:60ad:daff with SMTP id a640c23a62f3a-b50aa99e0f1mr827465866b.28.1760023505329;
+        bh=cnyuHEM+lsiHCfL6IDRN5IyrCB7LqRf5MK311Pq4COY=;
+        b=gFK0bZxI9U+mQoORudw402Y7LF/2tL6STM6XYkoWLk0Ulo9cGxjA7NLAeSV2YngDe7
+         JJw+/COGb4nyiYogFI94lGPGFcxIbKxSFpCkiT9UH0yj1YqJZc5iTdXTlwQIScnqysBz
+         VS0t8kgNFY5uTNckDweNLR6wiw8CXsgnHXvGgjgVzpMqoF69OA+pfHdmiaj1JacRElTf
+         qzW7K0HPOprQ8lkBOdTuI604gMtZpMr28dg9/eVukAg2ITtByaw3Ng+EkVbAUhwHvrmR
+         jCkU98lqCW7PbTpz443ZlTzQ4ZGrlRoHlRVBxr0kWzLFJFG3Ml1gxNly/7uZyIMat2PR
+         fyAQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVjG0AS5/Nle/Nrs2Rooq0HE3cXd/HLis2T95ShsG6Ou/e/+HHwYFkR+8cBpWwTml8VGKciAfDdkg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxCZ78L868DoLpmr1jeY7mu3e4POY0/9dbtdGjtlK/OTznFRlRL
+	oi6+n8/TJ7nJv062wacDxlKTybaQkLHILDbM89WJXutJWASmQDC7ep8ev94wWo0pqGY=
+X-Gm-Gg: ASbGnctOJlgTA1TbSPxfgFIMDg2+ZmkbFMNZ2MOmeyx+QkpX42G0M8aWBGBBLU7hEpI
+	NJTm/U8ikkx1LmuuLxc/hzkIxguh2b1WG+9gLsC7eomfAahNHl8TYugI4dTBnl4Zqf3RNx4+Az9
+	kZbTm5r1KgzuaPljXMJLaN8bOIyvvGyPoC0+Tqsl3JMYMnaQri8L5wTfW7SHoGDaLtjaupIPhuX
+	nF6gfRQvMXwDeHrUxNN16YTZ0QkxlAh5gxaqfNTRZg7UgcnLb5PA8nxPRg1fDt1nCXuJtZE+wyn
+	J+qWrQWw6McL5r1WuaEqLjIKBI7axwuH2IvCYtjncG9l5qGM7R9MEU97mgztFomEICMyXecNl1J
+	u6YBcWWB0dx6NE95gIhCJlMPJzuaCJl/0bg0q+kIdaKF81toewrXzmNTHgH2qLi29YKK/NjyWeM
+	qgvPXi6S71w9onrbx7FL8GBr7GPn+M3G061IZc/EVV
+X-Google-Smtp-Source: AGHT+IH4Riik0fnXmeV/DELQ8JjDqdvmxMdv2ShW6jNS8r7k8K/9xDWa2qfNhUPNms6YJU3aaNnQ8w==
+X-Received: by 2002:a17:906:d54e:b0:b3f:e1e9:22c1 with SMTP id a640c23a62f3a-b50ac8ebda2mr933717066b.53.1760023505945;
         Thu, 09 Oct 2025 08:25:05 -0700 (PDT)
 Received: from puffmais2.c.googlers.com (224.138.204.35.bc.googleusercontent.com. [35.204.138.224])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b486970b36fsm1908967566b.62.2025.10.09.08.25.04
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b486970b36fsm1908967566b.62.2025.10.09.08.25.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Oct 2025 08:25:04 -0700 (PDT)
+        Thu, 09 Oct 2025 08:25:05 -0700 (PDT)
 From: =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
-Date: Thu, 09 Oct 2025 16:25:03 +0100
-Subject: [PATCH v2 01/10] dt-bindings: power: samsung: add google,gs101-pd
+Date: Thu, 09 Oct 2025 16:25:04 +0100
+Subject: [PATCH v2 02/10] dt-bindings: soc: samsung: exynos-pmu: move
+ gs101-pmu into separate binding
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -85,7 +86,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20251009-gs101-pd-v2-1-3f4a6db2af39@linaro.org>
+Message-Id: <20251009-gs101-pd-v2-2-3f4a6db2af39@linaro.org>
 References: <20251009-gs101-pd-v2-0-3f4a6db2af39@linaro.org>
 In-Reply-To: <20251009-gs101-pd-v2-0-3f4a6db2af39@linaro.org>
 To: Krzysztof Kozlowski <krzk@kernel.org>, 
@@ -103,27 +104,155 @@ Cc: Peter Griffin <peter.griffin@linaro.org>,
  =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
 X-Mailer: b4 0.14.2
 
-Add support for the Google gs101 version of the Exynos power domains. A
-new compatible is needed because register fields have changed.
+The gs101-pmu binding is going to acquire various additional (pattern)
+properties that don't apply to other PMUs supported by this binding.
 
-Reviewed-by: Peter Griffin <peter.griffin@linaro.org>
+To enable this, move google,gs101-pmu into a separate binding.
+
 Signed-off-by: André Draszik <andre.draszik@linaro.org>
 ---
- Documentation/devicetree/bindings/power/pd-samsung.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ .../bindings/soc/google/google,gs101-pmu.yaml      | 67 ++++++++++++++++++++++
+ .../bindings/soc/samsung/exynos-pmu.yaml           | 20 -------
+ MAINTAINERS                                        |  1 +
+ 3 files changed, 68 insertions(+), 20 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/power/pd-samsung.yaml b/Documentation/devicetree/bindings/power/pd-samsung.yaml
-index 9c2c51133457112ca0098c043e123f0a02fa1291..c35c9cb0115d79e5c36142da2c2a5dd30cd2ad47 100644
---- a/Documentation/devicetree/bindings/power/pd-samsung.yaml
-+++ b/Documentation/devicetree/bindings/power/pd-samsung.yaml
-@@ -19,6 +19,7 @@ allOf:
- properties:
-   compatible:
-     enum:
-+      - google,gs101-pd
-       - samsung,exynos4210-pd
-       - samsung,exynos5433-pd
+diff --git a/Documentation/devicetree/bindings/soc/google/google,gs101-pmu.yaml b/Documentation/devicetree/bindings/soc/google/google,gs101-pmu.yaml
+new file mode 100644
+index 0000000000000000000000000000000000000000..209ee2f80d449c3eec568188898b3c6f7ae0ddd4
+--- /dev/null
++++ b/Documentation/devicetree/bindings/soc/google/google,gs101-pmu.yaml
+@@ -0,0 +1,67 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/soc/samsung/google,gs101-pmu.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Google GS101 Power Management Unit (PMU)
++
++maintainers:
++  - André Draszik <andre.draszik@linaro.org>
++
++# Custom select to avoid matching all nodes with 'syscon'
++select:
++  properties:
++    compatible:
++      contains:
++        const: google,gs101-pmu
++  required:
++    - compatible
++
++properties:
++  compatible:
++    items:
++      - const: google,gs101-pmu
++      - const: syscon
++
++  reg:
++    maxItems: 1
++
++  reboot-mode:
++    $ref: /schemas/power/reset/syscon-reboot-mode.yaml
++    type: object
++    description:
++      Reboot mode to alter bootloader behavior for the next boot
++
++  syscon-poweroff:
++    $ref: /schemas/power/reset/syscon-poweroff.yaml#
++    type: object
++    description:
++      Node for power off method
++
++  syscon-reboot:
++    $ref: /schemas/power/reset/syscon-reboot.yaml#
++    type: object
++    description:
++      Node for reboot method
++
++  google,pmu-intr-gen-syscon:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description:
++      Phandle to PMU interrupt generation interface.
++
++required:
++  - compatible
++  - reg
++  - google,pmu-intr-gen-syscon
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    system-controller@17460000 {
++        compatible = "google,gs101-pmu", "syscon";
++        reg = <0x17460000 0x10000>;
++
++        google,pmu-intr-gen-syscon = <&pmu_intr_gen>;
++    };
+diff --git a/Documentation/devicetree/bindings/soc/samsung/exynos-pmu.yaml b/Documentation/devicetree/bindings/soc/samsung/exynos-pmu.yaml
+index f0fb24156da9b8980dcfd5339ae75f12a71cf6d6..83f18a92fa1c4de75a90f00475cf17d5f0b652e4 100644
+--- a/Documentation/devicetree/bindings/soc/samsung/exynos-pmu.yaml
++++ b/Documentation/devicetree/bindings/soc/samsung/exynos-pmu.yaml
+@@ -15,7 +15,6 @@ select:
+     compatible:
+       contains:
+         enum:
+-          - google,gs101-pmu
+           - samsung,exynos3250-pmu
+           - samsung,exynos4210-pmu
+           - samsung,exynos4212-pmu
+@@ -36,7 +35,6 @@ properties:
+     oneOf:
+       - items:
+           - enum:
+-              - google,gs101-pmu
+               - samsung,exynos3250-pmu
+               - samsung,exynos4210-pmu
+               - samsung,exynos4212-pmu
+@@ -129,11 +127,6 @@ properties:
+     description:
+       Node for reboot method
  
+-  google,pmu-intr-gen-syscon:
+-    $ref: /schemas/types.yaml#/definitions/phandle
+-    description:
+-      Phandle to PMU interrupt generation interface.
+-
+ required:
+   - compatible
+   - reg
+@@ -194,19 +187,6 @@ allOf:
+       properties:
+         dp-phy: false
+ 
+-  - if:
+-      properties:
+-        compatible:
+-          contains:
+-            enum:
+-              - google,gs101-pmu
+-    then:
+-      required:
+-        - google,pmu-intr-gen-syscon
+-    else:
+-      properties:
+-        google,pmu-intr-gen-syscon: false
+-
+ examples:
+   - |
+     #include <dt-bindings/clock/exynos5250.h>
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 3439485437117aaffbe61b709468348231ca3cc4..9cf5b9300d4d96bfed8d1a75cc806925a884744b 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -10596,6 +10596,7 @@ S:	Maintained
+ P:	Documentation/process/maintainer-soc-clean-dts.rst
+ C:	irc://irc.oftc.net/pixel6-kernel-dev
+ F:	Documentation/devicetree/bindings/clock/google,gs101-clock.yaml
++F:	Documentation/devicetree/bindings/soc/google/google,gs101-pmu.yaml
+ F:	Documentation/devicetree/bindings/soc/google/google,gs101-pmu-intr-gen.yaml
+ F:	arch/arm64/boot/dts/exynos/google/
+ F:	drivers/clk/samsung/clk-gs101.c
 
 -- 
 2.51.0.710.ga91ca5db03-goog
