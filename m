@@ -1,205 +1,204 @@
-Return-Path: <linux-pm+bounces-35830-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35831-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C73D7BC7595
-	for <lists+linux-pm@lfdr.de>; Thu, 09 Oct 2025 06:12:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A8B56BC759C
+	for <lists+linux-pm@lfdr.de>; Thu, 09 Oct 2025 06:15:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1B5123B0981
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Oct 2025 04:12:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 77B73189FE6C
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Oct 2025 04:15:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D8F824169D;
-	Thu,  9 Oct 2025 04:12:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A334B244186;
+	Thu,  9 Oct 2025 04:15:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="05cfX2nR"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="kWW3pZxi"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from CH5PR02CU005.outbound.protection.outlook.com (mail-northcentralusazon11012060.outbound.protection.outlook.com [40.107.200.60])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9D761A9FA4;
-	Thu,  9 Oct 2025 04:12:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.200.60
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759983125; cv=fail; b=p0l3KNu6Un/Pp2iW+JMsIYCoXawZvi/PqcQUu4kXnZQ1z8lA3i9enGo2qmzPUb3wNLzQ2URKeCsHaRPC5tmVSK/79qbv1/Ap1Ikv7txZXvLp3rppPwssliCRkoxqdEiWXMILbwPuhEhaehqOtpHPFr9eMfF5iEIth8WaNDyPNG8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759983125; c=relaxed/simple;
-	bh=Zh+/58+/d6fjfBKt+fcx960jgts5o/2WTGU9zKgb/xA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=SwAYSlPFG2NF1FVZ+HDPrBEakzYOj2k4BxKfOOQ/IihUmYLnvmky4ELbKqFA8n6K8tRgpB6xzg46l6SAe37IBJEGalGNH3Xq/D2AsOrqNqCLrWR5EnKi62b1sNo3eHi5T3XnwuzWdx6xA50zfwSsLAlH3S5DV+Oc4nkVBLRcXOY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=05cfX2nR; arc=fail smtp.client-ip=40.107.200.60
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=C7IPfoAYzYmVpK0Z5pAGIF64W4sVgIUVF2gFpIwy/0fP59DToRRH+P7Da+wc6vtO27vCyYoS3XPwXPj76u+49fRwwzcDLyJ/yy4fixInsCerKMIwtglg8+/xZ3mNbJ+S6Bfb/n67r29QvNzmE5RkUbHXFdlOpW9ufGjSgVCCpjFTukwijBoQulJ76n8ZAhOGhFyyZF1VYfHMre1Df8R05f+I0VRbjfaewEyFoXD1DsJgQ3U/nQIOuvI7XBHzdT/Dv9eqWXosMpPOeE+IirAwZnt/lSF8jz32hHjQjZnP6srgXantADZcp1clKnxpEjVg9q2yTcWu7y8kByPEvHkz1w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pzEiDxr87ZZ+HMnc3tKCfQpUGx/ih0YDw7kfljlja4Y=;
- b=zRWfnxhsaguO022a6adagobrDA+YvUDsz8icQKrHTjEhuN2rjPP5F8PkGGSSpgUfz9rmRf17wKjkXgOLeh2spRTa5zQ6C4UNRdy3y3wo5Zz5Q05i4oFYr25yE10h10cSsjGNEdmQxTOrEbJlpEUEDzfMXji8Cn9yW+Z7xgsRty8SeSesE8AZMTLbXcQBX/bg6tzqFAj2TbMp1KEHQsbMG+6QYHo/d/ZHuMk1nvL8jszwM9wnedTKNGzyXRulAjxsRrebPIMM9U+Huwzsz/MVP0PaYAulMIaaRRq2Nyo2l5oDM84tpHDGnafRsnK26djp+TtCaFGOLeVWHL1JcwjEsg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pzEiDxr87ZZ+HMnc3tKCfQpUGx/ih0YDw7kfljlja4Y=;
- b=05cfX2nRJJfLqIZ2haZIlINlQcOWyVy4t68K4VWW1LAS7XCucD+qwtUxirpb78jgyaDvbRlt6c7XxXWFPeZb1aIlzD7L4G+XDa+iJA4uI2BL92Mm2FndAEYGDfkXIFFlqTR3TmQ2AQy6lXhjBMwtUxk2wdi0rrTYH2485zkgnT8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DS7PR12MB8252.namprd12.prod.outlook.com (2603:10b6:8:ee::7) by
- PH7PR12MB7330.namprd12.prod.outlook.com (2603:10b6:510:20d::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9182.20; Thu, 9 Oct
- 2025 04:11:58 +0000
-Received: from DS7PR12MB8252.namprd12.prod.outlook.com
- ([fe80::2d0c:4206:cb3c:96b7]) by DS7PR12MB8252.namprd12.prod.outlook.com
- ([fe80::2d0c:4206:cb3c:96b7%6]) with mapi id 15.20.9203.007; Thu, 9 Oct 2025
- 04:11:58 +0000
-Date: Thu, 9 Oct 2025 09:41:49 +0530
-From: "Gautham R. Shenoy" <gautham.shenoy@amd.com>
-To: "Mario Limonciello (AMD)" <superm1@kernel.org>
-Cc: Perry Yuan <perry.yuan@amd.com>,
-	"open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <linux-kernel@vger.kernel.org>,
-	"open list:CPU FREQUENCY SCALING FRAMEWORK" <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH] cpufreq/amd-pstate: Fix a regression leading to EPP 0
- after hibernate
-Message-ID: <aOc2BcT9NUCO8HJp@BLRRASHENOY1.amd.com>
-References: <20250923152929.1306578-1-superm1@kernel.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250923152929.1306578-1-superm1@kernel.org>
-X-ClientProxiedBy: PN2PR01CA0245.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:21a::10) To DS7PR12MB8252.namprd12.prod.outlook.com
- (2603:10b6:8:ee::7)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 011EC238175
+	for <linux-pm@vger.kernel.org>; Thu,  9 Oct 2025 04:14:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1759983301; cv=none; b=HD1sIkexSUF4j6AErOC0qWSlkQfrerX6ILvsRJ2bob1+2m7PW4F1e2119V/O3tI/yMwf6wkBV8IOtDAFsMu3H45HAdVMELgaSsAEzOHrw33oXtTuDopJChtBYWL33zYXMgt0sxlDkT0NpzHDTSkzrLcab3xst3X9gCUYkmuXyCg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1759983301; c=relaxed/simple;
+	bh=oe7VuLNsgGCgL70KMCtbXqjMfR3AriFiWIM7bP1/9eE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ph8XVeV/o4VsE12IwYLdOsRfx8sLO9syLiRJInudmtWwNsVLc0NxXottVwI6WP39hdW++YUImyHUe/Eq+qmDzOZ05P+KY82SXQ2ZGxfueELni4Qsq9K4Wf2KQTR7RhgZFCJO/iiVTMaTDcb1eTbg2SaDZVDemEUw/yOJbELMXK4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=kWW3pZxi; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 598I5G3H001377
+	for <linux-pm@vger.kernel.org>; Thu, 9 Oct 2025 04:14:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	/js+3taDhrejgB7UpAvscxRkqjCCg2tof4BrdDtD+8U=; b=kWW3pZxibhYsonos
+	xFC0Upj6XzEn7h5r4ubL8lgzYXy+Q0HtPkjbzsqXRM18PRMGM9cyKHwjDEX5qYPF
+	ZY/Wk1YVir1y0qjNR0J8silgm524wvvCaPrdA7oPaZakeKmDjFwD1z8tcfEDnThV
+	5QznhUwAmIjzmOZX+M+Nxokx/dnz/dFtADSLWaq26b8eJWvs0LlxjFrqchiU34G3
+	ItF5lxyUg9dRPsSDfRq3XEKOPUIg4qGP+O8Cqz0nRPK1CV//hcjxz/ObvGFose9E
+	p9Vk6gT5CEWB81YKxm00drPgcowOoU0hrMVX0jKOiToYs9PRLDp5MrUpQBJAJQ1I
+	D4TI7g==
+Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 49nv4ksebc-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Thu, 09 Oct 2025 04:14:59 +0000 (GMT)
+Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-2698ede62c2so1608735ad.1
+        for <linux-pm@vger.kernel.org>; Wed, 08 Oct 2025 21:14:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1759983298; x=1760588098;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/js+3taDhrejgB7UpAvscxRkqjCCg2tof4BrdDtD+8U=;
+        b=fdQ1IYvu8KHAmMdgOkSEYDjP+K15vueHip8o1W/exA93G2BDPJKjEHQYuLifbKLMPH
+         x3AmzJFSAJhriWWvjTMqlO1HkLg7UTMdbdfzK+1Q1zOehelw3xDCyquvJvh21FBgVSiR
+         tCgeI7X++Ep0dSUiMX6Zc1bWG3o6LkrlRbtKxTgdx3to+1xfLme+yqcRjwMf1tdykIxQ
+         cJZPVqjOjLNNsP4RR8DoNFBYMvqT2TBrgYYGMOrnnBJgCFx3g8M7dCMhhs7mDWiBhqfr
+         3hfP7L2fb32Mh5r8TvcspjyQSiTD0/lPdJn7QuWmqhS93TLN/4LFnF4y07xDGHugz1B4
+         MWLw==
+X-Forwarded-Encrypted: i=1; AJvYcCXeKoTBwZ8cFGB6d1FKQ07Cz8b/PgDlqEjd2Bpqas14ZoedqoKEcebsFIcRjbxbxPi7kfn0d/wPIQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyKUHN+cU0z4/yEElxuOJ6Cf1847+IO7nRfSCgG1+TM1MHFV7W+
+	9BuiD+Bm95QAgyZ0R4g7qVjTYYBfHIP3yGLstyZLt37X77Ty1YdVvxnWzMoIgg/wg+mAGF0m2DW
+	GxWos5udzHDLInRJBmmCS2D4m6WbXxr3bQJr2n00/KhP8Lcn6MW8MlKV4fGVFVA==
+X-Gm-Gg: ASbGncte9Kp7YF7Q5YkNIywozwaZ3i2S3opBhIdjG3hhu1vKvwIxzxa0YoasCpeGsn0
+	onrNG7eMwueZ5WBeAhnsPvRoKmuxg244yPe8/+75Y1PQ7mqfE229W1nYYk+p9WKFM7JTD3cq5X+
+	JVDAvfH5RRiKyyFifjOKbztrGhyBOCWdZZrFY9XtsHxjHEPxaPeEPwJSecGIAZeytIFYkKZUMp1
+	lstM4HJ3iQqF3T94ut1vsWf4SqPaqaqI5GWynuw86YhOvfGvjfaJAKLZt8iDlBsrw+NLcvm8/2Q
+	qcxeAnOjXA/o3mZokApPp/eaFhenx0YypaVBvi0B2STjdlleZNamduafh6ZYZ9OArevmH+BkhUy
+	hzcwLurHCA80IU9AUu7BznLceZWUWRpoVgtihpp8nZw==
+X-Received: by 2002:a17:902:d491:b0:253:a668:b638 with SMTP id d9443c01a7336-290273c598bmr46026545ad.2.1759983298274;
+        Wed, 08 Oct 2025 21:14:58 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHUYcLZvr1TDduUWf5IW+YzwXsZMsBV8TnFvLqPUsLDWvggUY7/sMA/hO5Cu4Ze/JJFPYsNLA==
+X-Received: by 2002:a17:902:d491:b0:253:a668:b638 with SMTP id d9443c01a7336-290273c598bmr46026265ad.2.1759983297782;
+        Wed, 08 Oct 2025 21:14:57 -0700 (PDT)
+Received: from [10.240.201.55] (tpe-colo-wan-fw-bordernet.qualcomm.com. [103.229.16.4])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29034e20f8csm13510955ad.49.2025.10.08.21.14.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Oct 2025 21:14:57 -0700 (PDT)
+Message-ID: <9ba7562f-bf6a-4759-b4a3-aaa80c45e247@oss.qualcomm.com>
+Date: Thu, 9 Oct 2025 09:44:51 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB8252:EE_|PH7PR12MB7330:EE_
-X-MS-Office365-Filtering-Correlation-Id: e6f5a8ad-8dd0-4c37-4fce-08de06e9fc38
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|366016|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?tJwn+2eWxMOp7wEecEa5tyo/cTnwyzMKCekyfklyG+KLt8FFFqOjViR9Red6?=
- =?us-ascii?Q?b6/DlI2RrvA94lUuneQhEpAB97WlUHz9gBHZSzh8V+YR4eUKyet+mN4xQYx/?=
- =?us-ascii?Q?iOODZnkWRgALnbskrATmBup4C/YJi/lBOsU+dXLFWrX6Sh5bX8MtBbxSSuZ6?=
- =?us-ascii?Q?mfc95L+7C824UUI9KkueX6prUHYaecG9tvhraoTLet+tO5KztwDazMPaFNa2?=
- =?us-ascii?Q?vT/nnS8T0y+8ckgMKpGQMiowy52LICTmVyls6XgEooaLl/zi5Hi9X8Cq0fv6?=
- =?us-ascii?Q?Y8o/gvOY7jeCg1pEyuIPwvo1EAvybiNrZ238AhXvfm3djPTfEFoR8TNUeZRc?=
- =?us-ascii?Q?tuIzA/cCgeE0w0hWaEAejgqCD4PUx+JRDLf0Eyf2ABxwXXCc7mcEQzm0KXbi?=
- =?us-ascii?Q?SQIk/7lm24cTPcaz7fjxu+QeXCx7UVXrQQyCrjGD9OShaLxjzXNTDhcYBYIC?=
- =?us-ascii?Q?uNUtr5MBcDvWYtEBr205hfCI+tCWsaCbpKRiQ7p7VH2hDHsr2FYv0+gpl0bL?=
- =?us-ascii?Q?sEyrB/rF7hOFnX4QpPv2q7eNHqBtPTtSSMAl+rwfei/FvvVENR2X2+hFoM5q?=
- =?us-ascii?Q?U1juIBglVtjJq+UHzAAHjUyTW+2gDodFbfl6plTpbICKOjK466/+vIiAln63?=
- =?us-ascii?Q?YDJM4xHtcTu1MhZUv8TYmLdHkilhGiADMZ3fkLGksJubDmylG/t1TnkHHQNR?=
- =?us-ascii?Q?2GJpljTKChvjZtIQ7DRTzSDPv32B0+qdkB3b56IaF9rTvNJOyV529MO44A49?=
- =?us-ascii?Q?/0Dc1NuKWeh3xcPpreM8OnnfScpRf5mmGe3KGYgz4G8Tcda5K9yMq7E3Bwe1?=
- =?us-ascii?Q?bcWa3W1AtLEOFrKgUpL4UNyKOXyEce3gKzawQ0yhzxXP8m8+CFT3uRxXTRqv?=
- =?us-ascii?Q?shpRcOygOFJohWR2ajDgGE3QJXaAQlygyvm6atR4q7tYRzxf2ygK9IYZGVzN?=
- =?us-ascii?Q?O1L6m9f1AJlF7yN8jHnyFLuQRGgwz74zP6C1PNR/srHID/+3nwW168iJwlIO?=
- =?us-ascii?Q?w6DxpAaNUvcRPWdnC03L3GoGiqb1VAtib9DKUwP3gG1/EGaj5h+lDyhf1bnq?=
- =?us-ascii?Q?f6oi6LSr789x5fnKjFNRfwa8By4tJxEZamNC9azHCNhAcW1rdrKbBkhBWz+h?=
- =?us-ascii?Q?L2fQ0RmZBaoSJk9K5mOZcj4ci32vJPSbK0Wc8bHLCuc0rLECJQt7DHf0lYy4?=
- =?us-ascii?Q?vTDwTAEnAKO263O1VZRi8QTxizNP6r6X6FW5sHGb7OQW+vEX34o/r2TQwNzX?=
- =?us-ascii?Q?0M2dWea2RLzHJI5BnEzJGI87PfRZOw5x6kiEyQFX9ivBdqwocEo3mKzFCC7D?=
- =?us-ascii?Q?ODsRXIzf+s52PlpLX80Kfv4xIrEYAz45HQ90DOwg0D3IMmt/Q2Ag5PyLnDHZ?=
- =?us-ascii?Q?lQRQDhqW0dKNFb5A9YG6x6bm3k3256KiIGWhCjVI/2jBbfJtrA=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB8252.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?lSxuOsG3uxGcSvTV/RrQgswe+Bx9dWYcnAwcUeYXcrQzjhcFOghuirJk65y3?=
- =?us-ascii?Q?1jt5gl8euuOLme3jWzjIpiAOcLa92Wc6mMAhaQdpQiP+wARSPF1n5hPSRUrr?=
- =?us-ascii?Q?L4UOhuZmESYZzoWcYrdhUNg+ZGLydURvlywsdnM8RPLMrzBHKgpGVx06Ty8Z?=
- =?us-ascii?Q?FsYk5jVlw5EqnnqUFmskGdcqxtZODMTNpgVG8XmSZx4hztBGKsNbxqXzAEQH?=
- =?us-ascii?Q?oXe42ERLXGayyGMunbGwnHqIyLTD522g+9ypid6jiY2C8dUb7KkhZgsj9f1y?=
- =?us-ascii?Q?8lOrc/rqs3xC0iJfeeT7bNSxk2qzYCwhi0hu5vsXncDQsbTdkkxOQJF6X5Wf?=
- =?us-ascii?Q?dwBRhSmSKsKwnpl57AFIDBshkrIdC/HowFqHOo/OO+pqx+z1RKj1yjN1StdZ?=
- =?us-ascii?Q?bofLCjFPlK2n2goTrH+6nVQS5Ku4uJR8pDzjcWcx+tooRezBFKUyO0HY8nWx?=
- =?us-ascii?Q?6/VDwV/Mo+00g59ZikZZ5rImGB7cJktdM0j7OYBdurzmjnFYcEglWw1ktGVA?=
- =?us-ascii?Q?cAm/MX0WphUwx2PfAqM5KKmuS99q+PdsF0rHnHyxA72vEYXndH6uR5kyCtsU?=
- =?us-ascii?Q?ojjYWlynHLg2iiImrx5AdJyG4AiqGMmNI5viZ+KwRteVa9II+GrG6ICFX3k9?=
- =?us-ascii?Q?4TuWnA267MfYRG0G+qCVBiELkIN3ST4wK7y+aRMC1VRvUkta4hxY7IwLhoom?=
- =?us-ascii?Q?X55qyWrkjB09GNEj7T0WylIiCcTU/FCLjBKLLXKsb3hULDFjKJlNEwY3sfpx?=
- =?us-ascii?Q?GTXdfql6DC0aG9yFZCvzrTpOqgHmf7fWTWu+BDzHC1kSjrj/YxGP2kDJAyBa?=
- =?us-ascii?Q?TviMmF/d+3THZ1ejX7SfO+Oe3lDuYGdc9kVO4GNCmjgw4wxf+gptL4mU0ARe?=
- =?us-ascii?Q?Zs68oiwzSNJzWnH74+GFxbONvo95e0x7ibMF7PMx04wLsYiSUrBjQyhZkMJu?=
- =?us-ascii?Q?IXPEF4JYBZI24N76/KbnzZ0An6tmkipoGLCIikHujaUvLYncDvie4T15k6ms?=
- =?us-ascii?Q?WG2U1qP1AuUXZZ2MuuetkBHuKCK5zzW4deHj3ULgmmztzvJnovklGlhpAlvr?=
- =?us-ascii?Q?p4oeKvRx4z1uejME09bC0+Bl5sU51nuIzoNuAWOV+IPbO+jfwIfWjIeVGACb?=
- =?us-ascii?Q?elNztiUJJtP3B/oNcvXDyPKsARuiUI4fFqm+AJ8HF8wiJXHf8ST4GkD72BRJ?=
- =?us-ascii?Q?+p9OqfiKdl6rDYIuJVS9xQtv6dyTm78SPXxBjNTDKmAuxQb8V8p0YcTdERM/?=
- =?us-ascii?Q?kFCDwtD4wsSDXmmRtlNWSfGLFicvajElRVavojv1KYCFwtgf3INB3OaFM0jY?=
- =?us-ascii?Q?prI6NDZiGsh1a9IkJZWf1se4ID0wUjWPmm/k7OAJU+1PrN8Akqv//75zH7qL?=
- =?us-ascii?Q?+D5CzwbajRHX0W7pjBzbV2iblBtc81OAW2SPz5qGsKQtKmiFj6c2k1/ri9xZ?=
- =?us-ascii?Q?44NYGCGYJaUTgEjSYJdT7h1fHVAttvkVX73HdwO92hmfikDw0tnpBjn5i3d+?=
- =?us-ascii?Q?n2K17TSbIO9FPMepDTpQo+JbKr0M5NPNFQdnJizZcBMXl4P++2cqfp1hzH3P?=
- =?us-ascii?Q?p+cyYarTvZGjiRN0oosYJcPAe/GlhQmUtL3BVIhf?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e6f5a8ad-8dd0-4c37-4fce-08de06e9fc38
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB8252.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Oct 2025 04:11:58.0938
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: yFAfLpH9U35gcXqeTIA7PBFeo68BPrHVGljsXWZd8KMaQQqFRIQVfbdyZlEW+5vjDJ9/H9NzWuLXJNfjbqB6mw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7330
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v15 07/14] firmware: psci: Implement vendor-specific
+ resets as reboot-mode
+To: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Souvik Chakravarty <Souvik.Chakravarty@arm.com>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+ <conor+dt@kernel.org>,
+        Andy Yan <andy.yan@rock-chips.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Konrad Dybcio <konradybcio@kernel.org>,
+        cros-qcom-dts-watchers@chromium.org, Vinod Koul <vkoul@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
+        Moritz Fischer <moritz.fischer@ettus.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+        Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Andre Draszik
+ <andre.draszik@linaro.org>,
+        Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org,
+        Elliot Berman <quic_eberman@quicinc.com>,
+        Srinivas Kandagatla <srini@kernel.org>
+References: <20250922-arm-psci-system_reset2-vendor-reboots-v15-0-7ce3a08878f1@oss.qualcomm.com>
+ <20250922-arm-psci-system_reset2-vendor-reboots-v15-7-7ce3a08878f1@oss.qualcomm.com>
+Content-Language: en-US
+From: Umang Chheda <umang.chheda@oss.qualcomm.com>
+In-Reply-To: <20250922-arm-psci-system_reset2-vendor-reboots-v15-7-7ce3a08878f1@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDA4MDEyMSBTYWx0ZWRfX1lT6+3L3UxIt
+ 75Lwzb14E0mrLM++3V6JPJkdv9tz7lujhLwsBO7LORN6civKqzOusB68VVePnuVUHzphxaRc2Li
+ iBfh29UI18iDRA595J7qMbKhtdGOAtM0XlFP7FbA74EDZ4aYj2lWIMTPswI83zHeEA+G3v/VMly
+ JBKvbNie+lL0NJoqVStd7zLGo7RGwc0N7J4uDcT2jYggjwNKqx1r3Rf7DUQZNqlfiJzQ/ruA69x
+ G6YivZPgRCFqzLNRgjR+eaDbVvU9hcqtuKMQ/M5yCMSUdNLUOaaqvLa2vTDhf/Et4VEzP8TqdAl
+ +G0yQ5OK0K8XCQ4gERHLdqecpXzL/bcErD1NBwrpJilhwcPyNJ6Iu5spAQQDvRovz3jVC7xrMK1
+ BX82NHMsKhZBEej59nlnHPEHhzqkvA==
+X-Authority-Analysis: v=2.4 cv=CbcFJbrl c=1 sm=1 tr=0 ts=68e736c3 cx=c_pps
+ a=JL+w9abYAAE89/QcEU+0QA==:117 a=nuhDOHQX5FNHPW3J6Bj6AA==:17
+ a=IkcTkHD0fZMA:10 a=x6icFKpwvdMA:10 a=EUspDBNiAAAA:8 a=yVxwAGkkkSKiqd9de7UA:9
+ a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=324X-CrmTo6CU4MGRt3R:22
+X-Proofpoint-GUID: sJYOhQ39nr85t3Xjkj7avm-zbi7Nca8o
+X-Proofpoint-ORIG-GUID: sJYOhQ39nr85t3Xjkj7avm-zbi7Nca8o
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-10-09_01,2025-10-06_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ adultscore=0 priorityscore=1501 malwarescore=0 spamscore=0 impostorscore=0
+ lowpriorityscore=0 bulkscore=0 clxscore=1011 phishscore=0 suspectscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2510020000 definitions=main-2510080121
 
-On Tue, Sep 23, 2025 at 10:29:29AM -0500, Mario Limonciello (AMD) wrote:
-> After resuming from S4, all CPUs except the boot CPU have the wrong EPP
-> hint programmed.  This is because when the CPUs were offlined the EPP value
-> was reset to 0.
+
+On 9/22/2025 7:10 PM, Shivendra Pratap wrote:
+> SoC vendors have different types of resets which are controlled
+> through various hardware registers. For instance, Qualcomm SoC
+> may have a requirement that reboot with “bootloader” command
+> should reboot the device to bootloader flashing mode and reboot
+> with “edl” should reboot the device into Emergency flashing mode.
+> Setting up such reboots on Qualcomm devices can be inconsistent
+> across SoC platforms and may require setting different HW
+> registers, where some of these registers may not be accessible to
+> HLOS. These knobs evolve over product generations and require
+> more drivers. PSCI spec defines, SYSTEM_RESET2, vendor-specific
+> reset which can help align this requirement. Add support for PSCI
+> SYSTEM_RESET2, vendor-specific resets and align the implementation
+> to allow user-space initiated reboots to trigger these resets.
 > 
-> This is a similar problem as fixed by
-> commit ba3319e590571 ("cpufreq/amd-pstate: Fix a regression leading to EPP
-> 0 after resume") and the solution is also similar.  When offlining rather
-> than reset the values to zero, reset them to match those chosen by the
-> policy. When the CPUs are onlined again these values will be restored.
+> Implement the PSCI vendor-specific resets by registering to the
+> reboot-mode framework. As psci init is done at early kernel init,
+> reboot-mode registration cannot be done at the time of psci init.
+> This is because reboot-mode creates a “reboot-mode” class for
+> exposing sysfs, which can fail at early kernel init. To overcome
+> this, introduce a late_initcall to register PSCI vendor-specific
+> resets as reboot modes. Implement a reboot-mode write function
+> that sets reset_type and cookie values during the reboot notifier
+> callback.  Introduce a firmware-based call for SYSTEM_RESET2
+> vendor-specific reset in the psci_sys_reset path, using
+> reset_type and cookie if supported by secure firmware. Register a
+> panic notifier and clear vendor_reset valid status during panic.
+> This is needed for any kernel panic that occurs post
+> reboot_notifiers.
 > 
-> Closes: https://community.frame.work/t/increased-power-usage-after-resuming-from-suspend-on-ryzen-7040-kernel-6-15-regression/74531/20?u=mario_limonciello
-> Fixes: 608a76b65288 ("cpufreq/amd-pstate: Add support for the "Requested CPU Min frequency" BIOS option")
-> Signed-off-by: Mario Limonciello (AMD) <superm1@kernel.org>
-
-Apologies for the delay in reviewing this.
-
-The fix looks good to me.
-
-Reviewed-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
-
--- 
-Thanks and Regards
-gautham.
-
-
+> By using the above implementation, userspace will be able to issue
+> such resets using the reboot() system call with the "*arg"
+> parameter as a string based command. The commands can be defined
+> in PSCI device tree node under “reboot-mode” and are based on the
+> reboot-mode based commands.
+> 
+> Signed-off-by: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
 > ---
->  drivers/cpufreq/amd-pstate.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
+>  drivers/firmware/psci/Kconfig |  2 +
+>  drivers/firmware/psci/psci.c  | 89 ++++++++++++++++++++++++++++++++++++++++++-
+>  2 files changed, 90 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> index 9f3b9dc26ab5..ba2adea03db1 100644
-> --- a/drivers/cpufreq/amd-pstate.c
-> +++ b/drivers/cpufreq/amd-pstate.c
-> @@ -1617,7 +1617,11 @@ static int amd_pstate_cpu_offline(struct cpufreq_policy *policy)
->  	 * min_perf value across kexec reboots. If this CPU is just onlined normally after this, the
->  	 * limits, epp and desired perf will get reset to the cached values in cpudata struct
->  	 */
-> -	return amd_pstate_update_perf(policy, perf.bios_min_perf, 0U, 0U, 0U, false);
-> +	return amd_pstate_update_perf(policy, perf.bios_min_perf,
-> +				     FIELD_GET(AMD_CPPC_DES_PERF_MASK, cpudata->cppc_req_cached),
-> +				     FIELD_GET(AMD_CPPC_MAX_PERF_MASK, cpudata->cppc_req_cached),
-> +				     FIELD_GET(AMD_CPPC_EPP_PERF_MASK, cpudata->cppc_req_cached),
-> +				     false);
->  }
->  
->  static int amd_pstate_suspend(struct cpufreq_policy *policy)
-> -- 
-> 2.51.0
-> 
+
+Reviewed-by: Umang Chheda <umang.chheda@oss.qualcomm.com>
+
+Thanks,
+Umang
 
