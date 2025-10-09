@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-35826-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35827-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3F44BC6FB4
-	for <lists+linux-pm@lfdr.de>; Thu, 09 Oct 2025 02:13:32 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7BBF1BC6FBE
+	for <lists+linux-pm@lfdr.de>; Thu, 09 Oct 2025 02:15:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 21C464E94BA
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Oct 2025 00:13:31 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id BD5374E413E
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Oct 2025 00:15:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CDC8F9E8;
-	Thu,  9 Oct 2025 00:13:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E55E38DE1;
+	Thu,  9 Oct 2025 00:15:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TznPu+kt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CZR0A/iJ"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 282914A1A;
-	Thu,  9 Oct 2025 00:13:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C73CDF6C;
+	Thu,  9 Oct 2025 00:15:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759968808; cv=none; b=e41URlgr1+5eUardXQ/JtvSlJcjcZe5nC6Xl0SYB1YmsZWcYyKvcZEiHKhSwrgTgrPTlSbhDyNwZ+3rRN8WqCYYyATwwscbRJk3XR0oLMRZvECm/corMGI/Gs61wnDZKIEz+OFX/46jiMIsMNsSbSlJR2BeCIafTkgDwSROHO0U=
+	t=1759968932; cv=none; b=YJpvwm9QCOd+hJN24gQBOieigUaLKiUPACyCh84INW9IBKlGpSz1mfMDa6baEshkQUwymvdhJ2yBNxSB2pvZJSmpZCnmQ8Ff+XQ36J62B1wR7YKY/4ADmraOcTKf5snG4rH1Qs+SNe9cBqc5Mx5ESDf496nlFoiZljMaTIZEVYo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759968808; c=relaxed/simple;
-	bh=KeuM5jBfOWpmzREsI/2fXKOwApbsRNPOniejGQuUKOQ=;
+	s=arc-20240116; t=1759968932; c=relaxed/simple;
+	bh=exXCrBhacEtExEyBeo6v3sY+qnYJxKDMlAakPGMX3GU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BCYY5WOCkdnrA6738EYoX6nx/lfTl0aaQqF7EMlEvz4rQVso28gGp6bkWPUEg7PCBuhoefyGPKSbpnRzgPeJ1SsTr4Ssa5H4hRnX4bGpsmVZ9dAbYqXzmycGUZi8BN5Z4yii24zFi6miADgcHe5ZJ+1oeUe4yGm/LFm+VVVOoUk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TznPu+kt; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CA78C4CEE7;
-	Thu,  9 Oct 2025 00:13:20 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=AYYPqVj4DAHcOnvtzDs0lANC2praBsFQi2MEVU0yz6N8Z80gvBQwLdvWK301sF+wcDap1p1YqK8vbHS8m7LM5A6e/kAS9mwm2um/7m2Aq6QLT0C9gtT7sefdRePleIyhoNsHP1dSCGlzQGiQ49K9Fsl1Q5bT82bhOC1BAVKC914=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CZR0A/iJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCD07C4CEE7;
+	Thu,  9 Oct 2025 00:15:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759968806;
-	bh=KeuM5jBfOWpmzREsI/2fXKOwApbsRNPOniejGQuUKOQ=;
+	s=k20201202; t=1759968930;
+	bh=exXCrBhacEtExEyBeo6v3sY+qnYJxKDMlAakPGMX3GU=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=TznPu+ktKHv2mu3aiVCfgbdLlNBqJSSJalxUY7dmEQ5GamLAOXR5HX1PyoCN4gJ+4
-	 6Ccp2DkC8lUTmITk13ZifWnsoW2+Td61zSlE1yMrZRFLbECwY38s8gFECPalXcVSHx
-	 DWelEtxQjxsoJTMWc1MllhpxG2xZIaX8qGZ/0Yl80/ddjGe3zDTxanusuu6nz+Zt3g
-	 K6iqYbsA+IbsiKxc1zMspQpC7De+VA5ovEgPfFqVyj4obzbdUfywt/b5TKVTl77N7D
-	 t0ergr9MEVp6iU9AcsfHB4bz5uRwQvF/hYdhZWpuwdQw5wOSVf//vQxnumvNP0MwDB
-	 CuKL9QeB228uA==
-Message-ID: <5df18f42-b567-4d27-9e12-29723af40d6e@kernel.org>
-Date: Thu, 9 Oct 2025 09:13:18 +0900
+	b=CZR0A/iJpKjXgLsr1YyoG38bp/BQn7xRkzLwxNil6v/hKCqgV6dPlDZtF05+srI+b
+	 W5oTJ+9PNFFezXvqYnWMz7spZ1Q1qm2fcSv76rjUfMgVy+vkozgkIra7SjLY701sRZ
+	 8P3QvpM433EQSDp8outpUcOMrUs+R5LViqTYfE6GPEAuQdTN4Sn075TJotm+5J/a22
+	 N8Kv/psasiXOhh6kWJcUbaFQSZ3Cqju4iMBgj9uVcRv5pJpAxnsLs9ipbO608U3d8C
+	 ZWGsPmoxurGw6VPE6T7RTosOr92tqE40V/XDF2Tt1NNRX4Jxpcd4Kr4nfjkatncxUu
+	 bpTh6l0OfI7RA==
+Message-ID: <84238581-0c23-4181-818e-a7fb2e7ca870@kernel.org>
+Date: Thu, 9 Oct 2025 09:15:23 +0900
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 03/10] pmdomain: samsung: use to devm_kstrdup_const() to
- simplify error handling
+Subject: Re: [PATCH 07/10] pmdomain: samsung: selectively handle enforced
+ sync_state
 To: =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
  Alim Akhtar <alim.akhtar@samsung.com>, Rob Herring <robh@kernel.org>,
  Conor Dooley <conor+dt@kernel.org>, Krzysztof Kozlowski
@@ -63,7 +63,7 @@ Cc: Peter Griffin <peter.griffin@linaro.org>,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-pm@vger.kernel.org
 References: <20251006-gs101-pd-v1-0-f0cb0c01ea7b@linaro.org>
- <20251006-gs101-pd-v1-3-f0cb0c01ea7b@linaro.org>
+ <20251006-gs101-pd-v1-7-f0cb0c01ea7b@linaro.org>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -109,20 +109,39 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20251006-gs101-pd-v1-3-f0cb0c01ea7b@linaro.org>
+In-Reply-To: <20251006-gs101-pd-v1-7-f0cb0c01ea7b@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 On 07/10/2025 01:43, André Draszik wrote:
-> Convert to using devm_kstrdup_const() so as to simplify cleanup during
-> error handling.
+> Unconditionally calling of_genpd_sync_state() causes issues on
+> platforms with child domains as the parent domain will be turned off
+> before the child domain was even registered during boot.
+> 
+> This in particular is an issue for the upcoming Google gs101 support -
+> all operations on child domains registered after the parent domain
+> misbehave.
+> 
+> Add a flag to the probe data to be able to sync_state conditionally
+> only, and enable that flag on the two platforms currently supported by
+> this driver.
+> 
+> Signed-off-by: André Draszik <andre.draszik@linaro.org>
+> ---
+>  drivers/pmdomain/samsung/exynos-pm-domains.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/pmdomain/samsung/exynos-pm-domains.c b/drivers/pmdomain/samsung/exynos-pm-domains.c
+> index 638d286b57f716140b2401092415644a6805870e..5a87802cff394945cb0202d08f2cf6bcbbcc774d 100644
+> --- a/drivers/pmdomain/samsung/exynos-pm-domains.c
+> +++ b/drivers/pmdomain/samsung/exynos-pm-domains.c
+> @@ -20,6 +20,7 @@
+>  struct exynos_pm_domain_config {
+>  	/* Value for LOCAL_PWR_CFG and STATUS fields for each domain */
+>  	u32 local_pwr_cfg;
+> +	unsigned int need_early_sync_state:1;
 
-
-This is either a fix (then describe the fixed issue and add Fixed tag)
-or you change the logic, not only simplify.
-
-Previously on of_genpd_add_provider_simple() the memory was not
-kfree_const. Now it will be.
+Just bool
 
 
 Best regards,
