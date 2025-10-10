@@ -1,233 +1,322 @@
-Return-Path: <linux-pm+bounces-35921-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35922-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D7D8BCD910
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Oct 2025 16:40:16 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3BB0EBCD997
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Oct 2025 16:46:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 52971402A4E
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Oct 2025 14:40:15 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 9B02D4E507A
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Oct 2025 14:45:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D483F2F60CB;
-	Fri, 10 Oct 2025 14:40:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32BCE2F60D8;
+	Fri, 10 Oct 2025 14:45:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Eml6+LRK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MasSTGUx"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C77102F5327
-	for <linux-pm@vger.kernel.org>; Fri, 10 Oct 2025 14:40:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDC2313BC0C;
+	Fri, 10 Oct 2025 14:45:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760107210; cv=none; b=X/ZTQMGVSbFiQBLZdUlm/+KG3FY7cSd6LSaNSRPt9+qpkA+beKY5tdDdsch1dK+MhhupsvoiJP6zRpVeNRR0j/8+kvs4SAgNI3Zpzcd8EEi9h2rYxb8Ee/XSTyFi974x9EnNV2AUk8KO8fo9Qo0fay5up89lUlSoEllp02gs4IE=
+	t=1760107522; cv=none; b=cDuOmr8xp/dGnHmtr0zst+lk4n69OKBwHVGDO9W+9fvfJUwTMBA8SplB1kg2pbGu9KZ/Bcbd74hvoyybC4cttZFQM7JusxXgCWV5LolziDamq5xUhgM6PcFQZlkAwPOAi3h7r3fR/PEfU8uPAkZD5XeU2V9ZEQg8oG7RR5y/q6M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760107210; c=relaxed/simple;
-	bh=WbeLzUgEV22dDeik0xafOaSUdi9R9dEvpfqnpGFwEAw=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=BuQ7+R+2VeYXNSPXcMKhP/5yT26c1BEdsC1IeY8OIBjm+h5+1TT1bdy4E3lO8xu4Eqmuyh2xkzmgq33z4QxqHJmgKvuWSzTLdqBZkz2DcOOvXmNEiGRXjwp42XpEh09c0C1kX1ierdE+IB1/kpOs5JDP5dHDgrU6SBrOZt40/TA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Eml6+LRK; arc=none smtp.client-ip=209.85.221.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-3ee1221ceaaso1580656f8f.3
-        for <linux-pm@vger.kernel.org>; Fri, 10 Oct 2025 07:40:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760107207; x=1760712007; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=WbeLzUgEV22dDeik0xafOaSUdi9R9dEvpfqnpGFwEAw=;
-        b=Eml6+LRK6dXTs8wDanPMG4/UBwafDNcsex+TU4XIv8H+YPlSSbdpmI6aQRtt9FS3MO
-         XXiYJgUJDhugYOwVhPzBTa+Aj45j1dc0dtJhbRZGn9zcD3Wt7fjUsl9dkBVwihjUgMRH
-         yXE9oxfYIlEu+13IwkAPfCIvtMRGCTsD1UHAgPB6eAeymExTGiViv2mER4eLHzO1oUnG
-         roBlOJAHl9ZD/unr8xJ/5O2Z3aXbb+sysPP3ilMQDWsJTevMfEEpV1ZYnoWPKybXJ+RG
-         Z32bDHCnjZrEw2xVdpt8/REaov7l7TSi2zD7od+92UAr04ChvEpep5yO79DrvOVb26aI
-         fs0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760107207; x=1760712007;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WbeLzUgEV22dDeik0xafOaSUdi9R9dEvpfqnpGFwEAw=;
-        b=KtQovdJnQcxi1R9kOOGXM9wqSUE4WVS4cJAdBOA43Z6ii24IXxjlKMayHOGEAkX2AV
-         r+jPjI9YC9CtzcW9pbL9GeJzZWPb3dSt1znjX/ykr79kiRNgkI58D3sSMk/MM7+9o1JK
-         N1vApkbNi7CvkYgM533cYCU/+17lZfmj6w8V3hsn0/fLbC+KGAoqNq9AiYToMZnet5Jx
-         4zjWVZEHGVoL43kX1SqdFwPlRj6gr5oqunyh5UNImSE1lDp3sQf+CaDiIdpge3w1hF+Y
-         eDtG8JHpywbs0cTLdMSDvbRVEQBDzGuyAx1dx7H1LQkCHYhlOqxKgPwJZ7JP6+2regCw
-         ihCg==
-X-Forwarded-Encrypted: i=1; AJvYcCXHV9hcUUhHIXwL3oiUPVAq6KvOyiEq9/j125aNRJsOKeLtQ+0QUJeLZm0PFW9NnPzwrSIpAFOvjw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxYgQ7vqGOSbAI+4cxH+xvcrSVz3IVbr76QaDDDc9rhtaMpBWmu
-	Lbyz/RcqpU6/BDMeJqWAXvZZhycWuY3q4lyFL7ljEEitmscHwJ+Cfrvp
-X-Gm-Gg: ASbGncuiXgdjxQCSxYNgCXdd9cdY8G8xJcXlGFkkwfMF7eOptPMLUwDoNjzlPYoJm2W
-	8DePVvfZpnE6TxItmz+wNkK18BX5MMV2UCEiEMLVzmXUoeMGH3c1O5/yuc73mNRB1G05NUSTnPg
-	wTmGjEdluv4P8+9j+auOC1ydfLFP5Ptbg4Kctqrsdd+bm4aJzrDP82xs8I3aI+vQJf5fYdxIJaR
-	pvMn7Ot+HDCLt8dPfjUCxEF7ygGLnSlZdpqfhhWGoUB0R1dpCe5lICMk6uPloQG9y/DbFk2c38n
-	9AC403dSofD3aR/5VTD/v1Ag+le1nJ1WvPwHvhZ1TeeRVBYSxJamAul9pZPL1ZtQfftbMsiVpA4
-	oxYYPYs29u4DEqJTS1TbcEgqY+PegYOplq2tHvzFZrHkk5dPFLtcS6skEFnOw
-X-Google-Smtp-Source: AGHT+IFnMF+6qNtBAMw+CyoQv3jiuQo/QSyCG7rCO6D+8KNfzJwrWSPS9T8beikQzgBhf5GvDE9Ang==
-X-Received: by 2002:a05:6000:1867:b0:3eb:b80c:cea0 with SMTP id ffacd0b85a97d-42666abbbabmr6495344f8f.4.1760107206730;
-        Fri, 10 Oct 2025 07:40:06 -0700 (PDT)
-Received: from [192.168.1.187] ([161.230.67.253])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-426ce5833dcsm4580320f8f.19.2025.10.10.07.40.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Oct 2025 07:40:06 -0700 (PDT)
-Message-ID: <61b5a5f43d97f700ec7fc52110a1784ef699eeaa.camel@gmail.com>
-Subject: Re: [PATCH RFC 0/6] Battery temperature ADC plumbing on Qualcomm
- platforms
-From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
-To: Luca Weiss <luca.weiss@fairphone.com>, Jonathan Cameron
- <jic23@kernel.org>,  David Lechner <dlechner@baylibre.com>, Nuno
- =?ISO-8859-1?Q?S=E1?= <nuno.sa@analog.com>, Andy Shevchenko	
- <andy@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano	
- <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, Lukasz Luba	
- <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski	
- <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Laxman Dewangan	
- <ldewangan@nvidia.com>, Bjorn Andersson <andersson@kernel.org>, Konrad
- Dybcio	 <konradybcio@kernel.org>, Hans de Goede <hansg@kernel.org>, Jens
- Reidel	 <adrian@mainlining.org>, Casey Connolly <casey.connolly@linaro.org>
-Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org, 
-	linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	devicetree@vger.kernel.org
-Date: Fri, 10 Oct 2025 15:40:36 +0100
-In-Reply-To: <20251010-bat-temp-adc-v1-0-d51ec895dac6@fairphone.com>
-References: <20251010-bat-temp-adc-v1-0-d51ec895dac6@fairphone.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.0 
+	s=arc-20240116; t=1760107522; c=relaxed/simple;
+	bh=9+oSY/IZtMS97w/FzZPMB/lEGaydDpXxMEPE+D8KrRA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iG3ljEzP0ZzI1VyyNXZxlFkcZyy5m248s9TaJoB73QAa0MWz3Oe86WVCfomD36egynH8TJK8As9ZZBHPQ3I4VryqtYg+WkXgxCvCtXjBTXQ3Ni4F0jPReYQJOeR4rwSaXiTuedrZ33iW2ZL+DQn4ZxHhG+SJHnvaihtMQWICU/A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MasSTGUx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B5A3C4CEF1;
+	Fri, 10 Oct 2025 14:45:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1760107521;
+	bh=9+oSY/IZtMS97w/FzZPMB/lEGaydDpXxMEPE+D8KrRA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=MasSTGUxtdJ0kcf9pdDVZ1iYZ+kaTlR9cw4p4YYeuTi9Oeuadmj8g4UPjjFxrmQtK
+	 SKPfVf0lkBuTQDsNyj87s9EidgaRKqdVR8Q09GQWEAqMhvRtEkK4gkVVU0C0IhGgqW
+	 lBTY9xgHWg1kZFdOx0zeqNp9lYWfBN83x7tneTDBACZ/05+aakSlWqLKqUy7LiPnXq
+	 VDUvo3qGNObPubLd+37GUu8O1WYU1fNEgcLn69ny4t9A0uubroLl4BuJbvC70OYiqo
+	 4Hq0Ss+sXQtEJprY1YckkLeLlg9BvjcHxOYIVqjJJd6IQXvZMFryrtmIykMxMu7Yyj
+	 XDBSs+2wck6WA==
+Date: Fri, 10 Oct 2025 15:45:15 +0100
+From: Lee Jones <lee@kernel.org>
+To: Matti Vaittinen <mazziesaccount@gmail.com>
+Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+	Pavel Machek <pavel@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Sebastian Reichel <sre@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Andreas Kemnade <andreas@kemnade.info>, linux-leds@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-gpio@vger.kernel.org
+Subject: Re: [RFC PATCH 06/13] mfd: bd71828: Support ROHM BD72720
+Message-ID: <20251010144515.GI2988639@google.com>
+References: <cover.1759824376.git.mazziesaccount@gmail.com>
+ <93142a80d90a0ac80b27090d0c83914675aad94d.1759824376.git.mazziesaccount@gmail.com>
+ <20251009161847.GE2890766@google.com>
+ <8ea507eb-f78c-4a16-882b-112e277fa1b6@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <8ea507eb-f78c-4a16-882b-112e277fa1b6@gmail.com>
 
-On Fri, 2025-10-10 at 13:21 +0200, Luca Weiss wrote:
-> This is an RFC which implements a potential solution to get battery
-> temperature readings working on for example smartphones with Qualcomm
-> SoCs.
->=20
-> The solution chosen in downstream Qualcomm kernels is exposing
-> ADC_BAT_THERM_PU* in the ADC driver as temperature channels with the
-> lookup table ("struct vadc_map_pt") for the specific NTC found in a
-> device's battery patched to adjust the lookup table.
->=20
-> The high level solution proposed here:
-> * ADC driver provides temperature channel in (milli)volt as IIO channel
-> * generic-adc-thermal driver converts voltage to temperature based on
-> =C2=A0 provided lookup table from DT (driver has one IIO channel input, o=
-ne
-> =C2=A0 IIO channel output)
-> * The fuel gauge driver can use that temperature IIO channel to expose
-> =C2=A0 battery temperature via the power supply device
->=20
-> Variants/alternatives considered:
->=20
-> 1. Do not implement IIO device in generic-adc-thermal
->=20
-> Without an IIO channel and using thermal zone directly it becomes more
-> difficult. You cannot get thermal zone by reference (e.g.
-> thermal-sensors =3D <&foo>;). The function thermal_zone_get_zone_by_name(=
-)
-> exists but lookup by name is kinda clunky. Adding by-phandle support
-> might be possible but is lots of work. It also doesn't really look like
-> thermal-sensor is really meant to be used by other drivers. E.g.
-> there's also no "thermal-sensor-names" property to designate passing
-> multiple thermal sensors. So I believe IIO is a better fitting API for
-> this.
+On Fri, 10 Oct 2025, Matti Vaittinen wrote:
 
-The only thing that I dislike is that using IIO just feels like hacking aro=
-und
-the lack of an inkernel interface (as you pointed out and which IIO provide=
-s)
-for thermal devices. My main question is, what makes this device an IIO dev=
-ice
-despite the fact that we (you) want to use the IIO inkernel API (IIUC)? AFA=
-IU,
-the sensor is already being implemented as the ADC driver and this is just
-convenience.
+> Hi deee Ho Lee,
+> 
+> And Thanks for the review!
+> 
+> On 09/10/2025 19:18, Lee Jones wrote:
+> > On Tue, 07 Oct 2025, Matti Vaittinen wrote:
+> > 
+> > > The ROHM BD72720 is a power management IC which continues the BD71828
+> > > family of PMICs. Similarly to the BD71815 and BD71828, the BD72720
+> > > integrates regulators, charger, RTC, clock gate and GPIOs.
+> > > 
+> > > The main difference to the earlier PMICs is that the BD72720 has two
+> > > different I2C slave addresses. In addition to the registers behind the
+> > > 'main I2C address', most of the charger (and to some extent LED) control
+> > > is done via registers behind a 'secondary I2C slave address', 0x4c.
+> > > 
+> > > Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+> > > 
+> > > ---
+> > > Note: This patch depends on the series: "power: supply: add charger for
+> > > BD71828" by Andreas:
+> > > https://lore.kernel.org/all/20250918-bd71828-charger-v5-0-851164839c28@kemnade.info/
+> > > 
+> > > There are some new variants being planned. Most notably, the BD73900
+> > > should be almost identical to the BD72720 - for everything else except
+> > > the charger block.
+> > > ---
+> 
+> // snip
+> 
+> > > +
+> > > +static struct regmap *bd72720_secondary_regmap;
+> > 
+> > Dynamically allocate this and add it to .platform_data once it's
+> > populated.
+> > 
+> 
+> This can be done but I suppose it's unnecessary churn. This driver does not
+> (at the moment) support more than one instance of the PMIC anyways. (The
+> button data is not alloacted).
+> 
+> This is not really a problem as typically there is only 1 of these PMICs to
+> be controlled.
 
-Anyways, that said, there's precedent (at least in 2 places) about register=
-ing
-IIO devices outside of the subsystem.
+I'd take a few lines of extra code over a globally defined variable any
+day of the week.
 
-Maybe we need the concept of an IIO proxy for the IIO inkernel interface. L=
-ike
-consumers of IIO devices that can use some the measurements (channels), do
-something with them and then be IIO providers. I guess I'm already rambling=
- :)
-=20
->=20
-> 2. Expose IIO channel as temperature in ADC driver
->=20
-> This would require passing in the temperature lookup table somehow to
-> the ADC driver via DT. I think this passes too many details about the
-> hardware that's connected into the ADC driver. While possible, at least
-> for Qcom ADC there's no precedent yet.
+> // snip
+> 
+> > > +/*
+> > > + * The BD72720 is an odd beast in that it contains two separate sets of
+> > > + * registers, both starting from address 0x0. The twist is that these "pages"
+> > > + * are behind different I2C slave addresses. Most of the registers are behind
+> > > + * a slave address 0x4b, which will be used as the "main" address for this
+> > > + * device.
+> > > + * Most of the charger related registers are located behind slave address 0x4c.
+> > > + * It is tempting to push the dealing with the charger registers and the extra
+> > > + * 0x4c device in power-supply driver - but perhaps it's better for the sake of
+> > > + * the cleaner re-use to deal with setting up all of the regmaps here.
+> > > + * Furthermore, the LED stuff may need access to both of these devices.
+> > > + */
+> > > +#define BD72720_SECONDARY_I2C_SLAVE 0x4c
+> > > +static const struct regmap_range bd72720_volatile_ranges_4b[] = {
+> > > +	{
+> > > +		/* RESETSRC1 and 2 are write '1' to clear */
+> > > +		.range_min = BD72720_REG_RESETSRC_1,
+> > > +		.range_max = BD72720_REG_RESETSRC_2,
+> > 
+> > regmap_reg_range()?
+> 
+> Ah, thanks. Out of the curiosity - do you know why this macro is written on
+> lowercase?
 
-Not really familiar with the HW setup but (just for my understanding) why i=
-t
-would not make sense to pass that info to the IIO driver? I guess that tabl=
-e is
-just not part of the ADC?
+Signed-off-by: Laxman Dewangan <ldewangan@nvidia.com>
+Signed-off-by: Mark Brown <broonie@linaro.org>
 
->=20
-> 3. Add temperature-lookup-table as property to simple-battery
->=20
-> Since the NTC is a part of the battery pack, adding a
-> temperature-lookup-table property to simple-battery would make sense
-> instead of having this lookup table be standalone in the
-> generic-adc-thermal node. However being able to re-use the existing code
-> in generic-adc-thermal lead me to the current proposal.
+=:-)
 
-What about turning it into a small lib module? No idea where to put it thou=
-gh.
-But while I was thinking about this, your option 3 looks the one that makes=
- more
-sense to me.
+> // snip
+> > > +static int bd72720_set_type_config(unsigned int **buf, unsigned int type,
+> > > +				   const struct regmap_irq *irq_data,
+> > > +				   int idx, void *irq_drv_data)
+> > > +{
+> > > +	const struct regmap_irq_type *t = &irq_data->type;
+> > > +
+> > > +	/*
+> > > +	 * The regmap IRQ ecpects IRQ_TYPE_EDGE_BOTH to be written to register
+> > > +	 * as logical OR of the type_falling_val and type_rising_val. This is
+> > > +	 * not how the BD72720 implements this configuration, hence we need
+> > > +	 * to handle this specific case separately.
+> > > +	 */
+> > > +	if (type == IRQ_TYPE_EDGE_BOTH) {
+> > > +		buf[0][idx] &= ~t->type_reg_mask;
+> > > +		buf[0][idx] |= BD72720_GPIO_IRQ_TYPE_BOTH;
+> > > +
+> > > +		return 0;
+> > > +	}
+> > > +
+> > > +	return regmap_irq_set_type_config_simple(buf, type, irq_data, idx,
+> > > +						 irq_drv_data);
+> > 
+> > Use 100-chars to avoid these pointless wraps please.
+> 
+> gnarl. I think we have discussed this before :)
+> I would love to keep the lines short - closer to 80 chars - because that way
+> I can fit 3 terminals on my screen. All the years spent staring at the
+> monitor are taking their toll, and my vision isn't as good as it used to be.
+> Frightening thing being that it seems I will only need to increase the font
+> in the future :/
+> 
+> Well, sure the lines can be split if you feel strongly about it - but I have
+> a real reason (other than the usual - "they have always been like that") to
+> try keep them short...
 
-My 2 cents!
-- Nuno S=C3=A1
+Welcome to the year 2000 when 32" monitors are super affordable.
 
+> > > +}
+> > > +
+> > >   static const struct regmap_irq_chip bd71828_irq_chip = {
+> > >   	.name = "bd71828_irq",
+> > >   	.main_status = BD71828_REG_INT_MAIN,
+> > > @@ -465,6 +814,28 @@ static const struct regmap_irq_chip bd71815_irq_chip = {
+> > >   	.irq_reg_stride = 1,
+> > >   };
+> > > +static const unsigned int bd72720_irq_type_base = BD72720_REG_GPIO1_CTRL;
+> > 
+> > This makes it look like a global variable, which I am allergic to.
+> > 
+> > Perhaps make it clear that this is a single element static array instead.
+> 
+> Ok. Just a comment will do?
 
->=20
-> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
-> ---
-> Luca Weiss (6):
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 iio: adc: qcom-spmi-adc5: Add battery ther=
-mal channels
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dt-bindings: thermal: generic-adc: Documen=
-t #io-channel-cells
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 thermal/drivers/generic-adc: Register as I=
-IO device
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 thermal/drivers/generic-adc: Allow probe w=
-ithout TZ registration
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 arm64: dts: qcom: pm7250b: Define battery =
-temperature ADC channels
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 arm64: dts: qcom: sm7225-fairphone-fp4: Ad=
-d battery temperature node
->=20
-> =C2=A0.../bindings/thermal/generic-adc-thermal.yaml=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 |=C2=A0 4 ++
-> =C2=A0arch/arm64/boot/dts/qcom/pm7250b.dtsi=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 24 +++++++
-> =C2=A0arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts=C2=A0 | 83
-> ++++++++++++++++++++++
-> =C2=A0drivers/iio/adc/qcom-spmi-adc5.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
- |=C2=A0 6 ++
-> =C2=A0drivers/iio/adc/qcom-vadc-common.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 16 +++++
-> =C2=A0drivers/thermal/thermal-generic-adc.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 68 ++++++++++++++++--
-> =C2=A0include/linux/iio/adc/qcom-vadc-common.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 3 +
-> =C2=A07 files changed, 198 insertions(+), 6 deletions(-)
-> ---
-> base-commit: 6063257da111c7639d020c5f15bfb37fb839d8b6
-> change-id: 20251010-bat-temp-adc-8539bf0b85bc
->=20
-> Best regards,
+Nope. :)
+
+> > > +static const struct regmap_irq_chip bd72720_irq_chip = {
+> > > +	.name = "bd72720_irq",
+> > > +	.main_status = BD72720_REG_INT_LVL1_STAT,
+> > > +	.irqs = &bd72720_irqs[0],
+> > > +	.num_irqs = ARRAY_SIZE(bd72720_irqs),
+> > > +	.status_base = BD72720_REG_INT_PS1_STAT,
+> > > +	.unmask_base = BD72720_REG_INT_PS1_EN,
+> > > +	.config_base = &bd72720_irq_type_base,
+> > > +	.num_config_bases = 1,
+> > > +	.num_config_regs = 2,
+> > > +	.set_type_config = bd72720_set_type_config,
+> > > +	.ack_base = BD72720_REG_INT_PS1_STAT,
+> > > +	.init_ack_masked = true,
+> > > +	.num_regs = 12,
+> > > +	.num_main_regs = 1,
+> > > +	.sub_reg_offsets = &bd72720_sub_irq_offsets[0],
+> > > +	.num_main_status_bits = 8,
+> > > +	.irq_reg_stride = 1,
+> > > +};
+> > > +
+> > >   static int set_clk_mode(struct device *dev, struct regmap *regmap,
+> > >   			int clkmode_reg)
+> > >   {
+> > > @@ -511,6 +882,25 @@ static void bd71828_remove_poweroff(void *data)
+> > >   	pm_power_off = NULL;
+> > >   }
+> > > +static int bd72720_get_secondary_regmap(struct i2c_client *i2c,
+> > 
+> > Does this 'secondary' have a specific purpose or a better name?
+> 
+> I am not entirely sure. When I asked this from the designers they just told
+> me that they needed more than 255 registers so they added another slave
+> address... (I'm not sure what would have been wrong with using a page
+> register). So, I assume they just placed stuff that didn't fit in first 255
+> register there. But yeah, it looks like most of the registers there are
+> related to the charger. So, perhaps it isn't completely misleading to use
+> "charger regmap"? The data-sheet seems to be just using "Register map 1" and
+> "Register map 2" in the tables listing these registers. I kind of like using
+> something which maps easily to the data-sheet, but I really have no strong
+> opinion on this.
+> 
+> > > +					const struct mfd_cell *mfd, int cells)
+> > > +{
+> 
+> // snip
+> 
+> > > diff --git a/include/linux/mfd/rohm-bd72720.h b/include/linux/mfd/rohm-bd72720.h
+> > > new file mode 100644
+> > > index 000000000000..856a6962b1b2
+> > > --- /dev/null
+> > > +++ b/include/linux/mfd/rohm-bd72720.h
+> > > @@ -0,0 +1,632 @@
+> > > +/* SPDX-License-Identifier: GPL-2.0-or-later */
+> > > +/*
+> > > + * Copyright 2024 ROHM Semiconductors.
+> > 
+> > Seems odd to introduce a new file with an old date.
+> 
+> I originally wrote this last year :) I can it update though. Thanks.
+> 
+> > 
+> > > + *
+> > > + * Author: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+> > > + */
+> > > +
+> > > +#ifndef _MFD_BD72720_H
+> > > +#define _MFD_BD72720_H
+> > > +
+> > > +#include <linux/regmap.h>
+> > > +
+> > > +enum {
+> > > +	BD72720_BUCK1,
+> > > +	BD72720_BUCK2,
+> > > +	BD72720_BUCK3,
+> > > +	BD72720_BUCK4,
+> > > +	BD72720_BUCK5,
+> > > +	BD72720_BUCK6,
+> > > +	BD72720_BUCK7,
+> > > +	BD72720_BUCK8,
+> > > +	BD72720_BUCK9,
+> > > +	BD72720_BUCK10,
+> > > +	BD72720_BUCK11,
+> > > +	BD72720_LDO1,
+> > > +	BD72720_LDO2,
+> > > +	BD72720_LDO3,
+> > > +	BD72720_LDO4,
+> > > +	BD72720_LDO5,
+> > > +	BD72720_LDO6,
+> > > +	BD72720_LDO7,
+> > > +	BD72720_LDO8,
+> > > +	BD72720_LDO9,
+> > > +	BD72720_LDO10,
+> > > +	BD72720_LDO11,
+> > > +	BD72720_REGULATOR_AMOUNT,
+> > > +};
+> > > +
+> > > +/* BD72720 interrupts */
+> > > +#define BD72720_INT_LONGPUSH_MASK BIT(0)
+> > 
+> > Tab out the values please.
+> 
+> Ok, sure.
+> 
+> Ps.
+> I do really appreciate you going through RFCs :) Kudos!
+
+NP
+
+-- 
+Lee Jones [李琼斯]
 
