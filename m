@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-35914-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35915-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B3C8BCCF46
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Oct 2025 14:44:14 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7738EBCCF57
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Oct 2025 14:45:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 046AD405F60
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Oct 2025 12:44:13 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 68BA04E9DC1
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Oct 2025 12:45:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 397F12EDD6F;
-	Fri, 10 Oct 2025 12:44:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F9FF2877D3;
+	Fri, 10 Oct 2025 12:45:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PotMFbUv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N/5prysj"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 086BA2673B0;
-	Fri, 10 Oct 2025 12:44:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D002C35949;
+	Fri, 10 Oct 2025 12:45:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760100248; cv=none; b=syZZMdorYR0bBYh1XJnYNns5Ch4L7nqIwmALBFDOwaugPmYyFNgxZFbkMpQgy9ZcdxFAOKHez9pQ+Noy2Fg1xUGdFjIwFwW02Z5Ww1wLIUyg5/qW4/kqJ4lrUpkOGFY2pAuXTHnIOUdVQpUhvJRYQaUenu1wLFRa6f2WnYJr820=
+	t=1760100353; cv=none; b=POQ2U5mb0VUUrQo8KNRMJxpvBiJnkkoE9wNAPXotjegStgXa/pnUcjikwS77PowVSZwcxpdadpA0gwckhvRv/Thj81i4fF76c2ZqYi/dBQOMxTtmlUX586WNzHaqvGqTtL+GXMa40zCfKwxf8c5zf8uYm06vnGIoEO2js540jhE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760100248; c=relaxed/simple;
-	bh=z2CL8cErF6RjRybkPU3ycPqkynLp0+MowYCPJIFtBmQ=;
+	s=arc-20240116; t=1760100353; c=relaxed/simple;
+	bh=6iO2HOO+p8AuKfTDEjhESQvdQrqHK4X+aOwnAUvg0lE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mVV1MKXSRMu/1xcZiAypUMLtikjc5rAUTwEfT3lLarw34mEAG/EyXPWeWHK+04NMvbC/fIgswuf+hlr2fa9vS3q8bcoYxVjXK4qm8uMV38J1DUBRc3t4c/Z+DiEUFJojr+I28yboKUabs0NDfvTJ2N8cSYCjuTsqVH/AQJiCmxk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PotMFbUv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B1BAC4CEF1;
-	Fri, 10 Oct 2025 12:44:00 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=E6PY+obMkK/ylh3SBR0YjdCNkvD18U//coZPDDzxbOUOEIGsnY06VEnH8VSsiBqL/wPXmEu6XxwshkmagHSuV+8FxibECVV22XFzcdmTdkrVJf/XOegfd6lVzy7hCWASiQ6MfUxzDH1IxWcsspBlWi6gMb/r960d4clYCxdAfxk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N/5prysj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E909C4CEF9;
+	Fri, 10 Oct 2025 12:45:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760100246;
-	bh=z2CL8cErF6RjRybkPU3ycPqkynLp0+MowYCPJIFtBmQ=;
+	s=k20201202; t=1760100353;
+	bh=6iO2HOO+p8AuKfTDEjhESQvdQrqHK4X+aOwnAUvg0lE=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=PotMFbUvN4s0rfa+VOVFapAiP5CNN/McqucE7q+rhsH6MX/c6QPkt9uaJHH7Bb74E
-	 PAq9qG5j+rtxYZoKNNNtSr2zPbpYiJj5G8+V3d5vW5S4AfSQspt997PKTCRPauVv3k
-	 Q07iLgFEH2hYOAMw9zjELJDIh60fZoOXAuw3m/eoCm4qwMuztQ4lPJ3qXg3fhWfOd8
-	 HBli4dnplxAILMh4jod2E76n0/dEUylTixIPI68fSx1Q3ZfLGK1ubUDSivH5ziMC/Y
-	 q7zhM4Lm6XgH+AHu2eU5xSWl0IFnq8B1qTlMM8WfGC4YUHcR+t4SrpUIC3tJLlH5P0
-	 hP2pMdkrLNw8Q==
-Message-ID: <5747ce14-2963-4c5f-b43b-5437807cfb11@kernel.org>
-Date: Fri, 10 Oct 2025 14:43:59 +0200
+	b=N/5prysjhDbZuE7GsXDqNwkLhm6ptSBp1/lDPkW9mdmH78tctCdwzPp8S+Iok7Ykq
+	 EgGXMMGuwUmbGakfJb2PKLa7T//ilQMZ1Rxd/8zJPQySWtmMi3FpK4v7DxNAFvdbp9
+	 h3jj5GmbBaT6muG+0nGM/fuuVhlZ3qr9+EYi6C+OT3650ob3NHk7kVwZzi2hkBkcJK
+	 KjqItfY2idORIjrsGFcAUoensbXteL7Lh/adBCVbIdUYX0fiqTHuGamm7RvK7r1hBl
+	 CYnV/o0h0O9E31MSAAeicdAGd4jpi7HoovxrooKklBaJmLu4t7Hi2CpzMfljqaYgTj
+	 yl2Y8Lo24jLIQ==
+Message-ID: <65380fa1-7d49-48eb-bab4-3e15cc4ea434@kernel.org>
+Date: Fri, 10 Oct 2025 14:45:47 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,8 +50,7 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 1/3] dt-bindings: thermal: samsung: Adjust
- '#thermal-sensor-cells' to 1
+Subject: Re: [PATCH v6 3/3] arm64: dts: exynosautov920: Add multiple sensors
 To: Shin Son <shin.son@samsung.com>,
  Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
  "Rafael J . Wysocki" <rafael@kernel.org>,
@@ -63,8 +62,8 @@ Cc: linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
  devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  linux-kernel@vger.kernel.org
 References: <20250930005139.1424963-1-shin.son@samsung.com>
- <CGME20250930005147epcas2p2622ff5fdbffc045bbd625e3e60db8118@epcas2p2.samsung.com>
- <20250930005139.1424963-2-shin.son@samsung.com>
+ <CGME20250930005148epcas2p19ffbb0ceaacac4d92e7d43936884dc70@epcas2p1.samsung.com>
+ <20250930005139.1424963-4-shin.son@samsung.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -110,48 +109,24 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20250930005139.1424963-2-shin.son@samsung.com>
+In-Reply-To: <20250930005139.1424963-4-shin.son@samsung.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 30/09/2025 02:51, Shin Son wrote:
->          reg:
->            minItems: 1
->            maxItems: 1
-> +        '#thermal-sensor-cells':
-> +          const: 0
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: samsung,exynosautov920-tmu
-> +    then:
-> +      properties:
-> +        clocks:
-> +          minItems: 1
-
-You can drop minItems. Existing binding has it unnecessarily.
-
-> +          maxItems: 1
-
-You also need clock-names restriction, just like clocks or just ": false".
-
-> +        reg:
-> +          minItems: 1
-
-This also drop.
-
-> +          maxItems: 1
-> +        '#thermal-sensor-cells':
-> +          const: 1
+> diff --git a/arch/arm64/boot/dts/exynos/exynosautov920.dtsi b/arch/arm64/boot/dts/exynos/exynosautov920.dtsi
+> index 0fdf2062930a..fba403e48aed 100644
+> --- a/arch/arm64/boot/dts/exynos/exynosautov920.dtsi
+> +++ b/arch/arm64/boot/dts/exynos/exynosautov920.dtsi
+> @@ -330,6 +330,36 @@ watchdog_cl1: watchdog@10070000 {
+>  			samsung,cluster-index = <1>;
+>  		};
 >  
+> +		tmu_top: tmu@100a0000 {
+> +			compatible = "samsung,exynosautov920-tmu";
+> +			reg = <0x100A0000 0x1000>;
 
-
-Rest looks fine, so with changes above:
-
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+I guess there will be new version, so nitpick: please use lowercase hex.
 
 
 Best regards,
