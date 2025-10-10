@@ -1,97 +1,70 @@
-Return-Path: <linux-pm+bounces-35897-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35898-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CAABDBCC6E6
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Oct 2025 11:48:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A52BBCC71C
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Oct 2025 11:55:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7E7DB3A9A01
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Oct 2025 09:48:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D0ED13BD682
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Oct 2025 09:55:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9761B2ED154;
-	Fri, 10 Oct 2025 09:48:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dvslxa6y"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 271C42C0299;
+	Fri, 10 Oct 2025 09:55:40 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CDD62ECE9A;
-	Fri, 10 Oct 2025 09:48:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F16D20A5EA;
+	Fri, 10 Oct 2025 09:55:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760089698; cv=none; b=EfQY4FTaNJRatIgyVk6VvtGt7vdmk6Jxjhc9gyvVPhRptuvaCHOLBVl3MuGAr1x78vv45N3iJ/FjYxqpYKO/YXOb243/OHgsvNQYXxNPiSbic185XARxWwyZIUdOe8j9t4IyFV8J2chly8nf2dZfoX1DZctJhyiFs9NcCdqaS6k=
+	t=1760090140; cv=none; b=XSHaih/KmzPw/qqltIuvt8MsTyyPpWsxoo2and09ubsGVsgjwdSv1vOZp5csc3B0gjT8Hp9dz/1tKagM9oddD7AXS3J2U4EhzzyYG+GtuzxAtL4KLsQFR+l4YleG9hX5MBmD8lqmAuR8ItrPU6apN0WUgGOmGnIdSfuRXuui38o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760089698; c=relaxed/simple;
-	bh=JrWrN+FQZRgzUNzMiSaZNnbC3MC4bk658YLS+9m48g8=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=gPZ461WvRMjuIjK3Hh54CwyJfRqzfHGIrFDOKPHTzHB0F38sLKEOY1l/eK0gB9zUXN5X53PWF/ol8ipHabBzfFtsouqbGUKHu+to48L8+AlYNkfQiardmj3Lhf1MER+EBZQbou7/drOvd5ICUABVTKdX7PtKGPzIZhLbaTn6iLM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dvslxa6y; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBDA5C4CEF1;
-	Fri, 10 Oct 2025 09:48:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760089697;
-	bh=JrWrN+FQZRgzUNzMiSaZNnbC3MC4bk658YLS+9m48g8=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=dvslxa6yxvt2X8m9j5W8vxa0CEpmn58MZW4GD8Bm90QDt4Li+sTdT51zb8UE0qeLb
-	 azDAoKjznhK8NsVXZ0yiVFtmkDfO4v3OP0darB8cUgpIS4xYA7XGtz9twXoN2m/2Iv
-	 Zgla+K3E0rJ87QbBw4pf2zqk4qvl+l8MiFs2THHroDkH9Duy8Rpn560n26a4X/x8mc
-	 y1cAca8VS22y3cTaYlvNauRTOqGmc6n5JZY5PyxnsPIL5DzzvT7zot84hDCxmeS4b2
-	 Qz7IcfT+5G/3MKmXcCqcN4AOS7vciwONESBmCNrU278J4u6ZJDH3uR36EV0+E9bpF5
-	 sYKnC7q9v6t1w==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.98.2)
-	(envelope-from <maz@kernel.org>)
-	id 1v79jT-0000000CsJY-3fzQ;
-	Fri, 10 Oct 2025 09:48:16 +0000
-Date: Fri, 10 Oct 2025 10:48:15 +0100
-Message-ID: <86h5w7xf34.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
+	s=arc-20240116; t=1760090140; c=relaxed/simple;
+	bh=mTfjnlLIPs747DZ8NtNpnvu4jI9ogYkuUeDHxXbtTJ0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZGs0Se61zO79vprLKKIQtfqrCmblqX1QfR+RH+RB9W4/yjQx4Idjt3+BfGWzflaAJcg5WUNdTlUibbmB5pIKFY3aObvmQRt0wBjCiACCcbcvaFVu3Hfs/pERCe3PmB2nL9jVzfPSIEZvTZ/8DZCzSmFz6fHPENWGLhNTpigwfbg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AB7471596;
+	Fri, 10 Oct 2025 02:55:29 -0700 (PDT)
+Received: from J2N7QTR9R3 (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 82B7F3F66E;
+	Fri, 10 Oct 2025 02:55:35 -0700 (PDT)
+Date: Fri, 10 Oct 2025 10:55:32 +0100
+From: Mark Rutland <mark.rutland@arm.com>
 To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
+Cc: Marc Zyngier <maz@kernel.org>, "Rafael J . Wysocki" <rafael@kernel.org>,
 	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
+	Will Deacon <will@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
 	Maulik Shah <quic_mkshah@quicinc.com>,
 	Sudeep Holla <sudeep.holla@arm.com>,
 	Daniel Lezcano <daniel.lezcano@linaro.org>,
 	Vincent Guittot <vincent.guittot@linaro.org>,
-	linux-pm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
+	linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org
 Subject: Re: [PATCH 2/3] arm64: smp: Implement cpus_has_pending_ipi()
-In-Reply-To: <CAPDyKFq4RgL0=hPhB0cwTQF-A+mXH8dxsZAYTB1CFuLxxxTujg@mail.gmail.com>
+Message-ID: <aOjYFBpeqj8sBHJ9@J2N7QTR9R3>
 References: <20251003150251.520624-1-ulf.hansson@linaro.org>
-	<20251003150251.520624-3-ulf.hansson@linaro.org>
-	<865xcsyqgs.wl-maz@kernel.org>
-	<CAPDyKFq4RgL0=hPhB0cwTQF-A+mXH8dxsZAYTB1CFuLxxxTujg@mail.gmail.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+ <20251003150251.520624-3-ulf.hansson@linaro.org>
+ <865xcsyqgs.wl-maz@kernel.org>
+ <CAPDyKFq4RgL0=hPhB0cwTQF-A+mXH8dxsZAYTB1CFuLxxxTujg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: ulf.hansson@linaro.org, rafael@kernel.org, catalin.marinas@arm.com, will@kernel.org, mark.rutland@arm.com, tglx@linutronix.de, quic_mkshah@quicinc.com, sudeep.holla@arm.com, daniel.lezcano@linaro.org, vincent.guittot@linaro.org, linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFq4RgL0=hPhB0cwTQF-A+mXH8dxsZAYTB1CFuLxxxTujg@mail.gmail.com>
 
-On Fri, 10 Oct 2025 09:30:11 +0100,
-Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> 
+On Fri, Oct 10, 2025 at 10:30:11AM +0200, Ulf Hansson wrote:
 > On Mon, 6 Oct 2025 at 17:55, Marc Zyngier <maz@kernel.org> wrote:
-> >
 > > On Fri, 03 Oct 2025 16:02:44 +0100,
 > > Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> > >
 > > > To add support for keeping track of whether there may be a pending IPI
 > > > scheduled for a CPU or a group of CPUs, let's implement
 > > > cpus_has_pending_ipi() for arm64.
@@ -100,65 +73,7 @@ Ulf Hansson <ulf.hansson@linaro.org> wrote:
 > > > additional lock. This is good enough for cpuidle based decisions.
 > > >
 > > > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> > > ---
-> > >  arch/arm64/kernel/smp.c | 20 ++++++++++++++++++++
-> > >  1 file changed, 20 insertions(+)
-> > >
-> > > diff --git a/arch/arm64/kernel/smp.c b/arch/arm64/kernel/smp.c
-> > > index 68cea3a4a35c..dd1acfa91d44 100644
-> > > --- a/arch/arm64/kernel/smp.c
-> > > +++ b/arch/arm64/kernel/smp.c
-> > > @@ -55,6 +55,8 @@
-> > >
-> > >  #include <trace/events/ipi.h>
-> > >
-> > > +static DEFINE_PER_CPU(bool, pending_ipi);
-> > > +
-> > >  /*
-> > >   * as from 2.5, kernels no longer have an init_tasks structure
-> > >   * so we need some other way of telling a new secondary core
-> > > @@ -1012,6 +1014,8 @@ static void do_handle_IPI(int ipinr)
-> > >
-> > >       if ((unsigned)ipinr < NR_IPI)
-> > >               trace_ipi_exit(ipi_types[ipinr]);
-> > > +
-> > > +     per_cpu(pending_ipi, cpu) = false;
-> > >  }
-> > >
-> > >  static irqreturn_t ipi_handler(int irq, void *data)
-> > > @@ -1024,10 +1028,26 @@ static irqreturn_t ipi_handler(int irq, void *data)
-> > >
-> > >  static void smp_cross_call(const struct cpumask *target, unsigned int ipinr)
-> > >  {
-> > > +     unsigned int cpu;
-> > > +
-> > > +     for_each_cpu(cpu, target)
-> > > +             per_cpu(pending_ipi, cpu) = true;
-> > > +
-> >
-> > Why isn't all of this part of the core IRQ management? We already
-> > track things like timers, I assume for similar reasons. If IPIs have
-> > to be singled out, I'd rather this is done in common code, and not on
-> > a per architecture basis.
-> 
-> The idea was to start simple, avoid running code for architectures
-> that don't seem to need it, by using this opt-in and lightweight
-> approach.
 
-If this stuff is remotely useful, then it is useful to everyone, and I
-don't see the point in littering the arch code with it. We have plenty
-of buy-in features that can be selected by an architecture and ignored
-by others if they see fit.
-
-> 
-> I guess we could do this in generic IRQ code too. Perhaps making it
-> conditional behind a Kconfig, if required.
-> 
-> >
-> > >       trace_ipi_raise(target, ipi_types[ipinr]);
-> > >       arm64_send_ipi(target, ipinr);
-> > >  }
-> > >
 > > > +bool cpus_has_pending_ipi(const struct cpumask *mask)
 > > > +{
 > > > +     unsigned int cpu;
@@ -179,19 +94,19 @@ by others if they see fit.
 > locking/barriers, as those could be costly and introduce latencies in
 > these paths.
 
-"I've made this car 10% faster by removing the brakes. It's great! Try
-it!"
+I think the concern is that the naming implies a precise semantic that
+the code doesn't actually provide. As written and commented, this
+function definitely has false positives and false negatives.
 
-> Still this is good enough to significantly improve cpuidle based
-> decisions in this regard. Please have a look at the commit message of
-> patch3.
+The commit message says "This is good enough for cpuidle based
+decisions", but doesn't say what those decisions require nor why this is
+good enough.
 
-If I can't see how this thing is *correct*, I really don't care how
-fast it is. You might as well remove most locks and barriers from the
-kernel -- it will be even faster!
+If false positives and/or false negatives are ok, add a comment block
+above the function to mention that those are acceptable. Presumably
+there's some boundary at which incorrectness is not acceptable (e.g. if
+it's wrong 50% of the time), and we'd want to understand how we can
+ensure that we're the right side of that boundary.
 
-	M.
-
--- 
-Without deviation from the norm, progress is not possible.
+Mark.
 
