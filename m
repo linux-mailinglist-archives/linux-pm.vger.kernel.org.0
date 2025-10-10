@@ -1,48 +1,46 @@
-Return-Path: <linux-pm+bounces-35887-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35888-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2209BCB4A5
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Oct 2025 02:36:01 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id C360DBCB805
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Oct 2025 05:24:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 97B83407C0F
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Oct 2025 00:36:00 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id F3E8C4E2A25
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Oct 2025 03:24:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E4AC1E3DF2;
-	Fri, 10 Oct 2025 00:35:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Hd3AG4Ur"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9E6C23A58B;
+	Fri, 10 Oct 2025 03:24:18 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from canpmsgout10.his.huawei.com (canpmsgout10.his.huawei.com [113.46.200.225])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1951B2868B;
-	Fri, 10 Oct 2025 00:35:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3DC61E500C;
+	Fri, 10 Oct 2025 03:24:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.225
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760056557; cv=none; b=fFKetAlTASfY/+anGcWTnIfGGvRI6o0M73qr5eBbFBjQV8xyj9ui6ZhhoTqkRvLdIkCiF6AzZyH19rVNL5m8uA/lPrZ7Ufgg+JTQPdkq6sg8r1Q7GRiqOpxIRwfRYbyQiQ0SF6bVYUU+aWtHPOshhuc5PD1h9CmfGvqTxck4TXg=
+	t=1760066658; cv=none; b=fLGr67b90jdvlyy/NbBqsO+QEP+4crRvavI92U2OjmhROiMbGvAIEjGHL2izwHINPivlFC8b5LZVD0ergbTuHrbgZHUhq29WFkAZUhqSRGRuDz7K7JxQqO0Cbqq/G4Qob51altFKkkQ4iZKsIZbWwFC3ot8cb87eAROCQ5Ne2ww=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760056557; c=relaxed/simple;
-	bh=UJBKelWNaxJp1ghN/z8oNZD/T3CC150AKCBq79bvbuM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UU+nzK4NfKjkK3vBDPGcjoeFzpJ5vY3rrLLmgSmZ6J7KJye1OA6eh2zIVZ37bkbYZqaByS29OnwSCgqb15U/8tXue18vyIttq0Yrk+pZg7OxQaGpGtqaFD4zkUCGtYRzongb+8BGygvvHsO3Wb9Nw1zqDIr1dxN7ls53os6Z35w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Hd3AG4Ur; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BAF8C4CEE7;
-	Fri, 10 Oct 2025 00:35:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760056556;
-	bh=UJBKelWNaxJp1ghN/z8oNZD/T3CC150AKCBq79bvbuM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Hd3AG4UrLs963sNA4gkrVp3KiLSzE8qrhXx8i3yhcqy64tqT/aNljv5Yhcvn8Zy4n
-	 EnayE0Mhr/hz6mEWn4mdwA0fGioKdhQnmQlm+dfFgWZXSt9AWsaytfj12yZycTduQT
-	 zl1L+RYx8LD8jYOuSUvP8+4pluuENV42Xmxry9WE9JzRR77I7DEplULoCpeQhuwpW1
-	 GbZ+d/cMfoWD2TnbLVnhXSt2/MnjjD5mKOEzhxsCwG+5UBxmsINHNt2wgGQVFTGh/3
-	 dyAvV9ZyKdgwSkQc9X/7ovvsuhmR/mEJ+266oUTsb2vm6IHvr+nIL3VhO63ggvuJhX
-	 QQRyFeo+tCUVA==
-Message-ID: <df12e818-5341-4964-9192-71c66d664454@kernel.org>
-Date: Fri, 10 Oct 2025 02:35:48 +0200
+	s=arc-20240116; t=1760066658; c=relaxed/simple;
+	bh=3WF4tIRUtvQA2j4EjIaI7q0oYeLt55Dandq5aU/vbhU=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:CC:References:
+	 In-Reply-To:Content-Type; b=UfumN3kca8YOCfND/bvRvE/OCSUh1l4LGD78YsiqFtGXYW2OBR/DW8EaJIAa1sgqn2S9Zhy1g/SnchxrUhFsOgolSgO/Vzok78hy99Rc/pQiXAeVAA2A1tU037kFitxPxJDusgnzqVmV0/FYQlTItv+nMHAG4C5wNpRl1HZWwLA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com; spf=pass smtp.mailfrom=hisilicon.com; arc=none smtp.client-ip=113.46.200.225
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hisilicon.com
+Received: from mail.maildlp.com (unknown [172.19.163.17])
+	by canpmsgout10.his.huawei.com (SkyGuard) with ESMTPS id 4cjXCB3FGMz1K9Bc;
+	Fri, 10 Oct 2025 11:23:50 +0800 (CST)
+Received: from kwepemr500004.china.huawei.com (unknown [7.202.195.141])
+	by mail.maildlp.com (Postfix) with ESMTPS id CB73F1A0188;
+	Fri, 10 Oct 2025 11:24:06 +0800 (CST)
+Received: from [10.67.121.58] (10.67.121.58) by kwepemr500004.china.huawei.com
+ (7.202.195.141) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Fri, 10 Oct
+ 2025 11:24:05 +0800
+Message-ID: <bdd0aa7b-d239-420e-8741-b33d73959412@hisilicon.com>
+Date: Fri, 10 Oct 2025 11:24:05 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,84 +48,172 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 04/10] pmdomain: samsung: plug potential memleak during
- probe
-To: =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
- Alim Akhtar <alim.akhtar@samsung.com>, Rob Herring <robh@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Krzysztof Kozlowski
- <krzk+dt@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
- Marek Szyprowski <m.szyprowski@samsung.com>
-Cc: Peter Griffin <peter.griffin@linaro.org>,
- Tudor Ambarus <tudor.ambarus@linaro.org>,
- Will McVicker <willmcvicker@google.com>, kernel-team@android.com,
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, stable@vger.kernel.org
-References: <20251009-gs101-pd-v2-0-3f4a6db2af39@linaro.org>
- <20251009-gs101-pd-v2-4-3f4a6db2af39@linaro.org>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+From: Jie Zhan <zhanjie9@hisilicon.com>
+Subject: Re: [PATCH v3 1/8] cpufreq: CPPC: Add generic helpers for sysfs
+ show/store
+To: Sumit Gupta <sumitg@nvidia.com>, <rafael@kernel.org>,
+	<viresh.kumar@linaro.org>, <lenb@kernel.org>, <robert.moore@intel.com>,
+	<corbet@lwn.net>, <pierre.gondois@arm.com>, <zhenglifeng1@huawei.com>,
+	<rdunlap@infradead.org>, <ray.huang@amd.com>, <gautham.shenoy@amd.com>,
+	<mario.limonciello@amd.com>, <perry.yuan@amd.com>,
+	<linux-pm@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
+	<linux-doc@vger.kernel.org>, <acpica-devel@lists.linux.dev>,
+	<linux-kernel@vger.kernel.org>
+CC: <linux-tegra@vger.kernel.org>, <treding@nvidia.com>,
+	<jonathanh@nvidia.com>, <vsethi@nvidia.com>, <ksitaraman@nvidia.com>,
+	<sanjayc@nvidia.com>, <bbasu@nvidia.com>
+References: <20251001150104.1275188-1-sumitg@nvidia.com>
+ <20251001150104.1275188-2-sumitg@nvidia.com>
 Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20251009-gs101-pd-v2-4-3f4a6db2af39@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20251001150104.1275188-2-sumitg@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
+ kwepemr500004.china.huawei.com (7.202.195.141)
 
-On 09/10/2025 00:25, André Draszik wrote:
-> of_genpd_add_provider_simple() could fail, in which case this code
-> leaks the domain name, pd->pd.name.
+
+Hi Sumit,
+
+On 10/1/2025 11:00 PM, Sumit Gupta wrote:
+> Add generic show/store helper functions for u64 sysfs attributes:
+> - cppc_cpufreq_sysfs_show_u64()
+> - cppc_cpufreq_sysfs_store_u64()
 > 
-> Use devm_kstrdup_const() to plug this leak. As a side-effect, we can
-> simplify existing error handling.
+> Refactor auto_act_window and energy_performance_preference_val
+> attributes to use these helpers, eliminating code duplication.
 > 
-> Fixes: c09a3e6c97f0 ("soc: samsung: pm_domains: Convert to regular platform driver")
-> Cc: stable@vger.kernel.org
-> Reviewed-by: Peter Griffin <peter.griffin@linaro.org>
-> Signed-off-by: André Draszik <andre.draszik@linaro.org>
+> No functional changes.
+> 
+> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
+Nice cleanup in general.  Some minor bits inline.
+> ---
+>  drivers/cpufreq/cppc_cpufreq.c | 87 ++++++++++++++--------------------
+>  1 file changed, 35 insertions(+), 52 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+> index 12de0ac7bbaf..732f35096991 100644
+> --- a/drivers/cpufreq/cppc_cpufreq.c
+> +++ b/drivers/cpufreq/cppc_cpufreq.c
+> @@ -781,6 +781,36 @@ static int cppc_cpufreq_set_boost(struct cpufreq_policy *policy, int state)
+>  	return 0;
+>  }
+>  
+> +static ssize_t cppc_cpufreq_sysfs_show_u64(unsigned int cpu, int (*get_func)(int, u64 *), char *buf)
+Wrap a bit into 80 chars?
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
+BTW, trivial but I would prefer a symmetric param order, like:
+show(buf, get_func, cpu)
+store(buf, count, set_func, cpu)
+> +{
+> +	u64 val;
+> +	int ret = get_func(cpu, &val);
+> +
+> +	if (ret == -EOPNOTSUPP)
+> +		return sysfs_emit(buf, "<unsupported>\n");
+> +	if (ret)
+> +		return ret;
+> +
+> +	return sysfs_emit(buf, "%llu\n", val);
+> +}
+> +
+> +static ssize_t cppc_cpufreq_sysfs_store_u64(const char *buf, size_t count,
+> +					    int (*set_func)(int, u64), unsigned int cpu)
+> +{
+> +	u64 val;
+> +	int ret;
+> +
+> +	if (!buf || !set_func)
+> +		return -EINVAL;
+No need.
+> +
+> +	ret = kstrtou64(buf, 0, &val);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = set_func((int)cpu, val);
+> +	return ret ? ret : count;
+I suppose it's preferred to avoid using ternary operators like this.
+> +}
+> +
+Would be nicer to move cppc_cpufreq_sysfs_show/store_u64() to just above
+where they are used, i.e. just before show_auto_act_window().
+>  static ssize_t show_freqdomain_cpus(struct cpufreq_policy *policy, char *buf)
+>  {
+>  	struct cppc_cpudata *cpu_data = policy->driver_data;
+> @@ -824,70 +854,23 @@ static ssize_t store_auto_select(struct cpufreq_policy *policy,
+>  
+>  static ssize_t show_auto_act_window(struct cpufreq_policy *policy, char *buf)
+>  {
+> -	u64 val;
+> -	int ret;
+> -
+> -	ret = cppc_get_auto_act_window(policy->cpu, &val);
+> -
+> -	/* show "<unsupported>" when this register is not supported by cpc */
+> -	if (ret == -EOPNOTSUPP)
+> -		return sysfs_emit(buf, "<unsupported>\n");
+> -
+> -	if (ret)
+> -		return ret;
+> -
+> -	return sysfs_emit(buf, "%llu\n", val);
+> +	return cppc_cpufreq_sysfs_show_u64(policy->cpu, cppc_get_auto_act_window, buf);
+>  }
+>  
+> -static ssize_t store_auto_act_window(struct cpufreq_policy *policy,
+> -				     const char *buf, size_t count)
+> +static ssize_t store_auto_act_window(struct cpufreq_policy *policy, const char *buf, size_t count)
+>  {
+> -	u64 usec;
+> -	int ret;
+> -
+> -	ret = kstrtou64(buf, 0, &usec);
+> -	if (ret)
+> -		return ret;
+> -
+> -	ret = cppc_set_auto_act_window(policy->cpu, usec);
+> -	if (ret)
+> -		return ret;
+> -
+> -	return count;
+> +	return cppc_cpufreq_sysfs_store_u64(buf, count, cppc_set_auto_act_window, policy->cpu);
+>  }
+>  
+>  static ssize_t show_energy_performance_preference_val(struct cpufreq_policy *policy, char *buf)
+>  {
+> -	u64 val;
+> -	int ret;
+> -
+> -	ret = cppc_get_epp_perf(policy->cpu, &val);
+> -
+> -	/* show "<unsupported>" when this register is not supported by cpc */
+> -	if (ret == -EOPNOTSUPP)
+> -		return sysfs_emit(buf, "<unsupported>\n");
+> -
+> -	if (ret)
+> -		return ret;
+> -
+> -	return sysfs_emit(buf, "%llu\n", val);
+> +	return cppc_cpufreq_sysfs_show_u64(policy->cpu, cppc_get_epp_perf, buf);
+>  }
+>  
+>  static ssize_t store_energy_performance_preference_val(struct cpufreq_policy *policy,
+>  						       const char *buf, size_t count)
+>  {
+> -	u64 val;
+> -	int ret;
+> -
+> -	ret = kstrtou64(buf, 0, &val);
+> -	if (ret)
+> -		return ret;
+> -
+> -	ret = cppc_set_epp(policy->cpu, val);
+> -	if (ret)
+> -		return ret;
+> -
+> -	return count;
+> +	return cppc_cpufreq_sysfs_store_u64(buf, count, cppc_set_epp, policy->cpu);
+>  }
+>  
+>  cpufreq_freq_attr_ro(freqdomain_cpus);
 
