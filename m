@@ -1,227 +1,170 @@
-Return-Path: <linux-pm+bounces-35910-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35912-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A4636BCCC1F
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Oct 2025 13:24:49 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 879BFBCCD72
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Oct 2025 14:09:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A2065421CBC
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Oct 2025 11:24:43 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4B1C64EC825
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Oct 2025 12:09:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4511A2F39BC;
-	Fri, 10 Oct 2025 11:24:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30420288C3B;
+	Fri, 10 Oct 2025 12:09:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b="ACNaYjPr"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="e++32knt"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9082E2F0C73
-	for <linux-pm@vger.kernel.org>; Fri, 10 Oct 2025 11:23:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760095440; cv=none; b=E5BkHOljhvYixzY4SR16h4BRl2bFF1PIGensFufZAleWTjXuiffJWQWXc3CPE+3FP/SwBXd1DsaeLQqXDv9BpiaDZAgzoKBnqdWIPWQ38Xf3OIWpxr0DmvqHaZjKoTEdMAxdTFobSSNJFNCVM73s07kAFeubDHkZ3q40suW4fG0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760095440; c=relaxed/simple;
-	bh=aBMTPtPDt4M1GRWOyqpCZ1qdlJgnotQej/fUpg30pyI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=aopPSAqOmTRL38VikiPSSLMjfokXVZQ0yx3dMfTFBp1ErxzLcb1gWMWyTBIgXbolXEzI9ugXhvrtmOqtmyCZM5A+E/+jT53V7SsHc1jimyeUJNGtlUBHtibzxqqkSWfk54x51Zo9vQTJpZgJVyYJQYA+/r6U+LItGrIR0vFnH4k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fairphone.com; spf=pass smtp.mailfrom=fairphone.com; dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b=ACNaYjPr; arc=none smtp.client-ip=209.85.208.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fairphone.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fairphone.com
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-637e9f9f9fbso3583379a12.0
-        for <linux-pm@vger.kernel.org>; Fri, 10 Oct 2025 04:23:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair; t=1760095436; x=1760700236; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DCAG8MFE1hhKxgzGizvbP32Gb84eEFJPKvZVLfU2qZI=;
-        b=ACNaYjPrzkywZAgQXs1JxRb+ETCWKhV6hSmZVLeqdh0AcLZs5rxOwiFgwACWB4rltk
-         CDhOjKYtSG9kOBdKJTsYTyzHTukaKKTNOJTqo+818xxYtja/MrdMp/gxI/n1EoCx/iNv
-         cV8pcNzhEVAWrEtg3G/oezIlNoM7hc6O6TnypZ2LbWT+Ulpd+HRL0TnAjF7Yz7OWUBY6
-         iHrva5Z+on3L8gAClGfvqIiOI4J+ef6hxBQNa3CgczjVyR7e/31OZpvfbT5kJuEy5ArX
-         ButIBM6t0vVXjhj2fgT5WaQdwYlUJvv3Nve7tvIFfZXjXDgotpuY1Q+BAVg6amSbYryd
-         dBvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760095436; x=1760700236;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DCAG8MFE1hhKxgzGizvbP32Gb84eEFJPKvZVLfU2qZI=;
-        b=DkNmjj7C3Z+16vAsEqiaVfxbAyI30MrQ83Xsl8ke0UPDlVD7PDTmvxQ1pg6H7/h902
-         qPokSWCrDP/xpQE8po+4SF5oskJkVn9ARPSncgt/1nfIrBEGCZa6cYuYZgmjtqvYqi+0
-         A729g+UtxfWzljld7OKXj0FmqmGlH8LU6CrwuJ7WBmLTpoA2OKCwAsy22Yq76sVFj4qc
-         +TFXY/oCy0Icr9ssh+qH6szLtjOAhBuaQ7TEsAhflcKo5NZI2l/aqCnspmxuJmVY0bVB
-         IWwzWeDaWYTnOvo5TAXA5BT6kVnLiJjPnLG99/Bm+aSn94D6JQ8cxaxIL4g6o71Hhu4K
-         yHtw==
-X-Forwarded-Encrypted: i=1; AJvYcCXA+Z655+Mxjw+DIsCEFOMqD6f0jFzh9i2IjdtL7wZIPpnq8zHm8LnjA0CekXieFp4L4tQyir9mzA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzLaQiXl1ofIVbwAPFk+r/UTnBUG7Z51HLLtxJxXkJx+6b5xivC
-	3DpHC8iVVktVaZC3yAI+DGgolwp7ElD58iKo5IhF5HybEEyoh2AEB1Lrz1ZMIC14pRM=
-X-Gm-Gg: ASbGncv3fjFT/flOkizRFhGn99tH+EDGMq/t9Rx24VR3lMlMybtSJ+hMMLrV/xhcZRj
-	ByZVYHutapDOSkJcLniNux4WIFboT4KQOM+hlQEUIdLYR1bt/8IiZCFjw7Qxh0zGDhoWLtoI/qR
-	rBOvwnFIoUZ6HtaNO0GD6PFMbinpSAyiVKPvmXjONsS5h0Pqc1WdWtgTiNSL0F+tXgB0gEx9SAE
-	42aMcW7BrCuiZmMUp4yH6/4AiVNhz44MfMeksfUo+/OKCmC2fIomKwunMU1Lu6NrYjlipFddgfP
-	hvQZqADb1BSzjTFxSzrz0Y1MbshgG9eklhn5JYrjT+HcGQ6l5/z18YmBl1R7D/nugh10RIMGHn0
-	Mkmlg49xDFKyv+pdWAEROHKWCLgFrY8VNjd7/G+gplF2PnTPv6QCvrBwC4oh2zIBcULQjObTEUz
-	Fpm0KaR7Q6udr96WbduzE=
-X-Google-Smtp-Source: AGHT+IGsAakh/8g2j83SKx9fw/+oQlSgc9qI6tjYbD9FJ2KHiIAG+QpeQGgMy8xOFcppj58CQxNe8A==
-X-Received: by 2002:a17:907:961b:b0:b3a:ecc1:7769 with SMTP id a640c23a62f3a-b50ac0cb195mr1154612866b.52.1760095435795;
-        Fri, 10 Oct 2025 04:23:55 -0700 (PDT)
-Received: from [172.16.240.99] (144-178-202-138.static.ef-service.nl. [144.178.202.138])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b55d900bf8csm209905766b.59.2025.10.10.04.23.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Oct 2025 04:23:55 -0700 (PDT)
-From: Luca Weiss <luca.weiss@fairphone.com>
-Date: Fri, 10 Oct 2025 13:22:04 +0200
-Subject: [PATCH RFC 6/6] arm64: dts: qcom: sm7225-fairphone-fp4: Add
- battery temperature node
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20DDB28935C;
+	Fri, 10 Oct 2025 12:09:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1760098170; cv=pass; b=V4tyzUnViXDG3qezY/RCyMj/5ZHfCh5KB2gFa/g+VUwE3khAUUI/V1kJ4XmIxbLw45G4zzwwYVFFBDjivRDKWw4YSEX/tSCdofzzCFsjHa6RonP6gVFbxzWuj7G48/xfSJsMG4uJixreuLcaJOTNcuiJ2hhK9WkhSJr+g/KZ8z4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1760098170; c=relaxed/simple;
+	bh=4w3kqGVJTLViAam56F8blcy40H7IF16KUIpTWyq6UcM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MyPmSzdc1Xq4FFIq2XQAERS/BBpb0qzmKxCVC2gEYc/MF+zBmvJH8ocr0uHA0iNL9OwlaQ4x5rjMdTTpgHqV0DxQ2vJCEY2BCiJw/4qC/St6xBhIwnxBiu6Ug7GauAGIis4kVgoe/9xfPwjXAZQUgbMWBSH/s3lDd8xICo81DtA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=e++32knt; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1760098144; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=dA7yAX/vP+3sun5ZXeCK2uinkx7VxnyIrLK/qFVhnYkyIFMtM7d0mDDrS+TVtokDdKLyrYnAAwSizRXhvpbRLgf2TDGGByKbFmsqPa6nviQqfy4lrZk6kcd0Ae7HWo39fKmeIXVQXcXiYB37IGKBh2MKy+Z7YhgN03NwLj9wa0Q=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1760098144; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=5TVVAycESmEEhj5tXHazMG2YgT7j35yrk8K3ETkT928=; 
+	b=LrRKByWE0juU2zdLzyEYdDD1mp9eVTrWVGP1NeYLCrsE0o38GKgbGP08xo0GlCT8Cc1Cofa+1c2eId5d3DQtwywqTNOjUuWeTQx4F7dsZJ62uZjwLStFKhuEdDXO2nVowLYnkS5SGG9WHyYd5Szo6DqN3gpyDQhcAanBlNNLICg=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
+	dmarc=pass header.from=<sebastian.reichel@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1760098144;
+	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
+	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
+	bh=5TVVAycESmEEhj5tXHazMG2YgT7j35yrk8K3ETkT928=;
+	b=e++32knteoigBVHQgzqdtxzmswEgQW44+hGhNEU0OeQ+GmGQTqbxF29o9ndVlZw3
+	q+VPMupP2hE/k9JBfai0xY/xICZijegXN+IN+7AcgZrFIMxvzzRnoLEmnPD5oHubILE
+	q0ozm8UE6yix73c5DQeKYJY4j46i0QaDOJzImgw0=
+Received: by mx.zohomail.com with SMTPS id 1760098141718220.0272880217807;
+	Fri, 10 Oct 2025 05:09:01 -0700 (PDT)
+Received: by venus (Postfix, from userid 1000)
+	id 8F261181905; Fri, 10 Oct 2025 14:08:53 +0200 (CEST)
+Date: Fri, 10 Oct 2025 14:08:53 +0200
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Saravana Kannan <saravanak@google.com>, 
+	"Rafael J . Wysocki" <rafael@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	linux-pm@vger.kernel.org, Geert Uytterhoeven <geert@linux-m68k.org>, 
+	Nicolas Frattaroli <nicolas.frattaroli@collabora.com>, Heiko Stuebner <heiko@sntech.de>, 
+	Sebin Francis <sebin.francis@ti.com>, Diederik de Haas <didi.debian@cknow.org>, 
+	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, Jon Hunter <jonathanh@nvidia.com>, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] driver core: fw_devlink: Don't warn about
+ sync_state() pending
+Message-ID: <f7zspguplzerupaorr4ex4xnpeyrcdcid473u3tx3ekbvcj233@wgle5id5z5on>
+References: <20251007094312.590819-1-ulf.hansson@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20251010-bat-temp-adc-v1-6-d51ec895dac6@fairphone.com>
-References: <20251010-bat-temp-adc-v1-0-d51ec895dac6@fairphone.com>
-In-Reply-To: <20251010-bat-temp-adc-v1-0-d51ec895dac6@fairphone.com>
-To: Jonathan Cameron <jic23@kernel.org>, 
- David Lechner <dlechner@baylibre.com>, 
- =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>, 
- Andy Shevchenko <andy@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
- Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Laxman Dewangan <ldewangan@nvidia.com>, 
- Bjorn Andersson <andersson@kernel.org>, 
- Konrad Dybcio <konradybcio@kernel.org>, Hans de Goede <hansg@kernel.org>, 
- Jens Reidel <adrian@mainlining.org>, 
- Casey Connolly <casey.connolly@linaro.org>
-Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org, 
- linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
- devicetree@vger.kernel.org, Luca Weiss <luca.weiss@fairphone.com>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1760095429; l=2583;
- i=luca.weiss@fairphone.com; s=20250611; h=from:subject:message-id;
- bh=aBMTPtPDt4M1GRWOyqpCZ1qdlJgnotQej/fUpg30pyI=;
- b=DG6raoy42scFWp8jMx4GHyDTeTHosn+ep/uPea5mNpCWeWqjD8FtINPdQuqqrvkBh+hTj9hB9
- b2JrnMH1voTC9ep4hy/q8gBtWKN+XacHVXEgdX0i+73ImCPhJE5J0Yz
-X-Developer-Key: i=luca.weiss@fairphone.com; a=ed25519;
- pk=O1aw+AAust5lEmgrNJ1Bs7PTY0fEsJm+mdkjExA69q8=
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="o7l652o277il7yvz"
+Content-Disposition: inline
+In-Reply-To: <20251007094312.590819-1-ulf.hansson@linaro.org>
+X-Zoho-Virus-Status: 1
+X-Zoho-Virus-Status: 1
+X-Zoho-AV-Stamp: zmail-av-1.4.3/260.58.11
+X-ZohoMailClient: External
 
-Add a generic-adc-thermal node to convert the voltage read by the
-battery temperature ADC into degree Celsius using the provided lookup
-table.
 
-This will later be used as input for the fuel gauge node (QGauge on the
-PM7250B).
+--o7l652o277il7yvz
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v2] driver core: fw_devlink: Don't warn about
+ sync_state() pending
+MIME-Version: 1.0
 
-Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
----
- arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts | 83 +++++++++++++++++++++++
- 1 file changed, 83 insertions(+)
+Hi,
 
-diff --git a/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts b/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
-index 71e87ab92955..24855cec7880 100644
---- a/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
-+++ b/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
-@@ -107,6 +107,89 @@ rear_cam_sensor: thermal-sensor-rear-cam {
- 		io-channel-names = "sensor-channel";
- 	};
- 
-+	bat_therm_sensor: thermal-sensor-bat-therm {
-+		compatible = "generic-adc-thermal";
-+		#thermal-sensor-cells = <0>;
-+		#io-channel-cells = <0>;
-+		io-channels = <&pm7250b_adc ADC5_BAT_THERM_30K_PU>;
-+		io-channel-names = "sensor-channel";
-+		/*
-+		 * Voltage to temperature table for 10kΩ (B=3435K) NTC with a
-+		 * 1.875V reference and 30kΩ pull-up.
-+		 */
-+		temperature-lookup-table = <
-+			(-40000) 1673
-+			(-38000) 1649
-+			(-36000) 1623
-+			(-34000) 1596
-+			(-32000) 1566
-+			(-30000) 1535
-+			(-28000) 1502
-+			(-26000) 1467
-+			(-24000) 1430
-+			(-22000) 1392
-+			(-20000) 1352
-+			(-18000) 1311
-+			(-16000) 1269
-+			(-14000) 1226
-+			(-12000) 1182
-+			(-10000) 1138
-+			 (-8000) 1093
-+			 (-6000) 1049
-+			 (-4000) 1004
-+			 (-2000) 960
-+			       0 917
-+			    2000 874
-+			    4000 832
-+			    6000 791
-+			    8000 752
-+			   10000 713
-+			   12000 676
-+			   14000 640
-+			   16000 606
-+			   18000 573
-+			   20000 541
-+			   22000 511
-+			   24000 483
-+			   26000 455
-+			   28000 430
-+			   30000 405
-+			   32000 382
-+			   34000 360
-+			   36000 340
-+			   38000 320
-+			   40000 302
-+			   42000 285
-+			   44000 269
-+			   46000 253
-+			   48000 239
-+			   50000 225
-+			   52000 213
-+			   54000 201
-+			   56000 190
-+			   58000 179
-+			   60000 169
-+			   62000 160
-+			   64000 152
-+			   66000 143
-+			   68000 136
-+			   70000 128
-+			   72000 122
-+			   74000 115
-+			   76000 109
-+			   78000 104
-+			   80000 98
-+			   82000 93
-+			   84000 89
-+			   86000 84
-+			   88000 80
-+			   90000 76
-+			   92000 73
-+			   94000 69
-+			   96000 66
-+			   98000 63>;
-+	};
-+
- 	thermal-zones {
- 		chg-skin-thermal {
- 			thermal-sensors = <&pm7250b_adc_tm 0>;
+On Tue, Oct 07, 2025 at 11:43:12AM +0200, Ulf Hansson wrote:
+> Due to the wider deployment of the ->sync_state() support, for PM domains
+> for example, we are receiving reports about the sync_state() pending
+> message that is being logged in fw_devlink_dev_sync_state(). In particular
+> as it's printed at the warning level, which is questionable.
+>=20
+> Even if it certainly is useful to know that the ->sync_state() condition
+> could not be met, there may be nothing wrong with it. For example, a driv=
+er
+> may be built as module and are still waiting to be initialized/probed. For
+> this reason let's move to the info level for now.
+>=20
+> Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> Reported-by: Sebin Francis <sebin.francis@ti.com>
+> Reported-by: Diederik de Haas <didi.debian@cknow.org>
+> Reported-by: Jon Hunter <jonathanh@nvidia.com>
+> Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 
--- 
-2.51.0
+Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 
+-- Sebastian
+
+> ---
+>=20
+> Changes in v2:
+> 	- Due to discussions on v1 and because the default Kconfig is to use the
+> 	FW_DEVLINK_SYNC_STATE_STRICT, I suggest that for now it may be best to
+> 	keep the warning level for the "Timed out.." print and only change the
+> 	"sync_state pending..." message.
+>=20
+> ---
+>  drivers/base/core.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/base/core.c b/drivers/base/core.c
+> index d22d6b23e758..c62e428b95b0 100644
+> --- a/drivers/base/core.c
+> +++ b/drivers/base/core.c
+> @@ -1784,7 +1784,7 @@ static int fw_devlink_dev_sync_state(struct device =
+*dev, void *data)
+>  		return 0;
+> =20
+>  	if (fw_devlink_sync_state =3D=3D FW_DEVLINK_SYNC_STATE_STRICT) {
+> -		dev_warn(sup, "sync_state() pending due to %s\n",
+> +		dev_info(sup, "sync_state() pending due to %s\n",
+>  			 dev_name(link->consumer));
+>  		return 0;
+>  	}
+> --=20
+> 2.43.0
+>=20
+
+--o7l652o277il7yvz
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmjo91EACgkQ2O7X88g7
++pomMhAAgIOiXn/XY2FB+L5+3ENCR0BvsBVlK+rVbqoS/fUE/D7K/rUt4yv/2O+p
+bt9dweSC0hd9Z0Zb11SMW9Txh1ChIxByF0g+OuoqvG2BtoQhdNVqkhATO9hDT6yX
+P7h0znsMPWh3BqxBn7r/kEyTY2fnUb8GPAD0LUx4ueKZtDBXBrGX/5P9idorPLkY
+lclBxSg6VAFOIgcFW8SEAMn1ZCvCF+5stTLuR7Mou68+M2Qfd61t+Yj0drYzCgAG
+joUXON246lHT8zLcSTKpkNro6KTMlL8SHtM5SPdJDnO7pS9dNI+B3MqD7TK9link
+s5j7Xyr8crIcpb9+iqcnIRcWe3h6VxJVNTf3TkPFz2svNmjrLOzH2Wdpy2V9zeGz
+rTI7ZuG74S/OiDI6TpVu7Hk+VKDfevhos/vyV1IgXU9LdCUHDisytirZc0j3t0tE
+DYdQQpCA83ZIFz6imfBJaTg+stf9FAwcFKpzpPe7w1w0RxXqt+3Sut8kUb3lLo3l
+H2F/q6mFL7Cemwo90QXtrDK6PKLa/WVS3IQB0/pyWqEHMGnsvXqT7lXwzRhiCc7L
+4kToIWU3haS2yG8vB+of3kOl6hPYhUJSMBy6Q/49qKn8ktDriMDC5+HeOUrPL7kl
+5He8aqTNVKGgRSzNLF0oVO9FyyKCQPcQCUKOcunDvPXD4f6y9Rw=
+=iRpS
+-----END PGP SIGNATURE-----
+
+--o7l652o277il7yvz--
 
