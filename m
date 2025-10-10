@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-35886-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35887-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id B5F3FBCB499
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Oct 2025 02:35:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E2209BCB4A5
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Oct 2025 02:36:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 62F84345335
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Oct 2025 00:35:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 97B83407C0F
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Oct 2025 00:36:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD05E1A239A;
-	Fri, 10 Oct 2025 00:35:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E4AC1E3DF2;
+	Fri, 10 Oct 2025 00:35:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C2c9rPlL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Hd3AG4Ur"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 791CF2868B;
-	Fri, 10 Oct 2025 00:35:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1951B2868B;
+	Fri, 10 Oct 2025 00:35:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760056508; cv=none; b=oZyp0WIQQzYWVJsXSDHbI2gRtucz28SU/AWB4vK9h6jwTeTOsERLqYLimhvnkcAkImFSSRq3Sii/lGoeHA11eZw5qikYGuJWkoZbaHnuL+1xHZ2lD6sc5StQ7xoxQ2FVGCa5er2VhlIfJ2KLHhVj8OnnpKb6gTRXwtIXi2IvmbE=
+	t=1760056557; cv=none; b=fFKetAlTASfY/+anGcWTnIfGGvRI6o0M73qr5eBbFBjQV8xyj9ui6ZhhoTqkRvLdIkCiF6AzZyH19rVNL5m8uA/lPrZ7Ufgg+JTQPdkq6sg8r1Q7GRiqOpxIRwfRYbyQiQ0SF6bVYUU+aWtHPOshhuc5PD1h9CmfGvqTxck4TXg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760056508; c=relaxed/simple;
-	bh=KNqW2jOUrMCS+KkCDoTBffjC5mjUpkFZ+BlmvxcluDI=;
+	s=arc-20240116; t=1760056557; c=relaxed/simple;
+	bh=UJBKelWNaxJp1ghN/z8oNZD/T3CC150AKCBq79bvbuM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AYHpoGIT8AlgUSegwT7KenBxOYqx+ksHuj0CQuiDpOt8ApKmD3jlhV1cODxvjMQU2XAFB/gR8PD3gnAyIcMK2RrwSpULW/TfMPQzmEodOxbMHqSfv9f6DOlweRbGhomOQT55a8ohqMUMxxd9P//GOm+ZhnwrwJQzpdyY4E3q4Uw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C2c9rPlL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F7F2C4CEE7;
-	Fri, 10 Oct 2025 00:35:01 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=UU+nzK4NfKjkK3vBDPGcjoeFzpJ5vY3rrLLmgSmZ6J7KJye1OA6eh2zIVZ37bkbYZqaByS29OnwSCgqb15U/8tXue18vyIttq0Yrk+pZg7OxQaGpGtqaFD4zkUCGtYRzongb+8BGygvvHsO3Wb9Nw1zqDIr1dxN7ls53os6Z35w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Hd3AG4Ur; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BAF8C4CEE7;
+	Fri, 10 Oct 2025 00:35:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760056507;
-	bh=KNqW2jOUrMCS+KkCDoTBffjC5mjUpkFZ+BlmvxcluDI=;
+	s=k20201202; t=1760056556;
+	bh=UJBKelWNaxJp1ghN/z8oNZD/T3CC150AKCBq79bvbuM=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=C2c9rPlLjv+MWWhyxOo09u9ji6boWNLkNOaZpyOX/L6SLQO7dH6+VHsRzJkWfgYxr
-	 5JAFOpJpLUZGRKihHHX4iy5occofk90XkCLrZkQlLqwbAhg1QrRG0VBnueWE6bEByR
-	 uHejfjVR8ZPSlqY284hJORPcY2uhHdRt5h8yWyaZ+26zDluzzVusE7yZyvc00xRom6
-	 XVW0zgEPV+EGYc6YZMzBZDNQ4LEeSHQ+qHb/usxz+onw6qrNP0t3+L20tFyJyzNHo6
-	 SFRvizSJOzzAjoW4eDVUWiiHGeORw/ZsgDp4qfd9vd00MkZSEQSpzlog3W4BcU0Hx8
-	 9EmR4t0hnbcQA==
-Message-ID: <ee66dca6-3cd6-41d3-82f9-d2673da00287@kernel.org>
-Date: Fri, 10 Oct 2025 02:35:00 +0200
+	b=Hd3AG4UrLs963sNA4gkrVp3KiLSzE8qrhXx8i3yhcqy64tqT/aNljv5Yhcvn8Zy4n
+	 EnayE0Mhr/hz6mEWn4mdwA0fGioKdhQnmQlm+dfFgWZXSt9AWsaytfj12yZycTduQT
+	 zl1L+RYx8LD8jYOuSUvP8+4pluuENV42Xmxry9WE9JzRR77I7DEplULoCpeQhuwpW1
+	 GbZ+d/cMfoWD2TnbLVnhXSt2/MnjjD5mKOEzhxsCwG+5UBxmsINHNt2wgGQVFTGh/3
+	 dyAvV9ZyKdgwSkQc9X/7ovvsuhmR/mEJ+266oUTsb2vm6IHvr+nIL3VhO63ggvuJhX
+	 QQRyFeo+tCUVA==
+Message-ID: <df12e818-5341-4964-9192-71c66d664454@kernel.org>
+Date: Fri, 10 Oct 2025 02:35:48 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,23 +50,21 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 03/10] pmdomain: samsung: use to devm_kstrdup_const() to
- simplify error handling
+Subject: Re: [PATCH v2 04/10] pmdomain: samsung: plug potential memleak during
+ probe
 To: =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
  Alim Akhtar <alim.akhtar@samsung.com>, Rob Herring <robh@kernel.org>,
  Conor Dooley <conor+dt@kernel.org>, Krzysztof Kozlowski
- <krzk+dt@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>
+ <krzk+dt@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
+ Marek Szyprowski <m.szyprowski@samsung.com>
 Cc: Peter Griffin <peter.griffin@linaro.org>,
  Tudor Ambarus <tudor.ambarus@linaro.org>,
  Will McVicker <willmcvicker@google.com>, kernel-team@android.com,
  linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org
-References: <20251006-gs101-pd-v1-0-f0cb0c01ea7b@linaro.org>
- <20251006-gs101-pd-v1-3-f0cb0c01ea7b@linaro.org>
- <5df18f42-b567-4d27-9e12-29723af40d6e@kernel.org>
- <9d4ccadf76ccfff1a8b5f572b8aa190e2dc40c29.camel@linaro.org>
- <63fb3ccc10267add00b579d4a05497cbeeadc65e.camel@linaro.org>
+ linux-pm@vger.kernel.org, stable@vger.kernel.org
+References: <20251009-gs101-pd-v2-0-3f4a6db2af39@linaro.org>
+ <20251009-gs101-pd-v2-4-3f4a6db2af39@linaro.org>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -112,30 +110,23 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <63fb3ccc10267add00b579d4a05497cbeeadc65e.camel@linaro.org>
+In-Reply-To: <20251009-gs101-pd-v2-4-3f4a6db2af39@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 09/10/2025 23:00, André Draszik wrote:
-> On Thu, 2025-10-09 at 14:31 +0100, André Draszik wrote:
->> On Thu, 2025-10-09 at 09:13 +0900, Krzysztof Kozlowski wrote:
->>> On 07/10/2025 01:43, André Draszik wrote:
->>>> Convert to using devm_kstrdup_const() so as to simplify cleanup during
->>>> error handling.
->>>
->>>
->>> This is either a fix (then describe the fixed issue and add Fixed tag)
->>> or you change the logic, not only simplify.
->>>
->>> Previously on of_genpd_add_provider_simple() the memory was not
->>> kfree_const. Now it will be.
->>
->> Indeed it's a fix after all - While the driver doesn't allow unbind,
+On 09/10/2025 00:25, André Draszik wrote:
+> of_genpd_add_provider_simple() could fail, in which case this code
+> leaks the domain name, pd->pd.name.
 > 
-> Thinking more about it - at this stage, this patch is not a fix. The driver
-> can not unbind, hence there is no leak to be plugged, hence no fix.
+> Use devm_kstrdup_const() to plug this leak. As a side-effect, we can
+> simplify existing error handling.
+> 
+> Fixes: c09a3e6c97f0 ("soc: samsung: pm_domains: Convert to regular platform driver")
+> Cc: stable@vger.kernel.org
+> Reviewed-by: Peter Griffin <peter.griffin@linaro.org>
+> Signed-off-by: André Draszik <andre.draszik@linaro.org>
 
-It is about error paths. Driver can fail binding.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
