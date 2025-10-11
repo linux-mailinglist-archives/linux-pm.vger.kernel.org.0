@@ -1,168 +1,154 @@
-Return-Path: <linux-pm+bounces-35931-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35932-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id D84F7BCF325
-	for <lists+linux-pm@lfdr.de>; Sat, 11 Oct 2025 11:39:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 89E9EBCF358
+	for <lists+linux-pm@lfdr.de>; Sat, 11 Oct 2025 11:52:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 769574E2D5A
-	for <lists+linux-pm@lfdr.de>; Sat, 11 Oct 2025 09:39:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 97840189FEF0
+	for <lists+linux-pm@lfdr.de>; Sat, 11 Oct 2025 09:53:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4167257AD3;
-	Sat, 11 Oct 2025 09:38:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 676872459C5;
+	Sat, 11 Oct 2025 09:52:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HKIp3WXP"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f194.google.com (mail-pl1-f194.google.com [209.85.214.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 456D0257846
-	for <linux-pm@vger.kernel.org>; Sat, 11 Oct 2025 09:38:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28D1723B62C;
+	Sat, 11 Oct 2025 09:52:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760175524; cv=none; b=ZYEuEu5aMV5LCbnRCvqx6euxgpPfTtYF5fBZQU/EK5MfQ6Xhr92tCaV3u4tuPxl9mPQJceAn+GF3o3CrCcLQUjTfIG1BuAGapbBn+J376lv+MPeV3kbfR1YKp0RaQdo8AaCAyLoNGjXUQKCC/Fy46wOJ5O5p0ECSyJdnRImqUB0=
+	t=1760176371; cv=none; b=XtbTuOG12BssWPGSj5Yc0p3N17emZf2jKhcVgGTrrH3v9nop3ajYu+4CT71U5tiIjOh4RnjTVvqcBFr61oEqFlZBGE3oTfYanen7TGe6SCI0h5aBHed5PXZxA8kFR9xm8C9Qgvombvctwucofxuf7wcNE5aaqU8BzJ+uLkWxlfo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760175524; c=relaxed/simple;
-	bh=bTB9DzoWH3QIpeBu4xYDTQAzXlJCXk6gbv+o+fe1N3s=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=X/F3LDDjDXNgCOZXEECCd9Af54oFPQCQv6DpxGkFc1T9XukllOdAOoIhP4uBXhEQK8BSi1PGfuH7cyHhU1xJNxTeWCHQrucxDQqi7/miRZ9oPQEdBnHgjgk5IepJe3l/yGhkK1Kt05E9bFroQyRz94tEnqae2Ni9/XUXy9XdOgs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.214.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f194.google.com with SMTP id d9443c01a7336-28e7cd6dbc0so31742295ad.0
-        for <linux-pm@vger.kernel.org>; Sat, 11 Oct 2025 02:38:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760175519; x=1760780319;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TVV/uiMu0xHtlKgwsYx2mXd0JzCW14CDL0hbQStIbj4=;
-        b=jW2Rvuhf0HzDwF6bOsNbrY9rf7eYnVQqdhS9d4P5v5Ao4AqTiPdTlDj6CMHzGcX+7B
-         dq0GjcRURF0UYlLH3IyjTd2p0NptSyHBEp1RoWG5DBNYb5frTYft0qFUNESj7ylLEV9y
-         hiG+S2oKEVxYqPc6TGbWTtliG/Nbt/IlY+/LRHIW9EmfduylJeaWx6HrSrjcm99XXHa5
-         ybyIBm5pSZc/8m3RMWF1XppUDx5E+c6psH3pyHoZBHgUXw8SbKqlzgrejlOtC+PggT6n
-         oCyTD/ckskIF2KRMcr05h7DCBFwx5ADgBS/5ft3Wl53cZcwk12hk4SykcIN2fNw/y0vR
-         LH/g==
-X-Forwarded-Encrypted: i=1; AJvYcCVNRIuATvCI7Zuowuk6WnGC2/Nz5RusR1FP3hDllM3pMTR3J3l0Rgf+oHe9o9evQuxdfyxTi4/tFQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyfxhUyphzlzD8AmqjvSYlwapMA4zBT76Rm1TggHqHYvfIQCAGs
-	wyCfi/1VDlNgFz3yuvFaAVETG9BPioAwfO2K9Czdxp39hTJSB3UPOCOg
-X-Gm-Gg: ASbGncvpaZ94AsaxqTdzB0braqyxDIbh17eRHBPgMuaCJTdZp4Lvgnhtylvf4GESKxC
-	wPvtSmviRe3QEpjslLODb81rGzVAvJJ61csT8tMx+pwGv4U8by/uxQG/e5w0D9zhP90m4BS2cAV
-	bRIJ63iGCaJDAoOaRQ14C/QnHph6NcCAk2gjK6TeGiJe8QFKfylJlUISlOodxyjTvbKftxrtrr9
-	5ES5qF7uqu8i1+prCNNIkWez0c4RE5C/yNYx3sfy6Bn069MHrMwz92FD9rWL2LkLyUJqvoFunTk
-	uvfaelJsi2fo50KyfPINaJp8MLckoehp/kA0n/IPF6rL5f/TZION+NaATAr7g/FFGYdUfoDUIGk
-	jUep25ioBksegCUNEatpDfPR7lAPDJeiPF63Re3b9Oz/Nx5IozXOaUtFulnsdO+8y
-X-Google-Smtp-Source: AGHT+IHpGLpU8M9LjptzuKQ5BOFJfe6J4j9z7uO9gDV2SVJTv45LojULgBTU28zYulg26XhrRR4Gpw==
-X-Received: by 2002:a17:903:3807:b0:269:4741:6d33 with SMTP id d9443c01a7336-2902737a672mr193197825ad.23.1760175518554;
-        Sat, 11 Oct 2025 02:38:38 -0700 (PDT)
-Received: from power-ThinkBook-15-G2-ITL.. ([116.128.244.171])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-33b6262df70sm5663168a91.1.2025.10.11.02.38.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Oct 2025 02:38:38 -0700 (PDT)
-From: Xueqin Luo <luoxueqin@kylinos.cn>
-To: rafael@kernel.org,
-	pavel@kernel.org,
-	lenb@kernel.org,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Xueqin Luo <luoxueqin@kylinos.cn>
-Subject: [PATCH RESEND v3 2/2] PM: hibernate: make compression threads configurable
-Date: Sat, 11 Oct 2025 17:38:08 +0800
-Message-ID: <1764e5db50a9e6a7809f0ec59a7b59e66c1f155f.1757680816.git.luoxueqin@kylinos.cn>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1757680816.git.luoxueqin@kylinos.cn>
-References: <cover.1757680816.git.luoxueqin@kylinos.cn>
+	s=arc-20240116; t=1760176371; c=relaxed/simple;
+	bh=jc9YZsle3WLAtfJzis9aeE92ql/1xDWBDtwmj5gNJAA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fig4F6yQuHU5qOTW3pUXvu4SZUFZCZpwfVqedPbA183eQ7QcSUfLrAyRlHjJ6qnq4Wm7lR3Navg4d0mMuCpbwuTrv97B5eA463UVCOw70Umpcwbd5Dc4YMJT9g+JxsMpuu5OZALjnQ2q02oDK4x3V8fAN2wiiWPxGaV/JO+toLU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HKIp3WXP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A29EEC4CEF8;
+	Sat, 11 Oct 2025 09:52:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1760176370;
+	bh=jc9YZsle3WLAtfJzis9aeE92ql/1xDWBDtwmj5gNJAA=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=HKIp3WXPyfB84fp5zyGifttUxZkr0IRSM8nxihrtsvt7E6XHkmbbAnNWInWsXujB5
+	 qEjcRPqrWHlTRdfwShTF9rntiupGS24f4CZPNQqT3U9OqDxsZch6q6dYr9Wy+XICyt
+	 QVa2XvBCsQwYGtHpwTpvyFTr2d4dMZ5VBQ6l4yfUkirsva0UBaOg9TRE5UNdCDx7ua
+	 Dqq6nYx46JrPIF2RBClntQI1JNg0e5R7RWuKKiPWOIVrM7JdaFYuWcWGx2Mkwzs5Jt
+	 dMQA9xuobUFlt7sfiatKA8LtVFFAQ9+Y9zOmfn8IJ4QXK/q5S3BpWt0SbWZYYWo/J+
+	 NYexfH06tu+xg==
+Message-ID: <0beae4dd-2feb-4891-b7b0-0f63db8f5615@kernel.org>
+Date: Sat, 11 Oct 2025 11:52:43 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC 0/6] Battery temperature ADC plumbing on Qualcomm
+ platforms
+To: David Lechner <dlechner@baylibre.com>,
+ Luca Weiss <luca.weiss@fairphone.com>, Jonathan Cameron <jic23@kernel.org>,
+ =?UTF-8?Q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
+ Andy Shevchenko <andy@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Laxman Dewangan <ldewangan@nvidia.com>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konradybcio@kernel.org>, Jens Reidel <adrian@mainlining.org>,
+ Casey Connolly <casey.connolly@linaro.org>
+Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ devicetree@vger.kernel.org
+References: <20251010-bat-temp-adc-v1-0-d51ec895dac6@fairphone.com>
+ <c770c799-4318-4c40-bd62-3cefbbbef731@baylibre.com>
+From: Hans de Goede <hansg@kernel.org>
+Content-Language: en-US, nl
+In-Reply-To: <c770c799-4318-4c40-bd62-3cefbbbef731@baylibre.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-The number of compression/decompression threads has a direct impact on
-hibernate image generation and resume latency. Using more threads can
-reduce overall resume time, but on systems with fewer CPU cores it may
-also introduce contention and reduce efficiency.
+Hi All,
 
-Performance was evaluated on an 8-core ARM system, averaged over 10 runs:
+Luca thank you for Cc-ing me.
 
-    cmp_threads   hibernate time (s)   resume time (s)
-    --------------------------------------------------
-          3             12.14              18.86
-          4             12.28              17.48
-          5             11.09              16.77
-          6             11.08              16.44
+On 10-Oct-25 10:56 PM, David Lechner wrote:
+> On 10/10/25 6:21 AM, Luca Weiss wrote:
+>> This is an RFC which implements a potential solution to get battery
+>> temperature readings working on for example smartphones with Qualcomm
+>> SoCs.
+>>
+> 
+> ...
+> 
+>> 3. Add temperature-lookup-table as property to simple-battery
+>>
+>> Since the NTC is a part of the battery pack, adding a
+>> temperature-lookup-table property to simple-battery would make sense
+>> instead of having this lookup table be standalone in the
+>> generic-adc-thermal node. However being able to re-use the existing code
+>> in generic-adc-thermal lead me to the current proposal.
+>>
+> Did you consider creating a specific compatible string for the battery pack?
+> Then the battery node could have the io-channels property for the ADC
+> connected to the temperature sensor. Then a specific battery driver could
+> handle the conversion as needed rather than filling the devicetree with
+> conversion tables.
 
-With 5–6 threads, resume latency improves by approximately 12% compared
-to the default 3-thread configuration, with negligible impact on
-hibernate time.
+That will require a driver update, filling the driver (and thus memory)
+with conversion tables each time a new battery model (one model phone
+can have multiple battery revisions) comes out.
 
-Introduce a new kernel parameter `cmp_threads=` that allows users and
-integrators to tune the number of compression/decompression threads at
-boot. This provides a way to balance performance and CPU utilization
-across a wide range of hardware without recompiling the kernel.
+That seems undesirable. To me these conversion tables are very much
+something which belongs in DT rather then being hardcoded in
+the driver.
 
-Signed-off-by: Xueqin Luo <luoxueqin@kylinos.cn>
----
- kernel/power/swap.c | 24 ++++++++++++++++++++----
- 1 file changed, 20 insertions(+), 4 deletions(-)
+Also contrast this to ACPI where there actually is a mechanism defined
+for thermal lookup tables and there all these things typically just
+work when the ACPI tables are written properly. IMHO we want to move
+more towards this direction where things just work without requiring
+kernel code changes for every new model.
 
-diff --git a/kernel/power/swap.c b/kernel/power/swap.c
-index f8c13f5672ec..dfa9b7c0f96c 100644
---- a/kernel/power/swap.c
-+++ b/kernel/power/swap.c
-@@ -519,8 +519,8 @@ static int swap_writer_finish(struct swap_map_handle *handle,
- 				CMP_HEADER, PAGE_SIZE)
- #define CMP_SIZE	(CMP_PAGES * PAGE_SIZE)
- 
--/* Maximum number of threads for compression/decompression. */
--#define CMP_THREADS	3
-+/* Default number of threads for compression/decompression. */
-+static int cmp_threads = 3;
- 
- /* Minimum/maximum number of pages for read buffering. */
- #define CMP_MIN_RD_PAGES	1024
-@@ -741,7 +741,7 @@ static int save_compressed_image(struct swap_map_handle *handle,
- 	 * footprint.
- 	 */
- 	nr_threads = num_online_cpus() - 1;
--	nr_threads = clamp_val(nr_threads, 1, CMP_THREADS);
-+	nr_threads = clamp_val(nr_threads, 1, cmp_threads);
- 
- 	page = (void *)__get_free_page(GFP_NOIO | __GFP_HIGH);
- 	if (!page) {
-@@ -1257,7 +1257,7 @@ static int load_compressed_image(struct swap_map_handle *handle,
- 	 * footprint.
- 	 */
- 	nr_threads = num_online_cpus() - 1;
--	nr_threads = clamp_val(nr_threads, 1, CMP_THREADS);
-+	nr_threads = clamp_val(nr_threads, 1, cmp_threads);
- 
- 	page = vmalloc_array(CMP_MAX_RD_PAGES, sizeof(*page));
- 	if (!page) {
-@@ -1697,3 +1697,19 @@ static int __init swsusp_header_init(void)
- }
- 
- core_initcall(swsusp_header_init);
-+
-+static int __init cmp_threads_setup(char *str)
-+{
-+	int rc = kstrtouint(str, 0, &cmp_threads);
-+
-+	if (rc)
-+		return rc;
-+
-+	if (cmp_threads < 1)
-+		cmp_threads = 1;
-+
-+	return 1;
-+
-+}
-+
-+__setup("cmp_threads=", cmp_threads_setup);
--- 
-2.43.0
+And we already have a mechanism in DT to map an ADC voltage to
+a temperature in the generic-adc-thermal driver.
+
+So all that is left to do really is to come up with a clean way
+to export the temperature from the generic-adc-thermal driver
+to the generic-adc-battery driver.
+
+> The simple-battery bindings are already far from simple! So I would not
+> be inclined to add more to it.
+
+I think we all agree on this and we also don't want to duplicate
+the generic-adc-thermal bindings + code implementing that functionality.
+
+IMHO not wanting to duplicate the bindings + functionality applies to
+both: a) directly exporting an IIO temp channel from the ADC driver and
+b) adding volt -> temp mapping functionality to the simple-battery bindings.
+
+So that basically leaves us with coming up with a way for
+the generic-adc-battery code to consume the temperature coming out of
+the generic-adc-thermal code and there are 2 ways to do this:
+
+1. Modify the generic-adc-thermal driver to export an IIO channel
+2. Modify the thermal-zone core to allow referencing to a thermal-zone
+   with a phandle *and* modify generic-adc-battery to be able to
+   optionally get the temperature from a thermal-zone instead of
+   from an IIO-channel
+
+Of these two options 1. clear is the most KISS option. SO I agree with
+Luca that 1. as implemented in this series is the best way forward.
+
+Regards,
+
+Hans
+
 
 
