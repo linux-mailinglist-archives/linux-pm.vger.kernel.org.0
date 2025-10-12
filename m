@@ -1,119 +1,176 @@
-Return-Path: <linux-pm+bounces-35933-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35934-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id B390FBCF539
-	for <lists+linux-pm@lfdr.de>; Sat, 11 Oct 2025 14:29:45 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C1C71BD09CA
+	for <lists+linux-pm@lfdr.de>; Sun, 12 Oct 2025 20:24:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 169854E5E38
-	for <lists+linux-pm@lfdr.de>; Sat, 11 Oct 2025 12:29:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1511E3B88B2
+	for <lists+linux-pm@lfdr.de>; Sun, 12 Oct 2025 18:24:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2EC026E6FD;
-	Sat, 11 Oct 2025 12:29:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3C972F0689;
+	Sun, 12 Oct 2025 18:24:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WLvDFj8u"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zy4G4+OC"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADDD98479
-	for <linux-pm@vger.kernel.org>; Sat, 11 Oct 2025 12:29:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A1292EFDA2;
+	Sun, 12 Oct 2025 18:24:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760185779; cv=none; b=UHUyjBFooXhXUp7G7TjoDfJLFiqnKtDOZvqLhhRuNXpkQr5JXpvXXaAmcF0nLHmxysURcSLVarYSFBZ4/v6YXw5EbQk0wHDr5uazAv/RrFB/O6QJjGq31J8VMSRpfh9RH5kNdp7LKb2XSc8jZzvLiqTiD/rs9LDFpxb695oM1Vo=
+	t=1760293474; cv=none; b=imHd9OPqi2hEGcJGk80ct1RXVsTKMRPIv4PWyGGr/R/xkyqEsUE/AajLNT+arUQFhqgZGE+i4D7Cj8ROuaxy9UxzjPrmTrHOzJfUVqmAkU6SinzvoedrqKBBJsnjsbbEjuiYheCqJlounoY/0BHdkBEmclySyI8PDUvKbiXx2Gg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760185779; c=relaxed/simple;
-	bh=AJyI+USEssROQGBUbngOEIFkwlQ+dvsaob5VOR+LxJI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PGE0ZN/1QxT1PjeFQYt2NIUMU08hVMoHy/5OOjpjyzausVO7hNKtfq5EP7pj8sochysquPnkhHHjWVQynJr4Bqz5iXJb4pFwCBV/DA4g/QsyVjmu0p3jWP1Y2wQnlRP1JIevR4uSug2xTGiD+iwbt2lkIga6D+eO1aYV5HPUSDQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WLvDFj8u; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 433BFC4AF0B
-	for <linux-pm@vger.kernel.org>; Sat, 11 Oct 2025 12:29:39 +0000 (UTC)
+	s=arc-20240116; t=1760293474; c=relaxed/simple;
+	bh=txxPlbpyx3vQKhi9nz3pfg6ck8R1K4SwlLeAQZv2X7c=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=cDzjkSxTo71Q7WR8ddH2sqa8MIJA27luqrenJh+iSLUgGlbkgbbAzNYjKUj1ZNMRkTgkRNiBHJ53HUuCvf5+Ea32zkQaDI3uy+LcNIBivb+xQXjA1YWj4KEXpTvZAJ+CshSv0BmdKxWslEbihHjrAlC2DYTDGye2hwj0lkx18oA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zy4G4+OC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EED81C4CEE7;
+	Sun, 12 Oct 2025 18:24:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760185779;
-	bh=AJyI+USEssROQGBUbngOEIFkwlQ+dvsaob5VOR+LxJI=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=WLvDFj8uIbnjx4YwUngLF9ZAI6ZEPhWusSlbTsmxXnpXMIXTgs6D2YAnb6I1sgbyp
-	 /S4fB4bQFIbE6AAIYi3OuR/XKTXqRB9GHgiO4ikjYjaFvH7w3r/LUdtSdzUyUr7kQh
-	 w7SdZgCosB3lQNXXtMEpby7NHxh3/hBpkDLGXyp3bOIb+Ab1+Ls9FKZlrSGP15X9dU
-	 LDpegdYALRd1FqHJKhklXDMRZIGJMWWgTug9qszpe76PTvjaSA/mU10jtNutxWGB1C
-	 vBaUmgvjxYqouRqcMAjkr/kxxNioq0ZoTGMJm47t6CbrWYpS+JxClsx/G27MUmsXE7
-	 M0m2k85pfZiYw==
-Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-7c103e679a2so335118a34.2
-        for <linux-pm@vger.kernel.org>; Sat, 11 Oct 2025 05:29:39 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXtkGQ8/dwOf2i+q/zsNI6gqCMwvEkK9eLZlWUITDpuK+7pexBbvBDYepCDbU1zrV0PGx4BGFy7eg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwhdskBkZcOZ4OHQhheIVXCwSubcqsrtLy0x4Cg7tjqssSa9OMI
-	osea3wg0MnUFyVMN2bMtEwTrlMCNOftVQULNvcMMHBfyn1yEjd14WpGV4LyOZztgIv347gUPLHM
-	UAZ7duqhlImKzw5+sb0SX9mHtHlg/9zs=
-X-Google-Smtp-Source: AGHT+IGMhLvweltXd/z9viHewXgalSXCevVEspM2R9C/Jv3qQPUruwLZfqpzE4MJQKCOMiPC/2Dz2gwfPhYkxh05uuA=
-X-Received: by 2002:a05:6808:4fd1:b0:43f:7dee:468b with SMTP id
- 5614622812f47-4417b34652fmr6615070b6e.4.1760185778571; Sat, 11 Oct 2025
- 05:29:38 -0700 (PDT)
+	s=k20201202; t=1760293474;
+	bh=txxPlbpyx3vQKhi9nz3pfg6ck8R1K4SwlLeAQZv2X7c=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=Zy4G4+OCIG/0CdyakHTuZLbFC5q8C1zoD6N1vQKl/4OOToHtevVoYp+TepcMqz5pP
+	 HzU+blhg+y7/Y1DeKvV8l2bC4epgP9muK5dnGDQPadfeKmvLrHnZLXT+ZI+AW/Tz+2
+	 A0c6Vu+FKUqrmV+1HQjp+LakYH2czp6R6GGbOqQZ58PVhtKvENAdeLfneVeQUIamWg
+	 SS75X3zojQIC7ieqk4MVS4eQY4LOhDxYhrDBG5A0YTjezW3Jms+F0H2CF83u0sm+Vs
+	 JmlBysNay4kFAWBGvoEHSBL8LP8DIUGYgF1Zkn8qXW0jiicWDIwPWmX+ZEQY+B6d+4
+	 Wf3TQ+DbDZWzw==
+Date: Sun, 12 Oct 2025 19:24:22 +0100
+From: Jonathan Cameron <jic23@kernel.org>
+To: Hans de Goede <hansg@kernel.org>
+Cc: David Lechner <dlechner@baylibre.com>, Luca Weiss
+ <luca.weiss@fairphone.com>, Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>,
+ Andy Shevchenko <andy@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui
+ <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, Rob Herring
+ <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Laxman Dewangan <ldewangan@nvidia.com>, Bjorn
+ Andersson <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>,
+ Jens Reidel <adrian@mainlining.org>, Casey Connolly
+ <casey.connolly@linaro.org>, ~postmarketos/upstreaming@lists.sr.ht,
+ phone-devel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH RFC 0/6] Battery temperature ADC plumbing on Qualcomm
+ platforms
+Message-ID: <20251012192422.46775ad1@jic23-huawei>
+In-Reply-To: <0beae4dd-2feb-4891-b7b0-0f63db8f5615@kernel.org>
+References: <20251010-bat-temp-adc-v1-0-d51ec895dac6@fairphone.com>
+	<c770c799-4318-4c40-bd62-3cefbbbef731@baylibre.com>
+	<0beae4dd-2feb-4891-b7b0-0f63db8f5615@kernel.org>
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <3914183.kQq0lBPeGt@rafael.j.wysocki> <20251011085052.1237082-1-tianyaxiong@kylinos.cn>
-In-Reply-To: <20251011085052.1237082-1-tianyaxiong@kylinos.cn>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Sat, 11 Oct 2025 14:29:26 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0gitV7vk1=-1r57SPaQLFnNLXMrXowKMzvm1ebmhse0-g@mail.gmail.com>
-X-Gm-Features: AS18NWCg7K1uiOjaOJA2fXNOZxoWBCp2PR-KSKbvja-gfWA5lGdlvioFfGVd9s4
-Message-ID: <CAJZ5v0gitV7vk1=-1r57SPaQLFnNLXMrXowKMzvm1ebmhse0-g@mail.gmail.com>
-Subject: Re: [PATCH v1 3/3] cpufreq: intel_pstate: Simplify the energy model
- for hybrid systems
-To: Yaxiong Tian <tianyaxiong@kylinos.cn>
-Cc: rafael@kernel.org, christian.loehle@arm.com, dietmar.eggemann@arm.com, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, lukasz.luba@arm.com, 
-	srinivas.pandruvada@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Sat, Oct 11, 2025 at 10:51=E2=80=AFAM Yaxiong Tian <tianyaxiong@kylinos.=
-cn> wrote:
->
-> > Since em_cpu_energy() computes the cost of using a given CPU to
-> > do work as a product of the utilization of that CPU and a constant
-> > positive cost coefficient supplied through an energy model, EAS
-> > evenly distributes the load among CPUs represented by identical
-> > one-CPU PDs regardless of what is there in the energy model.
-> >
-> > Namely, two CPUs represented by identical PDs have the same energy
-> > model data and if the PDs are one-CPU, max_util is always equal to the
-> > utilization of the given CPU, possibly increased by the utilization
-> > of a task that is waking up.  The cost coefficient is a monotonically
-> > increasing (or at least non-decreasing) function of max_util, so the
-> > CPU with higher utilization will generally get a higher (or at least
-> > not lower) cost coefficient.  After multiplying that coefficient by
-> > CPU utilization, the resulting number will always be higher for the
-> > CPU with higher utilization.  Accordingly, whenever these two CPUs
-> > are compared, the cost of running a waking task will always be higher
-> > for the CPU with higher utilization which leads to the even distributio=
-n
-> > of load mentioned above.
-> >
-> > For this reason, the energy model can be adjusted in arbitrary
-> > ways without disturbing the even distribution of load among CPUs
-> > represented by indentical one-CPU PDs.  In particular, for all of
-> > those CPUs, the energy model can provide one cost coefficient that
-> > does not depend on the performance level.
->
-> But if the cost is a constant that does not depend on performance levels,
-> then the energy increment for running a waking task on these CPUs would b=
-e
-> the same. For example, for a task with utilization u, whether it is place=
-d
-> on CPU A or CPU B, since the cost is the same, the energy increment gener=
-ated
-> would be identical. In this case, EAS should not perform load balancing
-> between them.
+On Sat, 11 Oct 2025 11:52:43 +0200
+Hans de Goede <hansg@kernel.org> wrote:
 
-Right, what matters is the delta between base_energy and energy
-including the waking task utilization.
+> Hi All,
+> 
+> Luca thank you for Cc-ing me.
+> 
+> On 10-Oct-25 10:56 PM, David Lechner wrote:
+> > On 10/10/25 6:21 AM, Luca Weiss wrote:  
+> >> This is an RFC which implements a potential solution to get battery
+> >> temperature readings working on for example smartphones with Qualcomm
+> >> SoCs.
+> >>  
+> > 
+> > ...
+> >   
+> >> 3. Add temperature-lookup-table as property to simple-battery
+> >>
+> >> Since the NTC is a part of the battery pack, adding a
+> >> temperature-lookup-table property to simple-battery would make sense
+> >> instead of having this lookup table be standalone in the
+> >> generic-adc-thermal node. However being able to re-use the existing code
+> >> in generic-adc-thermal lead me to the current proposal.
+> >>  
+> > Did you consider creating a specific compatible string for the battery pack?
+> > Then the battery node could have the io-channels property for the ADC
+> > connected to the temperature sensor. Then a specific battery driver could
+> > handle the conversion as needed rather than filling the devicetree with
+> > conversion tables.  
+> 
+> That will require a driver update, filling the driver (and thus memory)
+> with conversion tables each time a new battery model (one model phone
+> can have multiple battery revisions) comes out.
+> 
+> That seems undesirable. To me these conversion tables are very much
+> something which belongs in DT rather then being hardcoded in
+> the driver.
+> 
+> Also contrast this to ACPI where there actually is a mechanism defined
+> for thermal lookup tables and there all these things typically just
+> work when the ACPI tables are written properly. IMHO we want to move
+> more towards this direction where things just work without requiring
+> kernel code changes for every new model.
+> 
+> And we already have a mechanism in DT to map an ADC voltage to
+> a temperature in the generic-adc-thermal driver.
+> 
+> So all that is left to do really is to come up with a clean way
+> to export the temperature from the generic-adc-thermal driver
+> to the generic-adc-battery driver.
+> 
+> > The simple-battery bindings are already far from simple! So I would not
+> > be inclined to add more to it.  
+> 
+> I think we all agree on this and we also don't want to duplicate
+> the generic-adc-thermal bindings + code implementing that functionality.
+> 
+> IMHO not wanting to duplicate the bindings + functionality applies to
+> both: a) directly exporting an IIO temp channel from the ADC driver and
+> b) adding volt -> temp mapping functionality to the simple-battery bindings.
+> 
+> So that basically leaves us with coming up with a way for
+> the generic-adc-battery code to consume the temperature coming out of
+> the generic-adc-thermal code and there are 2 ways to do this:
+> 
+> 1. Modify the generic-adc-thermal driver to export an IIO channel
 
-I got confused somehow, sorry for the noise.
+Other than the fact this is embedded in an existing driver, this is just
+a case of modelling an analog sensor in IIO. There's an ancient accelerometer
+that does this and the analog fronted ends handle things like potential dividers
+which are similar but with far simpler DT than this.
+
+So conceptually I have no problem with the approach.
+
+If we were starting from scratch we might have had an explicit representation
+of the thermal sensor analog part (like our accelerometer), and then done
+
+Generic temperature device sensor driver is consumer of the ADC channel.
+generic-adc-thermal is consumer of the generic temp device sensor.
+
+But retrofitting that split may be a pain (I haven't looked at this though so
+maybe not!)
+
+
+
+> 2. Modify the thermal-zone core to allow referencing to a thermal-zone
+>    with a phandle *and* modify generic-adc-battery to be able to
+>    optionally get the temperature from a thermal-zone instead of
+>    from an IIO-channel
+> 
+> Of these two options 1. clear is the most KISS option. SO I agree with
+> Luca that 1. as implemented in this series is the best way forward.
+> 
+> Regards,
+> 
+> Hans
+> 
+> 
+
 
