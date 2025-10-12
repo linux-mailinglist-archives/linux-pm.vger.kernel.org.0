@@ -1,125 +1,95 @@
-Return-Path: <linux-pm+bounces-35935-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35938-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id A0DE1BD0A04
-	for <lists+linux-pm@lfdr.de>; Sun, 12 Oct 2025 20:41:32 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 19C09BD0D9D
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Oct 2025 01:36:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4E8934E2C5D
-	for <lists+linux-pm@lfdr.de>; Sun, 12 Oct 2025 18:41:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5829A3B0C28
+	for <lists+linux-pm@lfdr.de>; Sun, 12 Oct 2025 23:36:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 500932EF665;
-	Sun, 12 Oct 2025 18:41:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 769B72F1FFC;
+	Sun, 12 Oct 2025 23:35:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="krOIPd4f"
+	dkim=pass (2048-bit key) header.d=packett.cool header.i=@packett.cool header.b="nUABm1eO"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-179.mta1.migadu.com (out-179.mta1.migadu.com [95.215.58.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EE9375809;
-	Sun, 12 Oct 2025 18:41:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95FFA2F0C7C
+	for <linux-pm@vger.kernel.org>; Sun, 12 Oct 2025 23:35:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760294488; cv=none; b=OU+wXTuElifw4g9KppFVpnqcBKbV1THoVvRRRtY0QljIaL8ozV6bsiIBgJ3jVIKpNzl3jP5yiknzq7J7so3a8jrLxGKfQRiFnYVXK1FU6fkkWRZ/AFCVZZrY+i6H+uXyFAE3KQR4kMeXxlKP5FgpV2ONO7Ek/Rz6SWsrx5Pljfo=
+	t=1760312133; cv=none; b=bsGzmHyxJb7rJ/12+IsO6hJbCs1asMPaGvp+lawNWOZEEvmZG5301UMUFAI4CIwDdr+w/5gIqj1XTIOvbngE2Nz06cV8KqUI2SbxM8XqQgCGl+skK6AjU5N8Jxqx3IS2xb9DGeUlaqvTZmDHXl5CqvdOe660rC8xrovbTG1K/wA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760294488; c=relaxed/simple;
-	bh=PoUFRD1yzrjYJCi3ArphUQMDmoTrK9yIQsCtPXBJOks=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=UMJCV/GKkRbcHc6ojUOeMzve3NAhRzJ/0gO4oCf3xmhz8ab+MvrsNXmivATvE3pQ5pvF4OPufTKQu9ECXXxINKEInbuDiaSkxPqWE3bOmAiR6woDeptLBlxJTs4WBz/eUVR3KLoc/E6LWxyeWCmqT6J52v1MnvwuWT4Q55IaKhM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=krOIPd4f; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CDB7C4CEE7;
-	Sun, 12 Oct 2025 18:41:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760294487;
-	bh=PoUFRD1yzrjYJCi3ArphUQMDmoTrK9yIQsCtPXBJOks=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=krOIPd4f4lyc27ACoYSnNCwCsujV1k6HK7G8mhBaU8D+fmiS+vu7emBKFtr+9Q9gQ
-	 C5MHEabrspBaERkLsNUHpszwwGT6gCzCUyzIx+8e461sNDdO5fJ2uVkuG8+1LJuH9P
-	 2fTucsdyNWjDEe7GzmpyKNGUWLzzIL7VsDshJNDQK+Y5U/XanapgdNbYb/gfmzB8N/
-	 /CIm+68VaDiByKwhKevpvQm7I+1PvR8tKHp+MagE/hj6T0CplhxbH1hGe30WYxED42
-	 T2RI7qfx7r8s+Z1H615AF9JCEMMtfuVSOa4SbmUo4Mk51H11xzd+60HO8HwUsoWeY2
-	 ziBIH32MkxkWw==
-Date: Sun, 12 Oct 2025 19:41:14 +0100
-From: Jonathan Cameron <jic23@kernel.org>
-To: Luca Weiss <luca.weiss@fairphone.com>
-Cc: David Lechner <dlechner@baylibre.com>, Nuno =?UTF-8?B?U8Oh?=
- <nuno.sa@analog.com>, Andy Shevchenko <andy@kernel.org>, "Rafael J.
- Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>,
- Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, Rob
- Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor
- Dooley <conor+dt@kernel.org>, Laxman Dewangan <ldewangan@nvidia.com>, Bjorn
- Andersson <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>,
- Hans de Goede <hansg@kernel.org>, Jens Reidel <adrian@mainlining.org>,
- Casey Connolly <casey.connolly@linaro.org>,
- ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org
-Subject: Re: [PATCH RFC 3/6] thermal/drivers/generic-adc: Register as IIO
- device
-Message-ID: <20251012194114.094a61a3@jic23-huawei>
-In-Reply-To: <20251010-bat-temp-adc-v1-3-d51ec895dac6@fairphone.com>
-References: <20251010-bat-temp-adc-v1-0-d51ec895dac6@fairphone.com>
-	<20251010-bat-temp-adc-v1-3-d51ec895dac6@fairphone.com>
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1760312133; c=relaxed/simple;
+	bh=RjwSkuSroUgpMQ3Z3ISFdpypDXbCwD3Kcl8yzwyMI+o=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SfTYFKoGgjz09HDbUgvJKjNqq3yHEVm/zydcv5dm2FP+b3VnuoalQhtvFut9bqm1nI8HjdSV8AfoSNrkEYixjt9KTZ6+qWoyGGT/Chtw+ZdVOx1tt6v9ITh74cuQ3FzpigAyYMAxxM8DPgYl/CgsezRpv1hU7hdtZ9qrx0WTOvA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=packett.cool; spf=pass smtp.mailfrom=packett.cool; dkim=pass (2048-bit key) header.d=packett.cool header.i=@packett.cool header.b=nUABm1eO; arc=none smtp.client-ip=95.215.58.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=packett.cool
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=packett.cool
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=packett.cool;
+	s=key1; t=1760312118;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=jkhzacjcds6W3I5BIs0Lk/YOFhJFn1fRWKod7Pdp9mY=;
+	b=nUABm1eObyDhr1Xns2e9scHvW+Qmu4UQMkC238cRQq4yFyXqwIy076cmUhG99WWIfRGlky
+	Fc9RSSehKm+J0avAEc59gBgZbMtvWFqxAAiI1/yaCnAGnz2ztzutvepSYgIBwtUtpLRkwf
+	Zve8blObIBY3PjiG/l1ilHZVE1h6Q89ReOXKXz1dPcIdg5acD+naVQLWmw2kw2hC17siIc
+	sCU7ktCeB6BZm6weB0itSM6ng0anFa+MVaTCw38nb0mMNJyrpGA0QptlMxA3fpkfltqFzz
+	wZo9PfYQ54XoioIoxsarArLa2TUwcjVskKNaNdU5hK+R8liiYH+qsa3Po733Iw==
+From: Val Packett <val@packett.cool>
+To: Sebastian Reichel <sre@kernel.org>,
+	Fenglin Wu <fenglin.wu@oss.qualcomm.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	linux-arm-msm@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Val Packett <val@packett.cool>
+Subject: [PATCH 0/2] power: supply: qcom_battmgr: improve charge control threshold handling
+Date: Sun, 12 Oct 2025 20:32:17 -0300
+Message-ID: <20251012233333.19144-2-val@packett.cool>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Fri, 10 Oct 2025 13:22:01 +0200
-Luca Weiss <luca.weiss@fairphone.com> wrote:
+Currently, upowerd is unable to turn off the battery preservation mode[1]
+on Qualcomm laptops, because it does that by setting the start threshold to
+zero and the driver returns an error:
 
-> Register an IIO channel to allow reading the temperature using the IIO
-> interface.
-> 
-> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
-Just one question below.
+pmic_glink.power-supply.0: charge control start threshold exceed range: [50 - 95]
 
->  static int gadc_thermal_probe(struct platform_device *pdev)
->  {
->  	struct device *dev = &pdev->dev;
->  	struct gadc_thermal_info *gti;
-> +	struct iio_dev *indio_dev;
-> +	struct gadc_iio *data;
->  	int ret;
->  
->  	if (!dev->of_node) {
-> @@ -153,6 +192,23 @@ static int gadc_thermal_probe(struct platform_device *pdev)
->  
->  	devm_thermal_add_hwmon_sysfs(dev, gti->tz_dev);
->  
-> +	indio_dev = devm_iio_device_alloc(dev, sizeof(*data));
-> +	if (!indio_dev)
-> +		return -ENOMEM;
-> +
-> +	data = iio_priv(indio_dev);
-> +	data->gti = gti;
-> +
-> +	indio_dev->name = pdev->name;
-what does this end up as?
+Kernel documentation says the end threshold must be clamped[2] but does
+not say anything about the start threshold.
 
-obviously we don't really care what name the user space interface we
-aren't using advertises but this should be something part number like.
+In this proposal I've special-cased start==0 to actually disable the
+functionality via the enable bit, and otherwise made both start and
+end thresholds be clamped to the acceptable range. Hopefully that's
+fine? Or should the [1 - 49] range for start actually be rejected?
 
-> +	indio_dev->modes = INDIO_DIRECT_MODE;
-> +	indio_dev->info = &gadc_adc_info;
-> +	indio_dev->channels = gadc_adc_channels;
-> +	indio_dev->num_channels = ARRAY_SIZE(gadc_adc_channels);
-> +
-> +	ret = devm_iio_device_register(dev, indio_dev);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "Failed to register IIO device\n");
-> +
->  	return 0;
->  }
->  
-> 
+[1]: https://gitlab.freedesktop.org/upower/upower/-/issues/327
+[2]: https://www.kernel.org/doc/Documentation/ABI/testing/sysfs-class-power
+
+Thanks,
+~val
+
+Val Packett (2):
+  power: supply: qcom_battmgr: clamp charge control thresholds
+  power: supply: qcom_battmgr: support disabling charge control
+
+ drivers/power/supply/qcom_battmgr.c | 26 ++++++++++----------------
+ 1 file changed, 10 insertions(+), 16 deletions(-)
+
+-- 
+2.51.0
 
 
