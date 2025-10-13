@@ -1,107 +1,128 @@
-Return-Path: <linux-pm+bounces-35972-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35973-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64FE9BD343B
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Oct 2025 15:44:08 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id F07A7BD345F
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Oct 2025 15:46:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AEAAC189DA84
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Oct 2025 13:44:31 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id AD5964E4BDC
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Oct 2025 13:46:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D4B7309DCF;
-	Mon, 13 Oct 2025 13:42:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10BCD19E82A;
+	Mon, 13 Oct 2025 13:46:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=sjoerd@collabora.com header.b="hjT4mlMZ"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="iB++p8Hg"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BEBF309DCB;
-	Mon, 13 Oct 2025 13:42:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760362949; cv=pass; b=cNgWb/uvDJtkvDR4IclFACBU6LfkDtv8XiGMORhv5Hmat+7QQa2EWnMCYROl6Y2M5dYn73S7zQlgmdW2Crxnaeo5BQGuGIY6gDqd0N5s7o1PXB01ja97W9I/nDRAseJfLDjKLq2B2XmkhzLZ42jyXuc1hbL+t8r0DwcZbhRincM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760362949; c=relaxed/simple;
-	bh=gDpPd5UzOQn8zDPGA7FYXf9y+izfyQBl4gvsqPled8k=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=jge2RyXNAYD3f+1ABsHpG9H6qmodobPJMI2wOPuP87378HgG5Zt/yotmGhJ0vRNDxgUkVWvvIrUldCgXl9S+s9dOZXdBZGVeyhrjGqg6s8g2I/0cLJ/QCZs3wU04q8WDlJ4uvP2pnueXeeFbPTnzsQ2TCv0EzxajpmqbYUlHOZU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sjoerd@collabora.com header.b=hjT4mlMZ; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1760362921; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=XIXkd09YTcHrxyEMy3Q47jCyFRdZdGg7DG/PawiO9mFO9t3j+QNvOECuDBMMf8OY8ZecH6Aig5NBab5wViVuE0Xn4ifoDV6O7Ax6Nva+yk0jiGWzm3gj/Fm8UclkzUuOPXIUskYCj4TPy913l7BWPkcwu8Ubxc2+qm9woMBl+CU=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1760362921; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=gDpPd5UzOQn8zDPGA7FYXf9y+izfyQBl4gvsqPled8k=; 
-	b=KZLBIJiEBTseT5PnJagP7TnThgzIguQKMRE+d5O1+q+QCFVGTiwXQ7MKaj5tBtz/rPPAieZ32iPp0WxsefkdUqLbzruXbNT/nkWwufQh6jE8OZB7ca0gBgoHL1q2vCZ8f4kBi7PAAhNztBrYalYB0i3yGtgms1G8fqfan5tO1jQ=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=sjoerd@collabora.com;
-	dmarc=pass header.from=<sjoerd@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1760362921;
-	s=zohomail; d=collabora.com; i=sjoerd@collabora.com;
-	h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:Date:Date:In-Reply-To:References:Content-Type:Content-Transfer-Encoding:MIME-Version:Message-Id:Reply-To;
-	bh=gDpPd5UzOQn8zDPGA7FYXf9y+izfyQBl4gvsqPled8k=;
-	b=hjT4mlMZjMIWKVYikSKVmQYnNeZ5wGoair2n5QNpespSgO7wN5w1rrNzg0r9x4xs
-	s9GP8XPPyEtfMZnBIE7gL6+eaSd5d1nOCTwK4OXYRh/mwjSu8vtFZXHtK/w2sqfmsAF
-	BBJD9gPU7RSQCmYYPl7sa9/uXQrEsTMpEfG/k36M=
-Received: by mx.zohomail.com with SMTPS id 1760362918105978.3996948303734;
-	Mon, 13 Oct 2025 06:41:58 -0700 (PDT)
-Message-ID: <a2eae87efe46ebf397bcec3580eb9bc152b80846.camel@collabora.com>
-Subject: Re: [PATCH v3 04/10] pmdomain: mediatek: Refactor bus protection
- regmaps retrieval
-From: Sjoerd Simons <sjoerd@collabora.com>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	linux-mediatek@lists.infradead.org
-Cc: robh@kernel.org, conor+dt@kernel.org, mbrugger@suse.com, 
-	y.oudjana@protonmail.com, =?ISO-8859-1?Q?N=EDcolas?= "F. R. A. Prado"	
- <nfraprado@collabora.com>, linux-pm@vger.kernel.org,
- ulf.hansson@linaro.org, 	linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org, 	mandyjh.liu@mediatek.com,
- lihongbo22@huawei.com, wenst@chromium.org, 	matthias.bgg@gmail.com,
- krzk+dt@kernel.org, kernel@collabora.com, 
-	linux-arm-kernel@lists.infradead.org
-Date: Mon, 13 Oct 2025 15:41:49 +0200
-In-Reply-To: <20250805074746.29457-5-angelogioacchino.delregno@collabora.com>
-References: <20250805074746.29457-1-angelogioacchino.delregno@collabora.com>
-	 <20250805074746.29457-5-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-5 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D48FA18C31;
+	Mon, 13 Oct 2025 13:46:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1760363211; cv=none; b=oMxhvvWFIH/1txadYwIaW1At03xe82hvJwjhiWLWelYJ07jD1/wo93T66upav0Jcg1ZHC38f8KKkQrhp1cbWaesmSdzesz0aesbEjhM/cdT01r6UXRNNrrzsjMcBu9MCBkdIiNXCWLrQbixNTbqFrdV07dE3OkSioEiA3TKPml4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1760363211; c=relaxed/simple;
+	bh=Pmmbcic/r+qIXV8K5ROPBDHBvFSG1h6KWUV4d88MJB0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=QqSOWqbL0unVv/1W/13x/TN6HynTBXQvPMrI5PBWtrSwrj8m+32E++YEg+psUJLaMLh1PqltrncxsgOaZIbm9d4TycgWaofwPdrwjYhONjlxl1Ew938aKO0AverUEZC1qbfNS4ZAejlcyAf0YY+cQ99hs1rgAIQCP3Qps3VpCs4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=iB++p8Hg; arc=none smtp.client-ip=213.97.179.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+	References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=PcQMbKbBHQi1eguzQVLDx7OjmBd7vc+uwJpL8NjHAVQ=; b=iB++p8HgLU9j07rxYeZ8mf4TII
+	A3tbYIw25XmlUev9vBRRfjySiA8bizOS/XQA7ASgUCFnqXBnxovcjHnmbnhsDXDd+wFHCKWVP5XWf
+	j3j8X9T2J0xcm58r5DUlBbQR7XXZ+gfzLYf6bI9ky08Aa0BTV/Q7/xpjUdtodZEO/75FpE/DQ7cME
+	HzHNLoeNYAicMSzLgX8bjU4PqYu3x0bWbuab0vPJ/RMqlcGVhVu+o+mld478tsjoajW6py1psYZXJ
+	L/G3pH2Hky/Wwt3VovvP07PjPayr2ib05AxFiV5mw4/dzeSpxjuCvW76PrItihAj5EAed6FmuM+wH
+	767vnj+w==;
+Received: from [58.29.143.236] (helo=[192.168.1.7])
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+	id 1v8Isg-008xCR-47; Mon, 13 Oct 2025 15:46:30 +0200
+Message-ID: <66cbfbbb-53f8-4786-97cf-92eac8daeda8@igalia.com>
+Date: Mon, 13 Oct 2025 22:46:23 +0900
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ZohoMailClient: External
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RESEND v4 01/10] PM: EM: Assign a unique ID when creating
+ a performance domain
+To: Lukasz Luba <lukasz.luba@arm.com>
+Cc: christian.loehle@arm.com, tj@kernel.org, pavel@kernel.org,
+ len.brown@intel.com, rafael@kernel.org, kernel-dev@igalia.com,
+ linux-pm@vger.kernel.org, sched-ext@lists.linux.dev,
+ linux-kernel@vger.kernel.org
+References: <20250921031928.205869-1-changwoo@igalia.com>
+ <20250921031928.205869-2-changwoo@igalia.com>
+ <05359260-336f-4047-bc3a-003ace5ad7c4@arm.com>
+ <affa03ed-f859-4e11-9de2-59702b9d5ea4@arm.com>
+From: Changwoo Min <changwoo@igalia.com>
+Content-Language: en-US, ko-KR, en-US-large, ko
+In-Reply-To: <affa03ed-f859-4e11-9de2-59702b9d5ea4@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hey,
+Hi Lukasz,
 
-On Tue, 2025-08-05 at 09:47 +0200, AngeloGioacchino Del Regno wrote:
-> In preparation to add support for new generation SoCs like MT8196,
-> MT6991 and other variants, which require to set bus protection on
-> different busses than the ones found on legacy chips, and to also
-> simplify and reduce memory footprint of this driver, refactor the
-> mechanism to retrieve and use the bus protection regmaps.
->=20
-> This is done by removing the three pointers to struct regmap from
-> struct scpsys_domain (allocated for each power domain) and moving
-> them to the main struct scpsys (allocated per driver instance) as
-> an array of pointers to regmap named **bus_prot.
+On 10/6/25 21:24, Lukasz Luba wrote:
+> 
+> 
+> On 10/6/25 09:17, Lukasz Luba wrote:
+>> Hi Chanwoo,
+>>
+>> My apologies to delay on this topic.
 
-Trying to boot v6.18.0-rc1 on a Genio 700 EVK using the arm64 defconfig,
-ends up hanging at boot (seemingly when probing MTU3 and/or mmc, but that=
-=C2=A0
-might be a red herring).=C2=A0
+Thank you for finding time and making an effort for the review! I
+understand that it is not always possible to make time for review. :-)
 
-Either reverting this patch *or* having CONFIG_MTK_MMSYS builtin rather
-then a module seems to solve that.=20
+>>
+>> On 9/21/25 04:19, Changwoo Min wrote:
+>>> It is necessary to refer to a specific performance domain from a
+>>> userspace. For example, the energy model of a particular performance
+>>> domain is updated.
+>>>
+>>> To this end, assign a unique ID to each performance domain to address 
+>>> it,
+>>
+>> Is this related to the sched_ext view on the EM that we cannot re-use
+>> the allocated ID for the given domain?
+> 
+> Ignore that comment, I know the need now.
+> 
+> Although, there is a small code sneak below...
+> 
+> 
+> 
+> [..]
+> 
+>>> @@ -660,6 +678,13 @@ int em_dev_register_pd_no_update(struct device 
+>>> *dev, unsigned int nr_states,
+>>>   unlock:
+>>>       mutex_unlock(&em_pd_mutex);
+>>> +    if (_is_cpu_device(dev))
+>>> +        em_check_capacity_update();
+>>> +
+> 
+> It doesn't below to this $subject at all. It looks like
+> it was left from some your local changes, isn't it?
 
---=20
-Sjoerd Simons <sjoerd@collabora.com>
+You are right. The code is redundant since the same check is done at
+em_dev_register_perf_domain(). It is the side-effect of a bad rebase. I
+will remove this in the next version.
+
+Regards,
+Changwoo Min
+
+
 
