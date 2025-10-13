@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-35940-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35941-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A110BD1367
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Oct 2025 04:25:28 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1AB85BD1376
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Oct 2025 04:27:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 63C474E351C
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Oct 2025 02:25:27 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 9D99C34798B
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Oct 2025 02:27:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D33BD279795;
-	Mon, 13 Oct 2025 02:25:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D91627FB12;
+	Mon, 13 Oct 2025 02:27:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kn/25R2b"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gqGDH6fD"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C172169AE6;
-	Mon, 13 Oct 2025 02:25:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F116B3BB40;
+	Mon, 13 Oct 2025 02:27:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760322322; cv=none; b=DMa9UjmkITG45lPmT0v0pk6yfLOir2jr7hGqYGcUFNLX0ysoKgAR22mAruO7DZiftdflFPcYffKKBFIz+hvi+Ial0+xBE6bECF75u4evllO60OSkTKld4yJYPYdl9ID9ktL+arf58Fbaxju+rnu+us2aDJKbRoeIRGjcpukJ7lk=
+	t=1760322441; cv=none; b=tZjM3y5qyNPsYcLiJ6a2ISeKDWU7l1eTEB4myM3LIeoVF4ojD6waC9gduhfrOHorxYArOHPO8Wx1y2keCDLTQKl9w24sRi+RptHmPAeJaHWbDOOhvMpBiVeLWAmarLVBI+FAVHQjMXq61/oTiPtrD53yq4ntonllzFDEE5xXiSU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760322322; c=relaxed/simple;
-	bh=Itaq1V0U6nNOOCWC+XmgFMPtt3a1t6ejjMbWDxR4+XU=;
+	s=arc-20240116; t=1760322441; c=relaxed/simple;
+	bh=CVNd0PH8AKBAePY1RavAfuYH04MG9C4pyo0szuEEhRM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SkJt0tNiwtSEiwzJ5O3DgwagnrXQ4XCuLJCEJu5bU5yB+cA2cF5+1nmvNxqz9eAyEpor0SyZWG5E6ixESZcu26huznx5NEENPhwPuFXBnnTNFSFnHM0tfd5kXqaWk8Kt6+i1NWGD6Zg/F61tluYB8DBaUCtwZu6XFwEyrKFe6Kc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kn/25R2b; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B08AC4CEE7;
-	Mon, 13 Oct 2025 02:25:18 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=GshoKN053/9ar2I/wTFkQogJpJiX5IDcVLyaXp6VcqMR97oX46to5Ta8Laha+lMDGmm6mcvfGGpen3gAHZ3ZcqR54A2VOneT6uRen59y0rfyyAQ+Lfxz2+QhbXNlsO1i0vf+KKKeV5FhXoa3N6T+VdienkWvd+B3/eynI1mMUCI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gqGDH6fD; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 420E1C4CEE7;
+	Mon, 13 Oct 2025 02:27:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760322322;
-	bh=Itaq1V0U6nNOOCWC+XmgFMPtt3a1t6ejjMbWDxR4+XU=;
+	s=k20201202; t=1760322440;
+	bh=CVNd0PH8AKBAePY1RavAfuYH04MG9C4pyo0szuEEhRM=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Kn/25R2b5SoLxjelWmgMsL1/WsfY4OsPQLhUWvb1Qyd16DHaM2gsM/O00bKYOizV7
-	 ckpbiUUpdFVBOVIu7z1p8r7/wdLXoc7sLph/A8x2tpa7TzzbwmHQT/oXwbmR7N/9o2
-	 613jbGpOMP8ynhvOob2ErNQxqhfL7tYs2c/Xnku+B7Fo1XvotNEhzyAN7eKVlBpkiF
-	 ZFJt7pCH+m1N4gnANxWZnwc3CMJ/1ZqALVE4YnaJpW/VJ72W1gLvWHWJaiH8dG95Bs
-	 n/9iBVM7OwQnVp8XExMMAZ/5yLdy/CcuJq/UfY5BIXGLmWNCUDAiL9OltjdM0dCNkA
-	 Z5GcOMtQLkJ9Q==
-Message-ID: <113725e3-3e82-4921-b045-8d5be3fed8bf@kernel.org>
-Date: Mon, 13 Oct 2025 04:25:15 +0200
+	b=gqGDH6fDyqsrwi0gouXqdG3nGPXm+d0BJABXDo2ZPv4Edo36potK4LgRE99gKnvPf
+	 ciajn6COM+Y8LKEY3OujqzPoCQHBhyry8MQI+NIempXZD9s79V0dl5e6rJOGZzNuHN
+	 4KlatM+uRqXW9+fyVCMm+dRtpVZTYHdFrf0cpnfbZfAU6HB16bF51TgPKsO9DL/DuB
+	 /P3ovlbxDY/lFC1syD7atKjBioJp8x1EcUe3dQ2AeuYI7/syFRolI3fjV/CNqAKhiX
+	 YQ7oRBn8+6Azbo6TDINr9xXctpQbM/DT8V1Ap8Ar19xZnPig6dHyzSi6C7x2mJA16o
+	 l8bY2ZuMR8Uag==
+Message-ID: <a857df85-4b6a-4b8e-89bc-05e0d1530a77@kernel.org>
+Date: Mon, 13 Oct 2025 04:27:12 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,19 +50,19 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/8] Support dynamic EMC frequency scaling on
- Tegra186/Tegra194
-To: Aaron Kling <webgeek1234@gmail.com>
-Cc: Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
- Thierry Reding <thierry.reding@gmail.com>,
- Jonathan Hunter <jonathanh@nvidia.com>, "Rafael J. Wysocki"
- <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
- linux-pm@vger.kernel.org
-References: <20250909-tegra186-icc-v2-0-09413724e781@gmail.com>
- <5d7491b1-8f9a-4040-b854-ff0b94bfd24e@kernel.org>
- <CALHNRZ-okVZ8tzKYa=jqudDu3dZ_Yq1CkeErdcvxi5xJEgJFbg@mail.gmail.com>
+Subject: Re: [PATCH v4 2/9] dt-bindings: memory: tegra210: emc: Document OPP
+ table and interconnect
+To: webgeek1234@gmail.com, Rob Herring <robh@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Thierry Reding
+ <thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ MyungJoo Ham <myungjoo.ham@samsung.com>,
+ Kyungmin Park <kyungmin.park@samsung.com>,
+ Chanwoo Choi <cw00.choi@samsung.com>, Dmitry Osipenko <digetx@gmail.com>
+Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20250923-t210-actmon-v4-0-442d1eb6377c@gmail.com>
+ <20250923-t210-actmon-v4-2-442d1eb6377c@gmail.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -108,32 +108,17 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <CALHNRZ-okVZ8tzKYa=jqudDu3dZ_Yq1CkeErdcvxi5xJEgJFbg@mail.gmail.com>
+In-Reply-To: <20250923-t210-actmon-v4-2-442d1eb6377c@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 13/10/2025 04:18, Aaron Kling wrote:
-> On Wed, Oct 8, 2025 at 7:05 PM Krzysztof Kozlowski <krzk@kernel.org> wrote:
->>
->> On 09/09/2025 15:21, Aaron Kling via B4 Relay wrote:
->>> This series borrows the concept used on Tegra234 to scale EMC based on
->>> CPU frequency and applies it to Tegra186 and Tegra194. Except that the
->>> bpmp on those archs does not support bandwidth manager, so the scaling
->>> iteself is handled similar to how Tegra124 currently works.
->>>
->>
->> Nothing improved:
->> https://lore.kernel.org/all/20250902-glittering-toucan-of-feminism-95fd9f@kuoka/
+On 23/09/2025 19:05, Aaron Kling via B4 Relay wrote:
+> From: Aaron Kling <webgeek1234@gmail.com>
 > 
-> The dt changes should go last. The cpufreq and memory pieces can go in
-> either order because the new code won't be used unless the dt pieces
-> activate them.
+> These are needed for dynamic frequency scaling of the EMC controller.
 
-
-Then cpufreq and memory should never have been part of same patchset.
-Instead of simple command to apply it, maintainers need multiple steps.
-Really, when you send patches, think how this should be handled and how
-much effort this needs on maintainer side.
+Please do not combine unrelated patchset and subsystems together. This
+is just making merging unnecessarily difficult.
 
 Best regards,
 Krzysztof
