@@ -1,145 +1,240 @@
-Return-Path: <linux-pm+bounces-35962-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35963-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DADB4BD2F47
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Oct 2025 14:25:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4580CBD2F5F
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Oct 2025 14:28:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 17259189E36C
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Oct 2025 12:25:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C101E3C5356
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Oct 2025 12:28:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4D9826E718;
-	Mon, 13 Oct 2025 12:24:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C18E270ED7;
+	Mon, 13 Oct 2025 12:28:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="vi+kvkAZ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LS35QxNN"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fllvem-ot03.ext.ti.com (fllvem-ot03.ext.ti.com [198.47.19.245])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 928C0253951;
-	Mon, 13 Oct 2025 12:24:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.245
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15CB2270EBA
+	for <linux-pm@vger.kernel.org>; Mon, 13 Oct 2025 12:28:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760358297; cv=none; b=g9LEUEVTGAebVP6O90juMz5ruvDSick8ksgp77xSiRKucraaDKZjTWRMrFHgprgNf2k4DL58P4bOtyjFpGSa9Vl44ryoAO+EBdZrRHglEPUYNKXJkQY8ar5uBIU9sY+zI1IFr/XF2+fnepJe55wKiCGBDIf+mDem169fUSw/uvY=
+	t=1760358515; cv=none; b=lrDJ02F+ZFvYs56Abn+H/LF8ralJsC7qL5zeFnpYdeY+hVfARPl3IQoif7Wy8lSklwomdCX1ndIQrnGRboHkdig87vjMCmtha58zW4XOkIVDBG0MVlGUusQPPeILpz2O43pMk6pWAIuMmyDb8R3LXXLU9bwdroc3gYaE/itaIww=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760358297; c=relaxed/simple;
-	bh=BQtuvlp3qDa0kOOKHkXJjR36iCBMqpE3O78moZ1Ifto=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=D4THOAPoVv86rQvkd5LCD+jP/2c9o437Sp44QbvDBfMsso3sEZvVg/gM8ReDw2aZLgtIHBLyI1v9Gi3D1wf8QoPNexVQTuXEhwLv/pBb2UBQtn3zRQct/4QUKTWFH10fUumc7ocggbCC12S5kW6eyJR5/wz2PDyxb3HKmfa/qn0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=vi+kvkAZ; arc=none smtp.client-ip=198.47.19.245
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllvem-sh04.itg.ti.com ([10.64.41.54])
-	by fllvem-ot03.ext.ti.com (8.15.2/8.15.2) with ESMTP id 59DCOHts819446;
-	Mon, 13 Oct 2025 07:24:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1760358257;
-	bh=ri1nfMxiQBO4KBesq7BXBzulmGX4m0aO13eZuQEBwas=;
-	h=Date:Subject:To:CC:References:From:In-Reply-To;
-	b=vi+kvkAZ5nS/O7iiVbdUigRSBJAt7vLc69XxGWip5mV4v0pNaF9I0iqrJKm8GsLvG
-	 Gkd8uHellZFBbNj3Tf6vvnzeAcKa5hzYbLxKlWzMebIuGI553X+Z2DS826U0q/2Ot1
-	 rAQILyHV6Ls+QPuHlAHa8uLOuwtEVicV+Z+Gaq20=
-Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
-	by fllvem-sh04.itg.ti.com (8.18.1/8.18.1) with ESMTPS id 59DCOGMD2951310
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-SHA256 bits=128 verify=FAIL);
-	Mon, 13 Oct 2025 07:24:16 -0500
-Received: from DFLE204.ent.ti.com (10.64.6.62) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55; Mon, 13
- Oct 2025 07:24:16 -0500
-Received: from lelvem-mr05.itg.ti.com (10.180.75.9) by DFLE204.ent.ti.com
- (10.64.6.62) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
- Transport; Mon, 13 Oct 2025 07:24:16 -0500
-Received: from [172.24.233.14] (shark.dhcp.ti.com [172.24.233.14])
-	by lelvem-mr05.itg.ti.com (8.18.1/8.18.1) with ESMTP id 59DCOCkV2045134;
-	Mon, 13 Oct 2025 07:24:12 -0500
-Message-ID: <88b11fb5-91c0-4ab2-9e63-a4d2b745468b@ti.com>
-Date: Mon, 13 Oct 2025 17:54:11 +0530
+	s=arc-20240116; t=1760358515; c=relaxed/simple;
+	bh=+vbyFrZcBnFsvtcYalRuaDry0I2W4DKDBtFCjWgAn4s=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=YBEXg0B02O9OokbK+HU1v7mcUConxWmeS+IDJLUbltUYxgB2w/9nTXg7i2b7WGofEnIkp6hTTJ+mT3kcvzcY18+ajESjfyclV4LiPWKxKhNdS4QzbF6cTq9yHy6mMnqPm8u+oze4np0WYwEvS9tKFKOg2PdCe/7bo2pW8JsEOxM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LS35QxNN; arc=none smtp.client-ip=209.85.216.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-33082aed31dso4321298a91.3
+        for <linux-pm@vger.kernel.org>; Mon, 13 Oct 2025 05:28:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1760358512; x=1760963312; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=1Hfyx/yKH/qoWr47V08+NxngS+OiO3dtYiWQ1I4tci4=;
+        b=LS35QxNNN7opFVYyh8O4P9rQdZ9CqGR3yVgFC7mjkECcxzHNUNKjXSiJ7ZSKU08l83
+         igDPm3dC6FFruydFC8u7gR4crJyetjjLEUfXNYDJrWgJcfWorYrrMngX/X40CuX/7Sd6
+         ylEMH9TPytKsYqQa3oAlekfumKxw77aNvZDbf2fiVG7Wj0T3lBTU5puof1vNvbLqsNKM
+         ni211UaKq7dJyuN4lahewAbzfNPvWFcD4wH2yx4C0rjFSO+90L+s4QnoRogRqBEXfJBY
+         hprX7gfP8zeUV8SYeYVXU72/fPOnrgrxFGaa7MT2rFN3QoyI99oWKR+q8MeYythMe6mj
+         wgZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760358512; x=1760963312;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1Hfyx/yKH/qoWr47V08+NxngS+OiO3dtYiWQ1I4tci4=;
+        b=bhFNfql7+vSrptkF7K2EMqytHkt4R4OrtOQRC7z4aE1x3Nqe6vupPLN7DL+QthL8TQ
+         tSmmC7yRuMb+PgfpXN4bR1MZdb26WZHXy0L8tzgwhCYUrW2ncfKkg4QT3TVnwYj7QIw9
+         MFOurQEKkp++xohlp3vp5ptZbb9Uf3l/H0N2/un/rFfSMtK0rzyQqr3fd4Lr9ly9yP1Q
+         lokkNQ2LSofRhfkPrdbToGYTPcA1NfzHV/2nJ9XturMMkPUM0a2vy5N4wI1MyG+rYTMb
+         qmvjQal8VrzqzceqdHttYzoky9RJ0bvBg8vot6FNZPhfojmRj2pgkwppWDisiEvOMe65
+         RpUg==
+X-Forwarded-Encrypted: i=1; AJvYcCXuaW8WLkTOEjxr+69+irk7CHfLf3hfcaYpNxDH3Eydv/hIvkB2mIWcik2FdegslEVJ2RGZ9jr3Jg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzx/+cMAAJaieszUA5/6UMqWZRdp8Aia7+L359EHZ8ctcIi5Y/M
+	C+NPSYhAckpRD8W2zYtHXNxXKuX4bWxkGlv8uHTTn1Vxqw2tdaaBjokeGI0dbxl8S9s17DGUF2T
+	p/VZU6UKjshHBbLhIPcV5GMU0Q2zcpyY=
+X-Gm-Gg: ASbGncvGgwA122EzU21yOb/bviX094jVMPQr37niQr0NL7x750vco4v0QH/FdJadLTt
+	WruE+75DMeAfQzx6TfVDQ4y6o5k+igSNZGA0BNsP/dSfxfKSIuHvs0bnQp88R+erUAh3RdgN73u
+	rY2RJi8phjIGA23AEM9TiWB9LE1EGbCPmwDTX6+Z1oct8PWEZZI9wVepG4M2sSI6DdXaazShCTN
+	h2TYOunTa6S9rDRyisZ+lxlDZykQu4PQyiDWPwSPjSG2POlo2ftOITHUDq4
+X-Google-Smtp-Source: AGHT+IFDFAOFmZ461XoI5RW9YuCzah5zLExPQE6vCScxrqfd5twVWI97u4O0yepFXgRtTULwZnxCG8cuEBCFsRqZlPE=
+X-Received: by 2002:a17:90b:38cc:b0:32e:f1c:e778 with SMTP id
+ 98e67ed59e1d1-33b51105f5dmr28620196a91.3.1760358511952; Mon, 13 Oct 2025
+ 05:28:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] driver core: fw_devlink: Don't warn about sync_state()
- pending
-To: Ulf Hansson <ulf.hansson@linaro.org>,
-        Saravana Kannan
-	<saravanak@google.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Greg
- Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-pm@vger.kernel.org>
-CC: Geert Uytterhoeven <geert@linux-m68k.org>,
-        Nicolas Frattaroli
-	<nicolas.frattaroli@collabora.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Diederik de Haas
-	<didi.debian@cknow.org>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-References: <20251007094312.590819-1-ulf.hansson@linaro.org>
-Content-Language: en-US
-From: Sebin Francis <sebin.francis@ti.com>
-In-Reply-To: <20251007094312.590819-1-ulf.hansson@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
+References: <cover.1759824376.git.mazziesaccount@gmail.com>
+ <93142a80d90a0ac80b27090d0c83914675aad94d.1759824376.git.mazziesaccount@gmail.com>
+ <20251009161847.GE2890766@google.com> <8ea507eb-f78c-4a16-882b-112e277fa1b6@gmail.com>
+ <20251010144515.GI2988639@google.com>
+In-Reply-To: <20251010144515.GI2988639@google.com>
+From: Matti Vaittinen <mazziesaccount@gmail.com>
+Date: Mon, 13 Oct 2025 15:28:20 +0300
+X-Gm-Features: AS18NWD7Fn8K61uYpxry40G4lSMSR38Hgj7AfijgSk6lHd0n6-E_snhITV5UyEs
+Message-ID: <CANhJrGMEN0QRLoBzntVnaYgfFDyre=Yfw-dNdmi226p6pnpgHw@mail.gmail.com>
+Subject: Re: [RFC PATCH 06/13] mfd: bd71828: Support ROHM BD72720
+To: Lee Jones <lee@kernel.org>
+Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>, Pavel Machek <pavel@kernel.org>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Sebastian Reichel <sre@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
+	Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, 
+	Andreas Kemnade <andreas@kemnade.info>, linux-leds@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linux-gpio@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi,
+pe 10.10.2025 klo 17.45 Lee Jones (lee@kernel.org) kirjoitti:
+>
+> On Fri, 10 Oct 2025, Matti Vaittinen wrote:
+>
+> > Hi deee Ho Lee,
+> >
+> > And Thanks for the review!
+> >
+> > On 09/10/2025 19:18, Lee Jones wrote:
+> > > On Tue, 07 Oct 2025, Matti Vaittinen wrote:
+> > >
+> > > > The ROHM BD72720 is a power management IC which continues the BD71828
+> > > > family of PMICs. Similarly to the BD71815 and BD71828, the BD72720
+> > > > integrates regulators, charger, RTC, clock gate and GPIOs.
+> > > >
+> > > > The main difference to the earlier PMICs is that the BD72720 has two
+> > > > different I2C slave addresses. In addition to the registers behind the
+> > > > 'main I2C address', most of the charger (and to some extent LED) control
+> > > > is done via registers behind a 'secondary I2C slave address', 0x4c.
+> > > >
+> > > > Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
 
-On 07/10/25 15:13, Ulf Hansson wrote:
-> Due to the wider deployment of the ->sync_state() support, for PM domains
-> for example, we are receiving reports about the sync_state() pending
-> message that is being logged in fw_devlink_dev_sync_state(). In particular
-> as it's printed at the warning level, which is questionable.
-> 
-> Even if it certainly is useful to know that the ->sync_state() condition
-> could not be met, there may be nothing wrong with it. For example, a driver
-> may be built as module and are still waiting to be initialized/probed. For
-> this reason let's move to the info level for now.
-> 
-> Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> Reported-by: Sebin Francis <sebin.francis@ti.com>
-> Reported-by: Diederik de Haas <didi.debian@cknow.org>
-> Reported-by: Jon Hunter <jonathanh@nvidia.com>
-> Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> ---
+// snip
 
-Reviewed-by: Sebin Francis <sebin.francis@ti.com>
-Tested-by: Sebin Francis <sebin.francis@ti.com>
+> > > > +
+> > > > +static struct regmap *bd72720_secondary_regmap;
+> > >
+> > > Dynamically allocate this and add it to .platform_data once it's
+> > > populated.
+> > >
+> >
+> > This can be done but I suppose it's unnecessary churn. This driver does not
+> > (at the moment) support more than one instance of the PMIC anyways. (The
+> > button data is not alloacted).
+> >
+> > This is not really a problem as typically there is only 1 of these PMICs to
+> > be controlled.
+>
+> I'd take a few lines of extra code over a globally defined variable any
+> day of the week.
 
--- Sebin
+Even though that'll require us to drop the const from the
+bd72720_mfd_cells MFD cell array? Which, in turn, will probably
+require us to drop the const from the MFD cell pointer in probe as
+well. Additionally, this will require us to skim through the MFD cell
+array in probe, so we locate the power cell, adding one more spot for
+errors. I think this is quite a cost just a princible of dropping a
+global, which is accessed from one function only. I'd definitely agree
+if it was driver data which gets used in a variety of functions, but
+here we really just need a memory location for a pointer so MFD can
+copy it when kicking the 'sub drivers'. Do you think you can still
+reconsider?
 
-> 
-> Changes in v2:
-> 	- Due to discussions on v1 and because the default Kconfig is to use the
-> 	FW_DEVLINK_SYNC_STATE_STRICT, I suggest that for now it may be best to
-> 	keep the warning level for the "Timed out.." print and only change the
-> 	"sync_state pending..." message.
-> 
-> ---
->   drivers/base/core.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/base/core.c b/drivers/base/core.c
-> index d22d6b23e758..c62e428b95b0 100644
-> --- a/drivers/base/core.c
-> +++ b/drivers/base/core.c
-> @@ -1784,7 +1784,7 @@ static int fw_devlink_dev_sync_state(struct device *dev, void *data)
->   		return 0;
->   
->   	if (fw_devlink_sync_state == FW_DEVLINK_SYNC_STATE_STRICT) {
-> -		dev_warn(sup, "sync_state() pending due to %s\n",
-> +		dev_info(sup, "sync_state() pending due to %s\n",
->   			 dev_name(link->consumer));
->   		return 0;
->   	}
+>
+> > // snip
+> >
+> > > > +/*
+> > > > + * The BD72720 is an odd beast in that it contains two separate sets of
+> > > > + * registers, both starting from address 0x0. The twist is that these "pages"
+> > > > + * are behind different I2C slave addresses. Most of the registers are behind
+> > > > + * a slave address 0x4b, which will be used as the "main" address for this
+> > > > + * device.
+> > > > + * Most of the charger related registers are located behind slave address 0x4c.
+> > > > + * It is tempting to push the dealing with the charger registers and the extra
+> > > > + * 0x4c device in power-supply driver - but perhaps it's better for the sake of
+> > > > + * the cleaner re-use to deal with setting up all of the regmaps here.
+> > > > + * Furthermore, the LED stuff may need access to both of these devices.
+> > > > + */
+> > > > +#define BD72720_SECONDARY_I2C_SLAVE 0x4c
+> > > > +static const struct regmap_range bd72720_volatile_ranges_4b[] = {
+> > > > + {
+> > > > +         /* RESETSRC1 and 2 are write '1' to clear */
+> > > > +         .range_min = BD72720_REG_RESETSRC_1,
+> > > > +         .range_max = BD72720_REG_RESETSRC_2,
+> > >
+> > > regmap_reg_range()?
+> >
+> > Ah, thanks. Out of the curiosity - do you know why this macro is written on
+> > lowercase?
+>
+> Signed-off-by: Laxman Dewangan <ldewangan@nvidia.com>
+> Signed-off-by: Mark Brown <broonie@linaro.org>
+>
+> =:-)
+
+Yeah. I just thought that maybe you knew :)
+
+>
+> > // snip
+> > > > +static int bd72720_set_type_config(unsigned int **buf, unsigned int type,
+> > > > +                            const struct regmap_irq *irq_data,
+> > > > +                            int idx, void *irq_drv_data)
+> > > > +{
+> > > > + const struct regmap_irq_type *t = &irq_data->type;
+> > > > +
+> > > > + /*
+> > > > +  * The regmap IRQ ecpects IRQ_TYPE_EDGE_BOTH to be written to register
+> > > > +  * as logical OR of the type_falling_val and type_rising_val. This is
+> > > > +  * not how the BD72720 implements this configuration, hence we need
+> > > > +  * to handle this specific case separately.
+> > > > +  */
+> > > > + if (type == IRQ_TYPE_EDGE_BOTH) {
+> > > > +         buf[0][idx] &= ~t->type_reg_mask;
+> > > > +         buf[0][idx] |= BD72720_GPIO_IRQ_TYPE_BOTH;
+> > > > +
+> > > > +         return 0;
+> > > > + }
+> > > > +
+> > > > + return regmap_irq_set_type_config_simple(buf, type, irq_data, idx,
+> > > > +                                          irq_drv_data);
+> > >
+> > > Use 100-chars to avoid these pointless wraps please.
+> >
+> > gnarl. I think we have discussed this before :)
+> > I would love to keep the lines short - closer to 80 chars - because that way
+> > I can fit 3 terminals on my screen. All the years spent staring at the
+> > monitor are taking their toll, and my vision isn't as good as it used to be.
+> > Frightening thing being that it seems I will only need to increase the font
+> > in the future :/
+> >
+> > Well, sure the lines can be split if you feel strongly about it - but I have
+> > a real reason (other than the usual - "they have always been like that") to
+> > try keep them short...
+>
+> Welcome to the year 2000 when 32" monitors are super affordable.
+
+I know. But work rooms where I can fit larger table aren't. Not even
+in Finland which should have plenty of space. And my table is really
+packed.
+
+Yours,
+    -- Matti
+
+-- 
+
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~
+
+Discuss - Estimate - Plan - Report and finally accomplish this:
+void do_work(int time) __attribute__ ((const));
 
