@@ -1,125 +1,196 @@
-Return-Path: <linux-pm+bounces-35943-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35944-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA5EFBD13B8
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Oct 2025 04:32:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B1EEBD1551
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Oct 2025 05:50:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 23F6518964E3
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Oct 2025 02:33:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3EB233BB90E
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Oct 2025 03:50:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC5942882D6;
-	Mon, 13 Oct 2025 02:32:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B5301EEA54;
+	Mon, 13 Oct 2025 03:50:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AXUl1n8I"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="LVnGE+F0"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fllvem-ot03.ext.ti.com (fllvem-ot03.ext.ti.com [198.47.19.245])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE9D3278154
-	for <linux-pm@vger.kernel.org>; Mon, 13 Oct 2025 02:32:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E539034BA42;
+	Mon, 13 Oct 2025 03:50:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.245
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760322771; cv=none; b=phxTL0YCSfeKvMZhiSCIDQXv2haeosMq0Dq8hdGf4tLaLHlWlMXOkBnEHXdeCwxvMgGjGbCwTOrlAQ6OCHnIVH+BxEgLOFws/Ypnh5Xht+tTRWo8gLoMGTdTN0ffUoGlOnPbCI2vhrYuh+a92royXQxTyv/SX8qOPSgc0NIymIk=
+	t=1760327408; cv=none; b=oyu1TUSXsm5fTipzVTs4fDslo6JJjj+x3HJSLhT59X8MFoDKBYMWEifiBrxLq5Tq18lkA07Z67z36WOsftiAGMA4dTTxMwXvC0LIcGkklG3kTg41Yso7Co9KUwGiY9o3PeyzZPEk7ivIrhzp/CnuzQujtA/uPbsbuE6tp+S31Qo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760322771; c=relaxed/simple;
-	bh=Mobd2nPQjln/iaGH+phCc81JbmWHC6V+ZX+OEP8c6WQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=s9TFZutoaoARYmdyCYrTKSQYvKJ9xwQ0WGuWW2YJDt1HdPk4HwWKgK9rkEEKnemwHZZocEooQMuijxJuUCrBoWTaCQ+tsYuqrSwvDtUvssSryt9LuI9suVVeHAGIfMNVo6PYaRkrxRuuD2hrzH4oH//7pKj+/L/zLXxoGFWl03A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AXUl1n8I; arc=none smtp.client-ip=209.85.167.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-57bd482dfd2so3758002e87.2
-        for <linux-pm@vger.kernel.org>; Sun, 12 Oct 2025 19:32:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760322766; x=1760927566; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rSyKix+dExsW53zwh7yt2N4OdGXjl30i0H4cWLjWmaI=;
-        b=AXUl1n8IHV3cVpOOSU6jhy5H9gRtJCqQqlFmwpSNEXYIIAxjniKANxWCRPkgyI4F9b
-         FZCYvgFHjRlFhzyElVY9ULVvkhqDJUP3I5K/6ywQpgL82np+hl++/lu8EkH1Ycdxp/Kd
-         aq9ZDSEqmTi1mVpQQBhurmmsq7UX0Sj806RIM2uqwoLL8H0k8SC4gfrz3ZTbKsQdRayu
-         IhraNnBEIsv/XDqbqvjo2/Xwn2pBVg/Mqcp/kwj1PD3fM72o1zTf2+DRxr+W1PajRVRd
-         O2osOnO4xKgLCkIDgjNrNuGMYbWlbwiubp+/O9q7GJz8tzKH2wpj4yZGIEHjKxBrpjbf
-         UC2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760322766; x=1760927566;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rSyKix+dExsW53zwh7yt2N4OdGXjl30i0H4cWLjWmaI=;
-        b=D+rJNYMR4zLKIhMCuXZreHywUGXLzYHKCyy9QyPUH8QnawVAbXw0icIcWTyH4UNgPV
-         eVibedflyR9wZj8wXvAGLzp7TPYMNZ6NS4T1riICJvHTzQvY1AE5oQTwyyKevM4dZtvz
-         PnKoXA6+L97iYyc0YG+FpSD4QYgocY6NJw+K4bd4yjXy0kR3HcekPxBDhexGEDg6mVfI
-         Zx42299d2bBH4AzOEggCoD25WE6WQ2lapnKResow8FjlKlHMv7WocM5ZTR1VEDq9Vc1z
-         d/RICgB2lMcu7gMvsVcG6JkoLBtezBgan6WyEnBPgJYSksnbUpuMz/u0GlehDDlJwJbY
-         FpJg==
-X-Forwarded-Encrypted: i=1; AJvYcCXLs+XQB6laYbtg6WlIG25ZWSOYI5rnfkfNwCqYoRIzQN5UUO8SAAeBP9uyWGE155wvSYV+VFv1oQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx4IIhWhy+xC2ROvkbqkJykW4thvW+XG6sdm3341WttlU/ELXO3
-	Np2EejG33GAHlgL+0cK5DPADTsRTXiKrVetwwuI8SD4odaNTZq5tfR/OXYLFmgivOO/g5VzzxEw
-	rkZ0KG4EeJSRIB0cqaYtLkhTqViI5vC4=
-X-Gm-Gg: ASbGncsuw5hz0N4WP7pk16VlRgXJMyrng+H3XP8l8UAEwFXRWVgp03R8UeoZWKTRMzs
-	qvcuEm/QQfuwknzQ4TmQVCOUxyTs/+qCgTpzY5hM6SoVKBZ25mTCEhjUzrpUMyRM68EWeYD/Nhx
-	m4seIvfUOiK3VQFTCDdaq+3hgrhQ3Y+fK1gE+ueYN+sZX0AokyQ/yfnubUMeXKC1P7VIlAu6d9G
-	TAh7nXJTvYi+g7oTr9xHMWieA==
-X-Google-Smtp-Source: AGHT+IHWj20Z//Zd/Bj3pk8xg9qchfT20FaF7gZ8rC2cQFm5rgDMz1ihnaPh6KkjuMjFtQn3GvJXwEat84MrHNsMau0=
-X-Received: by 2002:a05:6512:31c2:b0:57b:7c74:67e6 with SMTP id
- 2adb3069b0e04-5906d75f85bmr5366512e87.2.1760322765941; Sun, 12 Oct 2025
- 19:32:45 -0700 (PDT)
+	s=arc-20240116; t=1760327408; c=relaxed/simple;
+	bh=II9PstpmWDTczQX7bhyjq4AqTAUxf3ZpRGR9ppyMc2A=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=NzSZO65WIs0GM1QwAkIRJI47uZrBFV7vEZRnhuBxNRIX0WiDZdAyqrt/o+kn+HVt07UdO16nf5xTQTCvcmQtINmnSY6sM9VbrPZiPtCYDNT10NVGsq0rm/WA2rN3al8bJiGSspoun9KXC5gJ3S50h4EvrEB2utEf1DVIQaWMfLE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=LVnGE+F0; arc=none smtp.client-ip=198.47.19.245
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from lelvem-sh02.itg.ti.com ([10.180.78.226])
+	by fllvem-ot03.ext.ti.com (8.15.2/8.15.2) with ESMTP id 59D3nnCO730626;
+	Sun, 12 Oct 2025 22:49:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1760327389;
+	bh=dCw0dkLniTXuadQJ1IK2N4d0zgAIPu2vQk8B/Rto7pY=;
+	h=Date:Subject:To:CC:References:From:In-Reply-To;
+	b=LVnGE+F0ZtSxnzj1vRiYQ7BfQIzQavIgGhsBECpMtj9+CLC4rFIbkNrHqo7qnDo07
+	 j20WoazHfLlTBFmqQUc7bkS7KsXuitGP/IzpCwU9rDA+wggUrKps9hSvJvYAgpkJuI
+	 TFZL5GYVrwYMJM/O6AawXOr38m/+hyAxwquMVo9Y=
+Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
+	by lelvem-sh02.itg.ti.com (8.18.1/8.18.1) with ESMTPS id 59D3nnx63521823
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-SHA256 bits=128 verify=FAIL);
+	Sun, 12 Oct 2025 22:49:49 -0500
+Received: from DLEE202.ent.ti.com (157.170.170.77) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55; Sun, 12
+ Oct 2025 22:49:48 -0500
+Received: from lelvem-mr05.itg.ti.com (10.180.75.9) by DLEE202.ent.ti.com
+ (157.170.170.77) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
+ Transport; Sun, 12 Oct 2025 22:49:48 -0500
+Received: from [172.24.233.249] (ula0502350.dhcp.ti.com [172.24.233.249])
+	by lelvem-mr05.itg.ti.com (8.18.1/8.18.1) with ESMTP id 59D3njWf1399385;
+	Sun, 12 Oct 2025 22:49:46 -0500
+Message-ID: <029725c3-f747-4f90-9f6a-ef7eb133d7eb@ti.com>
+Date: Mon, 13 Oct 2025 09:19:45 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250909-tegra186-icc-v2-0-09413724e781@gmail.com>
- <20250909-tegra186-icc-v2-1-09413724e781@gmail.com> <20250930103006.octwlx53p2shwq2v@vireshk-i7>
-In-Reply-To: <20250930103006.octwlx53p2shwq2v@vireshk-i7>
-From: Aaron Kling <webgeek1234@gmail.com>
-Date: Sun, 12 Oct 2025 21:32:34 -0500
-X-Gm-Features: AS18NWDaKTgv8GyE1hN1DRdGL5_G-8YoPjy4LzB-vGT0ghwtG2kFi7JSPl6_Rmg
-Message-ID: <CALHNRZ84s8rxQKWZeF-bfS31nK6ay4_MspmYa4+qapf9gtk+Fg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/8] cpufreq: tegra186: add OPP support and set bandwidth
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>, Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Thierry Reding <thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-kernel@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-tegra@vger.kernel.org, 
-	linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH AUTOSEL 6.17-6.12] cpufreq: ti: Add support for AM62D2
+To: Sasha Levin <sashal@kernel.org>, <patches@lists.linux.dev>,
+        <stable@vger.kernel.org>
+CC: Viresh Kumar <viresh.kumar@linaro.org>, <rafael@kernel.org>,
+        <linux-pm@vger.kernel.org>
+References: <20251009155752.773732-1-sashal@kernel.org>
+ <20251009155752.773732-85-sashal@kernel.org>
+Content-Language: en-US
+From: Paresh Bhagat <p-bhagat@ti.com>
+In-Reply-To: <20251009155752.773732-85-sashal@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-On Tue, Sep 30, 2025 at 5:30=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.o=
-rg> wrote:
->
-> On 09-09-25, 01:21, Aaron Kling via B4 Relay wrote:
-> > +static int tegra_cpufreq_set_bw(struct cpufreq_policy *policy, unsigne=
-d long freq_khz)
-> > +{
-> > +     struct tegra186_cpufreq_data *data =3D cpufreq_get_driver_data();
-> > +     struct dev_pm_opp *opp __free(put_opp);
->
-> The usage here looks incorrect..
->
-> > +     struct device *dev;
-> > +     int ret;
-> > +
-> > +     dev =3D get_cpu_device(policy->cpu);
-> > +     if (!dev)
-> > +             return -ENODEV;
->
-> On failure, we would return from here with a garbage `opp` pointer, which=
- the
-> OPP core may try to free ?
->
-> Moving the variable definition here would fix that.
+Hi all,
 
-If the var was NULL initialized, would the free handle that correctly?
-Keeping the declarations at the start of the function reads better
-imo.
+This patch doesn't need to be backported. AM62D support itself was added 
+recently in 6.17.
 
-Aaron
+Thanks
+
+On 09/10/25 21:25, Sasha Levin wrote:
+> From: Paresh Bhagat <p-bhagat@ti.com>
+>
+> [ Upstream commit b5af45302ebc141662b2b60c713c9202e88c943c ]
+>
+> Add support for TI K3 AM62D2 SoC to read speed and revision values
+> from hardware and pass to OPP layer. AM62D shares the same configuations
+> as AM62A so use existing am62a7_soc_data.
+>
+> Signed-off-by: Paresh Bhagat <p-bhagat@ti.com>
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
+> ---
+>
+> LLM Generated explanations, may be completely bogus:
+>
+> Based on my comprehensive analysis of this commit and the stable kernel
+> backporting policies, here is my assessment:
+>
+> ## Backport Status: YES
+>
+> ### Detailed Analysis
+>
+> #### 1. **Explicit Policy Support**
+> The Linux stable kernel rules (Documentation/process/stable-kernel-
+> rules.rst, line 15) **explicitly allow device ID additions**:
+>> "It must either fix a real bug that bothers people or **just add a
+> device ID**."
+>
+> This commit adds device IDs for the AM62D2 SoC in two locations:
+> - **Line 313** in `k3_cpufreq_soc[]`: Adds `{ .family = "AM62DX",
+>    .revision = "SR1.0" }`
+> - **Line 461** in `ti_cpufreq_of_match[]`: Adds `{ .compatible =
+>    "ti,am62d2", .data = &am62a7_soc_data, }`
+>
+> #### 2. **Strong Historical Precedent**
+> Similar commits for the AM62 SoC family were backported to stable trees:
+>
+> - **AM625 support** (aac0293a8f1cd): No Cc: stable tag, but present in
+>    stable branches linux-6.10.y through 6.17.y
+> - **AM62A7 support** (5008e4c8c31c6): No Cc: stable tag, but present in
+>    stable branches linux-6.10.y through 6.17.y
+> - **AM625 blacklist** (e66e20d71d79e): Also backported to stable
+> - **AM62A7 blacklist** (b2b2029eb1788): Also backported to stable
+>
+> #### 3. **Minimal Risk Profile**
+> - **Only 2 lines changed** (1 file, +2 insertions)
+> - **Reuses existing configuration**: Uses `am62a7_soc_data` as stated in
+>    commit message - no new code paths
+> - **Isolated change**: Only affects AM62D2 hardware, no impact on other
+>    SoCs
+> - **Well-tested pattern**: Follows the exact same pattern as AM625,
+>    AM62A7, and AM62P5 additions
+>
+> #### 4. **User Benefit**
+> - Enables CPU frequency scaling on AM62D2 hardware
+> - Users with AM62D2 boards (device tree support added in v6.17 via
+>    commit 1544bca2f188e) need this for proper power management
+> - Without this commit, AM62D2 systems cannot adjust CPU frequencies
+>    based on load
+>
+> #### 5. **Companion Commit**
+> There's a companion commit **fa40cbe1c86b6** "cpufreq: dt-platdev:
+> Blacklist ti,am62d2 SoC" by the same author on the same date. Both
+> should be backported together to prevent the generic cpufreq-dt driver
+> from conflicting with ti-cpufreq.
+>
+> #### 6. **No Architectural Changes**
+> - No new features beyond hardware enablement
+> - No refactoring or code restructuring
+> - No changes to existing functionality
+> - Meets stable tree criteria: small, contained, low regression risk
+>
+> ### Conclusion
+> This commit should be backported to stable kernel trees because it:
+> 1. Falls under the explicit "device ID addition" exception in stable
+>     rules
+> 2. Has strong precedent with similar AM62 family commits being
+>     backported
+> 3. Provides essential functionality for AM62D2 hardware owners
+> 4. Has minimal regression risk (2 lines, reuses existing data
+>     structures)
+> 5. Follows the established stable backporting pattern for this driver
+>
+>   drivers/cpufreq/ti-cpufreq.c | 2 ++
+>   1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/cpufreq/ti-cpufreq.c b/drivers/cpufreq/ti-cpufreq.c
+> index 5a5147277cd0a..9a912d3093153 100644
+> --- a/drivers/cpufreq/ti-cpufreq.c
+> +++ b/drivers/cpufreq/ti-cpufreq.c
+> @@ -310,6 +310,7 @@ static const struct soc_device_attribute k3_cpufreq_soc[] = {
+>   	{ .family = "AM62X", .revision = "SR1.0" },
+>   	{ .family = "AM62AX", .revision = "SR1.0" },
+>   	{ .family = "AM62PX", .revision = "SR1.0" },
+> +	{ .family = "AM62DX", .revision = "SR1.0" },
+>   	{ /* sentinel */ }
+>   };
+>   
+> @@ -457,6 +458,7 @@ static const struct of_device_id ti_cpufreq_of_match[]  __maybe_unused = {
+>   	{ .compatible = "ti,omap36xx", .data = &omap36xx_soc_data, },
+>   	{ .compatible = "ti,am625", .data = &am625_soc_data, },
+>   	{ .compatible = "ti,am62a7", .data = &am62a7_soc_data, },
+> +	{ .compatible = "ti,am62d2", .data = &am62a7_soc_data, },
+>   	{ .compatible = "ti,am62p5", .data = &am62p5_soc_data, },
+>   	/* legacy */
+>   	{ .compatible = "ti,omap3430", .data = &omap34xx_soc_data, },
 
