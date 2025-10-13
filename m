@@ -1,187 +1,183 @@
-Return-Path: <linux-pm+bounces-35990-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35991-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D6DEBD5B21
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Oct 2025 20:25:50 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D64E6BD5B4B
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Oct 2025 20:27:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 570204EB1F1
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Oct 2025 18:25:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D2085188353C
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Oct 2025 18:27:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B22752D3EC0;
-	Mon, 13 Oct 2025 18:25:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4BFF2D47E0;
+	Mon, 13 Oct 2025 18:27:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b3Knjc/+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KjlM5bfb"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D2A92D3A6F
-	for <linux-pm@vger.kernel.org>; Mon, 13 Oct 2025 18:25:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A65A52D3A6F
+	for <linux-pm@vger.kernel.org>; Mon, 13 Oct 2025 18:27:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760379940; cv=none; b=CFTe1I89aPiUH7GUl5i7olEUYUghVaDDaZpI03jgBCNOG0pgE0hYxc3GLT9gBNnSxJ2z/0ORYo/ARtumIvhoaE15VPyHOmHm7QJD6C+x0Qwy3wAee0+0vwF0mpqClbO5nDUIHdgAtiak6obd+f5rDpKJzhYmPLSa6f4jZiZAdZw=
+	t=1760380024; cv=none; b=LYrL6s7GLVkFotDyCaqg/wGPXTdeN8Nm2j0p5vxSdY/ORkJ2Oi+nZq/shS1wPGQndgJWw+4+Hoi6k/v9yUG8wsIqVMPwBNl7Pg4J3uPWzD/73LzJ7gwfe5Q4lqz1615H//TeYxxSg/KuNmRByoIMTDX4/e2fwooez+8Hucfl9AA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760379940; c=relaxed/simple;
-	bh=VV/21DPWmzE2JQhMY1y17kZphOs5loZocaHFfgHsgMo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LtTRNBhn45FrVEQEPvFW7tl6Wk+LONHQKKJIoC/pIaK/ygItmuuOFupThNAMVStcWpm2TF9ZdAWxQl9cEIoY9uJv3S2TWwuOgPSq2l+QkrDw2UmWGidCPxm/yLtdS3dKczwS9X+UGFYprKUy4vkBtcBo+yeDD8zHsNkB/Xp2qAo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b3Knjc/+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28534C4CEFE
-	for <linux-pm@vger.kernel.org>; Mon, 13 Oct 2025 18:25:40 +0000 (UTC)
+	s=arc-20240116; t=1760380024; c=relaxed/simple;
+	bh=VE/HEIwj1bQ+ebqbNdMwxt3bASigE0XM2z92yrmXfDo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HKjcZzYg3ZZiFFczo+3vViHc+xKKsxnd9TplZDG/JqhJ2ZKNwa4eEYGjOmUT2GgLivnmUJChy+nqAz9ngyk0Zu8S23wgcL/2G1+zlAmTmpOaLL1Luw/pLQkWvgciOTp/Gas2eTxxz438xN4oMOIjTptY4NwfRHq9M/GdiUVy5ts=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KjlM5bfb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E8A0C4CEF8;
+	Mon, 13 Oct 2025 18:27:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760379940;
-	bh=VV/21DPWmzE2JQhMY1y17kZphOs5loZocaHFfgHsgMo=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=b3Knjc/+ep/hPZDq//nuDuB8kvREi/2QsXfIHXN8+MZ/rSyBaoRO3kPK+OV92CVmQ
-	 V/YI39FPKJb0zi1c5yOTerHLm7gXslpILzLs5EmgS9WfczjuvpnZk2z48eDE9tm40/
-	 3RO4z2gwWIHThdHCOAIeDtizzqMxpN8P/47U45S0+do6UEujfw9EsE7yvD4vwCONnU
-	 wQM53ujioFkH7s0dor5qcStkDS3tEmarOgVKgu1QJF+XaC8ReliVMV/yXFl5E0h8RU
-	 bFkp3zCeLoOgntlrV/EYMONg0bjX+ZAt5dgeT2x2N8UmexvwJTixGPhZ92qLW1eW0l
-	 h8bgSIlVhqBLA==
-Received: by mail-ot1-f52.google.com with SMTP id 46e09a7af769-7afbcf24c83so1351282a34.3
-        for <linux-pm@vger.kernel.org>; Mon, 13 Oct 2025 11:25:40 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCW8XlALH7xgs5nRw5h/a/rwvBAHq36AFC1J1OTloSKHIZ+ZkwGp/EUYmFrAdE7ORpVP3dxcNwDKSA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwQhe59x3WKDKY4/Y4o5kcHER8Fc+aa2KmWyY6mIOmL8iEMIcY/
-	kqnuvQktXGY5gN1BJJv0yrZQ4XIGiG9H/wF7M5jUinaJFaGfmHycrKC76/sT0YE3H8tO8qhLLiU
-	kyLUhBXqKlKRiu95etojzvqMQK9tszy0=
-X-Google-Smtp-Source: AGHT+IFBkWddC08oGilHU6T5O6yA7yHRvW6pPKbfEiNe3azKZTA/wGjAeGdMf01atVgj6PF4S0fxbX/czTUUrOAUE4Y=
-X-Received: by 2002:a05:6808:4fe7:b0:43d:270f:4b87 with SMTP id
- 5614622812f47-4417b2bbca4mr10279983b6e.1.1760379939453; Mon, 13 Oct 2025
- 11:25:39 -0700 (PDT)
+	s=k20201202; t=1760380024;
+	bh=VE/HEIwj1bQ+ebqbNdMwxt3bASigE0XM2z92yrmXfDo=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=KjlM5bfbkT+4+m5BdOU5B0W5Wv4D5UrDDNYxdMQ/MaC3ZoJfWGavHfNJuvgpEPiiZ
+	 v3oI+ocDKLhoIlKWsp137pL/07yXexaPsQZG3Nm9i2NH3JgsuvBbyTyKOtzynco1uO
+	 jOI7OtlewXS65VF7txuvDT3vvZk1dFjYZkNdB6OgWW0L+pun+P9HRnr6V8iNyIJKXT
+	 3Mj/gD+0JqBzHq3XXAjk/QZE+jjna//o4L/VUco4+G2semqAQzRbb9DaH9Ze09aVpY
+	 X5FAf2uUwAVchWhZc4RaES27DC2l+9PRvwMP9fyLwQ00SP1h/dh/C+pMigoJ8gAGnn
+	 //3Krfwf5bpoA==
+Message-ID: <92a24599-efc7-4684-abc0-bcf3fb203744@kernel.org>
+Date: Mon, 13 Oct 2025 13:27:02 -0500
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250911185314.2377124-1-wusamuel@google.com> <CAG2Kctqf=Q+nuuDqzkrOpjp+tOttf079DS_R8Q0pHU-k8DmFvA@mail.gmail.com>
- <CAJZ5v0gtKmtiLQwi-2qaw2G4O4PF_iqz6UbUZuaknepcJ1ToZQ@mail.gmail.com>
- <CAG2KctrK0JrP7JNUyzF72JeDgR4-GSRmJDe+yEnav=gQCAf64Q@mail.gmail.com>
- <CAJZ5v0g_HXQjWfp=L0KetRCHMTD=QsP3wJKNZnadJic2yccCUQ@mail.gmail.com>
- <CAGETcx_Fn3AzZo7gNvJnPxy=CNHpqAviGdUrww++SGySuBcaZw@mail.gmail.com>
- <CAJZ5v0hbtHxFo_z2fp9DMRDi75k6QL-kcDHD+o8zabub1YdCKg@mail.gmail.com> <CAGETcx_XFUg7V5KEGF+eqDtmhbUoufs8xARhaB0KJeh7Lzaj0w@mail.gmail.com>
-In-Reply-To: <CAGETcx_XFUg7V5KEGF+eqDtmhbUoufs8xARhaB0KJeh7Lzaj0w@mail.gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 13 Oct 2025 20:25:27 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0h31=e8QfodNioB77Wc3xwRipea3mW9LeEibJSw6L-WuA@mail.gmail.com>
-X-Gm-Features: AS18NWAatZMrq1gMlxm6GLA_VSpFuok-iOQPwKXoQ_kD_z9xJdn6wuJ6pjEK-qA
-Message-ID: <CAJZ5v0h31=e8QfodNioB77Wc3xwRipea3mW9LeEibJSw6L-WuA@mail.gmail.com>
-Subject: Re: [PATCH v4] PM: Support aborting sleep during filesystem sync
-To: Saravana Kannan <saravanak@google.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Samuel Wu <wusamuel@google.com>, Len Brown <lenb@kernel.org>, 
-	Pavel Machek <pavel@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Danilo Krummrich <dakr@kernel.org>, kernel-team@android.com, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 1/3] PM: hibernate: Nominally skip thaw sequence for
+ all devices
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: mario.limonciello@amd.com, airlied@gmail.com, alexander.deucher@amd.com,
+ christian.koenig@amd.com, dakr@kernel.org, gregkh@linuxfoundation.org,
+ lenb@kernel.org, pavel@kernel.org, simona@ffwll.ch,
+ amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+ linux-pm@vger.kernel.org
+References: <20251013174729.1101186-1-superm1@kernel.org>
+ <20251013174729.1101186-2-superm1@kernel.org>
+ <CAJZ5v0jC9BBniDkODH-RnfvPNP8yYZd2QyYSAOiANfO-jCeyPw@mail.gmail.com>
+Content-Language: en-US
+From: Mario Limonciello <superm1@kernel.org>
+In-Reply-To: <CAJZ5v0jC9BBniDkODH-RnfvPNP8yYZd2QyYSAOiANfO-jCeyPw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Mon, Oct 13, 2025 at 8:13=E2=80=AFPM Saravana Kannan <saravanak@google.c=
-om> wrote:
->
-> On Mon, Oct 13, 2025 at 11:02=E2=80=AFAM Rafael J. Wysocki <rafael@kernel=
-.org> wrote:
-> >
-> > On Thu, Oct 2, 2025 at 12:13=E2=80=AFAM Saravana Kannan <saravanak@goog=
-le.com> wrote:
-> > >
-> > > On Wed, Oct 1, 2025 at 11:22=E2=80=AFAM Rafael J. Wysocki <rafael@ker=
-nel.org> wrote:
-> > > >
-> > > > On Wed, Oct 1, 2025 at 12:37=E2=80=AFAM Samuel Wu <wusamuel@google.=
-com> wrote:
-> > > > >
-> > > > > On Tue, Sep 30, 2025 at 11:51=E2=80=AFAM Rafael J. Wysocki <rafae=
-l@kernel.org> wrote:
-> > > > > >
-> > > > > > Hi,
-> > > > > >
-> > > > > > On Tue, Sep 30, 2025 at 8:30=E2=80=AFPM Samuel Wu <wusamuel@goo=
-gle.com> wrote:
-> > > > > > >
-> > > > > > > Hi Rafael,
-> > > > > > >
-> > > > > > > Just a friendly ping on this patch. Please let me know if the=
-re's any
-> > > > > > > feedback or if you'd like me to make any changes.
-> > > > > >
-> > > > > > Have you seen https://lore.kernel.org/all/20250909065836.32534-=
-1-tuhaowen@uniontech.com/
-> > > > > > ?
-> > > > > >
-> > > > > > If so, what do you think about it?
-> > > > >
-> > > > > I was following this chain
-> > > > > (https://lore.kernel.org/all/20250908024655.14636-1-tuhaowen@unio=
-ntech.com/),
-> > > > > where there is some ongoing discussion on converging the solution=
-.
-> > > > >
-> > > > > Our changes aren't mutually exclusive, and tuhaowen can build cha=
-nges
-> > > > > on top of ours, even indicating:
-> > > > > > I'm happy to work on this as a follow-up patch series after you=
-r changes land, or we could explore a unified solution that handles both sc=
-enarios.
-> > > >
-> > > > That's fair.
-> > > >
-> > > > > These patchsets don't negate each other, so could we decouple the=
-se
-> > > > > two patchsets since they address different issues?
-> > > >
-> > > > Well, I'm not sure if they are really different.  After all, this i=
-s
-> > > > all about avoiding having to wait on an excessively long filesystem
-> > > > sync during suspend.
-> > >
-> > > No, it's different. We don't mind a long filesystem sync if we don't
-> > > have a need to abort a suspend. If it takes 25 seconds to sync the
-> > > filesystem but there's no need to abort it, that's totally fine. So,
-> > > this patch is just about allowing abort to happen without waiting for
-> > > file system sync to finish.
-> >
-> > OK, thanks for clarification.
-> >
-> > > The other patch's requirement is to always abort if suspend takes 25
-> > > seconds (or whatever the timeout is). IIRC, in his case, it's because
-> > > of a bad disk or say a USB disk getting unplugged. I'm not convinced =
-a
-> > > suspend timeout is the right thing to do, but I'm not going to nack
-> > > it. But to implement his requirement, he can put a patch on top of
-> > > ours where he sets a timer and then aborts suspends if it fires.
-> > >
-> > > > I'm also not sure why it is being pursued to be honest.  Is setting
-> > > > /sys/power/sync_on_suspend to 0 not regarded as a viable option?
-> > >
-> > > We do want to sync on every suspend. So, we don't want to turn it off
-> > > completely.
-> >
-> > I wonder why though.
-> >
-> > If suspend/resume works reliably, syncing filesystems on every attempt
-> > to suspend the system isn't particularly useful AFAICS.
->
-> A lot of people's entire digital life is on their phone. Even if
-> there's just 1% crash, when you look at that across billions of users
-> it adds up to serious impact.
->
-> Also, there are classes of devices where we do disable sync on suspend
-> (I can't share specifics). So, this is not an arbitrary stance. For
-> phones, we want to sync on suspend.
->
-> Also, your question could be posed equally to laptops too. If suspend
-> is reliable, then the laptop can always wake up at 3% battery, sync,
-> and then shutdown. But that's a leap of faith none of us want to make.
-> So, as long as we support sync on suspend, I think it makes sense to
-> allow suspend aborts to happen more gracefully.
+On 10/13/25 12:58 PM, Rafael J. Wysocki wrote:
+> On Mon, Oct 13, 2025 at 7:48 PM Mario Limonciello (AMD)
+> <superm1@kernel.org> wrote:
+>>
+>> From: Mario Limonciello <mario.limonciello@amd.com>
+>>
+>> After the hibernation snapshot is created all devices will have
+>> their thaw() callback called before the next stage.  For the most
+>> common scenarios of hibernation this is not necessary because the
+>> device will be powered off anyway.
+> 
+> And how exactly is the image going to be saved?
+> 
+> It is only in memory when the "thaw" callbacks are invoked.
 
-The sync on suspend may not prevent damage from happening when suspend
-or resume crashes though.
+Ah; right.
 
-On laptops it is mostly a mitigation for letting the battery run dry
-while suspended due to the lack of safety there on the majority of
-systems, but on phones that shouldn't be a problem AFAICS.
+I suppose one option would be to thaw "just" the backing device, but 
+this could turn into a relatively complex mess because it would have 
+relationships (parent/child or device link) to other devices that need 
+to thaw too then.
+
+> 
+>> If the hibernation snapshot was successfully created skip thawing
+>> devices until it's needed for userspace created hibernation image
+>> or hybrid sleep. To accomplish this use PMSG_INVALID in
+>> hibernation_snapshot() and set the dpm functions to skip running.
+>>
+>> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+>> ---
+>>   drivers/base/power/main.c |  6 ++++++
+>>   kernel/power/hibernate.c  | 13 ++++++++++---
+>>   kernel/power/user.c       |  3 +++
+>>   3 files changed, 19 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
+>> index 8179fd53171dc..58f5270a173e8 100644
+>> --- a/drivers/base/power/main.c
+>> +++ b/drivers/base/power/main.c
+>> @@ -1143,6 +1143,9 @@ void dpm_resume(pm_message_t state)
+>>          struct device *dev;
+>>          ktime_t starttime = ktime_get();
+>>
+>> +       if (state.event == PM_EVENT_INVALID)
+>> +               return;
+>> +
+>>          trace_suspend_resume(TPS("dpm_resume"), state.event, true);
+>>
+>>          pm_transition = state;
+>> @@ -1245,6 +1248,9 @@ void dpm_complete(pm_message_t state)
+>>   {
+>>          struct list_head list;
+>>
+>> +       if (state.event == PM_EVENT_INVALID)
+>> +               return;
+>> +
+>>          trace_suspend_resume(TPS("dpm_complete"), state.event, true);
+>>
+>>          INIT_LIST_HEAD(&list);
+>> diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
+>> index aadf82f57e868..7af2e392c574a 100644
+>> --- a/kernel/power/hibernate.c
+>> +++ b/kernel/power/hibernate.c
+>> @@ -480,13 +480,14 @@ int hibernation_snapshot(int platform_mode)
+>>          if (error || !in_suspend)
+>>                  swsusp_free();
+>>
+>> -       msg = in_suspend ? (error ? PMSG_RECOVER : PMSG_THAW) : PMSG_RESTORE;
+>> +       msg = in_suspend ? (error ? PMSG_RECOVER : PMSG_INVALID) : PMSG_RESTORE;
+>>          dpm_resume(msg);
+>>
+>> -       if (error || !in_suspend)
+>> +       if (error || !in_suspend) {
+>>                  pm_restore_gfp_mask();
+>> +               console_resume_all();
+>> +       }
+>>
+>> -       console_resume_all();
+>>          dpm_complete(msg);
+>>
+>>    Close:
+>> @@ -707,7 +708,13 @@ static void power_down(void)
+>>
+>>   #ifdef CONFIG_SUSPEND
+>>          if (hibernation_mode == HIBERNATION_SUSPEND) {
+>> +               /* recover from hibernation_snapshot() */
+>> +               dpm_resume(PMSG_THAW);
+>> +               console_resume_all();
+>> +               dpm_complete(PMSG_THAW);
+>>                  pm_restore_gfp_mask();
+>> +
+>> +               /* run suspend sequence */
+>>                  error = suspend_devices_and_enter(mem_sleep_current);
+>>                  if (!error)
+>>                          goto exit;
+>> diff --git a/kernel/power/user.c b/kernel/power/user.c
+>> index 3f9e3efb9f6e7..d70c963b1ba88 100644
+>> --- a/kernel/power/user.c
+>> +++ b/kernel/power/user.c
+>> @@ -310,6 +310,9 @@ static long snapshot_ioctl(struct file *filp, unsigned int cmd,
+>>                  pm_restore_gfp_mask();
+>>                  error = hibernation_snapshot(data->platform_support);
+>>                  if (!error) {
+>> +                       dpm_resume(PMSG_THAW);
+>> +                       console_resume_all();
+>> +                       dpm_complete(PMSG_THAW);
+>>                          error = put_user(in_suspend, (int __user *)arg);
+>>                          data->ready = !freezer_test_done && !error;
+>>                          freezer_test_done = false;
+>> --
+>> 2.43.0
+>>
+
 
