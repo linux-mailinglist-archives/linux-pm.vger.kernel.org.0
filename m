@@ -1,183 +1,105 @@
-Return-Path: <linux-pm+bounces-35991-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35992-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D64E6BD5B4B
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Oct 2025 20:27:09 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5740BD5B78
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Oct 2025 20:30:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D2085188353C
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Oct 2025 18:27:32 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id D43194ED440
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Oct 2025 18:30:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4BFF2D47E0;
-	Mon, 13 Oct 2025 18:27:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 479222D3A9B;
+	Mon, 13 Oct 2025 18:30:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KjlM5bfb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qtN0njAf"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A65A52D3A6F
-	for <linux-pm@vger.kernel.org>; Mon, 13 Oct 2025 18:27:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 216082D46DB
+	for <linux-pm@vger.kernel.org>; Mon, 13 Oct 2025 18:30:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760380024; cv=none; b=LYrL6s7GLVkFotDyCaqg/wGPXTdeN8Nm2j0p5vxSdY/ORkJ2Oi+nZq/shS1wPGQndgJWw+4+Hoi6k/v9yUG8wsIqVMPwBNl7Pg4J3uPWzD/73LzJ7gwfe5Q4lqz1615H//TeYxxSg/KuNmRByoIMTDX4/e2fwooez+8Hucfl9AA=
+	t=1760380208; cv=none; b=OpRhJGePjTjQxXOl+RgBBgA8ld1BDTv9TiczGAowyJsfp7GcPxhUSPhIliNvTCyK19kFPeH9i+JgXw9lqSOmaAoUMfvk+t8CydImL9qSO2YkJXgWkuFiyNrz/8V8Wch1fExKGt48+sNfNwR+emCYtTzWAYuYZXkj6fcnCcshrQU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760380024; c=relaxed/simple;
-	bh=VE/HEIwj1bQ+ebqbNdMwxt3bASigE0XM2z92yrmXfDo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HKjcZzYg3ZZiFFczo+3vViHc+xKKsxnd9TplZDG/JqhJ2ZKNwa4eEYGjOmUT2GgLivnmUJChy+nqAz9ngyk0Zu8S23wgcL/2G1+zlAmTmpOaLL1Luw/pLQkWvgciOTp/Gas2eTxxz438xN4oMOIjTptY4NwfRHq9M/GdiUVy5ts=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KjlM5bfb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E8A0C4CEF8;
-	Mon, 13 Oct 2025 18:27:03 +0000 (UTC)
+	s=arc-20240116; t=1760380208; c=relaxed/simple;
+	bh=UweM+L90OGCDu2JgL8AKhNEC7OIFbFzIiTiZKCcYqIE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=I8V323b+YkUmDw26mW9CBr1Sj1tR4mYgBsLRRz0oRFwShISQIuELp7ip8ddxDJzPNJjFoqRpW5+JI1BXYY+x+dFTLlCQ4rkbfriCqIlep1dtiZUTQYThf6jNC+dKXcjE26MPIjLmhUZcDnga3bneI2di27ZgCs7CZdNzxwIHzBQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qtN0njAf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEC6BC19422
+	for <linux-pm@vger.kernel.org>; Mon, 13 Oct 2025 18:30:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760380024;
-	bh=VE/HEIwj1bQ+ebqbNdMwxt3bASigE0XM2z92yrmXfDo=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=KjlM5bfbkT+4+m5BdOU5B0W5Wv4D5UrDDNYxdMQ/MaC3ZoJfWGavHfNJuvgpEPiiZ
-	 v3oI+ocDKLhoIlKWsp137pL/07yXexaPsQZG3Nm9i2NH3JgsuvBbyTyKOtzynco1uO
-	 jOI7OtlewXS65VF7txuvDT3vvZk1dFjYZkNdB6OgWW0L+pun+P9HRnr6V8iNyIJKXT
-	 3Mj/gD+0JqBzHq3XXAjk/QZE+jjna//o4L/VUco4+G2semqAQzRbb9DaH9Ze09aVpY
-	 X5FAf2uUwAVchWhZc4RaES27DC2l+9PRvwMP9fyLwQ00SP1h/dh/C+pMigoJ8gAGnn
-	 //3Krfwf5bpoA==
-Message-ID: <92a24599-efc7-4684-abc0-bcf3fb203744@kernel.org>
-Date: Mon, 13 Oct 2025 13:27:02 -0500
+	s=k20201202; t=1760380208;
+	bh=UweM+L90OGCDu2JgL8AKhNEC7OIFbFzIiTiZKCcYqIE=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=qtN0njAfBQ0B+t11crFgpb6Hk0VQnAhENFU67Jt+3SU5ItPie2s3PutyQ9gzujDnl
+	 s91ld3ZcaFl4hniBVcGq5j6ieos8EXRJ55Ttcow+N2bv4V78hYVqZdNBsoNuSTD/ew
+	 pPgzCGUqCenzrmDb1k6PGYtapzdqTOSLkI6GGBkUt45JzsRv4ZKEoakYcmqtFGLL3k
+	 oL5sNAMMkquKnLFG0bYtdeC4h6iwME1gAme5j7RXV+YOraBYstr5Waso4bEYLqZaIi
+	 dRG3DR8a0K4gv7Soc+kdH1nhysmTs9QShOzMj2853xL6EeRdWOC3JJtDVV1NyuCuf9
+	 3Mn3VpK1xGVsQ==
+Received: by mail-oi1-f180.google.com with SMTP id 5614622812f47-441de7ba142so385171b6e.2
+        for <linux-pm@vger.kernel.org>; Mon, 13 Oct 2025 11:30:07 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVvdAmAkDxGkkA1gOAmg+gScWQKiqGlx9RHexTEOzpPNbCCkf56gpXXQWsbVXEAHtBPLASpSlfAcw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyEuHkHe1EQ8jeY3ZeB8/FQJnPmz8YvV+NlzmVlfUZ6YcCEw/+i
+	vuJp+y0XpzWeCRD9Qd2xDh4vJSzmuq5C/G6sbFwnZkbjFdkzc8KdtUdwyYhcqLV18f7FUVtamQ5
+	cl/O2JEsEZwFvveb3cu9hsJH8w39hnyM=
+X-Google-Smtp-Source: AGHT+IEidsorgj7WZjmq240EhlEZc8BnvKKAzSXOoGbRoYt0lU05odHT7I8aBQr229CSF34G8HWT9HQudIxjW0ChoE8=
+X-Received: by 2002:a05:6808:1203:b0:43f:29ec:a210 with SMTP id
+ 5614622812f47-4417b3e9520mr10710947b6e.47.1760380207222; Mon, 13 Oct 2025
+ 11:30:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
+References: <20251013174729.1101186-1-superm1@kernel.org> <20251013174729.1101186-2-superm1@kernel.org>
+ <CAJZ5v0jC9BBniDkODH-RnfvPNP8yYZd2QyYSAOiANfO-jCeyPw@mail.gmail.com> <92a24599-efc7-4684-abc0-bcf3fb203744@kernel.org>
+In-Reply-To: <92a24599-efc7-4684-abc0-bcf3fb203744@kernel.org>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 13 Oct 2025 20:29:54 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0gNzfpW=ot9JSYoAbOdpWEzkoxxYx+zKkofCni3EeA-jw@mail.gmail.com>
+X-Gm-Features: AS18NWA4p6B2QnnjTVdeSaW5EUz4KzwEi_ifHtYzW-l80mppmBMWYn7Koe0-WnI
+Message-ID: <CAJZ5v0gNzfpW=ot9JSYoAbOdpWEzkoxxYx+zKkofCni3EeA-jw@mail.gmail.com>
 Subject: Re: [RFC PATCH 1/3] PM: hibernate: Nominally skip thaw sequence for
  all devices
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: mario.limonciello@amd.com, airlied@gmail.com, alexander.deucher@amd.com,
- christian.koenig@amd.com, dakr@kernel.org, gregkh@linuxfoundation.org,
- lenb@kernel.org, pavel@kernel.org, simona@ffwll.ch,
- amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
- linux-pm@vger.kernel.org
-References: <20251013174729.1101186-1-superm1@kernel.org>
- <20251013174729.1101186-2-superm1@kernel.org>
- <CAJZ5v0jC9BBniDkODH-RnfvPNP8yYZd2QyYSAOiANfO-jCeyPw@mail.gmail.com>
-Content-Language: en-US
-From: Mario Limonciello <superm1@kernel.org>
-In-Reply-To: <CAJZ5v0jC9BBniDkODH-RnfvPNP8yYZd2QyYSAOiANfO-jCeyPw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+To: Mario Limonciello <superm1@kernel.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, mario.limonciello@amd.com, airlied@gmail.com, 
+	alexander.deucher@amd.com, christian.koenig@amd.com, dakr@kernel.org, 
+	gregkh@linuxfoundation.org, lenb@kernel.org, pavel@kernel.org, 
+	simona@ffwll.ch, amd-gfx@lists.freedesktop.org, 
+	dri-devel@lists.freedesktop.org, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 10/13/25 12:58 PM, Rafael J. Wysocki wrote:
-> On Mon, Oct 13, 2025 at 7:48 PM Mario Limonciello (AMD)
-> <superm1@kernel.org> wrote:
->>
->> From: Mario Limonciello <mario.limonciello@amd.com>
->>
->> After the hibernation snapshot is created all devices will have
->> their thaw() callback called before the next stage.  For the most
->> common scenarios of hibernation this is not necessary because the
->> device will be powered off anyway.
-> 
-> And how exactly is the image going to be saved?
-> 
-> It is only in memory when the "thaw" callbacks are invoked.
+On Mon, Oct 13, 2025 at 8:27=E2=80=AFPM Mario Limonciello <superm1@kernel.o=
+rg> wrote:
+>
+> On 10/13/25 12:58 PM, Rafael J. Wysocki wrote:
+> > On Mon, Oct 13, 2025 at 7:48=E2=80=AFPM Mario Limonciello (AMD)
+> > <superm1@kernel.org> wrote:
+> >>
+> >> From: Mario Limonciello <mario.limonciello@amd.com>
+> >>
+> >> After the hibernation snapshot is created all devices will have
+> >> their thaw() callback called before the next stage.  For the most
+> >> common scenarios of hibernation this is not necessary because the
+> >> device will be powered off anyway.
+> >
+> > And how exactly is the image going to be saved?
+> >
+> > It is only in memory when the "thaw" callbacks are invoked.
+>
+> Ah; right.
+>
+> I suppose one option would be to thaw "just" the backing device, but
+> this could turn into a relatively complex mess because it would have
+> relationships (parent/child or device link) to other devices that need
+> to thaw too then.
 
-Ah; right.
-
-I suppose one option would be to thaw "just" the backing device, but 
-this could turn into a relatively complex mess because it would have 
-relationships (parent/child or device link) to other devices that need 
-to thaw too then.
-
-> 
->> If the hibernation snapshot was successfully created skip thawing
->> devices until it's needed for userspace created hibernation image
->> or hybrid sleep. To accomplish this use PMSG_INVALID in
->> hibernation_snapshot() and set the dpm functions to skip running.
->>
->> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
->> ---
->>   drivers/base/power/main.c |  6 ++++++
->>   kernel/power/hibernate.c  | 13 ++++++++++---
->>   kernel/power/user.c       |  3 +++
->>   3 files changed, 19 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
->> index 8179fd53171dc..58f5270a173e8 100644
->> --- a/drivers/base/power/main.c
->> +++ b/drivers/base/power/main.c
->> @@ -1143,6 +1143,9 @@ void dpm_resume(pm_message_t state)
->>          struct device *dev;
->>          ktime_t starttime = ktime_get();
->>
->> +       if (state.event == PM_EVENT_INVALID)
->> +               return;
->> +
->>          trace_suspend_resume(TPS("dpm_resume"), state.event, true);
->>
->>          pm_transition = state;
->> @@ -1245,6 +1248,9 @@ void dpm_complete(pm_message_t state)
->>   {
->>          struct list_head list;
->>
->> +       if (state.event == PM_EVENT_INVALID)
->> +               return;
->> +
->>          trace_suspend_resume(TPS("dpm_complete"), state.event, true);
->>
->>          INIT_LIST_HEAD(&list);
->> diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
->> index aadf82f57e868..7af2e392c574a 100644
->> --- a/kernel/power/hibernate.c
->> +++ b/kernel/power/hibernate.c
->> @@ -480,13 +480,14 @@ int hibernation_snapshot(int platform_mode)
->>          if (error || !in_suspend)
->>                  swsusp_free();
->>
->> -       msg = in_suspend ? (error ? PMSG_RECOVER : PMSG_THAW) : PMSG_RESTORE;
->> +       msg = in_suspend ? (error ? PMSG_RECOVER : PMSG_INVALID) : PMSG_RESTORE;
->>          dpm_resume(msg);
->>
->> -       if (error || !in_suspend)
->> +       if (error || !in_suspend) {
->>                  pm_restore_gfp_mask();
->> +               console_resume_all();
->> +       }
->>
->> -       console_resume_all();
->>          dpm_complete(msg);
->>
->>    Close:
->> @@ -707,7 +708,13 @@ static void power_down(void)
->>
->>   #ifdef CONFIG_SUSPEND
->>          if (hibernation_mode == HIBERNATION_SUSPEND) {
->> +               /* recover from hibernation_snapshot() */
->> +               dpm_resume(PMSG_THAW);
->> +               console_resume_all();
->> +               dpm_complete(PMSG_THAW);
->>                  pm_restore_gfp_mask();
->> +
->> +               /* run suspend sequence */
->>                  error = suspend_devices_and_enter(mem_sleep_current);
->>                  if (!error)
->>                          goto exit;
->> diff --git a/kernel/power/user.c b/kernel/power/user.c
->> index 3f9e3efb9f6e7..d70c963b1ba88 100644
->> --- a/kernel/power/user.c
->> +++ b/kernel/power/user.c
->> @@ -310,6 +310,9 @@ static long snapshot_ioctl(struct file *filp, unsigned int cmd,
->>                  pm_restore_gfp_mask();
->>                  error = hibernation_snapshot(data->platform_support);
->>                  if (!error) {
->> +                       dpm_resume(PMSG_THAW);
->> +                       console_resume_all();
->> +                       dpm_complete(PMSG_THAW);
->>                          error = put_user(in_suspend, (int __user *)arg);
->>                          data->ready = !freezer_test_done && !error;
->>                          freezer_test_done = false;
->> --
->> 2.43.0
->>
-
+Right and that's exactly why everything is thawed.
 
