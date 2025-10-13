@@ -1,126 +1,143 @@
-Return-Path: <linux-pm+bounces-35980-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35981-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C45CBD5395
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Oct 2025 18:51:01 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C557BD562C
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Oct 2025 19:10:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 323E8426780
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Oct 2025 16:32:48 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 8B4DA4F5E54
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Oct 2025 16:58:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 104A821930A;
-	Mon, 13 Oct 2025 16:32:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1BE329B8DC;
+	Mon, 13 Oct 2025 16:58:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A/UdoII1"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M74mFQ9H"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83CC2272801
-	for <linux-pm@vger.kernel.org>; Mon, 13 Oct 2025 16:32:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B788229B78F
+	for <linux-pm@vger.kernel.org>; Mon, 13 Oct 2025 16:58:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760373159; cv=none; b=otRVct7cVXkDKnCn/Stc/8jU923RzibCR/a1gePFfS6IpX06/8qSH+5U/pZ7tjC6UA+CogDt7+fPQJSQuis5EEn4Fn0/+SvbpD/MBoXBbz+/AOKFwsXIzqMHhZnMX92TN+EWWzOD0epSknblLFKKggUIu3gRIwQKGGuWebzaISU=
+	t=1760374696; cv=none; b=oBRf+lWEmWh2q7e+ruXTkKxJ+phMTPnAvDl19rg19eDeXmTNh2R/G13yiJ2ATrKK8rAs2v5m7KJ1htW9nAr69unchwHRBUKh16WzqwDKVd/s5PhKjdHhUj9Ny6I4zVq1PmKD8wYQLBidmlIWdqcEXEvQedlhrN0aqpGqBc+5z4o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760373159; c=relaxed/simple;
-	bh=8PEbt7/KiisZENpthYaEwPRP3ny6x+ce9ThxH5LQ09A=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DQG8pJd9RXQ1OxZ6KB8SLYLKklC/2VRgyLKfZn+7OTQQpb/cen4qoqbQ3ixvlCI+HmGsF6uk58lJk8G7mAUPHYTBjiW28734PKFTR/6tLIPweoaUpk8mkzdAVm1/6Hsbxr7VWCy+NSXJ2smYwK9fYoP6lq+K2MfF+teddkptdkI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=A/UdoII1; arc=none smtp.client-ip=209.85.214.180
+	s=arc-20240116; t=1760374696; c=relaxed/simple;
+	bh=aVbLx3zzuiItcIq6jkvMD/Zgek8sd/MbjhMghYBE0P4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=TnM4EH7TeztpJJ1E0XQH761qbg2WsJ7jxtfhdANHNPZRmnpgjZIMP5/0gJancP5vygGECldomX0jnah5wIf2xP2Ov6WLv5N0gPOh/7sO9OryUU0nNyzzfKb4DUDe4jH8xUP+vkIgrnVYmvvdtnPgpSa0eLYzW8MHoiWRjFa0nl8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M74mFQ9H; arc=none smtp.client-ip=209.85.167.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-26987b80720so10216545ad.2
-        for <linux-pm@vger.kernel.org>; Mon, 13 Oct 2025 09:32:37 -0700 (PDT)
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-5797c8612b4so5420408e87.2
+        for <linux-pm@vger.kernel.org>; Mon, 13 Oct 2025 09:58:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760373157; x=1760977957; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OhkE2kxttgjbOmTglGY3wFhQ7XB/INVjgyXJP2fCnrU=;
-        b=A/UdoII1weJXtH40r0xBqkXt4/ChtPyWccPix7as/CZCDCwH6q6qe7myR5boIWx8f/
-         UMuVW5MfBQlIgNjwwmkgd4A7l6F9K+4CGCx7kh4MpHAl4L33mAIzM6FRN3kKBPJ83h++
-         m32b1hvVcAlRHlGkJ9IN1UFXfX3+5PIZpZ+m9HPm8RRsQOzqnBBvCIOh0Z/7pCoGh1fP
-         1V4Nht43Y1iMN984DFp0bR07m/0F2Ne+l+tkWYnf9x5JTD9GPrl4ZPK+r9d+0bGSQCr9
-         7+StuPswGN123ua6pa6UkJdcYXZd5ZplfwO9JnHQyJj84ix4oj3jmIg8AceSuVJ9D9wd
-         UISA==
+        d=gmail.com; s=20230601; t=1760374693; x=1760979493; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yugt4TFzKOWVtrp9PcwweappLEqjwwN8AAVbBJj3x48=;
+        b=M74mFQ9HvKukuAyHkZgSoarVInq8g6SVHkIHPYSCFvcdFOtBbcbcTV9eKbDReyG/pp
+         KdIx6qukevvbll49LnzS9pFeCJSWi+xCmLRCDcwb9prvjP4bSnd4UDwzB5srbExk1lxL
+         x6Ink1cLNayjEKBYzdYAvrdxEESaNMvkmRQgDFN5GY4B1rf+KiaiI7A+kHVonyFWCVez
+         +Fpk4WA7G+wwikLP4z49RnQZhQXIcTlo/oQWxlwL3mrXM/6O7MIKLIo5tdZ51Y6vk48v
+         md0bC4aHTnBmdFu6yKm5I9WdA3qqt9bcLHJCcFXERn3shL8P7hWNvhx1xuE8BsHxIom4
+         z1mA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760373157; x=1760977957;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OhkE2kxttgjbOmTglGY3wFhQ7XB/INVjgyXJP2fCnrU=;
-        b=wyiZQL/StkqpNDsWeNMZMUFPLQ3//XwH18GvpF54g5W1W58klshyVlpqofAInBxXbq
-         pCBXfoGlblXfZJmbLslaiI74bavAajB56XxZiuztLtpT3eTuoM8Yv/znbPDN+t6CiCIR
-         gSQbzNW8H+1Q9RlmGz5JKLCprUOnY4o8iXFIdqAVCioVrt85ZHz8MDw2qI42bIwx4Ef5
-         M4gECmDh6ShyegkQs+mM+j6s4yHfQ6iu70quRgxgLDkADdAzqdPbbOnpgT0jYzFmFBd/
-         1F1FQFAVjh+NRlobv4vFyUtOspomTVIqBNExUzh/UqJZZ9AeOzwh9zENZ9VIymRjgRqP
-         OR5Q==
-X-Forwarded-Encrypted: i=1; AJvYcCURFZCIAYdJthcloyEoL61iQ5b/iyqe8+IriA0BFMQ0vfY4jIADS+eJ6Vt9bZLwFePu0JWks8ZSKQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxXiWdAA2RIfg3DyOTD9O8EJGjYZPUsvtibuaGEb0PaPI8m9JsS
-	xKCWCSU8pfFbeQoXJ7xq9eGySspF11Y017Ch9liDUgEFE+gDmNIBeQpX9jle89rGGDHdWiy7EC/
-	mzWLjhX+CxrAtQy372J36R2d2WbZFOpo=
-X-Gm-Gg: ASbGncvQe/uvHyasS2aQpoovVCr1KF2unyK84MrdtygxP7O7NOSqRcGbnyX9wmSY1kn
-	97KFDrBcimNxs//SMTcY+SL/1E1aCVlMwcnYz9bpkLuQbmOXVi1hoYfXajHJ5kz42RpBueKMwBm
-	0cASfKhbRSc+G/WtybDBKmTbO6yxBEbtISoDIJJartXHkpVI3k2TSyr9KQl5k8COZHLdNo0JyMR
-	aOCkFmlG9tFRlXoudQWD8xcjZeCziTiObsawXxD5fSsL7vZUGNR8noXe6Iq/rC9RHzdfS7F2Bia
-	A3eZ009G7pg5KiuMG46QbonLLu01f6S3TeadTalnl2J5kUlQmMl00Zc=
-X-Google-Smtp-Source: AGHT+IFL/ZfJ4cj1Fo21vdtAWa72Ot3BxKQ8+vXwbOeeF2ANwjBEWGV/ZPwLInyjcxfIhg/pREwZw5L55MhN3eCJYLQ=
-X-Received: by 2002:a17:903:110c:b0:272:2bf1:6a1f with SMTP id
- d9443c01a7336-290272667a9mr157087805ad.4.1760373156695; Mon, 13 Oct 2025
- 09:32:36 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1760374693; x=1760979493;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yugt4TFzKOWVtrp9PcwweappLEqjwwN8AAVbBJj3x48=;
+        b=XeHQPo/1Ss4xSPBo8+7TCQxWDIxxV7/GSp95TC83k9F3250kaG0ezHj4A1EXvNZ2M1
+         uZaphk3hNmo/q+HmUBPht7ylDrQosD4lKAYPukT7zRsf0OtY48D/u5pCiwH5iVOfmr2e
+         XRSg3xOqPW1nU4vaaR/D4Vnoa23mQBaPDmZ8Tfv52HQW/rXazTw+KaqCdW4KHj3F2tsR
+         XtcLQJIccLuipzP5EVi4V5f3rLMq7sZJSyE6BJ+P4CWJ21m0vo13ehQfTm2OOyIqb5sR
+         /rtFp7AJFQVPd7EMNMZyqPqrMqh2ypEunngx3uahpXPuNQGHsWq37rcc0/wRF1XuZz/7
+         klPg==
+X-Gm-Message-State: AOJu0Yw9GlrG+yl3IInlyPieYBTt5yCFR576GnGuaFKoTlWK07JZj1Ty
+	IctQFIwyqYGC9mFOEC/aK2WjXQ4ToRV+oZCFjkaBpijfPho+QL+CJF0I
+X-Gm-Gg: ASbGncuRJFodKkrhHkkvzCd7LOM7EBqaLAUiic/QO6Mvzg2qX1n9SSwREKurBhZXBqK
+	GhKtO72zWdV2SWWzWkZP2wPjZHqXJqoYYDTzo+0CMhvgnUUqTqCrtE4KdUMYdEa9+4Ei0BFmblD
+	PbFHDgdouFnS9PQkAixWnFct+7ve2bDhIt+9A/JZ6l90Ric+ZKjMEmZ6UtsEaeWrLUEzNY1CLXe
+	3/M+IW+B0aEIb1hUBbpNlXpBeBBNA4dlhQ0TbhFddCDaOI2loPakiltSZ7QXcNvZ1P+9F19u5Uf
+	3Mt+qFFHen9TgqaDTwwDaajWTh/Ulhuu34OoEqy8LmVlmv/ImdfINVA5EsFSU+r5Fh2i0XzAZAH
+	YFwSgOxJaR5neTZGLZ3mFQPxDr0lZleG2IHTFzCyb6YrGaMXoXqV7ouoU0ujl4Al7wQ3Nq+zclV
+	cO4bSCwD2cEMEjjkJM
+X-Google-Smtp-Source: AGHT+IEh5FEGdLJk3FY3nXjUAjtDIVpFAFgTlMg4hJ6GlsiA7ZQHpqXBQCJHQ9JSVuB42SxmUqwjGg==
+X-Received: by 2002:a05:6512:39c3:b0:577:494e:ca63 with SMTP id 2adb3069b0e04-5906d896d59mr5638965e87.12.1760374692389;
+        Mon, 13 Oct 2025 09:58:12 -0700 (PDT)
+Received: from [192.168.2.19] (109-252-159-193.dynamic.spd-mgts.ru. [109.252.159.193])
+        by smtp.googlemail.com with ESMTPSA id 2adb3069b0e04-5909413ec6csm3376197e87.48.2025.10.13.09.58.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Oct 2025 09:58:11 -0700 (PDT)
+Message-ID: <590984a2-633d-4e68-9601-f379bdc2b8fd@gmail.com>
+Date: Mon, 13 Oct 2025 19:58:10 +0300
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251013155205.2004838-1-lyude@redhat.com> <20251013155205.2004838-2-lyude@redhat.com>
- <04dc4834d38932242df86773e47030e8105461c9.camel@redhat.com>
-In-Reply-To: <04dc4834d38932242df86773e47030e8105461c9.camel@redhat.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Mon, 13 Oct 2025 18:32:24 +0200
-X-Gm-Features: AS18NWDyh_CiI5BROIDxIAOTwe9IjcgjNOybhNZ0YtVxcSx0Nj5WUlyw0Qb3tYk
-Message-ID: <CANiq72kkC+aieH-SqqGwX2iA6wZEJcysLui0JWxAmo75RZ5fiA@mail.gmail.com>
-Subject: Re: [PATCH v13 01/17] preempt: Track NMI nesting to separate per-CPU counter
-To: Lyude Paul <lyude@redhat.com>
-Cc: rust-for-linux@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>, 
-	Boqun Feng <boqun.feng@gmail.com>, linux-kernel@vger.kernel.org, 
-	Daniel Almeida <daniel.almeida@collabora.com>, Joel Fernandes <joelagnelf@nvidia.com>, 
-	Danilo Krummrich <dakr@kernel.org>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
-	Vlastimil Babka <vbabka@suse.cz>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
-	Uladzislau Rezki <urezki@gmail.com>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>, Ingo Molnar <mingo@kernel.org>, 
-	"Peter Zijlstra (Intel)" <peterz@infradead.org>, Ryo Takakura <ryotkkr98@gmail.com>, 
-	K Prateek Nayak <kprateek.nayak@amd.com>, 
-	"open list:CPU FREQUENCY SCALING FRAMEWORK" <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RESEND] PM / devfreq: tegra30: use min to simplify
+ actmon_cpu_to_emc_rate
+To: Thorsten Blum <thorsten.blum@linux.dev>,
+ MyungJoo Ham <myungjoo.ham@samsung.com>,
+ Kyungmin Park <kyungmin.park@samsung.com>,
+ Chanwoo Choi <cw00.choi@samsung.com>,
+ Thierry Reding <thierry.reding@gmail.com>,
+ Jonathan Hunter <jonathanh@nvidia.com>
+Cc: linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20251013131825.31400-2-thorsten.blum@linux.dev>
+From: Dmitry Osipenko <digetx@gmail.com>
+Content-Language: en-US
+In-Reply-To: <20251013131825.31400-2-thorsten.blum@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Mon, Oct 13, 2025 at 6:19=E2=80=AFPM Lyude Paul <lyude@redhat.com> wrote=
-:
->
-> JFYI - This hunk shouldn't be here, it looks like there was probably a ru=
-st
-> formatting issue somewhere else in the kernel tree,
+13.10.2025 16:18, Thorsten Blum пишет:
+> Use min() to improve the readability of actmon_cpu_to_emc_rate() and
+> remove any unnecessary curly braces.
+> 
+> Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
+> ---
+>  drivers/devfreq/tegra30-devfreq.c | 12 ++++--------
+>  1 file changed, 4 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
+> index 4a4f0106ab9d..2c9813bd697e 100644
+> --- a/drivers/devfreq/tegra30-devfreq.c
+> +++ b/drivers/devfreq/tegra30-devfreq.c
+> @@ -12,6 +12,7 @@
+>  #include <linux/interrupt.h>
+>  #include <linux/io.h>
+>  #include <linux/irq.h>
+> +#include <linux/minmax.h>
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+>  #include <linux/platform_device.h>
+> @@ -326,14 +327,9 @@ static unsigned long actmon_cpu_to_emc_rate(struct tegra_devfreq *tegra,
+>  	unsigned int i;
+>  	const struct tegra_actmon_emc_ratio *ratio = actmon_emc_ratios;
+>  
+> -	for (i = 0; i < ARRAY_SIZE(actmon_emc_ratios); i++, ratio++) {
+> -		if (cpu_freq >= ratio->cpu_freq) {
+> -			if (ratio->emc_freq >= tegra->max_freq)
+> -				return tegra->max_freq;
+> -			else
+> -				return ratio->emc_freq;
+> -		}
+> -	}
+> +	for (i = 0; i < ARRAY_SIZE(actmon_emc_ratios); i++, ratio++)
+> +		if (cpu_freq >= ratio->cpu_freq)
+> +			return min(ratio->emc_freq, tegra->max_freq);
+>  
+>  	return 0;
+>  }
 
-Yeah, one is the one that Linus kept in the tree for the merge
-conflicts discussion, while the other was probably not intentional
-(i.e. simply manually formatted) -- context and fixes in this series:
-
-    https://lore.kernel.org/rust-for-linux/20251010174351.948650-2-ojeda@ke=
-rnel.org/
-
-So, no worries, I guess it is to be expected given the tree has always
-been `rustfmt` clean.
-
-I hope that helps.
-
-Cheers,
-Miguel
+Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
 
