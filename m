@@ -1,81 +1,88 @@
-Return-Path: <linux-pm+bounces-35951-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35952-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88D08BD24A0
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Oct 2025 11:27:51 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 23D1CBD258B
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Oct 2025 11:43:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A17813A5EF9
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Oct 2025 09:27:44 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4E8354EF687
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Oct 2025 09:43:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C79F2FDC21;
-	Mon, 13 Oct 2025 09:27:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EE052FE066;
+	Mon, 13 Oct 2025 09:43:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jWZ/5+Sl"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="L4O6KkFS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78ABB2FD1CE
-	for <linux-pm@vger.kernel.org>; Mon, 13 Oct 2025 09:27:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA4A12FE04B
+	for <linux-pm@vger.kernel.org>; Mon, 13 Oct 2025 09:43:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760347660; cv=none; b=UGnOmbBjR/NP8FSCmFndaICbXkLaXAybYD4/4tWPFTySoNWO2GyhUJxzqtHKYzBfDX4bx5CAOEP7jN8CCkBlItZ0Zp0pXVIUpFsoYFXBbpfZgm9d9kinOGCYwu5MoK+9A2KIchTCS1eDe1TwNIXoNpdqiF/YMhB21vcgDh9+Q64=
+	t=1760348590; cv=none; b=mWQVN/rrOoFyppZ2iB2gg9ZJ0spY6e+eOhRn27c8aTb1kZpgNKPsD1REOpFuI88UyEQT+MClng+B4FbJy37wBAOC5rX2+YeKIrN+BziX7yW0aetjVYHkkj3QFO79q1WmaT3JvaxYYwpL9N33MHPtJV5SzkHdti5l23KreAycYBE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760347660; c=relaxed/simple;
-	bh=Vnu9qF1W+mtePyJT46244Xk0nYQav+1PFrImO+uiBpI=;
+	s=arc-20240116; t=1760348590; c=relaxed/simple;
+	bh=JAorbLSuZiT53x85S0dpzWaGHVqHdTXASc19XDvMYJA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qNovwSkiimBmv3NrXKRjOQDgyZkGBCjHDMdDZbFCphfLnxtAigqbTQHSdG0LZKra4rg7RYjfpyjih/IHUAwE43BU/YEoju3wxRDyjV9gNL/X7+9VLHE2SrFW38KJ0rFlA+W30CzqOLrYQ0qykyBHKs8yXkFmL3Qe5frn4RzzXs8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jWZ/5+Sl; arc=none smtp.client-ip=209.85.167.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-59093864727so2459769e87.3
-        for <linux-pm@vger.kernel.org>; Mon, 13 Oct 2025 02:27:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760347656; x=1760952456; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TSTsG2geMiXZZ54sKPHqUYbwVwZADjPORMJscfDPZgg=;
-        b=jWZ/5+SljpEk8QizK6qM0TG2OT6docRYqUXFzt+x95jYvOnNrmmT7zioksz6h8wUEG
-         QJWTj/SExgnOGFXuyQiBZXsR73urnrb84UOTMd8t/GNhcUsfmUSeGGGkXQIs0X+o6CAh
-         NECFMEmve/PvMzAc5HpXqlitNn9BEbaMbDPb9rxE5SA5aAnCmkb6I+Lc04sPG7dJlz30
-         o6M5AygU50aC/Yr9rbBZnyfGujoZVyuF+57VMEPM687PTKWTz9pZLPVNmpLdsD4pd9e+
-         J9QFDE2plJzI5eOg9tU3z9QkKDyaI+pcJEzRADffESa6n9ENzDtNN0q/5wo1Q571lvnp
-         pWnA==
+	 In-Reply-To:Content-Type; b=ZgAx+DR90QgOF2NSvfewKLWftE49oGoGOzGHhfmAmCQO8z4gZNszbvZbmmNwi9AmUSdhrpCVVLvILoY7wlYBXVxcbMLZ25/L8StShOeMfVgGm9cjcwBK6bqchSFGYHDmw+Dcbs/4RoGeXtxDxWaRh6BnXrF5LS3PZfKcGdlanLs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=L4O6KkFS; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 59D4qKWn022864
+	for <linux-pm@vger.kernel.org>; Mon, 13 Oct 2025 09:43:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	PRoNub5jA9Gf7w1dXnkXsq7KXaxAcgcIuaL6MaCMdgk=; b=L4O6KkFSUN0UGwxg
+	uwbjbdjSLlijcjeNnIYgyP5E5Rk//2L6Ag9bpTUMU5OQyUK8l3YyZjmiUqMIIuf6
+	dx676QqUc45cBMCm4fXWd9CqSaiIl+59nvO0b+rFjWWSr1KrA7nSMmv3EkY6Fnh7
+	mq64cK035a1tXA3RC1+CpxUPlak+0UJkqeOsAMnB+DN6HEDhKR/r+IhzKqG7UvEp
+	XWdlGG/Jz5+DTEKjmN3LhKeQxzNkyNYR9y5yV2qEtNHeP5v0iv1+inSSFwGfbUOg
+	4cfMZWbm+oYfG+mLGmhpjS/m+7qdUKp/cblKSoA1boZAWY7/UAfPSN1AeKwfFCIf
+	Tb4dEQ==
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com [209.85.222.198])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 49rtrt0ure-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Mon, 13 Oct 2025 09:43:07 +0000 (GMT)
+Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-85bb4e88394so180123385a.1
+        for <linux-pm@vger.kernel.org>; Mon, 13 Oct 2025 02:43:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760347656; x=1760952456;
+        d=1e100.net; s=20230601; t=1760348586; x=1760953386;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TSTsG2geMiXZZ54sKPHqUYbwVwZADjPORMJscfDPZgg=;
-        b=M+uVozhJM9kFAViGT2UEeT/XIs/ctPwU0SZLgmM+FFbuP7HGPDj6k3bcUyLw5+Qmha
-         7GRjMWqPH63gSey3KwXrMRdpyBlBarfl0n0LWHmE/i2T4D81JYk6z3lvpzFgRWQGHgRp
-         dN2Xok5zymxDKWexeDxWOMC0kcDMsayQWYEbFvl+P9aM0VTnRHA3re/Lip6zgBubrtKV
-         yvvBZQ2CJMXR1hxqpCG9Jmi4KSQb/J8HqKGlpz4ucr35lPoNT+aDewHTgiC2i/k0/JrY
-         YOlH7XCEJRNCa1kPWexnmuEDBo2Lrz1k5Szmf+oMvcnIoXYTBCtt8/hCh3DfYq6oeGj9
-         W/1Q==
-X-Forwarded-Encrypted: i=1; AJvYcCU8ZvFXYiBo0MXEThEr9RxHFwv8YYxpSb02umqHiaPWk/DSmgK5LyxPKpDNDlp8xeM7FFqXa689zg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz7sQv3S2MmFcOndoOv5RnyIR5AZvj7M2UDaFbOa1JsMXjj3T/x
-	dkcBAdoGOAzP1+4JQCCcuSpmTt3yKZTvQkRJyJSeV61ZP/vM6Vwy9j8M
-X-Gm-Gg: ASbGncvgtwXtiCyJKUmahht7s+AHRtNH9LHkhG+wgXhMNaepP0JrL1bmGFw/ah6/4px
-	Xy/059RpVa7JvLMFBi/SmsMItoyoarIS4Vs6+MG7f51aQX2jYXwiRSr25D4oPhplzEwiUc+DMQ+
-	SvTGKPMOHBfK4YTTCSTYsPJFFMiaAuOY2ruBeK5tAJc6KdYUl4BXhkMfmW2UYKXdRdP2aLCPxRT
-	0IRmVMxjDRKiyR2hTEfOwLx0nQhR2hg74qFBvHd5MOjDaOdghmzK5u/b288RDMmd05RiwzeLIwK
-	jvyv4kf2V9SENKwLp2RAv+CCHbrkQiFABPDCdKiqov+WIZYH4MiXyNA2UxC3olhyUtefMvnl0ZU
-	JtQQhFVCBgHA1cUL2FEZE6f/6NWJKdv75/+N/ShD0le+YzT6ncgMpA/KuaIFwSMy1U15/VLKPdD
-	+7665U+XgCPJ3q6sGvUvj+cyKz8tbIQCy+xQ==
-X-Google-Smtp-Source: AGHT+IEqb5UWThw0zJL0ngTJbT7pv4o6411sYhb14KLtxUGEsvK5SpnsWbVBznfiz/L/V7BnIrIUsw==
-X-Received: by 2002:a05:6512:3b9a:b0:57f:6da2:6a1a with SMTP id 2adb3069b0e04-5906db01c1emr5500852e87.48.1760347655259;
-        Mon, 13 Oct 2025 02:27:35 -0700 (PDT)
-Received: from ?IPV6:2a10:a5c0:800d:dd00:8fdf:935a:2c85:d703? ([2a10:a5c0:800d:dd00:8fdf:935a:2c85:d703])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-59088577c1bsm3920293e87.106.2025.10.13.02.27.34
+        bh=PRoNub5jA9Gf7w1dXnkXsq7KXaxAcgcIuaL6MaCMdgk=;
+        b=RAn9l6ym4wbGpZaW6p5JxYS/1i1VALo3IrNFgFzfGbeUvAeRG9fgyoKpFlzzVQRH07
+         HoVxTwYoAfYk1GZT9VxrKFQK4RQdV0bqg7Zn2EGtNugYxjBxihwJOeZigilkjW1A+b6e
+         KtqhPH/ToEL8k43bU52ow1YPCRcKHHsokjLLpB1oMpieV7r/po1SiOTOs7vR04nwxauv
+         AZlaHPqZPp3SwC5KRMNH/5dAqV5zP+1CuoTkXZWGV+gqO02RUCpL2jIYFZuOKHSJT+oN
+         hQmwezcGeiiD1hX5bW1APPgi9QpkGhYr0ElKhuZdE2KNU4xW1e0159w3DGShTMA0fl0f
+         S92Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUvg0+sWjWg0gxVTFjJoDjGoo3w1tvsY2zkm50Hyi+WWINEzMeBXlx+9Cec4ne0MvWX3XLu2r984g==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwbqmaSShZF2tGYTR2ddvNLIAaMdfUU0by+kf/6ya35AyHTB+oN
+	Hr34ZsZ1vMg5hjevxBlLoY0jDCSgLtPwLWF0AmiOZLSD+rUz0cVvze8aukpTRrFw759f1xOfqWV
+	lR+l8BxTksJUmp17cEnhhMF06ESk/rPqhXvXo+r0OvCn3PBQ8+oS5m+VjpX31u2vsBAutkw==
+X-Gm-Gg: ASbGnctYFN4eYkLNgzvfgKXxlwonBk401R7dLzr5iDDhgg6rNBBdhpLuBL8sYDInzrg
+	MvYhu1GMxhU4Yfz7UVxHECjocrUPAHS+3f1lj7NI2uS/zxK+SswglUpABK4JenHHVPSd9571OI3
+	OEWcgi+n4JgwEiGyKpgfUi8cT2LHl3ORlibu7ab1xI/HWiELoSoYJzlhJ1pnSW2VPpLo3koKjJe
+	oskpNC7YoWqW2E+7HflC46BCCrRGzpnn81NDBp7ij/4vHHpm4ltIlQpTl2eeEsjaYpw/H/588Mw
+	mHdJXrVDw2wo3pvHnFdYJyPnuUMCJIJycvLX93U7zaN1NLh/givZmgiPDHMW2tBNPdA1P47cEiG
+	L9LNewiDfBxd+GSxGvOoqTw==
+X-Received: by 2002:a05:620a:40ce:b0:883:3c5c:9077 with SMTP id af79cd13be357-883543faa58mr1929904085a.13.1760348586416;
+        Mon, 13 Oct 2025 02:43:06 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEZ37YIa8D275kZUNP9IUttcMgdGMHC6q8jTuYigjOj9p2rv1EtOiRJJX6OXhmRdZGU4PYwjQ==
+X-Received: by 2002:a05:620a:40ce:b0:883:3c5c:9077 with SMTP id af79cd13be357-883543faa58mr1929902185a.13.1760348585981;
+        Mon, 13 Oct 2025 02:43:05 -0700 (PDT)
+Received: from [192.168.149.223] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b55d66cc4b8sm894618366b.30.2025.10.13.02.43.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Oct 2025 02:27:34 -0700 (PDT)
-Message-ID: <d2295506-bf70-4142-8537-0fdf9cb04a30@gmail.com>
-Date: Mon, 13 Oct 2025 12:27:33 +0300
+        Mon, 13 Oct 2025 02:43:05 -0700 (PDT)
+Message-ID: <4b4ca560-d8e8-4d89-a02c-02d4245ccc37@oss.qualcomm.com>
+Date: Mon, 13 Oct 2025 11:43:04 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -83,79 +90,52 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 06/13] mfd: bd71828: Support ROHM BD72720
-To: Andreas Kemnade <andreas@kemnade.info>
-Cc: Lee Jones <lee@kernel.org>,
- Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
- Pavel Machek <pavel@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Sebastian Reichel <sre@kernel.org>,
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
- Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski
- <brgl@bgdev.pl>, linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-gpio@vger.kernel.org
-References: <cover.1759824376.git.mazziesaccount@gmail.com>
- <93142a80d90a0ac80b27090d0c83914675aad94d.1759824376.git.mazziesaccount@gmail.com>
- <20251009161847.GE2890766@google.com>
- <8ea507eb-f78c-4a16-882b-112e277fa1b6@gmail.com>
- <20251010150317.07bfdbe8@kemnade.info>
-Content-Language: en-US, en-AU, en-GB, en-BW
-From: Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <20251010150317.07bfdbe8@kemnade.info>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: [PATCH 1/2] power: supply: qcom_battmgr: clamp charge control
+ thresholds
+To: Val Packett <val@packett.cool>, Sebastian Reichel <sre@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Fenglin Wu <fenglin.wu@oss.qualcomm.com>
+Cc: Sebastian Reichel <sebastian.reichel@collabora.com>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20251012233333.19144-2-val@packett.cool>
+ <20251012233333.19144-3-val@packett.cool>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <20251012233333.19144-3-val@packett.cool>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-Proofpoint-ORIG-GUID: v_2NO6vbGh0fm6q_FxkfiUqGeOMi8JxT
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDEzMDAyMiBTYWx0ZWRfX+QZmU4KNEg48
+ S40UJe9qcjm2WxGV04H1/mnf0pjzAmv6svIErc8jP7uAZrNGWTLC6DJTvPpMTA8EYY9UFYBPMrn
+ ZrC/emgolgAqCbTAZfNiKMFzxpaAtJDtPVSwmv32s0N1Se/xcyp+wzL7HCt5CFlH1Sz34pAWseR
+ aXd5JRuyMmOqLMCijs9iPedNi7FWb1lCBiXPAK6Ek+qH7MU9digaoi+mLbWhxGw99a+F0CPATxf
+ UQhIm100m4teTzb56a5rOVMBMIIIt5g931cSbQmmIjHN08ig5stkIVVy+sxI+FV36DJ7hhK8MYH
+ 6UFaSSZU2wgW7RfHEHVqPxBBD5FggdATDjqTfilh1lGq42nxGpw1ejuvaGz5yarDIRtWZXf5FHe
+ hCK/r0QUem1l2d/PTsj1N2JRRa7csA==
+X-Authority-Analysis: v=2.4 cv=SfD6t/Ru c=1 sm=1 tr=0 ts=68ecc9ab cx=c_pps
+ a=qKBjSQ1v91RyAK45QCPf5w==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
+ a=IkcTkHD0fZMA:10 a=x6icFKpwvdMA:10 a=Wbw6XCnMcsYJmrvhT80A:9
+ a=QEXdDO2ut3YA:10 a=NFOGd7dJGGMPyQGDc5-O:22
+X-Proofpoint-GUID: v_2NO6vbGh0fm6q_FxkfiUqGeOMi8JxT
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-10-13_03,2025-10-06_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ malwarescore=0 clxscore=1015 adultscore=0 phishscore=0 lowpriorityscore=0
+ bulkscore=0 impostorscore=0 priorityscore=1501 spamscore=0 suspectscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2510020000 definitions=main-2510130022
 
-Hi Andreas!
-
-First of all, thanks for taking a look at this!
-
-On 10/10/2025 16:03, Andreas Kemnade wrote:
-> On Fri, 10 Oct 2025 15:09:07 +0300
-> Matti Vaittinen <mazziesaccount@gmail.com> wrote:
+On 10/13/25 1:32 AM, Val Packett wrote:
+> The sysfs API documentation says that drivers "round written values to
+> the nearest supported value" for charge_control_end_threshold.
 > 
->>>> +static int bd72720_get_secondary_regmap(struct i2c_client *i2c,
->>>
->>> Does this 'secondary' have a specific purpose or a better name?
->>
->> I am not entirely sure. When I asked this from the designers they just
->> told me that they needed more than 255 registers so they added another
->> slave address... (I'm not sure what would have been wrong with using a
->> page register). So, I assume they just placed stuff that didn't fit in
->> first 255 register there. But yeah, it looks like most of the registers
->> there are related to the charger. So, perhaps it isn't completely
->> misleading to use "charger regmap"? The data-sheet seems to be just
->> using "Register map 1" and "Register map 2" in the tables listing these
->> registers. I kind of like using something which maps easily to the
->> data-sheet, but I really have no strong opinion on this.
-> 
-> just another idea: What about one regmap with custom functions covering
-> both these adresses? Maybe that could even be added to the regmap
-> functionality, maybe with a 0x100 offset for the second range.
-> That way the rest of the code only needs to real with one regmap
-> and properly defined registers.
+> Let's do this for both thresholds, as userspace (e.g. upower) generally
+> does not expect these writes to fail at all.
 
-Interesting idea.
+The documentation says so only for the upper bound. You should
+probably submit a patch to amend the lower one as well
 
-I suppose you mean something like implementing custom remap_read() and 
-regmap_write() - which would practically select the I2C adapter to use 
-based on the register address - and then doing same thing as the 
-regmap_i2c_smbus_i2c_write() / regmap_i2c_smbus_i2c_read() do?
-
-I suppose this would mean duplicating the functionality provided by the 
-regmap_i2c_smbus_i2c_write() and the regmap_i2c_smbus_i2c_read(), which 
-are static. It'd also mean we'll lose the 1 to 1 mapping between the 
-register addresses in driver and addresses in the data-sheet. I agree 
-this wouldn't be such a huge thing if we used offset like 0x100 though.
-
-I am still leaning towards using two different regmaps though, as it 
-seems like a more 'standard' solution. I assume people are more familiar 
-with providing platform data to "MFD sub drivers" than custom regmaps 
-accessing different I2C slave addresses.
-
-But yeah, thanks for this suggestion! It opened up some completely new 
-paths in my brains! :)
-
-Yours,
-	-- Matti
+Konrad
 
