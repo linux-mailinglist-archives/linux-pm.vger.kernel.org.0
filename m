@@ -1,133 +1,97 @@
-Return-Path: <linux-pm+bounces-35945-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35946-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id B44BDBD168D
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Oct 2025 07:08:52 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 86F79BD1D0C
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Oct 2025 09:34:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 44486346F1F
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Oct 2025 05:08:52 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 5E8814EAD7B
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Oct 2025 07:34:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8BD02C15A2;
-	Mon, 13 Oct 2025 05:08:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 575522E1F10;
+	Mon, 13 Oct 2025 07:34:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="DGcSJ2Af"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="PabJbPSo"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D4BE23AB8B
-	for <linux-pm@vger.kernel.org>; Mon, 13 Oct 2025 05:08:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2159A145B3E;
+	Mon, 13 Oct 2025 07:33:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760332125; cv=none; b=th1MCUMiPlaJtCilt65Cvdg7f9x74HjIOsqA8odyRpw0NlYmCP5cK2M1tbm7P5OnL+dHNYhrmDn96+WkfZfAHQVJREexoMtrw1dcecAUB/yYW6JFT+TCYxKT0AM4RRmFj7TDmIDUFGgIjUtwxdPlAJqhA0/8HHhOCIR4o+zQj1s=
+	t=1760340842; cv=none; b=LCAXuxl5nwq2W/IF6PNiB4aVatcyFb7DDmeK4NemfAWUf8CjGkgtPnoPlh8KWbLrKNK7vMfQso59kDSRuULNqvV9hPUbT9yZ7CYqvDMNbq9SgYOaxLYSQN7oPhp00BHUbZkDESoCuDgGXDJt4g9VsWpDqqrJHnxfT+G03hpTwTc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760332125; c=relaxed/simple;
-	bh=JW2KZzHBHGQ+XKshSFr20YBoYNWz1TvAot2oKeFV9kw=;
+	s=arc-20240116; t=1760340842; c=relaxed/simple;
+	bh=7yV78F8cMOSvYni2E1LkAFWuImI1aDXW1ZhVxLtNRMo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ady97R8L1RPVIwmoZKNkuI7thdH5/dp6zqE+ATibY5XvXJNrGyu+0tuA2bDZDbrbnUCxsp5gGdaWRBYY/Sf7EcE408iGoBC/nRvAOqj2jYtF44sID/QcwtTDi+1Qmq8TRjGtl7BE6sAB3zRwKMnVkl7Z7mCU5F2uwtK2Mqrsico=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=DGcSJ2Af; arc=none smtp.client-ip=209.85.210.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-781db5068b8so3039379b3a.0
-        for <linux-pm@vger.kernel.org>; Sun, 12 Oct 2025 22:08:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1760332123; x=1760936923; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=GvMGF2m9NKomiMPkcFDrgY9B/XQ2FXotq7iRDHPw2HM=;
-        b=DGcSJ2Af6VYmbrtuCzQG3CMmb1RhZwaLy/chU9o2lUUr70Bx2+z3r/OMvV0xYYZQaP
-         eA16OXeckD7LDEPs5jQU6+fV23sXpMRaYgbQ6ObGNFp/Jg5iHFT2ZcNlHPoO55kIH4Tf
-         VvbRMvZdohIEapQ9BF/G6g2n2nHsWsVs3c6TuRAKPbOwpLuWIhTCmCsToee6YyUG+Xwj
-         zlL3m1vxw7MJoZIMh2wJ26ewgNdyVNUko7VgXB4Poad0kFnqgWm+AKYxtseB3POYaXQr
-         +XLJ/2bvwsqb/VW7BhAwPG8K8AyGuxtOh5GkLvxpI12AHo/S+oYzfoSEjL7NDdwlNNcr
-         8x8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760332123; x=1760936923;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GvMGF2m9NKomiMPkcFDrgY9B/XQ2FXotq7iRDHPw2HM=;
-        b=eAf7UJ80OqppxuQwgYHrAaR2TL+16r2qR0V6wjFnn7Nnhll149KvHd0MbGncBW0TW1
-         wtB7U21VIG+Kbf4V4mfZ0o8G7HpXdQfCf0XdFXIjl9LEhyCIEANaYu9HAeCts6tyxrqB
-         F8JBk2dTCczFo1IeeRvoC8JVBrtpMRut+0NRMAKEmz7eFHSLeuCjQ4EUGxBQN/s6Fwoc
-         0TPFCIplDwKmDbBFS/BiRgt3KgnZXaVy6TYRtf1dzBAXJcqhCbrsbDUtb2xkUNQ9gFcJ
-         KOgzMiX13jzSIcIROST3w9Jif42AN3y2wllh5ERbpamp/rGkeQURMcSQoiF6Sw3fUFYj
-         0PvA==
-X-Forwarded-Encrypted: i=1; AJvYcCWTQDON32tZbAvOIz3+bxTaBe/PHILc5bSFFnPicqM6Spec9YVW9QFvlsF5ILjRSCPKyinom20QKQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxZO8GlYDDKi7IIOU1s4S2oz8bh/2svvWAOKAeBSTylI5HIt32B
-	vv22lVDrKwpxeIorOwUzEAQsropXYwf5X2rkoEW5750J6PvbLemIGvTjN3gmmMGnS+c=
-X-Gm-Gg: ASbGnctUwEnvUgY2EZvelCNRVT5g8uUezteMB16sH5UVZf2mZ31Nx79/4XKi3o66IWA
-	iIn5ANoJcqWhhr9NZZKUb3nGuw65ou02UWDsbw5k+ypgdaYmOkm5YODWvCrABYny5cABzCy7kBf
-	05Jju3KxxEWZWcCTSyr1c8P0agxSNmIw37N71hn8rkwM/HQBoswhR333aBRKImjx470PAcIaTgW
-	zIPDH8ivtpGfcTRpHY3TsnBKD8dVtKSG0TO1V3BQvF5QkwQjE2eeeNlUgahwO5ULt6vH6W14MMh
-	H2X0ERUwPXY9ctSy8YFKp8uJozgA0sxVgCwTBxSG4y8zDzuEovNUcpYcRE6fQX6E4+SafZZOKZx
-	Ii9SNcn9zDTCgQzuZZFXHTQSj0GmCUXzHO+PEtHSfJIjMzRGq4wPfmQLvQEcfmivIHjmY
-X-Google-Smtp-Source: AGHT+IFr1jDMWruKiXaI53Y1xIrFgDt+3JcFOtGMWWSDIGVWWBQCIaxajxNyZnXlqxumYlg8hTxd+w==
-X-Received: by 2002:a05:6a21:99a1:b0:302:c800:bc0b with SMTP id adf61e73a8af0-32da83e64d7mr25164345637.44.1760332123377;
-        Sun, 12 Oct 2025 22:08:43 -0700 (PDT)
-Received: from localhost ([122.172.87.183])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7992bb11ca0sm10155168b3a.32.2025.10.12.22.08.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Oct 2025 22:08:42 -0700 (PDT)
-Date: Mon, 13 Oct 2025 10:38:40 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Aaron Kling <webgeek1234@gmail.com>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Thierry Reding <thierry.reding@gmail.com>, 
-	Jonathan Hunter <jonathanh@nvidia.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 1/8] cpufreq: tegra186: add OPP support and set
- bandwidth
-Message-ID: <5ind7yevxsrsd3ws5rkl5z3zuxw4yrqoclqg7q6beunc6kgr2n@qmgbgw5q2ltc>
-References: <20250909-tegra186-icc-v2-0-09413724e781@gmail.com>
- <20250909-tegra186-icc-v2-1-09413724e781@gmail.com>
- <20250930103006.octwlx53p2shwq2v@vireshk-i7>
- <CALHNRZ84s8rxQKWZeF-bfS31nK6ay4_MspmYa4+qapf9gtk+Fg@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=dQ+Xq3xKlQTFkmxXtwPgZX90guJQO8zBViH75x/45jBCCjlYyODYAbFkaZLOlHBRE8v5ffvo7Vc46PxemutjNBQrW+0UAoeoUKU09kn/z1iVv0zLii1cdx8Zgvs9PkX1QDP7Sa5W4ZSUZOIELM1oNPX+w8Tf2P/HQAdS+chWI54=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=PabJbPSo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47C1EC4CEFE;
+	Mon, 13 Oct 2025 07:33:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1760340839;
+	bh=7yV78F8cMOSvYni2E1LkAFWuImI1aDXW1ZhVxLtNRMo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=PabJbPSonzXaexcpuNWwzV1vROM5krc4piAQSkLQ1CBbSc9mnMwYr3EuKkPtwwQwo
+	 X2rITrD1eMK+SwFBIvgUdAyQkXeZ8XJUzsuctyOTSF1sLbypKA5E4ecgGg/N2VLLzG
+	 FvznZEPdA+Xq++I2LIN5sjX+CR/VgpPevbk3jK8M=
+Date: Mon, 13 Oct 2025 09:33:56 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Jameson Thies <jthies@google.com>
+Cc: heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, dmitry.baryshkov@oss.qualcomm.com,
+	bleung@chromium.org, akuchynski@chromium.org,
+	abhishekpandit@chromium.org, sebastian.reichel@collabora.com,
+	linux-pm@vger.kernel.org
+Subject: Re: [PATCH 0/6] UCSI Power Supply Updates and Bug Fixes
+Message-ID: <2025101316-rage-vegan-c380@gregkh>
+References: <20251007000007.3724229-1-jthies@google.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CALHNRZ84s8rxQKWZeF-bfS31nK6ay4_MspmYa4+qapf9gtk+Fg@mail.gmail.com>
+In-Reply-To: <20251007000007.3724229-1-jthies@google.com>
 
-On 12-10-25, 21:32, Aaron Kling wrote:
-> On Tue, Sep 30, 2025 at 5:30 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> >
-> > On 09-09-25, 01:21, Aaron Kling via B4 Relay wrote:
-> > > +static int tegra_cpufreq_set_bw(struct cpufreq_policy *policy, unsigned long freq_khz)
-> > > +{
-> > > +     struct tegra186_cpufreq_data *data = cpufreq_get_driver_data();
-> > > +     struct dev_pm_opp *opp __free(put_opp);
-> >
-> > The usage here looks incorrect..
-> >
-> > > +     struct device *dev;
-> > > +     int ret;
-> > > +
-> > > +     dev = get_cpu_device(policy->cpu);
-> > > +     if (!dev)
-> > > +             return -ENODEV;
-> >
-> > On failure, we would return from here with a garbage `opp` pointer, which the
-> > OPP core may try to free ?
-> >
-> > Moving the variable definition here would fix that.
+On Tue, Oct 07, 2025 at 12:00:01AM +0000, Jameson Thies wrote:
+> This series includes the following minor changes to power supply
+> handling by the UCSI driver.
 > 
-> If the var was NULL initialized, would the free handle that correctly?
-> Keeping the declarations at the start of the function reads better
-> imo.
+> 1) Adds the "Status" property to power supplies registered by the UCSI
+> driver.
+> 2) Reports power supply USB type as "DRP" when the port partner is a
+> DRP.
+> 3) Updates ucsi.c to report a power supply change all power opmode
+> changes. Currently this only gets reported when opmode is PD.
+> 4) Updates ucsi.c to report a power supply change when the PPM signals
+> a sink path change.
+> 5) Set max current to 0 when no device is connected. Currently this
+> defaults to 0.1A.
+> 6) Updates connector status after initiating a PR swap. Following the
+> UCSI spec, there is no reported change following a successful SET_PDR
+> command. This results in the stored connector status being outdated.
+> 
+> Abhishek Pandit-Subedi (1):
+>   usb: typec: ucsi: pr_swap should check connector_status
+> 
+> Jameson Thies (5):
+>   usb: typec: ucsi: psy: Add power supply status
+>   usb: typec: ucsi: psy: Add support for DRP USB type
+>   usb: typec: ucsi: Report power supply changes on power opmode changes
+>   usb: typec: ucsi: Report power supply change on sink path change
+>   usb: typec: ucsi: psy: Set max current to zero when disconnected
 
-include/linux/cleanup.h has some recommendations around that.
+Please do not mix bug fixes and updates to the driver in the same patch
+series, as that means the bug fixes will be delayed until the next
+release, not the current one, as I can't take them all at once.
 
--- 
-viresh
+thanks,
+
+greg k-h
 
