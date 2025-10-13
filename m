@@ -1,245 +1,1758 @@
-Return-Path: <linux-pm+bounces-35947-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35949-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2EA9BBD1D23
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Oct 2025 09:34:57 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5BF06BD231C
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Oct 2025 11:04:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 116A64EC889
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Oct 2025 07:34:56 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id AB813349265
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Oct 2025 09:04:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 299FA2E92B7;
-	Mon, 13 Oct 2025 07:34:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 691EB2FB995;
+	Mon, 13 Oct 2025 09:03:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="AyQkphUp"
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="BgV+bFwS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from out162-62-57-64.mail.qq.com (out162-62-57-64.mail.qq.com [162.62.57.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AA0C2E8DE2;
-	Mon, 13 Oct 2025 07:34:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760340886; cv=pass; b=KawHxvkAGVv4nSDnSF3dRWXcQK0w0QRnQ2ZGRI9uSD2Mum3i3QjT0RTLyc0Qi4uKOaAqswpL4CaLuiNL1K5TrntGRFnVNG/BiMIn+RNc7oagHLmMp+XaxgPOwDT3JaJuYniqaPoMB0C5+EccGc69bYhY9QrErx5MKpPW15+tBI0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760340886; c=relaxed/simple;
-	bh=A9EJJL6HpVd5HlAevCxk3ja2iF96RJMdvndegCmdfHA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=n7N5sjOVkmODBskkMZhzKVoBfHQxRDLXQAl9GY9MmG+0FVnQl/s7OO7tgDaCUE6JFZFGcwP4nRMXYhy+nFu4UL3rQMfZ3hK82lBBn/FF4ugtwBh5NoFP5NjRENB9wKkIpp04eWke/vGf1rHQj6+2lLiVujK7/kkESjVsYgIX/kc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=AyQkphUp; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1760340856; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=SjXvJu+0aw4xckUH7lck7ICJqmaQGmv80hZYTOYLzaknZ/8xvlq40ClTC57fIcoHd8npb86VG9Y8lEFYP8CWAJEvMZFdWwfz9Q4n5JKT2SGvqV8rfh+cCdhe+5JVurMrcqsK60NYFDSgDxX3niuml8J5RovrZIniTi9GqQJuqoc=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1760340856; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=5W/p2P/EoHtENGM2zw+O/fNV3kIkZkb90QJ9eHXBW54=; 
-	b=gE5whtZRfMU5IMkCVkgFMHEhfjktbPhtMbgGr4vQdbe8mWOdNRIRzegLrH7jsL145/7aGuxFzlzzwcAZ5dgCi9udaiFhlT+esw0IxjaHCWUFvIi9OTEgBeLDqxyIJovNDWB6ERCTrLU+0dJit5IOKLN2k8ILkmO7rCrfvbnl9Ec=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
-	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1760340856;
-	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
-	h=From:From:Date:Date:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Message-Id:To:To:Cc:Cc:Reply-To;
-	bh=5W/p2P/EoHtENGM2zw+O/fNV3kIkZkb90QJ9eHXBW54=;
-	b=AyQkphUp6sUYT5/8R3SRYFj/3pk43NQrIK4FuMU8/rbecKhdT1duMmIYYbA5MWbd
-	SN1oQaQk9FDra61sc+sC5xzMQzrrkY705gZaEYDtDjYy86oVaZwSQ2IflTsDYOZubCV
-	nqESgaDlUGDIofIb0f2bW7So6LUxQQbbRZIucH1g=
-Received: by mx.zohomail.com with SMTPS id 1760340853910318.69177918268304;
-	Mon, 13 Oct 2025 00:34:13 -0700 (PDT)
-From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-Date: Mon, 13 Oct 2025 09:34:04 +0200
-Subject: [PATCH] PM / devfreq: rockchip-dfi: switch to FIELD_PREP_WM16
- macro
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C0C32EAD0A;
+	Mon, 13 Oct 2025 09:03:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.64
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1760346236; cv=none; b=HXFsvEeAkcEFQElOnFh3xzIvxhD22c/WcqfttZ2dK7+uAlJoMvU/tEMMqyMCXl5byVnkmXlw3yaSbUt2GoN21R+e8xa7oihmN2GF1Cq9aKgJYO6VUXQ8MzLWotzH7CmD7LXb2NziUewjpjsBtQ12FTN6aYVtBKOeiMVHcR3LEPo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1760346236; c=relaxed/simple;
+	bh=yPQIwV+/+FUhn0gOp/BGeNghJ9mfys2kAxspEfxQXtE=;
+	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version; b=UUm6Eyr3f23FF3ygjNST/3119PA3KamZzjW83TY7n9zlcM93KJrj9BNMtrZYPNWpRrzpWzdHilNph7niBgQHnR/X04DO85W3vCcqTXYbS+eL4m0sw/v0h9Pa48x6MSJeaxwqUneLvMYBN/sIbAo1aklfpRTtp3EPTL0oQK86k5M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=BgV+bFwS; arc=none smtp.client-ip=162.62.57.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1760345926; bh=6c2FB9/UyW5g3HtlyCnwBKmZjoWTB2VfR0y1MYPoGts=;
+	h=From:To:Cc:Subject:Date;
+	b=BgV+bFwSZsFh92WlNle8UaJWpKz2cudK6a9Qt45T4DCJIZ+o8wm8FVupLx0nAq12s
+	 UnEfFUIJqw7QVRtOF71Jh3s0q33a/2UVjPib7tKAawCkf09y/8mgk5D7AQwPLz+xIA
+	 gkNTsK/JKoW+cDZKKoadOOsrTfppPfJs3xUwrlTw=
+Received: from wwq-QiTianM428-A688.ght.com ([58.34.102.26])
+	by newxmesmtplogicsvrszc41-0.qq.com (NewEsmtp) with SMTP
+	id D90208F1; Mon, 13 Oct 2025 16:54:16 +0800
+X-QQ-mid: xmsmtpt1760345656tlho651og
+Message-ID: <tencent_DAD6E4E85F79FDC4DF2878B03940CA337108@qq.com>
+X-QQ-XMAILINFO: NMGzQWUSIfvTWeYJEh4q88/uj6wf/wTROHgnRN9PtH6FSjNPhGuCz6W1GQPgZH
+	 WZhP+K6inNRJlLsXTzsPAxW4HoXVf8ET+7P0i+5OpHwhlKroBf/PeXTgv0ge2mvQh/5Pm1HpTJGK
+	 7IEOFnmU59ZLFxHqtt0TP0NsuvY5FgShpv2fOkUZD5g8XWYAEYXOobkDIAhmZt85suqCaoJ9RZMh
+	 V9oovNrOXEA5MXRjYIBzyHqmn4PyVyhio0QPGCma12/ryv445O4vkibZ51TzJAWkbs102MHvIC8M
+	 jg19DlCwxePVdoYRp5+1ksujDmfbnv4DkN22VE69lTG8pdk8J79L/KRc+i3ufIbbKLcp/uqpvqd+
+	 CSRSKkFa86KhDKjHatqauhTNigWlu5M15TCrVqYFvd3apy6xxJfqLerLCdP18kPeuoR3hS6TaP9r
+	 s8TdcxQv03AWeFC/+6EWxqBO1QkQEPElWYPGBl4Tgu6bMFcSxvmZia6ftMLscNEwcwcNf8E4zMfA
+	 RjXtTdetGVEnVYysGH6OgjAkgWgeED2m+GUtECU5wptJOWFkDJTtWIpRUy84s/sfaO4DamrgB71B
+	 cQDiN2jhxW/Uz1VZtoiROg3nbI5CXl/QKiC138NyyckWl8mh9YQAT7SA/r4S7hveV4o9WRREGanC
+	 I5HEMXKtnVuJWh9YuYaJIvuYwt+hcYDYKRc9ygGkdpXi0U7oJ7QGbxqXzSgeLiN4S5vTeeaVA3fj
+	 rd0RL4wNEjuRn+R28xAq4E8y2/FYLxcZDfNPz+ZY1vPk+XXYxcFp64W3/23RyhxLogGcyl6ra/Hi
+	 DzmFCjXIjqjfKkzSBZQAvs1Wzv1RHmaMKcC+JttkA0qfQD/RRkeXCS4Bn2nuiOpe95EXNQ34qIgt
+	 quLvdha9Pcbewj1lQLHES2rKcc8jwMxL3U6JDFqLn9AhKRk0qpxETTDHQN7m34aHQtQGtARlh4NB
+	 HJ5HrTxDQ/q1JT6nOuH77B2CVia2sF1KR58JNrcUGBVnVe66fRpM62WzBNh8Bf
+X-QQ-XMRINFO: NS+P29fieYNw95Bth2bWPxk=
+From: 1647395606@qq.com
+To: sre@kernel.org
+Cc: linus.walleij@linaro.org,
+	brgl@bgdev.pl,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	wangwenqiang <wenqiang.wang@faiot.com>
+Subject: [PATCH] power: supply: Add SC8541 charger drivers
+Date: Mon, 13 Oct 2025 16:54:14 +0800
+X-OQ-MSGID: <20251013085414.48559-1-1647395606@qq.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251013-hiword-rockchip-dfi-v1-1-4f2a63098553@collabora.com>
-X-B4-Tracking: v=1; b=H4sIAGur7GgC/yXMQQrCMBCF4auEWTuSxBpKryJd1GRiBmlTJ7UKp
- Xc32OX34P0bFBKmAp3aQGjlwnmqMCcFPg3Tg5BDNVhtr0abCyb+ZAko2T994hlDZGyMdjo617R
- WQ33OQpG//+qtPyz0etf4coxwHwqhz+PIS6dWdzYtijfQ7/sPfxY7wJIAAAA=
-X-Change-ID: 20251013-hiword-rockchip-dfi-41060f664820
-To: Yury Norov <yury.norov@gmail.com>, Chanwoo Choi <cw00.choi@samsung.com>, 
- MyungJoo Ham <myungjoo.ham@samsung.com>, 
- Kyungmin Park <kyungmin.park@samsung.com>, Heiko Stuebner <heiko@sntech.de>
-Cc: kernel@collabora.com, linux-pm@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org, 
- linux-kernel@vger.kernel.org, 
- Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-X-Mailer: b4 0.14.3
+Content-Transfer-Encoding: 8bit
 
-The era of hand-rolled HIWORD_UPDATE macros is over, at least for those
-drivers that use constant masks.
+From: wangwenqiang <wenqiang.wang@faiot.com>
 
-Like many other Rockchip drivers, rockchip-dfi brings with it its own
-HIWORD_UPDATE macro. This variant doesn't shift the value (and like the
-others, doesn't do any checking).
+The SC8541 is a charger pump from South Chip.
+By adjusting the voltage difference between the input and output terminals,
+it can achieve a maximum charging current of 8A.
+It has been verified that this driver can operate normally on the Qualcomm QCS615 platform.
 
-Remove it, and replace instances of it with hw_bitfield.h's
-FIELD_PREP_WM16.  Since FIELD_PREP_WM16 requires contiguous masks and
-shifts the value for us, some reshuffling of definitions needs to
-happen.
-
-This gives us better compile-time error checking, and in my opinion,
-nicer code.
-
-Tested on an RK3568 ODROID-M1 board (LPDDR4X at 1560 MHz, an RK3588
-Radxa ROCK 5B board (LPDDR4X at 2112 MHz) and an RK3588 Radxa ROCK 5T
-board (LPDDR5 at 2400 MHz). perf measurements were consistent with the
-measurements of stress-ng --stream in all cases.
-
-Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+Signed-off-by: wangwenqiang <wenqiang.wang@faiot.com>
 ---
-Hi Yury,
+ drivers/power/supply/Kconfig          |    7 +
+ drivers/power/supply/Makefile         |    1 +
+ drivers/power/supply/sc8541_charger.c | 1624 +++++++++++++++++++++++++
+ 3 files changed, 1632 insertions(+)
+ create mode 100644 drivers/power/supply/sc8541_charger.c
 
-as promised[1], here's the follow-up patch to move rockchip-dfi to the
-new FIELD_PREP_WM16 macro after the LPDDR5 changes, which caused a
-conflict during the last merge window.
-
-I've re-tested it on three boards, as outlined in the commit message.
-
-Link: https://lore.kernel.org/all/14358105.O9o76ZdvQC@workhorse/t/#m6b5b01cb30a04745ea3167a660b4794c608f387b [1]
----
- drivers/devfreq/event/rockchip-dfi.c | 45 ++++++++++++++++++------------------
- 1 file changed, 22 insertions(+), 23 deletions(-)
-
-diff --git a/drivers/devfreq/event/rockchip-dfi.c b/drivers/devfreq/event/rockchip-dfi.c
-index 5a2c9badcc64..5e6e7e900bda 100644
---- a/drivers/devfreq/event/rockchip-dfi.c
-+++ b/drivers/devfreq/event/rockchip-dfi.c
-@@ -20,6 +20,7 @@
- #include <linux/of.h>
- #include <linux/of_device.h>
- #include <linux/bitfield.h>
-+#include <linux/hw_bitfield.h>
- #include <linux/bits.h>
- #include <linux/perf_event.h>
+diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
+index 79ddb006e2da..b44e5ba46f79 100644
+--- a/drivers/power/supply/Kconfig
++++ b/drivers/power/supply/Kconfig
+@@ -1074,4 +1074,11 @@ config FUEL_GAUGE_MM8013
+ 	  the state of charge, temperature, cycle count, actual and design
+ 	  capacity, etc.
  
-@@ -30,8 +31,6 @@
- 
- #define DMC_MAX_CHANNELS	4
- 
--#define HIWORD_UPDATE(val, mask)	((val) | (mask) << 16)
--
- /* DDRMON_CTRL */
- #define DDRMON_CTRL	0x04
- #define DDRMON_CTRL_LPDDR5		BIT(6)
-@@ -41,10 +40,6 @@
- #define DDRMON_CTRL_LPDDR23		BIT(2)
- #define DDRMON_CTRL_SOFTWARE_EN		BIT(1)
- #define DDRMON_CTRL_TIMER_CNT_EN	BIT(0)
--#define DDRMON_CTRL_DDR_TYPE_MASK	(DDRMON_CTRL_LPDDR5 | \
--					 DDRMON_CTRL_DDR4 | \
--					 DDRMON_CTRL_LPDDR4 | \
--					 DDRMON_CTRL_LPDDR23)
- #define DDRMON_CTRL_LP5_BANK_MODE_MASK	GENMASK(8, 7)
- 
- #define DDRMON_CH0_WR_NUM		0x20
-@@ -124,27 +119,31 @@ struct rockchip_dfi {
- 	unsigned int count_multiplier;	/* number of data clocks per count */
- };
- 
--static int rockchip_dfi_ddrtype_to_ctrl(struct rockchip_dfi *dfi, u32 *ctrl,
--					u32 *mask)
-+static int rockchip_dfi_ddrtype_to_ctrl(struct rockchip_dfi *dfi, u32 *ctrl)
- {
- 	u32 ddrmon_ver;
- 
--	*mask = DDRMON_CTRL_DDR_TYPE_MASK;
--
- 	switch (dfi->ddr_type) {
- 	case ROCKCHIP_DDRTYPE_LPDDR2:
- 	case ROCKCHIP_DDRTYPE_LPDDR3:
--		*ctrl = DDRMON_CTRL_LPDDR23;
-+		*ctrl = FIELD_PREP_WM16(DDRMON_CTRL_LPDDR23, 1) |
-+			FIELD_PREP_WM16(DDRMON_CTRL_LPDDR4, 0) |
-+			FIELD_PREP_WM16(DDRMON_CTRL_LPDDR5, 0);
- 		break;
- 	case ROCKCHIP_DDRTYPE_LPDDR4:
- 	case ROCKCHIP_DDRTYPE_LPDDR4X:
--		*ctrl = DDRMON_CTRL_LPDDR4;
-+		*ctrl = FIELD_PREP_WM16(DDRMON_CTRL_LPDDR23, 0) |
-+			FIELD_PREP_WM16(DDRMON_CTRL_LPDDR4, 1) |
-+			FIELD_PREP_WM16(DDRMON_CTRL_LPDDR5, 0);
- 		break;
- 	case ROCKCHIP_DDRTYPE_LPDDR5:
- 		ddrmon_ver = readl_relaxed(dfi->regs);
- 		if (ddrmon_ver < 0x40) {
--			*ctrl = DDRMON_CTRL_LPDDR5 | dfi->lp5_bank_mode;
--			*mask |= DDRMON_CTRL_LP5_BANK_MODE_MASK;
-+			*ctrl = FIELD_PREP_WM16(DDRMON_CTRL_LPDDR23, 0) |
-+				FIELD_PREP_WM16(DDRMON_CTRL_LPDDR4, 0) |
-+				FIELD_PREP_WM16(DDRMON_CTRL_LPDDR5, 1) |
-+				FIELD_PREP_WM16(DDRMON_CTRL_LP5_BANK_MODE_MASK,
-+						dfi->lp5_bank_mode);
- 			break;
- 		}
- 
-@@ -172,7 +171,6 @@ static int rockchip_dfi_enable(struct rockchip_dfi *dfi)
- 	void __iomem *dfi_regs = dfi->regs;
- 	int i, ret = 0;
- 	u32 ctrl;
--	u32 ctrl_mask;
- 
- 	mutex_lock(&dfi->mutex);
- 
-@@ -186,7 +184,7 @@ static int rockchip_dfi_enable(struct rockchip_dfi *dfi)
- 		goto out;
- 	}
- 
--	ret = rockchip_dfi_ddrtype_to_ctrl(dfi, &ctrl, &ctrl_mask);
-+	ret = rockchip_dfi_ddrtype_to_ctrl(dfi, &ctrl);
- 	if (ret)
- 		goto out;
- 
-@@ -196,15 +194,16 @@ static int rockchip_dfi_enable(struct rockchip_dfi *dfi)
- 			continue;
- 
- 		/* clear DDRMON_CTRL setting */
--		writel_relaxed(HIWORD_UPDATE(0, DDRMON_CTRL_TIMER_CNT_EN |
--			       DDRMON_CTRL_SOFTWARE_EN | DDRMON_CTRL_HARDWARE_EN),
-+		writel_relaxed(FIELD_PREP_WM16(DDRMON_CTRL_TIMER_CNT_EN, 0) |
-+			       FIELD_PREP_WM16(DDRMON_CTRL_SOFTWARE_EN, 0) |
-+			       FIELD_PREP_WM16(DDRMON_CTRL_HARDWARE_EN, 0),
- 			       dfi_regs + i * dfi->ddrmon_stride + DDRMON_CTRL);
- 
--		writel_relaxed(HIWORD_UPDATE(ctrl, ctrl_mask),
--			       dfi_regs + i * dfi->ddrmon_stride + DDRMON_CTRL);
-+		writel_relaxed(ctrl, dfi_regs + i * dfi->ddrmon_stride +
-+			       DDRMON_CTRL);
- 
- 		/* enable count, use software mode */
--		writel_relaxed(HIWORD_UPDATE(DDRMON_CTRL_SOFTWARE_EN, DDRMON_CTRL_SOFTWARE_EN),
-+		writel_relaxed(FIELD_PREP_WM16(DDRMON_CTRL_SOFTWARE_EN, 1),
- 			       dfi_regs + i * dfi->ddrmon_stride + DDRMON_CTRL);
- 
- 		if (dfi->ddrmon_ctrl_single)
-@@ -234,8 +233,8 @@ static void rockchip_dfi_disable(struct rockchip_dfi *dfi)
- 		if (!(dfi->channel_mask & BIT(i)))
- 			continue;
- 
--		writel_relaxed(HIWORD_UPDATE(0, DDRMON_CTRL_SOFTWARE_EN),
--			      dfi_regs + i * dfi->ddrmon_stride + DDRMON_CTRL);
-+		writel_relaxed(FIELD_PREP_WM16(DDRMON_CTRL_SOFTWARE_EN, 0),
-+			       dfi_regs + i * dfi->ddrmon_stride + DDRMON_CTRL);
- 
- 		if (dfi->ddrmon_ctrl_single)
- 			break;
-
----
-base-commit: cb6649f6217c0331b885cf787f1d175963e2a1d2
-change-id: 20251013-hiword-rockchip-dfi-41060f664820
-
-Best regards,
++config SC8541_CHARGER
++        tristate "SC8541 Charger Pump driver"
++        default n
++        help
++          If you say yes here you will get support for the SC8541 Charge Pump.
++          This driver can give support for SC8541 Int
++
+ endif # POWER_SUPPLY
+diff --git a/drivers/power/supply/Makefile b/drivers/power/supply/Makefile
+index f943c9150b32..4542bab1765c 100644
+--- a/drivers/power/supply/Makefile
++++ b/drivers/power/supply/Makefile
+@@ -122,3 +122,4 @@ obj-$(CONFIG_CHARGER_SURFACE)	+= surface_charger.o
+ obj-$(CONFIG_BATTERY_UG3105)	+= ug3105_battery.o
+ obj-$(CONFIG_CHARGER_QCOM_SMB2)	+= qcom_smbx.o
+ obj-$(CONFIG_FUEL_GAUGE_MM8013)	+= mm8013.o
++obj-$(CONFIG_SC8541_CHARGER)	+= sc8541_charger.o
+diff --git a/drivers/power/supply/sc8541_charger.c b/drivers/power/supply/sc8541_charger.c
+new file mode 100644
+index 000000000000..6900f9a9ebd6
+--- /dev/null
++++ b/drivers/power/supply/sc8541_charger.c
+@@ -0,0 +-2,1623 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++* Copyright (c) 2022 Southchip Semiconductor Technology(Shanghai) Co., Ltd.
++*/
++
++#include <linux/gpio.h>
++#include <linux/i2c.h>
++#include <linux/init.h>
++#include <linux/interrupt.h>
++#include <linux/module.h>
++#include <linux/power_supply.h>
++#include <linux/slab.h>
++#include <linux/kernel.h>
++#include <linux/sched.h>
++#include <linux/kthread.h>
++#include <linux/delay.h>
++#include <linux/of.h>
++#include <linux/of_device.h>
++#include <linux/of_gpio.h>
++#include <linux/err.h>
++#include <linux/regulator/driver.h>
++#include <linux/regulator/of_regulator.h>
++#include <linux/regulator/machine.h>
++#include <linux/debugfs.h>
++#include <linux/bitops.h>
++#include <linux/math64.h>
++#include <linux/regmap.h>
++
++#ifdef CONFIG_MTK_CLASS
++#include "charger_class.h"
++#endif /*CONFIG_MTK_CLASS*/
++
++#ifdef CONFIG_MTK_CHARGER_V4P19
++#include "mtk_charger_intf.h"
++#endif /*CONFIG_MTK_CHARGER_V4P19*/
++
++#ifdef CONFIG_SOUTHCHIP_DVCHG_CLASS
++#include "dvchg_class.h"
++#endif /*CONFIG_SOUTHCHIP_DVCHG_CLASS*/
++
++#define SC8541_DRV_VERSION              "1.0.0_G"
++
++enum {
++    SC8541_STANDALONE = 0,
++    SC8541_MASTER,
++    SC8541_SLAVE,
++};
++
++static const char *sc8541_psy_name[] = {
++    [SC8541_STANDALONE] = "sc-cp-standalone",
++    [SC8541_MASTER] = "sc-cp-master",
++    [SC8541_SLAVE] = "sc-cp-slave",
++};
++
++static const char *sc8541_irq_name[] = {
++    [SC8541_STANDALONE] = "sc8541-standalone-irq",
++    [SC8541_MASTER] = "sc8541-master-irq",
++    [SC8541_SLAVE] = "sc8541-slave-irq",
++};
++
++static int sc8541_mode_data[] = {
++    [SC8541_STANDALONE] = SC8541_STANDALONE,
++    [SC8541_MASTER] = SC8541_MASTER,
++    [SC8541_SLAVE] = SC8541_SLAVE,
++};
++
++enum {
++    ADC_IBUS,
++    ADC_VBUS,
++    ADC_VAC1,
++    ADC_VAC2,
++    ADC_VOUT,
++    ADC_VBAT,
++    ADC_IBAT,
++    ADC_TSBUS,
++    ADC_TSBAT,
++    ADC_TDIE,
++    ADC_MAX_NUM,
++} ADC_CH;
++
++static const u32 sc8541_adc_accuracy_tbl[ADC_MAX_NUM] = {
++	150000,	/* IBUS */
++	35000,	/* VBUS */
++	35000,	/* VAC1 */
++    35000,	/* VAC2 */
++	20000,	/* VOUT */
++	20000,	/* VBAT */
++	200000,	/* IBAT */
++    0,	/* TSBUS */
++    0,	/* TSBAT */
++	4,	/* TDIE */
++};
++
++static const int sc8541_adc_m[] = {
++    25, 375, 5, 5, 125, 125, 3125, 9766, 9766, 5};
++
++static const int sc8541_adc_l[] = {
++    10, 100, 1, 1, 100, 100, 1000, 100000, 100000, 10};
++
++enum sc8541_notify {
++    SC8541_NOTIFY_OTHER = 0,
++	SC8541_NOTIFY_IBUSUCPF,
++	SC8541_NOTIFY_VBUSOVPALM,
++	SC8541_NOTIFY_VBATOVPALM,
++	SC8541_NOTIFY_IBUSOCP,
++	SC8541_NOTIFY_VBUSOVP,
++	SC8541_NOTIFY_IBATOCP,
++	SC8541_NOTIFY_VBATOVP,
++	SC8541_NOTIFY_VOUTOVP,
++	SC8541_NOTIFY_VDROVP,
++};
++
++enum sc8541_error_stata {
++    ERROR_VBUS_HIGH = 0,
++	ERROR_VBUS_LOW,
++	ERROR_VBUS_OVP,
++	ERROR_IBUS_OCP,
++	ERROR_VBAT_OVP,
++	ERROR_IBAT_OCP,
++};
++
++struct flag_bit {
++    int notify;
++    int mask;
++    char *name;
++};
++
++struct intr_flag {
++    int reg;
++    int len;
++    struct flag_bit bit[8];
++};
++
++static struct intr_flag cp_intr_flag[] = {
++    { .reg = 0x18, .len = 7, .bit = {
++		{.mask = BIT(0), .name = "vbus ovp alm flag", .notify = SC8541_NOTIFY_VBUSOVPALM},
++		{.mask = BIT(1), .name = "vbus ovp flag", .notify = SC8541_NOTIFY_VBUSOVP},
++		{.mask = BIT(3), .name = "ibat ocp alm flag", .notify = SC8541_NOTIFY_OTHER},
++		{.mask = BIT(4), .name = "ibat ocp flag", .notify = SC8541_NOTIFY_IBATOCP},
++		{.mask = BIT(5), .name = "vout ovp flag", .notify = SC8541_NOTIFY_VOUTOVP},
++		{.mask = BIT(6), .name = "vbat ovp alm flag", .notify = SC8541_NOTIFY_VBATOVPALM},
++		{.mask = BIT(7), .name = "vbat ovp flag", .notify = SC8541_NOTIFY_VBATOVP},
++		},
++    },
++    { .reg = 0x19, .len = 3, .bit = {
++		{.mask = BIT(2), .name = "pin diag fall flag", .notify = SC8541_NOTIFY_OTHER},
++		{.mask = BIT(5), .name = "ibus ucp fall flag", .notify = SC8541_NOTIFY_IBUSUCPF},
++		{.mask = BIT(7), .name = "ibus ocp flag", .notify = SC8541_NOTIFY_IBUSOCP},
++		},
++    },
++    { .reg = 0x1a, .len = 8, .bit = {
++		{.mask = BIT(0), .name = "acrb2 config flag", .notify = SC8541_NOTIFY_OTHER},
++		{.mask = BIT(1), .name = "acrb1 config flag", .notify = SC8541_NOTIFY_OTHER},
++		{.mask = BIT(2), .name = "vbus present flag", .notify = SC8541_NOTIFY_OTHER},
++		{.mask = BIT(3), .name = "vac2 insert flag", .notify = SC8541_NOTIFY_OTHER},
++		{.mask = BIT(4), .name = "vac1 insert flag", .notify = SC8541_NOTIFY_OTHER},
++		{.mask = BIT(5), .name = "vat insert flag", .notify = SC8541_NOTIFY_OTHER},
++		{.mask = BIT(6), .name = "vac2 ovp flag", .notify = SC8541_NOTIFY_OTHER},
++		{.mask = BIT(7), .name = "vac1 ovp flag", .notify = SC8541_NOTIFY_OTHER},
++		},
++    },
++    { .reg = 0x1b, .len = 8, .bit = {
++		{.mask = BIT(0), .name = "wd timeout flag", .notify = SC8541_NOTIFY_OTHER},
++		{.mask = BIT(1), .name = "tdie alm flag", .notify = SC8541_NOTIFY_OTHER},
++		{.mask = BIT(2), .name = "tshut flag", .notify = SC8541_NOTIFY_OTHER},
++		{.mask = BIT(3), .name = "tsbat flt flag", .notify = SC8541_NOTIFY_OTHER},
++		{.mask = BIT(4), .name = "tsbus flt flag", .notify = SC8541_NOTIFY_OTHER},
++		{.mask = BIT(5), .name = "tsbus tsbat alm flag", .notify = SC8541_NOTIFY_OTHER},
++		{.mask = BIT(6), .name = "ss timeout flag", .notify = SC8541_NOTIFY_OTHER},
++		{.mask = BIT(7), .name = "adc done flag", .notify = SC8541_NOTIFY_OTHER},
++		},
++    },
++    { .reg = 0x1c, .len = 3, .bit = {
++		{.mask = BIT(3), .name = "vbus errorlo flag", .notify = SC8541_NOTIFY_OTHER},
++		{.mask = BIT(4), .name = "vbus errorhi flag", .notify = SC8541_NOTIFY_OTHER},
++		{.mask = BIT(6), .name = "cp switching flag", .notify = SC8541_NOTIFY_OTHER},
++		},
++    },
++};
++
++
++/************************************************************************/
++#define SC8541_DEVICE_ID                0x41
++
++#define SC8541_VBAT_OVP_MIN             3840
++#define SC8541_VBAT_OVP_MAX             5110
++#define SC8541_VBAT_OVP_STEP            10
++
++#define SC8541_IBAT_OCP_MIN             0
++#define SC8541_IBAT_OCP_MAX             12700
++#define SC8541_IBAT_OCP_STEP            10
++
++#define SC8541_VBUS_OVP_MIN             7000
++#define SC8541_VBUS_OVP_MAX             13350
++#define SC8541_VBUS_OVP_STEP            50
++
++#define SC8541_IBUS_OCP_MIN             1000
++#define SC8541_IBUS_OCP_MAX             8000
++#define SC8541_IBUS_OCP_STEP            250
++
++#define SC8541_REG18                    0x18
++#define SC8541_REG25                    0x25
++#define SC8541_REGMAX                   0x42
++
++enum sc8541_reg_range {
++    SC8541_VBAT_OVP,
++    SC8541_IBAT_OCP,
++    SC8541_VBUS_OVP,
++    SC8541_IBUS_OCP,
++    SC8541_VBUS_OVP_ALM,
++    SC8541_VBAT_OVP_ALM,
++};
++
++struct reg_range {
++    u32 min;
++    u32 max;
++    u32 step;
++    u32 offset;
++    const u32 *table;
++    u16 num_table;
++    bool round_up;
++};
++
++#define SC8541_CHG_RANGE(_min, _max, _step, _offset, _ru) \
++{ \
++    .min = _min, \
++    .max = _max, \
++    .step = _step, \
++    .offset = _offset, \
++    .round_up = _ru, \
++}
++
++#define SC8541_CHG_RANGE_T(_table, _ru) \
++    { .table = _table, .num_table = ARRAY_SIZE(_table), .round_up = _ru, }
++
++
++static const struct reg_range sc8541_reg_range[] = {
++    [SC8541_VBAT_OVP]      = SC8541_CHG_RANGE(3840, 5110, 10, 3840, false),
++    [SC8541_IBAT_OCP]      = SC8541_CHG_RANGE(0, 12700, 100, 0, false),
++    [SC8541_VBUS_OVP]      = SC8541_CHG_RANGE(7000, 13350, 50, 7000, false),
++    [SC8541_IBUS_OCP]      = SC8541_CHG_RANGE(1000, 8000, 250, 1000, false),
++    [SC8541_VBUS_OVP_ALM]  = SC8541_CHG_RANGE(7000, 13350, 50, 7000, false),
++    [SC8541_VBAT_OVP_ALM]  = SC8541_CHG_RANGE(60, 960, 60, 60, false),
++};
++
++
++enum sc8541_fields {
++    VBAT_OVP_DIS, VBAT_OVP,
++    VBAT_OVP_ALM_DIS, VBAT_OVP_ALM,
++    IBAT_OCP_DIS, IBAT_OCP,
++    IBAT_OCP_ALM_DIS, IBAT_OCP_ALM,
++    IBUS_UCP_DIS, VBUS_IN_RANGE_DIS,
++    VBUS_PD_EN, VBUS_OVP,
++    VBUS_OVP_ALM_DIS, VBUS_OVP_ALM,
++    IBUS_OCP_DIS, IBUS_OCP,
++    TSHUT_DIS, TSBUS_FLT_DIS, TSBAT_FLT_DIS,
++    TDIE_ALM,
++    TSBUS_FLT,
++    TSBAT_FLT,
++    VAC1_OVP, VAC2_OVP, VAC1_PD_EN, VAC2_PD_EN,
++    REG_RST, OTG_EN, CHG_EN, MODE, ACDRV1_STAT, ACDRV2_STAT,
++    FSW_SET, WD_TIMEOUT, WD_TIMEOUT_DIS,
++    SET_IBAT_SNS_RES, SS_TIMEOUT, IBUS_UCP_FALL_DG,
++    VOUT_OVP_DIS, VOUT_OVP, MS,
++    CP_SWITCHING_STAT, VBUS_ERRORHI_STAT, VBUS_ERRORLO_STAT,
++    DEVICE_ID,
++    ADC_EN, ADC_RATE,
++    ACDRV_MANUAL_EN, ACDRV1_EN, ACDRV2_EN,
++    PMID2OUT_UVP, PMID2OUT_OVP, PMID2OUT_UVP_FLAG, PMID2OUT_OVP_FLAG,
++    F_MAX_FIELDS,
++};
++
++
++//REGISTER
++static const struct reg_field sc8541_reg_fields[] = {
++    /*reg00*/
++    [VBAT_OVP_DIS] = REG_FIELD(0x00, 7, 7),
++    [VBAT_OVP] = REG_FIELD(0x00, 0, 6),
++    /*reg01*/
++    [VBAT_OVP_ALM_DIS] = REG_FIELD(0x01, 7, 7),
++    [VBAT_OVP_ALM] = REG_FIELD(0x01, 0, 6),
++    /*reg02*/
++    [IBAT_OCP_DIS] = REG_FIELD(0x02, 7, 7),
++    [IBAT_OCP] = REG_FIELD(0x02, 0, 6),
++    /*reg03*/
++    [IBAT_OCP_ALM_DIS] = REG_FIELD(0x03, 7, 7),
++    [IBAT_OCP_ALM] = REG_FIELD(0x03, 0, 6),
++    /*reg05*/
++    [IBUS_UCP_DIS] = REG_FIELD(0x05, 7, 7),
++    [VBUS_IN_RANGE_DIS] = REG_FIELD(0x05, 2, 2),
++    /*reg06*/
++    [VBUS_PD_EN] = REG_FIELD(0x06, 7, 7),
++    [VBUS_OVP] = REG_FIELD(0x06, 0, 6),
++    /*reg07*/
++    [VBUS_OVP_ALM_DIS] = REG_FIELD(0x07, 7, 7),
++    [VBUS_OVP_ALM] = REG_FIELD(0x07, 0, 6),
++    /*reg08*/
++    [IBUS_OCP_DIS] = REG_FIELD(0x08, 7, 7),
++    [IBUS_OCP] = REG_FIELD(0x08, 0, 4),
++    /*reg0A*/
++    [TSHUT_DIS] = REG_FIELD(0x0A, 7, 7),
++    [TSBUS_FLT_DIS] = REG_FIELD(0x0A, 3, 3),
++    [TSBAT_FLT_DIS] = REG_FIELD(0x0A, 2, 2),
++    /*reg0B*/
++    [TDIE_ALM] = REG_FIELD(0x0B, 0, 7),
++    /*reg0C*/
++    [TSBUS_FLT] = REG_FIELD(0x0C, 0, 7),
++    /*reg0D*/
++    [TSBAT_FLT] = REG_FIELD(0x0D, 0, 7),
++    /*reg0E*/
++    [VAC1_OVP] = REG_FIELD(0x0E, 5, 7),
++    [VAC2_OVP] = REG_FIELD(0x0E, 2, 4),
++    [VAC1_PD_EN] = REG_FIELD(0x0E, 1, 1),
++    [VAC2_PD_EN] = REG_FIELD(0x0E, 0, 0),
++    /*reg0F*/
++    [REG_RST] = REG_FIELD(0x0F, 7, 7),
++    [OTG_EN] = REG_FIELD(0x0F, 5, 5),
++    [CHG_EN] = REG_FIELD(0x0F, 4, 4),
++    [MODE] = REG_FIELD(0x0F, 3, 3),
++    [ACDRV1_STAT] = REG_FIELD(0x0F, 1, 1),
++    [ACDRV2_STAT] = REG_FIELD(0x0F, 0, 0),
++    /*reg10*/
++    [FSW_SET] = REG_FIELD(0x10, 5, 7),
++    [WD_TIMEOUT] = REG_FIELD(0x10, 3, 4),
++    [WD_TIMEOUT_DIS] = REG_FIELD(0x10, 2, 2),
++    /*reg11*/
++    [SET_IBAT_SNS_RES] = REG_FIELD(0x11, 7, 7),
++    [SS_TIMEOUT] = REG_FIELD(0x11, 4, 6),
++    [IBUS_UCP_FALL_DG] = REG_FIELD(0x11, 2, 3),
++    /*reg12*/
++    [VOUT_OVP_DIS] = REG_FIELD(0x12, 7, 7),
++    [VOUT_OVP] = REG_FIELD(0x12, 5, 6),
++    [MS] = REG_FIELD(0x12, 0, 1),
++    /*reg17*/
++    [CP_SWITCHING_STAT] = REG_FIELD(0x17, 6, 6),
++    [VBUS_ERRORHI_STAT] = REG_FIELD(0x17, 4, 4),
++    [VBUS_ERRORLO_STAT] = REG_FIELD(0x17, 3, 3),
++    /*reg22*/
++    [DEVICE_ID] = REG_FIELD(0x22, 0, 7),
++    /*reg23*/
++    [ADC_EN] = REG_FIELD(0x23, 7, 7),
++    [ADC_RATE] = REG_FIELD(0x23, 6, 6),
++    /*reg40*/
++    [ACDRV_MANUAL_EN] = REG_FIELD(0x40, 6, 6),
++    [ACDRV1_EN] = REG_FIELD(0x40, 5, 5),
++    [ACDRV2_EN] = REG_FIELD(0x40, 4, 4),
++    /*reg42*/
++    [PMID2OUT_UVP] = REG_FIELD(0x42, 5, 7),
++    [PMID2OUT_OVP] = REG_FIELD(0x42, 2, 4),
++    [PMID2OUT_UVP_FLAG] = REG_FIELD(0x42, 1, 1),
++    [PMID2OUT_OVP_FLAG] = REG_FIELD(0x42, 0, 0),
++};
++
++static const struct regmap_config sc8541_regmap_config = {
++    .reg_bits = 8,
++    .val_bits = 8,
++
++    .max_register = SC8541_REGMAX,
++};
++
++/************************************************************************/
++
++struct sc8541_cfg_e {
++    int vbat_ovp_dis;
++    int vbat_ovp;
++    int vbat_ovp_alm_dis;
++    int vbat_ovp_alm;
++    int ibat_ocp_dis;
++    int ibat_ocp;
++    int ibat_ocp_alm_dis;
++    int ibat_ocp_alm;
++    int ibus_ucp_dis;
++    int vbus_in_range_dis;
++    int vbus_pd_en;
++    int vbus_ovp;
++    int vbus_ovp_alm_dis;
++    int vbus_ovp_alm;
++    int ibus_ocp_dis;
++    int ibus_ocp;
++    int tshut_dis;
++    int tsbus_flt_dis;
++    int tsbat_flt_dis;
++    int tdie_alm;
++    int tsbus_flt;
++    int tsbat_flt;
++    int vac1_ovp;
++    int vac2_ovp;
++    int vac1_pd_en;
++    int vac2_pd_en;
++    int fsw_set;
++    int wd_timeout;
++    int wd_timeout_dis;
++    int ibat_sns_r;
++    int ss_timeout;
++    int ibus_ucp_fall_dg;
++    int vout_ovp_dis;
++    int vout_ovp;
++    int pmid2out_uvp;
++    int pmid2out_ovp;
++};
++
++struct sc8541_chip {
++    struct device *dev;
++    struct i2c_client *client;
++    struct regmap *regmap;
++    struct regmap_field *rmap_fields[F_MAX_FIELDS];
++
++    struct sc8541_cfg_e cfg;
++    int irq_gpio;
++    int irq;
++
++    int mode;
++
++    bool charge_enabled;
++    int usb_present;
++    int vbus_volt;
++    int ibus_curr;
++    int vbat_volt;
++    int ibat_curr;
++    int die_temp;
++
++#ifdef CONFIG_MTK_CLASS
++    struct charger_device *chg_dev;
++#endif /*CONFIG_MTK_CLASS*/
++
++#ifdef CONFIG_SOUTHCHIP_DVCHG_CLASS
++    struct dvchg_dev *charger_pump;
++#endif /*CONFIG_SOUTHCHIP_DVCHG_CLASS*/
++
++    const char *chg_dev_name;
++
++    struct power_supply_desc psy_desc;
++    struct power_supply_config psy_cfg;
++    struct power_supply *psy;
++};
++
++#ifdef CONFIG_MTK_CLASS
++static const struct charger_properties sc8541_chg_props = {
++	.alias_name = "sc8541_chg",
++};
++#endif /*CONFIG_MTK_CLASS*/
++
++
++/********************COMMON API***********************/
++__maybe_unused static u8 val2reg(enum sc8541_reg_range id, u32 val)
++{
++    int i;
++    u8 reg;
++    const struct reg_range *range = &sc8541_reg_range[id];
++
++    if (!range)
++	return val;
++
++    if (range->table) {
++	if (val <= range->table[0])
++	    return 0;
++	for (i = 1; i < range->num_table - 1; i++) {
++	    if (val == range->table[i])
++		return i;
++	    if (val > range->table[i] &&
++		val < range->table[i + 1])
++		return range->round_up ? i + 1 : i;
++	}
++	return range->num_table - 1;
++    }
++    if (val <= range->min)
++	reg = 0;
++    else if (val >= range->max)
++	reg = (range->max - range->offset) / range->step;
++    else if (range->round_up)
++	reg = (val - range->offset) / range->step + 1;
++    else
++	reg = (val - range->offset) / range->step;
++    return reg;
++}
++
++__maybe_unused static u32 reg2val(enum sc8541_reg_range id, u8 reg)
++{
++    const struct reg_range *range = &sc8541_reg_range[id];
++
++    if (!range)
++	return reg;
++    return range->table ? range->table[reg] :
++		  range->offset + range->step * reg;
++}
++/*********************************************************/
++static int sc8541_field_read(struct sc8541_chip *sc,
++		enum sc8541_fields field_id, int *val)
++{
++    int ret;
++
++    ret = regmap_field_read(sc->rmap_fields[field_id], val);
++    if (ret < 0) {
++	dev_err(sc->dev, "sc8541 read field %d fail: %d\n", field_id, ret);
++    }
++
++    return ret;
++}
++
++static int sc8541_field_write(struct sc8541_chip *sc,
++		enum sc8541_fields field_id, int val)
++{
++    int ret;
++
++    ret = regmap_field_write(sc->rmap_fields[field_id], val);
++    if (ret < 0) {
++	dev_err(sc->dev, "sc8541 read field %d fail: %d\n", field_id, ret);
++    }
++
++    return ret;
++}
++
++static int sc8541_read_block(struct sc8541_chip *sc,
++		int reg, uint8_t *val, int len)
++{
++    int ret;
++
++    ret = regmap_bulk_read(sc->regmap, reg, val, len);
++    if (ret < 0) {
++	dev_err(sc->dev, "sc8541 read %02x block failed %d\n", reg, ret);
++    }
++
++    return ret;
++}
++
++
++
++/*******************************************************/
++__maybe_unused static int sc8541_detect_device(struct sc8541_chip *sc)
++{
++    int ret;
++    int val;
++
++    ret = sc8541_field_read(sc, DEVICE_ID, &val);
++    if (ret < 0) {
++	dev_err(sc->dev, "%s fail(%d)\n", __func__, ret);
++	return ret;
++    }
++
++    if (val != SC8541_DEVICE_ID) {
++	dev_err(sc->dev, "%s not find SC8541, ID = 0x%02x\n", __func__, ret);
++	return -EINVAL;
++    }
++
++    return ret;
++}
++
++__maybe_unused static int sc8541_reg_reset(struct sc8541_chip *sc)
++{
++    return sc8541_field_write(sc, REG_RST, 1);
++}
++
++__maybe_unused static int sc8541_dump_reg(struct sc8541_chip *sc)
++{
++    int ret;
++    int i;
++    int val;
++
++    for (i = 0; i <= SC8541_REGMAX; i++) {
++	ret = regmap_read(sc->regmap, i, &val);
++	dev_err(sc->dev, "%s reg[0x%02x] = 0x%02x\n",
++		__func__, i, val);
++    }
++
++    return ret;
++}
++
++__maybe_unused static int sc8541_enable_charge(struct sc8541_chip *sc, bool en)
++{
++    int ret;
++
++    dev_info(sc->dev, "%s:%d", __func__, en);
++
++    ret = sc8541_field_write(sc, CHG_EN, !!en);
++
++    return ret;
++}
++
++
++__maybe_unused static int sc8541_check_charge_enabled(struct sc8541_chip *sc, bool *enabled)
++{
++    int ret, val;
++
++    ret = sc8541_field_read(sc, CP_SWITCHING_STAT, &val);
++
++    *enabled = (bool)val;
++
++    dev_info(sc->dev, "%s:%d", __func__, val);
++
++    return ret;
++}
++
++__maybe_unused static int sc8541_get_status(struct sc8541_chip *sc, uint32_t *status)
++{
++    int ret, val;
++    *status = 0;
++
++    ret = sc8541_field_read(sc, VBUS_ERRORHI_STAT, &val);
++    if (ret < 0) {
++	dev_err(sc->dev, "%s fail to read VBUS_ERRORHI_STAT(%d)\n", __func__, ret);
++	return ret;
++    }
++    if (val != 0)
++	*status |= BIT(ERROR_VBUS_HIGH);
++
++    ret = sc8541_field_read(sc, VBUS_ERRORLO_STAT, &val);
++    if (ret < 0) {
++	dev_err(sc->dev, "%s fail to read VBUS_ERRORLO_STAT(%d)\n", __func__, ret);
++	return ret;
++    }
++    if (val != 0)
++	*status |= BIT(ERROR_VBUS_LOW);
++
++
++    return ret;
++
++}
++
++__maybe_unused static int sc8541_enable_adc(struct sc8541_chip *sc, bool en)
++{
++    dev_info(sc->dev, "%s:%d", __func__, en);
++    return sc8541_field_write(sc, ADC_EN, !!en);
++}
++
++__maybe_unused static int sc8541_set_adc_scanrate(struct sc8541_chip *sc, bool oneshot)
++{
++    dev_info(sc->dev, "%s:%d", __func__, oneshot);
++    return sc8541_field_write(sc, ADC_RATE, !!oneshot);
++}
++
++static int sc8541_get_adc_data(struct sc8541_chip *sc,
++	    int channel, int *result)
++{
++    uint8_t val[2] = {0};
++    int ret;
++
++    if (channel >= ADC_MAX_NUM)
++	return -EINVAL;
++
++    sc8541_enable_adc(sc, true);
++    msleep(50);
++
++    ret = sc8541_read_block(sc, SC8541_REG25 + (channel << 1), val, 2);
++    if (ret < 0) {
++	return ret;
++    }
++
++    *result = (val[1] | (val[0] << 8)) *
++		sc8541_adc_m[channel] / sc8541_adc_l[channel];
++
++    dev_info(sc->dev, "%s %d %d", __func__, channel, *result);
++
++    sc8541_enable_adc(sc, false);
++
++    return ret;
++}
++
++__maybe_unused static int sc8541_set_busovp_th(struct sc8541_chip *sc, int threshold)
++{
++    int reg_val = val2reg(SC8541_VBUS_OVP, threshold);
++
++    dev_info(sc->dev, "%s:%d-%d", __func__, threshold, reg_val);
++
++    return sc8541_field_write(sc, VBUS_OVP, reg_val);
++}
++
++__maybe_unused static int sc8541_set_busocp_th(struct sc8541_chip *sc, int threshold)
++{
++    int reg_val = val2reg(SC8541_IBUS_OCP, threshold);
++
++    dev_info(sc->dev, "%s:%d-%d", __func__, threshold, reg_val);
++
++    return sc8541_field_write(sc, IBUS_OCP, reg_val);
++}
++
++__maybe_unused static int sc8541_set_batovp_th(struct sc8541_chip *sc, int threshold)
++{
++    int reg_val = val2reg(SC8541_VBAT_OVP, threshold);
++
++    dev_info(sc->dev, "%s:%d-%d", __func__, threshold, reg_val);
++
++    return sc8541_field_write(sc, VBAT_OVP, reg_val);
++}
++
++__maybe_unused static int sc8541_set_batocp_th(struct sc8541_chip *sc, int threshold)
++{
++    int reg_val = val2reg(SC8541_IBAT_OCP, threshold);
++
++    dev_info(sc->dev, "%s:%d-%d", __func__, threshold, reg_val);
++
++    return sc8541_field_write(sc, IBAT_OCP, reg_val);
++}
++
++__maybe_unused static int sc8541_set_vbusovp_alarm(struct sc8541_chip *sc, int threshold)
++{
++    int reg_val = val2reg(SC8541_VBUS_OVP_ALM, threshold);
++
++    dev_info(sc->dev, "%s:%d-%d", __func__, threshold, reg_val);
++
++    return sc8541_field_write(sc, VBUS_OVP_ALM, reg_val);
++}
++
++__maybe_unused static int sc8541_set_vbatovp_alarm(struct sc8541_chip *sc, int threshold)
++{
++    int reg_val = val2reg(SC8541_VBAT_OVP_ALM, threshold);
++
++    dev_info(sc->dev, "%s:%d-%d", __func__, threshold, reg_val);
++
++    return sc8541_field_write(sc, VBAT_OVP_ALM, reg_val);
++}
++
++__maybe_unused static int sc8541_disable_vbatovp_alarm(struct sc8541_chip *sc, bool en)
++{
++    int ret;
++
++    dev_info(sc->dev, "%s:%d", __func__, en);
++
++    ret = sc8541_field_write(sc, VBAT_OVP_ALM_DIS, !!en);
++
++    return ret;
++}
++
++__maybe_unused static int sc8541_disable_vbusovp_alarm(struct sc8541_chip *sc, bool en)
++{
++    int ret;
++
++    dev_info(sc->dev, "%s:%d", __func__, en);
++
++    ret = sc8541_field_write(sc, VBUS_OVP_ALM_DIS, !!en);
++
++    return ret;
++}
++
++
++__maybe_unused static int sc8541_is_vbuslowerr(struct sc8541_chip *sc, bool *err)
++{
++    int ret;
++    int val;
++
++    ret = sc8541_field_read(sc, VBUS_ERRORLO_STAT, &val);
++    if (ret < 0) {
++	return ret;
++    }
++
++    dev_info(sc->dev, "%s:%d", __func__, val);
++
++    *err = (bool)val;
++
++    return ret;
++}
++
++__maybe_unused static int sc8541_init_device(struct sc8541_chip *sc)
++{
++    int ret = 0;
++    int i;
++    struct {
++	enum sc8541_fields field_id;
++	int conv_data;
++    } props[] = {
++	{VBAT_OVP_DIS, sc->cfg.vbat_ovp_dis},
++	{VBAT_OVP, sc->cfg.vbat_ovp},
++	{VBAT_OVP_ALM_DIS, sc->cfg.vbat_ovp_alm_dis},
++	{VBAT_OVP_ALM, sc->cfg.vbat_ovp_alm},
++	{IBAT_OCP_DIS, sc->cfg.ibat_ocp_dis},
++	{IBAT_OCP, sc->cfg.ibat_ocp},
++	{IBAT_OCP_ALM_DIS, sc->cfg.ibat_ocp_alm_dis},
++	{IBAT_OCP_ALM, sc->cfg.ibat_ocp_alm},
++	{IBUS_UCP_DIS, sc->cfg.ibus_ucp_dis},
++	{VBUS_IN_RANGE_DIS, sc->cfg.vbus_in_range_dis},
++	{VBUS_PD_EN, sc->cfg.vbus_pd_en},
++	{VBUS_OVP, sc->cfg.vbus_ovp},
++	{VBUS_OVP_ALM_DIS, sc->cfg.vbus_ovp_alm_dis},
++	{VBUS_OVP_ALM, sc->cfg.vbus_ovp_alm},
++	{IBUS_OCP_DIS, sc->cfg.ibus_ocp_dis},
++	{IBUS_OCP, sc->cfg.ibus_ocp},
++	{TSHUT_DIS, sc->cfg.tshut_dis},
++	{TSBUS_FLT_DIS, sc->cfg.tsbus_flt_dis},
++	{TSBAT_FLT_DIS, sc->cfg.tsbat_flt_dis},
++	{TDIE_ALM, sc->cfg.tdie_alm},
++	{TSBUS_FLT, sc->cfg.tsbus_flt},
++	{TSBAT_FLT, sc->cfg.tsbat_flt},
++	{VAC1_OVP, sc->cfg.vac1_ovp},
++	{VAC2_OVP, sc->cfg.vac2_ovp},
++	{VAC1_PD_EN, sc->cfg.vac1_pd_en},
++	{VAC2_PD_EN, sc->cfg.vac2_pd_en},
++	{FSW_SET, sc->cfg.fsw_set},
++	{WD_TIMEOUT, sc->cfg.wd_timeout},
++	{WD_TIMEOUT_DIS, sc->cfg.wd_timeout_dis},
++	{SET_IBAT_SNS_RES, sc->cfg.ibat_sns_r},
++	{SS_TIMEOUT, sc->cfg.ss_timeout},
++	{IBUS_UCP_FALL_DG, sc->cfg.ibus_ucp_fall_dg},
++	{VOUT_OVP_DIS, sc->cfg.vout_ovp_dis},
++	{VOUT_OVP, sc->cfg.vout_ovp},
++	//{MS, sc->cfg.ms},
++	{PMID2OUT_UVP, sc->cfg.pmid2out_uvp},
++	{PMID2OUT_OVP, sc->cfg.pmid2out_ovp},
++    };
++
++    ret = sc8541_reg_reset(sc);
++    if (ret < 0) {
++	dev_err(sc->dev, "%s Failed to reset registers(%d)\n", __func__, ret);
++    }
++    msleep(10);
++
++    for (i = 0; i < ARRAY_SIZE(props); i++) {
++	ret = sc8541_field_write(sc, props[i].field_id, props[i].conv_data);
++    }
++
++    if (sc->mode == SC8541_SLAVE) {
++	ret = sc8541_field_write(sc, VBUS_IN_RANGE_DIS, 1);
++	if (ret < 0) {
++	    dev_err(sc->dev, "%s Failed to set vbus in range(%d)\n", __func__, ret);
++	}
++    }
++
++    sc8541_dump_reg(sc);
++
++    return ret;
++}
++
++
++/*********************mtk charger interface start**********************************/
++#ifdef CONFIG_MTK_CLASS
++static inline int to_sc8541_adc(enum adc_channel chan)
++{
++	switch (chan) {
++	case ADC_CHANNEL_VBUS:
++		return ADC_VBUS;
++	case ADC_CHANNEL_VBAT:
++		return ADC_VBAT;
++	case ADC_CHANNEL_IBUS:
++		return ADC_IBUS;
++	case ADC_CHANNEL_IBAT:
++		return ADC_IBAT;
++	case ADC_CHANNEL_TEMP_JC:
++		return ADC_TDIE;
++	case ADC_CHANNEL_VOUT:
++		return ADC_VOUT;
++	default:
++		break;
++	}
++	return ADC_MAX_NUM;
++}
++
++
++static int mtk_sc8541_is_chg_enabled(struct charger_device *chg_dev, bool *en)
++{
++    struct sc8541_chip *sc = charger_get_data(chg_dev);
++    int ret;
++
++    ret = sc8541_check_charge_enabled(sc, en);
++
++    return ret;
++}
++
++
++static int mtk_sc8541_enable_chg(struct charger_device *chg_dev, bool en)
++{
++    struct sc8541_chip *sc = charger_get_data(chg_dev);
++    int ret;
++
++    ret = sc8541_enable_charge(sc, en);
++
++    return ret;
++}
++
++
++static int mtk_sc8541_set_vbusovp(struct charger_device *chg_dev, u32 uV)
++{
++    struct sc8541_chip *sc = charger_get_data(chg_dev);
++    int mv;
++
++    mv = uV / 1000;
++
++    return sc8541_set_busovp_th(sc, mv);
++}
++
++static int mtk_sc8541_set_ibusocp(struct charger_device *chg_dev, u32 uA)
++{
++    struct sc8541_chip *sc = charger_get_data(chg_dev);
++    int ma;
++
++    ma = uA / 1000;
++
++    return sc8541_set_busocp_th(sc, ma);
++}
++
++static int mtk_sc8541_set_vbatovp(struct charger_device *chg_dev, u32 uV)
++{
++    struct sc8541_chip *sc = charger_get_data(chg_dev);
++    int ret;
++
++    ret = sc8541_set_batovp_th(sc, uV/1000);
++    if (ret < 0)
++	return ret;
++
++    return ret;
++}
++
++static int mtk_sc8541_set_ibatocp(struct charger_device *chg_dev, u32 uA)
++{
++    struct sc8541_chip *sc = charger_get_data(chg_dev);
++    int ret;
++
++    ret = sc8541_set_batocp_th(sc, uA/1000);
++    if (ret < 0)
++	return ret;
++
++    return ret;
++}
++
++
++static int mtk_sc8541_get_adc(struct charger_device *chg_dev, enum adc_channel chan,
++			  int *min, int *max)
++{
++    struct sc8541_chip *sc = charger_get_data(chg_dev);
++
++    sc8541_get_adc_data(sc, to_sc8541_adc(chan), max);
++
++    if (chan != ADC_CHANNEL_TEMP_JC)
++	*max = *max * 1000;
++
++    if (min != max)
++		*min = *max;
++
++    return 0;
++}
++
++static int mtk_sc8541_get_adc_accuracy(struct charger_device *chg_dev,
++				   enum adc_channel chan, int *min, int *max)
++{
++    *min = *max = sc8541_adc_accuracy_tbl[to_sc8541_adc(chan)];
++    return 0;
++}
++
++static int mtk_sc8541_is_vbuslowerr(struct charger_device *chg_dev, bool *err)
++{
++    struct sc8541_chip *sc = charger_get_data(chg_dev);
++
++    return sc8541_is_vbuslowerr(sc, err);
++}
++
++static int mtk_sc8541_set_vbatovp_alarm(struct charger_device *chg_dev, u32 uV)
++{
++    struct sc8541_chip *sc = charger_get_data(chg_dev);
++    int ret;
++
++    ret = sc8541_set_vbatovp_alarm(sc, uV/1000);
++    if (ret < 0)
++	return ret;
++
++    return ret;
++}
++
++static int mtk_sc8541_reset_vbatovp_alarm(struct charger_device *chg_dev)
++{
++    struct sc8541_chip *sc = charger_get_data(chg_dev);
++
++    return 0;
++}
++
++static int mtk_sc8541_set_vbusovp_alarm(struct charger_device *chg_dev, u32 uV)
++{
++    struct sc8541_chip *sc = charger_get_data(chg_dev);
++    int ret;
++
++    ret = sc8541_set_vbusovp_alarm(sc, uV/1000);
++    if (ret < 0)
++	return ret;
++
++    return ret;
++}
++
++static int mtk_sc8541_reset_vbusovp_alarm(struct charger_device *chg_dev)
++{
++    struct sc8541_chip *sc = charger_get_data(chg_dev);
++
++    return 0;
++}
++
++static int mtk_sc8541_init_chip(struct charger_device *chg_dev)
++{
++    struct sc8541_chip *sc = charger_get_data(chg_dev);
++
++    return sc8541_init_device(sc);
++}
++
++static const struct charger_ops sc8541_chg_ops = {
++	 .enable = mtk_sc8541_enable_chg,
++	 .is_enabled = mtk_sc8541_is_chg_enabled,
++	 .get_adc = mtk_sc8541_get_adc,
++     .get_adc_accuracy = mtk_sc8541_get_adc_accuracy,
++	 .set_vbusovp = mtk_sc8541_set_vbusovp,
++	 .set_ibusocp = mtk_sc8541_set_ibusocp,
++	 .set_vbatovp = mtk_sc8541_set_vbatovp,
++	 .set_ibatocp = mtk_sc8541_set_ibatocp,
++	 .init_chip = mtk_sc8541_init_chip,
++     .is_vbuslowerr = mtk_sc8541_is_vbuslowerr,
++	 .set_vbatovp_alarm = mtk_sc8541_set_vbatovp_alarm,
++	 .reset_vbatovp_alarm = mtk_sc8541_reset_vbatovp_alarm,
++	 .set_vbusovp_alarm = mtk_sc8541_set_vbusovp_alarm,
++	 .reset_vbusovp_alarm = mtk_sc8541_reset_vbusovp_alarm,
++};
++#endif /*CONFIG_MTK_CLASS*/
++/********************mtk charger interface end*************************************************/
++
++#ifdef CONFIG_SOUTHCHIP_DVCHG_CLASS
++static inline int sc_to_sc8541_adc(enum sc_adc_channel chan)
++{
++	switch (chan) {
++	case SC_ADC_VBUS:
++		return ADC_VBUS;
++	case SC_ADC_VBAT:
++		return ADC_VBAT;
++	case SC_ADC_IBUS:
++		return ADC_IBUS;
++	case SC_ADC_IBAT:
++		return ADC_IBAT;
++	case SC_ADC_TDIE:
++		return ADC_TDIE;
++	default:
++		break;
++	}
++	return ADC_MAX_NUM;
++}
++
++
++static int sc_sc8541_set_enable(struct dvchg_dev *charger_pump, bool enable)
++{
++    struct sc8541_chip *sc = dvchg_get_private(charger_pump);
++    int ret;
++
++    ret = sc8541_enable_charge(sc, enable);
++
++    return ret;
++}
++
++static int sc_sc8541_get_is_enable(struct dvchg_dev *charger_pump, bool *enable)
++{
++    struct sc8541_chip *sc = dvchg_get_private(charger_pump);
++    int ret;
++
++    ret = sc8541_check_charge_enabled(sc, enable);
++
++    return ret;
++}
++
++static int sc_sc8541_get_status(struct dvchg_dev *charger_pump, uint32_t *status)
++{
++    struct sc8541_chip *sc = dvchg_get_private(charger_pump);
++    int ret = 0;
++
++    ret = sc8541_get_status(sc, status);
++
++    return ret;
++}
++
++static int sc_sc8541_get_adc_value(struct dvchg_dev *charger_pump, enum sc_adc_channel ch, int *value)
++{
++    struct sc8541_chip *sc = dvchg_get_private(charger_pump);
++    int ret = 0;
++
++    ret = sc8541_get_adc_data(sc, sc_to_sc8541_adc(ch), value);
++
++    return ret;
++}
++
++static struct dvchg_ops sc_sc8541_dvchg_ops = {
++    .set_enable = sc_sc8541_set_enable,
++    .get_status = sc_sc8541_get_status,
++    .get_is_enable = sc_sc8541_get_is_enable,
++    .get_adc_value = sc_sc8541_get_adc_value,
++};
++#endif /*CONFIG_SOUTHCHIP_DVCHG_CLASS*/
++
++/********************creat devices note start*************************************************/
++static ssize_t sc8541_show_registers(struct device *dev,
++		struct device_attribute *attr, char *buf)
++{
++    struct sc8541_chip *sc = dev_get_drvdata(dev);
++    u8 addr;
++    int val;
++    u8 tmpbuf[300];
++    int len;
++    int idx = 0;
++    int ret;
++
++    idx = snprintf(buf, PAGE_SIZE, "%s:\n", "sc8541");
++    for (addr = 0x0; addr <= SC8541_REGMAX; addr++) {
++	ret = regmap_read(sc->regmap, addr, &val);
++	if (ret == 0) {
++	    len = snprintf(tmpbuf, PAGE_SIZE - idx,
++		    "Reg[%.2X] = 0x%.2x\n", addr, val);
++	    memcpy(&buf[idx], tmpbuf, len);
++	    idx += len;
++	}
++    }
++
++    return idx;
++}
++
++static ssize_t sc8541_store_register(struct device *dev,
++	struct device_attribute *attr, const char *buf, size_t count)
++{
++    struct sc8541_chip *sc = dev_get_drvdata(dev);
++    int ret;
++    unsigned int reg;
++    unsigned int val;
++
++    ret = sscanf(buf, "%x %x", &reg, &val);
++    if (ret == 2 && reg <= SC8541_REGMAX)
++	regmap_write(sc->regmap, (unsigned char)reg, (unsigned char)val);
++
++    return count;
++}
++
++static DEVICE_ATTR(registers, 0660, sc8541_show_registers, sc8541_store_register);
++
++static void sc8541_create_device_node(struct device *dev)
++{
++    device_create_file(dev, &dev_attr_registers);
++}
++/********************creat devices note end*************************************************/
++
++
++/*
++* interrupt does nothing, just info event chagne, other module could get info
++* through power supply interface
++*/
++#ifdef CONFIG_MTK_CLASS
++static inline int status_reg_to_charger(enum sc8541_notify notify)
++{
++	switch (notify) {
++	case SC8541_NOTIFY_IBUSUCPF:
++		return CHARGER_DEV_NOTIFY_IBUSUCP_FALL;
++    case SC8541_NOTIFY_VBUSOVPALM:
++		return CHARGER_DEV_NOTIFY_VBUSOVP_ALARM;
++    case SC8541_NOTIFY_VBATOVPALM:
++		return CHARGER_DEV_NOTIFY_VBATOVP_ALARM;
++    case SC8541_NOTIFY_IBUSOCP:
++		return CHARGER_DEV_NOTIFY_IBUSOCP;
++    case SC8541_NOTIFY_VBUSOVP:
++		return CHARGER_DEV_NOTIFY_VBUS_OVP;
++    case SC8541_NOTIFY_IBATOCP:
++		return CHARGER_DEV_NOTIFY_IBATOCP;
++    case SC8541_NOTIFY_VBATOVP:
++		return CHARGER_DEV_NOTIFY_BAT_OVP;
++    case SC8541_NOTIFY_VOUTOVP:
++		return CHARGER_DEV_NOTIFY_VOUTOVP;
++	default:
++	return -EINVAL;
++		break;
++	}
++	return -EINVAL;
++}
++#endif /*CONFIG_MTK_CLASS*/
++static void sc8541_check_fault_status(struct sc8541_chip *sc)
++{
++    int ret;
++    u8 flag = 0;
++    int i, j;
++#ifdef CONFIG_MTK_CLASS
++    int noti;
++#endif /*CONFIG_MTK_CLASS*/
++
++    for (i = 0; i < ARRAY_SIZE(cp_intr_flag); i++) {
++	ret = sc8541_read_block(sc, cp_intr_flag[i].reg, &flag, 1);
++        for (j = 0; j <  cp_intr_flag[i].len; j++) {
++	    if (flag & cp_intr_flag[i].bit[j].mask) {
++                dev_err(sc->dev, "trigger :%s\n", cp_intr_flag[i].bit[j].name);
++#ifdef CONFIG_MTK_CLASS
++		noti = status_reg_to_charger(cp_intr_flag[i].bit[j].notify);
++		if (noti >= 0) {
++		    charger_dev_notify(sc->chg_dev, noti);
++		}
++#endif /*CONFIG_MTK_CLASS*/
++	    }
++	}
++    }
++}
++
++static irqreturn_t sc8541_irq_handler(int irq, void *data)
++{
++    struct sc8541_chip *sc = data;
++
++    dev_err(sc->dev, "INT OCCURRED\n");
++
++    sc8541_check_fault_status(sc);
++
++    power_supply_changed(sc->psy);
++
++    return IRQ_HANDLED;
++}
++
++static int sc8541_register_interrupt(struct sc8541_chip *sc)
++{
++    int ret;
++
++    if (gpio_is_valid(sc->irq_gpio)) {
++	ret = gpio_request_one(sc->irq_gpio, GPIOF_IN, "sc8541_irq");
++	if (ret) {
++            dev_err(sc->dev, "failed to request sc8541_irq\n");
++	    return -EINVAL;
++	}
++	sc->irq = gpio_to_irq(sc->irq_gpio);
++	if (sc->irq < 0) {
++            dev_err(sc->dev, "failed to gpio_to_irq\n");
++	    return -EINVAL;
++	}
++    } else {
++        dev_err(sc->dev, "irq gpio not provided\n");
++	return -EINVAL;
++    }
++
++    if (sc->irq) {
++	ret = devm_request_threaded_irq(&sc->client->dev, sc->irq,
++		NULL, sc8541_irq_handler,
++		IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
++		sc8541_irq_name[sc->mode], sc);
++
++	if (ret < 0) {
++            dev_err(sc->dev, "request irq for irq=%d failed, ret =%d\n",
++			    sc->irq, ret);
++	    return ret;
++	}
++	enable_irq_wake(sc->irq);
++    }
++
++    return ret;
++}
++/********************interrupte end*************************************************/
++
++
++/************************psy start**************************************/
++static enum power_supply_property sc8541_charger_props[] = {
++    POWER_SUPPLY_PROP_ONLINE,
++    POWER_SUPPLY_PROP_PRESENT,
++    POWER_SUPPLY_PROP_VOLTAGE_NOW,
++    POWER_SUPPLY_PROP_CURRENT_NOW,
++    POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT,
++    POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE,
++    POWER_SUPPLY_PROP_TEMP,
++};
++
++static int sc8541_charger_get_property(struct power_supply *psy,
++		enum power_supply_property psp,
++		union power_supply_propval *val)
++{
++    struct sc8541_chip *sc = power_supply_get_drvdata(psy);
++    int result;
++    int ret;
++
++    switch (psp) {
++    case POWER_SUPPLY_PROP_ONLINE:
++	sc8541_check_charge_enabled(sc, &sc->charge_enabled);
++	val->intval = sc->charge_enabled;
++	break;
++    case POWER_SUPPLY_PROP_VOLTAGE_NOW:
++	ret = sc8541_get_adc_data(sc, ADC_VBUS, &result);
++	if (!ret)
++	    sc->vbus_volt = result;
++	val->intval = sc->vbus_volt;
++	break;
++    case POWER_SUPPLY_PROP_CURRENT_NOW:
++	ret = sc8541_get_adc_data(sc, ADC_IBUS, &result);
++	if (!ret)
++	    sc->ibus_curr = result;
++	val->intval = sc->ibus_curr;
++	break;
++    case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE:
++	ret = sc8541_get_adc_data(sc, ADC_VBAT, &result);
++	if (!ret)
++	    sc->vbat_volt = result;
++	val->intval = sc->vbat_volt;
++	break;
++    case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
++	ret = sc8541_get_adc_data(sc, ADC_IBAT, &result);
++	if (!ret)
++	    sc->ibat_curr = result;
++	val->intval = sc->ibat_curr;
++	break;
++    case POWER_SUPPLY_PROP_TEMP:
++	ret = sc8541_get_adc_data(sc, ADC_TDIE, &result);
++	if (!ret)
++	    sc->die_temp = result;
++	val->intval = sc->die_temp;
++	break;
++    default:
++	return -EINVAL;
++    }
++
++    return 0;
++}
++
++static int sc8541_charger_set_property(struct power_supply *psy,
++		    enum power_supply_property prop,
++		    const union power_supply_propval *val)
++{
++    struct sc8541_chip *sc = power_supply_get_drvdata(psy);
++
++    switch (prop) {
++    case POWER_SUPPLY_PROP_ONLINE:
++	sc8541_enable_charge(sc, val->intval);
++	dev_info(sc->dev, "POWER_SUPPLY_PROP_ONLINE: %s\n",
++		val->intval ? "enable" : "disable");
++	break;
++    default:
++	return -EINVAL;
++    }
++
++    return 0;
++}
++
++static int sc8541_charger_is_writeable(struct power_supply *psy,
++		    enum power_supply_property prop)
++{
++    return 0;
++}
++
++static int sc8541_psy_register(struct sc8541_chip *sc)
++{
++    sc->psy_cfg.drv_data = sc;
++    sc->psy_cfg.fwnode = dev_fwnode(sc->dev);
++
++    sc->psy_desc.name = sc8541_psy_name[sc->mode];
++
++    sc->psy_desc.type = POWER_SUPPLY_TYPE_MAINS;
++    sc->psy_desc.properties = sc8541_charger_props;
++    sc->psy_desc.num_properties = ARRAY_SIZE(sc8541_charger_props);
++    sc->psy_desc.get_property = sc8541_charger_get_property;
++    sc->psy_desc.set_property = sc8541_charger_set_property;
++    sc->psy_desc.property_is_writeable = sc8541_charger_is_writeable;
++
++
++    sc->psy = devm_power_supply_register(sc->dev,
++	    &sc->psy_desc, &sc->psy_cfg);
++    if (IS_ERR(sc->psy)) {
++	dev_err(sc->dev, "%s failed to register psy\n", __func__);
++	return PTR_ERR(sc->psy);
++    }
++
++    dev_info(sc->dev, "%s power supply register successfully\n", sc->psy_desc.name);
++
++    return 0;
++}
++
++
++/************************psy end**************************************/
++
++static int sc8541_set_work_mode(struct sc8541_chip *sc, int mode)
++{
++    sc->mode = mode;
++
++    dev_err(sc->dev, "work mode is %s\n", sc->mode == SC8541_STANDALONE 
++	? "standalone" : (sc->mode == SC8541_MASTER ? "master" : "slave"));
++
++    return 0;
++}
++
++static int sc8541_parse_dt(struct sc8541_chip *sc, struct device *dev)
++{
++    struct device_node *np = dev->of_node;
++    int i;
++    int ret;
++    struct {
++	char *name;
++	int *conv_data;
++    } props[] = {
++	{"sc,sc8541,vbat-ovp-dis", &(sc->cfg.vbat_ovp_dis)},
++	{"sc,sc8541,vbat-ovp", &(sc->cfg.vbat_ovp)},
++	{"sc,sc8541,vbat-ovp-alm-dis", &(sc->cfg.vbat_ovp_alm_dis)},
++	{"sc,sc8541,vbat-ovp-alm", &(sc->cfg.vbat_ovp_alm)},
++	{"sc,sc8541,ibat-ocp-dis", &(sc->cfg.ibat_ocp_dis)},
++	{"sc,sc8541,ibat-ocp", &(sc->cfg.ibat_ocp)},
++	{"sc,sc8541,ibat-ocp-alm-dis", &(sc->cfg.ibat_ocp_alm_dis)},
++	{"sc,sc8541,ibat-ocp-alm", &(sc->cfg.ibat_ocp_alm)},
++	{"sc,sc8541,ibus-ucp-dis", &(sc->cfg.ibus_ucp_dis)},
++	{"sc,sc8541,vbus-in-range-dis", &(sc->cfg.vbus_in_range_dis)},
++	{"sc,sc8541,vbus-pd-en", &(sc->cfg.vbus_pd_en)},
++	{"sc,sc8541,vbus-ovp", &(sc->cfg.vbus_ovp)},
++	{"sc,sc8541,vbus-ovp-alm-dis", &(sc->cfg.vbus_ovp_alm_dis)},
++	{"sc,sc8541,vbus-ovp-alm", &(sc->cfg.vbus_ovp_alm)},
++	{"sc,sc8541,ibus-ocp-dis", &(sc->cfg.ibus_ocp_dis)},
++	{"sc,sc8541,ibus-ocp", &(sc->cfg.ibus_ocp)},
++	{"sc,sc8541,tshut-dis", &(sc->cfg.tshut_dis)},
++	{"sc,sc8541,tsbus-flt-dis", &(sc->cfg.tsbus_flt_dis)},
++	{"sc,sc8541,tsbat-flt-dis", &(sc->cfg.tsbat_flt_dis)},
++	{"sc,sc8541,tdie-alm", &(sc->cfg.tdie_alm)},
++	{"sc,sc8541,tsbus-flt", &(sc->cfg.tsbus_flt)},
++	{"sc,sc8541,tsbat-flt", &(sc->cfg.tsbat_flt)},
++	{"sc,sc8541,vac1-ovp", &(sc->cfg.vac1_ovp)},
++	{"sc,sc8541,vac2-ovp", &(sc->cfg.vac2_ovp)},
++	{"sc,sc8541,vac1-pd-en", &(sc->cfg.vac1_pd_en)},
++	{"sc,sc8541,vac2-pd-en", &(sc->cfg.vac2_pd_en)},
++	{"sc,sc8541,fsw-set", &(sc->cfg.fsw_set)},
++	{"sc,sc8541,wd-timeout", &(sc->cfg.wd_timeout)},
++	{"sc,sc8541,wd-timeout-dis", &(sc->cfg.wd_timeout_dis)},
++	{"sc,sc8541,ibat-sns-r", &(sc->cfg.ibat_sns_r)},
++	{"sc,sc8541,ss-timeout", &(sc->cfg.ss_timeout)},
++	{"sc,sc8541,ibus-ucp-fall-dg", &(sc->cfg.ibus_ucp_fall_dg)},
++	{"sc,sc8541,vout-ovp-dis", &(sc->cfg.vout_ovp_dis)},
++	{"sc,sc8541,vout-ovp", &(sc->cfg.vout_ovp)},
++	//{"sc,sc8541,ms", &(sc->cfg.ms)},
++	{"sc,sc8541,pmid2out-uvp", &(sc->cfg.pmid2out_uvp)},
++	{"sc,sc8541,pmid2out-ovp", &(sc->cfg.pmid2out_ovp)},
++    };
++
++    /* initialize data for optional properties */
++    for (i = 0; i < ARRAY_SIZE(props); i++) {
++	ret = of_property_read_u32(np, props[i].name,
++			props[i].conv_data);
++	if (ret < 0) {
++	    dev_err(sc->dev, "can not read %s\n", props[i].name);
++	    return ret;
++	}
++    }
++
++    sc->irq_gpio = of_get_named_gpio(np, "sc8541,intr_gpio", 0);
++    if (!gpio_is_valid(sc->irq_gpio)) {
++        dev_err(sc->dev, "fail to valid gpio : %d\n", sc->irq_gpio);
++	return -EINVAL;
++    }
++
++    if (of_property_read_string(np, "charger_name", &sc->chg_dev_name) < 0) {
++		sc->chg_dev_name = "charger";
++		dev_err(sc->dev, "no charger name\n");
++	}
++
++    return 0;
++}
++
++static struct of_device_id sc8541_charger_match_table[] = {
++    {   .compatible = "sc,sc8541-standalone",
++	.data = &sc8541_mode_data[SC8541_STANDALONE], },
++    {   .compatible = "sc,sc8541-master",
++	.data = &sc8541_mode_data[SC8541_MASTER], },
++    {   .compatible = "sc,sc8541-slave",
++	.data = &sc8541_mode_data[SC8541_SLAVE], },
++};
++
++static int sc8541_charger_probe(struct i2c_client *client)
++{
++    struct sc8541_chip *sc;
++    const struct of_device_id *match;
++    struct device_node *node = client->dev.of_node;
++    int ret, i;
++
++    dev_err(&client->dev, "%s (%s)\n", __func__, SC8541_DRV_VERSION);
++
++    sc = devm_kzalloc(&client->dev, sizeof(struct sc8541_chip), GFP_KERNEL);
++    if (!sc) {
++	ret = -ENOMEM;
++	goto err_kzalloc;
++    }
++
++    sc->dev = &client->dev;
++    sc->client = client;
++
++    sc->regmap = devm_regmap_init_i2c(client,
++			    &sc8541_regmap_config);
++    if (IS_ERR(sc->regmap)) {
++	dev_err(sc->dev, "Failed to initialize regmap\n");
++	ret = PTR_ERR(sc->regmap);
++	goto err_regmap_init;
++    }
++
++    for (i = 0; i < ARRAY_SIZE(sc8541_reg_fields); i++) {
++	const struct reg_field *reg_fields = sc8541_reg_fields;
++
++	sc->rmap_fields[i] =
++	    devm_regmap_field_alloc(sc->dev,
++			sc->regmap,
++			reg_fields[i]);
++	if (IS_ERR(sc->rmap_fields[i])) {
++	    dev_err(sc->dev, "cannot allocate regmap field\n");
++	    ret = PTR_ERR(sc->rmap_fields[i]);
++	    goto err_regmap_field;
++	}
++    }
++
++    ret = sc8541_detect_device(sc);
++    if (ret < 0) {
++	dev_err(sc->dev, "%s detect device fail\n", __func__);
++	goto err_detect_dev;
++    }
++
++    i2c_set_clientdata(client, sc);
++    sc8541_create_device_node(&(client->dev));
++
++    match = of_match_node(sc8541_charger_match_table, node);
++    if (match == NULL) {
++	dev_err(sc->dev, "device tree match not found!\n");
++	goto err_match_node;
++    }
++
++    sc8541_set_work_mode(sc, *(int *)match->data);
++    if (ret) {
++        dev_err(sc->dev, "Fail to set work mode!\n");
++	goto err_set_mode;
++    }
++
++    ret = sc8541_parse_dt(sc, &client->dev);
++    if (ret < 0) {
++	dev_err(sc->dev, "%s parse dt failed(%d)\n", __func__, ret);
++	goto err_parse_dt;
++    }
++
++    ret = sc8541_init_device(sc);
++    if (ret < 0) {
++	dev_err(sc->dev, "%s init device failed(%d)\n", __func__, ret);
++	goto err_init_device;
++    }
++
++    ret = sc8541_psy_register(sc);
++    if (ret < 0) {
++	dev_err(sc->dev, "%s psy register failed(%d)\n", __func__, ret);
++	goto err_register_psy;
++    }
++
++    ret = sc8541_register_interrupt(sc);
++    if (ret < 0) {
++	dev_err(sc->dev, "%s register irq fail(%d)\n",
++		    __func__, ret);
++	goto err_register_irq;
++    }
++
++#ifdef CONFIG_MTK_CLASS
++    sc->chg_dev = charger_device_register(sc->chg_dev_name,
++					      &client->dev, sc,
++					      &sc8541_chg_ops,
++					      &sc8541_chg_props);
++	if (IS_ERR_OR_NULL(sc->chg_dev)) {
++		ret = PTR_ERR(sc->chg_dev);
++		dev_err(sc->dev, "Fail to register charger!\n");
++	goto err_register_mtk_charger;
++	}
++#endif /*CONFIG_MTK_CLASS*/
++
++#ifdef CONFIG_SOUTHCHIP_DVCHG_CLASS
++    sc->charger_pump = dvchg_register("sc_dvchg",
++			     sc->dev, &sc_sc8541_dvchg_ops, sc);
++    if (IS_ERR_OR_NULL(sc->charger_pump)) {
++		ret = PTR_ERR(sc->charger_pump);
++		dev_err(sc->dev, "Fail to register charger!\n");
++	goto err_register_sc_charger;
++	}
++#endif /* CONFIG_SOUTHCHIP_DVCHG_CLASS */
++    dev_err(sc->dev, "sc8541[%s] probe successfully!\n",
++	    sc->mode == SC8541_MASTER ? "master" : "slave");
++    return 0;
++
++err_register_psy:
++err_register_irq:
++#ifdef CONFIG_MTK_CLASS
++err_register_mtk_charger:
++#endif /*CONFIG_MTK_CLASS*/
++#ifdef CONFIG_SOUTHCHIP_DVCHG_CLASS
++err_register_sc_charger:
++#endif /*CONFIG_SOUTHCHIP_DVCHG_CLASS*/
++err_init_device:
++    power_supply_unregister(sc->psy);
++err_detect_dev:
++err_match_node:
++err_set_mode:
++err_parse_dt:
++err_regmap_init:
++err_regmap_field:
++    devm_kfree(&client->dev, sc);
++err_kzalloc:
++    dev_err(&client->dev, "sc8541 probe fail\n");
++    return ret;
++}
++
++
++static void sc8541_charger_remove(struct i2c_client *client)
++{
++    struct sc8541_chip *sc = i2c_get_clientdata(client);
++
++    power_supply_unregister(sc->psy);
++    devm_kfree(&client->dev, sc);
++}
++
++#ifdef CONFIG_PM_SLEEP
++static int sc8541_suspend(struct device *dev)
++{
++    struct sc8541_chip *sc = dev_get_drvdata(dev);
++
++    dev_info(sc->dev, "Suspend successfully!");
++    if (device_may_wakeup(dev))
++	enable_irq_wake(sc->irq);
++    disable_irq(sc->irq);
++
++    return 0;
++}
++static int sc8541_resume(struct device *dev)
++{
++    struct sc8541_chip *sc = dev_get_drvdata(dev);
++
++    dev_info(sc->dev, "Resume successfully!");
++    if (device_may_wakeup(dev))
++	disable_irq_wake(sc->irq);
++    enable_irq(sc->irq);
++
++    return 0;
++}
++
++static const struct dev_pm_ops sc8541_pm = {
++    SET_SYSTEM_SLEEP_PM_OPS(sc8541_suspend, sc8541_resume)
++};
++#endif
++
++static struct i2c_driver sc8541_charger_driver = {
++    .driver     = {
++	.name   = "sc8541",
++	.owner  = THIS_MODULE,
++	.of_match_table = sc8541_charger_match_table,
++#ifdef CONFIG_PM_SLEEP
++	.pm = &sc8541_pm,
++#endif
++    },
++    .probe      = sc8541_charger_probe,
++    .remove     = sc8541_charger_remove,
++};
++
++module_i2c_driver(sc8541_charger_driver);
++
++MODULE_DESCRIPTION("SC SC8541 Driver");
++MODULE_LICENSE("GPL");
++MODULE_AUTHOR("South Chip <Aiden-yu@southchip.com>");
++
 -- 
-Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+2.25.1
 
 
