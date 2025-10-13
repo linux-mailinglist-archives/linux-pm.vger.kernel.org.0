@@ -1,200 +1,141 @@
-Return-Path: <linux-pm+bounces-35958-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35959-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D7BEBD2AB1
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Oct 2025 12:56:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 866E0BD2BA9
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Oct 2025 13:09:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C9BE6189C584
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Oct 2025 10:56:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D63E7189CE92
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Oct 2025 11:09:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12C18307490;
-	Mon, 13 Oct 2025 10:54:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7E8C259CBD;
+	Mon, 13 Oct 2025 11:09:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="jdb2ehCv"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="RDQRbt3M"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f49.google.com (mail-yx1-f49.google.com [74.125.224.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 628E3306D5E
-	for <linux-pm@vger.kernel.org>; Mon, 13 Oct 2025 10:54:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0D984C85
+	for <linux-pm@vger.kernel.org>; Mon, 13 Oct 2025 11:09:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760352861; cv=none; b=KDPRqz0Jy4Fdl9Fr7h2iSCZEEvE0FyPL8cAAKGJNlY1rHFYfdVsb9+1++yiQzux1Y9K53y1MLSQrI8InTaPfpB8eC3d5ZCMBruSPpKCy/oYyjxieE6H+m+lGBuyPfUx1C4xWWG/a60fcQyMBC4hT6oamLmXzhQe6/aO3j8v8Clw=
+	t=1760353744; cv=none; b=UQFNyzYGpPGaLGPMS9o2fokPLLgVIdUQJiabvO2lxtjUKn8R6N2PN+OXGqDveOrKuhvafkZRgiz8ZunKbXPq/4bX+7L1cjX+/eC7NLoFGpaK5O3AojrlW1BgiD24vuC461ixfbKqpP7MMAa1fh3bWvZ3miUlZPl053icluCiVIk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760352861; c=relaxed/simple;
-	bh=s8aliwbSN8aDBycb6R1r4K4cCFRZ355dOg0hIcHGa6Y=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=H3Zohz7Nr5mP0TQacwkV+mVwkaUfcnSxnwCPWywAv6C7CDj4m2StJEQJFi5HbzA6GAsg5Dn4aztphKfpyioD3KWhJ4t71xwvUYQZ0GfNztQ2dh4PtYVmGyQSbTW+a9ldeQY1sjPX9YtX54vUiXE3L+jmyS/61melFaCG1J296Pg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=jdb2ehCv; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 59DABYIk016699
-	for <linux-pm@vger.kernel.org>; Mon, 13 Oct 2025 10:54:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	dzqy/pPgafXyIrZ6tRmMgMR1smWL+TClMm1JmbNZJBg=; b=jdb2ehCvapwFCoKK
-	TZVZmSWkpxlOqrwE5nrUK09QmyWMqisZYE+hfs8sREQhMACN4DMnwT4GAsHDma7w
-	G1XB8m/oFdgInMa7P7hqpvof7CcQF8IAMcPAQqnEd3yh+dLy1ApibyzgyP8OzLN7
-	PgdpAlOwTVCEe5seGngB5VOLe5XtjG5aOk83Jm8snUFw7/8Wnad93AM5/YwrGK0c
-	GQYUlFcDSNuSVlr+8wGQ1btjqfaokBQtwo/8MlndNwcmGq2lJ+WZIRD7Z5oyMoYc
-	Pvoh0B4EDcWGZVZckgBjvQSH84o2PRkIQ6JPWwG+QKU3ryaF/sRbuFyu6l6M5yUJ
-	pzOpfQ==
-Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com [209.85.215.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 49qfbhva74-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Mon, 13 Oct 2025 10:54:19 +0000 (GMT)
-Received: by mail-pg1-f199.google.com with SMTP id 41be03b00d2f7-b5533921eb2so6411689a12.0
-        for <linux-pm@vger.kernel.org>; Mon, 13 Oct 2025 03:54:19 -0700 (PDT)
+	s=arc-20240116; t=1760353744; c=relaxed/simple;
+	bh=JBjcoD6p4V3FBJzZf3IkyyOyuKRE3/OmLmnidKruPC0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=NonZWahwQkGN3ahPm1pYohY4/5b9rVzp8B2+0bNSAX0zkKgLydPsHOi+tWM0XFPIaIZG/G8TWj+GHpmO7yby96o0dLAiLmRVwVZ4zUaa2ICraUqkBhLlgenIY6ksalo9rmTrwHTCBwHBIjZjO82imzSoq8ZyfqFLPkOpOOJ30bk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=RDQRbt3M; arc=none smtp.client-ip=74.125.224.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yx1-f49.google.com with SMTP id 956f58d0204a3-63bc1aeb427so4055414d50.3
+        for <linux-pm@vger.kernel.org>; Mon, 13 Oct 2025 04:09:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1760353742; x=1760958542; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=KZ0p4RGMaKkdg82zu0ufNV13vLNgFLb6uCYyjivzVoc=;
+        b=RDQRbt3MGnpugXnjKCN3EOOg8+qImF7lC+O+0tFZxvkUWyQdE5SrtKSC8lT4KdmjAl
+         eGTJn4zVtP1TS4fLTWq3E3wil+Qro5Y4On0D9t/PZ0Sgj3eaw5gVALif+fz6/EeBfnLU
+         RaqOo9CqxAEqAQtj/gIdeyr2zMS2k/1Rn3dlzVj2idUhz6uHlN9nRAX7RVnVY+VbXqRx
+         4H1a7mgai4coyIvcQ1yujFIInHC9EN2NCjLRCDOS1tk2ufboi0B/hCvgrOORar19mugW
+         YpVAanTyoINpthqQTI5X3vtZAQrWj3fYdZxNWAP8gB9V67WEjSpu5TxvO1x20jkKH11z
+         Rvmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760352858; x=1760957658;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dzqy/pPgafXyIrZ6tRmMgMR1smWL+TClMm1JmbNZJBg=;
-        b=E45PFfgnatSlnUjGudam2xTtLSH8ol1E6enqO7jP/T5sFiJHgxI/A4QEqkfAFJOEcE
-         OObihfkFaBx5VH5Obl9Bt3O8ecyHqOhb+ot5eDHMUtrVvpaR6lYsEgLfIRqKx+qYpcmS
-         fjfVV4wl6bgg+Irp5xzx2heaviTO24LtAm+Y0SvGH2qce074fDONq1EdleVvrJ7NBb8m
-         uzyzssbVUg/gAuewQ8GPb/VA/QlvDbE1m3KBW80W4AphYvGG6xo7BVej4liyD/OOjhm9
-         Y10zg703fEFyFmfKiXX3n7Q+R5ne+lq7+9wvsc2uGo601yOIx14oLSHgVZoWyNf5nkdA
-         7gvg==
-X-Gm-Message-State: AOJu0YysAxnTWNgmfO+iPXU+kMtBEBggCOKUGrfhlqzUUlRZ8gcCVZq6
-	rOJ+WFpIvZWQ4x9xuVF9zZHee1oqHAU08WZ2CEVeteqN2tBjak3bTUBKKUj+ydoybjUb/AGSh/y
-	R0ExKdqVBgadmnohd1ek3EMfMPiYLBMj0bMbplyAIAV+SzEkTt/Cs3vJXZ9/T7w==
-X-Gm-Gg: ASbGnct0AWllSzEC6Turf0hDPw+lL+oFgVthfitU5rSSM8lowcqkROvOGv6VSKxW/fJ
-	NX9/raFKpaTBrW0sW1iNi7PE4pJylGApN3N/uWKO+FanvTNFogtIkElfbIcafhUHNC3QmUu0U7c
-	hZLFmu19nVwvlt4ZLmH1mOEeTTo4ndmGnAw12TP4lYnLE8WVPo9tbH5B+Q1xf/oMUFhD31meogA
-	tpz5bDSLmlQBMxarFEBHqNOLdtwlJZtcg/6k/sw3V3ispEwupnUYU1KbkXo+qn4NI4B5m7tTuH0
-	wfmEn7ieHrmDbDPP3WpBdimnlgUKxpbFrZp1KaJXXHw2XuAoJFbzpg3uV+mdCt8ZlbTOZgQSvoM
-	=
-X-Received: by 2002:a05:6a20:914f:b0:2c4:c85a:7da5 with SMTP id adf61e73a8af0-32da81345e5mr29088596637.6.1760352857998;
-        Mon, 13 Oct 2025 03:54:17 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IE2Dc1sV8qzTg3yBNUQrWbsJJQp0QNojNq7MP48Dww6Xlvl/hVhSX+o5b9dp/M0VJWQ68tALQ==
-X-Received: by 2002:a05:6a20:914f:b0:2c4:c85a:7da5 with SMTP id adf61e73a8af0-32da81345e5mr29088557637.6.1760352857498;
-        Mon, 13 Oct 2025 03:54:17 -0700 (PDT)
-Received: from hu-krichai-hyd.qualcomm.com ([202.46.23.25])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-33b626403desm11662295a91.7.2025.10.13.03.54.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Oct 2025 03:54:17 -0700 (PDT)
-From: Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>
-Date: Mon, 13 Oct 2025 16:23:32 +0530
-Subject: [PATCH v5 5/5] PCI: qcom: Use frequency and level based OPP lookup
+        d=1e100.net; s=20230601; t=1760353742; x=1760958542;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KZ0p4RGMaKkdg82zu0ufNV13vLNgFLb6uCYyjivzVoc=;
+        b=j+8oewO+clmN1gIxam8z+o8tYDjo2nR43uWv8rkcPYs6qyOJPU7x8sx8e6blUbHl46
+         i7q1ux7veqtgvavfHydkAluvku1dPr6hBSyUgT1Gi/SsM1s9AIDc+l6kyI8OGoeFIBty
+         WBKsZnDqKrnXAQ+EklIE56MVAlY/axhSy4NTpshGbmZfmexArlD/xaVfGAz4c9vy9eFe
+         tlf+Gs7MQ0er2U9x7EorodXunTxYb3RYokdruUFJ47RuADeECaNCgmNX+a65kBi9JXQN
+         pyWmFnXySg6WDkDsks0eM+rEZHrNrEgVW7zkqMnjC2sYXunzIX0ZGaoICL0NTiNwyZk3
+         uUaw==
+X-Forwarded-Encrypted: i=1; AJvYcCUoxJNKwIzYKgmkRvf88VFIT761KwTc1aVxzPBwV3NqmFoPrZ8HdYbxBojT0P/1L8Svfh0E3kmhIQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxSrVc59a2rqMm/UNElGjJz429HJ70i8ZEsRlcw3azKPXZ9TUIH
+	OMSoIvGgV2runcbgbAIwDuK0bJwmufjkdbSt6oDt6jc4WQbLa5fgtedHlfZwIW93qGSqd5g2xwB
+	vpRTxwbn5BJJnW0P01b7e7EO6iB7s5qr8wMl0DJBL8Q==
+X-Gm-Gg: ASbGncvDNUP/00npQQbKdVLZ6ADnZRJnPaO5/sSN6ErA8BrenObYHrlYTCA92bP7kqn
+	a58Nnv8ym8Kih/gG9VfiVAvZ6/9CojmuRQW+rtbm2Xp4RBLli4lFahas6AWdUbWLaO4YWAXDVPh
+	wsO627caV1TDio/rrBPXQXz/Qv/06aFFTBS1bdgM5iFqbphow9VlijwzrY7znPbIvkGtJFK5tFP
+	DEWR1lU/W30jj+FzU5dj7+TefL0nXaQAB2tCJvfpQ==
+X-Google-Smtp-Source: AGHT+IHrxYQ9lAwrAdQaAqwn1O+JAjRD1WZ/bFkPUNTQEmfnnv60+IjtPt4OC2P/C+wu47H7hgloLf7dCT2IP6oTbGM=
+X-Received: by 2002:a53:5009:0:b0:636:2420:d3ce with SMTP id
+ 956f58d0204a3-63ccb93456dmr13963269d50.51.1760353741929; Mon, 13 Oct 2025
+ 04:09:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251013-opp_pcie-v5-5-eb64db2b4bd3@oss.qualcomm.com>
-References: <20251013-opp_pcie-v5-0-eb64db2b4bd3@oss.qualcomm.com>
-In-Reply-To: <20251013-opp_pcie-v5-0-eb64db2b4bd3@oss.qualcomm.com>
-To: Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
-        Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1760352825; l=2164;
- i=krishna.chundru@oss.qualcomm.com; s=20230907; h=from:subject:message-id;
- bh=s8aliwbSN8aDBycb6R1r4K4cCFRZ355dOg0hIcHGa6Y=;
- b=a9LPyMNvzxPSP5d74h2NSW3Y7ZtnU8wBZN6ChdVmntSo234L2UuCKTBXfZNDbzGbpK6SvrjLI
- wQHRfMY25SRDQHvbRmR1981JYMJhkbcL3Omgj8+AFkHcJdOnaHfsYos
-X-Developer-Key: i=krishna.chundru@oss.qualcomm.com; a=ed25519;
- pk=10CL2pdAKFyzyOHbfSWHCD0X0my7CXxj8gJScmn1FAg=
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDExMDAxOCBTYWx0ZWRfX/mdQIBGw5hIQ
- Ffi5hBNqiEhBnMcJht9OvNGli9edYw6C8v2bEu1QQByUkgG6hKmhl5pBEqannFHL2egiK17tZ3e
- oy8ZD9DuBAarxHiePdTDY3S3eUQaEL7NKUWSInHGKQl7kHNNB+co8XPWt9zaX4N4eWyY1F6D76d
- gG9z0mFiJsgimlopkbT4O4Hl/YyHP/Gg40m8MjCApnSiJgRzrw53QcyxV7YHP9V+OJ8+1jN98op
- bUXlxcZrUcDv/EADKMTPcJvy23QQBsttgmIlEGIE2jDTOrzaOEzrw78Yiaf2n5Ot3wE6eMEaq9v
- KdX6SYUkypW17ev+WMih/K2oMajX9osnotSYcD04aJMnW0rtGG8ZQTKYPdlvjOhOTCwJlrU4E89
- rCBbXUF3Wgm4gBZL7B/CpFXIt7y9ug==
-X-Proofpoint-ORIG-GUID: jbMBEkhcA1B7zG-d8DBtg0SYikrpv9pb
-X-Authority-Analysis: v=2.4 cv=bodBxUai c=1 sm=1 tr=0 ts=68ecda5b cx=c_pps
- a=Oh5Dbbf/trHjhBongsHeRQ==:117 a=ZePRamnt/+rB5gQjfz0u9A==:17
- a=IkcTkHD0fZMA:10 a=x6icFKpwvdMA:10 a=EUspDBNiAAAA:8 a=kXhGf0cxdCgfIYue-YsA:9
- a=QEXdDO2ut3YA:10 a=_Vgx9l1VpLgwpw_dHYaR:22
-X-Proofpoint-GUID: jbMBEkhcA1B7zG-d8DBtg0SYikrpv9pb
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-10-13_04,2025-10-06_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- phishscore=0 lowpriorityscore=0 adultscore=0 impostorscore=0 suspectscore=0
- bulkscore=0 priorityscore=1501 clxscore=1015 malwarescore=0 spamscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2510020000 definitions=main-2510110018
+References: <20250917063233.1270-1-svarbanov@suse.de>
+In-Reply-To: <20250917063233.1270-1-svarbanov@suse.de>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Mon, 13 Oct 2025 13:08:26 +0200
+X-Gm-Features: AS18NWDL9Q6dk2HPqdUsVDURwgZHNk0vQNVjiF3dETSyBPsHFLwf7APcaD_mqAU
+Message-ID: <CAPDyKFpus05RAkYAoG7zjyvgAJiuXwRt3=z-JB5Kb7mo0AK4vw@mail.gmail.com>
+Subject: Re: [PATCH 0/4] Add watchdog support for bcm2712
+To: Stanimir Varbanov <svarbanov@suse.de>
+Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-rpi-kernel@lists.infradead.org, 
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, linux-pm@vger.kernel.org, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Florian Fainelli <florian.fainelli@broadcom.com>, Ray Jui <rjui@broadcom.com>, 
+	Scott Branden <sbranden@broadcom.com>, Lee Jones <lee@kernel.org>, 
+	Willow Cunningham <willow.e.cunningham@gmail.com>, Stefan Wahren <wahrenst@gmx.net>, 
+	Saenz Julienne <nsaenz@kernel.org>, Andrea della Porta <andrea.porta@suse.com>, 
+	Phil Elwell <phil@raspberrypi.com>, Jonathan Bell <jonathan@raspberrypi.com>, 
+	Dave Stevenson <dave.stevenson@raspberrypi.com>
+Content-Type: text/plain; charset="UTF-8"
 
-PCIe link configurations such as 8GT/s x2 and 16GT/s x1 may operate at
-the same frequency but differ in other characteristics like RPMh votes.
-The existing OPP selection based solely on frequency cannot distinguish
-between such cases.
+On Wed, 17 Sept 2025 at 08:33, Stanimir Varbanov <svarbanov@suse.de> wrote:
+>
+> Hello,
+>
+> The following patch-set aims to:
+>
+>  * allow probe of bcm2835-wdt watchdog driver for bcm2712.
+>  * prepare bcm2835-power driver for enabling of v3d for bcm2712.
+>
+>  - patch 1/4 is preparing bcm2835-power driver to be able to
+> control GRAFX_V3D pm-domain. This is a prerequisite for the follow-up
+> patch-set which will add a v3d DT node for bcm2712 (RPi5).
+>
+>  - patches 2/4 and 3/4 are adding bcm2712-pm compatible in MFD driver
+> and update the dt-bindings accordingly.
+>
+>  - patch 4/4 is adding a watchdog DT node for bcm2712.
+>
+> Comments are welcome!
 
-In such cases, frequency alone is insufficient to identify the correct OPP.
-Use the newly introduced dev_pm_opp_find_key_exact() API to match both
-frequency and level when selecting an OPP, here level indicates PCIe
-data rate.
+This looks good to me!
 
-To support older device tree's where opp-level is not defined, check if
-opp-level is present or not using dev_pm_opp_find_level_exact(). if
-not present fallback to frequency only match.
+Kind regards
+Uffe
 
-Signed-off-by: Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>
----
- drivers/pci/controller/dwc/pcie-qcom.c | 17 +++++++++++++++--
- 1 file changed, 15 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-index 805edbbfe7eba496bc99ca82051dee43d240f359..03b3a1d3a40359a0c70704873b72539ffa43e722 100644
---- a/drivers/pci/controller/dwc/pcie-qcom.c
-+++ b/drivers/pci/controller/dwc/pcie-qcom.c
-@@ -1565,6 +1565,7 @@ static void qcom_pcie_icc_opp_update(struct qcom_pcie *pcie)
- {
- 	u32 offset, status, width, speed;
- 	struct dw_pcie *pci = pcie->pci;
-+	struct dev_pm_opp_key key;
- 	unsigned long freq_kbps;
- 	struct dev_pm_opp *opp;
- 	int ret, freq_mbps;
-@@ -1592,8 +1593,20 @@ static void qcom_pcie_icc_opp_update(struct qcom_pcie *pcie)
- 			return;
- 
- 		freq_kbps = freq_mbps * KILO;
--		opp = dev_pm_opp_find_freq_exact(pci->dev, freq_kbps * width,
--						 true);
-+		opp = dev_pm_opp_find_level_exact(pci->dev, speed);
-+		if (IS_ERR(opp)) {
-+			 /* opp-level is not defined use only frequency */
-+			opp = dev_pm_opp_find_freq_exact(pci->dev, freq_kbps * width,
-+							 true);
-+		} else {
-+			/* put opp-level OPP */
-+			dev_pm_opp_put(opp);
-+
-+			key.freq = freq_kbps * width;
-+			key.level = speed;
-+			key.bw = 0;
-+			opp = dev_pm_opp_find_key_exact(pci->dev, &key, true);
-+		}
- 		if (!IS_ERR(opp)) {
- 			ret = dev_pm_opp_set_opp(pci->dev, opp);
- 			if (ret)
-
--- 
-2.34.1
-
+>
+> regards,
+> ~Stan
+>
+> Stanimir Varbanov (4):
+>   pmdomain: bcm: bcm2835-power: Prepare to support BCM2712
+>   dt-bindings: soc: bcm: Add bcm2712 compatible
+>   mfd: bcm2835-pm: Add support for BCM2712
+>   arm64: dts: broadcom: bcm2712: Add watchdog DT node
+>
+>  .../bindings/soc/bcm/brcm,bcm2835-pm.yaml     | 28 +++++++++++++++----
+>  arch/arm64/boot/dts/broadcom/bcm2712.dtsi     |  9 ++++++
+>  drivers/mfd/bcm2835-pm.c                      |  1 +
+>  drivers/pmdomain/bcm/bcm2835-power.c          | 17 ++++++++---
+>  4 files changed, 46 insertions(+), 9 deletions(-)
+>
+> --
+> 2.47.0
+>
 
