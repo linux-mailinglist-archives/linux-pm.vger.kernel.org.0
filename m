@@ -1,233 +1,213 @@
-Return-Path: <linux-pm+bounces-35977-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35978-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D22A6BD3DB0
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Oct 2025 17:05:34 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73120BD4F1F
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Oct 2025 18:22:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 06E4F40422E
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Oct 2025 14:48:43 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 536145472BD
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Oct 2025 16:10:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CBDC2F83BA;
-	Mon, 13 Oct 2025 14:43:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C39EB30AD06;
+	Mon, 13 Oct 2025 15:53:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="d6qqfemU"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fR2YIs+J"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD4B42727F8;
-	Mon, 13 Oct 2025 14:43:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0588B30ACE9
+	for <linux-pm@vger.kernel.org>; Mon, 13 Oct 2025 15:53:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760366629; cv=none; b=u4TOgFZwto3hEUIE3IMKCuOAsdXKQRpWgzfLkZDfUWk/rAR0duxVWHAwMWKne+yKUTpnej/oJutaxwXMRHQ8puXfb6DDWwZ0SZb7bHrkvqoq/Er9pX0GVF4qceIBuCNMIhTdJSjvTqk4IvcrxoJq2bkzV1uZybr84LCu0blsyRA=
+	t=1760370838; cv=none; b=nwBrh1OAnDmzCqOQfF9m5k6jXdJDmI5dKFp4bAWwxPKKFUjcuEaAxYg9Swcz9agsjE5XNvOznLn/cbpSaC55iHERG2u8JHCttXphxhe+1QII04tSG1tGPzF+FNyDjSLN/4kIjPWj8zFYqnOSBA+c5phITOHwMAAz6DbAjroRIT8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760366629; c=relaxed/simple;
-	bh=fNSlmFkAwMv7DSvSIlrhBoKIM17GelrNPvEpaF69TWI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YlwzypGIHLAacpnOFfPtArgC9cUEg+Am81tCwuQ7hEEpk/6o8IHiBRl0bCpxWSXsa8yl2Q9AR1HzdwulDdvmKK1xIbCl05E079/mz11oezbkWSVI8cxM3hMDvBs60gLnVX4eAB5njgqeTq6YIMPpJhhjU+M0sdAiFZXn6px6No0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=d6qqfemU; arc=none smtp.client-ip=213.97.179.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-	References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=z77PuP/yQTSrJ7+jwLh0PPjk/nTPqujxkqChcEwXBUs=; b=d6qqfemUqFgGgbZyDg3hcf6Cp4
-	nyAgeX0/PsgLzHLU0JI5+Z6lvPDQ7NOS2tdgl4+nCRdFjqIVYmFM2YBXNJGmrEDmKMmTnD5RAyn2A
-	SnfKNY9axHLsaXac1UMcX2Cow2EDQqAIQsmO5XZzF7U58Cyr8HwEfSMI0Goc7o66sPye5XGwKX2Bc
-	tosNXVjEDGmacYnWUUuJxjv55bmKiO112xn7fZlu7s1RQGfDnpTtlAiZTkpJJEldoWmgKoPFnexVy
-	6M1v/+n1DU/bBM/CL93gCiz5nB8jYTrJ8SwadQepooUPnmjGaFhDbeeAVa1u0WtabPKBrAaljQLEe
-	/Pp8SC7g==;
-Received: from [58.29.143.236] (helo=[192.168.1.7])
-	by fanzine2.igalia.com with esmtpsa 
-	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-	id 1v8Jlw-008yVA-95; Mon, 13 Oct 2025 16:43:36 +0200
-Message-ID: <ed555287-1f31-4831-a11c-799e177a8f2f@igalia.com>
-Date: Mon, 13 Oct 2025 23:43:28 +0900
+	s=arc-20240116; t=1760370838; c=relaxed/simple;
+	bh=/dCx9r/U8UG2l5Mcbc2KOJix8VyRJqMpv2JirRyVJ9k=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=kbBwB+YKQhZL42jNdht1/NSwLq3/6ebO8wy9MiDe1cnvVP7L+wVTSSEav04srlSfnqavctoqVIlFdK7/VJUqn8VW+lvBqxAUZp18YUvyIpoSQbZL/Zm4gzIopbCQgcONLvBHo2Svk4RGUIZ6VDvaz0n+Rz1PCIG3QnguKQ1fkDo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fR2YIs+J; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1760370836;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=pIWnafYZvpDpu4eOTrAw6osXsXYCsEI4K9wvhKujihY=;
+	b=fR2YIs+J7zXVnWa1QBZNbfH96kQO24AG9j3HZV0Dpi7KSccIfpG9utrCYXtzbK/Hq6Oz5o
+	nuGFbdCM1aMV82+EDLvPbYVh+m5ZrjDOSJjzCbEZ/qJ9pNh/40Auzx7Ahpb5mM//eOm66l
+	GQDn4WHE+5EMhYcTB1iIIYgG3SADJos=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-628-EuVqN5lNPA2qFbLoLfga_w-1; Mon,
+ 13 Oct 2025 11:53:51 -0400
+X-MC-Unique: EuVqN5lNPA2qFbLoLfga_w-1
+X-Mimecast-MFC-AGG-ID: EuVqN5lNPA2qFbLoLfga_w_1760370828
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id BAB71180057B;
+	Mon, 13 Oct 2025 15:53:47 +0000 (UTC)
+Received: from chopper.lan (unknown [10.22.81.1])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id C68D93000384;
+	Mon, 13 Oct 2025 15:53:42 +0000 (UTC)
+From: Lyude Paul <lyude@redhat.com>
+To: rust-for-linux@vger.kernel.org,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	linux-kernel@vger.kernel.org,
+	Daniel Almeida <daniel.almeida@collabora.com>
+Cc: Joel Fernandes <joelagnelf@nvidia.com>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Gary Guo <gary@garyguo.net>,
+	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Trevor Gross <tmgross@umich.edu>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Ingo Molnar <mingo@kernel.org>,
+	"Peter Zijlstra (Intel)" <peterz@infradead.org>,
+	Ryo Takakura <ryotkkr98@gmail.com>,
+	K Prateek Nayak <kprateek.nayak@amd.com>,
+	linux-pm@vger.kernel.org (open list:CPU FREQUENCY SCALING FRAMEWORK)
+Subject: [PATCH v13 01/17] preempt: Track NMI nesting to separate per-CPU counter
+Date: Mon, 13 Oct 2025 11:48:03 -0400
+Message-ID: <20251013155205.2004838-2-lyude@redhat.com>
+In-Reply-To: <20251013155205.2004838-1-lyude@redhat.com>
+References: <20251013155205.2004838-1-lyude@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RESEND v4 05/10] PM: EM: Add a skeleton code for netlink
- notification
-To: Lukasz Luba <lukasz.luba@arm.com>
-Cc: christian.loehle@arm.com, tj@kernel.org, pavel@kernel.org,
- len.brown@intel.com, rafael@kernel.org, kernel-dev@igalia.com,
- linux-pm@vger.kernel.org, sched-ext@lists.linux.dev,
- linux-kernel@vger.kernel.org
-References: <20250921031928.205869-1-changwoo@igalia.com>
- <20250921031928.205869-6-changwoo@igalia.com>
- <2be75031-e7a6-44e8-a096-945947d73631@arm.com>
- <ad403e60-ad18-49ca-8557-a81329c9269f@igalia.com>
- <507225c7-5d10-4b92-a448-c44d545c8867@arm.com>
-From: Changwoo Min <changwoo@igalia.com>
-Content-Language: en-US, ko-KR, en-US-large, ko
-In-Reply-To: <507225c7-5d10-4b92-a448-c44d545c8867@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
+From: Joel Fernandes <joelagnelf@nvidia.com>
 
+Move NMI nesting tracking from the preempt_count bits to a separate per-CPU
+counter (nmi_nesting). This is to free up the NMI bits in the preempt_count,
+allowing those bits to be repurposed for other uses.  This also has the benefit
+of tracking more than 16-levels deep if there is ever a need.
 
-On 10/13/25 22:53, Lukasz Luba wrote:
-> 
-> 
-> On 10/13/25 14:46, Changwoo Min wrote:
->>
->>
->> On 10/7/25 00:44, Lukasz Luba wrote:
->>>
->>>
->>> On 9/21/25 04:19, Changwoo Min wrote:
->>>> Add a boilerplate code for netlink notification to register the new
->>>> protocol family. Also, initialize and register the netlink during 
->>>> booting.
->>>> The initialization is called at the postcore level, which is late 
->>>> enough
->>>> after the generic netlink is initialized.
->>>>
->>>> Finally, update MAINTAINERS to include new files.
->>>>
->>>> Signed-off-by: Changwoo Min <changwoo@igalia.com>
->>>> ---
->>>>   MAINTAINERS               |  2 +-
->>>>   kernel/power/Makefile     |  5 ++++-
->>>>   kernel/power/em_netlink.c | 35 +++++++++++++++++++++++++++++++++++
->>>>   kernel/power/em_netlink.h | 16 ++++++++++++++++
->>>>   4 files changed, 56 insertions(+), 2 deletions(-)
->>>>   create mode 100644 kernel/power/em_netlink.c
->>>>   create mode 100644 kernel/power/em_netlink.h
->>>>
->>>> diff --git a/MAINTAINERS b/MAINTAINERS
->>>> index 0992029d271d..ba528836eac1 100644
->>>> --- a/MAINTAINERS
->>>> +++ b/MAINTAINERS
->>>> @@ -9034,7 +9034,7 @@ F:    include/linux/energy_model.h
->>>>   F:    Documentation/power/energy-model.rst
->>>>   F:    Documentation/netlink/specs/em.yaml
->>>>   F:    include/uapi/linux/energy_model.h
->>>> -F:    kernel/power/em_netlink_autogen.*
->>>> +F:    kernel/power/em_netlink*.*
->>>>   EPAPR HYPERVISOR BYTE CHANNEL DEVICE DRIVER
->>>>   M:    Laurentiu Tudor <laurentiu.tudor@nxp.com>
->>>> diff --git a/kernel/power/Makefile b/kernel/power/Makefile
->>>> index 874ad834dc8d..284a760aade7 100644
->>>> --- a/kernel/power/Makefile
->>>> +++ b/kernel/power/Makefile
->>>> @@ -21,4 +21,7 @@ obj-$(CONFIG_PM_WAKELOCKS)    += wakelock.o
->>>>   obj-$(CONFIG_MAGIC_SYSRQ)    += poweroff.o
->>>> -obj-$(CONFIG_ENERGY_MODEL)    += energy_model.o
->>>> +obj-$(CONFIG_ENERGY_MODEL)    += em.o
->>>> +em-y                := energy_model.o
->>>> +em-$(CONFIG_NET)        += em_netlink_autogen.o em_netlink.o
->>>> +
->>>> diff --git a/kernel/power/em_netlink.c b/kernel/power/em_netlink.c
->>>> new file mode 100644
->>>> index 000000000000..f3fbfeff29a4
->>>> --- /dev/null
->>>> +++ b/kernel/power/em_netlink.c
->>>> @@ -0,0 +1,35 @@
->>>> +// SPDX-License-Identifier: GPL-2.0
->>>> +/*
->>>> + *
->>>> + * Generic netlink for energy model.
->>>> + *
->>>> + * Copyright (c) 2025 Valve Corporation.
->>>> + * Author: Changwoo Min <changwoo@igalia.com>
->>>> + */
->>>> +
->>>> +#define pr_fmt(fmt) "energy_model: " fmt
->>>> +
->>>> +#include <linux/energy_model.h>
->>>> +#include <net/sock.h>
->>>> +#include <net/genetlink.h>
->>>> +#include <uapi/linux/energy_model.h>
->>>> +
->>>> +#include "em_netlink.h"
->>>> +#include "em_netlink_autogen.h"
->>>> +
->>>> +int em_nl_get_pds_doit(struct sk_buff *skb, struct genl_info *info)
->>>> +{
->>>> +    return -EOPNOTSUPP;
->>>> +}
->>>> +
->>>> +int em_nl_get_pd_table_doit(struct sk_buff *skb, struct genl_info 
->>>> *info)
->>>> +{
->>>> +    return -EOPNOTSUPP;
->>>> +}
->>>> +
->>>> +static int __init em_netlink_init(void)
->>>> +{
->>>> +    return genl_register_family(&em_nl_family);
->>>> +}
->>>> +postcore_initcall(em_netlink_init);
->>>> +
->>>> diff --git a/kernel/power/em_netlink.h b/kernel/power/em_netlink.h
->>>> new file mode 100644
->>>> index 000000000000..acd186c92d6b
->>>> --- /dev/null
->>>> +++ b/kernel/power/em_netlink.h
->>>> @@ -0,0 +1,16 @@
->>>> +/* SPDX-License-Identifier: GPL-2.0 */
->>>> +/*
->>>> + *
->>>> + * Generic netlink for energy model.
->>>> + *
->>>> + * Copyright (c) 2025 Valve Corporation.
->>>> + * Author: Changwoo Min <changwoo@igalia.com>
->>>> + */
->>>> +#ifndef _EM_NETLINK_H
->>>> +#define _EM_NETLINK_H
->>>> +
->>>> +#if defined(CONFIG_ENERGY_MODEL) && defined(CONFIG_NET)
->>>> +#else
->>>> +#endif
->>>> +
->>>> +#endif /* _EM_NETLINK_H */
->>>
->>> Actually, those declarations of functions from patch 3/10 can
->>> live in this header. We would avoid creating more local headers
->>> in such case.
->>
->>   That makes sense to me.
->>
->>>
->>> Then the patch 3/10 would have to go after this patch when
->>> this header is introduced.
->>>
->>> Please ignore the comment in the patch 3/10 and try to
->>> use this header. It is also logically linked to the
->>> notifications, so belongs to such header IMHO.
->>>
->>
->> Sure, after moving 3/10 after this, I will move the changes made in 3/10
->> to em_netlink.h. I will keep the implementation of
->> for_each_em_perf_domain() and em_perf_domain_get_by_id() in
->> energy_model.c since it it not ideal to expose em_pd_list_mutex, etc.
->> outside of energy_mode.c. And, this requires to include "em_netlink.h"
->> from energy_model.c.
->>
-> 
-> Sounds good. These are only minor changes because it has nice shape
-> already.
-> 
-> I was able to test it last weekend and it works on my setup now.
-> I can see the messages coming in the user-space, so it should
-> work as designed.
-> 
-> Thank you Changwoo! Looking forward for your v5.
+Suggested-by: Boqun Feng <boqun.feng@gmail.com>
+Signed-off-by: Joel Fernandes <joelaf@google.com>
+Signed-off-by: Lyude Paul <lyude@redhat.com>
+---
+ include/linux/hardirq.h   | 17 +++++++++++++----
+ kernel/softirq.c          |  2 ++
+ rust/kernel/alloc/kvec.rs |  5 +----
+ rust/kernel/cpufreq.rs    |  3 +--
+ 4 files changed, 17 insertions(+), 10 deletions(-)
 
-Thank you Lukasz for testing. I will send v5 soon after final testing.
-
-Regards,
-Changwoo Min
+diff --git a/include/linux/hardirq.h b/include/linux/hardirq.h
+index d57cab4d4c06f..177eed1de35cc 100644
+--- a/include/linux/hardirq.h
++++ b/include/linux/hardirq.h
+@@ -10,6 +10,8 @@
+ #include <linux/vtime.h>
+ #include <asm/hardirq.h>
+ 
++DECLARE_PER_CPU(unsigned int, nmi_nesting);
++
+ extern void synchronize_irq(unsigned int irq);
+ extern bool synchronize_hardirq(unsigned int irq);
+ 
+@@ -102,14 +104,17 @@ void irq_exit_rcu(void);
+  */
+ 
+ /*
+- * nmi_enter() can nest up to 15 times; see NMI_BITS.
++ * nmi_enter() can nest - nesting is tracked in a per-CPU counter.
+  */
+ #define __nmi_enter()						\
+ 	do {							\
+ 		lockdep_off();					\
+ 		arch_nmi_enter();				\
+-		BUG_ON(in_nmi() == NMI_MASK);			\
+-		__preempt_count_add(NMI_OFFSET + HARDIRQ_OFFSET);	\
++		BUG_ON(__this_cpu_read(nmi_nesting) == UINT_MAX);	\
++		__this_cpu_inc(nmi_nesting);			\
++		__preempt_count_add(HARDIRQ_OFFSET);		\
++		if (__this_cpu_read(nmi_nesting) == 1)		\
++			__preempt_count_add(NMI_OFFSET);	\
+ 	} while (0)
+ 
+ #define nmi_enter()						\
+@@ -124,8 +129,12 @@ void irq_exit_rcu(void);
+ 
+ #define __nmi_exit()						\
+ 	do {							\
++		unsigned int nesting;				\
+ 		BUG_ON(!in_nmi());				\
+-		__preempt_count_sub(NMI_OFFSET + HARDIRQ_OFFSET);	\
++		__preempt_count_sub(HARDIRQ_OFFSET);		\
++		nesting = __this_cpu_dec_return(nmi_nesting);	\
++		if (!nesting)					\
++			__preempt_count_sub(NMI_OFFSET);	\
+ 		arch_nmi_exit();				\
+ 		lockdep_on();					\
+ 	} while (0)
+diff --git a/kernel/softirq.c b/kernel/softirq.c
+index 77198911b8dd4..af47ea23aba3b 100644
+--- a/kernel/softirq.c
++++ b/kernel/softirq.c
+@@ -88,6 +88,8 @@ EXPORT_PER_CPU_SYMBOL_GPL(hardirqs_enabled);
+ EXPORT_PER_CPU_SYMBOL_GPL(hardirq_context);
+ #endif
+ 
++DEFINE_PER_CPU(unsigned int, nmi_nesting);
++
+ /*
+  * SOFTIRQ_OFFSET usage:
+  *
+diff --git a/rust/kernel/alloc/kvec.rs b/rust/kernel/alloc/kvec.rs
+index e94aebd084c83..1d6cc81bdeef5 100644
+--- a/rust/kernel/alloc/kvec.rs
++++ b/rust/kernel/alloc/kvec.rs
+@@ -7,10 +7,7 @@
+     layout::ArrayLayout,
+     AllocError, Allocator, Box, Flags, NumaNode,
+ };
+-use crate::{
+-    fmt,
+-    page::AsPageIter,
+-};
++use crate::{fmt, page::AsPageIter};
+ use core::{
+     borrow::{Borrow, BorrowMut},
+     marker::PhantomData,
+diff --git a/rust/kernel/cpufreq.rs b/rust/kernel/cpufreq.rs
+index 21b5b9b8acc10..1a555fcb120a9 100644
+--- a/rust/kernel/cpufreq.rs
++++ b/rust/kernel/cpufreq.rs
+@@ -38,8 +38,7 @@
+ const CPUFREQ_NAME_LEN: usize = bindings::CPUFREQ_NAME_LEN as usize;
+ 
+ /// Default transition latency value in nanoseconds.
+-pub const DEFAULT_TRANSITION_LATENCY_NS: u32 =
+-        bindings::CPUFREQ_DEFAULT_TRANSITION_LATENCY_NS;
++pub const DEFAULT_TRANSITION_LATENCY_NS: u32 = bindings::CPUFREQ_DEFAULT_TRANSITION_LATENCY_NS;
+ 
+ /// CPU frequency driver flags.
+ pub mod flags {
+-- 
+2.51.0
 
 
