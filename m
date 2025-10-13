@@ -1,127 +1,107 @@
-Return-Path: <linux-pm+bounces-35970-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35972-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 79FA6BD32AF
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Oct 2025 15:19:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64FE9BD343B
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Oct 2025 15:44:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 6145F4F159D
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Oct 2025 13:19:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AEAAC189DA84
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Oct 2025 13:44:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C13C274B39;
-	Mon, 13 Oct 2025 13:19:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D4B7309DCF;
+	Mon, 13 Oct 2025 13:42:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b="yPRCbj3w"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=sjoerd@collabora.com header.b="hjT4mlMZ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [178.238.236.174])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B108A1FDA;
-	Mon, 13 Oct 2025 13:19:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.238.236.174
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760361559; cv=none; b=tB65P+t61kuxRcbFzyPvONoPIAqd4SqpJ6HBQt95aEDe/ZsfYFb23fBJLRNyimWZx28WcLTUx0T86CA+wShzVAdnraIfMWXeBYzx2d4+FFZuoLd50tFDlFGPke3p9dwzlOOgc0DXRWzwQiPBuOWLz+SADPwV5yKxAvP3FjMLiJM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760361559; c=relaxed/simple;
-	bh=b+tLPeMD1Z5B1winxVP0fpDzZ4Ft1DgcmZYnxUfJFCU=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=g0qvyUYZSDw6kiKEKWATmi1y64bQ7Y4DmPC9432WmwxxDjnQH+DAjrq4cbl37Cyg4jhMhQPdO0LI+cAkWozZzQbYbnxXB5csZpDNsKcxmsuf/t/tHD+TlX3lhIPZ0apxiuiZB9AsKAJuqtEWQjXjQO2M/xw2TPZvoEqNbEf+ya8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info; spf=pass smtp.mailfrom=kemnade.info; dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b=yPRCbj3w; arc=none smtp.client-ip=178.238.236.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kemnade.info
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=kemnade.info; s=20220719; h=References:In-Reply-To:Cc:From:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=cpFL1cZfIfuJbSy7oDZfLNOPydM7RMbiykjJfKLFtHQ=; b=yPRCbj3w+JzG2CxEWEcVvcjBza
-	hkRNX7lqUR5By+Cmgf8/uqmkX24qVNgDoa3x8PbKuUv6UjeNsOJxDSx5yciVVNZbfExnzKfJI0GGT
-	Y7hg2WN5XBcJqLyWQPP04Ru9M8Z0eepchHT+D9spikwHkELmqnNxbvbAAJyz7NPDJ+jybyHA+8wku
-	2pRjIZ9FPfgP+6ywNrFskufsFV4Jh0uSzKcEN8P88dFmNqBAIqhkpHAKzwboeFW3JLXmJcqmYy+cG
-	sABRGdGAF7n1+NvMYbqvXXcvveoBG/Th5A3Bo1FqRKmvIir+JuI0nOIKMoUdfGX99g4uIhFDS6MK/
-	XROuw62A==;
-Date: Mon, 13 Oct 2025 15:19:00 +0200
-From: Andreas Kemnade <andreas@kemnade.info>
-To: Matti Vaittinen <mazziesaccount@gmail.com>
-Cc: Lee Jones <lee@kernel.org>, Matti Vaittinen
- <matti.vaittinen@fi.rohmeurope.com>, Pavel Machek <pavel@kernel.org>, Rob
- Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor
- Dooley <conor+dt@kernel.org>, Sebastian Reichel <sre@kernel.org>, Liam
- Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, Linus
- Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
- linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-gpio@vger.kernel.org
-Subject: Re: [RFC PATCH 06/13] mfd: bd71828: Support ROHM BD72720
-Message-ID: <20251013151900.3e4cc69f@kemnade.info>
-In-Reply-To: <d2295506-bf70-4142-8537-0fdf9cb04a30@gmail.com>
-References: <cover.1759824376.git.mazziesaccount@gmail.com>
-	<93142a80d90a0ac80b27090d0c83914675aad94d.1759824376.git.mazziesaccount@gmail.com>
-	<20251009161847.GE2890766@google.com>
-	<8ea507eb-f78c-4a16-882b-112e277fa1b6@gmail.com>
-	<20251010150317.07bfdbe8@kemnade.info>
-	<d2295506-bf70-4142-8537-0fdf9cb04a30@gmail.com>
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; aarch64-unknown-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BEBF309DCB;
+	Mon, 13 Oct 2025 13:42:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1760362949; cv=pass; b=cNgWb/uvDJtkvDR4IclFACBU6LfkDtv8XiGMORhv5Hmat+7QQa2EWnMCYROl6Y2M5dYn73S7zQlgmdW2Crxnaeo5BQGuGIY6gDqd0N5s7o1PXB01ja97W9I/nDRAseJfLDjKLq2B2XmkhzLZ42jyXuc1hbL+t8r0DwcZbhRincM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1760362949; c=relaxed/simple;
+	bh=gDpPd5UzOQn8zDPGA7FYXf9y+izfyQBl4gvsqPled8k=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=jge2RyXNAYD3f+1ABsHpG9H6qmodobPJMI2wOPuP87378HgG5Zt/yotmGhJ0vRNDxgUkVWvvIrUldCgXl9S+s9dOZXdBZGVeyhrjGqg6s8g2I/0cLJ/QCZs3wU04q8WDlJ4uvP2pnueXeeFbPTnzsQ2TCv0EzxajpmqbYUlHOZU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sjoerd@collabora.com header.b=hjT4mlMZ; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1760362921; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=XIXkd09YTcHrxyEMy3Q47jCyFRdZdGg7DG/PawiO9mFO9t3j+QNvOECuDBMMf8OY8ZecH6Aig5NBab5wViVuE0Xn4ifoDV6O7Ax6Nva+yk0jiGWzm3gj/Fm8UclkzUuOPXIUskYCj4TPy913l7BWPkcwu8Ubxc2+qm9woMBl+CU=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1760362921; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=gDpPd5UzOQn8zDPGA7FYXf9y+izfyQBl4gvsqPled8k=; 
+	b=KZLBIJiEBTseT5PnJagP7TnThgzIguQKMRE+d5O1+q+QCFVGTiwXQ7MKaj5tBtz/rPPAieZ32iPp0WxsefkdUqLbzruXbNT/nkWwufQh6jE8OZB7ca0gBgoHL1q2vCZ8f4kBi7PAAhNztBrYalYB0i3yGtgms1G8fqfan5tO1jQ=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=sjoerd@collabora.com;
+	dmarc=pass header.from=<sjoerd@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1760362921;
+	s=zohomail; d=collabora.com; i=sjoerd@collabora.com;
+	h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:Date:Date:In-Reply-To:References:Content-Type:Content-Transfer-Encoding:MIME-Version:Message-Id:Reply-To;
+	bh=gDpPd5UzOQn8zDPGA7FYXf9y+izfyQBl4gvsqPled8k=;
+	b=hjT4mlMZjMIWKVYikSKVmQYnNeZ5wGoair2n5QNpespSgO7wN5w1rrNzg0r9x4xs
+	s9GP8XPPyEtfMZnBIE7gL6+eaSd5d1nOCTwK4OXYRh/mwjSu8vtFZXHtK/w2sqfmsAF
+	BBJD9gPU7RSQCmYYPl7sa9/uXQrEsTMpEfG/k36M=
+Received: by mx.zohomail.com with SMTPS id 1760362918105978.3996948303734;
+	Mon, 13 Oct 2025 06:41:58 -0700 (PDT)
+Message-ID: <a2eae87efe46ebf397bcec3580eb9bc152b80846.camel@collabora.com>
+Subject: Re: [PATCH v3 04/10] pmdomain: mediatek: Refactor bus protection
+ regmaps retrieval
+From: Sjoerd Simons <sjoerd@collabora.com>
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+	linux-mediatek@lists.infradead.org
+Cc: robh@kernel.org, conor+dt@kernel.org, mbrugger@suse.com, 
+	y.oudjana@protonmail.com, =?ISO-8859-1?Q?N=EDcolas?= "F. R. A. Prado"	
+ <nfraprado@collabora.com>, linux-pm@vger.kernel.org,
+ ulf.hansson@linaro.org, 	linux-kernel@vger.kernel.org,
+ devicetree@vger.kernel.org, 	mandyjh.liu@mediatek.com,
+ lihongbo22@huawei.com, wenst@chromium.org, 	matthias.bgg@gmail.com,
+ krzk+dt@kernel.org, kernel@collabora.com, 
+	linux-arm-kernel@lists.infradead.org
+Date: Mon, 13 Oct 2025 15:41:49 +0200
+In-Reply-To: <20250805074746.29457-5-angelogioacchino.delregno@collabora.com>
+References: <20250805074746.29457-1-angelogioacchino.delregno@collabora.com>
+	 <20250805074746.29457-5-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2-5 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+X-ZohoMailClient: External
 
-On Mon, 13 Oct 2025 12:27:33 +0300
-Matti Vaittinen <mazziesaccount@gmail.com> wrote:
+Hey,
 
-> Hi Andreas!
-> 
-> First of all, thanks for taking a look at this!
-> 
-> On 10/10/2025 16:03, Andreas Kemnade wrote:
-> > On Fri, 10 Oct 2025 15:09:07 +0300
-> > Matti Vaittinen <mazziesaccount@gmail.com> wrote:
-> >   
-> >>>> +static int bd72720_get_secondary_regmap(struct i2c_client *i2c,  
-> >>>
-> >>> Does this 'secondary' have a specific purpose or a better name?  
-> >>
-> >> I am not entirely sure. When I asked this from the designers they just
-> >> told me that they needed more than 255 registers so they added another
-> >> slave address... (I'm not sure what would have been wrong with using a
-> >> page register). So, I assume they just placed stuff that didn't fit in
-> >> first 255 register there. But yeah, it looks like most of the registers
-> >> there are related to the charger. So, perhaps it isn't completely
-> >> misleading to use "charger regmap"? The data-sheet seems to be just
-> >> using "Register map 1" and "Register map 2" in the tables listing these
-> >> registers. I kind of like using something which maps easily to the
-> >> data-sheet, but I really have no strong opinion on this.  
-> > 
-> > just another idea: What about one regmap with custom functions covering
-> > both these adresses? Maybe that could even be added to the regmap
-> > functionality, maybe with a 0x100 offset for the second range.
-> > That way the rest of the code only needs to real with one regmap
-> > and properly defined registers.  
-> 
-> Interesting idea.
-> 
-> I suppose you mean something like implementing custom remap_read() and 
-> regmap_write() - which would practically select the I2C adapter to use 
-> based on the register address - and then doing same thing as the 
-> regmap_i2c_smbus_i2c_write() / regmap_i2c_smbus_i2c_read() do?
-> 
-> I suppose this would mean duplicating the functionality provided by the 
-> regmap_i2c_smbus_i2c_write() and the regmap_i2c_smbus_i2c_read(), which 
-> are static. It'd also mean we'll lose the 1 to 1 mapping between the 
-> register addresses in driver and addresses in the data-sheet. I agree 
-> this wouldn't be such a huge thing if we used offset like 0x100 though.
-> 
-Well, you could also stack regmaps like ntxec.c is doing (but there
-for some very weird reason). That would avoid duplicating code.
+On Tue, 2025-08-05 at 09:47 +0200, AngeloGioacchino Del Regno wrote:
+> In preparation to add support for new generation SoCs like MT8196,
+> MT6991 and other variants, which require to set bus protection on
+> different busses than the ones found on legacy chips, and to also
+> simplify and reduce memory footprint of this driver, refactor the
+> mechanism to retrieve and use the bus protection regmaps.
+>=20
+> This is done by removing the three pointers to struct regmap from
+> struct scpsys_domain (allocated for each power domain) and moving
+> them to the main struct scpsys (allocated per driver instance) as
+> an array of pointers to regmap named **bus_prot.
 
-I have no strong opinion here.
+Trying to boot v6.18.0-rc1 on a Genio 700 EVK using the arm64 defconfig,
+ends up hanging at boot (seemingly when probing MTU3 and/or mmc, but that=
+=C2=A0
+might be a red herring).=C2=A0
 
-Regards,
-Andreas
+Either reverting this patch *or* having CONFIG_MTK_MMSYS builtin rather
+then a module seems to solve that.=20
+
+--=20
+Sjoerd Simons <sjoerd@collabora.com>
 
