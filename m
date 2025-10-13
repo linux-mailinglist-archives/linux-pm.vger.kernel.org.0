@@ -1,179 +1,266 @@
-Return-Path: <linux-pm+bounces-35960-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-35961-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6554BD2BF1
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Oct 2025 13:15:59 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7BE8FBD2E16
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Oct 2025 14:00:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 99D5C3C10B0
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Oct 2025 11:15:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BBFA5189DFA8
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Oct 2025 12:00:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35266247299;
-	Mon, 13 Oct 2025 11:15:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E59B2269811;
+	Mon, 13 Oct 2025 11:59:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="hrh5p/A3"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="ZADweHue"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yx1-f50.google.com (mail-yx1-f50.google.com [74.125.224.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from CH1PR05CU001.outbound.protection.outlook.com (mail-northcentralusazon11010061.outbound.protection.outlook.com [52.101.193.61])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 464B021C19D
-	for <linux-pm@vger.kernel.org>; Mon, 13 Oct 2025 11:15:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.50
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760354151; cv=none; b=RD5CLXydIt21MjSWAuLb5G6uxnYDA2ZhwZyXXUI8tRtkIPRJX+zngzUP5gyEPTumpjfdg914g1mv1nSodFYTPKNXBM6ZzXO3hBbDrAlJV+FMbPD3Ml/1W4T0N04ARgAJ69AJiK9tt9DDyBDOJxhrqGO5UY0KJP0ngVS2mmlwJyg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760354151; c=relaxed/simple;
-	bh=5hp9zUHq0R5HWrspQN9QVS3q1lJNHb6OVnyXINT0IWY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JlOErsoWXJDSekvSX6WDA7q+8mZiqhfiGdPUfkPQSKF/H7Q3S7JG+dZEIQrvLVfZP4kF+OB4rM331tP+0NtRUSYaz+8qST3mJ+sIMdjb5WG+m1LsOB+BnyXZXIy+kJeEGFZbELRuyTLg5fHcMxNnt4g6JC26+JT8joJkoLZY80M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=hrh5p/A3; arc=none smtp.client-ip=74.125.224.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yx1-f50.google.com with SMTP id 956f58d0204a3-63bcdf5f241so5734312d50.0
-        for <linux-pm@vger.kernel.org>; Mon, 13 Oct 2025 04:15:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1760354147; x=1760958947; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=e3RISinv/bCM0VNwzTFAkKuvG5MysA9cPKKTeSuSvPc=;
-        b=hrh5p/A35X0YskjPV8tyZs9aLQO7iYQDj3EPfqgtptC+Pc/1PoZIsPm1ajfDoUDvyL
-         PYWGxfl8Q05kuXv/2NMm98fM4ecLFB5ynM3IU91U3IPnp6N1K6+WrZkdXzLv6dnHeRJu
-         eC5cnNXNSYrWbqbK64YXWfEXIjTypyIVVAweGPcKG1L8aReBElmthjm841/ftuttkBFT
-         w8GIXzdUf0PYHIvwvUnlB+BjOhT8P57D6r7BeH8EJ9Y8hRoKCh4TNKGUj1BkNVdJKzqS
-         rbkwivOinGl/DagvGjdlzXdj0hIVySq8w46VN5v9lt2l5nO5GOk6bzSUI9mf2XSTPmSh
-         GXWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760354147; x=1760958947;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=e3RISinv/bCM0VNwzTFAkKuvG5MysA9cPKKTeSuSvPc=;
-        b=Gd3qhMz5vSUesOyHrpi6uffVtrO+ptwe7YhP9aSDzc5ur1dIFgaBAsx/tq2/BIL+6w
-         7npPbe/1zJrRywTfLEkUf9YIOihAeTwRvyulCJVGH4QgtTc2Zoj9p8P37jUfBtZDzuNE
-         EEMWRy7Ewx1qnuANoc6dcNLOxa2Np5U3WItuM0ic5RH2/VBniUBK/RxvmDQrheQ4TuJj
-         QRMvt7ecs91XdK1QOlGT5vfStpkeZbV1R4wjwVPptiYSMNNFNUvDDXQ7evZ9LVHHmFse
-         bfZiRkNxX4Iwk2NZ579PNun0IqHpbgk651KaDbl4xuEvV7HkeM8Hj++BPChZA0FN+4zV
-         Z1VA==
-X-Forwarded-Encrypted: i=1; AJvYcCWq1FOSY493oasUUDqEnE5JFO+WsORJr9Pbg8z1t6fA0KlWGuU39y/4MNr0dPhs+wulmZREjuFTaw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxBxhRuON5r8smffmopGs8H+fQymWWRCtl1mUMx1dsqban5j0ph
-	SJTrgR0XTAXj/jXvrJaflwvaKF9NtpeZ+fykZZ7VX0r/FXkw2zf37VZrf7wZ+Ym2GUFKrB8o6ZP
-	W5JjKa7I4cKlOdAw+iHhH10Mqva/bXMOJ+heFUfQVZA==
-X-Gm-Gg: ASbGncvh5E4YAw8dXIEOJEP8sSsLOLeo+8XehLWuujhKH2wWMD6yySZNjGanqfrSLy3
-	hFkKu4RusrRMJDGoup95u+FGX2fw8oODPLUUdArw/QIoXYS9w4ynAU252B9IU2FTLJrTqLY9Czz
-	Pm13lgKsJfh5T/AYj3zHY2R4EhKSnwE/v+O7Gq9C6X1BOx7FHYDUWhQoTW2q9f5pYD1hf0cZ6Hi
-	gxFCIwn9GIciOcoa469Z/67c3zogxrpuuWBysjFSvo4ox30cvQF
-X-Google-Smtp-Source: AGHT+IHvEZE1RemEWZANjQdcYRJnmpKPuha5Rfx9EE12zd+TvLMKMu2rY0U/r/AG1D8YeV+4gOIdtjWRgw0qDfDMQ+4=
-X-Received: by 2002:a53:bc0e:0:b0:635:2bc3:cb6f with SMTP id
- 956f58d0204a3-63cbe0f580amr16932597d50.15.1760354147075; Mon, 13 Oct 2025
- 04:15:47 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 360621A9B46;
+	Mon, 13 Oct 2025 11:59:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.193.61
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1760356791; cv=fail; b=YyEGvDv7SRJV3RU895LZyVc1K9k+bzlya+BJk48p20MZEGqPEpk9qsgFDi8oWM9GO5buenvpLKEXMEJr+Gg1hxEsn/vvVvSTFTtVsMS7fYZGoz05mfi4AA8kX5Kl4UhmGOp1p+twNwnRrXBLZDw6fHIAQlLhTlr2c5ZJnc5b4XI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1760356791; c=relaxed/simple;
+	bh=WFNz4j3XnSnLf5oKFzO9fEMtvoNJu42Y+Hz2vvX4LNc=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=IsfFHDlxFlo74SbqLLOUU2Gzzj7Jx+mKgLtEpH9L8tu6/reiAsskRCK2EU2Rpv4sdKmoCJvjzTY0YIkTaYjf1WaqO2QA0WfhmvLP68ziN4XIWjxBE/wYquZLbAQMZgzGjEq5iVPwkGTrxcCjwrN1pB/0/WFB01j/Pokce2+pLhI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=ZADweHue; arc=fail smtp.client-ip=52.101.193.61
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=adXzmgyr2cAR5JZWUseQ7nMigiOiOfUmlAL++V4t+IEuTqVyQPBfm6Fv9jr20txe6pWBT2cWB8Nq4xp9YD4i7tjeRJzqzBrEbwxtZ1tBnq80iX6Q8rNXiCA7PhV32+fILenD4ALV9d/84KZIsEalZGN9IKnI5C4XSnx/lZ/FrM6rhfkEd2OKsn4mIq7cbHuy7FTkpkxSMSgKQAnhzM5FtWcefkpmFWhzz0y/fqoi2ML33L7yQ86E0wULoyLNhTAinC4nS42tzizOUdsfgPxcsS32HzWzmwcTbxhTdOvmcXLX3SEwi1pjeJ8qXmL5rJl8uqrmIlg9YorEpZFFlSo/mA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2qmhzFHTA14b9FMBJ5uYsBJoIWvYAeFWAJ8vk2Wt7OI=;
+ b=zIeXsX2qO2sDEYhePGsbPh0FAzGHzvjbQQEXTMqHTHGEJNvKwxaclvNoS5cN+5v5MbuJpLCGiSFSNMPPCrOHa+/+rQFtAcfdajp2hHKz09x0KJ5MXIN0D3qiAGySDsZRbkbFaFXoRwgWF199wXlcgBP/ax6fa3BId0a+fKZBUCsWCnramHcLcGNRZghBMhrwM+td7rP4pPzRiGz0ikiP4zA+u49uwPsRi95kRLoMeCIiCGJki7poUM64elImQBURTySR8pjeWcYv8z6DUGeGyZXZvthIXDh+O2hc5OepKCzyGA6c4AR/5d2DELk8H2ceXOhHZLOIQ9FNrvYpnB/VaA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2qmhzFHTA14b9FMBJ5uYsBJoIWvYAeFWAJ8vk2Wt7OI=;
+ b=ZADweHueF+UzVLUOuPGpC64fPzDbCdUzhBY6pATytXm2BXEgUckGiCrv2FiOwzHFFTc9GUYcuS0fitPxpv+gX4G2T1Fc9w5SAybsCtzlRQr4U6utXZLD5/KsEgEi9nM1ieWn+YX9TkIYMNXdXoVN+LWE493p2uuW0MOGOKWKJ3lPZRhhbWNq5gMYJxIWgncX6gK+Mq2Iz1mDy+xtiv+u8+Tc5ZyWWbfYijbOJZWGR6kEPboQiNIetOrSZ3umoatrfnrNmeWQP/Rk7ZiUOZZXnxtVNv5XBVQFTaHNUVV3EBWL0Scb09jvxmweeg/G3IWSq2Jwjd6mVwqSXDLiQyFuLQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BN9PR12MB5179.namprd12.prod.outlook.com (2603:10b6:408:11c::18)
+ by CH3PR12MB8725.namprd12.prod.outlook.com (2603:10b6:610:170::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9203.12; Mon, 13 Oct
+ 2025 11:59:47 +0000
+Received: from BN9PR12MB5179.namprd12.prod.outlook.com
+ ([fe80::44e5:415d:e1a8:6e42]) by BN9PR12MB5179.namprd12.prod.outlook.com
+ ([fe80::44e5:415d:e1a8:6e42%7]) with mapi id 15.20.9203.009; Mon, 13 Oct 2025
+ 11:59:46 +0000
+Message-ID: <43243a37-db14-49aa-8338-dc7ca446b94e@nvidia.com>
+Date: Mon, 13 Oct 2025 17:29:33 +0530
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 6/8] cpufreq: CPPC: Add sysfs for min/max_perf and
+ perf_limited
+To: Jie Zhan <zhanjie9@hisilicon.com>, rafael@kernel.org,
+ viresh.kumar@linaro.org, lenb@kernel.org, robert.moore@intel.com,
+ corbet@lwn.net, pierre.gondois@arm.com, zhenglifeng1@huawei.com,
+ rdunlap@infradead.org, ray.huang@amd.com, gautham.shenoy@amd.com,
+ mario.limonciello@amd.com, perry.yuan@amd.com, linux-pm@vger.kernel.org,
+ linux-acpi@vger.kernel.org, linux-doc@vger.kernel.org,
+ acpica-devel@lists.linux.dev, linux-kernel@vger.kernel.org
+Cc: linux-tegra@vger.kernel.org, treding@nvidia.com, jonathanh@nvidia.com,
+ vsethi@nvidia.com, ksitaraman@nvidia.com, sanjayc@nvidia.com,
+ bbasu@nvidia.com, sumitg@nvidia.com
+References: <20251001150104.1275188-1-sumitg@nvidia.com>
+ <20251001150104.1275188-7-sumitg@nvidia.com>
+ <0dca2bf6-0f87-422d-a348-5ab33a9683d2@hisilicon.com>
+Content-Language: en-US
+From: Sumit Gupta <sumitg@nvidia.com>
+In-Reply-To: <0dca2bf6-0f87-422d-a348-5ab33a9683d2@hisilicon.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MA1P287CA0005.INDP287.PROD.OUTLOOK.COM
+ (2603:1096:a00:35::19) To DM4PR12MB5184.namprd12.prod.outlook.com
+ (2603:10b6:5:397::18)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250922-pm-v4-v4-0-ef48428e8fe0@nxp.com>
-In-Reply-To: <20250922-pm-v4-v4-0-ef48428e8fe0@nxp.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Mon, 13 Oct 2025 13:15:11 +0200
-X-Gm-Features: AS18NWDCZqKnJMG4N6L-Bv935qiWkmNc8DmpQMLFdUi5NIh87a_dGMaIYkUOIBo
-Message-ID: <CAPDyKFrD9wJqu59HXJEnReCk0o74Ag+p987V6z53or0DxQiu0w@mail.gmail.com>
-Subject: Re: [PATCH v4 0/5] pmdomain: core: Introduce device_set_out_band_wakeup
- and use it in usb
-To: Peng Fan <peng.fan@nxp.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, 
-	Peter Chen <peter.chen@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
-	Fabio Estevam <festevam@gmail.com>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, imx@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, Xu Yang <xu.yang_2@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN9PR12MB5179:EE_|CH3PR12MB8725:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5b37f94a-978b-419a-e66e-08de0a500073
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|376014|366016|1800799024|921020;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?KzZPdTJkYTF3Z1dvOGo1M0xPeHhnMllnT0gvMkFJWi9HaE5MaG8wNU5acEdy?=
+ =?utf-8?B?SFFtVlJ0VTBsOCtTZkJpeUd1OXhYcXBBeFVhQThLL2V4YnBDY3RBRWNxeitw?=
+ =?utf-8?B?bjFGSE1DaktFVW1WdjBkWDBKN292YVM1RWZJY3hqT2ZrV3d3cnU5b2pqLzg1?=
+ =?utf-8?B?c21XYmFzakZoMFNoaE5yYnBHcVFCVmkxOTFrTEtUWU9teFZVS3I2QUw5WlVI?=
+ =?utf-8?B?RzlMeklwVGREZTZ6TGdmNXhPa0pSeFdYSjBGVFVsNENXV0xCdHA5TXorSE1H?=
+ =?utf-8?B?bkFKOW01YWwxN0FiOE15VXcrWkJpcy9YckFHd1FubmtZenA2N3R3Y3RIYTlI?=
+ =?utf-8?B?TjF3ZThpL3dTYzJ2UjY2ODByWUhtTUlIaDY3Q3lMZXEyRnRSNG8xdzNUTEp0?=
+ =?utf-8?B?bkpFZmxrOUd0NUdteXNDdFRGZWh2d25vNklHMVlMSVVxT0dFSHh1RCtyWXpF?=
+ =?utf-8?B?MVdOVEtBUWhoSU85VUxoRHZpM00wNnludHNTWTNQS2I0NEN2L3BZM0pOaTE1?=
+ =?utf-8?B?SWZtMXpRVXFHeWtic1c4S2NZeUx4UGU2UXYwdTZzcWxJZTZPbEVaNWdoeDdy?=
+ =?utf-8?B?KzZQMytLUnRzM0JsVEJqekNyRGZyRWt2SHRzdVcxb0J3OU1CV0hZZmxXOVZt?=
+ =?utf-8?B?a0JpSnZFKzE1TE8vSU1kaEF1VDRhSVNjcjhpNEpMNnVCZXNJREVmcWdwSlZ0?=
+ =?utf-8?B?VFVIQ2lQTkVmK2FvTis5eXNaVmNQRXVKZEdMQkNVNjJGWEkzbVFXenZPUTZT?=
+ =?utf-8?B?RHN1Z0lXTGRoSUttVHdQNjI4NXJXdHBlS0lMOFJUS2VoNkxRenNUWHBhOGwr?=
+ =?utf-8?B?bnN5OGZEcTRGbjJ5Ykp5elh2M2lLYWxqejBpUlVjYkZ1bm5BdTUrM3hjK0F4?=
+ =?utf-8?B?dXdZRjkzQ3FKQTdKZUZ5NEFYMC8xbWFYUXRXU0cxalNXOFhULysyUEltSnpn?=
+ =?utf-8?B?T3FlZDBYTDV3QXc5b3lVNkttNWZ3ckdmMnF3bStlRzNVMmZZWkRwRnRvdkxy?=
+ =?utf-8?B?a2hJQTJnUDlSRTRKbjE1SFFlOU1yZmZSVGl0STEwaE03YTB6V2c3bVRpdEMr?=
+ =?utf-8?B?STFUdTFXK3ZTRTBJazQ5aDgwLzd0VENRY1JNandyNDBHSExrTExlNmxZRlYx?=
+ =?utf-8?B?OE1FaTJ2U0U3QnA5WDNydFcrYndnS1Z1RGhRU3NRVmN6dWdWcUhNZmVHS3Rv?=
+ =?utf-8?B?TU5UZ0VSS25rWG93eGc5ZG9oaU4zMWpENzFvOFp6UTIyWWgramJ3MU9Vdm9F?=
+ =?utf-8?B?a2tMUk12Nmljd3RpWjlDYk9hZFJ1MkR6cktwL20xNFlHdXp1ekMvQkJwVlBy?=
+ =?utf-8?B?Y3lrcllmaGNNZ0hGNFlXdWNZajQybWtUOHhKZnJLWUdzTUtHUTdBemRGbS9l?=
+ =?utf-8?B?b3FKWmZuVE5SU0drcm1ieGJIcHNkQjBaMmgrcVVnL0Vpdy94N1dIY3l2UnB1?=
+ =?utf-8?B?a3NRZ2dYNnBHZlFtQnp3OVppVG5CQUtRL05CTENOUmtVNTNRY2pQZUt2eGRj?=
+ =?utf-8?B?NTI3TTVPSmNxS3JrUnNSNHlMMHpYSHNBRmErdmVXbFQ2VittOFA0SHczZDhG?=
+ =?utf-8?B?MDd4QVNnM3cyVEJ0enpYWTlhbjVVQmdxMk8zUlEvcHBIYlNESmNSMzU0RW1o?=
+ =?utf-8?B?SnNOU29nekw5aFNwTTRBOWI2ZERUMWRMTkNBNHJOcjd6MVZQRk94QkEzM3Y1?=
+ =?utf-8?B?THpoWkFlZnU5S2dMYzF2Z0s2eE5NSVE5TXNvcXB5c0xxQVhKTG9nRjd4Uk1C?=
+ =?utf-8?B?SmxHSmVOSys3L2VOUko0L0VLNlA5RWtBdjRhSW5NS2ZLN0txUUVWdklQbWlk?=
+ =?utf-8?B?OGMvcGRkMktmaFcrNDM3d25MbmQvQlJmWXlybTYyRExGWmFrQ2diVm1sWVM5?=
+ =?utf-8?B?M1AyVEZDSnRlcDhhYW4wbjNmbEtIdTVnaTRHcUcyY3NNVmxPVXJ1eXR5MjNy?=
+ =?utf-8?B?aGxrMU5ySTVIR1BCUGVCNGk3cm9BRWtUVnZsQlFNT2k3Nk9JN25rNnNLTkht?=
+ =?utf-8?Q?3pN5oJ+iSFZhgNHMvQPRG2qqis12H8=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR12MB5179.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024)(921020);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?VG9aaHpwSlh4RmxtanZLQVZ4eU9zNVpaRzMyWjNsZHptM3VNZ3lPSjhoT0tJ?=
+ =?utf-8?B?dGxGVE1lRUJzYVlHM2hibm9NMDN1K2ZLbU5OTlZLUk9TN3RQKzRXZmo0akR3?=
+ =?utf-8?B?ZWUvTkgwaVF4TGNiWmRFR1QvZG9rWkVIZnJyM043MGdSb2RPZG1rMlQ5RkhP?=
+ =?utf-8?B?VnBBNUlxaVBaK0JxVnFMelpXdDhRVk9xN2ZYR0RBcTRKVVhQek9FUHNScFdO?=
+ =?utf-8?B?clFrSElGQmVYOHZKY29vZWdNcWdyRzlIL3Fsa0NvcjdwOGF3NG9PcE4vSkM3?=
+ =?utf-8?B?c2s0a3hEaE1IUUEwbkVOMlAxREhSM3plWUJ1U2NKeDM2MURISXFHeVBuWkJD?=
+ =?utf-8?B?Tk9jeXZpb0d5clJPa2NEWUxkemFCUC83N3c1dktpVVhZKzJnSUU2QXlCOFRT?=
+ =?utf-8?B?UlphdnNtaXFKL05NWCtRY05SUklCMHFYNWpwd3lIZVdHZEVlV0p4WU1WZGRW?=
+ =?utf-8?B?RWNqSUdNWTd2Qk5iRmlPWDEzcVloQ2U4NHEyeHJ5U2xJKzQ0ZFZYSWVqVmRu?=
+ =?utf-8?B?dndWWTU5YzMxTy9GREFqQWlwWUQ5WHkxRmQrOFJEcTFiRnBOVjNiSlZiYW5J?=
+ =?utf-8?B?SnZsMEloT1RtSmdUdHhtYm1QREZCU2hYUnIvRXl0NFdHc2hkTThUS0wvN0li?=
+ =?utf-8?B?MytuS2dVdDB2eVl0MiszSUp1MDRObWs3UDdPZWVQTk5SVDkyLzBGcUhVamZL?=
+ =?utf-8?B?VVlhVllQTDVUUXRNUE9sWURDSEh6K3U4RDlrVU1FdGtLSTBJbThpUW1RWlRo?=
+ =?utf-8?B?WkZqd0IyMTFtMzJ6QXhyMjdKL01DRkltV05iQ0xzdnF6eE9DRVFOajlxY29k?=
+ =?utf-8?B?U2MyUk14b3FxMG1TbG1yR0hUZnlraHJWUWpuSk5ZQ1luV0N1c0trY1BHSkZB?=
+ =?utf-8?B?Mm1QMHpUTUpmbWNuV2lpM1NRMU1ZMEhFc1Z3QjVabWI1bkhBZUk5VXg2dnpU?=
+ =?utf-8?B?c2pjVHJhQzRhNmpXN05VeS9qOWxIcmVZNGd4bytwRDNyVE5CeG1XY3BXNjBo?=
+ =?utf-8?B?dmhZcnl6bzFZTFNTU29jRW9mQ1FuZlJwZWF5UTlNK3ZQajVwMnV2dkx4d2FO?=
+ =?utf-8?B?THBXYzhEQ2NNL0wzTDUvUXhzcFo5UXlzWWNsZmhzZ3F2cFRrdmhHN3FtdFdV?=
+ =?utf-8?B?UDFQbFlRNW5KdnF3anJ2ZDZOMjQrZmtQOFRYRGZRczU2NWo3VlhFYkhoWjI0?=
+ =?utf-8?B?S0w2eHZCdHhXSFRZaWNKNnM3OXBRTjlYVFk5cXNBVHpvTUQwdklwRjRKMlc3?=
+ =?utf-8?B?TmNjd3p3dVF2TXpBU1ExR01qbU9CaWM5Z2ttbjBZWjE4OGZIUWNCbXpMSk1J?=
+ =?utf-8?B?d1BUSjhmSUViTE5QQUNBeW56MmF6RXYweUdEZWhocHRPS0ZKU1ljOTJEcUh1?=
+ =?utf-8?B?eGJ0WmtKMUhHeGN1VVh5ZGJ0Q3pxMUNBbEozcW04bENzdUNDWHl4cFl1Zzhv?=
+ =?utf-8?B?U0o0S1Qxb3JreWJEZUFTTWV1QmZsblVkRmRIV2tlSnBacUlyL2RLbnZIaUo3?=
+ =?utf-8?B?VU9PbldWYnowVmt6M3JwMDZhR2s2MnNRVkU3M1hlNlIwYjZGdVRpTFdrenAr?=
+ =?utf-8?B?UStOT1MzejBENHY4TXFrYm9HUHVqV3dlWFQwbDQ4S2xJYzMwdjlzRyt2elVp?=
+ =?utf-8?B?Y0w4bFNoR2pPVTlrUGdrYWhGV3BVMXNwclpmYW1NdVE1TktLbFVMLzZhZmtK?=
+ =?utf-8?B?RlU5VHI4ZlJyd2lhTkRpbEtTdml1Zlc1OHlzRklJYkdTNWVMU3M2c3laNFEz?=
+ =?utf-8?B?YnJwUDVMSGhNUHEwZUdHUmx1QnFJbDVoQS9nSWFrZEo2RjFzaEc3TmU3b005?=
+ =?utf-8?B?dWltdVdqY1Y5RGtzRlFOM0JlZG90dG1ac3EvZG00d1hoQlZYYk5BVFBRWkxs?=
+ =?utf-8?B?WEVpYldvdTkraEFMMHR5MS9NUFUrb0V1a1c0Zk9heTUyNEg1dkV5NmtSQjhq?=
+ =?utf-8?B?YVFqRzBxRGVNdWRlMmo2ZlR0RlE0NTFTMHhCVHQxTVMzMmpGS2ErMmhxdW1n?=
+ =?utf-8?B?OWZPSDJwdXVJRzNwNlNwbmdKV2hZa01WbG1CSS9Cc0FpZTdyTEpaVUxVWDF0?=
+ =?utf-8?B?eWFKMFdVMXdHazNwQ1BIQ2ZVQk5BOE1TRzVYRGdjcGNTdDM5RnNjT09GSzZL?=
+ =?utf-8?Q?qn+uKkBcU0ViUWQxgGylbiX6v?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5b37f94a-978b-419a-e66e-08de0a500073
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5184.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Oct 2025 11:59:46.6778
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Ed5S7D9segvv3ojHPQTK1ZyKiXcNVEkKk2RtQFOSAiLVEcVjqGEM/rtXGUY4fX6raBHIcZz0RfB1qVatk7wKoA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8725
 
-On Mon, 22 Sept 2025 at 04:21, Peng Fan <peng.fan@nxp.com> wrote:
->
-> To i.MX95, USB2 and USB3 are in HSIOMIX domain, but there is always on logic
-> to make USB2 and USB3 has wakeup capability when HSIOMIX power domain
-> is in off state. So when in system-suspend state, USB2/USB3 could wakeup
-> the system even the USB2/USB3 HSIOMIX power domain is turned off. This
-> means USB2/USB3 has out-of-band wakeup capability to wakeup system from
-> suspended state.
->
-> Without this patchset, if USB2/USB3 are configured with wakeup enabled,
-> the HSIOMIX power domain will not be turned off. This leads to more
-> power consumed in system suspend state.
->
-> This patchset introduces device_set_out_band_wakeup and
-> device_out_band_wakeup two APIs to set out-of-band and query the flag.
-> In genpd_finish_suspend, there is a check, if out-of-band is set,
-> it will continue to turn off the power domain. In genpd resume flow,
-> there is a similar check to turn on the power domain.
->
-> Patch 1,2 introduces device_set_out_band_wakeup and
-> device_out_band_wakeup
-> Patch 3 and 4 are drivers changes to use device_out_band_wakeup
->
-> More old discussions:
-> https://lore.kernel.org/linux-pm/20250311083239.3336439-1-peng.fan@oss.nxp.com/
->
-> This is pick up of [1]
-> This V2 patchset
-> - includes usb driver changes to give people a full picture on how it is used.
-> - Rebased next-20250729 to resolve conflicts
->
-> [1]https://lore.kernel.org/linux-pm/20250311083239.3336439-1-peng.fan@oss.nxp.com/
->
-> Changes in v4:
-> - Split device_set_out_band_wakeup API and pmdomain changes into patch 1
->   and 2 and clear the flag in device_prepare (from Ulf)
-> - Add R-b in patch 2
-> - Move the call of device_set_out_band_wakeup to system suspend
->   callback in patch 3 and 4. (from Ulf)
-> - For patch 3,4, I still keep the Tags, since compared with V3, it is quite
->   small changes.
-> - Link to v3: https://lore.kernel.org/r/20250902-pm-v3-0-ffadbb454cdc@nxp.com
->
-> Changes in v3:
-> - Add a new patch from Xu Yang to detach power domain for ci hdrc
-> - Add A-b for patch 4
-> - Link to v2: https://lore.kernel.org/r/20250801-pm-v2-0-97c8fb2a433c@nxp.com
->
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
-> Peng Fan (4):
->       PM: wakeup: Add out-of-band system wakeup support for devices
->       PM: domains: Allow power-off for out-of-band wakeup-capable devices
->       usb: chipidea: ci_hdrc_imx: Set out of band wakeup for i.MX95
->       usb: dwc3: imx8mp: Set out of band wakeup for i.MX95
->
-> Xu Yang (1):
->       usb: chipidea: core: detach power domain for ci_hdrc platform device
->
->  drivers/base/power/main.c          |  1 +
->  drivers/pmdomain/core.c            |  6 ++++--
->  drivers/usb/chipidea/ci_hdrc_imx.c | 11 ++++++++++-
->  drivers/usb/chipidea/core.c        |  3 +++
->  drivers/usb/dwc3/dwc3-imx8mp.c     |  9 +++++++--
->  include/linux/pm.h                 |  1 +
->  include/linux/pm_wakeup.h          | 17 +++++++++++++++++
->  include/linux/usb/chipidea.h       |  1 +
->  8 files changed, 44 insertions(+), 5 deletions(-)
-> ---
-> base-commit: 8f7f8b1b3f4c613dd886f53f768f82816b41eaa3
-> change-id: 20250919-pm-v4-1879568de500
->
-> Best regards,
-> --
-> Peng Fan <peng.fan@nxp.com>
->
 
-I have now queued this series (including the acked usb patches) via my
-pmdomain tree for next. Please let me know if it's preferred to route
-the usb patches via another tree, so I can share an immutable branch
-instead.
+On 10/10/25 08:59, Jie Zhan wrote:
+> External email: Use caution opening links or attachments
+>
+>
+> On 10/1/2025 11:01 PM, Sumit Gupta wrote:
+>> Add sysfs interfaces for Minimum Performance, Maximum Performance
+>> and Performance Limited Register in the cppc_cpufreq driver.
+>>
+>> Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+>> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
+>> ---
+>>   .../ABI/testing/sysfs-devices-system-cpu      | 43 +++++++++++++++++++
+>>   1 file changed, 43 insertions(+)
+>>
+>> diff --git a/Documentation/ABI/testing/sysfs-devices-system-cpu b/Documentation/ABI/testing/sysfs-devices-system-cpu
+>> index ab8cd337f43a..82141b45d58c 100644
+>> --- a/Documentation/ABI/testing/sysfs-devices-system-cpu
+>> +++ b/Documentation/ABI/testing/sysfs-devices-system-cpu
+>> @@ -327,6 +327,49 @@ Description:     Energy performance preference
+>>
+>>                This file is only present if the cppc-cpufreq driver is in use.
+>>
+>> +What:                /sys/devices/system/cpu/cpuX/cpufreq/min_perf
+>> +Date:                September 2025
+>> +Contact:     linux-pm@vger.kernel.org
+>> +Description: Minimum Performance
+>> +
+>> +             Read/write a 32 bits value from/to this file. This file
+>> +             conveys the minimum performance level at which the platform
+>> +             may run. Minimum performance may be set to any performance
+>> +             value in the range [Lowest Performance, Highest Performance],
+>> +             inclusive but must be set to a value that is less than or
+>> +             equal to that specified by the Maximum Performance Register.
+>> +
+>> +             Writing to this file only has meaning when Autonomous Selection
+>> +             is enabled.
+>> +
+>> +             This file is only present if the cppc-cpufreq driver is in use.
+>> +
+>> +What:                /sys/devices/system/cpu/cpuX/cpufreq/max_perf
+>> +Date:                September 2025
+>> +Contact:     linux-pm@vger.kernel.org
+>> +Description: Minimum Performance
+> Not adapted
+Sorry, i missed this. Will update here and below.
 
-Kind regards
-Uffe
+Thank you,
+Sumit
+
+>> +
+>> +             Read/write a 32 bits value from/to this file. This file conveys
+>> +             the maximum performance level at which the platform may run.
+>> +             Maximum performance may be set to any performance value in the
+>> +             range [Lowest Performance, Highest Performance], inclusive.
+>> +
+>> +             Writing to this file only has meaning when Autonomous Selection is
+>> +             enabled.
+>> +
+>> +             This file is only present if the cppc-cpufreq driver is in use.
+>> +
+>> +What:                /sys/devices/system/cpu/cpuX/cpufreq/perf_limited
+>> +Date:                September 2025
+>> +Contact:     linux-pm@vger.kernel.org
+>> +Description: Minimum Performance
+> Not adapted
+
+Ack.
+
+
+>> +
+>> +             Read/write a 32 bits value from/to this file. This file indicates
+>> +             to OSPM that an unpredictable event has limited processor
+>> +             performance, and the delivered performance may be less than
+>> +             desired/minimum performance.
+>> +
+>> +             This file is only present if the cppc-cpufreq driver is in use.
+>>
+>>   What:                /sys/devices/system/cpu/cpu*/cache/index3/cache_disable_{0,1}
+>>   Date:                August 2008
 
