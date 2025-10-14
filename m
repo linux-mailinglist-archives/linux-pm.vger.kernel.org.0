@@ -1,99 +1,123 @@
-Return-Path: <linux-pm+bounces-36058-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36059-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67DE9BD8C3F
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Oct 2025 12:27:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D4C3EBD8C48
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Oct 2025 12:29:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id D17874FD7EB
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Oct 2025 10:27:40 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id CAC3E4F9B29
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Oct 2025 10:29:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 617D92F6164;
-	Tue, 14 Oct 2025 10:27:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 840682F619B;
+	Tue, 14 Oct 2025 10:29:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IlZ+Yhx+"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="DdfYgz7Y"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABC062F60B6
-	for <linux-pm@vger.kernel.org>; Tue, 14 Oct 2025 10:27:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C86F02D248E
+	for <linux-pm@vger.kernel.org>; Tue, 14 Oct 2025 10:29:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760437645; cv=none; b=UhD0/o4JpWOFMmL2KaHoD+Yz3A0q6yC3K91UaBMeojkbJdLv7y1jrw5LyE8cp1txGKCnwgIV9k7OFLlW1dI4DI0Snna7ZIMT6P9bA8V9va7lTVQ+OfGtYJQ2KvkdzOUdI36+GnyUlrytodtKHL+5GyAKCnqKWwWjr8JCvIn3pUc=
+	t=1760437768; cv=none; b=MJ4wXVu6hjuoABYvRF4mBCYcw9NoUqxJDwshVKa9jVxO1PluUI1XTL9w1Q29mQLwJEWcZTa7v+ccl76ogfh7bMbZnNu4Qu0eJ8UJfoJRlcJOH70SfwQL6yyPTrtEzNfkFkkw1dUgI1kHTBQAzqNVBLFldZhMdl6mamMt/paX424=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760437645; c=relaxed/simple;
-	bh=XfHYBYtUiuN62UEeB1HH/QMYo6SMY+oi0W0Fke8RKEM=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=GaPOdoqYKL8qki/dJtii5KvfRYD2j/fUDUy9QYmMCeRzw0gBzuvoqrqfY67Yg4q6NnwukiMuVOjEIK/wKIeUTLwF1u/vGnUJekmScLt6TwYRvZRO1Td+NpncKfQUYYuYbka/jB+qgWOBHE3J8Eqx5uQKnwzjThhDLsQFr/+N8u4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IlZ+Yhx+; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760437644; x=1791973644;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=XfHYBYtUiuN62UEeB1HH/QMYo6SMY+oi0W0Fke8RKEM=;
-  b=IlZ+Yhx+6EO9NvrT8SMaz9Dmw1xzSKCE/YXNI8QrxdgJ/hntQ2ItcJEN
-   HMGbKqQptSS67sLjjwvRbJOGGS9ojmTSZPXK0efBmCuw9XxsHSwWlGhLx
-   XDG1mfgx3LdJxT4MO1UvaufV4HvbimLuaz+dyzHhqpD3479pEDX7i+h9T
-   WSaGSM+GL0gSOBrgwcftopS1LB8RsdFYYhjCgCV3DxYA6bjdlQWKcmhcZ
-   24SkLolZn4+lhizkpLtDlgD1KYqYk7rjP1JsHpAHJXfVjEW+FS30sQwPt
-   3TzoXNbSdgSG4W4+edcWu7DgT+L2YBiYq/MVRunG285ry7qB9kZdkkXr3
-   g==;
-X-CSE-ConnectionGUID: ircHQLmmRWiIRn22BKKZhg==
-X-CSE-MsgGUID: fpn0WGyST3G5oomDTs6wRA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11581"; a="85214158"
-X-IronPort-AV: E=Sophos;i="6.19,227,1754982000"; 
-   d="scan'208";a="85214158"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2025 03:27:23 -0700
-X-CSE-ConnectionGUID: j6F/T0piQ8exo3Nc6eilXA==
-X-CSE-MsgGUID: v0hz/MyhRNOHttQqYRT4kA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,227,1754982000"; 
-   d="scan'208";a="181857474"
-Received: from baandr0id001.iind.intel.com ([10.66.253.151])
-  by orviesa008.jf.intel.com with ESMTP; 14 Oct 2025 03:27:22 -0700
-From: Kaushlendra Kumar <kaushlendra.kumar@intel.com>
-To: lenb@kernel.org
-Cc: linux-pm@vger.kernel.org,
-	Kaushlendra Kumar <kaushlendra.kumar@intel.com>
-Subject: [PATCH] tools/power turbostat: Add Wildcat Lake platform support
-Date: Tue, 14 Oct 2025 15:55:28 +0530
-Message-Id: <20251014102528.1220586-1-kaushlendra.kumar@intel.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1760437768; c=relaxed/simple;
+	bh=hYbEH8aG5/g2lPpfG/EurG4fthUUtSOeRcTH4W6yxtc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=UOGDtBSPufa5bOmyB+XC9QfqXAIQBUpdHxEhNNnRO8ECwwQOr+VYYVLLnvfymSKNzliN4QvgQJFaTz0k/GFY9ERZuxAoBgUpdR97l21QVQuu90GygHPjlVDZ/D0JSWKE6ApJNo5x+xINAwko4gQ0RjTmeJg1PsK6v4xzLvol0j4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=DdfYgz7Y; arc=none smtp.client-ip=209.85.128.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-781421f5be8so17087277b3.1
+        for <linux-pm@vger.kernel.org>; Tue, 14 Oct 2025 03:29:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1760437766; x=1761042566; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VNwslOTb5JOWqs8U+YdiNL7KIGdnAR5sXRre+K3C3ks=;
+        b=DdfYgz7Y5rKyJFlUITSxKyldlwkvFkFQZTgk6UA/p2LEY5CQpKFBwncD4udabSboBD
+         rrm7E9bZUvkucLxDDq/dee2j3ql/kyuWvNF76DVstATfP4FCeHsXikyQTr70j8gEegzH
+         6KBn9Q62DDmtvc6VOh/nVPMqXKRqIMZliBdzMUV3/nvoWOleqspYJuCmx7ThPZhyNaPu
+         PpNDgzBbY0qGjQohu1bTNSwB90F1Bg/jp0WGIuOPXch/joPJYuGRP/IgXNu6GZoB3NgZ
+         IFXuHOl2RqiBiFiPM7Wc7tPFXEMkBmvdiCn+FmB8KXnMe5/9jHXnh19NqyYjGuwKuthi
+         EhLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760437766; x=1761042566;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VNwslOTb5JOWqs8U+YdiNL7KIGdnAR5sXRre+K3C3ks=;
+        b=NTYCNhyawLNMq8eNzH3fBLXa8Ft8zQOnjfs5AQDWHYZAW6Lv1yw+d2o+wXeugvrio5
+         +ZIrvORkA9yojruyh6PlKKx/Ml6TjJZXr9bhxvmYp/9zbDpYJdt2km4wwdjmeN1H2OCQ
+         G00QWnMBUvyDaq/1UB2DJKohygzv/cXxUIS+NSgKr3k4aMt21j8Xt1gyLteQBH1JYMSs
+         oQppPpVIQ/fZcnOFr+FDLTjHlp80/9EiFTgXbIM+HsVOHFbYzmhe9uTnNdlT0NqRUXda
+         yQ+OInENOybgOzMErkGzooIxae2hhdV2eDfMlYLLnGLgxm9JlzhiOdn0FsiWSeizWUp6
+         ywqw==
+X-Forwarded-Encrypted: i=1; AJvYcCVUK27Ob1VsoTZ/iJDZvb7rVb37hn30bzTsJOOFuEe/ntPEOJkQZNIgUXtK/FllzyG9R88Wnp51Hw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzu6IrWxU/TS3Em7TOltj1xzvem5CTRKck4PF+d3fJ6hygcz6XA
+	tCLUtXDquY0YJ7Nf4ItkMQdiGVfJ8uwllqAcxunwKEfgAaHIxckK+x/927PcowSA8aWMdHPyr78
+	9xrt1BkmLj0fR9Xc5VTH8hoBi+kWB6DFn1w3zvB9VTw==
+X-Gm-Gg: ASbGncstOD2Q5xLO2ybg2rtvn25aMoozOw+lpvfvRWPUyyUABFXmTSTezF255g3HOEl
+	1oNMlKkBzuSx+Etb0WOkTSWo0Hp/z0BTpIeAWi+Mzp2VxXzfPxzrERsxUPAmJDrvothH/st7XqG
+	N+YM1GuuBSfb1yGkO/SgDo7NUTIoLYLh/TqxNfgpWUpshNJn2KjByOWuaA6EsjBIeuM1IEp3Z/T
+	VslGsIGngHN5uc27U71oAVCvRLcRC8XwFwphbvv
+X-Google-Smtp-Source: AGHT+IFDFh6iWuOmPmvWilDaFBE5YfW3xBkJ2+8+m1/8Q1QTZSI3MhsChmCnpdF1r4INYGcDiNPz/lr8Vbf/DOouGeY=
+X-Received: by 2002:a53:ce8c:0:b0:636:19c8:278e with SMTP id
+ 956f58d0204a3-63ccb84414bmr14226319d50.14.1760437765773; Tue, 14 Oct 2025
+ 03:29:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <cover.1759824376.git.mazziesaccount@gmail.com>
+ <19d537f9920cae5fa849b649e5bc42ba0b8e52f8.1759824376.git.mazziesaccount@gmail.com>
+ <CACRpkdbHBQQnnTUrUzOrYxzQKCzDyy8aNK7w8OEFz-ic8ic1FQ@mail.gmail.com> <f2e6f0eb-b412-4cf6-8615-d669b8066393@gmail.com>
+In-Reply-To: <f2e6f0eb-b412-4cf6-8615-d669b8066393@gmail.com>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Tue, 14 Oct 2025 12:29:10 +0200
+X-Gm-Features: AS18NWDIhtpPAtiexOECYnDlN0ABGxByFw8_QgkDjMMcng7GLnSDiPGnwdY3LaY
+Message-ID: <CACRpkdb-Oz4RXWjLEH2ffKhe3jRxVTSN1u5g=tTTfQHpXW1=8w@mail.gmail.com>
+Subject: Re: [RFC PATCH 03/13] dt-bindings: power: supply: BD72720 managed battery
+To: Matti Vaittinen <mazziesaccount@gmail.com>
+Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>, Lee Jones <lee@kernel.org>, 
+	Pavel Machek <pavel@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Sebastian Reichel <sre@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
+	Bartosz Golaszewski <brgl@bgdev.pl>, Andreas Kemnade <andreas@kemnade.info>, linux-leds@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linux-gpio@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add INTEL_WILDCATLAKE_L to the platform data table with Lunar Lake features
-to enable turbostat support for this Intel platform.
+On Mon, Oct 13, 2025 at 3:00=E2=80=AFPM Matti Vaittinen
+<mazziesaccount@gmail.com> wrote:
 
-Signed-off-by: Kaushlendra Kumar <kaushlendra.kumar@intel.com>
----
- tools/power/x86/turbostat/turbostat.c | 1 +
- 1 file changed, 1 insertion(+)
+> >> +  rohm,volt-drop-very-low-temp-microvolt:
+> >> +    description: VDR table for very low temperature
+> >
+> > Doesn't the four last properties require to be defined as uint32-array?
+>
+> I have been under impression that the "-microvolt" ending suffices, but
+> I may be wrong. At last the 'make dt_binding_check' didn't give me a shou=
+t.
 
-diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index f2512d78bcbd..f59bffa6025c 100644
---- a/tools/power/x86/turbostat/turbostat.c
-+++ b/tools/power/x86/turbostat/turbostat.c
-@@ -1210,6 +1210,7 @@ static const struct platform_data turbostat_pdata[] = {
- 	{ INTEL_ARROWLAKE, &adl_features },
- 	{ INTEL_LUNARLAKE_M, &lnl_features },
- 	{ INTEL_PANTHERLAKE_L, &lnl_features },
-+	{ INTEL_WILDCATLAKE_L, &lnl_features },
- 	{ INTEL_ATOM_SILVERMONT, &slv_features },
- 	{ INTEL_ATOM_SILVERMONT_D, &slvd_features },
- 	{ INTEL_ATOM_AIRMONT, &amt_features },
--- 
-2.34.1
+Ah you're right, I tend to forget about all the magic Rob has put into
+dtsschema.
 
+> >> +        rohm,voltage-vdr-thresh-microvolt =3D <4150000>;
+> >
+> > This property seems to be missing from the bindings?
+>
+> I think it is the first binding in the file :)
+
+Ugh I missed it.
+
+Yours,
+Linus Walleij
 
