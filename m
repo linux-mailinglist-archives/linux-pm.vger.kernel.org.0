@@ -1,315 +1,241 @@
-Return-Path: <linux-pm+bounces-36084-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36083-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20859BDA875
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Oct 2025 17:58:28 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 347AEBDA845
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Oct 2025 17:56:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 9709934D2DC
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Oct 2025 15:58:27 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id CC31B4E11DC
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Oct 2025 15:55:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C5C730275B;
-	Tue, 14 Oct 2025 15:56:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F1F8302CC4;
+	Tue, 14 Oct 2025 15:54:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fHm0/wFS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fU6uACkr"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1034E3019B0;
-	Tue, 14 Oct 2025 15:56:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 595F8302CAE
+	for <linux-pm@vger.kernel.org>; Tue, 14 Oct 2025 15:54:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760457401; cv=none; b=i6AnTQYVHp9hb+JndGW13gEnxkJjQ6Nb9DffDf9VVJKcUwrZyfcS+vCIFm4jcsF+9vAr8fFpnFCgP3wTTRUG2Rj/STbBCa57WwgKkl0KaBlDBHcJf/CDoZmVLq05z96VwzUkDDP+uLvKfEcj339YXk3g0GTcMSY4Ff4zFSdxUFo=
+	t=1760457271; cv=none; b=CuCceUzoLlt5YkVdqOZbiNaDBd30YKVa1PocJ1j4c9ELTyG/x51ya1F2afEL2x2IAzOIF6mBwX65hIsPezZEopyNZCHpvgLr5xxOFSqxndfUh5biSEilGxtpUMO+tcp0ALTq7VY5z7xnCbCQq+yPpeAcCxB1tnDWa3heoinXAT4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760457401; c=relaxed/simple;
-	bh=5GPDzrtL56vN+02W1bUBdJXQLX4MoI65x5OAnRb3VmI=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=ixABR5zb7X0dbZ7Euc7VEZObpyqn8LkPWzXaCZgC9D/vVF0sZ7PAQyCC1tEkrlTiDPq/BtMe2rnrUlz9oo003Zlr6p5rlIx43czYS3ky0q0K7H2SZ6RNM4sjvtZPPnLto1cgttA8trLEA1N+bUMkiRf4p9+3rJWMTofbFawmv34=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fHm0/wFS; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760457398; x=1791993398;
-  h=date:from:to:cc:subject:message-id;
-  bh=5GPDzrtL56vN+02W1bUBdJXQLX4MoI65x5OAnRb3VmI=;
-  b=fHm0/wFSOiNwi1pGLgwNcMspwZeTSgJkFJb3LRSaWOGKvL8APc62Vs0F
-   3Zobig8jwQeUtkQoKgZYEcBL6CJ82Rt8qiyjtLW59geHnODHvEh4oPL7N
-   Lz5mxfWt44QDZnE0eg1xY/aTMQ41Bdq5RbXmNmLtp46Il7jViYYi98BX7
-   gponlGYQRcaRmQTHgO55W/9Lja56ihbEknZBbbtm8lgMg4LUsHM5a3WRn
-   aez4zESNnT7iitAdc8bXqnXkXAXDlk12nULOkgnTGyoI5hT5b3ne/M+GG
-   f5amYK4FvFCXzEjOL+LUZV7IEPBT0yfkuHLRQOr6fWCnnAKyQ2CFrjK+l
-   Q==;
-X-CSE-ConnectionGUID: oURqmPcWQ2e6iXy7rASJew==
-X-CSE-MsgGUID: KWUoVJhyTg+lPYo/gchz0w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="62530224"
-X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="62530224"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2025 08:56:37 -0700
-X-CSE-ConnectionGUID: biyAUWsnQKWJ9qXXlAXCLQ==
-X-CSE-MsgGUID: l6bnNH9SSJ28gJSv4rXA2A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,228,1754982000"; 
-   d="scan'208";a="181864925"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by fmviesa006.fm.intel.com with ESMTP; 14 Oct 2025 08:56:35 -0700
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1v8hO4-0002xL-2t;
-	Tue, 14 Oct 2025 15:56:32 +0000
-Date: Tue, 14 Oct 2025 23:49:48 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 5c9d9ffa1aa9b73764439430e19a44c6ec75548a
-Message-ID: <202510142342.lUnUzzoL-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	s=arc-20240116; t=1760457271; c=relaxed/simple;
+	bh=rsZ3BaDupSqS8qeP47Vi26VGfO+VXssPsBRIxY84eVs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qi+q0UtjX4ghk/PTyoXLHaVJrswyGjxprC1Q84jbmkbFAp1nt4HiuJKW2kgYFEFHewDPfpRyBZuoRb5rMck2ugIABmHcmes3/6OVnLpgkxrYZ9Ll1Ed89bhpAbUaIe9FQAf+rFoulXBGKUiQN5hX8eLvFnJKNW//WvurIZbWTPg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fU6uACkr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F23DBC19424
+	for <linux-pm@vger.kernel.org>; Tue, 14 Oct 2025 15:54:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1760457271;
+	bh=rsZ3BaDupSqS8qeP47Vi26VGfO+VXssPsBRIxY84eVs=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=fU6uACkrVd4N0qr8x3kB6IWjCYHHjN9/O49RCJGq71hfjQTiwFTQETs5US4VoDLaD
+	 n7HpBPHfXFuGosGw442+FihGTuWqG8cxcQPaDHxLeKsud8Z1KT0EjVDAjgUeDnwaD1
+	 5R5LljJ6coDbyAmxImCfJq+ZwO0FuZG2sHYy0gEZ4//755M1IPLMIwBoaBN2rTT6bY
+	 EXvMs84PGRq4lDjx/KzTjmo9z2132Q854sMp5pL6biMMN64zdszBXb9ZAyCc030g6X
+	 Js1UZvSrhP26/s97ZPEBRMY/AFhEpubPSW1Tjq3HcoQyNdDkWqkMGnxzUYrxjIXkEL
+	 ygHrqWtVHLv2A==
+Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-650304a9e4cso1059743eaf.3
+        for <linux-pm@vger.kernel.org>; Tue, 14 Oct 2025 08:54:30 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCViBD32xqZgnSuxsVkyrPEEtWtl6cy9DvDulTgL7Y39lblLLeUiMx4XleCQ+gAXS/SH9Vn3EXKbog==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzlyJB1bSbMTPopK7tpBCuy7zUbeUg2TMsGzU4Xht9RhGhDf6V8
+	neYElPYJE69TlK8BtC30+G7JN5yihSBO/XqsUIjrmtwL+sLEyVZCHjwyuPOMZksiSwi+XTpTBRM
+	5w7N0xAiSY198kWUCeMn9LLMqkil218A=
+X-Google-Smtp-Source: AGHT+IHF2NDlkSbOEFkhgIxTV+2pfbPIavGMBPl+ZxHrdWz0+VRE//WMkSLvbFlqn/CWFM8NAerN1gBNmKRcgn2v5lM=
+X-Received: by 2002:a05:6808:30a6:b0:441:8f74:f26 with SMTP id
+ 5614622812f47-4418f741dc9mr9287921b6e.64.1760457270166; Tue, 14 Oct 2025
+ 08:54:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <36iykr223vmcfsoysexug6s274nq2oimcu55ybn6ww4il3g3cv@cohflgdbpnq7>
+ <08529809-5ca1-4495-8160-15d8e85ad640@arm.com> <2zreguw4djctgcmvgticnm4dctcuja7yfnp3r6bxaqon3i2pxf@thee3p3qduoq>
+ <8da42386-282e-4f97-af93-4715ae206361@arm.com> <nd64xabhbb53bbqoxsjkfvkmlpn5tkdlu3nb5ofwdhyauko35b@qv6in7biupgi>
+ <49cf14a1-b96f-4413-a17e-599bc1c104cd@arm.com>
+In-Reply-To: <49cf14a1-b96f-4413-a17e-599bc1c104cd@arm.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 14 Oct 2025 17:54:18 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0hGu-JdwR57cwKfB+a98Pv7e3y36X6xCo=PyGdD2hwkhQ@mail.gmail.com>
+X-Gm-Features: AS18NWChJvr-GMb6g3ashFlNGeFNEltmJaQ_ewPgLPRRRWz5LjKbsRahtrKNCrE
+Message-ID: <CAJZ5v0hGu-JdwR57cwKfB+a98Pv7e3y36X6xCo=PyGdD2hwkhQ@mail.gmail.com>
+Subject: Re: stable: commit "cpuidle: menu: Avoid discarding useful
+ information" causes regressions
+To: Christian Loehle <christian.loehle@arm.com>, Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Artem Bityutskiy <artem.bityutskiy@linux.intel.com>, Sasha Levin <sashal@kernel.org>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Tomasz Figa <tfiga@chromium.org>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 5c9d9ffa1aa9b73764439430e19a44c6ec75548a  Merge branch 'pm-sleep' into bleeding-edge
+On Tue, Oct 14, 2025 at 5:11=E2=80=AFPM Christian Loehle
+<christian.loehle@arm.com> wrote:
+>
+> On 10/14/25 12:55, Sergey Senozhatsky wrote:
+> > On (25/10/14 11:25), Christian Loehle wrote:
+> >> On 10/14/25 11:23, Sergey Senozhatsky wrote:
+> >>> On (25/10/14 10:50), Christian Loehle wrote:
+> >>>>> Upstream fixup fa3fa55de0d ("cpuidle: governors: menu: Avoid using
+> >>>>> invalid recent intervals data") doesn't address the problems we are
+> >>>>> observing.  Revert seems to be bringing performance metrics back to
+> >>>>> pre-regression levels.
+> >>>>
+> >>>> Any details would be much appreciated.
+> >>>> How do the idle state usages differ with and without
+> >>>> "cpuidle: menu: Avoid discarding useful information"?
+> >>>> What do the idle states look like in your platform?
+> >>>
+> >>> Sure, I can run tests.  How do I get the numbers/stats
+> >>> that you are asking for?
+> >>
+> >> Ideally just dump
+> >> cat /sys/devices/system/cpu/cpu*/cpuidle/state*/*
+> >> before and after the test.
+> >
+> > OK, got some data for you.  The terminology being used here is as follo=
+ws:
+> >
+> > - 6.1-base
+> >   is 6.1 stable with a9edb700846 "cpuidle: menu: Avoid discarding usefu=
+l information"
+> >
+> > - 6.1-base-fixup
+> >   is 6.1 stable with a9edb700846 and fa3fa55de0d6 "cpuidle: governors:
+> >   menu: Avoid using invalid recent intervals data" cherry-pick
+> >
+> > - 6.1-revert
+> >   is 6.1 stable with a9edb700846 reverted (and no fixup commit, obvious=
+ly)
+> >
+> > Just to show the scale of regression, results of some of the benchmarks=
+:
+> >
+> >   6.1-base:           84.5
+> >   6.1-base-fixup:     76.5
+> >   6.1-revert:         59.5
+> >
+> >   (lower is better, 6.1-revert has the same results as previous stable
+> >   kernels).
+> This immediately threw me off.
+> The fixup was written for a specific system which had completely broken
+> cpuidle. It shouldn't affect any sane system significantly.
+> I double checked the numbers and your system looks fine, in fact none of
+> the tests had any rejected cpuidle occurrences. So functionally base and
+> base-fixup are identical for you. The cpuidle numbers are also reasonably
+> 'in the noise', so just for the future some stats would be helpful on tho=
+se
+> scores.
+>
+> I can see a huge difference between base and revert in terms of cpuidle,
+> so that's enough for me to take a look, I'll do that now.
+> (6.1-revert has more C3_ACPI in favor of C1_ACPI.)
+>
+> (Also I can't send this email without at least recommending teo instead o=
+f menu
+> for your platform / use-cases, if you deemed it unfit I'd love to know wh=
+at
+> didn't work for you!)
 
-elapsed time: 1187m
+Well, yeah.
 
-configs tested: 222
-configs skipped: 5
+So I've already done some analysis.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+There are 4 C-states, POLL, C1, C6 and C10 (at least that's what the
+MWAIT hints tell me).
 
-tested configs:
-alpha                             allnoconfig    clang-22
-alpha                             allnoconfig    gcc-15.1.0
-alpha                            allyesconfig    clang-19
-alpha                            allyesconfig    gcc-15.1.0
-alpha                               defconfig    clang-19
-arc                              allmodconfig    clang-19
-arc                              allmodconfig    gcc-15.1.0
-arc                               allnoconfig    clang-22
-arc                               allnoconfig    gcc-15.1.0
-arc                              allyesconfig    clang-19
-arc                              allyesconfig    gcc-15.1.0
-arc                                 defconfig    clang-19
-arc                   randconfig-001-20251014    clang-16
-arc                   randconfig-002-20251014    clang-16
-arm                              allmodconfig    clang-19
-arm                              allmodconfig    gcc-15.1.0
-arm                               allnoconfig    clang-22
-arm                              allyesconfig    clang-19
-arm                              allyesconfig    gcc-15.1.0
-arm                                 defconfig    clang-19
-arm                   milbeaut_m10v_defconfig    gcc-15.1.0
-arm                        multi_v5_defconfig    gcc-15.1.0
-arm                   randconfig-001-20251014    clang-16
-arm                   randconfig-002-20251014    clang-16
-arm                   randconfig-003-20251014    clang-16
-arm                   randconfig-004-20251014    clang-16
-arm64                            allmodconfig    clang-19
-arm64                             allnoconfig    clang-22
-arm64                             allnoconfig    gcc-15.1.0
-arm64                            allyesconfig    gcc-15.1.0
-arm64                               defconfig    clang-19
-arm64                 randconfig-001-20251014    clang-16
-arm64                 randconfig-002-20251014    clang-16
-arm64                 randconfig-003-20251014    clang-16
-arm64                 randconfig-004-20251014    clang-16
-csky                             allmodconfig    gcc-15.1.0
-csky                              allnoconfig    clang-22
-csky                              allnoconfig    gcc-15.1.0
-csky                             allyesconfig    gcc-15.1.0
-csky                                defconfig    clang-19
-csky                  randconfig-001-20251014    gcc-8.5.0
-csky                  randconfig-002-20251014    gcc-8.5.0
-hexagon                          allmodconfig    clang-17
-hexagon                          allmodconfig    clang-19
-hexagon                           allnoconfig    clang-22
-hexagon                          allyesconfig    clang-19
-hexagon                          allyesconfig    clang-22
-hexagon                             defconfig    clang-19
-hexagon               randconfig-001-20251014    gcc-8.5.0
-hexagon               randconfig-002-20251014    gcc-8.5.0
-i386                             allmodconfig    clang-20
-i386                             allmodconfig    gcc-14
-i386                              allnoconfig    clang-20
-i386                              allnoconfig    gcc-14
-i386                             allyesconfig    clang-20
-i386                             allyesconfig    gcc-14
-i386        buildonly-randconfig-001-20251014    gcc-14
-i386        buildonly-randconfig-002-20251014    gcc-14
-i386        buildonly-randconfig-003-20251014    gcc-14
-i386        buildonly-randconfig-004-20251014    gcc-14
-i386        buildonly-randconfig-005-20251014    gcc-14
-i386        buildonly-randconfig-006-20251014    gcc-14
-i386                                defconfig    clang-20
-i386                  randconfig-001-20251014    clang-20
-i386                  randconfig-002-20251014    clang-20
-i386                  randconfig-003-20251014    clang-20
-i386                  randconfig-004-20251014    clang-20
-i386                  randconfig-005-20251014    clang-20
-i386                  randconfig-006-20251014    clang-20
-i386                  randconfig-007-20251014    clang-20
-i386                  randconfig-011-20251014    gcc-14
-i386                  randconfig-012-20251014    gcc-14
-i386                  randconfig-013-20251014    gcc-14
-i386                  randconfig-014-20251014    gcc-14
-i386                  randconfig-015-20251014    gcc-14
-i386                  randconfig-016-20251014    gcc-14
-i386                  randconfig-017-20251014    gcc-14
-loongarch                        allmodconfig    clang-19
-loongarch                         allnoconfig    clang-22
-loongarch                        allyesconfig    gcc-15.1.0
-loongarch                           defconfig    clang-19
-loongarch             randconfig-001-20251014    gcc-8.5.0
-loongarch             randconfig-002-20251014    gcc-8.5.0
-m68k                             allmodconfig    clang-19
-m68k                             allmodconfig    gcc-15.1.0
-m68k                              allnoconfig    gcc-15.1.0
-m68k                             allyesconfig    clang-19
-m68k                             allyesconfig    gcc-15.1.0
-m68k                                defconfig    clang-19
-microblaze                       allmodconfig    clang-19
-microblaze                       allmodconfig    gcc-15.1.0
-microblaze                        allnoconfig    gcc-15.1.0
-microblaze                       allyesconfig    clang-19
-microblaze                       allyesconfig    gcc-15.1.0
-microblaze                          defconfig    gcc-15.1.0
-mips                             allmodconfig    gcc-15.1.0
-mips                              allnoconfig    gcc-15.1.0
-mips                             allyesconfig    gcc-15.1.0
-mips                   sb1250_swarm_defconfig    gcc-15.1.0
-nios2                            allmodconfig    clang-22
-nios2                             allnoconfig    gcc-11.5.0
-nios2                             allnoconfig    gcc-15.1.0
-nios2                            allyesconfig    clang-22
-nios2                               defconfig    gcc-11.5.0
-nios2                 randconfig-001-20251014    gcc-8.5.0
-nios2                 randconfig-002-20251014    gcc-8.5.0
-openrisc                         allmodconfig    clang-22
-openrisc                          allnoconfig    gcc-15.1.0
-openrisc                         allyesconfig    gcc-15.1.0
-openrisc                            defconfig    gcc-14
-parisc                           allmodconfig    gcc-15.1.0
-parisc                            allnoconfig    gcc-15.1.0
-parisc                           allyesconfig    gcc-15.1.0
-parisc                              defconfig    gcc-15.1.0
-parisc                randconfig-001-20251014    gcc-8.5.0
-parisc                randconfig-002-20251014    gcc-8.5.0
-parisc64                            defconfig    gcc-15.1.0
-powerpc                          allmodconfig    gcc-15.1.0
-powerpc                           allnoconfig    gcc-15.1.0
-powerpc                          allyesconfig    gcc-15.1.0
-powerpc               randconfig-001-20251014    gcc-8.5.0
-powerpc               randconfig-002-20251014    gcc-8.5.0
-powerpc               randconfig-003-20251014    gcc-8.5.0
-powerpc                     redwood_defconfig    gcc-15.1.0
-powerpc                     tqm8540_defconfig    gcc-15.1.0
-powerpc64             randconfig-001-20251014    gcc-8.5.0
-powerpc64             randconfig-002-20251014    gcc-8.5.0
-powerpc64             randconfig-003-20251014    gcc-8.5.0
-riscv                            allmodconfig    gcc-15.1.0
-riscv                             allnoconfig    gcc-15.1.0
-riscv                            allyesconfig    gcc-15.1.0
-riscv                               defconfig    gcc-14
-riscv                 randconfig-001-20251014    gcc-10.5.0
-riscv                 randconfig-002-20251014    gcc-10.5.0
-s390                             allmodconfig    gcc-15.1.0
-s390                              allnoconfig    clang-22
-s390                             allyesconfig    gcc-15.1.0
-s390                                defconfig    gcc-14
-s390                  randconfig-001-20251014    clang-22
-s390                  randconfig-001-20251014    gcc-10.5.0
-s390                  randconfig-002-20251014    clang-19
-s390                  randconfig-002-20251014    gcc-10.5.0
-sh                               allmodconfig    gcc-15.1.0
-sh                                allnoconfig    gcc-15.1.0
-sh                               allyesconfig    gcc-15.1.0
-sh                         apsh4a3a_defconfig    gcc-15.1.0
-sh                                  defconfig    gcc-14
-sh                    randconfig-001-20251014    gcc-10.5.0
-sh                    randconfig-001-20251014    gcc-14.3.0
-sh                    randconfig-002-20251014    gcc-10.5.0
-sh                    randconfig-002-20251014    gcc-11.5.0
-sh                          sdk7786_defconfig    gcc-15.1.0
-sparc                            allmodconfig    gcc-15.1.0
-sparc                             allnoconfig    gcc-15.1.0
-sparc                            allyesconfig    clang-22
-sparc                               defconfig    gcc-15.1.0
-sparc                 randconfig-001-20251014    gcc-10.5.0
-sparc                 randconfig-001-20251014    gcc-15.1.0
-sparc                 randconfig-002-20251014    gcc-10.5.0
-sparc                 randconfig-002-20251014    gcc-15.1.0
-sparc64                          allmodconfig    clang-22
-sparc64                          allyesconfig    clang-22
-sparc64                             defconfig    gcc-14
-sparc64               randconfig-001-20251014    clang-20
-sparc64               randconfig-001-20251014    gcc-10.5.0
-sparc64               randconfig-002-20251014    clang-22
-sparc64               randconfig-002-20251014    gcc-10.5.0
-um                               allmodconfig    clang-19
-um                                allnoconfig    clang-22
-um                               allyesconfig    clang-19
-um                               allyesconfig    gcc-14
-um                                  defconfig    gcc-14
-um                             i386_defconfig    gcc-14
-um                    randconfig-001-20251014    gcc-10.5.0
-um                    randconfig-001-20251014    gcc-14
-um                    randconfig-002-20251014    gcc-10.5.0
-um                    randconfig-002-20251014    gcc-14
-um                           x86_64_defconfig    gcc-14
-x86_64                            allnoconfig    clang-20
-x86_64                           allyesconfig    clang-20
-x86_64      buildonly-randconfig-001-20251014    gcc-14
-x86_64      buildonly-randconfig-002-20251014    clang-20
-x86_64      buildonly-randconfig-002-20251014    gcc-14
-x86_64      buildonly-randconfig-003-20251014    gcc-14
-x86_64      buildonly-randconfig-004-20251014    clang-20
-x86_64      buildonly-randconfig-004-20251014    gcc-14
-x86_64      buildonly-randconfig-005-20251014    clang-20
-x86_64      buildonly-randconfig-005-20251014    gcc-14
-x86_64      buildonly-randconfig-006-20251014    gcc-14
-x86_64                              defconfig    clang-20
-x86_64                              defconfig    gcc-14
-x86_64                                  kexec    clang-20
-x86_64                randconfig-001-20251014    gcc-14
-x86_64                randconfig-002-20251014    gcc-14
-x86_64                randconfig-003-20251014    gcc-14
-x86_64                randconfig-004-20251014    gcc-14
-x86_64                randconfig-005-20251014    gcc-14
-x86_64                randconfig-006-20251014    gcc-14
-x86_64                randconfig-007-20251014    gcc-14
-x86_64                randconfig-008-20251014    gcc-14
-x86_64                randconfig-071-20251014    gcc-14
-x86_64                randconfig-072-20251014    gcc-14
-x86_64                randconfig-073-20251014    gcc-14
-x86_64                randconfig-074-20251014    gcc-14
-x86_64                randconfig-075-20251014    gcc-14
-x86_64                randconfig-076-20251014    gcc-14
-x86_64                randconfig-077-20251014    gcc-14
-x86_64                randconfig-078-20251014    gcc-14
-x86_64                               rhel-9.4    clang-20
-x86_64                           rhel-9.4-bpf    gcc-14
-x86_64                          rhel-9.4-func    clang-20
-x86_64                    rhel-9.4-kselftests    clang-20
-x86_64                         rhel-9.4-kunit    gcc-14
-x86_64                           rhel-9.4-ltp    gcc-14
-x86_64                          rhel-9.4-rust    clang-20
-xtensa                            allnoconfig    gcc-15.1.0
-xtensa                           allyesconfig    clang-22
-xtensa                randconfig-001-20251014    gcc-10.5.0
-xtensa                randconfig-001-20251014    gcc-8.5.0
-xtensa                randconfig-002-20251014    gcc-10.5.0
-xtensa                randconfig-002-20251014    gcc-8.5.0
-xtensa                         virt_defconfig    gcc-15.1.0
+This is how many times each of them was requested during the workload
+run on base 6.1.y:
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+POLL: 21445
+C1: 2993722
+C6: 767029
+C10: 736854
+
+and in percentage of the total idle state requests:
+
+POLL: 0,47%
+C1: 66,25%
+C6: 16,97%
+C10: 16,31%
+
+With the problematic commit reverted, this became
+
+POLL: 16092
+C1: 2452591
+C6: 750933
+C10: 1150259
+
+and (again) in percentage of the total:
+
+POLL: 0,37%
+C1: 56,12%
+C6: 17,18%
+C10: 26,32%
+
+Overall, POLL is negligible and the revet had no effect on the number
+of times C6 was requested.  The difference is for C1 and C10 and it's
+10% in both cases, but going in opposite directions so to speak: C1
+was requested 10% less and C10 was requested 10% more after the
+revert.
+
+Let's see how this corresponds to the residency numbers.
+
+For base 6.1.y there was
+
+POLL: 599883
+C1: 732303748
+C6: 576785253
+C10: 2020491489
+
+and in percentage of the total
+
+POLL: 0,02%
+C1: 21,99%
+C6: 17,32%
+C10: 60,67%
+
+After the revert it became
+
+POLL: 469451
+C1: 517623465
+C6: 508945687
+C10: 2567701673
+
+and in percentage of the total
+
+POLL: 0,01%
+C1: 14,40%
+C6: 14,16%
+C10: 71,43%
+
+so with the revert the CPUs spend around 7% more time in deep idle
+states (C6 and C10 combined).
+
+I have to say that this is consistent with the intent of the
+problematic commit, which is to reduce the number of times the deepest
+idle state is requested although it is likely to be too deep.
+
+However, on the system in question this somehow causes performance to
+drop significantly (even though shallow idle states are used more
+often which should result in lower average idle state exit latency and
+better performance).
+
+One possible explanation is that this somehow affects turbo
+frequencies.  That is, requesting shallower idle states on idle CPUs
+prevents the other CPUs from getting sufficiently high turbo.
+
+Sergey, can you please run the workload under turbostat on the base
+6.1.y and on 6.1.y with the problematic commit reverted and send the
+turbostat output from both runs (note: turbostat needs to be run as
+root)?
 
