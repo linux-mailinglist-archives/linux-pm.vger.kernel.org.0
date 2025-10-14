@@ -1,169 +1,363 @@
-Return-Path: <linux-pm+bounces-36037-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36038-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48035BD7D82
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Oct 2025 09:20:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 93072BD7DCD
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Oct 2025 09:24:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9ABD3189F2AA
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Oct 2025 07:21:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4606042370A
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Oct 2025 07:24:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2AF930DEB6;
-	Tue, 14 Oct 2025 07:20:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3837F29BD81;
+	Tue, 14 Oct 2025 07:24:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GPfR8hp9"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f193.google.com (mail-pf1-f193.google.com [209.85.210.193])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A04F30ACF6
-	for <linux-pm@vger.kernel.org>; Tue, 14 Oct 2025 07:20:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BEBF1DFDA1
+	for <linux-pm@vger.kernel.org>; Tue, 14 Oct 2025 07:24:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760426441; cv=none; b=QXN7maNy7Byg0sEQeleIGm1ejcVcWraLGCvdO+y2Y1XAGgzVV4rar3wbGO+qmu27Ljy5LtXayI4otvbBS0UQhJch8JM0KLX/TZZ224HNd3UVhMFHWfOs+zVTzZRfLM73xDi7yC00ipJwPL3TqwjLEUlAUSWZ74KYEMyFbeKpItk=
+	t=1760426643; cv=none; b=oO+gSLeu6dz/lJyRgVgtC08lkVJrm6AhGZR8gD660GTffC4jClm/MTTbol657kZHtnwwOdrUjFI0f1r9aRoXVjJZK5p0uqjRdlAAbnW3ba1a0M17NvJ2axk1B3N6btA960kgrVpBuM+fn2NRpgg9P7RmTW0n9ahp81I0gjSohmQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760426441; c=relaxed/simple;
-	bh=ese1AL4Mbt9Qfou8zsa4/1NpQHkJN9OTenytTIEZe5g=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=JjHNeyO3RoXbeO1/cSvVNUBpZb26PgT2PL/GFdKh/enQiB849/0eIKS38nXPPFNvPsJzCQOZkedzn8q9hOs7y5MSoZZpaHOAhX/rG5O93nROPCoWkOmW5Uh2m7kYdGqQiu25QYK/rICCW8e9dhH9SKt3jj9WNZ2lW6tCCTXUojo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f193.google.com with SMTP id d2e1a72fcca58-781ea2cee3fso4789657b3a.0
-        for <linux-pm@vger.kernel.org>; Tue, 14 Oct 2025 00:20:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760426439; x=1761031239;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wX/I9Icx0RS+yCcmomPEu0g/6wZ9SyCmq3ksJTG9NiY=;
-        b=d1iG2XXgpyu7kGlH3QBgOtt3SvYUMKcHdY8b6J9vEjak9ZuWg+diANqsRRNR8wDs9s
-         VeE8sxAQnkvVSsIWY/2nl5KMz6y6Hx8319FFRjJzCcDE4fuTRxT3O3a9hQkk3VlPlVkN
-         d/+XVz6ZPJIIc0hS6ZEwX18qIZbcF+KJ35BkfVedBtwW/LkJLvpdhVBNJOSXBtRt/y73
-         7v2QbwE4cD7ciCynUBvQ6V2AizRqWwzGiehuJySbODy4zGfSW/mK3+acCpik3JJZAKXs
-         yYTg7NYEjS5iqcuv8Ov/+xKzZquNi+SYe8bjEzpK5FD1jaH+1AA/TK5WgS77vbr0aMKV
-         B28Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWAn3ALBZSkDe1rkgLT1QIOWWALEYAqvoyfCeZn9pkWeTGmD5lHXjRrlspVk3sqBG/1FBPr7xwEgg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzdEVjQIHy2tU5U09aAAhkNqrxIPwSWpSJuzxDvzDhUHcuQNujk
-	hPavKiAtryQiGLDSmt/kx7snKQJh0MGbovnx1Q7Sv2v3EZjTyTf+w5KH
-X-Gm-Gg: ASbGncul3vTqJdqqPRShEfdMmsyqQp4t2Q0C/fzjU9vM28JsAR/6HoSHkz0Clsum8Gz
-	Oyx7KpvX52UTwZS0/qqDeGtOZHDBDKgCyuqi0E6g9zyhBAvj0A0eMXmiEqd4x1GWozrlXqYRh6n
-	kbwlpx49mvg79FEkUAFkh7C9UBEEebSHvTGz52FFHQ6y3yeDAoaTO9hVmkd+LGF0ucbNcxLsmOt
-	LmxEAltS7iIxcqorET+KY2W9AIy5KVV+2ynxBLlLBslkph8jsyViI04x1eBcL1UxIN8QlXe0Ah3
-	YFX0mIHoM4S5PHAZcnpM+qPdx2MP3hRJS5qtOe2Ct8caoNCLl8rReqh1lx/2oeqAs6qP0F1w4bV
-	xA0BF+T7dRUCS5xC192g7G0bTRlx3yix0EDMrcME8/2KiT0sbC9RSlYmldOtHnskb7s+Bc2cVkh
-	0=
-X-Google-Smtp-Source: AGHT+IEF/aCTeVvSBrO05FwR6QofuqxkKDZvPY8nTM2m7UVq5+hTdMYW/LkSoT6imz0KOJoiVM2kVA==
-X-Received: by 2002:a05:6a20:728a:b0:2b5:9c2:c579 with SMTP id adf61e73a8af0-32da84ea53amr32225959637.54.1760426439338;
-        Tue, 14 Oct 2025 00:20:39 -0700 (PDT)
-Received: from power-ThinkBook-15-G2-ITL.. ([116.128.244.171])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b678de09cb3sm11937092a12.18.2025.10.14.00.20.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Oct 2025 00:20:39 -0700 (PDT)
-From: Xueqin Luo <luoxueqin@kylinos.cn>
+	s=arc-20240116; t=1760426643; c=relaxed/simple;
+	bh=dCeGMIWFFgRa+BuEYZOjyOHxmMDW9aUD7u7cnpbaFrk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=cidv3kL9MYp+JQfo5k0fBcRDDBhQD5PDC6wehOqDkTFkp6PbH17MzZG5NwQ8CZm3ZzfKVoGhRDEijlpw/fxGNdRxcAB9jwoBG4bEXDeW0Q4FpkjwKE53j6S7gXW/KXuzxFfLT1ozEBsRAx8rwbpxvA8gdAZpoQkWLl2rT6pDJik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GPfR8hp9; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1760426641; x=1791962641;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=dCeGMIWFFgRa+BuEYZOjyOHxmMDW9aUD7u7cnpbaFrk=;
+  b=GPfR8hp96qHlGpdoFea/oPf07T2N3ubuLkx2uEngE1QLDRdxLv+3gshB
+   x+yZO9eCL2jnLeMVObvXEsB2xW1nCY4g5oKw7lheCQnwCHEh/ZZxwWSMD
+   0j0rH71oT+SLC5tI6pNunYCL70TVIty1+GgvRAU/Dt6Z9CGJ4c5axpyE/
+   cHSgN94hI5KPf6pzXSqPNDp0P2I8fZXzGlyOTl/tKVMXl1zvpxiP/PDf1
+   Y460vwTiiT6Y4olNy7Iwa0WewdTX49BLaClN9viURPRIQmQn0sw9PUOF0
+   fYDe4PzAAviHqQNGFodlg+e50htKqTx9Pp2A7EEeikWRPmj+ofBJTqXcN
+   A==;
+X-CSE-ConnectionGUID: hkJJCt0eRsCsdP6XCmO2dA==
+X-CSE-MsgGUID: JScC81cpTAGQyQbfJMkPSA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11581"; a="61788281"
+X-IronPort-AV: E=Sophos;i="6.19,227,1754982000"; 
+   d="scan'208";a="61788281"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2025 00:24:00 -0700
+X-CSE-ConnectionGUID: lpmpSTGhTnKFWBl7F7L0Eg==
+X-CSE-MsgGUID: YHhRwlVpS8yL7sb9hGB98w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,227,1754982000"; 
+   d="scan'208";a="186221815"
+Received: from baandr0id001.iind.intel.com ([10.66.253.151])
+  by fmviesa005.fm.intel.com with ESMTP; 14 Oct 2025 00:23:59 -0700
+From: Kaushlendra Kumar <kaushlendra.kumar@intel.com>
 To: rafael@kernel.org,
 	pavel@kernel.org,
-	lenb@kernel.org,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Xueqin Luo <luoxueqin@kylinos.cn>
-Subject: [PATCH v4 2/2] PM: hibernate: make compression threads configurable
-Date: Tue, 14 Oct 2025 15:14:18 +0800
-Message-ID: <9f15307fcf22784a82fc1957133dfc2296930c33.1760423687.git.luoxueqin@kylinos.cn>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1760423687.git.luoxueqin@kylinos.cn>
-References: <cover.1760423687.git.luoxueqin@kylinos.cn>
+	dakr@kernel.org,
+	gregkh@linuxfoundation.org
+Cc: linux-pm@vger.kernel.org,
+	Kaushlendra Kumar <kaushlendra.kumar@intel.com>
+Subject: [PATCH v2] PM: Introduce DEFINE_PM_GENERIC_FUNC macro to reduce code duplication
+Date: Tue, 14 Oct 2025 12:52:03 +0530
+Message-Id: <20251014072203.979292-1-kaushlendra.kumar@intel.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-The number of compression/decompression threads has a direct impact on
-hibernate image generation and resume latency. Using more threads can
-reduce overall resume time, but on systems with fewer CPU cores it may
-also introduce contention and reduce efficiency.
+Add DEFINE_PM_GENERIC_FUNC macro to completely eliminate repetitive
+code patterns in power management generic operations. This macro
+generates the entire function definition including signature,
+implementation, and symbol export for each pm_generic_* function.
 
-Performance was evaluated on an 8-core ARM system, averaged over 10 runs:
+This reduces code duplication significantly while maintaining the
+same functionality and improving code maintainability.
 
-    cmp_threads   hibernate time (s)   resume time (s)
-    --------------------------------------------------
-          3             12.14              18.86
-          4             12.28              17.48
-          5             11.09              16.77
-          6             11.08              16.44
-
-With 5–6 threads, resume latency improves by approximately 12% compared
-to the default 3-thread configuration, with negligible impact on
-hibernate time.
-
-Introduce a new kernel parameter `cmp_threads=` that allows users and
-integrators to tune the number of compression/decompression threads at
-boot. This provides a way to balance performance and CPU utilization
-across a wide range of hardware without recompiling the kernel.
-
-Signed-off-by: Xueqin Luo <luoxueqin@kylinos.cn>
+Signed-off-by: Kaushlendra Kumar <kaushlendra.kumar@intel.com>
 ---
- kernel/power/swap.c | 24 ++++++++++++++++++++----
- 1 file changed, 20 insertions(+), 4 deletions(-)
+Changes in v2:
+- Include function signature and symbol export in macro as suggested
+---
+ drivers/base/power/generic_ops.c | 158 +++++--------------------------
+ 1 file changed, 26 insertions(+), 132 deletions(-)
 
-diff --git a/kernel/power/swap.c b/kernel/power/swap.c
-index f8c13f5672ec..540cf902498c 100644
---- a/kernel/power/swap.c
-+++ b/kernel/power/swap.c
-@@ -519,8 +519,8 @@ static int swap_writer_finish(struct swap_map_handle *handle,
- 				CMP_HEADER, PAGE_SIZE)
- #define CMP_SIZE	(CMP_PAGES * PAGE_SIZE)
+diff --git a/drivers/base/power/generic_ops.c b/drivers/base/power/generic_ops.c
+index 6502720bb564..0afea5d8f8ef 100644
+--- a/drivers/base/power/generic_ops.c
++++ b/drivers/base/power/generic_ops.c
+@@ -8,6 +8,14 @@
+ #include <linux/pm_runtime.h>
+ #include <linux/export.h>
  
--/* Maximum number of threads for compression/decompression. */
--#define CMP_THREADS	3
-+/* Default number of threads for compression/decompression. */
-+static int cmp_threads = 3;
++#define DEFINE_PM_GENERIC_FUNC(func_name, op_name) \
++int pm_generic_##func_name(struct device *dev) \
++{ \
++	const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL; \
++	return pm && pm->op_name ? pm->op_name(dev) : 0; \
++} \
++EXPORT_SYMBOL_GPL(pm_generic_##func_name)
++
+ #ifdef CONFIG_PM
+ /**
+  * pm_generic_runtime_suspend - Generic runtime suspend callback for subsystems.
+@@ -17,16 +25,7 @@
+  * ->runtime_suspend(), execute it and return its error code.  Otherwise,
+  * return 0.
+  */
+-int pm_generic_runtime_suspend(struct device *dev)
+-{
+-	const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+-	int ret;
+-
+-	ret = pm && pm->runtime_suspend ? pm->runtime_suspend(dev) : 0;
+-
+-	return ret;
+-}
+-EXPORT_SYMBOL_GPL(pm_generic_runtime_suspend);
++DEFINE_PM_GENERIC_FUNC(runtime_suspend, runtime_suspend);
  
- /* Minimum/maximum number of pages for read buffering. */
- #define CMP_MIN_RD_PAGES	1024
-@@ -741,7 +741,7 @@ static int save_compressed_image(struct swap_map_handle *handle,
- 	 * footprint.
- 	 */
- 	nr_threads = num_online_cpus() - 1;
--	nr_threads = clamp_val(nr_threads, 1, CMP_THREADS);
-+	nr_threads = clamp_val(nr_threads, 1, cmp_threads);
+ /**
+  * pm_generic_runtime_resume - Generic runtime resume callback for subsystems.
+@@ -36,16 +35,7 @@ EXPORT_SYMBOL_GPL(pm_generic_runtime_suspend);
+  * ->runtime_resume(), execute it and return its error code.  Otherwise,
+  * return 0.
+  */
+-int pm_generic_runtime_resume(struct device *dev)
+-{
+-	const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+-	int ret;
+-
+-	ret = pm && pm->runtime_resume ? pm->runtime_resume(dev) : 0;
+-
+-	return ret;
+-}
+-EXPORT_SYMBOL_GPL(pm_generic_runtime_resume);
++DEFINE_PM_GENERIC_FUNC(runtime_resume, runtime_resume);
+ #endif /* CONFIG_PM */
  
- 	page = (void *)__get_free_page(GFP_NOIO | __GFP_HIGH);
- 	if (!page) {
-@@ -1257,7 +1257,7 @@ static int load_compressed_image(struct swap_map_handle *handle,
- 	 * footprint.
- 	 */
- 	nr_threads = num_online_cpus() - 1;
--	nr_threads = clamp_val(nr_threads, 1, CMP_THREADS);
-+	nr_threads = clamp_val(nr_threads, 1, cmp_threads);
+ #ifdef CONFIG_PM_SLEEP
+@@ -70,193 +60,97 @@ int pm_generic_prepare(struct device *dev)
+  * pm_generic_suspend_noirq - Generic suspend_noirq callback for subsystems.
+  * @dev: Device to suspend.
+  */
+-int pm_generic_suspend_noirq(struct device *dev)
+-{
+-	const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+-
+-	return pm && pm->suspend_noirq ? pm->suspend_noirq(dev) : 0;
+-}
+-EXPORT_SYMBOL_GPL(pm_generic_suspend_noirq);
++DEFINE_PM_GENERIC_FUNC(suspend_noirq, suspend_noirq);
  
- 	page = vmalloc_array(CMP_MAX_RD_PAGES, sizeof(*page));
- 	if (!page) {
-@@ -1697,3 +1697,19 @@ static int __init swsusp_header_init(void)
- }
+ /**
+  * pm_generic_suspend_late - Generic suspend_late callback for subsystems.
+  * @dev: Device to suspend.
+  */
+-int pm_generic_suspend_late(struct device *dev)
+-{
+-	const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+-
+-	return pm && pm->suspend_late ? pm->suspend_late(dev) : 0;
+-}
+-EXPORT_SYMBOL_GPL(pm_generic_suspend_late);
++DEFINE_PM_GENERIC_FUNC(suspend_late, suspend_late);
  
- core_initcall(swsusp_header_init);
-+
-+static int __init cmp_threads_setup(char *str)
-+{
-+	int rc = kstrtouint(str, 0, &cmp_threads);
-+
-+	if (rc)
-+		return rc;
-+
-+	if (cmp_threads < 1)
-+		cmp_threads = 3;
-+
-+	return 1;
-+
-+}
-+
-+__setup("cmp_threads=", cmp_threads_setup);
+ /**
+  * pm_generic_suspend - Generic suspend callback for subsystems.
+  * @dev: Device to suspend.
+  */
+-int pm_generic_suspend(struct device *dev)
+-{
+-	const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+-
+-	return pm && pm->suspend ? pm->suspend(dev) : 0;
+-}
+-EXPORT_SYMBOL_GPL(pm_generic_suspend);
++DEFINE_PM_GENERIC_FUNC(suspend, suspend);
+ 
+ /**
+  * pm_generic_freeze_noirq - Generic freeze_noirq callback for subsystems.
+  * @dev: Device to freeze.
+  */
+-int pm_generic_freeze_noirq(struct device *dev)
+-{
+-	const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+-
+-	return pm && pm->freeze_noirq ? pm->freeze_noirq(dev) : 0;
+-}
+-EXPORT_SYMBOL_GPL(pm_generic_freeze_noirq);
++DEFINE_PM_GENERIC_FUNC(freeze_noirq, freeze_noirq);
+ 
+ /**
+  * pm_generic_freeze - Generic freeze callback for subsystems.
+  * @dev: Device to freeze.
+  */
+-int pm_generic_freeze(struct device *dev)
+-{
+-	const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+-
+-	return pm && pm->freeze ? pm->freeze(dev) : 0;
+-}
+-EXPORT_SYMBOL_GPL(pm_generic_freeze);
++DEFINE_PM_GENERIC_FUNC(freeze, freeze);
+ 
+ /**
+  * pm_generic_poweroff_noirq - Generic poweroff_noirq callback for subsystems.
+  * @dev: Device to handle.
+  */
+-int pm_generic_poweroff_noirq(struct device *dev)
+-{
+-	const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+-
+-	return pm && pm->poweroff_noirq ? pm->poweroff_noirq(dev) : 0;
+-}
+-EXPORT_SYMBOL_GPL(pm_generic_poweroff_noirq);
++DEFINE_PM_GENERIC_FUNC(poweroff_noirq, poweroff_noirq);
+ 
+ /**
+  * pm_generic_poweroff_late - Generic poweroff_late callback for subsystems.
+  * @dev: Device to handle.
+  */
+-int pm_generic_poweroff_late(struct device *dev)
+-{
+-	const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+-
+-	return pm && pm->poweroff_late ? pm->poweroff_late(dev) : 0;
+-}
+-EXPORT_SYMBOL_GPL(pm_generic_poweroff_late);
++DEFINE_PM_GENERIC_FUNC(poweroff_late, poweroff_late);
+ 
+ /**
+  * pm_generic_poweroff - Generic poweroff callback for subsystems.
+  * @dev: Device to handle.
+  */
+-int pm_generic_poweroff(struct device *dev)
+-{
+-	const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+-
+-	return pm && pm->poweroff ? pm->poweroff(dev) : 0;
+-}
+-EXPORT_SYMBOL_GPL(pm_generic_poweroff);
++DEFINE_PM_GENERIC_FUNC(poweroff, poweroff);
+ 
+ /**
+  * pm_generic_thaw_noirq - Generic thaw_noirq callback for subsystems.
+  * @dev: Device to thaw.
+  */
+-int pm_generic_thaw_noirq(struct device *dev)
+-{
+-	const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+-
+-	return pm && pm->thaw_noirq ? pm->thaw_noirq(dev) : 0;
+-}
+-EXPORT_SYMBOL_GPL(pm_generic_thaw_noirq);
++DEFINE_PM_GENERIC_FUNC(thaw_noirq, thaw_noirq);
+ 
+ /**
+  * pm_generic_thaw - Generic thaw callback for subsystems.
+  * @dev: Device to thaw.
+  */
+-int pm_generic_thaw(struct device *dev)
+-{
+-	const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+-
+-	return pm && pm->thaw ? pm->thaw(dev) : 0;
+-}
+-EXPORT_SYMBOL_GPL(pm_generic_thaw);
++DEFINE_PM_GENERIC_FUNC(thaw, thaw);
+ 
+ /**
+  * pm_generic_resume_noirq - Generic resume_noirq callback for subsystems.
+  * @dev: Device to resume.
+  */
+-int pm_generic_resume_noirq(struct device *dev)
+-{
+-	const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+-
+-	return pm && pm->resume_noirq ? pm->resume_noirq(dev) : 0;
+-}
+-EXPORT_SYMBOL_GPL(pm_generic_resume_noirq);
++DEFINE_PM_GENERIC_FUNC(resume_noirq, resume_noirq);
+ 
+ /**
+  * pm_generic_resume_early - Generic resume_early callback for subsystems.
+  * @dev: Device to resume.
+  */
+-int pm_generic_resume_early(struct device *dev)
+-{
+-	const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+-
+-	return pm && pm->resume_early ? pm->resume_early(dev) : 0;
+-}
+-EXPORT_SYMBOL_GPL(pm_generic_resume_early);
++DEFINE_PM_GENERIC_FUNC(resume_early, resume_early);
+ 
+ /**
+  * pm_generic_resume - Generic resume callback for subsystems.
+  * @dev: Device to resume.
+  */
+-int pm_generic_resume(struct device *dev)
+-{
+-	const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+-
+-	return pm && pm->resume ? pm->resume(dev) : 0;
+-}
+-EXPORT_SYMBOL_GPL(pm_generic_resume);
++DEFINE_PM_GENERIC_FUNC(resume, resume);
+ 
+ /**
+  * pm_generic_restore_noirq - Generic restore_noirq callback for subsystems.
+  * @dev: Device to restore.
+  */
+-int pm_generic_restore_noirq(struct device *dev)
+-{
+-	const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+-
+-	return pm && pm->restore_noirq ? pm->restore_noirq(dev) : 0;
+-}
+-EXPORT_SYMBOL_GPL(pm_generic_restore_noirq);
++DEFINE_PM_GENERIC_FUNC(restore_noirq, restore_noirq);
+ 
+ /**
+  * pm_generic_restore_early - Generic restore_early callback for subsystems.
+  * @dev: Device to resume.
+  */
+-int pm_generic_restore_early(struct device *dev)
+-{
+-	const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+-
+-	return pm && pm->restore_early ? pm->restore_early(dev) : 0;
+-}
+-EXPORT_SYMBOL_GPL(pm_generic_restore_early);
++DEFINE_PM_GENERIC_FUNC(restore_early, restore_early);
+ 
+ /**
+  * pm_generic_restore - Generic restore callback for subsystems.
+  * @dev: Device to restore.
+  */
+-int pm_generic_restore(struct device *dev)
+-{
+-	const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+-
+-	return pm && pm->restore ? pm->restore(dev) : 0;
+-}
+-EXPORT_SYMBOL_GPL(pm_generic_restore);
++DEFINE_PM_GENERIC_FUNC(restore, restore);
+ 
+ /**
+  * pm_generic_complete - Generic routine completing a device power transition.
 -- 
-2.43.0
+2.34.1
 
 
