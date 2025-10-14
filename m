@@ -1,81 +1,99 @@
-Return-Path: <linux-pm+bounces-36057-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36058-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 167B2BD8C0F
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Oct 2025 12:25:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 67DE9BD8C3F
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Oct 2025 12:27:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 0E7B74FE3B1
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Oct 2025 10:25:21 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id D17874FD7EB
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Oct 2025 10:27:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B65B3BB40;
-	Tue, 14 Oct 2025 10:25:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 617D92F6164;
+	Tue, 14 Oct 2025 10:27:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IlZ+Yhx+"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D10E2E2EF8;
-	Tue, 14 Oct 2025 10:25:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABC062F60B6
+	for <linux-pm@vger.kernel.org>; Tue, 14 Oct 2025 10:27:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760437512; cv=none; b=ouL/u17KqSRzxEoeN7x3/9Yt5nIsKNqSlJRhvoAWIjhBZ/ZkuCi90WFIrdUsAW0EqK9o5s6chWRo1QolWHIrXEkVLVL2j9GJ+3k0+mn4KWFW65m4hCElbg2C3+I3d9rzAPQRrKTe9IKwnp9FVdiL9myuRI90+be9R6aDnGwYA9o=
+	t=1760437645; cv=none; b=UhD0/o4JpWOFMmL2KaHoD+Yz3A0q6yC3K91UaBMeojkbJdLv7y1jrw5LyE8cp1txGKCnwgIV9k7OFLlW1dI4DI0Snna7ZIMT6P9bA8V9va7lTVQ+OfGtYJQ2KvkdzOUdI36+GnyUlrytodtKHL+5GyAKCnqKWwWjr8JCvIn3pUc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760437512; c=relaxed/simple;
-	bh=GrPWHejUInShSTEIrfwfdYR823L0J0oxHEJVM90GmJs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hTsKOAkhoRFGYBROChRH5aNGaYm9CSWXmuuXtbmooT0rM20A8dGgiO6ZD3g+NTA9BkA50/k1AGreIibOvHXiMXEvTjBU7h1pPBxZFKcBPJ1FSc7DLYJ3kGauDy05HshSZYHR/9aBpEJGNMjGH0mp6jIppT2dyEm6CV42kczGcT4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 70DBE1A9A;
-	Tue, 14 Oct 2025 03:25:02 -0700 (PDT)
-Received: from [10.57.66.74] (unknown [10.57.66.74])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E88D33F6A8;
-	Tue, 14 Oct 2025 03:25:08 -0700 (PDT)
-Message-ID: <8da42386-282e-4f97-af93-4715ae206361@arm.com>
-Date: Tue, 14 Oct 2025 11:25:07 +0100
+	s=arc-20240116; t=1760437645; c=relaxed/simple;
+	bh=XfHYBYtUiuN62UEeB1HH/QMYo6SMY+oi0W0Fke8RKEM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=GaPOdoqYKL8qki/dJtii5KvfRYD2j/fUDUy9QYmMCeRzw0gBzuvoqrqfY67Yg4q6NnwukiMuVOjEIK/wKIeUTLwF1u/vGnUJekmScLt6TwYRvZRO1Td+NpncKfQUYYuYbka/jB+qgWOBHE3J8Eqx5uQKnwzjThhDLsQFr/+N8u4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IlZ+Yhx+; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1760437644; x=1791973644;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=XfHYBYtUiuN62UEeB1HH/QMYo6SMY+oi0W0Fke8RKEM=;
+  b=IlZ+Yhx+6EO9NvrT8SMaz9Dmw1xzSKCE/YXNI8QrxdgJ/hntQ2ItcJEN
+   HMGbKqQptSS67sLjjwvRbJOGGS9ojmTSZPXK0efBmCuw9XxsHSwWlGhLx
+   XDG1mfgx3LdJxT4MO1UvaufV4HvbimLuaz+dyzHhqpD3479pEDX7i+h9T
+   WSaGSM+GL0gSOBrgwcftopS1LB8RsdFYYhjCgCV3DxYA6bjdlQWKcmhcZ
+   24SkLolZn4+lhizkpLtDlgD1KYqYk7rjP1JsHpAHJXfVjEW+FS30sQwPt
+   3TzoXNbSdgSG4W4+edcWu7DgT+L2YBiYq/MVRunG285ry7qB9kZdkkXr3
+   g==;
+X-CSE-ConnectionGUID: ircHQLmmRWiIRn22BKKZhg==
+X-CSE-MsgGUID: fpn0WGyST3G5oomDTs6wRA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11581"; a="85214158"
+X-IronPort-AV: E=Sophos;i="6.19,227,1754982000"; 
+   d="scan'208";a="85214158"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2025 03:27:23 -0700
+X-CSE-ConnectionGUID: j6F/T0piQ8exo3Nc6eilXA==
+X-CSE-MsgGUID: v0hz/MyhRNOHttQqYRT4kA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,227,1754982000"; 
+   d="scan'208";a="181857474"
+Received: from baandr0id001.iind.intel.com ([10.66.253.151])
+  by orviesa008.jf.intel.com with ESMTP; 14 Oct 2025 03:27:22 -0700
+From: Kaushlendra Kumar <kaushlendra.kumar@intel.com>
+To: lenb@kernel.org
+Cc: linux-pm@vger.kernel.org,
+	Kaushlendra Kumar <kaushlendra.kumar@intel.com>
+Subject: [PATCH] tools/power turbostat: Add Wildcat Lake platform support
+Date: Tue, 14 Oct 2025 15:55:28 +0530
+Message-Id: <20251014102528.1220586-1-kaushlendra.kumar@intel.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: stable: commit "cpuidle: menu: Avoid discarding useful
- information" causes regressions
-To: Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
- Sasha Levin <sashal@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>,
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- Tomasz Figa <tfiga@chromium.org>, stable@vger.kernel.org
-References: <36iykr223vmcfsoysexug6s274nq2oimcu55ybn6ww4il3g3cv@cohflgdbpnq7>
- <08529809-5ca1-4495-8160-15d8e85ad640@arm.com>
- <2zreguw4djctgcmvgticnm4dctcuja7yfnp3r6bxaqon3i2pxf@thee3p3qduoq>
-Content-Language: en-US
-From: Christian Loehle <christian.loehle@arm.com>
-In-Reply-To: <2zreguw4djctgcmvgticnm4dctcuja7yfnp3r6bxaqon3i2pxf@thee3p3qduoq>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 10/14/25 11:23, Sergey Senozhatsky wrote:
-> On (25/10/14 10:50), Christian Loehle wrote:
->>> Upstream fixup fa3fa55de0d ("cpuidle: governors: menu: Avoid using
->>> invalid recent intervals data") doesn't address the problems we are
->>> observing.  Revert seems to be bringing performance metrics back to
->>> pre-regression levels.
->>
->> Any details would be much appreciated.
->> How do the idle state usages differ with and without
->> "cpuidle: menu: Avoid discarding useful information"?
->> What do the idle states look like in your platform?
-> 
-> Sure, I can run tests.  How do I get the numbers/stats
-> that you are asking for?
+Add INTEL_WILDCATLAKE_L to the platform data table with Lunar Lake features
+to enable turbostat support for this Intel platform.
 
-Ideally just dump
-cat /sys/devices/system/cpu/cpu*/cpuidle/state*/*
-before and after the test.
+Signed-off-by: Kaushlendra Kumar <kaushlendra.kumar@intel.com>
+---
+ tools/power/x86/turbostat/turbostat.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
+index f2512d78bcbd..f59bffa6025c 100644
+--- a/tools/power/x86/turbostat/turbostat.c
++++ b/tools/power/x86/turbostat/turbostat.c
+@@ -1210,6 +1210,7 @@ static const struct platform_data turbostat_pdata[] = {
+ 	{ INTEL_ARROWLAKE, &adl_features },
+ 	{ INTEL_LUNARLAKE_M, &lnl_features },
+ 	{ INTEL_PANTHERLAKE_L, &lnl_features },
++	{ INTEL_WILDCATLAKE_L, &lnl_features },
+ 	{ INTEL_ATOM_SILVERMONT, &slv_features },
+ 	{ INTEL_ATOM_SILVERMONT_D, &slvd_features },
+ 	{ INTEL_ATOM_AIRMONT, &amt_features },
+-- 
+2.34.1
+
 
