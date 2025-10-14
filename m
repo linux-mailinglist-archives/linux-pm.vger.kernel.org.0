@@ -1,123 +1,108 @@
-Return-Path: <linux-pm+bounces-36059-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36060-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4C3EBD8C48
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Oct 2025 12:29:34 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4A1CCBD8CE4
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Oct 2025 12:49:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id CAC3E4F9B29
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Oct 2025 10:29:33 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id CC0C9351900
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Oct 2025 10:49:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 840682F619B;
-	Tue, 14 Oct 2025 10:29:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73C9D2F99AE;
+	Tue, 14 Oct 2025 10:49:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="DdfYgz7Y"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="lCLA3pdV"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C86F02D248E
-	for <linux-pm@vger.kernel.org>; Tue, 14 Oct 2025 10:29:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E02E42EC0B2;
+	Tue, 14 Oct 2025 10:48:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760437768; cv=none; b=MJ4wXVu6hjuoABYvRF4mBCYcw9NoUqxJDwshVKa9jVxO1PluUI1XTL9w1Q29mQLwJEWcZTa7v+ccl76ogfh7bMbZnNu4Qu0eJ8UJfoJRlcJOH70SfwQL6yyPTrtEzNfkFkkw1dUgI1kHTBQAzqNVBLFldZhMdl6mamMt/paX424=
+	t=1760438940; cv=none; b=jDUn3zIcj/uaJk7rRaYThpBzvzYO0tU2puwvUcbBUrRbJS+KykrV4wz4NvyCoybu24booOBPVA1ymFG48jJcw/+V3N2Vqx7lBGtEPNYPDlYYxSONzZM77V0USw39cS0lHdbqUdIxgRa4p4vl1H2r+9CGQpnFpyti3pE834ZBsIA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760437768; c=relaxed/simple;
-	bh=hYbEH8aG5/g2lPpfG/EurG4fthUUtSOeRcTH4W6yxtc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=UOGDtBSPufa5bOmyB+XC9QfqXAIQBUpdHxEhNNnRO8ECwwQOr+VYYVLLnvfymSKNzliN4QvgQJFaTz0k/GFY9ERZuxAoBgUpdR97l21QVQuu90GygHPjlVDZ/D0JSWKE6ApJNo5x+xINAwko4gQ0RjTmeJg1PsK6v4xzLvol0j4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=DdfYgz7Y; arc=none smtp.client-ip=209.85.128.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-781421f5be8so17087277b3.1
-        for <linux-pm@vger.kernel.org>; Tue, 14 Oct 2025 03:29:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1760437766; x=1761042566; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VNwslOTb5JOWqs8U+YdiNL7KIGdnAR5sXRre+K3C3ks=;
-        b=DdfYgz7Y5rKyJFlUITSxKyldlwkvFkFQZTgk6UA/p2LEY5CQpKFBwncD4udabSboBD
-         rrm7E9bZUvkucLxDDq/dee2j3ql/kyuWvNF76DVstATfP4FCeHsXikyQTr70j8gEegzH
-         6KBn9Q62DDmtvc6VOh/nVPMqXKRqIMZliBdzMUV3/nvoWOleqspYJuCmx7ThPZhyNaPu
-         PpNDgzBbY0qGjQohu1bTNSwB90F1Bg/jp0WGIuOPXch/joPJYuGRP/IgXNu6GZoB3NgZ
-         IFXuHOl2RqiBiFiPM7Wc7tPFXEMkBmvdiCn+FmB8KXnMe5/9jHXnh19NqyYjGuwKuthi
-         EhLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760437766; x=1761042566;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VNwslOTb5JOWqs8U+YdiNL7KIGdnAR5sXRre+K3C3ks=;
-        b=NTYCNhyawLNMq8eNzH3fBLXa8Ft8zQOnjfs5AQDWHYZAW6Lv1yw+d2o+wXeugvrio5
-         +ZIrvORkA9yojruyh6PlKKx/Ml6TjJZXr9bhxvmYp/9zbDpYJdt2km4wwdjmeN1H2OCQ
-         G00QWnMBUvyDaq/1UB2DJKohygzv/cXxUIS+NSgKr3k4aMt21j8Xt1gyLteQBH1JYMSs
-         oQppPpVIQ/fZcnOFr+FDLTjHlp80/9EiFTgXbIM+HsVOHFbYzmhe9uTnNdlT0NqRUXda
-         yQ+OInENOybgOzMErkGzooIxae2hhdV2eDfMlYLLnGLgxm9JlzhiOdn0FsiWSeizWUp6
-         ywqw==
-X-Forwarded-Encrypted: i=1; AJvYcCVUK27Ob1VsoTZ/iJDZvb7rVb37hn30bzTsJOOFuEe/ntPEOJkQZNIgUXtK/FllzyG9R88Wnp51Hw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzu6IrWxU/TS3Em7TOltj1xzvem5CTRKck4PF+d3fJ6hygcz6XA
-	tCLUtXDquY0YJ7Nf4ItkMQdiGVfJ8uwllqAcxunwKEfgAaHIxckK+x/927PcowSA8aWMdHPyr78
-	9xrt1BkmLj0fR9Xc5VTH8hoBi+kWB6DFn1w3zvB9VTw==
-X-Gm-Gg: ASbGncstOD2Q5xLO2ybg2rtvn25aMoozOw+lpvfvRWPUyyUABFXmTSTezF255g3HOEl
-	1oNMlKkBzuSx+Etb0WOkTSWo0Hp/z0BTpIeAWi+Mzp2VxXzfPxzrERsxUPAmJDrvothH/st7XqG
-	N+YM1GuuBSfb1yGkO/SgDo7NUTIoLYLh/TqxNfgpWUpshNJn2KjByOWuaA6EsjBIeuM1IEp3Z/T
-	VslGsIGngHN5uc27U71oAVCvRLcRC8XwFwphbvv
-X-Google-Smtp-Source: AGHT+IFDFh6iWuOmPmvWilDaFBE5YfW3xBkJ2+8+m1/8Q1QTZSI3MhsChmCnpdF1r4INYGcDiNPz/lr8Vbf/DOouGeY=
-X-Received: by 2002:a53:ce8c:0:b0:636:19c8:278e with SMTP id
- 956f58d0204a3-63ccb84414bmr14226319d50.14.1760437765773; Tue, 14 Oct 2025
- 03:29:25 -0700 (PDT)
+	s=arc-20240116; t=1760438940; c=relaxed/simple;
+	bh=jsZ35PKJoIyRJL+lhaOaWpvfX5vguopAXv8JOUir99c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZjZG8ACHyFKOMK9mViuzKn7tE2oKQmPQv17QFRw20zEGx8jXCXiXYafyhj14yCavhnehYkE+Q5pwmoDwLIIwjq2V1tj5qDB9X4oN13ioqEvsSVbmXKyEdYrsI/Heapx1BRldMSZnPUbF+kSMJf9+TRmzYUZ1ndDQc+aledymCqA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=lCLA3pdV; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=4TK3DsBWtfaz0TuDxRr37u83eeyXIsUWSIrJ5//loOc=; b=lCLA3pdVWW5yhqAcccqogx0EQm
+	kcFkufSMqfEj7xlRtiCtgniW17DK8YiIlxRl+Apd5hcLMLiRRxexqvWbTZZJdA+GmcaPHNMkhy8yp
+	TcEwNdjyNJWU2mk9r8rNPvGPmdV+b27FYAXJhquXvpZ78womnf12J3RutLlYDu8zT2nwvAsABEf/5
+	Z6l63Oql5hRbwZIrrU4kpIqdQ3PyyNEinCMk04PFBTN4olBD1JwI0IL1KfF3y9HRi/XmAqv78U10B
+	jf7PGzQkN0aQUaLbuYQ8xxfKL1o8LKq9JLvR7G55ZfPYdUoHX7CiB6+y+UF/7SlEcxQKKKA8bogyy
+	zXlTAQgA==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1v8ca8-000000056MU-06Jf;
+	Tue, 14 Oct 2025 10:48:40 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 53B15300212; Tue, 14 Oct 2025 12:48:39 +0200 (CEST)
+Date: Tue, 14 Oct 2025 12:48:39 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Lyude Paul <lyude@redhat.com>
+Cc: rust-for-linux@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+	Boqun Feng <boqun.feng@gmail.com>, linux-kernel@vger.kernel.org,
+	Daniel Almeida <daniel.almeida@collabora.com>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Ingo Molnar <mingo@kernel.org>, Ryo Takakura <ryotkkr98@gmail.com>,
+	K Prateek Nayak <kprateek.nayak@amd.com>,
+	"open list:CPU FREQUENCY SCALING FRAMEWORK" <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v13 01/17] preempt: Track NMI nesting to separate per-CPU
+ counter
+Message-ID: <20251014104839.GN4067720@noisy.programming.kicks-ass.net>
+References: <20251013155205.2004838-1-lyude@redhat.com>
+ <20251013155205.2004838-2-lyude@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1759824376.git.mazziesaccount@gmail.com>
- <19d537f9920cae5fa849b649e5bc42ba0b8e52f8.1759824376.git.mazziesaccount@gmail.com>
- <CACRpkdbHBQQnnTUrUzOrYxzQKCzDyy8aNK7w8OEFz-ic8ic1FQ@mail.gmail.com> <f2e6f0eb-b412-4cf6-8615-d669b8066393@gmail.com>
-In-Reply-To: <f2e6f0eb-b412-4cf6-8615-d669b8066393@gmail.com>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Tue, 14 Oct 2025 12:29:10 +0200
-X-Gm-Features: AS18NWDIhtpPAtiexOECYnDlN0ABGxByFw8_QgkDjMMcng7GLnSDiPGnwdY3LaY
-Message-ID: <CACRpkdb-Oz4RXWjLEH2ffKhe3jRxVTSN1u5g=tTTfQHpXW1=8w@mail.gmail.com>
-Subject: Re: [RFC PATCH 03/13] dt-bindings: power: supply: BD72720 managed battery
-To: Matti Vaittinen <mazziesaccount@gmail.com>
-Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>, Lee Jones <lee@kernel.org>, 
-	Pavel Machek <pavel@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Sebastian Reichel <sre@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
-	Bartosz Golaszewski <brgl@bgdev.pl>, Andreas Kemnade <andreas@kemnade.info>, linux-leds@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linux-gpio@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251013155205.2004838-2-lyude@redhat.com>
 
-On Mon, Oct 13, 2025 at 3:00=E2=80=AFPM Matti Vaittinen
-<mazziesaccount@gmail.com> wrote:
+On Mon, Oct 13, 2025 at 11:48:03AM -0400, Lyude Paul wrote:
 
-> >> +  rohm,volt-drop-very-low-temp-microvolt:
-> >> +    description: VDR table for very low temperature
-> >
-> > Doesn't the four last properties require to be defined as uint32-array?
->
-> I have been under impression that the "-microvolt" ending suffices, but
-> I may be wrong. At last the 'make dt_binding_check' didn't give me a shou=
-t.
+>  #define __nmi_enter()						\
+>  	do {							\
+>  		lockdep_off();					\
+>  		arch_nmi_enter();				\
+> -		BUG_ON(in_nmi() == NMI_MASK);			\
+> -		__preempt_count_add(NMI_OFFSET + HARDIRQ_OFFSET);	\
+> +		BUG_ON(__this_cpu_read(nmi_nesting) == UINT_MAX);	\
+> +		__this_cpu_inc(nmi_nesting);			\
 
-Ah you're right, I tend to forget about all the magic Rob has put into
-dtsschema.
+An NMI that nests from here..
 
-> >> +        rohm,voltage-vdr-thresh-microvolt =3D <4150000>;
-> >
-> > This property seems to be missing from the bindings?
->
-> I think it is the first binding in the file :)
+> +		__preempt_count_add(HARDIRQ_OFFSET);		\
+> +		if (__this_cpu_read(nmi_nesting) == 1)		\
 
-Ugh I missed it.
+.. until here, will see nmi_nesting > 1 and not set NMI_OFFSET.
 
-Yours,
-Linus Walleij
+> +			__preempt_count_add(NMI_OFFSET);	\
 
