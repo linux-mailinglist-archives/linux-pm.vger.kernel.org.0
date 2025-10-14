@@ -1,51 +1,52 @@
-Return-Path: <linux-pm+bounces-36015-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36016-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44F1CBD6D83
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Oct 2025 02:11:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 31950BD6D89
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Oct 2025 02:12:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C4C904F5D08
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Oct 2025 00:11:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1486E422B0C
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Oct 2025 00:11:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E4B11A26B;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B63F4F5E0;
 	Tue, 14 Oct 2025 00:11:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="NEV0n3fH"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="GYVdnbke"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A80E2AE99;
-	Tue, 14 Oct 2025 00:11:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 549012BAF4;
+	Tue, 14 Oct 2025 00:11:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760400682; cv=none; b=N7YQx4h71A+91lGRf7YRCB8zQT8WqsJ+h1p9fQ8sPfg8B1C6R7OvytL8zexPfCcw2Yik3jh4HpLxurP4ng109FhndxKdDQvblYldaeoM1f9RG8XX2wSSAYHGC4wkqa6DJOLBWRRvLj1+9+fLbHYb/5I/zwq290JnkzAfouJuSeI=
+	t=1760400682; cv=none; b=OVHccasKXxX+7P6wIDV9HR7TrXtnKnGiXiW71CDUs4Aqxcz3KOMJJjzgTl98gXVaTpHoL1KvQlDUhfSXA1lu4HljUhjvna7RntL0RoOUpL9mQ+Wo6lMZ73CjTwuShNohVja1ZPDUXHCWo+d7dvFVWKg5CS55LRShyFeNeYhgdwY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1760400682; c=relaxed/simple;
-	bh=j0M/tv+bAuDRZOr99LUYcC0nkC5aTvG7gXJ+Gxodeg0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mFF9xqA0m3eHCnaYstGR7PGx8bznT9rx6z2uNjcD4XVCiEoDHAdy7crN4ukyZmvzvXIgH1CSkz2CbTEfQu9zKDwUj3SwXdq6LdExcRGM9XoIwDBHCIQMUjLffaOjrVvbytAS8Vrgq+YGPiCq45wz0BRgugYy0i0gUa9tOcu64Sg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=NEV0n3fH; arc=none smtp.client-ip=213.97.179.56
+	bh=wlQBcPZyWi4XJKZtUGEByh7ydZiyuKMFouVRuIWp7Pc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=b9fz0y5t19yPMflzngAgVAouqVju1XOUviAEbkiNT0WP1y/gkRk4LMfhl0ZXVpq44yZDqHF2LPFTgXwbLGz41kUqY4/qPdNT/PfLV9K1whov+Xqzqw/ezB0I8qYB1gscHJcqlwkwZuEtSb7TxXfCGPiS6krZ919lneubLuJb/9U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=GYVdnbke; arc=none smtp.client-ip=213.97.179.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:
-	Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	s=20170329; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
+	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
 	List-Post:List-Owner:List-Archive;
-	bh=pu+LdPKfSu+MDyWgXTszalrm/CaNksue7OHp1eaX1zg=; b=NEV0n3fHMGXQAGqK4SAD+tHo9o
-	Nh/pFgmzxQ1021duGnfrItGbIksKBIM+BmtYWbg4r6bM3AyDfFcuQGnur2yBI1iWhMAaDnFM69ZbM
-	naYPvxUyExz9XQ/9n1TiIh336dcFICfJHQLhO3Nc3o2bYjOlIPjPIIE1DHri8E2YVjj+KZn/jcJ3C
-	re7aJmho6TMpZg45XZpXa8/ZbAsvCg47IxrZjRNEV3nqusOuX78y9uM/etO3dKOBBULUml6oTCGK4
-	SMaJJphxxOJ7c8BC086jQ4p3mu+KHebnJIeUNfFtUzSfvFzXemL3ITYgGyEeCTs+uqUDl1GdjApuM
-	sfQXMpkw==;
+	bh=wNeq7npuhqJJtVTAMtq3WXXIqglRKR2ENbm4FZ5tNQY=; b=GYVdnbkeEIxkc2QJBuvlxoZgdR
+	cmw0WSfI+49dAgoHHRrEchRyLzAIZ97V3cKblKQn2XcwpOU9mgafO5WmAaN5QS9O+Q1H0IqBTlbC0
+	UrLTkiX7WPkFuMFF29tT8vMdgZJXBGK10VoCs0HbnkHTtf+TGcppN+98fVHDSDXak5jCwpyJo303n
+	ozL2ccPk9zpol5o+Px2eKoCJeOmUqq97uksXjqDJJ2mo3sSOMf2hAfu8e3KdG+QWLpy3j+2nUBdvB
+	G4ZKZ9QtxlNjQn99EN7cI8vgS8R1ozvHhu1SlHN9QJfJ65haaa2Gs4MOLSKUwkpYu3ShmX8C5gVLc
+	gS+JizYQ==;
 Received: from [58.29.143.236] (helo=localhost)
 	by fanzine2.igalia.com with utf8esmtpsa 
 	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-	id 1v8Sd5-009A0R-He; Tue, 14 Oct 2025 02:11:04 +0200
+	id 1v8SdC-009A0V-G8; Tue, 14 Oct 2025 02:11:11 +0200
 From: Changwoo Min <changwoo@igalia.com>
 To: lukasz.luba@arm.com,
 	rafael@kernel.org,
@@ -58,10 +59,12 @@ Cc: christian.loehle@arm.com,
 	sched-ext@lists.linux.dev,
 	linux-kernel@vger.kernel.org,
 	Changwoo Min <changwoo@igalia.com>
-Subject: [PATCH v5 00/10] PM: EM: Add netlink support for the energy model
-Date: Tue, 14 Oct 2025 09:10:45 +0900
-Message-ID: <20251014001055.772422-1-changwoo@igalia.com>
+Subject: [PATCH v5 01/10] PM: EM: Assign a unique ID when creating a performance domain
+Date: Tue, 14 Oct 2025 09:10:46 +0900
+Message-ID: <20251014001055.772422-2-changwoo@igalia.com>
 X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20251014001055.772422-1-changwoo@igalia.com>
+References: <20251014001055.772422-1-changwoo@igalia.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -70,124 +73,129 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Addressed all the comments from Lukasz and rebased the code to the head
-of the linus tree.
+It is necessary to refer to a specific performance domain from a
+userspace. For example, the energy model of a particular performance
+domain is updated.
 
-There is a need to access the energy model from the userspace. One such
-example is the sched_ext schedulers [1]. The userspace part of the
-sched_ext schedules could feed the (post-processed) energy-model
-information to the BPF part of the scheduler.
+To this end, assign a unique ID to each performance domain to address it,
+and manage them in a global linked list to look up a specific one by
+matching ID. IDA is used for ID assignment, and the mutex is used to
+protect the global list from concurrent access.
 
-Currently, debugfs is the only way to read the energy model from userspace;
-however, it lacks proper notification mechanisms when a performance domain
-and its associated energy model change.
+Note that the mutex (em_pd_list_mutex) is not supposed to hold while
+holding em_pd_mutex to avoid ABBA deadlock.
 
-This patch set introduces a generic netlink for the energy model, as
-discussed in [2]. It allows a userspace program to read the performance
-domain and its energy model. It notifies the userspace program when a
-performance domain is created or deleted or its energy model is updated
-through a multicast interface.
+Signed-off-by: Changwoo Min <changwoo@igalia.com>
+---
+ include/linux/energy_model.h |  4 ++++
+ kernel/power/energy_model.c  | 30 +++++++++++++++++++++++++++++-
+ 2 files changed, 33 insertions(+), 1 deletion(-)
 
-Specifically, it supports two commands:
-  - EM_CMD_GET_PDS: Get the list of information for all performance
-    domains.
-  - EM_CMD_GET_PD_TABLE: Get the energy model table of a performance
-    domain.
-
-Also, it supports three notification events:
-  - EM_CMD_PD_CREATED: When a performance domain is created.
-  - EM_CMD_PD_DELETED: When a performance domain is deleted.
-  - EM_CMD_PD_UPDATED: When the energy model table of a performance domain
-    is updated.
-
-This can be tested using the tool, tools/net/ynl/pyynl/cli.py, for example,
-with the following commands:
-
-  $> tools/net/ynl/pyynl/cli.py \
-     --spec Documentation/netlink/specs/em.yaml \
-     --do get-pds
-  $> tools/net/ynl/pyynl/cli.py \
-     --spec Documentation/netlink/specs/em.yaml \
-     --do get-pd-table --json '{"pd-id": 0}'
-  $> tools/net/ynl/pyynl/cli.py \
-     --spec Documentation/netlink/specs/em.yaml \
-     --subscribe event  --sleep 10
-
-[1] https://lwn.net/Articles/922405/
-[2] https://lore.kernel.org/lkml/a82423bc-8c38-4d57-93da-c4f20011cc92@arm.com/
-[3] https://lore.kernel.org/lkml/202506140306.tuIoz8rN-lkp@intel.com/#t
-
-ChangeLog v4 -> v5:
-  - Rebase the code to the head of the linus tree.
-  - Remove the redundant em_check_capacity_update() call from
-    em_dev_register_pd_no_update().
-  - Move patch 3 ("PM: EM: Add an iterator and accessor for the
-    performance domain") after patch 5 ("PM: EM: Add a skeleton code for
-    netlink notification").
-  - Move the declaration of for_each_em_perf_domain() and
-    em_perf_domain_get_by_id() from energy_model.h to em_netlink.h.
-  - Fix a typo in patch 7 ("PM: EM: Implement
-    em_nl_get_pd_table_doit()") and change the variable declaration
-    order in em_nl_get_pd_table_doit() following the reverse Christmas
-    tree order.
-  - Remove the empty skeleton code of em_notify_pd_created/updated() from
-    patch 8 ("PM: EM: Implement em_notify_pd_deleted()") and introduce
-    them later where they are actually implemented.
-  - Change the return type of em_notify_pd_created/updated/deleted()
-    from int to void, since we don't check it anyway.
-
-ChangeLog v3 -> v4:
-  - Move patches [3-5] to the first.
-  - Remove the ending period (".") from all of the patch subjects.
-  - Rebase the code to v6.17-rc4.
-
-ChangeLog v2 -> v3:
-  - Properly initialize a return variable in
-    em_notify_pd_created/updated() at an error path (09/10), reported by
-    the kernel test robot [3].
-  - Remove redundant initialization of a return variable in
-    em_notify_pd_deleted() at an error path (08/10).
-
-ChangeLog v1 -> v2:
-  - Use YNL to generate boilerplate code. Overhaul the naming conventions
-    (command, event, notification, attribute) to follow the typical
-    conventions of other YNL-based netlink implementations.
-  - Calculate the exact message size instead of using NLMSG_GOODSIZE
-    when allocating a message (genlmsg_new). This avoids the reallocation
-    of a message.
-  - Remove an unnecessary function, em_netlink_exit(), and initialize the
-    netlink (em_netlink_init) at em_netlink.c without touching energy_model.c.
-
-Changwoo Min (10):
-  PM: EM: Assign a unique ID when creating a performance domain
-  PM: EM: Expose the ID of a performance domain via debugfs
-  PM: EM: Add em.yaml and autogen files
-  PM: EM: Add a skeleton code for netlink notification
-  PM: EM: Add an iterator and accessor for the performance domain
-  PM: EM: Implement em_nl_get_pds_doit()
-  PM: EM: Implement em_nl_get_pd_table_doit()
-  PM: EM: Implement em_notify_pd_deleted()
-  PM: EM: Implement em_notify_pd_created/updated()
-  PM: EM: Notify an event when the performance domain changes
-
- Documentation/netlink/specs/em.yaml | 113 ++++++++++
- MAINTAINERS                         |   3 +
- include/linux/energy_model.h        |   4 +
- include/uapi/linux/energy_model.h   |  62 ++++++
- kernel/power/Makefile               |   5 +-
- kernel/power/em_netlink.c           | 311 ++++++++++++++++++++++++++++
- kernel/power/em_netlink.h           |  39 ++++
- kernel/power/em_netlink_autogen.c   |  48 +++++
- kernel/power/em_netlink_autogen.h   |  23 ++
- kernel/power/energy_model.c         |  83 +++++++-
- 10 files changed, 689 insertions(+), 2 deletions(-)
- create mode 100644 Documentation/netlink/specs/em.yaml
- create mode 100644 include/uapi/linux/energy_model.h
- create mode 100644 kernel/power/em_netlink.c
- create mode 100644 kernel/power/em_netlink.h
- create mode 100644 kernel/power/em_netlink_autogen.c
- create mode 100644 kernel/power/em_netlink_autogen.h
-
+diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
+index 61d50571ad88..43aa6153dc57 100644
+--- a/include/linux/energy_model.h
++++ b/include/linux/energy_model.h
+@@ -54,6 +54,8 @@ struct em_perf_table {
+ /**
+  * struct em_perf_domain - Performance domain
+  * @em_table:		Pointer to the runtime modifiable em_perf_table
++ * @node:		node in	em_pd_list (in energy_model.c)
++ * @id:			A unique ID number for each performance domain
+  * @nr_perf_states:	Number of performance states
+  * @min_perf_state:	Minimum allowed Performance State index
+  * @max_perf_state:	Maximum allowed Performance State index
+@@ -71,6 +73,8 @@ struct em_perf_table {
+  */
+ struct em_perf_domain {
+ 	struct em_perf_table __rcu *em_table;
++	struct list_head node;
++	int id;
+ 	int nr_perf_states;
+ 	int min_perf_state;
+ 	int max_perf_state;
+diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
+index 5f17d2e8e954..2047b546ad11 100644
+--- a/kernel/power/energy_model.c
++++ b/kernel/power/energy_model.c
+@@ -23,6 +23,16 @@
+  */
+ static DEFINE_MUTEX(em_pd_mutex);
+ 
++/*
++ * Manage performance domains with IDs. One can iterate the performance domains
++ * through the list and pick one with their associated ID. The mutex serializes
++ * the list access. When holding em_pd_list_mutex, em_pd_mutex should not be
++ * taken to avoid potential deadlock.
++ */
++static DEFINE_IDA(em_pd_ida);
++static LIST_HEAD(em_pd_list);
++static DEFINE_MUTEX(em_pd_list_mutex);
++
+ static void em_cpufreq_update_efficiencies(struct device *dev,
+ 					   struct em_perf_state *table);
+ static void em_check_capacity_update(void);
+@@ -396,7 +406,7 @@ static int em_create_pd(struct device *dev, int nr_states,
+ 	struct em_perf_table *em_table;
+ 	struct em_perf_domain *pd;
+ 	struct device *cpu_dev;
+-	int cpu, ret, num_cpus;
++	int cpu, ret, num_cpus, id;
+ 
+ 	if (_is_cpu_device(dev)) {
+ 		num_cpus = cpumask_weight(cpus);
+@@ -420,6 +430,13 @@ static int em_create_pd(struct device *dev, int nr_states,
+ 
+ 	pd->nr_perf_states = nr_states;
+ 
++	INIT_LIST_HEAD(&pd->node);
++
++	id = ida_alloc(&em_pd_ida, GFP_KERNEL);
++	if (id < 0)
++		return -ENOMEM;
++	pd->id = id;
++
+ 	em_table = em_table_alloc(pd);
+ 	if (!em_table)
+ 		goto free_pd;
+@@ -444,6 +461,7 @@ static int em_create_pd(struct device *dev, int nr_states,
+ 	kfree(em_table);
+ free_pd:
+ 	kfree(pd);
++	ida_free(&em_pd_ida, id);
+ 	return -EINVAL;
+ }
+ 
+@@ -660,6 +678,10 @@ int em_dev_register_pd_no_update(struct device *dev, unsigned int nr_states,
+ unlock:
+ 	mutex_unlock(&em_pd_mutex);
+ 
++	mutex_lock(&em_pd_list_mutex);
++	list_add_tail(&dev->em_pd->node, &em_pd_list);
++	mutex_unlock(&em_pd_list_mutex);
++
+ 	return ret;
+ }
+ EXPORT_SYMBOL_GPL(em_dev_register_pd_no_update);
+@@ -678,6 +700,10 @@ void em_dev_unregister_perf_domain(struct device *dev)
+ 	if (_is_cpu_device(dev))
+ 		return;
+ 
++	mutex_lock(&em_pd_list_mutex);
++	list_del_init(&dev->em_pd->node);
++	mutex_unlock(&em_pd_list_mutex);
++
+ 	/*
+ 	 * The mutex separates all register/unregister requests and protects
+ 	 * from potential clean-up/setup issues in the debugfs directories.
+@@ -689,6 +715,8 @@ void em_dev_unregister_perf_domain(struct device *dev)
+ 	em_table_free(rcu_dereference_protected(dev->em_pd->em_table,
+ 						lockdep_is_held(&em_pd_mutex)));
+ 
++	ida_free(&em_pd_ida, dev->em_pd->id);
++
+ 	kfree(dev->em_pd);
+ 	dev->em_pd = NULL;
+ 	mutex_unlock(&em_pd_mutex);
 -- 
 2.51.0
 
