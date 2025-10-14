@@ -1,88 +1,106 @@
-Return-Path: <linux-pm+bounces-36040-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36041-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DCF02BD7FE4
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Oct 2025 09:47:32 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C5429BD8035
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Oct 2025 09:53:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 534CE18A577E
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Oct 2025 07:47:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5D77B3E7C89
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Oct 2025 07:53:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCBFA301712;
-	Tue, 14 Oct 2025 07:47:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5650A30E823;
+	Tue, 14 Oct 2025 07:52:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="NjDlrzks"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="bM2vIbQ/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 998D134BA39;
-	Tue, 14 Oct 2025 07:47:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FB8D305971
+	for <linux-pm@vger.kernel.org>; Tue, 14 Oct 2025 07:52:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760428047; cv=none; b=Q+lsfT67YV7Qu1MunZtGHnbPbfxOhB6vSgt4Mpt/ZYDw38O8vlTgxH4TFn5kqzntMbZJv8mvhEB54v4nHrZXzMEmQB2Qikqne+op8ZseOYs4M9BBYimV9vyhszU1gqXdsSqoAEnnojhGUHhEfsw6Mdis9vMAlMQoNRVsI/O0RpQ=
+	t=1760428379; cv=none; b=a+4TKMZJ3NDagb7keKddpphhKAYScyy9SpiVQVIa7YAmhW1N/N+eSvvBGjt+XhjhBbTM9l3WzjO/M1uas+Y0HnAnJXxvhhIlnPotFW85anv6egBjU2fSBfOyaSTrVx1R6ewZ16dO/AxuFvMqIf6Z2emCMbWh3xsyXmZArTTtvlI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760428047; c=relaxed/simple;
-	bh=g7JNuJj+OqUGfhgCtCwRpgpvtAkXAEyTRMNNWOnq9pk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ouvdOWOkrCjd/J2EC1fcXaqxh1Nfhur0AeOj1+qLdIvtKOZLqI3wiFNsjMg9wsJcjQ0/8URcIvG7NnYQTzX/Ty7tRJ3onyEUT/ux1GpnTc8ifRMPHWFJzsSrF33IZIstVwpFH5005lbpswbAGY0ggu9tSM2YFLDkujX+ETqLWCE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=NjDlrzks; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2B66C4CEE7;
-	Tue, 14 Oct 2025 07:47:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1760428047;
-	bh=g7JNuJj+OqUGfhgCtCwRpgpvtAkXAEyTRMNNWOnq9pk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NjDlrzks3O/M1dbBO/TF/OAv3mURyrpu7ljAxhZ+d/BmpcMeIgk7f9TYHIGzqStgs
-	 AuJnsESSt3+RewLb2tzim+qUZWDmk5yCNJIaZYUg7WlBogyoaRVPQ9JPqVIr6K1VSq
-	 KAUVAxi4/fkOGuhlL0DSp1HKXleqtJ3ts9VHbjBE=
-Date: Tue, 14 Oct 2025 09:47:24 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-	Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
-	Christian Loehle <christian.loehle@arm.com>,
-	Sasha Levin <sashal@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Tomasz Figa <tfiga@chromium.org>, stable@vger.kernel.org
-Subject: Re: stable: commit "cpuidle: menu: Avoid discarding useful
- information" causes regressions
-Message-ID: <2025101451-unlinked-strongly-2fb3@gregkh>
-References: <36iykr223vmcfsoysexug6s274nq2oimcu55ybn6ww4il3g3cv@cohflgdbpnq7>
+	s=arc-20240116; t=1760428379; c=relaxed/simple;
+	bh=vwrJbLqYUIs2hdIZr04E/5ekc/E1RfYrlr8r6ix4a88=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ZNBye+GyeHDrJtc2lYMRww8dk386tgHd2WNjXa2ZvkNq4z/SCDGseNOc0YnvFRCgsN/hxjiBfmihRxxaTsfgXtU4D742MNRPysOmTKmFYeJHS/VaK6JMZ+lNcAjOYUdBjSPHIHUN+KyM0ekcNzqVf4tDSnUwsbcJ3/7DVFaq09M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=bM2vIbQ/; arc=none smtp.client-ip=209.85.208.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-36a6a39752bso47704241fa.0
+        for <linux-pm@vger.kernel.org>; Tue, 14 Oct 2025 00:52:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1760428375; x=1761033175; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vwrJbLqYUIs2hdIZr04E/5ekc/E1RfYrlr8r6ix4a88=;
+        b=bM2vIbQ/T7wKhEPoz2u2iP2U8eDm6ZzLXRuCTG5L+Nkr51c1LuJO0bnYR5o/gOJvLJ
+         PqMc40rxLILHumK5eOrp7azICvxkO3KgyPSvqb9L/GkSFnRDu2veAiFq3pAIFyXBQr0b
+         GioXqiHn/vNKdtDIdIOkaVQahGRHf5Kt/XRWYUqbfIG6dWC+YTVexptKCupumVkpbLzG
+         sp759a+6uTPxPalIb2sEs/LhyfWSGQNUHtoe46r+K2PqXOKLTSIO/y3Ep88ZeHbGZxgu
+         5yeNFepW76upTfrjLPqVsrwBditNkbF4shMRrte9f3NvRm540BAH1Yy+1iDXI+G4HR43
+         SGwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760428375; x=1761033175;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vwrJbLqYUIs2hdIZr04E/5ekc/E1RfYrlr8r6ix4a88=;
+        b=mZ2DtSB7yVdt5u/c/Kvza4zPgI6Z2shW7moug3K0h5z51i5vOp89TVF1m7I0OrYHjl
+         U+fMUU6JMa59qxjICGgpK4v0U30EyaFrtng1r/Mliz5Zu1gWBCpwKlqh6Fm0gf5JtMuW
+         osGHXj71QH8LCriu+vFRfLnAtLRdXwIJ7Ag2Ig5He8FAkM02M0HUnf6kITyIsoPftmQq
+         0R9KWOcktBG2a8M6eWRgF4vamJD4LYn3KpMEXfFMd2lT4XmGZ+NK8sUYL7Uas9vGFGN7
+         3v/R7eEWWwotaoI/NsVP+rGtfGBx/EJ6jlUIFe5nlTcnASiYyY8SPjHS2JU1HOIxEDzI
+         V83w==
+X-Forwarded-Encrypted: i=1; AJvYcCXq7G0hn9jFudEjxUasnb5RCVR1mIA8t24OHC6uABIHJ9ELLYbJPtLhJAY0b66B4nEdMCOot8q5dw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyiA2uPaE+1sKbxmFh5t3bwx8hkfYobk0V2moswAAx8KKxYRIyv
+	Rlfr+ldWK082Q1kg9lqIfrWn69/01ZgZyhGI8ebWNrRRf1XvN/3BJ0kIkoEADmfvJaLcxd8byO+
+	mIjp1FyAu5gdGmt+Weq280070ltdkQ/2VXgEGW/zIqA==
+X-Gm-Gg: ASbGnctlWtqRfB3LrC6VPGNHDNaKLxPaEsOn8dHyPzVHmavHZ9N8ZBa1vQNvXKsWJIt
+	zwf5z6FYROteLodva2ANxXVKBQnWwuoGsGhyewLVfEnnrLmt6UlXhYdQaHOaapiPFx9iyzvtY7V
+	wfTNCCnyysVau3dzKllQ9nXMZiOTEtcCo5oHqX+4I0YITHwtsva2hwBUDrbtOec0nQozhFLL2rc
+	EVp8oD8or2ue4x9dJlINVQmictJwFU3jj7WjZYow028Kyd1uWDEytZzLgI=
+X-Google-Smtp-Source: AGHT+IE6gg+MLBxMH7PzBTZswQ1htTybiRf8di7CCXjc7HVRjNQ5sXwPlBAm2r4gvNL/pfqQj+6D1NfuyxLQ/PTPyB4=
+X-Received: by 2002:a2e:9a12:0:b0:336:7c7c:5ba5 with SMTP id
+ 38308e7fff4ca-37609e10855mr73524151fa.23.1760428375403; Tue, 14 Oct 2025
+ 00:52:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <36iykr223vmcfsoysexug6s274nq2oimcu55ybn6ww4il3g3cv@cohflgdbpnq7>
+References: <20250919153008.324338-1-marco.crivellari@suse.com>
+ <20250919153008.324338-2-marco.crivellari@suse.com> <CAJZ5v0hvTogN-egwXWRp3F1iJ0HS_eSJ4hEavjrMuKF5RVxuHQ@mail.gmail.com>
+In-Reply-To: <CAJZ5v0hvTogN-egwXWRp3F1iJ0HS_eSJ4hEavjrMuKF5RVxuHQ@mail.gmail.com>
+From: Marco Crivellari <marco.crivellari@suse.com>
+Date: Tue, 14 Oct 2025 09:52:44 +0200
+X-Gm-Features: AS18NWBEnf1NwISRN12NIVApf9Z9zdxOb-FVRSihzo52lcsL7sWcjBRM1cAsi1s
+Message-ID: <CAAofZF45x0y1a8bEbv9BrPgVp8EGbfPYTjvL_sv=xnf-r80u8g@mail.gmail.com>
+Subject: Re: [PATCH v2 1/1] PM: WQ_UNBOUND added to pm_wq workqueue
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	Tejun Heo <tj@kernel.org>, Lai Jiangshan <jiangshanlai@gmail.com>, 
+	Frederic Weisbecker <frederic@kernel.org>, Sebastian Andrzej Siewior <bigeasy@linutronix.de>, 
+	Michal Hocko <mhocko@suse.com>, Pavel Machek <pavel@kernel.org>, Len Brown <len.brown@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Oct 14, 2025 at 04:43:43PM +0900, Sergey Senozhatsky wrote:
-> Hello,
-> 
-> We are observing performance regressions (cpu usage, power
-> consumption, dropped frames in video playback test, etc.)
-> after updating to recent stable kernels.  We tracked it down
-> to commit 3cd2aa93674e in linux-6.1.y and commit 3cd2aa93674
-> in linux-6.6.y ("cpuidle: menu: Avoid discarding useful information",
-> upstream commit 85975daeaa4).
-> 
-> Upstream fixup fa3fa55de0d ("cpuidle: governors: menu: Avoid using
-> invalid recent intervals data") doesn't address the problems we are
-> observing.  Revert seems to be bringing performance metrics back to
-> pre-regression levels.
-> 
+On Mon, Oct 13, 2025 at 8:51=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.or=
+g> wrote:
+>[...]
+> Applied as 6.19 material, thanks!
 
-For some reason that commit was not added to the 6.1 releases, sorry
-about that.  Can you submit a working/tested backport so we can queue it
-up after the next round of releases in a few days?
+Many thanks!
 
-thanks,
+--=20
 
-greg k-h
+Marco Crivellari
+
+L3 Support Engineer, Technology & Product
 
