@@ -1,247 +1,318 @@
-Return-Path: <linux-pm+bounces-36092-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36093-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id E107BBDADFC
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Oct 2025 19:59:18 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D6B1BDAEBE
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Oct 2025 20:20:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 682B0356818
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Oct 2025 17:59:18 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id D994E4E1E92
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Oct 2025 18:20:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FB323074BD;
-	Tue, 14 Oct 2025 17:59:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFC4A272805;
+	Tue, 14 Oct 2025 18:20:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="VpC0T/it"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="eYObutv4"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from PH7PR06CU001.outbound.protection.outlook.com (mail-westus3azon11010000.outbound.protection.outlook.com [52.101.201.0])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFEEA305064;
-	Tue, 14 Oct 2025 17:59:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.201.0
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760464754; cv=fail; b=uryFs2hjPKotdsawqP9Qqz6i27jkdHujopT3BkSputynCdgJnvkAYHI6abiF2e0LawCDc55n38V66Vd50zlYEYcCmUWOsuFhSn9ju4No0uY4sdGuuIBCE1Y5fLsSgsOK0KVBK8txCTOmzMA+5/kqD1ZNhox+k4dNZ4zEVzciZeA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760464754; c=relaxed/simple;
-	bh=qKUO0nVpsXqWBaU5qjlcReec51r1fjJaKTlSkqlgw7U=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=aqJXlM2b8Pmioq+B+kgJVo3mnNfLovaqgZK2MujTEPZPU7C9gKY+S7DuD0Js/NLWp4fstlquqNqkauvOJYiP5TYqOcNGvpEKrCfuERkL199Jv8IXXK0nO3aXtBqFiDa0vPDsoUGkjNAk/9fBCmpcRC5tYl+ZXUphTSelFn+SRNY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=VpC0T/it; arc=fail smtp.client-ip=52.101.201.0
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=h1n58FmpOaZaowVhV26O9mx3APM/RDWGnxrzJmrW8cY1qrmlx84ZyVIrciHcBY2F7lrLs3hFxoRlfMCZn1vFd5nmYLpQwLZf269gpSk4ce5SAvZdnBSTmTXogCc5/MnAt8ZiYHturf7Xc20XxxI5yDkX4arWBtkRENKcCFxr4bfl8k9Y9hNx0jLp5FClxiLGm54x5jrTfZU1yhb8vDs4B9CNH1DKcEyBEXKw1FwfGUNgcUr0gBMNUDpzDAK67W0lcNTylAx0CmwhUk3VVko+POXNeHNAT0g8/iJm+fZDhVlZj1LYJ3yKIV/ffLVNbxwIaWVokU5fnU6cAR0YJ17Pzw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ehU4tk+4OeClyhvpY7SyeOrjEeyYRUvRYOWaWAn8gQ8=;
- b=Da8maxAEaDfJscCIEJZKYaH9xywVHYaGPjCy7ofRJUz8XtqRZNPCuCCzrZCWRCe9/dxtFDt0wyiRJIlEwl6qIBSWnv2xEraB8wxxegeoEBuUymGgRop+RJ2LrigUYcdcHPX+V+T5pCR1i4J2UxhS1K7QMfsGTtj3NiY21Q+kDfE0aS/kg7cYWB2CL7OEbdvlvl5hDp+AHQwYV6vmOuSpuyzpcq1XQgzq0ZPuNIjHiNnbaR9YZnPrX3NiPohik8O4ma/F7DsYtyBMfx5JowmKcrJ0zjUtOtFeg/V/yS8C/URrRTfUB2+9LxfDvN09cUtoVkJcROomnDPejlTNwZV+9A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ehU4tk+4OeClyhvpY7SyeOrjEeyYRUvRYOWaWAn8gQ8=;
- b=VpC0T/ityUVLj3cEJ6t9mw0zgcm0AQCMr3TZaf1y/IO1SIlTQQQhLMfhfxEWvEgiBlvpP8NyIiWc/i4bi+1noBl+N57bHIgWXoXbrFtLjluXQmWaf55XzMICzDdUgWj1um+wrlMVXwGzE8nJ6oNqafj8fG38diELTGk4gb09LgNuYFOEYYzhx/0LHdP9sqx8jaEIgljUHE7b4BuKGsu55O0947ypjb27LFj8LXKDUs1P0he8lHwYp2ME7mKtOhRuDn5JBbVW/sehzF65YUTgQpooJAi++sDUVhHRv607YqImavDqviM97s0xWhS5dV42Jt8nNFcdiAguWagaRlzEXg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from SN7PR12MB8059.namprd12.prod.outlook.com (2603:10b6:806:32b::7)
- by BL3PR12MB6426.namprd12.prod.outlook.com (2603:10b6:208:3b5::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9203.12; Tue, 14 Oct
- 2025 17:59:05 +0000
-Received: from SN7PR12MB8059.namprd12.prod.outlook.com
- ([fe80::4ee2:654e:1fe8:4b91]) by SN7PR12MB8059.namprd12.prod.outlook.com
- ([fe80::4ee2:654e:1fe8:4b91%2]) with mapi id 15.20.9203.009; Tue, 14 Oct 2025
- 17:59:05 +0000
-Message-ID: <c58d01f7-2589-465b-b10e-ba39e01deee1@nvidia.com>
-Date: Tue, 14 Oct 2025 13:59:00 -0400
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v13 01/17] preempt: Track NMI nesting to separate per-CPU
- counter
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Lyude Paul <lyude@redhat.com>, rust-for-linux@vger.kernel.org,
- Thomas Gleixner <tglx@linutronix.de>, Boqun Feng <boqun.feng@gmail.com>,
- linux-kernel@vger.kernel.org, Daniel Almeida <daniel.almeida@collabora.com>,
- Danilo Krummrich <dakr@kernel.org>,
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- Vlastimil Babka <vbabka@suse.cz>, "Liam R. Howlett"
- <Liam.Howlett@oracle.com>, Uladzislau Rezki <urezki@gmail.com>,
- Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
- Gary Guo <gary@garyguo.net>, Bj??rn Roy Baron <bjorn3_gh@protonmail.com>,
- Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>,
- Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Viresh Kumar <viresh.kumar@linaro.org>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- Ingo Molnar <mingo@kernel.org>, Ryo Takakura <ryotkkr98@gmail.com>,
- K Prateek Nayak <kprateek.nayak@amd.com>,
- "open list:CPU FREQUENCY SCALING FRAMEWORK" <linux-pm@vger.kernel.org>
-References: <20251013155205.2004838-1-lyude@redhat.com>
- <20251013155205.2004838-2-lyude@redhat.com>
- <20251013200035.GD2734756@noisy.programming.kicks-ass.net>
- <d481f196-703e-4ed0-8db1-dbc3822c349e@nvidia.com>
- <20251014082506.GO3245006@noisy.programming.kicks-ass.net>
-Content-Language: en-US
-From: Joel Fernandes <joelagnelf@nvidia.com>
-In-Reply-To: <20251014082506.GO3245006@noisy.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR03CA0127.namprd03.prod.outlook.com
- (2603:10b6:a03:33c::12) To SN7PR12MB8059.namprd12.prod.outlook.com
- (2603:10b6:806:32b::7)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71C2F1C5D57;
+	Tue, 14 Oct 2025 18:20:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1760466019; cv=none; b=JpkOz/+hP2VVb1zfyIIou2u3OIbt8agqYtxsDd6xKQAEZKdKn8qAXEaIrVrgLBJQQvF2RxcOf/J4jeZP1d08EdN/5W8g9UXaohuxavuyKBOtO5LkuH9ar4NRgKCcwV+SWYFo3KAW0Xott17pgHn2osfWC7aXl2cJIkiYcPRNqEA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1760466019; c=relaxed/simple;
+	bh=KQhrN8qpZwVS8voF3pVL7Hbp4A63/QycxPeXWSoFAKc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=PDab/0pUWxhKQ6BUAWp6x8zU0pyyiWY1par4AL+2oBNuwGl+ifMhCjjXcPAP1XGAgVV/vgjfI5ske0ibgYmlTPtInZAge9W2tLKF401iM8lN1IY2hEeoIPCa+lob36L9k+cxRs+acA9JIG2sIjGmyGDix4bYLfcY/SHbScTJzHc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=eYObutv4; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+	:MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
+	Content-Description:In-Reply-To:References;
+	bh=Kh8OiPr1HuW8h+GZ2t/tyrDGhvve8fwKBgMUu00kx3A=; b=eYObutv4vtSAPg6Ez06II6ousJ
+	o1qElrv1UCdaIXY58JGDNTIZhSYOw5Op+0759D323OlJLTwPs59HASLxOInP+YmEEaAskktP+Wim/
+	yPKlC5L/7xbj5/s012I/8mACjhVMhe14f9RKza2a8aH7/hlwTjFGhb98HBTt0uVY5AheE+jDBDh5u
+	Q7V594rEiinT39PTfOWlrINrBVLLwo+wSSjw15aJowt/a16BZWDkTQ1S0TM3SrFUI5UrkcR8ZpJu1
+	F3Vlle+q9LO5XMXmIxiT+BYkbWCNX0KbFDwm6U2IjFSIjDSjJKZDZ/VNv8QBG0IWzb1M22Usmm1nX
+	SZjPtp7g==;
+Received: from [50.53.43.113] (helo=smtpauth.infradead.org)
+	by desiato.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1v8jd7-00000005MrT-1idE;
+	Tue, 14 Oct 2025 18:20:14 +0000
+From: Randy Dunlap <rdunlap@infradead.org>
+To: linux-kernel@vger.kernel.org
+Cc: Randy Dunlap <rdunlap@infradead.org>,
+	Dhruva Gole <d-gole@ti.com>,
+	Sebastian Reichel <sre@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Len Brown <lenb@kernel.org>,
+	Pavel Machek <pavel@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	linux-doc@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Subject: [PATCH v2] docs: power: clean up power_supply_class.rst
+Date: Tue, 14 Oct 2025 11:20:07 -0700
+Message-ID: <20251014182008.823980-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN7PR12MB8059:EE_|BL3PR12MB6426:EE_
-X-MS-Office365-Filtering-Correlation-Id: 51d034d2-fdd1-4159-8d6b-08de0b4b5d84
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014|7416014;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?eG54K3V3WEZwa01HQ0o4NjZEWnZvQ1Q4UHoyWEhGcHIxaTlUcGEyL2dtbmtK?=
- =?utf-8?B?K2hub3ZPaXF4c29pY3JLSXduY2VvVDMrNlM4bDRIRmREVDIybFBMN0lnUDRk?=
- =?utf-8?B?MVZuRkJjTHErdnRzK3g5Z05KemRBNkYrWDJKUjFHbmo0RXp6Z3A2WlI1YXJD?=
- =?utf-8?B?Tm9nL05wTHFRQ2lld3ZubDhadHJaVFZHOW50QWljd3J6RTVENHhsU25COXdW?=
- =?utf-8?B?WHcyNmI1UkZhWE56dmdGMmFic3piTm5ETXVLY3ByUWdEYVZnNXVPQ1VKL21q?=
- =?utf-8?B?eUNaT2tTUVFKSmJUMFN5VzNIL2ZhZXZaQTRrNzN4TW9yUEljUUF6MDlNL1JU?=
- =?utf-8?B?bU5xRVRoUk85TW1aN1U4VXd6R09ZeDRiSTB0eklKbmRISjhsQjRGWWcyeGxQ?=
- =?utf-8?B?cS9VUFF1a3p2emlNTEFKQVlrSVJvYlE3U1lJSkNDcCtaMUVzVlRnN1N3UHl5?=
- =?utf-8?B?QWJoNk9xUldLY0xZdWdsTnpHQmU5U3BGK3FYc0VPTElkaHFKQlRwMzI5WEh4?=
- =?utf-8?B?MlhMMlFzYzg2T1QzWVRkSHNOdXJLTER3K2xvT3ppRkJnTVpzKzJHVUxNeno0?=
- =?utf-8?B?cTFBeGtreVNSK0ZQdjNhVzdRQVdKNlVKOXNhUEx6UXE2RGcrclA1MU01Rkhy?=
- =?utf-8?B?VXptMW5rUmh3aE1MTTdzQjAzS0RLOEd0emZaeCtiQnFqK2NZWXBOOHB0QW9R?=
- =?utf-8?B?SGdCNmgzWFRpN08ra2UyUWlWUWdYQkpQRzZxdXFpY0diNmwxSzZIQnBPZVJq?=
- =?utf-8?B?ajAvVW8wemcyM2U2d3pFMm5BditJYVd0Ly9DTDM1ODZWeFBhTi9SeS9xU01X?=
- =?utf-8?B?bUQraThvNmFvMU5ZSThMNFlRMlFyWmZwNG9PRTZBRUdhbXgxTVk5SW14bUJH?=
- =?utf-8?B?UFc4TVlZKzJuZlc0Z25GdGRFTFBmVHY2Tnl0SURvZ2VJcllVb1JSdDZGVktS?=
- =?utf-8?B?YldrSld6Z3EraXIrTkRBMm5nOUZZTWI3enN4UVR4L3gzVWZQbGNNMkQvTk1Z?=
- =?utf-8?B?Z0ZpQkcxaFlselQ1d0hudEo3Y2hRZGgrM29WZWJwckUwNGFMcWxFNDlQOU5P?=
- =?utf-8?B?OG9VTjJXaU5XNERCYnZIQXVUTHFrQy9kMmhwZkU5Z3NOQXJJekFya01xV1hD?=
- =?utf-8?B?bjIrUUlDTjhpSmNkUHcvLzljSjZGYnZsdXc2ZVViakpuSWFRYWQrTE83T2Ru?=
- =?utf-8?B?TDkvSzFxRlY5V1Y3UDZ3cE5JNGZZOWNrUmU4NW5yaUhZQWhkNXp6b1pXWTdO?=
- =?utf-8?B?bmtaM1BMaCtER3BrQ2Q2TGdvVW1PNHBUSEQxVXptSlZPbGdjMEp3UmFFaUxJ?=
- =?utf-8?B?MGlFVnQyMVNUcmxhUmNXWXBvQ3BpQ2NPVERvejdpazNPajd2Nm9UVTZ1RjhD?=
- =?utf-8?B?MTdmQ0RidExDc1JKQ2tFVGl3Z0lXM0ZLa2dpU08xVmUwektWUmI4Z08xNXN3?=
- =?utf-8?B?dFZQVnNIQXpJUHZjY0lJOXhyeUdicXlxcHc0dVIzTElmTEdDcUIwOG84QTYz?=
- =?utf-8?B?ckRqVHllb2pMd0g4aEwvUU1VQisvWDlreFRMMjFrYzJTOGZLcnVKbTQwYVFI?=
- =?utf-8?B?T2xBcEMyOUVYaFM5cW16Nncxb3hCdFA1R1R6WHhUWUwzZERRWnlaaW56WVEr?=
- =?utf-8?B?SFNGZzNoekpQOHJwUGhjQ1JwNitiUm9HZFdPaUJWdVhYek5Ed1diZDFFTlN5?=
- =?utf-8?B?dThWWm1NT2hVcmVPQjVaUU00RUFuSzdyd3JsTDRjNVVGMUlxbXdkeUZWcFVu?=
- =?utf-8?B?a1UzK0daRmR4eWk0MkNDWGFtSy94UnRtNDBFRXk1TDFJUTVkNmFwTUlzbmJs?=
- =?utf-8?B?Q3RBNXltOW96WW5SOS9lZ3hwQW5hSURSUW1DSEpBM2RTSHlFTXBhbTNORGNI?=
- =?utf-8?B?dUpGeVlCL3c1bURtVDd3OEU2NitqYnpXZEQ1KzdBRVl0anRYaUNpZytkRTVj?=
- =?utf-8?Q?FhqqNNMRmfyf7BLl7aYBgkKzCtXDGDff?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN7PR12MB8059.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?WFZiUlk4UWRlT2R1dVhVMXQzZFBPYXFqdUpkak93SVVCM3BFbVhJbmpENEx6?=
- =?utf-8?B?Y0hHdWJUL2tnTmlrUldUWW9iRkQ2WisrK3RnVGhEZllvTWR0UGtOWHdMeGx5?=
- =?utf-8?B?QkNrZnU3c0F0aDYvTGZBK25GZzBBQnhpQXQxOCtkeWNkZVNiRWtwTXg5TFIv?=
- =?utf-8?B?Nld0aVNOYnVnOE1neWJaR0tXN3lZWUIya0NSRWltN3grUkVjam81UDN1M0w1?=
- =?utf-8?B?V282ZHAvMldFdmJoamJNdDR6RzJyQ0hLaXRZaUlHWHFVN3YyazlsV0lFRzhP?=
- =?utf-8?B?SGd3dUQxcFVCVDA1UCt6MC9QaXloUlhyL3h1RGQrZE1tQ0hjSDRXeU4wbUpv?=
- =?utf-8?B?bnEvUituLzhURUYzTEY5dnQzUmpCVldyWll1Tzh6VTRqNVlETjRxcHh5Ukx4?=
- =?utf-8?B?VXhEMURRZ2dXNG8rbHVKSlRGSVNnb3BQblRTVmdtRGdOaDRMZEF5cmRSWk0v?=
- =?utf-8?B?RnVuYVlVVVQ1ZnNteWhsYWIzWGhUVzFabzMySURTZUgyYU00d1BYZnB5WkJD?=
- =?utf-8?B?dzlVNE5zd2VVZW50UnVkU3oya2UwcEdrRkNQYzg2Z1p4d3phVGVlODZWbFVQ?=
- =?utf-8?B?eHN4SzBkWEZzYWdFaEJjQU1sRVdFdGhENTJJd2E3aXdOUmJISmJsdEpYQ2gx?=
- =?utf-8?B?ZFZoSktKQXFCaEZWZEllZGdmK2tGS0FFZVhVWG1HTmp4UmdndDhBYjM3VVc3?=
- =?utf-8?B?UzNFSnV5N241MXJJSXl0Snpqb0Z6dmRQbC9tbGhMa3hYVXF6a3J3U29xMS8r?=
- =?utf-8?B?TUxyVisxUkY0eGVobi9hNzRqVDRiTkRnMjVDUDM3OGFqMWlwK1pQMXRBWXU0?=
- =?utf-8?B?SjNRUkJaODBWZTRHV3ppa1pKTXFvRUQwcENWYisraFBCWmtONGRZRmlPOExi?=
- =?utf-8?B?MEJiTDJCb2l6MnFlQ3VTUkIrdlFnTy9BaXpEdFl2RFpERStlR0dWU1FEbE41?=
- =?utf-8?B?ZnlEZ1hsUURjR2MzQ2pxQUNONERzTy9USGlpMGV4L1Rna1h5OHRVYTJDemtw?=
- =?utf-8?B?NlExSUpoK0dhUjBIQnp3TjF1UVIweXp3U3M3RW9jM0VYRWhyY1FTQ0hKNDZI?=
- =?utf-8?B?QU45SjlYMWtsZVRqQ09KVDF0YmNwRE9ibnVmSFpqdVo0a0lPZ0hhSllHa0E4?=
- =?utf-8?B?a1VmYlRtZWJON2VBOGxCSnhHUzBGNXRtRElOTklJWFlQN2lCUGhiVnRvSlpL?=
- =?utf-8?B?K2tVU1JhVGdmUk1SUFRNMVhpOWp2L2tJT2xTMW9zY2VUOCtSVWkxZWxFK0xX?=
- =?utf-8?B?UjFSQlN3V0lEcnFRMmxKNnprQ0RIaFNzR1dtYk5jQ0FtYlZYajRVb3V5ZHpj?=
- =?utf-8?B?VzMyNnNaSnEzWnU3cWZwQk93eTZESWNhQi9MNHVtc3c3RlVsVit3UEFvSDVt?=
- =?utf-8?B?TUMwWEF3RXhRbTBGcXIzVWF4ZWZieHVZR3dnQkhFU1c5Z3ZjMWt2cGI0eE1F?=
- =?utf-8?B?NE5TaEtvVnJjcjAxUk91N3FJTFlYSUpYUGF1Y05NSi9BTVRYYWNRUjNZaUUz?=
- =?utf-8?B?Z01yZ1FPNlUvTzYyaTFFQXl5ZFczNnhsZW15U0ZSRUw1TDhoQTdKTTQyMUtU?=
- =?utf-8?B?dm1wYUlhaHltT21CUFo3ckFqRlgrVDhnU1BoMTI1bTgyVE9OaDRXOXUvc1Rx?=
- =?utf-8?B?anh1MFFEcG5QZHlSWmExZ0ltaVZjWGl2bjhtSTZSMTlIZjd3ZlRCbkVIN3h1?=
- =?utf-8?B?Ylg2U201M1JnQ2NvNTBCUExxS1Z4YTN2OHNnclg1NmxuQWxKWjB6enFROUVF?=
- =?utf-8?B?b3lCUm4yTHhpSlRLQXhoSFNKWVZYUFZiUUh4V2xJanN5R2pHR25zM1paWkhy?=
- =?utf-8?B?dUNsSk9oZlVqeFA0blh3dDJDeXBLSUNoSkM1cmhRYWVQcWRNTkpGenA3QWY5?=
- =?utf-8?B?aFNXa2hFek1rdVcxUDJHaThBMVlKWis1ZnQ4dmRBUC8vbFZCN3NldEZqK0xF?=
- =?utf-8?B?eFJNN2t3SUhpN2VaeEJNdDQ4NnRkU1ZkeWR2TFJsUkQ1N1ZtNUl5cEkrTlRa?=
- =?utf-8?B?NCtxbFA1clRqMVVicWlOK282STgrcmVTZnQ4dGRQbmQ1Wi9wVFJVdjA5NVM0?=
- =?utf-8?B?SjQrOGlrNmFBa2k0bVZwZWZrUm15YkNkcGM3UzMraTdYQTRTNWYwYzJubWln?=
- =?utf-8?Q?HoPxskgiS1OAjW/h98Dhphop4?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 51d034d2-fdd1-4159-8d6b-08de0b4b5d84
-X-MS-Exchange-CrossTenant-AuthSource: SN7PR12MB8059.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Oct 2025 17:59:05.4184
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7i6uX9fYkbwWjLm1MRdlUZ97e6Gy68ARyd//jK3hHh6ArvFVF0xhP8XruzUUEY5D1zpCrdRS98FEwK/qhYsd9g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR12MB6426
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
+Clean up grammar, punctuation, etc., in the power supply class
+documentation.
 
+Add article adjectives where needed.
+Hyphenate some adjectives.
+Fix punctuation.
+Fix some verb usage (singular/plural).
+Fix run-on sentences.
+Add "is" in a few places.
+Change "QA" to "Q&A".
 
-On 10/14/2025 4:25 AM, Peter Zijlstra wrote:
-> On Mon, Oct 13, 2025 at 05:27:32PM -0400, Joel Fernandes wrote:
->>
->>
->> On 10/13/2025 4:00 PM, Peter Zijlstra wrote:
->>> On Mon, Oct 13, 2025 at 11:48:03AM -0400, Lyude Paul wrote:
->>>> From: Joel Fernandes <joelagnelf@nvidia.com>
->>>>
->>>> Move NMI nesting tracking from the preempt_count bits to a separate per-CPU
->>>> counter (nmi_nesting). This is to free up the NMI bits in the preempt_count,
->>>> allowing those bits to be repurposed for other uses.  This also has the benefit
->>>> of tracking more than 16-levels deep if there is ever a need.
->>>>
->>>> Suggested-by: Boqun Feng <boqun.feng@gmail.com>
->>>> Signed-off-by: Joel Fernandes <joelaf@google.com>
->>>> Signed-off-by: Lyude Paul <lyude@redhat.com>
->>>> ---
->>>>  include/linux/hardirq.h   | 17 +++++++++++++----
->>>>  kernel/softirq.c          |  2 ++
->>>>  rust/kernel/alloc/kvec.rs |  5 +----
->>>>  rust/kernel/cpufreq.rs    |  3 +--
->>>>  4 files changed, 17 insertions(+), 10 deletions(-)
->>>>
->>>> diff --git a/include/linux/hardirq.h b/include/linux/hardirq.h
->>>> index d57cab4d4c06f..177eed1de35cc 100644
->>>> --- a/include/linux/hardirq.h
->>>> +++ b/include/linux/hardirq.h
->>>> @@ -10,6 +10,8 @@
->>>>  #include <linux/vtime.h>
->>>>  #include <asm/hardirq.h>
->>>>  
->>>> +DECLARE_PER_CPU(unsigned int, nmi_nesting);
->>>
->>> Urgh, and it isn't even in the same cacheline as the preempt_count :/
->>
->> Great point. I will move this to DECLARE_PER_CPU_CACHE_HOT()
->> so it's co-located with preempt_count and run some tests. Let me know if that
->> works for you, thanks!
-> 
-> Well, I hate how on entry we then end up incrementing both. How terrible
-> would it be to make __preempt_count u64 instead?
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reviewed-by: Dhruva Gole <d-gole@ti.com>
+---
+Cc: Sebastian Reichel <sre@kernel.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Len Brown <lenb@kernel.org>
+Cc: Pavel Machek <pavel@kernel.org>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: linux-doc@vger.kernel.org
+Cc: linux-pm@vger.kernel.org
+---
+v2: make clarifications as suggested by Dhruva Gole.
 
-Would that break 32-bit x86? I have to research this more. This was what I
-initially thought of doing but ISTR some challenges. I'd like to think that was
-my imagination, but I will revisit it and see what it takes.
+ Documentation/power/power_supply_class.rst |   84 +++++++++----------
+ 1 file changed, 42 insertions(+), 42 deletions(-)
 
-Thanks!
-
- - Joel
-
-
+--- linux-next-20251013.orig/Documentation/power/power_supply_class.rst
++++ linux-next-20251013/Documentation/power/power_supply_class.rst
+@@ -7,35 +7,35 @@ Synopsis
+ Power supply class used to represent battery, UPS, AC or DC power supply
+ properties to user-space.
+ 
+-It defines core set of attributes, which should be applicable to (almost)
++It defines a core set of attributes which should be applicable to (almost)
+ every power supply out there. Attributes are available via sysfs and uevent
+ interfaces.
+ 
+-Each attribute has well defined meaning, up to unit of measure used. While
++Each attribute has a well-defined meaning, up to the unit of measure used. While
+ the attributes provided are believed to be universally applicable to any
+ power supply, specific monitoring hardware may not be able to provide them
+ all, so any of them may be skipped.
+ 
+-Power supply class is extensible, and allows to define drivers own attributes.
+-The core attribute set is subject to the standard Linux evolution (i.e.
+-if it will be found that some attribute is applicable to many power supply
+-types or their drivers, it can be added to the core set).
++The power supply class is extensible and allows drivers to define their own
++attributes.  The core attribute set is subject to the standard Linux evolution
++(i.e., if some attribute is found to be applicable to many power
++supply types or their drivers, it can be added to the core set).
+ 
+-It also integrates with LED framework, for the purpose of providing
++It also integrates with the LED framework, for the purpose of providing
+ typically expected feedback of battery charging/fully charged status and
+ AC/USB power supply online status. (Note that specific details of the
+ indication (including whether to use it at all) are fully controllable by
+-user and/or specific machine defaults, per design principles of LED
+-framework).
++user and/or specific machine defaults, per design principles of the LED
++framework.)
+ 
+ 
+ Attributes/properties
+ ~~~~~~~~~~~~~~~~~~~~~
+-Power supply class has predefined set of attributes, this eliminates code
+-duplication across drivers. Power supply class insist on reusing its
++The power supply class has a predefined set of attributes. This eliminates code
++duplication across drivers. The power supply class insists on reusing its
+ predefined attributes *and* their units.
+ 
+-So, userspace gets predictable set of attributes and their units for any
++So, userspace gets a predictable set of attributes and their units for any
+ kind of power supply, and can process/present them to a user in consistent
+ manner. Results for different power supplies and machines are also directly
+ comparable.
+@@ -61,7 +61,7 @@ Attributes/properties detailed
+ |               **Charge/Energy/Capacity - how to not confuse**            |
+ +--------------------------------------------------------------------------+
+ | **Because both "charge" (µAh) and "energy" (µWh) represents "capacity"   |
+-| of battery, this class distinguish these terms. Don't mix them!**        |
++| of battery, this class distinguishes these terms. Don't mix them!**      |
+ |                                                                          |
+ | - `CHARGE_*`                                                             |
+ |	attributes represents capacity in µAh only.                        |
+@@ -81,7 +81,7 @@ _NOW
+ 
+ STATUS
+   this attribute represents operating status (charging, full,
+-  discharging (i.e. powering a load), etc.). This corresponds to
++  discharging (i.e., powering a load), etc.). This corresponds to
+   `BATTERY_STATUS_*` values, as defined in battery.h.
+ 
+ CHARGE_TYPE
+@@ -92,10 +92,10 @@ CHARGE_TYPE
+ 
+ AUTHENTIC
+   indicates the power supply (battery or charger) connected
+-  to the platform is authentic(1) or non authentic(0).
++  to the platform is authentic(1) or non-authentic(0).
+ 
+ HEALTH
+-  represents health of the battery, values corresponds to
++  represents health of the battery. Values corresponds to
+   POWER_SUPPLY_HEALTH_*, defined in battery.h.
+ 
+ VOLTAGE_OCV
+@@ -103,11 +103,11 @@ VOLTAGE_OCV
+ 
+ VOLTAGE_MAX_DESIGN, VOLTAGE_MIN_DESIGN
+   design values for maximal and minimal power supply voltages.
+-  Maximal/minimal means values of voltages when battery considered
++  Maximal/minimal means values of voltages when battery is considered
+   "full"/"empty" at normal conditions. Yes, there is no direct relation
+   between voltage and battery capacity, but some dumb
+   batteries use voltage for very approximated calculation of capacity.
+-  Battery driver also can use this attribute just to inform userspace
++  A battery driver also can use this attribute just to inform userspace
+   about maximal and minimal voltage thresholds of a given battery.
+ 
+ VOLTAGE_MAX, VOLTAGE_MIN
+@@ -122,16 +122,16 @@ CURRENT_BOOT
+   Reports the current measured during boot
+ 
+ CHARGE_FULL_DESIGN, CHARGE_EMPTY_DESIGN
+-  design charge values, when battery considered full/empty.
++  design charge values, when battery is considered full/empty.
+ 
+ ENERGY_FULL_DESIGN, ENERGY_EMPTY_DESIGN
+   same as above but for energy.
+ 
+ CHARGE_FULL, CHARGE_EMPTY
+-  These attributes means "last remembered value of charge when battery
+-  became full/empty". It also could mean "value of charge when battery
++  These attributes mean "last remembered value of charge when battery
++  became full/empty". They also could mean "value of charge when battery is
+   considered full/empty at given conditions (temperature, age)".
+-  I.e. these attributes represents real thresholds, not design values.
++  I.e., these attributes represents real thresholds, not design values.
+ 
+ ENERGY_FULL, ENERGY_EMPTY
+   same as above but for energy.
+@@ -153,12 +153,12 @@ CHARGE_TERM_CURRENT
+ CONSTANT_CHARGE_CURRENT
+   constant charge current programmed by charger.
+ 
+-
+ CONSTANT_CHARGE_CURRENT_MAX
+   maximum charge current supported by the power supply object.
+ 
+ CONSTANT_CHARGE_VOLTAGE
+   constant charge voltage programmed by charger.
++
+ CONSTANT_CHARGE_VOLTAGE_MAX
+   maximum charge voltage supported by the power supply object.
+ 
+@@ -208,10 +208,10 @@ TEMP_MAX
+ 
+ TIME_TO_EMPTY
+   seconds left for battery to be considered empty
+-  (i.e. while battery powers a load)
++  (i.e., while battery powers a load)
+ TIME_TO_FULL
+   seconds left for battery to be considered full
+-  (i.e. while battery is charging)
++  (i.e., while battery is charging)
+ 
+ 
+ Battery <-> external power supply interaction
+@@ -220,13 +220,13 @@ Often power supplies are acting as suppl
+ time. Batteries are good example. So, batteries usually care if they're
+ externally powered or not.
+ 
+-For that case, power supply class implements notification mechanism for
++For that case, the power supply class implements a notification mechanism for
+ batteries.
+ 
+-External power supply (AC) lists supplicants (batteries) names in
++An external power supply (AC) lists supplicants (batteries) names in
+ "supplied_to" struct member, and each power_supply_changed() call
+-issued by external power supply will notify supplicants via
+-external_power_changed callback.
++issued by an external power supply will notify supplicants via
++the external_power_changed callback.
+ 
+ 
+ Devicetree battery characteristics
+@@ -241,14 +241,14 @@ battery node have names corresponding to
+ for naming consistency between sysfs attributes and battery node properties.
+ 
+ 
+-QA
+-~~
++Q&A
++~~~
+ 
+ Q:
+    Where is POWER_SUPPLY_PROP_XYZ attribute?
+ A:
+-   If you cannot find attribute suitable for your driver needs, feel free
+-   to add it and send patch along with your driver.
++   If you cannot find an attribute suitable for your driver needs, feel free
++   to add it and send a patch along with your driver.
+ 
+    The attributes available currently are the ones currently provided by the
+    drivers written.
+@@ -258,18 +258,18 @@ A:
+ 
+ 
+ Q:
+-   I have some very specific attribute (e.g. battery color), should I add
++   I have some very specific attribute (e.g., battery color). Should I add
+    this attribute to standard ones?
+ A:
+    Most likely, no. Such attribute can be placed in the driver itself, if
+-   it is useful. Of course, if the attribute in question applicable to
+-   large set of batteries, provided by many drivers, and/or comes from
++   it is useful. Of course, if the attribute in question is applicable to
++   a large set of batteries, provided by many drivers, and/or comes from
+    some general battery specification/standard, it may be a candidate to
+    be added to the core attribute set.
+ 
+ 
+ Q:
+-   Suppose, my battery monitoring chip/firmware does not provides capacity
++   Suppose my battery monitoring chip/firmware does not provide capacity
+    in percents, but provides charge_{now,full,empty}. Should I calculate
+    percentage capacity manually, inside the driver, and register CAPACITY
+    attribute? The same question about time_to_empty/time_to_full.
+@@ -278,11 +278,11 @@ A:
+    directly measurable by the specific hardware available.
+ 
+    Inferring not available properties using some heuristics or mathematical
+-   model is not subject of work for a battery driver. Such functionality
++   model is not a subject of work for a battery driver. Such functionality
+    should be factored out, and in fact, apm_power, the driver to serve
+-   legacy APM API on top of power supply class, uses a simple heuristic of
++   legacy APM API on top of the power supply class, uses a simple heuristic of
+    approximating remaining battery capacity based on its charge, current,
+-   voltage and so on. But full-fledged battery model is likely not subject
+-   for kernel at all, as it would require floating point calculation to deal
+-   with things like differential equations and Kalman filters. This is
++   voltage and so on. But a full-fledged battery model is likely not a subject
++   for the kernel at all, as it would require floating point calculations to
++   deal with things like differential equations and Kalman filters. This is
+    better be handled by batteryd/libbattery, yet to be written.
 
