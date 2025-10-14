@@ -1,82 +1,104 @@
-Return-Path: <linux-pm+bounces-36034-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36035-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14E19BD78AF
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Oct 2025 08:11:46 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 48B20BD7D4E
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Oct 2025 09:14:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C80183A3C53
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Oct 2025 06:11:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 87C6E189DCDA
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Oct 2025 07:15:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C61FE304975;
-	Tue, 14 Oct 2025 06:11:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0B6030DD38;
+	Tue, 14 Oct 2025 07:14:31 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from srv01.abscue.de (abscue.de [89.58.28.240])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f67.google.com (mail-pj1-f67.google.com [209.85.216.67])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79C5D26E70B;
-	Tue, 14 Oct 2025 06:11:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.58.28.240
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB94230AACF
+	for <linux-pm@vger.kernel.org>; Tue, 14 Oct 2025 07:14:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.67
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760422301; cv=none; b=h2TspIVeZYIj/zvq2fWx7fNuTVNn9bIRhlUDuWQ+JLGfBegLog7r10DIc3cAbZ8BhdcuTdrB5yuUiq5PynhGpSKCKaCzYOtSYJkSscIBtfkoQ9nYT1QDhcKqJRRrmT+uobR7Y+/h7n1gJ42uaVei9Onh8QTtlOllI8cXneYP+E4=
+	t=1760426071; cv=none; b=hd1E1ZPJxc2NBX/l0EU3IEmrJ4MJBGtul01R2IMEYf5AXHbuW9+YRBa5iqq4SVgXaGdaPQuw+7FOphd6ohGkD6cXqGFCavyQG73zYNCNeK9g5AH6v9uFyVykKNPHp8l7K9U7an7iEskueehLoNUCNrazlQI2lQ2LoK6wFva11ZU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760422301; c=relaxed/simple;
-	bh=WEXgui8AO20DzmSZxyE4JtJcfk3ps/p5StxRxjEB870=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UWUgqL583snvw6xjXQ4ORa20clTF7jxqmVcfE7ocUG3ip4YyniXKMYodPV5kq+hSrTu6b9Wg+69fmPTVNhqxaBrw8DNQtR8/vRGXG42yC3G7uwmpG698bisC5JYylKVb5ZFAb1M+Z+c6BAPQIMyyDB0mD1uCiGEZwECppOhG9as=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=abscue.de; spf=pass smtp.mailfrom=abscue.de; arc=none smtp.client-ip=89.58.28.240
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=abscue.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=abscue.de
-Received: from srv01.abscue.de (localhost [127.0.0.1])
-	by spamfilter.srv.local (Postfix) with ESMTP id 412991C6786;
-	Tue, 14 Oct 2025 08:11:20 +0200 (CEST)
-X-Spam-Level: 
-Date: Tue, 14 Oct 2025 08:10:57 +0200
-From: Otto =?iso-8859-1?Q?Pfl=FCger?= <otto.pflueger@abscue.de>
-To: Baolin Wang <baolin.wang@linux.alibaba.com>
-Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Orson Zhai <orsonzhai@gmail.com>,
-	Chunyan Zhang <zhang.lyra@gmail.com>, Lee Jones <lee@kernel.org>,
-	linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+	s=arc-20240116; t=1760426071; c=relaxed/simple;
+	bh=sSEQUz4N1vC51QgVF/J8wPV6nb8fqvjIzqiU8S/1ebk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=YgdrHOTtmKDtj+qnsaLxiCU1BzpzHzJlgWEbwNNnGfesbWdYB6y0rRuWvhLuE4YdBiUfofsVHiNOgC9gOiXBvpytFsYXCCHw7yfnnT4xLcSt/Iz1+Rk2Iwgt6O4bpAqLWFrhxRnanjaUHZN6h5N4niXekkDHykTWCn3O2DL6l6w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.216.67
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f67.google.com with SMTP id 98e67ed59e1d1-3304dd2f119so3908004a91.2
+        for <linux-pm@vger.kernel.org>; Tue, 14 Oct 2025 00:14:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760426069; x=1761030869;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gdAzSUy8ZgocF90WcjHBW2VOon+JtEmmbYQOKZDMVVk=;
+        b=SQA9FygyL8tOK9m7hWTeIy5p0Y+M3b6eOZPbLJK+66PsGGI+lTRPZXUz5/IZXX/aDn
+         OIWs4ht+Pu4kLAYzUSW4eNXFaKP85RlPVX2qsCAyqGPlGSlMwtgiOm/LO1MTC0RxtOAH
+         0R58DDWIltqitVqIOYH67c5tRrmiJLjYqmJvoXOLTOiQ7gnylNo/JmjN/RxlGMIsNEUT
+         pqb8QvnhP7LoWFSOHFe4KgvxpGDGX3S6+jILj6BezBYAhNus0El1gCmh4D/tX0T8/8O8
+         gPM7AyOoZd1asqMmAWFf7L6wzn4U9zDPSbUCDk/9WFWbbxxSgnkM5Ue3xvC1jDputp+W
+         ePTA==
+X-Forwarded-Encrypted: i=1; AJvYcCVe1VI+f54amabQcD9CUUHl2cSw8dPGLe2/w6yjzC0oz8oQd1gcLvPKaZDkgWKlSUcrWZl6mzYydg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzYOzq0YPGowRZm+YFblHOAt9A8fQQuHDIfyl3Zloo+Ny/wYIDN
+	bYYbNm8uJ/Z+Go0zHSEZY4HQnutbKbKxCAqvPg3yIrhoTftUIjvxtOre
+X-Gm-Gg: ASbGncvavWcfevs21ubG2d3Q8DvmVun8jj+GAxeLWUTctNq3aJzPSgHFj4OetrH5HRS
+	EduR8OcxUDPOujlHY8tXtZM2+F9GTzngbbzIDfwFIfw4af1Ryj3eWYTWhdjXLmeBse/HIKjFX9J
+	5F1vrPqSnnL1yiRkHfJC3K7ymP2xoKI9h0w0O+XD+WxCRjO9kUt4VRw2wlmyUSzqBOv0ZDNUwaQ
+	8r39VC62R/Rj/PMQGY6QKkCwElmNHx49+Xzo50ipvoZJXMcC15TFJrIcrl5WSZz2i5QYjCSSt5h
+	2dYCPffdI6OPIhMPHe/ObafcgzgFXpCfwaKG1KSej/Noh3ZjD9kdhu5OIBdU2xI3GOM7JF6f0VQ
+	O7EpFquYsvvzo5hu1YVeQp1HQuOTnD2fVvk92fBY0zSgSZMVcQue0TzutSB59nRqMMRpHh0U+Np
+	5yXfdQPmK+bQ==
+X-Google-Smtp-Source: AGHT+IHBUJxkuPQvjDi0tp4Ni9gQZbWJEugoilSleeEqEKswyN6LQweepoV6GTvNet5iaQOUSLpvcg==
+X-Received: by 2002:a17:90b:38cf:b0:32e:d011:ea0f with SMTP id 98e67ed59e1d1-33b5139fcabmr33135818a91.25.1760426069124;
+        Tue, 14 Oct 2025 00:14:29 -0700 (PDT)
+Received: from power-ThinkBook-15-G2-ITL.. ([116.128.244.171])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b678de09cb3sm11937092a12.18.2025.10.14.00.14.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Oct 2025 00:14:28 -0700 (PDT)
+From: Xueqin Luo <luoxueqin@kylinos.cn>
+To: rafael@kernel.org,
+	pavel@kernel.org,
+	lenb@kernel.org,
+	linux-pm@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/5] power: reset: sc27xx: Add support for SC2730 and OF
- match table
-Message-ID: <aO3pcRCZN1qYEDW6@abscue.de>
-References: <20250926-sc2730-reboot-v1-0-62ebfd3d31bb@abscue.de>
- <20250926-sc2730-reboot-v1-4-62ebfd3d31bb@abscue.de>
- <58441250-1f00-45ee-8583-9863efc938e0@linux.alibaba.com>
- <aNtq4qyYNqZThjeI@abscue.de>
- <982105c4-9dbd-47dc-bfc3-ef37a390a14c@linux.alibaba.com>
+Cc: Xueqin Luo <luoxueqin@kylinos.cn>
+Subject: [PATCH v4 0/2] PM: hibernate: make compression threads configurable and support dynamic crc arrays
+Date: Tue, 14 Oct 2025 15:14:16 +0800
+Message-ID: <cover.1760423687.git.luoxueqin@kylinos.cn>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <982105c4-9dbd-47dc-bfc3-ef37a390a14c@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Tue, Oct 14, 2025 at 09:44:15AM +0800, Baolin Wang wrote:
-> [...]
-> > 
-> > The driver was hard-coded to use registers 0xc2c and 0xdf0. SC2730 has
-> > different registers, which were added to the downstream version of the
-> > driver in [1]. I have tested this with a UMS9230 phone which has an
-> > SC2730 PMIC according to the device tree.
-> > 
-> > [1]: https://github.com/MotorolaMobilityLLC/kernel-sprd/commit/6165e1afe3eba33089fecc86767d47af9ab176d6
-> 
-> OK. Thanks.
-> Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+Hi,
 
-Please note that due to the feedback about the use of empty device tree
-nodes, I have switched to a different approach and sent an alternative
-patch as a follow-up to this one:
+This is v4 of the series to make hibernate compression/decompression
+threads configurable and improve scalability.
 
-https://lore.kernel.org/all/20251007-sc27xx-mfd-poweroff-v1-0-89a2f919b731@abscue.de/
+Changes since v3:
+  * Only patch 2 was updated: When an invalid `cmp_threads` value is provided,
+    fall back to the default value (3).
+
+Thanks for your feedback and review!
+
+Xueqin Luo (2):
+  PM: hibernate: dynamically allocate crc->unc_len/unc for configurable
+    threads
+  PM: hibernate: make compression threads configurable
+
+ kernel/power/swap.c | 82 +++++++++++++++++++++++++++++++++++----------
+ 1 file changed, 64 insertions(+), 18 deletions(-)
+
+-- 
+2.43.0
+
 
