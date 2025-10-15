@@ -1,53 +1,60 @@
-Return-Path: <linux-pm+bounces-36189-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36193-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C3CCFBDED86
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Oct 2025 15:51:09 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id A64BFBDEEBB
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Oct 2025 16:06:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3CEED19C6098
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Oct 2025 13:51:33 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 511CF34A150
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Oct 2025 14:06:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 793362264B1;
-	Wed, 15 Oct 2025 13:50:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB128262FEB;
+	Wed, 15 Oct 2025 14:05:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GfVBeOK1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ADkYFgIV"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 503BD1A26B;
-	Wed, 15 Oct 2025 13:50:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBF7B25487B;
+	Wed, 15 Oct 2025 14:05:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760536259; cv=none; b=EdZhhRft4+RCSKBNms1jVnvvl6kPSU0zRFmeDnH9L6ZHjoS//O5+94L6t35/q8mItcIJjdEsUsEhdj62YmBDNg651NNktI8tBWUgAhKyaNP1xFX6+adFE7xJO5I48WGLUNul1FA6rfDP5Ryf2A/KgKf1emGNtPl20aztM20FCes=
+	t=1760537129; cv=none; b=NKe/xhm0KF4NQDLw6WX9V5TKejwbn2YQGXymH960t9EN7PkZGAAfTahVRWSPsegi6DdqK9B2z48ItiPR71CuQCbp4/jp1RYX+I9+F20J+2qA68g2zbskXEHDg0/yLof1o7q+/OUPwAcPKWgDLDWX/MwcKZfC+kiCsl/kXRtbxfI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760536259; c=relaxed/simple;
-	bh=as7iEayxt+kAwUNIYVoz5KT/GcFxr4dpxoRVI7uNMHg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=LXp6Z+26OVTAhRQUTVbsFebTwqqiErVZOGcY5BjN4gcAKwMCQLM9nPzTO220hk3el5dV4tHUEoDa31d6Snr3TgSmMECjbIWBQNq9DRDf64KGcmgTRmGbs8CCSWnZfDbNtoWjNd4XSD/lf+YIaNU5kaaf5fv/xqrxAjf3DEhxYJg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GfVBeOK1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 710F6C4CEF8;
-	Wed, 15 Oct 2025 13:50:58 +0000 (UTC)
+	s=arc-20240116; t=1760537129; c=relaxed/simple;
+	bh=vmlYb0g+8Bco2x8DuZ7wv9Yxt/D7mnkuiu2npAVRBXI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=QrCp78GK1Td7+RWcuU1qUN0rth4EmV8nBZ11Q1+LlZZdejok7EglH6ryLuszkts5ZqU9pewdjgOyo55+QuxZer/CuYhXEbYhk0OYyRnEjl6SKcDhuuk4n8eovRdyh+BixiTm7XIK4cMv0YvvYPGE+t59kTwrfQYeUS6H0wWPTLo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ADkYFgIV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8642BC4CEFB;
+	Wed, 15 Oct 2025 14:05:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760536259;
-	bh=as7iEayxt+kAwUNIYVoz5KT/GcFxr4dpxoRVI7uNMHg=;
+	s=k20201202; t=1760537129;
+	bh=vmlYb0g+8Bco2x8DuZ7wv9Yxt/D7mnkuiu2npAVRBXI=;
 	h=From:To:Cc:Subject:Date:From;
-	b=GfVBeOK15wWRF9rhCWFXbDFRlA9PjXO4b7dPIUxqn6JIsvVbYY5lO98LaWpu1CkYf
-	 3CRprkZAg1ORrND9clrGkf6dQmC0MS8wcuQmoF81udQRQZxUMQRdAHgvq1C2UpTQFH
-	 b/FXxEvZdtFBKCm3fb9e8BHISfypXYcx6V2dxPjUjUusS9Mmhoe8p6fAooaO0liQ7H
-	 P0ehOjDK1adxqeLFqmhFrjFtSnBjyxfoqGAWco1aYCPPcQeWnsrfr3iT//38WKHn3h
-	 EqseA4mC7UHgSZZyqSukCaNcCJ4NQXLQOiCR9DB9tW0co7HATjSaTN3KWLN69q9pVC
-	 kl1EYXhxNALWA==
+	b=ADkYFgIVWWX1zfKViU2vKx02y/WaRMhIz4kdl937KEp/Nv8dKiU4re62ORCqcJ3lu
+	 YxRDRmIffUaPlBnCjc2KkusZAthJF4pNY3IHyXcovlLqjELAztczGD0byHcPFtG1Ap
+	 MjSeNrBcZ+ufgK1+6I/zEcIaDLxP5qmcLxc5tJa8fbbdybSNoxMvjyOCgIH7R9HegU
+	 AQ9VijTzCJLVW1QEjV2p0QN9ammE/QIjkaMWVy6gv1g2k1fqRc6TKjOeJe5tKsI7n8
+	 69bwNQ+v2NauFdCls+QwA9bnYkL5LnGYVwCMvOJno8bTMVB5HTaLcsf/VlhAxFyJVr
+	 fParbeerFKZDA==
 From: "Rafael J. Wysocki" <rafael@kernel.org>
 To: Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
-Subject: [PATCH v1] cpufreq: intel_pstate: Improve printing of debug messages
-Date: Wed, 15 Oct 2025 15:50:56 +0200
-Message-ID: <8609836.T7Z3S40VBb@rafael.j.wysocki>
+Cc: Jonathan Cameron <jonathan.cameron@huawei.com>,
+ Takashi Iwai <tiwai@suse.de>, LKML <linux-kernel@vger.kernel.org>,
+ Linux PCI <linux-pci@vger.kernel.org>,
+ Alex Williamson <alex.williamson@redhat.com>,
+ Bjorn Helgaas <helgaas@kernel.org>, Zhang Qilong <zhangqilong3@huawei.com>,
+ Ulf Hansson <ulf.hansson@linaro.org>, Frank Li <Frank.Li@nxp.com>,
+ Dhruva Gole <d-gole@ti.com>,
+ Mika Westerberg <mika.westerberg@linux.intel.com>,
+ Linux ACPI <linux-acpi@vger.kernel.org>
+Subject:
+ [PATCH v1 0/3] PM: runtimePCI/ACPI: TAD: Auto-cleanup macros for runtime PM
+Date: Wed, 15 Oct 2025 15:59:48 +0200
+Message-ID: <3925484.kQq0lBPeGt@rafael.j.wysocki>
 Organization: Linux Kernel Development
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -58,84 +65,15 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="UTF-8"
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Hi All,
 
-Some debug messages generated by intel_pstate on a given hybrid system
-are only printed for some CPUs which is confusing, so modify the driver
-to print them for all CPUs.  Also change those messages to avoid
-printing local variable names in them.
+This series introduces a helper macro on top of the recently added runtime PM
+usage counter guard definitions, uses it in the PCI sysfs code (patch [1/3])
+and modifies the runtime PM usage counter handling in the ACPI TAD driver
+with the help of it (patch [3/3]).  Patch [3/2] is a preparation for the
+latter.
 
-Moreover, some debug messages printed by intel_pstate are quite hard
-to understand without looking at the code printing them, so make them
-somewhat clearer while at it.
-
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/cpufreq/intel_pstate.c |   25 +++++++++++++------------
- 1 file changed, 13 insertions(+), 12 deletions(-)
-
---- a/drivers/cpufreq/intel_pstate.c
-+++ b/drivers/cpufreq/intel_pstate.c
-@@ -575,13 +575,18 @@ static void intel_pstate_hybrid_hwp_adju
- 	int scaling = cpu->pstate.scaling;
- 	int freq;
- 
--	pr_debug("CPU%d: perf_ctl_max_phys = %d\n", cpu->cpu, perf_ctl_max_phys);
--	pr_debug("CPU%d: perf_ctl_turbo = %d\n", cpu->cpu, perf_ctl_turbo);
--	pr_debug("CPU%d: perf_ctl_scaling = %d\n", cpu->cpu, perf_ctl_scaling);
-+	pr_debug("CPU%d: PERF_CTL max_phys = %d\n", cpu->cpu, perf_ctl_max_phys);
-+	pr_debug("CPU%d: PERF_CTL turbo = %d\n", cpu->cpu, perf_ctl_turbo);
-+	pr_debug("CPU%d: PERF_CTL scaling = %d\n", cpu->cpu, perf_ctl_scaling);
- 	pr_debug("CPU%d: HWP_CAP guaranteed = %d\n", cpu->cpu, cpu->pstate.max_pstate);
- 	pr_debug("CPU%d: HWP_CAP highest = %d\n", cpu->cpu, cpu->pstate.turbo_pstate);
- 	pr_debug("CPU%d: HWP-to-frequency scaling factor: %d\n", cpu->cpu, scaling);
- 
-+	if (scaling == perf_ctl_scaling)
-+		return;
-+
-+	hwp_is_hybrid = true;
-+
- 	cpu->pstate.turbo_freq = rounddown(cpu->pstate.turbo_pstate * scaling,
- 					   perf_ctl_scaling);
- 	cpu->pstate.max_freq = rounddown(cpu->pstate.max_pstate * scaling,
-@@ -1044,9 +1049,9 @@ static void hybrid_set_cpu_capacity(stru
- 
- 	topology_set_cpu_scale(cpu->cpu, arch_scale_cpu_capacity(cpu->cpu));
- 
--	pr_debug("CPU%d: perf = %u, max. perf = %u, base perf = %d\n", cpu->cpu,
--		 cpu->capacity_perf, hybrid_max_perf_cpu->capacity_perf,
--		 cpu->pstate.max_pstate_physical);
-+	pr_debug("CPU%d: capacity perf = %u, base perf = %u, sys max perf = %u\n",
-+		 cpu->cpu, cpu->capacity_perf, cpu->pstate.max_pstate_physical,
-+		 hybrid_max_perf_cpu->capacity_perf);
- }
- 
- static void hybrid_clear_cpu_capacity(unsigned int cpunum)
-@@ -2344,11 +2349,10 @@ static void intel_pstate_set_min_pstate(
- 
- static void intel_pstate_get_cpu_pstates(struct cpudata *cpu)
- {
--	int perf_ctl_max_phys = pstate_funcs.get_max_physical(cpu->cpu);
- 	int perf_ctl_scaling = pstate_funcs.get_scaling();
- 
-+	cpu->pstate.max_pstate_physical = pstate_funcs.get_max_physical(cpu->cpu);
- 	cpu->pstate.min_pstate = pstate_funcs.get_min(cpu->cpu);
--	cpu->pstate.max_pstate_physical = perf_ctl_max_phys;
- 	cpu->pstate.perf_ctl_scaling = perf_ctl_scaling;
- 
- 	if (hwp_active && !hwp_mode_bdw) {
-@@ -2356,10 +2360,7 @@ static void intel_pstate_get_cpu_pstates
- 
- 		if (pstate_funcs.get_cpu_scaling) {
- 			cpu->pstate.scaling = pstate_funcs.get_cpu_scaling(cpu->cpu);
--			if (cpu->pstate.scaling != perf_ctl_scaling) {
--				intel_pstate_hybrid_hwp_adjust(cpu);
--				hwp_is_hybrid = true;
--			}
-+			intel_pstate_hybrid_hwp_adjust(cpu);
- 		} else {
- 			cpu->pstate.scaling = perf_ctl_scaling;
- 		}
+Thanks!
 
 
 
