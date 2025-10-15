@@ -1,167 +1,129 @@
-Return-Path: <linux-pm+bounces-36199-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36200-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 77912BDF26F
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Oct 2025 16:47:32 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 141E6BDF2CC
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Oct 2025 16:54:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 323E83C51D1
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Oct 2025 14:47:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8C78A19A2EEB
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Oct 2025 14:54:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D27822C029D;
-	Wed, 15 Oct 2025 14:47:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="fDZk1URF"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AC052D543A;
+	Wed, 15 Oct 2025 14:54:09 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+Received: from mail-ua1-f47.google.com (mail-ua1-f47.google.com [209.85.222.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9DA52C0278
-	for <linux-pm@vger.kernel.org>; Wed, 15 Oct 2025 14:47:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A77542D3ECA
+	for <linux-pm@vger.kernel.org>; Wed, 15 Oct 2025 14:54:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760539648; cv=none; b=i0OAiZbp+9ELEn7tee9Bc4xPap+8wWxwIw7jT4h371af1e1R2CHJP3oE2eSrtraCBRoExexrotFUevbeAIxQZNy0eZwgy5TB0fB2VYhg78Lbpb9bJQgLQwILJsoU6ztOZ2a0Ilwmxr51RPgeM6o9zvW2sMHuz0nferzIAB/fzjY=
+	t=1760540049; cv=none; b=AjkhQ6+TjqOWbWMVPOHBG1LaduR8qSUNVZYuC6FYcDZ/VWXEigBcTwunZlilb1FKsa1lnOgEuTNor31e95t+mVVcKIF8d6fYMgPgI5T58o46rBKy2HlPfM6S/VSXw9yCcb2GHeqSaczcoa06o43rjcTrJTb2JHHcx7rVeEv0f/k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760539648; c=relaxed/simple;
-	bh=QUCvg677zhCDZSxrUQAlexw6PjexV7DKVMj4nJGBmi8=;
+	s=arc-20240116; t=1760540049; c=relaxed/simple;
+	bh=6OUsLxRkye/V5CLq7E3pRBp04R4Pl/s8hSmjTBcuHj0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PoDH1hTvoN/vU/DV1TfO/et1uyhB1XaH4JfoEsgcyRXZQOhXCiqDjKaYHOkioVLOua8R7lM8NZcFYqsYL9vYFZGR5o1d8X3pENv4BPRWCjYVT5/XZ8/K4WfqzcXbQaIn90ctVPlIh77jKD1i3Hsn2Lq6/aqnytdygtDcmN8cHsc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=fDZk1URF; arc=none smtp.client-ip=209.85.218.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-b2e0513433bso530399666b.1
-        for <linux-pm@vger.kernel.org>; Wed, 15 Oct 2025 07:47:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1760539645; x=1761144445; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=BkRSLUnpznpy3qYmmJfpc7POjKcvG8Z1LeLnSK1GGKQ=;
-        b=fDZk1URF5eS4U1dQlxHNMNPkp/ddZGxQOOoZBdyAtJdu9mnPnEpZHXdIHKLu5vj5OG
-         8zw2OP4Njz5OSTbnJ8K2pXaKuSpYLrRtlQaO7S2sz7rk3GZH1diDieZrxCXrDFtLy5rU
-         XcnCw3QIcCAR3YQ7Rbkjc3Oh6anB/XAnDVP890DhTunZyKQ4IgpR6IST6W1//kd7K+v4
-         GH/WVO6Xg8bUlNMSRIMQX87RNguF1jLLH5u6J6w5L9ZhhlfSWhit8C3uxysPp8g23Sm8
-         pnnniRTF6YoeJAlBaGD/EXTX+Gt5RkzyKeWnUzPEybmJo7O8iw2uRcwL6DvaxPxApNmH
-         5F6Q==
+	 To:Cc:Content-Type; b=V657lssw/fwIkkfGrsxATG1FS0t+60CRwTW5a1OLWA4d4COed1MBL7Tm8txS0EYShrjFuRTaFyahvIEPnLbr5yk6fmQeq23tD+noPqv3WcRMIjZKutcVXMv0nHsL6Ny62m5gtG7IJRybAh0ZTFVbllGCKt65yNAswCPdsmQZnms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ua1-f47.google.com with SMTP id a1e0cc1a2514c-90f6d66e96dso1720294241.0
+        for <linux-pm@vger.kernel.org>; Wed, 15 Oct 2025 07:54:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760539645; x=1761144445;
+        d=1e100.net; s=20230601; t=1760540045; x=1761144845;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=BkRSLUnpznpy3qYmmJfpc7POjKcvG8Z1LeLnSK1GGKQ=;
-        b=L5XPp+OlcAN0cFKbEORvO4No4xrZwrn6yFzUj71YaSvmp/w4NOIZJ37RRqSzByiQAO
-         m/vEPqpcfvHw2XPTJG3gDvCcnMq0knIMeFIBLfIyTtD7lUA7aWTy+riX5JXhsEPrhYTK
-         +EDUk/maorAkySXB6UzoJkRtNDrHHR3a4HTNiOZPlWi/oglMZ3vAoNsuaYW1KyT3vJD3
-         KpG1Bt0KvIxSkt+oyc5oXISWnanWEeUEs+Vd7ryOueyrHTtEPqCx5Pdnf/qG95UCiqkh
-         7ILfG1IF6iFAbeS0s9KQ+qugROJ5GLPH64rqV5eobWd0t7Hho6knc/U80yWPDrKE7fXR
-         4VMw==
-X-Forwarded-Encrypted: i=1; AJvYcCVDVA7aPPbNfW/BG7002e6S6wQqcx5L0c0actPE3KQvJB0Xz0uGpKQzgTvfjIcCl8Uho7recqCDDg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YySZEuIIps4pRM1FXbnUSb3y8P0vm1kvu3Oh1bYONvfilQH3jzy
-	eoKHw+j/Zdndm+BRzZRzh3dVGLrv0OQD5xDiQUCDKJbwgwPm3D+Hk/lH0nYubnP0a5hN928e6KS
-	A229VKR4AfN+LvUW9mYek5Zm1gCfqS6TTYSM1QM5hqg==
-X-Gm-Gg: ASbGncuxAb1Tpt9oGNCjCpbKJT1dbc++xIdzh3V//BHygebQwiqIPoejkMp+iipB4qe
-	ukb4Ps8Xe5iqPqER9vDOVU15SdfZ8CLAvugU9dbrosJp8zUK++ucsMtM2DQ1Pg1YDTzgCKqmu5a
-	rbmf0sFwzgbIys4J+DpIckgLh3ZfRdc6o0Ivc1Nlaqo5HLH9dA6xBxJ4HN4k4+mZZmVV88Ac0t6
-	abcml2WZb2BLtc0+lycGn9A/X8mnNAacdCsEsTtpiNtN+SUEyICKTNlcJwAR/lm31mcOpiH
-X-Google-Smtp-Source: AGHT+IEUqGfQp9YhYQvza9pi3u1frVExIPZGobHvkJpepK8/VlN4XugYvlYQpaqAjcg5hzZJQWZYiCQ8a7FDZgL9rGQ=
-X-Received: by 2002:a17:907:3e95:b0:b3c:cda5:dc5f with SMTP id
- a640c23a62f3a-b50aa48b9cdmr2796236166b.9.1760539645069; Wed, 15 Oct 2025
- 07:47:25 -0700 (PDT)
+        bh=buS4UytUzJOTO4hyhwviAO+sxk7bCqxVtv+iDQgoWO0=;
+        b=GRnfSp1K7RBPxywvorTuD1bvFz+wrHgaicgsKidGl/bpkldKM8MAEURy+0yXFl88+v
+         U38u+xqsV1DtzXkOB3gNGJRO9CVZ62Gbv0ytzcK84lgkGRPVCqqJVAwHkv1FBeyP85hP
+         j/81udYNvJO4Hx4o4QvdfOIWSpsHuaa6IyqeH81r50FC6qIOYUGC3R+jLqwB37MyBkRj
+         IyT9veYwHIHn5b0TW4ZSOkqpl6Q0gt+pyxRxnu5ho89Qtpi2G9wDTxak8/QpTJRLg2Jd
+         9gldxNAkaI0ZDN26ClMaz+QVtPRkhv6P2TsDGoZ6bprqDl6+4CyFoaHSAtUXfcYsB60a
+         2z0w==
+X-Gm-Message-State: AOJu0Yzr/nLQ0d9U4vxtXCnEH8pnpACU83fW7Qcukg0L9WhPEMvl2zqh
+	1IqNYGICmQJijNKmjBwp1JRV/n7AveQgTdw/vySsUiTRH5LoVogHxPWSWg6eFfa3
+X-Gm-Gg: ASbGncsnm+MeBzYjjDPH/2wCsM30yfOei6TjGOJwZTjO0DEqAIuQQt60Gxeva56s7Fx
+	0LMZlNqk8YrL2w5bgxXemjTLAiuLokfhqFw02URZtYoT6mPVx+H+MS8elXbvF1FtjqFwci52wSt
+	5KG0KCJB281Zn3lx8vo7Eygxe29FFbW5mAvEa+CjACV4Gb5ROe3wZ3Mgya+fiU3txy7HoOnPPA3
+	l3zJKwZKM7/kmkzs+77+RhcBwg8ZgQikrKv+w/+iTjxvimFLZOVbF3pjNZb5qSwNM8JFDaqRfPX
+	CUl1L6KZRjFVm/F+eZJ55gVe8AZXUWnHEabW2dN6FY9k5UUaSCLMw8OGzBAfDsQawldK3MOMLnM
+	974Jdb9qr3/ZEt/RpCwJ5z1LaQO25Nu7reBc0H9ruySzrOD6F9jQUs269KAEjjXUE/zb6Ifvm90
+	A4EkE=
+X-Google-Smtp-Source: AGHT+IGdlnYB7FK3fGVmhyZd68ot9swjBTAB6u2fl211IL0PKyz+c6GzSuUWhK9yudIrdNpT8n0FAg==
+X-Received: by 2002:a05:6102:c09:b0:5d3:ff03:8f6a with SMTP id ada2fe7eead31-5d5e23d364fmr9694243137.30.1760540045125;
+        Wed, 15 Oct 2025 07:54:05 -0700 (PDT)
+Received: from mail-ua1-f54.google.com (mail-ua1-f54.google.com. [209.85.222.54])
+        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-930bf6cec14sm4517007241.8.2025.10.15.07.54.04
+        for <linux-pm@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Oct 2025 07:54:04 -0700 (PDT)
+Received: by mail-ua1-f54.google.com with SMTP id a1e0cc1a2514c-8fea25727a9so1803792241.1
+        for <linux-pm@vger.kernel.org>; Wed, 15 Oct 2025 07:54:04 -0700 (PDT)
+X-Received: by 2002:a05:6102:390b:b0:5d6:fce:4443 with SMTP id
+ ada2fe7eead31-5d60fce44d4mr4420342137.43.1760540044664; Wed, 15 Oct 2025
+ 07:54:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251015-arm-psci-system_reset2-vendor-reboots-v16-0-b98aedaa23ee@oss.qualcomm.com>
- <20251015-arm-psci-system_reset2-vendor-reboots-v16-5-b98aedaa23ee@oss.qualcomm.com>
-In-Reply-To: <20251015-arm-psci-system_reset2-vendor-reboots-v16-5-b98aedaa23ee@oss.qualcomm.com>
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Date: Wed, 15 Oct 2025 16:47:08 +0200
-X-Gm-Features: AS18NWDY7WIS_O4_p56TfpOvWCBi95zCtvBsZn2zTDEoiMSusyplTlJpgBuyRf4
-Message-ID: <CACMJSetWthCcJo8v7EuUK-aDKhf5KTNG5WQQ9aTQu62B+E=DMA@mail.gmail.com>
-Subject: Re: [PATCH v16 05/14] power: reset: reboot-mode: Expose sysfs for
- registered reboot_modes
-To: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
-Cc: Bjorn Andersson <andersson@kernel.org>, Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Sudeep Holla <sudeep.holla@arm.com>, Souvik Chakravarty <Souvik.Chakravarty@arm.com>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Andy Yan <andy.yan@rock-chips.com>, Mark Rutland <mark.rutland@arm.com>, 
-	Lorenzo Pieralisi <lpieralisi@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Konrad Dybcio <konradybcio@kernel.org>, cros-qcom-dts-watchers@chromium.org, 
-	Vinod Koul <vkoul@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Florian Fainelli <florian.fainelli@broadcom.com>, 
-	John Stultz <john.stultz@linaro.org>, Matthias Brugger <matthias.bgg@gmail.com>, 
-	Krzysztof Kozlowski <krzk@kernel.org>, Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
-	Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>, Stephen Boyd <swboyd@chromium.org>, 
-	Andre Draszik <andre.draszik@linaro.org>, 
-	Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org, 
-	Elliot Berman <quic_eberman@quicinc.com>, Srinivas Kandagatla <srini@kernel.org>
+References: <20251015141014.156437-1-marek.vasut+renesas@mailbox.org>
+In-Reply-To: <20251015141014.156437-1-marek.vasut+renesas@mailbox.org>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Wed, 15 Oct 2025 16:53:53 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWq4dbpsRYBVeQLpAVZ0Zk44vwPJTShMi8jZpuH0miYgQ@mail.gmail.com>
+X-Gm-Features: AS18NWCxkT4sRPfN_bOCrKffa15VtUEJklYqD4ElIKofei39YrIIER48YuJxXBM
+Message-ID: <CAMuHMdWq4dbpsRYBVeQLpAVZ0Zk44vwPJTShMi8jZpuH0miYgQ@mail.gmail.com>
+Subject: Re: [PATCH] thermal/drivers/rcar_gen3: Document Gen4 support in
+ driver comment
+To: Marek Vasut <marek.vasut+renesas@mailbox.org>
+Cc: linux-pm@vger.kernel.org, 
+	=?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	Lukasz Luba <lukasz.luba@arm.com>, Magnus Damm <magnus.damm@gmail.com>, 
+	Zhang Rui <rui.zhang@intel.com>, linux-renesas-soc@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-On Wed, 15 Oct 2025 at 06:39, Shivendra Pratap
-<shivendra.pratap@oss.qualcomm.com> wrote:
->
-> Currently, there is no standardized mechanism for userspace to
-> discover which reboot-modes are supported on a given platform.
-> This limitation forces tools and scripts to rely on hardcoded
-> assumptions about the supported reboot-modes.
->
-> Create a class 'reboot-mode' and a device under it to expose a
-> sysfs interface to show the available reboot mode arguments to
-> userspace. Use the driver_name field of the struct
-> reboot_mode_driver to create the device. For device-based
-> drivers, configure the device driver name as driver_name.
->
-> This results in the creation of:
->   /sys/class/reboot-mode/<driver>/reboot_modes
->
-> This read-only sysfs file will exposes the list of supported
-> reboot modes arguments provided by the driver, enabling userspace
-> to query the list of arguments.
->
-> Align the clean up path to maintain backward compatibility for
-> existing reboot-mode based drivers.
->
-> Signed-off-by: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
+Hi Marek,
 
-[snip]
+Thanks for your patch!
 
-> +
-> +static int create_reboot_mode_device(struct reboot_mode_driver *reboot)
-> +{
-> +       struct reboot_mode_driver **dr;
-> +       int ret = 0;
-> +
-> +       if (!rb_class) {
-> +               rb_class = class_create("reboot-mode");
-> +               if (IS_ERR(rb_class))
-> +                       return PTR_ERR(rb_class);
-> +       }
-> +
-> +       reboot->reboot_dev = device_create(rb_class, NULL, 0, NULL, reboot->driver_name);
-> +       if (IS_ERR(reboot->reboot_dev))
-> +               return PTR_ERR(reboot->reboot_dev);
-> +
-> +       ret = device_create_file(reboot->reboot_dev, &dev_attr_reboot_modes);
-> +       if (ret)
-> +               goto create_file_err;
-> +
-> +       dr = devres_alloc(release_reboot_mode_device, sizeof(*dr), GFP_KERNEL);
-> +       if (!dr) {
-> +               ret = -ENOMEM;
-> +               goto devres_alloc_error;
-> +       }
-> +
-> +       *dr = reboot;
-> +       devres_add(reboot->reboot_dev, dr);
+On Wed, 15 Oct 2025 at 16:10, Marek Vasut
+<marek.vasut+renesas@mailbox.org> wrote:
+> The R-Car Gen3 thermal driver supports both R-Car Gen3 and Gen4 SoCs.
 
-If you're using devres here - at least make it obvious by adding the
-devm_ prefix to the function name and make it take an explicit struct
-device * parameter so that it's clear who owns the managed resource.
+And RZ/G2 (the ones that do not fall under "RZ/G2L"), cfr. what you
+actually added in the comment.
 
-Bart
+> Update the driver comment. No functional change.
+>
+> Signed-off-by: Marek Vasut <marek.vasut+renesas@mailbox.org>
+
+> --- a/drivers/thermal/renesas/rcar_gen3_thermal.c
+> +++ b/drivers/thermal/renesas/rcar_gen3_thermal.c
+> @@ -1,6 +1,6 @@
+>  // SPDX-License-Identifier: GPL-2.0
+>  /*
+> - *  R-Car Gen3 THS thermal sensor driver
+> + *  R-Car Gen3/Gen4 and RZ/G2 THS thermal sensor driver
+>   *  Based on rcar_thermal.c and work from Hien Dang and Khiem Nguyen.
+>   *
+>   * Copyright (C) 2016 Renesas Electronics Corporation.
+
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
