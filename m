@@ -1,115 +1,98 @@
-Return-Path: <linux-pm+bounces-36179-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36180-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 392F5BDDF24
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Oct 2025 12:20:10 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DDA06BDE540
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Oct 2025 13:50:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 294404EEC2F
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Oct 2025 10:20:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9562D427942
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Oct 2025 11:50:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E255631A553;
-	Wed, 15 Oct 2025 10:20:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02BAA3233E7;
+	Wed, 15 Oct 2025 11:50:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IlDyGl8S"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pPJ41aZj"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07F9C3081D8;
-	Wed, 15 Oct 2025 10:20:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1FCD322DC1
+	for <linux-pm@vger.kernel.org>; Wed, 15 Oct 2025 11:50:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760523605; cv=none; b=J9YBHNfB+1hY/ct1nRf0IxJzmjIy5BILlmRj5xyDZs52U/eG5YuiB3YaE9Ek+T7b7L+zTl2WJSTZlP6PK0UJfR3dA9eiHCKfM6zZ1r1VA2mXE/DL3M6RmlFszc6wnNQJUndSfEF0eYmgBUwlPkmuqoouf8HntYsMFeYERGWbFCM=
+	t=1760529005; cv=none; b=L47XiinOF4CGRg35vdVIdz6IUvhQrsHComYwvJvgyIPbpyTRtFGtIkp/8tj/sqQ/86DKnS2anjVCpj4UNgrysHApdmsaAOvpm24momfEF6i4L6diHkQyN9mcsSyFGdYChsXbzYSWyxrOL1oB6/Pempsrr+AWxcw7lDcCi4pRkn4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760523605; c=relaxed/simple;
-	bh=bs7/thg5Z5VOfFwZjE7aM1gTUyMEXNvJwxigOV1AyVg=;
-	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=RlV1DZB8xDWz7ID5P7GzZip/tkaSmXXjsqxDJULK4ueL+MpNm836X5JQkVP4O7MQTg6DHspTfcF3DNHp2MYbFEhsR97zb1s68AxICsq7mwT+kfaMIGkualRMiD7ju7UWOkFeYmG7L8h8foPAg8JVcN33sOpyIqydAe027fiAiAc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IlDyGl8S; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760523604; x=1792059604;
-  h=from:to:in-reply-to:references:subject:message-id:date:
-   mime-version:content-transfer-encoding;
-  bh=bs7/thg5Z5VOfFwZjE7aM1gTUyMEXNvJwxigOV1AyVg=;
-  b=IlDyGl8SvkXrVtGaMC873/7KvTeKTDj6WN5OgXYevESIP6DRrZz+Ziq1
-   X2VJUnPr16xqW4MJOfpkIXbFGK3Uh8veAjpR1vivFA310rwwa5UEH3BvQ
-   6skJpE6vjMaT7iednKUGXV4XhWhn5WTCBKWt73YOV28fBen5UGDcMH3vt
-   P4Y31Y0v36jdaJoRCgPPKVHDOauaFRh3fNMIlNqaDaliCfwB1gNUZuIzJ
-   szZxGX6pdMI9VR5/UHDz2s7ejrWfGY9xFp2K/IFhU9p1QSa5qnmoW8p4p
-   t+bh3lYiY9M7OxEnjDjSCf4U4MA1EruOZhOFKGRO8QUkxtFVKizZV7QC1
-   Q==;
-X-CSE-ConnectionGUID: Nv4qCbErQSmg3J5YHOraoQ==
-X-CSE-MsgGUID: L/1282+CRC2O3FMz5riWSw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11582"; a="73373162"
-X-IronPort-AV: E=Sophos;i="6.19,231,1754982000"; 
-   d="scan'208";a="73373162"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2025 03:20:02 -0700
-X-CSE-ConnectionGUID: Pb6wy7Q2TDOmjZgJCWe77w==
-X-CSE-MsgGUID: xXx2JB3URkK4h7rHYVukQA==
-X-ExtLoop1: 1
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.75])
-  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2025 03:19:59 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To: irenic.rajneesh@gmail.com, david.e.box@linux.intel.com, 
- platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-pm@vger.kernel.org, Hans de Goede <hansg@kernel.org>, 
- Xi Pardee <xi.pardee@linux.intel.com>
-In-Reply-To: <20251014214548.629023-1-xi.pardee@linux.intel.com>
-References: <20251014214548.629023-1-xi.pardee@linux.intel.com>
-Subject: Re: [PATCH 0/6] Update Arrow Lake telemetry GUID
-Message-Id: <176052359484.21241.13282551469499297780.b4-ty@linux.intel.com>
-Date: Wed, 15 Oct 2025 13:19:54 +0300
+	s=arc-20240116; t=1760529005; c=relaxed/simple;
+	bh=ooKuFwes3Vhtb88vFNU8Ivf+LQKJ5Zbjhym0lsVJnFc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rOaAbi7Nz7c0yY2Npgkrww+PHrxWHzOeRTgjORC4Y1S9bU3dzFiQfsZnm8wqmLK/AwbdxbNsKw+k2NZsfkc+PJ5e0DnkpZ+qkX5gzo/h4MldAWNUApcOLIrL5j2dyDD/uhDMP+NnqYbKbNEIPweUvpSgoGiZ6vj0KiCqKKQTTSY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pPJ41aZj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4F7BC4CEFE
+	for <linux-pm@vger.kernel.org>; Wed, 15 Oct 2025 11:50:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1760529005;
+	bh=ooKuFwes3Vhtb88vFNU8Ivf+LQKJ5Zbjhym0lsVJnFc=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=pPJ41aZj0fSfWNlsmRArlY/pKEQBLwAbYCJ3Kf/Yt3x6+GMI/bwJGEEbarPL5snAW
+	 QDvQJp56XVMi1HtOewG1p7T/wKe1rzfBT5o/gON0NXNUk6bFSwIILYGquGVzLCM/ar
+	 OZFDNvlYW6WrgOExxd/bSi+1NboatmB481cuUL6ZMIDSVWtJxjK9bamkl57A28kB3L
+	 KDJsCfzeYnRSvbYdQ1E4wfmjR4dVcYfdraE+B3qhfmts00p2Y6tgfofaR6D7cZcK08
+	 OJpVg/24jR3zidWNa3BwcpmP6qOmfXzwYo80KTFlWGq9YbKUIPVn1FH9p9zQ2ilvXZ
+	 IJmLilEizadJQ==
+Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-7b00927607eso4535072a34.0
+        for <linux-pm@vger.kernel.org>; Wed, 15 Oct 2025 04:50:05 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU2W0cYdJTOkzS3SrfzGU2QZzNPSB0jnuM6WjuzPiZKf0A/85LE3ERG+uEyuFB8cFasOMSdrPbY7A==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyCNxG+deOTetmbkYKLFEXzsSFzuFwQX6bKSmcbn9DUbiphf3qT
+	ymhtrzKuPtuBkP7RSuM7rK8I1BFviRa7NSLS0hNWmzXJa6SXDQg/QjJiYF/SxznynTcAaasZ7pe
+	P8u1OVGrU082sM5Mbr8Aohsma6LCt7d4=
+X-Google-Smtp-Source: AGHT+IEcOvtS91b8xBc9x8mFoNEL4oiSYrMPmBf02hvPxuJLVNB/9E+H2gs8poT1029kYj76kZmT5rKMedZ4Ubm3dj0=
+X-Received: by 2002:a05:6808:bd2:b0:441:8f74:fcb with SMTP id
+ 5614622812f47-4418f741f0bmr10872569b6e.56.1760529005083; Wed, 15 Oct 2025
+ 04:50:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13.0
+References: <36iykr223vmcfsoysexug6s274nq2oimcu55ybn6ww4il3g3cv@cohflgdbpnq7>
+ <08529809-5ca1-4495-8160-15d8e85ad640@arm.com> <2zreguw4djctgcmvgticnm4dctcuja7yfnp3r6bxaqon3i2pxf@thee3p3qduoq>
+ <8da42386-282e-4f97-af93-4715ae206361@arm.com> <nd64xabhbb53bbqoxsjkfvkmlpn5tkdlu3nb5ofwdhyauko35b@qv6in7biupgi>
+ <49cf14a1-b96f-4413-a17e-599bc1c104cd@arm.com> <CAJZ5v0hGu-JdwR57cwKfB+a98Pv7e3y36X6xCo=PyGdD2hwkhQ@mail.gmail.com>
+ <7ctfmyzpcogc5qug6u3jm2o32vy2ldo3ml5gsoxdm3gyr6l3fc@jo7inkr3otua> <001601dc3d85$933dd540$b9b97fc0$@telus.net>
+In-Reply-To: <001601dc3d85$933dd540$b9b97fc0$@telus.net>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 15 Oct 2025 13:49:52 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0g7g7-WWTu=ZQwVAA345fodXer1ts422N0N+ZKx+6jXRw@mail.gmail.com>
+X-Gm-Features: AS18NWATo-6k6LvzkPgyIf_Bc1oxboWU9Wp6VAZkaltVlveNh-c1lVAl4_h_8co
+Message-ID: <CAJZ5v0g7g7-WWTu=ZQwVAA345fodXer1ts422N0N+ZKx+6jXRw@mail.gmail.com>
+Subject: Re: stable: commit "cpuidle: menu: Avoid discarding useful
+ information" causes regressions
+To: Doug Smythies <dsmythies@telus.net>
+Cc: Sergey Senozhatsky <senozhatsky@chromium.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Christian Loehle <christian.loehle@arm.com>, "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Artem Bityutskiy <artem.bityutskiy@linux.intel.com>, Sasha Levin <sashal@kernel.org>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Tomasz Figa <tfiga@chromium.org>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 14 Oct 2025 14:45:28 -0700, Xi Pardee wrote:
+On Wed, Oct 15, 2025 at 5:41=E2=80=AFAM Doug Smythies <dsmythies@telus.net>=
+ wrote:
+>
+> On 2025.10.14 18:30 Sergey Senozhatsky wrote:
+> > On (25/10/14 17:54), Rafael J. Wysocki wrote:
+> >> Sergey, can you please run the workload under turbostat on the base
+> >> 6.1.y and on 6.1.y with the problematic commit reverted and send the
+> >> turbostat output from both runs (note: turbostat needs to be run as
+> >> root)?
+> >
+> > Please find attached the turbostat logs for both cases.
+>
+> The turbostat data suggests that power limit throttling is involved.
 
-> This patch series updates the Arrow Lake DMU telemetry GUID and enhances
-> the infrastructure for managing lpm_req_guid. Additionally, it includes
-> two patches that improve the intel_pmc_core driver.
-> 
-> The first three patches update the Arrow Lake DMU telemetry GUID and add
-> support for multiple possible GUIDs. The fourth patch standardizes the
-> naming convention for PMC variable indices. The fifth patch enhances
-> lpm_req_guid management. The final patch removes an unnecessary variable.
-> 
-> [...]
-
-
-Thank you for your contribution, it has been applied to my local
-review-ilpo-next branch. Note it will show up in the public
-platform-drivers-x86/review-ilpo-next branch only once I've pushed my
-local branch there, which might take a while.
-
-The list of commits applied:
-[1/6] platform/x86:intel/pmc: Update Arrow Lake telemetry GUID
-      commit: 644ab3bc98ee386f178d5209ae8170b3fac591aa
-[2/6] platform/x86:intel/pmc: Add support for multiple DMU GUIDs
-      commit: 3b603955f2423cf668ebd5ba670019a5b4960cc5
-[3/6] platform/x86:intel/pmc: Add DMU GUID to Arrow Lake U/H
-      commit: a32f7d76e3cd7c4170db44d109661d657cfa5e21
-[4/6] platform/x86:intel/pmc: Rename PMC index variable to pmc_idx
-      commit: 7848154c3a11fb3ffbffd150f2185f97b5a6595a
-[5/6] platform/x86:intel/pmc: Relocate lpm_req_guid to pmc_reg_map
-      commit: c2bc11f1f204ef916ec96e45cf329e42873b37d6
-[6/6] platform/x86:intel/pmc: Remove redundant has_die_c6 variable
-      commit: 1c72d9c3e0c61468de878d906a65d4cc845718fb
-
---
- i.
-
+Why do you think so?
 
