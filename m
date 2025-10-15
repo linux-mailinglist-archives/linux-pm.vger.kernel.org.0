@@ -1,166 +1,202 @@
-Return-Path: <linux-pm+bounces-36157-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36158-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3108BBDD15B
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Oct 2025 09:33:09 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 98278BDD2FB
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Oct 2025 09:46:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C82D5189EBE5
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Oct 2025 07:30:49 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 8158F4E10AB
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Oct 2025 07:46:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E75A7322A0A;
-	Wed, 15 Oct 2025 07:21:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9143A31327D;
+	Wed, 15 Oct 2025 07:46:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="13/95jD2"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PzHhYOI7"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E76FC315D2C
-	for <linux-pm@vger.kernel.org>; Wed, 15 Oct 2025 07:21:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A6172609C5
+	for <linux-pm@vger.kernel.org>; Wed, 15 Oct 2025 07:46:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760512908; cv=none; b=r9Aagh0yijXf8q7YCQg/adu9nFjmdMu61VyBk3/VA4Vrcyi/UciOCUW7ohmQnyfOExq9HEXJ6J5JXzYSHkCKU992vjiXXBiK/MYXGoVFRtTGe+1p/NrSpJGsqwjv2hbaLUt7wH9yVjURpQ6u6h5RAXNB5AroAiMeOSBslplnSjo=
+	t=1760514384; cv=none; b=NvJMaGAaIedk0KgUB0Vid9Dh3yWQV+jcedBD0iAOuzOWRcZjQVm7qwUrTa9FS5XPYki0Uuxwp1eps9oTSTB0rzKusy8F7cn1tv5q0spZU/dpoFal5vaYJxpS5Jmt9BE1NvZzQeN8OG+hz3nIgYXsszixMufYBG12eDjQYQVoNkM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760512908; c=relaxed/simple;
-	bh=ZzdIgXkVyruSkkb124Jgkm0GwzeDNU9Cpoe/h8aUEvg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CwYwMV7iFuPhXRbEc3orRLn6QveRJ46CfsuXUS/udwDnvRl56unfGUL0sUew7vRuqWvzGfOiLwo9iTJ4NlYdKJXR27BNh8vlKyaXRGkl9Kak3PtPNug+a3DlOitJZoBDsjhpkF7yM1B/Iyg/3cFpb9zcjyzK9NPJ3qeIhKUoeYk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=13/95jD2; arc=none smtp.client-ip=185.246.85.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 7FF0C4E410C7
-	for <linux-pm@vger.kernel.org>; Wed, 15 Oct 2025 07:21:45 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 4C583606F9;
-	Wed, 15 Oct 2025 07:21:45 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id E343D102F22BC;
-	Wed, 15 Oct 2025 09:21:32 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1760512903; h=from:subject:date:message-id:to:cc:mime-version:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=x4ZLGkOvm/oVigw1/rloRb4F3nzZJ1Eq9qAeVsAs4fw=;
-	b=13/95jD25xlXmwc7R6cH5utrqLk/HydWkfUY5UAwRu+FW2yl+l+tf7aKeHHHXqhGa3Hh1g
-	C7U5piDWXij4eAwMG3FcMRMZwHFx9KfJf2soJXvwVrFcC1HIt+jFMl8u58jqa+xvMyvycw
-	/OMkrxOgHqBrrRbJYnf9FJhsvLy9LtU/n334Y0Jqzr2yMlD8i+mVYckXutUZApDiv3CGP8
-	CgqY65Ogld37rs6/a29unDJxzrOX8xfqiD0iIFbEkLnPYzFWPtZChkTFRRhoDiDc83dCGN
-	/ecyucff/4m9QfuIOxGqKSwkD68Nenwp720UITVnFX9MCEsPGgluSQvCOiWaFg==
-From: Herve Codina <herve.codina@bootlin.com>
-To: Andrew Lunn <andrew@lunn.ch>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Peter Rosin <peda@axentia.se>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Herve Codina <herve.codina@bootlin.com>,
-	Saravana Kannan <saravanak@google.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Charles Keepax <ckeepax@opensource.cirrus.com>,
-	Richard Fitzgerald <rf@opensource.cirrus.com>,
-	David Rhodes <david.rhodes@cirrus.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Mark Brown <broonie@kernel.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Daniel Scally <djrscally@gmail.com>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Len Brown <lenb@kernel.org>,
-	Davidlohr Bueso <dave@stgolabs.net>,
-	Jonathan Cameron <jonathan.cameron@huawei.com>,
-	Dave Jiang <dave.jiang@intel.com>,
-	Alison Schofield <alison.schofield@intel.com>,
-	Vishal Verma <vishal.l.verma@intel.com>,
-	Ira Weiny <ira.weiny@intel.com>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Geert Uytterhoeven <geert+renesas@glider.be>
-Cc: Wolfram Sang <wsa@kernel.org>,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	linux-clk@vger.kernel.org,
-	linux-i2c@vger.kernel.org,
-	linux-pci@vger.kernel.org,
-	linux-sound@vger.kernel.org,
-	patches@opensource.cirrus.com,
-	linux-gpio@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	linux-spi@vger.kernel.org,
-	linux-acpi@vger.kernel.org,
-	linux-cxl@vger.kernel.org,
-	Allan Nielsen <allan.nielsen@microchip.com>,
-	Horatiu Vultur <horatiu.vultur@microchip.com>,
-	Steen Hegelund <steen.hegelund@microchip.com>,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH v4 29/29] misc: lan966x_pci: Add drivers needed to support SFPs in Kconfig help
-Date: Wed, 15 Oct 2025 09:14:16 +0200
-Message-ID: <20251015071420.1173068-30-herve.codina@bootlin.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20251015071420.1173068-1-herve.codina@bootlin.com>
-References: <20251015071420.1173068-1-herve.codina@bootlin.com>
+	s=arc-20240116; t=1760514384; c=relaxed/simple;
+	bh=BC15KuwCSg0SviAD2NX9WP0PeUqiSLVuQjRMVITVnHE=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=UnEySM7picnhsA5aC8vshzYvFfEwgkpBNH2pFOxLKvw6SFaGNv5hVEHa/Bqdyrmgf126eJM/2tSB4AjxuwFGY+YPrmD1S2hPHVxf5OBC3c+yi6xlMUe0cNdIJQSpjl2pKbJKIjiDZLnNvUsfB714yIhub3X73wDBin4YsKl8bj8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PzHhYOI7; arc=none smtp.client-ip=209.85.167.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-579d7104c37so7532425e87.3
+        for <linux-pm@vger.kernel.org>; Wed, 15 Oct 2025 00:46:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1760514380; x=1761119180; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=p2MNLLJ09ZFJ09dXhL/1vB6MSlJ3nz18TUtg3KkoHkI=;
+        b=PzHhYOI78oHjFm7MZWikF3C2dWia5TEvAGB6Zf+sjI8zY7NICRbYjk7TUk+0AzEBJb
+         Aeej+6lL7TiW8itdbiV8URhCJVb1JJg2qPGE6qSFgklAonjoAzWvinCSIcWa1QYKurL/
+         AtbFt0+ShIG46QQY8FxAFlo7GJkFgaLz3rEav9MgfDrfFQZ6TmIzYVYajPoHywY+DqYw
+         LYlIq8xyVimQp7efUBhlQSi66dl/QfWHmG05JRfqkSm8DdGjPRhjwIobaLz0KWKWQuT8
+         yZm9vfB/4LIJCdzFSS2WW3plX0qYsm3a6aa8CVhPzpT2u+4/K03Jv0slBgvT3Tg2qiW8
+         5ZIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760514381; x=1761119181;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=p2MNLLJ09ZFJ09dXhL/1vB6MSlJ3nz18TUtg3KkoHkI=;
+        b=OXkig4HU3Wc4fUR+JAyJIx9c2RjvTMijpKW3ccIZrKtge0uFRIYEaEqbRhqRcJq3h5
+         EY5gIAfiR4ovtfKf3eK4yXNh5zpKOigaXYkudGWVyEowgF1bVuPCv5Nnalt1cNvgh0lo
+         DJqrfP+g2dg9ZrWXvSvxaP2YIthGIRDw1TSe+IWrSqFEA+F9ZKS3mxPKaQd8jROXtEmM
+         Qg1W82i6aFwQB1utmSonQePbe1txLTCEhETg1e2G7RVktAHqmNwvf1XhU9GPBvXTx/Xa
+         CN2yvdQBi6Z529OkyBfALGBT2VgxP1qcA45DEg2TlmgIbFS+K/bojvNXEwFbA8e1KJaL
+         ytSQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXiu9mAqebRbiU/SKsaSZtcznhLk/yFUq3DWav1bqxtEwbbBSLshNOHpFVcwZV0gU+DOF97zjzn7A==@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywtfx5n03k6YHKmcw35UOf6a4Hp/SiZ2WUdG83ZJZZg4OJNRqzT
+	+DIEx08wcQ1OKhgrqG+4iJfr475XhaEriUasnu8gVUgJN2G/GywLla8L
+X-Gm-Gg: ASbGncs6P8v1hQriz0EMJucPRdiMgPyudnBo415z5IvCV4L2+3h+jr1xZcR24gljJVS
+	+pnbF3bxAQvr+hXp8kRvg2SvAlj7+dGkj6BL6/7xjHRZBeYYHOzd9pL1gy7iWpE15gra/2At9rh
+	pOOmrpTh/oJnBRRlakBwqodM7x8DNKEvZDh1ss+FXUr3Gp8taLpk1ecyRE6UzTLYoy9b3R44rZa
+	jNYBGoL7TvuQKLiDRN8KaZ/o3Q4FIs5itbtuzARyIs+DwmQLwaT8qA+l5+GtnwimKb94zh0lIv9
+	GSITsj240qvlIQOJW4RskpH+fdhBI9JOevZCZZwodIk4GsVVjhNS6d4PlJB5x8qh+c6idTeHQJ3
+	FdudEZ0z/H0RRTJbnbFUMMmUY0kK3hHFpETOQS7gdU2OwjAFbDKitfuZHDCDy3SmEk0fUxhXg4p
+	GbgkIIBYbhIdlSA6sam1scRh4=
+X-Google-Smtp-Source: AGHT+IECrk7yi+Pwe9pZO4hGvEmNp5pxm/s4OrGMFnEn/EkQ/+8aZDd4HdtIeMunC3aM5IGda/MJPw==
+X-Received: by 2002:a05:6512:3b29:b0:58b:23e:249 with SMTP id 2adb3069b0e04-5906d892889mr7308450e87.18.1760514380271;
+        Wed, 15 Oct 2025 00:46:20 -0700 (PDT)
+Received: from ?IPV6:2a10:a5c0:800d:dd00:8fdf:935a:2c85:d703? ([2a10:a5c0:800d:dd00:8fdf:935a:2c85:d703])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-591c20253b1sm1336364e87.79.2025.10.15.00.46.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Oct 2025 00:46:19 -0700 (PDT)
+Message-ID: <07bd2e21-8631-4812-9021-3d3b2dbc7050@gmail.com>
+Date: Wed, 15 Oct 2025 10:46:18 +0300
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 06/13] mfd: bd71828: Support ROHM BD72720
+From: Matti Vaittinen <mazziesaccount@gmail.com>
+To: Andreas Kemnade <andreas@kemnade.info>
+Cc: Lee Jones <lee@kernel.org>,
+ Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+ Pavel Machek <pavel@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Sebastian Reichel <sre@kernel.org>,
+ Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+ Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski
+ <brgl@bgdev.pl>, linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-gpio@vger.kernel.org
+References: <cover.1759824376.git.mazziesaccount@gmail.com>
+ <93142a80d90a0ac80b27090d0c83914675aad94d.1759824376.git.mazziesaccount@gmail.com>
+ <20251009161847.GE2890766@google.com>
+ <8ea507eb-f78c-4a16-882b-112e277fa1b6@gmail.com>
+ <20251010150317.07bfdbe8@kemnade.info>
+ <d2295506-bf70-4142-8537-0fdf9cb04a30@gmail.com>
+ <20251013151900.3e4cc69f@kemnade.info>
+ <5ef55577-b8ae-4c8d-a965-ee356c47c691@gmail.com>
+Content-Language: en-US, en-AU, en-GB, en-BW
+In-Reply-To: <5ef55577-b8ae-4c8d-a965-ee356c47c691@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Recently, new device-tree nodes were added in the overlay to add support
-for SFPs on LAN966x PCI device.
+On 14/10/2025 08:41, Matti Vaittinen wrote:
+> On 13/10/2025 16:19, Andreas Kemnade wrote:
+>> On Mon, 13 Oct 2025 12:27:33 +0300
+>> Matti Vaittinen <mazziesaccount@gmail.com> wrote:
+>>
+>>> Hi Andreas!
+>>>
+>>> First of all, thanks for taking a look at this!
+>>>
+>>> On 10/10/2025 16:03, Andreas Kemnade wrote:
+>>>> On Fri, 10 Oct 2025 15:09:07 +0300
+>>>> Matti Vaittinen <mazziesaccount@gmail.com> wrote:
+>>>>>>> +static int bd72720_get_secondary_regmap(struct i2c_client *i2c,
+>>>>>>
+>>>>>> Does this 'secondary' have a specific purpose or a better name?
+>>>>>
+>>>>> I am not entirely sure. When I asked this from the designers they just
+>>>>> told me that they needed more than 255 registers so they added another
+>>>>> slave address... (I'm not sure what would have been wrong with using a
+>>>>> page register). So, I assume they just placed stuff that didn't fit in
+>>>>> first 255 register there. But yeah, it looks like most of the 
+>>>>> registers
+>>>>> there are related to the charger. So, perhaps it isn't completely
+>>>>> misleading to use "charger regmap"? The data-sheet seems to be just
+>>>>> using "Register map 1" and "Register map 2" in the tables listing 
+>>>>> these
+>>>>> registers. I kind of like using something which maps easily to the
+>>>>> data-sheet, but I really have no strong opinion on this.
+>>>>
+>>>> just another idea: What about one regmap with custom functions covering
+>>>> both these adresses? Maybe that could even be added to the regmap
+>>>> functionality, maybe with a 0x100 offset for the second range.
+>>>> That way the rest of the code only needs to real with one regmap
+>>>> and properly defined registers.
+>>>
+>>> Interesting idea.
+>>>
+>>> I suppose you mean something like implementing custom remap_read() and
+>>> regmap_write() - which would practically select the I2C adapter to use
+>>> based on the register address - and then doing same thing as the
+>>> regmap_i2c_smbus_i2c_write() / regmap_i2c_smbus_i2c_read() do?
+>>>
+>>> I suppose this would mean duplicating the functionality provided by the
+>>> regmap_i2c_smbus_i2c_write() and the regmap_i2c_smbus_i2c_read(), which
+>>> are static. It'd also mean we'll lose the 1 to 1 mapping between the
+>>> register addresses in driver and addresses in the data-sheet. I agree
+>>> this wouldn't be such a huge thing if we used offset like 0x100 though.
+>>>
+>> Well, you could also stack regmaps like ntxec.c is doing (but there
+>> for some very weird reason). That would avoid duplicating code.
+> 
+// snip
+> 
+> If this works, then I kind of like this. It avoids using the platform 
+> data and simplifies the regmap getting in the power_supply driver. 
+> Thanks for the good idea Andreas!
 
-The LAN966X Kconfig help section mentions drivers related to devices
-added based on the overlay description.
+Hmm. This morning I tested this approach. I converted the MFD driver and 
+some sub-devices, and I mostly liked it. Mostly.
 
-Add drivers related to devices described by those new nodes in the
-already existing driver list.
+When adding the offset only to the addresses behind the 'secondary 
+slave', the addresses behind the 'real slave' (which the MFD driver is 
+bound), can be accessed using both the 'wrapper' and the 'real' regmap. 
+Assuming the cache is kept in the 'real' regmaps. This is a small 
+performance penalty compared to having the cache already in the wrapper, 
+but it allows the drivers like the regulator driver, which only use the 
+'primary slave' to just get a regmap from the MFD parent, no matter 
+whether they get the 'wrapper' of the 'real' one. So, no deviation in 
+these slave devices - nice.
 
-Signed-off-by: Herve Codina <herve.codina@bootlin.com>
----
- drivers/misc/Kconfig | 5 +++++
- 1 file changed, 5 insertions(+)
+MFD gains a tad more complexity due to the additional wrapper regmap. 
+That's not bad though. MFD also needs to use the 'unwrapped' register 
+addresses for the slave regmap config (ranges and max register). This 
+won't get extremely ugly though as we can do some simple macros for 
+'unwrapping'.
 
-diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
-index 3ca09d993a19..c4e6af87c977 100644
---- a/drivers/misc/Kconfig
-+++ b/drivers/misc/Kconfig
-@@ -636,13 +636,18 @@ config MCHP_LAN966X_PCI
- 	  Even if this driver does not depend on those other drivers, in order
- 	  to have a fully functional board, the following drivers are needed:
- 	    - fixed-clock (COMMON_CLK)
-+	    - i2c-mux-pinctrl (I2C_MUX_PINCTRL)
- 	    - lan966x-cpu-syscon (MFD_SYSCON)
-+	    - lan966x-gck (COMMON_CLK_LAN966X)
- 	    - lan966x-miim (MDIO_MSCC_MIIM)
- 	    - lan966x-oic (LAN966X_OIC)
- 	    - lan966x-pinctrl (PINCTRL_OCELOT)
- 	    - lan966x-serdes (PHY_LAN966X_SERDES)
- 	    - lan966x-switch (LAN966X_SWITCH)
- 	    - lan966x-switch-reset (RESET_MCHP_SPARX5)
-+	    - sam9x60-i2c (I2C_AT91)
-+	    - sama5d2-flexcom (MFD_ATMEL_FLEXCOM)
-+	    - sfp (SFP)
- 
- source "drivers/misc/c2port/Kconfig"
- source "drivers/misc/eeprom/Kconfig"
--- 
-2.51.0
+What I do dislike is the fact that the register addresses for the 
+secondary slave will now be 9 bits. This will require some modifications 
+in the power-supply driver, which currently stores the addresses using 
+u8. The register values can still be 8-bits though, so maybe it won't 
+get that bad. I haven't tested this yet.
 
+As a result, I am not entirely convinced, but not totally against this 
+idea either.
+
+I'll be away for a bit more than a week, starting from Friday, so it may 
+be I won't spin the next version until around the last days of the October.
+
+Yours,
+	-- Matti.
 
