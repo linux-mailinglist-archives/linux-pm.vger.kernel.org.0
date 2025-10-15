@@ -1,128 +1,211 @@
-Return-Path: <linux-pm+bounces-36126-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36127-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BAFB3BDCA1C
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Oct 2025 07:46:53 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1EEFABDCCD6
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Oct 2025 08:55:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3082E188DB7F
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Oct 2025 05:47:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3A17819A7969
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Oct 2025 06:55:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCF64145B3F;
-	Wed, 15 Oct 2025 05:46:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9E4E313292;
+	Wed, 15 Oct 2025 06:55:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="HJEvdX9a"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="QqUadTo0"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from lelvem-ot01.ext.ti.com (lelvem-ot01.ext.ti.com [198.47.23.234])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9202CE555
-	for <linux-pm@vger.kernel.org>; Wed, 15 Oct 2025 05:46:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.234
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D9F7313271
+	for <linux-pm@vger.kernel.org>; Wed, 15 Oct 2025 06:55:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760507209; cv=none; b=dqTOjwIvM7mT1Hs6CGlZNszr9hnk9CCcsswmCuGjuV8PROo4HTBtr1oDSTPKDG8LWgZ5uWIVFybVkmxM2Y4fI/yXUgqe2Y72lDL0rouZ2VgZgGRISYnmmB2F5JyDX6YrJipGPObvphuPlCLTKb91dLWRxLwu7m7DiwIhVdTlgIU=
+	t=1760511318; cv=none; b=q5dSG7VygPzw4Wz+HICjJyJBqVApzo7/ba4BclnyRuAnuJXEWHIuCDaS7PwHqsL7KXg/9ucWuB8u7V4OU+3GrMtHIGx8nTU/Y3xUCj7I4LuaWMp5xQA4mhyzNRKif4Q6A9ezrbwfxZMos7Abn2WfO8Dw4LyF7AWuBkjsaEXR3No=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760507209; c=relaxed/simple;
-	bh=4o/AIluxL5bylaEM2NTY4++CTKRGyt5DbbyMBpi5FW0=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cHm8A35++5UlhOdm2SgfR4ZkshdQJ3wjFSuWo8fFp37L1WXRqRga6ewtHlwyh8EYqm2ObgJ/RrttdDpj0lqpdvotOsKmKGxbhQx68bLmiwt+B3uYFpjYqfO7wkMAo6pLV7W+7nr1llEi2yiXvfTAUv8xFVvuAy4BFgvIJ5sLsuQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=HJEvdX9a; arc=none smtp.client-ip=198.47.23.234
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from lelvem-sh02.itg.ti.com ([10.180.78.226])
-	by lelvem-ot01.ext.ti.com (8.15.2/8.15.2) with ESMTP id 59F5kgaW1327149;
-	Wed, 15 Oct 2025 00:46:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1760507202;
-	bh=cd4fot0vc2ArBNVBL+srbZEPrL+OVTa8Pinp08MojuI=;
-	h=Date:From:To:CC:Subject:References:In-Reply-To;
-	b=HJEvdX9aXfFPkCrVfNRHUPRcX8B4QVqmetghS6jfFbD0zvqTxBZ44zd0eHO+upN6N
-	 R19g2BGhAUBAi+AX/2V24O7CegPkwZ0Pr5x549br1VeADnyuFw9gbeQoTZuyHXxC8X
-	 4INuqzIav9YFTUt/eVZsP71ck6Efy3QweojVrpJo=
-Received: from DLEE213.ent.ti.com (dlee213.ent.ti.com [157.170.170.116])
-	by lelvem-sh02.itg.ti.com (8.18.1/8.18.1) with ESMTPS id 59F5kgSG997651
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Wed, 15 Oct 2025 00:46:42 -0500
-Received: from DLEE203.ent.ti.com (157.170.170.78) by DLEE213.ent.ti.com
- (157.170.170.116) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 15 Oct
- 2025 00:46:42 -0500
-Received: from lelvem-mr05.itg.ti.com (10.180.75.9) by DLEE203.ent.ti.com
- (157.170.170.78) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
- Transport; Wed, 15 Oct 2025 00:46:42 -0500
-Received: from localhost (lcpd911.dhcp.ti.com [172.24.233.130])
-	by lelvem-mr05.itg.ti.com (8.18.1/8.18.1) with ESMTP id 59F5kevD1410268;
-	Wed, 15 Oct 2025 00:46:41 -0500
-Date: Wed, 15 Oct 2025 11:16:40 +0530
-From: Dhruva Gole <d-gole@ti.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-CC: Kaushlendra Kumar <kaushlendra.kumar@intel.com>, <pavel@kernel.org>,
-        <gregkh@linuxfoundation.org>, <dakr@kernel.org>,
-        <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH] PM: Introduce CALL_PM_OP macro to reduce code duplication
-Message-ID: <20251015054640.g2mjf4dccbn2tcma@lcpd911>
-References: <20250919124437.3075016-1-kaushlendra.kumar@intel.com>
- <CAJZ5v0iXAO6Z1t-LeGgutsJRbfL7+Xtszq0h_pG+QFfPbfET7Q@mail.gmail.com>
+	s=arc-20240116; t=1760511318; c=relaxed/simple;
+	bh=sh9A9FOiaFSj1NrSmBjEHeyuo7+m+MPI2zTeMPcWPMA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FMFLgKM9jor68JX9YDhYn45m2+A3pVbH9+Uv6JbZC7QFROSP/hKFvcuvC4cOqJsY/aLjE5kbDbuuFfyajBGnscg2332Bv+rEQb3mRJldHz6dmGq35rnBz8cyvn72Bh7owPVImRE1SL+Q5vw/XzmvpvifXavsZtly9qDoWmArwac=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=QqUadTo0; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 59F2sjaY003849
+	for <linux-pm@vger.kernel.org>; Wed, 15 Oct 2025 06:55:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=TXB5nJozBeUSUfmi0Lz+MYki
+	JUeY6V0tmx/cboDkFLY=; b=QqUadTo04FZBGSEHNT3wH2hmQAOObsSR2bX3r/Xw
+	jdd9pY1qeVHvYx+42EQ/WitzbGb3MmYbcIDGFXo1CFkXWaI4B4GchmcUnQXbJV/9
+	BH86iYFa7Jm7O4wdqMoC5sQ8L3ToA9QgFQkpPva6wp6lDm4KLWSSnacqJdnPSYvy
+	Y/vFak9EgeeZ7o+68+xUYY7IqrOJ1OHstbN2mooGEYLdDXDosjQ8dB6G0xju7O9C
+	5Yb53L9tL9dOYF1az+3paNWe8eagwYY/iOoemckuHekwFkpZGd4MTXoBFrxa//E0
+	umU6/Truog4dPnX2MOe7QMtwyF7YZf4jsf0FLHwO2nLT2w==
+Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com [209.85.216.72])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 49sua8hyq5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Wed, 15 Oct 2025 06:55:15 +0000 (GMT)
+Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-33274f8ff7cso14300972a91.0
+        for <linux-pm@vger.kernel.org>; Tue, 14 Oct 2025 23:55:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760511312; x=1761116112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TXB5nJozBeUSUfmi0Lz+MYkiJUeY6V0tmx/cboDkFLY=;
+        b=VGeVVeQPUhupFaCmJzaoe199fJQU2og2whS5ctjlgnqs998BsM4E9pk7mcbmVGCFOs
+         zKTiKrLvDYdmYeuEJo/wQOrZsKo6ZpxS6ZQOi7UP+6/jusDo1VQwNDO4o2SA61mBA/+l
+         DBqDltXwb8So3D1xIymOpxihq+b23a0Dr2sW7ttWqeT61IltC9J5wOpTxva/pzq4xGPv
+         Wk/SF7brko7QQG76NoNcNJVkNR2LVrLurb641KSoa/xcYqGZFocMstDv3vjdRQzQG5k2
+         LGWeoTWDxK2HdgqExaZZFxuF6ShBZT4bqI88mdIvOzNBNEUEAGSld+WumU+HcShTYUnp
+         qUuQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUqvMKByAsPURs6nfLR33soSUc4Vmbshiw8nqWWT9CnjqBXejuF68GLlINQ2YDARzCRXDDfmGCKEA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzuKkbpK0Y3qTnqbSqJXQ3o7VsFcNdmc55N815rqoZPEXdfgyuK
+	yb3RguaK0OPWvIISx99DBNPidJaEhDsE+TfJZvdVbeY+I4Mv+Loseth+PeQH+q/7TvCkcma8cgO
+	flP+w7gtNgzg1dlHm/VvUgr4V8baKo4F6iqA4yf7BAzD9qcjkBNwSzg43j9KoDQ==
+X-Gm-Gg: ASbGncvBRgDH8YRTEqe3s8lc+ngFyxDSCG6DStClwHZU+rCcx3dURWIT2EUqLVv6GC+
+	3SobMHd7s5Mh5o2Mk5nZqGe1y1jz4SUWr6FUE41z2GHuIJrPLdYiJ+k2848LmSUOtFu1aThN4LG
+	VGtvULEfNhTz16k0S8eByt9NVrXhW1e1L837mImodOd9FkqT2nJQde2gpQBYyI0PIvBfZjcK259
+	5ucgPtyPy3AhEYgyr+Tl5qB6GwmT62SnKT4FrN+4uAYHgjmS8dGVrGlDgaNOgi4VNiIwLcgytRE
+	fzvmtcRNuDc0vyVTt0m2A3RuXlB+QQt0rKky7+P4XmatnglcHoB4Z8Ly6/MxPEBxFIIIVViI/Q=
+	=
+X-Received: by 2002:a17:90b:3ec5:b0:327:e018:204a with SMTP id 98e67ed59e1d1-33b50f85081mr37168959a91.0.1760511311968;
+        Tue, 14 Oct 2025 23:55:11 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IF7PQa4vHNUgbJuh2uPKnDF3CrlxsqSIGMWHhVoDwTgNv+/9QY6DRirS1HikY5vDY9hqKN+Rw==
+X-Received: by 2002:a17:90b:3ec5:b0:327:e018:204a with SMTP id 98e67ed59e1d1-33b50f85081mr37168927a91.0.1760511311418;
+        Tue, 14 Oct 2025 23:55:11 -0700 (PDT)
+Received: from hu-pkondeti-hyd.qualcomm.com ([202.46.22.19])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-33b9786e602sm1207949a91.11.2025.10.14.23.55.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Oct 2025 23:55:11 -0700 (PDT)
+Date: Wed, 15 Oct 2025 12:25:00 +0530
+From: Pavan Kondeti <pavan.kondeti@oss.qualcomm.com>
+To: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
+Cc: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Souvik Chakravarty <Souvik.Chakravarty@arm.com>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>, Andy Yan <andy.yan@rock-chips.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Konrad Dybcio <konradybcio@kernel.org>,
+        cros-qcom-dts-watchers@chromium.org, Vinod Koul <vkoul@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
+        Moritz Fischer <moritz.fischer@ettus.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+        Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Andre Draszik <andre.draszik@linaro.org>,
+        Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org,
+        Elliot Berman <quic_eberman@quicinc.com>,
+        Srinivas Kandagatla <srini@kernel.org>,
+        Umang Chheda <umang.chheda@oss.qualcomm.com>
+Subject: Re: [PATCH v16 07/14] firmware: psci: Implement vendor-specific
+ resets as reboot-mode
+Message-ID: <3978e740-0589-4872-8f2f-1162084d3818@quicinc.com>
+References: <20251015-arm-psci-system_reset2-vendor-reboots-v16-0-b98aedaa23ee@oss.qualcomm.com>
+ <20251015-arm-psci-system_reset2-vendor-reboots-v16-7-b98aedaa23ee@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0iXAO6Z1t-LeGgutsJRbfL7+Xtszq0h_pG+QFfPbfET7Q@mail.gmail.com>
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
+In-Reply-To: <20251015-arm-psci-system_reset2-vendor-reboots-v16-7-b98aedaa23ee@oss.qualcomm.com>
+X-Proofpoint-GUID: -VSSZ3urkWy7_u3GnQwLI_CyZvaA5oGG
+X-Authority-Analysis: v=2.4 cv=e5MLiKp/ c=1 sm=1 tr=0 ts=68ef4553 cx=c_pps
+ a=RP+M6JBNLl+fLTcSJhASfg==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
+ a=kj9zAlcOel0A:10 a=x6icFKpwvdMA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=BmsMZzT-mW5IMwsoq18A:9 a=CjuIK1q_8ugA:10 a=iS9zxrgQBfv6-_F4QbHw:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDE0MDEzNCBTYWx0ZWRfX3j/btCJ20mDC
+ U7FAScar0uK/ayCZEvNiOdIzhR2t5Ex+EJPHLGR7ZyxkPqXRp/Rrw/K3WdA2/gaWEnVwKzyg8i8
+ BROe1Uoc+UWMpZ9V5pu7eZQIMaVT9Su008CEJkMZy2zS3SWNaJ0yP/f9CM6STRFmS3OV2bRpnmJ
+ 8HyklfmRS+qaeiaKOkln6RzSTjdMMCQ8tG5WvaDvEYxTOQoPu6H47OdZsehlKOspgYrll6SUQn7
+ d5RPdx7wvDYJMuUNRRqoRjakVUSfyiekNxKTRCtTsTELwBzOvIHeO/tYnlIuHUK8TdwvJnjebEp
+ dUOMLyNuh0uu329Akf2I2f6guwzNIn0b3/GHGpvkuNls4X0FEmdtfFbj9M4S7H+I2Z8tqO2O6lj
+ WebCSzuheJ1/55jtZSCMv72QBzTLHw==
+X-Proofpoint-ORIG-GUID: -VSSZ3urkWy7_u3GnQwLI_CyZvaA5oGG
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-10-15_02,2025-10-13_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ phishscore=0 suspectscore=0 spamscore=0 adultscore=0 clxscore=1011
+ priorityscore=1501 impostorscore=0 malwarescore=0 bulkscore=0
+ lowpriorityscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2510020000
+ definitions=main-2510140134
 
-On Oct 13, 2025 at 20:56:40 +0200, Rafael J. Wysocki wrote:
-> On Fri, Sep 19, 2025 at 2:46 PM Kaushlendra Kumar
-> <kaushlendra.kumar@intel.com> wrote:
-> >
-> > Add CALL_PM_OP macro to eliminate repetitive code patterns in power
-> > management generic operations. Replace identical driver PM callback
-> > invocation logic across all pm_generic_* functions with a single
-> > macro that handles the NULL pointer checks and function calls.
-> >
-> > This reduces code duplication significantly while maintaining the
-> > same functionality and improving code maintainability.
-> >
-> > Signed-off-by: Kaushlendra Kumar <kaushlendra.kumar@intel.com>
-> > ---
-> >  drivers/base/power/generic_ops.c | 85 ++++++++++----------------------
-> >  1 file changed, 25 insertions(+), 60 deletions(-)
-> >
-> > diff --git a/drivers/base/power/generic_ops.c b/drivers/base/power/generic_ops.c
-> > index 6502720bb564..c4fc802b8c65 100644
-> > --- a/drivers/base/power/generic_ops.c
-> > +++ b/drivers/base/power/generic_ops.c
-> > @@ -8,6 +8,13 @@
-> >  #include <linux/pm_runtime.h>
-> >  #include <linux/export.h>
-> >
-> > +#define CALL_PM_OP(dev, op) \
-> > +({ \
-> > +struct device *_dev = (dev); \
-> > +const struct dev_pm_ops *pm = _dev->driver ? _dev->driver->pm : NULL; \
-> > +pm && pm->op ? pm->op(_dev) : 0; \
-> > +})
+On Wed, Oct 15, 2025 at 10:08:22AM +0530, Shivendra Pratap wrote:
+> +static int __init psci_init_vendor_reset(void)
+> +{
+> +	struct reboot_mode_driver *reboot;
+> +	struct device_node *psci_np;
+> +	struct device_node *np;
+> +	int ret;
+> +
+> +	if (!psci_system_reset2_supported)
+> +		return -EINVAL;
+> +
+> +	psci_np = of_find_compatible_node(NULL, NULL, "arm,psci-1.0");
+> +	if (!psci_np)
+> +		return -ENODEV;
+> +
+> +	np = of_find_node_by_name(psci_np, "reboot-mode");
+> +	if (!np) {
+> +		of_node_put(psci_np);
+> +		return -ENODEV;
+> +	}
+> +
+> +	ret = atomic_notifier_chain_register(&panic_notifier_list, &psci_panic_block);
+> +	if (ret)
+> +		goto err_notifier;
+> +
+> +	reboot = kzalloc(sizeof(*reboot), GFP_KERNEL);
+> +	if (!reboot) {
+> +		ret = -ENOMEM;
+> +		goto err_kzalloc;
+> +	}
+> +
+> +	reboot->write = psci_set_vendor_sys_reset2;
+> +	reboot->driver_name = "psci";
+> +
+> +	ret = reboot_mode_register(reboot, of_fwnode_handle(np));
+> +	if (ret)
+> +		goto err_register;
+> +
+
+minor nit: np and psci_np reference must be dropped since we are done
+using it.
+
+> +	return 0;
+> +
+> +err_register:
+> +	kfree(reboot);
+> +err_kzalloc:
+> +	atomic_notifier_chain_unregister(&panic_notifier_list, &psci_panic_block);
+> +err_notifier:
+> +	of_node_put(psci_np);
+> +	of_node_put(np);
+> +	return ret;
+> +}
+> +late_initcall(psci_init_vendor_reset)
+> +
+>  static void __init psci_init_system_reset2(void)
+>  {
+>  	int ret;
 > 
-> Why don't you include the function signature and symbol export into the macro?
-> 
-
-As discussed in the [v2] I am more inclined toward this v1
-implementation.
-
-So for v1:
-Reviewed-by: Dhruva Gole <d-gole@ti.com>
-
-[v2] https://lore.kernel.org/linux-pm/CAJZ5v0iHcvXHdMfdakd5TUgcAiOGFW8hbvb2k-xb92dz81cGhA@mail.gmail.com
-
--- 
-Best regards,
-Dhruva Gole
-Texas Instruments Incorporated
 
