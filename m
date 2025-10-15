@@ -1,212 +1,154 @@
-Return-Path: <linux-pm+bounces-36123-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36125-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2AD57BDC892
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Oct 2025 06:43:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 56662BDC8BF
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Oct 2025 06:50:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 9167850369F
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Oct 2025 04:41:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 368893A9A93
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Oct 2025 04:50:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EB8A2FFFA0;
-	Wed, 15 Oct 2025 04:40:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4AD82FF15B;
+	Wed, 15 Oct 2025 04:50:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="hxs2r+8S"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VIWWG9xi"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F0F02FE578
-	for <linux-pm@vger.kernel.org>; Wed, 15 Oct 2025 04:40:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BE6B2FDC54;
+	Wed, 15 Oct 2025 04:50:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760503250; cv=none; b=k2tqdM0ihQrEmyFP7lNY0+TjCS3GFypxM7bjgggpxFv15P0t8q4UFwftnVw3IuFzu962id0MstdktvIKIaXFgENYdTZpfqKjnG0ptDQArGRdlFhbCPF0z3oKvnBbiO0T+jVIfdPmb0UDBSy18mEmBhQUpvpSQsW4LYFIfWCqdW4=
+	t=1760503824; cv=none; b=FhG5n/E+7AJ8aZAbkdBe2wwRL+sGh5xCdZ7LM9Ya+PsV3w639BX0EbYhaOsyY6TzaaO/efF1A2BEsspKLamG5XrsAKMqUh/KgPVIxMILkVCZuPpBKPWOWPGmf0OG7JqaE+OulDPBK2e7xRXS/2AAOu8vuQPlh2mfM3Ojsz3wR/8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760503250; c=relaxed/simple;
-	bh=q1pRzkuBh9GAg1JcwXGzO3FL3XRWgrlscAgQj90ENvE=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=g/kbp28GkVufAhlfHRHIu8fv3FmUqJGQnhVezxkRmGKONOKjKeDy5wWWO1+evrqb181hAbeiVFldSo1qZ6/IgrJ+D+C6ny5NV7Qt8iT7TPsKMTfM+RTOmckzYXQka6PqKER2MNJmAK2cHMxEXi477MX/LJ4mWSoM5ce1LkqUHWk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=hxs2r+8S; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 59F2sS3n016037
-	for <linux-pm@vger.kernel.org>; Wed, 15 Oct 2025 04:40:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	gBo9gZrkew51yYf4IHpWDN66o41yYqQF87bJGWuNb/k=; b=hxs2r+8SAYSKqgeT
-	uAZNpqBlEcK6bBPzYZ5zcv8abNZFHrNMkkFFCSPx8K8IIyRARkIGLrTOPXAqDF/n
-	qZp5bk41wfi2JAhOAerQ/gzaNeZKOMKe0+ao48SwoB8F0jVO8VGz2suDEWTaKeDP
-	J83RV++aCKvWtMtJEjQgMIZcXWIZi7gOz8MkBDDA9j3XCIKlaf11bs8U3BZx49x7
-	pN05oHm3WL4XOd+RN9kp3jgnEWfzcVTmVkCM8pRMt6XCy40+rjLbyh1LsBkT7xCn
-	Ybb/QhPBDJIGuzlRTMgSDqZ9T2FUOMOYfSLD20UkNWEcVKsrZ3zH2EvD+AEnbMYL
-	OI9xXw==
-Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com [209.85.216.71])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 49qfm5k5kk-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Wed, 15 Oct 2025 04:40:47 +0000 (GMT)
-Received: by mail-pj1-f71.google.com with SMTP id 98e67ed59e1d1-3352a336ee1so21071239a91.0
-        for <linux-pm@vger.kernel.org>; Tue, 14 Oct 2025 21:40:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760503246; x=1761108046;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gBo9gZrkew51yYf4IHpWDN66o41yYqQF87bJGWuNb/k=;
-        b=JJ+DBHjHy2dUxXdUi5MdMi4LJyL4YAPVgjpWCYbii0PNEC5BwEfPIP07ZgHkB1BabZ
-         lPCwlVAm22Qz12kpWFgsUGH41xpvK3i3YsNza9m9nWaZzbZ5U8piY0MfGchplxlLB1vk
-         Y1C84K48bq2Dw0qOLizpXEldzOibBWRZsEktmU1DsEcz5vZVcJ/6hdbzPNT0F+agR/1j
-         WhlFlXTbYUhWe0dBVYVRJ+gbs5jrfgprV8IrmREuaS6HDk017+j8PdMk/ScfcmVGq0y3
-         ElgZnM0yBjso3kqFZGu2Tk0Z9iMU3AIhd8wisq2HSGi08Sn62XgivHkL17DkmauseGWV
-         g+gQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW8XbucOdijkxQpl/MFZkhzNYjn1VW+lVJQad8pCYBTa9sz5sWb3sgwXcRcSwgrocZ4U/5ebh98wQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywhtm5gthWCwZhep5tXez/scQwpaSIN/KMeVbdURjC90feUBNr6
-	f6+aqi/tyeH0lOnc9UXDwe2u1KF42Bgz8qbfKPAneqPLyU0JxcfFLU40/eqodcz0/ehbGrCQZDN
-	7ouQQWJyz9bAzd/rF+IxhvjnQCW10TV+38EOMWCWhhzSAoRN1jDmftiDgJZwClQsceXactA==
-X-Gm-Gg: ASbGnctI1/GF29s7/TVYwz/lMYzh864JMSVM11zz7c+a5BElDSWnBMhqo5dUG4VDHYo
-	dS4AmG1kBh3pxo3aw+EP3tZ+LntHjLO1FJEHrajS2Ns6+Ls+HCe3hluicHpPVFYtYOnBCdFrvIK
-	K0Xjf1fXMjKlkpt3hrRr5h1Qbirznllu3rouPbJ0sWxQ2eRrj+h50jegKo1HsaszaXgOKrQMICD
-	pV98YTfWRcQ3V/piFKjPQmEKaVX7baawu39g0LfjqcSnBq4cyeBFZMVYGOP/OLREr9mouYKqTm6
-	+Uqm4vMKyDxmBG6/9rz+IBc8vUpIHBgzFt/90/XujzvHdY1j3vJdiL8X+ysIAQTlt4fnH1gXwdb
-	2
-X-Received: by 2002:a17:90b:1c88:b0:330:a454:c31a with SMTP id 98e67ed59e1d1-33b51386573mr36050538a91.32.1760503245569;
-        Tue, 14 Oct 2025 21:40:45 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHl45T5gEGBYaChkWOQqwIOqGUS/zz2WbvtwiMkJgYFYDoxb2M6+A0u7nW/BBPu6hBROJZsvA==
-X-Received: by 2002:a17:90b:1c88:b0:330:a454:c31a with SMTP id 98e67ed59e1d1-33b51386573mr36050499a91.32.1760503245015;
-        Tue, 14 Oct 2025 21:40:45 -0700 (PDT)
-Received: from hu-spratap-hyd.qualcomm.com ([202.46.22.19])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-33b9787af5asm705406a91.20.2025.10.14.21.40.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Oct 2025 21:40:44 -0700 (PDT)
-From: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
-Date: Wed, 15 Oct 2025 10:08:29 +0530
-Subject: [PATCH v16 14/14] arm64: dts: qcom: qcs615-ride: Add PSCI
- SYSTEM_RESET2 types
+	s=arc-20240116; t=1760503824; c=relaxed/simple;
+	bh=LqQqWnML8DclCbVCtkFguG/McePDuiseyX71RGUghcQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZpxR7lQZrrbJ00ef92qG9ieW+FYMo7rAfXTU1/m7xlvq8GZmmnBBffiWLGM1UbsfGMhcmif8S1sJ83vhEEd68j55YO5CReldsrgu1b/tf8sWxGvZN3fnfjGNaedC+y7I63pZGsEeDTvoCHJoSRJmr5WGMBmwL0Cl1lDV5Q+8W18=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VIWWG9xi; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1760503823; x=1792039823;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=LqQqWnML8DclCbVCtkFguG/McePDuiseyX71RGUghcQ=;
+  b=VIWWG9xij1i9qcnh0U2jFiBK0F52rWkC2ZMy5hTWwQAXyyKIEeZajJ0F
+   xPVsCE+CzruE7TXRW8JNKAPMIBZBIXWRF78AnJ3dFLEdKmt+Mia+gb0/c
+   QvvpccBJAL4FLhYc41js7T8GPLwxuTELNFj6LZ2X0RJzCLk4/VA7Deb3T
+   FvUgHjt73Bx9UxagPBfnXo3Ki0miehjYYFCLhGptUHLb8bhnpsMuWZnlv
+   T+Kv8LtpdeBMlKq5i15O9s4g8+VSK7Gf3lVFrpUNc4QUNI5x/HvJN0B+0
+   rUhB+kqIQ3qj6zRU95I+Y3nmXCwlUx2yrCpnHRL5OmA1doqUMfzK6dDLN
+   A==;
+X-CSE-ConnectionGUID: Ucj01nRnROegk5tbZJmgUg==
+X-CSE-MsgGUID: akf04SSKQriLJBW85FazlA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11582"; a="50234694"
+X-IronPort-AV: E=Sophos;i="6.19,230,1754982000"; 
+   d="scan'208";a="50234694"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2025 21:50:23 -0700
+X-CSE-ConnectionGUID: SMWUyt40S7OMWDVvD/jLuQ==
+X-CSE-MsgGUID: J3aQ1pfEQXWAR4GohqDU3A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,230,1754982000"; 
+   d="scan'208";a="182847741"
+Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
+  by fmviesa010.fm.intel.com with ESMTP; 14 Oct 2025 21:50:20 -0700
+Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1v8tSr-0003SD-1b;
+	Wed, 15 Oct 2025 04:50:17 +0000
+Date: Wed, 15 Oct 2025 12:49:54 +0800
+From: kernel test robot <lkp@intel.com>
+To: Changwoo Min <changwoo@igalia.com>, lukasz.luba@arm.com,
+	rafael@kernel.org, len.brown@intel.com, pavel@kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, christian.loehle@arm.com, tj@kernel.org,
+	kernel-dev@igalia.com, linux-pm@vger.kernel.org,
+	sched-ext@lists.linux.dev, linux-kernel@vger.kernel.org,
+	Changwoo Min <changwoo@igalia.com>
+Subject: Re: [PATCH v5 05/10] PM: EM: Add an iterator and accessor for the
+ performance domain
+Message-ID: <202510151232.UNZ2J7TZ-lkp@intel.com>
+References: <20251014001055.772422-6-changwoo@igalia.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251015-arm-psci-system_reset2-vendor-reboots-v16-14-b98aedaa23ee@oss.qualcomm.com>
-References: <20251015-arm-psci-system_reset2-vendor-reboots-v16-0-b98aedaa23ee@oss.qualcomm.com>
-In-Reply-To: <20251015-arm-psci-system_reset2-vendor-reboots-v16-0-b98aedaa23ee@oss.qualcomm.com>
-To: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Souvik Chakravarty <Souvik.Chakravarty@arm.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>, Andy Yan <andy.yan@rock-chips.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Konrad Dybcio <konradybcio@kernel.org>,
-        cros-qcom-dts-watchers@chromium.org, Vinod Koul <vkoul@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Florian Fainelli <florian.fainelli@broadcom.com>,
-        Moritz Fischer <moritz.fischer@ettus.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-        Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Andre Draszik <andre.draszik@linaro.org>,
-        Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org,
-        Elliot Berman <quic_eberman@quicinc.com>,
-        Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>,
-        Srinivas Kandagatla <srini@kernel.org>,
-        Song Xue <quic_songxue@quicinc.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1760503106; l=1528;
- i=shivendra.pratap@oss.qualcomm.com; s=20250710; h=from:subject:message-id;
- bh=st897fJ7jTPYQ5eppZ6+OrlCOSPDdAnpzJ0eoXTLNbM=;
- b=gWz6wC5KS4Z9D59qmU8+oPQ+ydpoZURhG6YTecv1VL1HdeQY4r8X5AuEshLZFDnnQNu2P7OnP
- ETCaaC08bcmCbxRY4EyrQJoana5MwZKnS0RbAX/G9ftaPPfaG17phQc
-X-Developer-Key: i=shivendra.pratap@oss.qualcomm.com; a=ed25519;
- pk=CpsuL7yZ8NReDPhGgq6Xn/SRoa59mAvzWOW0QZoo4gw=
-X-Proofpoint-GUID: ZvacHtmJmB1KRHiU_EqVfm0wvDgdzms0
-X-Proofpoint-ORIG-GUID: ZvacHtmJmB1KRHiU_EqVfm0wvDgdzms0
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDExMDAyMCBTYWx0ZWRfX83RfWIfIEuY8
- JJW6ToerSqV8hu+87qZ8QX7rlX60m62/tn0W3VTWEdGmHL7lXXBlaKp+gAMZ4ODGfXr+n6agPza
- bLF7P5PZG8n0hLkH3990Rv6vOERsUyu9EFsKFlBNO53sqDQu5HVTblidulQ9OwgVr+5IbR6MeUZ
- EQVWm8w2oFKYN0KmMCtfQz11kk1fo1E8Pk3L0tigqXRlbKzl/8uK+rleFq+m90EE25BJvYYIWKT
- fx9tk3wi/iFC4rF9jFwTnbUKs+HMVLsU2vHkGcJKg2mEyDacjvJToQFx+vVNG0LICi+wrkhKszl
- REB8Kdc3aQc5AEuJf8a2ICfrB5XOPDuVvXyVMrXFsVmgWaT+Y8EuNurwYaYh2rZwiCpN/wYQFY/
- +I0NZaNGCop2LfZTuAkzkIglErMOJw==
-X-Authority-Analysis: v=2.4 cv=V71wEOni c=1 sm=1 tr=0 ts=68ef25cf cx=c_pps
- a=UNFcQwm+pnOIJct1K4W+Mw==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
- a=IkcTkHD0fZMA:10 a=x6icFKpwvdMA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=COk6AnOGAAAA:8 a=EUspDBNiAAAA:8 a=pkXgoPqwvIc8jTsVjBcA:9 a=QEXdDO2ut3YA:10
- a=uKXjsCUrEbL0IQVhDsJ9:22 a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-10-15_01,2025-10-13_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- bulkscore=0 malwarescore=0 spamscore=0 adultscore=0 suspectscore=0
- impostorscore=0 phishscore=0 clxscore=1015 lowpriorityscore=0
- priorityscore=1501 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2510020000
- definitions=main-2510110020
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251014001055.772422-6-changwoo@igalia.com>
 
-From: Song Xue <quic_songxue@quicinc.com>
+Hi Changwoo,
 
-Add support for SYSTEM_RESET2 vendor-specific resets in
-qcs615-ride as reboot-modes.  Describe the resets:
-"bootloader" will cause device to reboot and stop in the
-bootloader's fastboot mode.  "edl" will cause device to reboot
-into "emergency download mode", which permits loading images via
-the Firehose protocol.
+kernel test robot noticed the following build errors:
 
-Signed-off-by: Song Xue <quic_songxue@quicinc.com>
-Signed-off-by: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
----
- arch/arm64/boot/dts/qcom/qcs615-ride.dts | 7 +++++++
- arch/arm64/boot/dts/qcom/sm6150.dtsi     | 2 +-
- 2 files changed, 8 insertions(+), 1 deletion(-)
+[auto build test ERROR on amd-pstate/linux-next]
+[also build test ERROR on amd-pstate/bleeding-edge linus/master v6.18-rc1 next-20251014]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-diff --git a/arch/arm64/boot/dts/qcom/qcs615-ride.dts b/arch/arm64/boot/dts/qcom/qcs615-ride.dts
-index 705ea71b07a10aea82b5789e8ab9f757683f678a..bfb504db43368fe73ff200476ff5220334872c8a 100644
---- a/arch/arm64/boot/dts/qcom/qcs615-ride.dts
-+++ b/arch/arm64/boot/dts/qcom/qcs615-ride.dts
-@@ -343,6 +343,13 @@ &pon_resin {
- 	status = "okay";
- };
- 
-+&psci {
-+	reboot-mode {
-+		mode-bootloader = <0x10001 0x2>;
-+		mode-edl = <0 0x1>;
-+	};
-+};
-+
- &qupv3_id_0 {
- 	status = "okay";
- };
-diff --git a/arch/arm64/boot/dts/qcom/sm6150.dtsi b/arch/arm64/boot/dts/qcom/sm6150.dtsi
-index 3d2a1cb02b628a5db7ca14bea784429be5a020f9..9df5e94069f604e5393350f5d8906097d6d01209 100644
---- a/arch/arm64/boot/dts/qcom/sm6150.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm6150.dtsi
-@@ -416,7 +416,7 @@ opp-128000000 {
- 		};
- 	};
- 
--	psci {
-+	psci: psci {
- 		compatible = "arm,psci-1.0";
- 		method = "smc";
- 
+url:    https://github.com/intel-lab-lkp/linux/commits/Changwoo-Min/PM-EM-Assign-a-unique-ID-when-creating-a-performance-domain/20251014-082420
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git linux-next
+patch link:    https://lore.kernel.org/r/20251014001055.772422-6-changwoo%40igalia.com
+patch subject: [PATCH v5 05/10] PM: EM: Add an iterator and accessor for the performance domain
+config: i386-buildonly-randconfig-001-20251015 (https://download.01.org/0day-ci/archive/20251015/202510151232.UNZ2J7TZ-lkp@intel.com/config)
+compiler: gcc-13 (Debian 13.3.0-16) 13.3.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251015/202510151232.UNZ2J7TZ-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510151232.UNZ2J7TZ-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> kernel/power/energy_model.c:1003:5: error: redefinition of 'for_each_em_perf_domain'
+    1003 | int for_each_em_perf_domain(int (*cb)(struct em_perf_domain*, void *),
+         |     ^~~~~~~~~~~~~~~~~~~~~~~
+   In file included from kernel/power/energy_model.c:20:
+   kernel/power/em_netlink.h:18:5: note: previous definition of 'for_each_em_perf_domain' with type 'int(int (*)(struct em_perf_domain *, void *), void *)'
+      18 | int for_each_em_perf_domain(int (*cb)(struct em_perf_domain*, void *),
+         |     ^~~~~~~~~~~~~~~~~~~~~~~
+>> kernel/power/energy_model.c:1022:24: error: redefinition of 'em_perf_domain_get_by_id'
+    1022 | struct em_perf_domain *em_perf_domain_get_by_id(int id)
+         |                        ^~~~~~~~~~~~~~~~~~~~~~~~
+   kernel/power/em_netlink.h:24:24: note: previous definition of 'em_perf_domain_get_by_id' with type 'struct em_perf_domain *(int)'
+      24 | struct em_perf_domain *em_perf_domain_get_by_id(int id)
+         |                        ^~~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/for_each_em_perf_domain +1003 kernel/power/energy_model.c
+
+  1002	
+> 1003	int for_each_em_perf_domain(int (*cb)(struct em_perf_domain*, void *),
+  1004				    void *data)
+  1005	{
+  1006		struct em_perf_domain *pd;
+  1007	
+  1008		lockdep_assert_not_held(&em_pd_mutex);
+  1009		guard(mutex)(&em_pd_list_mutex);
+  1010	
+  1011		list_for_each_entry(pd, &em_pd_list, node) {
+  1012			int ret;
+  1013	
+  1014			ret = cb(pd, data);
+  1015			if (ret)
+  1016				return ret;
+  1017		}
+  1018	
+  1019		return 0;
+  1020	}
+  1021	
+> 1022	struct em_perf_domain *em_perf_domain_get_by_id(int id)
 
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
