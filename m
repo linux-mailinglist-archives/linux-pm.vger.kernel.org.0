@@ -1,195 +1,120 @@
-Return-Path: <linux-pm+bounces-36190-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36194-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 253C0BDEE94
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Oct 2025 16:05:23 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA7E0BDEF11
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Oct 2025 16:11:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 1DA134F30EC
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Oct 2025 14:05:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4FF0D1882E84
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Oct 2025 14:11:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 435FC245005;
-	Wed, 15 Oct 2025 14:05:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B701E2609DC;
+	Wed, 15 Oct 2025 14:10:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="psScjpBb"
+	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="yeqZ4FuS";
+	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="U2Yb/25Z"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mout-p-103.mailbox.org (mout-p-103.mailbox.org [80.241.56.161])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FA2F21ABC9;
-	Wed, 15 Oct 2025 14:05:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 469782566F7;
+	Wed, 15 Oct 2025 14:10:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.161
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760537118; cv=none; b=XBVcPtLrnCDI6OjWp9PeA1/9wJ7x7QFLC51BWq71FYM/+nOqSGYxy/0cro/20UIiputUPfOgtwJpfgbUYTH4hPBXRnK4+ckFxOGQxPlfNIl06aBUSGioDdoo5017i6pyepPGSIX4h21wsqlYnLdTLzafijD5cp9VtFTTlUO4dro=
+	t=1760537448; cv=none; b=YE86MMSHBlrRX6/SJAUi1ozlVZRk3+EjDSgyYj3EQJrs2v6yhrgx9jw7IG60oQSWuXwdoAI6wP3e9v2PTObTXXWTEpaGWIXYODgCcSxZABAwO8lnHxA4wHzVtqkjRz7ACWzqsNwpISVL1zsD5Lj252i1efoZGVH+Z7jQWL4MgI4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760537118; c=relaxed/simple;
-	bh=Imiy/d2gYAYXCcTyQuEFVMYa5XWR048yJFog3UE4+H0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=a0oIit4QOU/H04p7a6nOZtXUisWIUoxMM8MWmeYjLgOyPFRtFHlol7GlMifRB2kt7uOsrbr6MtLKRSWfvc3XQNCeyO42PInOLblqwcyeOo8yBHtrM/eTHJXDl9a4LjrWPAyT7u61GchGropR5q+gXr9SJbfOulyRg4GDfCHKyqk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=psScjpBb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78819C4CEF8;
-	Wed, 15 Oct 2025 14:05:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760537117;
-	bh=Imiy/d2gYAYXCcTyQuEFVMYa5XWR048yJFog3UE4+H0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=psScjpBb3e1kcLI5VrkuiWJV17PKdqUVkH2BY7yFGOlYPK2AgZoyISa+/TzVfYYO3
-	 5+PHeN/sB02bv62v11abXuGEqviummglF8j9iGdgD/sq7EPkXC6/QdkRZunsohCIjS
-	 +AL3DNF1W+ayaDX4RLSqj50ToOSXdH8eIZCPax0+c1pVe5Pms0PB8E3vqvHBAIMgzO
-	 y83rOx6KOlya9DtMyXVRcq7s2DySZMQHBBHF/y4xyqDYSxAzrNVW3wQeIXw7ThtAaL
-	 D/ykNx9CJCb2EwFJJnpURIzkACECJNCFP2u4aELprI6L3llqb7s/1qqfoN6RqaheQp
-	 A0zHxkLTAJ4dA==
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-To: Linux PM <linux-pm@vger.kernel.org>
-Cc: Jonathan Cameron <jonathan.cameron@huawei.com>,
- Takashi Iwai <tiwai@suse.de>, LKML <linux-kernel@vger.kernel.org>,
- Linux PCI <linux-pci@vger.kernel.org>,
- Alex Williamson <alex.williamson@redhat.com>,
- Bjorn Helgaas <helgaas@kernel.org>, Zhang Qilong <zhangqilong3@huawei.com>,
- Ulf Hansson <ulf.hansson@linaro.org>, Frank Li <Frank.Li@nxp.com>,
- Dhruva Gole <d-gole@ti.com>,
- Mika Westerberg <mika.westerberg@linux.intel.com>,
- Linux ACPI <linux-acpi@vger.kernel.org>
-Subject: [PATCH v1 3/3] ACPI: TAD: Improve runtime PM using guard macros
-Date: Wed, 15 Oct 2025 16:04:39 +0200
-Message-ID: <2057157.usQuhbGJ8B@rafael.j.wysocki>
-Organization: Linux Kernel Development
-In-Reply-To: <3925484.kQq0lBPeGt@rafael.j.wysocki>
-References: <3925484.kQq0lBPeGt@rafael.j.wysocki>
+	s=arc-20240116; t=1760537448; c=relaxed/simple;
+	bh=hVRuz+dYhhjqt7qTfCIuDOea7yuVm9ZeY94c8xKoBl4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=bp4+Gu8qb5yr0p6kBdFXfG5ZaFeqEonXQj7yfAE7Aublf6fLsExIoiYU5ib0KC6SKQDwq7wxqWqCEtlIqzdfQk2pf0lY8v0LaN1q1lTZAZUU5/ZzisF4OY9af82DfSVqq7IUm6w24T0mmVaUN9o0V6LeXL8KSL+u9OTZPMWV/Pc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=yeqZ4FuS; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=U2Yb/25Z; arc=none smtp.client-ip=80.241.56.161
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailbox.org
+Received: from smtp102.mailbox.org (smtp102.mailbox.org [10.196.197.102])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-p-103.mailbox.org (Postfix) with ESMTPS id 4cmtKB1z9jz9thf;
+	Wed, 15 Oct 2025 16:10:38 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+	t=1760537438;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=6yHkGFUgeQQv/Xu03jMdrrfgeEJ+J6H1xw7g/yGp/24=;
+	b=yeqZ4FuSun6CGxVP9E9OPvrrzAgIC25p/Nsh2z37FQdVkwlC7dA8CqW01s6Dq6t80NyJj3
+	tSUpAOuCDAJOhdU3l7ihc63bYzEN2E8kGzbi+1gg29rtYKU6KYEB3QDGN9JY1Hdd9HudFK
+	hvy67mF+qS59PDhFCjWYhn5v5tsy+4lJrrGsTbupfXD9V0k1RSBvIFbRpwlziGHgumfgLN
+	ij0wZqz3PQ0LtuyihXRxQ/n6ZqjBbRwwJkxX3lPkMaAUKb+tjS7TsqpdeBxqjLwU12CePA
+	UCmoBUC6Qr0cTsxScQv3sybnjXoay5BMJp9VEMvqmq5vRraNCYmLRwehqXUedQ==
+From: Marek Vasut <marek.vasut+renesas@mailbox.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+	t=1760537436;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=6yHkGFUgeQQv/Xu03jMdrrfgeEJ+J6H1xw7g/yGp/24=;
+	b=U2Yb/25ZKAr0SAiIeUFEWscRQrk4ScPA7MlVJdhngD4YPv0N7Xp9AkFOMFvmrDMnXxg7Hd
+	FjgH+Ns8qorUbb6ETVQTr6Q+yMEvWOX4UQuEZ6NDKiIUoe9jjiC94gudlYRxQw5nrgE/+5
+	l0jhbxPOdyEjRhMYEDW9BzWI2zy0V5M1J+MVaAfH1X0NZt6Ll8QNrQEhVnAXE705oE1KkH
+	Z0Ky7tyNxasIdu1vHw24FFmmUzcGUQ9JiyeUM5igrVlvu8d0P4KdV9a/cxrnqbVzRUboxM
+	Y2rG2tqr1KzbVrlgQTYpJO17p/g1azqjSlVV/KpOgYTnUxxQpPVGfYi/gJm8Zw==
+To: linux-pm@vger.kernel.org
+Cc: Marek Vasut <marek.vasut+renesas@mailbox.org>,
+	=?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Zhang Rui <rui.zhang@intel.com>,
+	linux-renesas-soc@vger.kernel.org
+Subject: [PATCH] thermal/drivers/rcar_gen3: Document Gen4 support in driver comment
+Date: Wed, 15 Oct 2025 16:09:51 +0200
+Message-ID: <20251015141014.156437-1-marek.vasut+renesas@mailbox.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-MBO-RS-META: p8w49a5f6hrrnnnecitdicwun7f7z6g6
+X-MBO-RS-ID: e0609ddc3c648950fdb
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+The R-Car Gen3 thermal driver supports both R-Car Gen3 and Gen4 SoCs.
+Update the driver comment. No functional change.
 
-Use guard pm_runtime_active_try to simplify runtime PM cleanup and
-implement runtime resume error handling in multiple places.
-
-Also use guard pm_runtime_noresume to simplify acpi_tad_remove().
-
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Marek Vasut <marek.vasut+renesas@mailbox.org>
 ---
- drivers/acpi/acpi_tad.c |   45 +++++++++++++--------------------------------
- 1 file changed, 13 insertions(+), 32 deletions(-)
+Cc: "Niklas Söderlund" <niklas.soderlund@ragnatech.se>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: Lukasz Luba <lukasz.luba@arm.com>
+Cc: Magnus Damm <magnus.damm@gmail.com>
+Cc: Zhang Rui <rui.zhang@intel.com>
+Cc: linux-pm@vger.kernel.org
+Cc: linux-renesas-soc@vger.kernel.org
+---
+ drivers/thermal/renesas/rcar_gen3_thermal.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/acpi/acpi_tad.c
-+++ b/drivers/acpi/acpi_tad.c
-@@ -90,12 +90,9 @@ static int acpi_tad_set_real_time(struct
- 	args[0].buffer.pointer = (u8 *)rt;
- 	args[0].buffer.length = sizeof(*rt);
- 
--	pm_runtime_get_sync(dev);
-+	PM_RUNTIME_ACQUIRE_OR_FAIL(dev, -ENXIO);
- 
- 	status = acpi_evaluate_integer(handle, "_SRT", &arg_list, &retval);
--
--	pm_runtime_put_sync(dev);
--
- 	if (ACPI_FAILURE(status) || retval)
- 		return -EIO;
- 
-@@ -111,12 +108,9 @@ static int acpi_tad_get_real_time(struct
- 	acpi_status status;
- 	int ret = -EIO;
- 
--	pm_runtime_get_sync(dev);
-+	PM_RUNTIME_ACQUIRE_OR_FAIL(dev, -ENXIO);
- 
- 	status = acpi_evaluate_object(handle, "_GRT", NULL, &output);
--
--	pm_runtime_put_sync(dev);
--
- 	if (ACPI_FAILURE(status))
- 		goto out_free;
- 
-@@ -266,12 +260,9 @@ static int acpi_tad_wake_set(struct devi
- 	args[0].integer.value = timer_id;
- 	args[1].integer.value = value;
- 
--	pm_runtime_get_sync(dev);
-+	PM_RUNTIME_ACQUIRE_OR_FAIL(dev, -ENXIO);
- 
- 	status = acpi_evaluate_integer(handle, method, &arg_list, &retval);
--
--	pm_runtime_put_sync(dev);
--
- 	if (ACPI_FAILURE(status) || retval)
- 		return -EIO;
- 
-@@ -314,12 +305,9 @@ static ssize_t acpi_tad_wake_read(struct
- 
- 	args[0].integer.value = timer_id;
- 
--	pm_runtime_get_sync(dev);
-+	PM_RUNTIME_ACQUIRE_OR_FAIL(dev, -ENXIO);
- 
- 	status = acpi_evaluate_integer(handle, method, &arg_list, &retval);
--
--	pm_runtime_put_sync(dev);
--
- 	if (ACPI_FAILURE(status))
- 		return -EIO;
- 
-@@ -370,12 +358,9 @@ static int acpi_tad_clear_status(struct
- 
- 	args[0].integer.value = timer_id;
- 
--	pm_runtime_get_sync(dev);
-+	PM_RUNTIME_ACQUIRE_OR_FAIL(dev, -ENXIO);
- 
- 	status = acpi_evaluate_integer(handle, "_CWS", &arg_list, &retval);
--
--	pm_runtime_put_sync(dev);
--
- 	if (ACPI_FAILURE(status) || retval)
- 		return -EIO;
- 
-@@ -411,12 +396,9 @@ static ssize_t acpi_tad_status_read(stru
- 
- 	args[0].integer.value = timer_id;
- 
--	pm_runtime_get_sync(dev);
-+	PM_RUNTIME_ACQUIRE_OR_FAIL(dev, -ENXIO);
- 
- 	status = acpi_evaluate_integer(handle, "_GWS", &arg_list, &retval);
--
--	pm_runtime_put_sync(dev);
--
- 	if (ACPI_FAILURE(status))
- 		return -EIO;
- 
-@@ -571,16 +553,15 @@ static void acpi_tad_remove(struct platf
- 
- 	sysfs_remove_group(&dev->kobj, &acpi_tad_attr_group);
- 
--	pm_runtime_get_noresume(dev);
--
--	acpi_tad_disable_timer(dev, ACPI_TAD_AC_TIMER);
--	acpi_tad_clear_status(dev, ACPI_TAD_AC_TIMER);
--	if (dd->capabilities & ACPI_TAD_DC_WAKE) {
--		acpi_tad_disable_timer(dev, ACPI_TAD_DC_TIMER);
--		acpi_tad_clear_status(dev, ACPI_TAD_DC_TIMER);
-+	scoped_guard(pm_runtime_noresume, dev) {
-+		acpi_tad_disable_timer(dev, ACPI_TAD_AC_TIMER);
-+		acpi_tad_clear_status(dev, ACPI_TAD_AC_TIMER);
-+		if (dd->capabilities & ACPI_TAD_DC_WAKE) {
-+			acpi_tad_disable_timer(dev, ACPI_TAD_DC_TIMER);
-+			acpi_tad_clear_status(dev, ACPI_TAD_DC_TIMER);
-+		}
- 	}
- 
--	pm_runtime_put_noidle(dev);
- 	pm_runtime_suspend(dev);
- 	pm_runtime_disable(dev);
- 	acpi_remove_cmos_rtc_space_handler(handle);
-
-
+diff --git a/drivers/thermal/renesas/rcar_gen3_thermal.c b/drivers/thermal/renesas/rcar_gen3_thermal.c
+index 3223de238d014..a143b087a8ea7 100644
+--- a/drivers/thermal/renesas/rcar_gen3_thermal.c
++++ b/drivers/thermal/renesas/rcar_gen3_thermal.c
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /*
+- *  R-Car Gen3 THS thermal sensor driver
++ *  R-Car Gen3/Gen4 and RZ/G2 THS thermal sensor driver
+  *  Based on rcar_thermal.c and work from Hien Dang and Khiem Nguyen.
+  *
+  * Copyright (C) 2016 Renesas Electronics Corporation.
+-- 
+2.51.0
 
 
