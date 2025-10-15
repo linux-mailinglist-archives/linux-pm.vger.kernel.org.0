@@ -1,235 +1,2851 @@
-Return-Path: <linux-pm+bounces-36103-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36104-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id A06A5BDB90D
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Oct 2025 00:06:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 88DE5BDBFBA
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Oct 2025 03:30:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 922614E53CF
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Oct 2025 22:06:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2D41E42122E
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Oct 2025 01:30:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A1CD3064BC;
-	Tue, 14 Oct 2025 22:06:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C4982F99AE;
+	Wed, 15 Oct 2025 01:30:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="ml9BgZir"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="hbB6ABED"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from MW6PR02CU001.outbound.protection.outlook.com (mail-westus2azon11012054.outbound.protection.outlook.com [52.101.48.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC8BD2EA173;
-	Tue, 14 Oct 2025 22:06:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.48.54
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760479568; cv=fail; b=DASea5WxJ/1u+FB6ZVak/wp+7fSXh55XaHu8bmiAzZ0RbR76cy6dTjMVc3cFiCM66dcLSMwVFWtWU4MxISjHi4pwmGIDJioJN6rTiGhP5Hp4swM9u5E+QT3Ll1DFe+Niym8LrjgD+sEEsFuze7PHDSRThkmQvOU8oByYD3OpRGs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760479568; c=relaxed/simple;
-	bh=/otWnmc6e63Lp4zUweIwjAbVMw7Y/J4lcqzHVXZkzJQ=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=XDPeR2H0244iBwBvPvzNjqoDBCt7YE9gWyseP11xyAqKRaBpA+AFadZupCMOwNO/K9jMu10ved3C8qGWQjN1ULeleS+T1WbxeSypQ69usz5gHiZWr3KgMJGcso/xeMnqiFYjyUS4YBQCqHFUfW4G8PvxRzEtRQScQdOOCoF/WLk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=ml9BgZir; arc=fail smtp.client-ip=52.101.48.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=LcjG7nTSFMF9LFCAv6Doscv6inR+62qnEnwNyW/sHZ8IIq8ETUF2yCjzQ05+/tg2Icg6KEWHy/AqQ2d9zigp3WFhA7QELQ+RyhaiEG3fC+WwtvtS4snAD7i2smGncp7R8/B3uT4VQHMKlGQXItTJy/WI9HPHg/ySECEC+hrPlaKFUenDa9R4V+EwW0tnDlMQMH3pSq8kUfGLmc4PEZRXQLRsnQeq3OJDGuF0Z9j9wSRFy0Z4FJVV77+UKajxMM1yXJojRgExkmIx0Nmf37dI1uqvOIM9B2HmjBxeW7aQ3ZVR4DWHjaF9F+A7LxFpiyGQrQnDyV7iNnuk9hTeGQTLJg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=N7/uCB6tTmbvwy6ZzcjN8e0sSWvW9RbQQYIVjmji55Q=;
- b=uV4MUC+e0UXJAFcONZkA2d/PLlt9fWGAYAaAegiAvA7IoRX331BvJPsX++cRnZrsOZXAlOLWnt1Wzv5E/7Zwp/g9+Ahhx8BQSBCVpxxdaR9fgM3NT79bS53HY2RrWLHf/4q9qVWpBD8T5kbS1Bw112UO5Hodz6Gwb2sniMBpLoA+v5btkluDA6ZVCuB2zCTS48Dz5ozLCXunQixtXMduEs580eM0/aOFjqGCCLDpcYow240J8kyrl1kgYEn4AtaNd80eIemiCEH0J6RorkSmJ02wxTbigSN6/fRpRAKjyM2MDp/epTVk4j45D31cocVpSRzP4MH+7xC0QpRmyuYBNg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=N7/uCB6tTmbvwy6ZzcjN8e0sSWvW9RbQQYIVjmji55Q=;
- b=ml9BgZirY1ytQaP5iM4Qu95ARzXRrpd6FhaHwwff7UmfgiMuGPWIuTrLWRW14C3e1LBVkxraza3U0APfFihjiVCkdY0mA63hU4NQwO7J8YkEK3qHghCIFVHZcbl2kxGWdq7MaM+aWPechREywFCFTKutC5TQpOAnwwIudNxWprlkYXaYZDjl5dzrhHFR8apvBu1m83cVuoYDGk2UEuBfyJZKbPZwr5kf2DY+juwFi3nZ3W6ARc6AEsSDK+5p8qCBg8BUqkZ6qqbvQSLpg69Lh8xzo5qlVaypQ1AApRtADfEdNAwYCMpPfGocaIe0Svz+2Jd9LAIW/UHEDh5LI9IhrQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from SN7PR12MB8059.namprd12.prod.outlook.com (2603:10b6:806:32b::7)
- by IA1PR12MB8333.namprd12.prod.outlook.com (2603:10b6:208:3fe::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9203.12; Tue, 14 Oct
- 2025 22:05:59 +0000
-Received: from SN7PR12MB8059.namprd12.prod.outlook.com
- ([fe80::4ee2:654e:1fe8:4b91]) by SN7PR12MB8059.namprd12.prod.outlook.com
- ([fe80::4ee2:654e:1fe8:4b91%2]) with mapi id 15.20.9203.009; Tue, 14 Oct 2025
- 22:05:59 +0000
-Message-ID: <e2346583-0c70-44a1-b0a1-ed41b1175835@nvidia.com>
-Date: Tue, 14 Oct 2025 18:05:56 -0400
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v13 01/17] preempt: Track NMI nesting to separate per-CPU
- counter
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Lyude Paul <lyude@redhat.com>, rust-for-linux@vger.kernel.org,
- Thomas Gleixner <tglx@linutronix.de>, Boqun Feng <boqun.feng@gmail.com>,
- linux-kernel@vger.kernel.org, Daniel Almeida <daniel.almeida@collabora.com>,
- Danilo Krummrich <dakr@kernel.org>,
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- Vlastimil Babka <vbabka@suse.cz>, "Liam R. Howlett"
- <Liam.Howlett@oracle.com>, Uladzislau Rezki <urezki@gmail.com>,
- Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
- Gary Guo <gary@garyguo.net>, Bj??rn Roy Baron <bjorn3_gh@protonmail.com>,
- Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>,
- Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Viresh Kumar <viresh.kumar@linaro.org>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- Ingo Molnar <mingo@kernel.org>, Ryo Takakura <ryotkkr98@gmail.com>,
- K Prateek Nayak <kprateek.nayak@amd.com>,
- "open list:CPU FREQUENCY SCALING FRAMEWORK" <linux-pm@vger.kernel.org>
-References: <20251013155205.2004838-1-lyude@redhat.com>
- <20251013155205.2004838-2-lyude@redhat.com>
- <20251014104839.GN4067720@noisy.programming.kicks-ass.net>
- <4a237ec0-05ae-439b-a1cb-6b7f451c0d7e@nvidia.com>
- <20251014194349.GC1206438@noisy.programming.kicks-ass.net>
-Content-Language: en-US
-From: Joel Fernandes <joelagnelf@nvidia.com>
-In-Reply-To: <20251014194349.GC1206438@noisy.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BN0PR04CA0053.namprd04.prod.outlook.com
- (2603:10b6:408:e8::28) To SN7PR12MB8059.namprd12.prod.outlook.com
- (2603:10b6:806:32b::7)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E86982F9DB5
+	for <linux-pm@vger.kernel.org>; Wed, 15 Oct 2025 01:29:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1760491801; cv=none; b=K9PSf8ugpQfD9HLVfH3EmBrpChwL6hdq+Khjs2Z0aqiCUyak3RB6sUDNXsm3BrAJlrWHJw0RbBKf3XpmCo8HXZ5N9JH+VFgmKap9bTEM3GP04XEHLkxVXUKvYO3RfJHMN5J5H8dJdko+cDMdYE17WpoRE97Qc67qSGp/FAbpr90=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1760491801; c=relaxed/simple;
+	bh=qlLbC/fqkn+0o5k36MnOzRrLJLJrmDnZY4lm4qUwAlk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CZUpifMl6j+T2t8+F1UC96lupDbVrpPvUkFeZcWmygkEkTX3xGO/xzg5UjApQYPcpgygKVjHtgSybJ8I2y4+OBVEjnKM/0vq9fka8B4q2oTIpqrU0KfwadoBa7JIHngRBPjtdt7O0WbIXWkPwZOoFkcBlKjkIOXuAQgUTm8hHj0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=hbB6ABED; arc=none smtp.client-ip=209.85.216.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-33b8a8aa73bso1850330a91.0
+        for <linux-pm@vger.kernel.org>; Tue, 14 Oct 2025 18:29:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1760491784; x=1761096584; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=FMINc3PjweKoVftqMMymgpyq6kW+eqZUkDe+Znm1szw=;
+        b=hbB6ABEDFQdDjkzHkOR8HLO8vteeqVPKJdvEtSUemRVwIwvRbwnyRom+BqbgNtHH1p
+         66D9ag69E+O+SxsilJcymCdMPEr0r8u+evh99jvu0KYFNrqq6SzSUrGweyYF8JrVYIlN
+         vyhZG0dB1kmPBSlRf7KkvXJzT1gzqZc6weQ3w=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760491784; x=1761096584;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FMINc3PjweKoVftqMMymgpyq6kW+eqZUkDe+Znm1szw=;
+        b=AsmLHIKeyuKGo4vqV5gJ3z7TfJ46sZFGYi2xEOo/cIzhZbcmQTDtFEfQYnWydI85/x
+         y8PBJNFMWIRrH830elaikQsk4FvBUb0x++X4iDTIoyVuBojXNnOL0BauMLYlraJ2+2jb
+         ZNwHH/UnicOiXeutWf7TgiWT0It/Wb4x9TsoVUzf1GubdgKrd7jOwuTl65gwYhCGg/57
+         I/O8NkAM79t/M9bdnms2aRQFD8AGH7cmF6p2Xh/xF+QaoHmEUGnzBOfGn2VzBzmCtoJa
+         /uSOQuDa0TyNLgZ1y05E+t9JKuP60hDx3Sd5CMjVKIkSl9oagGtiP2vrnAo6Azgejaor
+         nCGw==
+X-Forwarded-Encrypted: i=1; AJvYcCWtyQU+1lL5Uora2VuevbEwvsMKQcWisVm/WX6qLpFYfXJFcdQuU5en/rzxFRb+vwAp3ZW9NC5r4A==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwfS/qsaEcZTBkcpjdHD8CCymEY2M4fWkF8WjTFLQl+uXrLg71E
+	j8tzRLzBez5laSSRHI+apaorGvTPaxX+vq+B5Wv9KhMVhS5fWN1eG3EX8R4kAGldWQ==
+X-Gm-Gg: ASbGncuqOknEarcZoChq8dmNiEwfkK0BPBCbNi/SvTtRZPBmxzYnoxQ0rIya3J6nBuq
+	skh7NxNoKbTaZ5n4HqvHeYXfAPOj5eDih1T/KLDlQlYUztqH0BnvTf2Xj1P0TquGD9ucKthEmBD
+	zWChfyAy7QD+5U6CsrPAqwYPO1/q8/z8guy58S6AU1u0ZwSzyJGg8JSpOubdGtb1Kn1ysHUeKgn
+	8rt2azLI9yAp6+Sn+5WNuuhq7o6oDXhbEWi/jG2Eubg4/GOwSCTn/0ONucxh7rjE3tLw14Mbluf
+	NJv0HosEpBR2G5vRDYwRjA8yuCR3H50IemKfFVoae3Q2JfBQzv9h3Y0aLwmcp+8/Ytsrg1UB4vf
+	Lrb1d2jCAEIYk2ZfEVi+O2xsG5RHr4iIA+4KReaLRL+E96nKh9FySDQ==
+X-Google-Smtp-Source: AGHT+IEqmKx5MoyM8FYY+b1ZLKbT4jY8rtMMcXjroVu0yqVk1/tR+4B0h04TI97oH0Q8l4RofejwUA==
+X-Received: by 2002:a17:90b:4d0f:b0:330:852e:2bcc with SMTP id 98e67ed59e1d1-33b5127ab4bmr36190215a91.21.1760491784015;
+        Tue, 14 Oct 2025 18:29:44 -0700 (PDT)
+Received: from google.com ([2401:fa00:8f:203:f7c9:39b0:1a9:7d97])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-33b97860447sm274367a91.8.2025.10.14.18.29.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Oct 2025 18:29:42 -0700 (PDT)
+Date: Wed, 15 Oct 2025 10:29:36 +0900
+From: Sergey Senozhatsky <senozhatsky@chromium.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Christian Loehle <christian.loehle@arm.com>, 
+	Sergey Senozhatsky <senozhatsky@chromium.org>, "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Artem Bityutskiy <artem.bityutskiy@linux.intel.com>, 
+	Sasha Levin <sashal@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, Tomasz Figa <tfiga@chromium.org>, 
+	stable@vger.kernel.org
+Subject: Re: stable: commit "cpuidle: menu: Avoid discarding useful
+ information" causes regressions
+Message-ID: <7ctfmyzpcogc5qug6u3jm2o32vy2ldo3ml5gsoxdm3gyr6l3fc@jo7inkr3otua>
+References: <36iykr223vmcfsoysexug6s274nq2oimcu55ybn6ww4il3g3cv@cohflgdbpnq7>
+ <08529809-5ca1-4495-8160-15d8e85ad640@arm.com>
+ <2zreguw4djctgcmvgticnm4dctcuja7yfnp3r6bxaqon3i2pxf@thee3p3qduoq>
+ <8da42386-282e-4f97-af93-4715ae206361@arm.com>
+ <nd64xabhbb53bbqoxsjkfvkmlpn5tkdlu3nb5ofwdhyauko35b@qv6in7biupgi>
+ <49cf14a1-b96f-4413-a17e-599bc1c104cd@arm.com>
+ <CAJZ5v0hGu-JdwR57cwKfB+a98Pv7e3y36X6xCo=PyGdD2hwkhQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN7PR12MB8059:EE_|IA1PR12MB8333:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4457b672-6dda-48f0-e891-08de0b6ddb39
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|7416014|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?Qi9FUkNaaW1WWmVxR2JDV25QamVDWUljS0YrWFZtMnlGaVphSkQ2SlJJQUYw?=
- =?utf-8?B?Mjdhcko2azNhWTl2YVNKbjVrdWloVzRsQmptYURuOUI3NVpRekZtNUtjc0dQ?=
- =?utf-8?B?STQxQWw3d3A0ckRRWXU1ZXY2Wk5MejNSVFQ0Yk55eG9saUVkZHFkaFBsMUZ1?=
- =?utf-8?B?RUlMRGdSM2txOUlXUHljb1VUWFFUc0JzU2wwWVdscjhvbkZpZVR4NUJ2aU9o?=
- =?utf-8?B?bmozR1Z2RDFDR1E1TXJ6NE5SZnh2ZjVlYkRFVjFzM21MaDF3bTNueXdJYXA5?=
- =?utf-8?B?M05YbUFuVGZlRmpuT1MreEdlK2o3Tml6WVJNRitsdGlwTkkrUDVFMndUZUNl?=
- =?utf-8?B?cDZxR3kwbnZqUFBGRmVjR0U0SlJUWUhneWFUWEE5Mkl6aVNFTExZMWxDRzJ6?=
- =?utf-8?B?d25UYkxnQ3dTSGlMdU83ZGJaU3ZKZ2loRG82OVRPYUMzNHZsK3hsamdaYzVp?=
- =?utf-8?B?WE03Wi9BQldvL3MxdS9vZllsZC9BZzB4M0E2SHpDOWpoMDd2YnJiWFRLSTFH?=
- =?utf-8?B?bWxpNlozeCtVenRtTnJOUW4rMkpVNkRZanRDQjdhSEFIeGlNMUludUxuY1k1?=
- =?utf-8?B?Mk9kRjhqaWxRZVZlbGN3aVhWck5RbXJzNzFoZlA2ZWUvb2ovWUIwTlY4d2Vn?=
- =?utf-8?B?Sm9pTlY0WDl2ekRBdDAwME9WcCtBUWlCRnBhTUFpcll6NTN5V1RRRUR2R1lr?=
- =?utf-8?B?YmxQbzFSOWRPZTVFZEJGaGNxOTVtRW5OM0ZBNGNCYy9rTk9qWXpCU2pXYXd2?=
- =?utf-8?B?aGpiS015VFBjSlpPWllJNEgvMjZ3azRKcFp2cDJQOGUvbTkyVkVQZ2hjc004?=
- =?utf-8?B?QnJmdldocjV1blZtdUcwSXVRQk9mUVVhL2VaMFRtOXl0RnhtL1RNSUo3QUVx?=
- =?utf-8?B?U0pSWFBPQlJYcUNnS0ttYVlaK2ZQSXZ4YkpzanNKZXhFRlNESG81dHF5NlIv?=
- =?utf-8?B?WS8ySjhQZlk3RUdIOWFESndGejhhMWNQZ3U2ZnZSbHNOdHZ4RzdVdVdzT3Bq?=
- =?utf-8?B?cnNZd28yOU1jeWxOa0I0bGlPa0M4alVpRE1Jejl5QkxtMklLemx3dkh6Ni9V?=
- =?utf-8?B?elhKQUZocG1OdlBTcFJoY2VmVzZPN0tUSXhmRW4xanpuTzJYZzl1SyszQUxi?=
- =?utf-8?B?VUR2UXhQV2kvdWhDazl4MEhMMHpLTVpUaDZHZ2Q4QVlqM0NqbWpLUTJxSy92?=
- =?utf-8?B?eXhvSG9jSXRrdks5K0QxUXE4Q0EybG5uTzVFSEFOZ3MrYjUrQ0pYRm5RVjNn?=
- =?utf-8?B?OUQ1Y09Rb1lqYk1WTm5SZWVaSEdyV1ozNVEyQjlFRXMremtQbWk3dlMwSXd6?=
- =?utf-8?B?aG8wRmduMWtnRG5nVUt2N0J6NkpVbFVRYXcvUGhabmVtUmhNQWM0ekl4TlhF?=
- =?utf-8?B?TlIvempINTd2VzJybkw2Q3MzZC9PNlVxUEVKOWlneHNKMC90MldrZVREVWVP?=
- =?utf-8?B?U2t6QUVIT0FEVjJsSjdoNW1EbVFtdERFbCtVVklWV00vYmNPWm5wWGRqTU1U?=
- =?utf-8?B?SzRxQWZTbDVCZG9uOWtaMHYyMWtkVm5QcGRtMklDNUdWUHI2ZTh5UFF4ajJV?=
- =?utf-8?B?a2lXL0p3WUJ6RzNaQXArVDd6WjdKS0IxZWRRK1ByWk84LzFoeDVJNU94b1pO?=
- =?utf-8?B?a0IvbWJ2K1h1aUt4TzR0R1NCamFoZjJnNldoTm5mR0EzUWxhUUZRaHdKcG9y?=
- =?utf-8?B?ZG9rRHlxQTFtUFJyQTZBbGpUNGNyNkdMaExxL2EyTnd6TGRJanowUm1EZGhE?=
- =?utf-8?B?UDNnZlJrUm1qTE1KOVhzSjV4VlYvY1NWNnZnVnpERFoydkdvemxaSmhqTkFy?=
- =?utf-8?B?SVdpeEw3VnhLMlRMdDRPSmlmMHdwTzc0bHlUdXNpeTh2N1E1TXArOGN1cEd0?=
- =?utf-8?B?Q0s3QktSZ3RONHV3WjRTNlNiT1E5RHk0U2dHSFpQMG83TU1WWDlMZlpxbjkv?=
- =?utf-8?Q?rHyHUVqavkNdGI5abZPUHGmfTrGWWqei?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN7PR12MB8059.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?ZEdvcFhNb1dyY2VYYlRkRytiUkNoczB1dldRSXU2UU9IanFQckxuNHNvRms2?=
- =?utf-8?B?d3FIMW9HTldZcXRUd0hoSHdzNXREWXVsYjR0dSsrWGtibTNINTVPcm5uRUw5?=
- =?utf-8?B?SVN2VjMya3U3TTVvM2k3V2dDODdLSC9hcWhtbHgxcnl4ekNRRVd0Slg1VVFv?=
- =?utf-8?B?Nks3Y21DSWRFSUQzU3BVMk1JcGEySjNDcy8vendCVUxleDBma1pwcnM5REZ3?=
- =?utf-8?B?RFU2M3huLzk4YUxrVjFQOTI2NFMyUDk1aTNJYUpWVW9uN1I3MXBQWldPUVU0?=
- =?utf-8?B?bXJqS1AveGpRWXUwMGJEeEhPaitxLzVXNkIzNUhDSVhweGdtb0diWkVuVDc3?=
- =?utf-8?B?d2NLMDhTNXo1SDRIMEdybkRUeUlFeE1OeUNMTUhRUHdNMWRBWlI3NFltdWJV?=
- =?utf-8?B?NjU0QjhiREw5VFVKRkIrdmlDNlMzaDU2SWszYmMra1RHWFZFUE5OaVd3ODlI?=
- =?utf-8?B?YzNzRDlnUkh6V3lUWTFYbmR2SmZXK0lZMTVSQUljdzVMVlBkZHpzckpLZWY5?=
- =?utf-8?B?dER2UGFQUndqSnBWcEg5VXdSRUt1TXlMKzQvSURqaExGN2pNbjdQQzdVL1hL?=
- =?utf-8?B?MWlYOVN5VHlkbEV2aTFUMlRmbldTM1NsTzhnT2xFUmt0V05QancxYXBWVUx1?=
- =?utf-8?B?U3U2M0VqdTVRQzB3Mk5pSzhNVW55VUM1Wno0OWoxYzZvQ0lvNWRTRWViUngz?=
- =?utf-8?B?TkxlRXdhaEVUQWozWm9BczFKeTQ5MUwxMEZMM0tCSUJtL2NKZCtOSVBMZUNH?=
- =?utf-8?B?cW1ERisrc29rOFdLZnZOdEQvQUhDamYrWEw5bFlScGRFU2xHQS9OTXc0NFNk?=
- =?utf-8?B?YnMzTVpRMm8zWXRiT0lvWWZRaEptc0ZUbW1WNE5DQTd6Mm9BZVNnbkkyQi9E?=
- =?utf-8?B?d3AwUjYzOUtsaDNabTVtdE5NMGJDMVI0UFpON1c5Z2M3ZkR2akJFdTJuK1Zs?=
- =?utf-8?B?aVVEaG13MXF0WlM4OUNaUFNJcE5aRXVaVm9KOThaa20vOVhCeUZxY2xiR3VN?=
- =?utf-8?B?Z3ZJbUNrazVPKzdUNWZNMFRZSVdGK2xEcmZsclZxeUozVktUK21WSGZCT0RW?=
- =?utf-8?B?UGRCTDJINk1JVFNWL0taWWVvM0RQL043T0Z1NUlYQ2lKaVRwdFB6ZW5DV3Y2?=
- =?utf-8?B?NEVlckNlMWhiazBJUDVFMUIwQjhjOUg5Zzd5UjExUm8yMVJpdmt4ZjNxVGtM?=
- =?utf-8?B?S3lpM2FKR2VYeFRkVDVzeGpBaHA1T1hScER3WHZFSmF6YlAxTFdQSG9zME1w?=
- =?utf-8?B?ZWpJeVFZQWV5U3VFbE1QWTVkUENwTHlqZTRPMXpsR1ZiUmtYYVFCKzNMK2dB?=
- =?utf-8?B?TnFLR1BCRUVaM0h2RzFwYmFLZVYvd0ZNQWNUWEh2bmllSDdoYnRNcVcwbkl2?=
- =?utf-8?B?Szhzb2t0NmpRMThuUTQ1V0NmS3UwR2pSVlQ3VEFRZDBSRkxmS2JOdkM1cWlJ?=
- =?utf-8?B?WE9pbGNQZ21GY3E3d0pGZXpTVjJXQzNWK25UVENqbFBkOHY3QlpsN21tTXUv?=
- =?utf-8?B?TlIrS1owKzE5VDhwbUFiUXE1UXJGL0FnSWlwNFlhZXo4cjlvakdhNmc2S1ZW?=
- =?utf-8?B?alN2enFkWi9XazhibXo1RENWbndGL2kvbWlXYUtGTUhnQTNWOEM0akZuQ3hW?=
- =?utf-8?B?VnpSWkMyTlNjai9oR1dZWlU2QlFyU3dmU2ZGbjR2YWIzdHp3a0ZDLzVtVkpk?=
- =?utf-8?B?LzVNc3VLQ1dtSndMdXJqemF0Z3dYUHc0eU93NVFjVmsvRkdDMGR6ZUUrbEQ2?=
- =?utf-8?B?ckJBRWhMbUdReEtQZDhxbFpjWkUzZVJEMDlwS05OaiswakVSMDhEYzc4d2I3?=
- =?utf-8?B?QlloNFZUYlQyTGRZMWRSbXdTL0Y3U2tkRmorbE56Q3EzYXJSRGVSeWJteFhi?=
- =?utf-8?B?Ry95UHpZTjdRbnA5N1htR2t1T2s2T1F0US9jNzZ6ZEdZQzZZVnpBcDNvSjgv?=
- =?utf-8?B?eU8rWmJyUVQwKzRTNzhKNDI5RVFsbDZzR0k2ODlLa3dXcE5iQlFJNGNlMHU5?=
- =?utf-8?B?ZDFEQnF4TElXMURDUUNYYXZaODRESkp6ZE1ZM2VJUEJJZFo5VjY3WENnMmJP?=
- =?utf-8?B?V0lMMnZZWWdZbmU5UWV0bkFnKy9OaHdraDY2cnZkcm5QRHRjY2NoNVBld3hX?=
- =?utf-8?Q?ZASGsV9UerX/b7PS3BqHn3TY1?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4457b672-6dda-48f0-e891-08de0b6ddb39
-X-MS-Exchange-CrossTenant-AuthSource: SN7PR12MB8059.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Oct 2025 22:05:59.1902
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: J7OPXtyfxKrmXGj7qG7e7wbj+kTlaJIUFzMRYtKXtoFp/CqWxH8DrIwQUMO04as2Tgbb+f1KF+1nlB4kFUsGZg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB8333
+Content-Type: multipart/mixed; boundary="kpdjzflh5kdx5uyd"
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0hGu-JdwR57cwKfB+a98Pv7e3y36X6xCo=PyGdD2hwkhQ@mail.gmail.com>
 
 
+--kpdjzflh5kdx5uyd
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 10/14/2025 3:43 PM, Peter Zijlstra wrote:
-> On Tue, Oct 14, 2025 at 01:55:47PM -0400, Joel Fernandes wrote:
->>
->>
->> On 10/14/2025 6:48 AM, Peter Zijlstra wrote:
->>> On Mon, Oct 13, 2025 at 11:48:03AM -0400, Lyude Paul wrote:
->>>
->>>>  #define __nmi_enter()						\
->>>>  	do {							\
->>>>  		lockdep_off();					\
->>>>  		arch_nmi_enter();				\
->>>> -		BUG_ON(in_nmi() == NMI_MASK);			\
->>>> -		__preempt_count_add(NMI_OFFSET + HARDIRQ_OFFSET);	\
->>>> +		BUG_ON(__this_cpu_read(nmi_nesting) == UINT_MAX);	\
->>>> +		__this_cpu_inc(nmi_nesting);			\
->>>
->>> An NMI that nests from here..
->>>
->>>> +		__preempt_count_add(HARDIRQ_OFFSET);		\
->>>> +		if (__this_cpu_read(nmi_nesting) == 1)		\
->>>
->>> .. until here, will see nmi_nesting > 1 and not set NMI_OFFSET.
->>
->> This is true, I can cure it by setting NMI_OFFSET unconditionally when
->> nmi_nesting >= 1. Then the outer most NMI will then reset it. I think that will
->> work. Do you see any other issue with doing so?
-> 
-> unconditionally set NMI_FFSET, regardless of nmi_nesting
-> and only clear on exit when nmi_nesting == 0.
-> 
-> Notably, when you use u64 __preempt_count, you can limit this to 32bit
-> only. The NMI nesting can happen in the single instruction window
-> between ADD and ADC. But on 64bit you don't have that gap and so don't
-> need to fix it.
+On (25/10/14 17:54), Rafael J. Wysocki wrote:
+> Sergey, can you please run the workload under turbostat on the base
+> 6.1.y and on 6.1.y with the problematic commit reverted and send the
+> turbostat output from both runs (note: turbostat needs to be run as
+> root)?
 
-Awesome, I will give this a try, thanks a lot Peter!!
+Please find attached the turbostat logs for both cases.
 
- - Joel
+--kpdjzflh5kdx5uyd
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: attachment; filename="6.1-base-turbostat"
 
+turbostat version 21.05.04 - Len Brown <lenb@kernel.org>
+CPUID(0): GenuineIntel 0x1b CPUID levels
+CPUID(1): family:model:stepping 0x6:9c:0 (6:156:0) microcode 0x24000026
+CPUID(0x80000000): max_extended_levels: 0x80000008
+CPUID(1): SSE3 MONITOR - EIST TM2 TSC MSR ACPI-TM HT TM
+CPUID(6): APERF, TURBO, DTS, PTM, HWP, HWPnotify, HWPwindow, HWPepp, HWPpkg, EPB
+cpu2: MSR_IA32_MISC_ENABLE: 0x00850089 (TCC EIST MWAIT PREFETCH TURBO)
+CPUID(7): No-SGX
+CPUID(0x15): eax_crystal: 2 ebx_tsc: 58 ecx_crystal_hz: 38400000
+TSC: 1113 MHz (38400000 Hz * 58 / 2 / 1000000)
+CPUID(0x16): base_mhz: 1100 max_mhz: 3300 bus_mhz: 100
+cpu2: MSR_MISC_PWR_MGMT: 0x004010c0 (ENable-EIST_Coordination DISable-EPB DISable-OOB)
+RAPL: 43691 sec. Joule Counter Range, at 6 Watts
+cpu2: MSR_PLATFORM_INFO: 0x40830f0810b00
+8 * 100.0 = 800.0 MHz max efficiency frequency
+11 * 100.0 = 1100.0 MHz base frequency
+cpu2: MSR_IA32_POWER_CTL: 0x08a4005f (C1E auto-promotion: ENabled)
+cpu2: MSR_TURBO_RATIO_LIMIT: 0x1f1f1f1f1f1f2121
+31 * 100.0 = 3100.0 MHz max turbo 8 active cores
+31 * 100.0 = 3100.0 MHz max turbo 7 active cores
+31 * 100.0 = 3100.0 MHz max turbo 6 active cores
+31 * 100.0 = 3100.0 MHz max turbo 5 active cores
+31 * 100.0 = 3100.0 MHz max turbo 4 active cores
+31 * 100.0 = 3100.0 MHz max turbo 3 active cores
+33 * 100.0 = 3300.0 MHz max turbo 2 active cores
+33 * 100.0 = 3300.0 MHz max turbo 1 active cores
+cpu2: MSR_PKG_CST_CONFIG_CONTROL: 0x74008008 (UNdemote-C1, demote-C1, locked, pkg-cstate-limit=8 (pc10))
+/dev/cpu_dma_latency: 2000000000 usec (default)
+current_driver: intel_idle
+current_governor: menu
+current_governor_ro: menu
+cpu2: POLL: CPUIDLE CORE POLL IDLE
+cpu2: C1ACPI: ACPI FFH MWAIT 0x0
+cpu2: C2ACPI: ACPI FFH MWAIT 0x33
+cpu2: C3ACPI: ACPI FFH MWAIT 0x60
+cpu2: cpufreq driver: intel_pstate
+cpu2: cpufreq governor: powersave
+cpufreq intel_pstate no_turbo: 0
+cpu0: MSR_PM_ENABLE: 0x00000001 (HWP)
+cpu0: MSR_HWP_CAPABILITIES: 0x01080b21 (high 33 guar 11 eff 8 low 1)
+cpu0: MSR_HWP_REQUEST: 0x80002108 (min 8 max 33 des 0 epp 0x80 window 0x0 pkg 0x0)
+cpu0: MSR_HWP_REQUEST_PKG: 0x8000ff01 (min 1 max 255 des 0 epp 0x80 window 0x0)
+cpu0: MSR_HWP_INTERRUPT: 0x00000001 (EN_Guaranteed_Perf_Change, Dis_Excursion_Min)
+cpu0: MSR_HWP_STATUS: 0x00000004 (No-Guaranteed_Perf_Change, Excursion_Min)
+cpu0: EPB: 6 (balanced)
+cpu0: MSR_RAPL_POWER_UNIT: 0x000a0e03 (0.125000 Watts, 0.000061 Joules, 0.000977 sec.)
+cpu0: MSR_PKG_POWER_INFO: 0x00000030 (6 W TDP, RAPL 0 - 0 W, 0.000000 sec.)
+cpu0: MSR_PKG_POWER_LIMIT: 0x1806000dd8030 (UNlocked)
+cpu0: PKG Limit #1: ENabled (6.000000 Watts, 28.000000 sec, clamp ENabled)
+cpu0: PKG Limit #2: ENabled (12.000000 Watts, 0.000977* sec, clamp ENabled)
+cpu0: MSR_DRAM_POWER_LIMIT: 0x5400de00000000 (UNlocked)
+cpu0: DRAM Limit: DISabled (0.000000 Watts, 0.000977 sec, clamp DISabled)
+cpu0: MSR_PP0_POLICY: 0
+cpu0: MSR_PP0_POWER_LIMIT: 0x00000000 (UNlocked)
+cpu0: Cores Limit: DISabled (0.000000 Watts, 0.000977 sec, clamp DISabled)
+cpu0: MSR_PP1_POLICY: 0
+cpu0: MSR_PP1_POWER_LIMIT: 0x00000000 (UNlocked)
+cpu0: GFX Limit: DISabled (0.000000 Watts, 0.000977 sec, clamp DISabled)
+cpu0: MSR_IA32_TEMPERATURE_TARGET: 0x0f690080 (105 C)
+cpu0: MSR_IA32_PACKAGE_THERM_STATUS: 0x884a0002 (31 C)
+cpu0: MSR_IA32_PACKAGE_THERM_INTERRUPT: 0x00000013 (105 C, 105 C)
+cpu2: MSR_PKGC3_IRTL: 0x00000000 (NOTvalid, 0 ns)
+cpu2: MSR_PKGC6_IRTL: 0x00000000 (NOTvalid, 0 ns)
+cpu2: MSR_PKGC7_IRTL: 0x00000000 (NOTvalid, 0 ns)
+cpu2: MSR_PKGC8_IRTL: 0x00000000 (NOTvalid, 0 ns)
+cpu2: MSR_PKGC9_IRTL: 0x00000000 (NOTvalid, 0 ns)
+cpu2: MSR_PKGC10_IRTL: 0x00000000 (NOTvalid, 0 ns)
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	35	3.58	974	1113	0.62	3563	0	4	1552	589	2509	0.00	2.68	2.58	91.04	2.00	1.90	92.51	26	30	0.00	18.28	10.11	0.20	2.38	47.66	0.00	0.00	0.00	1.57	0.15	0.00	0.00
+-1	0	0	30	2.91	1029	1114	0.73	809	0	1	343	130	528	0.00	2.54	2.20	92.23	1.92	1.72	93.46	25	30	0.00	18.28	10.11	0.20	2.38	47.66	0.00	0.00	0.00	1.57	0.15	0.00	0.00
+-1	1	1	37	3.42	1094	1114	0.78	615	0	0	294	156	449	0.00	2.21	2.66	91.61	1.38	1.67	93.53	25
+-1	2	2	40	4.31	923	1114	0.49	1497	0	2	462	147	992	0.00	3.29	2.69	89.61	2.74	2.49	90.45	26
+-1	3	3	32	3.69	879	1114	0.50	642	0	1	453	156	540	0.00	2.67	2.78	90.74	1.97	1.73	92.61	26
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	95	5.01	1905	1114	1.91	4296	0	10	2016	665	2713	0.00	3.11	2.75	89.00	2.41	1.91	90.68	29	32	0.00	16.53	9.38	0.06	2.20	45.39	0.00	0.00	0.00	1.86	0.39	0.00	0.00
+-1	0	0	286	10.90	2624	1114	2.45	1158	0	1	802	202	448	0.00	3.71	3.44	81.81	3.05	1.66	84.39	28	32	0.00	16.53	9.38	0.06	2.20	45.39	0.00	0.00	0.00	1.86	0.39	0.00	0.00
+-1	1	1	40	2.98	1339	1114	0.22	1197	0	2	598	174	747	0.00	4.38	2.56	89.89	3.70	1.82	91.50	29
+-1	2	2	33	3.78	881	1114	0.30	1533	0	1	392	193	980	0.00	2.69	3.28	90.14	2.11	2.50	91.61	29
+-1	3	3	22	2.36	945	1114	0.39	408	0	6	224	96	538	0.01	1.66	1.71	94.17	0.78	1.65	95.21	29
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	132	7.55	1746	1114	1.21	12003	0	18	6008	1052	2559	0.01	5.74	4.42	82.09	5.83	1.90	84.73	26	30	0.00	17.29	8.20	1.71	2.80	37.11	0.00	0.00	0.00	1.98	0.49	0.00	0.00
+-1	0	0	153	7.94	1929	1114	1.33	2268	0	4	1164	266	548	0.00	5.86	4.65	81.43	5.31	1.76	84.99	25	30	0.00	17.29	8.20	1.71	2.80	37.11	0.00	0.00	0.00	1.98	0.49	0.00	0.00
+-1	1	1	123	6.72	1829	1114	1.28	2247	0	4	1480	196	522	0.00	5.49	3.27	84.40	5.33	1.66	86.29	25
+-1	2	2	145	9.04	1604	1114	1.06	5028	0	3	1987	318	908	0.00	6.13	5.11	79.26	6.99	2.39	81.58	25
+-1	3	3	106	6.50	1634	1114	1.12	2460	0	7	1377	272	581	0.01	5.46	4.66	83.25	5.68	1.78	86.04	26
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	125	6.94	1793	1114	1.22	11657	0	13	5525	903	2372	0.00	5.02	3.95	83.89	5.09	1.83	86.13	26	29	0.00	15.73	9.02	0.08	2.61	41.88	0.00	0.00	0.00	1.94	0.47	0.00	0.00
+-1	0	0	114	6.31	1801	1114	1.29	2499	0	4	1279	273	560	0.01	5.38	4.72	83.46	5.42	1.79	86.49	25	29	0.00	15.73	9.02	0.08	2.61	41.88	0.00	0.00	0.00	1.94	0.47	0.00	0.00
+-1	1	1	131	6.56	1993	1114	1.35	1915	0	6	868	182	510	0.01	3.94	3.21	86.19	3.57	1.64	88.24	25
+-1	2	2	135	8.67	1557	1114	1.01	5335	0	2	2070	278	814	0.00	6.53	4.83	79.54	7.34	2.30	81.69	26
+-1	3	3	119	6.24	1902	1114	1.26	1908	0	1	1308	170	488	0.00	4.21	3.03	86.39	4.03	1.60	88.13	26
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	197	8.36	2353	1114	0.55	8251	0	28	5932	1006	2554	0.01	6.03	3.80	81.42	6.39	1.72	83.53	39	40	0.00	13.29	8.63	0.10	1.39	40.38	0.00	0.00	0.00	2.11	0.62	0.00	0.00
+-1	0	0	131	6.44	2030	1114	0.68	2784	0	6	1938	307	839	0.01	7.03	4.49	81.24	8.76	1.67	83.13	39	40	0.00	13.29	8.63	0.10	1.39	40.37	0.00	0.00	0.00	2.11	0.62	0.00	0.00
+-1	1	1	147	6.51	2260	1114	0.78	1833	0	11	2139	330	506	0.01	8.06	4.86	80.29	8.42	1.63	83.44	39
+-1	2	2	119	6.56	1817	1114	0.70	2016	0	7	993	237	830	0.01	5.30	3.83	84.12	5.01	2.17	86.26	39
+-1	3	3	390	13.92	2800	1114	0.38	1618	0	4	862	132	379	0.00	3.75	2.04	80.02	3.38	1.40	81.30	39
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	732	23.62	3098	1114	0.36	11066	0	97	4797	1415	2443	0.03	6.69	6.36	62.99	6.48	1.60	68.30	33	33	0.00	4.37	2.47	0.01	0.67	12.19	0.00	0.00	0.00	3.72	1.93	0.00	0.00
+-1	0	0	220	7.78	2833	1114	0.70	1914	0	42	1353	479	642	0.05	7.80	8.52	75.77	7.30	1.90	83.01	33	33	0.00	4.37	2.47	0.01	0.67	12.19	0.00	0.00	0.00	3.72	1.93	0.00	0.00
+-1	1	1	251	8.72	2879	1114	0.71	2341	0	26	1190	427	671	0.03	6.77	8.12	76.13	6.21	1.87	83.19	33
+-1	2	2	253	9.47	2673	1114	0.81	2686	0	21	1471	437	881	0.03	7.97	7.87	74.48	7.57	2.10	80.86	33
+-1	3	3	2202	68.50	3215	1114	0.23	4125	0	8	783	72	249	0.01	4.21	0.94	25.55	4.82	0.53	26.15	33
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	349	13.68	2549	1114	0.71	10971	0	31	4347	1146	2391	0.01	5.56	4.78	75.79	5.13	1.79	79.40	45	45	0.00	13.55	6.62	0.08	2.16	32.39	0.00	0.00	0.00	2.55	0.98	0.00	0.00
+-1	0	0	630	22.01	2862	1114	0.24	1979	0	2	573	185	454	0.00	3.74	3.10	70.90	3.30	1.45	73.24	45	45	0.00	13.55	6.62	0.08	2.16	32.39	0.00	0.00	0.00	2.55	0.98	0.00	0.00
+-1	1	1	334	13.70	2438	1114	0.94	3021	0	9	1200	308	547	0.01	6.03	5.27	74.82	5.72	1.71	78.87	45
+-1	2	2	262	11.38	2300	1114	1.27	3250	0	9	1384	335	839	0.01	6.37	5.35	76.69	6.06	2.24	80.31	45
+-1	3	3	169	7.63	2217	1114	1.14	2721	0	11	1190	318	551	0.01	6.10	5.40	80.75	5.45	1.74	85.18	45
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	916	28.09	3260	1114	0.30	15660	0	170	7490	1344	2218	0.06	5.79	5.67	60.17	6.71	1.41	63.80	51	51	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	4.18	2.33	0.00	0.00
+-1	0	0	244	7.58	3220	1114	0.73	2742	0	40	1465	323	642	0.05	5.39	5.61	81.33	5.89	1.70	84.82	51	51	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	4.18	2.33	0.00	0.00
+-1	1	1	1625	49.59	3277	1114	0.20	3515	0	35	2005	253	295	0.05	5.54	4.40	39.99	7.27	0.92	42.23	51
+-1	2	2	195	6.10	3189	1114	1.25	5554	0	65	3607	617	936	0.08	10.30	10.01	73.55	11.56	2.03	80.31	51
+-1	3	3	1599	49.07	3259	1114	0.23	3849	0	30	413	151	345	0.04	1.94	2.68	45.82	2.11	0.98	47.84	51
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	873	26.68	3271	1114	0.24	12779	0	160	6581	1134	2148	0.05	5.21	4.75	63.13	5.69	1.38	66.25	45	45	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	4.05	2.21	0.00	0.00
+-1	0	0	67	2.15	3142	1114	0.84	1548	0	55	1701	392	659	0.07	6.45	6.54	84.83	6.80	1.84	89.21	45	45	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	4.05	2.21	0.00	0.00
+-1	1	1	3251	99.13	3280	1114	0.19	5045	0	0	0	0	0	0.00	0.00	0.00	0.00	0.87	0.00	0.00	45
+-1	2	2	109	3.44	3173	1114	0.89	4698	0	55	3327	438	959	0.07	8.93	7.23	80.41	9.78	1.95	84.83	45
+-1	3	3	63	2.00	3146	1114	0.85	1488	0	50	1553	304	530	0.07	5.47	5.22	87.27	5.30	1.73	90.97	45
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	877	26.79	3272	1114	0.87	10428	0	111	2578	853	2398	0.03	3.75	3.47	65.61	3.39	1.43	68.38	67	67	0.00	0.01	0.00	0.00	0.00	0.00	0.00	0.00	0.00	4.66	2.76	0.00	0.00
+-1	0	0	418	12.81	3260	1114	1.82	1471	0	45	711	235	597	0.05	4.08	3.68	79.23	3.42	1.64	82.13	67	67	0.00	0.01	0.00	0.00	0.00	0.00	0.00	0.00	0.00	4.66	2.76	0.00	0.00
+-1	1	1	2535	77.28	3281	1114	0.57	5152	0	5	514	82	397	0.01	3.06	1.22	17.47	3.88	0.54	18.30	67
+-1	2	2	173	5.42	3194	1114	1.28	2162	0	25	667	339	849	0.03	4.04	5.74	84.68	3.20	1.94	89.44	67
+-1	3	3	380	11.67	3257	1114	1.66	1643	0	36	686	197	555	0.04	3.83	3.25	81.07	3.08	1.58	83.67	67
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	1049	32.98	3180	1114	1.12	21480	0	190	14159	1779	2941	0.04	12.78	6.44	47.45	13.84	1.38	51.80	61	61	0.00	0.22	0.00	0.00	0.07	0.00	0.00	0.00	0.00	6.16	4.15	0.00	0.00
+-1	0	0	755	24.19	3120	1114	1.11	3247	0	28	1884	455	635	0.03	7.75	6.94	60.92	8.33	1.54	65.94	61	61	0.00	0.22	0.00	0.00	0.07	0.00	0.00	0.00	0.00	6.16	4.15	0.00	0.00
+-1	1	1	758	24.11	3143	1114	0.78	8188	0	59	5719	478	1220	0.05	20.03	6.04	49.38	20.91	1.70	53.28	61
+-1	2	2	635	20.34	3122	1114	0.94	4426	0	62	3178	477	792	0.06	11.42	7.61	60.46	11.88	1.64	66.14	61
+-1	3	3	2048	63.29	3236	1114	1.31	5619	0	41	3378	369	294	0.02	11.90	5.14	19.04	14.25	0.64	21.82	61
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	1603	52.82	3035	1114	0.78	48893	0	2610	23336	1501	1428	0.51	33.49	5.40	8.03	33.98	0.60	12.59	78	78	0.00	0.07	0.00	0.00	0.01	0.00	0.00	0.00	0.00	7.74	5.39	0.01	0.00
+-1	0	0	1534	50.07	3063	1114	0.78	13539	0	868	5919	345	199	0.62	39.55	5.47	4.74	39.93	0.43	9.56	78	78	0.00	0.07	0.00	0.00	0.01	0.00	0.00	0.00	0.00	7.74	5.39	0.01	0.00
+-1	1	1	1776	58.90	3015	1114	0.69	15848	0	360	6711	435	748	0.30	25.40	5.24	9.99	26.47	0.92	13.71	77
+-1	2	2	1542	51.03	3023	1114	0.75	11490	0	318	5397	427	342	0.19	28.18	7.01	13.64	28.46	0.70	19.81	77
+-1	3	3	1561	51.30	3043	1114	0.93	8016	0	1064	5309	294	139	0.92	40.85	3.89	3.75	41.06	0.35	7.29	77
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	793	26.29	3016	1113	1.07	14153	0	72	7264	2105	3387	0.02	9.87	8.19	55.29	9.95	1.77	61.99	39	42	0.00	3.34	0.79	0.01	0.87	1.07	0.00	0.00	0.00	5.24	3.28	0.00	0.00
+-1	0	0	346	12.81	2700	1114	0.54	3469	0	19	2137	793	880	0.02	12.87	12.26	61.87	12.91	2.17	72.11	38	42	0.00	3.34	0.79	0.01	0.87	1.07	0.00	0.00	0.00	5.24	3.28	0.00	0.00
+-1	1	1	1496	47.40	3155	1114	1.24	4591	0	15	1735	388	835	0.01	8.12	5.87	38.01	8.59	1.39	42.62	39
+-1	2	2	698	23.46	2975	1114	0.94	3919	0	26	2243	548	954	0.03	11.45	8.50	56.35	11.37	1.87	63.31	39
+-1	3	3	633	21.50	2944	1114	1.08	2174	0	12	1149	376	718	0.02	7.05	6.15	64.97	6.92	1.65	69.93	39
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	132	13.50	980	1114	0.48	15996	0	12	9492	4033	4576	0.00	16.78	15.92	53.66	17.03	2.84	66.63	34	39	0.00	17.85	3.02	0.28	5.54	8.59	0.00	0.00	0.00	2.11	0.44	0.01	0.00
+-1	0	0	149	15.15	982	1114	0.50	6380	0	3	2940	1332	1167	0.00	23.10	20.29	41.16	23.86	3.23	57.75	33	39	0.00	17.85	3.02	0.28	5.54	8.59	0.00	0.00	0.00	2.11	0.44	0.01	0.00
+-1	1	1	119	12.02	992	1114	0.48	2765	0	2	1930	878	1102	0.00	13.87	14.24	59.80	13.86	2.58	71.54	33
+-1	2	2	136	13.96	977	1114	0.44	3938	0	3	2416	967	1244	0.00	15.62	15.17	55.15	15.83	2.95	67.25	33
+-1	3	3	125	12.88	970	1114	0.52	2913	0	4	2206	856	1063	0.01	14.54	13.98	58.51	14.57	2.57	69.97	34
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	87	11.14	783	1114	0.35	13993	0	12	7921	3849	4688	0.00	15.04	15.33	58.39	15.10	2.94	70.82	33	37	0.00	17.56	2.97	0.03	7.57	11.81	0.00	0.00	0.00	1.92	0.31	0.01	0.00
+-1	0	0	92	11.92	774	1114	0.34	5734	0	2	2569	1380	1177	0.00	21.30	20.74	45.83	21.75	3.42	62.91	33	37	0.00	17.56	2.97	0.03	7.57	11.81	0.00	0.00	0.00	1.92	0.31	0.01	0.00
+-1	1	1	81	10.21	789	1114	0.35	2126	0	4	1436	723	1190	0.00	10.47	11.60	67.69	10.25	2.53	77.01	33
+-1	2	2	92	11.73	782	1114	0.34	3572	0	4	2241	852	1274	0.01	15.64	13.38	59.21	15.70	2.99	69.58	33
+-1	3	3	84	10.72	787	1114	0.36	2561	0	2	1675	894	1047	0.00	12.76	15.62	60.84	12.68	2.82	73.78	33
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	478	22.46	2130	1114	0.65	23542	0	446	16325	3014	2977	0.09	19.06	11.15	47.06	19.87	1.94	55.72	70	70	0.00	11.44	3.37	1.60	2.87	12.84	0.00	0.00	0.00	3.22	1.41	0.02	0.00
+-1	0	0	509	23.56	2162	1114	0.63	8178	0	163	4430	831	675	0.17	20.52	12.04	43.50	21.46	1.93	53.04	70	70	0.00	11.44	3.37	1.60	2.87	12.84	0.00	0.00	0.00	3.22	1.41	0.02	0.00
+-1	1	1	482	22.51	2142	1114	0.64	5268	0	101	4524	712	622	0.08	19.12	10.28	47.84	20.19	1.71	55.59	70
+-1	2	2	477	23.10	2064	1114	0.64	5713	0	58	3522	712	922	0.05	17.11	10.87	48.71	17.64	2.19	57.07	70
+-1	3	3	445	20.67	2152	1114	0.70	4383	0	124	3849	759	758	0.07	19.50	11.40	48.20	20.20	1.94	57.19	70
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	2380	78.29	3039	1114	0.74	63309	0	8322	54659	1148	640	0.35	15.19	3.20	3.19	18.58	0.16	2.97	75	75	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	9.49	6.99	0.01	0.00
+-1	0	0	2390	78.65	3039	1114	0.66	18774	0	1555	13032	281	144	0.33	16.32	3.07	1.83	19.06	0.13	2.16	75	75	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	9.49	6.99	0.01	0.00
+-1	1	1	2391	78.71	3037	1114	0.76	16072	0	1538	15471	258	119	0.28	15.29	3.26	2.59	18.22	0.16	2.90	75
+-1	2	2	2409	79.20	3041	1114	0.74	16322	0	2989	12300	260	145	0.47	14.84	2.48	3.35	18.70	0.12	1.98	75
+-1	3	3	2329	76.61	3040	1114	0.78	12141	0	2240	13856	349	232	0.31	14.32	4.01	5.00	18.32	0.23	4.83	74
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	1759	57.02	3086	1114	0.88	43292	0	2340	41813	2150	1225	0.24	29.49	6.36	6.88	31.05	0.59	11.34	89	89	0.00	0.02	0.00	0.00	0.00	0.00	0.00	0.00	0.00	8.63	6.25	0.00	0.00
+-1	0	0	1936	62.36	3104	1114	1.01	10068	0	975	10325	421	177	0.40	29.38	4.67	3.32	30.88	0.39	6.38	89	89	0.00	0.02	0.00	0.00	0.00	0.00	0.00	0.00	0.00	8.63	6.25	0.00	0.00
+-1	1	1	1931	62.79	3075	1114	0.80	15484	0	491	11013	431	283	0.20	26.87	4.51	5.27	28.42	0.46	8.33	89
+-1	2	2	1610	52.26	3081	1114	0.83	10391	0	332	11007	676	381	0.18	29.97	8.51	9.17	31.48	0.80	15.46	89
+-1	3	3	1561	50.67	3081	1114	0.88	7349	0	542	9468	622	384	0.19	31.73	7.75	9.76	33.41	0.72	15.19	89
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	2312	76.65	3017	1114	0.54	52071	0	239	25352	1222	697	0.04	17.07	3.19	2.78	18.36	0.30	4.69	90	90	0.00	0.06	0.00	0.00	0.00	0.00	0.00	0.00	0.00	9.07	6.55	0.00	0.00
+-1	0	0	2241	74.26	3018	1114	0.58	11479	0	57	7020	361	188	0.05	18.43	3.91	3.21	19.80	0.34	5.60	90	90	0.00	0.06	0.00	0.00	0.00	0.00	0.00	0.00	0.00	9.07	6.55	0.00	0.00
+-1	1	1	2377	78.95	3011	1114	0.53	14390	0	69	6334	247	181	0.05	15.94	2.05	2.52	17.34	0.26	3.45	90
+-1	2	2	2319	76.74	3022	1114	0.52	13692	0	24	5649	298	137	0.02	17.58	3.12	2.27	18.67	0.29	4.30	90
+-1	3	3	2313	76.65	3017	1114	0.53	12510	0	89	6349	316	191	0.05	16.33	3.66	3.12	17.61	0.32	5.42	90
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	2124	80.37	2642	1114	0.46	129648	0	204	15517	1171	560	0.03	14.14	3.12	2.03	14.92	0.33	4.38	60	61	0.00	0.04	0.00	0.00	0.00	0.00	0.00	0.00	0.00	7.47	4.85	0.02	0.00
+-1	0	0	2083	79.00	2637	1114	0.48	30291	0	38	3968	278	123	0.03	15.66	2.91	2.17	16.09	0.32	4.59	60	61	0.00	0.04	0.00	0.00	0.00	0.00	0.00	0.00	0.00	7.47	4.85	0.02	0.00
+-1	1	1	2196	83.02	2646	1114	0.46	37240	0	34	4362	215	173	0.02	13.17	1.92	1.35	14.38	0.25	2.36	60
+-1	2	2	2093	79.29	2639	1114	0.44	35381	0	53	3443	336	165	0.03	14.01	3.70	2.74	14.63	0.39	5.69	60
+-1	3	3	2122	80.19	2647	1114	0.49	26736	0	79	3744	342	99	0.04	13.72	3.95	1.86	14.56	0.36	4.90	59
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	1536	61.21	2510	1114	0.46	89830	0	1214	21471	1373	722	0.10	21.99	8.77	7.69	23.10	0.50	15.20	66	66	0.00	0.80	0.34	0.00	0.62	0.17	0.00	0.00	0.00	5.57	3.20	0.00	0.00
+-1	0	0	1516	60.07	2524	1114	0.49	18367	0	119	5349	322	170	0.07	20.36	10.69	8.45	21.34	0.51	18.08	66	66	0.00	0.80	0.34	0.00	0.62	0.17	0.00	0.00	0.00	5.57	3.20	0.00	0.00
+-1	1	1	1570	62.68	2505	1114	0.40	26198	0	72	5797	363	171	0.04	21.19	9.98	5.68	22.55	0.48	14.30	65
+-1	2	2	1520	60.80	2500	1114	0.45	22812	0	565	5071	353	233	0.15	21.82	6.61	10.54	22.88	0.56	15.75	65
+-1	3	3	1539	61.28	2512	1114	0.48	22453	0	458	5254	335	148	0.12	24.58	7.81	6.11	25.61	0.43	12.68	66
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	1741	71.39	2438	1114	0.55	86773	0	428	31060	1630	851	0.05	21.73	4.17	2.56	23.33	0.34	4.93	62	62	0.00	0.03	0.00	0.00	0.00	0.00	0.00	0.00	0.00	5.74	3.32	0.00	0.00
+-1	0	0	1747	71.60	2440	1114	0.58	21211	0	296	6840	407	294	0.09	20.02	4.61	3.69	21.69	0.43	6.29	62	62	0.00	0.03	0.00	0.00	0.00	0.00	0.00	0.00	0.00	5.74	3.32	0.00	0.00
+-1	1	1	1801	74.09	2431	1114	0.46	26957	0	37	8652	329	142	0.03	21.52	2.98	1.05	23.60	0.18	2.12	62
+-1	2	2	1787	73.07	2446	1114	0.64	17692	0	54	6704	355	202	0.05	21.20	3.49	2.14	22.26	0.33	4.34	62
+-1	3	3	1628	66.81	2437	1114	0.52	20913	0	41	8864	539	213	0.03	24.17	5.61	3.38	25.77	0.44	6.97	62
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	1529	59.48	2571	1114	0.45	86403	0	120	33981	2594	1545	0.02	27.11	6.93	6.12	29.60	0.69	10.23	62	62	0.00	0.07	0.00	0.00	0.00	0.00	0.00	0.00	0.00	5.67	3.36	0.00	0.00
+-1	0	0	1443	56.02	2576	1114	0.42	21336	0	30	9196	743	370	0.02	29.21	8.53	6.04	31.85	0.76	11.37	62	62	0.00	0.07	0.00	0.00	0.00	0.00	0.00	0.00	0.00	5.67	3.36	0.00	0.00
+-1	1	1	1572	61.31	2565	1114	0.42	20440	0	41	9678	589	359	0.04	28.01	5.62	4.30	30.64	0.56	7.48	62
+-1	2	2	1559	60.59	2573	1114	0.48	22758	0	17	7869	622	424	0.01	25.53	6.51	7.15	28.36	0.68	10.38	62
+-1	3	3	1542	60.02	2570	1114	0.47	21869	0	32	7238	640	392	0.02	25.70	7.06	6.99	27.56	0.75	11.68	61
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	1496	56.08	2667	1114	0.54	107887	0	445	37424	2729	1930	0.05	29.12	7.33	7.23	31.46	0.73	11.73	61	61	0.00	0.21	0.00	0.00	0.00	0.00	0.00	0.00	0.00	6.01	3.72	0.00	0.00
+-1	0	0	1508	56.34	2677	1114	0.61	33066	0	247	8724	632	457	0.08	28.50	7.02	7.98	30.39	0.71	12.56	61	61	0.00	0.21	0.00	0.00	0.00	0.00	0.00	0.00	0.00	6.01	3.72	0.00	0.00
+-1	1	1	1540	58.13	2650	1114	0.56	22337	0	24	8997	697	474	0.02	27.75	7.13	6.42	30.55	0.72	10.60	61
+-1	2	2	1436	53.81	2669	1114	0.48	29180	0	61	10319	699	471	0.05	32.33	7.39	6.33	34.64	0.69	10.86	61
+-1	3	3	1497	56.03	2673	1114	0.52	23304	0	113	9384	701	528	0.04	27.89	7.77	8.18	30.27	0.79	12.91	61
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	374	20.46	1827	1113	0.65	26066	0	53	15629	3189	3025	0.01	15.32	12.28	51.76	16.71	2.11	60.72	38	42	0.00	16.02	5.86	0.07	3.20	9.86	0.00	0.00	0.00	2.81	1.09	0.00	0.00
+-1	0	0	369	20.70	1784	1114	0.66	5218	0	10	3443	759	694	0.01	14.53	11.60	52.98	15.56	1.97	61.77	38	42	0.00	16.02	5.86	0.07	3.20	9.86	0.00	0.00	0.00	2.81	1.09	0.00	0.00
+-1	1	1	384	20.81	1847	1114	0.66	7970	0	13	4518	692	724	0.01	14.54	10.77	53.74	16.14	1.86	61.19	38
+-1	2	2	384	21.40	1792	1114	0.70	6967	0	21	4177	814	886	0.02	16.28	12.46	49.70	18.15	2.37	58.08	38
+-1	3	3	359	18.93	1894	1114	0.58	5911	0	9	3491	924	721	0.01	15.92	14.32	50.65	16.98	2.22	61.86	38
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	56	6.81	829	1114	0.40	8642	0	9	5774	2963	3285	0.00	8.57	12.58	71.86	8.77	2.62	81.80	36	40	0.00	24.87	10.06	0.19	4.67	16.68	0.00	0.00	0.00	1.84	0.26	0.00	0.00
+-1	0	0	50	5.96	843	1114	0.41	1719	0	3	1218	655	814	0.00	7.64	11.00	75.21	7.79	2.35	83.89	36	40	0.00	24.87	10.06	0.19	4.67	16.68	0.00	0.00	0.00	1.84	0.26	0.00	0.00
+-1	1	1	58	6.92	840	1114	0.45	2007	0	2	1595	723	743	0.00	8.83	12.25	71.82	8.96	2.44	81.67	36
+-1	2	2	64	7.91	809	1114	0.37	2975	0	2	1384	796	1080	0.00	9.72	13.58	68.63	9.84	3.16	79.10	36
+-1	3	3	53	6.44	828	1114	0.38	1941	0	2	1577	789	648	0.00	8.11	13.51	71.79	8.48	2.53	82.55	36
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	68	6.84	992	1114	0.47	9440	0	40	6603	2720	3214	0.00	8.93	11.00	73.06	9.23	2.46	81.46	34	39	0.00	25.13	10.53	0.11	4.33	18.58	0.00	0.00	0.00	1.86	0.28	0.00	0.00
+-1	0	0	61	6.29	966	1114	0.46	1927	0	1	1581	700	816	0.00	8.84	11.42	73.26	9.02	2.41	82.29	34	39	0.00	25.13	10.53	0.11	4.33	18.58	0.00	0.00	0.00	1.86	0.28	0.00	0.00
+-1	1	1	68	6.47	1056	1114	0.51	2186	0	3	1546	569	736	0.00	8.24	9.10	76.07	8.43	2.17	82.94	34
+-1	2	2	77	8.30	927	1114	0.42	3407	0	2	1693	797	942	0.00	10.84	12.98	67.67	11.18	2.98	77.54	34
+-1	3	3	65	6.30	1036	1114	0.51	1920	0	34	1783	654	720	0.01	7.82	10.49	75.25	8.32	2.30	83.08	34
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	45	5.50	825	1114	0.38	7239	0	11	4995	2324	3069	0.00	7.02	9.94	77.41	7.10	2.43	84.97	34	38	0.00	26.44	11.85	0.09	4.04	21.37	0.00	0.00	0.00	1.77	0.22	0.00	0.00
+-1	0	0	44	5.31	835	1114	0.40	1428	0	1	1297	542	727	0.00	6.51	9.17	78.93	6.73	2.24	85.72	33	38	0.00	26.44	11.85	0.09	4.04	21.37	0.00	0.00	0.00	1.77	0.22	0.00	0.00
+-1	1	1	35	4.35	794	1114	0.36	1305	0	1	809	485	634	0.00	5.84	8.16	81.56	5.42	2.14	88.09	33
+-1	2	2	56	6.58	854	1114	0.39	2759	0	8	1798	583	1012	0.00	8.13	10.13	75.02	8.59	2.89	81.94	33
+-1	3	3	47	5.78	806	1114	0.37	1747	0	1	1091	714	696	0.00	7.59	12.30	74.14	7.65	2.44	84.13	34
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	78	7.99	978	1114	0.37	9622	0	13	6209	3069	3233	0.00	9.79	12.71	69.35	9.81	2.58	79.61	34	38	0.00	25.58	9.67	0.37	4.15	15.88	0.00	0.00	0.00	1.90	0.29	0.00	0.00
+-1	0	0	81	8.30	978	1114	0.40	2324	0	5	1849	812	732	0.00	11.24	13.73	66.53	11.39	2.46	77.85	33	38	0.00	25.58	9.67	0.37	4.15	15.88	0.00	0.00	0.00	1.90	0.29	0.00	0.00
+-1	1	1	70	6.98	1004	1114	0.36	2060	0	4	1626	680	744	0.00	8.35	11.01	73.50	8.55	2.33	82.14	33
+-1	2	2	86	9.13	947	1114	0.33	3162	0	2	1552	743	1090	0.00	10.34	11.87	68.50	10.33	2.99	77.54	34
+-1	3	3	75	7.55	993	1114	0.37	2076	0	2	1182	834	667	0.00	9.22	14.22	68.87	8.96	2.56	80.93	34
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	53	6.31	845	1114	0.41	8319	0	10	5835	2762	3249	0.00	8.54	12.07	72.94	8.81	2.58	82.30	33	37	0.00	25.82	10.09	0.13	4.97	17.52	0.00	0.00	0.00	1.82	0.24	0.00	0.00
+-1	0	0	53	6.15	856	1114	0.51	1697	0	1	1572	579	777	0.00	7.81	10.12	75.80	8.15	2.28	83.42	32	37	0.00	25.82	10.09	0.13	4.97	17.52	0.00	0.00	0.00	1.82	0.24	0.00	0.00
+-1	1	1	46	5.37	850	1114	0.40	1659	0	1	1148	639	694	0.00	7.39	11.17	75.97	7.32	2.36	84.95	32
+-1	2	2	59	7.12	826	1114	0.34	3080	0	1	1643	845	987	0.00	10.65	14.43	67.64	11.04	3.18	78.66	32
+-1	3	3	56	6.60	851	1114	0.41	1883	0	7	1472	699	791	0.00	8.33	12.56	72.36	8.71	2.51	82.18	33
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	148	11.00	1344	1114	0.53	11135	0	26	8165	3202	3345	0.01	11.12	13.07	64.65	11.47	2.51	75.02	37	40	0.00	22.28	8.29	0.07	4.46	13.88	0.00	0.00	0.00	2.11	0.48	0.00	0.00
+-1	0	0	151	10.57	1427	1114	0.76	2367	0	7	1467	766	816	0.01	10.08	12.54	66.63	9.94	2.37	77.12	36	40	0.00	22.28	8.29	0.07	4.46	13.88	0.00	0.00	0.00	2.11	0.48	0.00	0.00
+-1	1	1	155	11.13	1395	1114	0.50	2705	0	11	2256	843	752	0.01	11.06	13.64	64.00	11.64	2.40	74.84	37
+-1	2	2	154	12.13	1271	1114	0.40	3602	0	3	2123	757	1080	0.00	12.03	12.49	63.16	12.32	2.91	72.65	37
+-1	3	3	131	10.16	1288	1114	0.47	2461	0	5	2319	836	697	0.00	11.29	13.62	64.77	11.99	2.37	75.48	37
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	119	8.66	1378	1114	0.45	9133	0	22	7726	2379	3206	0.01	10.17	9.47	71.48	10.67	2.26	78.40	34	39	0.00	23.45	10.63	0.09	3.09	19.44	0.00	0.00	0.00	2.02	0.42	0.00	0.00
+-1	0	0	98	7.52	1299	1114	0.39	2024	0	2	1781	629	811	0.00	10.19	9.96	72.14	10.56	2.18	79.75	34	39	0.00	23.45	10.63	0.09	3.09	19.45	0.00	0.00	0.00	2.02	0.42	0.00	0.00
+-1	1	1	152	9.53	1595	1114	0.51	2474	0	4	2112	568	649	0.00	10.04	8.90	71.23	10.55	2.06	77.87	34
+-1	2	2	114	9.24	1237	1114	0.40	2806	0	5	2325	590	1056	0.01	11.26	9.20	70.16	12.20	2.65	75.90	34
+-1	3	3	113	8.36	1358	1114	0.46	1829	0	11	1508	592	690	0.01	9.18	9.83	72.42	9.39	2.16	80.09	34
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	44	5.25	833	1114	0.41	6518	0	7	3415	1916	2751	0.00	6.06	8.33	80.25	5.57	2.29	86.90	33	36	0.00	27.07	12.85	0.13	3.97	23.14	0.00	0.00	0.00	1.74	0.19	0.00	0.00
+-1	0	0	49	5.53	882	1114	0.53	1527	0	1	1002	457	621	0.00	6.50	7.83	80.02	5.96	2.08	86.43	32	36	0.00	27.07	12.85	0.13	3.97	23.14	0.00	0.00	0.00	1.74	0.19	0.00	0.00
+-1	1	1	38	4.59	824	1114	0.38	1309	0	2	766	406	716	0.00	5.03	7.14	83.14	4.47	2.11	88.83	32
+-1	2	2	49	6.20	796	1114	0.32	2190	0	2	887	508	944	0.00	6.84	8.54	78.32	6.51	2.77	84.52	33
+-1	3	3	39	4.67	833	1114	0.41	1492	0	2	760	545	470	0.00	5.88	9.82	79.52	5.32	2.19	87.82	33
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	41	5.08	803	1114	0.38	6433	0	2	3394	2006	3122	0.00	6.34	8.92	79.52	5.92	2.38	86.62	30	36	0.00	27.37	12.51	0.12	4.15	22.09	0.00	0.00	0.00	1.74	0.19	0.00	0.00
+-1	0	0	43	5.03	847	1114	0.52	1339	0	2	838	498	685	0.00	5.88	8.55	80.43	5.38	2.17	87.42	30	36	0.00	27.37	12.51	0.12	4.15	22.09	0.00	0.00	0.00	1.74	0.19	0.00	0.00
+-1	1	1	39	4.88	796	1114	0.35	1294	0	0	815	453	697	0.00	5.57	8.12	81.33	5.03	2.14	87.95	30
+-1	2	2	45	5.78	780	1114	0.32	2579	0	0	1104	620	1047	0.00	8.67	11.01	74.39	8.50	3.03	82.68	30
+-1	3	3	37	4.63	791	1114	0.32	1221	0	0	637	435	693	0.00	5.26	8.02	81.94	4.76	2.19	88.42	30
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	40	5.14	781	1114	0.34	6735	0	6	3529	2082	3050	0.00	6.33	9.57	78.84	5.94	2.43	86.49	31	36	0.00	27.94	11.92	0.16	4.96	20.87	0.00	0.00	0.00	1.74	0.19	0.00	0.00
+-1	0	0	38	4.80	783	1114	0.38	1288	0	3	744	438	770	0.00	5.60	7.88	81.59	5.09	2.20	87.91	30	36	0.00	27.93	11.92	0.16	4.96	20.87	0.00	0.00	0.00	1.74	0.19	0.00	0.00
+-1	1	1	35	4.46	783	1114	0.34	1421	0	1	836	463	661	0.00	6.17	8.70	80.58	5.65	2.21	87.68	30
+-1	2	2	50	6.49	776	1114	0.30	2691	0	1	1211	686	953	0.00	8.12	12.59	72.64	8.09	3.06	82.36	31
+-1	3	3	38	4.80	784	1114	0.34	1335	0	1	738	495	666	0.00	5.42	9.10	80.57	4.92	2.27	88.02	31
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	44	5.40	808	1114	0.35	7370	0	5	4534	2640	3161	0.00	7.43	11.64	75.40	7.46	2.55	84.59	30	36	0.00	26.87	11.27	0.08	4.63	19.78	0.00	0.00	0.00	1.76	0.21	0.00	0.00
+-1	0	0	39	4.96	791	1114	0.40	1607	0	1	939	703	747	0.00	6.56	12.33	76.04	6.39	2.42	86.23	30	36	0.00	26.87	11.27	0.08	4.63	19.78	0.00	0.00	0.00	1.76	0.21	0.00	0.00
+-1	1	1	37	4.42	840	1114	0.38	1419	0	2	1169	496	662	0.00	5.62	8.76	81.09	5.60	2.18	87.81	30
+-1	2	2	53	6.61	806	1114	0.32	2711	0	1	1405	753	1004	0.00	10.59	13.32	69.32	10.92	3.14	79.33	30
+-1	3	3	45	5.60	801	1114	0.33	1633	0	1	1021	688	748	0.00	6.94	12.16	75.14	6.96	2.47	84.97	30
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	50	5.88	844	1114	0.45	7890	0	17	4721	2791	3206	0.00	7.85	11.80	74.33	7.73	2.57	83.82	31	36	0.00	26.59	10.86	0.10	4.84	18.96	0.00	0.00	0.00	1.79	0.22	0.00	0.00
+-1	0	0	42	5.33	795	1114	0.45	1657	0	4	975	693	728	0.01	7.47	11.47	75.60	7.08	2.38	85.21	31	36	0.00	26.59	10.86	0.10	4.84	18.96	0.00	0.00	0.00	1.79	0.22	0.00	0.00
+-1	1	1	42	5.17	818	1114	0.40	1302	0	1	884	526	797	0.00	5.14	9.00	80.61	5.02	2.29	87.53	31
+-1	2	2	52	6.63	780	1114	0.29	3027	0	4	1472	789	1011	0.00	10.23	13.43	69.56	10.18	3.14	80.05	31
+-1	3	3	62	6.40	972	1114	0.60	1904	0	8	1390	783	670	0.00	8.57	13.28	71.56	8.64	2.47	82.49	31
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	171	8.58	1999	1114	1.62	9129	0	35	6604	2079	3195	0.01	9.22	8.46	73.45	9.53	2.18	79.71	32	36	0.00	21.19	10.01	0.12	3.13	17.64	0.00	0.00	0.00	2.39	0.81	0.00	0.00
+-1	0	0	55	5.02	1092	1114	0.44	1445	0	4	1388	505	866	0.00	7.65	8.45	78.69	7.67	2.16	85.15	31	36	0.00	21.19	10.01	0.12	3.13	17.64	0.00	0.00	0.00	2.39	0.81	0.00	0.00
+-1	1	1	53	4.45	1188	1114	0.44	1403	0	10	1319	440	774	0.01	7.75	7.05	80.61	8.00	2.02	85.54	31
+-1	2	2	74	6.44	1152	1114	0.37	3858	0	18	2479	621	970	0.02	12.71	9.83	70.61	13.28	2.66	77.62	31
+-1	3	3	504	18.41	2738	1114	2.05	2423	0	3	1418	513	585	0.00	8.77	8.52	63.88	9.16	1.89	70.54	32
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	58	6.61	881	1114	0.35	9430	0	6	5726	3074	3381	0.00	9.81	12.86	70.49	9.76	2.63	81.00	31	36	0.00	24.78	9.49	0.09	5.05	16.07	0.00	0.00	0.00	1.84	0.26	0.00	0.00
+-1	0	0	50	6.18	802	1114	0.34	1953	0	0	1258	797	824	0.00	9.20	13.17	71.21	9.17	2.50	82.15	31	36	0.00	24.78	9.49	0.09	5.05	16.07	0.00	0.00	0.00	1.84	0.26	0.00	0.00
+-1	1	1	70	6.65	1048	1114	0.33	1968	0	1	1303	480	921	0.00	7.46	8.20	77.37	7.36	2.25	83.73	31
+-1	2	2	64	7.37	868	1114	0.36	3411	0	3	1893	959	929	0.00	13.04	15.72	63.67	13.12	3.17	76.34	31
+-1	3	3	50	6.23	797	1114	0.36	2098	0	2	1272	838	707	0.00	9.53	14.35	69.73	9.38	2.61	81.78	30
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	41	5.25	781	1114	0.33	7415	0	4	3816	2565	3099	0.00	7.34	11.14	76.14	7.00	2.51	85.24	31	35	0.00	26.80	11.60	0.10	4.62	20.72	0.00	0.00	0.00	1.75	0.20	0.00	0.00
+-1	0	0	38	4.94	779	1114	0.33	1719	0	1	1104	639	750	0.00	7.77	10.98	76.21	7.41	2.35	85.30	31	35	0.00	26.80	11.60	0.10	4.62	20.72	0.00	0.00	0.00	1.75	0.20	0.00	0.00
+-1	1	1	35	4.41	785	1114	0.34	1331	0	0	719	475	735	0.00	5.47	8.41	81.62	4.93	2.18	88.47	30
+-1	2	2	50	6.49	775	1114	0.31	2820	0	2	1217	747	926	0.00	9.58	12.70	71.07	9.46	3.05	80.99	30
+-1	3	3	41	5.17	786	1114	0.34	1545	0	1	776	704	688	0.00	6.55	12.47	75.65	6.22	2.44	86.18	30
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	256	12.54	2043	1114	0.81	11459	0	22	6471	2777	3173	0.01	9.84	11.31	66.09	9.77	2.33	75.36	51	51	0.00	21.20	8.60	0.20	3.58	14.82	0.00	0.00	0.00	2.59	0.92	0.00	0.00
+-1	0	0	182	9.86	1842	1114	0.61	2405	0	6	1731	674	799	0.01	10.09	10.96	68.88	9.96	2.20	77.98	51	51	0.00	21.20	8.60	0.20	3.58	14.82	0.00	0.00	0.00	2.59	0.92	0.00	0.00
+-1	1	1	444	17.94	2473	1114	1.03	2936	0	9	1353	613	656	0.01	7.65	10.05	64.03	7.71	2.06	72.29	51
+-1	2	2	223	12.35	1806	1114	0.68	3923	0	4	1871	807	1013	0.00	12.10	12.88	62.47	12.14	2.84	72.67	51
+-1	3	3	177	10.01	1763	1114	0.64	2195	0	3	1516	683	705	0.00	9.53	11.36	68.93	9.26	2.24	78.49	51
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	68	5.69	1195	1113	0.33	7150	0	6	4811	2198	2980	0.00	6.87	9.47	77.82	6.81	2.37	85.13	30	36	0.00	26.39	12.33	0.14	4.12	21.97	0.00	0.00	0.00	1.83	0.27	0.00	0.00
+-1	0	0	64	5.15	1248	1114	0.34	1331	0	3	1201	507	696	0.00	6.42	8.43	79.87	6.36	2.14	86.35	30	36	0.00	26.39	12.33	0.14	4.12	21.97	0.00	0.00	0.00	1.83	0.27	0.00	0.00
+-1	1	1	69	5.32	1300	1114	0.38	1413	0	0	1104	419	687	0.00	5.21	7.39	81.95	5.23	2.07	87.38	30
+-1	2	2	79	6.83	1154	1114	0.29	2661	0	1	1274	717	929	0.00	8.47	12.33	72.23	8.49	3.01	81.67	30
+-1	3	3	60	5.47	1097	1114	0.33	1745	0	2	1232	555	668	0.00	7.38	9.74	77.26	7.16	2.25	85.13	30
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	74	7.82	941	1114	0.58	8647	0	40	5351	2670	3263	0.01	8.27	11.38	72.39	8.25	2.50	81.43	31	35	0.00	25.03	10.53	0.12	4.21	18.18	0.00	0.00	0.00	1.85	0.27	0.00	0.00
+-1	0	0	70	7.69	913	1114	0.58	1897	0	3	1053	734	732	0.00	7.73	12.24	72.20	7.49	2.41	82.42	31	35	0.00	25.03	10.53	0.12	4.21	18.17	0.00	0.00	0.00	1.85	0.27	0.00	0.00
+-1	1	1	69	7.22	954	1114	0.55	1835	0	5	1186	528	833	0.00	6.10	8.91	77.65	6.12	2.25	84.41	31
+-1	2	2	72	8.15	890	1114	0.51	2873	0	6	1611	616	996	0.01	10.09	10.55	71.05	10.06	2.82	78.98	31
+-1	3	3	83	8.22	1006	1114	0.65	2042	0	26	1501	792	702	0.01	9.17	13.82	68.61	9.35	2.52	79.91	31
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	51	5.67	903	1114	0.48	7436	0	10	4361	2443	3240	0.00	7.09	11.03	76.06	6.99	2.53	84.80	31	35	0.00	26.80	11.35	0.17	4.96	19.02	0.00	0.00	0.00	1.79	0.23	0.00	0.00
+-1	0	0	70	6.08	1154	1114	0.75	1449	0	1	955	536	662	0.00	6.02	9.55	78.21	5.85	2.22	85.86	31	35	0.00	26.80	11.35	0.17	4.96	19.02	0.00	0.00	0.00	1.79	0.23	0.00	0.00
+-1	1	1	39	4.69	829	1114	0.40	1584	0	7	1159	565	762	0.00	6.66	10.05	78.51	6.51	2.32	86.48	31
+-1	2	2	51	6.40	803	1114	0.31	2694	0	2	1225	631	1063	0.00	7.98	11.42	74.06	8.02	3.05	82.54	31
+-1	3	3	45	5.53	806	1114	0.34	1709	0	0	1022	711	753	0.00	7.70	13.11	73.50	7.60	2.55	84.33	31
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	49	6.25	782	1114	0.35	8329	0	5	4466	3045	3091	0.00	8.37	12.50	72.75	8.14	2.59	83.02	30	35	0.00	25.86	10.53	0.09	4.46	18.32	0.00	0.00	0.00	1.79	0.22	0.00	0.00
+-1	0	0	47	5.91	789	1114	0.36	1427	0	0	813	537	806	0.00	5.97	8.75	79.24	5.64	2.23	86.22	29	35	0.00	25.86	10.53	0.09	4.46	18.32	0.00	0.00	0.00	1.79	0.22	0.00	0.00
+-1	1	1	47	5.95	782	1114	0.39	1818	0	2	970	773	724	0.00	7.76	12.85	73.32	7.44	2.46	84.15	29
+-1	2	2	58	7.54	773	1114	0.33	3409	0	2	1673	1006	875	0.00	11.98	16.15	64.16	12.07	3.21	77.18	30
+-1	3	3	44	5.60	787	1114	0.35	1675	0	1	1010	729	686	0.00	7.77	12.23	74.27	7.41	2.45	84.54	30
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	51	6.36	799	1114	0.36	8849	0	9	4994	3101	3289	0.00	9.37	13.30	70.81	9.20	2.66	81.78	31	35	0.00	25.87	9.77	0.06	5.04	16.83	0.00	0.00	0.00	1.80	0.23	0.00	0.00
+-1	0	0	48	5.95	805	1114	0.37	1647	0	3	946	655	750	0.01	7.38	11.32	75.19	7.03	2.38	84.64	30	35	0.00	25.87	9.77	0.06	5.04	16.83	0.00	0.00	0.00	1.80	0.23	0.00	0.00
+-1	1	1	49	6.05	804	1114	0.37	1730	0	2	1056	628	871	0.00	7.90	10.81	75.11	7.57	2.41	83.97	30
+-1	2	2	57	7.34	783	1114	0.31	3434	0	3	1740	956	1036	0.00	12.58	16.05	63.85	12.82	3.25	76.60	30
+-1	3	3	49	6.11	807	1114	0.40	2038	0	1	1252	862	632	0.00	9.62	15.03	69.09	9.40	2.59	81.90	31
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	98	7.78	1254	1114	0.59	9231	0	28	6081	2936	3248	0.00	9.62	12.07	70.36	9.63	2.52	80.07	30	35	0.00	24.41	10.02	0.09	4.32	17.33	0.00	0.00	0.00	1.95	0.36	0.00	0.00
+-1	0	0	95	7.54	1253	1114	0.53	2081	0	7	1682	720	700	0.00	9.81	11.77	70.71	9.74	2.31	80.40	30	35	0.00	24.41	10.02	0.09	4.32	17.33	0.00	0.00	0.00	1.95	0.36	0.00	0.00
+-1	1	1	109	7.85	1391	1114	0.60	1973	0	2	1328	719	740	0.00	8.57	11.95	71.45	8.57	2.37	81.21	30
+-1	2	2	120	9.53	1259	1114	0.79	3324	0	1	1816	774	1010	0.00	11.20	13.08	66.00	11.45	2.99	76.03	30
+-1	3	3	66	6.20	1073	1114	0.32	1853	0	18	1255	723	798	0.01	8.90	11.47	73.29	8.76	2.41	82.63	30
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	49	6.01	808	1114	0.39	8356	0	9	5173	2910	3267	0.00	8.42	11.95	73.47	8.43	2.58	82.98	30	35	0.00	25.75	10.67	0.13	4.26	19.08	0.00	0.00	0.00	1.78	0.22	0.00	0.00
+-1	0	0	45	5.54	816	1114	0.50	1858	0	2	1428	698	669	0.00	8.31	11.62	74.39	8.29	2.36	83.81	30	35	0.00	25.75	10.67	0.13	4.26	19.08	0.00	0.00	0.00	1.78	0.22	0.00	0.00
+-1	1	1	45	5.64	803	1114	0.36	1760	0	1	1111	686	787	0.00	7.30	11.29	75.63	7.27	2.37	84.72	30
+-1	2	2	53	6.80	786	1114	0.32	2993	0	3	1460	797	1044	0.00	9.99	13.06	69.98	10.02	3.13	80.06	29
+-1	3	3	50	6.07	831	1114	0.37	1745	0	3	1174	729	767	0.00	8.09	11.82	73.86	8.12	2.45	83.35	29
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	56	6.64	836	1114	0.41	8776	0	4	5146	3264	3528	0.00	8.90	13.72	70.58	8.90	2.74	81.72	31	36	0.00	26.21	9.33	0.14	5.04	15.89	0.00	0.00	0.00	1.82	0.25	0.00	0.00
+-1	0	0	51	6.48	790	1114	0.35	1917	0	1	1129	836	831	0.00	8.74	13.91	70.72	8.50	2.60	82.41	31	36	0.00	26.21	9.33	0.14	5.04	15.89	0.00	0.00	0.00	1.82	0.25	0.00	0.00
+-1	1	1	51	6.22	815	1114	0.37	1764	0	1	1315	659	856	0.00	7.41	10.79	75.41	7.44	2.41	83.93	30
+-1	2	2	59	7.32	808	1114	0.32	3190	0	2	1697	992	1114	0.00	11.76	16.48	64.27	12.26	3.38	77.04	30
+-1	3	3	61	6.55	933	1114	0.60	1905	0	0	1005	777	727	0.00	7.67	13.71	71.92	7.41	2.55	83.50	30
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	51	6.31	806	1114	0.36	8843	0	8	5635	3141	3502	0.00	9.33	13.15	71.03	9.46	2.68	81.54	30	35	0.00	25.34	10.22	0.11	4.80	17.37	0.00	0.00	0.00	1.80	0.23	0.00	0.00
+-1	0	0	46	5.84	791	1114	0.34	1690	0	3	1063	667	870	0.01	8.31	11.29	74.41	8.00	2.42	83.75	30	35	0.00	25.34	10.22	0.11	4.80	17.37	0.00	0.00	0.00	1.80	0.23	0.00	0.00
+-1	1	1	49	5.95	816	1114	0.38	1926	0	3	1468	777	748	0.00	8.68	13.34	71.87	9.02	2.48	82.55	30
+-1	2	2	57	7.22	792	1114	0.32	3149	0	0	1505	883	1122	0.00	10.84	14.32	67.43	11.01	3.26	78.52	29
+-1	3	3	52	6.26	827	1114	0.38	2078	0	2	1599	814	762	0.00	9.48	13.65	70.42	9.83	2.57	81.34	29
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	44	5.51	801	1114	0.34	7678	0	7	4248	2496	3092	0.00	7.52	11.05	75.77	7.35	2.51	84.64	29	34	0.00	27.02	11.44	0.11	4.75	20.06	0.00	0.00	0.00	1.76	0.20	0.00	0.00
+-1	0	0	40	4.94	815	1114	0.36	1719	0	1	1058	650	690	0.00	7.74	11.33	75.80	7.55	2.36	85.15	29	34	0.00	27.02	11.44	0.11	4.75	20.06	0.00	0.00	0.00	1.76	0.20	0.00	0.00
+-1	1	1	39	4.92	797	1114	0.38	1388	0	2	819	479	765	0.00	5.84	8.50	80.62	5.54	2.20	87.35	29
+-1	2	2	54	6.75	807	1114	0.31	2724	0	3	1271	695	1003	0.01	8.87	12.37	71.87	8.90	3.04	81.31	29
+-1	3	3	43	5.41	786	1114	0.34	1847	0	1	1100	672	634	0.00	7.62	11.99	74.79	7.41	2.42	84.76	29
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	191	10.48	1826	1114	0.52	10616	0	36	7043	2228	2938	0.01	9.56	9.15	70.66	9.49	2.19	77.85	38	39	0.00	23.51	10.87	0.16	3.38	18.93	0.00	0.00	0.00	2.23	0.59	0.01	0.00
+-1	0	0	154	9.05	1708	1114	0.44	2605	0	8	1972	583	729	0.01	10.12	9.26	71.42	10.09	2.06	78.81	38	39	0.00	23.51	10.87	0.16	3.38	18.93	0.00	0.00	0.00	2.23	0.59	0.01	0.00
+-1	1	1	188	10.20	1839	1114	0.51	2381	0	8	1644	482	647	0.01	8.90	7.90	72.86	8.57	1.99	79.24	37
+-1	2	2	205	11.71	1749	1114	0.55	3536	0	9	1891	677	951	0.01	11.12	11.45	65.54	11.40	2.73	74.17	37
+-1	3	3	218	10.95	1993	1114	0.56	2094	0	11	1536	486	611	0.01	8.07	7.99	72.81	7.91	1.97	79.17	37
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	1003	38.41	2612	1114	0.75	36348	0	78	18810	3787	2236	0.02	22.65	12.81	25.88	23.26	1.66	36.67	35	39	0.00	8.79	2.22	0.38	1.33	2.75	0.00	0.00	0.00	5.35	3.24	0.02	0.00
+-1	0	0	1037	39.17	2648	1114	0.81	9246	0	23	4643	881	544	0.02	22.61	11.67	26.27	23.17	1.54	36.12	35	39	0.00	8.79	2.22	0.38	1.33	2.75	0.00	0.00	0.00	5.35	3.24	0.02	0.00
+-1	1	1	1029	39.12	2630	1114	0.70	7653	0	17	4473	833	515	0.01	20.76	11.17	28.65	21.31	1.51	38.06	35
+-1	2	2	945	36.29	2604	1114	0.70	10782	0	24	5428	1085	586	0.02	25.74	14.63	23.16	26.57	1.88	35.27	35
+-1	3	3	1002	39.05	2567	1114	0.77	8667	0	14	4266	988	591	0.02	21.49	13.77	25.46	21.97	1.73	37.24	33
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	606	25.78	2351	1114	0.69	25481	0	80	12620	3444	2958	0.01	15.02	12.60	46.39	15.45	2.13	56.64	34	37	0.00	16.54	5.27	0.06	2.54	9.30	0.00	0.00	0.00	3.66	1.83	0.00	0.00
+-1	0	0	651	27.11	2399	1114	0.71	5596	0	16	3110	883	628	0.01	13.61	12.93	46.11	14.26	2.00	56.62	33	37	0.00	16.54	5.27	0.06	2.54	9.30	0.00	0.00	0.00	3.66	1.83	0.00	0.00
+-1	1	1	602	25.75	2340	1114	0.73	6519	0	31	3156	832	741	0.02	14.33	12.07	47.68	14.82	2.03	57.41	33
+-1	2	2	569	24.83	2291	1114	0.63	7802	0	30	3545	872	888	0.01	17.28	12.77	44.91	17.59	2.37	55.20	34
+-1	3	3	603	25.43	2371	1114	0.69	5564	0	3	2809	857	701	0.00	14.87	12.64	46.87	15.14	2.10	57.33	34
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	517	20.92	2470	1114	0.77	19537	0	225	27584	1664	2899	0.03	18.86	5.41	54.76	21.92	1.35	55.81	41	41	0.00	10.67	5.91	0.03	2.02	23.58	0.00	0.00	0.00	3.45	1.67	0.00	0.00
+-1	0	0	436	17.74	2458	1114	0.65	5018	0	39	7131	456	769	0.02	21.53	5.63	55.07	24.73	1.32	56.21	41	41	0.00	10.67	5.91	0.03	2.02	23.58	0.00	0.00	0.00	3.45	1.67	0.00	0.00
+-1	1	1	535	21.32	2509	1114	0.75	4987	0	28	7197	392	559	0.02	18.72	4.73	55.12	21.51	1.15	56.02	41
+-1	2	2	558	22.73	2456	1114	0.84	5054	0	32	6440	451	847	0.02	17.42	5.88	53.92	20.39	1.65	55.23	41
+-1	3	3	538	21.89	2456	1114	0.81	4478	0	126	6816	365	724	0.07	17.76	5.39	54.93	21.04	1.27	55.81	41
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	1793	58.51	3065	1114	0.71	54822	0	98	21122	2753	1681	0.02	19.88	8.87	12.47	20.92	0.96	19.61	77	77	0.00	1.22	0.26	0.02	0.38	0.98	0.00	0.00	0.00	8.29	5.89	0.02	0.00
+-1	0	0	1885	61.66	3058	1114	0.75	12842	0	11	4950	639	351	0.01	19.23	8.05	10.76	20.32	0.88	17.14	77	77	0.00	1.22	0.26	0.02	0.38	0.98	0.00	0.00	0.00	8.29	5.89	0.02	0.00
+-1	1	1	1471	48.21	3050	1114	0.62	10862	0	30	5550	919	550	0.03	23.70	12.10	15.91	24.35	1.27	26.18	77
+-1	2	2	1775	58.04	3058	1114	0.64	19802	0	23	6286	681	423	0.02	20.59	8.84	12.27	21.52	0.94	19.50	77
+-1	3	3	2042	66.13	3088	1114	0.78	11316	0	34	4336	514	357	0.02	15.99	6.52	10.95	17.51	0.74	15.62	77
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	182	14.69	1238	1113	0.62	13505	0	16	9632	2841	3484	0.00	13.13	11.45	60.55	13.52	2.27	69.52	37	41	0.00	15.81	3.77	0.29	4.01	17.74	0.00	0.00	0.00	2.23	0.56	0.01	0.00
+-1	0	0	184	14.12	1300	1114	0.66	3558	0	7	2549	831	891	0.01	14.41	13.08	58.20	14.56	2.37	68.95	37	41	0.00	15.81	3.77	0.29	4.01	17.74	0.00	0.00	0.00	2.23	0.56	0.01	0.00
+-1	1	1	179	14.44	1236	1114	0.65	3579	0	2	2542	731	795	0.00	12.99	11.96	60.41	13.53	2.19	69.83	36
+-1	2	2	181	14.56	1240	1114	0.63	3587	0	1	2328	735	1010	0.00	13.49	11.91	59.90	14.03	2.52	68.89	36
+-1	3	3	185	15.63	1183	1114	0.55	2781	0	6	2213	544	788	0.00	11.66	8.86	63.70	11.97	2.01	70.40	37
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	191	15.54	1226	1114	0.56	12251	0	21	7526	2977	3596	0.01	11.65	11.65	60.94	11.60	2.38	70.48	35	40	0.00	17.34	3.59	0.69	3.71	16.02	0.00	0.00	0.00	2.18	0.51	0.01	0.00
+-1	0	0	191	15.60	1226	1114	0.55	3391	0	7	1948	839	902	0.01	12.94	12.91	58.25	12.96	2.42	69.02	35	40	0.00	17.34	3.59	0.69	3.71	16.02	0.00	0.00	0.00	2.18	0.51	0.01	0.00
+-1	1	1	164	12.59	1304	1114	0.55	2719	0	9	1926	799	869	0.01	11.68	12.24	63.30	11.53	2.33	73.55	35
+-1	2	2	222	19.18	1159	1114	0.60	3472	0	0	1817	709	944	0.00	11.13	11.48	58.01	11.18	2.53	67.11	35
+-1	3	3	184	14.80	1246	1114	0.53	2669	0	5	1835	630	881	0.00	10.83	9.96	64.22	10.72	2.23	72.26	35
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	402	23.18	1732	1114	0.65	16345	0	15	11157	3387	3643	0.00	14.33	12.79	49.48	14.77	2.23	59.83	65	65	0.00	11.80	2.68	0.16	3.39	11.94	0.00	0.00	0.00	2.95	1.17	0.01	0.00
+-1	0	0	457	26.25	1742	1114	0.68	4264	0	6	2488	725	812	0.00	13.59	11.18	48.66	14.13	2.00	57.61	65	65	0.00	11.80	2.68	0.16	3.39	11.94	0.00	0.00	0.00	2.95	1.17	0.01	0.00
+-1	1	1	408	22.98	1777	1114	0.72	3610	0	4	2784	845	903	0.00	13.93	12.80	50.07	14.38	2.15	60.49	65
+-1	2	2	388	22.12	1752	1114	0.57	4641	0	3	2904	907	1023	0.00	15.00	13.38	49.27	15.41	2.48	59.98	65
+-1	3	3	353	21.36	1653	1114	0.60	3830	0	2	2981	910	905	0.00	14.78	13.80	49.89	15.16	2.27	61.22	65
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	347	25.27	1374	1113	0.54	18899	0	65	13902	3780	3632	0.01	17.92	13.90	42.72	18.55	2.18	54.00	38	41	0.00	11.42	1.75	0.31	2.76	7.16	0.00	0.00	0.00	2.69	0.88	0.01	0.00
+-1	0	0	336	25.12	1336	1114	0.52	4754	0	31	3678	886	890	0.01	18.07	12.87	43.72	18.88	2.03	53.96	36	41	0.00	11.42	1.75	0.31	2.76	7.16	0.00	0.00	0.00	2.69	0.88	0.01	0.00
+-1	1	1	365	26.09	1398	1114	0.52	4492	0	9	3372	920	870	0.01	17.52	13.81	42.37	18.10	2.09	53.72	36
+-1	2	2	352	25.17	1397	1114	0.53	5341	0	16	3655	1087	974	0.01	19.14	16.02	39.49	19.97	2.48	52.38	38
+-1	3	3	336	24.68	1361	1114	0.59	4312	0	9	3197	887	898	0.01	16.95	12.90	45.31	17.25	2.11	55.96	38
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	291	23.39	1244	1114	0.49	17589	0	23	12620	3774	3798	0.01	17.50	13.82	45.10	17.87	2.29	56.44	37	40	0.00	13.17	1.61	0.42	3.09	7.25	0.00	0.00	0.00	2.53	0.73	0.01	0.00
+-1	0	0	277	22.48	1232	1114	0.47	4475	0	6	3457	979	912	0.01	19.17	14.22	43.90	19.79	2.22	55.51	37	40	0.00	13.17	1.61	0.42	3.09	7.25	0.00	0.00	0.00	2.53	0.73	0.01	0.00
+-1	1	1	259	21.33	1216	1114	0.50	4039	0	4	3176	957	937	0.00	17.72	14.27	46.50	17.97	2.31	58.39	37
+-1	2	2	320	24.46	1309	1114	0.50	4944	0	2	3085	942	1055	0.00	17.56	13.48	44.29	17.79	2.44	55.30	37
+-1	3	3	308	25.30	1216	1114	0.49	4131	0	11	2902	896	894	0.01	15.52	13.29	45.69	15.94	2.20	56.56	36
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	286	24.51	1165	1114	0.50	18140	0	34	12277	3709	3780	0.01	16.89	13.85	44.58	17.27	2.30	55.92	36	39	0.00	12.56	1.74	0.34	3.29	7.45	0.00	0.00	0.00	2.47	0.67	0.01	0.00
+-1	0	0	285	23.83	1198	1114	0.51	4900	0	4	3028	952	944	0.00	17.17	14.26	44.54	17.48	2.30	56.39	35	39	0.00	12.56	1.74	0.34	3.29	7.45	0.00	0.00	0.00	2.47	0.67	0.01	0.00
+-1	1	1	266	22.29	1193	1114	0.50	3923	0	5	3163	947	950	0.01	17.32	14.07	46.23	17.70	2.27	57.74	35
+-1	2	2	302	25.73	1173	1114	0.48	5272	0	4	3017	998	1020	0.00	17.25	14.93	41.88	17.48	2.53	54.26	35
+-1	3	3	289	26.19	1104	1114	0.50	4045	0	21	3069	812	866	0.00	15.82	12.13	45.69	16.42	2.10	55.30	36
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	292	26.28	1112	1114	0.55	18073	0	12	12063	3461	3718	0.00	16.97	12.50	44.09	17.28	2.14	54.30	40	40	0.00	12.51	1.52	0.41	2.66	7.06	0.00	0.00	0.00	2.48	0.67	0.01	0.00
+-1	0	0	313	28.05	1116	1114	0.54	4787	0	3	3006	918	861	0.00	16.83	13.58	41.28	17.43	2.13	52.39	40	40	0.00	12.51	1.52	0.41	2.66	7.06	0.00	0.00	0.00	2.48	0.67	0.01	0.00
+-1	1	1	269	24.27	1109	1114	0.55	4124	0	2	3114	797	925	0.00	16.76	11.92	46.93	17.09	2.06	56.59	40
+-1	2	2	299	26.24	1140	1114	0.55	5333	0	2	3165	893	1039	0.00	17.89	12.28	43.46	18.06	2.29	53.41	40
+-1	3	3	288	26.57	1084	1114	0.56	3829	0	5	2778	853	893	0.01	16.39	12.22	44.68	16.52	2.10	54.80	40
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	286	27.74	1032	1113	0.56	18528	0	15	12044	3602	3808	0.00	17.02	13.48	41.61	17.28	2.20	52.77	36	39	0.00	11.10	1.24	0.21	3.15	5.78	0.00	0.00	0.00	2.44	0.64	0.01	0.00
+-1	0	0	298	28.38	1049	1114	0.58	4794	0	5	2849	946	903	0.00	16.66	14.30	40.51	16.80	2.17	52.65	36	39	0.00	11.10	1.24	0.21	3.15	5.78	0.00	0.00	0.00	2.44	0.64	0.01	0.00
+-1	1	1	276	26.87	1027	1114	0.54	4076	0	5	2832	846	953	0.01	16.02	12.54	44.44	16.31	2.12	54.71	36
+-1	2	2	294	28.30	1038	1114	0.56	5619	0	4	3483	962	979	0.00	18.70	14.43	38.44	19.04	2.35	50.30	36
+-1	3	3	278	27.43	1014	1114	0.55	4039	0	1	2880	848	973	0.00	16.70	12.68	43.07	16.99	2.16	53.42	36
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	291	29.71	979	1114	0.60	19760	0	107	11099	3396	3613	0.01	15.56	12.85	41.82	15.62	2.10	52.57	37	40	0.00	11.78	1.42	0.36	2.92	6.23	0.00	0.00	0.00	2.42	0.62	0.01	0.00
+-1	0	0	266	26.92	989	1114	0.63	4684	0	38	2932	958	889	0.01	16.80	14.28	41.94	16.82	2.14	54.12	37	40	0.00	11.78	1.42	0.36	2.92	6.23	0.00	0.00	0.00	2.42	0.62	0.01	0.00
+-1	1	1	286	29.43	973	1114	0.63	4430	0	7	2626	789	869	0.01	15.16	11.93	43.41	15.15	2.00	53.42	37
+-1	2	2	298	30.48	979	1114	0.61	5556	0	58	3061	854	1009	0.01	16.12	12.96	40.39	16.33	2.24	50.94	37
+-1	3	3	313	32.00	978	1114	0.55	5090	0	4	2480	795	846	0.00	14.15	12.23	41.54	14.18	2.03	51.80	37
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	311	31.31	994	1113	0.66	19256	0	22	11416	3350	3550	0.01	15.63	12.56	40.40	15.82	2.05	50.82	37	39	0.00	11.51	1.25	0.45	2.83	5.29	0.00	0.00	0.00	2.50	0.68	0.01	0.00
+-1	0	0	314	32.48	968	1114	0.66	5153	0	5	2794	779	892	0.00	15.44	11.88	40.07	15.67	1.98	49.88	35	39	0.00	11.51	1.25	0.45	2.83	5.29	0.00	0.00	0.00	2.50	0.68	0.01	0.00
+-1	1	1	314	31.99	983	1114	0.59	4300	0	6	2865	913	798	0.01	14.93	13.34	39.65	15.18	2.04	50.79	37
+-1	2	2	294	29.72	989	1114	0.60	5673	0	7	3182	876	986	0.01	17.29	13.15	39.79	17.35	2.21	50.72	37
+-1	3	3	322	31.04	1038	1114	0.77	4130	0	4	2575	782	874	0.01	14.87	11.88	42.12	15.07	1.99	51.90	36
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	280	24.12	1162	1114	0.53	17140	0	25	11955	3539	3739	0.01	16.29	13.14	46.27	16.56	2.27	57.05	37	39	0.00	13.07	1.75	0.32	3.51	7.73	0.00	0.00	0.00	2.47	0.69	0.01	0.00
+-1	0	0	292	25.34	1153	1114	0.52	4479	0	5	3013	811	910	0.00	16.68	11.96	45.79	17.09	2.10	55.47	36	39	0.00	13.07	1.75	0.32	3.51	7.73	0.00	0.00	0.00	2.47	0.69	0.01	0.00
+-1	1	1	262	22.90	1145	1114	0.55	3883	0	9	2959	861	905	0.01	15.45	12.99	48.48	15.69	2.22	59.19	37
+-1	2	2	313	25.95	1205	1114	0.55	4945	0	5	2901	935	1005	0.01	16.42	13.78	43.67	16.61	2.43	55.01	37
+-1	3	3	254	22.29	1139	1114	0.50	3833	0	6	3082	932	919	0.01	16.62	13.83	47.12	16.86	2.32	58.53	37
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	290	22.15	1310	1114	0.54	16712	0	78	12235	3770	3892	0.01	17.03	14.28	46.31	17.51	2.37	57.98	38	41	0.00	12.95	1.84	0.27	3.35	8.06	0.00	0.00	0.00	2.57	0.78	0.01	0.00
+-1	0	0	299	23.13	1293	1114	0.50	4438	0	3	2900	895	965	0.00	17.60	13.52	45.48	18.04	2.30	56.53	38	41	0.00	12.95	1.84	0.27	3.35	8.06	0.00	0.00	0.00	2.57	0.78	0.01	0.00
+-1	1	1	294	22.32	1315	1114	0.57	3877	0	5	3057	1025	907	0.01	16.72	15.73	44.99	17.12	2.37	58.19	38
+-1	2	2	275	21.25	1293	1114	0.51	4665	0	8	3465	979	1049	0.01	18.31	14.58	45.64	19.00	2.52	57.23	38
+-1	3	3	293	21.88	1338	1114	0.56	3732	0	62	2813	871	971	0.01	15.49	13.28	49.11	15.87	2.29	59.95	38
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	312	26.87	1160	1114	0.51	18693	0	20	12610	3673	3617	0.01	17.38	13.55	42.03	17.65	2.20	53.28	44	44	0.00	12.52	1.36	0.37	3.16	5.96	0.00	0.00	0.00	2.55	0.74	0.01	0.00
+-1	0	0	330	28.40	1164	1114	0.50	5053	0	3	3235	989	837	0.00	17.69	14.92	38.76	18.00	2.19	51.41	44	44	0.00	12.52	1.36	0.37	3.16	5.96	0.00	0.00	0.00	2.55	0.74	0.01	0.00
+-1	1	1	296	25.78	1150	1114	0.50	4336	0	4	2971	862	945	0.01	16.66	12.94	44.44	16.87	2.17	55.18	43
+-1	2	2	332	28.45	1168	1114	0.49	5235	0	8	3259	953	931	0.01	18.44	13.63	39.31	18.83	2.29	50.43	43
+-1	3	3	288	24.83	1159	1114	0.52	4069	0	5	3145	869	904	0.00	16.73	12.70	45.61	16.91	2.14	56.12	43
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	298	23.95	1243	1114	0.57	16679	0	31	11468	3822	3769	0.01	16.48	14.29	45.08	16.79	2.33	56.94	36	40	0.00	13.32	1.54	0.36	3.65	6.66	0.00	0.00	0.00	2.56	0.75	0.02	0.00
+-1	0	0	304	25.65	1186	1114	0.59	4373	0	6	2836	1013	882	0.01	16.62	15.42	42.07	16.89	2.31	55.15	36	40	0.00	13.33	1.54	0.36	3.65	6.66	0.00	0.00	0.00	2.56	0.75	0.02	0.00
+-1	1	1	291	24.22	1201	1114	0.51	3795	0	6	2524	905	981	0.01	14.76	13.74	47.09	15.24	2.23	58.30	36
+-1	2	2	317	23.63	1340	1114	0.61	4801	0	7	3236	988	995	0.01	18.36	13.99	43.81	18.67	2.49	55.21	36
+-1	3	3	279	22.28	1251	1114	0.56	3710	0	12	2872	916	911	0.01	16.17	14.00	47.37	16.35	2.28	59.09	36
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	321	28.84	1115	1114	0.59	21314	0	20	12430	3549	3629	0.00	16.67	13.01	41.35	16.97	2.12	52.08	37	38	0.00	11.35	1.39	0.32	2.79	6.51	0.00	0.00	0.00	2.55	0.74	0.01	0.00
+-1	0	0	287	26.55	1082	1114	0.55	5139	0	5	3025	968	876	0.00	16.92	14.39	42.02	17.06	2.12	54.27	37	38	0.00	11.35	1.39	0.32	2.79	6.51	0.00	0.00	0.00	2.55	0.74	0.01	0.00
+-1	1	1	358	30.99	1156	1114	0.59	5393	0	0	2420	718	924	0.00	14.42	10.11	44.32	14.56	1.91	52.54	36
+-1	2	2	308	28.49	1082	1114	0.53	5908	0	7	3724	1017	1013	0.01	19.03	14.74	37.65	19.54	2.41	49.57	36
+-1	3	3	332	29.34	1133	1114	0.70	4874	0	8	3261	846	816	0.01	16.31	12.80	41.42	16.71	2.03	51.93	36
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	295	23.56	1250	1114	0.50	18514	0	29	13231	3936	3754	0.00	17.51	14.87	43.83	18.14	2.34	55.96	39	40	0.00	13.35	1.28	0.38	3.46	6.13	0.00	0.00	0.00	2.55	0.74	0.02	0.00
+-1	0	0	266	21.38	1247	1114	0.51	4842	0	11	3315	1088	915	0.00	18.36	15.95	44.07	18.92	2.38	57.32	39	40	0.00	13.35	1.28	0.38	3.46	6.13	0.00	0.00	0.00	2.55	0.74	0.02	0.00
+-1	1	1	343	27.93	1226	1114	0.52	4149	0	4	2959	856	874	0.00	14.97	13.23	43.64	15.66	2.17	54.24	39
+-1	2	2	295	23.59	1252	1114	0.48	5712	0	6	3997	1093	971	0.00	20.19	16.72	39.29	21.16	2.56	52.69	39
+-1	3	3	274	21.35	1283	1114	0.50	3811	0	8	2960	899	994	0.01	16.53	13.59	48.32	16.81	2.26	59.58	39
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	405	25.70	1576	1113	0.76	20162	0	24	10442	3844	3242	0.00	13.42	15.00	45.68	13.90	2.16	58.24	37	40	0.00	8.02	2.29	0.04	2.39	10.36	0.00	0.00	0.00	2.98	1.12	0.04	0.00
+-1	0	0	390	25.82	1510	1114	0.68	5805	0	4	3248	1139	782	0.00	17.20	17.07	39.63	17.81	2.27	54.10	37	40	0.00	8.02	2.29	0.04	2.39	10.36	0.00	0.00	0.00	2.98	1.12	0.04	0.00
+-1	1	1	401	25.60	1568	1114	0.76	5280	0	8	1976	894	849	0.00	11.39	14.04	48.80	11.65	2.10	60.65	36
+-1	2	2	375	24.64	1524	1114	0.73	4889	0	3	3094	889	950	0.00	13.34	14.31	47.54	14.09	2.31	58.96	36
+-1	3	3	454	26.73	1697	1114	0.87	4188	0	9	2124	922	661	0.01	11.76	14.58	46.77	12.05	1.98	59.25	37
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	245	17.06	1434	1114	0.72	14085	0	18	9781	3610	3781	0.00	13.76	13.96	55.04	14.28	2.40	66.26	44	44	0.00	12.47	2.92	0.11	4.08	13.98	0.00	0.00	0.00	2.52	0.79	0.03	0.00
+-1	0	0	289	18.99	1520	1114	0.78	4465	0	9	2592	954	848	0.01	16.08	14.34	50.27	16.56	2.31	62.14	44	44	0.00	12.47	2.92	0.11	4.08	13.98	0.00	0.00	0.00	2.52	0.79	0.03	0.00
+-1	1	1	274	17.50	1563	1114	0.88	2832	0	3	2380	703	932	0.01	11.99	10.62	59.72	12.24	2.09	68.17	44
+-1	2	2	212	16.05	1324	1114	0.50	3906	0	3	2593	1076	1096	0.00	14.93	16.92	51.96	15.66	2.85	65.44	44
+-1	3	3	204	15.72	1298	1114	0.63	2882	0	3	2216	877	905	0.00	12.02	13.94	58.19	12.67	2.34	69.27	44
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	384	27.44	1400	1113	0.58	19824	0	19	11757	4507	3077	0.00	17.81	17.10	37.44	18.37	2.30	51.89	38	41	0.00	9.65	1.69	0.04	3.24	7.68	0.00	0.00	0.00	2.89	1.01	0.03	0.00
+-1	0	0	396	28.81	1376	1114	0.59	6325	0	4	3267	1224	629	0.01	20.32	17.87	32.73	21.00	2.25	47.94	37	41	0.00	9.65	1.69	0.04	3.24	7.68	0.00	0.00	0.00	2.89	1.01	0.03	0.00
+-1	1	1	339	24.54	1380	1114	0.53	4393	0	5	2955	1149	741	0.01	18.06	17.77	39.50	18.63	2.29	54.53	38
+-1	2	2	452	32.20	1402	1114	0.58	5133	0	4	2884	1030	816	0.00	16.53	16.05	34.99	17.26	2.30	48.24	38
+-1	3	3	351	24.22	1447	1114	0.62	3973	0	6	2651	1104	891	0.01	16.34	16.73	42.57	16.58	2.34	56.86	37
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	297	27.46	1083	1114	0.59	18169	0	26	11747	3193	3440	0.01	15.98	11.89	44.55	16.13	2.05	54.36	35	38	0.00	12.30	1.95	0.37	2.80	8.56	0.00	0.00	0.00	2.47	0.68	0.01	0.00
+-1	0	0	312	28.20	1106	1114	0.59	4645	0	12	2874	788	819	0.01	15.90	11.82	43.95	16.01	1.95	53.85	34	38	0.00	12.30	1.95	0.37	2.80	8.56	0.00	0.00	0.00	2.47	0.68	0.01	0.00
+-1	1	1	302	28.69	1054	1114	0.63	4216	0	5	2835	803	799	0.00	15.47	11.97	43.75	15.66	2.00	53.64	34
+-1	2	2	280	25.57	1094	1114	0.60	5257	0	3	3465	872	963	0.00	18.70	12.74	42.87	18.87	2.26	53.30	34
+-1	3	3	296	27.41	1079	1114	0.53	4051	0	6	2573	730	859	0.01	13.84	11.04	47.63	13.97	1.97	56.66	35
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	342	25.00	1369	1114	0.59	17830	0	21	11801	3835	3757	0.01	16.82	14.36	43.58	17.31	2.32	55.37	37	40	0.00	13.04	1.49	0.43	3.21	6.36	0.00	0.00	0.00	2.67	0.86	0.01	0.00
+-1	0	0	344	26.01	1323	1114	0.59	4686	0	4	3002	961	860	0.01	17.45	14.22	42.05	18.08	2.19	53.72	36	40	0.00	13.04	1.49	0.43	3.21	6.36	0.00	0.00	0.00	2.67	0.86	0.01	0.00
+-1	1	1	321	23.05	1390	1114	0.59	4038	0	9	2919	1018	930	0.01	16.51	15.23	45.01	16.88	2.34	57.73	36
+-1	2	2	362	25.62	1413	1114	0.54	5189	0	2	3135	1044	1046	0.00	18.06	15.15	40.88	18.61	2.58	53.19	36
+-1	3	3	342	25.33	1351	1114	0.64	3917	0	6	2745	812	921	0.01	15.25	12.83	46.39	15.66	2.17	56.84	37
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	274	21.62	1268	1114	0.50	16272	0	24	12849	3809	3780	0.00	17.64	14.01	46.52	18.22	2.32	57.84	39	41	0.00	12.92	1.93	0.37	2.85	8.51	0.00	0.00	0.00	2.47	0.69	0.01	0.00
+-1	0	0	272	21.28	1280	1114	0.50	4301	0	11	3575	1019	880	0.00	19.19	15.09	44.19	19.98	2.26	56.48	38	41	0.00	12.92	1.93	0.37	2.85	8.51	0.00	0.00	0.00	2.47	0.69	0.01	0.00
+-1	1	1	275	20.78	1325	1114	0.48	3642	0	5	3035	979	908	0.01	16.69	14.75	47.57	17.17	2.32	59.73	38
+-1	2	2	269	21.80	1233	1114	0.47	4851	0	5	3393	1043	1057	0.00	19.11	15.10	43.80	19.73	2.58	55.89	38
+-1	3	3	280	22.61	1238	1114	0.54	3478	0	3	2846	768	935	0.00	15.58	11.11	50.50	16.01	2.12	59.26	39
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	294	23.33	1259	1114	0.56	17031	0	16	12955	3944	3791	0.00	18.04	14.94	43.46	18.46	2.37	55.84	36	39	0.00	13.42	1.31	0.47	3.29	5.80	0.00	0.00	0.00	2.55	0.75	0.01	0.00
+-1	0	0	291	22.86	1271	1114	0.51	4285	0	5	3394	983	896	0.00	18.63	14.54	43.76	18.90	2.26	55.98	36	39	0.00	13.42	1.31	0.47	3.29	5.80	0.00	0.00	0.00	2.55	0.75	0.01	0.00
+-1	1	1	307	24.19	1267	1114	0.62	3948	0	4	3248	976	933	0.00	17.74	14.86	42.99	18.16	2.36	55.30	36
+-1	2	2	318	24.78	1285	1114	0.58	5033	0	6	3289	1019	1043	0.01	18.62	15.44	40.94	19.20	2.51	53.52	36
+-1	3	3	260	21.50	1207	1114	0.54	3765	0	1	3024	966	919	0.00	17.18	14.94	46.17	17.57	2.36	58.58	36
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	361	28.14	1282	1114	0.61	18145	0	27	12551	3863	3699	0.01	16.85	14.41	40.46	17.20	2.22	52.44	38	40	0.00	11.40	1.18	0.36	3.33	5.04	0.00	0.00	0.00	2.69	0.87	0.01	0.00
+-1	0	0	355	27.91	1270	1114	0.57	4760	0	14	3547	1056	877	0.01	18.71	15.55	37.66	19.29	2.19	50.61	38	40	0.00	11.40	1.18	0.36	3.33	5.04	0.00	0.00	0.00	2.69	0.87	0.01	0.00
+-1	1	1	366	28.78	1271	1114	0.64	4068	0	2	2587	905	909	0.00	15.14	13.83	42.08	15.36	2.15	53.72	38
+-1	2	2	380	28.49	1335	1114	0.58	5216	0	7	3361	1009	1053	0.01	17.15	14.76	39.43	17.54	2.43	51.54	38
+-1	3	3	342	27.37	1251	1114	0.65	4101	0	4	3056	893	860	0.01	16.39	13.47	42.64	16.63	2.13	53.87	38
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	285	24.59	1159	1114	0.54	17205	0	16	12158	3735	3715	0.00	17.36	13.98	43.90	17.60	2.26	55.56	38	40	0.00	13.05	1.48	0.50	3.28	6.19	0.00	0.00	0.00	2.48	0.68	0.01	0.00
+-1	0	0	271	23.74	1143	1114	0.55	4401	0	5	3266	1028	912	0.00	19.11	15.09	41.86	19.28	2.24	54.74	38	40	0.00	13.05	1.48	0.50	3.28	6.19	0.00	0.00	0.00	2.48	0.68	0.01	0.00
+-1	1	1	290	25.07	1157	1114	0.51	3820	0	2	2777	892	926	0.00	15.72	13.56	45.47	15.88	2.18	56.87	38
+-1	2	2	287	24.16	1186	1114	0.56	5080	0	5	3333	954	1013	0.01	18.66	14.12	42.88	19.15	2.43	54.26	38
+-1	3	3	292	25.37	1150	1114	0.55	3904	0	4	2782	861	864	0.00	15.93	13.14	45.37	16.08	2.18	56.37	38
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	338	22.76	1485	1113	0.56	17334	0	61	12239	3805	3837	0.01	17.29	14.15	45.54	17.80	2.36	57.08	36	40	0.00	13.32	1.52	0.35	3.51	6.77	0.00	0.00	0.00	2.70	0.90	0.02	0.00
+-1	0	0	374	24.69	1514	1114	0.57	4347	0	5	2965	926	886	0.01	17.31	13.69	44.01	17.76	2.21	55.34	36	40	0.00	13.32	1.52	0.35	3.51	6.77	0.00	0.00	0.00	2.70	0.90	0.02	0.00
+-1	1	1	322	22.24	1447	1114	0.59	3890	0	6	2793	939	956	0.01	16.26	14.04	47.22	16.47	2.33	58.96	36
+-1	2	2	336	22.49	1496	1114	0.50	5336	0	45	3362	975	1093	0.01	17.82	14.31	45.13	18.48	2.55	56.49	36
+-1	3	3	320	21.62	1481	1114	0.58	3761	0	5	3119	965	902	0.01	17.78	14.56	45.82	18.48	2.34	57.55	36
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	279	20.81	1341	1114	0.55	15623	0	14	11545	3697	3843	0.01	16.56	13.86	48.54	16.82	2.38	59.99	37	40	0.00	14.30	1.82	0.41	3.67	8.35	0.00	0.00	0.00	2.52	0.75	0.01	0.00
+-1	0	0	265	19.38	1368	1114	0.54	3902	0	5	2901	999	886	0.01	17.36	15.02	47.97	17.63	2.34	60.65	36	40	0.00	14.30	1.82	0.41	3.67	8.35	0.00	0.00	0.00	2.52	0.75	0.01	0.00
+-1	1	1	293	22.46	1305	1114	0.56	3752	0	1	2817	881	916	0.00	16.19	13.28	47.82	16.33	2.28	58.93	36
+-1	2	2	250	19.28	1297	1114	0.48	4564	0	3	3367	1018	1072	0.00	18.22	15.03	47.27	18.80	2.62	59.30	37
+-1	3	3	308	22.11	1392	1114	0.60	3405	0	5	2460	799	969	0.01	14.47	12.10	51.07	14.51	2.29	61.09	37
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	300	22.32	1344	1114	0.59	16256	0	73	12236	3842	3708	0.00	16.90	14.65	45.90	17.36	2.36	57.96	38	40	0.00	12.99	1.48	0.26	3.78	6.96	0.00	0.00	0.00	2.60	0.80	0.01	0.00
+-1	0	0	267	20.58	1298	1114	0.53	4131	0	2	3170	1075	957	0.00	18.11	16.75	44.28	18.68	2.46	58.28	38	40	0.00	12.99	1.48	0.26	3.78	6.96	0.00	0.00	0.00	2.60	0.80	0.01	0.00
+-1	1	1	327	24.38	1341	1114	0.64	3714	0	65	2848	844	807	0.01	15.21	13.05	47.12	15.66	2.16	57.80	38
+-1	2	2	276	20.76	1331	1114	0.58	4657	0	3	3425	972	1079	0.00	17.86	14.02	47.19	18.41	2.50	58.33	38
+-1	3	3	329	23.54	1397	1114	0.60	3754	0	3	2793	951	865	0.00	16.41	14.80	45.00	16.68	2.34	57.44	38
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	286	21.76	1316	1113	0.53	17059	0	324	12759	4091	3786	0.01	17.86	15.32	44.79	18.41	2.42	57.41	36	40	0.00	13.28	1.56	0.36	3.37	6.69	0.00	0.00	0.00	2.55	0.75	0.01	0.00
+-1	0	0	223	17.44	1281	1114	0.51	4738	0	306	3650	1231	996	0.01	20.16	18.00	44.17	20.96	2.58	59.01	36	40	0.00	13.28	1.56	0.36	3.37	6.69	0.00	0.00	0.00	2.55	0.75	0.01	0.00
+-1	1	1	276	20.38	1354	1114	0.58	3942	0	6	3330	1113	907	0.01	19.39	16.47	43.49	19.75	2.46	57.41	35
+-1	2	2	319	23.85	1338	1114	0.50	4878	0	12	3186	968	1004	0.02	17.54	14.54	43.78	18.21	2.50	55.45	35
+-1	3	3	327	25.38	1290	1114	0.52	3501	0	0	2593	779	879	0.00	14.36	12.28	47.74	14.72	2.14	57.76	35
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	284	20.71	1371	1114	0.54	15861	0	18	12316	3770	3931	0.01	16.43	14.27	48.30	16.86	2.42	60.01	37	40	0.00	13.59	1.69	0.32	3.84	8.00	0.00	0.00	0.00	2.57	0.79	0.01	0.00
+-1	0	0	302	21.78	1385	1114	0.56	4072	0	5	3255	971	882	0.00	17.36	14.78	45.72	17.99	2.27	57.96	36	40	0.00	13.59	1.69	0.32	3.84	8.00	0.00	0.00	0.00	2.57	0.79	0.01	0.00
+-1	1	1	244	18.25	1334	1114	0.51	3437	0	6	2854	953	1028	0.01	16.14	14.17	51.20	16.24	2.43	63.07	36
+-1	2	2	302	21.26	1422	1114	0.61	4785	0	6	3541	1025	1067	0.01	17.73	15.41	45.28	18.53	2.68	57.53	36
+-1	3	3	289	21.56	1338	1114	0.47	3567	0	1	2666	821	954	0.00	14.49	12.70	50.98	14.70	2.28	61.47	37
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	269	22.52	1194	1114	0.52	15890	0	16	11664	3598	3796	0.00	16.64	13.64	47.00	16.89	2.33	58.26	35	39	0.00	14.59	1.65	0.45	3.79	6.93	0.00	0.00	0.00	2.44	0.66	0.01	0.00
+-1	0	0	263	21.83	1207	1114	0.53	3910	0	2	2839	928	946	0.00	16.68	13.82	47.47	16.92	2.26	58.99	35	39	0.00	14.59	1.65	0.45	3.79	6.93	0.00	0.00	0.00	2.44	0.66	0.01	0.00
+-1	1	1	273	23.70	1154	1114	0.54	3717	0	3	2891	902	859	0.00	16.23	13.66	46.22	16.46	2.24	57.61	35
+-1	2	2	289	24.32	1187	1114	0.49	4674	0	7	3011	907	1055	0.01	16.66	13.42	45.40	17.06	2.48	56.15	35
+-1	3	3	250	20.23	1234	1114	0.53	3589	0	4	2923	861	936	0.00	17.02	13.67	48.91	17.15	2.34	60.28	35
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	346	25.86	1338	1114	0.63	17134	0	18	11405	3372	3886	0.00	16.09	12.58	45.29	16.47	2.18	55.49	38	40	0.00	11.97	1.74	0.36	2.81	7.75	0.00	0.00	0.00	2.69	0.88	0.01	0.00
+-1	0	0	332	25.49	1301	1114	0.61	4357	0	4	2991	881	960	0.00	16.52	13.16	44.62	17.03	2.13	55.35	38	40	0.00	11.97	1.74	0.36	2.81	7.75	0.00	0.00	0.00	2.69	0.88	0.01	0.00
+-1	1	1	375	26.85	1395	1114	0.69	4014	0	3	2701	807	880	0.00	15.30	11.80	45.88	15.57	2.05	55.54	38
+-1	2	2	367	28.13	1304	1114	0.64	5000	0	7	2932	844	1038	0.01	16.06	12.67	42.94	16.70	2.32	52.85	38
+-1	3	3	311	22.95	1353	1114	0.56	3763	0	4	2781	840	1008	0.00	16.47	12.70	47.70	16.58	2.23	58.24	38
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	224	16.76	1337	1114	0.68	13431	0	8	8843	3062	3583	0.00	12.71	12.14	58.21	12.90	2.31	68.04	36	39	0.00	13.77	3.36	0.13	3.54	16.41	0.00	0.00	0.00	2.39	0.66	0.02	0.00
+-1	0	0	221	17.71	1248	1114	0.59	3788	0	2	2279	866	900	0.00	14.22	13.31	54.50	14.51	2.36	65.42	36	39	0.00	13.77	3.36	0.13	3.54	16.41	0.00	0.00	0.00	2.39	0.66	0.02	0.00
+-1	1	1	215	16.56	1300	1114	0.58	2944	0	2	2168	696	841	0.00	11.83	11.49	59.97	11.90	2.17	69.37	36
+-1	2	2	236	16.72	1413	1114	0.86	3949	0	3	2515	825	982	0.00	13.87	12.84	56.38	14.27	2.51	66.50	35
+-1	3	3	223	16.04	1393	1114	0.66	2750	0	1	1881	675	860	0.00	10.91	10.91	61.99	10.93	2.19	70.85	35
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	200	16.79	1193	1114	0.68	14185	0	24	9033	3833	3700	0.00	13.29	15.23	54.54	13.78	2.42	67.01	42	42	0.00	10.99	2.71	0.10	3.28	12.40	0.00	0.00	0.00	2.35	0.59	0.04	0.00
+-1	0	0	191	16.33	1167	1114	0.59	4923	0	9	2793	1129	923	0.00	18.89	17.25	47.28	19.61	2.55	61.51	42	42	0.00	10.99	2.71	0.10	3.28	12.40	0.00	0.00	0.00	2.35	0.59	0.04	0.00
+-1	1	1	203	16.21	1255	1114	0.73	2840	0	3	2186	920	849	0.00	11.74	14.58	57.33	12.10	2.27	69.42	42
+-1	2	2	221	18.24	1212	1114	0.71	3683	0	4	2089	943	1025	0.00	12.19	15.15	54.26	12.68	2.56	66.52	42
+-1	3	3	186	16.36	1137	1114	0.66	2739	0	8	1965	841	903	0.01	10.35	13.92	59.27	10.74	2.29	70.61	42
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	441	30.59	1441	1113	0.57	20241	0	31	12843	4469	3172	0.00	18.61	16.91	33.69	19.12	2.21	48.08	37	41	0.00	8.04	1.10	0.05	2.58	5.42	0.00	0.00	0.00	3.04	1.11	0.04	0.00
+-1	0	0	436	30.19	1446	1114	0.55	6212	0	4	3230	1200	739	0.00	20.51	17.69	31.38	20.99	2.24	46.58	37	41	0.00	8.04	1.10	0.05	2.58	5.42	0.00	0.00	0.00	3.04	1.11	0.04	0.00
+-1	1	1	423	27.78	1525	1114	0.65	4287	0	5	3221	1081	877	0.00	17.99	16.16	37.92	18.65	2.16	51.41	36
+-1	2	2	462	32.36	1429	1114	0.53	5296	0	20	3425	1198	801	0.00	18.72	18.27	30.45	19.29	2.34	46.01	36
+-1	3	3	440	32.02	1376	1114	0.56	4446	0	2	2967	990	755	0.00	17.24	15.54	35.02	17.54	2.11	48.34	37
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	383	24.86	1540	1114	0.67	17870	0	55	12061	3369	3434	0.01	14.98	12.62	47.37	15.78	2.13	57.24	36	40	0.00	12.17	2.22	0.21	3.76	9.93	0.00	0.00	0.00	2.83	1.03	0.01	0.00
+-1	0	0	395	24.98	1582	1114	0.72	4531	0	23	3235	894	837	0.02	15.80	13.28	45.74	16.85	2.12	56.05	36	40	0.00	12.17	2.22	0.21	3.76	9.93	0.00	0.00	0.00	2.83	1.03	0.01	0.00
+-1	1	1	406	26.61	1527	1114	0.65	4119	0	7	2824	752	778	0.01	13.93	11.32	47.93	14.58	1.96	56.85	36
+-1	2	2	384	24.57	1565	1114	0.68	5094	0	13	3132	877	966	0.02	15.36	13.19	46.73	16.10	2.34	56.99	36
+-1	3	3	345	23.27	1482	1114	0.61	4126	0	12	2870	846	853	0.02	14.81	12.68	49.05	15.60	2.08	59.05	36
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	354	28.53	1239	1114	0.61	17781	0	11	11294	3638	3509	0.00	16.62	13.28	41.40	16.82	2.12	52.53	35	40	0.00	11.31	1.36	0.28	2.90	5.95	0.00	0.00	0.00	2.66	0.84	0.01	0.00
+-1	0	0	360	28.37	1268	1114	0.60	4326	0	2	2820	912	807	0.00	16.95	13.13	41.37	17.12	2.01	52.50	35	40	0.00	11.31	1.36	0.28	2.90	5.95	0.00	0.00	0.00	2.66	0.84	0.01	0.00
+-1	1	1	328	26.74	1228	1114	0.66	4181	0	3	2996	860	882	0.00	17.55	12.80	42.77	17.65	2.02	53.58	35
+-1	2	2	399	32.11	1244	1114	0.59	5315	0	1	2719	971	951	0.00	15.48	14.14	38.04	15.93	2.37	49.59	35
+-1	3	3	327	26.90	1215	1114	0.60	3959	0	5	2759	895	869	0.01	16.50	13.06	43.43	16.57	2.07	54.45	35
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	314	28.15	1115	1114	0.60	17643	0	29	11456	3784	3587	0.01	16.64	14.12	40.91	16.82	2.21	52.82	36	40	0.00	10.98	1.32	0.25	2.80	5.71	0.00	0.00	0.00	2.52	0.70	0.01	0.00
+-1	0	0	317	28.84	1098	1114	0.59	4662	0	16	2907	1006	820	0.01	17.37	15.53	38.05	17.55	2.19	51.42	35	40	0.00	10.98	1.32	0.25	2.80	5.71	0.00	0.00	0.00	2.52	0.70	0.01	0.00
+-1	1	1	309	27.27	1132	1114	0.65	3845	0	4	2630	895	979	0.01	15.84	13.16	43.59	15.98	2.17	54.58	36
+-1	2	2	335	29.98	1117	1114	0.61	5125	0	4	3022	958	919	0.01	16.48	14.12	39.25	16.77	2.30	50.95	36
+-1	3	3	296	26.52	1115	1114	0.56	4011	0	5	2897	925	869	0.01	16.89	13.67	42.76	16.98	2.16	54.33	35
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	298	25.28	1179	1114	0.58	17039	0	9	11414	3931	3634	0.00	16.86	14.52	43.13	17.19	2.29	55.24	36	39	0.00	12.14	1.53	0.36	2.81	6.83	0.00	0.00	0.00	2.52	0.72	0.01	0.00
+-1	0	0	297	25.08	1183	1114	0.63	4301	0	4	2835	1029	864	0.01	16.76	15.29	42.61	17.11	2.27	55.54	36	39	0.00	12.14	1.53	0.36	2.81	6.83	0.00	0.00	0.00	2.51	0.72	0.01	0.00
+-1	1	1	303	24.77	1222	1114	0.57	3895	0	2	2787	970	849	0.00	16.86	14.23	43.94	17.16	2.21	55.86	36
+-1	2	2	297	25.70	1158	1114	0.53	5088	0	2	3128	1056	1029	0.00	18.31	15.38	40.42	18.84	2.48	52.98	36
+-1	3	3	296	25.59	1156	1114	0.60	3755	0	1	2664	876	892	0.00	15.49	13.17	45.54	15.64	2.20	56.57	36
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	359	26.00	1379	1113	0.51	17659	0	19	12689	3774	3595	0.01	16.78	13.90	43.03	17.41	2.22	54.37	37	40	0.00	12.44	1.45	0.41	3.08	5.97	0.00	0.00	0.00	2.69	0.86	0.01	0.00
+-1	0	0	389	28.22	1380	1114	0.47	4461	0	6	2916	904	830	0.00	15.85	13.57	42.04	16.45	2.10	53.24	37	40	0.00	12.44	1.45	0.41	3.08	5.98	0.00	0.00	0.00	2.69	0.86	0.01	0.00
+-1	1	1	333	23.93	1393	1114	0.57	3856	0	3	2978	920	919	0.00	16.10	12.86	46.85	16.46	2.19	57.42	37
+-1	2	2	367	26.86	1368	1114	0.45	5418	0	5	3730	996	954	0.01	18.47	15.24	39.11	19.43	2.39	51.32	37
+-1	3	3	344	24.98	1379	1114	0.57	3924	0	5	3065	954	892	0.01	16.69	13.93	44.14	17.32	2.22	55.48	37
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	319	26.93	1183	1114	0.61	18194	0	7	12256	3855	3617	0.00	17.12	14.43	41.31	17.52	2.21	53.34	37	41	0.00	11.20	1.24	0.36	2.69	5.51	0.00	0.00	0.00	2.55	0.74	0.01	0.00
+-1	0	0	323	27.14	1189	1114	0.63	4532	0	4	3044	1060	858	0.01	18.15	15.92	38.55	18.37	2.24	52.25	36	41	0.00	11.20	1.24	0.36	2.69	5.51	0.00	0.00	0.00	2.55	0.74	0.01	0.00
+-1	1	1	330	28.53	1158	1114	0.64	4478	0	1	3061	932	890	0.00	16.10	14.46	40.70	16.58	2.17	52.71	37
+-1	2	2	325	27.25	1194	1114	0.63	5123	0	1	3076	980	1003	0.00	17.63	14.55	40.34	18.07	2.37	52.31	37
+-1	3	3	296	24.78	1193	1114	0.55	4061	0	1	3075	883	866	0.00	16.62	12.79	45.66	17.07	2.08	56.08	37
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	318	26.98	1180	1114	0.60	17681	0	24	12288	3724	3636	0.01	17.03	13.84	41.97	17.34	2.20	53.47	37	39	0.00	11.41	1.47	0.30	2.79	6.06	0.00	0.00	0.00	2.54	0.73	0.01	0.00
+-1	0	0	312	26.62	1173	1114	0.60	4459	0	8	3139	953	886	0.01	16.80	14.30	42.08	17.16	2.16	54.07	37	39	0.00	11.41	1.47	0.30	2.79	6.06	0.00	0.00	0.00	2.54	0.73	0.01	0.00
+-1	1	1	295	24.94	1183	1114	0.57	4082	0	1	3121	942	886	0.00	17.14	14.04	43.71	17.48	2.16	55.43	37
+-1	2	2	349	29.34	1190	1114	0.60	5250	0	3	3271	913	966	0.00	17.70	13.14	39.63	18.14	2.30	50.23	36
+-1	3	3	317	27.04	1174	1114	0.64	3890	0	12	2757	916	898	0.01	16.48	13.88	42.44	16.61	2.19	54.17	36
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	309	24.41	1268	1114	0.59	16579	0	22	11281	3597	3735	0.01	16.32	13.50	45.56	16.46	2.25	56.88	37	40	0.00	12.53	1.58	0.32	3.12	7.21	0.00	0.00	0.00	2.56	0.76	0.01	0.00
+-1	0	0	269	22.02	1223	1114	0.54	4190	0	8	3075	929	981	0.01	17.39	14.31	46.07	17.54	2.25	58.19	37	40	0.00	12.53	1.58	0.32	3.12	7.21	0.00	0.00	0.00	2.56	0.76	0.01	0.00
+-1	1	1	327	25.65	1274	1114	0.63	3788	0	3	2563	884	896	0.00	15.41	13.19	45.53	15.51	2.18	56.66	37
+-1	2	2	328	25.18	1303	1114	0.67	4906	0	5	3053	996	990	0.01	17.62	14.70	42.26	17.87	2.46	54.49	37
+-1	3	3	314	24.80	1266	1114	0.51	3695	0	6	2590	788	868	0.01	14.84	11.78	48.38	14.91	2.11	58.19	37
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	358	27.91	1283	1114	0.63	18052	0	15	11522	3589	3491	0.00	16.04	13.26	42.59	16.37	2.14	53.57	43	42	0.00	11.30	1.53	0.27	3.00	6.90	0.00	0.00	0.00	2.69	0.87	0.01	0.00
+-1	0	0	364	27.40	1328	1114	0.58	4399	0	2	2801	890	816	0.00	16.25	13.31	42.76	16.46	2.08	54.06	42	42	0.00	11.30	1.53	0.27	3.00	6.90	0.00	0.00	0.00	2.69	0.87	0.01	0.00
+-1	1	1	322	25.78	1249	1114	0.68	4233	0	5	3056	978	858	0.00	16.26	14.67	43.14	16.87	2.19	55.15	42
+-1	2	2	382	29.41	1300	1114	0.63	5500	0	2	3342	912	941	0.00	17.76	13.36	39.25	18.24	2.24	50.11	43
+-1	3	3	365	29.07	1255	1114	0.65	3920	0	6	2323	809	876	0.01	13.87	11.70	45.20	13.89	2.07	54.98	43
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	589	32.38	1819	1114	0.46	21408	0	175	18722	3286	3046	0.02	18.65	11.86	36.93	19.20	1.87	46.55	38	41	0.00	9.96	1.33	0.16	2.71	5.82	0.00	0.00	0.00	3.42	1.49	0.01	0.00
+-1	0	0	597	33.22	1798	1114	0.44	5340	0	102	4655	916	671	0.04	19.73	13.25	33.58	20.39	1.84	44.55	38	41	0.00	9.96	1.33	0.16	2.71	5.82	0.00	0.00	0.00	3.42	1.49	0.01	0.00
+-1	1	1	621	33.75	1839	1114	0.47	5201	0	43	3790	728	755	0.03	15.63	10.60	39.85	15.94	1.78	48.53	38
+-1	2	2	578	31.79	1818	1114	0.48	5834	0	18	5280	855	853	0.01	20.38	12.02	35.66	21.02	2.01	45.18	38
+-1	3	3	560	30.76	1822	1114	0.45	5033	0	12	4997	787	767	0.01	18.87	11.57	38.64	19.45	1.84	47.95	38
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	324	28.43	1141	1114	0.64	18207	0	27	11982	3739	3448	0.01	16.39	13.93	41.08	16.76	2.14	52.68	37	39	0.00	10.89	1.35	0.24	2.58	6.33	0.00	0.00	0.00	2.58	0.76	0.01	0.00
+-1	0	0	307	27.87	1100	1114	0.57	4658	0	5	3136	1015	825	0.00	18.15	15.12	38.67	18.45	2.15	51.53	37	39	0.00	10.89	1.35	0.24	2.58	6.33	0.00	0.00	0.00	2.58	0.76	0.01	0.00
+-1	1	1	298	26.03	1146	1114	0.64	4186	0	5	3200	943	855	0.00	16.23	14.07	43.51	16.81	2.12	55.04	37
+-1	2	2	332	29.44	1127	1114	0.64	4978	0	15	2964	914	993	0.02	16.56	13.30	40.52	16.80	2.26	51.49	37
+-1	3	3	361	30.36	1189	1114	0.70	4385	0	2	2682	867	775	0.00	14.62	13.24	41.60	14.98	2.01	52.65	37
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	306	24.16	1265	1114	0.55	17395	0	28	13219	3988	3666	0.01	18.22	14.57	42.80	18.77	2.28	54.80	36	39	0.00	11.95	1.29	0.28	2.91	5.40	0.00	0.00	0.00	2.58	0.77	0.01	0.00
+-1	0	0	317	25.01	1269	1114	0.54	4547	0	3	3304	978	874	0.00	18.98	14.50	41.23	19.45	2.16	53.38	36	39	0.00	11.95	1.29	0.28	2.91	5.40	0.00	0.00	0.00	2.58	0.77	0.01	0.00
+-1	1	1	288	23.41	1229	1114	0.57	4067	0	3	3279	990	861	0.01	18.64	14.45	43.26	19.22	2.19	55.19	36
+-1	2	2	318	24.32	1307	1114	0.51	5074	0	12	3539	1074	1073	0.01	18.84	15.46	41.11	19.50	2.56	53.61	36
+-1	3	3	300	23.89	1255	1114	0.57	3707	0	10	3097	946	858	0.01	16.40	13.88	45.62	16.92	2.19	57.01	36
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	314	25.68	1224	1114	0.61	17125	0	10	12183	3558	3638	0.00	17.06	13.00	44.07	17.44	2.16	54.71	37	40	0.00	11.35	1.69	0.27	2.85	7.19	0.00	0.00	0.00	2.59	0.79	0.01	0.00
+-1	0	0	318	26.00	1225	1114	0.57	4285	0	4	3092	899	844	0.00	16.85	13.07	43.86	17.31	2.07	54.61	36	40	0.00	11.35	1.69	0.27	2.85	7.19	0.00	0.00	0.00	2.59	0.79	0.01	0.00
+-1	1	1	305	25.68	1186	1114	0.60	3854	0	6	2796	862	884	0.01	16.43	12.77	44.97	16.69	2.09	55.54	36
+-1	2	2	340	26.64	1275	1114	0.66	5177	0	0	3431	948	1000	0.00	18.43	13.86	40.87	19.05	2.34	51.97	36
+-1	3	3	295	24.40	1207	1114	0.60	3809	0	0	2864	849	910	0.00	16.51	12.30	46.59	16.72	2.14	56.73	37
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	325	23.94	1356	1114	0.69	20515	0	29	10373	3541	3541	0.01	16.32	13.56	45.95	16.48	2.19	57.38	35	41	0.00	10.83	1.83	0.18	2.78	8.40	0.00	0.00	0.00	2.73	0.89	0.02	0.00
+-1	0	0	403	26.47	1521	1114	0.67	4258	0	8	2590	918	757	0.01	17.25	13.49	42.52	17.54	2.04	53.95	35	41	0.00	10.83	1.83	0.18	2.78	8.40	0.00	0.00	0.00	2.73	0.89	0.02	0.00
+-1	1	1	359	25.63	1402	1114	0.91	5712	0	6	2597	845	787	0.01	16.45	12.76	44.88	16.54	2.04	55.79	35
+-1	2	2	273	22.34	1223	1114	0.57	5751	0	3	2717	915	1093	0.00	16.60	14.26	46.63	16.69	2.48	58.49	35
+-1	3	3	264	21.34	1236	1114	0.55	4794	0	12	2469	863	904	0.01	14.99	13.73	49.78	15.16	2.20	61.31	35
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	189	16.15	1172	1114	0.65	12974	0	13	7117	3359	3344	0.00	11.65	13.57	58.47	11.75	2.28	69.83	34	38	0.00	10.75	3.84	0.06	2.88	17.40	0.00	0.00	0.00	2.28	0.53	0.05	0.00
+-1	0	0	217	18.15	1197	1114	0.69	4518	0	3	2117	1055	786	0.00	15.52	16.25	49.85	15.74	2.39	63.72	33	38	0.00	10.75	3.84	0.06	2.88	17.40	0.00	0.00	0.00	2.28	0.53	0.05	0.00
+-1	1	1	200	16.48	1213	1114	0.68	2634	0	0	1492	753	732	0.00	9.65	12.78	60.94	9.46	2.13	71.93	34
+-1	2	2	180	15.75	1144	1114	0.60	3376	0	4	1912	807	979	0.01	11.59	13.03	59.51	11.85	2.40	70.00	34
+-1	3	3	160	14.22	1124	1114	0.60	2446	0	6	1596	744	847	0.00	9.84	12.23	63.60	9.95	2.18	73.65	34
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	362	20.11	1801	1114	0.63	15425	0	23	10613	3771	3812	0.01	14.51	14.24	50.87	15.17	2.36	62.36	38	40	0.00	11.77	2.64	0.14	3.41	12.73	0.00	0.00	0.00	2.90	1.08	0.03	0.00
+-1	0	0	361	19.75	1829	1114	0.61	4491	0	10	2786	917	1018	0.01	16.01	13.80	50.08	16.65	2.40	61.19	38	40	0.00	11.77	2.64	0.14	3.41	12.73	0.00	0.00	0.00	2.90	1.08	0.03	0.00
+-1	1	1	355	19.87	1789	1114	0.56	3438	0	8	2448	935	896	0.01	13.30	14.05	52.53	13.93	2.24	63.97	38
+-1	2	2	385	21.38	1800	1114	0.70	4061	0	4	2510	887	1000	0.00	14.45	13.18	50.75	15.07	2.38	61.17	38
+-1	3	3	347	19.45	1786	1114	0.62	3435	0	1	2869	1032	898	0.00	14.28	15.93	50.10	15.04	2.41	63.10	38
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	289	26.04	1110	1114	0.64	17597	0	29	12553	3746	3170	0.00	17.04	14.30	42.53	17.57	2.12	54.28	38	40	0.00	10.13	2.08	0.16	2.82	9.28	0.00	0.00	0.00	2.54	0.73	0.03	0.00
+-1	0	0	287	25.64	1121	1114	0.65	5150	0	2	3573	978	779	0.00	19.37	14.59	40.29	20.14	2.02	52.19	38	40	0.00	10.13	2.08	0.16	2.82	9.28	0.00	0.00	0.00	2.54	0.73	0.03	0.00
+-1	1	1	270	24.99	1080	1114	0.57	4007	0	6	3138	1015	723	0.01	17.78	15.23	41.94	18.21	2.12	54.69	38
+-1	2	2	300	27.52	1090	1114	0.60	4675	0	7	2944	853	877	0.00	15.74	13.30	43.33	16.01	2.24	54.23	38
+-1	3	3	299	26.00	1151	1114	0.75	3765	0	14	2898	900	791	0.00	15.27	14.08	44.57	15.93	2.08	55.99	38
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	338	26.17	1292	1113	0.60	17030	0	17	12354	3433	3660	0.00	16.64	12.70	44.32	17.17	2.16	54.49	34	40	0.00	12.08	1.72	0.33	2.93	7.64	0.00	0.00	0.00	2.63	0.83	0.01	0.00
+-1	0	0	342	25.33	1349	1114	0.64	4272	0	6	3174	897	913	0.01	17.68	13.23	43.55	18.24	2.15	54.27	34	40	0.00	12.08	1.72	0.33	2.93	7.64	0.00	0.00	0.00	2.63	0.84	0.01	0.00
+-1	1	1	346	27.21	1271	1114	0.61	3938	0	3	3067	874	841	0.00	16.42	12.81	43.41	16.92	2.10	53.78	34
+-1	2	2	354	27.17	1303	1114	0.61	5074	0	6	3260	872	964	0.00	17.20	12.90	42.57	17.93	2.29	52.62	34
+-1	3	3	311	24.99	1246	1114	0.56	3746	0	2	2853	790	942	0.00	15.26	11.86	47.76	15.59	2.11	57.30	34
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	272	21.00	1295	1114	0.53	16391	0	15	12718	3839	3855	0.00	17.55	14.52	46.68	18.03	2.41	58.56	34	39	0.00	14.09	1.53	0.44	3.84	6.84	0.00	0.00	0.00	2.51	0.73	0.01	0.00
+-1	0	0	257	20.04	1282	1114	0.50	4476	0	8	3172	1012	932	0.01	18.37	15.21	46.07	18.67	2.38	58.92	34	39	0.00	14.09	1.53	0.44	3.84	6.84	0.00	0.00	0.00	2.51	0.73	0.01	0.00
+-1	1	1	266	20.91	1275	1114	0.55	3631	0	2	2770	904	941	0.00	16.32	13.68	48.85	16.47	2.34	60.29	34
+-1	2	2	322	23.34	1379	1114	0.56	4707	0	3	3422	981	1001	0.00	17.82	14.87	43.70	18.67	2.54	55.45	34
+-1	3	3	242	19.70	1229	1114	0.51	3577	0	2	3354	942	981	0.00	17.69	14.32	48.08	18.32	2.37	59.60	34
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	265	21.25	1247	1114	0.52	16034	0	14	12007	3856	3952	0.01	17.06	14.38	47.07	17.46	2.41	58.89	37	40	0.00	13.98	1.71	0.44	3.80	7.63	0.00	0.00	0.00	2.45	0.67	0.01	0.00
+-1	0	0	269	21.77	1234	1114	0.53	4073	0	3	2870	971	967	0.00	16.98	14.38	46.58	17.35	2.34	58.53	37	40	0.00	13.98	1.71	0.44	3.80	7.63	0.00	0.00	0.00	2.45	0.67	0.01	0.00
+-1	1	1	257	20.16	1275	1114	0.55	3740	0	6	3102	986	935	0.01	17.44	14.91	47.27	17.68	2.36	59.80	37
+-1	2	2	251	20.66	1216	1114	0.48	4794	0	4	3464	1045	1112	0.01	18.96	15.26	44.88	19.57	2.69	57.07	37
+-1	3	3	283	22.41	1262	1114	0.50	3427	0	1	2571	854	938	0.00	14.86	12.97	49.54	15.22	2.24	60.14	37
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	339	23.22	1459	1114	0.60	16473	0	22	11595	3590	3904	0.01	16.35	13.41	46.79	16.74	2.31	57.74	36	39	0.00	13.48	1.77	0.44	3.55	7.40	0.00	0.00	0.00	2.69	0.89	0.01	0.00
+-1	0	0	338	23.94	1410	1114	0.58	4265	0	10	2870	895	948	0.01	16.24	12.97	46.61	16.65	2.21	57.20	35	39	0.00	13.48	1.77	0.44	3.55	7.40	0.00	0.00	0.00	2.69	0.89	0.01	0.00
+-1	1	1	330	22.79	1448	1114	0.59	3626	0	2	2742	903	939	0.00	15.66	13.39	47.97	15.96	2.25	59.00	35
+-1	2	2	357	23.10	1546	1114	0.65	4897	0	7	3185	938	1103	0.01	17.51	14.30	44.85	17.93	2.56	56.41	35
+-1	3	3	331	23.03	1435	1114	0.57	3685	0	3	2798	854	914	0.00	16.01	12.98	47.74	16.42	2.21	58.34	36
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	262	21.92	1193	1114	0.53	15630	0	18	11732	3608	3989	0.01	17.07	13.46	47.36	17.32	2.32	58.44	35	39	0.00	13.81	1.87	0.42	3.23	7.85	0.00	0.00	0.00	2.42	0.65	0.01	0.00
+-1	0	0	260	22.21	1168	1114	0.52	4038	0	7	2903	994	949	0.01	17.84	14.71	44.99	18.18	2.29	57.31	34	39	0.00	13.81	1.87	0.42	3.23	7.85	0.00	0.00	0.00	2.42	0.65	0.01	0.00
+-1	1	1	262	21.79	1205	1114	0.56	3600	0	4	2924	885	939	0.00	17.23	13.39	47.40	17.37	2.25	58.59	35
+-1	2	2	263	21.77	1208	1114	0.54	4511	0	6	3143	884	1114	0.01	17.43	12.52	48.12	17.74	2.44	58.05	35
+-1	3	3	261	21.93	1191	1114	0.50	3481	0	1	2762	845	987	0.00	15.76	13.21	48.92	15.97	2.32	59.79	35
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	1924	69.04	2786	1114	0.61	67526	0	94	21748	1522	1224	0.01	15.95	4.78	10.07	16.41	0.67	13.88	90	90	0.00	2.60	0.31	0.07	0.68	1.16	0.00	0.00	0.00	7.85	5.43	0.01	0.00
+-1	0	0	1907	68.47	2786	1114	0.60	17735	0	22	5562	458	270	0.02	16.86	5.56	8.95	17.22	0.70	13.62	90	90	0.00	2.60	0.31	0.07	0.68	1.16	0.00	0.00	0.00	7.85	5.43	0.01	0.00
+-1	1	1	1938	69.48	2790	1114	0.61	13831	0	4	5305	371	299	0.00	15.76	4.73	9.85	16.25	0.65	13.62	90
+-1	2	2	1956	70.14	2788	1114	0.63	19689	0	16	5518	313	322	0.01	15.06	4.11	10.52	15.56	0.67	13.63	90
+-1	3	3	1893	68.07	2781	1114	0.60	16271	0	52	5363	380	333	0.01	16.11	4.71	10.95	16.61	0.68	14.65	90
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	2638	94.63	2787	1114	0.96	223794	0	2893	6094	310	183	0.06	3.23	0.88	0.88	3.61	0.09	1.67	90	90	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	9.66	6.96	0.02	0.00
+-1	0	0	2607	93.56	2787	1114	0.96	57254	0	968	1626	98	52	0.09	3.74	1.19	1.13	4.11	0.11	2.23	90	90	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	9.66	6.96	0.02	0.00
+-1	1	1	2622	94.14	2785	1114	1.03	55121	0	700	1471	78	58	0.08	3.34	0.95	1.18	3.71	0.10	2.05	90
+-1	2	2	2654	95.16	2789	1114	0.94	58024	0	516	1590	73	39	0.03	2.93	0.75	0.77	3.31	0.08	1.45	90
+-1	3	3	2667	95.67	2788	1114	0.90	53395	0	709	1407	61	34	0.04	2.90	0.61	0.42	3.29	0.06	0.97	90
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	2047	70.86	2888	1114	0.83	92408	0	640	22003	1511	936	0.06	17.83	5.26	5.79	18.95	0.48	9.71	79	79	0.00	0.29	0.01	0.00	0.07	0.03	0.00	0.00	0.00	8.83	6.26	0.02	0.00
+-1	0	0	1904	66.53	2861	1114	0.78	21621	0	204	6413	414	277	0.10	21.28	5.65	6.37	22.61	0.53	10.32	79	79	0.00	0.29	0.01	0.00	0.07	0.03	0.00	0.00	0.00	8.83	6.26	0.02	0.00
+-1	1	1	2186	75.36	2900	1114	0.86	21063	0	334	5347	246	192	0.09	15.60	4.00	4.71	16.69	0.34	7.60	79
+-1	2	2	2094	72.10	2904	1114	0.83	24297	0	26	5487	463	211	0.02	16.57	6.22	4.81	17.76	0.51	9.63	79
+-1	3	3	2004	69.45	2885	1114	0.82	25427	0	76	4756	388	256	0.05	17.87	5.16	7.28	18.74	0.52	11.29	79
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	1500	55.59	2698	1113	0.62	50316	0	423	43829	1793	1595	0.03	23.34	6.03	14.93	24.18	0.82	19.42	48	51	0.00	2.68	0.35	0.11	0.52	1.44	0.00	0.00	0.00	7.10	4.74	0.01	0.00
+-1	0	0	1408	52.10	2702	1114	0.53	13349	0	100	12717	558	406	0.03	25.16	7.69	15.03	25.68	0.91	21.31	47	51	0.00	2.68	0.35	0.11	0.52	1.44	0.00	0.00	0.00	7.10	4.74	0.01	0.00
+-1	1	1	1453	54.94	2645	1114	0.61	10435	0	25	7611	457	457	0.02	21.66	6.13	17.13	22.12	0.91	22.03	47
+-1	2	2	1742	63.53	2741	1114	0.74	14457	0	142	12394	329	322	0.04	21.42	4.38	10.43	22.40	0.63	13.43	47
+-1	3	3	1397	51.77	2698	1114	0.59	12075	0	156	11107	449	410	0.03	25.13	5.91	17.14	26.51	0.81	20.91	48
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	355	26.30	1349	1114	0.65	17957	0	23	12102	3579	3781	0.01	16.78	13.43	43.32	17.15	2.14	54.42	43	45	0.00	11.21	1.44	0.27	2.91	6.72	0.00	0.00	0.00	2.79	0.95	0.02	0.00
+-1	0	0	348	24.97	1393	1114	0.61	5184	0	7	3216	1026	898	0.01	19.43	15.55	39.84	19.81	2.17	53.06	42	45	0.00	11.21	1.44	0.27	2.91	6.72	0.00	0.00	0.00	2.79	0.95	0.02	0.00
+-1	1	1	369	29.49	1252	1114	0.59	4078	0	9	2770	758	874	0.01	13.82	11.47	45.03	14.24	1.93	54.35	42
+-1	2	2	377	26.12	1445	1114	0.83	5167	0	2	3514	970	1035	0.00	19.13	14.31	40.27	19.69	2.33	51.85	43
+-1	3	3	325	24.61	1321	1114	0.56	3528	0	5	2602	825	974	0.01	14.72	12.40	48.15	14.84	2.12	58.43	43
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	188	17.17	1097	1114	0.66	13484	0	12	7419	3554	3332	0.00	12.39	14.15	56.16	12.43	2.23	68.17	40	42	0.00	10.04	3.26	0.02	2.44	15.20	0.00	0.00	0.00	2.30	0.54	0.04	0.00
+-1	0	0	182	16.22	1119	1114	0.65	4287	0	2	2211	926	816	0.00	15.60	13.74	54.27	15.69	2.22	65.87	40	42	0.00	10.04	3.26	0.02	2.44	15.20	0.00	0.00	0.00	2.30	0.54	0.04	0.00
+-1	1	1	189	17.02	1112	1114	0.69	2958	0	3	1794	849	843	0.00	10.86	14.04	57.97	10.90	2.13	69.95	40
+-1	2	2	209	19.68	1063	1114	0.64	3765	0	5	1877	1040	881	0.01	13.33	16.98	49.84	13.53	2.54	64.25	40
+-1	3	3	173	15.77	1098	1114	0.65	2474	0	2	1537	739	792	0.00	9.75	11.83	62.56	9.59	2.04	72.60	40
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	502	25.51	1967	1114	0.93	23398	0	162	11634	3919	3564	0.01	17.06	15.51	41.59	17.91	2.22	54.35	41	44	0.00	10.10	1.55	0.16	3.22	6.81	0.00	0.00	0.00	3.45	1.54	0.03	0.00
+-1	0	0	452	24.16	1870	1114	0.95	6313	0	146	3310	992	734	0.04	25.01	16.63	33.84	25.79	2.01	48.04	40	44	0.00	10.10	1.55	0.16	3.22	6.81	0.00	0.00	0.00	3.45	1.54	0.03	0.00
+-1	1	1	472	23.84	1979	1114	1.04	5042	0	5	2849	951	953	0.01	14.75	14.77	46.35	15.50	2.23	58.42	40
+-1	2	2	594	29.60	2005	1114	0.88	6882	0	6	2650	925	980	0.01	14.16	14.45	41.42	14.87	2.36	53.17	40
+-1	3	3	491	24.46	2006	1114	0.86	5161	0	5	2825	1051	897	0.01	14.32	16.20	44.72	15.47	2.29	57.78	41
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	483	29.41	1644	1114	0.66	19886	0	43	13511	3821	3275	0.01	16.62	14.25	39.48	17.58	2.09	50.92	44	47	0.00	9.00	1.76	0.04	2.64	7.56	0.00	0.00	0.00	3.23	1.32	0.03	0.00
+-1	0	0	461	28.14	1638	1114	0.58	5482	0	16	3701	966	828	0.02	18.75	14.34	38.50	19.59	2.08	50.18	43	47	0.00	9.00	1.76	0.04	2.64	7.56	0.00	0.00	0.00	3.23	1.32	0.03	0.00
+-1	1	1	542	31.71	1710	1114	0.75	4402	0	11	2774	980	749	0.01	14.92	14.94	38.17	15.54	2.05	50.70	43
+-1	2	2	486	30.22	1609	1114	0.67	5943	0	7	3744	1042	846	0.01	17.74	15.40	36.41	19.03	2.22	48.53	43
+-1	3	3	445	27.57	1613	1114	0.62	4059	0	9	3292	833	852	0.01	15.07	12.31	44.84	16.16	2.00	54.27	44
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	267	21.55	1237	1114	0.69	17760	0	31	13660	2776	3450	0.01	15.43	10.13	52.66	16.82	1.98	59.64	36	41	0.00	12.47	3.54	0.25	3.38	15.21	0.00	0.00	0.00	2.49	0.76	0.01	0.00
+-1	0	0	277	21.33	1298	1114	0.79	3986	0	4	2957	742	849	0.00	15.38	10.89	52.19	15.94	2.08	60.65	36	41	0.00	12.47	3.54	0.25	3.38	15.21	0.00	0.00	0.00	2.49	0.76	0.01	0.00
+-1	1	1	277	23.08	1200	1114	0.66	3439	0	8	2924	640	822	0.01	13.39	9.45	53.86	14.82	1.87	60.23	36
+-1	2	2	292	23.59	1236	1114	0.67	6164	0	9	4006	649	978	0.01	16.52	9.52	50.00	18.08	2.07	56.26	36
+-1	3	3	221	18.21	1212	1114	0.62	4171	0	10	3773	745	801	0.01	16.41	10.66	54.56	18.46	1.89	61.45	36
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	162	11.57	1398	1114	0.77	11463	0	11	5324	1990	3596	0.00	8.25	7.84	72.27	7.97	2.21	78.24	53	53	0.00	16.97	5.54	0.28	4.47	26.49	0.00	0.00	0.00	2.14	0.55	0.00	0.00
+-1	0	0	193	13.64	1413	1114	0.92	3417	0	2	1364	574	802	0.00	9.71	8.89	67.61	9.44	2.24	74.67	53	53	0.00	16.96	5.54	0.28	4.47	26.49	0.00	0.00	0.00	2.14	0.55	0.00	0.00
+-1	1	1	186	12.10	1536	1114	0.74	2046	0	3	1130	357	883	0.00	6.61	5.72	75.48	6.33	1.99	79.58	53
+-1	2	2	162	11.54	1408	1114	0.74	3425	0	4	1406	510	1057	0.01	8.04	8.04	72.32	7.84	2.46	78.17	52
+-1	3	3	106	9.01	1179	1114	0.57	2575	0	2	1424	549	854	0.00	8.63	8.70	73.63	8.27	2.16	80.56	52
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	942	35.08	2687	1113	0.57	30679	0	64	18618	1790	2704	0.01	13.28	6.59	44.92	13.75	1.49	49.68	40	44	0.00	8.98	2.98	0.11	2.61	12.93	0.00	0.00	0.00	4.79	2.85	0.00	0.00
+-1	0	0	848	31.75	2671	1114	0.52	8076	0	7	5329	510	679	0.01	15.51	6.94	45.74	15.98	1.49	50.78	39	44	0.00	8.98	2.98	0.11	2.61	12.93	0.00	0.00	0.00	4.79	2.85	0.00	0.00
+-1	1	1	1104	40.76	2709	1114	0.66	6503	0	3	3762	359	562	0.00	10.79	5.34	42.88	11.01	1.29	46.94	39
+-1	2	2	802	30.72	2610	1114	0.45	9146	0	50	5412	525	871	0.01	14.89	8.13	46.22	15.81	1.82	51.64	40
+-1	3	3	1016	37.09	2739	1114	0.62	6954	0	4	4115	396	592	0.00	11.94	5.94	44.87	12.20	1.36	49.35	40
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	321	21.12	1523	1114	0.54	15531	0	48	11197	2275	3287	0.01	13.15	8.60	56.98	13.72	1.94	63.22	49	51	0.00	13.66	4.19	0.26	3.62	19.28	0.00	0.00	0.00	2.57	0.85	0.01	0.00
+-1	0	0	286	19.24	1489	1114	0.50	4285	0	14	3007	683	799	0.00	15.58	10.23	54.76	16.35	2.00	62.41	48	51	0.00	13.66	4.19	0.26	3.62	19.28	0.00	0.00	0.00	2.57	0.85	0.01	0.00
+-1	1	1	321	21.64	1482	1114	0.47	4022	0	19	2803	564	812	0.02	12.46	8.91	56.84	13.05	1.93	63.38	48
+-1	2	2	348	22.21	1565	1114	0.56	3979	0	6	2912	574	962	0.01	13.38	8.67	55.58	13.94	2.13	61.71	48
+-1	3	3	331	21.37	1549	1114	0.62	3245	0	9	2475	454	714	0.01	11.18	6.59	60.73	11.53	1.71	65.39	49
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	436	39.51	1105	1114	0.62	23205	0	41	12535	3025	2767	0.01	16.38	10.82	33.22	16.87	1.67	41.94	40	43	0.00	9.62	1.26	0.33	2.40	5.57	0.00	0.00	0.00	2.83	0.91	0.02	0.00
+-1	0	0	430	39.34	1092	1114	0.58	6066	0	13	3240	738	648	0.01	17.47	10.16	32.96	18.01	1.56	41.10	40	43	0.00	9.62	1.26	0.33	2.40	5.57	0.00	0.00	0.00	2.83	0.91	0.02	0.00
+-1	1	1	441	39.15	1126	1114	0.66	5495	0	21	3032	753	701	0.02	15.47	10.78	34.57	15.86	1.68	43.32	39
+-1	2	2	461	41.92	1101	1114	0.62	6375	0	4	3190	758	747	0.00	16.13	11.10	30.76	16.80	1.78	39.51	39
+-1	3	3	414	37.64	1100	1114	0.62	5269	0	3	3073	776	671	0.00	16.46	11.26	34.57	16.82	1.69	43.85	39
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	406	38.08	1065	1114	0.66	21874	0	39	13680	3219	2934	0.01	17.49	11.72	32.65	18.03	1.71	42.18	39	42	0.00	8.62	1.15	0.26	1.94	5.29	0.00	0.00	0.00	2.74	0.83	0.02	0.00
+-1	0	0	424	39.04	1087	1114	0.72	6006	0	17	3395	885	658	0.01	17.72	12.81	30.34	18.35	1.68	40.93	39	42	0.00	8.62	1.15	0.26	1.94	5.29	0.00	0.00	0.00	2.74	0.83	0.02	0.00
+-1	1	1	397	36.99	1073	1114	0.66	5104	0	8	3501	845	730	0.01	17.97	12.62	32.34	18.37	1.77	42.87	39
+-1	2	2	406	38.41	1057	1114	0.63	5852	0	7	3734	758	833	0.01	17.90	10.86	32.79	18.59	1.74	41.26	39
+-1	3	3	396	37.88	1045	1114	0.63	4912	0	7	3050	731	713	0.01	16.37	10.57	35.12	16.82	1.63	43.67	39
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	462	38.87	1189	1114	0.65	21557	0	16	13251	3376	2920	0.00	16.97	12.27	31.81	17.58	1.72	41.84	39	42	0.00	8.45	1.15	0.27	2.14	5.12	0.00	0.00	0.00	2.92	1.00	0.02	0.00
+-1	0	0	462	39.73	1163	1114	0.61	5931	0	5	3403	878	654	0.00	16.62	12.63	30.91	17.45	1.64	41.17	38	42	0.00	8.45	1.15	0.27	2.14	5.12	0.00	0.00	0.00	2.92	1.00	0.02	0.00
+-1	1	1	449	37.53	1195	1114	0.69	4888	0	4	3504	920	737	0.00	17.53	13.54	31.34	18.08	1.78	42.60	38
+-1	2	2	461	38.78	1188	1114	0.65	6068	0	1	3452	831	809	0.00	17.98	11.99	31.19	18.52	1.81	40.90	38
+-1	3	3	477	39.44	1210	1114	0.66	4670	0	6	2892	747	720	0.01	15.73	10.94	33.80	16.25	1.63	42.68	39
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	405	39.72	1020	1114	0.69	22254	0	30	12343	3340	2898	0.01	16.69	12.22	31.32	17.02	1.73	41.52	40	43	0.00	7.98	1.16	0.23	1.89	4.76	0.00	0.00	0.00	2.70	0.79	0.02	0.00
+-1	0	0	406	40.32	1008	1114	0.69	6047	0	5	3236	870	717	0.01	17.87	12.67	29.06	18.40	1.73	39.54	40	43	0.00	7.98	1.16	0.23	1.89	4.76	0.00	0.00	0.00	2.70	0.79	0.02	0.00
+-1	1	1	403	39.69	1015	1114	0.68	5052	0	11	2984	815	739	0.01	16.49	11.66	32.10	16.80	1.65	41.86	40
+-1	2	2	397	39.52	1004	1114	0.71	6145	0	5	3319	892	775	0.01	17.44	12.95	30.04	17.80	1.89	40.79	40
+-1	3	3	415	39.34	1054	1114	0.69	5010	0	9	2804	763	667	0.01	14.93	11.58	34.06	15.09	1.65	43.91	40
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	388	37.52	1035	1114	0.72	21529	0	15	12347	3198	2909	0.00	16.85	11.64	33.92	17.08	1.73	43.67	38	42	0.00	9.74	1.24	0.38	2.08	5.30	0.00	0.00	0.00	2.69	0.79	0.02	0.00
+-1	0	0	371	35.62	1042	1114	0.65	6196	0	3	3352	848	705	0.00	19.02	12.18	33.12	19.19	1.71	43.48	38	42	0.00	9.74	1.24	0.38	2.08	5.30	0.00	0.00	0.00	2.69	0.79	0.02	0.00
+-1	1	1	392	38.41	1019	1114	0.73	4833	0	2	2801	711	727	0.00	15.18	10.51	35.83	15.49	1.64	44.46	38
+-1	2	2	407	38.81	1050	1114	0.79	5741	0	5	3334	842	758	0.01	17.68	12.36	31.09	17.96	1.84	41.39	38
+-1	3	3	382	37.23	1027	1114	0.71	4759	0	5	2860	797	719	0.00	15.53	11.52	35.66	15.68	1.72	45.37	38
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	392	39.40	995	1114	0.74	22143	0	23	12565	3141	2874	0.01	16.99	11.16	32.40	17.15	1.65	41.80	39	42	0.00	8.11	1.14	0.15	2.17	5.39	0.00	0.00	0.00	2.66	0.76	0.02	0.00
+-1	0	0	394	38.37	1027	1114	0.73	6369	0	8	3272	820	694	0.01	17.82	11.40	32.38	17.88	1.61	42.14	38	42	0.00	8.11	1.14	0.15	2.17	5.39	0.00	0.00	0.00	2.66	0.76	0.02	0.00
+-1	1	1	378	37.80	1000	1114	0.71	4925	0	5	3098	864	680	0.01	17.01	12.48	32.69	17.08	1.70	43.42	39
+-1	2	2	401	40.96	978	1114	0.75	6025	0	7	3178	796	809	0.01	17.08	11.38	30.53	17.33	1.81	39.90	39
+-1	3	3	396	40.49	979	1114	0.75	4824	0	3	3017	661	691	0.00	16.07	9.39	34.00	16.30	1.49	41.72	39
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	411	37.61	1092	1114	0.72	22563	0	24	13868	3231	2890	0.01	17.69	11.66	32.95	18.19	1.74	42.46	41	42	0.00	8.53	1.04	0.20	2.38	4.65	0.00	0.00	0.00	2.78	0.89	0.02	0.00
+-1	0	0	401	37.74	1063	1114	0.73	6260	0	9	3479	796	687	0.01	19.13	11.30	31.73	19.69	1.67	40.90	41	42	0.00	8.53	1.04	0.20	2.38	4.65	0.00	0.00	0.00	2.78	0.88	0.02	0.00
+-1	1	1	367	34.00	1079	1114	0.69	5087	0	3	3706	841	783	0.00	18.16	12.01	35.79	18.87	1.71	45.42	41
+-1	2	2	441	39.30	1122	1114	0.73	6084	0	5	3685	859	758	0.01	17.73	12.47	30.37	18.18	1.93	40.58	41
+-1	3	3	435	39.42	1103	1114	0.74	5132	0	7	2998	735	662	0.01	15.74	10.84	33.88	16.00	1.66	42.93	41
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	415	36.95	1124	1114	0.78	21099	0	13	13678	3238	3087	0.00	17.18	11.84	33.96	17.67	1.73	43.64	42	44	0.00	7.85	1.14	0.13	2.23	5.52	0.00	0.00	0.00	2.82	0.92	0.02	0.00
+-1	0	0	429	37.98	1130	1114	0.88	5809	0	2	3241	860	712	0.00	17.80	12.47	31.65	18.21	1.70	42.11	40	44	0.00	7.85	1.14	0.13	2.23	5.52	0.00	0.00	0.00	2.82	0.92	0.02	0.00
+-1	1	1	405	36.62	1106	1114	0.74	5018	0	4	3649	819	725	0.00	17.55	12.18	33.60	18.30	1.67	43.41	41
+-1	2	2	402	35.89	1121	1114	0.65	5872	0	5	3974	837	852	0.00	18.75	12.29	33.02	19.40	1.88	42.84	41
+-1	3	3	425	37.32	1138	1114	0.84	4400	0	2	2814	722	798	0.00	14.63	10.42	37.57	14.77	1.69	46.22	42
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	377	34.83	1083	1114	0.71	20912	0	23	13146	3245	2979	0.01	17.33	11.68	36.07	17.73	1.78	45.66	39	43	0.00	9.44	1.42	0.26	2.45	6.42	0.00	0.00	0.00	2.69	0.82	0.02	0.00
+-1	0	0	368	33.20	1107	1114	0.67	5708	0	3	3598	879	708	0.00	19.61	12.38	34.70	19.76	1.78	45.26	39	43	0.00	9.44	1.42	0.26	2.45	6.42	0.00	0.00	0.00	2.69	0.82	0.02	0.00
+-1	1	1	377	35.56	1060	1114	0.69	4777	0	7	3118	837	705	0.01	15.87	12.07	36.43	16.37	1.76	46.30	39
+-1	2	2	408	37.12	1099	1114	0.81	5942	0	11	3424	814	788	0.01	18.12	11.87	32.80	18.77	1.85	42.26	39
+-1	3	3	356	33.43	1065	1114	0.67	4485	0	2	3006	715	778	0.00	15.72	10.41	40.36	16.01	1.73	48.83	39
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	482	38.41	1254	1114	0.78	21427	0	17	12376	3110	2901	0.01	16.36	11.19	33.96	16.73	1.66	43.21	38	41	0.00	7.65	1.36	0.11	1.83	6.10	0.00	0.00	0.00	3.00	1.09	0.02	0.00
+-1	0	0	496	39.74	1249	1114	0.76	5900	0	4	2969	783	640	0.01	16.50	11.55	32.12	16.75	1.59	41.92	37	41	0.00	7.65	1.36	0.11	1.83	6.10	0.00	0.00	0.00	3.00	1.09	0.02	0.00
+-1	1	1	486	38.98	1248	1114	0.74	4803	0	7	2831	703	708	0.01	15.31	10.02	35.58	15.68	1.55	43.79	38
+-1	2	2	442	35.43	1246	1114	0.76	5863	0	3	3684	886	853	0.00	18.43	12.60	33.45	18.94	1.88	43.75	38
+-1	3	3	502	39.48	1271	1114	0.87	4861	0	3	2892	738	700	0.00	15.18	10.58	34.67	15.55	1.60	43.36	38
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	522	32.81	1592	1114	0.90	23926	0	43	10902	2770	2857	0.01	14.18	10.30	42.56	14.50	1.75	50.94	48	49	0.00	9.26	2.42	0.10	2.59	10.97	0.00	0.00	0.00	3.25	1.39	0.02	0.00
+-1	0	0	467	30.81	1515	1114	0.90	5715	0	8	2965	790	666	0.01	15.84	11.67	41.52	16.43	1.75	51.01	48	49	0.00	9.26	2.42	0.10	2.59	10.97	0.00	0.00	0.00	3.25	1.39	0.02	0.00
+-1	1	1	519	32.50	1597	1114	0.85	4712	0	7	2576	663	739	0.01	14.19	9.86	43.32	14.28	1.76	51.46	48
+-1	2	2	563	34.63	1627	1114	0.88	7917	0	5	2711	711	761	0.01	13.64	10.72	40.89	13.81	1.87	49.70	48
+-1	3	3	541	33.31	1623	1114	0.96	5582	0	23	2650	606	691	0.00	13.04	8.94	44.53	13.47	1.63	51.59	48
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	378	28.12	1344	1114	0.92	21272	0	26	12465	3975	3473	0.01	17.05	14.83	39.80	17.68	2.09	52.11	47	47	0.00	7.26	1.61	0.07	2.21	6.67	0.00	0.00	0.00	2.98	1.08	0.05	0.00
+-1	0	0	423	29.02	1457	1114	1.01	6627	0	7	3612	1135	814	0.01	20.90	16.41	33.40	21.64	2.13	47.21	47	47	0.00	7.26	1.61	0.07	2.21	6.67	0.00	0.00	0.00	2.98	1.08	0.05	0.00
+-1	1	1	376	28.41	1324	1114	0.90	4778	0	5	2911	952	804	0.00	15.44	14.53	41.41	15.94	1.99	53.66	47
+-1	2	2	349	27.05	1291	1114	0.81	5437	0	4	3145	1019	996	0.01	16.95	15.23	40.58	17.60	2.22	53.14	47
+-1	3	3	363	28.02	1296	1114	0.91	4430	0	10	2797	869	859	0.01	14.90	13.14	43.79	15.55	2.01	54.42	47
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	492	30.27	1627	1113	0.80	22046	0	54	15051	4339	3279	0.01	19.96	15.75	33.74	20.94	2.07	46.73	42	46	0.00	6.95	1.36	0.01	2.16	6.48	0.00	0.00	0.00	3.31	1.37	0.03	0.00
+-1	0	0	492	29.96	1640	1114	0.80	6417	0	9	3990	1153	763	0.01	22.10	16.27	31.37	22.79	2.06	45.18	42	46	0.00	6.95	1.36	0.01	2.16	6.48	0.00	0.00	0.00	3.31	1.37	0.03	0.00
+-1	1	1	456	29.32	1554	1114	0.74	4973	0	12	3495	1133	803	0.01	19.48	16.81	34.11	20.54	2.08	48.05	42
+-1	2	2	517	31.02	1668	1114	0.92	5791	0	17	4039	1015	929	0.02	20.19	14.48	34.04	21.39	2.13	45.46	42
+-1	3	3	506	30.77	1643	1114	0.72	4865	0	16	3527	1038	784	0.01	18.06	15.46	35.46	19.02	2.01	48.21	42
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	487	29.74	1639	1114	0.87	20868	0	46	14565	3319	3125	0.01	16.29	12.59	41.19	17.09	1.91	51.27	38	41	0.00	9.20	1.90	0.11	2.66	8.94	0.00	0.00	0.00	3.23	1.38	0.02	0.00
+-1	0	0	476	28.36	1680	1114	0.95	5616	0	11	4057	894	745	0.01	18.49	13.54	39.40	19.19	1.91	50.53	37	41	0.00	9.20	1.90	0.11	2.66	8.94	0.00	0.00	0.00	3.23	1.38	0.02	0.00
+-1	1	1	475	29.03	1635	1114	0.83	4925	0	15	3633	861	727	0.01	16.45	13.40	40.93	17.30	1.89	51.78	38
+-1	2	2	523	32.96	1586	1114	0.85	5925	0	13	3736	798	828	0.01	16.47	11.77	38.58	17.50	1.96	47.58	38
+-1	3	3	475	28.59	1662	1114	0.86	4402	0	7	3139	766	825	0.01	13.74	11.65	45.85	14.36	1.87	55.18	38
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	260	15.88	1637	1114	1.12	15281	0	28	9671	2539	3638	0.01	12.40	9.58	61.91	12.65	2.17	69.30	37	40	0.00	14.07	4.52	0.21	3.90	20.23	0.00	0.00	0.00	2.57	0.92	0.00	0.00
+-1	0	0	224	14.25	1574	1114	1.03	4050	0	6	2343	750	866	0.00	13.60	11.17	60.74	13.74	2.22	69.79	36	40	0.00	14.07	4.52	0.21	3.90	20.23	0.00	0.00	0.00	2.57	0.92	0.00	0.00
+-1	1	1	279	16.71	1669	1114	1.24	3512	0	9	2508	558	869	0.01	11.97	8.30	62.81	12.46	1.98	68.84	36
+-1	2	2	262	15.66	1675	1114	1.09	4328	0	6	2380	635	1039	0.01	12.14	9.49	62.50	12.17	2.38	69.79	36
+-1	3	3	274	16.91	1622	1114	1.10	3391	0	7	2440	596	864	0.01	11.90	9.35	61.58	12.22	2.10	68.77	37
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	249	14.80	1685	1114	1.19	15952	0	11	8905	2615	3706	0.00	12.37	9.83	62.77	12.58	2.21	70.41	36	40	0.00	13.84	4.62	0.19	3.85	20.89	0.00	0.00	0.00	2.55	0.91	0.00	0.00
+-1	0	0	266	15.78	1687	1114	1.23	4544	0	5	2311	765	852	0.00	13.89	11.14	58.93	14.07	2.27	67.89	36	40	0.00	13.84	4.62	0.19	3.85	20.89	0.00	0.00	0.00	2.55	0.91	0.00	0.00
+-1	1	1	254	14.72	1725	1114	1.20	3650	0	1	2146	656	880	0.00	11.39	10.03	63.60	11.64	2.11	71.53	36
+-1	2	2	231	13.95	1654	1114	1.04	4212	0	3	2484	615	1069	0.00	12.83	9.17	63.83	13.01	2.38	70.66	36
+-1	3	3	246	14.74	1671	1114	1.26	3546	0	2	1964	579	905	0.00	11.36	8.98	64.72	11.62	2.08	71.56	36
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	260	15.38	1690	1114	1.19	14684	0	22	8956	2406	3811	0.01	12.34	9.16	62.85	12.47	2.19	69.96	41	42	0.00	13.69	4.25	0.20	3.56	21.03	0.00	0.00	0.00	2.59	0.93	0.00	0.00
+-1	0	0	229	13.79	1662	1114	1.07	4081	0	7	2600	711	968	0.01	14.39	10.65	60.88	14.68	2.28	69.24	41	42	0.00	13.69	4.25	0.20	3.56	21.03	0.00	0.00	0.00	2.59	0.93	0.00	0.00
+-1	1	1	211	13.56	1555	1114	0.98	3599	0	5	2179	624	947	0.01	12.09	9.80	64.31	12.12	2.16	72.17	41
+-1	2	2	302	17.27	1747	1114	1.28	4030	0	6	2255	606	1033	0.01	12.60	8.69	61.18	12.76	2.34	67.62	41
+-1	3	3	298	16.91	1761	1114	1.35	2974	0	4	1922	465	863	0.00	10.29	7.48	65.00	10.32	1.96	70.82	41
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	603	31.18	1935	1114	0.85	26553	0	25	12887	3404	3351	0.01	16.57	12.56	39.39	16.98	1.96	49.88	51	51	0.00	9.13	1.41	0.32	2.43	5.53	0.00	0.00	0.00	3.64	1.72	0.02	0.00
+-1	0	0	563	28.68	1965	1114	0.77	5739	0	5	3409	926	843	0.01	17.78	13.34	39.92	18.20	1.97	51.15	50	51	0.00	9.13	1.41	0.32	2.43	5.53	0.00	0.00	0.00	3.64	1.72	0.02	0.00
+-1	1	1	518	27.36	1892	1114	0.84	8884	0	5	3300	915	899	0.01	17.49	13.41	41.49	17.86	2.02	52.76	51
+-1	2	2	655	33.63	1946	1114	0.88	6453	0	4	3292	889	844	0.01	16.76	13.22	36.08	17.33	2.09	46.94	51
+-1	3	3	678	35.06	1934	1114	0.88	5477	0	11	2886	674	765	0.01	14.26	10.29	40.05	14.53	1.74	48.67	51
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	508	29.71	1710	1114	0.85	22399	0	22	13515	3307	3418	0.00	17.09	11.99	40.96	17.56	1.90	50.82	44	45	0.00	9.83	1.50	0.38	1.94	6.98	0.00	0.00	0.00	3.33	1.45	0.01	0.00
+-1	0	0	502	30.15	1664	1114	0.79	5805	0	8	3500	876	791	0.01	17.47	12.80	39.33	18.08	1.87	49.89	44	45	0.00	9.83	1.50	0.38	1.94	6.98	0.00	0.00	0.00	3.33	1.45	0.01	0.00
+-1	1	1	501	28.80	1738	1114	0.95	5815	0	2	3482	856	839	0.00	17.40	12.19	41.36	17.75	1.88	51.58	44
+-1	2	2	498	29.75	1673	1114	0.72	6424	0	9	3679	810	961	0.01	17.92	11.82	40.28	18.63	2.00	49.61	44
+-1	3	3	533	30.15	1767	1114	0.94	4355	0	3	2854	765	827	0.00	15.56	11.17	42.86	15.80	1.84	52.22	44
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	790	38.17	2070	1114	0.70	29134	0	35	22332	2965	2960	0.01	19.68	10.40	31.51	20.65	1.58	39.61	75	75	0.00	7.09	0.92	0.31	1.53	4.01	0.00	0.00	0.00	4.18	2.18	0.01	0.00
+-1	0	0	849	40.89	2075	1114	0.67	6703	0	10	4442	727	650	0.01	19.44	10.10	29.29	20.14	1.50	37.46	75	75	0.00	7.09	0.92	0.31	1.53	4.01	0.00	0.00	0.00	4.18	2.18	0.01	0.00
+-1	1	1	825	39.91	2067	1114	0.76	6170	0	6	4664	714	729	0.01	18.28	10.08	31.50	19.41	1.52	39.16	75
+-1	2	2	758	36.94	2051	1114	0.64	10473	0	10	7195	777	792	0.01	21.51	10.79	30.46	22.32	1.69	39.05	75
+-1	3	3	729	34.92	2088	1114	0.71	5788	0	9	6031	747	789	0.01	19.47	10.62	34.80	20.72	1.59	42.78	75
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	685	31.97	2143	1114	0.77	25804	0	230	18964	3101	3139	0.02	18.23	11.13	38.34	19.17	1.78	47.09	52	52	0.00	9.11	1.60	0.29	2.21	7.11	0.00	0.00	0.00	4.02	2.08	0.01	0.00
+-1	0	0	761	34.97	2177	1114	0.81	6498	0	94	4284	770	700	0.02	18.18	11.07	35.40	19.08	1.68	44.27	52	52	0.00	9.11	1.60	0.29	2.21	7.11	0.00	0.00	0.00	4.02	2.08	0.01	0.00
+-1	1	1	655	30.24	2165	1114	0.82	5762	0	14	4415	777	799	0.01	18.23	11.22	40.06	19.03	1.77	48.96	52
+-1	2	2	641	30.04	2133	1114	0.73	7596	0	112	5402	831	867	0.03	19.64	11.70	38.27	20.85	1.93	47.17	52
+-1	3	3	683	32.61	2094	1114	0.72	5948	0	10	4863	723	773	0.01	16.88	10.54	39.65	17.71	1.72	47.96	52
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	768	34.40	2233	1113	0.77	29044	0	64	21030	3081	2988	0.02	18.93	11.05	35.26	19.84	1.72	44.04	40	44	0.00	8.47	1.21	0.23	2.05	5.24	0.00	0.00	0.00	4.31	2.33	0.01	0.00
+-1	0	0	726	31.64	2293	1114	0.76	7320	0	8	5847	893	713	0.01	20.71	12.58	34.72	21.83	1.77	44.76	40	44	0.00	8.48	1.21	0.23	2.05	5.24	0.00	0.00	0.00	4.31	2.33	0.01	0.00
+-1	1	1	721	32.98	2185	1114	0.67	6597	0	24	5735	814	699	0.02	19.40	11.50	35.87	20.09	1.70	45.22	40
+-1	2	2	806	36.67	2199	1114	0.82	8811	0	11	5366	699	890	0.01	18.83	10.15	33.91	19.75	1.82	41.76	40
+-1	3	3	820	36.30	2260	1114	0.83	6316	0	21	4082	675	686	0.02	16.77	9.99	36.56	17.69	1.58	44.43	40
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	643	30.52	2107	1114	0.66	24901	0	41	17686	2876	3179	0.01	17.26	10.51	41.38	18.24	1.82	49.42	69	69	0.00	10.34	1.62	0.35	2.47	7.76	0.00	0.00	0.00	3.77	1.85	0.01	0.00
+-1	0	0	684	32.61	2097	1114	0.64	5990	0	9	4025	705	712	0.01	17.05	10.26	39.73	17.76	1.71	47.91	69	69	0.00	10.34	1.62	0.35	2.47	7.76	0.00	0.00	0.00	3.76	1.85	0.01	0.00
+-1	1	1	585	26.07	2246	1114	0.68	4850	0	11	4372	761	862	0.00	18.05	11.16	44.49	19.31	1.86	52.76	69
+-1	2	2	663	31.43	2109	1114	0.75	8869	0	18	5518	721	862	0.02	18.51	10.44	39.20	19.29	1.95	47.32	69
+-1	3	3	640	31.97	2003	1114	0.58	5192	0	3	3771	689	743	0.00	15.44	10.18	42.08	16.59	1.76	49.68	69
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	947	42.88	2208	1114	0.83	33124	0	251	27548	3032	2345	0.03	23.48	11.04	22.29	24.68	1.29	31.15	56	58	0.00	4.16	0.53	0.18	0.96	1.97	0.00	0.00	0.00	4.92	2.81	0.02	0.00
+-1	0	0	944	43.67	2162	1114	0.88	7731	0	17	7860	686	583	0.02	23.81	9.70	22.54	25.07	1.19	30.08	56	58	0.00	4.16	0.53	0.18	0.96	1.97	0.00	0.00	0.00	4.92	2.81	0.02	0.00
+-1	1	1	983	42.93	2290	1114	0.84	7885	0	84	5975	833	591	0.04	22.82	12.37	21.60	23.95	1.34	31.78	56
+-1	2	2	983	43.66	2251	1114	0.84	10517	0	39	6848	741	602	0.03	23.38	11.13	21.41	24.32	1.35	30.68	56
+-1	3	3	877	41.28	2125	1114	0.74	6991	0	111	6865	772	569	0.04	23.93	10.98	23.62	25.37	1.28	32.07	56
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	918	39.42	2329	1114	0.80	31430	0	41	20261	2883	2819	0.01	17.81	10.32	32.16	18.69	1.58	40.31	48	52	0.00	7.13	1.15	0.12	1.74	5.18	0.00	0.00	0.00	4.83	2.80	0.02	0.00
+-1	0	0	948	41.61	2279	1114	0.81	7253	0	10	4777	740	626	0.01	16.97	10.87	30.24	18.03	1.52	38.84	47	52	0.00	7.13	1.15	0.12	1.74	5.18	0.00	0.00	0.00	4.83	2.80	0.02	0.00
+-1	1	1	891	37.65	2367	1114	0.80	6615	0	13	5347	744	767	0.02	18.38	10.38	33.36	19.13	1.60	41.62	47
+-1	2	2	969	41.62	2328	1114	0.83	10199	0	7	5410	655	718	0.00	18.43	9.75	29.84	19.11	1.60	37.67	47
+-1	3	3	865	36.81	2350	1114	0.75	7363	0	11	4727	744	708	0.01	17.47	10.27	35.19	18.49	1.61	43.09	48
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	627	32.50	1931	1114	0.88	25577	0	31	15828	3361	3332	0.01	18.70	11.93	36.55	19.22	1.83	46.45	56	56	0.00	8.75	1.16	0.30	2.03	5.03	0.00	0.00	0.00	3.86	1.91	0.02	0.00
+-1	0	0	645	32.19	2005	1114	0.92	6906	0	9	3908	975	748	0.01	19.58	14.29	33.59	20.11	1.84	45.87	56	56	0.00	8.75	1.16	0.30	2.03	5.03	0.00	0.00	0.00	3.86	1.91	0.02	0.00
+-1	1	1	655	34.21	1915	1114	0.84	5550	0	4	3421	788	777	0.00	17.48	11.09	36.92	17.80	1.73	46.27	56
+-1	2	2	629	32.59	1930	1114	0.92	7209	0	8	4440	774	980	0.00	19.60	10.67	36.80	20.37	1.92	45.12	56
+-1	3	3	580	31.00	1871	1114	0.84	5912	0	10	4059	824	827	0.01	18.15	11.66	38.88	18.61	1.84	48.54	56
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	741	34.49	2149	1114	0.89	27449	0	38	21380	3456	3078	0.01	21.65	11.99	31.51	22.94	1.64	40.93	59	59	0.00	6.08	0.89	0.15	1.38	4.25	0.00	0.00	0.00	4.30	2.29	0.02	0.00
+-1	0	0	705	33.36	2114	1114	0.89	6522	0	11	5113	900	780	0.01	22.57	12.40	31.32	23.94	1.66	41.04	59	59	0.00	6.08	0.89	0.15	1.38	4.25	0.00	0.00	0.00	4.30	2.29	0.02	0.00
+-1	1	1	743	33.65	2209	1114	0.98	5903	0	7	4838	900	741	0.00	21.63	12.45	31.95	22.94	1.61	41.80	58
+-1	2	2	790	36.47	2165	1114	0.86	9392	0	11	6219	791	804	0.01	21.27	10.81	31.00	22.32	1.64	39.57	58
+-1	3	3	727	34.47	2108	1114	0.83	5632	0	9	5210	865	753	0.01	21.14	12.32	31.76	22.58	1.63	41.32	58
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	978	40.09	2440	1114	0.84	30646	0	187	26058	3034	2817	0.01	18.74	10.86	30.07	19.80	1.51	38.60	50	54	0.00	5.60	0.91	0.15	1.41	3.79	0.00	0.00	0.00	5.19	3.13	0.02	0.00
+-1	0	0	968	38.77	2497	1114	0.87	6885	0	14	4496	817	738	0.01	18.85	11.83	30.30	19.68	1.58	39.96	50	54	0.00	5.60	0.91	0.15	1.41	3.79	0.00	0.00	0.00	5.19	3.13	0.02	0.00
+-1	1	1	904	37.65	2401	1114	0.87	7831	0	39	8313	744	706	0.01	20.05	10.48	31.67	21.69	1.43	39.23	50
+-1	2	2	966	38.34	2519	1114	0.74	8205	0	81	6471	791	785	0.03	18.88	11.44	31.10	19.44	1.70	40.52	50
+-1	3	3	1075	45.61	2357	1114	0.86	7725	0	53	6778	682	588	0.01	17.20	9.70	27.20	18.40	1.32	34.67	50
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	305	18.44	1653	1114	0.59	14654	0	29	10491	3488	3784	0.01	15.44	13.39	52.42	15.69	2.37	63.50	41	44	0.00	14.10	2.42	0.44	3.41	10.58	0.00	0.00	0.00	2.75	0.96	0.02	0.00
+-1	0	0	309	18.45	1674	1114	0.59	3982	0	8	2736	956	902	0.01	16.88	14.20	50.11	17.24	2.34	61.97	41	44	0.00	14.10	2.42	0.44	3.41	10.58	0.00	0.00	0.00	2.75	0.96	0.02	0.00
+-1	1	1	322	20.03	1610	1114	0.50	3117	0	3	2251	749	928	0.00	13.21	11.75	54.71	13.34	2.24	64.40	41
+-1	2	2	279	17.82	1567	1114	0.48	4326	0	4	2915	960	1054	0.01	16.75	15.07	50.07	17.12	2.64	62.41	41
+-1	3	3	309	17.45	1768	1114	0.78	3229	0	14	2589	823	900	0.01	14.92	12.53	54.77	15.04	2.29	65.22	41
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	387	21.60	1792	1114	0.72	21033	0	24	9952	3235	2999	0.00	11.62	12.85	53.76	11.94	2.07	64.39	40	45	0.00	9.50	3.45	0.02	2.09	16.39	0.00	0.00	0.00	2.95	1.12	0.04	0.00
+-1	0	0	383	22.09	1736	1114	0.75	6420	0	11	2785	931	752	0.00	13.92	13.89	49.87	14.36	2.15	61.40	40	45	0.00	9.50	3.45	0.02	2.09	16.39	0.00	0.00	0.00	2.95	1.12	0.04	0.00
+-1	1	1	377	21.19	1779	1114	0.70	4547	0	5	2588	754	687	0.00	9.91	12.69	56.05	10.46	1.94	66.41	40
+-1	2	2	425	22.48	1890	1114	0.71	5786	0	2	2463	771	903	0.00	12.74	11.94	52.68	12.98	2.20	62.34	40
+-1	3	3	363	20.65	1759	1114	0.74	4280	0	6	2116	779	657	0.00	9.90	12.85	56.43	9.96	1.99	67.39	40
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	300	18.76	1598	1114	0.64	14989	0	17	10977	4026	4089	0.00	15.14	15.54	50.30	15.82	2.51	62.91	41	44	0.00	12.73	2.23	0.13	4.17	10.20	0.00	0.00	0.00	2.79	1.00	0.02	0.00
+-1	0	0	415	22.18	1872	1114	0.71	4600	0	1	2625	1035	969	0.00	14.70	15.89	46.86	15.83	2.51	59.47	41	44	0.00	12.73	2.23	0.13	4.17	10.20	0.00	0.00	0.00	2.79	1.00	0.02	0.00
+-1	1	1	283	18.83	1500	1114	0.67	3210	0	4	2513	949	979	0.01	14.60	14.66	51.69	14.82	2.36	63.98	40
+-1	2	2	258	17.07	1511	1114	0.55	4029	0	7	3168	1013	1110	0.00	16.95	15.49	50.27	17.72	2.61	62.59	40
+-1	3	3	243	16.94	1437	1114	0.59	3150	0	5	2671	1029	1031	0.00	14.32	16.13	52.37	14.92	2.55	65.59	41
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	367	27.81	1320	1114	0.66	18680	0	39	11994	3988	3046	0.01	17.11	15.50	39.44	17.53	2.12	52.53	41	45	0.00	9.30	1.78	0.06	3.06	7.86	0.00	0.00	0.00	2.84	0.97	0.03	0.00
+-1	0	0	379	27.28	1391	1114	0.74	5433	0	6	3046	1058	727	0.01	19.16	16.11	37.29	19.64	2.09	51.00	41	45	0.00	9.30	1.78	0.06	3.06	7.86	0.00	0.00	0.00	2.84	0.97	0.03	0.00
+-1	1	1	385	29.40	1309	1114	0.63	4536	0	9	2990	1011	772	0.01	15.45	15.65	39.34	15.94	2.13	52.53	41
+-1	2	2	340	26.58	1279	1114	0.63	4790	0	5	3034	966	855	0.00	17.46	15.16	40.70	17.76	2.24	53.41	41
+-1	3	3	365	27.99	1303	1114	0.65	3921	0	19	2924	953	692	0.02	16.36	15.07	40.44	16.79	2.02	53.19	41
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	272	14.77	1842	1114	0.75	17555	0	204	18261	2931	4002	0.03	20.54	10.63	53.26	22.90	2.11	60.22	36	41	0.00	10.54	3.17	0.24	2.86	14.20	0.00	0.00	0.00	2.76	1.03	0.01	0.00
+-1	0	0	205	11.89	1726	1114	0.62	3700	0	14	3884	882	1041	0.01	19.94	13.08	54.47	22.19	2.32	63.60	35	41	0.00	10.54	3.17	0.24	2.86	14.20	0.00	0.00	0.00	2.76	1.03	0.01	0.00
+-1	1	1	231	14.10	1641	1114	0.61	3081	0	14	3773	705	913	0.02	17.83	10.36	57.18	19.50	2.15	64.25	36
+-1	2	2	434	20.14	2155	1114	0.93	7920	0	17	6929	599	1102	0.02	25.98	7.93	44.54	30.12	1.77	47.97	36
+-1	3	3	217	12.94	1679	1114	0.66	2854	0	159	3675	745	946	0.06	18.41	11.17	56.87	19.77	2.22	65.07	36
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	67	7.71	872	1114	0.49	8078	0	3	4438	1931	3568	0.00	7.57	8.07	76.59	7.16	2.33	82.81	34	39	0.00	18.87	6.71	0.31	4.42	30.58	0.00	0.00	0.00	1.79	0.25	0.00	0.00
+-1	0	0	67	7.91	851	1114	0.47	2540	0	1	1155	574	823	0.00	8.32	9.07	74.58	7.98	2.35	81.76	34	39	0.00	18.87	6.71	0.31	4.42	30.58	0.00	0.00	0.00	1.79	0.25	0.00	0.00
+-1	1	1	71	7.86	903	1114	0.61	1673	0	0	981	468	807	0.00	6.54	8.20	77.32	6.11	2.21	83.81	34
+-1	2	2	61	7.20	846	1114	0.34	2188	0	1	1170	433	1142	0.00	7.78	7.27	77.73	7.38	2.59	82.83	34
+-1	3	3	70	7.87	886	1114	0.51	1677	0	1	1132	456	796	0.00	7.62	7.75	76.70	7.15	2.16	82.82	34
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	186	15.61	1190	1114	0.58	11606	0	6	6729	2461	3430	0.00	10.43	9.81	64.02	10.19	2.22	71.99	37	40	0.00	15.91	4.82	0.29	4.03	21.90	0.00	0.00	0.00	2.18	0.52	0.01	0.00
+-1	0	0	173	15.19	1140	1114	0.55	3588	0	2	1932	719	761	0.00	12.64	10.85	61.16	12.45	2.20	70.16	37	40	0.00	15.91	4.82	0.29	4.03	21.90	0.00	0.00	0.00	2.18	0.52	0.01	0.00
+-1	1	1	188	15.51	1212	1114	0.49	2419	0	0	1477	581	840	0.00	9.52	9.25	65.63	9.20	2.08	73.21	37
+-1	2	2	166	15.00	1107	1114	0.54	3133	0	4	1845	603	1036	0.00	10.53	9.94	64.44	10.32	2.48	72.20	37
+-1	3	3	216	16.75	1291	1114	0.71	2466	0	0	1475	558	793	0.00	9.02	9.20	64.88	8.77	2.09	72.38	37
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	367	29.43	1249	1114	0.63	20149	0	15	10237	3175	3229	0.00	15.34	11.82	43.27	15.43	1.97	53.17	38	42	0.00	11.40	1.72	0.35	2.85	7.87	0.00	0.00	0.00	2.72	0.89	0.02	0.00
+-1	0	0	361	29.05	1243	1114	0.62	5995	0	3	2745	828	717	0.01	16.71	12.20	41.90	16.77	1.92	52.26	37	42	0.00	11.40	1.72	0.35	2.85	7.87	0.00	0.00	0.00	2.72	0.89	0.02	0.00
+-1	1	1	359	28.80	1248	1114	0.57	3998	0	6	2454	753	815	0.01	14.63	10.90	45.53	14.74	1.89	54.56	38
+-1	2	2	396	30.87	1282	1114	0.71	5426	0	4	2562	832	892	0.00	14.91	12.72	41.36	15.10	2.16	51.86	38
+-1	3	3	354	29.00	1220	1114	0.62	4730	0	2	2476	762	805	0.00	15.09	11.47	44.32	15.09	1.92	53.99	38
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	347	29.31	1183	1114	0.60	17952	0	85	10086	3113	3311	0.01	14.53	11.83	44.23	14.64	1.98	54.07	38	42	0.00	11.93	2.05	0.34	2.76	8.87	0.00	0.00	0.00	2.60	0.77	0.02	0.00
+-1	0	0	335	27.42	1222	1114	0.58	5158	0	5	2749	879	770	0.01	16.93	13.12	42.39	16.96	2.00	53.61	38	42	0.00	11.93	2.05	0.34	2.76	8.87	0.00	0.00	0.00	2.60	0.77	0.02	0.00
+-1	1	1	371	32.11	1154	1114	0.62	3996	0	0	2437	695	758	0.00	12.69	10.36	44.72	12.85	1.81	53.24	38
+-1	2	2	334	28.92	1155	1114	0.59	4825	0	5	2432	749	994	0.01	14.50	11.41	45.09	14.49	2.14	54.45	38
+-1	3	3	347	28.78	1204	1114	0.62	3973	0	75	2468	790	789	0.01	13.98	12.42	44.71	14.26	1.96	55.00	38
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	305	26.88	1135	1114	0.56	16758	0	19	10448	3276	3494	0.00	15.03	12.52	45.41	15.15	2.12	55.85	37	41	0.00	12.90	1.85	0.39	3.09	8.45	0.00	0.00	0.00	2.53	0.70	0.02	0.00
+-1	0	0	293	26.02	1126	1114	0.53	4752	0	3	2761	897	860	0.00	17.06	13.66	43.06	17.24	2.12	54.62	37	41	0.00	12.90	1.85	0.39	3.09	8.45	0.00	0.00	0.00	2.53	0.70	0.02	0.00
+-1	1	1	300	26.49	1131	1114	0.55	3643	0	6	2516	812	853	0.01	13.91	12.24	47.22	14.01	2.04	57.46	37
+-1	2	2	326	28.73	1135	1114	0.52	4784	0	4	2609	874	931	0.00	15.64	13.45	42.02	15.77	2.32	53.17	37
+-1	3	3	301	26.27	1145	1114	0.64	3579	0	6	2562	693	850	0.00	13.50	10.74	49.35	13.59	1.98	58.16	37
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	413	33.12	1248	1114	0.66	21523	0	19	10432	3092	3261	0.00	14.52	11.68	40.56	14.71	1.89	50.29	55	55	0.00	10.55	1.52	0.34	2.53	7.03	0.00	0.00	0.00	2.83	0.95	0.02	0.00
+-1	0	0	405	32.98	1229	1114	0.59	6991	0	11	2983	822	797	0.00	15.61	11.97	39.30	15.75	1.85	49.41	55	55	0.00	10.55	1.52	0.34	2.52	7.03	0.00	0.00	0.00	2.82	0.95	0.02	0.00
+-1	1	1	404	31.52	1281	1114	0.68	4361	0	2	2453	776	826	0.00	14.53	11.95	41.89	14.63	1.87	51.99	55
+-1	2	2	437	35.58	1229	1114	0.68	5613	0	6	2476	832	808	0.00	14.01	12.69	37.59	14.38	2.04	48.00	55
+-1	3	3	406	32.39	1254	1114	0.70	4558	0	0	2520	662	830	0.00	13.92	10.12	43.44	14.07	1.80	51.74	55
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	297	27.30	1088	1113	0.57	17252	0	16	10283	3342	3378	0.00	15.51	12.49	44.54	15.58	2.06	55.06	38	40	0.00	11.67	2.00	0.34	2.80	9.08	0.00	0.00	0.00	2.48	0.66	0.02	0.00
+-1	0	0	285	25.73	1107	1114	0.55	4640	0	6	2586	892	813	0.01	16.45	13.14	44.55	16.44	2.03	55.79	37	40	0.00	11.67	2.00	0.34	2.80	9.08	0.00	0.00	0.00	2.48	0.66	0.02	0.00
+-1	1	1	318	29.12	1092	1114	0.58	3905	0	3	2312	800	796	0.00	13.96	12.23	44.53	14.05	1.93	54.89	37
+-1	2	2	297	27.32	1087	1114	0.55	5001	0	2	3063	884	907	0.00	17.10	13.26	42.19	17.23	2.28	53.17	37
+-1	3	3	288	27.03	1065	1114	0.61	3706	0	5	2322	766	862	0.01	14.56	11.34	46.94	14.60	1.99	56.39	38
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	279	27.60	1012	1114	0.57	16988	0	10	9961	3202	3466	0.00	15.21	12.27	44.81	15.25	2.05	55.09	37	41	0.00	12.51	1.86	0.35	3.02	8.25	0.00	0.00	0.00	2.40	0.60	0.02	0.00
+-1	0	0	310	30.35	1022	1114	0.56	4621	0	3	2292	822	797	0.00	14.77	12.95	41.78	14.86	2.00	52.80	37	41	0.00	12.51	1.86	0.35	3.02	8.25	0.00	0.00	0.00	2.40	0.60	0.02	0.00
+-1	1	1	263	25.66	1027	1114	0.54	4056	0	2	2447	833	850	0.00	14.96	12.71	46.58	14.99	2.01	57.34	37
+-1	2	2	282	28.29	996	1114	0.59	4669	0	2	2795	792	988	0.00	15.82	12.04	43.76	15.95	2.22	53.54	37
+-1	3	3	262	26.10	1002	1114	0.59	3642	0	3	2427	755	831	0.00	15.27	11.40	47.13	15.21	1.98	56.70	37
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	281	27.47	1024	1114	0.58	16868	0	19	10405	3251	3382	0.00	15.42	12.15	44.85	15.49	2.06	54.99	38	40	0.00	12.42	1.95	0.34	2.70	8.88	0.00	0.00	0.00	2.43	0.62	0.02	0.00
+-1	0	0	274	27.16	1007	1114	0.60	4676	0	3	2770	887	817	0.00	17.39	12.63	42.66	17.55	2.05	53.23	38	40	0.00	12.42	1.95	0.34	2.70	8.88	0.00	0.00	0.00	2.43	0.62	0.02	0.00
+-1	1	1	297	28.20	1052	1114	0.59	3849	0	6	2323	781	813	0.01	14.14	11.73	45.83	14.07	1.96	55.77	38
+-1	2	2	290	28.44	1021	1114	0.54	4641	0	6	2651	868	934	0.00	15.15	13.19	43.08	15.36	2.29	53.91	38
+-1	3	3	264	26.06	1014	1114	0.59	3702	0	4	2661	715	818	0.00	15.01	11.03	47.82	14.96	1.95	57.04	38
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	308	24.69	1249	1114	0.58	16227	0	40	10623	3407	3463	0.00	15.12	12.93	47.04	15.31	2.17	57.83	37	40	0.00	12.86	2.21	0.36	2.97	9.49	0.00	0.00	0.00	2.56	0.75	0.02	0.00
+-1	0	0	340	27.38	1241	1114	0.50	4704	0	6	2503	864	732	0.01	15.96	13.14	43.23	16.09	2.05	54.49	37	40	0.00	12.86	2.21	0.36	2.97	9.49	0.00	0.00	0.00	2.56	0.75	0.02	0.00
+-1	1	1	297	25.38	1169	1114	0.60	3683	0	4	2630	811	883	0.00	14.06	12.51	47.82	14.28	2.10	58.24	37
+-1	2	2	344	25.89	1328	1114	0.69	4560	0	29	2870	888	963	0.01	15.61	13.48	44.82	15.93	2.35	55.83	37
+-1	3	3	254	20.12	1260	1114	0.52	3280	0	1	2620	844	885	0.00	14.85	12.61	52.30	14.95	2.17	62.76	37
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	359	27.84	1291	1114	0.62	17148	0	149	11040	3194	3470	0.01	15.22	11.84	44.96	15.53	2.04	54.59	37	41	0.00	11.77	1.93	0.37	2.69	9.28	0.00	0.00	0.00	2.69	0.87	0.02	0.00
+-1	0	0	354	27.27	1297	1114	0.62	4923	0	135	2924	916	796	0.03	17.77	13.25	41.51	17.93	2.05	52.75	37	41	0.00	11.77	1.93	0.37	2.69	9.28	0.00	0.00	0.00	2.69	0.87	0.02	0.00
+-1	1	1	355	27.30	1301	1114	0.56	3670	0	8	2605	751	928	0.01	13.76	11.46	47.39	14.20	2.00	56.51	37
+-1	2	2	358	28.01	1277	1114	0.63	4665	0	3	2822	767	972	0.00	15.36	11.38	45.10	15.72	2.17	54.10	37
+-1	3	3	371	28.77	1288	1114	0.65	3890	0	3	2689	760	774	0.00	13.98	11.27	45.84	14.29	1.92	55.02	37
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	298	27.14	1097	1114	0.58	18285	0	11	10631	3246	3509	0.00	15.27	12.37	45.09	15.52	2.08	55.27	38	41	0.00	12.35	1.89	0.39	2.97	8.09	0.00	0.00	0.00	2.49	0.67	0.02	0.00
+-1	0	0	272	24.96	1090	1114	0.56	4993	0	2	2853	954	854	0.00	18.06	14.27	42.55	18.25	2.16	54.63	38	41	0.00	12.35	1.89	0.39	2.97	8.09	0.00	0.00	0.00	2.49	0.67	0.02	0.00
+-1	1	1	303	27.57	1100	1114	0.58	4469	0	4	2399	770	828	0.00	13.88	12.22	46.19	14.03	2.02	56.38	37
+-1	2	2	314	28.08	1117	1114	0.57	5312	0	2	2985	761	977	0.00	15.53	11.50	44.76	15.90	2.16	53.85	37
+-1	3	3	301	27.95	1079	1114	0.59	3511	0	3	2394	761	850	0.00	13.61	11.51	46.83	13.89	1.96	56.20	37
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	259	17.65	1468	1114	0.75	13589	0	26	8577	2992	3382	0.01	12.60	11.48	58.03	12.75	2.18	67.42	38	41	0.00	11.77	3.84	0.13	2.70	17.72	0.00	0.00	0.00	2.54	0.79	0.03	0.00
+-1	0	0	290	18.88	1535	1114	0.71	4024	0	2	2236	860	752	0.00	15.17	12.82	52.83	15.34	2.18	63.60	38	41	0.00	11.77	3.84	0.13	2.70	17.72	0.00	0.00	0.00	2.54	0.79	0.03	0.00
+-1	1	1	208	14.95	1394	1114	0.64	2857	0	7	2067	677	917	0.01	11.58	10.18	63.10	11.65	2.09	71.31	38
+-1	2	2	305	19.68	1549	1114	0.93	3838	0	10	2345	778	901	0.01	13.39	11.95	54.69	13.58	2.36	64.38	38
+-1	3	3	233	17.08	1365	1114	0.65	2870	0	7	1929	677	812	0.01	10.25	10.98	61.50	10.42	2.10	70.39	38
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	291	20.96	1388	1114	0.69	18698	0	27	9349	3844	3458	0.01	13.64	15.17	50.07	14.14	2.29	62.61	39	42	0.00	9.92	2.40	0.07	2.79	11.35	0.00	0.00	0.00	2.60	0.80	0.04	0.00
+-1	0	0	296	20.28	1458	1114	0.76	4996	0	2	2611	1122	852	0.00	17.42	16.83	45.27	18.04	2.41	59.27	39	42	0.00	9.92	2.40	0.07	2.79	11.35	0.00	0.00	0.00	2.60	0.80	0.04	0.00
+-1	1	1	285	21.07	1353	1114	0.69	3535	0	9	2272	924	806	0.01	12.58	14.83	51.40	13.02	2.16	63.76	39
+-1	2	2	307	22.61	1358	1114	0.68	4969	0	11	2318	812	1005	0.00	12.93	12.72	51.58	13.49	2.31	61.59	39
+-1	3	3	276	19.87	1389	1114	0.62	5198	0	5	2148	986	795	0.01	11.65	16.31	52.03	12.00	2.30	65.83	39
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	349	25.67	1359	1114	0.53	19188	0	25	12279	4997	3510	0.01	19.35	18.77	35.96	19.77	2.47	52.10	38	41	0.00	8.91	1.28	0.03	2.84	5.44	0.00	0.00	0.00	2.87	0.96	0.04	0.00
+-1	0	0	310	24.19	1280	1114	0.50	6123	0	10	3579	1316	723	0.01	23.31	19.15	33.05	23.80	2.40	49.61	38	41	0.00	8.91	1.28	0.03	2.84	5.44	0.00	0.00	0.00	2.87	0.96	0.04	0.00
+-1	1	1	480	30.62	1567	1114	0.59	4328	0	4	2538	1133	819	0.01	15.64	17.32	36.13	16.14	2.26	50.98	38
+-1	2	2	286	22.90	1250	1114	0.52	4643	0	5	3246	1249	1097	0.01	20.12	18.55	38.22	20.53	2.64	53.93	38
+-1	3	3	320	24.96	1280	1114	0.50	4094	0	6	2916	1299	871	0.01	18.31	20.06	36.42	18.61	2.57	53.86	38
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	481	25.46	1889	1114	0.73	16983	0	15	13105	2911	3244	0.00	14.51	11.03	48.79	15.37	1.98	57.19	42	46	0.00	11.44	2.42	0.22	3.01	11.52	0.00	0.00	0.00	3.25	1.43	0.02	0.00
+-1	0	0	501	28.89	1735	1114	0.73	4499	0	1	3253	718	663	0.00	14.01	11.10	45.71	15.01	1.82	54.29	42	46	0.00	11.44	2.42	0.22	3.01	11.52	0.00	0.00	0.00	3.25	1.43	0.02	0.00
+-1	1	1	452	24.13	1874	1114	0.72	3838	0	3	3274	681	847	0.00	13.46	10.18	52.08	14.64	1.91	59.33	42
+-1	2	2	436	23.20	1880	1114	0.61	5045	0	9	3807	876	971	0.00	17.22	13.20	46.22	17.97	2.34	56.48	42
+-1	3	3	534	25.63	2085	1114	0.82	3601	0	2	2771	636	763	0.00	13.36	9.63	51.16	13.86	1.83	58.68	42
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	546	29.45	1853	1114	0.99	18970	0	28	12887	3241	3223	0.01	15.09	12.45	42.78	15.95	1.94	52.66	79	79	0.00	9.84	1.68	0.29	2.61	7.60	0.00	0.00	0.00	3.52	1.65	0.02	0.00
+-1	0	0	480	25.50	1881	1114	1.07	5098	0	8	3703	987	807	0.01	18.01	14.83	41.42	18.99	2.06	53.46	79	79	0.00	9.84	1.68	0.29	2.61	7.60	0.00	0.00	0.00	3.52	1.65	0.02	0.00
+-1	1	1	623	31.11	2002	1114	0.98	4192	0	4	2938	766	837	0.00	14.40	11.87	42.39	15.15	1.90	51.85	79
+-1	2	2	504	28.59	1763	1114	1.02	5210	0	7	3468	907	883	0.01	15.42	13.90	41.85	16.41	2.14	52.86	79
+-1	3	3	577	32.61	1769	1114	0.92	4470	0	9	2778	581	696	0.01	12.52	9.19	45.44	13.24	1.65	52.49	79
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	471	31.32	1505	1113	1.09	18770	0	12	11841	3520	3623	0.00	15.91	12.75	39.83	16.38	2.03	50.27	39	41	0.00	10.77	1.45	0.36	2.78	6.23	0.00	0.00	0.00	3.14	1.31	0.01	0.00
+-1	0	0	466	31.01	1503	1114	1.13	4594	0	4	3074	909	869	0.01	16.80	13.34	38.65	17.40	1.97	49.62	38	41	0.00	10.77	1.45	0.36	2.78	6.23	0.00	0.00	0.00	3.14	1.32	0.01	0.00
+-1	1	1	509	34.44	1477	1114	1.12	4346	0	1	2474	784	811	0.00	13.43	11.31	40.63	13.77	1.85	49.94	38
+-1	2	2	462	30.72	1503	1114	0.92	5834	0	4	3532	966	1002	0.01	17.89	14.05	37.16	18.52	2.24	48.51	38
+-1	3	3	450	29.12	1544	1114	1.18	3996	0	3	2761	861	941	0.01	15.52	12.30	42.89	15.82	2.06	52.99	39
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	264	26.94	979	1114	0.58	17622	0	16	11803	3495	3730	0.01	16.78	13.09	43.13	16.88	2.15	54.03	38	42	0.00	11.83	1.48	0.34	3.33	6.63	0.00	0.00	0.00	2.37	0.59	0.01	0.00
+-1	0	0	283	28.42	996	1114	0.56	4701	0	4	2858	916	808	0.00	17.52	13.79	40.14	17.67	2.06	51.85	38	42	0.00	11.83	1.48	0.34	3.33	6.63	0.00	0.00	0.00	2.37	0.59	0.01	0.00
+-1	1	1	252	25.53	989	1114	0.55	3946	0	2	2717	837	990	0.00	16.14	12.50	45.77	16.22	2.11	56.14	38
+-1	2	2	267	27.68	963	1114	0.59	4947	0	5	3112	886	1015	0.01	17.02	13.10	42.14	17.12	2.31	52.90	38
+-1	3	3	253	26.11	969	1114	0.61	4028	0	5	3116	856	917	0.01	16.42	12.94	44.48	16.53	2.12	55.23	38
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	336	27.49	1223	1114	0.64	17418	0	27	10808	3486	3714	0.01	15.79	13.18	43.39	15.94	2.16	54.41	37	42	0.00	12.06	1.59	0.39	3.11	7.32	0.00	0.00	0.00	2.61	0.81	0.01	0.00
+-1	0	0	362	28.34	1278	1114	0.80	4644	0	9	2861	931	877	0.01	17.00	14.20	40.29	17.29	2.13	52.24	36	42	0.00	12.06	1.59	0.39	3.11	7.32	0.00	0.00	0.00	2.61	0.81	0.01	0.00
+-1	1	1	335	27.39	1222	1114	0.55	3988	0	2	2636	890	861	0.00	15.65	13.74	43.09	15.74	2.12	54.75	36
+-1	2	2	330	27.31	1209	1114	0.58	4944	0	13	2797	892	1056	0.02	15.66	13.03	43.89	15.79	2.33	54.57	36
+-1	3	3	318	26.93	1179	1114	0.63	3842	0	3	2514	773	920	0.00	14.87	11.78	46.32	14.94	2.07	56.06	37
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	335	25.67	1306	1114	0.58	17509	0	20	11715	3587	3919	0.01	16.82	13.48	43.85	17.01	2.27	55.05	40	43	0.00	12.47	1.49	0.31	3.49	6.63	0.00	0.00	0.00	2.62	0.81	0.01	0.00
+-1	0	0	335	25.39	1319	1114	0.57	4336	0	5	2922	952	942	0.01	17.72	14.16	42.50	17.89	2.21	54.50	40	43	0.00	12.47	1.49	0.31	3.49	6.63	0.00	0.00	0.00	2.62	0.81	0.01	0.00
+-1	1	1	347	26.54	1309	1114	0.61	4235	0	4	2912	930	929	0.00	16.55	14.19	42.54	16.75	2.25	54.46	40
+-1	2	2	363	28.23	1286	1114	0.58	5235	0	3	2985	909	1062	0.00	16.78	13.51	41.26	17.14	2.44	52.19	40
+-1	3	3	296	22.53	1313	1114	0.57	3703	0	8	2896	796	986	0.01	16.21	12.04	49.07	16.26	2.18	59.03	40
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	260	24.13	1079	1114	0.54	16717	0	20	12900	3753	3823	0.01	17.81	13.83	44.08	18.35	2.24	55.28	38	41	0.00	12.42	1.54	0.45	3.30	6.51	0.00	0.00	0.00	2.40	0.62	0.01	0.00
+-1	0	0	273	25.26	1082	1114	0.56	4272	0	8	3190	952	880	0.01	17.70	14.21	42.64	18.20	2.16	54.38	38	41	0.00	12.42	1.54	0.45	3.30	6.51	0.00	0.00	0.00	2.40	0.62	0.01	0.00
+-1	1	1	228	21.57	1056	1114	0.51	3976	0	4	3523	1002	957	0.00	19.40	14.51	44.42	20.00	2.27	56.16	38
+-1	2	2	289	26.41	1096	1114	0.53	4876	0	5	3374	940	1011	0.00	18.69	13.64	41.11	19.40	2.34	51.85	37
+-1	3	3	251	23.28	1077	1114	0.56	3593	0	3	2813	859	975	0.00	15.45	12.95	48.18	15.82	2.19	58.71	37
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	280	22.98	1217	1114	0.56	16702	0	39	12601	3786	3822	0.01	17.34	14.00	45.50	17.86	2.30	56.86	37	42	0.00	13.31	1.43	0.50	3.52	6.71	0.00	0.00	0.00	2.46	0.67	0.01	0.00
+-1	0	0	292	24.19	1209	1114	0.56	4175	0	20	3226	929	896	0.02	17.85	14.08	43.63	18.47	2.17	55.16	37	42	0.00	13.31	1.43	0.50	3.52	6.71	0.00	0.00	0.00	2.46	0.67	0.01	0.00
+-1	1	1	265	20.57	1287	1114	0.62	3535	0	4	3025	924	1006	0.01	16.62	13.70	48.97	17.04	2.29	60.10	37
+-1	2	2	279	23.26	1197	1114	0.52	4998	0	7	3247	985	992	0.01	18.46	13.87	44.25	18.79	2.44	55.51	37
+-1	3	3	283	23.90	1185	1114	0.55	3994	0	8	3103	948	928	0.01	16.40	14.37	45.15	17.15	2.30	56.65	37
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	293	21.29	1375	1114	0.59	15940	0	18	12425	3712	3958	0.01	17.02	14.00	47.44	17.52	2.36	58.83	37	40	0.00	13.49	1.77	0.39	3.74	7.88	0.00	0.00	0.00	2.58	0.80	0.01	0.00
+-1	0	0	331	23.72	1394	1114	0.67	4046	0	5	2993	844	930	0.00	16.89	12.68	46.44	17.39	2.17	56.72	37	40	0.00	13.49	1.77	0.39	3.74	7.88	0.00	0.00	0.00	2.58	0.80	0.01	0.00
+-1	1	1	254	19.12	1329	1114	0.55	3618	0	2	3118	977	994	0.00	17.33	14.74	48.62	17.78	2.37	60.74	37
+-1	2	2	311	21.87	1420	1114	0.59	4676	0	7	3186	1009	1050	0.01	17.63	15.02	45.20	18.11	2.57	57.46	37
+-1	3	3	275	20.45	1346	1114	0.54	3600	0	4	3128	882	984	0.01	16.25	13.55	49.49	16.81	2.33	60.41	37
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	266	21.08	1263	1114	0.54	15466	0	12	11244	3637	3969	0.00	16.55	13.73	48.45	16.70	2.37	59.86	46	46	0.00	13.53	2.13	0.35	3.79	8.83	0.00	0.00	0.00	2.47	0.70	0.01	0.00
+-1	0	0	280	20.63	1359	1114	0.62	4055	0	4	2855	994	968	0.01	17.85	15.36	45.90	18.03	2.39	58.95	46	46	0.00	13.53	2.13	0.35	3.79	8.83	0.00	0.00	0.00	2.47	0.70	0.01	0.00
+-1	1	1	262	21.56	1216	1114	0.50	3496	0	2	2661	854	979	0.00	15.87	13.04	49.36	16.05	2.28	60.11	46
+-1	2	2	267	21.92	1220	1114	0.47	4465	0	4	2859	924	1061	0.00	16.27	13.67	47.97	16.42	2.51	59.15	46
+-1	3	3	255	20.20	1260	1114	0.56	3450	0	2	2869	865	961	0.00	16.19	12.86	50.55	16.28	2.29	61.23	46
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	259	22.96	1129	1113	0.55	15604	0	10	11622	3539	3791	0.00	16.71	13.04	47.15	16.87	2.27	57.90	36	40	0.00	13.70	1.69	0.45	3.64	8.15	0.00	0.00	0.00	2.41	0.65	0.01	0.00
+-1	0	0	256	21.09	1214	1114	0.60	3905	0	2	2985	969	956	0.00	18.53	13.82	46.40	18.71	2.29	57.92	35	40	0.00	13.70	1.69	0.45	3.64	8.15	0.00	0.00	0.00	2.41	0.65	0.01	0.00
+-1	1	1	272	25.13	1082	1114	0.53	3758	0	4	2901	864	839	0.00	16.05	13.14	45.52	16.37	2.15	56.35	36
+-1	2	2	260	23.23	1120	1114	0.50	4702	0	3	3236	965	981	0.00	17.62	13.99	45.04	17.73	2.50	56.53	36
+-1	3	3	248	22.38	1110	1114	0.56	3239	0	1	2500	741	1015	0.00	14.64	11.19	51.68	14.65	2.16	60.80	36
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	403	27.29	1475	1114	0.69	18306	0	22	11549	3561	3664	0.01	15.99	13.44	43.08	16.35	2.19	54.18	37	40	0.00	11.67	1.64	0.45	3.26	7.19	0.00	0.00	0.00	2.91	1.09	0.01	0.00
+-1	0	0	415	27.78	1494	1114	0.64	5173	0	2	2852	1013	800	0.00	17.08	15.77	39.10	17.38	2.24	52.60	37	40	0.00	11.67	1.64	0.45	3.26	7.19	0.00	0.00	0.00	2.91	1.09	0.01	0.00
+-1	1	1	372	26.52	1401	1114	0.65	4157	0	4	3060	922	879	0.00	15.63	13.58	44.07	16.07	2.14	55.26	37
+-1	2	2	433	29.44	1470	1114	0.71	4917	0	3	2662	825	1050	0.00	15.45	12.29	42.62	15.86	2.29	52.41	37
+-1	3	3	391	25.42	1537	1114	0.77	4059	0	13	2975	801	935	0.02	15.81	12.10	46.52	16.07	2.08	56.43	37
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	285	23.32	1221	1114	0.53	18648	0	21	12809	3800	3863	0.01	17.95	14.42	44.10	18.48	2.30	55.90	40	44	0.00	12.11	1.57	0.34	3.44	6.10	0.00	0.00	0.00	2.56	0.76	0.01	0.00
+-1	0	0	251	22.00	1141	1114	0.48	5191	0	7	3623	1074	960	0.01	19.83	16.19	41.72	20.65	2.31	55.05	40	44	0.00	12.11	1.57	0.34	3.44	6.10	0.00	0.00	0.00	2.56	0.76	0.01	0.00
+-1	1	1	293	25.40	1154	1114	0.55	3786	0	7	2977	804	908	0.01	17.06	13.16	44.22	17.67	2.06	54.86	40
+-1	2	2	347	24.78	1400	1114	0.59	4739	0	5	2975	935	1047	0.01	17.56	13.50	43.94	17.80	2.45	54.96	40
+-1	3	3	248	21.08	1176	1114	0.46	4932	0	2	3234	987	948	0.00	17.34	14.85	46.53	17.81	2.37	58.74	40
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	327	25.82	1266	1114	0.59	17390	0	31	12123	3818	3883	0.00	17.21	14.22	42.58	17.60	2.27	54.32	38	40	0.00	11.50	1.52	0.23	3.25	6.81	0.00	0.00	0.00	2.60	0.81	0.01	0.00
+-1	0	0	356	27.72	1284	1114	0.55	4280	0	3	2838	963	852	0.00	16.58	14.19	41.29	16.97	2.11	53.21	38	40	0.00	11.50	1.52	0.23	3.25	6.81	0.00	0.00	0.00	2.60	0.81	0.01	0.00
+-1	1	1	317	24.69	1283	1114	0.62	3998	0	0	2751	960	978	0.00	16.74	14.55	43.86	16.87	2.29	56.15	38
+-1	2	2	329	26.00	1265	1114	0.58	5335	0	24	3670	1023	1076	0.00	19.89	15.26	38.66	20.57	2.48	50.95	38
+-1	3	3	306	24.85	1230	1114	0.62	3777	0	4	2864	872	977	0.00	15.61	12.87	46.49	15.97	2.21	56.97	38
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	450	22.42	2007	1114	0.85	15272	0	51	10856	3072	3321	0.01	13.45	11.89	51.97	13.96	2.12	61.51	42	46	0.00	10.57	2.99	0.10	3.18	13.56	0.00	0.00	0.00	3.28	1.47	0.02	0.00
+-1	0	0	408	21.56	1893	1114	0.85	4174	0	10	3103	871	788	0.01	15.44	13.45	49.26	16.27	2.13	60.04	42	46	0.00	10.57	2.99	0.10	3.18	13.56	0.00	0.00	0.00	3.28	1.47	0.02	0.00
+-1	1	1	458	22.69	2020	1114	0.77	3286	0	4	2418	616	790	0.00	11.93	9.72	55.42	12.08	1.93	63.30	42
+-1	2	2	448	21.91	2044	1114	0.81	4394	0	10	2841	834	953	0.00	14.12	12.76	50.95	14.74	2.36	60.99	42
+-1	3	3	486	23.51	2065	1114	0.95	3418	0	27	2494	751	790	0.01	12.30	11.66	52.26	12.75	2.04	61.70	42
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	191	16.92	1131	1114	0.63	13912	0	19	7933	3540	3499	0.01	12.83	13.98	56.11	12.95	2.26	67.87	35	39	0.00	10.03	3.43	0.03	2.41	15.84	0.00	0.00	0.00	2.31	0.54	0.04	0.00
+-1	0	0	198	17.46	1135	1114	0.60	4861	0	6	2484	1082	819	0.01	17.52	16.73	48.04	17.82	2.33	62.39	35	39	0.00	10.03	3.43	0.03	2.41	15.84	0.00	0.00	0.00	2.31	0.54	0.04	0.00
+-1	1	1	186	16.26	1144	1114	0.60	2997	0	4	2075	904	843	0.01	12.71	14.46	56.41	12.89	2.18	68.67	35
+-1	2	2	181	15.95	1133	1114	0.64	3328	0	4	1824	780	1121	0.01	11.25	12.43	60.25	11.22	2.44	70.39	35
+-1	3	3	200	18.00	1113	1114	0.68	2726	0	5	1550	774	716	0.01	9.83	12.29	59.73	9.87	2.09	70.03	34
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	335	19.61	1711	1114	0.66	17780	0	15	9593	3717	3829	0.00	13.78	14.53	51.83	14.12	2.44	63.83	39	43	0.00	12.50	2.65	0.22	3.80	12.14	0.00	0.00	0.00	2.81	1.02	0.03	0.00
+-1	0	0	411	23.76	1729	1114	0.67	4478	0	0	2321	834	911	0.00	13.95	12.54	49.37	14.32	2.30	59.62	39	43	0.00	12.50	2.65	0.22	3.80	12.14	0.00	0.00	0.00	2.81	1.02	0.03	0.00
+-1	1	1	343	19.70	1739	1114	0.67	5525	0	4	2305	1032	790	0.00	13.20	16.52	50.36	13.46	2.40	64.43	39
+-1	2	2	336	19.60	1715	1114	0.64	4161	0	3	2475	966	1100	0.00	14.49	15.61	50.09	14.86	2.69	62.86	39
+-1	3	3	252	15.36	1639	1114	0.65	3616	0	8	2492	885	1028	0.01	13.49	13.46	57.51	13.84	2.38	68.42	39
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	359	27.18	1319	1114	0.64	17875	0	16	10650	3892	2944	0.00	15.88	14.85	41.94	16.32	2.12	54.39	37	40	0.00	9.75	2.32	0.07	3.12	10.75	0.00	0.00	0.00	2.78	0.94	0.03	0.00
+-1	0	0	325	25.39	1281	1114	0.60	5607	0	3	3094	1064	693	0.00	18.49	15.80	40.15	18.83	2.14	53.64	36	40	0.00	9.75	2.32	0.07	3.12	10.75	0.00	0.00	0.00	2.78	0.94	0.03	0.00
+-1	1	1	367	29.03	1264	1114	0.60	3723	0	3	2415	897	728	0.00	14.68	13.50	42.67	15.02	1.99	53.97	37
+-1	2	2	339	25.33	1338	1114	0.69	4436	0	4	2713	964	833	0.00	15.80	14.68	44.08	16.29	2.21	56.17	37
+-1	3	3	403	28.95	1392	1114	0.66	4109	0	6	2428	967	690	0.00	14.56	15.42	40.88	15.15	2.12	53.77	37
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	617	36.70	1681	1114	0.64	23665	0	40	17906	3459	2909	0.01	20.61	12.16	30.36	21.48	1.73	40.09	49	49	0.00	7.20	0.88	0.17	1.74	3.82	0.00	0.00	0.00	3.55	1.57	0.02	0.00
+-1	0	0	605	36.17	1674	1114	0.67	6285	0	11	4825	905	687	0.01	21.96	12.18	29.50	22.91	1.68	39.25	49	49	0.00	7.20	0.88	0.17	1.74	3.82	0.00	0.00	0.00	3.55	1.57	0.02	0.00
+-1	1	1	664	38.02	1747	1114	0.66	5586	0	9	4196	832	708	0.01	19.30	11.81	30.67	20.34	1.68	39.97	49
+-1	2	2	607	37.42	1621	1114	0.60	6844	0	6	4566	895	764	0.01	21.16	12.95	28.30	21.95	1.86	38.78	49
+-1	3	3	592	35.19	1681	1114	0.64	4950	0	14	4319	827	750	0.01	19.99	11.69	32.96	20.73	1.71	42.37	49
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	601	35.12	1711	1113	0.72	23755	0	49	22772	3962	2750	0.01	23.01	14.41	27.23	25.13	1.77	37.98	41	46	0.00	6.10	0.61	0.04	1.90	2.62	0.00	0.00	0.00	3.53	1.60	0.02	0.00
+-1	0	0	593	34.55	1717	1114	0.72	6337	0	11	6021	1056	541	0.01	25.10	15.24	24.90	26.87	1.70	36.87	41	46	0.00	6.10	0.61	0.04	1.90	2.62	0.00	0.00	0.00	3.53	1.60	0.02	0.00
+-1	1	1	582	33.33	1747	1114	0.64	5689	0	7	5594	1013	735	0.00	22.91	15.08	28.49	24.86	1.80	40.01	41
+-1	2	2	645	38.27	1685	1114	0.87	6341	0	10	5712	902	758	0.00	22.34	12.42	26.74	24.54	1.75	35.44	41
+-1	3	3	583	34.33	1698	1114	0.64	5388	0	21	5445	991	716	0.01	21.71	14.91	28.82	24.24	1.83	39.60	41
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	511	34.26	1490	1114	0.71	23349	0	37	22739	4120	2854	0.01	22.58	14.86	28.14	25.05	1.82	38.87	40	43	0.00	6.72	0.49	0.06	2.09	2.58	0.00	0.00	0.00	3.22	1.31	0.02	0.00
+-1	0	0	504	34.81	1449	1114	0.66	6148	0	6	5821	1071	677	0.01	22.93	15.18	26.89	25.77	1.75	37.67	39	43	0.00	6.72	0.49	0.06	2.09	2.58	0.00	0.00	0.00	3.22	1.31	0.02	0.00
+-1	1	1	569	37.71	1508	1114	0.81	5501	0	3	5294	957	660	0.00	20.41	14.16	27.53	22.66	1.72	37.91	39
+-1	2	2	471	31.94	1473	1114	0.61	6146	0	14	5840	1064	864	0.01	23.78	15.01	29.13	26.44	1.98	39.64	39
+-1	3	3	499	32.58	1531	1114	0.74	5554	0	14	5784	1028	653	0.02	23.20	15.07	29.02	25.35	1.83	40.24	40
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	590	35.47	1664	1114	0.76	23380	0	52	21619	3902	2894	0.01	21.74	14.34	28.25	23.85	1.83	38.85	43	45	0.00	7.15	0.57	0.05	2.42	2.67	0.00	0.00	0.00	3.50	1.57	0.02	0.00
+-1	0	0	603	35.64	1693	1114	0.76	6336	0	11	5652	1028	672	0.00	23.47	15.37	25.29	25.71	1.81	36.84	43	45	0.00	7.15	0.57	0.05	2.42	2.67	0.00	0.00	0.00	3.50	1.57	0.02	0.00
+-1	1	1	610	36.92	1653	1114	0.84	5539	0	8	5016	963	728	0.01	20.09	14.42	28.36	22.35	1.79	38.94	43
+-1	2	2	545	33.93	1606	1114	0.62	6288	0	17	5709	1032	771	0.01	23.03	14.85	28.02	24.96	1.98	39.13	43
+-1	3	3	602	35.41	1700	1114	0.80	5217	0	16	5242	879	723	0.01	20.36	12.73	31.35	22.39	1.74	40.46	43
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	516	32.63	1582	1114	0.72	22549	0	54	22107	4031	3080	0.01	22.19	14.96	30.04	24.22	1.93	41.22	41	44	0.00	7.20	0.80	0.02	2.58	3.04	0.00	0.00	0.00	3.27	1.37	0.02	0.00
+-1	0	0	564	34.81	1621	1114	0.84	6095	0	8	5679	984	680	0.00	23.20	14.09	27.67	25.36	1.76	38.07	40	44	0.00	7.19	0.80	0.02	2.58	3.04	0.00	0.00	0.00	3.27	1.37	0.02	0.00
+-1	1	1	506	32.37	1563	1114	0.72	5080	0	12	5263	1032	748	0.01	20.80	15.32	31.33	22.63	1.93	43.07	40
+-1	2	2	520	32.09	1621	1114	0.68	6155	0	18	5585	1099	807	0.01	22.83	16.52	28.36	24.79	2.13	40.99	40
+-1	3	3	475	31.23	1520	1114	0.64	5219	0	16	5580	916	845	0.02	21.95	13.89	32.80	24.10	1.92	42.74	41
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	529	34.86	1518	1114	0.72	23141	0	56	21707	3757	2816	0.01	21.80	13.72	29.45	23.73	1.79	39.63	43	45	0.00	6.90	0.98	0.04	2.39	3.73	0.00	0.00	0.00	3.29	1.38	0.02	0.00
+-1	0	0	572	37.14	1541	1114	0.79	6287	0	21	5109	870	688	0.02	20.96	12.65	29.04	22.91	1.69	38.26	43	45	0.00	6.90	0.98	0.04	2.39	3.73	0.00	0.00	0.00	3.29	1.38	0.02	0.00
+-1	1	1	534	34.68	1539	1114	0.73	5473	0	15	5463	954	674	0.01	21.86	13.90	29.37	23.51	1.73	40.07	43
+-1	2	2	506	34.01	1487	1114	0.68	6297	0	8	5982	1038	711	0.01	23.77	14.99	27.08	26.13	1.92	37.94	43
+-1	3	3	505	33.61	1504	1114	0.70	5084	0	12	5153	895	743	0.01	20.59	13.34	32.30	22.35	1.80	42.25	43
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	495	33.36	1484	1114	0.72	22948	0	41	23029	4223	2840	0.01	23.17	15.33	27.94	25.82	1.85	38.97	42	44	0.00	7.06	0.70	0.05	2.13	2.87	0.00	0.00	0.00	3.21	1.31	0.01	0.00
+-1	0	0	481	32.66	1473	1114	0.73	6123	0	4	5728	1115	692	0.00	23.26	16.49	27.37	25.96	1.85	39.53	42	44	0.00	7.06	0.70	0.05	2.13	2.87	0.00	0.00	0.00	3.21	1.31	0.01	0.00
+-1	1	1	515	34.97	1474	1114	0.76	5559	0	13	5689	1019	658	0.01	22.93	14.41	27.53	25.43	1.75	37.85	42
+-1	2	2	468	31.65	1480	1114	0.64	6233	0	12	6249	1128	781	0.01	24.54	16.45	27.17	27.94	1.97	38.44	42
+-1	3	3	516	34.15	1510	1114	0.74	5033	0	12	5363	961	709	0.01	21.97	13.98	29.70	23.95	1.81	40.08	42
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	601	36.33	1655	1114	0.72	24156	0	43	22624	3901	2650	0.01	22.18	14.27	27.01	24.56	1.76	37.34	45	46	0.00	7.09	0.65	0.05	2.44	2.83	0.00	0.00	0.00	3.54	1.59	0.02	0.00
+-1	0	0	630	37.21	1693	1114	0.76	6634	0	10	5774	979	620	0.00	22.24	14.05	26.21	24.97	1.69	36.13	45	46	0.00	7.09	0.65	0.05	2.44	2.83	0.00	0.00	0.00	3.54	1.59	0.02	0.00
+-1	1	1	552	33.97	1625	1114	0.62	5815	0	7	5747	1083	627	0.01	22.40	16.20	27.25	24.70	1.84	39.49	45
+-1	2	2	623	37.90	1643	1114	0.73	6196	0	12	5534	901	722	0.01	22.23	13.11	26.53	24.71	1.74	35.64	45
+-1	3	3	601	36.25	1657	1114	0.78	5511	0	14	5569	938	681	0.01	21.83	13.72	28.03	23.87	1.78	38.10	45
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	526	33.58	1566	1114	0.73	23270	0	45	23337	4061	2813	0.01	23.10	14.76	28.36	25.44	1.82	39.16	44	44	0.00	6.78	0.75	0.03	2.18	3.20	0.00	0.00	0.00	3.31	1.40	0.02	0.00
+-1	0	0	512	33.66	1521	1114	0.70	6217	0	13	6128	975	668	0.01	23.96	14.00	28.16	26.42	1.75	38.17	44	44	0.00	6.78	0.75	0.03	2.18	3.20	0.00	0.00	0.00	3.31	1.40	0.02	0.00
+-1	1	1	527	32.59	1616	1114	0.74	5180	0	11	5282	1051	718	0.01	21.42	15.34	30.48	23.56	1.83	42.01	44
+-1	2	2	545	35.11	1551	1114	0.78	6473	0	18	6131	1004	759	0.01	24.01	14.40	26.24	26.41	1.86	36.62	44
+-1	3	3	521	32.95	1580	1114	0.70	5400	0	3	5796	1031	668	0.00	23.02	15.31	28.54	25.36	1.84	39.85	44
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	589	37.31	1579	1114	0.75	23467	0	45	21169	3765	2719	0.01	21.19	13.94	27.36	23.55	1.70	37.44	49	49	0.00	6.33	0.56	0.03	2.00	2.35	0.00	0.00	0.00	3.46	1.50	0.02	0.00
+-1	0	0	573	36.91	1552	1114	0.75	6377	0	13	5596	968	655	0.01	22.46	14.27	26.15	25.08	1.66	36.34	49	49	0.00	6.32	0.56	0.03	2.00	2.35	0.00	0.00	0.00	3.46	1.50	0.02	0.00
+-1	1	1	594	38.21	1555	1114	0.79	5379	0	11	5021	912	694	0.01	20.36	13.72	27.51	22.85	1.68	37.26	49
+-1	2	2	577	36.14	1597	1114	0.71	6320	0	12	5764	992	702	0.01	22.94	14.70	25.98	25.32	1.81	36.73	49
+-1	3	3	613	37.96	1614	1114	0.74	5391	0	9	4788	893	668	0.01	19.01	13.05	29.79	20.94	1.66	39.44	49
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	496	33.68	1472	1113	0.72	22600	0	44	22260	4118	2872	0.01	22.68	15.04	28.42	25.02	1.87	39.43	42	46	0.00	7.21	0.61	0.06	2.39	2.78	0.00	0.00	0.00	3.19	1.29	0.02	0.00
+-1	0	0	502	33.87	1481	1114	0.76	6135	0	8	5756	1104	664	0.01	23.79	15.98	26.14	26.13	1.86	38.14	42	46	0.00	7.21	0.61	0.06	2.39	2.78	0.00	0.00	0.00	3.19	1.29	0.02	0.00
+-1	1	1	441	31.21	1413	1114	0.55	4941	0	11	5241	1004	770	0.01	21.43	14.95	32.29	23.79	1.86	43.13	42
+-1	2	2	520	35.48	1464	1114	0.74	6176	0	13	5701	1050	793	0.01	22.54	15.24	26.57	25.18	2.00	37.34	42
+-1	3	3	521	34.17	1523	1114	0.81	5348	0	12	5562	960	645	0.01	22.99	13.99	28.67	24.96	1.77	39.09	42
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	513	31.30	1638	1114	0.68	23069	0	127	17651	3675	3069	0.01	18.92	13.74	35.88	20.43	1.94	46.34	39	42	0.00	8.18	1.24	0.01	2.99	5.97	0.00	0.00	0.00	3.26	1.38	0.02	0.00
+-1	0	0	486	30.14	1614	1114	0.58	6311	0	8	4609	978	752	0.01	20.93	14.41	34.34	22.52	1.93	45.41	39	42	0.00	8.18	1.24	0.01	2.99	5.97	0.00	0.00	0.00	3.26	1.38	0.02	0.00
+-1	1	1	523	32.54	1608	1114	0.67	5028	0	5	4241	879	709	0.00	17.26	13.62	36.44	18.66	1.85	46.96	39
+-1	2	2	484	30.49	1586	1114	0.66	7174	0	108	4662	952	829	0.03	19.95	14.14	35.26	21.56	2.04	45.90	39
+-1	3	3	558	32.03	1741	1114	0.80	4556	0	6	4139	866	779	0.00	17.53	12.79	37.48	18.97	1.92	47.08	39
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	189	15.23	1238	1114	0.62	13152	0	23	8110	3542	3245	0.01	12.13	14.32	58.12	12.39	2.29	70.08	39	41	0.00	11.03	3.90	0.19	2.76	17.80	0.00	0.00	0.00	2.30	0.56	0.04	0.00
+-1	0	0	187	15.24	1229	1114	0.56	4302	0	4	2276	971	790	0.00	15.79	14.71	54.01	15.82	2.33	66.61	37	41	0.00	11.03	3.90	0.19	2.76	17.80	0.00	0.00	0.00	2.30	0.56	0.04	0.00
+-1	1	1	185	14.28	1296	1114	0.65	2840	0	3	2019	868	830	0.00	11.86	14.46	59.24	12.16	2.26	71.29	37
+-1	2	2	200	16.78	1192	1114	0.64	3526	0	4	1935	997	861	0.01	11.98	16.43	54.60	12.28	2.53	68.41	37
+-1	3	3	182	14.62	1245	1114	0.65	2484	0	12	1880	706	764	0.01	8.89	11.68	64.63	9.32	2.04	74.02	39
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	375	21.89	1711	1114	0.64	16736	0	22	10836	3833	3894	0.01	15.09	14.82	47.97	15.74	2.41	59.96	68	68	0.00	11.97	2.27	0.13	3.73	10.07	0.00	0.00	0.00	2.93	1.10	0.03	0.00
+-1	0	0	393	23.32	1684	1114	0.67	4946	0	6	2598	1018	900	0.01	16.98	15.16	44.23	17.52	2.42	56.74	68	68	0.00	11.97	2.27	0.13	3.73	10.07	0.00	0.00	0.00	2.93	1.10	0.03	0.00
+-1	1	1	321	19.09	1681	1114	0.57	3668	0	5	2668	1045	929	0.00	14.82	16.29	49.63	15.38	2.45	63.08	68
+-1	2	2	389	22.66	1715	1114	0.73	4653	0	7	2953	980	1074	0.01	15.42	15.62	46.07	16.26	2.61	58.47	68
+-1	3	3	396	22.51	1759	1114	0.59	3469	0	4	2617	790	991	0.00	13.13	12.21	51.94	13.79	2.17	61.54	68
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	209	20.96	998	1113	0.57	15538	0	20	9814	3715	3196	0.01	14.99	14.66	49.31	15.10	2.26	61.68	35	39	0.00	11.84	2.96	0.09	3.85	13.24	0.00	0.00	0.00	2.30	0.55	0.02	0.00
+-1	0	0	196	20.92	938	1114	0.53	4921	0	9	2569	1084	775	0.01	16.98	16.11	45.85	17.11	2.35	59.62	35	39	0.00	11.84	2.96	0.09	3.85	13.24	0.00	0.00	0.00	2.30	0.56	0.02	0.00
+-1	1	1	203	21.12	961	1114	0.53	3302	0	6	2061	810	729	0.01	13.41	13.09	52.31	13.34	2.08	63.47	35
+-1	2	2	211	20.61	1024	1114	0.63	3913	0	2	2684	934	938	0.00	15.38	14.84	49.13	15.50	2.43	61.46	35
+-1	3	3	226	21.19	1068	1114	0.60	3402	0	3	2500	887	754	0.00	14.20	14.58	49.96	14.47	2.18	62.16	35
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	363	16.18	2246	1114	0.92	15113	0	65	19890	2232	3803	0.01	16.83	8.15	58.81	21.58	1.76	60.49	65	65	0.00	14.17	4.04	0.36	3.37	19.01	0.00	0.00	0.00	3.09	1.35	0.00	0.00
+-1	0	0	345	15.63	2206	1114	0.86	4224	0	17	5091	699	885	0.01	18.13	9.91	56.26	23.26	1.81	59.30	65	65	0.00	14.17	4.04	0.36	3.37	19.01	0.00	0.00	0.00	3.09	1.35	0.00	0.00
+-1	1	1	401	17.27	2323	1114	1.02	3606	0	14	4944	461	887	0.01	15.42	6.98	60.24	19.49	1.64	61.60	65
+-1	2	2	337	15.96	2112	1114	0.83	4125	0	23	5070	547	1067	0.02	16.76	8.00	59.28	21.93	1.91	60.20	65
+-1	3	3	370	15.87	2335	1114	0.97	3158	0	11	4785	525	964	0.01	17.01	7.71	59.44	21.62	1.67	60.84	65
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	1508	49.49	3046	1114	1.09	29171	0	70	16264	2034	2071	0.01	14.97	6.96	28.27	17.22	0.99	32.30	90	90	0.00	0.20	0.03	0.00	0.07	0.11	0.00	0.00	0.00	7.62	5.47	0.02	0.00
+-1	0	0	1188	39.60	3001	1114	1.03	7794	0	18	4496	581	577	0.01	17.33	8.05	34.81	19.35	1.18	39.87	90	90	0.00	0.20	0.03	0.00	0.07	0.11	0.00	0.00	0.00	7.62	5.47	0.02	0.00
+-1	1	1	1464	48.17	3038	1114	1.05	6772	0	21	3676	455	462	0.02	13.37	6.36	31.74	15.81	0.92	35.09	90
+-1	2	2	1163	39.01	2981	1114	1.08	7397	0	19	4666	631	651	0.02	16.92	8.65	35.26	19.07	1.27	40.65	90
+-1	3	3	2216	71.17	3113	1114	1.15	7208	0	12	3426	367	381	0.01	12.24	4.79	11.28	14.67	0.57	13.59	90
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	646	28.54	2264	1113	0.61	21309	0	21	11483	3047	3008	0.00	14.45	11.50	45.31	15.15	1.94	54.38	48	50	0.00	11.11	2.47	0.24	3.15	10.98	0.00	0.00	0.00	3.81	1.92	0.02	0.00
+-1	0	0	619	28.95	2137	1114	0.59	6085	0	9	3319	898	681	0.01	17.14	13.25	40.42	18.18	2.04	50.83	48	50	0.00	11.12	2.47	0.24	3.15	10.98	0.00	0.00	0.00	3.82	1.92	0.02	0.00
+-1	1	1	610	27.39	2227	1114	0.54	4697	0	6	2778	757	811	0.00	13.72	11.76	46.99	14.49	1.96	56.16	47
+-1	2	2	646	28.13	2297	1114	0.59	5690	0	3	2765	731	821	0.00	13.69	10.86	47.15	14.42	1.99	55.46	47
+-1	3	3	710	29.68	2392	1114	0.70	4837	0	3	2621	661	695	0.00	13.26	10.15	46.71	13.49	1.77	55.06	47
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	1093	38.56	2835	1114	0.66	37879	0	88	18215	1924	2155	0.01	15.32	6.80	39.08	15.89	1.38	44.16	66	66	0.00	8.39	2.89	0.03	2.37	13.47	0.00	0.00	0.00	5.37	3.32	0.01	0.00
+-1	0	0	1145	41.01	2792	1114	0.70	10375	0	11	3893	473	507	0.01	14.74	7.22	36.72	15.11	1.31	42.57	66	66	0.00	8.39	2.89	0.03	2.37	13.47	0.00	0.00	0.00	5.36	3.32	0.01	0.00
+-1	1	1	1036	36.18	2862	1114	0.68	7191	0	54	4886	528	529	0.01	15.98	7.36	40.27	16.77	1.40	45.65	66
+-1	2	2	1123	39.43	2849	1114	0.64	9892	0	12	4589	455	591	0.01	15.44	6.11	38.77	16.11	1.47	42.98	66
+-1	3	3	1069	37.63	2842	1114	0.64	10421	0	11	4847	468	528	0.01	15.12	6.50	40.55	15.59	1.34	45.45	66
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	451	22.95	1963	1113	0.73	23124	0	671	21111	3601	2896	0.05	18.97	13.57	44.19	21.94	1.92	53.18	38	43	0.00	12.64	4.53	0.09	2.61	7.38	0.00	0.00	0.00	3.30	1.54	0.00	0.00
+-1	0	0	459	24.47	1876	1114	0.72	4228	0	168	4139	901	630	0.06	17.59	14.17	43.41	19.47	1.90	54.16	38	43	0.00	12.64	4.53	0.09	2.61	7.38	0.00	0.00	0.00	3.30	1.54	0.00	0.00
+-1	1	1	406	21.28	1906	1114	0.70	4768	0	259	4848	889	831	0.06	18.74	12.97	46.74	21.74	1.91	55.07	38
+-1	2	2	481	24.20	1988	1114	0.75	10052	0	108	6583	867	781	0.04	20.30	13.07	42.08	23.66	2.03	50.11	38
+-1	3	3	457	21.87	2090	1114	0.76	4076	0	136	5541	944	654	0.05	19.26	14.08	44.56	22.88	1.85	53.40	38
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	398	15.52	2564	1114	0.57	24384	0	278	26940	3634	3544	0.05	28.89	13.38	40.49	32.18	1.96	50.34	45	48	0.00	5.40	2.09	0.03	0.81	3.78	0.00	0.00	0.00	3.36	1.58	0.00	0.00
+-1	0	0	213	8.51	2498	1114	0.63	2854	0	37	4682	890	598	0.03	25.92	23.10	42.07	27.48	1.92	62.09	45	48	0.00	5.40	2.09	0.03	0.81	3.78	0.00	0.00	0.00	3.36	1.58	0.00	0.00
+-1	1	1	554	23.38	2370	1114	0.21	13938	0	106	10089	1260	1836	0.07	35.86	8.98	26.34	44.03	2.42	30.16	45
+-1	2	2	456	16.45	2774	1114	0.82	4337	0	51	6580	813	593	0.05	28.76	11.53	42.61	31.09	1.80	50.65	45
+-1	3	3	368	13.73	2681	1114	0.75	3255	0	84	5589	671	517	0.06	24.99	9.89	50.93	26.13	1.68	58.45	45
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	243	12.08	2009	1113	0.70	21017	0	41	10723	2811	3117	0.01	12.64	11.25	63.73	13.27	2.21	72.43	38	43	0.00	20.04	7.94	0.14	3.18	14.72	0.00	0.00	0.00	2.57	0.89	0.00	0.00
+-1	0	0	143	9.25	1541	1114	0.63	3882	0	8	2373	711	754	0.01	11.91	11.23	67.44	12.12	2.15	76.48	38	43	0.00	20.04	7.94	0.14	3.18	14.72	0.00	0.00	0.00	2.57	0.89	0.00	0.00
+-1	1	1	210	10.65	1967	1114	0.47	7225	0	14	3169	726	814	0.01	13.00	11.71	64.10	14.10	2.13	73.12	38
+-1	2	2	453	19.21	2361	1114	0.84	6453	0	4	2438	649	868	0.00	12.51	10.65	57.33	13.32	2.42	65.05	38
+-1	3	3	166	9.23	1796	1114	0.66	3457	0	15	2743	725	681	0.02	13.15	11.42	66.06	13.53	2.15	75.09	38
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	115	7.23	1591	1114	0.83	17354	0	12	4075	2310	2428	0.00	7.24	9.64	75.74	6.96	2.25	83.56	34	39	0.00	24.84	12.13	0.19	4.05	21.37	0.00	0.00	0.00	2.03	0.45	0.00	0.00
+-1	0	0	71	5.75	1238	1114	0.66	5093	0	2	912	556	588	0.00	6.33	9.34	78.45	5.93	2.13	86.19	34	39	0.00	24.84	12.13	0.19	4.05	21.37	0.00	0.00	0.00	2.03	0.45	0.00	0.00
+-1	1	1	71	5.85	1218	1114	0.73	4895	0	5	1151	689	546	0.01	8.40	11.44	74.19	8.13	2.30	83.71	34
+-1	2	2	149	8.51	1755	1114	0.90	3732	0	2	1043	531	730	0.00	7.28	8.74	75.30	7.16	2.45	81.88	34
+-1	3	3	168	8.80	1910	1114	0.87	3634	0	3	969	534	564	0.00	6.95	9.07	75.04	6.61	2.12	82.46	34
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	39	4.36	905	1114	0.56	5230	0	2	2500	1802	2103	0.00	5.00	7.87	82.67	4.40	2.16	89.07	33	39	0.00	27.56	14.56	0.26	3.94	25.98	0.00	0.00	0.00	1.70	0.18	0.00	0.00
+-1	0	0	48	4.77	1007	1114	0.68	1220	0	1	542	451	451	0.00	4.60	8.15	82.38	3.95	2.08	89.20	33	39	0.00	27.56	14.56	0.26	3.94	25.98	0.00	0.00	0.00	1.70	0.18	0.00	0.00
+-1	1	1	39	4.28	915	1114	0.67	1123	0	0	569	394	497	0.00	4.86	6.56	84.19	4.22	1.98	89.52	33
+-1	2	2	38	4.51	837	1114	0.40	1725	0	0	747	506	655	0.00	5.67	8.77	80.97	5.21	2.49	87.78	33
+-1	3	3	33	3.89	847	1114	0.45	1162	0	1	642	451	500	0.00	4.89	8.00	83.13	4.24	2.10	89.77	33
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	90	5.45	1642	1114	0.53	7056	0	2	2946	1432	1927	0.00	4.41	6.38	83.64	3.92	2.01	88.62	34	38	0.00	26.10	14.68	0.28	3.12	26.89	0.00	0.00	0.00	1.92	0.36	0.00	0.00
+-1	0	0	42	3.86	1095	1114	0.41	1342	0	0	771	394	426	0.00	4.69	6.88	84.46	4.18	1.96	90.00	34	38	0.00	26.10	14.68	0.28	3.12	26.89	0.00	0.00	0.00	1.92	0.36	0.00	0.00
+-1	1	1	45	3.96	1130	1114	0.42	1691	0	2	820	478	446	0.00	4.96	8.28	82.69	4.46	2.08	89.50	33
+-1	2	2	57	4.93	1158	1114	0.66	2511	0	0	762	344	659	0.00	4.74	6.30	83.92	4.36	2.29	88.42	33
+-1	3	3	214	9.06	2363	1114	0.54	1512	0	0	593	216	396	0.00	3.26	4.06	83.49	2.67	1.72	86.54	33
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	39	4.40	883	1114	0.49	5203	0	38	3404	1921	2139	0.00	5.60	8.62	81.28	5.31	2.20	88.08	33	38	0.00	26.90	14.37	0.22	3.98	25.70	0.00	0.00	0.00	1.70	0.18	0.00	0.00
+-1	0	0	31	3.83	819	1114	0.39	1112	0	2	743	482	476	0.00	5.35	8.25	82.47	4.87	2.06	89.24	33	38	0.00	26.90	14.37	0.22	3.98	25.70	0.00	0.00	0.00	1.70	0.18	0.00	0.00
+-1	1	1	38	4.32	871	1114	0.42	1140	0	33	936	466	532	0.00	4.94	8.63	82.01	4.75	2.11	88.83	33
+-1	2	2	41	5.07	810	1114	0.38	1859	0	3	1043	516	693	0.00	7.47	9.31	78.02	7.41	2.56	84.96	33
+-1	3	3	45	4.39	1037	1114	0.72	1092	0	0	682	457	438	0.00	4.64	8.28	82.60	4.23	2.08	89.30	33
+
+--kpdjzflh5kdx5uyd
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: attachment; filename="6.1-revert-turbostat"
+
+turbostat version 21.05.04 - Len Brown <lenb@kernel.org>
+CPUID(0): GenuineIntel 0x1b CPUID levels
+CPUID(1): family:model:stepping 0x6:9c:0 (6:156:0) microcode 0x24000026
+CPUID(0x80000000): max_extended_levels: 0x80000008
+CPUID(1): SSE3 MONITOR - EIST TM2 TSC MSR ACPI-TM HT TM
+CPUID(6): APERF, TURBO, DTS, PTM, HWP, HWPnotify, HWPwindow, HWPepp, HWPpkg, EPB
+cpu1: MSR_IA32_MISC_ENABLE: 0x00850089 (TCC EIST MWAIT PREFETCH TURBO)
+CPUID(7): No-SGX
+CPUID(0x15): eax_crystal: 2 ebx_tsc: 58 ecx_crystal_hz: 38400000
+TSC: 1113 MHz (38400000 Hz * 58 / 2 / 1000000)
+CPUID(0x16): base_mhz: 1100 max_mhz: 3300 bus_mhz: 100
+cpu1: MSR_MISC_PWR_MGMT: 0x004010c0 (ENable-EIST_Coordination DISable-EPB DISable-OOB)
+RAPL: 43691 sec. Joule Counter Range, at 6 Watts
+cpu1: MSR_PLATFORM_INFO: 0x40830f0810b00
+8 * 100.0 = 800.0 MHz max efficiency frequency
+11 * 100.0 = 1100.0 MHz base frequency
+cpu1: MSR_IA32_POWER_CTL: 0x08a4005f (C1E auto-promotion: ENabled)
+cpu1: MSR_TURBO_RATIO_LIMIT: 0x1f1f1f1f1f1f2121
+31 * 100.0 = 3100.0 MHz max turbo 8 active cores
+31 * 100.0 = 3100.0 MHz max turbo 7 active cores
+31 * 100.0 = 3100.0 MHz max turbo 6 active cores
+31 * 100.0 = 3100.0 MHz max turbo 5 active cores
+31 * 100.0 = 3100.0 MHz max turbo 4 active cores
+31 * 100.0 = 3100.0 MHz max turbo 3 active cores
+33 * 100.0 = 3300.0 MHz max turbo 2 active cores
+33 * 100.0 = 3300.0 MHz max turbo 1 active cores
+cpu1: MSR_PKG_CST_CONFIG_CONTROL: 0x74008008 (UNdemote-C1, demote-C1, locked, pkg-cstate-limit=8 (pc10))
+/dev/cpu_dma_latency: 2000000000 usec (default)
+current_driver: intel_idle
+current_governor: menu
+current_governor_ro: menu
+cpu1: POLL: CPUIDLE CORE POLL IDLE
+cpu1: C1ACPI: ACPI FFH MWAIT 0x0
+cpu1: C2ACPI: ACPI FFH MWAIT 0x33
+cpu1: C3ACPI: ACPI FFH MWAIT 0x60
+cpu1: cpufreq driver: intel_pstate
+cpu1: cpufreq governor: powersave
+cpufreq intel_pstate no_turbo: 0
+cpu0: MSR_PM_ENABLE: 0x00000001 (HWP)
+cpu0: MSR_HWP_CAPABILITIES: 0x01080b21 (high 33 guar 11 eff 8 low 1)
+cpu0: MSR_HWP_REQUEST: 0x80002108 (min 8 max 33 des 0 epp 0x80 window 0x0 pkg 0x0)
+cpu0: MSR_HWP_REQUEST_PKG: 0x8000ff01 (min 1 max 255 des 0 epp 0x80 window 0x0)
+cpu0: MSR_HWP_INTERRUPT: 0x00000001 (EN_Guaranteed_Perf_Change, Dis_Excursion_Min)
+cpu0: MSR_HWP_STATUS: 0x00000004 (No-Guaranteed_Perf_Change, Excursion_Min)
+cpu0: EPB: 6 (balanced)
+cpu0: MSR_RAPL_POWER_UNIT: 0x000a0e03 (0.125000 Watts, 0.000061 Joules, 0.000977 sec.)
+cpu0: MSR_PKG_POWER_INFO: 0x00000030 (6 W TDP, RAPL 0 - 0 W, 0.000000 sec.)
+cpu0: MSR_PKG_POWER_LIMIT: 0x1806000dd8030 (UNlocked)
+cpu0: PKG Limit #1: ENabled (6.000000 Watts, 28.000000 sec, clamp ENabled)
+cpu0: PKG Limit #2: ENabled (12.000000 Watts, 0.000977* sec, clamp ENabled)
+cpu0: MSR_DRAM_POWER_LIMIT: 0x5400de00000000 (UNlocked)
+cpu0: DRAM Limit: DISabled (0.000000 Watts, 0.000977 sec, clamp DISabled)
+cpu0: MSR_PP0_POLICY: 0
+cpu0: MSR_PP0_POWER_LIMIT: 0x00000000 (UNlocked)
+cpu0: Cores Limit: DISabled (0.000000 Watts, 0.000977 sec, clamp DISabled)
+cpu0: MSR_PP1_POLICY: 0
+cpu0: MSR_PP1_POWER_LIMIT: 0x00000000 (UNlocked)
+cpu0: GFX Limit: DISabled (0.000000 Watts, 0.000977 sec, clamp DISabled)
+cpu0: MSR_IA32_TEMPERATURE_TARGET: 0x0f690080 (105 C)
+cpu0: MSR_IA32_PACKAGE_THERM_STATUS: 0x88460802 (35 C)
+cpu0: MSR_IA32_PACKAGE_THERM_INTERRUPT: 0x00000013 (105 C, 105 C)
+cpu1: MSR_PKGC3_IRTL: 0x00000000 (NOTvalid, 0 ns)
+cpu1: MSR_PKGC6_IRTL: 0x00000000 (NOTvalid, 0 ns)
+cpu1: MSR_PKGC7_IRTL: 0x00000000 (NOTvalid, 0 ns)
+cpu1: MSR_PKGC8_IRTL: 0x00000000 (NOTvalid, 0 ns)
+cpu1: MSR_PKGC9_IRTL: 0x00000000 (NOTvalid, 0 ns)
+cpu1: MSR_PKGC10_IRTL: 0x00000000 (NOTvalid, 0 ns)
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	22	2.57	877	1113	0.58	2315	0	0	650	255	2196	0.00	1.01	1.06	95.29	0.31	1.75	95.44	29	34	0.00	16.70	11.92	0.11	1.37	55.79	0.00	0.00	0.00	1.49	0.10	0.00	0.00
+-1	0	0	25	2.61	952	1114	0.78	599	0	0	173	67	440	0.00	1.12	1.16	95.03	0.39	1.58	95.41	29	34	0.00	16.70	11.92	0.11	1.37	55.80	0.00	0.00	0.00	1.49	0.10	0.00	0.00
+-1	1	1	18	2.12	857	1114	0.36	389	0	0	190	65	519	0.00	1.09	0.99	95.77	0.30	1.64	95.93	29
+-1	2	2	27	3.35	805	1114	0.32	1068	0	0	198	89	866	0.00	1.14	1.45	93.99	0.56	2.29	93.80	29
+-1	3	3	20	2.17	915	1114	0.89	259	0	0	89	34	371	0.00	0.69	0.63	96.43	0.00	1.50	96.62	29
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	259	10.55	2456	1114	1.16	6502	0	13	2477	1005	3559	0.00	3.29	5.28	80.59	2.85	1.97	84.63	51	51	0.00	13.97	7.82	0.06	1.22	38.48	0.00	0.00	0.00	2.48	0.91	0.00	0.00
+-1	0	0	215	9.52	2264	1114	0.85	1286	0	2	533	239	725	0.00	3.47	5.18	81.60	2.90	1.82	85.77	51	51	0.00	13.97	7.82	0.06	1.22	38.48	0.00	0.00	0.00	2.48	0.91	0.00	0.00
+-1	1	1	217	8.63	2519	1114	0.67	1963	0	2	461	253	1112	0.00	2.24	5.57	83.25	1.77	2.04	87.56	51
+-1	2	2	336	13.38	2510	1114	1.60	2162	0	5	847	320	1042	0.01	4.07	5.85	76.36	3.86	2.33	80.43	51
+-1	3	3	268	10.68	2508	1114	1.26	1091	0	4	636	193	680	0.01	3.38	4.53	81.10	2.89	1.68	84.75	51
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	146	7.85	1861	1113	1.31	10204	0	16	4052	847	3702	0.00	3.23	2.93	85.76	3.52	1.92	86.71	32	35	0.00	15.66	8.63	0.10	2.04	41.89	0.00	0.00	0.00	2.05	0.56	0.00	0.00
+-1	0	0	161	7.57	2123	1114	1.30	1780	0	5	861	218	598	0.00	3.00	2.66	86.66	2.77	1.67	87.99	32	35	0.00	15.66	8.63	0.10	2.04	41.90	0.00	0.00	0.00	2.05	0.56	0.00	0.00
+-1	1	1	146	7.91	1842	1114	1.24	2025	0	2	946	157	771	0.00	3.25	2.54	86.15	3.01	1.82	87.26	32
+-1	2	2	128	8.42	1520	1114	1.04	4587	0	3	1103	202	1683	0.00	3.32	2.99	84.86	4.72	2.50	84.36	32
+-1	3	3	150	7.49	2000	1114	1.61	1812	0	6	1142	270	650	0.01	3.35	3.53	85.42	3.58	1.71	87.22	32
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	470	17.07	2755	1114	0.55	13809	0	60	5240	1326	3235	0.02	4.25	4.52	73.83	4.81	1.78	76.34	45	46	0.00	8.97	4.41	0.04	1.40	21.51	0.00	0.00	0.00	3.01	1.36	0.00	0.00
+-1	0	0	150	7.14	2095	1114	0.96	2453	0	20	1506	436	810	0.02	5.32	5.31	82.01	5.81	1.92	85.13	45	46	0.00	8.97	4.41	0.04	1.40	21.51	0.00	0.00	0.00	3.01	1.36	0.00	0.00
+-1	1	1	299	11.91	2508	1114	0.77	2257	0	11	760	222	647	0.02	3.18	3.44	81.21	2.95	1.71	83.43	45
+-1	2	2	199	9.33	2128	1114	1.00	5470	0	24	1989	474	1280	0.03	5.64	6.90	77.68	6.88	2.30	81.48	45
+-1	3	3	1235	39.90	3094	1114	0.37	3629	0	5	985	194	498	0.01	2.84	2.42	54.38	3.62	1.17	55.31	45
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	932	28.57	3263	1114	0.28	12238	0	134	5839	962	2902	0.04	4.17	3.58	63.40	4.59	1.38	65.46	48	48	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	4.25	2.39	0.00	0.00
+-1	0	0	223	7.02	3170	1114	0.83	2933	0	50	2013	298	1081	0.07	4.91	4.67	83.29	5.26	1.80	85.92	48	48	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	4.25	2.39	0.00	0.00
+-1	1	1	137	4.29	3188	1114	1.11	1844	0	39	1292	316	823	0.05	4.94	4.91	85.79	5.31	1.80	88.59	48
+-1	2	2	122	3.89	3150	1114	0.66	2443	0	45	2534	348	998	0.06	6.83	4.75	84.51	6.87	1.94	87.31	48
+-1	3	3	3247	99.07	3277	1114	0.19	5018	0	0	0	0	0	0.00	0.00	0.00	0.00	0.93	0.00	0.00	48
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	843	25.62	3291	1114	0.19	8079	0	218	1322	608	2486	0.07	1.90	2.55	69.64	1.55	1.44	71.38	49	48	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	4.05	2.20	0.00	0.00
+-1	0	0	36	1.11	3198	1114	0.33	850	0	68	497	186	746	0.08	2.57	3.19	93.05	1.88	1.91	95.10	48	48	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	4.05	2.20	0.00	0.00
+-1	1	1	42	1.31	3195	1114	0.48	698	0	60	364	180	651	0.08	2.13	3.26	93.23	1.40	1.79	95.50	49
+-1	2	2	34	1.04	3237	1114	0.24	1518	0	90	461	242	1089	0.12	2.89	3.74	92.28	1.96	2.07	94.94	49
+-1	3	3	3262	99.03	3294	1114	0.19	5013	0	0	0	0	0	0.00	0.00	0.00	0.00	0.97	0.00	0.00	49
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	1203	36.72	3275	1114	0.72	11299	0	104	2222	981	2778	0.03	2.83	3.38	56.56	3.09	1.37	58.83	61	61	0.00	0.04	0.00	0.00	0.00	0.00	0.00	0.00	0.00	5.41	3.41	0.00	0.00
+-1	0	0	854	26.09	3272	1114	1.43	2024	0	44	642	302	872	0.06	2.98	4.48	66.00	3.40	1.67	68.84	61	61	0.00	0.04	0.00	0.00	0.00	0.00	0.00	0.00	0.00	5.41	3.41	0.00	0.00
+-1	1	1	716	21.96	3259	1114	1.62	2426	0	27	632	338	938	0.04	3.79	4.44	69.44	3.79	1.77	72.47	61
+-1	2	2	1541	47.10	3272	1114	0.43	3889	0	23	699	198	578	0.03	2.58	2.43	47.10	3.24	1.08	48.58	61
+-1	3	3	1700	51.71	3287	1114	0.26	2960	0	10	249	143	390	0.01	1.97	2.17	43.68	1.94	0.94	45.41	61
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	1018	31.51	3231	1114	0.92	11598	0	43	3304	1119	2873	0.01	4.49	6.61	56.85	4.70	1.46	62.33	57	58	0.00	1.04	0.86	0.00	3.96	0.34	0.00	0.00	0.00	5.64	3.65	0.00	0.00
+-1	0	0	1653	50.77	3256	1114	0.68	3340	0	8	788	155	390	0.01	4.30	4.25	39.89	4.74	0.90	43.58	57	58	0.00	1.04	0.86	0.00	3.96	0.34	0.00	0.00	0.00	5.64	3.65	0.00	0.00
+-1	1	1	556	17.45	3184	1114	0.78	3145	0	14	1084	459	1274	0.02	6.44	12.25	63.51	6.65	2.08	73.82	57
+-1	2	2	1536	47.46	3236	1114	1.31	3790	0	4	743	303	630	0.01	3.81	6.83	41.13	4.40	1.26	46.88	57
+-1	3	3	328	10.35	3165	1114	0.49	1323	0	17	689	202	579	0.02	3.42	3.12	82.87	3.02	1.60	85.04	57
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	954	29.34	3252	1114	1.20	18888	0	95	6232	1384	3518	0.03	4.48	4.67	61.12	5.25	1.54	63.86	60	60	0.00	0.18	0.00	0.00	0.01	0.02	0.00	0.00	0.00	6.02	4.03	0.00	0.00
+-1	0	0	834	25.67	3250	1114	1.15	3350	0	24	1244	338	710	0.03	4.54	5.04	64.39	4.91	1.53	67.89	60	60	0.00	0.18	0.00	0.00	0.01	0.02	0.00	0.00	0.00	6.02	4.03	0.00	0.00
+-1	1	1	1000	30.80	3246	1114	1.19	4747	0	23	1864	435	1192	0.03	5.04	5.59	58.09	6.07	1.79	61.33	59
+-1	2	2	1611	49.30	3268	1114	1.31	7326	0	19	1965	304	919	0.02	4.68	3.08	42.33	6.26	1.14	43.30	59
+-1	3	3	372	11.59	3209	1114	0.79	3465	0	29	1159	307	697	0.04	3.65	4.95	79.66	3.78	1.69	82.94	59
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	220	8.96	2456	1113	1.17	7912	0	17	2372	807	2796	0.01	2.64	3.18	85.01	2.12	1.85	87.07	36	40	0.00	13.84	8.13	0.12	1.71	39.61	0.00	0.00	0.00	2.44	0.90	0.00	0.00
+-1	0	0	342	12.70	2691	1114	1.15	1814	0	2	524	204	485	0.00	2.61	3.13	81.33	2.12	1.60	83.59	35	40	0.00	13.84	8.13	0.12	1.71	39.61	0.00	0.00	0.00	2.44	0.90	0.00	0.00
+-1	1	1	169	7.52	2242	1114	1.08	1975	0	4	824	234	841	0.00	3.39	3.62	85.26	2.80	1.91	87.78	35
+-1	2	2	229	9.29	2461	1114	1.22	2834	0	4	702	224	939	0.01	2.83	3.53	84.16	2.42	2.27	86.02	36
+-1	3	3	141	6.34	2231	1114	1.26	1289	0	7	322	145	531	0.01	1.74	2.43	89.34	1.13	1.65	90.88	36
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	44	4.53	961	1114	0.60	5989	0	8	3147	753	3324	0.00	2.61	2.44	90.21	2.90	1.89	90.67	34	39	0.00	17.11	9.75	0.09	2.20	47.07	0.00	0.00	0.00	1.62	0.18	0.00	0.00
+-1	0	0	36	3.84	932	1114	0.41	909	0	1	826	236	694	0.00	2.78	2.98	90.20	3.07	1.77	91.32	33	39	0.00	17.11	9.75	0.09	2.20	47.07	0.00	0.00	0.00	1.62	0.18	0.00	0.00
+-1	1	1	47	4.56	1023	1114	0.76	894	0	3	852	188	580	0.00	2.56	2.16	90.60	2.48	1.67	91.28	33
+-1	2	2	59	6.13	962	1114	0.60	3548	0	3	1091	210	1522	0.00	3.49	2.77	87.14	4.99	2.49	86.39	34
+-1	3	3	33	3.58	910	1114	0.60	638	0	1	378	119	528	0.00	1.60	1.85	92.89	1.07	1.65	93.69	34
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	107	6.09	1764	1114	1.27	9074	0	2	1660	506	2792	0.00	2.06	2.19	89.56	1.33	1.88	90.70	33	38	0.00	18.54	9.60	1.61	1.71	42.66	0.00	0.00	0.00	1.89	0.42	0.00	0.00
+-1	0	0	78	4.97	1579	1114	1.10	2335	0	0	410	185	593	0.00	2.54	3.12	89.30	1.73	1.77	91.53	33	38	0.00	18.54	9.60	1.61	1.71	42.66	0.00	0.00	0.00	1.89	0.42	0.00	0.00
+-1	1	1	133	6.37	2095	1114	1.42	2198	0	0	304	94	514	0.00	1.48	1.59	90.47	0.65	1.63	91.35	33
+-1	2	2	103	6.88	1500	1114	1.13	3055	0	1	354	125	1047	0.00	2.04	2.34	88.63	1.51	2.46	89.15	33
+-1	3	3	114	6.13	1866	1114	1.34	1486	0	1	592	102	638	0.00	2.17	1.70	89.85	1.44	1.67	90.77	33
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	436	16.83	2593	1114	0.77	24243	0	245	17844	3239	6382	0.06	17.94	8.98	54.77	22.75	2.16	58.26	37	41	0.00	5.96	2.84	0.02	2.16	12.53	0.00	0.00	0.00	3.32	1.60	0.00	0.00
+-1	0	0	323	12.74	2536	1114	0.59	5331	0	55	2998	612	1837	0.05	11.60	10.26	64.12	17.70	2.22	67.35	36	41	0.00	5.96	2.84	0.02	2.16	12.53	0.00	0.00	0.00	3.32	1.60	0.00	0.00
+-1	1	1	483	20.71	2330	1114	0.39	10840	0	80	6107	1027	2694	0.10	18.93	6.30	51.04	26.99	2.67	49.63	37
+-1	2	2	510	18.70	2725	1114	1.02	5614	0	67	6107	1020	999	0.05	30.25	11.72	38.37	34.33	1.90	45.07	37
+-1	3	3	430	15.17	2836	1114	1.04	2458	0	43	2632	580	852	0.03	10.99	7.64	65.57	11.97	1.87	71.00	37
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	1282	43.22	2966	1114	0.74	37813	0	313	15855	3279	4506	0.05	16.15	10.68	29.54	18.21	1.58	36.99	43	47	0.00	3.36	1.19	0.02	1.50	2.01	0.00	0.00	0.00	6.40	4.20	0.01	0.00
+-1	0	0	1140	38.36	2973	1114	0.68	10992	0	100	4694	996	987	0.04	19.79	15.78	25.76	22.00	1.57	38.06	42	47	0.00	3.36	1.19	0.02	1.50	2.01	0.00	0.00	0.00	6.40	4.20	0.01	0.00
+-1	1	1	1260	43.33	2909	1114	0.70	9873	0	58	3895	825	1552	0.05	14.20	9.08	32.90	16.29	1.96	38.42	42
+-1	2	2	1212	40.79	2972	1114	0.81	9546	0	83	4565	940	1154	0.06	19.92	11.80	27.14	22.33	1.60	35.28	43
+-1	3	3	1515	50.39	3006	1114	0.77	7402	0	72	2701	518	813	0.06	10.68	6.05	32.34	12.23	1.19	36.19	43
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	114	11.24	1018	1114	0.47	10402	0	20	5888	2123	4740	0.01	7.97	7.63	72.98	8.33	2.34	78.09	37	40	0.00	21.45	8.72	0.10	2.63	21.30	0.00	0.00	0.00	1.97	0.36	0.01	0.00
+-1	0	0	116	11.87	979	1114	0.46	3491	0	4	1750	693	1036	0.01	11.00	9.70	67.20	11.38	2.37	74.38	36	40	0.00	21.45	8.72	0.10	2.63	21.30	0.00	0.00	0.00	1.97	0.36	0.01	0.00
+-1	1	1	119	11.41	1042	1114	0.43	2352	0	5	1414	515	1172	0.00	7.29	7.68	73.40	7.97	2.19	78.44	36
+-1	2	2	121	11.48	1054	1114	0.50	2901	0	5	1539	519	1464	0.01	7.38	7.25	73.79	7.79	2.72	78.01	37
+-1	3	3	102	10.22	997	1114	0.51	1658	0	6	1185	396	1068	0.01	6.20	5.88	77.54	6.18	2.07	81.53	37
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	147	15.18	971	1114	0.51	13559	0	18	6855	2858	5505	0.01	10.92	10.60	63.20	10.96	2.58	71.27	36	39	0.00	15.86	3.96	0.55	3.60	16.67	0.00	0.00	0.00	2.06	0.41	0.01	0.00
+-1	0	0	153	16.06	954	1114	0.54	5222	0	3	2133	954	1447	0.00	15.14	13.07	55.55	15.61	2.87	65.46	35	39	0.00	15.86	3.96	0.55	3.60	16.67	0.00	0.00	0.00	2.06	0.41	0.01	0.00
+-1	1	1	138	13.97	989	1114	0.52	2301	0	5	1406	589	1291	0.01	8.37	8.66	68.93	8.13	2.30	75.60	35
+-1	2	2	139	14.76	944	1114	0.41	3376	0	3	1780	612	1572	0.00	9.92	9.22	66.05	10.01	2.75	72.48	36
+-1	3	3	159	15.95	998	1114	0.56	2660	0	7	1536	703	1195	0.01	10.23	11.44	62.28	10.09	2.41	71.54	36
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	169	14.69	1150	1114	0.52	13992	0	10	6761	2747	5353	0.00	10.44	9.92	64.88	10.42	2.54	72.36	35	39	0.00	15.55	3.97	0.05	3.69	19.41	0.00	0.00	0.00	2.15	0.51	0.01	0.00
+-1	0	0	167	14.81	1126	1114	0.50	5025	0	2	2091	940	1396	0.00	14.05	13.16	57.82	14.23	2.83	68.13	35	39	0.00	15.55	3.97	0.05	3.69	19.41	0.00	0.00	0.00	2.15	0.51	0.01	0.00
+-1	1	1	165	14.49	1141	1114	0.51	2890	0	6	1893	718	1237	0.01	10.87	10.44	64.16	10.89	2.35	72.27	35
+-1	2	2	198	16.15	1226	1114	0.60	3909	0	2	1476	539	1608	0.00	8.19	7.50	68.07	8.14	2.71	73.00	35
+-1	3	3	145	13.29	1093	1114	0.43	2168	0	0	1301	550	1112	0.00	8.64	8.56	69.45	8.41	2.26	76.04	35
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	1458	50.31	2898	1114	0.68	50715	0	224	11652	1976	2706	0.05	11.47	5.92	31.86	12.99	1.21	35.49	91	91	0.00	5.24	2.22	0.02	0.80	11.60	0.00	0.00	0.00	6.26	4.04	0.02	0.00
+-1	0	0	1555	53.42	2910	1114	0.62	18305	0	30	2741	488	683	0.03	11.45	5.30	29.23	12.77	1.14	32.67	91	91	0.00	5.24	2.22	0.02	0.80	11.60	0.00	0.00	0.00	6.25	4.04	0.02	0.00
+-1	1	1	1421	48.85	2910	1114	0.75	11247	0	73	3408	589	599	0.07	13.29	7.11	30.30	15.32	1.18	34.65	91
+-1	2	2	1446	50.44	2867	1114	0.61	13134	0	84	2625	418	782	0.07	10.69	5.31	33.16	11.95	1.35	36.26	91
+-1	3	3	1409	48.51	2905	1114	0.75	8029	0	37	2878	481	642	0.03	10.46	5.94	34.72	11.91	1.19	38.39	91
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	2023	68.17	2968	1114	0.82	55315	0	2449	63739	2310	2084	0.22	19.82	5.06	6.70	24.44	0.41	6.97	89	89	0.00	0.02	0.00	0.00	0.00	0.00	0.00	0.00	0.00	8.67	6.28	0.01	0.00
+-1	0	0	2038	68.57	2972	1114	0.85	12324	0	722	14240	527	430	0.28	19.43	5.15	6.62	23.51	0.46	7.46	89	89	0.00	0.02	0.00	0.00	0.00	0.00	0.00	0.00	0.00	8.67	6.28	0.01	0.00
+-1	1	1	2075	70.21	2956	1114	0.75	17423	0	614	16027	637	586	0.22	18.53	5.05	5.63	23.79	0.37	5.63	89
+-1	2	2	2009	67.62	2971	1114	0.79	14921	0	599	17409	581	522	0.19	19.12	5.51	7.66	23.76	0.45	8.18	89
+-1	3	3	1971	66.28	2974	1114	0.90	10647	0	514	16063	565	546	0.21	22.18	4.55	6.89	26.71	0.38	6.63	89
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	1713	56.11	3054	1114	0.79	40496	0	1018	41640	4051	2907	0.11	25.00	8.91	9.64	29.55	0.87	13.47	82	82	0.00	0.04	0.00	0.00	0.00	0.00	0.00	0.00	0.00	8.22	5.90	0.00	0.00
+-1	0	0	1559	51.01	3056	1114	0.76	9143	0	415	10938	1145	710	0.21	26.56	11.18	11.05	31.66	0.99	16.34	82	82	0.00	0.04	0.00	0.00	0.00	0.00	0.00	0.00	0.00	8.22	5.90	0.00	0.00
+-1	1	1	1967	64.44	3053	1114	0.84	12642	0	221	10456	953	735	0.07	22.46	5.85	6.52	27.27	0.65	7.64	82
+-1	2	2	1634	53.52	3053	1114	0.75	9671	0	194	9734	1051	853	0.08	25.44	9.49	11.34	30.42	0.94	15.12	82
+-1	3	3	1694	55.48	3053	1114	0.81	9040	0	188	10512	902	609	0.09	25.55	9.10	9.63	28.86	0.89	14.77	82
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	2464	84.67	2910	1114	0.54	55944	0	311	10534	1546	1473	0.02	7.64	2.98	4.30	8.48	0.44	6.41	86	86	0.00	0.06	0.00	0.00	0.01	0.00	0.00	0.00	0.00	9.00	6.38	0.01	0.00
+-1	0	0	2408	82.93	2903	1114	0.56	13189	0	87	2308	397	357	0.03	7.54	3.45	5.71	8.13	0.50	8.44	86	86	0.00	0.06	0.00	0.00	0.01	0.00	0.00	0.00	0.00	9.00	6.38	0.01	0.00
+-1	1	1	2534	87.09	2909	1114	0.54	16148	0	186	2541	356	451	0.03	6.27	2.11	4.06	7.43	0.41	5.07	86
+-1	2	2	2424	83.24	2912	1114	0.49	14152	0	34	2854	393	397	0.02	8.15	3.22	5.01	8.94	0.48	7.34	86
+-1	3	3	2490	85.42	2915	1114	0.55	12455	0	4	2831	400	268	0.00	8.61	3.14	2.42	9.40	0.36	4.81	86
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	2194	74.38	2950	1114	0.47	115506	0	1152	22421	2391	1750	0.10	16.55	4.61	4.04	18.52	0.52	6.58	91	91	0.00	0.04	0.00	0.00	0.02	0.00	0.00	0.00	0.00	8.62	5.97	0.03	0.00
+-1	0	0	2284	77.36	2952	1114	0.53	27842	0	193	4103	562	400	0.08	13.32	5.25	3.72	14.99	0.52	7.13	91	91	0.00	0.04	0.00	0.00	0.02	0.00	0.00	0.00	0.00	8.62	5.97	0.03	0.00
+-1	1	1	2314	78.69	2941	1114	0.42	35758	0	272	5545	595	470	0.12	14.82	3.07	2.70	17.65	0.40	3.26	91
+-1	2	2	2088	70.73	2952	1114	0.46	27486	0	572	6312	656	394	0.15	18.55	5.55	4.86	20.36	0.58	8.32	91
+-1	3	3	2090	70.73	2955	1114	0.46	24420	0	115	6461	578	486	0.06	19.51	4.59	4.89	21.07	0.58	7.63	91
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	1773	77.08	2300	1114	0.54	120800	0	216	16138	2347	1755	0.03	13.57	4.56	4.59	14.70	0.56	7.66	57	58	0.00	0.12	0.00	0.00	0.01	0.00	0.00	0.00	0.00	5.61	3.09	0.00	0.00
+-1	0	0	1681	72.86	2307	1114	0.52	31122	0	114	4560	643	627	0.05	14.95	5.38	6.67	16.01	0.71	10.42	57	58	0.00	0.12	0.00	0.00	0.01	0.00	0.00	0.00	0.00	5.61	3.09	0.00	0.00
+-1	1	1	1920	83.62	2296	1114	0.46	39737	0	24	4134	543	332	0.02	10.01	3.28	2.74	11.57	0.46	4.36	57
+-1	2	2	1755	76.35	2299	1114	0.59	31303	0	40	3453	575	352	0.03	14.01	4.94	4.52	15.05	0.53	8.07	57
+-1	3	3	1737	75.48	2301	1114	0.58	18638	0	38	3991	586	444	0.01	15.31	4.64	4.44	16.16	0.55	7.80	57
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	1812	74.80	2423	1114	0.53	108727	0	182	27049	2955	2446	0.03	15.46	4.56	5.05	17.64	0.57	6.99	66	65	0.00	0.02	0.00	0.00	0.01	0.00	0.00	0.00	0.00	5.81	3.41	0.00	0.00
+-1	0	0	1819	75.05	2423	1114	0.55	30817	0	60	6092	721	597	0.03	14.68	4.85	5.34	17.23	0.55	7.17	65	65	0.00	0.02	0.00	0.00	0.01	0.00	0.00	0.00	0.00	5.81	3.41	0.00	0.00
+-1	1	1	1840	76.21	2415	1114	0.53	34867	0	45	7852	786	688	0.04	15.83	3.69	3.97	18.66	0.53	4.60	66
+-1	2	2	1788	73.77	2424	1114	0.48	24496	0	29	5975	721	585	0.02	14.90	4.90	6.35	16.23	0.64	9.36	66
+-1	3	3	1803	74.17	2430	1114	0.55	18547	0	48	7130	727	576	0.04	16.43	4.79	4.54	18.43	0.58	6.82	66
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	1332	52.05	2560	1114	0.47	81823	0	146	30806	5383	5285	0.03	21.65	11.10	14.75	26.43	1.39	20.12	68	68	0.00	0.18	0.00	0.00	0.01	0.00	0.00	0.00	0.00	5.65	3.40	0.00	0.00
+-1	0	0	1363	53.19	2563	1114	0.49	24020	0	19	7137	1292	1220	0.01	20.97	11.38	14.15	25.65	1.34	19.82	68	68	0.00	0.18	0.00	0.00	0.01	0.00	0.00	0.00	0.00	5.65	3.40	0.00	0.00
+-1	1	1	1384	54.01	2562	1114	0.44	22035	0	27	7491	1484	1243	0.03	22.13	11.29	11.78	27.26	1.38	17.35	68
+-1	2	2	1301	50.28	2587	1114	0.47	17510	0	45	7774	1303	1437	0.03	21.50	10.88	16.96	25.51	1.47	22.74	68
+-1	3	3	1282	50.73	2527	1114	0.48	18258	0	55	8404	1304	1385	0.03	21.99	10.83	16.12	27.31	1.37	20.59	68
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	1320	53.28	2478	1113	0.54	76956	0	302	29840	4749	4640	0.04	20.63	9.30	16.48	24.33	1.26	21.13	48	52	0.00	1.57	0.49	0.00	0.32	0.86	0.00	0.00	0.00	5.50	3.29	0.00	0.00
+-1	0	0	1408	56.23	2504	1114	0.62	17865	0	112	6203	1023	1067	0.06	18.40	7.98	17.15	21.17	1.18	21.42	48	52	0.00	1.57	0.49	0.00	0.32	0.86	0.00	0.00	0.00	5.50	3.29	0.00	0.00
+-1	1	1	1338	53.88	2484	1114	0.48	22036	0	50	8024	1334	1163	0.04	21.28	9.95	14.36	26.07	1.26	18.79	48
+-1	2	2	1257	51.36	2448	1114	0.51	20490	0	98	8410	1173	1217	0.05	22.58	9.34	16.47	26.58	1.27	20.79	48
+-1	3	3	1278	51.66	2473	1114	0.54	16565	0	42	7203	1219	1193	0.03	20.28	9.94	17.95	23.48	1.34	23.52	48
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	215	13.82	1552	1114	0.69	15598	0	35	10287	2820	4084	0.01	9.47	10.17	66.31	10.95	2.27	72.96	40	44	0.00	20.37	8.13	0.10	4.10	14.89	0.00	0.00	0.00	2.36	0.70	0.00	0.00
+-1	0	0	219	14.27	1533	1114	0.80	3031	0	16	2729	683	1053	0.01	9.26	9.78	66.44	11.05	2.16	72.52	40	44	0.00	20.37	8.13	0.10	4.10	14.89	0.00	0.00	0.00	2.36	0.70	0.00	0.00
+-1	1	1	214	13.76	1554	1114	0.65	3563	0	4	2308	647	945	0.00	8.26	9.23	68.53	9.62	2.11	74.51	40
+-1	2	2	214	13.74	1559	1114	0.64	4170	0	11	2853	791	1200	0.01	11.10	11.74	63.17	12.94	2.69	70.62	40
+-1	3	3	211	13.53	1561	1114	0.69	4834	0	4	2397	699	886	0.00	9.25	9.93	67.08	10.19	2.11	74.18	40
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	95	8.52	1110	1114	0.54	7649	0	7	5479	2009	3612	0.00	6.59	8.10	76.64	6.68	2.25	82.54	39	43	0.00	23.43	11.08	0.12	3.55	20.89	0.00	0.00	0.00	1.93	0.34	0.00	0.00
+-1	0	0	110	8.81	1250	1114	0.68	1636	0	3	1275	528	769	0.01	6.42	8.62	76.00	6.34	2.10	82.75	39	43	0.00	23.43	11.08	0.12	3.55	20.89	0.00	0.00	0.00	1.93	0.34	0.00	0.00
+-1	1	1	86	7.67	1119	1114	0.49	1682	0	1	1010	472	864	0.00	5.80	7.33	79.05	5.62	2.10	84.62	39
+-1	2	2	99	9.49	1047	1114	0.44	2714	0	3	1601	570	1095	0.00	7.61	9.20	73.54	7.83	2.69	79.99	38
+-1	3	3	83	8.13	1025	1114	0.50	1617	0	0	1593	439	884	0.00	6.51	7.24	77.97	6.94	2.12	82.82	38
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	50	6.20	806	1114	0.42	6065	0	2	3664	1583	3483	0.00	4.99	6.53	82.19	4.70	2.21	86.90	36	42	0.00	26.02	13.15	0.18	3.44	24.82	0.00	0.00	0.00	1.76	0.21	0.00	0.00
+-1	0	0	43	5.42	793	1114	0.39	1402	0	0	875	409	811	0.00	5.07	6.92	82.49	4.52	2.07	88.00	36	42	0.00	26.02	13.15	0.18	3.44	24.82	0.00	0.00	0.00	1.76	0.21	0.00	0.00
+-1	1	1	49	5.93	828	1114	0.43	1285	0	1	1019	374	749	0.00	4.79	6.46	82.74	4.62	2.02	87.43	36
+-1	2	2	60	7.42	802	1114	0.44	2258	0	0	1067	476	1116	0.00	5.55	7.46	79.47	5.64	2.75	84.18	36
+-1	3	3	48	6.02	800	1114	0.41	1120	0	1	703	324	807	0.00	4.53	5.27	84.07	4.00	2.00	87.98	36
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	45	5.32	840	1114	0.45	5591	0	5	3956	1411	3278	0.00	4.65	6.12	83.81	4.53	2.18	87.97	35	40	0.00	26.51	13.52	0.16	3.64	25.42	0.00	0.00	0.00	1.74	0.20	0.00	0.00
+-1	0	0	42	5.05	841	1114	0.45	1255	0	2	1129	342	768	0.00	4.81	6.00	84.07	4.70	2.03	88.22	35	40	0.00	26.51	13.52	0.16	3.64	25.42	0.00	0.00	0.00	1.74	0.20	0.00	0.00
+-1	1	1	38	4.60	818	1114	0.42	1113	0	0	722	243	831	0.00	3.64	4.19	87.47	3.15	1.95	90.30	35
+-1	2	2	51	6.12	841	1114	0.40	2028	0	2	1247	440	1014	0.00	5.38	7.54	80.86	5.70	2.70	85.47	35
+-1	3	3	47	5.52	857	1114	0.53	1195	0	1	858	386	665	0.00	4.79	6.74	82.84	4.55	2.04	87.89	35
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	72	6.66	1083	1114	0.41	6267	0	6	3924	1573	3331	0.00	5.05	6.32	81.83	4.86	2.19	86.29	35	40	0.00	26.60	13.07	0.44	3.32	23.98	0.00	0.00	0.00	1.83	0.26	0.00	0.00
+-1	0	0	63	5.88	1065	1114	0.42	1430	0	1	1233	350	729	0.00	5.33	5.68	82.96	5.10	1.98	87.03	35	40	0.00	26.60	13.07	0.44	3.32	23.98	0.00	0.00	0.00	1.83	0.26	0.00	0.00
+-1	1	1	81	7.11	1140	1114	0.42	1281	0	0	728	323	766	0.00	4.40	5.02	83.36	4.06	1.96	86.87	35
+-1	2	2	77	7.07	1084	1114	0.37	2210	0	1	1146	400	1117	0.00	4.94	6.59	81.30	4.95	2.70	85.28	35
+-1	3	3	68	6.59	1035	1114	0.44	1346	0	4	817	500	719	0.01	5.54	8.00	79.69	5.31	2.13	85.97	35
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	70	7.18	972	1114	0.49	7353	0	11	5364	2042	3852	0.00	6.56	8.26	77.85	6.72	2.38	83.73	35	40	0.00	25.16	11.16	0.14	4.34	20.74	0.00	0.00	0.00	1.84	0.27	0.00	0.00
+-1	0	0	71	7.29	971	1114	0.48	1686	0	1	1433	568	874	0.00	7.41	9.37	75.76	7.67	2.27	82.77	35	40	0.00	25.16	11.16	0.14	4.34	20.74	0.00	0.00	0.00	1.84	0.27	0.00	0.00
+-1	1	1	69	6.83	1015	1114	0.50	1551	0	2	1317	434	941	0.00	5.81	6.80	80.44	5.90	2.16	85.11	35
+-1	2	2	78	8.22	944	1114	0.50	2579	0	3	1423	510	1249	0.00	6.74	7.75	77.12	7.06	2.81	81.91	35
+-1	3	3	62	6.39	965	1114	0.48	1537	0	5	1191	530	788	0.00	6.26	9.12	78.08	6.24	2.26	85.11	35
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	70	7.52	924	1114	0.48	7661	0	25	5134	1816	3694	0.00	6.45	7.35	78.55	6.58	2.24	83.65	34	40	0.00	23.99	11.68	0.14	3.55	21.78	0.00	0.00	0.00	1.84	0.26	0.00	0.00
+-1	0	0	62	7.04	878	1114	0.47	1888	0	3	1221	374	890	0.00	6.24	6.19	80.40	6.04	2.08	84.83	34	40	0.00	23.99	11.68	0.14	3.55	21.78	0.00	0.00	0.00	1.84	0.26	0.00	0.00
+-1	1	1	74	7.55	980	1114	0.47	1932	0	3	1411	490	840	0.00	6.56	7.71	78.08	6.80	2.16	83.49	34
+-1	2	2	70	7.96	882	1114	0.48	2485	0	11	1224	533	1114	0.01	6.92	8.93	76.06	7.09	2.67	82.28	34
+-1	3	3	72	7.53	956	1114	0.50	1356	0	8	1278	419	850	0.01	6.10	6.59	79.65	6.41	2.05	84.01	34
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	176	10.36	1695	1114	0.56	8518	0	21	7287	2082	3976	0.01	7.80	7.26	74.35	8.62	2.14	78.87	37	40	0.00	22.18	10.99	0.20	2.99	20.41	0.00	0.00	0.00	2.19	0.57	0.00	0.00
+-1	0	0	169	9.74	1738	1114	0.49	1634	0	4	1699	480	918	0.00	7.20	6.92	75.96	7.61	1.99	80.66	35	40	0.00	22.18	10.99	0.20	2.99	20.41	0.00	0.00	0.00	2.19	0.57	0.00	0.00
+-1	1	1	183	10.70	1711	1114	0.47	2256	0	10	2163	499	991	0.01	7.41	6.67	74.91	8.82	2.00	78.48	37
+-1	2	2	198	12.13	1632	1114	0.70	2882	0	4	1827	546	1252	0.00	9.18	7.66	70.79	9.89	2.53	75.45	37
+-1	3	3	152	8.88	1713	1114	0.56	1746	0	3	1598	557	815	0.01	7.40	7.79	75.73	8.17	2.05	80.90	37
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	45	5.39	826	1114	0.42	5627	0	7	2718	1442	3303	0.00	4.47	6.48	83.54	3.95	2.23	88.43	33	38	0.00	27.00	12.79	0.10	4.42	24.02	0.00	0.00	0.00	1.74	0.20	0.00	0.00
+-1	0	0	39	4.81	819	1114	0.48	946	0	2	470	260	753	0.00	3.22	4.78	87.09	2.55	1.97	90.67	33	38	0.00	27.00	12.79	0.10	4.42	24.02	0.00	0.00	0.00	1.74	0.20	0.00	0.00
+-1	1	1	45	5.29	845	1114	0.44	1134	0	2	578	343	777	0.00	4.19	5.97	84.46	3.59	2.05	89.06	33
+-1	2	2	49	6.04	817	1114	0.32	2086	0	2	849	393	1089	0.00	5.19	7.05	81.60	4.85	2.74	86.37	33
+-1	3	3	45	5.44	822	1114	0.46	1461	0	1	821	446	684	0.00	5.30	8.11	81.02	4.78	2.17	87.61	33
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	46	5.80	787	1114	0.39	6204	0	1	3282	1568	3534	0.00	5.01	6.50	82.58	4.53	2.28	87.39	35	39	0.00	26.87	12.88	0.16	4.04	24.18	0.00	0.00	0.00	1.74	0.19	0.00	0.00
+-1	0	0	43	5.46	790	1114	0.40	1278	0	0	829	376	804	0.00	4.68	6.01	83.74	4.14	2.07	88.33	33	39	0.00	26.87	12.88	0.16	4.04	24.18	0.00	0.00	0.00	1.74	0.19	0.00	0.00
+-1	1	1	45	5.72	785	1114	0.40	1411	0	1	825	417	790	0.00	5.07	7.14	81.94	4.58	2.18	87.52	33
+-1	2	2	52	6.60	784	1114	0.36	2230	0	0	794	408	1142	0.00	5.37	6.79	81.15	5.04	2.76	85.60	35
+-1	3	3	43	5.43	787	1114	0.43	1285	0	0	834	367	798	0.00	4.91	6.07	83.48	4.37	2.10	88.10	35
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	39	4.92	797	1114	0.38	5563	0	8	2965	1284	3307	0.00	4.34	5.42	85.20	3.86	2.18	89.04	33	37	0.00	27.16	14.10	0.18	3.37	26.53	0.00	0.00	0.00	1.71	0.18	0.00	0.00
+-1	0	0	38	4.80	800	1114	0.42	1116	0	2	726	263	766	0.00	4.13	4.47	86.47	3.52	1.97	89.70	33	37	0.00	27.16	14.10	0.18	3.37	26.53	0.00	0.00	0.00	1.71	0.18	0.00	0.00
+-1	1	1	38	4.74	800	1114	0.38	1286	0	3	768	331	759	0.00	3.92	5.58	85.61	3.52	2.02	89.73	32
+-1	2	2	42	5.34	790	1114	0.33	1987	0	1	742	386	1087	0.00	5.10	6.31	83.15	4.83	2.75	87.08	32
+-1	3	3	38	4.80	799	1114	0.37	1174	0	2	729	304	695	0.00	4.20	5.33	85.56	3.57	1.98	89.65	32
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	42	5.00	849	1114	0.43	5523	0	4	3555	1246	3203	0.00	4.48	5.35	85.06	4.37	2.12	88.51	33	37	0.00	26.57	14.16	0.20	3.32	26.56	0.00	0.00	0.00	1.72	0.19	0.00	0.00
+-1	0	0	42	4.88	858	1114	0.54	1339	0	0	883	297	728	0.00	4.52	4.99	85.47	4.35	1.91	88.85	33	37	0.00	26.57	14.16	0.20	3.32	26.56	0.00	0.00	0.00	1.72	0.19	0.00	0.00
+-1	1	1	39	4.44	873	1114	0.45	1051	0	2	830	273	740	0.00	3.70	4.76	87.02	3.55	1.95	90.06	33
+-1	2	2	47	5.62	840	1114	0.35	2006	0	0	1046	353	1021	0.00	4.87	5.88	83.53	4.89	2.62	86.87	33
+-1	3	3	42	5.07	827	1114	0.38	1127	0	2	796	323	714	0.00	4.82	5.76	84.23	4.69	1.99	88.25	33
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	44	5.31	821	1114	0.41	5953	0	5	3877	1544	3355	0.00	4.99	6.12	83.46	4.90	2.22	87.57	33	37	0.00	26.33	13.52	0.16	3.40	25.81	0.00	0.00	0.00	1.73	0.19	0.00	0.00
+-1	0	0	44	5.26	844	1114	0.48	1093	0	1	921	337	756	0.00	4.20	5.32	85.13	4.18	2.00	88.56	33	37	0.00	26.33	13.52	0.16	3.40	25.81	0.00	0.00	0.00	1.73	0.19	0.00	0.00
+-1	1	1	40	4.91	810	1114	0.40	1180	0	0	793	381	769	0.00	4.88	5.94	84.16	4.64	2.02	88.43	32
+-1	2	2	50	6.12	818	1114	0.38	2507	0	3	1455	450	1118	0.00	6.56	6.98	80.19	6.91	2.77	84.20	32
+-1	3	3	40	4.95	812	1114	0.39	1173	0	1	708	376	712	0.00	4.32	6.23	84.36	3.86	2.08	89.11	32
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	57	5.81	989	1114	0.54	5751	0	8	3729	1294	3262	0.00	4.60	5.04	84.40	4.48	2.11	87.61	37	39	0.00	25.12	13.63	0.18	3.06	25.70	0.00	0.00	0.00	1.77	0.22	0.00	0.00
+-1	0	0	61	5.95	1028	1114	0.73	1165	0	3	844	318	705	0.00	4.64	5.42	83.88	4.41	1.96	87.68	37	39	0.00	25.12	13.63	0.18	3.06	25.70	0.00	0.00	0.00	1.76	0.22	0.00	0.00
+-1	1	1	56	5.42	1028	1114	0.43	1337	0	1	654	265	956	0.00	3.75	3.75	86.82	3.42	2.10	89.06	37
+-1	2	2	59	6.55	906	1114	0.44	2261	0	4	1338	372	914	0.01	5.75	6.20	81.36	5.92	2.46	85.07	37
+-1	3	3	54	5.30	1011	1114	0.53	988	0	0	893	339	687	0.00	4.26	4.78	85.50	4.17	1.91	88.62	37
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	44	5.50	805	1113	0.37	6256	0	5	3474	1624	3681	0.00	5.35	6.91	82.09	4.94	2.34	87.22	34	37	0.00	26.49	12.65	0.15	4.29	23.71	0.00	0.00	0.00	1.74	0.20	0.00	0.00
+-1	0	0	40	4.91	812	1114	0.41	1356	0	1	937	357	811	0.00	5.26	6.22	83.49	4.73	2.09	88.27	33	37	0.00	26.49	12.65	0.15	4.30	23.71	0.00	0.00	0.00	1.74	0.20	0.00	0.00
+-1	1	1	41	4.94	821	1114	0.39	1173	0	1	642	390	904	0.00	4.69	6.66	83.58	4.21	2.17	88.68	34
+-1	2	2	53	6.67	802	1114	0.33	2209	0	1	870	404	1271	0.00	5.16	6.55	81.49	4.90	2.86	85.57	34
+-1	3	3	43	5.49	789	1114	0.37	1518	0	2	1025	473	695	0.00	6.30	8.21	79.82	5.91	2.23	86.37	33
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	56	6.87	813	1114	0.47	7119	0	5	4066	1863	3960	0.00	6.37	7.42	79.20	6.09	2.37	84.66	33	38	0.00	24.85	11.93	0.19	3.94	21.91	0.00	0.00	0.00	1.78	0.22	0.00	0.00
+-1	0	0	48	5.91	806	1114	0.47	1285	0	1	883	387	862	0.00	5.65	6.34	81.99	5.14	2.11	86.84	33	38	0.00	24.85	11.93	0.19	3.94	21.91	0.00	0.00	0.00	1.78	0.22	0.00	0.00
+-1	1	1	55	6.76	806	1114	0.43	1653	0	0	1033	607	986	0.00	6.95	9.79	76.33	6.77	2.41	84.06	33
+-1	2	2	66	8.22	808	1114	0.42	2787	0	3	1332	490	1275	0.00	7.46	7.47	76.72	7.52	2.84	81.43	33
+-1	3	3	55	6.60	833	1114	0.58	1394	0	1	818	379	837	0.00	5.43	6.08	81.77	4.94	2.13	86.33	33
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	260	12.40	2096	1114	0.85	9856	0	17	4314	2031	4194	0.01	6.37	7.53	73.43	6.27	2.28	79.05	34	39	0.00	21.47	9.73	0.57	3.08	17.33	0.00	0.00	0.00	2.60	0.95	0.00	0.00
+-1	0	0	202	10.01	2017	1114	0.81	2016	0	4	900	443	948	0.00	6.26	6.56	76.95	5.85	2.04	82.10	34	39	0.00	21.47	9.73	0.57	3.08	17.33	0.00	0.00	0.00	2.60	0.95	0.00	0.00
+-1	1	1	473	18.77	2523	1114	1.03	2667	0	2	1013	557	867	0.00	6.04	8.57	66.25	6.17	2.11	72.96	33
+-1	2	2	178	10.55	1688	1114	0.58	3365	0	7	1417	590	1360	0.01	7.57	8.40	73.26	7.54	2.83	79.08	33
+-1	3	3	186	10.27	1814	1114	0.68	1808	0	4	984	441	1019	0.01	5.60	6.58	77.27	5.53	2.13	82.07	33
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	136	10.03	1357	1114	0.46	9380	0	10	6448	2549	4349	0.00	8.36	9.58	71.83	8.72	2.49	78.77	33	38	0.00	23.13	9.24	0.11	4.61	17.08	0.00	0.00	0.00	2.05	0.44	0.00	0.00
+-1	0	0	152	10.43	1454	1114	0.56	1973	0	4	1614	626	1057	0.00	7.80	9.73	71.83	8.48	2.32	78.78	33	38	0.00	23.13	9.24	0.11	4.61	17.08	0.00	0.00	0.00	2.05	0.44	0.00	0.00
+-1	1	1	124	9.46	1312	1114	0.42	2257	0	2	1513	598	995	0.00	8.18	9.25	72.93	8.19	2.33	80.01	33
+-1	2	2	140	11.04	1270	1114	0.39	3171	0	1	1951	681	1298	0.00	9.59	9.49	69.67	10.52	2.88	75.55	33
+-1	3	3	128	9.17	1397	1114	0.44	1979	0	3	1370	644	999	0.00	7.85	9.86	72.89	7.68	2.40	80.74	33
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	63	6.78	931	1114	0.47	7366	0	16	4598	2069	3871	0.00	6.40	8.39	78.28	6.71	2.40	84.11	33	38	0.00	25.54	11.39	0.14	4.50	21.19	0.00	0.00	0.00	1.81	0.26	0.00	0.00
+-1	0	0	55	5.89	941	1114	0.49	1379	0	5	982	413	807	0.00	5.16	6.85	81.97	5.14	2.13	86.85	33	38	0.00	25.54	11.39	0.14	4.50	21.19	0.00	0.00	0.00	1.81	0.26	0.00	0.00
+-1	1	1	65	7.00	928	1114	0.47	1791	0	3	1348	594	858	0.00	7.33	9.43	76.07	7.80	2.27	82.93	32
+-1	2	2	71	7.52	942	1114	0.46	2779	0	5	1453	593	1217	0.00	7.71	9.46	75.14	8.47	2.92	81.10	32
+-1	3	3	61	6.69	912	1114	0.48	1417	0	3	815	469	989	0.00	5.38	7.81	79.94	5.44	2.28	85.59	32
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	67	7.29	921	1114	0.53	7975	0	8	4830	2399	4202	0.00	7.10	10.21	75.24	7.11	2.60	83.00	33	38	0.00	25.37	9.51	0.10	5.31	17.78	0.00	0.00	0.00	1.85	0.28	0.00	0.00
+-1	0	0	68	7.25	943	1114	0.62	2116	0	3	1424	730	884	0.00	8.76	12.19	71.59	8.60	2.51	81.64	33	38	0.00	25.37	9.51	0.10	5.31	17.78	0.00	0.00	0.00	1.85	0.28	0.00	0.00
+-1	1	1	54	6.68	809	1114	0.37	1604	0	0	1017	589	1031	0.00	6.14	10.15	76.89	6.11	2.46	84.75	33
+-1	2	2	94	8.99	1045	1114	0.62	2685	0	4	1317	583	1382	0.01	7.45	9.59	73.81	7.77	3.10	80.14	33
+-1	3	3	52	6.24	836	1114	0.43	1570	0	1	1072	497	905	0.00	6.04	8.92	78.69	5.96	2.33	85.47	33
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	49	6.15	797	1114	0.37	6944	0	9	3764	1980	3764	0.00	6.06	8.37	79.27	5.83	2.45	85.58	33	36	0.00	26.29	11.36	0.13	4.72	21.47	0.00	0.00	0.00	1.77	0.21	0.00	0.00
+-1	0	0	50	6.26	803	1114	0.39	1554	0	1	1035	516	871	0.00	6.65	8.85	78.08	6.35	2.30	85.09	32	36	0.00	26.29	11.36	0.13	4.72	21.47	0.00	0.00	0.00	1.77	0.21	0.00	0.00
+-1	1	1	43	5.37	797	1114	0.42	1423	0	1	811	476	775	0.00	5.18	7.94	81.37	4.78	2.22	87.63	32
+-1	2	2	58	7.29	790	1114	0.33	2622	0	5	1125	512	1265	0.01	6.46	8.45	77.62	6.62	2.96	83.13	33
+-1	3	3	45	5.67	801	1114	0.36	1345	0	2	793	476	853	0.00	5.95	8.23	79.99	5.58	2.30	86.46	33
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	189	10.68	1772	1114	1.57	10155	0	29	5777	2210	5062	0.01	8.30	8.24	72.43	9.01	2.44	77.87	33	38	0.00	19.27	7.87	0.10	3.29	14.94	0.00	0.00	0.00	2.46	0.86	0.00	0.00
+-1	0	0	70	6.86	1016	1114	0.44	1689	0	10	1318	529	1150	0.01	7.78	7.94	77.11	7.86	2.34	82.94	33	38	0.00	19.27	7.87	0.10	3.29	14.94	0.00	0.00	0.00	2.46	0.86	0.00	0.00
+-1	1	1	541	21.26	2543	1114	2.04	2430	0	2	1393	437	948	0.00	8.31	6.59	63.33	8.91	1.96	67.86	33
+-1	2	2	83	8.43	987	1114	0.35	4542	0	5	2010	695	1961	0.01	10.00	9.95	71.22	12.31	3.15	76.12	33
+-1	3	3	63	6.16	1030	1114	0.41	1494	0	12	1056	549	1003	0.01	7.10	8.49	78.03	6.95	2.31	84.59	33
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	55	6.95	787	1114	0.40	7518	0	6	4010	2128	4021	0.00	6.58	8.94	77.38	6.33	2.51	84.21	33	37	0.00	25.61	10.57	0.14	4.97	19.79	0.00	0.00	0.00	1.79	0.22	0.00	0.00
+-1	0	0	50	6.37	788	1114	0.43	1578	0	2	986	505	907	0.00	6.12	8.72	78.62	5.76	2.31	85.56	33	37	0.00	25.61	10.57	0.14	4.97	19.79	0.00	0.00	0.00	1.79	0.22	0.00	0.00
+-1	1	1	54	6.77	790	1114	0.43	1545	0	1	996	460	888	0.00	6.00	7.61	79.50	5.60	2.23	85.39	31
+-1	2	2	60	7.65	782	1114	0.33	2696	0	0	970	561	1364	0.00	6.84	9.40	75.97	6.85	3.08	82.42	31
+-1	3	3	55	7.00	788	1114	0.41	1699	0	3	1058	602	862	0.00	7.36	10.02	75.45	7.11	2.43	83.47	31
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	51	6.31	805	1114	0.40	7296	0	7	4415	2109	3865	0.00	6.29	9.31	77.93	6.18	2.53	84.98	32	37	0.00	26.45	10.49	0.10	5.69	19.20	0.00	0.00	0.00	1.78	0.22	0.00	0.00
+-1	0	0	55	6.57	830	1114	0.50	1571	0	2	1104	517	897	0.00	6.20	9.01	78.07	6.25	2.36	84.82	32	37	0.00	26.45	10.49	0.10	5.69	19.20	0.00	0.00	0.00	1.78	0.22	0.00	0.00
+-1	1	1	47	5.85	804	1114	0.36	1388	0	3	855	495	935	0.00	5.45	8.59	79.98	5.16	2.33	86.66	32
+-1	2	2	57	7.10	798	1114	0.37	2712	0	1	1456	553	1240	0.00	7.11	9.95	75.69	7.28	3.07	82.56	32
+-1	3	3	45	5.73	786	1114	0.38	1625	0	1	1000	544	793	0.00	6.39	9.68	78.01	6.04	2.35	85.88	32
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	272	12.10	2249	1114	0.62	29788	0	28	6224	2089	3427	0.01	7.85	7.61	72.22	8.04	2.14	77.71	57	57	0.00	21.35	10.35	0.21	3.18	19.52	0.00	0.00	0.00	2.62	0.92	0.00	0.00
+-1	0	0	193	9.06	2125	1114	0.53	8646	0	4	1430	509	885	0.00	7.75	7.05	76.00	7.70	2.06	81.18	57	57	0.00	21.34	10.35	0.21	3.18	19.52	0.00	0.00	0.00	2.62	0.92	0.00	0.00
+-1	1	1	171	8.56	2003	1114	0.40	7405	0	10	1688	534	806	0.01	8.36	7.46	75.46	8.38	2.01	81.05	57
+-1	2	2	248	12.01	2065	1114	0.57	11431	0	4	1734	622	1029	0.00	8.45	8.95	70.39	8.81	2.61	76.57	57
+-1	3	3	477	18.80	2539	1114	0.77	2306	0	10	1372	424	707	0.01	6.86	6.99	67.01	7.28	1.90	72.02	57
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	1221	44.12	2767	1113	0.74	39498	0	142	16232	4474	3337	0.02	15.84	12.26	27.39	17.10	1.72	37.06	41	45	0.00	5.62	2.06	0.02	0.97	3.92	0.00	0.00	0.00	6.10	3.88	0.03	0.00
+-1	0	0	1209	44.10	2741	1114	0.83	10005	0	104	4390	1130	785	0.06	16.66	12.58	26.28	17.81	1.70	36.38	40	45	0.00	5.62	2.06	0.02	0.97	3.92	0.00	0.00	0.00	6.11	3.88	0.03	0.00
+-1	1	1	1073	39.30	2731	1114	0.69	9217	0	8	4448	1323	869	0.01	17.52	15.05	27.84	18.78	1.90	40.01	40
+-1	2	2	1343	47.72	2813	1114	0.73	11950	0	14	3521	958	890	0.02	13.82	10.24	27.73	14.93	1.68	35.67	41
+-1	3	3	1258	45.36	2774	1114	0.69	8326	0	16	3873	1063	793	0.01	15.35	11.16	27.73	16.86	1.60	36.18	41
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	629	27.09	2322	1114	0.68	24244	0	43	9768	3468	4538	0.01	10.78	11.16	50.69	11.28	2.30	59.33	37	43	0.00	15.93	5.24	0.07	2.86	9.62	0.00	0.00	0.00	3.75	1.90	0.01	0.00
+-1	0	0	627	27.11	2314	1114	0.66	5263	0	14	2382	845	1049	0.00	10.89	11.22	50.48	11.32	2.20	59.37	37	43	0.00	15.93	5.24	0.07	2.86	9.62	0.00	0.00	0.00	3.75	1.90	0.01	0.00
+-1	1	1	638	27.46	2323	1114	0.71	5179	0	15	2339	861	966	0.01	10.65	10.66	50.96	10.87	2.14	59.52	37
+-1	2	2	656	28.06	2339	1114	0.63	8454	0	8	2720	898	1415	0.01	10.89	11.52	49.22	11.85	2.57	57.52	37
+-1	3	3	594	25.71	2312	1114	0.74	5348	0	6	2327	864	1108	0.01	10.70	11.25	52.09	11.09	2.30	60.90	37
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	221	12.52	1768	1114	1.19	10523	0	16	4366	2153	4181	0.00	6.34	8.52	72.43	6.14	2.39	78.95	35	41	0.00	22.56	8.63	0.19	3.57	16.80	0.00	0.00	0.00	2.44	0.83	0.00	0.00
+-1	0	0	191	11.40	1677	1114	1.20	2299	0	4	1092	581	921	0.00	6.52	9.06	72.83	6.20	2.26	80.14	35	41	0.00	22.56	8.63	0.19	3.57	16.80	0.00	0.00	0.00	2.44	0.83	0.00	0.00
+-1	1	1	187	11.53	1626	1114	1.15	2079	0	4	1029	512	1022	0.00	5.93	8.18	74.19	5.69	2.28	80.50	35
+-1	2	2	286	15.29	1871	1114	1.25	3943	0	6	1295	596	1271	0.01	7.47	9.00	68.02	7.46	2.83	74.42	35
+-1	3	3	221	11.85	1861	1114	1.15	2202	0	2	950	464	967	0.00	5.44	7.84	74.68	5.19	2.20	80.76	35
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	263	14.15	1858	1114	0.58	12563	0	101	8862	2300	3931	0.01	8.74	7.49	69.44	9.82	2.14	73.89	34	39	0.00	20.69	9.18	0.20	2.93	20.34	0.00	0.00	0.00	2.43	0.78	0.00	0.00
+-1	0	0	253	13.78	1838	1114	0.53	3018	0	46	2333	614	833	0.02	9.18	7.74	69.15	10.13	1.99	74.10	34	39	0.00	20.69	9.18	0.20	2.93	20.34	0.00	0.00	0.00	2.43	0.78	0.00	0.00
+-1	1	1	245	12.83	1912	1114	0.53	2728	0	11	2088	458	935	0.01	7.44	6.07	73.52	8.24	1.96	76.96	34
+-1	2	2	271	15.34	1765	1114	0.55	4136	0	2	2433	633	1197	0.00	9.74	8.20	66.51	11.47	2.51	70.68	34
+-1	3	3	282	14.64	1927	1114	0.68	2681	0	42	2008	595	966	0.02	8.62	7.96	68.58	9.43	2.10	73.83	34
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	817	28.43	2874	1114	0.83	26221	0	91	22092	2948	5633	0.01	12.24	6.97	52.20	21.45	1.34	48.78	72	72	0.00	6.43	4.12	0.02	1.11	18.89	0.00	0.00	0.00	4.78	2.86	0.01	0.00
+-1	0	0	722	25.12	2873	1114	0.83	6273	0	23	6377	796	1478	0.01	13.75	7.85	53.19	23.76	1.37	49.76	72	72	0.00	6.43	4.12	0.02	1.11	18.89	0.00	0.00	0.00	4.78	2.85	0.01	0.00
+-1	1	1	691	24.08	2871	1114	0.73	7162	0	21	5196	774	1424	0.01	12.89	7.77	55.18	21.82	1.38	52.72	72
+-1	2	2	728	26.50	2749	1114	0.79	6043	0	32	6316	897	1516	0.02	13.51	8.26	51.61	24.23	1.57	47.71	72
+-1	3	3	1127	38.02	2965	1114	0.92	6743	0	15	4203	481	1215	0.01	8.79	4.01	48.82	15.99	1.06	44.93	72
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	1487	51.69	2878	1113	0.66	38897	0	34	13371	3287	3596	0.01	11.57	8.84	27.53	12.53	1.46	34.31	41	46	0.00	4.46	1.31	0.05	1.06	6.56	0.00	0.00	0.00	6.96	4.71	0.02	0.00
+-1	0	0	1699	58.25	2916	1114	0.73	9627	0	2	2527	698	659	0.00	10.46	8.56	22.22	11.43	1.29	29.04	41	46	0.00	4.46	1.31	0.05	1.06	6.56	0.00	0.00	0.00	6.96	4.71	0.02	0.00
+-1	1	1	1319	46.21	2855	1114	0.67	8644	0	9	3332	945	1167	0.01	12.42	10.48	30.68	13.05	1.73	39.01	40
+-1	2	2	1443	50.54	2854	1114	0.56	13162	0	16	3690	867	1087	0.02	11.31	8.90	28.94	12.71	1.58	35.17	40
+-1	3	3	1490	51.78	2877	1114	0.69	7464	0	7	3822	777	683	0.01	12.11	7.43	28.31	12.94	1.26	34.03	40
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	216	14.97	1444	1114	0.63	11391	0	27	7261	2369	4371	0.01	8.10	8.89	67.83	8.76	2.27	74.00	39	41	0.00	16.80	4.58	0.41	2.94	21.00	0.00	0.00	0.00	2.30	0.64	0.01	0.00
+-1	0	0	228	16.22	1404	1114	0.58	3305	0	6	1853	587	1043	0.01	8.75	8.91	65.84	9.66	2.21	71.90	37	41	0.00	16.80	4.58	0.41	2.94	21.00	0.00	0.00	0.00	2.30	0.64	0.01	0.00
+-1	1	1	218	15.04	1448	1114	0.68	2376	0	4	1676	588	1009	0.00	6.71	8.78	69.30	7.33	2.13	75.50	38
+-1	2	2	220	14.92	1475	1114	0.62	3271	0	10	2164	634	1240	0.01	9.25	9.17	66.42	10.24	2.48	72.35	38
+-1	3	3	199	13.68	1452	1114	0.62	2439	0	7	1568	560	1079	0.01	7.69	8.69	69.75	7.81	2.26	76.25	39
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	279	18.96	1471	1114	0.61	12012	0	15	6236	2505	4787	0.00	8.34	9.25	63.20	8.28	2.30	70.45	40	43	0.00	15.35	3.48	0.61	2.88	16.66	0.00	0.00	0.00	2.49	0.76	0.01	0.00
+-1	0	0	280	18.61	1506	1114	0.64	3208	0	3	1549	646	1216	0.00	8.24	9.71	63.13	8.31	2.31	70.77	40	43	0.00	15.35	3.48	0.61	2.88	16.66	0.00	0.00	0.00	2.49	0.76	0.01	0.00
+-1	1	1	289	19.89	1452	1114	0.56	2779	0	5	1539	628	1136	0.01	8.23	9.24	62.38	8.12	2.19	69.79	40
+-1	2	2	271	18.44	1469	1114	0.61	3433	0	5	1742	693	1333	0.01	9.26	10.26	61.83	9.29	2.57	69.70	40
+-1	3	3	276	18.90	1460	1114	0.61	2592	0	2	1406	538	1102	0.00	7.62	7.80	65.47	7.41	2.13	71.56	39
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	468	25.36	1843	1114	0.62	16364	0	23	8849	2964	4934	0.00	9.61	9.90	54.84	10.27	2.21	62.16	51	51	0.00	11.70	2.96	0.18	2.72	14.13	0.00	0.00	0.00	3.14	1.30	0.01	0.00
+-1	0	0	495	26.05	1899	1114	0.70	4162	0	6	2452	768	1101	0.00	10.56	10.23	52.83	11.38	2.08	60.49	51	51	0.00	11.70	2.96	0.18	2.72	14.13	0.00	0.00	0.00	3.14	1.30	0.01	0.00
+-1	1	1	433	22.92	1889	1114	0.53	3886	0	8	2025	712	1335	0.00	8.96	9.16	58.68	9.60	2.19	65.29	51
+-1	2	2	483	26.63	1814	1114	0.60	4674	0	6	2495	796	1350	0.01	10.43	10.82	51.80	11.22	2.46	59.69	51
+-1	3	3	459	25.84	1778	1114	0.65	3642	0	3	1877	688	1148	0.00	8.47	9.41	56.03	8.87	2.12	63.18	51
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	360	21.85	1648	1113	0.47	15195	0	16	9216	3617	5406	0.00	11.15	12.36	54.27	11.68	2.54	63.94	40	43	0.00	14.54	2.21	0.49	3.23	10.45	0.00	0.00	0.00	2.80	0.97	0.01	0.00
+-1	0	0	367	22.56	1626	1114	0.48	3905	0	4	2424	952	1344	0.00	12.29	12.99	51.76	13.16	2.51	61.76	39	43	0.00	14.54	2.21	0.49	3.23	10.45	0.00	0.00	0.00	2.80	0.97	0.01	0.00
+-1	1	1	341	20.09	1697	1114	0.48	3211	0	1	2100	878	1338	0.00	10.44	12.05	57.11	10.59	2.46	66.86	39
+-1	2	2	364	21.85	1665	1114	0.47	4620	0	7	2426	931	1475	0.01	11.35	12.36	54.07	11.98	2.71	63.46	39
+-1	3	3	369	22.90	1612	1114	0.46	3459	0	4	2266	856	1249	0.00	10.54	12.04	54.17	10.98	2.46	63.66	40
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	351	22.52	1561	1114	0.48	16171	0	25	9993	3558	5387	0.01	11.54	12.30	53.32	12.25	2.51	62.73	39	43	0.00	14.53	2.06	0.51	3.40	9.47	0.00	0.00	0.00	2.74	0.91	0.01	0.00
+-1	0	0	332	21.69	1529	1114	0.48	4501	0	6	2859	937	1356	0.01	13.19	12.59	52.19	14.08	2.46	61.77	39	43	0.00	14.53	2.06	0.51	3.40	9.47	0.00	0.00	0.00	2.74	0.91	0.01	0.00
+-1	1	1	368	23.72	1552	1114	0.46	3601	0	3	2343	897	1238	0.00	11.51	12.53	51.92	12.12	2.41	61.76	39
+-1	2	2	332	21.06	1578	1114	0.49	4299	0	13	2469	911	1573	0.02	11.73	12.62	54.31	12.29	2.80	63.85	39
+-1	3	3	374	23.60	1583	1114	0.48	3770	0	3	2322	813	1220	0.00	9.72	11.45	54.84	10.51	2.36	63.53	39
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	349	22.04	1584	1114	0.48	16282	0	18	10086	3503	5412	0.00	11.65	12.13	53.80	12.24	2.49	63.23	40	44	0.00	14.62	1.94	0.56	3.13	8.89	0.00	0.00	0.00	2.75	0.93	0.01	0.00
+-1	0	0	373	23.47	1589	1114	0.52	3965	0	3	2303	842	1232	0.00	11.62	11.46	53.07	11.84	2.35	62.34	40	44	0.00	14.62	1.94	0.56	3.13	8.89	0.00	0.00	0.00	2.75	0.93	0.01	0.00
+-1	1	1	341	21.86	1562	1114	0.46	4342	0	3	2563	897	1323	0.00	11.96	12.73	53.08	12.74	2.45	62.95	39
+-1	2	2	359	23.08	1555	1114	0.44	4665	0	8	2662	938	1397	0.01	12.08	13.12	51.34	12.87	2.66	61.39	39
+-1	3	3	323	19.75	1635	1114	0.51	3310	0	4	2558	826	1460	0.00	10.92	11.22	57.72	11.50	2.50	66.25	39
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	405	23.57	1719	1114	0.54	16718	0	30	9978	3680	5298	0.01	11.30	12.65	52.09	11.88	2.53	62.02	39	44	0.00	13.79	1.97	0.35	3.32	8.83	0.00	0.00	0.00	2.95	1.10	0.01	0.00
+-1	0	0	402	23.31	1725	1114	0.53	4335	0	7	2540	968	1264	0.01	12.04	13.65	50.61	12.52	2.48	61.70	39	44	0.00	13.79	1.97	0.35	3.32	8.83	0.00	0.00	0.00	2.95	1.10	0.01	0.00
+-1	1	1	416	24.27	1714	1114	0.54	3595	0	4	2296	856	1242	0.00	10.70	12.00	52.65	11.15	2.36	62.23	39
+-1	2	2	428	24.97	1713	1114	0.55	4774	0	10	2713	970	1401	0.01	11.66	12.75	50.20	12.36	2.74	59.93	39
+-1	3	3	375	21.73	1725	1114	0.54	4014	0	9	2429	886	1391	0.01	10.81	12.19	54.89	11.51	2.53	64.23	39
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	368	22.53	1635	1114	0.53	15542	0	15	9222	3508	5249	0.00	11.09	12.05	53.98	11.52	2.47	63.48	45	45	0.00	14.71	1.98	0.56	3.31	9.26	0.00	0.00	0.00	2.83	1.00	0.01	0.00
+-1	0	0	353	21.60	1636	1114	0.57	4114	0	2	2503	921	1252	0.00	12.49	12.56	53.00	12.76	2.43	63.21	45	45	0.00	14.71	1.98	0.56	3.31	9.26	0.00	0.00	0.00	2.83	1.00	0.01	0.00
+-1	1	1	362	22.06	1641	1114	0.55	3572	0	4	2229	895	1233	0.01	10.39	12.53	54.68	10.98	2.39	64.58	45
+-1	2	2	377	23.15	1630	1114	0.49	4594	0	4	2531	924	1522	0.00	11.60	12.64	52.26	12.23	2.76	61.87	45
+-1	3	3	380	23.33	1631	1114	0.52	3262	0	5	1959	768	1242	0.01	9.88	10.47	55.97	10.11	2.30	64.26	45
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	358	22.66	1582	1114	0.52	15778	0	18	8969	3405	5127	0.00	11.08	11.65	54.28	11.36	2.45	63.54	40	42	0.00	14.79	2.08	0.51	3.15	10.60	0.00	0.00	0.00	2.76	0.94	0.01	0.00
+-1	0	0	379	23.89	1589	1114	0.57	4064	0	5	2283	915	1199	0.00	11.42	12.56	51.78	11.76	2.40	61.96	40	42	0.00	14.79	2.08	0.51	3.15	10.60	0.00	0.00	0.00	2.76	0.94	0.01	0.00
+-1	1	1	359	22.78	1575	1114	0.50	3543	0	5	2096	810	1276	0.01	10.80	11.08	55.05	11.10	2.32	63.80	40
+-1	2	2	350	21.93	1595	1114	0.51	4805	0	3	2285	855	1488	0.00	11.14	12.01	54.60	11.35	2.71	64.01	40
+-1	3	3	345	22.03	1567	1114	0.49	3366	0	5	2305	825	1164	0.00	10.97	10.95	55.71	11.22	2.35	64.40	40
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	391	23.49	1665	1114	0.61	15849	0	27	8432	3384	5139	0.01	10.24	12.02	53.91	10.46	2.44	63.61	43	45	0.00	14.45	2.16	0.43	2.86	10.37	0.00	0.00	0.00	2.91	1.07	0.02	0.00
+-1	0	0	418	25.40	1647	1114	0.64	4322	0	8	1970	852	1173	0.01	9.90	12.35	51.99	10.13	2.34	62.13	43	45	0.00	14.45	2.16	0.43	2.86	10.37	0.00	0.00	0.00	2.91	1.07	0.02	0.00
+-1	1	1	366	22.36	1637	1114	0.61	3517	0	5	1928	770	1293	0.01	9.29	11.00	57.05	9.35	2.36	65.93	43
+-1	2	2	390	23.47	1663	1114	0.59	4604	0	8	2363	948	1431	0.01	11.35	13.36	51.48	11.69	2.69	62.16	43
+-1	3	3	390	22.74	1715	1114	0.60	3406	0	6	2171	814	1242	0.00	10.43	11.38	55.11	10.66	2.38	64.22	43
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	315	21.25	1480	1114	0.49	14497	0	13	9444	3366	5379	0.00	11.13	11.72	55.59	11.51	2.50	64.75	38	42	0.00	14.27	2.42	0.42	3.30	10.71	0.00	0.00	0.00	2.62	0.83	0.01	0.00
+-1	0	0	291	19.52	1489	1114	0.51	3864	0	6	2850	1029	1277	0.01	13.66	13.99	52.47	14.16	2.56	63.76	38	42	0.00	14.27	2.42	0.42	3.30	10.71	0.00	0.00	0.00	2.62	0.83	0.01	0.00
+-1	1	1	316	21.11	1495	1114	0.48	3102	0	2	2186	685	1293	0.00	9.85	10.08	58.69	10.18	2.31	66.39	38
+-1	2	2	330	22.40	1472	1114	0.48	4553	0	3	2397	898	1525	0.00	11.42	12.46	53.39	11.75	2.78	63.07	38
+-1	3	3	322	21.95	1467	1114	0.48	2978	0	2	2011	754	1284	0.00	9.60	10.34	57.81	9.95	2.35	65.76	38
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	403	23.89	1688	1114	0.56	15566	0	29	9919	3321	5157	0.00	10.53	11.78	53.49	11.36	2.40	62.34	44	44	0.00	13.54	2.24	0.34	3.17	10.30	0.00	0.00	0.00	2.92	1.10	0.01	0.00
+-1	0	0	406	24.54	1654	1114	0.55	4166	0	18	2803	879	1218	0.00	11.91	12.31	50.92	13.09	2.33	60.04	44	44	0.00	13.54	2.24	0.34	3.17	10.30	0.00	0.00	0.00	2.92	1.10	0.01	0.00
+-1	1	1	477	27.20	1752	1114	0.58	3298	0	2	1942	660	1158	0.00	8.27	9.38	54.81	8.60	2.14	62.06	44
+-1	2	2	407	24.74	1645	1114	0.56	4815	0	2	2456	893	1399	0.00	10.67	12.88	51.36	11.60	2.65	61.01	44
+-1	3	3	323	19.08	1695	1114	0.56	3287	0	7	2718	889	1382	0.01	11.25	12.55	56.86	12.16	2.50	66.26	44
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	373	22.10	1686	1113	0.55	15249	0	21	9679	3392	5392	0.01	11.25	11.85	54.39	11.80	2.49	63.60	39	43	0.00	14.14	2.15	0.38	3.05	9.75	0.00	0.00	0.00	2.86	1.02	0.02	0.00
+-1	0	0	335	20.50	1634	1114	0.50	4010	0	5	2862	880	1328	0.00	12.79	12.04	54.27	13.47	2.41	63.63	38	43	0.00	14.14	2.15	0.38	3.05	9.75	0.00	0.00	0.00	2.86	1.02	0.02	0.00
+-1	1	1	355	20.86	1704	1114	0.54	3260	0	3	2166	805	1389	0.00	9.94	11.58	57.26	10.40	2.49	66.25	38
+-1	2	2	407	23.79	1711	1114	0.58	4423	0	10	2465	892	1468	0.01	11.53	11.96	52.31	12.23	2.70	61.28	39
+-1	3	3	393	23.27	1689	1114	0.58	3556	0	3	2186	815	1207	0.00	10.74	11.83	53.73	11.11	2.36	63.26	39
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	437	23.98	1823	1114	0.60	18145	0	44	9370	3525	5287	0.01	11.17	12.32	52.14	11.64	2.47	61.91	44	45	0.00	13.67	1.86	0.44	3.19	8.66	0.00	0.00	0.00	3.07	1.20	0.01	0.00
+-1	0	0	452	24.68	1833	1114	0.62	4883	0	27	2395	865	1296	0.01	11.82	12.42	50.65	12.17	2.43	60.73	44	45	0.00	13.67	1.86	0.44	3.19	8.66	0.00	0.00	0.00	3.07	1.20	0.01	0.00
+-1	1	1	410	22.47	1822	1114	0.60	3558	0	6	2164	889	1272	0.01	10.86	12.44	53.86	11.14	2.42	63.97	44
+-1	2	2	452	25.21	1794	1114	0.58	4740	0	3	2611	942	1348	0.00	11.59	12.94	49.80	12.05	2.62	60.12	44
+-1	3	3	435	23.55	1846	1114	0.58	4964	0	8	2200	829	1371	0.01	10.39	11.49	54.21	11.21	2.41	62.84	44
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	445	25.53	1744	1113	0.56	19068	0	27	9213	3650	5135	0.01	10.98	12.53	50.56	11.55	2.44	60.48	38	43	0.00	13.46	1.80	0.40	3.03	8.44	0.00	0.00	0.00	3.06	1.20	0.01	0.00
+-1	0	0	429	25.31	1695	1114	0.56	4860	0	7	2480	973	1197	0.01	11.94	13.26	49.09	12.53	2.38	59.78	38	43	0.00	13.46	1.80	0.40	3.03	8.44	0.00	0.00	0.00	3.06	1.20	0.01	0.00
+-1	1	1	450	26.29	1711	1114	0.58	4750	0	5	2286	939	1210	0.01	11.24	13.06	49.01	11.64	2.40	59.67	38
+-1	2	2	422	24.27	1740	1114	0.51	4690	0	9	2537	971	1484	0.00	11.78	13.09	50.49	12.56	2.70	60.47	38
+-1	3	3	479	26.25	1827	1114	0.58	4768	0	6	1910	767	1244	0.01	8.95	10.72	53.66	9.46	2.30	62.00	38
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	443	24.33	1819	1114	0.65	16187	0	24	9861	3543	5205	0.00	11.52	12.23	51.55	12.21	2.40	61.05	40	45	0.00	11.97	1.87	0.36	2.84	8.47	0.00	0.00	0.00	3.10	1.24	0.02	0.00
+-1	0	0	400	22.93	1744	1114	0.57	4017	0	0	2537	889	1328	0.00	12.66	12.09	51.97	13.25	2.36	61.45	40	45	0.00	11.97	1.87	0.36	2.84	8.47	0.00	0.00	0.00	3.10	1.24	0.02	0.00
+-1	1	1	407	22.83	1781	1114	0.58	3767	0	6	2470	935	1217	0.01	11.56	13.15	52.12	12.21	2.41	62.55	39
+-1	2	2	512	26.96	1897	1114	0.78	5123	0	14	2880	1019	1373	0.00	12.77	13.78	46.07	13.95	2.60	56.49	39
+-1	3	3	452	24.62	1837	1114	0.65	3280	0	4	1974	700	1287	0.00	9.10	9.90	56.06	9.43	2.25	63.70	39
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	291	18.63	1562	1114	0.68	13496	0	16	6590	2398	4112	0.00	8.55	9.29	63.31	8.75	2.13	70.49	38	42	0.00	9.66	3.96	0.01	2.11	18.72	0.00	0.00	0.00	2.59	0.79	0.04	0.00
+-1	0	0	273	17.85	1531	1114	0.65	4262	0	3	1955	619	1140	0.00	11.33	9.05	61.50	11.79	2.19	68.17	38	42	0.00	9.66	3.96	0.01	2.11	18.72	0.00	0.00	0.00	2.59	0.79	0.04	0.00
+-1	1	1	256	16.48	1552	1114	0.68	3017	0	2	1371	586	998	0.00	6.81	9.07	67.47	6.90	2.07	74.56	38
+-1	2	2	306	19.52	1566	1114	0.65	3619	0	7	1871	634	1130	0.01	8.88	9.82	61.55	9.23	2.31	68.94	38
+-1	3	3	329	20.68	1592	1114	0.73	2598	0	4	1393	559	844	0.00	7.18	9.21	62.70	7.07	1.96	70.28	37
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	349	19.43	1798	1114	0.64	13945	0	25	8833	3300	5146	0.01	10.57	12.03	57.66	11.46	2.48	66.64	39	42	0.00	12.24	3.12	0.12	3.18	13.85	0.00	0.00	0.00	2.92	1.11	0.02	0.00
+-1	0	0	368	20.98	1754	1114	0.53	4384	0	3	2156	801	1297	0.00	11.94	11.13	55.56	12.65	2.44	63.93	39	42	0.00	12.24	3.12	0.12	3.18	13.85	0.00	0.00	0.00	2.92	1.11	0.02	0.00
+-1	1	1	369	19.67	1873	1114	0.82	2767	0	13	1809	763	1242	0.02	9.52	11.18	59.30	10.18	2.35	67.79	39
+-1	2	2	407	21.41	1899	1114	0.66	3866	0	4	2364	845	1329	0.00	9.62	12.68	55.95	10.79	2.63	65.17	39
+-1	3	3	254	15.64	1625	1114	0.51	2928	0	5	2504	891	1278	0.00	11.19	13.11	59.85	12.23	2.48	69.65	38
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	409	26.16	1561	1114	0.61	16688	0	22	9568	3807	4335	0.01	11.80	13.79	47.94	12.45	2.32	59.06	40	43	0.00	10.03	2.27	0.15	2.92	10.70	0.00	0.00	0.00	2.95	1.07	0.03	0.00
+-1	0	0	410	26.33	1555	1114	0.60	5201	0	6	2391	964	1090	0.00	12.75	13.92	46.66	13.38	2.28	58.00	40	43	0.00	10.03	2.27	0.15	2.92	10.70	0.00	0.00	0.00	2.95	1.07	0.03	0.00
+-1	1	1	414	26.00	1593	1114	0.60	3457	0	6	2009	849	1127	0.01	9.63	11.95	52.17	10.13	2.22	61.65	40
+-1	2	2	405	25.43	1593	1114	0.65	4325	0	6	2742	1073	1129	0.01	13.59	15.57	45.12	14.35	2.52	57.70	40
+-1	3	3	405	26.89	1507	1114	0.61	3705	0	4	2426	921	989	0.00	11.25	13.73	47.81	11.94	2.27	58.90	40
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	434	25.20	1724	1114	0.58	16549	0	22	8796	3244	5121	0.00	10.62	10.98	52.88	10.85	2.37	61.58	42	44	0.00	13.94	2.28	0.52	2.79	10.19	0.00	0.00	0.00	3.00	1.16	0.01	0.00
+-1	0	0	424	24.82	1706	1114	0.60	4286	0	4	2243	868	1258	0.00	11.30	11.53	51.97	11.61	2.31	61.25	42	44	0.00	13.94	2.28	0.52	2.79	10.19	0.00	0.00	0.00	3.00	1.15	0.01	0.00
+-1	1	1	451	25.86	1743	1114	0.61	3488	0	7	1849	681	1278	0.00	8.91	9.38	55.56	8.96	2.25	62.92	42
+-1	2	2	455	26.45	1719	1114	0.54	4830	0	5	2338	874	1320	0.01	10.89	11.81	50.51	11.23	2.56	59.76	42
+-1	3	3	408	23.65	1726	1114	0.57	3945	0	6	2366	821	1265	0.01	11.37	11.20	53.45	11.59	2.35	62.40	42
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	392	22.81	1720	1113	0.55	15293	0	15	9065	3498	5220	0.00	11.22	12.14	53.43	11.51	2.47	63.21	39	43	0.00	14.38	1.94	0.53	3.35	9.21	0.00	0.00	0.00	2.89	1.05	0.01	0.00
+-1	0	0	361	21.24	1701	1114	0.56	3792	0	4	2173	904	1262	0.01	11.28	12.30	54.80	11.50	2.39	64.87	39	43	0.00	14.38	1.94	0.53	3.35	9.21	0.00	0.00	0.00	2.89	1.05	0.01	0.00
+-1	1	1	424	24.56	1725	1114	0.52	3424	0	1	2089	762	1250	0.00	10.03	10.77	54.26	10.26	2.30	62.89	39
+-1	2	2	367	20.80	1766	1114	0.58	4505	0	3	2662	1013	1465	0.00	12.44	14.05	52.37	12.80	2.82	63.59	39
+-1	3	3	417	24.63	1693	1114	0.56	3572	0	7	2141	819	1243	0.00	11.14	11.45	52.31	11.50	2.36	61.50	39
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	329	20.83	1579	1114	0.50	14354	0	16	9130	3540	5476	0.00	11.09	12.25	55.47	11.52	2.57	65.09	39	40	0.00	14.87	2.23	0.44	3.53	9.71	0.00	0.00	0.00	2.69	0.88	0.01	0.00
+-1	0	0	329	21.07	1561	1114	0.52	3673	0	6	2463	953	1311	0.01	12.41	13.05	53.10	12.93	2.53	63.47	39	40	0.00	14.87	2.23	0.44	3.53	9.71	0.00	0.00	0.00	2.69	0.88	0.01	0.00
+-1	1	1	327	20.59	1588	1114	0.51	3295	0	2	2265	821	1350	0.00	10.69	11.19	57.17	11.06	2.44	65.90	38
+-1	2	2	337	21.39	1576	1114	0.46	4284	0	3	2335	943	1463	0.00	11.06	13.17	54.03	11.68	2.78	64.15	38
+-1	3	3	322	20.25	1592	1114	0.51	3102	0	5	2067	823	1352	0.00	10.21	11.61	57.58	10.40	2.51	66.84	38
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	343	21.69	1580	1114	0.51	14565	0	21	9737	3466	5385	0.01	11.25	12.02	54.71	11.76	2.50	64.05	46	46	0.00	14.69	2.02	0.51	3.18	9.11	0.00	0.00	0.00	2.73	0.92	0.01	0.00
+-1	0	0	360	22.18	1621	1114	0.57	3812	0	6	2336	983	1255	0.01	11.47	13.97	51.99	11.95	2.50	63.36	46	46	0.00	14.69	2.02	0.51	3.18	9.11	0.00	0.00	0.00	2.73	0.92	0.01	0.00
+-1	1	1	393	25.60	1536	1114	0.53	3375	0	4	2196	782	1188	0.00	9.69	10.96	53.36	10.30	2.28	61.81	46
+-1	2	2	330	20.91	1578	1114	0.47	4267	0	10	2526	845	1582	0.01	12.02	11.57	55.20	12.54	2.73	63.82	46
+-1	3	3	287	18.05	1592	1114	0.48	3111	0	1	2679	856	1360	0.00	11.80	11.59	58.25	12.25	2.47	67.22	46
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	743	33.73	2203	1113	0.49	21472	0	242	17719	3613	4529	0.02	13.83	10.95	41.20	15.12	2.01	49.14	44	47	0.00	10.44	1.30	0.30	2.31	6.62	0.00	0.00	0.00	3.96	1.98	0.01	0.00
+-1	0	0	762	35.56	2144	1114	0.51	5430	0	30	4728	920	1105	0.02	13.87	11.38	38.88	15.54	1.93	46.97	43	47	0.00	10.44	1.30	0.30	2.31	6.62	0.00	0.00	0.00	3.96	1.98	0.01	0.00
+-1	1	1	734	32.95	2227	1114	0.47	5624	0	17	4392	892	1140	0.01	13.75	10.27	42.77	14.91	1.95	50.19	43
+-1	2	2	748	33.43	2237	1114	0.45	5708	0	116	4135	922	1220	0.03	13.87	11.45	40.95	15.03	2.19	49.35	43
+-1	3	3	728	32.99	2208	1114	0.51	4710	0	79	4464	879	1064	0.03	13.82	10.70	42.22	15.01	1.95	50.06	44
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	344	21.39	1610	1114	0.50	14815	0	24	10155	3495	5267	0.01	11.54	12.04	54.68	12.27	2.45	63.89	41	43	0.00	14.28	2.36	0.45	3.08	10.17	0.00	0.00	0.00	2.76	0.94	0.01	0.00
+-1	0	0	351	21.96	1596	1114	0.50	3821	0	7	2444	878	1273	0.01	11.50	11.97	54.20	12.31	2.33	63.40	41	43	0.00	14.28	2.36	0.45	3.08	10.17	0.00	0.00	0.00	2.75	0.94	0.01	0.00
+-1	1	1	349	21.27	1639	1114	0.49	3341	0	6	2518	820	1192	0.01	11.43	11.27	55.69	12.16	2.30	64.27	41
+-1	2	2	348	21.69	1606	1114	0.52	4507	0	6	2792	1016	1414	0.01	12.92	13.68	51.33	13.58	2.79	61.95	41
+-1	3	3	330	20.62	1600	1114	0.50	3146	0	5	2401	781	1388	0.00	10.31	11.24	57.50	11.04	2.40	65.93	41
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	336	20.95	1606	1114	0.52	14566	0	11	9089	3478	5300	0.00	10.86	12.25	55.59	11.24	2.53	65.29	42	43	0.00	14.82	2.28	0.48	3.04	10.66	0.00	0.00	0.00	2.73	0.92	0.01	0.00
+-1	0	0	347	21.80	1590	1114	0.48	3562	0	2	2199	917	1233	0.00	11.03	12.80	53.98	11.52	2.46	64.22	41	43	0.00	14.82	2.28	0.48	3.04	10.66	0.00	0.00	0.00	2.73	0.92	0.01	0.00
+-1	1	1	350	21.04	1662	1114	0.57	3261	0	3	2233	887	1247	0.00	10.68	12.78	55.13	10.90	2.48	65.58	41
+-1	2	2	343	21.38	1604	1114	0.51	4588	0	2	2381	822	1454	0.00	11.11	11.27	55.89	11.58	2.66	64.38	42
+-1	3	3	306	19.56	1565	1114	0.51	3155	0	4	2276	852	1366	0.01	10.62	12.15	57.34	10.95	2.51	66.98	42
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	331	20.87	1584	1114	0.52	13742	0	20	8495	3205	5373	0.01	10.49	11.22	57.06	10.73	2.48	65.92	39	43	0.00	14.78	2.45	0.52	3.05	11.28	0.00	0.00	0.00	2.72	0.91	0.01	0.00
+-1	0	0	389	23.40	1662	1114	0.54	3656	0	5	2079	783	1234	0.01	10.51	11.11	54.54	10.72	2.35	63.53	39	43	0.00	14.78	2.45	0.52	3.05	11.28	0.00	0.00	0.00	2.72	0.91	0.01	0.00
+-1	1	1	290	18.94	1530	1114	0.52	2930	0	5	1980	762	1364	0.01	9.68	10.73	60.36	9.71	2.42	68.94	39
+-1	2	2	362	22.70	1594	1114	0.52	4304	0	8	2343	922	1437	0.01	11.20	12.97	52.77	11.69	2.77	62.84	39
+-1	3	3	282	18.45	1530	1114	0.50	2852	0	2	2093	738	1338	0.00	10.57	10.07	60.59	10.79	2.40	68.37	39
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	341	21.11	1614	1113	0.56	13995	0	14	8621	3336	5334	0.00	10.94	11.62	55.95	11.20	2.50	65.19	40	42	0.00	13.76	2.55	0.37	3.07	10.94	0.00	0.00	0.00	2.75	0.94	0.01	0.00
+-1	0	0	330	19.76	1671	1114	0.53	3670	0	4	2392	915	1300	0.01	12.53	12.59	54.73	12.91	2.46	64.86	40	42	0.00	13.76	2.55	0.37	3.07	10.94	0.00	0.00	0.00	2.75	0.94	0.01	0.00
+-1	1	1	298	19.02	1566	1114	0.53	3148	0	2	2249	832	1354	0.00	10.99	11.72	57.96	11.15	2.47	67.35	39
+-1	2	2	377	23.22	1623	1114	0.56	4105	0	6	2120	795	1398	0.01	10.21	10.78	55.39	10.58	2.65	63.55	39
+-1	3	3	358	22.44	1595	1114	0.60	3072	0	2	1860	794	1282	0.00	10.03	11.39	55.75	10.16	2.41	64.99	39
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	416	23.87	1741	1114	0.56	15478	0	21	10214	3656	5303	0.01	11.40	12.64	51.71	12.14	2.50	61.49	39	43	0.00	13.56	1.82	0.36	3.26	7.96	0.00	0.00	0.00	2.98	1.13	0.01	0.00
+-1	0	0	422	25.28	1669	1114	0.55	4188	0	6	2515	940	1231	0.01	11.73	13.71	48.85	12.46	2.43	59.82	39	43	0.00	13.56	1.82	0.36	3.26	7.96	0.00	0.00	0.00	2.98	1.13	0.01	0.00
+-1	1	1	452	25.24	1792	1114	0.59	3499	0	4	2371	877	1235	0.01	11.18	12.13	51.00	12.05	2.39	60.32	39
+-1	2	2	388	21.63	1793	1114	0.54	4357	0	5	2691	940	1542	0.01	11.75	12.44	53.85	12.51	2.75	63.11	38
+-1	3	3	400	23.31	1715	1114	0.55	3434	0	6	2637	899	1295	0.01	10.95	12.27	53.14	11.55	2.43	62.71	38
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	340	21.03	1615	1114	0.53	14291	0	19	9766	3245	5242	0.01	10.91	11.14	56.57	11.72	2.42	64.84	40	43	0.00	13.75	2.42	0.42	2.98	11.25	0.00	0.00	0.00	2.76	0.96	0.01	0.00
+-1	0	0	372	22.26	1669	1114	0.56	3731	0	7	2442	801	1145	0.01	11.91	10.23	55.18	12.62	2.19	62.93	40	43	0.00	13.75	2.42	0.42	2.98	11.25	0.00	0.00	0.00	2.76	0.96	0.01	0.00
+-1	1	1	319	19.37	1646	1114	0.54	3126	0	2	2450	855	1414	0.00	10.84	12.09	57.38	11.74	2.52	66.38	40
+-1	2	2	317	20.84	1521	1114	0.47	4409	0	8	2847	853	1448	0.01	11.72	11.79	55.31	12.72	2.66	63.77	40
+-1	3	3	351	21.64	1621	1114	0.52	3025	0	2	2027	736	1235	0.00	9.18	10.45	58.39	9.79	2.29	66.28	39
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	428	23.75	1803	1114	0.60	15246	0	19	9699	3475	5154	0.01	11.03	12.09	52.75	11.62	2.42	62.21	39	43	0.00	13.34	2.00	0.34	2.91	9.33	0.00	0.00	0.00	3.03	1.19	0.01	0.00
+-1	0	0	413	22.95	1799	1114	0.61	3798	0	4	2286	894	1354	0.01	11.32	12.84	52.50	11.76	2.46	62.83	39	43	0.00	13.34	2.00	0.34	2.91	9.33	0.00	0.00	0.00	3.03	1.19	0.01	0.00
+-1	1	1	382	21.56	1773	1114	0.59	3611	0	3	2814	947	1236	0.00	12.12	13.29	52.66	12.90	2.39	63.16	39
+-1	2	2	501	27.40	1828	1114	0.59	4611	0	5	2224	874	1323	0.00	10.89	11.82	49.42	11.42	2.56	58.61	38
+-1	3	3	417	23.08	1806	1114	0.61	3226	0	7	2375	760	1241	0.01	9.77	10.39	56.43	10.41	2.27	64.24	38
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	327	21.53	1521	1114	0.50	14756	0	13	8935	3452	5512	0.00	11.04	12.19	54.88	11.37	2.55	64.55	39	43	0.00	14.66	2.02	0.41	3.46	9.53	0.00	0.00	0.00	2.67	0.86	0.01	0.00
+-1	0	0	364	24.05	1514	1114	0.50	3766	0	5	2121	836	1289	0.00	10.93	11.65	52.99	11.23	2.39	62.33	39	43	0.00	14.66	2.02	0.41	3.46	9.53	0.00	0.00	0.00	2.67	0.86	0.01	0.00
+-1	1	1	291	19.15	1519	1114	0.52	3257	0	2	2285	879	1298	0.00	11.16	12.77	56.60	11.54	2.53	66.78	39
+-1	2	2	347	22.53	1541	1114	0.50	4554	0	1	2388	940	1497	0.00	12.01	13.06	52.01	12.51	2.79	62.17	39
+-1	3	3	308	20.38	1510	1114	0.48	3179	0	5	2141	797	1428	0.00	10.06	11.29	57.91	10.22	2.50	66.91	39
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	252	18.94	1331	1114	0.74	12976	0	17	6540	2546	4565	0.00	8.96	9.67	62.24	9.14	2.20	69.73	39	42	0.00	9.07	3.43	0.06	1.92	15.93	0.00	0.00	0.00	2.50	0.72	0.04	0.00
+-1	0	0	222	17.60	1259	1114	0.58	4281	0	4	2122	693	1173	0.00	13.00	9.87	59.30	13.31	2.24	66.85	39	42	0.00	9.07	3.43	0.06	1.92	15.92	0.00	0.00	0.00	2.50	0.72	0.04	0.00
+-1	1	1	315	21.71	1449	1114	0.97	2673	0	3	1323	616	1012	0.01	6.99	9.75	61.34	7.10	2.09	69.10	39
+-1	2	2	256	19.37	1323	1114	0.72	3481	0	8	1670	660	1285	0.01	8.39	10.12	61.96	8.60	2.38	69.64	39
+-1	3	3	216	17.07	1266	1114	0.60	2541	0	2	1425	577	1095	0.00	7.46	8.94	66.35	7.53	2.09	73.31	39
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	308	19.40	1590	1114	0.67	13585	0	15	6928	2854	4791	0.00	9.33	10.45	60.64	9.71	2.31	68.57	47	47	0.00	11.86	3.34	0.16	2.77	15.63	0.00	0.00	0.00	2.65	0.90	0.03	0.00
+-1	0	0	314	18.72	1679	1114	0.73	4168	0	2	1892	768	1174	0.00	10.73	10.99	59.33	11.21	2.34	67.73	47	47	0.00	11.86	3.34	0.16	2.77	15.63	0.00	0.00	0.00	2.65	0.90	0.03	0.00
+-1	1	1	326	20.34	1601	1114	0.71	2988	0	6	1530	649	1112	0.01	8.58	9.54	61.33	8.98	2.14	68.55	47
+-1	2	2	298	18.86	1579	1114	0.56	3601	0	5	1880	757	1319	0.01	10.00	11.15	59.84	10.59	2.50	68.05	47
+-1	3	3	296	19.70	1504	1114	0.68	2828	0	2	1626	680	1186	0.00	8.02	10.12	62.05	8.07	2.28	69.95	46
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	364	24.25	1503	1114	0.54	17143	0	19	10129	4190	4622	0.01	12.89	15.39	47.05	13.84	2.52	59.39	38	42	0.00	9.59	2.22	0.10	2.58	10.14	0.00	0.00	0.00	2.89	0.99	0.04	0.00
+-1	0	0	435	26.39	1648	1114	0.51	5541	0	4	2621	1076	1098	0.00	13.62	15.49	44.02	14.77	2.48	56.36	38	42	0.00	9.59	2.22	0.10	2.58	10.14	0.00	0.00	0.00	2.89	0.99	0.04	0.00
+-1	1	1	319	22.10	1442	1114	0.54	3566	0	6	2473	990	1214	0.01	12.26	14.85	50.50	13.21	2.45	62.25	38
+-1	2	2	335	23.99	1396	1114	0.48	4649	0	4	2778	1227	1200	0.00	14.15	17.73	43.66	15.16	2.78	58.07	38
+-1	3	3	369	24.51	1506	1114	0.62	3387	0	5	2257	897	1110	0.01	11.55	13.49	50.05	12.23	2.39	60.88	37
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	457	24.40	1874	1114	0.60	16742	0	21	9774	3231	5062	0.01	10.94	11.30	52.98	11.70	2.33	61.57	39	44	0.00	12.66	2.31	0.36	2.66	10.61	0.00	0.00	0.00	3.10	1.25	0.02	0.00
+-1	0	0	439	23.61	1858	1114	0.58	4237	0	3	2481	806	1266	0.00	11.52	11.11	53.33	12.18	2.31	61.89	39	44	0.00	12.66	2.31	0.36	2.66	10.61	0.00	0.00	0.00	3.10	1.25	0.02	0.00
+-1	1	1	486	26.44	1838	1114	0.60	4292	0	10	2509	796	1108	0.01	11.31	11.28	50.56	11.92	2.17	59.46	39
+-1	2	2	447	24.01	1864	1114	0.52	4571	0	6	2251	835	1470	0.01	10.36	11.52	53.77	11.19	2.60	62.21	39
+-1	3	3	457	23.54	1942	1114	0.72	3642	0	2	2533	794	1218	0.00	10.55	11.29	54.23	11.50	2.25	62.71	39
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	372	23.97	1552	1114	0.57	15133	0	7	9262	3384	5050	0.00	10.68	11.79	53.20	11.30	2.38	62.36	39	42	0.00	13.74	2.04	0.57	2.62	9.30	0.00	0.00	0.00	2.81	0.97	0.01	0.00
+-1	0	0	386	24.59	1572	1114	0.56	3847	0	3	2160	802	1187	0.00	11.00	11.20	52.83	11.59	2.22	61.60	39	42	0.00	13.75	2.04	0.57	2.62	9.30	0.00	0.00	0.00	2.81	0.97	0.01	0.00
+-1	1	1	364	23.59	1545	1114	0.58	3512	0	3	2274	897	1224	0.00	10.96	12.32	52.79	11.39	2.34	62.68	38
+-1	2	2	323	20.91	1546	1114	0.56	4591	0	1	3038	982	1447	0.00	12.44	13.16	53.18	13.26	2.72	63.11	38
+-1	3	3	413	26.78	1543	1114	0.58	3183	0	0	1790	703	1192	0.00	8.34	10.48	54.01	8.96	2.22	62.05	38
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	416	24.37	1707	1114	0.58	15589	0	25	9058	3696	5219	0.01	11.61	12.64	50.98	12.03	2.46	61.14	67	66	0.00	12.76	1.88	0.43	2.50	8.28	0.00	0.00	0.00	2.97	1.12	0.01	0.00
+-1	0	0	384	22.55	1702	1114	0.61	3720	0	5	2238	976	1322	0.01	12.07	13.48	51.51	12.42	2.47	62.56	66	66	0.00	12.75	1.88	0.43	2.50	8.28	0.00	0.00	0.00	2.97	1.12	0.01	0.00
+-1	1	1	435	25.63	1696	1114	0.57	3920	0	3	2398	953	1206	0.00	12.33	12.94	48.67	12.93	2.38	59.06	66
+-1	2	2	452	26.11	1729	1114	0.58	4435	0	7	2131	860	1414	0.00	10.91	11.40	51.17	11.23	2.54	60.12	66
+-1	3	3	394	23.19	1701	1114	0.59	3514	0	10	2291	907	1277	0.01	11.14	12.74	52.55	11.52	2.46	62.83	67
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	375	23.50	1596	1114	0.55	15041	0	14	9268	3498	5109	0.00	11.28	12.06	52.78	11.82	2.41	62.27	38	42	0.00	14.01	1.81	0.60	2.95	8.51	0.00	0.00	0.00	2.82	1.00	0.01	0.00
+-1	0	0	378	23.86	1583	1114	0.57	3964	0	3	2290	910	1232	0.00	12.18	12.35	51.25	12.68	2.33	61.13	38	42	0.00	14.01	1.81	0.60	2.95	8.51	0.00	0.00	0.00	2.82	1.00	0.01	0.00
+-1	1	1	395	25.29	1560	1114	0.60	3507	0	5	2014	799	1141	0.00	9.97	11.74	52.60	10.42	2.28	62.01	38
+-1	2	2	384	23.13	1658	1114	0.50	4308	0	4	2528	863	1475	0.01	11.60	11.40	53.54	12.15	2.60	62.12	38
+-1	3	3	344	21.74	1584	1114	0.52	3262	0	2	2436	926	1261	0.00	11.38	12.77	53.77	12.01	2.45	63.80	38
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	377	22.84	1652	1114	0.55	15357	0	18	8942	3570	5318	0.01	11.13	12.21	53.39	11.60	2.49	63.06	40	43	0.00	13.67	1.87	0.42	2.88	8.81	0.00	0.00	0.00	2.85	1.01	0.01	0.00
+-1	0	0	383	23.32	1641	1114	0.55	3925	0	6	2430	968	1195	0.01	12.23	12.96	51.02	12.83	2.41	61.45	40	43	0.00	13.67	1.87	0.42	2.88	8.81	0.00	0.00	0.00	2.85	1.01	0.01	0.00
+-1	1	1	388	22.79	1703	1114	0.54	3647	0	2	2107	880	1317	0.00	10.58	12.35	53.86	10.87	2.44	63.90	39
+-1	2	2	374	22.59	1657	1114	0.55	4469	0	7	2291	919	1526	0.01	10.80	12.52	53.67	11.35	2.77	63.30	39
+-1	3	3	364	22.68	1606	1114	0.55	3316	0	3	2114	803	1280	0.00	10.92	11.01	54.99	11.36	2.36	63.61	39
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	384	24.15	1591	1114	0.58	15770	0	15	9611	3495	5260	0.00	11.31	12.31	51.82	11.91	2.45	61.49	41	44	0.00	14.09	1.69	0.49	3.25	7.33	0.00	0.00	0.00	2.85	1.00	0.02	0.00
+-1	0	0	394	25.00	1576	1114	0.53	4003	0	1	2320	872	1195	0.00	11.92	12.17	50.47	12.45	2.29	60.25	40	44	0.00	14.09	1.69	0.49	3.25	7.33	0.00	0.00	0.00	2.85	1.00	0.02	0.00
+-1	1	1	371	23.22	1599	1114	0.64	3670	0	4	2241	876	1336	0.00	11.44	12.38	52.57	11.86	2.42	62.50	40
+-1	2	2	404	25.58	1579	1114	0.58	4496	0	6	2451	864	1444	0.01	10.74	11.92	51.34	11.46	2.64	60.32	40
+-1	3	3	367	22.80	1610	1114	0.56	3601	0	4	2599	883	1285	0.01	11.14	12.77	52.90	11.85	2.45	62.89	41
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	410	25.20	1626	1114	0.59	15376	0	14	9340	3494	5146	0.00	10.93	12.08	51.43	11.50	2.39	60.90	66	66	0.00	13.45	1.95	0.51	2.69	8.69	0.00	0.00	0.00	2.89	1.06	0.01	0.00
+-1	0	0	378	23.51	1606	1114	0.57	3963	0	2	2400	944	1249	0.00	12.21	12.99	50.91	12.74	2.39	61.36	66	66	0.00	13.45	1.95	0.51	2.69	8.69	0.00	0.00	0.00	2.89	1.06	0.01	0.00
+-1	1	1	438	27.14	1614	1114	0.60	3483	0	4	2222	849	1160	0.00	9.85	12.17	50.48	10.61	2.26	60.00	66
+-1	2	2	426	25.85	1649	1114	0.63	4547	0	5	2460	879	1437	0.01	11.19	12.08	50.51	11.98	2.60	59.57	66
+-1	3	3	398	24.30	1636	1114	0.55	3383	0	3	2258	822	1300	0.00	10.48	11.06	53.82	10.69	2.34	62.67	66
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	408	24.30	1678	1114	0.60	14992	0	15	9099	3336	5009	0.00	10.51	11.46	53.34	11.04	2.38	62.29	41	43	0.00	12.72	2.39	0.47	2.56	10.36	0.00	0.00	0.00	2.95	1.11	0.01	0.00
+-1	0	0	416	23.97	1733	1114	0.67	3819	0	7	2501	886	1244	0.00	11.72	12.16	51.72	12.43	2.33	61.26	41	43	0.00	12.72	2.39	0.47	2.56	10.36	0.00	0.00	0.00	2.95	1.11	0.01	0.00
+-1	1	1	396	23.63	1674	1114	0.57	3240	0	4	2015	818	1234	0.00	10.01	11.28	54.69	10.38	2.34	63.64	41
+-1	2	2	434	25.86	1678	1114	0.61	4593	0	3	2467	853	1334	0.00	10.66	11.44	51.67	11.14	2.52	60.48	41
+-1	3	3	385	23.73	1624	1114	0.53	3340	0	1	2116	779	1197	0.00	9.67	10.95	55.29	10.18	2.32	63.76	41
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	342	21.79	1571	1114	0.55	14236	0	17	8371	3521	5118	0.00	10.69	12.38	54.75	10.91	2.49	64.81	39	42	0.00	13.52	2.35	0.37	3.11	10.48	0.00	0.00	0.00	2.71	0.92	0.01	0.00
+-1	0	0	320	20.86	1532	1114	0.47	3770	0	2	2237	967	1272	0.00	12.08	13.83	52.81	12.34	2.51	64.28	38	42	0.00	13.52	2.35	0.37	3.11	10.48	0.00	0.00	0.00	2.72	0.92	0.01	0.00
+-1	1	1	346	22.02	1570	1114	0.54	3288	0	3	2035	841	1300	0.00	9.87	11.90	55.85	10.06	2.42	65.49	38
+-1	2	2	337	21.21	1588	1114	0.62	4201	0	3	2313	989	1307	0.00	11.74	13.63	53.05	12.03	2.72	64.04	39
+-1	3	3	367	23.05	1593	1114	0.58	2977	0	9	1786	724	1239	0.01	9.09	10.15	57.33	9.21	2.32	65.43	39
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	430	27.83	1547	1114	0.60	16552	0	11	9224	3562	4937	0.00	11.68	12.13	48.02	12.12	2.34	57.71	41	43	0.00	12.61	1.48	0.43	2.85	6.58	0.00	0.00	0.00	2.95	1.07	0.01	0.00
+-1	0	0	439	28.31	1550	1114	0.58	4270	0	2	2366	887	1183	0.00	12.17	12.50	46.62	12.65	2.28	56.76	41	43	0.00	12.61	1.48	0.43	2.85	6.58	0.00	0.00	0.00	2.94	1.07	0.01	0.00
+-1	1	1	435	28.40	1533	1114	0.61	3906	0	3	1945	818	1166	0.00	10.70	11.46	49.13	10.99	2.21	58.40	41
+-1	2	2	399	25.27	1577	1114	0.56	4773	0	3	2880	1021	1402	0.00	13.31	12.97	48.12	13.97	2.62	58.14	41
+-1	3	3	449	29.35	1530	1114	0.64	3603	0	3	2033	836	1186	0.00	10.54	11.59	48.20	10.87	2.23	57.55	41
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	375	22.37	1677	1113	0.57	14495	0	9	8725	3465	5378	0.00	11.09	11.90	54.22	11.45	2.49	63.69	39	44	0.00	13.78	2.03	0.48	2.97	9.51	0.00	0.00	0.00	2.86	1.03	0.02	0.00
+-1	0	0	335	19.74	1699	1114	0.55	3528	0	3	2421	870	1358	0.00	11.80	11.99	56.08	12.13	2.45	65.68	39	44	0.00	13.78	2.03	0.48	2.97	9.51	0.00	0.00	0.00	2.86	1.03	0.02	0.00
+-1	1	1	389	22.05	1763	1114	0.63	3273	0	2	2057	883	1315	0.00	10.57	12.14	54.84	10.82	2.45	64.68	39
+-1	2	2	412	25.56	1611	1114	0.55	4332	0	3	2126	854	1354	0.00	11.07	11.67	51.25	11.44	2.58	60.41	39
+-1	3	3	364	22.13	1647	1114	0.54	3362	0	1	2121	858	1351	0.00	10.92	11.80	54.74	11.39	2.47	64.01	39
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	353	22.87	1543	1114	0.53	14688	0	8	9810	3549	5204	0.00	11.67	12.22	52.85	12.19	2.47	62.47	38	41	0.00	13.91	1.91	0.44	3.11	8.61	0.00	0.00	0.00	2.76	0.93	0.01	0.00
+-1	0	0	369	23.74	1553	1114	0.51	3795	0	4	2632	892	1184	0.00	12.00	12.37	51.48	12.68	2.35	61.23	38	41	0.00	13.91	1.91	0.44	3.11	8.61	0.00	0.00	0.00	2.76	0.93	0.01	0.00
+-1	1	1	337	22.36	1507	1114	0.52	3253	0	0	2328	866	1342	0.00	10.61	12.36	54.33	11.34	2.47	63.84	38
+-1	2	2	353	22.64	1558	1114	0.54	4420	0	2	2590	957	1445	0.00	12.49	12.70	51.76	12.96	2.70	61.70	38
+-1	3	3	354	22.75	1555	1114	0.54	3220	0	2	2260	834	1233	0.00	11.56	11.46	53.84	11.77	2.36	63.11	38
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	432	25.17	1716	1114	0.61	14901	0	11	9323	3207	5111	0.00	10.48	11.15	52.85	11.15	2.33	61.35	41	44	0.00	12.70	1.88	0.44	2.54	9.07	0.00	0.00	0.00	3.02	1.17	0.02	0.00
+-1	0	0	433	25.24	1714	1114	0.56	3756	0	1	2461	834	1235	0.00	11.07	11.67	51.63	11.84	2.27	60.65	41	44	0.00	12.70	1.88	0.44	2.54	9.07	0.00	0.00	0.00	3.02	1.17	0.02	0.00
+-1	1	1	438	24.47	1792	1114	0.66	3328	0	2	2017	765	1230	0.00	9.76	10.79	54.68	10.19	2.22	63.12	41
+-1	2	2	412	24.89	1657	1114	0.62	4574	0	4	2674	940	1475	0.00	12.03	12.86	49.85	12.88	2.68	59.55	41
+-1	3	3	444	26.07	1704	1114	0.60	3243	0	4	2171	668	1171	0.00	9.06	9.28	55.20	9.71	2.14	62.09	41
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	318	18.87	1684	1114	0.66	13980	0	24	8081	2655	4444	0.01	9.41	9.75	61.68	9.68	2.25	69.20	38	41	0.00	12.79	3.90	0.13	2.66	18.80	0.00	0.00	0.00	2.69	0.93	0.02	0.00
+-1	0	0	266	16.35	1627	1114	0.59	3792	0	9	2067	770	1147	0.01	10.64	11.08	61.69	10.71	2.36	70.59	38	41	0.00	12.79	3.90	0.13	2.66	18.80	0.00	0.00	0.00	2.69	0.93	0.02	0.00
+-1	1	1	297	17.17	1728	1114	0.52	3093	0	6	2119	664	1105	0.00	8.34	10.08	64.15	8.80	2.24	71.79	38
+-1	2	2	405	23.62	1717	1114	0.83	4119	0	4	1920	612	1092	0.00	10.10	8.82	57.10	10.39	2.29	63.70	38
+-1	3	3	303	18.33	1651	1114	0.61	2976	0	5	1975	609	1100	0.00	8.55	9.03	63.80	8.82	2.13	70.72	38
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	234	20.33	1150	1114	0.69	13897	0	13	6861	2933	4863	0.00	10.23	11.30	57.97	10.38	2.34	66.94	41	41	0.00	9.31	2.94	0.09	2.32	14.00	0.00	0.00	0.00	2.39	0.60	0.05	0.00
+-1	0	0	243	20.96	1160	1114	0.65	5101	0	1	2349	887	1273	0.00	15.69	12.77	50.36	16.01	2.47	60.56	41	41	0.00	9.31	2.94	0.09	2.32	14.00	0.00	0.00	0.00	2.39	0.60	0.05	0.00
+-1	1	1	224	19.83	1131	1114	0.72	2835	0	5	1706	714	1190	0.00	9.32	11.17	59.56	9.43	2.27	68.47	41
+-1	2	2	241	20.98	1148	1114	0.67	3437	0	3	1554	687	1326	0.00	8.50	10.93	59.42	8.63	2.48	67.91	41
+-1	3	3	227	19.55	1159	1114	0.73	2524	0	4	1252	645	1074	0.00	7.40	10.33	62.54	7.46	2.16	70.83	41
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	440	23.98	1835	1114	0.59	15460	0	17	8683	3812	5086	0.00	10.97	13.97	50.70	11.55	2.53	61.94	43	46	0.00	10.42	2.14	0.14	3.05	9.61	0.00	0.00	0.00	3.14	1.22	0.04	0.00
+-1	0	0	424	24.90	1702	1114	0.55	4423	0	4	2162	885	1214	0.01	11.14	12.39	51.14	11.59	2.45	61.06	43	46	0.00	10.42	2.14	0.14	3.05	9.61	0.00	0.00	0.00	3.14	1.22	0.04	0.00
+-1	1	1	380	20.74	1833	1114	0.56	3431	0	5	2232	945	1274	0.01	10.94	13.82	54.18	11.44	2.48	65.34	43
+-1	2	2	441	23.96	1840	1114	0.63	4093	0	4	2224	996	1420	0.00	11.59	14.38	49.71	12.13	2.70	61.21	43
+-1	3	3	516	26.33	1958	1114	0.61	3513	0	4	2065	986	1178	0.00	10.21	15.29	47.75	11.02	2.51	60.14	43
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	347	20.29	1710	1114	0.61	13553	0	21	9198	3061	4944	0.00	10.39	10.60	58.40	11.12	2.37	66.22	39	42	0.00	13.23	3.03	0.28	2.97	14.79	0.00	0.00	0.00	2.78	0.99	0.02	0.00
+-1	0	0	391	22.06	1774	1114	0.66	3587	0	3	2136	768	1205	0.00	9.98	10.72	56.84	10.75	2.34	64.85	38	42	0.00	13.23	3.03	0.28	2.97	14.79	0.00	0.00	0.00	2.78	0.99	0.02	0.00
+-1	1	1	331	19.77	1675	1114	0.59	2921	0	6	2248	746	1204	0.01	10.11	9.98	59.90	10.65	2.30	67.29	39
+-1	2	2	331	19.53	1697	1114	0.58	3998	0	6	2473	828	1410	0.00	11.49	11.50	57.20	12.12	2.62	65.73	39
+-1	3	3	334	19.80	1686	1114	0.60	3047	0	6	2341	719	1125	0.00	9.99	10.22	59.67	10.96	2.22	67.02	38
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	368	21.86	1681	1114	0.54	14551	0	20	9467	3527	5243	0.01	10.98	12.73	54.10	11.63	2.51	64.00	39	41	0.00	14.23	2.05	0.43	3.43	9.50	0.00	0.00	0.00	2.81	1.00	0.01	0.00
+-1	0	0	338	20.39	1659	1114	0.54	3587	0	3	2178	933	1266	0.00	11.49	13.53	54.22	11.95	2.48	65.18	39	41	0.00	14.23	2.05	0.43	3.43	9.50	0.00	0.00	0.00	2.81	1.00	0.01	0.00
+-1	1	1	360	21.26	1696	1114	0.52	3300	0	3	2192	884	1319	0.00	10.61	12.77	55.03	11.01	2.51	65.22	39
+-1	2	2	429	25.52	1680	1114	0.55	4452	0	10	2602	882	1397	0.01	10.63	12.51	50.99	11.69	2.65	60.14	39
+-1	3	3	342	20.27	1690	1114	0.56	3212	0	4	2495	828	1261	0.01	11.18	12.13	56.14	11.87	2.40	65.46	37
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	333	20.43	1630	1114	0.52	14380	0	21	9878	3515	5350	0.00	11.29	12.09	55.79	12.07	2.52	64.98	37	42	0.00	14.75	2.21	0.53	3.19	10.02	0.00	0.00	0.00	2.72	0.92	0.01	0.00
+-1	0	0	363	22.26	1633	1114	0.51	3827	0	3	2562	868	1233	0.00	11.46	12.35	53.45	12.46	2.44	62.84	37	42	0.00	14.75	2.21	0.53	3.19	10.02	0.00	0.00	0.00	2.72	0.92	0.01	0.00
+-1	1	1	351	20.71	1695	1114	0.55	3342	0	2	2377	870	1319	0.00	11.53	11.96	55.41	12.18	2.43	64.68	37
+-1	2	2	305	18.90	1612	1114	0.50	4320	0	5	2540	921	1537	0.01	11.83	12.64	56.29	12.41	2.80	65.88	37
+-1	3	3	312	19.85	1574	1114	0.51	2891	0	11	2399	856	1261	0.00	10.35	11.43	58.01	11.22	2.41	66.52	37
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	447	24.12	1853	1114	0.61	14899	0	24	9138	3474	5188	0.01	10.67	12.06	52.76	11.26	2.47	62.14	44	43	0.00	13.47	2.08	0.44	3.10	9.37	0.00	0.00	0.00	3.08	1.24	0.01	0.00
+-1	0	0	412	22.24	1851	1114	0.59	3708	0	4	2516	926	1367	0.00	10.50	12.83	54.07	11.20	2.54	64.02	42	43	0.00	13.47	2.08	0.44	3.10	9.37	0.00	0.00	0.00	3.08	1.24	0.01	0.00
+-1	1	1	437	23.67	1848	1114	0.60	3489	0	9	2152	894	1276	0.01	11.54	12.34	52.07	11.95	2.44	61.95	44
+-1	2	2	496	26.15	1898	1114	0.67	4398	0	5	2531	893	1372	0.00	10.89	12.43	50.10	11.89	2.60	59.36	44
+-1	3	3	442	24.43	1810	1114	0.55	3304	0	6	1939	761	1173	0.01	9.76	10.63	54.78	10.02	2.31	63.25	44
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	1547	56.33	2747	1114	0.60	47125	0	63	14227	3247	3850	0.01	11.34	7.61	24.37	11.96	1.46	30.25	87	87	0.00	5.61	0.69	0.17	1.25	3.21	0.00	0.00	0.00	6.70	4.43	0.01	0.00
+-1	0	0	1618	59.31	2728	1114	0.67	10141	0	6	3232	631	866	0.01	10.38	5.85	24.04	10.91	1.26	28.52	87	87	0.00	5.61	0.69	0.17	1.25	3.21	0.00	0.00	0.00	6.70	4.43	0.01	0.00
+-1	1	1	1481	54.43	2722	1114	0.56	11384	0	15	3749	894	820	0.01	12.82	8.74	23.69	13.46	1.44	30.67	87
+-1	2	2	1614	58.36	2765	1114	0.56	14616	0	3	3664	798	1086	0.00	10.81	6.72	23.76	11.67	1.53	28.44	87
+-1	3	3	1476	53.21	2775	1114	0.60	10984	0	39	3582	924	1078	0.02	11.35	9.14	26.01	11.82	1.61	33.37	87
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	2619	93.77	2793	1114	0.86	225979	0	2775	7096	840	868	0.05	3.29	1.38	1.20	3.67	0.21	2.34	89	89	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	9.56	6.87	0.01	0.00
+-1	0	0	2617	93.71	2792	1114	0.88	50734	0	924	1688	208	276	0.07	3.11	1.36	1.45	3.50	0.23	2.55	89	89	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	9.56	6.87	0.01	0.00
+-1	1	1	2605	93.32	2792	1114	0.89	50392	0	387	1611	262	292	0.04	3.33	1.67	1.33	3.75	0.26	2.67	89
+-1	2	2	2643	94.53	2796	1114	0.80	63624	0	789	2149	158	133	0.05	3.25	0.88	0.96	3.64	0.14	1.69	89
+-1	3	3	2611	93.53	2792	1114	0.88	61229	0	675	1648	212	167	0.03	3.45	1.63	1.05	3.81	0.20	2.46	89
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	2307	81.82	2820	1114	0.82	123089	0	865	10802	2063	1644	0.02	7.20	4.57	6.09	7.79	0.56	9.83	80	80	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	8.99	6.37	0.01	0.00
+-1	0	0	2169	77.13	2812	1114	0.80	32700	0	178	3331	635	487	0.01	8.64	5.74	8.24	9.25	0.70	12.92	80	80	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	8.98	6.37	0.01	0.00
+-1	1	1	2410	85.34	2824	1114	0.86	27511	0	449	2454	404	385	0.03	5.79	3.44	5.04	6.27	0.47	7.92	80
+-1	2	2	2320	82.23	2821	1114	0.80	33364	0	59	2657	538	399	0.01	7.14	4.54	5.77	7.83	0.56	9.38	80
+-1	3	3	2329	82.57	2820	1114	0.83	29514	0	179	2360	486	373	0.01	7.24	4.55	5.31	7.81	0.52	9.10	80
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	1858	65.28	2847	1114	0.85	51414	0	112	25211	4146	3810	0.01	14.74	7.27	12.38	17.59	0.99	16.14	71	71	0.00	0.47	0.03	0.01	0.10	0.19	0.00	0.00	0.00	8.20	5.74	0.01	0.00
+-1	0	0	1861	65.19	2855	1114	0.94	12064	0	61	6013	1089	917	0.02	14.10	7.95	12.44	16.84	1.03	16.93	71	71	0.00	0.47	0.03	0.01	0.10	0.19	0.00	0.00	0.00	8.20	5.74	0.01	0.00
+-1	1	1	1776	62.75	2830	1114	0.72	14002	0	15	6190	988	1055	0.01	14.71	7.29	14.97	17.22	1.08	18.95	71
+-1	2	2	1881	66.16	2843	1114	0.86	14066	0	16	6827	1052	1027	0.01	15.18	6.64	11.66	18.08	0.99	14.77	71
+-1	3	3	1915	67.03	2857	1114	0.89	11282	0	20	6181	1017	811	0.01	14.96	7.19	10.46	18.22	0.85	13.90	71
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	631	29.78	2120	1114	0.67	23108	0	199	22669	3542	4778	0.02	13.58	11.28	45.02	14.24	2.21	53.77	52	52	0.00	11.41	1.64	0.44	2.48	7.00	0.00	0.00	0.00	3.89	1.92	0.02	0.00
+-1	0	0	607	27.76	2187	1114	0.69	5543	0	132	6780	834	1179	0.03	15.10	10.87	45.91	15.90	2.12	54.22	52	52	0.00	11.41	1.64	0.44	2.48	7.00	0.00	0.00	0.00	3.89	1.92	0.02	0.00
+-1	1	1	643	30.23	2126	1114	0.72	5604	0	12	4367	909	1177	0.01	12.45	12.14	44.83	12.83	2.24	54.69	52
+-1	2	2	589	27.89	2113	1114	0.59	6674	0	38	6239	997	1348	0.02	14.66	12.40	44.76	15.43	2.47	54.21	52
+-1	3	3	686	33.23	2065	1114	0.68	5287	0	17	5283	802	1074	0.00	12.11	9.72	44.58	12.79	2.02	51.97	52
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	373	21.67	1720	1113	0.49	15578	0	24	10433	3735	5549	0.01	12.14	13.03	52.66	12.93	2.58	62.82	43	47	0.00	13.31	1.66	0.41	3.10	7.99	0.00	0.00	0.00	2.93	1.06	0.02	0.00
+-1	0	0	358	21.36	1675	1114	0.47	4242	0	9	2984	991	1325	0.01	13.86	13.84	50.44	14.72	2.54	61.37	43	47	0.00	13.31	1.66	0.41	3.10	7.99	0.00	0.00	0.00	2.93	1.06	0.02	0.00
+-1	1	1	374	21.20	1766	1114	0.52	3379	0	6	2456	839	1364	0.00	11.02	11.48	55.84	11.72	2.42	64.66	43
+-1	2	2	401	23.23	1725	1114	0.47	4543	0	5	2459	964	1538	0.00	12.17	13.51	50.56	12.85	2.84	61.07	43
+-1	3	3	358	20.88	1715	1114	0.51	3414	0	4	2534	941	1322	0.01	11.52	13.32	53.81	12.43	2.51	64.17	43
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	493	24.75	1992	1114	0.97	19301	0	19	6824	2584	4215	0.00	8.29	9.34	57.31	8.62	2.14	64.49	40	44	0.00	12.98	3.78	0.22	2.83	16.87	0.00	0.00	0.00	3.28	1.47	0.02	0.00
+-1	0	0	502	25.59	1962	1114	0.96	4765	0	4	1779	626	1019	0.00	9.11	9.79	55.19	9.45	2.04	62.92	40	44	0.00	12.98	3.78	0.22	2.83	16.87	0.00	0.00	0.00	3.28	1.47	0.02	0.00
+-1	1	1	486	23.76	2047	1114	1.00	4182	0	2	1742	623	1055	0.00	8.17	8.64	59.11	8.63	2.07	65.53	40
+-1	2	2	485	25.33	1915	1114	0.86	5359	0	7	1616	703	1159	0.01	7.99	9.75	56.63	8.44	2.35	63.87	40
+-1	3	3	498	24.32	2050	1114	1.04	4995	0	6	1687	632	982	0.01	7.91	9.18	58.30	7.97	2.10	65.62	40
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	237	19.40	1222	1114	0.67	13175	0	15	6554	2862	4694	0.00	9.72	10.95	59.76	9.85	2.25	68.50	38	42	0.00	8.70	3.17	0.07	1.81	14.73	0.00	0.00	0.00	2.42	0.63	0.05	0.00
+-1	0	0	193	16.01	1206	1114	0.56	4285	0	2	1949	735	1352	0.00	12.30	10.84	60.71	12.37	2.43	69.19	37	42	0.00	8.70	3.17	0.07	1.81	14.73	0.00	0.00	0.00	2.42	0.63	0.05	0.00
+-1	1	1	253	20.33	1245	1114	0.73	2789	0	3	1468	752	1089	0.00	8.53	11.94	59.03	8.59	2.17	68.91	37
+-1	2	2	264	20.99	1260	1114	0.69	3482	0	6	1735	781	1210	0.01	10.33	11.44	57.06	10.69	2.38	65.94	37
+-1	3	3	238	20.26	1173	1114	0.69	2619	0	4	1402	594	1043	0.01	7.73	9.57	62.24	7.74	2.04	69.97	38
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	623	30.77	2023	1114	0.65	20856	0	57	11410	4120	4828	0.01	13.71	13.90	41.21	14.70	2.24	52.29	47	50	0.00	7.14	1.85	0.02	1.92	8.42	0.00	0.00	0.00	3.86	1.83	0.04	0.00
+-1	0	0	536	27.46	1953	1114	0.55	6118	0	8	3546	1186	1313	0.01	15.69	15.48	41.02	16.82	2.40	53.32	47	50	0.00	7.14	1.85	0.02	1.92	8.42	0.00	0.00	0.00	3.86	1.83	0.04	0.00
+-1	1	1	602	29.82	2020	1114	0.69	4878	0	2	2742	1016	1158	0.00	14.36	14.07	41.37	15.20	2.20	52.78	47
+-1	2	2	634	31.52	2013	1114	0.62	5466	0	10	2801	1053	1259	0.01	12.81	14.10	41.16	13.74	2.33	52.41	47
+-1	3	3	717	34.29	2092	1114	0.71	4394	0	37	2321	865	1098	0.01	11.99	11.94	41.28	13.06	2.04	50.62	47
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	366	26.53	1378	1114	0.66	16847	0	13	9540	3288	4654	0.00	11.09	11.87	50.29	11.75	2.22	59.49	43	46	0.00	10.92	2.54	0.14	2.54	11.92	0.00	0.00	0.00	2.79	0.96	0.02	0.00
+-1	0	0	361	26.76	1348	1114	0.65	4798	0	2	2239	847	1129	0.00	11.38	12.13	49.50	11.92	2.18	59.13	42	46	0.00	10.92	2.54	0.14	2.54	11.92	0.00	0.00	0.00	2.79	0.96	0.02	0.00
+-1	1	1	393	26.97	1457	1114	0.74	3555	0	4	2122	802	1145	0.00	9.81	11.62	51.39	10.29	2.15	60.59	42
+-1	2	2	329	24.59	1340	1114	0.54	4625	0	4	2755	890	1327	0.00	12.37	12.84	50.04	13.20	2.46	59.75	42
+-1	3	3	379	27.81	1363	1114	0.68	3869	0	3	2424	749	1053	0.00	10.80	10.90	50.22	11.59	2.09	58.51	43
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	1108	39.64	2794	1114	0.70	32222	0	62	12691	2902	5073	0.02	10.75	8.15	40.92	13.17	1.70	45.49	84	84	0.00	5.51	1.47	0.11	1.19	6.54	0.00	0.00	0.00	5.53	3.48	0.01	0.00
+-1	0	0	1061	37.79	2807	1114	0.64	8054	0	10	2853	738	1145	0.01	10.97	8.39	42.34	13.02	1.75	47.44	84	84	0.00	5.51	1.47	0.11	1.19	6.54	0.00	0.00	0.00	5.53	3.48	0.01	0.00
+-1	1	1	1461	50.44	2896	1114	0.87	7669	0	14	2753	515	947	0.01	9.21	5.89	33.76	10.70	1.35	37.50	84
+-1	2	2	990	36.46	2715	1114	0.61	10087	0	23	4003	896	1678	0.03	12.42	9.18	41.39	17.29	1.77	44.48	84
+-1	3	3	918	33.85	2713	1114	0.59	6412	0	15	3082	753	1303	0.02	10.40	9.13	46.19	11.67	1.95	52.53	84
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	510	23.33	2187	1113	0.60	20142	0	80	12059	2641	5071	0.01	9.04	7.58	59.83	10.22	2.05	64.41	39	43	0.00	11.59	4.15	0.11	2.48	18.52	0.00	0.00	0.00	3.41	1.64	0.00	0.00
+-1	0	0	535	24.06	2222	1114	0.65	5665	0	55	3529	752	1162	0.04	10.73	8.54	56.41	12.19	2.01	61.75	39	43	0.00	11.59	4.15	0.11	2.48	18.52	0.00	0.00	0.00	3.41	1.64	0.00	0.00
+-1	1	1	475	22.50	2112	1114	0.56	4536	0	5	3473	631	1168	0.01	9.30	7.16	60.87	10.13	1.95	65.42	39
+-1	2	2	505	22.97	2199	1114	0.58	6283	0	4	2300	698	1463	0.00	8.60	8.33	59.88	9.30	2.38	65.36	39
+-1	3	3	526	23.79	2210	1114	0.62	3658	0	16	2757	560	1278	0.01	7.52	6.29	62.18	9.25	1.86	65.10	39
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	162	13.24	1225	1114	0.58	9344	0	10	5864	2039	4853	0.00	6.92	6.54	73.13	7.38	2.21	77.17	38	41	0.00	15.37	6.08	0.25	2.77	28.48	0.00	0.00	0.00	2.06	0.46	0.00	0.00
+-1	0	0	157	12.66	1238	1114	0.57	2616	0	2	1391	552	1177	0.00	7.65	6.75	72.77	7.88	2.22	77.24	37	41	0.00	15.37	6.08	0.25	2.77	28.48	0.00	0.00	0.00	2.06	0.46	0.00	0.00
+-1	1	1	164	13.23	1243	1114	0.62	1862	0	3	1329	445	1178	0.00	5.77	5.53	75.35	6.06	2.05	78.65	38
+-1	2	2	180	14.94	1203	1114	0.57	2873	0	4	1590	540	1394	0.01	7.50	7.22	70.14	7.96	2.53	74.57	38
+-1	3	3	148	12.15	1220	1114	0.55	1993	0	1	1554	502	1104	0.00	6.77	6.68	74.27	7.60	2.05	78.20	38
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	380	29.03	1308	1114	0.65	17660	0	27	8105	2821	4896	0.01	9.34	8.72	52.70	9.98	2.05	58.94	42	44	0.00	10.74	3.36	0.24	1.98	15.93	0.00	0.00	0.00	2.70	0.88	0.01	0.00
+-1	0	0	415	31.75	1307	1114	0.65	4883	0	5	2123	686	1145	0.01	9.98	8.12	49.88	10.62	1.94	55.69	41	44	0.00	10.74	3.36	0.24	1.98	15.93	0.00	0.00	0.00	2.70	0.88	0.01	0.00
+-1	1	1	335	26.39	1271	1114	0.62	3914	0	12	2049	770	1259	0.01	9.25	9.33	54.88	10.04	2.06	61.52	42
+-1	2	2	357	27.26	1309	1114	0.60	4948	0	7	2027	712	1415	0.01	9.31	9.02	54.20	9.87	2.32	60.56	42
+-1	3	3	412	30.73	1341	1114	0.73	3915	0	3	1906	653	1077	0.00	8.82	8.39	51.85	9.40	1.88	57.99	42
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	523	41.28	1266	1114	0.66	21112	0	23	9339	3296	4570	0.01	11.01	10.62	36.92	11.44	1.90	45.38	44	46	0.00	8.27	1.25	0.22	1.84	5.81	0.00	0.00	0.00	3.05	1.08	0.02	0.00
+-1	0	0	495	39.30	1261	1114	0.66	5506	0	6	2539	824	1184	0.00	12.56	10.37	37.62	12.95	1.88	45.87	44	46	0.00	8.27	1.25	0.22	1.84	5.81	0.00	0.00	0.00	3.05	1.08	0.02	0.00
+-1	1	1	541	42.52	1272	1114	0.67	4774	0	2	2229	837	1044	0.00	10.65	10.75	35.92	11.09	1.83	44.56	43
+-1	2	2	521	41.41	1258	1114	0.61	5951	0	6	2329	884	1224	0.00	11.00	11.24	36.20	11.50	2.03	45.06	43
+-1	3	3	533	41.90	1272	1114	0.70	4881	0	9	2242	751	1118	0.01	9.83	10.13	37.94	10.21	1.86	46.03	43
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	504	40.28	1251	1114	0.66	20584	0	18	9519	3343	4626	0.00	10.92	10.52	38.14	11.57	1.90	46.25	41	44	0.00	8.33	1.26	0.34	1.97	5.27	0.00	0.00	0.00	2.99	1.04	0.02	0.00
+-1	0	0	489	39.30	1244	1114	0.64	5619	0	4	2627	868	1166	0.00	11.73	10.86	37.98	12.91	1.88	45.92	41	44	0.00	8.33	1.26	0.34	1.97	5.27	0.00	0.00	0.00	2.99	1.04	0.02	0.00
+-1	1	1	492	39.88	1233	1114	0.61	4421	0	7	2286	843	1155	0.00	10.61	10.52	38.89	11.21	1.86	47.05	41
+-1	2	2	503	39.52	1273	1114	0.65	5976	0	4	2627	970	1199	0.01	12.13	12.28	35.91	12.41	2.11	45.97	41
+-1	3	3	532	42.42	1255	1114	0.71	4568	0	3	1979	662	1106	0.00	9.22	8.41	39.78	9.76	1.75	46.07	41
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	466	39.48	1179	1114	0.67	19908	0	30	9561	3199	4568	0.01	10.62	10.10	39.70	11.15	1.86	47.51	42	44	0.00	8.37	1.61	0.25	1.66	7.06	0.00	0.00	0.00	2.84	0.92	0.02	0.00
+-1	0	0	484	40.81	1186	1114	0.71	5311	0	6	2217	739	1061	0.01	10.36	9.12	39.57	10.76	1.73	46.70	41	44	0.00	8.37	1.61	0.25	1.66	7.06	0.00	0.00	0.00	2.84	0.92	0.02	0.00
+-1	1	1	442	37.36	1183	1114	0.67	4326	0	4	2635	787	1094	0.00	11.28	9.55	41.73	11.85	1.79	49.00	42
+-1	2	2	458	38.94	1177	1114	0.64	5530	0	10	2474	884	1302	0.01	11.37	11.67	37.91	11.80	2.10	47.16	42
+-1	3	3	478	40.79	1172	1114	0.65	4741	0	10	2235	789	1111	0.01	9.46	10.04	39.59	10.18	1.83	47.20	42
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	623	39.87	1562	1114	0.69	22718	0	17	10957	3496	4447	0.01	11.53	11.17	37.20	12.27	1.94	45.92	45	47	0.00	8.24	1.28	0.21	1.91	5.54	0.00	0.00	0.00	3.46	1.49	0.02	0.00
+-1	0	0	576	36.98	1557	1114	0.57	6008	0	4	3134	920	1123	0.00	13.11	11.90	37.81	13.93	1.95	47.14	45	47	0.00	8.24	1.28	0.21	1.91	5.54	0.00	0.00	0.00	3.46	1.49	0.02	0.00
+-1	1	1	628	40.51	1549	1114	0.69	5081	0	4	2494	876	1048	0.01	10.98	11.08	37.19	11.32	1.89	46.28	45
+-1	2	2	695	42.71	1628	1114	0.84	6444	0	5	2867	943	1134	0.01	11.01	11.92	34.06	12.20	2.05	43.04	45
+-1	3	3	592	39.26	1509	1114	0.65	5185	0	4	2462	757	1142	0.00	11.01	9.78	39.73	11.63	1.87	47.24	45
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	529	34.95	1514	1114	0.67	21380	0	19	10563	3585	4848	0.00	12.18	11.12	41.45	12.91	2.05	50.08	43	47	0.00	9.51	1.45	0.34	1.84	6.50	0.00	0.00	0.00	3.17	1.22	0.03	0.00
+-1	0	0	532	34.95	1522	1114	0.67	5923	0	4	2820	927	1109	0.00	13.55	11.44	39.74	14.51	1.94	48.60	43	47	0.00	9.51	1.45	0.34	1.84	6.50	0.00	0.00	0.00	3.17	1.22	0.03	0.00
+-1	1	1	525	34.67	1516	1114	0.69	4656	0	6	2647	889	1258	0.01	11.37	10.99	42.67	12.12	2.05	51.16	42
+-1	2	2	532	35.24	1509	1114	0.64	5812	0	3	2747	924	1324	0.00	12.45	11.36	40.63	13.29	2.23	49.24	42
+-1	3	3	527	34.96	1509	1114	0.70	4989	0	6	2349	845	1157	0.01	11.33	10.68	42.74	11.73	1.99	51.33	43
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	501	32.91	1522	1114	0.71	19256	0	29	9813	3527	5198	0.01	11.55	11.25	43.95	12.26	2.15	52.68	45	45	0.00	9.32	1.73	0.32	2.05	7.69	0.00	0.00	0.00	3.18	1.25	0.03	0.00
+-1	0	0	500	33.66	1486	1114	0.66	5564	0	8	2661	915	1201	0.01	13.42	11.75	40.81	14.01	2.09	50.24	45	45	0.00	9.32	1.73	0.32	2.05	7.69	0.00	0.00	0.00	3.18	1.25	0.03	0.00
+-1	1	1	497	31.95	1556	1114	0.67	4178	0	11	2426	882	1253	0.01	11.05	10.85	45.79	11.85	2.08	54.12	45
+-1	2	2	496	32.87	1508	1114	0.71	5429	0	3	2524	933	1492	0.00	11.38	12.08	43.38	12.18	2.37	52.58	45
+-1	3	3	510	33.16	1538	1114	0.78	4085	0	7	2202	797	1252	0.01	10.35	10.32	45.82	11.00	2.06	53.79	45
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	500	38.85	1288	1113	0.74	21778	0	21	9171	3391	4651	0.01	10.90	11.08	38.91	11.33	1.98	47.84	41	44	0.00	8.84	1.35	0.31	1.65	5.83	0.00	0.00	0.00	3.04	1.08	0.02	0.00
+-1	0	0	470	37.13	1265	1114	0.71	5985	0	4	2567	902	1166	0.00	12.47	11.43	38.74	12.87	1.98	48.02	41	44	0.00	8.84	1.35	0.31	1.65	5.83	0.00	0.00	0.00	3.04	1.08	0.02	0.00
+-1	1	1	485	37.90	1280	1114	0.64	5316	0	11	2346	886	1164	0.01	11.00	11.86	39.02	11.53	2.01	48.57	41
+-1	2	2	577	42.89	1344	1114	0.87	5779	0	3	2093	766	1189	0.00	10.07	10.16	36.54	10.42	2.00	44.69	41
+-1	3	3	470	37.48	1255	1114	0.70	4698	0	3	2165	837	1132	0.00	10.08	10.88	41.37	10.50	1.92	50.10	41
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	526	33.65	1563	1114	0.74	21412	0	21	10653	3589	4912	0.01	11.81	11.45	42.81	12.38	2.11	51.86	42	45	0.00	9.45	1.71	0.28	1.81	7.72	0.00	0.00	0.00	3.22	1.29	0.02	0.00
+-1	0	0	511	32.31	1582	1114	0.75	6070	0	1	3130	986	1242	0.00	14.32	12.39	40.71	15.16	2.10	50.44	42	45	0.00	9.45	1.71	0.28	1.81	7.72	0.00	0.00	0.00	3.22	1.29	0.02	0.00
+-1	1	1	498	33.08	1506	1114	0.73	5090	0	10	2646	935	1147	0.01	10.96	12.02	43.71	11.51	2.08	53.33	42
+-1	2	2	535	34.84	1536	1114	0.70	5689	0	5	2501	872	1335	0.00	11.29	11.08	42.53	11.81	2.25	51.10	42
+-1	3	3	559	34.38	1627	1114	0.79	4563	0	5	2376	796	1188	0.01	10.66	10.34	44.32	11.05	2.01	52.56	42
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	588	37.14	1582	1114	0.75	21521	0	28	10705	3467	4610	0.01	11.64	11.16	39.81	12.48	1.98	48.40	50	51	0.00	8.67	1.29	0.24	1.93	6.28	0.00	0.00	0.00	3.40	1.45	0.02	0.00
+-1	0	0	586	37.66	1556	1114	0.74	5706	0	11	2489	871	1078	0.01	12.57	11.48	38.02	12.99	1.91	47.44	50	51	0.00	8.67	1.29	0.24	1.93	6.28	0.00	0.00	0.00	3.40	1.45	0.02	0.00
+-1	1	1	566	36.28	1560	1114	0.73	4860	0	6	2820	859	1116	0.01	11.21	10.90	41.38	12.57	1.87	49.28	50
+-1	2	2	576	36.91	1560	1114	0.66	6054	0	4	2680	903	1320	0.00	11.64	11.41	39.79	12.28	2.18	48.63	50
+-1	3	3	623	37.70	1652	1114	0.87	4901	0	7	2716	834	1096	0.01	11.12	10.83	40.03	12.09	1.94	48.27	50
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	553	37.22	1487	1114	0.76	21173	0	17	9653	3252	4647	0.00	10.79	10.37	41.34	11.13	1.97	49.68	46	46	0.00	8.49	1.65	0.21	1.69	7.66	0.00	0.00	0.00	3.27	1.32	0.02	0.00
+-1	0	0	534	36.16	1476	1114	0.72	5977	0	4	2832	834	1162	0.00	12.09	10.44	41.00	12.65	1.94	49.24	46	46	0.00	8.49	1.65	0.21	1.69	7.66	0.00	0.00	0.00	3.27	1.32	0.02	0.00
+-1	1	1	507	34.33	1478	1114	0.67	4976	0	5	2353	929	1104	0.00	11.15	11.69	42.63	11.35	2.02	52.30	46
+-1	2	2	559	38.76	1441	1114	0.74	5764	0	4	2537	815	1282	0.00	10.79	10.64	39.54	11.21	2.10	47.92	46
+-1	3	3	614	39.61	1550	1114	0.90	4456	0	4	1931	674	1099	0.00	9.15	8.72	42.19	9.32	1.81	49.26	46
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	468	25.28	1850	1114	0.89	18324	0	21	9075	3094	5085	0.00	10.62	10.19	53.51	11.37	2.20	61.14	42	46	0.00	8.60	2.62	0.05	2.01	13.07	0.00	0.00	0.00	3.29	1.42	0.03	0.00
+-1	0	0	438	24.02	1825	1114	0.88	5267	0	6	2547	820	1326	0.01	13.06	10.39	52.14	13.84	2.27	59.86	42	46	0.00	8.60	2.62	0.05	2.01	13.07	0.00	0.00	0.00	3.29	1.42	0.03	0.00
+-1	1	1	448	24.35	1838	1114	0.85	3978	0	4	2144	793	1239	0.00	9.82	10.68	54.80	10.20	2.18	63.28	42
+-1	2	2	482	25.30	1904	1114	0.83	5064	0	5	2409	772	1345	0.00	10.30	9.80	54.20	11.35	2.30	61.06	42
+-1	3	3	503	27.46	1832	1114	1.01	4015	0	6	1975	709	1175	0.00	9.33	9.88	52.94	10.10	2.07	60.38	42
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	524	27.31	1919	1114	0.92	21093	0	43	9683	3389	5299	0.01	11.76	11.53	48.97	12.63	2.27	57.80	58	58	0.00	7.41	1.74	0.07	2.04	8.52	0.00	0.00	0.00	3.57	1.66	0.04	0.00
+-1	0	0	533	27.39	1947	1114	0.97	6748	0	26	2789	841	1267	0.01	14.38	10.83	46.91	15.20	2.20	55.21	58	58	0.00	7.41	1.74	0.07	2.04	8.52	0.00	0.00	0.00	3.57	1.66	0.04	0.00
+-1	1	1	530	26.94	1969	1114	0.92	5233	0	4	2321	847	1257	0.00	11.17	11.61	49.85	12.00	2.22	58.85	58
+-1	2	2	547	29.38	1861	1114	0.96	4935	0	10	2334	865	1479	0.01	11.37	11.80	47.01	12.69	2.39	55.54	58
+-1	3	3	485	25.53	1901	1114	0.85	4177	0	3	2239	836	1296	0.00	10.12	11.87	52.08	10.62	2.25	61.60	58
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	564	32.21	1750	1114	0.79	22946	0	31	11306	4535	4770	0.00	14.27	15.02	38.09	15.03	2.30	50.47	50	50	0.00	6.98	1.33	0.02	2.15	6.32	0.00	0.00	0.00	3.60	1.60	0.03	0.00
+-1	0	0	566	33.86	1671	1114	0.75	6756	0	18	3155	1193	1058	0.01	17.21	15.49	32.97	17.96	2.25	45.93	50	50	0.00	6.98	1.33	0.02	2.15	6.32	0.00	0.00	0.00	3.60	1.60	0.03	0.00
+-1	1	1	562	31.99	1756	1114	0.92	4860	0	5	2586	1080	1247	0.00	12.63	14.34	40.66	13.30	2.26	52.44	50
+-1	2	2	562	30.97	1816	1114	0.62	6246	0	3	3023	1247	1237	0.00	14.97	16.78	36.94	15.82	2.49	50.72	50
+-1	3	3	565	32.00	1766	1114	0.89	5084	0	5	2542	1015	1228	0.01	12.28	13.47	41.82	13.04	2.19	52.78	50
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	528	26.30	2009	1114	0.94	18124	0	80	9911	2959	5114	0.01	9.51	9.46	54.31	10.59	2.18	60.93	43	44	0.00	10.25	3.20	0.16	2.09	15.19	0.00	0.00	0.00	3.49	1.67	0.01	0.00
+-1	0	0	518	26.06	1988	1114	0.89	4696	0	54	2455	802	1232	0.02	10.36	10.56	52.63	11.21	2.20	60.52	41	44	0.00	10.25	3.20	0.16	2.09	15.19	0.00	0.00	0.00	3.49	1.67	0.01	0.00
+-1	1	1	500	25.27	1981	1114	0.84	4121	0	6	2387	684	1303	0.00	8.69	8.49	57.16	10.03	2.07	62.63	41
+-1	2	2	533	26.92	1979	1114	0.99	5303	0	15	2792	756	1385	0.02	10.41	9.87	52.38	11.76	2.39	58.94	41
+-1	3	3	562	26.96	2084	1114	1.02	4004	0	5	2277	717	1194	0.00	8.58	8.91	55.10	9.38	2.05	61.61	43
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	342	18.52	1844	1114	0.99	16208	0	49	10337	2649	5400	0.01	9.75	7.65	63.71	11.54	2.12	67.82	38	41	0.00	12.22	4.40	0.25	2.26	20.54	0.00	0.00	0.00	2.89	1.18	0.00	0.00
+-1	0	0	302	17.14	1760	1114	0.74	4170	0	18	2618	743	1279	0.02	11.67	9.38	61.49	13.27	2.20	67.40	38	41	0.00	12.23	4.40	0.25	2.26	20.54	0.00	0.00	0.00	2.89	1.18	0.00	0.00
+-1	1	1	399	20.67	1932	1114	1.21	3375	0	8	2002	570	1278	0.01	8.67	6.83	63.47	10.12	1.97	67.24	38
+-1	2	2	350	19.18	1826	1114	0.99	5431	0	15	3143	687	1521	0.02	9.57	6.78	64.02	11.45	2.25	67.12	38
+-1	3	3	315	17.09	1842	1114	0.93	3232	0	8	2574	649	1322	0.01	9.11	7.61	65.85	11.33	2.05	69.52	38
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	302	16.83	1795	1114	1.14	14368	0	26	6924	2341	5069	0.01	7.91	7.91	67.02	8.34	2.26	72.56	40	42	0.00	13.65	4.72	0.26	2.72	21.23	0.00	0.00	0.00	2.74	1.08	0.00	0.00
+-1	0	0	299	16.39	1825	1114	1.15	3720	0	7	1724	554	1329	0.01	8.12	7.30	67.89	8.57	2.21	72.83	40	42	0.00	13.65	4.72	0.26	2.72	21.23	0.00	0.00	0.00	2.74	1.08	0.00	0.00
+-1	1	1	293	16.41	1785	1114	1.16	3451	0	3	1735	578	1190	0.00	8.09	7.76	67.40	8.64	2.17	72.78	40
+-1	2	2	302	17.19	1759	1114	1.10	4116	0	6	1886	668	1432	0.01	8.60	9.00	64.87	9.34	2.55	70.92	40
+-1	3	3	314	17.33	1811	1114	1.15	3081	0	10	1579	541	1118	0.01	6.84	7.58	67.92	6.83	2.11	73.73	40
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	325	17.69	1837	1114	1.10	14207	0	22	6403	2440	5239	0.01	8.03	7.99	65.93	8.16	2.30	71.85	54	54	0.00	12.91	4.51	0.24	2.90	20.46	0.00	0.00	0.00	2.83	1.15	0.00	0.00
+-1	0	0	296	16.90	1754	1114	1.13	3949	0	9	1793	695	1276	0.01	9.40	8.84	64.54	9.63	2.29	71.19	54	54	0.00	12.91	4.51	0.24	2.90	20.46	0.00	0.00	0.00	2.83	1.15	0.00	0.00
+-1	1	1	363	18.56	1956	1114	1.17	3135	0	4	1432	535	1193	0.00	6.70	7.20	67.16	6.74	2.12	72.57	54
+-1	2	2	333	18.11	1838	1114	1.07	4068	0	3	1743	739	1441	0.00	8.93	9.49	63.08	9.14	2.67	70.08	54
+-1	3	3	308	17.20	1790	1114	1.03	3055	0	6	1435	471	1329	0.01	7.11	6.41	68.91	7.11	2.14	73.56	54
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	708	30.35	2334	1114	0.79	22617	0	24	9873	3234	5418	0.01	10.89	10.40	47.83	11.62	2.18	55.86	44	47	0.00	9.59	2.04	0.41	1.86	9.48	0.00	0.00	0.00	4.13	2.18	0.01	0.00
+-1	0	0	737	30.99	2377	1114	0.82	6069	0	6	2587	792	1308	0.01	12.15	10.19	46.10	12.90	2.08	54.03	44	47	0.00	9.60	2.04	0.41	1.86	9.49	0.00	0.00	0.00	4.13	2.18	0.01	0.00
+-1	1	1	731	31.58	2313	1114	0.83	4753	0	2	2419	785	1224	0.00	10.51	9.94	47.45	11.10	2.03	55.28	44
+-1	2	2	689	29.84	2309	1114	0.76	6539	0	5	2495	861	1559	0.01	11.08	11.54	47.02	11.91	2.43	55.83	44
+-1	3	3	677	28.99	2335	1114	0.77	5256	0	11	2372	796	1327	0.01	9.82	9.94	50.76	10.56	2.17	58.28	44
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	1046	39.15	2671	1114	0.71	30548	0	288	20564	3699	4776	0.02	13.88	10.15	36.30	15.56	1.87	43.42	82	82	0.00	6.66	1.23	0.15	1.48	5.62	0.00	0.00	0.00	5.28	3.21	0.02	0.00
+-1	0	0	1081	40.90	2643	1114	0.78	7404	0	157	5037	982	1019	0.02	14.95	11.47	32.13	16.68	1.83	40.59	82	82	0.00	6.66	1.23	0.15	1.48	5.62	0.00	0.00	0.00	5.28	3.21	0.02	0.00
+-1	1	1	1099	40.18	2734	1114	0.73	6090	0	32	3336	768	1263	0.02	10.98	8.45	39.85	11.96	1.87	45.99	82
+-1	2	2	1045	39.03	2678	1114	0.69	10214	0	88	5828	958	1302	0.03	14.91	9.65	35.84	16.85	1.87	42.25	82
+-1	3	3	958	36.48	2626	1114	0.64	6840	0	11	6363	991	1192	0.01	14.70	11.03	37.39	16.76	1.92	44.84	82
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	894	36.69	2435	1114	0.78	27273	0	51	19787	3452	4644	0.01	13.01	9.92	39.90	14.36	1.88	47.06	55	54	0.00	7.88	1.68	0.21	1.70	7.00	0.00	0.00	0.00	4.77	2.77	0.01	0.00
+-1	0	0	781	31.86	2451	1114	0.75	6277	0	7	5072	965	1211	0.01	14.36	11.23	42.14	15.62	2.02	50.51	54	54	0.00	7.88	1.68	0.21	1.70	7.00	0.00	0.00	0.00	4.77	2.77	0.01	0.00
+-1	1	1	984	40.40	2436	1114	0.82	5744	0	14	4654	782	994	0.01	11.56	9.03	38.46	12.83	1.74	45.02	54
+-1	2	2	903	36.73	2457	1114	0.80	9164	0	15	5576	965	1384	0.01	14.28	11.08	37.37	15.71	2.09	45.47	54
+-1	3	3	907	37.76	2401	1114	0.74	6088	0	15	4485	740	1055	0.02	11.85	8.33	41.63	13.30	1.70	47.24	55
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	1001	38.74	2583	1114	0.77	31300	0	116	18940	3228	4660	0.01	13.57	9.59	37.64	14.78	1.83	44.65	56	56	0.00	7.17	1.33	0.16	1.38	6.07	0.00	0.00	0.00	5.21	3.13	0.01	0.00
+-1	0	0	1002	39.31	2550	1114	0.85	7391	0	13	5150	840	1111	0.01	14.31	10.02	35.88	15.60	1.78	43.32	56	56	0.00	7.17	1.33	0.16	1.38	6.07	0.00	0.00	0.00	5.21	3.13	0.01	0.00
+-1	1	1	1029	39.80	2586	1114	0.71	6928	0	9	4699	680	1100	0.01	12.85	8.24	38.66	13.95	1.72	44.53	56
+-1	2	2	950	37.10	2560	1114	0.64	9901	0	14	5110	908	1291	0.01	14.50	10.61	37.32	15.77	2.00	45.13	56
+-1	3	3	1021	38.73	2636	1114	0.87	7080	0	80	3981	800	1158	0.03	12.63	9.48	38.70	13.81	1.83	45.63	56
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	983	40.78	2410	1114	0.78	28111	0	152	18283	3468	4304	0.02	13.87	10.69	34.23	14.96	1.77	42.49	49	52	0.00	6.79	1.29	0.21	1.73	5.25	0.00	0.00	0.00	5.02	2.96	0.02	0.00
+-1	0	0	956	40.75	2346	1114	0.72	7033	0	13	4896	827	1076	0.01	12.27	9.56	37.03	13.22	1.77	44.26	49	52	0.00	6.79	1.29	0.21	1.73	5.25	0.00	0.00	0.00	5.02	2.96	0.02	0.00
+-1	1	1	1028	41.09	2501	1114	0.82	5956	0	31	3367	830	876	0.02	14.91	11.52	32.04	16.07	1.61	41.23	49
+-1	2	2	891	38.66	2304	1114	0.65	8840	0	10	6045	1062	1427	0.01	14.34	11.26	35.37	16.00	2.05	43.29	49
+-1	3	3	1058	42.63	2481	1114	0.88	6282	0	98	3975	749	925	0.03	13.98	10.44	32.49	14.55	1.64	41.17	49
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	949	36.30	2614	1114	0.77	29560	0	78	17659	3795	5147	0.02	13.05	11.32	38.75	14.41	2.06	47.23	50	53	0.00	6.95	1.16	0.18	1.68	5.36	0.00	0.00	0.00	5.06	3.01	0.02	0.00
+-1	0	0	958	37.16	2577	1114	0.81	7390	0	18	4072	888	1313	0.02	13.02	11.12	38.13	14.50	2.04	46.30	50	53	0.00	6.95	1.16	0.18	1.68	5.36	0.00	0.00	0.00	5.06	3.01	0.02	0.00
+-1	1	1	908	34.45	2637	1114	0.84	6573	0	11	4666	925	1276	0.01	13.29	10.89	40.85	14.37	2.04	49.14	49
+-1	2	2	999	38.42	2601	1114	0.76	9393	0	26	4470	1067	1367	0.02	12.82	11.93	36.15	14.49	2.14	44.95	49
+-1	3	3	930	35.17	2643	1114	0.68	6204	0	23	4451	915	1191	0.02	13.06	11.33	39.87	14.27	2.02	48.53	49
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	853	35.35	2412	1114	0.90	22873	0	25	10093	3563	5176	0.01	11.54	11.56	40.97	12.24	2.13	50.28	50	53	0.00	7.68	1.26	0.23	1.62	5.13	0.00	0.00	0.00	4.75	2.72	0.02	0.00
+-1	0	0	838	34.15	2454	1114	0.83	5542	0	3	2541	895	1250	0.00	11.86	11.54	41.88	12.55	2.07	51.23	50	53	0.00	7.68	1.26	0.23	1.62	5.13	0.00	0.00	0.00	4.75	2.72	0.02	0.00
+-1	1	1	877	35.88	2445	1114	1.00	5807	0	10	2475	834	1298	0.01	11.29	11.16	41.02	12.08	2.07	49.96	50
+-1	2	2	829	34.44	2407	1114	0.93	6282	0	8	2758	1042	1370	0.01	12.52	13.17	39.33	13.36	2.33	49.87	50
+-1	3	3	867	36.93	2347	1114	0.85	5242	0	4	2319	792	1258	0.00	10.50	10.36	41.63	10.97	2.04	50.07	50
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	673	28.74	2342	1114	0.65	22941	0	37	15316	3933	5325	0.01	13.66	11.55	45.49	15.67	2.16	53.44	48	50	0.00	9.84	1.54	0.26	2.06	7.20	0.00	0.00	0.00	4.07	2.11	0.02	0.00
+-1	0	0	667	28.02	2380	1114	0.65	5257	0	7	3708	959	1324	0.01	14.89	11.31	45.18	17.40	2.07	52.52	48	50	0.00	9.84	1.54	0.26	2.06	7.20	0.00	0.00	0.00	4.07	2.11	0.02	0.00
+-1	1	1	654	27.89	2347	1114	0.63	4571	0	6	3211	919	1332	0.00	12.55	11.18	47.90	14.78	2.11	55.22	48
+-1	2	2	711	30.04	2366	1114	0.71	8424	0	15	4950	1068	1468	0.01	14.39	11.46	43.46	16.04	2.29	51.64	47
+-1	3	3	660	29.00	2275	1114	0.62	4689	0	9	3447	987	1201	0.01	12.81	12.23	45.43	14.45	2.16	54.39	48
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	665	28.31	2348	1114	0.83	20487	0	28	9855	3517	5343	0.01	10.96	11.70	48.48	11.53	2.33	57.83	60	60	0.00	9.95	1.80	0.35	1.94	8.18	0.00	0.00	0.00	4.07	2.13	0.02	0.00
+-1	0	0	604	26.68	2263	1114	0.76	5429	0	7	2769	895	1381	0.01	12.17	11.83	48.79	12.77	2.34	58.21	60	60	0.00	9.95	1.80	0.35	1.94	8.18	0.00	0.00	0.00	4.07	2.13	0.02	0.00
+-1	1	1	619	25.59	2420	1114	0.88	5047	0	7	2939	977	1345	0.01	11.99	12.60	49.34	12.65	2.36	59.39	60
+-1	2	2	820	34.71	2363	1114	0.94	5623	0	7	1932	810	1366	0.01	9.60	11.07	43.94	10.22	2.37	52.70	60
+-1	3	3	616	26.27	2346	1114	0.69	4388	0	7	2215	835	1251	0.01	10.08	11.31	51.83	10.46	2.24	61.03	60
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	665	28.01	2372	1114	0.80	19816	0	36	11214	3569	5242	0.01	11.71	11.66	48.06	12.70	2.25	57.04	50	49	0.00	10.11	1.72	0.35	2.00	7.75	0.00	0.00	0.00	4.13	2.17	0.02	0.00
+-1	0	0	640	27.30	2343	1114	0.75	5212	0	11	2931	916	1238	0.01	12.87	11.70	47.55	13.99	2.18	56.53	49	49	0.00	10.11	1.72	0.35	2.00	7.75	0.00	0.00	0.00	4.13	2.17	0.02	0.00
+-1	1	1	650	27.12	2396	1114	0.76	4456	0	12	2608	906	1309	0.01	11.40	12.02	48.93	12.23	2.25	58.40	49
+-1	2	2	692	30.00	2307	1114	0.75	5733	0	5	2840	907	1405	0.00	11.51	11.79	46.08	12.63	2.41	54.96	49
+-1	3	3	677	27.63	2450	1114	0.95	4415	0	8	2835	840	1290	0.01	11.05	11.14	49.66	11.96	2.16	58.26	50
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	609	26.25	2321	1113	0.91	17876	0	39	10998	3399	5064	0.01	12.02	11.26	49.95	12.99	2.23	58.54	43	47	0.00	10.65	1.95	0.31	1.92	8.88	0.00	0.00	0.00	4.01	2.06	0.02	0.00
+-1	0	0	570	24.52	2322	1114	0.74	4476	0	10	2724	871	1150	0.01	13.65	11.77	49.58	13.99	2.19	59.29	43	47	0.00	10.65	1.96	0.31	1.92	8.88	0.00	0.00	0.00	4.01	2.06	0.02	0.00
+-1	1	1	458	20.75	2208	1114	0.68	4413	0	9	3006	971	1373	0.01	12.32	12.62	53.88	13.48	2.39	63.38	43
+-1	2	2	828	34.35	2410	1114	1.21	5191	0	8	2510	724	1235	0.01	10.86	9.77	44.37	12.06	2.13	51.46	42
+-1	3	3	582	25.37	2292	1114	0.82	3796	0	12	2758	833	1306	0.02	11.25	10.90	52.00	12.41	2.20	60.02	42
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	472	22.11	2136	1114	0.88	16524	0	22	8476	2821	4737	0.01	9.58	9.88	58.05	10.09	2.21	65.58	39	43	0.00	11.84	3.30	0.24	2.48	14.84	0.00	0.00	0.00	3.39	1.58	0.02	0.00
+-1	0	0	437	21.27	2056	1114	0.80	4449	0	7	2387	741	1114	0.01	11.36	9.98	57.01	12.04	2.13	64.56	38	43	0.00	11.84	3.30	0.24	2.48	14.84	0.00	0.00	0.00	3.39	1.58	0.02	0.00
+-1	1	1	494	21.47	2300	1114	1.01	3530	0	9	1995	637	1255	0.01	8.13	8.82	61.18	8.82	2.13	67.58	38
+-1	2	2	471	22.52	2089	1114	0.81	4774	0	3	2282	798	1307	0.00	10.14	10.99	55.97	10.55	2.50	64.42	38
+-1	3	3	488	23.18	2103	1114	0.87	3771	0	3	1812	645	1061	0.00	8.68	9.73	58.02	8.96	2.10	65.76	39
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	526	24.54	2144	1114	1.09	18110	0	21	9476	3246	4875	0.01	11.78	11.60	51.73	12.87	2.22	60.37	50	50	0.00	8.40	2.76	0.07	2.13	12.27	0.00	0.00	0.00	3.82	1.87	0.05	0.00
+-1	0	0	564	25.41	2219	1114	1.29	5534	0	3	2543	821	1189	0.00	13.98	11.60	48.57	14.97	2.23	57.39	50	50	0.00	8.40	2.76	0.07	2.13	12.27	0.00	0.00	0.00	3.82	1.87	0.05	0.00
+-1	1	1	670	28.96	2315	1114	1.41	3890	0	5	1993	725	1076	0.01	9.61	10.25	50.80	11.17	1.93	57.94	50
+-1	2	2	430	21.02	2048	1114	0.73	5147	0	7	2676	893	1416	0.01	11.67	12.79	54.24	12.89	2.46	63.63	50
+-1	3	3	440	22.79	1933	1114	0.70	3539	0	6	2264	807	1194	0.01	11.84	11.77	53.30	12.45	2.24	62.52	50
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	472	24.13	1957	1114	0.72	16342	0	21	9079	3393	4744	0.00	11.12	12.20	52.22	11.71	2.32	61.83	46	47	0.00	10.28	2.83	0.04	2.70	12.55	0.00	0.00	0.00	3.31	1.43	0.03	0.00
+-1	0	0	469	23.94	1958	1114	0.72	5094	0	7	2421	887	1221	0.00	12.23	12.44	51.03	13.10	2.32	60.64	46	47	0.00	10.28	2.83	0.04	2.70	12.55	0.00	0.00	0.00	3.31	1.43	0.03	0.00
+-1	1	1	521	26.21	1987	1114	0.68	3416	0	8	2046	769	1156	0.01	9.49	11.11	52.87	10.01	2.22	61.55	46
+-1	2	2	420	23.54	1786	1114	0.66	4258	0	3	2475	872	1311	0.00	11.78	12.54	51.85	12.42	2.50	61.54	46
+-1	3	3	479	22.85	2097	1114	0.80	3574	0	3	2137	865	1056	0.00	10.97	12.70	53.13	11.31	2.24	63.59	46
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	761	34.85	2184	1114	0.85	25289	0	49	18609	3961	4526	0.01	14.45	12.41	37.99	16.62	1.94	46.59	77	77	0.00	6.47	1.32	0.06	1.80	6.14	0.00	0.00	0.00	4.40	2.42	0.02	0.00
+-1	0	0	1101	47.21	2331	1114	1.21	6211	0	15	3162	803	889	0.01	12.88	10.00	29.39	14.52	1.61	36.66	77	77	0.00	6.47	1.32	0.06	1.80	6.13	0.00	0.00	0.00	4.40	2.42	0.02	0.00
+-1	1	1	703	33.19	2117	1114	0.72	5308	0	14	4072	1044	1145	0.01	14.11	13.97	38.48	16.51	1.98	48.32	77
+-1	2	2	646	30.62	2108	1114	0.61	8621	0	12	6304	1043	1388	0.01	15.10	11.76	42.24	17.41	2.07	49.90	77
+-1	3	3	596	28.36	2101	1114	0.60	5149	0	8	5071	1071	1104	0.01	15.69	13.93	41.85	18.06	2.08	51.50	77
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	753	27.83	2705	1114	0.83	24575	0	58	12298	2889	5873	0.01	12.62	8.49	50.23	15.03	2.07	55.08	83	83	0.00	6.00	1.64	0.09	1.16	8.17	0.00	0.00	0.00	4.72	2.69	0.01	0.00
+-1	0	0	1065	36.97	2880	1114	1.01	5671	0	7	2105	541	1230	0.01	10.48	6.74	44.92	12.13	1.79	49.11	83	83	0.00	6.00	1.64	0.09	1.16	8.17	0.00	0.00	0.00	4.72	2.69	0.01	0.00
+-1	1	1	792	29.16	2716	1114	0.74	4606	0	17	2923	662	1173	0.01	12.06	8.91	49.11	13.33	1.99	55.52	82
+-1	2	2	579	22.47	2580	1114	0.70	10142	0	15	4459	1007	2010	0.02	16.41	9.78	50.38	21.25	2.34	53.94	82
+-1	3	3	575	22.71	2532	1114	0.76	4156	0	19	2811	679	1460	0.02	11.52	8.53	56.52	13.39	2.15	61.75	82
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	1944	64.83	2999	1113	0.54	68498	0	319	43898	4562	4674	0.06	23.30	5.58	6.01	30.80	0.35	4.02	56	60	0.00	0.31	0.00	0.00	0.12	0.02	0.00	0.00	0.00	8.49	6.00	0.01	0.00
+-1	0	0	1893	63.07	3001	1114	0.52	12315	0	110	9714	1173	1110	0.07	24.54	6.38	5.86	32.91	0.32	3.69	55	60	0.00	0.31	0.00	0.00	0.12	0.02	0.00	0.00	0.00	8.49	6.00	0.01	0.00
+-1	1	1	1935	64.39	3005	1114	0.55	12577	0	32	9019	1161	1050	0.03	22.17	6.48	6.73	30.19	0.43	4.99	56
+-1	2	2	2045	68.62	2980	1114	0.52	32654	0	127	15556	1094	1314	0.09	23.66	3.21	3.87	28.64	0.25	2.49	56
+-1	3	3	1904	63.23	3012	1114	0.57	10952	0	50	9609	1134	1200	0.04	22.83	6.24	7.57	31.48	0.38	4.92	56
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	633	30.66	2065	1114	0.82	23927	0	126	16212	3361	4655	0.02	14.26	9.98	44.72	16.37	1.77	51.19	45	47	0.00	8.74	2.37	0.21	2.59	10.14	0.00	0.00	0.00	4.01	2.05	0.02	0.00
+-1	0	0	615	29.11	2114	1114	0.75	5757	0	59	3857	854	1095	0.03	15.14	9.48	45.93	16.78	1.78	52.33	45	47	0.00	8.74	2.37	0.21	2.59	10.14	0.00	0.00	0.00	4.01	2.05	0.02	0.00
+-1	1	1	624	31.68	1970	1114	0.79	5272	0	13	3712	803	1111	0.01	12.54	8.89	46.55	14.82	1.73	51.77	45
+-1	2	2	631	31.73	1990	1114	0.78	8319	0	9	4825	915	1451	0.01	13.76	9.65	44.37	16.05	1.97	50.25	45
+-1	3	3	662	30.12	2198	1114	0.96	4579	0	45	3818	789	998	0.03	15.60	11.91	42.02	17.84	1.62	50.42	45
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	484	29.63	1635	1114	0.71	16483	0	18	8235	2777	3936	0.00	12.88	12.02	45.18	13.04	1.90	55.43	44	47	0.00	10.72	2.10	0.43	4.39	7.34	0.00	0.00	0.00	3.17	1.26	0.02	0.00
+-1	0	0	474	29.11	1630	1114	0.65	4685	0	4	2356	748	957	0.00	14.23	12.72	43.61	14.37	1.90	54.62	44	47	0.00	10.72	2.10	0.43	4.39	7.34	0.00	0.00	0.00	3.17	1.26	0.02	0.00
+-1	1	1	464	27.71	1675	1114	0.66	3452	0	6	2100	687	745	0.00	19.52	17.46	35.08	19.70	1.61	50.99	44
+-1	2	2	513	31.83	1611	1114	0.68	4701	0	6	2047	713	1244	0.00	9.11	9.31	49.42	9.39	2.17	56.61	44
+-1	3	3	486	29.88	1628	1114	0.83	3645	0	2	1732	629	990	0.00	8.64	8.59	52.64	8.71	1.92	59.49	44
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	502	27.04	1857	1114	0.72	16804	0	30	7870	2896	4629	0.01	9.97	10.30	52.31	10.17	2.21	60.58	48	49	0.00	13.60	2.27	0.55	2.75	10.06	0.00	0.00	0.00	3.29	1.41	0.02	0.00
+-1	0	0	544	28.14	1932	1114	0.81	4683	0	6	1986	755	1082	0.01	10.93	10.53	49.92	11.23	2.08	58.54	48	49	0.00	13.60	2.27	0.55	2.75	10.06	0.00	0.00	0.00	3.29	1.41	0.02	0.00
+-1	1	1	489	26.70	1832	1114	0.68	3539	0	16	1843	709	1148	0.02	9.27	9.93	53.77	9.42	2.15	61.74	48
+-1	2	2	468	25.66	1823	1114	0.64	4426	0	2	2171	752	1326	0.00	10.42	10.68	52.94	10.52	2.47	61.35	48
+-1	3	3	508	27.68	1836	1114	0.74	4156	0	6	1870	680	1073	0.00	9.24	10.07	52.61	9.50	2.14	60.68	48
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	557	27.65	2013	1114	0.71	17597	0	32	9109	3083	4610	0.01	11.40	10.72	49.80	12.04	2.16	58.15	48	50	0.00	11.38	2.43	0.36	2.38	10.00	0.00	0.00	0.00	3.52	1.60	0.03	0.00
+-1	0	0	512	26.03	1967	1114	0.67	4953	0	1	2513	841	1047	0.00	15.64	12.09	45.76	16.38	2.06	55.53	47	50	0.00	11.38	2.43	0.36	2.38	10.00	0.00	0.00	0.00	3.52	1.60	0.03	0.00
+-1	1	1	568	28.95	1963	1114	0.64	4029	0	12	2277	812	1094	0.01	10.56	11.17	48.85	11.23	2.16	57.66	47
+-1	2	2	559	27.03	2069	1114	0.74	4777	0	11	2335	816	1377	0.02	10.89	10.75	50.94	11.56	2.40	59.01	48
+-1	3	3	587	28.61	2052	1114	0.76	3838	0	8	1984	614	1092	0.01	8.50	8.86	53.65	8.99	2.03	60.38	48
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	392	23.32	1681	1114	0.56	15217	0	15	8474	2914	4811	0.00	9.91	10.22	56.19	10.27	2.31	64.11	63	63	0.00	14.02	2.96	0.45	2.89	13.17	0.00	0.00	0.00	2.91	1.07	0.03	0.00
+-1	0	0	346	20.46	1693	1114	0.51	4235	0	8	2559	817	1286	0.01	11.86	11.05	56.28	12.42	2.37	64.75	63	63	0.00	14.02	2.96	0.45	2.89	13.17	0.00	0.00	0.00	2.91	1.06	0.03	0.00
+-1	1	1	356	22.36	1593	1114	0.54	3529	0	3	2193	774	1132	0.00	10.32	10.92	56.06	10.61	2.27	64.76	63
+-1	2	2	439	25.67	1709	1114	0.56	4328	0	1	2206	728	1254	0.00	9.80	10.38	53.75	10.36	2.44	61.53	63
+-1	3	3	427	24.77	1722	1114	0.62	3125	0	3	1516	595	1139	0.00	7.65	8.53	58.67	7.69	2.15	65.39	63
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	471	26.10	1803	1113	0.62	15758	0	19	8215	2895	4490	0.01	9.89	10.05	53.62	10.22	2.18	61.49	42	45	0.00	12.97	2.87	0.46	2.28	13.28	0.00	0.00	0.00	3.15	1.28	0.03	0.00
+-1	0	0	492	26.07	1887	1114	0.67	4304	0	5	2189	711	1071	0.00	10.75	9.87	52.96	10.97	2.09	60.88	42	45	0.00	12.97	2.87	0.46	2.28	13.28	0.00	0.00	0.00	3.15	1.28	0.03	0.00
+-1	1	1	474	25.95	1827	1114	0.63	3619	0	2	1833	625	1111	0.00	8.63	8.93	56.15	8.84	2.08	63.13	42
+-1	2	2	438	25.47	1720	1114	0.58	4280	0	11	2233	821	1230	0.02	10.97	11.03	52.23	11.54	2.41	60.58	42
+-1	3	3	479	26.93	1777	1114	0.59	3555	0	1	1960	738	1078	0.00	9.23	10.36	53.16	9.53	2.15	61.39	41
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	426	23.19	1838	1114	0.63	15461	0	26	8447	3029	4885	0.01	10.75	10.67	54.96	11.07	2.32	63.42	42	46	0.00	13.87	2.55	0.43	2.89	11.32	0.00	0.00	0.00	3.10	1.24	0.03	0.00
+-1	0	0	447	23.59	1895	1114	0.66	4434	0	5	2233	834	1139	0.01	12.34	11.52	52.06	12.74	2.29	61.39	41	46	0.00	13.87	2.55	0.43	2.89	11.32	0.00	0.00	0.00	3.10	1.24	0.03	0.00
+-1	1	1	379	21.23	1786	1114	0.57	3634	0	10	2300	800	1249	0.01	11.27	11.57	55.51	11.58	2.36	64.84	42
+-1	2	2	396	21.87	1808	1114	0.58	4085	0	8	2244	799	1408	0.01	11.02	10.95	55.74	11.35	2.57	64.21	42
+-1	3	3	484	26.06	1856	1114	0.68	3308	0	3	1670	596	1089	0.00	8.36	8.64	56.51	8.61	2.08	63.25	42
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	430	23.90	1799	1114	0.62	15685	0	23	8323	2900	5065	0.01	10.43	10.10	55.16	10.80	2.32	62.98	71	71	0.00	13.93	2.63	0.45	2.73	12.46	0.00	0.00	0.00	3.06	1.20	0.03	0.00
+-1	0	0	461	25.54	1807	1114	0.55	4460	0	4	2125	713	1161	0.01	11.43	9.82	52.72	11.85	2.19	60.42	71	71	0.00	13.93	2.63	0.45	2.73	12.46	0.00	0.00	0.00	3.06	1.20	0.03	0.00
+-1	1	1	418	23.51	1779	1114	0.60	3643	0	7	2114	781	1262	0.01	10.32	11.10	54.66	10.59	2.36	63.53	71
+-1	2	2	390	22.57	1728	1114	0.52	4140	0	4	2080	740	1458	0.01	10.21	10.08	56.82	10.78	2.53	64.12	71
+-1	3	3	450	23.98	1878	1114	0.78	3442	0	8	2004	666	1184	0.01	9.76	9.40	56.42	9.97	2.20	63.85	71
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	437	24.44	1788	1114	0.63	16196	0	30	8159	2966	4850	0.01	9.88	10.58	54.70	10.23	2.31	63.03	49	49	0.00	14.17	2.41	0.52	2.94	11.31	0.00	0.00	0.00	3.10	1.23	0.02	0.00
+-1	0	0	503	27.14	1855	1114	0.69	4304	0	8	1986	712	1109	0.01	9.80	10.17	52.44	10.27	2.15	60.45	49	49	0.00	14.17	2.41	0.52	2.94	11.31	0.00	0.00	0.00	3.10	1.23	0.02	0.00
+-1	1	1	387	22.09	1751	1114	0.60	3639	0	6	2054	788	1284	0.01	9.82	11.12	56.62	10.17	2.36	65.39	49
+-1	2	2	430	25.05	1716	1114	0.57	4653	0	10	2226	775	1316	0.01	10.51	11.07	53.00	10.94	2.51	61.50	49
+-1	3	3	428	23.49	1822	1114	0.64	3600	0	6	1893	691	1141	0.01	9.39	9.97	56.75	9.53	2.22	64.76	49
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	619	32.33	1916	1113	0.87	22308	0	33	10168	3266	4532	0.01	11.00	10.74	45.52	11.78	2.04	53.85	45	48	0.00	9.59	1.78	0.27	1.99	8.35	0.00	0.00	0.00	3.80	1.85	0.02	0.00
+-1	0	0	650	33.28	1953	1114	0.90	6071	0	7	2607	799	1131	0.01	11.37	10.25	44.63	12.22	1.98	52.52	45	48	0.00	9.59	1.78	0.27	1.99	8.35	0.00	0.00	0.00	3.80	1.85	0.02	0.00
+-1	1	1	564	29.56	1910	1114	0.82	4954	0	6	2536	902	1184	0.01	11.24	12.33	46.53	11.92	2.14	56.39	45
+-1	2	2	662	34.19	1937	1114	0.89	6122	0	14	2439	849	1198	0.02	10.62	11.17	43.62	11.25	2.17	52.39	45
+-1	3	3	601	32.31	1861	1114	0.87	5161	0	6	2586	716	1019	0.01	10.77	9.22	47.32	11.72	1.85	54.12	45
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	408	25.35	1611	1114	0.63	16489	0	11	9030	3087	4707	0.00	10.72	10.71	52.90	11.29	2.21	61.15	41	44	0.00	12.84	2.62	0.36	2.61	12.07	0.00	0.00	0.00	2.95	1.10	0.02	0.00
+-1	0	0	467	28.22	1656	1114	0.68	4618	0	1	2180	748	1044	0.00	10.80	10.41	50.16	11.32	2.04	58.43	41	44	0.00	12.84	2.62	0.36	2.61	12.07	0.00	0.00	0.00	2.95	1.10	0.02	0.00
+-1	1	1	362	23.40	1546	1114	0.53	3609	0	3	2274	733	1185	0.00	10.96	10.12	55.30	11.38	2.13	63.09	40
+-1	2	2	387	24.84	1559	1114	0.50	4735	0	3	2347	887	1353	0.00	10.74	12.37	51.75	11.43	2.54	61.19	40
+-1	3	3	418	24.95	1675	1114	0.77	3527	0	4	2229	719	1125	0.00	10.40	9.92	54.39	11.04	2.12	61.89	40
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	932	37.88	2460	1114	0.84	27707	0	227	23946	3701	5195	0.03	14.24	11.15	36.40	16.79	1.86	43.47	45	48	0.00	3.71	0.78	0.06	1.00	3.21	0.00	0.00	0.00	5.18	3.11	0.05	0.00
+-1	0	0	1022	42.04	2431	1114	0.94	7513	0	23	5697	1015	1183	0.01	16.33	11.90	29.34	19.04	1.79	37.13	45	48	0.00	3.71	0.78	0.06	1.00	3.21	0.00	0.00	0.00	5.18	3.10	0.05	0.00
+-1	1	1	865	36.01	2401	1114	0.76	7261	0	109	8189	876	1335	0.03	13.59	11.06	39.03	16.10	1.93	45.95	45
+-1	2	2	914	36.88	2479	1114	0.84	6762	0	34	5115	886	1484	0.03	13.31	9.62	39.88	16.20	1.84	45.08	45
+-1	3	3	927	36.58	2534	1114	0.81	6171	0	61	4945	924	1193	0.03	13.73	12.01	37.35	15.82	1.88	45.71	45
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	336	20.60	1629	1114	0.67	15169	0	13	7646	3065	4769	0.00	9.45	11.44	58.26	10.10	2.34	66.97	50	50	0.00	11.68	3.22	0.14	2.77	14.30	0.00	0.00	0.00	2.79	1.00	0.03	0.00
+-1	0	0	304	18.64	1630	1114	0.63	4399	0	3	2059	778	1293	0.00	10.91	11.71	58.41	11.79	2.39	67.17	50	50	0.00	11.68	3.22	0.14	2.77	14.30	0.00	0.00	0.00	2.79	1.00	0.03	0.00
+-1	1	1	383	23.26	1647	1114	0.66	3436	0	6	2011	754	1057	0.01	9.75	11.18	55.53	10.94	2.12	63.68	50
+-1	2	2	346	20.51	1687	1114	0.73	4102	0	2	1906	838	1307	0.00	8.78	12.49	58.01	9.05	2.61	67.83	50
+-1	3	3	310	19.98	1550	1114	0.66	3232	0	2	1670	695	1112	0.00	8.37	10.36	61.08	8.61	2.23	69.18	50
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	453	23.82	1900	1114	0.54	18608	0	21	10556	3962	4874	0.01	11.83	14.06	49.85	12.50	2.55	61.13	42	45	0.00	11.18	2.21	0.06	3.19	10.24	0.00	0.00	0.00	3.20	1.27	0.04	0.00
+-1	0	0	379	20.84	1820	1114	0.55	5219	0	4	2921	1079	1327	0.01	13.29	15.10	50.37	13.98	2.68	62.49	42	45	0.00	11.18	2.21	0.06	3.19	10.24	0.00	0.00	0.00	3.20	1.27	0.04	0.00
+-1	1	1	465	23.87	1947	1114	0.57	4388	0	8	2352	1041	1105	0.01	11.91	14.80	48.96	12.39	2.47	61.27	42
+-1	2	2	545	27.85	1956	1114	0.55	5498	0	5	2680	946	1197	0.00	11.50	13.10	47.06	12.31	2.54	57.31	42
+-1	3	3	422	22.73	1855	1114	0.49	3503	0	4	2603	896	1245	0.00	10.62	13.22	53.01	11.32	2.51	63.44	42
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	523	23.93	2185	1113	0.77	14061	0	13	8499	2687	4536	0.00	8.68	9.34	57.72	9.13	2.18	64.77	44	46	0.00	12.55	3.17	0.28	2.66	14.45	0.00	0.00	0.00	3.50	1.66	0.02	0.00
+-1	0	0	468	22.09	2117	1114	0.80	3618	0	4	2306	763	1174	0.00	10.05	10.51	57.00	10.83	2.22	64.86	44	46	0.00	12.55	3.17	0.28	2.66	14.45	0.00	0.00	0.00	3.50	1.66	0.02	0.00
+-1	1	1	547	25.44	2149	1114	0.67	3017	0	1	1915	636	1064	0.00	8.02	9.09	57.15	8.24	2.06	64.26	44
+-1	2	2	587	25.69	2283	1114	0.84	4330	0	6	2253	724	1172	0.00	9.05	10.10	54.79	9.57	2.37	62.37	44
+-1	3	3	491	22.49	2181	1114	0.77	3096	0	2	2025	564	1126	0.00	7.59	7.66	61.97	7.87	2.06	67.58	44
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	682	32.14	2123	1114	1.19	17994	0	26	9968	3036	4758	0.01	10.35	10.53	46.54	11.41	2.10	54.35	43	45	0.00	10.57	1.71	0.34	2.35	7.50	0.00	0.00	0.00	4.02	2.10	0.02	0.00
+-1	0	0	753	34.61	2177	1114	1.13	5263	0	7	2275	793	1106	0.01	10.46	11.41	42.96	11.76	2.07	51.56	43	45	0.00	10.57	1.71	0.34	2.35	7.50	0.00	0.00	0.00	4.02	2.10	0.02	0.00
+-1	1	1	636	29.80	2134	1114	1.30	4080	0	8	2628	772	1207	0.01	10.10	10.68	49.06	11.30	2.09	56.81	42
+-1	2	2	695	33.75	2060	1114	1.17	4995	0	7	2836	815	1186	0.01	11.50	11.23	43.09	12.64	2.23	51.37	42
+-1	3	3	645	30.41	2120	1114	1.19	3656	0	4	2229	656	1259	0.01	9.34	8.81	51.05	9.92	2.02	57.66	42
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	392	23.89	1639	1114	0.56	16483	0	15	9732	3441	5230	0.00	11.05	11.84	52.92	11.65	2.42	62.05	43	45	0.00	13.85	1.97	0.45	3.18	9.31	0.00	0.00	0.00	2.87	1.05	0.01	0.00
+-1	0	0	388	24.09	1612	1114	0.56	4009	0	4	2648	976	1203	0.01	12.22	13.43	49.95	12.99	2.40	60.52	42	45	0.00	13.85	1.97	0.45	3.18	9.31	0.00	0.00	0.00	2.87	1.05	0.01	0.00
+-1	1	1	424	26.26	1613	1114	0.55	4097	0	3	2077	741	1283	0.00	9.36	10.51	53.57	9.64	2.31	61.79	42
+-1	2	2	360	21.38	1683	1114	0.53	4895	0	4	2688	966	1495	0.00	12.98	12.98	52.39	13.57	2.70	62.34	43
+-1	3	3	394	23.81	1657	1114	0.60	3482	0	4	2319	758	1249	0.01	9.66	10.44	55.77	10.38	2.25	63.55	43
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	320	21.44	1493	1114	0.51	14575	0	22	9486	3494	5359	0.01	10.86	12.39	55.01	11.25	2.52	64.79	42	44	0.00	14.61	2.21	0.53	3.69	9.83	0.00	0.00	0.00	2.64	0.85	0.01	0.00
+-1	0	0	362	23.79	1523	1114	0.58	3625	0	7	2136	850	1221	0.01	11.01	11.79	53.02	11.45	2.42	62.35	42	44	0.00	14.61	2.21	0.53	3.69	9.83	0.00	0.00	0.00	2.64	0.85	0.01	0.00
+-1	1	1	276	18.51	1494	1114	0.45	3227	0	3	2516	935	1440	0.00	10.82	13.15	57.28	11.43	2.55	67.51	42
+-1	2	2	297	20.49	1450	1114	0.47	4385	0	6	2565	980	1502	0.01	12.09	13.96	53.19	12.28	2.85	64.38	42
+-1	3	3	344	22.97	1499	1114	0.51	3338	0	6	2269	729	1196	0.00	9.53	10.64	56.55	9.82	2.28	64.94	42
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	422	24.10	1752	1114	0.62	15539	0	22	8868	3483	5214	0.01	10.85	12.18	52.54	11.26	2.42	62.22	41	45	0.00	13.84	2.06	0.48	3.00	9.32	0.00	0.00	0.00	3.01	1.18	0.01	0.00
+-1	0	0	415	23.39	1773	1114	0.60	3984	0	5	2489	956	1240	0.01	11.94	13.25	51.04	12.61	2.41	61.59	41	45	0.00	13.84	2.06	0.48	3.00	9.33	0.00	0.00	0.00	3.01	1.18	0.01	0.00
+-1	1	1	432	24.21	1785	1114	0.67	3829	0	10	2167	900	1252	0.01	10.56	13.04	51.84	10.81	2.41	62.57	41
+-1	2	2	423	24.25	1745	1114	0.58	4507	0	6	2257	908	1453	0.00	11.02	12.35	52.07	11.37	2.65	61.73	41
+-1	3	3	419	24.55	1706	1114	0.64	3219	0	1	1955	719	1269	0.00	9.87	10.07	55.24	10.27	2.20	62.99	40
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	316	21.14	1496	1114	0.49	14228	0	16	9017	3428	5426	0.00	10.98	11.95	55.59	11.30	2.54	65.02	41	43	0.00	14.43	2.21	0.56	3.76	10.33	0.00	0.00	0.00	2.63	0.83	0.01	0.00
+-1	0	0	315	21.28	1482	1114	0.50	3646	0	6	2322	869	1274	0.01	11.67	11.95	54.75	12.01	2.39	64.33	41	43	0.00	14.43	2.21	0.56	3.76	10.33	0.00	0.00	0.00	2.63	0.83	0.01	0.00
+-1	1	1	308	20.81	1482	1114	0.50	3333	0	3	2274	909	1266	0.00	11.03	13.07	54.75	11.34	2.52	65.33	41
+-1	2	2	312	20.55	1518	1114	0.45	4186	0	2	2361	924	1549	0.00	11.31	12.72	55.12	11.65	2.87	64.92	41
+-1	3	3	330	21.94	1502	1114	0.49	3063	0	5	2060	726	1337	0.01	9.92	10.07	57.74	10.19	2.36	65.51	41
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	377	24.21	1558	1114	0.56	15925	0	18	8518	3226	5275	0.00	10.44	11.32	53.75	10.67	2.42	62.71	41	43	0.00	13.63	2.20	0.37	3.46	10.12	0.00	0.00	0.00	2.78	0.97	0.01	0.00
+-1	0	0	376	23.82	1579	1114	0.58	4105	0	3	2157	826	1273	0.00	11.05	11.62	53.19	11.27	2.36	62.56	40	43	0.00	13.63	2.20	0.37	3.46	10.11	0.00	0.00	0.00	2.78	0.97	0.01	0.00
+-1	1	1	372	23.84	1562	1114	0.57	3670	0	6	2094	832	1246	0.00	10.06	11.61	54.24	10.19	2.34	63.63	40
+-1	2	2	399	26.06	1531	1114	0.55	4371	0	3	1864	780	1494	0.00	9.39	10.72	53.55	9.71	2.62	61.60	41
+-1	3	3	362	23.11	1565	1114	0.55	3779	0	6	2403	788	1262	0.00	11.24	11.34	54.02	11.49	2.37	63.03	41
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	337	21.08	1601	1113	0.54	13846	0	22	9102	3360	5377	0.00	10.57	11.82	56.17	11.07	2.51	65.33	40	43	0.00	14.42	2.26	0.54	3.35	10.14	0.00	0.00	0.00	2.73	0.94	0.01	0.00
+-1	0	0	378	23.14	1632	1114	0.60	3481	0	6	2316	793	1266	0.01	10.70	11.16	54.61	11.33	2.35	63.19	39	43	0.00	14.42	2.26	0.54	3.35	10.15	0.00	0.00	0.00	2.73	0.94	0.01	0.00
+-1	1	1	335	21.23	1576	1114	0.54	3197	0	5	2162	791	1324	0.00	9.52	11.37	57.54	10.15	2.43	66.18	40
+-1	2	2	312	19.63	1590	1114	0.49	4109	0	10	2471	940	1493	0.01	11.39	12.55	56.08	11.68	2.81	65.88	40
+-1	3	3	326	20.33	1602	1114	0.52	3059	0	1	2153	836	1294	0.00	10.67	12.21	56.46	11.13	2.46	66.08	40
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	406	23.81	1706	1114	0.61	15382	0	12	9185	3351	5249	0.00	10.86	11.78	53.20	11.41	2.40	62.38	39	42	0.00	12.63	2.19	0.35	2.84	10.82	0.00	0.00	0.00	2.94	1.12	0.01	0.00
+-1	0	0	398	23.79	1675	1114	0.65	3817	0	1	2229	894	1251	0.00	11.47	12.56	51.83	11.91	2.34	61.96	39	42	0.00	12.63	2.19	0.35	2.84	10.82	0.00	0.00	0.00	2.94	1.12	0.01	0.00
+-1	1	1	331	19.54	1692	1114	0.54	3968	0	5	2895	994	1403	0.01	12.81	13.67	53.68	13.35	2.56	64.55	39
+-1	2	2	456	24.98	1826	1114	0.64	4155	0	4	2033	806	1494	0.01	10.01	10.90	53.77	10.66	2.58	61.78	39
+-1	3	3	439	26.93	1631	1114	0.59	3442	0	2	2028	657	1101	0.00	9.17	10.00	53.53	9.72	2.13	61.22	39
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	338	21.62	1564	1114	0.56	13858	0	20	9259	3409	5364	0.01	10.76	12.02	55.28	11.38	2.48	64.53	47	47	0.00	13.36	2.22	0.44	3.23	10.27	0.00	0.00	0.00	2.74	0.94	0.01	0.00
+-1	0	0	305	20.51	1487	1114	0.53	3601	0	1	2385	886	1275	0.00	12.37	12.24	54.54	12.83	2.42	64.23	47	47	0.00	13.36	2.22	0.44	3.23	10.27	0.00	0.00	0.00	2.74	0.94	0.01	0.00
+-1	1	1	326	20.90	1559	1114	0.55	3100	0	2	2084	839	1311	0.00	10.42	12.19	56.19	11.01	2.42	65.68	47
+-1	2	2	373	22.87	1632	1114	0.59	4196	0	3	2504	880	1515	0.00	11.04	12.38	53.34	11.92	2.72	62.49	47
+-1	3	3	349	22.19	1571	1114	0.56	2961	0	14	2286	804	1263	0.02	9.20	11.27	57.03	9.75	2.36	65.70	47
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	391	24.30	1609	1113	0.56	15288	0	25	9385	3516	5274	0.00	10.62	11.90	52.86	11.20	2.43	62.07	43	45	0.00	13.67	2.22	0.43	3.40	9.78	0.00	0.00	0.00	2.82	1.03	0.00	0.00
+-1	0	0	383	23.82	1607	1114	0.60	4045	0	3	2470	912	1356	0.00	11.77	12.53	51.50	12.59	2.44	61.15	43	45	0.00	13.67	2.22	0.43	3.40	9.78	0.00	0.00	0.00	2.82	1.03	0.00	0.00
+-1	1	1	413	26.15	1580	1114	0.59	3362	0	3	2144	842	1238	0.00	9.41	11.51	52.63	9.98	2.30	61.56	43
+-1	2	2	371	23.09	1606	1114	0.54	4523	0	13	2621	967	1492	0.01	11.66	12.62	52.36	12.20	2.72	61.99	42
+-1	3	3	397	24.13	1644	1114	0.51	3358	0	6	2150	795	1188	0.01	9.64	10.93	54.96	10.02	2.28	63.57	42
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	376	22.28	1686	1114	0.59	19304	0	32	9120	3432	5436	0.01	10.86	12.12	54.35	11.22	2.50	63.99	45	45	0.00	13.12	2.06	0.35	3.45	9.50	0.00	0.00	0.00	2.91	1.08	0.01	0.00
+-1	0	0	385	22.46	1712	1114	0.64	4668	0	5	2378	922	1243	0.01	12.15	13.25	51.73	12.45	2.40	62.69	45	45	0.00	13.12	2.06	0.35	3.45	9.50	0.00	0.00	0.00	2.91	1.08	0.01	0.00
+-1	1	1	356	21.70	1641	1114	0.52	3308	0	9	2106	819	1373	0.01	10.14	11.69	56.10	10.35	2.48	65.48	45
+-1	2	2	344	21.16	1626	1114	0.53	6942	0	9	2268	829	1600	0.01	9.96	11.39	57.12	10.43	2.74	65.67	44
+-1	3	3	419	23.81	1757	1114	0.64	4386	0	9	2368	862	1220	0.01	11.19	12.15	52.44	11.67	2.38	62.14	44
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	334	21.00	1593	1114	0.58	13740	0	15	8525	3234	5352	0.00	10.76	11.32	56.60	10.97	2.46	65.58	41	42	0.00	14.12	2.27	0.40	3.33	10.57	0.00	0.00	0.00	2.74	0.95	0.01	0.00
+-1	0	0	347	21.29	1632	1114	0.65	3503	0	1	2211	845	1273	0.00	11.47	11.96	54.97	11.69	2.40	64.62	40	42	0.00	14.12	2.27	0.40	3.33	10.57	0.00	0.00	0.00	2.74	0.95	0.01	0.00
+-1	1	1	312	20.16	1548	1114	0.51	3082	0	6	2110	795	1300	0.01	10.57	11.29	57.69	10.73	2.39	66.72	40
+-1	2	2	347	22.34	1554	1114	0.53	4348	0	7	2357	869	1416	0.01	11.40	12.40	53.52	11.72	2.69	63.25	41
+-1	3	3	331	20.20	1639	1114	0.61	2807	0	1	1847	725	1363	0.00	9.61	9.65	60.24	9.72	2.35	67.73	41
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	302	21.80	1385	1114	0.49	14471	0	22	9689	3420	5444	0.00	11.12	11.80	55.01	11.68	2.49	64.02	42	44	0.00	14.34	2.18	0.52	3.24	10.61	0.00	0.00	0.00	2.56	0.78	0.01	0.00
+-1	0	0	310	22.29	1391	1114	0.50	3728	0	5	2486	908	1251	0.00	11.33	12.47	53.62	11.80	2.43	63.48	41	44	0.00	14.34	2.18	0.52	3.24	10.60	0.00	0.00	0.00	2.56	0.78	0.01	0.00
+-1	1	1	311	22.98	1355	1114	0.49	3350	0	7	2357	830	1340	0.01	10.85	11.57	54.33	11.44	2.39	63.18	42
+-1	2	2	277	20.00	1383	1114	0.47	4086	0	5	2492	867	1621	0.00	11.79	11.56	56.39	12.40	2.76	64.83	42
+-1	3	3	310	21.94	1413	1114	0.51	3307	0	5	2354	815	1232	0.00	10.50	11.60	55.67	11.07	2.38	64.61	42
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	387	19.17	2019	1113	0.87	12526	0	23	8483	2426	4340	0.00	8.60	8.76	63.16	9.50	2.12	69.20	37	40	0.00	10.43	3.81	0.12	2.27	18.07	0.00	0.00	0.00	3.12	1.33	0.03	0.00
+-1	0	0	359	18.20	1970	1114	0.66	3845	0	10	2204	681	1044	0.01	10.30	9.85	61.30	11.47	2.16	68.17	37	40	0.00	10.43	3.81	0.12	2.27	18.07	0.00	0.00	0.00	3.12	1.33	0.03	0.00
+-1	1	1	478	22.72	2103	1114	0.97	2931	0	4	2312	541	939	0.00	7.75	7.87	61.35	8.86	1.87	66.55	37
+-1	2	2	328	16.88	1945	1114	0.78	3250	0	5	2218	654	1346	0.00	8.56	9.45	64.88	9.74	2.43	70.95	37
+-1	3	3	384	18.90	2032	1114	1.03	2500	0	4	1749	550	1011	0.01	7.78	7.89	65.14	7.92	2.03	71.15	37
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	212	16.59	1277	1114	0.66	11969	0	12	6563	2682	4349	0.00	8.83	10.57	63.83	8.98	2.25	72.19	37	40	0.00	9.68	3.43	0.06	2.02	17.08	0.00	0.00	0.00	2.35	0.59	0.05	0.00
+-1	0	0	215	16.65	1290	1114	0.66	4284	0	4	2108	777	1128	0.01	12.18	11.79	59.13	12.52	2.34	68.49	37	40	0.00	9.68	3.43	0.06	2.02	17.08	0.00	0.00	0.00	2.35	0.59	0.05	0.00
+-1	1	1	199	15.55	1282	1114	0.66	2273	0	3	1475	632	1079	0.00	7.19	9.97	67.16	7.05	2.16	75.24	36
+-1	2	2	207	16.70	1239	1114	0.64	3064	0	2	1626	687	1197	0.00	8.81	10.98	63.34	9.16	2.42	71.72	36
+-1	3	3	226	17.45	1297	1114	0.69	2348	0	3	1354	586	945	0.00	7.14	9.51	65.70	7.18	2.07	73.30	36
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	401	20.95	1915	1114	0.63	14561	0	27	7906	3334	4961	0.01	10.20	12.09	56.40	10.78	2.44	65.83	41	44	0.00	11.40	3.04	0.08	2.86	13.54	0.00	0.00	0.00	3.06	1.23	0.03	0.00
+-1	0	0	421	22.21	1896	1114	0.65	4543	0	8	2034	891	1297	0.01	11.16	13.09	53.11	11.66	2.52	63.61	41	44	0.00	11.40	3.04	0.08	2.86	13.54	0.00	0.00	0.00	3.06	1.23	0.03	0.00
+-1	1	1	418	21.46	1947	1114	0.74	3244	0	4	1852	722	1148	0.00	9.17	10.25	58.76	9.84	2.22	66.47	41
+-1	2	2	366	19.21	1908	1114	0.54	3603	0	5	2090	954	1325	0.01	11.31	13.77	55.37	11.89	2.68	66.22	41
+-1	3	3	399	20.92	1907	1114	0.60	3171	0	10	1930	767	1191	0.01	9.15	11.24	58.32	9.74	2.31	67.03	41
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	421	26.41	1596	1113	0.63	18657	0	29	9027	3616	4627	0.01	11.45	13.34	48.48	11.88	2.38	59.33	39	45	0.00	10.75	2.37	0.18	2.67	10.74	0.00	0.00	0.00	2.97	1.09	0.03	0.00
+-1	0	0	424	27.32	1551	1114	0.63	5265	0	5	2516	947	1142	0.00	13.47	13.61	45.24	13.82	2.35	56.51	39	45	0.00	10.75	2.37	0.18	2.67	10.74	0.00	0.00	0.00	2.97	1.09	0.03	0.00
+-1	1	1	418	25.40	1647	1114	0.60	4628	0	3	2134	958	1087	0.00	10.86	14.01	49.46	11.41	2.32	60.86	39
+-1	2	2	434	27.85	1558	1114	0.63	4502	0	10	2258	888	1285	0.01	10.69	13.55	47.59	11.27	2.58	58.29	39
+-1	3	3	410	25.07	1634	1114	0.65	4262	0	11	2119	823	1113	0.00	10.80	12.20	51.65	11.01	2.28	61.64	39
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	801	37.23	2151	1114	0.65	22584	0	26	14460	3973	4499	0.00	13.91	12.46	36.02	15.79	2.01	44.96	45	49	0.00	8.09	1.10	0.20	2.01	4.74	0.00	0.00	0.00	4.24	2.21	0.02	0.00
+-1	0	0	831	38.99	2131	1114	0.71	6177	0	7	3648	1072	1103	0.00	14.65	13.73	32.20	16.24	2.05	42.73	45	49	0.00	8.09	1.10	0.20	2.01	4.74	0.00	0.00	0.00	4.24	2.21	0.02	0.00
+-1	1	1	824	38.64	2133	1114	0.63	5262	0	7	3326	926	1093	0.00	13.00	11.56	36.40	14.75	1.92	44.69	45
+-1	2	2	789	36.06	2189	1114	0.63	6098	0	6	3628	962	1203	0.01	13.61	11.87	38.09	15.73	2.11	46.10	45
+-1	3	3	759	35.25	2154	1114	0.61	5047	0	6	3858	1013	1100	0.00	14.36	12.69	37.38	16.44	1.98	46.33	45
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	613	37.14	1650	1114	0.72	22282	0	51	18194	4586	4547	0.01	15.56	14.09	32.95	19.41	1.93	41.51	47	50	0.00	6.18	0.84	0.08	1.58	3.94	0.00	0.00	0.00	3.53	1.57	0.02	0.00
+-1	0	0	596	36.03	1653	1114	0.68	5885	0	11	4773	1200	1066	0.01	17.01	14.35	32.36	20.74	1.86	41.36	47	50	0.00	6.18	0.84	0.08	1.58	3.94	0.00	0.00	0.00	3.52	1.57	0.02	0.00
+-1	1	1	654	40.40	1619	1114	0.77	5352	0	9	4259	1112	1148	0.01	13.92	13.75	31.63	17.81	1.89	39.90	47
+-1	2	2	630	38.09	1653	1114	0.70	5987	0	12	4594	1140	1178	0.00	15.68	14.23	31.75	19.76	2.02	40.14	47
+-1	3	3	572	34.05	1679	1114	0.72	5058	0	19	4568	1134	1155	0.01	15.64	14.04	36.05	19.35	1.96	44.63	47
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	662	39.23	1688	1114	0.73	23898	0	49	17707	4448	4370	0.01	14.63	13.72	32.15	18.65	1.88	40.24	53	53	0.00	5.91	0.78	0.05	1.75	3.99	0.00	0.00	0.00	3.68	1.71	0.02	0.00
+-1	0	0	662	38.36	1726	1114	0.79	6249	0	13	4515	1204	1087	0.01	15.36	14.74	31.25	19.39	1.94	40.31	53	53	0.00	5.91	0.78	0.05	1.75	3.99	0.00	0.00	0.00	3.67	1.71	0.02	0.00
+-1	1	1	675	39.76	1697	1114	0.67	5643	0	11	4505	1121	1056	0.01	14.44	14.49	31.03	18.56	1.91	39.77	53
+-1	2	2	658	39.37	1671	1114	0.72	6423	0	11	4489	1085	1179	0.01	14.77	13.01	32.60	18.97	1.93	39.73	53
+-1	3	3	655	39.46	1659	1114	0.73	5583	0	14	4198	1038	1048	0.01	13.95	12.64	33.71	17.67	1.74	41.14	53
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	597	37.84	1577	1114	0.72	21947	0	38	17301	4290	4586	0.01	14.54	13.12	34.26	17.68	1.97	42.51	47	47	0.00	6.59	0.92	0.02	2.10	3.99	0.00	0.00	0.00	3.44	1.49	0.02	0.00
+-1	0	0	589	37.35	1576	1114	0.71	6167	0	13	4617	1123	1151	0.01	15.74	13.88	32.74	18.71	1.99	41.95	47	47	0.00	6.59	0.92	0.02	2.10	3.99	0.00	0.00	0.00	3.44	1.49	0.02	0.00
+-1	1	1	571	36.10	1582	1114	0.70	4998	0	7	4386	1134	1088	0.00	15.16	13.55	34.98	18.53	1.95	43.42	47
+-1	2	2	643	40.32	1594	1114	0.79	5945	0	11	4219	1051	1188	0.01	14.21	12.81	32.40	17.25	2.02	40.41	47
+-1	3	3	585	37.60	1556	1114	0.69	4837	0	7	4079	982	1159	0.01	13.03	12.25	36.91	16.25	1.92	44.24	47
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	587	35.65	1647	1114	0.70	22061	0	53	17865	4578	4767	0.01	15.09	14.02	34.98	18.87	2.01	43.47	47	48	0.00	6.58	0.84	0.05	2.03	3.89	0.00	0.00	0.00	3.46	1.52	0.02	0.00
+-1	0	0	586	35.58	1646	1114	0.68	5962	0	12	4404	1140	1196	0.01	15.00	13.77	35.37	18.59	2.00	43.84	47	48	0.00	6.58	0.84	0.05	2.03	3.89	0.00	0.00	0.00	3.46	1.52	0.02	0.00
+-1	1	1	591	34.91	1692	1114	0.71	5157	0	12	4428	1189	1163	0.01	15.10	15.09	34.63	18.70	2.06	44.33	47
+-1	2	2	620	37.10	1671	1114	0.76	5884	0	15	4554	1161	1255	0.01	15.09	14.02	33.52	19.12	2.06	41.72	47
+-1	3	3	551	34.99	1576	1114	0.65	5058	0	14	4479	1088	1153	0.02	15.19	13.20	36.40	19.10	1.94	43.97	47
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	592	38.54	1536	1114	0.73	22250	0	42	16521	4444	4735	0.01	14.48	13.96	32.75	17.90	2.00	41.56	46	47	0.00	6.42	0.73	0.08	2.22	3.03	0.00	0.00	0.00	3.44	1.49	0.02	0.00
+-1	0	0	549	36.07	1522	1114	0.65	5945	0	14	4358	1108	1248	0.01	15.61	13.73	34.34	18.69	2.09	43.15	46	47	0.00	6.42	0.73	0.08	2.22	3.03	0.00	0.00	0.00	3.44	1.49	0.02	0.00
+-1	1	1	603	39.16	1540	1114	0.77	5360	0	9	4145	1128	1139	0.01	13.45	14.15	32.98	17.39	1.90	41.54	46
+-1	2	2	594	38.97	1523	1114	0.66	5956	0	11	4061	1161	1184	0.01	15.08	14.57	31.08	18.46	2.08	40.49	46
+-1	3	3	622	39.96	1555	1114	0.83	4989	0	8	3957	1047	1164	0.01	13.78	13.39	32.60	17.04	1.93	41.07	46
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	626	35.70	1755	1113	0.71	22745	0	37	16991	4400	4700	0.01	14.88	13.30	35.82	18.33	1.99	43.98	42	45	0.00	6.90	0.95	0.05	2.30	4.28	0.00	0.00	0.00	3.59	1.65	0.02	0.00
+-1	0	0	651	36.90	1764	1114	0.84	6167	0	9	4309	1077	1136	0.00	15.36	12.15	35.32	18.88	1.83	42.38	42	45	0.00	6.90	0.95	0.05	2.30	4.28	0.00	0.00	0.00	3.59	1.65	0.02	0.00
+-1	1	1	572	32.84	1742	1114	0.62	5439	0	8	4470	1175	1144	0.01	16.07	14.49	36.34	19.54	2.03	45.59	42
+-1	2	2	665	37.50	1773	1114	0.71	5941	0	10	4133	1119	1319	0.01	14.47	14.16	33.55	17.70	2.20	42.60	42
+-1	3	3	618	35.57	1737	1114	0.66	5198	0	10	4079	1029	1101	0.00	13.63	12.39	38.09	17.18	1.89	45.36	42
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	643	40.25	1598	1114	0.72	22659	0	48	17260	4311	4560	0.01	14.58	13.49	31.45	18.15	1.89	39.72	43	46	0.00	6.64	0.64	0.09	2.06	2.70	0.00	0.00	0.00	3.58	1.60	0.02	0.00
+-1	0	0	603	38.26	1576	1114	0.69	6206	0	20	4890	1145	1140	0.01	16.16	14.92	30.42	20.00	1.94	39.80	43	46	0.00	6.64	0.64	0.09	2.06	2.70	0.00	0.00	0.00	3.58	1.60	0.02	0.00
+-1	1	1	635	40.10	1583	1114	0.68	5294	0	10	4355	1077	1174	0.01	14.21	13.33	32.14	18.17	1.86	39.88	43
+-1	2	2	680	41.56	1635	1114	0.77	6019	0	10	4082	1140	1153	0.01	14.28	14.30	29.60	17.66	1.98	38.80	43
+-1	3	3	655	41.08	1594	1114	0.75	5140	0	8	3933	949	1093	0.01	13.66	11.40	33.61	16.76	1.77	40.39	43
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	577	37.62	1534	1114	0.72	21947	0	39	17708	4417	4593	0.01	14.97	13.38	33.79	18.82	1.90	41.67	51	51	0.00	6.21	0.82	0.03	1.93	3.59	0.00	0.00	0.00	3.39	1.45	0.02	0.00
+-1	0	0	579	37.63	1538	1114	0.70	6138	0	12	4685	1167	1060	0.01	15.62	14.71	31.77	20.13	1.88	40.37	51	51	0.00	6.21	0.82	0.03	1.93	3.59	0.00	0.00	0.00	3.39	1.45	0.02	0.00
+-1	1	1	530	34.93	1516	1114	0.61	5011	0	12	4503	1088	1210	0.01	15.48	13.09	36.32	18.95	1.92	44.20	51
+-1	2	2	601	39.36	1528	1114	0.78	5876	0	9	4342	1179	1244	0.01	15.14	13.90	31.34	19.20	2.03	39.41	51
+-1	3	3	599	38.56	1554	1114	0.76	4922	0	6	4178	983	1079	0.00	13.64	11.83	35.72	17.00	1.76	42.69	51
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	610	37.47	1627	1114	0.74	22180	0	65	17350	4499	4746	0.01	14.76	13.94	33.55	18.35	2.00	42.17	50	50	0.00	6.35	0.62	0.05	1.99	3.21	0.00	0.00	0.00	3.53	1.57	0.02	0.00
+-1	0	0	648	38.67	1676	1114	0.79	6089	0	16	4488	1247	1145	0.01	15.95	15.84	29.25	19.58	2.05	39.71	50	50	0.00	6.35	0.62	0.05	1.99	3.21	0.00	0.00	0.00	3.53	1.57	0.02	0.00
+-1	1	1	592	37.81	1566	1114	0.77	5142	0	11	4139	1021	1179	0.01	14.10	12.73	35.10	17.37	1.92	42.91	49
+-1	2	2	605	37.08	1631	1114	0.72	6155	0	14	4779	1153	1242	0.01	15.79	14.02	32.86	20.05	2.04	40.83	49
+-1	3	3	594	36.34	1636	1114	0.66	4794	0	24	3944	1078	1180	0.01	13.23	13.19	37.00	16.42	2.00	45.24	49
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	566	37.08	1526	1114	0.70	21633	0	49	16975	4593	4796	0.01	14.43	14.30	33.96	18.47	2.02	42.43	47	48	0.00	6.69	0.81	0.06	1.85	3.41	0.00	0.00	0.00	3.37	1.41	0.02	0.00
+-1	0	0	567	37.61	1508	1114	0.67	6036	0	16	4521	1127	1224	0.01	15.41	13.77	32.93	19.55	1.98	40.86	47	48	0.00	6.69	0.81	0.06	1.85	3.41	0.00	0.00	0.00	3.37	1.41	0.02	0.00
+-1	1	1	577	36.79	1569	1114	0.76	4974	0	13	4127	1166	1171	0.01	13.97	14.79	34.24	17.84	1.99	43.38	47
+-1	2	2	561	37.26	1505	1114	0.69	5712	0	12	4042	1167	1323	0.01	14.21	14.34	33.94	18.00	2.23	42.52	47
+-1	3	3	558	36.67	1522	1114	0.69	4911	0	8	4285	1133	1078	0.00	14.11	14.31	34.71	18.48	1.90	42.96	47
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	549	31.16	1763	1113	0.68	20709	0	27	13655	3997	4755	0.00	12.88	12.83	42.87	15.50	2.07	51.26	40	43	0.00	8.04	1.47	0.08	2.12	6.83	0.00	0.00	0.00	3.41	1.50	0.02	0.00
+-1	0	0	550	31.50	1746	1114	0.65	5668	0	5	3354	1007	1291	0.00	13.75	12.63	41.83	16.89	2.13	49.49	39	43	0.00	8.04	1.47	0.08	2.12	6.83	0.00	0.00	0.00	3.41	1.50	0.02	0.00
+-1	1	1	538	30.37	1771	1114	0.65	5022	0	8	3404	1020	1081	0.01	12.87	13.57	42.95	15.37	2.00	52.27	39
+-1	2	2	580	32.38	1792	1114	0.76	5769	0	4	3707	1041	1205	0.00	13.18	13.06	41.14	15.62	2.15	49.85	39
+-1	3	3	529	30.40	1742	1114	0.65	4250	0	10	3190	929	1178	0.00	11.71	12.08	45.59	14.15	2.02	53.44	40
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	283	20.23	1398	1114	0.71	14809	0	15	6639	2502	4220	0.00	8.87	9.56	61.15	9.06	2.14	68.56	40	43	0.00	9.28	3.57	0.07	2.23	16.36	0.00	0.00	0.00	2.57	0.77	0.04	0.00
+-1	0	0	298	21.13	1410	1114	0.69	4467	0	3	2139	660	1088	0.00	11.92	9.46	57.21	12.33	2.18	64.37	39	43	0.00	9.28	3.57	0.07	2.23	16.36	0.00	0.00	0.00	2.57	0.77	0.04	0.00
+-1	1	1	284	20.66	1375	1114	0.80	3732	0	0	1402	595	997	0.00	7.47	9.56	62.17	7.59	2.03	69.72	39
+-1	2	2	274	20.85	1315	1114	0.72	3540	0	6	1841	679	1212	0.00	9.18	10.09	59.74	9.54	2.37	67.24	40
+-1	3	3	276	18.29	1507	1114	0.65	3070	0	6	1257	568	923	0.01	6.91	9.12	65.50	6.80	2.00	72.91	40
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	329	19.27	1706	1114	0.60	13441	0	21	8492	3256	5134	0.01	10.47	11.78	58.18	11.16	2.47	67.10	48	48	0.00	12.46	3.11	0.16	3.12	14.55	0.00	0.00	0.00	2.84	1.04	0.02	0.00
+-1	0	0	314	19.40	1621	1114	0.63	4070	0	4	2280	894	1270	0.00	12.02	12.69	55.54	12.77	2.55	65.28	48	48	0.00	12.46	3.11	0.16	3.12	14.55	0.00	0.00	0.00	2.84	1.04	0.02	0.00
+-1	1	1	371	21.75	1705	1114	0.67	3064	0	4	1833	767	1212	0.00	9.86	11.35	56.72	10.57	2.32	65.37	48
+-1	2	2	365	20.37	1790	1114	0.57	3414	0	5	1971	763	1402	0.00	8.57	10.91	59.84	9.34	2.59	67.70	48
+-1	3	3	265	15.56	1705	1114	0.52	2893	0	8	2408	832	1250	0.01	11.42	12.17	60.58	11.96	2.42	70.06	48
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	243	20.94	1160	1113	0.53	14177	0	38	7833	3443	4429	0.00	10.40	13.16	55.32	10.70	2.41	65.95	35	40	0.00	11.94	3.30	0.10	3.08	15.50	0.00	0.00	0.00	2.39	0.61	0.03	0.00
+-1	0	0	218	18.89	1156	1114	0.48	4535	0	2	2073	932	1147	0.00	11.95	14.09	54.88	12.20	2.48	66.44	35	40	0.00	11.94	3.30	0.10	3.08	15.50	0.00	0.00	0.00	2.39	0.61	0.03	0.00
+-1	1	1	262	23.03	1138	1114	0.58	2963	0	3	1671	770	1056	0.00	8.65	12.17	55.96	8.86	2.30	65.80	35
+-1	2	2	238	20.12	1183	1114	0.51	3699	0	5	2272	896	1276	0.01	10.69	13.12	55.95	11.09	2.60	66.19	35
+-1	3	3	253	21.70	1165	1114	0.55	2980	0	28	1817	845	950	0.01	10.32	13.26	54.53	10.65	2.28	65.36	35
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	473	19.66	2407	1114	0.93	15213	0	60	19290	2939	6140	0.01	10.98	7.67	61.53	23.29	1.71	55.34	66	66	0.00	11.37	4.13	0.25	1.92	19.06	0.00	0.00	0.00	3.54	1.76	0.00	0.00
+-1	0	0	524	21.32	2456	1114	1.00	4085	0	12	4646	803	1417	0.00	11.75	7.97	58.74	21.70	1.77	55.20	66	66	0.00	11.37	4.13	0.25	1.92	19.06	0.00	0.00	0.00	3.54	1.76	0.00	0.00
+-1	1	1	407	17.41	2340	1114	0.82	3663	0	19	5223	786	1474	0.01	11.12	8.11	63.21	25.62	1.52	55.45	66
+-1	2	2	552	22.42	2463	1114	1.01	4014	0	12	4716	675	1640	0.01	10.60	7.30	59.51	21.38	1.94	54.26	66
+-1	3	3	409	17.49	2341	1114	0.84	3451	0	17	4705	675	1609	0.01	10.42	7.31	64.65	24.48	1.60	56.43	66
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	1689	55.19	3061	1114	1.02	31925	0	40	15136	2513	2774	0.01	9.13	6.54	28.74	10.36	1.13	33.32	91	91	0.00	0.21	0.00	0.00	0.07	0.06	0.00	0.00	0.00	8.00	5.80	0.03	0.00
+-1	0	0	2008	64.83	3098	1114	1.05	8800	0	5	4010	860	588	0.00	12.06	8.20	14.52	13.79	0.99	20.40	91	91	0.00	0.21	0.00	0.00	0.07	0.06	0.00	0.00	0.00	8.00	5.80	0.03	0.00
+-1	1	1	1302	43.16	3016	1114	0.94	7372	0	10	5222	831	852	0.01	12.00	9.16	35.50	13.18	1.45	42.21	91
+-1	2	2	1929	62.81	3071	1114	1.03	8526	0	12	3810	283	498	0.01	5.40	2.55	28.58	6.58	0.80	29.81	91
+-1	3	3	1518	49.95	3040	1114	1.03	7227	0	13	2094	539	836	0.01	7.07	6.23	36.36	7.90	1.28	40.88	91
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	704	30.58	2303	1114	0.67	23691	0	22	10910	3128	4267	0.01	11.67	10.30	47.17	12.67	2.01	54.74	65	65	0.00	9.53	2.33	0.14	2.58	11.06	0.00	0.00	0.00	4.11	2.17	0.02	0.00
+-1	0	0	619	28.27	2189	1114	0.68	6805	0	7	2829	804	1230	0.01	13.53	10.65	47.28	14.37	2.10	55.26	65	65	0.00	9.53	2.33	0.14	2.58	11.06	0.00	0.00	0.00	4.11	2.17	0.02	0.00
+-1	1	1	747	31.49	2373	1114	0.72	4903	0	3	2808	838	917	0.00	11.44	10.73	46.05	12.40	1.91	54.21	65
+-1	2	2	676	29.28	2310	1114	0.57	6315	0	6	3070	793	1243	0.01	11.85	10.23	48.41	13.27	2.19	55.27	65
+-1	3	3	775	33.30	2329	1114	0.69	5668	0	6	2203	693	877	0.01	9.84	9.59	46.94	10.63	1.84	54.23	64
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	1169	42.62	2743	1114	0.64	30414	0	41	12211	2451	3721	0.01	9.42	6.47	41.22	10.22	1.55	45.61	70	70	0.00	7.89	2.85	0.04	1.69	13.46	0.00	0.00	0.00	5.52	3.46	0.01	0.00
+-1	0	0	1172	42.92	2731	1114	0.62	7278	0	16	3434	712	827	0.02	11.01	7.14	38.68	11.50	1.49	44.08	70	70	0.00	7.89	2.85	0.04	1.69	13.46	0.00	0.00	0.00	5.52	3.46	0.01	0.00
+-1	1	1	1189	42.73	2783	1114	0.64	7309	0	2	2799	542	964	0.00	8.01	5.49	43.45	9.24	1.49	46.54	70
+-1	2	2	1227	44.95	2730	1114	0.71	8515	0	6	2890	590	953	0.01	8.79	6.34	39.62	9.59	1.63	43.83	70
+-1	3	3	1089	39.88	2729	1114	0.60	7312	0	17	3088	607	977	0.01	9.87	6.91	43.12	10.53	1.58	48.00	70
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	452	23.75	1903	1113	0.78	20971	0	497	17320	3497	4591	0.05	13.94	11.32	50.65	16.47	2.05	57.73	39	44	0.00	12.58	4.87	0.13	2.50	8.82	0.00	0.00	0.00	3.28	1.53	0.00	0.00
+-1	0	0	534	26.65	2004	1114	0.99	3324	0	48	2940	611	1030	0.02	10.49	8.26	54.27	11.98	1.79	59.59	39	44	0.00	12.58	4.87	0.13	2.50	8.82	0.00	0.00	0.00	3.28	1.53	0.00	0.00
+-1	1	1	341	19.67	1732	1114	0.53	4379	0	129	4373	1002	1133	0.05	13.82	12.70	53.47	16.40	2.16	61.77	39
+-1	2	2	527	27.41	1924	1114	0.81	9794	0	152	5786	940	1391	0.04	16.85	11.31	44.04	20.27	2.16	50.16	39
+-1	3	3	406	21.27	1908	1114	0.68	3474	0	168	4221	944	1037	0.07	14.61	13.01	50.84	17.22	2.08	59.43	39
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	402	15.28	2631	1114	0.72	21047	0	652	22091	3731	3826	0.05	23.57	10.02	49.45	26.45	2.04	56.24	46	48	0.00	5.41	2.62	0.06	0.61	4.96	0.00	0.00	0.00	3.41	1.65	0.00	0.00
+-1	0	0	291	10.51	2770	1114	0.75	2239	0	113	3593	803	585	0.03	17.28	10.36	60.96	18.92	1.90	68.67	46	48	0.00	5.41	2.62	0.06	0.61	4.96	0.00	0.00	0.00	3.41	1.65	0.00	0.00
+-1	1	1	599	24.27	2467	1114	0.64	12381	0	55	7263	2106	2086	0.06	26.59	12.58	31.55	35.09	3.25	37.38	46
+-1	2	2	291	10.94	2657	1114	0.74	3064	0	330	4275	456	669	0.04	19.27	9.68	59.64	19.83	1.74	67.49	46
+-1	3	3	428	15.40	2776	1114	0.79	3363	0	154	6960	366	486	0.06	31.12	7.46	45.64	31.95	1.25	51.40	46
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	203	10.36	1959	1113	0.68	16945	0	25	7605	2569	4187	0.01	7.36	7.65	74.03	8.89	2.27	78.48	38	42	0.00	18.58	8.68	0.13	2.59	16.36	0.00	0.00	0.00	2.43	0.77	0.00	0.00
+-1	0	0	128	7.02	1826	1114	0.70	3239	0	8	1538	413	899	0.01	5.45	6.13	81.19	6.65	1.92	84.40	38	42	0.00	18.58	8.68	0.13	2.59	16.36	0.00	0.00	0.00	2.43	0.77	0.00	0.00
+-1	1	1	203	11.27	1803	1114	0.49	6942	0	6	1736	824	1687	0.01	6.96	7.88	72.60	9.74	2.74	76.24	38
+-1	2	2	315	14.12	2229	1114	0.73	4000	0	6	1964	522	922	0.01	7.17	7.40	70.91	8.23	2.32	75.34	38
+-1	3	3	166	9.03	1834	1114	0.82	2764	0	5	2367	810	679	0.01	9.87	9.21	71.46	10.94	2.08	77.95	38
+Node	Core	CPU	Avg_MHz	Busy%	Bzy_MHz	TSC_MHz	IPC	IRQ	SMI	POLL	C1ACPI	C2ACPI	C3ACPI	POLL%	C1ACPI%	C2ACPI%	C3ACPI%	CPU%c1	CPU%c6	CPU%c7	CoreTmp	PkgTmp	GFX%rc6	Pkg%pc2	Pkg%pc3	Pkg%pc6	Pkg%pc7	Pkg%pc8	Pkg%pc9	Pk%pc10	SYS%LPI	PkgWatt	CorWatt	GFXWatt	RAMWatt
+-	-	-	44	5.60	789	1114	0.38	1489	0	1	689	514	838	0.00	4.83	8.40	81.04	4.37	2.33	87.70	37	41	0.00	27.46	13.10	0.17	4.43	24.34	0.00	0.00	0.00	1.73	0.19	0.00	0.00
+-1	0	0	44	5.57	783	1114	0.37	377	0	0	171	170	197	0.00	5.35	11.08	77.81	4.99	2.40	87.04	36	41	0.00	27.46	13.10	0.17	4.43	24.34	0.00	0.00	0.00	1.73	0.19	0.00	0.00
+-1	1	1	40	4.96	804	1114	0.38	312	0	1	147	121	185	0.01	4.28	8.11	82.56	3.71	2.17	89.15	36
+-1	2	2	55	7.05	781	1114	0.35	556	0	0	255	145	259	0.00	6.13	9.17	77.52	5.86	2.76	84.34	36
+-1	3	3	38	4.83	793	1114	0.43	244	0	0	116	78	197	0.00	3.55	5.26	86.26	2.91	1.99	90.27	37
+
+--kpdjzflh5kdx5uyd--
 
