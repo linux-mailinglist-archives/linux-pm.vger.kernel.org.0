@@ -1,202 +1,209 @@
-Return-Path: <linux-pm+bounces-36158-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36159-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98278BDD2FB
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Oct 2025 09:46:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4946DBDD30C
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Oct 2025 09:47:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 8158F4E10AB
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Oct 2025 07:46:28 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 0D7264E8D34
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Oct 2025 07:47:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9143A31327D;
-	Wed, 15 Oct 2025 07:46:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD6D530F803;
+	Wed, 15 Oct 2025 07:47:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PzHhYOI7"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="GTGvq6sc"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A6172609C5
-	for <linux-pm@vger.kernel.org>; Wed, 15 Oct 2025 07:46:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 550012BE657
+	for <linux-pm@vger.kernel.org>; Wed, 15 Oct 2025 07:47:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760514384; cv=none; b=NvJMaGAaIedk0KgUB0Vid9Dh3yWQV+jcedBD0iAOuzOWRcZjQVm7qwUrTa9FS5XPYki0Uuxwp1eps9oTSTB0rzKusy8F7cn1tv5q0spZU/dpoFal5vaYJxpS5Jmt9BE1NvZzQeN8OG+hz3nIgYXsszixMufYBG12eDjQYQVoNkM=
+	t=1760514456; cv=none; b=cC/zIOvu2o4YNKqDpuAt551wK37lsn+StcphzXB30peV4WjURFGkcubTKetMekGQ1jBGj6ZioFdMQUSAR4jXOOueBbDVKoVVCKicmNlLqVFf5Lzyx1ZkLlLwFUgfOKGQ8/PltOfLn6PIJxMvJyrl2U9nOxTP9Dp0shIq9ixsU4c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760514384; c=relaxed/simple;
-	bh=BC15KuwCSg0SviAD2NX9WP0PeUqiSLVuQjRMVITVnHE=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=UnEySM7picnhsA5aC8vshzYvFfEwgkpBNH2pFOxLKvw6SFaGNv5hVEHa/Bqdyrmgf126eJM/2tSB4AjxuwFGY+YPrmD1S2hPHVxf5OBC3c+yi6xlMUe0cNdIJQSpjl2pKbJKIjiDZLnNvUsfB714yIhub3X73wDBin4YsKl8bj8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PzHhYOI7; arc=none smtp.client-ip=209.85.167.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-579d7104c37so7532425e87.3
-        for <linux-pm@vger.kernel.org>; Wed, 15 Oct 2025 00:46:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760514380; x=1761119180; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=p2MNLLJ09ZFJ09dXhL/1vB6MSlJ3nz18TUtg3KkoHkI=;
-        b=PzHhYOI78oHjFm7MZWikF3C2dWia5TEvAGB6Zf+sjI8zY7NICRbYjk7TUk+0AzEBJb
-         Aeej+6lL7TiW8itdbiV8URhCJVb1JJg2qPGE6qSFgklAonjoAzWvinCSIcWa1QYKurL/
-         AtbFt0+ShIG46QQY8FxAFlo7GJkFgaLz3rEav9MgfDrfFQZ6TmIzYVYajPoHywY+DqYw
-         LYlIq8xyVimQp7efUBhlQSi66dl/QfWHmG05JRfqkSm8DdGjPRhjwIobaLz0KWKWQuT8
-         yZm9vfB/4LIJCdzFSS2WW3plX0qYsm3a6aa8CVhPzpT2u+4/K03Jv0slBgvT3Tg2qiW8
-         5ZIQ==
+	s=arc-20240116; t=1760514456; c=relaxed/simple;
+	bh=JBySYm7jCnLNR7S47OJWMx5tSg66aDYRas2A7H3BfRg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=G2F/Pfu4Nm0aUBxc9G1AY1b4m8b3SDBopjFEVgwEo+6bOUiBCF3iZQi6TsMy5JSNQqiJVxuSv4SN/J3bUrY7F2ICHsDpQdbDtyFP2Vg0tL6aNOyPNQyk9rGU+lfmaBNm5x6fohfSuusOASgu1ZEUmQaLqJhCmCfgY32tmjCSKUQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=GTGvq6sc; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 59F2s5Na003381
+	for <linux-pm@vger.kernel.org>; Wed, 15 Oct 2025 07:47:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	3wzEuS4KgwUf/si4HCRP4Xjfg9FTP53VK8rld0Pt2hw=; b=GTGvq6sc6JxH0BRj
+	ATrPrb5KfpdAAosrchw3H6kaMELoxGWp3yqbmmH/y8D0AjUvLOxzprSudsU1bZ+Q
+	TxBCCCTKBjaI+EbGlJyNHNMwPGIDwH5Yq/0K58KY45PtKXZtRE0EtZUy/BiR9bdB
+	7RfKDLwEGUEoLtyTJztloXRJp5obqdVQWiYMSUyr4qsnc+iyh27XpAyRk+n6bbBf
+	i99KG671HDGIGK8V9oiQ+AFQo2ieOzwDQVXf+HCFcS/uAtIJR/bLuJCyUVulwGCF
+	iWatMZCyif/690rRFP6oj6A8romXj3CPAjlRaWDSVFR1BzUDFyvbObTo1uhbBSub
+	m8pakw==
+Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com [209.85.214.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 49sua8j4s2-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Wed, 15 Oct 2025 07:47:34 +0000 (GMT)
+Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-27ee41e062cso141978975ad.1
+        for <linux-pm@vger.kernel.org>; Wed, 15 Oct 2025 00:47:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760514381; x=1761119181;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1760514453; x=1761119253;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=p2MNLLJ09ZFJ09dXhL/1vB6MSlJ3nz18TUtg3KkoHkI=;
-        b=OXkig4HU3Wc4fUR+JAyJIx9c2RjvTMijpKW3ccIZrKtge0uFRIYEaEqbRhqRcJq3h5
-         EY5gIAfiR4ovtfKf3eK4yXNh5zpKOigaXYkudGWVyEowgF1bVuPCv5Nnalt1cNvgh0lo
-         DJqrfP+g2dg9ZrWXvSvxaP2YIthGIRDw1TSe+IWrSqFEA+F9ZKS3mxPKaQd8jROXtEmM
-         Qg1W82i6aFwQB1utmSonQePbe1txLTCEhETg1e2G7RVktAHqmNwvf1XhU9GPBvXTx/Xa
-         CN2yvdQBi6Z529OkyBfALGBT2VgxP1qcA45DEg2TlmgIbFS+K/bojvNXEwFbA8e1KJaL
-         ytSQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXiu9mAqebRbiU/SKsaSZtcznhLk/yFUq3DWav1bqxtEwbbBSLshNOHpFVcwZV0gU+DOF97zjzn7A==@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywtfx5n03k6YHKmcw35UOf6a4Hp/SiZ2WUdG83ZJZZg4OJNRqzT
-	+DIEx08wcQ1OKhgrqG+4iJfr475XhaEriUasnu8gVUgJN2G/GywLla8L
-X-Gm-Gg: ASbGncs6P8v1hQriz0EMJucPRdiMgPyudnBo415z5IvCV4L2+3h+jr1xZcR24gljJVS
-	+pnbF3bxAQvr+hXp8kRvg2SvAlj7+dGkj6BL6/7xjHRZBeYYHOzd9pL1gy7iWpE15gra/2At9rh
-	pOOmrpTh/oJnBRRlakBwqodM7x8DNKEvZDh1ss+FXUr3Gp8taLpk1ecyRE6UzTLYoy9b3R44rZa
-	jNYBGoL7TvuQKLiDRN8KaZ/o3Q4FIs5itbtuzARyIs+DwmQLwaT8qA+l5+GtnwimKb94zh0lIv9
-	GSITsj240qvlIQOJW4RskpH+fdhBI9JOevZCZZwodIk4GsVVjhNS6d4PlJB5x8qh+c6idTeHQJ3
-	FdudEZ0z/H0RRTJbnbFUMMmUY0kK3hHFpETOQS7gdU2OwjAFbDKitfuZHDCDy3SmEk0fUxhXg4p
-	GbgkIIBYbhIdlSA6sam1scRh4=
-X-Google-Smtp-Source: AGHT+IECrk7yi+Pwe9pZO4hGvEmNp5pxm/s4OrGMFnEn/EkQ/+8aZDd4HdtIeMunC3aM5IGda/MJPw==
-X-Received: by 2002:a05:6512:3b29:b0:58b:23e:249 with SMTP id 2adb3069b0e04-5906d892889mr7308450e87.18.1760514380271;
-        Wed, 15 Oct 2025 00:46:20 -0700 (PDT)
-Received: from ?IPV6:2a10:a5c0:800d:dd00:8fdf:935a:2c85:d703? ([2a10:a5c0:800d:dd00:8fdf:935a:2c85:d703])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-591c20253b1sm1336364e87.79.2025.10.15.00.46.19
+        bh=3wzEuS4KgwUf/si4HCRP4Xjfg9FTP53VK8rld0Pt2hw=;
+        b=NVIWz0RDKQS7JHyz6Lz/OhLFa9P4G1PhrRCAH77j7R5DF37VawVjMP2xEdOXL3IKbu
+         DfPLl16OdOJpCyRJyWvi9Qy1R6+zGNL4RN1nYe1CsRg/4SwCAaiFj3HyyHWPhcEixlaa
+         IB3kl1Bp3qTWJHOH2LyLD+SoazOtT+CtFDFek3fJ4GxoyPTOmL530o4fnUWdF3YweSAR
+         MNay+wMIsJgbtbxXoqAzjJ+NwUIr6zqrRufZ6bfMP80zeD440COS1d1t30W3iD+k9O+e
+         5/2mHzyMMFUyaJDQuhG+WXGpqD3I8hrcGSRbKzPQfUcXKvQbK5/BMp5LQcQiOXfqbKL5
+         7WrQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWeYhxEgQ34wjEMctZ4pLJOuOK0ho83RSdvvSoPpcuhkRo2EXc1ZS472+OAv3UV9vdsLcFjN8D6jg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx8oBWZWhMNZ7gPtgDygEuzwJWh2Ib9PNd/2YdRNF76pyh53lke
+	uHF57PB23LG7JCASwc/0Vq9aJJ1HcUv5fAOKDVQ7OGaIFAtzRHoFhmxr5WA+aqZQDiWvZGk2wvt
+	ptUE04ugWfi1hbqOmSc0LP5YlwCFt9OlYfThD/MkHzwiDQc2CjL91kpmV6HuBOQ==
+X-Gm-Gg: ASbGncscR4cb/OH1+S+2gOe8ov8H+XZtByPm5uo0dHgyMkkv4reUD1Txpe9YhvFj5Vb
+	lwGJXEYX7N2dKKp4tT4wChJuljZep2bmXvm/a2AESekc/7aZyv9WJYeSoz5Ry/5OvFBPBo01jL2
+	lth+cmHyE6GsKX1yTjmYHQgT6cpWOo/+c1HWs2eQk0I9Bp6nQQNGTckjnZDs+CYgV/Hh2agksQw
+	6qL+sYwW4a0gEKJF8CHPcWXUo2hz5BO5SHrKmqgKutKqmCsoB4kNyqKmEekkubFbNea6/CXhDAZ
+	oBrJRtNIIvtlKmIqf6GusM+n4jMa937gFyoygovPJCbzU9B+aS+ogQmFSfVRMUwz4K+4P2YOYQ=
+	=
+X-Received: by 2002:a17:903:2343:b0:248:fc2d:3a21 with SMTP id d9443c01a7336-29027290194mr277067305ad.4.1760514452618;
+        Wed, 15 Oct 2025 00:47:32 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGhzyOtK2t73BdHuEH9yQdQ6LRCYOnKx0D9BJpdqWj+pdvXaadxnVohWazYDT43ZnK/Q6nPCw==
+X-Received: by 2002:a17:903:2343:b0:248:fc2d:3a21 with SMTP id d9443c01a7336-29027290194mr277066685ad.4.1760514451980;
+        Wed, 15 Oct 2025 00:47:31 -0700 (PDT)
+Received: from [10.216.0.133] ([202.46.23.19])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29034de658bsm187706535ad.22.2025.10.15.00.47.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Oct 2025 00:46:19 -0700 (PDT)
-Message-ID: <07bd2e21-8631-4812-9021-3d3b2dbc7050@gmail.com>
-Date: Wed, 15 Oct 2025 10:46:18 +0300
+        Wed, 15 Oct 2025 00:47:31 -0700 (PDT)
+Message-ID: <1bf62073-fae9-dd49-c908-193c06cdda84@oss.qualcomm.com>
+Date: Wed, 15 Oct 2025 13:17:01 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 06/13] mfd: bd71828: Support ROHM BD72720
-From: Matti Vaittinen <mazziesaccount@gmail.com>
-To: Andreas Kemnade <andreas@kemnade.info>
-Cc: Lee Jones <lee@kernel.org>,
- Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
- Pavel Machek <pavel@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Sebastian Reichel <sre@kernel.org>,
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
- Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski
- <brgl@bgdev.pl>, linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-gpio@vger.kernel.org
-References: <cover.1759824376.git.mazziesaccount@gmail.com>
- <93142a80d90a0ac80b27090d0c83914675aad94d.1759824376.git.mazziesaccount@gmail.com>
- <20251009161847.GE2890766@google.com>
- <8ea507eb-f78c-4a16-882b-112e277fa1b6@gmail.com>
- <20251010150317.07bfdbe8@kemnade.info>
- <d2295506-bf70-4142-8537-0fdf9cb04a30@gmail.com>
- <20251013151900.3e4cc69f@kemnade.info>
- <5ef55577-b8ae-4c8d-a965-ee356c47c691@gmail.com>
-Content-Language: en-US, en-AU, en-GB, en-BW
-In-Reply-To: <5ef55577-b8ae-4c8d-a965-ee356c47c691@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v16 07/14] firmware: psci: Implement vendor-specific
+ resets as reboot-mode
+Content-Language: en-US
+To: Pavan Kondeti <pavan.kondeti@oss.qualcomm.com>
+Cc: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Souvik Chakravarty <Souvik.Chakravarty@arm.com>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+ <conor+dt@kernel.org>,
+        Andy Yan <andy.yan@rock-chips.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Konrad Dybcio <konradybcio@kernel.org>,
+        cros-qcom-dts-watchers@chromium.org, Vinod Koul <vkoul@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
+        Moritz Fischer <moritz.fischer@ettus.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+        Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Andre Draszik
+ <andre.draszik@linaro.org>,
+        Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org,
+        Elliot Berman <quic_eberman@quicinc.com>,
+        Srinivas Kandagatla <srini@kernel.org>,
+        Umang Chheda <umang.chheda@oss.qualcomm.com>
+References: <20251015-arm-psci-system_reset2-vendor-reboots-v16-0-b98aedaa23ee@oss.qualcomm.com>
+ <20251015-arm-psci-system_reset2-vendor-reboots-v16-7-b98aedaa23ee@oss.qualcomm.com>
+ <3978e740-0589-4872-8f2f-1162084d3818@quicinc.com>
+From: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
+In-Reply-To: <3978e740-0589-4872-8f2f-1162084d3818@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-Proofpoint-GUID: DrtGPmYrw0GMe2aqIzkWaYdUMPekkox5
+X-Authority-Analysis: v=2.4 cv=e5MLiKp/ c=1 sm=1 tr=0 ts=68ef5196 cx=c_pps
+ a=IZJwPbhc+fLeJZngyXXI0A==:117 a=j4ogTh8yFefVWWEFDRgCtg==:17
+ a=IkcTkHD0fZMA:10 a=x6icFKpwvdMA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=R8NOTgI61i89tWg-cvsA:9 a=QEXdDO2ut3YA:10 a=uG9DUKGECoFWVXl0Dc02:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDE0MDEzNCBTYWx0ZWRfX56CVNgog4im1
+ StsW6pd53D66Ql7xtiXom0U2zAxCny9NJe70LElttet1XhgLEk7VKGoslXdFN9o/A8DATV7Eblv
+ Ex2nOkMHl0/nIAh74NMAvMgyV6sKKmDRvW9Q7jCgVDcTvpqmx1AsO4NvaEMWtga4wPlAiFlzF0R
+ MdosXGtrJgHKumuWWeer/fHy5MRaNDrNzADfc9IenDmgIEiUVSE83VDPikhG0Svyeko0/B/nxSP
+ e3GTqoL9p1DnecBXyDsuSc0HMUwy0Czlv8+JLJL+1yjjIQ9JN7tNwJdYn+poJCBXDHuDWzmgMVl
+ fUvzNvtZVRrTwsaZdHBCd866qGr7JNumhsQSu9IwE9xjdN6ZsBGdbiK55FpOkUpH0VXTEO8BANT
+ atJq8Vb7m2QPFxYZHvwB+YsXdBfElw==
+X-Proofpoint-ORIG-GUID: DrtGPmYrw0GMe2aqIzkWaYdUMPekkox5
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-10-15_03,2025-10-13_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ phishscore=0 suspectscore=0 spamscore=0 adultscore=0 clxscore=1015
+ priorityscore=1501 impostorscore=0 malwarescore=0 bulkscore=0
+ lowpriorityscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2510020000
+ definitions=main-2510140134
 
-On 14/10/2025 08:41, Matti Vaittinen wrote:
-> On 13/10/2025 16:19, Andreas Kemnade wrote:
->> On Mon, 13 Oct 2025 12:27:33 +0300
->> Matti Vaittinen <mazziesaccount@gmail.com> wrote:
->>
->>> Hi Andreas!
->>>
->>> First of all, thanks for taking a look at this!
->>>
->>> On 10/10/2025 16:03, Andreas Kemnade wrote:
->>>> On Fri, 10 Oct 2025 15:09:07 +0300
->>>> Matti Vaittinen <mazziesaccount@gmail.com> wrote:
->>>>>>> +static int bd72720_get_secondary_regmap(struct i2c_client *i2c,
->>>>>>
->>>>>> Does this 'secondary' have a specific purpose or a better name?
->>>>>
->>>>> I am not entirely sure. When I asked this from the designers they just
->>>>> told me that they needed more than 255 registers so they added another
->>>>> slave address... (I'm not sure what would have been wrong with using a
->>>>> page register). So, I assume they just placed stuff that didn't fit in
->>>>> first 255 register there. But yeah, it looks like most of the 
->>>>> registers
->>>>> there are related to the charger. So, perhaps it isn't completely
->>>>> misleading to use "charger regmap"? The data-sheet seems to be just
->>>>> using "Register map 1" and "Register map 2" in the tables listing 
->>>>> these
->>>>> registers. I kind of like using something which maps easily to the
->>>>> data-sheet, but I really have no strong opinion on this.
->>>>
->>>> just another idea: What about one regmap with custom functions covering
->>>> both these adresses? Maybe that could even be added to the regmap
->>>> functionality, maybe with a 0x100 offset for the second range.
->>>> That way the rest of the code only needs to real with one regmap
->>>> and properly defined registers.
->>>
->>> Interesting idea.
->>>
->>> I suppose you mean something like implementing custom remap_read() and
->>> regmap_write() - which would practically select the I2C adapter to use
->>> based on the register address - and then doing same thing as the
->>> regmap_i2c_smbus_i2c_write() / regmap_i2c_smbus_i2c_read() do?
->>>
->>> I suppose this would mean duplicating the functionality provided by the
->>> regmap_i2c_smbus_i2c_write() and the regmap_i2c_smbus_i2c_read(), which
->>> are static. It'd also mean we'll lose the 1 to 1 mapping between the
->>> register addresses in driver and addresses in the data-sheet. I agree
->>> this wouldn't be such a huge thing if we used offset like 0x100 though.
->>>
->> Well, you could also stack regmaps like ntxec.c is doing (but there
->> for some very weird reason). That would avoid duplicating code.
+
+
+On 10/15/2025 12:25 PM, Pavan Kondeti wrote:
+> On Wed, Oct 15, 2025 at 10:08:22AM +0530, Shivendra Pratap wrote:
+>> +static int __init psci_init_vendor_reset(void)
+>> +{
+>> +	struct reboot_mode_driver *reboot;
+>> +	struct device_node *psci_np;
+>> +	struct device_node *np;
+>> +	int ret;
+>> +
+>> +	if (!psci_system_reset2_supported)
+>> +		return -EINVAL;
+>> +
+>> +	psci_np = of_find_compatible_node(NULL, NULL, "arm,psci-1.0");
+>> +	if (!psci_np)
+>> +		return -ENODEV;
+>> +
+>> +	np = of_find_node_by_name(psci_np, "reboot-mode");
+>> +	if (!np) {
+>> +		of_node_put(psci_np);
+>> +		return -ENODEV;
+>> +	}
+>> +
+>> +	ret = atomic_notifier_chain_register(&panic_notifier_list, &psci_panic_block);
+>> +	if (ret)
+>> +		goto err_notifier;
+>> +
+>> +	reboot = kzalloc(sizeof(*reboot), GFP_KERNEL);
+>> +	if (!reboot) {
+>> +		ret = -ENOMEM;
+>> +		goto err_kzalloc;
+>> +	}
+>> +
+>> +	reboot->write = psci_set_vendor_sys_reset2;
+>> +	reboot->driver_name = "psci";
+>> +
+>> +	ret = reboot_mode_register(reboot, of_fwnode_handle(np));
+>> +	if (ret)
+>> +		goto err_register;
+>> +
 > 
-// snip
-> 
-> If this works, then I kind of like this. It avoids using the platform 
-> data and simplifies the regmap getting in the power_supply driver. 
-> Thanks for the good idea Andreas!
+> minor nit: np and psci_np reference must be dropped since we are done
+> using it.
 
-Hmm. This morning I tested this approach. I converted the MFD driver and 
-some sub-devices, and I mostly liked it. Mostly.
+Ack. Sure. thanks. Will update this.
 
-When adding the offset only to the addresses behind the 'secondary 
-slave', the addresses behind the 'real slave' (which the MFD driver is 
-bound), can be accessed using both the 'wrapper' and the 'real' regmap. 
-Assuming the cache is kept in the 'real' regmaps. This is a small 
-performance penalty compared to having the cache already in the wrapper, 
-but it allows the drivers like the regulator driver, which only use the 
-'primary slave' to just get a regmap from the MFD parent, no matter 
-whether they get the 'wrapper' of the 'real' one. So, no deviation in 
-these slave devices - nice.
-
-MFD gains a tad more complexity due to the additional wrapper regmap. 
-That's not bad though. MFD also needs to use the 'unwrapped' register 
-addresses for the slave regmap config (ranges and max register). This 
-won't get extremely ugly though as we can do some simple macros for 
-'unwrapping'.
-
-What I do dislike is the fact that the register addresses for the 
-secondary slave will now be 9 bits. This will require some modifications 
-in the power-supply driver, which currently stores the addresses using 
-u8. The register values can still be 8-bits though, so maybe it won't 
-get that bad. I haven't tested this yet.
-
-As a result, I am not entirely convinced, but not totally against this 
-idea either.
-
-I'll be away for a bit more than a week, starting from Friday, so it may 
-be I won't spin the next version until around the last days of the October.
-
-Yours,
-	-- Matti.
+thanks,
+Shivendra
 
