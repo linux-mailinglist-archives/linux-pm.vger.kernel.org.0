@@ -1,130 +1,120 @@
-Return-Path: <linux-pm+bounces-36236-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36237-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E501BE2A81
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Oct 2025 12:10:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 12643BE2A99
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Oct 2025 12:10:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 0283F50381E
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Oct 2025 10:08:16 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id DDB7B5059CF
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Oct 2025 10:09:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DF9E2DF703;
-	Thu, 16 Oct 2025 09:59:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DA9332D7C1;
+	Thu, 16 Oct 2025 10:00:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="aipIkr55";
-	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="rBDQanJ3"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="IvIkSAKq"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mout-p-103.mailbox.org (mout-p-103.mailbox.org [80.241.56.161])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7658D2DFF3F;
-	Thu, 16 Oct 2025 09:59:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.161
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B651232D440
+	for <linux-pm@vger.kernel.org>; Thu, 16 Oct 2025 10:00:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760608742; cv=none; b=eG0yoUahcp/U4gN67+CKvmhklrbt/6hMBPfizdbu6r8UXId2zOEMWUzwqIUVfiQaTX0KiuLVJYcAYgb2+PzyQ3045jPpFmM1wzjIP+0mnTkFxzW47EewC7vSXXB2esiFstH19w0fEaeQi6qqFoxiZ4zSz8eb8ZTAlw892GJVOgE=
+	t=1760608845; cv=none; b=duUeDwdjpYUpHr+QVW3/cwLCyZRxEswbNaNfXCzZBs6/iSdO69wENJAfo4pQD3w6VLEYFTgpB/gz12JVtKYgk54QYFtXDWL4yCpaRRzSkRoQAmw2FhykWzXimjgyZ8/9TulOK3w+Dda2c9rpGYA9RijPHExsIE478mxrqh06mDY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760608742; c=relaxed/simple;
-	bh=0myl7+eecFYC3uJ49S5/p1O8sOxw27NoGrlpR4pgihw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HzD/nd9UYfDtGI5VfPGb19MU13w6pwCZLn8iTPVgzV3EwY9tRhOvSKjPXwhnmsB/Uvi8wJEX/u/idIfrLFpCJMPYhZiecI3+UvjVilkhi2mgNtnwfNabPk0K40Opd7m4uxBSlB8tyKoDr7wSujqAC+sHDfZQlGnHR5Sfi58CGio=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=aipIkr55; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=rBDQanJ3; arc=none smtp.client-ip=80.241.56.161
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailbox.org
-Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:b231:465::102])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-103.mailbox.org (Postfix) with ESMTPS id 4cnNhL3bSzz9tkC;
-	Thu, 16 Oct 2025 11:58:58 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-	t=1760608738;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=++h923KP06/abXCubB4DCzwM+QM2ZyYkkutYj5Xm0mM=;
-	b=aipIkr557wDgKdcxlJtiwabVjYX5XYR3qmP6pV0VMl8kTSm+3dTH2XSIYuJBofZCLxQv0P
-	NvNbjlWys5jojHvSP3wBU6D6nAEvxgnKUd2oNRGdN+F7MyUaZSfscUvyDG33afhyN3KIsy
-	USV2bWCSvtGXUiZMVUVmqm24QwYyuTv0BhOPr+Dw7sRd7WKwU7yJTTpzP30qGIPVCHfr7f
-	EGrwTHsJ5IYAbLNDVmH7QqSsjncFAKAZ0wOrdFCt1RZcAuQymMIkWuWweg3R47ctf49u7J
-	gY64nUL8Fjl803VBwButUSwWNZ8WrjrIVshis+QArZyUCrKM8OigcuS+rwjt/w==
-Authentication-Results: outgoing_mbo_mout;
-	dkim=pass header.d=mailbox.org header.s=mail20150812 header.b=rBDQanJ3;
-	spf=pass (outgoing_mbo_mout: domain of marek.vasut@mailbox.org designates 2001:67c:2050:b231:465::102 as permitted sender) smtp.mailfrom=marek.vasut@mailbox.org
-Message-ID: <23421cce-4873-4439-b68b-0f3bd8b72692@mailbox.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-	t=1760608736;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=++h923KP06/abXCubB4DCzwM+QM2ZyYkkutYj5Xm0mM=;
-	b=rBDQanJ3GKnpN5CiWhNp3rB5JVCP30t+kiOEVQ++vRUg6lZ5XJrdFIcr658K95C1OCIm8y
-	FUMeEEkupEPhZvajCrNK4K2OMQdYTexoqP8e1r9mqt3Iwe3VTaIkkmufSzIotmMQntNlwF
-	t9wMESMAkAYQtQe7ubo1FWYpaFrjdXBjLquxOz3CDM/2BIk73Hs+ODka7oRQ1eAZ3KO6j+
-	DOTO3xH3zKaG9REum0uogmKsJrsEJVr2th/WIyloM16qsLUBKg98iyPfNw3HNeWO5uI3d6
-	Zc4Mgp7ryfWvJT6KWOrizeMXNDyYNUXDTjBBrtv1qHnaGK7d5mxrW3SgT2MGEQ==
-Date: Thu, 16 Oct 2025 11:58:50 +0200
+	s=arc-20240116; t=1760608845; c=relaxed/simple;
+	bh=GuHdpaWnWYFigwpENImVEQ8FLU6LX49o1UO74ZnhrBs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kAP/JUZ2doDFkzutjfh4ZuUPGCuYhYhlA7dDh4h8LB1Hhxt3wPBTH7o5aLS4kqXG4zmV4iiWbVhXHT62zyfZauR8jtjLM/huPsUAjs7CjVbZCNyGNdQ2472l0x7CC0cj1HUw/525bABjuR+G2L73ovINzPtNnRhN8ybVFTz2P6M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=IvIkSAKq; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-27eec33b737so8624925ad.1
+        for <linux-pm@vger.kernel.org>; Thu, 16 Oct 2025 03:00:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1760608843; x=1761213643; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=uzhZSXVDw5HBXWXhpgNz8QGmIpqR91GrblzBsUR2jdE=;
+        b=IvIkSAKqs0wrbYgEtNn+G2fPOcEq+fFL8J57V83XpTZ71hxTH0Xy0ur0iZNhpcTIuj
+         zeZJUDyLzmaAaEw2jF8pf7RIQ0GtDJSp4l/JPtefL6Gfz+uS7QZBfJazqXCrmA4Iho+D
+         9Xm6sNIF4efqGmwI9Ww4ok8op3ivPC2qLzWH8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760608843; x=1761213643;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uzhZSXVDw5HBXWXhpgNz8QGmIpqR91GrblzBsUR2jdE=;
+        b=S4lrCrk9NgSAh9DJLrDyaqF2Ws5M9CqbLc9U7oQzw0gIneyvqlNLFWrwPo+zP6GnsM
+         tRvaim2EV/puhpVV2/FK/GWbQ2oUbC3xnhw88NKPVky/DAMyflF7GpKdVL5MYp8i+3M8
+         kMNI5kEUcrV/fUbexnsKI5oiCU3oUbf9J5+659dEMi+pMU5wwsRSMLVrLV+3i7Ne8qdy
+         qgShbwXPecV8RJkJP3Af31L44kIYandiA/j3qqNhWrn2Bs1R7zvA4TTUm/bHD6DEb0dh
+         FGQZ45aiVCOTFxkCHH+U1c3pT2o56zov3q6w5yACTHCFE0jsYS8EatePfsErGg+d8VQG
+         W0og==
+X-Forwarded-Encrypted: i=1; AJvYcCV6v1o7AOZpCGnOfuUF3QESelk6DBHxNUdvnWIwzLreQgqm4C2cqTZFZgIn2wzXX6YLAbRgcEG6uQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwaTFR3CJnhM0+eio1M/WSbsNtWWRs4InxUkxzrIggq5yIn7iPe
+	P4I//5KlFE2ifG/TtfNLcdkCSm4gRh7XumIWKy+TEWP2oRd63hPGqemQjAu6bHMaxH8r6qIHYs6
+	ixp8=
+X-Gm-Gg: ASbGncsTP0EjrVQegNAAUV7n/PH4dCS3m8VXbyGpMCEDu1245ypmJ6K/baah6g4oRrV
+	sSP+tcellKhU0s+PLaIRks1hwOzVpq7oox9hozzGlziDejhEc9iABk2QcdHl8G3KSlt1Og1MXY9
+	qIdvYz0mlfmrN/7LR8s7S+86EaE38T4aDdTo0uUODKTQltzsj9RRWEaP4uNYYqnOVr+v3P68LIm
+	Qbc/yBgMAIobcwYzfNX4sAh0O5pBOdevwFMXq1YhEmVBE4EuxGazcnHXDKIeuL7SGN2bKkd59hH
+	K32M3Jlxg8whvcOBz0WzijnZWVlHOnj7X1YrtiTVi5W+4WMdZM/F+epW/YGwgOJhKZyMR+4MHne
+	h57k8GA2Iu8JFIIirqznLEj19fneIf5pEpiLJ2QMs91k6Pw7FBfjFxSjvXSXtaYwFmHDkFoN8a4
+	sBzOvY7xoBBnBd5A==
+X-Google-Smtp-Source: AGHT+IFuKHF70rg9myfkHvvqf8ak7ClXze86hhc+4ZWu7glDGpK14qjiuk/CiRAUD3qVgrKVbYIklQ==
+X-Received: by 2002:a17:903:2388:b0:290:94ed:1841 with SMTP id d9443c01a7336-29094ed1a6dmr39122505ad.41.1760608842794;
+        Thu, 16 Oct 2025 03:00:42 -0700 (PDT)
+Received: from google.com ([2401:fa00:8f:203:98b0:109e:180c:f908])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2909934a8e6sm24587115ad.30.2025.10.16.03.00.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Oct 2025 03:00:42 -0700 (PDT)
+Date: Thu, 16 Oct 2025 19:00:36 +0900
+From: Sergey Senozhatsky <senozhatsky@chromium.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Sergey Senozhatsky <senozhatsky@chromium.org>, 
+	Doug Smythies <dsmythies@telus.net>, Christian Loehle <christian.loehle@arm.com>, 
+	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Artem Bityutskiy <artem.bityutskiy@linux.intel.com>, Sasha Levin <sashal@kernel.org>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Tomasz Figa <tfiga@chromium.org>, stable@vger.kernel.org
+Subject: Re: stable: commit "cpuidle: menu: Avoid discarding useful
+ information" causes regressions
+Message-ID: <ytv4w7uw23fwdkihbgrpegmco6yzkxmzjbakmxtricreou6p6k@rhwxcjq3jvnv>
+References: <8da42386-282e-4f97-af93-4715ae206361@arm.com>
+ <nd64xabhbb53bbqoxsjkfvkmlpn5tkdlu3nb5ofwdhyauko35b@qv6in7biupgi>
+ <49cf14a1-b96f-4413-a17e-599bc1c104cd@arm.com>
+ <CAJZ5v0hGu-JdwR57cwKfB+a98Pv7e3y36X6xCo=PyGdD2hwkhQ@mail.gmail.com>
+ <7ctfmyzpcogc5qug6u3jm2o32vy2ldo3ml5gsoxdm3gyr6l3fc@jo7inkr3otua>
+ <001601dc3d85$933dd540$b9b97fc0$@telus.net>
+ <sw4p2hk4ofyyz3ncnwi3qs36yc2leailqmal5kksozodkak2ju@wfpqlwep7aid>
+ <001601dc3ddd$a19f9850$e4dec8f0$@telus.net>
+ <ewahdjfgiog4onnrd2i4vg4ucbrchesrkksrqqpr7apyy6b76p@uznmxhbcwctw>
+ <CAJZ5v0inu-Ty-hh0owS0z0Q+d1Ck7KUR_kHQvUCVOc1SZFqyjw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v2] thermal/drivers/rcar_gen3: Document R-Car Gen4 and
- RZ/G2 support in driver comment
-To: wsa+renesas <wsa+renesas@sang-engineering.com>,
- Biju Das <biju.das.jz@bp.renesas.com>
-Cc: Marek Vasut <marek.vasut+renesas@mailbox.org>,
- "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
- "niklas.soderlund" <niklas.soderlund@ragnatech.se>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>,
- Geert Uytterhoeven <geert+renesas@glider.be>,
- Lukasz Luba <lukasz.luba@arm.com>, "magnus.damm" <magnus.damm@gmail.com>,
- Zhang Rui <rui.zhang@intel.com>,
- "linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>
-References: <20251015155905.186612-1-marek.vasut+renesas@mailbox.org>
- <aO_eLEFLAnjc8n4G@shikoro> <62670d89-56f2-419e-8f80-0536858415f3@mailbox.org>
- <aPCmZp8sM5oV2jPa@shikoro>
- <TY3PR01MB113468C08443256EC6D99209386E9A@TY3PR01MB11346.jpnprd01.prod.outlook.com>
- <aPCqtn3OwY1NRCD5@shikoro>
-Content-Language: en-US
-From: Marek Vasut <marek.vasut@mailbox.org>
-In-Reply-To: <aPCqtn3OwY1NRCD5@shikoro>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-MBO-RS-META: x6bhsh5uok8xrdufhdzrk55cp8oukry9
-X-MBO-RS-ID: ab838ff85d1ed314f83
-X-Rspamd-Queue-Id: 4cnNhL3bSzz9tkC
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0inu-Ty-hh0owS0z0Q+d1Ck7KUR_kHQvUCVOc1SZFqyjw@mail.gmail.com>
 
-On 10/16/25 10:20 AM, wsa+renesas wrote:
+On (25/10/16 11:48), Rafael J. Wysocki wrote:
+> All right, let's see what RAPL on that system has to say.
 > 
->>>>> I am not opposed to the patch. Just want to mention that such
->>>>> information gets stale all the time, so I would suggest:
->>>>>
->>>>> + R-Car Gen3 THS and compatible thermal sensor driver
->>>> This won't cover RZ/G2 which something else, and Gen5 seems like it
->>>> will be also a bit different, so maybe the list is now exhaustive?
->>>
->>> Sorry, I don't understand: If RZ/xx THS is compatible with R-Car Gen3 THS, why is this not covered?
->>
->> RZ/G2{H,M,N,E} thermal sensors should be compatible with R-Car Gen3{H,M3W,M3N,E}
->> But RZ/{G2L,G2LC,G2UL,V2L} uses different compatible.
-> 
-> I do understand this.
-> 
-> But if I say "this driver supports R-Car Gen3 THS and all THS instances
-> compatible with it", this includes all RZ which are, well, compatible
-> with it. And not those which are, well, not compatible with it?
-> 
-> Where is the misunderstanding? I am feeling a little awkward here...
-I think the only misunderstanding is, that if I spell the list of 
-supported devices fully, it is easier for the reader. Gen3 and 
-compatible pushes the onus of looking up whether their SoC has THS 
-compatible with Gen3 onto the reader. It seems no other entries will be 
-added in the foreseeable future, so the list is currently likely 
-exhaustive for a while.
+> Please send the output of "grep .
+> /sys/class/powercap/intel-rapl/intel-rapl:0/constraint_*"
+
+/sys/class/powercap/intel-rapl/intel-rapl:0/constraint_0_max_power_uw:6000000
+/sys/class/powercap/intel-rapl/intel-rapl:0/constraint_0_name:long_term
+/sys/class/powercap/intel-rapl/intel-rapl:0/constraint_0_power_limit_uw:6000000
+/sys/class/powercap/intel-rapl/intel-rapl:0/constraint_0_time_window_us:27983872
+/sys/class/powercap/intel-rapl/intel-rapl:0/constraint_1_max_power_uw:0
+/sys/class/powercap/intel-rapl/intel-rapl:0/constraint_1_name:short_term
+/sys/class/powercap/intel-rapl/intel-rapl:0/constraint_1_power_limit_uw:12000000
+/sys/class/powercap/intel-rapl/intel-rapl:0/constraint_1_time_window_us:976
 
