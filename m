@@ -1,209 +1,130 @@
-Return-Path: <linux-pm+bounces-36235-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36236-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF76EBE288B
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Oct 2025 11:54:25 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E501BE2A81
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Oct 2025 12:10:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 51916351C28
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Oct 2025 09:54:25 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 0283F50381E
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Oct 2025 10:08:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C25D3277A9;
-	Thu, 16 Oct 2025 09:52:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DF9E2DF703;
+	Thu, 16 Oct 2025 09:59:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jmX/S44e"
+	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="aipIkr55";
+	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="rBDQanJ3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mout-p-103.mailbox.org (mout-p-103.mailbox.org [80.241.56.161])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F1EB326D77
-	for <linux-pm@vger.kernel.org>; Thu, 16 Oct 2025 09:52:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7658D2DFF3F;
+	Thu, 16 Oct 2025 09:59:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.161
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760608357; cv=none; b=BiVAs98vCxus9TM7KCoUgJxQ5OBAiThx4QSi7gnPzQ2tSvFd1GV9zeQOicMVJ54pBbPkovLX45A52nP7hg2Z4bmKcaY6JOk+YnY7lW9T0Yj3O+xbnTH5GLLjW+1KtcLuEMNJHSjs11OGyia66WL2Gp0L/TU3MoXxFie5/YqK/ik=
+	t=1760608742; cv=none; b=eG0yoUahcp/U4gN67+CKvmhklrbt/6hMBPfizdbu6r8UXId2zOEMWUzwqIUVfiQaTX0KiuLVJYcAYgb2+PzyQ3045jPpFmM1wzjIP+0mnTkFxzW47EewC7vSXXB2esiFstH19w0fEaeQi6qqFoxiZ4zSz8eb8ZTAlw892GJVOgE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760608357; c=relaxed/simple;
-	bh=NZq77HFZD20VILf0AyJ5tjTga2D94ZLlRW5jpJXb/R0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bDLPZeLu2KkSS2sOWwECIUOOXab/LEdAUvR9sdRNlPktJyoalB7oqYjjVFgO5OLPn1U4jqBmtAvSnUll5r3HQDhYXCKHcULATG/ISwqJJCDxTmYl2tEM9RyFmNUQFgpe2/7zw7SBG+2K9r/iMZc2ZdUL7J4T0uZLKj7SE5fNM6g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jmX/S44e; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF60CC4CEF9
-	for <linux-pm@vger.kernel.org>; Thu, 16 Oct 2025 09:52:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760608356;
-	bh=NZq77HFZD20VILf0AyJ5tjTga2D94ZLlRW5jpJXb/R0=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=jmX/S44ekOViTNCTeINKfD7UxTFESGVL+FxIck7g5JWoBPj5xLZN+xNlU68fRQ4ZN
-	 cPEY//ewooYEwy1lnqqh0EAuf0n2BRHs1SVLnHYOELqVipw7ppL00ol8ZHI7aoaqOC
-	 aqyoN3D5PbLz8bd/vicMcbWTgMDK7IXNO0/h7bxxArFggFVt9hUuQOu8T31kh3Uo4U
-	 4T5iQiozCXH8oIZY5x1U/8JgT11pFcpx5Vv/s2aWxqb09G7EEy0xbfC8aiKQQHSZwd
-	 sXRVK3MfADDAEnpfN8Sb0oLTUlOmslTMhOdtOFvgHfiUXXaAoZFg88DtF+Ep/k3gKh
-	 9ZN146nBVEVGA==
-Received: by mail-ot1-f45.google.com with SMTP id 46e09a7af769-7b6d6a1e4e4so329830a34.2
-        for <linux-pm@vger.kernel.org>; Thu, 16 Oct 2025 02:52:36 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUdKyeUnKPyQeQFL0E6xMLUIqX/6EG/XbBUty2H6kaPOFtpeHiJgQjQX6tMQWff+CPm+fNfFlYEyA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzK7Y22wqGInsu+ZnGuCg72zbI9FeoTuqTrenpI/8r0m+EmzU+S
-	0qGlBdVyMD/dSJ3GxF9WW1SucwvZfAG64a0/atXeBqI2xPGkl8aIPzkZzg1cq48g90oNOu0u0ko
-	Em0uQFxH57U6Czf1ONPDFAM3ILiwPXto=
-X-Google-Smtp-Source: AGHT+IFIOaY5cMCN8dH+Jk11CimFFk7TIWnyxWKiWeryJcloGMVroLTVkhTqydgzGuh51Mk0UCE5+92V+dq1ygEnwOg=
-X-Received: by 2002:a05:6808:5386:b0:441:8f74:f1d with SMTP id
- 5614622812f47-4418f741bdbmr12511218b6e.55.1760608356179; Thu, 16 Oct 2025
- 02:52:36 -0700 (PDT)
+	s=arc-20240116; t=1760608742; c=relaxed/simple;
+	bh=0myl7+eecFYC3uJ49S5/p1O8sOxw27NoGrlpR4pgihw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HzD/nd9UYfDtGI5VfPGb19MU13w6pwCZLn8iTPVgzV3EwY9tRhOvSKjPXwhnmsB/Uvi8wJEX/u/idIfrLFpCJMPYhZiecI3+UvjVilkhi2mgNtnwfNabPk0K40Opd7m4uxBSlB8tyKoDr7wSujqAC+sHDfZQlGnHR5Sfi58CGio=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=aipIkr55; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=rBDQanJ3; arc=none smtp.client-ip=80.241.56.161
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailbox.org
+Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:b231:465::102])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-p-103.mailbox.org (Postfix) with ESMTPS id 4cnNhL3bSzz9tkC;
+	Thu, 16 Oct 2025 11:58:58 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+	t=1760608738;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=++h923KP06/abXCubB4DCzwM+QM2ZyYkkutYj5Xm0mM=;
+	b=aipIkr557wDgKdcxlJtiwabVjYX5XYR3qmP6pV0VMl8kTSm+3dTH2XSIYuJBofZCLxQv0P
+	NvNbjlWys5jojHvSP3wBU6D6nAEvxgnKUd2oNRGdN+F7MyUaZSfscUvyDG33afhyN3KIsy
+	USV2bWCSvtGXUiZMVUVmqm24QwYyuTv0BhOPr+Dw7sRd7WKwU7yJTTpzP30qGIPVCHfr7f
+	EGrwTHsJ5IYAbLNDVmH7QqSsjncFAKAZ0wOrdFCt1RZcAuQymMIkWuWweg3R47ctf49u7J
+	gY64nUL8Fjl803VBwButUSwWNZ8WrjrIVshis+QArZyUCrKM8OigcuS+rwjt/w==
+Authentication-Results: outgoing_mbo_mout;
+	dkim=pass header.d=mailbox.org header.s=mail20150812 header.b=rBDQanJ3;
+	spf=pass (outgoing_mbo_mout: domain of marek.vasut@mailbox.org designates 2001:67c:2050:b231:465::102 as permitted sender) smtp.mailfrom=marek.vasut@mailbox.org
+Message-ID: <23421cce-4873-4439-b68b-0f3bd8b72692@mailbox.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+	t=1760608736;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=++h923KP06/abXCubB4DCzwM+QM2ZyYkkutYj5Xm0mM=;
+	b=rBDQanJ3GKnpN5CiWhNp3rB5JVCP30t+kiOEVQ++vRUg6lZ5XJrdFIcr658K95C1OCIm8y
+	FUMeEEkupEPhZvajCrNK4K2OMQdYTexoqP8e1r9mqt3Iwe3VTaIkkmufSzIotmMQntNlwF
+	t9wMESMAkAYQtQe7ubo1FWYpaFrjdXBjLquxOz3CDM/2BIk73Hs+ODka7oRQ1eAZ3KO6j+
+	DOTO3xH3zKaG9REum0uogmKsJrsEJVr2th/WIyloM16qsLUBKg98iyPfNw3HNeWO5uI3d6
+	Zc4Mgp7ryfWvJT6KWOrizeMXNDyYNUXDTjBBrtv1qHnaGK7d5mxrW3SgT2MGEQ==
+Date: Thu, 16 Oct 2025 11:58:50 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <3394529.aeNJFYEL58@rafael.j.wysocki> <20251016074849.1046580-1-tianyaxiong@kylinos.cn>
- <f48b80d5-0098-424d-9a7c-ae07017ab2bb@arm.com>
-In-Reply-To: <f48b80d5-0098-424d-9a7c-ae07017ab2bb@arm.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 16 Oct 2025 11:52:25 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0gyGsTdJ+up-peX5_ggF-YKPep1j0uG6zRGn9UKiHA-KQ@mail.gmail.com>
-X-Gm-Features: AS18NWBzrQKZ2xx_RsJlHjfpVp_38BOqEDjd4UwAt6g1GuPAcpajZCuz_AHU85c
-Message-ID: <CAJZ5v0gyGsTdJ+up-peX5_ggF-YKPep1j0uG6zRGn9UKiHA-KQ@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] cpufreq: intel_pstate: hybrid: Adjust energy model rules
-To: Christian Loehle <christian.loehle@arm.com>
-Cc: Yaxiong Tian <tianyaxiong@kylinos.cn>, rafael@kernel.org, dietmar.eggemann@arm.com, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, lukasz.luba@arm.com, 
-	srinivas.pandruvada@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v2] thermal/drivers/rcar_gen3: Document R-Car Gen4 and
+ RZ/G2 support in driver comment
+To: wsa+renesas <wsa+renesas@sang-engineering.com>,
+ Biju Das <biju.das.jz@bp.renesas.com>
+Cc: Marek Vasut <marek.vasut+renesas@mailbox.org>,
+ "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+ "niklas.soderlund" <niklas.soderlund@ragnatech.se>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Geert Uytterhoeven <geert+renesas@glider.be>,
+ Lukasz Luba <lukasz.luba@arm.com>, "magnus.damm" <magnus.damm@gmail.com>,
+ Zhang Rui <rui.zhang@intel.com>,
+ "linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>
+References: <20251015155905.186612-1-marek.vasut+renesas@mailbox.org>
+ <aO_eLEFLAnjc8n4G@shikoro> <62670d89-56f2-419e-8f80-0536858415f3@mailbox.org>
+ <aPCmZp8sM5oV2jPa@shikoro>
+ <TY3PR01MB113468C08443256EC6D99209386E9A@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+ <aPCqtn3OwY1NRCD5@shikoro>
+Content-Language: en-US
+From: Marek Vasut <marek.vasut@mailbox.org>
+In-Reply-To: <aPCqtn3OwY1NRCD5@shikoro>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-MBO-RS-META: x6bhsh5uok8xrdufhdzrk55cp8oukry9
+X-MBO-RS-ID: ab838ff85d1ed314f83
+X-Rspamd-Queue-Id: 4cnNhL3bSzz9tkC
 
-On Thu, Oct 16, 2025 at 11:00=E2=80=AFAM Christian Loehle
-<christian.loehle@arm.com> wrote:
->
-> On 10/16/25 08:48, Yaxiong Tian wrote:
-> > =E5=9C=A8 2025/10/15 21:48, Rafael J. Wysocki =E5=86=99=E9=81=93:> From=
-: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >>
-> >> Instead of using HWP-to-frequency scaling factors for computing cost
-> >> coefficients in the energy model used on hybrid systems, which is
-> >> fragile, rely on CPU type information that is easily accessible now an=
-d
-> >> the information on whether or not L3 cache is present for this purpose=
-.
-> >>
-> >> This also allows the cost coefficients for P-cores to be adjusted so
-> >> that they start to be populated somewhat earlier (that is, before
-> >> E-cores are loaded up to their full capacity).
-> >>
-> >> In addition to the above, replace an inaccurate comment regarding the
-> >> reason why the freq value is added to the cost in hybrid_get_cost().
-> >>
-> >> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >> ---
-> >>   drivers/cpufreq/intel_pstate.c |   37 +++++++++++++++---------------=
--------
-> >>   1 file changed, 15 insertions(+), 22 deletions(-)
-> >>
-> >> --- a/drivers/cpufreq/intel_pstate.c
-> >> +++ b/drivers/cpufreq/intel_pstate.c
-> >> @@ -933,11 +933,8 @@ static int hybrid_active_power(struct de
-> >>                             unsigned long *freq)
-> >>   {
-> >>      /*
-> >> -     * Create "utilization bins" of 0-40%, 40%-60%, 60%-80%, and 80%-=
-100%
-> >> -     * of the maximum capacity such that two CPUs of the same type wi=
-ll be
-> >> -     * regarded as equally attractive if the utilization of each of t=
-hem
-> >> -     * falls into the same bin, which should prevent tasks from being
-> >> -     * migrated between them too often.
-> >> +     * Create four "states" corresponding to 40%, 60%, 80%, and 100% =
-of the
-> >> +     * full capacity.
-> >>       *
-> >>       * For this purpose, return the "frequency" of 2 for the first
-> >>       * performance level and otherwise leave the value set by the cal=
-ler.
-> >> @@ -970,26 +967,22 @@ static bool hybrid_has_l3(unsigned int c
-> >>   static int hybrid_get_cost(struct device *dev, unsigned long freq,
-> >>                         unsigned long *cost)
-> >>   {
-> >> -    struct pstate_data *pstate =3D &all_cpu_data[dev->id]->pstate;
-> >> -
-> >> +    /* Facilitate load balancing between CPUs of the same type. */
-> >> +    *cost =3D freq;
-> >>      /*
-> >> -     * The smaller the perf-to-frequency scaling factor, the larger t=
-he IPC
-> >> -     * ratio between the given CPU and the least capable CPU in the s=
-ystem.
-> >> -     * Regard that IPC ratio as the primary cost component and assume=
- that
-> >> -     * the scaling factors for different CPU types will differ by at =
-least
-> >> -     * 5% and they will not be above INTEL_PSTATE_CORE_SCALING.
-> >> +     * Adjust the cost depending on CPU type.
-> >>       *
-> >> -     * Add the freq value to the cost, so that the cost of running on=
- CPUs
-> >> -     * of the same type in different "utilization bins" is different.
-> >> -     */
-> >> -    *cost =3D div_u64(100ULL * INTEL_PSTATE_CORE_SCALING, pstate->sca=
-ling) + freq;
-> >> -    /*
-> >> -     * Increase the cost slightly for CPUs able to access L3 to avoid
-> >> -     * touching it in case some other CPUs of the same type can do th=
-e work
-> >> -     * without it.
-> >> +     * The idea is to start loading up LPE-cores before E-cores and s=
-tart
-> >> +     * to populate E-cores when LPE-cores are utilized above 60% of t=
-he
-> >> +     * capacity.  Similarly, P-cores start to be populated when E-cor=
-es are
-> >> +     * utilized above 60% of the capacity.
-> >>       */
-> >> -    if (hybrid_has_l3(dev->id))
-> >> -            *cost +=3D 2;
-> >> +    if (hybrid_get_cpu_type(dev->id) =3D=3D INTEL_CPU_TYPE_ATOM) {
-> >> +            if (hybrid_has_l3(dev->id)) /* E-core */
-> >> +                    *cost +=3D 2;
-> >> +    } else { /* P-core */
-> >> +            *cost +=3D 4;
-> >> +    }
-> >>
-> >>      return 0;
-> >>   }
-> >
-> > Hi Rafael J. Wysocki:
-> >
-> > Is the increment of this cost for different types of CPUs by one instea=
-d
-> > of two?
-> >
-> > cost by increment of 2:
-> >           0~40%  40%~60%  60%~80% 80%~100
-> > LPE-core    2       3        4      5
-> > E-core      4       5        6      7
-> > P-core      6       7        8      9
-> >
-> > So, tasks only start being allocated to more powerful CPUs when
-> > utilization exceeds 80%, but by that point the system is already in an
-> >  overloaded state.
-> >
-> > cost by increment of 1:
-> >           0~40%  40%~60%  60%~80% 80%~100
-> > LPE-core    2       3        4      5
-> > E-core      3       4        5      6
-> > P-core      4       5        6      7
-> >
-> > This situation aligns with the description in your patch.
-> >
-> > The idea of this patch looks good to me.
->
-> Agreed if you want the threshold to be 60% for both it should be +1 for l=
-3
-> and +2 for P-core.
-> Good catch!
-
-OK, I'll send an update of this patch then, but I won't resend the
-first two patches in the series.  I don't think that they are
-objectionable.
+On 10/16/25 10:20 AM, wsa+renesas wrote:
+> 
+>>>>> I am not opposed to the patch. Just want to mention that such
+>>>>> information gets stale all the time, so I would suggest:
+>>>>>
+>>>>> + R-Car Gen3 THS and compatible thermal sensor driver
+>>>> This won't cover RZ/G2 which something else, and Gen5 seems like it
+>>>> will be also a bit different, so maybe the list is now exhaustive?
+>>>
+>>> Sorry, I don't understand: If RZ/xx THS is compatible with R-Car Gen3 THS, why is this not covered?
+>>
+>> RZ/G2{H,M,N,E} thermal sensors should be compatible with R-Car Gen3{H,M3W,M3N,E}
+>> But RZ/{G2L,G2LC,G2UL,V2L} uses different compatible.
+> 
+> I do understand this.
+> 
+> But if I say "this driver supports R-Car Gen3 THS and all THS instances
+> compatible with it", this includes all RZ which are, well, compatible
+> with it. And not those which are, well, not compatible with it?
+> 
+> Where is the misunderstanding? I am feeling a little awkward here...
+I think the only misunderstanding is, that if I spell the list of 
+supported devices fully, it is easier for the reader. Gen3 and 
+compatible pushes the onus of looking up whether their SoC has THS 
+compatible with Gen3 onto the reader. It seems no other entries will be 
+added in the foreseeable future, so the list is currently likely 
+exhaustive for a while.
 
