@@ -1,156 +1,154 @@
-Return-Path: <linux-pm+bounces-36220-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36221-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C323FBE1B92
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Oct 2025 08:29:57 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id E17BDBE1E71
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Oct 2025 09:24:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 83AE93B05B2
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Oct 2025 06:29:56 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C01884EB91F
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Oct 2025 07:24:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C5C22D46A9;
-	Thu, 16 Oct 2025 06:29:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49EA82F6188;
+	Thu, 16 Oct 2025 07:24:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eL5jKV42"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="tbj63GWZ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E784E246760;
-	Thu, 16 Oct 2025 06:29:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71E7C2E1F08
+	for <linux-pm@vger.kernel.org>; Thu, 16 Oct 2025 07:24:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760596194; cv=none; b=gUSptmxtoxOg8MZoeQ/V0OKPzI1MBbJf1Wj3u5fVLT0ctcG2eA8nEc0RCsJvt70oYdH2k/KHJyGWupGqRgII/TALaL59NwZWNrFSWgJ5ce59lKOeCcIzTOhEVtIcgJOfH2zNpWL5jw0BS2bfG1D4icuclzap4s5iviJ83NH77h0=
+	t=1760599485; cv=none; b=uhtXTV5pvByJTINWET7RLPAoDWED3P0lDwrp/kgUqZ5JWC7jklevHq6bi2jLd4QKu8JPO9DZosz6Ogdc9GRzSAfehPy/1l5i4gz+uKNxm3Jr3YcfhgvXxMudyHWAMHK3bHLRJU7IGZzoi+EnNbKTWyhxm9ebCYdtdrJh4QjGL68=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760596194; c=relaxed/simple;
-	bh=6VL689xuDpzXvO89I0ypP6DTgKNfXX4cUC2WC3T6Jnc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KBdsrChW0cQd/Fh5PySu01sVVQlDdZCwExcm0DEhDhdj/diCTWvdimVWmgfuB2qeFqmOPANQf+120NmgQMpxJHIdQtumwwHFs6XK9Bg6FAasaQaj04ofJVKCSrrT4EkhHUDkAbbLu/M1ErFaNLw6Fji5+R1LC3Tpw4aV42EfKvE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eL5jKV42; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67BD1C4CEF1;
-	Thu, 16 Oct 2025 06:29:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760596193;
-	bh=6VL689xuDpzXvO89I0ypP6DTgKNfXX4cUC2WC3T6Jnc=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=eL5jKV42etU2u69l1HmaaoPYVm6Z1smkDqGmMZl5X4uPGMN/EdLzpxJ/45szhxamE
-	 wb6R8sbpn99z4x4w5JRpoHV6aBJNHx8taGyOpbj/ZZg0WOyrCSHDGGr6Cr/Ys4v+1V
-	 grcaI5NyxI+5waohTeKyZUcx/cRuuxnjyYF7x7Grf1Auslh3KDYxdg2PfCTj7tSrsx
-	 gkf0/PHnIS+gs+VGFLo9N7hXKGxn93Y4fhFdd6TK8vBK/vHrxA8PO4/m/0N/TG/eGv
-	 JYzQuxO+UzvjCNgVO8d+zw04xhoyOaNTJIYyxbRkhu0g4XvZQkTib3WpDSXjKzliLD
-	 ISpOmxuR6JjTQ==
-Message-ID: <a5dc35d1-497e-40bd-b729-0ed9695311ff@kernel.org>
-Date: Thu, 16 Oct 2025 08:29:50 +0200
+	s=arc-20240116; t=1760599485; c=relaxed/simple;
+	bh=5xo1wcMo2ObznNd0kT3fow7tyytTL4bVQLcZfQgpJNA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type:
+	 References; b=lk91/qPm2jpuj/lzhu+6X6TCiKxboJqVMahnU+kYqu1D9oPcIo8zFKDxorPBw0DJcpfmtnQKFWgavqLc3Wf2N7lvusAfJS8ujvmG5Ts/BVY6KjIOzW3VJbBQ5NWyWkynT6ZYAF7FbjRObtSMG1Aw39waVjcHTkuezHDvmDg6O6M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=tbj63GWZ; arc=none smtp.client-ip=203.254.224.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
+	by mailout3.samsung.com (KnoxPortal) with ESMTP id 20251016072440epoutp0398e6f74047fcf6c38dc7b04af8e1c48f~u5_ZEiDTa1905019050epoutp03z
+	for <linux-pm@vger.kernel.org>; Thu, 16 Oct 2025 07:24:40 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20251016072440epoutp0398e6f74047fcf6c38dc7b04af8e1c48f~u5_ZEiDTa1905019050epoutp03z
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1760599480;
+	bh=uvPq6Yt+OkoQhl8rEe9LIjf6WFzUTfhhECRiJsOl0Bc=;
+	h=From:To:Cc:Subject:Date:References:From;
+	b=tbj63GWZxqzCPC8PYsOY+XfeMnVB0vOuEdTaZJXyo2jCzNkQkO0XOQUVZP/3CSqH/
+	 6dCoAN/I+/NyXLfeyzKebRV1eserjrrQcIxzPZiiC7OygmKrNZkpzypobelJF7jOsC
+	 IlGr+9k9jqqzKLd0OH584kP7OPTfBFkg7ipGewlM=
+Received: from epsnrtp02.localdomain (unknown [182.195.42.154]) by
+	epcas2p2.samsung.com (KnoxPortal) with ESMTPS id
+	20251016072439epcas2p263c9131a1e33874315c5c755bc31cbac~u5_Yjl-863251532515epcas2p2I;
+	Thu, 16 Oct 2025 07:24:39 +0000 (GMT)
+Received: from epcas2p2.samsung.com (unknown [182.195.38.202]) by
+	epsnrtp02.localdomain (Postfix) with ESMTP id 4cnKGH4Tdzz2SSKk; Thu, 16 Oct
+	2025 07:24:39 +0000 (GMT)
+Received: from epsmtip1.samsung.com (unknown [182.195.34.30]) by
+	epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
+	20251016072438epcas2p4c090c6e0433452e0ee061b115398dddf~u5_XoFJ9x2416724167epcas2p45;
+	Thu, 16 Oct 2025 07:24:38 +0000 (GMT)
+Received: from asswp60 (unknown [10.229.9.60]) by epsmtip1.samsung.com
+	(KnoxPortal) with ESMTPA id
+	20251016072438epsmtip14a5e9c18ff706ff09ae7d4bf88c40cf5~u5_XimSB72023420234epsmtip1c;
+	Thu, 16 Oct 2025 07:24:38 +0000 (GMT)
+From: Shin Son <shin.son@samsung.com>
+To: Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>, Krzysztof Kozlowski
+	<krzk@kernel.org>, "Rafael J . Wysocki" <rafael@kernel.org>, Daniel Lezcano
+	<daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, Lukasz Luba
+	<lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>, Conor Dooley
+	<conor+dt@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>, Henrik Grimler
+	<henrik@grimler.se>
+Cc: Shin Son <shin.son@samsung.com>, linux-pm@vger.kernel.org,
+	linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v7 0/3] Add exynosautov920 thermal support
+Date: Thu, 16 Oct 2025 16:24:26 +0900
+Message-ID: <20251016072429.1933024-1-shin.son@samsung.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] power: supply: intel_dc_ti_battery: fix 64bit
- divisions
-To: sre@kernel.org
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- Linus Walleij <linus.walleij@linaro.org>, Hans de Goede <hansg@kernel.org>,
- Sebastian Reichel <sebastian.reichel@collabora.com>
-References: <20251016062730.410281-1-jirislaby@kernel.org>
-Content-Language: en-US
-From: Jiri Slaby <jirislaby@kernel.org>
-Autocrypt: addr=jirislaby@kernel.org; keydata=
- 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
-In-Reply-To: <20251016062730.410281-1-jirislaby@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-CMS-MailID: 20251016072438epcas2p4c090c6e0433452e0ee061b115398dddf
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+cpgsPolicy: CPGSC10-234,Y
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20251016072438epcas2p4c090c6e0433452e0ee061b115398dddf
+References: <CGME20251016072438epcas2p4c090c6e0433452e0ee061b115398dddf@epcas2p4.samsung.com>
 
-OK, now I came across 20251015075957.8F40620057@lion.mk-sys.cz, so no 
-need for this one...
+This patch series adds support for exynosautov920, automotive-grade
+processor. Although the exynosautov920's TMU hardware differs slightly
+from exisiting platform, its read and calibration logic closely follow
+our legacy TMU interface. To prevent runtime and build time errors,
+it is kept as a single change rather than being split.
 
-On 16. 10. 25, 8:27, Jiri Slaby (SUSE) wrote:
-> On 32bit builds, I get:
-> ERROR: modpost: "__udivdi3" [drivers/power/supply/intel_dc_ti_battery.ko] undefined!
-> 
-> This is due to 64bit ktime divisions. Fix both by using div_u64().
-> 
-> Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
-> Fixes: 8c5795fe5527 ("power: supply: Add new Intel Dollar Cove TI battery driver")
-> ---
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Hans de Goede <hansg@kernel.org>
-> Cc: Sebastian Reichel <sebastian.reichel@collabora.com>
-> 
-> [v2] added Signed-off-by.
-> ---
->   drivers/power/supply/intel_dc_ti_battery.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/power/supply/intel_dc_ti_battery.c b/drivers/power/supply/intel_dc_ti_battery.c
-> index 56b0c92e9d28..3d38106b638b 100644
-> --- a/drivers/power/supply/intel_dc_ti_battery.c
-> +++ b/drivers/power/supply/intel_dc_ti_battery.c
-> @@ -141,7 +141,7 @@ static int dc_ti_battery_get_voltage_and_current_now(struct power_supply *psy, i
->   	if (ret)
->   		goto out_err;
->   
-> -	cnt_start_usec = ktime_get_ns() / NSEC_PER_USEC;
-> +	cnt_start_usec = div_u64(ktime_get_ns(), NSEC_PER_USEC);
->   
->   	/* Read Vbat, convert IIO mV to power-supply ųV */
->   	ret = iio_read_channel_processed_scale(chip->vbat_channel, volt, 1000);
-> @@ -149,7 +149,7 @@ static int dc_ti_battery_get_voltage_and_current_now(struct power_supply *psy, i
->   		goto out_err;
->   
->   	/* Sleep at least 3 sample-times + slack to get 3+ CC samples */
-> -	now_usec = ktime_get_ns() / NSEC_PER_USEC;
-> +	now_usec = div_u64(ktime_get_ns(), NSEC_PER_USEC);
->   	sleep_usec = 3 * SMPL_INTVL_US + SLEEP_SLACK_US - (now_usec - cnt_start_usec);
->   	if (sleep_usec > 0 && sleep_usec < 1000000)
->   		usleep_range(sleep_usec, sleep_usec + SLEEP_SLACK_US);
+This change merges the new exynosautov920-specific register definitions and
+timing parameters into the exynos-tmu driver, ensuring consistent behavior
+across all Exynos series. All new code paths have been tested on a
+exynosautov920 board and verified to correctly read temperatures and
+emulate behavior.
 
+Changes in v7:
+- Use lowercase hex for register address
+- Dropped unnecessary 'minItems' from properties.
+- Added restriction for 'clock-names'
+
+Changes in v6:
+- Add a reviewer for the thermal driver patch.
+
+Changes in v5:
+- Changed the maximum number of thermal sensors to 15.
+
+Changes in v4:
+- Kept 'addtionalProperties: false'.
+- Removed the 'samsung,hw-sensor-indices' property in the binding.
+- Added the 'samsung,sensors' property in the binding.
+- Dropped code-like formatting and rewrote the description in plain,
+  hardware-focused language in the commit message.
+- Removed the bitmap and replaced the tz_count to sensor_count.
+
+Changes in v3:
+- Removed redundant commit message.
+- Rephrased the sentences to describe the hardware clearly.
+- Restricted sensor indices to V920.
+- Set #thermal-sensor-cells per variant.
+- Replaced 'additionalProperties' with 'unevaluatedProperties'.
+- Removed the duplicate #define and use the original.
+- Used lowercase hex in #define.
+- Simplified 'temp_to_code' and 'code_to_temp' to one computation
+  path by normalizing calib_temp.
+
+Changes in v2:
+- Replace the generic property with a vendor-specific one.
+- Added an indices property instead of ranges.
+- Shortened thermal node name and made them more generic.
+- Updated the indices logic accordingly after removing the ranges property.
+
+Shin Son (3):
+  dt-bindings: thermal: samsung: Adjust '#thermal-sensor-cells' to 1
+  thermal: exynos_tmu: Support new hardware and update TMU interface
+  arm64: dts: exynosautov920: Add multiple sensors
+
+ .../thermal/samsung,exynos-thermal.yaml       |  33 +-
+ .../boot/dts/exynos/exynosautov920-tmu.dtsi   | 377 ++++++++++++++++++
+ .../arm64/boot/dts/exynos/exynosautov920.dtsi |  31 ++
+ drivers/thermal/samsung/exynos_tmu.c          | 322 +++++++++++++--
+ 4 files changed, 725 insertions(+), 38 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/exynos/exynosautov920-tmu.dtsi
 
 -- 
-js
-suse labs
+2.50.1
+
 
