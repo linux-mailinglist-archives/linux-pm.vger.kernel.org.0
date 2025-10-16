@@ -1,108 +1,113 @@
-Return-Path: <linux-pm+bounces-36238-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36239-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id D38FFBE2ACF
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Oct 2025 12:12:22 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D32A9BE2E2B
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Oct 2025 12:45:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id DFDF25042F9
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Oct 2025 10:10:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 63BDA3B4CFB
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Oct 2025 10:43:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07D1332D7D5;
-	Thu, 16 Oct 2025 10:06:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB5F531A810;
+	Thu, 16 Oct 2025 10:42:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c2YzU8pK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JmiVN99a"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D668C319611
-	for <linux-pm@vger.kernel.org>; Thu, 16 Oct 2025 10:06:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B1702E0934;
+	Thu, 16 Oct 2025 10:42:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760609173; cv=none; b=umLoOaswb9TCrwrnKHqsZXiYRXjmp8KUdW+bTGffic+d3/cPdEfKnrvH/l+iMzjgQI2mef01sG/FHp7nN64CXBoy7SXDK6Pli4Yx6f1y+XKHR7gwN9xA7y4859BpsAZ5JU5eeEdd/a7zhM1jmH41DRvYlRjee1V4bB5n4JMoPRA=
+	t=1760611378; cv=none; b=p0eRKHMUg1GCQMEh1+pUgSPMwv8/sUEoOXbvU1+91ZpddaiL3CX1Jv+UWJIz8jbuU5kRnj1OpgGe8YmLzvcbhOz9+E5EGkEnkXVd7Ieq4HgKCQ02t4kVhXXfW+ro0lV32d5dDhQ1fWX1Z+68tUNKIBpH6ZQrSS5pypij50O6NR0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760609173; c=relaxed/simple;
-	bh=0bN7P+gtpbAg1qEU7iDnh8GWbGACYzseXtB9zCSy3tM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jhtZ3E+oyu84TdEkEtlNJap0N90/dKCNrjIusO5nty9O1w9rWpSXe2cznSt+aNQjtSqid3HVFR5/o9XthhCQT+5FQiTBOW95w9TFcBnuteMEmC/a3kbZsqCumr5vpL2VRH6BrLg0Tm4TeyhSjZemXSGfhwJ4rjsxkYFpnp0Mw0U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c2YzU8pK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D686C4AF09
-	for <linux-pm@vger.kernel.org>; Thu, 16 Oct 2025 10:06:10 +0000 (UTC)
+	s=arc-20240116; t=1760611378; c=relaxed/simple;
+	bh=fErXExt8RSysN8h2wJXFWIVOcFCJHfLTOJEmQT9C/wc=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=peiT/Acn98ADf0DiXyH1Uxid2fI/4lnOckmqUYn0E5UsATi/s1BQs16Z6McUzXm2fUhIInamWJeNSJ59t7kFfF4xyOGxKf65vJ4iMc7jYcqpX83kPB3luf1ehi77m3Wwbdyay9xRF0MXa15DtoqqEPZRgZu1PDeGsWdXJfRsGkA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JmiVN99a; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB8BDC4CEF9;
+	Thu, 16 Oct 2025 10:42:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760609170;
-	bh=0bN7P+gtpbAg1qEU7iDnh8GWbGACYzseXtB9zCSy3tM=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=c2YzU8pKwKpCZ7OkJZmRM1/0XGCmpM9sf812vOMN4oJC/fLuRYG5wfHfxFru3UkvA
-	 ld9DlOU+vEXG/gVr7rvOwRVq8cBHMLu9jSnl8xEU82HdPkaliVzH/jvFN0ady/YbZT
-	 1hIhtZcOIjeElT2D+CF9teDnaYKqnWi6EaiTF3/i8jdONENCP/9U/B+PYcPJV2ncyJ
-	 kcSTKzjFl1JFDQoHuURhHGLnZ3oAufPVnaHDahs1M01DEcacWae9Qwb+GYHAElpwUL
-	 4jkuVnHhqxSLUyGafps7+O+TDj06J9Z/y+5PIRq2xHPLUg/rmZyfvbEOm//re7Tuv5
-	 /iA2yUmpovYCA==
-Received: by mail-oi1-f182.google.com with SMTP id 5614622812f47-43f715b18caso301829b6e.2
-        for <linux-pm@vger.kernel.org>; Thu, 16 Oct 2025 03:06:10 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXn7WQxU8hu5G1ZPgGiJCkh4PeMSK1ymsemVu+TfrFeSrV2WdElF2uIWAamjI3tFvRnvuxI+J1+8A==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzwYIFAOWEmbrY8EXFz+WHt+CdandKIaYmEOBF5LRxx6kLmsE5p
-	mKw9nrtSv2MQ13TCG7CSgi6hKnROuzyXJ+KWwwRzm5OGqW3Ix5KTSw+BU+3eutIOa5nDecQIhWm
-	O6LdRFH1cBjyfxu74pAG5H8Vek4imJBI=
-X-Google-Smtp-Source: AGHT+IHfgDy+V/bvWWn9Fgz/trJVQRilHVaPhAXQ7+cCwduGIusWo/bnfDCrPq1eBxIcfcjZxfUu3pVX2vqrifOY8fI=
-X-Received: by 2002:a05:6808:d4a:b0:441:8f74:fad with SMTP id
- 5614622812f47-4418f74207dmr14024408b6e.58.1760609169586; Thu, 16 Oct 2025
- 03:06:09 -0700 (PDT)
+	s=k20201202; t=1760611378;
+	bh=fErXExt8RSysN8h2wJXFWIVOcFCJHfLTOJEmQT9C/wc=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=JmiVN99azeY59tVwDTzaK+WC4HQWXUncOqi3pAncLsEm7ZoloUtQxcL0wO03R+6/y
+	 PQQBiEKO8U3A1mlrvP3RQKUG6j9ISIEA8lFMKq6OCCskt7dHIy0j/pZS2yN2P4eLMz
+	 s06rZAmY58W9yL0Y0zrEm4QJTaxF1y6DQYh2/YScdddCgZwVmREfLd2kNXizNAbYu3
+	 irTpEnrr8B/lItxlpxgJkCPDQrtZMwjRZuqn2MKytv65xyyjRGmMQZEzKLoRBhVQ7J
+	 CJm5MFX/ATbnHUJ3MR8dMAmQ4RWRJ5o34bBiuNvdsY14Eg+qoDg7pTytqL4EyvS+HT
+	 hgj3oGQp5xSsQ==
+From: Andreas Hindborg <a.hindborg@kernel.org>
+To: Tamir Duberstein <tamird@gmail.com>, "Rafael J. Wysocki"
+ <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, Miguel Ojeda
+ <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng
+ <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, =?utf-8?Q?Bj=C3=B6rn?=
+ Roy Baron
+ <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, Alice Ryhl
+ <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, Danilo Krummrich
+ <dakr@kernel.org>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann
+ <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter
+ <simona@ffwll.ch>, FUJITA Tomonori <fujita.tomonori@gmail.com>, Andrew
+ Lunn <andrew@lunn.ch>, Heiner Kallweit <hkallweit1@gmail.com>, Russell
+ King <linux@armlinux.org.uk>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Michael Turquette
+ <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, Breno Leitao
+ <leitao@debian.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Luis
+ Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, Dave
+ Ertman <david.m.ertman@intel.com>, Ira Weiny <ira.weiny@intel.com>, Leon
+ Romanovsky <leon@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+ Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>, Arnd
+ Bergmann
+ <arnd@arndb.de>, Brendan Higgins <brendan.higgins@linux.dev>, David Gow
+ <davidgow@google.com>, Rae Moar <rmoar@google.com>, Jens Axboe
+ <axboe@kernel.dk>, Alexandre Courbot <acourbot@nvidia.com>, Alexander Viro
+ <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan
+ Kara <jack@suse.cz>, Liam Girdwood <lgirdwood@gmail.com>, Mark Brown
+ <broonie@kernel.org>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ rust-for-linux@vger.kernel.org, nouveau@lists.freedesktop.org,
+ dri-devel@lists.freedesktop.org, netdev@vger.kernel.org,
+ linux-clk@vger.kernel.org, linux-pci@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+ linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org, Tamir
+ Duberstein <tamird@gmail.com>
+Subject: Re: [PATCH v2 17/19] rust: sync: replace `kernel::c_str!` with
+ C-Strings
+In-Reply-To: <20250925-core-cstr-cstrings-v2-17-78e0aaace1cd@gmail.com>
+References: <20250925-core-cstr-cstrings-v2-0-78e0aaace1cd@gmail.com>
+ <20250925-core-cstr-cstrings-v2-17-78e0aaace1cd@gmail.com>
+Date: Thu, 16 Oct 2025 12:42:35 +0200
+Message-ID: <874irz5dr8.fsf@t14s.mail-host-address-is-not-set>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <8da42386-282e-4f97-af93-4715ae206361@arm.com> <nd64xabhbb53bbqoxsjkfvkmlpn5tkdlu3nb5ofwdhyauko35b@qv6in7biupgi>
- <49cf14a1-b96f-4413-a17e-599bc1c104cd@arm.com> <CAJZ5v0hGu-JdwR57cwKfB+a98Pv7e3y36X6xCo=PyGdD2hwkhQ@mail.gmail.com>
- <7ctfmyzpcogc5qug6u3jm2o32vy2ldo3ml5gsoxdm3gyr6l3fc@jo7inkr3otua>
- <001601dc3d85$933dd540$b9b97fc0$@telus.net> <sw4p2hk4ofyyz3ncnwi3qs36yc2leailqmal5kksozodkak2ju@wfpqlwep7aid>
- <001601dc3ddd$a19f9850$e4dec8f0$@telus.net> <ewahdjfgiog4onnrd2i4vg4ucbrchesrkksrqqpr7apyy6b76p@uznmxhbcwctw>
- <CAJZ5v0inu-Ty-hh0owS0z0Q+d1Ck7KUR_kHQvUCVOc1SZFqyjw@mail.gmail.com> <ytv4w7uw23fwdkihbgrpegmco6yzkxmzjbakmxtricreou6p6k@rhwxcjq3jvnv>
-In-Reply-To: <ytv4w7uw23fwdkihbgrpegmco6yzkxmzjbakmxtricreou6p6k@rhwxcjq3jvnv>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 16 Oct 2025 12:05:58 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0ii-pBMj2aQmH8no920wb_XO7ReOVQmy+V=CozmFm8HfA@mail.gmail.com>
-X-Gm-Features: AS18NWAfKXsVHMgRaJMtGIOc7V03yC_KT5OmPpvqxdp79_xFs9amUoBgdY_JNMs
-Message-ID: <CAJZ5v0ii-pBMj2aQmH8no920wb_XO7ReOVQmy+V=CozmFm8HfA@mail.gmail.com>
-Subject: Re: stable: commit "cpuidle: menu: Avoid discarding useful
- information" causes regressions
-To: Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Doug Smythies <dsmythies@telus.net>, 
-	Christian Loehle <christian.loehle@arm.com>, "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Artem Bityutskiy <artem.bityutskiy@linux.intel.com>, Sasha Levin <sashal@kernel.org>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Tomasz Figa <tfiga@chromium.org>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 
-On Thu, Oct 16, 2025 at 12:00=E2=80=AFPM Sergey Senozhatsky
-<senozhatsky@chromium.org> wrote:
->
-> On (25/10/16 11:48), Rafael J. Wysocki wrote:
-> > All right, let's see what RAPL on that system has to say.
-> >
-> > Please send the output of "grep .
-> > /sys/class/powercap/intel-rapl/intel-rapl:0/constraint_*"
->
-> /sys/class/powercap/intel-rapl/intel-rapl:0/constraint_0_max_power_uw:600=
-0000
-> /sys/class/powercap/intel-rapl/intel-rapl:0/constraint_0_name:long_term
-> /sys/class/powercap/intel-rapl/intel-rapl:0/constraint_0_power_limit_uw:6=
-000000
-> /sys/class/powercap/intel-rapl/intel-rapl:0/constraint_0_time_window_us:2=
-7983872
-> /sys/class/powercap/intel-rapl/intel-rapl:0/constraint_1_max_power_uw:0
-> /sys/class/powercap/intel-rapl/intel-rapl:0/constraint_1_name:short_term
-> /sys/class/powercap/intel-rapl/intel-rapl:0/constraint_1_power_limit_uw:1=
-2000000
-> /sys/class/powercap/intel-rapl/intel-rapl:0/constraint_1_time_window_us:9=
-76
+Tamir Duberstein <tamird@gmail.com> writes:
 
-This looks reasonable, so I'd rather not recommend playing with it.
+> C-String literals were added in Rust 1.77. Replace instances of
+> `kernel::c_str!` with C-String literals where possible.
+>
+> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+> Reviewed-by: Benno Lossin <lossin@kernel.org>
+> Signed-off-by: Tamir Duberstein <tamird@gmail.com>
+
+Acked-by: Andreas Hindborg <a.hindborg@kernel.org>
+
+
+Best regards,
+Andreas Hindborg
+
+
+
 
