@@ -1,124 +1,161 @@
-Return-Path: <linux-pm+bounces-36249-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36250-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id D26B9BE3000
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Oct 2025 13:05:06 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 41EC8BE3722
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Oct 2025 14:39:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C10D34EFE77
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Oct 2025 11:05:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F02F3583105
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Oct 2025 12:39:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DFF72798FA;
-	Thu, 16 Oct 2025 11:05:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="pRpluJdy"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E070432D7DD;
+	Thu, 16 Oct 2025 12:39:02 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C226726C3A7
-	for <linux-pm@vger.kernel.org>; Thu, 16 Oct 2025 11:05:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE24432860D;
+	Thu, 16 Oct 2025 12:38:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760612702; cv=none; b=KlV3B75bZKtZsH6uLwAXZ9AHseQ+4r7+Uom7FBvHufq6AJBvG7vQVxTbnRKT8J7af9AK7QWoz+u3UphKfJRrcHdicJ0dwqRh0Tt+9GFEZG+T3M01xMMvQk7KV+7sYy4gzFakEnkwkWkOZcvjKNM2ejrPBRgTrhleqEiPcQgPWHc=
+	t=1760618342; cv=none; b=TWY4Ly6WO4b4k8Xg0yBNzd0vPXEfOVzbOffedkRCXMKx3Pc0czWodWBHsIk/d9l3jpAnwuenwSaChvdr1ayx3Xrp0NjUJw8PAkHyv2NXQAm0arO7CjyDTbz3MM9N0MlNl6zFchHoyEEPqxx+mb6FqG7abmf86e1q6Sk9GZMDTCU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760612702; c=relaxed/simple;
-	bh=yNh22VpgcD5iZWVVFSioXx5eXaPdBuNnJFKRzPH5pTU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kHlW/o7DfAIY8Y8hV2O6KyPKSWMoxMYEF0sLeZ2pMDNlyhheTb+UxVvzybjPFZMRMJalp0yVDL0PMTa7mgAyQ6jNd06cHdRLZ1gNTxHuIzcEhXRNQoY9+NZ80W7/FIpRP3LF4s9ApKYUXZdnSFwpteH/AShlKAXTBmQdxbodH2U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=pRpluJdy; arc=none smtp.client-ip=209.85.167.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-591c74fd958so802098e87.3
-        for <linux-pm@vger.kernel.org>; Thu, 16 Oct 2025 04:05:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1760612699; x=1761217499; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yNh22VpgcD5iZWVVFSioXx5eXaPdBuNnJFKRzPH5pTU=;
-        b=pRpluJdy3S+CmDzXCmPjKSBJfhuP8TPPFH+u7ATDkyoMP4R+1l2RoPyVSN67iquszO
-         o4uB/WoV0GiLeWx3LNUficLXtDZf9+DTS7qZp5r6FyZoI6UGU/oJV26rioeFEIdxdq0y
-         4u5vJiFENGLNf0xFDUyhD2pasms+CSYyW/T4H5SkdsTXToFJJH+WcvyYDho6hgeJIwZ0
-         /P0Nvx4GD9Y8DzA4RtPNCo5UBJoh/wFx4LZjE8ECuRJqRNaUQzUNu7p2tP58RlxzBA+V
-         CfVmdl4S62YC3zNQhwHKlA8JpONHFDxSrUjfy1KxGo76NQw8edj65PWMQfocxX4/JBue
-         trzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760612699; x=1761217499;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yNh22VpgcD5iZWVVFSioXx5eXaPdBuNnJFKRzPH5pTU=;
-        b=iw9euWwxhvkmMt5sMl7s/o3bfEFtAHVO4Baq+0dYVducry35CgnuzS/2zO8T/u9hvy
-         lydzmQiuGlM+NikMZgjX5/M25Nu16l2SsQUnO03TGrtvtn4fXrLhZAj+kAPJRiLxaX+W
-         FbTmKXSeDNRJvF5FZhVyqG80uqLghgOaN7vYgf85RUlkSUktrtcvCYUf8Bo5hw2S7qdQ
-         sZnPtfmYIuwL25BlcI+Rxv9n+raW9VRQJGx4zzBejBTMaFQbd2s2Bjfkm7zM64+t3xoA
-         DAmy8E100qUy1eOT1UHMDAFhkt+614qxlZ6M1ejk53e1jWw56fZHX0hcyJ/PFZ0AzMEd
-         3p6w==
-X-Forwarded-Encrypted: i=1; AJvYcCUeIC7Bi8Kg4mQVJZj+dJcgWueygJYD5mlKubBqWrIwVMu95VZ5UM+V9iHbaPpOdb1E7gVAUqK1uw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyToxHkF3xbXvoGM+k9v0Le+mLni/RCReCmveIbG49n94y0phgh
-	06h6poKyB7FNIrZ4e3ceKYB4ItkjC/WM5biyob0/mr0wwYe5FV+jJH5V9GA8TLGKLZlSq5WlIg4
-	UluN7+otO5AOO3NvFP44JwtOMOdhKr2SVzbFtUpdS4A==
-X-Gm-Gg: ASbGnctbHIRQB8+CYphyEsFSNgnSYc5j0bngnxl3UtYbbMADhY1Bnr3ki8a+jjGndAd
-	DtvwV6Cf/BBN09N5QGOUY901Bkxl2Mhs1rRjvnYm/Ewrfqel4hLbfExqfDtcACkDY4kDaAqneTw
-	ts8/OOAkPl3HFo1E6j9ygb9OUAdzcmjg1v9ueUwynvc2apdzypDJJD71Qh6cEdWConoU/RYKLhl
-	kNO3DNatAZCWRJYL3yhrTT29mhLp2bEkFWg1VZLZ1xMD4n2/yk4abQu6W6E8cBTK4Lzze0xVV3i
-	NoqLub+3kTHbz1WckvDBZnbXECc=
-X-Google-Smtp-Source: AGHT+IFayaCD0pSGBkneNyn/a6xVpthdUoJp6sRMc3xLlMt0uMSjEDaswBOJxo1hM6bEJaYHKB510/0SUrWtiIUFhV4=
-X-Received: by 2002:a05:6512:1510:10b0:591:c2f8:9a60 with SMTP id
- 2adb3069b0e04-591c2f89da8mr2767654e87.31.1760612698712; Thu, 16 Oct 2025
- 04:04:58 -0700 (PDT)
+	s=arc-20240116; t=1760618342; c=relaxed/simple;
+	bh=wkWj8uPiFcnVkLdKk+neIeiF8L20PMjDW7F62OEEvAE=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=MPp0DKVBkkri6fRCAi52TOL6805zEFGHAUB/Pnj/Krmmx1V/GlSH5QxS40rcJMj3b5hMiN0ItU+bqTAceQt8AcnLDoeLIsqsB5vYoEmBQ+RQ4wPXd9EzUWR+qT1TioM6FvNjNXRQvpeB0+YJ9AthBQd2MKVxhCzl1Fn3gAjnYZ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.231])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4cnSCh2sntz6L55l;
+	Thu, 16 Oct 2025 20:37:52 +0800 (CST)
+Received: from dubpeml100005.china.huawei.com (unknown [7.214.146.113])
+	by mail.maildlp.com (Postfix) with ESMTPS id 3B2CA1402FE;
+	Thu, 16 Oct 2025 20:38:57 +0800 (CST)
+Received: from localhost (10.203.177.15) by dubpeml100005.china.huawei.com
+ (7.214.146.113) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Thu, 16 Oct
+ 2025 13:38:56 +0100
+Date: Thu, 16 Oct 2025 13:38:54 +0100
+From: Jonathan Cameron <jonathan.cameron@huawei.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+CC: Linux PM <linux-pm@vger.kernel.org>, Takashi Iwai <tiwai@suse.de>, LKML
+	<linux-kernel@vger.kernel.org>, Linux PCI <linux-pci@vger.kernel.org>, "Alex
+ Williamson" <alex.williamson@redhat.com>, Bjorn Helgaas <helgaas@kernel.org>,
+	Zhang Qilong <zhangqilong3@huawei.com>, Ulf Hansson <ulf.hansson@linaro.org>,
+	Frank Li <Frank.Li@nxp.com>, Dhruva Gole <d-gole@ti.com>, Mika Westerberg
+	<mika.westerberg@linux.intel.com>, "Linux ACPI" <linux-acpi@vger.kernel.org>,
+	Dan Williams <dan.j.williams@intel.com>, David Lechner
+	<dlechner@baylibre.com>, "Fabio M. De Francesco"
+	<fabio.maria.de.francesco@linux.intel.com>
+Subject: Re: [PATCH v1 1/3] PM: runtime: Introduce
+ PM_RUNTIME_ACQUIRE_OR_FAIL() macro
+Message-ID: <20251016133854.00003669@huawei.com>
+In-Reply-To: <3324926.5fSG56mABF@rafael.j.wysocki>
+References: <3925484.kQq0lBPeGt@rafael.j.wysocki>
+	<3324926.5fSG56mABF@rafael.j.wysocki>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1759824376.git.mazziesaccount@gmail.com> <ed65074dbedaf2b503d789b38bd9710926d08a55.1759824376.git.mazziesaccount@gmail.com>
-In-Reply-To: <ed65074dbedaf2b503d789b38bd9710926d08a55.1759824376.git.mazziesaccount@gmail.com>
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Thu, 16 Oct 2025 13:04:46 +0200
-X-Gm-Features: AS18NWBwUA24uaqVHxHl7BqIfjkNE89oORmb5j7GI3HGq5QpCdYV7wiF_boIXL4
-Message-ID: <CAMRc=Mcv3Mt1HHBtJtC4ZQt-RL=0UPODxWmab8Sn0-TA1fTtzg@mail.gmail.com>
-Subject: Re: [RFC PATCH 09/13] gpio: Support ROHM BD72720 gpios
-To: Matti Vaittinen <mazziesaccount@gmail.com>
-Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>, Lee Jones <lee@kernel.org>, 
-	Pavel Machek <pavel@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Sebastian Reichel <sre@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
-	Linus Walleij <linus.walleij@linaro.org>, Andreas Kemnade <andreas@kemnade.info>, 
-	linux-leds@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linux-gpio@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml500011.china.huawei.com (7.191.174.215) To
+ dubpeml100005.china.huawei.com (7.214.146.113)
 
-On Tue, Oct 7, 2025 at 10:34=E2=80=AFAM Matti Vaittinen
-<mazziesaccount@gmail.com> wrote:
->
-> The ROHM BD72720 has 6 pins which may be configured as GPIOs. The
-> GPIO1 ... GPIO5 and EPDEN pins. The configuration is done to OTP at the
-> manufacturing, and it can't be read at runtime. The device-tree is
-> required to tell the software which of the pins are used as GPIOs.
->
-> Keep the pin mapping static regardless the OTP. This way the user-space
-> can always access the BASE+N for GPIO(N+1) (N =3D 0 to 4), and BASE + 5
-> for the EPDEN pin. Do this by setting always the number of GPIOs to 6,
-> and by using the valid-mask to invalidate the pins which aren't configure=
-d
-> as GPIOs.
->
-> First two pins can be set to be either input or output by OTP. Direction
-> can't be changed by software. Rest of the pins can be set as outputs
-> only. All of the pins support generating interrupts.
->
-> Support the Input/Output state getting/setting and the output mode
-> configuration (open-drain/push-pull).
->
-> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+On Wed, 15 Oct 2025 16:02:02 +0200
+"Rafael J. Wysocki" <rafael@kernel.org> wrote:
+
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> There appears to be an emerging pattern in which guard
+> pm_runtime_active_try is used for resuming the given device and
+> incrementing its runtime PM usage counter if the resume has been
+> successful, that is followed by an ACQUIRE_ERR() check on the guard
+> variable and if that triggers, a specific error code is returned, for
+> example:
+> 
+> 	ACQUIRE(pm_runtime_active_try, pm)(dev);
+> 	if (ACQUIRE_ERR(pm_runtime_active_try, &pm))
+> 		return -ENXIO
+> 
+> Introduce a macro called PM_RUNTIME_ACQUIRE_OR_FAIL() representing the
+> above sequence of statements that can be used to avoid code duplication
+> wherever that sequence would be used.
+> 
+> Use this macro right away in the PCI sysfs code where the above pattern
+> is already present.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > ---
+> 
+> Admittedly, the new macro is slightly on the edge, but it really helps
+> reduce code duplication, so here it goes.
 
-Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Fully agree with the 'on the edge'. 
+
+This looks somewhat like the some of the earlier attempts to come up with
+a general solution before ACQUIRE().  Linus was fairly clear on his opinion of
+a proposal that looked a bit similar to this
+cond_guard(mutex_intr, return -EINTR, &mutex);
+
+https://lore.kernel.org/all/CAHk-=win7bwWhPJ=iuW4h-sDTqbX6v9_LJnMaO3KxVfPSs81bQ@mail.gmail.com/
+
++CC a few people who might have better memories of where things went than I do.
+
+The solution you have here has the benefit of clarity that all it can do is
+return the error code.
+
+Thanks,
+
+Jonathan
+
+
+> 
+> Any feedback (good, bad, ugly) will be appreciated.
+> 
+> Thanks!
+> 
+> ---
+>  drivers/pci/pci-sysfs.c    |    4 +---
+>  include/linux/pm_runtime.h |    5 +++++
+>  2 files changed, 6 insertions(+), 3 deletions(-)
+> 
+> --- a/drivers/pci/pci-sysfs.c
+> +++ b/drivers/pci/pci-sysfs.c
+> @@ -1517,9 +1517,7 @@ static ssize_t reset_method_store(struct
+>  		return count;
+>  	}
+>  
+> -	ACQUIRE(pm_runtime_active_try, pm)(dev);
+> -	if (ACQUIRE_ERR(pm_runtime_active_try, &pm))
+> -		return -ENXIO;
+> +	PM_RUNTIME_ACQUIRE_OR_FAIL(dev, -ENXIO);
+>  
+>  	if (sysfs_streq(buf, "default")) {
+>  		pci_init_reset_methods(pdev);
+> --- a/include/linux/pm_runtime.h
+> +++ b/include/linux/pm_runtime.h
+> @@ -637,6 +637,11 @@ DEFINE_GUARD_COND(pm_runtime_active_auto
+>  DEFINE_GUARD_COND(pm_runtime_active_auto, _try_enabled,
+>  		  pm_runtime_resume_and_get(_T))
+>  
+> +#define PM_RUNTIME_ACQUIRE_OR_FAIL(dev, error)		\
+> +	ACQUIRE(pm_runtime_active_try, __pm)(dev);	\
+> +	if (ACQUIRE_ERR(pm_runtime_active_try, &__pm))	\
+> +		return error
+> +
+>  /**
+>   * pm_runtime_put_sync - Drop device usage counter and run "idle check" if 0.
+>   * @dev: Target device.
+> 
+> 
+> 
+
 
