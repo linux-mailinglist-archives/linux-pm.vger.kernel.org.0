@@ -1,214 +1,295 @@
-Return-Path: <linux-pm+bounces-36296-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36297-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8573EBE4A86
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Oct 2025 18:47:04 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53540BE4D16
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Oct 2025 19:19:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3F9113B2E99
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Oct 2025 16:47:03 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 17DCB4F0A83
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Oct 2025 17:19:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 972D019F43A;
-	Thu, 16 Oct 2025 16:47:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5943D21CA13;
+	Thu, 16 Oct 2025 17:19:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="0A7Gg9lh"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="gohw4ps1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 739A014B950
-	for <linux-pm@vger.kernel.org>; Thu, 16 Oct 2025 16:46:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AC9F21A453
+	for <linux-pm@vger.kernel.org>; Thu, 16 Oct 2025 17:19:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760633220; cv=none; b=kwB7QKWpBw4zuCj7rA7tChK6GHuRVH7l4Ro2nzyfyy7dziczOOwKO6z1IrfUL6nM7vbj8fPZ4JK1GdemEvukYXEVzgbYxaPV/LAVQp2QpCIVtzAwJttvcrOOUf8E4hMt9B7mqygX2QGV1Mnfhw/Naq7Whgx48i2MHhpnTYsh8MU=
+	t=1760635187; cv=none; b=G6przrJ0YDrL58OBMntreEJqXVp4oL7ZhtRNlpzP8ZvEKiuVhRc6umHu0kAlLnBcr1/gVGWwcgSvjfQygcFPsqsmh+M+NqFiQNFONEZJWOud+60IIxrFtI07v7/n9BIPXtG4zXlpRxqMtIYZQCAMYQcuuu0fvWctocSa3HovxN0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760633220; c=relaxed/simple;
-	bh=/8ULp8GNitp6ed8PeDWxV3ir/nSGEG1rxOOWV9OZqWQ=;
+	s=arc-20240116; t=1760635187; c=relaxed/simple;
+	bh=iCjjuLaISQPhiPCfSVOWiLqhl9nvQ9Mx8UGWwvNy8QM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hxit/tiLVhaGf07AeafoMHcRPOni0E6vA46wbJ2UlzX62OzxVQENz7BrWYQqy4HL0Pj9bh1nPj9BbaQITOVJ/A3gruOhj1BRn5RPDboRfTG81DKtBy5APKM9hF6KrBbOn2l8qsiawoop4TSSBn0+YlAK34ofLlKCl2OUCYZid78=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=0A7Gg9lh; arc=none smtp.client-ip=209.85.167.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-oi1-f181.google.com with SMTP id 5614622812f47-43f9cc65f66so558061b6e.2
-        for <linux-pm@vger.kernel.org>; Thu, 16 Oct 2025 09:46:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1760633217; x=1761238017; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WC9Kf4Woi10vxrnm+xt87b6ePjx84cYka09NWwjNNWA=;
-        b=0A7Gg9lhFCuW9sMBiGBuBCWby4BhJtTI6e1ru5t1h/Sjf9+vApIhL3Uj2S9Eh5s5zO
-         shfFQOyr/EWGKdWFlroW42BOfu6ljhknOhZSj3rYeN30I+OggdfYtx2eaxm37unbcz/a
-         0vH4WvRmfN11HlLhCgbCttNuN/oA1Cq0gTF4LErAHa3MfhR6kvtM/c8GL4NuoYK7DTcD
-         D/hL5MUHML1iesOwzBDvAdHZVszuFaAmYr2sJKxxSMazufnB24W2JFKHyDKb6mFhPSP+
-         rrIIjw3UkowvQiQMnjyd2l+xN8J7Erf3DYtcu3+RI3b3KSLtNPYFiS2dvqodtRSVzmlH
-         YxOg==
+	 In-Reply-To:Content-Type; b=EISjAI07VnvM+GThCRXNcKecIYFeeFL1OQsIJaALeuiS8qPGASD7buaSqTdmkL23u28NGmeq3/D3RfpLVbvkr/avbE+0ADoPAuxRf0wH2ESH5Gy+mhnLiNAJiHJVZP5qx+3+3VBNaS3mOYsdS716LI1Xj+Ijdlaf4wA5ZLEhNc8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=gohw4ps1; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 59GG2HfG016274
+	for <linux-pm@vger.kernel.org>; Thu, 16 Oct 2025 17:19:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	Ax94yOZGpPbJi/xkHkGG7O7SwfDjw1ym9nOUmMgbPc8=; b=gohw4ps1ahNQxtjY
+	g6HwKuJdWImMQBH6Aa7c0ZA/c+8LQdaiGrfY9ChqFh/Ei+np3e02R7TOn/kqd0a6
+	8FOsqmqtGAqrFyXEFn+JBz3bTgFQFceGi2CbXY6/Z490iaVL7L4RRiKyj3NBCSGU
+	0OhgQnxhh4OBjFxPAINLgzVuaQ3rtOqTgomhenXRH4SlZSd4A3DKe5WOMisk0AoF
+	uLHer1wLpjUwfMahIOTLgk6cUB5gCbfyYeNj1EDyOQ38cYZp8mPX2uGssJWx1K3w
+	Xlstm/3v2XABbh1YLdullQ3cL4ptI92ZxF/IZlId/CXQKp6cRg+GY9tOqmheutIK
+	gXJiqA==
+Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com [209.85.216.69])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 49qfdkh4nx-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Thu, 16 Oct 2025 17:19:43 +0000 (GMT)
+Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-32eb864fe90so1665250a91.3
+        for <linux-pm@vger.kernel.org>; Thu, 16 Oct 2025 10:19:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760633217; x=1761238017;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1760635183; x=1761239983;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WC9Kf4Woi10vxrnm+xt87b6ePjx84cYka09NWwjNNWA=;
-        b=prEHNartHVDLfULc0AXyvrjL5G59P7XEUFWLfaWrlkFiWJTWXUqpQXS7JpHcRLN/UZ
-         3fqM4MphAK3LKs9H6woeZHE5lMo2AQo4sdPFja/N/m9eDL3XsX+ZwAuuscK27eo1f9YV
-         99+pMI+xNqMpZM/OHCTSqk2DmSDsTiOt7JzlxUvVXBNIpd4dxjb2ce71OZL1sp//LtUA
-         KCgiEmq8/ikT0i4yoo0j58mKGCHFfySF1da0gorCnDH17OeUuG0eBov7P/aWull8s4mB
-         YgDrmyRnA8WH55/d8ZxJMeMCsOLGIYNVno9CjVno3HaEAbnpiQimOA7cGR4ajKXZlJ4F
-         F5vg==
-X-Forwarded-Encrypted: i=1; AJvYcCVS19ykl2lAyyDcJ42c27Uh5IwsmpLu9oAqsF3ZEP/U64gLy3gvbQ+WmXvxk7CYksaKlp40XJHtJQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw2KY65Z51xp721gSMMeXBz6q0/+W14GFkWzT8qgr4Sn9Xgcc35
-	cy8TB+4/iJzyy+P2fRS5735ZoxjBBBICh5i+tgeLNuf4tmcEvzFkg6dBd1T57Uh9msY=
-X-Gm-Gg: ASbGncvSWrqM0YgBD9qPKKbTsCEXRpO29uj51dnhCEY3CvVHY5iKWf529gmofDAJreX
-	LBbnW2OKH3rbfmOlvf1m7VUE0/z/gDR3Hf6g1zeHvmMBEq4VaMS+WOxOIdqTPpu/u5AnwpoRrOZ
-	7PKMQfk/ueJ6nzb6A1olIXl5Ajw3TABTf6Be6W+xJTrOCyJ0whGEAY4RkoptaKc15pp7VrLJFAH
-	V7I5Fs5wKc0RFyPjShjwuZzGKLs0VgZiICtryexcr/M0AkZdOCXwwL2zBjrC3FU/g05t28sXagL
-	OkDujFkDFtvTlgoB2qj/8K/KXFk9pQcdbFlf3++thKAhb3p6NLYkVEpSW8TniI40R+B15b4wLK5
-	pKrNYcDMYvvL5DNVUeitfWnfCp4AmshwSsoZukr4feFg85NvCmoqw1JKv9JcBwg5RaneiYhRO+x
-	YE+1L1mtW+pk/yKUdgQX7ZNC124nm2ePUzq63ouq0BgUTbgP8=
-X-Google-Smtp-Source: AGHT+IGuEWd+8F+VovYJZ3CHXCt5CGxSvLqiDDTdefEfbr49E3wJzWtW8JNbm3BgbVjhnWchRkMr+Q==
-X-Received: by 2002:a05:6808:3a0b:b0:441:d465:7474 with SMTP id 5614622812f47-443a30e1b7emr249948b6e.33.1760633217480;
-        Thu, 16 Oct 2025 09:46:57 -0700 (PDT)
-Received: from ?IPV6:2600:8803:e7e4:500:86b5:623:b364:9913? ([2600:8803:e7e4:500:86b5:623:b364:9913])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-441d5f7ebdbsm3144632b6e.18.2025.10.16.09.46.56
+        bh=Ax94yOZGpPbJi/xkHkGG7O7SwfDjw1ym9nOUmMgbPc8=;
+        b=irod3yJORWeMMWi3WzUXglGynRT8GEMxBietxyr8ma7Mz/C2H00GPxFW8jF/4gHUh0
+         hYvLtHOB6mNCrgzQ06HXanVycM3vp0frrx1EqJKEffGjbu0CBNm1L9kCAKyKLYQ++PTs
+         7PabtOxomzvDUCuWWlH5fuD8VvAYtekA5RkT6g5tL0w11uUjG3A0W88MA13tJtpglIpt
+         hzXPuRjuKIQffR+6uLxDd8RwVSOewrF+0To30qz4/6NEHXpQf8ePBUvjNQ7vXS5OjheX
+         VDEWlBrXLnj8sym2yULPSqixfVUsZyhly7cDZx+6I0Kk2HsVUwKAEX/jPyCKayHilEKi
+         KY9w==
+X-Forwarded-Encrypted: i=1; AJvYcCWopFXfHdFI0wJXFbdprww+AhE/niW84STX0oCNAXT4PF/x9NWxtw4FcORGsegAMpOm7g9nmOsCvA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxc67AdEpySuOUiJ+EoHk4+Uoo6czI+GLxagRbVkPBp5FDybOFe
+	k21oRViD1/fpicoTYJ3fb3xUjvN+8NlcH6xI0q9teiv0lpI6cMUmem/hqW+dQ6zssTrxgvg6P1h
+	DRRuzRed0WGz3R3YCaf+xV5UKuhEvmNKNlST6dyLVRVZcHtmcczFmRu9KMROvAA==
+X-Gm-Gg: ASbGncuU5c5hyAfFNAeVAACqotlTz1fJvF0Lkj2tDjhQ1u1qUbbHxxhCKHIHPSWQ0bN
+	Wh97ElgLlbXw4j6oLofFWgQDe9CPDDYxN5mLBBT7hs/duu8E6mrEZOLHG+SQo14Vbq2v0XN6XIj
+	7tbLBDO9XkSRZvQI7s+T02nzVb5VNFF06jJ4qi00V67fvvYzVK5iC64fKeH4J0epZryEt/n1tgm
+	izMWe90EtrxD5bC1BCIaMcLvv0skF66KHBu/4l5LhlcwbbC6o7R88eiTD6fVBGu7qk/Hc66hkjE
+	q/+MxqZ2v+/ji+HdYcHRh2cfBy1ZUvQMUU8tUSHL7aaWm9Xxf2CA4LabTn8sVDsP1uVjwgqNa6x
+	rfRDoCZB9l02dz98zMinx22mVUIT7XIwz
+X-Received: by 2002:a17:90b:3f8d:b0:33b:be31:8193 with SMTP id 98e67ed59e1d1-33bcf85d59dmr763819a91.6.1760635182591;
+        Thu, 16 Oct 2025 10:19:42 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IF1rRrAo2QPBaKZifUQLJIoZpvDEaFp+zcbkMAZ+fOe6tW2DlqTpsxyKkKUiFkWY1Ph4rjsWQ==
+X-Received: by 2002:a17:90b:3f8d:b0:33b:be31:8193 with SMTP id 98e67ed59e1d1-33bcf85d59dmr763793a91.6.1760635182106;
+        Thu, 16 Oct 2025 10:19:42 -0700 (PDT)
+Received: from [10.216.0.133] ([202.46.23.19])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-33bb65222b1sm2611494a91.6.2025.10.16.10.19.29
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Oct 2025 09:46:57 -0700 (PDT)
-Message-ID: <cc21a74c-905f-4223-95a8-d747ef763081@baylibre.com>
-Date: Thu, 16 Oct 2025 11:46:56 -0500
+        Thu, 16 Oct 2025 10:19:41 -0700 (PDT)
+Message-ID: <fa42adf0-8f15-ad4c-3788-578b1bee1c72@oss.qualcomm.com>
+Date: Thu, 16 Oct 2025 22:49:26 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 1/3] PM: runtime: Introduce
- PM_RUNTIME_ACQUIRE_OR_FAIL() macro
-To: Takashi Iwai <tiwai@suse.de>, "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Jonathan Cameron <jonathan.cameron@huawei.com>,
- Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
- Linux PCI <linux-pci@vger.kernel.org>,
- Alex Williamson <alex.williamson@redhat.com>,
- Bjorn Helgaas <helgaas@kernel.org>, Zhang Qilong <zhangqilong3@huawei.com>,
- Ulf Hansson <ulf.hansson@linaro.org>, Frank Li <Frank.Li@nxp.com>,
- Dhruva Gole <d-gole@ti.com>,
- Mika Westerberg <mika.westerberg@linux.intel.com>,
- Linux ACPI <linux-acpi@vger.kernel.org>,
- Dan Williams <dan.j.williams@intel.com>,
- "Fabio M. De Francesco" <fabio.maria.de.francesco@linux.intel.com>
-References: <3925484.kQq0lBPeGt@rafael.j.wysocki>
- <3324926.5fSG56mABF@rafael.j.wysocki> <20251016133854.00003669@huawei.com>
- <CAJZ5v0iOgbkJbdRzgrBUaaYL+S_8BZD7XuXdK5vs2gMG3ug1KA@mail.gmail.com>
- <87ikge7v01.wl-tiwai@suse.de>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v16 02/14] power: reset: reboot-mode: Add device tree
+ node-based registration
 Content-Language: en-US
-From: David Lechner <dlechner@baylibre.com>
-In-Reply-To: <87ikge7v01.wl-tiwai@suse.de>
+To: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Cc: Bjorn Andersson <andersson@kernel.org>,
+        Sebastian Reichel
+ <sre@kernel.org>, Rob Herring <robh@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Souvik Chakravarty <Souvik.Chakravarty@arm.com>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+ <conor+dt@kernel.org>,
+        Andy Yan <andy.yan@rock-chips.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Konrad Dybcio <konradybcio@kernel.org>,
+        cros-qcom-dts-watchers@chromium.org, Vinod Koul <vkoul@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
+        Moritz Fischer <moritz.fischer@ettus.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+        Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Andre Draszik
+ <andre.draszik@linaro.org>,
+        Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org,
+        Elliot Berman <quic_eberman@quicinc.com>,
+        Srinivas Kandagatla <srini@kernel.org>
+References: <20251015-arm-psci-system_reset2-vendor-reboots-v16-0-b98aedaa23ee@oss.qualcomm.com>
+ <20251015-arm-psci-system_reset2-vendor-reboots-v16-2-b98aedaa23ee@oss.qualcomm.com>
+ <CACMJSesvTLe28Jz83b=zfHD2rvmf7-i_2+2DoV=dgooVqFEYbA@mail.gmail.com>
+From: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
+In-Reply-To: <CACMJSesvTLe28Jz83b=zfHD2rvmf7-i_2+2DoV=dgooVqFEYbA@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-ORIG-GUID: jJ22KcMjQaV4OSLKQpcrWnUebdRt-li-
+X-Authority-Analysis: v=2.4 cv=MrNfKmae c=1 sm=1 tr=0 ts=68f12930 cx=c_pps
+ a=vVfyC5vLCtgYJKYeQD43oA==:117 a=j4ogTh8yFefVWWEFDRgCtg==:17
+ a=IkcTkHD0fZMA:10 a=x6icFKpwvdMA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=EUspDBNiAAAA:8 a=8ps4eDoI1eVci98EcxQA:9 a=QEXdDO2ut3YA:10
+ a=rl5im9kqc5Lf4LNbBjHf:22
+X-Proofpoint-GUID: jJ22KcMjQaV4OSLKQpcrWnUebdRt-li-
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDExMDAxOCBTYWx0ZWRfX5p10Qrx8G0O3
+ B/yqdE9FY6/sbL7OGTFmesxwhG+upqpmexJ9b9bvVMbc95TFevlS4XkCKGrgwzK5abmYC9f0HX7
+ zsOT3MRsYvIQ1YsSAXYxJolI67R7cUrneNyBTv2cC784u4J7Ye/s8sj9OEuCacKls++0e21xWPB
+ 00tswYHPNtj5iLmwrCxlU+4ebzgr5akA6g+fhtG8HqtqnM6t4Q66wm7AznJBnPtbzeQkuPMrvsu
+ g9rDKIxHGBtZK+A+J61ccW+GyBIZv9CRatwrK3Q5s3HmKRKL3JN/lOJBpApx2W8gcnEgPG0+F9F
+ NQJA9jfmjDgxc/iW4WVk2Qp1bUEoc06FBo1LNeEuyh5OGjrgmgtFIIukhMd6W/TIuhDn99OxX1J
+ nOeggfHI0Mwn3OQzDr5SrTxyfbyEZg==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-10-16_03,2025-10-13_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ spamscore=0 bulkscore=0 clxscore=1015 adultscore=0 phishscore=0
+ impostorscore=0 priorityscore=1501 malwarescore=0 lowpriorityscore=0
+ suspectscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2510020000
+ definitions=main-2510110018
 
-On 10/16/25 9:59 AM, Takashi Iwai wrote:
-> On Thu, 16 Oct 2025 15:46:08 +0200,
-> Rafael J. Wysocki wrote:
+
+
+On 10/15/2025 8:10 PM, Bartosz Golaszewski wrote:
+> On Wed, 15 Oct 2025 at 06:38, Shivendra Pratap
+> <shivendra.pratap@oss.qualcomm.com> wrote:
 >>
->> On Thu, Oct 16, 2025 at 2:39 PM Jonathan Cameron
->> <jonathan.cameron@huawei.com> wrote:
->>>
->>> On Wed, 15 Oct 2025 16:02:02 +0200
->>> "Rafael J. Wysocki" <rafael@kernel.org> wrote:
->>>
->>>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->>>>
->>>> There appears to be an emerging pattern in which guard
->>>> pm_runtime_active_try is used for resuming the given device and
->>>> incrementing its runtime PM usage counter if the resume has been
->>>> successful, that is followed by an ACQUIRE_ERR() check on the guard
->>>> variable and if that triggers, a specific error code is returned, for
->>>> example:
->>>>
->>>>       ACQUIRE(pm_runtime_active_try, pm)(dev);
->>>>       if (ACQUIRE_ERR(pm_runtime_active_try, &pm))
->>>>               return -ENXIO
->>>>
->>>> Introduce a macro called PM_RUNTIME_ACQUIRE_OR_FAIL() representing the
->>>> above sequence of statements that can be used to avoid code duplication
->>>> wherever that sequence would be used.
->>>>
->>>> Use this macro right away in the PCI sysfs code where the above pattern
->>>> is already present.
->>>>
->>>> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->>>> ---
->>>>
->>>> Admittedly, the new macro is slightly on the edge, but it really helps
->>>> reduce code duplication, so here it goes.
->>>
->>> Fully agree with the 'on the edge'.
->>>
->>> This looks somewhat like the some of the earlier attempts to come up with
->>> a general solution before ACQUIRE().  Linus was fairly clear on his opinion of
->>> a proposal that looked a bit similar to this
->>> cond_guard(mutex_intr, return -EINTR, &mutex);
->>>
->>> https://lore.kernel.org/all/CAHk-=win7bwWhPJ=iuW4h-sDTqbX6v9_LJnMaO3KxVfPSs81bQ@mail.gmail.com/
->>>
->>> +CC a few people who might have better memories of where things went than I do.
->>>
->>> The solution you have here has the benefit of clarity that all it can do is
->>> return the error code.
+>> The reboot-mode driver does not have a strict requirement for
+>> device-based registration. It primarily uses the device's of_node
+>> to read mode-<cmd> properties and the device pointer for logging.
 >>
->> Well, I could call the macro PM_RUNTIME_ACQUIRE_OR_RETURN_ERROR(), but
->> FAIL is just shorter. :-)
+>> Remove the dependency on struct device and introduce support for
+>> firmware node (fwnode) based registration. This enables drivers
+>> that are not associated with a struct device to leverage the
+>> reboot-mode framework.
 >>
->> Seriously though, the odd syntax bothers me, but it has come from
->> looking at the multiple pieces of code that otherwise would have
->> repeated exactly the same code pattern including the guard name in two
->> places and the pm variable that has no role beyond guarding.
+>> Signed-off-by: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
+>> ---
+>>  drivers/power/reset/reboot-mode.c | 45 +++++++++++++++++++++++++++++----------
+>>  include/linux/reboot-mode.h       |  3 ++-
+>>  2 files changed, 36 insertions(+), 12 deletions(-)
+>>
+>> diff --git a/drivers/power/reset/reboot-mode.c b/drivers/power/reset/reboot-mode.c
+>> index 8fc3e14638ea757c8dc3808c240ff569cbd74786..c8f71e6f661ae14eb72bdcb1f412cd05faee3dd9 100644
+>> --- a/drivers/power/reset/reboot-mode.c
+>> +++ b/drivers/power/reset/reboot-mode.c
+>> @@ -3,13 +3,17 @@
+>>   * Copyright (c) 2016, Fuzhou Rockchip Electronics Co., Ltd
+>>   */
+>>
+>> +#define pr_fmt(fmt)    "reboot-mode: " fmt
+>> +
+>>  #include <linux/device.h>
+>>  #include <linux/init.h>
+>>  #include <linux/kernel.h>
+>> +#include <linux/list.h>
+>>  #include <linux/module.h>
+>>  #include <linux/of.h>
+>>  #include <linux/reboot.h>
+>>  #include <linux/reboot-mode.h>
+>> +#include <linux/slab.h>
+>>
+>>  #define PREFIX "mode-"
+>>
+>> @@ -69,17 +73,26 @@ static int reboot_mode_notify(struct notifier_block *this,
+>>  /**
+>>   * reboot_mode_register - register a reboot mode driver
+>>   * @reboot: reboot mode driver
+>> + * @fwnode: Firmware node with reboot-mode configuration
+>>   *
+>>   * Returns: 0 on success or a negative error code on failure.
+>>   */
+>> -int reboot_mode_register(struct reboot_mode_driver *reboot)
+>> +int reboot_mode_register(struct reboot_mode_driver *reboot, struct fwnode_handle *fwnode)
+>>  {
+>>         struct mode_info *info;
+>> +       struct mode_info *next;
+>> +       struct device_node *np;
+>>         struct property *prop;
+>> -       struct device_node *np = reboot->dev->of_node;
+>>         size_t len = strlen(PREFIX);
+>>         int ret;
+>>
+>> +       if (!fwnode)
+>> +               return -EINVAL;
+>> +
+>> +       np = to_of_node(fwnode);
+>> +       if (!np)
+>> +               return -EINVAL;
+>> +
+>>         INIT_LIST_HEAD(&reboot->head);
+>>
+>>         mutex_init(&reboot->rb_lock);
+>> @@ -89,28 +102,28 @@ int reboot_mode_register(struct reboot_mode_driver *reboot)
+>>                         if (strncmp(prop->name, PREFIX, len))
+>>                                 continue;
+>>
+>> -                       info = devm_kzalloc(reboot->dev, sizeof(*info), GFP_KERNEL);
 > 
-> While I see the benefit of simplification, IMO, embedding a code
-> flow control inside the macro argument makes it really harder to
-> follow.
-> 
-> Is the problem about the messy ACQUIRE_ERR() invocation?  If so, it
-> could be replaced with something shorter (and without extra type),
-> e.g. replace 
-> 	ret = ACQUIRE_ERR(pm_runtime_active_try, &pm);
-> with
-> 	ret = PM_RUNTIME_ACQUIRE_ERR(&pm);
-> 
-> Since all runtime PM guard usage is to the same object, we can have a
-> common macro.
-> 
-> Also, in the past, I thought of a macro like below that stores the
-> error code in the given variable ret:
-> 
-> #define __guard_cond_ret(_name, _var, _ret, _args)	\
-> 	CLASS(_name, _var)(_args);			\
-> 	(_ret) = __guard_err(_name)(&_var)
-> #define guard_cond_ret(_name, _ret, _args) \
-> 	__guard_cond_ret(_name, __UNIQUE_ID(guard), _ret, _args)
-> 
-> ... so that it'd work for runtime PM like:
-> 
-> 	int ret;
-> 
-> 	guard_cond_ret(pm_runtime_active, ret)(dev);
-> 	if (ret)
-> 		return ret;
-> 	
-> Of course, a clear drawback is that the assignment of ret isn't
-> obvious, but the code flow isn't skewed much in this way.
-> 
-> 
-> thanks,
-> 
-> Takashi
+> This change is good - devres should not be used in subsystem library
+> code, only in drivers - but it doesn't seem to belong here, can you
+> please separate it out and make it backportable?
 
-FWIW, a while back, I suggested something like this where ret was
-a parameter rather than a return value [1]. Linus did not seem to
-be a fan (said it was "disgusting syntax").
+sure. Just to confirm we should separate out the devm_kzalloc part of the
+change and add a fixes tag.
+ 
+> 
+>> +                       info = kzalloc(sizeof(*info), GFP_KERNEL);
+>>                         if (!info) {
+>>                                 ret = -ENOMEM;
+>>                                 goto error;
+>>                         }
+>>
+>>                         if (of_property_read_u32(np, prop->name, &info->magic)) {
+>> -                               dev_err(reboot->dev, "reboot mode %s without magic number\n",
+>> -                                       info->mode);
+>> -                               devm_kfree(reboot->dev, info);
+>> +                               pr_err("reboot mode %s without magic number\n", info->mode);
+>> +                               kfree(info);
+>>                                 continue;
+>>                         }
+>>
+>>                         info->mode = kstrdup_const(prop->name + len, GFP_KERNEL);
+>>                         if (!info->mode) {
+>>                                 ret =  -ENOMEM;
+>> +                               kfree(info);
+>>                                 goto error;
+>>                         } else if (info->mode[0] == '\0') {
+>>                                 kfree_const(info->mode);
+>> +                               kfree(info);
+>>                                 ret = -EINVAL;
+>> -                               dev_err(reboot->dev, "invalid mode name(%s): too short!\n",
+>> -                                       prop->name);
+>> +                               pr_err("invalid mode name(%s): too short!\n", prop->name);
+>>                                 goto error;
+>>                         }
+>>
+>> @@ -123,8 +136,11 @@ int reboot_mode_register(struct reboot_mode_driver *reboot)
+>>                 return 0;
+>>
+>>  error:
+>> -               list_for_each_entry(info, &reboot->head, list)
+>> +               list_for_each_entry_safe(info, next, &reboot->head, list) {
+>> +                       list_del(&info->list);
+> 
+> Same here, not deleting the entries currently seems like a bug? Do we
+> depend on the driver detach to clean up the resources on failure?
 
-[1]: https://lore.kernel.org/all/CAHk-=whn07tnDosPfn+UcAtWHBcLg=KqA16SHVv0GV4t8P1fHw@mail.gmail.com/
+sure, so this should also go as fixes? and should we remove the other
+dev_err(printk) also as fixes? or that can still got with the change
+where we add fwnode based registration?
 
+thanks for review!
 
+-
+Shivendra
 
