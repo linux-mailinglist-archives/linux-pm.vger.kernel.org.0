@@ -1,120 +1,255 @@
-Return-Path: <linux-pm+bounces-36271-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36272-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id BBA7CBE3E57
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Oct 2025 16:25:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B2F8BE411A
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Oct 2025 17:01:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 3EFA65080BB
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Oct 2025 14:24:17 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 616F8507797
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Oct 2025 15:00:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD3453431FE;
-	Thu, 16 Oct 2025 14:22:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 687C134BA3E;
+	Thu, 16 Oct 2025 14:59:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="aVNVNzti"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="ZY3ZmRSY";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="IXcoEnzI";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="ZY3ZmRSY";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="IXcoEnzI"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06D2833EB19;
-	Thu, 16 Oct 2025 14:22:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7E7334AB16
+	for <linux-pm@vger.kernel.org>; Thu, 16 Oct 2025 14:59:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760624576; cv=none; b=LGE612G3Rt7UPVn/nltjj8795qeU0nf5YrH9uTa/xkFIibhukqDO7PXEGfRAfW1um/a6CM63hG1DsKqMgasuR0NKGcafc0g95tDkGjPqfWIO/NL/3cqdwJ7PGFtGhD+aJ0Jn2D6bdimp5nJkT4jZh/NnjYXPD0fW0wKsOAo3EGk=
+	t=1760626773; cv=none; b=p6J+z1FIDTq+Fvny0j2sNRF+x1LoSyMPjfBBQ5zmY/6vVat7nVEyC0+EAQUEYq4dMHCHTeTGox+7kEEK5UldvQythLWQuUZTQgEj1GLtkPL6SklaISzGF5TcfQNRpGGGfySwS6AJKipMJDqk5Gmufh27kevgC7cz7c8m0CzzOQc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760624576; c=relaxed/simple;
-	bh=/Trh+v1W/uhiBFTYoqQXEekxqHsqS7bTdkGqVrRYRBk=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=a08uVm8QvVOnOlg0Yxeh/Tmopp6FI+7tmQQSpRyA1zRzZ1tArEIr23DHHemiki+W/S7he7Ua8rlK24iGYPRqGC910RLtEzPFHFAaMNuVBjvKAfFXVJZjb/jX+PzyU4nhoakHZD7AawNx738Be7/ys7QUk8wyxEniAuc+yvpWlUM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=aVNVNzti; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1760624573;
-	bh=/Trh+v1W/uhiBFTYoqQXEekxqHsqS7bTdkGqVrRYRBk=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=aVNVNztiHaDJ0c9NLhWPwbjZhsvWW8Zr/b4eqAt5QGaoNsJn0Z6AC3HqzYYD13Lt4
-	 /axQTpMlyei9J2PFKmBPQKos3F41LEApQ++DW0nMJk+oixKiuSR7VbtPtPPx6yAEvc
-	 7h6VWqyfGMdXPu2EDJlc7tedWdghXJDPgJo52ziMw9k0LbHJsBBYTe1nUMguwxkrMu
-	 U4agrD0lL+8dq1trQ2zOE+yFr4nN1x0aJqhTfhiB0mrLuJ7HW3Zhsu4+s7xiYqT88o
-	 fp7DlSq9wbQ4iduXlp4aBlTV6JAk5zqcBTFhgIHVEBny6SYdf3vwBYXj8a6vaqsyXi
-	 cq3sIcvc66/XA==
-Received: from laura.lan (unknown [IPv6:2001:b07:646b:e2:655a:5eaa:d2ad:4ee4])
+	s=arc-20240116; t=1760626773; c=relaxed/simple;
+	bh=1NnJGh3RgfjkpW6AGtdLPzcmmHHio1yCKYsVEWhVt/k=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=eKWEnprt5v9VtkZCo7GfktvOtG7KBacpWr3+rHcZ9Y6f1uzGItmhVwtqqlNBt6J6GSIPDisYQsr/XojyNk9/QKwa34ee1CHk+8U20Z2aThrgfOmAxF5anu+ogTLNhzgJdjXp480hIQ6Oe+w4xJWy4eNyI6aeE61gIgb8FzsO5wU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=ZY3ZmRSY; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=IXcoEnzI; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=ZY3ZmRSY; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=IXcoEnzI; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	(Authenticated sender: laura.nao)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 2DBE617E10C8;
-	Thu, 16 Oct 2025 16:22:52 +0200 (CEST)
-From: Laura Nao <laura.nao@collabora.com>
-To: srini@kernel.org,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	rafael@kernel.org,
-	daniel.lezcano@linaro.org,
-	rui.zhang@intel.com,
-	lukasz.luba@arm.com,
-	matthias.bgg@gmail.com,
-	angelogioacchino.delregno@collabora.com
-Cc: nfraprado@collabora.com,
-	arnd@arndb.de,
-	colin.i.king@gmail.com,
-	u.kleine-koenig@baylibre.com,
-	andrew-ct.chen@mediatek.com,
-	lala.lin@mediatek.com,
-	bchihi@baylibre.com,
-	frank-w@public-files.de,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org,
-	kernel@collabora.com,
-	Laura Nao <laura.nao@collabora.com>
-Subject: [PATCH RESEND v3 9/9] dt-bindings: nvmem: mediatek: efuse: Add support for MT8196
-Date: Thu, 16 Oct 2025 16:21:58 +0200
-Message-Id: <20251016142158.740242-10-laura.nao@collabora.com>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20251016142158.740242-1-laura.nao@collabora.com>
-References: <20251016142158.740242-1-laura.nao@collabora.com>
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 828C41F8AA;
+	Thu, 16 Oct 2025 14:59:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1760626767; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Ixrx72sjYHSlYxDM5wooi8Ni2tWQmng+Sqj/d0kRtTw=;
+	b=ZY3ZmRSYTsrKhVYLgYUjHUgcZrbbU+DWvmCBvOERCkqI+edLlFNv6lvaJlVieP96uk+8T1
+	S0Lp1B13B56uI4BF6sdU/tjOL33bgsoyYECh78SiM1if8sVmIEacqsstxfR/++cOogo/bE
+	hjakvCGQ7Yb0C9s21psekOEw1Hj5ufQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1760626767;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Ixrx72sjYHSlYxDM5wooi8Ni2tWQmng+Sqj/d0kRtTw=;
+	b=IXcoEnzIDqdlAVD6rMvrz3sgvWCkG9o1UT93EX57TJ2r03hWkRO5pQWPwIjb3laAoe9YHs
+	Aap8hRIvhJblHKDQ==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=ZY3ZmRSY;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=IXcoEnzI
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1760626767; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Ixrx72sjYHSlYxDM5wooi8Ni2tWQmng+Sqj/d0kRtTw=;
+	b=ZY3ZmRSYTsrKhVYLgYUjHUgcZrbbU+DWvmCBvOERCkqI+edLlFNv6lvaJlVieP96uk+8T1
+	S0Lp1B13B56uI4BF6sdU/tjOL33bgsoyYECh78SiM1if8sVmIEacqsstxfR/++cOogo/bE
+	hjakvCGQ7Yb0C9s21psekOEw1Hj5ufQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1760626767;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Ixrx72sjYHSlYxDM5wooi8Ni2tWQmng+Sqj/d0kRtTw=;
+	b=IXcoEnzIDqdlAVD6rMvrz3sgvWCkG9o1UT93EX57TJ2r03hWkRO5pQWPwIjb3laAoe9YHs
+	Aap8hRIvhJblHKDQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 1100C1376E;
+	Thu, 16 Oct 2025 14:59:27 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id 9jnkAk8I8WjlHwAAD6G6ig
+	(envelope-from <tiwai@suse.de>); Thu, 16 Oct 2025 14:59:27 +0000
+Date: Thu, 16 Oct 2025 16:59:26 +0200
+Message-ID: <87ikge7v01.wl-tiwai@suse.de>
+From: Takashi Iwai <tiwai@suse.de>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Jonathan Cameron <jonathan.cameron@huawei.com>,
+	Linux PM <linux-pm@vger.kernel.org>,
+	Takashi Iwai <tiwai@suse.de>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Linux PCI <linux-pci@vger.kernel.org>,
+	Alex Williamson <alex.williamson@redhat.com>,
+	Bjorn Helgaas <helgaas@kernel.org>,
+	Zhang Qilong <zhangqilong3@huawei.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Frank Li <Frank.Li@nxp.com>,
+	Dhruva Gole <d-gole@ti.com>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>,
+	Linux ACPI <linux-acpi@vger.kernel.org>,
+	Dan Williams <dan.j.williams@intel.com>,
+	David Lechner <dlechner@baylibre.com>,
+	"Fabio M. De Francesco" <fabio.maria.de.francesco@linux.intel.com>
+Subject: Re: [PATCH v1 1/3] PM: runtime: Introduce PM_RUNTIME_ACQUIRE_OR_FAIL() macro
+In-Reply-To: <CAJZ5v0iOgbkJbdRzgrBUaaYL+S_8BZD7XuXdK5vs2gMG3ug1KA@mail.gmail.com>
+References: <3925484.kQq0lBPeGt@rafael.j.wysocki>
+	<3324926.5fSG56mABF@rafael.j.wysocki>
+	<20251016133854.00003669@huawei.com>
+	<CAJZ5v0iOgbkJbdRzgrBUaaYL+S_8BZD7XuXdK5vs2gMG3ug1KA@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-Spam-Level: 
+X-Spam-Flag: NO
+X-Rspamd-Queue-Id: 828C41F8AA
+X-Rspamd-Action: no action
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Spamd-Result: default: False [-3.51 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	MIME_TRACE(0.00)[0:+];
+	ARC_NA(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[17];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	RCVD_TLS_ALL(0.00)[];
+	DNSWL_BLOCKED(0.00)[2a07:de40:b281:104:10:150:64:97:from,2a07:de40:b281:106:10:150:64:167:received];
+	RCVD_COUNT_TWO(0.00)[2];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo,huawei.com:email,intel.com:email,suse.de:dkim,suse.de:mid];
+	TO_DN_ALL(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	DKIM_TRACE(0.00)[suse.de:+]
+X-Spam-Score: -3.51
 
-The MT8196 eFuse layout is compatible with MT8186 and shares the same
-decoding scheme for the gpu-speedbin cell.
+On Thu, 16 Oct 2025 15:46:08 +0200,
+Rafael J. Wysocki wrote:
+> 
+> On Thu, Oct 16, 2025 at 2:39 PM Jonathan Cameron
+> <jonathan.cameron@huawei.com> wrote:
+> >
+> > On Wed, 15 Oct 2025 16:02:02 +0200
+> > "Rafael J. Wysocki" <rafael@kernel.org> wrote:
+> >
+> > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > >
+> > > There appears to be an emerging pattern in which guard
+> > > pm_runtime_active_try is used for resuming the given device and
+> > > incrementing its runtime PM usage counter if the resume has been
+> > > successful, that is followed by an ACQUIRE_ERR() check on the guard
+> > > variable and if that triggers, a specific error code is returned, for
+> > > example:
+> > >
+> > >       ACQUIRE(pm_runtime_active_try, pm)(dev);
+> > >       if (ACQUIRE_ERR(pm_runtime_active_try, &pm))
+> > >               return -ENXIO
+> > >
+> > > Introduce a macro called PM_RUNTIME_ACQUIRE_OR_FAIL() representing the
+> > > above sequence of statements that can be used to avoid code duplication
+> > > wherever that sequence would be used.
+> > >
+> > > Use this macro right away in the PCI sysfs code where the above pattern
+> > > is already present.
+> > >
+> > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > ---
+> > >
+> > > Admittedly, the new macro is slightly on the edge, but it really helps
+> > > reduce code duplication, so here it goes.
+> >
+> > Fully agree with the 'on the edge'.
+> >
+> > This looks somewhat like the some of the earlier attempts to come up with
+> > a general solution before ACQUIRE().  Linus was fairly clear on his opinion of
+> > a proposal that looked a bit similar to this
+> > cond_guard(mutex_intr, return -EINTR, &mutex);
+> >
+> > https://lore.kernel.org/all/CAHk-=win7bwWhPJ=iuW4h-sDTqbX6v9_LJnMaO3KxVfPSs81bQ@mail.gmail.com/
+> >
+> > +CC a few people who might have better memories of where things went than I do.
+> >
+> > The solution you have here has the benefit of clarity that all it can do is
+> > return the error code.
+> 
+> Well, I could call the macro PM_RUNTIME_ACQUIRE_OR_RETURN_ERROR(), but
+> FAIL is just shorter. :-)
+> 
+> Seriously though, the odd syntax bothers me, but it has come from
+> looking at the multiple pieces of code that otherwise would have
+> repeated exactly the same code pattern including the guard name in two
+> places and the pm variable that has no role beyond guarding.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Acked-by: Rob Herring (Arm) <robh@kernel.org>
-Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Signed-off-by: Laura Nao <laura.nao@collabora.com>
----
- Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+While I see the benefit of simplification, IMO, embedding a code
+flow control inside the macro argument makes it really harder to
+follow.
 
-diff --git a/Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml b/Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml
-index 4dc0d42df3e6..c90b026e40bd 100644
---- a/Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml
-+++ b/Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml
-@@ -25,7 +25,9 @@ properties:
-   compatible:
-     oneOf:
-       - items:
--          - const: mediatek,mt8188-efuse
-+          - enum:
-+              - mediatek,mt8196-efuse
-+              - mediatek,mt8188-efuse
-           - const: mediatek,mt8186-efuse
-       - const: mediatek,mt8186-efuse
- 
--- 
-2.39.5
+Is the problem about the messy ACQUIRE_ERR() invocation?  If so, it
+could be replaced with something shorter (and without extra type),
+e.g. replace 
+	ret = ACQUIRE_ERR(pm_runtime_active_try, &pm);
+with
+	ret = PM_RUNTIME_ACQUIRE_ERR(&pm);
 
+Since all runtime PM guard usage is to the same object, we can have a
+common macro.
+
+Also, in the past, I thought of a macro like below that stores the
+error code in the given variable ret:
+
+#define __guard_cond_ret(_name, _var, _ret, _args)	\
+	CLASS(_name, _var)(_args);			\
+	(_ret) = __guard_err(_name)(&_var)
+#define guard_cond_ret(_name, _ret, _args) \
+	__guard_cond_ret(_name, __UNIQUE_ID(guard), _ret, _args)
+
+... so that it'd work for runtime PM like:
+
+	int ret;
+
+	guard_cond_ret(pm_runtime_active, ret)(dev);
+	if (ret)
+		return ret;
+	
+Of course, a clear drawback is that the assignment of ret isn't
+obvious, but the code flow isn't skewed much in this way.
+
+
+thanks,
+
+Takashi
 
