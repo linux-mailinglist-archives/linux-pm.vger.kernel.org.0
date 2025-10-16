@@ -1,154 +1,174 @@
-Return-Path: <linux-pm+bounces-36290-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36291-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A6721BE469A
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Oct 2025 18:00:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 605E2BE4736
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Oct 2025 18:06:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0F9421A64C42
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Oct 2025 16:00:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CB7D519A7A4E
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Oct 2025 16:07:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9C47393DC8;
-	Thu, 16 Oct 2025 15:58:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15C8132D0E0;
+	Thu, 16 Oct 2025 16:06:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="IytOev9E"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gx3e4bzo"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4DC536998F
-	for <linux-pm@vger.kernel.org>; Thu, 16 Oct 2025 15:58:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E413B32D0DA
+	for <linux-pm@vger.kernel.org>; Thu, 16 Oct 2025 16:06:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760630337; cv=none; b=Zywr9qTv/P0EdV1i/PZ4sgHDxSR4fsoB8RCEYTVxzltuAafLAA4CBQ7W/pKIC2FlQYvF06JucncBFACLM26F3hR4qlKPWfw9kdtyuPveln66IQionzv48m0t8qkWPA6v2hAa3ohtQfoUrXSM/uWr4JvLAPbYb476fPWqnOJprp8=
+	t=1760630803; cv=none; b=BIm5m/GE0t+USsU1vIK2gx6tT9q1kjzomCQuPL7ptm0NwsPjTrbGU1ACLs9CB9pw5BNQqrALL6WIYpRZutZWYBR2GavP4lDTlMKT9w2no3DckxVS2808kfU2JBubHCbB03CaFHXYUyBwtsqvQzZI/82dn8gGYkktEq2jx9WpH2M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760630337; c=relaxed/simple;
-	bh=ngrM+eWn9xbaRjAU/VwFL/GK16Xs8solvHiQs5E/TVs=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Bf2MTqzBpm/HyCyzZ52Y+ZzUCY/v5rJFkLIxkfEEHqudDM/skquQNLF76hG0U8DN4On/mOQ8LhwcKYBmu7viadPs6EMfChxrCkEyEda40enXN6rerRZM4EcSPNJNdBAzrqttvd/ShBN8UvscZalgluV+PLFhXGAWiIsvAeFlk78=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=IytOev9E; arc=none smtp.client-ip=209.85.218.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-b07d4d24d09so147526366b.2
-        for <linux-pm@vger.kernel.org>; Thu, 16 Oct 2025 08:58:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1760630332; x=1761235132; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GRtuCWl6DsZm6id43RaQ+ggcTZIQA9X1wHdBvSFgFgY=;
-        b=IytOev9E/QILIygCo15TlnAtXJvDl/fxruSM9RvNvnlOI8jIDle3TDO5NIAkByMiqE
-         6NmYGg80GCs7+B3JHJbw44EggHlnKxkKG23u9Ic2oW16pcZBWRHcm1JXsckVC+sClPtx
-         HSI1YuQJVyA9EJxd8Yd8mPQP47O6kDCDgX0zkU+6qceGCKa6CAWSLYJdTDNJcJqJu34U
-         7T7p4Dai//Dx8kYQBoRKLPNbXGL4qVYCyCT+SZkFH+/jyCTbDt5A3PssNgacCRpTiLXr
-         bwIX42Z0B9nly1KS50SKujx+HeKWqU/zmafuTY69FtlMLlEoA80E5qPMkM0D/Myr60+N
-         t2Bw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760630332; x=1761235132;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GRtuCWl6DsZm6id43RaQ+ggcTZIQA9X1wHdBvSFgFgY=;
-        b=DsE5HC02mCE9J8k7qEu1AtJR7f9OiSdCYZ2NVA4CAaRFu8IVwjRdcmaeiTjkPFfTU6
-         PDpdsAmaqaLzcz+wICIA/JkK+Clrki6lUo60N1RxgwkyeXjRqju8fmwWHSW7hnGUglQA
-         nunDoeEgJ9X+UYTnv6UlYu63WVFtJwaU7dld2gl1uAQSVZyHaTwTwbF/Q8NXxdcbqJ8A
-         xq8mK+Pz+H3/vuNUydWNChM31Hg3HcpHi54Myq4N/WOg3OE3GbGSZfZEHtPkhJQ8A/sQ
-         JirgEuhY2gShNwRcuaHeRDfR/B1/wwT/kOOP6yeqvalXo2ER2U17lt+XaruarUkSqSik
-         1dCw==
-X-Forwarded-Encrypted: i=1; AJvYcCUlQrzKN35VEhBtD30dK1NRVeNpH87zHAuft1D8Q2/kd/U31Z5ObAvMjZIxs6IiD27HzKvT1aqkvQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxWoNtf8CjR9VTIrC2ES8RPSjxD/Rp0udAw/Oqox/G0zrOgB3y6
-	yMvm8Oe+c+LdcjrvzX97WVB4JFAKZgtsbtV9AV8QZBWq4mupBll2G5y/UmFdOTR6v0g=
-X-Gm-Gg: ASbGncujyaihieoEKbBxA20hLbSKc220osvZOjtupq3LaHfdEYwe21BAb+TJFlEBQ4u
-	x3BRZUiE2ZOKs9sn/Ks91qshJc3kwltAMEeo53jMSWSLRytlMA1shiNyYXZqre8JN/xNhG4cbM8
-	bSOdG79bkI7IQ4PGLX9iD5kIasL/KVN/KwSgzHLYXpCGySPw2x1aTQ/1qFmHLOCDkG/08A7fwIg
-	b8h1kibO+B2kLdIwwDMPfu8OiZe6dxq3c473irlpwKJYlkFNBg8i93YBUIRFg/aPO+AEvTWbXIR
-	T6bh3wYtnElYBb4e1L1wr1g3XQIwDZAM00rxMe30DqMxB+tWBIuaidEFr5jAhqTT/ohAmlapLa0
-	UvvcKJlbAwsmz8JsYHw8JctkJqy2uMX060tz0yoEbb3LGS6hsOM2EnRo0Ejqj34VYFq7SHBfRwA
-	/TJ4s1OHtHzzirGykFmfU3CMFwSJsbw1WcyifhgPQq4f6w+Crzy5xn1WkxmOsD
-X-Google-Smtp-Source: AGHT+IEbUoUcanooKZDlk5mEzvgz5a6q2790fxYwvUg/eU6pRWdoDgf3AvUevu67xFJRES2YBilqRw==
-X-Received: by 2002:a17:906:4899:b0:b4f:f6ff:a82f with SMTP id a640c23a62f3a-b6474b371e4mr39583466b.32.1760630332293;
-        Thu, 16 Oct 2025 08:58:52 -0700 (PDT)
-Received: from puffmais2.c.googlers.com (254.48.34.34.bc.googleusercontent.com. [34.34.48.254])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b5ccccb4811sm549021666b.56.2025.10.16.08.58.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Oct 2025 08:58:51 -0700 (PDT)
-From: =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
-Date: Thu, 16 Oct 2025 16:58:43 +0100
-Subject: [PATCH v3 10/10] pmdomain: samsung: use dev_err() instead of
- pr_err()
+	s=arc-20240116; t=1760630803; c=relaxed/simple;
+	bh=Hrisi8zxkOaW5XhVaLZLwZymkPWBwWZRKU/rxPnRWqk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=nkZlrt03ucvx5zx9ZqOL1lFuTSX5yNlQoT8NOK3+BxrpMvLCCTepn+lwQdwBe/5+vtfmR5F+n4deX7OTh3rqH+qDaXLdb7vkWsQcaOhWLSuIfjd+yoJ5E4MHDW3TihQ0taNyilPUFu3lvj5M47eK6kMx7r9AqK8CSABqNdfZ5Ic=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gx3e4bzo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E070C4CEFB
+	for <linux-pm@vger.kernel.org>; Thu, 16 Oct 2025 16:06:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1760630802;
+	bh=Hrisi8zxkOaW5XhVaLZLwZymkPWBwWZRKU/rxPnRWqk=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Gx3e4bzo2/dy5fsNgvEObKHmZZ/QgxCgMxKuMxfm0+jdtRo7q8fVuqp0nMBCUX9ME
+	 s7g3kyUtrbplEUMKLXPdSW0L8EpjF/5htvKPY2piaO/fmh2wCNEvqGrZ8BLIU6QSaZ
+	 1+h8csiJ1FB9gheVgUms0l2nD8qwQqLSRj4TVKBYBeqmJy95lTR1RaYqs2j/P7/EBt
+	 sevLm+z7ns1zmungpLoNfiNWUb9jXfyhx71vufrklhRHZZNE2EIRgGOxo27AQFh9UA
+	 fkpAyF8MGF0+Rrcp3VZXUPp26yIJzUdyY+M4KC9ZnnhItNRYLIEJoJ3y9jpwz/QsNI
+	 2sBdUNzcbh8ug==
+Received: by mail-ot1-f52.google.com with SMTP id 46e09a7af769-7827025e548so397717a34.2
+        for <linux-pm@vger.kernel.org>; Thu, 16 Oct 2025 09:06:42 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXjU1CMEw4AynZbGhin6EQbiXIJ25taOCufQ30qakH/xuTQopGIq2iX/IU/Ms2fuZz93CE26k+DBA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwI5Hbikng4boBIcvtTHDOLAhwU1qMgSgTCQXYuUjxl1ZVMoVFf
+	rWCXewWUk8kwTcKjQ6nu5YNeTI4qTq65+sMfxww/+bU48j6xDve9rQCSeY3GCDKjg1CwOPtf8YW
+	EG1KKySnds08uCWt9YfUvjmNSsI4V7HA=
+X-Google-Smtp-Source: AGHT+IEV6FcNRR4ZW0YJGN/hXp78WROhL7nsspV7qW6aVCZGAonTb7rnNMyezEumYmrfn681jqhnuJA5qn9Vcrf6tb0=
+X-Received: by 2002:a05:6808:4442:b0:43f:64bc:8b7e with SMTP id
+ 5614622812f47-443a2ed9ademr251822b6e.15.1760630801727; Thu, 16 Oct 2025
+ 09:06:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20251016-gs101-pd-v3-10-7b30797396e7@linaro.org>
-References: <20251016-gs101-pd-v3-0-7b30797396e7@linaro.org>
-In-Reply-To: <20251016-gs101-pd-v3-0-7b30797396e7@linaro.org>
-To: Krzysztof Kozlowski <krzk@kernel.org>, 
- Alim Akhtar <alim.akhtar@samsung.com>, Rob Herring <robh@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Ulf Hansson <ulf.hansson@linaro.org>, 
- Marek Szyprowski <m.szyprowski@samsung.com>
-Cc: Peter Griffin <peter.griffin@linaro.org>, 
- Tudor Ambarus <tudor.ambarus@linaro.org>, 
- Will McVicker <willmcvicker@google.com>, kernel-team@android.com, 
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-pm@vger.kernel.org, 
- =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-X-Mailer: b4 0.14.2
+References: <3925484.kQq0lBPeGt@rafael.j.wysocki> <3324926.5fSG56mABF@rafael.j.wysocki>
+ <20251016133854.00003669@huawei.com> <CAJZ5v0iOgbkJbdRzgrBUaaYL+S_8BZD7XuXdK5vs2gMG3ug1KA@mail.gmail.com>
+ <87ikge7v01.wl-tiwai@suse.de>
+In-Reply-To: <87ikge7v01.wl-tiwai@suse.de>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 16 Oct 2025 18:06:29 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0iWq=1HDHnj6_rTiK83cFiVyNimuSpLc5dYU9Tz90nqXw@mail.gmail.com>
+X-Gm-Features: AS18NWAe-CiF1eQtYmrJretaU6h3MT0stuE3TFM4dIDL5Jf7RC9uiRIurDJvprE
+Message-ID: <CAJZ5v0iWq=1HDHnj6_rTiK83cFiVyNimuSpLc5dYU9Tz90nqXw@mail.gmail.com>
+Subject: Re: [PATCH v1 1/3] PM: runtime: Introduce PM_RUNTIME_ACQUIRE_OR_FAIL()
+ macro
+To: Takashi Iwai <tiwai@suse.de>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Jonathan Cameron <jonathan.cameron@huawei.com>, 
+	Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Linux PCI <linux-pci@vger.kernel.org>, Alex Williamson <alex.williamson@redhat.com>, 
+	Bjorn Helgaas <helgaas@kernel.org>, Zhang Qilong <zhangqilong3@huawei.com>, 
+	Ulf Hansson <ulf.hansson@linaro.org>, Frank Li <Frank.Li@nxp.com>, Dhruva Gole <d-gole@ti.com>, 
+	Mika Westerberg <mika.westerberg@linux.intel.com>, Linux ACPI <linux-acpi@vger.kernel.org>, 
+	Dan Williams <dan.j.williams@intel.com>, David Lechner <dlechner@baylibre.com>, 
+	"Fabio M. De Francesco" <fabio.maria.de.francesco@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-dev_err() gives us more consistent error messages, which include the
-device. Switch to using dev_err().
+On Thu, Oct 16, 2025 at 4:59=E2=80=AFPM Takashi Iwai <tiwai@suse.de> wrote:
+>
+> On Thu, 16 Oct 2025 15:46:08 +0200,
+> Rafael J. Wysocki wrote:
+> >
+> > On Thu, Oct 16, 2025 at 2:39=E2=80=AFPM Jonathan Cameron
+> > <jonathan.cameron@huawei.com> wrote:
+> > >
+> > > On Wed, 15 Oct 2025 16:02:02 +0200
+> > > "Rafael J. Wysocki" <rafael@kernel.org> wrote:
+> > >
+> > > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > >
+> > > > There appears to be an emerging pattern in which guard
+> > > > pm_runtime_active_try is used for resuming the given device and
+> > > > incrementing its runtime PM usage counter if the resume has been
+> > > > successful, that is followed by an ACQUIRE_ERR() check on the guard
+> > > > variable and if that triggers, a specific error code is returned, f=
+or
+> > > > example:
+> > > >
+> > > >       ACQUIRE(pm_runtime_active_try, pm)(dev);
+> > > >       if (ACQUIRE_ERR(pm_runtime_active_try, &pm))
+> > > >               return -ENXIO
+> > > >
+> > > > Introduce a macro called PM_RUNTIME_ACQUIRE_OR_FAIL() representing =
+the
+> > > > above sequence of statements that can be used to avoid code duplica=
+tion
+> > > > wherever that sequence would be used.
+> > > >
+> > > > Use this macro right away in the PCI sysfs code where the above pat=
+tern
+> > > > is already present.
+> > > >
+> > > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > > ---
+> > > >
+> > > > Admittedly, the new macro is slightly on the edge, but it really he=
+lps
+> > > > reduce code duplication, so here it goes.
+> > >
+> > > Fully agree with the 'on the edge'.
+> > >
+> > > This looks somewhat like the some of the earlier attempts to come up =
+with
+> > > a general solution before ACQUIRE().  Linus was fairly clear on his o=
+pinion of
+> > > a proposal that looked a bit similar to this
+> > > cond_guard(mutex_intr, return -EINTR, &mutex);
+> > >
+> > > https://lore.kernel.org/all/CAHk-=3Dwin7bwWhPJ=3DiuW4h-sDTqbX6v9_LJnM=
+aO3KxVfPSs81bQ@mail.gmail.com/
+> > >
+> > > +CC a few people who might have better memories of where things went =
+than I do.
+> > >
+> > > The solution you have here has the benefit of clarity that all it can=
+ do is
+> > > return the error code.
+> >
+> > Well, I could call the macro PM_RUNTIME_ACQUIRE_OR_RETURN_ERROR(), but
+> > FAIL is just shorter. :-)
+> >
+> > Seriously though, the odd syntax bothers me, but it has come from
+> > looking at the multiple pieces of code that otherwise would have
+> > repeated exactly the same code pattern including the guard name in two
+> > places and the pm variable that has no role beyond guarding.
+>
+> While I see the benefit of simplification, IMO, embedding a code
+> flow control inside the macro argument makes it really harder to
+> follow.
+>
+> Is the problem about the messy ACQUIRE_ERR() invocation?  If so, it
+> could be replaced with something shorter (and without extra type),
+> e.g. replace
+>         ret =3D ACQUIRE_ERR(pm_runtime_active_try, &pm);
+> with
+>         ret =3D PM_RUNTIME_ACQUIRE_ERR(&pm);
+>
+> Since all runtime PM guard usage is to the same object, we can have a
+> common macro.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: André Draszik <andre.draszik@linaro.org>
----
- drivers/pmdomain/samsung/exynos-pm-domains.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+Well, it's not a problem, but an observation that the code pattern is
+exactly the same in all of the places that use this macro, so it
+represents this exact same code pattern that otherwise will be
+repeated in multiple places.
 
-diff --git a/drivers/pmdomain/samsung/exynos-pm-domains.c b/drivers/pmdomain/samsung/exynos-pm-domains.c
-index a7e55624728a62545eac049c9a51012a229f44c2..387ee1c91caeae4519237af2ec659f56782e7bd7 100644
---- a/drivers/pmdomain/samsung/exynos-pm-domains.c
-+++ b/drivers/pmdomain/samsung/exynos-pm-domains.c
-@@ -29,6 +29,7 @@ struct exynos_pm_domain_config {
-  */
- struct exynos_pm_domain {
- 	struct regmap *regmap;
-+	struct device *dev;
- 	struct generic_pm_domain pd;
- 	u32 local_pwr_cfg;
- 	u32 configuration_reg;
-@@ -53,8 +54,9 @@ static int exynos_pd_power(struct generic_pm_domain *domain, bool power_on)
- 				       (val & pd->local_pwr_cfg) == pwr,
- 				       100, 1 * USEC_PER_MSEC);
- 	if (err)
--		pr_err("Power domain %s %sable failed: %d (%#.2x)\n",
--		       domain->name, power_on ? "en" : "dis", err, val);
-+		dev_err(pd->dev,
-+			"Power domain %s %sable failed: %d (%#.2x)\n",
-+			domain->name, power_on ? "en" : "dis", err, val);
- 
- 	return err;
- }
-@@ -123,6 +125,8 @@ static int exynos_pd_probe(struct platform_device *pdev)
- 	if (!pd)
- 		return -ENOMEM;
- 
-+	pd->dev = dev;
-+
- 	pd->pd.name = exynos_get_domain_name(dev, np);
- 	if (!pd->pd.name)
- 		return -ENOMEM;
-
--- 
-2.51.0.788.g6d19910ace-goog
-
+I have no problem with copy-pasting this code pattern between
+different use sites, but that's something we generally avoid as a
+rule, don't we?
 
