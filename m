@@ -1,140 +1,103 @@
-Return-Path: <linux-pm+bounces-36216-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36217-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B99BBE19A7
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Oct 2025 07:55:13 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D13E7BE1B38
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Oct 2025 08:24:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id D9F0434D762
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Oct 2025 05:55:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4C83619C7A0C
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Oct 2025 06:24:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 936FA246760;
-	Thu, 16 Oct 2025 05:55:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA2782D3A7B;
+	Thu, 16 Oct 2025 06:24:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="FHwWz2us"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U8x+/whe"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB571218AC1
-	for <linux-pm@vger.kernel.org>; Thu, 16 Oct 2025 05:55:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.24
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FCC92D24B8;
+	Thu, 16 Oct 2025 06:24:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760594109; cv=none; b=eCgTiHmz2/LwRDN4opE/gMQNuFU4dPYL1CHxXwrFK0KSyfPLpbjpI4coDcRxxbyQnXM7/S+LEkHplcTRpN7hxrXe/8RsWKywr6HwZUX6iYqWxlESJR/zhQ3HrF0SgEtdNZj946e4VvSB3P1+yh0BxrNa601StCrEx4YmK7pNktA=
+	t=1760595846; cv=none; b=PEAHZgEzlXxwSq20X3FWqmh+wtMtdCEjxvib7EyFkji5qjkkkQoqVvyfOzg38uzp6PcQ7HpTfo7yjEXJQaIJbf95YIWA73r+/vc5Tx47leHSIXDD7od0oLxpLcICPeApqxYlhciO2AGHYjgkvjJtBUKWFaD657C2GoHcfWtM7tQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760594109; c=relaxed/simple;
-	bh=zZ3hiuoOz7S40OWe1BhO7yrk1jjd8J+w81QTPBAFJB4=;
-	h=From:To:Cc:In-Reply-To:Subject:Date:Message-ID:MIME-Version:
-	 Content-Type:References; b=bqCQzyZQigzdkVtWP/fcYc+D7PUe2cpjc3xG9TUM2hFi2ZRICpRYaJWwlUIw/R8OhNToImg2tIx/FUdtCPbXgt4Im2J/op9JkxjUtX2WyEBHOxHcaWO6WUb+QKKo3VwBNC3BQIWrtHFuSiECwJKvj7o3FriQ67Py9U3taVzIwRc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=FHwWz2us; arc=none smtp.client-ip=203.254.224.24
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
-	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20251016055506epoutp01b5a6772ca740a30cbdc3ef33b1083b25~u4wLxP2Vg3271832718epoutp01G
-	for <linux-pm@vger.kernel.org>; Thu, 16 Oct 2025 05:55:06 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20251016055506epoutp01b5a6772ca740a30cbdc3ef33b1083b25~u4wLxP2Vg3271832718epoutp01G
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1760594106;
-	bh=Lt1V1ttJT/rzLxB3yr+Kj2hiXZUyzShEyCvGqxVBJsQ=;
-	h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-	b=FHwWz2us2IYVIr+EuFa6oJbqoifB4KHvpW7efNqW30FqFZmUucTZAOWlA+M12qzg7
-	 kjrIixlxsVwlX4MFCSgPlx0eKIF7vyEwh38v6QEQsiLqVWRhMzP3sF4zT2uRW1Z3R0
-	 DXDOaRU6OpumLxcCPwDaMCMQgDWpxWigiDqYGv70=
-Received: from epsnrtp01.localdomain (unknown [182.195.42.153]) by
-	epcas2p1.samsung.com (KnoxPortal) with ESMTPS id
-	20251016055505epcas2p1bd7203b2019c94b7e042145b3c441814~u4wLSUwr41320913209epcas2p1v;
-	Thu, 16 Oct 2025 05:55:05 +0000 (GMT)
-Received: from epcas2p1.samsung.com (unknown [182.195.38.201]) by
-	epsnrtp01.localdomain (Postfix) with ESMTP id 4cnHGx1qvFz6B9mD; Thu, 16 Oct
-	2025 05:55:05 +0000 (GMT)
-Received: from epsmtip2.samsung.com (unknown [182.195.34.31]) by
-	epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
-	20251016055504epcas2p465445e62cb43a07d933890d533c08b97~u4wKYUP4M2158421584epcas2p4M;
-	Thu, 16 Oct 2025 05:55:04 +0000 (GMT)
-Received: from KORCO115296 (unknown [12.80.207.128]) by epsmtip2.samsung.com
-	(KnoxPortal) with ESMTPA id
-	20251016055504epsmtip2ae441a34d309f357a7223522f6fc7556~u4wKSXLQv2437324373epsmtip2j;
-	Thu, 16 Oct 2025 05:55:04 +0000 (GMT)
-From: =?UTF-8?B?7IaQ7Iug?= <shin.son@samsung.com>
-To: "'Krzysztof Kozlowski'" <krzk@kernel.org>, "'Bartlomiej Zolnierkiewicz'"
-	<bzolnier@gmail.com>, "'Rafael J . Wysocki'" <rafael@kernel.org>, "'Daniel
- Lezcano'" <daniel.lezcano@linaro.org>, "'Zhang Rui'" <rui.zhang@intel.com>,
-	"'Lukasz	Luba'" <lukasz.luba@arm.com>, "'Rob Herring'" <robh@kernel.org>,
-	"'Conor Dooley'" <conor+dt@kernel.org>, "'Alim Akhtar'"
-	<alim.akhtar@samsung.com>, "'Henrik Grimler'" <henrik@grimler.se>
-Cc: <linux-pm@vger.kernel.org>, <linux-samsung-soc@vger.kernel.org>,
-	<devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>
-In-Reply-To: <65380fa1-7d49-48eb-bab4-3e15cc4ea434@kernel.org>
-Subject: RE: [PATCH v6 3/3] arm64: dts: exynosautov920: Add multiple sensors
-Date: Thu, 16 Oct 2025 14:55:02 +0900
-Message-ID: <001f01dc3e61$6b2ec7d0$418c5770$@samsung.com>
+	s=arc-20240116; t=1760595846; c=relaxed/simple;
+	bh=qMC0IxEb6NTfUfw9jV3WwM+mLfXoaAYouX7oyvcmmqg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=LUEx10hSWOwsfqDkXVKjhXrdGtQTPe1MFl5E3nYXzEWHWDovMbAFcs/kUZkc8rP3/8iBXVkmAeYOeUK0c2ghzI9Vr+XtfITDnZJVBl+WFO1lfxZxS2f+kauzjEI23Da7jvMIMBdLoozEHOkY8f58RAmS/IZv0lQrsJOKoIFcQDM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U8x+/whe; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56FDBC4CEF1;
+	Thu, 16 Oct 2025 06:24:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1760595845;
+	bh=qMC0IxEb6NTfUfw9jV3WwM+mLfXoaAYouX7oyvcmmqg=;
+	h=From:To:Cc:Subject:Date:From;
+	b=U8x+/wheNLLVgKiDnshOyRa6jCwmy3Yy+kLBrc9dCafwa4lX5WOZqVfIsBz83RoVX
+	 eXiT50IFSzjcdSkoL9Pd9xDkQD8wC8GHmP7hJqDMbSZ7F2LZbz3hN9kfEShiTgO91+
+	 7rHpNO5BRyzA2CV8AsLLJ8oAeefPip0TdAHTLhWPPtCEdD8TvcGh7UoTpY+5QESJUd
+	 0swFsBsen/9n1tTH1eMwlTOIh5uvhvyRriLQf13lduTQfLzvp1tLziRjn+Wxp18m2z
+	 N0+4q5O5xJKEn9yuaqVrPxLPNAvP1piB+dC32UhUGL/dUWCEiBqm6u/GGYDI163foC
+	 btOMteVUjnxWg==
+From: "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
+To: sre@kernel.org
+Cc: linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	"Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Hans de Goede <hansg@kernel.org>,
+	Sebastian Reichel <sebastian.reichel@collabora.com>
+Subject: [PATCH] power: supply: intel_dc_ti_battery: fix 64bit divisions
+Date: Thu, 16 Oct 2025 08:23:57 +0200
+Message-ID: <20251016062401.409809-1-jirislaby@kernel.org>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 15.0
-Thread-Index: AQIjrV0tYij4Y9dxV2JVizj4BALpcQInw8+iAnOKzA4BpaaqeLQDYDWA
-Content-Language: ko
-X-CMS-MailID: 20251016055504epcas2p465445e62cb43a07d933890d533c08b97
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-cpgsPolicy: CPGSC10-234,Y
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20250930005148epcas2p19ffbb0ceaacac4d92e7d43936884dc70
-References: <20250930005139.1424963-1-shin.son@samsung.com>
-	<CGME20250930005148epcas2p19ffbb0ceaacac4d92e7d43936884dc70@epcas2p1.samsung.com>
-	<20250930005139.1424963-4-shin.son@samsung.com>
-	<65380fa1-7d49-48eb-bab4-3e15cc4ea434@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hello Krzysztof Kozlowski,
+On 32bit builds, I get:
+ERROR: modpost: "__udivdi3" [drivers/power/supply/intel_dc_ti_battery.ko] undefined!
 
-> -----Original Message-----
-> From: Krzysztof Kozlowski [mailto:krzk@kernel.org]
-> Sent: Friday, October 10, 2025 9:46 PM
-> To: Shin Son <shin.son@samsung.com>; Bartlomiej Zolnierkiewicz
-> <bzolnier@gmail.com>; Rafael J . Wysocki <rafael@kernel.org>; Daniel
-> Lezcano <daniel.lezcano@linaro.org>; Zhang Rui <rui.zhang@intel.com>;
-> Lukasz Luba <lukasz.luba@arm.com>; Rob Herring <robh@kernel.org>; Conor
-> Dooley <conor+dt@kernel.org>; Alim Akhtar <alim.akhtar@samsung.com>;
-> Henrik Grimler <henrik@grimler.se>
-> Cc: linux-pm@vger.kernel.org; linux-samsung-soc@vger.kernel.org;
-> devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-
-> kernel@vger.kernel.org
-> Subject: Re: [PATCH v6 3/3] arm64: dts: exynosautov920: Add multiple
-> sensors
-> 
-> On 30/09/2025 02:51, Shin Son wrote:
-> > diff --git a/arch/arm64/boot/dts/exynos/exynosautov920.dtsi
-> b/arch/arm64/boot/dts/exynos/exynosautov920.dtsi
-> > index 0fdf2062930a..fba403e48aed 100644
-> > --- a/arch/arm64/boot/dts/exynos/exynosautov920.dtsi
-> > +++ b/arch/arm64/boot/dts/exynos/exynosautov920.dtsi
-> > @@ -330,6 +330,36 @@ watchdog_cl1: watchdog@10070000 {
-> >  			samsung,cluster-index = <1>;
-> >  		};
-> >
-> > +		tmu_top: tmu@100a0000 {
-> > +			compatible = "samsung,exynosautov920-tmu";
-> > +			reg = <0x100A0000 0x1000>;
-> 
-> I guess there will be new version, so nitpick: please use lowercase hex.
-> 
-> 
-> Best regards,
-> Krzysztof
+This is due to 64bit ktime divisions. Fix both by using div_u64().
 
-Ok, I'll use the lowercase hex.
-Thanks for your feedback.
+Fixes: 8c5795fe5527 ("power: supply: Add new Intel Dollar Cove TI battery driver")
+---
+Cc: Linus Walleij <linus.walleij@linaro.org>
+Cc: Hans de Goede <hansg@kernel.org>
+Cc: Sebastian Reichel <sebastian.reichel@collabora.com>
+---
+ drivers/power/supply/intel_dc_ti_battery.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Best regards,
-Shin Son.
+diff --git a/drivers/power/supply/intel_dc_ti_battery.c b/drivers/power/supply/intel_dc_ti_battery.c
+index 56b0c92e9d28..3d38106b638b 100644
+--- a/drivers/power/supply/intel_dc_ti_battery.c
++++ b/drivers/power/supply/intel_dc_ti_battery.c
+@@ -141,7 +141,7 @@ static int dc_ti_battery_get_voltage_and_current_now(struct power_supply *psy, i
+ 	if (ret)
+ 		goto out_err;
+ 
+-	cnt_start_usec = ktime_get_ns() / NSEC_PER_USEC;
++	cnt_start_usec = div_u64(ktime_get_ns(), NSEC_PER_USEC);
+ 
+ 	/* Read Vbat, convert IIO mV to power-supply ųV */
+ 	ret = iio_read_channel_processed_scale(chip->vbat_channel, volt, 1000);
+@@ -149,7 +149,7 @@ static int dc_ti_battery_get_voltage_and_current_now(struct power_supply *psy, i
+ 		goto out_err;
+ 
+ 	/* Sleep at least 3 sample-times + slack to get 3+ CC samples */
+-	now_usec = ktime_get_ns() / NSEC_PER_USEC;
++	now_usec = div_u64(ktime_get_ns(), NSEC_PER_USEC);
+ 	sleep_usec = 3 * SMPL_INTVL_US + SLEEP_SLACK_US - (now_usec - cnt_start_usec);
+ 	if (sleep_usec > 0 && sleep_usec < 1000000)
+ 		usleep_range(sleep_usec, sleep_usec + SLEEP_SLACK_US);
+-- 
+2.51.0
 
 
