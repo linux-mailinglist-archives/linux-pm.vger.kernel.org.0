@@ -1,132 +1,120 @@
-Return-Path: <linux-pm+bounces-36306-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36307-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B1042BE5990
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Oct 2025 23:48:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C21DBE5A32
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Oct 2025 00:05:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3B2421A625AB
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Oct 2025 21:49:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A05481A65CFC
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Oct 2025 22:05:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BFEA2E62AC;
-	Thu, 16 Oct 2025 21:48:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6D8928CF49;
+	Thu, 16 Oct 2025 22:05:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S3pgPtJ/"
+	dkim=pass (2048-bit key) header.d=nabijaczleweli.xyz header.i=@nabijaczleweli.xyz header.b="XZzh14oA"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from tarta.nabijaczleweli.xyz (tarta.nabijaczleweli.xyz [139.28.40.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAFFA2E612E;
-	Thu, 16 Oct 2025 21:48:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 950691E1C02;
+	Thu, 16 Oct 2025 22:05:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=139.28.40.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760651313; cv=none; b=lYUd0+v11pfUKRcx1aV1v7wQj4V0OhypAIzG1TDwz1blE4HLBv+fD7oteNiPolGGV+QnKioia1Xtf4yZa6+eE0B5Lu5FjGApt8NbHs2fNqY04AC1Jz/MTFwWkGpxvx6S7zAgHdQTS49SvgdVX56A5VxZShWIrBXUd5jtwJUzB/k=
+	t=1760652326; cv=none; b=Vn83z6OJ5X3F2OQeA779Q3w18UX4hmTXoCfPRcYEOnsmp5t5s2hE1fd9FC1nXsjg2je2iCozgZl+ylc0HZkKrvC8OEGjXYiStS2k14UFFy55onYPwwJlNDlzlRUyVm65PUifBD/vgo13JB+MCLm9vdl92LRob5DwMbezpsAczoI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760651313; c=relaxed/simple;
-	bh=az2P0BtWOdbNV9GVnUGrbuYR+gFXF+qCpHSYxeMG9Y0=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=IMQ+SLcuM1hfMoGEwU3bcCt63DbyjOZ9HNKnM+/VV412M5c8D0LDgeenOuZWTuKYk5Zk/pQxoDZk9cum47Vwda5uXziJWin7/Jhf6FEj5r/8hWpBK2IzO9CIRBbtXFwRlcJcE4Y6K4cUtb1rXJJqGgtDTfHpkL9Ve28qOgxmDmM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S3pgPtJ/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CBCCC4CEF1;
-	Thu, 16 Oct 2025 21:48:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760651312;
-	bh=az2P0BtWOdbNV9GVnUGrbuYR+gFXF+qCpHSYxeMG9Y0=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=S3pgPtJ/dxSC0vCGR7QZtHL8vtSOJDzsapuk50mdbYa2Bzph4QxYTLe4mdrOb9VOS
-	 EPbPLvQvJ8E4OoEQDjLcCVqxfP/crT4q5rweC/WxdiUod3jm1woACovGDOkofs9ZfZ
-	 SIXHZQo+9gXCQtFPlTX4B43idgOIAFf8PsiQbkOnYM1CuIrRT3eT06BcTXsAqk7Y1R
-	 rcZYL1+MnGfTxb1NxkMV/Lno9/7/axlaD9bnhNDTbfrXdXtJak7x7pYpVwQ5Dgiqd5
-	 507EJO3k6eqIES5q9RdHzE+7koQyPPY0w7yIhd1yrXMbM6iflC8NPB6cPRnVI5E1nC
-	 9drphuLbHu6xw==
+	s=arc-20240116; t=1760652326; c=relaxed/simple;
+	bh=5JEj39LadNR7rhYPvNgg/UBNja+ntXm8BL0As54t5qU=;
+	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=KHn2DxImFN8wofPQKzW9rUSqVjLJyLG1FiykX0nH2NPyDROlb1RqfquN/hTy4jm5SVRAJYb+OTJXzMrpecHGarqJM6LkIaj3uEicMoMW/FjD+X3zvtUXHjQZeZYSC1WWRYd6tyzVj67idbVdnmeToL3xOA+99q7q1QjS4fbzYmk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nabijaczleweli.xyz; spf=pass smtp.mailfrom=nabijaczleweli.xyz; dkim=pass (2048-bit key) header.d=nabijaczleweli.xyz header.i=@nabijaczleweli.xyz header.b=XZzh14oA; arc=none smtp.client-ip=139.28.40.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nabijaczleweli.xyz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nabijaczleweli.xyz
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nabijaczleweli.xyz;
+	s=202505; t=1760652318;
+	bh=5JEj39LadNR7rhYPvNgg/UBNja+ntXm8BL0As54t5qU=;
+	h=Date:From:To:Subject:From;
+	b=XZzh14oATVTpGoiEls3TWGOMKbnvFWLmdoXm/ebIccbriZLORocDlMam5x8uRHrYO
+	 YAMQ3duxJYgy5+j21JjXoazNFWd7REQd9DW4/hU8cfOYYLRBuMwSCZvO6t3MpTnrMa
+	 au8E/sZh9s+hEVTUg/s93O//X0Bo3KTBF4wLpnoBsah92j3pk7990Rxn/S1QRhM8uG
+	 nyOoegLIiB1unz2unSJsxEQV3bustuXp79ZWpDr23cwIEQ8QDWylXBkxsobnIu8WzS
+	 78csjVV1vprkZBnELUf6M3XFgYrJyF8L05Ewht81aqDNSWPyefzx5baww44vXAakdb
+	 vHNUQ24C0f6VA==
+Received: from tarta.nabijaczleweli.xyz (unknown [192.168.1.250])
+	by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id E393F96A8;
+	Fri, 17 Oct 2025 00:05:18 +0200 (CEST)
+Date: Fri, 17 Oct 2025 00:05:18 +0200
+From: 
+	Ahelenia =?utf-8?Q?Ziemia=C5=84ska?= <nabijaczleweli@nabijaczleweli.xyz>
+To: Sebastian Reichel <sre@kernel.org>, Anton Vorontsov <cbou@mail.ru>, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] power: supply: apm_power: only unset own apm_get_power_status
+Message-ID: <xczpgox57hxbunkcbdl5fxhc4gnsajsipldfidi7355afezk64@tarta.nabijaczleweli.xyz>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="pix4lgskgslujr3l"
+Content-Disposition: inline
+User-Agent: NeoMutt/20231221-2-4202cf-dirty
+
+
+--pix4lgskgslujr3l
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 16 Oct 2025 23:48:25 +0200
-Message-Id: <DDK2SRUF7OG7.1HEZXR1V4ND8Z@kernel.org>
-Cc: <viresh.kumar@linaro.org>, <acourbot@nvidia.com>, <ira.weiny@intel.com>,
- <leon@kernel.org>, <daniel.almeida@collabora.com>, <bhelgaas@google.com>,
- <kwilczynski@kernel.org>, <abdiel.janulgue@gmail.com>,
- <robin.murphy@arm.com>, <ojeda@kernel.org>, <alex.gaynor@gmail.com>,
- <boqun.feng@gmail.com>, <gary@garyguo.net>, <bjorn3_gh@protonmail.com>,
- <a.hindborg@kernel.org>, <aliceryhl@google.com>, <tmgross@umich.edu>,
- <rust-for-linux@vger.kernel.org>, <linux-pci@vger.kernel.org>,
- <linux-pm@vger.kernel.org>, <nouveau@lists.freedesktop.org>,
- <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] rust: driver: let probe() return impl PinInit<Self,
- Error>
-From: "Benno Lossin" <lossin@kernel.org>
-To: "Danilo Krummrich" <dakr@kernel.org>, <gregkh@linuxfoundation.org>,
- <rafael@kernel.org>
-X-Mailer: aerc 0.21.0
-References: <20251016125544.15559-1-dakr@kernel.org>
-In-Reply-To: <20251016125544.15559-1-dakr@kernel.org>
 
-On Thu Oct 16, 2025 at 2:55 PM CEST, Danilo Krummrich wrote:
-> The driver model defines the lifetime of the private data stored in (and
-> owned by) a bus device to be valid from when the driver is bound to a
-> device (i.e. from successful probe()) until the driver is unbound from
-> the device.
->
-> This is already taken care of by the Rust implementation of the driver
-> model. However, we still ask drivers to return a Result<Pin<KBox<Self>>>
-> from probe().
->
-> Unlike in C, where we do not have the concept of initializers, but
-> rather deal with uninitialized memory, drivers can just return an
-> impl PinInit<Self, Error> instead.
->
-> This contributed to more clarity to the fact that a driver returns it's
-> device private data in probe() and the Rust driver model owns the data,
-> manages the lifetime and - considering the lifetime - provides (safe)
-> accessors for the driver.
->
-> Hence, let probe() functions return an impl PinInit<Self, Error> instead
-> of Result<Pin<KBox<Self>>>.
->
-> Signed-off-by: Danilo Krummrich <dakr@kernel.org>
-> ---
-> Depends on a minor pin-init patch [1] (Benno will send it to the list
-> soon). A branch with this patch and the pin-init dependency is available
-> in [2].
+Mirroring drivers/macintosh/apm_emu.c, this means that
+  modprobe apm_power && modprobe $anotherdriver && modprobe -r apm_power
+leaves $anotherdriver's apm_get_power_status instead of deleting it.
 
-I sent the patch to the list:
-
-    https://lore.kernel.org/all/20251016210541.650056-1-lossin@kernel.org
-
+Fixes: 3788ec932bfd ("[BATTERY] APM emulation driver for class batteries")
+Signed-off-by: Ahelenia Ziemia=C5=84ska <nabijaczleweli@nabijaczleweli.xyz>
 ---
-Cheers,
-Benno
+ drivers/power/supply/apm_power.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
->
-> [1] https://github.com/Rust-for-Linux/pin-init/pull/86/commits
-> [2] https://git.kernel.org/pub/scm/linux/kernel/git/dakr/linux.git/log/?h=
-=3Dprobe_return
-> ---
->  drivers/cpufreq/rcpufreq_dt.rs        |  4 +-
->  drivers/gpu/drm/nova/driver.rs        |  4 +-
->  drivers/gpu/drm/tyr/driver.rs         |  4 +-
->  drivers/gpu/nova-core/driver.rs       | 34 +++++++----------
->  rust/kernel/auxiliary.rs              |  6 +--
->  rust/kernel/cpufreq.rs                |  4 +-
->  rust/kernel/device.rs                 |  9 ++++-
->  rust/kernel/driver.rs                 |  4 +-
->  rust/kernel/io/mem.rs                 |  8 ++--
->  rust/kernel/pci.rs                    |  8 ++--
->  rust/kernel/platform.rs               | 12 +++---
->  rust/kernel/usb.rs                    |  4 +-
->  samples/rust/rust_debugfs.rs          | 21 ++++++-----
->  samples/rust/rust_dma.rs              | 37 +++++++++----------
->  samples/rust/rust_driver_auxiliary.rs | 25 +++++--------
->  samples/rust/rust_driver_pci.rs       | 53 +++++++++++++--------------
->  samples/rust/rust_driver_platform.rs  |  6 +--
->  samples/rust/rust_driver_usb.rs       |  5 +--
->  18 files changed, 117 insertions(+), 131 deletions(-)
+diff --git a/drivers/power/supply/apm_power.c b/drivers/power/supply/apm_po=
+wer.c
+index 9236e0078578..9933cdc5c387 100644
+--- a/drivers/power/supply/apm_power.c
++++ b/drivers/power/supply/apm_power.c
+@@ -364,7 +364,8 @@ static int __init apm_battery_init(void)
+=20
+ static void __exit apm_battery_exit(void)
+ {
+-	apm_get_power_status =3D NULL;
++	if (apm_get_power_status =3D=3D apm_battery_apm_get_power_status)
++		apm_get_power_status =3D NULL;
+ }
+=20
+ module_init(apm_battery_init);
+--=20
+2.39.5
+
+--pix4lgskgslujr3l
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmjxbB4ACgkQvP0LAY0m
+WPFqCQ//fxglfRv+qlGsadB3URTAE0Xt/umw7kK0stSIuGUw7Z/JCuRYCWlqzEPg
+UhdbIOsI/2yf1r9dhpurnCaBnx++5HibSgGcxfYWMhCWePxYnx7ebm1HBUB/oYnx
+HOPtXv4scCUnnYXvitR1mtNIetUndMg7EAsDjXd/fHaWI3clieY4mWapFHCmya1M
+Lx27ld4O8nQgYGsCi8tQO9tG87+Yqly6QUVJDPze1vf4EIr2WjJC0GkAS7wts/bx
+qqPdA681wqg9abFNKYRbcBnL9K1U4COgItX+zvgKqpuD+tIXKggK5JZxhVV/CDXN
+cCkp+vD1KJWPZtTaF05WCNhNw441NKxhFCgTYlo96OJou0APnlbc5JOt9UPCn+ZN
+wwzMaX78SLZxVwXdAebYaw5c5F41W1L0JSWpVG1ULOP6Aa/5KEMQnBu30f7n1Zum
+OlNabnWdVbW0Gzl5Qs9xLhtMry5/SLE6i/5xg+9pREadUoqrGXT02IieobiR94Za
+OW92QqWWpzdkOCmuxKxKR01k+vdii+o1iYcSET0QQE+m1HmgHjU8M5wmcZYZIguX
+L19OrRuF055SLDC16SjKVAgraCkR0E5M0otQLThk/jZME+gOqHctz4WW75NBGB2a
+HpJ9R3jEGVdy7xU+CioSWS7/Ch4r7Y8EPT22x3eXwPJhIEoW7Cs=
+=noJ1
+-----END PGP SIGNATURE-----
+
+--pix4lgskgslujr3l--
 
