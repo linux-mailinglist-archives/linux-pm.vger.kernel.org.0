@@ -1,164 +1,129 @@
-Return-Path: <linux-pm+bounces-36211-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36212-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2F39BE09B7
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Oct 2025 22:17:11 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 85B56BE173E
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Oct 2025 06:54:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 9CDBB4E5FD6
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Oct 2025 20:17:10 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 1B7764E4177
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Oct 2025 04:54:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0D4628EA72;
-	Wed, 15 Oct 2025 20:17:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 029872153D8;
+	Thu, 16 Oct 2025 04:54:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AdYkVMg5"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="k9W2Roms"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24D8C259C92;
-	Wed, 15 Oct 2025 20:17:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E1041F12F8
+	for <linux-pm@vger.kernel.org>; Thu, 16 Oct 2025 04:54:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760559427; cv=none; b=JHYtkJKIOWJcEsw1zNOchLxx+H7CQJ9RaMBSJNVzOVfrtjCwXgJ7Q1aN+SbKSDU7Xx7E8FFoABFQVGFIStmt99ygmrxMdAvDmmI41HIkdB/hf5byI/rkdhIXxVAv9aXZjzcurTMYeq1+PNhEkB75R5QZt0vrFrUoZpgodTGgSWM=
+	t=1760590481; cv=none; b=a77juFTj5QlmLYiKQrrTWz+fYuM6FeI/24GaVAbkGk+o7AoOafcSRkrL9hL7EhxVPrYlL6lqNgh9I6M47d3zzJhpNhdZ0fdfaF+Da0FWA9LARe30CWs766Zi9gGzpjX0CXnAtve3AVNK5R671PArXfqWaA7xaumHorEqekMx0yg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760559427; c=relaxed/simple;
-	bh=0v6EnKffs2NEkIH+eVz0aqecvPBLBrK+UWbvYlBHsO4=;
+	s=arc-20240116; t=1760590481; c=relaxed/simple;
+	bh=/Q6NfJWghWGNobhXEDBhXrQWhlfTOUPEdyfRJMrQ5PM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XC+Dl4uFxaFOSOPMATfNY75HDWWnzUPuF2gBT5ogyzVDLCaj4S4QovBhrstytk7RG6uCaVaCpM5GvKprEvwsva2yY8uaAdOUu/tByV8vid14A4Qk7FfIFnJ0YACXADoVmG5SXXI83ITfOvQyxgWF+R8X7DwhCV2M1akcEWe2RMg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AdYkVMg5; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760559426; x=1792095426;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0v6EnKffs2NEkIH+eVz0aqecvPBLBrK+UWbvYlBHsO4=;
-  b=AdYkVMg5pvBhBsr4ONF5nYlQNPbwWAzACpZ3mOk3ZuKimPn1Td/4d9VA
-   ac2pshgBrrrpWPYCPZt0y9NNqYMmm3L2pUszLBSmpxknAQdqNV4oMy4cK
-   lqMcS5O6YZJNgniaZqX/DsD6RTsAix9tfo7YpQv8EbnghDZrPqaOqbRwy
-   MEkOlqwpnPlufvYC/uYs3WSxno23B3ErUhMkmrTZtfaK2iW+yek+ROIAA
-   Id/5DxHZEwSPNAwBFykwicz8H74a4yJalF4Oum3MEGO+itCIQSXfX6VVs
-   vQPAJOhe1Tixz6/wdVV2ridoehO6zoWjv4QDCSIRR/KfYz8qx0EXQbKpv
-   Q==;
-X-CSE-ConnectionGUID: rbziwU0/SGSnb1OlyRwE+A==
-X-CSE-MsgGUID: FwI9n/jySgSbz4eypmEPgA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11583"; a="66396423"
-X-IronPort-AV: E=Sophos;i="6.19,232,1754982000"; 
-   d="scan'208";a="66396423"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2025 13:17:05 -0700
-X-CSE-ConnectionGUID: RPhexlMERmWcmPSSBcmGhw==
-X-CSE-MsgGUID: 6M4kJJQaRH+ciw5Js1Ynag==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,232,1754982000"; 
-   d="scan'208";a="219416290"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by orviesa001.jf.intel.com with ESMTP; 15 Oct 2025 13:16:59 -0700
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1v97vQ-0004CH-29;
-	Wed, 15 Oct 2025 20:16:49 +0000
-Date: Thu, 16 Oct 2025 04:16:19 +0800
-From: kernel test robot <lkp@intel.com>
-To: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Boris Brezillon <bbrezillon@kernel.org>,
-	Jassi Brar <jassisinghbrar@gmail.com>,
-	Chia-I Wu <olvaffe@gmail.com>, Chen-Yu Tsai <wenst@chromium.org>,
-	Steven Price <steven.price@arm.com>,
-	Liviu Dudau <liviu.dudau@arm.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	Kees Cook <kees@kernel.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>
-Cc: oe-kbuild-all@lists.linux.dev, kernel@collabora.com,
-	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, linux-hardening@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-Subject: Re: [PATCH v7 5/5] pmdomain: mediatek: Add support for MFlexGraphics
-Message-ID: <202510160419.8PPrVXUl-lkp@intel.com>
-References: <20251015-mt8196-gpufreq-v7-5-0a6435da2080@collabora.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=UgexEMv/wllP9yvo3CBKXCTkmbJlxHHGzFuXyO3F3He1Stu35WcOHZpuJN82J/2wK76807+qBXgbItfybzfY3mNPeSYJTC/TgqmLmeewQ4guDfHUGNPpimf4kSEsiz4aU8Jp/B/+nPcU5yz5k718NBoKcsd6RhleF82enjCUYMM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=k9W2Roms; arc=none smtp.client-ip=209.85.215.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-b62e7221351so233523a12.1
+        for <linux-pm@vger.kernel.org>; Wed, 15 Oct 2025 21:54:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1760590480; x=1761195280; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=jdHglGpSN3KxDuAvr8dPMfQT8EEnf8fGwUS/E78rcH8=;
+        b=k9W2Roms1z9Oth+D9VFUQ6ksuw/aqLt9bxMeo95+5mUJmAjf8V6qXHLv6KY/tfRoqD
+         bkEYogIJyzNZmemLP9Fr5KGzcTt6HOhv8Otv6oFeMQDJT8wFIxJw0cE5Iv2waqnCAUR3
+         sMtrObkC81MALTZGI/Bc7p8Vjvkz+bDOLWoaQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760590480; x=1761195280;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jdHglGpSN3KxDuAvr8dPMfQT8EEnf8fGwUS/E78rcH8=;
+        b=olELzwbezaOEWZ4AR7uYqauyknnBOfbnOFmHuxPgutVNjhTDCtUwYXgTsuy0ttg8No
+         7hM69AL9rVLin9U0vfT49kYsBvHt2/nN1gBVFuC6hJJWgZkpmU+LE1U6d9txjPUhh774
+         7AWJCw/dVnKmQJlUkO44y/JHjRaMfcHH/fcIwOQ+AmOP8C78YqcstImuiy2O0BoBmeKv
+         M5cvPF9yCapdkq/a76Jb6GdXh9DW09shKxbP9YN0ZsBJVeK3jWUNziirT3nTJb92CrLT
+         BbtE3gMtdXxVWw9JmIOmpuhfxqUeF+PD4v5X8x+0X6MXzAmEfvuArQKQXfLLCRqyF7zC
+         wibA==
+X-Forwarded-Encrypted: i=1; AJvYcCXgnvVLiaKrxKNnjrcteRNieLX6uTYu7sK232X+2MmwH9H0CxUswROXnAHfRhwz3lfwVhhwbHcjJQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yysk2tnflF1Ri156MEruOvjNpke4zj3MJkh9cB/pO2a3IXDZGU+
+	jpe3xdKS6FIW8KjS+gy8vbjovvcJrDhpSTQ8AJQG1UfrdQcdSaHAimFNJHnOGt32iw==
+X-Gm-Gg: ASbGncsyYqReP/IGH+31mx+EZPK+nAj8droqDbbgYmHHox3Yu6mAWjEr+Q3O+WRGpdJ
+	LiTA9VwVVjAPkt0uIgRyYHJkSgmF4y6/AmTj0znhN71KNYfc75INySrYFA4WjlLz6PJ82hSNUR3
+	Xgey7r02dOWjh1T/gfJ5OhQ0xwkBKxrzoYwGVA9IBXToVQFnkZjqqkdNl6Ji9/2HplwfJE6sru2
+	6V52DDpCSMYtM/t7TorzupkajEvnKDuRUmGGj33yoHGx9OP+cwArkWcSaGb/s5PTLDXFbYMeTq2
+	WEU1tbbFZORv6YwLnwjJWMEdyZHGDdlpwcxFm98PAtQ1JhJu7TfbcR8GCB2bKepurqDG529zAB/
+	OjrnDIePBfdXQqR7CdrHh8Wyhjsft8VznM3Ig0ooI+YFgWSNb7RWcV5gX12Lq0a6BkrwaCjOGeB
+	RBuVE=
+X-Google-Smtp-Source: AGHT+IE0ih/CjX4ELruc5guQe7p/S9Ic1AWEutevogqpYPhg2145lGm3u6x2XmjWR3oPrwyHajo9KA==
+X-Received: by 2002:a17:903:1510:b0:267:776b:a31a with SMTP id d9443c01a7336-290272c188dmr388977865ad.29.1760590479719;
+        Wed, 15 Oct 2025 21:54:39 -0700 (PDT)
+Received: from google.com ([2401:fa00:8f:203:18d7:f088:3b2a:6563])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29099afbdb5sm14082495ad.104.2025.10.15.21.54.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Oct 2025 21:54:39 -0700 (PDT)
+Date: Thu, 16 Oct 2025 13:54:34 +0900
+From: Sergey Senozhatsky <senozhatsky@chromium.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Sergey Senozhatsky <senozhatsky@chromium.org>, 
+	Christian Loehle <christian.loehle@arm.com>, "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Artem Bityutskiy <artem.bityutskiy@linux.intel.com>, 
+	Sasha Levin <sashal@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, Tomasz Figa <tfiga@chromium.org>, 
+	stable@vger.kernel.org
+Subject: Re: stable: commit "cpuidle: menu: Avoid discarding useful
+ information" causes regressions
+Message-ID: <ry5gjxocyzo6waonjyc7hgvo7bc6riqpmy6l3f2au7dm4j5dtd@shma7ngcqjuk>
+References: <36iykr223vmcfsoysexug6s274nq2oimcu55ybn6ww4il3g3cv@cohflgdbpnq7>
+ <08529809-5ca1-4495-8160-15d8e85ad640@arm.com>
+ <2zreguw4djctgcmvgticnm4dctcuja7yfnp3r6bxaqon3i2pxf@thee3p3qduoq>
+ <CAJZ5v0h-=MU2uwC0+TZy0WpyyMpFibW58=t68+NPqE0W9WxWtQ@mail.gmail.com>
+ <ns2dglxkdqiidj445xal2w4onk56njkzllgoads377oaix7wuh@afvq7yinhpl7>
+ <a9857ceb-bf3e-4229-9c2f-ecab6eb2e1b0@arm.com>
+ <CAJZ5v0iF0NE07KcK4J2_Pko-1p2wuQXjLSD7iOTBr4QcDCX4vA@mail.gmail.com>
+ <wd3rjb7lfwmi2cnx3up3wkfiv4tamoz66vgtv756rfaqmwaiwf@7wapktjpctsj>
+ <CAJZ5v0g=HNDEbD=nTGNKtSex1E2m2PJmvz1V4HoEFDbdZ7mN3g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20251015-mt8196-gpufreq-v7-5-0a6435da2080@collabora.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0g=HNDEbD=nTGNKtSex1E2m2PJmvz1V4HoEFDbdZ7mN3g@mail.gmail.com>
 
-Hi Nicolas,
+On (25/10/15 15:08), Rafael J. Wysocki wrote:
+> On Wed, Oct 15, 2025 at 3:56 AM Sergey Senozhatsky
+> <senozhatsky@chromium.org> wrote:
+> >
+> > On (25/10/14 16:02), Rafael J. Wysocki wrote:
+> > > > >> Would it be possible to check if the mainline has this issue?  That
+> > > > >> is, compare the benchmark results on unmodified 6.17 (say) and on 6.17
+> > > > >> with commit 85975daeaa4 reverted?
+> > > > >
+> > > > > I don't think mainline kernel can run on those devices (due to
+> > > > > a bunch of downstream patches).  Best bet is 6.12, I guess.
+> > > >
+> > > > Depending on what Rafael is expecting here you might just get
+> > > > away with copying menu.c from mainline, the interactions to other
+> > > > subsystems are limited fortunately.
+> > >
+> > > Yeah, that'd be sufficiently close.
+> >
+> > Test results for menu.c from linux-next are within regressed range: 78.5
+> 
+> So please check if the attached patch makes any difference.
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on 40a3abb0f3e5229996c8ef0498fc8d8a0c2bd64f]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Nicolas-Frattaroli/dt-bindings-gpu-mali-valhall-csf-add-mediatek-mt8196-mali-variant/20251015-165256
-base:   40a3abb0f3e5229996c8ef0498fc8d8a0c2bd64f
-patch link:    https://lore.kernel.org/r/20251015-mt8196-gpufreq-v7-5-0a6435da2080%40collabora.com
-patch subject: [PATCH v7 5/5] pmdomain: mediatek: Add support for MFlexGraphics
-config: arm64-randconfig-002-20251016 (https://download.01.org/0day-ci/archive/20251016/202510160419.8PPrVXUl-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 13.4.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251016/202510160419.8PPrVXUl-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510160419.8PPrVXUl-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from include/linux/preempt.h:11,
-                    from include/linux/spinlock.h:56,
-                    from include/linux/swait.h:7,
-                    from include/linux/completion.h:12,
-                    from drivers/pmdomain/mediatek/mtk-mfg-pmdomain.c:8:
-   In function '__free_device_node',
-       inlined from 'mtk_mfg_probe' at drivers/pmdomain/mediatek/mtk-mfg-pmdomain.c:877:22:
->> include/linux/of.h:138:51: warning: 'shmem' is used uninitialized [-Wuninitialized]
-     138 | DEFINE_FREE(device_node, struct device_node *, if (_T) of_node_put(_T))
-         |                                                   ^
-   include/linux/cleanup.h:211:78: note: in definition of macro 'DEFINE_FREE'
-     211 |         static inline void __free_##_name(void *p) { _type _T = *(_type *)p; _free; }
-         |                                                                              ^~~~~
-   drivers/pmdomain/mediatek/mtk-mfg-pmdomain.c: In function 'mtk_mfg_probe':
-   drivers/pmdomain/mediatek/mtk-mfg-pmdomain.c:877:29: note: 'shmem' was declared here
-     877 |         struct device_node *shmem __free(device_node);
-         |                             ^~~~~
-
-
-vim +/shmem +138 include/linux/of.h
-
-0829f6d1f69e4f Pantelis Antoniou 2013-12-13  126  
-0f22dd395fc473 Grant Likely      2012-02-15  127  #ifdef CONFIG_OF_DYNAMIC
-0f22dd395fc473 Grant Likely      2012-02-15  128  extern struct device_node *of_node_get(struct device_node *node);
-0f22dd395fc473 Grant Likely      2012-02-15  129  extern void of_node_put(struct device_node *node);
-0f22dd395fc473 Grant Likely      2012-02-15  130  #else /* CONFIG_OF_DYNAMIC */
-3ecdd0515287af Rob Herring       2011-12-13  131  /* Dummy ref counting routines - to be implemented later */
-3ecdd0515287af Rob Herring       2011-12-13  132  static inline struct device_node *of_node_get(struct device_node *node)
-3ecdd0515287af Rob Herring       2011-12-13  133  {
-3ecdd0515287af Rob Herring       2011-12-13  134  	return node;
-3ecdd0515287af Rob Herring       2011-12-13  135  }
-0f22dd395fc473 Grant Likely      2012-02-15  136  static inline void of_node_put(struct device_node *node) { }
-0f22dd395fc473 Grant Likely      2012-02-15  137  #endif /* !CONFIG_OF_DYNAMIC */
-9448e55d032d99 Jonathan Cameron  2024-02-25 @138  DEFINE_FREE(device_node, struct device_node *, if (_T) of_node_put(_T))
-3ecdd0515287af Rob Herring       2011-12-13  139  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+From what I can tell the patch fixes it!
 
