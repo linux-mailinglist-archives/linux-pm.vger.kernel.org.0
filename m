@@ -1,61 +1,57 @@
-Return-Path: <linux-pm+bounces-36294-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36295-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E973DBE4905
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Oct 2025 18:25:27 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D01A9BE4911
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Oct 2025 18:27:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ADEC058252C
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Oct 2025 16:22:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 250EC3A49F3
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Oct 2025 16:25:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8421301000;
-	Thu, 16 Oct 2025 16:22:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECB91329C49;
+	Thu, 16 Oct 2025 16:25:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XFmb/iac"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cDb8Huj+"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EC8E23EAB4;
-	Thu, 16 Oct 2025 16:22:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC06A23EABA;
+	Thu, 16 Oct 2025 16:25:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760631738; cv=none; b=JbcrO7EK7QpYn9VjBVfN8cHfZaomkFxNBO9L499G1hydA4zlNnmdatg5BorhG9ZiROmQkS/1iKRLgcB5v/BvRsyClv8WHyxKpnm/8Yo91L2R60e8mm9KFLJQHRL/2zKGt6QOeJuSP9dH/PfQgpxApIBT4nD6x3wFqw2kLXWKuCE=
+	t=1760631939; cv=none; b=twqaNaIZ8c3Rq2lngbsFWNiOYG3GBGYI8YYP0ijYurHrEQtA4XkPyen+fvj040VdPcbJNfbIx35EPsKErOU6TE8OVMdAdBPM+upmD91bOM4p2i7UjuUk1LkFZrDwkftlM1EoXSE7FzHRP4CCNAllq6KGowPVBNCM+HpUAmax9uU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760631738; c=relaxed/simple;
-	bh=/vPCtUNxUxUrURmVRLH/Zanu6E4IpRsjCbDrKYN9pFU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ZbKxLl1HI8bREcJaAhi6Zj5w2WS6wCbhO/Ej3Qm6/l2igOkUjnyZvHG60RcFEHZzcTSmlKcG+BtKUeIxW8N2+AC53NC6OyUT2MTwamwN6kIMuKKv/YTtjQK5hB6Ycs5Xo1AOEUceWIAOV3d9qEeG9S/zPFY7LUPikqn3DUTco5U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XFmb/iac; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 346B9C4CEF1;
-	Thu, 16 Oct 2025 16:22:15 +0000 (UTC)
+	s=arc-20240116; t=1760631939; c=relaxed/simple;
+	bh=XY16fYS6OOP9xjM5VB6SenXMoSMfGpwGBh+ou4x3omo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=DMZAvCBlCKdkvSU6kD8HgrQ7eKFqZI56A2uX3mDUMbTHz3lrzEpPeer29gIfbNioQBPly2vhk8/8FITZDy4HNKIkQFEkw8P2DK5V8MMmV41cddz0v5GSeQ+fvMM0+Ahypx5Z2riz4J2tx+XpQtBBnOySXjcD7vJgEAangnTWREo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cDb8Huj+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8154DC4CEF1;
+	Thu, 16 Oct 2025 16:25:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760631738;
-	bh=/vPCtUNxUxUrURmVRLH/Zanu6E4IpRsjCbDrKYN9pFU=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=XFmb/iac5f9BP5PjQCueO37qH4g3mCrQlxiuKA2Q0OLdye+hxGILZa6uDC7koEjTk
-	 Slf+wcUhD4Ds+psK5ut6EXuXQzBl9SQM4bi8RhSf1CTIav9rnY4lYAGMXwgqthm8Jo
-	 7kLUXI1qLgmSrIH/dlBDh+gBx+UaKJxeT7O2O8FEf+vQfMt6DPNWyd19mlowf2Z9Sx
-	 ySp7W0/yr+SC0rslmkby6haBi1plBmA9KGemBaIc14qvdicpJSL0DYn8DpXAqmq1aQ
-	 GcLcT8vWEqIhUq9IYm6A1TSJlwEGRtn8DuCKtkywhIFDK6m/XvHJTGc0Hhp+1Mt7um
-	 IG1oDge4kc3dg==
+	s=k20201202; t=1760631939;
+	bh=XY16fYS6OOP9xjM5VB6SenXMoSMfGpwGBh+ou4x3omo=;
+	h=From:To:Cc:Subject:Date:From;
+	b=cDb8Huj+Nb1b74dUMKRfDINKIB0wlM5mMXrFYZP2igHn5sUTdKiC5/pE1ACZRpMRH
+	 z5V92wh/zu4WKGzjMW3UUnWi+5vf/GhgPhpml5tnX947zVb29UCoLwlmtVtB4NW03I
+	 QBktHZKavXf66oJOqsgTSqDmWjAH6XexGOirVAvqMvX+aVUL72B0mzcULIxnOH8q54
+	 3NnISlgr6J6u8WLe2peZxDlTz+ERw8R4DQcW1Tw41Bc/kqGb9X0liYKaDjm7mN4TNk
+	 ySJFh2NlrOX6N/10NkidA+chc8A0zjBvRpWR3kgwO5ZkHLgbfibmL2ZIb3CMLhkD8m
+	 cCnf2UqfeLb8g==
 From: "Rafael J. Wysocki" <rafael@kernel.org>
 To: Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Dietmar Eggemann <dietmar.eggemann@arm.com>,
+Cc: Sergey Senozhatsky <senozhatsky@chromium.org>,
+ LKML <linux-kernel@vger.kernel.org>,
  Christian Loehle <christian.loehle@arm.com>,
- Yaxiong Tian <tianyaxiong@kylinos.cn>
+ Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
+ Tomasz Figa <tfiga@chromium.org>, Doug Smythies <dsmythies@telus.net>
 Subject:
- [PATCH v3 3/3] cpufreq: intel_pstate: hybrid: Adjust energy model rules
-Date: Thu, 16 Oct 2025 18:22:13 +0200
-Message-ID: <5932894.DvuYhMxLoT@rafael.j.wysocki>
+ [PATCH v1] cpuidle: governors: menu: Predict longer idle time when in doubt
+Date: Thu, 16 Oct 2025 18:25:35 +0200
+Message-ID: <4687373.LvFx2qVVIh@rafael.j.wysocki>
 Organization: Linux Kernel Development
-In-Reply-To: <3394529.aeNJFYEL58@rafael.j.wysocki>
-References:
- <2404176.ElGaqSPkdT@rafael.j.wysocki> <3394529.aeNJFYEL58@rafael.j.wysocki>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -67,89 +63,83 @@ Content-Type: text/plain; charset="UTF-8"
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Instead of using HWP-to-frequency scaling factors for computing cost
-coefficients in the energy model used on hybrid systems, which is
-fragile, rely on CPU type information that is easily accessible now and
-the information on whether or not L3 cache is present for this purpose.
+It is reported that commit 85975daeaa4d ("cpuidle: menu: Avoid discarding
+useful information") led to a performance regression on Intel Jasper Lake
+systems because it reduced the time spent by CPUs in idle state C7 which
+is correlated to the maximum frequency the CPUs can get to because of an
+average running power limit [1].
 
-This also allows the cost coefficients for P-cores to be adjusted so
-that they start to be populated somewhat earlier (that is, before
-E-cores are loaded up to their full capacity).
+Before that commit, get_typical_interval() would have returned UINT_MAX
+whenever it had been unable to make a high-confidence prediction which
+had led to selecting the deepest available idle state too often and
+both power and performance had been inadequate as a result of that in
+some cases.  This was not a problem on systems with relatively
+aggressive average running power limits, like the Jasper Lake systems
+in question, because on those systems it was compensated by the ability
+to run CPUs at relatively higher frequencies.
 
-In addition to the above, replace an inaccurate comment regarding the
-reason why the freq value is added to the cost in hybrid_get_cost().
+Commit 85975daeaa4d addressed that by causing get_typical_interval() to
+return a number based on the recent idle duration information available
+to it in those cases, but that number is usually smaller than the
+maximum idle duration observed recently which may be regarded as an
+overly optimistic choice.
 
+Namely, it may be argued that when the samples considered by
+get_typical_interval() are spread too much for a high-confidence
+prediction to be made, the function should fall back to returning a
+number that is likely to be an upper bound for the duration of the
+upcoming idle interval and that number needs to be at least equal to
+the maximum recently observed idle time.  Otherwise, the governor may
+miss an oportunity to reduce power without hurting performance in a
+noticeable way.  Of course, it may also be argued the other way around,
+but the available data indicate that get_typical_interval() should
+rather tend to return larger numbers as that causes the governor to
+behave more closely to its past behavior from before the problematic
+commit.
+
+Accordingly, modify get_typical_interval() to return the maximum
+recently observed idle time when it is unable to make a high-
+confidence prediction.
+
+Fixes: 85975daeaa4d ("cpuidle: menu: Avoid discarding useful information")
+Closes: https://lore.kernel.org/linux-pm/36iykr223vmcfsoysexug6s274nq2oimcu55ybn6ww4il3g3cv@cohflgdbpnq7/ [1]
+Reported-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+Tested-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc: All applicable <stable@vger.kernel.org>
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Reviewed-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
 ---
+ drivers/cpuidle/governors/menu.c |    6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-v2 -> v3:
-   * Reduce cost differences between CPU types by 1 (Tian, Christian)
-   * Add a tag from Dietmar
-
-Note: The other patches in the series have not changed.
-
-v1 -> v2: New patch
-
----
- drivers/cpufreq/intel_pstate.c |   35 ++++++++++++++---------------------
- 1 file changed, 14 insertions(+), 21 deletions(-)
-
---- a/drivers/cpufreq/intel_pstate.c
-+++ b/drivers/cpufreq/intel_pstate.c
-@@ -933,11 +933,8 @@ static int hybrid_active_power(struct de
- 			       unsigned long *freq)
+--- a/drivers/cpuidle/governors/menu.c
++++ b/drivers/cpuidle/governors/menu.c
+@@ -116,6 +116,7 @@ static void menu_update(struct cpuidle_d
+ static unsigned int get_typical_interval(struct menu_device *data)
  {
- 	/*
--	 * Create "utilization bins" of 0-40%, 40%-60%, 60%-80%, and 80%-100%
--	 * of the maximum capacity such that two CPUs of the same type will be
--	 * regarded as equally attractive if the utilization of each of them
--	 * falls into the same bin, which should prevent tasks from being
--	 * migrated between them too often.
-+	 * Create four "states" corresponding to 40%, 60%, 80%, and 100% of the
-+	 * full capacity.
- 	 *
- 	 * For this purpose, return the "frequency" of 2 for the first
- 	 * performance level and otherwise leave the value set by the caller.
-@@ -970,26 +967,22 @@ static bool hybrid_has_l3(unsigned int c
- static int hybrid_get_cost(struct device *dev, unsigned long freq,
- 			   unsigned long *cost)
- {
--	struct pstate_data *pstate = &all_cpu_data[dev->id]->pstate;
--
-+	/* Facilitate load balancing between CPUs of the same type. */
-+	*cost = freq;
- 	/*
--	 * The smaller the perf-to-frequency scaling factor, the larger the IPC
--	 * ratio between the given CPU and the least capable CPU in the system.
--	 * Regard that IPC ratio as the primary cost component and assume that
--	 * the scaling factors for different CPU types will differ by at least
--	 * 5% and they will not be above INTEL_PSTATE_CORE_SCALING.
-+	 * Adjust the cost depending on CPU type.
- 	 *
--	 * Add the freq value to the cost, so that the cost of running on CPUs
--	 * of the same type in different "utilization bins" is different.
--	 */
--	*cost = div_u64(100ULL * INTEL_PSTATE_CORE_SCALING, pstate->scaling) + freq;
--	/*
--	 * Increase the cost slightly for CPUs able to access L3 to avoid
--	 * touching it in case some other CPUs of the same type can do the work
--	 * without it.
-+	 * The idea is to start loading up LPE-cores before E-cores and start
-+	 * to populate E-cores when LPE-cores are utilized above 60% of the
-+	 * capacity.  Similarly, P-cores start to be populated when E-cores are
-+	 * utilized above 60% of the capacity.
- 	 */
--	if (hybrid_has_l3(dev->id))
-+	if (hybrid_get_cpu_type(dev->id) == INTEL_CPU_TYPE_ATOM) {
-+		if (hybrid_has_l3(dev->id)) /* E-core */
-+			*cost += 1;
-+	} else { /* P-core */
- 		*cost += 2;
-+	}
+ 	s64 value, min_thresh = -1, max_thresh = UINT_MAX;
++	unsigned int max_overall = 0;
+ 	unsigned int max, min, divisor;
+ 	u64 avg, variance, avg_sq;
+ 	int i;
+@@ -151,6 +152,9 @@ again:
+ 	if (!max)
+ 		return UINT_MAX;
  
- 	return 0;
- }
++	if (max_overall < max)
++		max_overall = max;
++
+ 	if (divisor == INTERVALS) {
+ 		avg >>= INTERVAL_SHIFT;
+ 		variance >>= INTERVAL_SHIFT;
+@@ -198,7 +202,7 @@ again:
+ 		 * maximum, so return the latter in that case.
+ 		 */
+ 		if (divisor >= INTERVALS / 2)
+-			return max;
++			return max_overall;
+ 
+ 		return UINT_MAX;
+ 	}
 
 
 
