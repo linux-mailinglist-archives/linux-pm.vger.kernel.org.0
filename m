@@ -1,212 +1,93 @@
-Return-Path: <linux-pm+bounces-36255-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36256-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5827FBE3A7B
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Oct 2025 15:19:40 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B78E5BE3AF4
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Oct 2025 15:23:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 179C658774E
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Oct 2025 13:19:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3A5E54069BD
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Oct 2025 13:23:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76738301712;
-	Thu, 16 Oct 2025 13:18:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35DD43191DD;
+	Thu, 16 Oct 2025 13:23:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B9t0vcS9"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5D6C32BF4E;
-	Thu, 16 Oct 2025 13:18:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.171
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9FDB5FDA7;
+	Thu, 16 Oct 2025 13:23:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760620736; cv=none; b=QX5dkTwmrKpQgxxgPPYHy9MVswH87bL/0ke6MiZFoQqwM+K78oo9NsawshxycPRcd0FH7hjQJXEghdZ88FR/iHD5rreltYVxSOmEVUKIVIGg/xlD7Toz1SmdoEg/Zapllj63Cy1R3PeoJwsdxnLWiQrqLN8EntUqzb4kqDV5Vvs=
+	t=1760621029; cv=none; b=G4817AtiVxZiKz1SIkw7mSAETpzSP44NAwrnMWXkVTOM4smMZ85d/7DadkjhZgT5MmvLMOTcCq0dU1/cPguo1VJZUEZbK+f1yuN1IzGT6zr2Lwej7vFv/5MnDgL3pC67+5HtRoSgw57FaibCMvEd7SKvRBTCekjNyyuDwco12jo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760620736; c=relaxed/simple;
-	bh=azS+cM6Lp8W1wqmvaDSOGvNQ1AiY4Nlu4oPCO3Z97RA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=c6hUGT3eC+QvkvIHGS7Csmn/h2k+zkmox6Fr4Z7mYV4M2DBLlLUvyBzZjgsmx1cyp+r+jfRakA17EhPiGWOSYKs+oh0HF+Qv1x4AFmE6hKpwRjNYfEG9JFElC1wlJNA8Zetz1XrUX+1xJx3RPGrY/squ2N4UbZV3yDhP9oEU7p0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com; spf=pass smtp.mailfrom=renesas.com; arc=none smtp.client-ip=210.160.252.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=renesas.com
-X-CSE-ConnectionGUID: KtNcrM/sRKicY28FFlpLWA==
-X-CSE-MsgGUID: C/XDfOunRoyvKHSAMEonLg==
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie5.idc.renesas.com with ESMTP; 16 Oct 2025 22:13:51 +0900
-Received: from vm01.adwin.renesas.com (unknown [10.226.92.8])
-	by relmlir6.idc.renesas.com (Postfix) with ESMTP id 5BDE741CB11F;
-	Thu, 16 Oct 2025 22:13:46 +0900 (JST)
-From: Ovidiu Panait <ovidiu.panait.rb@renesas.com>
-To: john.madieu.xa@bp.renesas.com,
-	rafael@kernel.org,
-	daniel.lezcano@linaro.org,
-	rui.zhang@intel.com,
-	lukasz.luba@arm.com,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	geert+renesas@glider.be,
-	magnus.damm@gmail.com,
-	mturquette@baylibre.com,
-	sboyd@kernel.org
-Cc: linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	linux-clk@vger.kernel.org
-Subject: [PATCH 3/3] arm64: dts: renesas: r9a09g057: Add TSU nodes
-Date: Thu, 16 Oct 2025 13:13:27 +0000
-Message-ID: <20251016131327.19141-4-ovidiu.panait.rb@renesas.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20251016131327.19141-1-ovidiu.panait.rb@renesas.com>
-References: <20251016131327.19141-1-ovidiu.panait.rb@renesas.com>
+	s=arc-20240116; t=1760621029; c=relaxed/simple;
+	bh=oPb0Im8WtoroK+cXhb4e0SOwboGZR2dvctqtPYfvUIs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=s8loUwy7/ik5985TYymtAHHp//JgnHFityRJBOoCVZsUVip7mH6+KK9GkQ3DIgREGxxxn2Ps9q4LLMAZofvdr7V2gPTVn3qT4g8Z7ngx7wLkcuu2e4+7lejxA9/vgxo/e6P/GBN4irAjD1GJLTbMFiR+aqPqn6/1OWOTGOKGf7c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B9t0vcS9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7691BC4CEF1;
+	Thu, 16 Oct 2025 13:23:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1760621027;
+	bh=oPb0Im8WtoroK+cXhb4e0SOwboGZR2dvctqtPYfvUIs=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=B9t0vcS99VjyCpDyIB6uqcqQGWz9LAGxV80HpxxpMm3HGRqgPFbM9bHyVP6SakKjC
+	 qmGnig8LnrGh1RH5kKmzOmB70G+OQepzITjcuwQLCHOpUuZP6A5gIJ+567krB35ei0
+	 u4hTtrZKoEXtTck2oisBK6TrJN6ewX/kMHmZ0dcf4kwK54rl9w4y5qJpdTligM/xVd
+	 sinTmQrGSM6Lwr5oQB9i5cUmIhNJDpCHodXoiHBAOCVkPDBhg+WyCuS90UP6R9VFhZ
+	 LQ9DEEGKG32yYLCjweZ7r2cFyhMUwbyFyR1w+b4eSu8nuYcfep96kYpE0EjNsO4Jjp
+	 anJRi/+6Rqofw==
+Message-ID: <6e8fa195-d168-4a52-ae67-6a5be74e01b2@kernel.org>
+Date: Thu, 16 Oct 2025 16:23:39 +0300
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v7 03/10] dt-bindings: interconnect: Add Qualcomm IPQ5424
+ NSSNOC IDs
+To: Luo Jie <quic_luoj@quicinc.com>, Bjorn Andersson <andersson@kernel.org>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Varadarajan Narayanan <quic_varada@quicinc.com>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Anusha Rao <quic_anusha@quicinc.com>,
+ Devi Priya <quic_devipriy@quicinc.com>,
+ Manikanta Mylavarapu <quic_mmanikan@quicinc.com>,
+ Philipp Zabel <p.zabel@pengutronix.de>,
+ Richard Cochran <richardcochran@gmail.com>,
+ Konrad Dybcio <konradybcio@kernel.org>
+Cc: linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+ devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+ netdev@vger.kernel.org, quic_kkumarcs@quicinc.com, quic_linchen@quicinc.com,
+ quic_leiwei@quicinc.com, quic_pavir@quicinc.com, quic_suruchia@quicinc.com
+References: <20251014-qcom_ipq5424_nsscc-v7-0-081f4956be02@quicinc.com>
+ <20251014-qcom_ipq5424_nsscc-v7-3-081f4956be02@quicinc.com>
+From: Georgi Djakov <djakov@kernel.org>
+Content-Language: en-US
+In-Reply-To: <20251014-qcom_ipq5424_nsscc-v7-3-081f4956be02@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-The Renesas RZ/V2H SoC includes a Thermal Sensor Unit (TSU) block designed
-to measure the junction temperature. The device provides real-time
-temperature measurements for thermal management, utilizing two dedicated
-channels for temperature sensing:
-- TSU0, which is located near the DRP-AI block
-- TSU1, which is located near the CPU and DRP-AI block
+On 10/14/25 5:35 PM, Luo Jie wrote:
+> Add the NSSNOC master/slave ids for Qualcomm IPQ5424 network subsystem
+> (NSS) hardware blocks. These will be used by the gcc-ipq5424 driver
+> that provides the interconnect services by using the icc-clk framework.
+> 
+> Acked-by: Rob Herring (Arm) <robh@kernel.org>
+> Signed-off-by: Luo Jie <quic_luoj@quicinc.com>
 
-Since TSU1 is physically closer the CPU and the highest temperature
-spot, it is used for CPU throttling through a passive trip and cooling
-map. TSU0 is configured only with a critical trip.
+Acked-by: Georgi Djakov <djakov@kernel.org>
 
-Add TSU nodes along with thermal zones and keep them enabled in the SoC
-DTSI.
-
-Signed-off-by: Ovidiu Panait <ovidiu.panait.rb@renesas.com>
----
- arch/arm64/boot/dts/renesas/r9a09g057.dtsi | 75 ++++++++++++++++++++++
- 1 file changed, 75 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/renesas/r9a09g057.dtsi b/arch/arm64/boot/dts/renesas/r9a09g057.dtsi
-index e426b9978e22..e88cfc965415 100644
---- a/arch/arm64/boot/dts/renesas/r9a09g057.dtsi
-+++ b/arch/arm64/boot/dts/renesas/r9a09g057.dtsi
-@@ -65,6 +65,7 @@ cpu0: cpu@0 {
- 			next-level-cache = <&L3_CA55>;
- 			enable-method = "psci";
- 			clocks = <&cpg CPG_CORE R9A09G057_CA55_0_CORE_CLK0>;
-+			#cooling-cells = <2>;
- 			operating-points-v2 = <&cluster0_opp>;
- 		};
- 
-@@ -75,6 +76,7 @@ cpu1: cpu@100 {
- 			next-level-cache = <&L3_CA55>;
- 			enable-method = "psci";
- 			clocks = <&cpg CPG_CORE R9A09G057_CA55_0_CORE_CLK1>;
-+			#cooling-cells = <2>;
- 			operating-points-v2 = <&cluster0_opp>;
- 		};
- 
-@@ -85,6 +87,7 @@ cpu2: cpu@200 {
- 			next-level-cache = <&L3_CA55>;
- 			enable-method = "psci";
- 			clocks = <&cpg CPG_CORE R9A09G057_CA55_0_CORE_CLK2>;
-+			#cooling-cells = <2>;
- 			operating-points-v2 = <&cluster0_opp>;
- 		};
- 
-@@ -95,6 +98,7 @@ cpu3: cpu@300 {
- 			next-level-cache = <&L3_CA55>;
- 			enable-method = "psci";
- 			clocks = <&cpg CPG_CORE R9A09G057_CA55_0_CORE_CLK3>;
-+			#cooling-cells = <2>;
- 			operating-points-v2 = <&cluster0_opp>;
- 		};
- 
-@@ -285,6 +289,32 @@ sys: system-controller@10430000 {
- 			resets = <&cpg 0x30>;
- 		};
- 
-+		tsu0: thermal@11000000 {
-+			compatible = "renesas,r9a09g057-tsu", "renesas,r9a09g047-tsu";
-+			reg = <0 0x11000000 0 0x1000>;
-+			interrupts = <GIC_SPI 248 IRQ_TYPE_EDGE_RISING>,
-+				     <GIC_SPI 249 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "adi", "adcmpi";
-+			clocks = <&cpg CPG_MOD 0x109>;
-+			resets = <&cpg 0xf7>;
-+			power-domains = <&cpg>;
-+			#thermal-sensor-cells = <0>;
-+			renesas,tsu-trim = <&sys 0x320>;
-+		};
-+
-+		tsu1: thermal@14002000 {
-+			compatible = "renesas,r9a09g057-tsu", "renesas,r9a09g047-tsu";
-+			reg = <0 0x14002000 0 0x1000>;
-+			interrupts = <GIC_SPI 250 IRQ_TYPE_EDGE_RISING>,
-+				     <GIC_SPI 251 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "adi", "adcmpi";
-+			clocks = <&cpg CPG_MOD 0x10a>;
-+			resets = <&cpg 0xf8>;
-+			power-domains = <&cpg>;
-+			#thermal-sensor-cells = <0>;
-+			renesas,tsu-trim = <&sys 0x330>;
-+		};
-+
- 		xspi: spi@11030000 {
- 			compatible = "renesas,r9a09g057-xspi", "renesas,r9a09g047-xspi";
- 			reg = <0 0x11030000 0 0x10000>,
-@@ -1326,6 +1356,51 @@ stmmac_axi_setup: stmmac-axi-config {
- 		snps,blen = <16 8 4 0 0 0 0>;
- 	};
- 
-+	thermal-zones {
-+		sensor1_thermal: sensor1-thermal {
-+			polling-delay = <1000>;
-+			polling-delay-passive = <250>;
-+			thermal-sensors = <&tsu0>;
-+
-+			trips {
-+				sensor1_crit: sensor1-crit {
-+					temperature = <120000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		sensor2_thermal: sensor2-thermal {
-+			polling-delay = <1000>;
-+			polling-delay-passive = <250>;
-+			thermal-sensors = <&tsu1>;
-+
-+			cooling-maps {
-+				map0 {
-+					trip = <&sensor2_target>;
-+					cooling-device = <&cpu0 0 3>, <&cpu1 0 3>,
-+							 <&cpu2 0 3>, <&cpu3 0 3>;
-+					contribution = <1024>;
-+				};
-+			};
-+
-+			trips {
-+				sensor2_target: trip-point {
-+					temperature = <95000>;
-+					hysteresis = <1000>;
-+					type = "passive";
-+				};
-+
-+				sensor2_crit: sensor2-crit {
-+					temperature = <120000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+	};
-+
- 	timer {
- 		compatible = "arm,armv8-timer";
- 		interrupts = <GIC_PPI 13 IRQ_TYPE_LEVEL_LOW>,
--- 
-2.51.0
-
+> ---
+>   include/dt-bindings/interconnect/qcom,ipq5424.h | 20 ++++++++++++++++++++
+>   1 file changed, 20 insertions(+)
+> 
 
