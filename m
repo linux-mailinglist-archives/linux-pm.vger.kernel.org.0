@@ -1,264 +1,240 @@
-Return-Path: <linux-pm+bounces-36299-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36300-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E8B5EBE5033
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Oct 2025 20:13:38 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 807A3BE52DC
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Oct 2025 21:08:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C44DC4245B7
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Oct 2025 18:13:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B050E4843F5
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Oct 2025 19:07:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93819226541;
-	Thu, 16 Oct 2025 18:13:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3688C246760;
+	Thu, 16 Oct 2025 19:07:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="PSaeOqi9";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="v9WTW5Q0";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="mgOc4fWp";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="LqSD4NVW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dd3WmlMk"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADF70223DC1
-	for <linux-pm@vger.kernel.org>; Thu, 16 Oct 2025 18:13:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 001F5242D70;
+	Thu, 16 Oct 2025 19:07:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760638400; cv=none; b=WZE9b/wbihR8xk3dHylx7a3eFpUEA/3k1yQ7VOECqns2RLNMpqcgcud+n/d0EGneyAtcOlj5cuk7tBcT9wlwbPe0B/1AiSJN8YRqwA8KndbDroGbLOTx2NWK9TY+CaYOmJbrlpNUo8ySMEWMAoxF9FJHQJiFXiTk8cofOKbT4QY=
+	t=1760641632; cv=none; b=XcgMxlee7nBSak0YEuZ43LInpd66CABBOu/ppv3GK5chttu/PzvmZ0YCB+W/ZMuFy+vAaw7usL4CUat6lBl3tLFX3Cbd1h9nPAof4WK0hpky+T5ucFvUhBKGGZG/ONMnfm4kvbnP481XhrewxZiyXFD5LB/Ur2YqDLF+CkTnUDU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760638400; c=relaxed/simple;
-	bh=5vo4Zfhwr+S7XtbJbcIq277w8DiqH8TsgSNcOlGyI4c=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=JJ4h5D0ZCz5r06WcrUZwp3i23h/MtbwGNckc/SHZIR8s1JDwxqr2yQey87HwDHh1lXKk1zKa70A6lJcgjO2lId23+F7JTL3WW6zG8rPOje3eN5MTkx2OaFRFSL0L0QhEk0gkhfsqdD3/8tqf8CNiApEmIYjdQclmfRkDpQcSwR0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=PSaeOqi9; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=v9WTW5Q0; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=mgOc4fWp; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=LqSD4NVW; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 0051821DB7;
-	Thu, 16 Oct 2025 18:13:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1760638396; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=hXt0HYhwDbekzTJKQtnkmPdsKEmx8+QLoAWrJr+AuHw=;
-	b=PSaeOqi97XxN25N8+xX5ofD3mqXKKqyLYdL4FfCv8SgXpDPP96vCtB7wMCLkufqtBe4kGh
-	/qwAg4skhRvFajo0JdMWIftzj42pQ8ko9xC71E1O54wbr3BIK/6HfY3j7cjEHPrFhxa3CU
-	Mqa0yH9iQxPujYbEGKbDB36DhPCG7LE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1760638396;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=hXt0HYhwDbekzTJKQtnkmPdsKEmx8+QLoAWrJr+AuHw=;
-	b=v9WTW5Q0+Ab+4BU0T0sorM6CZ59obHujUD7l3r21bLS5mfhHRiu8uMOoClyAZSeHn6jqDc
-	wAf62b/+k28rp0Dw==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1760638395; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=hXt0HYhwDbekzTJKQtnkmPdsKEmx8+QLoAWrJr+AuHw=;
-	b=mgOc4fWpD3otk8/UDDfvjUWrmrPV4EAfCLbWNeiGLCLLTY4EnURnH+T3Mam4q3bLMzD4rB
-	iNL9nzbLeFB+5vwCYhe0lMnGJRDlugZJsrn9Cm5GxiXMivfmQAFp/WW18qW1xlXedOlkY5
-	mKVyNSeOKVXOJ3tmVog4wCO664Pds6c=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1760638395;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=hXt0HYhwDbekzTJKQtnkmPdsKEmx8+QLoAWrJr+AuHw=;
-	b=LqSD4NVWcSWEIoiLiJqe+AvCxCPXW9tNEFWkjtSl2gmsnbLbT4uYsFfUC5E9kahkG296XR
-	QxjuBljFFXM7hSBQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 827051340C;
-	Thu, 16 Oct 2025 18:13:14 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id 0XYVHro18Wg9WwAAD6G6ig
-	(envelope-from <tiwai@suse.de>); Thu, 16 Oct 2025 18:13:14 +0000
-Date: Thu, 16 Oct 2025 20:13:14 +0200
-Message-ID: <875xce7m11.wl-tiwai@suse.de>
-From: Takashi Iwai <tiwai@suse.de>
-To: David Lechner <dlechner@baylibre.com>
-Cc: Takashi Iwai <tiwai@suse.de>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Jonathan Cameron <jonathan.cameron@huawei.com>,
-	Linux PM <linux-pm@vger.kernel.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	Linux PCI <linux-pci@vger.kernel.org>,
-	Alex Williamson <alex.williamson@redhat.com>,
-	Bjorn Helgaas <helgaas@kernel.org>,
-	Zhang Qilong <zhangqilong3@huawei.com>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Frank Li <Frank.Li@nxp.com>,
-	Dhruva Gole <d-gole@ti.com>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	Linux ACPI <linux-acpi@vger.kernel.org>,
-	Dan Williams <dan.j.williams@intel.com>,
-	"Fabio M. De Francesco" <fabio.maria.de.francesco@linux.intel.com>
-Subject: Re: [PATCH v1 1/3] PM: runtime: Introduce PM_RUNTIME_ACQUIRE_OR_FAIL() macro
-In-Reply-To: <cc21a74c-905f-4223-95a8-d747ef763081@baylibre.com>
-References: <3925484.kQq0lBPeGt@rafael.j.wysocki>
-	<3324926.5fSG56mABF@rafael.j.wysocki>
-	<20251016133854.00003669@huawei.com>
-	<CAJZ5v0iOgbkJbdRzgrBUaaYL+S_8BZD7XuXdK5vs2gMG3ug1KA@mail.gmail.com>
-	<87ikge7v01.wl-tiwai@suse.de>
-	<cc21a74c-905f-4223-95a8-d747ef763081@baylibre.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+	s=arc-20240116; t=1760641632; c=relaxed/simple;
+	bh=I5GFQ9CYsjyd1tjZWlXho/z0XBSLZ3hEh4t+498uLAo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=in5PwXRbgEAr2q0vavUpcjd3S7wnjWkcCNh+9z7+CZKmHC6rTKBCfIc45hMvaT6Na3XsykUIHeFiGA1EMSDe9SCBmWLdSgkdKjG/X3d6x2/LZneE/bwvxDglVSQIWnc0W/bQkF6M9qIq/JGnzVPxiPPtkLsTZoPJWkUbXTR8ZYo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dd3WmlMk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 301F4C4CEF1;
+	Thu, 16 Oct 2025 19:07:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1760641630;
+	bh=I5GFQ9CYsjyd1tjZWlXho/z0XBSLZ3hEh4t+498uLAo=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=dd3WmlMkkO3VWVk5MbsO9dj6dUzoIhC8D7UqawEPIjJRDdju/KOCzOhajRqb4hoIU
+	 QSVsYnGa2wbx4ed59Zzk8JB1x9VpQ958ft5YCMInAP0doNztEwQbC62erjiWefuxRQ
+	 zoat/ZyIuKU+ODTXjZCEY3rkmauQYvpvE+6OrXKT8dYCbOACRnrU1dzvRZEsEEFpeG
+	 8TUv6Rw7aB+IHTG9JTRydveMrAjdqboaKo1VUJB6Qm9bSsYPs6r2X7NGKZjpRMx7Y4
+	 9G5FwrvYvGkcdxrykSMc4LVTKYkRmwTpgY+dl+FRvB7BgkFmVJhQQjshaRfyAbmF4F
+	 2nA/nm/M1xAnQ==
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+To: Takashi Iwai <tiwai@suse.de>
+Cc: David Lechner <dlechner@baylibre.com>,
+ Jonathan Cameron <jonathan.cameron@huawei.com>,
+ Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+ Linux PCI <linux-pci@vger.kernel.org>,
+ Alex Williamson <alex.williamson@redhat.com>,
+ Bjorn Helgaas <helgaas@kernel.org>, Zhang Qilong <zhangqilong3@huawei.com>,
+ Ulf Hansson <ulf.hansson@linaro.org>, Frank Li <Frank.Li@nxp.com>,
+ Dhruva Gole <d-gole@ti.com>,
+ Mika Westerberg <mika.westerberg@linux.intel.com>,
+ Linux ACPI <linux-acpi@vger.kernel.org>,
+ Dan Williams <dan.j.williams@intel.com>,
+ "Fabio M. De Francesco" <fabio.maria.de.francesco@linux.intel.com>
+Subject:
+ Re: [PATCH v1 1/3] PM: runtime: Introduce PM_RUNTIME_ACQUIRE_OR_FAIL() macro
+Date: Thu, 16 Oct 2025 21:07:03 +0200
+Message-ID: <12765144.O9o76ZdvQC@rafael.j.wysocki>
+Organization: Linux Kernel Development
+In-Reply-To: <875xce7m11.wl-tiwai@suse.de>
+References:
+ <3925484.kQq0lBPeGt@rafael.j.wysocki>
+ <cc21a74c-905f-4223-95a8-d747ef763081@baylibre.com>
+ <875xce7m11.wl-tiwai@suse.de>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-3.30 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	TO_DN_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	MIME_TRACE(0.00)[0:+];
-	ARC_NA(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[17];
-	RCVD_COUNT_TWO(0.00)[2];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:mid]
-X-Spam-Flag: NO
-X-Spam-Score: -3.30
-X-Spam-Level: 
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, 16 Oct 2025 18:46:56 +0200,
-David Lechner wrote:
-> 
-> On 10/16/25 9:59 AM, Takashi Iwai wrote:
-> > On Thu, 16 Oct 2025 15:46:08 +0200,
-> > Rafael J. Wysocki wrote:
-> >>
-> >> On Thu, Oct 16, 2025 at 2:39 PM Jonathan Cameron
-> >> <jonathan.cameron@huawei.com> wrote:
-> >>>
-> >>> On Wed, 15 Oct 2025 16:02:02 +0200
-> >>> "Rafael J. Wysocki" <rafael@kernel.org> wrote:
-> >>>
-> >>>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >>>>
-> >>>> There appears to be an emerging pattern in which guard
-> >>>> pm_runtime_active_try is used for resuming the given device and
-> >>>> incrementing its runtime PM usage counter if the resume has been
-> >>>> successful, that is followed by an ACQUIRE_ERR() check on the guard
-> >>>> variable and if that triggers, a specific error code is returned, for
-> >>>> example:
-> >>>>
-> >>>>       ACQUIRE(pm_runtime_active_try, pm)(dev);
-> >>>>       if (ACQUIRE_ERR(pm_runtime_active_try, &pm))
-> >>>>               return -ENXIO
-> >>>>
-> >>>> Introduce a macro called PM_RUNTIME_ACQUIRE_OR_FAIL() representing the
-> >>>> above sequence of statements that can be used to avoid code duplication
-> >>>> wherever that sequence would be used.
-> >>>>
-> >>>> Use this macro right away in the PCI sysfs code where the above pattern
-> >>>> is already present.
-> >>>>
-> >>>> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >>>> ---
-> >>>>
-> >>>> Admittedly, the new macro is slightly on the edge, but it really helps
-> >>>> reduce code duplication, so here it goes.
-> >>>
-> >>> Fully agree with the 'on the edge'.
-> >>>
-> >>> This looks somewhat like the some of the earlier attempts to come up with
-> >>> a general solution before ACQUIRE().  Linus was fairly clear on his opinion of
-> >>> a proposal that looked a bit similar to this
-> >>> cond_guard(mutex_intr, return -EINTR, &mutex);
-> >>>
-> >>> https://lore.kernel.org/all/CAHk-=win7bwWhPJ=iuW4h-sDTqbX6v9_LJnMaO3KxVfPSs81bQ@mail.gmail.com/
-> >>>
-> >>> +CC a few people who might have better memories of where things went than I do.
-> >>>
-> >>> The solution you have here has the benefit of clarity that all it can do is
-> >>> return the error code.
-> >>
-> >> Well, I could call the macro PM_RUNTIME_ACQUIRE_OR_RETURN_ERROR(), but
-> >> FAIL is just shorter. :-)
-> >>
-> >> Seriously though, the odd syntax bothers me, but it has come from
-> >> looking at the multiple pieces of code that otherwise would have
-> >> repeated exactly the same code pattern including the guard name in two
-> >> places and the pm variable that has no role beyond guarding.
-> > 
-> > While I see the benefit of simplification, IMO, embedding a code
-> > flow control inside the macro argument makes it really harder to
-> > follow.
-> > 
-> > Is the problem about the messy ACQUIRE_ERR() invocation?  If so, it
-> > could be replaced with something shorter (and without extra type),
-> > e.g. replace 
-> > 	ret = ACQUIRE_ERR(pm_runtime_active_try, &pm);
-> > with
-> > 	ret = PM_RUNTIME_ACQUIRE_ERR(&pm);
-> > 
-> > Since all runtime PM guard usage is to the same object, we can have a
-> > common macro.
-> > 
-> > Also, in the past, I thought of a macro like below that stores the
-> > error code in the given variable ret:
-> > 
-> > #define __guard_cond_ret(_name, _var, _ret, _args)	\
-> > 	CLASS(_name, _var)(_args);			\
-> > 	(_ret) = __guard_err(_name)(&_var)
-> > #define guard_cond_ret(_name, _ret, _args) \
-> > 	__guard_cond_ret(_name, __UNIQUE_ID(guard), _ret, _args)
-> > 
-> > ... so that it'd work for runtime PM like:
-> > 
-> > 	int ret;
-> > 
-> > 	guard_cond_ret(pm_runtime_active, ret)(dev);
-> > 	if (ret)
-> > 		return ret;
-> > 	
-> > Of course, a clear drawback is that the assignment of ret isn't
-> > obvious, but the code flow isn't skewed much in this way.
-> > 
-> > 
-> > thanks,
-> > 
-> > Takashi
-> 
-> FWIW, a while back, I suggested something like this where ret was
-> a parameter rather than a return value [1]. Linus did not seem to
-> be a fan (said it was "disgusting syntax").
-> 
-> [1]: https://lore.kernel.org/all/CAHk-=whn07tnDosPfn+UcAtWHBcLg=KqA16SHVv0GV4t8P1fHw@mail.gmail.com/
+On Thursday, October 16, 2025 8:13:14 PM CEST Takashi Iwai wrote:
+> On Thu, 16 Oct 2025 18:46:56 +0200,
+> David Lechner wrote:
+> >=20
+> > On 10/16/25 9:59 AM, Takashi Iwai wrote:
+> > > On Thu, 16 Oct 2025 15:46:08 +0200,
+> > > Rafael J. Wysocki wrote:
+> > >>
+> > >> On Thu, Oct 16, 2025 at 2:39=E2=80=AFPM Jonathan Cameron
+> > >> <jonathan.cameron@huawei.com> wrote:
+> > >>>
+> > >>> On Wed, 15 Oct 2025 16:02:02 +0200
+> > >>> "Rafael J. Wysocki" <rafael@kernel.org> wrote:
+> > >>>
+> > >>>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > >>>>
+> > >>>> There appears to be an emerging pattern in which guard
+> > >>>> pm_runtime_active_try is used for resuming the given device and
+> > >>>> incrementing its runtime PM usage counter if the resume has been
+> > >>>> successful, that is followed by an ACQUIRE_ERR() check on the guard
+> > >>>> variable and if that triggers, a specific error code is returned, =
+for
+> > >>>> example:
+> > >>>>
+> > >>>>       ACQUIRE(pm_runtime_active_try, pm)(dev);
+> > >>>>       if (ACQUIRE_ERR(pm_runtime_active_try, &pm))
+> > >>>>               return -ENXIO
+> > >>>>
+> > >>>> Introduce a macro called PM_RUNTIME_ACQUIRE_OR_FAIL() representing=
+ the
+> > >>>> above sequence of statements that can be used to avoid code duplic=
+ation
+> > >>>> wherever that sequence would be used.
+> > >>>>
+> > >>>> Use this macro right away in the PCI sysfs code where the above pa=
+ttern
+> > >>>> is already present.
+> > >>>>
+> > >>>> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > >>>> ---
+> > >>>>
+> > >>>> Admittedly, the new macro is slightly on the edge, but it really h=
+elps
+> > >>>> reduce code duplication, so here it goes.
+> > >>>
+> > >>> Fully agree with the 'on the edge'.
+> > >>>
+> > >>> This looks somewhat like the some of the earlier attempts to come u=
+p with
+> > >>> a general solution before ACQUIRE().  Linus was fairly clear on his=
+ opinion of
+> > >>> a proposal that looked a bit similar to this
+> > >>> cond_guard(mutex_intr, return -EINTR, &mutex);
+> > >>>
+> > >>> https://lore.kernel.org/all/CAHk-=3Dwin7bwWhPJ=3DiuW4h-sDTqbX6v9_LJ=
+nMaO3KxVfPSs81bQ@mail.gmail.com/
+> > >>>
+> > >>> +CC a few people who might have better memories of where things wen=
+t than I do.
+> > >>>
+> > >>> The solution you have here has the benefit of clarity that all it c=
+an do is
+> > >>> return the error code.
+> > >>
+> > >> Well, I could call the macro PM_RUNTIME_ACQUIRE_OR_RETURN_ERROR(), b=
+ut
+> > >> FAIL is just shorter. :-)
+> > >>
+> > >> Seriously though, the odd syntax bothers me, but it has come from
+> > >> looking at the multiple pieces of code that otherwise would have
+> > >> repeated exactly the same code pattern including the guard name in t=
+wo
+> > >> places and the pm variable that has no role beyond guarding.
+> > >=20
+> > > While I see the benefit of simplification, IMO, embedding a code
+> > > flow control inside the macro argument makes it really harder to
+> > > follow.
+> > >=20
+> > > Is the problem about the messy ACQUIRE_ERR() invocation?  If so, it
+> > > could be replaced with something shorter (and without extra type),
+> > > e.g. replace=20
+> > > 	ret =3D ACQUIRE_ERR(pm_runtime_active_try, &pm);
+> > > with
+> > > 	ret =3D PM_RUNTIME_ACQUIRE_ERR(&pm);
+> > >=20
+> > > Since all runtime PM guard usage is to the same object, we can have a
+> > > common macro.
+> > >=20
+> > > Also, in the past, I thought of a macro like below that stores the
+> > > error code in the given variable ret:
+> > >=20
+> > > #define __guard_cond_ret(_name, _var, _ret, _args)	\
+> > > 	CLASS(_name, _var)(_args);			\
+> > > 	(_ret) =3D __guard_err(_name)(&_var)
+> > > #define guard_cond_ret(_name, _ret, _args) \
+> > > 	__guard_cond_ret(_name, __UNIQUE_ID(guard), _ret, _args)
+> > >=20
+> > > ... so that it'd work for runtime PM like:
+> > >=20
+> > > 	int ret;
+> > >=20
+> > > 	guard_cond_ret(pm_runtime_active, ret)(dev);
+> > > 	if (ret)
+> > > 		return ret;
+> > > =09
+> > > Of course, a clear drawback is that the assignment of ret isn't
+> > > obvious, but the code flow isn't skewed much in this way.
+> > >=20
+> > >=20
+> > > thanks,
+> > >=20
+> > > Takashi
+> >=20
+> > FWIW, a while back, I suggested something like this where ret was
+> > a parameter rather than a return value [1]. Linus did not seem to
+> > be a fan (said it was "disgusting syntax").
+> >=20
+> > [1]: https://lore.kernel.org/all/CAHk-=3Dwhn07tnDosPfn+UcAtWHBcLg=3DKqA=
+16SHVv0GV4t8P1fHw@mail.gmail.com/
+>=20
+> Yeah, I myself also find it suboptimal, hence it wasn't really
+> proposed...  It's a limit of macro, unfortunately.
 
-Yeah, I myself also find it suboptimal, hence it wasn't really
-proposed...  It's a limit of macro, unfortunately.
+The macro from the $subject patch can be split along the lines of the appen=
+ded
+patch to avoid the "disgusting syntax" issue, although it then becomes less
+attractive as far as I'm concerned.  It still allows the details unrelated =
+to
+the rest of the code to be hidden though.
+
+=2D--
+ drivers/acpi/acpi_tad.c |   10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+=2D-- a/drivers/acpi/acpi_tad.c
++++ b/drivers/acpi/acpi_tad.c
+@@ -31,6 +31,12 @@ MODULE_DESCRIPTION("ACPI Time and Alarm
+ MODULE_LICENSE("GPL v2");
+ MODULE_AUTHOR("Rafael J. Wysocki");
+=20
++#define PM_RUNTIME_ACQUIRE_ACTIVE(dev)	\
++	ACQUIRE(pm_runtime_active_try, pm_runtime_active_guard_var)(dev)
++
++#define PM_RUNTIME_ACQUIRE_ACTIVE_ERR	\
++	ACQUIRE_ERR(pm_runtime_active_try, &pm_runtime_active_guard_var)
++
+ /* ACPI TAD capability flags (ACPI 6.2, Section 9.18.2) */
+ #define ACPI_TAD_AC_WAKE	BIT(0)
+ #define ACPI_TAD_DC_WAKE	BIT(1)
+@@ -264,8 +270,8 @@ static int acpi_tad_wake_set(struct devi
+ 	args[0].integer.value =3D timer_id;
+ 	args[1].integer.value =3D value;
+=20
+=2D	ACQUIRE(pm_runtime_active_try, pm)(dev);
+=2D	if (ACQUIRE_ERR(pm_runtime_active_try, &pm))
++	PM_RUNTIME_ACQUIRE_ACTIVE(dev);
++	if (PM_RUNTIME_ACQUIRE_ACTIVE_ERR)
+ 		return -ENXIO;
+=20
+ 	status =3D acpi_evaluate_integer(handle, method, &arg_list, &retval);
 
 
-thanks,
 
-Takashi
 
