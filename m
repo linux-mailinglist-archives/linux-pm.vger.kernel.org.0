@@ -1,165 +1,151 @@
-Return-Path: <linux-pm+bounces-36302-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36303-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8BACBE55D3
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Oct 2025 22:22:26 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB3A8BE5696
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Oct 2025 22:38:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CE77B5E3FBA
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Oct 2025 20:22:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8655E488118
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Oct 2025 20:38:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1CBD2DCF51;
-	Thu, 16 Oct 2025 20:22:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D06622DE1E6;
+	Thu, 16 Oct 2025 20:38:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="EQ1Ca7B5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IMO/9uoz"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 218FF1C8629
-	for <linux-pm@vger.kernel.org>; Thu, 16 Oct 2025 20:22:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA2111EBFE0
+	for <linux-pm@vger.kernel.org>; Thu, 16 Oct 2025 20:38:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760646139; cv=none; b=tAMzlAhlb8ECgTF5vkh2UNBJtbqrWPbcXmnnfYo0029sVq786dSWkGrL+Ng3pWgHsB2vRToFk/W4VfxtTQcsP3rW1R5UogbpPjJ5nABCZELArtp4mxrBPJev2fsTzgbd7KyB0M95no+mdC7gMdIAdgsKgJeFfoQJHkgxAY7suYw=
+	t=1760647128; cv=none; b=q8f3k/Ri1qpF07xAttXptVXjf1n9vAvS9ZAh6erhacua/5/Mc+ob7Oo7Y1yBL9KkPW3eQduvzoumNIrqU0+xwssxv6L3/l9hT1yEx82li54CkID1N6WAMl9vX33FO5DZflbihj9Yz3sM08ehbAiwf34ntqpjfhSTxsxdTvlvwCM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760646139; c=relaxed/simple;
-	bh=/BnkzLG7iF5vjjsEuhMhpnk3gLf1GEWGWf5wGNVMGhY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=s2o81rGJEMtEktVn4ODhqEHmO0/dh1XxZxCn8uE71LAgQ93j7xo/t6SC2WkhSp0X7mA03GAXC2vSVLeTztjvmIdc8frIQm/3Hjt78551Hqltiy/JCMPvjKdcOF143As94rpBWdqtSnQpyJEsRi06lywKHeu8nLPHp3FFxoVIxZs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=EQ1Ca7B5; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 59GKLOCB020186
-	for <linux-pm@vger.kernel.org>; Thu, 16 Oct 2025 20:22:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=t4XeRTtk1HhmwuJqivoNSUwm
-	vc5y3nht6ULpzG7FoOU=; b=EQ1Ca7B5u3ErYhxM5XM/jZbhsVuk/QMCZSm4CVyc
-	xvzCG8WsO7+QXMbVhlvWscHFpQepb6mr97s+9iKjaEEr+/0t/HXRNd9xEXXftf22
-	tD71PbW0BQKQSzSycxYvagZ6q4t+B037vCE+8K8NL4YqIyQH3CIoPDWgd67c/ZRZ
-	IGt754YNOSQsPQCLqSa/pw23WZcU0QrosaE/67i1AuFLUUz44/Jw0e50DW5TQ8eu
-	v0nZJShbWqeG3lgcvLkPEXQxenDkMw90Vhe8fgx3hCKfcM8rYFLFp9YWGPSf9nxH
-	iuOFoYwooRrICLVHlfLzpQ6axkIXcIyRUPvj0vSfZEDRIg==
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com [209.85.219.69])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 49tqvpk141-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Thu, 16 Oct 2025 20:22:17 +0000 (GMT)
-Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-87c1ed305b4so20510866d6.2
-        for <linux-pm@vger.kernel.org>; Thu, 16 Oct 2025 13:22:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760646136; x=1761250936;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=t4XeRTtk1HhmwuJqivoNSUwmvc5y3nht6ULpzG7FoOU=;
-        b=AvSuJF6uOxJvrakC8nCQ814uDrYyk1VX9y1Yjlo66Is7XIPCHkpmaljyFMmPjZpfZP
-         mr9SyMKaBFp2LHbUvJy07n4wzrF/0RLDC2tfZmPNVZEmRpEWrF4fYg7ZF5t/UcjdTA6a
-         sP28hrc6ACGcp/N0DhihHmfnUvCGx65N/GF5EDoriuE50bbPEw8LhZL1JDguTeG7i3H8
-         ntgaAfYYo78bDerxIbg78A4c2jLhOUDGsJrZqyZ6UoBcM+gtjPHCU5MNind0QUT6EBJr
-         FB0Alz5HUKDZ5naucBQYhhVIbsXfR5sgdgvV9yoQKCTDv4S1RnNdsuPgpagw4MfEp8AA
-         bTVQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVbS65Jgu8uEqxYoYzOxvBbnas/+PSoy1Dm6syya027FOoHGRr+/lf+vg8soiJ30prHhtzV0d95vA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxLisZSnQfxFcJ0wHFX8ZF39GU+EvNBJZiM66yxX89AnB+EiaeM
-	8/6f+ckWeahrA3jRmd/si6l/CwpjIUFnDwCWB2X0luAviDTb7UsTCwuw12SFYP/q5U5Jmtt0HMB
-	FrJGbV5fk5eqyZLn5ItPwcbG8JphyuEOxbku+qoGkG6opm8/7SiJwjav+oyO0DA==
-X-Gm-Gg: ASbGncuK2vu08PojyOHE2AIIL+Z0L13MWwNSf0g95doekRRF/JVN+gdG5ZBiT2IgT27
-	I4TicGkSbzK3SjmOqMoXUwR6B1srU/L8BibwVjDnT9Liap2dbyAyc7NjwR2ZZERzeRJaCAFRsRa
-	8iQC5vRRTrdLpmPZfCkNDWmX8MhaB655AI/rfUcRiTPaPSHd/QvD8lkmSOf3cXHi8x/z7mbADpq
-	2Dk6UwEi1QVoKaWUBIVZ8+E6GhZdSLU0QAMhQnXaO8q0FHAfz5c6lAaS0KHaHBICtPQCOyGG0Rj
-	YiqzBhVFQmeAm2ddiyCrvjO6pcV/shYx6HY5Seh+bUwaOqjaFkI1RenR/OjV+0CvxdizI11NoRn
-	DjHs0ODL2BzQoi+2z7bXlvOdrLPLLZ9XfU6SUQXMwp4S5e0loBPOMRLoTR//KRzWdrrTPPgg/jF
-	H2rwxb3prdMWY=
-X-Received: by 2002:a05:622a:1101:b0:4e8:9601:37f5 with SMTP id d75a77b69052e-4e89d05bcd6mr20995831cf.0.1760646136061;
-        Thu, 16 Oct 2025 13:22:16 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGrcAdKJUHa7P+g75kVAeMcu1GBVw0vLJXNi7Bmcd+TwVbNriITJu0bKiz1xjIXDkX2pPHaqg==
-X-Received: by 2002:a05:622a:1101:b0:4e8:9601:37f5 with SMTP id d75a77b69052e-4e89d05bcd6mr20995271cf.0.1760646135519;
-        Thu, 16 Oct 2025 13:22:15 -0700 (PDT)
-Received: from umbar.lan (2001-14ba-a0c3-3a00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a0c3:3a00:264b:feff:fe8b:be8a])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-590881f9148sm7376487e87.44.2025.10.16.13.22.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Oct 2025 13:22:13 -0700 (PDT)
-Date: Thu, 16 Oct 2025 23:22:12 +0300
-From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-To: Luo Jie <quic_luoj@quicinc.com>
-Cc: Bjorn Andersson <andersson@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Varadarajan Narayanan <quic_varada@quicinc.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Anusha Rao <quic_anusha@quicinc.com>,
-        Devi Priya <quic_devipriy@quicinc.com>,
-        Manikanta Mylavarapu <quic_mmanikan@quicinc.com>,
-        Georgi Djakov <djakov@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Konrad Dybcio <konradybcio@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        netdev@vger.kernel.org, quic_kkumarcs@quicinc.com,
-        quic_linchen@quicinc.com, quic_leiwei@quicinc.com,
-        quic_pavir@quicinc.com, quic_suruchia@quicinc.com,
-        Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Subject: Re: [PATCH v7 04/10] clk: qcom: gcc-ipq5424: Enable NSS NoC clocks
- to use icc-clk
-Message-ID: <yegaz22k6jpn657tyuiavbchgc2unaoqgvsjn54dzdhnb6rr4s@twg5yrmxx7ot>
-References: <20251014-qcom_ipq5424_nsscc-v7-0-081f4956be02@quicinc.com>
- <20251014-qcom_ipq5424_nsscc-v7-4-081f4956be02@quicinc.com>
+	s=arc-20240116; t=1760647128; c=relaxed/simple;
+	bh=XTIlb00y7jKvl1Otn5ZrCsdMlwiiEfx7RWVXZYlBVac=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Zn5cKjbYkI9oN5StfX267vbhSScpqjl2HV8LLOIOfYN62eu5vyYsBz7IUo5UUoGnTSTuJ9YM/UPgnVsvT1xUS6RpAJ5boSPo4oqpz7FCHq9XlMGpCq7o5SfGYdRXc3hqrVYB3LUmnELxIPwe1RZh0hkygiNPSUVnJ1l0y7vV2jQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IMO/9uoz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 807E6C19424
+	for <linux-pm@vger.kernel.org>; Thu, 16 Oct 2025 20:38:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1760647128;
+	bh=XTIlb00y7jKvl1Otn5ZrCsdMlwiiEfx7RWVXZYlBVac=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=IMO/9uoz9402Rq/72H+fzGiweWdOTANK8n3P07wAJEwSUsdk1cojA6DdXdoUReOuM
+	 9yRQuePM2+cOtswdJoYIhd/7qJV8nzqzQSJr2+dDcU5u4y1GrU+vcOIl/iZf87rDak
+	 1COlMuvVJcUWEIg+dtRJ6YLOZPkcURXFwMbqrTAPjjlOi95k0KYUPg3eegkG/zv7BR
+	 +nYcP+d7q9IMmogzk+uLypcyOnxtrMpX2A9mvGunrLvmyGD3Y02hiRRZ7aP6U22+13
+	 OJxP5Q7aWOdRqJ+giiFiywbX8RpK9G0JyZn8Azgu8ZdjUv+A+sNGckCq0Jg7xWwDMu
+	 RzhQzyAeNNRXA==
+Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-7c27e5ca2beso92063a34.3
+        for <linux-pm@vger.kernel.org>; Thu, 16 Oct 2025 13:38:48 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWQVbK6uNbJcbvgjpKfH+s/6mkalYYJiXQICQNyAzkmjLP01jCjnI9Zj8+NTcwfsc1sfbpXCreVFw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxZnp61DIjzE/G1vNXLi59IZV4b04CjZ0JQ7O7FUCHl/nBGOHZ6
+	878Bz1HBqmXC/dEO2LbIiKDDccTwE19VZVkezm9X0LkARWs1PTSD1X8KHvA/v4EMcsa+XmR4A9b
+	SjCsLN+9QxhX2f//qNUlIqazxkqjAP8Q=
+X-Google-Smtp-Source: AGHT+IHeni4wRtDvxXTKZAACGsTAPxwB1YyN0NYvoLAG+cyBLP79pAf7CDk+uKKMzHt4n9NJ/Pkc8WVtYd2NS5a16ZU=
+X-Received: by 2002:a05:6808:6f8e:b0:43f:7dee:468b with SMTP id
+ 5614622812f47-443a2dcb6d3mr672131b6e.4.1760647127720; Thu, 16 Oct 2025
+ 13:38:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251014-qcom_ipq5424_nsscc-v7-4-081f4956be02@quicinc.com>
-X-Authority-Analysis: v=2.4 cv=aPD9aL9m c=1 sm=1 tr=0 ts=68f153f9 cx=c_pps
- a=wEM5vcRIz55oU/E2lInRtA==:117 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
- a=x6icFKpwvdMA:10 a=VkNPw1HP01LnGYTKEx00:22 a=EUspDBNiAAAA:8 a=COk6AnOGAAAA:8
- a=DdE-_dUAR9VioeaCo_UA:9 a=CjuIK1q_8ugA:10 a=OIgjcC2v60KrkQgK7BGD:22
- a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDE2MDAxNyBTYWx0ZWRfX1JopmaPfholP
- VVPMGPxtLZdQ4TOX8EqJhXY7pzSWSs6d0kAlUe3yoTYScOXDDt9wAiecW0NbAOCCQ/93jknrhAA
- cv8IOGlTxpQ2T3qrEnhQTgBGGF9jjmLhMaULa1QjHgmOb5BR33dU9M2+Y5dxzc1N0LRhykzyT/X
- SpGXFuAA1tko3z+i/eet+ty+t23RcCNVG/GNU/mXItlYMMDE9mRDQOVrLCgoqm7AyaksUoE+SlJ
- 2SinPDg294YOSN2IJwWCEPPg5DKfyMwNhyLcI1mwyWzhr4RKwsTAZmNdE4TMOPfiTw5GWA446yn
- XRLR+ieU+fsYTQfoQvEJOe22104cbJZ05pSPzmvpsWIFtz8MR/dqIDNLkYnmrGPAFJvpuBYq9pY
- pKdsX7tQMm84ox7fNmftpud3eIdNKA==
-X-Proofpoint-ORIG-GUID: pa7JpvOl_JjR6Kn25xfk_ljb9n9Zisel
-X-Proofpoint-GUID: pa7JpvOl_JjR6Kn25xfk_ljb9n9Zisel
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-10-16_04,2025-10-13_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 adultscore=0 impostorscore=0 lowpriorityscore=0 clxscore=1015
- bulkscore=0 suspectscore=0 malwarescore=0 phishscore=0 priorityscore=1501
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2510020000 definitions=main-2510160017
+References: <3925484.kQq0lBPeGt@rafael.j.wysocki> <cc21a74c-905f-4223-95a8-d747ef763081@baylibre.com>
+ <875xce7m11.wl-tiwai@suse.de> <12765144.O9o76ZdvQC@rafael.j.wysocki> <68f14b5b6a92_2a2b10018@dwillia2-mobl4.notmuch>
+In-Reply-To: <68f14b5b6a92_2a2b10018@dwillia2-mobl4.notmuch>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 16 Oct 2025 22:38:35 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0iZJFQeBhA7tM-sWuJDtisvrHGjPPdQHrC-eXXF1xJpbA@mail.gmail.com>
+X-Gm-Features: AS18NWCN60rGQYTojeNqhxmPLJuY9IXf_MfoZ5rdwA1XGpcY1kgT-SGMUWeS1hQ
+Message-ID: <CAJZ5v0iZJFQeBhA7tM-sWuJDtisvrHGjPPdQHrC-eXXF1xJpbA@mail.gmail.com>
+Subject: Re: [PATCH v1 1/3] PM: runtime: Introduce PM_RUNTIME_ACQUIRE_OR_FAIL()
+ macro
+To: dan.j.williams@intel.com
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Takashi Iwai <tiwai@suse.de>, 
+	David Lechner <dlechner@baylibre.com>, Jonathan Cameron <jonathan.cameron@huawei.com>, 
+	Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Linux PCI <linux-pci@vger.kernel.org>, Alex Williamson <alex.williamson@redhat.com>, 
+	Bjorn Helgaas <helgaas@kernel.org>, Zhang Qilong <zhangqilong3@huawei.com>, 
+	Ulf Hansson <ulf.hansson@linaro.org>, Frank Li <Frank.Li@nxp.com>, Dhruva Gole <d-gole@ti.com>, 
+	Mika Westerberg <mika.westerberg@linux.intel.com>, Linux ACPI <linux-acpi@vger.kernel.org>, 
+	"Fabio M. De Francesco" <fabio.maria.de.francesco@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Oct 14, 2025 at 10:35:29PM +0800, Luo Jie wrote:
-> Add NSS NoC clocks using the icc-clk framework to create interconnect
-> paths. The network subsystem (NSS) can be connected to these NoCs.
-> 
-> Additionally, add the LPASS CNOC and SNOC nodes to establish the complete
-> interconnect path.
-> 
-> Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-> Signed-off-by: Luo Jie <quic_luoj@quicinc.com>
-> ---
->  drivers/clk/qcom/gcc-ipq5424.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
+On Thu, Oct 16, 2025 at 9:45=E2=80=AFPM <dan.j.williams@intel.com> wrote:
+>
+> Rafael J. Wysocki wrote:
+> [..]
+> > > > [1]: https://lore.kernel.org/all/CAHk-=3Dwhn07tnDosPfn+UcAtWHBcLg=
+=3DKqA16SHVv0GV4t8P1fHw@mail.gmail.com/
+> > >
+> > > Yeah, I myself also find it suboptimal, hence it wasn't really
+> > > proposed...  It's a limit of macro, unfortunately.
+> >
+> > The macro from the $subject patch can be split along the lines of the a=
+ppended
+> > patch to avoid the "disgusting syntax" issue, although it then becomes =
+less
+> > attractive as far as I'm concerned.  It still allows the details unrela=
+ted to
+> > the rest of the code to be hidden though.
+> >
+> > ---
+> >  drivers/acpi/acpi_tad.c |   10 ++++++++--
+> >  1 file changed, 8 insertions(+), 2 deletions(-)
+> >
+> > --- a/drivers/acpi/acpi_tad.c
+> > +++ b/drivers/acpi/acpi_tad.c
+> > @@ -31,6 +31,12 @@ MODULE_DESCRIPTION("ACPI Time and Alarm
+> >  MODULE_LICENSE("GPL v2");
+> >  MODULE_AUTHOR("Rafael J. Wysocki");
+> >
+> > +#define PM_RUNTIME_ACQUIRE_ACTIVE(dev)       \
+> > +     ACQUIRE(pm_runtime_active_try, pm_runtime_active_guard_var)(dev)
+> > +
+> > +#define PM_RUNTIME_ACQUIRE_ACTIVE_ERR        \
+> > +     ACQUIRE_ERR(pm_runtime_active_try, &pm_runtime_active_guard_var)
+> > +
+> >  /* ACPI TAD capability flags (ACPI 6.2, Section 9.18.2) */
+> >  #define ACPI_TAD_AC_WAKE     BIT(0)
+> >  #define ACPI_TAD_DC_WAKE     BIT(1)
+> > @@ -264,8 +270,8 @@ static int acpi_tad_wake_set(struct devi
+> >       args[0].integer.value =3D timer_id;
+> >       args[1].integer.value =3D value;
+> >
+> > -     ACQUIRE(pm_runtime_active_try, pm)(dev);
+> > -     if (ACQUIRE_ERR(pm_runtime_active_try, &pm))
+> > +     PM_RUNTIME_ACQUIRE_ACTIVE(dev);
+> > +     if (PM_RUNTIME_ACQUIRE_ACTIVE_ERR)
+> >               return -ENXIO;
+>
+> This defeats one of the other motivations for ACQUIRE() vs
+> scoped_cond_guard() in that it drops the error code from
+> pm_runtime_active_try.
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+No, it doesn't.  PM_RUNTIME_ACQUIRE_ACTIVE_ERR is that error code.  Or
+did I misunderstand what you said?
 
+> Maybe it is the case that failure is always
+> -ENXIO, but from a future code evolution standpoint do you want to
+> commit to always translating _try errors to a local error code?
 
--- 
-With best wishes
-Dmitry
+No, I don't.
+
+> Btw, was acpi_tad_wake_set() buggy previously for ignoring
+> pm_runtime_get_sync() errors, or is it a regression risk now for
+> honoring errors?
+
+You may call it buggy strictly speaking, but it just assumed that if
+the runtime resume failed, the subsequent operation would just fail
+either, so -EIO would be returned to the caller.
+
+This change allows distinguishing resume errors from I/O errors.
 
