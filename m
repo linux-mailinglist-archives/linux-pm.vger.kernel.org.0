@@ -1,132 +1,146 @@
-Return-Path: <linux-pm+bounces-36337-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36338-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 32214BE7559
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Oct 2025 11:02:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A0D9EBE7765
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Oct 2025 11:11:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E2F8D1887470
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Oct 2025 09:01:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CAFDB423D66
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Oct 2025 09:08:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCD8F2D239B;
-	Fri, 17 Oct 2025 09:01:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A14FC2D6E73;
+	Fri, 17 Oct 2025 09:06:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DvGAL1hb"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="p8PkJAVR"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D2ED2C3274;
-	Fri, 17 Oct 2025 09:01:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A581B2DC35C
+	for <linux-pm@vger.kernel.org>; Fri, 17 Oct 2025 09:06:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760691690; cv=none; b=mCoYkJUSo/8egRZ7tCXkQMyiVf0FMvUhFXUDjkYZXqRaeESYXd4I9JGQJzqOA70pW4ayjhpeRgxiwyK4P8bD25L76hLk6Zk4jMJltfvuGagSt+2PR3tX/b0hGWU6RwqNlg5rfY/zS1W33NVtUSFvBD2qvyl6cVte6HA5dqj5RLE=
+	t=1760691990; cv=none; b=Vkk6l74O7VsXvzy3b8o1wgXoTFJS91V67vE3MaEqgwFDl2/JZ486G9k6mgUsvurO5ZI/fTUACwa3gFHEAZeFrQKv/u3pNoAC+6/BRi9D0GncRXBbxOKh1r2m0CUgbua9CGLkTekJKH8W4UGWK/YRqXlnDWqxKiS8zTftzWlspbY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760691690; c=relaxed/simple;
-	bh=czvWRGUC8SKWmmVMtp198CQsF4ETDH3/M7KH2tvcz7k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=r0t7Nm/7RJkDZKv7wHUDaz/H8EN8vzX+1mhH3M8kPjv9eKX0duJ0IUij+LMSDpi+2CI4qZk+t5GZ9sLiaFHPpp6dvXO1OoUKBk6lbENPb1W1upKhd53HmunfX88l4NTKVa6uOODwz4drpEtqBWh73yLJdMz8azvvR2P5BA7otxY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DvGAL1hb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39DA7C4CEE7;
-	Fri, 17 Oct 2025 09:01:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760691690;
-	bh=czvWRGUC8SKWmmVMtp198CQsF4ETDH3/M7KH2tvcz7k=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=DvGAL1hbud2PLriqHwpGae3BhhR0CT0nDWyrBNBqOTD9hLrHayj2KRYls+qZE2wv6
-	 4hH0XY/jyP84JV6DfOEel3UDGZp3dj2IMja07uWBy6U623jTuUNkyBYowQ+jc5Xc1h
-	 DAW6QHAk9VFxIJNxfjQkHQOz76bdT7KPD7rkUnzrTjHhHkpzxeWLEiweBzHosOUwQ8
-	 ZSLrg91TxbtGFnWbNBFRRAw91TmcTGoHyVIaNiSOm2uXOVrFgEsTc1Ig6iQRFKmGpH
-	 YZgMx1Fz5TLJmmqiSxS/6N2XrZmlGkaMn139yGOfSP8KshQ+mQpVhj0RPRjYf4U5IM
-	 ipH8Ep5LuqmAQ==
-Message-ID: <2b0a60de-060f-47b5-9268-cb1e3f360e12@kernel.org>
-Date: Fri, 17 Oct 2025 11:01:25 +0200
+	s=arc-20240116; t=1760691990; c=relaxed/simple;
+	bh=tL9LCQhpKIBjQIgS/5f1KpjSDRPB3nJi2aKghBl0jM4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=YTanJSVdwGfooef3rLoxA6KsYtsqlLGqq3nkKfsiDg5DUedzGjsvVkZRJcNRCCDVijavx3pXJqfS/8P6iT3VOsu6OBvtWh3xCWdZEu/jctrepr/km7hFwO/XOCa5bRyZ1agdNQ1gUGadN8oR1nqZngj261jRAl6Eagh/O8fpbXw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=p8PkJAVR; arc=none smtp.client-ip=209.85.218.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-b50206773adso529132466b.0
+        for <linux-pm@vger.kernel.org>; Fri, 17 Oct 2025 02:06:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1760691987; x=1761296787; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=418kpMdDHnOQzzDnjco0/swD3OeHn+l/8evRSWETxr8=;
+        b=p8PkJAVRd2Vo0QVBck6JlHDW4H1DfgmBgUNao/9Nxyt77rBPmQMYnnrLCiL5RkCg9F
+         7xOKXf3qxLoKusF2/EHXZkz5XcwpmCBC9VQHrhnlqs5rJUJfDNUFkSX/lA2gE7nYJ+Xm
+         E9uBNrUd87yXlyIindIpkJ2u1iZWt5HaVZkijLxikgHQjmUKd6+oLC9YIKv+AiZUJkFb
+         9j/8iSANWosU8+A+5zyqUOKgpUG8YpPFj4rUtYfiXhauZgIPdHSwOBR/LsFYVled3gcQ
+         le4SDLYgaWgXbzqx8cPJ6UrU3m6tLzByNNerGPfwfG2soIjP6LOC2zEm86p2rMAzwS10
+         JWig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760691987; x=1761296787;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=418kpMdDHnOQzzDnjco0/swD3OeHn+l/8evRSWETxr8=;
+        b=jbER8mDabgkiOa62j9T92vxA7RtaLIvK/iS+o2nD/Z25LFAR+uxh8pkHNDPUz9NG2O
+         QS+8iB4SEXZEgLUMOC4gRYMnvCAT/fkpySKuye/qGhm/po6j7nEkGpa245CPpMTH7kKJ
+         FOWLLUSKLSiCuBUE4XiC+X7JrUvEWz6e0Ue9LJq0XLSb/ixkq0TBjBlCnRkUIRgFVVEE
+         p9xy43HHj0CWZQUU/+K+DtFk+8+N9BRW1ogFNP9CgrVde1oGanZR5LeMGgci3UsufJUm
+         N7gWf5X01ZQ2mn2D+MeNxVcZaE4fi/p6V/iAq9TrJsnBRdeA0J+kzKB7wuhdpJEdTfyA
+         X3bQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXju/y/ciQVErsYbXxaVmajMdEWFWN0lvje/Q4xLeDj/4egM+/Z5b61i67QN7Gzm7otcW4Yu9ZOdg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YztYPTyKWmPDc+JehpLDLAZwIQIb5vbsfDzEdbRbzvZUxrE2TSY
+	j4tI88cPOaTM8U0nOtUhK2l+LQYTcGTUiZrroG6SdMfjVzWex57TaF79Nw/GVDsuVz71od6aehm
+	EwC2FSarSea2a7R7vNKHMel7wEmbbz96YIHlyhlBYQg==
+X-Gm-Gg: ASbGncvyyRuze44xe5ulYzpHXRhRbmK2BEEz6lfRzwU7Mn+j1pRc7sx8pMpBDzT0GKw
+	XMx+uO5UYhqCsY2HnwTZwPm2DCDmuD+13gyRi7HszT/fcDXRI8n64zXjvYpxF8Lc/g2xM4JFR9T
+	saakbxs+0fy/JrDyoSmSTKS/kNDr+tZpIWYkIKtwpZrNFC6rSb1rBySKK/e0KBlSwcoLaRKW+pI
+	Rs8C8B8tOMrKGp2jfZRI8S7ovADMYLxX1fPh7qFMfKDRYl+pxs6II6K3fqPwRlNd4VhjfMGAFt3
+	xP9ftDrsqjF19kYfndSrJQefuRA=
+X-Google-Smtp-Source: AGHT+IG+w0UsfxJS4d6pFqa8XviZVfLhRM+rhE1KqiFzit259/+EaKQIY+0egVcn1SrXy9IXtpCbr0Z+t9PVc3PXPa4=
+X-Received: by 2002:a17:907:868f:b0:b41:c602:c75d with SMTP id
+ a640c23a62f3a-b645f7ef255mr378423666b.31.1760691986910; Fri, 17 Oct 2025
+ 02:06:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 1/2] dt-bindings: power: rockchip: Add support for
- RV1126B
-To: Finley Xiao <finley.xiao@rock-chips.com>, heiko@sntech.de
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
- ulf.hansson@linaro.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org,
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- zhangqing@rock-chips.com, sugar.zhang@rock-chips.com, huangtao@rock-chips.com
-References: <20251016134103.294636-1-finley.xiao@rock-chips.com>
- <20251016134103.294636-2-finley.xiao@rock-chips.com>
- <d5a07602-360c-420c-aaa0-664d5d1ed760@kernel.org>
- <494b724d-31e3-45f1-9cc2-ac64851a6f70@rock-chips.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <494b724d-31e3-45f1-9cc2-ac64851a6f70@rock-chips.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20251015-arm-psci-system_reset2-vendor-reboots-v16-0-b98aedaa23ee@oss.qualcomm.com>
+ <20251015-arm-psci-system_reset2-vendor-reboots-v16-2-b98aedaa23ee@oss.qualcomm.com>
+ <CACMJSesvTLe28Jz83b=zfHD2rvmf7-i_2+2DoV=dgooVqFEYbA@mail.gmail.com> <fa42adf0-8f15-ad4c-3788-578b1bee1c72@oss.qualcomm.com>
+In-Reply-To: <fa42adf0-8f15-ad4c-3788-578b1bee1c72@oss.qualcomm.com>
+From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Date: Fri, 17 Oct 2025 11:06:15 +0200
+X-Gm-Features: AS18NWCSgzHU1qRYaMmAnFnfeUajlPBrTb0Y5_GWRI3iwaw1dVFHqq2mvJmjYc8
+Message-ID: <CACMJSesxazA7Nf6sAhUT16KfwtiUNjvb5JOEWkEb1B5fJtihMQ@mail.gmail.com>
+Subject: Re: [PATCH v16 02/14] power: reset: reboot-mode: Add device tree
+ node-based registration
+To: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
+Cc: Bjorn Andersson <andersson@kernel.org>, Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Sudeep Holla <sudeep.holla@arm.com>, Souvik Chakravarty <Souvik.Chakravarty@arm.com>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Andy Yan <andy.yan@rock-chips.com>, Mark Rutland <mark.rutland@arm.com>, 
+	Lorenzo Pieralisi <lpieralisi@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Konrad Dybcio <konradybcio@kernel.org>, cros-qcom-dts-watchers@chromium.org, 
+	Vinod Koul <vkoul@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Florian Fainelli <florian.fainelli@broadcom.com>, 
+	Moritz Fischer <moritz.fischer@ettus.com>, John Stultz <john.stultz@linaro.org>, 
+	Matthias Brugger <matthias.bgg@gmail.com>, Krzysztof Kozlowski <krzk@kernel.org>, 
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
+	Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>, Stephen Boyd <swboyd@chromium.org>, 
+	Andre Draszik <andre.draszik@linaro.org>, 
+	Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org, 
+	Elliot Berman <quic_eberman@quicinc.com>, Srinivas Kandagatla <srini@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On 17/10/2025 10:51, Finley Xiao wrote:
->>>   
->>>         clocks:
->>>           minItems: 1
->>> diff --git a/include/dt-bindings/power/rockchip,rv1126b-power.h b/include/dt-bindings/power/rockchip,rv1126b-power.h
->>> new file mode 100644
->>> index 000000000000..0a418f16e4ea
->>> --- /dev/null
->>> +++ b/include/dt-bindings/power/rockchip,rv1126b-power.h
->> Use rather filename matching compatible fully.
-> 
-> Should the file be renamed to "rockchip,rv1126b-power-controller.h"?
+On Thu, 16 Oct 2025 at 19:19, Shivendra Pratap
+<shivendra.pratap@oss.qualcomm.com> wrote:
+> >>
+> >> -                       info = devm_kzalloc(reboot->dev, sizeof(*info), GFP_KERNEL);
+> >
+> > This change is good - devres should not be used in subsystem library
+> > code, only in drivers - but it doesn't seem to belong here, can you
+> > please separate it out and make it backportable?
+>
+> sure. Just to confirm we should separate out the devm_kzalloc part of the
+> change and add a fixes tag.
+>
 
-Yes, usually naming follows compatible, unless there are reasons not to,
-like file for multiple compatibles.
+And preferably put it first in the series to avoid conflicts.
 
-Best regards,
-Krzysztof
+> >> @@ -123,8 +136,11 @@ int reboot_mode_register(struct reboot_mode_driver *reboot)
+> >>                 return 0;
+> >>
+> >>  error:
+> >> -               list_for_each_entry(info, &reboot->head, list)
+> >> +               list_for_each_entry_safe(info, next, &reboot->head, list) {
+> >> +                       list_del(&info->list);
+> >
+> > Same here, not deleting the entries currently seems like a bug? Do we
+> > depend on the driver detach to clean up the resources on failure?
+>
+> sure, so this should also go as fixes? and should we remove the other
+> dev_err(printk) also as fixes? or that can still got with the change
+> where we add fwnode based registration?
+>
+
+It doesn't seem to be strictly required by current code as the users
+use it "correctly" but if the API becomes used in different ways - for
+instance the structure may be reused after failure - it's a good idea
+to backport it. In general we should undo everything we did in the
+same function if we fail at some point.
+
+Bart
 
