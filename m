@@ -1,151 +1,148 @@
-Return-Path: <linux-pm+bounces-36327-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36328-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92B97BE6600
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Oct 2025 07:12:17 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1FC5FBE6BDB
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Oct 2025 08:43:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 81D304EE37B
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Oct 2025 05:12:16 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 0FC094F64DF
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Oct 2025 06:43:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 579FB30C623;
-	Fri, 17 Oct 2025 05:12:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 562D430FC29;
+	Fri, 17 Oct 2025 06:43:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eTqi9inl"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="WokAg896"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 196AC3FCC;
-	Fri, 17 Oct 2025 05:12:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A839224234
+	for <linux-pm@vger.kernel.org>; Fri, 17 Oct 2025 06:43:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760677931; cv=none; b=IGmVY3XJZea4GuQbLaSSSdPd+SCguWiUSWmeZN0MZAZ486HjaVfm3LmeDZLaqwg/ZWaA+UX96IAKRLtp2XuQbrxG6Mtd1vdaLgBFQT4+/NlL6D5TXznoX2Ugd4TJhl3qMVCvP/oNpx3t6IM03v8gO42Berc77I6qPwnuScXN6QY=
+	t=1760683417; cv=none; b=bg5ezdMSB1GptuKsq7Cx5oGCMYgXA0m5wqfN2ZNfmYuptI2N+iOCWzrCwvAQ4nTopS00jx63gqpjOKfNfhkkP80yUBPrvJtB0djffwCyGd/8eBoaSoP91E6ttZv2X0TEKaEtyCzBPfoosuLkG1SGBXGYYGRI2FJ56IxTQfseWxo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760677931; c=relaxed/simple;
-	bh=yTz2OAWYK23rMc0c1KwBF4lmZ8+usEUxK6yl7xp/muE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LlOcEm4WEG4c0+Nt3o4zEakj5FpoupxbuH6H1xhBFgRgP2xCbz2PnqpiyzIY4SIqrYCy2cO79SlUdU0nLF1oEW8aY+zbLB8HJHVv32gMKrYkHJ5b1ailOhtJbmEd3i66GyUwTWaNG5L4/hNZrEaURX3Qa/kO9aXJPJA+TIE24lc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eTqi9inl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71BE0C4CEE7;
-	Fri, 17 Oct 2025 05:12:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760677928;
-	bh=yTz2OAWYK23rMc0c1KwBF4lmZ8+usEUxK6yl7xp/muE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=eTqi9inlVuMf/4wKDJUrTR8A+z0E/PpeuE+WtXHYsmXBssSjwi8OofIjL1Tk0avVF
-	 wWMBpJ8kt+M5vTFhoSxUU4T+jMYhXZLpdzeQ5Sdh/JYx68hlvJYGtcJBpdJ6XVw4xh
-	 j/LnAb6EqNtFxtcFucD/82+BudLaLcQcwYre57RSFa0BOLtUN1XMDsWqn0s0kNES/P
-	 lyV61eeH84FZOsxksggHTMO4DoHGI6Dd9lEu73MVBlFpDVNerPeQ4g6IdMMnmM4v0L
-	 dRk0lxnWE3DGcuGe9GnQSjO/kuV98ltoSlcL6Q9vIf8P4URJeeaLamO4CWveu+9Rmg
-	 8MRZDN1AwMZ7Q==
-Message-ID: <841fca71-6842-4874-a829-6296949ad925@kernel.org>
-Date: Fri, 17 Oct 2025 07:12:02 +0200
+	s=arc-20240116; t=1760683417; c=relaxed/simple;
+	bh=goiNe26JI97XimIaJqB0nQh2LC62mtWHX8LAPMghZtc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
+	 Content-Type:References; b=Cf8o5RTW+3QyMkzyrTgeTeiD42Rtir3ojMdQQQgCxYyTzKsSH1CBIsnJAhDhdUUQWF5dmRYPF9Bb5EBx4YnuZkGNRiMT5KxdlQx6KBNv2ywLmOLvN6ENSqjd2i2t/ypQ/qYz646xsK6WZTp+wCHLI6Y1OrhCcTy3ZqoWZRtLQ8A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=WokAg896; arc=none smtp.client-ip=210.118.77.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20251017064327euoutp027d49e16813edd60d59c04af49e89b65c~vNDsHaR3_1864218642euoutp029
+	for <linux-pm@vger.kernel.org>; Fri, 17 Oct 2025 06:43:27 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20251017064327euoutp027d49e16813edd60d59c04af49e89b65c~vNDsHaR3_1864218642euoutp029
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1760683407;
+	bh=pmOERI3SUEXraCgPIeHw+QXcfM6eSSu/gHX94UGDCzg=;
+	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+	b=WokAg896tCCv63IRBiccsVar42fKcVYzFnOA+JFwG5K7FKWRIYNZZQonCiKxs0uq6
+	 Q3HXOXddKG6MYJL9GkAUI+7PeTOk69m0xIFW1kjpd1kLduazEoiyVrEwE+7VhyrFrQ
+	 iUy4xUJnQ63u9uz54QPWZkDuZ/oHClyNGxJIUWFU=
+Received: from eusmtip2.samsung.com (unknown [203.254.199.222]) by
+	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+	20251017064327eucas1p29f30c1de202c52dc09548aa9fc6f54b7~vNDrsbPeZ1312513125eucas1p2d;
+	Fri, 17 Oct 2025 06:43:27 +0000 (GMT)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+	eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+	20251017064324eusmtip201695dfb1cec04fbd125e4f2c643fd35~vNDpvJ8tS0730207302eusmtip2G;
+	Fri, 17 Oct 2025 06:43:24 +0000 (GMT)
+Message-ID: <1731abfc-c7e4-4ff0-a1b3-7d86c8025866@samsung.com>
+Date: Fri, 17 Oct 2025 08:43:24 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/3] dt-bindings: thermal: r9a09g047-tsu: Document RZ/V2H
- TSU
-To: Ovidiu Panait <ovidiu.panait.rb@renesas.com>,
- john.madieu.xa@bp.renesas.com, rafael@kernel.org, daniel.lezcano@linaro.org,
- rui.zhang@intel.com, lukasz.luba@arm.com, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, geert+renesas@glider.be,
- magnus.damm@gmail.com, mturquette@baylibre.com, sboyd@kernel.org
-Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
- linux-clk@vger.kernel.org
-References: <20251016131327.19141-1-ovidiu.panait.rb@renesas.com>
- <20251016131327.19141-3-ovidiu.panait.rb@renesas.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+User-Agent: Betterbird (Windows)
+Subject: Re: [PATCH v3 00/10] pmdomain: samsung: add supoort for Google
+ GS101
+To: =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, Krzysztof
+	Kozlowski <krzk@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>, Rob
+	Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Krzysztof
+	Kozlowski <krzk+dt@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Peter Griffin <peter.griffin@linaro.org>, Tudor Ambarus
+	<tudor.ambarus@linaro.org>, Will McVicker <willmcvicker@google.com>,
+	kernel-team@android.com, linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+	stable@vger.kernel.org, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
- cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
- JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
- gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
- J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
- NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
- BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
- vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
- Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
- TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
- S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
- FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJoF1BKBQkWlnSaAAoJEBuTQ307
- QWKbHukP/3t4tRp/bvDnxJfmNdNVn0gv9ep3L39IntPalBFwRKytqeQkzAju0whYWg+R/rwp
- +r2I1Fzwt7+PTjsnMFlh1AZxGDmP5MFkzVsMnfX1lGiXhYSOMP97XL6R1QSXxaWOpGNCDaUl
- ajorB0lJDcC0q3xAdwzRConxYVhlgmTrRiD8oLlSCD5baEAt5Zw17UTNDnDGmZQKR0fqLpWy
- 786Lm5OScb7DjEgcA2PRm17st4UQ1kF0rQHokVaotxRM74PPDB8bCsunlghJl1DRK9s1aSuN
- hL1Pv9VD8b4dFNvCo7b4hfAANPU67W40AaaGZ3UAfmw+1MYyo4QuAZGKzaP2ukbdCD/DYnqi
- tJy88XqWtyb4UQWKNoQqGKzlYXdKsldYqrLHGoMvj1UN9XcRtXHST/IaLn72o7j7/h/Ac5EL
- 8lSUVIG4TYn59NyxxAXa07Wi6zjVL1U11fTnFmE29ALYQEXKBI3KUO1A3p4sQWzU7uRmbuxn
- naUmm8RbpMcOfa9JjlXCLmQ5IP7Rr5tYZUCkZz08LIfF8UMXwH7OOEX87Y++EkAB+pzKZNNd
- hwoXulTAgjSy+OiaLtuCys9VdXLZ3Zy314azaCU3BoWgaMV0eAW/+gprWMXQM1lrlzvwlD/k
- whyy9wGf0AEPpLssLVt9VVxNjo6BIkt6d1pMg6mHsUEVzsFNBFVDXDQBEADNkrQYSREUL4D3
- Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
- MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
- OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
- GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
- 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
- YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
- 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
- BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
- JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
- 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
- YpsFAmgXUF8FCRaWWyoACgkQG5NDfTtBYptO0w//dlXJs5/42hAXKsk+PDg3wyEFb4NpyA1v
- qmx7SfAzk9Hf6lWwU1O6AbqNMbh6PjEwadKUk1m04S7EjdQLsj/MBSgoQtCT3MDmWUUtHZd5
- RYIPnPq3WVB47GtuO6/u375tsxhtf7vt95QSYJwCB+ZUgo4T+FV4hquZ4AsRkbgavtIzQisg
- Dgv76tnEv3YHV8Jn9mi/Bu0FURF+5kpdMfgo1sq6RXNQ//TVf8yFgRtTUdXxW/qHjlYURrm2
- H4kutobVEIxiyu6m05q3e9eZB/TaMMNVORx+1kM3j7f0rwtEYUFzY1ygQfpcMDPl7pRYoJjB
- dSsm0ZuzDaCwaxg2t8hqQJBzJCezTOIkjHUsWAK+tEbU4Z4SnNpCyM3fBqsgYdJxjyC/tWVT
- AQ18NRLtPw7tK1rdcwCl0GFQHwSwk5pDpz1NH40e6lU+NcXSeiqkDDRkHlftKPV/dV+lQXiu
- jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
- zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
- XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20251016131327.19141-3-ovidiu.panait.rb@renesas.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+From: Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <20251016-gs101-pd-v3-0-7b30797396e7@linaro.org>
+Content-Transfer-Encoding: 8bit
+X-CMS-MailID: 20251017064327eucas1p29f30c1de202c52dc09548aa9fc6f54b7
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20251016155848eucas1p193debe70e38b1694bfb250d748f4aa14
+X-EPHeader: CA
+X-CMS-RootMailID: 20251016155848eucas1p193debe70e38b1694bfb250d748f4aa14
+References: <CGME20251016155848eucas1p193debe70e38b1694bfb250d748f4aa14@eucas1p1.samsung.com>
+	<20251016-gs101-pd-v3-0-7b30797396e7@linaro.org>
 
-On 16/10/2025 15:13, Ovidiu Panait wrote:
-> The Renesas RZ/V2H SoC includes a Thermal Sensor Unit (TSU) block designed
-> to measure the junction temperature. The device provides real-time
-> temperature measurements for thermal management, utilizing two dedicated
-> channels for temperature sensing.
-> 
-> The Renesas RZ/V2H SoC is using the same TSU IP found on the RZ/G3E SoC,
-> the only difference being that it has two channels instead of one.
-> 
-> Add new compatible string "renesas,r9a09g057-tsu" for RZ/V2H and use
-> "renesas,r9a09g047-tsu" as a fallback compatible to indicate hardware
-> compatibility with the RZ/G3E implementation.
-> 
-> Signed-off-by: Ovidiu Panait <ovidiu.panait.rb@renesas.com>
+On 16.10.2025 17:58, André Draszik wrote:
+> This series adds support for the power domains on Google GS101. It's
+> fairly similar to SoCs already supported by this driver, except that
+> register acces does not work via plain ioremap() / readl() / writel().
+> Instead, the regmap created by the PMU driver must be used (which uses
+> Arm SMCC calls under the hood).
+>
+> The DT update to add the new required properties on gs101 will be
+> posted separately.
+>
+> Signed-off-by: André Draszik <andre.draszik@linaro.org>
+
+Works fine on existing Exynos based boards.
+
+Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+
 > ---
->  .../devicetree/bindings/thermal/renesas,r9a09g047-tsu.yaml | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/thermal/renesas,r9a09g047-tsu.yaml b/Documentation/devicetree/bindings/thermal/renesas,r9a09g047-tsu.yaml
-> index 8d3f3c24f0f2..274e96e37a12 100644
-> --- a/Documentation/devicetree/bindings/thermal/renesas,r9a09g047-tsu.yaml
-> +++ b/Documentation/devicetree/bindings/thermal/renesas,r9a09g047-tsu.yaml
-> @@ -16,7 +16,12 @@ description:
->  
->  properties:
->    compatible:
-> -    const: renesas,r9a09g047-tsu
-> +    oneOf:
-> +      - items:
+> Changes in v3:
+> - use additionalProperties, not unevaluatedProperties in patch 2
+> - fix path in $id in patch 2 (Rob)
+> - drop comment around 'select' in patch 2 (Rob)
+> - collect tags
+> - Link to v2: https://lore.kernel.org/r/20251009-gs101-pd-v2-0-3f4a6db2af39@linaro.org
+>
+> Changes in v2:
+> - Krzysztof:
+>    - move google,gs101-pmu binding into separate file
+>    - mark devm_kstrdup_const() patch as fix
+>    - use bool for need_early_sync_state
+>    - merge patches 8 and 10 from v1 series into one patch
+> - collect tags
+> - Link to v1: https://lore.kernel.org/r/20251006-gs101-pd-v1-0-f0cb0c01ea7b@linaro.org
+>
+> ---
+> André Draszik (10):
+>        dt-bindings: power: samsung: add google,gs101-pd
+>        dt-bindings: soc: samsung: exynos-pmu: move gs101-pmu into separate binding
+>        dt-bindings: soc: samsung: gs101-pmu: allow power domains as children
+>        pmdomain: samsung: plug potential memleak during probe
+>        pmdomain: samsung: convert to using regmap
+>        pmdomain: samsung: convert to regmap_read_poll_timeout()
+>        pmdomain: samsung: don't hardcode offset for registers to 0 and 4
+>        pmdomain: samsung: selectively handle enforced sync_state
+>        pmdomain: samsung: add support for google,gs101-pd
+>        pmdomain: samsung: use dev_err() instead of pr_err()
+>
+>   .../devicetree/bindings/power/pd-samsung.yaml      |   1 +
+>   .../bindings/soc/google/google,gs101-pmu.yaml      | 106 +++++++++++++++++
+>   .../bindings/soc/samsung/exynos-pmu.yaml           |  20 ----
+>   MAINTAINERS                                        |   1 +
+>   drivers/pmdomain/samsung/exynos-pm-domains.c       | 126 +++++++++++++++------
+>   5 files changed, 200 insertions(+), 54 deletions(-)
+> ---
+> base-commit: 58e817956925fdc12c61f1cb86915b82ae1603c1
+> change-id: 20251001-gs101-pd-d4dc97d70a84
 
+Best regards
+-- 
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
 
-No need to add items here.
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
 
