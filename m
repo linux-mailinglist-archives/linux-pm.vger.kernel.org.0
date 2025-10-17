@@ -1,123 +1,127 @@
-Return-Path: <linux-pm+bounces-36346-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36347-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82608BE804A
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Oct 2025 12:18:16 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD882BE817C
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Oct 2025 12:39:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 359BB3A17B9
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Oct 2025 10:15:29 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 9CC7D501D30
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Oct 2025 10:39:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 300BF2D77FE;
-	Fri, 17 Oct 2025 10:15:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 671A831282B;
+	Fri, 17 Oct 2025 10:39:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="mESr5QPA"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PIsJBmJr"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB8672D6E5B;
-	Fri, 17 Oct 2025 10:15:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAE0E312801
+	for <linux-pm@vger.kernel.org>; Fri, 17 Oct 2025 10:39:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760696127; cv=none; b=swRg2XvIPMAjFSs95iIkkzfe9VziMwgDnjsx6bcSDByGeTQxTLlmsrspS/DXFEyvKWBaMgPlu78jDGBR5jborKdJsJz1GoocczNQB+ijeQDV6m3maPCyOUR67nRRYJsceJMktzqcNvWNZfS+LbcFwkMTcEa7hLkfX2SkqUwJX1o=
+	t=1760697582; cv=none; b=eN/i7hxpIFWnVReG+ba9gfD0KKEeGSCKuMpkgXYWyeEge8nqgPHLbY4kWgjduzej++44ovs+ZB5m30e4UELWx9dG75lngajRA32uE3uiYGurkrf1SH4XmprLBVLUgIM7XlUJDly0fs8sssuEdgNCHK+ByMAFbfjaUzQDu+FSBys=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760696127; c=relaxed/simple;
-	bh=0ZRBA+nKWLHvVQU5bLDfqU164MIzoUT/GKn7+SZOtgs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JFDp/wt5mx8hBrGJ60jox0OAKrYkdTXWycOYX6PWRNbYDPMurUeVDx6Ykcs955oivFRlETjHvl6bdm30f6Tj6H2Je6T+rciIsQjnwU8Bk689wx1kcIbjewhzXFLDkCY/WtXmbLFuxrbVHc/xxV/PdT/6puDHg8ljh7VR+qXtCEI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=mESr5QPA; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=foxZlAn+rwPCGv1EUUcZaOp0f3TbSZApKlY3+roEXio=; b=mESr5QPA5RKifin8wuK4L0aypL
-	WM4yr6k0hjnZvn+AKVC0ztwCCVXJEHDcW4vP+XJxd0ziJ5RRG9aSItE4P1CO/53kl2/UQ+6jzH14f
-	8mmORddVkj4qz6RD0smXvwmPaPDaudD1SZ3nnyTjvemzMvYhPFhsVHV7PxgCCj7eFLRdqBcCKcXk9
-	xW/RAqPKFLoW1FMMCwr3bes8t55GEE1BAdt9v41Z7jfbl0xKpcw6fBcFh0LbCKBzFlaVHC53noGeq
-	jDzotC36/rsRJQTISlIz28EMRFXSK++Um8LUT7j6exlKCFRGIbUGrRkUPjTMo7D3HLaTsiKQXFbTW
-	SioC9xKQ==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1v9hUS-00000007Sf6-0q00;
-	Fri, 17 Oct 2025 10:15:16 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id C04ED30023C; Fri, 17 Oct 2025 12:15:15 +0200 (CEST)
-Date: Fri, 17 Oct 2025 12:15:15 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Pavel Machek <pavel@kernel.org>, Len Brown <len.brown@intel.com>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Saravana Kannan <saravanak@google.com>,
-	Maulik Shah <quic_mkshah@quicinc.com>,
-	Prasad Sodagudi <psodagud@quicinc.com>, Dhruva Gole <d-gole@ti.com>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/4] sched: idle: Respect the CPU system-wakeup QoS
- limit for s2idle
-Message-ID: <20251017101515.GX4067720@noisy.programming.kicks-ass.net>
-References: <20251016151929.75863-1-ulf.hansson@linaro.org>
- <20251016151929.75863-4-ulf.hansson@linaro.org>
+	s=arc-20240116; t=1760697582; c=relaxed/simple;
+	bh=3icRH0liAsP7sjwZ2zPe1LVJ+1rHNTn97LK8vpGCQW4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Adu/uPUUoxCDkxpYwtz1IUa3+poYp3CZ1rkU985FksxixQM4iTYy7Njnb6vvpDfE5siwxiFeZrYWWkXxEH6DH+v9uxtemq+o2HrwtYu1QQlwJnunRkkPlpjuYKShuXNSgt19NndUKYgL5jWxnI+4jBStuo5Rp2mS4ENmAS0537A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PIsJBmJr; arc=none smtp.client-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-42701f2ad61so749865f8f.1
+        for <linux-pm@vger.kernel.org>; Fri, 17 Oct 2025 03:39:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1760697579; x=1761302379; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=J7jEt2bBtS4lkQKEiP8Z3A8t05k/u/Bf60nmYvlGeNY=;
+        b=PIsJBmJrMIRiaJc377tUJB/Q7jAPNt+/GfB5DIWte0H+rpzZbktzK6V+z8PoTBEV3n
+         PXbatbbxsvCpMeXkPh4Pkvh9x+HOK6mzX+0OzVatQKjGwmZNV11fZy0DnubGUWu7nJ6n
+         jasj0SZuwGnlUMILN0xZgaeY076K9PTQujkfuVbgDDdSQScYdhhewD9JZRaz7iP2vrle
+         zdS/rqCAViynmb7CQ9RZonSn5DVK1QXDKU5pNP36zNP9FclbCe3nm03cJVXUqgw3fUq8
+         SlR5IsNq8+6DmDNdOTasECZ6L6JHpgAA6tHuKzz0GiHqzUiWMXyEmbkzyepPkpPIooHQ
+         mHMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760697579; x=1761302379;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=J7jEt2bBtS4lkQKEiP8Z3A8t05k/u/Bf60nmYvlGeNY=;
+        b=qvGxN1g66AzpNuVHOyIZTIo9/AUuImeWYXiT9YOsE04QXzd+/kaKhNF2VLPQK1QjHw
+         jF3snn8bmbBbjroA1om3aJQyxCzpu9JwS/znj1krcdfP/6MREzzY3bzQQLax5nn0lbr6
+         vtCHlKjZ5Tb1yuWVheKZGTBuAv3zu/RnwsbVGn27lVWwdxhOjGm3FiFem67padN9G2ge
+         7vZ2f71enzyNChq+yF5xciZG3tRofGvJwWkBmi1fHWUwuKfqmoYSLpY26bKbd+rfiiZd
+         y48hQBKk6B5gbKOWrCSPJ3kzQGvPf50SZN9YqDeF/JBTkUd1Ol/3xfpYa84nit808nOj
+         a7tw==
+X-Forwarded-Encrypted: i=1; AJvYcCWfAnM0/Pqqny9ALY2ZGstLSVW0xCTpu+VWQA5DWrCy2vNpKYZ1p3mWatnyJ4+W6kyaQRChJq63AQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxiCd9bYY4vUcpTpJnxGcoEvYqTASzuVSSmPr7ZaHSe3edfleEu
+	ai7hW0W0CFUwr5cuSXR8jCW5hYtrenObXdPpA/AZnLpXcRtlj0i3dg7FXoqdKIil
+X-Gm-Gg: ASbGncvVGWUcFHPm54Dejc+4gHv93+HA/nhB98BIbkukMHeCqQxGzPJv6eOiN4H4p07
+	9CrNTwbMCLcsdXHJBLm82XDgKdqWhmeqcsvjZqp50veMHjBJT5yAh0mfkqDVaHS0XJ8ij2AwCFS
+	obOOlIPeRs9tHpTQj7rCRpQjDulXSTxIZXuVmOPrbDR6SUpsYUFOt8j7h+WveE5s7pJ1UkCSrQe
+	r4WELy3bvmgDw3g2CKjH3haJ1UvZ4RWc04jTvSJGlyXttYCXeNaPznOFRqypWi9cENp35vd7ttd
+	tq1IHTkqpQW3zIYuA2h7lYjlj0FwRvE/wrqwIOnHnWbGWMDQhn1NQQVkQzqJ6+e80wRFnpSpKth
+	aEAOmdNVOt/OVZNyn2RT9TxS5/1yCkG7/QvDMk81cgZRvAQ9i3sOWTrM6Hkdnaj5ICdpfy4rqni
+	kMTN08cC/9JTI5CtrJQpfJhA==
+X-Google-Smtp-Source: AGHT+IEHuo1AdfTtiQhHrCKaYLVYpg367t+Hy0cy8LVgBCFvR9kcQy/2El+YmymF463hMk6d8OPEzg==
+X-Received: by 2002:a05:6000:400a:b0:425:769e:515a with SMTP id ffacd0b85a97d-42704d9e8f7mr2460323f8f.42.1760697578950;
+        Fri, 17 Oct 2025 03:39:38 -0700 (PDT)
+Received: from localhost ([212.73.77.104])
+        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-426ce5e10e8sm40199791f8f.39.2025.10.17.03.39.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Oct 2025 03:39:38 -0700 (PDT)
+From: Askar Safin <safinaskar@gmail.com>
+To: quwenruo.btrfs@gmx.com
+Cc: linux-btrfs@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Subject: Re: Long running ioctl and pm, which should have higher priority?
+Date: Fri, 17 Oct 2025 13:39:32 +0300
+Message-ID: <20251017103932.1176085-1-safinaskar@gmail.com>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <3a77483d-d8c3-4e1b-8189-70a2a741517e@gmx.com>
+References: <3a77483d-d8c3-4e1b-8189-70a2a741517e@gmx.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251016151929.75863-4-ulf.hansson@linaro.org>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Oct 16, 2025 at 05:19:23PM +0200, Ulf Hansson wrote:
+Qu Wenruo <quwenruo.btrfs@gmx.com>:
+> But there is a question concerning me, which should have the higher 
+> priority? The long running ioctl or pm?
 
-No objections to this.
+Of course, pm.
 
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+I have a huge btrfs fs on a laptop.
 
-> diff --git a/kernel/sched/idle.c b/kernel/sched/idle.c
-> index c39b089d4f09..c1c3d0166610 100644
-> --- a/kernel/sched/idle.c
-> +++ b/kernel/sched/idle.c
-> @@ -131,12 +131,13 @@ void __cpuidle default_idle_call(void)
->  }
->  
->  static int call_cpuidle_s2idle(struct cpuidle_driver *drv,
-> -			       struct cpuidle_device *dev)
-> +			       struct cpuidle_device *dev,
-> +			       u64 max_latency_ns)
->  {
->  	if (current_clr_polling_and_test())
->  		return -EBUSY;
->  
-> -	return cpuidle_enter_s2idle(drv, dev);
-> +	return cpuidle_enter_s2idle(drv, dev, max_latency_ns);
->  }
->  
->  static int call_cpuidle(struct cpuidle_driver *drv, struct cpuidle_device *dev,
-> @@ -205,12 +206,13 @@ static void cpuidle_idle_call(void)
->  		u64 max_latency_ns;
->  
->  		if (idle_should_enter_s2idle()) {
-> +			max_latency_ns = cpu_wakeup_latency_qos_limit() *
-> +					 NSEC_PER_USEC;
->  
-> -			entered_state = call_cpuidle_s2idle(drv, dev);
-> +			entered_state = call_cpuidle_s2idle(drv, dev,
-> +							    max_latency_ns);
->  			if (entered_state > 0)
->  				goto exit_idle;
-> -
-> -			max_latency_ns = U64_MAX;
->  		} else {
->  			max_latency_ns = dev->forced_idle_latency_limit_ns;
->  		}
-> -- 
-> 2.43.0
-> 
+I don't want scrub to prevent suspend, even if that suspend is happening
+automatically.
+
+> Furthermore the interruption may be indistinguishable between pm and 
+> real user signals (SIGINT etc).
+
+If we interrupted because of signal, ioctl should return EINTR. This is
+what all other syscalls do.
+
+If we were cancelled, we should return ECANCELED.
+
+If we interrupted because of process freeze or fs freeze, then... I
+don't know what we should do in this case, but definitely not ECANCELED
+(because we are not cancelled). EINTR will go, or maybe something else
+(EAGAIN?).
+
+Then, userspace program "btrfs scrub" can resume process if it
+got EINTR. (But this is totally unimportant for me.)
+
+Also, please CC me when sending any emails about this scrub/trim bug.
+
+-- 
+Askar Safin
 
