@@ -1,163 +1,84 @@
-Return-Path: <linux-pm+bounces-36315-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36316-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D46D1BE5DC4
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Oct 2025 02:11:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D9003BE5DDF
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Oct 2025 02:16:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4A870407566
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Oct 2025 00:11:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 98F9F584DD3
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Oct 2025 00:16:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77A6778F3A;
-	Fri, 17 Oct 2025 00:11:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAAE11DC1AB;
+	Fri, 17 Oct 2025 00:16:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="35Ul1jOa"
+	dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b="nst4UH6L"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailbackend.panix.com (mailbackend.panix.com [166.84.1.89])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F24971F95C
-	for <linux-pm@vger.kernel.org>; Fri, 17 Oct 2025 00:11:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FC531B042E;
+	Fri, 17 Oct 2025 00:16:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.84.1.89
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760659894; cv=none; b=eACzBGsYhYL1DgZe9MVsld3kgUpL+Z0+3qtk28r/QkWe2Cf8yzdFY07nBqQ/tBt875fc2WEV0Mz17UojxaF1sRFIkEyMmWV1IHyuOvijSwQisCB7niNDXpfWG5cqMnk5ow46hdLpsXRZd8iLiSDMQix3P6PkDDsLbbfhwk7XaD8=
+	t=1760660186; cv=none; b=lzJ41s7TNqVd1+2AlFQuGCRsOyY1kxgK6zFia5h/OpVSpJw8RnhOvpYg8TxUYv2aBvs/a+rmSltUcgb3Lw0QBPqaqqcVHLQJASHWnTiZeH1AUtBZiPEvQXIfTeZoY2Bc8j7enpT2t3sqSlEyVssghlzhAek0rnNO8IR6WccgNns=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760659894; c=relaxed/simple;
-	bh=9qQ/Kaq1PQi1iQEGpE/Y4pRBJHUu5desBrWzjzYMp1c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pkDQrkb1OCiFpEtkkrDf+KTeDfj3AImsjoVcDchf+sbaLUISe8wdOZ4soqghXIgJlNS2sF6tYa/4E7f/qwOr5wRpnQ5VsLKec+54VMbPDEmcQwdOmuqKYdcFZl2d4auzzKmxxtiGZ4q85xlx2lyydt0Iuay+bOqgq9HLUu/fw9o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=35Ul1jOa; arc=none smtp.client-ip=209.85.216.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-33ba37b3ff7so1271311a91.1
-        for <linux-pm@vger.kernel.org>; Thu, 16 Oct 2025 17:11:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1760659892; x=1761264692; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6rdlnJ4bFVxMl/yRGUabSawyz7mEAHOSqjDImE5CoEM=;
-        b=35Ul1jOaA8k6hSHM5pY5yRZMWRSaezWC9IvE2E1zA0yZsrOIeLiCJ9UoouboPAor+Q
-         QTj3LFgL+BTtibQRft9CfKT4etURCans9Yw5OoOtzvgVw3oBcl6gtkaE4UFDc8agcdW1
-         8V53SOx364gb6q7Wfi2zRka72O4+aRzNd3FM0tX5EkWOKDrekRYZOkzaHt5BitYWlAYi
-         RZdsh45/0AhFUUdMXpE/2TnjjlkCsKc7bCEP7W8yjYH3Pi0CKVgxtJOrf4/qx/ExOcWn
-         AJZqpfLS16IJ0K2ueYpNTi6xWw96n51egktTVi4N8oe9Gug6K7pPc3C08M+57U/dUfIm
-         lEUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760659892; x=1761264692;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6rdlnJ4bFVxMl/yRGUabSawyz7mEAHOSqjDImE5CoEM=;
-        b=EGff7KfL77txQZOaxCqJw36puD9/upYdciRClonCnHrWF7M/JUyIwiVJoaY+oNbuc8
-         qQdfocClQ9Va32Nu70VR2JbFMTqC+7zBev62/4xBEbKZDphE+pooBFrrpAFNXAO9cVz/
-         Hkk48TjbXowo0JSkDTQoxgB/SnlNvF/PoqzsrJFPT8Qe0pprc8iVMxK3t1rsNBVGjFDQ
-         dCUXAVML4KiRiZJH/xJd/LewvxR+9jSdld+XxN9AB8WHBMdSKMSlg1CeR0ULtqQCoyrl
-         ihh5+z7JS+rKig9rpt00jWigHGMpX4jDxqn+e4LZOv2BCytf2eef3f/UACLGgv/z/UnS
-         uALg==
-X-Forwarded-Encrypted: i=1; AJvYcCUou/mMfT+sGIklZKVmMk1RbF0Ugbi7vftpDFdVdUp9IcObfiN7bBvMbX/MRh9mfwZIoS2hxEYHVQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZFedqPd4B+m3W3GvIa5OM2CSXEtauDlRFQZT+DulvVk6TvSia
-	v06RdiKFIr0+QSCiKpYJkZUVp/wPDXQM+J/q8oIWbrL1m5ssDMp0K88LtHxh6OgDWw==
-X-Gm-Gg: ASbGncshH+VaL9Bm0GsAcnZpPNB1nPiovHn8ijOi1NVXa1QZBnw1C5JABK6keHW1+Ty
-	iJk0NrXsRldDgrKMz1TUaqiWwGRb8B/DQqnqepz7YdpBrVN4cO0cE6+OUikrRXwhQSQR9AJwRGb
-	aa9R1v+7Wu9AyCu7mvSfJINGVGBlcdoAYqQ/IzMH4+0tfCgcVk6VAUWZd8dmuuRG9+FNbSU4ntE
-	msxLj5iUAICFaaKHv7dNhybhlswOUujDZGXUneMeiEglFDT3aytVt1eeuRXDj1iO+sGP6QddC+L
-	kYyosyol+EJ/1CVaVL/vE1tzhQBFUWoTxl7NU8NgiqAH8d0Y+B+RtgD6HLZbAfphyvpYXGMqPTy
-	Fp1hBQ4VEk6VKoKPRisGOr7x+VBBMAU+MfPRs9nKUNsQ6m2kOn71c14EMh4Xb6k3dUe+KLOCIKP
-	GCQ7rdI0hlyoJ3zyj1xlwsegF3qqb2KybkuK4JkrfebiA=
-X-Google-Smtp-Source: AGHT+IF/mLPPhwDZ9pM3tExE2bPuXwl/05sO0pJ0F8y1gYSwfK180J5bWJ1YL2l1fjSo1vLni9n+LA==
-X-Received: by 2002:a17:90b:5110:b0:32e:4716:d551 with SMTP id 98e67ed59e1d1-33bc9b8f4e7mr2440735a91.6.1760659891842;
-        Thu, 16 Oct 2025 17:11:31 -0700 (PDT)
-Received: from google.com (232.92.83.34.bc.googleusercontent.com. [34.83.92.232])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-33ba9270049sm1592080a91.0.2025.10.16.17.11.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Oct 2025 17:11:30 -0700 (PDT)
-Date: Fri, 17 Oct 2025 00:11:26 +0000
-From: Benson Leung <bleung@google.com>
-To: Jameson Thies <jthies@google.com>
-Cc: heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, dmitry.baryshkov@oss.qualcomm.com,
-	bleung@chromium.org, gregkh@linuxfoundation.org,
-	akuchynski@chromium.org, abhishekpandit@chromium.org,
-	sebastian.reichel@collabora.com, kenny@panix.com,
-	linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] usb: typec: ucsi: Report power supply change on
- sink path change
-Message-ID: <aPGJrjG6nsRQune_@google.com>
-References: <20251016235909.2092917-1-jthies@google.com>
- <20251016235909.2092917-4-jthies@google.com>
+	s=arc-20240116; t=1760660186; c=relaxed/simple;
+	bh=7sAlPsgPaqVRtg4vyciG7ZFOALiAgARqEcWosXY9e6Y=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=VU6xmdF08PyPPxwepln5J+u2CK+LtW0PVWTBDpTbAVn0ZFgr2XQT6DcZ0fGVPCnc4bs9lYW1ni6iSoF49bus96t5SdvAIzX0dnA4UvdG1U1SfJshyhS/3MlO23y1PgE6a+KElSHbiBwmRxgJ9WQU8/SyxxcoIHiWMBdhqFawJHA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com; spf=pass smtp.mailfrom=panix.com; dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b=nst4UH6L; arc=none smtp.client-ip=166.84.1.89
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=panix.com
+Received: from [10.50.4.39] (45-31-46-51.lightspeed.sndgca.sbcglobal.net [45.31.46.51])
+	by mailbackend.panix.com (Postfix) with ESMTPSA id 4cnljX0Bc1z4Dsh;
+	Thu, 16 Oct 2025 20:16:15 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=panix.com; s=panix;
+	t=1760660177; bh=7sAlPsgPaqVRtg4vyciG7ZFOALiAgARqEcWosXY9e6Y=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=nst4UH6LnYjVbhkBZDDNnvzfIOgMoNlL9vrFKGDyEFxUwQbe2kX/VOT/RXi0YzLnR
+	 +fFnRXBjMYJ5njiyJFXf/0K5qd0BeocHwkyO3o2R4VZxvO0hDT/jt2t/U/qlhRKLPU
+	 gDdl4CJFyvzxjCijNZzTtfztvyPSIdBTLPaVSSQE=
+Message-ID: <7f969633-6a5c-4694-a33e-b7d4d975ce59@panix.com>
+Date: Thu, 16 Oct 2025 17:16:15 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="fNlBXg0mnG7NeY4w"
-Content-Disposition: inline
-In-Reply-To: <20251016235909.2092917-4-jthies@google.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 0/3] UCSI Power Supply Updates
+To: Jameson Thies <jthies@google.com>, heikki.krogerus@linux.intel.com,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Kenneth C <kenny@panix.com>
+Cc: dmitry.baryshkov@oss.qualcomm.com, bleung@chromium.org,
+ gregkh@linuxfoundation.org, akuchynski@chromium.org,
+ abhishekpandit@chromium.org, sebastian.reichel@collabora.com,
+ linux-pm@vger.kernel.org
+References: <20251016235909.2092917-1-jthies@google.com>
+Content-Language: en-US
+From: Kenneth Crudup <kenny@panix.com>
+In-Reply-To: <20251016235909.2092917-1-jthies@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
 
---fNlBXg0mnG7NeY4w
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 10/16/25 16:59, Jameson Thies wrote:
 
-On Thu, Oct 16, 2025 at 11:59:09PM +0000, Jameson Thies wrote:
-> Update the UCSI interface driver to report a power supply change when
-> the PPM sets the Sink Path Change bit.
->=20
-> Signed-off-by: Jameson Thies <jthies@google.com>
+> v2 changes
+> - Removed patch adding support for reporting DRP power supply types.
+>    It led to spam in dmesg and needs further debug.
 
-Reviewed-by: Benson Leung <bleung@chromium.org>
+So far, so good! I'm currently booted (along with the "Add power supply 
+status" patch) and no issues so far.
 
+I'll look for the sysfs entries and report back with a Tested-By: if all 
+is well.
 
-> ---
->  drivers/usb/typec/ucsi/ucsi.c | 2 +-
->  drivers/usb/typec/ucsi/ucsi.h | 1 +
->  2 files changed, 2 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> index 7b718049d0d1..cad3913bd7f9 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.c
-> +++ b/drivers/usb/typec/ucsi/ucsi.c
-> @@ -1293,7 +1293,7 @@ static void ucsi_handle_connector_change(struct wor=
-k_struct *work)
->  	if (change & UCSI_CONSTAT_CAM_CHANGE)
->  		ucsi_partner_task(con, ucsi_check_altmodes, 1, HZ);
-> =20
-> -	if (change & UCSI_CONSTAT_BC_CHANGE)
-> +	if (change & (UCSI_CONSTAT_BC_CHANGE | UCSI_CONSTAT_SINK_PATH_CHANGE))
->  		ucsi_port_psy_changed(con);
-> =20
->  	if (con->ucsi->version >=3D UCSI_VERSION_2_1 &&
-> diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
-> index cce93af7461b..35993bc34d4d 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.h
-> +++ b/drivers/usb/typec/ucsi/ucsi.h
-> @@ -382,6 +382,7 @@ struct ucsi_cable_property {
->  #define UCSI_CONSTAT_BC_CHANGE			BIT(9)
->  #define UCSI_CONSTAT_PARTNER_CHANGE		BIT(11)
->  #define UCSI_CONSTAT_POWER_DIR_CHANGE		BIT(12)
-> +#define UCSI_CONSTAT_SINK_PATH_CHANGE		BIT(13)
->  #define UCSI_CONSTAT_CONNECT_CHANGE		BIT(14)
->  #define UCSI_CONSTAT_ERROR			BIT(15)
-> =20
-> --=20
-> 2.51.0.858.gf9c4a03a3a-goog
->=20
+-Kenny--
+Kenneth R. Crudup / Sr. SW Engineer, Scott County Consulting, Orange 
+County CA
 
---fNlBXg0mnG7NeY4w
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQQCtZK6p/AktxXfkOlzbaomhzOwwgUCaPGJrgAKCRBzbaomhzOw
-wmyRAP4qaYGumR/0N01XkF9UwvhoHVmf95YivCn2pzq/dyTTSwD9E9LvRCPYKeaM
-kvdNAAOULTjT4h0VUuKVJ93sTEh0LQM=
-=N62/
------END PGP SIGNATURE-----
-
---fNlBXg0mnG7NeY4w--
 
