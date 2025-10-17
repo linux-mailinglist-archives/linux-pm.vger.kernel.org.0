@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-36326-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36327-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1CF38BE6541
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Oct 2025 06:44:59 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 92B97BE6600
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Oct 2025 07:12:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B95993BAC82
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Oct 2025 04:44:57 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 81D304EE37B
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Oct 2025 05:12:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24F8330B538;
-	Fri, 17 Oct 2025 04:44:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 579FB30C623;
+	Fri, 17 Oct 2025 05:12:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NOxblIDt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eTqi9inl"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8F38334689;
-	Fri, 17 Oct 2025 04:44:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 196AC3FCC;
+	Fri, 17 Oct 2025 05:12:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760676294; cv=none; b=GdQjrSxcP9x+4tU44ZcIgpsPiBHOKi6HxpHbcX5JBeyU8/kBlpwUf7WIZmOA+QkOH9t7CIen8FgmVlMb0Aa22PZ746KVG3INh8K26MTONfWIVYCszhS/M/DkS4EhSNrDZOYF3ofyVjb4WPXpkul7Xl4cNNVEFoZ2oy2aAkTcAVg=
+	t=1760677931; cv=none; b=IGmVY3XJZea4GuQbLaSSSdPd+SCguWiUSWmeZN0MZAZ486HjaVfm3LmeDZLaqwg/ZWaA+UX96IAKRLtp2XuQbrxG6Mtd1vdaLgBFQT4+/NlL6D5TXznoX2Ugd4TJhl3qMVCvP/oNpx3t6IM03v8gO42Berc77I6qPwnuScXN6QY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760676294; c=relaxed/simple;
-	bh=SSTkBucb3JgRyyCqeNakRbmMDwqm8r6x8qKrd9uPk8w=;
+	s=arc-20240116; t=1760677931; c=relaxed/simple;
+	bh=yTz2OAWYK23rMc0c1KwBF4lmZ8+usEUxK6yl7xp/muE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JEtpjrz38Xbtfxlt3foM18Cq/wwXGP4rUPN9tPaM4ENHF19VAfR1FmYJuyaXlv/barN5ljtMVvP9NMGtNLx1aOFgWaUDw7qSJQ/qQDaTByWKPTjXgNtHHzua7c7aGMDmFyJdG7wpc6b6vpt6NEg4v8ArRixoYYZLNM4lZ29Lh1o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NOxblIDt; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F539C4CEE7;
-	Fri, 17 Oct 2025 04:44:50 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=LlOcEm4WEG4c0+Nt3o4zEakj5FpoupxbuH6H1xhBFgRgP2xCbz2PnqpiyzIY4SIqrYCy2cO79SlUdU0nLF1oEW8aY+zbLB8HJHVv32gMKrYkHJ5b1ailOhtJbmEd3i66GyUwTWaNG5L4/hNZrEaURX3Qa/kO9aXJPJA+TIE24lc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eTqi9inl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71BE0C4CEE7;
+	Fri, 17 Oct 2025 05:12:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760676293;
-	bh=SSTkBucb3JgRyyCqeNakRbmMDwqm8r6x8qKrd9uPk8w=;
+	s=k20201202; t=1760677928;
+	bh=yTz2OAWYK23rMc0c1KwBF4lmZ8+usEUxK6yl7xp/muE=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=NOxblIDtox5CRTYai+aOrI33TDQrS5M1T7e6Ej1NyGLUSzavS5iX9HhRdSKFzIXSA
-	 ItaSyY6YCZ/UPfbBALJS+Cpj7nNMGtxjhq4vqr9SZ26AepewdxPa2SQdhU64Djqfbt
-	 qdM5L2Ji6yhco4eAQyxx4o34tiwNLkloTdFZOgZkCyj0B+aeMgFD6GyZQr0k8DuQUm
-	 8gyUUrqyVmGhfR4vom0uitgiVxHGMjj4vinvbGC4ThlNPMZVP8Oad7OhG2Lmxs3ecR
-	 FcTUVRtID/30F8lgtVE0JbmEoK0V0XqwyW2GT/M6p3oB4Xs6MA0F0dZy80ijrFVGCd
-	 tKeP+eAIHU8SQ==
-Message-ID: <c03cc208-5415-40e3-82fd-fc19d31fbc74@kernel.org>
-Date: Fri, 17 Oct 2025 06:44:48 +0200
+	b=eTqi9inlVuMf/4wKDJUrTR8A+z0E/PpeuE+WtXHYsmXBssSjwi8OofIjL1Tk0avVF
+	 wWMBpJ8kt+M5vTFhoSxUU4T+jMYhXZLpdzeQ5Sdh/JYx68hlvJYGtcJBpdJ6XVw4xh
+	 j/LnAb6EqNtFxtcFucD/82+BudLaLcQcwYre57RSFa0BOLtUN1XMDsWqn0s0kNES/P
+	 lyV61eeH84FZOsxksggHTMO4DoHGI6Dd9lEu73MVBlFpDVNerPeQ4g6IdMMnmM4v0L
+	 dRk0lxnWE3DGcuGe9GnQSjO/kuV98ltoSlcL6Q9vIf8P4URJeeaLamO4CWveu+9Rmg
+	 8MRZDN1AwMZ7Q==
+Message-ID: <841fca71-6842-4874-a829-6296949ad925@kernel.org>
+Date: Fri, 17 Oct 2025 07:12:02 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,16 +50,18 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] dt-bindings: power: rockchip: Add support for
- RV1126B
-To: Finley Xiao <finley.xiao@rock-chips.com>, heiko@sntech.de
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
- ulf.hansson@linaro.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org,
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- zhangqing@rock-chips.com, sugar.zhang@rock-chips.com
-References: <20251017031425.310946-1-finley.xiao@rock-chips.com>
- <20251017031425.310946-2-finley.xiao@rock-chips.com>
+Subject: Re: [PATCH 2/3] dt-bindings: thermal: r9a09g047-tsu: Document RZ/V2H
+ TSU
+To: Ovidiu Panait <ovidiu.panait.rb@renesas.com>,
+ john.madieu.xa@bp.renesas.com, rafael@kernel.org, daniel.lezcano@linaro.org,
+ rui.zhang@intel.com, lukasz.luba@arm.com, robh@kernel.org,
+ krzk+dt@kernel.org, conor+dt@kernel.org, geert+renesas@glider.be,
+ magnus.damm@gmail.com, mturquette@baylibre.com, sboyd@kernel.org
+Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+ linux-clk@vger.kernel.org
+References: <20251016131327.19141-1-ovidiu.panait.rb@renesas.com>
+ <20251016131327.19141-3-ovidiu.panait.rb@renesas.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -105,28 +107,44 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20251017031425.310946-2-finley.xiao@rock-chips.com>
+In-Reply-To: <20251016131327.19141-3-ovidiu.panait.rb@renesas.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 17/10/2025 05:14, Finley Xiao wrote:
-> Add power domain IDs for RV1126B SoC.
-> Add a new compatible because register fields have changed.
+On 16/10/2025 15:13, Ovidiu Panait wrote:
+> The Renesas RZ/V2H SoC includes a Thermal Sensor Unit (TSU) block designed
+> to measure the junction temperature. The device provides real-time
+> temperature measurements for thermal management, utilizing two dedicated
+> channels for temperature sensing.
 > 
-> Signed-off-by: Finley Xiao <finley.xiao@rock-chips.com>
+> The Renesas RZ/V2H SoC is using the same TSU IP found on the RZ/G3E SoC,
+> the only difference being that it has two channels instead of one.
 > 
+> Add new compatible string "renesas,r9a09g057-tsu" for RZ/V2H and use
+> "renesas,r9a09g047-tsu" as a fallback compatible to indicate hardware
+> compatibility with the RZ/G3E implementation.
+> 
+> Signed-off-by: Ovidiu Panait <ovidiu.panait.rb@renesas.com>
+> ---
+>  .../devicetree/bindings/thermal/renesas,r9a09g047-tsu.yaml | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/thermal/renesas,r9a09g047-tsu.yaml b/Documentation/devicetree/bindings/thermal/renesas,r9a09g047-tsu.yaml
+> index 8d3f3c24f0f2..274e96e37a12 100644
+> --- a/Documentation/devicetree/bindings/thermal/renesas,r9a09g047-tsu.yaml
+> +++ b/Documentation/devicetree/bindings/thermal/renesas,r9a09g047-tsu.yaml
+> @@ -16,7 +16,12 @@ description:
+>  
+>  properties:
+>    compatible:
+> -    const: renesas,r9a09g047-tsu
+> +    oneOf:
+> +      - items:
 
-Missing ---. Please read how commits and patches are created in
-submitting patches.
 
-> Changes in v2:
-> - update the commit message
-> - update the license
-> - rename AISP to AIISP
+No need to add items here.
 
-because this breaks canonical patch format. See yourself, run checkpatch
-or verify signed-off tools.
-
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
