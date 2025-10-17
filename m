@@ -1,187 +1,161 @@
-Return-Path: <linux-pm+bounces-36341-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36342-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D5D9CBE7D9F
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Oct 2025 11:43:27 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3965DBE7E05
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Oct 2025 11:46:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AFD76188D9DE
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Oct 2025 09:40:06 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4E15554103B
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Oct 2025 09:43:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC6962D543A;
-	Fri, 17 Oct 2025 09:39:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 687832BEC41;
+	Fri, 17 Oct 2025 09:43:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mkm5iFQJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XnbLDmKG"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B78782C15A5
-	for <linux-pm@vger.kernel.org>; Fri, 17 Oct 2025 09:39:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43401223710
+	for <linux-pm@vger.kernel.org>; Fri, 17 Oct 2025 09:43:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760693961; cv=none; b=RPKmnQ2W+/2DyQyKiP21k0KW0p/Pq4CT2hURqtlifhyaHaEVD4rO1RibvYMv+U+/io/v/DiKAA5Kfg7BeGaF+A3RA0vTX8R4WBnD+diXBqeBhq+BmONLq0dJ2vmB0DjoD7KYDoHM8DuLzhIlYRliYHP8T7DvLM06T9z9Gdv5sto=
+	t=1760694210; cv=none; b=aabEGLLzAjVo6X3ZPriCQ/BMhNTd3xfWeF0dw6YUeEY2zJzXRG5g9B4WWPlE/yCwYlbwDkLRXoCH3FuZ4YGTI4ZPQyoFXyxb0qej523U76CVjekCpH1UoZia3nYoNZjNTl7y7DnDnwStwttoPA8VTHgjFlAKCce/DrBcNfaGI8E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760693961; c=relaxed/simple;
-	bh=Qx1TE74bjoehaJnB38qm6cAa+/c4JLqzRjdOWDek/ks=;
+	s=arc-20240116; t=1760694210; c=relaxed/simple;
+	bh=pkCI6HFfiRn0R2kWZVx7o4rc4bqqMnfKrsb36bHEddo=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DDgSek968jNYXt1fr+9VT7NWR6MM6qQp8tZ3PndgWRD3RbtLYilADYQlfMLWmUmVWa5R3kODTJodA1RbcVAffUrvEWQfArUYyLKx+kDtl/JPFV5+1zfYCKopju/MZzGIhluiN4AI1CcQQEvzsgNZgVTKvp7PAv5X4lmno8IDifo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mkm5iFQJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53134C113D0
-	for <linux-pm@vger.kernel.org>; Fri, 17 Oct 2025 09:39:21 +0000 (UTC)
+	 To:Cc:Content-Type; b=mcbLTm2/joO/FCMUr5XtTNb6rlLTQfNYMOXqKCHp+G4Mwe1gNoANLpqtTMyIq7BtNxQ+r3wxM8wT3yu7dJNyEUWcSsJjG+yRlbV1AYhm0yj25HM3Qo03DYxCl2nVBZq9S0vxHa413xNHW7EC1CANb4GK1uZhXs88HRSyLpEZkNA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XnbLDmKG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E89D2C19423
+	for <linux-pm@vger.kernel.org>; Fri, 17 Oct 2025 09:43:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760693961;
-	bh=Qx1TE74bjoehaJnB38qm6cAa+/c4JLqzRjdOWDek/ks=;
+	s=k20201202; t=1760694209;
+	bh=pkCI6HFfiRn0R2kWZVx7o4rc4bqqMnfKrsb36bHEddo=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=mkm5iFQJVb5xjTK1usWFPlxgoKljXiRJqTkwvEZq0IE8VEamijNvCFPHa3a/h4m9r
-	 RJbLlf8bkDFGxOJEE9Rm3juJVzJRlfx5U7KGJeGMUT+VQYLlwXhzrHnNVpBnlmn+Vp
-	 +MZt7/+AO2PYlHrWo+nKUqL87T1a7OPRv3XGAfGS4p3cypsE9qcctqwcBY+3OgTP2D
-	 XcVNI38qYjCPnlBPDL5IAMuW9LYTcsJrZRw4ScBkatz+zgRrjuBqfDbPByoKksqZ1k
-	 +HmlHXxoFvdhC7/x7wrjJ98PIeUThzrgsz6xsG5jS2dQO0hdvO823i8hrfRjCN5+QC
-	 zqT8IZSrURRvQ==
-Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-7b4f7a856acso544414a34.3
-        for <linux-pm@vger.kernel.org>; Fri, 17 Oct 2025 02:39:21 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWK5K84EDXMmsC3O3KSj56m9k08NVBYElaG9J0/nBizcn1ZZAqk/R1L3Oey7icX7FRYQjNsUPsh5g==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyU588BhX0krI6oXGIxb6AlmPz+FfeM8+YUq/M1bC9W3psaO8VG
-	DdOKRmGXg7qMIrgkh0fSSfAjfo7WC5A3kUx5oBloqHjQbIdYQAqUZ4j/CN3JdV7SLoo9jRk/dWp
-	03LazRMXpq87JCY9clYKgtx+vD0ZFpg0=
-X-Google-Smtp-Source: AGHT+IGttxufEgkOwOsutN3evluYKDZYajTfOKTB9QlgJ8PbCatlAdOeutL0B0BAsdWnnouVh/yMwTtxDPHcl4JHcH0=
-X-Received: by 2002:a05:6808:2211:b0:43f:70a1:c6a3 with SMTP id
- 5614622812f47-443a2f0be2cmr1386014b6e.26.1760693960641; Fri, 17 Oct 2025
- 02:39:20 -0700 (PDT)
+	b=XnbLDmKG5RnudC+UiGXKohr0V7QpfNa7T2B4ezxb4q260dbsT6Xl71FesMdApZXpw
+	 3zeuJIK6CCywFxO6xcPL8xjtuNzUWAQizCxvq0V92bjnZFcO5rh9E7yuhKzX89c/aX
+	 AqVMiwszMWwL5TqVGio0E2YV8PO4+mlWOMfgbwJiPhVfc1qaTTcQ1QF0DkZzPWdkih
+	 PhwSLq4BFTILe1lcmxhuxdLmZRoSzlkZP41kTpyUTgbGB6T+rYhtERafkf32GwMiN8
+	 xVhxBa31J5pL+YEE0EiqpRZFcCvO79vfl2iuOOX3atZSFVK+R6Xsq2bNMnRp/Ud8IM
+	 MJGl0o2dfzb2g==
+Received: by mail-ot1-f42.google.com with SMTP id 46e09a7af769-7c280b71af9so148853a34.2
+        for <linux-pm@vger.kernel.org>; Fri, 17 Oct 2025 02:43:29 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUzuxRZTBlre7k9g5BGUPiVk0qDa0l4FA9olxr/DEdInrtYpnuIv784VvKJpBgPB53PNp4rWxv95w==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyyUZ2LrVzybXqudlVNzs7Rd8QnFJpswF2DOIPh5f/nook6b/eB
+	qNAMdOh0JRz/+KzglX0thQJews0eqo/FGZTmJWtDIHcg/efydVCep6pybThzbtMMjkoNgh7to7b
+	9lcuvQHAcc2FEKZllAubE6qy3VybhZdg=
+X-Google-Smtp-Source: AGHT+IFb30NmOSO8om+QY7wjx78VOOzA/XC5BsA2TqliME5xYcdEEBmD6YG/6U29lXl8c1d2Hrs83yjqQRrYaDsT33k=
+X-Received: by 2002:a05:6808:1a16:b0:442:20cb:8d18 with SMTP id
+ 5614622812f47-443a2fb2b9dmr1312211b6e.42.1760694209205; Fri, 17 Oct 2025
+ 02:43:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <4687373.LvFx2qVVIh@rafael.j.wysocki> <5f0aa630-b30a-44c4-a52c-e08179cd3bf9@arm.com>
-In-Reply-To: <5f0aa630-b30a-44c4-a52c-e08179cd3bf9@arm.com>
+References: <3925484.kQq0lBPeGt@rafael.j.wysocki> <cc21a74c-905f-4223-95a8-d747ef763081@baylibre.com>
+ <875xce7m11.wl-tiwai@suse.de> <12765144.O9o76ZdvQC@rafael.j.wysocki>
+ <68f14b5b6a92_2a2b10018@dwillia2-mobl4.notmuch> <CAJZ5v0iZJFQeBhA7tM-sWuJDtisvrHGjPPdQHrC-eXXF1xJpbA@mail.gmail.com>
+ <68f15c85b1781_2a2010086@dwillia2-mobl4.notmuch>
+In-Reply-To: <68f15c85b1781_2a2010086@dwillia2-mobl4.notmuch>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 17 Oct 2025 11:39:08 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0gBtv0bpK2swkc6D0AmanpKAvqO53dgRp2e7p9cWAM3TA@mail.gmail.com>
-X-Gm-Features: AS18NWBUyN7vl9Iz8L2yW8Lm6U0ynOZg4aGcHapB3TuhqCtgXEqHaSRKsWpI-eE
-Message-ID: <CAJZ5v0gBtv0bpK2swkc6D0AmanpKAvqO53dgRp2e7p9cWAM3TA@mail.gmail.com>
-Subject: Re: [PATCH v1] cpuidle: governors: menu: Predict longer idle time
- when in doubt
-To: Christian Loehle <christian.loehle@arm.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
-	Sergey Senozhatsky <senozhatsky@chromium.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Artem Bityutskiy <artem.bityutskiy@linux.intel.com>, Tomasz Figa <tfiga@chromium.org>, 
-	Doug Smythies <dsmythies@telus.net>
+Date: Fri, 17 Oct 2025 11:43:15 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0gKWSdVeT-eKobSe+BedPKZq25adZKdxOgV0z+iOCAyNw@mail.gmail.com>
+X-Gm-Features: AS18NWDmW9zSSD8Q9CCy7XVXUmgMtdJ9aAZX1cxaF4-5gfPljWhkljZlWax6ZH8
+Message-ID: <CAJZ5v0gKWSdVeT-eKobSe+BedPKZq25adZKdxOgV0z+iOCAyNw@mail.gmail.com>
+Subject: Re: [PATCH v1 1/3] PM: runtime: Introduce PM_RUNTIME_ACQUIRE_OR_FAIL()
+ macro
+To: dan.j.williams@intel.com
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Takashi Iwai <tiwai@suse.de>, 
+	David Lechner <dlechner@baylibre.com>, Jonathan Cameron <jonathan.cameron@huawei.com>, 
+	Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Linux PCI <linux-pci@vger.kernel.org>, Alex Williamson <alex.williamson@redhat.com>, 
+	Bjorn Helgaas <helgaas@kernel.org>, Zhang Qilong <zhangqilong3@huawei.com>, 
+	Ulf Hansson <ulf.hansson@linaro.org>, Frank Li <Frank.Li@nxp.com>, Dhruva Gole <d-gole@ti.com>, 
+	Mika Westerberg <mika.westerberg@linux.intel.com>, Linux ACPI <linux-acpi@vger.kernel.org>, 
+	"Fabio M. De Francesco" <fabio.maria.de.francesco@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Oct 17, 2025 at 10:22=E2=80=AFAM Christian Loehle
-<christian.loehle@arm.com> wrote:
+On Thu, Oct 16, 2025 at 10:59=E2=80=AFPM <dan.j.williams@intel.com> wrote:
 >
-> On 10/16/25 17:25, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Rafael J. Wysocki wrote:
+> > On Thu, Oct 16, 2025 at 9:45=E2=80=AFPM <dan.j.williams@intel.com> wrot=
+e:
+> > >
+> > > Rafael J. Wysocki wrote:
+> > > [..]
+> > > > > > [1]: https://lore.kernel.org/all/CAHk-=3Dwhn07tnDosPfn+UcAtWHBc=
+Lg=3DKqA16SHVv0GV4t8P1fHw@mail.gmail.com/
+> > > > >
+> > > > > Yeah, I myself also find it suboptimal, hence it wasn't really
+> > > > > proposed...  It's a limit of macro, unfortunately.
+> > > >
+> > > > The macro from the $subject patch can be split along the lines of t=
+he appended
+> > > > patch to avoid the "disgusting syntax" issue, although it then beco=
+mes less
+> > > > attractive as far as I'm concerned.  It still allows the details un=
+related to
+> > > > the rest of the code to be hidden though.
+> > > >
+> > > > ---
+> > > >  drivers/acpi/acpi_tad.c |   10 ++++++++--
+> > > >  1 file changed, 8 insertions(+), 2 deletions(-)
+> > > >
+> > > > --- a/drivers/acpi/acpi_tad.c
+> > > > +++ b/drivers/acpi/acpi_tad.c
+> > > > @@ -31,6 +31,12 @@ MODULE_DESCRIPTION("ACPI Time and Alarm
+> > > >  MODULE_LICENSE("GPL v2");
+> > > >  MODULE_AUTHOR("Rafael J. Wysocki");
+> > > >
+> > > > +#define PM_RUNTIME_ACQUIRE_ACTIVE(dev)       \
+> > > > +     ACQUIRE(pm_runtime_active_try, pm_runtime_active_guard_var)(d=
+ev)
+> > > > +
+> > > > +#define PM_RUNTIME_ACQUIRE_ACTIVE_ERR        \
+> > > > +     ACQUIRE_ERR(pm_runtime_active_try, &pm_runtime_active_guard_v=
+ar)
+> > > > +
+> > > >  /* ACPI TAD capability flags (ACPI 6.2, Section 9.18.2) */
+> > > >  #define ACPI_TAD_AC_WAKE     BIT(0)
+> > > >  #define ACPI_TAD_DC_WAKE     BIT(1)
+> > > > @@ -264,8 +270,8 @@ static int acpi_tad_wake_set(struct devi
+> > > >       args[0].integer.value =3D timer_id;
+> > > >       args[1].integer.value =3D value;
+> > > >
+> > > > -     ACQUIRE(pm_runtime_active_try, pm)(dev);
+> > > > -     if (ACQUIRE_ERR(pm_runtime_active_try, &pm))
+> > > > +     PM_RUNTIME_ACQUIRE_ACTIVE(dev);
+> > > > +     if (PM_RUNTIME_ACQUIRE_ACTIVE_ERR)
+> > > >               return -ENXIO;
+> > >
+> > > This defeats one of the other motivations for ACQUIRE() vs
+> > > scoped_cond_guard() in that it drops the error code from
+> > > pm_runtime_active_try.
 > >
-> > It is reported that commit 85975daeaa4d ("cpuidle: menu: Avoid discardi=
-ng
-> > useful information") led to a performance regression on Intel Jasper La=
-ke
-> > systems because it reduced the time spent by CPUs in idle state C7 whic=
-h
-> > is correlated to the maximum frequency the CPUs can get to because of a=
-n
-> > average running power limit [1].
-> >
-> > Before that commit, get_typical_interval() would have returned UINT_MAX
-> > whenever it had been unable to make a high-confidence prediction which
-> > had led to selecting the deepest available idle state too often and
-> > both power and performance had been inadequate as a result of that in
-> > some cases.  This was not a problem on systems with relatively
-> > aggressive average running power limits, like the Jasper Lake systems
-> > in question, because on those systems it was compensated by the ability
-> > to run CPUs at relatively higher frequencies.
-> >
-> > Commit 85975daeaa4d addressed that by causing get_typical_interval() to
-> > return a number based on the recent idle duration information available
-> > to it in those cases, but that number is usually smaller than the
-> > maximum idle duration observed recently which may be regarded as an
-> > overly optimistic choice.
-> >
-> > Namely, it may be argued that when the samples considered by
-> > get_typical_interval() are spread too much for a high-confidence
-> > prediction to be made, the function should fall back to returning a
-> > number that is likely to be an upper bound for the duration of the
-> > upcoming idle interval and that number needs to be at least equal to
-> > the maximum recently observed idle time.  Otherwise, the governor may
-> > miss an oportunity to reduce power without hurting performance in a
-
-Ah, a typo.
-
-> > noticeable way.  Of course, it may also be argued the other way around,
-> > but the available data indicate that get_typical_interval() should
-> > rather tend to return larger numbers as that causes the governor to
-> > behave more closely to its past behavior from before the problematic
-> > commit.
-> >
-> > Accordingly, modify get_typical_interval() to return the maximum
-> > recently observed idle time when it is unable to make a high-
-> > confidence prediction.
-> >
-> > Fixes: 85975daeaa4d ("cpuidle: menu: Avoid discarding useful informatio=
-n")
-> > Closes: https://lore.kernel.org/linux-pm/36iykr223vmcfsoysexug6s274nq2o=
-imcu55ybn6ww4il3g3cv@cohflgdbpnq7/ [1]
-> > Reported-by: Sergey Senozhatsky <senozhatsky@chromium.org>
-> > Tested-by: Sergey Senozhatsky <senozhatsky@chromium.org>
-> > Cc: All applicable <stable@vger.kernel.org>
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
-> >  drivers/cpuidle/governors/menu.c |    6 +++++-
-> >  1 file changed, 5 insertions(+), 1 deletion(-)
-> >
-> > --- a/drivers/cpuidle/governors/menu.c
-> > +++ b/drivers/cpuidle/governors/menu.c
-> > @@ -116,6 +116,7 @@ static void menu_update(struct cpuidle_d
-> >  static unsigned int get_typical_interval(struct menu_device *data)
-> >  {
-> >       s64 value, min_thresh =3D -1, max_thresh =3D UINT_MAX;
-> > +     unsigned int max_overall =3D 0;
+> > No, it doesn't.  PM_RUNTIME_ACQUIRE_ACTIVE_ERR is that error code.  Or
+> > did I misunderstand what you said?
 >
-> nit: for reverse xmas this should be one further down?
+> Oh, what I am saying is that pm_runtime_get_active() returns a distinct
+> error code like -EACCES or -EINPROGRESS etc. The
+> PM_RUNTIME_ACQUIRE_ACTIVE_ERR proposal ignores that value and open codes
+> returning -ENXIO.
 
-Actually, I can combine this with the min and max definition.
+No, it doesn't.
 
-> Maybe s/max_overall/max_first_pass/?
+You can still do
 
-I can call it grand_max.
+ret =3D PM_RUNTIME_ACQUIRE_ACTIVE_ERR;
+if (ret)
+        return ret;
 
-> >       unsigned int max, min, divisor;
-> >       u64 avg, variance, avg_sq;
-> >       int i;
-> > @@ -151,6 +152,9 @@ again:
-> >       if (!max)
-> >               return UINT_MAX;
-> >
->
-> Or alternatively a comment:
-> /* Save the max before we discard any intervals */
-> or something.
->
-> > +     if (max_overall < max)
-> > +             max_overall =3D max;
-> > +>    if (divisor =3D=3D INTERVALS) {
-> >               avg >>=3D INTERVAL_SHIFT;
-> >               variance >>=3D INTERVAL_SHIFT;
-> > @@ -198,7 +202,7 @@ again:
-> >                * maximum, so return the latter in that case.
-> >                */
-> >               if (divisor >=3D INTERVALS / 2)
-> > -                     return max;
-> > +                     return max_overall;
-> >
-> >               return UINT_MAX;
-> >       }
-> >
->
-> Anyway, the patch makes sense, let me run some tests and get back.
+if the caller needs to know the original resume error code.
 
-Thanks!
+The code being updated in the example patch returns -ENXIO, but it
+does so before the change either.
 
