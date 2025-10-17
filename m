@@ -1,101 +1,134 @@
-Return-Path: <linux-pm+bounces-36353-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36352-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id E16FABE8BE2
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Oct 2025 15:06:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3EE72BE8B88
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Oct 2025 15:05:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 3C8B2565186
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Oct 2025 13:05:50 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C81954FBE8E
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Oct 2025 13:05:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B985C331A74;
-	Fri, 17 Oct 2025 13:05:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 905A4331A43;
+	Fri, 17 Oct 2025 13:04:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=debtmanager.org header.i=@debtmanager.org header.b="lVC19zam"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="M9heAzin"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from manage.vyzra.com (unknown [104.128.60.218])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f74.google.com (mail-wr1-f74.google.com [209.85.221.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E5E63451C1
-	for <linux-pm@vger.kernel.org>; Fri, 17 Oct 2025 13:05:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=104.128.60.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FB592DE713
+	for <linux-pm@vger.kernel.org>; Fri, 17 Oct 2025 13:04:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760706312; cv=none; b=qe6GFBH2OiwZhro+q6Er/pfY/YuSyxu7RfimL+hZmjCbzT1Iu+hTrYNHNhVerPzsmT8lBayRFZDGi8xvBwXrxokMx/tkobqPHyx1ZQo1yaCJ+UvsRD3EnEibbA51MYtrVcWZXNZoxTnr1M4StmtwILdtYJjly/1tJ7I2uCRGQ8k=
+	t=1760706297; cv=none; b=E4liODHsQ9Ue9Yvxm/yLYJrg4d315HVzapZNf/q0wZIVz50AwnJYCxo4ln7B4KFZNhuNK5LOCQvLUceTmbZj5wLOl/JZzm/oPJPGnMsWl+KCNEV7E3nkPqqD5SsOJ3xuAlapE/4PnV1ja0ZdK20TLyGWZuaDg+t8lBx1U4BLYI0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760706312; c=relaxed/simple;
-	bh=biLnUx9jTTyVdIbdiavoTAgEZeIqqOihfb373MH/e18=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=PXAtN+I9lSW3N78VHWSLGDI09cBRQVNtCBBma8WU3PooHNaEbyUsWhBvwuoBvruK7n9goTcUna/bys7QTOKGMOjt3TyJzY0fbe33ZQr1YOfqTaPikRnPS5+hJO1TjnD71FsSISZsmYk2jG2Sl9uNhUlfEg+9HnVBIZLlrBE8W8c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debtmanager.org; spf=none smtp.mailfrom=manage.vyzra.com; dkim=fail (0-bit key) header.d=debtmanager.org header.i=@debtmanager.org header.b=lVC19zam reason="key not found in DNS"; arc=none smtp.client-ip=104.128.60.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debtmanager.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=manage.vyzra.com
-Received: from debtmanager.org (unknown [103.237.86.103])
-	by manage.vyzra.com (Postfix) with ESMTPA id DE6DC49027A9
-	for <linux-pm@vger.kernel.org>; Fri, 17 Oct 2025 07:45:35 -0500 (CDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=debtmanager.org;
-	s=DKIM2021; t=1760705136; h=from:from:reply-to:reply-to:subject:subject:date:date:
-	 message-id:message-id:to:to:cc:mime-version:mime-version:
-	 content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-	bh=Aj8bDacQlJB5qNMC5+yWWged1+K/M8YReXQkzUminbQ=;
-	b=lVC19zamzeE0B0k3x7FhTw9rmCmI/hjJ9C82glkDSti/bKehXKftzSiP7F9evB934at2xM
-	yXLFMlBW4F6le2V/NCOagSa6h55lWA4+OS3QtPQ/A2ye6HuLawC06pMvue5tBJmeUJOFcw
-	Yr9nChkBX0Yirrn7gyx1t/GNg/KvFbGOj9XW7vkwvcLxImT0usQ/XdtOWKa+zLTLjeks/T
-	OEGZdgQZvWZrbrU1ev/hY/4ZdfJWzZSR5Qkk88OWG1NvWDPvvmJhbNG3KXnY2RT/Y504QC
-	HwvAhV91crykgq1R1+B5r9whuQ3yJf75Xktr+IH8bVZA+5hdvdOhxoG9RwJZAA==
-Reply-To: vlad.dinu@rdslink.ro
-From: "Vlad Dinu" <info@debtmanager.org>
-To: linux-pm@vger.kernel.org
-Subject: *** Urgent Change ***
-Date: 17 Oct 2025 05:45:34 -0700
-Message-ID: <20251017054533.3856CCA2892DF9C0@debtmanager.org>
+	s=arc-20240116; t=1760706297; c=relaxed/simple;
+	bh=45mXk3vW1QoAnyjK4Nd0ASLRTO5e22FNrn8YEgJAgCM=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=hyvkoPHWllfAMBPblvFF6/01n2VAMyGqVA/5o3iSeTX5XNfOQwMkMzv5d63+U5irvphZoeo8KE2YEVX//meKn+5KlF+RzDcxBzpjbecTs8baM6z/afQC+6r/7tgvlKIS0GBhQ8UYcGHbrKU0cujeV27lGU0n4yuAo9jjyVYATvc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=M9heAzin; arc=none smtp.client-ip=209.85.221.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
+Received: by mail-wr1-f74.google.com with SMTP id ffacd0b85a97d-427013eb71dso2319200f8f.2
+        for <linux-pm@vger.kernel.org>; Fri, 17 Oct 2025 06:04:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1760706294; x=1761311094; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=QsGulBtXOolWogbv37P9kOPn3EPzZ7HWeVFTvLjVVtA=;
+        b=M9heAzinbWs6Rws/XraRiYASpesShCyWMFYu3Ulftwtmb8EKhO1Cg3XmpkqIluR/1E
+         0A2rNY/+AhKaiXftu0BmP2ymAuKimHzsi/H4teFi91493IWupZSZZ62fc92UgtPWDccI
+         UzzPUz8dEjWv4I+sbnuF+vpbs76iOXmq8SXWo/dpVbu3IE14neNkx+/D6O60EEdRf6hc
+         srW5cprOSSsWHget1JX8jbm+8SMNnfQjoOR3J0jCFFKK4D61zovbTG8nTtEHYgPjUXfX
+         HqYtShRJsQo4MfxYrjxFYmTw0uweC7OrwWC5+dNs+Kis/eI1tFQfDEPtnnsc86E2oHyj
+         expA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760706294; x=1761311094;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QsGulBtXOolWogbv37P9kOPn3EPzZ7HWeVFTvLjVVtA=;
+        b=hjPakaYpXP746v5xL3xDE1A+CKdK5CGTOdDZXL0jsgizbha0egKDs5WGjqH0dPUyvY
+         d0i3tqX1GR0OGBWQNG8ssomXLcgdlOFsxAWpzEW0PtDwUFlAEAS1SBcKT0VENtRSusEw
+         ZMJR1joMJEAHW5irx+6Gww4QexhxD0iUQEZOtA/x5EsQ3gMHU0FN8cCE082r9gD5m93B
+         IVYmOpAMTv1P4/mlXYtu4mGXS7DTJ+9/g6SVhySLRFkbh3n8O9ov5eseQbkdJ2nWcsuG
+         gaEzmmHEcRIMgN7oQE9GHcfGYWt4YyzdmXxHDrNA9CvBqahBufUlLRlwhS+S1fr/8P2Q
+         DTQA==
+X-Forwarded-Encrypted: i=1; AJvYcCVLBEDKZ/vzvsTjyxnj7mJbysH1O453ds6aAua/slm6IdTTifpHHv3YSCiVLwnqdlkLYQX4qLbqOg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzlqTXETbMzX7QbDlmQ/xsKOEO6JeJ9XDDNf48Qyk2uECrTYJnt
+	+mEPUTfeAOwFT6mbFmCiWEnWfqS+XK8Ui6c2pyL0XCqB3rUAjiA7Hp9dru37CC73nzmwUycEaFR
+	IaFCJ5o+G9r5O/9lOgA==
+X-Google-Smtp-Source: AGHT+IHmxuUy/higL8bMvF0u1RF+TfLvGKbJRuFXq91cThOSrZ5KPNHsS9I5kFewP7afvF/ZcVPnLKvl0oA6dKw=
+X-Received: from wmbgx4.prod.google.com ([2002:a05:600c:8584:b0:46e:1fc1:6636])
+ (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6000:40ce:b0:427:6a8:532a with SMTP id ffacd0b85a97d-42706a8535dmr1784522f8f.31.1760706293678;
+ Fri, 17 Oct 2025 06:04:53 -0700 (PDT)
+Date: Fri, 17 Oct 2025 13:04:52 +0000
+In-Reply-To: <20251016125544.15559-1-dakr@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain;
-	charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Score: -0.10
+Mime-Version: 1.0
+References: <20251016125544.15559-1-dakr@kernel.org>
+Message-ID: <aPI-9GoI7ZsNCpQr@google.com>
+Subject: Re: [PATCH] rust: driver: let probe() return impl PinInit<Self, Error>
+From: Alice Ryhl <aliceryhl@google.com>
+To: Danilo Krummrich <dakr@kernel.org>
+Cc: gregkh@linuxfoundation.org, rafael@kernel.org, viresh.kumar@linaro.org, 
+	acourbot@nvidia.com, ira.weiny@intel.com, leon@kernel.org, 
+	daniel.almeida@collabora.com, bhelgaas@google.com, kwilczynski@kernel.org, 
+	abdiel.janulgue@gmail.com, robin.murphy@arm.com, ojeda@kernel.org, 
+	alex.gaynor@gmail.com, boqun.feng@gmail.com, gary@garyguo.net, 
+	bjorn3_gh@protonmail.com, lossin@kernel.org, a.hindborg@kernel.org, 
+	tmgross@umich.edu, rust-for-linux@vger.kernel.org, linux-pci@vger.kernel.org, 
+	linux-pm@vger.kernel.org, nouveau@lists.freedesktop.org, 
+	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
 
-Hello,
+On Thu, Oct 16, 2025 at 02:55:28PM +0200, Danilo Krummrich wrote:
+> The driver model defines the lifetime of the private data stored in (and
+> owned by) a bus device to be valid from when the driver is bound to a
+> device (i.e. from successful probe()) until the driver is unbound from
+> the device.
+> 
+> This is already taken care of by the Rust implementation of the driver
+> model. However, we still ask drivers to return a Result<Pin<KBox<Self>>>
+> from probe().
+> 
+> Unlike in C, where we do not have the concept of initializers, but
+> rather deal with uninitialized memory, drivers can just return an
+> impl PinInit<Self, Error> instead.
+> 
+> This contributed to more clarity to the fact that a driver returns it's
+> device private data in probe() and the Rust driver model owns the data,
+> manages the lifetime and - considering the lifetime - provides (safe)
+> accessors for the driver.
+> 
+> Hence, let probe() functions return an impl PinInit<Self, Error> instead
+> of Result<Pin<KBox<Self>>>.
+> 
+> Signed-off-by: Danilo Krummrich <dakr@kernel.org>
+> ---
+> Depends on a minor pin-init patch [1] (Benno will send it to the list
+> soon). A branch with this patch and the pin-init dependency is available
+> in [2].
+> 
+> [1] https://github.com/Rust-for-Linux/pin-init/pull/86/commits
+> [2] https://git.kernel.org/pub/scm/linux/kernel/git/dakr/linux.git/log/?h=probe_return
 
-I am Vlad Dinu, the newly appointed Director of IMF Legal=20
-Affairs, Security and Investigation. I have been given the=20
-responsibility to look into all the payments that are still=20
-pending and owed to fund beneficiaries / scam victims worldwide.
+Overall LGTM.
+Reviewed-by: Alice Ryhl <aliceryhl@google.com>
 
-This action was taken because there have been issues with some=20
-banks not being able to send or release money to the correct=20
-beneficiary accounts. We have found out that some directors in=20
-different organizations are moving pending funds to their own=20
-chosen accounts instead of where they should go.
+>  impl Device<CoreInternal> {
+>      /// Store a pointer to the bound driver's private data.
+> -    pub fn set_drvdata(&self, data: impl ForeignOwnable) {
+> +    pub fn set_drvdata<T: 'static>(&self, data: impl PinInit<T, Error>) -> Result {
+> +        let data = KBox::pin_init(data, GFP_KERNEL)?;
 
-During my investigation, I discovered that an account was=20
-reported to redirect your funds to a bank in Sweden.
-The details of that account are provided below. I would like you=20
-to confirm if you are aware of this new information, as we are=20
-now planning to send the payment to the account mentioned.
+Perhaps the gfp flags should be an argument set_drvdata?
 
-NAME OF BENEFICIARY: ERIK KASPERSSON
-BANK NAME: SWEDBANK AB
-ADDRESS: REPSLAGAREGATAN 23A, 582 22 LINK=C3=96PING, SWEDEN
-SWIFT CODE: SWEDSESS
-ACCOUNT NUMBER: 84806-31282205
-
-
-A payment instruction has been issued by the Department of=20
-Treasury for an immediate release of your payment to the bank=20
-account above without further prejudice. We cannot approve or=20
-schedule payment to the 
-
-given bank account without your confirmation. May we proceed with=20
-the transfer to the Beneficiary: Erik Kaspersson, bank account in=20
-Sweden?
-
-I await your urgent response.
-
-Mr. Vlad Dinu.
+Alice
 
