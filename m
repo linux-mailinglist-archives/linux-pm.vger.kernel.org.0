@@ -1,156 +1,115 @@
-Return-Path: <linux-pm+bounces-36344-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36345-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id EEF70BE7DE4
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Oct 2025 11:45:32 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9C0FBE7E74
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Oct 2025 11:55:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 9E16F35C176
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Oct 2025 09:45:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4769F5E775A
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Oct 2025 09:54:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F8762882B2;
-	Fri, 17 Oct 2025 09:45:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S6jaivmL"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C7552DCC01;
+	Fri, 17 Oct 2025 09:53:54 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF0892D97AB
-	for <linux-pm@vger.kernel.org>; Fri, 17 Oct 2025 09:45:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24F952DC784;
+	Fri, 17 Oct 2025 09:53:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760694328; cv=none; b=DT1G1OwjOm7eKUGOM3QcMKNBYENg68QYqX3U0gTcbaZetTPqctn6jU1ixXlisWSU6fTG0Q2CBlJsqds7UDd73hIrgZdXbieKHGnGBja5jdHPYaFz2Nv3kMzcH2fiBofjaYoOO9kg1Z3AgumELrhJCYyrCr9LixNT/X5gb0YlsVs=
+	t=1760694834; cv=none; b=FGFDGuAbS+OTGTqOean/JMHenSzIw/DZl7KRuc5wWBkm6iaQseN6PuwPeSdUfXE4sco/BHUUHXvpklCEVchBH7NMYkEm5xkoKf68VdAuT959E3W3Vpd/e/vzwSJt2EQLq2cVUCh3VxfKJ7sCPp5u9x//yOGq/8OP7muaYB1EJ9E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760694328; c=relaxed/simple;
-	bh=XtO9sRQeiqTEF3Mgx59O+0CfGSoNUdMMWG3uX2sJANc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pv/Xjecr28/STvIJSbsyPaFIrK/aKue9hg7i9FIZrBa7oZ5HBiX8J7zH2pfqVnqGkZiysRHICcftJCkuZWIDcqEC2R3+7eDZGoORPm0CTjvHfgsgXPGfk7Cae1NGYEueYGFpAKh1TbxmsVT4RG34ernPsj0r4MB1cg1wVcl3ueE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S6jaivmL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BC9CC116D0
-	for <linux-pm@vger.kernel.org>; Fri, 17 Oct 2025 09:45:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760694327;
-	bh=XtO9sRQeiqTEF3Mgx59O+0CfGSoNUdMMWG3uX2sJANc=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=S6jaivmL21W3j9X94Ug/vZPu9YmbLoyjEWgbaxTo4XE3WKXOrTeDKG9vdkTCgYWYg
-	 shWpjWn0BvJn0wMWGjEyrwPTD6mgziEtD6Vu0fQ7BSQUyHRBCn4z64q4iaGDdl5JjV
-	 qX6v0jC5yfFkeobv8NlBtsBLIY/cF2YO+yAtgiZLj4j3IJgMjkNuAIX5ONUZdHTm+M
-	 k368bR6By5fuuf1IVbEXp3ZbfMak4TdHOpL9YTKzWt1eyPsCcH4Yet+7u6fk8WhWCo
-	 /9aKX7oKI9Shy7eB72Zh0w03pAVA9CVlmurErvgqjX9yNvyWcMZQRD4dYRwD8MmubZ
-	 vRPt4q+c6lBNg==
-Received: by mail-oi1-f178.google.com with SMTP id 5614622812f47-443afb2334bso69282b6e.3
-        for <linux-pm@vger.kernel.org>; Fri, 17 Oct 2025 02:45:27 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU1btkGV/kivPTSRrEwRwc9Dv9q0OEQP1UnEkjgSx0C3Tqrc0625UQtQlq1BOqpXou127EtN3Q21g==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxZTdiQp50BkUOYPk6PiFPyeIMvryDE+UFqfkfjsMEJQSp1nIJb
-	uj1o7Sr9qh3G5VlndBD4vc9E8kiejRCJyIpFeOQpgYfHAg2YYkyL8AHgmOqdUlztB938AQYWspp
-	iF9Vw0YyKPEO10cBW45KJkuTOmkNaZ5Y=
-X-Google-Smtp-Source: AGHT+IH4eFtUZLBxcwh2xQ/mf6nJ2K1x5Ot8Mr4XTPJHIaP3cRmxN8m7Qjq/x+6o55VptzdO3OZu5M8S/8tYsiUSlRE=
-X-Received: by 2002:a05:6808:6d82:b0:441:c8af:291d with SMTP id
- 5614622812f47-443a30953d3mr1270420b6e.42.1760694326867; Fri, 17 Oct 2025
- 02:45:26 -0700 (PDT)
+	s=arc-20240116; t=1760694834; c=relaxed/simple;
+	bh=KxWv3OkV6Fh1TVJiY1tMIX4D7MibM0hpfwsKlVtzS0I=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=BZloNjZDq6Gtmdph8x2WXj8YkW2XsfceERQ5oIFao+MjWQMf4jf7rpn9Hm5tZDU/TUqbbCRVlfVVQl7LLdafLUcbxQ8CaFcrCAGO/NK4eMmo9hjtBsJmZehVA/+4CM1v/DzmDmJdcZnIR3dCW9ibpuyV7nJTOmub2qPC+Pruu1M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 29fb1a16ab3f11f0a38c85956e01ac42-20251017
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.6,REQID:3730d44e-7d97-4405-bae9-b60d4d2e7084,IP:0,UR
+	L:0,TC:0,Content:-5,EDM:-25,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+	N:release,TS:-30
+X-CID-META: VersionHash:a9d874c,CLOUDID:40513bf150f9d7312e74212bac7c4de4,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:102|850,TC:nil,Content:0|50,EDM:2,IP:nil
+	,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:
+	1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: 29fb1a16ab3f11f0a38c85956e01ac42-20251017
+X-User: luriwen@kylinos.cn
+Received: from localhost.localdomain [(10.44.16.150)] by mailgw.kylinos.cn
+	(envelope-from <luriwen@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 903986183; Fri, 17 Oct 2025 17:53:42 +0800
+From: Riwen Lu <luriwen@kylinos.cn>
+To: rafael@kernel.org,
+	pavel@kernel.org,
+	lenb@kernel.org
+Cc: linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Riwen Lu <luriwen@kylinos.cn>,
+	xiongxin <xiongxin@kylinos.cn>
+Subject: [PATCH v1] PM: suspend: Make pm_test delay interruptible by wakeup events
+Date: Fri, 17 Oct 2025 17:53:38 +0800
+Message-Id: <20251017095338.4122406-1-luriwen@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251016155335.1.I60a53c170a8596661883bd2b4ef475155c7aa72b@changeid>
-In-Reply-To: <20251016155335.1.I60a53c170a8596661883bd2b4ef475155c7aa72b@changeid>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 17 Oct 2025 11:45:14 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0iFa3_UFkA920Ogn0YAYLq4CjnAD_VjLsmxQxrfm5HEBw@mail.gmail.com>
-X-Gm-Features: AS18NWAfxBP4Jux50tLr0QwuvERSlU0IAnFqGNafXGnfCBKno1UvlTv43pvyLKQ
-Message-ID: <CAJZ5v0iFa3_UFkA920Ogn0YAYLq4CjnAD_VjLsmxQxrfm5HEBw@mail.gmail.com>
-Subject: Re: [PATCH] PCI/PM: Prevent runtime suspend before devices are fully initialized
-To: Brian Norris <briannorris@chromium.org>
-Cc: Bjorn Helgaas <bhelgaas@google.com>, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, "Rafael J . Wysocki" <rafael@kernel.org>, 
-	Lukas Wunner <lukas@wunner.de>, linux-pci@vger.kernel.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Fri, Oct 17, 2025 at 1:28=E2=80=AFAM Brian Norris <briannorris@chromium.=
-org> wrote:
->
-> PCI devices are created via pci_scan_slot() and similar, and are
-> promptly configured for runtime PM (pci_pm_init()). They are initially
-> prevented from suspending by way of pm_runtime_forbid(); however, it's
-> expected that user space may override this via sysfs [1].
->
-> Now, sometime after initial scan, a PCI device receives its BAR
-> configuration (pci_assign_unassigned_bus_resources(), etc.).
->
-> If a PCI device is allowed to suspend between pci_scan_slot() and
-> pci_assign_unassigned_bus_resources(), then pci-driver.c will
-> save/restore incorrect BAR configuration for the device, and the device
-> may cease to function.
->
-> This behavior races with user space, since user space may enable runtime
-> PM [1] as soon as it sees the device, which may be before BAR
-> configuration.
->
-> Prevent suspending in this intermediate state by holding a runtime PM
-> reference until the device is fully initialized and ready for probe().
->
-> [1] echo auto > /sys/bus/pci/devices/.../power/control
->
-> Cc: <stable@vger.kernel.org>
-> Signed-off-by: Brian Norris <briannorris@chromium.org>
-> ---
->
->  drivers/pci/bus.c | 7 +++++++
->  drivers/pci/pci.c | 6 ++++++
->  2 files changed, 13 insertions(+)
->
-> diff --git a/drivers/pci/bus.c b/drivers/pci/bus.c
-> index f26aec6ff588..227a8898acac 100644
-> --- a/drivers/pci/bus.c
-> +++ b/drivers/pci/bus.c
-> @@ -14,6 +14,7 @@
->  #include <linux/of.h>
->  #include <linux/of_platform.h>
->  #include <linux/platform_device.h>
-> +#include <linux/pm_runtime.h>
->  #include <linux/proc_fs.h>
->  #include <linux/slab.h>
->
-> @@ -375,6 +376,12 @@ void pci_bus_add_device(struct pci_dev *dev)
->                 put_device(&pdev->dev);
->         }
->
-> +       /*
-> +        * Now that resources are assigned, drop the reference we grabbed=
- in
-> +        * pci_pm_init().
-> +        */
-> +       pm_runtime_put_noidle(&dev->dev);
-> +
->         if (!dn || of_device_is_available(dn))
->                 pci_dev_allow_binding(dev);
->
-> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> index b14dd064006c..06a901214f2c 100644
-> --- a/drivers/pci/pci.c
-> +++ b/drivers/pci/pci.c
-> @@ -3226,6 +3226,12 @@ void pci_pm_init(struct pci_dev *dev)
->         pci_pm_power_up_and_verify_state(dev);
->         pm_runtime_forbid(&dev->dev);
->         pm_runtime_set_active(&dev->dev);
-> +       /*
-> +        * We cannot allow a device to suspend before its resources are
-> +        * configured. Otherwise, we may allow saving/restoring unexpecte=
-d BAR
-> +        * configuration.
-> +        */
-> +       pm_runtime_get_noresume(&dev->dev);
->         pm_runtime_enable(&dev->dev);
+Modify the suspend_test() function to make the test delay can be
+interrupted by wakeup events.
 
-So runtime PM should not be enabled here, should it?
+This improves the responsiveness of the system during suspend testing
+when wakeup events occur, allowing the suspend process to proceed
+without waiting for the full test delay to complte when wakeup events
+are detected.
 
->  }
->
-> --
+Additionally, using msleep() instead of mdelay() avoids potential soft
+lockup "CPU stuck" issues when long test delays are configured.
+
+Signed-off-by: Riwen Lu <luriwen@kylinos.cn>
+Signed-off-by: xiongxin <xiongxin@kylinos.cn>
+---
+ kernel/power/suspend.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
+index 4bb4686c1c08..8f022d279635 100644
+--- a/kernel/power/suspend.c
++++ b/kernel/power/suspend.c
+@@ -344,10 +344,18 @@ MODULE_PARM_DESC(pm_test_delay,
+ static int suspend_test(int level)
+ {
+ #ifdef CONFIG_PM_DEBUG
++	int i;
++
+ 	if (pm_test_level == level) {
+-		pr_info("suspend debug: Waiting for %d second(s).\n",
++		for (i = 0; i < pm_test_delay; i++) {
++			if (pm_wakeup_pending())
++				break;
++			msleep(1000);
++		}
++		if (i == pm_test_delay)
++			pr_info("suspend debug: Already wait %d second(s).\n",
+ 				pm_test_delay);
+-		mdelay(pm_test_delay * 1000);
++
+ 		return 1;
+ 	}
+ #endif /* !CONFIG_PM_DEBUG */
+-- 
+2.25.1
+
 
