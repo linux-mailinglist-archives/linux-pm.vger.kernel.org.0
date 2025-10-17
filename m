@@ -1,106 +1,194 @@
-Return-Path: <linux-pm+bounces-36373-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36374-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52078BEBB93
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Oct 2025 22:48:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6EC7BBEBC1A
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Oct 2025 22:51:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 413B84E1DEE
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Oct 2025 20:48:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DB7903AA6C6
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Oct 2025 20:51:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91426261B9F;
-	Fri, 17 Oct 2025 20:48:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF80C275105;
+	Fri, 17 Oct 2025 20:51:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SnIFHLZZ"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="SqSVlWl7"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1DA0248896
-	for <linux-pm@vger.kernel.org>; Fri, 17 Oct 2025 20:48:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BAB9354ADA
+	for <linux-pm@vger.kernel.org>; Fri, 17 Oct 2025 20:51:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760734117; cv=none; b=YM+9zqRdQxQt8I43RxUiLTsTBoJOw9d0IB05ltjC3SB+rdSgFkqj3zjWdj8rpwEcxDKbzII2WzN676uUpt2NBH0mEN0rjvs/DPjXEy2vxT1KLT7u997C8cFLznvTMzzMnRsZP5sCd75GmEoRzW0g4gqtFTNGSzIIIMLgtwEbP+8=
+	t=1760734305; cv=none; b=ehcTQVDDknrBkCarQqc9d33xArOmVU6xORYtzmscwktD7odtnABH/8Gmg7gl4Ova9taN4cyUPUif63MSfH1HkZw9C4yEpbgGWIMcxwNJUatA05glm++EPlZo2LEoK9VCoRn5kQEqNU6SdgIXIsyfXqIu3PGNGsNfjygHpi0V9Pc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760734117; c=relaxed/simple;
-	bh=oQ/gGtYvav+gWWdoIlX8Zb6LNC9cOW2UkrE8R2Ydnos=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=tEv++JUYPS7pnAdpcby6pWdgmTQ1z2W/OZNPK1zyq9liVbFexGUk55PuN0ja/u0nVskUIxaYWZrO6kgbipvJMOeL08xzxtLf2eEk7530vDk8+2LMPbUz11KVcunHxryMxkngxidVBnRGZMpa1iA7owJ4Po9zw7QB8J7vBLELBOo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=SnIFHLZZ; arc=none smtp.client-ip=209.85.221.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-3ee15b5435bso1648811f8f.0
-        for <linux-pm@vger.kernel.org>; Fri, 17 Oct 2025 13:48:35 -0700 (PDT)
+	s=arc-20240116; t=1760734305; c=relaxed/simple;
+	bh=vL7y5BK/Z7rzXcE255Yb+t5mWwQvzc0R4RWiu4lYENU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=k/eX7dlmhDRHyDlDIlDHdbpmIj9gIq062FWHa6TlOa1zazkBdQWqKA63WUGTWIgv+XuiH+PoTpCMvJDHJcb4Gg6VU4ItmkeQKqH5M2+rI/i6PKRbTYj9Ey/6vIF8ODQLpNAvEuIwIW1twvJJh8sH79pVOciujtZIs/r1oQtUDyo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=SqSVlWl7; arc=none smtp.client-ip=209.85.221.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-3ece0e4c5faso2077458f8f.1
+        for <linux-pm@vger.kernel.org>; Fri, 17 Oct 2025 13:51:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1760734114; x=1761338914; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=oQ/gGtYvav+gWWdoIlX8Zb6LNC9cOW2UkrE8R2Ydnos=;
-        b=SnIFHLZZs7YhF2m0vcAe6oe2xSQE7X5HerxWIZHUhyYeXUfr/vpSeIuV2rCIv4Ej1Y
-         ZvCk1M9UfrxvmkrBhjvhTfzrpcEjQ5i31aiY1TEDK9+gw7ES+bcHEB9K4Qv2ZL8lFwau
-         w2onrMDpEfDdqPAmxo0vDNbqdxfCYANz0jtb22JO+be/pGGXtDJbiEhV/qr66XMN/Xi3
-         qaVkTy6tgfAXQs1ioibH64ugtYfJtBOZPzPUTpkcUIpSrZjsL7yvUQDdeHjCTLlv+kp1
-         0TghXFfBor0vE/LkNvPq1EqIl92DvkMBSS8QuROhu/tsu/pJEJFPAn4nSNSLPd9Ffx5z
-         06og==
+        d=suse.com; s=google; t=1760734302; x=1761339102; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=H1aXZ0jZfn9HlJa0HWEu3AHHLkyWLP1uGfd165omN0Q=;
+        b=SqSVlWl7DsNGmg/sIp46WqNfp5HLl/nwp07ax7+vKeCCNOOlNNzJ67QqJaWKJxH3gk
+         uO34/RAsjF1PfpkZctTkhy8Fp6GBrRp5RXdpan4C5XCVXL3pFke03mZLYrx11OfjZxyV
+         RAsaN+EPC67C1oWiaCROZnyAZ4JDNgUe0oEUPmly7FuOQMmx+yAkjf62oO+A8OEs9elO
+         8jd3CPTQVl1icGV3aIXMc8cJebclsS0na5o2DTLEaa/2QMyFsjheFPjZg9AmEyk46Ox+
+         X7aeHkeiZZ4NHbb48fuK31ryqlvJG0nHdzd6ZTiRoLm9BvcT5c/Ykrm5Wf3wIN8sr0cK
+         8DuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760734114; x=1761338914;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oQ/gGtYvav+gWWdoIlX8Zb6LNC9cOW2UkrE8R2Ydnos=;
-        b=eyBUWsNZgQFMSdPPepZGDVxn1EPNbycSVgYeVZUXd039X6feGcxsl9aEPHJVnTU3r2
-         EAxn1Q4VJc8R+/3nsR9BWkFI3mgZ3HdqGJBXLizG5SJRvC0r1/rzu84mmHIN3XyZJRis
-         SKctEptuxl/U1kjfnpJ4+4yPnKwz7WJEqlW14rtcYU5IoZQZQFGNwqJJ93FzNIEUgDj8
-         BMCH010kmE8kv9EYP9vnY2S3AcWpdBPlaUskqCyRNFVCcE6gFcmmyLs47GOwuOOOMB4i
-         KTpXG/Qnw+zZDif5nzCdlewruUMou+sZuyUgP2myBMaaG+wkxK24J37GZ7JMKww5u/9j
-         k7cw==
-X-Forwarded-Encrypted: i=1; AJvYcCX8HQzxscfqtfRzT7xGd3keSUpRYgmt0Em7A0z3BKOxOia6igIynO7pYQP6qo0D4PO7NISfmjFKUg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyhe6enRVabal3c2iZYEe/5mYDIq7ZZAjiM7MzU+4YFMHZBLmXM
-	A4Vr/qroGzc+ZP7u+rzAh5i5BLr+3txtO5TqearLCw7LMolFeYzx0fi+VR/Ib2SyAQQjYL7m0So
-	QJt/rMv+jy0jd9AGghq2Z4q5zlhrJi4rZ9lBFaoiz
-X-Gm-Gg: ASbGnctJtEWeLhjz5YHaYJbf+JMMzeP1bzPfKAe6SHpC42NKmU/dp1w7rj1MSow+4bK
-	5rfL6ITzgRFANTInjwuTwb7RwLIm9qEJJmlEHQSYcNAdjfiDtntzCFeJKVRcaTFOf9BP6svYhBo
-	lhQE3idzXJrIF8WsXyGxWwK9Mrqil2AfWqc6Kmm+X08S0USyjABOoqlqMCS1YG6GLzGppqzAVda
-	MH7iI9iyAs1YgPhLITXObN7SK5ZIaLpFo0iKmnzrJD73/+WcO+kZ3S7o/DkrKm1P7+uaGp0T6mm
-	qICJtwHE6MMKgrD3Oa8dhP4=
-X-Google-Smtp-Source: AGHT+IHAavia4dajmjd1wu0ozenk/EgHnS13fnhiNCGOo15GBQoO3qzrk0f46KUvjIzbKPhJBuIwwZghoR1ZvbV+ZV8=
-X-Received: by 2002:a05:600c:681b:b0:46e:4921:9443 with SMTP id
- 5b1f17b1804b1-4711792a6bemr42023365e9.37.1760734113965; Fri, 17 Oct 2025
- 13:48:33 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1760734302; x=1761339102;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=H1aXZ0jZfn9HlJa0HWEu3AHHLkyWLP1uGfd165omN0Q=;
+        b=nRYwLtGZm3bVUBpBL8Fxb5jt+gIXwzvDo7dlvzBrW3KJHrpIK4s+UjYzNffK904y9x
+         RxFQzTcgIB3t/K6+kg8F2A4HeBx8w3yroOIz9KpHmGDoo9wKnzxbJvs6soaCAXhzP2sA
+         g1LVsgy6Vb62kpOgMVW4qCUFIt6qBwRo93ZyMwWq5dWTAojUmbPM6HDfBo68Dx7it8gs
+         SrISE25zv7Vat6Yjv3rSALZ07TlXRzqScn7PWJB6bn4/oAQ555z1+xx9/7J//ElhmNwU
+         WurnnJiByWvoTA1JjlTtTVIRKZzHh26bpIM5l6Go8zNeI4zIaTIVxyALOcn3icYsGm6V
+         5hvw==
+X-Forwarded-Encrypted: i=1; AJvYcCWky1ExbRdRYVlgmx7/GZ1fOLcdC/htqB/ezZqn0EPga6RTu7F7RxcwA8/E1NdOih6My0OVg9mX4A==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzuwFWPucnjzn9DsdaXeDl4XOYX1dh523zGAa9Zgot63nkP5G+6
+	vB/RclcAep1K3jOrfAQEWwzOvJWSD2lhlSuEiS1EPR84qnaWmv2JghioW5I2Fdgs+EE=
+X-Gm-Gg: ASbGncvjliuQe8Vyb2kESzOOEOP1ygKfMkSGQ7ASOEh00P/sdS6MysHTuWpieeWBxR/
+	ZOrnrX3olvG5KhfI35VTpuTg1jKpgyQpsrWs5gxDCjlAz5oIKsX4a6qpeQ0cZzZDyiss1AjBBsW
+	X7kSq0ezotvcJ29RiOKCuImFCtMXiT++ADh05RFBiUGFlacnI8wIjPbYelpkOLPZyXjdbgFFuv8
+	B1LUMlW0dTQYdvEXWdUeFuOf2Ap3f2L6L9Bk/8maUIlvFZfIr/uDMtDgyMBdkED5TGyHlrv7Wh/
+	O+glPtxnY7Ur4HyfK0Ua6v6rx9fJbXqnBzmliiebOcigX50smG1pV+oFa0AoKoVGop0gS1+dzQt
+	xAdBRa3xwOlTWLIjzyAmTP/xzcyiLzZM5d0TCVtQHzBVSwsqGXR5yfjKl37GjoqiQKHASyMcu9c
+	vhRv3QfVvebY2XOmt0dhnh5hRrxXJGotZ4t7OWwMU=
+X-Google-Smtp-Source: AGHT+IHupydN5GPDZj2QaS35grCd3GNFRBZq3UVfx4GwbQX8d+VwEv/fpWhZFHmVd6D40q0GylcCWQ==
+X-Received: by 2002:a05:6000:1a8e:b0:410:3a4f:1298 with SMTP id ffacd0b85a97d-42704d86b8fmr3647679f8f.15.1760734301872;
+        Fri, 17 Oct 2025 13:51:41 -0700 (PDT)
+Received: from ?IPV6:2403:580d:fda1::299? (2403-580d-fda1--299.ip6.aussiebb.net. [2403:580d:fda1::299])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7a2301211besm486393b3a.68.2025.10.17.13.51.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Oct 2025 13:51:41 -0700 (PDT)
+Message-ID: <316d0c07-7785-44ca-8f07-6c1a365c91e9@suse.com>
+Date: Sat, 18 Oct 2025 07:21:36 +1030
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251017000051.2094101-1-jthies@google.com> <abd715e2-6edd-4f35-a308-d2ee9a5ca334@panix.com>
-In-Reply-To: <abd715e2-6edd-4f35-a308-d2ee9a5ca334@panix.com>
-From: Jameson Thies <jthies@google.com>
-Date: Fri, 17 Oct 2025 13:48:21 -0700
-X-Gm-Features: AS18NWBOVLDYxDh3NOr1aYj7ImsXftnVZMr0nHmHk5U7INnmD_I0toUf4vs0lBc
-Message-ID: <CAMFSARdUMJ3WX1L8U-2k1w7kmH8Z4y7=MKKEBjCmyY-94wiBig@mail.gmail.com>
-Subject: Re: [PATCH] usb: typec: ucsi: psy: Set max current to zero when disconnected
-To: Kenneth Crudup <kenny@panix.com>
-Cc: heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, dmitry.baryshkov@oss.qualcomm.com, 
-	bleung@chromium.org, gregkh@linuxfoundation.org, akuchynski@chromium.org, 
-	abhishekpandit@chromium.org, sebastian.reichel@collabora.com, 
-	linux-pm@vger.kernel.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: Long running ioctl and pm, which should have higher priority?
+To: Andrei Borzenkov <arvidjaar@gmail.com>, Qu Wenruo <quwenruo.btrfs@gmx.com>
+Cc: Askar Safin <safinaskar@gmail.com>, linux-btrfs@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org, linux-pm@vger.kernel.org
+References: <3a77483d-d8c3-4e1b-8189-70a2a741517e@gmx.com>
+ <20251017103932.1176085-1-safinaskar@gmail.com>
+ <0d2eb0c9-9885-417f-bb0a-d78e5e0d1c23@gmx.com>
+ <CAA91j0XHt30mqDhgzWnvjbE-iGi3nS1BB1rgZy0Z6mSOT64Abg@mail.gmail.com>
+Content-Language: en-US
+From: Qu Wenruo <wqu@suse.com>
+Autocrypt: addr=wqu@suse.com; keydata=
+ xsBNBFnVga8BCACyhFP3ExcTIuB73jDIBA/vSoYcTyysFQzPvez64TUSCv1SgXEByR7fju3o
+ 8RfaWuHCnkkea5luuTZMqfgTXrun2dqNVYDNOV6RIVrc4YuG20yhC1epnV55fJCThqij0MRL
+ 1NxPKXIlEdHvN0Kov3CtWA+R1iNN0RCeVun7rmOrrjBK573aWC5sgP7YsBOLK79H3tmUtz6b
+ 9Imuj0ZyEsa76Xg9PX9Hn2myKj1hfWGS+5og9Va4hrwQC8ipjXik6NKR5GDV+hOZkktU81G5
+ gkQtGB9jOAYRs86QG/b7PtIlbd3+pppT0gaS+wvwMs8cuNG+Pu6KO1oC4jgdseFLu7NpABEB
+ AAHNGFF1IFdlbnJ1byA8d3F1QHN1c2UuY29tPsLAlAQTAQgAPgIbAwULCQgHAgYVCAkKCwIE
+ FgIDAQIeAQIXgBYhBC3fcuWlpVuonapC4cI9kfOhJf6oBQJnEXVgBQkQ/lqxAAoJEMI9kfOh
+ Jf6o+jIH/2KhFmyOw4XWAYbnnijuYqb/obGae8HhcJO2KIGcxbsinK+KQFTSZnkFxnbsQ+VY
+ fvtWBHGt8WfHcNmfjdejmy9si2jyy8smQV2jiB60a8iqQXGmsrkuR+AM2V360oEbMF3gVvim
+ 2VSX2IiW9KERuhifjseNV1HLk0SHw5NnXiWh1THTqtvFFY+CwnLN2GqiMaSLF6gATW05/sEd
+ V17MdI1z4+WSk7D57FlLjp50F3ow2WJtXwG8yG8d6S40dytZpH9iFuk12Sbg7lrtQxPPOIEU
+ rpmZLfCNJJoZj603613w/M8EiZw6MohzikTWcFc55RLYJPBWQ+9puZtx1DopW2jOwE0EWdWB
+ rwEIAKpT62HgSzL9zwGe+WIUCMB+nOEjXAfvoUPUwk+YCEDcOdfkkM5FyBoJs8TCEuPXGXBO
+ Cl5P5B8OYYnkHkGWutAVlUTV8KESOIm/KJIA7jJA+Ss9VhMjtePfgWexw+P8itFRSRrrwyUf
+ E+0WcAevblUi45LjWWZgpg3A80tHP0iToOZ5MbdYk7YFBE29cDSleskfV80ZKxFv6koQocq0
+ vXzTfHvXNDELAuH7Ms/WJcdUzmPyBf3Oq6mKBBH8J6XZc9LjjNZwNbyvsHSrV5bgmu/THX2n
+ g/3be+iqf6OggCiy3I1NSMJ5KtR0q2H2Nx2Vqb1fYPOID8McMV9Ll6rh8S8AEQEAAcLAfAQY
+ AQgAJgIbDBYhBC3fcuWlpVuonapC4cI9kfOhJf6oBQJnEXWBBQkQ/lrSAAoJEMI9kfOhJf6o
+ cakH+QHwDszsoYvmrNq36MFGgvAHRjdlrHRBa4A1V1kzd4kOUokongcrOOgHY9yfglcvZqlJ
+ qfa4l+1oxs1BvCi29psteQTtw+memmcGruKi+YHD7793zNCMtAtYidDmQ2pWaLfqSaryjlzR
+ /3tBWMyvIeWZKURnZbBzWRREB7iWxEbZ014B3gICqZPDRwwitHpH8Om3eZr7ygZck6bBa4MU
+ o1XgbZcspyCGqu1xF/bMAY2iCDcq6ULKQceuKkbeQ8qxvt9hVxJC2W3lHq8dlK1pkHPDg9wO
+ JoAXek8MF37R8gpLoGWl41FIUb3hFiu3zhDDvslYM4BmzI18QgQTQnotJH8=
+In-Reply-To: <CAA91j0XHt30mqDhgzWnvjbE-iGi3nS1BB1rgZy0Z6mSOT64Abg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-> Rule: add the tag "Cc: stable@vger.kernel.org" in the sign-off area to have the patch automatically included in the stable tree.
-> Subject: [PATCH] usb: typec: ucsi: psy: Set max current to zero when disconnected
-> Link: https://lore.kernel.org/stable/20251017000051.2094101-1-jthies%40google.com
 
-My mistake, I'll send up a v2 adding the appropriate CCs.
 
-> I wonder if this is the reason my (Kubuntu 25.04, FWIW) system will
-> sometimes show the battery icon as "Charging" even when it's discharging
-> (or nothing is plugged into either USB-C port)?
+在 2025/10/17 21:16, Andrei Borzenkov 写道:
+> On Fri, Oct 17, 2025 at 1:43 PM Qu Wenruo <quwenruo.btrfs@gmx.com> wrote:
+>>
+>>
+>>
+>> 在 2025/10/17 21:09, Askar Safin 写道:
+>>> Qu Wenruo <quwenruo.btrfs@gmx.com>:
+>>>> But there is a question concerning me, which should have the higher
+>>>> priority? The long running ioctl or pm?
+>>>
+>>> Of course, pm.
+>>>
+>>> I have a huge btrfs fs on a laptop.
+>>>
+>>> I don't want scrub to prevent suspend, even if that suspend is happening
+>>> automatically.
+>>>
+>>>> Furthermore the interruption may be indistinguishable between pm and
+>>>> real user signals (SIGINT etc).
+>>>
+>>> If we interrupted because of signal, ioctl should return EINTR. This is
+>>> what all other syscalls do.
+>>>
+>>> If we were cancelled, we should return ECANCELED.
+>>>
+>>> If we interrupted because of process freeze or fs freeze, then... I
+>>> don't know what we should do in this case, but definitely not ECANCELED
+>>> (because we are not cancelled). EINTR will go, or maybe something else
+>>> (EAGAIN?).
+>>>
+>>> Then, userspace program "btrfs scrub" can resume process if it
+>>> got EINTR. (But this is totally unimportant for me.)
+>>
+>> The problem is, dev-replace can not be resumed, but start again from the
+>> very beginning.
+> 
+> What happens if there is a power failure? We are left with two devices
+> that are part of btrfs. How does btrfs decide which one is good and
+> which one is not?
 
-The update to set max current to 0.1A for BC and default USB operation
-landed only a couple months ago. If the battery icon issue is a recent
-regression, it's definitely possible.
+That's restartable. There is an item in the root tree indicating the 
+process.
+
+But canceled one will remove that. And we can not keep it without a 
+running replace.
+That will open a window where writes are not properly duplicated and 
+cause problems.
+
+> 
+>> As the interrupted dev-replace will remove the to-be-added device.
+>>
+> 
+> In case of power failure it has no chance to remove anything.
+> 
+>> Scrub it self is more or less fine, just need some extra parameters to
+>> tell scrub to start from certain bytenr.
+>>
+>> Thanks,
+>> Qu
+>>
+>>>
+>>> Also, please CC me when sending any emails about this scrub/trim bug.
+>>>
+>>
+>>
+> 
+
 
