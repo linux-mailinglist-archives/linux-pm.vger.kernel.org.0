@@ -1,146 +1,88 @@
-Return-Path: <linux-pm+bounces-36338-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36339-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A0D9EBE7765
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Oct 2025 11:11:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9CF85BE7DC6
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Oct 2025 11:44:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CAFDB423D66
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Oct 2025 09:08:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3CDCD6E17D1
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Oct 2025 09:39:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A14FC2D6E73;
-	Fri, 17 Oct 2025 09:06:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5A1A2D7DC1;
+	Fri, 17 Oct 2025 09:38:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="p8PkJAVR"
+	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="hMuhADEP"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-m32101.qiye.163.com (mail-m32101.qiye.163.com [220.197.32.101])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A581B2DC35C
-	for <linux-pm@vger.kernel.org>; Fri, 17 Oct 2025 09:06:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65B442D7388;
+	Fri, 17 Oct 2025 09:38:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.32.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760691990; cv=none; b=Vkk6l74O7VsXvzy3b8o1wgXoTFJS91V67vE3MaEqgwFDl2/JZ486G9k6mgUsvurO5ZI/fTUACwa3gFHEAZeFrQKv/u3pNoAC+6/BRi9D0GncRXBbxOKh1r2m0CUgbua9CGLkTekJKH8W4UGWK/YRqXlnDWqxKiS8zTftzWlspbY=
+	t=1760693934; cv=none; b=TFkaTxGCZuuqhl95bQE70MuGJcfvjsf0iA+foM3bjcO1EpUNhjzaw65UijE4INspzWtusLn/H7embIdfL2IuknftY9JTMgdLgk/0GYDKYQkW89z2/1ZoN59oiRWKfXjxZl0GVTsnUUY+ZNu6Z84HuTGSyDke+S8+7uxe4tr1j+o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760691990; c=relaxed/simple;
-	bh=tL9LCQhpKIBjQIgS/5f1KpjSDRPB3nJi2aKghBl0jM4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YTanJSVdwGfooef3rLoxA6KsYtsqlLGqq3nkKfsiDg5DUedzGjsvVkZRJcNRCCDVijavx3pXJqfS/8P6iT3VOsu6OBvtWh3xCWdZEu/jctrepr/km7hFwO/XOCa5bRyZ1agdNQ1gUGadN8oR1nqZngj261jRAl6Eagh/O8fpbXw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=p8PkJAVR; arc=none smtp.client-ip=209.85.218.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-b50206773adso529132466b.0
-        for <linux-pm@vger.kernel.org>; Fri, 17 Oct 2025 02:06:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1760691987; x=1761296787; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=418kpMdDHnOQzzDnjco0/swD3OeHn+l/8evRSWETxr8=;
-        b=p8PkJAVRd2Vo0QVBck6JlHDW4H1DfgmBgUNao/9Nxyt77rBPmQMYnnrLCiL5RkCg9F
-         7xOKXf3qxLoKusF2/EHXZkz5XcwpmCBC9VQHrhnlqs5rJUJfDNUFkSX/lA2gE7nYJ+Xm
-         E9uBNrUd87yXlyIindIpkJ2u1iZWt5HaVZkijLxikgHQjmUKd6+oLC9YIKv+AiZUJkFb
-         9j/8iSANWosU8+A+5zyqUOKgpUG8YpPFj4rUtYfiXhauZgIPdHSwOBR/LsFYVled3gcQ
-         le4SDLYgaWgXbzqx8cPJ6UrU3m6tLzByNNerGPfwfG2soIjP6LOC2zEm86p2rMAzwS10
-         JWig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760691987; x=1761296787;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=418kpMdDHnOQzzDnjco0/swD3OeHn+l/8evRSWETxr8=;
-        b=jbER8mDabgkiOa62j9T92vxA7RtaLIvK/iS+o2nD/Z25LFAR+uxh8pkHNDPUz9NG2O
-         QS+8iB4SEXZEgLUMOC4gRYMnvCAT/fkpySKuye/qGhm/po6j7nEkGpa245CPpMTH7kKJ
-         FOWLLUSKLSiCuBUE4XiC+X7JrUvEWz6e0Ue9LJq0XLSb/ixkq0TBjBlCnRkUIRgFVVEE
-         p9xy43HHj0CWZQUU/+K+DtFk+8+N9BRW1ogFNP9CgrVde1oGanZR5LeMGgci3UsufJUm
-         N7gWf5X01ZQ2mn2D+MeNxVcZaE4fi/p6V/iAq9TrJsnBRdeA0J+kzKB7wuhdpJEdTfyA
-         X3bQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXju/y/ciQVErsYbXxaVmajMdEWFWN0lvje/Q4xLeDj/4egM+/Z5b61i67QN7Gzm7otcW4Yu9ZOdg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YztYPTyKWmPDc+JehpLDLAZwIQIb5vbsfDzEdbRbzvZUxrE2TSY
-	j4tI88cPOaTM8U0nOtUhK2l+LQYTcGTUiZrroG6SdMfjVzWex57TaF79Nw/GVDsuVz71od6aehm
-	EwC2FSarSea2a7R7vNKHMel7wEmbbz96YIHlyhlBYQg==
-X-Gm-Gg: ASbGncvyyRuze44xe5ulYzpHXRhRbmK2BEEz6lfRzwU7Mn+j1pRc7sx8pMpBDzT0GKw
-	XMx+uO5UYhqCsY2HnwTZwPm2DCDmuD+13gyRi7HszT/fcDXRI8n64zXjvYpxF8Lc/g2xM4JFR9T
-	saakbxs+0fy/JrDyoSmSTKS/kNDr+tZpIWYkIKtwpZrNFC6rSb1rBySKK/e0KBlSwcoLaRKW+pI
-	Rs8C8B8tOMrKGp2jfZRI8S7ovADMYLxX1fPh7qFMfKDRYl+pxs6II6K3fqPwRlNd4VhjfMGAFt3
-	xP9ftDrsqjF19kYfndSrJQefuRA=
-X-Google-Smtp-Source: AGHT+IG+w0UsfxJS4d6pFqa8XviZVfLhRM+rhE1KqiFzit259/+EaKQIY+0egVcn1SrXy9IXtpCbr0Z+t9PVc3PXPa4=
-X-Received: by 2002:a17:907:868f:b0:b41:c602:c75d with SMTP id
- a640c23a62f3a-b645f7ef255mr378423666b.31.1760691986910; Fri, 17 Oct 2025
- 02:06:26 -0700 (PDT)
+	s=arc-20240116; t=1760693934; c=relaxed/simple;
+	bh=GQ6R570uQrtw7VpX38UcuaUMLbdw1hKLzXQSSJtmD4o=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=suY7kXhcuPGJPyMdn+OcuMsPKfFFg0Kkj5+PiStO2ICv7J4JNawfX+0agEgkZI/oILEUlf7+Gw2t6W0Et/AVVOZCAK5afkyo+kOrMD1Qdo+jhif6gqqDzgCQtNwAXdyX96Bur5hDD9edTCZKq5ZN9MZshuQnbcKeUHpH/oCjTq8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=hMuhADEP; arc=none smtp.client-ip=220.197.32.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
+Received: from xf.. (unknown [58.22.7.114])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 264523269;
+	Fri, 17 Oct 2025 17:38:40 +0800 (GMT+08:00)
+From: Finley Xiao <finley.xiao@rock-chips.com>
+To: heiko@sntech.de
+Cc: robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	ulf.hansson@linaro.org,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	zhangqing@rock-chips.com,
+	sugar.zhang@rock-chips.com,
+	huangtao@rock-chips.com,
+	Finley Xiao <finley.xiao@rock-chips.com>
+Subject: [PATCH v4 0/2] Add power-controller support for RV1126B
+Date: Fri, 17 Oct 2025 17:38:32 +0800
+Message-ID: <20251017093834.331998-1-finley.xiao@rock-chips.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251015-arm-psci-system_reset2-vendor-reboots-v16-0-b98aedaa23ee@oss.qualcomm.com>
- <20251015-arm-psci-system_reset2-vendor-reboots-v16-2-b98aedaa23ee@oss.qualcomm.com>
- <CACMJSesvTLe28Jz83b=zfHD2rvmf7-i_2+2DoV=dgooVqFEYbA@mail.gmail.com> <fa42adf0-8f15-ad4c-3788-578b1bee1c72@oss.qualcomm.com>
-In-Reply-To: <fa42adf0-8f15-ad4c-3788-578b1bee1c72@oss.qualcomm.com>
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Date: Fri, 17 Oct 2025 11:06:15 +0200
-X-Gm-Features: AS18NWCSgzHU1qRYaMmAnFnfeUajlPBrTb0Y5_GWRI3iwaw1dVFHqq2mvJmjYc8
-Message-ID: <CACMJSesxazA7Nf6sAhUT16KfwtiUNjvb5JOEWkEb1B5fJtihMQ@mail.gmail.com>
-Subject: Re: [PATCH v16 02/14] power: reset: reboot-mode: Add device tree
- node-based registration
-To: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
-Cc: Bjorn Andersson <andersson@kernel.org>, Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Sudeep Holla <sudeep.holla@arm.com>, Souvik Chakravarty <Souvik.Chakravarty@arm.com>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Andy Yan <andy.yan@rock-chips.com>, Mark Rutland <mark.rutland@arm.com>, 
-	Lorenzo Pieralisi <lpieralisi@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Konrad Dybcio <konradybcio@kernel.org>, cros-qcom-dts-watchers@chromium.org, 
-	Vinod Koul <vkoul@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Florian Fainelli <florian.fainelli@broadcom.com>, 
-	Moritz Fischer <moritz.fischer@ettus.com>, John Stultz <john.stultz@linaro.org>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, Krzysztof Kozlowski <krzk@kernel.org>, 
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
-	Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>, Stephen Boyd <swboyd@chromium.org>, 
-	Andre Draszik <andre.draszik@linaro.org>, 
-	Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org, 
-	Elliot Berman <quic_eberman@quicinc.com>, Srinivas Kandagatla <srini@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-HM-Tid: 0a99f189210a03a9kunmbe68a2b91698e9
+X-HM-MType: 1
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZQkNCHlZCS0pDQk1MQ01JQkpWFRQJFh
+	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSU9PT0
+	hVSktLVUpCS0tZBg++
+DKIM-Signature: a=rsa-sha256;
+	b=hMuhADEPSmwP6nPasnEsJ31HuhbuNxT3etn3+hJJkFF62U7zWJC8lq+LcH/zBZZl7vGpFiijdsoOn54FZy4hlmlP7K0O+I9MNURftFqGk8K+ZAfI9ik/F1H0BPPUBQHk8FcYzX4o4naL5CW7pSQ64Kwd4wlHa9s63crTXOuFojs=; c=relaxed/relaxed; s=default; d=rock-chips.com; v=1;
+	bh=LjF9ZqEFw1pOCkzkvk35rLOTjYm8/YyQQGfvrv/Wf0E=;
+	h=date:mime-version:subject:message-id:from;
 
-On Thu, 16 Oct 2025 at 19:19, Shivendra Pratap
-<shivendra.pratap@oss.qualcomm.com> wrote:
-> >>
-> >> -                       info = devm_kzalloc(reboot->dev, sizeof(*info), GFP_KERNEL);
-> >
-> > This change is good - devres should not be used in subsystem library
-> > code, only in drivers - but it doesn't seem to belong here, can you
-> > please separate it out and make it backportable?
->
-> sure. Just to confirm we should separate out the devm_kzalloc part of the
-> change and add a fixes tag.
->
+Add support for the power domain controller on the RV1126B SoC.
 
-And preferably put it first in the series to avoid conflicts.
+Finley Xiao (2):
+  dt-bindings: power: rockchip: Add support for RV1126B
+  pmdomain: rockchip: Add support for RV1126B
 
-> >> @@ -123,8 +136,11 @@ int reboot_mode_register(struct reboot_mode_driver *reboot)
-> >>                 return 0;
-> >>
-> >>  error:
-> >> -               list_for_each_entry(info, &reboot->head, list)
-> >> +               list_for_each_entry_safe(info, next, &reboot->head, list) {
-> >> +                       list_del(&info->list);
-> >
-> > Same here, not deleting the entries currently seems like a bug? Do we
-> > depend on the driver detach to clean up the resources on failure?
->
-> sure, so this should also go as fixes? and should we remove the other
-> dev_err(printk) also as fixes? or that can still got with the change
-> where we add fwnode based registration?
->
+ .../power/rockchip,power-controller.yaml      |  2 +
+ drivers/pmdomain/rockchip/pm-domains.c        | 41 +++++++++++++++++++
+ .../power/rockchip,rv1126b-power-controller.h | 17 ++++++++
+ 3 files changed, 60 insertions(+)
+ create mode 100644 include/dt-bindings/power/rockchip,rv1126b-power-controller.h
 
-It doesn't seem to be strictly required by current code as the users
-use it "correctly" but if the API becomes used in different ways - for
-instance the structure may be reused after failure - it's a good idea
-to backport it. In general we should undo everything we did in the
-same function if we fail at some point.
+-- 
+2.43.0
 
-Bart
 
