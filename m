@@ -1,83 +1,83 @@
-Return-Path: <linux-pm+bounces-36402-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36403-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 972CFBED6AF
-	for <lists+linux-pm@lfdr.de>; Sat, 18 Oct 2025 19:50:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6ED01BED6C7
+	for <lists+linux-pm@lfdr.de>; Sat, 18 Oct 2025 19:50:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D0DB96247FF
-	for <lists+linux-pm@lfdr.de>; Sat, 18 Oct 2025 17:47:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DB288625993
+	for <lists+linux-pm@lfdr.de>; Sat, 18 Oct 2025 17:47:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7400B2E1722;
-	Sat, 18 Oct 2025 17:46:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A40932F9DA0;
+	Sat, 18 Oct 2025 17:46:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GL7XNcaR"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B4d5twMq"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
+Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com [209.85.222.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 391E42857F0
-	for <linux-pm@vger.kernel.org>; Sat, 18 Oct 2025 17:45:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09A092ECE80
+	for <linux-pm@vger.kernel.org>; Sat, 18 Oct 2025 17:46:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760809560; cv=none; b=q7suBf/4Z/+VeIG09su9vbld3Q8l79baWChOY/V5iogqh9ypjFFOqkrRcFOhdcchXQHWtSnIf8w9RR8ooiDwLDVjgSw8J+OFOHsu/nGqIG4vvwXwDPfSZe17hQYDG8sWkwOCsmKb+v0ouwUVw7FgzxtTzKXGoDZhSVbnKbjI1Vw=
+	t=1760809564; cv=none; b=VmanCpPS8MCNLWJuOIi6lmnhy7rooCIs9GygnYXfJ2xIfxlRn3+PMVGHJ9T+87d5TdG8dda0dcFtLn24y5duPPNgt5Wit+4KVX5TOYwCM6cqckpNqDcr3/NZtS1iOw/5JrTKjzejNOcd5caKrPXW53v5jvK0Dy4PW56bJTn+a9M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760809560; c=relaxed/simple;
-	bh=2RO1O8x8vlwhifkhfd816jOQiIu5L43+GQ3qhkZvCCc=;
+	s=arc-20240116; t=1760809564; c=relaxed/simple;
+	bh=03bsWp5q/RvNg/sXSrzNos1bBBR49+qyJdq4+m4Ha6w=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=MmkBxeE9x/HjSgxI8bfRdrZRGYdwoK11HCOUAJ7but3IxOQG6qEG7NJCNdUJqaGh5y23kf3vEw3vyGCceWWH3pUkzXAIe2Gy7xqrrRZjJxlIYdsZc1eKU3n0aOBRfczRJpj6KS3mH2ScRSjS6SHGzJxTwqZMVVhyKklN/jdowB8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GL7XNcaR; arc=none smtp.client-ip=209.85.219.45
+	 In-Reply-To:To:Cc; b=TvakVQzw7VHv5Ndatf7RyA80o4fTdFiv4JrEQiD9aQ7teje7PPjNPc+drS/jqJGPOXV3WISx27OxbjfZzR+9Q2hvZtaG4tRGk8K7Ap1QO+De5PTIyA/ZWHIqDanTQJFfEsZgxl2qVssOsP85Nkiqkybwg0TE+u5bJpmj0SpOI2I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B4d5twMq; arc=none smtp.client-ip=209.85.222.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-81efcad9c90so54664196d6.0
-        for <linux-pm@vger.kernel.org>; Sat, 18 Oct 2025 10:45:58 -0700 (PDT)
+Received: by mail-qk1-f177.google.com with SMTP id af79cd13be357-88f2aebce7fso450795185a.3
+        for <linux-pm@vger.kernel.org>; Sat, 18 Oct 2025 10:46:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760809557; x=1761414357; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1760809561; x=1761414361; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=a15d5fAvykxuJ32X4GoFun7W4EexMfG4QkmOfbTlvaA=;
-        b=GL7XNcaRisIQRpvNANKfLsPUjWi9UKTcVHFQt3rKxT9e6k6Z7Mq4yV0sQYC4gO1Hcj
-         sJyg/79Klvel4XnE0xuudtNs0raQqIomw/EIVxnvdo31WaO+XZDR8estB4jBg5M+8DNg
-         URsz2s28FaId/vbAeX53DFBXSGYMLHiveLI683yf3JutpfZ5O+XRJc++HP8IxECwm4yF
-         8sEzTLFwSqcIbkp2aiMS4Uz39mbuLXRrWx3q5+MShmY6MLypWnyT/l5akGk1mcXye4OV
-         c4/9KfD+bGDJBWvS8XUAuaF170gODiUmD4ZCYEr4uNoR8GZj3ycLBqJwQ4imwcR9Sx2C
-         r0ug==
+        bh=H5WimfWZlEqiYHKzfmcAckTYkDvTe0+bpTYNTmk8aT4=;
+        b=B4d5twMqq15Bm4EX95wI9H+g9Jr4ulZ0Z2Blp27d9tlkapDkfxPWxVvAX3MR5FcYD1
+         j1C7SIRD1af1Caj62Q0lteSNdf3CpvaN7soagf+2Rh6DfU1ehN+iYXDRlJM4NYLJoR/8
+         jKmLVTuarADNH/eQhdgR3DKmZ/bVA98jgdLCnCRjqJdeZ9ASlFozjb/Skv0W9xczvSUX
+         5tSIAmas2MIlcs0es82VfRqbFmPt2zDg2T4Z5u2urQBT2siO60YzSSZ1PaCqBdGpMcP/
+         pD7KQwBQHFgvXeXTpNVJX3x3fXFu5zj+ZVIKJHizeeg2I9b08xEwSIuUmKYSPa7s3u4V
+         bCvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760809557; x=1761414357;
+        d=1e100.net; s=20230601; t=1760809561; x=1761414361;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=a15d5fAvykxuJ32X4GoFun7W4EexMfG4QkmOfbTlvaA=;
-        b=BRTVZdGBokuzYP3ionD3/kak8Bo2LNmjJKlkRG8lHlVv2R6me7TDlxfkiybQ+sIbom
-         /xFd1K4Z5DfRxB/rUT/QjOrQv4YPoYxGAqVPm64GWtKo4ex4Mxgd/I+NvRMqkCf0bCNJ
-         r44xPxsk7Bvq71llw5b8eL+6OerVMg/aNqsAuGvQMo80BcNI84HrjSeuR00IQ/xACm1N
-         B84c5MQ9H7IEyHcxjyyn1SeZoqAfOHVXly2GTEcB1kFGKdHKRJRcJ/5fsZtmwDMuLGV1
-         1jnugGv7mJVn7hoLtzJRveMAhHeJNKPWdqdo+NgRBCxvBNXBSeA3GjVxbLPolh0mlby1
-         s2JA==
-X-Forwarded-Encrypted: i=1; AJvYcCWCDapsAKn9x3l3U3fj/UVkCEpecy5vattT0g/EP2es2mNT/53jLZfvgQbgLK+S73XKPb6/eqFxBA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw+Kqq55SSxX9ZcHoGJFcveOY5d7WAGXM5psicHgZnlTE7UbJBW
-	VWoscWdSFGerARSvMZhHFHJJVjEMd9rNna52Yp5whowc2ZP4FwlIKe9o
-X-Gm-Gg: ASbGncttcGDNSWbBS/+EuEnwVFtxWesHR6ytQ0nje9l6f4oMvcUdDtf7Zl0yAbm0DB3
-	VV1JH0Rj3BZ1JBAvFsjvEl7rIGs6SlS3IBYjIp6aB2ANAphtdnEltRbHqdPTp5Xbs7ppf2DhrWS
-	Bzs+jFloUHyswHqOa3ySyI2Oq6U/mIH0uFcXMyqvg5E+bcu9tVY1rGRFhqeufTXrj/Juv7ni1ar
-	VUxY4tU8ClNc0A3uXXMDxOYf39PYV14+2QgvBEoLJwC6ourYPqtdy/LrLI+N2ObPac2lUfgh/k5
-	7YJI6hbmB8Tc4Qr/r1hJ6gCyKaYb6trfVF87QVDL+t3bzg4MjpPT8sl2mlKvm7UsljmvXsc8JOS
-	y8piR6IPwR1JWpsfSg33yzAc+FNuEazzoKOsjFz0h+xTtjyyIkqhM0yR90oGmNpIQaYERpbs11t
-	LSx46bnFAcIkaHgP2kdvAsnMO8Uwavz90KGEwCIM5bMCunpd2bcwk9UGPoUlgO3ZxZllNz8UT2u
-	Nz7EbkYUR+VZfXqyvkRZ5qFv1aBDPRlGlahBWBlNTOLDzSE+rhpLPJoTdqM67iV6EfIkQMrog==
-X-Google-Smtp-Source: AGHT+IF0jDSr4+x2H9ezxo4E3+k6pmF019NwUbAdiwnAzhTA8DToLrkpZSznJQWz124+QD1Dm24uLg==
-X-Received: by 2002:a05:622a:1102:b0:4e8:b17d:916b with SMTP id d75a77b69052e-4e8b17d949fmr28810291cf.51.1760809556972;
-        Sat, 18 Oct 2025 10:45:56 -0700 (PDT)
+        bh=H5WimfWZlEqiYHKzfmcAckTYkDvTe0+bpTYNTmk8aT4=;
+        b=XdRviY6RxqsL944i9xnBa/9CC0jKVfm2sV8e1oSqXrhwCa02X/ItgByWbI9H1cvl9D
+         y+McxXwjNeXs6etnnOCx0vEKpi+11U4eN3M/6E8JPsgy89p+ioocKBoST+OhUaHQ3yYu
+         ZGU22RdN8XdAtGpm0foJiatJySLSlqfqESvXRSJqmUrzg+Uudc6RGTTpGlSB+fFCKUnG
+         0tEVVDRep0I8ZClE+LFlBeSOQqTwNcCVpTW+QpOWZAMfR0GWpYSBatAzVKgOpJ20jkz9
+         PUzAS0XBOHuCXnkC/iJZ/eDVCQESKP9V0ZSGl7UMv7n0qoxar730fsBm1gB9AEo59JDn
+         2P2g==
+X-Forwarded-Encrypted: i=1; AJvYcCWEuX1O56567hnp2G73EW4GFpA+UIvkJRjNbGkwlbYmBPKQJWrCDH8pWLWucKn2r2E6czjTslZULg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YweEPz8gMaFV2hu9OKvNdAP+fsZqqPEsBOy+DKKH2CMj0DuLGPK
+	iJNMNYSCLLyz+dLBq5ywN/bWLqw2gIbFE9dXfGGtCkI3jhFhFYUo0Ol6
+X-Gm-Gg: ASbGncuGX7tEfMni1MQuiCUdDdpBndGvRt+rhEbkjiZH0g1NsfyvXp8/mZxICHE5ZCc
+	562cPR+ZUnSaWWPZLRHJPw7m6fCwwwymTTFgqUMMdMOyKWxTqezgYULP2tU0grFB+k5Msa+B3mj
+	9d6ws+KvUQlJHoQKIntaZuqcxXGWXXmS6+zdi1GoeUQZDT2RAaF9/+BjLgRTnHy+NOBHKxhhXhi
+	/myvwYMdDFJcUPoe9uPJuFPvOvgO4qns0dCGPFtV3cFKSMhZE29J5DDbHfdJT5mAR2JmEe8mHEH
+	vA4jTTmVjLHQz9NRos0ojv6Jhue2bdIgM+znUGOA1+4ahm1BukgwB6yXSdfZ4Dq3CqAKfdkhWlc
+	ivGI2iZQ/PrpWKhnOtdBuhy67cjrsy/o2stAho4zcWLtxNi/3pGD9/zmhQPmm6ksqmopWSpRT4Q
+	6gve/PlRXXHoGamIkfuH/Y5BF9MckutiOoPdb591uA7n8kUTHZGb18H1OU/V8mTi6+HWQD8bwIj
+	BMdZySmVNaQ7muj9JMOjGB+oMTjHG0EFadSmMJ8aVgeaRS+5lREQOF1lkcBCQM=
+X-Google-Smtp-Source: AGHT+IH8lweP2XYB08E+inbzDnXw7d9uWVgrdDvTnlgrkRHMKVP2lag0JhfKwKbfvNE1zYcp4Zi2rA==
+X-Received: by 2002:a05:622a:15cd:b0:4e8:894e:1345 with SMTP id d75a77b69052e-4e89d07d9b1mr104925911cf.0.1760809560785;
+        Sat, 18 Oct 2025 10:46:00 -0700 (PDT)
 Received: from 117.1.168.192.in-addr.arpa ([2600:4808:6353:5c00:1948:1052:f1e9:e23a])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4e8ab114132sm20445161cf.40.2025.10.18.10.45.53
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4e8ab114132sm20445161cf.40.2025.10.18.10.45.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Oct 2025 10:45:55 -0700 (PDT)
+        Sat, 18 Oct 2025 10:45:59 -0700 (PDT)
 From: Tamir Duberstein <tamird@gmail.com>
-Date: Sat, 18 Oct 2025 13:45:18 -0400
-Subject: [PATCH v18 07/16] rust: debugfs: use `kernel::fmt`
+Date: Sat, 18 Oct 2025 13:45:19 -0400
+Subject: [PATCH v18 08/16] rust: pci: use `kernel::fmt`
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -86,7 +86,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251018-cstr-core-v18-7-ef3d02760804@gmail.com>
+Message-Id: <20251018-cstr-core-v18-8-ef3d02760804@gmail.com>
 References: <20251018-cstr-core-v18-0-ef3d02760804@gmail.com>
 In-Reply-To: <20251018-cstr-core-v18-0-ef3d02760804@gmail.com>
 To: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
@@ -123,148 +123,44 @@ Cc: rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
  llvm@lists.linux.dev, linux-fsdevel@vger.kernel.org, 
  linux-block@vger.kernel.org, linux-pci@vger.kernel.org, 
  linux-pm@vger.kernel.org, linux-clk@vger.kernel.org, 
- dri-devel@lists.freedesktop.org, Tamir Duberstein <tamird@gmail.com>, 
- Matthew Maurer <mmaurer@google.com>
+ dri-devel@lists.freedesktop.org, Tamir Duberstein <tamird@gmail.com>
 X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openssh-sha256; t=1760809527; l=4664;
+X-Developer-Signature: v=1; a=openssh-sha256; t=1760809527; l=918;
  i=tamird@gmail.com; h=from:subject:message-id;
- bh=2RO1O8x8vlwhifkhfd816jOQiIu5L43+GQ3qhkZvCCc=;
+ bh=03bsWp5q/RvNg/sXSrzNos1bBBR49+qyJdq4+m4Ha6w=;
  b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgtYz36g7iDMSkY5K7Ab51ksGX7hJgs
  MRt+XVZTrIzMVIAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QMATZCii+4KTdwmO4cL/e3cZ7fEhaFxHdhr1qxcBeKLRmamGNwC2RJ/lvy+nkubg5+s2N1SC1jy
- AY70o32pQ0gI=
+ QH27Y5uAfTmrvKZIdGCHYL/oomYMJkFLfNEOLtlLtpxxDPHsRr1ISH3D/10dPkATw5kw42q12/O
+ zIe1ETaFKVAY=
 X-Developer-Key: i=tamird@gmail.com; a=openssh;
  fpr=SHA256:264rPmnnrb+ERkS7DDS3tuwqcJss/zevJRzoylqMsbc
 
 Reduce coupling to implementation details of the formatting machinery by
 avoiding direct use for `core`'s formatting traits and macros.
 
-This backslid in commit 40ecc49466c8 ("rust: debugfs: Add support for
-callback-based files") and commit 5e40b591cb46 ("rust: debugfs: Add
-support for read-only files").
+This backslid in commit ed78a01887e2 ("rust: pci: provide access to PCI
+Class and Class-related items").
 
 Acked-by: Danilo Krummrich <dakr@kernel.org>
-Reviewed-by: Matthew Maurer <mmaurer@google.com>
 Signed-off-by: Tamir Duberstein <tamird@gmail.com>
 ---
- rust/kernel/debugfs.rs                   |  2 +-
- rust/kernel/debugfs/callback_adapters.rs |  7 +++----
- rust/kernel/debugfs/file_ops.rs          |  6 +++---
- rust/kernel/debugfs/traits.rs            | 10 +++++-----
- 4 files changed, 12 insertions(+), 13 deletions(-)
+ rust/kernel/pci/id.rs | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/rust/kernel/debugfs.rs b/rust/kernel/debugfs.rs
-index 381c23b3dd83..8c35d032acfe 100644
---- a/rust/kernel/debugfs.rs
-+++ b/rust/kernel/debugfs.rs
-@@ -8,12 +8,12 @@
- // When DebugFS is disabled, many parameters are dead. Linting for this isn't helpful.
- #![cfg_attr(not(CONFIG_DEBUG_FS), allow(unused_variables))]
+diff --git a/rust/kernel/pci/id.rs b/rust/kernel/pci/id.rs
+index 7f2a7f57507f..5f5d59ff49fc 100644
+--- a/rust/kernel/pci/id.rs
++++ b/rust/kernel/pci/id.rs
+@@ -4,8 +4,7 @@
+ //!
+ //! This module contains PCI class codes, Vendor IDs, and supporting types.
  
-+use crate::fmt;
- use crate::prelude::*;
- use crate::str::CStr;
- #[cfg(CONFIG_DEBUG_FS)]
- use crate::sync::Arc;
- use crate::uaccess::UserSliceReader;
+-use crate::{bindings, error::code::EINVAL, error::Error, prelude::*};
 -use core::fmt;
- use core::marker::PhantomData;
- use core::marker::PhantomPinned;
- #[cfg(CONFIG_DEBUG_FS)]
-diff --git a/rust/kernel/debugfs/callback_adapters.rs b/rust/kernel/debugfs/callback_adapters.rs
-index 6c024230f676..a260d8dee051 100644
---- a/rust/kernel/debugfs/callback_adapters.rs
-+++ b/rust/kernel/debugfs/callback_adapters.rs
-@@ -5,10 +5,9 @@
- //! than a trait implementation. If provided, it will override the trait implementation.
++use crate::{bindings, error::code::EINVAL, error::Error, fmt, prelude::*};
  
- use super::{Reader, Writer};
-+use crate::fmt;
- use crate::prelude::*;
- use crate::uaccess::UserSliceReader;
--use core::fmt;
--use core::fmt::Formatter;
- use core::marker::PhantomData;
- use core::ops::Deref;
- 
-@@ -76,9 +75,9 @@ fn deref(&self) -> &D {
- 
- impl<D, F> Writer for FormatAdapter<D, F>
- where
--    F: Fn(&D, &mut Formatter<'_>) -> fmt::Result + 'static,
-+    F: Fn(&D, &mut fmt::Formatter<'_>) -> fmt::Result + 'static,
- {
--    fn write(&self, fmt: &mut Formatter<'_>) -> fmt::Result {
-+    fn write(&self, fmt: &mut fmt::Formatter<'_>) -> fmt::Result {
-         // SAFETY: FormatAdapter<_, F> can only be constructed if F is inhabited
-         let f: &F = unsafe { materialize_zst() };
-         f(&self.inner, fmt)
-diff --git a/rust/kernel/debugfs/file_ops.rs b/rust/kernel/debugfs/file_ops.rs
-index 50fead17b6f3..9ad5e3fa6f69 100644
---- a/rust/kernel/debugfs/file_ops.rs
-+++ b/rust/kernel/debugfs/file_ops.rs
-@@ -3,11 +3,11 @@
- 
- use super::{Reader, Writer};
- use crate::debugfs::callback_adapters::Adapter;
-+use crate::fmt;
- use crate::prelude::*;
- use crate::seq_file::SeqFile;
- use crate::seq_print;
- use crate::uaccess::UserSlice;
--use core::fmt::{Display, Formatter, Result};
- use core::marker::PhantomData;
- 
- #[cfg(CONFIG_DEBUG_FS)]
-@@ -65,8 +65,8 @@ fn deref(&self) -> &Self::Target {
- 
- struct WriterAdapter<T>(T);
- 
--impl<'a, T: Writer> Display for WriterAdapter<&'a T> {
--    fn fmt(&self, f: &mut Formatter<'_>) -> Result {
-+impl<'a, T: Writer> fmt::Display for WriterAdapter<&'a T> {
-+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-         self.0.write(f)
-     }
- }
-diff --git a/rust/kernel/debugfs/traits.rs b/rust/kernel/debugfs/traits.rs
-index ab009eb254b3..ad33bfbc7669 100644
---- a/rust/kernel/debugfs/traits.rs
-+++ b/rust/kernel/debugfs/traits.rs
-@@ -3,10 +3,10 @@
- 
- //! Traits for rendering or updating values exported to DebugFS.
- 
-+use crate::fmt;
- use crate::prelude::*;
- use crate::sync::Mutex;
- use crate::uaccess::UserSliceReader;
--use core::fmt::{self, Debug, Formatter};
- use core::str::FromStr;
- use core::sync::atomic::{
-     AtomicI16, AtomicI32, AtomicI64, AtomicI8, AtomicIsize, AtomicU16, AtomicU32, AtomicU64,
-@@ -24,17 +24,17 @@
- /// explicitly instead.
- pub trait Writer {
-     /// Formats the value using the given formatter.
--    fn write(&self, f: &mut Formatter<'_>) -> fmt::Result;
-+    fn write(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result;
- }
- 
- impl<T: Writer> Writer for Mutex<T> {
--    fn write(&self, f: &mut Formatter<'_>) -> fmt::Result {
-+    fn write(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-         self.lock().write(f)
-     }
- }
- 
--impl<T: Debug> Writer for T {
--    fn write(&self, f: &mut Formatter<'_>) -> fmt::Result {
-+impl<T: fmt::Debug> Writer for T {
-+    fn write(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-         writeln!(f, "{self:?}")
-     }
- }
+ /// PCI device class codes.
+ ///
 
 -- 
 2.51.1
