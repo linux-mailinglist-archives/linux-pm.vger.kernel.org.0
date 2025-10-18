@@ -1,83 +1,83 @@
-Return-Path: <linux-pm+bounces-36398-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36399-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 54193BED658
-	for <lists+linux-pm@lfdr.de>; Sat, 18 Oct 2025 19:47:17 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 19EB5BED637
+	for <lists+linux-pm@lfdr.de>; Sat, 18 Oct 2025 19:46:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 87D5E4EEC97
-	for <lists+linux-pm@lfdr.de>; Sat, 18 Oct 2025 17:46:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7F5601891593
+	for <lists+linux-pm@lfdr.de>; Sat, 18 Oct 2025 17:47:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCB1A27AC48;
-	Sat, 18 Oct 2025 17:45:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AACB286D40;
+	Sat, 18 Oct 2025 17:45:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PiUSbTna"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JQn2XBtZ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com [209.85.222.177])
+Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BAD027703E
-	for <linux-pm@vger.kernel.org>; Sat, 18 Oct 2025 17:45:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC1751D7999
+	for <linux-pm@vger.kernel.org>; Sat, 18 Oct 2025 17:45:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760809546; cv=none; b=phTeQsXGUo+vXZAbJbtJCzjzKlK7N0yL3BPV5KM/jR4x8Zz/Rc/jn0JtloaKhJHSNhI4grTDHyBjRYvM5GvU5rXt+7qEGu95rSZeNWk/kU/osKcbC+JHF7nG9CYZhHEgRRoYobbU+h1fMUUll+MXilHnXUwjzpkvuTw2wcyl5pg=
+	t=1760809552; cv=none; b=KTNXzNNkeFPbepC7258AH885iwgY4m/k/+Chy/FHjzg8MD9BYrO8muF7K39LzkdRrm0cVaZl9/XxbeR9PMkcOfBg1Dz6OlkaRqTtS+CmDRMXrRu4gBYJ8oDAeJFSAzikK7cwrMcCfXCj8VYp3MMxatSAYG3awmLRpV6bie6dpYo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760809546; c=relaxed/simple;
-	bh=872/2/9eITdb9tB+ajd4McXNzNIKi7XLnXFm8ifjokI=;
+	s=arc-20240116; t=1760809552; c=relaxed/simple;
+	bh=CzY30Cbw7NH9BCqW+7Dm4yyfJiEmTcSRj3QBxiZsJWU=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=P7VmC39PSHzBvJC/a9D7KNrEAwbN/+AuRAxkKn9yp9xMq6rDgEPe8ATVjvh/W35H2dr+ariCwR3tM8cMDA+HC5MsAczG/nlGSTFZKeSIkn4X8WWVUP3F0mXu0JNnmdXCNi7KXI0sHP38m+F79Eg+y/gtVOV9th0MdlJJw2vC7eA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PiUSbTna; arc=none smtp.client-ip=209.85.222.177
+	 In-Reply-To:To:Cc; b=Q0Z6XUuYQprX7SzNsrXPGXCr0EBSx/jbTzPfs0DT5M6O/SyJWhrsXIAAUnmvVbC3pa5OhP4KD/e8pu4UcQDsGigVcGq3+PEFyeZNrNnfE269OFsvMcLzAG5590qKXNu9tZaOyoazH8njiDsGjUmHvE6n7zPF2Yd89gwtg+BVqGM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JQn2XBtZ; arc=none smtp.client-ip=209.85.219.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f177.google.com with SMTP id af79cd13be357-88f26db50b4so415190085a.2
-        for <linux-pm@vger.kernel.org>; Sat, 18 Oct 2025 10:45:44 -0700 (PDT)
+Received: by mail-qv1-f44.google.com with SMTP id 6a1803df08f44-87c1877b428so54462006d6.1
+        for <linux-pm@vger.kernel.org>; Sat, 18 Oct 2025 10:45:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760809543; x=1761414343; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1760809547; x=1761414347; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=WxxD2K5FdBz/EnZVjAulq7wLhETf3uBIbeo+/VSTI5o=;
-        b=PiUSbTnawi0Y2gAOle6WmnfWCMP15/NZEFmhoWZ/P8IE/4TCxmGjSoi53OpB/Yl7Lo
-         /Zswgw8ol5/9UeFvKlNkHdyWX81ZKlWnsSmTb9/L9ttW3D+7oojqWaXLXBm5IuaTAWAZ
-         zzx7mr2BpUeRb+HK/FjLv/xzNThgx2XnCClmTyRlPo6/twf/ocjqFQWg1IUcESd8hnVP
-         m1S44t3z4VO+iQ9fuLTi03/HdihgxNiTi9JqOcYIdKACT2i21syOexoVSijXEAZWEM/w
-         TBLUaURZjJI2t4IhEj9sagARG3zDp0VCz56QWREA0Z1RqrYl7Pz/sZAalkncJcCLNSGL
-         xVsA==
+        bh=lawTNFgWMdwiPfh6WDKLTV6aPOfN+Nzqh2uzIhroikw=;
+        b=JQn2XBtZHFcfyd0otLfHMIY2rjaug1QAyR3P4HT6Nhx+HGjJ8IDNRoAsH7r+NltaEK
+         jT+mD32eTIWFecS4qBPgSgaKG949+MgyP6TcOKiRvoN/IOOiKulaIcatHQ138pUn1MmS
+         at2q3Vqo0bJHD72ziz/6guu1rn06JyzC3zTd0A4DORkrXD2BX2/PWgiTj+gS69usb0+C
+         Z4pd0Ia28fm2fZjMqThmk6HfJbJrQ60ypyxPqHEfGtRG3bh6AOKUxb92yuOBpQc6iIUN
+         7t4DkBAxlVWEp6A5RxIP/7szbwbuYq1IfuLwxMo8cyEoqleYqeToYMkoanI8KR9vMfVC
+         zBzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760809543; x=1761414343;
+        d=1e100.net; s=20230601; t=1760809547; x=1761414347;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=WxxD2K5FdBz/EnZVjAulq7wLhETf3uBIbeo+/VSTI5o=;
-        b=SoOQemX0cDlSagpavIfFbXMVmWoN7OVOujChsnq3KcCn5QE+nhcuv/WL83SFJ64OSJ
-         okGEBOmeJCqCk7rwbEvEYYqRbBYaCdcUg3Fib5fBSCAC/4UIwycTl34Najt6XViAOgo7
-         a8Dj/Us5J8X69Ckjh07Xv5iYUjXOy5Hexrsu2oPFtq2u6+938t3pKLlL690+FgUF4ury
-         G2jIoOA6QYoD1sizehhWTeIIMRWyc/myCcbiG41SSRd2oijqJkwavYMQiyHn3+l4xlOJ
-         88NSoy0FqB53LvmuY0eOozTBZ+HCq5gszDzfgnbjm0BZft6vYeOdBY9XwV797qRWKi1O
-         G7Mg==
-X-Forwarded-Encrypted: i=1; AJvYcCU+bNm/xvmqPh3+lIs2G8DGzjSY3f5Fh1kTLP+l/TUJP2RXggJGvnYT1c4G0lrChQCUziC3xOW+hw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyuDTWHsYQ5fKi/iduP2GZ/BoW/q8l5u1R+DzfoKZjQED3p5Bpt
-	OYmzWYh1wHp5bAIVxXRl4JzErvGfKw7nbG1nQU5O+BTQI+K0iMNVax2c
-X-Gm-Gg: ASbGncsIdZlv7KJITf/JuqmBiu9gS2kTPDpa+sHR0vjRcC6EXVeXYPsyTX25fdEcHoY
-	CRV2QMwYpMYLL8TiQEwKy+jMhnOUtyNs0BVAQ16tqkdSYHf72629iXDT9KcBacFbWHu3njoakLe
-	lT0gS/uZe1b3F+VLZFKlr2AudF5OeJBnz8zI9o+SfYrPEMYLRWKlxUzEYX1jn6gklRRhKffRrYj
-	J23N5gZKYwMDhYPc3Gu7sUKdE/wymCv3gk3uI1ZTwhZLWK+cui2i1EtVTzztq1In63FlHqUiMxE
-	lQbMSOgUqGFKIacwfa+bJXqUdvkUPKylZuPW+Qm+7yHZ7370XdMe6G6gX2aKbahITXLdjWwd0lh
-	Fe3S09jKSPTprpUJQaMJaoPYuWY7/Ts2njwR0Vyxf6bDs4H+T6Jx/LgxjPUAbYabLxC6VJhghJC
-	UvgzKuoNhiIy4DNNTrje5GBbMxiX/YHOKyU1US4x8eaA38wMjVx46oZF3KSxtAJW4to8jGPLWDe
-	mZR0ziPptTY5YIgEdRRqhvuC2y6XDw2+CFL6N4RORhxI7CxFTtBBcybdTzRtC0=
-X-Google-Smtp-Source: AGHT+IFKKdVLl3mAPx5GW1O57JDFIbYY3aQNyGp5ohShtikkzbyW7xTlAHv9ByPokofKb8ncQ992Dw==
-X-Received: by 2002:a05:620a:28d0:b0:891:7def:94a5 with SMTP id af79cd13be357-8917def9615mr601979985a.89.1760809543355;
-        Sat, 18 Oct 2025 10:45:43 -0700 (PDT)
+        bh=lawTNFgWMdwiPfh6WDKLTV6aPOfN+Nzqh2uzIhroikw=;
+        b=Xoyce0MEy8H3of5Wg6/JjIXixfGZ+t/IAfIYzDM+qmDPoP5HpISg/18WpFwUIg6E+b
+         Hg8oHrukh9CyKBeeiAzRNgSq4IGP1YPuINriK0HdXDRBCdFlpC1iiZxXxCaFpMmrdNXA
+         1CayMW0auDG0661CtLgQijLJjq4CjEhHeoNlsMalKabc8w+KOPHmdpu8R1V3pgRn+BWL
+         5Hhmyw4vyo6y/beI3mkEhbgX3yX+VveCQxLU5d3GmUfeKb0FlBnXyrYbcdxM6yh6tgFf
+         hZ69YcR4CcVgGfGPf+Ii3CmfTXxv6NztliboR3cJJn7FCPmEcSIqZChEHI2bsgPOUlbo
+         NzyQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVQ+4LL5MeuN1mc3ZqRsr00bSBtmTqykQEloouNueEO0D32EhW3ku+kRfTD8UHocP9zaML/I4jGvw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwzLkQeTU2eyNQcRp5VfSsSUzdMWsCfBkOQGXGuUfehCkIelhl7
+	2dxlCP+UThlkC4tGk76Yp3zo9KEgFA4EMMnyW/Uxrem3K23n+FuJ/f0e
+X-Gm-Gg: ASbGnctj7BgFxe1HlvvvXNHxRz8eMhsbTcp7kMvjq68n0rDq+NDMFmycncCkPqSuYHs
+	oZKLJZZotIK+1jz/p4HXulQbSBQrDoWoxKEXrns7zwX/J6qlvtHGeKJgYqzKUKBVtdeRQaRldv6
+	8gIA0RIgDWGlDzZVpAy+oF4OAtShyeoq7NQab22dXYvtb6yUH3C2FfGEVAD63/H4xqHUYaffC9Y
+	H5cjg98ElDMv8LWCHlscmIHz6McGgJN+9n2bS5ojaerDDobV2Q2ItiqVeM1icUnkWWPoQJC8Kr6
+	+MSyeMBs8wlJMFPNT0jxRaQLQqiA1oF+UiXogeH/GuW68BHW8fOu0IUGdUfEeb5k0n9GbW/u6HB
+	79CI9Bqif3+SFQChfYiWM70b/s4QaGMhqn5vyTfTdrEIbkPsP4aXpphgTZdMy1jgbUvLTJwe0Fi
+	ztbzdorK2I3YCXhpOV2Y7/7j4Nh/6ZBfEAikAeHJRMlWHm3blZ6oMHHZrMefaDil6uvIWlpbrFV
+	UEBK9DTXGHoFJ5AwzTSS18JOOFCp7Z7zNYPSJ35VbEypg/1r3MT
+X-Google-Smtp-Source: AGHT+IGtoC16cs2IUHy92V+PgbYqI7ItzE0B6P6UQD9FJc874xh/zcTQPxmAHJdRXWEe38KwPk6DJw==
+X-Received: by 2002:a05:622a:1350:b0:4e6:ebe3:9403 with SMTP id d75a77b69052e-4e89d3578camr111769721cf.41.1760809546751;
+        Sat, 18 Oct 2025 10:45:46 -0700 (PDT)
 Received: from 117.1.168.192.in-addr.arpa ([2600:4808:6353:5c00:1948:1052:f1e9:e23a])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4e8ab114132sm20445161cf.40.2025.10.18.10.45.40
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4e8ab114132sm20445161cf.40.2025.10.18.10.45.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Oct 2025 10:45:42 -0700 (PDT)
+        Sat, 18 Oct 2025 10:45:46 -0700 (PDT)
 From: Tamir Duberstein <tamird@gmail.com>
-Date: Sat, 18 Oct 2025 13:45:14 -0400
-Subject: [PATCH v18 03/16] rust_binder: use `kernel::fmt`
+Date: Sat, 18 Oct 2025 13:45:15 -0400
+Subject: [PATCH v18 04/16] rust_binder: use `core::ffi::CStr` method names
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -86,7 +86,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251018-cstr-core-v18-3-ef3d02760804@gmail.com>
+Message-Id: <20251018-cstr-core-v18-4-ef3d02760804@gmail.com>
 References: <20251018-cstr-core-v18-0-ef3d02760804@gmail.com>
 In-Reply-To: <20251018-cstr-core-v18-0-ef3d02760804@gmail.com>
 To: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
@@ -125,18 +125,18 @@ Cc: rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-pm@vger.kernel.org, linux-clk@vger.kernel.org, 
  dri-devel@lists.freedesktop.org, Tamir Duberstein <tamird@gmail.com>
 X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openssh-sha256; t=1760809526; l=1195;
+X-Developer-Signature: v=1; a=openssh-sha256; t=1760809526; l=1838;
  i=tamird@gmail.com; h=from:subject:message-id;
- bh=872/2/9eITdb9tB+ajd4McXNzNIKi7XLnXFm8ifjokI=;
+ bh=CzY30Cbw7NH9BCqW+7Dm4yyfJiEmTcSRj3QBxiZsJWU=;
  b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgtYz36g7iDMSkY5K7Ab51ksGX7hJgs
  MRt+XVZTrIzMVIAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QNpeE2O2veZx/WAQcXn2BPsuVFmwejvaIZ814PGVaIzTcLISv+9UjXgL3SnRuXBWt3P0YjfBZ5X
- ySAtgUYGZcgw=
+ QCdjYy/3zPtDG6mLhbi/m87N/OQUz3F9LUrbbVL/SdtvY9mUE4M1GxOy/SM9SDWwBVOLExEXvgS
+ qD3AZBhe7nAg=
 X-Developer-Key: i=tamird@gmail.com; a=openssh;
  fpr=SHA256:264rPmnnrb+ERkS7DDS3tuwqcJss/zevJRzoylqMsbc
 
-Reduce coupling to implementation details of the formatting machinery by
-avoiding direct use for `core`'s formatting traits and macros.
+Prepare for `core::ffi::CStr` taking the place of `kernel::str::CStr` by
+avoiding methods that only exist on the latter.
 
 This backslid in commit eafedbc7c050 ("rust_binder: add Rust Binder
 driver").
@@ -144,32 +144,31 @@ driver").
 Reviewed-by: Alice Ryhl <aliceryhl@google.com>
 Signed-off-by: Tamir Duberstein <tamird@gmail.com>
 ---
- drivers/android/binder/error.rs | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/android/binder/stats.rs | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/android/binder/error.rs b/drivers/android/binder/error.rs
-index 9921827267d0..b24497cfa292 100644
---- a/drivers/android/binder/error.rs
-+++ b/drivers/android/binder/error.rs
-@@ -2,6 +2,7 @@
- 
- // Copyright (C) 2025 Google LLC.
- 
-+use kernel::fmt;
- use kernel::prelude::*;
- 
- use crate::defs::*;
-@@ -76,8 +77,8 @@ fn from(_: kernel::alloc::AllocError) -> Self {
+diff --git a/drivers/android/binder/stats.rs b/drivers/android/binder/stats.rs
+index a83ec111d2cb..10c43679d5c3 100644
+--- a/drivers/android/binder/stats.rs
++++ b/drivers/android/binder/stats.rs
+@@ -72,7 +72,7 @@ pub(super) fn command_string(i: usize) -> &'static str {
+         // SAFETY: Accessing `binder_command_strings` is always safe.
+         let c_str_ptr = unsafe { binder_command_strings[i] };
+         // SAFETY: The `binder_command_strings` array only contains nul-terminated strings.
+-        let bytes = unsafe { CStr::from_char_ptr(c_str_ptr) }.as_bytes();
++        let bytes = unsafe { CStr::from_char_ptr(c_str_ptr) }.to_bytes();
+         // SAFETY: The `binder_command_strings` array only contains strings with ascii-chars.
+         unsafe { from_utf8_unchecked(bytes) }
      }
- }
- 
--impl core::fmt::Debug for BinderError {
--    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-+impl fmt::Debug for BinderError {
-+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-         match self.reply {
-             BR_FAILED_REPLY => match self.source.as_ref() {
-                 Some(source) => f
+@@ -81,7 +81,7 @@ pub(super) fn return_string(i: usize) -> &'static str {
+         // SAFETY: Accessing `binder_return_strings` is always safe.
+         let c_str_ptr = unsafe { binder_return_strings[i] };
+         // SAFETY: The `binder_command_strings` array only contains nul-terminated strings.
+-        let bytes = unsafe { CStr::from_char_ptr(c_str_ptr) }.as_bytes();
++        let bytes = unsafe { CStr::from_char_ptr(c_str_ptr) }.to_bytes();
+         // SAFETY: The `binder_command_strings` array only contains strings with ascii-chars.
+         unsafe { from_utf8_unchecked(bytes) }
+     }
 
 -- 
 2.51.1
