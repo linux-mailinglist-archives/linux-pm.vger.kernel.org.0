@@ -1,122 +1,78 @@
-Return-Path: <linux-pm+bounces-36377-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36378-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D0026BEC284
-	for <lists+linux-pm@lfdr.de>; Sat, 18 Oct 2025 02:18:21 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8BCB6BEC94E
+	for <lists+linux-pm@lfdr.de>; Sat, 18 Oct 2025 09:28:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A7C81427985
-	for <lists+linux-pm@lfdr.de>; Sat, 18 Oct 2025 00:18:18 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 5F5B74E34AC
+	for <lists+linux-pm@lfdr.de>; Sat, 18 Oct 2025 07:28:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 394C41862A;
-	Sat, 18 Oct 2025 00:18:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DD0D285CA9;
+	Sat, 18 Oct 2025 07:28:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=sina.com header.i=@sina.com header.b="VupVssy6"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="2RlZkBuG"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from r3-18.sinamail.sina.com.cn (r3-18.sinamail.sina.com.cn [202.108.3.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F30AE4C6C
-	for <linux-pm@vger.kernel.org>; Sat, 18 Oct 2025 00:18:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.108.3.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B25051DDC1B;
+	Sat, 18 Oct 2025 07:28:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760746695; cv=none; b=gJoRr359xPrNC0rKNhzlDBbmuNrzp45nfw/8z12xmrJbEeLv25OyIr/FFOK+fLnYZAEFxJdRw/R56nQOkx14KoQEtLDIDOSD+2Hra/gHAjlJNq+Zue2OI3xM57HHAKxGtoRJmaEBAK/ct4Z7uta5JFp+/KPc7/RgtPGAy5n1NMU=
+	t=1760772514; cv=none; b=K7jUu5FJOEt2d9MGBfHzkfx4oiTygwdmxEzaPyEYcNPC/PcEz3c1986FJBc6jaALe6EEOjA6oEgP7s9clk9yfsokBaxZz8tGFKDf32Dy2dNkDkZ5K3bo9+STKT+oDfDkkW/AHm7LKTBf1PzHdEewd2HW2O45Yu/JUjUJLFMeGrE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760746695; c=relaxed/simple;
-	bh=nMCcOH3LsvFDiSoSwVzn+bMl8JggwFCUIc5JCRh1UnA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=QkNciuW/cXvIYFkqa5EM+1wCkNuUbJi6kmp8irRDkO257mMYX0MkgacQv/xP/yQxLFOn7kIBtgmnEHbBNiQKR0nWlfyNKwLK50dNGrnkwTSBX1bJuFk7jW5cUuH5QqbBgleOuKfRL6D6jtiF7QgOHQehncXAkumPg/pZ3KP1kjs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sina.com; spf=pass smtp.mailfrom=sina.com; dkim=pass (1024-bit key) header.d=sina.com header.i=@sina.com header.b=VupVssy6; arc=none smtp.client-ip=202.108.3.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sina.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sina.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sina.com; s=201208; t=1760746692;
-	bh=6abL2+5TdRDXHj5K2UZsVchQ0aAKfL1TRVZ/hY0u6/U=;
-	h=From:Subject:Date:Message-ID;
-	b=VupVssy6feH+U5AIrJ5Dy+gBfClD/7cVkNJ4BZOw3/wI9CW6mlhG+ZogDL8WAAhmd
-	 z1c8bdyIIvOnEoZ/3LxXn6io15nCI01uJMRSDE1wU14iNF+3ntP+nbu29exjBfnMkV
-	 QbscoDfaiiOaXcqyeSrswQN9Rz0dPppAGDE6kWnM=
-X-SMAIL-HELO: localhost.localdomain
-Received: from unknown (HELO localhost.localdomain)([114.249.58.236])
-	by sina.com (10.54.253.32) with ESMTP
-	id 68F2DC9500004450; Sat, 18 Oct 2025 08:17:27 +0800 (CST)
-X-Sender: hdanton@sina.com
-X-Auth-ID: hdanton@sina.com
-Authentication-Results: sina.com;
-	 spf=none smtp.mailfrom=hdanton@sina.com;
-	 dkim=none header.i=none;
-	 dmarc=none action=none header.from=hdanton@sina.com
-X-SMAIL-MID: 1788674456905
-X-SMAIL-UIID: 626E1FBE367746C6AA11BA8380028A8E-20251018-081727-1
-From: Hillf Danton <hdanton@sina.com>
-To: Samuel Wu <wusamuel@google.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Pavel Machek <pavel@kernel.org>,
-	Len Brown <lenb@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Danilo Krummrich <dakr@kernel.org>
-Cc: Saravana Kannan <saravanak@google.com>,
-	kernel-team@android.com,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5] PM: Support aborting sleep during filesystem sync
-Date: Sat, 18 Oct 2025 08:17:12 +0800
-Message-ID: <20251018001715.8621-1-hdanton@sina.com>
-In-Reply-To: <20251017233907.2305303-1-wusamuel@google.com>
-References: 
+	s=arc-20240116; t=1760772514; c=relaxed/simple;
+	bh=GpS9zGqd7lcQg/F5/TWJMpxLxBq4OCOjore8c7iRkTw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ltrJqbQTdX0WZF67dqekEXyQ/aPFt6/6llt1dCZBwzdB7HB+Cpi1XZh/1xRu6tL0FJpoU0BiujsEduqUqdLrgtrArz9PmPOoq3voqvW91G6spVxIWaWy3vne4QgPIqCrONYAXTDs4a/7w5+SwDQ0OODGI0Y8PO6RK0foEZJiy2A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=2RlZkBuG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6507C4CEF8;
+	Sat, 18 Oct 2025 07:28:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1760772514;
+	bh=GpS9zGqd7lcQg/F5/TWJMpxLxBq4OCOjore8c7iRkTw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=2RlZkBuGK2EsXr8GnsodI2nIke7X6wG8/ai8k1paHJ9QlpbMqQJfEc64W6jQMMwS3
+	 /+LwbGTMBZrfIrkMmggac5r3hRBATHE7HIGCTxekWdqJbiCu6d4UwMB/RsKY+qGEli
+	 z6y8kOIFCH3ytikEVr9xW8wEAlLtZ6o/OFFU4KyA=
+Date: Sat, 18 Oct 2025 09:28:31 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Jameson Thies <jthies@google.com>
+Cc: heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, dmitry.baryshkov@oss.qualcomm.com,
+	bleung@chromium.org, akuchynski@chromium.org,
+	abhishekpandit@chromium.org, sebastian.reichel@collabora.com,
+	kenny@panix.com, linux-pm@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v2] usb: typec: ucsi: psy: Set max current to zero when
+ disconnected
+Message-ID: <2025101812-jaybird-radiantly-ec27@gregkh>
+References: <20251017223053.2415243-1-jthies@google.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251017223053.2415243-1-jthies@google.com>
 
-On Fri, 17 Oct 2025 23:39:06 +0000 Samuel Wu wrote:
-> +/**
-> + * pm_sleep_fs_sync - Trigger fs_sync with ability to abort
-> + *
-> + * Return 0 on successful file system sync, otherwise returns -EBUSY if file
-> + * system sync was aborted.
-> + */
-> +int pm_sleep_fs_sync(void)
-> +{
-> +	bool need_pm_sleep_fs_sync_requeue;
-> +	unsigned long flags;
-> +
-> +	do {
-> +		spin_lock_irqsave(&pm_sleep_fs_sync_lock, flags);
-> +		reinit_completion(&pm_sleep_fs_sync_complete);
+On Fri, Oct 17, 2025 at 10:30:53PM +0000, Jameson Thies wrote:
+> The ucsi_psy_get_current_max function defaults to 0.1A when it is not
+> clear how much current the partner device can support. But this does
+> not check the port is connected, and will report 0.1A max current when
+> nothing is connected. Update ucsi_psy_get_current_max to report 0A when
+> there is no connection.
+> 
+> v2 changes:
+> - added cc stable tag to commit message
 
-Given difficulty following up here, can you specify why reinit is needed?
-> +		/*
-> +		 * Handle the case where a sleep immediately follows a previous
-> +		 * sleep that was aborted during fs_sync. In this case, wait for
-> +		 * the previous filesystem sync to finish. Then do another
-> +		 * filesystem sync so any subsequent filesystem changes are
-> +		 * synced before sleeping.
-> +		 */
-> +		if (pm_sleep_fs_sync_queued) {
-> +			need_pm_sleep_fs_sync_requeue = true;
-> +		} else {
-> +			need_pm_sleep_fs_sync_requeue = false;
-> +			pm_sleep_fs_sync_queued = true;
-> +			schedule_work(&sync_filesystems);
-> +		}
-> +		spin_unlock_irqrestore(&pm_sleep_fs_sync_lock, flags);
-> +
-> +		/*
-> +		 * Completion is triggered by fs_sync finishing or an abort sleep
-> +		 * signal, whichever comes first
-> +		 */
-> +		wait_for_completion(&pm_sleep_fs_sync_complete);
-> +		if (pm_wakeup_pending())
-> +			return -EBUSY;
-> +	} while (need_pm_sleep_fs_sync_requeue);
-> +
-> +	return 0;
-> +}
-> +
+Note, as per the documentation, this needs to go below the --- line.
+
+thanks,
+
+greg k-h
 
