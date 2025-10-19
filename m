@@ -1,142 +1,139 @@
-Return-Path: <linux-pm+bounces-36438-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36439-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95C61BEEC67
-	for <lists+linux-pm@lfdr.de>; Sun, 19 Oct 2025 22:53:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D7E2BEED2E
+	for <lists+linux-pm@lfdr.de>; Sun, 19 Oct 2025 23:25:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 5581E4E158E
-	for <lists+linux-pm@lfdr.de>; Sun, 19 Oct 2025 20:53:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 17EE63B9505
+	for <lists+linux-pm@lfdr.de>; Sun, 19 Oct 2025 21:25:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5918722688C;
-	Sun, 19 Oct 2025 20:53:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CC7222B5AD;
+	Sun, 19 Oct 2025 21:25:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ABTacBYu"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BFVHgf1e"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2D8D1F2B88
-	for <linux-pm@vger.kernel.org>; Sun, 19 Oct 2025 20:53:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7513715278E
+	for <linux-pm@vger.kernel.org>; Sun, 19 Oct 2025 21:25:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760907228; cv=none; b=iaSzDkIXAqgOzg4nV5vBhbN103Fze8SZLX/pAP3ChryFpQA2MBlpp5cENko8mm/DwDSkMyFf6VeD+3w6M4WveCpsTdg0dc7SHq8W+SgQoMSVO2vvGvOd3Ql4CctP0ZBZSrSbNIxz5Jx9m0S10cMD8Us91NerkB5jAONUHESTOk0=
+	t=1760909133; cv=none; b=iNQa3vxOgmDSQ06Nz11kwSKQVuBwQV/N933Qr+6GBH5pT3Fql2RSw/tiY6MrghqCGEFIkiQ9wsN288/NU8qArJWpp7nyVpT3tl0r/7vqnLyA38NWn9DwDqpWjCXF/C5Eskbyl0axUgNMC+p4nUXx2LM9GMaIqcdBvQjV3h6sPpA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760907228; c=relaxed/simple;
-	bh=O2zfE4vf4ah1dibiRpvsd3NnhgM9Vr10uy3t41JeKRI=;
+	s=arc-20240116; t=1760909133; c=relaxed/simple;
+	bh=VMzOcGlzTmgP7Sx2K6Mr5nIuxpWb7Ycpm/3lBUKh9gU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Ht3YDROBRRV769ONjv28acA8+JlJzxmpK2uq5sVNlLFSz8F6iJ7JAsUsJuda91DUtkqdVrLvo6chFR2qR8ZEXjvbDyNdz4+dVT0si98MiOAFk9KIfdHC8+gxbkTz2b+0Up5jp++odyNgatFQgbCRGyYKR/B7SFAaShJYBqQVHFg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ABTacBYu; arc=none smtp.client-ip=209.85.128.171
+	 To:Cc:Content-Type; b=GTNI10i2hPJntbMYY3WaBBe44cJ6nNlA82xmKIuVNQUrHxRwpRlVMQTG0pSzQQDWkN40SFzxWENAUunq/FOTA/gmBlcoH2nfpH50h+Gj+AkVa9h++CUZZAiMVOU4tIukZ6Kpgu+3FGYbOP1fW7QRt2wfGYrFQKoqCSSkzrAVHBo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BFVHgf1e; arc=none smtp.client-ip=209.85.214.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-7829fc3b7deso28251237b3.3
-        for <linux-pm@vger.kernel.org>; Sun, 19 Oct 2025 13:53:46 -0700 (PDT)
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-27eca7297a7so4667965ad.1
+        for <linux-pm@vger.kernel.org>; Sun, 19 Oct 2025 14:25:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760907225; x=1761512025; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=bLIclD2aF84lUbWy0CIM8XnSXp6AC1BEWNN7dbQyLN4=;
-        b=ABTacBYuhPvnzWu4OtghliDgZGKXPT2miCS4VSLkBaizIwEsmYpkZ0aLIblBDjBKZ3
-         lfKOA+/R/C16MdrumYsJFws/cRfQlq2+gDETwDhxXntuRtkbFdir+mKl2McpAYs3l2y2
-         pZYVqBdMw2ukaEC/GOh0E+u2hmWbefXPK5OQvR5fg7kNCIvEEuUBJ95GbpFnwx/gIwR/
-         3ZPphUA7b5lh08vMlXxRuNRZB9fJ2tRxncBS4e2ZmXtx0bBP5JiUmb+xmDYjdKKdhsi1
-         teCpwTGIQpgr2rLassZZrZ9loRMic8ujW4eccBFhYQQrVzQqGSJ2SvAmUx8LNXaJphIB
-         YAWA==
+        d=gmail.com; s=20230601; t=1760909129; x=1761513929; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VMzOcGlzTmgP7Sx2K6Mr5nIuxpWb7Ycpm/3lBUKh9gU=;
+        b=BFVHgf1eBxrRlVa4HQwtg+9JdGx+ckCck1jX46JQ5chJaRBSqsc6IKXoNvNltJhS5z
+         SrqUVnX4pqzWiqNACvkDi1zVvk0GidVr9CkWudBq60rIZd3EAb5DXaA+0AHy7UMlu2IG
+         fOjsqzm45BHLYsgMbYQvLre1c4z0LdXIonBIBz/gncQQg8glng0WpBLHu/TfVJFWVi2R
+         N6nphsFpZ+PNw+cXdn0SfRcjuXCDssB1hHtfya3a4thXk9G7paDwq4vzO7Ul3foqBdju
+         mPnqrYMM8J9oyfVNXdQhhChz/diK6X8qnWUsWRiaNkBcK76mIzKAYNBEDTup+TwJgR3A
+         HOvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760907225; x=1761512025;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bLIclD2aF84lUbWy0CIM8XnSXp6AC1BEWNN7dbQyLN4=;
-        b=M3E6fDvC1x3PNJqrNxhBR3VX2Gr9yN4Rl4fuPWwzVxJM1X96Nq+M9HTPqHCBYxw1CH
-         EnLyIu8tNbpTxbDsQPYsQcz5VsIlgTwLc9OqtQxgqBC1zC5uXkpCjK91T0PDrNFVxeKs
-         koCtcODYk/8/g6Fjc9TioCr+R2yxYDl6KIbC1lT8yeNiIPBDqsN+cEXpXBABON7Zcc5L
-         xHAj4VTxVxRvN+IiAkYtabXmAKPolFF8KVnTsRuNJS6qBrK40cayto1HZ77B927YzANF
-         pfg/1em0MNinS9YMkOKnevDREjCbm93p/NcnM4RpzWktDmLRvLWtLbXrr/dXfLPEy0NN
-         7lGA==
-X-Forwarded-Encrypted: i=1; AJvYcCWjznQIRZhFoJxuy5QKdPJxrtkd7nsMG1ageO1PtPiarPpqjmuiGhDla27RTXJEA+ew0zjSjPkQ9Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz5w+ehMYefUbSKwkYa9hoRbvOsDOM1e6qUuOAugfP0610ua8/z
-	ABPRdiXAqr4xsdOTKZgQkLkIMxsnUtCoMHw9561SzRWuKeWr9GPvgBuedYKgxMi7zfjYu2EuJCk
-	84jT0gJbLPPh7X6AuMuAlUptEB6UBr0o=
-X-Gm-Gg: ASbGncvz02v10MM/Ln4sJFZKOyZtdrc6oqOlk89GXCxxT10qcVuvKuuZlxfjobbmdpK
-	oswzhpiO6lK3UMPv+F9O6Y749EJA3ncjYqqd8+CnijFw0v1qFHDhIn07rkYAjfFRitAfZ1xMfV2
-	goOHxywaZOcDz8zoAIxCjB6lDSzAs1XZLgU4E3r8pV6HItjGOlZwT3nbb+8psIL5sdC/VUAcL+3
-	ThpncdATvTsGesxPuUcAFzY6yFzCvur5u/3oPsbJYJLheDA9zpIvGl6L+zPseHWdWaw08Qg5X9x
-	0IrQ
-X-Google-Smtp-Source: AGHT+IG+VnVg4eeqtni24th+c8XSTz9bZ4o+eo5ggxBTkXyndw/uiD4XSbKqdvbqo7rPEXjxfr8g73d/jXS/Qyg3a7c=
-X-Received: by 2002:a05:690e:4091:b0:63e:3c2a:c33a with SMTP id
- 956f58d0204a3-63e3c2ad83fmr192995d50.12.1760907225531; Sun, 19 Oct 2025
- 13:53:45 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1760909129; x=1761513929;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VMzOcGlzTmgP7Sx2K6Mr5nIuxpWb7Ycpm/3lBUKh9gU=;
+        b=ccC/OKuxu4aB6Q4ONPp4wP+3yjkC+sxlYMR/PVgo6VqIALPTQCDWyPrhSe+fUiOIeR
+         o7TBlc6H+nSALDGzHcaqVWW67ulKhZHKvOcOSbg2D3bWTs/4E8dHzYA/bg9GQRwXPvel
+         1eES8SmN4vBf1LC2ixIULflcB3vyNM9gtzz69zN0w4Y4ymlOymMnUBtps1Ii8Q+KlH9H
+         4/+uB8qNV7MO63gbTuiAubeF34ydqsTQeI3gBQ0qVJSvUpJF7qrGE5d3xrfC/eHanjZp
+         vL52oY9QAaJ+XVIS8Aijk7wHE8QLT/HWvloNzHJ0Jwm732WaHu2PKFVXq8alf+DiKCdV
+         tNDQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVhU2j/3ZqRxOOJTM3IzgJ3xDX4ecaQix6LocoNswSG0vlpsWohSeGGwfh1XCYS7ZHrTOFoa+wbWw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyTqlkBTvNE4JtTHQZskMC8mmvNa3mPnmdOKtL87I+7HY/81M+r
+	ogFhTr5MmEs6X+RWNcAfwpeo2yFvOc5zo3wxTa2Q60SAIfLv4PASKwF18WH9IVkXioMSrsWxYWy
+	9DUUalIBCTxDCfKOuHLEjGFEZU27Gjuk=
+X-Gm-Gg: ASbGncu0JfgT6oDPkHjBSYxtCv5XQifryuUZ4vNDjSVqr7/HVB3Mf9tHzVdksXMNLA1
+	MoeuRHMGZuQsHFa2LLuGAI0bchA7/BSoX1rnSQ/15mY1AAJsT9bqF1pjINK2VQzfa1/8ltnStRp
+	ZsgbUinU8QUdKvcNy9Y1g9FRk7ZrNtoq4AhY2SXapgp5uMcag+t35A1Hg6aiVuf0C8P+TknZQ85
+	uYkqCbAexCSlYm0AP28wZrqam45jyjsV8Y3Tjr7qhLJtqMXs48gZkkrg89p1GcjtzevvgB54aRC
+	DipZbNUho70hL/U6IpyrMXqprBYVjr7POCZXmmsukd2ijmjWFyVgoOuPr1n6Y0cYV9NspvZxZvC
+	tA3zBMt1EgOzaww==
+X-Google-Smtp-Source: AGHT+IFkXmb/qgb/KgY8CoxXBFCqji+DioDep8k1ccK80l52uLY2VJCsOrEx4mXqL5zBbM0jkYzLAt9Oa8qgqgiQULk=
+X-Received: by 2002:a17:903:1a0b:b0:27e:eb9b:b80f with SMTP id
+ d9443c01a7336-290c9c9a8a7mr71999045ad.2.1760909129461; Sun, 19 Oct 2025
+ 14:25:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251019191519.3898095-1-aurelien@aurel32.net> <20251019191519.3898095-2-aurelien@aurel32.net>
-In-Reply-To: <20251019191519.3898095-2-aurelien@aurel32.net>
-From: Emil Renner Berthing <emil.renner.berthing@gmail.com>
-Date: Sun, 19 Oct 2025 22:53:34 +0200
-X-Gm-Features: AS18NWC8mas1vOpzBcYTdN6WQn4JlQUKb553pLiF9PjWnggz16K-ukTapFmx2g8
-Message-ID: <CANBLGczi3GeaC4aWECV8NS-zqSHgRa-5onynz9fGsZeN8qgysg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] driver: reset: spacemit-p1: add driver for poweroff/reboot
-To: Aurelien Jarno <aurelien@aurel32.net>
-Cc: linux-kernel@vger.kernel.org, Lee Jones <lee@kernel.org>, 
-	Sebastian Reichel <sre@kernel.org>, Troy Mitchell <troy.mitchell@linux.spacemit.com>, 
-	Yixun Lan <dlan@gentoo.org>, Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
-	"open list:RISC-V ARCHITECTURE:Keyword:riscv" <linux-riscv@lists.infradead.org>, 
-	"open list:RISC-V SPACEMIT SoC Support:Keyword:spacemit" <spacemit@lists.linux.dev>, 
-	"open list:SYSTEM RESET/SHUTDOWN DRIVERS" <linux-pm@vger.kernel.org>
+References: <20251018-cstr-core-v18-0-9378a54385f8@gmail.com> <20251018-cstr-core-v18-13-9378a54385f8@gmail.com>
+In-Reply-To: <20251018-cstr-core-v18-13-9378a54385f8@gmail.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Sun, 19 Oct 2025 23:25:16 +0200
+X-Gm-Features: AS18NWDXrZ8O-3KwwwBOxfZWPwAGhp3HE5GT4mOk-9o3K1qGCus24KCpGnZzuZA
+Message-ID: <CANiq72mpmO2fyfHmkipYZmirRg-x90Hi3Ly+2mriuGX96bOuew@mail.gmail.com>
+Subject: Re: [RESEND PATCH v18 13/16] rust: regulator: use `CStr::as_char_ptr`
+To: Tamir Duberstein <tamird@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, 
+	Mark Brown <broonie@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Danilo Krummrich <dakr@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	=?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>, 
+	Todd Kjos <tkjos@android.com>, Martijn Coenen <maco@android.com>, 
+	Joel Fernandes <joelagnelf@nvidia.com>, Christian Brauner <brauner@kernel.org>, 
+	Carlos Llamas <cmllamas@google.com>, Suren Baghdasaryan <surenb@google.com>, Jens Axboe <axboe@kernel.dk>, 
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, 
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Uladzislau Rezki <urezki@gmail.com>, 
+	Bjorn Helgaas <bhelgaas@google.com>, =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
+	Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Breno Leitao <leitao@debian.org>, Michael Turquette <mturquette@baylibre.com>, 
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
+	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, 
+	Waiman Long <longman@redhat.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, rust-for-linux@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-block@vger.kernel.org, 
+	linux-pci@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+	linux-fsdevel@vger.kernel.org, llvm@lists.linux.dev, 
+	Tamir Duberstein <tamird@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, 19 Oct 2025 at 22:34, Aurelien Jarno <aurelien@aurel32.net> wrote:
+On Sat, Oct 18, 2025 at 9:17=E2=80=AFPM Tamir Duberstein <tamird@kernel.org=
+> wrote:
 >
-> This driver implements poweroff/reboot support for the SpacemiT P1 PMIC
-> chip, which is commonly paired with the SpacemiT K1 SoC.
+> From: Tamir Duberstein <tamird@gmail.com>
 >
-> The SpacemiT P1 support is implemented as a MFD driver, so the access is
-> done directly through the regmap interface. Reboot or poweroff is
-> triggered by setting a specific bit in a control register, which is
-> automatically cleared by the hardware afterwards.
+> Replace the use of `as_ptr` which works through `<CStr as
+> Deref<Target=3D&[u8]>::deref()` in preparation for replacing
+> `kernel::str::CStr` with `core::ffi::CStr` as the latter does not
+> implement `Deref<Target=3D&[u8]>`.
 >
-> Signed-off-by: Aurelien Jarno <aurelien@aurel32.net>
-> Acked-by: Troy Mitchell <troy.mitchell@linux.spacemit.com>
-> Tested-by: Troy Mitchell <troy.mitchell@linux.spacemit.com>
-> ---
-> v2:
->  - Rebase onto v6.18-rc1
->  - Use dev_err_probe() to simplify the code
->  - Fix indentation of patch 1
->  - Collect Acked-by and Tested-by
->
->  drivers/power/reset/Kconfig              |  9 +++
->  drivers/power/reset/Makefile             |  1 +
->  drivers/power/reset/spacemit-p1-reboot.c | 88 ++++++++++++++++++++++++
->  3 files changed, 98 insertions(+)
->  create mode 100644 drivers/power/reset/spacemit-p1-reboot.c
->
-> diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
-> index 8248895ca9038..063202923d95d 100644
-> --- a/drivers/power/reset/Kconfig
-> +++ b/drivers/power/reset/Kconfig
-> @@ -283,6 +283,15 @@ config POWER_RESET_KEYSTONE
->         help
->           Reboot support for the KEYSTONE SoCs.
->
-> +config POWER_RESET_SPACEMIT_P1
-> +       bool "SpacemiT P1 poweroff and reset driver"
+> Signed-off-by: Tamir Duberstein <tamird@gmail.com>
 
-The driver code looks to be written to work as a module, but here it
-says "bool" not "tristate".
+Liam, Mark: I will apply this since it would be nice to try to get the
+flag day patch in this series finally done -- please shout if you have
+a problem with this.
 
-> +       depends on ARCH_SPACEMIT || COMPILE_TEST
-> +       select MFD_SPACEMIT_P1
-> +       default ARCH_SPACEMIT
+An Acked-by would be very appreciated, thanks!
 
-If it does work as a module I'd prefer "default m" here.
-
-/Emil
+Cheers,
+Miguel
 
