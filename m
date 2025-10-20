@@ -1,39 +1,39 @@
-Return-Path: <linux-pm+bounces-36470-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36472-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2864EBF1DC8
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 16:32:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0AE56BF1DD7
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 16:32:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BA3F93B603E
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 14:31:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9561D404160
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 14:32:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FD01221578;
-	Mon, 20 Oct 2025 14:31:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FB4922A817;
+	Mon, 20 Oct 2025 14:31:34 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E671421FF4D;
-	Mon, 20 Oct 2025 14:31:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.171
+Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAAA71A239A;
+	Mon, 20 Oct 2025 14:31:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760970688; cv=none; b=iMpKMTS7KFr9NH5eqoOoRp4CYJijcxwf/kQJqRDREjLfQ1B1w241dvNHy5g6B6B1rEjt6rLg+A++hQyh6LOg34K9sXRcvtu5MFcRW4Ml6DP5/yhavitstl+9GM3RLp8XyNNV8LI5fRyKbuBrOi+h6G7F7bGkmZ3y0hhlbuwTpSY=
+	t=1760970694; cv=none; b=r/TMjHL1c0lknFzsQnfADVF9/qmwKaZQbYN0TieMLkz3U1RaM5l0Z6KkIz/ayXHjU+I84Uo64b0o6V3uMOUnoGg9LhhBniOvemmeFPaSsYkRQ/Vi4NE/pQpdeeYmDi41ZXMNoVD8mZKLR989nblGN8PUbI55pu/K/nLdJluoqL8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760970688; c=relaxed/simple;
-	bh=RmDctZXm85kTLVYOSDkgdDNVCzPmUFMnuvpzQZziQro=;
+	s=arc-20240116; t=1760970694; c=relaxed/simple;
+	bh=Bty+vvqO0kZ7CUd0Q2nqj5ngueUp9769n2FevdwMEyw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Do4MmNsbRPEVz0BPaym//+1cJQioSHKo+cXwKjuUeoE0c+47AGYL4s6hLeSVSMMJg7fJC4c57GI7DfXW2KnlTPbEB0HBFUBoYHpTw1X7KLaGOu+LzxswdjldxcXQ3FaasyKRZ8ZhE6ii5cjNAAKi/YwIhpT/vuQi9RWAOj3967U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com; spf=pass smtp.mailfrom=renesas.com; arc=none smtp.client-ip=210.160.252.171
+	 MIME-Version; b=fGxYKNxFVmm4UAcHjlSQsn8kV64xFRIfVAclN/Mu47HYDiHfuNUdLt1ybF0hC49Ycd76FyjUw8aGQAjXMVwEaBvUE5YXCNuQZ1Tyvvxh5xmNyQY4oibtotuOuNJ5zC/+DQCCXQGo8pI/CNnTy/4wbujRWv9SYIbImqq0r+vHsOw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com; spf=pass smtp.mailfrom=renesas.com; arc=none smtp.client-ip=210.160.252.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=renesas.com
-X-CSE-ConnectionGUID: safs7Iz4ROaWEswTR1lfVw==
-X-CSE-MsgGUID: JiGLIIcsTXWmbAUrnk3ZTQ==
+X-CSE-ConnectionGUID: qPnqo77zQLGKHJRIXyqJhg==
+X-CSE-MsgGUID: pMNaHPNaRwSsplcJ/xXfBw==
 Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie5.idc.renesas.com with ESMTP; 20 Oct 2025 23:31:25 +0900
+  by relmlie6.idc.renesas.com with ESMTP; 20 Oct 2025 23:31:31 +0900
 Received: from vm01.adwin.renesas.com (unknown [10.226.92.23])
-	by relmlir6.idc.renesas.com (Postfix) with ESMTP id 77D6541CCD99;
-	Mon, 20 Oct 2025 23:31:20 +0900 (JST)
+	by relmlir6.idc.renesas.com (Postfix) with ESMTP id 46A8F41CCD99;
+	Mon, 20 Oct 2025 23:31:25 +0900 (JST)
 From: Ovidiu Panait <ovidiu.panait.rb@renesas.com>
 To: john.madieu.xa@bp.renesas.com,
 	rafael@kernel.org,
@@ -52,9 +52,9 @@ Cc: linux-pm@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-renesas-soc@vger.kernel.org,
 	linux-clk@vger.kernel.org
-Subject: [PATCH v2 2/3] dt-bindings: thermal: r9a09g047-tsu: Document RZ/V2H TSU
-Date: Mon, 20 Oct 2025 14:31:06 +0000
-Message-ID: <20251020143107.13974-3-ovidiu.panait.rb@renesas.com>
+Subject: [PATCH v2 3/3] arm64: dts: renesas: r9a09g057: Add TSU nodes
+Date: Mon, 20 Oct 2025 14:31:07 +0000
+Message-ID: <20251020143107.13974-4-ovidiu.panait.rb@renesas.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20251020143107.13974-1-ovidiu.panait.rb@renesas.com>
 References: <20251020143107.13974-1-ovidiu.panait.rb@renesas.com>
@@ -69,42 +69,145 @@ Content-Transfer-Encoding: 8bit
 The Renesas RZ/V2H SoC includes a Thermal Sensor Unit (TSU) block designed
 to measure the junction temperature. The device provides real-time
 temperature measurements for thermal management, utilizing two dedicated
-channels for temperature sensing.
+channels for temperature sensing:
+- TSU0, which is located near the DRP-AI block
+- TSU1, which is located near the CPU and DRP-AI block
 
-The Renesas RZ/V2H SoC is using the same TSU IP found on the RZ/G3E SoC,
-the only difference being that it has two channels instead of one.
+Since TSU1 is physically closer the CPU and the highest temperature
+spot, it is used for CPU throttling through a passive trip and cooling
+map. TSU0 is configured only with a critical trip.
 
-Add new compatible string "renesas,r9a09g057-tsu" for RZ/V2H and use
-"renesas,r9a09g047-tsu" as a fallback compatible to indicate hardware
-compatibility with the RZ/G3E implementation.
+Add TSU nodes along with thermal zones and keep them enabled in the SoC
+DTSI.
 
 Signed-off-by: Ovidiu Panait <ovidiu.panait.rb@renesas.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
-v2 changes:
-- dropped unneeded "items" from compatible list
-- added "Reviewed-by:" tag from Krzysztof
+v2 changes: none
 
- .../devicetree/bindings/thermal/renesas,r9a09g047-tsu.yaml  | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ arch/arm64/boot/dts/renesas/r9a09g057.dtsi | 75 ++++++++++++++++++++++
+ 1 file changed, 75 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/thermal/renesas,r9a09g047-tsu.yaml b/Documentation/devicetree/bindings/thermal/renesas,r9a09g047-tsu.yaml
-index 8d3f3c24f0f2..befdc8b7a082 100644
---- a/Documentation/devicetree/bindings/thermal/renesas,r9a09g047-tsu.yaml
-+++ b/Documentation/devicetree/bindings/thermal/renesas,r9a09g047-tsu.yaml
-@@ -16,7 +16,11 @@ description:
+diff --git a/arch/arm64/boot/dts/renesas/r9a09g057.dtsi b/arch/arm64/boot/dts/renesas/r9a09g057.dtsi
+index e426b9978e22..e88cfc965415 100644
+--- a/arch/arm64/boot/dts/renesas/r9a09g057.dtsi
++++ b/arch/arm64/boot/dts/renesas/r9a09g057.dtsi
+@@ -65,6 +65,7 @@ cpu0: cpu@0 {
+ 			next-level-cache = <&L3_CA55>;
+ 			enable-method = "psci";
+ 			clocks = <&cpg CPG_CORE R9A09G057_CA55_0_CORE_CLK0>;
++			#cooling-cells = <2>;
+ 			operating-points-v2 = <&cluster0_opp>;
+ 		};
  
- properties:
-   compatible:
--    const: renesas,r9a09g047-tsu
-+    oneOf:
-+      - const: renesas,r9a09g047-tsu # RZ/G3E
-+      - items:
-+          - const: renesas,r9a09g057-tsu # RZ/V2H
-+          - const: renesas,r9a09g047-tsu # RZ/G3E
+@@ -75,6 +76,7 @@ cpu1: cpu@100 {
+ 			next-level-cache = <&L3_CA55>;
+ 			enable-method = "psci";
+ 			clocks = <&cpg CPG_CORE R9A09G057_CA55_0_CORE_CLK1>;
++			#cooling-cells = <2>;
+ 			operating-points-v2 = <&cluster0_opp>;
+ 		};
  
-   reg:
-     maxItems: 1
+@@ -85,6 +87,7 @@ cpu2: cpu@200 {
+ 			next-level-cache = <&L3_CA55>;
+ 			enable-method = "psci";
+ 			clocks = <&cpg CPG_CORE R9A09G057_CA55_0_CORE_CLK2>;
++			#cooling-cells = <2>;
+ 			operating-points-v2 = <&cluster0_opp>;
+ 		};
+ 
+@@ -95,6 +98,7 @@ cpu3: cpu@300 {
+ 			next-level-cache = <&L3_CA55>;
+ 			enable-method = "psci";
+ 			clocks = <&cpg CPG_CORE R9A09G057_CA55_0_CORE_CLK3>;
++			#cooling-cells = <2>;
+ 			operating-points-v2 = <&cluster0_opp>;
+ 		};
+ 
+@@ -285,6 +289,32 @@ sys: system-controller@10430000 {
+ 			resets = <&cpg 0x30>;
+ 		};
+ 
++		tsu0: thermal@11000000 {
++			compatible = "renesas,r9a09g057-tsu", "renesas,r9a09g047-tsu";
++			reg = <0 0x11000000 0 0x1000>;
++			interrupts = <GIC_SPI 248 IRQ_TYPE_EDGE_RISING>,
++				     <GIC_SPI 249 IRQ_TYPE_LEVEL_HIGH>;
++			interrupt-names = "adi", "adcmpi";
++			clocks = <&cpg CPG_MOD 0x109>;
++			resets = <&cpg 0xf7>;
++			power-domains = <&cpg>;
++			#thermal-sensor-cells = <0>;
++			renesas,tsu-trim = <&sys 0x320>;
++		};
++
++		tsu1: thermal@14002000 {
++			compatible = "renesas,r9a09g057-tsu", "renesas,r9a09g047-tsu";
++			reg = <0 0x14002000 0 0x1000>;
++			interrupts = <GIC_SPI 250 IRQ_TYPE_EDGE_RISING>,
++				     <GIC_SPI 251 IRQ_TYPE_LEVEL_HIGH>;
++			interrupt-names = "adi", "adcmpi";
++			clocks = <&cpg CPG_MOD 0x10a>;
++			resets = <&cpg 0xf8>;
++			power-domains = <&cpg>;
++			#thermal-sensor-cells = <0>;
++			renesas,tsu-trim = <&sys 0x330>;
++		};
++
+ 		xspi: spi@11030000 {
+ 			compatible = "renesas,r9a09g057-xspi", "renesas,r9a09g047-xspi";
+ 			reg = <0 0x11030000 0 0x10000>,
+@@ -1326,6 +1356,51 @@ stmmac_axi_setup: stmmac-axi-config {
+ 		snps,blen = <16 8 4 0 0 0 0>;
+ 	};
+ 
++	thermal-zones {
++		sensor1_thermal: sensor1-thermal {
++			polling-delay = <1000>;
++			polling-delay-passive = <250>;
++			thermal-sensors = <&tsu0>;
++
++			trips {
++				sensor1_crit: sensor1-crit {
++					temperature = <120000>;
++					hysteresis = <1000>;
++					type = "critical";
++				};
++			};
++		};
++
++		sensor2_thermal: sensor2-thermal {
++			polling-delay = <1000>;
++			polling-delay-passive = <250>;
++			thermal-sensors = <&tsu1>;
++
++			cooling-maps {
++				map0 {
++					trip = <&sensor2_target>;
++					cooling-device = <&cpu0 0 3>, <&cpu1 0 3>,
++							 <&cpu2 0 3>, <&cpu3 0 3>;
++					contribution = <1024>;
++				};
++			};
++
++			trips {
++				sensor2_target: trip-point {
++					temperature = <95000>;
++					hysteresis = <1000>;
++					type = "passive";
++				};
++
++				sensor2_crit: sensor2-crit {
++					temperature = <120000>;
++					hysteresis = <1000>;
++					type = "critical";
++				};
++			};
++		};
++	};
++
+ 	timer {
+ 		compatible = "arm,armv8-timer";
+ 		interrupts = <GIC_PPI 13 IRQ_TYPE_LEVEL_LOW>,
 -- 
 2.51.0
 
