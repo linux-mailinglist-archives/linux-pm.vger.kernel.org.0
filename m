@@ -1,170 +1,331 @@
-Return-Path: <linux-pm+bounces-36501-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36502-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C6E52BF3021
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 20:50:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B307BF30A1
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 20:53:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7B95A3B62E6
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 18:50:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 440D24020BA
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 18:52:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9FBF2BE04C;
-	Mon, 20 Oct 2025 18:50:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 112742D4817;
+	Mon, 20 Oct 2025 18:52:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HBzKp5rt"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="ejz0yDOo"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 859FE221DB5
-	for <linux-pm@vger.kernel.org>; Mon, 20 Oct 2025 18:50:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 336A623A9AC
+	for <linux-pm@vger.kernel.org>; Mon, 20 Oct 2025 18:52:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760986234; cv=none; b=Q0ZPsDyfTtp4x1p5HesUb56ePSwS1z2iAQtrij65os7BUHrevkAqSioatozDCKu//43JHu5QNE14QtX9GuOY99vR3LzjK+9m5nN1NAaz3n7xzoxtCUai+RQWMh8q6h24P5XE1SZwTngUZdyy061Asgrpe+XbHgPfjnBQ6MpFaXs=
+	t=1760986372; cv=none; b=HCsOyzgX5JJM/VG3juzx0hqO026C/dJVihU1+CHRByOHkZpJkr5M0P07Ol9m+/7CD5Tuqnue6V1zTWbRkynQ6FV2jZHxEf4lhy559U8y4AFAdCiZnFHm15jRIQcxxyhCefWFa8esDCfBnbx7EWUwY3gFIRCT7/Qw8BdHTUoRceM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760986234; c=relaxed/simple;
-	bh=T9xox0HM4UF95GIL4X1Mn43yKdjkpOS/EWQtbC4EEJ8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SoHE8J1+jP4/F7GXSnsNcO5jpWSLy73v4ZD72g9fKMu/s18ekfOnu2unP8KpqxiufHOyCqKN0pmglglSgceqllowgtunjHIWIHWa1/acqYtZTw+twVnu9Kjqhmz35rzvlFQuZoLxJhoV7mfLOCzC+/HLye0QP8Kvv6z+saK4Ncg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HBzKp5rt; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26D9CC16AAE
-	for <linux-pm@vger.kernel.org>; Mon, 20 Oct 2025 18:50:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760986234;
-	bh=T9xox0HM4UF95GIL4X1Mn43yKdjkpOS/EWQtbC4EEJ8=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=HBzKp5rtQ0Q8SVxn/1FlqftM/plmc2WgoX+gulyccpBKV5FTDk2wp5otTaeIk4jFC
-	 fEt62b6Kv9PD71QGe/1OuyX8OcUtrQV9ifO08jXPy8cCSOwfjmH4oYCp3gB6jN+0q9
-	 snx49ojC4QIbP8v1S+Wx3Z9b0058PyeXPDjlHjnZkeh+diBAqfFg4TsXtszuVjSExg
-	 DAUt/syVsbuu7YNFn3ofbBGaRKXaeXQfzroNKoJ5JKYBRzLls68TXNvsA73DjzeF8w
-	 dyScxKWNtAUvvb5e++cTiRbz30AH4/qM0T19Qh3DnEKpxdBbLC/GbztpLYJNzsU2KC
-	 UTdwsD6+qpvPQ==
-Received: by mail-oi1-f174.google.com with SMTP id 5614622812f47-442003b80d0so1733905b6e.1
-        for <linux-pm@vger.kernel.org>; Mon, 20 Oct 2025 11:50:34 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWH/ZP3XC2clKfB1AKVwe2zW8aPhYt66mCIHCGxjI/MYJOWZ2MpSlagLYKL7JLXVFGKnTEaXNKajQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxxcVK7nQ0Hd9rsrSgJ3+ok9+HlaCjAQNSCAnEEdnKH5hSKgAWk
-	JkfLUXA1pHiQThQ+vFQsxTBaGeTO5Vs0pRDyIDQuGnT0sH/IgFnhrBmNQ/EuNe2fwi3Ysvkcfa3
-	lvBbnCkwCqzDndZRHb1XGmTdKxjk1Uwk=
-X-Google-Smtp-Source: AGHT+IHST6iSSjR9sowIUp74URZmCfDo260rlv0OLY3MtNgq5MbkgmXa21ZyE1N1chceC+tTpTh+NIvIgmYQVBg9HjI=
-X-Received: by 2002:a05:6808:6718:b0:43f:abc7:f840 with SMTP id
- 5614622812f47-441fb97f76cmr7641827b6e.17.1760986233391; Mon, 20 Oct 2025
- 11:50:33 -0700 (PDT)
+	s=arc-20240116; t=1760986372; c=relaxed/simple;
+	bh=O0Qsp6HTPTxCPWbUjZe0P+yQW8HB8Ku6D+f7nISUFtg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XoHOMuKUCeteqFx66Ta9Dk7+MNOrb2+exRZ4TaI7n741TbH9yAX3pLfk/Te+grUHkbdshwRrkYv//cMHfXcCvmw8+OLmvBbeniMaOwZrKaSOtmfTsiy46JTTEinjU2VTtUc7yD8oss/KJZ4u30LxlOJsMr+keB5CB/nL3zxkwMQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=ejz0yDOo; arc=none smtp.client-ip=209.85.210.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-78125ed4052so5823799b3a.0
+        for <linux-pm@vger.kernel.org>; Mon, 20 Oct 2025 11:52:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1760986370; x=1761591170; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=SpIynvegjR22Q4YHC5qBxpjjnmowauSfD2NRwQPuzyA=;
+        b=ejz0yDOoEikGRESL6lOaBodx478OQLCMlkWwpZEvMxx+fNr6PdoYwaSOlHrYtTBIpI
+         OBpzo0QF4XYLWD3U6+XKNFLTic4sdSnyo7whBMz1nwLx9grz7wiwjB91JJrqC9FqNeDk
+         Mhf6AlaXf3WxMA+kYA2m1gVbcD0sSqwd4kRY8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760986370; x=1761591170;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SpIynvegjR22Q4YHC5qBxpjjnmowauSfD2NRwQPuzyA=;
+        b=sjSheo4ric3PyGmmBLgvoeSmLT+SRxadcqf4mrNE417v4dTMVVJeHoBrS2RDPlDWho
+         Mjyz1aE/7ISXX8nj0Y2N4H5asmT5p4ZB5DYiK+eJypx95v42j3PN8VQmZqkK5DQIaO3X
+         75q2ZNNKCToWjShXVcGEFTteQl0FhmyeCGNz/9PczFQ7tcXGPIBBtKlzmcXjt1ErNSOi
+         OD8xWKLzOjG0um7E+ZOQNuGAeFrUJ+qEbWWT/AJ4FsFqR1KiZ3mpCVWYdv58pTsBxtZ0
+         pITCfn6kaabAyJC1Iip1kk3oDVY3s8sgRY+uh/rGOkkAvIrrgRPq6o1FwwZBIOvoNSmg
+         DzXg==
+X-Forwarded-Encrypted: i=1; AJvYcCXzgOX6m1fTC31mBh2YXwyJ63iQqN/TQBhhkrREzNuTy8ZGkSp6Yj3D07tJ7lxD4GNplzaRMerlOA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy8i3dsZ3Q/4VEU3x0rUXaFY1JaCE5jlahukQaoOuOn2oy8fVVn
+	pCyMByo/h52vgcYijrTqfwQwwDPdfKsSh+bMcnkLbbhzghhzrsW58Tpc+DIK/9rddw==
+X-Gm-Gg: ASbGncsmDyCpkkKwVtpzymz9c+WXFUbNzNu4/5w4Qq2bM9m0WJdwVOAVbeGPxBPe3sL
+	FUgCJ7FSebD+eqbXcaY/q9APR4M1JfEeCoCi2m/WEOvMuOmuMMNswUX2ZkFG6qqhw6yIdN2oHhu
+	STXQzujMAwsspB8EXHp9o5jkuKxDvOmOk7tf5VP8eAy14OFXjizEnDEyiiIFP8XaW/00wIPHFLl
+	cauDVapJy+atNorFMTZJkajGnjKPDc9IpUhOoAaYpGxDmFC4QU/r+P6ACPipNp3kYaEcBK1urNa
+	isMsgjZT0HYgvhVTiqkWkABurrRHErPVhN1AoME6ygK1GPBCrzVlUcpVFVDPJVJokiUVBqDXRCn
+	vMkxmIyB65B0WHkgOgiAmWYynir3VrlnPNdGFJOqLYsY24FhS6Ta+yNOasSBUJ4JD7pzBskl1sS
+	Mx3lGrr2SiJuf+p0vRYg10YUT76wtp1c4fV5YD8aTuMGZtfk+0brJ+D2JsEw==
+X-Google-Smtp-Source: AGHT+IHmGLFxBbueM4IopZ6jkRLe8Fz33+8pBqAuMQfkaf78ZCea9ju5GU1cNvCEv+znR85Tq/TVwA==
+X-Received: by 2002:a05:6a00:4c83:b0:781:2656:1d6b with SMTP id d2e1a72fcca58-7a220b1eb48mr16934941b3a.24.1760986370446;
+        Mon, 20 Oct 2025 11:52:50 -0700 (PDT)
+Received: from localhost ([2a00:79e0:2e7c:8:f21:3ecc:2915:f4cb])
+        by smtp.gmail.com with UTF8SMTPSA id d2e1a72fcca58-7a230121ed6sm8936589b3a.73.2025.10.20.11.52.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Oct 2025 11:52:49 -0700 (PDT)
+Date: Mon, 20 Oct 2025 11:52:48 -0700
+From: Brian Norris <briannorris@chromium.org>
+To: Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc: Lukas Wunner <lukas@wunner.de>, Bjorn Helgaas <bhelgaas@google.com>,
+	LKML <linux-kernel@vger.kernel.org>, linux-pm@vger.kernel.org,
+	"Rafael J . Wysocki" <rafael@kernel.org>, linux-pci@vger.kernel.org
+Subject: Re: [PATCH] PCI/PM: Prevent runtime suspend before devices are fully
+ initialized
+Message-ID: <aPaFACsVupPOe67G@google.com>
+References: <20251016155335.1.I60a53c170a8596661883bd2b4ef475155c7aa72b@changeid>
+ <aPH_B7SiJ8KnIAwJ@wunner.de>
+ <67381f3b-4aee-a314-b5dd-2b7d987a7794@linux.intel.com>
+ <aPKANja_k1gogTAU@google.com>
+ <08976178-298f-79d9-1d63-cff5a4e56cc3@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251020165317.3992933-1-superm1@kernel.org> <20251020165317.3992933-4-superm1@kernel.org>
- <CAJZ5v0gsdmfXUJuLW8Ogt2jKDunx4g51LqCfSVMWQ6WHXBw_zg@mail.gmail.com>
- <85c039ef-e189-48c1-8bf7-50ac0c2484e2@kernel.org> <CAJZ5v0gT9BG5QPcwg6jJ1Jghny2YxC9_HY542LTBy-aVc_2T_w@mail.gmail.com>
- <aec8fc6c-3f9f-4ec1-a929-7a0be6026a3d@kernel.org>
-In-Reply-To: <aec8fc6c-3f9f-4ec1-a929-7a0be6026a3d@kernel.org>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 20 Oct 2025 20:50:21 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0gMf-qMGa6iBL2NdRXd-Mt5cpsoVQ90y+rSyK5xoYEf8A@mail.gmail.com>
-X-Gm-Features: AS18NWBuf_ZaMFCedSeiIN34onuDzQPdHGd1wzQY-S5DN-sJHQED06c6kG-OGlI
-Message-ID: <CAJZ5v0gMf-qMGa6iBL2NdRXd-Mt5cpsoVQ90y+rSyK5xoYEf8A@mail.gmail.com>
-Subject: Re: [RFC 3/3] drm/amd: Return -EBUSY for amdgpu_pmops_thaw() on success
-To: "Mario Limonciello (AMD) (kernel.org)" <superm1@kernel.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, mario.limonciello@amd.com, airlied@gmail.com, 
-	alexander.deucher@amd.com, christian.koenig@amd.com, dakr@kernel.org, 
-	gregkh@linuxfoundation.org, lenb@kernel.org, pavel@kernel.org, 
-	simona@ffwll.ch, Muhammad Usama Anjum <usama.anjum@collabora.com>, amd-gfx@lists.freedesktop.org, 
-	dri-devel@lists.freedesktop.org, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <08976178-298f-79d9-1d63-cff5a4e56cc3@linux.intel.com>
 
-On Mon, Oct 20, 2025 at 8:32=E2=80=AFPM Mario Limonciello (AMD) (kernel.org=
-)
-<superm1@kernel.org> wrote:
->
->
->
-> On 10/20/2025 12:39 PM, Rafael J. Wysocki wrote:
-> > On Mon, Oct 20, 2025 at 7:28=E2=80=AFPM Mario Limonciello (AMD) (kernel=
-.org)
-> > <superm1@kernel.org> wrote:
-> >>
-> >>
-> >>
-> >> On 10/20/2025 12:21 PM, Rafael J. Wysocki wrote:
-> >>> On Mon, Oct 20, 2025 at 6:53=E2=80=AFPM Mario Limonciello (AMD)
-> >>> <superm1@kernel.org> wrote:
-> >>>>
-> >>>> From: Mario Limonciello <mario.limonciello@amd.com>
-> >>>>
-> >>>> The PM core should be notified that thaw was skipped for the device
-> >>>> so that if it's tried to be resumed (such as an aborted hibernate)
-> >>>> that it gets another chance to resume.
-> >>>>
-> >>>> Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> >>>> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> >>>> ---
-> >>>>    drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c | 2 +-
-> >>>>    1 file changed, 1 insertion(+), 1 deletion(-)
-> >>>>
-> >>>> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c b/drivers/gpu/d=
-rm/amd/amdgpu/amdgpu_drv.c
-> >>>> index 61268aa82df4d..d40af069f24dd 100644
-> >>>> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-> >>>> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-> >>>> @@ -2681,7 +2681,7 @@ static int amdgpu_pmops_thaw(struct device *de=
-v)
-> >>>>
-> >>>>           /* do not resume device if it's normal hibernation */
-> >>>>           if (!pm_hibernate_is_recovering() && !pm_hibernation_mode_=
-is_suspend())
-> >>>> -               return 0;
-> >>>> +               return -EBUSY;
-> >>>
-> >>> So that's why you need the special handling of -EBUSY in the previous=
- patch.
-> >>
-> >> Yup.
-> >>
-> >>>
-> >>> I think that you need to save some state in this driver and then use
-> >>> it in subsequent callbacks instead of hacking the core to do what you
-> >>> want.
-> >>>
-> >>
-> >> The problem is the core decides "what" to call and more importantly
-> >> "when" to call it.
-> >>
-> >> IE if the core thinks that something is thawed it will never call
-> >> resume, and that's why you end up in a bad place with Muhammad's
-> >> cancellation series and why I proposed this one to discuss.
-> >>
-> >> We could obviously go back to dropping this case entirely:
-> >>
-> >> if (!pm_hibernate_is_recovering() && !pm_hibernation_mode_is_suspend()=
-)
-> >>
-> >> But then the display turns on at thaw(), you do an unnecessary resourc=
-e
-> >> eviction, it takes a lot longer if you have a ton of VRAM etc.
-> >
-> > The cancellation series is at odds with this code path AFAICS because
-> > what if hibernation is canceled after the entire thaw transition?
->
-> Muhammad - did you test that specific timing of cancelling the hibernate?
-> >
-> > Some cleanup would need to be done before thawing user space I suppose.
->
-> I agree; I think that series would need changes for it.
->
-> But if you put that series aside, I think this one still has some merit
-> on it's own.  If another driver aborted the hibernate, I think the same
-> thing could happen if it happened to run before amdgpu's device thaw().
->
-> That series just exposed a very "easy" way to reproduce this issue.
+Hi Ilpo,
 
-Device thaw errors don't abort anything AFAICS.
+On Mon, Oct 20, 2025 at 06:56:41PM +0300, Ilpo Järvinen wrote:
+> On Fri, 17 Oct 2025, Brian Norris wrote:
+> 
+> > Hi Ilpo and Lukas,
+> > 
+> > I'll reply to both of you inline:
+> 
+> I see you posted v2 but I'm answering here to have the context available. 
 
-What can happen though is that another device may abort the final
-"power off" transition, which is one of the reasons why I think that
-rolling it back is generally hard.
+Sure!
+
+> Mostly things seem okay after your explanation, I think the only question 
+> mark is a driver calling pci_resize_resource() directly to resize BARs.
+> 
+> > On Fri, Oct 17, 2025 at 02:49:35PM +0300, Ilpo Järvinen wrote:
+> > > On Fri, 17 Oct 2025, Lukas Wunner wrote:
+> > > 
+> > > > [cc += Ilpo]
+> > > > 
+> > > > On Thu, Oct 16, 2025 at 03:53:35PM -0700, Brian Norris wrote:
+> > > > > PCI devices are created via pci_scan_slot() and similar, and are
+> > > > > promptly configured for runtime PM (pci_pm_init()). They are initially
+> > > > > prevented from suspending by way of pm_runtime_forbid(); however, it's
+> > > > > expected that user space may override this via sysfs [1].
+> > > 
+> > > Is this true as pm_runtime_forbid() also increases PM usage count?
+> > 
+> > Yes it's true. See below.
+> > 
+> > > "void pm_runtime_forbid(struct device *dev);
+> > > 
+> > > unset the power.runtime_auto flag for the device and increase its 
+> > > usage counter (used by the /sys/devices/.../power/control interface to 
+> > > effectively prevent the device from being power managed at run time)"
+
+I see this doc line confused you, and I can sympathize.
+
+IIUC, the parenthetical means that sysfs *uses* pm_runtime_forbid() to
+"effectively prevent runtime power management"; pm_runtime_forbid() does
+not block user space from doing anything.
+
+> > Right, but sysfs `echo auto > .../power/control` performs the inverse --
+> > pm_runtime_allow() -- which decrements that count.
+> 
+> Fair enough, I didn't check what it does.
+> 
+> IMO, the details about how the usage count behaves should be part of the 
+> changelog as that documentation I quoted sounded like user control is 
+> prevented when forbidden.
+
+I tried to elaborate on the API doc confusion above. But frankly, I'm
+not sure how best to explain runtime PM.
+
+> I see you've put this part of the explanation 
+> into the v2 as well so I suggest you explain the usage count in the change 
+> so it is recorded in the commit if somebody has to look at this commit 
+> years from now.
+
+Both v1 and v2 mention that the sysfs 'power/control' file can override
+the kernel calling pm_runtime_forbid(). They don't mention the usage
+count, since that's an implementation detail IMO. (To me, the mental
+model works best if "usage count" (usually get()/put()) is considered
+mostly orthogonal to forbid()/allow()/sysfs, because "forbid()" can be
+overridden at any time.)
+
+This is also covered here:
+
+https://docs.kernel.org/power/runtime_pm.html#runtime-pm-initialization-device-probing-and-removal
+
+"In principle, this mechanism may also be used by the driver to
+effectively turn off the runtime power management of the device until
+the user space turns it on."
+
+But admittedly, I find the runtime PM API surface to be enormous, and
+its documentation ... not very helpful to outsiders. It's pretty much
+written by and for PM experts. Case in point: you read and quoted the
+appropriate docs, but it still misled you quite a bit :(
+
+I'm more tempted to try to improve the runtime PM docs than to try to
+make up for them in the commit message, but maybe I can be convinced
+otherwise.
+
+> > > > > Now, sometime after initial scan, a PCI device receives its BAR
+> > > > > configuration (pci_assign_unassigned_bus_resources(), etc.).
+> > > > > 
+> > > > > If a PCI device is allowed to suspend between pci_scan_slot() and
+> > > > > pci_assign_unassigned_bus_resources(), then pci-driver.c will
+> > > > > save/restore incorrect BAR configuration for the device, and the device
+> > > > > may cease to function.
+> > > > > 
+> > > > > This behavior races with user space, since user space may enable runtime
+> > > > > PM [1] as soon as it sees the device, which may be before BAR
+> > > > > configuration.
+> > > > > 
+> > > > > Prevent suspending in this intermediate state by holding a runtime PM
+> > > > > reference until the device is fully initialized and ready for probe().
+> > > >
+> > > > Not sure if that is comprehensible by everybody.
+> > 
+> > Yeah, thanks for trying to clarify. After getting too far into the weeds
+> > on a bug, I sometimes don't spend the appropriate time on writing a
+> > simple problem description. Maybe I can do better on a v2.
+> > 
+> > > > The point is that
+> > > > unbound devices are left in D0 but are nevertheless allowed to
+> > > > (logically) runtime suspend.  And pci_pm_runtime_suspend() may call
+> > > > pci_save_state() while config space isn't fully initialized yet,
+> > > > or pci_pm_runtime_resume() may call pci_restore_state() (via
+> > > > pci_pm_default_resume_early()) and overwrite initialized config space
+> > > > with uninitialized data.
+> > 
+> > Ack.
+> > 
+> > > > Have you actually seen this happen in practice?
+> > 
+> > Yes, that's why I spent my time debugging and submitting this patch :)
+> 
+> Thanks for doing it! :-)
+> 
+> > > > Normally enumeration
+> > > > happens during subsys_initcall time, when user space isn't running yet.
+> > > > Hotplug may be an exception though.
+> > 
+> > Hotplug, rescan (e.g., when pwrctrl is in use, power may be stablished
+> > later on, and it triggers a bus rescan; pwrctrl drivers can be modules),
+> > or PCI controller drivers built as modules.
+> > 
+> > I happen to be using both pwrctrl and controller drivers as modules, so
+> > I hit it that way.
+> > 
+> > > Adding that pm_runtime_get_noresume() doesn't look useful given 
+> > > pm_runtime_forbid() already increases PM usage count. If this problem is 
+> > > actually seen in practice, there could a bug elsewhere where something 
+> > > decrements usage count too early so this change "helps" by double 
+> > > incrementing the usage count.
+> > > 
+> > > To find more information what's going on, one could try to trace events 
+> > > for the PM usage count (though last time I looked not all paths that 
+> > > change PM usage count were covered by the event and adding the 
+> > > trace_event() calls into the header turned out too much magic for me to 
+> > > figure out so I couldn't solve the problem).
+> > 
+> > See above. forbid() is not a guaranteed blocker, because user space can
+> > undo it.
+> > 
+> > > > Patch LGTM in principle, but adding Ilpo to cc who is refactoring PCI
+> > > > resource allocation and may judge whether this can actually happen.
+> > > 
+> > > I can see there could be other failure modes besides just saving wrong 
+> > > config if devices get suspended underneath the resource assignment 
+> > > algorithm.
+> > > 
+> > > Besides hotplug, also BAR resize does changes the resources and BARs.
+> > > This case is not helped by this patch.
+> > 
+> > Is that the 'resource_N_resize' sysfs attributes? Becuase that holds PM
+> > references (pci_config_pm_runtime_{get,put}()) and therefore should not
+> > generally have the same problem.
+> 
+> Okay, seem fine for the PCI core part.
+> 
+> Driver's can also trigger BAR resize by calling pci_resize_resource() 
+> directly but I've no idea how the usage counts behave (TBH, PM isn't my 
+> strongest forte even if Lukas pulled me in to comment).
+
+There are only 3 drivers that call pci_resize_resource(). I looked into
+them, and it looks like they all hold pm_runtime_* references while
+doing this, or are calling it during pci_driver probe(), which docs say
+will hold a reference.
+
+https://docs.kernel.org/power/pci.html#device-runtime-power-management
+
+So they should all be OK too.
+
+> > pci-driver.c's runtime suspend will
+> > save a new copy of the registers the next time we suspend after resize.
+> > 
+> > (Now, some drivers could have problems if they try to stash a static
+> > copy via pci_store_saved_state()/pci_load_saved_state(), but that
+> > invites plenty of its own problems anyway.)
+> > 
+> > > I also recently learned some DT platforms do the "actual" scan for the bus 
+> > > later on Link Up event through irq which could perhaps occur late enough, 
+> > > I dunno for sure.
+> > 
+> > Sure, but that'd be covered by my patch, as those (re)scans would
+> > discover new devices in the same scan+add flow.
+> 
+> Okay, maybe it's fine like the rest. I was mostly trying to think 
+> non-subsys_initcall() cases I knew of without contextualizing them back to 
+> this patch.
+
+Sure, thanks for the pointers. I'm happy to look into other areas if you
+suspect there might similar PM-related bugs.
+
+> > > > I think the code comments you're adding are a little verbose and a simple
+> > > > /* acquired in pci_pm_init() */ in pci_bus_add_device() may be sufficient.
+> > > 
+> > > I'm also not entirely convinced these always pair
+> > 
+> > That's a very valid question. There are so many variations of scan+add
+> > that it's been hard for me to tell.
+> 
+> I've noticed... unfortunately I find myself often in the same boat. :-/
+> 
+> > I've studied the code pretty
+> > closely, and tested what I could, but I don't have hotplug systems on
+> > hand, and I definitely could miss something.
+> > 
+> > FWIW, Rafael suggested/implied an alternative, where I could simply
+> > delay pm_runtime_enable() until pci_bus_add_device(). That would dodge
+> > the pairing questions, I think.
+> 
+> Yes.
+> 
+> > > or if the pci_dev may 
+> > > get removed before pci_bus_add_device(), see e.g., enable_slot() in 
+> > > hotplug/acpiphp_glue.c that does acpiphp_sanitize_bus() before 
+> > > pci_bus_add_devices() (which could have other bugs too as is).
+> > 
+> > I believe it should be OK if a device is removed before the
+> > pm_runtime_put_noidle() half of the pair. It just means the device gets
+> > destroyed with a nonzero PM usage count, which is legal.
+> 
+> Ah yes, I think I was too attached to the "pairing" thought at that point 
+> to see this isn't like e.g. a lock/unlock pair.
+
+Thanks for looking things over.
+
+Brian
 
