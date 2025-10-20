@@ -1,150 +1,189 @@
-Return-Path: <linux-pm+bounces-36455-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36456-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42034BF0538
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 11:55:21 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 41A14BF0ECB
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 13:51:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D4C13189280D
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 09:55:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 65C4E188C737
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 11:51:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF1102ED167;
-	Mon, 20 Oct 2025 09:55:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CAB73019C1;
+	Mon, 20 Oct 2025 11:51:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b="AGeyKzYB"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="PaL/OAYl"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3A9229ACC3
-	for <linux-pm@vger.kernel.org>; Mon, 20 Oct 2025 09:55:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.123
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760954116; cv=none; b=BjhtKBe23igQ22ChCQULtzCI7CmkKAhVUJttFdgtPmJDwHTTkGA1V5jofgkemOBoDaYqnsU5SyP3XQIe5dKdVO16yGHoHGVQSFTTO/iLIeajRrmUW+Vv6heYWIaua6ZmBxZRy5GEq1aKCR5/1U9jdjrtz8g00QJO+IEpq0ZhexM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760954116; c=relaxed/simple;
-	bh=ltNi0MhEYk2msw3rWtEl8refNJjhQym3ZLbABQDdz8o=;
-	h=MIME-Version:In-Reply-To:References:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sk/43CrnqGjfe6NlKxtOcK1gAyK/1A4AfXfX5iMxEEPa1t5KPwlnUFeY6eNhR7X7z6ZdIP9OPquO8MPGZ9XPj8NFD7ZpmK8qdYIvWpR33MWdAYVUyJK8AeQJv8VlTdR/964SEfpNF6/NjdxmvtAy5pgoE0jFd+JvrfwkfrI5qkM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b=AGeyKzYB; arc=none smtp.client-ip=185.125.188.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
-Received: from mail-vs1-f70.google.com (mail-vs1-f70.google.com [209.85.217.70])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 9A2743F628
-	for <linux-pm@vger.kernel.org>; Mon, 20 Oct 2025 09:55:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20251003; t=1760954111;
-	bh=mEBranLPBa0mzFLmxRJ9fx9ZSptWmlBhnJV3QiXyr/c=;
-	h=MIME-Version:In-Reply-To:References:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type;
-	b=AGeyKzYB4CGPZcB6lRwMy85hy+xN8ceJZLD2WD3afZBFPFerH36rRid0cpUKGzggO
-	 CP+JjziZhtasSsizWEsfrBsml3MyDsTegO308OyATm+3sxwliK2GtpRd+zkmK6Un77
-	 GLXASFV7HRQnpscM1sVtFUAJqea3sum5Yo0P+Az46nzHZgAqm7n7tJXTXRKUZDUKn8
-	 WLw6uU73CX5Svd9OXOFGklSiPpX7RZB9/2r+k7fGaelhlbAeNp9PyWU/6GfwAx7+Gv
-	 LQZ0yTFZ/MbAdHzfzUvXwojiPIMg6ieYlkUXUdJtTyTbPn1i5wxCJsyiVGKkwUxxe1
-	 5kyP9rhkN0qGnKMnHWGq2RLXzqeY1lkPdVL+TIJ8jQezDJlpFfLW/tV0zIw+MvFCbO
-	 bH5ivfLIHR4igqEUITHg3ehbsFII8nZRK2d0rySNG5/JrmbyK8vIYjXXOh48uxCsN9
-	 gTY7PGcfttmEA8XB0wr5l17vzpup7guBQz/G1YHcjGgLTpFbY2+MH9m48zmt3CSUjf
-	 v4l8mqd6PtOCVg5SGlCf/19RQ/GzPgQD6NXogGo4m/9PwYXLRJ6jGcClcjPZ/qDLaL
-	 TsGtCJ5vMK0Q0zj/6zHVMZjWW97t4hXDaK9Ti8Tn9qvPwvn6jBYLTdPPU2a2mwPiye
-	 RLq7fcsvNMRrKjyHZcl0QtYc=
-Received: by mail-vs1-f70.google.com with SMTP id ada2fe7eead31-5d631e1a2e2so8355286137.0
-        for <linux-pm@vger.kernel.org>; Mon, 20 Oct 2025 02:55:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760954110; x=1761558910;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mEBranLPBa0mzFLmxRJ9fx9ZSptWmlBhnJV3QiXyr/c=;
-        b=A6L1/f7uyd4jx9cwjL7AHKWekP5CFO1B7aUy2RJ0uuU3/CaEHo4VPE1NjBSVnWOwdr
-         gSmL3o8SM+tXdKg2fJpSJS4ZJrk4ybY6yAz0J+Pv/M+eRot1XBu0ztL3kzJRRbAU0M2k
-         x4yt7aNzXwE7VLBJ5/+auju85jMEYTZo6jEQY0OhNWL/9EWYhWUf5VBQ34Aid2QL9v6s
-         v8mnnPoaX1O/+XosUhaPAK2LKml0g65ZjCZvDZOsCg/nhMKspGsI6rSy7POeJLQ/uzbY
-         7y6AuR88iYJAXktrs11ewfihCmqshJDylwirCpeoQZpYqOakcQlHffRDDnmcWOwUPeeN
-         Wg+w==
-X-Forwarded-Encrypted: i=1; AJvYcCUQGnH7igPlBtcPo1IM/4nsad6OV9QCwAv9PoyPv0GbJXu278gKwEIpoTfNitsC8RWh08uj8YcD5A==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxPZm35D8wi/4yS2BNrKJSW9qf349FkdhIC2lIg5Rq9ISMi2TQH
-	6jN2b6r5Ox3Ed67hbp7TFyLDQS9uw4bhQM7ot/eEQjcRNHU8A66kETOjZK6f1L7xZSorccDYd21
-	2volSjWsW9P+buuZCg5fCjqRMdeVdVnMK5jRs2R5UH3XFmIg0+PxlyeA7Eip44iTNFesJLmTVJA
-	W6enfxTyklsLP8wEyDoYdKvMNgKgnwjA4YLrGeJ8ahSf+adPmoTNE=
-X-Gm-Gg: ASbGncsPM+h6Feqddc5onFjMisQvUdQSwz4RMvQJQOHtpL5JcQ+EOxTXe6GMawT7w79
-	GUDqEYYE415V9mFZIu0A+2UTHEeTVeik68bKcpOz67Ps7Th+1esYI99H7lXZPx5c0hOP2jILyCf
-	xYKrNU/GFLHSqysqtMJ/jmMpbtGvuNa1fIeF3Lr1HNyHpfNp0JthIns87jTEuz2nVf9xho7DkJM
-	I1RyjSGg8GUQ1Cn
-X-Received: by 2002:a05:6102:2c8a:b0:5ca:714b:2dcd with SMTP id ada2fe7eead31-5d7ce77b197mr5090709137.10.1760954110398;
-        Mon, 20 Oct 2025 02:55:10 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IE8U9dwM6qULSdCBv1qTum4Bp6zRtcLVxnBY4adzvxZNg4OxsHj3q1MDPNwZUFy1CWdBXERfTMV4CjpVWjcmns=
-X-Received: by 2002:a05:6102:2c8a:b0:5ca:714b:2dcd with SMTP id
- ada2fe7eead31-5d7ce77b197mr5090696137.10.1760954110055; Mon, 20 Oct 2025
- 02:55:10 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 20 Oct 2025 04:55:09 -0500
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 20 Oct 2025 04:55:09 -0500
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CD012192F5;
+	Mon, 20 Oct 2025 11:51:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1760961091; cv=pass; b=pLA0dM3pIEyqx9t1mQduThddAYRD6l7BEQDTN/NFfwai0HYJ1j1Ksr9Zbl/n3XrLqmIjusZBzynYTWiStgf2dA2Fg2kz/l+nKLpfnaX8YF4BtYlL6CuA/Vz5Uufh2DqCdXZCYehSGXHuNhXkuok8/ghBCX/KrptzptfTETbuHDo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1760961091; c=relaxed/simple;
+	bh=6ynyZRXd+tVSkitkXZRJParXJVETR9hXhC8hUwlemlE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=mafqbWr82DngRFCb7DTlAGeCxDWJAFM7WoikNw7eeIIOgG7cG2BMHbe9TyK0u8IjwU8R1moLaBeBG8A/AISEmden72W5RDOc/ZExj7C3iIP/SamRDaYdZeGQHQBiW///jPd61VHbHSUE/g012J5d1BQ381L7P0kFzdB5VGZXh2Q=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=PaL/OAYl; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1760961056; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=C6s9lTyHmYNGClzUwi70t4LJADX3+pHHK1XyNHdHK8pkqZ0ewDbfJbwIXWji+uiKKcmUeuBW6l+zGWUuO+03pxUuW4fSbebuqG/S8KLJ5DCvdHU667ISmBHyMLGiEhevq79+UUaFc7vwqAm5S5mMXdCMvSHVgcf314a5waiB5NI=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1760961056; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=A/c/4oL8Z03NjnVaEgMnJiauD1mgyw2BMdnR11SbtOU=; 
+	b=iW82Q/ZctwRGQX/L9mOKuaimgoLOz0fVBR1M3TyCll3uEAfcdqH7w9UXuCqxDvtaM0ZJWtujTQtrBMFIsHz79mKsGlZlxVJUxxPgaOPiETDnmLnSSlwiQ6TTLdJq4ZGBBnB7YHbpk1mKNlRkRjCJStTnqRl8T1J3jkhSJ2wQsK0=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
+	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1760961056;
+	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
+	bh=A/c/4oL8Z03NjnVaEgMnJiauD1mgyw2BMdnR11SbtOU=;
+	b=PaL/OAYlpW7pCWoX/nW8/r5Ars7ZMGegZ6sORd7Ra52eVXY8qtIgTV84a6OuCiti
+	f1QFLSFukxd6rYxUkCCtp1sRRNyjyBoz59JCtIF/7UUcfAFVo1cFMZUeeejGOl4n1WW
+	oo+B23a8e3D8+ZHnwIQTPwmfqEktI30JqVK/GOy4=
+Received: by mx.zohomail.com with SMTPS id 1760961055618931.097867690532;
+	Mon, 20 Oct 2025 04:50:55 -0700 (PDT)
+From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ Boris Brezillon <boris.brezillon@collabora.com>,
+ Jassi Brar <jassisinghbrar@gmail.com>, Chia-I Wu <olvaffe@gmail.com>,
+ Chen-Yu Tsai <wenst@chromium.org>, Steven Price <steven.price@arm.com>,
+ Liviu Dudau <liviu.dudau@arm.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Matthias Brugger <matthias.bgg@gmail.com>, Kees Cook <kees@kernel.org>,
+ "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+ Ulf Hansson <ulf.hansson@linaro.org>, Karunika Choo <karunika.choo@arm.com>
+Cc: kernel@collabora.com, dri-devel@lists.freedesktop.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
+ linux-hardening@vger.kernel.org, linux-pm@vger.kernel.org, nd@arm.com
+Subject: Re: [PATCH v8 4/5] drm/panthor: Use existing OPP table if present
+Date: Mon, 20 Oct 2025 13:50:47 +0200
+Message-ID: <12781303.O9o76ZdvQC@workhorse>
+In-Reply-To: <386ca96d-34b6-4aab-844d-ea720099cf6b@arm.com>
+References:
+ <20251017-mt8196-gpufreq-v8-0-98fc1cc566a1@collabora.com>
+ <20251017-mt8196-gpufreq-v8-4-98fc1cc566a1@collabora.com>
+ <386ca96d-34b6-4aab-844d-ea720099cf6b@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <aPXAyeDC7YXAketm@aurel32.net>
-References: <20251019191519.3898095-1-aurelien@aurel32.net>
- <20251019191519.3898095-2-aurelien@aurel32.net> <CANBLGczi3GeaC4aWECV8NS-zqSHgRa-5onynz9fGsZeN8qgysg@mail.gmail.com>
- <aPXAyeDC7YXAketm@aurel32.net>
-From: Emil Renner Berthing <emil.renner.berthing@canonical.com>
-User-Agent: alot/0.0.0
-Date: Mon, 20 Oct 2025 04:55:09 -0500
-X-Gm-Features: AS18NWArKI2YauisXr79VuYk9B-KtJdQQBJvjv4Xg4AX0iHaDUW4DU_PmGIO6p4
-Message-ID: <CAJM55Z_BzfRo5aKf2VrneTymSizwDQq6OfMK_LNgyoGjp43K8Q@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] driver: reset: spacemit-p1: add driver for poweroff/reboot
-To: Aurelien Jarno <aurelien@aurel32.net>
-Cc: linux-kernel@vger.kernel.org, Lee Jones <lee@kernel.org>, 
-	Sebastian Reichel <sre@kernel.org>, Troy Mitchell <troy.mitchell@linux.spacemit.com>, 
-	Yixun Lan <dlan@gentoo.org>, Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, linux-riscv@lists.infradead.org, 
-	spacemit@lists.linux.dev, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="utf-8"
 
-Quoting Aurelien Jarno (2025-10-20 06:55:37)
-> Hi Emil,
->
-> On 2025-10-19 22:53, Emil Renner Berthing wrote:
-> > On Sun, 19 Oct 2025 at 22:34, Aurelien Jarno <aurelien@aurel32.net> wrote:
-> > > diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
-> > > index 8248895ca9038..063202923d95d 100644
-> > > --- a/drivers/power/reset/Kconfig
-> > > +++ b/drivers/power/reset/Kconfig
-> > > @@ -283,6 +283,15 @@ config POWER_RESET_KEYSTONE
-> > >         help
-> > >           Reboot support for the KEYSTONE SoCs.
-> > >
-> > > +config POWER_RESET_SPACEMIT_P1
-> > > +       bool "SpacemiT P1 poweroff and reset driver"
-> >
-> > The driver code looks to be written to work as a module, but here it
-> > says "bool" not "tristate".
->
-> I have just tested to build it as a module, and it indeed works that
-> way. I'll change that to tristate in the next version.
->
-> > > +       depends on ARCH_SPACEMIT || COMPILE_TEST
-> > > +       select MFD_SPACEMIT_P1
-> > > +       default ARCH_SPACEMIT
-> >
-> > If it does work as a module I'd prefer "default m" here.
->
-> Do you mean "default m" or "default m if ARCH_SPACEMIT"?
+On Monday, 20 October 2025 10:35:04 Central European Summer Time Karunika Choo wrote:
+> On 17/10/2025 16:31, Nicolas Frattaroli wrote:
+> > On SoCs where the GPU's power-domain is in charge of setting performance
+> > levels, the OPP table of the GPU node will have already been populated
+> > during said power-domain's attach_dev operation.
+> > 
+> > To avoid initialising an OPP table twice, only set the OPP regulator and
+> > the OPPs from DT if there's no OPP table present.
+> > 
+> > Reviewed-by: Chia-I Wu <olvaffe@gmail.com>
+> > Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> > Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+> > ---
+> >  drivers/gpu/drm/panthor/panthor_devfreq.c | 32 ++++++++++++++++++++++---------
+> >  1 file changed, 23 insertions(+), 9 deletions(-)
+> > 
+> > diff --git a/drivers/gpu/drm/panthor/panthor_devfreq.c b/drivers/gpu/drm/panthor/panthor_devfreq.c
+> > index a6dca599f0a5..ec63e27f4883 100644
+> > --- a/drivers/gpu/drm/panthor/panthor_devfreq.c
+> > +++ b/drivers/gpu/drm/panthor/panthor_devfreq.c
+> > @@ -141,6 +141,7 @@ int panthor_devfreq_init(struct panthor_device *ptdev)
+> >  	struct thermal_cooling_device *cooling;
+> >  	struct device *dev = ptdev->base.dev;
+> >  	struct panthor_devfreq *pdevfreq;
+> > +	struct opp_table *table;
+> >  	struct dev_pm_opp *opp;
+> >  	unsigned long cur_freq;
+> >  	unsigned long freq = ULONG_MAX;
+> > @@ -152,17 +153,30 @@ int panthor_devfreq_init(struct panthor_device *ptdev)
+> >  
+> >  	ptdev->devfreq = pdevfreq;
+> >  
+> > -	ret = devm_pm_opp_set_regulators(dev, reg_names);
+> > -	if (ret && ret != -ENODEV) {
+> > -		if (ret != -EPROBE_DEFER)
+> > -			DRM_DEV_ERROR(dev, "Couldn't set OPP regulators\n");
+> > -		return ret;
+> > +	/*
+> > +	 * The power domain associated with the GPU may have already added an
+> > +	 * OPP table, complete with OPPs, as part of the platform bus
+> > +	 * initialization. If this is the case, the power domain is in charge of
+> > +	 * also controlling the performance, with a set_performance callback.
+> > +	 * Only add a new OPP table from DT if there isn't such a table present
+> > +	 * already.
+> > +	 */
+> > +	table = dev_pm_opp_get_opp_table(dev);
+> > +	if (IS_ERR_OR_NULL(table)) {
+> > +		ret = devm_pm_opp_set_regulators(dev, reg_names);
+> > +		if (ret && ret != -ENODEV) {
+> 
+> Is there a reason to not fail on -ENODEV? I would assume it is a valid 
+> failure path. 
 
-Just "default m" should be fine since the driver already depends on
-ARCH_SPACEMIT, but the 2nd version is more explicit.
+Hi,
 
-A quick grep doesn't show an overwhelming majority of one over the other, so I
-guess it's up to the maintainers.
+the -ENODEV logic wasn't added by me, it was added in
+Commit: a8cb5ca53690 ("drm/panthor: skip regulator setup if no such prop")
 
-/Emil
+with the justification
+
+  The regulator is optional, skip the setup instead of returning an
+  error if it is not present
+
+I will not be changing anything about this logic in this patch set,
+as it is not in scope for MT8196 enablement, since MT8196 does not
+use this code path at all.
+
+Kind regards,
+Nicolas Frattaroli
+
+> 
+> Kind regards,
+> Karunika Choo
+> 
+> > +			if (ret != -EPROBE_DEFER)
+> > +				DRM_DEV_ERROR(dev, "Couldn't set OPP regulators\n");
+> > +			return ret;
+> > +		}
+> > +
+> > +		ret = devm_pm_opp_of_add_table(dev);
+> > +		if (ret)
+> > +			return ret;
+> > +	} else {
+> > +		dev_pm_opp_put_opp_table(table);
+> >  	}
+> >  
+> > -	ret = devm_pm_opp_of_add_table(dev);
+> > -	if (ret)
+> > -		return ret;
+> > -
+> >  	spin_lock_init(&pdevfreq->lock);
+> >  
+> >  	panthor_devfreq_reset(pdevfreq);
+> > 
+> 
+> 
+
+
+
+
 
