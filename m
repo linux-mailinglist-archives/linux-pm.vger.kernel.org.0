@@ -1,54 +1,75 @@
-Return-Path: <linux-pm+bounces-36521-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36522-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1633BF3C5C
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 23:36:05 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 01667BF3D24
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 00:07:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 1A31B4F2F89
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 21:35:53 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 1B9C134F521
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 22:07:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8BA52DE71B;
-	Mon, 20 Oct 2025 21:35:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00F2C2E8B8A;
+	Mon, 20 Oct 2025 22:07:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="KJ7t5kIS"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="BfUtVR8y"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC8EB21ABD7;
-	Mon, 20 Oct 2025 21:35:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A3DF1C695;
+	Mon, 20 Oct 2025 22:07:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760996147; cv=none; b=HdYeSTKR43VMdchVYuScNPr38O+vN+hmqrtv9M7hq2sGu5FCJaj2x8mYoR0rminIyD6nP+PFm+I8e6edZEMVVOk7wYRbR+LHxQ/Dezchhe0U2RJvFq+4eyweU2uZ82Gy3IgL4Rq3RXnkD9zvhC/8UwUu/Zj6e7nUIWScSYV9hmw=
+	t=1760998056; cv=none; b=D7qhEVUO53332Mye0g1lGNr7s8OgjxPInVPqT/OJ2ydF7etikvTAXapNBUW0T6uQWCM5ObyLNrCZhTw4IZ4MoyqlVpBwXqKzJufSwatsaig6A988MEHChBMXpiFpyxhZ9DO0IFhz9XA5wGl6VrtsXitJkNDf4WP6i7A3xJwsFM8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760996147; c=relaxed/simple;
-	bh=O3gKx5Rj2VOWiy+K0H59IGE1QBF6cjEbBSIJ2Vxbkns=;
+	s=arc-20240116; t=1760998056; c=relaxed/simple;
+	bh=H5Sx8VCAi4uDZTrCoyLCZeTCEAQROEY7HE/dz3M3F4Y=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bDUFVi3z1386202LP8dZCU3QNCBRte8KSj1BFtRtTmUNCXZDsaU4moXnTcaMt+LWzoy88MkgiyOwMs6INiQHuS9tEue1Te05jOSY3GSbOClUyUVjqaANcODFUYIAz1lUL7yEKYcSJMnpi+o47xaeyUccoEZc+q7Ol3DTUBfSZ9w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=KJ7t5kIS; arc=none smtp.client-ip=213.97.179.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-	References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=Apw2ko+AxH0CsXs7vBtTeoN9MrrD1jme4QTPmBSX9yA=; b=KJ7t5kIS0nuNSItWb5IMKwFEEb
-	xd0Jah9HUvMknufapOJo3x+MpBXpdrA/1uV9QWhneBUCmjF0qW6QPohN0uHSrQRoSMsQ4zLn+dWuR
-	9c+IVTrwGFri/X62NsZJQJWpJIMrJOlUuv207ZEcr0ho0SZ60mM6A5If9P9d+31tJn0TKkK+xG+dE
-	3YmOJ0OS3T0JFcxZgGFeKk5BSGRwDQqAedT+Zjwjcx/0CyyN2ZFssp5tS6FXhxAR/3HWZ6Q9K5bzo
-	HbE/NbjfYyTf3Y5D6LjN2g+o61ZCGj30+lp6abHVR7PLDTMdXHCCqhkF4UKnNh1wIbqj+JFOy0bm9
-	AljfkgFw==;
-Received: from [58.29.143.236] (helo=[192.168.1.7])
-	by fanzine2.igalia.com with esmtpsa 
-	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-	id 1vAxXW-00CGru-9Z; Mon, 20 Oct 2025 23:35:38 +0200
-Message-ID: <57a19531-de5f-44ee-bff0-d3a956131d29@igalia.com>
-Date: Tue, 21 Oct 2025 06:35:31 +0900
+	 In-Reply-To:Content-Type; b=t4iwIbpGPW8hYgqIEnjdnCKIuc25MZvQLvFNGcBjkmMkexqg/DgFZTfhujg8AVitxAzkDRpZi9f6c0wPO/a57qoPxSyejKujn8V28O3x5HFEhMLG1r/J2Iv3ZPossg2MB97ai8rZEr0lIb0kepfIvIC5TiOVWCLet8BgSZduxf8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=BfUtVR8y; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 59KFURnH026789;
+	Mon, 20 Oct 2025 22:07:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=r6sUFF
+	eWnIrjGTAl4MBZvysEDk1VUIyRSBaJopdfdgs=; b=BfUtVR8ycv5UpzMVxmIFKY
+	BQbYhmzulPF+80NwDj8AaBn3+GwL5zg9qclU8cux+dgEt0Fvf0BibbTSIyho9fAW
+	Fl1EKzJkdQrIrRg4CWn3XKchEK8PgfDsklxWb1BQ9+mt/fWVL3IWM+Yz6NuYg5Gm
+	7BGJWMPrkA5Mn5P9AU2YUqNZlCFmhbTAtDjL3fIrWaQBwaxjtsJYEbu5xehxEWP7
+	0oTzalfN5aLHlVGBmWnVpbYxmw5TosYgSVaywDfwD+xxaf9gS726itZgVlaraXRf
+	rB/O1XcPwdZBMG/MgfnKtfcWUPU8etFgKYG98vRkU9dmWyDG8iMV6PlNppGfpyNg
+	==
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 49v30vjnca-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 20 Oct 2025 22:07:07 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 59KLEsLT014779;
+	Mon, 20 Oct 2025 22:07:07 GMT
+Received: from smtprelay05.wdc07v.mail.ibm.com ([172.16.1.72])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 49vn7s01mx-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 20 Oct 2025 22:07:06 +0000
+Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
+	by smtprelay05.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 59KM76CI31720118
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 20 Oct 2025 22:07:06 GMT
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 2391C58058;
+	Mon, 20 Oct 2025 22:07:06 +0000 (GMT)
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id C617358059;
+	Mon, 20 Oct 2025 22:07:04 +0000 (GMT)
+Received: from [9.61.241.180] (unknown [9.61.241.180])
+	by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Mon, 20 Oct 2025 22:07:04 +0000 (GMT)
+Message-ID: <25435d82-575d-495f-ae61-bd38570ff9ad@linux.ibm.com>
+Date: Mon, 20 Oct 2025 15:07:01 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -56,71 +77,132 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 05/10] PM: EM: Add an iterator and accessor for the
- performance domain
-To: "Rafael J. Wysocki" <rafael@kernel.org>, kernel test robot <lkp@intel.com>
-Cc: lukasz.luba@arm.com, len.brown@intel.com, pavel@kernel.org,
- oe-kbuild-all@lists.linux.dev, christian.loehle@arm.com, tj@kernel.org,
- kernel-dev@igalia.com, linux-pm@vger.kernel.org, sched-ext@lists.linux.dev,
- linux-kernel@vger.kernel.org
-References: <20251014001055.772422-6-changwoo@igalia.com>
- <202510151232.UNZ2J7TZ-lkp@intel.com>
- <CAJZ5v0hAnKEUP7n_d3bzVEi0HGmgZXC-+U=_RmS1n0wGniv8qQ@mail.gmail.com>
-From: Changwoo Min <changwoo@igalia.com>
-Content-Language: en-US, ko-KR, en-US-large, ko
-In-Reply-To: <CAJZ5v0hAnKEUP7n_d3bzVEi0HGmgZXC-+U=_RmS1n0wGniv8qQ@mail.gmail.com>
+Subject: Re: [PATCH v4 2/3] PCI/sysfs: Use runtime PM guard macro for
+ auto-cleanup
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Jonathan Cameron <jonathan.cameron@huawei.com>,
+        Bjorn Helgaas <helgaas@kernel.org>
+Cc: Takashi Iwai <tiwai@suse.de>, LKML <linux-kernel@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Zhang Qilong <zhangqilong3@huawei.com>,
+        Ulf Hansson
+ <ulf.hansson@linaro.org>, Frank Li <Frank.Li@nxp.com>,
+        Dhruva Gole <d-gole@ti.com>, Niklas Schnelle <schnelle@linux.ibm.com>
+References: <6196611.lOV4Wx5bFT@rafael.j.wysocki>
+ <2323750.iZASKD2KPV@rafael.j.wysocki>
+Content-Language: en-US
+From: Farhan Ali <alifm@linux.ibm.com>
+In-Reply-To: <2323750.iZASKD2KPV@rafael.j.wysocki>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: bhUE52pihM2-hnvxydHCN2Rc_tCGvwvn
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDE4MDAyMiBTYWx0ZWRfX57jXW+8zLtMi
+ 7PrDbm0hKnsV78siKRz9+/b07CC+/Xv6Fukkspad3M0w+zS9jBVqzyhEEKfw1JlL9VLwo5xxfRV
+ PhNrDiJ83nlCgpx48MY68E+FEDFySquZ11A2HVF3wPvYSsYMP7x2T4p8nrfs01PDL9Oz5TcUQIf
+ AIskfnB2Fc/rxHxgQnDWO5YjL8FJPY7vZgjn0GLzHUF6B3zrEZ907ED+d+seKyRbfl/i6I3R4fX
+ cBzV2VW+0nsHowxYXd4j6yydd/hiXpx7tGw9r7rOF0z5vrUE7GRcCO0fWYRAKhImIcYhDD0dT/z
+ 1yJ1WinElwCKtE68oabMU53yMAdQuiZi145sbiI9KOGx7TRxSiFG4dyobr3N2h+CFXLTn9vnZAh
+ IVs5gu32bEn7PvAOz9uRSK1bA+mthA==
+X-Authority-Analysis: v=2.4 cv=MIJtWcZl c=1 sm=1 tr=0 ts=68f6b28b cx=c_pps
+ a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
+ a=IkcTkHD0fZMA:10 a=x6icFKpwvdMA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=bC-a23v3AAAA:8 a=QyXUC8HyAAAA:8 a=1XWaLZrsAAAA:8 a=hqneplKKMpFo2bd696AA:9
+ a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=FO4_E8m0qiDe52t0p3_H:22
+ a=poXaRoVlC6wW9_mwW8W4:22 a=cPQSjfK2_nFv0Q5t_7PE:22 a=Z5ABNNGmrOfJ6cZ5bIyy:22
+ a=SsAZrZ5W_gNWK9tOzrEV:22
+X-Proofpoint-ORIG-GUID: bhUE52pihM2-hnvxydHCN2Rc_tCGvwvn
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-10-20_06,2025-10-13_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ malwarescore=0 spamscore=0 phishscore=0 lowpriorityscore=0 adultscore=0
+ clxscore=1011 impostorscore=0 bulkscore=0 priorityscore=1501 suspectscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2510020000 definitions=main-2510180022
 
+
+On 9/26/2025 9:24 AM, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>
+> Use the newly introduced pm_runtime_active_try guard to simplify
+> the code and add the proper error handling for PM runtime resume
+> errors.
+>
+> Based on an earlier patch from Takashi Iwai <tiwai@suse.de> [1].
+>
+> Link: https://patch.msgid.link/20250919163147.4743-3-tiwai@suse.de [1]
+> Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>
+> v3 -> v4:
+>     * Use ACQUIRE()/ACQUIRE_ERR() (Jonathan)
+>     * Adjust subject and changelog
+>     * Take patch ownership (it's all different now)
+>     * Pick up Bjorn's ACK from v3 (Bjorn, please let me know if that's not OK)
+>
+> v2 -> v3: No changes
+>
+> v1 -> v2:
+>     * Adjust the name of the class to handle the disabled runtime PM case
+>       transparently (like the original code).
+>
+> ---
+>   drivers/pci/pci-sysfs.c |    5 +++--
+>   1 file changed, 3 insertions(+), 2 deletions(-)
+>
+> --- a/drivers/pci/pci-sysfs.c
+> +++ b/drivers/pci/pci-sysfs.c
+> @@ -1475,8 +1475,9 @@ static ssize_t reset_method_store(struct
+>   		return count;
+>   	}
+>   
+> -	pm_runtime_get_sync(dev);
+> -	struct device *pmdev __free(pm_runtime_put) = dev;
+> +	ACQUIRE(pm_runtime_active_try, pm)(dev);
+> +	if (ACQUIRE_ERR(pm_runtime_active_try, &pm))
+> +		return -ENXIO;
+>   
+>   	if (sysfs_streq(buf, "default")) {
+>   		pci_init_reset_methods(pdev);
+>
+>
 Hi Rafael,
 
-On 10/21/25 02:44, Rafael J. Wysocki wrote:
-> On Wed, Oct 15, 2025 at 6:50 AM kernel test robot <lkp@intel.com> wrote:
->>
->> Hi Changwoo,
->>
->> kernel test robot noticed the following build errors:
->>
->> [auto build test ERROR on amd-pstate/linux-next]
->> [also build test ERROR on amd-pstate/bleeding-edge linus/master v6.18-rc1 next-20251014]
->> [If your patch is applied to the wrong git tree, kindly drop us a note.
->> And when submitting patch, we suggest to use '--base' as documented in
->> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->>
->> url:    https://github.com/intel-lab-lkp/linux/commits/Changwoo-Min/PM-EM-Assign-a-unique-ID-when-creating-a-performance-domain/20251014-082420
->> base:   https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git linux-next
->> patch link:    https://lore.kernel.org/r/20251014001055.772422-6-changwoo%40igalia.com
->> patch subject: [PATCH v5 05/10] PM: EM: Add an iterator and accessor for the performance domain
->> config: i386-buildonly-randconfig-001-20251015 (https://download.01.org/0day-ci/archive/20251015/202510151232.UNZ2J7TZ-lkp@intel.com/config)
->> compiler: gcc-13 (Debian 13.3.0-16) 13.3.0
->> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251015/202510151232.UNZ2J7TZ-lkp@intel.com/reproduce)
->>
->> If you fix the issue in a separate patch/commit (i.e. not just a new version of
->> the same patch/commit), kindly add following tags
->> | Reported-by: kernel test robot <lkp@intel.com>
->> | Closes: https://lore.kernel.org/oe-kbuild-all/202510151232.UNZ2J7TZ-lkp@intel.com/
->>
->> All errors (new ones prefixed by >>):
->>
->>>> kernel/power/energy_model.c:1003:5: error: redefinition of 'for_each_em_perf_domain'
->>      1003 | int for_each_em_perf_domain(int (*cb)(struct em_perf_domain*, void *),
->>           |     ^~~~~~~~~~~~~~~~~~~~~~~
->>     In file included from kernel/power/energy_model.c:20:
->>     kernel/power/em_netlink.h:18:5: note: previous definition of 'for_each_em_perf_domain' with type 'int(int (*)(struct em_perf_domain *, void *), void *)'
->>        18 | int for_each_em_perf_domain(int (*cb)(struct em_perf_domain*, void *),
->>           |     ^~~~~~~~~~~~~~~~~~~~~~~
->>>> kernel/power/energy_model.c:1022:24: error: redefinition of 'em_perf_domain_get_by_id'
->>      1022 | struct em_perf_domain *em_perf_domain_get_by_id(int id)
->>           |                        ^~~~~~~~~~~~~~~~~~~~~~~~
->>     kernel/power/em_netlink.h:24:24: note: previous definition of 'em_perf_domain_get_by_id' with type 'struct em_perf_domain *(int)'
->>        24 | struct em_perf_domain *em_perf_domain_get_by_id(int id)
->>           |                        ^~~~~~~~~~~~~~~~~~~~~~~~
->>
-> 
-> Please update the patch to address this report and resend it, thanks!
+This patch breaks updating the 'reset_method' sysfs file on s390. If we 
+try to update the reset_method, we are hitting the ENXIO error. eg:
 
-Sure, I will send v6 with these two fixes in.
+echo 'bus' > /sys/bus/pci/devices/0007\:00\:10.1/reset_method
+-bash: echo: write error: No such device or address
 
-Regards,
-Changwoo Min
+I don't think s390 does anything different in this path, so this could 
+also impact other platforms? Changing this to something like this fixes it
+
+
+diff --git a/drivers/pci/pci-sysfs.c b/drivers/pci/pci-sysfs.c
+index 9d6f74bd95f8..d7fc0dc81c30 100644
+--- a/drivers/pci/pci-sysfs.c
++++ b/drivers/pci/pci-sysfs.c
+@@ -1517,8 +1517,8 @@ static ssize_t reset_method_store(struct device *dev,
+                 return count;
+         }
+
+-       ACQUIRE(pm_runtime_active_try, pm)(dev);
+-       if (ACQUIRE_ERR(pm_runtime_active_try, &pm))
++       ACQUIRE(pm_runtime_active, pm)(dev);
++       if (ACQUIRE_ERR(pm_runtime_active, &pm))
+                 return -ENXIO;
+
+This changes the logic to what it was previously which used 
+pm_runtime_get_sync and pm_runtime_put. But I am not familiar with the 
+PM runtime code, so not sure what would be the right fix here.
+
+Thanks
+
+Farhan
+
+
 
