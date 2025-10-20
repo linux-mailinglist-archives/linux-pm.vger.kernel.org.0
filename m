@@ -1,142 +1,166 @@
-Return-Path: <linux-pm+bounces-36492-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36493-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2414DBF2C4A
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 19:43:32 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 22A45BF2C83
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 19:45:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7F6364648BD
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 17:39:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CDFE318A7AD9
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 17:45:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 064A7330312;
-	Mon, 20 Oct 2025 17:39:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6D33332ED0;
+	Mon, 20 Oct 2025 17:44:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="esCKnBGZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XoWOuH7p"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4C8713DDAE
-	for <linux-pm@vger.kernel.org>; Mon, 20 Oct 2025 17:39:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91B063321D7
+	for <linux-pm@vger.kernel.org>; Mon, 20 Oct 2025 17:44:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760981988; cv=none; b=ZiTCs5GmgehhYl/rAZz6u6AZxgbSgsrz3DculfmH6DhZL+p4hMtxjJqtNSKWDuc1YgvmgNWCh6e9ZUUguJrk5AyjVXfs/Sh2JjTX/f7ivfZfgn+jXE7wDLlVtGH1eUKSl5Y9LNiF0U9Q1c7P4Mxk9Xwdkbl8rAN3qvBNdUvKtyo=
+	t=1760982276; cv=none; b=FiCe1X4S5wWgrZUk+ip/yx09Jr+5mJ3ZSwbHsacP7Dz5KhCQmKHUcR/uEJk4f/yIA1HrxIgxmc3ytcLPTDeYbS2DNWSo3baPa8xN6ksHShp7bi/rbjK7rwiS2Ci0VM+jeIQsHxbuu9foPYUgrmLNpBCRYSEz5XLt6bTPJJsdZgQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760981988; c=relaxed/simple;
-	bh=wT1Y0qfI1uM/2GtV+FQhAIBMo9jpLEUnAXNhpAS02FE=;
+	s=arc-20240116; t=1760982276; c=relaxed/simple;
+	bh=9SQduol4sq0EtS2GcOIwdhucDz3vZOy2iqkydjidjb0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DulvkDcDd08tnLfPp+O7/UL/lWQGDWTjfaqxPhAa0VzsfCt/0Xrp0IlMZDvHp6W7Na9oDaQHy1j/FvKt0G+Wim4ZplJkDQqJsxDPIAlLNwpVNeYsn2D57XcmvRzHxKhb494mzWSm5PcIuqu+HlHbVn2jMMJqxOoi9Pl/XEqPQKc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=esCKnBGZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E187C19425
-	for <linux-pm@vger.kernel.org>; Mon, 20 Oct 2025 17:39:47 +0000 (UTC)
+	 To:Cc:Content-Type; b=Z97i4QBHFhu3AvWZLIJ/Te4RWFP4ozFGBfV6ocMlvjrpLyA0ddl+55nTPeuOOROTMrT5HRqNL6jTdpBJeaZLV+TzaF+GeX8RtXbQtk5TsCxeWDrIpVQPtnvaOrRxClBOCIu52BSAb37cXVusRXQVOUZIgAe5/7xrcc5PJdbdpxk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XoWOuH7p; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34922C4CEF9
+	for <linux-pm@vger.kernel.org>; Mon, 20 Oct 2025 17:44:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760981987;
-	bh=wT1Y0qfI1uM/2GtV+FQhAIBMo9jpLEUnAXNhpAS02FE=;
+	s=k20201202; t=1760982276;
+	bh=9SQduol4sq0EtS2GcOIwdhucDz3vZOy2iqkydjidjb0=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=esCKnBGZ6tc7fXkUNN0JMOBxu4pT8vQeT0lTR5kZUFWi+3eMrJIJJBjRCN85L+Nba
-	 oQpck0TBqIfTz0bdA27GzRuRMDrlPQYiN+8itrLY2Bg4xX3JMsd3oqo0dUym8iRseY
-	 kHyQUsYhahuf50qjT0r2elMPjfOeOjT8t1Mq09jIc8WLS6U+ql/aSTJwekhaXUN+eu
-	 hJ3Sg5z7uInlb/xr6vLmnxZ3SlFZjE1QUhtFyQoJ3+oCOLGgx29OwbJgxrr0XlOAas
-	 R1kCWqalRAZ3NA3aBPyrgqXuvAJfIEUnZG39F9IUByVkYfl/QOt5LKcIq0zCyjnSk+
-	 6Op2Pp9/4GVvw==
-Received: by mail-oi1-f178.google.com with SMTP id 5614622812f47-43f715b18caso2288112b6e.2
-        for <linux-pm@vger.kernel.org>; Mon, 20 Oct 2025 10:39:47 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUOwDmOWy3GL9fCTjdM31Qyn75n4g8TEiWGn8zheon2+ZY1KJWp7euY3osdExDxHiYMrkzi8sn0PA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxCXiYEo9sA10exai1AzSUanHox/AmcOPEPAb0GrSD6Ghr57OT/
-	AxhCj4D3p8xZW7IxF2anRCVUgtP0qCPGWCa9fslNY6viQbR7mYvKsRjHOJpEfnPE6mfnFLgh3GT
-	CvKh+fwFpTAOyJjyKUuz18vfVwgR2VGU=
-X-Google-Smtp-Source: AGHT+IG2Rxr5g0ETdapUPV9rmvM1DRXwrnwlcoW74xA8ZYJcZOIYF2AKB8oeuOlCh0+q7dU4hWkh88h8bpa+Do93q4Y=
-X-Received: by 2002:a05:6808:138b:b0:441:8f74:fb1 with SMTP id
- 5614622812f47-443a31ef503mr6101556b6e.62.1760981986716; Mon, 20 Oct 2025
- 10:39:46 -0700 (PDT)
+	b=XoWOuH7pqGKUuHsGV4vnJ9f2sK9s0qP/cnmrb8G+I/J68fBw1F7pqORh3JN/Fh3Tp
+	 eOqfw6DVP/uLocyxy/H5lVzQDfvYG1m+yR7sJ0gbjEI5HJaRa2C+FbuGAVMNoFjNEM
+	 tQRnaQOY1B+RmhajjkSLD8ZHgmDiQWC83ItxpM+FsoI/CojrO6RKudqeL7T5/jiIdM
+	 jlwJxeWKEmgo8xgKwz9CHGclQ/3AGF/iOxsyP+tjDwcjzMKqOhI/ah22OuxBKSudzd
+	 A1VmOL90BuYrfJafDdw8s57VpX+gsu3SwiLmgDCeTmXqXXPFU3sw8dajyGmHmjmX8Z
+	 2RM0WNCFERl/w==
+Received: by mail-oi1-f177.google.com with SMTP id 5614622812f47-43f802f8571so1279262b6e.0
+        for <linux-pm@vger.kernel.org>; Mon, 20 Oct 2025 10:44:36 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVadmijn+Lxw06tCFt8MMuxKYiAYMruRVTvwSaN4yc5j4ct5YXA2oH33kWXvOoQc2msUPyRunCitw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzCqofz8Qlg4paKSTH3hJDGFyFwWsuteQh9aYEoT/eqw2XFo5Nt
+	CuODsSJ08xly6wuqRG5/Cf/ebILU2yayZQkVt0DSHnaspNCMder7j0nX9hA6ntiGuUPB7MJlKcS
+	RNJnywRwJDSQNwKJzhAsD48UhZTkMjyA=
+X-Google-Smtp-Source: AGHT+IEwbvz72kNzUitB/HZRHnWBHktzWo+WHJ4wfWV7a7y7zEi7Xt1kb6kk+2+LndRg6PQI9iAqjmMQy+zxteny/jM=
+X-Received: by 2002:a05:6808:190d:b0:438:8c9:5f4 with SMTP id
+ 5614622812f47-443a2edee81mr5446868b6e.19.1760982275490; Mon, 20 Oct 2025
+ 10:44:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251020165317.3992933-1-superm1@kernel.org> <20251020165317.3992933-4-superm1@kernel.org>
- <CAJZ5v0gsdmfXUJuLW8Ogt2jKDunx4g51LqCfSVMWQ6WHXBw_zg@mail.gmail.com> <85c039ef-e189-48c1-8bf7-50ac0c2484e2@kernel.org>
-In-Reply-To: <85c039ef-e189-48c1-8bf7-50ac0c2484e2@kernel.org>
+References: <20251014001055.772422-6-changwoo@igalia.com> <202510151232.UNZ2J7TZ-lkp@intel.com>
+In-Reply-To: <202510151232.UNZ2J7TZ-lkp@intel.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 20 Oct 2025 19:39:34 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0gT9BG5QPcwg6jJ1Jghny2YxC9_HY542LTBy-aVc_2T_w@mail.gmail.com>
-X-Gm-Features: AS18NWAGFArtUw2iag6c7zcOb_ybIi_pg36NhodGLq9MnSrMsDZdX75ZsN_KO40
-Message-ID: <CAJZ5v0gT9BG5QPcwg6jJ1Jghny2YxC9_HY542LTBy-aVc_2T_w@mail.gmail.com>
-Subject: Re: [RFC 3/3] drm/amd: Return -EBUSY for amdgpu_pmops_thaw() on success
-To: "Mario Limonciello (AMD) (kernel.org)" <superm1@kernel.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, mario.limonciello@amd.com, airlied@gmail.com, 
-	alexander.deucher@amd.com, christian.koenig@amd.com, dakr@kernel.org, 
-	gregkh@linuxfoundation.org, lenb@kernel.org, pavel@kernel.org, 
-	simona@ffwll.ch, Muhammad Usama Anjum <usama.anjum@collabora.com>, amd-gfx@lists.freedesktop.org, 
-	dri-devel@lists.freedesktop.org, linux-pm@vger.kernel.org
+Date: Mon, 20 Oct 2025 19:44:23 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0hAnKEUP7n_d3bzVEi0HGmgZXC-+U=_RmS1n0wGniv8qQ@mail.gmail.com>
+X-Gm-Features: AS18NWDqU8gI4O1WJOZVUI3zH0SqwXzI9Pu_KT0r6C5A7fFtSAxMeq04Q4UHq8s
+Message-ID: <CAJZ5v0hAnKEUP7n_d3bzVEi0HGmgZXC-+U=_RmS1n0wGniv8qQ@mail.gmail.com>
+Subject: Re: [PATCH v5 05/10] PM: EM: Add an iterator and accessor for the
+ performance domain
+To: kernel test robot <lkp@intel.com>, Changwoo Min <changwoo@igalia.com>
+Cc: lukasz.luba@arm.com, rafael@kernel.org, len.brown@intel.com, 
+	pavel@kernel.org, oe-kbuild-all@lists.linux.dev, christian.loehle@arm.com, 
+	tj@kernel.org, kernel-dev@igalia.com, linux-pm@vger.kernel.org, 
+	sched-ext@lists.linux.dev, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Oct 20, 2025 at 7:28=E2=80=AFPM Mario Limonciello (AMD) (kernel.org=
-)
-<superm1@kernel.org> wrote:
+On Wed, Oct 15, 2025 at 6:50=E2=80=AFAM kernel test robot <lkp@intel.com> w=
+rote:
 >
+> Hi Changwoo,
 >
+> kernel test robot noticed the following build errors:
 >
-> On 10/20/2025 12:21 PM, Rafael J. Wysocki wrote:
-> > On Mon, Oct 20, 2025 at 6:53=E2=80=AFPM Mario Limonciello (AMD)
-> > <superm1@kernel.org> wrote:
-> >>
-> >> From: Mario Limonciello <mario.limonciello@amd.com>
-> >>
-> >> The PM core should be notified that thaw was skipped for the device
-> >> so that if it's tried to be resumed (such as an aborted hibernate)
-> >> that it gets another chance to resume.
-> >>
-> >> Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> >> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> >> ---
-> >>   drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c | 2 +-
-> >>   1 file changed, 1 insertion(+), 1 deletion(-)
-> >>
-> >> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c b/drivers/gpu/drm=
-/amd/amdgpu/amdgpu_drv.c
-> >> index 61268aa82df4d..d40af069f24dd 100644
-> >> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-> >> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-> >> @@ -2681,7 +2681,7 @@ static int amdgpu_pmops_thaw(struct device *dev)
-> >>
-> >>          /* do not resume device if it's normal hibernation */
-> >>          if (!pm_hibernate_is_recovering() && !pm_hibernation_mode_is_=
-suspend())
-> >> -               return 0;
-> >> +               return -EBUSY;
-> >
-> > So that's why you need the special handling of -EBUSY in the previous p=
-atch.
+> [auto build test ERROR on amd-pstate/linux-next]
+> [also build test ERROR on amd-pstate/bleeding-edge linus/master v6.18-rc1=
+ next-20251014]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
 >
-> Yup.
+> url:    https://github.com/intel-lab-lkp/linux/commits/Changwoo-Min/PM-EM=
+-Assign-a-unique-ID-when-creating-a-performance-domain/20251014-082420
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git=
+ linux-next
+> patch link:    https://lore.kernel.org/r/20251014001055.772422-6-changwoo=
+%40igalia.com
+> patch subject: [PATCH v5 05/10] PM: EM: Add an iterator and accessor for =
+the performance domain
+> config: i386-buildonly-randconfig-001-20251015 (https://download.01.org/0=
+day-ci/archive/20251015/202510151232.UNZ2J7TZ-lkp@intel.com/config)
+> compiler: gcc-13 (Debian 13.3.0-16) 13.3.0
+> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
+ve/20251015/202510151232.UNZ2J7TZ-lkp@intel.com/reproduce)
 >
-> >
-> > I think that you need to save some state in this driver and then use
-> > it in subsequent callbacks instead of hacking the core to do what you
-> > want.
-> >
+> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
+ion of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202510151232.UNZ2J7TZ-lkp=
+@intel.com/
 >
-> The problem is the core decides "what" to call and more importantly
-> "when" to call it.
+> All errors (new ones prefixed by >>):
 >
-> IE if the core thinks that something is thawed it will never call
-> resume, and that's why you end up in a bad place with Muhammad's
-> cancellation series and why I proposed this one to discuss.
+> >> kernel/power/energy_model.c:1003:5: error: redefinition of 'for_each_e=
+m_perf_domain'
+>     1003 | int for_each_em_perf_domain(int (*cb)(struct em_perf_domain*, =
+void *),
+>          |     ^~~~~~~~~~~~~~~~~~~~~~~
+>    In file included from kernel/power/energy_model.c:20:
+>    kernel/power/em_netlink.h:18:5: note: previous definition of 'for_each=
+_em_perf_domain' with type 'int(int (*)(struct em_perf_domain *, void *), v=
+oid *)'
+>       18 | int for_each_em_perf_domain(int (*cb)(struct em_perf_domain*, =
+void *),
+>          |     ^~~~~~~~~~~~~~~~~~~~~~~
+> >> kernel/power/energy_model.c:1022:24: error: redefinition of 'em_perf_d=
+omain_get_by_id'
+>     1022 | struct em_perf_domain *em_perf_domain_get_by_id(int id)
+>          |                        ^~~~~~~~~~~~~~~~~~~~~~~~
+>    kernel/power/em_netlink.h:24:24: note: previous definition of 'em_perf=
+_domain_get_by_id' with type 'struct em_perf_domain *(int)'
+>       24 | struct em_perf_domain *em_perf_domain_get_by_id(int id)
+>          |                        ^~~~~~~~~~~~~~~~~~~~~~~~
 >
-> We could obviously go back to dropping this case entirely:
->
-> if (!pm_hibernate_is_recovering() && !pm_hibernation_mode_is_suspend())
->
-> But then the display turns on at thaw(), you do an unnecessary resource
-> eviction, it takes a lot longer if you have a ton of VRAM etc.
 
-The cancellation series is at odds with this code path AFAICS because
-what if hibernation is canceled after the entire thaw transition?
+Please update the patch to address this report and resend it, thanks!
 
-Some cleanup would need to be done before thawing user space I suppose.
+> vim +/for_each_em_perf_domain +1003 kernel/power/energy_model.c
+>
+>   1002
+> > 1003  int for_each_em_perf_domain(int (*cb)(struct em_perf_domain*, voi=
+d *),
+>   1004                              void *data)
+>   1005  {
+>   1006          struct em_perf_domain *pd;
+>   1007
+>   1008          lockdep_assert_not_held(&em_pd_mutex);
+>   1009          guard(mutex)(&em_pd_list_mutex);
+>   1010
+>   1011          list_for_each_entry(pd, &em_pd_list, node) {
+>   1012                  int ret;
+>   1013
+>   1014                  ret =3D cb(pd, data);
+>   1015                  if (ret)
+>   1016                          return ret;
+>   1017          }
+>   1018
+>   1019          return 0;
+>   1020  }
+>   1021
+> > 1022  struct em_perf_domain *em_perf_domain_get_by_id(int id)
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
 
