@@ -1,229 +1,222 @@
-Return-Path: <linux-pm+bounces-36518-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36519-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9705DBF37B7
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 22:44:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E2430BF3AB4
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 23:11:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 577C118A4F09
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 20:44:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 117C718C5703
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 21:11:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFCD72DFA27;
-	Mon, 20 Oct 2025 20:44:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 945012E7185;
+	Mon, 20 Oct 2025 21:09:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="NmOLzQam"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NdOZS6fA"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from CH4PR04CU002.outbound.protection.outlook.com (mail-northcentralusazon11013055.outbound.protection.outlook.com [40.107.201.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67BA0240611;
-	Mon, 20 Oct 2025 20:44:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.201.55
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760993070; cv=fail; b=WYrVaRe4HRc2HefgFQ2vitWMnPcrq/54n/jKYpTnQQPGEWZcbSgB0UHMmlALw++MYZN/TAFxWDI2zpp37+Oac1UgeZ7V6slZvjo0PiL1T3gAuQ2eABQ64yUNiLHwW6S67bdgOc/CkJqDoW8V3MZh/tP+r66RJCRRNTL5urAjTGQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760993070; c=relaxed/simple;
-	bh=qE9k+VS9SPzCMRwvz2SFmZBXZn6fPMXghelCcIk5Txc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=musYMc1U3i7DrUJ6vG3PIyIcw3W8HU/gxbJPHqqDbeZRNVmEVxC9EbEPnuIqgUitq8yIcPlyCjoPCXM8h6cBQpJKPHMQhThA13QAIpaoFe3pWm9SO64RbcOj2FUl6ScUOKLHb/evFDfpvK+gaXgYYaMIqC+3PQilbdlEE6YiEnY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=NmOLzQam; arc=fail smtp.client-ip=40.107.201.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=W0tOTVRbhCrsYqC7VUHSCBX3VXHFRqxat8kyiWzaLqXW0c58YjEzF6/zdBTlUhrly/E+vJwjs9IVlA7bktPnFKQclOpDPrEzPkmiWpYy9KDBR3t0RMB2POCqoIGqEAosEbds1EJS04QLksNtuRlNyL7lGuXNXatJ+CfdMjmo4yOAZxWkKStmkEoz6XHDEK9WChoqSNKA58nt+z82Eit3u0smtognnyraKG6zvHA6OL9uisJBEcKGk+8Xa+ULzdWBbVoZXIHRmi6lXdQZ93PnJJ6yy48tTAiNYgO5buLU6qtkbdRxfi19EJGo+jGWtWWJusDjBgTrmRlwbavZO6D5yg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=M3gghQ4MChrCqP/MLAEzO2lpO5E8T82mA8G2gdh0WNo=;
- b=ttoXPBDgtEz1ycu0+vP7U926vpEj7X0JnD1DPUEUUbzB/a1jxdL7Nv5O9bBnXNdGOGrHia6lVsRvd2c/2wRcLyS54564MP5qIvQiLcLTwQmAZE4XaYhgkzOi8QHkf9SlMsn7MHmDf1EO43lSKzvpbYwNkC+MtbGbu4OoMUngMK872nTPa8EoafmvCqxLhECy34UKTmE+rV3ZSMcIzqAIllzJ+KsaYvvXkAiZFEkUZD2G+u6bu8LORJCf9f8PwFS/1V6Fvhr9Ds5dG+UIdDgEBHMWWm2T+hrEkzcjK9NoACCcF2fzOhTnWldMp4dQ/KxVSk+Zgf113iSfzbNRv6e3UA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=M3gghQ4MChrCqP/MLAEzO2lpO5E8T82mA8G2gdh0WNo=;
- b=NmOLzQamUuZNZHsvLOQPjqJTw+7C5ADafk7wXckRI53e+DqxN2+wDokSbkMShlgbPMh8O7HFovBJI7KTIrDJNRWAQ7L1jmwkmFrn5SVhczHJBmuJHJCQpnDOH5VI31ReWGGkaz5mTP62h/8kQw7ciUl23oR/hT0zp5ho6V/57fLJw75n+azpQnGEcBFauVWDG7Q/qe2krplcpra1Eo7oVtmPD4l7XJbdMdcLMuL6ZMqwqDEQ30fKyEi8eENSCza4R/TqMwDyhMlEaIhzzrx+OdWE/AscAC7jKL/NXVbXhUaOUaTy6jbVCoXGEFlzm0f/2W8vMjLtSeAUHVNNUkLNVQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from SN7PR12MB8059.namprd12.prod.outlook.com (2603:10b6:806:32b::7)
- by SN7PR12MB6671.namprd12.prod.outlook.com (2603:10b6:806:26d::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9228.16; Mon, 20 Oct
- 2025 20:44:22 +0000
-Received: from SN7PR12MB8059.namprd12.prod.outlook.com
- ([fe80::4ee2:654e:1fe8:4b91]) by SN7PR12MB8059.namprd12.prod.outlook.com
- ([fe80::4ee2:654e:1fe8:4b91%2]) with mapi id 15.20.9228.015; Mon, 20 Oct 2025
- 20:44:22 +0000
-Date: Mon, 20 Oct 2025 16:44:21 -0400
-From: Joel Fernandes <joelagnelf@nvidia.com>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Lyude Paul <lyude@redhat.com>, rust-for-linux@vger.kernel.org,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Boqun Feng <boqun.feng@gmail.com>, linux-kernel@vger.kernel.org,
-	Daniel Almeida <daniel.almeida@collabora.com>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>,
-	Bj??rn Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Ingo Molnar <mingo@kernel.org>, Ryo Takakura <ryotkkr98@gmail.com>,
-	K Prateek Nayak <kprateek.nayak@amd.com>,
-	"open list:CPU FREQUENCY SCALING FRAMEWORK" <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v13 01/17] preempt: Track NMI nesting to separate per-CPU
- counter
-Message-ID: <20251020204421.GA197647@joelbox2>
-References: <20251013155205.2004838-1-lyude@redhat.com>
- <20251013155205.2004838-2-lyude@redhat.com>
- <20251014104839.GN4067720@noisy.programming.kicks-ass.net>
- <4a237ec0-05ae-439b-a1cb-6b7f451c0d7e@nvidia.com>
- <20251014194349.GC1206438@noisy.programming.kicks-ass.net>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251014194349.GC1206438@noisy.programming.kicks-ass.net>
-X-ClientProxiedBy: BL1PR13CA0108.namprd13.prod.outlook.com
- (2603:10b6:208:2b9::23) To SN7PR12MB8059.namprd12.prod.outlook.com
- (2603:10b6:806:32b::7)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E3AE2E6CD7
+	for <linux-pm@vger.kernel.org>; Mon, 20 Oct 2025 21:09:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1760994555; cv=none; b=sDgmsxS4/eLiGtAVTecMUPvPbWmiT9jfZVKn3fY9dz9EwzMDxYrZ0AFmNSGJxwJSQW0EwiyrAQSK/XyZr0Ofr+yr5xckqa4KlRZMwJg8ONVCwN4sZI4K/kcZrRDpno9A2vn82ceeTUzD2lpKsIRZ2BU9eMI5pwLEbvWJqKPLu+I=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1760994555; c=relaxed/simple;
+	bh=2OWfnrw6R79/W6QhBeXTqM5HVJZw23+arXPfbfHvRhc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Fg9TQ1CmDRnnnSLiLRUpnYI3tTULeeoF3YVyBQMXA+Izz6SJ63tnQ52JVW57FiJZOH5EiScsEG84FA5BhvW2wAZfh1dSUmJ5j6gtj4kf/0ZtpNkY6Z6+Leqw3GRev/DIo3wNEZOPbtcGAsbsBXU1nrDpV8LjzK75ih/KDo5/Ia4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NdOZS6fA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84A01C113D0;
+	Mon, 20 Oct 2025 21:09:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1760994554;
+	bh=2OWfnrw6R79/W6QhBeXTqM5HVJZw23+arXPfbfHvRhc=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=NdOZS6fAa5DYVHLmuV/KArrNGY3K1x6yY+4ZLmkmUc0oGPZgPT8GFTPpijsqPtqw+
+	 WMiIyHyZZ1+xWdayItALA+eEXXWD6sn/CyQBMDMp0vZ/Rv6tOBBpBvbGcj+KtSOGeQ
+	 6qLFebTMbDIXj+od08BC/qrHW3BVwxdNEfVtJwoOcOqH6aDBuCZcLFjQjGd4AUeLti
+	 2zHDGRQYBh/9qVk8GUM5T1CWHJsgVx7thcfyJdWBwz5p/ay+vzeWVlv2P92Ey9Qssf
+	 5X7vh2o0Ut0T6W1JRP0NEB5ezdWDzZzglyOpUPYeJ1SFToQ1jy/3qHsorpbuQ2r1nr
+	 gYf0u9sxl8RiQ==
+Message-ID: <1b86e583-1f3a-4192-8864-d2a60a8787e1@kernel.org>
+Date: Mon, 20 Oct 2025 16:09:12 -0500
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN7PR12MB8059:EE_|SN7PR12MB6671:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7cd026b1-0be7-42e6-fdcc-08de101972f7
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|7416014|366016;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?LpX8CQIIE8fGZYF8JrP3Aa10AGeQFfp63Fwwluz6OZd7HJJrZG5+wDROwA6w?=
- =?us-ascii?Q?8Z1cFQjomtiVzpLAdUR+VDK16o1gCTb8VxHQZ8DBcw+D+Kd5T5ATYq7uZHGo?=
- =?us-ascii?Q?KB0iYcM1AKpYz5opi95m+VhNkiYfY5hgRDUyUdlAZlEK+KiuK2PGTB4RqDr2?=
- =?us-ascii?Q?OQCek5C8Vvw9FS3DThNRX9m5sjZKAMGXVQpbvwX+o5WJkSqJnRCfhojOcg8n?=
- =?us-ascii?Q?QSGHnFY/vPjJBOFD03szMouZ2qHocbY8XBv7u8y7cZh3m6AbxvQE3tqPMXTY?=
- =?us-ascii?Q?wLXlCmw93vKWitMLE59HiSsRbdZylymTRUWPwtv0Cy44DM3WhzFtiJD26bZt?=
- =?us-ascii?Q?x5PwJMgHg+S8vEC+Hw8DaZ1tA58F55C9WrlOI6mKdK1h4chLglKjz7DKRM4+?=
- =?us-ascii?Q?AlUfOVKTctKDxZQ99pmeoGnCHQ8pISTfSuSOumS6Uuha55giooRB/p6YLFFF?=
- =?us-ascii?Q?EpAlVyX38AVpXM9k6i81y/l2LLKFCOUmzbJEGokOqbkl++fwmO11LR1cdV/W?=
- =?us-ascii?Q?UC87WOuW+THDOIJSxQt1v6TMM7yYasy5xgHPIqqIBnQCRaJO6/36/o9+lkVo?=
- =?us-ascii?Q?db/UMcgFZZ+oV6w7D3pQzqPFk/yvU7TZ7fVUsAitaMXNiMG9Qu1yFtpCNY3x?=
- =?us-ascii?Q?o5kDT6Ez1y0DEfnkJ0UmGCHVXoEgTyz/SLQ+sIN7VfCb87+3SzEEWELAHoMC?=
- =?us-ascii?Q?WktxlFjOPq8lNNIEUIVuHuGAIdRzhaBmjQ9rvH+jPGm+tYT7q31XImMhLvnq?=
- =?us-ascii?Q?4pA4l4BEHJZXmm5SF2xhGuaux+QpIoYhjrPOSs9/vzR9gl70N3dpwhmoSijc?=
- =?us-ascii?Q?Wd+hQ+Q0cqQ/gzhBYxfAmE2bhtUurQFnw3yRoem6mh+GAf80gC/uXh10Vf+m?=
- =?us-ascii?Q?9b2KD5Ry4P/q4ZbktACtcHeGbYr4mEe9chLZRNUSAGnFaP4bmO+jZBx3dA1w?=
- =?us-ascii?Q?8EEGfxoq9H16tT1sNF35ZA+PijmJ/B5tuy9RkaVKCYKKQJGUvXIVMY8QLbzt?=
- =?us-ascii?Q?cpkbLLPhqcdaZWTI1MJrgPB8ZMFAdom7rv3/u4vDiGezfuF6Vyip6s6Y5nB6?=
- =?us-ascii?Q?6o8dwUqzfOEHT2iaAI7Xpxfs2C7bL8MdeFMq4TWm7zeqxOptbSYtmw8E/81E?=
- =?us-ascii?Q?+2TBLQ3UISS+XXURr3VLk6VWXk9e/ef/e36Mh9HZVUyAubS4+lH+b6rEUohV?=
- =?us-ascii?Q?3WtXYwZD/AJJsNSDvyqBHTLhnf7et1xj5cVaoyTYU6Ex94GWe+kTho25ZoN3?=
- =?us-ascii?Q?eyDIkP63Lxk998zuy6jPBQzZD9YhIWeSvbdgmYwILlOrmTCkS1opAA3Xq4Ta?=
- =?us-ascii?Q?Ro8j12VHXFEctXPbJQJ/BsLylavMqmmRQg1sAk3zbXVN7S9hBX69vZSp5/DK?=
- =?us-ascii?Q?d7CftfPlEqk0LWKgm2ot3DdyzWQC2pGiqJ+sLJiDpYoDf1H6ugwtzEHIpIjH?=
- =?us-ascii?Q?5VuJiTDjhVvk78b88UQk+5VSmLNuF2yy?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN7PR12MB8059.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?Ak0Hv85X/N5sN0qdf+lc2yw4C5wJd+GnPfYAusi5mm6zJtM1pRMoNNR44iC/?=
- =?us-ascii?Q?YZZ7iPdoMbJl3myqzcuIiIzBcJi4SrCU8E5yMNO/G+LmPLmsv+9qCxDNn+68?=
- =?us-ascii?Q?TaGYUOVAU2re5WB81n7KsXspE93lelowylvvTKfjJv4P5sbvHLemu2lGV9rP?=
- =?us-ascii?Q?Qje80HHxV4k3mY3PDKu2ml0Ff2i7NUESJHrYvqVsWFZLQKUZtduwY8+/acgp?=
- =?us-ascii?Q?MqTrNs8753bn+kxMuz72qILnlU5nPce3J66clsK0fHbpcGbfrlD2hfHR+sqr?=
- =?us-ascii?Q?M9ybCiPkScea+YR3izXDbFKFGGLnuhfyU3gJjfOldi07Xo8xS5rcu670VCcE?=
- =?us-ascii?Q?NL1sC8TsvRoflFzNPVvOmxWqCEanFkG8EWkHtynzG0BVxLBghvPNRuf3UUXK?=
- =?us-ascii?Q?2M8djSvkjQlYUVo3hTD8XP4qUIbKVLZZyTY9SEAmZx98Z3LNHlgPiz/etica?=
- =?us-ascii?Q?ZOvW7ok8wURdzJC0pnxaza9S2nGBmzOfrRGKvP/ZjpQ/5MOH/ms/JceO+ZnT?=
- =?us-ascii?Q?zgk8qGd8FSVeQr2IBoxGunQma1U3LxupT+c5lJsWChZQJPSUAdP8ug4kDFK1?=
- =?us-ascii?Q?9zNb2ZFpIUTQ2ImCpA8778mzW2k91wdTd1lE5cWxwDnUqOWY4vkxVDPDSlur?=
- =?us-ascii?Q?PyrgbcokJRELMgAfftnB9dW1dybzBYQkhq53/tpJgoYxsHXIrN34HrOKS94P?=
- =?us-ascii?Q?ylN0UMuiPexkn9jgHracU/nWpZ12NucZnANeXlU7H4ekjkJ5GCR3tvp9GgO0?=
- =?us-ascii?Q?8sItyzpXGoP0gz3Rzq/mZIh0JXJfZ9JB9ErVV2n7IvGhG6bMdu6JLFhBftq4?=
- =?us-ascii?Q?OSkFXkzHIrxlAI8m8budkWyb/a12P351Cnzj9qVVmav+K5JYkc85YTSsNsgS?=
- =?us-ascii?Q?HKSY1x5vmAZX6SPf6tNrFqbS3FGERZe22687KcpSin0Aq15R3iMWsA3ZIt9Y?=
- =?us-ascii?Q?voAWmOThmuQRWwL2o/v3/go1eicxozUh38I8+HHD45MTHc7DQVDg/fPSk9C9?=
- =?us-ascii?Q?+vg/Xfu70O3+1l+vGDNd+iAgrNDaucgNbPIo6p7G1gzHnFquaLeBPC/mo3US?=
- =?us-ascii?Q?9khP6WQO7XQ8rawmUIFIRHT0cnI27QjVw9dOprNWv/0BKRdaq3uErhmv3yzg?=
- =?us-ascii?Q?0Wei4YF6DGMrGflOY3Pl2aE4r7KCreEWgnIYMAl88S1oKw8P22L/619kv2bZ?=
- =?us-ascii?Q?Bs6jPjyuTt8Yo4f0RjzMkzhesk6ZjN3GMB6GnA3rE9qwOKPhareca8vxfjka?=
- =?us-ascii?Q?CQ5V/KQepHicv0BUK3EnHdL23hGhkn5+os9WAOVX7Y/IxLyXfJyWQmizaE1i?=
- =?us-ascii?Q?/TTUsuFICHIJ+uFmjYyvonNoqnnqXpsKcGYQbSxbeILUdU4h+mkmxe7OrmSt?=
- =?us-ascii?Q?29b52CFcQn0wspINnfTdz1oji8jE1yjYGRZfyOvI4B7BuwOG9d8LBWi4rH3m?=
- =?us-ascii?Q?q7UMyE+yCqrIeC1G1OC09U+RvpTesE65hqoLxF0dFR/f5HiyPn4AkEHsl4DW?=
- =?us-ascii?Q?rB2CHVTurdR0vX8eB8qSoUzZVBtnj0c2mvFyuaSOgQW3AEZampMU9sAvJg2o?=
- =?us-ascii?Q?Chjzlr2P0iccWTET75MQeG0NG7fkKMI1CkTRWYTE?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7cd026b1-0be7-42e6-fdcc-08de101972f7
-X-MS-Exchange-CrossTenant-AuthSource: SN7PR12MB8059.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Oct 2025 20:44:22.5617
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Rsrt2pYL05wRv/6D8ZQHcN3zT9/47jyaVMSt2SyWUc1bSqAVvXn4NfnOxWKK+jejb9lXnDtKUITL5WgnhpNc9w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB6671
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC 3/3] drm/amd: Return -EBUSY for amdgpu_pmops_thaw() on
+ success
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: mario.limonciello@amd.com, airlied@gmail.com, alexander.deucher@amd.com,
+ christian.koenig@amd.com, dakr@kernel.org, gregkh@linuxfoundation.org,
+ lenb@kernel.org, pavel@kernel.org, simona@ffwll.ch,
+ Muhammad Usama Anjum <usama.anjum@collabora.com>,
+ amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+ linux-pm@vger.kernel.org
+References: <20251020165317.3992933-1-superm1@kernel.org>
+ <20251020165317.3992933-4-superm1@kernel.org>
+ <CAJZ5v0gsdmfXUJuLW8Ogt2jKDunx4g51LqCfSVMWQ6WHXBw_zg@mail.gmail.com>
+ <85c039ef-e189-48c1-8bf7-50ac0c2484e2@kernel.org>
+ <CAJZ5v0gT9BG5QPcwg6jJ1Jghny2YxC9_HY542LTBy-aVc_2T_w@mail.gmail.com>
+ <aec8fc6c-3f9f-4ec1-a929-7a0be6026a3d@kernel.org>
+ <CAJZ5v0gMf-qMGa6iBL2NdRXd-Mt5cpsoVQ90y+rSyK5xoYEf8A@mail.gmail.com>
+ <aa04dea5-d35b-46c9-9501-0a2e79ecbd79@kernel.org>
+ <CAJZ5v0j=sw9X3mV2ddOD_-qJwxveXQ1faD6HWtStLo9xOpwYKA@mail.gmail.com>
+ <57f073e8-f600-4bdf-b3b9-a34df882cbdb@kernel.org>
+ <CAJZ5v0jWou0vxNZhe-pU-wQyWxhikaDkF+ZO0rsUieXs_nYjjQ@mail.gmail.com>
+Content-Language: en-US
+From: "Mario Limonciello (AMD) (kernel.org)" <superm1@kernel.org>
+In-Reply-To: <CAJZ5v0jWou0vxNZhe-pU-wQyWxhikaDkF+ZO0rsUieXs_nYjjQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Tue, Oct 14, 2025 at 09:43:49PM +0200, Peter Zijlstra wrote:
-> On Tue, Oct 14, 2025 at 01:55:47PM -0400, Joel Fernandes wrote:
-> > 
-> > 
-> > On 10/14/2025 6:48 AM, Peter Zijlstra wrote:
-> > > On Mon, Oct 13, 2025 at 11:48:03AM -0400, Lyude Paul wrote:
-> > > 
-> > >>  #define __nmi_enter()						\
-> > >>  	do {							\
-> > >>  		lockdep_off();					\
-> > >>  		arch_nmi_enter();				\
-> > >> -		BUG_ON(in_nmi() == NMI_MASK);			\
-> > >> -		__preempt_count_add(NMI_OFFSET + HARDIRQ_OFFSET);	\
-> > >> +		BUG_ON(__this_cpu_read(nmi_nesting) == UINT_MAX);	\
-> > >> +		__this_cpu_inc(nmi_nesting);			\
-> > > 
-> > > An NMI that nests from here..
-> > > 
-> > >> +		__preempt_count_add(HARDIRQ_OFFSET);		\
-> > >> +		if (__this_cpu_read(nmi_nesting) == 1)		\
-> > > 
-> > > .. until here, will see nmi_nesting > 1 and not set NMI_OFFSET.
-> > 
-> > This is true, I can cure it by setting NMI_OFFSET unconditionally when
-> > nmi_nesting >= 1. Then the outer most NMI will then reset it. I think that will
-> > work. Do you see any other issue with doing so?
+
+
+On 10/20/2025 2:55 PM, Rafael J. Wysocki wrote:
+> On Mon, Oct 20, 2025 at 9:34 PM Mario Limonciello (AMD) (kernel.org)
+> <superm1@kernel.org> wrote:
+>>
+>>
+>>
+>> On 10/20/2025 2:18 PM, Rafael J. Wysocki wrote:
+>>> On Mon, Oct 20, 2025 at 9:14 PM Mario Limonciello (AMD) (kernel.org)
+>>> <superm1@kernel.org> wrote:
+>>>>
+>>>>
+>>>>
+>>>> On 10/20/2025 1:50 PM, Rafael J. Wysocki wrote:
+>>>>> On Mon, Oct 20, 2025 at 8:32 PM Mario Limonciello (AMD) (kernel.org)
+>>>>> <superm1@kernel.org> wrote:
+>>>>>>
+>>>>>>
+>>>>>>
+>>>>>> On 10/20/2025 12:39 PM, Rafael J. Wysocki wrote:
+>>>>>>> On Mon, Oct 20, 2025 at 7:28 PM Mario Limonciello (AMD) (kernel.org)
+>>>>>>> <superm1@kernel.org> wrote:
+>>>>>>>>
+>>>>>>>>
+>>>>>>>>
+>>>>>>>> On 10/20/2025 12:21 PM, Rafael J. Wysocki wrote:
+>>>>>>>>> On Mon, Oct 20, 2025 at 6:53 PM Mario Limonciello (AMD)
+>>>>>>>>> <superm1@kernel.org> wrote:
+>>>>>>>>>>
+>>>>>>>>>> From: Mario Limonciello <mario.limonciello@amd.com>
+>>>>>>>>>>
+>>>>>>>>>> The PM core should be notified that thaw was skipped for the device
+>>>>>>>>>> so that if it's tried to be resumed (such as an aborted hibernate)
+>>>>>>>>>> that it gets another chance to resume.
+>>>>>>>>>>
+>>>>>>>>>> Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>
+>>>>>>>>>> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+>>>>>>>>>> ---
+>>>>>>>>>>       drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c | 2 +-
+>>>>>>>>>>       1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>>>>>>>
+>>>>>>>>>> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+>>>>>>>>>> index 61268aa82df4d..d40af069f24dd 100644
+>>>>>>>>>> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+>>>>>>>>>> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+>>>>>>>>>> @@ -2681,7 +2681,7 @@ static int amdgpu_pmops_thaw(struct device *dev)
+>>>>>>>>>>
+>>>>>>>>>>              /* do not resume device if it's normal hibernation */
+>>>>>>>>>>              if (!pm_hibernate_is_recovering() && !pm_hibernation_mode_is_suspend())
+>>>>>>>>>> -               return 0;
+>>>>>>>>>> +               return -EBUSY;
+>>>>>>>>>
+>>>>>>>>> So that's why you need the special handling of -EBUSY in the previous patch.
+>>>>>>>>
+>>>>>>>> Yup.
+>>>>>>>>
+>>>>>>>>>
+>>>>>>>>> I think that you need to save some state in this driver and then use
+>>>>>>>>> it in subsequent callbacks instead of hacking the core to do what you
+>>>>>>>>> want.
+>>>>>>>>>
+>>>>>>>>
+>>>>>>>> The problem is the core decides "what" to call and more importantly
+>>>>>>>> "when" to call it.
+>>>>>>>>
+>>>>>>>> IE if the core thinks that something is thawed it will never call
+>>>>>>>> resume, and that's why you end up in a bad place with Muhammad's
+>>>>>>>> cancellation series and why I proposed this one to discuss.
+>>>>>>>>
+>>>>>>>> We could obviously go back to dropping this case entirely:
+>>>>>>>>
+>>>>>>>> if (!pm_hibernate_is_recovering() && !pm_hibernation_mode_is_suspend())
+>>>>>>>>
+>>>>>>>> But then the display turns on at thaw(), you do an unnecessary resource
+>>>>>>>> eviction, it takes a lot longer if you have a ton of VRAM etc.
+>>>>>>>
+>>>>>>> The cancellation series is at odds with this code path AFAICS because
+>>>>>>> what if hibernation is canceled after the entire thaw transition?
+>>>>>>
+>>>>>> Muhammad - did you test that specific timing of cancelling the hibernate?
+>>>>>>>
+>>>>>>> Some cleanup would need to be done before thawing user space I suppose.
+>>>>>>
+>>>>>> I agree; I think that series would need changes for it.
+>>>>>>
+>>>>>> But if you put that series aside, I think this one still has some merit
+>>>>>> on it's own.  If another driver aborted the hibernate, I think the same
+>>>>>> thing could happen if it happened to run before amdgpu's device thaw().
+>>>>>>
+>>>>>> That series just exposed a very "easy" way to reproduce this issue.
+>>>>>
+>>>>> Device thaw errors don't abort anything AFAICS.
+>>>>>
+>>>>
+>>>> You're right; it doesn't abort, it just is saved to the logs.
+>>>> The state is also not maintained.
+>>>>> What can happen though is that another device may abort the final
+>>>>> "power off" transition, which is one of the reasons why I think that
+>>>>> rolling it back is generally hard.
+>>>>
+>>>> That's exactly the reason for the first patch in this series.  The state
+>>>> of whether it succeeded isn't recorded.  So if thaw non-fatally fails
+>>>> and you've saved state to indicate this then any of the other calls that
+>>>> run can try again.
+>>>
+>>> So long as they are called.
+>>>
+>>> But as I said before, I would save the state in the driver thaw
+>>> callback and then clear it in the driver poweroff callback and look at
+>>> it in the driver restore callback.  If it is there at that point,
+>>> poweroff has not run and hibernation is rolling back, so you need to
+>>> do a "thaw".
+>>
+>> Are you suggesting that the device driver should directly manipulate
+>> dev->power.is_suspended?
 > 
-> unconditionally set NMI_FFSET, regardless of nmi_nesting
-> and only clear on exit when nmi_nesting == 0.
+> No, it needs to have its own state for that.  power.is_suspended
+> should not be manipulated by drivers (or anything other than the core
+> for that matter).
+
+That's what I originally thought which is why this series looks like it 
+does.
+
 > 
-> Notably, when you use u64 __preempt_count, you can limit this to 32bit
-> only. The NMI nesting can happen in the single instruction window
-> between ADD and ADC. But on 64bit you don't have that gap and so don't
-> need to fix it.
+>> I'll do some testing but; I suppose that would work as well without
+>> needing to make core changes if you don't see a need for other devices
+>> to do this.
+> 
+> So long as they don't try to skip the "thaw" actions, I don't.
+> 
+> If there are more drivers wanting to do it, I guess it would be good
+> to have a common approach although at this point I'm not sure how much
+> in common there would be.
 
-Wouldn't this break __preempt_count_dec_and_test though? If we make it
-64-bit, then there is no longer a way on x86 32-bit to decrement the preempt
-count and zero-test the entire word in the same instruction (decl). And I
-feel there might be other races as well. Also this means that every
-preempt_disable/enable will be heavier on 32-bit.
+But so if the state is maintained in the driver dev->power.is_suspended 
+will be FALSE at the end of thaw().  That means that restore() is never 
+called for a cancellation/abort.
 
-If we take the approach of this patch, but move the per-cpu counter to cache
-hot area, what are the other drawbacks other than few more instructions on
-NMI entry/exit? It feels simpler and less risky. But let me know if I missed
-something.
-
-thanks,
-
- - Joel
+So I think the only place to do the cleanup would be in the complete() 
+callback.  Do you think that's the best place for this based upon that 
+internal driver state variable?
 
 
