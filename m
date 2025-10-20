@@ -1,182 +1,152 @@
-Return-Path: <linux-pm+bounces-36515-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36516-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id BDEFFBF3537
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 22:07:39 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6435CBF359A
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 22:14:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id B5823350D68
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 20:07:30 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 224974EDFCA
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 20:14:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BB662DF70E;
-	Mon, 20 Oct 2025 20:07:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 103AC2DF6E3;
+	Mon, 20 Oct 2025 20:14:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="AW4HtEiK"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VDKVsLMP"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B10782DBF69
-	for <linux-pm@vger.kernel.org>; Mon, 20 Oct 2025 20:07:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A4092DAFD8
+	for <linux-pm@vger.kernel.org>; Mon, 20 Oct 2025 20:14:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760990838; cv=none; b=g+UciSNv4iz7FBOrjKuh1sBsSevMM5gbfipkSkmTwN1hAVLSaRiPAK5idjdCNp7o1Ed08e3Jui48vMHhVytxFTJmFYR4VJSBBU8k5qV8oojXO7OlSpgxzk+axtyq7U3aXvnd/NiHTWfolHlAyUGfkXnzLM3EcICKXjgwNmabqTY=
+	t=1760991260; cv=none; b=Ayzjn85JRkKwK/bsO6nkBc8HuiJHKvnAarXCDb50ZjKhhbSOMTg3LJlk+g4lWoBYGIwLyyGAvlWCtZYZukrzw1eV7eSr3b4hJKo0XGbkTa7mqSxxKYdn11iG+H3fZHlQy6FDsN5vwbJu23qxhK9JUvHSkNZfx5D5T91M+iJ8a7I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760990838; c=relaxed/simple;
-	bh=zLPH0lbgL0Ocuc9pxtO7DECZsxJkyTUfQWX/XLhPKa0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GEMEDdlaytXbMQVzUVSF7qr3q4ibU9sbw0H0gINOsjkWN3WX3GsBJ3X2Q/F3oLZCdULx8nUZbO8H74y9JqhIb3+UF/nrh7UdoV5q1fXYTF43q6J3fy5Vq+lw6+kkcG0O3BoryqY38Hi/YDAxgmtnbVy9+m06DzIAkMZZM9dcujk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=AW4HtEiK; arc=none smtp.client-ip=209.85.210.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-794e300e20dso4647959b3a.1
-        for <linux-pm@vger.kernel.org>; Mon, 20 Oct 2025 13:07:16 -0700 (PDT)
+	s=arc-20240116; t=1760991260; c=relaxed/simple;
+	bh=cW0NrS3XvfmefHojKNpPlFwBgfzDJ5SAdW6H/5DCfJc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=nEE83jX7jot3DrNRKTH5bUtQFUyIShLhqaNiF0JJM09KcVOVrn9Rzp+9TRFhjqgo9pb5NilgZXvW/aDSjvKEMb712HVfMFtIFXdC609+OR555OJjGt94KmxtKwkeWlR/WzbmgoCDK/nd0MWTApeGJmJGlS/MhIkWq37vhLHWa/A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VDKVsLMP; arc=none smtp.client-ip=209.85.167.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-57dfd0b6cd7so5335222e87.0
+        for <linux-pm@vger.kernel.org>; Mon, 20 Oct 2025 13:14:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1760990836; x=1761595636; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=9qvPrU2SVrQkwkVIFxvkw04Dj387TMVRI8Nd6I2AoLU=;
-        b=AW4HtEiKbxOyuVnZknkgFbT3DlKJIqP2Mk3b7vBB3bsaD8iXzdQOziOT5pNtEtvbjK
-         lLAINlH9VkNRn39Ps85e2rd1qCm+Lr6t0lyUSFBnUUI7mebX7d/5ZaeDUVPbUYqCoqMF
-         +1M0EDTsvBIgCPK+r5fXthUZvzXx8eM8qcD+k=
+        d=gmail.com; s=20230601; t=1760991256; x=1761596056; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cW0NrS3XvfmefHojKNpPlFwBgfzDJ5SAdW6H/5DCfJc=;
+        b=VDKVsLMPM20J15S3GLLr20r5MXIkau6rpxVYq3D0Y5zDQEGdGfsgoYmLpFvR3Aw17o
+         T23W680+65Pei+gQysdvQgWcnVnj5fysoWlA0hJVt75WcS03PRf1HmWWgaKm7HUZX/zS
+         iCtX+z3a6N5AOCkJuVuww7yZGMLEb2j0Ziy+g3WeTYPlAP2p6IPB7T32WFGxfAc9T6zy
+         hwMQaxetN9tvKMrkZgpjzXl/oOrZXNE4BzHaLUoUh1+N7G4ebabKBKc3czuZ8ccZyQIs
+         KFfdLw6aE72VAA6DO4qeD6nyCdpvQtb+8HblZXd1gy6dR/EFL+lSS3/lnJTDSDLsvSA5
+         ig0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760990836; x=1761595636;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9qvPrU2SVrQkwkVIFxvkw04Dj387TMVRI8Nd6I2AoLU=;
-        b=UF1F28qgEmDqXrDHahwj9B/D6a8KEultxQTwdbN3s/ycHpeliMgG8bzdpeAN4z9fDi
-         PlV6zV/AXwJ1xs4khMOAZVEOLK6L9UZJX3hJx5NLyT0fY1L3mmT5ZgdDP43eBt2fuVeG
-         NCUK3A3+lNxp1HkMkpXsqvPKa/bs3EXeo0cwqeyxbKk/8I359XtUaYspNcqmzlNrpTmd
-         FZUp7txB6hSMehKDQoXQZwyJMeVhzSGQUo16wVtgMXVYv/P0kT0/OmVvRzY0cco2AC4r
-         exMvErUqpzwmmw0LOXBdDoCGSftXasjQRGwMF26N1jdAMWXbDwX7rwIp4WDXdU3gRR9r
-         18Jg==
-X-Forwarded-Encrypted: i=1; AJvYcCV2a+dIIy+BwerMtE65BubrTYYS43vNed9MzFtnFb8XQ5nVOfeWeXTa2u6Y2deUmhMLJLgr5rqGGA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwGDy9m3HA2WVumVPJSr+rb62gQm3o3UYt3mEfE3k3XSCtcF5/I
-	Y86uJWVMszds76xri1qLiKWD3yTeUfiWPycugRFSPXLYKOb8pgDaHxf2vfyAf9nXlA==
-X-Gm-Gg: ASbGnctSaF0ov3XEM4q0xCF112r2wYinx5oB6l0X4o9h5TBbECF2+fSGHWdRVXnssgY
-	faJzuauT7OI/8mfM2TENOGMVJlEa8Q3bZP0VtpqyTOFtsLHlsFSDJy/Q+AJ6RFWAiLa4rwoDYtV
-	xmy3oY7LY0K1Q2ZzHloRpidiYzxBG+bihYOMoQc0z8Iyu9S9wy2yo0diR1JeQ280+7vaVRGgPGT
-	K3dCNW506lws6GKm/iyiUuuEgWz1Mai5FV0bHrFV3+CSM4xk5cYSTpqYYGKhIalX4382ZlJRBGs
-	guJAA2ERQPog1NFbV2p0v+5VgqFbKvRLiWCRGgbt0VIphzSxMVABJR428Nis3pW/SGtq8uUwo0s
-	GJLR6kp4oFFD2QBDv1XvSHChEGSR102hUcjbz1obwdQHEO6fQcm7dnF85sEI6tn5/VVt0P+slZN
-	B8v9avlZHnOaNO2+rYqrPAQDgxdZ1QEuwBQKZq
-X-Google-Smtp-Source: AGHT+IEWFrn4E0X2qBfQRXblCheHMI4S1GU+HtF87Gs1Gvnbk9snqqv5CsvEVEz33PzoAgCgB2vVWQ==
-X-Received: by 2002:a17:90b:2882:b0:33b:d8ad:b69c with SMTP id 98e67ed59e1d1-33bd8adc731mr16702735a91.3.1760990835754;
-        Mon, 20 Oct 2025 13:07:15 -0700 (PDT)
-Received: from localhost ([2a00:79e0:2e7c:8:f21:3ecc:2915:f4cb])
-        by smtp.gmail.com with UTF8SMTPSA id 98e67ed59e1d1-33dfb1d9390sm136234a91.0.2025.10.20.13.07.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Oct 2025 13:07:15 -0700 (PDT)
-Date: Mon, 20 Oct 2025 13:07:13 -0700
-From: Brian Norris <briannorris@chromium.org>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Bjorn Helgaas <bhelgaas@google.com>, linux-kernel@vger.kernel.org,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	linux-pm@vger.kernel.org, Lukas Wunner <lukas@wunner.de>,
-	linux-pci@vger.kernel.org
-Subject: Re: [PATCH v2] PCI/PM: Prevent runtime suspend before devices are
- fully initialized
-Message-ID: <aPaWcYgduGIHno3x@google.com>
-References: <20251017122123.v2.1.I60a53c170a8596661883bd2b4ef475155c7aa72b@changeid>
- <CAJZ5v0ie0Jz6AJdZJx2jNSRcqRQOqMCF+gYdgemTs=rKwXD1_g@mail.gmail.com>
+        d=1e100.net; s=20230601; t=1760991256; x=1761596056;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cW0NrS3XvfmefHojKNpPlFwBgfzDJ5SAdW6H/5DCfJc=;
+        b=eyJFXJVRSGt5EOo425LlcDuueIyu9EZ66iS8fsMvq5j0Sy2dpdHw72cx2VhhECY6tw
+         suMMR7hFGHEF8QHa/3Qiq63tXfQtCixdwbyGL0S5zUqxmD9ZmhNCF7NddsEoSGgXDiGv
+         2t3xJhTqLDPfBMAP4bPl/PzTJMUdJ4KAAr8bALc2jGxcnCuCgaKB/Fi2NTTAg7PQNrQ0
+         GeVGAMaMHHVJJcVbv6zIuC6TdPeIxCVulHR5FcWw42su6iKObJ6Fy64W+vihaBaXeglC
+         r/FoMxkQz+A0MqTpesx4fz8fhwyEQZAlPmLo91orJnfacNeDCPSeQ31pE6cpGrhniYaN
+         4TeA==
+X-Forwarded-Encrypted: i=1; AJvYcCVkv6qdo3DQrguZl9LkoDXZBUOvc+xOgr8FtxOJBI2QZmRxyhUxf0Z2da5og4FcbMkgGJJNhynNjw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyi8r7PU2uyv7Jm5SjCGI4dqTObQEUDiQIfYq3ajMkdPb5bDbKi
+	ux567t5nrnxcqG8uKGgkljTHeS3pZVmPY6Mjmypg4VjQXY1L3g5EGyE1+DvDIddePVdhDAaw2c0
+	EUqncj2zfdsFZmFxajUgkfEP9fdGBuaw=
+X-Gm-Gg: ASbGncsSolqYm5s2Qes9ey8i7bN0/rU5qOpiYC8+Zt2qVxpDgLDgdLcCBt5iwZYx2TU
+	R1HMwOgyKY4/TIDxEytBimVUW8I43q3836cDdoi1pUnsV7d+2LdgomMJTbKBrtpurfGMen2uPCg
+	o3TbsiKRl7yZpXaXBb//EYi+C5uMuUiX1miPCDlEqBSBU04EUYgzsNQcoE/si7geMr6CgaMxq0H
+	WzIu+7lfIG7c8Xi6mcGIbdwVi29zSZXidbsKnORPCckNH62vpEI4rbYyiFS3NOFjTOt5zNE40k9
+	XguvEdBplqMyGaeENK7F2K+U72J4
+X-Google-Smtp-Source: AGHT+IH5YbH/N0GzOG9KC4T3jdDKTBXy9E5rcby+9lA7Aeai++z/YKb5cv2iLVBi4oC0gn0ky+3LKbarimVH4bcAel0=
+X-Received: by 2002:a05:6512:23a3:b0:576:d5df:fe1b with SMTP id
+ 2adb3069b0e04-591d84cfb78mr5033821e87.10.1760991256016; Mon, 20 Oct 2025
+ 13:14:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0ie0Jz6AJdZJx2jNSRcqRQOqMCF+gYdgemTs=rKwXD1_g@mail.gmail.com>
+References: <20250909-tegra186-icc-v2-0-09413724e781@gmail.com>
+ <5d7491b1-8f9a-4040-b854-ff0b94bfd24e@kernel.org> <CALHNRZ-okVZ8tzKYa=jqudDu3dZ_Yq1CkeErdcvxi5xJEgJFbg@mail.gmail.com>
+ <113725e3-3e82-4921-b045-8d5be3fed8bf@kernel.org> <CALHNRZ8r_bg-Pm1ZCoJT9sk++zQcq85R=8N6enL_Vcq=VziNwA@mail.gmail.com>
+In-Reply-To: <CALHNRZ8r_bg-Pm1ZCoJT9sk++zQcq85R=8N6enL_Vcq=VziNwA@mail.gmail.com>
+From: Aaron Kling <webgeek1234@gmail.com>
+Date: Mon, 20 Oct 2025 15:14:04 -0500
+X-Gm-Features: AS18NWB_ZO-oT8U4UToGcdXsXZWXtPvNCoksa_QZNadvxO4znElXh9NUJcwBK4g
+Message-ID: <CALHNRZ-2Hv2ix0Hr9veOPWdO=ekgpEWKBWtCiCsQa29DcfdkUA@mail.gmail.com>
+Subject: Re: [PATCH v2 0/8] Support dynamic EMC frequency scaling on Tegra186/Tegra194
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Thierry Reding <thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-kernel@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-tegra@vger.kernel.org, 
+	linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
-
-On Sat, Oct 18, 2025 at 01:27:13PM +0200, Rafael J. Wysocki wrote:
-> On Fri, Oct 17, 2025 at 9:22 PM Brian Norris <briannorris@chromium.org> wrote:
+On Sun, Oct 12, 2025 at 9:31=E2=80=AFPM Aaron Kling <webgeek1234@gmail.com>=
+ wrote:
+>
+> On Sun, Oct 12, 2025 at 9:25=E2=80=AFPM Krzysztof Kozlowski <krzk@kernel.=
+org> wrote:
 > >
-> > Today, it's possible for a PCI device to be created and
-> > runtime-suspended before it is fully initialized. When that happens, the
-> > device will remain in D0, but the suspend process may save an
-> > intermediate version of that device's state -- for example, without
-> > appropriate BAR configuration. When the device later resumes, we'll
-> > restore invalid PCI state and the device may not function.
+> > On 13/10/2025 04:18, Aaron Kling wrote:
+> > > On Wed, Oct 8, 2025 at 7:05=E2=80=AFPM Krzysztof Kozlowski <krzk@kern=
+el.org> wrote:
+> > >>
+> > >> On 09/09/2025 15:21, Aaron Kling via B4 Relay wrote:
+> > >>> This series borrows the concept used on Tegra234 to scale EMC based=
+ on
+> > >>> CPU frequency and applies it to Tegra186 and Tegra194. Except that =
+the
+> > >>> bpmp on those archs does not support bandwidth manager, so the scal=
+ing
+> > >>> iteself is handled similar to how Tegra124 currently works.
+> > >>>
+> > >>
+> > >> Nothing improved:
+> > >> https://lore.kernel.org/all/20250902-glittering-toucan-of-feminism-9=
+5fd9f@kuoka/
+> > >
+> > > The dt changes should go last. The cpufreq and memory pieces can go i=
+n
+> > > either order because the new code won't be used unless the dt pieces
+> > > activate them.
 > >
-> > Prevent runtime suspend for PCI devices by deferring pm_runtime_enable()
-> > until we've fully initialized the device.
 > >
-> > More details on how exactly this may occur:
-> >
-> > 1. PCI device is created by pci_scan_slot() or similar
-> > 2. As part of pci_scan_slot(), pci_pm_init() enables runtime PM; the
-> >    device starts "active" and we initially prevent (pm_runtime_forbid())
-> >    suspend -- but see [*] footnote
-> > 3. Underlying 'struct device' is added to the system (device_add());
-> >    runtime PM can now be configured by user space
-> > 4. PCI device receives BAR configuration
-> >    (pci_assign_unassigned_bus_resources(), etc.)
-> > 5. PCI device is added to the system in pci_bus_add_device()
-> >
-> > The device may potentially suspend between #3 and #4.
-> >
-> > [*] By default, pm_runtime_forbid() prevents suspending a device; but by
-> > design, this can be overridden by user space policy via
-> >
-> >   echo auto > /sys/bus/pci/devices/.../power/control
-> >
-> > Thus, the above #3/#4 sequence is racy with user space (udev or
-> > similar).
-> >
-> > Notably, many PCI devices are enumerated at subsys_initcall time and so
-> > will not race with user space. However, there are several scenarios
-> > where PCI devices are created later on, such as with hotplug or when
-> > drivers (pwrctrl or controller drivers) are built as modules.
-> >
-> > Signed-off-by: Brian Norris <briannorris@chromium.org>
-> > Cc: <stable@vger.kernel.org>
-> 
-> Can you please add a Link: pointer to the discussion on the previous
-> version of the patch?
+> > Then cpufreq and memory should never have been part of same patchset.
+> > Instead of simple command to apply it, maintainers need multiple steps.
+> > Really, when you send patches, think how this should be handled and how
+> > much effort this needs on maintainer side.
+>
+> To be honest, I was expecting all of these to go through the tegra
+> tree, since all the drivers I touch are owned by the tegra
+> maintainers. But getting stuff moved through that tree has been like
+> pulling teeth recently. So Krzysztof, what's the alternative you're
+> suggesting here?
 
-Ha, it sounds like you want me to get flamed by Linus :) I don't even
-know how "Link:" is supposed to be used any more.
+What is the expectation for the series here, and related, the tegra210
+actmon series? Everything put together here accomplishes the single
+logical task of enabling dynamic frequency scaling for emc on tegra186
+and tegra194. The driver subsystems do not have hard dependencies in
+that the new driver code has fallbacks to not fail to probe if the
+complementary driver changes are missing. But if I was to split them
+up, how would it work? I send the cpufreq patch by itself, the memory
+changes in a group, then the dt changes in a group with b4 deps lines
+for the two driver sets? That seems crazy complicated for something
+that's a single logical concept. Especially when as far as I know,
+this can all go together through the tegra tree.
 
-But in case Bjorn wants to apply this as-is, here's a reference to v1,
-where that discussion happened:
-
-Link: https://lore.kernel.org/all/20251016155335.1.I60a53c170a8596661883bd2b4ef475155c7aa72b@changeid/
-
-If I send a v3, I'll include that.
-
-<soap-box while we're at it:>
-I really wish this proposal didn't also get flamed out:
-
-Subject: [Ksummit-discuss] Allowing something Change-Id (or something like it) in kernel commits
-https://lore.kernel.org/all/CAD=FV=UPjPpUyFTPjF-Ogzj_6LJLE4PTxMhCoCEDmH1LXSSmpQ@mail.gmail.com/
-
-If we did that, then no one would have to ask for series-history links,
-because changes would already include such IDs so anyone could follow
-them automatically.
-
-As a compromise, I've been doing this:
-https://lore.kernel.org/all/CAD=FV=VLMFxFt55oB4ERTFw3xnH4czUY5tXiqfY14NKZ8gqojA@mail.gmail.com/
-
-i.e., my patches tend to have Message-Ids that look like
-<$timestamp.$revision.$changeid@changeid>, and so you can cleanly
-track this patch, including past and future versions, with:
-
-https://lore.kernel.org/all/?q=I60a53c170a8596661883bd2b4ef475155c7aa72b%40changeid
-</soap-box>
-
-> With that
-> 
-> Reviewed-by: Rafael J. Wysocki (Intel) <rafael@kernel.org>
-
-Thanks!
-
-Brian
+Aaron
 
