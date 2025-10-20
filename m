@@ -1,169 +1,142 @@
-Return-Path: <linux-pm+bounces-36494-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36495-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6926CBF2CC2
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 19:48:57 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E636BF2D1C
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 19:56:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1D6673A389E
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 17:48:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 189424206D1
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 17:56:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71D6B2BF3F4;
-	Mon, 20 Oct 2025 17:48:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9987321442;
+	Mon, 20 Oct 2025 17:55:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tURujRNg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mo8NSVVj"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D720289E13
-	for <linux-pm@vger.kernel.org>; Mon, 20 Oct 2025 17:48:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F5DF221DB5;
+	Mon, 20 Oct 2025 17:55:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760982532; cv=none; b=VP2aZQy7G01ged0S7RQ6G5akzcOYHucL5U6m6fFq13MxR3HgN7+6J5kjsTDiVTo9BGMA62Flu4PoEhY7AjNcCf2CnfK/SOMwDeT92UvDe1KG5UFCencH03/5yv6g5we6UaaDHWMzgzmVInEEq9F5AtZvoviz6A9ih9xvA5j1wiM=
+	t=1760982956; cv=none; b=HfCHVEue/NZi/3b2/3nluoCHoLH35FgABBfT3vOEZh9o10gZS9feNbbtNQJKWKlG4wWrmH8JQD1Ju/wlWqGWnpmNkPqrfoo5FgBMSbErlNPKC6/LNles+rkT1eh043TU02fqegzXr0cvA/Dhx4haNyYRamlc13pqBD+h0iBRlXY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760982532; c=relaxed/simple;
-	bh=vvj9rbshDG/mJYIvIFilBgDtfu0m0YbNFbdyps7CYhE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fHV+RCOV4OGyjqEf2FRuUddOcWgFUHplqI7VKLFF3onFLXhyvbBmqwuk7vZb03iScd0r7/OthDCFwkN3Io9c7Rr1J0zPav7ayDuWy5aizTdNv1/whKkCxF6ZisxsBjX8OKjosbYnIHWznONVlI624kKNfRAOhBtjRQphV6QqvDA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tURujRNg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2BECC4CEFE
-	for <linux-pm@vger.kernel.org>; Mon, 20 Oct 2025 17:48:51 +0000 (UTC)
+	s=arc-20240116; t=1760982956; c=relaxed/simple;
+	bh=2ogP/70t6tGzuzL3B9RTLcdw87Cips2j3HOmINioEgE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=r3xOAqBt6J62BsTfVAIdX/Qz7DSnhZPwShq4VnWrf5SgSKcZpQfS5oNGmCoV2T3F72lJoLLIu/l1xi16l9DmO12/Oeg3wlf+5YFrpkPmbKj4omvBjwC2UP5mitsLhwRgWzQ1jv+BCvVMeUAKtb7AQ7oRTJDcP65xRQtWfEIHK24=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mo8NSVVj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48771C4CEF9;
+	Mon, 20 Oct 2025 17:55:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760982531;
-	bh=vvj9rbshDG/mJYIvIFilBgDtfu0m0YbNFbdyps7CYhE=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=tURujRNgi7AmohBDrv49upr1mAHzmK/nisfEDCULMQHbiuhZr9IPuTh7dcMmxKIwy
-	 B4upXXVtNLhOGjfUGN6MUT3pJSn/++/sHWiO7FGyu6VfltiwMKAfyylX8oCpt2YX9G
-	 CeOuCbbhOitkW/1mn4Vb4LvUMxvOVfzAglqwhYzC0izMa21jlPyEbx6HYta9BHGRiM
-	 IaIUkfy9cxpdAakYF2/3R7NXdrqmIR8tnL2t4aVT6Byc3RlwdRuRKj3/dkk+apA6xz
-	 nOvTIEhx6DkKEaxeKSpzNp2glfhw9okZrUKmJHgKimRreIJ+NG2Ege4Y12B5cxR+3T
-	 RxzQwXn+E0JrA==
-Received: by mail-oi1-f169.google.com with SMTP id 5614622812f47-443b4d7e927so1558950b6e.1
-        for <linux-pm@vger.kernel.org>; Mon, 20 Oct 2025 10:48:51 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUpOlfSPxnWfhU7FxPftgAkB8DyDEK+Iz0oIkIFMbN5ByS+AfTMghcRlK6AWqtlKTWZ13bEZ8cgfw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwZmmG5lnx2Hkq8xoejl3fTNF2RS9FPymAdNL9+fwYHrnlGRU6R
-	oi2MoM04t/wi6I+HC3XJoiJI+Py9dHaJpnzzYb0E3zvr6XUnKcJLVbNd2c/7VimWrjp9ivuGbzp
-	016vE99QsBg5/3CVxM8IcFvd1Rs3zyC8=
-X-Google-Smtp-Source: AGHT+IEBTcqbNW4WztbsFHgjbUpb2lUwnFWN4p7InrdR0RgRIFe00LDkdSaeIzpzw4iNCju0IktvgqGnApVX0bNPXDo=
-X-Received: by 2002:a05:6808:5086:b0:441:8f74:f10 with SMTP id
- 5614622812f47-443a30e6210mr6069613b6e.58.1760982531178; Mon, 20 Oct 2025
- 10:48:51 -0700 (PDT)
+	s=k20201202; t=1760982956;
+	bh=2ogP/70t6tGzuzL3B9RTLcdw87Cips2j3HOmINioEgE=;
+	h=Date:From:To:Cc:Subject:From;
+	b=Mo8NSVVjeAIRpA6FHS/EbOrTJsEzTtz1AGOt31ZlFtZYxTFORtMRez9jFUN84yj1K
+	 OVU44JAJfBCyuLcJ3Dg4u7iegRdiHY/aInNiBRIXrTxpKJ3ArcpUyOEbjVx138OE5/
+	 YvxOnmJP9c1ramUvkKYf4Sv6kHt3hanzmvKyq+iZnWqZ+gLNQJ8sqNLYBo4rky8vlG
+	 sHUmUdJhvhayKsozF5HmLf2kYHjO9niIibAM3DTQsGyRVljEF7QO6P8hiTcvxi0/Hg
+	 PV+zVpeXvV8tmpUzTXpAkmkyjF9/SksIv9A0RtibmmhWc3A8aTv91Ep6HWJGUHiw/a
+	 jRZZYtvKy1hjg==
+Date: Mon, 20 Oct 2025 07:55:55 -1000
+From: Tejun Heo <tj@kernel.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Qu Wenruo <wqu@suse.com>, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH PM/for-6.19] freezer: Clarify that only cgroup1 freezer uses
+ PM freezer
+Message-ID: <aPZ3q6Hm865NicBC@slm.duckdns.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251014001055.772422-9-changwoo@igalia.com> <202510151223.THlBK6QR-lkp@intel.com>
-In-Reply-To: <202510151223.THlBK6QR-lkp@intel.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 20 Oct 2025 19:48:40 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0h-gzxQQAu272z30R8+sDNHA6L=J1w+P2qfLOYF8LRdLQ@mail.gmail.com>
-X-Gm-Features: AS18NWDDJNGF4sne2vfcDVyis3SAYtdDq88ce2v-uhPN9EnOmccJ14D_6NBaZtk
-Message-ID: <CAJZ5v0h-gzxQQAu272z30R8+sDNHA6L=J1w+P2qfLOYF8LRdLQ@mail.gmail.com>
-Subject: Re: [PATCH v5 08/10] PM: EM: Implement em_notify_pd_deleted()
-To: kernel test robot <lkp@intel.com>, Changwoo Min <changwoo@igalia.com>
-Cc: lukasz.luba@arm.com, rafael@kernel.org, len.brown@intel.com, 
-	pavel@kernel.org, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	christian.loehle@arm.com, tj@kernel.org, kernel-dev@igalia.com, 
-	linux-pm@vger.kernel.org, sched-ext@lists.linux.dev, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Wed, Oct 15, 2025 at 6:17=E2=80=AFAM kernel test robot <lkp@intel.com> w=
-rote:
->
-> Hi Changwoo,
->
-> kernel test robot noticed the following build warnings:
->
-> [auto build test WARNING on amd-pstate/linux-next]
-> [also build test WARNING on amd-pstate/bleeding-edge linus/master v6.18-r=
-c1 next-20251014]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Changwoo-Min/PM-EM=
--Assign-a-unique-ID-when-creating-a-performance-domain/20251014-082420
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git=
- linux-next
-> patch link:    https://lore.kernel.org/r/20251014001055.772422-9-changwoo=
-%40igalia.com
-> patch subject: [PATCH v5 08/10] PM: EM: Implement em_notify_pd_deleted()
-> config: i386-buildonly-randconfig-004-20251015 (https://download.01.org/0=
-day-ci/archive/20251015/202510151223.THlBK6QR-lkp@intel.com/config)
-> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0=
-227cb60147a26a1eeb4fb06e3b505e9c7261)
-> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
-ve/20251015/202510151223.THlBK6QR-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
-ion of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202510151223.THlBK6QR-lkp=
-@intel.com/
->
-> All warnings (new ones prefixed by >>):
->
-> >> kernel/power/em_netlink.c:228:6: warning: variable 'ret' set but not u=
-sed [-Wunused-but-set-variable]
->      228 |         int ret =3D -EMSGSIZE;
->          |             ^
->    1 warning generated.
->
+cgroup1 freezer piggybacks on the PM freezer, which inadvertently allowed
+userspace to produce uninterruptible tasks at will. To avoid the issue,
+cgroup2 freezer switched to a separate job control based mechanism. While
+this happened a long time ago, the code and comment haven't been updated
+making it confusing to people who aren't familiar with the history.
 
-Please update the patch to address this report and resend it, thanks!
+Rename cgroup_freezing() to cgroup1_freezing() and update comments on top of
+freezing() and frozen() to clarify that cgroup2 freezer isn't covered by the
+PM freezer mechanism.
 
-> vim +/ret +228 kernel/power/em_netlink.c
->
->    224
->    225  void em_notify_pd_deleted(const struct em_perf_domain *pd)
->    226  {
->    227          struct sk_buff *msg;
->  > 228          int ret =3D -EMSGSIZE;
->    229          void *hdr;
->    230          int msg_sz;
->    231
->    232          if (!genl_has_listeners(&em_nl_family, &init_net, EM_NLGR=
-P_EVENT))
->    233                  return;
->    234
->    235          msg_sz =3D __em_notify_pd_deleted_size(pd);
->    236
->    237          msg =3D genlmsg_new(msg_sz, GFP_KERNEL);
->    238          if (!msg)
->    239                  return;
->    240
->    241          hdr =3D genlmsg_put(msg, 0, 0, &em_nl_family, 0, EM_CMD_P=
-D_DELETED);
->    242          if (!hdr)
->    243                  goto out_free_msg;
->    244
->    245          if (nla_put_u32(msg, EM_A_PD_TABLE_PD_ID, pd->id)) {
->    246                  ret =3D -EMSGSIZE;
->    247                  goto out_free_msg;
->    248          }
->    249
->    250          genlmsg_end(msg, hdr);
->    251
->    252          genlmsg_multicast(&em_nl_family, msg, 0, EM_NLGRP_EVENT, =
-GFP_KERNEL);
->    253
->    254          return;
->    255
->    256  out_free_msg:
->    257          nlmsg_free(msg);
->    258          return;
->    259  }
->    260
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
+Signed-off-by: Tejun Heo <tj@kernel.org>
+Suggested-by: Qu Wenruo <wqu@suse.com>
+---
+ include/linux/freezer.h        |   12 ++++++++----
+ kernel/cgroup/legacy_freezer.c |    2 +-
+ kernel/freezer.c               |    2 +-
+ 3 files changed, 10 insertions(+), 6 deletions(-)
+
+diff --git a/include/linux/freezer.h b/include/linux/freezer.h
+index 32884c9721e5..0a8c6c4d1a82 100644
+--- a/include/linux/freezer.h
++++ b/include/linux/freezer.h
+@@ -22,14 +22,18 @@ extern bool pm_nosig_freezing;		/* PM nosig freezing in effect */
+ extern unsigned int freeze_timeout_msecs;
+ 
+ /*
+- * Check if a process has been frozen
++ * Check if a process has been frozen for PM or cgroup1 freezer. Note that
++ * cgroup2 freezer uses the job control mechanism and does not interact with
++ * the PM freezer.
+  */
+ extern bool frozen(struct task_struct *p);
+ 
+ extern bool freezing_slow_path(struct task_struct *p);
+ 
+ /*
+- * Check if there is a request to freeze a process
++ * Check if there is a request to freeze a task from PM or cgroup1 freezer.
++ * Note that cgroup2 freezer uses the job control mechanism and does not
++ * interact with the PM freezer.
+  */
+ static inline bool freezing(struct task_struct *p)
+ {
+@@ -63,9 +67,9 @@ extern bool freeze_task(struct task_struct *p);
+ extern bool set_freezable(void);
+ 
+ #ifdef CONFIG_CGROUP_FREEZER
+-extern bool cgroup_freezing(struct task_struct *task);
++extern bool cgroup1_freezing(struct task_struct *task);
+ #else /* !CONFIG_CGROUP_FREEZER */
+-static inline bool cgroup_freezing(struct task_struct *task)
++static inline bool cgroup1_freezing(struct task_struct *task)
+ {
+ 	return false;
+ }
+diff --git a/kernel/cgroup/legacy_freezer.c b/kernel/cgroup/legacy_freezer.c
+index dd9417425d92..915b02f65980 100644
+--- a/kernel/cgroup/legacy_freezer.c
++++ b/kernel/cgroup/legacy_freezer.c
+@@ -63,7 +63,7 @@ static struct freezer *parent_freezer(struct freezer *freezer)
+ 	return css_freezer(freezer->css.parent);
+ }
+ 
+-bool cgroup_freezing(struct task_struct *task)
++bool cgroup1_freezing(struct task_struct *task)
+ {
+ 	bool ret;
+ 
+diff --git a/kernel/freezer.c b/kernel/freezer.c
+index ddc11a8bd2ea..a76bf957fb32 100644
+--- a/kernel/freezer.c
++++ b/kernel/freezer.c
+@@ -44,7 +44,7 @@ bool freezing_slow_path(struct task_struct *p)
+ 	if (tsk_is_oom_victim(p))
+ 		return false;
+ 
+-	if (pm_nosig_freezing || cgroup_freezing(p))
++	if (pm_nosig_freezing || cgroup1_freezing(p))
+ 		return true;
+ 
+ 	if (pm_freezing && !(p->flags & PF_KTHREAD))
 
