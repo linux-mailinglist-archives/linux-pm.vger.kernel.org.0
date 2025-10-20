@@ -1,34 +1,34 @@
-Return-Path: <linux-pm+bounces-36528-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36529-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16108BF3D75
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 00:11:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C2FF2BF3D99
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 00:11:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8FC7E488D76
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 22:10:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A20CF3A81A5
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 22:10:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D5A32F1FD1;
-	Mon, 20 Oct 2025 22:10:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04C4A2F2603;
+	Mon, 20 Oct 2025 22:10:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="h8FRer9e"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="eU3Iaivk"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B41672F1FF1;
-	Mon, 20 Oct 2025 22:10:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9B392F2616;
+	Mon, 20 Oct 2025 22:10:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760998211; cv=none; b=ach63aWnp3qbUjxbWa3erAFPK6QJGlbPsCSCUXGMLrV7Oaq6Iw8pvIlgadGvWaC/tPO1ylHwTgvVOSLNQhlpQQyMjxLC+PrT3PuH0Rku2OtEB20aON1stgtnkK3bPGm9Z7/Vr2FFZg9sECjP0G2L5WditTVazVXjS+ocJEpzzcI=
+	t=1760998217; cv=none; b=m8uwHIW0RIUuDnjTSMBu6XuAqHhACnPBvp2n82wXfU4A2MWGGYmDab/h40slGMRZdrgpKq64LXS/WeTPcjjXUoQnFBcklg8e8TmfLNu4h0eDNCQEpbb0Fiu4kHtvdxKTAoombrTMol2VH0QYtdAJHkFVJBRVMDNqUc4Rr0Om1CU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760998211; c=relaxed/simple;
-	bh=1yIg7dHF3CyRg844eO79zOv4yiU6/OVOg/B/vkwccnw=;
+	s=arc-20240116; t=1760998217; c=relaxed/simple;
+	bh=0f1+ENs3T63f9aOdJboSXpzC0mIs5Iva+r6XrLXHbX4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=npbc5PqbVnKAcjJOK8A6DtkIGoipBJFdRgzDUwD+eBel36r0sZdRHSfoM4nKMqNpXm9ldvRUq4GIiZCHAs7/Tbd67nZr4oJTFIpIeYwHWhORLIF0QbDOWDahE0oI0p8PZ9k80sEzIcxNeX+2B9ptDZeXHwesaqnupl9hJACKiXU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=h8FRer9e; arc=none smtp.client-ip=213.97.179.56
+	 MIME-Version; b=ZHlqvC/IjTxdUZqLmOqrDglOf0a+22IxZZYYA0HmYurxLJwAhGq6rVGa9iQA033Z8dZpbAORf/nW+Ja9x2z13OSn0urqTHCWc9/Ldpl6P+UTM4qVBcJ0r9cc/SKtKMpyQ/YO6k3Jf9ny9dr8Y3hUaVweSHaw50fBTStoJJTfC64=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=eU3Iaivk; arc=none smtp.client-ip=213.97.179.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
@@ -37,16 +37,16 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
 	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
 	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
 	List-Post:List-Owner:List-Archive;
-	bh=gyg0WST9LZSc6E28J9ruwfqB7SqRNUl68LO52d7HJnk=; b=h8FRer9eNqbhodvcBqaUF5zW5N
-	5WM1QIlZH0kSYWkoB4IR4T3UGxEBgmRU6EbGVEf/hhAa4kbHK6nT05AfQqhysiPeGfns1295X195Q
-	rZL4cDKltvXoV9v03sTFrioj0L5yx7KGBm0nUu8of34f9RofOockCcp37wlZctzlcK54sEsA1UVvI
-	SFIZXk4dpCKlOeaQCWdetA6Q7hOrHgINM9YLMJ6R1ZCOw7pamrm/lYgiFFjmYWeH5RohNJjVaQXIt
-	EZtmy4ZuYGOOvgOfG9QDQmKKPJg+pNghH/hH7P6gDYWFhNAoEzB4E5A1/fmrs5FpyvMjDUYatsvHA
-	RObcu+Qg==;
+	bh=4CpqRigTtbxipVi66MHgGtA2LlCEev1FGqXSxHC1DAs=; b=eU3IaivkAQhfYg9q9KvI5KNGMy
+	Lb1+DbNbnvU1t0ZbJwz2O6Zytaqkk/Zy9VjpIhh/vyrh1GcXnsDe7GLthIu5KCtklqjC3iSsuad2s
+	fnTPTkkmSeblRhBWrqRnazft3ZYpKIXqqFLV/VAIa2irBEYuZfVOVdWqSvy4SDVE5SfiuBWEILXef
+	xc5Zloo3OaD79URc4Fc0mZFL12V2eE0wHFyu4fZGmd6yOe7e42j56purGizwzqXkdtsAszUm6MU/k
+	WZgHz5fla18blTJAH0sWnUjyo2XyItqdfhYXgeJsYT7h8DkToWXqRz5FMsp0XBdekLxKyVXCSbOh9
+	PDgeNkKg==;
 Received: from [58.29.143.236] (helo=localhost)
 	by fanzine2.igalia.com with esmtpsa 
 	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-	id 1vAy4o-00CHZL-2m; Tue, 21 Oct 2025 00:10:03 +0200
+	id 1vAy4u-00CHZm-O5; Tue, 21 Oct 2025 00:10:09 +0200
 From: Changwoo Min <changwoo@igalia.com>
 To: lukasz.luba@arm.com,
 	rafael@kernel.org,
@@ -59,9 +59,9 @@ Cc: christian.loehle@arm.com,
 	sched-ext@lists.linux.dev,
 	linux-kernel@vger.kernel.org,
 	Changwoo Min <changwoo@igalia.com>
-Subject: [PATCH v6 05/10] PM: EM: Add an iterator and accessor for the performance domain
-Date: Tue, 21 Oct 2025 07:09:09 +0900
-Message-ID: <20251020220914.320832-6-changwoo@igalia.com>
+Subject: [PATCH v6 06/10] PM: EM: Implement em_nl_get_pds_doit()
+Date: Tue, 21 Oct 2025 07:09:10 +0900
+Message-ID: <20251020220914.320832-7-changwoo@igalia.com>
 X-Mailer: git-send-email 2.51.1.dirty
 In-Reply-To: <20251020220914.320832-1-changwoo@igalia.com>
 References: <20251020220914.320832-1-changwoo@igalia.com>
@@ -73,98 +73,120 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add an iterator function (for_each_em_perf_domain) that iterates all the
-performance domains in the global list. A passed callback function (cb) is
-called for each performance domain.
+When a userspace requests EM_CMD_GET_PDS, the kernel responds with
+information on all performance domains. The message format of the
+response is as follows:
 
-Additionally, add a lookup function (em_perf_domain_get_by_id) that
-searches for a performance domain by matching the ID in the global list.
+EM_A_PDS_PD (NLA_NESTED)*
+    EM_A_PD_PD_ID (NLA_U32)
+    EM_A_PD_FLAGS (NLA_U64)
+    EM_A_PD_CPUS (NLA_STRING)
+
+where EM_A_PDS_PD can be repeated as many times as there are performance
+domains, and EM_A_PD_CPUS is a hexadecimal string representing a CPU
+bitmask.
 
 Signed-off-by: Changwoo Min <changwoo@igalia.com>
+Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
 ---
- kernel/power/em_netlink.h   | 14 ++++++++++++++
- kernel/power/energy_model.c | 38 +++++++++++++++++++++++++++++++++++++
- 2 files changed, 52 insertions(+)
+ kernel/power/em_netlink.c | 82 ++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 81 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/power/em_netlink.h b/kernel/power/em_netlink.h
-index acd186c92d6b..8114b018c73b 100644
---- a/kernel/power/em_netlink.h
-+++ b/kernel/power/em_netlink.h
-@@ -10,7 +10,21 @@
- #define _EM_NETLINK_H
+diff --git a/kernel/power/em_netlink.c b/kernel/power/em_netlink.c
+index f3fbfeff29a4..31b27c6fe3c9 100644
+--- a/kernel/power/em_netlink.c
++++ b/kernel/power/em_netlink.c
+@@ -17,9 +17,89 @@
+ #include "em_netlink.h"
+ #include "em_netlink_autogen.h"
  
- #if defined(CONFIG_ENERGY_MODEL) && defined(CONFIG_NET)
-+int for_each_em_perf_domain(int (*cb)(struct em_perf_domain*, void *),
-+			    void *data);
-+struct em_perf_domain *em_perf_domain_get_by_id(int id);
- #else
-+static inline
-+int for_each_em_perf_domain(int (*cb)(struct em_perf_domain*, void *),
-+			    void *data)
++#define EM_A_PD_CPUS_LEN		256
++
++/*************************** Command encoding ********************************/
++static int __em_nl_get_pd_size(struct em_perf_domain *pd, void *data)
 +{
-+	return -EINVAL;
-+}
-+static inline
-+struct em_perf_domain *em_perf_domain_get_by_id(int id)
-+{
-+	return NULL;
-+}
- #endif
- 
- #endif /* _EM_NETLINK_H */
-diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
-index 756debf5406a..9e35aba4b113 100644
---- a/kernel/power/energy_model.c
-+++ b/kernel/power/energy_model.c
-@@ -17,6 +17,8 @@
- #include <linux/sched/topology.h>
- #include <linux/slab.h>
- 
-+#include "em_netlink.h"
++	char cpus_buf[EM_A_PD_CPUS_LEN];
++	int *tot_msg_sz = data;
++	int msg_sz, cpus_sz;
 +
- /*
-  * Mutex serializing the registrations of performance domains and letting
-  * callbacks defined by drivers sleep.
-@@ -998,3 +1000,39 @@ void em_rebuild_sched_domains(void)
- 	 */
- 	schedule_work(&rebuild_sd_work);
- }
++	cpus_sz = snprintf(cpus_buf, sizeof(cpus_buf), "%*pb",
++			   cpumask_pr_args(to_cpumask(pd->cpus)));
 +
-+#if defined(CONFIG_ENERGY_MODEL) && defined(CONFIG_NET)
-+int for_each_em_perf_domain(int (*cb)(struct em_perf_domain*, void *),
-+			    void *data)
-+{
-+	struct em_perf_domain *pd;
++	msg_sz = nla_total_size(0) +			/* EM_A_PDS_PD */
++		 nla_total_size(sizeof(u32)) +		/* EM_A_PD_PD_ID */
++		 nla_total_size_64bit(sizeof(u64)) +	/* EM_A_PD_FLAGS */
++		 nla_total_size(cpus_sz);		/* EM_A_PD_CPUS */
 +
-+	lockdep_assert_not_held(&em_pd_mutex);
-+	guard(mutex)(&em_pd_list_mutex);
-+
-+	list_for_each_entry(pd, &em_pd_list, node) {
-+		int ret;
-+
-+		ret = cb(pd, data);
-+		if (ret)
-+			return ret;
-+	}
-+
++	*tot_msg_sz += nlmsg_total_size(genlmsg_msg_size(msg_sz));
 +	return 0;
 +}
 +
-+struct em_perf_domain *em_perf_domain_get_by_id(int id)
++static int __em_nl_get_pd(struct em_perf_domain *pd, void *data)
 +{
-+	struct em_perf_domain *pd;
++	char cpus_buf[EM_A_PD_CPUS_LEN];
++	struct sk_buff *msg = data;
++	struct nlattr *entry;
 +
-+	lockdep_assert_not_held(&em_pd_mutex);
-+	guard(mutex)(&em_pd_list_mutex);
++	entry = nla_nest_start(msg, EM_A_PDS_PD);
++	if (!entry)
++		goto out_cancel_nest;
 +
-+	list_for_each_entry(pd, &em_pd_list, node) {
-+		if (pd->id == id)
-+			return pd;
-+	}
++	if (nla_put_u32(msg, EM_A_PD_PD_ID, pd->id))
++		goto out_cancel_nest;
 +
-+	return NULL;
++	if (nla_put_u64_64bit(msg, EM_A_PD_FLAGS, pd->flags, EM_A_PD_PAD))
++		goto out_cancel_nest;
++
++	snprintf(cpus_buf, sizeof(cpus_buf), "%*pb",
++		 cpumask_pr_args(to_cpumask(pd->cpus)));
++	if (nla_put_string(msg, EM_A_PD_CPUS, cpus_buf))
++		goto out_cancel_nest;
++
++	nla_nest_end(msg, entry);
++
++	return 0;
++
++out_cancel_nest:
++	nla_nest_cancel(msg, entry);
++
++	return -EMSGSIZE;
 +}
-+#endif
++
+ int em_nl_get_pds_doit(struct sk_buff *skb, struct genl_info *info)
+ {
+-	return -EOPNOTSUPP;
++	struct sk_buff *msg;
++	void *hdr;
++	int cmd = info->genlhdr->cmd;
++	int ret = -EMSGSIZE, msg_sz = 0;
++
++	for_each_em_perf_domain(__em_nl_get_pd_size, &msg_sz);
++
++	msg = genlmsg_new(msg_sz, GFP_KERNEL);
++	if (!msg)
++		return -ENOMEM;
++
++	hdr = genlmsg_put_reply(msg, info, &em_nl_family, 0, cmd);
++	if (!hdr)
++		goto out_free_msg;
++
++	ret = for_each_em_perf_domain(__em_nl_get_pd, msg);
++	if (ret)
++		goto out_cancel_msg;
++
++	genlmsg_end(msg, hdr);
++
++	return genlmsg_reply(msg, info);
++
++out_cancel_msg:
++	genlmsg_cancel(msg, hdr);
++out_free_msg:
++	nlmsg_free(msg);
++
++	return ret;
+ }
+ 
+ int em_nl_get_pd_table_doit(struct sk_buff *skb, struct genl_info *info)
 -- 
 2.51.1.dirty
 
