@@ -1,189 +1,120 @@
-Return-Path: <linux-pm+bounces-36456-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36457-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41A14BF0ECB
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 13:51:42 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 93616BF1227
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 14:23:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 65C4E188C737
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 11:51:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 54CB03AD39A
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 12:19:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CAB73019C1;
-	Mon, 20 Oct 2025 11:51:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26CAB313264;
+	Mon, 20 Oct 2025 12:18:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="PaL/OAYl"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I1cOESkD"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CD012192F5;
-	Mon, 20 Oct 2025 11:51:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760961091; cv=pass; b=pLA0dM3pIEyqx9t1mQduThddAYRD6l7BEQDTN/NFfwai0HYJ1j1Ksr9Zbl/n3XrLqmIjusZBzynYTWiStgf2dA2Fg2kz/l+nKLpfnaX8YF4BtYlL6CuA/Vz5Uufh2DqCdXZCYehSGXHuNhXkuok8/ghBCX/KrptzptfTETbuHDo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760961091; c=relaxed/simple;
-	bh=6ynyZRXd+tVSkitkXZRJParXJVETR9hXhC8hUwlemlE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mafqbWr82DngRFCb7DTlAGeCxDWJAFM7WoikNw7eeIIOgG7cG2BMHbe9TyK0u8IjwU8R1moLaBeBG8A/AISEmden72W5RDOc/ZExj7C3iIP/SamRDaYdZeGQHQBiW///jPd61VHbHSUE/g012J5d1BQ381L7P0kFzdB5VGZXh2Q=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=PaL/OAYl; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1760961056; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=C6s9lTyHmYNGClzUwi70t4LJADX3+pHHK1XyNHdHK8pkqZ0ewDbfJbwIXWji+uiKKcmUeuBW6l+zGWUuO+03pxUuW4fSbebuqG/S8KLJ5DCvdHU667ISmBHyMLGiEhevq79+UUaFc7vwqAm5S5mMXdCMvSHVgcf314a5waiB5NI=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1760961056; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=A/c/4oL8Z03NjnVaEgMnJiauD1mgyw2BMdnR11SbtOU=; 
-	b=iW82Q/ZctwRGQX/L9mOKuaimgoLOz0fVBR1M3TyCll3uEAfcdqH7w9UXuCqxDvtaM0ZJWtujTQtrBMFIsHz79mKsGlZlxVJUxxPgaOPiETDnmLnSSlwiQ6TTLdJq4ZGBBnB7YHbpk1mKNlRkRjCJStTnqRl8T1J3jkhSJ2wQsK0=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
-	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1760961056;
-	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
-	bh=A/c/4oL8Z03NjnVaEgMnJiauD1mgyw2BMdnR11SbtOU=;
-	b=PaL/OAYlpW7pCWoX/nW8/r5Ars7ZMGegZ6sORd7Ra52eVXY8qtIgTV84a6OuCiti
-	f1QFLSFukxd6rYxUkCCtp1sRRNyjyBoz59JCtIF/7UUcfAFVo1cFMZUeeejGOl4n1WW
-	oo+B23a8e3D8+ZHnwIQTPwmfqEktI30JqVK/GOy4=
-Received: by mx.zohomail.com with SMTPS id 1760961055618931.097867690532;
-	Mon, 20 Oct 2025 04:50:55 -0700 (PDT)
-From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Boris Brezillon <boris.brezillon@collabora.com>,
- Jassi Brar <jassisinghbrar@gmail.com>, Chia-I Wu <olvaffe@gmail.com>,
- Chen-Yu Tsai <wenst@chromium.org>, Steven Price <steven.price@arm.com>,
- Liviu Dudau <liviu.dudau@arm.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Matthias Brugger <matthias.bgg@gmail.com>, Kees Cook <kees@kernel.org>,
- "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- Ulf Hansson <ulf.hansson@linaro.org>, Karunika Choo <karunika.choo@arm.com>
-Cc: kernel@collabora.com, dri-devel@lists.freedesktop.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
- linux-hardening@vger.kernel.org, linux-pm@vger.kernel.org, nd@arm.com
-Subject: Re: [PATCH v8 4/5] drm/panthor: Use existing OPP table if present
-Date: Mon, 20 Oct 2025 13:50:47 +0200
-Message-ID: <12781303.O9o76ZdvQC@workhorse>
-In-Reply-To: <386ca96d-34b6-4aab-844d-ea720099cf6b@arm.com>
-References:
- <20251017-mt8196-gpufreq-v8-0-98fc1cc566a1@collabora.com>
- <20251017-mt8196-gpufreq-v8-4-98fc1cc566a1@collabora.com>
- <386ca96d-34b6-4aab-844d-ea720099cf6b@arm.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F42063126A7
+	for <linux-pm@vger.kernel.org>; Mon, 20 Oct 2025 12:18:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1760962698; cv=none; b=GOiydRsF2+OXIEVOykzpsLUdmSETpUB7DqiMILzTQiLz2WQNuT5Ku710xWN7PKxzI5nN2Qc8iGr40xxkjehigxkeSbjh5s7Nb41pS/I38xZwb8GYcG30ni/j7V3WRMEI7/uMIG2kkFFtUF7a8WV59k4FqKa+9KSS54ZLhyEjgcU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1760962698; c=relaxed/simple;
+	bh=r0EfMT9X6rvzpWUrxQejrhPkjoIbmWaoix43K/pnhuc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Uj6rMwkFHv5h7dRMH9W4Nb5rdbMbt66R6QLRSEskWSgquLOWgZn4NgnvG5EgCVnewVNBMqGNNeP+m8O4m2UQehPXKR3rehC8mw1ZzOE1ApF5jOwI6HLXfGPzaKCkHCg6yLRW0hhZ3Tt+xqFw5ZF5MZ4hPKutbQZDXalG0gP7eg4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I1cOESkD; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97DA8C19421
+	for <linux-pm@vger.kernel.org>; Mon, 20 Oct 2025 12:18:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1760962697;
+	bh=r0EfMT9X6rvzpWUrxQejrhPkjoIbmWaoix43K/pnhuc=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=I1cOESkDtb6jDYTXLVe4Dl3S4aPAdgaz2tunhE9MAUX7pnxJ+zvtEzeHGD85fwSMV
+	 wo4twoV+aRl5m0m3+J9sXf6CDWOFf72G5r3VRsSmmQZrclErGfuBw68qujzeO5sb0z
+	 G7dXTs+2aVkxhqbeJg9aSqAVmxfAxA0XXYBeqO9K597f3qtyjryKf2oD5uHHIQQ0b8
+	 OUz8Gi5QMy+AERiXtZ6H4sYXbTn8xIMK0nQSTWd09e1HZbRpbQtRI6L0Z3BPoPjsYu
+	 wNx69wiqGIUi4RvL3weYDM6gU/kdjAT2YA7b84MaZDJ85S5pZe00hLDZhLb+O1kG3x
+	 iMiZLMSBdxEWg==
+Received: by mail-oi1-f177.google.com with SMTP id 5614622812f47-443a9ae4639so1578386b6e.1
+        for <linux-pm@vger.kernel.org>; Mon, 20 Oct 2025 05:18:17 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUJ376t5+U685Hy+AmHMixXQaXrQ80veLwpCsy2Olc1XsIXj2vlJcJlq8onC7QMwfmDxXEBQmXgKQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyUuOKCcfIaDO7Ts5RMiFBCADhJBW/Umc3/JEqpPE/45Wvnck94
+	S37HFw7NK+B/gjYry1bk5Jk88a1FpndF5CB3vc+QtX1cxAH/tea7JlA8/tcN4zwXuKz8KGl7Xot
+	IjKNd+0Gm6eBbVrQJ8hl/yAXVyaKKRxc=
+X-Google-Smtp-Source: AGHT+IE0I6W30GnSKbp2Erj/Uw5BnMxh4MvGbK/mgLcIWPEuN+PmNy1oBqcy5zKua0ICQgW7Xmqsmz8sxUjrWFBxnRM=
+X-Received: by 2002:a05:6808:1806:b0:439:b9b3:af44 with SMTP id
+ 5614622812f47-443a2e20f40mr5745349b6e.19.1760962696808; Mon, 20 Oct 2025
+ 05:18:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="utf-8"
+References: <20251020084429.230322-1-changwoo@igalia.com>
+In-Reply-To: <20251020084429.230322-1-changwoo@igalia.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 20 Oct 2025 14:17:58 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0ib0dXYiNsj8cP6jcGpdqer_ASzMo7RAKhDU7eh_cHAZw@mail.gmail.com>
+X-Gm-Features: AS18NWDRFvBXPdetqSzpiuDZVc9Lq0RSEVb4luTn_5z_vJ4UDkHiWtyqqMdvrZY
+Message-ID: <CAJZ5v0ib0dXYiNsj8cP6jcGpdqer_ASzMo7RAKhDU7eh_cHAZw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] PM: EM: Remove an unused variable in em_notify_pd_deleted()
+To: Changwoo Min <changwoo@igalia.com>
+Cc: lukasz.luba@arm.com, rafael@kernel.org, len.brown@intel.com, 
+	pavel@kernel.org, christian.loehle@arm.com, tj@kernel.org, 
+	kernel-dev@igalia.com, linux-pm@vger.kernel.org, sched-ext@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Monday, 20 October 2025 10:35:04 Central European Summer Time Karunika Choo wrote:
-> On 17/10/2025 16:31, Nicolas Frattaroli wrote:
-> > On SoCs where the GPU's power-domain is in charge of setting performance
-> > levels, the OPP table of the GPU node will have already been populated
-> > during said power-domain's attach_dev operation.
-> > 
-> > To avoid initialising an OPP table twice, only set the OPP regulator and
-> > the OPPs from DT if there's no OPP table present.
-> > 
-> > Reviewed-by: Chia-I Wu <olvaffe@gmail.com>
-> > Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> > Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-> > ---
-> >  drivers/gpu/drm/panthor/panthor_devfreq.c | 32 ++++++++++++++++++++++---------
-> >  1 file changed, 23 insertions(+), 9 deletions(-)
-> > 
-> > diff --git a/drivers/gpu/drm/panthor/panthor_devfreq.c b/drivers/gpu/drm/panthor/panthor_devfreq.c
-> > index a6dca599f0a5..ec63e27f4883 100644
-> > --- a/drivers/gpu/drm/panthor/panthor_devfreq.c
-> > +++ b/drivers/gpu/drm/panthor/panthor_devfreq.c
-> > @@ -141,6 +141,7 @@ int panthor_devfreq_init(struct panthor_device *ptdev)
-> >  	struct thermal_cooling_device *cooling;
-> >  	struct device *dev = ptdev->base.dev;
-> >  	struct panthor_devfreq *pdevfreq;
-> > +	struct opp_table *table;
-> >  	struct dev_pm_opp *opp;
-> >  	unsigned long cur_freq;
-> >  	unsigned long freq = ULONG_MAX;
-> > @@ -152,17 +153,30 @@ int panthor_devfreq_init(struct panthor_device *ptdev)
-> >  
-> >  	ptdev->devfreq = pdevfreq;
-> >  
-> > -	ret = devm_pm_opp_set_regulators(dev, reg_names);
-> > -	if (ret && ret != -ENODEV) {
-> > -		if (ret != -EPROBE_DEFER)
-> > -			DRM_DEV_ERROR(dev, "Couldn't set OPP regulators\n");
-> > -		return ret;
-> > +	/*
-> > +	 * The power domain associated with the GPU may have already added an
-> > +	 * OPP table, complete with OPPs, as part of the platform bus
-> > +	 * initialization. If this is the case, the power domain is in charge of
-> > +	 * also controlling the performance, with a set_performance callback.
-> > +	 * Only add a new OPP table from DT if there isn't such a table present
-> > +	 * already.
-> > +	 */
-> > +	table = dev_pm_opp_get_opp_table(dev);
-> > +	if (IS_ERR_OR_NULL(table)) {
-> > +		ret = devm_pm_opp_set_regulators(dev, reg_names);
-> > +		if (ret && ret != -ENODEV) {
-> 
-> Is there a reason to not fail on -ENODEV? I would assume it is a valid 
-> failure path. 
+On Mon, Oct 20, 2025 at 10:45=E2=80=AFAM Changwoo Min <changwoo@igalia.com>=
+ wrote:
+>
+> The variable `ret` in em_notify_pd_deleted() is set but not used, so
+> that it causes the following warning:
+>
+> >> kernel/power/em_netlink.c:228:6: warning: variable 'ret' set but
+>    not used [-Wunused-but-set-variable]
+>
+> So, let's remove the unused `ret` to avoid the warning.
+>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202510151223.THlBK6QR-lkp@i=
+ntel.com/
+> Signed-off-by: Changwoo Min <changwoo@igalia.com>
+> ---
+>  kernel/power/em_netlink.c | 2 --
+>  1 file changed, 2 deletions(-)
+>
+> diff --git a/kernel/power/em_netlink.c b/kernel/power/em_netlink.c
+> index 2c55c758de6b..48752189a07b 100644
+> --- a/kernel/power/em_netlink.c
+> +++ b/kernel/power/em_netlink.c
+> @@ -269,7 +269,6 @@ static int __em_notify_pd_deleted_size(const struct e=
+m_perf_domain *pd)
+>  void em_notify_pd_deleted(const struct em_perf_domain *pd)
+>  {
+>         struct sk_buff *msg;
+> -       int ret =3D -EMSGSIZE;
+>         void *hdr;
+>         int msg_sz;
+>
+> @@ -287,7 +286,6 @@ void em_notify_pd_deleted(const struct em_perf_domain=
+ *pd)
+>                 goto out_free_msg;
+>
+>         if (nla_put_u32(msg, EM_A_PD_TABLE_PD_ID, pd->id)) {
+> -               ret =3D -EMSGSIZE;
+>                 goto out_free_msg;
+>         }
+>
+> --
 
-Hi,
-
-the -ENODEV logic wasn't added by me, it was added in
-Commit: a8cb5ca53690 ("drm/panthor: skip regulator setup if no such prop")
-
-with the justification
-
-  The regulator is optional, skip the setup instead of returning an
-  error if it is not present
-
-I will not be changing anything about this logic in this patch set,
-as it is not in scope for MT8196 enablement, since MT8196 does not
-use this code path at all.
-
-Kind regards,
-Nicolas Frattaroli
-
-> 
-> Kind regards,
-> Karunika Choo
-> 
-> > +			if (ret != -EPROBE_DEFER)
-> > +				DRM_DEV_ERROR(dev, "Couldn't set OPP regulators\n");
-> > +			return ret;
-> > +		}
-> > +
-> > +		ret = devm_pm_opp_of_add_table(dev);
-> > +		if (ret)
-> > +			return ret;
-> > +	} else {
-> > +		dev_pm_opp_put_opp_table(table);
-> >  	}
-> >  
-> > -	ret = devm_pm_opp_of_add_table(dev);
-> > -	if (ret)
-> > -		return ret;
-> > -
-> >  	spin_lock_init(&pdevfreq->lock);
-> >  
-> >  	panthor_devfreq_reset(pdevfreq);
-> > 
-> 
-> 
-
-
-
-
+Would you please fix the patches on top of which these fixes are needed?
 
