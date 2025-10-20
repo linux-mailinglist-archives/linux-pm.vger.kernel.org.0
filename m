@@ -1,123 +1,100 @@
-Return-Path: <linux-pm+bounces-36508-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36509-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 70B3BBF31BC
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 21:05:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5EE36BF31E3
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 21:11:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CE5E840603D
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 19:04:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 15EA63AFC05
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 19:11:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9A7A2C3263;
-	Mon, 20 Oct 2025 19:04:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AO3HZPXL"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CC2B2D46B2;
+	Mon, 20 Oct 2025 19:11:05 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4A8C28BAB1
-	for <linux-pm@vger.kernel.org>; Mon, 20 Oct 2025 19:04:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3FEF242D76;
+	Mon, 20 Oct 2025 19:11:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760987072; cv=none; b=CP/ZNkfV2XlNcWnPCP2T8ZO0YeLXCQUH6lhRXoid/0GPV6zRMO0kVRmlWOzOywCFF6sw12FgvxAELCfVyhtoEdwmaU91f2/+LOlXiSD3nxhlRfj2/8iT7oO/ZIJ9kWMpm0uN6t++PmkWxaa466XHnpljpiV6MTY4c1t3ghQl2FE=
+	t=1760987464; cv=none; b=EyOQEwDjtPToLKNCK3gVDiaSKSVkbzSJyx7/frleVVZmifF+4Q0JCnFNjko8mUIbqrwtvP0Oyw/wmk9uNP4ZlpncDHnHnBTx4lVNbO7QcJ/y2qn8XzCbsD42xd11WMLtiBz/y4DTSue0asXkBdqsLRtQwetrIUq+qcch9Yogy5Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760987072; c=relaxed/simple;
-	bh=la2SNRyOuUL1EroP0cyfJMdhcrK+Fhus7+Rn3W6MB2Y=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=up1PYRDZgRoYSFLnxIgxfwjGpTPX1AHpQ7JGqc9q7pUS/uJSyHuCi75jK2TAjFipmNMob1Ms3uejQ47u1sjURuEd4XlPp9467NicC/qIJ+0siVUv5tV7hNKaBDCdb8uZBWHlP32a7ACTm/GORdLt1C0vX02XNb/YEy0kPrnaKhA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AO3HZPXL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C6C8C116D0
-	for <linux-pm@vger.kernel.org>; Mon, 20 Oct 2025 19:04:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760987072;
-	bh=la2SNRyOuUL1EroP0cyfJMdhcrK+Fhus7+Rn3W6MB2Y=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=AO3HZPXLF1e6rZin4schtZWty2lv9xfLEqlI3lIa2eo3yApunlF/ouE63UwvboZnq
-	 rldbczlTHbNmeRKhUetE9qNOBBcN3o/z+eD8R3ABsoOltC4wxhrCM12ZO37Tu+TbcZ
-	 N/GHnBZafwzN29jK9mU+Tn52jHKCNxkZvIIhlanlbjXxqGHD+8ZCjBxwHL1W3unn7+
-	 sA5ymBFP1pe6sOPYBweKelSM3i1bMwivC57cvlpD64/TyAMukwcBQx9IxcZosjgA/k
-	 4+Vg02BtoqGDPBKFzPOboR0uN6Jx1NsFBIp9LyEIul+qAQpvAxZOJyD8jxmfs2SzXf
-	 Q5+sBluj3PYvg==
-Received: by mail-oi1-f170.google.com with SMTP id 5614622812f47-4439f1cb764so2435153b6e.3
-        for <linux-pm@vger.kernel.org>; Mon, 20 Oct 2025 12:04:32 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVgmeCe0rku1QKJhAVmThHl6BLoIYf7UNT4GcW2ydpVhgTHSBKhYOtW9pirjACfk6PZzStEoVeP0g==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwV2cp+36cW9tTl1Wz+rLA1Yn1NcAHTmmx9AFL9zbUkX+mGySZR
-	wOA2xTQuj8iGDPve62DD1SjsQNN4QeoKAplK1htZnaAovm7sgRhmHhgjRyRKQzZ6lSUO71FpTMU
-	KuqJUZTPTzEpt4qr6B1lmZPfH1LHn6Us=
-X-Google-Smtp-Source: AGHT+IH2YwF5IgfEZBDiCNDTtJ4zxwtEoO0dMgpApSlIVsF+6kCQO4qUFCcXU32gMhAVur0/d18jXf1G70X2mafsg3A=
-X-Received: by 2002:a05:6808:4442:b0:441:8f74:fc0 with SMTP id
- 5614622812f47-443a31b76ddmr6748203b6e.61.1760987071710; Mon, 20 Oct 2025
- 12:04:31 -0700 (PDT)
+	s=arc-20240116; t=1760987464; c=relaxed/simple;
+	bh=nieYJ4XJDwAF96WABbqXyE0cfBIwUORhTlynNpFjzOI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Y1ZLC0g1GLSULkGOIQl01V8YkHxZhdIvD1EkwtwhRNSlP8DWdXen3+SHi9PfA+GPi6rLbpSl0c2sBBMVVYe8cKe6GS5K2fdnZHl8Qz+9V5pO6XLJZZxg/hAEFqHeiAZcY1gMaORgV6Ko9R4TaYZ81fFQ4PrLervmgSVMHBcdi9Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F418C1007;
+	Mon, 20 Oct 2025 12:10:53 -0700 (PDT)
+Received: from [10.1.196.46] (e134344.arm.com [10.1.196.46])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3843D3F59E;
+	Mon, 20 Oct 2025 12:11:00 -0700 (PDT)
+Message-ID: <a0120876-0f00-4e1a-aa17-5fe7c3512276@arm.com>
+Date: Mon, 20 Oct 2025 20:10:58 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251011072420.11495-1-zhangzihuan@kylinos.cn>
-In-Reply-To: <20251011072420.11495-1-zhangzihuan@kylinos.cn>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 20 Oct 2025 21:04:20 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0iTR-0mbODbYPjbNcS-xx7AxF48ZtKrcqv--v_knY9xNg@mail.gmail.com>
-X-Gm-Features: AS18NWCBY11AETUvwsQS5L9kv9qDCzJWMLRGrhRc-IRGBcJL32hORwGcmN_JcD4
-Message-ID: <CAJZ5v0iTR-0mbODbYPjbNcS-xx7AxF48ZtKrcqv--v_knY9xNg@mail.gmail.com>
-Subject: Re: [PATCH v1] cpufreq: preserve freq_table_sorted across suspend/hibernate
-To: zzhwaxy <zhangzihuan@kylinos.cn>
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
-	zhenglifeng <zhenglifeng1@huawei.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/2] smp: Introduce a helper function to check for
+ pending IPIs
+To: Ulf Hansson <ulf.hansson@linaro.org>,
+ "Rafael J . Wysocki" <rafael@kernel.org>,
+ Thomas Gleixner <tglx@linutronix.de>
+Cc: Mark Rutland <mark.rutland@arm.com>, Marc Zyngier <maz@kernel.org>,
+ Maulik Shah <quic_mkshah@quicinc.com>, Sudeep Holla <sudeep.holla@arm.com>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Vincent Guittot <vincent.guittot@linaro.org>, linux-pm@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20251020141718.150919-1-ulf.hansson@linaro.org>
+ <20251020141718.150919-2-ulf.hansson@linaro.org>
+From: Ben Horgan <ben.horgan@arm.com>
+Content-Language: en-US
+In-Reply-To: <20251020141718.150919-2-ulf.hansson@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Sat, Oct 11, 2025 at 9:24=E2=80=AFAM zzhwaxy <zhangzihuan@kylinos.cn> wr=
-ote:
->
-> From: Zihuan Zhang <zhangzihuan@kylinos.cn>
->
-> During S3/S4 suspend and resume, cpufreq policies are not freed or
-> recreated; the freq_table and policy structure remain intact. However,
-> set_freq_table_sorted() currently resets policy->freq_table_sorted to
-> UNSORTED unconditionally, which is unnecessary since the table order
-> does not change across suspend/resume.
->
-> This patch adds a check to skip validation if policy->freq_table_sorted
-> is already ASCENDING or DESCENDING. This avoids unnecessary traversal
-> of the frequency table on S3/S4 resume or repeated online events,
-> reducing overhead while preserving correctness.
->
-> Signed-off-by: Zihuan Zhang <zhangzihuan@kylinos.cn>
+Hi Ulf,
+
+Only a comment on the naming rather than a full review.
+
+On 10/20/25 15:17, Ulf Hansson wrote:
+> When governors used during cpuidle, tries to find the most optimal
+> idlestate for a CPU or a group of CPUs, they are known to quite often fail.
+> One reason for this, is that we are not taking into account whether there
+> has been an IPI scheduled for any of the CPUs that are affected by the
+> selected idlestate.
+> 
+> To enable pending IPIs to be taken into account for cpuidle decisions,
+> let's introduce a new helper function, cpus_may_have_pending_ipi().
+
+To me, "may" indicates permission, i.e. is allowed, rather than
+correctness. Would "likely" be better here, cpus_likely_have_pending_ipi()?
+
+> 
+> Note that, the implementation is intentionally as lightweight as possible,
+> in favor of always providing the correct information. For cpuidle decisions
+> this is good enough.
+> 
+> Suggested-by: Thomas Gleixner <tglx@linutronix.de>
+> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 > ---
->  drivers/cpufreq/cpufreq.c | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index 852e024facc3..4a27f6cb07d3 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -1421,9 +1421,12 @@ static int cpufreq_policy_online(struct cpufreq_po=
-licy *policy,
->                  * If there is a problem with its frequency table, take i=
-t
->                  * offline and drop it.
->                  */
-> -               ret =3D cpufreq_table_validate_and_sort(policy);
-> -               if (ret)
-> -                       goto out_offline_policy;
-> +               if (policy->freq_table_sorted !=3D CPUFREQ_TABLE_SORTED_A=
-SCENDING &&
-> +                   policy->freq_table_sorted !=3D CPUFREQ_TABLE_SORTED_D=
-ESCENDING) {
-> +                       ret =3D cpufreq_table_validate_and_sort(policy);
-> +                       if (ret)
-> +                               goto out_offline_policy;
-> +               }
->
->                 /* related_cpus should at least include policy->cpus. */
->                 cpumask_copy(policy->related_cpus, policy->cpus);
-> --
+> 
+> Changes in v2:
+> 	- Implemented a common function, rather than making it arch-specific. As
+> 	suggested by Thomas and Marc.
+> 	- Renamed the function to indicate that it doesn't provide correctness.
+> 	- Clarified function description and commit message.
+> 
+-- 
+Thanks,
 
-Applied as 6.19 material, thanks!
+Ben
+
 
