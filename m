@@ -1,214 +1,103 @@
-Return-Path: <linux-pm+bounces-36472-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36473-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0AE56BF1DD7
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 16:32:47 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id F22DDBF1FA5
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 17:03:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9561D404160
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 14:32:22 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id D3FEB4F5933
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 15:03:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FB4922A817;
-	Mon, 20 Oct 2025 14:31:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 358FE24168D;
+	Mon, 20 Oct 2025 15:03:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ohBwijkW"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAAA71A239A;
-	Mon, 20 Oct 2025 14:31:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0915923EAAB;
+	Mon, 20 Oct 2025 15:03:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760970694; cv=none; b=r/TMjHL1c0lknFzsQnfADVF9/qmwKaZQbYN0TieMLkz3U1RaM5l0Z6KkIz/ayXHjU+I84Uo64b0o6V3uMOUnoGg9LhhBniOvemmeFPaSsYkRQ/Vi4NE/pQpdeeYmDi41ZXMNoVD8mZKLR989nblGN8PUbI55pu/K/nLdJluoqL8=
+	t=1760972615; cv=none; b=KP0pXUE7e/CJ3Ry+O1Lq5v2DgOhckPTiZjCPV5aYlM7tEt3Nmu8jGBW75CwqFR8vfige9k9n73gwEzEnTTASxJmkvqKRjDFPbyTuz26x3FkY2ImBoQFGNtfa2hVbectAO3isFIx2ab6QG9buQAtK46TCtT+piMgFf1ZoRNAlLj0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760970694; c=relaxed/simple;
-	bh=Bty+vvqO0kZ7CUd0Q2nqj5ngueUp9769n2FevdwMEyw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fGxYKNxFVmm4UAcHjlSQsn8kV64xFRIfVAclN/Mu47HYDiHfuNUdLt1ybF0hC49Ycd76FyjUw8aGQAjXMVwEaBvUE5YXCNuQZ1Tyvvxh5xmNyQY4oibtotuOuNJ5zC/+DQCCXQGo8pI/CNnTy/4wbujRWv9SYIbImqq0r+vHsOw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com; spf=pass smtp.mailfrom=renesas.com; arc=none smtp.client-ip=210.160.252.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=renesas.com
-X-CSE-ConnectionGUID: qPnqo77zQLGKHJRIXyqJhg==
-X-CSE-MsgGUID: pMNaHPNaRwSsplcJ/xXfBw==
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie6.idc.renesas.com with ESMTP; 20 Oct 2025 23:31:31 +0900
-Received: from vm01.adwin.renesas.com (unknown [10.226.92.23])
-	by relmlir6.idc.renesas.com (Postfix) with ESMTP id 46A8F41CCD99;
-	Mon, 20 Oct 2025 23:31:25 +0900 (JST)
-From: Ovidiu Panait <ovidiu.panait.rb@renesas.com>
-To: john.madieu.xa@bp.renesas.com,
-	rafael@kernel.org,
-	daniel.lezcano@linaro.org,
-	rui.zhang@intel.com,
-	lukasz.luba@arm.com,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	geert+renesas@glider.be,
-	magnus.damm@gmail.com,
-	mturquette@baylibre.com,
-	sboyd@kernel.org
-Cc: linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	linux-clk@vger.kernel.org
-Subject: [PATCH v2 3/3] arm64: dts: renesas: r9a09g057: Add TSU nodes
-Date: Mon, 20 Oct 2025 14:31:07 +0000
-Message-ID: <20251020143107.13974-4-ovidiu.panait.rb@renesas.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20251020143107.13974-1-ovidiu.panait.rb@renesas.com>
-References: <20251020143107.13974-1-ovidiu.panait.rb@renesas.com>
+	s=arc-20240116; t=1760972615; c=relaxed/simple;
+	bh=iUG+fRnnUVsa259c08kxC+gXjuE42e8X9HNnAtoNEl8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=R10ncT2JVf0BLJgGuZKg2GSC0U5U8mm0W0Ti1+I+ceqMnzPUJHOnpDM0/n+eMVCcZmQAGqOSG+hYja+I7RxS2YT9wDY01PitiODhoTgzKJq7dgikLo8mamdT05IuPk1WoSpyPrBcKIrgtD5EdTjZEqjGstJ66KerIjtjXaiiy40=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ohBwijkW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B6B5C4CEF9;
+	Mon, 20 Oct 2025 15:03:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1760972614;
+	bh=iUG+fRnnUVsa259c08kxC+gXjuE42e8X9HNnAtoNEl8=;
+	h=From:To:Cc:Subject:Date:From;
+	b=ohBwijkWaIjvhjaDuLMjE0LGurcDhRmxVVh1v/Z8SOIQNTqviNh2nzb/78CzMAMMb
+	 sPiC0mmyDdGKWhI1soCSAMQPipua1Y7iMuXd2964YXBulXgOvW/OuQm/kZxiCpv3Os
+	 Y3/IxmxdbdnqwJX4inad+nmYhQzUJu2w8bnka3oE/6GiFyc6AoWDvVnZo6INoHEbxj
+	 6jQaGm+Ok8poL0EfAyiF6PP8uLSsfY6XVX8cr9IxmYG0lghiWkUXQB/MSLJZ5XcAKk
+	 dgU0+yDFxitlzua2KpLpXSGEGv2L49iqC+wNX3YNFUXcZaCXZumLbMLH0k5gnQdQ2s
+	 I1WMLjIh0RvEg==
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+To: Linux PM <linux-pm@vger.kernel.org>
+Cc: Jonathan Cameron <jonathan.cameron@huawei.com>,
+ Takashi Iwai <tiwai@suse.de>, LKML <linux-kernel@vger.kernel.org>,
+ Linux PCI <linux-pci@vger.kernel.org>,
+ Alex Williamson <alex.williamson@redhat.com>,
+ Bjorn Helgaas <helgaas@kernel.org>, Zhang Qilong <zhangqilong3@huawei.com>,
+ Ulf Hansson <ulf.hansson@linaro.org>, Frank Li <Frank.Li@nxp.com>,
+ Dhruva Gole <d-gole@ti.com>, Dan Williams <dan.j.williams@intel.com>
+Subject: [PATCH v1] PM: runtime: Fix conditional guard definitions
+Date: Mon, 20 Oct 2025 17:03:28 +0200
+Message-ID: <5943878.DvuYhMxLoT@rafael.j.wysocki>
+Organization: Linux Kernel Development
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
 
-The Renesas RZ/V2H SoC includes a Thermal Sensor Unit (TSU) block designed
-to measure the junction temperature. The device provides real-time
-temperature measurements for thermal management, utilizing two dedicated
-channels for temperature sensing:
-- TSU0, which is located near the DRP-AI block
-- TSU1, which is located near the CPU and DRP-AI block
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Since TSU1 is physically closer the CPU and the highest temperature
-spot, it is used for CPU throttling through a passive trip and cooling
-map. TSU0 is configured only with a critical trip.
+Since pm_runtime_get_active() returns 0 on success, all of the
+DEFINE_GUARD_COND() macros in pm_runtime.h need the "_RET == 0"
+condition at the end of the argument list or they would not work
+correctly.
 
-Add TSU nodes along with thermal zones and keep them enabled in the SoC
-DTSI.
-
-Signed-off-by: Ovidiu Panait <ovidiu.panait.rb@renesas.com>
+Fixes: 9a0abc39450a ("PM: runtime: Add auto-cleanup macros for "resume and get" operations")
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/linux-pm/202510191529.BCyjKlLQ-lkp@intel.com/
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
-v2 changes: none
+ include/linux/pm_runtime.h |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
- arch/arm64/boot/dts/renesas/r9a09g057.dtsi | 75 ++++++++++++++++++++++
- 1 file changed, 75 insertions(+)
+--- a/include/linux/pm_runtime.h
++++ b/include/linux/pm_runtime.h
+@@ -629,13 +629,13 @@ DEFINE_GUARD(pm_runtime_active_auto, str
+  * device.
+  */
+ DEFINE_GUARD_COND(pm_runtime_active, _try,
+-		  pm_runtime_get_active(_T, RPM_TRANSPARENT))
++		  pm_runtime_get_active(_T, RPM_TRANSPARENT), _RET == 0)
+ DEFINE_GUARD_COND(pm_runtime_active, _try_enabled,
+-		  pm_runtime_resume_and_get(_T))
++		  pm_runtime_resume_and_get(_T), _RET == 0)
+ DEFINE_GUARD_COND(pm_runtime_active_auto, _try,
+-		  pm_runtime_get_active(_T, RPM_TRANSPARENT))
++		  pm_runtime_get_active(_T, RPM_TRANSPARENT), _RET == 0)
+ DEFINE_GUARD_COND(pm_runtime_active_auto, _try_enabled,
+-		  pm_runtime_resume_and_get(_T))
++		  pm_runtime_resume_and_get(_T), _RET == 0)
+ 
+ /**
+  * pm_runtime_put_sync - Drop device usage counter and run "idle check" if 0.
 
-diff --git a/arch/arm64/boot/dts/renesas/r9a09g057.dtsi b/arch/arm64/boot/dts/renesas/r9a09g057.dtsi
-index e426b9978e22..e88cfc965415 100644
---- a/arch/arm64/boot/dts/renesas/r9a09g057.dtsi
-+++ b/arch/arm64/boot/dts/renesas/r9a09g057.dtsi
-@@ -65,6 +65,7 @@ cpu0: cpu@0 {
- 			next-level-cache = <&L3_CA55>;
- 			enable-method = "psci";
- 			clocks = <&cpg CPG_CORE R9A09G057_CA55_0_CORE_CLK0>;
-+			#cooling-cells = <2>;
- 			operating-points-v2 = <&cluster0_opp>;
- 		};
- 
-@@ -75,6 +76,7 @@ cpu1: cpu@100 {
- 			next-level-cache = <&L3_CA55>;
- 			enable-method = "psci";
- 			clocks = <&cpg CPG_CORE R9A09G057_CA55_0_CORE_CLK1>;
-+			#cooling-cells = <2>;
- 			operating-points-v2 = <&cluster0_opp>;
- 		};
- 
-@@ -85,6 +87,7 @@ cpu2: cpu@200 {
- 			next-level-cache = <&L3_CA55>;
- 			enable-method = "psci";
- 			clocks = <&cpg CPG_CORE R9A09G057_CA55_0_CORE_CLK2>;
-+			#cooling-cells = <2>;
- 			operating-points-v2 = <&cluster0_opp>;
- 		};
- 
-@@ -95,6 +98,7 @@ cpu3: cpu@300 {
- 			next-level-cache = <&L3_CA55>;
- 			enable-method = "psci";
- 			clocks = <&cpg CPG_CORE R9A09G057_CA55_0_CORE_CLK3>;
-+			#cooling-cells = <2>;
- 			operating-points-v2 = <&cluster0_opp>;
- 		};
- 
-@@ -285,6 +289,32 @@ sys: system-controller@10430000 {
- 			resets = <&cpg 0x30>;
- 		};
- 
-+		tsu0: thermal@11000000 {
-+			compatible = "renesas,r9a09g057-tsu", "renesas,r9a09g047-tsu";
-+			reg = <0 0x11000000 0 0x1000>;
-+			interrupts = <GIC_SPI 248 IRQ_TYPE_EDGE_RISING>,
-+				     <GIC_SPI 249 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "adi", "adcmpi";
-+			clocks = <&cpg CPG_MOD 0x109>;
-+			resets = <&cpg 0xf7>;
-+			power-domains = <&cpg>;
-+			#thermal-sensor-cells = <0>;
-+			renesas,tsu-trim = <&sys 0x320>;
-+		};
-+
-+		tsu1: thermal@14002000 {
-+			compatible = "renesas,r9a09g057-tsu", "renesas,r9a09g047-tsu";
-+			reg = <0 0x14002000 0 0x1000>;
-+			interrupts = <GIC_SPI 250 IRQ_TYPE_EDGE_RISING>,
-+				     <GIC_SPI 251 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "adi", "adcmpi";
-+			clocks = <&cpg CPG_MOD 0x10a>;
-+			resets = <&cpg 0xf8>;
-+			power-domains = <&cpg>;
-+			#thermal-sensor-cells = <0>;
-+			renesas,tsu-trim = <&sys 0x330>;
-+		};
-+
- 		xspi: spi@11030000 {
- 			compatible = "renesas,r9a09g057-xspi", "renesas,r9a09g047-xspi";
- 			reg = <0 0x11030000 0 0x10000>,
-@@ -1326,6 +1356,51 @@ stmmac_axi_setup: stmmac-axi-config {
- 		snps,blen = <16 8 4 0 0 0 0>;
- 	};
- 
-+	thermal-zones {
-+		sensor1_thermal: sensor1-thermal {
-+			polling-delay = <1000>;
-+			polling-delay-passive = <250>;
-+			thermal-sensors = <&tsu0>;
-+
-+			trips {
-+				sensor1_crit: sensor1-crit {
-+					temperature = <120000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		sensor2_thermal: sensor2-thermal {
-+			polling-delay = <1000>;
-+			polling-delay-passive = <250>;
-+			thermal-sensors = <&tsu1>;
-+
-+			cooling-maps {
-+				map0 {
-+					trip = <&sensor2_target>;
-+					cooling-device = <&cpu0 0 3>, <&cpu1 0 3>,
-+							 <&cpu2 0 3>, <&cpu3 0 3>;
-+					contribution = <1024>;
-+				};
-+			};
-+
-+			trips {
-+				sensor2_target: trip-point {
-+					temperature = <95000>;
-+					hysteresis = <1000>;
-+					type = "passive";
-+				};
-+
-+				sensor2_crit: sensor2-crit {
-+					temperature = <120000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+	};
-+
- 	timer {
- 		compatible = "arm,armv8-timer";
- 		interrupts = <GIC_PPI 13 IRQ_TYPE_LEVEL_LOW>,
--- 
-2.51.0
+
 
 
