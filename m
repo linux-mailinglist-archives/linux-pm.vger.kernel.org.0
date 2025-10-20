@@ -1,182 +1,291 @@
-Return-Path: <linux-pm+bounces-36477-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36478-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 86212BF23BD
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 17:55:42 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 89F2FBF23E4
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 17:57:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 12924188D779
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 15:56:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D4D453B5ED1
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 15:56:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06B912773CC;
-	Mon, 20 Oct 2025 15:55:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D46BA2797B5;
+	Mon, 20 Oct 2025 15:56:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W/mDPqXo"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="c5jnV09U"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2C9D2765EA;
-	Mon, 20 Oct 2025 15:55:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5E691F30A9;
+	Mon, 20 Oct 2025 15:56:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760975737; cv=none; b=dhH0pxVOXYm2S7096Vyog4YJGj96b67vFMaPgrsFjgFszOEiW4qTd9fJrQON5v5Lpw5igmZSETf4yvuOT3GYf5F7x22FSLoGaq4yovsvc5rbanXjMafEvcFIUqQGcleyIA8Vn0ysHeur1vFCzudoJv7y77fQZVX26LBUsNsZzpU=
+	t=1760975810; cv=none; b=DwPZv/Uuv4tveMeuDUQH5MqylroFYjWsmMkGC3R7KGMQHMqD3stuWRqwLAGvlWroPdQsW895n+gAb2bnl75SRylPNyZqX3efj2HKWOmOOCJMpREak5Y7ko5SslhHejw2bs8mgm9V+4Xy2kL14teowkzSyEpEyREvKmOjLqesJW0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760975737; c=relaxed/simple;
-	bh=Ux+6jo+bKEelFRnI1rAKVhe+llVndMIj95DyyF3IQkA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kcCUt2d48R4UpC9DOHtzzqa88duaMpmBWkmRX6JKZ0Hf237JQRQUtLdRkJ3ZRhRN9BlcdRit20e52W0bzzRQe765Ox6Du/wXE93fV+dHxLvRrcmu6dScdBpmy30jF01uN6fRVqbOfaXPG8klVKE5y8QxAAaFmkTsJww0NnQ5dRc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W/mDPqXo; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CAFFC116C6;
-	Mon, 20 Oct 2025 15:55:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760975737;
-	bh=Ux+6jo+bKEelFRnI1rAKVhe+llVndMIj95DyyF3IQkA=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=W/mDPqXoYMArX3Baaai+ndiEGA0AzD5b77GwWuZBqGIrB5R8qlD/9pkilAsrluKoG
-	 t95Lw8iFBhMZBdps7Ysi2Hl6+z5VzpZ6fDddsY9FRDUhQnYvi+dQJ3sXdIUrX0dl67
-	 rMVb9g77Fn1vVxsaCFnm0/Vz1cICDFR1Y/kert2uU3zGJpefUxePAtmyjEZ+lNLFeT
-	 9+iyz1+h4xGqsy0yCCCK4dVzVLBZ0JzU4DUVoieI7Ns9sJSy3igbYSO1qVRwci+sIJ
-	 MMEYvXKGojWbKkIMnDPm1mU4oRy29DC/XPYWzH3g3g+WcxebeviuWz05eT/zgCMlZu
-	 Kp4hH4bwoACSg==
-Message-ID: <4979bd26-0a77-4390-9db2-6d40cd7f963c@kernel.org>
-Date: Mon, 20 Oct 2025 17:55:27 +0200
+	s=arc-20240116; t=1760975810; c=relaxed/simple;
+	bh=WZ4YUk4WU8McD6JGE5J0TWtxlA38dDDDBVKgtRpK7FY=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=E5r/GhD5j5g+Km7t20JbjcNJJ9GZmSG4rvpirbM55NaXbhjDL47jncnLNRo7ftWiVGwBJVStUscKmWzG97Y5u4nEzjcZH2I3TM2YvmLpF3/xweZEeA4BaTaqb+95xouamKk1+Tub8yLCNV8QifI5/4MlpBacl1ZeJ0BPQrj3oq0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=c5jnV09U; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1760975808; x=1792511808;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version:content-id;
+  bh=WZ4YUk4WU8McD6JGE5J0TWtxlA38dDDDBVKgtRpK7FY=;
+  b=c5jnV09UHIMrgrm0Ykw0wC5b18qMSr7gur4j4g7ym93if0SHvKgsKEAf
+   RpcuXRsfSDQnZyISowUc3e+OPJ706mbawppzNBpq0cRKdcNBN74Nyih2X
+   7FG4Rb2J0nz1+ACh/KS4EqI99DsH3bfkyJsMC90ILYr+UYzBd1orCAq1G
+   /zfxbNbWhqSlz6Miatd85NM5lYK7tz89bN/uoWxXv57WjAHON8BsD2U3h
+   K7KpzRV/PnIY/XQsiSo3kB/DIL6qM0CozKisb8VW15oqNpw3Z1BLxqRPy
+   RDkXUlLKkFTsGZVhVdVSpYiEjA33nwFVey76Y9U//Wi/8R4JjRm4BLVq5
+   g==;
+X-CSE-ConnectionGUID: Ij9sGUOqSya0CcOPHnh1ug==
+X-CSE-MsgGUID: ryfnPa+kR9iPhuieks2OOQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="50662745"
+X-IronPort-AV: E=Sophos;i="6.19,242,1754982000"; 
+   d="scan'208";a="50662745"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2025 08:56:48 -0700
+X-CSE-ConnectionGUID: M1kcM3wpSWGkD4JmczsKcQ==
+X-CSE-MsgGUID: NAoIyT/pR1G1rEQE24fCUg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,242,1754982000"; 
+   d="scan'208";a="220511818"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.76])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2025 08:56:45 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Mon, 20 Oct 2025 18:56:41 +0300 (EEST)
+To: Brian Norris <briannorris@chromium.org>
+cc: Lukas Wunner <lukas@wunner.de>, Bjorn Helgaas <bhelgaas@google.com>, 
+    LKML <linux-kernel@vger.kernel.org>, linux-pm@vger.kernel.org, 
+    "Rafael J . Wysocki" <rafael@kernel.org>, linux-pci@vger.kernel.org
+Subject: Re: [PATCH] PCI/PM: Prevent runtime suspend before devices are fully
+ initialized
+In-Reply-To: <aPKANja_k1gogTAU@google.com>
+Message-ID: <08976178-298f-79d9-1d63-cff5a4e56cc3@linux.intel.com>
+References: <20251016155335.1.I60a53c170a8596661883bd2b4ef475155c7aa72b@changeid> <aPH_B7SiJ8KnIAwJ@wunner.de> <67381f3b-4aee-a314-b5dd-2b7d987a7794@linux.intel.com> <aPKANja_k1gogTAU@google.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V7 3/5] dt-bindings: iio: adc: Add support for QCOM PMIC5
- Gen3 ADC
-To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
- Jishnu Prakash <jishnu.prakash@oss.qualcomm.com>,
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Jonathan Cameron <jic23@kernel.org>, robh@kernel.org, krzk+dt@kernel.org,
- conor+dt@kernel.org, agross@kernel.org, andersson@kernel.org,
- lumag@kernel.org, dmitry.baryshkov@oss.qualcomm.com, konradybcio@kernel.org,
- daniel.lezcano@linaro.org, sboyd@kernel.org, amitk@kernel.org,
- thara.gopinath@gmail.com, lee@kernel.org, rafael@kernel.org,
- subbaraman.narayanamurthy@oss.qualcomm.com, david.collins@oss.qualcomm.com,
- anjelique.melendez@oss.qualcomm.com, kamal.wadhwa@oss.qualcomm.com,
- rui.zhang@intel.com, lukasz.luba@arm.com, devicetree@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- cros-qcom-dts-watchers@chromium.org, quic_kotarake@quicinc.com,
- neil.armstrong@linaro.org, stephan.gerhold@linaro.org,
- Jonathan Cameron <Jonathan.Cameron@huawei.com>
-References: <20250826083657.4005727-1-jishnu.prakash@oss.qualcomm.com>
- <20250826083657.4005727-4-jishnu.prakash@oss.qualcomm.com>
- <20250829-classic-dynamic-clam-addbd8@kuoka>
- <5d662148-408f-49e1-a769-2a5d61371cae@oss.qualcomm.com>
- <4e974e77-adfc-49e5-90c8-cf8996ded513@kernel.org>
- <a0e885be-e87d-411a-884e-3e38a0d761e5@oss.qualcomm.com>
- <8c90cc3f-115e-4362-9293-05d9bee24214@linaro.org>
- <5d4edecf-51f3-4d4a-861f-fce419e3a314@oss.qualcomm.com>
- <20250927144757.4d36d5c8@jic23-huawei>
- <a3158843-dfac-4adc-838a-35bb4b0cbea4@oss.qualcomm.com>
- <CAGE=qrrCvq28pr9Y7it-CGMW=szKUnU+XBj1TmpoUwuASM05ig@mail.gmail.com>
- <31bd08ce-823a-4a71-baca-a9d1e02fcb6a@oss.qualcomm.com>
- <08eb477f-ea34-4a31-b181-bfc629aef4c8@kernel.org>
- <68a9b8e8-bdf4-430f-baef-6a293ccea78d@oss.qualcomm.com>
- <d8a78b7c-e3a9-44b5-986d-8ac32f328eb6@kernel.org>
- <3a32746a-5b0e-4c0a-8322-00cd3a84394a@oss.qualcomm.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <3a32746a-5b0e-4c0a-8322-00cd3a84394a@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; BOUNDARY="8323328-1420943740-1760974941=:976"
+Content-ID: <a433eea2-38a5-aacf-0723-f8969cd2b3ff@linux.intel.com>
 
-On 20/10/2025 14:51, Konrad Dybcio wrote:
-> On 10/17/25 3:40 PM, Krzysztof Kozlowski wrote:
->> On 17/10/2025 13:18, Jishnu Prakash wrote:
->>> Hi Krzysztof,
->>>
->>> On 10/9/2025 5:22 AM, Krzysztof Kozlowski wrote:
->>>> On 08/10/2025 23:20, Jishnu Prakash wrote:
->>>>> Hi Krzysztof,
->>>>>
->>>>> On 10/4/2025 12:22 PM, Krzysztof Kozlowski wrote:
->>>>>> On Sat, 4 Oct 2025 at 11:42, Jishnu Prakash
->>>>>> <jishnu.prakash@oss.qualcomm.com> wrote:
->>>>>>>
->>>>>>> Hi Jonathan,
->>>>>>>
->>>>>>> On 9/27/2025 7:17 PM, Jonathan Cameron wrote:
->>>>>>>> On Fri, 19 Sep 2025 20:17:43 +0530
->>>>>>>> Jishnu Prakash <jishnu.prakash@oss.qualcomm.com> wrote:
-> 
-> [...]
-> 
->>> Can you please provide your suggestions on changes we can make
->>> in the above points ?
->>
->> You just pasted DT. I asked about SW, software. Please read carefully
->> previous comments.
-> 
-> Is the problem that Jishnu included some indices in dt-bindings without
-> also adding them in the driver's adc5_gen3_chans_pmic[] array?
-> 
-> As in, would the resolution to this thread be simply handling all of
-> them in the driver correctly?
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-The solution is to remove them from the bindings, just like we do with
-many other hardware constants. Of course if these are not hardware
-constants, but part of ABI, then solution would be different but no one
-provided proof or argument that this is any binding. All proofs were
-"but I want to use it in my DTS", which proofs nothing. Not a binding.
+--8323328-1420943740-1760974941=:976
+Content-Type: text/plain; CHARSET=ISO-8859-15
+Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-ID: <a1a9a386-1566-03e9-e284-96c6675bae0c@linux.intel.com>
 
-While this issue is not that important, we keep discussing it because
-author does not try to understand the problem or even keep up the
-discussion. Instead repeats the same without really reading my
-messages... and then disappears for month or more.
+On Fri, 17 Oct 2025, Brian Norris wrote:
 
-Best regards,
-Krzysztof
+> Hi Ilpo and Lukas,
+>=20
+> I'll reply to both of you inline:
+
+I see you posted v2 but I'm answering here to have the context available.=
+=20
+Mostly things seem okay after your explanation, I think the only question=
+=20
+mark is a driver calling pci_resize_resource() directly to resize BARs.
+
+> On Fri, Oct 17, 2025 at 02:49:35PM +0300, Ilpo J=E4rvinen wrote:
+> > On Fri, 17 Oct 2025, Lukas Wunner wrote:
+> >=20
+> > > [cc +=3D Ilpo]
+> > >=20
+> > > On Thu, Oct 16, 2025 at 03:53:35PM -0700, Brian Norris wrote:
+> > > > PCI devices are created via pci_scan_slot() and similar, and are
+> > > > promptly configured for runtime PM (pci_pm_init()). They are initia=
+lly
+> > > > prevented from suspending by way of pm_runtime_forbid(); however, i=
+t's
+> > > > expected that user space may override this via sysfs [1].
+> >=20
+> > Is this true as pm_runtime_forbid() also increases PM usage count?
+>=20
+> Yes it's true. See below.
+>=20
+> > "void pm_runtime_forbid(struct device *dev);
+> >=20
+> > unset the power.runtime_auto flag for the device and increase its=20
+> > usage counter (used by the /sys/devices/.../power/control interface to=
+=20
+> > effectively prevent the device from being power managed at run time)"
+>=20
+> Right, but sysfs `echo auto > .../power/control` performs the inverse --
+> pm_runtime_allow() -- which decrements that count.
+
+Fair enough, I didn't check what it does.
+
+IMO, the details about how the usage count behaves should be part of the=20
+changelog as that documentation I quoted sounded like user control is=20
+prevented when forbidden. I see you've put this part of the explanation=20
+into the v2 as well so I suggest you explain the usage count in the change=
+=20
+so it is recorded in the commit if somebody has to look at this commit=20
+years from now.
+
+> > > > Now, sometime after initial scan, a PCI device receives its BAR
+> > > > configuration (pci_assign_unassigned_bus_resources(), etc.).
+> > > >=20
+> > > > If a PCI device is allowed to suspend between pci_scan_slot() and
+> > > > pci_assign_unassigned_bus_resources(), then pci-driver.c will
+> > > > save/restore incorrect BAR configuration for the device, and the de=
+vice
+> > > > may cease to function.
+> > > >=20
+> > > > This behavior races with user space, since user space may enable ru=
+ntime
+> > > > PM [1] as soon as it sees the device, which may be before BAR
+> > > > configuration.
+> > > >=20
+> > > > Prevent suspending in this intermediate state by holding a runtime =
+PM
+> > > > reference until the device is fully initialized and ready for probe=
+().
+> > >
+> > > Not sure if that is comprehensible by everybody.
+>=20
+> Yeah, thanks for trying to clarify. After getting too far into the weeds
+> on a bug, I sometimes don't spend the appropriate time on writing a
+> simple problem description. Maybe I can do better on a v2.
+>=20
+> > > The point is that
+> > > unbound devices are left in D0 but are nevertheless allowed to
+> > > (logically) runtime suspend.  And pci_pm_runtime_suspend() may call
+> > > pci_save_state() while config space isn't fully initialized yet,
+> > > or pci_pm_runtime_resume() may call pci_restore_state() (via
+> > > pci_pm_default_resume_early()) and overwrite initialized config space
+> > > with uninitialized data.
+>=20
+> Ack.
+>=20
+> > > Have you actually seen this happen in practice?
+>=20
+> Yes, that's why I spent my time debugging and submitting this patch :)
+
+Thanks for doing it! :-)
+
+> > > Normally enumeration
+> > > happens during subsys_initcall time, when user space isn't running ye=
+t.
+> > > Hotplug may be an exception though.
+>=20
+> Hotplug, rescan (e.g., when pwrctrl is in use, power may be stablished
+> later on, and it triggers a bus rescan; pwrctrl drivers can be modules),
+> or PCI controller drivers built as modules.
+>=20
+> I happen to be using both pwrctrl and controller drivers as modules, so
+> I hit it that way.
+>=20
+> > Adding that pm_runtime_get_noresume() doesn't look useful given=20
+> > pm_runtime_forbid() already increases PM usage count. If this problem i=
+s=20
+> > actually seen in practice, there could a bug elsewhere where something=
+=20
+> > decrements usage count too early so this change "helps" by double=20
+> > incrementing the usage count.
+> >=20
+> > To find more information what's going on, one could try to trace events=
+=20
+> > for the PM usage count (though last time I looked not all paths that=20
+> > change PM usage count were covered by the event and adding the=20
+> > trace_event() calls into the header turned out too much magic for me to=
+=20
+> > figure out so I couldn't solve the problem).
+>=20
+> See above. forbid() is not a guaranteed blocker, because user space can
+> undo it.
+>=20
+> > > Patch LGTM in principle, but adding Ilpo to cc who is refactoring PCI
+> > > resource allocation and may judge whether this can actually happen.
+> >=20
+> > I can see there could be other failure modes besides just saving wrong=
+=20
+> > config if devices get suspended underneath the resource assignment=20
+> > algorithm.
+> >=20
+> > Besides hotplug, also BAR resize does changes the resources and BARs.
+> > This case is not helped by this patch.
+>=20
+> Is that the 'resource_N_resize' sysfs attributes? Becuase that holds PM
+> references (pci_config_pm_runtime_{get,put}()) and therefore should not
+> generally have the same problem.
+
+Okay, seem fine for the PCI core part.
+
+Driver's can also trigger BAR resize by calling pci_resize_resource()=20
+directly but I've no idea how the usage counts behave (TBH, PM isn't my=20
+strongest forte even if Lukas pulled me in to comment).
+
+> pci-driver.c's runtime suspend will
+> save a new copy of the registers the next time we suspend after resize.
+>=20
+> (Now, some drivers could have problems if they try to stash a static
+> copy via pci_store_saved_state()/pci_load_saved_state(), but that
+> invites plenty of its own problems anyway.)
+>=20
+> > I also recently learned some DT platforms do the "actual" scan for the =
+bus=20
+> > later on Link Up event through irq which could perhaps occur late enoug=
+h,=20
+> > I dunno for sure.
+>=20
+> Sure, but that'd be covered by my patch, as those (re)scans would
+> discover new devices in the same scan+add flow.
+
+Okay, maybe it's fine like the rest. I was mostly trying to think=20
+non-subsys_initcall() cases I knew of without contextualizing them back to=
+=20
+this patch.
+
+> > > I think the code comments you're adding are a little verbose and a si=
+mple
+> > > /* acquired in pci_pm_init() */ in pci_bus_add_device() may be suffic=
+ient.
+> >=20
+> > I'm also not entirely convinced these always pair
+>=20
+> That's a very valid question. There are so many variations of scan+add
+> that it's been hard for me to tell.
+
+I've noticed... unfortunately I find myself often in the same boat. :-/
+
+> I've studied the code pretty
+> closely, and tested what I could, but I don't have hotplug systems on
+> hand, and I definitely could miss something.
+>=20
+> FWIW, Rafael suggested/implied an alternative, where I could simply
+> delay pm_runtime_enable() until pci_bus_add_device(). That would dodge
+> the pairing questions, I think.
+
+Yes.
+
+> > or if the pci_dev may=20
+> > get removed before pci_bus_add_device(), see e.g., enable_slot() in=20
+> > hotplug/acpiphp_glue.c that does acpiphp_sanitize_bus() before=20
+> > pci_bus_add_devices() (which could have other bugs too as is).
+>=20
+> I believe it should be OK if a device is removed before the
+> pm_runtime_put_noidle() half of the pair. It just means the device gets
+> destroyed with a nonzero PM usage count, which is legal.
+
+Ah yes, I think I was too attached to the "pairing" thought at that point=
+=20
+to see this isn't like e.g. a lock/unlock pair.
+
+
+--=20
+ i.
+--8323328-1420943740-1760974941=:976--
 
