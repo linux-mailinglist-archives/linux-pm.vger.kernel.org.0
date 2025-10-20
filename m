@@ -1,141 +1,181 @@
-Return-Path: <linux-pm+bounces-36463-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36464-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id A0A21BF17EE
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 15:16:59 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 738A1BF1816
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 15:19:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 53E6E4F498C
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 13:16:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7CBDD3E0C41
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 13:18:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7246B29DB65;
-	Mon, 20 Oct 2025 13:16:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F1BB25A655;
+	Mon, 20 Oct 2025 13:18:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="LuyIgp7h"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EwALX88j"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yx1-f53.google.com (mail-yx1-f53.google.com [74.125.224.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B22A821348
-	for <linux-pm@vger.kernel.org>; Mon, 20 Oct 2025 13:16:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 798C21B21BF
+	for <linux-pm@vger.kernel.org>; Mon, 20 Oct 2025 13:18:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760966182; cv=none; b=PU6S3una1tRQLF+hqc8VN+w/mqGBip1gLGbNbWeFyjdPwdEwD/p1DhEomSuf6BPtHDpWy/bfGc1ZXrg+7jjvr6dCOYikb5eJVWe4GBKd0TAe7MdwELntKSi51VYfAgkIfKAUB96OIXelwiElIe09qWL0TPQE7sF7HA4esYYF80I=
+	t=1760966322; cv=none; b=gqbvnlMa7XiaiabQxYbwCZ3OYaNT3uZvptZ0Qg1DbOWj6MeiA0sOZnFjNL9sg5bQbW1P0OZDVeSrobA+l/yEant253XC/lorD4p7ZtgtLNWJy0id6p+hpqbFVnNJNDCpd9F5nkFEgchhia8dC48PWmW69ZEfVo9RFTDbO6tAzRI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760966182; c=relaxed/simple;
-	bh=Mts36fyNnyZuf8TR6hsMlEXKwl2CcVVXzvx1QoeQXrM=;
+	s=arc-20240116; t=1760966322; c=relaxed/simple;
+	bh=T3ZbtjSKT8Lj7egPFjM6MiatDeaM7MGWw8l3RDf0DmU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uCjUfeIO/PMOvGi+3NyOiE9vdPY3TJhiniiHkbeSQ5GtMf1hstfzdd5PvWmUuuJnkuERlsArbXsv6dW5kIpG1zkMSEEqzkSHGvAPZsAsR+Pl5qTjkDhmC2MSYurrKdMrfZ9qlEbid1ppcoEGkTOrjD0Yahnowe//uni09QHrUlg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=LuyIgp7h; arc=none smtp.client-ip=74.125.224.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yx1-f53.google.com with SMTP id 956f58d0204a3-63b710f276fso4629256d50.1
-        for <linux-pm@vger.kernel.org>; Mon, 20 Oct 2025 06:16:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1760966180; x=1761570980; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Bv/hgIoX+50q6Ixl1xcYkiMJg4G9dL+7TCf9i2+ayLE=;
-        b=LuyIgp7hYcD5rggvHOqpDkGLm6dVcg27vqPhVb839P8eA6a4GW4fZKE3se+qmbqKJ9
-         bma8T5YGzJZOyJoDjV4YH/9yov/ebdqhNYagBDbkZkS98f9bZ8GF7Pk9mHDrzAvF/S1d
-         UUeMgYiqfjFs+bOMqGLeLsWRRM7ZhE4AQOQWbfddRShxe0k8C/+SAHLxaKRoXBxvhxrF
-         KtPlxPLBnyJamgHeOZF5O5ZmWCu61v5SiAsfgNgWvbH6nTwA4dJmM5a3JFP9sseckhmj
-         XWaaLDU7YSevjXleYoOIVvXhv20rAaC0jDLJGgeMBs/PXSnQUr9NX6+PUeeIsCClMRRk
-         gKiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760966180; x=1761570980;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Bv/hgIoX+50q6Ixl1xcYkiMJg4G9dL+7TCf9i2+ayLE=;
-        b=k9KyEVGrLOWJNHMqCU+V1J2LCx5JFNEJ7gG636PtZLqHF40VJs85amw4dOdZRJBwKt
-         j12YFE5/gebAnYGFbb3TwKIpGShMtVlg3WsqUdsmsomjXVirrSFmLzdH2l4ovN25phlJ
-         iBSbCL4N46KA0u3yaQ2FAm8PpPEIz84/KgcQh9PUVUjPkVJheF2fJQx4IMxpvvml+KEy
-         EErc2ym3WYv60+tlXjMQs3EegxRohEGkE649lokD5+cng86x8fCIFau0fPrGL2GkVcfJ
-         OaoSUmtlzouOgZIcXBa8ThE+ck9sF0P7DegiFPgSheQ+6JL8cR033g8031XptdSuSZbb
-         lu+w==
-X-Forwarded-Encrypted: i=1; AJvYcCWzkIETV2FBMwPtUQdbdFkM//p1s7Lv1aEe5yf+D8JAibyZJ6oNK9uHn2m4Hsmbazee0+UmzgCG0Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy7sooUH6bmESc8M4N3RV9lSUIy9PDANQpHaqYhX95i+JggiZnp
-	4UzckACUrep4MvruxkZm4On8Db3/xkC67jXm6U71iTTi4crfoNnnqWuA//XwWb+VEvOCLvbyrl3
-	IJeAhoInMZcLXfK/5lhP4JQCBmUOiwHCorY5c2BhXww==
-X-Gm-Gg: ASbGncusDVOVtENduYdxM08SJbBlNbUqFdh+wugZKqTMF98eDLEpi4qXcndQAyFAxv4
-	WW5Y4XTShKN4fcNR4P+k84Rsup8VkVB34/jFxNaAgK//IE8h8gaK6ZXYqaoPAQd6Zw0dWBP1Q2F
-	ua9IhKEYy4col56i253qgPaMVxqldayUNyQJCR4SWdfV+b4nGafG7i84PIKzEi4hbyFcz3YZBVX
-	ZuEz9agMMGlagquvIgtHKgaMfs1KeHFggIvXKvUyCoxl6krpWx+UCoCtrq9MYO/Ab1239Ep
-X-Google-Smtp-Source: AGHT+IGnRUd6oOWdcIGq7ZJOM2TXHgRRiMIGNGat5wkkLEzDStDeU0jE+0gV73QBrOSN31p7sfrpQMby2GN8IBO6/98=
-X-Received: by 2002:a05:690e:134f:b0:63e:3352:4eef with SMTP id
- 956f58d0204a3-63e335251d5mr4077188d50.69.1760966179641; Mon, 20 Oct 2025
- 06:16:19 -0700 (PDT)
+	 To:Cc:Content-Type; b=pGGBx2prZ3x4jvPMoCHQIBvYW2cmxlSH3Kko9Zicj11Bw6leFzyHNpsE/rsNl+pTrqYaCSaWRiQdZ7mlkNPqx5DcDIc4SDKUmTzre0BDY2Sxw/TWobY55t+sxw86oqfl1KoJFJp7GemTe12HeKTxmvsA32B05euft1kX1x0T2ks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EwALX88j; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 287BAC19421
+	for <linux-pm@vger.kernel.org>; Mon, 20 Oct 2025 13:18:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1760966322;
+	bh=T3ZbtjSKT8Lj7egPFjM6MiatDeaM7MGWw8l3RDf0DmU=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=EwALX88jE+a5/SJm114LxzVAweK1Zqq8niclfsDsy3HZMBCxFYb4xDf43S6fM4xDy
+	 996IjgH/1tA+OFM2usFAKN/taqUu3iklUOGYHfmBD0A8P3jd4Le9kEAdpVmIc/xt4M
+	 w3IhGhetqU/KpOvXG7j2FvvGhbExSC2Yt1oLUA628wtDju8dPinLqOrKiTAE9eTRzl
+	 QwGTKo6Z0OSKKB1X55Zrc3FkMw4J5ziEqaPaAh8uvXg5TPSH6YD5JFWq4K2RCj8YgO
+	 aqBfx9D7UXhrQeNy6EiDft4Iysd08VDEHcBd6Ze/5pqEkLG4hNV5Npz/QJpUKKjw+G
+	 z40F3nwPsMQQg==
+Received: by mail-oi1-f171.google.com with SMTP id 5614622812f47-43f88d33872so1803065b6e.0
+        for <linux-pm@vger.kernel.org>; Mon, 20 Oct 2025 06:18:42 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWkesvb+rTcCU10PZOLbgG5W3WkiRsWAGoCxwiGm1cI6pmYae1zNeeG0cGhdmgQORdnx3Tm+n0UXw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxFmpiWP2QAWIIARMIDN4SS+9Xx3XkU2sNu4yX6blfe2ar+BoCP
+	OJ50bTn3DonSlX66wCf8+Nhi8QYoDSkoo2+nD3Rp2dpwcWXAJDJ+28enU5HHnu+Wd9lQRzQevvb
+	zw0bTIqEGQHewy6GoxvFLkzWGR7SKc/o=
+X-Google-Smtp-Source: AGHT+IF/IMbPwn3GU9n0xfrwMBAuzNb6Pn6kpxiIwhCKY05pivQFzdXOwTuxpU/TktIIh6PsdQ9Id4DfpO4//2n4z0w=
+X-Received: by 2002:a05:6808:448d:b0:43f:57cb:7fa0 with SMTP id
+ 5614622812f47-443a313d2e4mr5097747b6e.46.1760966321405; Mon, 20 Oct 2025
+ 06:18:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251003150251.520624-1-ulf.hansson@linaro.org>
- <20251003150251.520624-3-ulf.hansson@linaro.org> <87ms5pzkxa.ffs@tglx>
-In-Reply-To: <87ms5pzkxa.ffs@tglx>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Mon, 20 Oct 2025 15:15:43 +0200
-X-Gm-Features: AS18NWAQ9Q6Yt14QDB7s6GeA-9Aoe7Poi1wd95vo2hk4UxQrH-HTLgjH3ho0lzw
-Message-ID: <CAPDyKFrVkO1nn-1C7z9RJBX-bzxQ8_tBhhKNaK7h++NbAoT3zg@mail.gmail.com>
-Subject: Re: [PATCH 2/3] arm64: smp: Implement cpus_has_pending_ipi()
-To: Thomas Gleixner <tglx@linutronix.de>, Mark Rutland <mark.rutland@arm.com>, 
-	Marc Zyngier <maz@kernel.org>
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Maulik Shah <quic_mkshah@quicinc.com>, 
-	Sudeep Holla <sudeep.holla@arm.com>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Vincent Guittot <vincent.guittot@linaro.org>, linux-pm@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <4687373.LvFx2qVVIh@rafael.j.wysocki> <5f0aa630-b30a-44c4-a52c-e08179cd3bf9@arm.com>
+ <CAJZ5v0gBtv0bpK2swkc6D0AmanpKAvqO53dgRp2e7p9cWAM3TA@mail.gmail.com>
+ <28ecb23b-ecee-409a-9771-24f801081d07@arm.com> <CAJZ5v0jMoEVUaYYPx6EtHFxsg6TF-QtDWJGrasGK7C2C+JxOFw@mail.gmail.com>
+ <001801dc4041$607c19f0$21744dd0$@telus.net> <8ccf53bd-81cc-4c7b-88b5-5d7aeebf2c3f@arm.com>
+In-Reply-To: <8ccf53bd-81cc-4c7b-88b5-5d7aeebf2c3f@arm.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 20 Oct 2025 15:18:22 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0ijNkUQdTGRUHRUQKKeEzCR354CGkf-L2oUsG51bnU5oA@mail.gmail.com>
+X-Gm-Features: AS18NWATCzTLrtkVknl3eJY6FaRyejQGQJdzCQsbaYC0yK49S0qSAqlbZ709Yq0
+Message-ID: <CAJZ5v0ijNkUQdTGRUHRUQKKeEzCR354CGkf-L2oUsG51bnU5oA@mail.gmail.com>
+Subject: Re: RE: [PATCH v1] cpuidle: governors: menu: Predict longer idle time
+ when in doubt
+To: Christian Loehle <christian.loehle@arm.com>
+Cc: Doug Smythies <dsmythies@telus.net>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Sergey Senozhatsky <senozhatsky@chromium.org>, Linux PM <linux-pm@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, 
+	Artem Bityutskiy <artem.bityutskiy@linux.intel.com>, Tomasz Figa <tfiga@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-+ Marc
+On Sun, Oct 19, 2025 at 4:45=E2=80=AFPM Christian Loehle
+<christian.loehle@arm.com> wrote:
+>
+> On 10/18/25 16:10, Doug Smythies wrote:
+> > Hi all,
+> >
+> > I have been following and testing these menu.c changes over the last mo=
+nths,
+> > but never reported back on this email list because:
+> > 1.) I never found anything significant to report.
+> > 2.) I always seemed to be a week or more behind the conversations.
+>
+> Your input is always appreciated!
 
-On Fri, 17 Oct 2025 at 16:01, Thomas Gleixner <tglx@linutronix.de> wrote:
->
-> On Fri, Oct 03 2025 at 17:02, Ulf Hansson wrote:
-> > Note, the implementation is intentionally lightweight and doesn't use
-> > any
->
-> By some definition of lightweight.
->
-> >  static void smp_cross_call(const struct cpumask *target, unsigned int ipinr)
-> >  {
-> > +     unsigned int cpu;
-> > +
-> > +     for_each_cpu(cpu, target)
-> > +             per_cpu(pending_ipi, cpu) = true;
->
-> Iterating over a full cpumask on a big system is not necessarily
-> considered lightweight. And that comes on top of the loop in
-> smp_call_function_many_cond() plus the potential loop in
-> arm64_send_ipi()...
->
-> None of this is actually needed. If you want a lightweight racy check
-> whether there is an IPI en route to a set of CPUs then you can simply do
-> that in kernel/smp.c:
->
-> bool smp_pending_ipis_crystalball(mask)
-> {
->         for_each_cpu(cpu, mask) {
->                 if (!llist_empty(per_cpu_ptr(&call_single_queue, cpu)))
->                         return true;
->         }
->         return false;
-> }
->
-> No?
+Indeed.
 
-Indeed this is way better, thanks for your suggestion!
+> >
+> > On 2025.10.18 04:47 Rafael wrote:
+> >> On Fri, Oct 17, 2025 at 8:37=E2=80=AFPM Christian Loehle wrote:
+> >>> On 10/17/25 10:39, Rafael J. Wysocki wrote:
+> >>>> On Fri, Oct 17, 2025 at 10:22=E2=80=AFAM Christian Loehle wrote:
+> >>>>> On 10/16/25 17:25, Rafael J. Wysocki wrote:
+> >>>>>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >>>>>>
+> >>>>>> It is reported that commit 85975daeaa4d ("cpuidle: menu: Avoid dis=
+carding
+> >>>>>> useful information") led to a performance regression on Intel Jasp=
+er Lake
+> >>>>>> systems because it reduced the time spent by CPUs in idle state C7=
+ which
+> >>>>>> is correlated to the maximum frequency the CPUs can get to because=
+ of an
+> >>>>>> average running power limit [1].
+> >
+> > I would like to understand Sergey's benchmark test better, and even try
+> > to repeat the results on my test system. I would also like to try to
+> > separate the variables in an attempt to isolate potential contributors.
+> >
+> > To eliminate the PL1 effect, limit the CPU frequency to 2300 MHz and re=
+peat
+> > the test. To eliminate potential CPU frequency scaling contributions, u=
+se the
+> > performance CPU frequency scaling governor. Both changes at once would
+> > be an acceptable first step.
+> >
+> > Sergey: Would you be willing to do that test?
+> > Sergey: Could you provide more details about your test?
+>
+> +1
+> Depending on what the actual test does maybe offlining CPUs and comparing=
+ would
+> be interesting too (if this means that we never reach throttling on this =
+system).
 
-I have also tried this out and can confirm that it gives the same
-improved results on the Dragonboard 410c!
+While it would be kind of interesting to know the test details, I
+don't think that this is just one test.
 
-I will submit a new version of the series and I will try to
-incorporate all the valuable feedback I have received.
+Sergey mentioned several different symptoms in his initial message:
 
-Thanks everyone and kind regards
-Uffe
+https://lore.kernel.org/linux-pm/36iykr223vmcfsoysexug6s274nq2oimcu55ybn6ww=
+4il3g3cv@cohflgdbpnq7/
+
+which kind of indicates several different tests regressing, so this
+appears to be a whole-platform issue.
+
+> >>From the turbostat data of the other day, it seems that the system was
+> > only power throttled for about 25 seconds for each test. What we don't =
+know
+> > is how long the test took overall or the magnitude of any contributions=
+ from
+> > the power limit throttling.
+>
+> If I didn't mess up it should be >800s, at least from the sum of idle tim=
+e
+> Sergey provided. (excludes active time)
+> That makes the powerthrottling story less plausible IMO.
+
+Quite evidently, there is a correlation between the max CPU ("busy")
+frequency and the time spent in core C7 on that system.
+
+The only explanation that I can offer is a firmware mechanism turning
+spare power into a CPU boost.
+
+RAPL is such a mechanism and it doesn't throttle strictly speaking,
+but it prevents the CPU package (in the case of PL1) from using more
+energy than it is allowed to use over a given time frame.  One way to
+achieve that is to allow CPUs to run fast at the beginning of the
+measurement window and then throttle them below a certain power level,
+but it is not the only way and it is not likely to be used.  Moreover,
+it is unlikely that the time spent in C7 will affect that because that
+time is not known when the measurement window starts.
+
+Another approach is to keep the package power on a "trajectory" to
+meet the goal and adjust periodically given what all of the CPUs are
+doing.  In that case, it will throttle sometimes when the direction of
+changes is mispredicted, but overall it will set OPPs with certain
+expectation regarding the trend.
+
+Also, on some platforms high-turgo OPPs are "locked" when deep core
+idle states (typically C6 and above) are not utilized, but I'm not
+aware of that being done on Jasper Lake.
 
