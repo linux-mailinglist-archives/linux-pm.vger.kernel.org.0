@@ -1,233 +1,182 @@
-Return-Path: <linux-pm+bounces-36514-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36515-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id E8ED3BF34C1
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 21:56:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id BDEFFBF3537
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 22:07:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 6DE37350B66
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 19:56:13 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id B5823350D68
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 20:07:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBFCE32F74A;
-	Mon, 20 Oct 2025 19:56:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BB662DF70E;
+	Mon, 20 Oct 2025 20:07:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uDLVtYUH"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="AW4HtEiK"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAE6C332908
-	for <linux-pm@vger.kernel.org>; Mon, 20 Oct 2025 19:56:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B10782DBF69
+	for <linux-pm@vger.kernel.org>; Mon, 20 Oct 2025 20:07:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760990166; cv=none; b=dFGyGjkazESiEzKopu+NQ/1xdCuD98sGuRWnunWVW01Un4bKDv08xKBejZVAB5TrvDR1IDgRE1AxLnjszU2WBkA0FHAFimF1T748taTxv2qXpPO4VIySdhLls4ZsM2uuGjjnZRlbye/3Pq2lgCdTxKO/fxUxV/JygnCuD5IGaF0=
+	t=1760990838; cv=none; b=g+UciSNv4iz7FBOrjKuh1sBsSevMM5gbfipkSkmTwN1hAVLSaRiPAK5idjdCNp7o1Ed08e3Jui48vMHhVytxFTJmFYR4VJSBBU8k5qV8oojXO7OlSpgxzk+axtyq7U3aXvnd/NiHTWfolHlAyUGfkXnzLM3EcICKXjgwNmabqTY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760990166; c=relaxed/simple;
-	bh=4qPwDwsdMikXkxvbv56536AorA2BS23G3d3lBe/pp18=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KbfQecbsbya5fuS3rnxgLq8mjJbJsydnNdQkjzhKk/MU+Ot7PcEGwko5CC0gdmRIddEWnGDAV/JwfgELoN6/ZE5yE1Sy1Pc/TOQ4UDvZ6yCOYnZbkgR7Nhyf0wXM0ucT2cSbmn9LRXbWwkIv+BYij/lier52jls7xoDrq5FZ6CE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uDLVtYUH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24B84C19423
-	for <linux-pm@vger.kernel.org>; Mon, 20 Oct 2025 19:56:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760990164;
-	bh=4qPwDwsdMikXkxvbv56536AorA2BS23G3d3lBe/pp18=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=uDLVtYUHEhVihyHRke4z45Bz4LFDVvZiu3HRhjxhPLT7wX4kvqHCYfcc/lby9FoZt
-	 7aXiY94baiolo/wtDidUH/i/A0BjwKliXOJ2pFqOQarzWNmJtqe9qegyFpNioIYIhE
-	 Ck86sp7zQ2TtVa8uiTTrhLqKRAqCx1p21Ku18C8HcKNivVqYl5hhLemxwcxchL/r/6
-	 qxJkkMsKXXHNHUSj803G8sQJ6tyG2ixGyVQhTf9Vw/k7VIdT4JxIsgXVExCFMQC/hg
-	 Zjr8f4ThzYSO/dUevw0drIftwBoupuNfDVbQEBD23lErzZpn+E29yvN3eGlfQ56YL7
-	 xETdjpF/0Y1Mg==
-Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-7c2823c3475so2436272a34.0
-        for <linux-pm@vger.kernel.org>; Mon, 20 Oct 2025 12:56:04 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWy+KpPOU6Tl1GpS9o8ETJN8bkNsjTvlQIo2PorsNKIezUPTJf7euuxiY14jiaAQ/97DUO/0GY/qw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxMHJCeL+GKPAMBO7ORgAcsT/I1otO09+UjOPVUwQ1I8SlKbVeT
-	UkNtPAdZSpLfAieASDMAeFUmw1lU/Un1sWbGgtnvJE0ZIxubPUhXp4iLK6CTbU6Ze4g8ujOKuLl
-	PLzFeeOeCyNDMYTZjjLmi6roqeArq4Q8=
-X-Google-Smtp-Source: AGHT+IEbeg2cLcKOuLYzAZRTr0vuqK20gID3ktgdwJE6wbS86j55xeki8UgqPOj7l4400x1ADOY4J3dF0x2yuvvptrU=
-X-Received: by 2002:a05:6808:4487:b0:43f:76b4:816e with SMTP id
- 5614622812f47-443a2dd85d0mr6750051b6e.4.1760990163403; Mon, 20 Oct 2025
- 12:56:03 -0700 (PDT)
+	s=arc-20240116; t=1760990838; c=relaxed/simple;
+	bh=zLPH0lbgL0Ocuc9pxtO7DECZsxJkyTUfQWX/XLhPKa0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GEMEDdlaytXbMQVzUVSF7qr3q4ibU9sbw0H0gINOsjkWN3WX3GsBJ3X2Q/F3oLZCdULx8nUZbO8H74y9JqhIb3+UF/nrh7UdoV5q1fXYTF43q6J3fy5Vq+lw6+kkcG0O3BoryqY38Hi/YDAxgmtnbVy9+m06DzIAkMZZM9dcujk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=AW4HtEiK; arc=none smtp.client-ip=209.85.210.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-794e300e20dso4647959b3a.1
+        for <linux-pm@vger.kernel.org>; Mon, 20 Oct 2025 13:07:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1760990836; x=1761595636; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=9qvPrU2SVrQkwkVIFxvkw04Dj387TMVRI8Nd6I2AoLU=;
+        b=AW4HtEiKbxOyuVnZknkgFbT3DlKJIqP2Mk3b7vBB3bsaD8iXzdQOziOT5pNtEtvbjK
+         lLAINlH9VkNRn39Ps85e2rd1qCm+Lr6t0lyUSFBnUUI7mebX7d/5ZaeDUVPbUYqCoqMF
+         +1M0EDTsvBIgCPK+r5fXthUZvzXx8eM8qcD+k=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760990836; x=1761595636;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9qvPrU2SVrQkwkVIFxvkw04Dj387TMVRI8Nd6I2AoLU=;
+        b=UF1F28qgEmDqXrDHahwj9B/D6a8KEultxQTwdbN3s/ycHpeliMgG8bzdpeAN4z9fDi
+         PlV6zV/AXwJ1xs4khMOAZVEOLK6L9UZJX3hJx5NLyT0fY1L3mmT5ZgdDP43eBt2fuVeG
+         NCUK3A3+lNxp1HkMkpXsqvPKa/bs3EXeo0cwqeyxbKk/8I359XtUaYspNcqmzlNrpTmd
+         FZUp7txB6hSMehKDQoXQZwyJMeVhzSGQUo16wVtgMXVYv/P0kT0/OmVvRzY0cco2AC4r
+         exMvErUqpzwmmw0LOXBdDoCGSftXasjQRGwMF26N1jdAMWXbDwX7rwIp4WDXdU3gRR9r
+         18Jg==
+X-Forwarded-Encrypted: i=1; AJvYcCV2a+dIIy+BwerMtE65BubrTYYS43vNed9MzFtnFb8XQ5nVOfeWeXTa2u6Y2deUmhMLJLgr5rqGGA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwGDy9m3HA2WVumVPJSr+rb62gQm3o3UYt3mEfE3k3XSCtcF5/I
+	Y86uJWVMszds76xri1qLiKWD3yTeUfiWPycugRFSPXLYKOb8pgDaHxf2vfyAf9nXlA==
+X-Gm-Gg: ASbGnctSaF0ov3XEM4q0xCF112r2wYinx5oB6l0X4o9h5TBbECF2+fSGHWdRVXnssgY
+	faJzuauT7OI/8mfM2TENOGMVJlEa8Q3bZP0VtpqyTOFtsLHlsFSDJy/Q+AJ6RFWAiLa4rwoDYtV
+	xmy3oY7LY0K1Q2ZzHloRpidiYzxBG+bihYOMoQc0z8Iyu9S9wy2yo0diR1JeQ280+7vaVRGgPGT
+	K3dCNW506lws6GKm/iyiUuuEgWz1Mai5FV0bHrFV3+CSM4xk5cYSTpqYYGKhIalX4382ZlJRBGs
+	guJAA2ERQPog1NFbV2p0v+5VgqFbKvRLiWCRGgbt0VIphzSxMVABJR428Nis3pW/SGtq8uUwo0s
+	GJLR6kp4oFFD2QBDv1XvSHChEGSR102hUcjbz1obwdQHEO6fQcm7dnF85sEI6tn5/VVt0P+slZN
+	B8v9avlZHnOaNO2+rYqrPAQDgxdZ1QEuwBQKZq
+X-Google-Smtp-Source: AGHT+IEWFrn4E0X2qBfQRXblCheHMI4S1GU+HtF87Gs1Gvnbk9snqqv5CsvEVEz33PzoAgCgB2vVWQ==
+X-Received: by 2002:a17:90b:2882:b0:33b:d8ad:b69c with SMTP id 98e67ed59e1d1-33bd8adc731mr16702735a91.3.1760990835754;
+        Mon, 20 Oct 2025 13:07:15 -0700 (PDT)
+Received: from localhost ([2a00:79e0:2e7c:8:f21:3ecc:2915:f4cb])
+        by smtp.gmail.com with UTF8SMTPSA id 98e67ed59e1d1-33dfb1d9390sm136234a91.0.2025.10.20.13.07.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Oct 2025 13:07:15 -0700 (PDT)
+Date: Mon, 20 Oct 2025 13:07:13 -0700
+From: Brian Norris <briannorris@chromium.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Bjorn Helgaas <bhelgaas@google.com>, linux-kernel@vger.kernel.org,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	linux-pm@vger.kernel.org, Lukas Wunner <lukas@wunner.de>,
+	linux-pci@vger.kernel.org
+Subject: Re: [PATCH v2] PCI/PM: Prevent runtime suspend before devices are
+ fully initialized
+Message-ID: <aPaWcYgduGIHno3x@google.com>
+References: <20251017122123.v2.1.I60a53c170a8596661883bd2b4ef475155c7aa72b@changeid>
+ <CAJZ5v0ie0Jz6AJdZJx2jNSRcqRQOqMCF+gYdgemTs=rKwXD1_g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251020165317.3992933-1-superm1@kernel.org> <20251020165317.3992933-4-superm1@kernel.org>
- <CAJZ5v0gsdmfXUJuLW8Ogt2jKDunx4g51LqCfSVMWQ6WHXBw_zg@mail.gmail.com>
- <85c039ef-e189-48c1-8bf7-50ac0c2484e2@kernel.org> <CAJZ5v0gT9BG5QPcwg6jJ1Jghny2YxC9_HY542LTBy-aVc_2T_w@mail.gmail.com>
- <aec8fc6c-3f9f-4ec1-a929-7a0be6026a3d@kernel.org> <CAJZ5v0gMf-qMGa6iBL2NdRXd-Mt5cpsoVQ90y+rSyK5xoYEf8A@mail.gmail.com>
- <aa04dea5-d35b-46c9-9501-0a2e79ecbd79@kernel.org> <CAJZ5v0j=sw9X3mV2ddOD_-qJwxveXQ1faD6HWtStLo9xOpwYKA@mail.gmail.com>
- <57f073e8-f600-4bdf-b3b9-a34df882cbdb@kernel.org>
-In-Reply-To: <57f073e8-f600-4bdf-b3b9-a34df882cbdb@kernel.org>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 20 Oct 2025 21:55:52 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0jWou0vxNZhe-pU-wQyWxhikaDkF+ZO0rsUieXs_nYjjQ@mail.gmail.com>
-X-Gm-Features: AS18NWD03bjw1R4kg2B_5QWympcxUv86RphHdhypOr40BtR-r3mgzWbqa08zNEk
-Message-ID: <CAJZ5v0jWou0vxNZhe-pU-wQyWxhikaDkF+ZO0rsUieXs_nYjjQ@mail.gmail.com>
-Subject: Re: [RFC 3/3] drm/amd: Return -EBUSY for amdgpu_pmops_thaw() on success
-To: "Mario Limonciello (AMD) (kernel.org)" <superm1@kernel.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, mario.limonciello@amd.com, airlied@gmail.com, 
-	alexander.deucher@amd.com, christian.koenig@amd.com, dakr@kernel.org, 
-	gregkh@linuxfoundation.org, lenb@kernel.org, pavel@kernel.org, 
-	simona@ffwll.ch, Muhammad Usama Anjum <usama.anjum@collabora.com>, amd-gfx@lists.freedesktop.org, 
-	dri-devel@lists.freedesktop.org, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0ie0Jz6AJdZJx2jNSRcqRQOqMCF+gYdgemTs=rKwXD1_g@mail.gmail.com>
 
-On Mon, Oct 20, 2025 at 9:34=E2=80=AFPM Mario Limonciello (AMD) (kernel.org=
-)
-<superm1@kernel.org> wrote:
->
->
->
-> On 10/20/2025 2:18 PM, Rafael J. Wysocki wrote:
-> > On Mon, Oct 20, 2025 at 9:14=E2=80=AFPM Mario Limonciello (AMD) (kernel=
-.org)
-> > <superm1@kernel.org> wrote:
-> >>
-> >>
-> >>
-> >> On 10/20/2025 1:50 PM, Rafael J. Wysocki wrote:
-> >>> On Mon, Oct 20, 2025 at 8:32=E2=80=AFPM Mario Limonciello (AMD) (kern=
-el.org)
-> >>> <superm1@kernel.org> wrote:
-> >>>>
-> >>>>
-> >>>>
-> >>>> On 10/20/2025 12:39 PM, Rafael J. Wysocki wrote:
-> >>>>> On Mon, Oct 20, 2025 at 7:28=E2=80=AFPM Mario Limonciello (AMD) (ke=
-rnel.org)
-> >>>>> <superm1@kernel.org> wrote:
-> >>>>>>
-> >>>>>>
-> >>>>>>
-> >>>>>> On 10/20/2025 12:21 PM, Rafael J. Wysocki wrote:
-> >>>>>>> On Mon, Oct 20, 2025 at 6:53=E2=80=AFPM Mario Limonciello (AMD)
-> >>>>>>> <superm1@kernel.org> wrote:
-> >>>>>>>>
-> >>>>>>>> From: Mario Limonciello <mario.limonciello@amd.com>
-> >>>>>>>>
-> >>>>>>>> The PM core should be notified that thaw was skipped for the dev=
-ice
-> >>>>>>>> so that if it's tried to be resumed (such as an aborted hibernat=
-e)
-> >>>>>>>> that it gets another chance to resume.
-> >>>>>>>>
-> >>>>>>>> Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> >>>>>>>> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> >>>>>>>> ---
-> >>>>>>>>      drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c | 2 +-
-> >>>>>>>>      1 file changed, 1 insertion(+), 1 deletion(-)
-> >>>>>>>>
-> >>>>>>>> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c b/drivers/g=
-pu/drm/amd/amdgpu/amdgpu_drv.c
-> >>>>>>>> index 61268aa82df4d..d40af069f24dd 100644
-> >>>>>>>> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-> >>>>>>>> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-> >>>>>>>> @@ -2681,7 +2681,7 @@ static int amdgpu_pmops_thaw(struct device=
- *dev)
-> >>>>>>>>
-> >>>>>>>>             /* do not resume device if it's normal hibernation *=
-/
-> >>>>>>>>             if (!pm_hibernate_is_recovering() && !pm_hibernation=
-_mode_is_suspend())
-> >>>>>>>> -               return 0;
-> >>>>>>>> +               return -EBUSY;
-> >>>>>>>
-> >>>>>>> So that's why you need the special handling of -EBUSY in the prev=
-ious patch.
-> >>>>>>
-> >>>>>> Yup.
-> >>>>>>
-> >>>>>>>
-> >>>>>>> I think that you need to save some state in this driver and then =
-use
-> >>>>>>> it in subsequent callbacks instead of hacking the core to do what=
- you
-> >>>>>>> want.
-> >>>>>>>
-> >>>>>>
-> >>>>>> The problem is the core decides "what" to call and more importantl=
-y
-> >>>>>> "when" to call it.
-> >>>>>>
-> >>>>>> IE if the core thinks that something is thawed it will never call
-> >>>>>> resume, and that's why you end up in a bad place with Muhammad's
-> >>>>>> cancellation series and why I proposed this one to discuss.
-> >>>>>>
-> >>>>>> We could obviously go back to dropping this case entirely:
-> >>>>>>
-> >>>>>> if (!pm_hibernate_is_recovering() && !pm_hibernation_mode_is_suspe=
-nd())
-> >>>>>>
-> >>>>>> But then the display turns on at thaw(), you do an unnecessary res=
-ource
-> >>>>>> eviction, it takes a lot longer if you have a ton of VRAM etc.
-> >>>>>
-> >>>>> The cancellation series is at odds with this code path AFAICS becau=
-se
-> >>>>> what if hibernation is canceled after the entire thaw transition?
-> >>>>
-> >>>> Muhammad - did you test that specific timing of cancelling the hiber=
-nate?
-> >>>>>
-> >>>>> Some cleanup would need to be done before thawing user space I supp=
-ose.
-> >>>>
-> >>>> I agree; I think that series would need changes for it.
-> >>>>
-> >>>> But if you put that series aside, I think this one still has some me=
-rit
-> >>>> on it's own.  If another driver aborted the hibernate, I think the s=
-ame
-> >>>> thing could happen if it happened to run before amdgpu's device thaw=
-().
-> >>>>
-> >>>> That series just exposed a very "easy" way to reproduce this issue.
-> >>>
-> >>> Device thaw errors don't abort anything AFAICS.
-> >>>
-> >>
-> >> You're right; it doesn't abort, it just is saved to the logs.
-> >> The state is also not maintained.
-> >>> What can happen though is that another device may abort the final
-> >>> "power off" transition, which is one of the reasons why I think that
-> >>> rolling it back is generally hard.
-> >>
-> >> That's exactly the reason for the first patch in this series.  The sta=
-te
-> >> of whether it succeeded isn't recorded.  So if thaw non-fatally fails
-> >> and you've saved state to indicate this then any of the other calls th=
-at
-> >> run can try again.
+Hi,
+
+On Sat, Oct 18, 2025 at 01:27:13PM +0200, Rafael J. Wysocki wrote:
+> On Fri, Oct 17, 2025 at 9:22 PM Brian Norris <briannorris@chromium.org> wrote:
 > >
-> > So long as they are called.
+> > Today, it's possible for a PCI device to be created and
+> > runtime-suspended before it is fully initialized. When that happens, the
+> > device will remain in D0, but the suspend process may save an
+> > intermediate version of that device's state -- for example, without
+> > appropriate BAR configuration. When the device later resumes, we'll
+> > restore invalid PCI state and the device may not function.
 > >
-> > But as I said before, I would save the state in the driver thaw
-> > callback and then clear it in the driver poweroff callback and look at
-> > it in the driver restore callback.  If it is there at that point,
-> > poweroff has not run and hibernation is rolling back, so you need to
-> > do a "thaw".
->
-> Are you suggesting that the device driver should directly manipulate
-> dev->power.is_suspended?
+> > Prevent runtime suspend for PCI devices by deferring pm_runtime_enable()
+> > until we've fully initialized the device.
+> >
+> > More details on how exactly this may occur:
+> >
+> > 1. PCI device is created by pci_scan_slot() or similar
+> > 2. As part of pci_scan_slot(), pci_pm_init() enables runtime PM; the
+> >    device starts "active" and we initially prevent (pm_runtime_forbid())
+> >    suspend -- but see [*] footnote
+> > 3. Underlying 'struct device' is added to the system (device_add());
+> >    runtime PM can now be configured by user space
+> > 4. PCI device receives BAR configuration
+> >    (pci_assign_unassigned_bus_resources(), etc.)
+> > 5. PCI device is added to the system in pci_bus_add_device()
+> >
+> > The device may potentially suspend between #3 and #4.
+> >
+> > [*] By default, pm_runtime_forbid() prevents suspending a device; but by
+> > design, this can be overridden by user space policy via
+> >
+> >   echo auto > /sys/bus/pci/devices/.../power/control
+> >
+> > Thus, the above #3/#4 sequence is racy with user space (udev or
+> > similar).
+> >
+> > Notably, many PCI devices are enumerated at subsys_initcall time and so
+> > will not race with user space. However, there are several scenarios
+> > where PCI devices are created later on, such as with hotplug or when
+> > drivers (pwrctrl or controller drivers) are built as modules.
+> >
+> > Signed-off-by: Brian Norris <briannorris@chromium.org>
+> > Cc: <stable@vger.kernel.org>
+> 
+> Can you please add a Link: pointer to the discussion on the previous
+> version of the patch?
 
-No, it needs to have its own state for that.  power.is_suspended
-should not be manipulated by drivers (or anything other than the core
-for that matter).
+Ha, it sounds like you want me to get flamed by Linus :) I don't even
+know how "Link:" is supposed to be used any more.
 
-> I'll do some testing but; I suppose that would work as well without
-> needing to make core changes if you don't see a need for other devices
-> to do this.
+But in case Bjorn wants to apply this as-is, here's a reference to v1,
+where that discussion happened:
 
-So long as they don't try to skip the "thaw" actions, I don't.
+Link: https://lore.kernel.org/all/20251016155335.1.I60a53c170a8596661883bd2b4ef475155c7aa72b@changeid/
 
-If there are more drivers wanting to do it, I guess it would be good
-to have a common approach although at this point I'm not sure how much
-in common there would be.
+If I send a v3, I'll include that.
+
+<soap-box while we're at it:>
+I really wish this proposal didn't also get flamed out:
+
+Subject: [Ksummit-discuss] Allowing something Change-Id (or something like it) in kernel commits
+https://lore.kernel.org/all/CAD=FV=UPjPpUyFTPjF-Ogzj_6LJLE4PTxMhCoCEDmH1LXSSmpQ@mail.gmail.com/
+
+If we did that, then no one would have to ask for series-history links,
+because changes would already include such IDs so anyone could follow
+them automatically.
+
+As a compromise, I've been doing this:
+https://lore.kernel.org/all/CAD=FV=VLMFxFt55oB4ERTFw3xnH4czUY5tXiqfY14NKZ8gqojA@mail.gmail.com/
+
+i.e., my patches tend to have Message-Ids that look like
+<$timestamp.$revision.$changeid@changeid>, and so you can cleanly
+track this patch, including past and future versions, with:
+
+https://lore.kernel.org/all/?q=I60a53c170a8596661883bd2b4ef475155c7aa72b%40changeid
+</soap-box>
+
+> With that
+> 
+> Reviewed-by: Rafael J. Wysocki (Intel) <rafael@kernel.org>
+
+Thanks!
+
+Brian
 
