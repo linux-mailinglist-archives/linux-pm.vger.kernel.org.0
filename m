@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-36490-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36491-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C325BF2B1E
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 19:24:32 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB2FEBF2B54
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 19:28:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 016844F2DD0
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 17:24:29 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 882493451AA
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Oct 2025 17:28:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 063173161AC;
-	Mon, 20 Oct 2025 17:24:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A77E832860D;
+	Mon, 20 Oct 2025 17:28:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cFac1jYc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WcSnKK4i"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D58C431353A
-	for <linux-pm@vger.kernel.org>; Mon, 20 Oct 2025 17:24:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82658221FC8
+	for <linux-pm@vger.kernel.org>; Mon, 20 Oct 2025 17:28:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760981063; cv=none; b=GMjOnfGj0p/u75EdOtsCmdIjdgCJuZR8LlsTx1lqyYYNY+IIu4qo+vjji/nCvgEXe2pj/VQ0V+s1KlSrkGtCV+hTFRAaGoGnfBPXkgI1OG1WBBBOrMrCNQEjI/z+jXS2Q2HlPDBBXMt7z4cGU0trvsk3h9+mpCjwRB3u4mrXeVs=
+	t=1760981318; cv=none; b=X0bl51sVbPbtwVmJHGmOSMAvSDHbmfgEtRu/uyQoA9dKboNagA+WwtPKc90J90WSeH6todb/VuF8qoFluQ181NYt0Zs2ElYAOYnOzBbQiz0Kn9nU9fTTYs32tgQwebNsaPqkr/0V30Ug8EiwdA9oUv51rCFYFwMp0dEL2xrzS7I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760981063; c=relaxed/simple;
-	bh=uN4YzlNmTDyMTVbkr8hP6fCxIeShyG12ItAxTKnPx/U=;
+	s=arc-20240116; t=1760981318; c=relaxed/simple;
+	bh=XoBtTVIfyCks+3vvS0y9uJAoDlapnqVQpQnuzzSfF34=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Dkv8UXEhwMibsOD0ZRxDY651FZrmddWiZPPRgN2KtBgQuytwPY/716dUIjtMf7SXZ/Q37vfXthC4bHtdyDcVRMkNZKE9RqNpkFdAiS5DQ69MteppnDEgj1JL046cKf/47r8Q9zHqyz5YBuMO22lyFMs1koc+5CYglZzphoD3jC8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cFac1jYc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBF12C4CEF9;
-	Mon, 20 Oct 2025 17:24:21 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=HRJ9LNBUJDKt1MhuIZZ8lj3ojFguBHTWtb8yC514TT6ph1cvvpPNSVAlE0QoSkjtoyuISylQXupyoKp2rRPsafcA1bT+orhhZ1L34bwWHdLQH2/nuodj0sJQuRxJcJRJodSFATlvswZhyBVR98Z7rREfR4m7obaY5An3dTyw1dc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WcSnKK4i; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3D63C4CEF9;
+	Mon, 20 Oct 2025 17:28:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760981063;
-	bh=uN4YzlNmTDyMTVbkr8hP6fCxIeShyG12ItAxTKnPx/U=;
+	s=k20201202; t=1760981318;
+	bh=XoBtTVIfyCks+3vvS0y9uJAoDlapnqVQpQnuzzSfF34=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=cFac1jYc5I/mpLogrxJs+C1FSnV2hXbV3gLCdZCPseI5UTHbib0gaI8Bw7ULWpQRK
-	 /3yIC+HPGOrBZQrCrR/9ZHTVPQIlr+dHqzdvXocWj5RB89FAcpyaPYZtWDIaFf9ttH
-	 s458D7gJOxhlLDUeI7EcwRltwTNawyrHYamEDpgSKf7wyWVGjSZDtHU5HvA6IGCNaM
-	 jenI2DlyZ7AZ5vgD3amV/0/fmmetkdx+3pS5p7vQBfT9TRHuvadRfsd8+UpKjXmhmV
-	 mkKbzPz0qi7umxDfn/uTfqjzzrgG0pYTdz0wWLhQFfCeNLKH0PIa8bjc1pSCXPuvi2
-	 mmYc2ddF7qVyw==
-Message-ID: <f44ec6c9-80f9-4e5b-9cdb-e92d4c6b72fc@kernel.org>
-Date: Mon, 20 Oct 2025 12:24:20 -0500
+	b=WcSnKK4iDS6gPA+JCDA/Z1VumuFkDT4duTisGd1ZPAtcbjeztp7eAmEx6CxakyzNo
+	 lDKwiRz/S6EPF9pYjk+RBRtiKxE5JdH+cfaOPqFd5MrGoCGsjmlDEoQ0KFgv9jLT/5
+	 NRnESVeL2/kBb9s6u9ITQ36EKBP6gg6J0NnDHAXlQFb6hwZREmu336yBqWAoi41O+h
+	 jH2Je8EZ1tOoA0VOw0acAmyWKtOUMNUH7qaM/8+QyMK5FGVhOHY5Bu35km62417HZG
+	 2NaXyg6/3tkPI1joejAKNBJLCE+Lpji1QQ/U9eRX4etPmUzWQnr17rpRZSJCmzILfT
+	 Z/1VrmtoO4/Mw==
+Message-ID: <85c039ef-e189-48c1-8bf7-50ac0c2484e2@kernel.org>
+Date: Mon, 20 Oct 2025 12:28:36 -0500
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,7 +50,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC 2/3] PM: Don't pass up device_resume() -EBUSY errors
+Subject: Re: [RFC 3/3] drm/amd: Return -EBUSY for amdgpu_pmops_thaw() on
+ success
 To: "Rafael J. Wysocki" <rafael@kernel.org>
 Cc: mario.limonciello@amd.com, airlied@gmail.com, alexander.deucher@amd.com,
  christian.koenig@amd.com, dakr@kernel.org, gregkh@linuxfoundation.org,
@@ -59,74 +60,65 @@ Cc: mario.limonciello@amd.com, airlied@gmail.com, alexander.deucher@amd.com,
  amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
  linux-pm@vger.kernel.org
 References: <20251020165317.3992933-1-superm1@kernel.org>
- <20251020165317.3992933-3-superm1@kernel.org>
- <CAJZ5v0g64Hu15k5sLVfxj-AADy2goyvseGGm_zTAqSPHXEaxOA@mail.gmail.com>
+ <20251020165317.3992933-4-superm1@kernel.org>
+ <CAJZ5v0gsdmfXUJuLW8Ogt2jKDunx4g51LqCfSVMWQ6WHXBw_zg@mail.gmail.com>
 Content-Language: en-US
 From: "Mario Limonciello (AMD) (kernel.org)" <superm1@kernel.org>
-In-Reply-To: <CAJZ5v0g64Hu15k5sLVfxj-AADy2goyvseGGm_zTAqSPHXEaxOA@mail.gmail.com>
+In-Reply-To: <CAJZ5v0gsdmfXUJuLW8Ogt2jKDunx4g51LqCfSVMWQ6WHXBw_zg@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
 
 
-On 10/20/2025 12:18 PM, Rafael J. Wysocki wrote:
+On 10/20/2025 12:21 PM, Rafael J. Wysocki wrote:
 > On Mon, Oct 20, 2025 at 6:53 PM Mario Limonciello (AMD)
 > <superm1@kernel.org> wrote:
 >>
 >> From: Mario Limonciello <mario.limonciello@amd.com>
 >>
->> If a device resume returns -EBUSY the device resume sequence has
->> been skipped.
-> 
-> Is this actually demonstrably true in all of the cases?
-> 
-> And what about -EAGAIN?
-> 
-
-I haven't audited codepaths of all drivers to guarantee it to be true 
-for all cases.  That's the main reason I wanted to make it RFC - to 
-discuss the idea of a dedicated return code to indicate it was skipped.
-
-Another idea I had is that we could make it return a positive number, 
-and PM core could recognize that as a skip.
-
-So would like your thoughts against the ideas currently presented:
-
-* -EAGAIN
-* -EBUSY
-* Some other return code
-* > 0
-
-Whichever is decided the PM core documentation would need to be updated 
-to match as well.
-
->> Don't show errors for this or pass it up to async
->> resume.  If resume is run again in another stage the device should
->> try again.
+>> The PM core should be notified that thaw was skipped for the device
+>> so that if it's tried to be resumed (such as an aborted hibernate)
+>> that it gets another chance to resume.
 >>
 >> Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>
->> Signed-off-by: Mario Limonciello (AMD) <superm1@kernel.org>
+>> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 >> ---
->>   drivers/base/power/main.c | 4 +++-
->>   1 file changed, 3 insertions(+), 1 deletion(-)
+>>   drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
 >>
->> diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
->> index bf9c3d79c455f..f6bc7ef9a8371 100644
->> --- a/drivers/base/power/main.c
->> +++ b/drivers/base/power/main.c
->> @@ -1112,7 +1112,9 @@ static void device_resume(struct device *dev, pm_message_t state, bool async)
+>> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+>> index 61268aa82df4d..d40af069f24dd 100644
+>> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+>> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+>> @@ -2681,7 +2681,7 @@ static int amdgpu_pmops_thaw(struct device *dev)
 >>
->>          TRACE_RESUME(error);
->>
->> -       if (error) {
->> +       if (error == -EBUSY)
->> +               pm_dev_dbg(dev, state, async ? " async" : "");
->> +       else if (error) {
->>                  WRITE_ONCE(async_error, error);
->>                  dpm_save_failed_dev(dev_name(dev));
->>                  pm_dev_err(dev, state, async ? " async" : "", error);
->> --
->> 2.43.0
->>
+>>          /* do not resume device if it's normal hibernation */
+>>          if (!pm_hibernate_is_recovering() && !pm_hibernation_mode_is_suspend())
+>> -               return 0;
+>> +               return -EBUSY;
+> 
+> So that's why you need the special handling of -EBUSY in the previous patch.
+
+Yup.
+
+> 
+> I think that you need to save some state in this driver and then use
+> it in subsequent callbacks instead of hacking the core to do what you
+> want.
+> 
+
+The problem is the core decides "what" to call and more importantly 
+"when" to call it.
+
+IE if the core thinks that something is thawed it will never call 
+resume, and that's why you end up in a bad place with Muhammad's 
+cancellation series and why I proposed this one to discuss.
+
+We could obviously go back to dropping this case entirely:
+
+if (!pm_hibernate_is_recovering() && !pm_hibernation_mode_is_suspend())
+
+But then the display turns on at thaw(), you do an unnecessary resource 
+eviction, it takes a lot longer if you have a ton of VRAM etc.
 
 
