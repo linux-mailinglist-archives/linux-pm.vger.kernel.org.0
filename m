@@ -1,161 +1,248 @@
-Return-Path: <linux-pm+bounces-36557-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36558-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2861BF5D38
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 12:39:00 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C7FDBF6046
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 13:27:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 3FD4834A03A
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 10:39:00 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 1FC8E4E1BBB
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 11:27:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0411E32F75C;
-	Tue, 21 Oct 2025 10:37:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F06E632B9A4;
+	Tue, 21 Oct 2025 11:27:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="OV4FJNFQ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="arDyYrOn"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yx1-f50.google.com (mail-yx1-f50.google.com [74.125.224.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C36A7328B67
-	for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 10:37:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B99DB2F4A1B;
+	Tue, 21 Oct 2025 11:27:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761043049; cv=none; b=ZnHdXpB8wT4KlbM6b+rgm762fd1utkTneqCSuLT8uuzFuOxNa/+HHbCjjL/LifDhCcTQYt27yfNmPvbiFUB8s2q48PgV0sqSJ6OPKNWnZp2JgpulUueH9Ww4Xe3W46Gge+luaGaUQX/XjfIl22Df6Jegj0C2edDGbw/1EJzkc80=
+	t=1761046038; cv=none; b=frGgCyFY4q2RHNO4ceAmQnXzJZwnUipa0dj8jIOAfDwY6EwP2UPIUSql+MRsG6FgkVC1lJMGnsP0sFh6Whkf+6Kgm0mMQ21ojry2LkvEb85VJj0tXj0RMy95j+UX3d1dyA3wXzeqXDGrOwIrKtUU/aT37VXheko6/5FAzx25/8U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761043049; c=relaxed/simple;
-	bh=G8bIrdKOREeaQWFYl+BVblIyK/tNvhnzk9i8+sGZ5Dk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=d6dOpnECPj9ue2gsE6d3KpZQz+ZyA94bbWhYi4DoGFD3tD0NX2lqoz1vhC39yhjAE0E1hQhdeiVaWNJHqXjsyzXUVk1SrVK9DLfx/9LlyDtw6ffDUt0eGhlMoTI98UTVy+h4MKc6YIgozbFIJlEpxWdMHCDE5+WZ6quc7ZaI+Bk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=OV4FJNFQ; arc=none smtp.client-ip=74.125.224.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yx1-f50.google.com with SMTP id 956f58d0204a3-63e1591183bso4310052d50.0
-        for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 03:37:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1761043046; x=1761647846; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=du/uiA2g0ruAK2UrT7r+xEuTy7bML0SpAVcY8ooVq04=;
-        b=OV4FJNFQ1uapnGqxwNArp1c3sMnou9Gn5Mulg7FgaRBpu3ejO833yxc66+0QPR5qku
-         aA6EtTV2yORIXSU8/KOKiCgkLr08ed7m+oB3VG68OcVm4IkfQWuf0NSFnvDvBvHYEmGO
-         s7eoCUGrMzgib3JPXWKNfiFjGSXvsakVOwKCpyf53cvuthskb+tI6l295G2g2M067qv0
-         G6+Xk1iy4eqtknYhBYxWVNcWvuKiCEb1jHN6XCahAmWGOYfMn+CWYLTXienvZkfJa3Lm
-         e+zGW8er2mG1JDxIljGhsR0OOWqP1w+F6NtkkmNhuPT00c+L0r+NcJ0Wx1GHFOjnhc7B
-         L2yw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761043046; x=1761647846;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=du/uiA2g0ruAK2UrT7r+xEuTy7bML0SpAVcY8ooVq04=;
-        b=MMHEWyK4NTojVp/6lswMp5xImXpHYqkfaynmQZ6ybJ2CvQsmSM7kb0bqztSg+TheIw
-         be/XMnmrZRCi0xIVVw39SKkWQ2ATeE2pecF4y0+gbcDcsDMkVAwXwEdI0qnq135XLtlZ
-         SHbaYOQv3iiHKHc7fDqsRAgCb2fm5a9pvWO14A7ETnl8+zib18j2NH6KgGuoPPx9q5na
-         fgw8Lc/SrS9YxU1I4PRwJX7DvwyZSA4opTyp7A/SqJQmmibH5cyDqlHCcST5/lc0XJAv
-         AqqyK3Wfr73vpak8WIe+pf1to3Gn488aqwXsUnxymYKqQvJD97ciu64ZwV4c1EC6kxL2
-         uNRQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUPAmg3jPtLsP43d7TDaZyzXq9w3KgkoOZeZoeUa910NKwI5UjXfMMyqzD1Suu0hUXpIfQ4VhjvNg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy/Hp1sieWzHegPV7C8vWzlavubwjgrZJaw880Xr7Ndv9xV4mVw
-	EEcRFO2H6uXFnQKZgzKWAkBzhXT+s0E2Q5jLmPgVimygtrMY7t9JfxnpE9LbDzcJKM3qPubmJiS
-	+MQjjTaKoMwOYDyiTUWGYQh+Mbp5ufWKMXtQrdrqL4w==
-X-Gm-Gg: ASbGncttDoV9JCZpGNYpDyuwVJ2AKwtSjVQCPEmdVich3us5Wnz8+qkpEWGQlu4Gb12
-	osmssuow41vKcvRmf3VGWluBZK2mxJ2RdTbrK/+Kyr4csZdknGqC/a+MM22Q2RSXStWTxoMwzQ2
-	rxgkgyX3XaOeI+msDZCyx+8jzz7SOjy7YW39v3+UdwahltWFD/hZMbPtNPGayRSKJZ5KfPxluKv
-	GFBF5i4f3VZNMS1hyX7H0qh1Y4BROv1TqUyLNcKW7agyyH4e/U37i+uti1maA==
-X-Google-Smtp-Source: AGHT+IFFOhRKu4kQW/XKD1Pm8VUPug9hRZQumhyHTlK9vebZPyquvLC0TgCPXJX5yR8+F8jVszRXlOsVXxUxv7obTms=
-X-Received: by 2002:a05:690e:4090:b0:63e:3e77:a7c4 with SMTP id
- 956f58d0204a3-63e3e77a7fdmr3660188d50.1.1761043045615; Tue, 21 Oct 2025
- 03:37:25 -0700 (PDT)
+	s=arc-20240116; t=1761046038; c=relaxed/simple;
+	bh=Mcw/R5C/1blOsSXxSnYelYotH/+tXWkrAqT9RAUEjyc=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=iuZynDft8VW2H5ltSwoikNcywllLrzFc7HDHVSemGUAmB+DEug1HMf9+sMMFjDt9Be6iOk9/4fssjqzxdYMChKKM2h91TNTGHoU2/nFBVY7GLWBLL0H8Ifmk2Pqwe7MU47LyruZQ1zcYObWykbzTPPVPrIMqjXe3qFSsJPgXgY8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=arDyYrOn; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1761046036; x=1792582036;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version:content-id;
+  bh=Mcw/R5C/1blOsSXxSnYelYotH/+tXWkrAqT9RAUEjyc=;
+  b=arDyYrOnGQwZJqtpCN+aUFD6I686n+AS6eqxYzaZ4tytTefGzriEjtHR
+   1t3E5+B+l5aeXocEh+8PPYHJtfsxIkjZPBU3qaAL1agYWFzHBZN9MZCSt
+   IpCxGjtile+cl7TBvhMXDsZS/O0gY+ZU6OsYsQmvbGMZ1yuIoErVzGSfi
+   LchlDnd7ou7Jz44iiBwom9rii1mkaEAIcHxwWWoYJjeTl5Zn+2rbRtfn8
+   ZBVf2KpRL6KsvlSASWc9ZLqs6BCIec0X9swXksUhbns0KFptM0p4/QqD7
+   M3ONCma5HroswZpZX4Wuw68RIXQWaJ2epLvp6Fy1bTq2psecqDaj+jq5d
+   A==;
+X-CSE-ConnectionGUID: bU20rhQCSfSlKCPwrfwyzg==
+X-CSE-MsgGUID: zIs7Qh5YT9KYh+nuJBjKdw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="65784623"
+X-IronPort-AV: E=Sophos;i="6.19,244,1754982000"; 
+   d="scan'208";a="65784623"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2025 04:27:16 -0700
+X-CSE-ConnectionGUID: bDCDmVJ5TrC9gC94ZZ8SAA==
+X-CSE-MsgGUID: MlYojyCSQQGE4SV5i27/1Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,244,1754982000"; 
+   d="scan'208";a="184049803"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.189])
+  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2025 04:27:13 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Tue, 21 Oct 2025 14:27:09 +0300 (EEST)
+To: Brian Norris <briannorris@chromium.org>
+cc: Lukas Wunner <lukas@wunner.de>, Bjorn Helgaas <bhelgaas@google.com>, 
+    LKML <linux-kernel@vger.kernel.org>, linux-pm@vger.kernel.org, 
+    "Rafael J . Wysocki" <rafael@kernel.org>, linux-pci@vger.kernel.org
+Subject: Re: [PATCH] PCI/PM: Prevent runtime suspend before devices are fully
+ initialized
+In-Reply-To: <aPaFACsVupPOe67G@google.com>
+Message-ID: <06cd0121-819d-652d-afa7-eece15bf82a2@linux.intel.com>
+References: <20251016155335.1.I60a53c170a8596661883bd2b4ef475155c7aa72b@changeid> <aPH_B7SiJ8KnIAwJ@wunner.de> <67381f3b-4aee-a314-b5dd-2b7d987a7794@linux.intel.com> <aPKANja_k1gogTAU@google.com> <08976178-298f-79d9-1d63-cff5a4e56cc3@linux.intel.com>
+ <aPaFACsVupPOe67G@google.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251015071420.1173068-1-herve.codina@bootlin.com> <20251015071420.1173068-10-herve.codina@bootlin.com>
-In-Reply-To: <20251015071420.1173068-10-herve.codina@bootlin.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Tue, 21 Oct 2025 12:36:49 +0200
-X-Gm-Features: AS18NWAi-o77CPd71JT42D3mLl8vqFN7eYPAV53oOUDllJc5eKGrXIzOLUEhLMM
-Message-ID: <CAPDyKFrkJp4Ny1kUoWy6LHmv6zCOGK-jVEYk95s2ayhqEbDOpw@mail.gmail.com>
-Subject: Re: [PATCH v4 09/29] drivers: core: Use fw_devlink_set_device()
-To: Herve Codina <herve.codina@bootlin.com>
-Cc: Andrew Lunn <andrew@lunn.ch>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Danilo Krummrich <dakr@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
-	Fabio Estevam <festevam@gmail.com>, Michael Turquette <mturquette@baylibre.com>, 
-	Stephen Boyd <sboyd@kernel.org>, Andi Shyti <andi.shyti@kernel.org>, 
-	Wolfram Sang <wsa+renesas@sang-engineering.com>, Peter Rosin <peda@axentia.se>, 
-	Arnd Bergmann <arnd@arndb.de>, Saravana Kannan <saravanak@google.com>, 
-	Bjorn Helgaas <bhelgaas@google.com>, Charles Keepax <ckeepax@opensource.cirrus.com>, 
-	Richard Fitzgerald <rf@opensource.cirrus.com>, David Rhodes <david.rhodes@cirrus.com>, 
-	Linus Walleij <linus.walleij@linaro.org>, Mark Brown <broonie@kernel.org>, 
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Daniel Scally <djrscally@gmail.com>, 
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	Sakari Ailus <sakari.ailus@linux.intel.com>, Len Brown <lenb@kernel.org>, 
-	Davidlohr Bueso <dave@stgolabs.net>, Jonathan Cameron <jonathan.cameron@huawei.com>, 
-	Dave Jiang <dave.jiang@intel.com>, Alison Schofield <alison.schofield@intel.com>, 
-	Vishal Verma <vishal.l.verma@intel.com>, Ira Weiny <ira.weiny@intel.com>, 
-	Dan Williams <dan.j.williams@intel.com>, Geert Uytterhoeven <geert+renesas@glider.be>, 
-	Wolfram Sang <wsa@kernel.org>, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
-	linux-clk@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-pci@vger.kernel.org, linux-sound@vger.kernel.org, 
-	patches@opensource.cirrus.com, linux-gpio@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linux-spi@vger.kernel.org, 
-	linux-acpi@vger.kernel.org, linux-cxl@vger.kernel.org, 
-	Allan Nielsen <allan.nielsen@microchip.com>, Horatiu Vultur <horatiu.vultur@microchip.com>, 
-	Steen Hegelund <steen.hegelund@microchip.com>, Luca Ceresoli <luca.ceresoli@bootlin.com>, 
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/mixed; BOUNDARY="8323328-479427486-1761044931=:1018"
+Content-ID: <49460876-f5af-65c3-c424-466755820541@linux.intel.com>
 
-On Wed, 15 Oct 2025 at 09:18, Herve Codina <herve.codina@bootlin.com> wrote:
->
-> The code set directly fwnode->dev field.
->
-> Use the dedicated fw_devlink_set_device() helper to perform this
-> operation.
->
-> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+--8323328-479427486-1761044931=:1018
+Content-Type: text/plain; CHARSET=ISO-8859-15
+Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-ID: <706a33bd-aa0c-b5a8-88b0-500979f8acc2@linux.intel.com>
 
-Kind regards
-Uffe
+On Mon, 20 Oct 2025, Brian Norris wrote:
 
+> Hi Ilpo,
+>=20
+> On Mon, Oct 20, 2025 at 06:56:41PM +0300, Ilpo J=E4rvinen wrote:
+> > On Fri, 17 Oct 2025, Brian Norris wrote:
+> >=20
+> > > On Fri, Oct 17, 2025 at 02:49:35PM +0300, Ilpo J=E4rvinen wrote:
+> > > > On Fri, 17 Oct 2025, Lukas Wunner wrote:
+> > > >=20
+> > > > > [cc +=3D Ilpo]
+> > > > >=20
+> > > > > On Thu, Oct 16, 2025 at 03:53:35PM -0700, Brian Norris wrote:
+> > > > > > PCI devices are created via pci_scan_slot() and similar, and ar=
+e
+> > > > > > promptly configured for runtime PM (pci_pm_init()). They are in=
+itially
+> > > > > > prevented from suspending by way of pm_runtime_forbid(); howeve=
+r, it's
+> > > > > > expected that user space may override this via sysfs [1].
+> > > >=20
+> > > > Is this true as pm_runtime_forbid() also increases PM usage count?
+> > >=20
+> > > Yes it's true. See below.
+> > >=20
+> > > > "void pm_runtime_forbid(struct device *dev);
+> > > >=20
+> > > > unset the power.runtime_auto flag for the device and increase its=
+=20
+> > > > usage counter (used by the /sys/devices/.../power/control interface=
+ to=20
+> > > > effectively prevent the device from being power managed at run time=
+)"
+>=20
+> I see this doc line confused you, and I can sympathize.
+>=20
+> IIUC, the parenthetical means that sysfs *uses* pm_runtime_forbid() to
+> "effectively prevent runtime power management"; pm_runtime_forbid() does
+> not block user space from doing anything.
+>
+> > > Right, but sysfs `echo auto > .../power/control` performs the inverse=
+ --
+> > > pm_runtime_allow() -- which decrements that count.
+> >=20
+> > Fair enough, I didn't check what it does.
+> >=20
+> > IMO, the details about how the usage count behaves should be part of th=
+e=20
+> > changelog as that documentation I quoted sounded like user control is=
+=20
+> > prevented when forbidden.
+>=20
+> I tried to elaborate on the API doc confusion above. But frankly, I'm
+> not sure how best to explain runtime PM.
+>=20
+> > I see you've put this part of the explanation=20
+> > into the v2 as well so I suggest you explain the usage count in the cha=
+nge=20
+> > so it is recorded in the commit if somebody has to look at this commit=
+=20
+> > years from now.
+>=20
+> Both v1 and v2 mention that the sysfs 'power/control' file can override
+> the kernel calling pm_runtime_forbid(). They don't mention the usage
+> count, since that's an implementation detail IMO. (To me, the mental
+> model works best if "usage count" (usually get()/put()) is considered
+> mostly orthogonal to forbid()/allow()/sysfs, because "forbid()" can be
+> overridden at any time.)
+>=20
+> This is also covered here:
+>=20
+> https://docs.kernel.org/power/runtime_pm.html#runtime-pm-initialization-d=
+evice-probing-and-removal
+>=20
+> "In principle, this mechanism may also be used by the driver to
+> effectively turn off the runtime power management of the device until
+> the user space turns it on."
 
-> ---
->  drivers/base/core.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/base/core.c b/drivers/base/core.c
-> index 3e81b1914ce5..9da630d75d17 100644
-> --- a/drivers/base/core.c
-> +++ b/drivers/base/core.c
-> @@ -3739,7 +3739,7 @@ int device_add(struct device *dev)
->          * device and the driver sync_state callback is called for this device.
->          */
->         if (dev->fwnode && !dev->fwnode->dev) {
-> -               dev->fwnode->dev = dev;
-> +               fw_devlink_set_device(dev->fwnode, dev);
->                 fw_devlink_link_device(dev);
->         }
->
-> @@ -3899,7 +3899,7 @@ void device_del(struct device *dev)
->         device_unlock(dev);
->
->         if (dev->fwnode && dev->fwnode->dev == dev)
-> -               dev->fwnode->dev = NULL;
-> +               fw_devlink_set_device(dev->fwnode, NULL);
->
->         /* Notify clients of device removal.  This call must come
->          * before dpm_sysfs_remove().
-> --
-> 2.51.0
->
+The problem is already rooted into the function name, when a function is=20
+called "forbid", anyone unfamiliar will think it really forbids=20
+something. The docs just further reinforced the idea and the fact that it=
+=20
+also increments usage count.
+
+It is quite unexpected and feels quite illogical (for non-PM person like=20
+me) that user interface then goes to reverse that usage count increase,=20
+what would be the logical reason why there now are less users for it when=
+=20
+user wants to turn on PM? (I understand things are done that way, no need=
+=20
+to explain that further, but there are quite a few misleading things in=20
+this entire scenario, not just that parenthesis part of the docs.)
+
+> But admittedly, I find the runtime PM API surface to be enormous, and
+> its documentation ... not very helpful to outsiders. It's pretty much
+> written by and for PM experts. Case in point: you read and quoted the
+> appropriate docs, but it still misled you quite a bit :(
+>=20
+> I'm more tempted to try to improve the runtime PM docs than to try to
+> make up for them in the commit message, but maybe I can be convinced
+> otherwise.
+
+My personal approach is that if something comes up during review, it=20
+likely is something also the next person to look at this change (from=20
+history, maybe years from now) could similarly stumbles on when trying to=
+=20
+understand the change. Thus, it often is worth to mention such things in=20
+the changelog too.
+
+While I'm definitely not against improvements to docs too, the changelog=20
+for any patch should help to understand why the change was made. And=20
+IMO, this unexpected "internal detail" related to usage count which is=20
+quite significant here, if user interface wouldn't lower it, runtime PM=20
+would remain forbidden as forbid() promised.
+
+> > > > > Patch LGTM in principle, but adding Ilpo to cc who is refactoring=
+ PCI
+> > > > > resource allocation and may judge whether this can actually happe=
+n.
+> > > >=20
+> > > > I can see there could be other failure modes besides just saving wr=
+ong=20
+> > > > config if devices get suspended underneath the resource assignment=
+=20
+> > > > algorithm.
+> > > >=20
+> > > > Besides hotplug, also BAR resize does changes the resources and BAR=
+s.
+> > > > This case is not helped by this patch.
+> > >=20
+> > > Is that the 'resource_N_resize' sysfs attributes? Becuase that holds =
+PM
+> > > references (pci_config_pm_runtime_{get,put}()) and therefore should n=
+ot
+> > > generally have the same problem.
+> >=20
+> > Okay, seem fine for the PCI core part.
+> >=20
+> > Driver's can also trigger BAR resize by calling pci_resize_resource()=
+=20
+> > directly but I've no idea how the usage counts behave (TBH, PM isn't my=
+=20
+> > strongest forte even if Lukas pulled me in to comment).
+>=20
+> There are only 3 drivers that call pci_resize_resource(). I looked into
+> them, and it looks like they all hold pm_runtime_* references while
+> doing this, or are calling it during pci_driver probe(), which docs say
+> will hold a reference.
+>=20
+> https://docs.kernel.org/power/pci.html#device-runtime-power-management
+>=20
+> So they should all be OK too.
+
+Thanks for checking.
+
+--=20
+ i.
+--8323328-479427486-1761044931=:1018--
 
