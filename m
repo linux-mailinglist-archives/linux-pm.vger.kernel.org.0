@@ -1,167 +1,183 @@
-Return-Path: <linux-pm+bounces-36564-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36565-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 47A9FBF6841
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 14:45:26 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 024FBBF68F0
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 14:53:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 089D719A1440
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 12:45:50 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id CD3FC4EE0D3
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 12:53:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 083AF332EC4;
-	Tue, 21 Oct 2025 12:45:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D4B5333727;
+	Tue, 21 Oct 2025 12:53:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Iu0n0IjZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p8Cs6anh"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8049332904
-	for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 12:45:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FACF33343A
+	for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 12:53:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761050713; cv=none; b=nWTSKSaNxHr7lA/LUKBRScWd2p/PE+Jnp3u9BXnhgVUd0K4onYvLg30tjTF2KM0E3Sd9f1LDCOyFYIie35cKu31yo8aXpYMXluf5rot3L+999uBQdVHfnaJgwHvCwN4p40znwN+8rA9wb3KuiAQacTl5r9gRbdq/IbvbdHVshO8=
+	t=1761051207; cv=none; b=dKFYuicuJEVdFzLTL+Ny+wWdGYZMZHYd4d70m8t1530dS2TZlzi0q40ycuxoBHY/pGVz2hVZJO7egq0hzkODDZm76hAfUOJ99GymXWM32eiaREmkNLJBrpC6CYTHXsp93HZaQvO2paKNnDd0e9Jk7XUJ8tg2rkSH1FYrr8xtbrY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761050713; c=relaxed/simple;
-	bh=fNqD+B6s469Yj7Uuf2+D0qytTYH3QsTqcGglEXhywPQ=;
+	s=arc-20240116; t=1761051207; c=relaxed/simple;
+	bh=JRMgqzMCkRarxTqmjB25RB2qN3M2EvcJMAfE3kwGsSw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=be7Z9J8hq25TatgBzPQLvURt1v6fZSzNRsLHcDKVONCCsCqJ8Isj2vSGKz/1o+fdaaBrb+xyGPBOXMPCzKIAWVSFaJplP2xihGLRuCANa6pXfv239GF8MvKXNQUa6eFe2wiE0eVlHvJBMVvsJjUkhPQRblE76ACPy985PURiL6E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Iu0n0IjZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B48CC4CEFD
-	for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 12:45:13 +0000 (UTC)
+	 To:Cc:Content-Type; b=NOLcB33D5K5996qvNaTBEnjqwNV+BaesvR0nbdgqAdDADDRIGH44ypQbXg2S9eVeL1Nd9YAAWUrzTSTvMk4kuf3GxRDk56KAN0EokO7tge+V+gDoU9tz0XxCe+cxPC5sCpMuMT69fBah12HPoZG3eAiRa1IRj1EIoBa/OLaETLo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p8Cs6anh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19BE7C116C6
+	for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 12:53:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761050713;
-	bh=fNqD+B6s469Yj7Uuf2+D0qytTYH3QsTqcGglEXhywPQ=;
+	s=k20201202; t=1761051207;
+	bh=JRMgqzMCkRarxTqmjB25RB2qN3M2EvcJMAfE3kwGsSw=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Iu0n0IjZdJ1BkmkUfib/wrwtDaZ6xxHsH/c9fcxkTJjMAdwzqS98vY2XcO/fnDlZp
-	 w3jJfmFgk+1Px+pty5cxR0VQczTngpA2iuD22WeZm98XvhzSCPuJYTXDbFuJXUXUM1
-	 sdws1JBJcySlRx3SqYvtwrpL2rqFaHzXDCzooFesdHaB6NNtPefPtIfdsfGMwupJrC
-	 3u0Uk0umvEPeP/Ei35P/BRrFymRIDy/uNLraeQX2nAxGbHlG+0kNp4HFW7jLoM28ec
-	 kAoRz8OcCUravdQt/zI4VWy0/VrLeTWbg+xWB7UesTOpYB4aRKhD/L05DtyCkprZFy
-	 aBVoJ4agTixUA==
-Received: by mail-oo1-f49.google.com with SMTP id 006d021491bc7-651c77805b7so2403613eaf.1
-        for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 05:45:13 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVxQbow/7WT//T1XVWg+UDi4mH4ty1JuY5FNw4dco6NXAQT1yUdY0ky271qtu/n5H5NCNpzKcy8aA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxM8o55UxKiMjNB+6QkgXW1RzgL79H/oWXZMJrQf3SrA855+A0t
-	Axih3zjCU7YJeXLSNS1ZWgrfWXLU17tTrtKTINar02vg2oGzYwizLXluEPWLyIsG8T5jgJtTjyj
-	5S3fReqTygQjdmYHeVI73BALT57MSerM=
-X-Google-Smtp-Source: AGHT+IH6obx8zcmEauqGoNYLVkeBLUIIr0ww8RYLI2qsmTsgyzzB7QT2RsZlbIpSX2hhGlD1fpjflbZtgs/poJLEHoA=
-X-Received: by 2002:a05:6808:1383:b0:43f:5b28:f0a6 with SMTP id
- 5614622812f47-443a2ee46d2mr7050078b6e.1.1761050712765; Tue, 21 Oct 2025
- 05:45:12 -0700 (PDT)
+	b=p8Cs6anh7MxhwqhAo26mJSRzuftK40TA4a6UF4EhaaR3j7eaP0M3gFUqpYosDs697
+	 ySlEGZGWbDR3UmWIvMBLGUXBlovIrkZwdS+8dZnjjF+v9vgiw0GnZGyBq2qx2AbyIY
+	 rF02Y2wRMNB3yqrU026qp1+N2Ob+iqa3SDUm4+vLgQwBPOeRmdyCSUP787/6YAgxSa
+	 w/sVW1QDCtEOzhT7EekrP2z3ektze5KSU1QIgdHOawXzn9FvCEXBti4FRZqG9v5IQ+
+	 2EyRMs1TgCGNM6V+Rqv7C0g7ZMMZp7Quc7wP4aWhAGLbkSyq+bmUHXoNECDvw3Bjv/
+	 93WrkNZwm/2xw==
+Received: by mail-oi1-f178.google.com with SMTP id 5614622812f47-443a58904efso2086486b6e.0
+        for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 05:53:27 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWTsdT1gjsZkAETpViJIf+EkmMIs9JVb19ccdDB/lq/2ceLKgZjfr9X5+sM47f8Rw784M6NAYrXQQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyJotD5VW5n478tKcAUuAg42wOYcV9o7MH45eK8pT451zRoBz7A
+	jbibT/KNXz3fIV4EKPdVgkax1AIqKlmRiTnmPkqccSkMJwX0FW49OUrPG7Sd0hZvj0/ZD3XsYf6
+	8CZWH7eP+BHGyi3KNLzl2o8F2Cpu4G8I=
+X-Google-Smtp-Source: AGHT+IELKAJn+CpJ5d/x/lg53OE74Osp3H7VB9TLdb1TgTTX0AqIbjmO0KqDlLu2W8HZjjlDl3/ySjO9XTu3OKhlfNQ=
+X-Received: by 2002:a05:6808:18a7:b0:43f:7a87:b39 with SMTP id
+ 5614622812f47-443a2f6a7c2mr6912539b6e.28.1761051206442; Tue, 21 Oct 2025
+ 05:53:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <6196611.lOV4Wx5bFT@rafael.j.wysocki> <2323750.iZASKD2KPV@rafael.j.wysocki>
- <25435d82-575d-495f-ae61-bd38570ff9ad@linux.ibm.com>
-In-Reply-To: <25435d82-575d-495f-ae61-bd38570ff9ad@linux.ibm.com>
+References: <20251016155335.1.I60a53c170a8596661883bd2b4ef475155c7aa72b@changeid>
+ <aPH_B7SiJ8KnIAwJ@wunner.de> <67381f3b-4aee-a314-b5dd-2b7d987a7794@linux.intel.com>
+ <aPKANja_k1gogTAU@google.com> <08976178-298f-79d9-1d63-cff5a4e56cc3@linux.intel.com>
+ <aPaFACsVupPOe67G@google.com> <06cd0121-819d-652d-afa7-eece15bf82a2@linux.intel.com>
+In-Reply-To: <06cd0121-819d-652d-afa7-eece15bf82a2@linux.intel.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 21 Oct 2025 14:44:59 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0iC-Lz59iu+5Ps-T9W5Ow__pm_0-txF2mDERypPFQYFsw@mail.gmail.com>
-X-Gm-Features: AS18NWBovxp0gk85Y0l34CMY9sPShK1oLNJ-hGiHVklLTkmzTqdfgdStD1r2e9w
-Message-ID: <CAJZ5v0iC-Lz59iu+5Ps-T9W5Ow__pm_0-txF2mDERypPFQYFsw@mail.gmail.com>
-Subject: Re: [PATCH v4 2/3] PCI/sysfs: Use runtime PM guard macro for auto-cleanup
-To: Farhan Ali <alifm@linux.ibm.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
-	Jonathan Cameron <jonathan.cameron@huawei.com>, Bjorn Helgaas <helgaas@kernel.org>, 
-	Takashi Iwai <tiwai@suse.de>, LKML <linux-kernel@vger.kernel.org>, 
-	Linux PCI <linux-pci@vger.kernel.org>, Alex Williamson <alex.williamson@redhat.com>, 
-	Zhang Qilong <zhangqilong3@huawei.com>, Ulf Hansson <ulf.hansson@linaro.org>, 
-	Frank Li <Frank.Li@nxp.com>, Dhruva Gole <d-gole@ti.com>, 
-	Niklas Schnelle <schnelle@linux.ibm.com>
+Date: Tue, 21 Oct 2025 14:53:13 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0giOw54L6M8rj-Q8ZELpFHx9LPKS2fAnsHHjHfhW_LZWw@mail.gmail.com>
+X-Gm-Features: AS18NWCQj4vpYEf3m-BM318rLr21HBYlYKoNpN244opR4NeobUnk_Cp4bjPsdg0
+Message-ID: <CAJZ5v0giOw54L6M8rj-Q8ZELpFHx9LPKS2fAnsHHjHfhW_LZWw@mail.gmail.com>
+Subject: Re: [PATCH] PCI/PM: Prevent runtime suspend before devices are fully initialized
+To: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc: Brian Norris <briannorris@chromium.org>, Lukas Wunner <lukas@wunner.de>, 
+	Bjorn Helgaas <bhelgaas@google.com>, LKML <linux-kernel@vger.kernel.org>, 
+	linux-pm@vger.kernel.org, "Rafael J . Wysocki" <rafael@kernel.org>, linux-pci@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Oct 21, 2025 at 12:07=E2=80=AFAM Farhan Ali <alifm@linux.ibm.com> w=
-rote:
+On Tue, Oct 21, 2025 at 1:27=E2=80=AFPM Ilpo J=C3=A4rvinen
+<ilpo.jarvinen@linux.intel.com> wrote:
 >
+> On Mon, 20 Oct 2025, Brian Norris wrote:
 >
-> On 9/26/2025 9:24 AM, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > Hi Ilpo,
 > >
-> > Use the newly introduced pm_runtime_active_try guard to simplify
-> > the code and add the proper error handling for PM runtime resume
-> > errors.
+> > On Mon, Oct 20, 2025 at 06:56:41PM +0300, Ilpo J=C3=A4rvinen wrote:
+> > > On Fri, 17 Oct 2025, Brian Norris wrote:
+> > >
+> > > > On Fri, Oct 17, 2025 at 02:49:35PM +0300, Ilpo J=C3=A4rvinen wrote:
+> > > > > On Fri, 17 Oct 2025, Lukas Wunner wrote:
+> > > > >
+> > > > > > [cc +=3D Ilpo]
+> > > > > >
+> > > > > > On Thu, Oct 16, 2025 at 03:53:35PM -0700, Brian Norris wrote:
+> > > > > > > PCI devices are created via pci_scan_slot() and similar, and =
+are
+> > > > > > > promptly configured for runtime PM (pci_pm_init()). They are =
+initially
+> > > > > > > prevented from suspending by way of pm_runtime_forbid(); howe=
+ver, it's
+> > > > > > > expected that user space may override this via sysfs [1].
+> > > > >
+> > > > > Is this true as pm_runtime_forbid() also increases PM usage count=
+?
+> > > >
+> > > > Yes it's true. See below.
+> > > >
+> > > > > "void pm_runtime_forbid(struct device *dev);
+> > > > >
+> > > > > unset the power.runtime_auto flag for the device and increase its
+> > > > > usage counter (used by the /sys/devices/.../power/control interfa=
+ce to
+> > > > > effectively prevent the device from being power managed at run ti=
+me)"
 > >
-> > Based on an earlier patch from Takashi Iwai <tiwai@suse.de> [1].
+> > I see this doc line confused you, and I can sympathize.
 > >
-> > Link: https://patch.msgid.link/20250919163147.4743-3-tiwai@suse.de [1]
-> > Acked-by: Bjorn Helgaas <bhelgaas@google.com>
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
+> > IIUC, the parenthetical means that sysfs *uses* pm_runtime_forbid() to
+> > "effectively prevent runtime power management"; pm_runtime_forbid() doe=
+s
+> > not block user space from doing anything.
 > >
-> > v3 -> v4:
-> >     * Use ACQUIRE()/ACQUIRE_ERR() (Jonathan)
-> >     * Adjust subject and changelog
-> >     * Take patch ownership (it's all different now)
-> >     * Pick up Bjorn's ACK from v3 (Bjorn, please let me know if that's =
-not OK)
+> > > > Right, but sysfs `echo auto > .../power/control` performs the inver=
+se --
+> > > > pm_runtime_allow() -- which decrements that count.
+> > >
+> > > Fair enough, I didn't check what it does.
+> > >
+> > > IMO, the details about how the usage count behaves should be part of =
+the
+> > > changelog as that documentation I quoted sounded like user control is
+> > > prevented when forbidden.
 > >
-> > v2 -> v3: No changes
+> > I tried to elaborate on the API doc confusion above. But frankly, I'm
+> > not sure how best to explain runtime PM.
 > >
-> > v1 -> v2:
-> >     * Adjust the name of the class to handle the disabled runtime PM ca=
-se
-> >       transparently (like the original code).
-> >
-> > ---
-> >   drivers/pci/pci-sysfs.c |    5 +++--
-> >   1 file changed, 3 insertions(+), 2 deletions(-)
-> >
-> > --- a/drivers/pci/pci-sysfs.c
-> > +++ b/drivers/pci/pci-sysfs.c
-> > @@ -1475,8 +1475,9 @@ static ssize_t reset_method_store(struct
-> >               return count;
-> >       }
-> >
-> > -     pm_runtime_get_sync(dev);
-> > -     struct device *pmdev __free(pm_runtime_put) =3D dev;
-> > +     ACQUIRE(pm_runtime_active_try, pm)(dev);
-> > +     if (ACQUIRE_ERR(pm_runtime_active_try, &pm))
-> > +             return -ENXIO;
-> >
-> >       if (sysfs_streq(buf, "default")) {
-> >               pci_init_reset_methods(pdev);
-> >
-> >
-> Hi Rafael,
->
-> This patch breaks updating the 'reset_method' sysfs file on s390. If we
-> try to update the reset_method, we are hitting the ENXIO error. eg:
->
-> echo 'bus' > /sys/bus/pci/devices/0007\:00\:10.1/reset_method
-> -bash: echo: write error: No such device or address
->
-> I don't think s390 does anything different in this path, so this could
-> also impact other platforms? Changing this to something like this fixes i=
+> > > I see you've put this part of the explanation
+> > > into the v2 as well so I suggest you explain the usage count in the c=
+hange
+> > > so it is recorded in the commit if somebody has to look at this commi=
 t
+> > > years from now.
+> >
+> > Both v1 and v2 mention that the sysfs 'power/control' file can override
+> > the kernel calling pm_runtime_forbid(). They don't mention the usage
+> > count, since that's an implementation detail IMO. (To me, the mental
+> > model works best if "usage count" (usually get()/put()) is considered
+> > mostly orthogonal to forbid()/allow()/sysfs, because "forbid()" can be
+> > overridden at any time.)
+> >
+> > This is also covered here:
+> >
+> > https://docs.kernel.org/power/runtime_pm.html#runtime-pm-initialization=
+-device-probing-and-removal
+> >
+> > "In principle, this mechanism may also be used by the driver to
+> > effectively turn off the runtime power management of the device until
+> > the user space turns it on."
 >
->
-> diff --git a/drivers/pci/pci-sysfs.c b/drivers/pci/pci-sysfs.c
-> index 9d6f74bd95f8..d7fc0dc81c30 100644
-> --- a/drivers/pci/pci-sysfs.c
-> +++ b/drivers/pci/pci-sysfs.c
-> @@ -1517,8 +1517,8 @@ static ssize_t reset_method_store(struct device *de=
-v,
->                  return count;
->          }
->
-> -       ACQUIRE(pm_runtime_active_try, pm)(dev);
-> -       if (ACQUIRE_ERR(pm_runtime_active_try, &pm))
-> +       ACQUIRE(pm_runtime_active, pm)(dev);
-> +       if (ACQUIRE_ERR(pm_runtime_active, &pm))
->                  return -ENXIO;
->
-> This changes the logic to what it was previously which used
-> pm_runtime_get_sync and pm_runtime_put. But I am not familiar with the
-> PM runtime code, so not sure what would be the right fix here.
+> The problem is already rooted into the function name, when a function is
+> called "forbid", anyone unfamiliar will think it really forbids
+> something.
 
-Can you please check if this helps:
+And it does, until the "allow" counterpart of it is called.
 
-https://lore.kernel.org/linux-pm/5943878.DvuYhMxLoT@rafael.j.wysocki/
+The confusing part here is that the "allow" counterpart is called from
+a sysfs attribute.
+
+> The docs just further reinforced the idea and the fact that it
+> also increments usage count.
+>
+> It is quite unexpected and feels quite illogical (for non-PM person like
+> me) that user interface then goes to reverse that usage count increase,
+> what would be the logical reason why there now are less users for it when
+> user wants to turn on PM? (I understand things are done that way, no need
+> to explain that further, but there are quite a few misleading things in
+> this entire scenario, not just that parenthesis part of the docs.)
+
+So the purpose of this "forbid" call in pci_pm_init() is to "block"
+runtime PM for PCI devices by default, but allow user space to
+"unblock" it later.
+
+Would adding a comment to that effect next to that call be useful?
 
