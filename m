@@ -1,205 +1,167 @@
-Return-Path: <linux-pm+bounces-36563-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36564-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1469BBF66AC
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 14:22:59 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 47A9FBF6841
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 14:45:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C40584E5F8A
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 12:22:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 089D719A1440
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 12:45:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 931CB25A659;
-	Tue, 21 Oct 2025 12:22:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 083AF332EC4;
+	Tue, 21 Oct 2025 12:45:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="TtoFpAgr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Iu0n0IjZ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B79FC1DE4F1
-	for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 12:22:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8049332904
+	for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 12:45:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761049373; cv=none; b=oHmic0VcyOJWqmpZ3GxbGbifAOZtn86mHVKspvMXdP35GgsNWC5Q7PjCbGCKumYi6SqaoMpXOUfwdXXd4YvV4O/60RdDcX9seu/sYlpNM87lMGaccyM1X9XDJ43xla7XF39xnOKVmHF8vktnGipVi9nzYp6NaN8D8eBe+QMnEIc=
+	t=1761050713; cv=none; b=nWTSKSaNxHr7lA/LUKBRScWd2p/PE+Jnp3u9BXnhgVUd0K4onYvLg30tjTF2KM0E3Sd9f1LDCOyFYIie35cKu31yo8aXpYMXluf5rot3L+999uBQdVHfnaJgwHvCwN4p40znwN+8rA9wb3KuiAQacTl5r9gRbdq/IbvbdHVshO8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761049373; c=relaxed/simple;
-	bh=f3De6rNTLERtBCHNMZ22urpVrMEnrkSKkBp8ZJH0Ey0=;
+	s=arc-20240116; t=1761050713; c=relaxed/simple;
+	bh=fNqD+B6s469Yj7Uuf2+D0qytTYH3QsTqcGglEXhywPQ=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RMl+oT71xCv1nXR0AqGxxFS6OI+kYDWd7y4RKFELDt8sd+DNgmmCMc3bktIHBXJV5gRxS6rYqweBCGCBIFqUbK/VQjFtzDbH75MdTMpo9cPKWzB8HeUfWBEY66neUVvaipNKqpNz0RQ3BF1DrdwjRsG7gxqQhDqk5AEIBnOFaEU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=TtoFpAgr; arc=none smtp.client-ip=209.85.128.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-71d71bcab69so53808677b3.0
-        for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 05:22:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1761049370; x=1761654170; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=0gsO0Mv1FrcyGXkqaqLTVsEMXbut/odQDvF8E5ZP8zg=;
-        b=TtoFpAgr9EvntFhc0LWUKCHatbEH+caEZo4EJERzFHvdgEZ435S+nNHROPl0IAYd+k
-         sVmMOlEAdxm3e9IaZzJD4xUzSrfyV99GKaMkGVFioYvU2ZHHMOTRqmJNuOs1bjnGK2UE
-         LX6E9RBByJFXuE7uCDXc4enjwrYVuWbtom6kBXhR8wl3PlvqA8/v4208U9y2jWMQpTrr
-         +YXtHmo5dvsH3yJGWHHtjcFNcNkggoGWxjbwpdsATMLfoGQbW47rzsiQKby2eGfN12AB
-         KnVexQom0e4V8BDfgWImOuLLu/ljhJoAlHNATfdVHJeAktbmcdUnFwQxq3l/HCMRfcjH
-         d5yQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761049370; x=1761654170;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0gsO0Mv1FrcyGXkqaqLTVsEMXbut/odQDvF8E5ZP8zg=;
-        b=B7a1OCAMe2algkhbuT0gBbnpSLlnm1D3vcvXQdPFBKPHFtvxtalEoak3xtHKl5kczk
-         fWb/p5mV+BfxOvNbVplTUBexQLuT9JNqVzcGC1NgxXp6/BDbRk/4CSrKIuCbrWVAdfV/
-         W+5yyo8UH6lkjo0nPePjkGoxfVWlwDPtmBXLdloheikmMwRpcO8v5bP77Lq0tN86wHuM
-         HYDcToSjmKeNM/1DcA/ertlNhu91BExkQ8bAZR7bcTHJX6Iuybx+myuakKcqwv/J/XIg
-         IyvM+ruVBdnyENo/uTUsyPmU/ZqxI2apYiZmynGedG5lLAJYgt7eQfqFhiy/K2iTGWjb
-         Vrjg==
-X-Forwarded-Encrypted: i=1; AJvYcCU3l/MJie0pQRhtIacJYF/NQ6Pn6Cas9dwgjHEu3X4Z98Hg6mjwE97sRTAuxYvG/fX3LtL8AElFfQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxx0UIvIgh81KUhSfg8zHJGXDvkotZX2sGMgRjrLtae7eaL0/10
-	RaWODrnnHOfLS4J1riYrT2+XX+vdfLiKcCtq/3tV0zbLJp59i3QEiQjypFHlSTEX1gPVEjQW/Tc
-	pPBEokwsRDvSkdogWkBZq9lMWCiGPJBBmSaD6g9695Q==
-X-Gm-Gg: ASbGnctdU2H60WwwMLIva+glMZOE2Y4MHUiQjwGDw3adLXOewins8ZIE41jKwt69NyJ
-	D8s74zZJXmRu8Zd7NmZoc1+eibenWNrw5LcMaL/9frO9/6t/ZPz/lHGgkbC1Sk9O5pY9jat9v65
-	mzd/h9iAW6kvETIr9sWCDtls0vtCpwEQMYLnA7XJ772BAym6A0MThqVFxwp+oEYLMKLOuP6ZHqG
-	i7ii+S5vHUNQ+NDKGgO80/HdnEQvpYzqS59JXictfdrny9W8BWEjdAjoH7wlcGa8QwoYOa+
-X-Google-Smtp-Source: AGHT+IEjsTRnovw4ePg20FTB4OUKNJwNiI+HcgpJ0npXrx4jgsZXBfmlUSYcGf7LNK6sqZ0vKa1Fghky5U1mlT7+5do=
-X-Received: by 2002:a53:acd5:0:20b0:63e:102f:e00e with SMTP id
- 956f58d0204a3-63e1625aee1mr12332024d50.53.1761049369570; Tue, 21 Oct 2025
- 05:22:49 -0700 (PDT)
+	 To:Cc:Content-Type; b=be7Z9J8hq25TatgBzPQLvURt1v6fZSzNRsLHcDKVONCCsCqJ8Isj2vSGKz/1o+fdaaBrb+xyGPBOXMPCzKIAWVSFaJplP2xihGLRuCANa6pXfv239GF8MvKXNQUa6eFe2wiE0eVlHvJBMVvsJjUkhPQRblE76ACPy985PURiL6E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Iu0n0IjZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B48CC4CEFD
+	for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 12:45:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761050713;
+	bh=fNqD+B6s469Yj7Uuf2+D0qytTYH3QsTqcGglEXhywPQ=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Iu0n0IjZdJ1BkmkUfib/wrwtDaZ6xxHsH/c9fcxkTJjMAdwzqS98vY2XcO/fnDlZp
+	 w3jJfmFgk+1Px+pty5cxR0VQczTngpA2iuD22WeZm98XvhzSCPuJYTXDbFuJXUXUM1
+	 sdws1JBJcySlRx3SqYvtwrpL2rqFaHzXDCzooFesdHaB6NNtPefPtIfdsfGMwupJrC
+	 3u0Uk0umvEPeP/Ei35P/BRrFymRIDy/uNLraeQX2nAxGbHlG+0kNp4HFW7jLoM28ec
+	 kAoRz8OcCUravdQt/zI4VWy0/VrLeTWbg+xWB7UesTOpYB4aRKhD/L05DtyCkprZFy
+	 aBVoJ4agTixUA==
+Received: by mail-oo1-f49.google.com with SMTP id 006d021491bc7-651c77805b7so2403613eaf.1
+        for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 05:45:13 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVxQbow/7WT//T1XVWg+UDi4mH4ty1JuY5FNw4dco6NXAQT1yUdY0ky271qtu/n5H5NCNpzKcy8aA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxM8o55UxKiMjNB+6QkgXW1RzgL79H/oWXZMJrQf3SrA855+A0t
+	Axih3zjCU7YJeXLSNS1ZWgrfWXLU17tTrtKTINar02vg2oGzYwizLXluEPWLyIsG8T5jgJtTjyj
+	5S3fReqTygQjdmYHeVI73BALT57MSerM=
+X-Google-Smtp-Source: AGHT+IH6obx8zcmEauqGoNYLVkeBLUIIr0ww8RYLI2qsmTsgyzzB7QT2RsZlbIpSX2hhGlD1fpjflbZtgs/poJLEHoA=
+X-Received: by 2002:a05:6808:1383:b0:43f:5b28:f0a6 with SMTP id
+ 5614622812f47-443a2ee46d2mr7050078b6e.1.1761050712765; Tue, 21 Oct 2025
+ 05:45:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250910-uart-daisy-chain-pmdomain-v2-1-6d0215f4af32@ti.com>
-In-Reply-To: <20250910-uart-daisy-chain-pmdomain-v2-1-6d0215f4af32@ti.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Tue, 21 Oct 2025 14:22:13 +0200
-X-Gm-Features: AS18NWBw6aYnNOt7sX3hV723CfvlVkoslKqfPhuE6iOIYmHabXQ8nFw-lI3bkVE
-Message-ID: <CAPDyKFrOjFeZDOs84egaCAmRwtnXcj5bZLniOb1gkDkDH0214g@mail.gmail.com>
-Subject: Re: [PATCH v2] pmdomain: ti_sci: Handle wakeup constraint if device
- has pinctrl wakeup state
-To: Kendall Willis <k-willis@ti.com>, khilman@baylibre.com
-Cc: Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>, 
-	Santosh Shilimkar <ssantosh@kernel.org>, linux-arm-kernel@lists.infradead.org, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, d-gole@ti.com, 
-	vishalm@ti.com, sebin.francis@ti.com, msp@baylibre.com, a-kaur@ti.com
+References: <6196611.lOV4Wx5bFT@rafael.j.wysocki> <2323750.iZASKD2KPV@rafael.j.wysocki>
+ <25435d82-575d-495f-ae61-bd38570ff9ad@linux.ibm.com>
+In-Reply-To: <25435d82-575d-495f-ae61-bd38570ff9ad@linux.ibm.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 21 Oct 2025 14:44:59 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0iC-Lz59iu+5Ps-T9W5Ow__pm_0-txF2mDERypPFQYFsw@mail.gmail.com>
+X-Gm-Features: AS18NWBovxp0gk85Y0l34CMY9sPShK1oLNJ-hGiHVklLTkmzTqdfgdStD1r2e9w
+Message-ID: <CAJZ5v0iC-Lz59iu+5Ps-T9W5Ow__pm_0-txF2mDERypPFQYFsw@mail.gmail.com>
+Subject: Re: [PATCH v4 2/3] PCI/sysfs: Use runtime PM guard macro for auto-cleanup
+To: Farhan Ali <alifm@linux.ibm.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
+	Jonathan Cameron <jonathan.cameron@huawei.com>, Bjorn Helgaas <helgaas@kernel.org>, 
+	Takashi Iwai <tiwai@suse.de>, LKML <linux-kernel@vger.kernel.org>, 
+	Linux PCI <linux-pci@vger.kernel.org>, Alex Williamson <alex.williamson@redhat.com>, 
+	Zhang Qilong <zhangqilong3@huawei.com>, Ulf Hansson <ulf.hansson@linaro.org>, 
+	Frank Li <Frank.Li@nxp.com>, Dhruva Gole <d-gole@ti.com>, 
+	Niklas Schnelle <schnelle@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 10 Sept 2025 at 23:16, Kendall Willis <k-willis@ti.com> wrote:
+On Tue, Oct 21, 2025 at 12:07=E2=80=AFAM Farhan Ali <alifm@linux.ibm.com> w=
+rote:
 >
-> For TI K3 SoCs with IO daisy-chaining using pinctrl wakeup state, avoid
-> sending wakeup constraints to the PM co-processor. This allows the SoC to
-> enter deeper low power states while still maintaining wakeup capability
-> for peripherals using IO daisy-chain wakeup via pinctrl wakeup state,
-> similar to the existing wake IRQ mechanism added in commit b06bc47279919
-> ("pmdomain: ti_sci: handle wake IRQs for IO daisy chain wakeups").
 >
-> Detect the pinctrl wakeup state in the suspend path, and if it exists,
-> skip sending the constraint.
+> On 9/26/2025 9:24 AM, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > Use the newly introduced pm_runtime_active_try guard to simplify
+> > the code and add the proper error handling for PM runtime resume
+> > errors.
+> >
+> > Based on an earlier patch from Takashi Iwai <tiwai@suse.de> [1].
+> >
+> > Link: https://patch.msgid.link/20250919163147.4743-3-tiwai@suse.de [1]
+> > Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > ---
+> >
+> > v3 -> v4:
+> >     * Use ACQUIRE()/ACQUIRE_ERR() (Jonathan)
+> >     * Adjust subject and changelog
+> >     * Take patch ownership (it's all different now)
+> >     * Pick up Bjorn's ACK from v3 (Bjorn, please let me know if that's =
+not OK)
+> >
+> > v2 -> v3: No changes
+> >
+> > v1 -> v2:
+> >     * Adjust the name of the class to handle the disabled runtime PM ca=
+se
+> >       transparently (like the original code).
+> >
+> > ---
+> >   drivers/pci/pci-sysfs.c |    5 +++--
+> >   1 file changed, 3 insertions(+), 2 deletions(-)
+> >
+> > --- a/drivers/pci/pci-sysfs.c
+> > +++ b/drivers/pci/pci-sysfs.c
+> > @@ -1475,8 +1475,9 @@ static ssize_t reset_method_store(struct
+> >               return count;
+> >       }
+> >
+> > -     pm_runtime_get_sync(dev);
+> > -     struct device *pmdev __free(pm_runtime_put) =3D dev;
+> > +     ACQUIRE(pm_runtime_active_try, pm)(dev);
+> > +     if (ACQUIRE_ERR(pm_runtime_active_try, &pm))
+> > +             return -ENXIO;
+> >
+> >       if (sysfs_streq(buf, "default")) {
+> >               pci_init_reset_methods(pdev);
+> >
+> >
+> Hi Rafael,
 >
-> Signed-off-by: Kendall Willis <k-willis@ti.com>
-> ---
-> Implementation
-> --------------
-> This patch is intended to be implemented along with the following
-> series. This patch has no dependencies on any of the other series:
+> This patch breaks updating the 'reset_method' sysfs file on s390. If we
+> try to update the reset_method, we are hitting the ENXIO error. eg:
 >
-> 1. "pmdomain: ti_sci: Handle wakeup constraint if device has pinctrl
->    wakeup state": (this patch) skips setting constraints for wakeup
->    sources that use pinctrl state 'wakeup'.
+> echo 'bus' > /sys/bus/pci/devices/0007\:00\:10.1/reset_method
+> -bash: echo: write error: No such device or address
 >
-> 2. "serial: 8250: omap: Add wakeup support": Implements wakeup from
->    the UARTs for TI K3 SoCs
->    https://github.com/kwillis01/linux/tree/b4/uart-daisy-chain-8250-omap
+> I don't think s390 does anything different in this path, so this could
+> also impact other platforms? Changing this to something like this fixes i=
+t
 >
-> 3. "arm64: dts: ti: k3-am62: Support Main UART wakeup": Implements the
->    functionality to wakeup the system from the Main UART
->    https://github.com/kwillis01/linux/tree/b4/uart-daisy-chain-dts
 >
-> Testing
-> -------
-> Tested on a AM62P SK EVM board with all series and dependencies
-> implemented. Suspend/resume verified with the Main UART wakeup source
-> by entering a keypress on the console.
+> diff --git a/drivers/pci/pci-sysfs.c b/drivers/pci/pci-sysfs.c
+> index 9d6f74bd95f8..d7fc0dc81c30 100644
+> --- a/drivers/pci/pci-sysfs.c
+> +++ b/drivers/pci/pci-sysfs.c
+> @@ -1517,8 +1517,8 @@ static ssize_t reset_method_store(struct device *de=
+v,
+>                  return count;
+>          }
 >
-> This github branch has all the necessary patches to test the series
-> using linux-next:
-> https://github.com/kwillis01/linux/tree/uart-daisy-chain
+> -       ACQUIRE(pm_runtime_active_try, pm)(dev);
+> -       if (ACQUIRE_ERR(pm_runtime_active_try, &pm))
+> +       ACQUIRE(pm_runtime_active, pm)(dev);
+> +       if (ACQUIRE_ERR(pm_runtime_active, &pm))
+>                  return -ENXIO;
 >
-> Version History
-> ---------------
-> Changes from v1 to v2:
->  - Reworded commit message to be concise and to reference commit
->    b06bc47279919
->
-> v1: https://lore.kernel.org/all/20250904211607.3725897-1-k-willis@ti.com/
-> ---
->  drivers/pmdomain/ti/ti_sci_pm_domains.c | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
->
-> diff --git a/drivers/pmdomain/ti/ti_sci_pm_domains.c b/drivers/pmdomain/ti/ti_sci_pm_domains.c
-> index 82df7e44250bb64f9c4a2108b5e97bd782a5976d..884905fd0686c1b94aba68c03da038e577428adf 100644
-> --- a/drivers/pmdomain/ti/ti_sci_pm_domains.c
-> +++ b/drivers/pmdomain/ti/ti_sci_pm_domains.c
-> @@ -10,6 +10,7 @@
->  #include <linux/err.h>
->  #include <linux/module.h>
->  #include <linux/of.h>
-> +#include <linux/pinctrl/consumer.h>
->  #include <linux/platform_device.h>
->  #include <linux/pm_domain.h>
->  #include <linux/pm_qos.h>
-> @@ -84,9 +85,24 @@ static inline void ti_sci_pd_set_wkup_constraint(struct device *dev)
->         struct generic_pm_domain *genpd = pd_to_genpd(dev->pm_domain);
->         struct ti_sci_pm_domain *pd = genpd_to_ti_sci_pd(genpd);
->         const struct ti_sci_handle *ti_sci = pd->parent->ti_sci;
-> +       struct pinctrl *pinctrl = devm_pinctrl_get(dev);
-> +       struct pinctrl_state *pinctrl_state_wakeup;
->         int ret;
->
->         if (device_may_wakeup(dev)) {
-> +               /*
-> +                * If device can wakeup using pinctrl wakeup state,
-> +                * we do not want to set a constraint
-> +                */
-> +               if (!IS_ERR_OR_NULL(pinctrl)) {
-> +                       pinctrl_state_wakeup = pinctrl_lookup_state(pinctrl, "wakeup");
-> +                       if (!IS_ERR_OR_NULL(pinctrl_state_wakeup)) {
-> +                               dev_dbg(dev, "%s: has wake pinctrl wakeup state, not setting " \
-> +                                               "constraints\n", __func__);
-> +                               return;
-> +                       }
-> +               }
+> This changes the logic to what it was previously which used
+> pm_runtime_get_sync and pm_runtime_put. But I am not familiar with the
+> PM runtime code, so not sure what would be the right fix here.
 
-Relying on the above condition and the wakeirq check that was added in
-b06bc47279919, seems fragile and doesn't really seem like the best
-approach to me.
+Can you please check if this helps:
 
-I would rather think that we should rely on the driver for the
-consumer device to successfully have completed its parts, by enabling
-the out-band system-wakeup IRQ. In other words, make the consumer
-driver to call device_set_out_band_wakeup() and then use
-device_out_band_wakeup() instead of the pinctrl+wakeirq check above,
-to understand if QoS constraints shall be sent to the FW or not.
-
-> +
->                 /*
->                  * If device can wakeup using IO daisy chain wakeups,
->                  * we do not want to set a constraint.
->
-> ---
-> base-commit: 5f540c4aade9f1d58fb7b9490b4b7d5214ec9746
-> change-id: 20250910-uart-daisy-chain-pmdomain-b83b2db2c3cc
->
-> Best regards,
-> --
-> Kendall Willis <k-willis@ti.com>
->
-
-Kind regards
-Uffe
+https://lore.kernel.org/linux-pm/5943878.DvuYhMxLoT@rafael.j.wysocki/
 
