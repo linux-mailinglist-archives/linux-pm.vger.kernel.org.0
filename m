@@ -1,100 +1,112 @@
-Return-Path: <linux-pm+bounces-36541-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36542-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C560BF4D01
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 09:06:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 02E1FBF526A
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 10:07:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C42034F94E2
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 07:05:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B2E0A18909B1
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 08:07:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EDE6272E72;
-	Tue, 21 Oct 2025 07:05:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DA9628DF2D;
+	Tue, 21 Oct 2025 08:07:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ZNu8cu//"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="QA2jFApg"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C705726FDBD;
-	Tue, 21 Oct 2025 07:05:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B88B26CE39;
+	Tue, 21 Oct 2025 08:07:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761030313; cv=none; b=SEY7h1Y3DEwZCrwQJ2aarJhxtVbCqS4VJGKIn91uVqBWaUvx3Bl4VMmZcWtyK6mdjmKxa/xIiV9/RcE3+Gtq1ZJqx/P7P/ZEBnfg6cHkKlWROE2GKnBekF3OmtztA/1pPi7tnHeAeQc9kVdaRWir+K2S0QLsi2LGXxG1Vj51wxc=
+	t=1761034027; cv=none; b=ANFQ+hGtDVzR6b0Mt9bS9KfXJiyjL/Sd2leStzZD1dH56xGETYhOtjOlc0eHMAobrHeaUqQFW4C99Q5tkNyt6Fg+NkXm9f/hkUW/4VPqLoPSeLEoey8zyjxoq6ZAezQHn/YucAUKPmkG1y/bEqRK44O+vybPV+8fBYUW/mVPsCs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761030313; c=relaxed/simple;
-	bh=EHsArdqsSEWKKduqFrtczKcUKMzzz51C1h76mpGhFlI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Yrl4KTm9CUm5bMqI/jnb8/VcWsgjFZcjb1LUtH9tPyvnwNz4qKYQ+x9gTVRNuYBo7JrzmfVgEVFZGJPOf0y2jGv2JyYMhtvglpqylXWwKnrZ+Y8Vh1iVla4Vj/yaMySMu0g3pZLHvLtXjrQM+yH2zaX70tTlLq9OMi1Tu9y1YPU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ZNu8cu//; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2D37C4CEF1;
-	Tue, 21 Oct 2025 07:05:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1761030312;
-	bh=EHsArdqsSEWKKduqFrtczKcUKMzzz51C1h76mpGhFlI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZNu8cu//JZ3YSlADe6H2B3e7usY12xgSqfAc3mg2b5zvqETI5nUwHrUobxPs7mXl3
-	 45+TBlX7GQaS6dUndczNC7kpv1R2BdyQDQKVSM7Qeb6bFRBHRyM6JtsZFHSf1VNlTq
-	 QuztdY+ldB1r4hU/DHMNlvjk0Ola2/kZ1++13Ydc=
-Date: Tue, 21 Oct 2025 09:05:08 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Danilo Krummrich <dakr@kernel.org>
-Cc: rafael@kernel.org, viresh.kumar@linaro.org, acourbot@nvidia.com,
-	ira.weiny@intel.com, leon@kernel.org, daniel.almeida@collabora.com,
-	bhelgaas@google.com, kwilczynski@kernel.org,
-	abdiel.janulgue@gmail.com, robin.murphy@arm.com, ojeda@kernel.org,
-	alex.gaynor@gmail.com, boqun.feng@gmail.com, gary@garyguo.net,
-	bjorn3_gh@protonmail.com, lossin@kernel.org, a.hindborg@kernel.org,
-	aliceryhl@google.com, tmgross@umich.edu,
-	rust-for-linux@vger.kernel.org, linux-pci@vger.kernel.org,
-	linux-pm@vger.kernel.org, nouveau@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rust: driver: let probe() return impl PinInit<Self,
- Error>
-Message-ID: <2025102158-tissue-goal-77ba@gregkh>
-References: <20251016125544.15559-1-dakr@kernel.org>
+	s=arc-20240116; t=1761034027; c=relaxed/simple;
+	bh=Rehk/1A9fRtUYg+F9et0A0RhHwPHQZv605r7G7w8Cx8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MNcqYpIO9T10KYtSDQXvmmHUJN4PNi4lkW+szi1bLpFN/1igIjyKwF0VKh47DbyWH4gCJ0SqhLP3TBQrjS5UXykHFurnS1isVJ/K6HyWEZiWEE0zO97jVtBZsT7KIMw8X893zykYvMFV9x5ecJ9JTLW93LUNvqZfOAdmwDgISAw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=QA2jFApg; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1761034023;
+	bh=Rehk/1A9fRtUYg+F9et0A0RhHwPHQZv605r7G7w8Cx8=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=QA2jFApgIehSOhr+h6MU72RM5sk8wy+gDqp4D4uIO82/Yr/3kBj51T+4Oha1Cc0p9
+	 kjxb7ouJev91hZ81J4yCDLPdur+TjgIiDT1Pq4PjfomHCYmmQ+elrkVe/7KzjK4sH+
+	 XPmyDcRL2w7eU5MFAdG2GmD9bqqEeBZEDEUa5X0m/IGmnMwlPtnxLBEWfeYDyxo0Eh
+	 VpgR0Dl1vcoOHNLU0xJNFAWm1lm+71bOIdhQnfKYA5klxWxhZDiNxVUKeJAsTyda8/
+	 T1FPwtnAJ/YQabb+3XUSL29xzHoz8TAQMyES7vlDWJjT96rA9wQFUzAa8kWByhQ513
+	 cRY+m5/uwPLmw==
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id AE38E17E0CA3;
+	Tue, 21 Oct 2025 10:07:02 +0200 (CEST)
+Message-ID: <1a5f4081-191f-49a5-b3a0-419656b04bf4@collabora.com>
+Date: Tue, 21 Oct 2025 10:07:02 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251016125544.15559-1-dakr@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 1/8] spmi: Print error status with %pe format
+To: Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc: sboyd@kernel.org, jic23@kernel.org, dlechner@baylibre.com,
+ nuno.sa@analog.com, andy@kernel.org, arnd@arndb.de,
+ gregkh@linuxfoundation.org, srini@kernel.org, vkoul@kernel.org,
+ kishon@kernel.org, sre@kernel.org, krzysztof.kozlowski@linaro.org,
+ u.kleine-koenig@baylibre.com, linux-arm-msm@vger.kernel.org,
+ linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-phy@lists.infradead.org, linux-pm@vger.kernel.org,
+ kernel@collabora.com, wenst@chromium.org, casey.connolly@linaro.org,
+ AngeloGioacchino Del Regno <angleogioacchino.delregno@collabora.com>
+References: <20251016104402.338246-1-angelogioacchino.delregno@collabora.com>
+ <20251016104402.338246-2-angelogioacchino.delregno@collabora.com>
+ <aPPmsBHnmKQ1sa3O@ashevche-desk.local>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Content-Language: en-US
+In-Reply-To: <aPPmsBHnmKQ1sa3O@ashevche-desk.local>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, Oct 16, 2025 at 02:55:28PM +0200, Danilo Krummrich wrote:
-> The driver model defines the lifetime of the private data stored in (and
-> owned by) a bus device to be valid from when the driver is bound to a
-> device (i.e. from successful probe()) until the driver is unbound from
-> the device.
+Il 18/10/25 21:12, Andy Shevchenko ha scritto:
+> On Thu, Oct 16, 2025 at 12:43:55PM +0200, AngeloGioacchino Del Regno wrote:
+>> Instead of printing just a number, use the %pe format for error
+>> status, increasing readability of error prints.
 > 
-> This is already taken care of by the Rust implementation of the driver
-> model. However, we still ask drivers to return a Result<Pin<KBox<Self>>>
-> from probe().
+> ...
 > 
-> Unlike in C, where we do not have the concept of initializers, but
-> rather deal with uninitialized memory, drivers can just return an
-> impl PinInit<Self, Error> instead.
+>>   	err = device_add(&sdev->dev);
+>>   	if (err < 0) {
+>> -		dev_err(&sdev->dev, "Can't add %s, status %d\n",
+>> -			dev_name(&sdev->dev), err);
+>> +		dev_err(&sdev->dev, "Can't add %s, status %pe\n",
+>> +			dev_name(&sdev->dev), ERR_PTR(err));
 > 
-> This contributed to more clarity to the fact that a driver returns it's
-> device private data in probe() and the Rust driver model owns the data,
-> manages the lifetime and - considering the lifetime - provides (safe)
-> accessors for the driver.
+> LOL, I only now noticed that the parameter to dev_err() and dev_name() is the
+> same. For christ's sake, why do we need dev_name()?
 > 
-> Hence, let probe() functions return an impl PinInit<Self, Error> instead
-> of Result<Pin<KBox<Self>>>.
-> 
-> Signed-off-by: Danilo Krummrich <dakr@kernel.org>
-> ---
-> Depends on a minor pin-init patch [1] (Benno will send it to the list
-> soon). A branch with this patch and the pin-init dependency is available
-> in [2].
-> 
-> [1] https://github.com/Rust-for-Linux/pin-init/pull/86/commits
-> [2] https://git.kernel.org/pub/scm/linux/kernel/git/dakr/linux.git/log/?h=probe_return
 
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Just only for consistency and having the exact same message as function
+spmi_device_add() and nothing else.
+
+I agree that it's not really needed; if you want I can just change the
+error message in both spmi_device_add() and in the new function that I
+am introducing here.
+
+Cheers,
+Angelo
+
+>>   		goto err_device_add;
+>>   	}
+> 
+
 
