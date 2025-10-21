@@ -1,201 +1,145 @@
-Return-Path: <linux-pm+bounces-36535-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36536-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A1952BF4562
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 03:58:48 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C5CDBF486F
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 05:43:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3483218A7961
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 01:59:12 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id AC9534E4BF7
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 03:43:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5FAC25D527;
-	Tue, 21 Oct 2025 01:58:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AAA821C9E5;
+	Tue, 21 Oct 2025 03:43:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="JXBsHQWP"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="HXf6AR6S"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 708CF25A2BB
-	for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 01:58:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81FB51EB193
+	for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 03:43:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761011923; cv=none; b=hupyjfgv1JwR0cdIHfdmZmfZi6ijDzap8qLReji04CpGlJpQwGVHhj4hWfNq1vT8FIK+Hd8F1mia58A2oDyPPDRRTmkERykFOwhVNhSoJr81PEtV7Mbi0zOAsJg759Op76sPiJi+t0Q5MuTAPQ8JR6suSz/mstxnVU/KMr/+grg=
+	t=1761018199; cv=none; b=H6GqGRtPvh/DIUZru2n/nIQ0oAzvjzjApl81+GQFLQDL8eRbg2bC4pVQkfGvfvP5qMZnb97h0TYg16a9JG1yEaXgZiTHF5GzZPe+RILd4cG82h/f3WFRkMrMJzPbyE5mvpv4bXfY6Tf9xGijy76LAfG2/Z9kGuqJoO23df+9Kgc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761011923; c=relaxed/simple;
-	bh=TaJ6Kpu5C42O4zfV+T1Ms1+yf77uSZazTk3VhrzJq24=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Bs0EO1axQ6MMIfBKD2id3ZCpaOeGKVC3q6zblmuECjzeL5MU/nx/Bp6sbN532vP2SFeWYa5UZK6vvZtOFelnz9KGCDJJbaGUFBQeh6Jk4o40Cr62Tve/Clk6qb029dSTQ2CLge5iDGPYuGdOThVDcqLLu/7D7FZB91EJBYbNio0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=JXBsHQWP; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 59KL10Rh031133
-	for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 01:58:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	TGwpn8/U0jGDBsJ9vOkeOjiPiuDIq8W2qVCHqYYf6sc=; b=JXBsHQWP/qTEPR9F
-	aj4n17ekAa9v3b3yCN3CLVOyV9Y3CFau8yYJ5UxGlaWaVCHIzJUZiNECUDH8uvfu
-	NMfAHF7EddZz90C3hfNCc8AQxdeBEKSapbVXxF4TZlUQJifc4T1/edYz/UyUh1q5
-	DRcydR/YamYHAJfLAjN1BwAgctF90VM8+41EECsk8Nozpv15KDy0lkJ8/1hpOVMZ
-	vdGudTmveBsuKN/2trnGZvx4tU0N2thLNudNnyl4xj3eBse5VjcHYb4juEZPJoEc
-	UpaomhHCr7Tnfi5Qg8pm9w4Uoeqk9iCTeFQUVZdrEjFORLuikPu3z++4sGr48i/m
-	DmFi2Q==
-Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com [209.85.214.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 49v42k6mv7-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 01:58:41 +0000 (GMT)
-Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-286a252bfbfso134374065ad.3
-        for <linux-pm@vger.kernel.org>; Mon, 20 Oct 2025 18:58:41 -0700 (PDT)
+	s=arc-20240116; t=1761018199; c=relaxed/simple;
+	bh=nbBzwttth1UnlFkWL+G5/MGyW0tHPQmic+LV4iQ4s90=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mJ25IdXLyKN0e8gBYpvYjZ4twlaK8J6SZGMyzdSV/4pi+jYDUhu4Q83NSS22oHtxBUO9BUoNHAHw3Rj/qDph19gnhpVv9B1aTqUp1uJDGpmFEKhjMmjXbc4bbMiMnPd/lL/HqyvyFHfuuilgizo5tbeBGiIbAkV29RqOm7K+udc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=HXf6AR6S; arc=none smtp.client-ip=209.85.210.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-7811fa91774so4499461b3a.0
+        for <linux-pm@vger.kernel.org>; Mon, 20 Oct 2025 20:43:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1761018197; x=1761622997; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Xr7US09S8qqydwr4G/9BHixKcLW/nGB742179WdAweo=;
+        b=HXf6AR6S+thw4MAjkMLm3My+5naBeeWdrHooFR786WFOdWzYwXdLu7YKLRGOWpzhtS
+         zQNs46MB2gM8YobUSjTFHYDnr6MORGSC9UrRraNZ/Lakixeag28veIXGh36BeagIfzzl
+         ehkOawJwLLY2SFaUH8k/NE1QcxqBfC/UZ85zk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761011921; x=1761616721;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1761018197; x=1761622997;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TGwpn8/U0jGDBsJ9vOkeOjiPiuDIq8W2qVCHqYYf6sc=;
-        b=p1B1DZF9suiDI8DUzPVz7T1h1aWH8mzo2/d2TCwrwFPlGctzUqZH6bLsN1H1tA5NOf
-         Q2pWw4ERoSAeuny8UMgj9yyc9/SAJ8ZTMiiZtTdsenoUOrZ3gszdK4EONVeGR7f9y2wk
-         4RgdaM+EPie0HpyuCedjyhl6R4DfYg2mdxygzS1CvV5qN0JIwohkQskui3plFEpmEnwE
-         kje1nxqb2oWFqfWtCh/iUKVb+oHiiHX+yA8MV5VyrNokLV9tEgJiDv8hjxhAauqtIxdZ
-         /WSheiI5ZCuj+jkRjQ0V1+aL+jZRuKvIR5FrbcVXLQPMYBkow4U7Mk5wyAFB8uP+bTv7
-         edYQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWJCN4xCfC5UteXuuy9YM+UQF1QNF7QCFLNwoiII9srEDP2wcJrYswei2GX6KmLqW0itTANzNemaQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyXjKmitikpJR6HYHs5vfX/uvU9c0UeX57B6ifu2qj2rQkD3Ilq
-	3jLv8zbILSYzcYZmcBkPd3yOzyoy+SY58mI2nO1pOO+RXmFtOmLIDTV97//qVotkEz8KSjcbx/+
-	D8MlVUKAfYYgoFZn6FzrRe2FVInApjlUz1/u3TwwKzDRRhUMGqLsOeN1GNFB3mA==
-X-Gm-Gg: ASbGnctrlepdaAZwP1W83aGXMB7AgV4yxoQFS/rbycq6IdnzFlJ9B2y/1KYTXIl2qSo
-	5bZ57tvTeZiWSmgjyLfdjvMzW6OWFRqp0DolAF7HxpnnD3J2J4d2MuFfASvgur04fkxkH3SIVQe
-	ST7XwoMUj2Ln/mcrCDYZGFDSaWrqDbzzOdr1yr0ntq59hb6nbogwRhsTkN79rkUe+LLt6ZLsbcw
-	+H52oPOdaZXj4Wbw8FPvk39ZsJu9O25bJZS6POaRQ3LEaHIj/03GQVh22zPl1XFwK7O9s8n0Trf
-	vB8Zy2dBjbXVo0u5dUAW8cZsPlicYRXZlIKnvFSSNE8I/b4Is7tlEc8CzQGDjTm64AyTUd9FmSJ
-	G6p+CQVl34Khq0EYSVPVDCeiC49D3IjDBSFf+aotJVh0tORTaDPS4YXlk8GnwExdoYNq3fHKi
-X-Received: by 2002:a17:902:eccb:b0:278:9051:8e9c with SMTP id d9443c01a7336-290cb07a023mr215059315ad.42.1761011920717;
-        Mon, 20 Oct 2025 18:58:40 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGTGO8LNhqSw5LRNEv7/Nl+bkPzCeoLUOMnBS6Q0IAq/GhPgb1srkEd6w74xcF3soP78u6rQQ==
-X-Received: by 2002:a17:902:eccb:b0:278:9051:8e9c with SMTP id d9443c01a7336-290cb07a023mr215058935ad.42.1761011920307;
-        Mon, 20 Oct 2025 18:58:40 -0700 (PDT)
-Received: from ?IPV6:2405:201:c416:5052:e167:a6da:f5f1:b45? ([2405:201:c416:5052:e167:a6da:f5f1:b45])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29246ec20a4sm93752155ad.7.2025.10.20.18.58.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Oct 2025 18:58:39 -0700 (PDT)
-Message-ID: <766890b0-099c-42e0-971c-cc94114c0d7a@oss.qualcomm.com>
-Date: Tue, 21 Oct 2025 07:28:04 +0530
+        bh=Xr7US09S8qqydwr4G/9BHixKcLW/nGB742179WdAweo=;
+        b=NZ6VVNn9LjyhLvZfAspBCFv29KLeMZUyVOhc20DyJac6GV3T/5dyC6tFZaYeOEVD0w
+         hCFz9goUXBJZqs8TdbtEcrBpjpFgGi0pLIKTrP1m7niXRIFj20x6aQzuRebECnphMXc1
+         OD/vNqV8zLO/UgjHKOZdQxmJHXwdGdlS58zdBu4oaEvk/92Gjr8hmnNrSxKwVNdzOpgW
+         OLjoyyyEVKr0evh6ezKE1AkZf4UQl8A6FNvYkLUPC9bKC3qimNH1VCXhkKybh11T/bsY
+         9MvA22dHzHAE4j99uydE2oku6GM/LecbZ+UnpNPExbJM0jJK/WGyjWyIl/FCR38IZFEu
+         OozA==
+X-Forwarded-Encrypted: i=1; AJvYcCXA12cbnhRkgEXTSHzq1At01g62/ooAz4oMiBawurM7t4+Sn/TK1oO40MblR560aeiswOyhbZ/tvg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzwOuKQtB4HCKn9WXMG8LlMB+9Mc1qKsINCS2pp5mkTo4KMgX3Y
+	Yx1nz2j9DJKk5RJ2aAZubNSdHAo9AoyiNYvGNGkJeAOrwxEDYx1Ga8pohHc7M2RQ4Q==
+X-Gm-Gg: ASbGnctpdv9g2N/06TjLC3pPzd3an5AcSYhVgvrPVDZ6BImu7+0ddO+wXJHExfaU7rZ
+	Y+auWfEzcstR6WUqmtj+nWMx3rD2ZEawb86FPy7sPW5lx/cnZcudP4tS8KCG/T9QNKkrCQsiLgD
+	AklKreNC7ih0NcJ+EGqs+YUimaBUNR5CYCrqnPUU9V75FBlGiI/r28Z/3FHWMpMTsjRWBYvjTpX
+	02p/5rDhekzVYPVFNf1SaSO76xKaHRThoY51DnDwyq1HiB2fYk6g0a3LeolPtcLJUgpiGjcjJEf
+	HAe2ITcv3G12qLWv/TWa41uv2hXmYTG8N2q70Bbg+biRBrPXwSoKpMoSmcYWk3Vv55kZs51fkht
+	jximvJ1KIOQhiDEpmTNfudAeKo3J+halQZCwdq0vXTAf/gdC1KdDc0IqOTwgQCJE6mZMiqrLlMG
+	tE9aCOrhoy3JBQbA==
+X-Google-Smtp-Source: AGHT+IE/m6Pnmm6QG1kxaMZaj2yh9jqr1scnjiIgpm7t50PZ0mb2TcvYsQ39BhAG1mhtNI+3sHgXnA==
+X-Received: by 2002:a05:6a20:6a0b:b0:32b:83bf:2cdb with SMTP id adf61e73a8af0-334a8524332mr21571201637.15.1761018196691;
+        Mon, 20 Oct 2025 20:43:16 -0700 (PDT)
+Received: from google.com ([2401:fa00:8f:203:3364:b517:9129:5413])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b6a813d4766sm7375833a12.5.2025.10.20.20.43.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Oct 2025 20:43:16 -0700 (PDT)
+Date: Tue, 21 Oct 2025 12:43:11 +0900
+From: Sergey Senozhatsky <senozhatsky@chromium.org>
+To: Doug Smythies <dsmythies@telus.net>
+Cc: "'Rafael J. Wysocki'" <rafael@kernel.org>, 
+	'Christian Loehle' <christian.loehle@arm.com>, 'Sergey Senozhatsky' <senozhatsky@chromium.org>, 
+	'Linux PM' <linux-pm@vger.kernel.org>, 'LKML' <linux-kernel@vger.kernel.org>, 
+	'Artem Bityutskiy' <artem.bityutskiy@linux.intel.com>, 'Tomasz Figa' <tfiga@chromium.org>
+Subject: Re: [PATCH v1] cpuidle: governors: menu: Predict longer idle time
+ when in doubt
+Message-ID: <x4qvjfwxzatm6wnrtqgue7y673oqzo74i6ysmxalvnts5olkot@ekaee62fjg5l>
+References: <4687373.LvFx2qVVIh@rafael.j.wysocki>
+ <5f0aa630-b30a-44c4-a52c-e08179cd3bf9@arm.com>
+ <CAJZ5v0gBtv0bpK2swkc6D0AmanpKAvqO53dgRp2e7p9cWAM3TA@mail.gmail.com>
+ <28ecb23b-ecee-409a-9771-24f801081d07@arm.com>
+ <CAJZ5v0jMoEVUaYYPx6EtHFxsg6TF-QtDWJGrasGK7C2C+JxOFw@mail.gmail.com>
+ <001801dc4041$607c19f0$21744dd0$@telus.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] dt-bindings: interconnect: document the RPMh
- Network-On-Chip interconnect in Kaanapali SoC
-To: Eugen Hristev <eugen.hristev@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
-        Jingyi Wang <jingyi.wang@oss.qualcomm.com>,
-        Georgi Djakov
- <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc: linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        aiqun.yu@oss.qualcomm.com, tingwei.zhang@oss.qualcomm.com,
-        trilok.soni@oss.qualcomm.com, yijie.yang@oss.qualcomm.com
-References: <20250924-knp-interconnect-v1-0-4c822a72141c@oss.qualcomm.com>
- <20250924-knp-interconnect-v1-1-4c822a72141c@oss.qualcomm.com>
- <ea291acc-bfdc-4a04-ba60-fc59a55ada28@linaro.org>
- <f4e7a388-54fd-42a7-8960-be6a3de7ec6a@oss.qualcomm.com>
- <70569fdf-7a3a-495a-b1ca-d35ae1963592@oss.qualcomm.com>
- <f5c5254c-537e-46ad-a7cb-a8b18b07632c@linaro.org>
-Content-Language: en-US
-From: Raviteja Laggyshetty <raviteja.laggyshetty@oss.qualcomm.com>
-In-Reply-To: <f5c5254c-537e-46ad-a7cb-a8b18b07632c@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: ggw5MWwLdeAhLz0RtUtZVggHkQzAFtiz
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDE4MDAzMSBTYWx0ZWRfX0lmKvsLonhz4
- tCjsOQvyFs+PlGpEkFK8mMVaKz7+L/jK2fcSRfsRv5ybT+2f0/ORLQRuB6egIXzK2+uB1G2BcPK
- wunfsQ73XejJLgGhfbryYmPju1ZZDYwpBSHTP5ukADFDW4J/IT3QWuwsvmEi/VW+4/pim1pE9py
- rthl3EpkZPAxLrkVdrRcWgm0VFzGSF0dkTYs6fCCguGSy5rhwo+MsyZbGuJ4RQzwkSfXL/DqxfZ
- ls/TlvGkHTi8xjc9T+J/wmuwAQK/FQIszR8FD5+TRpIFuFO+xrjjON/Eklk8v6G7dlh8nAm+k9u
- XTORKAN26LVciLjPzPkPdkEA0rGbZEI7knYRDZd0lCN7SKUG+jYsz7/S3ytr9rUuQsLrWbFo/+D
- /q9O3gIr18ZFg9CxwgkB796grN0x4A==
-X-Authority-Analysis: v=2.4 cv=QYNrf8bv c=1 sm=1 tr=0 ts=68f6e8d1 cx=c_pps
- a=IZJwPbhc+fLeJZngyXXI0A==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
- a=x6icFKpwvdMA:10 a=VkNPw1HP01LnGYTKEx00:22 a=EUspDBNiAAAA:8
- a=lx9-Q6l9dX336bKDy7QA:9 a=QEXdDO2ut3YA:10 a=uG9DUKGECoFWVXl0Dc02:22
- a=HhbK4dLum7pmb74im6QT:22
-X-Proofpoint-ORIG-GUID: ggw5MWwLdeAhLz0RtUtZVggHkQzAFtiz
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-10-20_07,2025-10-13_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 phishscore=0 malwarescore=0 clxscore=1015 impostorscore=0
- spamscore=0 bulkscore=0 suspectscore=0 adultscore=0 lowpriorityscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2510020000 definitions=main-2510180031
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <001801dc4041$607c19f0$21744dd0$@telus.net>
 
-
-
-On 9/30/2025 3:27 PM, Eugen Hristev wrote:
+On (25/10/18 08:10), Doug Smythies wrote:
+> On 2025.10.18 04:47 Rafael wrote:
+> > On Fri, Oct 17, 2025 at 8:37 PM Christian Loehle wrote:
+> >> On 10/17/25 10:39, Rafael J. Wysocki wrote:
+> >>> On Fri, Oct 17, 2025 at 10:22 AM Christian Loehle wrote:
+> >>>> On 10/16/25 17:25, Rafael J. Wysocki wrote:
+> >>>>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >>>>>
+> >>>>> It is reported that commit 85975daeaa4d ("cpuidle: menu: Avoid discarding
+> >>>>> useful information") led to a performance regression on Intel Jasper Lake
+> >>>>> systems because it reduced the time spent by CPUs in idle state C7 which
+> >>>>> is correlated to the maximum frequency the CPUs can get to because of an
+> >>>>> average running power limit [1].
 > 
+> I would like to understand Sergey's benchmark test better, and even try
+> to repeat the results on my test system. I would also like to try to 
+> separate the variables in an attempt to isolate potential contributors.
 > 
-> On 9/30/25 06:06, Raviteja Laggyshetty wrote:
->>
->>
->> On 9/25/2025 6:10 PM, Konrad Dybcio wrote:
->>> On 9/25/25 10:57 AM, Eugen Hristev wrote:
->>>>
->>>>
->>>> On 9/25/25 02:02, Jingyi Wang wrote:
->>>>> From: Raviteja Laggyshetty <raviteja.laggyshetty@oss.qualcomm.com>
->>>>>
->>>>> Document the RPMh Network-On-Chip Interconnect of the Kaanapali platform.
->>>>>
->>>>> Signed-off-by: Raviteja Laggyshetty <raviteja.laggyshetty@oss.qualcomm.com>
->>>>> Signed-off-by: Jingyi Wang <jingyi.wang@oss.qualcomm.com>
->>>>> ---
->>>
->>> [...]
->>>
->>>>> +properties:
->>>>> +  compatible:
->>>>> +    enum:
->>>>> +      - qcom,kaanapali-aggre-noc
->>>>
->>>> Hi,
->>>>
->>>> Does Kaanapali have a single aggre node, or there are several ?
->>>> On previous SoC, I see there are two (aggre1 and aggre2).
->>>> Also in your driver (second patch), I notice aggre1_noc and aggre2_noc .
->>>> It would make sense to accurately describe here the hardware.
->>>
->>> They're physically separate
->>>
->> Yes, they are physically separate but the topology treats them as a single noc
->> with two slave connections to system noc which you have noticed in the topology file.
+> To eliminate the PL1 effect, limit the CPU frequency to 2300 MHz and repeat
+> the test. To eliminate potential CPU frequency scaling contributions, use the
+> performance CPU frequency scaling governor. Both changes at once would
+> be an acceptable first step.
 > 
-> Is it any difference from previous sm8750 where there are two nodes ?
-> If yes, can you mention the difference and reasoning for merging them
-> into a single node.
-> If no, can you reason why the decision to merge them into a single node
-> this time instead of keeping it consistent ?
->This is due to HW design issue.
-qxm_crypto port is on aggre1_noc and it's qos config is in aggre2_noc. Since
-aggre1_noc and aggre2_noc are separate devices they can not access intra address
-space. To access qxm_crypto qos combined agree1_noc, aggre2_noc into aggre_noc.
+> Sergey: Would you be willing to do that test?
 
-Thanks,
-Raviteja.
+Apologies for the delay.
 
->>
->> Thanks,
->> Raviteja.
->>
->>> Konrad
-> 
+Sure, I can give it a try sometime this week, am dealing with a bunch
+of other stable regressions right now (will report separately).
 
+Can you please help me with the configuration steps?  CPU freq limiting,
+etc.
 
+> Sergey: Could you provide more details about your test?
+
+We track regressions in a number of tests.  The one I'm running more
+often than others is a Google Docs test (our tests replicate real use
+cases).  The test in question creates new google docs (in chrome, of
+course) and inputs some text in them (with various words-per-minute
+settings - 60, 90, 120 wpm) in English, Japanese, Korean and other
+languages; different font faces, different styles (bold, italic),
+text highlighting/selection, windows switching, and so on.  The test
+measures input latency, the number of dropped frames during scrolling,
+CPU usage, power consumption, etc.
 
