@@ -1,145 +1,161 @@
-Return-Path: <linux-pm+bounces-36576-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36577-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id A29D7BF6FC0
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 16:11:05 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 77A4CBF6FFF
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 16:13:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 834115041EB
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 14:08:45 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 029734E2C3A
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 14:13:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E96D4338F3D;
-	Tue, 21 Oct 2025 14:08:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 139FB32BF59;
+	Tue, 21 Oct 2025 14:13:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WU3j6eb+"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="ZPmSSNnL"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B63AC30BB83;
-	Tue, 21 Oct 2025 14:08:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9A4D280CC1
+	for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 14:13:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761055720; cv=none; b=KXpTgs8ahU5KVP0t8iGRAL+R1QPS4OWtkpbWK2NMnZpUTdUKIP/z4lfVwbBNOjZ5RSNynjKyf6XUM/wOOY6N1FKJoz9holC+1RA9698fRqlXsq9ym8qtn2DQVtc4janVQ/oWa1Nf0sXNqpC/5uGA1xxusABZhvF9DE3IjKLyBYQ=
+	t=1761056012; cv=none; b=R8hzNDHQlvH9ZzN9hzoewwcbAc/QsMhnyAEOsQrvyxAXFDRkitpsMfF3bzXN9zl+WNzMoOzjaAW/39Lb47U91tiJxKyfLoBVOx3XwTEvHrWQ/veej/cY3eykPp5J6q3rYSFNtBPquc3KbpgmfgXJWyJNywbbPrS2zBtJ3xBPOKc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761055720; c=relaxed/simple;
-	bh=q0UJhFh/ymFNMfB5lO1iqfViSAmwOaowEDmMPzVVZh0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EB66kghhWcB/9p+nU3jdMbxPnQekp8icIsmR0sB3Rl6cZpiNGfYOpB7g4IbYTzChpyaYtlzRrVAS1XGG07loIOyRposX+0XfvYmynAj1k2oufhIh0mo5WkdBCgQNJCpVrySBBHuT4FW+OgosV6Q3v3X48rOkQyPN6K4zxTtm2CQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WU3j6eb+; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761055719; x=1792591719;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=q0UJhFh/ymFNMfB5lO1iqfViSAmwOaowEDmMPzVVZh0=;
-  b=WU3j6eb+m6KsIQhDbJRuFft36e9aIu9q6LQB/8bj7iaN8SWrk+VsNrjz
-   9bcwu3kBwxb2ma1ijo6cuYqdagczSUFsNXQ4mWHboR0xfkKPu4XIGvUc7
-   oHsJrwE/wexEgOQ+kylLzubZwFc6MPtkN2W4QoHqwQ0CCYuJHxTOz5zy3
-   T4460lXT1/4EgLfAGEYMh30VR/dhiHtdZSvJliVhIGxTQcwKf/fkLqdOh
-   9vVFNTQqHl/e5pEyG627hbbmBYF2Prwo4rYvObkl+c2pIkiZHCtm096Rc
-   71LptO2UB/aH9mQlSs9ZMivcqxUeeSvMP2ZuT/ctQTkH55QjuTl4vVK7p
-   A==;
-X-CSE-ConnectionGUID: ZuSWgQGUTV2WH0cXQEQM5A==
-X-CSE-MsgGUID: CA/4KTfLQqaqnQ73cNKrAA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="67045289"
-X-IronPort-AV: E=Sophos;i="6.19,245,1754982000"; 
-   d="scan'208";a="67045289"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2025 07:08:38 -0700
-X-CSE-ConnectionGUID: lTF4vOHAQc2nPuVSYtPeyw==
-X-CSE-MsgGUID: xsJaPeS3RZicD7PgMDVkZA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,245,1754982000"; 
-   d="scan'208";a="183539756"
-Received: from fpallare-mobl4.ger.corp.intel.com (HELO ashevche-desk.local) ([10.245.245.148])
-  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2025 07:08:27 -0700
-Received: from andy by ashevche-desk.local with local (Exim 4.98.2)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1vBD2F-00000001Vzw-0kAj;
-	Tue, 21 Oct 2025 17:08:23 +0300
-Date: Tue, 21 Oct 2025 17:08:22 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Herve Codina <herve.codina@bootlin.com>
-Cc: Andrew Lunn <andrew@lunn.ch>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Peter Rosin <peda@axentia.se>, Arnd Bergmann <arnd@arndb.de>,
-	Saravana Kannan <saravanak@google.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Charles Keepax <ckeepax@opensource.cirrus.com>,
-	Richard Fitzgerald <rf@opensource.cirrus.com>,
-	David Rhodes <david.rhodes@cirrus.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Mark Brown <broonie@kernel.org>,
-	Daniel Scally <djrscally@gmail.com>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Len Brown <lenb@kernel.org>, Davidlohr Bueso <dave@stgolabs.net>,
-	Jonathan Cameron <jonathan.cameron@huawei.com>,
-	Dave Jiang <dave.jiang@intel.com>,
-	Alison Schofield <alison.schofield@intel.com>,
-	Vishal Verma <vishal.l.verma@intel.com>,
-	Ira Weiny <ira.weiny@intel.com>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Wolfram Sang <wsa@kernel.org>, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-pci@vger.kernel.org,
-	linux-sound@vger.kernel.org, patches@opensource.cirrus.com,
-	linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-spi@vger.kernel.org, linux-acpi@vger.kernel.org,
-	linux-cxl@vger.kernel.org,
-	Allan Nielsen <allan.nielsen@microchip.com>,
-	Horatiu Vultur <horatiu.vultur@microchip.com>,
-	Steen Hegelund <steen.hegelund@microchip.com>,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v4 08/29] driver core: fw_devlink: Introduce
- fw_devlink_set_device()
-Message-ID: <aPeT1hzXgO2J-M0K@smile.fi.intel.com>
-References: <20251015071420.1173068-1-herve.codina@bootlin.com>
- <20251015071420.1173068-9-herve.codina@bootlin.com>
+	s=arc-20240116; t=1761056012; c=relaxed/simple;
+	bh=OUNt515k947NUUgOEPQcDgyTR6oy4aUK4SYeKt//dvU=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=Aw/qfU2Xf87Q7Vr7XFKkgqm+yGuPOC5PmtSPYJVYUUIUcJwCGGpxQaSjHa2nWE6ldHFA89QBudH6atmZuPhipWtk9LGjhdonlWrft0gb82Wf4VWNxZ7E7FtIqMPpaethabSseecHFJmk0mKVlR7pJfXBDqSLdd3Hkcf6DgJbzn0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=ZPmSSNnL; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1761056007;
+	bh=OUNt515k947NUUgOEPQcDgyTR6oy4aUK4SYeKt//dvU=;
+	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+	b=ZPmSSNnLZ1Aff9mNSDZRTJrMZ4Wkfz/Pjs3t6yj3UJjFlQG4M1GGMj72VOYKB5Hn1
+	 Ia6b48F0agaIOJG5Jf520FZhjOD270rJdk/NJcFbFlEstXwDd2tGD9EGyk5ME1YNrt
+	 FDfVVAQ0GdsfoKOFSCgJy149Nni9NznkNNwXbdT2w5KswJ5PiBlxe/0z4LEHph5f0/
+	 GjKvlKh/Krkbi0WglBdZJL7kq/lziOtSQU++Suc59w/WanJKnFL1oy7f1BHLgxcNnx
+	 AVDNupPTUnQYxrl3qIxO0pk3NSqZX288bL+yE0fx2ywP+ZQts/mcwVtR3tQ+qs/KZB
+	 SOiGIeLl/ab6w==
+Received: from [192.168.100.50] (unknown [144.48.130.189])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: usama.anjum)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id E129E17E081A;
+	Tue, 21 Oct 2025 16:13:07 +0200 (CEST)
+Message-ID: <977cbbea-60b9-4d08-83e6-9ef1653f3857@collabora.com>
+Date: Tue, 21 Oct 2025 19:12:29 +0500
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251015071420.1173068-9-herve.codina@bootlin.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+User-Agent: Mozilla Thunderbird
+Cc: usama.anjum@collabora.com, mario.limonciello@amd.com, airlied@gmail.com,
+ alexander.deucher@amd.com, christian.koenig@amd.com, dakr@kernel.org,
+ gregkh@linuxfoundation.org, lenb@kernel.org, pavel@kernel.org,
+ simona@ffwll.ch, amd-gfx@lists.freedesktop.org,
+ dri-devel@lists.freedesktop.org, linux-pm@vger.kernel.org
+Subject: Re: [RFC 3/3] drm/amd: Return -EBUSY for amdgpu_pmops_thaw() on
+ success
+To: "Mario Limonciello (AMD) (kernel.org)" <superm1@kernel.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>
+References: <20251020165317.3992933-1-superm1@kernel.org>
+ <20251020165317.3992933-4-superm1@kernel.org>
+ <CAJZ5v0gsdmfXUJuLW8Ogt2jKDunx4g51LqCfSVMWQ6WHXBw_zg@mail.gmail.com>
+ <85c039ef-e189-48c1-8bf7-50ac0c2484e2@kernel.org>
+ <CAJZ5v0gT9BG5QPcwg6jJ1Jghny2YxC9_HY542LTBy-aVc_2T_w@mail.gmail.com>
+ <aec8fc6c-3f9f-4ec1-a929-7a0be6026a3d@kernel.org>
+Content-Language: en-US
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <aec8fc6c-3f9f-4ec1-a929-7a0be6026a3d@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Wed, Oct 15, 2025 at 09:13:55AM +0200, Herve Codina wrote:
-> Setting fwnode->dev is specific to fw_devlink.
+On 10/20/25 11:32 PM, Mario Limonciello (AMD) (kernel.org) wrote:
 > 
-> In order to avoid having a direct 'fwnode->dev = dev;' in several
-> place in the kernel, introduce fw_devlink_set_device() helper to perform
-> this operation.
+> 
+> On 10/20/2025 12:39 PM, Rafael J. Wysocki wrote:
+>> On Mon, Oct 20, 2025 at 7:28 PM Mario Limonciello (AMD) (kernel.org)
+>> <superm1@kernel.org> wrote:
+>>>
+>>>
+>>>
+>>> On 10/20/2025 12:21 PM, Rafael J. Wysocki wrote:
+>>>> On Mon, Oct 20, 2025 at 6:53 PM Mario Limonciello (AMD)
+>>>> <superm1@kernel.org> wrote:
+>>>>>
+>>>>> From: Mario Limonciello <mario.limonciello@amd.com>
+>>>>>
+>>>>> The PM core should be notified that thaw was skipped for the device
+>>>>> so that if it's tried to be resumed (such as an aborted hibernate)
+>>>>> that it gets another chance to resume.
+>>>>>
+>>>>> Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>
+>>>>> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+>>>>> ---
+>>>>>    drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c | 2 +-
+>>>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>>
+>>>>> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+>>>>> index 61268aa82df4d..d40af069f24dd 100644
+>>>>> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+>>>>> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+>>>>> @@ -2681,7 +2681,7 @@ static int amdgpu_pmops_thaw(struct device *dev)
+>>>>>
+>>>>>           /* do not resume device if it's normal hibernation */
+>>>>>           if (!pm_hibernate_is_recovering() && !pm_hibernation_mode_is_suspend())
+>>>>> -               return 0;
+>>>>> +               return -EBUSY;
+>>>>
+>>>> So that's why you need the special handling of -EBUSY in the previous patch.
+>>>
+>>> Yup.
+>>>
+>>>>
+>>>> I think that you need to save some state in this driver and then use
+>>>> it in subsequent callbacks instead of hacking the core to do what you
+>>>> want.
+>>>>
+>>>
+>>> The problem is the core decides "what" to call and more importantly
+>>> "when" to call it.
+>>>
+>>> IE if the core thinks that something is thawed it will never call
+>>> resume, and that's why you end up in a bad place with Muhammad's
+>>> cancellation series and why I proposed this one to discuss.
+>>>
+>>> We could obviously go back to dropping this case entirely:
+>>>
+>>> if (!pm_hibernate_is_recovering() && !pm_hibernation_mode_is_suspend())
+>>>
+>>> But then the display turns on at thaw(), you do an unnecessary resource
+>>> eviction, it takes a lot longer if you have a ton of VRAM etc.
+>>
+>> The cancellation series is at odds with this code path AFAICS because
+>> what if hibernation is canceled after the entire thaw transition?
+> 
+> Muhammad - did you test that specific timing of cancelling the hibernate?
+Yes, I've tested the cancellations before and after the thaw both.
 
-FWIW,
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+>>
+>> Some cleanup would need to be done before thawing user space I suppose.
+> 
+> I agree; I think that series would need changes for it.
+> 
+> But if you put that series aside, I think this one still has some merit on it's own.  If another driver aborted the hibernate, I think the same thing could happen if it happened to run before amdgpu's device thaw().
+> 
+> That series just exposed a very "easy" way to reproduce this issue.
+
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+---
+Thanks,
+Usama
 
