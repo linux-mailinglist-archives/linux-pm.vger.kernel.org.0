@@ -1,130 +1,177 @@
-Return-Path: <linux-pm+bounces-36599-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36600-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B059FBF82C4
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 20:57:36 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 768B7BF83DF
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 21:25:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5E53F46141C
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 18:56:46 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 19D274EC574
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 19:25:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DDD234FF71;
-	Tue, 21 Oct 2025 18:56:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C573351FB4;
+	Tue, 21 Oct 2025 19:25:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QqgjPmAY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f9UkZCiT"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 298F134E74E
-	for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 18:56:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC085351FB2
+	for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 19:25:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761073004; cv=none; b=qwzklPSNmzMy/RK62hbiTxGZbSiteqvAZwsDl0Xm2Uk3+/LMflE4/3kI5OtFBYy/WeIM4E21oSOnDmggLMLRRVqncQZsZIGBDJRRJX6OXaSmiHmEVMX7KKrr9CV+mk1lGJwqbdzjgy0AUxzv0k5WQFYiZ17/h02CByAfP8bzqfk=
+	t=1761074735; cv=none; b=iV+7j0uhUfOD25KVsg4KvXEmN41pncV3zGBnfoO2RlXHrdYpcX3WwgKvJDgJR0CaDbZqd5X+2nSdkTnLRetOZVm6f2BtjuaYHGG7WQQeRcRZxn0vfdPHgBZuhoaBnwd8mXl2Hv0SQi8ObcRZ9xFsoP+KdaEKt3nodqIJVsneyPs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761073004; c=relaxed/simple;
-	bh=8yDmvmglZvjVOp/KRPO8WpehMDxUb0UefPiZgtNhufo=;
+	s=arc-20240116; t=1761074735; c=relaxed/simple;
+	bh=ZBF6Sb+cThRkUXiAy5cx8gb0t4QYBOQD5Da7vH3eOV8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=C5DyR6dwuaTR9h9BtprV8kaYn2NHTVaLwd9VCgCGtvlV9WkON+QbRFeMZuZJqWV6CH8e9HZNs2lp0qKW7FaE9Jqwm71QNvnB0S0CQLPlnnQBV5s2rOlvYlqc9dhcL6VSHxwJ5esmMUpE2fK7WBSgedG1T7EuQtLDTyK9AL4XE9M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QqgjPmAY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE042C116C6
-	for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 18:56:43 +0000 (UTC)
+	 To:Cc:Content-Type; b=TrLyHbdzfwUc60C2owEaUkE4RSf0mVmzjrEhGPcnwQVj4OVtsATFWq1aLE3wMHoJZS+vzqOC/zidL7w90qcH5io/InlDQMHsVzZiK/gpMXFdB9o2dBfUjj2oB5SAVZQu7npiwR+EZdIRQ7I/4cqDAQyAyMBLnE3N1fYbUFw4YkY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f9UkZCiT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73EAEC16AAE
+	for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 19:25:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761073003;
-	bh=8yDmvmglZvjVOp/KRPO8WpehMDxUb0UefPiZgtNhufo=;
+	s=k20201202; t=1761074734;
+	bh=ZBF6Sb+cThRkUXiAy5cx8gb0t4QYBOQD5Da7vH3eOV8=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=QqgjPmAYfYo5cKPjyKGVrru7JcT02HUz1xCJF8TQGSIUQxrdRA6PdSfZiTINP9oJQ
-	 92RiWIS2yg3NbJ1tHxiM3apj+zEtsWLdnNoSSd9JXIzq9DSx78Entykbpp12Ty4YdK
-	 vf1oFtLqefE4mkaj11eFXjdCSTNmeOoEfwbfwSFc271okdesB377QQDQJFI/xYkYNW
-	 w0d9P5UgKBcQnpmA3qHkhQ2n01RHyw0OLtSUT1vD7GFyWr2ATf8PcPzDKUkW9xN9gk
-	 i5QX3H7WSgmmHXgL5ywOhG7kIHBDOqYvtEJojkiZolbOUKtfke7TBHgOh1sFzSmGFU
-	 nyU0HkUoEBe0w==
-Received: by mail-oi1-f182.google.com with SMTP id 5614622812f47-43f715fb494so1860045b6e.1
-        for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 11:56:43 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWorTP4tMYqRYlHuzFTUHOyvOjQOcGDhsWSnw5IRJtny4TxTP2FGY52E6DIvYGG2i4OY4+Ta3HBNA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxr2rR7QUlegPxelWMvmvCeAqBIi3kL4HsuCgT71EzXz2jVpu24
-	jbomqy4aGLwZ5AUHEutPyAnyMFtHwZ3kVAO820hn3WqygaJiDjNbsFfNdcpxajcyAeSzkltKhhY
-	h0uCrSDuJBL9CIpqMeBGSwzXVYiGtAC8=
-X-Google-Smtp-Source: AGHT+IGohavhsojR9mYb/ePcVFaKRZ7g871RvRpy8sKGBnWj3PDmfDeb1aB5bMKDg0Opp/jRvXRPwc6NbeGA5nZsfJs=
-X-Received: by 2002:a05:6808:6f8e:b0:43f:5c61:448c with SMTP id
- 5614622812f47-443a30d2036mr7827619b6e.39.1761073003108; Tue, 21 Oct 2025
- 11:56:43 -0700 (PDT)
+	b=f9UkZCiTqkbQUkw9AqLwqf3fnZzTRZPnXo/w8T43slZmXYcj9OPM3blv8JCPHgM/T
+	 3J1qFp/oqsZpj0lgIn/nJjSZHwxRp0NXXvDzBosM1ecvGcrAiKFopy2zsKhKBYWtcK
+	 ZiTP0mtNW6hzjvkQV6RPQoCQ01xs2x/m7ZQ6Jc80pDWw6L73TD9RzMD6CEW3FyY0/r
+	 SNXeUbvQMXfgR6+P2KH5rYlS0WO8cax3NQov+So5nrXnl18+3ZBhhpqeLkTx1F3wcp
+	 LCNHtAhCtWns/vy1JcI0886vGmhi8/aTwhixKz5eSEIGC5KQHSQWim8AR8i1QktWjB
+	 im8Z/eSJegiZg==
+Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-7bb79ad6857so3154891a34.0
+        for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 12:25:34 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCV4eIqFinhekvSDKNAutEzWWm52WeVkICUGYiMvOXm98RQX9lcFf6AgbfZfvgCJ/fLFQhMe+Xj34A==@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywy3JIA0+jKir5prno73mm7Lt+EpztYyix/gsZdg0ACkJaT5VGi
+	1vs3w03MhBqvP8t6ECtM/4s1DcRVtLkcDp2J/lgDr5HBNsxPVF1GRvn1N/JEqJQxKByL7JMWzE0
+	QDuGCupCD2fe0XpJpFwcnmGKzpCDuIIE=
+X-Google-Smtp-Source: AGHT+IE/08QSQyp9X0ccFhg4UFvUOgwCgdeciymPiqm4mIxF4c8LobqZKfy8Ajho/BYpHKCpe1Dso5SMqC5wRfFNnKo=
+X-Received: by 2002:a05:6808:2211:b0:438:bdb0:89b6 with SMTP id
+ 5614622812f47-443a3095328mr7294620b6e.34.1761074733638; Tue, 21 Oct 2025
+ 12:25:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251016155335.1.I60a53c170a8596661883bd2b4ef475155c7aa72b@changeid>
- <aPH_B7SiJ8KnIAwJ@wunner.de> <67381f3b-4aee-a314-b5dd-2b7d987a7794@linux.intel.com>
- <aPKANja_k1gogTAU@google.com> <08976178-298f-79d9-1d63-cff5a4e56cc3@linux.intel.com>
- <aPaFACsVupPOe67G@google.com> <06cd0121-819d-652d-afa7-eece15bf82a2@linux.intel.com>
- <CAJZ5v0giOw54L6M8rj-Q8ZELpFHx9LPKS2fAnsHHjHfhW_LZWw@mail.gmail.com>
- <41d5c358-e469-3757-8bfb-e88c3d187e02@linux.intel.com> <aPfQmy0-7Cd0I9Jp@google.com>
-In-Reply-To: <aPfQmy0-7Cd0I9Jp@google.com>
+References: <20251006013954.17972-1-aboorvad@linux.ibm.com>
+In-Reply-To: <20251006013954.17972-1-aboorvad@linux.ibm.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 21 Oct 2025 20:56:30 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0gbH-S-vQ+rBb6zNE77_pN7n_L0g+LFUmUxontx1xrPZQ@mail.gmail.com>
-X-Gm-Features: AS18NWBeMdJjjD5R2mN68_8m6T4J5O_CdkCq2Q4a2fQMD1PJ5_1RxSXECSIhLTk
-Message-ID: <CAJZ5v0gbH-S-vQ+rBb6zNE77_pN7n_L0g+LFUmUxontx1xrPZQ@mail.gmail.com>
-Subject: Re: [PATCH] PCI/PM: Prevent runtime suspend before devices are fully initialized
-To: Brian Norris <briannorris@chromium.org>
-Cc: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Lukas Wunner <lukas@wunner.de>, Bjorn Helgaas <bhelgaas@google.com>, 
-	LKML <linux-kernel@vger.kernel.org>, linux-pm@vger.kernel.org, 
-	linux-pci@vger.kernel.org
+Date: Tue, 21 Oct 2025 21:25:22 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0hCvvMzPCy+8N34vCt_d4mdeuMVHR9dQbs4cHwQDOpYrw@mail.gmail.com>
+X-Gm-Features: AS18NWBMycXoaeD05VXzOVH8lO1ntRK70bBfzIJ49OyblOMmInRKm-CI_7G6PUg
+Message-ID: <CAJZ5v0hCvvMzPCy+8N34vCt_d4mdeuMVHR9dQbs4cHwQDOpYrw@mail.gmail.com>
+Subject: Re: [PATCH v4] cpuidle: menu: Use residency threshold in polling
+ state override decisions
+To: Aboorva Devarajan <aboorvad@linux.ibm.com>
+Cc: rafael@kernel.org, christian.loehle@arm.com, daniel.lezcano@linaro.org, 
+	gautam@linux.ibm.com, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Oct 21, 2025 at 8:27=E2=80=AFPM Brian Norris <briannorris@chromium.=
-org> wrote:
+On Mon, Oct 6, 2025 at 3:40=E2=80=AFAM Aboorva Devarajan <aboorvad@linux.ib=
+m.com> wrote:
 >
-> On Tue, Oct 21, 2025 at 04:18:54PM +0300, Ilpo J=C3=A4rvinen wrote:
-> > On Tue, 21 Oct 2025, Rafael J. Wysocki wrote:
-> > > So the purpose of this "forbid" call in pci_pm_init() is to "block"
-> > > runtime PM for PCI devices by default, but allow user space to
-> > > "unblock" it later.
-> > >
-> > > Would adding a comment to that effect next to that call be useful?
-> >
-> > It would be useful to improve the wording in PM documentation which is =
-too
-> > ambiguous. I suggest changing this:
-> >
-> > "void pm_runtime_forbid(struct device *dev);
-> >
-> > unset the power.runtime_auto flag for the device and increase its
-> > usage counter (used by the /sys/devices/.../power/control interface to
-> > effectively prevent the device from being power managed at run time).
-> >
-> > to:
-> >
-> > "... (used to prevent the device from being power managed at run time
-> > until pm_runtime_allow() or /sys/devices/.../power/control interface
-> > allows it)."
+> On virtualized PowerPC (pseries) systems, where only one polling state
+> (Snooze) and one deep state (CEDE) are available, selecting CEDE when
+> the predicted idle duration is less than the target residency of CEDE
+> state can hurt performance. In such cases, the entry/exit overhead of
+> CEDE outweighs the power savings, leading to unnecessary state
+> transitions and higher latency.
 >
-> Looks like a good change to me, even if just scratching the surface. If
-> this goes in a patch, you can add my:
+> Menu governor currently contains a special-case rule that prioritizes
+> the first non-polling state over polling, even when its target residency
+> is much longer than the predicted idle duration. On PowerPC/pseries,
+> where the gap between the polling state (Snooze) and the first non-pollin=
+g
+> state (CEDE) is large, this behavior causes performance regressions.
 >
-> Reviewed-by: Brian Norris <briannorris@chromium.org>
+> This patch refines the special case by adding an extra requirement:
+> the first non-polling state can only be chosen if its
+> target residency is below the defined RESIDENCY_THRESHOLD_NS. If
+> this condition is not satisfied, polling is allowed instead, avoiding
+> suboptimal non-polling state entries.
 >
-> A separate problem that sorta stopped me from trying to rewrite some of
-> the Documentation/ is that we have both
-> Documentation/power/runtime_pm.rst and kerneldoc in
-> include/linux/pm_runtime.h + drivers/base/power/runtime.c. It doesn't
-> feel great having separate variations of the same API docs.
+> This change is limited to the single special-case rule for the first
+> non-polling state. The general non-polling state selection logic in the
+> menu governor remains unchanged.
 >
-> But hey, I shouldn't let "perfect" be the enemy of progress.
+> Performance improvement observed with pgbench on PowerPC (pseries)
+> system:
+> +---------------------------+------------+------------+------------+
+> | Metric                    | Baseline   | Patched    | Change (%) |
+> +---------------------------+------------+------------+------------+
+> | Transactions/sec (TPS)    | 495,210    | 536,982    | +8.45%     |
+> | Avg latency (ms)          | 0.163      | 0.150      | -7.98%     |
+> +---------------------------+------------+------------+------------+
+> CPUIdle state usage:
+> +--------------+--------------+-------------+
+> | Metric       | Baseline     | Patched     |
+> +--------------+--------------+-------------+
+> | Total usage  | 12,735,820   | 13,918,442  |
+> | Above usage  | 11,401,520   | 1,598,210   |
+> | Below usage  | 20,145       | 702,395     |
+> +--------------+--------------+-------------+
+>
+> Above/Total and Below/Total usage percentages:
+> +------------------------+-----------+---------+
+> | Metric                 | Baseline  | Patched |
+> +------------------------+-----------+---------+
+> | Above % (Above/Total)  | 89.56%    | 11.49%  |
+> | Below % (Below/Total)  | 0.16%     | 5.05%   |
+> | Total cpuidle miss (%) | 89.72%    | 16.54%  |
+> +------------------------+-----------+---------+
+>
+> The results indicate that restricting CEDE selection to cases where
+> its residency matches the predicted idle time reduces mispredictions,
+> lowers unnecessary state transitions, and improves overall throughput.
+>
+> Reviewed-by: Christian Loehle <christian.loehle@arm.com>
+> Signed-off-by: Aboorva Devarajan <aboorvad@linux.ibm.com>
+> ---
+>
+> v3: https://lore.kernel.org/all/20250908075443.208570-1-aboorvad@linux.ib=
+m.com/
+>
+> v3 -> v4
+>
+> - Rebased onto the linux-pm/pm branch.
+> - Updated commit message and comments based on review feedback.
+> - Reordered condition checks as recommended in review.
+> - Added Reviewed-by tag from Christian.
+>
+> ---
+>  drivers/cpuidle/governors/menu.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/cpuidle/governors/menu.c b/drivers/cpuidle/governors=
+/menu.c
+> index 4d9aa5ce31f0..6a98a724442e 100644
+> --- a/drivers/cpuidle/governors/menu.c
+> +++ b/drivers/cpuidle/governors/menu.c
+> @@ -320,10 +320,12 @@ static int menu_select(struct cpuidle_driver *drv, =
+struct cpuidle_device *dev,
+>                 }
+>
+>                 /*
+> -                * Use a physical idle state, not busy polling, unless a =
+timer
+> -                * is going to trigger soon enough.
+> +                * Use a physical idle state instead of busy polling as l=
+ong as
+> +                * its target residency is below the residency threshold =
+and the
+> +                * next timer doesn't expire soon.
+>                  */
+>                 if ((drv->states[idx].flags & CPUIDLE_FLAG_POLLING) &&
+> +                   s->target_residency_ns < RESIDENCY_THRESHOLD_NS &&
+>                     s->target_residency_ns <=3D data->next_timer_ns) {
+>                         predicted_ns =3D s->target_residency_ns;
+>                         idx =3D i;
+> --
 
-Documentation/power/runtime_pm.rst is generally outdated.
-
-There was a plan to replace it with a new document mostly constructed
-from pm_runtime.h and pm_runtime.c kerneldocs, but those also require
-some work.
-
-I would rather remove the reference to pm_runtime_forbid() from
-Documentation/power/runtime_pm.rst entirely and make the other
-documentation pieces describe it properly.
+Applied as 6.19 material, thanks!
 
