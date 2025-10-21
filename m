@@ -1,259 +1,175 @@
-Return-Path: <linux-pm+bounces-36580-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36581-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id BFBD5BF7135
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 16:29:32 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5DD4BF714D
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 16:30:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 44F8E35317D
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 14:29:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2E2B4188D47D
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 14:30:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BBEB3396F1;
-	Tue, 21 Oct 2025 14:29:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78E99339B32;
+	Tue, 21 Oct 2025 14:30:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="e0aGeSal"
+	dkim=pass (2048-bit key) header.d=telus.net header.i=@telus.net header.b="F0JvGQcY"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from PH0PR06CU001.outbound.protection.outlook.com (mail-westus3azon11011018.outbound.protection.outlook.com [40.107.208.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A204432BF59;
-	Tue, 21 Oct 2025 14:29:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.208.18
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761056967; cv=fail; b=sd01mKt/09CXe/WyUujcTDZuT/qSAH4AX/kgNqcOzY8FGV7YYX6QTJB4uSAz74+MvjFQrmxec3iiOyj5v3cgiGWXdVzKkaZ0mM+pkbrJqSaeJEee8FkMRWNQMLDKyvQpBpCFi3ITNAA4hMpVy6YeuEaTGg9kG23j1K3trEMLXy4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761056967; c=relaxed/simple;
-	bh=tM+NtWh+t+T8tf6Hgk09Yte4HYzjLad484zKtnjIcRc=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=P3nzXQiAA/e3w+YhiYhbti2F2zcaBtUKTW7/J5//pDiBnzKX3IysHV5J7+NpD1OP+1uhOQIJhY+ELZyFnHhcXKvnqt1KNJPDouhTwtMMAUBaBq9ea6eCjvjAI7kF6PJYIFy3XXc/MQVfJHvxma/oHdflC04FgWSyO3ji9tKR6nA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=e0aGeSal; arc=fail smtp.client-ip=40.107.208.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=IwXOK5At3qg4Pq/MnoVKtlt06n6d0hdaJsGR+zbeK71u39nKiYoVu1C8XvMCgU5S3ppvYOAxOW6Mh/OlpL8/e1rJbySJziVI4gTh4QZNf1vAZOoU3z8MChxcOJbAfEazeJPjTKLJHm94SyQp3BKLmcFgxW4r2lLSIt2QqtOmALrOTVRFjnldJSITsBFXcA211IEIQv/TDuWKDYGMTnuoLjfVGN/Bdv982XN3TMGKklWJmDultTu5il8MtcLHnG8UTtQhxcyinRgn/XZ/zwFbwesXJ8HO2e7/zNrwFQDd+9wLaCm+ryx8GeKuqShjRXtXfffIsic6SD2bujFPf4n4wA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ak5QX/u8vHwGZ4BX/uL9vnuZlCKwbef88djoO2q4D+o=;
- b=T+uAxaiB+pRodesFaddi8m1UaCz6v3/XnvTel+EgJwzpCV+gektofG8Lf2mnYSP9LpjUk5ILwTGH3r/3ymVy/ZGq6Lu8S7naCiiVSK9IyO2BgPAViWhvvXhoxwfA5vSZe/jMuNq1B6jMgEC0YG+vseUiY8P9EQrbFyyB8n2QlUT18fmbNSJ8dLfSqiue0IQFEhSYDjkEWN+KvSHcN0icuWiFyFN0hdUuYsMzZlPvcaDpI2i1cfAfH8zALuM9y/QoiaiPSPWd/xTZT+mQ2J/3m7D+hVPrX1BI1XzXyq+AhDLT/md3KQt0VWDz2sj+QfxwFB6p2BZ3ucCXACSlWy86nA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ak5QX/u8vHwGZ4BX/uL9vnuZlCKwbef88djoO2q4D+o=;
- b=e0aGeSalbH+B3CH20+MYPAoMfnCyfcP6fZFcto6Zbb8NoSPMH8illV+d5xvc/tW8NC6cbM18i20qokd8iQ0A54l3uwlxU7lom9ikgiQCeTUKNg1C6FfQLzrTjP7x5NPxq0apOfD5ktTHcWX9mv0CRrxSGpQB6nlhABQsVng0M/o=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by PH7PR12MB6443.namprd12.prod.outlook.com (2603:10b6:510:1f9::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9228.16; Tue, 21 Oct
- 2025 14:29:20 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::37ee:a763:6d04:81ca]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::37ee:a763:6d04:81ca%7]) with mapi id 15.20.9228.016; Tue, 21 Oct 2025
- 14:29:20 +0000
-Message-ID: <e27d0392-11c4-4b9e-8ada-9db73f47dddb@amd.com>
-Date: Tue, 21 Oct 2025 09:29:17 -0500
-User-Agent: Mozilla Thunderbird
-Subject: Re: [REGRESSION][BISECTED] "Wakeup event detected during hibernation"
- on Dell Precision 7780 (was "[PATCH v4] PM: hibernate: Avoid missing wakeup
- events during hibernation")
-To: Askar Safin <safinaskar@gmail.com>, chris.feng@mediatek.com,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: chetan.kumar@mediatek.com, hua.yang@mediatek.com, len.brown@intel.com,
- liang.lu@mediatek.com, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, pavel@ucw.cz, rafael@kernel.org,
- stable@kernel.org, ting.wang@mediatek.com,
- regressions <regressions@lists.linux.dev>,
- DellClientKernel <Dell.Client.Kernel@dell.com>,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-References: <20231213083251.186935-1-chris.feng@mediatek.com>
- <20251021125446.4384-1-safinaskar@gmail.com>
-Content-Language: en-US
-From: Mario Limonciello <mario.limonciello@amd.com>
-In-Reply-To: <20251021125446.4384-1-safinaskar@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SA0PR11CA0047.namprd11.prod.outlook.com
- (2603:10b6:806:d0::22) To MN0PR12MB6101.namprd12.prod.outlook.com
- (2603:10b6:208:3cb::10)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0C9A339B35
+	for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 14:30:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1761057020; cv=none; b=pGvComyPKO9gpRLRwOzBmoaJ7lfhT6dqVu7632Bo3j87H8D0LsRSrQZH3BmaBBdpWnTMBZ95UGyf83ebH8L4gLCJhxHM0qHk05iptn5J+rfhTxlQ/+V/eVCKJZpUQhsLgbeAQb0hM2HrnDBuD/XxOGi522aQEBT5IV/3P52KXvc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1761057020; c=relaxed/simple;
+	bh=AMk6Lrxmvf/zuorD22sZx/fHRloh9GVoJWzNxQaEuIE=;
+	h=From:To:Cc:References:In-Reply-To:Subject:Date:Message-ID:
+	 MIME-Version:Content-Type; b=b5hFuB6AlVpkCkveXQRTwHV92YlyUf3vBckkZoN8oHBRNR1e1amDTh8N6Kyo22jYF1r2pibXraNkGb8vtjqgiV8HUI2NSX7W/eXY5ufx+7JAbgdqH0JLZFVLhjo7iP4ItzHkxw+HcObsWevJzMXtVYdMqdC2RDTI16zRuyeQpqE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=telus.net; spf=pass smtp.mailfrom=telus.net; dkim=pass (2048-bit key) header.d=telus.net header.i=@telus.net header.b=F0JvGQcY; arc=none smtp.client-ip=209.85.210.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=telus.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=telus.net
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-7811fa91774so5041472b3a.0
+        for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 07:30:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=telus.net; s=google; t=1761057018; x=1761661818; darn=vger.kernel.org;
+        h=content-language:thread-index:content-transfer-encoding
+         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=72EdVUvWUCeeRDpijDC/64Xkq93xQ0f8jqeBT4LAAk8=;
+        b=F0JvGQcYcIE6u7mxUYwOWX/axYMIif+gYF93z84Hj1Bp5mbP29mbZHJkuwxxy4KoZs
+         8vJyub5ZV2oqiVswWFh4GIH2yqvZHWhW3zG/yt1kliWbg96yxt/uhA+ladlMrUraK4Fd
+         qpSz6rv/J+VZxFSEQAMoxRxk58BzKgYwvAUDnHeYgB/fCiUPPaUZW8tu8pQx5k6WWjpp
+         hNEGNpxWWEMjoSJ9a0sYOQmsl1EnKXk+TQ/fRdGmbk0568lnsTjD2aMdMIPtdA89Zv2k
+         h9DH5WW2AhJ8MwaO0MhrgZ5WxjZKQDuUgHVopAEqTK1NIhPjrsxAdJI3v2gUl7cO+tE0
+         kgmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761057018; x=1761661818;
+        h=content-language:thread-index:content-transfer-encoding
+         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=72EdVUvWUCeeRDpijDC/64Xkq93xQ0f8jqeBT4LAAk8=;
+        b=Axt6jEc+f7ZZX0jl/iGeGPuFew3RcnXH+YASaMmaF8ZsEoe/+RkCe++vgdFG/2uOTe
+         8CD4YA36BFBi0t+v6RizKVJYefXsS+LSRf3LlTrjgYP877v9bZhBHTJ+TtjZYDRy6sLs
+         kl1w/TKvhiOhA4G5mcwexjRMoQM7BwpamedrNHeJytTjNZrZC1bKDoqJZ6njFv3643Gt
+         LDWhiKQv3So9dGMYFW5rzXhAjz6/0USl8oA2QDuFfB1lCvfVROxwTimvDvauZX3DeHSF
+         LcMGwzljQ3I+575L2+KEtcAU1wimAtMjMGJVmj6z46GVdhqPpYvhpYocj5EdNNQwMZaN
+         bWcA==
+X-Forwarded-Encrypted: i=1; AJvYcCV+BVeF9ECoeeUrsfyIlVUJxsFn1Z819BxA6km4TY21UKNtxDLfL4EvthnqE64jKCW+CfvYBBZjDw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwRSkZlJsXziEwwIXTaiIauB4UUhhjPMP7YDBTBb+/7v/Ca0itx
+	OW/UCc1e3AHt5yVSDhQYNEJ3bBFCNwcokoU6J+uHx/oKrpym1zwK8s2l1tYyevF6YEs=
+X-Gm-Gg: ASbGncvMjGubAjBdjUt6DritwUJbi/WyqveqmtuGEP07eZ0hpCYr0m9SnsgQfIMk34s
+	oV4IcAPT3Ov3CFkgWJ4UaNxZPSGDmUkLBqP/76NMGmvBOfWC4Rww5OtGC+k7xBhB7m4QJTGSXv5
+	q/DSfX/Li1AHk/k5fUGxFDJSAcJfRf4ZhiXGozD57VWRQYeLG6WC9/c9y//kqu5Mmq1xZAkgpBS
+	Va1Q3EoteD5LG3Ozqd6zZPRVi2GMPQdTqCle0RYXnh0txgZ1BRDSLqLrZTDVvqYyWMESpqEOJVZ
+	BK5yZnXPNw/CQWTU1kWP1ZpRYfILfu41hSePuWG8M2zPeGB6DP17vkgu8tK5RHBgoht8LcZf1Xb
+	r4/8sYtf9V9YibbOJqamXr0coSDnvdCglhFZXXBt3gCycdHwk4fAxIwLO5l+RqqRVTiZvMtNgQW
+	GS3mY8+iJgJOP/V7e05azZKRGNLBQO9Mc68K8mOjuRwI+/
+X-Google-Smtp-Source: AGHT+IEqyxsWbC/jVX5CbA9miNQ3uKmcnqiXwB8tEcbEEj4Zq2w3qQ5vOuYWSkkg5NxKrD2+uN5BRg==
+X-Received: by 2002:a05:6a20:431a:b0:334:a327:b0df with SMTP id adf61e73a8af0-334a85d88c3mr20566089637.29.1761057017712;
+        Tue, 21 Oct 2025 07:30:17 -0700 (PDT)
+Received: from DougS18 (s66-183-142-209.bc.hsia.telus.net. [66.183.142.209])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7a23010e24fsm11510899b3a.57.2025.10.21.07.30.16
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 21 Oct 2025 07:30:17 -0700 (PDT)
+From: "Doug Smythies" <dsmythies@telus.net>
+To: "'Sergey Senozhatsky'" <senozhatsky@chromium.org>
+Cc: "'Rafael J. Wysocki'" <rafael@kernel.org>,
+	"'Christian Loehle'" <christian.loehle@arm.com>,
+	"'Linux PM'" <linux-pm@vger.kernel.org>,
+	"'LKML'" <linux-kernel@vger.kernel.org>,
+	"'Artem Bityutskiy'" <artem.bityutskiy@linux.intel.com>,
+	"'Tomasz Figa'" <tfiga@chromium.org>,
+	"Doug Smythies" <dsmythies@telus.net>
+References: <4687373.LvFx2qVVIh@rafael.j.wysocki> <5f0aa630-b30a-44c4-a52c-e08179cd3bf9@arm.com> <CAJZ5v0gBtv0bpK2swkc6D0AmanpKAvqO53dgRp2e7p9cWAM3TA@mail.gmail.com> <28ecb23b-ecee-409a-9771-24f801081d07@arm.com> <CAJZ5v0jMoEVUaYYPx6EtHFxsg6TF-QtDWJGrasGK7C2C+JxOFw@mail.gmail.com> <001801dc4041$607c19f0$21744dd0$@telus.net> <x4qvjfwxzatm6wnrtqgue7y673oqzo74i6ysmxalvnts5olkot@ekaee62fjg5l>
+In-Reply-To: <x4qvjfwxzatm6wnrtqgue7y673oqzo74i6ysmxalvnts5olkot@ekaee62fjg5l>
+Subject: RE: [PATCH v1] cpuidle: governors: menu: Predict longer idle time when in doubt
+Date: Tue, 21 Oct 2025 07:30:17 -0700
+Message-ID: <001201dc4297$3903af70$ab0b0e50$@telus.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|PH7PR12MB6443:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8b432639-ad41-48b7-288f-08de10ae3910
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|7416014|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?TzlWSG91N3FTTEZnRUdKMVE3ajBnbUlLVEErN256bWxLdWkxSWVDYlBqcFVS?=
- =?utf-8?B?Q2I0MU8wU1BSd205OWxoYzMydU5CV0grZnk2RjhKNjZqM2hQSjNpYWpCY0ph?=
- =?utf-8?B?ZjIzeTN5dWRjSTJNUG4yN0Q5S1B5ZUpRSFM5b1RoSzA0N2N1WEZPMUVQZE0x?=
- =?utf-8?B?TVZ6WkZ2cnh6akFVVDB5N3NEMHMyOEFTeDEwbkRrRWNCUXh3Q2hESXFoQjZx?=
- =?utf-8?B?bXQxdzdscHBUREUzaVdSd09LY2w1VEdkVDIwdDhvdnhYNzdVekc4SmZiVDRE?=
- =?utf-8?B?am1ZeUk5dEF3aUN5TlpUQnFQQUhoa0RHbTR6eHcyTStXTDBmQW1PTjQ5M25I?=
- =?utf-8?B?VVIzLzNZeXpZRjhtcE8rNnBVckMycUVLSHpQOUVTZzFQU0ZpemVpQ3kwd0Nr?=
- =?utf-8?B?S1FXR08vYVR0ZXgyTVdtZGJIRVV1NDZsdUhOOHpzbDg2NEZqeWo3cVltTy9q?=
- =?utf-8?B?eWw5TDR1OGZJTS8yQ3FkWUgzenpYSVJsZHJxTVdRK0FTODZYNVRNRkxnZDZH?=
- =?utf-8?B?UjZxQ2Y4b0VQN2Z2MEcwekhJRldUWFNncC9DQXBRVU9vMG9TYjN2Y3JwMHFD?=
- =?utf-8?B?LzF5ZHhUSFg1VVV6Rlp1d3gxSW1HNE8rU0RJbGpGSWNJY1YwS21JeXdoTEFp?=
- =?utf-8?B?bGdoYmwyWmlKTUdoaDhPdVJyOHlyNUQrbk9hb1VjdHlNVG1YYlhodFcxZ2Qv?=
- =?utf-8?B?QnVhQjg1RkRRdFg0eGQzTm1QWWtEdFJHZGkvdnBpaXN6QWEyUFhmYU8vWnQz?=
- =?utf-8?B?L21YcGtnbjZ5aWxXa3RGWEVsZG9MTGxvcXlySk9HOHFyc0Y0ME9jdWR6MFdP?=
- =?utf-8?B?R1dPLzJsZWpnZzcyRkcyNVM4TVh3WTNkYm9rcFdZUEhPaGJtMEJmQXEvU00v?=
- =?utf-8?B?TXZYZkw5a1NTR1MrZlRLcEo5Wk9STXl5ZTQyaEhybGoraklFSDN3SzB4ZW11?=
- =?utf-8?B?TzVkZ0pzQjIvUk8vOFk0ajM1aEc1K3IyWFB6eWZaaTJDOVZMYmVkZ0Q0SDUr?=
- =?utf-8?B?a0l6a1RkVFlCcklsZUpRZjVxV0RTaTFSS1Fxd24yeUl4eG11cW81ZnBMTzRI?=
- =?utf-8?B?NXRGVjZxMVBOTEFpMEFzQUlEdTBFSUVqc1dDN1QyVUt1ZlAyN3Yxb3Ftb0Ro?=
- =?utf-8?B?WlRNVFBkWDNxVmRuT2h6VkxaUlFCNzF3NWxTVkJ2cnNYNndVNDh2bEdzTGpv?=
- =?utf-8?B?M3NNWmcyQkJFUUgveEcraDFUSFZXTm5URTdoRGNyc2ovQndnTGQ3U1hGSmlL?=
- =?utf-8?B?Z0k2dk44QmQyK0RxMkdscjJoREhqWVFsay9LZUQySURCU25XZk9PS3V6NUp4?=
- =?utf-8?B?Y1JJTVQvL3h4TlhrNFNETDlZdHhOcTBPalZmWGJLWnhMWVo3Z3lUcDdXOWRU?=
- =?utf-8?B?L0RNWWo4VmlkOUJ2Yi9TR1JETG1neVcrbGlBWmQwSFJNcnQzZkFCTUhWTGdU?=
- =?utf-8?B?a2NnTDJqbHFQRUVlZld0NkdPUGdvcUc1ZCtKUlQ0OGRSc3FLME5qR0w0UnZK?=
- =?utf-8?B?ejFnWnVIMnpXeTAyQklrWXNiek5hcXFwQm01ZDFPL2thOHJMUkhQdFhUMHgz?=
- =?utf-8?B?U0Y2b3RMSVBvOFFsck05TjVSM29KRFoydUJmZXhpYmJjeTNSbWpKTlV6Tjg1?=
- =?utf-8?B?YmZYWjBjLzFkbDlZR0JtSDhSR1orcERoQ0dHRmVNVFo1dk9jSFlZT2RBL2hQ?=
- =?utf-8?B?QTYzTmJGcHJpUHBIOUpPTDNsbFVlRkZKU1hkb2g4T3h1RmMxeGNHdUVLL0NL?=
- =?utf-8?B?TlY1dnEyR2hYZllvMWxzd3dDOXo4M0R6VU1aZUJtUjAwSnBCVE1PYmhHZS9a?=
- =?utf-8?B?aTh6cGNBU0RFczZwSlpqejhKcExxRUhHVk5aVEVMQ0cwSHVjcmtSN2RZZnVE?=
- =?utf-8?B?V3cyV1I1QS9uZkxPVzUySFlseGdhQi8vaW5CSEV4Yk1MZVE9PQ==?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?bUsvWWZPcER5eDVHQk5tN09TK2t0MmNtYzltMVpyTC9XLzVCWFNkSmkwQTF5?=
- =?utf-8?B?S1NCTXFWTnZ6bEdyRzBwY0w0aDlObE8vQXVOeGRHU2syOUFVNGNmOVhxN1NS?=
- =?utf-8?B?b2Y5UkRncUNVemNucnhDcUc5OWtseHNPT2Z5ZkN5QWk4YkFTdDBnOTRCWWhB?=
- =?utf-8?B?UE94MDJlYjh3NXFReHU3cTJqYWVIVWZHeVpoUjlzN2ZUYWE0aTNOR3Y5M1M0?=
- =?utf-8?B?OTV2NWl2RnNxYWdYT0dXQjFFb3hIOVRtSTBZR3BuTTFYYXVWTkV5WGVVdHVh?=
- =?utf-8?B?TjgyN0xoQ21OSHBSR3NmRUtuakI1WkRqTUh1UkR2T0NnSFNZeGRJZHVjZkRp?=
- =?utf-8?B?dDlBblY2SmVCWnVHc1cxd29PeHE5S1NsNjdoQ0VzOTBhTmtvcThxemRhSVFz?=
- =?utf-8?B?aENqUHo0OVhGQVV5bUYvTDhZM2NhbS9KWERmL3dUUkVDRHJVZnhTN1dYZmNT?=
- =?utf-8?B?bGJvSUU4SFN5ZG1TS0U5VjdWWk8rcWZFaWN1Y2NRYkVpKzMyVjIwZ0RRU1RZ?=
- =?utf-8?B?UzR5VFB5TEFnVFF6TEdSaDR4UTV4Mkx4dm0xRFRBczJuVDY3RG1FdnBVVnc1?=
- =?utf-8?B?Y0lKb3pEMFFIYVU0dnhiYjdQNE84OXdWdTNjWlZJcURla3pwd2p2alR2UFY5?=
- =?utf-8?B?YkowekVtVi8xb2xiWUlRSkZrelBvc3RoMGhPdFkyanN6STNvYk15cWlWdHZG?=
- =?utf-8?B?ek9iaFI2anhGVnk5N0JHc2FtdTJVTE5sNmEwZWVDenhSVUhjMUY3WmlCZTVC?=
- =?utf-8?B?NTNHQTNtQTk2RGZvUVZaTURWeFJtckdkVVpPY28xNmJwUnJEVDVOaVl0RHVH?=
- =?utf-8?B?OU9SdG52TlBnangxOXZBNnB2NEtLd1llbnVyTE1qc3EwVG95SFdJc0hRbEp2?=
- =?utf-8?B?Q2NycG5SdytHWm5LZGF1YWZWRzhyZ0RsR1Q5ZXZsOHNqYmZNekxIYWtOUkY1?=
- =?utf-8?B?Z25kZ0RiUlJqaXZlcEgydm9xOFRpd0pyNW92SzBzUEtiZ0pIbncyR3dqTE5j?=
- =?utf-8?B?cyt4UHUrWUFFZ2ZERHdUb0E5Y2RxaXZmVXFmMHpRNHo1VFl3RXgzNE1XTkdE?=
- =?utf-8?B?ZHBsQURUQ2prZXJQbmRqVndRNEh2UGZEK2V2WndwQ01JNUdNdllISlcwdzBG?=
- =?utf-8?B?YVhiRzJ3RERFZmw0MG5hMEd1WW4zRCtycmtwWkwxOWQvN3RYeGZhY20xWDA2?=
- =?utf-8?B?M3lvVTdNNkVwZDhoZnBZWngwaG9OaitsYkdxeTFGMDNWWmRIeTZnMnhLTksy?=
- =?utf-8?B?ZnRnU05CN3J2L3dWNm1rM0ppczJEQWd2UnIyV2lhMy8xUzdSWmVhYjN4YzN2?=
- =?utf-8?B?TUxzN2tVTm1pOGhTYkU1K3Y2cDIzWFRvZjJRbER0NTIzRFRnWHo4NmhYNmJi?=
- =?utf-8?B?b0tCNjJ2cW9IQ2JjQXNwdk9iMEhXTHl6NitKRTRxSkMrbjd6UlVKTnRTUzdV?=
- =?utf-8?B?djh6K0NlU2l3UFVNRXlOSEJDTVhZQmFCVEVaYnpKa01sWWJURjNSdkJxQ0dH?=
- =?utf-8?B?WUpENE50N2xOMzNqNVpIL2NPREEyVHBCWDl2Ri96TFBORUhWOTlWS0RuRlgw?=
- =?utf-8?B?Qk1vQTVhZXN2VmNKRlZyTzVnY1ZIWXdKZ2dkNGc5QU9DRFloMFlVam9CeWRJ?=
- =?utf-8?B?bVhHdENEZXZOSEZNZlpJU1ZVaml4NGxzOHBORDRxVG41cWhHbkxUTC9Vdmhz?=
- =?utf-8?B?bmxqOXA0aTBobDk4dS9aRjBtNXhITCsybjFJMHhKNXNFNStOWFBDM0FORko3?=
- =?utf-8?B?cG51M0dDOWVKVklVblJpTVFFRmdCcFFGTnRsaGl3ZUtpN3BiMkZ1VFFIWGkz?=
- =?utf-8?B?S0d3cjZSbnM5VzhoOEpTWm1QeEJXOGc3ZGdQUXovenRIYlU5ZXBSYWl6OTR6?=
- =?utf-8?B?R2NRLy94ZGh2dzdES0ZLcG9wc3VQLzJwbTRNNXJkRHNZUWNDY3pRN3hMSnFJ?=
- =?utf-8?B?QUo1RnFaOFNlYUc5S0hsKzlELzZhY3JrQzhmbXpiMmxmUkcvL0gxV0s3Z050?=
- =?utf-8?B?ZWpXRlI0T1NhUmwvYU5UUS9nbUY5cTUxU1l1eVJCQWlvYUJDaTZ0UktlLytF?=
- =?utf-8?B?ZlRpR08xdUdoQmQ5amZ2ZlNLc1gxL2ZwcXM2MFpZZXRDYWdQY1ZWeHBUU1dR?=
- =?utf-8?Q?ZyXbzfoRwSUF+VFX5FSh1XPoo?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8b432639-ad41-48b7-288f-08de10ae3910
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Oct 2025 14:29:20.3701
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: tiX5Q+v1GWBcsgzgjcKbbQQaKWb5W8VqRsVozZQ4tC+Vqv8fC7deKHVOxO4bF/c/JgT6uIHgWbunbbTqLMKkqA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6443
+Content-Type: text/plain;
+	charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQEHjVQKCrlPynWgLAaVpIarC+pGJQGZtDQKAi3SGCUCWYi7hgLZuqUGAZPsdfIBj3Y3ebYVH1IA
+Content-Language: en-ca
 
+On 2025.10.20 20:43 Sergey Senozhatsky wrote:
+> On (25/10/18 08:10), Doug Smythies wrote:
+>> On 2025.10.18 04:47 Rafael wrote:
+>>> On Fri, Oct 17, 2025 at 8:37=E2=80=AFPM Christian Loehle wrote:
+>>>> On 10/17/25 10:39, Rafael J. Wysocki wrote:
+>>>>> On Fri, Oct 17, 2025 at 10:22=E2=80=AFAM Christian Loehle wrote:
+>>>>>> On 10/16/25 17:25, Rafael J. Wysocki wrote:
+>>>>>>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>>>>>>>
+>>>>>>> It is reported that commit 85975daeaa4d ("cpuidle: menu: Avoid =
+discarding
+>>>>>>> useful information") led to a performance regression on Intel =
+Jasper Lake
+>>>>>>> systems because it reduced the time spent by CPUs in idle state =
+C7 which
+>>>>>>> is correlated to the maximum frequency the CPUs can get to =
+because of an
+>>>>>>> average running power limit [1].
+>>=20
+>> I would like to understand Sergey's benchmark test better, and even =
+try
+>> to repeat the results on my test system. I would also like to try to=20
+>> separate the variables in an attempt to isolate potential =
+contributors.
+>>=20
+>> To eliminate the PL1 effect, limit the CPU frequency to 2300 MHz and =
+repeat
+>> the test. To eliminate potential CPU frequency scaling contributions, =
+use the
+>> performance CPU frequency scaling governor. Both changes at once =
+would
+>> be an acceptable first step.
+>>=20
+>> Sergey: Would you be willing to do that test?
+>
+> Apologies for the delay.
+>
+> Sure, I can give it a try sometime this week, am dealing with a bunch
+> of other stable regressions right now (will report separately).
+>
+> Can you please help me with the configuration steps?  CPU freq =
+limiting,
+> etc.
 
+For your system booted with "base" and "revert" do:
 
-On 10/21/2025 7:54 AM, Askar Safin wrote:
-> Chris Feng <chris.feng@mediatek.com>:
->> Wakeup events that occur in the hibernation process's
->> hibernation_platform_enter() cannot wake up the system. Although the
->> current hibernation framework will execute part of the recovery process
->> after a wakeup event occurs, it ultimately performs a shutdown operation
->> because the system does not check the return value of
->> hibernation_platform_enter(). In short, if a wakeup event occurs before
->> putting the system into the final low-power state, it will be missed.
->>
->> To solve this problem, check the return value of
->> hibernation_platform_enter(). When it returns -EAGAIN or -EBUSY (indicate
->> the occurrence of a wakeup event), execute the hibernation recovery
->> process, discard the previously saved image, and ultimately return to the
->> working state.
-> 
-> #regzbot introduced: 0c4cae1bc00d31c78858c184ede351baea232bdb
-> 
-> Hibernation doesn't work on my laptop.
-> 
-> My laptop is Dell Precision 7780.
-> 
-> Hibernation starts, then aborts. dmesg contains:
-> 
-> [   28.283320] PM: hibernation: Wakeup event detected during hibernation, rolling back.
-> 
-> I did bisect. The bug reproduces starting with 0c4cae1bc00d.
-> 
-> The bug still reproduces on v6.18-rc2.
-> 
-> Note: there is another problem with PM on my laptop, which is tracked here:
-> https://lore.kernel.org/all/197ae95ffd8.dc819e60457077.7692120488609091556@zohomail.com/ .
-> 
-> So I always revert 1796f808e4bb in my kernels.
-> 
-> But this doesn't prevent this hibernation bug.
-> 
-> In other words, this hibernation bug still happens on v6.18-rc2 even
-> with 1796f808e4bb reverted.
-> 
-> Steps to reproduce:
-> 1. Power off laptop, then power on
-> 2. Hibernate ("sudo systemctl hibernate")
-> 
-> Hibernate will not work.
-> 
-> Note that to reproduce the bug you need power off laptop, and then power on
-> it in step 1. Merely reboot doesn't cause bug. I. e. reproducibilty
-> depends on whether last boot was reboot or cold power on.
-> 
-> Also: suspend works normally (assuming I reverted 1796f808e4bb), but hibernate
-> doesn't.
-> 
-> This is "dmesg --level=debug+" on v6.18-rc2-with-1796f808e4bb-reverted:
-> 
-> https://zerobin.net/?0459f6411446622d#8i0Ifo6o68By3+UlYUr2t2KL7YLXsKEXrkfszpE77Rw=
-> 
-> This is config of this kernel:
-> 
-> https://zerobin.net/?04e89ceab8284c1d#9bpaZKqVXFSaeav/WW6GOCwD4i3SozzQ8pBEJ6LWwVM=
-> 
+echo performance | sudo tee =
+/sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+echo 2300000 | sudo tee =
+/sys/devices/system/cpu/cpufreq/policy*/scaling_max_freq
 
-To me it sounds like it's potentially the same root cause for the early 
-suspend wakeup as well as the hibernate wakeup.
+then do your test.
 
-Assuming the GPIO pointed out in that other thread 
-(https://lore.kernel.org/all/20250918183336.5633-1-safinaskar@gmail.com/) 
-is indeed the touchpad GPIO I had a suspicion.  Are you closing the lid 
-and putting the laptop in a bag or putting anything on top of it?
+>
+>> Sergey: Could you provide more details about your test?
+>
+> We track regressions in a number of tests.  The one I'm running more
+> often than others is a Google Docs test (our tests replicate real use
+> cases).  The test in question creates new google docs (in chrome, of
+> course) and inputs some text in them (with various words-per-minute
+> settings - 60, 90, 120 wpm) in English, Japanese, Korean and other
+> languages; different font faces, different styles (bold, italic),
+> text highlighting/selection, windows switching, and so on.  The test
+> measures input latency, the number of dropped frames during scrolling,
+> CPU usage, power consumption, etc.
 
-I wonder if the touchpad is not disabled by the hardware and getting 
-pressure through the lid and physically clicking/activating.
+Okay, Thanks. So not a test I can repeat on my test computer.
 
-I've seen this exact issue occur on a Framework 16 as well.  The 
-workaround is to disable wakeup from touchpad before suspend/hibernate.
+... Doug
+
 
 
