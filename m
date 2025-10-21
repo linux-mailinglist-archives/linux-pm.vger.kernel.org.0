@@ -1,141 +1,349 @@
-Return-Path: <linux-pm+bounces-36596-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36597-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8FD3CBF80D3
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 20:28:20 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D3955BF80DC
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 20:28:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 7BE554EDFB9
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 18:28:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 41EA93AE52E
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 18:28:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F62734A3C7;
-	Tue, 21 Oct 2025 18:27:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACAF434A3B7;
+	Tue, 21 Oct 2025 18:28:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="jjDF/Mqa"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dTIp/a8z"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 826AB34A3BE
-	for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 18:27:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DB6A34A3AF;
+	Tue, 21 Oct 2025 18:28:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761071264; cv=none; b=FUFc4qER8/OOWIOYctenQG2VjfhpcWuTZHni5hU702KKuOcb/BS+I/C0gCa0wEmEX7fcUCHUU7tgjz70SYZgWIERk5S0U2o17MSGWLFD9k5nIeHlMI/nC4P2Js2/7j2LUV01j42cUZYylmxGnewZrEM4K2DEc8RgNsRmVCgoGcU=
+	t=1761071296; cv=none; b=jKlRFbeAUzSp5tD8HdcnHsQc58I+uFR0xgjU+2sU3zqTiWvTTE+6grim2Uz/F+v6pEjbF+g/qxKFZ9ixgDULDNWMvV4vHHU5Sl5sh7KZ4m2IT0cuqWv8Lhy4yaNoLNsss0rHFMklaHO5bQAiDlaC1hD/u+vkyhQAIJpJ250EVAc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761071264; c=relaxed/simple;
-	bh=3RjBXAGDusLGx9xDc6Pf9biTKmKASJPpEkqNe3B3qqI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=T/0oKAxkVwODun8J4D8/kiPLSejmv5yQrp/ED7Tt+DQIOxAWnNyGH1QiOTJKEd+59u4P6XrqHfEtaewvslKQatOiLJvGdemrfFKInTSxZRork3nGIIpfyKlqDH56KQ5EbRVQ6xvjD+egm6OmIsVLIWiOIfSbu/LIH3coCWwuKpM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=jjDF/Mqa; arc=none smtp.client-ip=209.85.216.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-33b5a3e8ae2so155988a91.1
-        for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 11:27:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1761071262; x=1761676062; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=HqYzl/UW33J1zC9mz6UdaYFjF9I5n2x84L74tPVphTs=;
-        b=jjDF/MqaU5GTQPcB2gFr/gXDPEVkGu8EP0Eq1OctL+/pieLOP1te1UXphA5cmVB9mF
-         vwrr/AF5EyNRaia6YwloBstsG8dJRObDmbe/mnFaswYrXHsr4UtsBgjuRwZL1LPDz3Yf
-         0BrHoPw+GYuzg/Qycfpq8hWzxheHPthQPTAeU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761071262; x=1761676062;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HqYzl/UW33J1zC9mz6UdaYFjF9I5n2x84L74tPVphTs=;
-        b=DhBNzJfikZikD/x3tc3Wy4PrgvpqAnrgM9yZYvHnd+5dHsKdRMqDaAtaL6k56p+QbM
-         bsIAM8V8eD7ah0GxZ/59O4CauYmpr0X2sylrIC+qB9H+AlFCoeTDq0oyG51CESNNc4TJ
-         X97Z+OiHkTCLQezYLGE0KrhryF2YrI2Xe3A/LFrCGQUBE0bxzrM8AGP1yG09xO7j018F
-         ZR6ruILZuarninXrcEjavUOCvR6N3Kh7BTNWCdI8KlfHUIhO70EoQPiVuPzVvogsgTHR
-         iTP6w0Z+Mng8hZTrjb7TRh5UKuCOGURv9BKfZKZa/dnUTKs4TqsLdizkQTt1gyEEGlH7
-         HULg==
-X-Forwarded-Encrypted: i=1; AJvYcCVA6p8wpQzNcwRPrerHnWamf/NDvBm5LTQWkIp5AFa6ZY3FJgZFqZXKjB26QlCI351bxbO2xzcJ3A==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxNLnvmoNx9lWWbvzy0N/wkiYM31RmMvh93O8bJHdgEceqDilrH
-	MQO7nFu4+HhGzmqJmq1uM15qGBIam3RjW2BOUd5QQGhz0Se1E9Y/STJyFECpTS+SyQ==
-X-Gm-Gg: ASbGncs/qYGWxlSecSYCypBtuJeD0X2QutKTv9YVUj4g82n4Cw2tW8T/Uv/zA/21qr/
-	tEYdjnPY/+5/zc7XS9cBxiqkk6BEUU8C1qqKk/3P/DqDODSweDUdAKLabF1/ZK/GxylXHRdTPg4
-	yYA31B9P21k/Nsk34tyy+6enZGXYfZ1amVot/2nfJHPQD0PjXiuiLS9TlfzYXOWysafztxSxX7P
-	FMpoY3+fk4Pomr4Du4O7J5bj6xrAYW7FU6YajgQanr3Ag/5I1Cp/60puNOY2CklpJFyxEMyzh+N
-	IRv7oVF1bLBXH2oCLWkAJrWKaHfs8hehDKuuKV+5zZtAGxTmhAFlhHfm46E0VHd+GpN1GP/3zHF
-	0aPrPZY597PJNFwFuPcU+c5qNQdki1VN9o77yHpg8wMXPQBUBVU7wYfx4mezxA7PgLN6uhr4sTw
-	FdtjAxmO2geNezoAKv1LWuXNtGug1kYwTqNkeLrg==
-X-Google-Smtp-Source: AGHT+IF8cBN5zDoXETXF5lzZV8J3PI7WMOXfoZlFBQttwsFJrfAQjOmOSkixYd7wOfT54VYENlNFKQ==
-X-Received: by 2002:a17:90b:1c06:b0:31c:39c2:b027 with SMTP id 98e67ed59e1d1-33e21ef1205mr1063117a91.7.1761071261628;
-        Tue, 21 Oct 2025 11:27:41 -0700 (PDT)
-Received: from localhost ([2a00:79e0:2e7c:8:e63a:4ad2:c410:7d7e])
-        by smtp.gmail.com with UTF8SMTPSA id 98e67ed59e1d1-33dff3adf7bsm1416782a91.4.2025.10.21.11.27.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Oct 2025 11:27:40 -0700 (PDT)
-Date: Tue, 21 Oct 2025 11:27:39 -0700
-From: Brian Norris <briannorris@chromium.org>
-To: Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Lukas Wunner <lukas@wunner.de>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	LKML <linux-kernel@vger.kernel.org>, linux-pm@vger.kernel.org,
-	linux-pci@vger.kernel.org
-Subject: Re: [PATCH] PCI/PM: Prevent runtime suspend before devices are fully
- initialized
-Message-ID: <aPfQmy0-7Cd0I9Jp@google.com>
-References: <20251016155335.1.I60a53c170a8596661883bd2b4ef475155c7aa72b@changeid>
- <aPH_B7SiJ8KnIAwJ@wunner.de>
- <67381f3b-4aee-a314-b5dd-2b7d987a7794@linux.intel.com>
- <aPKANja_k1gogTAU@google.com>
- <08976178-298f-79d9-1d63-cff5a4e56cc3@linux.intel.com>
- <aPaFACsVupPOe67G@google.com>
- <06cd0121-819d-652d-afa7-eece15bf82a2@linux.intel.com>
- <CAJZ5v0giOw54L6M8rj-Q8ZELpFHx9LPKS2fAnsHHjHfhW_LZWw@mail.gmail.com>
- <41d5c358-e469-3757-8bfb-e88c3d187e02@linux.intel.com>
+	s=arc-20240116; t=1761071296; c=relaxed/simple;
+	bh=aVzTN5Pe2u7CD+qSDkT0agN51qPgECGhUYuu2Ej+1Sc=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=sTOu3dB/gKphQCK74uKo2BcR5xUiLxXdRiv9WSguWsh/WaHvi3KKF9WgwduTE/vyNlD1y+vVnJqa5hhZwFx8lu1QTeevzVg6w5iiDk2UqPhdD5Riny3GuEwxVDx7/s4Fj2oIhX/nLPKIusQ+n4Ck1NOrRVwgJzlHNBNLwqe6UWY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dTIp/a8z; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0E44BC4CEF1;
+	Tue, 21 Oct 2025 18:28:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761071295;
+	bh=aVzTN5Pe2u7CD+qSDkT0agN51qPgECGhUYuu2Ej+1Sc=;
+	h=From:Date:Subject:To:Cc:Reply-To:From;
+	b=dTIp/a8zVKjpLLDdOuvliIsSGsRIpHoK/JMW/dPf3tbRThhZ9MR2D3mH5rdTCr3EG
+	 QTXFNyTnSZ4ByzyhQQ3dbcdMsOhSg3qmJPOPWnoQrlImojQ1cW2p6kdQ0yd/AMMiOM
+	 Eh1UZ+wqhuRGWRqF8YiKgFibEIzG9JzPtLqWilq7u0T0eH2ltcBqZp7a0K0UCHpxRh
+	 z+7lW75m0sIpLBT1kKSp7wDrTiS4YAlMCrp8XrrRSiUwB3uNOMzIHvJqI7mA6fwvzo
+	 1C+6WanSQf4bl/9oUHyk+QRrLFC3XjvQxPdxBEvn1VvVQFYGCUzVklBE7KU4j35amv
+	 H0ojmX3voF4Ww==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2393CCD1A5;
+	Tue, 21 Oct 2025 18:28:14 +0000 (UTC)
+From: Aaron Kling via B4 Relay <devnull+webgeek1234.gmail.com@kernel.org>
+Date: Tue, 21 Oct 2025 13:28:05 -0500
+Subject: [PATCH] cpufreq: tegra186: add OPP support and set bandwidth
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <41d5c358-e469-3757-8bfb-e88c3d187e02@linux.intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20251021-tegra186-icc-p1-v1-1-0d8eede5cc50@gmail.com>
+X-B4-Tracking: v=1; b=H4sIALTQ92gC/x3MQQqAIBBA0avErBtwTEW6SrQInWw2FhoRRHdPW
+ r7F/w9ULsIVxu6BwpdU2XMD9R2EbcmJUWIzaKUtKU14cioLeYcSAh6E3ljLjqKxQ4RWHYVXuf/
+ jNL/vB1qTW3phAAAA
+X-Change-ID: 20251021-tegra186-icc-p1-8455e61d453d
+To: "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Viresh Kumar <viresh.kumar@linaro.org>, 
+ Thierry Reding <thierry.reding@gmail.com>, 
+ Jonathan Hunter <jonathanh@nvidia.com>
+Cc: linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Aaron Kling <webgeek1234@gmail.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1761071294; l=8546;
+ i=webgeek1234@gmail.com; s=20250217; h=from:subject:message-id;
+ bh=qWPRTxCCx08WIx7xdW9SGGyovJKa82Ei3y1cUQPJ9Z8=;
+ b=U90KdYLoqGRMn7mIuUKRzIO3P36Xacvd8/6Uu0g4TvorWE8yZtvjL4bl19sEENSxO0QTU672F
+ bKOZvOLBkEKAizW0ChjRxUJBe0xhilHJfiKZDbUboHcy1q4AEkFp7uQ
+X-Developer-Key: i=webgeek1234@gmail.com; a=ed25519;
+ pk=TQwd6q26txw7bkK7B8qtI/kcAohZc7bHHGSD7domdrU=
+X-Endpoint-Received: by B4 Relay for webgeek1234@gmail.com/20250217 with
+ auth_id=342
+X-Original-From: Aaron Kling <webgeek1234@gmail.com>
+Reply-To: webgeek1234@gmail.com
 
-On Tue, Oct 21, 2025 at 04:18:54PM +0300, Ilpo Järvinen wrote:
-> On Tue, 21 Oct 2025, Rafael J. Wysocki wrote:
-> > So the purpose of this "forbid" call in pci_pm_init() is to "block"
-> > runtime PM for PCI devices by default, but allow user space to
-> > "unblock" it later.
-> > 
-> > Would adding a comment to that effect next to that call be useful?
-> 
-> It would be useful to improve the wording in PM documentation which is too 
-> ambiguous. I suggest changing this:
-> 
-> "void pm_runtime_forbid(struct device *dev);
-> 
-> unset the power.runtime_auto flag for the device and increase its
-> usage counter (used by the /sys/devices/.../power/control interface to 
-> effectively prevent the device from being power managed at run time).
-> 
-> to:
-> 
-> "... (used to prevent the device from being power managed at run time 
-> until pm_runtime_allow() or /sys/devices/.../power/control interface 
-> allows it)."
+From: Aaron Kling <webgeek1234@gmail.com>
 
-Looks like a good change to me, even if just scratching the surface. If
-this goes in a patch, you can add my:
+Add support to use OPP table from DT in Tegra186 cpufreq driver.
+Tegra SoC's receive the frequency lookup table (LUT) from BPMP-FW.
+Cross check the OPP's present in DT against the LUT from BPMP-FW
+and enable only those DT OPP's which are present in LUT also.
 
-Reviewed-by: Brian Norris <briannorris@chromium.org>
+The OPP table in DT has CPU Frequency to bandwidth mapping where
+the bandwidth value is per MC channel. DRAM bandwidth depends on the
+number of MC channels which can vary as per the boot configuration.
+This per channel bandwidth from OPP table will be later converted by
+MC driver to final bandwidth value by multiplying with number of
+channels before being handled in the EMC driver.
 
-A separate problem that sorta stopped me from trying to rewrite some of
-the Documentation/ is that we have both
-Documentation/power/runtime_pm.rst and kerneldoc in
-include/linux/pm_runtime.h + drivers/base/power/runtime.c. It doesn't
-feel great having separate variations of the same API docs.
+If OPP table is not present in DT, then use the LUT from BPMP-FW
+directy as the CPU frequency table and not do the DRAM frequency
+scaling which is same as the current behavior.
 
-But hey, I shouldn't let "perfect" be the enemy of progress.
+Signed-off-by: Aaron Kling <webgeek1234@gmail.com>
+---
+ drivers/cpufreq/tegra186-cpufreq.c | 152 +++++++++++++++++++++++++++++++++++--
+ 1 file changed, 145 insertions(+), 7 deletions(-)
 
-Brian
+diff --git a/drivers/cpufreq/tegra186-cpufreq.c b/drivers/cpufreq/tegra186-cpufreq.c
+index 136ab102f636aa57741639ed1909d095881c14d3..35f1c1371f6a1688c35f3ba012b9f008fba83d74 100644
+--- a/drivers/cpufreq/tegra186-cpufreq.c
++++ b/drivers/cpufreq/tegra186-cpufreq.c
+@@ -8,6 +8,7 @@
+ #include <linux/module.h>
+ #include <linux/of.h>
+ #include <linux/platform_device.h>
++#include <linux/units.h>
+ 
+ #include <soc/tegra/bpmp.h>
+ #include <soc/tegra/bpmp-abi.h>
+@@ -58,7 +59,7 @@ static const struct tegra186_cpufreq_cpu tegra186_cpus[] = {
+ };
+ 
+ struct tegra186_cpufreq_cluster {
+-	struct cpufreq_frequency_table *table;
++	struct cpufreq_frequency_table *bpmp_lut;
+ 	u32 ref_clk_khz;
+ 	u32 div;
+ };
+@@ -66,16 +67,121 @@ struct tegra186_cpufreq_cluster {
+ struct tegra186_cpufreq_data {
+ 	void __iomem *regs;
+ 	const struct tegra186_cpufreq_cpu *cpus;
++	bool icc_dram_bw_scaling;
+ 	struct tegra186_cpufreq_cluster clusters[];
+ };
+ 
++static int tegra_cpufreq_set_bw(struct cpufreq_policy *policy, unsigned long freq_khz)
++{
++	struct tegra186_cpufreq_data *data = cpufreq_get_driver_data();
++	struct device *dev;
++	int ret;
++
++	dev = get_cpu_device(policy->cpu);
++	if (!dev)
++		return -ENODEV;
++
++	struct dev_pm_opp *opp __free(put_opp) =
++		dev_pm_opp_find_freq_exact(dev, freq_khz * HZ_PER_KHZ, true);
++	if (IS_ERR(opp))
++		return PTR_ERR(opp);
++
++	ret = dev_pm_opp_set_opp(dev, opp);
++	if (ret)
++		data->icc_dram_bw_scaling = false;
++
++	return ret;
++}
++
++static int tegra_cpufreq_init_cpufreq_table(struct cpufreq_policy *policy,
++					    struct cpufreq_frequency_table *bpmp_lut,
++					    struct cpufreq_frequency_table **opp_table)
++{
++	struct tegra186_cpufreq_data *data = cpufreq_get_driver_data();
++	struct cpufreq_frequency_table *freq_table = NULL;
++	struct cpufreq_frequency_table *pos;
++	struct device *cpu_dev;
++	unsigned long rate;
++	int ret, max_opps;
++	int j = 0;
++
++	cpu_dev = get_cpu_device(policy->cpu);
++	if (!cpu_dev) {
++		pr_err("%s: failed to get cpu%d device\n", __func__, policy->cpu);
++		return -ENODEV;
++	}
++
++	/* Initialize OPP table mentioned in operating-points-v2 property in DT */
++	ret = dev_pm_opp_of_add_table_indexed(cpu_dev, 0);
++	if (ret) {
++		dev_err(cpu_dev, "Invalid or empty opp table in device tree\n");
++		data->icc_dram_bw_scaling = false;
++		return ret;
++	}
++
++	max_opps = dev_pm_opp_get_opp_count(cpu_dev);
++	if (max_opps <= 0) {
++		dev_err(cpu_dev, "Failed to add OPPs\n");
++		return max_opps;
++	}
++
++	/* Disable all opps and cross-validate against LUT later */
++	for (rate = 0; ; rate++) {
++		struct dev_pm_opp *opp __free(put_opp);
++
++		opp = dev_pm_opp_find_freq_ceil(cpu_dev, &rate);
++		if (IS_ERR(opp))
++			break;
++
++		dev_pm_opp_disable(cpu_dev, rate);
++	}
++
++	freq_table = kcalloc((max_opps + 1), sizeof(*freq_table), GFP_KERNEL);
++	if (!freq_table)
++		return -ENOMEM;
++
++	/*
++	 * Cross check the frequencies from BPMP-FW LUT against the OPP's present in DT.
++	 * Enable only those DT OPP's which are present in LUT also.
++	 */
++	cpufreq_for_each_valid_entry(pos, bpmp_lut) {
++		struct dev_pm_opp *opp __free(put_opp);
++
++		opp = dev_pm_opp_find_freq_exact(cpu_dev, pos->frequency * HZ_PER_KHZ, false);
++		if (IS_ERR(opp))
++			continue;
++
++		ret = dev_pm_opp_enable(cpu_dev, pos->frequency * HZ_PER_KHZ);
++		if (ret < 0)
++			return ret;
++
++		freq_table[j].driver_data = pos->driver_data;
++		freq_table[j].frequency = pos->frequency;
++		j++;
++	}
++
++	freq_table[j].driver_data = pos->driver_data;
++	freq_table[j].frequency = CPUFREQ_TABLE_END;
++
++	*opp_table = &freq_table[0];
++
++	dev_pm_opp_set_sharing_cpus(cpu_dev, policy->cpus);
++
++	/* Prime interconnect data */
++	tegra_cpufreq_set_bw(policy, freq_table[j - 1].frequency);
++
++	return ret;
++}
++
+ static int tegra186_cpufreq_init(struct cpufreq_policy *policy)
+ {
+ 	struct tegra186_cpufreq_data *data = cpufreq_get_driver_data();
+ 	unsigned int cluster = data->cpus[policy->cpu].bpmp_cluster_id;
++	struct cpufreq_frequency_table *freq_table;
++	struct cpufreq_frequency_table *bpmp_lut;
+ 	u32 cpu;
++	int ret;
+ 
+-	policy->freq_table = data->clusters[cluster].table;
+ 	policy->cpuinfo.transition_latency = 300 * 1000;
+ 	policy->driver_data = NULL;
+ 
+@@ -85,6 +191,20 @@ static int tegra186_cpufreq_init(struct cpufreq_policy *policy)
+ 			cpumask_set_cpu(cpu, policy->cpus);
+ 	}
+ 
++	bpmp_lut = data->clusters[cluster].bpmp_lut;
++
++	if (data->icc_dram_bw_scaling) {
++		ret = tegra_cpufreq_init_cpufreq_table(policy, bpmp_lut, &freq_table);
++		if (!ret) {
++			policy->freq_table = freq_table;
++			return 0;
++		}
++	}
++
++	data->icc_dram_bw_scaling = false;
++	policy->freq_table = bpmp_lut;
++	pr_info("OPP tables missing from DT, EMC frequency scaling disabled\n");
++
+ 	return 0;
+ }
+ 
+@@ -102,6 +222,10 @@ static int tegra186_cpufreq_set_target(struct cpufreq_policy *policy,
+ 		writel(edvd_val, data->regs + edvd_offset);
+ 	}
+ 
++	if (data->icc_dram_bw_scaling)
++		tegra_cpufreq_set_bw(policy, tbl->frequency);
++
++
+ 	return 0;
+ }
+ 
+@@ -134,7 +258,7 @@ static struct cpufreq_driver tegra186_cpufreq_driver = {
+ 	.init = tegra186_cpufreq_init,
+ };
+ 
+-static struct cpufreq_frequency_table *init_vhint_table(
++static struct cpufreq_frequency_table *tegra_cpufreq_bpmp_read_lut(
+ 	struct platform_device *pdev, struct tegra_bpmp *bpmp,
+ 	struct tegra186_cpufreq_cluster *cluster, unsigned int cluster_id,
+ 	int *num_rates)
+@@ -229,6 +353,7 @@ static int tegra186_cpufreq_probe(struct platform_device *pdev)
+ {
+ 	struct tegra186_cpufreq_data *data;
+ 	struct tegra_bpmp *bpmp;
++	struct device *cpu_dev;
+ 	unsigned int i = 0, err, edvd_offset;
+ 	int num_rates = 0;
+ 	u32 edvd_val, cpu;
+@@ -254,9 +379,9 @@ static int tegra186_cpufreq_probe(struct platform_device *pdev)
+ 	for (i = 0; i < TEGRA186_NUM_CLUSTERS; i++) {
+ 		struct tegra186_cpufreq_cluster *cluster = &data->clusters[i];
+ 
+-		cluster->table = init_vhint_table(pdev, bpmp, cluster, i, &num_rates);
+-		if (IS_ERR(cluster->table)) {
+-			err = PTR_ERR(cluster->table);
++		cluster->bpmp_lut = tegra_cpufreq_bpmp_read_lut(pdev, bpmp, cluster, i, &num_rates);
++		if (IS_ERR(cluster->bpmp_lut)) {
++			err = PTR_ERR(cluster->bpmp_lut);
+ 			goto put_bpmp;
+ 		} else if (!num_rates) {
+ 			err = -EINVAL;
+@@ -265,7 +390,7 @@ static int tegra186_cpufreq_probe(struct platform_device *pdev)
+ 
+ 		for (cpu = 0; cpu < ARRAY_SIZE(tegra186_cpus); cpu++) {
+ 			if (data->cpus[cpu].bpmp_cluster_id == i) {
+-				edvd_val = cluster->table[num_rates - 1].driver_data;
++				edvd_val = cluster->bpmp_lut[num_rates - 1].driver_data;
+ 				edvd_offset = data->cpus[cpu].edvd_offset;
+ 				writel(edvd_val, data->regs + edvd_offset);
+ 			}
+@@ -274,6 +399,19 @@ static int tegra186_cpufreq_probe(struct platform_device *pdev)
+ 
+ 	tegra186_cpufreq_driver.driver_data = data;
+ 
++	/* Check for optional OPPv2 and interconnect paths on CPU0 to enable ICC scaling */
++	cpu_dev = get_cpu_device(0);
++	if (!cpu_dev) {
++		err = -EPROBE_DEFER;
++		goto put_bpmp;
++	}
++
++	if (dev_pm_opp_of_get_opp_desc_node(cpu_dev)) {
++		err = dev_pm_opp_of_find_icc_paths(cpu_dev, NULL);
++		if (!err)
++			data->icc_dram_bw_scaling = true;
++	}
++
+ 	err = cpufreq_register_driver(&tegra186_cpufreq_driver);
+ 
+ put_bpmp:
+
+---
+base-commit: 211ddde0823f1442e4ad052a2f30f050145ccada
+change-id: 20251021-tegra186-icc-p1-8455e61d453d
+
+Best regards,
+-- 
+Aaron Kling <webgeek1234@gmail.com>
+
+
 
