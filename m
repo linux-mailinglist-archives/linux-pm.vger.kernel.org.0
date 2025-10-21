@@ -1,158 +1,167 @@
-Return-Path: <linux-pm+bounces-36603-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36607-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A46B5BF8AE5
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 22:15:09 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 01044BF8BB4
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 22:38:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 004D55850BD
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 20:14:02 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 2DCF04E4242
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 20:38:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A905827CB35;
-	Tue, 21 Oct 2025 20:13:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89D5026738B;
+	Tue, 21 Oct 2025 20:38:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BTbySJRF"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="rSyoE7eE"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D141A279918
-	for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 20:13:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EED18528E
+	for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 20:38:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761077634; cv=none; b=oTdKFqARodl1fgj9oE2RgqCbza2tFRlrXkyCpQu2+UwTXJQzcNdRdrzigFqL+A4zKTLj9Nsi8yGQxFg6ZJ7Ep9luhl4WwNBE2KQU4UdArSLBPYaVKXPo2a+l+Oco15iuOwhZhBun93IP65sqphqiiXNSfuXlhgvQ+kvnSfIu0fw=
+	t=1761079089; cv=none; b=ZfgF0bdNhjzfkbGsupTuXqeRS3nG7lSdQWLGCzhYDSoynEQYmy17ZTYM0Z77qU5D/e4dkw6d1FFxzC6POGgGKRroejaDqjbjGv2WRMsVCOBpMebrN8a0lXgU+nwCQR/yVZ/5rOaCCavTcsbbOPlXivdNvxYXYGIQwhuqxAc317s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761077634; c=relaxed/simple;
-	bh=4J0OjdwLHiQReJHal9jW/12h5Mk9FoHm68ukURUqSXg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XOz1ih8IRP16uvYciX/bQwQGlZSIrHgm9zhTrut7EnTbVPq3EwQBgGBcrqs4gzEd9YRgXDsmdUbP7UvlwvP+LGsht1yO+HWjlbxXWwX+hQjg0gkYDpq5QKrV3/7Aaw9fDh1Hgyx3VCF6tWAbjiiIVOEheExmuxixPyTLtk4aNSE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=BTbySJRF; arc=none smtp.client-ip=209.85.167.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-591c98ebe90so6656779e87.3
-        for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 13:13:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1761077631; x=1761682431; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RKxOWgYUPXY6dMbHVZSr2oXiuYnahXqeB8QRh2XeD1U=;
-        b=BTbySJRFPV8RtG0oHZeNnw7Qrsg7TrZrdY5F3E+uYFwwedsAdqbsDJBhqzhI5Mv2eK
-         XejAvf7e3j0M/EU5TpOVMlryhyrfdM0hPhwOSC9Z5XO9S2o/OcntE3zqeOkM9G5mAmX5
-         wmKNH16m13ELztaFyvpC2Vf+5yLKxoE5x0veoVaURx5BHvD+Q2prw6XSLxSbyCMjZaXp
-         5Hp8Vy3tEWiZ3qOA3VyZF+FBi3tjZq6/A8ou6Pne37yZS0nZpoI161O7j0aXclV0ZxA+
-         W6nCKh/a9T7Uhvi43fkLewuWSdjmhyfP7VUPBcxdnsZQMEDnTLXfT7mQGDh6t1DTpDG3
-         ATGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761077631; x=1761682431;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RKxOWgYUPXY6dMbHVZSr2oXiuYnahXqeB8QRh2XeD1U=;
-        b=ZxHgL9P/INzFLgDJhKOHOnjpPBOpPkVmiokdqRPHoti+VHQKgUgxuBC8z1ZeZoc1ya
-         gGa/dJ84XMi6nBlfGLf527N4hhBLNbYomVGE6PMoM16IRDaRiZB3YioeD4lArbMUNSuH
-         ZJf4dEUOST4nYG71u24PXIc9Fma+seby2NXAb5fjOeLB/5X45oiKkiisxHMUFZxpHuaD
-         OPiMYOmvi56x0m/dHZYArri1+nWJSQFuWkAohc1lM7pDJABvcryQxKu7qr74axUSP8J7
-         97ysHeNfROI3oJiFhSkJYtHp3I/AMve9gXAbH2jGDK9FuDV04HpGOz9gjwkbpHESrZRg
-         UHwg==
-X-Forwarded-Encrypted: i=1; AJvYcCVRaBTF3s1YQrJbOGMHoHoDyJ1bJEdSnpmnYnzj0RsOyPG2XyDOZrakxlxQ1HbM/uujT/WPLlUdpQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw2luMFJUjJcrOT7dIfjbs36yhv7tje1DYXbaMDKs/RzS0NFF77
-	twf0GSF9ltBsXFYlTYKp7xEd6mIwf9uPAjwhx4xcpe5eWyq+3/xixQY6aRAl4YEYfi/urMPoHWI
-	K6GPCq0hi+qvdx9MjBgqKzoOulQmEdDZJemBOHqI4
-X-Gm-Gg: ASbGncthr+hKlvCu/PR/Hx5SZgij1xHmgzEU+lyH2umKSsc4HKmAgiSt9c+00eOh9+z
-	8C6TMLjJuCbZDbT5aCjTuPixxSPESkOMWzEiVaBtSyvpV/amvdTclO0MKTZkbZFIof2zGqKnW7L
-	Z7O3feKs0kHQBW+0nLKbFv2OrglXgD41wEy9B2lpQENNRLSY70lYqtqVZIbOy58T9Oe+No4axo0
-	PcQXmaKbz3cuqlKodq1Pb8FJLhsGN6nbQVq9OX4u2celfARSROvYn8V9z3GgWzkmO1kLD5xh10B
-	UgedigvDuXH21h0=
-X-Google-Smtp-Source: AGHT+IEqXRFdpx8CQbrjYvDVnFkn8J994f91e0LtjYzhGaLWt510eCkAIILvZM/1VmWwOM7eWS/cxOq1TCtRG2ycS50=
-X-Received: by 2002:a05:651c:887:b0:372:9bf0:aed6 with SMTP id
- 38308e7fff4ca-37797a3dd66mr47608571fa.25.1761077630863; Tue, 21 Oct 2025
- 13:13:50 -0700 (PDT)
+	s=arc-20240116; t=1761079089; c=relaxed/simple;
+	bh=2UzUPa0O7wVHv85721B5teO1x+rf4QPSmTIVyKZAjHQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
+	 Content-Type:References; b=gYDHgvt0nn26FudGH1ltHrK/glcxZK834oILYgpgMMrqrMHrZFE+2gvvFOWRTSMm7kyDXDYlJku4lrNg5nlqTdFZspjA/QjmXWzzv6STJqPHBxT/FH8DcrMOed++Zlk8PevOaW5ASuAW89eChsVTGLLguvMftRQ9kmdcr9UZIaM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=rSyoE7eE; arc=none smtp.client-ip=210.118.77.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20251021203805euoutp02f3927bfa8bc40308fa60dd1a0fc613f1~wnBkEZHnc0098700987euoutp02B
+	for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 20:38:05 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20251021203805euoutp02f3927bfa8bc40308fa60dd1a0fc613f1~wnBkEZHnc0098700987euoutp02B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1761079085;
+	bh=WkfTpNuqej1UoTarvASJEkiFQ49zLY0qzCQi5FcT4uM=;
+	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+	b=rSyoE7eEsLXh9M8Vms1QePG23J8dvTd+XqkgCf2aNnIF06Guc00f+AK4hNUbm+XLw
+	 pJfmkcyYy9OpTo5HtJVNtSFgUe7ZKlhsHWf2/tt/kDnr4zYtaVbCXvNif9xY70br9D
+	 /h2cMy3Hj9X/n0N535wxwcgZt96u+dAS1Heq4SpQ=
+Received: from eusmtip2.samsung.com (unknown [203.254.199.222]) by
+	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+	20251021203804eucas1p2c091f1cce52c4d08eeacf8c36604f1fb~wnBisd64H0197501975eucas1p21;
+	Tue, 21 Oct 2025 20:38:04 +0000 (GMT)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+	eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+	20251021203802eusmtip23e28f0f310780cc696c497752fb587eb~wnBhWTpKN1353213532eusmtip2A;
+	Tue, 21 Oct 2025 20:38:02 +0000 (GMT)
+Message-ID: <2e38e6c2-0548-432f-ae34-daf3972877ac@samsung.com>
+Date: Tue, 21 Oct 2025 22:38:01 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251017233907.2305303-1-wusamuel@google.com> <20251018001715.8621-1-hdanton@sina.com>
-In-Reply-To: <20251018001715.8621-1-hdanton@sina.com>
-From: Samuel Wu <wusamuel@google.com>
-Date: Tue, 21 Oct 2025 13:13:39 -0700
-X-Gm-Features: AS18NWCpcTWwPQfzIddHNwywzJiUN6wPBLbqql1bRpm4FhPF577suS0FfEJERho
-Message-ID: <CAG2KctpHA+L=xh-VQ8SVDSRcqyL+ch=WMVrKS+pckLmC6uJwvw@mail.gmail.com>
-Subject: Re: [PATCH v5] PM: Support aborting sleep during filesystem sync
-To: Hillf Danton <hdanton@sina.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, 
-	Saravana Kannan <saravanak@google.com>, kernel-team@android.com, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Betterbird (Windows)
+Subject: Re: [PATCH v3 06/10] pmdomain: samsung: convert to
+ regmap_read_poll_timeout()
+To: =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, Krzysztof
+	Kozlowski <krzk@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>, Rob
+	Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Krzysztof
+	Kozlowski <krzk+dt@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Peter Griffin <peter.griffin@linaro.org>, Tudor Ambarus
+	<tudor.ambarus@linaro.org>, Will McVicker <willmcvicker@google.com>,
+	kernel-team@android.com, linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Content-Language: en-US
+From: Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <20251016-gs101-pd-v3-6-7b30797396e7@linaro.org>
+Content-Transfer-Encoding: 8bit
+X-CMS-MailID: 20251021203804eucas1p2c091f1cce52c4d08eeacf8c36604f1fb
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20251016155855eucas1p2ccc516861548e963761133fc52fc560e
+X-EPHeader: CA
+X-CMS-RootMailID: 20251016155855eucas1p2ccc516861548e963761133fc52fc560e
+References: <20251016-gs101-pd-v3-0-7b30797396e7@linaro.org>
+	<CGME20251016155855eucas1p2ccc516861548e963761133fc52fc560e@eucas1p2.samsung.com>
+	<20251016-gs101-pd-v3-6-7b30797396e7@linaro.org>
 
-On Fri, Oct 17, 2025 at 5:17=E2=80=AFPM Hillf Danton <hdanton@sina.com> wro=
-te:
+On 16.10.2025 17:58, André Draszik wrote:
+> Replace the open-coded PD status polling with
+> regmap_read_poll_timeout(). This change simplifies the code without
+> altering functionality.
 >
-> On Fri, 17 Oct 2025 23:39:06 +0000 Samuel Wu wrote:
-> > +/**
-> > + * pm_sleep_fs_sync - Trigger fs_sync with ability to abort
-> > + *
-> > + * Return 0 on successful file system sync, otherwise returns -EBUSY i=
-f file
-> > + * system sync was aborted.
-> > + */
-> > +int pm_sleep_fs_sync(void)
-> > +{
-> > +     bool need_pm_sleep_fs_sync_requeue;
-> > +     unsigned long flags;
-> > +
-> > +     do {
-> > +             spin_lock_irqsave(&pm_sleep_fs_sync_lock, flags);
-> > +             reinit_completion(&pm_sleep_fs_sync_complete);
+> Signed-off-by: André Draszik <andre.draszik@linaro.org>
+> ---
+>   drivers/pmdomain/samsung/exynos-pm-domains.c | 29 ++++++++--------------------
+>   1 file changed, 8 insertions(+), 21 deletions(-)
 >
-> Given difficulty following up here, can you specify why reinit is needed?
+> diff --git a/drivers/pmdomain/samsung/exynos-pm-domains.c b/drivers/pmdomain/samsung/exynos-pm-domains.c
+> index 383126245811cb8e4dbae3b99ced3f06d3093f35..431548ad9a7e40c0a77ac6672081b600c90ddd4e 100644
+> --- a/drivers/pmdomain/samsung/exynos-pm-domains.c
+> +++ b/drivers/pmdomain/samsung/exynos-pm-domains.c
+> @@ -13,7 +13,6 @@
+>   #include <linux/platform_device.h>
+>   #include <linux/slab.h>
+>   #include <linux/pm_domain.h>
+> -#include <linux/delay.h>
+>   #include <linux/of.h>
+>   #include <linux/pm_runtime.h>
+>   #include <linux/regmap.h>
+> @@ -35,7 +34,8 @@ struct exynos_pm_domain {
+>   static int exynos_pd_power(struct generic_pm_domain *domain, bool power_on)
+>   {
+>   	struct exynos_pm_domain *pd;
+> -	u32 timeout, pwr;
+> +	unsigned int val;
+> +	u32 pwr;
+>   	int err;
+>   
+>   	pd = container_of(domain, struct exynos_pm_domain, pd);
+> @@ -45,25 +45,12 @@ static int exynos_pd_power(struct generic_pm_domain *domain, bool power_on)
+>   	if (err)
+>   		return err;
+>   
+> -	/* Wait max 1ms */
+> -	timeout = 10;
+> -	while (timeout-- > 0) {
+> -		unsigned int val;
+> -
+> -		err = regmap_read(pd->regmap, 0x4, &val);
+> -		if (err || ((val & pd->local_pwr_cfg) != pwr)) {
+> -			cpu_relax();
+> -			usleep_range(80, 100);
+> -			continue;
+> -		}
+> -
+> -		return 0;
+> -	}
+> -
+> -	if (!err)
+> -		err = -ETIMEDOUT;
+> -	pr_err("Power domain %s %sable failed: %d\n", domain->name,
+> -	       power_on ? "en" : "dis", err);
+> +	err = regmap_read_poll_timeout(pd->regmap, 0x4, val,
+> +				       (val & pd->local_pwr_cfg) == pwr,
+> +				       100, 1 * USEC_PER_MSEC);
+> +	if (err)
+> +		pr_err("Power domain %s %sable failed: %d (%#.2x)\n",
+> +		       domain->name, power_on ? "en" : "dis", err, val);
 
-There are two possibilities that make reinit_completion() necessary:
-1. Suspend abort triggers completion, but is canceled before
-pm_wakeup_pending(), so need reinit to restart the
-wait_for_completion() process.
-2. Handling back-to-back suspend attempts: after a subsequent suspend
-attempt finishes waiting for a previous suspend's fs_sync to finish,
-we need the reinit to start the wait_for_completion() process of the
-subsequent suspend's fs_sync.
+I've posted my 'tested-by' tag for this patchset, but in meantime I 
+found that this patch causes regression from time to time on old Exynos 
+SoCs (especially when all debugs are disabled). It looks that there are 
+some subtle differences between reading the status register up to 10 
+times with cpu_relax()+usleep_range() and the 
+regmap_read_poll_timeout(). I will try to analyze this a bit more and 
+provide details, but I suspect that the old loop might take a bit longer 
+than the 1ms from the comment above this code.
 
-> > +             /*
-> > +              * Handle the case where a sleep immediately follows a pr=
-evious
-> > +              * sleep that was aborted during fs_sync. In this case, w=
-ait for
-> > +              * the previous filesystem sync to finish. Then do anothe=
-r
-> > +              * filesystem sync so any subsequent filesystem changes a=
-re
-> > +              * synced before sleeping.
-> > +              */
-> > +             if (pm_sleep_fs_sync_queued) {
-> > +                     need_pm_sleep_fs_sync_requeue =3D true;
-> > +             } else {
-> > +                     need_pm_sleep_fs_sync_requeue =3D false;
-> > +                     pm_sleep_fs_sync_queued =3D true;
-> > +                     schedule_work(&sync_filesystems);
-> > +             }
-> > +             spin_unlock_irqrestore(&pm_sleep_fs_sync_lock, flags);
-> > +
-> > +             /*
-> > +              * Completion is triggered by fs_sync finishing or an abo=
-rt sleep
-> > +              * signal, whichever comes first
-> > +              */
-> > +             wait_for_completion(&pm_sleep_fs_sync_complete);
-> > +             if (pm_wakeup_pending())
-> > +                     return -EBUSY;
-> > +     } while (need_pm_sleep_fs_sync_requeue);
-> > +
-> > +     return 0;
-> > +}
-> > +
+
+>   	return err;
+>   }
+>
+Best regards
+-- 
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
+
 
