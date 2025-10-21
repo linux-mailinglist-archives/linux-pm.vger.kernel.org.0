@@ -1,104 +1,164 @@
-Return-Path: <linux-pm+bounces-36604-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36602-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71E1CBF8AFA
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 22:15:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 22AD9BF8ADF
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 22:14:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9D31A3A3E8F
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 20:15:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9238658386C
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 20:13:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A1B0245014;
-	Tue, 21 Oct 2025 20:15:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA08C279DAB;
+	Tue, 21 Oct 2025 20:13:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=aurel32.net header.i=@aurel32.net header.b="Fb4KkOv2"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gH1y7Dp7"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from hall.aurel32.net (hall.aurel32.net [195.154.113.88])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7516366;
-	Tue, 21 Oct 2025 20:15:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.154.113.88
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3A9D279DDB
+	for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 20:13:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761077732; cv=none; b=MWGPMvSNtk497lEKUX/aee29LNjCU1mGXYOMH/faB0dT80VUAPc0UwTbASLW8qbnK8bFO+JBigzbGNmUze9e1s+49upgoFqtvp29dcWU39iCIOE+g3iI/9F0m07CR2L5h+noZ5oUiFCjNZJ73ffNMGHMcEbibLplzEMjAo2hrqY=
+	t=1761077625; cv=none; b=QMtL7F+hWwfE36bIJXQkVgQjur810He1NEFRAeMS4xx8msTLg4FDHPAWkfLxIMRl1RCXO/W451oAsTSON6+IwrKVKEAymRPTqaBOJc494OQmdKGZn/VhZ4oxtBEQWmAql5xaPgD35H2SGNqZagsmR1V8ZK2+VgtTAUN9aaMTzkQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761077732; c=relaxed/simple;
-	bh=uiQE3F6PNrH2qUqlwFl2M0IAS6OtWbqRebDnn5BkzHs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KR1kxZjPMeWrpU+wQtf1z9gw5jsdnntu/4EiEOdd+TWA8BskTRXwsM4/FnRnn7ODvhg8lEFUOAJD2nh56vLlc8dZxJlLO3xDTnE84xi2d2kf45v7vSzensIqwAWZsE0Ltz4zvC3maRuZ4sMEs35TXzJOi+M0SNiXmSATyj0/hiw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=aurel32.net; spf=pass smtp.mailfrom=aurel32.net; dkim=pass (2048-bit key) header.d=aurel32.net header.i=@aurel32.net header.b=Fb4KkOv2; arc=none smtp.client-ip=195.154.113.88
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=aurel32.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aurel32.net
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=aurel32.net
-	; s=202004.hall; h=Content-Transfer-Encoding:MIME-Version:References:
-	In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Content-Type:From:Reply-To:
-	Subject:Content-ID:Content-Description:X-Debbugs-Cc;
-	bh=af2q0eyIVeKU9fcGvNX/nR6ZwHN1BAkM9i1dSmiJRBQ=; b=Fb4KkOv27NT9ibbJKtuIYmC2cu
-	FvDx2pHnmouhKkw8XWoxexNGk2OIjYLkK0oIFE4IqiXeLQHiGkQvkOGgzJGX1Af7gN8hbWrQE7r1h
-	LuN8hqhHmCg04MVvm4lHMJ4w2GSiiGLt19kz/3IUNpjeHqdCpxoPODq1EhmdVtriNNcj3D9x9LgKo
-	EWoO7/uVqnq/qVR0I2hbwX9LPxeCfLrv65Ez/Pjpkdper+LhKb8MIvfEqMr6tpyYwbdI0qJC2p5vj
-	rnQi+VIq7Csw4XkcDFDjSaiREiZM+mPPbgDV3orDTPDsr+KHAYDdLMNoh5a3ovYnPe+Tczssl4+Of
-	WI7Lwk0A==;
-Received: from [2a01:e34:ec5d:a741:1ee1:92ff:feb4:5ec0] (helo=ohm.rr44.fr)
-	by hall.aurel32.net with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <aurelien@aurel32.net>)
-	id 1vBIl8-00GWoD-0i;
-	Tue, 21 Oct 2025 22:15:06 +0200
-From: Aurelien Jarno <aurelien@aurel32.net>
-To: linux-kernel@vger.kernel.org,
-	Lee Jones <lee@kernel.org>,
-	Sebastian Reichel <sre@kernel.org>,
-	Troy Mitchell <troy.mitchell@linux.spacemit.com>,
-	Yixun Lan <dlan@gentoo.org>,
-	Paul Walmsley <pjw@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Alexandre Ghiti <alex@ghiti.fr>,
-	linux-riscv@lists.infradead.org (open list:RISC-V ARCHITECTURE:Keyword:riscv),
-	spacemit@lists.linux.dev (open list:RISC-V SPACEMIT SoC Support:Keyword:spacemit)
-Cc: Aurelien Jarno <aurelien@aurel32.net>,
-	linux-pm@vger.kernel.org (open list:SYSTEM RESET/SHUTDOWN DRIVERS),
-	linux-riscv@lists.infradead.org (open list:RISC-V SPACEMIT SoC Support),
-	spacemit@lists.linux.dev (open list:RISC-V SPACEMIT SoC Support)
-Subject: [PATCH v3 2/2] mfd: simple-mfd-i2c: add a reboot cell for the SpacemiT P1 chip
-Date: Tue, 21 Oct 2025 22:12:00 +0200
-Message-ID: <20251021201451.1013640-3-aurelien@aurel32.net>
-X-Mailer: git-send-email 2.47.2
-In-Reply-To: <20251021201451.1013640-1-aurelien@aurel32.net>
-References: <20251021201451.1013640-1-aurelien@aurel32.net>
+	s=arc-20240116; t=1761077625; c=relaxed/simple;
+	bh=m8dulZsmOF4wEvLc1RlTO2XmXrclzS6tJ1KKfQwhMpw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=YE36RDQ9+xZeoeUUaNgux7supAbjRLwgq+rDOhf+lBoLfrjn6IcNaw6LO4DT+DnNDEwsrHwFepeHPXseVr6rzeSpH7SAli5t8xO5aon+pBjhYrWGdl/6Qs/fkzi80WIhZCEOpwyZqAKLFgEh9FNhDRK/NWJ6KsAMow2hWGXbpzI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=gH1y7Dp7; arc=none smtp.client-ip=209.85.167.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-57edfeaa05aso6869912e87.0
+        for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 13:13:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1761077622; x=1761682422; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gFunx2MZpZr8MGsSovVvmXHzBeV4exhykIDoDRfAdgo=;
+        b=gH1y7Dp7s9BNzvUdJ99URmhRHISMHJY4Lyw7lTD/crUxSFP7kvfrDq2vQUBzGyrX0C
+         KEh4cHoHfdkxqw+Z33WSiWmwlVGaii0dQ0hGz00eEk0xg4O3CkQOYHfbBl/cL2NBpSFM
+         a2x09x4dX8Q1B7dJ4kgw0AYbcBQ7Z85tTQuJnDGBesiJUmoHkdppbPTa0A+DlV7YRiYn
+         GFp+G30X6KTuSM5lKLJJ//LxJ3dUHdOv0lq9w+1L0R0z+stHlX3+SZMGimpxtHqV5uoD
+         7/cbNRsClTYEa9Z4L0+3N8L0z7mmqf7/TKoidQpGXa6g+AQiCXjDgiVKNJEING8khnd2
+         BjAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761077622; x=1761682422;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gFunx2MZpZr8MGsSovVvmXHzBeV4exhykIDoDRfAdgo=;
+        b=J1l7MKJb1CMZ3mMtHnbFKfztnFcO6edGPOEBd4mk7e7+f3/ULBP64zQIoq50z7k1WV
+         QWZEQ70YgwUAUkZa1xATaoYC6mr54PsHRj3r2V5KAklgsEXlCw8XXsx9slZMDTtMUUyh
+         p38ffXZrQhSEJbKkkBmof9adI/jq6scQRO5sbNJ4QUBys8XolIVSKEqFSvqnMbCgEUzH
+         2x1ootZCUeRY8TR0qR6EY+D9G7YWtFfWQUCCP8qvZQFwIkdlD5jxJVY9j19V93quG1lS
+         mxsvxWUFABT88Ixwoo+f7WOJxfRZMvVmukhbk6eQ9uFQQ67lmC5Q0EEWNnUogoMp14wD
+         6Q4w==
+X-Forwarded-Encrypted: i=1; AJvYcCV/xX4PxUPEldw3AX2hP3mdAIpYR1WIrddTj93wAZfowyiT8gzxL17b4UCnhCycu/uZqJNB17zMKw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyjUbW7Sri6oTxpVQW4W2OfHLBnK5abmPO6rlhwYjF5fvfnvApE
+	NGMorvZQ07LAm9KoLUnrwTxPAnQ8IB7mdDqOtk6S3qg+tiwU7+59hS2IMvOj8fWwXowP7R++KuO
+	qEd+4NKTW9wmiGfBRicCqVRXid7CFjYT0S7vovJfu
+X-Gm-Gg: ASbGncs2kW/9EcgKvWwptG7hPrhUmmjmLOv76y7VGm4eFtfX8c6zXd1KB4IpXQrKWyS
+	TOJdFxX97yilBDyw/AyIUdjUDIIWhGMd1FDHFF1ieJiD0BdvISnzmc1vcJhjngGRorarQepvmiZ
+	ygVp1AfhBRqeD0LwUE/6CnQYLzQhItoyy0hc43uXD2MfG4VgCf3pTny3/mStmBNDAPCwIBDvqv6
+	EeHt+zVaS5CTiImx5TaHK5eOkWgjxglnGzIp5ey7oC6Nr1ETGhVXUooBzFp18cVE60v2+cvLCw/
+	YzqJKli1FphvNqjSLadg0D0HDg==
+X-Google-Smtp-Source: AGHT+IGAvGEVgit/SDBbJXfglgzrCcYtyoqLzzRV1N2+0Gnz2+ROcolK3EI6Rrn4aLeI5pJYAVKljQP6z6syteJTyHg=
+X-Received: by 2002:a2e:bd17:0:b0:376:3a83:428d with SMTP id
+ 38308e7fff4ca-37797ada3e4mr54852761fa.48.1761077621527; Tue, 21 Oct 2025
+ 13:13:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20251017233907.2305303-1-wusamuel@google.com> <202510190215.ppx4apvg-lkp@intel.com>
+In-Reply-To: <202510190215.ppx4apvg-lkp@intel.com>
+From: Samuel Wu <wusamuel@google.com>
+Date: Tue, 21 Oct 2025 13:13:29 -0700
+X-Gm-Features: AS18NWAbUHSxxc75oxQg0pd4M1nulX2qNGsXjQaXglcPLJv9sfuKAT6aV7qCa3A
+Message-ID: <CAG2Kcto1=kQ-6eR50aA_Uj4jUSQEVLaZs1Ucp0R8y6hMxNfLvQ@mail.gmail.com>
+Subject: Re: [PATCH v5] PM: Support aborting sleep during filesystem sync
+To: kernel test robot <lkp@intel.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, llvm@lists.linux.dev, 
+	oe-kbuild-all@lists.linux.dev, tuhaowen@uniontech.com, 
+	Saravana Kannan <saravanak@google.com>, kernel-team@android.com, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add a "spacemit-p1-reboot" cell for the SpacemiT P1 chip.
+On Sat, Oct 18, 2025 at 11:32=E2=80=AFAM kernel test robot <lkp@intel.com> =
+wrote:
+>
+> Hi Samuel,
+>
+> kernel test robot noticed the following build errors:
+>
+> [auto build test ERROR on rafael-pm/linux-next]
+> [also build test ERROR on rafael-pm/bleeding-edge amd-pstate/linux-next a=
+md-pstate/bleeding-edge linus/master v6.18-rc1 next-20251017]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/Samuel-Wu/PM-Suppo=
+rt-aborting-sleep-during-filesystem-sync/20251018-091422
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.g=
+it linux-next
+> patch link:    https://lore.kernel.org/r/20251017233907.2305303-1-wusamue=
+l%40google.com
+> patch subject: [PATCH v5] PM: Support aborting sleep during filesystem sy=
+nc
+> config: i386-randconfig-012-20251018 (https://download.01.org/0day-ci/arc=
+hive/20251019/202510190215.ppx4apvg-lkp@intel.com/config)
+> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0=
+227cb60147a26a1eeb4fb06e3b505e9c7261)
+> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
+ve/20251019/202510190215.ppx4apvg-lkp@intel.com/reproduce)
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
+ion of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202510190215.ppx4apvg-lkp=
+@intel.com/
+>
+> All errors (new ones prefixed by >>):
+>
+>    In file included from arch/x86/kernel/asm-offsets.c:14:
+> >> include/linux/suspend.h:510:15: error: type specifier missing, default=
+s to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+>      510 | static inline pm_stop_waiting_for_fs_sync(void) {}
+>          | ~~~~~~~~~~~~~ ^
+>          | int
+>    1 error generated.
+>    make[3]: *** [scripts/Makefile.build:182: arch/x86/kernel/asm-offsets.=
+s] Error 1 shuffle=3D1011955029
+>    make[3]: Target 'prepare' not remade because of errors.
+>    make[2]: *** [Makefile:1280: prepare0] Error 2 shuffle=3D1011955029
+>    make[2]: Target 'prepare' not remade because of errors.
+>    make[1]: *** [Makefile:248: __sub-make] Error 2 shuffle=3D1011955029
+>    make[1]: Target 'prepare' not remade because of errors.
+>    make: *** [Makefile:248: __sub-make] Error 2 shuffle=3D1011955029
+>    make: Target 'prepare' not remade because of errors.
+>
+>
+> vim +/int +510 include/linux/suspend.h
+>
+>    508
+>    509  static inline void ksys_sync_helper(void) {}
+>  > 510  static inline pm_stop_waiting_for_fs_sync(void) {}
+>    511  static inline int pm_sleep_fs_sync(void) {}
+>    512
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
 
-Signed-off-by: Aurelien Jarno <aurelien@aurel32.net>
----
-v3: no changes
-
- drivers/mfd/simple-mfd-i2c.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/mfd/simple-mfd-i2c.c b/drivers/mfd/simple-mfd-i2c.c
-index 0a607a1e3ca1d..542d378cdcd1f 100644
---- a/drivers/mfd/simple-mfd-i2c.c
-+++ b/drivers/mfd/simple-mfd-i2c.c
-@@ -99,6 +99,7 @@ static const struct regmap_config spacemit_p1_regmap_config = {
- };
- 
- static const struct mfd_cell spacemit_p1_cells[] = {
-+	{ .name = "spacemit-p1-reboot", },
- 	{ .name = "spacemit-p1-regulator", },
- 	{ .name = "spacemit-p1-rtc", },
- };
--- 
-2.47.2
-
+Oversight on my part- I'll fix this in v6 along with other feedback
 
