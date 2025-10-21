@@ -1,181 +1,205 @@
-Return-Path: <linux-pm+bounces-36562-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36563-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF44BBF6193
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 13:40:39 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1469BBF66AC
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 14:22:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 83208487930
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 11:38:23 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C40584E5F8A
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 12:22:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8791C32E73D;
-	Tue, 21 Oct 2025 11:37:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 931CB25A659;
+	Tue, 21 Oct 2025 12:22:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="TtoFpAgr"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f196.google.com (mail-pl1-f196.google.com [209.85.214.196])
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E00292F3607
-	for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 11:37:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B79FC1DE4F1
+	for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 12:22:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761046678; cv=none; b=msBc3F+28Pc9/5IoqHe9RGPre4JTDOXgUx/cvn4IBJ0E0tX8xlNmxdjqh89xhhwNrDyhOSijShsqjNrJ7bkEriWM49jRCOGY+jq1YTBEvGYaay/ep3UDogujeqxkQ6El7YmzTltm4zdu5mb+UxztLQkfvfHTxorOx4Op7alQtIM=
+	t=1761049373; cv=none; b=oHmic0VcyOJWqmpZ3GxbGbifAOZtn86mHVKspvMXdP35GgsNWC5Q7PjCbGCKumYi6SqaoMpXOUfwdXXd4YvV4O/60RdDcX9seu/sYlpNM87lMGaccyM1X9XDJ43xla7XF39xnOKVmHF8vktnGipVi9nzYp6NaN8D8eBe+QMnEIc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761046678; c=relaxed/simple;
-	bh=LwlKlFHSEbNrVRvKsond5796RbxaXrrqKSRSObBmQZs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=HM/hVxheAajgN6oNOaZXKaMnpbu0O7LlYju8+90RT3RQBWdc7DOtfsGs3f6TIiOQze8+7g9VKQmQCg9Hx6tbn3hIVC5RXf6ns86T3qjJJ6H2Gs8gnFZpe1CffpkXwJ1h6c+WEA8LT85RiPf6ZPYYPo5xh4SUU6i/RopGE6QLkgk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.214.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f196.google.com with SMTP id d9443c01a7336-269639879c3so51820705ad.2
-        for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 04:37:56 -0700 (PDT)
+	s=arc-20240116; t=1761049373; c=relaxed/simple;
+	bh=f3De6rNTLERtBCHNMZ22urpVrMEnrkSKkBp8ZJH0Ey0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=RMl+oT71xCv1nXR0AqGxxFS6OI+kYDWd7y4RKFELDt8sd+DNgmmCMc3bktIHBXJV5gRxS6rYqweBCGCBIFqUbK/VQjFtzDbH75MdTMpo9cPKWzB8HeUfWBEY66neUVvaipNKqpNz0RQ3BF1DrdwjRsG7gxqQhDqk5AEIBnOFaEU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=TtoFpAgr; arc=none smtp.client-ip=209.85.128.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-71d71bcab69so53808677b3.0
+        for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 05:22:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1761049370; x=1761654170; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=0gsO0Mv1FrcyGXkqaqLTVsEMXbut/odQDvF8E5ZP8zg=;
+        b=TtoFpAgr9EvntFhc0LWUKCHatbEH+caEZo4EJERzFHvdgEZ435S+nNHROPl0IAYd+k
+         sVmMOlEAdxm3e9IaZzJD4xUzSrfyV99GKaMkGVFioYvU2ZHHMOTRqmJNuOs1bjnGK2UE
+         LX6E9RBByJFXuE7uCDXc4enjwrYVuWbtom6kBXhR8wl3PlvqA8/v4208U9y2jWMQpTrr
+         +YXtHmo5dvsH3yJGWHHtjcFNcNkggoGWxjbwpdsATMLfoGQbW47rzsiQKby2eGfN12AB
+         KnVexQom0e4V8BDfgWImOuLLu/ljhJoAlHNATfdVHJeAktbmcdUnFwQxq3l/HCMRfcjH
+         d5yQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761046676; x=1761651476;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zb/P39EN0zTHeWlEc7WRQeworU4Q/PPx2G1j0YfRkmU=;
-        b=piXZaHzY3uPTMA4FHd+PlueGqy9I8Vw1VMluvTqB55COi06sX58JfvuyvsOeWLS4fN
-         nEMYoFAJ7rOFCK5pxYEPkZuA0I8N2Q/uyMNYVaFyOs+SJ2wups4uWxJe+lU1Rgj/r6tx
-         s30NEhQvd7UDwNKtG1xS7CTDWz4SPudEqIkuPjKJFAJ7r2oMWOZv+JIT7kONE5QH6OdQ
-         JIdnpewVcvnM4bywKXzbZlQmgJ/shAwAz3SaJnqF/SQyDY8wzEgKraCPmmAZEokWvpZ/
-         TozxC3IsE+Pwj69J9Ff4KWLrXmUC+9Bjus61xbCSuRzJ+BCpjAgJUebY7mZk6QsrohoL
-         In5Q==
-X-Forwarded-Encrypted: i=1; AJvYcCU0LMUDEz487bHSImfu6A+eplWwv5G4/SUiaKR6Uv9A2G7qyjplEEqRMnvv3fCzBVc5l9hQXWsbGw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzeK5FcoPn5Y9IBth6xL5+0bWirBMppcIWO8X+p//QGZBRpMInL
-	ti0a3gbMJI97teTIDHdQREolEL2HGlnIOO7pMPDqE4zMNMjvyf7skhvB
-X-Gm-Gg: ASbGnctz87YdDuV5B7+0a8rw8ltLVI9LZ/pE6m47lrDzO6ylSWchkrbQlhTv1a1ipPs
-	VjFF4zOToykITZ9OOg69tFNxh87F1t+cfk/G7SwTMTBooqM6qOCFNqlYEdMj6qfyKhzXoTxyb4C
-	sxQlBvpJZ3PGJO1WpjNDWKTjXif+KT2ejoQIrNBkvyR0rQbPR4cHZ1OGyOW2/mL+zKejGOvm3UV
-	4uS6gWO1Gmt4Od75OakWzCssNrEbdJSqXZMyXyNMgJLpSpjjZLTHtwiaVZcllwVY4d9Jux3qJmx
-	M4zXQ/rNK95v1X6WWkj/Hl5pAXQKAEUYsR8xmL8OIVgDSak8qouR3VCi3hyUSRNm3DoHRyGcquN
-	vAuIVIAQu1vuO6kO6sRXrTic32LAr1g3q+pGyE9E24cK740G++vjcOTrLMvxNXNvL2+o2oFWGfX
-	ZSUYCD4DXx3dr+GyKzy/w1b4hvS1iG3bVccQ==
-X-Google-Smtp-Source: AGHT+IF6cl/LBwyaFNUn13dpXkGP8NioeG262Y8OPcKXHmKGNZPKgVCEeAVM6LjaxPs3Wd2eic9dVQ==
-X-Received: by 2002:a17:903:287:b0:24b:4a9a:703a with SMTP id d9443c01a7336-290c9cbc0d7mr203876085ad.17.1761046676061;
-        Tue, 21 Oct 2025 04:37:56 -0700 (PDT)
-Received: from power-ThinkBook-15-G2-ITL.. ([116.128.244.171])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-292471d5874sm107138825ad.54.2025.10.21.04.37.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Oct 2025 04:37:55 -0700 (PDT)
-From: Xueqin Luo <luoxueqin@kylinos.cn>
-To: rafael@kernel.org,
-	pavel@kernel.org,
-	lenb@kernel.org,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Xueqin Luo <luoxueqin@kylinos.cn>
-Subject: [PATCH v5 3/3] PM: hibernate: add sysfs interface for hibernate_compression_threads
-Date: Tue, 21 Oct 2025 19:37:28 +0800
-Message-ID: <c68c62f97fabf32507b8794ad8c16cd22ee656ac.1761046167.git.luoxueqin@kylinos.cn>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1761046167.git.luoxueqin@kylinos.cn>
-References: <cover.1761046167.git.luoxueqin@kylinos.cn>
+        d=1e100.net; s=20230601; t=1761049370; x=1761654170;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0gsO0Mv1FrcyGXkqaqLTVsEMXbut/odQDvF8E5ZP8zg=;
+        b=B7a1OCAMe2algkhbuT0gBbnpSLlnm1D3vcvXQdPFBKPHFtvxtalEoak3xtHKl5kczk
+         fWb/p5mV+BfxOvNbVplTUBexQLuT9JNqVzcGC1NgxXp6/BDbRk/4CSrKIuCbrWVAdfV/
+         W+5yyo8UH6lkjo0nPePjkGoxfVWlwDPtmBXLdloheikmMwRpcO8v5bP77Lq0tN86wHuM
+         HYDcToSjmKeNM/1DcA/ertlNhu91BExkQ8bAZR7bcTHJX6Iuybx+myuakKcqwv/J/XIg
+         IyvM+ruVBdnyENo/uTUsyPmU/ZqxI2apYiZmynGedG5lLAJYgt7eQfqFhiy/K2iTGWjb
+         Vrjg==
+X-Forwarded-Encrypted: i=1; AJvYcCU3l/MJie0pQRhtIacJYF/NQ6Pn6Cas9dwgjHEu3X4Z98Hg6mjwE97sRTAuxYvG/fX3LtL8AElFfQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxx0UIvIgh81KUhSfg8zHJGXDvkotZX2sGMgRjrLtae7eaL0/10
+	RaWODrnnHOfLS4J1riYrT2+XX+vdfLiKcCtq/3tV0zbLJp59i3QEiQjypFHlSTEX1gPVEjQW/Tc
+	pPBEokwsRDvSkdogWkBZq9lMWCiGPJBBmSaD6g9695Q==
+X-Gm-Gg: ASbGnctdU2H60WwwMLIva+glMZOE2Y4MHUiQjwGDw3adLXOewins8ZIE41jKwt69NyJ
+	D8s74zZJXmRu8Zd7NmZoc1+eibenWNrw5LcMaL/9frO9/6t/ZPz/lHGgkbC1Sk9O5pY9jat9v65
+	mzd/h9iAW6kvETIr9sWCDtls0vtCpwEQMYLnA7XJ772BAym6A0MThqVFxwp+oEYLMKLOuP6ZHqG
+	i7ii+S5vHUNQ+NDKGgO80/HdnEQvpYzqS59JXictfdrny9W8BWEjdAjoH7wlcGa8QwoYOa+
+X-Google-Smtp-Source: AGHT+IEjsTRnovw4ePg20FTB4OUKNJwNiI+HcgpJ0npXrx4jgsZXBfmlUSYcGf7LNK6sqZ0vKa1Fghky5U1mlT7+5do=
+X-Received: by 2002:a53:acd5:0:20b0:63e:102f:e00e with SMTP id
+ 956f58d0204a3-63e1625aee1mr12332024d50.53.1761049369570; Tue, 21 Oct 2025
+ 05:22:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250910-uart-daisy-chain-pmdomain-v2-1-6d0215f4af32@ti.com>
+In-Reply-To: <20250910-uart-daisy-chain-pmdomain-v2-1-6d0215f4af32@ti.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Tue, 21 Oct 2025 14:22:13 +0200
+X-Gm-Features: AS18NWBw6aYnNOt7sX3hV723CfvlVkoslKqfPhuE6iOIYmHabXQ8nFw-lI3bkVE
+Message-ID: <CAPDyKFrOjFeZDOs84egaCAmRwtnXcj5bZLniOb1gkDkDH0214g@mail.gmail.com>
+Subject: Re: [PATCH v2] pmdomain: ti_sci: Handle wakeup constraint if device
+ has pinctrl wakeup state
+To: Kendall Willis <k-willis@ti.com>, khilman@baylibre.com
+Cc: Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>, 
+	Santosh Shilimkar <ssantosh@kernel.org>, linux-arm-kernel@lists.infradead.org, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, d-gole@ti.com, 
+	vishalm@ti.com, sebin.francis@ti.com, msp@baylibre.com, a-kaur@ti.com
+Content-Type: text/plain; charset="UTF-8"
 
-Add a sysfs attribute `/sys/power/hibernate_compression_threads` to
-allow runtime configuration of the number of threads used for
-compressing and decompressing hibernation images.
+On Wed, 10 Sept 2025 at 23:16, Kendall Willis <k-willis@ti.com> wrote:
+>
+> For TI K3 SoCs with IO daisy-chaining using pinctrl wakeup state, avoid
+> sending wakeup constraints to the PM co-processor. This allows the SoC to
+> enter deeper low power states while still maintaining wakeup capability
+> for peripherals using IO daisy-chain wakeup via pinctrl wakeup state,
+> similar to the existing wake IRQ mechanism added in commit b06bc47279919
+> ("pmdomain: ti_sci: handle wake IRQs for IO daisy chain wakeups").
+>
+> Detect the pinctrl wakeup state in the suspend path, and if it exists,
+> skip sending the constraint.
+>
+> Signed-off-by: Kendall Willis <k-willis@ti.com>
+> ---
+> Implementation
+> --------------
+> This patch is intended to be implemented along with the following
+> series. This patch has no dependencies on any of the other series:
+>
+> 1. "pmdomain: ti_sci: Handle wakeup constraint if device has pinctrl
+>    wakeup state": (this patch) skips setting constraints for wakeup
+>    sources that use pinctrl state 'wakeup'.
+>
+> 2. "serial: 8250: omap: Add wakeup support": Implements wakeup from
+>    the UARTs for TI K3 SoCs
+>    https://github.com/kwillis01/linux/tree/b4/uart-daisy-chain-8250-omap
+>
+> 3. "arm64: dts: ti: k3-am62: Support Main UART wakeup": Implements the
+>    functionality to wakeup the system from the Main UART
+>    https://github.com/kwillis01/linux/tree/b4/uart-daisy-chain-dts
+>
+> Testing
+> -------
+> Tested on a AM62P SK EVM board with all series and dependencies
+> implemented. Suspend/resume verified with the Main UART wakeup source
+> by entering a keypress on the console.
+>
+> This github branch has all the necessary patches to test the series
+> using linux-next:
+> https://github.com/kwillis01/linux/tree/uart-daisy-chain
+>
+> Version History
+> ---------------
+> Changes from v1 to v2:
+>  - Reworded commit message to be concise and to reference commit
+>    b06bc47279919
+>
+> v1: https://lore.kernel.org/all/20250904211607.3725897-1-k-willis@ti.com/
+> ---
+>  drivers/pmdomain/ti/ti_sci_pm_domains.c | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
+>
+> diff --git a/drivers/pmdomain/ti/ti_sci_pm_domains.c b/drivers/pmdomain/ti/ti_sci_pm_domains.c
+> index 82df7e44250bb64f9c4a2108b5e97bd782a5976d..884905fd0686c1b94aba68c03da038e577428adf 100644
+> --- a/drivers/pmdomain/ti/ti_sci_pm_domains.c
+> +++ b/drivers/pmdomain/ti/ti_sci_pm_domains.c
+> @@ -10,6 +10,7 @@
+>  #include <linux/err.h>
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+> +#include <linux/pinctrl/consumer.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/pm_domain.h>
+>  #include <linux/pm_qos.h>
+> @@ -84,9 +85,24 @@ static inline void ti_sci_pd_set_wkup_constraint(struct device *dev)
+>         struct generic_pm_domain *genpd = pd_to_genpd(dev->pm_domain);
+>         struct ti_sci_pm_domain *pd = genpd_to_ti_sci_pd(genpd);
+>         const struct ti_sci_handle *ti_sci = pd->parent->ti_sci;
+> +       struct pinctrl *pinctrl = devm_pinctrl_get(dev);
+> +       struct pinctrl_state *pinctrl_state_wakeup;
+>         int ret;
+>
+>         if (device_may_wakeup(dev)) {
+> +               /*
+> +                * If device can wakeup using pinctrl wakeup state,
+> +                * we do not want to set a constraint
+> +                */
+> +               if (!IS_ERR_OR_NULL(pinctrl)) {
+> +                       pinctrl_state_wakeup = pinctrl_lookup_state(pinctrl, "wakeup");
+> +                       if (!IS_ERR_OR_NULL(pinctrl_state_wakeup)) {
+> +                               dev_dbg(dev, "%s: has wake pinctrl wakeup state, not setting " \
+> +                                               "constraints\n", __func__);
+> +                               return;
+> +                       }
+> +               }
 
-The new sysfs interface enables dynamic adjustment at runtime:
+Relying on the above condition and the wakeirq check that was added in
+b06bc47279919, seems fragile and doesn't really seem like the best
+approach to me.
 
-    # cat /sys/power/hibernate_compression_threads
-    3
-    # echo 4 > /sys/power/hibernate_compression_threads
+I would rather think that we should rely on the driver for the
+consumer device to successfully have completed its parts, by enabling
+the out-band system-wakeup IRQ. In other words, make the consumer
+driver to call device_set_out_band_wakeup() and then use
+device_out_band_wakeup() instead of the pinctrl+wakeirq check above,
+to understand if QoS constraints shall be sent to the FW or not.
 
-This change provides greater flexibility for debugging and performance
-tuning of hibernation without requiring a reboot.
+> +
+>                 /*
+>                  * If device can wakeup using IO daisy chain wakeups,
+>                  * we do not want to set a constraint.
+>
+> ---
+> base-commit: 5f540c4aade9f1d58fb7b9490b4b7d5214ec9746
+> change-id: 20250910-uart-daisy-chain-pmdomain-b83b2db2c3cc
+>
+> Best regards,
+> --
+> Kendall Willis <k-willis@ti.com>
+>
 
-Signed-off-by: Xueqin Luo <luoxueqin@kylinos.cn>
----
- Documentation/ABI/testing/sysfs-power | 16 +++++++++++
- kernel/power/swap.c                   | 38 +++++++++++++++++++++++++++
- 2 files changed, 54 insertions(+)
-
-diff --git a/Documentation/ABI/testing/sysfs-power b/Documentation/ABI/testing/sysfs-power
-index 4d8e1ad020f0..d38da077905a 100644
---- a/Documentation/ABI/testing/sysfs-power
-+++ b/Documentation/ABI/testing/sysfs-power
-@@ -454,3 +454,19 @@ Description:
- 		disables it.  Reads from the file return the current value.
- 		The default is "1" if the build-time "SUSPEND_SKIP_SYNC" config
- 		flag is unset, or "0" otherwise.
-+
-+What:           /sys/power/hibernate_compression_threads
-+Date:           October 2025
-+Contact:        <luoxueqin@kylinos.cn>
-+Description:
-+                Controls the number of threads used for compression
-+                and decompression of hibernation images.
-+
-+                The value can be adjusted at runtime to balance
-+                performance and CPU utilization.
-+
-+                The change takes effect on the next hibernation or
-+                resume operation.
-+
-+                Minimum value: 1
-+                Default value: 3
-diff --git a/kernel/power/swap.c b/kernel/power/swap.c
-index aa11576e92a9..d173e276b494 100644
---- a/kernel/power/swap.c
-+++ b/kernel/power/swap.c
-@@ -1689,8 +1689,46 @@ int swsusp_unmark(void)
- }
- #endif
- 
-+static ssize_t hibernate_compression_threads_show(struct kobject *kobj,
-+				struct kobj_attribute *attr, char *buf)
-+{
-+	return sysfs_emit(buf, "%d\n", hibernate_compression_threads);
-+}
-+
-+static ssize_t hibernate_compression_threads_store(struct kobject *kobj,
-+				struct kobj_attribute *attr,
-+				const char *buf, size_t n)
-+{
-+	unsigned long val;
-+
-+	if (kstrtoul(buf, 0, &val))
-+		return -EINVAL;
-+
-+	if (val < 1)
-+		return -EINVAL;
-+
-+	hibernate_compression_threads = val;
-+	return n;
-+}
-+power_attr(hibernate_compression_threads);
-+
-+static struct attribute *g[] = {
-+	&hibernate_compression_threads_attr.attr,
-+	NULL,
-+};
-+
-+static const struct attribute_group attr_group = {
-+	.attrs = g,
-+};
-+
- static int __init swsusp_header_init(void)
- {
-+	int error;
-+
-+	error = sysfs_create_group(power_kobj, &attr_group);
-+	if (error)
-+		return -ENOMEM;
-+
- 	swsusp_header = (struct swsusp_header*) __get_free_page(GFP_KERNEL);
- 	if (!swsusp_header)
- 		panic("Could not allocate memory for swsusp_header\n");
--- 
-2.43.0
-
+Kind regards
+Uffe
 
