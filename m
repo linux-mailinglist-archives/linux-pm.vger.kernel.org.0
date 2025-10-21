@@ -1,135 +1,108 @@
-Return-Path: <linux-pm+bounces-36583-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36584-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0883EBF79FE
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 18:18:41 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9723CBF7A70
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 18:27:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4651D506266
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 16:18:11 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 43614354BB2
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 16:27:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61E08347FEA;
-	Tue, 21 Oct 2025 16:18:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14C0E3491EB;
+	Tue, 21 Oct 2025 16:27:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rMu1787S"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EuurpcqY"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D92C4342C95;
-	Tue, 21 Oct 2025 16:18:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2B523491DA;
+	Tue, 21 Oct 2025 16:27:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761063489; cv=none; b=JNwQyNNcp/ez4V8Y+tPxcn14Va0zcDw0qpcES703LVKfZvlNyIu9BS5FEGnY6wjOFWYGPHrKVQ2Y+BFuZ98SvSF//YfoHwANHCcFD6yIqziKEr8e4CbrWxHQlFJwgw9DT/CCA+4bEmW1ZX/VMP4pJhCNgVKMrYkBS/A10iiH19I=
+	t=1761064060; cv=none; b=W9RwmAGUHaIZjsRHtSPmsiq1MNVRwBJHj/xYgxDwaajvtIDdKsu5PDAb0p9S3rENP9D5fCoJ0CBJs0ZcaNlFzDPmcE9bvp33R4OnmyzSb/JWwud7GOBbFZbNSRygiUKteJ4P3gRDrRF3vpy817UTD/PibrlS6cIEEdxW0vXDCHw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761063489; c=relaxed/simple;
-	bh=rMKSb1cRH4lEqywTI0wGc0Q4LAQSR6tQ9gDaQ7eSNSU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=P9Q3Nie8eqPvvr3iC6+5//ZL04bDRi3FARD1JeDSufC5O7l2QX3fNtjRca78k9wdnIoAoqUxvRHt8qcccnfX4Ulzq9lkfG//fHvsFFk8f+Se7Fcy7MRi3lr7ObJTblPdFCgbqTeGjhvDVRhDn60kPOtxDyd7VoHR9lIuBEI3NtM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rMu1787S; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0BFAC4CEF1;
-	Tue, 21 Oct 2025 16:18:04 +0000 (UTC)
+	s=arc-20240116; t=1761064060; c=relaxed/simple;
+	bh=kd69N002vmpOtiEZ/bz+Dv6wfmuq9EEiUSEIIPlzC/A=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=KmbU3XIgGJ9jad9Rf2qbStn8/X1pde+F0aNhgrwrBTZshuljZJNXtRXBdhh25stO7RZ0coHfvAhsCfIzPsp9U5ahpHJBpQA1qk94C/BYUcxM49NcsukyDVKrOADobmU+SeEVH5RnnYg0ejhlRGSizz3ua9d5WD95lpXCi8ScPzc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EuurpcqY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C56A6C4CEF1;
+	Tue, 21 Oct 2025 16:27:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761063488;
-	bh=rMKSb1cRH4lEqywTI0wGc0Q4LAQSR6tQ9gDaQ7eSNSU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=rMu1787SOmOck0wMgaYUexJPtS5DjeH/RABt9BSbEZuDCLPdEeECLAcdme3/jm0oe
-	 XrLow66A/nQbxVpEwDrgNLPl5iBgbtSqtnSCNR9hwriJma+pCNTRJTHwqtbd91Jk64
-	 TKxxSYHdQ6c4XpQnywTih9HZdIXj+cEjThiF+CMpM2OTtJNIJqYlE3oT23McD6KUlB
-	 fPqLmuWyJr/KltDWNa6oVArf2E/3n2kQsky5dm7ggC/OBHG80W47OfWZOctC1Y24OC
-	 S9us6T1SsmiBEcF/uDS7VV3Gw79Hch6Yv+ZIKohOytiCoHL8zqWcH5EahNVwKsjuP0
-	 XNvbrTyZVjVfw==
-Message-ID: <838a2a9f-9d4f-4c04-bab3-c6a7d52b60b3@kernel.org>
-Date: Tue, 21 Oct 2025 18:18:02 +0200
+	s=k20201202; t=1761064059;
+	bh=kd69N002vmpOtiEZ/bz+Dv6wfmuq9EEiUSEIIPlzC/A=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=EuurpcqYQ6t3c0RJHYtFpQ96qi9D2nhzD1mshw+97vGzJVzXqT3Fsjsw4kuea/pFC
+	 4FL/5K7Db5TAWO8uRVOV8krL+nCPHc2xcKgEyRqWD0vgVqLGU5+napMl0uNycBMDoT
+	 Zq65JHxannPosBC+9KsBi62bLqZQd7zMftRtJJZP5lF1MeJ+QVlmPKMiEG+6DAt696
+	 XF7Ovh9rEzQq5ipuBedftxSHfQ+hTltnAX7YexgtqfH11aNYd4m4/5W/yghImzKHFR
+	 2UjONgnl1YQIyDTnGzdzukB/6vidtTkc+cuZn9q08xseXzVfzNeGrv4kNTR/uxLpFQ
+	 MeM4Ah23DvYUA==
+From: Lee Jones <lee@kernel.org>
+To: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, 
+ Mark Brown <broonie@kernel.org>, 
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
+ Sebastian Reichel <sre@kernel.org>, Frank Li <Frank.li@nxp.com>, 
+ Samuel Kayode <samuel.kayode@savoirfairelinux.com>
+Cc: imx@lists.linux.dev, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-input@vger.kernel.org, 
+ linux-pm@vger.kernel.org, Abel Vesa <abelvesa@kernel.org>, 
+ Abel Vesa <abelvesa@linux.com>, Robin Gong <b38343@freescale.com>, 
+ Robin Gong <yibin.gong@nxp.com>, 
+ Enric Balletbo i Serra <eballetbo@gmail.com>, 
+ Sean Nyekjaer <sean@geanix.com>, 
+ Christophe JAILLET <christophe.jaillet@wanadoo.fr>, 
+ Abel Vesa <abelvesa@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+ Frank Li <Frank.Li@nxp.com>, 
+ Sebastian Reichel <sebastian.reichel@collabora.com>
+In-Reply-To: <20251001-pf1550-v12-0-a3302aa41687@savoirfairelinux.com>
+References: <20251001-pf1550-v12-0-a3302aa41687@savoirfairelinux.com>
+Subject: Re: [PATCH v12 0/6] add support for pf1550 PMIC MFD-based drivers
+Message-Id: <176106405453.1328165.3892656646740462467.b4-ty@kernel.org>
+Date: Tue, 21 Oct 2025 17:27:34 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 03/10] dt-bindings: soc: samsung: gs101-pmu: allow
- power domains as children
-To: Ulf Hansson <ulf.hansson@linaro.org>,
- =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
-Cc: Alim Akhtar <alim.akhtar@samsung.com>, Rob Herring <robh@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Krzysztof Kozlowski
- <krzk+dt@kernel.org>, Marek Szyprowski <m.szyprowski@samsung.com>,
- Peter Griffin <peter.griffin@linaro.org>,
- Tudor Ambarus <tudor.ambarus@linaro.org>,
- Will McVicker <willmcvicker@google.com>, kernel-team@android.com,
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org
-References: <20251016-gs101-pd-v3-0-7b30797396e7@linaro.org>
- <20251016-gs101-pd-v3-3-7b30797396e7@linaro.org>
- <CAPDyKFqNEN_yfmGWZr=sC-W8-Drv7zn82WYa-y=v+Suk-JHvtQ@mail.gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <CAPDyKFqNEN_yfmGWZr=sC-W8-Drv7zn82WYa-y=v+Suk-JHvtQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.15-dev-52d38
 
-On 21/10/2025 14:59, Ulf Hansson wrote:
->> +  "^power-domain@[0-9a-f]+$":
->> +    type: object
->> +    description: Child node describing one power domain within the PMU
->> +
+On Wed, 01 Oct 2025 11:42:36 -0400, Samuel Kayode wrote:
+> This series adds support for pf1550 PMIC. It provides the core driver and
+> sub-drivers for the regulator, power supply and input subsystems.
 > 
-> I think we should specify the power-domain-cells too, along the lines
-> of the below.
+> Patch 1 adds the DT binding document for the PMIC. Patches 2-5 adds the
+> pertinent drivers. Last patch adds a MAINTAINERS entry for the drivers.
 > 
-> '#power-domain-cells'
->  const: 0
+> The patches 3-5 depend on the core driver provided in patch 2.
+> 
+> [...]
 
-That's not needed. The child (this child device node) schema will
-enforce it. Parent (so the PMU) is supposed only to list compatible.
+Applied, thanks!
 
-Best regards,
-Krzysztof
+[1/6] dt-bindings: mfd: add pf1550
+      commit: 2391e1377e39a7ca8592257d6b17126bffd58d48
+[2/6] mfd: pf1550: add core driver
+      commit: ebaec90ec0b5850ab80ca017e7b63183adcca131
+[3/6] regulator: pf1550: add support for regulator
+      commit: 7320d41c29bbd80144bb89112b8bf0c8223b94a1
+[4/6] input: pf1550: add onkey support
+      commit: 9acb215cbebdce721af2219e2859ad17342c9084
+[5/6] power: supply: pf1550: add battery charger support
+      commit: 4b6b6433a97d5863b5340fc87f866d784fdf0783
+[6/6] MAINTAINERS: add an entry for pf1550 mfd driver
+      commit: a7d6255a0bf302c028ac680564633a6aac5f611d
+
+--
+Lee Jones [李琼斯]
+
 
