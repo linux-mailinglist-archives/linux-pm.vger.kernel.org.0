@@ -1,215 +1,250 @@
-Return-Path: <linux-pm+bounces-36592-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36593-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF03BBF7F8F
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 19:52:34 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73EABBF7FE1
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 19:57:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 9B3854E343E
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 17:52:33 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 33EFC4ED699
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 17:57:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C697F34B69C;
-	Tue, 21 Oct 2025 17:52:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86E2E34C833;
+	Tue, 21 Oct 2025 17:56:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ukGtqBiE"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RVVvwhnd"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A20473557F1
-	for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 17:52:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761069150; cv=none; b=pUXFJbPKT/Ybhg5EgUFQiZx7Mf4UkZMdVPKI07f8JMOvt++8HqGfX+KlNddzKVW+Akq909vUhiCV6Tpo2cepmv/TApHV9fvhdqT2xkrtl/EWY0skN3ixN1fHp4gguo3ZwtA4antW3ryheH9JLAlOX1fXPLi3kLr0Zm30UHVxgAg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761069150; c=relaxed/simple;
-	bh=ndfCxg4M63xn2nqUZ2Ayh9FKf+NUQ5blADXKYxyxxf4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hunOnfpzxMOfoe+6t5tjuGDvhD+/zl5kQHmLj7EAg7Z47jQ7yxAyjqwQCiPYr0BgU70eOxVkY7TUEuoo1pM+v32GbjOWe16HYpG7uZx/+0IYlKkOqMxH0l8C4zivG2KFgczvFDfzL6IU/QHVdlVRnsk7vSytKU3Opqb8E9TtlpE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ukGtqBiE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58CE5C116B1
-	for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 17:52:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761069150;
-	bh=ndfCxg4M63xn2nqUZ2Ayh9FKf+NUQ5blADXKYxyxxf4=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=ukGtqBiES93R3iz1DWMY1Pj9Y1eWR1jip8/DOJ9D9v2/2MgPFtWPncPoQPgcIjQYl
-	 4XX3hmJS75XRzMIFjQGNGeohA4wTuVToDnFXMhwoqjT3dMa018BzbcfhPwCDxGKEA+
-	 v9JOJsg9tuYODIQgDVSmFj2cx3Bh6aaKozxI7tiZDzOok+fq0SRZB8PDILnnIgT+dM
-	 x6nfxmcb9vHMvoEFMCDUtS2FKQIJWso/BUhjTiWC9WK15CrF+FtzuoEbFrrp7/qKV8
-	 UB1S/Goe1e0bBZYIqb0JFcOwuVCxiUWISlV6N9ZlCBbunnlgVmA/GtYRxLQvBEs7Td
-	 gTxUdQbASInHw==
-Received: by mail-ot1-f42.google.com with SMTP id 46e09a7af769-7c284d4867eso1469565a34.3
-        for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 10:52:30 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU3GAnUsqViwEp9QHO+/4yemKuU14TYVvetLoMFHf9cxGJCAyKm8FyuvZ2Pn1PoI2HXEZqF3J8nOA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxOTvQ6sos7sPA0y0nInbY6rrMk2ZwzPnHdv3yKRqw0/m95TGCH
-	yyWX2Gd/zZIsPhiWdPxjfLSbgUj5gvX9mPdeQk/HSxCQUFq4cgEv+lqVxZ98a3UaakozMQmhGr6
-	I5pYn+z2DpbOncYa/5bfQOOcVdC5IkeY=
-X-Google-Smtp-Source: AGHT+IGPKl3GQ9sdtZoYyLsrJBzwYizXgcnSpczdZWQwaAv3rUzoD9WeKdfE/wLYE6wyyaaHLp86bkCftKiteQeGZFk=
-X-Received: by 2002:a05:6808:2444:b0:441:8f74:f48 with SMTP id
- 5614622812f47-443a31bd4d4mr8372621b6e.66.1761069149581; Tue, 21 Oct 2025
- 10:52:29 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B839F9EC;
+	Tue, 21 Oct 2025 17:56:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.9
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1761069418; cv=fail; b=GXSDJpfQlhUDp44bNgp6Gp+DCqmI1N5mHYVFJ5jAvw70K0mb04IQnW2xhMswlG+tlYVa+RG7t4yAbECAemDYAjtZUmqxdcRb5y7SiCc7UIQq9FicGmBy8xcW3JsarW7x8LJJT4pWl4DfMIoxzXUsGNBfgwS1kuIX4G4EYKeg1F8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1761069418; c=relaxed/simple;
+	bh=NYpSBcGRx+gzoEiFZJF8b5JbhG2YN6dUU7OrTmVKjfA=;
+	h=From:Date:To:CC:Message-ID:In-Reply-To:References:Subject:
+	 Content-Type:MIME-Version; b=nx+CpezIHlnmVAtTtDKNZJob1Ar8DR4KisUdrSMMB5aIibiUtzNOUVNxfNBDLfkaVsPTsn2Rrg7CEUQLPiazRE+47XlSrPkTo0Q2RJnBKz3132fK0xVu1TiQH9opyWOSXrNpUT8/Sc9n5YkOLzLq91cYoFbgSVZ91xbhSJNrRaE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RVVvwhnd; arc=fail smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1761069416; x=1792605416;
+  h=from:date:to:cc:message-id:in-reply-to:references:
+   subject:content-transfer-encoding:mime-version;
+  bh=NYpSBcGRx+gzoEiFZJF8b5JbhG2YN6dUU7OrTmVKjfA=;
+  b=RVVvwhndUEUtm+YrWwCLlbMBhzf/aYngthlEM2un5ybbwyfvoLrKF35I
+   bSdRRJBl+Il0sBUq/zW14mRjvrKk/TLn/TqrnFmpXWKYCsufeK3MobFsj
+   gLNPvES/lssjmZQtRKdVaOKG24r3sU7KzV08fAVb8t/UDjdOVcQkop7tf
+   pWa4ZgLxQDJB5//nsBpZ+2parm9Sp1/2Ep/w0jlExUda1NAunB+hp/WOM
+   wu7BtEy+qSkrZM+N1oEo/gHrRo/VMPFDfb0dmDyYHQZwgQIzf6XbM88uB
+   I0f7PwWHJKo19qjA+i6NZ2LqUjT2nFaCnID4RlcnrjpSh9KsVZXg82LTI
+   w==;
+X-CSE-ConnectionGUID: laPnJumyTleZtuI2kQbfBg==
+X-CSE-MsgGUID: EBou4FBJQiO8HoyYOicJDw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="73876089"
+X-IronPort-AV: E=Sophos;i="6.19,245,1754982000"; 
+   d="scan'208";a="73876089"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2025 10:56:56 -0700
+X-CSE-ConnectionGUID: qXqROIQfSdW7h5sOPCVKJw==
+X-CSE-MsgGUID: fPZKv1VWQiO4HqmNvvziHA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,245,1754982000"; 
+   d="scan'208";a="184056552"
+Received: from orsmsx902.amr.corp.intel.com ([10.22.229.24])
+  by fmviesa008.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2025 10:56:55 -0700
+Received: from ORSMSX902.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.27; Tue, 21 Oct 2025 10:56:44 -0700
+Received: from ORSEDG903.ED.cps.intel.com (10.7.248.13) by
+ ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.27 via Frontend Transport; Tue, 21 Oct 2025 10:56:44 -0700
+Received: from CH4PR04CU002.outbound.protection.outlook.com (40.107.201.29) by
+ edgegateway.intel.com (134.134.137.113) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.27; Tue, 21 Oct 2025 10:56:44 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=yumuRQKriNJnTHqVxrfnuMEPMdXS+FwEWILlO5o95CvBgCgIEzj3Xu3mVfJH41swIvb9+RLhqQirCN2gB+Qx6ZD4PcBpf/0+KZxhbnAlozoaSJ4fKjd5Hhr1zf4jgItQP4haDUw4thqJlGMpbvgunUsx1IondtrFRD3zG5WdpgCfpFvXHJBnfIat5no6X0BEZWVz501gOyjnJcFz1JqK7UeKMETbiocJn2Eexpg1ChU30d6Cyfv5nzSZcYAnpSbAsqvSyBc/16lfarzxenQtX1Fu2EHMWZIJmdBsddME/zsSF73N2oI8gBL0J7yp/MgalBxdsaY+3TdbutUVwujUFQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=8rVJX2XMDd3tuljxgt5r2sLfebyweafZ327ojo4QK2o=;
+ b=VzERw0AsdiBfH5T1R0sBiNKRJCqY3+z2cqS6OzOHwrBMR0f8YddGv8NztNsz+u9oal9ttfvZilJ6A8ubO+K3vohxIxAfWjUf9o8cqI6NzE4wWWGAPuOyn72l12fL1lm4o1MjNj+gU2scunnfASimto7f3Y9/6qmDz4Qtajq07RJpqWebepI0E+P+uXcnrM3XUQ2dUh5SRSgIqnhVzjdqFI6kkdL10rqldmr+aWIwldxhGfK/YDz2rJXoJfy6AORKjeLUy1YoQqLgBU0pR9XxiXAee2meP3tQEhMX1HTyROOGnL+d46iskK7q3v3WGnPk4xgix8EnjRMEWlrOtkgpwA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH8PR11MB8107.namprd11.prod.outlook.com (2603:10b6:510:256::6)
+ by CY8PR11MB7780.namprd11.prod.outlook.com (2603:10b6:930:78::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9253.12; Tue, 21 Oct
+ 2025 17:56:42 +0000
+Received: from PH8PR11MB8107.namprd11.prod.outlook.com
+ ([fe80::6b05:74cf:a304:ecd8]) by PH8PR11MB8107.namprd11.prod.outlook.com
+ ([fe80::6b05:74cf:a304:ecd8%5]) with mapi id 15.20.9253.011; Tue, 21 Oct 2025
+ 17:56:41 +0000
+From: <dan.j.williams@intel.com>
+Date: Tue, 21 Oct 2025 10:56:40 -0700
+To: Joe Perches <joe@perches.com>, Ally Heev <allyheev@gmail.com>, "Dwaipayan
+ Ray" <dwaipayanray1@gmail.com>, Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+	Jonathan Corbet <corbet@lwn.net>, Andy Whitcroft <apw@canonical.com>
+CC: <workflows@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, Dan Carpenter <dan.carpenter@linaro.org>,
+	David Hunter <david.hunter.linux@gmail.com>, Shuah Khan
+	<skhan@linuxfoundation.org>, Viresh Kumar <vireshk@kernel.org>, "Nishanth
+ Menon" <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>, linux-pm
+	<linux-pm@vger.kernel.org>
+Message-ID: <68f7c9585ca25_10e210039@dwillia2-mobl4.notmuch>
+In-Reply-To: <5e11f1bacb6430e1331f02e3e0e326a78e5b0d12.camel@perches.com>
+References: <20251021-aheev-checkpatch-uninitialized-free-v1-1-18fb01bc6a7a@gmail.com>
+ <5e11f1bacb6430e1331f02e3e0e326a78e5b0d12.camel@perches.com>
+Subject: Re: [PATCH] checkpatch: add uninitialized pointer with __free
+ attribute check
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BY3PR05CA0052.namprd05.prod.outlook.com
+ (2603:10b6:a03:39b::27) To PH8PR11MB8107.namprd11.prod.outlook.com
+ (2603:10b6:510:256::6)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251020220914.320832-1-changwoo@igalia.com>
-In-Reply-To: <20251020220914.320832-1-changwoo@igalia.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 21 Oct 2025 19:52:17 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0jy3gztTTfR_UOv_yX5w9Uj2ZqEmhmNZ63WVnFHM2rRcw@mail.gmail.com>
-X-Gm-Features: AS18NWCGY90SiFbX5qje6-fmqgpchXM6x_TukWYEclLqBmorwEojmFOe7VXcsV4
-Message-ID: <CAJZ5v0jy3gztTTfR_UOv_yX5w9Uj2ZqEmhmNZ63WVnFHM2rRcw@mail.gmail.com>
-Subject: Re: [PATCH v6 00/10] PM: EM: Add netlink support for the energy model
-To: Changwoo Min <changwoo@igalia.com>
-Cc: lukasz.luba@arm.com, rafael@kernel.org, len.brown@intel.com, 
-	pavel@kernel.org, christian.loehle@arm.com, tj@kernel.org, 
-	kernel-dev@igalia.com, linux-pm@vger.kernel.org, sched-ext@lists.linux.dev, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH8PR11MB8107:EE_|CY8PR11MB7780:EE_
+X-MS-Office365-Filtering-Correlation-Id: c7be00ab-46c5-407e-c6c3-08de10cb30cc
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014|7416014;
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?eS9zQWY4aFMyZ0ZCZzArN0h0RDE2MGVmU1g0YmxsajMyK2dOdXMwM0RKdG9I?=
+ =?utf-8?B?OWIwSmpPTVBjVGtjUlFPVm5uSlpMelJDaXQvTXIzVG8veG9NcHhBVmluZEty?=
+ =?utf-8?B?NFFkcHBqMGZaNWJtcXFYeUlLUTZnWmVXbVhsV0hSRkJ5amZJWmZyc1F1SXZ5?=
+ =?utf-8?B?N0RaeDVhcUo2RFFNUEQ0NEpkazFhRzJKSTFiUmpiaWI5YmdWSXNmekNJRlJ5?=
+ =?utf-8?B?SkpDVjhlT0xyT2NOUkN1c24vZlo2b3dEcVBSWCtOK2s1SU40ZytVdVFlVVV3?=
+ =?utf-8?B?a0c1azdDUy9HeDI5U0ZYNm45RGQvcGU5S1VIVlZFWUs1K011T0VjOWw1QWw5?=
+ =?utf-8?B?N01YU2R3VlVUcVVReGs0TUFhb1VHT3FDUFF5bm5IWG5IeGN4M3cxNmVaV3VR?=
+ =?utf-8?B?L2JyeXBLdC8vUlZMMmlvYzdRWTkxTE50WTROTlNMdm1WOFFYMmdxRjY5TlNW?=
+ =?utf-8?B?dTY1T0EwazJHelEvQTM3TndKdHJQM2pYN0pWOTZUMnYwREU1WUFSTmNWVnVF?=
+ =?utf-8?B?ZjFqMHlNU0dWUUk1em1OOW5BZTVNOUU0anA5N2hUeEIzVUlTZDNhOFc0c1FK?=
+ =?utf-8?B?RHhlQjJKbVZLemg3TUdlSnVwSTcxNnYwUDJyengyMUhQOHBwVFhERGhrd0h6?=
+ =?utf-8?B?Wko4QkdVYWtPTXJhK0NrVW5oaVNVbmMzV2h0T3U5OU1wYW0yOVpGR2NiYVkx?=
+ =?utf-8?B?dC92WXZOeVFUQ0ZVT3VrLytXb3poelZXLy8xOEw2Qms3QXJ0ZjYrUy9jM2U1?=
+ =?utf-8?B?dnBOZmtOWDZTWjdoZ2RsQ01BbjlaQTlObktSL2pBSmxNK255UVhWRlZWblcr?=
+ =?utf-8?B?emRBcTIrcURNR0M1UUp3TVZoSXoxc3Azb1V6K3QxK29TQmp3bHBCSTB2eGxV?=
+ =?utf-8?B?bzRMNWVUVExlZi83Um1OcDZYUWpsbGxGWXBDa0xTckVoY3p0Z1QwcDhUVGp5?=
+ =?utf-8?B?eWFYYnMyTXRoenNRWGRqSlV5WHN2c21ZR3AyUi9PTDk2ZHFsTFcyM1lYQXI1?=
+ =?utf-8?B?b2NPUTNiYkdUUnRORGN5enRBRXBsOUhHd3ZhNlNSa0p0Q1RpMEk0SVNsbjIz?=
+ =?utf-8?B?KytVQmh5aHJyN2wrTWVLY0FFQ2tqZzdGcjFpbE5JT3FQQkQ2aDZwWHY0MUlR?=
+ =?utf-8?B?bndVNEt3b2s2UWlqekVQL1VDSlhVUmxKL3hjbmtDK3BRN3RBSGNYSGZqUWFt?=
+ =?utf-8?B?dkphY0NUNXZ5VzdxazVpTG5vdFZwdTdQUjVKSGxLNUM3QllrV2RSM1Zjdlh3?=
+ =?utf-8?B?YzAyOENicVRJOFFWSDJ5QllwWTlMQ2xiaVdReW1TNFZKRVdsQnIwU25GOGxT?=
+ =?utf-8?B?TkRFdGpUSjJGc25ObHdnaFQyb0o3ZnhKdUFabVRxaDlvNXg1VzhtNEdJT0Ni?=
+ =?utf-8?B?Ukd4Z1hUTVhGdnJ2czdBeGErQ21JSm9HbXZ2bHErcHAyWXRVNitxcXhULytQ?=
+ =?utf-8?B?dHJhZDlpWWorTjJyK053U1Rwb3hGWUlrOE5NVnUrVGtteXBhZElVanh5Rklj?=
+ =?utf-8?B?R2VsMlFiUngyYVhwc0s4QzU2YmlSOTVXNkZNbzBXZ04xTWlvZW9GOGZBT0Uy?=
+ =?utf-8?B?SktVRTJRVTl2K1hHbUdBWStoSk9CNEplUEovL0dOd2VMUmsxRVBvMUNEcW9H?=
+ =?utf-8?B?cXNsTmlZUnplTEVBbFg5c2ZTVkxWRHp6SW84VVlzK3RXQWs1c2tjMU9heElQ?=
+ =?utf-8?B?WG9TTjF6bFl5akpXVkFsZnhPMDRvSHJhZDlhL3VYNktISHhxWDhheE1wMnpJ?=
+ =?utf-8?B?TzBQc0hkNGVONFFTaW9kdjc4ZnBsMTM0K1k1L2kyOFRrUHk2SDB6aWc0cURL?=
+ =?utf-8?B?bjZmNi90ekV1UEtIQ2Jid1ZjeFJ0L2J5bG5VaFA3Zi9DYlRXc3NCYnh2SzBP?=
+ =?utf-8?B?d1NEblBUdFBJcXdlMHBMN3lLY095KytLZFJjbFltNG9nS3RSRVplYnRtd0o4?=
+ =?utf-8?B?Zk05N0JoMHF2WCt6QzZQcDd4NmtzYTRBQTE3YWhwYVR6aSt5SXFBUWZwa0pU?=
+ =?utf-8?B?WFBUazVkcWNBPT0=?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR11MB8107.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WXRxdFI0b2ZXNHdGanFkQUk2QThRQkdnaHdweE1VUGNKdkdXcHd2RjRocWg5?=
+ =?utf-8?B?bDN2SlV0UWh6TnQwdUVtV3E2SDhHR2V6Rmlkc2VNR3lCM3VSRE9HeWJ5eFk3?=
+ =?utf-8?B?SklWU2dxSHFVL09Jd3RXVXNyVzduZFJIYnV4NVJzMmRBa0w5RWhmeUIvQTIy?=
+ =?utf-8?B?WlJMWmhTUXFScE1wVHRiZTViUHJad1JhNFBnRSs1MitzaVhXL1NtU3Jxbi9E?=
+ =?utf-8?B?UkJSNGhkbmJ6U0IvT2gwTUtSRnVja3o4UmFZYk9Ga0lPczJscm1WdXN5MDRl?=
+ =?utf-8?B?V0dPZGd3TWFpM3ZMTVREM3NQWXpDRXpRQkI2elpadE5xZU5mZ3BVcWlzNjAy?=
+ =?utf-8?B?aFB3Rzh3cEN6bkJaaUxwOE50TjVlUGlmdldYYStieThZNmYzWmF4UmxiNUtt?=
+ =?utf-8?B?TnR6WlhNTmdHajFlYXUyT2VtRnZDOEIwZ3F6V004blhVVmtnL0lhUk9XdThK?=
+ =?utf-8?B?TFQvSDgwZS93Y2dNNjZvVW16QUtMdXV3NVFMN0VmdmhoN2RjV3phTlZiNnZM?=
+ =?utf-8?B?ck1LdGNwem0rKy9ieExQdUtQOTNwL0ZkZzd4M296aFA1QzNFWHlZckMxd095?=
+ =?utf-8?B?bjd2RVBwTFNuTllkTGpRbFdtSU1rYk1PWEk4aTZBNlVLanArbVF3YlZhUmVm?=
+ =?utf-8?B?YWo3aTUzeXN5YWZoOXB3ajByaFh4Y0d3d1plMEk0ejZ5YUxKbjhFb3luVm51?=
+ =?utf-8?B?ajZPc2RCckFqeTZDTHl3Z2NIKys2ZS82Yng3R29SWGQ0TEtSaFdVeVA5SG1p?=
+ =?utf-8?B?ZlcrZnFEcklCVjFaZ2R6L1E1Mzg1MUVUT0Q0UjVXTzlKbVRCSXFteVg5SUl6?=
+ =?utf-8?B?SnN5anZiVkNud28xVVdSZVpCWHFRV1YrTW5HMWgxU0JMbCtTRW5ZOFBmU0Vz?=
+ =?utf-8?B?Nk16NCtVb1FPeUt2azg1TXdYSXRhNkJRQ0d3STZRTnJiUVdxUVN6dHJyMnpE?=
+ =?utf-8?B?TUc2UlVUanZSTlloMGRUbTF1S1h6Tzd4ZXNxRHV3Rk1uTXlJWDg4TmwybFdv?=
+ =?utf-8?B?bVZ2SHRISGxxVWxwU0p0RTBTV3dsYkJtQStyeXBFZDBFcWFGTzc5WDdWQUxt?=
+ =?utf-8?B?cXN4bDRNUmhpVDdFenVieDVJbmRQNHRZRTM2Q0ovaGErS2tKWTZtMHhWWnJp?=
+ =?utf-8?B?Z2RtZTJNMExvb2k3aGZKTzZiQjVxZUhoamFHUk1MenJNU2l6alU3YWtxbG5J?=
+ =?utf-8?B?cDZkakxJaTAxTkw5cHZiTGU2YlR5Q0ZrSU03bGtia0haa2hybTUvRUpEbHpu?=
+ =?utf-8?B?K0kybXAycEhMbmlkcUFOVFlHNUVhaEhocEhRMlB0VFRDdlJFSmQ1N0tiZkho?=
+ =?utf-8?B?MlFuSGlmWE1TV2NWRmlYZ1BYRlkzMjNyaStIdjdOeFZ0Y3dWTFVUcnl0TGo1?=
+ =?utf-8?B?aEdGSmpNRzV5cThiK2N1KzJ2ekllczc0ZW0vZWZuRmlETkN6QmNZQ25YM29E?=
+ =?utf-8?B?Ty84VHpWVEtSUDZ2RHQ4M0pNYkgvZ2tyUjFoWWk0VU1ZUlcvTlFxWHhoYW5H?=
+ =?utf-8?B?ekM4ZVpud1h1Q2F5cWNLOThTTGRJZGt0MTNwRU1kaTIvYkNkYmh0U21TRU5v?=
+ =?utf-8?B?UnpwS01FUm9LOXVXeHlFajNsSDE0T3pJdFdHTEhDdjVtYjl5cldTaXRBelk3?=
+ =?utf-8?B?dnBwMkVNT3ZXNG5TT24vSTFkSnNnSXVlMlkyVEJrSlU4bzUxZmlsRXFKdWQx?=
+ =?utf-8?B?d3ZWUjhxblBhY0xPSFZGbDJvbSt6ZWpaQTB2ekhPeGRrQXJRdG5ZTjJzSndq?=
+ =?utf-8?B?YUYyOUpXd3hGbGRFS3JjOUNKZkk3WlIybFlrTkk0Q3Zmc1IxcmVaN0NTTkdy?=
+ =?utf-8?B?Yi9JVkZXekloNWJUNlB6dkJXYkhwc21rNXJ0Z2hVcWs4aVVLS25RTVE3NFJq?=
+ =?utf-8?B?M05jYjkxcmthREp5UWtZN0pNUWJpZldEZGw2d3hMYWhoVlNSNU9YaW9MeTNs?=
+ =?utf-8?B?R2g3M0xDZ0R3TVFVVkwyRFo5MFVtVExDME4yVkxWYll2SGNDbXQ1YjkwZ3BP?=
+ =?utf-8?B?UlNqbjBidUV4dlp1b0phSmdpb1h0VTV2RlowVTIrZFpOT3h2d0Q1OFF1UEpS?=
+ =?utf-8?B?ZUFFKzN1bGdaU2R3Tk9zbVM1anNQTG1Bc1g1SFlNc2s1T3ZxU1RrWGgycWlo?=
+ =?utf-8?B?Q2ZGejhZTzF3TFpoMklmVjEyd0kwWDUvN1hRRTYwV0pTSW8xYXpRdkp6OEFH?=
+ =?utf-8?B?WkE9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: c7be00ab-46c5-407e-c6c3-08de10cb30cc
+X-MS-Exchange-CrossTenant-AuthSource: PH8PR11MB8107.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Oct 2025 17:56:41.7878
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: x0pQU9EcF9jB7fiDyXo/cdtSMeSZ9wA+TjKlIVqlWC05GmZPcJ6Vv/bg4UzDvb+p/7n4dPIVGtwju8fII3rSeKBo2O46mmRLHVCyPng8qhQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR11MB7780
+X-OriginatorOrg: intel.com
 
-On Tue, Oct 21, 2025 at 12:09=E2=80=AFAM Changwoo Min <changwoo@igalia.com>=
- wrote:
->
-> Addressed all the comments from Lukasz and rebased the code to the head
-> of the linus tree.
->
-> There is a need to access the energy model from the userspace. One such
-> example is the sched_ext schedulers [1]. The userspace part of the
-> sched_ext schedules could feed the (post-processed) energy-model
-> information to the BPF part of the scheduler.
->
-> Currently, debugfs is the only way to read the energy model from userspac=
-e;
-> however, it lacks proper notification mechanisms when a performance domai=
-n
-> and its associated energy model change.
->
-> This patch set introduces a generic netlink for the energy model, as
-> discussed in [2]. It allows a userspace program to read the performance
-> domain and its energy model. It notifies the userspace program when a
-> performance domain is created or deleted or its energy model is updated
-> through a multicast interface.
->
-> Specifically, it supports two commands:
->   - EM_CMD_GET_PDS: Get the list of information for all performance
->     domains.
->   - EM_CMD_GET_PD_TABLE: Get the energy model table of a performance
->     domain.
->
-> Also, it supports three notification events:
->   - EM_CMD_PD_CREATED: When a performance domain is created.
->   - EM_CMD_PD_DELETED: When a performance domain is deleted.
->   - EM_CMD_PD_UPDATED: When the energy model table of a performance domai=
-n
->     is updated.
->
-> This can be tested using the tool, tools/net/ynl/pyynl/cli.py, for exampl=
-e,
-> with the following commands:
->
->   $> tools/net/ynl/pyynl/cli.py \
->      --spec Documentation/netlink/specs/em.yaml \
->      --do get-pds
->   $> tools/net/ynl/pyynl/cli.py \
->      --spec Documentation/netlink/specs/em.yaml \
->      --do get-pd-table --json '{"pd-id": 0}'
->   $> tools/net/ynl/pyynl/cli.py \
->      --spec Documentation/netlink/specs/em.yaml \
->      --subscribe event  --sleep 10
->
-> [1] https://lwn.net/Articles/922405/
-> [2] https://lore.kernel.org/lkml/a82423bc-8c38-4d57-93da-c4f20011cc92@arm=
-.com/
-> [3] https://lore.kernel.org/lkml/202506140306.tuIoz8rN-lkp@intel.com/#t
->
-> ChangeLog v5 -> v6:
->   - Fix two problems reported by the kernel test robot.
->   - Conditionally include the iterator/accessor code for the performance
->     domain when both CONFIG_ENERGY_MODEL and CONFIG_NET are set to avoid
->     the compilation errors (patch 5).
->   - Remove an unused variable, `ret`, in em_notify_pd_deleted() to avoid
->     a warning (patch 8).
->
-> ChangeLog v4 -> v5:
->   - Rebase the code to the head of the linus tree.
->   - Remove the redundant em_check_capacity_update() call from
->     em_dev_register_pd_no_update().
->   - Move patch 3 ("PM: EM: Add an iterator and accessor for the
->     performance domain") after patch 5 ("PM: EM: Add a skeleton code for
->     netlink notification").
->   - Move the declaration of for_each_em_perf_domain() and
->     em_perf_domain_get_by_id() from energy_model.h to em_netlink.h.
->   - Fix a typo in patch 7 ("PM: EM: Implement
->     em_nl_get_pd_table_doit()") and change the variable declaration
->     order in em_nl_get_pd_table_doit() following the reverse Christmas
->     tree order.
->   - Remove the empty skeleton code of em_notify_pd_created/updated() from
->     patch 8 ("PM: EM: Implement em_notify_pd_deleted()") and introduce
->     them later where they are actually implemented.
->   - Change the return type of em_notify_pd_created/updated/deleted()
->     from int to void, since we don't check it anyway.
->
-> ChangeLog v3 -> v4:
->   - Move patches [3-5] to the first.
->   - Remove the ending period (".") from all of the patch subjects.
->   - Rebase the code to v6.17-rc4.
->
-> ChangeLog v2 -> v3:
->   - Properly initialize a return variable in
->     em_notify_pd_created/updated() at an error path (09/10), reported by
->     the kernel test robot [3].
->   - Remove redundant initialization of a return variable in
->     em_notify_pd_deleted() at an error path (08/10).
->
-> ChangeLog v1 -> v2:
->   - Use YNL to generate boilerplate code. Overhaul the naming conventions
->     (command, event, notification, attribute) to follow the typical
->     conventions of other YNL-based netlink implementations.
->   - Calculate the exact message size instead of using NLMSG_GOODSIZE
->     when allocating a message (genlmsg_new). This avoids the reallocation
->     of a message.
->   - Remove an unnecessary function, em_netlink_exit(), and initialize the
->     netlink (em_netlink_init) at em_netlink.c without touching energy_mod=
-el.c.
->
-> Changwoo Min (10):
->   PM: EM: Assign a unique ID when creating a performance domain
->   PM: EM: Expose the ID of a performance domain via debugfs
->   PM: EM: Add em.yaml and autogen files
->   PM: EM: Add a skeleton code for netlink notification
->   PM: EM: Add an iterator and accessor for the performance domain
->   PM: EM: Implement em_nl_get_pds_doit()
->   PM: EM: Implement em_nl_get_pd_table_doit()
->   PM: EM: Implement em_notify_pd_deleted()
->   PM: EM: Implement em_notify_pd_created/updated()
->   PM: EM: Notify an event when the performance domain changes
->
->  Documentation/netlink/specs/em.yaml | 113 ++++++++++
->  MAINTAINERS                         |   3 +
->  include/linux/energy_model.h        |   4 +
->  include/uapi/linux/energy_model.h   |  62 ++++++
->  kernel/power/Makefile               |   5 +-
->  kernel/power/em_netlink.c           | 309 ++++++++++++++++++++++++++++
->  kernel/power/em_netlink.h           |  39 ++++
->  kernel/power/em_netlink_autogen.c   |  48 +++++
->  kernel/power/em_netlink_autogen.h   |  23 +++
->  kernel/power/energy_model.c         |  85 +++++++-
->  10 files changed, 689 insertions(+), 2 deletions(-)
->  create mode 100644 Documentation/netlink/specs/em.yaml
->  create mode 100644 include/uapi/linux/energy_model.h
->  create mode 100644 kernel/power/em_netlink.c
->  create mode 100644 kernel/power/em_netlink.h
->  create mode 100644 kernel/power/em_netlink_autogen.c
->  create mode 100644 kernel/power/em_netlink_autogen.h
->
-> --
+Joe Perches wrote:
+[..]
+> drivers/opp/core.c-unsigned long dev_pm_opp_get_max_clock_latency(struct device *dev)
+> drivers/opp/core.c-{
+> drivers/opp/core.c:     struct opp_table *opp_table __free(put_opp_table);
+> drivers/opp/core.c-
+> drivers/opp/core.c-     opp_table = _find_opp_table(dev);
 
-Is there any particular reason why you have not picked up the tags
-received by the previous iteration?
+The documentation in include/linux/cleanup.h recommends always combining
+declaration and allocation. The rule of "variable declarations at the
+top of the function" is relaxed for scope-based cleanup.
+
+> An aside found while using grep:
+> 
+> There are uses of DEFINE_FREE that seem to have an unnecessary trailing ;
+> 
+> $ git grep -w DEFINE_FREE | grep ';'
+> drivers/firmware/efi/libstub/efistub.h:DEFINE_FREE(efi_pool, void *, if (_T) efi_bs_call(free_pool, _T));
+> drivers/fwctl/mlx5/main.c:DEFINE_FREE(mlx5ctl, struct mlx5ctl_dev *, if (_T) fwctl_put(&_T->fwctl));
+> drivers/pci/msi/msi.c:DEFINE_FREE(free_msi_irqs, struct pci_dev *, if (_T) pci_free_msi_irqs(_T));
+> drivers/tty/vt/vc_screen.c:DEFINE_FREE(free_page_ptr, void *, if (_T) free_page((unsigned long)_T));
+> fs/pstore/inode.c:DEFINE_FREE(pstore_private, struct pstore_private *, free_pstore_private(_T));
+> include/linux/cpumask.h:DEFINE_FREE(free_cpumask_var, struct cpumask *, if (_T) free_cpumask_var(_T));
+> include/linux/execmem.h:DEFINE_FREE(execmem, void *, if (_T) execmem_free(_T));
+> include/linux/fwctl.h:DEFINE_FREE(fwctl, struct fwctl_device *, if (_T) fwctl_put(_T));
+> net/core/dev.h:DEFINE_FREE(netdev_unlock, struct net_device *, if (_T) netdev_unlock(_T));
+
+Note that until this issue is addressed:
+
+https://github.com/universal-ctags/ctags/issues/4289
+
+...it may be the case that Linux *wants* to allow dangling semicolon
+for DEFINE_FREE() if only to help "make tags" find the symbols following
+DEFINE_FREE() invocations.
+
+It is interesting that this happens to not impact DEFINE_FREE()
+instances that use IS_ERR_OR_NULL.
 
