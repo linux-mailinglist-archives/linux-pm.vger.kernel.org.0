@@ -1,108 +1,178 @@
-Return-Path: <linux-pm+bounces-36584-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36585-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9723CBF7A70
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 18:27:45 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9887BF7BE1
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 18:42:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 43614354BB2
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 16:27:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0039D3BCEE1
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 16:39:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14C0E3491EB;
-	Tue, 21 Oct 2025 16:27:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 555592FD667;
+	Tue, 21 Oct 2025 16:39:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EuurpcqY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ke9gU49O"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2B523491DA;
-	Tue, 21 Oct 2025 16:27:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 303A572629
+	for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 16:39:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761064060; cv=none; b=W9RwmAGUHaIZjsRHtSPmsiq1MNVRwBJHj/xYgxDwaajvtIDdKsu5PDAb0p9S3rENP9D5fCoJ0CBJs0ZcaNlFzDPmcE9bvp33R4OnmyzSb/JWwud7GOBbFZbNSRygiUKteJ4P3gRDrRF3vpy817UTD/PibrlS6cIEEdxW0vXDCHw=
+	t=1761064796; cv=none; b=D7ZW0zwRXyidNsXRs9FgDXi+FneSSlXiRz/mJ4PeSeXjYIdsYrokDENGh2Zm+H4VWtBzIHD1osZ1HVxkemyu6Hn65nFYkoYe0RH68dFUWSVUQglCXf2ajNHhM1vcago7dJwIpVPfRkcszbTRzHSEQhtWYqshn8bdguogebhl0ZQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761064060; c=relaxed/simple;
-	bh=kd69N002vmpOtiEZ/bz+Dv6wfmuq9EEiUSEIIPlzC/A=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=KmbU3XIgGJ9jad9Rf2qbStn8/X1pde+F0aNhgrwrBTZshuljZJNXtRXBdhh25stO7RZ0coHfvAhsCfIzPsp9U5ahpHJBpQA1qk94C/BYUcxM49NcsukyDVKrOADobmU+SeEVH5RnnYg0ejhlRGSizz3ua9d5WD95lpXCi8ScPzc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EuurpcqY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C56A6C4CEF1;
-	Tue, 21 Oct 2025 16:27:34 +0000 (UTC)
+	s=arc-20240116; t=1761064796; c=relaxed/simple;
+	bh=qpx7VnzXu0jWnMHS6AoL7AXgBkvwcS31z32WB2upC9g=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=jD1AywD8czZqzjj5Amttz2rPz5XN7bmRJi20+ICJ/RQ9x9714WKdXMq75C5AC3hfua5UxfFGtN6tDIVxzG9prJSGVejG6Th4y+hr1zdqVdXm0ElQ/Eo4hMWArxdXwUmwwcctSzdsPefhuIpXkRenHStmO6vc4lBGkFbzrochG7g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ke9gU49O; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF575C113D0
+	for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 16:39:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761064059;
-	bh=kd69N002vmpOtiEZ/bz+Dv6wfmuq9EEiUSEIIPlzC/A=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=EuurpcqYQ6t3c0RJHYtFpQ96qi9D2nhzD1mshw+97vGzJVzXqT3Fsjsw4kuea/pFC
-	 4FL/5K7Db5TAWO8uRVOV8krL+nCPHc2xcKgEyRqWD0vgVqLGU5+napMl0uNycBMDoT
-	 Zq65JHxannPosBC+9KsBi62bLqZQd7zMftRtJJZP5lF1MeJ+QVlmPKMiEG+6DAt696
-	 XF7Ovh9rEzQq5ipuBedftxSHfQ+hTltnAX7YexgtqfH11aNYd4m4/5W/yghImzKHFR
-	 2UjONgnl1YQIyDTnGzdzukB/6vidtTkc+cuZn9q08xseXzVfzNeGrv4kNTR/uxLpFQ
-	 MeM4Ah23DvYUA==
-From: Lee Jones <lee@kernel.org>
-To: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, 
- Mark Brown <broonie@kernel.org>, 
- Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
- Sebastian Reichel <sre@kernel.org>, Frank Li <Frank.li@nxp.com>, 
- Samuel Kayode <samuel.kayode@savoirfairelinux.com>
-Cc: imx@lists.linux.dev, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-input@vger.kernel.org, 
- linux-pm@vger.kernel.org, Abel Vesa <abelvesa@kernel.org>, 
- Abel Vesa <abelvesa@linux.com>, Robin Gong <b38343@freescale.com>, 
- Robin Gong <yibin.gong@nxp.com>, 
- Enric Balletbo i Serra <eballetbo@gmail.com>, 
- Sean Nyekjaer <sean@geanix.com>, 
- Christophe JAILLET <christophe.jaillet@wanadoo.fr>, 
- Abel Vesa <abelvesa@kernel.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
- Frank Li <Frank.Li@nxp.com>, 
- Sebastian Reichel <sebastian.reichel@collabora.com>
-In-Reply-To: <20251001-pf1550-v12-0-a3302aa41687@savoirfairelinux.com>
-References: <20251001-pf1550-v12-0-a3302aa41687@savoirfairelinux.com>
-Subject: Re: [PATCH v12 0/6] add support for pf1550 PMIC MFD-based drivers
-Message-Id: <176106405453.1328165.3892656646740462467.b4-ty@kernel.org>
-Date: Tue, 21 Oct 2025 17:27:34 +0100
+	s=k20201202; t=1761064795;
+	bh=qpx7VnzXu0jWnMHS6AoL7AXgBkvwcS31z32WB2upC9g=;
+	h=References:In-Reply-To:Reply-To:From:Date:Subject:To:Cc:From;
+	b=ke9gU49OgWntnGWDJ25iZiP5Pjt1ccyYrQwQRjMAj/5pM8eFE/hPTVirU4HUKZ4ux
+	 6MkezHdJBm7IIPxD8xAzwX8GczMcfkafFfJHV1epyGiGCq/06UMsiSpiKp5MBG6UsG
+	 /dpdLulVyagsXl90YbhhbjJXvXk6tb10JHMilN3Oif1dynKkIgovLt47qyechH2Hao
+	 i8SfIWInCAffxuLfyf4e7hE3ksfImD3gDh26sEMS4+8EW2jD0TqFzFuxznuygDJz04
+	 gpjCgCVmRl6U25gsim8Kx0JhU6Voz41r6be/VHu/1/8SrPEqtKV7nBailMoOxSR0cQ
+	 gdfAGwWKy3ugA==
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-57f0aa38aadso7527483e87.2
+        for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 09:39:55 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWo2k12fhpsnLgOYbC5MdJWNvi0hlPoXKm49xrk+kw6Ds5KvP51zS/JTkC6bqSyb6EV4X5g/LPC4w==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzBIY0ruKZOQaGrj9rlTwfytnU+nfuMzXUHRvgdPeq3DqOgROtA
+	AN783dGQ6Qec7r+e+zwiCbHP1sg/DPOX5SpXfJ5JO+J5TceTR+4znGrmilislfrD7X7YZjV2Mdf
+	/xCz0IVPFqymDDDC2ArlkkD1QPePtiIs=
+X-Google-Smtp-Source: AGHT+IE2XjfXeECfoI3UjrAZUn5quwYmJl2VF2lxd1i+sdiq5r6M2c/okvW135k2n/kF/1QwC+gpk9oVdn3+8YVxEho=
+X-Received: by 2002:a05:651c:554:b0:377:78cd:e8fd with SMTP id
+ 38308e7fff4ca-37797826492mr57797611fa.9.1761064794269; Tue, 21 Oct 2025
+ 09:39:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.15-dev-52d38
+References: <20250924-gpio-shared-v1-0-775e7efeb1a3@linaro.org>
+ <hyzzrjn7jzo3tt3oyg7azijouawe3zopfjzq6zfhoo6e6z2m4t@ssl5vl4g557e>
+ <zk4ea5cibrkp4vttuy4evrqybf76b3nop5lnyck4ws4nyf2yc4@ghj2eyswsoow>
+ <CAMRc=MdWmO4wvX6zpzN0-LZF1pF5Y2=sS8fBwr=CKMGWHg+shA@mail.gmail.com>
+ <rfr5cou6jr7wmtxixfgjxhnda6yywlsxsei7md7ne3qge7r3gk@xv6n5pvcjzrm>
+ <CAMRc=Me9Td5G9qZV8A98XkGROKw1D2UeQHpFzt8uApF8995MZw@mail.gmail.com>
+ <rvsyll4u6v4tpaxs4z3k4pbusoktkaocq4o3g6rjt6d2zrzqst@raiuch3hu3ce>
+ <CAMRc=Me+4H6G+-Qj_Gz2cv2MgRHOmrjMyNwJr+ardDR1ndYHvQ@mail.gmail.com>
+ <fydmplp5z4hjic2wlmvcy6yr3s5t5u4qsgo7yzbqq3xu2g6hdk@v4tzjj3ww4s6>
+ <CAMRc=McGuNX42k_HdV20zW+buACBTmTZEHWgS-ddRYsvnfwDSg@mail.gmail.com> <ibdmghl5dg3oda2j5ejp35ydky4xkazewhdvskm7p32vstdegr@36pj32b6dt44>
+In-Reply-To: <ibdmghl5dg3oda2j5ejp35ydky4xkazewhdvskm7p32vstdegr@36pj32b6dt44>
+Reply-To: wens@kernel.org
+From: Chen-Yu Tsai <wens@kernel.org>
+Date: Wed, 22 Oct 2025 00:39:41 +0800
+X-Gmail-Original-Message-ID: <CAGb2v65acHoO5025ZN7DhX0xVQf6JyHmUK3CB9UhnmTDDHq6vg@mail.gmail.com>
+X-Gm-Features: AS18NWAGPRHcJje8w8MGIGImjcIFzXETxdKIrug_Hlh6_IEun9PtDw8YCzNUTf4
+Message-ID: <CAGb2v65acHoO5025ZN7DhX0xVQf6JyHmUK3CB9UhnmTDDHq6vg@mail.gmail.com>
+Subject: PCIe link training and pwrctrl sequence
+To: Manivannan Sadhasivam <mani@kernel.org>
+Cc: Bartosz Golaszewski <brgl@bgdev.pl>, Bjorn Helgaas <bhelgaas@google.com>, 
+	linux-kernel <linux-kernel@vger.kernel.org>, 
+	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, PCI <linux-pci@vger.kernel.org>, 
+	"open list:THERMAL" <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 01 Oct 2025 11:42:36 -0400, Samuel Kayode wrote:
-> This series adds support for pf1550 PMIC. It provides the core driver and
-> sub-drivers for the regulator, power supply and input subsystems.
-> 
-> Patch 1 adds the DT binding document for the PMIC. Patches 2-5 adds the
-> pertinent drivers. Last patch adds a MAINTAINERS entry for the drivers.
-> 
-> The patches 3-5 depend on the core driver provided in patch 2.
-> 
-> [...]
+(recipient list trimmed down and added PCI & pwrctrl maintainers and lists)
 
-Applied, thanks!
+On Tue, Oct 21, 2025 at 8:54=E2=80=AFPM Manivannan Sadhasivam <mani@kernel.=
+org> wrote:
+>
+> On Tue, Oct 21, 2025 at 02:22:46PM +0200, Bartosz Golaszewski wrote:
+> > On Tue, Oct 21, 2025 at 2:20=E2=80=AFPM Manivannan Sadhasivam <mani@ker=
+nel.org> wrote:
+> > >
+> > > >
+> > > > And with the implementation this series proposes it would mean that
+> > > > the perst signal will go high after the first endpoint pwrctl drive=
+r
+> > > > sets it to high and only go down once the last driver sets it to lo=
+w.
+> > > > The only thing I'm not sure about is the synchronization between th=
+e
+> > > > endpoints - how do we wait for all of them to be powered-up before
+> > > > calling the last gpiod_set_value()?
+> > > >
+> > >
+> > > That will be handled by the pwrctrl core. Not today, but in the comin=
+g days.
+> > >
+> >
+> > But is this the right approach or are you doing it this way *because*
+> > there's no support for enable-counted GPIOs as of yet?
+> >
+>
+> This is the right approach since as of today, pwrctrl core scans the bus,=
+ tries
+> to probe the pwrctrl driver (if one exists for the device to be scanned),=
+ powers
+> it ON, and deasserts the PERST#. If the device is a PCI bridge/switch, th=
+en the
+> devices underneath the downstream bus will only be powered ON after the f=
+urther
+> rescan of the downstream bus. But the pwrctrl drivers for those devices m=
+ight
+> get loaded at any time (even after the bus rescan).
+>
+> This causes several issues with the PCI core as this behavior sort of emu=
+lates
+> the PCI hot-plug (devices showing up at random times after bus scan). If =
+the
+> upstream PCI bridge/switch is not hot-plug capable, then the devices that=
+ were
+> showing up later will fail to enumerate due to lack of resources. The fai=
+lure
+> is due to PCI core limiting the resources for non hot-plug PCI bridges as=
+ it
+> doesn't expect the devices to show up later in the downstream port.
 
-[1/6] dt-bindings: mfd: add pf1550
-      commit: 2391e1377e39a7ca8592257d6b17126bffd58d48
-[2/6] mfd: pf1550: add core driver
-      commit: ebaec90ec0b5850ab80ca017e7b63183adcca131
-[3/6] regulator: pf1550: add support for regulator
-      commit: 7320d41c29bbd80144bb89112b8bf0c8223b94a1
-[4/6] input: pf1550: add onkey support
-      commit: 9acb215cbebdce721af2219e2859ad17342c9084
-[5/6] power: supply: pf1550: add battery charger support
-      commit: 4b6b6433a97d5863b5340fc87f866d784fdf0783
-[6/6] MAINTAINERS: add an entry for pf1550 mfd driver
-      commit: a7d6255a0bf302c028ac680564633a6aac5f611d
+Side note:
 
---
-Lee Jones [李琼斯]
+Today I was looking into how the PCI core does slot pwrctrl, and it doesn't
+really work for some of the PCI controller drivers.
 
+The pwrctrl stuff happens after the driver adds the host bus bridge.
+However drivers are doing link training before that. If the power is
+not on, link training will fail, and the driver errors out. It never
+has a chance to get to pwrctrl.
+
+I wonder if some bits should be split out so they could be interleaved with
+link management on the host side. AFAICT only dwc and qcom will rescan the
+bus when an interrupt says the link is up. Other controllers might not have
+such an interrupt notification. I was looking at the MediaTek gen3 driver
+specifically.
+
+Otherwise I think the DT representation for the PCIe slot power is great.
+
+
+Thanks
+ChenYu
+
+> One way to fix this issue is by making sure all the pwrctrl capable devic=
+es
+> underneath a PCI bridge getting probed, powered ON, and finally deasserti=
+ng the
+> PERST# for each one of them. If the PERST# happens to be shared, it will =
+be
+> deasserted once at the last. And this order has to be ensured by the pwrc=
+trl
+> core irrespective of the shared PERST#.
+>
+> - Mani
+>
+> --
+> =E0=AE=AE=E0=AE=A3=E0=AE=BF=E0=AE=B5=E0=AE=A3=E0=AF=8D=E0=AE=A3=E0=AE=A9=
+=E0=AF=8D =E0=AE=9A=E0=AE=A4=E0=AE=BE=E0=AE=9A=E0=AE=BF=E0=AE=B5=E0=AE=AE=
+=E0=AF=8D
+>
 
