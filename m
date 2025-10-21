@@ -1,238 +1,96 @@
-Return-Path: <linux-pm+bounces-36588-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36591-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4184BBF7EBD
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 19:36:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B33FBF7F14
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 19:44:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8F3833A7A25
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 17:36:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 457813B1E20
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 17:44:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6BD934B68A;
-	Tue, 21 Oct 2025 17:36:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEF1434C80B;
+	Tue, 21 Oct 2025 17:44:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QM7xQNjM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YnHRPa43"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A6A623BCE4;
-	Tue, 21 Oct 2025 17:36:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E59234C806;
+	Tue, 21 Oct 2025 17:44:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761068168; cv=none; b=ZxFhzvwOp7L7jULO2/tiEhyvIrvfgq3U/XAaLRkRErbfHOSjnSrE5vidVdM6KmuH2HdcJYjhxvpC4nhNTN3J4NWw6hnaSk1DbrAkQ7mZiZMflrsh0FBiz4x1H7l2pSDUEDdqv5V5BhG0bpcZOa54r2QEg3iDIXZEUZZU7I2EtBE=
+	t=1761068646; cv=none; b=JAc9XlNfRun2cVYTxsTBdvJy5Ph0QB9gkjHlnyM4fWC1I0gtTNL9l/8VevYuRDl3LVZeS6dzXT1viu4mZjPQ21rgwkEOIiJbDegTThByPkVGR1qS0ep+rxpKmQ9Q0cDiF6gcNtEs9yE75PKQN72yX8P8pSkCIW82iqPsiAeGs/o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761068168; c=relaxed/simple;
-	bh=tr9D0PnnlH4JBLjwZIbaVfaUWzAU9oe6dwsFcwU5bKE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mioOrodZwwKPMoPWH0CTR/19hjiYJ/u9tSNH/oM+HFc2TvEJaFy4M23zaMbCeeJ5deZXWOCRUw4cmU7fk+8Huad2CsEGpjNR9pHscaE4zvMKHZw2itkdXuidYxYLX65YD0E6GvOcNfTHe8jWw2c76uwVNE+hdM5xsUmCNzc72MU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QM7xQNjM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F0A4C4CEF1;
-	Tue, 21 Oct 2025 17:36:03 +0000 (UTC)
+	s=arc-20240116; t=1761068646; c=relaxed/simple;
+	bh=bHNcj1wjfOdU2U4vdwQgraEX91IYvZD0sUGfn4zYsro=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
+	 References:In-Reply-To; b=jU4dy80W2oFn+V0jE7uZuizi4F+TitwBHMEzEVdxvYCsV7YVVMFgxQ+qn04dhs1w8896ZaFxfOEDWiQCdzGGmOqef1+snB61h8ngE6+DcKCCH8ks1GE/6LLkrSy4JHnvUt2yTIpXPa4sC2IXqOoAHXKLGRhJg9hSs0JAsGQlmVY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YnHRPa43; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E238C4CEF1;
+	Tue, 21 Oct 2025 17:44:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761068165;
-	bh=tr9D0PnnlH4JBLjwZIbaVfaUWzAU9oe6dwsFcwU5bKE=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=QM7xQNjMYjaCZUu1pz+cdH+McrBUnjQbm/9BUqR1K0tdhJSqml4ybuaMCJ/7k4hLs
-	 7c06KnoZcuhbYTJk2qtD7oROg4dKy462gAKa/Xtfw0Hf/s9GvBeDQheKdSBcHmBg2U
-	 MZUkUEOWEB1k8ojmplGvxvfHPrYASLJgzGSGuMnELUwYZvEAKhB8A1mTI6SB2Rg03Z
-	 mXjRMGIFEGdmOKJaa5J6o/X0pDKDWWzlRmMw5ucYHHy9iEaZz3bt/AtDwIF4U5C+Az
-	 QVUqt5Y21C1Yudy770e+5H9/AbcSSHRnTj+acOaJuVXKWkEbLvHceYT+PNYvB1/kxG
-	 /d29wZYRv/KaQ==
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-To: Linux ACPI <linux-acpi@vger.kernel.org>
-Cc: Linux PM <linux-pm@vger.kernel.org>,
- Jonathan Cameron <jonathan.cameron@huawei.com>, Takashi Iwai <tiwai@suse.de>,
- LKML <linux-kernel@vger.kernel.org>, Zhang Qilong <zhangqilong3@huawei.com>,
- Frank Li <Frank.Li@nxp.com>, Dhruva Gole <d-gole@ti.com>,
- Mika Westerberg <mika.westerberg@linux.intel.com>,
- Dan Williams <dan.j.williams@intel.com>
-Subject: [PATCH v3 2/2] ACPI: TAD: Improve runtime PM using guard macros
-Date: Tue, 21 Oct 2025 19:35:54 +0200
-Message-ID: <13881356.uLZWGnKmhe@rafael.j.wysocki>
-Organization: Linux Kernel Development
-In-Reply-To: <4698369.LvFx2qVVIh@rafael.j.wysocki>
-References: <4698369.LvFx2qVVIh@rafael.j.wysocki>
+	s=k20201202; t=1761068645;
+	bh=bHNcj1wjfOdU2U4vdwQgraEX91IYvZD0sUGfn4zYsro=;
+	h=Date:Subject:Cc:To:From:References:In-Reply-To:From;
+	b=YnHRPa438hTYGZhg9fL0jrPt31M9vKs49W/DgdnAdE7iFZ+j5VZsieEpvyXqZ+z0F
+	 EZ5b4QWH2XJdtdTh/5fEyB0KAPwNEfgYZ7FBGGmllt0pq7FkmUCO+qW/hh/ywNNvEW
+	 YsBmZTKCQ8ner/3MPqz+TvFo2LK47Ei17tAZtrPNmD88ujHxAwDWd7IJ4eOjnAcdj7
+	 ufRY3JWW9DDZkHUaT2CsMWCCaXOtWv34OQ0FwcIw7LDg/9dDIoILU3JUyGzEFo+iIY
+	 5T4qk+Ztqz5sTs7RpqQBi5P0qj0R8J6YwzPChhiQWi00pg5pcvg3FeABlZcYZq5aVu
+	 JWOwPsaFDIUiQ==
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 21 Oct 2025 19:43:58 +0200
+Message-Id: <DDO6QBSWU8MN.3UA0DT8WDUPZT@kernel.org>
+Subject: Re: [PATCH] rust: driver: let probe() return impl PinInit<Self,
+ Error>
+Cc: <viresh.kumar@linaro.org>, <acourbot@nvidia.com>, <ira.weiny@intel.com>,
+ <leon@kernel.org>, <daniel.almeida@collabora.com>, <bhelgaas@google.com>,
+ <kwilczynski@kernel.org>, <abdiel.janulgue@gmail.com>,
+ <robin.murphy@arm.com>, <ojeda@kernel.org>, <alex.gaynor@gmail.com>,
+ <boqun.feng@gmail.com>, <gary@garyguo.net>, <bjorn3_gh@protonmail.com>,
+ <lossin@kernel.org>, <a.hindborg@kernel.org>, <aliceryhl@google.com>,
+ <tmgross@umich.edu>, <rust-for-linux@vger.kernel.org>,
+ <linux-pci@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+ <nouveau@lists.freedesktop.org>, <dri-devel@lists.freedesktop.org>,
+ <linux-kernel@vger.kernel.org>
+To: <gregkh@linuxfoundation.org>, <rafael@kernel.org>
+From: "Danilo Krummrich" <dakr@kernel.org>
+References: <20251016125544.15559-1-dakr@kernel.org>
+In-Reply-To: <20251016125544.15559-1-dakr@kernel.org>
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Thu Oct 16, 2025 at 2:55 PM CEST, Danilo Krummrich wrote:
+> The driver model defines the lifetime of the private data stored in (and
+> owned by) a bus device to be valid from when the driver is bound to a
+> device (i.e. from successful probe()) until the driver is unbound from
+> the device.
+>
+> This is already taken care of by the Rust implementation of the driver
+> model. However, we still ask drivers to return a Result<Pin<KBox<Self>>>
+> from probe().
+>
+> Unlike in C, where we do not have the concept of initializers, but
+> rather deal with uninitialized memory, drivers can just return an
+> impl PinInit<Self, Error> instead.
+>
+> This contributed to more clarity to the fact that a driver returns it's
+> device private data in probe() and the Rust driver model owns the data,
+> manages the lifetime and - considering the lifetime - provides (safe)
+> accessors for the driver.
+>
+> Hence, let probe() functions return an impl PinInit<Self, Error> instead
+> of Result<Pin<KBox<Self>>>.
+>
+> Signed-off-by: Danilo Krummrich <dakr@kernel.org>
 
-Use guard pm_runtime_active_try to simplify runtime PM cleanup and
-implement runtime resume error handling in multiple places.
-
-Also use guard pm_runtime_noresume to simplify acpi_tad_remove().
-
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
-
-v2 -> v3: Introduce a helper function to avoid using goto statements along
-          with cleanup.h macros in one function (Jonathan).
-
-v1 -> v2: Rebase after dropping the first patch in the series.
-
----
- drivers/acpi/acpi_tad.c |   72 +++++++++++++++++++++++++-----------------------
- 1 file changed, 38 insertions(+), 34 deletions(-)
-
---- a/drivers/acpi/acpi_tad.c
-+++ b/drivers/acpi/acpi_tad.c
-@@ -90,19 +90,18 @@ static int acpi_tad_set_real_time(struct
- 	args[0].buffer.pointer = (u8 *)rt;
- 	args[0].buffer.length = sizeof(*rt);
- 
--	pm_runtime_get_sync(dev);
-+	ACQUIRE(pm_runtime_active_try, pm)(dev);
-+	if (ACQUIRE_ERR(pm_runtime_active_try, &pm))
-+		return -ENXIO;
- 
- 	status = acpi_evaluate_integer(handle, "_SRT", &arg_list, &retval);
--
--	pm_runtime_put_sync(dev);
--
- 	if (ACPI_FAILURE(status) || retval)
- 		return -EIO;
- 
- 	return 0;
- }
- 
--static int acpi_tad_get_real_time(struct device *dev, struct acpi_tad_rt *rt)
-+static int acpi_tad_evaluate_grt(struct device *dev, struct acpi_tad_rt *rt)
- {
- 	acpi_handle handle = ACPI_HANDLE(dev);
- 	struct acpi_buffer output = { ACPI_ALLOCATE_BUFFER };
-@@ -111,12 +110,7 @@ static int acpi_tad_get_real_time(struct
- 	acpi_status status;
- 	int ret = -EIO;
- 
--	pm_runtime_get_sync(dev);
--
- 	status = acpi_evaluate_object(handle, "_GRT", NULL, &output);
--
--	pm_runtime_put_sync(dev);
--
- 	if (ACPI_FAILURE(status))
- 		goto out_free;
- 
-@@ -139,6 +133,21 @@ out_free:
- 	return ret;
- }
- 
-+static int acpi_tad_get_real_time(struct device *dev, struct acpi_tad_rt *rt)
-+{
-+	int ret;
-+
-+	ACQUIRE(pm_runtime_active_try, pm)(dev);
-+	if (ACQUIRE_ERR(pm_runtime_active_try, &pm))
-+		return -ENXIO;
-+
-+	ret = acpi_tad_evaluate_grt(dev, rt);
-+	if (ret)
-+		return ret;
-+
-+	return 0;
-+}
-+
- static char *acpi_tad_rt_next_field(char *s, int *val)
- {
- 	char *p;
-@@ -266,12 +275,11 @@ static int acpi_tad_wake_set(struct devi
- 	args[0].integer.value = timer_id;
- 	args[1].integer.value = value;
- 
--	pm_runtime_get_sync(dev);
-+	ACQUIRE(pm_runtime_active_try, pm)(dev);
-+	if (ACQUIRE_ERR(pm_runtime_active_try, &pm))
-+		return -ENXIO;
- 
- 	status = acpi_evaluate_integer(handle, method, &arg_list, &retval);
--
--	pm_runtime_put_sync(dev);
--
- 	if (ACPI_FAILURE(status) || retval)
- 		return -EIO;
- 
-@@ -314,12 +322,11 @@ static ssize_t acpi_tad_wake_read(struct
- 
- 	args[0].integer.value = timer_id;
- 
--	pm_runtime_get_sync(dev);
-+	ACQUIRE(pm_runtime_active_try, pm)(dev);
-+	if (ACQUIRE_ERR(pm_runtime_active_try, &pm))
-+		return -ENXIO;
- 
- 	status = acpi_evaluate_integer(handle, method, &arg_list, &retval);
--
--	pm_runtime_put_sync(dev);
--
- 	if (ACPI_FAILURE(status))
- 		return -EIO;
- 
-@@ -370,12 +377,11 @@ static int acpi_tad_clear_status(struct
- 
- 	args[0].integer.value = timer_id;
- 
--	pm_runtime_get_sync(dev);
-+	ACQUIRE(pm_runtime_active_try, pm)(dev);
-+	if (ACQUIRE_ERR(pm_runtime_active_try, &pm))
-+		return -ENXIO;
- 
- 	status = acpi_evaluate_integer(handle, "_CWS", &arg_list, &retval);
--
--	pm_runtime_put_sync(dev);
--
- 	if (ACPI_FAILURE(status) || retval)
- 		return -EIO;
- 
-@@ -411,12 +417,11 @@ static ssize_t acpi_tad_status_read(stru
- 
- 	args[0].integer.value = timer_id;
- 
--	pm_runtime_get_sync(dev);
-+	ACQUIRE(pm_runtime_active_try, pm)(dev);
-+	if (ACQUIRE_ERR(pm_runtime_active_try, &pm))
-+		return -ENXIO;
- 
- 	status = acpi_evaluate_integer(handle, "_GWS", &arg_list, &retval);
--
--	pm_runtime_put_sync(dev);
--
- 	if (ACPI_FAILURE(status))
- 		return -EIO;
- 
-@@ -571,16 +576,15 @@ static void acpi_tad_remove(struct platf
- 
- 	sysfs_remove_group(&dev->kobj, &acpi_tad_attr_group);
- 
--	pm_runtime_get_noresume(dev);
--
--	acpi_tad_disable_timer(dev, ACPI_TAD_AC_TIMER);
--	acpi_tad_clear_status(dev, ACPI_TAD_AC_TIMER);
--	if (dd->capabilities & ACPI_TAD_DC_WAKE) {
--		acpi_tad_disable_timer(dev, ACPI_TAD_DC_TIMER);
--		acpi_tad_clear_status(dev, ACPI_TAD_DC_TIMER);
-+	scoped_guard(pm_runtime_noresume, dev) {
-+		acpi_tad_disable_timer(dev, ACPI_TAD_AC_TIMER);
-+		acpi_tad_clear_status(dev, ACPI_TAD_AC_TIMER);
-+		if (dd->capabilities & ACPI_TAD_DC_WAKE) {
-+			acpi_tad_disable_timer(dev, ACPI_TAD_DC_TIMER);
-+			acpi_tad_clear_status(dev, ACPI_TAD_DC_TIMER);
-+		}
- 	}
- 
--	pm_runtime_put_noidle(dev);
- 	pm_runtime_suspend(dev);
- 	pm_runtime_disable(dev);
- 	acpi_remove_cmos_rtc_space_handler(handle);
-
-
-
+Applied to driver-core-testing, thanks!
 
