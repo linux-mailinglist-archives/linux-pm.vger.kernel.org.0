@@ -1,85 +1,100 @@
-Return-Path: <linux-pm+bounces-36540-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36541-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0DD1BF4C35
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 08:54:47 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C560BF4D01
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 09:06:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 9AACB4ECFDC
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 06:54:46 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C42034F94E2
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 07:05:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1E9726E16C;
-	Tue, 21 Oct 2025 06:54:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EDE6272E72;
+	Tue, 21 Oct 2025 07:05:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hof/auDC"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ZNu8cu//"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C466521CC4D;
-	Tue, 21 Oct 2025 06:54:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C705726FDBD;
+	Tue, 21 Oct 2025 07:05:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761029674; cv=none; b=m4u4sBSDmKuW4eRzytcvOhyzx/mwLiOBFZseZJzUzdicNBvVMOvTGsT4++Jl9nFkD04UbQSKeZEZ8gkxjlUf+1Du5nMeTevHLsknDh+NUPSHYxVIFqGdj5WY0GDYBVX/x84yGgSCEe7YDzf1JNvqSMMRFrAJU/TwKRt7qpB1M4s=
+	t=1761030313; cv=none; b=SEY7h1Y3DEwZCrwQJ2aarJhxtVbCqS4VJGKIn91uVqBWaUvx3Bl4VMmZcWtyK6mdjmKxa/xIiV9/RcE3+Gtq1ZJqx/P7P/ZEBnfg6cHkKlWROE2GKnBekF3OmtztA/1pPi7tnHeAeQc9kVdaRWir+K2S0QLsi2LGXxG1Vj51wxc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761029674; c=relaxed/simple;
-	bh=9WB4EVogPdGF0Akrmle9uP/wAUzch7W/R+uufjJAdRM=;
+	s=arc-20240116; t=1761030313; c=relaxed/simple;
+	bh=EHsArdqsSEWKKduqFrtczKcUKMzzz51C1h76mpGhFlI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nj9/9Deat1XEWAltt3vpxglTclUPhZyASJUGuW34SRpUTT+eKcutTYQZILNOz3jeFN34ZniMg5kUbh/UH5KHVNonU4Tv4QzIK8FibMeSWCDf/KBsMIeaKrRvpSFu73ZwhK5+klz29Fk9nJJ6WwctiVaJL/f8ptUMdZWYuWqdGeU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hof/auDC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 108ACC4CEF1;
-	Tue, 21 Oct 2025 06:54:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761029674;
-	bh=9WB4EVogPdGF0Akrmle9uP/wAUzch7W/R+uufjJAdRM=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=Yrl4KTm9CUm5bMqI/jnb8/VcWsgjFZcjb1LUtH9tPyvnwNz4qKYQ+x9gTVRNuYBo7JrzmfVgEVFZGJPOf0y2jGv2JyYMhtvglpqylXWwKnrZ+Y8Vh1iVla4Vj/yaMySMu0g3pZLHvLtXjrQM+yH2zaX70tTlLq9OMi1Tu9y1YPU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ZNu8cu//; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2D37C4CEF1;
+	Tue, 21 Oct 2025 07:05:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1761030312;
+	bh=EHsArdqsSEWKKduqFrtczKcUKMzzz51C1h76mpGhFlI=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hof/auDCKl8/8cKpsSdADoojtDXT2jnghuG1iYHdnGBkve22m90p5LLo4IZFIod5X
-	 8T3Hp4BWDBmeydKF9GFVFsRz1ofJ0QnqXzBhKcjJ85XSiqURlyTcxU12bhND69PPM8
-	 HE1LQOSK1jjtsPns+yUAtNgF0wLehsFUorePPPrixi/FfzBibNvMd4BKP82AQ7pJUJ
-	 7EIh0st62KlWPbVD2JDbwe58CiCq5yiR5l5FzfXgGxO0ssLdWpipZyeblt1GpZwfjh
-	 YH2g/5jTUPCVWIMfKa4nYSjheXmaeS1MLM4FMolUl5CZvWk0/eNMcUeIdRPvmU1VFp
-	 j7IHR1cp8VWkQ==
-Date: Tue, 21 Oct 2025 08:54:32 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
-	Lukasz Luba <lukasz.luba@arm.com>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Ray Jui <rjui@broadcom.com>, 
-	Scott Branden <sbranden@broadcom.com>, linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: thermal: Convert brcm,sr-thermal to DT
- schema
-Message-ID: <20251021-arrogant-horned-auk-e1fab7@kuoka>
-References: <20251013215810.783006-1-robh@kernel.org>
+	b=ZNu8cu//JZ3YSlADe6H2B3e7usY12xgSqfAc3mg2b5zvqETI5nUwHrUobxPs7mXl3
+	 45+TBlX7GQaS6dUndczNC7kpv1R2BdyQDQKVSM7Qeb6bFRBHRyM6JtsZFHSf1VNlTq
+	 QuztdY+ldB1r4hU/DHMNlvjk0Ola2/kZ1++13Ydc=
+Date: Tue, 21 Oct 2025 09:05:08 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Danilo Krummrich <dakr@kernel.org>
+Cc: rafael@kernel.org, viresh.kumar@linaro.org, acourbot@nvidia.com,
+	ira.weiny@intel.com, leon@kernel.org, daniel.almeida@collabora.com,
+	bhelgaas@google.com, kwilczynski@kernel.org,
+	abdiel.janulgue@gmail.com, robin.murphy@arm.com, ojeda@kernel.org,
+	alex.gaynor@gmail.com, boqun.feng@gmail.com, gary@garyguo.net,
+	bjorn3_gh@protonmail.com, lossin@kernel.org, a.hindborg@kernel.org,
+	aliceryhl@google.com, tmgross@umich.edu,
+	rust-for-linux@vger.kernel.org, linux-pci@vger.kernel.org,
+	linux-pm@vger.kernel.org, nouveau@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rust: driver: let probe() return impl PinInit<Self,
+ Error>
+Message-ID: <2025102158-tissue-goal-77ba@gregkh>
+References: <20251016125544.15559-1-dakr@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251013215810.783006-1-robh@kernel.org>
+In-Reply-To: <20251016125544.15559-1-dakr@kernel.org>
 
-On Mon, Oct 13, 2025 at 04:58:09PM -0500, Rob Herring (Arm) wrote:
-> Convert the brcm,sr-thermal binding to DT schema format. It's a
-> straight-forward conversion. "polling-delay", "thermal-sensors", and
-> "temperature" all apply to the thermal zones, not the sensor node.
+On Thu, Oct 16, 2025 at 02:55:28PM +0200, Danilo Krummrich wrote:
+> The driver model defines the lifetime of the private data stored in (and
+> owned by) a bus device to be valid from when the driver is bound to a
+> device (i.e. from successful probe()) until the driver is unbound from
+> the device.
 > 
-> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
+> This is already taken care of by the Rust implementation of the driver
+> model. However, we still ask drivers to return a Result<Pin<KBox<Self>>>
+> from probe().
+> 
+> Unlike in C, where we do not have the concept of initializers, but
+> rather deal with uninitialized memory, drivers can just return an
+> impl PinInit<Self, Error> instead.
+> 
+> This contributed to more clarity to the fact that a driver returns it's
+> device private data in probe() and the Rust driver model owns the data,
+> manages the lifetime and - considering the lifetime - provides (safe)
+> accessors for the driver.
+> 
+> Hence, let probe() functions return an impl PinInit<Self, Error> instead
+> of Result<Pin<KBox<Self>>>.
+> 
+> Signed-off-by: Danilo Krummrich <dakr@kernel.org>
 > ---
->  .../bindings/thermal/brcm,sr-thermal.txt      | 105 ---------------
->  .../bindings/thermal/brcm,sr-thermal.yaml     | 121 ++++++++++++++++++
->  2 files changed, 121 insertions(+), 105 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/thermal/brcm,sr-thermal.txt
->  create mode 100644 Documentation/devicetree/bindings/thermal/brcm,sr-thermal.yaml
+> Depends on a minor pin-init patch [1] (Benno will send it to the list
+> soon). A branch with this patch and the pin-init dependency is available
+> in [2].
+> 
+> [1] https://github.com/Rust-for-Linux/pin-init/pull/86/commits
+> [2] https://git.kernel.org/pub/scm/linux/kernel/git/dakr/linux.git/log/?h=probe_return
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
