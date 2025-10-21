@@ -1,220 +1,245 @@
-Return-Path: <linux-pm+bounces-36567-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36568-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0C8DBF6A7B
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 15:05:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0BD66BF6B87
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 15:19:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E7C35422FE4
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 13:03:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A52B73A1B42
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 13:19:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDB5E33C50B;
-	Tue, 21 Oct 2025 13:00:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA29E2F49EE;
+	Tue, 21 Oct 2025 13:19:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="c2NdSUn0"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ORYUm00W"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yx1-f48.google.com (mail-yx1-f48.google.com [74.125.224.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 810DB33C504
-	for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 13:00:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79B5027F759;
+	Tue, 21 Oct 2025 13:19:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761051618; cv=none; b=V6jmd2iSxg6XT43Ei68Nsl9vBgf42L0bv7wwMZw+9vienVdIF8OHi+xDMCHI8jz7Yb8IUuLbFDopsHnhmGZZj//sNrSS2/18SvnAPpOAUzoInqtITWzhXYQjhjNa/qIIzzKukTuJiUOU0ssd8ycozjFJ9IhrmI5uYGdyBZx72sc=
+	t=1761052743; cv=none; b=oo0nyeC4NJLvFl2nkMmMNFxDmv6pIWJ67a5QumzYo5LUf6Tw9AdEAjNFBHabbXPeYlgSOu/ZhZfxP/ozKVJChfD5H1tfaySfsyFZsqh9GRucADvPPG2K03tp8SPjg9hyjF0IeF1FRuArFSVmwiClcSV3rVS2t48/zdwymmie6W8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761051618; c=relaxed/simple;
-	bh=5CwFdvA3X29Kv1mhM21fPBuZSIHfzjJ7q9hLb6A09cA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ceEKQgQiYKcTPXj4qov5xbApuvqchTS44MnFcCSitiw3be3fBehkcPN9OEE2l2lXjqWezp/A+lBsVDOpI/PYgWrHc5O1+0o6Feb+EQkNRbSAzltZnEhRqhHlG9OthcqCMkJOUmqUAWJBMgIcA/rAtO8X7w1cDMduft49sRAyKRc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=c2NdSUn0; arc=none smtp.client-ip=74.125.224.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yx1-f48.google.com with SMTP id 956f58d0204a3-63d0692136bso5736673d50.1
-        for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 06:00:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1761051615; x=1761656415; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vlEJkGo4jbFcLLHgPauAsvkvtRdewAA4g7rPzfOb2+8=;
-        b=c2NdSUn0yplebnJZ75R6Fkskgf29aH6hwjhW3+d4F2fJQdm/ZCzrJKO8fnhpqjZLLF
-         OGHQ7naJyKgqlfdPS7UOG0qdaX+Ud+iFqlLqFjncvPgt21vAOw9NZCJmwVcu7tfkD1DM
-         Gn4ShpqDV/dDRYX+tM1hZSnwdqI6N3H/9VT2y/ZW1RMFlWODymVfpVvtngQ/v7jvwLJi
-         5sbU1Ywmkah9oxwMu50UuDWgfxe5JZ9l9YULd43ScHOtynICOWaB1JB3DpvzEAe9FfI+
-         0wkb3MI1QslQ+puDVgcvoXJS4o0HFkgaZ0yy7luqDTuEPN/1LUDKaldntaD8n/GR+8ck
-         32xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761051615; x=1761656415;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vlEJkGo4jbFcLLHgPauAsvkvtRdewAA4g7rPzfOb2+8=;
-        b=awnknsdIzuVRspnZvPD/O4s7mw9MvZZ5Dre9eZUuwMPbekC9hllcrZsBsGkIx9liZS
-         ZbensCn34ZHH6mdv0E49IqdGJgEfk3xaZ9i+ov1ZjhQvmiiRxkftpKAG7o0BJNvppzWf
-         DdKYqLQy2clqRrluuVkN9F+Y2GJa82vBa6nln4T3AzhsiVEjDsu6OSNcYwb6OFk8HflB
-         9D09LSkF45nS6TEtw6M1wIEktJ4vcpIoRDNO2Pw+c9nKoyJ3sJcR89l+fW4kXhKrILWk
-         PvO6EN5KXoBFWgzpXfuryyzaUasV14dxoKgKSfacM51S3ru1lnw6nY7D1m7txIg5cPHz
-         Up4g==
-X-Forwarded-Encrypted: i=1; AJvYcCVU/rZQDvpTxyYWupMJTjv7pd8HQNPZNimpKT94L2eGbF0QoSkm6eFOH5T0JsBjdLwc1m1cM6xyaA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyyeQvyMtzKMefN2t3V5nJuAX3s2Mns0AKF20woLlefRMK/zvVv
-	teqSdeRaAXRQrHaRFWy+cgzUfR3gHvCsm0myj57c7Rl64nSSel8DBmM6lT5B7d1JQCQ9QyU41om
-	S28k5Hf3LPWSG4jXhvXRPqPmIrzIdGIreUAl8L1ZYPA==
-X-Gm-Gg: ASbGncuSCZEzm6oqg15H6VwJ4tSenpaGtzrISVdVzlSQlF3Ww2EuF3chI/VPnLY7l+u
-	0IAwyp9PYSTRkwDk8gT/0zLm5ix19QVBERHg9s8Z6oqsdYshj6mTM8Q5Z31Bn1wizHBX2BZsS/Q
-	WFJmK5fhUcLqKtB0FznOm8TGxObCSwdQiEQgDt4eOzyzi3eR9RHHArCBWE0XHkZUFAWIWrxIVE4
-	WjzG0NlU2buQGAMYLLNUnWDbHAZyOmacJb9o7e+qTCNB6RyExG7xTy3sVUl3LY48F4b/kKm
-X-Google-Smtp-Source: AGHT+IH3Bsal993llg86W2aSSM1eiZS3yAmHYuPkrL2KcynJ1XAI6y+Y0IumRaTcK/qZuaGYZjT8+fHPq/Xs9WCQQDY=
-X-Received: by 2002:a05:690e:2049:b0:63c:f5a7:406 with SMTP id
- 956f58d0204a3-63e161f865emr9077055d50.58.1761051614403; Tue, 21 Oct 2025
- 06:00:14 -0700 (PDT)
+	s=arc-20240116; t=1761052743; c=relaxed/simple;
+	bh=1CqocnxLYPXxeLjuq5UmohrBCmDXaA+kDQupRU9VsM4=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=Qu1m47Y1U9Frg28v7IpfnGJDuEPB3Gu+jGLyxWWuPe50zGHpUhEDhXU8cf6GkIpulmxhA78NfYRYLSBdKaKkFWGCNETLgAIKiRrr8sg1wgQgMytZRVNMrGNQ6gu/7+msV29lKv2z65QUj7HI43X2d8nntnE27AMVllYjTb3nmEc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ORYUm00W; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1761052742; x=1792588742;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=1CqocnxLYPXxeLjuq5UmohrBCmDXaA+kDQupRU9VsM4=;
+  b=ORYUm00WN7PceZ3AlDEImjIHb6rOWHO4cIr9/lAhBIvDS2vlNcZ/w9Qp
+   W5fRTYweMOz7T20kncZrlgRUTZ10iTdssEmk+Q2nLdA763DUYAAQxNmuV
+   rXXPJCX8ohxrYfrXsrVz7SlJvuFxEvXECOPW36gCXq4k1GLx1RZUdT/ub
+   eId8C98DahOXTafMws1jdiPLBaGi9B0SqD0Aa7LOtrdZkT4XRTYGjfjk1
+   PeUWRaaGFf+TXPys7qg8ZHxGA74qciqQqcjbJDiMXrbvfXccbxgDFFzkZ
+   9umSMkjt25nLEYMxyVN6AQwJHfOGksBQTBrrkg+HBDagQaip6KCUG60Zj
+   Q==;
+X-CSE-ConnectionGUID: 58JcUWzdTdCPPw5EeNo1cw==
+X-CSE-MsgGUID: lJLoo0q4RJ2AXaSVb8ffdg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="85799505"
+X-IronPort-AV: E=Sophos;i="6.19,245,1754982000"; 
+   d="scan'208";a="85799505"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2025 06:19:01 -0700
+X-CSE-ConnectionGUID: jv73JKsWR6ueJyFvkZhc7w==
+X-CSE-MsgGUID: iWoFrbT3ReKQRkH0NPEddA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,245,1754982000"; 
+   d="scan'208";a="182793720"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.189])
+  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2025 06:18:58 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Tue, 21 Oct 2025 16:18:54 +0300 (EEST)
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+cc: Brian Norris <briannorris@chromium.org>, Lukas Wunner <lukas@wunner.de>, 
+    Bjorn Helgaas <bhelgaas@google.com>, LKML <linux-kernel@vger.kernel.org>, 
+    linux-pm@vger.kernel.org, linux-pci@vger.kernel.org
+Subject: Re: [PATCH] PCI/PM: Prevent runtime suspend before devices are fully
+ initialized
+In-Reply-To: <CAJZ5v0giOw54L6M8rj-Q8ZELpFHx9LPKS2fAnsHHjHfhW_LZWw@mail.gmail.com>
+Message-ID: <41d5c358-e469-3757-8bfb-e88c3d187e02@linux.intel.com>
+References: <20251016155335.1.I60a53c170a8596661883bd2b4ef475155c7aa72b@changeid> <aPH_B7SiJ8KnIAwJ@wunner.de> <67381f3b-4aee-a314-b5dd-2b7d987a7794@linux.intel.com> <aPKANja_k1gogTAU@google.com> <08976178-298f-79d9-1d63-cff5a4e56cc3@linux.intel.com>
+ <aPaFACsVupPOe67G@google.com> <06cd0121-819d-652d-afa7-eece15bf82a2@linux.intel.com> <CAJZ5v0giOw54L6M8rj-Q8ZELpFHx9LPKS2fAnsHHjHfhW_LZWw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251016-gs101-pd-v3-0-7b30797396e7@linaro.org> <20251016-gs101-pd-v3-3-7b30797396e7@linaro.org>
-In-Reply-To: <20251016-gs101-pd-v3-3-7b30797396e7@linaro.org>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Tue, 21 Oct 2025 14:59:37 +0200
-X-Gm-Features: AS18NWAWrX3EdOi49ik_edQ7hyw6I5dlqupwh8B2wvDucY-SMETDIx3Qc3I521g
-Message-ID: <CAPDyKFqNEN_yfmGWZr=sC-W8-Drv7zn82WYa-y=v+Suk-JHvtQ@mail.gmail.com>
-Subject: Re: [PATCH v3 03/10] dt-bindings: soc: samsung: gs101-pmu: allow
- power domains as children
-To: =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
-	Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Marek Szyprowski <m.szyprowski@samsung.com>, 
-	Peter Griffin <peter.griffin@linaro.org>, Tudor Ambarus <tudor.ambarus@linaro.org>, 
-	Will McVicker <willmcvicker@google.com>, kernel-team@android.com, 
-	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/mixed; boundary="8323328-450250802-1761052734=:1018"
 
-On Thu, 16 Oct 2025 at 17:58, Andr=C3=A9 Draszik <andre.draszik@linaro.org>=
- wrote:
->
-> The power domains are a property of / implemented in the PMU. As such,
-> they should be modelled as child nodes of the PMU.
->
-> Signed-off-by: Andr=C3=A9 Draszik <andre.draszik@linaro.org>
->
-> ---
-> Note: Ideally, the newly added properties (ranges, etc.) should only be
-> 'required' if "^power-domain@[0-9a-f]+$" exists as a patternProperty,
-> as they're needed only in that case. As-is, this patch now causes
-> warnings for existing DTs as they don't specify the new properties (and
-> they shouldn't need to). Only if DTs are updated to include
-> power-domains, such an update should also add the new properties.
->
-> I've not been able to come up with the correct schema syntax to achieve
-> that. dependencies, dependentRequired, and dependentSchemas don't seem
-> to support patterns. Similarly,
->   - if:
->       required:
->         - ...
->     then:
->       required:
->         - ...
->
-> doesn't allow patterns in the 'if' block (or I didn't get the syntax
-> right).
->
-> Rob said in
-> https://lore.kernel.org/all/20251010141357.GA219719-robh@kernel.org/
-> that this is a known limitation in json-schema.
-> ---
->  .../bindings/soc/google/google,gs101-pmu.yaml      | 40 ++++++++++++++++=
-++++++
->  1 file changed, 40 insertions(+)
->
-> diff --git a/Documentation/devicetree/bindings/soc/google/google,gs101-pm=
-u.yaml b/Documentation/devicetree/bindings/soc/google/google,gs101-pmu.yaml
-> index f7119e7a39a3fe0a0a23d1faa251d356f83ba501..a24390f6d2a54afe1aa84935e=
-03f719a62f4fc8e 100644
-> --- a/Documentation/devicetree/bindings/soc/google/google,gs101-pmu.yaml
-> +++ b/Documentation/devicetree/bindings/soc/google/google,gs101-pmu.yaml
-> @@ -26,6 +26,14 @@ properties:
->    reg:
->      maxItems: 1
->
-> +  '#address-cells':
-> +    const: 1
-> +
-> +  '#size-cells':
-> +    const: 1
-> +
-> +  ranges: true
-> +
->    reboot-mode:
->      $ref: /schemas/power/reset/syscon-reboot-mode.yaml
->      type: object
-> @@ -49,9 +57,23 @@ properties:
->      description:
->        Phandle to PMU interrupt generation interface.
->
-> +patternProperties:
-> +  "^power-domain@[0-9a-f]+$":
-> +    type: object
-> +    description: Child node describing one power domain within the PMU
-> +
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-I think we should specify the power-domain-cells too, along the lines
-of the below.
+--8323328-450250802-1761052734=:1018
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 
-'#power-domain-cells'
- const: 0
+On Tue, 21 Oct 2025, Rafael J. Wysocki wrote:
+> On Tue, Oct 21, 2025 at 1:27=E2=80=AFPM Ilpo J=C3=A4rvinen
+> <ilpo.jarvinen@linux.intel.com> wrote:
+> > On Mon, 20 Oct 2025, Brian Norris wrote:
+> > > On Mon, Oct 20, 2025 at 06:56:41PM +0300, Ilpo J=C3=A4rvinen wrote:
+> > > > On Fri, 17 Oct 2025, Brian Norris wrote:
+> > > >
+> > > > > On Fri, Oct 17, 2025 at 02:49:35PM +0300, Ilpo J=C3=A4rvinen wrot=
+e:
+> > > > > > On Fri, 17 Oct 2025, Lukas Wunner wrote:
+> > > > > >
+> > > > > > > [cc +=3D Ilpo]
+> > > > > > >
+> > > > > > > On Thu, Oct 16, 2025 at 03:53:35PM -0700, Brian Norris wrote:
+> > > > > > > > PCI devices are created via pci_scan_slot() and similar, an=
+d are
+> > > > > > > > promptly configured for runtime PM (pci_pm_init()). They ar=
+e initially
+> > > > > > > > prevented from suspending by way of pm_runtime_forbid(); ho=
+wever, it's
+> > > > > > > > expected that user space may override this via sysfs [1].
+> > > > > >
+> > > > > > Is this true as pm_runtime_forbid() also increases PM usage cou=
+nt?
+> > > > >
+> > > > > Yes it's true. See below.
+> > > > >
+> > > > > > "void pm_runtime_forbid(struct device *dev);
+> > > > > >
+> > > > > > unset the power.runtime_auto flag for the device and increase i=
+ts
+> > > > > > usage counter (used by the /sys/devices/.../power/control inter=
+face to
+> > > > > > effectively prevent the device from being power managed at run =
+time)"
+> > >
+> > > I see this doc line confused you, and I can sympathize.
+> > >
+> > > IIUC, the parenthetical means that sysfs *uses* pm_runtime_forbid() t=
+o
+> > > "effectively prevent runtime power management"; pm_runtime_forbid() d=
+oes
+> > > not block user space from doing anything.
+> > >
+> > > > > Right, but sysfs `echo auto > .../power/control` performs the inv=
+erse --
+> > > > > pm_runtime_allow() -- which decrements that count.
+> > > >
+> > > > Fair enough, I didn't check what it does.
+> > > >
+> > > > IMO, the details about how the usage count behaves should be part o=
+f the
+> > > > changelog as that documentation I quoted sounded like user control =
+is
+> > > > prevented when forbidden.
+> > >
+> > > I tried to elaborate on the API doc confusion above. But frankly, I'm
+> > > not sure how best to explain runtime PM.
+> > >
+> > > > I see you've put this part of the explanation
+> > > > into the v2 as well so I suggest you explain the usage count in the=
+ change
+> > > > so it is recorded in the commit if somebody has to look at this com=
+mit
+> > > > years from now.
+> > >
+> > > Both v1 and v2 mention that the sysfs 'power/control' file can overri=
+de
+> > > the kernel calling pm_runtime_forbid(). They don't mention the usage
+> > > count, since that's an implementation detail IMO. (To me, the mental
+> > > model works best if "usage count" (usually get()/put()) is considered
+> > > mostly orthogonal to forbid()/allow()/sysfs, because "forbid()" can b=
+e
+> > > overridden at any time.)
+> > >
+> > > This is also covered here:
+> > >
+> > > https://docs.kernel.org/power/runtime_pm.html#runtime-pm-initializati=
+on-device-probing-and-removal
+> > >
+> > > "In principle, this mechanism may also be used by the driver to
+> > > effectively turn off the runtime power management of the device until
+> > > the user space turns it on."
+> >
+> > The problem is already rooted into the function name, when a function i=
+s
+> > called "forbid", anyone unfamiliar will think it really forbids
+> > something.
+>=20
+> And it does, until the "allow" counterpart of it is called.
+>=20
+> The confusing part here is that the "allow" counterpart is called from
+> a sysfs attribute.
+
+Yes it is but the fact that allow then reduces usage count too even more=20
+so. I understand it's necessary for allowing the functionality but I hope=
+=20
+you can see how illogical it sounds that usage suddenly is less because of=
+=20
+an user action through sysfs, it just defies normal reasoning (no offense=
+=20
+meant in any way to anyone :-)).
+
+> > The docs just further reinforced the idea and the fact that it
+> > also increments usage count.
+> >
+> > It is quite unexpected and feels quite illogical (for non-PM person lik=
+e
+> > me) that user interface then goes to reverse that usage count increase,
+> > what would be the logical reason why there now are less users for it wh=
+en
+> > user wants to turn on PM? (I understand things are done that way, no ne=
+ed
+> > to explain that further, but there are quite a few misleading things in
+> > this entire scenario, not just that parenthesis part of the docs.)
+>=20
+> So the purpose of this "forbid" call in pci_pm_init() is to "block"
+> runtime PM for PCI devices by default, but allow user space to
+> "unblock" it later.
+>=20
+> Would adding a comment to that effect next to that call be useful?
+
+It would be useful to improve the wording in PM documentation which is too=
+=20
+ambiguous. I suggest changing this:
+
+"void pm_runtime_forbid(struct device *dev);
+
+unset the power.runtime_auto flag for the device and increase its
+usage counter (used by the /sys/devices/.../power/control interface to=20
+effectively prevent the device from being power managed at run time).
+
+to:
+
+"... (used to prevent the device from being power managed at run time=20
+until pm_runtime_allow() or /sys/devices/.../power/control interface=20
+allows it)."
 
 
-> +    additionalProperties: true
-> +
-> +    properties:
-> +      compatible:
-> +        const: google,gs101-pd
-> +
->  required:
->    - compatible
->    - reg
-> +  - '#address-cells'
-> +  - '#size-cells'
-> +  - ranges
->    - google,pmu-intr-gen-syscon
->
->  additionalProperties: false
-> @@ -61,6 +83,24 @@ examples:
->      system-controller@17460000 {
->          compatible =3D "google,gs101-pmu", "syscon";
->          reg =3D <0x17460000 0x10000>;
-> +        #address-cells =3D <1>;
-> +        #size-cells =3D <1>;
-> +        ranges;
->
->          google,pmu-intr-gen-syscon =3D <&pmu_intr_gen>;
-> +
-> +        pd_g3d: power-domain@1e00 {
-> +            compatible =3D "google,gs101-pd";
-> +            reg =3D <0x1e00 0x80>;
-> +            #power-domain-cells =3D <0>;
-> +            label =3D "g3d";
-> +        };
-> +
-> +        power-domain@2000 {
-> +            compatible =3D "google,gs101-pd";
-> +            reg =3D <0x2000 0x80>;
-> +            #power-domain-cells =3D <0>;
-> +            power-domains =3D <&pd_g3d>;
-> +            label =3D "embedded_g3d";
-> +        };
->      };
->
-> --
-> 2.51.0.788.g6d19910ace-goog
->
+I have to admit I'd still end up thinking usage count remains 1 up at this=
+=20
+point (if not knowing better like I do now) but at least it would
+unambiguously tells what the interface does.
 
-Kind regards
-Uffe
+
+My another point related to whether that confusing usage count decrement=20
+(solely because of user action) is worth describing in the changelog of=20
+this patch (or v2 of it which follows your suggestion on moving enable=20
+locatoon). IMO, it's odd/confusing enough a note would be warranted.
+I know it after this discussion, obviously, but I worry over others who=20
+trip over the same thing if somebody else has to look over this change.
+
+
+--=20
+ i.
+
+--8323328-450250802-1761052734=:1018--
 
