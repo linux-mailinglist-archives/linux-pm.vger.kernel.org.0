@@ -1,339 +1,143 @@
-Return-Path: <linux-pm+bounces-36553-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36554-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id A74A5BF5442
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 10:33:47 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id D6F33BF5B30
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 12:08:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 0B08D4F7370
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 08:33:43 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C21844E1F11
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 10:08:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 121E131AF21;
-	Tue, 21 Oct 2025 08:32:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01DA527C866;
+	Tue, 21 Oct 2025 10:08:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Iaxq4PRT"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="VU6zeb5I"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f46.google.com (mail-yx1-f46.google.com [74.125.224.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83C8B306495;
-	Tue, 21 Oct 2025 08:32:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 460C71E5B71
+	for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 10:08:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761035559; cv=none; b=Pw113+070Kvn6u6w49L+ocak6LFdqngYayhmNOT/HPm3eAvZE3zpZLvI8TPlEnsMy99AT0p6Coe++0Cm/Thej8Q3/4MHkNeN2m+OosGSBypRmzxozdah6qIqwLusu1NtbCW3JdmclgzmV20q29dYffha767H3nKxUWXUuo+gSrY=
+	t=1761041321; cv=none; b=XxnT8fbXX6G8+/iqFX6FbZCWGjpgAWUNuA8o63ohkPBX0hGFr1TZ3B22c4X6lQerTzPJYU5NNyZs1IQCF9QyynZnYgj0BbKo+GuNyKnCd4S/x6hBvySK1PBu07qv6ysoESi1YWpWkiS/kcbK/h4NBdDqAsJjd50vzs1Pf+5YTew=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761035559; c=relaxed/simple;
-	bh=xPjuPvMuBs/dTwTRMKPWsPhe1oH9dEsXoBgprJB6V/c=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MXUL3rUi4Op8PcA7pjCaC/mbX9qi2BYZ9hSG3xfvfRPdIQtmkPzuKhwnjexqi5lk5ZJj0rV6ELXcWF2ugfuy9vOyCRVJK7CeWqR8Mdx7yPJ9CDwZFJ+u/+OST9n1SZrbCyOaTWvuhPRBpRw2kmqxtdfs1X4rjcFT8h79RC/7CmQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Iaxq4PRT; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1761035551;
-	bh=xPjuPvMuBs/dTwTRMKPWsPhe1oH9dEsXoBgprJB6V/c=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Iaxq4PRTjSGBGhAOJjIntP+bdE5gWdK5Rntx2ISDQkFmgTeq2aaMKb/UQ1lklTq58
-	 I4oPCk5f14MfAqtyN7szoEu9nzLtRjv9GO99G4X+6Dn+BD9spiZ8oWDfmlN4nnsHMs
-	 rharWbRE8iGrGsvLTcinJ9rSfD6lLCU42wAgrrJRBO0JIHRanYREEQOlhtkNvWxjiR
-	 r8feBKxIez6cnavfphnRbxkIYFshSkBOOh4EKLU6jjZqTNpaxpzcffmwwN1sQOhCL5
-	 6ufQQgRyB/F3sxLbBtmxN2exKotmoCh5l9byVKHqjbjHJ5zSGmJOb6e7tFptYyoqsi
-	 Y/45OF7fnz6zA==
-Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 0B86717E1305;
-	Tue, 21 Oct 2025 10:32:31 +0200 (CEST)
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-To: sboyd@kernel.org
-Cc: jic23@kernel.org,
-	dlechner@baylibre.com,
-	nuno.sa@analog.com,
-	andy@kernel.org,
-	arnd@arndb.de,
-	gregkh@linuxfoundation.org,
-	srini@kernel.org,
-	vkoul@kernel.org,
-	kishon@kernel.org,
-	sre@kernel.org,
-	krzysztof.kozlowski@linaro.org,
-	u.kleine-koenig@baylibre.com,
-	angelogioacchino.delregno@collabora.com,
-	linux-arm-msm@vger.kernel.org,
-	linux-iio@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-phy@lists.infradead.org,
-	linux-pm@vger.kernel.org,
-	kernel@collabora.com,
-	wenst@chromium.org,
-	casey.connolly@linaro.org,
-	Jonathan Cameron <jonathan.cameron@huawei.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>
-Subject: [PATCH v7 10/10] iio: adc: qcom-spmi-iadc: Remove regmap R/W wrapper functions
-Date: Tue, 21 Oct 2025 10:32:19 +0200
-Message-ID: <20251021083219.17382-11-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.51.1
-In-Reply-To: <20251021083219.17382-1-angelogioacchino.delregno@collabora.com>
-References: <20251021083219.17382-1-angelogioacchino.delregno@collabora.com>
+	s=arc-20240116; t=1761041321; c=relaxed/simple;
+	bh=qAbJyQPPInrxKG97wEiG3fxqPfQEM6oQEkIzdBx2QKc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Goqt4rePn4abGyAqoL4e4RjiOOhBcLBu98M0Yqg7eaMQQHpGgwi9cIU5+pi0Igj1wW7zbpd/CIzc02dbt2Jf9O7HbdE88xwYeQeJmAdk3j2HQmRz/PIhOWjhoasg9QlR7w//FmV5vvfiMCBslIjgbfDiKwHqXiQAWnUO5wSTo4g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=VU6zeb5I; arc=none smtp.client-ip=74.125.224.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yx1-f46.google.com with SMTP id 956f58d0204a3-63bc1aeb427so5621255d50.3
+        for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 03:08:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1761041319; x=1761646119; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=FcY1WuRhXouiGA4KCWU+G5cXctN3EhAkLVSQq5aIkDA=;
+        b=VU6zeb5ITjgm6HsjuHLQtKaFcRpUmaTE7qMmuyBuM97iK4xuFFT2ibCUCWn6U9vLFO
+         +Bdl+Lm81GjNDuqf12b57tkzf/p6HGT5y/f+rp6gg8qj8w//fU0cWDTEMG2peNGgpknX
+         XkQxAisH9BkOaXNrwgZq5Nqmrdp0R4wYTDtRuGXro8FMsk5wglFjSZTUXbApGHelYHKM
+         yVRM0KxFMrFJ6boZMFlNJS+qbunguqNk6HvFui1/QcTxY80BGFXGKQIuW7rp9nSxk7oj
+         e1svSpqgbtZM6yZmAFCnpizgr1DBF27p7bRM3uVv2SZXZX8fABPQYby/kcY3pzP6Odzq
+         K2Wg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761041319; x=1761646119;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FcY1WuRhXouiGA4KCWU+G5cXctN3EhAkLVSQq5aIkDA=;
+        b=nPvxfpPqMhxbQTzoE69SRfvMDptLNIiDuWEilCNbfvFuBe3VHPe9QkZe5vAUWdd6kM
+         lL1zNP3goFtjqmbPHf81NfJKo8dundxaV5I/WrNvirnjM2iffqX84/YEWaT46DTU7sIb
+         guygG8w/mcsBJ/ItJOgY2PEeVv0OFqhyiHitdfqmVu7xDG9sAo2WtKTBz3kFdXrrHi6K
+         zEk3Zhle5VjihUXMr9XL+gVDLqiLR5P/Ci5/UcdEd7nIA8YnjsjZ5hp07lJ9QZiHZhGm
+         sQHOD2A0giSfUY8McU5Zius/C/qYiuTRJqJEVtkrMeFjj603WsqWMe0WwVUEC1yBIqE2
+         /AqA==
+X-Forwarded-Encrypted: i=1; AJvYcCWH65tYiofoUuAJ7lZn6yLPRET0+zRAgozGGDAE9VoPu/Av9bgSz856aVEv3/cV7Yz9Tg8vsLbxGg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzYgvzK8UhwIzWgur4bIBnLhM6qrh5YfBKfs87H2AdbZqUYrplB
+	26MK8dN5asORkz8MO7ojhtm8TlVkXShZzBYMTVbyCKcanxfKrw1FB6RG+6BD1jvlan9bsxO48Xn
+	yNihQkqxYX/0H8HBdjc+5Or5HsNVO0eU+GGaPgSpgrQ==
+X-Gm-Gg: ASbGncsBU/FM4xJzH5NyxVPFwk6jt/bmLdSUNar4NaeqARyN9ap1N8JicSB1WVvdmsr
+	0XExKhuBR/s9d3xYFuLgb3nzXWQClGu5Q7kuMwveF07oPB+xBOtqhyhL1DP9a+RTvFlPpZ44zq4
+	quHpg6VVI5ELFuD8u+KRAGCbkV+XiDzcdrWUsVDXafvZyaQmR9b1sfxqLmS3P9cKlUhLRRwld+y
+	ikVBv+hjuQuQcUHxdPsYGTsf4/q4/KOiKANo0KEOSocdb8xALIz3mUg89TcDQ==
+X-Google-Smtp-Source: AGHT+IER588Lwab2jH1RPVxWEMKtc71AdHZ7rUDhw6Az9ENBa6h+mO9XQH92FP+m3bjNm6autc5uWg5ixjt23yxAFE0=
+X-Received: by 2002:a05:690e:d51:b0:636:d3f9:6418 with SMTP id
+ 956f58d0204a3-63e1610c2eamr12824971d50.22.1761041319091; Tue, 21 Oct 2025
+ 03:08:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20251020141718.150919-1-ulf.hansson@linaro.org>
+ <20251020141718.150919-2-ulf.hansson@linaro.org> <a0120876-0f00-4e1a-aa17-5fe7c3512276@arm.com>
+In-Reply-To: <a0120876-0f00-4e1a-aa17-5fe7c3512276@arm.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Tue, 21 Oct 2025 12:08:02 +0200
+X-Gm-Features: AS18NWAG0JIz8WscydJtNeviSVU0idBmTgh-4-AojKeBaYrYkaU30tTtBYxU8G4
+Message-ID: <CAPDyKFrY5kOsoOH-mcWFiaiggV4q84xOtiKHdNN4bMfFmYOQPQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] smp: Introduce a helper function to check for
+ pending IPIs
+To: Ben Horgan <ben.horgan@arm.com>
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
+	Mark Rutland <mark.rutland@arm.com>, Marc Zyngier <maz@kernel.org>, 
+	Maulik Shah <quic_mkshah@quicinc.com>, Sudeep Holla <sudeep.holla@arm.com>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, Vincent Guittot <vincent.guittot@linaro.org>, 
+	linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-This driver doesn't need to add any register base address to any
-regmap call anymore since it was migrated to register as a SPMI
-subdevice with its own regmap reg_base, which makes the regmap
-API to automatically add such base address internally.
+On Mon, 20 Oct 2025 at 21:11, Ben Horgan <ben.horgan@arm.com> wrote:
+>
+> Hi Ulf,
+>
+> Only a comment on the naming rather than a full review.
+>
+> On 10/20/25 15:17, Ulf Hansson wrote:
+> > When governors used during cpuidle, tries to find the most optimal
+> > idlestate for a CPU or a group of CPUs, they are known to quite often fail.
+> > One reason for this, is that we are not taking into account whether there
+> > has been an IPI scheduled for any of the CPUs that are affected by the
+> > selected idlestate.
+> >
+> > To enable pending IPIs to be taken into account for cpuidle decisions,
+> > let's introduce a new helper function, cpus_may_have_pending_ipi().
+>
+> To me, "may" indicates permission, i.e. is allowed, rather than
+> correctness. Would "likely" be better here, cpus_likely_have_pending_ipi()?
 
-Since the iadc_{read,write,read_result}() functions now only do
-call regmap_{read,write,bulk_read}() and nothing else, simplify
-the driver by removing them and by calling regmap APIs directly.
+Sure, that sounds better to me too.
 
-Reviewed-by: Jonathan Cameron <jonathan.cameron@huawei.com>
-Tested-by: Neil Armstrong <neil.armstrong@linaro.org> # on SM8650-QRD
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- drivers/iio/adc/qcom-spmi-iadc.c | 83 ++++++++++++--------------------
- 1 file changed, 30 insertions(+), 53 deletions(-)
+I leave it a few days to allow people to provide their additional
+input, before posting a new version with the new name of the function.
 
-diff --git a/drivers/iio/adc/qcom-spmi-iadc.c b/drivers/iio/adc/qcom-spmi-iadc.c
-index 67096952b229..7d46ec2d1a30 100644
---- a/drivers/iio/adc/qcom-spmi-iadc.c
-+++ b/drivers/iio/adc/qcom-spmi-iadc.c
-@@ -113,77 +113,59 @@ struct iadc_chip {
- 	struct completion complete;
- };
- 
--static int iadc_read(struct iadc_chip *iadc, u16 offset, u8 *data)
--{
--	unsigned int val;
--	int ret;
--
--	ret = regmap_read(iadc->regmap, offset, &val);
--	if (ret < 0)
--		return ret;
--
--	*data = val;
--	return 0;
--}
--
--static int iadc_write(struct iadc_chip *iadc, u16 offset, u8 data)
--{
--	return regmap_write(iadc->regmap, offset, data);
--}
--
- static int iadc_reset(struct iadc_chip *iadc)
- {
--	u8 data;
-+	u32 data;
- 	int ret;
- 
--	ret = iadc_write(iadc, IADC_SEC_ACCESS, IADC_SEC_ACCESS_DATA);
-+	ret = regmap_write(iadc->regmap, IADC_SEC_ACCESS, IADC_SEC_ACCESS_DATA);
- 	if (ret < 0)
- 		return ret;
- 
--	ret = iadc_read(iadc, IADC_PERH_RESET_CTL3, &data);
-+	ret = regmap_read(iadc->regmap, IADC_PERH_RESET_CTL3, &data);
- 	if (ret < 0)
- 		return ret;
- 
--	ret = iadc_write(iadc, IADC_SEC_ACCESS, IADC_SEC_ACCESS_DATA);
-+	ret = regmap_write(iadc->regmap, IADC_SEC_ACCESS, IADC_SEC_ACCESS_DATA);
- 	if (ret < 0)
- 		return ret;
- 
- 	data |= IADC_FOLLOW_WARM_RB;
- 
--	return iadc_write(iadc, IADC_PERH_RESET_CTL3, data);
-+	return regmap_write(iadc->regmap, IADC_PERH_RESET_CTL3, data);
- }
- 
- static int iadc_set_state(struct iadc_chip *iadc, bool state)
- {
--	return iadc_write(iadc, IADC_EN_CTL1, state ? IADC_EN_CTL1_SET : 0);
-+	return regmap_write(iadc->regmap, IADC_EN_CTL1, state ? IADC_EN_CTL1_SET : 0);
- }
- 
- static void iadc_status_show(struct iadc_chip *iadc)
- {
--	u8 mode, sta1, chan, dig, en, req;
-+	u32 mode, sta1, chan, dig, en, req;
- 	int ret;
- 
--	ret = iadc_read(iadc, IADC_MODE_CTL, &mode);
-+	ret = regmap_read(iadc->regmap, IADC_MODE_CTL, &mode);
- 	if (ret < 0)
- 		return;
- 
--	ret = iadc_read(iadc, IADC_DIG_PARAM, &dig);
-+	ret = regmap_read(iadc->regmap, IADC_DIG_PARAM, &dig);
- 	if (ret < 0)
- 		return;
- 
--	ret = iadc_read(iadc, IADC_CH_SEL_CTL, &chan);
-+	ret = regmap_read(iadc->regmap, IADC_CH_SEL_CTL, &chan);
- 	if (ret < 0)
- 		return;
- 
--	ret = iadc_read(iadc, IADC_CONV_REQ, &req);
-+	ret = regmap_read(iadc->regmap, IADC_CONV_REQ, &req);
- 	if (ret < 0)
- 		return;
- 
--	ret = iadc_read(iadc, IADC_STATUS1, &sta1);
-+	ret = regmap_read(iadc->regmap, IADC_STATUS1, &sta1);
- 	if (ret < 0)
- 		return;
- 
--	ret = iadc_read(iadc, IADC_EN_CTL1, &en);
-+	ret = regmap_read(iadc->regmap, IADC_EN_CTL1, &en);
- 	if (ret < 0)
- 		return;
- 
-@@ -199,34 +181,34 @@ static int iadc_configure(struct iadc_chip *iadc, int channel)
- 
- 	/* Mode selection */
- 	mode = (IADC_OP_MODE_NORMAL << IADC_OP_MODE_SHIFT) | IADC_TRIM_EN;
--	ret = iadc_write(iadc, IADC_MODE_CTL, mode);
-+	ret = regmap_write(iadc->regmap, IADC_MODE_CTL, mode);
- 	if (ret < 0)
- 		return ret;
- 
- 	/* Channel selection */
--	ret = iadc_write(iadc, IADC_CH_SEL_CTL, channel);
-+	ret = regmap_write(iadc->regmap, IADC_CH_SEL_CTL, channel);
- 	if (ret < 0)
- 		return ret;
- 
- 	/* Digital parameter setup */
- 	decim = IADC_DEF_DECIMATION << IADC_DIG_DEC_RATIO_SEL_SHIFT;
--	ret = iadc_write(iadc, IADC_DIG_PARAM, decim);
-+	ret = regmap_write(iadc->regmap, IADC_DIG_PARAM, decim);
- 	if (ret < 0)
- 		return ret;
- 
- 	/* HW settle time delay */
--	ret = iadc_write(iadc, IADC_HW_SETTLE_DELAY, IADC_DEF_HW_SETTLE_TIME);
-+	ret = regmap_write(iadc->regmap, IADC_HW_SETTLE_DELAY, IADC_DEF_HW_SETTLE_TIME);
- 	if (ret < 0)
- 		return ret;
- 
--	ret = iadc_write(iadc, IADC_FAST_AVG_CTL, IADC_DEF_AVG_SAMPLES);
-+	ret = regmap_write(iadc->regmap, IADC_FAST_AVG_CTL, IADC_DEF_AVG_SAMPLES);
- 	if (ret < 0)
- 		return ret;
- 
- 	if (IADC_DEF_AVG_SAMPLES)
--		ret = iadc_write(iadc, IADC_FAST_AVG_EN, IADC_FAST_AVG_EN_SET);
-+		ret = regmap_write(iadc->regmap, IADC_FAST_AVG_EN, IADC_FAST_AVG_EN_SET);
- 	else
--		ret = iadc_write(iadc, IADC_FAST_AVG_EN, 0);
-+		ret = regmap_write(iadc->regmap, IADC_FAST_AVG_EN, 0);
- 
- 	if (ret < 0)
- 		return ret;
-@@ -239,19 +221,19 @@ static int iadc_configure(struct iadc_chip *iadc, int channel)
- 		return ret;
- 
- 	/* Request conversion */
--	return iadc_write(iadc, IADC_CONV_REQ, IADC_CONV_REQ_SET);
-+	return regmap_write(iadc->regmap, IADC_CONV_REQ, IADC_CONV_REQ_SET);
- }
- 
- static int iadc_poll_wait_eoc(struct iadc_chip *iadc, unsigned int interval_us)
- {
- 	unsigned int count, retry;
- 	int ret;
--	u8 sta1;
-+	u32 sta1;
- 
- 	retry = interval_us / IADC_CONV_TIME_MIN_US;
- 
- 	for (count = 0; count < retry; count++) {
--		ret = iadc_read(iadc, IADC_STATUS1, &sta1);
-+		ret = regmap_read(iadc->regmap, IADC_STATUS1, &sta1);
- 		if (ret < 0)
- 			return ret;
- 
-@@ -267,11 +249,6 @@ static int iadc_poll_wait_eoc(struct iadc_chip *iadc, unsigned int interval_us)
- 	return -ETIMEDOUT;
- }
- 
--static int iadc_read_result(struct iadc_chip *iadc, u16 *data)
--{
--	return regmap_bulk_read(iadc->regmap, IADC_DATA, data, 2);
--}
--
- static int iadc_do_conversion(struct iadc_chip *iadc, int chan, u16 *data)
- {
- 	unsigned int wait;
-@@ -296,7 +273,7 @@ static int iadc_do_conversion(struct iadc_chip *iadc, int chan, u16 *data)
- 	}
- 
- 	if (!ret)
--		ret = iadc_read_result(iadc, data);
-+		ret = regmap_bulk_read(iadc->regmap, IADC_DATA, data, sizeof(*data));
- exit:
- 	iadc_set_state(iadc, false);
- 	if (ret < 0)
-@@ -392,10 +369,10 @@ static int iadc_update_offset(struct iadc_chip *iadc)
- 
- static int iadc_version_check(struct iadc_chip *iadc)
- {
--	u8 val;
-+	u32 val;
- 	int ret;
- 
--	ret = iadc_read(iadc, IADC_PERPH_TYPE, &val);
-+	ret = regmap_read(iadc->regmap, IADC_PERPH_TYPE, &val);
- 	if (ret < 0)
- 		return ret;
- 
-@@ -404,7 +381,7 @@ static int iadc_version_check(struct iadc_chip *iadc)
- 		return -EINVAL;
- 	}
- 
--	ret = iadc_read(iadc, IADC_PERPH_SUBTYPE, &val);
-+	ret = regmap_read(iadc->regmap, IADC_PERPH_SUBTYPE, &val);
- 	if (ret < 0)
- 		return ret;
- 
-@@ -413,7 +390,7 @@ static int iadc_version_check(struct iadc_chip *iadc)
- 		return -EINVAL;
- 	}
- 
--	ret = iadc_read(iadc, IADC_REVISION2, &val);
-+	ret = regmap_read(iadc->regmap, IADC_REVISION2, &val);
- 	if (ret < 0)
- 		return ret;
- 
-@@ -428,7 +405,7 @@ static int iadc_version_check(struct iadc_chip *iadc)
- static int iadc_rsense_read(struct iadc_chip *iadc, struct device_node *node)
- {
- 	int ret, sign, int_sense;
--	u8 deviation;
-+	u32 deviation;
- 
- 	ret = of_property_read_u32(node, "qcom,external-resistor-micro-ohms",
- 				   &iadc->rsense[IADC_EXT_RSENSE]);
-@@ -440,7 +417,7 @@ static int iadc_rsense_read(struct iadc_chip *iadc, struct device_node *node)
- 		return -EINVAL;
- 	}
- 
--	ret = iadc_read(iadc, IADC_NOMINAL_RSENSE, &deviation);
-+	ret = regmap_read(iadc->regmap, IADC_NOMINAL_RSENSE, &deviation);
- 	if (ret < 0)
- 		return ret;
- 
--- 
-2.51.1
+>
+> >
+> > Note that, the implementation is intentionally as lightweight as possible,
+> > in favor of always providing the correct information. For cpuidle decisions
+> > this is good enough.
+> >
+> > Suggested-by: Thomas Gleixner <tglx@linutronix.de>
+> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> > ---
+> >
+> > Changes in v2:
+> >       - Implemented a common function, rather than making it arch-specific. As
+> >       suggested by Thomas and Marc.
+> >       - Renamed the function to indicate that it doesn't provide correctness.
+> >       - Clarified function description and commit message.
+> >
+> --
+> Thanks,
+>
+> Ben
+>
 
+Kind regards
+Uffe
 
