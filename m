@@ -1,178 +1,149 @@
-Return-Path: <linux-pm+bounces-36585-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36586-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9887BF7BE1
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 18:42:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 50891BF7D2E
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 19:07:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0039D3BCEE1
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 16:39:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1285B19A1E23
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 17:07:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 555592FD667;
-	Tue, 21 Oct 2025 16:39:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ke9gU49O"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9597342CBD;
+	Tue, 21 Oct 2025 17:07:09 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay.hostedemail.com (smtprelay0014.hostedemail.com [216.40.44.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 303A572629
-	for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 16:39:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5564F2D0C7D;
+	Tue, 21 Oct 2025 17:07:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761064796; cv=none; b=D7ZW0zwRXyidNsXRs9FgDXi+FneSSlXiRz/mJ4PeSeXjYIdsYrokDENGh2Zm+H4VWtBzIHD1osZ1HVxkemyu6Hn65nFYkoYe0RH68dFUWSVUQglCXf2ajNHhM1vcago7dJwIpVPfRkcszbTRzHSEQhtWYqshn8bdguogebhl0ZQ=
+	t=1761066429; cv=none; b=kp7R76rWJTOmhbytD92wrwh3Xdl5yLVhhk3eOQNhdAcpKXdgxh+EKa953Q0sxzCG/NCPL+v1PzaeDX6YGkPJMttuqh1lw0d5JXTollaLFZcN/gnbfT+43SxRDe9/Q2xSeAmdskURG/zw09kY/2eSfk5J6hNEEVPVO1Up/xvCmAs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761064796; c=relaxed/simple;
-	bh=qpx7VnzXu0jWnMHS6AoL7AXgBkvwcS31z32WB2upC9g=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jD1AywD8czZqzjj5Amttz2rPz5XN7bmRJi20+ICJ/RQ9x9714WKdXMq75C5AC3hfua5UxfFGtN6tDIVxzG9prJSGVejG6Th4y+hr1zdqVdXm0ElQ/Eo4hMWArxdXwUmwwcctSzdsPefhuIpXkRenHStmO6vc4lBGkFbzrochG7g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ke9gU49O; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF575C113D0
-	for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 16:39:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761064795;
-	bh=qpx7VnzXu0jWnMHS6AoL7AXgBkvwcS31z32WB2upC9g=;
-	h=References:In-Reply-To:Reply-To:From:Date:Subject:To:Cc:From;
-	b=ke9gU49OgWntnGWDJ25iZiP5Pjt1ccyYrQwQRjMAj/5pM8eFE/hPTVirU4HUKZ4ux
-	 6MkezHdJBm7IIPxD8xAzwX8GczMcfkafFfJHV1epyGiGCq/06UMsiSpiKp5MBG6UsG
-	 /dpdLulVyagsXl90YbhhbjJXvXk6tb10JHMilN3Oif1dynKkIgovLt47qyechH2Hao
-	 i8SfIWInCAffxuLfyf4e7hE3ksfImD3gDh26sEMS4+8EW2jD0TqFzFuxznuygDJz04
-	 gpjCgCVmRl6U25gsim8Kx0JhU6Voz41r6be/VHu/1/8SrPEqtKV7nBailMoOxSR0cQ
-	 gdfAGwWKy3ugA==
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-57f0aa38aadso7527483e87.2
-        for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 09:39:55 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWo2k12fhpsnLgOYbC5MdJWNvi0hlPoXKm49xrk+kw6Ds5KvP51zS/JTkC6bqSyb6EV4X5g/LPC4w==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzBIY0ruKZOQaGrj9rlTwfytnU+nfuMzXUHRvgdPeq3DqOgROtA
-	AN783dGQ6Qec7r+e+zwiCbHP1sg/DPOX5SpXfJ5JO+J5TceTR+4znGrmilislfrD7X7YZjV2Mdf
-	/xCz0IVPFqymDDDC2ArlkkD1QPePtiIs=
-X-Google-Smtp-Source: AGHT+IE2XjfXeECfoI3UjrAZUn5quwYmJl2VF2lxd1i+sdiq5r6M2c/okvW135k2n/kF/1QwC+gpk9oVdn3+8YVxEho=
-X-Received: by 2002:a05:651c:554:b0:377:78cd:e8fd with SMTP id
- 38308e7fff4ca-37797826492mr57797611fa.9.1761064794269; Tue, 21 Oct 2025
- 09:39:54 -0700 (PDT)
+	s=arc-20240116; t=1761066429; c=relaxed/simple;
+	bh=SfujZNGCUwdHXhnw5KtfoR9q5ts6/wY+0OdokUskIMU=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=lViFY1yRE0ym/+gfMiGgH/X6WkFMDlECPZV8D2fU80kSu0496D/qOdNTde6d+vn0inN9sAdtc9xox3az9s5JwmgUZxm7J6V02RLUdy1qGUC8ys0KUnbD/XxRmo7PV0jdmeZMo0hsn31k6OJ3X1b+OGHkFwpLAdyS0OWMBwk5OCg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=perches.com; spf=pass smtp.mailfrom=perches.com; arc=none smtp.client-ip=216.40.44.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=perches.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=perches.com
+Received: from omf02.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay10.hostedemail.com (Postfix) with ESMTP id ACE04C05CB;
+	Tue, 21 Oct 2025 17:06:56 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf02.hostedemail.com (Postfix) with ESMTPA id 2365B80009;
+	Tue, 21 Oct 2025 17:06:53 +0000 (UTC)
+Message-ID: <5e11f1bacb6430e1331f02e3e0e326a78e5b0d12.camel@perches.com>
+Subject: Re: [PATCH] checkpatch: add uninitialized pointer with __free
+ attribute check
+From: Joe Perches <joe@perches.com>
+To: Ally Heev <allyheev@gmail.com>, Dwaipayan Ray <dwaipayanray1@gmail.com>,
+  Lukas Bulwahn <lukas.bulwahn@gmail.com>, Jonathan Corbet <corbet@lwn.net>,
+ Andy Whitcroft <apw@canonical.com>
+Cc: workflows@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Dan Carpenter <dan.carpenter@linaro.org>,
+ David Hunter <david.hunter.linux@gmail.com>, Shuah Khan
+ <skhan@linuxfoundation.org>, Viresh Kumar	 <vireshk@kernel.org>, Nishanth
+ Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,  linux-pm
+ <linux-pm@vger.kernel.org>
+Date: Tue, 21 Oct 2025 10:06:52 -0700
+In-Reply-To: <20251021-aheev-checkpatch-uninitialized-free-v1-1-18fb01bc6a7a@gmail.com>
+References: 
+	<20251021-aheev-checkpatch-uninitialized-free-v1-1-18fb01bc6a7a@gmail.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250924-gpio-shared-v1-0-775e7efeb1a3@linaro.org>
- <hyzzrjn7jzo3tt3oyg7azijouawe3zopfjzq6zfhoo6e6z2m4t@ssl5vl4g557e>
- <zk4ea5cibrkp4vttuy4evrqybf76b3nop5lnyck4ws4nyf2yc4@ghj2eyswsoow>
- <CAMRc=MdWmO4wvX6zpzN0-LZF1pF5Y2=sS8fBwr=CKMGWHg+shA@mail.gmail.com>
- <rfr5cou6jr7wmtxixfgjxhnda6yywlsxsei7md7ne3qge7r3gk@xv6n5pvcjzrm>
- <CAMRc=Me9Td5G9qZV8A98XkGROKw1D2UeQHpFzt8uApF8995MZw@mail.gmail.com>
- <rvsyll4u6v4tpaxs4z3k4pbusoktkaocq4o3g6rjt6d2zrzqst@raiuch3hu3ce>
- <CAMRc=Me+4H6G+-Qj_Gz2cv2MgRHOmrjMyNwJr+ardDR1ndYHvQ@mail.gmail.com>
- <fydmplp5z4hjic2wlmvcy6yr3s5t5u4qsgo7yzbqq3xu2g6hdk@v4tzjj3ww4s6>
- <CAMRc=McGuNX42k_HdV20zW+buACBTmTZEHWgS-ddRYsvnfwDSg@mail.gmail.com> <ibdmghl5dg3oda2j5ejp35ydky4xkazewhdvskm7p32vstdegr@36pj32b6dt44>
-In-Reply-To: <ibdmghl5dg3oda2j5ejp35ydky4xkazewhdvskm7p32vstdegr@36pj32b6dt44>
-Reply-To: wens@kernel.org
-From: Chen-Yu Tsai <wens@kernel.org>
-Date: Wed, 22 Oct 2025 00:39:41 +0800
-X-Gmail-Original-Message-ID: <CAGb2v65acHoO5025ZN7DhX0xVQf6JyHmUK3CB9UhnmTDDHq6vg@mail.gmail.com>
-X-Gm-Features: AS18NWAGPRHcJje8w8MGIGImjcIFzXETxdKIrug_Hlh6_IEun9PtDw8YCzNUTf4
-Message-ID: <CAGb2v65acHoO5025ZN7DhX0xVQf6JyHmUK3CB9UhnmTDDHq6vg@mail.gmail.com>
-Subject: PCIe link training and pwrctrl sequence
-To: Manivannan Sadhasivam <mani@kernel.org>
-Cc: Bartosz Golaszewski <brgl@bgdev.pl>, Bjorn Helgaas <bhelgaas@google.com>, 
-	linux-kernel <linux-kernel@vger.kernel.org>, 
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, PCI <linux-pci@vger.kernel.org>, 
-	"open list:THERMAL" <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Rspamd-Queue-Id: 2365B80009
+X-Stat-Signature: rtipdxzuuspsu4ye6rx1eywenjf4xmbm
+X-Rspamd-Server: rspamout02
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1/aK9PuxmffjsTgMj+7z4sgkWUk2J9UG3M=
+X-HE-Tag: 1761066413-389271
+X-HE-Meta: U2FsdGVkX180ftX0W8yiVUd9MfsrdAPQRpyGK5++Zp8ivAXNqnmopqHV64+/SigWNggHzzW7JK87cKTebQm6lUXOd7Ezd4w/lnclCGEtyolye3dNDuFfgCz3Hs4VypC2IH5Jzp8Iv1DwTdSnOiXqZXa4BChHuoGCd2iEt1m6btxx/57curR3NDrqcnDBDmPrCUxSwWUGKP22CYp8VUZGkojDiJ+CnlnKUw9YJUNopTfsA9BOoIpw4hkUN5l4XNqst3pbp/gvcYtZvMVE8qbivsDrS4bHFglsPNZn+cY8QAB0x9/lJGQVQ777+DxamNSr
 
-(recipient list trimmed down and added PCI & pwrctrl maintainers and lists)
+On Tue, 2025-10-21 at 17:00 +0530, Ally Heev wrote:
+> uninitialized pointers with __free attribute can cause undefined
+> behaviour as the memory allocated to the pointer is freed
+> automatically when the pointer goes out of scope.
+> add check in checkpatch to detect such issues
 
-On Tue, Oct 21, 2025 at 8:54=E2=80=AFPM Manivannan Sadhasivam <mani@kernel.=
-org> wrote:
->
-> On Tue, Oct 21, 2025 at 02:22:46PM +0200, Bartosz Golaszewski wrote:
-> > On Tue, Oct 21, 2025 at 2:20=E2=80=AFPM Manivannan Sadhasivam <mani@ker=
-nel.org> wrote:
-> > >
-> > > >
-> > > > And with the implementation this series proposes it would mean that
-> > > > the perst signal will go high after the first endpoint pwrctl drive=
-r
-> > > > sets it to high and only go down once the last driver sets it to lo=
-w.
-> > > > The only thing I'm not sure about is the synchronization between th=
-e
-> > > > endpoints - how do we wait for all of them to be powered-up before
-> > > > calling the last gpiod_set_value()?
-> > > >
-> > >
-> > > That will be handled by the pwrctrl core. Not today, but in the comin=
-g days.
-> > >
-> >
-> > But is this the right approach or are you doing it this way *because*
-> > there's no support for enable-counted GPIOs as of yet?
-> >
->
-> This is the right approach since as of today, pwrctrl core scans the bus,=
- tries
-> to probe the pwrctrl driver (if one exists for the device to be scanned),=
- powers
-> it ON, and deasserts the PERST#. If the device is a PCI bridge/switch, th=
-en the
-> devices underneath the downstream bus will only be powered ON after the f=
-urther
-> rescan of the downstream bus. But the pwrctrl drivers for those devices m=
-ight
-> get loaded at any time (even after the bus rescan).
->
-> This causes several issues with the PCI core as this behavior sort of emu=
-lates
-> the PCI hot-plug (devices showing up at random times after bus scan). If =
-the
-> upstream PCI bridge/switch is not hot-plug capable, then the devices that=
- were
-> showing up later will fail to enumerate due to lack of resources. The fai=
-lure
-> is due to PCI core limiting the resources for non hot-plug PCI bridges as=
- it
-> doesn't expect the devices to show up later in the downstream port.
+Seems sensible.  Couple minor points below:
 
-Side note:
+> diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+[]
+> @@ -7721,6 +7721,12 @@ sub process {
+>  				ERROR("MISSING_SENTINEL", "missing sentinel in ID array\n" . "$here\=
+n$stat\n");
+>  			}
+>  		}
+> +
+> +# check for uninitialized pointers with __free attribute
+> +		if ($line =3D~ /\s*$Type\s*($Ident)\s+__free\s*\(\s*$Ident\s*\)\s*;/) =
+{
 
-Today I was looking into how the PCI core does slot pwrctrl, and it doesn't
-really work for some of the PCI controller drivers.
+The leading \s* isn't useful, but \b should be used.
 
-The pwrctrl stuff happens after the driver adds the host bus bridge.
-However drivers are doing link training before that. If the power is
-not on, link training will fail, and the driver errors out. It never
-has a chance to get to pwrctrl.
+Perhaps verify that $Type is a pointer as well
 
-I wonder if some bits should be split out so they could be interleaved with
-link management on the host side. AFAICT only dwc and qcom will rescan the
-bus when an interrupt says the link is up. Other controllers might not have
-such an interrupt notification. I was looking at the MediaTek gen3 driver
-specifically.
+		if ($line =3D~ /\b($Type)\s*($Ident)\s*__free\s*\(\s*$Ident\s*\)\s*;/ &&
+		    $1 =3D~ /\*\s*$/) {
 
-Otherwise I think the DT representation for the PCIe slot power is great.
+to avoid things like:
+
+drivers/net/ethernet/microsoft/mana/gdma_main.c:	cpumask_var_t cpus __free(=
+free_cpumask_var);
 
 
-Thanks
-ChenYu
+> +			WARN("UNINITIALIZED_PTR_WITH_FREE",
+> +			      "pointer '$1' with __free attribute should be initialized\n" . =
+$herecurr);
 
-> One way to fix this issue is by making sure all the pwrctrl capable devic=
-es
-> underneath a PCI bridge getting probed, powered ON, and finally deasserti=
-ng the
-> PERST# for each one of them. If the PERST# happens to be shared, it will =
-be
-> deasserted once at the last. And this order has to be ensured by the pwrc=
-trl
-> core irrespective of the shared PERST#.
->
-> - Mani
->
-> --
-> =E0=AE=AE=E0=AE=A3=E0=AE=BF=E0=AE=B5=E0=AE=A3=E0=AF=8D=E0=AE=A3=E0=AE=A9=
-=E0=AF=8D =E0=AE=9A=E0=AE=A4=E0=AE=BE=E0=AE=9A=E0=AE=BF=E0=AE=B5=E0=AE=AE=
-=E0=AF=8D
->
+			pointer '$2' etc
+
+And this would not find uses like the below where another definition
+is done before a definition with __free on the same line:
+
+crypto/testmgr.c:       u8 *ptr, *key __free(kfree);
+
+There are many uses in drivers/opp/ that could be updated where
+the initialization is done after the definition like the below:
+(I've added the opp maintainers to the cc's)
+
+drivers/opp/core.c-unsigned long dev_pm_opp_get_max_clock_latency(struct de=
+vice *dev)
+drivers/opp/core.c-{
+drivers/opp/core.c:     struct opp_table *opp_table __free(put_opp_table);
+drivers/opp/core.c-
+drivers/opp/core.c-     opp_table =3D _find_opp_table(dev);
+
+An aside found while using grep:
+
+There are uses of DEFINE_FREE that seem to have an unnecessary trailing ;
+
+$ git grep -w DEFINE_FREE | grep ';'
+drivers/firmware/efi/libstub/efistub.h:DEFINE_FREE(efi_pool, void *, if (_T=
+) efi_bs_call(free_pool, _T));
+drivers/fwctl/mlx5/main.c:DEFINE_FREE(mlx5ctl, struct mlx5ctl_dev *, if (_T=
+) fwctl_put(&_T->fwctl));
+drivers/pci/msi/msi.c:DEFINE_FREE(free_msi_irqs, struct pci_dev *, if (_T) =
+pci_free_msi_irqs(_T));
+drivers/tty/vt/vc_screen.c:DEFINE_FREE(free_page_ptr, void *, if (_T) free_=
+page((unsigned long)_T));
+fs/pstore/inode.c:DEFINE_FREE(pstore_private, struct pstore_private *, free=
+_pstore_private(_T));
+include/linux/cpumask.h:DEFINE_FREE(free_cpumask_var, struct cpumask *, if =
+(_T) free_cpumask_var(_T));
+include/linux/execmem.h:DEFINE_FREE(execmem, void *, if (_T) execmem_free(_=
+T));
+include/linux/fwctl.h:DEFINE_FREE(fwctl, struct fwctl_device *, if (_T) fwc=
+tl_put(_T));
+net/core/dev.h:DEFINE_FREE(netdev_unlock, struct net_device *, if (_T) netd=
+ev_unlock(_T));
 
