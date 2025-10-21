@@ -1,174 +1,124 @@
-Return-Path: <linux-pm+bounces-36573-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36574-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16D58BF6ECC
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 15:57:13 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 91E72BF6E99
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 15:55:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C2D883A7275
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 13:55:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2269119A0D6A
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Oct 2025 13:55:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D41B5339717;
-	Tue, 21 Oct 2025 13:54:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B4DB339B35;
+	Tue, 21 Oct 2025 13:55:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Z7MiLYc9"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="hs1OoVm4"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yx1-f51.google.com (mail-yx1-f51.google.com [74.125.224.51])
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB238338936
-	for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 13:54:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E3C8338931
+	for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 13:55:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761054895; cv=none; b=ND0i8IzmLQ3w0dfxWGDZP91qAtVrXETt7uuICnNeKZI7WDUGNAJMYDpoNv5w7LjNzHdWG+89HVSIbJEn7hWG1Vfd+n/NbfpWxQY+oZ0rUQ/KzgC2zFSuMyLedk4Qwnv07mHQol8uNzzdGQBqBVTTovtb4yyY8Pzco9NGkKY4HQA=
+	t=1761054906; cv=none; b=hkozmIC9OwYA2CBVQPhfJr6gKBNvPaDT+TTN99ToFmrIkOnLtonvqft5zxcQ2zeTgMP1Jpl60bHfMT8PQ2dwWG5kyeXXZdJEsT6GWEAeGFvNxAKoqkFM4E0fBNK5CIe9HGeWbSZ1q6E4g+8B7ssfaKG4/jZ6MAuONtok+jVMqWo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761054895; c=relaxed/simple;
-	bh=WjXVc6EHp/g4iSC0dgl+mBlijG+pJ2E1MMjbyg07e+k=;
+	s=arc-20240116; t=1761054906; c=relaxed/simple;
+	bh=dtENIpP2ymfiJq2a+uxczvxyLyuLM+4hnAglKE1I+no=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WKXEiANi7d2a4k1ane9F/+mJEf2F4CyT0imS97d8vPrnpHl8dJFOcZAJlJUP/UWfyUmgCpd5IpNVGjndtlxsO4BtwUdhh48asp3m96//eyPizZ/66O8D1j7TRW/Zxven2+22fx1eOTNw9qXFYLyKS92DAelApJWx6EvygqB/pqI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Z7MiLYc9; arc=none smtp.client-ip=74.125.224.51
+	 To:Cc:Content-Type; b=cl1C9wdElAlShmxN2PBk80f9pKztD1S0wsbQ4dI2LmtuWLoq+naRGxeNBC/6h1+915G++nWKTeajUmWEtdl0XwvvcYF95CMiTjrgdLryxsss0CTQj/PiisTZYJUiTOU8uKeY1/FV3MVmOkGzNSWPlruXdIMzzJ0YfaeXW2TJj7I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=hs1OoVm4; arc=none smtp.client-ip=209.85.128.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yx1-f51.google.com with SMTP id 956f58d0204a3-63bc1aeb427so5854754d50.3
-        for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 06:54:52 -0700 (PDT)
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-784826b75a4so36664347b3.0
+        for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 06:55:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1761054892; x=1761659692; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=t7l2S0fTu5SAF3VSsMCSsLrp+bmdGs9v0RGyTD+mw5o=;
-        b=Z7MiLYc94MoWtpRRdN94cauHSrYJHA2B/Y6/IEgd5CgGX96YFHY3fVWOtro0a4Gaaa
-         41wtWTBU/Aeo13JTK860LTl8Is3s5pnxRuIa5yayhMDPjkCjVD1UFfBo+pNaqQAx+Di7
-         +zM1UpZBKht2heAxtX4OZ1oeIdb5SfzogJ0pfrbcwaz0thc4EOWL4K1OgpnajXudnKR9
-         K0qVRXO3gytM2LZRHcib8v/LBLYc97EjKP/schY7KPeJ3AvK81cCBI1zccA7cceTIMal
-         K+zRA1QAe7rCu1HNMXgi05P9J9exSmXwqQ7eMoVWBygUVXRVmwsmX0J+qkBDIhITDbTj
-         3HiQ==
+        d=linaro.org; s=google; t=1761054903; x=1761659703; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=MZkRqgQmvQUxe0HkH7YLcOV5VrwBVz6cPfsq0k36X3M=;
+        b=hs1OoVm4puVOTtiW5YZKgNbhd7ncj7IncEdJ5JkCRy2ciVfXlDyCAV5ogD0ch8ChhT
+         FWIDdh8ZwsHEOpyRj/8cUBJClnR9wCE+WJiLUUZHHQfPBABgkxLIxzltzkL6EBHq8yxb
+         r/LVZ2JHgzvbiUwRd9M3tzPjV9LkiDmrSYVem1EQBQ+JRvb7fDDWUAvgEccuTA31hYGe
+         JpO9bModiWT1/Ca/uuIU9EdCSOfCZAnMucQVYwbVaCdK620HVzoEoDePL6im2E8WD7VP
+         3PJnI1jNWpQOmgEM0tWumPq8RHTuczLWxBPT0u5UmGSGsLDW4ZhixaygkS80rWwjswyR
+         nOpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761054892; x=1761659692;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=t7l2S0fTu5SAF3VSsMCSsLrp+bmdGs9v0RGyTD+mw5o=;
-        b=E/L4En8C1s2qV4gtRuRlMRDKfIMPBr1DvtoVKoNLrBQKSjHKwaJ0dNNHTE67abCgHV
-         sF3imVvjuq3sjjhcR/17ym8zTCGw4YDMjpPdbNzm4uUfrahyqXcz7spaxX7EXOpXBkus
-         V8zPUcUqj12ruPg4S8IU6wCWv5wurRKJqBaDPbvS7XepAj82fnsrVKJWbQ1krFhcWZRj
-         qim/vbcNnjDO2/j5GBPUa6FhQN40mF7BXpYZ/wP/x2De3fCRDg86itxitxpW8jk66kY5
-         k39cdf55REDKsu/ymAKg6jkxXxdIS5DUkGbhysE/qyW7HCmP6/DnZaLWxxafpkFH+w+F
-         bgtA==
-X-Forwarded-Encrypted: i=1; AJvYcCU+nOb9nnsDchRvtnzhqivhhtOdWGbW0hWMoIjcj8ZLHH9wDJk2lVP00KGxG0MZplnnIaqxh9FhYA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx+CkoqY7E3XkxDoJQ2XuJpuVvaySfF0Ujl3bdjrYlNBknkinFZ
-	Xrn/NszTZzlDlhAjvzUXoGbibBmULha3FFGO4GrHfKg2ecYdPQe5ddflgdY4Gt57J10UgHt0GK7
-	/wW86S9ZSq1z/TDbBc5t3ocDoOpc2BTttYTSvVo7vNA==
-X-Gm-Gg: ASbGnctUKN/hugU3PCUrYoWjalOPllFmIa/4oOtSlH6ojQdEAO9MAg3M0dY5iUYvaJG
-	pW2d0Yoof0D+wAXFuHflzvOz75s5Bz5FcGQJl4V1TcfEa9uPZP3TKqJWhKkEyLjr4tETL6YGoWX
-	65sphY0IH9eOGEM+7rnZK86eGHSlZw+Iw7eNIXySV57DBsBmpft29v8/CiBidEKxh0qNwZxD9TB
-	91DeVrJtu/9lJLbMT7hvEMzSNbD9bHs0GNdOFxrt37KeN9A/hSWqazHozBT7Mx7N5WQyCjB
-X-Google-Smtp-Source: AGHT+IHBbKVNcuM7l9dFMzW3m4txAHgl/oBl0HllzJAJ6dzOGjsTsg6Juv5F+fWERMC7Ma504B1opcnGXEPDICN6WPQ=
-X-Received: by 2002:a05:690e:134a:b0:63e:34ed:a131 with SMTP id
- 956f58d0204a3-63e34eda971mr6291641d50.31.1761054891971; Tue, 21 Oct 2025
- 06:54:51 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1761054903; x=1761659703;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MZkRqgQmvQUxe0HkH7YLcOV5VrwBVz6cPfsq0k36X3M=;
+        b=Pdb7mmHGpKHnuQTqNidXt8DB8nTtnW8Pjs6qwBG8JQgyH98Unf8SuwWFR+Lv89IF8Q
+         JqhUKnG+thvO0Dbz9D+tIb+vE+h5UMUX9/s+82usHvxFCCHF3j7BJUd67GY5msHbpjw9
+         V6tNbKAQbbC6Qga0X5+ugpJYOE4t3W777U81VcNchwcytPD4tFmHyL3cdRO+Y+0WM0th
+         kDUJQtqestRSexLH2E0BrCtV40Q3oQMe2DWXI1s5gxwa1gM+uYjy0L9pRXHSl4wpwkrS
+         S9QyrWt++09x86uvJxMEHgs+sJamPkvhz+d0Jdg7iEPqW/qsuTEfxN1+o4uKBtl6b7Xj
+         zGDA==
+X-Forwarded-Encrypted: i=1; AJvYcCWOnQmZ+YgKMWJfYsJE2tbY7StQfAVbSE1e66Ul1GwtVceIcCo7X+WSSaZXOhYv9vG4r8JNHJPZ7Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyHR+XrkeApHBwZ9pTO8G02RLF6+6/drsGrIzT9/mhUr+vywoeF
+	VqpTFMJwlxF7eC++mPxhOcIK2UX0XjXYY4zjsz7f0l03tW436961+4G+hij/7ctiIFI2erJzBB1
+	Lc2WW6TImW3SXv94gMqIB4tEFsdRXTRXYi0SEa+q9xw==
+X-Gm-Gg: ASbGncusdUUp1gtxt4xSgqyUG9OfrQSxV6Y4YhSbHKqbKZQ8bAXqqXsArvaE+itFNLu
+	kydn3k2RjN4olQfOUjFuNEH1S9dPo2s1OssqwIS0GikbVl0UkjV/MCmXh96cMi+XuTjsOw6pxPd
+	HXhLwivt2REf6d5g6AjOzbqgRrzlw7DYEyZwnV2hUWbbRi9CQl1rIMk7/rdamQbN/0eRJroPoiO
+	hviHfN6i4gQve2yFIlmHXWMkqHhRuUCPk8CxUETqFrr9PbWLHnCVSRGaMvvmxBwio8NgekU
+X-Google-Smtp-Source: AGHT+IGwCSwvvGE3O6NbkG51mymMqSVErgL+88mCbcZ/Sh4giHy8+THUXBi9OuVSQ8LD5w3yhlK7YcdBM0SL+BQqwY4=
+X-Received: by 2002:a05:690e:134e:b0:63e:3296:8886 with SMTP id
+ 956f58d0204a3-63e3297a274mr6263197d50.42.1761054902681; Tue, 21 Oct 2025
+ 06:55:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251016-gs101-pd-v3-0-7b30797396e7@linaro.org> <20251016-gs101-pd-v3-4-7b30797396e7@linaro.org>
-In-Reply-To: <20251016-gs101-pd-v3-4-7b30797396e7@linaro.org>
+References: <20250924-knp-pd-v1-0-b78444125c91@oss.qualcomm.com>
+In-Reply-To: <20250924-knp-pd-v1-0-b78444125c91@oss.qualcomm.com>
 From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Tue, 21 Oct 2025 15:54:16 +0200
-X-Gm-Features: AS18NWDpF262ybo6_Emnnj0aCX8cQdB1lik5qoOWoSB0z0MgCBOGMTnmDv5nouE
-Message-ID: <CAPDyKFpH2p=JhkuXOxL4V3QMH8GObh0qSphPCK=OM9cNe+QmJg@mail.gmail.com>
-Subject: Re: [PATCH v3 04/10] pmdomain: samsung: plug potential memleak during probe
-To: =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
-	Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Marek Szyprowski <m.szyprowski@samsung.com>, 
-	Peter Griffin <peter.griffin@linaro.org>, Tudor Ambarus <tudor.ambarus@linaro.org>, 
-	Will McVicker <willmcvicker@google.com>, kernel-team@android.com, 
-	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
+Date: Tue, 21 Oct 2025 15:54:26 +0200
+X-Gm-Features: AS18NWBHdAFp1mwITr0UmXnrlHznqrsFfmK4pqdcEpQD90Zx_dU1-YGQ61Q86vs
+Message-ID: <CAPDyKFofohpEDcowp-MwtJqKu4wN4qvXz+BKOG6=8jhWS_k-PA@mail.gmail.com>
+Subject: Re: [PATCH 0/3] power: qcom,rpmpd: Add support for Kaanapali
+To: Jingyi Wang <jingyi.wang@oss.qualcomm.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>, aiqun.yu@oss.qualcomm.com, 
+	tingwei.zhang@oss.qualcomm.com, trilok.soni@oss.qualcomm.com, 
+	yijie.yang@oss.qualcomm.com, linux-arm-msm@vger.kernel.org, 
 	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, stable@vger.kernel.org, 
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+	linux-pm@vger.kernel.org, Jishnu Prakash <jishnu.prakash@oss.qualcomm.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, 16 Oct 2025 at 17:58, Andr=C3=A9 Draszik <andre.draszik@linaro.org>=
- wrote:
+On Thu, 25 Sept 2025 at 01:17, Jingyi Wang <jingyi.wang@oss.qualcomm.com> wrote:
 >
-> of_genpd_add_provider_simple() could fail, in which case this code
-> leaks the domain name, pd->pd.name.
+> Add rpmpd support for Kaannapali Platform including RPMh power domains
+> and new RPMh levels.
 >
-> Use devm_kstrdup_const() to plug this leak. As a side-effect, we can
-> simplify existing error handling.
->
-> Fixes: c09a3e6c97f0 ("soc: samsung: pm_domains: Convert to regular platfo=
-rm driver")
-> Cc: stable@vger.kernel.org
-> Reviewed-by: Peter Griffin <peter.griffin@linaro.org>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Andr=C3=A9 Draszik <andre.draszik@linaro.org>
+> Signed-off-by: Jingyi Wang <jingyi.wang@oss.qualcomm.com>
 
-Applied for fixes, thanks!
+Applied for next, thanks!
 
 Kind regards
 Uffe
 
 
 > ---
-> v2:
-> mark as fix, as this isn't a pure simplification
+> Jishnu Prakash (3):
+>       dt-bindings: power: qcom,rpmpd: document the Kaanapali RPMh Power Domains
+>       dt-bindings: power: qcom,rpmpd: add new RPMH levels
+>       pmdomain: qcom: rpmhpd: Add RPMh power domain support for Kaanapali
+>
+>  .../devicetree/bindings/power/qcom,rpmpd.yaml      |  1 +
+>  drivers/pmdomain/qcom/rpmhpd.c                     | 28 +++++++++++++++++++++-
+>  include/dt-bindings/power/qcom,rpmhpd.h            |  3 +++
+>  3 files changed, 31 insertions(+), 1 deletion(-)
 > ---
->  drivers/pmdomain/samsung/exynos-pm-domains.c | 11 +++++------
->  1 file changed, 5 insertions(+), 6 deletions(-)
+> base-commit: ae2d20002576d2893ecaff25db3d7ef9190ac0b6
+> change-id: 20250922-knp-pd-f639194fd7c4
 >
-> diff --git a/drivers/pmdomain/samsung/exynos-pm-domains.c b/drivers/pmdom=
-ain/samsung/exynos-pm-domains.c
-> index 5d478bb37ad68afc7aed7c6ae19b5fefc94a9035..f53e1bd2479807988f969774b=
-4b7b4c5739c1aba 100644
-> --- a/drivers/pmdomain/samsung/exynos-pm-domains.c
-> +++ b/drivers/pmdomain/samsung/exynos-pm-domains.c
-> @@ -92,13 +92,14 @@ static const struct of_device_id exynos_pm_domain_of_=
-match[] =3D {
->         { },
->  };
->
-> -static const char *exynos_get_domain_name(struct device_node *node)
-> +static const char *exynos_get_domain_name(struct device *dev,
-> +                                         struct device_node *node)
->  {
->         const char *name;
->
->         if (of_property_read_string(node, "label", &name) < 0)
->                 name =3D kbasename(node->full_name);
-> -       return kstrdup_const(name, GFP_KERNEL);
-> +       return devm_kstrdup_const(dev, name, GFP_KERNEL);
->  }
->
->  static int exynos_pd_probe(struct platform_device *pdev)
-> @@ -115,15 +116,13 @@ static int exynos_pd_probe(struct platform_device *=
-pdev)
->         if (!pd)
->                 return -ENOMEM;
->
-> -       pd->pd.name =3D exynos_get_domain_name(np);
-> +       pd->pd.name =3D exynos_get_domain_name(dev, np);
->         if (!pd->pd.name)
->                 return -ENOMEM;
->
->         pd->base =3D of_iomap(np, 0);
-> -       if (!pd->base) {
-> -               kfree_const(pd->pd.name);
-> +       if (!pd->base)
->                 return -ENODEV;
-> -       }
->
->         pd->pd.power_off =3D exynos_pd_power_off;
->         pd->pd.power_on =3D exynos_pd_power_on;
->
+> Best regards,
 > --
-> 2.51.0.788.g6d19910ace-goog
+> Jingyi Wang <jingyi.wang@oss.qualcomm.com>
 >
 
