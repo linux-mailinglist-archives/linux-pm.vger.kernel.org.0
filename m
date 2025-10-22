@@ -1,167 +1,201 @@
-Return-Path: <linux-pm+bounces-36668-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36669-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 13B75BFDE6C
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Oct 2025 20:41:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C4157BFDEA8
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Oct 2025 20:45:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 84E813A71AD
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Oct 2025 18:40:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D1FB43A8FFA
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Oct 2025 18:41:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E57C34E761;
-	Wed, 22 Oct 2025 18:40:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0262E34DCCE;
+	Wed, 22 Oct 2025 18:41:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="tNOgdzIW"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="C4ABvbj4"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 179C834D4F0
-	for <linux-pm@vger.kernel.org>; Wed, 22 Oct 2025 18:39:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3D2634D4CC
+	for <linux-pm@vger.kernel.org>; Wed, 22 Oct 2025 18:41:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761158401; cv=none; b=hFO0UYKJhdfz3qUGIyOaqnXayUvEdcKqjzZpDnVGZOk0kzWSMZsBzv5SbeXqkMNelfqbEtShZjYIWgPWVoNC2SUy2vPaMDmRPWZNi4E0w+peDkqty4ioujxB9qBJOXpxKBN7OqWk8rHnmOh1KurGMM4rQPfawtE1zawKPMc0k5Q=
+	t=1761158512; cv=none; b=M1Q0wRqN2vyJFGgFN73SeIm6YpHHjJHQ9YOyXPvz5jTBsKlM/PNue6ee0LwABBovrBkvB0LQun4y/yuQay7Xpwz2/acZQxsuAHTDdb+Or67FB/ZbWczNiG2TnuKTbi5XP9FiPU5KjmBd1qEo3PlWsEh/PBZ9cPJDk7pE1DqL+5I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761158401; c=relaxed/simple;
-	bh=e80XxCGjZ6AfVrLJhtuJErL90MhPg1iUfpNnujKXdwY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
-	 Content-Type:References; b=rQHu5EMesUqkxYfNW+hIbkm2mvWQ0SI0oWy7LmzyODFuS3iWJYe/f0SWWEVLP7PgP/IhFdjmKTwPBgnObzS9IHlN2d5RcwiaNcECV3fq3BcB7bKDzvUjXKIts4dGdaTuvYIQAhmhkKwvutQ07sArbYy2eG99cqG2kkx9drcpMIQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=tNOgdzIW; arc=none smtp.client-ip=210.118.77.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-	by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20251022183956euoutp014b18a2a9e3e02825cf607c7f0871baff~w5Dr2nvXm1233912339euoutp01y
-	for <linux-pm@vger.kernel.org>; Wed, 22 Oct 2025 18:39:56 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20251022183956euoutp014b18a2a9e3e02825cf607c7f0871baff~w5Dr2nvXm1233912339euoutp01y
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1761158396;
-	bh=Wp7PQxwpEUaf4NDF7jDHZA4RAc1DRUXdHx0e2Vlvfqo=;
-	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-	b=tNOgdzIWZtXNOZ/Hu/grKRy1A+gwmxnM47VoFiQiKQNuR9W0LmUvunUkvu9FtCdH3
-	 gnDY6SgHxgHT8ebCxqR8dvZpfTxBGDc67utnUy3I3tECih9j19xdbSF9Ec/8Yq1yAp
-	 l4ZiujU90fMBy4EJAgaVTe59N+5VAbU1bLmxYNEQ=
-Received: from eusmtip1.samsung.com (unknown [203.254.199.221]) by
-	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-	20251022183955eucas1p23819de66a835c57747daa0136753c808~w5DrCgZAS0057800578eucas1p2Z;
-	Wed, 22 Oct 2025 18:39:55 +0000 (GMT)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-	eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20251022183953eusmtip131c046506281f6642166831a3fe9c211~w5DpcncR60141601416eusmtip1Y;
-	Wed, 22 Oct 2025 18:39:53 +0000 (GMT)
-Message-ID: <57bacc06-8a5e-4284-a520-c5d2a56545e9@samsung.com>
-Date: Wed, 22 Oct 2025 20:39:53 +0200
+	s=arc-20240116; t=1761158512; c=relaxed/simple;
+	bh=4SsgFy3W8i6VYi5migZylUtx9+LlsgxxkwCdOCuq1ec=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=O02Uf5Jx5TcUhKLSEp+s6IMNjn5wcMttB+fkjIpYu6djymTmm/vD4jjz5LGDOCC8Amudeli649CXgbOFIT2QlGUyljQbFvpIMI72JmiPWFz/ZVSXu+YTBlJ3eE5q4aWIAjtZT2C/ziS2yKrcI8afhe8IGaKxjte+xw3c2mkvaCw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=C4ABvbj4; arc=none smtp.client-ip=209.85.218.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-b5b823b4f3dso1373567966b.3
+        for <linux-pm@vger.kernel.org>; Wed, 22 Oct 2025 11:41:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1761158509; x=1761763309; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iBSNtwt1hqivpMpQtmcSf95eEecb17MZgEpr3DvvZp8=;
+        b=C4ABvbj4hEYyxN0hqadq04T0CTTUoZmxChgIpTw13E21PH2Mqw7qmXdxamV1Pm8HaE
+         T/JkCy+a1EACehR0AwlaDvnOA1bs/DGiZRt68+TMKfe9nc3Q5oBCgqUh+ejDPQ8eWrgm
+         XzV+lEwxAgLjWOKoBLXyaOpVN8wxLeiAvD8yOKaEpI3+VRUgEmBmK1kZq9/7n3FtSuSy
+         dYcu+nhRt2OK3+gNbjJkTrcrUhFUwUqQIOdDTIf5vqPrVhW+Ib/nNGPqHtP9xdkmI9VB
+         EQbRQ8LzUL/wI2TIa47+/WdMW1dTt0bm3KXcXyBMz6QSgbKIKkOA4sTyaidCpRG65C26
+         LWNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761158509; x=1761763309;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iBSNtwt1hqivpMpQtmcSf95eEecb17MZgEpr3DvvZp8=;
+        b=DkLoQGoTd9EI57m5tplPUw5ArZJhhAmegiGXs9sIpc9ks1zc0vpMINOOL0VD+9nSaR
+         Ol7Ya61SXG6UZzVYadyrtcsy+mLj6wzqZeQhHdqeK4PKqUFtRvVTlIGRk15YIWmNUzdb
+         qymSWI8GcosDH/UXzyu9BEbMtwTO/tvbHtk/AImwK8RfnPcy19ti4WP56rT9jpOlfXpo
+         EHFVxg7Su+Qcc6mRRilJMs1ql9OECyHdXszcUlomy3+qx/kV5eKwiUalqyvK3nLXY0wK
+         8LKdBTw4nb8/C2ADEJxBvPKjdqOMwdah/jUJbqvbmSVr9010diPjIUUt53s4sAAXrx9d
+         aQJA==
+X-Forwarded-Encrypted: i=1; AJvYcCUEptpVwvycammACP/fKDlalr1Yi5/1f8izi2lbSRwjz7L2M5yiOjYs3yWFdhzQGJxu9IsXS/+ydQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxOAF/xenNL0ENuvYB1B8R/nw/KkMlNX3w/ADWMwuqrZvDPxHLN
+	FspdMRbh2ic7Xa0C3DJBWaMj1PxgOAJKONH8MPsUMJZiSZOvp8e3wWOOB3tAaku4TdroWY/pZty
+	82L091OZUY649hKWN18GdCvbVpHtRXnqWcW1BVONC
+X-Gm-Gg: ASbGncvbm1oz1zxp9QJBVVFWE2aQgo7QuaeYyA6ITYnaNRgJrf/K1nNuJhHii2ow4fp
+	0zftP2KK4oNNctY16xg0U/xt3a/eGPnoQVttZwl8VYr490HEKYO2a8B/mPIoko2EM85JtrOp1r9
+	Lbs+hXKw1clnysfnA5eAYvkFF7HB44mXfOMaTatebXvnsIjgVGRgyNbibG4DF7DYg4ULLjXy/kk
+	AyL/Kr9ZQJFfH4/u5fVmbTobpkk9tzZwNpXWi/Uh/IMViNkxRKk2kFwVjy3q68Q2F+ctLIUcE0b
+	jvpx1pSDUIUAqgY2FL7rR48B
+X-Google-Smtp-Source: AGHT+IG9QOCvLGRlm2L1hQvr/syZxkOWJ3YGHVm/KAKKxfnnsFMCKtjyaFKcnKslc2naOE06t43sSnnXWGnsfmQWWbQ=
+X-Received: by 2002:a17:907:bb49:b0:b4b:4f7:7a51 with SMTP id
+ a640c23a62f3a-b6475706fc2mr2674087066b.62.1761158508815; Wed, 22 Oct 2025
+ 11:41:48 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Betterbird (Windows)
-Subject: Re: [PATCH v3 08/10] pmdomain: samsung: selectively handle enforced
- sync_state
-To: Ulf Hansson <ulf.hansson@linaro.org>, =?UTF-8?Q?Andr=C3=A9_Draszik?=
-	<andre.draszik@linaro.org>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>, Alim Akhtar
-	<alim.akhtar@samsung.com>, Rob Herring <robh@kernel.org>, Conor Dooley
-	<conor+dt@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Peter
-	Griffin <peter.griffin@linaro.org>, Tudor Ambarus
-	<tudor.ambarus@linaro.org>, Will McVicker <willmcvicker@google.com>,
-	kernel-team@android.com, linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Content-Language: en-US
-From: Marek Szyprowski <m.szyprowski@samsung.com>
-In-Reply-To: <CAPDyKFq2esPos=D-eVz6w1VXq=4LYi6fx54K4TvsUi4JqUJOaQ@mail.gmail.com>
-Content-Transfer-Encoding: 8bit
-X-CMS-MailID: 20251022183955eucas1p23819de66a835c57747daa0136753c808
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20251022110738eucas1p2cee28096ca5c9c6a802e2190d88ccf21
-X-EPHeader: CA
-X-CMS-RootMailID: 20251022110738eucas1p2cee28096ca5c9c6a802e2190d88ccf21
-References: <20251016-gs101-pd-v3-0-7b30797396e7@linaro.org>
-	<20251016-gs101-pd-v3-8-7b30797396e7@linaro.org>
-	<CGME20251022110738eucas1p2cee28096ca5c9c6a802e2190d88ccf21@eucas1p2.samsung.com>
-	<CAPDyKFq2esPos=D-eVz6w1VXq=4LYi6fx54K4TvsUi4JqUJOaQ@mail.gmail.com>
+References: <CAG2KctpHA+L=xh-VQ8SVDSRcqyL+ch=WMVrKS+pckLmC6uJwvw@mail.gmail.com>
+ <20251022011547.8648-1-hdanton@sina.com>
+In-Reply-To: <20251022011547.8648-1-hdanton@sina.com>
+From: Samuel Wu <wusamuel@google.com>
+Date: Wed, 22 Oct 2025 11:41:37 -0700
+X-Gm-Features: AS18NWBw4EAoALtfgytkbkwkbw8Bd9QzC3V--BUqEq20Lf9R4DR6aXlMdo7JRKk
+Message-ID: <CAG2KctoJ+1x61KNmDj_52J1_Y3vyox7UNceFw6_WtbRMA_1vYA@mail.gmail.com>
+Subject: Re: [PATCH v5] PM: Support aborting sleep during filesystem sync
+To: Hillf Danton <hdanton@sina.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, 
+	Saravana Kannan <saravanak@google.com>, kernel-team@android.com, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 22.10.2025 13:06, Ulf Hansson wrote:
-> On Thu, 16 Oct 2025 at 17:58, André Draszik <andre.draszik@linaro.org> wrote:
->> Unconditionally calling of_genpd_sync_state() causes issues on
->> platforms with child domains as the parent domain will be turned off
->> before the child domain was even registered during boot.
->>
->> This in particular is an issue for the upcoming Google gs101 support -
->> all operations on child domains registered after the parent domain
->> misbehave.
->>
->> Add a flag to the probe data to be able to sync_state conditionally
->> only, and enable that flag on the two platforms currently supported by
->> this driver.
->>
->> Signed-off-by: André Draszik <andre.draszik@linaro.org>
->>
->> ---
->> v2:
->> * use bool for need_early_sync_state (Krzysztof)
->> ---
->>   drivers/pmdomain/samsung/exynos-pm-domains.c | 5 ++++-
->>   1 file changed, 4 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/pmdomain/samsung/exynos-pm-domains.c b/drivers/pmdomain/samsung/exynos-pm-domains.c
->> index 638d286b57f716140b2401092415644a6805870e..15a1582aa92103a07335eb681600d9415369fefd 100644
->> --- a/drivers/pmdomain/samsung/exynos-pm-domains.c
->> +++ b/drivers/pmdomain/samsung/exynos-pm-domains.c
->> @@ -20,6 +20,7 @@
->>   struct exynos_pm_domain_config {
->>          /* Value for LOCAL_PWR_CFG and STATUS fields for each domain */
->>          u32 local_pwr_cfg;
->> +       bool need_early_sync_state;
->>   };
->>
->>   /*
->> @@ -69,10 +70,12 @@ static int exynos_pd_power_off(struct generic_pm_domain *domain)
->>
->>   static const struct exynos_pm_domain_config exynos4210_cfg = {
->>          .local_pwr_cfg          = 0x7,
->> +       .need_early_sync_state  = true,
->>   };
->>
->>   static const struct exynos_pm_domain_config exynos5433_cfg = {
->>          .local_pwr_cfg          = 0xf,
->> +       .need_early_sync_state  = true,
->>   };
->>
->>   static const struct of_device_id exynos_pm_domain_of_match[] = {
->> @@ -179,7 +182,7 @@ static int exynos_pd_probe(struct platform_device *pdev)
->>           * reset during boot. As a temporary hack to manage this, let's enforce
->>           * a sync_state.
->>           */
->> -       if (!ret)
->> +       if (pm_domain_cfg->need_early_sync_state && !ret)
->>                  of_genpd_sync_state(np);
-> The call to of_genpd_sync_state() was intended as a temporary solution here.
+On Tue, Oct 21, 2025 at 6:16=E2=80=AFPM Hillf Danton <hdanton@sina.com> wro=
+te:
 >
-> Potentially, if we would be able to distinguish what PM domain that is
-> causing the problem on the Exynos platforms, we could set
-> GENPD_FLAG_NO_STAY_ON for that genpd instead.
+> On Tue, 21 Oct 2025 13:13:39 -0700 Samuel Wu wrote:
+> > On Fri, Oct 17, 2025 at 5:17=E2=80=AFPM Hillf Danton <hdanton@sina.com>=
+ wrote:
+> > > On Fri, 17 Oct 2025 23:39:06 +0000 Samuel Wu wrote:
+> > > > +/**
+> > > > + * pm_sleep_fs_sync - Trigger fs_sync with ability to abort
+> > > > + *
+> > > > + * Return 0 on successful file system sync, otherwise returns -EBU=
+SY if file
+> > > > + * system sync was aborted.
+> > > > + */
+> > > > +int pm_sleep_fs_sync(void)
+> > > > +{
+> > > > +     bool need_pm_sleep_fs_sync_requeue;
+> > > > +     unsigned long flags;
+> > > > +
+> > > > +     do {
+> > > > +             spin_lock_irqsave(&pm_sleep_fs_sync_lock, flags);
+> > > > +             reinit_completion(&pm_sleep_fs_sync_complete);
+> > >
+> > > Given difficulty following up here, can you specify why reinit is nee=
+ded?
+> >
+> > There are two possibilities that make reinit_completion() necessary:
+> > 1. Suspend abort triggers completion, but is canceled before
+> > pm_wakeup_pending(), so need reinit to restart the
+> > wait_for_completion() process.
+> > 2. Handling back-to-back suspend attempts: after a subsequent suspend
+> > attempt finishes waiting for a previous suspend's fs_sync to finish,
+> > we need the reinit to start the wait_for_completion() process of the
+> > subsequent suspend's fs_sync.
+> >
+> If 1. and 2. matches the comment for wait_for_completion() below,
+>
+>         static DECLARE_COMPLETION(foo);
+>
+>         waiter          waker1          waker2
+>         ---             ---             ---
+>         for (;;) {
+>           reinit_completion(&foo)
+>           do anything
+>           wait_for_completion(&foo)
+>                         do bar1         do bar2
+>                         complete(&foo)  complete(&foo)
+>           if (end)
+>                 break;
+>         }
+>
+> the chance for reinit to drop one wakeup is not zero.
+> If drop makes sense, for what do you wait after receiving two wakeups?
+>
 
-Well, this of_genpd_sync_state() "workaround" has to be applied only to 
-the power domain of the display controller device. It can be replaced by 
-the following check on the legacy Exynos systems:
+If I understand correctly, you are referring to the case where
+multiple wakers trigger wait_for_complete() simultaneously, hence
+having at least one waker's complete() being ignored?
 
-if (IS_ENABLED(CONFIG_ARM) &&
-of_device_is_compatible(np, "samsung,exynos4210-pd") && 
-(strstr(pd->pd.name, "LCD") || strstr(pd->pd.name, "DISP"))) 
-pd->pd.flags = GENPD_FLAG_NO_STAY_ON;
+If so, I see two possibilities with multiple wakers:
+1. fs_sync finishing + suspend abort1 + ... + suspend abortN
+2. suspend abort1 + ... + suspend abortN
 
-I assume that this information cannot be coded in device tree to make it 
-somehow generic...
+Simplifying, if two wakers come in simultaneously, while one of the
+wakers may have its complete() ignored, the state of that waker is
+still checked after wait_for_completion(), with
+if(pm_wakeup_pending()) and while(need_pm_sleep_fs_sync_requeue) for
+suspend aborts and fs_sync finishing respectively.
 
-Best regards
--- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
-
+> > > > +             /*
+> > > > +              * Handle the case where a sleep immediately follows =
+a previous
+> > > > +              * sleep that was aborted during fs_sync. In this cas=
+e, wait for
+> > > > +              * the previous filesystem sync to finish. Then do an=
+other
+> > > > +              * filesystem sync so any subsequent filesystem chang=
+es are
+> > > > +              * synced before sleeping.
+> > > > +              */
+> > > > +             if (pm_sleep_fs_sync_queued) {
+> > > > +                     need_pm_sleep_fs_sync_requeue =3D true;
+> > > > +             } else {
+> > > > +                     need_pm_sleep_fs_sync_requeue =3D false;
+> > > > +                     pm_sleep_fs_sync_queued =3D true;
+> > > > +                     schedule_work(&sync_filesystems);
+> > > > +             }
+> > > > +             spin_unlock_irqrestore(&pm_sleep_fs_sync_lock, flags)=
+;
+> > > > +
+> > > > +             /*
+> > > > +              * Completion is triggered by fs_sync finishing or an=
+ abort sleep
+> > > > +              * signal, whichever comes first
+> > > > +              */
+> > > > +             wait_for_completion(&pm_sleep_fs_sync_complete);
+> > > > +             if (pm_wakeup_pending())
+> > > > +                     return -EBUSY;
+> > > > +     } while (need_pm_sleep_fs_sync_requeue);
+> > > > +
+> > > > +     return 0;
+> > > > +}
+>
+> To unsubscribe from this group and stop receiving emails from it, send an=
+ email to kernel-team+unsubscribe@android.com.
+>
 
