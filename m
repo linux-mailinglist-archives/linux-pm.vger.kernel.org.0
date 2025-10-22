@@ -1,87 +1,77 @@
-Return-Path: <linux-pm+bounces-36621-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36622-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9CB8BBFA116
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Oct 2025 07:35:12 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 44CE9BFA124
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Oct 2025 07:37:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 48C46346C2C
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Oct 2025 05:35:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0C7C1189A55D
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Oct 2025 05:37:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52CB72EC0AD;
-	Wed, 22 Oct 2025 05:35:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A85CB2EC08E;
+	Wed, 22 Oct 2025 05:37:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="EA4JWB16"
+	dkim=pass (2048-bit key) header.d=aurel32.net header.i=@aurel32.net header.b="0Up3RLUx"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from hall.aurel32.net (hall.aurel32.net [195.154.113.88])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B4A72EBDF9
-	for <linux-pm@vger.kernel.org>; Wed, 22 Oct 2025 05:35:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 709BC21348;
+	Wed, 22 Oct 2025 05:37:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.154.113.88
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761111306; cv=none; b=fyKb64R9Xv8B29TnfIGNC4k5cdFmSDsFlMbnVMo/6VFUOGoMOi/xnhHmMgjpLU4fMHI1ON4eDffQCqdCL0mojGQ6r1au35g2uURrwjDf40+ka4TwFKyoPBqDmdM4tCqQyVpk3S6FfXg06kmh+dgiLFbDA94sJocHG5OyCz8TEoo=
+	t=1761111437; cv=none; b=tDNiwXS/ksjkGJdixphHaWJtc22pr4fkesM/6FB4Dn0jnvfBHdOUVaf8fO8cwAGKJo8w8vmoxyYbdCZoX45tn/CSZscg0pxLRJXIqGS6dNoaHLzN0viKzKXt5UEQRf3aYyOlarxfTJSPkuDeja+uEHkkw27VyZkOWgaANOiAMm8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761111306; c=relaxed/simple;
-	bh=Yfli7nrNGWAirNBDg6CXZHLXMoqOZK8KHRWfvR153kE=;
+	s=arc-20240116; t=1761111437; c=relaxed/simple;
+	bh=Tbwss0nXMa5BTDRSqT/ghsm1C3O/dSOWFT7FaxGnv98=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fjkJpZF50RTU5O5sKabmMWyiswcL60jd+C14hpV+uhYvOYPBcamB8kWT7ZH9jVfcH+sich5FqLNSgNcsUpZDD19qzEQoOtyoXU982gH8/XLTp8X6i+ukK1zyX/dTCyaoKi4l2cdHwyU5vrsJYC0TN8SONG9j/f3X4J8FtDMslCs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=EA4JWB16; arc=none smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-27c369f898fso91617875ad.3
-        for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 22:35:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1761111302; x=1761716102; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=56ezGE6Ds9KP53wZYmYW6a4SSoZf29RYPFd4r32eFsg=;
-        b=EA4JWB16r+NXgjHMeMN9NN9KSu5R9Yy8KCxl56vrgzUuc27h1WpYbekyKs+ngvf9E6
-         YpCEaSjFsZqtKKfIR1Ue70YGGJ9nYuBDXFecfpdrhbxJdTQ+nn/VMC9oqoVsDd40p22f
-         Ez3Lq5AxcYC280OcvMweY60pM+McAPT2MaBL+pHBXNtixInkzvh2RpLuC5XkD2VlMgyC
-         pGgFj606MBeT3mQM8LTJ98jLyjvJi91wfE80JCFpjtcBMm5FgTYh3kOlK7x63zezL0UJ
-         EZf5ahL87tSLqOSuxv1gZAPCzM2mTMv5wiFvFHGJhvUJeFZwM0WYnmXHcnR/wulCKIfN
-         zDsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761111302; x=1761716102;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=56ezGE6Ds9KP53wZYmYW6a4SSoZf29RYPFd4r32eFsg=;
-        b=bJTwmVJvkApDOyTprmL16bzA7fHBXjIXOLCwGYPFg0HErTLqDuLnJEVCIndjBHsy5z
-         OS5iLftZVSkRgteEZyrdsI9hcvmCnnFpZ7jkq45bndkTHQRx/zKG5qP2nrmfLCyLLSQN
-         /+nxKB3V/3yZ/8HWPA9VUv2ik8xTLFkAsyMUrJsgQOyjTUbp6uo5rYwj/43IcjMVG8Kd
-         hhtRjGzrtaBPqTNPRf9D31ZbVNiAmvl2gQZ5b2ATektK4Re8AAg0bRg0paHRm8f+9cSq
-         OXvcpLQdjkNmbb1rPgeiJbtlyNTyHZyZ65hVMzyQC8C7XiDvEN8zXuoldic7Jsf0AOhI
-         aYUA==
-X-Forwarded-Encrypted: i=1; AJvYcCVhnEcGM2d7xhz+M5XEieSWAwCPFEXjS/HiryKfsn9o3vM+OdJ1d0IBfsSCPVO162uXZ1n0b90PtQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwEXqmPi+Rm1D0nImVy3bePuawI+M2A80Uea68E+BbpY77ye3PG
-	JfOrfL5+5iOMfeYBb1eI+yXwtskgOctOFHtGy41aa4/5t3iVooLpAAu7hcGFAIUGlrM=
-X-Gm-Gg: ASbGncvcQQAq7ZwkOsHVQKFMYpZ7yKehDcnRaMaWLT21kxJPHNswq6p1+70E2SQN/65
-	ojHNjyS1ut0WKTlHAxbNJSHq0J9/C11kLkdsJhcINZVi2hWRXr+IVXEmvJRSdgEcXwuM+KD0qmy
-	zxyUtIeKlvbVsAR3uRIr5/TSELTtifR54mpH7tYdEp7e776j7MSSRmePx4aYL/ObEa8/71ZRYJI
-	B54adhmJh5JptOKx/cFjiA0wlEJnfVlhXx+JjYahZ2L9zmQsXFiOakeC/WqEic+sF8MfsGjEqpX
-	5cRRcuVTgkyv4hg24YkRvzLdBoFR2Wktk36anD3ArQDUH6/9QJMcph6Q7rSQYSzWgPCL8og0Nwy
-	kYjDh0W8UQiLEsUKSWO0ZiJPqp4Dzem3AIJPpc9AxROOiCwlvsgUbM9bMFRwzR+L0q22WPf0+7L
-	rWI1ziquLqxXd2
-X-Google-Smtp-Source: AGHT+IGnVjE3oW9jfoMl45fRu62Au+V7hXBYTBJW0Xz1osI8MZwsrdpeSGQan//AK1Laa1HoxY0dkg==
-X-Received: by 2002:a17:902:ce07:b0:290:a3b9:d4c7 with SMTP id d9443c01a7336-290ca121944mr241503655ad.30.1761111302331;
-        Tue, 21 Oct 2025 22:35:02 -0700 (PDT)
-Received: from localhost ([122.172.87.183])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b6a766745dasm11961911a12.14.2025.10.21.22.35.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Oct 2025 22:35:01 -0700 (PDT)
-Date: Wed, 22 Oct 2025 11:04:59 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Thorsten Blum <thorsten.blum@linux.dev>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, 
-	linux-hardening@vger.kernel.org, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] cpufreq: Replace deprecated strcpy in
- cpufreq_unregister_governor
-Message-ID: <rgk3oym7r2gkx4gjqsot3n55s4jtlgyl7vayutaneyuqegybzl@njlf3ohiykjq>
-References: <20251017153354.82009-2-thorsten.blum@linux.dev>
+	 Content-Type:Content-Disposition:In-Reply-To; b=FXaqH8y7IDdCJU7e22hdWrKVfblvtlbByJHRVvfnpG3jB6bc/ZQDsNTpImodoyeEXP6wjnFWVbrUeVEFwqVAcg9q3CrWBOZUXL9mMdyyMZm+/0lWxtzUQ3Qr7ZKxvR0qttOf8w7DFa8SFRbWHlLRNIf+g/IBPODH7UIAjCZXp6o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=aurel32.net; spf=pass smtp.mailfrom=aurel32.net; dkim=pass (2048-bit key) header.d=aurel32.net header.i=@aurel32.net header.b=0Up3RLUx; arc=none smtp.client-ip=195.154.113.88
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=aurel32.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aurel32.net
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=aurel32.net
+	; s=202004.hall; h=In-Reply-To:Content-Type:MIME-Version:References:
+	Message-ID:Subject:Cc:To:From:Date:Content-Transfer-Encoding:From:Reply-To:
+	Subject:Content-ID:Content-Description:X-Debbugs-Cc;
+	bh=55BpwGusbE0Q6zvfMgJToUDCvwjVEr4QNsPjBG6PryY=; b=0Up3RLUxevg5HmyNmj6t+iLeeh
+	h9sk+cN5AbTz9BrLD/uDPr/dJ6yMTn4STQXIxdDeme1rpDqCwsKSqwtjgDSfuN0WhEqSGTgs9sICn
+	KnndmNcMxh5kNqok6inV4Dp64af+lZ0O3tIsTW5rttpQEwqMuDua7tJl35tz6k6CZo77Zy6IXv1/c
+	VpNDDm7WFADtWKZrKUI87mBA0q1axdv/MErhBQ51WFshpSAiZj84uANBFqG64Yx8a3jFIKMkXkQKL
+	EpyNNauoeWcqTN6ex1m3UZviSnSQ9FW1FYLbRthOB0iYpcMFYvwxelah14H1fjC/wJ5CUg/ohlUXQ
+	PKS92Ryg==;
+Received: from [2a01:e34:ec5d:a741:1ee1:92ff:feb4:5ec0] (helo=ohm.rr44.fr)
+	by hall.aurel32.net with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <aurelien@aurel32.net>)
+	id 1vBRWp-00H5T8-33;
+	Wed, 22 Oct 2025 07:36:55 +0200
+Date: Wed, 22 Oct 2025 07:36:55 +0200
+From: Aurelien Jarno <aurelien@aurel32.net>
+To: Yixun Lan <dlan@gentoo.org>
+Cc: linux-kernel@vger.kernel.org, Lee Jones <lee@kernel.org>,
+	Sebastian Reichel <sre@kernel.org>,
+	Troy Mitchell <troy.mitchell@linux.spacemit.com>,
+	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+	"open list:RISC-V ARCHITECTURE:Keyword:riscv" <linux-riscv@lists.infradead.org>,
+	"open list:RISC-V SPACEMIT SoC Support:Keyword:spacemit" <spacemit@lists.linux.dev>,
+	"open list:SYSTEM RESET/SHUTDOWN DRIVERS" <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v3 1/2] driver: reset: spacemit-p1: add driver for
+ poweroff/reboot
+Message-ID: <aPhtd0j6iBpqiGUQ@aurel32.net>
+Mail-Followup-To: Yixun Lan <dlan@gentoo.org>, linux-kernel@vger.kernel.org,
+	Lee Jones <lee@kernel.org>, Sebastian Reichel <sre@kernel.org>,
+	Troy Mitchell <troy.mitchell@linux.spacemit.com>,
+	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+	"open list:RISC-V ARCHITECTURE:Keyword:riscv" <linux-riscv@lists.infradead.org>,
+	"open list:RISC-V SPACEMIT SoC Support:Keyword:spacemit" <spacemit@lists.linux.dev>,
+	"open list:SYSTEM RESET/SHUTDOWN DRIVERS" <linux-pm@vger.kernel.org>
+References: <20251021201451.1013640-1-aurelien@aurel32.net>
+ <20251021201451.1013640-2-aurelien@aurel32.net>
+ <20251022004830-GYB1522542@gentoo.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -90,33 +80,73 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251017153354.82009-2-thorsten.blum@linux.dev>
+In-Reply-To: <20251022004830-GYB1522542@gentoo.org>
+User-Agent: Mutt/2.2.13 (2024-03-09)
 
-On 17-10-25, 17:33, Thorsten Blum wrote:
-> strcpy() is deprecated; assign the NUL terminator directly instead.
+On 2025-10-22 08:48, Yixun Lan wrote:
+> Hi Aurelien,
 > 
-> Link: https://github.com/KSPP/linux/issues/88
-> Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
-> ---
->  drivers/cpufreq/cpufreq.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> On 22:11 Tue 21 Oct     , Aurelien Jarno wrote:
+> > This driver implements poweroff/reboot support for the SpacemiT P1 PMIC
+> > chip, which is commonly paired with the SpacemiT K1 SoC.
+> > 
+> > The SpacemiT P1 support is implemented as a MFD driver, so the access is
+> > done directly through the regmap interface. Reboot or poweroff is
+> > triggered by setting a specific bit in a control register, which is
+> > automatically cleared by the hardware afterwards.
+> > 
+> > Signed-off-by: Aurelien Jarno <aurelien@aurel32.net>
+> > Reviewed-by: Yixun Lan <dlan@gentoo.org>
+> > ---
+> > v3:
+> >  - Allow building as a module
+> >  - Remove outdated Acked-by and Tested-by
+> >  - Collect Reviewed-by
+> > 
+> >  drivers/power/reset/Kconfig              |  9 +++
+> >  drivers/power/reset/Makefile             |  1 +
+> >  drivers/power/reset/spacemit-p1-reboot.c | 88 ++++++++++++++++++++++++
+> >  3 files changed, 98 insertions(+)
+> >  create mode 100644 drivers/power/reset/spacemit-p1-reboot.c
+> > 
+> > diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
+> > index 8248895ca9038..6577d73edbda4 100644
+> > --- a/drivers/power/reset/Kconfig
+> > +++ b/drivers/power/reset/Kconfig
+> > @@ -283,6 +283,15 @@ config POWER_RESET_KEYSTONE
+> >  	help
+> >  	  Reboot support for the KEYSTONE SoCs.
+> >  
+> > +config POWER_RESET_SPACEMIT_P1
+> > +	tristate "SpacemiT P1 poweroff and reset driver"
+> > +	depends on ARCH_SPACEMIT || COMPILE_TEST
+> ..
+> > +	select MFD_SPACEMIT_P1
+> I'd suggest to use "depends on" instead of "select", the reason is that
+> using "select" will sometimes ignore the dependency, considering
+> the reset driver here is tightly coupled with P1, so I think it's 
+> reasonable to switch to use "depends on", also refer below link
 > 
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index 852e024facc3..0d3e77cf96a7 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -2550,7 +2550,7 @@ void cpufreq_unregister_governor(struct cpufreq_governor *governor)
->  	for_each_inactive_policy(policy) {
->  		if (!strcmp(policy->last_governor, governor->name)) {
->  			policy->governor = NULL;
-> -			strcpy(policy->last_governor, "\0");
-> +			policy->last_governor[0] = '\0';
->  		}
->  	}
->  	read_unlock_irqrestore(&cpufreq_driver_lock, flags);
+> https://lxr.linux.no/#linux+v6.7.1/Documentation/kbuild/kconfig-language.rst#L144
+> 
+>         select should be used with care. select will force
+>         a symbol to a value without visiting the dependencies.
+>         By abusing select you are able to select a symbol FOO even
+>         if FOO depends on BAR that is not set.
+>         In general use select only for non-visible symbols
+>         (no prompts anywhere) and for symbols with no dependencies.
+>         That will limit the usefulness but on the other hand avoid
+>         the illegal configurations all over.
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Thanks for the pointer, I'll fix that in the next version. I used 
+REGULATOR_SPACEMIT_P1 and RTC_DRV_SPACEMIT_P1 as examples, they'll also 
+need to be fixed.
+
+Note also that without the select, a default value has to be added to 
+MFD_SPACEMIT_P1, otherwise this makes the default values on the 
+regulator, rtc and reboot drivers useless.
 
 -- 
-viresh
+Aurelien Jarno                          GPG: 4096R/1DDD8C9B
+aurelien@aurel32.net                     http://aurel32.net
 
