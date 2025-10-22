@@ -1,127 +1,156 @@
-Return-Path: <linux-pm+bounces-36617-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36618-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E872CBF9B9B
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Oct 2025 04:28:10 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 154FEBF9C9A
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Oct 2025 05:09:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 254E2565904
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Oct 2025 02:28:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C8DF619C5DDC
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Oct 2025 03:10:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5A58220F3E;
-	Wed, 22 Oct 2025 02:27:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C10FD224AF9;
+	Wed, 22 Oct 2025 03:09:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ns7datzf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WbsbtsmM"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBA9E1F7580
-	for <linux-pm@vger.kernel.org>; Wed, 22 Oct 2025 02:27:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 833391D5CF2;
+	Wed, 22 Oct 2025 03:09:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761100071; cv=none; b=nzSjhcDcQEXZZrs0r1pkFAy6LjPXqO4qWdo+hfM8Dsm0WWMejwCrL6K4n4FkrOWCvgipcOxkpVCmAEd4CeKrh1/W9VCChViOyM9AUDFdUW+9oa8Qgs+sFLqk2q/fa9JmsY9vrjthI0bfwzN3Heze7uBLQBWSNH0FfSyXYAIDTHw=
+	t=1761102586; cv=none; b=HDo9cvl+FtB9GjpmRxDeyh8cdPA7eHhIb6XnDn10GR6gwAVUmtUGSMb0IMea65hz9LYH2ivC/R9A/l0Vv3On3PPmel4YkeSZP+w0TyrQUA33L24BRxS9jrCyvqX9/fW0wtnpG9gs+j5Rfdgi9R83rFnHN3CyVHUtJV5rBrpxi2w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761100071; c=relaxed/simple;
-	bh=gtxXSsibCJLZR4eJo0X6XeizsPLCRJKnPsqSUiDcNsA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SUkB44fuLKUqqc7RiGXX0pn3ZdJO9KoguXuYIXq8lqKuTxdK6TSZFWoqjMOBvAO27gj3UgwkLgCrHDMPHP27MwM5Tc+3FfnncdtqKAvwlPKbAmWPXU5eiDZk0X+R0463Y60n9JBSwx0hTBu8jx3sad9SUq1R0rzaqEgdWO9RA0c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ns7datzf; arc=none smtp.client-ip=209.85.210.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-793021f348fso5643189b3a.1
-        for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 19:27:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1761100069; x=1761704869; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xqmP8PXFVjPtIGVNVJySqdODosEn/uc3qt8eNXsbPts=;
-        b=ns7datzf8icGOKTONAAVfZEYX2gMWHAvcdFwbStWebO0Rl/Du5QVFmBnXqRSoiZU6F
-         ptf5P7YAZ3aoE7s/Q6aHquXgljNMj4Z+TxXz/HRHggRHwGLOK6rVwuXlMjLRhzddmEyc
-         /a6aU+en3DTez+1SXNrDFb3/tQ6sHTGk02umTReHZF43Y/BdECOHhJXF60IYCuXL+cJN
-         NTZLYpFA7z5SJO5wFP7WkGsflKczPbG4jpAELRMI5vtL3D6j75XXzKArcmcPSy5dvNNL
-         kPHckmZcRpjqHq1jtHBqc67JbXw2PwDBNFk0/Ma9yM29KWvHwFt4UmMzb3KAngK/Rsi7
-         4FSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761100069; x=1761704869;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xqmP8PXFVjPtIGVNVJySqdODosEn/uc3qt8eNXsbPts=;
-        b=UWAYoyRXsJohxZdVyLn5IdKmACWELESOEQam0bldg8VtOFlfvscRmQoOhwZ3Efz/MN
-         CJuS4jkfJSlc5d5pPohyW1RQQMWJeMHT+yrg67/Y4oUAZlL52pG0r5d4K/p2oQhabgfz
-         j1HECkMRH03XEt+MNvHmLHvUANjVjNDWMVJKst/Z1dCxNaqklZ6UsO1VmAM4a43b4I6l
-         BTDDEvIe9aJTDJWJP58bFzhfBzuvMmWSpFPypKe/dzRa/WR11AoZOA7BcaTuMdfKZWK5
-         klSTDDM1LRRTH1khM2Z43IF2+qweo2wsCuxZx+dIPD6zFJAfIIQAVZeVof/zvEI2GrNA
-         j16g==
-X-Forwarded-Encrypted: i=1; AJvYcCXBKSwpf/crLBEfN/IYcho5SDakrCQhe75nnnUlFMzKRnwiO2pNrxSf6xWKixTUcfjQg7QR+YBVUg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxKjU2qRSVZD8Fi5UgwHXygiEeMQc+ZoHxfRJy4+OcvuJ1JgwU0
-	922SNzWXfM2FTdmjM2uOxBYdVrLym4ql11wKmqPVjDNGDC6hP1A1nuljTNXVBX1pExs=
-X-Gm-Gg: ASbGncuQ5zwIEtWkgQG+IfCUoLvR1iHZ4XFrAq0F5VIIAuBla/F+iUnR4j5V49/oVHc
-	ixk4fQM2iu/pNRHi3pGSpAmT2tqTvUAXBn1okdXmVxGY2UXnD5OXe1vtE2wXg1mbZ5JdVmJzoKq
-	RB5CPH4lGQL3M19vDRFHW7Horil3104t2D3Lr2BStm1IKSL7Wk3y6Mij+AGZkpw6Nty/dWnqLjz
-	2CmhSluW9/I4SEumfOfOtgv81Id+a0038Bz4x0kzNumPvRLSxyyrKN83dKUDyRWYjYxBORX1zw5
-	/DaI9KCSnE5CpQab0BZCU2t3xwOZ4R1ySCI/HKynzfG9Ur+70hN8j7nQyJEo7xMaTD79Z2t9rka
-	nGF6dnDMpsaphOtGp5ydDw2mKjGeL/ypoVm2BlSMRvHBWo8AI0fjrYJWAay+cEQkhiWaLcKDcni
-	z8oQ==
-X-Google-Smtp-Source: AGHT+IEkOxWVQSWldQc/gAwbJEjuX6oOPBwr0g1WUs0jQjHOfnCn6OF8lZVM21AQiTMGEA1gGzxfjQ==
-X-Received: by 2002:a05:6a20:9144:b0:334:3a1d:536 with SMTP id adf61e73a8af0-334a8536f36mr26023352637.17.1761100069036;
-        Tue, 21 Oct 2025 19:27:49 -0700 (PDT)
-Received: from localhost ([122.172.87.183])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-33e2247a7cfsm940817a91.11.2025.10.21.19.27.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Oct 2025 19:27:48 -0700 (PDT)
-Date: Wed, 22 Oct 2025 07:57:46 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Alice Ryhl <aliceryhl@google.com>
-Cc: tamird@gmail.com, Liam.Howlett@oracle.com, a.hindborg@kernel.org, 
-	airlied@gmail.com, alex.gaynor@gmail.com, arve@android.com, axboe@kernel.dk, 
-	bhelgaas@google.com, bjorn3_gh@protonmail.com, boqun.feng@gmail.com, 
-	brauner@kernel.org, broonie@kernel.org, cmllamas@google.com, dakr@kernel.org, 
-	dri-devel@lists.freedesktop.org, gary@garyguo.net, gregkh@linuxfoundation.org, jack@suse.cz, 
-	joelagnelf@nvidia.com, justinstitt@google.com, kwilczynski@kernel.org, 
-	leitao@debian.org, lgirdwood@gmail.com, linux-block@vger.kernel.org, 
-	linux-clk@vger.kernel.org, linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-pci@vger.kernel.org, linux-pm@vger.kernel.org, llvm@lists.linux.dev, 
-	longman@redhat.com, lorenzo.stoakes@oracle.com, lossin@kernel.org, maco@android.com, 
-	mcgrof@kernel.org, mingo@redhat.com, mmaurer@google.com, morbo@google.com, 
-	mturquette@baylibre.com, nathan@kernel.org, nick.desaulniers+lkml@gmail.com, nm@ti.com, 
-	ojeda@kernel.org, peterz@infradead.org, rafael@kernel.org, russ.weight@linux.dev, 
-	rust-for-linux@vger.kernel.org, sboyd@kernel.org, simona@ffwll.ch, surenb@google.com, 
-	tkjos@android.com, tmgross@umich.edu, urezki@gmail.com, vbabka@suse.cz, 
-	vireshk@kernel.org, viro@zeniv.linux.org.uk, will@kernel.org
-Subject: Re: [PATCH v18 14/16] rust: clk: use `CStr::as_char_ptr`
-Message-ID: <rd2jyc57e5p6zjhypnxkfnjwsnihs5tsr7r55qnuwbho5jmkxh@53grgiitw725>
-References: <20251018-cstr-core-v18-0-ef3d02760804@gmail.com>
- <20251018180319.3615829-1-aliceryhl@google.com>
+	s=arc-20240116; t=1761102586; c=relaxed/simple;
+	bh=3dG02UCUztaBPWNbNKvRv4U+aD1d2E0+ME3Sd2LNTCk=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=KGK3ic12nbygxutXZepzKoNQ8PnNfIWZ+7M2QEmZ1BFyWW/oOt2yQX9id48VhFUe7ELh1T4aYOS4IfcOAl1o/X/j/jNzUx7Qm0u6pMzIYm0huTHV60wpcNVyv+eifRQie529vUQEp4DWwY6fq716QKxmFOw2ec9D1gr5kXXFQdk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WbsbtsmM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0BB03C4CEE7;
+	Wed, 22 Oct 2025 03:09:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761102586;
+	bh=3dG02UCUztaBPWNbNKvRv4U+aD1d2E0+ME3Sd2LNTCk=;
+	h=From:Date:Subject:To:Cc:Reply-To:From;
+	b=WbsbtsmMVbDFA/G7qdobLssa9uUHasLdy/n7E49tpEzGv9WvX6zTpsmS7/OPkVYXq
+	 CyxyEwnSCfwt1UDpJDO1KHZjPArAYxjnCMTlv0ogPOMqVwzxMt8kZcbSA+4vYzXz9v
+	 Rw1AlMmREeVBeA0Q6AZHraAOpOXDzDeH+a61+pMawejU82oyzT/E5/Fc4kUC1mcnfq
+	 XVfYaelmglXfnxUnFqdt4KDtopNUULz6KnB6QUyvPHOnIeGxqWoYpYK983F6cJOVMQ
+	 wYbtQWJw6wi9DPYBOCeFWhn+OkbQwkINptXtng5Y61yVtfsnI1FTCwU1tJ7FvILoZ0
+	 2UjvKP3sqC2PQ==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EB28ACCD1B9;
+	Wed, 22 Oct 2025 03:09:45 +0000 (UTC)
+From: Aaron Kling via B4 Relay <devnull+webgeek1234.gmail.com@kernel.org>
+Date: Tue, 21 Oct 2025 22:09:26 -0500
+Subject: [PATCH v5] dt-bindings: devfreq: tegra30-actmon: Add Tegra124
+ fallback for Tegra210
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251018180319.3615829-1-aliceryhl@google.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20251021-t210-actmon-p1-v5-1-1bc8f9221917@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAOVK+GgC/x3MPQqAMAxA4atIZgNJsIJeRRz8iZrBKq2IULy7x
+ fEb3ksQNZhGaIsEQW+LdvgMVxYwbYNfFW3OBiFxTMJ4CRMO07UfHk9GXWRsuK6I3Aw5OoMu9vz
+ Drn/fDx9QEj9gAAAA
+X-Change-ID: 20251021-t210-actmon-p1-ef2b9164005d
+To: MyungJoo Ham <myungjoo.ham@samsung.com>, 
+ Kyungmin Park <kyungmin.park@samsung.com>, 
+ Chanwoo Choi <cw00.choi@samsung.com>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Thierry Reding <thierry.reding@gmail.com>, 
+ Jonathan Hunter <jonathanh@nvidia.com>, Dmitry Osipenko <digetx@gmail.com>
+Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Chanwoo Choi <cw00c.choi@samsung.com>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+ Aaron Kling <webgeek1234@gmail.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1761102585; l=2361;
+ i=webgeek1234@gmail.com; s=20250217; h=from:subject:message-id;
+ bh=mg8XT9vcS48SE8URDi3TR+Wy+mQQFKQFXQRT3zUHsb0=;
+ b=mZx+g9VaQ/AsA+KvIG57AVILTDDkK1rY9Hsjnu4uds6noRNEOI4n7Ahs955iTc0FLF1yOPed9
+ Oe1DAewlGE2BjBWI2ikc0sssC7WV59ThWK0tx3j8IyvZ+X4tsBVmUKR
+X-Developer-Key: i=webgeek1234@gmail.com; a=ed25519;
+ pk=TQwd6q26txw7bkK7B8qtI/kcAohZc7bHHGSD7domdrU=
+X-Endpoint-Received: by B4 Relay for webgeek1234@gmail.com/20250217 with
+ auth_id=342
+X-Original-From: Aaron Kling <webgeek1234@gmail.com>
+Reply-To: webgeek1234@gmail.com
 
-On 18-10-25, 18:03, Alice Ryhl wrote:
-> From: Tamir Duberstein <tamird@gmail.com>
-> 
-> Replace the use of `as_ptr` which works through `<CStr as
-> Deref<Target=&[u8]>::deref()` in preparation for replacing
-> `kernel::str::CStr` with `core::ffi::CStr` as the latter does not
-> implement `Deref<Target=&[u8]>`.
-> 
-> Signed-off-by: Tamir Duberstein <tamird@gmail.com>
-> Signed-off-by: Alice Ryhl <aliceryhl@google.com>
-> ---
->  rust/kernel/clk.rs | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+From: Aaron Kling <webgeek1234@gmail.com>
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+The Tegra210 actmon is compatible with the existing Tegra124 driver.
+Describe the compatibles as such.
 
+Acked-by: Chanwoo Choi <cw00c.choi@samsung.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Aaron Kling <webgeek1234@gmail.com>
+---
+Changes in v5:
+- Split series
+- Link to v4: https://lore.kernel.org/r/20250923-t210-actmon-v4-0-442d1eb6377c@gmail.com
+
+Changes in v4:
+- Various cleanups in patch 5 as requested by review
+- Fix a couple typos in patch 4
+- Link to v3: https://lore.kernel.org/r/20250906-t210-actmon-v3-0-1403365d571e@gmail.com
+
+Changes in v3:
+- In patch 5, don't fail mc probe if opp tables are missing
+- Add more mc bindings to patch 1
+- Add patch to use tegra210-mc bindings in the mc driver
+- Re-order series to align patches within a subsystem to each other
+- Link to v2: https://lore.kernel.org/r/20250903-t210-actmon-v2-0-e0d534d4f8ea@gmail.com
+
+Changes in v2:
+- Assume 64-bit dram bus width in patch 4
+- Add dt-bindings patch to document the new properties on the
+  tegra210-emc node.
+- Link to v1: https://lore.kernel.org/r/20250828-t210-actmon-v1-0-aeb19ec1f244@gmail.com
+---
+ .../devicetree/bindings/devfreq/nvidia,tegra30-actmon.yaml  | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/devfreq/nvidia,tegra30-actmon.yaml b/Documentation/devicetree/bindings/devfreq/nvidia,tegra30-actmon.yaml
+index e3379d1067283e36d1bee303187c0205b410f610..ea1dc86bc31f635f91a0e36f908f5c0c4f9a804c 100644
+--- a/Documentation/devicetree/bindings/devfreq/nvidia,tegra30-actmon.yaml
++++ b/Documentation/devicetree/bindings/devfreq/nvidia,tegra30-actmon.yaml
+@@ -19,11 +19,14 @@ description: |
+ 
+ properties:
+   compatible:
+-    enum:
+-      - nvidia,tegra30-actmon
+-      - nvidia,tegra114-actmon
+-      - nvidia,tegra124-actmon
+-      - nvidia,tegra210-actmon
++    oneOf:
++      - enum:
++          - nvidia,tegra30-actmon
++          - nvidia,tegra114-actmon
++          - nvidia,tegra124-actmon
++      - items:
++          - const: nvidia,tegra210-actmon
++          - const: nvidia,tegra124-actmon
+ 
+   reg:
+     maxItems: 1
+
+---
+base-commit: 211ddde0823f1442e4ad052a2f30f050145ccada
+change-id: 20251021-t210-actmon-p1-ef2b9164005d
+
+Best regards,
 -- 
-viresh
+Aaron Kling <webgeek1234@gmail.com>
+
+
 
