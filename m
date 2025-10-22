@@ -1,91 +1,69 @@
-Return-Path: <linux-pm+bounces-36623-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36624-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id B1AD3BFA15D
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Oct 2025 07:41:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 54947BFA187
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Oct 2025 07:44:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 7D4C84EC057
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Oct 2025 05:41:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C253F188264D
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Oct 2025 05:43:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AA672ECD2D;
-	Wed, 22 Oct 2025 05:40:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E12C2EF654;
+	Wed, 22 Oct 2025 05:42:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jZ0mgvFY"
+	dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b="SegtPXpW"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F8752EC540
-	for <linux-pm@vger.kernel.org>; Wed, 22 Oct 2025 05:40:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 967C62EC54E
+	for <linux-pm@vger.kernel.org>; Wed, 22 Oct 2025 05:42:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.243.244.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761111638; cv=none; b=bdrDPoh80Is7EcUvmKt36hH971RwiNbvFSjdOgUMpXPh9PXfmawVylTW3G62YJgmvmznsHIow7FjZIVBpivGIt2rgUKcHmJAJs3+YOUneNTsWoX7XrOvdzzCL3cLF7IlunCIpprbfJkZG1EFR+8P9zO20lwqu5INuR4BapFJdBE=
+	t=1761111738; cv=none; b=VAwfC1tjXUXMslXU7jUx06Tfg1w07SFd1m7UKq8O28h2edtqHDxrWD9N6E0kJnsd6qIZd6idGURvOuh8MwxZrOn7Ow0VQuoQfcGA1y/z0to/Stos4o0P3XaUFDJpcx2mfSrY9Ojb8N3yLiDpIaFqF6/hXTbstJrb1BjTxNMF23E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761111638; c=relaxed/simple;
-	bh=pJrhTqkYqYrDrHV69BMLI7l5fWeIbisLorjstsXX25A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RJIw9zfiFZTEJUkTjjo5C3tfw1gYZhpSyt/iq+/XUP/GiIOyCWedfjN50+bb1rjEBsqC96mhbX5VGQXE8Sb5zCrCF1dz6Ju1nsOnuOjNgfsZRJKhxQT/b7JO5VCBbzHERz3dCYXZ2MTkJhUvRyblJA+yy5Nk0yF9loBO0FU6o8k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=jZ0mgvFY; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-290dc630a07so34759305ad.1
-        for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 22:40:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1761111637; x=1761716437; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3iuqqBL1ouz7GRlykwDwM8a9PRkBS4+Fo5+nLag3W1Q=;
-        b=jZ0mgvFYrrBhUHTOr5Ax2Wy+e9v7GqNRGdZRazJrfu61DvsxLyAKslmBg6tytGg+PR
-         mTuvME0odwzbzdOhCRRHM+E5WeBTIJbzxHtSTXW5tpUQosv3og78D1gyn7tIS4m4AeFT
-         t8GkvMmzNtp2WzL/L0B6FovdhVhDnze4L3op66i7cnrrcyqdaEYnSrOvYrYczxZHpfk8
-         OEOwRAJqPtlG37eRSG02rnZJCxCddvbXul8DVicoGJNuUabtgsJ5jkbVNQYQTTOSVbc/
-         g5+AHDg+7cpTeLjqh9aRJ52elfbU8FShhaZiOHUO2ocw8tCvBgDxfj16teo8RfBAI9IG
-         9IcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761111637; x=1761716437;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3iuqqBL1ouz7GRlykwDwM8a9PRkBS4+Fo5+nLag3W1Q=;
-        b=eGejCjBeUDTRW79Q2AVhRcIqB9llqyB7dWFrwMe/Kx3k6VRgyZhgaeqzGIbNFzgMz1
-         9+o4LWxMijcW01Zkrpqe0Gi3tWErXAxbckE79FXi0roCV+oF0I7lp1PuGNGGfQBeudv6
-         i8zS7nhLYpVjPP4cltt5IQmGq2Ax5qbAkcAEvf2ofQHXI9GENfrZtidlXvhP+T3V8kf0
-         yB2hlymraocSTRDlrYbJfJOBCAj1+t2scMeJ/3qg1gB4ou38t2mcy06QDmOiJefeej4S
-         +nupOdnaTt8rYJhk40EwVw/RTiZofo5Jw6UJMvZo2Tdc0CMRGC5aTca+vQFesKpLeQw1
-         dULA==
-X-Forwarded-Encrypted: i=1; AJvYcCVrS7jOrR6rW04fLFO80Lh7AIcUEmhz+ThGaGUk8UScQg7WzMXHqz+GyCazhEwyMrbupNq7RWe5jg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx3Q/x/1B6BuFnje9Mrvzyy0MnG8ywH0H1V8yY7HhgIkUtZp24G
-	LaYYln1QXqs3SchSdlkr1lng0ttD8oReWSiT/veA+Toc433xXPo7VQ+sGH2Fog7OADE=
-X-Gm-Gg: ASbGnctcGJ/BVjUrn1sD8x+Ghn7/snMEVPSw600PYlxPe5gy/BS0HSekZaj4kfSLlu1
-	1JdH7D8aOP+cEuNsYJ/rh3U3sPydRHh7PNlfh0GQiKfdBBQo9ngUbOzKlmfBVZac7NeIcylyZB5
-	KexMh4wBLcH/ZzSWb+p+Cgz/VtZxJMibbB40wiQcyjKPx6MQ1kGEGhzQ3JYbfN1Md4KgUXHHpdX
-	bChT7iVTYtTGkfH+h6UHLDqBAz6zWzGgnRC81v0YtgjxymrFqV/nQAOqx7zNGGdKHNsd7K9rjwP
-	koWzWWot1h1zOrJk8lw4dvOev8rmPn5alraBlTNiQz4udHUm6pFl3iQX6R6QJpFZXCMLSrshgLF
-	GbboJd194mnGcaJi2cMw3Fwb7yW8Wkp0CUhknGEXGJZH0+pV+g6NawENHTJFEVpQiLokafU0tLg
-	T0Y3kRYgcr/YJY
-X-Google-Smtp-Source: AGHT+IH3mz2S4uhTIWWRZrBsBMjC/WQ2iNPLucaIEk7+PMDLVPZ9t3rD8MK8J58F865tjsvy8UEZXQ==
-X-Received: by 2002:a17:903:8c7:b0:26b:3aab:f6bf with SMTP id d9443c01a7336-290cc2f83fcmr265736415ad.42.1761111636533;
-        Tue, 21 Oct 2025 22:40:36 -0700 (PDT)
-Received: from localhost ([122.172.87.183])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-292471d5971sm126981835ad.56.2025.10.21.22.40.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Oct 2025 22:40:35 -0700 (PDT)
-Date: Wed, 22 Oct 2025 11:10:33 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Tamir Duberstein <tamird@kernel.org>
-Cc: Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>, 
-	Stephen Boyd <sboyd@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
-	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, linux-pm@vger.kernel.org, 
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rust: opp: simplify callers of `to_c_str_array`
-Message-ID: <ms55ue7qqbvoyfhptzu2a5cuthusihtobremhuqfm7lyu7b62o@qasunalgkptl>
-References: <20251020-opp-simpler-code-v1-1-04f7f447712f@kernel.org>
+	s=arc-20240116; t=1761111738; c=relaxed/simple;
+	bh=Ip7I2oKx+cUmVaYf0SMRJxuVfNJW+zHyD80hJta800c=;
+	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eq7gNC866CNiwRx/dIAzsAh7XdIw9r072vrApBtj2Ez8rWDqzCT3aemI2VFUkeAZHU6E1LPTuD330cQsZ4cP5NMgNWGHmQzRhRzO79ZTzx1K1OHnkptcyMVIiDAVZx0WD53IBXj1K1L3Tzi2ZaMy/ezpjTLU3gAfl6XZtSd8usw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com; spf=none smtp.mailfrom=linux.spacemit.com; dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b=SegtPXpW; arc=none smtp.client-ip=54.243.244.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.spacemit.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.spacemit.com;
+	s=mxsw2412; t=1761111727;
+	bh=2SLeXGDW3QlALU6I3vpBIG1DJuO1fm4ZApuKV65CGdI=;
+	h=Date:From:To:Subject:Message-ID:MIME-Version;
+	b=SegtPXpW51/lDFjLkmbFTKcp8WOg+Kx7zRr4jK74xY2ZuUyMI2ny29fqFCuXaZEY4
+	 WG3VS0RsIJRtwqGwGlAzfJwFS+4hZY/i956gnHfKLolNcgXznjHv944yzDf+HKNoGV
+	 KsS7gZ1UhJMiBpNiQYT2JDMB+vjh44WMIXOLusUE=
+X-QQ-mid: esmtpgz15t1761111725t9381ce62
+X-QQ-Originating-IP: 731FWEj5minQ81tpITCfvoBW2wAz+Y/YGXcnH39jcE8=
+Received: from = ( [14.123.255.147])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Wed, 22 Oct 2025 13:42:04 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 5196498867470666752
+EX-QQ-RecipientCnt: 12
+Date: Wed, 22 Oct 2025 13:42:04 +0800
+From: Troy Mitchell <troy.mitchell@linux.spacemit.com>
+To: Yixun Lan <dlan@gentoo.org>, linux-kernel@vger.kernel.org,
+	Lee Jones <lee@kernel.org>, Sebastian Reichel <sre@kernel.org>,
+	Troy Mitchell <troy.mitchell@linux.spacemit.com>,
+	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+	"open list:RISC-V ARCHITECTURE:Keyword:riscv" <linux-riscv@lists.infradead.org>,
+	"open list:RISC-V SPACEMIT SoC Support:Keyword:spacemit" <spacemit@lists.linux.dev>,
+	"open list:SYSTEM RESET/SHUTDOWN DRIVERS" <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v3 1/2] driver: reset: spacemit-p1: add driver for
+ poweroff/reboot
+Message-ID: <52468F28CD7B50FD+aPhurJD4HTXqIGDT@kernel.org>
+References: <20251021201451.1013640-1-aurelien@aurel32.net>
+ <20251021201451.1013640-2-aurelien@aurel32.net>
+ <20251022004830-GYB1522542@gentoo.org>
+ <aPhtd0j6iBpqiGUQ@aurel32.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -94,56 +72,78 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251020-opp-simpler-code-v1-1-04f7f447712f@kernel.org>
+In-Reply-To: <aPhtd0j6iBpqiGUQ@aurel32.net>
+X-QQ-SENDSIZE: 520
+Feedback-ID: esmtpgz:linux.spacemit.com:qybglogicsvrgz:qybglogicsvrgz3a-0
+X-QQ-XMAILINFO: NqN/wpVFVRYXUPmS2RiyfcIo7i7XceT881aAId2QLGZ0ZsUoydn/l2rk
+	NUu0OkkYtWQt3PCCoT5S+2kyp5acUrk/LK3zef1u5leLcUPq5PW2Yz5uFGTTifdJdxIWLFC
+	nEOMTOV+xExd+AaiQkXZfPZmADT+6NdAlKbnis9IR+MG0HM1ye//34tXkEwzQAPlpH5oyiB
+	VU1K/t97QpWXDw+0Qy+ABht0zkzth5rSwUK9lE7PSj65nIagVtpPUwDRyyRmtHlr3OwN2/a
+	zWY/Pe/8AdHNjUTLwRv1KPH59bgX8KMiVgJFSdYS3it9zgjTkyohs/eAgPYIWyJukwgAFPf
+	VaEXSWuQC2HacUPf/V1ZCRyqOkZm5z26BaZ4EHB5UTW2p6QrWRDS7byFPkrBdO34aK2cdF1
+	2HetV6JRHU8YgqiA9zfvRRBTgJ50LTbbomHCPYBF4QFmF1eS2MFjlLEKrtx8uTuWyYk309V
+	b5zoGxfozZNXmkXPeJizirtcZB8jjGqbv9fn9YhYxzIeSllgsJpcMt6ZX7su67nHYAWakOY
+	3UeH14ryjw/dS8apX1EO7CTFbyrlp1QoME9gV4pKOMjE0woeMviyO65TmIZdDWE/XxbKzh+
+	HxuwT3uHGjIvs+7wXePio+BQU60/vIjQ578By5C3Plgb3TWatkHl4kJBm0D1dwD7hOxxKjH
+	pGmq2hYlFQohsETyT14rudyVc27Bq19dc2mL0U5BMYhoEBv3YA/xiXRsBifLPMTBezfuSgW
+	bPW/oBQdmckSw8Mqgk9vo3ccAEuOvFubdtD1oQRtHCFGJ81OyMtVOHqPlgdAh/7ZHE61TX2
+	0+GeErzsgeu6KyxffnTVY148/2sJUxK0lJDQkYN0isI1ZuZjfa1qmxtYUzX26AVknx3K6Yy
+	m9H6qJqeGQEQKB3FVe7AWvmSCGQxZO+jDuulwbmjeSAA1k2ofT6/JvyKjVtisopc6+ewJ3V
+	WIFvhwADS3MX9rJg0Iwqv7uxWpHY1WlqX4HFFy2UP+StmKTgwewzsI4XPSAu97fTs2kf9Nk
+	EqVDtNYodEohUzA2etIOi6uQ0E67Hf3Qa3DDtXU8neCTz0Rns5lcOZ7K9VXwFojQeI8egGQ
+	zUv/9GAGXw6vBqA09yscmY=
+X-QQ-XMRINFO: NS+P29fieYNw95Bth2bWPxk=
+X-QQ-RECHKSPAM: 0
 
-Hi Tamir,
-
-On 20-10-25, 09:07, Tamir Duberstein wrote:
-> Use `Option` combinators to make this a bit less noisy.
+> > > diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
+> > > index 8248895ca9038..6577d73edbda4 100644
+> > > --- a/drivers/power/reset/Kconfig
+> > > +++ b/drivers/power/reset/Kconfig
+> > > @@ -283,6 +283,15 @@ config POWER_RESET_KEYSTONE
+> > >  	help
+> > >  	  Reboot support for the KEYSTONE SoCs.
+> > >  
+> > > +config POWER_RESET_SPACEMIT_P1
+> > > +	tristate "SpacemiT P1 poweroff and reset driver"
+> > > +	depends on ARCH_SPACEMIT || COMPILE_TEST
+> > ..
+> > > +	select MFD_SPACEMIT_P1
+> > I'd suggest to use "depends on" instead of "select", the reason is that
+> > using "select" will sometimes ignore the dependency, considering
+> > the reset driver here is tightly coupled with P1, so I think it's 
+> > reasonable to switch to use "depends on", also refer below link
+> > 
+> > https://lxr.linux.no/#linux+v6.7.1/Documentation/kbuild/kconfig-language.rst#L144
+> > 
+> >         select should be used with care. select will force
+> >         a symbol to a value without visiting the dependencies.
+> >         By abusing select you are able to select a symbol FOO even
+> >         if FOO depends on BAR that is not set.
+> >         In general use select only for non-visible symbols
+> >         (no prompts anywhere) and for symbols with no dependencies.
+> >         That will limit the usefulness but on the other hand avoid
+> >         the illegal configurations all over.
 > 
-> Signed-off-by: Tamir Duberstein <tamird@kernel.org>
-> ---
->  rust/kernel/opp.rs | 25 ++++++++-----------------
->  1 file changed, 8 insertions(+), 17 deletions(-)
+> Thanks for the pointer, I'll fix that in the next version. I used 
+> REGULATOR_SPACEMIT_P1 and RTC_DRV_SPACEMIT_P1 as examples, they'll also 
+> need to be fixed.
+Yes, I have said here[1].
+Do you want to fix that? If you don't have time, I can do it.
+
 > 
-> diff --git a/rust/kernel/opp.rs b/rust/kernel/opp.rs
-> index 9d6c58178a6f..b84786f45522 100644
-> --- a/rust/kernel/opp.rs
-> +++ b/rust/kernel/opp.rs
-> @@ -443,23 +443,14 @@ pub fn set_supported_hw(mut self, hw: KVec<u32>) -> Result<Self> {
->      ///
->      /// The returned [`ConfigToken`] will remove the configuration when dropped.
->      pub fn set(self, dev: &Device) -> Result<ConfigToken> {
-> -        let (_clk_list, clk_names) = match &self.clk_names {
-> -            Some(x) => {
-> -                let list = to_c_str_array(x)?;
-> -                let ptr = list.as_ptr();
-> -                (Some(list), ptr)
-> -            }
-> -            None => (None, ptr::null()),
-> -        };
-> -
-> -        let (_regulator_list, regulator_names) = match &self.regulator_names {
-> -            Some(x) => {
-> -                let list = to_c_str_array(x)?;
-> -                let ptr = list.as_ptr();
-> -                (Some(list), ptr)
-> -            }
-> -            None => (None, ptr::null()),
-> -        };
-> +        let clk_names = self.clk_names.as_deref().map(to_c_str_array).transpose()?;
-> +        let clk_names = clk_names.map_or(ptr::null(), |c| c.as_ptr());
-> +        let regulator_names = self
-> +            .regulator_names
-> +            .as_deref()
-> +            .map(to_c_str_array)
-> +            .transpose()?;
-> +        let regulator_names = regulator_names.map_or(ptr::null(), |c| c.as_ptr());
+> Note also that without the select, a default value has to be added to 
+> MFD_SPACEMIT_P1. 
+Yes, I will add it in my patch. Thanks.
 
-I had to keep _clk_list and _regulator_list earlier to make sure the list isn't
-freed while its pointer is still used (sent to dev_pm_opp_set_config()). Won't
-this change cause an issue here ?
+                  - Troy
 
--- 
-viresh
+Link: https://lore.kernel.org/all/6DB8C5F20B3FAC2E+aPhfoRXlJtJymlB5@kernel.org/ [1]
+
+> otherwise this makes the default values on the 
+> regulator, rtc and reboot drivers useless.
+> 
+> -- 
+> Aurelien Jarno                          GPG: 4096R/1DDD8C9B
+> aurelien@aurel32.net                     http://aurel32.net
+> 
 
