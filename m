@@ -1,139 +1,150 @@
-Return-Path: <linux-pm+bounces-36665-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36666-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1B520BFD5FF
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Oct 2025 18:51:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B210BFD704
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Oct 2025 19:02:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F3A0918C3B33
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Oct 2025 16:51:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2583C18C6F8D
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Oct 2025 17:03:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CB5826F2A1;
-	Wed, 22 Oct 2025 16:49:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F10F26FA70;
+	Wed, 22 Oct 2025 17:02:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=aurel32.net header.i=@aurel32.net header.b="NtR8svfE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sRlhloua"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from hall.aurel32.net (hall.aurel32.net [195.154.113.88])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ABC635B132;
-	Wed, 22 Oct 2025 16:49:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.154.113.88
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69DC72566D2
+	for <linux-pm@vger.kernel.org>; Wed, 22 Oct 2025 17:02:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761151746; cv=none; b=q6IzBEnQSvyvkFuExqJrBucRhhXf1vpyg7/nobVdm2xHy1wIeaB/m8+ECPSfkmdgbO+jQ2fMPQP040iutsBMZj847YMYU7RkquUio8c9q/zLtQd44B9TgX/ma7zqPCBg0QaIDgGR6CcjgcW+MJxssENfAUXZvTBUM4MDIwa2o/M=
+	t=1761152570; cv=none; b=c9hFXeA6UO33QqFQ1cn4lsQsKXL+gyL9kRM5WGfQch1DZkCdGjmLSjVT/TFFCRimu26eiAddDQs7JdL0huBgUuUshSkGQL3DMdQam708+ebUO8Q1a0DCnncV1HKtIbOGO++RBWUpsr7OlBErS3CFCMsgO07y+rFzh1m2jXM56gQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761151746; c=relaxed/simple;
-	bh=1Rzg1NYP1bG8uFJYlhbNXfg2908d4g/zk1tZMg9XMTg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nQKBqVfvZgvgWG8wr6s4/yeAXWHI6cGKhh2G/rOOvw67MpVUdaRl6SRs94IsXjenicbCE2K/Ip3+qIBVdytJG0hWldZ4RaGH0/WjjSsu+hHheQ9Y/8T+TWnI62V0DW/hpuJDPKS+vgnYygVBso6Bie3R2ju/vdKDYSVoCa1/5Ac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=aurel32.net; spf=pass smtp.mailfrom=aurel32.net; dkim=pass (2048-bit key) header.d=aurel32.net header.i=@aurel32.net header.b=NtR8svfE; arc=none smtp.client-ip=195.154.113.88
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=aurel32.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aurel32.net
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=aurel32.net
-	; s=202004.hall; h=In-Reply-To:Content-Type:MIME-Version:References:
-	Message-ID:Subject:Cc:To:From:Date:Content-Transfer-Encoding:From:Reply-To:
-	Subject:Content-ID:Content-Description:X-Debbugs-Cc;
-	bh=1nnTTQGLKpg2Y4zlHS/zCgkMJs42TpDEsJXY1zhm+kM=; b=NtR8svfECruwcJup56bQs5SOZR
-	GSG9JZvkRgw08/1tQ7KRuGSchIL8sCR1vKcjUnjjdfOYgJn9mJmS8T2l8weWJxj1JrPcQaMr0dom9
-	rW/zi599vslZV7xW0lPrZnyZ/KIGZsFnKzThIXlB7gtYUcvCRhsul4lqlNfIoFCFm7HDxBi6ed2tJ
-	0B9kuB3OPw0jwENFYVqp5XMvqqhpC4nTIlWT9CNIKNFlhG0U+rndTeod+7MZSe6Ku/FE+CnXQgk29
-	zlivSvW3jiyH5mV+2MYtrBvFGDPRIsWizpmAQwMQeae9ezHZvjrkAZ5kS39/KJL6uSMhlnzv9JtI3
-	+yI5AVcg==;
-Received: from [2a01:e34:ec5d:a741:1ee1:92ff:feb4:5ec0] (helo=ohm.rr44.fr)
-	by hall.aurel32.net with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <aurelien@aurel32.net>)
-	id 1vBc11-000AgZ-0O;
-	Wed, 22 Oct 2025 18:48:47 +0200
-Date: Wed, 22 Oct 2025 18:48:45 +0200
-From: Aurelien Jarno <aurelien@aurel32.net>
-To: Troy Mitchell <troy.mitchell@linux.spacemit.com>
-Cc: Yixun Lan <dlan@gentoo.org>, linux-kernel@vger.kernel.org,
-	Lee Jones <lee@kernel.org>, Sebastian Reichel <sre@kernel.org>,
-	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
-	"open list:RISC-V ARCHITECTURE:Keyword:riscv" <linux-riscv@lists.infradead.org>,
-	"open list:RISC-V SPACEMIT SoC Support:Keyword:spacemit" <spacemit@lists.linux.dev>,
-	"open list:SYSTEM RESET/SHUTDOWN DRIVERS" <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v3 1/2] driver: reset: spacemit-p1: add driver for
- poweroff/reboot
-Message-ID: <aPkK7aEHhxKScoCN@aurel32.net>
-Mail-Followup-To: Troy Mitchell <troy.mitchell@linux.spacemit.com>,
-	Yixun Lan <dlan@gentoo.org>, linux-kernel@vger.kernel.org,
-	Lee Jones <lee@kernel.org>, Sebastian Reichel <sre@kernel.org>,
-	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
-	"open list:RISC-V ARCHITECTURE:Keyword:riscv" <linux-riscv@lists.infradead.org>,
-	"open list:RISC-V SPACEMIT SoC Support:Keyword:spacemit" <spacemit@lists.linux.dev>,
-	"open list:SYSTEM RESET/SHUTDOWN DRIVERS" <linux-pm@vger.kernel.org>
-References: <20251021201451.1013640-1-aurelien@aurel32.net>
- <20251021201451.1013640-2-aurelien@aurel32.net>
- <20251022004830-GYB1522542@gentoo.org>
- <aPhtd0j6iBpqiGUQ@aurel32.net>
- <52468F28CD7B50FD+aPhurJD4HTXqIGDT@kernel.org>
+	s=arc-20240116; t=1761152570; c=relaxed/simple;
+	bh=uQ64JgFOmAzJd+mPkZtVG+ihpVKVYP1nw4V7fBIcKF4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Ay1/PAfp1CFwybC2s+l0b4t8BTtgB614FWT0AxOpTuPMkSZVPsBA65QIl2nFbX6Gx9jUWJOhqelLWUsZIrCGTSls8tosZ3fNfnnYc4deuHCeeeueye41421LFMikOXrmx0Y+UQaH/Jy3kKWY9WwwjSPAco0iKndQS8A2gEqOqoY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sRlhloua; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40231C19421
+	for <linux-pm@vger.kernel.org>; Wed, 22 Oct 2025 17:02:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761152570;
+	bh=uQ64JgFOmAzJd+mPkZtVG+ihpVKVYP1nw4V7fBIcKF4=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=sRlhlouas6aCSesmJCpwCgMhuTYNTUv7lLIogOIis+naR8orH2qBwGRtTp6L6Ym66
+	 RbcQ7kgKTBSTA+jqhjHc3DQQ1YbldHrndwPhqSaMfrG050duDP5+xUoknxXHlTR3mU
+	 Y0dgMGREzd843297p5wlSOff3M2Mu3mv9Z2ETUSuhXNudblRQlCxwmeCSJufh2i6N3
+	 P+udSZiF6AFs2XTUVollvSIgeXqIEBQ3hM0cAsWlwqkq0b6WcnRTqrggySzQPibwcZ
+	 fsg3g0A4uEOsnYjqUcU2O+GgQXs4AlT00CfvPE3IzWq/bCWbTP4AqZRrcbmzWpTlSy
+	 Jt+0iQQIs/nRw==
+Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-7c27698fde4so4126485a34.3
+        for <linux-pm@vger.kernel.org>; Wed, 22 Oct 2025 10:02:50 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVZiEuuK766WjFCMTgTYQ4XApWAE6f7T6HH7bohXTO9OowqeRdDpWsqax1AmFIGUjARivul2ZL4ug==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx9z1VHTT9BMgAERu8JmsgY1NcwYTDr0RV7VRasNg9eU931M044
+	1eJnfggGV9p5AskpNdOmr3VLwo3NOQqL7HETGz9zfyYDcQZFWQ5MTqiA7HeJYYK5N4d+IZkVPMP
+	J57nca52N3JiQC178+SAwaadua86/HjQ=
+X-Google-Smtp-Source: AGHT+IFsSLkS4AfOy5xcoE1SIc1rw+OhHunu+bX6yReuGG38wf86nNthgdGGvrwVmspSg8ngis0UUdzl53ovX1AjJdc=
+X-Received: by 2002:a05:6808:14c8:b0:43f:75f0:3894 with SMTP id
+ 5614622812f47-443a2e90865mr8908912b6e.22.1761152569474; Wed, 22 Oct 2025
+ 10:02:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <52468F28CD7B50FD+aPhurJD4HTXqIGDT@kernel.org>
-User-Agent: Mutt/2.2.13 (2024-03-09)
+References: <20251002113404.3117429-1-srosek@google.com>
+In-Reply-To: <20251002113404.3117429-1-srosek@google.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 22 Oct 2025 19:02:38 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0hO3+eznWztqO2B78wpLXr3EZ+Nj0yOxqesfpb20ykOYQ@mail.gmail.com>
+X-Gm-Features: AS18NWBlxJkUSv4HdoHV9K7LgQY0Hep2BdtAsCZ074SA2uAIDpGbEU_yqZ8QlaI
+Message-ID: <CAJZ5v0hO3+eznWztqO2B78wpLXr3EZ+Nj0yOxqesfpb20ykOYQ@mail.gmail.com>
+Subject: Re: [PATCH v3 0/6] ACPI: DPTF: Move INT340X enumeration from DPTF
+ core to thermal drivers
+To: Slawomir Rosek <srosek@google.com>, 
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc: Alex Hung <alexhung@gmail.com>, Hans de Goede <hansg@kernel.org>, 
+	Ilpo Jarvinen <ilpo.jarvinen@linux.intel.com>, AceLan Kao <acelan.kao@canonical.com>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Zhang Rui <rui.zhang@intel.com>, Tomasz Nowicki <tnowicki@google.com>, 
+	Stanislaw Kardach <skardach@google.com>, Michal Krawczyk <mikrawczyk@google.com>, 
+	linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org, 
+	platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2025-10-22 13:42, Troy Mitchell wrote:
-> > > > diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
-> > > > index 8248895ca9038..6577d73edbda4 100644
-> > > > --- a/drivers/power/reset/Kconfig
-> > > > +++ b/drivers/power/reset/Kconfig
-> > > > @@ -283,6 +283,15 @@ config POWER_RESET_KEYSTONE
-> > > >  	help
-> > > >  	  Reboot support for the KEYSTONE SoCs.
-> > > >  
-> > > > +config POWER_RESET_SPACEMIT_P1
-> > > > +	tristate "SpacemiT P1 poweroff and reset driver"
-> > > > +	depends on ARCH_SPACEMIT || COMPILE_TEST
-> > > ..
-> > > > +	select MFD_SPACEMIT_P1
-> > > I'd suggest to use "depends on" instead of "select", the reason is that
-> > > using "select" will sometimes ignore the dependency, considering
-> > > the reset driver here is tightly coupled with P1, so I think it's 
-> > > reasonable to switch to use "depends on", also refer below link
-> > > 
-> > > https://lxr.linux.no/#linux+v6.7.1/Documentation/kbuild/kconfig-language.rst#L144
-> > > 
-> > >         select should be used with care. select will force
-> > >         a symbol to a value without visiting the dependencies.
-> > >         By abusing select you are able to select a symbol FOO even
-> > >         if FOO depends on BAR that is not set.
-> > >         In general use select only for non-visible symbols
-> > >         (no prompts anywhere) and for symbols with no dependencies.
-> > >         That will limit the usefulness but on the other hand avoid
-> > >         the illegal configurations all over.
-> > 
-> > Thanks for the pointer, I'll fix that in the next version. I used 
-> > REGULATOR_SPACEMIT_P1 and RTC_DRV_SPACEMIT_P1 as examples, they'll also 
-> > need to be fixed.
-> Yes, I have said here[1].
-> Do you want to fix that? If you don't have time, I can do it.
+On Thu, Oct 2, 2025 at 1:34=E2=80=AFPM Slawomir Rosek <srosek@google.com> w=
+rote:
+>
+> The Intel Dynamic Platform and Thermal Framework (DPTF) relies on
+> the INT340X ACPI device objects. The temperature information and
+> cooling ability are exposed to the userspace via those objects.
+>
+> Since kernel v3.17 the ACPI bus scan handler is introduced to prevent
+> enumeration of INT340X ACPI device objects on the platform bus unless
+> related thermal drivers are enabled. However, using the IS_ENABLED()
+> macro in the ACPI scan handler forces the kernel to be recompiled
+> when thermal drivers are enabled or disabled, which is a significant
+> limitation of its modularity. The IS_ENABLED() macro is particularly
+> problematic for the Android Generic Kernel Image (GKI) project which
+> uses unified core kernel while SoC/board support is moved to loadable
+> vendor modules.
+>
+> This patch set moves enumeration of INT340X ACPI device objects on
+> the platform bus from DPTF core to thermal drivers. It starts with
+> some code cleanup and reorganization to eventually remove IS_ENABLED()
+> macro from the ACPI bus scan handler. Brief list of changes is listed
+> below:
+>
+> 1) Remove SOC DTS thermal driver case from the ACPI scan handler
+>    since its dependency on INT340X driver is unrelated to DPTF
+> 2) Move all INT340X ACPI device ids to the common header and update
+>    the DPTF core and thermal drivers accordingly
+> 3) Move dynamic enumeration of ACPI device objects on the platform bus
+>    from the intel-hid and intel-vbtn drivers to the ACPI platform core
+> 4) Move enumeration of INT340X ACPI device objects on the platform bus
+>    from DPTF core to thermal drivers using ACPI platform core methods
+>
+> Link to v1: https://lore.kernel.org/all/20250830053404.763995-1-srosek@go=
+ogle.com/
+> Link to v2: https://lore.kernel.org/all/20250917120719.2390847-1-srosek@g=
+oogle.com/
+>
+> In v3 the SoC DTS thermal explicitly depends on X86_64.
+>
+> Slawomir Rosek (6):
+>   ACPI: DPTF: Ignore SoC DTS thermal while scanning
+>   ACPI: DPTF: Move INT340X device IDs to header
+>   ACPI: DPTF: Move PCH FIVR device IDs to header
+>   ACPI: DPTF: Remove not supported INT340X IDs
+>   ACPI: platform: Add macro for acpi platform driver
+>   ACPI: DPTF: Move INT340X enumeration to modules
+>
+>  drivers/acpi/acpi_platform.c                  | 27 +++++++
+>  drivers/acpi/dptf/dptf_pch_fivr.c             | 10 +--
+>  drivers/acpi/dptf/dptf_power.c                | 20 +----
+>  drivers/acpi/dptf/int340x_thermal.c           | 76 ++++---------------
+>  drivers/acpi/fan.h                            | 10 +--
+>  drivers/acpi/fan_core.c                       |  2 +-
+>  drivers/acpi/int340x_thermal.h                | 76 +++++++++++++++++++
+>  drivers/platform/x86/intel/hid.c              | 33 +-------
+>  drivers/platform/x86/intel/vbtn.c             | 30 +-------
+>  drivers/thermal/intel/Kconfig                 |  3 +-
+>  .../intel/int340x_thermal/int3400_thermal.c   | 12 +--
+>  .../intel/int340x_thermal/int3401_thermal.c   |  5 +-
+>  .../intel/int340x_thermal/int3402_thermal.c   |  5 +-
+>  .../intel/int340x_thermal/int3403_thermal.c   | 12 +--
+>  .../intel/int340x_thermal/int3406_thermal.c   |  5 +-
+>  include/linux/platform_device.h               | 17 +++++
+>  16 files changed, 164 insertions(+), 179 deletions(-)
+>  create mode 100644 drivers/acpi/int340x_thermal.h
+>
+> --
 
-For the reboot patch series, I'll do that in the v4, but I would 
-appreciate if you can do it for the PMIC and RTC drivers. I guess it can 
-be a patch series with the first patch being the one you already posted.
-
-> > Note also that without the select, a default value has to be added to 
-> > MFD_SPACEMIT_P1. 
-> Yes, I will add it in my patch. Thanks.
-
-Thanks.
-
-Regards
-Aurelien
-
--- 
-Aurelien Jarno                          GPG: 4096R/1DDD8C9B
-aurelien@aurel32.net                     http://aurel32.net
+Srinivas, do you have any input on this series?
 
