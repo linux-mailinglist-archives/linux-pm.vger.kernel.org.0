@@ -1,116 +1,127 @@
-Return-Path: <linux-pm+bounces-36640-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36641-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D07A7BFB5FB
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Oct 2025 12:20:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DC23EBFB7A6
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Oct 2025 12:54:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 89EE719C2636
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Oct 2025 10:21:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 405C619A2946
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Oct 2025 10:54:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E4D82472A8;
-	Wed, 22 Oct 2025 10:20:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0DAF3254A4;
+	Wed, 22 Oct 2025 10:54:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Q5eXYtvb"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DvK2+WOc"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A69A430E83A
-	for <linux-pm@vger.kernel.org>; Wed, 22 Oct 2025 10:20:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 483473233EA
+	for <linux-pm@vger.kernel.org>; Wed, 22 Oct 2025 10:54:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761128443; cv=none; b=WUyanBj+snmdCsFXq2NyzlR2q+C9y3M6pKHZzH2NzqEZ/pWJeSGjs4EuJCVU9HJj3dtqYSufCGqiY7g/XuZ5X2Dbv/BPszEzV0EBUbjub2sqkHcSxoHle66+F0QCPFnFLuuMBQG7dzQYiR4p9E0pzgJmNa7Ywa1zAqWrD9V0z2k=
+	t=1761130455; cv=none; b=EdrNQUsEJAqiNi3chh3+AI+yD+SCoPTDeES40KcTZnwlikzqfXHDmzeYp0/2KG3B6sS2FNaD2W5+En0v6sFhQBPpaLXsrzBuNfzTVUoCy/2y9p6Saz3Act/lECOTxN7XdXkHZJWWvfHyTfXhOlgWXxBGqlB6qbY/sIl4WNwAPgo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761128443; c=relaxed/simple;
-	bh=bsLcKTPJEYIr6iWd2hSD2/QqBkscjLQjYwtElmBwUuw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ppvFl6HLNeWwfJTD7YAovDoUbYDYKlBH0RPaqugLniS91KOQ2xLbl3WhNT/5AAwG1sfS5MeyywV2jfmvQ5ZR71YZR68jSB9UwlcHZkwKyHsw9ZqjYMxQdrvmD+Ks+ftCDuYKMnkvknaxIB7ZX2ZXdlmrGy1HGYquRr5muagcZW0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Q5eXYtvb; arc=none smtp.client-ip=209.85.216.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-33c4252c3c5so4841821a91.0
-        for <linux-pm@vger.kernel.org>; Wed, 22 Oct 2025 03:20:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1761128441; x=1761733241; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=v+BERCfgvcR5X/QpiR51/cu4DL63bwSFg1M/A5GNtaI=;
-        b=Q5eXYtvbRn1VEpYB+ckss1F1GCQzUuvuD/3fl40yNikmpxtheQ7sMn5qQvpyDoulT+
-         NuvQXfh9fYXtofOxyEbl6d7RyO70TDEpg64rLRY8Z4vUP9uKQlEXiNkM1M+iM6F81x/F
-         ua9PH5RaMRdzQEV2yy93eyH5PdcySO3Av4XbIIZheaM0qTCVtAjaw4K1QPiveyzwKtZk
-         IHMzU7jBq7zstnoUb6xfZhwSbD/kOa0yLlP1eyBnchlHBEhyO1/otNkfaRLrm8zT1jgP
-         a1tsraAlVachrcTJG4BJNiELwejevit8YN2V0suucIcaXRrV24RUpbMYkEFrEBAwVusc
-         SddA==
+	s=arc-20240116; t=1761130455; c=relaxed/simple;
+	bh=yAme9gZz0jsPec+TiumN1DBQ0+B9qNdo1HlM5nTPaxM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Bfy4BjRikKTHvjpoaR//SBvDEwUcdfJI7qcnwY/ug1KeLGBO1aqXMLdCHN7DEcF2iHE3LAJ4XsBXTLvlkhW6aztah/nJRQc410k5iotxIR6yyIz4OaEt0MLDU2lpI247UCKDaujKtWaqY7Yc8vidNnRjk2I/h6/tulmapH/zdtY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DvK2+WOc; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1761130453;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=yAme9gZz0jsPec+TiumN1DBQ0+B9qNdo1HlM5nTPaxM=;
+	b=DvK2+WOcsvBH3W+uPssJvwJqnahdFI8dnJym0MBVAL5na9ZZs5lgfSyJX126eGPbnoIoEI
+	Z1HLmz170l9DiQ6iyEwdHibdHaVEKVVppSpzOsoBDKxdTDNZrvlcux44g25X4jVX+ony5g
+	T3uOgOBg+3H7sABud0Wj+9ZZHpffGJU=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-179-peuuI_6oPp-Pr6eCf3yDYw-1; Wed, 22 Oct 2025 06:54:11 -0400
+X-MC-Unique: peuuI_6oPp-Pr6eCf3yDYw-1
+X-Mimecast-MFC-AGG-ID: peuuI_6oPp-Pr6eCf3yDYw_1761130451
+Received: by mail-ed1-f71.google.com with SMTP id 4fb4d7f45d1cf-63c55116bdfso4948302a12.3
+        for <linux-pm@vger.kernel.org>; Wed, 22 Oct 2025 03:54:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761128441; x=1761733241;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=v+BERCfgvcR5X/QpiR51/cu4DL63bwSFg1M/A5GNtaI=;
-        b=bnOTTGo1SjbQEbArRYCcqmrvPx3PS+fBWgtc0oTe4cQO8c8wPLBMdL0Lp0BbG+VtBz
-         RepHw9VmowB5iblRfTR0r4ayToeSPJwRBJC2GyXWPj3TSjs7jdYSPu/JGNoE/g/Du575
-         9Q6exzOOJ8LN/IVIxsZWcwZMx9r0HaSK16mtaLjjlesWKcyRAlrZ9cq5ZYMQuCp+jjnV
-         6n39ynWttYjYMDDCTmjW84uk3s6stphnOHaD3ykrnuo92Ibh1X4VQsoosm5Ea+9N1/Zn
-         IGKfhsEeZzq/NWapbZ9DkcnHMEhTyjwZKyX1Tgw/EJmaqbsSUjR1zVba/p3j2WUZtg9x
-         KrPQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX7gQVPqt57yD0a2ri43hfNhYAcMG1+jOGNHPVe/603/xoCiPsKXhwuJ63hx0b9ddnK+Jr9Q3+0yA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyleIvVeIDvJx/9mROd3WUfuDGmrEDAw7gb8Tr1R0uZslNorm4L
-	XfAu7c6gN+pTh48bPnKcT7kotO9Yhvr4qb3a2cVBxkMQlUpiqw93+L6HeolQ5Ew7N60=
-X-Gm-Gg: ASbGncu9Ta0iLzmF0htT6aZulZ6dsv5lF3b6CSzaQUA7J6F63UPmAi1X5T3vuXeumxj
-	I+bsLuYvHeqmOPBGt1U9ObTmDPFreD74K/cB37KU71xs7zVyDmRXsh5TCDVzWSIkUFLc4Cwljx5
-	Na18tpXcZc2xJiCv84JvnpSrX9lqDporWMzvSML+MRHJBXtJIhm09rD3bDHxY9ezP3nKazQPKtn
-	3NtZe2EdLsrUfwDqtJqCxSi48mQKlaH20UIaymoNoDv4AmYGOi9TBXJTBwoSBTJJpUp4QIcUV4r
-	lLqkE9ssaPAkvkOHgcPM7gOk/aAwKhDmppBwPrhCtD+Ulttk1YEiZ/1nK6YKqaU2kfwCoczcZdN
-	7H8vDVUYtjAhOsedo9E1l/oZd8O6jgCXQmajFRQ08fwmmwDMohGXavXco8wTrIN1UjTnXxodapr
-	QnIwlt5GaKLZIC
-X-Google-Smtp-Source: AGHT+IEPudXWObjJLDv2XWqM26sgZsiKQXdb5QBSpUD/P+viWtBD0+IrqTmFx+e1SWZr7yyFfz4vMg==
-X-Received: by 2002:a17:90b:5105:b0:32d:dc3e:5575 with SMTP id 98e67ed59e1d1-33bcf8625b0mr23541723a91.5.1761128440788;
-        Wed, 22 Oct 2025 03:20:40 -0700 (PDT)
-Received: from localhost ([122.172.87.183])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-33e223f0124sm2159272a91.11.2025.10.22.03.20.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Oct 2025 03:20:40 -0700 (PDT)
-Date: Wed, 22 Oct 2025 15:50:37 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Joe Perches <joe@perches.com>
-Cc: Ally Heev <allyheev@gmail.com>, 
-	Dwaipayan Ray <dwaipayanray1@gmail.com>, Lukas Bulwahn <lukas.bulwahn@gmail.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Andy Whitcroft <apw@canonical.com>, workflows@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Dan Carpenter <dan.carpenter@linaro.org>, David Hunter <david.hunter.linux@gmail.com>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>, 
-	Stephen Boyd <sboyd@kernel.org>, linux-pm <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH] checkpatch: add uninitialized pointer with __free
- attribute check
-Message-ID: <a6yf3ms7smzjfcm54z7khg6g3zpepqwxcbhwzm74dk33famolr@s2at2tnyxoed>
-References: <20251021-aheev-checkpatch-uninitialized-free-v1-1-18fb01bc6a7a@gmail.com>
- <5e11f1bacb6430e1331f02e3e0e326a78e5b0d12.camel@perches.com>
+        d=1e100.net; s=20230601; t=1761130450; x=1761735250;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yAme9gZz0jsPec+TiumN1DBQ0+B9qNdo1HlM5nTPaxM=;
+        b=bN9rcMzTM4WYNYYKTNL7whR/03T/mx+V5lmPk2JyZCw+y2+ILAXNk3VEBZpbdaZDT+
+         HPM1b4yG7NRrRcGSHbJA3lIPAoHgZ1TGA5+HcvzmvmsBmL//UPqWyYFMr3w/t7NbiY5M
+         o0mbEJoUg/h7tryvpnTR3t98FkZnh71/URFiiJEkR9j9YVwvW8MuYKsUzvDiFu+c0nkn
+         LNV/vwlhyxhcaS3pAKrIWAjv0GaWw9E05EOSDKfqmvNArE03GW0p7bRSbVRomX9q60Wy
+         lJWYVFMXTPM0PP2YHilUJts5p8zH6L1VIIrjV1cbwKQT5YGmY7sZNbnHzKrbKleoWrkT
+         6KkA==
+X-Forwarded-Encrypted: i=1; AJvYcCXQ3qNtOA1XoNlJzEpj/RRic7/ZZLWaGpaTdhw2x427QMr1+ii+pXyaa2lr2tBXjoTeB7OevM3IPQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxB8TBCR9uXtlhWnGkDSNHtc0orbFwRd9W663WMKs+YmNqQ43HI
+	/S58RsOdvkXzdYwKE5FXHhm2RuB/ONitxrxa1kJ6GRr5QieMOHRxgAl0lzMc1T+Hl88YCIeluRX
+	YL/YMSq5LUX1EMyltXdQ8uSJzRsFKRaZB1JQorWqkE9+zxaA0gu9zVXsFn+xvRpBnGf+WgNEmIb
+	sBo158cpS8h06eu71DdQw4joZbP2dbsGlsefQ=
+X-Gm-Gg: ASbGncvmCVQJ11P8Oz0Ln8BLmJdEwMXAraXnsnqXS9e5Y6c5AYAoQ67wkBd3Y2EDop5
+	WAg3ryAnTAJTI7ZsTycnqPgevN0bK6TrtMExOjxOpz0vc9zP7lTZG1ZYEtvDKwMv4Ts2J4akYm/
+	jPRn8oExfL6HKTshCH+MtEEYA1i/s3fx59VjRQYu/v5CAw0iNjlCXV6fKhFQ==
+X-Received: by 2002:a05:6402:3554:b0:63c:4d42:993d with SMTP id 4fb4d7f45d1cf-63c4d429b92mr14924957a12.31.1761130450615;
+        Wed, 22 Oct 2025 03:54:10 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFwXo2Nnikbm4tEQdmgmkZp9TZORUaZ7NSsb6jc2EYon1wJHlulaxXg07EbqzbJhz2+0tqMwSZX80MVwHLznqQ=
+X-Received: by 2002:a05:6402:3554:b0:63c:4d42:993d with SMTP id
+ 4fb4d7f45d1cf-63c4d429b92mr14924933a12.31.1761130450205; Wed, 22 Oct 2025
+ 03:54:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5e11f1bacb6430e1331f02e3e0e326a78e5b0d12.camel@perches.com>
+References: <20251013193028.89570-1-mrout@redhat.com> <20251014053608.pwlnexeh7mwjrvsc@lcpd911>
+ <fdac8d84f266ba85d517542bdad0592bdc33b95d.camel@redhat.com> <CAJZ5v0iLCcCpiBqgQM=GcEAnQvZxgbtMy+bWGrWDQEikYOgC=Q@mail.gmail.com>
+In-Reply-To: <CAJZ5v0iLCcCpiBqgQM=GcEAnQvZxgbtMy+bWGrWDQEikYOgC=Q@mail.gmail.com>
+From: Malaya Kumar Rout <mrout@redhat.com>
+Date: Wed, 22 Oct 2025 16:23:58 +0530
+X-Gm-Features: AS18NWDcKkqLf4WGgRCf3VkZNzrXzmQMf2fm-cuEeYgk3yjR7d7XbHLUsCk1kdU
+Message-ID: <CADD9qegh88p3gBWbAhV02ScWR7GOc9Tby6QQouLFAzN7ceozDw@mail.gmail.com>
+Subject: Re: [PATCH] PM: console: Fix memory allocation error handling in pm_vt_switch_required()
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Lyude Paul <lyude@redhat.com>, Dhruva Gole <d-gole@ti.com>, linux-kernel@vger.kernel.org, 
+	malayarout91@gmail.com, Len Brown <lenb@kernel.org>, Pavel Machek <pavel@kernel.org>, 
+	linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 21-10-25, 10:06, Joe Perches wrote:
-> There are many uses in drivers/opp/ that could be updated where
-> the initialization is done after the definition like the below:
-> (I've added the opp maintainers to the cc's)
-> 
-> drivers/opp/core.c-unsigned long dev_pm_opp_get_max_clock_latency(struct device *dev)
-> drivers/opp/core.c-{
-> drivers/opp/core.c:     struct opp_table *opp_table __free(put_opp_table);
-> drivers/opp/core.c-
-> drivers/opp/core.c-     opp_table = _find_opp_table(dev);
+On Sat, Oct 18, 2025 at 6:11=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.or=
+g> wrote:
+>
+> On Tue, Oct 14, 2025 at 6:54=E2=80=AFPM Lyude Paul <lyude@redhat.com> wro=
+te:
+> >
+> > On Tue, 2025-10-14 at 11:06 +0530, Dhruva Gole wrote:
+> > > Btw you can't include a R-by tag in the very first revision of the
+> > > patch. This needs to come from Lyude on a public mailing list and onl=
+y
+> > > then can it be picked up.
+> >
+> > JFYI - I don't know how consistent this is across subsystems. I do usua=
+lly
+> > post my R-bys on mailing lists, but it's not unheard of/unusual for fol=
+ks to
+> > pass R-bs through means other then mailing lists (like IRC).
+>
+> IMV, they should be on a public record.
+>
+> > Regardless, happy to post it again:
+> >
+> > Reviewed-by: Lyude Paul <lyude@redhat.com>
+>
+> Patch applied as 6.19 material, thanks!
+>
+Thanks for applying, much appreciated!
 
-https://lore.kernel.org/all/45a64ff434a027c296d1d5c35f442e51378c9425.1761128347.git.viresh.kumar@linaro.org/
-
--- 
-viresh
 
