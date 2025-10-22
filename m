@@ -1,152 +1,133 @@
-Return-Path: <linux-pm+bounces-36614-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36615-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01D26BF998A
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Oct 2025 03:18:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 962B7BF9B6F
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Oct 2025 04:27:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 9FF9E4E885B
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Oct 2025 01:18:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 12582565731
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Oct 2025 02:27:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0D741F2B88;
-	Wed, 22 Oct 2025 01:18:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E69C2206B1;
+	Wed, 22 Oct 2025 02:27:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=sina.com header.i=@sina.com header.b="e5C8QN7Y"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="mg+cjNtW"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp153-168.sina.com.cn (smtp153-168.sina.com.cn [61.135.153.168])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9704812B93
-	for <linux-pm@vger.kernel.org>; Wed, 22 Oct 2025 01:18:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=61.135.153.168
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19E6221ABD7
+	for <linux-pm@vger.kernel.org>; Wed, 22 Oct 2025 02:27:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761095908; cv=none; b=Qve3iSNDdeWeybVZuJIoMn9wmIKydJg0MEICP+hMS31YvVTIFg7USkuzSNn7Pr4V5EPTEitwdNxs2W5HfVYCZ5TN3aMoPNtVI7c7e3hHAp9dzmpblclilh8fvEfJ7EydcD7dN6AO5rXINUB4ZYHUQNvoHN8p6DbJwlIbu+NU2F0=
+	t=1761100024; cv=none; b=qayihzTNFx1MC2qWLVzxp/0WRiq1CCyw72V83E5SKrP8d2It/cx4hNbmKQDhBrx+AS5qn5r293+V01DEzsUvAl/QXUTfO6bjj2MkNV3Ig1vLwgUvtM4agF8KDcuuUb8dTHzyohg1KysNUBHtopgwucyE5BNEnTSYlcVJcZRwdI0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761095908; c=relaxed/simple;
-	bh=yPI+NRDchou+55Z5ZkUQDZsXRs5KUlMpO3blhZVOeeY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=OMUHfDVSBDXASaEkWLEjVpkQlkvNfTjUqPOsm9/JO2ek8F+msjykSzHYhNN2606XGpGJu9N0SjmchJVZpmnJKMKcU6Tv/tD22XbTAM508uDi62khUurGUu50ip/YPnm24ChJx4Z7/7n3S93g5kl9wE9omnXyB88qZoJm7gbJ3BQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sina.com; spf=pass smtp.mailfrom=sina.com; dkim=pass (1024-bit key) header.d=sina.com header.i=@sina.com header.b=e5C8QN7Y; arc=none smtp.client-ip=61.135.153.168
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sina.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sina.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sina.com; s=201208; t=1761095902;
-	bh=owyn/VL0z1aMn38Icbz6k6j8VqVYe7fKFQhXKrFPPLY=;
-	h=From:Subject:Date:Message-ID;
-	b=e5C8QN7YDbJXhNuXRmICUGb8PyWiYjZmOuXNHLssfAlyszed2FInHCnYGpvYkPGaD
-	 T5oWE/MM6hlU2EUzwm2tMpYnQvMt6Q+Zssw8XYYvsD8tJ13f7e9zvz1P/31pwNzJRE
-	 km/kb/WLttQgCqdE/4J6riZzKfzPS+a1lNQ3urgo=
-X-SMAIL-HELO: localhost.localdomain
-Received: from unknown (HELO localhost.localdomain)([114.249.58.236])
-	by sina.com (10.54.253.33) with ESMTP
-	id 68F8304A000043CB; Wed, 22 Oct 2025 09:15:56 +0800 (CST)
-X-Sender: hdanton@sina.com
-X-Auth-ID: hdanton@sina.com
-Authentication-Results: sina.com;
-	 spf=none smtp.mailfrom=hdanton@sina.com;
-	 dkim=none header.i=none;
-	 dmarc=none action=none header.from=hdanton@sina.com
-X-SMAIL-MID: 2015496685394
-X-SMAIL-UIID: 46B6DD55AC574FDFACD9C46C0F2385F6-20251022-091556-1
-From: Hillf Danton <hdanton@sina.com>
-To: Samuel Wu <wusamuel@google.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Pavel Machek <pavel@kernel.org>,
-	Len Brown <lenb@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Saravana Kannan <saravanak@google.com>,
-	kernel-team@android.com,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5] PM: Support aborting sleep during filesystem sync
-Date: Wed, 22 Oct 2025 09:15:44 +0800
-Message-ID: <20251022011547.8648-1-hdanton@sina.com>
-In-Reply-To: <CAG2KctpHA+L=xh-VQ8SVDSRcqyL+ch=WMVrKS+pckLmC6uJwvw@mail.gmail.com>
-References: 
+	s=arc-20240116; t=1761100024; c=relaxed/simple;
+	bh=GHDQMCS5dEWxKn+0Txm/veOfLoI8l83ajhIWcN5rWOw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=k27h1QakzanFZnetmGyEA+dAZRDLnsfNejitCI2n4RB7jScwibUpYtlnTNInECeZ1IvGvhbKITmbsU0SIVyZLHH0g1vKoRA5i9xxscVOgCKyrslY08VqnGvJmCy9xHrBzdbTh84WijqJODAs5sMbmAEp0C6GsvB0kOziy2ovmB8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=mg+cjNtW; arc=none smtp.client-ip=209.85.210.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-793021f348fso5642690b3a.1
+        for <linux-pm@vger.kernel.org>; Tue, 21 Oct 2025 19:27:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1761100021; x=1761704821; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=WqQzNiLchpkg3pgwyuDiy5UGt+eUDtmLfbzoo0ne91s=;
+        b=mg+cjNtWy85MJ5yikxe1d5u3CQrZAjAaOamlRzfbcdkFc85wGXMOx7OimDEizRlL13
+         txfW2OZvUMSY5eFEerqT7QTicfB804oqCBqCynrAlYUTxnsBqONIs7uIKiRQx1ktaOGA
+         loKeDRjhNZyPV5Rmfbrl4X3ij+Zz7r2XmLJX/ilOvwgPp6gCuFVfiehV2L5iKcnHSVjP
+         5PCELIx8MNhXM6fFehUhXBSUX35G/sCuqZ9nS7oBOqa/UsJPWmIfs5B6s5xwP1pBkLYb
+         sjSYn6ux8ztx2kOSkpyBJ8c4L5WvphtjFNHRtAArdgUZ25ChBq3laCFW0RNTBtCty38g
+         hTHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761100021; x=1761704821;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WqQzNiLchpkg3pgwyuDiy5UGt+eUDtmLfbzoo0ne91s=;
+        b=qPOOLru3EKw9d8UlakllMyBEidyichyiSPA+EYs3zd5UXUb4SPCSdZQRymY+scwYgm
+         5xfyA14PN4J7EguRoqGCQh7KYb5gMCJgA5MJmGaf5Kb79ZfqNFlsqYiHLAjdrTwldYuv
+         ldyGIpYwZg3CO+8XeDbf2YznFPzN+qetASL8u6AfPgqYdEb6C01i+q5m2s+9lOfNJTK/
+         pHZbR72ZNKvGDeHsb+FeUg6P5ZZmJAKP1a5tLr604DBjUnR2Vi08oSIEXKoF1WuMoO1q
+         H3UIkyUjGjOFXJq83EtbVLnR/yT+0nGsZ1qaV3vDEtV8mBYzSLAglwqO1p3oKyM8unA2
+         ijWQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXOIrHiZ253UqUbCzgm5l+kk2v1EPQttuTMEHhmvAe40PiBRDruXRB/xVQiGgLQr7run5rkzDzoVg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyQGgedXfz6Qjfu3+iNE2bAdKvp5WwocIFpktLWjDY1uhh+FDac
+	FTncW0Gxy9JOdBpOr0DhOhKMoTiqGrudtSW0ors/P6eFtivnPFPTFUMf0fKbMpO68HI=
+X-Gm-Gg: ASbGncto9rUGX4zIaEWFx6Jq7mFsHPH/wCoc48U6HTyUuATf28/eVq1982MYRA6a0pk
+	ee1CTRL93vE7GDyKVfRGwju/mXBYQzu/G6q2X6cgYOagH0edRPdrD5GmqCq4Jgm5f1+GyIogAGu
+	Haiq2v5XhP8tedPcn6WythgBsRzoquc+LLavZkMJ8gIz9aewQA/JfJ/jZ7p/JP0SVnajJEVIyLJ
+	I9h++Jmu/iriKv72/T6VASYVa5WQEpFJcNFwljPtFRTuXOjXi8NpYYNtIMkRDl73by6LgineO2M
+	hugM+DOttRS/qBvjh3b+mY6PgJQPGc6EzFRdVyTWYrP1AlGKMgpStxj1/xO+LsLYlAETdUJGmaH
+	UjZoH3Da41D9AGpLeVGo823nAaqdsD3GkI7SMk1O5Hj40Hi0OQVz7kOYqzLggoyxGWUrWTy0G26
+	4iPw==
+X-Google-Smtp-Source: AGHT+IEiODVZTmpBKH4GJGfRgQpdF+p0v4t2QcX4SapXa+98D5HxqE/HG1opMUzT/b2Bq6W9RKZPmQ==
+X-Received: by 2002:a05:6a00:2e1f:b0:781:171f:df6f with SMTP id d2e1a72fcca58-7a220b14d80mr26349244b3a.18.1761100020948;
+        Tue, 21 Oct 2025 19:27:00 -0700 (PDT)
+Received: from localhost ([122.172.87.183])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7a23011088fsm12778187b3a.65.2025.10.21.19.26.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Oct 2025 19:27:00 -0700 (PDT)
+Date: Wed, 22 Oct 2025 07:56:57 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Tamir Duberstein <tamird@gmail.com>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, 
+	Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
+	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, 
+	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, 
+	Waiman Long <longman@redhat.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Christian Brauner <brauner@kernel.org>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
+	Arve =?utf-8?B?SGrDuG5uZXbDpWc=?= <arve@android.com>, Todd Kjos <tkjos@android.com>, Martijn Coenen <maco@android.com>, 
+	Joel Fernandes <joelagnelf@nvidia.com>, Carlos Llamas <cmllamas@google.com>, 
+	Suren Baghdasaryan <surenb@google.com>, Jens Axboe <axboe@kernel.dk>, 
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, 
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Uladzislau Rezki <urezki@gmail.com>, 
+	Bjorn Helgaas <bhelgaas@google.com>, Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
+	Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Breno Leitao <leitao@debian.org>, Liam Girdwood <lgirdwood@gmail.com>, 
+	Mark Brown <broonie@kernel.org>, Michael Turquette <mturquette@baylibre.com>, 
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, rust-for-linux@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, linux-fsdevel@vger.kernel.org, 
+	linux-block@vger.kernel.org, linux-pci@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v18 10/16] rust: opp: use `CStr::as_char_ptr`
+Message-ID: <75keuxnrpd2p2lumgmoxpwt42ovsx4xyltq3dimarvlspjq3gn@cmadekc427tk>
+References: <20251018-cstr-core-v18-0-ef3d02760804@gmail.com>
+ <20251018-cstr-core-v18-10-ef3d02760804@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251018-cstr-core-v18-10-ef3d02760804@gmail.com>
 
-On Tue, 21 Oct 2025 13:13:39 -0700 Samuel Wu wrote:
-> On Fri, Oct 17, 2025 at 5:17 PM Hillf Danton <hdanton@sina.com> wrote:
-> > On Fri, 17 Oct 2025 23:39:06 +0000 Samuel Wu wrote:
-> > > +/**
-> > > + * pm_sleep_fs_sync - Trigger fs_sync with ability to abort
-> > > + *
-> > > + * Return 0 on successful file system sync, otherwise returns -EBUSY if file
-> > > + * system sync was aborted.
-> > > + */
-> > > +int pm_sleep_fs_sync(void)
-> > > +{
-> > > +     bool need_pm_sleep_fs_sync_requeue;
-> > > +     unsigned long flags;
-> > > +
-> > > +     do {
-> > > +             spin_lock_irqsave(&pm_sleep_fs_sync_lock, flags);
-> > > +             reinit_completion(&pm_sleep_fs_sync_complete);
-> >
-> > Given difficulty following up here, can you specify why reinit is needed?
+On 18-10-25, 13:45, Tamir Duberstein wrote:
+> Replace the use of `as_ptr` which works through `<CStr as
+> Deref<Target=&[u8]>::deref()` in preparation for replacing
+> `kernel::str::CStr` with `core::ffi::CStr` as the latter does not
+> implement `Deref<Target=&[u8]>`.
 > 
-> There are two possibilities that make reinit_completion() necessary:
-> 1. Suspend abort triggers completion, but is canceled before
-> pm_wakeup_pending(), so need reinit to restart the
-> wait_for_completion() process.
-> 2. Handling back-to-back suspend attempts: after a subsequent suspend
-> attempt finishes waiting for a previous suspend's fs_sync to finish,
-> we need the reinit to start the wait_for_completion() process of the
-> subsequent suspend's fs_sync.
-> 
-If 1. and 2. matches the comment for wait_for_completion() below,
+> Signed-off-by: Tamir Duberstein <tamird@gmail.com>
+> ---
+>  rust/kernel/opp.rs | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 
-	static DECLARE_COMPLETION(foo);
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-	waiter		waker1		waker2
-	---		---		---
-	for (;;) {
-	  reinit_completion(&foo)
-	  do anything
-	  wait_for_completion(&foo)
-			do bar1 	do bar2
-			complete(&foo) 	complete(&foo)
-	  if (end)
-		break;
-	}
-
-the chance for reinit to drop one wakeup is not zero.
-If drop makes sense, for what do you wait after receiving two wakeups? 
-
-> > > +             /*
-> > > +              * Handle the case where a sleep immediately follows a previous
-> > > +              * sleep that was aborted during fs_sync. In this case, wait for
-> > > +              * the previous filesystem sync to finish. Then do another
-> > > +              * filesystem sync so any subsequent filesystem changes are
-> > > +              * synced before sleeping.
-> > > +              */
-> > > +             if (pm_sleep_fs_sync_queued) {
-> > > +                     need_pm_sleep_fs_sync_requeue = true;
-> > > +             } else {
-> > > +                     need_pm_sleep_fs_sync_requeue = false;
-> > > +                     pm_sleep_fs_sync_queued = true;
-> > > +                     schedule_work(&sync_filesystems);
-> > > +             }
-> > > +             spin_unlock_irqrestore(&pm_sleep_fs_sync_lock, flags);
-> > > +
-> > > +             /*
-> > > +              * Completion is triggered by fs_sync finishing or an abort sleep
-> > > +              * signal, whichever comes first
-> > > +              */
-> > > +             wait_for_completion(&pm_sleep_fs_sync_complete);
-> > > +             if (pm_wakeup_pending())
-> > > +                     return -EBUSY;
-> > > +     } while (need_pm_sleep_fs_sync_requeue);
-> > > +
-> > > +     return 0;
-> > > +}
+-- 
+viresh
 
