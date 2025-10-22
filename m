@@ -1,252 +1,110 @@
-Return-Path: <linux-pm+bounces-36660-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36661-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64B21BFD007
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Oct 2025 18:01:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F9B7BFD4DC
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Oct 2025 18:42:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4AF463AE775
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Oct 2025 16:01:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E3EC018828F8
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Oct 2025 16:41:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44C7D26C385;
-	Wed, 22 Oct 2025 16:01:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFE792D3A6A;
+	Wed, 22 Oct 2025 16:27:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="dtFHhLpP"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="dYczUrc6"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from SN4PR2101CU001.outbound.protection.outlook.com (mail-southcentralusazon11012023.outbound.protection.outlook.com [40.93.195.23])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FC6526CE3B
-	for <linux-pm@vger.kernel.org>; Wed, 22 Oct 2025 16:00:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.195.23
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761148860; cv=fail; b=q4+CNoY5LLLM/nJPWIbun9GK4TQJBY0cQscgZusmbSpHweW+MX8XUHB9JDTnVL7EndlRcu8jmo1oYp/POoCizuphUMnNQOX1H7UrHkV1fgIzsqEvw7n1l4ovJmGh1X12q+UGqNLKY+Ef4ljCDpOQG9VuCOWZXAZCQhZsaCcp+Y4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761148860; c=relaxed/simple;
-	bh=GA+cr7+FhwQyPcKtS2Q24bvFBmFPMbqKHkXFMEgIFT0=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=GQGcPQn4al2uE51YEZRoMfP/+8CdOVTunA9amSYVBhiijdPC+2u7zmOWcjAYJjqkZYikXmMATiSZTMqv4sUtUWo8snMDni06UbeiXuND6fXS5zUUQTPgLRUwdr7ejpYF5wRE7nJDJ6ILpIMIlxIS9S4HW8S/PE0QyQPlOSdxHGA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=dtFHhLpP; arc=fail smtp.client-ip=40.93.195.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=jUEIwWqhK/e4mWhcSgxpEgAjOqWy7jRtEb+SO8cBAQkrIl/eeu9H7jwqVEdwpMBBDvGNFraa5SgQlZZdiipjbQ77djml3XtUxJvZ4wWhHLDFTPmFKxTO4LMZJmzUdSfgAzylv+dWz+zoQRQxAJui6Pm9XPmGXb1I/bBz6Qp8V2Ecwp9eMn4+mQYOcnty3EnF/GqklCcacYX17O+eA7hVcb7x63T6pDlvnuVSTQ5s3tFENIGr/dDZ8ahciI/16SQFFXPJihu8epgBVucEf5gCuIlrLqkLGhZ3L8lwXuKbTyLWfn4jviNxvgbONNT5+61xvIbYXKA3nBw67uJ+ezm3jA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2WLKvWu2JccH8gpfpGEJ5PCXJJd6F2xIx/xWrI6G3hE=;
- b=HCXEK5OY9yBKyv5BTZ245WBzghGOgMzxw5be5Jv1zSCQb2HR5CVeObJUSLHo+cLfyoAiyjPhIHRazyI0ONgVvtAiJSOsz2dP0/ZUL1abdPRGE6d9YAgPMX7fL1CsjMViR+eugpO+HA/PVf/uzqvHEzxB3P4aLWFaH3bofO+X/ONbEDQ+ZM3JGo7UUlnX5EojLOVcO+RpTJdkZQFrwBePcwYX6x7xqGWuavDeL5Clumhd5DbNc3Tatheivnqw6NdsD8eW9BgwSOh9I3GSbYlLPHOtgRxYdM8X8w23gM1fYHJtMG7nyspAu/sbzCP03P3lINUQN8atFbtyHGiDlap0Qw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2WLKvWu2JccH8gpfpGEJ5PCXJJd6F2xIx/xWrI6G3hE=;
- b=dtFHhLpPkSQ3k/ACCyshAbDgQM1pVip8BZLiBwMd4KTnCXFlsXiYB4XQQLPpaeXvGkTjpArbMlx6bpHdZK44o4DecEHRD/OffrmcqIYdWZjCk4EebKmiBOqPqK2UMX+0x/VkaeCJrineVS316jPgqyylnpkArpkrNg5DqJO06pQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by DS7PR12MB5768.namprd12.prod.outlook.com (2603:10b6:8:77::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9253.12; Wed, 22 Oct
- 2025 16:00:53 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::37ee:a763:6d04:81ca]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::37ee:a763:6d04:81ca%7]) with mapi id 15.20.9253.011; Wed, 22 Oct 2025
- 16:00:53 +0000
-Message-ID: <8567a4c0-f902-488b-88ff-21f0f901a265@amd.com>
-Date: Wed, 22 Oct 2025 11:00:50 -0500
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] drm/amd: Manage frozen state internally
-To: amd-gfx@lists.freedesktop.org, alexander.deucher@amd.com,
- christian.koenig@amd.com, airlied@gmail.com, simona@ffwll.ch,
- "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: "Mario Limonciello (AMD)" <superm1@kernel.org>,
- Muhammad Usama Anjum <usama.anjum@collabora.com>,
- dri-devel@lists.freedesktop.org, Linux PM <linux-pm@vger.kernel.org>
-References: <20251022155114.48418-1-mario.limonciello@amd.com>
- <20251022155114.48418-3-mario.limonciello@amd.com>
-Content-Language: en-US
-From: Mario Limonciello <mario.limonciello@amd.com>
-In-Reply-To: <20251022155114.48418-3-mario.limonciello@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SA1PR02CA0006.namprd02.prod.outlook.com
- (2603:10b6:806:2cf::15) To MN0PR12MB6101.namprd12.prod.outlook.com
- (2603:10b6:208:3cb::10)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8D7F279DCE;
+	Wed, 22 Oct 2025 16:27:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1761150478; cv=none; b=BGVTolP9b20JmMZVEDIyxyYNZJ2ysZ/8ax0i0U+zcBtkY1rK+7ODD4GGe0Az3Q/UT56adhLQrT/J6X2jW1j5BsZjxu0p5vUyRE4RRSZ3TTX+QDpU4PgTKrSSmyYzDwTMhL/LNkkVSJBz5CuyhZu/DnywDWpiM6Yqh2cWRGsHaqs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1761150478; c=relaxed/simple;
+	bh=N7WMcy+tGgF0xedszwzLTPEiMBWrFIt4qQGWiXS/g98=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=o2x0jo0TR1CmjefxAOOsuAeEFbwVnUlMqFW6iUqNmxyp21DexaNrWf46gRkNV20XR3f346LN3oMO+O6f6OjHpCEy/RtzfnEPM4yWhllYHaONUL6dE8eRdW3Qw0f+JvRZrbh0kajGyRwETQSkGIdEq+4m6ynDUZw44VGTwObdsco=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=dYczUrc6; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1761150475;
+	bh=N7WMcy+tGgF0xedszwzLTPEiMBWrFIt4qQGWiXS/g98=;
+	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+	b=dYczUrc6/E+YlrOT4SMTk0efo1CZfEw961xQ6ObrcmuL+YLYrJo1DTe+CE6i0grnZ
+	 F+5GpCQ1g2s8wATI6WkoxC8Zcje4s03PLICfFd6v4sk5GRUuoZtX0UoJjf7o0tl7sQ
+	 Ndnmm26XXasPe+AEWFDUuvsJKmcAqHyu5awvmKoolOmXkeh1Wpq9EQlKAD95nHwZyg
+	 OyA9QPlaFJvPZFDWKXkcXGMK63eNuPW2mKCmWvR8IyBSX/HPDSML8aZBLtIwimNOs0
+	 rWutCeHG2amoPelADZ2h6vBPi18rp0pjUA5M6v374MHch9tdiBCw1UwbyDQWw2wMLH
+	 Ko+56MRdnE7Mw==
+Received: from [192.168.100.50] (unknown [144.48.130.189])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: usama.anjum)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 22BE017E108C;
+	Wed, 22 Oct 2025 18:27:50 +0200 (CEST)
+Message-ID: <288e4d9c-a3e4-4f7e-a68c-330704e5125d@collabora.com>
+Date: Wed, 22 Oct 2025 21:27:21 +0500
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|DS7PR12MB5768:EE_
-X-MS-Office365-Filtering-Correlation-Id: 34bc141a-c450-48c3-f248-08de11842d64
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?eldKN1BFbW5qL1dPWDUvM3RzZW14UWJDcVMvNGRlOHovNjNZcTVWNzRhdmFZ?=
- =?utf-8?B?OCsyYmVidVdybTVSSG1rQUJtK2dqckR5TmRVaG9kSi9VeHI4TDNnNERta1pa?=
- =?utf-8?B?YVJVT1RBc2todjZ5bVFLeTFSYTBFeHZLWVdzY1FwWWJjdkFNR1RNS1lVeWh3?=
- =?utf-8?B?Z1oreGhrbEZoYjJMYmw2MDFEWWs2T1VTS0hrZlArRGJyQWp3T1VDMUtIb09p?=
- =?utf-8?B?dEljVThNWDRRU1BTSWI0SndNdGNZSW9WZVVteDFiTmVmZEU2RjV4bzloUDZ4?=
- =?utf-8?B?eFdIakxxczY4dU5TaG5qMzVHU050YTI5L2t4QjZvN2NDS3h2ejcyMlhTK09W?=
- =?utf-8?B?UnZnYWs0S2xLL0orQ2QzbzN0RDl1T0k3K1lxc3FQQnVDOFBndC80NWh3RTc0?=
- =?utf-8?B?TnF0VUlTb05qNkdtWkp0WDExQmFxbkNGUFQvWTBJelFDeG9Qa25oSFFSa2h2?=
- =?utf-8?B?V3JmZkc3M0RKMGJPVXN0c2UwVnprb0VHTmhWT1UyNWEybzJ5ZkJPU3Z0UEU0?=
- =?utf-8?B?WENwYmN6Wi9SMFFjWXphUWxxWU1FQXc0V2lZODRwU2hFTUlJaVRDSU1aNFdx?=
- =?utf-8?B?aTJtMjBYd3ZPcjBaNlVqSVNXdCtveGR2c0hWN05NMVg5dGJLelVpS001Y1VD?=
- =?utf-8?B?YkdaeDgrRExYdzZCQkFEZzhHMWFGM1UzeVd4UXpzKzVyTmhZT0pLNis0Tnpm?=
- =?utf-8?B?M0h0K2ViL2UxWjlOeFkyZWI5NDltRGF2YUp1TmhPaC8vaVcwMnEyMHBqSEx1?=
- =?utf-8?B?L3BpUE5rTy9way9vVGFqRmlCeEdIY1VacWMrYUVyWnpMemdxTDRZWThBT2Jw?=
- =?utf-8?B?NGdHRU9kVHN2TktvQVhtSFo5dTdsa0d1MkdGK2pFN2MvdDhDY0VaTUhKZXlo?=
- =?utf-8?B?anluVnkzRWpaeVRNMDIyTUNaSThMVVBGeHRUWFJRV08wNGxCcDJONTkyOEU1?=
- =?utf-8?B?Z0plR0ZraGd1Rmcrd1prOUpZeFdPWWlLYkZhYmJYY0NFZFQ2clZ4ZWMvYTVm?=
- =?utf-8?B?Q2M3Z3NNbVUzWWxCUndWMndDOWZlRCsvek1CV1RPKzJ3L2xyK1Y1clpNSGxh?=
- =?utf-8?B?TFFCaFlaWVNUb1ZTVExZQ1VwZWxlMkZtWFJSc1RoSDczU0NYOE12Q1FjMWRj?=
- =?utf-8?B?K0hyVzl0cTJNeUt0WE5iVlIxSW91YUlkMXZlYUc5YUI5SkJuZ2YzNlZMaWFO?=
- =?utf-8?B?ekk5Q3djMmo3a3hpcG5DNnVwV2k2MCtIZE5xRExuL0JLRm0rdm00Vm9pYUNr?=
- =?utf-8?B?bjZ0VVNHdHYzWEFiNWZwN0RaRmxTSEpnNzBBSUJuSTYzUzZTVGtTTzJEcm1N?=
- =?utf-8?B?TE9peHJ5eWZlVjJQYjF0cURrajhIbkNjQytWaHJpaFp5ekVITWJyb08yalhw?=
- =?utf-8?B?bjRZTDh2Rks2NHVBUXRBaXZheDVFc2kzMnI5ZTF6TWJ3SjRaVWtTYWlDN1gy?=
- =?utf-8?B?cTB0cVNUSysrVER0MWRQMFBkWnN0bVhVT0VzTzJobU1XdDNQZ0JBQ2JPZDNZ?=
- =?utf-8?B?cmFtNzB4VWZPZms2Nk00bGZBaUw2aEExd05jdHlZLy92NHBVVFduTGhlaFpq?=
- =?utf-8?B?cFB4L0wyTmtwRkZSV3JKUk9pbHIzZkpMZy8vUjIyNkFiRDk1U2tWWU5hM3lF?=
- =?utf-8?B?VWJFVERaVUN2KzNGbFM1dWNwZUoxU2pTWm1HcXVZa1NjNEl3MDVyVEhOZ2JN?=
- =?utf-8?B?WnV2b3FpenNkanFMRzJCMGxiWDZyd1RYeVluYmw3QTV3L0pSWVlSdjM0TExP?=
- =?utf-8?B?WkVSSmxiMGwvVUlZbithdzhaZWIyWW51dUJ5L0VVekxoaVNvU05OMUtITHVy?=
- =?utf-8?B?UGZLT0VYbW9ic2RGNEpZSHVobHA5cjZ1RnQzcUxwUWwwMXQ3VElJWEhlOEYz?=
- =?utf-8?B?bkhqd2F2YlZQTEdTSnFYTG9MSzN1R3ZLeEFYVVhaVGFyb0V1MmUxdVBrNUJo?=
- =?utf-8?Q?3RRy/N9nl9HkSdCCSJJL+eqiIjimICXb?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?VmNOeHFaL1E3S09Xa21JeTJiTXlmenYvelNraVFheFJnV1pOU0toa0gveVow?=
- =?utf-8?B?Ty9hVG50R1BwWlA3Y29obnJGMnRrZTRDSFFwWjByQ2s2OWQ2Y1FPZENxUW5y?=
- =?utf-8?B?UkxQVktqZFdSVWJvdlkzLzdSRk5kY1JneXc3amxydzFkTEZuWitVZWpEOWpu?=
- =?utf-8?B?UFh2bVZJVlZSOEtkS0lKeThyMVFiMGpvWW51RCtlZytOV1BSYXZadEY2eTVO?=
- =?utf-8?B?Z2JTR2NidnV6czh0RFZMQ3dFWW9yT1ZmNVpua0JzeGFtcGlRRFNRS1FJSlNZ?=
- =?utf-8?B?RlQvT1ZndDZMeExsb213QlhLcUNkVTBLeVpoQUFUYW1HVi9yYUhjNE9ZeGhM?=
- =?utf-8?B?ZkwyYUx4RGxSNk5zZGRxMmZ1N3VtbXl2ejJMTjBiYWo0cllJN0ZQa3RleXVK?=
- =?utf-8?B?cUxiaVgvWnNCMzlTalZPRHN2UVNFc1VvNlZnbHJlSXFxbFdETjhJZlpuRks5?=
- =?utf-8?B?S2ZZLytkWUFLVTYySVd4UFZwcVljWEJOTXl5VWZMemdXTGs0b0I1b2hiNzlK?=
- =?utf-8?B?U2V4MVFZZ1YwSlF2NEJYRDlac1doc2RhY3RZSm0rVkRzZjhhWDlxdHp6VGM4?=
- =?utf-8?B?MU5pVnhhT3hXZ0R1MTVCNS9iMlMzekNuNno4eksvOVJTQnVVVFdqS0VGbkdV?=
- =?utf-8?B?aHQ5V2pTVHVzRU56NHZRQkJWSTVaUElqQkRVck5FNm1DUlNjRWtyN3R0S0Nw?=
- =?utf-8?B?Mm1PRFJMQ2NxVU9JYlVBMHRyME9aR3JTUExHcFNQa1pLN2tMMGQ4SE5rR1Bl?=
- =?utf-8?B?RmF0cjVEczhsaU9ueWIwOGlIOVNHbUtvVGJINndMT3ZWZlNzOXRFb3k5a09z?=
- =?utf-8?B?VC9oWHhiRU5kaVN2RG9xak0rNzU1VmlhTnVtb2o3VXNJaWxXczY4TmkxbGZ5?=
- =?utf-8?B?b01udDZzSGVwZ2N4cDJ2MzArNDloV1hjSThBOE8rOXNUQWczd1k0dDZZOXBk?=
- =?utf-8?B?ZDNITGh6M0xQK2ZzRkFkZHZ4a2tuR1Nidlh5SUZpN2FBaW9MVk9wNU1PNlVq?=
- =?utf-8?B?TzRFdkZNaDAreVZkZUNlQm9rd3FIcFU3S3JzbGtBU0hPVmdaWFMySXJmaDl1?=
- =?utf-8?B?cTRiTFZ3b1pBZFM3dHl2UVZGVjMvb0VWakdwOEl3eVJ5bjIyT1NIYkozcHNV?=
- =?utf-8?B?cmp6SStSZ1J1cUJ4dVVoL0tZKytmNHIvbUZQSUVQWi9FT0hDcHl1K3ZhZXJ4?=
- =?utf-8?B?b2hMbHJwYnJuOWNodmd2ZUlVUUxUU1Jvb0E1TGE1amY1dlhnaGppMXEzbHF0?=
- =?utf-8?B?UXZKaS9HYjlxVFB3TnhQK3RqUHNyMlFFdDJkcGNQNndIRCtKZmtieVdHTlZi?=
- =?utf-8?B?UkFyZVNMQ3B3cEJpQWcwVzd2bGxhajJrSUxETlFIWFJqS2lXaE5oSFBCSUlO?=
- =?utf-8?B?N0hBRVhXWFltNENXR1FWMG5iU05xUWFZMUQyOXI4eXI5NWdNQUN2VTJyUCtJ?=
- =?utf-8?B?d0pTQjNlN2NBS01WSHJtYUFMcXlKZTNsaDhKSkROMldzM2pubHN6ZlpqWTE2?=
- =?utf-8?B?MzJjOTRRVHRKZys2ZXFkdkQrOWVNY0FxbmZJMlJFeUYvMHBUS25HQkxLRGFD?=
- =?utf-8?B?eXZtbkZhR0NFeGswVm5kSjdxbTN6dFg0SXlGcExObWthQ3pBY1ZaVW9ZQ0lx?=
- =?utf-8?B?V25HWHMvaVZqNU03LzkvSzdHQTZ5UzA4OGNxV3Z3eGRIY1FncjJ5NDEyOXhr?=
- =?utf-8?B?VngrTDRIM3J3cmwycmRKSzRhVVNES0srR25NYWlhZHFJZnFLTDZlcG4rQURH?=
- =?utf-8?B?a200NTFoQnFHeGxNOVlYL205Q2wvSlZMZGpva0dTeGZZbWw5dEdoWjFLV3d6?=
- =?utf-8?B?RWVaWWJzRnpKSU1CaWM1engxVGE5ZlFOcEorWlBuUTF3cWROWkVFV0pNTHZY?=
- =?utf-8?B?bU1pNTAwU25xUi9ZMTI2SFRTNHoxRytkUitVRUlCRW9pemhmQmlmbUdWQnZQ?=
- =?utf-8?B?WGp5N3hJYkdSTzJROHczVEN4THNrSWtmUS9lamR2NVd0UnVRcHdOZ1dNQktF?=
- =?utf-8?B?Rlducno0ZTNERndxV3ErdlNjZXpHSEszRkRKdXdtZXFkZXhrRVV6NUZqYnVR?=
- =?utf-8?B?WDd0K0lKdVp3ZkVDeXpmM0FiOEZMd0lKOHZWdGt6Skw3bDRWK3l6aERCb1kr?=
- =?utf-8?Q?qqXMw0rsKghyOBiYidiKWV9C3?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 34bc141a-c450-48c3-f248-08de11842d64
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Oct 2025 16:00:52.9560
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 3ov9YHoEPQ9yntXzvmbF18LpeSgVtiqFJb5MNjQGrt2qxLCCb6Lf7XLkhyxtaJw0C8inuerNTDcXYoobdhtP1g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB5768
+User-Agent: Mozilla Thunderbird
+Cc: usama.anjum@collabora.com, Len Brown <lenb@kernel.org>,
+ Pavel Machek <pavel@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Danilo Krummrich <dakr@kernel.org>,
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+ Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra <peterz@infradead.org>,
+ linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-input@vger.kernel.org, kernel@collabora.com
+Subject: Re: [RFC 1/4] PM: hibernate: export hibernation_in_progress()
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+ "Mario Limonciello (AMD) (kernel.org)" <superm1@kernel.org>
+References: <20251018142114.897445-1-usama.anjum@collabora.com>
+ <20251018142114.897445-2-usama.anjum@collabora.com>
+ <68a8c1ba-275c-4908-a4c8-2e8b83367703@kernel.org>
+ <CAJZ5v0hCxpWXdnoQeW79kaDFmHcfE0A4k7JuA9T+RR1OyCw29w@mail.gmail.com>
+Content-Language: en-US
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <CAJZ5v0hCxpWXdnoQeW79kaDFmHcfE0A4k7JuA9T+RR1OyCw29w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On 10/22/25 10:50 AM, Mario Limonciello wrote:
-> From: "Mario Limonciello (AMD)" <superm1@kernel.org>
+On 10/22/25 2:53 PM, Rafael J. Wysocki wrote:
+> On Tue, Oct 21, 2025 at 11:07 PM Mario Limonciello (AMD) (kernel.org)
+> <superm1@kernel.org> wrote:
+>>
+>>
+>>
+>> On 10/18/2025 9:21 AM, Muhammad Usama Anjum wrote:
+>>> Export hibernation_in_progress() to be used by other modules. Add its
+>>> signature when hibernation config isn't enabled as well.
+>>
+>> I wonder if you actually want to have pm_sleep_transition_in_progress()
+>> exported instead.  "Logically" I would expect cancelling a hibernate and
+>> cancelling a suspend should work similarly.
 > 
-> [Why]
-> On a normal hibernate sequence amdgpu will skip the thaw step due to
-> commit 530694f54dd5e ("drm/amdgpu: do not resume device in thaw for
-> normal hibernation").
+> Well, it does AFAICS, except that only the "freeze" and "poweroff"
+> transitions can be aborted during hibernation.  This is analogous to
+> aborting a suspend transition.
+I'll switch up with pm_sleep_transition_in_progress().
+
 > 
-> If the hibernate sequence has been aborted however after this thawed
-> step runs the PM core will think the device is suspended and will skip
-> the restore() sequence for amdgpu.  This leads to accessing the device
-> while in a low power state and will freeze the system.
-> 
-> [How]
-> Set `dev->power.is_frozen` to indicate to the PM core that an error
-> code will be returned for thaw() callback because driver managed the
-> frozen state.  If the restore() callback is called by the PM core the
-> driver will resume the device.
-> 
-> Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> Signed-off-by: Mario Limonciello (AMD) <superm1@kernel.org>
-> ---
+> The missing part is a mechanism to cancel hibernation between image
+> creation and the "poweroff" transition.
+I'll add wakeup checking there and see if it works.
 
-Explicitly add Rafael and linux-pm as kw failed to do so (sorry).
 
-Here is the lore link for patch 2:
-
-https://lore.kernel.org/amd-gfx/20251022155114.48418-3-mario.limonciello@amd.com/
-
->   drivers/gpu/drm/amd/amdgpu/amdgpu_device.c | 10 ++++++++++
->   drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c    |  2 +-
->   2 files changed, 11 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-> index 3d032c4e2dce..693347eb6861 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-> @@ -5247,6 +5247,11 @@ int amdgpu_device_suspend(struct drm_device *dev, bool notify_clients)
->   	if (r)
->   		return r;
->   
-> +#ifdef CONFIG_HIBERNATE_CALLBACKS
-> +	if (adev->in_s4)
-> +		dev->dev->power.is_frozen = 1;
-> +#endif
-> +
->   	return 0;
->   }
->   
-> @@ -5385,6 +5390,11 @@ int amdgpu_device_resume(struct drm_device *dev, bool notify_clients)
->   	if (amdgpu_acpi_smart_shift_update(adev, AMDGPU_SS_DEV_D0))
->   		dev_warn(adev->dev, "smart shift update failed\n");
->   
-> +#ifdef CONFIG_HIBERNATE_CALLBACKS
-> +	if (adev->in_s4)
-> +		dev->dev->power.is_frozen = 0;
-> +#endif
-> +
->   	return 0;
->   }
->   
-> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-> index 61268aa82df4..d40af069f24d 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-> @@ -2681,7 +2681,7 @@ static int amdgpu_pmops_thaw(struct device *dev)
->   
->   	/* do not resume device if it's normal hibernation */
->   	if (!pm_hibernate_is_recovering() && !pm_hibernation_mode_is_suspend())
-> -		return 0;
-> +		return -EBUSY;
->   
->   	return amdgpu_device_resume(drm_dev, true);
->   }
-
+-- 
+---
+Thanks,
+Usama
 
