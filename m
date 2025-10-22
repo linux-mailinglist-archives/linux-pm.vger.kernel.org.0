@@ -1,107 +1,123 @@
-Return-Path: <linux-pm+bounces-36679-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36680-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 476D6BFE5AB
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Oct 2025 23:54:50 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C0F83BFE69E
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Oct 2025 00:29:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 18E004F58D3
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Oct 2025 21:54:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7AC393A35D4
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Oct 2025 22:29:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 986732FA0E9;
-	Wed, 22 Oct 2025 21:54:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A27E5305051;
+	Wed, 22 Oct 2025 22:29:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="k78uvr2/"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="RR1CnWz9"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0C0D26A08C;
-	Wed, 22 Oct 2025 21:54:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1193F2FB61D
+	for <linux-pm@vger.kernel.org>; Wed, 22 Oct 2025 22:29:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761170086; cv=none; b=SeK/Ug62RXzv3BAkgY2SdL8xdl8idZ2kJXfCOzJwYfQlHUvbMmI4VfPVRx7sS/cw2uJqLOaJy732UjvTWOaLqKwBK/3O5DWxBY4CwO5PF4eMGg6ereNKjjZXEr9Pyn2+IEx8+ULk3IgNFa1VMS2Ia/d0eGzocMmNpuxqzxC9QRM=
+	t=1761172159; cv=none; b=EwhjYVFeg35NRhtR2GOdrq1xEQOCp4Kuy415GyELpBy/xjSq/sOZcudibdee+IjceoGeY/GMQmvSmzoL5SqkOkFMxzhinzTD3SYRTp8h1+FwUXad744vL/uzsoXV82wZEYttMge8VSS9WhZ2VVgYve0zimKZxEsoMhXiB1RxQTk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761170086; c=relaxed/simple;
-	bh=q2Z+aLpyjSEgn4k4zzWqLbE5nFJEaMxzt0ps4s5d9dc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pLFBKl55XXFqyGwtFLtkaDRjSXlk90Z5TnJhurdp+VV0qqXprud45Rp8/CbOgGyGWzgjNgYJBlnVjoQTj8MRBPYp7EXnetOr8IyTyx5laPSSyR7T4SHjYq3Aq9ofQE7ikFjK16YlCgxqCkEpfCfbNYoHBIe9VIwhqh+wA5kiaTQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=k78uvr2/; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761170085; x=1792706085;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=q2Z+aLpyjSEgn4k4zzWqLbE5nFJEaMxzt0ps4s5d9dc=;
-  b=k78uvr2/eHifdu1aH1gMzHo7sCEFphx7WSIo1kXL1/W+CqCDCSnrVV5/
-   2u0oWVonkF4Sg+2vmdQe1oZJlbQr+L8hxtcrThVOAX14jRuo8pQgsxODP
-   3LaIiCQwIE8zSX95hvX3zwxiNiL0UorjWKd28QWYF9WQ7rpblEJm4Z8c2
-   hZsRttRbZ96dsZjPU8x6IB3tWwD8qnvInIDcGZRETuXXBVcT8XAYIncZP
-   cHSnNnS9fbfavGZdyaj9U9RwIzZP0wkSYE3InzXTpw9wS2ok1krbvGrIm
-   nftHDl8KP2Khagg7NEQMmCjm81wt3yfhQ/ytVDAE3wDuvMJpL57BTjmKT
-   w==;
-X-CSE-ConnectionGUID: I+iGD2g5SIuALPZzAClZCg==
-X-CSE-MsgGUID: Kxa2eV+nRE+ZYbRnJE7trw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="73936338"
-X-IronPort-AV: E=Sophos;i="6.19,248,1754982000"; 
-   d="scan'208";a="73936338"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2025 14:54:38 -0700
-X-CSE-ConnectionGUID: 1+vMHUN4R6iiEoLsDYsINA==
-X-CSE-MsgGUID: IA8anjFKStGNIRrKBfWdSQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,248,1754982000"; 
-   d="scan'208";a="188026193"
-Received: from skuppusw-desk2.jf.intel.com ([10.165.154.101])
-  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2025 14:54:36 -0700
-From: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-To: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	Len Brown <lenb@kernel.org>,
-	Rafael J Wysocki <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>
-Cc: linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v1] cpufreq: intel_pstate: Add Diamond Rapids OOB mode support
-Date: Wed, 22 Oct 2025 14:54:25 -0700
-Message-ID: <20251022215425.3566218-1-sathyanarayanan.kuppuswamy@linux.intel.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1761172159; c=relaxed/simple;
+	bh=n8ISGRabhAFNs3WUlciNSIjwBswMQEjwmH+FuJiXVgY=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=IHtIj3l7nJzt9i/1IbZxVZJBlqnMfjy9YA5XG5Url4r29Z9OAco2wsa3RkD3XiEoZzIYEq07DgOr/ScfZK80kggcx8aCF+t21+ymxwabgdNR8vqPSG5CKZXNlHfVft/LMWdI+LDNtLSJvsqaJOzluk60HU+wwBlL3JQ66r73wFA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--wusamuel.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=RR1CnWz9; arc=none smtp.client-ip=209.85.214.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--wusamuel.bounces.google.com
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-2697410e7f9so2312665ad.2
+        for <linux-pm@vger.kernel.org>; Wed, 22 Oct 2025 15:29:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1761172157; x=1761776957; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=kCJw8vrTps08USD66tSqWHMpSbjCtAd/5PGnI8+iP/c=;
+        b=RR1CnWz9h1j1B6AZkb+WXaZgVxigAc8X1lbJ5is2hajecmccQVwa7Lx+DL2F3SkJB4
+         UtQcXoN3cc4ZpXCKrNkg55PyQ/38UMzZuEQwdYTikKOK5H99TEecIRZROoajhELxH6UH
+         zZiiAWLyRRDDKuGUphLTNTSk8EFNhbe+RFBj0sEN1NjxbvfzVE0W8vw6VpcVmr2qvl8w
+         6Flyu5YbO+ZRnjY5WTVYZhiXDC9U5779I7Limv5kjSESufXE43Qwyr9pSGjB6tiBi6gB
+         Dk0sPTQohcGlKHK5QRabSyYKqZdvkPN4z/tn6Zc+jXFAT9DcZPAosHnd46od06T1QLsq
+         L14Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761172157; x=1761776957;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kCJw8vrTps08USD66tSqWHMpSbjCtAd/5PGnI8+iP/c=;
+        b=Jx/oZVP+N60h89Hd9QCi+xDjFKFPbtxzRWOLCY4R+iGQ3t1UP7ev0oiwUygxWyCLp7
+         7bI02Zlv1pC+yanaM7gmvZSO1TWiVFAM/+47O9FQs/Fot7qOTDcURPzry/Jl28Vsfv9M
+         WxnlNKto81LgUanPV72kYyRBW12aHmspoeebs2CvIg1egZkXISLraJ+/SsbK1BJ705Q2
+         HLGP0cqoMkqNZM0yDy8RwAJnWLG0fGdmimPldj6/SeSzb5lLpiwl9+KCdjbMhUkicPOw
+         Rf8ZPoy8mBmHQ1ltBXxhf5yQxUfrwxu0GjK9iZGZyMY2PrOreceZIhhXouKwE+1yYnKE
+         D9aA==
+X-Forwarded-Encrypted: i=1; AJvYcCUjagIfwo5/Hnsz9LaUUoExt7qaNxZEfiAfbjj2ohBTP4yIrHi+x/0Ck3yS9it8xLOke9GJofRS0Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwWmJYbhdS571I35FTBUsaCYbgTeQBVuQqER7CDjhD+l+Z0smC2
+	1rxM4kkipaXhEMm4ENlWjfDkG1qRGGb/ORJ9X2KLa55V4LM14VafgpVrHnijVipuOY36sDF4FLU
+	mpMr0/ehGrEnxUQ==
+X-Google-Smtp-Source: AGHT+IGDnhb3gQM49Ot8BnCEQLTjCXnCbba67ygs3SVunQnP3Gt3wyYp/GX4VsBUKR6zA6NfebgaCmX3mUlTQA==
+X-Received: from plcq12.prod.google.com ([2002:a17:902:e30c:b0:290:28e2:ce4e])
+ (user=wusamuel job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:902:cece:b0:292:fc65:3579 with SMTP id d9443c01a7336-292fc65380cmr74528845ad.17.1761172157403;
+ Wed, 22 Oct 2025 15:29:17 -0700 (PDT)
+Date: Wed, 22 Oct 2025 22:28:30 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.51.1.814.gb8fa24458f-goog
+Message-ID: <20251022222830.634086-1-wusamuel@google.com>
+Subject: [PATCH v1] Revert "PM: sleep: Make pm_wakeup_clear() call more clear"
+From: Samuel Wu <wusamuel@google.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, Pavel Machek <pavel@kernel.org>
+Cc: Samuel Wu <wusamuel@google.com>, Saravana Kannan <saravanak@google.com>, kernel-team@android.com, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Prevent intel_pstate from loading when Out-of-Band (OOB) P-states mode
-is enabled.
+This reverts commit 56a232d93cea0ba14da5e3157830330756a45b4c.
 
-The OOB identification mechanism for Diamond Rapids servers is the same
-as for prior generation CPUs such as Granite Rapids. Add the Diamond
-Rapids CPU model to intel_pstate_cpu_oob_ids[] to ensure correct OOB
-handling.
+The original patch changes the position of pm_wakeup_clear() for the
+suspend call path, but other call paths with references to
+freeze_processes() were not updated. This means that other call paths,
+such as hibernate(), will not have pm_wakeup_clear() called.
 
-Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+Suggested-by: Saravana Kannan <saravanak@google.com>
+Signed-off-by: Samuel Wu <wusamuel@google.com>
 ---
- drivers/cpufreq/intel_pstate.c | 1 +
- 1 file changed, 1 insertion(+)
+ kernel/power/process.c | 1 +
+ kernel/power/suspend.c | 1 -
+ 2 files changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-index 38897bb14a2c..dd1ebfc7de28 100644
---- a/drivers/cpufreq/intel_pstate.c
-+++ b/drivers/cpufreq/intel_pstate.c
-@@ -2761,6 +2761,7 @@ static const struct x86_cpu_id intel_pstate_cpu_oob_ids[] __initconst = {
- 	X86_MATCH(INTEL_ATOM_CRESTMONT,		core_funcs),
- 	X86_MATCH(INTEL_ATOM_CRESTMONT_X,	core_funcs),
- 	X86_MATCH(INTEL_ATOM_DARKMONT_X,	core_funcs),
-+	X86_MATCH(INTEL_DIAMONDRAPIDS_X,	core_funcs),
- 	{}
- };
- #endif
+diff --git a/kernel/power/process.c b/kernel/power/process.c
+index 8ff68ebaa1e0..dc0dfc349f22 100644
+--- a/kernel/power/process.c
++++ b/kernel/power/process.c
+@@ -132,6 +132,7 @@ int freeze_processes(void)
+ 	if (!pm_freezing)
+ 		static_branch_inc(&freezer_active);
+ 
++	pm_wakeup_clear(0);
+ 	pm_freezing = true;
+ 	error = try_to_freeze_tasks(true);
+ 	if (!error)
+diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
+index 4bb4686c1c08..b4ca17c2fecf 100644
+--- a/kernel/power/suspend.c
++++ b/kernel/power/suspend.c
+@@ -595,7 +595,6 @@ static int enter_state(suspend_state_t state)
+ 	}
+ 
+ 	pm_pr_dbg("Preparing system for sleep (%s)\n", mem_sleep_labels[state]);
+-	pm_wakeup_clear(0);
+ 	pm_suspend_clear_flags();
+ 	error = suspend_prepare(state);
+ 	if (error)
 -- 
-2.43.0
+2.51.1.814.gb8fa24458f-goog
 
 
