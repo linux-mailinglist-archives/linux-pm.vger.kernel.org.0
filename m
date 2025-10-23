@@ -1,259 +1,156 @@
-Return-Path: <linux-pm+bounces-36717-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36718-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC27CC00BA9
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Oct 2025 13:30:14 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA3CAC00C81
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Oct 2025 13:36:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E74F45024CD
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Oct 2025 11:29:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 936C03AFB28
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Oct 2025 11:32:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A25F30DECD;
-	Thu, 23 Oct 2025 11:29:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B4E730E0F9;
+	Thu, 23 Oct 2025 11:32:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jwfrK8th"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="GzjIwAqF"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10D6930E0FC
-	for <linux-pm@vger.kernel.org>; Thu, 23 Oct 2025 11:29:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D9FF3064A7
+	for <linux-pm@vger.kernel.org>; Thu, 23 Oct 2025 11:32:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761218968; cv=none; b=jLo121gzHMF50/PUieHhPn0MVaW6Tj3YkH+ARqX7v577oKwPOa9uaRLgtNmO/Jl56C/qQ/SCHgJLbK1qfpRfqB1enuo5zv7Mq94girFG4p0bxQvitqqnEt4451IgsnfddtKZFEkRnUN/gk8O9YMGJ/cZkRqaJSUKZeYKmbXQMvI=
+	t=1761219160; cv=none; b=g+u1A8p1fPuPfYalMizy8T7GV7IAnokXz1FrGishLBLx/hJ7R7H3xXFkAgncR18H3kAEuP1HGKw04tAHv4PLsmiwKcbcppGE4O2nDLm9flFDN830yG24J2PY0gMJ6rd/VQm31QQDULbHT5ZLdVnGJoNcJdGCNROaEJFjYiMBAPA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761218968; c=relaxed/simple;
-	bh=xp/QLlNgU9yT5Z0c6lOZJJZGC+bWM5/vOMB349Lhr6s=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Avm0k1ukq3si3V9Hpp2Q0AwhnqMDnwZW8jvYKWfJC9DKjqgtdAx5arIVapBV4qGUO5ZLKSKeI+kOVub4BBQsxaf159FDDDi5tf+tYEvswF9ZuheRqF0jg/Tg3/YueZVyJ2C10xyJ++lWisg9qh5RRa3Y1x29Jj+mqkfXGjcp6L0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jwfrK8th; arc=none smtp.client-ip=209.85.218.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-b6d5c59f2b6so54698866b.2
-        for <linux-pm@vger.kernel.org>; Thu, 23 Oct 2025 04:29:25 -0700 (PDT)
+	s=arc-20240116; t=1761219160; c=relaxed/simple;
+	bh=azN9cFPaIK+LJvezpMi4n8W0xzLhUdTsw6rk/82Y4Pk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qUh6U5s++wiKb2uuZua3QZzC6uv+g6f1Ec7y2P+WWjTJDIqYcy8agGyX6ACw2EkOCCfk3QMi32NA5MOqN0IVYs9eGqcX0v00SCWqzlIb3hlcYn0aQVktEEoisUyIVTM4DpcFFyiUutyYllT2o+S6X98O5V7aGxpdhBkL9gPzOwQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=GzjIwAqF; arc=none smtp.client-ip=209.85.216.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-33d28dbced5so974058a91.2
+        for <linux-pm@vger.kernel.org>; Thu, 23 Oct 2025 04:32:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761218964; x=1761823764; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=GOi8L/T/sc914HyVaQllPfco9t+JbsWkC8LrVlAzwL4=;
-        b=jwfrK8thrXGCV32G7zBks/av8cvyhCoRbtv3JTkDdZhEPt52F4IpIya/eGIwON9ctM
-         /Airg0vaU/J91SbREOgRSl7MVthJ0IaCE3NUBNZdKAdll0PlmWFP2du2Z6G7KbsbZshl
-         dbglUBF3Ig9Ov5dTFoDaUxtkexpiI4GehnvUXhwGpbxzEZtI6DdTAwRtSWZjWoWxrm1A
-         OTltS2GZKmpn5MAsWUTOaBdpEIEKeamRdfcNf3iMBcwSsHAcsTAp7Tq3ueHVAheloz3q
-         8nXLsR/CYENHvn4WXOJh1DKsmaw7egVewLb7JAmaEWNOid6Yg1r7iRshB4iIb5InZAuR
-         +BwQ==
+        d=linaro.org; s=google; t=1761219158; x=1761823958; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=QbT+vL0Cn4CTb6yElLpwHZ54WgDRlKCx3aWeBMwUJrQ=;
+        b=GzjIwAqFeZ4Us1IkLeYKFX/B9rnMtdcwRA3Z7JWlL1EeRxoTIPVbXGclFmtVkpycPY
+         pEyXmgDZuzqaCmnlV7kzyOoRSlMV+4sKlRsdP9M7W6EtBbVoyD4VtoA48E5+EB+Mmo5M
+         +rPeLnkCrh8ua9Vrk7+U3o8pxLOxATEtFFdA3YUC2ngtWANcdBbhG53LtbEbu4WnjrR3
+         8if8sTwBEOHGJzAZ/aEdThe1U6V2FpJS5HPA3gk1GDjliGqQFXpHezuS76IoxX0TyJyT
+         LQZQ/YcCGpNBxop0WV+RdxVXJZJ5XAmfSKSs8cU/oLzgoea+Vg8S0DImMmP+GeRoDGDf
+         9NdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761218964; x=1761823764;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GOi8L/T/sc914HyVaQllPfco9t+JbsWkC8LrVlAzwL4=;
-        b=ns4UeX4PNUnYqHFrQhGoiJIl3ldgiTXvuweN6YmSk6QDdfOSy5uLV5o4hT7oNP0A6i
-         sCP9RrqqqsdBLaw0zUpo5oSO/k2CxN6ZPSLfP5DDgUT0wI50h50wTA4aH42OxTnzkN9w
-         vSIm6dAsLtinOqPz6tbJ4QY2DsJdJIpkKxncBDtu1d+o6Kq8u+8QaTNj46PZAiqUFkne
-         te9SnQVHw0CnYeE+AaPngOu/RqA/1HZScbVBmxvrjbh2ppVjzwoB8ESjYwv6HrvAHtlz
-         e0xvA549hMOsQJenl4CfTPK5v0maA8MpNpsPjetXES/BTfpNXE64sLZNmIZ5VStZMUZE
-         41ug==
-X-Forwarded-Encrypted: i=1; AJvYcCWGP72dQFm5bSm+0PwtS6PCvLI5EPK2AOC3Z/kHXxrCCvhLNBQIZWyq4XgrVksIqh0YSpNXmf+k1A==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxCswIuHvGNRlZIXRzMH/UkZGL+kxC/WrbwJZ7Eb97RZXnxlyPM
-	PkwHmuqiuw8OZd8BAhD3qo7xNSWOfqawBcav/4juE6npbEbEvAReY/Xr
-X-Gm-Gg: ASbGnctPEODatMRuYEhsFFuM1eOaN0PvExfiOxd2dP8+nKYxATRg2ytk8MBs51QAJZ/
-	ZgWYmgeFzwX4qMylQNwKNGHHQgLcA/avqXSPSQs3N+MhsHqpubV2hXKhotblGv/3fmFfm3vbnZu
-	izBxbfYb4aF5eA1lCsblhxoU4XP28qFpZx1niYTJ1TtNSvGpf1gGPp+Xl0AoRhN84jFE64Wu86U
-	S4QCVGnz8dgk7qwofRLfmuFWa3VmZaK9s/to+kRrky1UufvmMNThZJ30Kb2T5nza7xAZfEiwf7u
-	JzY9zpqYadgH5fDkqrH8li+AvaReFqaZTqhBwlqVHjMdNoBguRkKY/2Rn9iTBN4EHwNgfoWzYcH
-	79MlN091cOcXOt9TSzjNr2hlnbCVYIiqquUTnnjW45paT/FUEEAWr2ZOGMRyDWynqyfnWbaJsjb
-	Lt
-X-Google-Smtp-Source: AGHT+IGVcD+OUFGiPRHpX8Zf9AyspMjR70F5rNVEqM4+m7vN8XE7B3HIHBPjz9kYyXDPcdhsgkufaQ==
-X-Received: by 2002:a17:907:1b06:b0:b6d:2f3f:3f98 with SMTP id a640c23a62f3a-b6d2f3f4014mr685674566b.41.1761218963986;
-        Thu, 23 Oct 2025 04:29:23 -0700 (PDT)
-Received: from localhost ([212.73.77.104])
-        by smtp.gmail.com with UTF8SMTPSA id a640c23a62f3a-b6d51471ef6sm182393366b.72.2025.10.23.04.29.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Oct 2025 04:29:23 -0700 (PDT)
-From: Askar Safin <safinaskar@gmail.com>
-To: linux-mm@kvack.org,
-	linux-pm@vger.kernel.org,
-	linux-block@vger.kernel.org,
-	linux-crypto@vger.kernel.org,
-	linux-lvm@lists.linux.dev,
-	lvm-devel@lists.linux.dev,
-	linux-raid@vger.kernel.org,
-	"DellClientKernel" <Dell.Client.Kernel@dell.com>,
-	dm-devel@lists.linux.dev,
-	linux-btrfs@vger.kernel.org
-Cc: Nhat Pham <nphamcs@gmail.com>,
-	Kairui Song <ryncsn@gmail.com>,
-	Pavel Machek <pavel@ucw.cz>,
-	=?UTF-8?q?Rodolfo=20Garc=C3=ADa=20Pe=C3=B1as=20=28kix=29?= <kix@kix.es>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Eric Biggers <ebiggers@kernel.org>,
-	"Lennart Poettering" <mzxreary@0pointer.de>,
-	Christian Brauner <brauner@kernel.org>,
-	"Linus Torvalds" <torvalds@linux-foundation.org>
-Subject: dm bug: hibernate to swap located on dm-integrity doesn't work (how to get data redundancy for swap?)
-Date: Thu, 23 Oct 2025 14:29:13 +0300
-Message-ID: <20251023112920.133897-1-safinaskar@gmail.com>
-X-Mailer: git-send-email 2.47.3
+        d=1e100.net; s=20230601; t=1761219158; x=1761823958;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QbT+vL0Cn4CTb6yElLpwHZ54WgDRlKCx3aWeBMwUJrQ=;
+        b=R6ImbZH+D1ljyDQX+oXNzN0170o+KXXVM4j62eSpoejG/7Z28YNIUrX4Vbzow+p/Sh
+         EQpxAp1XnbWYh+p1X3QkY6mYH3v/YurPBZ8NnuWv0IJetWnkvaMqGp535wsH7r5RXIvD
+         cOSPU7NOxNCSKEAxq7PAKqdEiih7WYiSm2pwstofrZSHiLnN2cVtY+bzQ4II13JDEdhE
+         cq8KvheqXLom1jMZYSZFncQWRfRbLgzoI1qmjEae+ce/k8kNpBO13Aq/qOx1lRjaZrnr
+         Hxoo08Mi4GbR3bF8vGyO2KOOFdqYCx2sM7ZtZI6pURV+AtLGVJiinu8caXisPw0yQfb2
+         eq6g==
+X-Forwarded-Encrypted: i=1; AJvYcCVkaOY0S3OO9TMZWZqNk9M0yTZ4KBXqw4wKJ9jN/fA+Z3nhdpeLMEMiCNvqvLT5oqRTLEpUGNowdQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx+GdqqTIY6s1lo7TDnh619w3hmba1nWUjANifkXEifaW9DmRmJ
+	y7PD4AWiGAMPdtO+LrT0HJLzp36NqsPGDhr2UiGehWJ5Qzo//IjMgyGE1diym3wWpGw=
+X-Gm-Gg: ASbGncseMLJgyEA80taY0QQDo4hT/NAVOE0XsMwITT5Zue+g5YAqvmj1N3cXA3NZSzq
+	XlsmhvyV0FMEEh4QgoJbjDesw+aDHZYmFJ6r+Vp+HeaDjlcihXmQ2g1p1GRxTIru5MEI1IqWyx1
+	zS4manF7S8llGjUg9klghtb4KNd4ce6htgZlLVEPFlThbGK+8E+rvkqWa+M31GmMh2swH4lyxMP
+	L7ykq9DQ6RXOaHd01M1DZnyuQ4XC8uJQswlJm8YZGgufFdsnf2uesEB1h2+J7zsdCfgtBmSiQY6
+	0Es6mzklkXDAEDXlwNfzYb2amY6F+jjB5bTijBNUEmEZEludRYA+pEyWxkYzZzn2Byy95vicLin
+	VDuRqnwKxkvW4gE5SOYXH2h/L+XPc7um7edyojNDbzZApPKdkWKgE0TE2JAglk1eD8aA2r21I2I
+	78og==
+X-Google-Smtp-Source: AGHT+IG9Mwz3D5ODuzsbIDuuLt6IzRd6uufkDmvzSlsw4AlqElvO+VEf4ssfLY/szdToC/ms2IV8tg==
+X-Received: by 2002:a17:90b:4c05:b0:339:ec9c:b275 with SMTP id 98e67ed59e1d1-33bcf84e181mr35547160a91.6.1761219158271;
+        Thu, 23 Oct 2025 04:32:38 -0700 (PDT)
+Received: from localhost ([122.172.87.183])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-33dff3c1f8csm4042462a91.4.2025.10.23.04.32.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Oct 2025 04:32:37 -0700 (PDT)
+Date: Thu, 23 Oct 2025 17:02:35 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Tamir Duberstein <tamird@kernel.org>
+Cc: Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>, 
+	Stephen Boyd <sboyd@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, 
+	Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
+	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, linux-pm@vger.kernel.org, 
+	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rust: opp: simplify callers of `to_c_str_array`
+Message-ID: <44k7h2wzksrp4eghvdim5kiq5tsul3p7yhy44d3eii7hyvivch@xx3x762acknd>
+References: <20251020-opp-simpler-code-v1-1-04f7f447712f@kernel.org>
+ <ms55ue7qqbvoyfhptzu2a5cuthusihtobremhuqfm7lyu7b62o@qasunalgkptl>
+ <CAJ-ks9mKiXR-8m_9x_k6YcL64h+QWExkiWCHMFNJbdUYQvPsNA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJ-ks9mKiXR-8m_9x_k6YcL64h+QWExkiWCHMFNJbdUYQvPsNA@mail.gmail.com>
 
-Hi.
+On 22-10-25, 07:22, Tamir Duberstein wrote:
+> I believe the `{clk,regulator}_names` vector bindings remain alive for
+> the whole scope, even if they are shadowed. See
+> https://play.rust-lang.org/?version=stable&mode=debug&edition=2024&gist=800b334c514c2024d7b5e47fc54c1f2d.
 
-Hibernate to swap located on dm-integrity doesn't work.
-Let me first describe why I need this, then I will describe a bug with steps to reproduce
-(and some speculation on cause of the bug).
+I tried to print the name of the regulator and clk in the C code:
 
-I want a personal Linux laptop fully protected from data corruption (cosmic rays, etc).
-And even if data corruption does happen, I want reliable indication of that,
-so that I know that I need to restore from backups and replace faulty hardware.
+diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+index d67d392e16d4..89b65fe07b99 100644
+--- a/drivers/opp/core.c
++++ b/drivers/opp/core.c
+@@ -2565,6 +2565,8 @@ int dev_pm_opp_set_config(struct device *dev, struct dev_pm_opp_config *config)
+                goto err;
+        }
 
-So I did this:
-- I bought a laptop with ECC memory: Dell Precision 7780. It seems to be one of
-the few laptop models in the world with ECC memory. And probably the only model
-in the world, which DOES HAVE ECC memory, but DOES NOT HAVE nvidia card
-- I set up btrfs raid-1
++       pr_info("%s: %d: %s: %s\n", __func__, __LINE__, config->clk_names[0], config->regulator_names[0]);
 
-So far, so good. I'm protected from both memory errors and disk errors.
+and I get this:
 
-But my swap partition stays unprotected. And yes, I need swap. I have 64 GiB of RAM,
-but this still is not enough for zillions of Chromium tabs and vscode windows.
+[    2.358437] core: dev_pm_opp_set_config: 2568: �<��y����<��y���x��: �<��y����<��y���x��
 
-And, according to btrfs docs, if I put swapfile to btrfs, it will be exempt from raid-1 guarantees.
 
-It seems that the only solution in this case is to put swap partition on top of dm-integrity.
 
-Note: I don't need error correcting code for my swap. I don't need a self-healing swap.
-The only thing I need is reliable error detection.
+With following diff applied over your patch, it works again:
 
-There is discussion on Stack Exchange on exactly the same problem:
-https://unix.stackexchange.com/questions/269098/silent-disk-errors-and-reliability-of-linux-swap .
-I think it reached the same conclusion: the only solution is dm-integrity.
+diff --git a/rust/kernel/opp.rs b/rust/kernel/opp.rs
+index 743080e14292..02cb754c4abd 100644
+--- a/rust/kernel/opp.rs
++++ b/rust/kernel/opp.rs
+@@ -444,13 +444,13 @@ pub fn set_supported_hw(mut self, hw: KVec<u32>) -> Result<Self> {
+     /// The returned [`ConfigToken`] will remove the configuration when dropped.
+     pub fn set(self, dev: &Device) -> Result<ConfigToken> {
+         let clk_names = self.clk_names.as_deref().map(to_c_str_array).transpose()?;
+-        let clk_names = clk_names.map_or(ptr::null(), |c| c.as_ptr());
++        let clk_names = clk_names.as_ref().map_or(ptr::null(), |c| c.as_ptr());
+         let regulator_names = self
+             .regulator_names
+             .as_deref()
+             .map(to_c_str_array)
+             .transpose()?;
+-        let regulator_names = regulator_names.map_or(ptr::null(), |c| c.as_ptr());
++        let regulator_names = regulator_names.as_ref().map_or(ptr::null(), |c| c.as_ptr());
 
-Also, as well as I understand, md raid is not a solution: when reading, it reads
-from one disk only, and thus doesn't detect all errors. It can detect remaining errors
-during scrub, which is too late (wrong data may be already consumed by some app).
+         let prop_name = self
+             .prop_name
 
-Also: I don't need encryption.
 
-(Also: there is other solution: "cryptsetup --integrity", but it uses dm-integrity anyway. We will
-get to it.)
+and I get:
 
-Okay, so I put swap partition to dm-integrity, and it worked!
-
-But then hibernation stopped to work.
-
-And here come steps to reproduce.
-
-Okay, so I have Dell Precision 7780. I bought it year ago, so I don't
-think my hardware is faulty. Also, I recently updated BIOS.
-
-My OS is Debian Trixie amd64. My kernel is Linux 6.12.48-1 from Debian.
-I created swap partition so:
-
-integritysetup format --integrity xxhash64 /dev/disk/by-partuuid/c4bbc73d-7909-42ea-8d96-eab82512cbe7
-integritysetup open --integrity xxhash64 /dev/disk/by-partuuid/c4bbc73d-7909-42ea-8d96-eab82512cbe7 swap
-mkswap /dev/mapper/swap
-swapon /dev/mapper/swap
-
-When I need to activate swap, I do this:
-
-integritysetup open --integrity xxhash64 /dev/disk/by-partuuid/c4bbc73d-7909-42ea-8d96-eab82512cbe7 swap
-swapon /dev/mapper/swap
-
-When I need to hibernate, I do "systemctl hibernate".
-
-And hibernate appears to work.
-
-Then, when I need to resume, I boot to my hand-crafted initramfs.
-That initramfs does this (I slightly simplified this script):
-
-==
-busybox mount -t proc proc /proc
-busybox mount -t devtmpfs devtmpfs /dev
-busybox mount -t sysfs sysfs /sys
-modprobe nvme
-modprobe dm-integrity
-modprobe xxhash64
-sleep 1
-integritysetup open --integrity xxhash64 "$LOWER_SWAP_DEV" early-swap
-sleep 1
-# The following "blkid" command should detect what is present on /dev/mapper/early-swap
-TYPE="$(blkid --match-tag TYPE --output value /dev/mapper/early-swap)"
-if [ "$TYPE" = 'swsuspend' ]; then
-  echo "got hibernation image, trying to resume"
-  echo /dev/mapper/early-swap > /sys/power/resume
-elif [ "$TYPE" = 'swap' ]; then
-  echo 'got normal swap without hibernation image'
-  integritysetup close early-swap
-  # proceed with fresh boot here
-fi
-==
-
-And this doesn't work. Hibernate works, resume doesn't. :)
-"blkid" reports swap as "swap" as opposed to "swsuspend".
-
-I suspect this is because hibernation doesn't flush dm-integrity journal.
-
-Also I tried to add "--integrity-bitmap-mode" to "format" and "open".
-Resume started to work, but when I try to shutdown resumed system,
-I get errors about corrupted dm-integrity partition. (Of course, I
-did necessary edits to initramfs script above.)
-
-Also I tried to add "--integrity-no-journal" to "format" and "open".
-It didn't work, either. (I don't remember what exactly didn't work.
-I can do this experiment again, if needed.)
-
-Then I tried to do "cryptsetup" instead of "integritysetup". I created
-swap partition so:
-
-cryptsetup luksFormat --type luks2 /dev/disk/by-partuuid/c4bbc73d-7909-42ea-8d96-eab82512cbe7 /tmp/key
-cryptsetup open --type luks2 --key-file /tmp/key /dev/disk/by-partuuid/c4bbc73d-7909-42ea-8d96-eab82512cbe7 swap
-mkswap /dev/mapper/swap
-swapon /dev/mapper/swap
-
-And, of course, I did all necessary edits to initramfs.
-
-And this time everything worked. This proves that I didn't do any mistakes in my setup
-(i. e. I got initramfs right, etc), and this is actual bug in dm-integrity.
-
-Unfortunately, LUKS created such way doesn't have any redundancy. So this is not solution for me.
-
-So I did this:
-cryptsetup luksFormat --type luks2 --integrity hmac-sha256 /dev/disk/by-partuuid/c4bbc73d-7909-42ea-8d96-eab82512cbe7 /tmp/key
-cryptsetup open --type luks2 --key-file /tmp/key /dev/disk/by-partuuid/c4bbc73d-7909-42ea-8d96-eab82512cbe7 swap
-mkswap /dev/mapper/swap
-swapon /dev/mapper/swap
-
-And this time everything stopped to work, again. I don't remember what exactly went wrong.
-As well as I remember, that "blkid" again returned "swap" instead of "swsuspend".
-I can run experiment again, if needed.
-
-The commands above use dm-integrity internally. So we clearly see: if dm-integrity is involved, then hibernation
-doesn't work.
-
-Here is a user with exactly same problem:
-https://www.reddit.com/r/archlinux/comments/atg18t/hibernation_wipes_swap_and_my_system_hangs_on_boot/ .
-I. e. "hibernation doesn't work if swap is on LUKS with integrity protection".
-
-So, please, fix this bug. Or say me how to solve my original problem (i. e. achieving full reliable error
-reporting). I'm available for testing. Send me experimental patches. I can provide more info, if needed.
-
-There is yet another potential solution: uswsusp ( https://docs.kernel.org/power/userland-swsusp.html ).
-In short, this is hibernation driven from userspace. I. e. uswsusp allows for finer control of hibernation.
-Thus, I can write my own userspace util, which will do hibernation, and execute "integritysetup close"
-after writing image. Assuming that original problem is what I think (i. e. lack of journal flush after writing of image),
-this may work. The problem is... latest commit to userspace implementation is dated 2012-09-15
-( https://git.kernel.org/pub/scm/linux/kernel/git/rafael/suspend-utils.git/ ). Do I really need to use such ancient
-technology? I didn't test this yet, I will test it in coming days. Even if it works, this will still mean that dm-integrity
-is buggy with kernel-based hibernation.
+[    2.460149] core: dev_pm_opp_set_config: 2568: dummy_clk: dummy_reg
 
 -- 
-Askar Safin
+viresh
 
