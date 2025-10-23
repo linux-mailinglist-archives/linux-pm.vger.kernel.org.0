@@ -1,112 +1,166 @@
-Return-Path: <linux-pm+bounces-36753-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36754-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7ED2FC02C90
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Oct 2025 19:46:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 71C78C02EF8
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Oct 2025 20:28:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4E70F4FCCDF
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Oct 2025 17:46:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 28F8C3AFCA1
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Oct 2025 18:28:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D008734B1B1;
-	Thu, 23 Oct 2025 17:45:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0799B34C9AA;
+	Thu, 23 Oct 2025 18:28:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="g1o99av/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d44D9cIt"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5EA01E51FA;
-	Thu, 23 Oct 2025 17:45:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FBFD23F40D;
+	Thu, 23 Oct 2025 18:28:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761241551; cv=none; b=alMhtPpejdy34mZ6B5sK3BrbbNzLomIlM21JRthTT1xflAsQ8p+qI7obPYEfDQ0ONkL+EfAFrTnF8qsohn+oBq8Inp5whBApfXThAcdRSsVcrA2P6VElo/OqrAqSj2/I6U3OVYRIAqQ5EBPGdEBiJnd/wfuiRurQ9+XZ9WTNuBs=
+	t=1761244089; cv=none; b=apmGDwmZazhVXaPe+G55IMAcTbAYui5vCdznRhKMD1bCk8hAwOZzjKcA7sCVK+tOSNYMvYwf5GuFOQW3t38LuMxQVbN1vxkKcE6mQjqwwS8wEEuzT7zINfN5Am2qYGv7lpdkVSKszkxWo4MuUUgo4SkDSKZDjrJx6G433l3bPC4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761241551; c=relaxed/simple;
-	bh=fo/oAnscwjde4LCMUKNl1gbrSUoCohsiDSRwkKBt0xA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=seGFQTiJtQKcHaOh2oivOXQo2Wf961d0GrtsIQRsNi4fhhlYJc7ueLyJ3h4ElNK8Z40JxOylxrq21Lxk4qa7SjBXYiSuq9EUL3aNZCmApd+F1YexQnKOli7hJoyJYArsmjpMi94Fz2gFJctaX/OB9WbsExNbVxidC+QlGnurwNs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=g1o99av/; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761241550; x=1792777550;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=fo/oAnscwjde4LCMUKNl1gbrSUoCohsiDSRwkKBt0xA=;
-  b=g1o99av/jYlXDTNtbQ4oxT1qMrAgHSwVqnoRprsmQ6uqPQN8uaLSwBvL
-   z4/k25Qsy/uVV46lVi2TaAVvnkxDHi2HtDePQaIotu0xenAIgWd+AtqCt
-   WP8pQhu30rO0Df0ydPxvJdXPekOIj/Ekq/AyR0z/LUycTq+C60OYulhWv
-   /GJDteSLoQ9cLPKPf2U120flRx9/+JvMmYsc4SZrPNIpDB+AG/AvX2OWK
-   sbQ7T7p9Z1msW3Nl8KJEqnfyYCQlC7n0bS5UeXCVf5U0YMvkkuqqPpoep
-   nEzj5PF8nv6VhFB4ReRc3RhjCg6Vs4zQyOPBysiomR5BP/8Xz31yFIcfl
-   Q==;
-X-CSE-ConnectionGUID: yaQzPf0kQxCuVKhb8N8AOg==
-X-CSE-MsgGUID: j+Tm4YcTTUW3o7obcBWXLw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="86049089"
-X-IronPort-AV: E=Sophos;i="6.19,250,1754982000"; 
-   d="scan'208";a="86049089"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2025 10:45:50 -0700
-X-CSE-ConnectionGUID: 1JbWohCvRsGtqMWWhoYKIg==
-X-CSE-MsgGUID: UI9CnhgbSjiiy1tD1nQYPA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,250,1754982000"; 
-   d="scan'208";a="184116352"
-Received: from spandruv-desk.jf.intel.com ([10.54.55.20])
-  by orviesa007.jf.intel.com with ESMTP; 23 Oct 2025 10:45:49 -0700
-From: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To: rafael@kernel.org
-Cc: linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [PATCH] powercap: intel_rapl: Add support for Wildcat Lake platform
-Date: Thu, 23 Oct 2025 10:45:32 -0700
-Message-ID: <20251023174532.1882008-1-srinivas.pandruvada@linux.intel.com>
-X-Mailer: git-send-email 2.51.0
+	s=arc-20240116; t=1761244089; c=relaxed/simple;
+	bh=cGxtT7v2QVMLn1P8NSEXbxLIEFsg1vLsHaVWtilPBJY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bTbBoEDBTJjNEMOKvhqqDCF6A6A94lZCc6yxThiIp1/xxXesyGhDHNpNvGX+SJfcP3v6IlNzoHT/U4JxWb8AuasvbEV2jBpcWiGomZ5qNGVmG5AoTkSubMpgSdGAtNy76zdUQSqmngoHRyU20Kk0oGOq648e40hTrOsEzoeocP0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d44D9cIt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34E70C4CEFF;
+	Thu, 23 Oct 2025 18:28:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761244087;
+	bh=cGxtT7v2QVMLn1P8NSEXbxLIEFsg1vLsHaVWtilPBJY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=d44D9cItbQrcUg9iAmRA0Vs/DVqR+y0ypS8CepbttdCZ0quavmx1O5RuHNLBQ+VVS
+	 Hk9CB2f0ii7zfWJET2k2ktByN18QFNj7RuwS+E60fNAqsfB+U+jd75LxA0v+MsfKCG
+	 pROr3dfPhBazSFR4t1gzPXCBkKTBQ5yhB34OJqc1E09BdynZid7mDKMO2A9Ja1qsOo
+	 bQvjMiOr/sxY8PzMSvTtbmu1SfAaVa/3KsuA7jMuAnty9u9OpZm6TBYZq5yZTrI8JM
+	 1IieU8qkXXu/XkyFWrxtvd+N2LpnC5OA5SGucqrFNsfiRa6K8cdQsny/O6a5Xf4qR9
+	 3MOIOFlebcXhg==
+Date: Thu, 23 Oct 2025 19:28:01 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
+Cc: John Madieu <john.madieu.xa@bp.renesas.com>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>, linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: Re: [PATCH 05/10] dt-bindings: thermal: r9a09g047-tsu: document
+ RZ/T2H and RZ/N2H
+Message-ID: <20251023-provider-obsession-a03de6982b72@spud>
+References: <20251023081925.2412325-1-cosmin-gabriel.tanislav.xa@renesas.com>
+ <20251023081925.2412325-6-cosmin-gabriel.tanislav.xa@renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="ztccTYdyCrUtiwjn"
+Content-Disposition: inline
+In-Reply-To: <20251023081925.2412325-6-cosmin-gabriel.tanislav.xa@renesas.com>
 
-Add Wildcat Lake to the list of supported processors for RAPL.
 
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
----
- drivers/powercap/intel_rapl_common.c | 1 +
- drivers/powercap/intel_rapl_msr.c    | 1 +
- 2 files changed, 2 insertions(+)
+--ztccTYdyCrUtiwjn
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
-index c7e7f9bf5313..cdb4363589e9 100644
---- a/drivers/powercap/intel_rapl_common.c
-+++ b/drivers/powercap/intel_rapl_common.c
-@@ -1284,6 +1284,7 @@ static const struct x86_cpu_id rapl_ids[] __initconst = {
- 	X86_MATCH_VFM(INTEL_EMERALDRAPIDS_X,	&rapl_defaults_spr_server),
- 	X86_MATCH_VFM(INTEL_LUNARLAKE_M,	&rapl_defaults_core),
- 	X86_MATCH_VFM(INTEL_PANTHERLAKE_L,	&rapl_defaults_core),
-+	X86_MATCH_VFM(INTEL_WILDCATLAKE_L,	&rapl_defaults_core),
- 	X86_MATCH_VFM(INTEL_ARROWLAKE_H,	&rapl_defaults_core),
- 	X86_MATCH_VFM(INTEL_ARROWLAKE,		&rapl_defaults_core),
- 	X86_MATCH_VFM(INTEL_ARROWLAKE_U,	&rapl_defaults_core),
-diff --git a/drivers/powercap/intel_rapl_msr.c b/drivers/powercap/intel_rapl_msr.c
-index 4ed06c71a3ac..c4d536c2f989 100644
---- a/drivers/powercap/intel_rapl_msr.c
-+++ b/drivers/powercap/intel_rapl_msr.c
-@@ -151,6 +151,7 @@ static const struct x86_cpu_id pl4_support_ids[] = {
- 	X86_MATCH_VFM(INTEL_ARROWLAKE_U, NULL),
- 	X86_MATCH_VFM(INTEL_ARROWLAKE_H, NULL),
- 	X86_MATCH_VFM(INTEL_PANTHERLAKE_L, NULL),
-+	X86_MATCH_VFM(INTEL_WILDCATLAKE_L, NULL),
- 	{}
- };
- 
--- 
-2.51.0
+On Thu, Oct 23, 2025 at 11:19:19AM +0300, Cosmin Tanislav wrote:
+> The Renesas RZ/T2H (R9A09G077) and RZ/N2H (R9A09G087) SoCs include a
+> Temperature Sensor Unit (TSU). The device provides real-time temperature
+> measurements for thermal management, utilizing a single dedicated
+> channel for temperature sensing.
+>=20
+> Signed-off-by: Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
+> ---
+>  .../thermal/renesas,r9a09g047-tsu.yaml        | 22 ++++++++++++++++---
+>  1 file changed, 19 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/thermal/renesas,r9a09g047-=
+tsu.yaml b/Documentation/devicetree/bindings/thermal/renesas,r9a09g047-tsu.=
+yaml
+> index 8d3f3c24f0f2..3cb66b51831d 100644
+> --- a/Documentation/devicetree/bindings/thermal/renesas,r9a09g047-tsu.yaml
+> +++ b/Documentation/devicetree/bindings/thermal/renesas,r9a09g047-tsu.yaml
+> @@ -16,7 +16,14 @@ description:
+> =20
+>  properties:
+>    compatible:
+> -    const: renesas,r9a09g047-tsu
+> +    oneOf:
 
+> +      - items:
+> +          - const: renesas,r9a09g047-tsu # RZ/G3E
+> +      - items:
+> +          - const: renesas,r9a09g077-tsu # RZ/T2H
+
+These two should just go together in an enum, no need to overcomplicate
+things with items like this. Items is only needed when you have more
+than one.
+pw-bot: changes-requested
+
+Cheers,
+Conor.
+
+> +      - items:
+> +          - const: renesas,r9a09g087-tsu # RZ/N2H
+> +          - const: renesas,r9a09g077-tsu # RZ/T2H
+> =20
+>    reg:
+>      maxItems: 1
+> @@ -59,12 +66,21 @@ required:
+>    - compatible
+>    - reg
+>    - clocks
+> -  - resets
+>    - power-domains
+>    - interrupts
+>    - interrupt-names
+>    - "#thermal-sensor-cells"
+> -  - renesas,tsu-trim
+> +
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: renesas,r9a09g047-tsu
+> +    then:
+> +      required:
+> +        - resets
+> +        - renesas,tsu-trim
+> =20
+>  additionalProperties: false
+> =20
+> --=20
+> 2.51.1.dirty
+>=20
+
+--ztccTYdyCrUtiwjn
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaPpzsQAKCRB4tDGHoIJi
+0jLUAP9gk1QFec0eyq7sJ7ydWHY9nm23V1ez/A8cZ5mitKk57wEA1gTFHul1tHzp
+Ho7K/mCR0kYFT4WNKfTrmnJZ5qruYAk=
+=ufQ1
+-----END PGP SIGNATURE-----
+
+--ztccTYdyCrUtiwjn--
 
