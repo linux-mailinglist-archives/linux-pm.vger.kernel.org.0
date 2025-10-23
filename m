@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-36689-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36690-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 37BA6BFF52B
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Oct 2025 08:22:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C2767BFF54F
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Oct 2025 08:24:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E637B3A497F
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Oct 2025 06:22:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 38FF13A5B23
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Oct 2025 06:24:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00FED28643A;
-	Thu, 23 Oct 2025 06:22:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5D8C292936;
+	Thu, 23 Oct 2025 06:24:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tPuS0LKG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K6CZS0rQ"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEAB0272E41;
-	Thu, 23 Oct 2025 06:22:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A45291B7F4;
+	Thu, 23 Oct 2025 06:24:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761200537; cv=none; b=HKyeH4iNrZDKh4aU0vBEtUFkMfMzJ++6vAdZF3xoUfmrUKCCVYnR6K8MFimjX51gu0m6KPLOuClkqQtVeVuje508HcD9yuWxnV5apjqGEAD6kLc2hfXzqINyesfyI8sUy6Cteb0iq49CCccFnQN7DLzqbvUILXhku0edrnK3Y3c=
+	t=1761200642; cv=none; b=h6LhpL7vzty99TUpwTFSRQ8dcorUt1BOrw+Ou5ySD18pFe5whjYaj3RGbmrZi29yf36/RXF/Ww7JZH04xER0A/HLogzHfd7eKRh68dtakOnyZa9P2Q7f2shHape0Ktg40Z8I+I85hC1vVpSzushDAehVw0DWa4N81nTa5KuazLw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761200537; c=relaxed/simple;
-	bh=OQy5ZEimz3NUoYmeKw+uSJ7emCUk471RH/9yGildT4k=;
+	s=arc-20240116; t=1761200642; c=relaxed/simple;
+	bh=/OiSRaDGDEOcSrlEyOG3xVu3IQjpPN8J4ESxLMGEzwE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kJGxiHJidgDKfNo1CaUpVKaUvosRwnysradx9BzHLGg5mYxVGpTslZVR+mqZwbLgnLzlDJhuL5Q7xhSGOCG0iIFUAx1ieX22G22DPWlJwqEO6SimTfr2OQC7m9GcfiYfY1U1XLzvy319PB3j2yHarFp1DYn+lBI2ZlbWxQNa87o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tPuS0LKG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8927C4CEE7;
-	Thu, 23 Oct 2025 06:22:14 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=nBVHSPKmzSjCajt+Cez6cLcPc8PVIu8qFcPPRSlIjXhXITFwNZ9Sp/N/qugqt9h8DzoDo7tasls2vR9HesLwTFSlkEdO99Bg3BCnfuyLcVDIlvUqRLemobT/xYhnUejGDseVbPAN4SsG4RqWVb3YQBnc/j9mcyvJtWxf2Pn4ACQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K6CZS0rQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2624C4CEFB;
+	Thu, 23 Oct 2025 06:23:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761200537;
-	bh=OQy5ZEimz3NUoYmeKw+uSJ7emCUk471RH/9yGildT4k=;
+	s=k20201202; t=1761200640;
+	bh=/OiSRaDGDEOcSrlEyOG3xVu3IQjpPN8J4ESxLMGEzwE=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=tPuS0LKGo73h2Y4LmgCCG2HfFBfDbHWuEyr1Vt5BCNPMNiHEZYLbklVddCrNr4TNC
-	 amn+LrQYd2w1iIOsmnXazFUc7mAo/1IkIyOCWUshssXBxIpwmFwEMXlOakOZgKz+hU
-	 DQOxpLYoROiqVBMNs6gIqpSzmL+lN8C1bu2eNrAOy4HeXM9DUVJef0B3Co0g8e9T8B
-	 /Zl/6RnjG4I+S52jHMvtd8vv/TJnY634/GNFgSo4VJs8dQuCMosngVa8rIWplzIg5x
-	 Ka+msct7L5/9Npxhh2FOsjYXfzQi+Lym9AX/cyV12f3aPR3nyvCLR+OcwiGgj9l578
-	 3f7tj4u2VFPiQ==
-Message-ID: <63fc8add-356a-44fe-b5d5-9ef7bda04d76@kernel.org>
-Date: Thu, 23 Oct 2025 08:22:13 +0200
+	b=K6CZS0rQQgWVf+Kb+icA4isQ0rAbut/fLcChrRz3Rdxkn5uUnagPMkqONA/Ubi0mQ
+	 sLQHIUSQ8eGxpHhThh3rid0SFoSEzPQQ1rDwPbxAtYiJfbDRzC5d0QaPgaZvgJFr5w
+	 t4oxo88ttlfuaJUlQFyRlXe97o7nV79dHcpwwOVTvDeL1iQWapy0V8tPUFHSvm/AkE
+	 cMLD/XcyVnZStqwOsUheQ4ndB5D7rl308dhrYk7Ge+7OOq+sqIETswv0zkCWWGUQXP
+	 cSof6rBf/mHuEf3AmtaNSM+bX8J+Sv23/lX51Y+n+qobT00dYHnCM8/CEx81nfMX0Z
+	 6nQC2vMYzewag==
+Message-ID: <57bc950a-a62b-4218-99a0-86c570bba6db@kernel.org>
+Date: Thu, 23 Oct 2025 08:23:55 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,7 +50,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/2] Add interconnect support for Kaanapali SoC
+Subject: Re: [PATCH 1/2] dt-bindings: interconnect: document the RPMh
+ Network-On-Chip interconnect in Kaanapali SoC
 To: Raviteja Laggyshetty <raviteja.laggyshetty@oss.qualcomm.com>,
  Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
@@ -59,6 +60,7 @@ To: Raviteja Laggyshetty <raviteja.laggyshetty@oss.qualcomm.com>,
 Cc: linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20251023-knp-interconnect-v1-0-df13182aceac@oss.qualcomm.com>
+ <20251023-knp-interconnect-v1-1-df13182aceac@oss.qualcomm.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -104,17 +106,20 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20251023-knp-interconnect-v1-0-df13182aceac@oss.qualcomm.com>
+In-Reply-To: <20251023-knp-interconnect-v1-1-df13182aceac@oss.qualcomm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 23/10/2025 06:39, Raviteja Laggyshetty wrote:
-> Add interconnect dt-bindings and driver support for Qualcomm Kaanapali SoC.
+> Document the RPMh Network-On-Chip Interconnect of the Kaanapali platform.
 > 
-> bindings file depends on Kaanapali gcc patch header file:
-> https://lore.kernel.org/all/20250924-knp-clk-v1-0-29b02b818782@oss.qualcomm.com/
+> Signed-off-by: Raviteja Laggyshetty <raviteja.laggyshetty@oss.qualcomm.com>
 
-They cannot. We told about this multiple times.
+
+This cannot be tested, so there is little point in doing real review. We
+already provided guidance - and it is documented in your internal
+guideline document - what to do in such case. Please follow internal
+docs to decouple.
 
 Best regards,
 Krzysztof
