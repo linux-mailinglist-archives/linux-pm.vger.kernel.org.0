@@ -1,39 +1,39 @@
-Return-Path: <linux-pm+bounces-36698-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36699-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7304BFFDAE
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Oct 2025 10:21:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FF81BFFDC0
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Oct 2025 10:21:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 9C8354F824F
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Oct 2025 08:21:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9C8363ABD2F
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Oct 2025 08:21:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 955E32F5A17;
-	Thu, 23 Oct 2025 08:20:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED8012F83AC;
+	Thu, 23 Oct 2025 08:20:45 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 521122F3C02;
-	Thu, 23 Oct 2025 08:20:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.172
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0221C2F39B5;
+	Thu, 23 Oct 2025 08:20:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761207637; cv=none; b=VVwzol0L2Rh6NjVFkJ7ZzMYe6W0rpsfZsg/Kdp1+sJx0gDWS/naWZSq+eI4e91cU/oDeVO02CcGKdHjJjV6vBemQhROnfnyeAfx8TvDXxkje6mcjIvJcZu2nI4SoAAj0Q3WdpsKbEyR+mP9NCg8tRATIEWMqkpbpCLYX4d97HEY=
+	t=1761207645; cv=none; b=ogQVfY+LMobcYy2KQPCNzFIC30YEfi9YftnPs7aGooxuQ9+peVgF//w0//8aj756nDmESyPDNAC/dXxs0mK7ou982rHyFhMLtyUxBoiea3a8xjJM6Twn2ftYrdahnCKCRTnBeVsJX/1A1qgVUUAQZ9O9gwMAROvxKOuqArEAt4I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761207637; c=relaxed/simple;
-	bh=NIBKgKhv9xAfByUXnE0EheWDX+dBSuLYB4n/gpkUHZs=;
+	s=arc-20240116; t=1761207645; c=relaxed/simple;
+	bh=MkbSgS4YkR93ogcEb+XS3z4L8GDw28CMziq/2/JDNmg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Wru1TcYOgS5ACf4aGwXPrseSxwLJ0yxMq2Y3SPmoV9vk0lI+83EG+eu+GoNsk0X2YTIV4VVhL86C/b4BJVX16GtC/U+eiRnZq9/AUK+2mbdPMwCeWeLyxj1Nob/49Q0Xd4O0V2awE7uNESp0iVSkOnGKDa3usQyIm7ka8hJWlKw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com; spf=pass smtp.mailfrom=renesas.com; arc=none smtp.client-ip=210.160.252.172
+	 MIME-Version; b=jfE1thGsvcEj/6fb0MomndG8KLl6p7ouIHmVRSF52dliCqbmhM5/ipZGI1wD0YX5p4N300wExCpqB90QnlyQYgOrXTgScoAn4ovswtXfHR3B+HQdoTX45wHcmQnU9/RSSyR1tYxQLJG7t5IW8tN0SZRsx5fauuGKbF5VVkuVr/c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com; spf=pass smtp.mailfrom=renesas.com; arc=none smtp.client-ip=210.160.252.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=renesas.com
-X-CSE-ConnectionGUID: 4ZjpXm+SQrOM1FWBtn5m4g==
-X-CSE-MsgGUID: CXQsNf+OQkmoXlNNbE58fw==
+X-CSE-ConnectionGUID: sze8qMMUReyzy9kyg3LcOA==
+X-CSE-MsgGUID: wqceSkWbRlaxJV+DuS0Bfw==
 Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie6.idc.renesas.com with ESMTP; 23 Oct 2025 17:20:35 +0900
+  by relmlie5.idc.renesas.com with ESMTP; 23 Oct 2025 17:20:41 +0900
 Received: from demon-pc.localdomain (unknown [10.226.93.77])
-	by relmlir6.idc.renesas.com (Postfix) with ESMTP id 5BA07417CA94;
-	Thu, 23 Oct 2025 17:20:29 +0900 (JST)
+	by relmlir6.idc.renesas.com (Postfix) with ESMTP id 375AC417CA94;
+	Thu, 23 Oct 2025 17:20:35 +0900 (JST)
 From: Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
 To: 
 Cc: John Madieu <john.madieu.xa@bp.renesas.com>,
@@ -55,9 +55,9 @@ Cc: John Madieu <john.madieu.xa@bp.renesas.com>,
 	linux-renesas-soc@vger.kernel.org,
 	linux-clk@vger.kernel.org,
 	Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
-Subject: [PATCH 05/10] dt-bindings: thermal: r9a09g047-tsu: document RZ/T2H and RZ/N2H
-Date: Thu, 23 Oct 2025 11:19:19 +0300
-Message-ID: <20251023081925.2412325-6-cosmin-gabriel.tanislav.xa@renesas.com>
+Subject: [PATCH 06/10] thermal: renesas: rzg3e: add support for RZ/T2H and RZ/N2H
+Date: Thu, 23 Oct 2025 11:19:20 +0300
+Message-ID: <20251023081925.2412325-7-cosmin-gabriel.tanislav.xa@renesas.com>
 X-Mailer: git-send-email 2.51.1.dirty
 In-Reply-To: <20251023081925.2412325-1-cosmin-gabriel.tanislav.xa@renesas.com>
 References: <20251023081925.2412325-1-cosmin-gabriel.tanislav.xa@renesas.com>
@@ -69,60 +69,80 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The Renesas RZ/T2H (R9A09G077) and RZ/N2H (R9A09G087) SoCs include a
-Temperature Sensor Unit (TSU). The device provides real-time temperature
-measurements for thermal management, utilizing a single dedicated
-channel for temperature sensing.
+The Renesas RZ/T2H (R9A09G077) and RZ/N2H (R9A09G087) SoCs expose the
+temperature calibration via SMC SIP and do not have a reset for the
+TSU peripheral, and use different minimum and maximum temperature values
+compared to the already supported RZ/G3E.
+
+Although the calibration data is stored in an OTP memory, the OTP itself
+is not memory-mapped, access to it is done through an OTP controller.
+
+The OTP controller is only accessible from the secure world,
+but the temperature calibration data stored in the OTP is exposed via
+SMC.
+
+Add support for retrieving the calibration data using arm_smcc_smc().
+
+Add a compatible for RZ/T2H, RZ/N2H can use it as a fallback.
 
 Signed-off-by: Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
 ---
- .../thermal/renesas,r9a09g047-tsu.yaml        | 22 ++++++++++++++++---
- 1 file changed, 19 insertions(+), 3 deletions(-)
+ drivers/thermal/renesas/rzg3e_thermal.c | 26 +++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/thermal/renesas,r9a09g047-tsu.yaml b/Documentation/devicetree/bindings/thermal/renesas,r9a09g047-tsu.yaml
-index 8d3f3c24f0f2..3cb66b51831d 100644
---- a/Documentation/devicetree/bindings/thermal/renesas,r9a09g047-tsu.yaml
-+++ b/Documentation/devicetree/bindings/thermal/renesas,r9a09g047-tsu.yaml
-@@ -16,7 +16,14 @@ description:
+diff --git a/drivers/thermal/renesas/rzg3e_thermal.c b/drivers/thermal/renesas/rzg3e_thermal.c
+index d2525ad3ffcc..efd09c35b216 100644
+--- a/drivers/thermal/renesas/rzg3e_thermal.c
++++ b/drivers/thermal/renesas/rzg3e_thermal.c
+@@ -72,6 +72,10 @@
  
- properties:
-   compatible:
--    const: renesas,r9a09g047-tsu
-+    oneOf:
-+      - items:
-+          - const: renesas,r9a09g047-tsu # RZ/G3E
-+      - items:
-+          - const: renesas,r9a09g077-tsu # RZ/T2H
-+      - items:
-+          - const: renesas,r9a09g087-tsu # RZ/N2H
-+          - const: renesas,r9a09g077-tsu # RZ/T2H
+ #define TSU_TEMP_MASK		GENMASK(11, 0)
  
-   reg:
-     maxItems: 1
-@@ -59,12 +66,21 @@ required:
-   - compatible
-   - reg
-   - clocks
--  - resets
-   - power-domains
-   - interrupts
-   - interrupt-names
-   - "#thermal-sensor-cells"
--  - renesas,tsu-trim
++#define RZ_SIP_SVC_GET_SYSTSU	0x82000022
++#define OTP_TSU_REG_ADR_TEMPHI	0x01DC
++#define OTP_TSU_REG_ADR_TEMPLO	0x01DD
 +
-+allOf:
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: renesas,r9a09g047-tsu
-+    then:
-+      required:
-+        - resets
-+        - renesas,tsu-trim
+ struct rzg3e_thermal_priv;
  
- additionalProperties: false
+ struct rzg3e_thermal_info {
+@@ -381,6 +385,21 @@ static int rzg3e_thermal_get_syscon_trim(struct rzg3e_thermal_priv *priv)
+ 	return 0;
+ }
  
++static int rzg3e_thermal_get_smc_trim(struct rzg3e_thermal_priv *priv)
++{
++	struct arm_smccc_res local_res;
++
++	arm_smccc_smc(RZ_SIP_SVC_GET_SYSTSU, OTP_TSU_REG_ADR_TEMPLO,
++		      0, 0, 0, 0, 0, 0, &local_res);
++	priv->trmval0 = local_res.a0 & TSU_TEMP_MASK;
++
++	arm_smccc_smc(RZ_SIP_SVC_GET_SYSTSU, OTP_TSU_REG_ADR_TEMPHI,
++		      0, 0, 0, 0, 0, 0, &local_res);
++	priv->trmval1 = local_res.a0 & TSU_TEMP_MASK;
++
++	return 0;
++}
++
+ static int rzg3e_thermal_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+@@ -539,8 +558,15 @@ static const struct rzg3e_thermal_info rzg3e_thermal_info = {
+ 	.temp_e_mc = 126000,
+ };
+ 
++static const struct rzg3e_thermal_info rzt2h_thermal_info = {
++	.get_trim = rzg3e_thermal_get_smc_trim,
++	.temp_d_mc = -40000,
++	.temp_e_mc = 125000,
++};
++
+ static const struct of_device_id rzg3e_thermal_dt_ids[] = {
+ 	{ .compatible = "renesas,r9a09g047-tsu", .data = &rzg3e_thermal_info },
++	{ .compatible = "renesas,r9a09g077-tsu", .data = &rzt2h_thermal_info },
+ 	{ /* sentinel */ }
+ };
+ MODULE_DEVICE_TABLE(of, rzg3e_thermal_dt_ids);
 -- 
 2.51.1.dirty
 
