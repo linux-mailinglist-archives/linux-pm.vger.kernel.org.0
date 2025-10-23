@@ -1,209 +1,162 @@
-Return-Path: <linux-pm+bounces-36735-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36736-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA9D8C01F5F
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Oct 2025 17:01:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A565C01F7B
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Oct 2025 17:03:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 2E93935A744
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Oct 2025 15:01:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 137ED19A4D44
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Oct 2025 15:03:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9166336EC3;
-	Thu, 23 Oct 2025 15:00:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A23503233F4;
+	Thu, 23 Oct 2025 15:02:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZhElHD9w"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dT7+pwoO"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C361626059D
-	for <linux-pm@vger.kernel.org>; Thu, 23 Oct 2025 15:00:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D41B51DFDA1
+	for <linux-pm@vger.kernel.org>; Thu, 23 Oct 2025 15:02:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761231611; cv=none; b=oL+gjxJd2rvwcQrOXyISl9NQJc0K1AWe+5gOeE2+Cfd3F9Vslo3gEcHP1f5/YLfNWKjNi58ROk4wFVCZ2jZo/dhgYXdWaG8EJqbbVcatn8K41V+hQZmdcKtxWnUViMwbfTOrhp0i5E9j5/85Z6e9tIG4EQN22WdrLsNkoKGzEDM=
+	t=1761231776; cv=none; b=T6NBSxzsWzUYH35FwPR5gO5fUIRThXfFRoIUmSn83SqWn5mZZT5wX08o7jJQzA2QWhE2tbDAYGMgbO2CS6tPBFppKSJJ/KsEZ2INcyssrw3cYEHG42H28x6qJ/g4paVnbOLw5b3M4aWdyot/1saQxFjBfHlYiKZoZvhENqCwM+8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761231611; c=relaxed/simple;
-	bh=4D2jOJRxSF4dEQgBcZy8n0Oy2bxBObeKMoSrbVEDkuA=;
+	s=arc-20240116; t=1761231776; c=relaxed/simple;
+	bh=qK5aw0ySKCWWtM8T+Ckc0U2FXVFfBi7RX+UnHhpIFyk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=segfzajDGMOiXf8DLnFrRtCB++zL2IH3Zx7jR2rtjvtn8JMzeJ9CyoPiLmSOgmNylMmGYB16IFBC1AbTaIK/xV1WIuyxT3Q4EDJWcfhioMqQJo72dvYsDTjrx0xyYuL56XSBC+ndNSLpxDq1erigLZw3P6Ikw52dHNp82R8JY0o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZhElHD9w; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 720E7C113D0
-	for <linux-pm@vger.kernel.org>; Thu, 23 Oct 2025 15:00:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761231611;
-	bh=4D2jOJRxSF4dEQgBcZy8n0Oy2bxBObeKMoSrbVEDkuA=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=ZhElHD9w+eEOeLILoWpl/ROaHfan6lMyEhMOFJb+7njnsEVxNuiwnbq2+vlhbIjum
-	 Dxz2wY8NQ75RPtfc68s+M99moe/y01nbL2SweJHao0HWoXSl5aLi9tZohr/LAWw3Nl
-	 aXwau7DwJQ2MbJZzl17/PgDpunbiFjPrp7Dtz8aGfypJpCGC+sKC3BZbtvRPenkELN
-	 60U+gsLcnENM35oLmNwurzuTGMBFh6WQKjXLxNdzjCsWz5qur7HfN+bywhjfMuJ2+b
-	 ND/ejimLyV67FWEg5zB0GN41vmTpFmqvuqeUH813umtuT3hDHgPYmQtnQgy4Lg/llS
-	 L0IZK0NJJCIHQ==
-Received: by mail-oi1-f176.google.com with SMTP id 5614622812f47-443a2689160so417072b6e.0
-        for <linux-pm@vger.kernel.org>; Thu, 23 Oct 2025 08:00:11 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUFx2halhUC+X4UjRT5sZnH+Ya8KLlL8WnnQlcnVgmujqO2et2k33/MxMd++PQ5RJ1ma2L+OKyZog==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz8TueOhiATPr57JXzrF06OqksY4Lg4kxwoTAr41rtX4cAe3EQX
-	e2wL7a7441HQCmfmZaDw4utaXxYQmsq5kNAM21cJk4eIyWSDSI/dhDgB2IuDdoG1MipeYVmDLpv
-	avSOpE5peQ1mLxxy6DIGntkADCaf0H+4=
-X-Google-Smtp-Source: AGHT+IHa1e0HiSHmvwXRumDdY7jZn5K3wnKO4MT9rWI/sxjE/u3U28hEj9Jhooq5nM+ZxTxJW/DdLo+z7u3biFECeGs=
-X-Received: by 2002:a05:6808:6909:b0:438:37eb:62c7 with SMTP id
- 5614622812f47-443a2e2985fmr11783735b6e.21.1761231610537; Thu, 23 Oct 2025
- 08:00:10 -0700 (PDT)
+	 To:Cc:Content-Type; b=WIsC+G+pqXH+Oph6a1nnKLgAcHdEwC2fOMpYEE1pKrhzUSn2KKf5e9/itvqwIzsVzxUhVmpaH3UKUBccsOygZKu0UWpLSNwVUF4FKEPaWdPruzfnDKAboLnueREhEjZpzcLHexTk3h4JnEfEIV3KIUCtULn+5lyUaSYxV6kaHP4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=dT7+pwoO; arc=none smtp.client-ip=209.85.218.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-b6d5c59f2b6so107462866b.2
+        for <linux-pm@vger.kernel.org>; Thu, 23 Oct 2025 08:02:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1761231773; x=1761836573; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=qK5aw0ySKCWWtM8T+Ckc0U2FXVFfBi7RX+UnHhpIFyk=;
+        b=dT7+pwoOmBE9pvdb88UHTh9cJONeRxz81L+szJOPLewGCYbE3lwwal6UeLeNbcAxg3
+         B9UzIdxFKYaiZIV+Sr4LZ9tGVxlQ02/rhOqwJrpc8P0+zTRuy3w3eKQuNU3+7yGjcJy7
+         ZuD3PDO+GiuQ9VUMBlmoDJX6Kb5F2vmMRigqRJw7uO041YiCBDVUr3SbXg/w1+Ftmxlp
+         xVFILVx6Q2QQkSySQJIzY9F+tgCMQbN9ZwDlYfGDQ+0DanNYKg1x/piKlEsmYDS35A0t
+         FxwWEjhh24TcnIUHGAJSrlyWqJKCv3SeMusCCNNe0eN0Pzp1hp4r0fcwmo+m7VJM9lnC
+         50DQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761231773; x=1761836573;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qK5aw0ySKCWWtM8T+Ckc0U2FXVFfBi7RX+UnHhpIFyk=;
+        b=HD/YSkKeDIaQZXSbvA/Tu/FzNZc4HS1FEd257J/djVpUwzgicVdnZtk2ditYT1ovBj
+         x7a7tq6on2XjnTuel1wHhtg3B/8wO15I4r5r+CgK8326DdQEoRuYwgHEF71Z4dGO7vI/
+         1XkeJg8HIUjzgkLXxjJHZDo8zeJeCnmkinFC2Y7jjW3cAzXfwmfKSfF20f2kTH1skexb
+         RqhLWaWRMylohIz50s5sdIdWmr0OaWcGU+MxZ2xq/C0zpgBCHOmXVxRDN6vc0kXozGsB
+         k/sV3HgcERKfdcSpUUrNmFyqqScU5BCS6dhQiuW6gTgEGczLrlEHz9yuiriRM7FGTDWz
+         e5jA==
+X-Forwarded-Encrypted: i=1; AJvYcCUNQ6AUkgW+qP7+6bID7Guc1itKY0u2MK+EErUCBuTdzkzq5KStvT6Q6tKIm/z838Uw6nxi8kOGUw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxFYpb1M7chgaIEHLasqlgZ0eKHzLTCxxm/tMljrCXyB8pXZfey
+	IYtAKIfsaYKWwij6C/AENBMEt2yPKGqyUHieBmojG2cGr/91IO7o372p+TVpk3s2dnIhPC+V/bW
+	yjJ7k7xAN1NDF81kPZWt9SPCPDHguRjwW9I+9opX8Kw==
+X-Gm-Gg: ASbGncthFe515rQLnQTzypf3c2H5voRZG6+HQ7kRyWnrFst2YC/KpkhRI+MMa/38hyX
+	wn0/dV9JQBKIFgd4u2Q65xJ8E51n9VRulxat0ShbhsnRxTkyV9+yPO3JgzuEdIgEHkIILCgVemO
+	Hvic5LPks+4w5A49sjAbzCKteJPyiM0gnr9qvtQTeWTsKVEkYYjeZzcI9271ng1bcUDLowhwCJA
+	uRBYLNIFD9hS/2e2Cmcs7ef3cdqDMlHCLaSnBGHEL8tTw/PNNqkVaWI3VHDnmbS8X7XjiQTAXtj
+	SZtT0FOjJJNSLMM=
+X-Google-Smtp-Source: AGHT+IFiT0IsifyoC4o9f6+8ie2I7nihSahQgM48GLh9H5e00zMiqsl4ryTGE/fKqLxHLO2ruCiUMTfjNs7pKOpZ3u8=
+X-Received: by 2002:a17:907:868f:b0:b6d:5b0a:bc3f with SMTP id
+ a640c23a62f3a-b6d5b0ad244mr179348466b.24.1761231772916; Thu, 23 Oct 2025
+ 08:02:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251002113404.3117429-1-srosek@google.com> <20251002113404.3117429-2-srosek@google.com>
- <CAJZ5v0ho8MhU8jj=YMyDKdTQWZt24LjoCaoEgJRsdi3YykkBBQ@mail.gmail.com> <CAF3aWvGdvHxA_fJm1EE2byL0LQUC3K2LGeDLxr3EpRzSQ=3Waw@mail.gmail.com>
-In-Reply-To: <CAF3aWvGdvHxA_fJm1EE2byL0LQUC3K2LGeDLxr3EpRzSQ=3Waw@mail.gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 23 Oct 2025 16:59:59 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0jPJqpX5xJX0j5OC21sp093O_B+jsL1mSBztR1wORV0Fg@mail.gmail.com>
-X-Gm-Features: AS18NWBXAE19BSgci90ZeQZmyqlqzpPybg5SJsR149yPoAo8jLxZSgIzaDlfpfM
-Message-ID: <CAJZ5v0jPJqpX5xJX0j5OC21sp093O_B+jsL1mSBztR1wORV0Fg@mail.gmail.com>
-Subject: Re: [PATCH v3 1/6] ACPI: DPTF: Ignore SoC DTS thermal while scanning
-To: =?UTF-8?Q?S=C5=82awomir_Rosek?= <srosek@google.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Alex Hung <alexhung@gmail.com>, 
-	Hans de Goede <hansg@kernel.org>, Ilpo Jarvinen <ilpo.jarvinen@linux.intel.com>, 
-	AceLan Kao <acelan.kao@canonical.com>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Zhang Rui <rui.zhang@intel.com>, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Tomasz Nowicki <tnowicki@google.com>, 
-	Stanislaw Kardach <skardach@google.com>, Michal Krawczyk <mikrawczyk@google.com>, 
-	linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org, 
-	platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20251015-arm-psci-system_reset2-vendor-reboots-v16-0-b98aedaa23ee@oss.qualcomm.com>
+ <20251015-arm-psci-system_reset2-vendor-reboots-v16-5-b98aedaa23ee@oss.qualcomm.com>
+ <CACMJSetWthCcJo8v7EuUK-aDKhf5KTNG5WQQ9aTQu62B+E=DMA@mail.gmail.com>
+ <8fb6e8e0-cdca-0bd5-d0fe-56b5f6d27a5c@oss.qualcomm.com> <CACMJSetTrze028iXmH3i=JguJy=aNOMcnkLhO1ewYNiusvVmgA@mail.gmail.com>
+ <efc84b92-43f9-ba25-1259-ae3907273af4@oss.qualcomm.com>
+In-Reply-To: <efc84b92-43f9-ba25-1259-ae3907273af4@oss.qualcomm.com>
+From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Date: Thu, 23 Oct 2025 17:02:41 +0200
+X-Gm-Features: AS18NWDhrwCWj5OatrU3wL3rcQVr8s37dYpX7bYhPrL9Oq2ex-mSUqkHzN71als
+Message-ID: <CACMJSetctEH4K58R9JvSYNzzYgE0NGMsAr5JxiZ4RH_3T08x-A@mail.gmail.com>
+Subject: Re: [PATCH v16 05/14] power: reset: reboot-mode: Expose sysfs for
+ registered reboot_modes
+To: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
+Cc: Bjorn Andersson <andersson@kernel.org>, Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Sudeep Holla <sudeep.holla@arm.com>, Souvik Chakravarty <Souvik.Chakravarty@arm.com>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Andy Yan <andy.yan@rock-chips.com>, Mark Rutland <mark.rutland@arm.com>, 
+	Lorenzo Pieralisi <lpieralisi@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Konrad Dybcio <konradybcio@kernel.org>, cros-qcom-dts-watchers@chromium.org, 
+	Vinod Koul <vkoul@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Florian Fainelli <florian.fainelli@broadcom.com>, 
+	John Stultz <john.stultz@linaro.org>, Matthias Brugger <matthias.bgg@gmail.com>, 
+	Krzysztof Kozlowski <krzk@kernel.org>, Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
+	Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>, Stephen Boyd <swboyd@chromium.org>, 
+	Andre Draszik <andre.draszik@linaro.org>, 
+	Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org, 
+	Elliot Berman <quic_eberman@quicinc.com>, Srinivas Kandagatla <srini@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Oct 23, 2025 at 4:36=E2=80=AFPM S=C5=82awomir Rosek <srosek@google.=
-com> wrote:
+On Wed, 22 Oct 2025 at 16:21, Shivendra Pratap
+<shivendra.pratap@oss.qualcomm.com> wrote:
 >
-> On Wed, Oct 22, 2025 at 8:33=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.=
-org> wrote:
-> >
-> > On Thu, Oct 2, 2025 at 1:34=E2=80=AFPM Slawomir Rosek <srosek@google.co=
-m> wrote:
-> > >
-> > > The Intel SoC DTS thermal driver on Baytrail platform uses IRQ 86 for
-> > > critical overheating notification. The IRQ 86 is described in the _CR=
-S
-> > > control method of INT3401 device, thus Intel SoC DTS thermal driver
-> > > requires INT3401 device to be enumerated.
-> >
-> > I don't think that the specific interrupt number is relevant here.  It
-> > would be sufficient to say something like "The IRQ used by the Intel
-> > SoC DTS thermal device for critical overheating notification is listed
-> > in _CRS of device INT3401 which therefore needs to be enumerated for
-> > Intel SoC DTS thermal to work."
 >
-> Above text is copied from the original change which is linked below.
-> I will rephrase it as you suggested.
 >
+> On 10/20/2025 1:10 PM, Bartosz Golaszewski wrote:
+> > On Fri, 17 Oct 2025 at 21:40, Shivendra Pratap
+> > <shivendra.pratap@oss.qualcomm.com> wrote:
+> >>
+> >>>
+> >>> If you're using devres here - at least make it obvious by adding the
+> >>> devm_ prefix to the function name and make it take an explicit struct
+> >>> device * parameter so that it's clear who owns the managed resource.
+> >>>
+> >>
+> >> sure. we can add devm_ prefix to the function name.
+> >> reboot->reboot_dev is an internal member of struct reboot_mode_driver *reboot.
+> >> The struct reboot_mode_driver *reboot is owned by the calling driver.
+> >> If we want to PASS reboot->reboot_dev to the devm_ prefixed function call, we
+> >> will need to kind of split create_reboot_mode_device into two calls - device_create
+> >> in a separate function and then call the devm_ prefix function where we add the devres_alloc.
+> >> Can you suggest a bit more on this?
+> >>
 > >
-> > > Since dependency on INT3401 device is unrelated to DPTF the IS_ENABLE=
-()
-> > > macro is removed from ACPI DPTF INT340X scan handler, instead Kconfig
-> > > is updated to ensure proper enumeration of INT3401 device.
-> >
-> > It is not entirely clear what happens in this patch after reading the
-> > above paragraph.
-> >
-> > I would rather continue the previous thought by saying that the
-> > enumeration happens by binding the int3401_thermal driver to the
-> > INT3401 platform device.  Thus CONFIG_INT340X_THERMAL is in fact
-> > necessary for enumerating it, so checking CONFIG_INTEL_SOC_DTS_THERMAL
-> > in int340x_thermal_handler_attach() is pointless and INT340X_THERMAL
-> > may as well be selected by INTEL_SOC_DTS_THERMAL.
+> > Ah, ok I missed the broken logic here. Devres should only be used in
+> > devices already *attached* to a driver as all managed resources will
+> > get released on driver *detach*. What you have here may "work" by
+> > accident but that's not correct and is very fragile as soon as you
+> > have some non-standard behavior or error paths. Devres won't fly here,
+> > please just use regular allocation and free whatever you need in the
+> > corresponding release/free/whatever routine.
 >
-> Sure, I will rephrase it to clearly describe what happens here.
+> Thanks, got the problem here. Was using devres to associate the reboot_mode struct
+> with the driver, so that it could be retrieved later when reboot_modes_show is called.
 >
-> >
-> > > Fixes: 014d9d5d0cc1 ("ACPI/int340x_thermal: enumerate INT3401 for Int=
-el SoC DTS thermal driver")
-> >
-> > Why do you want this tag to be added?
+> When reboot_modes_show is invoked, there's no direct way to identify which reboot_mode
+> instance is tied to the current driver, as multiple drivers can register with the reboot-mode
+> framework at the same time. Without devres, will need to maintain a global list of mapping for
+> all device driver structs and their corresponding reboot_mode struct. Then reboot_modes_show
+> would have to look up the correct reboot_mode struct using the device driver's pointer.
 >
-> Just for context. The IS_ENABLE is added to the scan handler in 014d9d5d0=
-cc1
-> and this change is about to fix that. I can remove the tag if it's not ne=
-eded.
+> Hope its ok to maintain that separate logic here?
+>
 
-I don't see a functional issue with this, it is just dead code AFAICS.
-As a rule, Fixes: tags are not added to patches removing dead code.
+Why can't you just do:
 
-> >
-> > > Signed-off-by: Slawomir Rosek <srosek@google.com>
-> > > ---
-> > >  drivers/acpi/dptf/int340x_thermal.c | 7 +------
-> > >  drivers/thermal/intel/Kconfig       | 3 ++-
-> > >  2 files changed, 3 insertions(+), 7 deletions(-)
-> > >
-> > > diff --git a/drivers/acpi/dptf/int340x_thermal.c b/drivers/acpi/dptf/=
-int340x_thermal.c
-> > > index a222df059a16..947fe50c2ef6 100644
-> > > --- a/drivers/acpi/dptf/int340x_thermal.c
-> > > +++ b/drivers/acpi/dptf/int340x_thermal.c
-> > > @@ -11,10 +11,9 @@
-> > >
-> > >  #include "../internal.h"
-> > >
-> > > -#define INT3401_DEVICE 0X01
-> > >  static const struct acpi_device_id int340x_thermal_device_ids[] =3D =
-{
-> > >         {"INT3400"},
-> > > -       {"INT3401", INT3401_DEVICE},
-> > > +       {"INT3401"},
-> > >         {"INT3402"},
-> > >         {"INT3403"},
-> > >         {"INT3404"},
-> > > @@ -76,10 +75,6 @@ static int int340x_thermal_handler_attach(struct a=
-cpi_device *adev,
-> > >  {
-> > >         if (IS_ENABLED(CONFIG_INT340X_THERMAL))
-> > >                 acpi_create_platform_device(adev, NULL);
-> > > -       /* Intel SoC DTS thermal driver needs INT3401 to set IRQ desc=
-riptor */
-> > > -       else if (IS_ENABLED(CONFIG_INTEL_SOC_DTS_THERMAL) &&
-> > > -                id->driver_data =3D=3D INT3401_DEVICE)
-> > > -               acpi_create_platform_device(adev, NULL);
-> > >         return 1;
-> > >  }
-> > >
-> > > diff --git a/drivers/thermal/intel/Kconfig b/drivers/thermal/intel/Kc=
-onfig
-> > > index e0268fac7093..f9e275538e29 100644
-> > > --- a/drivers/thermal/intel/Kconfig
-> > > +++ b/drivers/thermal/intel/Kconfig
-> > > @@ -44,7 +44,8 @@ config INTEL_SOC_DTS_IOSF_CORE
-> > >
-> > >  config INTEL_SOC_DTS_THERMAL
-> > >         tristate "Intel SoCs DTS thermal driver"
-> > > -       depends on X86 && PCI && ACPI
-> > > +       depends on X86_64 && PCI && ACPI
-> >
-> > AFAICS NET needs to be added to the dependency list above or selecting
-> > INT340X_THERMAL below may not actually cause it to be built.
->
-> Right. Previously I tried to "select NET" (INTEL_SOC_DTS_THERMAL does not
-> depend on NET directly so it seemed to be more appropriate to me) but got
-> circular dependency error so I assumed it is ensured somehow. Now I check=
-ed
-> again and you are right, I was able to disable NET and get unmet dependen=
-cies.
-> I will add dependency on NET. Thanks
+device_create(rb_class, NULL, 0, data reboot->driver_name);
 
-The rule of thumb is that if you want A to select B, then they both
-need to depend on the same things.
+Where data is whatever driver data you want to associate with the new
+class device? You can then retrieve it with dev_get_drvdata() in
+callbacks.
 
-> >
-> > > +       select INT340X_THERMAL
-> > >         select INTEL_SOC_DTS_IOSF_CORE
-> > >         help
-> > >           Enable this to register Intel SoCs (e.g. Bay Trail) platfor=
-m digital
-> > > --
->
+Bartosz
 
