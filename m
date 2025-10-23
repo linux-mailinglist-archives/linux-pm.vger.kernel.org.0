@@ -1,240 +1,121 @@
-Return-Path: <linux-pm+bounces-36726-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36727-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F449C019A9
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Oct 2025 16:00:41 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 791A9C01ACC
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Oct 2025 16:13:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E9CDF1A66A40
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Oct 2025 14:01:04 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 8ABF4562EC3
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Oct 2025 14:01:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADC19322C9A;
-	Thu, 23 Oct 2025 13:59:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0369032B995;
+	Thu, 23 Oct 2025 14:01:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FG5HYBPS"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="bKcnDu1U"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E04128E00;
-	Thu, 23 Oct 2025 13:59:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D810832861C
+	for <linux-pm@vger.kernel.org>; Thu, 23 Oct 2025 14:01:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761227990; cv=none; b=c/Y5SrfRYAGBxQBBIn0W49a5gDMAFu26RHyh7PEKD2M9M2RlWkXjLjIYfT6V2B3JBiuBMqJhWBZbkrgJ4wYGEd8vXgmpeUqxvfTKeJ++K0BHVtLrP2bEgtPrgluFBa5UIR/qLGg013JhvXx/M0da6IyGGpy55QodRjI1moTke1A=
+	t=1761228076; cv=none; b=kj4wAmQRvDDyaaSn7y4S0F66KrnEU/75JeBjHWv7nPcCpygFdd/auO1oo6OFsbcZaAFAJDJjcj3xS75/2SmEaNWYn+t7+zx9KxyhX2ZuiBFq1wleSK1Z/hCkC5CO1zR81Ev5sA3GL3BF/LGoqVhi1a6VvVr6yi3ARLXFJJSVf2o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761227990; c=relaxed/simple;
-	bh=nct9jhEWSM2GOVnXV2mRTGtn7KkYC3Xu9p8cxI6j6+U=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=lrpA94bjdM60Vuhw3sRL8EPBf2kyKEQgioysT1xUqUP2CAfJZ0K37rsBNlE0dgupCQhFOdNphj1kuGdBrlc/+NJLouF0PTuP/tNWKqEtQE0+lqwdtCe1xCkHSVHa0gYaVhLj6WQPUxDo1QK7qKiQ6Yj8pgdbivW15DMtPc5B80Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FG5HYBPS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BEA5C4CEE7;
-	Thu, 23 Oct 2025 13:59:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761227990;
-	bh=nct9jhEWSM2GOVnXV2mRTGtn7KkYC3Xu9p8cxI6j6+U=;
-	h=From:Date:Subject:To:Cc:From;
-	b=FG5HYBPSUikmZsTSFt3fwJ82G8umHab6anVu4NLANs49loyR8NGclAVqqjeCchX5P
-	 5nwYn9oBYDFEjo4VfpoxJ3VIChoWM1Znen8waWxyZxaMV9hxCgQL3G8FKcX6VRDCpY
-	 Yw9QIAZ11MTZPpMrZgKiwfTB20nLwkqi9oFM8ZEV32lc1RI4hOJJvUMnFIHnm17EJN
-	 5IxoIrYLaVcj3urUAxzjbQTn8m/6spzs9Wg6G7D8GqsJwzpS9K8xHyexh3hZnJtAas
-	 tRYNPkTz8rkAjvBDEb7szB8wJd8lZ59hqVkouLTJwuGO9OmSs/R1k7IebCWHQNQnfl
-	 n7hoSMMOFGjng==
-From: Tamir Duberstein <tamird@kernel.org>
-Date: Thu, 23 Oct 2025 09:59:39 -0400
-Subject: [PATCH v2] rust: opp: simplify callers of `to_c_str_array`
+	s=arc-20240116; t=1761228076; c=relaxed/simple;
+	bh=JnMWVm8H5Ck5TN7RGfsn5EcNXl+YklqB9zPZXCC4wAA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AsTGG2RSdvDQFn75DvQBG1GbBGkSzlFtTgpKi3/NvAaMHe+lnVnQlfP2ZHcuFA6ET9r4sI+LE/Gz0jmctkl2l08I6m53aHyqWDyodJrGyf6cf7NzBcZBIrtV5CBpEByKPPZqqoHfm4z1wQKqJHUd2ZdASq4p5fpbLioZy9C445E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=bKcnDu1U; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-47106fc51faso12435805e9.0
+        for <linux-pm@vger.kernel.org>; Thu, 23 Oct 2025 07:01:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1761228073; x=1761832873; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=JnMWVm8H5Ck5TN7RGfsn5EcNXl+YklqB9zPZXCC4wAA=;
+        b=bKcnDu1Ugc8m1FO2mnc9vhsm9Gt701FFuUye9pb+IQLedRuOOPZ7GH9xP2YLtnqaWA
+         3VWYZdNJluPWjsWKI7bj08iE3QMIoaJnU8TwJUYPVn/0XA0XkuqAHU5BXj7LoJjjzhI+
+         Jt/w+MfFqdWkbmI0HsqDr4W7tk+853JoroELlD6yHZaI6anlSaR+rYrmNHOp1jmiaWFD
+         bRyN7v/bJVXOET0nkcYsGPOCnkR+dK/eo37HgXt2JobJRvmuyK6SZzZEl2gA0M2s61AR
+         mECOx3QCU9G2NjOSy3w79ydxc1TC77gKKwO4rdMFp48bKYCp+HPRYn1Q4LKcTYA2ZnkS
+         9wDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761228073; x=1761832873;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JnMWVm8H5Ck5TN7RGfsn5EcNXl+YklqB9zPZXCC4wAA=;
+        b=cm0Q7fb1nm71Ya0kR+NMglUNqqv6WPaTA5hR6/ttfo+re/JSq6UIwAX505QTAAld07
+         oicYn+vOpW4A0/Yc67VJrDWsJfeCR4L0TnWs/ikyaHFIOJoz6ztZ+xO4XxLbrKIvyqOd
+         IxOrmNBJFtlel2oq22++lszfFeTfNDtYxnLRsLecbQv1hBRuH+bvApINBl0Kn3oRE6mF
+         fo0uLbgEB3odmXj1pyZyaV5V/glf/Gur6fcM2ko4RPqNUM8jTzUTXB8myWROk5Dh6/BY
+         yKhvM3Fad66Apr8/91lHgMMr9cKuRjlXf7XxMceo3eSDiTf/kRo2m7eKDf0qGrQcKAxd
+         MPNw==
+X-Forwarded-Encrypted: i=1; AJvYcCX8QdH+SSsO1eSQYPmQo5JBF+3QPmjesjyBX4XZK1nXtY+RUC4EqpfLF6rehkUSQmbClv99eYgQ/Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzaYFdUkK2w3zz9xX3DjdrKx92E3iBI8C45QRRHpp5a7/HUZI+U
+	BKLYCG0hdWvKRM3mKhc9olvbM9JaSj2nvMwFld29FIXZsuRGwbmOVMUlpo9QiY4N99E=
+X-Gm-Gg: ASbGnctMiTVUqc2ZDTheB1oqj7vKX4M9xuUZF7Tfg3A0g7raY2tTG2SUXrnlbpI6ZzO
+	KtmNvyfMMRjOsTpa+q9EsjmfaVOSLmv8ufpcjhbIMMl7iRALDT2/vmHIhqLhgQ73IMEph9/hToK
+	goV6rT7VciDOcW8wgKAhESlq0Cjg1UMR689jYmWhUUorD1rDChqnvu9ODVF9PlbIMkQgUDW88qb
+	oA1qU3Zc+WBJJHX45omKr0ODpDQJyI1GXGGuKFy/dPXEtbciWkfXr6mSeemz4hO2ndddqCeBQLu
+	LG7YFlgc0nZNN8HtGwny9BSrWr1ezfkf8PUxMwz+RANoQG2HSv89o6eIreRe7qtk4v+arBMGybT
+	bUi1HvP3269XfUWtJBXhFxle1aMZNaum81QEosDbiT7jh1XfEmRKr5o0RjwM+vjgIygobFgLbiW
+	ZONyAwlw==
+X-Google-Smtp-Source: AGHT+IEQurVzp77OCpHZFz2TRcOchNrP75ZwR0sZ9FlZgnu+xhnNBWaXzzz3i5vljtf/+Kejv/936A==
+X-Received: by 2002:a05:600c:4688:b0:46f:b42e:ed87 with SMTP id 5b1f17b1804b1-47117925eb5mr165543035e9.40.1761228072957;
+        Thu, 23 Oct 2025 07:01:12 -0700 (PDT)
+Received: from localhost ([196.207.164.177])
+        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-475cae924a1sm49352875e9.2.2025.10.23.07.01.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Oct 2025 07:01:12 -0700 (PDT)
+Date: Thu, 23 Oct 2025 17:01:09 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: ally heev <allyheev@gmail.com>
+Cc: dan.j.williams@intel.com, Dwaipayan Ray <dwaipayanray1@gmail.com>,
+	Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+	Joe Perches <joe@perches.com>, Jonathan Corbet <corbet@lwn.net>,
+	Andy Whitcroft <apw@canonical.com>, workflows@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	David Hunter <david.hunter.linux@gmail.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	linux-pm <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH] checkpatch: add uninitialized pointer with __free
+ attribute check
+Message-ID: <aPo1JU7pe-vvQzEf@stanley.mountain>
+References: <20251021-aheev-checkpatch-uninitialized-free-v1-1-18fb01bc6a7a@gmail.com>
+ <68f7b830ec21a_10e910070@dwillia2-mobl4.notmuch>
+ <f9cabfed7b165299b8048670e548c671f300f2b2.camel@gmail.com>
+ <CAMB6jUG+ES6XY7NL5TF-hFVDmz6O5rd9T-HNk7Q+pJA2_9g4Mw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251023-opp-simpler-code-v2-1-44230ed00fd8@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAMo0+mgC/2WNQQ6CMBBFr0K6dkw7KZS48h6GhcIUJiJtpoZoS
- O9uJe5cvpf89zeVSJiSOlWbElo5cVgK4KFS/XRdRgIeCivUWBttWggxQuJHnEmgDwNB3TYN9g2
- 6m7eqzKKQ59eevHSFJ07PIO/9YTVf+4uh/o+tBgxo65231jmD/nwnWWg+BhlVl3P+AB+MhcyxA
- AAA
-X-Change-ID: 20251018-opp-simpler-code-58662c627bf4
-To: Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>, 
- Stephen Boyd <sboyd@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
- Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
- Gary Guo <gary@garyguo.net>, 
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
- Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
- Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
- Danilo Krummrich <dakr@kernel.org>
-Cc: linux-pm@vger.kernel.org, rust-for-linux@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Tamir Duberstein <tamird@kernel.org>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openssh-sha256; t=1761227987; l=6187;
- i=tamird@kernel.org; h=from:subject:message-id;
- bh=nct9jhEWSM2GOVnXV2mRTGtn7KkYC3Xu9p8cxI6j6+U=;
- b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgtYz36g7iDMSkY5K7Ab51ksGX7hJgs
- MRt+XVZTrIzMVIAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QAZzhKgnRlHJSlChXcD5X76nsZnU9ccgzH5xOLYnJs0pGCxi5SkV+t4EjTlcabtsqGGEMERw/F8
- jJc18QDR+zQU=
-X-Developer-Key: i=tamird@kernel.org; a=openssh;
- fpr=SHA256:264rPmnnrb+ERkS7DDS3tuwqcJss/zevJRzoylqMsbc
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMB6jUG+ES6XY7NL5TF-hFVDmz6O5rd9T-HNk7Q+pJA2_9g4Mw@mail.gmail.com>
 
-Use `Option` combinators to make this a bit less noisy.
+On Thu, Oct 23, 2025 at 04:38:43PM +0530, ally heev wrote:
+> I will take this back. Found this in `include/linux/cleanup.h`
+> ```
+> * Given that the "__free(...) = NULL" pattern for variables defined at
+> * the top of the function poses this potential interdependency problem
+> * the recommendation is to always define and assign variables in one
+> * statement and not group variable definitions at the top of the
+> * function when __free() is used.
+> ```
 
-Wrap the `dev_pm_opp_set_config` operation in a closure and use type
-ascription to leverage the compiler to check for use after free.
+Ah, right.
 
-Signed-off-by: Tamir Duberstein <tamird@kernel.org>
----
-Note: this diff is much smaller with whitespace suppressed (`-w`).
-
-An alternative approach to compiler checking for UAF that doesn't change
-indentation is to add `drop((self, clk_names, regulator_names))` after
-`let ret = ...;` but that felt more prone to becoming out of date if
-more owned data needed to be added to the function scope.
----
-Changes in v2:
-- Avoid use after free; add compiler checking. (Thanks Viresh!)
-- Link to v1: https://patch.msgid.link/20251020-opp-simpler-code-v1-1-04f7f447712f@kernel.org
----
- rust/kernel/opp.rs | 112 +++++++++++++++++++++++++++--------------------------
- 1 file changed, 58 insertions(+), 54 deletions(-)
-
-diff --git a/rust/kernel/opp.rs b/rust/kernel/opp.rs
-index 04472a8de3ff..f9641c639fff 100644
---- a/rust/kernel/opp.rs
-+++ b/rust/kernel/opp.rs
-@@ -443,66 +443,70 @@ pub fn set_supported_hw(mut self, hw: KVec<u32>) -> Result<Self> {
-     ///
-     /// The returned [`ConfigToken`] will remove the configuration when dropped.
-     pub fn set(self, dev: &Device) -> Result<ConfigToken> {
--        let (_clk_list, clk_names) = match &self.clk_names {
--            Some(x) => {
--                let list = to_c_str_array(x)?;
--                let ptr = list.as_ptr();
--                (Some(list), ptr)
--            }
--            None => (None, ptr::null()),
--        };
-+        let clk_names = self.clk_names.as_deref().map(to_c_str_array).transpose()?;
-+        let regulator_names = self
-+            .regulator_names
-+            .as_deref()
-+            .map(to_c_str_array)
-+            .transpose()?;
-+
-+        let set_config = || {
-+            let clk_names = clk_names.as_ref().map_or(ptr::null(), |c| c.as_ptr());
-+            let regulator_names = regulator_names.as_ref().map_or(ptr::null(), |c| c.as_ptr());
-+
-+            let prop_name = self
-+                .prop_name
-+                .as_ref()
-+                .map_or(ptr::null(), |p| p.as_char_ptr());
-+
-+            let (supported_hw, supported_hw_count) = self
-+                .supported_hw
-+                .as_ref()
-+                .map_or((ptr::null(), 0), |hw| (hw.as_ptr(), hw.len() as u32));
-+
-+            let (required_dev, required_dev_index) = self
-+                .required_dev
-+                .as_ref()
-+                .map_or((ptr::null_mut(), 0), |(dev, idx)| (dev.as_raw(), *idx));
-+
-+            let mut config = bindings::dev_pm_opp_config {
-+                clk_names,
-+                config_clks: if T::HAS_CONFIG_CLKS {
-+                    Some(Self::config_clks)
-+                } else {
-+                    None
-+                },
-+                prop_name,
-+                regulator_names,
-+                config_regulators: if T::HAS_CONFIG_REGULATORS {
-+                    Some(Self::config_regulators)
-+                } else {
-+                    None
-+                },
-+                supported_hw,
-+                supported_hw_count,
- 
--        let (_regulator_list, regulator_names) = match &self.regulator_names {
--            Some(x) => {
--                let list = to_c_str_array(x)?;
--                let ptr = list.as_ptr();
--                (Some(list), ptr)
--            }
--            None => (None, ptr::null()),
--        };
-+                required_dev,
-+                required_dev_index,
-+            };
- 
--        let prop_name = self
--            .prop_name
--            .as_ref()
--            .map_or(ptr::null(), |p| p.as_char_ptr());
--
--        let (supported_hw, supported_hw_count) = self
--            .supported_hw
--            .as_ref()
--            .map_or((ptr::null(), 0), |hw| (hw.as_ptr(), hw.len() as u32));
--
--        let (required_dev, required_dev_index) = self
--            .required_dev
--            .as_ref()
--            .map_or((ptr::null_mut(), 0), |(dev, idx)| (dev.as_raw(), *idx));
--
--        let mut config = bindings::dev_pm_opp_config {
--            clk_names,
--            config_clks: if T::HAS_CONFIG_CLKS {
--                Some(Self::config_clks)
--            } else {
--                None
--            },
--            prop_name,
--            regulator_names,
--            config_regulators: if T::HAS_CONFIG_REGULATORS {
--                Some(Self::config_regulators)
--            } else {
--                None
--            },
--            supported_hw,
--            supported_hw_count,
-+            // SAFETY: The requirements are satisfied by the existence of [`Device`] and its safety
-+            // requirements. The OPP core guarantees not to access fields of [`Config`] after this
-+            // call and so we don't need to save a copy of them for future use.
-+            let ret = unsafe { bindings::dev_pm_opp_set_config(dev.as_raw(), &mut config) };
- 
--            required_dev,
--            required_dev_index,
-+            to_result(ret).map(|()| ConfigToken(ret))
-         };
- 
--        // SAFETY: The requirements are satisfied by the existence of [`Device`] and its safety
--        // requirements. The OPP core guarantees not to access fields of [`Config`] after this call
--        // and so we don't need to save a copy of them for future use.
--        let ret = unsafe { bindings::dev_pm_opp_set_config(dev.as_raw(), &mut config) };
-+        // Ensure the closure does not accidentally drop owned data; if violated, the compiler
-+        // produces E0525 with e.g.:
-+        //
-+        // ```
-+        // closure is `FnOnce` because it moves the variable `clk_names` out of its environment
-+        // ```
-+        let _: &dyn Fn() -> _ = &set_config;
- 
--        to_result(ret).map(|()| ConfigToken(ret))
-+        set_config()
-     }
- 
-     /// Config's clk callback.
-
----
-base-commit: 173e02d674946ff3ef8da7f44a9d5b820b9af21c
-change-id: 20251018-opp-simpler-code-58662c627bf4
-
-Best regards,
---  
-Tamir Duberstein <tamird@kernel.org>
+regards,
+dan carpenter
 
 
