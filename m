@@ -1,195 +1,140 @@
-Return-Path: <linux-pm+bounces-36737-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36738-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EBB70C01FEE
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Oct 2025 17:07:49 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 71120C020D7
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Oct 2025 17:17:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BD1EF1A631AC
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Oct 2025 15:08:02 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4793D50646E
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Oct 2025 15:11:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DEB833291C;
-	Thu, 23 Oct 2025 15:07:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6B68337B83;
+	Thu, 23 Oct 2025 15:11:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OKc9AeHx"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cQFAk4o9"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACE30211A28;
-	Thu, 23 Oct 2025 15:07:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C26D53370FD
+	for <linux-pm@vger.kernel.org>; Thu, 23 Oct 2025 15:11:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761232038; cv=none; b=O6bcv4ntt1LCoaeo+H22KqGP/ylbMKZS498znPYJSTSILIWDwgHw9bsnwfBKTAHUUX9CN/kdN3xZBVgnRk/7PrTVtdsqWBTf2MhC4Dsju8htHBnzQXxAbGGub2a4LpH+WD/kpwy8HfvLemAlqWvcz3ciHfTIGru/7O5pvJDpDc0=
+	t=1761232289; cv=none; b=qQerJn7hEFVEq7ak6lCh0hvwZkOzwSQVpVMLFkhHqwXgJ0QW9uEOC6DBqmhX5g6wwhhwBYY66tE10aG7B6OLv88qE1CcUCZSLC1WqOkNccNnxsuoFCE0Y4HFQkvo37VQMfd1wfH2ObJr/dHzY4GO6BwEPeYOLnGsyhQHny2ieo4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761232038; c=relaxed/simple;
-	bh=XWBnm4As/yEKwlRgDc/6pxtPDRTol/Yk+V45WwgsKmk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=h4GW3jIkGDYDUN4oXsaJfF4fP11CtIN1UyfJn4HyG7xj3lJlfxh6OB4B8r6mRMIqSJYXPiksCEet3MRmC/AulfdP4CV0pZj6izALVZPm0lkg7JYJrTPeP6j+nytoysGD7kTT3ZVaSj6ogkAj8GR9+xqxmgeEdsuXf9CUtQIEDOI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OKc9AeHx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64D76C4CEE7;
-	Thu, 23 Oct 2025 15:07:05 +0000 (UTC)
+	s=arc-20240116; t=1761232289; c=relaxed/simple;
+	bh=HbjhGK0G5pGUlhH8u9kmGZx/g9Y6CmyLtzSy7KvwPN4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=M0fr8RZKmUCGOsTi7Fsis9Q4Ww9Oa5LJlSJ6vseoMzlvm+sQeenHxyIR9nAERfVa/5uDyTdm1Wa71ArnCadTmEJKW9/q9bRaeICPUFE4m+vtt7JbKqLOVzlHl2bxIXQMeE9TcCjN3i12oErGepttxMQWlfaYl68dCbShyQq5FlQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cQFAk4o9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C3BAC2BC86
+	for <linux-pm@vger.kernel.org>; Thu, 23 Oct 2025 15:11:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761232037;
-	bh=XWBnm4As/yEKwlRgDc/6pxtPDRTol/Yk+V45WwgsKmk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=OKc9AeHxRjm48dkSrMWCcwcADV/4aoeDUqc06Xwl01QwdRS0G1uFn4tFrWEF2u/hd
-	 o22GGIJX1lmPFeT3hxtMnbrFV3Of8pdz7HMema9bjL+D0eBa/7jgYU0NIXaNwpM4+x
-	 81D328997z0BoGeXOeA5tBWEReCXIsynLBnot2okkBqysJAyt+qkluNGfTzwRIozND
-	 YySA1vwt74D4O2l7P1EuZOalFAgROnzEoXtBG2JpquV5DAJ++ZYFt1r8smnUr12hS7
-	 hFd1x91xvjzPtbbseW+Lsa5fhzDwWGPAvyjn6Fs5Qbrak3TeVAJW31wiZ/HrnONrB7
-	 1n1bA1B/lJUIg==
-Date: Thu, 23 Oct 2025 16:07:02 +0100
-From: Mark Brown <broonie@kernel.org>
-To: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Andrzej Hajda <andrzej.hajda@intel.com>,
-	Robert Foss <rfoss@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-	Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Georgi Djakov <djakov@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Joerg Roedel <joro@8bytes.org>,
-	Jassi Brar <jassisinghbrar@gmail.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Lee Jones <lee@kernel.org>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Sebastian Reichel <sre@kernel.org>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>,
-	Mathieu Poirier <mathieu.poirier@linaro.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Olivia Mackall <olivia@selenic.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	linux-fbdev@vger.kernel.org, dmaengine@vger.kernel.org,
-	linux-fpga@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
-	linux-pm@vger.kernel.org, iommu@lists.linux.dev,
-	linux-media@vger.kernel.org, linux-mtd@lists.infradead.org,
-	netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
-	linux-pci@vger.kernel.org, linux-phy@lists.infradead.org,
-	linux-pwm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-	linux-crypto@vger.kernel.org, linux-sound@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Remove extra blank lines
-Message-ID: <9e828a4b-6012-4e2a-9790-4231f0285309@sirena.org.uk>
-Mail-Followup-To: "Rob Herring (Arm)" <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Andrzej Hajda <andrzej.hajda@intel.com>,
-	Robert Foss <rfoss@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-	Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Georgi Djakov <djakov@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Joerg Roedel <joro@8bytes.org>,
-	Jassi Brar <jassisinghbrar@gmail.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Lee Jones <lee@kernel.org>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Sebastian Reichel <sre@kernel.org>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>,
-	Mathieu Poirier <mathieu.poirier@linaro.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Olivia Mackall <olivia@selenic.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	linux-fbdev@vger.kernel.org, dmaengine@vger.kernel.org,
-	linux-fpga@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
-	linux-pm@vger.kernel.org, iommu@lists.linux.dev,
-	linux-media@vger.kernel.org, linux-mtd@lists.infradead.org,
-	netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
-	linux-pci@vger.kernel.org, linux-phy@lists.infradead.org,
-	linux-pwm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-	linux-crypto@vger.kernel.org, linux-sound@vger.kernel.org,
-	linux-usb@vger.kernel.org
-References: <20251023143957.2899600-1-robh@kernel.org>
+	s=k20201202; t=1761232289;
+	bh=HbjhGK0G5pGUlhH8u9kmGZx/g9Y6CmyLtzSy7KvwPN4=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=cQFAk4o9U+xyOAJNykyTj5Eox2DeAu40D3rBnMNjkreYj4CoQdoln/3ZtajD9fSoI
+	 rlbInngI6r0mu04oelkhMxWxRMQMCFOsia9r3aK9pEEjtvVy5/tpFDqn7XkEyct7q7
+	 mbi7QEn3MmChtO2wU14Dc9s78AuSrgGSDvmoVZS8h80qU2SyZHYevpmlpfNfJsWIBu
+	 hC2NQvWjjxIlTxdtTo5u80GEFQEJXU7IF3q5lankAO22pVGS+YG55OLJH7PnyW6UY7
+	 F8e37kOdQTs+qjAGjoCpSRgV20pOXjrqpkUNQY45LK/GsCx/0gd/UO7z609Yis6bly
+	 x7y5v1zba+fLg==
+Received: by mail-ot1-f49.google.com with SMTP id 46e09a7af769-7bb79ad6857so561386a34.0
+        for <linux-pm@vger.kernel.org>; Thu, 23 Oct 2025 08:11:29 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUl/TC8M09aIbUS1wB8QtfRhgR2sM/c0C/FILHX329iwFXsPYoarpgtAirleVoQ1yPdHCQqmIBhUg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwnENXzZwNs842bY0dGyzJPJyGKi6CqEBfqSjLJjBXWwwQw8YYY
+	mvwi/mWbApRi6KHe5+UjuH9D6kFuxQSjtttWxpnOkHBErcxyTkw4rbJbh69k63hLlvic30+qNi/
+	kHRqJcNIxVnB2zGHNx2zFwTCXPcBNZ1c=
+X-Google-Smtp-Source: AGHT+IEEIqXqLWdKxaISo2plnHeWBU7F4XnnYvFesimjPGTiUUnWaB+9I8ytYhWNwjgu8abqtQKl6S2MMWeJRT3YG6s=
+X-Received: by 2002:a05:6808:181e:b0:441:8f74:f0b with SMTP id
+ 5614622812f47-443a30e0ab6mr9053954b6e.53.1761232288746; Thu, 23 Oct 2025
+ 08:11:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="zar6sraGOQMtGsj4"
-Content-Disposition: inline
-In-Reply-To: <20251023143957.2899600-1-robh@kernel.org>
-X-Cookie: I've got a bad feeling about this.
+References: <20251002113404.3117429-1-srosek@google.com> <20251002113404.3117429-3-srosek@google.com>
+ <CAJZ5v0iQToOkedruYqsowSm8=fxpnyJf86JJHB36E8+aCSZ5Hw@mail.gmail.com> <CAF3aWvFSomq+cm2sj+KjkYw=WODsrwH-VLDL=yOc6o9dqc5hWA@mail.gmail.com>
+In-Reply-To: <CAF3aWvFSomq+cm2sj+KjkYw=WODsrwH-VLDL=yOc6o9dqc5hWA@mail.gmail.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 23 Oct 2025 17:11:17 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0g72U3+u_KedKpZh2TuN-iYbXPcnZhN16oDvi4UqUTr7Q@mail.gmail.com>
+X-Gm-Features: AS18NWBHGY-eaK7GVSIrVckhmfz8bbUTGxn5FaIfLLu6uQlgSHMtDQwK9-F2IfE
+Message-ID: <CAJZ5v0g72U3+u_KedKpZh2TuN-iYbXPcnZhN16oDvi4UqUTr7Q@mail.gmail.com>
+Subject: Re: [PATCH v3 2/6] ACPI: DPTF: Move INT340X device IDs to header
+To: =?UTF-8?Q?S=C5=82awomir_Rosek?= <srosek@google.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Alex Hung <alexhung@gmail.com>, 
+	Hans de Goede <hansg@kernel.org>, Ilpo Jarvinen <ilpo.jarvinen@linux.intel.com>, 
+	AceLan Kao <acelan.kao@canonical.com>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Zhang Rui <rui.zhang@intel.com>, 
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Tomasz Nowicki <tnowicki@google.com>, 
+	Stanislaw Kardach <skardach@google.com>, Michal Krawczyk <mikrawczyk@google.com>, 
+	linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org, 
+	platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Thu, Oct 23, 2025 at 4:41=E2=80=AFPM S=C5=82awomir Rosek <srosek@google.=
+com> wrote:
+>
+> On Wed, Oct 22, 2025 at 8:46=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.=
+org> wrote:
+> >
+> > On Thu, Oct 2, 2025 at 1:34=E2=80=AFPM Slawomir Rosek <srosek@google.co=
+m> wrote:
+> > >
+> > > The ACPI INT340X device IDs are shared between the DPTF core
+> > > and thermal drivers, thus they are moved to the common header.
+> > >
+> > > Signed-off-by: Slawomir Rosek <srosek@google.com>
+> >
+> > I've actually started to wonder if int340x_thermal_handler is needed at=
+ all.
+> >
+> > It just creates a platform device if the given ACPI device ID is in
+> > its list,
+>
+> That's true. It creates platform device for the given ACPI device ID,
+> but only if CONFIG_INT340X_THERMAL is enabled.
+>
+> > but acpi_default_enumeration() would do that too with the
+> > caveat that it would also be done for CONFIG_INT340X_THERMAL unset.
+>
+> Not exactly. scan handler returns ret=3D1, so device is marked as enumera=
+ted
+> https://elixir.bootlin.com/linux/v6.18-rc2/source/drivers/acpi/scan.c#L23=
+14
+>
+> > That should not be a problem though because if CONFIG_INT340X_THERMAL,
+> > there are no drivers that will bind to those platform devices, so the
+> > net outcome should be the same.
+>
+> If CONFIG_INT340X_THERMAL is not set and there are no drivers to attach
+> to platform devices and int340x_thermal_handler is removed then you are
+> right, acpi_default_enumeration() will enumerate ACPI bus anyway and
+> create platform devices for all ACPI device IDs. However, for me it looks
+> like it was intentional to prevent this behaviour unless INT340X drivers
+> are "present" in the system (were enabled for build so should be).
+> I am not sure how DPTF works and what may happen if platform devices are
+> visible in sysfs while drivers are not loaded.
 
---zar6sraGOQMtGsj4
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Such a dependency would be unexpected and confusing.
 
-On Thu, Oct 23, 2025 at 09:37:56AM -0500, Rob Herring (Arm) wrote:
-> Generally at most 1 blank line is the standard style for DT schema
-> files. Remove the few cases with more than 1 so that the yamllint check
-> for this can be enabled.
+Also, I'm not sure why it would be useful because the lack of drivers
+means that the devices in question are not handled, so no
+functionality related to them is provided by the kernel.
 
-Acked-by: Mark Brown <broonie@kernel.org>
+> >
+> > Thus I'm wondering if the way to go might be to drop
+> > int340x_thermal_handler and simply keep the device IDs in the drivers
+> > that use them for device binding.
+>
+> Even better. If it's not required for DPTF to prevent enumeration
+> on the platform bus I can simply remove the scan handler.
 
---zar6sraGOQMtGsj4
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmj6RJUACgkQJNaLcl1U
-h9Bjcgf9H3jj+P7sfeIlnEdfq/Ody/eiqL682HMEokwJEmnrTl7XqELGSxt3FteB
-D40q4Z4wM3EUoz13JTzjaVMThQaIqtuFASfUGTjGv+lUGYgz4RmUvF10nSC8j0Gp
-0BfQgFSLb6G0vzWduYqYXORhQ44Su6ELfkRN3uv2b8+AypiYOlkyMm6qXVOL221W
-8b3HjR2K0RXBVipnKiDNcKxoFWroMDXSeSauuWxAjIQhFQXlW/NfM0p2zJ6f8RF6
-qmdTq99y3bnhhtTF+oofI+LJDhMaRZE18j92TF/Lvn5Cxyck6FLrSAfrveMd6mJ3
-dOE0e7PkFAnvIEhJc0g24Me6PhJJIg==
-=+K+K
------END PGP SIGNATURE-----
-
---zar6sraGOQMtGsj4--
+I would at least try to do that.
 
