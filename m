@@ -1,163 +1,117 @@
-Return-Path: <linux-pm+bounces-36733-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36734-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD2A3C01E63
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Oct 2025 16:51:12 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id D6A3FC01EEF
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Oct 2025 16:57:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9C2EA1A64186
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Oct 2025 14:51:36 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id B08444E1064
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Oct 2025 14:57:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EE70330B27;
-	Thu, 23 Oct 2025 14:51:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D1793321BD;
+	Thu, 23 Oct 2025 14:57:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JHnzFiO0"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="EnRgKBTl"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35F0130E0F9;
-	Thu, 23 Oct 2025 14:51:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BF8931E101;
+	Thu, 23 Oct 2025 14:57:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761231067; cv=none; b=D1CSFd3aKcXWcyQKGGAkPX9V8eFLyjP6yDNocD1EEDHVBZbBo8nMSnC7dIxFh9gL9bwqzxxXAnivuay6yw58/zBTQ8pUsgN1fgwQBjXorpnG8zqULFTf9Ulplnmx4uW5hQe9ORnh/Ad++xiggGI0kzvCE0NH/F9LJ1TduSbbHq0=
+	t=1761231460; cv=none; b=jrm1BmCbQ/TOOV9MVKZk1mhPIiTImVuVNmRmW1j99kyxfzV7AwZ6LJSkOjenCCxEHLGIczG3HpU2yUTHP9AbQJPEn33qPBy397+VpsOGJmV9Tvh2sBBDBTt68KfqtVCHZzLVsq5O55cj9TE3B699HCW6ahQ5H70ChsTOqbq0THo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761231067; c=relaxed/simple;
-	bh=ez3PbUsv1rESznuMiJLqjOGEvPB7lEbaKFWMyfGuR24=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Tq+PHcNIW531PqVYVGNZfQNMeaHc7mSn7HIb7jJm6mx390lNzl5XDWNi8wyT2NSrpe9jvnidfoHsEHhx4LEvZsfxbtxWTHMGH1pHjRnRYWMK7a3tKNhmYMeHE64/tFb2PfurpKzrR5vE3li27mhpHHbCwgT8mAzR2pyTHtIoP5Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JHnzFiO0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 104C0C4CEF7;
-	Thu, 23 Oct 2025 14:51:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761231066;
-	bh=ez3PbUsv1rESznuMiJLqjOGEvPB7lEbaKFWMyfGuR24=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=JHnzFiO06tWmdtxo01tQB8+t4UW5oEUH/c182+Qlqw3JFk0qfYlUX30uXGCJDCmoL
-	 KKfT9MFpe5vEr/17FCOlP0s7j4RGqLJwGKE0DotxclxyO0cqbLq+nKa7C2tA+eN76k
-	 OV7kqnsh/hazV45WCeORtBcaO63fzzWWvI2wtSynPd+K+YJ63fdqHwSee9WzJTn52Q
-	 jXzLpwTyjAH4GBiS8OalknizPk2LVJYyJcw0f7Bduql4/lx1E8QJUPtNDHf/na5lME
-	 tXrA9OcFUtnTxy8BZLLH3/ZgeQ4JvTiAB2CRH1Un9OaCVOmxDEEU65GmtPW8iZwfSK
-	 pUwc8vfAY9tiw==
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-To: Doug Smythies <dsmythies@telus.net>
-Cc: 'Frederic Weisbecker' <frederic@kernel.org>,
- 'LKML' <linux-kernel@vger.kernel.org>,
- 'Peter Zijlstra' <peterz@infradead.org>,
- 'Christian Loehle' <christian.loehle@arm.com>,
- 'Linux PM' <linux-pm@vger.kernel.org>, Doug Smythies <dsmythies@telus.net>
-Subject:
- Re: [PATCH v1 1/3] cpuidle: governors: menu: Avoid selecting states with too
- much latency
-Date: Thu, 23 Oct 2025 16:51:02 +0200
-Message-ID: <5040239.GXAFRqVoOG@rafael.j.wysocki>
-Organization: Linux Kernel Development
-In-Reply-To: <004501dc43c9$ec8aa930$c59ffb90$@telus.net>
-References:
- <2804546.mvXUDI8C0e@rafael.j.wysocki> <5043159.31r3eYUQgx@rafael.j.wysocki>
- <004501dc43c9$ec8aa930$c59ffb90$@telus.net>
+	s=arc-20240116; t=1761231460; c=relaxed/simple;
+	bh=mG5mH0BnC8Km7CQcYib0Nhd6yu8sv5YcIjd9xBIrAI0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hDPmQhPjDQy3Bp3azwmW5EQzzjztfpDMLywV4WimGpv2AcWzBc0qBnnHiq+YgKSS8I2Ww+75w2YutjxgpddeA4icHOPH1bZbiBqQ0S50/0NsCgR4fJ4hQON8OUUc62Cjl/hXo8zLpFZpgEOhXfqk24aJ5Q+LiWVuGqxZe6nBqa8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=EnRgKBTl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D26DDC4CEE7;
+	Thu, 23 Oct 2025 14:57:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1761231459;
+	bh=mG5mH0BnC8Km7CQcYib0Nhd6yu8sv5YcIjd9xBIrAI0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=EnRgKBTlSQ57nMd3Uyh7T3l0HP8JulP6vl6m3yIs+33XK40b5XP04rl6mV+O8oiSY
+	 2e9xXYJfm2VS91ZS580WL2mC/7c5d8LgWvctfOAaZ4Ol1GcehPjGj5Z2qvW8RFybzX
+	 d0FkU6VwFuwQF6J6HBxdAql8RtF86zY8pqsV0+KI=
+Date: Thu, 23 Oct 2025 16:57:36 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Andrzej Hajda <andrzej.hajda@intel.com>,
+	Robert Foss <rfoss@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+	Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Georgi Djakov <djakov@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Joerg Roedel <joro@8bytes.org>,
+	Jassi Brar <jassisinghbrar@gmail.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Lee Jones <lee@kernel.org>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Sebastian Reichel <sre@kernel.org>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>,
+	Mark Brown <broonie@kernel.org>,
+	Mathieu Poirier <mathieu.poirier@linaro.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Olivia Mackall <olivia@selenic.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	linux-fbdev@vger.kernel.org, dmaengine@vger.kernel.org,
+	linux-fpga@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
+	linux-pm@vger.kernel.org, iommu@lists.linux.dev,
+	linux-media@vger.kernel.org, linux-mtd@lists.infradead.org,
+	netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
+	linux-pci@vger.kernel.org, linux-phy@lists.infradead.org,
+	linux-pwm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+	linux-crypto@vger.kernel.org, linux-sound@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Remove extra blank lines
+Message-ID: <2025102328-certainty-unbaked-2ed9@gregkh>
+References: <20251023143957.2899600-1-robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251023143957.2899600-1-robh@kernel.org>
 
-Hi Doug,
+On Thu, Oct 23, 2025 at 09:37:56AM -0500, Rob Herring (Arm) wrote:
+> Generally at most 1 blank line is the standard style for DT schema
+> files. Remove the few cases with more than 1 so that the yamllint check
+> for this can be enabled.
+> 
+> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
 
-On Thursday, October 23, 2025 5:05:44 AM CEST Doug Smythies wrote:
-> Hi Rafael,
-> 
-> Recent email communications about other patches had me
-> looking at this one again. 
-> 
-> On 2025.08.13 03:26 Rafael wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> ... snip...
-> 
-> > However, after the above change, latency_req cannot take the predicted_ns
-> > value any more, which takes place after commit 38f83090f515 ("cpuidle:
-> > menu: Remove iowait influence"), because it may cause a polling state
-> > to be returned prematurely.
-> >
-> > In the context of the previous example say that predicted_ns is 3000 and
-> > the PM QoS latency limit is still 20 us.  Additionally, say that idle
-> > state 0 is a polling one.  Moving the exit_latency_ns check before the
-> > target_residency_ns one causes the loop to terminate in the second
-> > iteration, before the target_residency_ns check, so idle state 0 will be
-> > returned even though previously state 1 would be returned if there were
-> > no imminent timers.
-> >
-> > For this reason, remove the assignment of the predicted_ns value to
-> > latency_req from the code.
-> 
-> Which is okay for timer-based workflow,
-> but what about non-timer based, or interrupt driven, workflow?
-> 
-> Under conditions where idle state 0, or Polling, would be used a lot,
-> I am observing about a 11 % throughput regression with this patch
-> And idle state 0, polling, usage going from 20% to 0%. 
-> 
-> From my testing of kernels 6.17-rc1, rc2,rc3 in August and September
-> and again now. I missed this in August/September:
-> 
-> 779b1a1cb13a cpuidle: governors: menu: Avoid selecting states with too much latency - v6.17-rc3
-> fa3fa55de0d6 cpuidle: governors: menu: Avoid using invalid recent intervals data - v6.17-rc2
-> baseline reference: v6.17-rc1
-> 
-> teo was included also. As far as I can recall its response has always been similar to rc3. At least, recently.
-> 
-> Three graphs are attached:
-> Sampling data once per 20 seconds, the test is started after the first idle sample,
-> and at least one sample is taken after the system returns to idle after the test.
-> The faster the test runs the better.
-> 
-> Test computer:
-> Processor: Intel(R) Core(TM) i5-10600K CPU @ 4.10GHz
-> Distro: Ubuntu 24.04.3, server, no desktop GUI.
-> CPU frequency scaling driver: intel_pstate
-> HWP: disabled.
-> CPU frequency scaling governor: performance
-> Ilde driver: intel_idle
-> Idle governor: menu (except teo for one compare test run)
-> Idle states: 4: name : description:
->   state0/name:POLL                desc:CPUIDLE CORE POLL IDLE
->   state1/name:C1_ACPI          desc:ACPI FFH MWAIT 0x0
->   state2/name:C2_ACPI          desc:ACPI FFH MWAIT 0x30
->   state3/name:C3_ACPI          desc:ACPI FFH MWAIT 0x60
-
-OK, so since the exit residency of an idle state cannot exceed its target
-residency, the appended change (on top of 6.18-rc2) should make the throughput
-regression go away.
-
----
- drivers/cpuidle/governors/menu.c |    7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
-
---- a/drivers/cpuidle/governors/menu.c
-+++ b/drivers/cpuidle/governors/menu.c
-@@ -321,10 +321,13 @@ static int menu_select(struct cpuidle_dr
- 
- 		/*
- 		 * Use a physical idle state, not busy polling, unless a timer
--		 * is going to trigger soon enough.
-+		 * is going to trigger soon enough or the exit latency of the
-+		 * idle state in question is greater than the predicted idle
-+		 * duration.
- 		 */
- 		if ((drv->states[idx].flags & CPUIDLE_FLAG_POLLING) &&
--		    s->target_residency_ns <= data->next_timer_ns) {
-+		    s->target_residency_ns <= data->next_timer_ns &&
-+		    s->exit_latency_ns <= predicted_ns) {
- 			predicted_ns = s->target_residency_ns;
- 			idx = i;
- 			break;
-
-
-
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
