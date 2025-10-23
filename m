@@ -1,71 +1,93 @@
-Return-Path: <linux-pm+bounces-36683-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36684-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED064BFED90
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Oct 2025 03:28:46 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id F136DBFEEE6
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Oct 2025 04:25:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C50FF4EF741
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Oct 2025 01:27:58 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id D418E4EB8A2
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Oct 2025 02:24:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74E28199230;
-	Thu, 23 Oct 2025 01:27:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4208207DE2;
+	Thu, 23 Oct 2025 02:24:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="LZnGxTaU"
+	dkim=pass (2048-bit key) header.d=telus.net header.i=@telus.net header.b="eBG5n+nH"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5AFCEADC;
-	Thu, 23 Oct 2025 01:27:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F16AA8460
+	for <linux-pm@vger.kernel.org>; Thu, 23 Oct 2025 02:24:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761182876; cv=none; b=EgnVgi0I+QYuzbpUEu8UgXi0ZpA4efeJdYQfjcY7Xmh4FiJs0t22we+JENk01d/5GMeJhPO5TCtQ9qRgj75GJxH8Rdy5D58cjZ5f6duQT7go9E1qP5uqPgHkgE2mCNbWgaGlWj3naT4Djl4rQhj7EICP3gBfypIHmwNees1RowQ=
+	t=1761186252; cv=none; b=R3FBkfGKKKSbEKPacGX3bjOSmYCwh5Mxqu77lqyeoKZasRZsRXx++/SgTjrNIK3S4df/66X9pwgsmbJMtfBr77e/KqMaPYx1JeNk7ZnOAo2gEG/+CHHlg4V87qHCoeQ8YpNECDDLMhTln9iESArAvuc0jU6rMaJnh64RHDXwLVM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761182876; c=relaxed/simple;
-	bh=7uTZuWv2cNlK8eryDymfq5OnX6+sdUDtWolkNanxhw0=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=EukPHLw+dElnmiQP66ZSgTBAO5eusS+6P5Fe9tVzT5OiP0oV3gWJD8H+hT8OssOdA514oT4va4TbQ1HlcOEmo83/iKfTT8BJedeF+AOI/XAEJZz5YhniBUA1bHsmEbM0N+Ewscz+3jSjRdo8e6PqvLmzi/Md21McX5dOPSKFmRU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=LZnGxTaU; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
-Received: from ehlo.thunderbird.net (c-76-133-66-138.hsd1.ca.comcast.net [76.133.66.138])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 59N1QtvK2543238
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Wed, 22 Oct 2025 18:26:56 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 59N1QtvK2543238
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2025092201; t=1761182818;
-	bh=mXHwrAsRkwn/Qu1fpL5w/F9o+mSHAOdEPWFNeYZa7M8=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-	b=LZnGxTaURdxwDUo+sDpQhbpg9qH57co5lRtxDB11NnX/Bvzgt/mZuwIjsVzG0mshx
-	 z24en1i2UHaziQnmdEWrnl7rWxWwlcxZXKDLlEq9EEfSGfjqq5ThPsLes6Jpee08ee
-	 Dmmp7S4Px+72BEoRnVEtu0VuKPza0RioCM5BHvgxnETnflj+8o5WUQzz7FY2h8ZpbX
-	 dgMYBpV13LbEweMCv73pqRqQcowN9bXNqFJ1VeApHlww44LmG+Dn2XMYGbXJGrp0cn
-	 BKOcKQ6OY3WTco9xlasoaPUN/+YVpNELL/dfpEwaV09232HlrMHgtA+5J2ofmbGuDk
-	 F0W+vnb58Sz3A==
-Date: Wed, 22 Oct 2025 18:26:55 -0700
-From: "H. Peter Anvin" <hpa@zytor.com>
-To: Pavel Machek <pavel@ucw.cz>
-CC: Dave Hansen <dave.hansen@intel.com>, Fam Zheng <fam.zheng@bytedance.com>,
-        linux-kernel@vger.kernel.org, Lukasz Luba <lukasz.luba@arm.com>,
-        linyongting@bytedance.com, songmuchun@bytedance.com,
-        satish.kumar@bytedance.com, Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>, yuanzhu@bytedance.com,
-        Ingo Molnar <mingo@redhat.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>, fam@euphon.net, x86@kernel.org,
-        liangma@bytedance.com, Dave Hansen <dave.hansen@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, guojinhui.liam@bytedance.com,
-        linux-pm@vger.kernel.org, Thom Hughes <thom.hughes@bytedance.com>
-Subject: Re: [RFC 0/5] parker: PARtitioned KERnel
-User-Agent: K-9 Mail for Android
-In-Reply-To: <aPjJ53F8kBV0/wLH@duo.ucw.cz>
-References: <20250923153146.365015-1-fam.zheng@bytedance.com> <40419dea-666e-4a8d-97a7-fa571d7122f4@intel.com> <AEC34AE1-AEB5-4678-AC9D-39155E97D86C@zytor.com> <aPjJ53F8kBV0/wLH@duo.ucw.cz>
-Message-ID: <8363F839-4A11-4E5D-A34E-CBFCC1588886@zytor.com>
+	s=arc-20240116; t=1761186252; c=relaxed/simple;
+	bh=SVr30Gy0yl93FUQ9VNPO4a87bKc+DSCWdirStpeVB+M=;
+	h=From:To:Cc:References:In-Reply-To:Subject:Date:Message-ID:
+	 MIME-Version:Content-Type; b=gMeRs52QkE8VKKc3D1WvyThmwwqz4N+AGWQX5RTCLOt04Y7qu9il/Obe5HnqTuAT9NMsng6xZQibqlhsoXoNjyrnZn4c8FZ2VjwOF1PBzGk8HR/lgxb2iqqll6LMhGEKa37ztV0QMgjl0zKsobYpNPhA/zd4wUCLj8CB87Zg2IQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=telus.net; spf=pass smtp.mailfrom=telus.net; dkim=pass (2048-bit key) header.d=telus.net header.i=@telus.net header.b=eBG5n+nH; arc=none smtp.client-ip=209.85.210.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=telus.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=telus.net
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-78125ed4052so397650b3a.0
+        for <linux-pm@vger.kernel.org>; Wed, 22 Oct 2025 19:24:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=telus.net; s=google; t=1761186250; x=1761791050; darn=vger.kernel.org;
+        h=thread-index:content-language:content-transfer-encoding
+         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=hPrl+g8MWZLVjr5+X7xKR8IPIJl3i65GUuqXDZ4/RcU=;
+        b=eBG5n+nH9zJ95Fzn+R7fnOhg9otrS9AMVa1A/fHAUzn23pY1VozDCsXiKOZkx9EGnq
+         ZoiiijFynTJX5wEoaP/2pIFr8WN+VYve8GE709kK8X+REdW69dbyX32Qi2jo2nz9Q1Ns
+         +4drH3zC74JcgAuemPQTILk0cxNxuWbjGUK7cuahIeh28G/edeiW5mb8DPr1MQ2VOHOL
+         0HHfuckhu3MOoF8teCW1nKnfWroEOnxfCrpeA2l84qJL4P5cDK/3OyYXMSwaePh9Vq9F
+         8iPLzttBU8HowRjQQcd8GiuV6LddHTqIobrs1dqqyn36itVfEBxBvb6IHDfj8Fy1Zgso
+         qSsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761186250; x=1761791050;
+        h=thread-index:content-language:content-transfer-encoding
+         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hPrl+g8MWZLVjr5+X7xKR8IPIJl3i65GUuqXDZ4/RcU=;
+        b=PGbUX/28La//hlQmIIb0+luBdc732nym5jacSg74ltpfLC6/+DIq8ZG4XkZ2Lo+rGY
+         QP1NF5maer44iftWR5c7VazngpR8zAKUSg6BzbUR1xqo5JQfwVCDdxhq7K4kR9a+Lcy0
+         HqKDFRsjfCrgwjHWAKLUYGEaPlKwDmlsciyYEQoLm75Fl1HNc+kYdut+54Z7MwEXVTAP
+         hiToIU0U2SbbEuC6/LPyqWqDx9apSZD5czNt6bcllmLK6WKup/m+gd5TvArx/xnY75Pf
+         m44ssRI2Lz8he9Kmce55t6x0bblJ4FSNuRScQjxiyu3o4b5fYbxIrTDKrkxW6o7Bgmdo
+         h6qQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW5FOikyckRbE9BfzGJAzuRly94Hmo6Qpq9DHcyZl8laLiUAH5CJsmHngyrZhnLfOY2bNT5kqj+1g==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyo5OocSDLVmD7bk3lvQUrwDlC7yaB8nvnrLgu4R8yjU4/OWn+c
+	997z4HU/664CKnFZWPmI3+HwHtiGtJK/gXiCmPG4R9DpmwcNFUrOcLzmmyDDvczBtOs=
+X-Gm-Gg: ASbGncsYHyGxkP1rHHOd+R2EkFBjN1a1tkdwIZQ+S0LJVplEZfeY5rpyUbChaOteTZ4
+	H7Ttl2yDczhJid08dDPby0PUdS6kHcDQSpHtFZhOAi+mqFSlFbD4PuqJOTJRxa/o6gkfkRn26jP
+	rMzLdW99wLgsjTmDlD88NrV3y9M3ChpO0CMUx4sMH1A20RDdzqprXlsrEF0kc+RlpAlyTXlikVL
+	J8p2FNDxEdZK3bMmYk419phN5A3DyELwkIosjEbVmtQhDNAoarvGCyt/X6mnA9v3dgVRPmQjce/
+	/PQ0CuuxWzZfOyFHsFRkLgkhA7L5E3mH7NkSEquM7sNJSY+NmgcF1fhWGnhUbnu2Wehh1WTG8nw
+	fNLIYtI5mjY2fn+0td6RVEcpAUsPpdlQIdjy5TcUQtsnfQextBgV7/d+w35gavMJMOJsMeVeNty
+	0OGY/f22L3edY+ICoCSLQJ9GEdvaBK/PaVjt788kKCUQp4stif8gCmLPc=
+X-Google-Smtp-Source: AGHT+IFwycBqDK/MPavB8G4BR9E3C2atxDC6Fo7M4NKNuTfl2rx4e6P8+xg4h4rSnxEx94PbV5suKA==
+X-Received: by 2002:a05:6a20:a123:b0:324:6e84:d170 with SMTP id adf61e73a8af0-334a856d518mr32518220637.15.1761186250263;
+        Wed, 22 Oct 2025 19:24:10 -0700 (PDT)
+Received: from DougS18 (s66-183-142-209.bc.hsia.telus.net. [66.183.142.209])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b6cf4e12d6asm488383a12.21.2025.10.22.19.24.09
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 22 Oct 2025 19:24:09 -0700 (PDT)
+From: "Doug Smythies" <dsmythies@telus.net>
+To: "'Sergey Senozhatsky'" <senozhatsky@chromium.org>
+Cc: "'Rafael J. Wysocki'" <rafael@kernel.org>,
+	"'Christian Loehle'" <christian.loehle@arm.com>,
+	"'Linux PM'" <linux-pm@vger.kernel.org>,
+	"'LKML'" <linux-kernel@vger.kernel.org>,
+	"'Artem Bityutskiy'" <artem.bityutskiy@linux.intel.com>,
+	"'Tomasz Figa'" <tfiga@chromium.org>,
+	"Doug Smythies" <dsmythies@telus.net>
+References: <4687373.LvFx2qVVIh@rafael.j.wysocki> <5f0aa630-b30a-44c4-a52c-e08179cd3bf9@arm.com> <CAJZ5v0gBtv0bpK2swkc6D0AmanpKAvqO53dgRp2e7p9cWAM3TA@mail.gmail.com> <28ecb23b-ecee-409a-9771-24f801081d07@arm.com> <CAJZ5v0jMoEVUaYYPx6EtHFxsg6TF-QtDWJGrasGK7C2C+JxOFw@mail.gmail.com> <001801dc4041$607c19f0$21744dd0$@telus.net> <x4qvjfwxzatm6wnrtqgue7y673oqzo74i6ysmxalvnts5olkot@ekaee62fjg5l> <001201dc4297$3903af70$ab0b0e50$@telus.net> <zq6mqdrq2kxmyga2skrizuj63ocbab2o2k3ogeufq3sydmwyuo@epxcrwomkvvp>
+In-Reply-To: <zq6mqdrq2kxmyga2skrizuj63ocbab2o2k3ogeufq3sydmwyuo@epxcrwomkvvp>
+Subject: RE: [PATCH v1] cpuidle: governors: menu: Predict longer idle time when in doubt
+Date: Wed, 22 Oct 2025 19:24:11 -0700
+Message-ID: <001d01dc43c4$1f131eb0$5d395c10$@telus.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -73,53 +95,36 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+	charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Content-Language: en-ca
+Thread-Index: AQEHjVQKCrlPynWgLAaVpIarC+pGJQGZtDQKAi3SGCUCWYi7hgLZuqUGAZPsdfIBj3Y3eQKrbtlkAf5ekF218ivVcA==
 
-On October 22, 2025 5:11:19 AM PDT, Pavel Machek <pavel@ucw=2Ecz> wrote:
->On Wed 2025-09-24 12:01:52, H=2E Peter Anvin wrote:
->> On September 24, 2025 8:22:54 AM PDT, Dave Hansen <dave=2Ehansen@intel=
-=2Ecom> wrote:
->> >On 9/23/25 08:31, Fam Zheng wrote:
->> >> In terms of fault isolation or security, all kernel instances share
->> >> the same domain, as there is no supervising mechanism=2E A kernel bu=
-g
->> >> in any partition can cause problems for the whole physical machine=
-=2E
->> >> This is a tradeoff for low-overhead / low-complexity, but hope in
->> >> the future we can take advantage of some hardware mechanism to
->> >> introduce some isolation=2E
->> >I just don't think this is approach is viable=2E The buck needs to sto=
-p
->> >_somewhere_=2E You can't just have a bunch of different kernels, with
->> >nothing in charge of the system as a whole=2E
->> >
->> >Just think of bus locks=2E They affect the whole system=2E What if one
->> >kernel turns off split lock detection? Or has a different rate limit
->> >than the others? What if one kernel is a big fan of WBINVD? How about
->> >when they use resctrl to partition an L3 cache? How about microcode up=
-dates?
->> >
->> >I'd just guess that there are a few hundred problems like that=2E Mayb=
-e more=2E
->> >
->> >I'm not saying this won't be useful for a handful of folks in a tightl=
-y
->> >controlled environment=2E But I just don't think it has a place in
->> >mainline where it needs to work for everyone=2E
->>=20
->> Again, this comes down to why a partitioning top level hypervisor is Th=
-e Right Thing[TM]=2E
->>=20
->> IBM mainframes are, again, the archetype here, having done it
->> standard since VM/370 in 1972=2E This was running on machines with a
->> *maximum* of 4 MB memory=2E
+On 2025.10.22 01:01 Sergey Senozhatsky wrote:
+> On (25/10/21 07:30), Doug Smythies wrote:
+>> For your system booted with "base" and "revert" do:
+>> 
+>> echo performance | sudo tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+>> echo 2300000 | sudo tee /sys/devices/system/cpu/cpufreq/policy*/scaling_max_freq
 >
->Is there a good resource on IBM mainframes, prefferably written in
->language that can be understood by mostly x86 kernel hacker?
+> Alright, here are the results:
+> 
+> ~ # echo performance | sudo tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+> performance
+> ~ # echo 2300000 | sudo tee /sys/devices/system/cpu/cpufreq/policy*/scaling_max_freq
+> 2300000
 >
->BR,
->								Pavel
+> Base:		52.5
+> Revert:	45.5
 
-I don't know=2E=2E=2E perhaps ask the s390 guys?
+So, still 15.4 %.
+
+Thank you very much.
+I wish I could create a test that would show such results on my test computer and believe me I have tried.
+I haven't been able to.
+
+... Doug
+
+
 
