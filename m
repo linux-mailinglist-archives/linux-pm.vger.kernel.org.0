@@ -1,119 +1,138 @@
-Return-Path: <linux-pm+bounces-36721-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36722-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA485C0133D
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Oct 2025 14:46:27 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5129C01448
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Oct 2025 15:09:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 4057F35A5D8
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Oct 2025 12:46:27 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 910C635195B
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Oct 2025 13:09:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E52CD13DBA0;
-	Thu, 23 Oct 2025 12:46:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hqdpin9J"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BEB6314A8D;
+	Thu, 23 Oct 2025 13:09:14 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C15714086A
-	for <linux-pm@vger.kernel.org>; Thu, 23 Oct 2025 12:46:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEF07313544;
+	Thu, 23 Oct 2025 13:09:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761223582; cv=none; b=FDKfKeE3BiUHTSmICmsZVZt8hT0Ds87MLAzOQ+EFE7b8ooJmszb3ON9/SQnujopi/84v2YPUVqcpDglFGt9uiFAsrPV/QwtmHoYa/cR8D6NWxBiZxkhfjG8842zUTxfenNY2kub1YQhazagHQcpiWZ6gld1+q1v26D8bYwO4YaE=
+	t=1761224954; cv=none; b=NkLhz2Q+ge0pMs3dvZ/2mbsl0BPtfnIAwjyjuin69dzYduXki/8ww44mJke9L+gbxLHPQc2BITPUCP101Ne5J+CS0ewDnkP+cfquKz+xl0iY93lTtBcId+wewSMIkx8n91zHgO7XqVp7+V1mgDleaAKifOg7l0B0Cig5szG66Xw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761223582; c=relaxed/simple;
-	bh=Sizf7CGeACdwP7gOc5o1U4haoeWMTWq90HUAkt/cODY=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=CfD2YncSvS07bf2vgMs/2GiALzWmN1acMwvR95+RUhaGi8jL1vnErwPdQL2YEIuPf4IcecOKU9uLmeAZBD0rbLZbiRA/7trZyBNTUQ7x84bG404SxdA3CEBAH+vVQXhaY0Z6MjTszdT1J3RB3WJDvd4qtgeQgN3Wb9eTnSGsJbs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hqdpin9J; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 780B6C4CEE7
-	for <linux-pm@vger.kernel.org>; Thu, 23 Oct 2025 12:46:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761223582;
-	bh=Sizf7CGeACdwP7gOc5o1U4haoeWMTWq90HUAkt/cODY=;
-	h=From:Date:Subject:To:Cc:From;
-	b=hqdpin9JHOvvwCEmLhnNbj1Ay+lVvqZEGDQM6WUUMvq7Z2BnfuKKWk296WeF/vtfD
-	 ydNGqqZ+8ow00z6BGS49o5hKNQjFfDdt2sBxvKQNz4L5PicY9KlNnRdHb8UgGAHyap
-	 MM9dLXGk20SdgJRoz61Cph/ZpuoKsM1N3dfTWwlyO1ndQvfeY3wJsK4E8fNqAVw5Vq
-	 96c+OzFd/mJGAlSsD8w4G2wQ/blssiBpY9241A/8T5oax2E41rYksjrpyxP2NIJ3ho
-	 xMUU18xBqO0qn1MJ4zTp5MEpyNLOgjwPJ2mNso0FoJNbPP1aWeGwgOdQFGQahGI4gX
-	 ywWDa9jjQsgrQ==
-Received: by mail-oi1-f182.google.com with SMTP id 5614622812f47-4444887d8d1so379443b6e.1
-        for <linux-pm@vger.kernel.org>; Thu, 23 Oct 2025 05:46:22 -0700 (PDT)
-X-Gm-Message-State: AOJu0YzcF+fBKmZw2WzCkITt/grANqkQPaU1+oMHEOq6WLM3EdW9glgS
-	LqS/1/lvQGEvX9W1ScYmPo6/EjobqXQi/YuMiFTbu7PwPAbfQ1Cja3K7Xjlsf5qz3ER/EX1v0RF
-	8Ebnx+mVJpBWovRrSiMWAjdpUe9a4Tkg=
-X-Google-Smtp-Source: AGHT+IHOn8VUQsDPmWsiYFCKPqh/+AVdKwBQAHtuCTh8mhrqvInJacgO2I2XTeiGIxF8SMEI+t8beoax3YHZT/p+u8A=
-X-Received: by 2002:a05:6808:2f12:b0:443:a060:28e5 with SMTP id
- 5614622812f47-44bd4307e34mr832695b6e.48.1761223581811; Thu, 23 Oct 2025
- 05:46:21 -0700 (PDT)
+	s=arc-20240116; t=1761224954; c=relaxed/simple;
+	bh=LY+i7YCMScinIDDvmpsQhev0bahRF1MSCvBZv/Dlh7Q=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=o5DPkCS0gCMMoEWsl4giOLBuzS9FyQYC15jhzcL4uMkWMAsE2sYCrSmADuTDDzUHq767dNbN4BY4I+x6psjktGKkcx5vJczNYeEyiUIOrac2axgjhSo8CPSyRu/mcEKDv39fF9066W4WuxR54drSLY+UY+Idu0D9Khwb5v+DTks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2C6EF1516;
+	Thu, 23 Oct 2025 06:09:03 -0700 (PDT)
+Received: from [10.57.3.59] (unknown [10.57.3.59])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E65E83F63F;
+	Thu, 23 Oct 2025 06:09:08 -0700 (PDT)
+Message-ID: <eb9abe9d-3d12-4bf1-85da-deb38b8da321@arm.com>
+Date: Thu, 23 Oct 2025 14:09:36 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 23 Oct 2025 14:46:10 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0iGoHmc0bV2WC-pvok6a-teOR76XnmSUu_LBromN-kFRQ@mail.gmail.com>
-X-Gm-Features: AS18NWCGVExabVNosS-Hym7XJ6gfOtuPFAH_FVR5bTGW_F-oXKAIVG3ckszRQr8
-Message-ID: <CAJZ5v0iGoHmc0bV2WC-pvok6a-teOR76XnmSUu_LBromN-kFRQ@mail.gmail.com>
-Subject: [GIT PULL] Power management fixes for v6.18-rc3
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Linux PM <linux-pm@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Mario Limonciello <mario.limonciello@amd.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 0/5] PM QoS: Add CPU affinity latency QoS support and
+ resctrl integration
+To: Zhongqiu Han <quic_zhonhan@quicinc.com>
+Cc: linux-pm@vger.kernel.org, lenb@kernel.org, christian.loehle@arm.com,
+ amit.kucheria@linaro.org, ulf.hansson@linaro.org, james.morse@arm.com,
+ Dave.Martin@arm.com, reinette.chatre@intel.com, tony.luck@intel.com,
+ pavel@kernel.org, linux-kernel@vger.kernel.org, rafael@kernel.org
+References: <20250721124104.806120-1-quic_zhonhan@quicinc.com>
+Content-Language: en-US
+From: Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20250721124104.806120-1-quic_zhonhan@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Linus,
+Hi Zhongqui,
 
-Please pull from the tag
+My apologies for being a bit late with my comments...
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- pm-6.18-rc3
+On 7/21/25 13:40, Zhongqiu Han wrote:
+> Hi all,
+> 
+> This patch series introduces support for CPU affinity-based latency
+> constraints in the PM QoS framework. The motivation is to allow
+> finer-grained power management by enabling latency QoS requests to target
+> specific CPUs, rather than applying system-wide constraints.
+> 
+> The current PM QoS framework supports global and per-device CPU latency
+> constraints. However, in many real-world scenarios, such as IRQ affinity
+> or CPU-bound kernel threads, only a subset of CPUs are
+> performance-critical. Applying global constraints in such cases
+> unnecessarily prevents other CPUs from entering deeper C-states, leading
+> to increased power consumption.
+> 
+> This series addresses that limitation by introducing a new interface that
+> allows latency constraints to be applied to a CPU mask. This is
+> particularly useful on heterogeneous platforms (e.g., big.LITTLE) and
+> embedded systems where power efficiency is critical for example:
+> 
+>                          driver A       rt kthread B      module C
+>    CPU IDs (mask):         0-3              2-5              6-7
+>    target latency(us):     20               30               100
+>                            |                |                |
+>                            v                v                v
+>                            +---------------------------------+
+>                            |        PM  QoS  Framework       |
+>                            +---------------------------------+
+>                            |                |                |
+>                            v                v                v
+>    CPU IDs (mask):        0-3            2-3,4-5            6-7
+>    runtime latency(us):   20             20, 30             100
+> 
+> The current implementation includes only cpu_affinity_latency_qos_add()
+> and cpu_affinity_latency_qos_remove() interfaces. An update interface is
+> planned for future submission, along with PM QoS optimizations in the UFS
+> subsystem.
+> 
+> Patch1 introduces the core support for CPU affinity latency QoS in the PM
+> QoS framework.
+> 
+> Patch2 removes redundant KERN_ERR prefixes in WARN() calls in the global
+> CPU PM QoS interface. This change addresses issues in existing code and is
+> not related to the new interface introduced in this patch series.
+> 
+> Patch3 adds documentation for the new interface.
+> 
+> Patch4 fixes a minor documentation issue related to the return type of
+> cpu_latency_qos_request_active(). This change addresses issues in existing
+> doc and is not related to the new interface introduced in this patch
+> series.
+> 
+> Patch5 updates the resctrl pseudo-locking logic to use the new CPU
+> affinity latency QoS helpers, improving clarity and consistency. The only
+> functional and beneficial change is that the new interface actively wakes
+> up CPUs whose latency QoS values have changed, ensuring the latency limit
+> takes effect immediately.
 
-with top-most commit b62bd2cf7e991efbc823665e54dd7d7d8372c33b
+Could you describe a bit more the big picture of this proposed design,
+please?
 
- Merge branches 'pm-cpuidle' and 'pm-cpufreq'
+Ideally with some graph of connected frameworks & drivers and how they
+are going to work together.
 
-on top of commit 211ddde0823f1442e4ad052a2f30f050145ccada
+E.g.:
+1. what are the other components in the kernel which would use this
+feature?
+2. is there also a user-space interface planned for it so a HAL in
+the middle-ware would configure these "short-wake-up-CPU"?
+3. Is it possible to view/debug from the user-space which component
+requested this setting for some subsets of cpus?
 
- Linux 6.18-rc2
+Regards,
+Lukasz
 
-to receive power management fixes for 6.18-rc3.
-
-These revert a cpuidle menu governor commit leading to a performance
-regression, fix an amd-pstate driver regression introduced recently,
-and fix new conditional guard definitions for runtime PM.
-
- - Add missing _RET == 0 condition to recently introduced conditional
-   guard definitions for runtime PM (Rafael Wysocki)
-
- - Revert a cpuidle menu governor change that introduced a serious
-   performance regression on Chromebooks with Intel Jasper Lake
-   processors (Rafael Wysocki)
-
- - Fix an amd-pstate driver regression leading to EPP=0 after
-   hibernation (Mario Limonciello)
-
-Thanks!
-
-
----------------
-
-Mario Limonciello (AMD) (1):
-      cpufreq/amd-pstate: Fix a regression leading to EPP 0 after hibernate
-
-Rafael J. Wysocki (2):
-      Revert "cpuidle: menu: Avoid discarding useful information"
-      PM: runtime: Fix conditional guard definitions
-
----------------
-
- drivers/cpufreq/amd-pstate.c     |  6 +++++-
- drivers/cpuidle/governors/menu.c | 21 +++++++++------------
- include/linux/pm_runtime.h       |  8 ++++----
- 3 files changed, 18 insertions(+), 17 deletions(-)
 
