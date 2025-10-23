@@ -1,104 +1,112 @@
-Return-Path: <linux-pm+bounces-36752-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36753-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id B9C12C02ADC
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Oct 2025 19:13:10 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7ED2FC02C90
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Oct 2025 19:46:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id EF549349EB0
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Oct 2025 17:13:05 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4E70F4FCCDF
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Oct 2025 17:46:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF39E2DAFA5;
-	Thu, 23 Oct 2025 17:13:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D008734B1B1;
+	Thu, 23 Oct 2025 17:45:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Sc1j2XTj"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="g1o99av/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95D3F235063;
-	Thu, 23 Oct 2025 17:13:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5EA01E51FA;
+	Thu, 23 Oct 2025 17:45:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761239581; cv=none; b=kxGiRKw/Md37sMb89ejiVzi29rHUlmJ/Fzj8DDCBIQIPMZYLS0e+jbC1QOTZ5ITZXgwBGxbofFu+FMsKBrj+oVlFha5xtT+++aXpQmgp27CLpDgJthyWISBf6DO6v/kv0dWKfTk5h/W2fIaG2Z3Lh5NzrGQePoqpOur2EHNJrZ4=
+	t=1761241551; cv=none; b=alMhtPpejdy34mZ6B5sK3BrbbNzLomIlM21JRthTT1xflAsQ8p+qI7obPYEfDQ0ONkL+EfAFrTnF8qsohn+oBq8Inp5whBApfXThAcdRSsVcrA2P6VElo/OqrAqSj2/I6U3OVYRIAqQ5EBPGdEBiJnd/wfuiRurQ9+XZ9WTNuBs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761239581; c=relaxed/simple;
-	bh=uThquYsLE/eESBSNMrBv+gcGJQb1x5hHE3EyT9MbTp4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Ltiff9GFgoc6UTd6THzzWnVLs8kpUnDurn8oz5DaO1JUpaGj+CI2T2HSNWaZYcMXyylWPFiMjhm/oST4MJPfNBfri1ao6S8klH0E+F+Pr/zxKWK6uoNOGWZGo/YJMSMfjefPAXOcKePgeaWV6HEDM8eQgCWR09ya0jdG0Dwgmo8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Sc1j2XTj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02251C4CEE7;
-	Thu, 23 Oct 2025 17:12:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761239581;
-	bh=uThquYsLE/eESBSNMrBv+gcGJQb1x5hHE3EyT9MbTp4=;
-	h=From:To:Cc:Subject:Date:From;
-	b=Sc1j2XTjrruOB6MUoCqJOu6NtZchvbHwLKK7U/10WUVPmQ7Qd4CYOOdTvyE2cG1Kj
-	 NM20Wg1k1qhn2kA0EwVuZlBuyOt5jB4qubpruettgccxK6UVrKt2bXr5n/gNoqyW3W
-	 OHjCIGfTcNipWlHyX0LiLQkCPrk6WOgqKEFU4TGO4Qbqs5leLvO5FlJ4y1Kc8guoz2
-	 oYG69cWhaAJFU5It5O5Pk+oUFoESXuSObsJeTiWhyRqBGaL33wh9S5uM52s01QiuUp
-	 miCkmuEYKibTIkZy9Fk3iejGD2bjWVhADW4YfSZBcXV9OmHp6s9+BilyGChEuUanBm
-	 QLu1TlQXFw5fg==
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-To: Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, Doug Smythies <dsmythies@telus.net>,
- Christian Loehle <christian.loehle@arm.com>
-Subject:
- [PATCH v1] cpuidle: governors: menu: Select polling state in some more cases
-Date: Thu, 23 Oct 2025 19:12:57 +0200
-Message-ID: <12786727.O9o76ZdvQC@rafael.j.wysocki>
-Organization: Linux Kernel Development
+	s=arc-20240116; t=1761241551; c=relaxed/simple;
+	bh=fo/oAnscwjde4LCMUKNl1gbrSUoCohsiDSRwkKBt0xA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=seGFQTiJtQKcHaOh2oivOXQo2Wf961d0GrtsIQRsNi4fhhlYJc7ueLyJ3h4ElNK8Z40JxOylxrq21Lxk4qa7SjBXYiSuq9EUL3aNZCmApd+F1YexQnKOli7hJoyJYArsmjpMi94Fz2gFJctaX/OB9WbsExNbVxidC+QlGnurwNs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=g1o99av/; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1761241550; x=1792777550;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=fo/oAnscwjde4LCMUKNl1gbrSUoCohsiDSRwkKBt0xA=;
+  b=g1o99av/jYlXDTNtbQ4oxT1qMrAgHSwVqnoRprsmQ6uqPQN8uaLSwBvL
+   z4/k25Qsy/uVV46lVi2TaAVvnkxDHi2HtDePQaIotu0xenAIgWd+AtqCt
+   WP8pQhu30rO0Df0ydPxvJdXPekOIj/Ekq/AyR0z/LUycTq+C60OYulhWv
+   /GJDteSLoQ9cLPKPf2U120flRx9/+JvMmYsc4SZrPNIpDB+AG/AvX2OWK
+   sbQ7T7p9Z1msW3Nl8KJEqnfyYCQlC7n0bS5UeXCVf5U0YMvkkuqqPpoep
+   nEzj5PF8nv6VhFB4ReRc3RhjCg6Vs4zQyOPBysiomR5BP/8Xz31yFIcfl
+   Q==;
+X-CSE-ConnectionGUID: yaQzPf0kQxCuVKhb8N8AOg==
+X-CSE-MsgGUID: j+Tm4YcTTUW3o7obcBWXLw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="86049089"
+X-IronPort-AV: E=Sophos;i="6.19,250,1754982000"; 
+   d="scan'208";a="86049089"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2025 10:45:50 -0700
+X-CSE-ConnectionGUID: 1JbWohCvRsGtqMWWhoYKIg==
+X-CSE-MsgGUID: UI9CnhgbSjiiy1tD1nQYPA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,250,1754982000"; 
+   d="scan'208";a="184116352"
+Received: from spandruv-desk.jf.intel.com ([10.54.55.20])
+  by orviesa007.jf.intel.com with ESMTP; 23 Oct 2025 10:45:49 -0700
+From: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To: rafael@kernel.org
+Cc: linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH] powercap: intel_rapl: Add support for Wildcat Lake platform
+Date: Thu, 23 Oct 2025 10:45:32 -0700
+Message-ID: <20251023174532.1882008-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Add Wildcat Lake to the list of supported processors for RAPL.
 
-A throughput regression of 11% introduced by commit 779b1a1cb13a ("cpuidle:
-governors: menu: Avoid selecting states with too much latency") has been
-reported and it is related to the case when the menu governor checks if
-selecting a proper idle state instead of a polling one makes sense.
-
-In particular, it is questionable to do so if the exit latency of the
-idle state in question exceeds the predicted idle duration, so add a
-check for that, which is sufficient to make the reported regression go
-away, and update the related code comment accordingly.
-
-Fixes: 779b1a1cb13a ("cpuidle: governors: menu: Avoid selecting states with too much latency")
-Closes: https://lore.kernel.org/linux-pm/004501dc43c9$ec8aa930$c59ffb90$@telus.net/
-Reported-by: Doug Smythies <dsmythies@telus.net>
-Tested-by: Doug Smythies <dsmythies@telus.net>
-Cc: All applicable <stable@vger.kernel.org>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 ---
- drivers/cpuidle/governors/menu.c |    7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ drivers/powercap/intel_rapl_common.c | 1 +
+ drivers/powercap/intel_rapl_msr.c    | 1 +
+ 2 files changed, 2 insertions(+)
 
---- a/drivers/cpuidle/governors/menu.c
-+++ b/drivers/cpuidle/governors/menu.c
-@@ -321,10 +321,13 @@ static int menu_select(struct cpuidle_dr
+diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
+index c7e7f9bf5313..cdb4363589e9 100644
+--- a/drivers/powercap/intel_rapl_common.c
++++ b/drivers/powercap/intel_rapl_common.c
+@@ -1284,6 +1284,7 @@ static const struct x86_cpu_id rapl_ids[] __initconst = {
+ 	X86_MATCH_VFM(INTEL_EMERALDRAPIDS_X,	&rapl_defaults_spr_server),
+ 	X86_MATCH_VFM(INTEL_LUNARLAKE_M,	&rapl_defaults_core),
+ 	X86_MATCH_VFM(INTEL_PANTHERLAKE_L,	&rapl_defaults_core),
++	X86_MATCH_VFM(INTEL_WILDCATLAKE_L,	&rapl_defaults_core),
+ 	X86_MATCH_VFM(INTEL_ARROWLAKE_H,	&rapl_defaults_core),
+ 	X86_MATCH_VFM(INTEL_ARROWLAKE,		&rapl_defaults_core),
+ 	X86_MATCH_VFM(INTEL_ARROWLAKE_U,	&rapl_defaults_core),
+diff --git a/drivers/powercap/intel_rapl_msr.c b/drivers/powercap/intel_rapl_msr.c
+index 4ed06c71a3ac..c4d536c2f989 100644
+--- a/drivers/powercap/intel_rapl_msr.c
++++ b/drivers/powercap/intel_rapl_msr.c
+@@ -151,6 +151,7 @@ static const struct x86_cpu_id pl4_support_ids[] = {
+ 	X86_MATCH_VFM(INTEL_ARROWLAKE_U, NULL),
+ 	X86_MATCH_VFM(INTEL_ARROWLAKE_H, NULL),
+ 	X86_MATCH_VFM(INTEL_PANTHERLAKE_L, NULL),
++	X86_MATCH_VFM(INTEL_WILDCATLAKE_L, NULL),
+ 	{}
+ };
  
- 		/*
- 		 * Use a physical idle state, not busy polling, unless a timer
--		 * is going to trigger soon enough.
-+		 * is going to trigger soon enough or the exit latency of the
-+		 * idle state in question is greater than the predicted idle
-+		 * duration.
- 		 */
- 		if ((drv->states[idx].flags & CPUIDLE_FLAG_POLLING) &&
--		    s->target_residency_ns <= data->next_timer_ns) {
-+		    s->target_residency_ns <= data->next_timer_ns &&
-+		    s->exit_latency_ns <= predicted_ns) {
- 			predicted_ns = s->target_residency_ns;
- 			idx = i;
- 			break;
-
-
+-- 
+2.51.0
 
 
