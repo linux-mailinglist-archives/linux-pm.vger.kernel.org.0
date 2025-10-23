@@ -1,120 +1,148 @@
-Return-Path: <linux-pm+bounces-36713-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36714-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98071C00927
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Oct 2025 12:50:22 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 81DF8C009F9
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Oct 2025 13:04:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6FD0919A80D1
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Oct 2025 10:50:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DD7C23AFE54
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Oct 2025 11:04:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67306309EF4;
-	Thu, 23 Oct 2025 10:50:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEDC230B514;
+	Thu, 23 Oct 2025 11:03:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z/Qh9TlN"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="r1JINhMV"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B44E29B8C7
-	for <linux-pm@vger.kernel.org>; Thu, 23 Oct 2025 10:50:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF47C2FE573
+	for <linux-pm@vger.kernel.org>; Thu, 23 Oct 2025 11:03:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761216618; cv=none; b=fAl0n6RfMIZQtTopYHl6KEU3kLHYUkQnxiMVT8MEMKqJat5Q2DzpfHi6oTH623wlokMZqoGBpXTm4ddtmcR8pNZeoCXDSmEdKXgcjvmIGCW+b+eVYRRnlCetRk7Kw9Io50NBuqbv7w64KK8YxKNBdnJzS60YnVxnbiCjg7gvEkU=
+	t=1761217438; cv=none; b=Yi7Y+cpaKvp6yrAMH3tr59zMkhuUcevek/qCTETLCTx4w+lQJvjNM3wRoOF9BIoRZ9+trcl2pRNpqNIvlt+pDgBoMFzZmJ7B+lDWAz5YqPF2KczBPatk8M1gpOa8IwtfoJMupE3rmBBrXwq7phDllbOh6Wxs46ggySF37O9p06Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761216618; c=relaxed/simple;
-	bh=hHgcggWZ/t9HSfTPGxpCUE3xglrsVpf1BDu/EKLJTIo=;
+	s=arc-20240116; t=1761217438; c=relaxed/simple;
+	bh=kBsrJnbxBkr/fO6jx2/I7vg7Jb+qOy1iGAu9156yEwk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZoWw0Neg3ed2pzlJZQC0o9cWV2umz4q1QA24yCRQTfW94wzZIBqRFImMPhax2DkJxSqPHN1+AaJR/mqUwJtZ+O7/WDzJSRHnVpy4XCqHiZxQ+o7w5eYVxyfBqvL2ZLfpH4h85Uk3Vn3sKb4p5mTw9hlpzTZQMuKITOmJC8zLIRU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z/Qh9TlN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC0FCC4CEF7
-	for <linux-pm@vger.kernel.org>; Thu, 23 Oct 2025 10:50:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761216617;
-	bh=hHgcggWZ/t9HSfTPGxpCUE3xglrsVpf1BDu/EKLJTIo=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Z/Qh9TlNZMhSikFb104aHroPLsZVaxMwcRwB29PXAHj66rbIOKhxo3caSslysOhOR
-	 eBbNQVbhOjZAZEOlKwuO5USFhDUzMfjJs0PWGHWUi4UraPXrkRL0v2l8CJVnk8PLqg
-	 oHW3Nj+Pp8avk8Ycp6EhO8PoMY8AP3qLVf6FEy5bfgzoC9bVUoSYzg23pXJWxFzLja
-	 ZXUQsoUtClErPrYg3NpHlz3CkJpCCzVfEn91OwhrGGP/lw60N4sFJddjR6UMEmgm9Y
-	 j9lXsPdY2+JF6A6CwdysIS+LDNZSm6O7kOQgkMiUk9OdKli/JWvmGTCgF9KCgvdNoY
-	 LBHGbaV+f6Q1A==
-Received: by mail-oi1-f181.google.com with SMTP id 5614622812f47-443b4d7e927so349231b6e.1
-        for <linux-pm@vger.kernel.org>; Thu, 23 Oct 2025 03:50:17 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU2tbYGediYuOsG9AdVSl+xAPn4nlk0Cy6L54DMxu4v96Oo0zgxstoLW2Q8b3iztC82UbJcsjYbVA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx+jhk6UMLKRKQ8j1WoFrmWBAbt//SnlCfJI1EbdBJ1T5q7UDgA
-	Ncxtzwx49XMiN3grEvEpzqO+O0iV5TCE1fQ7l+Br2N1oDDxKTCmkE1XDmppwWt7aG0mxkF9e7rY
-	HCa1IoxsQn4sJS1gnOvFKv3ieoqKqq1c=
-X-Google-Smtp-Source: AGHT+IGCfWJiyXHV8J67lDH/mXJwOHR5+Oi30gvPpLfBalmvkb+jEOEeqsxZwOcsTBY210AxGsxZJVUKyrgU9edhkdc=
-X-Received: by 2002:a05:6808:1383:b0:43f:6d5a:9cdc with SMTP id
- 5614622812f47-443a2e90a97mr9424461b6e.23.1761216617126; Thu, 23 Oct 2025
- 03:50:17 -0700 (PDT)
+	 To:Cc:Content-Type; b=s+47LJu5TB11SB2SippwdhXZJD1jjDypRFu7yZpxGiIWu2rne9hnCZvTSKRj3u1YqW57FSzaaBR4fQQ5vTvn/S2C2ajdkEI/1sYSjT6/P2aHR94CbBVu/xLq3FJk+g91SxqFEhZml11B3DKz6Y+xdeDNfBnNuttZG7PQVNN+HD8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=r1JINhMV; arc=none smtp.client-ip=209.85.128.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-7847ee5f59dso8757267b3.2
+        for <linux-pm@vger.kernel.org>; Thu, 23 Oct 2025 04:03:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1761217436; x=1761822236; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=s7kfTDQj4kvXnrctF0hqqEzRvRC3TedEvs2k0hyX+5Y=;
+        b=r1JINhMVuEvrTH0Y0mbR4JGF+rHZKQC6v67TL3rK0ZxlzdDALF2hVfF7qAstJh1Yfv
+         7L3eRrR7Egd8nBo1zAk5ep37v+VFAjK/9ytsTsgTOE5/cQA0Yl09QrRbAlQQF3bLUnQh
+         O9/A+zmrMOASiwM04zBi53L714qumG8OARQX/Bdd2JOTLWiDutgifqLGNNKqVGZWLFMk
+         NiBWril2NEzNZ23oyW3fsH+hdPx0ojf5KVaYiaHMbhDFZ2f0ScD0XkRew51oHiemU4wL
+         eodafF8WCrL0yEmhHT7RXjvkZHdtiMarU/MfrTyziJc6FilEQnibwaUCI4Y0HTZkVU4I
+         4HdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761217436; x=1761822236;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=s7kfTDQj4kvXnrctF0hqqEzRvRC3TedEvs2k0hyX+5Y=;
+        b=vzrffvpjDu0XwH8bzjdZmXa1Uc71m59F1jxGrOEYJimxKbZa8Oupr6bY/OmHOWc1Vv
+         zeG/R0lUCuPEWVh7rJBV+WvXhs6d0LU0a9VA8341aFtfiKDWrX6X51JK0jns1e8dCSYa
+         ljtqU2CntBq5jNlFko0ej08nDvULpFeTuSrjWuRIcRdWcXOeVgT/DK9EOn8SpFp5SluF
+         RyyTSVAVv10M47K5UhmJ2nYA9oG8q3Cw4ptKRB8HMWwCqB6kQrZz9RRkQLZvnYIjEwnP
+         RZ5By7m/7+shEgCMySMuZ+XTdPfSHgs60ylV1LWyqjLHwjPe/NN9WcQ31syFHjQy3Gfq
+         dtxg==
+X-Forwarded-Encrypted: i=1; AJvYcCXcgjFR80+oizRQNH095UYIiZ7FtlFJwVJGRyEX99vz83Uy/89Nz+uVEjf4X7A8joCqYtNUVY1k4A==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzRBSpzSbT21UA7Y3nRMDhtDjvFtEIwUQXVuCu8zwJjkU7sPLOB
+	KmSku5om/ITz9KSCRnQYoT/GMn2wO7GVgT3G+7l346+qqQXmV/Q4jXVHEmwssCP1ZeGBQrQ1Lll
+	YNowZrrKjQLBBIzoTClPzY96ZCVUpz3hkUjyA81865A==
+X-Gm-Gg: ASbGnctevcoWxPx0fErjCc/ulAFF+Koiio0/8jJHObCty3DSDco2/lHJmAXpP0JbE84
+	M3mr6W5iKdUC/0xS3W9BkkOroxsSOQ381oqTgixQHihrg3Spnmp0xK2xUtOsLeLthR3EzX9zJVt
+	3AZJW+GEeqRT7J4Gd3NQGgGtqGdr7NmVq+7B6KraJldFKmBf5qWH0Wdtp01eawu2Ggm43mAxhBT
+	iZ9nFJsLqJAp5o3tC2IDTHfkIH0Qk5nZt3xqpnEcFKpZ2vLmgmaBxUWMBkxNA==
+X-Google-Smtp-Source: AGHT+IGQU8iAL2oBx44YJmSWLgkrzJbNQnnv5TJU5QYU9Ll/NoUPEJP3VALvDA7MdFtXzoHgi4s3vJZ8kDBTes0TUhA=
+X-Received: by 2002:a05:690c:3203:b0:784:180e:fd4c with SMTP id
+ 00721157ae682-784180f0adamr181008387b3.31.1761217435834; Thu, 23 Oct 2025
+ 04:03:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251022222830.634086-1-wusamuel@google.com>
-In-Reply-To: <20251022222830.634086-1-wusamuel@google.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 23 Oct 2025 12:50:04 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0j6SzpA-Zp-v19RTAmGSzejGfwzjsq4UvAkKLDXCPJEPA@mail.gmail.com>
-X-Gm-Features: AS18NWCa1bh2sNhE6H6CvJh4kNdHo4_Cr9awNuc0JLJhc7_KwxGiNro4tzk46-4
-Message-ID: <CAJZ5v0j6SzpA-Zp-v19RTAmGSzejGfwzjsq4UvAkKLDXCPJEPA@mail.gmail.com>
-Subject: Re: [PATCH v1] Revert "PM: sleep: Make pm_wakeup_clear() call more clear"
-To: Samuel Wu <wusamuel@google.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, Pavel Machek <pavel@kernel.org>, 
-	Saravana Kannan <saravanak@google.com>, kernel-team@android.com, linux-pm@vger.kernel.org, 
+References: <20250721124104.806120-1-quic_zhonhan@quicinc.com>
+In-Reply-To: <20250721124104.806120-1-quic_zhonhan@quicinc.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Thu, 23 Oct 2025 13:03:20 +0200
+X-Gm-Features: AS18NWBVEatEe3gSBhE8qZaLai0zI0Dc2SVrRDXu7B4f5w61d7RxUXvBV6dUips
+Message-ID: <CAPDyKFprP1d-9Ojwz7QaVBbdFumPmRoVnifrP8v+eL6FHR3Unw@mail.gmail.com>
+Subject: Re: [PATCH v2 0/5] PM QoS: Add CPU affinity latency QoS support and
+ resctrl integration
+To: Zhongqiu Han <quic_zhonhan@quicinc.com>
+Cc: rafael@kernel.org, lenb@kernel.org, pavel@kernel.org, tony.luck@intel.com, 
+	reinette.chatre@intel.com, Dave.Martin@arm.com, james.morse@arm.com, 
+	amit.kucheria@linaro.org, christian.loehle@arm.com, linux-pm@vger.kernel.org, 
 	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Oct 23, 2025 at 12:29=E2=80=AFAM Samuel Wu <wusamuel@google.com> wr=
-ote:
+On Mon, 21 Jul 2025 at 14:41, Zhongqiu Han <quic_zhonhan@quicinc.com> wrote:
 >
-> This reverts commit 56a232d93cea0ba14da5e3157830330756a45b4c.
+> Hi all,
 >
-> The original patch changes the position of pm_wakeup_clear() for the
-> suspend call path, but other call paths with references to
-> freeze_processes() were not updated. This means that other call paths,
-> such as hibernate(), will not have pm_wakeup_clear() called.
+> This patch series introduces support for CPU affinity-based latency
+> constraints in the PM QoS framework. The motivation is to allow
+> finer-grained power management by enabling latency QoS requests to target
+> specific CPUs, rather than applying system-wide constraints.
 >
-> Suggested-by: Saravana Kannan <saravanak@google.com>
-> Signed-off-by: Samuel Wu <wusamuel@google.com>
-> ---
->  kernel/power/process.c | 1 +
->  kernel/power/suspend.c | 1 -
->  2 files changed, 1 insertion(+), 1 deletion(-)
+> The current PM QoS framework supports global and per-device CPU latency
+> constraints. However, in many real-world scenarios, such as IRQ affinity
+> or CPU-bound kernel threads, only a subset of CPUs are
+> performance-critical. Applying global constraints in such cases
+> unnecessarily prevents other CPUs from entering deeper C-states, leading
+> to increased power consumption.
 >
-> diff --git a/kernel/power/process.c b/kernel/power/process.c
-> index 8ff68ebaa1e0..dc0dfc349f22 100644
-> --- a/kernel/power/process.c
-> +++ b/kernel/power/process.c
-> @@ -132,6 +132,7 @@ int freeze_processes(void)
->         if (!pm_freezing)
->                 static_branch_inc(&freezer_active);
+> This series addresses that limitation by introducing a new interface that
+> allows latency constraints to be applied to a CPU mask. This is
+> particularly useful on heterogeneous platforms (e.g., big.LITTLE) and
+> embedded systems where power efficiency is critical for example:
 >
-> +       pm_wakeup_clear(0);
->         pm_freezing =3D true;
->         error =3D try_to_freeze_tasks(true);
->         if (!error)
-> diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
-> index 4bb4686c1c08..b4ca17c2fecf 100644
-> --- a/kernel/power/suspend.c
-> +++ b/kernel/power/suspend.c
-> @@ -595,7 +595,6 @@ static int enter_state(suspend_state_t state)
->         }
+>                         driver A       rt kthread B      module C
+>   CPU IDs (mask):         0-3              2-5              6-7
+>   target latency(us):     20               30               100
+>                           |                |                |
+>                           v                v                v
+>                           +---------------------------------+
+>                           |        PM  QoS  Framework       |
+>                           +---------------------------------+
+>                           |                |                |
+>                           v                v                v
+>   CPU IDs (mask):        0-3            2-3,4-5            6-7
+>   runtime latency(us):   20             20, 30             100
 >
->         pm_pr_dbg("Preparing system for sleep (%s)\n", mem_sleep_labels[s=
-tate]);
-> -       pm_wakeup_clear(0);
->         pm_suspend_clear_flags();
->         error =3D suspend_prepare(state);
->         if (error)
-> --
+> The current implementation includes only cpu_affinity_latency_qos_add()
+> and cpu_affinity_latency_qos_remove() interfaces. An update interface is
+> planned for future submission, along with PM QoS optimizations in the UFS
+> subsystem.
 
-Applied as 6.18-rc material, thanks!
+My apologies for the very late reply.
+
+To fully understand how this new QoS interface is going to be used, I
+really think we need to include a user of it, as part of the $subject
+series.
+
+Besides the comments from Rafael and Christian, I also wonder how the
+user of the interface should know what CPU-mask it should use? For
+example, how does it know the CPU-mask for the big-cores and for the
+little-cores? In particular as I assume the user isn't a platform
+specific driver, but rather a generic driver that should work across
+various platforms.
+
+[...]
+
+Kind regards
+Uffe
 
