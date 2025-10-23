@@ -1,198 +1,204 @@
-Return-Path: <linux-pm+bounces-36706-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36707-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B040C0053E
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Oct 2025 11:43:43 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 934A7C00623
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Oct 2025 12:03:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8E67E1A6645E
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Oct 2025 09:43:37 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 0F5C134F86A
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Oct 2025 10:03:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95A643093D8;
-	Thu, 23 Oct 2025 09:41:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACE57304BD6;
+	Thu, 23 Oct 2025 10:03:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dP9LsCas"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ZQZI/bfu"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f45.google.com (mail-yx1-f45.google.com [74.125.224.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FF96307481
-	for <linux-pm@vger.kernel.org>; Thu, 23 Oct 2025 09:41:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 716F82C325C
+	for <linux-pm@vger.kernel.org>; Thu, 23 Oct 2025 10:03:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761212512; cv=none; b=hfsVDwW9CNeRjfQuqcEij4Zht6exhskTpgDRdG50cW5HDv6BNUAftEo/xDykPt8lb+ghnNnt6oLOgahtGuKZ2Ke1KzrixRtAMtVE0ioa5moqIhVSqvhg/6Lqkv0wY/cACfjHZKVVBxg0XW4oD3TJzSHRE7j2xK+xZ3AaGlZMZJk=
+	t=1761213807; cv=none; b=nPPDtDBOcSbQ5LyTaxO04rUMmlzSKlUnv6v2AewFBTyvJPgTHJCU4eFiW5uVmnUjBc6XWSUtOtu3TcEr6GYnXa1gZpfRdB/dk20ipIYQzbVD3MJAuPHPcYgQql+7c6DBfq5G07k92iI1f9mMTIdm284KwFuWHMDqrQExPzxP2xE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761212512; c=relaxed/simple;
-	bh=x39im17yCpKlBZK/OHzKxjKDvrvbrR9VUmbw5G3Mn5Y=;
+	s=arc-20240116; t=1761213807; c=relaxed/simple;
+	bh=+p1CXHiLaIPMryIwnOqeXs1RBYrS5XH1NSl8EPkHO8A=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Nlez+ZeDZEMlynLPcfI88eIRt4edcY3+hL0Zk/ce1GqykcZW57lQgdmadD1pJmtmohRdwF0LiIUYGWoUOSbhebl65CkQGNYT/HK2LAtOIFDihXr8LJqNUU5GYrGcE/nooNc89hQmSfeCKQYsbOkGIzYTso/fd51xVE+VTXitnds=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dP9LsCas; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25B73C113D0
-	for <linux-pm@vger.kernel.org>; Thu, 23 Oct 2025 09:41:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761212512;
-	bh=x39im17yCpKlBZK/OHzKxjKDvrvbrR9VUmbw5G3Mn5Y=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=dP9LsCas8r39cetxoBMH1TYsC96yxmMVIvM/r3khzXhORq95c4D/IDRstcDghULeV
-	 l9c/3ytfXNKbI17fEA+6f0I2OmT3ixJnG0XnZmoJwIQKo2lu6XPL4mY9X4ue2CZbIM
-	 Ju28DsF64+CgWglBJpsNsYalbHMnij/yExBbeghbEeohWPFdfRGTpqEZEnvDIU0Xn9
-	 e4eW7pxBbZOdCTsBWOjt4Kdz0Xbmlr1nxS3COtzwpfUF9/oOKWYxjziTVe1pf8/fij
-	 8bCvbwqEw+5gGEJjlbJspMwB8pdkdHhY0gVy9CZL/kUVCx24dYRxxEHpW0MRtFcdcw
-	 HraksUPBlOs7g==
-Received: by mail-ot1-f52.google.com with SMTP id 46e09a7af769-7c2816c0495so491676a34.3
-        for <linux-pm@vger.kernel.org>; Thu, 23 Oct 2025 02:41:52 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUH/R9mGi/3uPiEDdFafeM1xnFNzvF2GxevVtx18TlOG3QfBpE7x2WN1QSajEALQQ/rAuoQa3p5hw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwW4F5j4e7U3rHA9tWt2LgaBEQcT/wAVFO1NZDn74suVmNifdFh
-	dDqtHBW5mnoPblAKRtbltujGIjhEIPedlRe3dwUUJPoEWjuJ3p+6EfCYziNbn0Lwh0c8ER9W8vZ
-	eZrCMEFAz4TIIPigQRuKVH4SK9YXHJoU=
-X-Google-Smtp-Source: AGHT+IHx6vGcGv+vrMCHVYpCy9BVAaGKKr2CW9FBcS0RiH5DcbhljvnheCDcmlpQzXIY6wqKg6m4mu4Ybp34n+1tPz8=
-X-Received: by 2002:a05:6808:190d:b0:442:9a9f:daa9 with SMTP id
- 5614622812f47-443a314f730mr11086008b6e.45.1761212511413; Thu, 23 Oct 2025
- 02:41:51 -0700 (PDT)
+	 To:Cc:Content-Type; b=NnP4G6vOxSKbbKd1GwPi8ePtzUExuNVtL/bUE4W+aS334mLYfz4bBXC+S8JifH87sqOmRqvzpHQSa2RKHuNvsRjRF/anwPirjvnV+H+2r7lOPrYJ4RnuuA7n3K+rBOsPXJIjOLYk3GYKq9tM/k/W+I46AStxzNZyhV1sW/qRr+4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ZQZI/bfu; arc=none smtp.client-ip=74.125.224.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yx1-f45.google.com with SMTP id 956f58d0204a3-63e3568f90dso630831d50.0
+        for <linux-pm@vger.kernel.org>; Thu, 23 Oct 2025 03:03:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1761213804; x=1761818604; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oWquFxQQ4MHJSF9//VvQ/C1WhYfIG1u7wl2C5TWDxwA=;
+        b=ZQZI/bfu4tN3zB/Za0uaqFtM7QQVYhpAmBbheuFuY/dFrppF09xN91WQDq9Q0xsdL0
+         iRxvtXLLWi3Pb3dyMFz5bK9ofdCHYNkAOBwQ8FvEiWGs22BYJGXPFiXU7kqTfr18OXoA
+         xpEOx3Gtan+qmmgc2CFATsIfIjfFuFzxobcO+lAAAj7wzIfDHNdqqV3fnv62xCiQipIr
+         v8kttkQuNCKPGkLm0TEvTc4NyequWjt9YuebMxjuIy7fSO1uu2hUp9gjPwhkIeXmUKhS
+         v0BJyV9yxxV19fN11HWseqfzei0R99RbUbzO1nrGjKNZZi2fOa9WlGGE/CINnuKYiVBI
+         H0xg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761213804; x=1761818604;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oWquFxQQ4MHJSF9//VvQ/C1WhYfIG1u7wl2C5TWDxwA=;
+        b=J90FLS10UQbIetKP0BDxfco106ViBgZ+YD1G0mzjRADZEd6I3wIzqRk/JhY7Y3y8Cw
+         S2bKNz6ptLCt/Am4XX5bXjfQ1aA2i/7yxUc5gtoKngjB+HNrI3wbeEjJMyTjEuMdDEgH
+         0H1BS1JXf3G+UE1Febc2qpInx9UNmt3j1U1Dtb8pr0jc/dxJq2hP8/Pdf3nOQWc37xR2
+         RmNsI3jKtJElB6inhRFDDoZ6SsPCXhZfT3wU/TETNzUS/lotO0xE7q58NXmf8VuTw++J
+         HnlxjoE1DpiHnQ4UAMlTYyE0I+63moSMzwmI4c/DW/MFh6j5rqCiDf701IpiPBrKTWgz
+         z/uA==
+X-Forwarded-Encrypted: i=1; AJvYcCVVTYxM4vTsIqvHmELCqdKTQkCFtwPDmkggsYcUswRJsSkY8aR5GK39vmpZQUnN7x8BxlAnq/QIrg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwXOybRnSgF39NrILGqJgfG+FXSPWtXaTHGWaLNAHdZRciSPmJW
+	89WvoK5uU0wNEa3/jMwUibFrtDVp3K5mBYqGKw/hzqBbhMoS6g6ho1mvGKSu4EaLbnxNsCd7Wst
+	PTPU9etjTCWxb6UCaDZfnodsfZF0Rt23bC+I+TIVEPg==
+X-Gm-Gg: ASbGncsrbq+OOcSXohw5hgcGaiWcjYVJTM9abQZAyC/1zht4K2M32h9ABBNfKztsljQ
+	89jOLB0FjnZyZU4h+yRsl80V9EbUuqjbZ10VNR0yV5hcClLoostd6iI1XRXFUzMysh0sY0ulioA
+	R96LKEMASXu7V3W6uF5ZBlgcRnmssbJQbYEIuUXk2y4BD5Kt/burDbtRD0al8z+OTX8n7d7T1aw
+	TD1imSNaFDd1USXQzhRpqP9y6PgGSRhARkR/E8deHit05heMS8+usaBvLaMXA==
+X-Google-Smtp-Source: AGHT+IHYTuBS5tdkgCmTIC44x/jualH/JELvua1Z+qzp00tin6cE2MKOBedS1C2f62vL4/dVJ0lyn45HjIoQ+rR7MQ4=
+X-Received: by 2002:a05:690e:c42:b0:63e:33a7:cdf0 with SMTP id
+ 956f58d0204a3-63f377d2574mr1315040d50.14.1761213804328; Thu, 23 Oct 2025
+ 03:03:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251022141434.v3.1.I60a53c170a8596661883bd2b4ef475155c7aa72b@changeid>
-In-Reply-To: <20251022141434.v3.1.I60a53c170a8596661883bd2b4ef475155c7aa72b@changeid>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 23 Oct 2025 11:41:38 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0ieBdfuu_OF5YQsgsgy_L3H-UkVvn+kk45UFDfJSBtj0g@mail.gmail.com>
-X-Gm-Features: AS18NWDdb53hqfTM27k2OD16kpBKtv8BqC3y9LRdXe9K1AoiTPRwUbDpxSMcJ78
-Message-ID: <CAJZ5v0ieBdfuu_OF5YQsgsgy_L3H-UkVvn+kk45UFDfJSBtj0g@mail.gmail.com>
-Subject: Re: [PATCH v3] PCI/PM: Prevent runtime suspend before devices are
- fully initialized
-To: Brian Norris <briannorris@chromium.org>
-Cc: Bjorn Helgaas <bhelgaas@google.com>, =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
-	linux-pm@vger.kernel.org, linux-pci@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, "Rafael J . Wysocki" <rafael@kernel.org>, 
-	Lukas Wunner <lukas@wunner.de>
+References: <20251016-gs101-pd-v3-0-7b30797396e7@linaro.org>
+ <20251016-gs101-pd-v3-8-7b30797396e7@linaro.org> <CGME20251022110738eucas1p2cee28096ca5c9c6a802e2190d88ccf21@eucas1p2.samsung.com>
+ <CAPDyKFq2esPos=D-eVz6w1VXq=4LYi6fx54K4TvsUi4JqUJOaQ@mail.gmail.com> <57bacc06-8a5e-4284-a520-c5d2a56545e9@samsung.com>
+In-Reply-To: <57bacc06-8a5e-4284-a520-c5d2a56545e9@samsung.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Thu, 23 Oct 2025 12:02:48 +0200
+X-Gm-Features: AS18NWDk2cnwAbu5KPIINOVhITzbpKKTXME95wNCKMMbO1h01gk_WEP7weXC8KQ
+Message-ID: <CAPDyKFrCS1PGwPeZd2ahZ=wKXCqPj93qAJ7V-ELELLA_OwgdSw@mail.gmail.com>
+Subject: Re: [PATCH v3 08/10] pmdomain: samsung: selectively handle enforced sync_state
+To: Marek Szyprowski <m.szyprowski@samsung.com>, Krzysztof Kozlowski <krzk@kernel.org>, 
+	Rob Herring <robh@kernel.org>
+Cc: =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
+	Alim Akhtar <alim.akhtar@samsung.com>, Conor Dooley <conor+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Peter Griffin <peter.griffin@linaro.org>, 
+	Tudor Ambarus <tudor.ambarus@linaro.org>, Will McVicker <willmcvicker@google.com>, 
+	kernel-team@android.com, linux-arm-kernel@lists.infradead.org, 
+	linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Oct 22, 2025 at 11:15=E2=80=AFPM Brian Norris <briannorris@chromium=
-.org> wrote:
+On Wed, 22 Oct 2025 at 20:39, Marek Szyprowski <m.szyprowski@samsung.com> w=
+rote:
 >
-> Today, it's possible for a PCI device to be created and
-> runtime-suspended before it is fully initialized. When that happens, the
-> device will remain in D0, but the suspend process may save an
-> intermediate version of that device's state -- for example, without
-> appropriate BAR configuration. When the device later resumes, we'll
-> restore invalid PCI state and the device may not function.
+> On 22.10.2025 13:06, Ulf Hansson wrote:
+> > On Thu, 16 Oct 2025 at 17:58, Andr=C3=A9 Draszik <andre.draszik@linaro.=
+org> wrote:
+> >> Unconditionally calling of_genpd_sync_state() causes issues on
+> >> platforms with child domains as the parent domain will be turned off
+> >> before the child domain was even registered during boot.
+> >>
+> >> This in particular is an issue for the upcoming Google gs101 support -
+> >> all operations on child domains registered after the parent domain
+> >> misbehave.
+> >>
+> >> Add a flag to the probe data to be able to sync_state conditionally
+> >> only, and enable that flag on the two platforms currently supported by
+> >> this driver.
+> >>
+> >> Signed-off-by: Andr=C3=A9 Draszik <andre.draszik@linaro.org>
+> >>
+> >> ---
+> >> v2:
+> >> * use bool for need_early_sync_state (Krzysztof)
+> >> ---
+> >>   drivers/pmdomain/samsung/exynos-pm-domains.c | 5 ++++-
+> >>   1 file changed, 4 insertions(+), 1 deletion(-)
+> >>
+> >> diff --git a/drivers/pmdomain/samsung/exynos-pm-domains.c b/drivers/pm=
+domain/samsung/exynos-pm-domains.c
+> >> index 638d286b57f716140b2401092415644a6805870e..15a1582aa92103a07335eb=
+681600d9415369fefd 100644
+> >> --- a/drivers/pmdomain/samsung/exynos-pm-domains.c
+> >> +++ b/drivers/pmdomain/samsung/exynos-pm-domains.c
+> >> @@ -20,6 +20,7 @@
+> >>   struct exynos_pm_domain_config {
+> >>          /* Value for LOCAL_PWR_CFG and STATUS fields for each domain =
+*/
+> >>          u32 local_pwr_cfg;
+> >> +       bool need_early_sync_state;
+> >>   };
+> >>
+> >>   /*
+> >> @@ -69,10 +70,12 @@ static int exynos_pd_power_off(struct generic_pm_d=
+omain *domain)
+> >>
+> >>   static const struct exynos_pm_domain_config exynos4210_cfg =3D {
+> >>          .local_pwr_cfg          =3D 0x7,
+> >> +       .need_early_sync_state  =3D true,
+> >>   };
+> >>
+> >>   static const struct exynos_pm_domain_config exynos5433_cfg =3D {
+> >>          .local_pwr_cfg          =3D 0xf,
+> >> +       .need_early_sync_state  =3D true,
+> >>   };
+> >>
+> >>   static const struct of_device_id exynos_pm_domain_of_match[] =3D {
+> >> @@ -179,7 +182,7 @@ static int exynos_pd_probe(struct platform_device =
+*pdev)
+> >>           * reset during boot. As a temporary hack to manage this, let=
+'s enforce
+> >>           * a sync_state.
+> >>           */
+> >> -       if (!ret)
+> >> +       if (pm_domain_cfg->need_early_sync_state && !ret)
+> >>                  of_genpd_sync_state(np);
+> > The call to of_genpd_sync_state() was intended as a temporary solution =
+here.
+> >
+> > Potentially, if we would be able to distinguish what PM domain that is
+> > causing the problem on the Exynos platforms, we could set
+> > GENPD_FLAG_NO_STAY_ON for that genpd instead.
 >
-> Prevent runtime suspend for PCI devices by deferring pm_runtime_enable()
-> until we've fully initialized the device.
+> Well, this of_genpd_sync_state() "workaround" has to be applied only to
+> the power domain of the display controller device. It can be replaced by
+> the following check on the legacy Exynos systems:
 >
-> More details on how exactly this may occur:
->
-> 1. PCI device is created by pci_scan_slot() or similar
-> 2. As part of pci_scan_slot(), pci_pm_init() enables runtime PM; the
->    device starts "active" and we initially prevent (pm_runtime_forbid())
->    suspend -- but see [*] footnote
-> 3. Underlying 'struct device' is added to the system (device_add());
->    runtime PM can now be configured by user space
-> 4. PCI device receives BAR configuration
->    (pci_assign_unassigned_bus_resources(), etc.)
-> 5. PCI device is added to the system in pci_bus_add_device()
->
-> The device may potentially suspend between #3 and #4.
->
-> [*] By default, pm_runtime_forbid() prevents suspending a device; but by
-> design [**], this can be overridden by user space policy via
->
->   echo auto > /sys/bus/pci/devices/.../power/control
->
-> Thus, the above #3/#4 sequence is racy with user space (udev or
-> similar).
->
-> Notably, many PCI devices are enumerated at subsys_initcall time and so
-> will not race with user space. However, there are several scenarios
-> where PCI devices are created later on, such as with hotplug or when
-> drivers (pwrctrl or controller drivers) are built as modules.
->
-> [**] The relationship between pm_runtime_forbid(), pm_runtime_allow(),
-> /sys/.../power/control, and the runtime PM usage counter can be subtle.
-> It appears that the intention of pm_runtime_forbid() /
-> pm_runtime_allow() is twofold:
->
-> 1. Allow the user to disable runtime_pm (force device to always be
->    powered on) through sysfs.
-> 2. Allow the driver to start with runtime_pm disabled (device forced
->    on) and user space could later enable runtime_pm.
->
-> This conclusion comes from reading `Documentation/power/runtime_pm.rst`,
-> specifically the section starting "The user space can effectively
-> disallow".
->
-> This means that while pm_runtime_forbid() does technically increase the
-> runtime PM usage counter, this usage counter is not a guarantee of
-> functional correctness, because sysfs can decrease that count again.
->
-> Link: https://lore.kernel.org/all/20251016155335.1.I60a53c170a8596661883b=
-d2b4ef475155c7aa72b@changeid/
-> Signed-off-by: Brian Norris <briannorris@chromium.org>
-> Cc: <stable@vger.kernel.org>
-> Reviewed-by: Rafael J. Wysocki (Intel) <rafael@kernel.org>
-> ---
->
-> Changes in v3:
->  * Add Link to initial discussion
->  * Add Rafael's Reviewed-by
->  * Add lengthier footnotes about forbid vs allow vs sysfs
->
-> Changes in v2:
->  * Update CC list
->  * Rework problem description
->  * Update solution: defer pm_runtime_enable(), instead of trying to
->    get()/put()
->
->  drivers/pci/bus.c | 3 +++
->  drivers/pci/pci.c | 1 -
->  2 files changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/pci/bus.c b/drivers/pci/bus.c
-> index f26aec6ff588..fc66b6cb3a54 100644
-> --- a/drivers/pci/bus.c
-> +++ b/drivers/pci/bus.c
-> @@ -14,6 +14,7 @@
->  #include <linux/of.h>
->  #include <linux/of_platform.h>
->  #include <linux/platform_device.h>
-> +#include <linux/pm_runtime.h>
->  #include <linux/proc_fs.h>
->  #include <linux/slab.h>
->
-> @@ -375,6 +376,8 @@ void pci_bus_add_device(struct pci_dev *dev)
->                 put_device(&pdev->dev);
->         }
->
-> +       pm_runtime_enable(&dev->dev);
-> +
->         if (!dn || of_device_is_available(dn))
->                 pci_dev_allow_binding(dev);
->
-> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> index b14dd064006c..f792164fa297 100644
-> --- a/drivers/pci/pci.c
-> +++ b/drivers/pci/pci.c
-> @@ -3226,7 +3226,6 @@ void pci_pm_init(struct pci_dev *dev)
->         pci_pm_power_up_and_verify_state(dev);
->         pm_runtime_forbid(&dev->dev);
->         pm_runtime_set_active(&dev->dev);
+> if (IS_ENABLED(CONFIG_ARM) &&
+> of_device_is_compatible(np, "samsung,exynos4210-pd") &&
+> (strstr(pd->pd.name, "LCD") || strstr(pd->pd.name, "DISP")))
+> pd->pd.flags =3D GENPD_FLAG_NO_STAY_ON;
 
-Actually, I think that the two statements above can be moved too.
+Oh wait, perhaps better to just power-off these PM domains before
+calling pm_genpd_init(), if that can be done safely?
 
-The pm_runtime_forbid() call doesn't matter until runtime PM is
-enabled and it is better to do pm_runtime_set_active() right before
-enabling runtime PM.
+At least that would guarantee the reset to happen before the display
+driver gets probed. Instead of relying on genpd_power_off_unused()
+(late_initcall_sync) to do it.
 
-> -       pm_runtime_enable(&dev->dev);
->  }
 >
->  static unsigned long pci_ea_flags(struct pci_dev *dev, u8 prop)
+> I assume that this information cannot be coded in device tree to make it
+> somehow generic...
+
+Right, in principle we would need a new DT property for a power-domain
+provider, like "broken-hw-reset", because we don't have a reset-line
+to pull.
+
+>
+> Best regards
 > --
+> Marek Szyprowski, PhD
+> Samsung R&D Institute Poland
+>
+
+Kind regards
+Uffe
 
