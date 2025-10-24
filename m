@@ -1,354 +1,238 @@
-Return-Path: <linux-pm+bounces-36768-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36769-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D93D8C05301
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Oct 2025 10:52:19 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 304C3C051AF
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Oct 2025 10:42:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6CFF740160E
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Oct 2025 08:40:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EC5EC1A065E5
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Oct 2025 08:42:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FCDE305E2D;
-	Fri, 24 Oct 2025 08:38:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E69F4305978;
+	Fri, 24 Oct 2025 08:40:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ahFR4Xe4"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="HTxv+aCQ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B5AB305E14
-	for <linux-pm@vger.kernel.org>; Fri, 24 Oct 2025 08:38:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4684D305970
+	for <linux-pm@vger.kernel.org>; Fri, 24 Oct 2025 08:40:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761295094; cv=none; b=oE7IGcA9rxP0oeokmC7oCu570cIrQSsQdu+n9OUo+bGp6g1O2kxjdq877fZwMaQeedXlhmsVkdtnrFAlEwmolfVgGlsMaURO17jTTu6ZMwhNH7e0x0ehPpNLDzsQBtoh64Ix6lfbzT+1QGCI5r+demCLcSU4i0VLVtxwtU67cyg=
+	t=1761295222; cv=none; b=rjgioHHJccdXxQEHvUDt9iMglgnfj588XGbsyzTAjrMoxPUG+2Gth57kvOQtBfbIP2Ixawyda5CxwP6Fh7KyFWNy0ml5yGhN0EqxHdcn/ZECpQxMp1B1p02RW7jBEhj2qowbaw7QGdDL2RNoZGF7iJDpRXgftYsZmgt3wt5qmLk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761295094; c=relaxed/simple;
-	bh=7jbWwF4hBbdiXyxATfpKtCq76A/2hxuhoy8084Lb2bw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OJNRFhhLPwMzLncKCD8azWgVCxwbqabl8p49JCIggm8XXyT1/FgbVC6vYyFbFQUt3IVgeNof6SR94oROKnLcwI3zziXm+BQHLSyBnu6K0CVrxFg+jB8rHH+dbwoVh9fVYPPXEK6hh4zQm3CVtRhrZoAAfSNPE3bUayR0a70Hi5E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ahFR4Xe4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D916DC4AF0C
-	for <linux-pm@vger.kernel.org>; Fri, 24 Oct 2025 08:38:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761295093;
-	bh=7jbWwF4hBbdiXyxATfpKtCq76A/2hxuhoy8084Lb2bw=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=ahFR4Xe4vGJQC0deTmW+3RZFAPIxiE9YwSaFuuhS8wNdyryDPBEpFWtB9Sj8iYtrb
-	 rmzeV5WIuEQa7bf0kKpRa/h5pytdC2AeeswzvYZZquhh8H4o5DRfYAgac6a+9r5cFU
-	 CPN3QSWs/O0qsrh8rYljFqPnOttajsvsKHVt7hZ1r5+27+rbRdFJ1o5CCPwlPXQVPT
-	 doUMsSex0KkrLBAVwnTtI8DXY3uDVHYdH2Z4GOPdJQTw5tQev2AtMCTtkXp6HIx05/
-	 pB3KeLHN65VzihCyIiKFNk8PV1xIINM9M91QhIhGbksTPoYqY+eEGLS7YH18KxUqmw
-	 AMQCttexeYDAQ==
-Received: by mail-ot1-f45.google.com with SMTP id 46e09a7af769-7c3e2221217so307408a34.3
-        for <linux-pm@vger.kernel.org>; Fri, 24 Oct 2025 01:38:13 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXTkkLpIbzvAZcj1Jdy/b8kuoYoZMi9g4Babdq2PGzKrPPTXYf4nwhcTPyoCrx2iMCjpekocVtIjQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwnFPp6Qb3mLNWqDLYBS/0584Zj8WtqxfXa2Uv4tEnvOiFYbdPv
-	9z8IZ7wxDsjNuxxYnu+6I1NNEziGlEqfBFBNfaga/3Eyirenk878PjqaZ0bQlmtzImXRqOXSMe0
-	WtnmtYHVUv0ejRWDoHXeXrFezd5QmnYg=
-X-Google-Smtp-Source: AGHT+IFNMP+6PW+gib+wWUVkUGqGUDTOYSIW+l0A4z1HHfhVKizQqVUiVdiCiTKSMLQ7E3o9RJjoq3RhDrdeTNWgsYA=
-X-Received: by 2002:a05:6808:6783:b0:438:40c3:875a with SMTP id
- 5614622812f47-44bd416669amr2628692b6e.7.1761295093098; Fri, 24 Oct 2025
- 01:38:13 -0700 (PDT)
+	s=arc-20240116; t=1761295222; c=relaxed/simple;
+	bh=0/HpiekOuEFr+v52Q3cJ2AGl82ZF3h/HF23ETfIgSA4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=O5EH4HRy0cQHowvjXSmTyV+EBNr/NBJeysaF1FnkMtal4lvbpRDs4UQEUjayu0cHuEBsCHNsEGxLvjV2NQWTRq6oTGV9ZEaTAHjVREC/rFet1PLIcZHVPR34KH0dqwuXvIxOjpV6MOafRifKSmm87pzwRXS7UrrVUhxBQ+wrR7w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=HTxv+aCQ; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 59O3MBTw010242
+	for <linux-pm@vger.kernel.org>; Fri, 24 Oct 2025 08:40:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	0YNZn1RokASQE3KKlYOedjoJZiFwTtAXJpMFIu09VVg=; b=HTxv+aCQv5oDG+x/
+	rnxvxt2M7hj+cY7ldAl3EO0aMgMscSfySpJEgL9oE9M+tImGRTRrkdFCM2CJnakn
+	CQO2QLMcjzF65POzlo0EZYiXT1o2gRaLfydbo0gLUNfvBy1j3jI/vljf/TDC19TS
+	pebIv15e6TrTcvekhBeaJFiRfS7Zhd2f+HKCm6y3+FyDOf0iE6fE7or0Duozcbge
+	LF7+kNtQAouaM7KGzsVCk66Z0tN/z6xmEKSRxEZfCKSI7xrbt41rnkzhwxvm/sM9
+	iYjRIAgR+SXlKQIVNvZsooyWZpol/J1QwfY52HTDYZp+veUqCVPnlrCQyijnaapo
+	1bBX+w==
+Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com [209.85.215.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 49y524dknq-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Fri, 24 Oct 2025 08:40:20 +0000 (GMT)
+Received: by mail-pg1-f200.google.com with SMTP id 41be03b00d2f7-b6d0121b1c5so968019a12.0
+        for <linux-pm@vger.kernel.org>; Fri, 24 Oct 2025 01:40:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761295220; x=1761900020;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0YNZn1RokASQE3KKlYOedjoJZiFwTtAXJpMFIu09VVg=;
+        b=b8mS00ZQFFTO/KdNROU8l2nwFwZ2yFY8iS9wioNcnlGANxCgaV7zygsRPCWcF1Ab8F
+         ZjLkGoxQkNqm/pYv5cSttYVpStMjvADhaRj2s1HGQSh/db/Bqm5qMr0L85bAGdirCXv+
+         EEyNqei+iYBJcVZaoipoHFJ5SHsxmfhKq3lvyKacWdEF1XAhb/e/e5ksG3JbalIZ7nrL
+         r3A/xAxF7OviD6S4/FRy86mDPmHjdHw5x6PemM3BOUZzmy9YUzo2yGDBOrCch31z7/t9
+         Ia6UCjJ/CRe950nuh16eQ4zxX70HSjTyfb9SIwY8BjL28tx/1I3ZSAc7xM2wNPsYJBdB
+         qtTA==
+X-Forwarded-Encrypted: i=1; AJvYcCVyUrQMR1un/dFS8HJdMzf60tLz/qa6CRe75ZOr5wocU8V/FecqudbvVS2/1mLHIKnPgI25o4hqVA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YziHKuH92SP7rUsvg6RL5cIY/CGMQjyRoGhRS9KpuSuTHR7XlTS
+	/VofnuUE64iQ5wJA65upcq5U9keNSHYCi4ANbmBACmwScn8Qvlo2dLymGHbTplbI5p2qtwfuQXq
+	LqLpU+uvMJFMldGF2nR92E1bE2uWkvZ2dBVOM5pyvSR9OkQps6Om+uPGa1sXBxA==
+X-Gm-Gg: ASbGncskDIfx2fYXkrj5sf57prl16h9oDop7Jjf2z4C+I/P83CZnKgiqXD66rqdWoKZ
+	zF/vUBKlvWT61+umLu4nWuaRucBWT8+J3Se3kWB+KY8dF4JkvR2005TUDnF/dWxYfvU4y3fIEic
+	WabbL2LUqk0HRYAMrJujL24QXsOvLfE80WjOkUw8VyeqlxSBNDQVnrhuEXkKQ9zrFEwByoy3AQ5
+	O3wC0QB9LdDd6PNSjt36q+zNrxGPsvAnzRAYot+ZUZ2FWK5rstOl4rD0kJqyF0X2W4c9S+JAMiy
+	kRt6ALA5yShveknb7J0FPY2xAX19GE8Liab9hVkC6mZv3I/IAGqbryZ61Q4X3I+XLqMy1pzPP4G
+	Y4St/BWrtMnjbSDFdu2dkC/l4beC2KyewTFFrzaNTwY7nJscOqB2L6C3mFD9UDXLnhmgNLx4=
+X-Received: by 2002:a17:902:f548:b0:276:76e1:2e84 with SMTP id d9443c01a7336-290c9c8941dmr349464315ad.3.1761295219551;
+        Fri, 24 Oct 2025 01:40:19 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFTLNLn36/S60d7SJ13jy0mBlisBmviibNNbAEb8dy9ARhITndfXKQBcdUXHY27mLHKLz3ivg==
+X-Received: by 2002:a17:902:f548:b0:276:76e1:2e84 with SMTP id d9443c01a7336-290c9c8941dmr349464025ad.3.1761295219031;
+        Fri, 24 Oct 2025 01:40:19 -0700 (PDT)
+Received: from [10.133.33.181] (tpe-colo-wan-fw-bordernet.qualcomm.com. [103.229.16.4])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2946e25ba2esm47313615ad.104.2025.10.24.01.40.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Oct 2025 01:40:18 -0700 (PDT)
+Message-ID: <7acba50b-8c1e-4509-8100-3a65467d2d87@oss.qualcomm.com>
+Date: Fri, 24 Oct 2025 16:40:13 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251017233907.2305303-1-wusamuel@google.com> <CAJZ5v0g37NNj3inHcrZG8NHeTAGAncLAY7t9Yj3bTAv7GgAQJQ@mail.gmail.com>
- <CAGETcx8ZL3jAwFRxO1B8SFSWmC2jCitc9_61hBG-N2AvzRQv7w@mail.gmail.com>
-In-Reply-To: <CAGETcx8ZL3jAwFRxO1B8SFSWmC2jCitc9_61hBG-N2AvzRQv7w@mail.gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 24 Oct 2025 10:37:59 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0jiLzMvwBfcXKJEOMqa_U=6OeWymnBCBdxYfcgU+7P1Aw@mail.gmail.com>
-X-Gm-Features: AS18NWCBf9ARpxLgVmhFEb3gs4qG-h6lnqB7P0uzM2fl0gQtjRurOrUZXDDZMfg
-Message-ID: <CAJZ5v0jiLzMvwBfcXKJEOMqa_U=6OeWymnBCBdxYfcgU+7P1Aw@mail.gmail.com>
-Subject: Re: [PATCH v5] PM: Support aborting sleep during filesystem sync
-To: Saravana Kannan <saravanak@google.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Samuel Wu <wusamuel@google.com>, 
-	Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, tuhaowen@uniontech.com, 
-	kernel-team@android.com, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 0/5] PM QoS: Add CPU affinity latency QoS support and
+ resctrl integration
+To: Ulf Hansson <ulf.hansson@linaro.org>,
+        Zhongqiu Han <quic_zhonhan@quicinc.com>
+Cc: rafael@kernel.org, lenb@kernel.org, pavel@kernel.org, tony.luck@intel.com,
+        reinette.chatre@intel.com, Dave.Martin@arm.com, james.morse@arm.com,
+        amit.kucheria@linaro.org, christian.loehle@arm.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lukasz.luba@arm.com, zhongqiu.han@oss.qualcomm.com
+References: <20250721124104.806120-1-quic_zhonhan@quicinc.com>
+ <CAPDyKFprP1d-9Ojwz7QaVBbdFumPmRoVnifrP8v+eL6FHR3Unw@mail.gmail.com>
+Content-Language: en-US
+From: Zhongqiu Han <zhongqiu.han@oss.qualcomm.com>
+In-Reply-To: <CAPDyKFprP1d-9Ojwz7QaVBbdFumPmRoVnifrP8v+eL6FHR3Unw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDIyMDE1NSBTYWx0ZWRfX0WmVig8Q4XqP
+ YNSiqAFdKjyIWPEeI+E7SKNX9GdEAUPUQPAxott2qBp7xe/ulcA5iRTeQ+RPmbdaxwUaXdZbNeg
+ Q+zm0OKfCeG2eZCEM3wbrgzazE00cScB+02nmS9M8BPYTH13z1JsSn3pWVQqInZbHFe6mWpadbF
+ ZucP42/A7TbMOGJHlLstkPHwH1GsJxPwYdgYkPiXhmV+4hsrF/adZ4SUDx8RDbQxlZI7/B97zvE
+ S+7LdinGpkD78Nw8/sxavNhmWnxKcBSP+Zt8i9rNwie7pafZn7d7qiy+DXWaLaV3OlvdB4zeoZQ
+ H/oQvWK2n6psUjfyRwGtF7JfGpWg/lVam6e747lxJQq3Z/ks4N1i8hhCQqV8uboNBv9ELmPt1o0
+ a3JUeFb3WVBtPAsaKU+INHdwtjefNA==
+X-Authority-Analysis: v=2.4 cv=Uotu9uwB c=1 sm=1 tr=0 ts=68fb3b74 cx=c_pps
+ a=oF/VQ+ItUULfLr/lQ2/icg==:117 a=nuhDOHQX5FNHPW3J6Bj6AA==:17
+ a=IkcTkHD0fZMA:10 a=x6icFKpwvdMA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=VwQbUJbxAAAA:8 a=COk6AnOGAAAA:8 a=Ni59kdHh3PmOLRpg5VwA:9 a=3ZKOabzyN94A:10
+ a=QEXdDO2ut3YA:10 a=3WC7DwWrALyhR5TkjVHa:22 a=TjNXssC_j7lpFel5tvFf:22
+X-Proofpoint-GUID: mv7swp-SIKr2NFbGJJo5M_4B-JaRWJ_1
+X-Proofpoint-ORIG-GUID: mv7swp-SIKr2NFbGJJo5M_4B-JaRWJ_1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-10-23_03,2025-10-22_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ bulkscore=0 impostorscore=0 priorityscore=1501 clxscore=1015 spamscore=0
+ adultscore=0 suspectscore=0 phishscore=0 lowpriorityscore=0 malwarescore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2510020000 definitions=main-2510220155
 
-On Fri, Oct 24, 2025 at 12:47=E2=80=AFAM Saravana Kannan <saravanak@google.=
-com> wrote:
->
-> On Thu, Oct 23, 2025 at 12:43=E2=80=AFPM Rafael J. Wysocki <rafael@kernel=
-.org> wrote:
-> >
-> > On Sat, Oct 18, 2025 at 1:39=E2=80=AFAM Samuel Wu <wusamuel@google.com>=
- wrote:
-> > >
-> > > At the start of suspend and hibernate, filesystems will sync to save =
-the
-> > > current state of the device. However, the long tail of the filesystem
-> > > sync can take upwards of 25 seconds. If during this filesystem sync
-> > > there is some wakeup or abort signal, it will not be processed until =
-the
-> > > sync is complete; from a user's perspective, this looks like the devi=
-ce
-> > > is unresponsive to any form of input.
-> > >
-> > > This patch adds functionality to handle a sleep abort signal when in
-> > > the filesystem sync phase of suspend or hibernate. This topic was fir=
-st
-> > > discussed by Saravana Kannan at LPC 2024 [1], where the general
-> > > consensus was to allow filesystem sync on a parallel thread. In case =
-of
-> > > abort, the suspend process will stop waiting on an in-progress
-> > > filesystem sync, and continue by aborting suspend before the filesyst=
-em
-> > > sync is complete.
-> > >
-> > > Additionally, there is extra care needed to account for back-to-back
-> > > sleeps while maintaining functionality to immediately abort during th=
-e
-> > > filesystem sync stage. This patch handles this by serializing the
-> > > sequence with an invariant; a subsequent sleep's filesystem sync
-> > > operation will only start when the previous sleep's filesystem sync h=
-as
-> > > finished. While waiting for the previous sleep's filesystem sync to
-> > > finish, the subsequent sleep will still abort early if a wakeup event=
- is
-> > > triggered, solving the original issue of filesystem sync blocking abo=
-rt.
-> >
-> > It would be good to spell out the rationale for starting another
-> > filesystem sync when suspend starts while the previous sync is still
-> > in progress.
-> >
-> > > [1]: https://lpc.events/event/18/contributions/1845/
-> > >
-> > > Suggested-by: Saravana Kannan <saravanak@google.com>
-> > > Signed-off-by: Samuel Wu <wusamuel@google.com>
-> > > ---
-> > > Changes in v5:
-> > > - Update spin_lock() to spin_lock_irqsave() since abort can be in IRQ=
- context
-> > > - Updated changelog description to be more precise regarding continui=
-ng abort
-> > >   sleep before fs_sync() is complete
-> > > - Rename abort_sleep_during_fs_sync() to pm_stop_waiting_for_fs_sync(=
-)
-> > > - Simplify from a goto to do-while in pm_sleep_fs_sync()
-> > > - v4 link: https://lore.kernel.org/all/20250911185314.2377124-1-wusam=
-uel@google.com
-> > >
-> > > Changes in v4:
-> > > - Removed patch 1/3 of v3 as it is already picked up on linux-pm
-> > > - Squashed patches 2/3 and 3/3 from v3 into this single patch
-> > > - Added abort during fs_sync functionality to hibernate in addition t=
-o suspend
-> > > - Moved variables and functions for abort from power/suspend.c to pow=
-er/main.c
-> > > - Renamed suspend_fs_sync_with_abort() to pm_sleep_fs_sync()
-> > > - Renamed suspend_abort_fs_sync() to abort_sleep_during_fs_sync()
-> > > - v3 link: https://lore.kernel.org/all/20250821004237.2712312-1-wusam=
-uel@google.com/
-> > >
-> > > Changes in v3:
-> > > - Split v2 patch into 3 patches
-> > > - Moved pm_wakeup_clear() outside of if(sync_on_suspend_enabled) cond=
-ition
-> > > - Updated documentation and comments within kernel/power/suspend.c
-> > > - v2 link: https://lore.kernel.org/all/20250812232126.1814253-1-wusam=
-uel@google.com/
-> > >
-> > > Changes in v2:
-> > > - Added documentation for suspend_abort_fs_sync()
-> > > - Made suspend_fs_sync_lock and suspend_fs_sync_complete declaration =
-static
-> > > - v1 link: https://lore.kernel.org/all/20250815004635.3684650-1-wusam=
-uel@google.com
-> > >
-> > >  drivers/base/power/wakeup.c |  8 ++++
-> > >  include/linux/suspend.h     |  4 ++
-> > >  kernel/power/hibernate.c    |  5 ++-
-> > >  kernel/power/main.c         | 75 +++++++++++++++++++++++++++++++++++=
-++
-> > >  kernel/power/suspend.c      |  7 +++-
-> > >  5 files changed, 96 insertions(+), 3 deletions(-)
-> > >
-> > > diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.=
-c
-> > > index d1283ff1080b..689c16b08b38 100644
-> > > --- a/drivers/base/power/wakeup.c
-> > > +++ b/drivers/base/power/wakeup.c
-> > > @@ -570,6 +570,13 @@ static void wakeup_source_activate(struct wakeup=
-_source *ws)
-> > >
-> > >         /* Increment the counter of events in progress. */
-> > >         cec =3D atomic_inc_return(&combined_event_count);
-> > > +       /*
-> > > +        * wakeup_source_activate() aborts sleep only if events_check=
-_enabled
-> > > +        * is set (see pm_wakeup_pending()). Similarly, abort sleep d=
-uring
-> > > +        * fs_sync only if events_check_enabled is set.
-> > > +        */
-> > > +       if (events_check_enabled)
-> > > +               pm_stop_waiting_for_fs_sync();
-> > >
-> > >         trace_wakeup_source_activate(ws->name, cec);
-> > >  }
-> > > @@ -899,6 +906,7 @@ EXPORT_SYMBOL_GPL(pm_wakeup_pending);
-> > >  void pm_system_wakeup(void)
-> > >  {
-> > >         atomic_inc(&pm_abort_suspend);
-> > > +       pm_stop_waiting_for_fs_sync();
-> > >         s2idle_wake();
-> > >  }
-> > >  EXPORT_SYMBOL_GPL(pm_system_wakeup);
-> > > diff --git a/include/linux/suspend.h b/include/linux/suspend.h
-> > > index b02876f1ae38..dc6829b3836f 100644
-> > > --- a/include/linux/suspend.h
-> > > +++ b/include/linux/suspend.h
-> > > @@ -450,6 +450,8 @@ void restore_processor_state(void);
-> > >  extern int register_pm_notifier(struct notifier_block *nb);
-> > >  extern int unregister_pm_notifier(struct notifier_block *nb);
-> > >  extern void ksys_sync_helper(void);
-> > > +extern void pm_stop_waiting_for_fs_sync(void);
-> > > +extern int pm_sleep_fs_sync(void);
-> > >  extern void pm_report_hw_sleep_time(u64 t);
-> > >  extern void pm_report_max_hw_sleep(u64 t);
-> > >  void pm_restrict_gfp_mask(void);
-> > > @@ -505,6 +507,8 @@ static inline void pm_restrict_gfp_mask(void) {}
-> > >  static inline void pm_restore_gfp_mask(void) {}
-> > >
-> > >  static inline void ksys_sync_helper(void) {}
-> > > +static inline pm_stop_waiting_for_fs_sync(void) {}
-> > > +static inline int pm_sleep_fs_sync(void) {}
-> > >
-> > >  #define pm_notifier(fn, pri)   do { (void)(fn); } while (0)
-> > >
-> > > diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-> > > index 14e85ff23551..9c8db4b3c114 100644
-> > > --- a/kernel/power/hibernate.c
-> > > +++ b/kernel/power/hibernate.c
-> > > @@ -824,7 +824,10 @@ int hibernate(void)
-> > >         if (error)
-> > >                 goto Restore;
-> > >
-> > > -       ksys_sync_helper();
-> > > +       error =3D pm_sleep_fs_sync();
-> > > +       if (error)
-> > > +               goto Restore;
-> > > +
-> > >         if (filesystem_freeze_enabled)
-> > >                 filesystems_freeze();
-> > >
-> > > diff --git a/kernel/power/main.c b/kernel/power/main.c
-> > > index 3cf2d7e72567..81a53d833358 100644
-> > > --- a/kernel/power/main.c
-> > > +++ b/kernel/power/main.c
-> > > @@ -570,6 +570,81 @@ bool pm_sleep_transition_in_progress(void)
-> > >  {
-> > >         return pm_suspend_in_progress() || hibernation_in_progress();
-> > >  }
-> > > +
-> > > +static bool pm_sleep_fs_sync_queued;
-> > > +static DEFINE_SPINLOCK(pm_sleep_fs_sync_lock);
-> > > +static DECLARE_COMPLETION(pm_sleep_fs_sync_complete);
-> > > +
-> > > +/**
-> > > + * pm_stop_waiting_for_fs_sync - Abort fs_sync to abort sleep early
-> > > + *
-> > > + * This function causes the suspend process to stop waiting on an in=
--progress
-> > > + * filesystem sync, such that the suspend process can be aborted bef=
-ore the
-> > > + * filesystem sync is complete.
-> > > + */
-> > > +void pm_stop_waiting_for_fs_sync(void)
-> > > +{
-> > > +       unsigned long flags;
-> > > +
-> > > +       spin_lock_irqsave(&pm_sleep_fs_sync_lock, flags);
-> > > +       complete(&pm_sleep_fs_sync_complete);
-> > > +       spin_unlock_irqrestore(&pm_sleep_fs_sync_lock, flags);
-> > > +}
-> > > +
-> > > +static void sync_filesystems_fn(struct work_struct *work)
-> > > +{
-> > > +       unsigned long flags;
-> > > +
-> > > +       ksys_sync_helper();
-> > > +       spin_lock_irqsave(&pm_sleep_fs_sync_lock, flags);
-> > > +       pm_sleep_fs_sync_queued =3D false;
-> > > +       complete(&pm_sleep_fs_sync_complete);
-> > > +       spin_unlock_irqrestore(&pm_sleep_fs_sync_lock, flags);
-> > > +}
-> > > +static DECLARE_WORK(sync_filesystems, sync_filesystems_fn);
-> > > +
-> > > +/**
-> > > + * pm_sleep_fs_sync - Trigger fs_sync with ability to abort
-> > > + *
-> > > + * Return 0 on successful file system sync, otherwise returns -EBUSY=
- if file
-> > > + * system sync was aborted.
-> > > + */
-> > > +int pm_sleep_fs_sync(void)
-> > > +{
-> > > +       bool need_pm_sleep_fs_sync_requeue;
-> > > +       unsigned long flags;
-> > > +
-> > > +       do {
-> > > +               spin_lock_irqsave(&pm_sleep_fs_sync_lock, flags);
-> > > +               reinit_completion(&pm_sleep_fs_sync_complete);
-> > > +               /*
-> > > +                * Handle the case where a sleep immediately follows =
-a previous
-> > > +                * sleep that was aborted during fs_sync. In this cas=
-e, wait for
-> > > +                * the previous filesystem sync to finish. Then do an=
-other
-> > > +                * filesystem sync so any subsequent filesystem chang=
-es are
-> > > +                * synced before sleeping.
-> > > +                */
-> > > +               if (pm_sleep_fs_sync_queued) {
-> > > +                       need_pm_sleep_fs_sync_requeue =3D true;
-> > > +               } else {
-> > > +                       need_pm_sleep_fs_sync_requeue =3D false;
-> > > +                       pm_sleep_fs_sync_queued =3D true;
-> > > +                       schedule_work(&sync_filesystems);
-> > > +               }
-> > > +               spin_unlock_irqrestore(&pm_sleep_fs_sync_lock, flags)=
-;
-> > > +
-> > > +               /*
-> > > +                * Completion is triggered by fs_sync finishing or an=
- abort sleep
-> > > +                * signal, whichever comes first
-> > > +                */
-> > > +               wait_for_completion(&pm_sleep_fs_sync_complete);
-> > > +               if (pm_wakeup_pending())
-> > > +                       return -EBUSY;
-> > > +       } while (need_pm_sleep_fs_sync_requeue);
-> > > +
-> > > +       return 0;
-> > > +}
-> >
-> > If I'm not mistaken, the mechanism by which one more sync is started
-> > right after completing the previous one (that was in progress when
-> > suspend started) can be designed differently.
-> >
-> > 1. Use a dedicated ordered workqueue for the sync work items.
-> > 2. Use a counter instead of the two boolean vars for synchronization.
-> > 3. In pm_sleep_fs_sync(), if the counter is less than 2, increment the
-> > counter and queue up a sync work item.
-> > 4. In sync_filesystems_fn(), decrement the counter.
->
-> The problem with this is that we can't reuse the same work item. We'll
-> have to allocate one each time. Otherwise, we'll be queuing one that's
-> already queued. Right?
+On 10/23/2025 7:03 PM, Ulf Hansson wrote:
+> On Mon, 21 Jul 2025 at 14:41, Zhongqiu Han <quic_zhonhan@quicinc.com> wrote:
+>>
+>> Hi all,
+>>
+>> This patch series introduces support for CPU affinity-based latency
+>> constraints in the PM QoS framework. The motivation is to allow
+>> finer-grained power management by enabling latency QoS requests to target
+>> specific CPUs, rather than applying system-wide constraints.
+>>
+>> The current PM QoS framework supports global and per-device CPU latency
+>> constraints. However, in many real-world scenarios, such as IRQ affinity
+>> or CPU-bound kernel threads, only a subset of CPUs are
+>> performance-critical. Applying global constraints in such cases
+>> unnecessarily prevents other CPUs from entering deeper C-states, leading
+>> to increased power consumption.
+>>
+>> This series addresses that limitation by introducing a new interface that
+>> allows latency constraints to be applied to a CPU mask. This is
+>> particularly useful on heterogeneous platforms (e.g., big.LITTLE) and
+>> embedded systems where power efficiency is critical for example:
+>>
+>>                          driver A       rt kthread B      module C
+>>    CPU IDs (mask):         0-3              2-5              6-7
+>>    target latency(us):     20               30               100
+>>                            |                |                |
+>>                            v                v                v
+>>                            +---------------------------------+
+>>                            |        PM  QoS  Framework       |
+>>                            +---------------------------------+
+>>                            |                |                |
+>>                            v                v                v
+>>    CPU IDs (mask):        0-3            2-3,4-5            6-7
+>>    runtime latency(us):   20             20, 30             100
+>>
+>> The current implementation includes only cpu_affinity_latency_qos_add()
+>> and cpu_affinity_latency_qos_remove() interfaces. An update interface is
+>> planned for future submission, along with PM QoS optimizations in the UFS
+>> subsystem.
+> 
+> My apologies for the very late reply.
+> 
 
-Of course you can't queue up an already queued work, but there may be
-two of them and then in 3 above use work0 when the counter is 0 and
-use work1 when the counter is 1.  No big deal.
+Hi Uffe,
+I truly appreciate your review and discussion~
+
+
+> To fully understand how this new QoS interface is going to be used, I
+> really think we need to include a user of it, as part of the $subject
+> series.
+
+Yes, Patch 5/5 using the cpu_affinity_latency_qos_* helper functions to
+replace the logic in pseudo-locking that uses dev_pm_qos_request to
+restrict CPU latency for known CPUs (via a mask). Actually, I'm also
+looking for more users — for example, we plan to use these interfaces
+in our UFS module in the future to implement optimizations. And I also
+plan to support it in userspace on patch V3.
+
+> 
+> Besides the comments from Rafael and Christian, I also wonder how the
+> user of the interface should know what CPU-mask it should use? For
+> example, how does it know the CPU-mask for the big-cores and for the
+> little-cores? In particular as I assume the user isn't a platform
+> specific driver, but rather a generic driver that should work across
+> various platforms.
+
+This patch introduces cpu_affinity_latency_qos_* helper functions as an
+extension to the kernel existing cpu_latency_qos_* interfaces. These new
+helpers enable users to apply latency constraints to specific CPUs via a
+mask, allowing for more precise power management when the target CPUs
+are known in advance.
+If the user is a generic driver, there are two options:
+
+1.One is to use the existing cpu_latency_qos_* interfaces to directly
+restrict all CPUs from entering idle, since the driver may not know
+which specific CPUs need to be constrained.
+
+
+2.However, for generic drivers with specific workload characteristics
+such as the ufshcd driver in this patch:
+
+https://lore.kernel.org/all/20231213124353.16407-1
+-quic_mnaresh@quicinc.com/
+— if a user knows exactly which CPUs should be restricted, they can
+provide a custom mask via a hook function and use the extended API
+accordingly. The default return value of the hook is the system-wide
+possible CPUs, so it won't affect other users.
+
+In summary, this patch is mainly intended for users who know which CPUs
+they want to restrict. For users who don't, the extended API can still
+be used by passing a system-wide CPU mask, or they can simply use the
+existing cpu_latency_qos_* interfaces.
+
+Please kindly let me know if you have any more question.
+
+> 
+> [...]
+> 
+> Kind regards
+> Uffe
+> 
+
+
+-- 
+Thx and BRs,
+Zhongqiu Han
 
