@@ -1,53 +1,53 @@
-Return-Path: <linux-pm+bounces-36791-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36792-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B350BC070FB
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Oct 2025 17:47:53 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id A2F8DC07104
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Oct 2025 17:48:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BED943AB3F7
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Oct 2025 15:47:07 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 9851E56357E
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Oct 2025 15:47:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 056C532E730;
-	Fri, 24 Oct 2025 15:46:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D60132E720;
+	Fri, 24 Oct 2025 15:46:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jQyk0pm8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hirkPUsp"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D454D32E720
-	for <linux-pm@vger.kernel.org>; Fri, 24 Oct 2025 15:46:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0888931AF1F
+	for <linux-pm@vger.kernel.org>; Fri, 24 Oct 2025 15:46:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761320814; cv=none; b=mjpgvg0zHv1fnYyL/8GHlLtl0UkdANlebLfFYY05h56XhDdtsgDHv6RMMauqsN2V+4aWmA4/kXFu3CVxj8gEiSZ/4lAG49Zk7X646F4P7jAOgIbyiF7+b0qyHgWPx9ksk3l0Q7FcmqB6P5lVHw9zPgZZwUezNmrg0TpioZ2YHDg=
+	t=1761320817; cv=none; b=cAvsUqby+0kg4O9LHl9MVnaN9xp/8CV3thmZa1zHq1Z9Lq4ct1pdPAVRL7fuVgcdbI6E7x4fz56wWE7CwntFxcBhwJclrNrSLqm2DB0hRk+DBiprckV+KkS8dCP/4Jsy8zjdNPv52wlOhPWFq8/B31BMeMQiGRvHQeHS6A8BD9Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761320814; c=relaxed/simple;
-	bh=arRmVLWfA0OIIw0IvhTo1OlGzhGV3JXhy3hAi235i0Y=;
+	s=arc-20240116; t=1761320817; c=relaxed/simple;
+	bh=saOq3SW3k8W3DbOBnQgIb9bIpgoDktMm8VQZN3zH18g=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=VamI19rsXgbca/0ZOnsbEqFBFGForPhk12gNPSOkGGiX8DhYIy/ncSLWWAb4gxShzty3j4hXH16LSE8CIWZyfG+YopK6PIR2HcoxEuUN3SYlLgVF74M3bvdXi4dWweB8xXbXtFmzHBkoiDIkhO6poXdBPDvKlb3m78Kp6LSrZLI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jQyk0pm8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AE74C4CEF5;
-	Fri, 24 Oct 2025 15:46:52 +0000 (UTC)
+	 MIME-Version; b=r+2GGIREPXR8k0zeVGW/Mz1L6N5PusUNZ/QSxY2NmolOytMAQ4u4R3KZHCWQKaABW3n7qWvYOMw3QKoIiidFgAyX+S0havrvRVSYuJQFGhZEjtt2k1cTUsYoCL6h8K8/J6Vn2IAwv0HhY46fHv+s3EuXffz+RyvUnSC56Q/h0HY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hirkPUsp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62E04C113D0;
+	Fri, 24 Oct 2025 15:46:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761320814;
-	bh=arRmVLWfA0OIIw0IvhTo1OlGzhGV3JXhy3hAi235i0Y=;
+	s=k20201202; t=1761320816;
+	bh=saOq3SW3k8W3DbOBnQgIb9bIpgoDktMm8VQZN3zH18g=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:Reply-To:From;
-	b=jQyk0pm85wgQJqCVocIZgKJCV782r9hK/RWKQRJfa6oGqMSexs1lLginleyHUp6ns
-	 rytN77gHoeuZjDvgN2HZw57NXhBJAS3xkfXg5CMTmt303NjDaG4PTVN1r6hCczH0Wh
-	 BzoAWjQXpo3V1TVJxllfGrX25aoxEHvBhAWEVt+vpBZjzX4oP+4jZEfPimZkZYYe06
-	 ZRo9/rcosfaOP8LeS9cdMlcyaJgPDt1Sht8j46ItnetoZttqrKuPu6Gp8XIaEIuz9L
-	 bXH2DbNG/xR8P58z/fwpcgAPKeKeN/iaBI2lBEsV246UFTmmq8VyflsYYuD5dBeK6o
-	 FPdUqLSx64tGw==
+	b=hirkPUspHdrgMWpAl07aZrSU4M6I0zcH7AUEWRqQOtdSlPV9iNY3WpaMpkfZ97dV3
+	 jsrY5csQ33zv3KDC4XejPEbDBp5oz5ppEnNu/mfS80tahWe+E2xDpLaLSe5kNMPajj
+	 NSI0jEYYMOHCKNvB4MM5HXYCEY9foY23QjOfQEWvlrYCqA23radCHKKgmZQONJ6K7M
+	 jl6ZzDoOJDwme6AueT8v8MXJJxChP5ARmXPy3VgKHpIqcUH+D+e3FF9t4tQiWcL0nO
+	 EeOID8+ks7ydmVkHYLCLVi91CGF03tPGCAumRNTbRJ4ObQbmIAGBPGKIAX/Bmzp958
+	 tUTCuA2J866tw==
 From: Len Brown <lenb@kernel.org>
 To: rafael@kernel.org,
 	linux-pm@vger.kernel.org
 Cc: Len Brown <len.brown@intel.com>
-Subject: [PATCH 6/8] tools/power turbostat: Refactor floating point printout code
-Date: Fri, 24 Oct 2025 12:38:16 -0300
-Message-ID: <696d15cbd8c2cf29a8e7486bf9fbf085f4cefed6.1761320252.git.len.brown@intel.com>
+Subject: [PATCH 7/8] tools/power turbostat: Remove dead code
+Date: Fri, 24 Oct 2025 12:38:17 -0300
+Message-ID: <6dfb04332f2391053d4cece0782637532fc75207.1761320252.git.len.brown@intel.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <92664f2e6ab2228a3330734fc72dabeaf8a49ee1.1761320252.git.len.brown@intel.com>
 References: <92664f2e6ab2228a3330734fc72dabeaf8a49ee1.1761320252.git.len.brown@intel.com>
@@ -63,158 +63,38 @@ Content-Transfer-Encoding: 8bit
 
 From: Len Brown <len.brown@intel.com>
 
-Too many copies of (usually) the same printf code...
-
-Also, unify code for added-counter FORMAT_AVERAGE,
-which was correct where it was tested, but neglected elsewhere.
+amperf_group_fd is never used.
 
 Signed-off-by: Len Brown <len.brown@intel.com>
 ---
- tools/power/x86/turbostat/turbostat.c | 60 +++++++++++++--------------
- 1 file changed, 28 insertions(+), 32 deletions(-)
+ tools/power/x86/turbostat/turbostat.c | 7 -------
+ 1 file changed, 7 deletions(-)
 
 diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index f9b99940b247..47cb72343038 100644
+index 47cb72343038..f63525a1877c 100644
 --- a/tools/power/x86/turbostat/turbostat.c
 +++ b/tools/power/x86/turbostat/turbostat.c
-@@ -2736,6 +2736,10 @@ static inline int print_decimal_value(int width, int *printed, char *delim, unsi
- 	else
- 		return (sprintf(outp, "%s%-8lld", (*printed++ ? delim : ""), value));
+@@ -466,8 +466,6 @@ static void bic_groups_init(void)
+ #define PCL_10 14		/* PC10 */
+ #define PCLUNL 15		/* Unlimited */
+ 
+-struct amperf_group_fd;
+-
+ char *proc_stat = "/proc/stat";
+ FILE *outf;
+ int *fd_percpu;
+@@ -4418,11 +4416,6 @@ int get_core_throt_cnt(int cpu, unsigned long long *cnt)
+ 	return 0;
  }
-+static inline int print_float_value(int *printed, char *delim, double value)
-+{
-+	return (sprintf(outp, "%s%0.2f", (*printed++ ? delim : ""), value));
-+}
  
- void print_header(char *delim)
+-struct amperf_group_fd {
+-	int aperf;		/* Also the group descriptor */
+-	int mperf;
+-};
+-
+ static int read_perf_counter_info(const char *const path, const char *const parse_format, void *value_ptr)
  {
-@@ -3243,11 +3247,9 @@ int format_counters(PER_THREAD_PARAMS)
- 			outp += print_decimal_value(mp->width, &printed, delim, t->counter[i]);
- 		else if (mp->format == FORMAT_PERCENT) {
- 			if (mp->type == COUNTER_USEC)
--				outp +=
--				    sprintf(outp, "%s%.2f", (printed++ ? delim : ""),
--					    t->counter[i] / interval_float / 10000);
-+				outp += print_float_value(&printed, delim, t->counter[i] / interval_float / 10000);
- 			else
--				outp += sprintf(outp, "%s%.2f", (printed++ ? delim : ""), 100.0 * t->counter[i] / tsc);
-+				outp += print_float_value(&printed, delim, 100.0 * t->counter[i] / tsc);
- 		}
- 	}
- 
-@@ -3255,16 +3257,13 @@ int format_counters(PER_THREAD_PARAMS)
- 	for (i = 0, pp = sys.perf_tp; pp; ++i, pp = pp->next) {
- 		if (pp->format == FORMAT_RAW)
- 			outp += print_hex_value(pp->width, &printed, delim, t->perf_counter[i]);
--		else if (pp->format == FORMAT_DELTA)
-+		else if (pp->format == FORMAT_DELTA || mp->format == FORMAT_AVERAGE)
- 			outp += print_decimal_value(pp->width, &printed, delim, t->perf_counter[i]);
- 		else if (pp->format == FORMAT_PERCENT) {
- 			if (pp->type == COUNTER_USEC)
--				outp +=
--				    sprintf(outp, "%s%.2f", (printed++ ? delim : ""),
--					    t->perf_counter[i] / interval_float / 10000);
-+				outp += print_float_value(&printed, delim, t->perf_counter[i] / interval_float / 10000);
- 			else
--				outp +=
--				    sprintf(outp, "%s%.2f", (printed++ ? delim : ""), 100.0 * t->perf_counter[i] / tsc);
-+				outp += print_float_value(&printed, delim, 100.0 * t->perf_counter[i] / tsc);
- 		}
- 	}
- 
-@@ -3320,20 +3319,18 @@ int format_counters(PER_THREAD_PARAMS)
- 			outp += print_hex_value(mp->width, &printed, delim, c->counter[i]);
- 		else if (mp->format == FORMAT_DELTA || mp->format == FORMAT_AVERAGE)
- 			outp += print_decimal_value(mp->width, &printed, delim, c->counter[i]);
--		else if (mp->format == FORMAT_PERCENT) {
--			outp += sprintf(outp, "%s%.2f", (printed++ ? delim : ""), 100.0 * c->counter[i] / tsc);
--		}
-+		else if (mp->format == FORMAT_PERCENT)
-+			outp += print_float_value(&printed, delim, 100.0 * c->counter[i] / tsc);
- 	}
- 
- 	/* Added perf Core counters */
- 	for (i = 0, pp = sys.perf_cp; pp; i++, pp = pp->next) {
- 		if (pp->format == FORMAT_RAW)
- 			outp += print_hex_value(pp->width, &printed, delim, c->perf_counter[i]);
--		else if (pp->format == FORMAT_DELTA)
-+		else if (pp->format == FORMAT_DELTA || mp->format == FORMAT_AVERAGE)
- 			outp += print_decimal_value(pp->width, &printed, delim, c->perf_counter[i]);
--		else if (pp->format == FORMAT_PERCENT) {
--			outp += sprintf(outp, "%s%.2f", (printed++ ? delim : ""), 100.0 * c->perf_counter[i] / tsc);
--		}
-+		else if (pp->format == FORMAT_PERCENT)
-+			outp += print_float_value(&printed, delim, 100.0 * c->perf_counter[i] / tsc);
- 	}
- 
- 	/* Added PMT Core counters */
-@@ -3347,12 +3344,12 @@ int format_counters(PER_THREAD_PARAMS)
- 
- 		case PMT_TYPE_XTAL_TIME:
- 			value_converted = 100.0 * value_raw / crystal_hz / interval_float;
--			outp += sprintf(outp, "%s%.2f", (printed++ ? delim : ""), value_converted);
-+			outp += print_float_value(&printed, delim, value_converted);
- 			break;
- 
- 		case PMT_TYPE_TCORE_CLOCK:
- 			value_converted = 100.0 * value_raw / tcore_clock_freq_hz / interval_float;
--			outp += sprintf(outp, "%s%.2f", (printed++ ? delim : ""), value_converted);
-+			outp += print_float_value(&printed, delim, value_converted);
- 		}
- 	}
- 
-@@ -3500,26 +3497,25 @@ int format_counters(PER_THREAD_PARAMS)
- 	for (i = 0, mp = sys.pp; mp; i++, mp = mp->next) {
- 		if (mp->format == FORMAT_RAW)
- 			outp += print_hex_value(mp->width, &printed, delim, p->counter[i]);
--		else if (mp->format == FORMAT_DELTA)
--			outp += print_decimal_value(mp->width, &printed, delim, p->counter[i]);
--		else if (mp->format == FORMAT_PERCENT) {
--			outp += sprintf(outp, "%s%.2f", (printed++ ? delim : ""), 100.0 * p->counter[i] / tsc);
--		} else if (mp->type == COUNTER_K2M)
-+		else if (mp->type == COUNTER_K2M)
- 			outp += sprintf(outp, "%s%d", (printed++ ? delim : ""), (unsigned int)p->counter[i] / 1000);
-+		else if (mp->format == FORMAT_DELTA || mp->format == FORMAT_AVERAGE)
-+			outp += print_decimal_value(mp->width, &printed, delim, p->counter[i]);
-+		else if (mp->format == FORMAT_PERCENT)
-+			outp += print_float_value(&printed, delim, 100.0 * p->counter[i] / tsc);
- 	}
- 
- 	/* Added perf Package Counters */
- 	for (i = 0, pp = sys.perf_pp; pp; i++, pp = pp->next) {
- 		if (pp->format == FORMAT_RAW)
- 			outp += print_hex_value(pp->width, &printed, delim, p->perf_counter[i]);
--		else if (pp->format == FORMAT_DELTA) {
--			outp += print_decimal_value(pp->width, &printed, delim, p->perf_counter[i]);
--		} else if (pp->format == FORMAT_PERCENT) {
--			outp += sprintf(outp, "%s%.2f", (printed++ ? delim : ""), 100.0 * p->perf_counter[i] / tsc);
--		} else if (pp->type == COUNTER_K2M) {
-+		else if (pp->type == COUNTER_K2M)
- 			outp +=
- 			    sprintf(outp, "%s%d", (printed++ ? delim : ""), (unsigned int)p->perf_counter[i] / 1000);
--		}
-+		else if (pp->format == FORMAT_DELTA || mp->format == FORMAT_AVERAGE)
-+			outp += print_decimal_value(pp->width, &printed, delim, p->perf_counter[i]);
-+		else if (pp->format == FORMAT_PERCENT)
-+			outp += print_float_value(&printed, delim, 100.0 * p->perf_counter[i] / tsc);
- 	}
- 
- 	/* Added PMT Package Counters */
-@@ -3533,12 +3529,12 @@ int format_counters(PER_THREAD_PARAMS)
- 
- 		case PMT_TYPE_XTAL_TIME:
- 			value_converted = 100.0 * value_raw / crystal_hz / interval_float;
--			outp += sprintf(outp, "%s%.2f", (printed++ ? delim : ""), value_converted);
-+			outp += print_float_value(&printed, delim, value_converted);
- 			break;
- 
- 		case PMT_TYPE_TCORE_CLOCK:
- 			value_converted = 100.0 * value_raw / tcore_clock_freq_hz / interval_float;
--			outp += sprintf(outp, "%s%.2f", (printed++ ? delim : ""), value_converted);
-+			outp += print_float_value(&printed, delim, value_converted);
- 		}
- 	}
- 
+ 	int fdmt;
 -- 
 2.45.2
 
