@@ -1,355 +1,200 @@
-Return-Path: <linux-pm+bounces-36763-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36764-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4CBC7C03B30
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Oct 2025 00:47:05 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2605C04694
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Oct 2025 07:46:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id DF40B354AFC
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Oct 2025 22:47:03 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 35FFD4E0ECC
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Oct 2025 05:46:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCB0B26B742;
-	Thu, 23 Oct 2025 22:47:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E72F313DBA0;
+	Fri, 24 Oct 2025 05:46:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YmVdb8yk"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eEx2dy0T"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97C2E2BB1D
-	for <linux-pm@vger.kernel.org>; Thu, 23 Oct 2025 22:46:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5517363CF
+	for <linux-pm@vger.kernel.org>; Fri, 24 Oct 2025 05:46:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761259620; cv=none; b=P8+gxw/+8ya0gcldAy8CDmLyvW0/PtG0OnArsttQb/HTe8N11S33QP3hmbQpq5vxJY3TvKo4hFwGs7xX4Y4t4Fx/jHNzrKpJpCZ+Yt4rCWpSyFKswi/g6sExq9/yH/2E6y2w7Mbb4R2t85zEjxYsF+3GtZYbspBj0Al7wjzmuBA=
+	t=1761284814; cv=none; b=eeEUo/94udSEsdlK6R8264K5pefRSho52J8LxEk+6LIN7qAl2tTPhySI5CpxgE99rETPrl0r4I8HvuYsVYhci22glmNuyShl4gR91MjmDTOesb2iMolRb16Ju/5C9OWuRcwgSpdL7TVjv+W4uS89lyegHR5imJ6ybxGuDLln+eI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761259620; c=relaxed/simple;
-	bh=Lol0p/1OcEr3XP8rccD/JNpnzjatyofXWIu/y5Mo7yk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AkETC57HxORvofz8gqX6SzqCeIxatDYxwXe20lKJTugRfheFqETk+8ntRf9mDn6nYjQd6nYK2PDXEJkDSzMb5tchdUmGREeBxmQb3Akrz79FG0NC2HsXBMQpkZGy1eXgxGJu/6vNErTX64SvERATHd9M6C/0Unqm6Mbfk2MAMOY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=YmVdb8yk; arc=none smtp.client-ip=209.85.167.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-591ea9ccfc2so1782316e87.1
-        for <linux-pm@vger.kernel.org>; Thu, 23 Oct 2025 15:46:58 -0700 (PDT)
+	s=arc-20240116; t=1761284814; c=relaxed/simple;
+	bh=mqpBfiol+8cue8H7iv/V78L+EQtM20OQOKG+gw2a+FY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=qDgp86/Ufj95GC2Wu1GU082bo/WgkJ3+o7NsP90hHssHpq+qtV3foLu1JPBof7RPyNXPb/TnMPNlTNo4lr9Ko2CTRHP6ZwIfxS8tgDCPUj7YGyWkjEoBktUVHju5WJf31/A/AMRMvNjb9eS/+5exgIsOAB6ZMQmMcTIGmTYZdGM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eEx2dy0T; arc=none smtp.client-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-290cd62acc3so19388625ad.2
+        for <linux-pm@vger.kernel.org>; Thu, 23 Oct 2025 22:46:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1761259617; x=1761864417; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Inm/Nl3N+ajXJIRPlgpoAaTOjrjWGkKwCCLc+Xq7Vjk=;
-        b=YmVdb8ykJb0KZN/pbJG0ZDrTNRT4h00UeNjbQiJoPcAxAiz3N0AT3wSNt+CasyiRs2
-         ubebmuGmzteCXc+GKBTPkQKwj9FaSgum1SedqCKced4iF4o9pvRxJK/W95sPUSDvOmxu
-         Fech57iTHXe/oQ/QzhwVYASG1iA0/s71AHYrhHLkTejQ9ryIP9kI+HS6v5oCst+paj9v
-         k1024GnX+PzZ9xRwQuw7JgBzQ7ngcanBvHlN+YXsocTBnFePO4I6iaoUJE2Ap/sYAZ8F
-         zM/UEqmzT2d2xLKqU7/KzdPtgCrwPZ07AGYzifWZkGqrLJOF5yqXZXlMyCLDTpjxkjjk
-         BO5Q==
+        d=gmail.com; s=20230601; t=1761284812; x=1761889612; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8ggJ1ncamNDciUL/pnOvEp977Ru4f05+wirbHlcHHA4=;
+        b=eEx2dy0TBQpqvGSmv3g2dkzoqBQVY7PSYbM59Oeac5cuvID8NGti7lvTBdEjS18pIE
+         ubJuiP3p84imxhUjMf9KVme6z1SGPHs9PoqXXHQ4nRTPR+BynuNWQiJV15ztNP5F7UXt
+         iDTSOya0ove3hTbPvAn3RccyhOO0QS/lbWQ4Bp4uBCW1K0b+3EFI/Eo/nRg4TgdFEZlg
+         QdYPVP/B8eZ3E3s9L9WH53NYVtYbZLQqjMi7qksqSn32JoIp/zltawHmb9TiqG74vd6r
+         TbE6fLs/ulgaWW5Pq5DYsUkCmJvcGSRRbUxZGrJVdpBWBqTBMNnj2T0+glh4V4o2EVFC
+         2JIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761259617; x=1761864417;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Inm/Nl3N+ajXJIRPlgpoAaTOjrjWGkKwCCLc+Xq7Vjk=;
-        b=smL+oJ9K4J7IihrleXhZPXi7bCkZy7xEeq4Ag2yfMH5IWXcsc6zqS9nMbstuSTxjDZ
-         vVVyDciMsR/8r52ZzAXZ1XMS/IP3NTl8IhNa0blJDFP50VUx6Kz9MUsbK0i0JjlhZaST
-         81jM8K2VK0ppLl1+jCknLQl0gTa1WEFcFRr+k16QCsbqW3sqef5hTgQ1qP1S3e+PEqwG
-         JKyJ4DaQS99XT2eRzwWHzQtRzidO0agpzdBzrnelNKucDumvSr56gct8Aq9culIY5wiy
-         VviCQjSG6cs/QzrmDvafkFC5dDu3Qa4G7bwDLd/luJ7UL2wonR8C/rDAvOf72GJNZZGl
-         aDaA==
-X-Forwarded-Encrypted: i=1; AJvYcCW3zFPp1YGqErNVbYJ3ryOZiEJgGqExFx9leNJZO8IvPNO/UDZLISb+3haFCFDJdQcvsT1/S3wbHQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxP1YOeluIObF9u0tacwhYmmOl7EAYFNbYsPzlL8KJS8N5C+A2b
-	w+AViYta4kyViWPvwaVFi6F6oBEvt6WsOWYCkeHzUi5yvnZWWF7s7J68//58mfiGPXjNA/mBmB2
-	qv9GjiShWsvCQbyuTfy2Mo61GltsEkFGB0l7l1vpL
-X-Gm-Gg: ASbGncsT8n6I/djNuAfKQXD9XsV9y9PidPHamKOEl3BmGESsd0cR5oZHuRt93a0Dksw
-	5ZLGHRU/Dt3e0F/WZYKtGBsz22sMha2j9IzpFNsrG0B1QOjCejNVFzIIpDp7maCKS5fScqn5I7C
-	FCM9TnHupIp1LRmktP5DGrTa666U/aNMN3TdP9gghufiyuuxyUmNfxw1pGQqSTnVvvoPcrCl0+C
-	4qjVpXfhmCof4/ksxwdoO9MBZGAY/C6acO1cVvUt+yowwTd/wN1cfVNmYBX981qVLBr8fEFxPKU
-	KihlnqDNrtod2emakxeUF3AD1A==
-X-Google-Smtp-Source: AGHT+IHd5CrBHOm5d55EZjNIzsejzp5sHxKL56t5ZuAQBybymQT4Nr1WQQxe6t8K0VMJIG/YeZ2rMVyTq12nuS4YXPY=
-X-Received: by 2002:a05:6512:1194:b0:592:f390:1bf0 with SMTP id
- 2adb3069b0e04-592fc10c87cmr182196e87.8.1761259616375; Thu, 23 Oct 2025
- 15:46:56 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1761284812; x=1761889612;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8ggJ1ncamNDciUL/pnOvEp977Ru4f05+wirbHlcHHA4=;
+        b=PQGufd/HAv3lMyAmNXpjXyMb/L8cEBNzvA32K8UBZywLZxSNkPUF0zW0hxU0BbLJi0
+         9YKdWWO+8Fqr9J7MKLZVdX0LqZXjIcU3CoKY1qt7ciVQuWqqUD3qgMhlnoZ6xor1XmeK
+         td4ER62Hy03sW/ojhfnp/jRuZzbAHf05lNY08cQJJLBNrWnQQckhuXfXdOHVLrg+VC6r
+         pWfWSE690RxmFcFV3EPL2zkwFp3g168/STB6h0Uie6hjPtfcOXKiVglxA8h2+BH7VRqU
+         eELNTRasNmdamcWUPvnmnleE4XX6lOmoNkpNzSyMjxo+siioHdMG4TZe68wKa2gfjS/V
+         MJlg==
+X-Gm-Message-State: AOJu0YxiLYhjzVw27sMectLPtW6NmesAkg4GexTv16oI9LQiBaFjVWlo
+	NKNUfaYUrd/Bg7/8x/l+NUax6zOQQ78Z4nGrKBaEg6+tUZE07AroSJ3dQlep4g==
+X-Gm-Gg: ASbGncu5j6swOMIMFFJpYLvASLsJq9VOFdNOjEGt87BHCC7+Er4M4vHNWVDGU9Vvp7p
+	tIJyF+WMz/EVi51+cwBsRDvctRiDo1hh3aj/pdAxmuAGGy/ALhgqVN+Lx1O0z5PtYvxPzILfK7M
+	G20UoNMP6I5xNYdual4u25Hqb+o0vfsea8g7IkPY8fo81QskX0W1vj9/BqfhsML5iMyUd3WltvQ
+	V41cRPg6FOtciKC4Cyk0UNWHUZsBsDdAsEbU5u81tWprxTS7XH7VDEcOOWr8UQX7lnZxc1qgy3a
+	Lhl617yqWmBJqTMRCFYIOBiEdLhR6S3vpryI6Po6jjDm7ScT04SxNVxx9It7Yl9zAH1JdZ7wLzf
+	ed1gnBeC3dtlP0dWCxVeLcSaogVHAsKyAyKbyZcdiDhLufp42auVk/qmSdDmXG7oubRslVZrD1f
+	u7/cKqj+q4Es02QsCcXvrccQ/6
+X-Google-Smtp-Source: AGHT+IED860gfaQv/cIbLbAE3Ob/+vCo3S53KTjbuXMq01F6yEMwVKlQ1VuMUBWy2yfJ0IQefiHMDw==
+X-Received: by 2002:a17:902:da87:b0:269:8f2e:e38 with SMTP id d9443c01a7336-2948b95c2c0mr11575655ad.6.1761284812493;
+        Thu, 23 Oct 2025 22:46:52 -0700 (PDT)
+Received: from gmail.com ([202.133.210.164])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2946dda85dcsm43750525ad.7.2025.10.23.22.46.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Oct 2025 22:46:52 -0700 (PDT)
+Date: Fri, 24 Oct 2025 05:46:47 +0000
+From: Zuo An <zuoan.penguin@gmail.com>
+To: linux-pm@vger.kernel.org
+Cc: Thomas Renninger <trenn@suse.com>, Shuah Khan <shuah@kernel.org>, 
+	"John B. Wyatt IV" <jwyatt@redhat.com>, John Kacur <jkacur@redhat.com>
+Subject: [PATCH] tools/power/cpupower: Support building libcpupower statically
+Message-ID: <x7geegquiks3zndiavw2arihdc2rk7e2dx3lk7yxkewqii6zpg@tzjijqxyzwmu>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251017233907.2305303-1-wusamuel@google.com> <CAJZ5v0g37NNj3inHcrZG8NHeTAGAncLAY7t9Yj3bTAv7GgAQJQ@mail.gmail.com>
-In-Reply-To: <CAJZ5v0g37NNj3inHcrZG8NHeTAGAncLAY7t9Yj3bTAv7GgAQJQ@mail.gmail.com>
-From: Saravana Kannan <saravanak@google.com>
-Date: Thu, 23 Oct 2025 15:46:16 -0700
-X-Gm-Features: AS18NWCKhCxcu9rV_fl2epxZCgjuKDm8df8zwWqtPgbmGMJ1K6Tc8s6PbuH5cMU
-Message-ID: <CAGETcx8ZL3jAwFRxO1B8SFSWmC2jCitc9_61hBG-N2AvzRQv7w@mail.gmail.com>
-Subject: Re: [PATCH v5] PM: Support aborting sleep during filesystem sync
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Samuel Wu <wusamuel@google.com>, Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, tuhaowen@uniontech.com, 
-	kernel-team@android.com, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Thu, Oct 23, 2025 at 12:43=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.o=
-rg> wrote:
->
-> On Sat, Oct 18, 2025 at 1:39=E2=80=AFAM Samuel Wu <wusamuel@google.com> w=
-rote:
-> >
-> > At the start of suspend and hibernate, filesystems will sync to save th=
-e
-> > current state of the device. However, the long tail of the filesystem
-> > sync can take upwards of 25 seconds. If during this filesystem sync
-> > there is some wakeup or abort signal, it will not be processed until th=
-e
-> > sync is complete; from a user's perspective, this looks like the device
-> > is unresponsive to any form of input.
-> >
-> > This patch adds functionality to handle a sleep abort signal when in
-> > the filesystem sync phase of suspend or hibernate. This topic was first
-> > discussed by Saravana Kannan at LPC 2024 [1], where the general
-> > consensus was to allow filesystem sync on a parallel thread. In case of
-> > abort, the suspend process will stop waiting on an in-progress
-> > filesystem sync, and continue by aborting suspend before the filesystem
-> > sync is complete.
-> >
-> > Additionally, there is extra care needed to account for back-to-back
-> > sleeps while maintaining functionality to immediately abort during the
-> > filesystem sync stage. This patch handles this by serializing the
-> > sequence with an invariant; a subsequent sleep's filesystem sync
-> > operation will only start when the previous sleep's filesystem sync has
-> > finished. While waiting for the previous sleep's filesystem sync to
-> > finish, the subsequent sleep will still abort early if a wakeup event i=
-s
-> > triggered, solving the original issue of filesystem sync blocking abort=
-.
->
-> It would be good to spell out the rationale for starting another
-> filesystem sync when suspend starts while the previous sync is still
-> in progress.
->
-> > [1]: https://lpc.events/event/18/contributions/1845/
-> >
-> > Suggested-by: Saravana Kannan <saravanak@google.com>
-> > Signed-off-by: Samuel Wu <wusamuel@google.com>
-> > ---
-> > Changes in v5:
-> > - Update spin_lock() to spin_lock_irqsave() since abort can be in IRQ c=
-ontext
-> > - Updated changelog description to be more precise regarding continuing=
- abort
-> >   sleep before fs_sync() is complete
-> > - Rename abort_sleep_during_fs_sync() to pm_stop_waiting_for_fs_sync()
-> > - Simplify from a goto to do-while in pm_sleep_fs_sync()
-> > - v4 link: https://lore.kernel.org/all/20250911185314.2377124-1-wusamue=
-l@google.com
-> >
-> > Changes in v4:
-> > - Removed patch 1/3 of v3 as it is already picked up on linux-pm
-> > - Squashed patches 2/3 and 3/3 from v3 into this single patch
-> > - Added abort during fs_sync functionality to hibernate in addition to =
-suspend
-> > - Moved variables and functions for abort from power/suspend.c to power=
-/main.c
-> > - Renamed suspend_fs_sync_with_abort() to pm_sleep_fs_sync()
-> > - Renamed suspend_abort_fs_sync() to abort_sleep_during_fs_sync()
-> > - v3 link: https://lore.kernel.org/all/20250821004237.2712312-1-wusamue=
-l@google.com/
-> >
-> > Changes in v3:
-> > - Split v2 patch into 3 patches
-> > - Moved pm_wakeup_clear() outside of if(sync_on_suspend_enabled) condit=
-ion
-> > - Updated documentation and comments within kernel/power/suspend.c
-> > - v2 link: https://lore.kernel.org/all/20250812232126.1814253-1-wusamue=
-l@google.com/
-> >
-> > Changes in v2:
-> > - Added documentation for suspend_abort_fs_sync()
-> > - Made suspend_fs_sync_lock and suspend_fs_sync_complete declaration st=
-atic
-> > - v1 link: https://lore.kernel.org/all/20250815004635.3684650-1-wusamue=
-l@google.com
-> >
-> >  drivers/base/power/wakeup.c |  8 ++++
-> >  include/linux/suspend.h     |  4 ++
-> >  kernel/power/hibernate.c    |  5 ++-
-> >  kernel/power/main.c         | 75 +++++++++++++++++++++++++++++++++++++
-> >  kernel/power/suspend.c      |  7 +++-
-> >  5 files changed, 96 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
-> > index d1283ff1080b..689c16b08b38 100644
-> > --- a/drivers/base/power/wakeup.c
-> > +++ b/drivers/base/power/wakeup.c
-> > @@ -570,6 +570,13 @@ static void wakeup_source_activate(struct wakeup_s=
-ource *ws)
-> >
-> >         /* Increment the counter of events in progress. */
-> >         cec =3D atomic_inc_return(&combined_event_count);
-> > +       /*
-> > +        * wakeup_source_activate() aborts sleep only if events_check_e=
-nabled
-> > +        * is set (see pm_wakeup_pending()). Similarly, abort sleep dur=
-ing
-> > +        * fs_sync only if events_check_enabled is set.
-> > +        */
-> > +       if (events_check_enabled)
-> > +               pm_stop_waiting_for_fs_sync();
-> >
-> >         trace_wakeup_source_activate(ws->name, cec);
-> >  }
-> > @@ -899,6 +906,7 @@ EXPORT_SYMBOL_GPL(pm_wakeup_pending);
-> >  void pm_system_wakeup(void)
-> >  {
-> >         atomic_inc(&pm_abort_suspend);
-> > +       pm_stop_waiting_for_fs_sync();
-> >         s2idle_wake();
-> >  }
-> >  EXPORT_SYMBOL_GPL(pm_system_wakeup);
-> > diff --git a/include/linux/suspend.h b/include/linux/suspend.h
-> > index b02876f1ae38..dc6829b3836f 100644
-> > --- a/include/linux/suspend.h
-> > +++ b/include/linux/suspend.h
-> > @@ -450,6 +450,8 @@ void restore_processor_state(void);
-> >  extern int register_pm_notifier(struct notifier_block *nb);
-> >  extern int unregister_pm_notifier(struct notifier_block *nb);
-> >  extern void ksys_sync_helper(void);
-> > +extern void pm_stop_waiting_for_fs_sync(void);
-> > +extern int pm_sleep_fs_sync(void);
-> >  extern void pm_report_hw_sleep_time(u64 t);
-> >  extern void pm_report_max_hw_sleep(u64 t);
-> >  void pm_restrict_gfp_mask(void);
-> > @@ -505,6 +507,8 @@ static inline void pm_restrict_gfp_mask(void) {}
-> >  static inline void pm_restore_gfp_mask(void) {}
-> >
-> >  static inline void ksys_sync_helper(void) {}
-> > +static inline pm_stop_waiting_for_fs_sync(void) {}
-> > +static inline int pm_sleep_fs_sync(void) {}
-> >
-> >  #define pm_notifier(fn, pri)   do { (void)(fn); } while (0)
-> >
-> > diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-> > index 14e85ff23551..9c8db4b3c114 100644
-> > --- a/kernel/power/hibernate.c
-> > +++ b/kernel/power/hibernate.c
-> > @@ -824,7 +824,10 @@ int hibernate(void)
-> >         if (error)
-> >                 goto Restore;
-> >
-> > -       ksys_sync_helper();
-> > +       error =3D pm_sleep_fs_sync();
-> > +       if (error)
-> > +               goto Restore;
-> > +
-> >         if (filesystem_freeze_enabled)
-> >                 filesystems_freeze();
-> >
-> > diff --git a/kernel/power/main.c b/kernel/power/main.c
-> > index 3cf2d7e72567..81a53d833358 100644
-> > --- a/kernel/power/main.c
-> > +++ b/kernel/power/main.c
-> > @@ -570,6 +570,81 @@ bool pm_sleep_transition_in_progress(void)
-> >  {
-> >         return pm_suspend_in_progress() || hibernation_in_progress();
-> >  }
-> > +
-> > +static bool pm_sleep_fs_sync_queued;
-> > +static DEFINE_SPINLOCK(pm_sleep_fs_sync_lock);
-> > +static DECLARE_COMPLETION(pm_sleep_fs_sync_complete);
-> > +
-> > +/**
-> > + * pm_stop_waiting_for_fs_sync - Abort fs_sync to abort sleep early
-> > + *
-> > + * This function causes the suspend process to stop waiting on an in-p=
-rogress
-> > + * filesystem sync, such that the suspend process can be aborted befor=
-e the
-> > + * filesystem sync is complete.
-> > + */
-> > +void pm_stop_waiting_for_fs_sync(void)
-> > +{
-> > +       unsigned long flags;
-> > +
-> > +       spin_lock_irqsave(&pm_sleep_fs_sync_lock, flags);
-> > +       complete(&pm_sleep_fs_sync_complete);
-> > +       spin_unlock_irqrestore(&pm_sleep_fs_sync_lock, flags);
-> > +}
-> > +
-> > +static void sync_filesystems_fn(struct work_struct *work)
-> > +{
-> > +       unsigned long flags;
-> > +
-> > +       ksys_sync_helper();
-> > +       spin_lock_irqsave(&pm_sleep_fs_sync_lock, flags);
-> > +       pm_sleep_fs_sync_queued =3D false;
-> > +       complete(&pm_sleep_fs_sync_complete);
-> > +       spin_unlock_irqrestore(&pm_sleep_fs_sync_lock, flags);
-> > +}
-> > +static DECLARE_WORK(sync_filesystems, sync_filesystems_fn);
-> > +
-> > +/**
-> > + * pm_sleep_fs_sync - Trigger fs_sync with ability to abort
-> > + *
-> > + * Return 0 on successful file system sync, otherwise returns -EBUSY i=
-f file
-> > + * system sync was aborted.
-> > + */
-> > +int pm_sleep_fs_sync(void)
-> > +{
-> > +       bool need_pm_sleep_fs_sync_requeue;
-> > +       unsigned long flags;
-> > +
-> > +       do {
-> > +               spin_lock_irqsave(&pm_sleep_fs_sync_lock, flags);
-> > +               reinit_completion(&pm_sleep_fs_sync_complete);
-> > +               /*
-> > +                * Handle the case where a sleep immediately follows a =
-previous
-> > +                * sleep that was aborted during fs_sync. In this case,=
- wait for
-> > +                * the previous filesystem sync to finish. Then do anot=
-her
-> > +                * filesystem sync so any subsequent filesystem changes=
- are
-> > +                * synced before sleeping.
-> > +                */
-> > +               if (pm_sleep_fs_sync_queued) {
-> > +                       need_pm_sleep_fs_sync_requeue =3D true;
-> > +               } else {
-> > +                       need_pm_sleep_fs_sync_requeue =3D false;
-> > +                       pm_sleep_fs_sync_queued =3D true;
-> > +                       schedule_work(&sync_filesystems);
-> > +               }
-> > +               spin_unlock_irqrestore(&pm_sleep_fs_sync_lock, flags);
-> > +
-> > +               /*
-> > +                * Completion is triggered by fs_sync finishing or an a=
-bort sleep
-> > +                * signal, whichever comes first
-> > +                */
-> > +               wait_for_completion(&pm_sleep_fs_sync_complete);
-> > +               if (pm_wakeup_pending())
-> > +                       return -EBUSY;
-> > +       } while (need_pm_sleep_fs_sync_requeue);
-> > +
-> > +       return 0;
-> > +}
->
-> If I'm not mistaken, the mechanism by which one more sync is started
-> right after completing the previous one (that was in progress when
-> suspend started) can be designed differently.
->
-> 1. Use a dedicated ordered workqueue for the sync work items.
-> 2. Use a counter instead of the two boolean vars for synchronization.
-> 3. In pm_sleep_fs_sync(), if the counter is less than 2, increment the
-> counter and queue up a sync work item.
-> 4. In sync_filesystems_fn(), decrement the counter.
+The cpupower Makefile built and installed libcpupower as a shared
+library (libcpupower.so) without passing `STATIC=true`, but did not
+build a static version of the library even with `STATIC=true`. (Only the
+programs were static). Thus, out-of-tree programs using libcpupower
+were unable to link statically against the library without having access
+to intermediate object files produced during the build.
 
-The problem with this is that we can't reuse the same work item. We'll
-have to allocate one each time. Otherwise, we'll be queuing one that's
-already queued. Right?
+This fixes that situation by ensuring that libcpupower.a is built and
+installed when `STATIC=true` is specified.
 
--Saravana
+Signed-off-by: Zuo An <zuoan.penguin@gmail.com>
+---
+ tools/power/cpupower/Makefile | 32 +++++++++++++++++++++-----------
+ 1 file changed, 21 insertions(+), 11 deletions(-)
+
+diff --git a/tools/power/cpupower/Makefile b/tools/power/cpupower/Makefile
+index c43db1c41205..a1df9196dc45 100644
+--- a/tools/power/cpupower/Makefile
++++ b/tools/power/cpupower/Makefile
+@@ -37,9 +37,7 @@ NLS ?=		true
+ # cpufreq-bench benchmarking tool
+ CPUFREQ_BENCH ?= true
+ 
+-# Do not build libraries, but build the code in statically
+-# Libraries are still built, otherwise the Makefile code would
+-# be rather ugly.
++# Build the code, including libraries, statically.
+ export STATIC ?= false
+ 
+ # Prefix to the directories we're installing to
+@@ -207,14 +205,25 @@ $(OUTPUT)lib/%.o: $(LIB_SRC) $(LIB_HEADERS)
+ 	$(ECHO) "  CC      " $@
+ 	$(QUIET) $(CC) $(CFLAGS) -fPIC -o $@ -c lib/$*.c
+ 
+-$(OUTPUT)libcpupower.so.$(LIB_VER): $(LIB_OBJS)
++ifeq ($(strip $(STATIC)),true)
++LIBCPUPOWER := libcpupower.a
++else
++LIBCPUPOWER := libcpupower.so.$(LIB_VER)
++endif
++
++$(OUTPUT)$(LIBCPUPOWER): $(LIB_OBJS)
++ifeq ($(strip $(STATIC)),true)
++	$(ECHO) "  AR      " $@
++	$(QUIET) $(AR) rcs $@ $(LIB_OBJS)
++else
+ 	$(ECHO) "  LD      " $@
+ 	$(QUIET) $(CC) -shared $(CFLAGS) $(LDFLAGS) -o $@ \
+ 		-Wl,-soname,libcpupower.so.$(LIB_MAJ) $(LIB_OBJS)
+ 	@ln -sf $(@F) $(OUTPUT)libcpupower.so
+ 	@ln -sf $(@F) $(OUTPUT)libcpupower.so.$(LIB_MAJ)
++endif
+ 
+-libcpupower: $(OUTPUT)libcpupower.so.$(LIB_VER)
++libcpupower: $(OUTPUT)$(LIBCPUPOWER)
+ 
+ # Let all .o files depend on its .c file and all headers
+ # Might be worth to put this into utils/Makefile at some point of time
+@@ -224,7 +233,7 @@ $(OUTPUT)%.o: %.c
+ 	$(ECHO) "  CC      " $@
+ 	$(QUIET) $(CC) $(CFLAGS) -I./lib -I ./utils -o $@ -c $*.c
+ 
+-$(OUTPUT)cpupower: $(UTIL_OBJS) $(OUTPUT)libcpupower.so.$(LIB_VER)
++$(OUTPUT)cpupower: $(UTIL_OBJS) $(OUTPUT)$(LIBCPUPOWER)
+ 	$(ECHO) "  CC      " $@
+ ifeq ($(strip $(STATIC)),true)
+ 	$(QUIET) $(CC) $(CFLAGS) $(LDFLAGS) $(UTIL_OBJS) -lrt -lpci -L$(OUTPUT) -o $@
+@@ -269,7 +278,7 @@ update-po: $(OUTPUT)po/$(PACKAGE).pot
+ 	done;
+ endif
+ 
+-compile-bench: $(OUTPUT)libcpupower.so.$(LIB_VER)
++compile-bench: $(OUTPUT)$(LIBCPUPOWER)
+ 	@V=$(V) confdir=$(confdir) $(MAKE) -C bench O=$(OUTPUT)
+ 
+ # we compile into subdirectories. if the target directory is not the
+@@ -287,6 +296,7 @@ clean:
+ 	-find $(OUTPUT) \( -not -type d \) -and \( -name '*~' -o -name '*.[oas]' \) -type f -print \
+ 	 | xargs rm -f
+ 	-rm -f $(OUTPUT)cpupower
++	-rm -f $(OUTPUT)libcpupower.a
+ 	-rm -f $(OUTPUT)libcpupower.so*
+ 	-rm -rf $(OUTPUT)po/*.gmo
+ 	-rm -rf $(OUTPUT)po/*.pot
+@@ -295,7 +305,11 @@ clean:
+ 
+ install-lib: libcpupower
+ 	$(INSTALL) -d $(DESTDIR)${libdir}
++ifeq ($(strip $(STATIC)),true)
++	$(CP) $(OUTPUT)libcpupower.a $(DESTDIR)${libdir}/
++else
+ 	$(CP) $(OUTPUT)libcpupower.so* $(DESTDIR)${libdir}/
++endif
+ 	$(INSTALL) -d $(DESTDIR)${includedir}
+ 	$(INSTALL_DATA) lib/cpufreq.h $(DESTDIR)${includedir}/cpufreq.h
+ 	$(INSTALL_DATA) lib/cpuidle.h $(DESTDIR)${includedir}/cpuidle.h
+@@ -336,11 +350,7 @@ install-bench: compile-bench
+ 	@#DESTDIR must be set from outside to survive
+ 	@sbindir=$(sbindir) bindir=$(bindir) docdir=$(docdir) confdir=$(confdir) $(MAKE) -C bench O=$(OUTPUT) install
+ 
+-ifeq ($(strip $(STATIC)),true)
+-install: all install-tools install-man $(INSTALL_NLS) $(INSTALL_BENCH)
+-else
+ install: all install-lib install-tools install-man $(INSTALL_NLS) $(INSTALL_BENCH)
+-endif
+ 
+ uninstall:
+ 	- rm -f $(DESTDIR)${libdir}/libcpupower.*
+-- 
+2.51.1
 
