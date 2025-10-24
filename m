@@ -1,53 +1,53 @@
-Return-Path: <linux-pm+bounces-36789-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36790-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43855C07110
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Oct 2025 17:48:31 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1EC7FC070FE
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Oct 2025 17:48:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5DB321C20042
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Oct 2025 15:47:30 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 9A5FB5633FC
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Oct 2025 15:47:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0989E32F754;
-	Fri, 24 Oct 2025 15:46:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DEE232E6A7;
+	Fri, 24 Oct 2025 15:46:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y6arYswO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ukjUBXCn"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D787732ED57
-	for <linux-pm@vger.kernel.org>; Fri, 24 Oct 2025 15:46:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE23F32D439
+	for <linux-pm@vger.kernel.org>; Fri, 24 Oct 2025 15:46:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761320810; cv=none; b=YDHkpq3OaRSG2O6/m9R6tBXNsv/wpQzfjnJwBUaauZJXcJqCryEH70fsuQUJwuqen1k4HbiR3mXaZQ38YbAe7Cs7Iq12w/Lif2A5Thl1ZzNpTEfvz9WADuJp6zzGPmJobGakEr/V8AQK6EgIWzIaZh0xcGX49gEXBY0gQP9CxdQ=
+	t=1761320813; cv=none; b=oyUwAhzcH6pX9WyQbfXxZVPm/bMJQ61vyoXkstLCFEzSY6WiX+5/rfeBdfAW0IEwm2HqGDPJsq7jfO+BLC0Bm9xGKyZW1VyhLauyRLBMAHKr9P+jKVdnUVn/K5eZglKI2jM+rzLCLjouVVfQtuGy45FIjOtjonTtulQ7PB5aSVc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761320810; c=relaxed/simple;
-	bh=GWXHzkFli5dYftWmm3XabLpcqydfp5rO9O/Uu4CE70Y=;
+	s=arc-20240116; t=1761320813; c=relaxed/simple;
+	bh=adacKI/ATSnis6Y34NhcYNfTYmDY1V5hT6bJM3PL+3I=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KPXOQpbXn8W0uiC9ZlZvsWk+KMDersWRCg7MIpIZUWFEXVm/NrGrH33DxcFHfMPnmuEiRHSIC82TK/JImsIJUzO1MRl56cThAJfH4NuEpAFb2HGjOnijcvjZTyKRiTr0kxU2NLM5RkOM/IwST+u7iR9bqj1JH7Tyh+Yae5ay3Qg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y6arYswO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CD21C4CEF1;
-	Fri, 24 Oct 2025 15:46:48 +0000 (UTC)
+	 MIME-Version; b=Qyb8vroPjAeJ43JpgWB75mzNtHB/OhdIOOC8ibBBgiiBnxLNTpMUtVs/OGpdlfSNpC/VLrkhD00ADQx16dKSvr+5tP4TrmPdrBOwTmGHw1AJx3jb5xWJ0nbTMGwNLUjG6ufHA98050nbOYVy9MAYb+Tj5d/9VFMnw+3x7+X6XO4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ukjUBXCn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1693AC4CEF1;
+	Fri, 24 Oct 2025 15:46:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761320810;
-	bh=GWXHzkFli5dYftWmm3XabLpcqydfp5rO9O/Uu4CE70Y=;
+	s=k20201202; t=1761320812;
+	bh=adacKI/ATSnis6Y34NhcYNfTYmDY1V5hT6bJM3PL+3I=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:Reply-To:From;
-	b=Y6arYswOVESfRF7pDkeUF5LSpvGhQO9tyaAnutQVPBJahq1U0y7W4ZDbjOQS3igHc
-	 V1it2NvarRgZERKJtCdXXy0JHfMplIU6rTRNetpndtMYkYBfTjNLI8qpjmu9s9xvDd
-	 ckRNkDb9BeQo8rIDwhv4CXFmnp/wXoxjCDGOwvPcrC3PRMX9djDpXlCcveQ3jY0psg
-	 BKjOpSH5L+SA/J16eUBMQKHlwJ3ekAll5o6K1DHhKb+ejOI+jLSe7KUTsZ/t7gHbln
-	 3uCrndHcEsjnK92/raUVr65PwsG7XgHAqDbT0zd4GeIH039KZjBseGMP6QswJNBKzp
-	 G77GWN+C1dFKw==
+	b=ukjUBXCn0n7ghQNlbGbf0zBaQwpUCiXrrZ/fQydzA2FEBzp7wF7Mbb0TWHqDlH4mY
+	 wzi8y1xf2kAgNCbvgwa1ZQ5RsDOdAnTUk9kr6ESTSctfbSMvoUcOrnVrpfuQikC8Ab
+	 ruEC268XtffJ+L8LvnSF1dvXlqsESl4dzk8HUP4Y+mBXtofzZjGkpO2LowdR+OI6Zg
+	 PqjU7LQOTLfDjF7ySiWZ21BKbnne1S3AZ3NduEgOQM2ungLkbNmnen/MGNHOFnMmgH
+	 fapib6KU+UwzByLIU+jzasTy+ewIYiyLlWoAoYx2x/adAQvzNUo3osk5ngvdaWUYK4
+	 LxSmde5K+vA4A==
 From: Len Brown <lenb@kernel.org>
 To: rafael@kernel.org,
 	linux-pm@vger.kernel.org
 Cc: Len Brown <len.brown@intel.com>
-Subject: [PATCH 4/8] tools/power turbostat: Refactor added-counter value printing code
-Date: Fri, 24 Oct 2025 12:38:14 -0300
-Message-ID: <885e8227641604a6732cd5049f23ab39f80bee14.1761320252.git.len.brown@intel.com>
+Subject: [PATCH 5/8] tools/power turbostat.8: Update example
+Date: Fri, 24 Oct 2025 12:38:15 -0300
+Message-ID: <64f96057a6391a643f4e7c2b2333c445acdec865.1761320252.git.len.brown@intel.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <92664f2e6ab2228a3330734fc72dabeaf8a49ee1.1761320252.git.len.brown@intel.com>
 References: <92664f2e6ab2228a3330734fc72dabeaf8a49ee1.1761320252.git.len.brown@intel.com>
@@ -63,255 +63,54 @@ Content-Transfer-Encoding: 8bit
 
 From: Len Brown <len.brown@intel.com>
 
-We build up many copies of very similar code...
+Update the added-counters example to print counters in decimal
+rather than hex -- now that it is working...
 
 Signed-off-by: Len Brown <len.brown@intel.com>
 ---
- tools/power/x86/turbostat/turbostat.c | 153 ++++++++++----------------
- 1 file changed, 57 insertions(+), 96 deletions(-)
+ tools/power/x86/turbostat/turbostat.8 | 21 ++++++++++-----------
+ 1 file changed, 10 insertions(+), 11 deletions(-)
 
-diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index 5d753df8706d..f9b99940b247 100644
---- a/tools/power/x86/turbostat/turbostat.c
-+++ b/tools/power/x86/turbostat/turbostat.c
-@@ -2717,10 +2717,24 @@ void bic_lookup(cpu_set_t *ret_set, char *name_list, enum show_hide_mode mode)
-  */
- static inline int print_name(int width, int *printed, char *delim, char *name)
- {
--	if (width == 64)
-+	if (width <= 32)
-+		return (sprintf(outp, "%s%s", (*printed++ ? delim : ""), name));
-+	else
- 		return (sprintf(outp, "%s%-8s", (*printed++ ? delim : ""), name));
-+}
-+static inline int print_hex_value(int width, int *printed, char *delim, unsigned long long value)
-+{
-+	if (width <= 32)
-+		return (sprintf(outp, "%s%08x", (*printed++ ? delim : ""), (unsigned int)value));
- 	else
--		return (sprintf(outp, "%s%s", (*printed++ ? delim : ""), name));
-+		return (sprintf(outp, "%s%016llx", (*printed++ ? delim : ""), value));
-+}
-+static inline int print_decimal_value(int width, int *printed, char *delim, unsigned long long value)
-+{
-+	if (width <= 32)
-+		return (sprintf(outp, "%s%d", (*printed++ ? delim : ""), (unsigned int)value));
-+	else
-+		return (sprintf(outp, "%s%-8lld", (*printed++ ? delim : ""), value));
- }
+diff --git a/tools/power/x86/turbostat/turbostat.8 b/tools/power/x86/turbostat/turbostat.8
+index 3340def58d01..ad3fc201552f 100644
+--- a/tools/power/x86/turbostat/turbostat.8
++++ b/tools/power/x86/turbostat/turbostat.8
+@@ -410,25 +410,24 @@ CPU     pCPU%c1 CPU%c1
+ .fi
  
- void print_header(char *delim)
-@@ -3221,20 +3235,13 @@ int format_counters(PER_THREAD_PARAMS)
- 	if (DO_BIC(BIC_SMI))
- 		outp += sprintf(outp, "%s%d", (printed++ ? delim : ""), t->smi_count);
- 
--	/* Added counters */
-+	/* Added Thread Counters */
- 	for (i = 0, mp = sys.tp; mp; i++, mp = mp->next) {
--		if (mp->format == FORMAT_RAW) {
--			if (mp->width == 32)
--				outp +=
--				    sprintf(outp, "%s0x%08x", (printed++ ? delim : ""), (unsigned int)t->counter[i]);
--			else
--				outp += sprintf(outp, "%s0x%016llx", (printed++ ? delim : ""), t->counter[i]);
--		} else if (mp->format == FORMAT_DELTA || mp->format == FORMAT_AVERAGE) {
--			if ((mp->type == COUNTER_ITEMS) && sums_need_wide_columns)
--				outp += sprintf(outp, "%s%8lld", (printed++ ? delim : ""), t->counter[i]);
--			else
--				outp += sprintf(outp, "%s%lld", (printed++ ? delim : ""), t->counter[i]);
--		} else if (mp->format == FORMAT_PERCENT) {
-+		if (mp->format == FORMAT_RAW)
-+			outp += print_hex_value(mp->width, &printed, delim, t->counter[i]);
-+		else if (mp->format == FORMAT_DELTA || mp->format == FORMAT_AVERAGE)
-+			outp += print_decimal_value(mp->width, &printed, delim, t->counter[i]);
-+		else if (mp->format == FORMAT_PERCENT) {
- 			if (mp->type == COUNTER_USEC)
- 				outp +=
- 				    sprintf(outp, "%s%.2f", (printed++ ? delim : ""),
-@@ -3244,21 +3251,13 @@ int format_counters(PER_THREAD_PARAMS)
- 		}
- 	}
- 
--	/* Added perf counters */
-+	/* Added perf Thread Counters */
- 	for (i = 0, pp = sys.perf_tp; pp; ++i, pp = pp->next) {
--		if (pp->format == FORMAT_RAW) {
--			if (pp->width == 32)
--				outp +=
--				    sprintf(outp, "%s0x%08x", (printed++ ? delim : ""),
--					    (unsigned int)t->perf_counter[i]);
--			else
--				outp += sprintf(outp, "%s0x%016llx", (printed++ ? delim : ""), t->perf_counter[i]);
--		} else if (pp->format == FORMAT_DELTA) {
--			if ((pp->type == COUNTER_ITEMS) && sums_need_wide_columns)
--				outp += sprintf(outp, "%s%8lld", (printed++ ? delim : ""), t->perf_counter[i]);
--			else
--				outp += sprintf(outp, "%s%lld", (printed++ ? delim : ""), t->perf_counter[i]);
--		} else if (pp->format == FORMAT_PERCENT) {
-+		if (pp->format == FORMAT_RAW)
-+			outp += print_hex_value(pp->width, &printed, delim, t->perf_counter[i]);
-+		else if (pp->format == FORMAT_DELTA)
-+			outp += print_decimal_value(pp->width, &printed, delim, t->perf_counter[i]);
-+		else if (pp->format == FORMAT_PERCENT) {
- 			if (pp->type == COUNTER_USEC)
- 				outp +=
- 				    sprintf(outp, "%s%.2f", (printed++ ? delim : ""),
-@@ -3269,17 +3268,13 @@ int format_counters(PER_THREAD_PARAMS)
- 		}
- 	}
- 
-+	/* Added PMT Thread Counters */
- 	for (i = 0, ppmt = sys.pmt_tp; ppmt; i++, ppmt = ppmt->next) {
- 		const unsigned long value_raw = t->pmt_counter[i];
- 		double value_converted;
- 		switch (ppmt->type) {
- 		case PMT_TYPE_RAW:
--			if (pmt_counter_get_width(ppmt) <= 32)
--				outp += sprintf(outp, "%s0x%08x", (printed++ ? delim : ""),
--						(unsigned int)t->pmt_counter[i]);
--			else
--				outp += sprintf(outp, "%s0x%016llx", (printed++ ? delim : ""), t->pmt_counter[i]);
+ .SH ADD PERF COUNTER EXAMPLE #2 (using virtual cpu device)
+-Here we run on hybrid, Raptor Lake platform.
+-We limit turbostat to show output for just cpu0 (pcore) and cpu12 (ecore).
++Here we run on hybrid, Meteor Lake platform.
++We limit turbostat to show output for just cpu0 (pcore) and cpu4 (ecore).
+ We add a counter showing number of L3 cache misses, using virtual "cpu" device,
+ labeling it with the column header, "VCMISS".
+ We add a counter showing number of L3 cache misses, using virtual "cpu_core" device,
+-labeling it with the column header, "PCMISS". This will fail on ecore cpu12.
++labeling it with the column header, "PCMISS". This will fail on ecore cpu4.
+ We add a counter showing number of L3 cache misses, using virtual "cpu_atom" device,
+ labeling it with the column header, "ECMISS". This will fail on pcore cpu0.
+ We display it only once, after the conclusion of 0.1 second sleep.
+ .nf
+-sudo ./turbostat --quiet --cpu 0,12 --show CPU --add perf/cpu/cache-misses,cpu,delta,raw,VCMISS --add perf/cpu_core/cache-misses,cpu,delta,raw,PCMISS --add perf/cpu_atom/cache-misses,cpu,delta,raw,ECMISS sleep .1
++sudo ./turbostat --quiet --cpu 0,4 --show CPU --add perf/cpu/cache-misses,cpu,delta,VCMISS --add perf/cpu_core/cache-misses,cpu,delta,PCMISS --add perf/cpu_atom/cache-misses,cpu,delta,ECMISS sleep 5
+ turbostat: added_perf_counters_init_: perf/cpu_atom/cache-misses: failed to open counter on cpu0
+-turbostat: added_perf_counters_init_: perf/cpu_core/cache-misses: failed to open counter on cpu12
+-0.104630 sec
+-CPU                 ECMISS                  PCMISS                  VCMISS
+--       0x0000000000000000      0x0000000000000000      0x0000000000000000
+-0       0x0000000000000000      0x0000000000007951      0x0000000000007796
+-12      0x000000000001137a      0x0000000000000000      0x0000000000011392
 -
-+			outp += print_hex_value(pmt_counter_get_width(ppmt), &printed, delim, t->pmt_counter[i]);
- 			break;
++turbostat: added_perf_counters_init_: perf/cpu_core/cache-misses: failed to open counter on cpu4
++5.001207 sec
++CPU	ECMISS		PCMISS		VCMISS
++-	41586506	46291219	87877749
++4	83173012	0		83173040
++0	0		92582439	92582458
+ .fi
  
- 		case PMT_TYPE_XTAL_TIME:
-@@ -3319,52 +3314,35 @@ int format_counters(PER_THREAD_PARAMS)
- 	if (DO_BIC(BIC_CORE_THROT_CNT))
- 		outp += sprintf(outp, "%s%lld", (printed++ ? delim : ""), c->core_throt_cnt);
- 
-+	/* Added Core Counters */
- 	for (i = 0, mp = sys.cp; mp; i++, mp = mp->next) {
--		if (mp->format == FORMAT_RAW) {
--			if (mp->width == 32)
--				outp +=
--				    sprintf(outp, "%s0x%08x", (printed++ ? delim : ""), (unsigned int)c->counter[i]);
--			else
--				outp += sprintf(outp, "%s0x%016llx", (printed++ ? delim : ""), c->counter[i]);
--		} else if (mp->format == FORMAT_DELTA || mp->format == FORMAT_AVERAGE) {
--			if ((mp->type == COUNTER_ITEMS) && sums_need_wide_columns)
--				outp += sprintf(outp, "%s%8lld", (printed++ ? delim : ""), c->counter[i]);
--			else
--				outp += sprintf(outp, "%s%lld", (printed++ ? delim : ""), c->counter[i]);
--		} else if (mp->format == FORMAT_PERCENT) {
-+		if (mp->format == FORMAT_RAW)
-+			outp += print_hex_value(mp->width, &printed, delim, c->counter[i]);
-+		else if (mp->format == FORMAT_DELTA || mp->format == FORMAT_AVERAGE)
-+			outp += print_decimal_value(mp->width, &printed, delim, c->counter[i]);
-+		else if (mp->format == FORMAT_PERCENT) {
- 			outp += sprintf(outp, "%s%.2f", (printed++ ? delim : ""), 100.0 * c->counter[i] / tsc);
- 		}
- 	}
- 
-+	/* Added perf Core counters */
- 	for (i = 0, pp = sys.perf_cp; pp; i++, pp = pp->next) {
--		if (pp->format == FORMAT_RAW) {
--			if (pp->width == 32)
--				outp +=
--				    sprintf(outp, "%s0x%08x", (printed++ ? delim : ""),
--					    (unsigned int)c->perf_counter[i]);
--			else
--				outp += sprintf(outp, "%s0x%016llx", (printed++ ? delim : ""), c->perf_counter[i]);
--		} else if (pp->format == FORMAT_DELTA) {
--			if ((pp->type == COUNTER_ITEMS) && sums_need_wide_columns)
--				outp += sprintf(outp, "%s%8lld", (printed++ ? delim : ""), c->perf_counter[i]);
--			else
--				outp += sprintf(outp, "%s%lld", (printed++ ? delim : ""), c->perf_counter[i]);
--		} else if (pp->format == FORMAT_PERCENT) {
-+		if (pp->format == FORMAT_RAW)
-+			outp += print_hex_value(pp->width, &printed, delim, c->perf_counter[i]);
-+		else if (pp->format == FORMAT_DELTA)
-+			outp += print_decimal_value(pp->width, &printed, delim, c->perf_counter[i]);
-+		else if (pp->format == FORMAT_PERCENT) {
- 			outp += sprintf(outp, "%s%.2f", (printed++ ? delim : ""), 100.0 * c->perf_counter[i] / tsc);
- 		}
- 	}
- 
-+	/* Added PMT Core counters */
- 	for (i = 0, ppmt = sys.pmt_cp; ppmt; i++, ppmt = ppmt->next) {
- 		const unsigned long value_raw = c->pmt_counter[i];
- 		double value_converted;
- 		switch (ppmt->type) {
- 		case PMT_TYPE_RAW:
--			if (pmt_counter_get_width(ppmt) <= 32)
--				outp += sprintf(outp, "%s0x%08x", (printed++ ? delim : ""),
--						(unsigned int)c->pmt_counter[i]);
--			else
--				outp += sprintf(outp, "%s0x%016llx", (printed++ ? delim : ""), c->pmt_counter[i]);
--
-+			outp += print_hex_value(pmt_counter_get_width(ppmt), &printed, delim, c->pmt_counter[i]);
- 			break;
- 
- 		case PMT_TYPE_XTAL_TIME:
-@@ -3518,37 +3496,24 @@ int format_counters(PER_THREAD_PARAMS)
- 	if (DO_BIC(BIC_UNCORE_MHZ))
- 		outp += sprintf(outp, "%s%d", (printed++ ? delim : ""), p->uncore_mhz);
- 
-+	/* Added Package Counters */
- 	for (i = 0, mp = sys.pp; mp; i++, mp = mp->next) {
--		if (mp->format == FORMAT_RAW) {
--			if (mp->width == 32)
--				outp +=
--				    sprintf(outp, "%s0x%08x", (printed++ ? delim : ""), (unsigned int)p->counter[i]);
--			else
--				outp += sprintf(outp, "%s0x%016llx", (printed++ ? delim : ""), p->counter[i]);
--		} else if (mp->format == FORMAT_DELTA) {
--			if ((mp->type == COUNTER_ITEMS) && sums_need_wide_columns)
--				outp += sprintf(outp, "%s%8lld", (printed++ ? delim : ""), p->counter[i]);
--			else
--				outp += sprintf(outp, "%s%lld", (printed++ ? delim : ""), p->counter[i]);
--		} else if (mp->format == FORMAT_PERCENT) {
-+		if (mp->format == FORMAT_RAW)
-+			outp += print_hex_value(mp->width, &printed, delim, p->counter[i]);
-+		else if (mp->format == FORMAT_DELTA)
-+			outp += print_decimal_value(mp->width, &printed, delim, p->counter[i]);
-+		else if (mp->format == FORMAT_PERCENT) {
- 			outp += sprintf(outp, "%s%.2f", (printed++ ? delim : ""), 100.0 * p->counter[i] / tsc);
- 		} else if (mp->type == COUNTER_K2M)
- 			outp += sprintf(outp, "%s%d", (printed++ ? delim : ""), (unsigned int)p->counter[i] / 1000);
- 	}
- 
-+	/* Added perf Package Counters */
- 	for (i = 0, pp = sys.perf_pp; pp; i++, pp = pp->next) {
--		if (pp->format == FORMAT_RAW) {
--			if (pp->width == 32)
--				outp +=
--				    sprintf(outp, "%s0x%08x", (printed++ ? delim : ""),
--					    (unsigned int)p->perf_counter[i]);
--			else
--				outp += sprintf(outp, "%s0x%016llx", (printed++ ? delim : ""), p->perf_counter[i]);
--		} else if (pp->format == FORMAT_DELTA) {
--			if ((pp->type == COUNTER_ITEMS) && sums_need_wide_columns)
--				outp += sprintf(outp, "%s%8lld", (printed++ ? delim : ""), p->perf_counter[i]);
--			else
--				outp += sprintf(outp, "%s%lld", (printed++ ? delim : ""), p->perf_counter[i]);
-+		if (pp->format == FORMAT_RAW)
-+			outp += print_hex_value(pp->width, &printed, delim, p->perf_counter[i]);
-+		else if (pp->format == FORMAT_DELTA) {
-+			outp += print_decimal_value(pp->width, &printed, delim, p->perf_counter[i]);
- 		} else if (pp->format == FORMAT_PERCENT) {
- 			outp += sprintf(outp, "%s%.2f", (printed++ ? delim : ""), 100.0 * p->perf_counter[i] / tsc);
- 		} else if (pp->type == COUNTER_K2M) {
-@@ -3557,17 +3522,13 @@ int format_counters(PER_THREAD_PARAMS)
- 		}
- 	}
- 
-+	/* Added PMT Package Counters */
- 	for (i = 0, ppmt = sys.pmt_pp; ppmt; i++, ppmt = ppmt->next) {
- 		const unsigned long value_raw = p->pmt_counter[i];
- 		double value_converted;
- 		switch (ppmt->type) {
- 		case PMT_TYPE_RAW:
--			if (pmt_counter_get_width(ppmt) <= 32)
--				outp += sprintf(outp, "%s0x%08x", (printed++ ? delim : ""),
--						(unsigned int)p->pmt_counter[i]);
--			else
--				outp += sprintf(outp, "%s0x%016llx", (printed++ ? delim : ""), p->pmt_counter[i]);
--
-+			outp += print_hex_value(pmt_counter_get_width(ppmt), &printed, delim, p->pmt_counter[i]);
- 			break;
- 
- 		case PMT_TYPE_XTAL_TIME:
+ .SH ADD PMT COUNTER EXAMPLE
 -- 
 2.45.2
 
