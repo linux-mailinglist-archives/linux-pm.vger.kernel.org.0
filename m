@@ -1,238 +1,131 @@
-Return-Path: <linux-pm+bounces-36769-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36770-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 304C3C051AF
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Oct 2025 10:42:09 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 02F90C05605
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Oct 2025 11:36:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EC5EC1A065E5
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Oct 2025 08:42:32 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 310F24F5138
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Oct 2025 09:36:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E69F4305978;
-	Fri, 24 Oct 2025 08:40:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3981D3054E5;
+	Fri, 24 Oct 2025 09:36:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="HTxv+aCQ"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="idr7lAAe"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4684D305970
-	for <linux-pm@vger.kernel.org>; Fri, 24 Oct 2025 08:40:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFE1B2FB63F
+	for <linux-pm@vger.kernel.org>; Fri, 24 Oct 2025 09:36:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761295222; cv=none; b=rjgioHHJccdXxQEHvUDt9iMglgnfj588XGbsyzTAjrMoxPUG+2Gth57kvOQtBfbIP2Ixawyda5CxwP6Fh7KyFWNy0ml5yGhN0EqxHdcn/ZECpQxMp1B1p02RW7jBEhj2qowbaw7QGdDL2RNoZGF7iJDpRXgftYsZmgt3wt5qmLk=
+	t=1761298588; cv=none; b=sc2bkeiT4aDGHauETaRfkp3XW+tuYF4jYeoao6T/3Yy8rzybLcqq/VZQvF6JP871dfxZ91n1fCN/OauKWrrrsaGoMoB7Gw8tIVAKGKrsbUaGu6Wq2JezHguSlzWFEsFQ52NlopZknWQWTVLVu6If+Uz8/9/QMfRpJXoTiKqdry4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761295222; c=relaxed/simple;
-	bh=0/HpiekOuEFr+v52Q3cJ2AGl82ZF3h/HF23ETfIgSA4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=O5EH4HRy0cQHowvjXSmTyV+EBNr/NBJeysaF1FnkMtal4lvbpRDs4UQEUjayu0cHuEBsCHNsEGxLvjV2NQWTRq6oTGV9ZEaTAHjVREC/rFet1PLIcZHVPR34KH0dqwuXvIxOjpV6MOafRifKSmm87pzwRXS7UrrVUhxBQ+wrR7w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=HTxv+aCQ; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 59O3MBTw010242
-	for <linux-pm@vger.kernel.org>; Fri, 24 Oct 2025 08:40:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	0YNZn1RokASQE3KKlYOedjoJZiFwTtAXJpMFIu09VVg=; b=HTxv+aCQv5oDG+x/
-	rnxvxt2M7hj+cY7ldAl3EO0aMgMscSfySpJEgL9oE9M+tImGRTRrkdFCM2CJnakn
-	CQO2QLMcjzF65POzlo0EZYiXT1o2gRaLfydbo0gLUNfvBy1j3jI/vljf/TDC19TS
-	pebIv15e6TrTcvekhBeaJFiRfS7Zhd2f+HKCm6y3+FyDOf0iE6fE7or0Duozcbge
-	LF7+kNtQAouaM7KGzsVCk66Z0tN/z6xmEKSRxEZfCKSI7xrbt41rnkzhwxvm/sM9
-	iYjRIAgR+SXlKQIVNvZsooyWZpol/J1QwfY52HTDYZp+veUqCVPnlrCQyijnaapo
-	1bBX+w==
-Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com [209.85.215.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 49y524dknq-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Fri, 24 Oct 2025 08:40:20 +0000 (GMT)
-Received: by mail-pg1-f200.google.com with SMTP id 41be03b00d2f7-b6d0121b1c5so968019a12.0
-        for <linux-pm@vger.kernel.org>; Fri, 24 Oct 2025 01:40:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761295220; x=1761900020;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0YNZn1RokASQE3KKlYOedjoJZiFwTtAXJpMFIu09VVg=;
-        b=b8mS00ZQFFTO/KdNROU8l2nwFwZ2yFY8iS9wioNcnlGANxCgaV7zygsRPCWcF1Ab8F
-         ZjLkGoxQkNqm/pYv5cSttYVpStMjvADhaRj2s1HGQSh/db/Bqm5qMr0L85bAGdirCXv+
-         EEyNqei+iYBJcVZaoipoHFJ5SHsxmfhKq3lvyKacWdEF1XAhb/e/e5ksG3JbalIZ7nrL
-         r3A/xAxF7OviD6S4/FRy86mDPmHjdHw5x6PemM3BOUZzmy9YUzo2yGDBOrCch31z7/t9
-         Ia6UCjJ/CRe950nuh16eQ4zxX70HSjTyfb9SIwY8BjL28tx/1I3ZSAc7xM2wNPsYJBdB
-         qtTA==
-X-Forwarded-Encrypted: i=1; AJvYcCVyUrQMR1un/dFS8HJdMzf60tLz/qa6CRe75ZOr5wocU8V/FecqudbvVS2/1mLHIKnPgI25o4hqVA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YziHKuH92SP7rUsvg6RL5cIY/CGMQjyRoGhRS9KpuSuTHR7XlTS
-	/VofnuUE64iQ5wJA65upcq5U9keNSHYCi4ANbmBACmwScn8Qvlo2dLymGHbTplbI5p2qtwfuQXq
-	LqLpU+uvMJFMldGF2nR92E1bE2uWkvZ2dBVOM5pyvSR9OkQps6Om+uPGa1sXBxA==
-X-Gm-Gg: ASbGncskDIfx2fYXkrj5sf57prl16h9oDop7Jjf2z4C+I/P83CZnKgiqXD66rqdWoKZ
-	zF/vUBKlvWT61+umLu4nWuaRucBWT8+J3Se3kWB+KY8dF4JkvR2005TUDnF/dWxYfvU4y3fIEic
-	WabbL2LUqk0HRYAMrJujL24QXsOvLfE80WjOkUw8VyeqlxSBNDQVnrhuEXkKQ9zrFEwByoy3AQ5
-	O3wC0QB9LdDd6PNSjt36q+zNrxGPsvAnzRAYot+ZUZ2FWK5rstOl4rD0kJqyF0X2W4c9S+JAMiy
-	kRt6ALA5yShveknb7J0FPY2xAX19GE8Liab9hVkC6mZv3I/IAGqbryZ61Q4X3I+XLqMy1pzPP4G
-	Y4St/BWrtMnjbSDFdu2dkC/l4beC2KyewTFFrzaNTwY7nJscOqB2L6C3mFD9UDXLnhmgNLx4=
-X-Received: by 2002:a17:902:f548:b0:276:76e1:2e84 with SMTP id d9443c01a7336-290c9c8941dmr349464315ad.3.1761295219551;
-        Fri, 24 Oct 2025 01:40:19 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFTLNLn36/S60d7SJ13jy0mBlisBmviibNNbAEb8dy9ARhITndfXKQBcdUXHY27mLHKLz3ivg==
-X-Received: by 2002:a17:902:f548:b0:276:76e1:2e84 with SMTP id d9443c01a7336-290c9c8941dmr349464025ad.3.1761295219031;
-        Fri, 24 Oct 2025 01:40:19 -0700 (PDT)
-Received: from [10.133.33.181] (tpe-colo-wan-fw-bordernet.qualcomm.com. [103.229.16.4])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2946e25ba2esm47313615ad.104.2025.10.24.01.40.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Oct 2025 01:40:18 -0700 (PDT)
-Message-ID: <7acba50b-8c1e-4509-8100-3a65467d2d87@oss.qualcomm.com>
-Date: Fri, 24 Oct 2025 16:40:13 +0800
+	s=arc-20240116; t=1761298588; c=relaxed/simple;
+	bh=IhwFcLohg6CKFfqE7EDdE2jMLoyb02JJ0wyha3Wr1cs=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type:
+	 References; b=ciRbSdSfiqcqPJJIOIAFHjCMdor/eCvrdew4zPbs834AEj4o9/iSUMtJTWMMUA8i18FY6kzT227mt+ox6IBfgkB2R47G7VzXRb0xqTT2qduJrYfI+RtIfkFSvWPWAr5Mo5EiNeXCZeEe6VYPqKoN/sdV1vAQozolhMU30/WSryQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=idr7lAAe; arc=none smtp.client-ip=210.118.77.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20251024093618euoutp022be645511fd93b73e8aee24dfbf19a57~xY7moP44Y3109631096euoutp02x
+	for <linux-pm@vger.kernel.org>; Fri, 24 Oct 2025 09:36:18 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20251024093618euoutp022be645511fd93b73e8aee24dfbf19a57~xY7moP44Y3109631096euoutp02x
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1761298578;
+	bh=ERmBh8xYiDTbvxZ7jovH95wfR/eqlSI7mH3VZQ40nNM=;
+	h=From:To:Cc:Subject:Date:References:From;
+	b=idr7lAAeHj3cE08helkfkXeCVQed8SvbyIeVFsCUnJ8U0eVgMBVikdkO0L5K9l/Cl
+	 tif7KXj4ZfaBUzSFlsWF7mkX9oAsMIankUuKA2xYGr4XxiXJO9L+CXW0KMV/i/34cH
+	 uihW/51e54r3KKg9qb3hdbj+JsMkgSUStQkCpEFg=
+Received: from eusmtip2.samsung.com (unknown [203.254.199.222]) by
+	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+	20251024093617eucas1p2a84deaa88e39692fd4933d14684aaeb9~xY7mU8nQK3107431074eucas1p2n;
+	Fri, 24 Oct 2025 09:36:17 +0000 (GMT)
+Received: from AMDC4653.digital.local (unknown [106.120.51.32]) by
+	eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+	20251024093617eusmtip29ebfba4ee32bac7b05eb047c444494d7~xY7l7mEAJ2834328343eusmtip2Z;
+	Fri, 24 Oct 2025 09:36:17 +0000 (GMT)
+From: Marek Szyprowski <m.szyprowski@samsung.com>
+To: linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org
+Cc: Marek Szyprowski <m.szyprowski@samsung.com>, Ulf Hansson
+	<ulf.hansson@linaro.org>, Krzysztof Kozlowski <krzk@kernel.org>, Alim Akhtar
+	<alim.akhtar@samsung.com>, =?UTF-8?q?Andr=C3=A9=20Draszik?=
+	<andre.draszik@linaro.org>, Peter Griffin <peter.griffin@linaro.org>
+Subject: [PATCH] pmdomain: samsung: Rework legacy splash-screen handover
+ workaround
+Date: Fri, 24 Oct 2025 11:36:03 +0200
+Message-Id: <20251024093603.3484783-1-m.szyprowski@samsung.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/5] PM QoS: Add CPU affinity latency QoS support and
- resctrl integration
-To: Ulf Hansson <ulf.hansson@linaro.org>,
-        Zhongqiu Han <quic_zhonhan@quicinc.com>
-Cc: rafael@kernel.org, lenb@kernel.org, pavel@kernel.org, tony.luck@intel.com,
-        reinette.chatre@intel.com, Dave.Martin@arm.com, james.morse@arm.com,
-        amit.kucheria@linaro.org, christian.loehle@arm.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lukasz.luba@arm.com, zhongqiu.han@oss.qualcomm.com
-References: <20250721124104.806120-1-quic_zhonhan@quicinc.com>
- <CAPDyKFprP1d-9Ojwz7QaVBbdFumPmRoVnifrP8v+eL6FHR3Unw@mail.gmail.com>
-Content-Language: en-US
-From: Zhongqiu Han <zhongqiu.han@oss.qualcomm.com>
-In-Reply-To: <CAPDyKFprP1d-9Ojwz7QaVBbdFumPmRoVnifrP8v+eL6FHR3Unw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDIyMDE1NSBTYWx0ZWRfX0WmVig8Q4XqP
- YNSiqAFdKjyIWPEeI+E7SKNX9GdEAUPUQPAxott2qBp7xe/ulcA5iRTeQ+RPmbdaxwUaXdZbNeg
- Q+zm0OKfCeG2eZCEM3wbrgzazE00cScB+02nmS9M8BPYTH13z1JsSn3pWVQqInZbHFe6mWpadbF
- ZucP42/A7TbMOGJHlLstkPHwH1GsJxPwYdgYkPiXhmV+4hsrF/adZ4SUDx8RDbQxlZI7/B97zvE
- S+7LdinGpkD78Nw8/sxavNhmWnxKcBSP+Zt8i9rNwie7pafZn7d7qiy+DXWaLaV3OlvdB4zeoZQ
- H/oQvWK2n6psUjfyRwGtF7JfGpWg/lVam6e747lxJQq3Z/ks4N1i8hhCQqV8uboNBv9ELmPt1o0
- a3JUeFb3WVBtPAsaKU+INHdwtjefNA==
-X-Authority-Analysis: v=2.4 cv=Uotu9uwB c=1 sm=1 tr=0 ts=68fb3b74 cx=c_pps
- a=oF/VQ+ItUULfLr/lQ2/icg==:117 a=nuhDOHQX5FNHPW3J6Bj6AA==:17
- a=IkcTkHD0fZMA:10 a=x6icFKpwvdMA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=VwQbUJbxAAAA:8 a=COk6AnOGAAAA:8 a=Ni59kdHh3PmOLRpg5VwA:9 a=3ZKOabzyN94A:10
- a=QEXdDO2ut3YA:10 a=3WC7DwWrALyhR5TkjVHa:22 a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-GUID: mv7swp-SIKr2NFbGJJo5M_4B-JaRWJ_1
-X-Proofpoint-ORIG-GUID: mv7swp-SIKr2NFbGJJo5M_4B-JaRWJ_1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-10-23_03,2025-10-22_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- bulkscore=0 impostorscore=0 priorityscore=1501 clxscore=1015 spamscore=0
- adultscore=0 suspectscore=0 phishscore=0 lowpriorityscore=0 malwarescore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2510020000 definitions=main-2510220155
+X-CMS-MailID: 20251024093617eucas1p2a84deaa88e39692fd4933d14684aaeb9
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20251024093617eucas1p2a84deaa88e39692fd4933d14684aaeb9
+X-EPHeader: CA
+X-CMS-RootMailID: 20251024093617eucas1p2a84deaa88e39692fd4933d14684aaeb9
+References: <CGME20251024093617eucas1p2a84deaa88e39692fd4933d14684aaeb9@eucas1p2.samsung.com>
 
-On 10/23/2025 7:03 PM, Ulf Hansson wrote:
-> On Mon, 21 Jul 2025 at 14:41, Zhongqiu Han <quic_zhonhan@quicinc.com> wrote:
->>
->> Hi all,
->>
->> This patch series introduces support for CPU affinity-based latency
->> constraints in the PM QoS framework. The motivation is to allow
->> finer-grained power management by enabling latency QoS requests to target
->> specific CPUs, rather than applying system-wide constraints.
->>
->> The current PM QoS framework supports global and per-device CPU latency
->> constraints. However, in many real-world scenarios, such as IRQ affinity
->> or CPU-bound kernel threads, only a subset of CPUs are
->> performance-critical. Applying global constraints in such cases
->> unnecessarily prevents other CPUs from entering deeper C-states, leading
->> to increased power consumption.
->>
->> This series addresses that limitation by introducing a new interface that
->> allows latency constraints to be applied to a CPU mask. This is
->> particularly useful on heterogeneous platforms (e.g., big.LITTLE) and
->> embedded systems where power efficiency is critical for example:
->>
->>                          driver A       rt kthread B      module C
->>    CPU IDs (mask):         0-3              2-5              6-7
->>    target latency(us):     20               30               100
->>                            |                |                |
->>                            v                v                v
->>                            +---------------------------------+
->>                            |        PM  QoS  Framework       |
->>                            +---------------------------------+
->>                            |                |                |
->>                            v                v                v
->>    CPU IDs (mask):        0-3            2-3,4-5            6-7
->>    runtime latency(us):   20             20, 30             100
->>
->> The current implementation includes only cpu_affinity_latency_qos_add()
->> and cpu_affinity_latency_qos_remove() interfaces. An update interface is
->> planned for future submission, along with PM QoS optimizations in the UFS
->> subsystem.
-> 
-> My apologies for the very late reply.
-> 
+Limit the workaround for splash-screen handover handling to the affected
+power domains in legacy ARM 32bit systems and replace forcing a
+sync_state by explicite power domain shutdown. This approach lets
+compiler to optimize it out on newer ARM 64bit systems.
 
-Hi Uffe,
-I truly appreciate your review and discussion~
+Suggested-by: Ulf Hansson <ulf.hansson@linaro.org>
+Fixes: 0745658aebbe ("pmdomain: samsung: Fix splash-screen handover by enforcing a sync_state")
+Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
+---
+ drivers/pmdomain/samsung/exynos-pm-domains.c | 19 ++++++++++---------
+ 1 file changed, 10 insertions(+), 9 deletions(-)
 
-
-> To fully understand how this new QoS interface is going to be used, I
-> really think we need to include a user of it, as part of the $subject
-> series.
-
-Yes, Patch 5/5 using the cpu_affinity_latency_qos_* helper functions to
-replace the logic in pseudo-locking that uses dev_pm_qos_request to
-restrict CPU latency for known CPUs (via a mask). Actually, I'm also
-looking for more users — for example, we plan to use these interfaces
-in our UFS module in the future to implement optimizations. And I also
-plan to support it in userspace on patch V3.
-
-> 
-> Besides the comments from Rafael and Christian, I also wonder how the
-> user of the interface should know what CPU-mask it should use? For
-> example, how does it know the CPU-mask for the big-cores and for the
-> little-cores? In particular as I assume the user isn't a platform
-> specific driver, but rather a generic driver that should work across
-> various platforms.
-
-This patch introduces cpu_affinity_latency_qos_* helper functions as an
-extension to the kernel existing cpu_latency_qos_* interfaces. These new
-helpers enable users to apply latency constraints to specific CPUs via a
-mask, allowing for more precise power management when the target CPUs
-are known in advance.
-If the user is a generic driver, there are two options:
-
-1.One is to use the existing cpu_latency_qos_* interfaces to directly
-restrict all CPUs from entering idle, since the driver may not know
-which specific CPUs need to be constrained.
-
-
-2.However, for generic drivers with specific workload characteristics
-such as the ufshcd driver in this patch:
-
-https://lore.kernel.org/all/20231213124353.16407-1
--quic_mnaresh@quicinc.com/
-— if a user knows exactly which CPUs should be restricted, they can
-provide a custom mask via a hook function and use the extended API
-accordingly. The default return value of the hook is the system-wide
-possible CPUs, so it won't affect other users.
-
-In summary, this patch is mainly intended for users who know which CPUs
-they want to restrict. For users who don't, the extended API can still
-be used by passing a system-wide CPU mask, or they can simply use the
-existing cpu_latency_qos_* interfaces.
-
-Please kindly let me know if you have any more question.
-
-> 
-> [...]
-> 
-> Kind regards
-> Uffe
-> 
-
-
+diff --git a/drivers/pmdomain/samsung/exynos-pm-domains.c b/drivers/pmdomain/samsung/exynos-pm-domains.c
+index f53e1bd24798..8e7ac1ab0780 100644
+--- a/drivers/pmdomain/samsung/exynos-pm-domains.c
++++ b/drivers/pmdomain/samsung/exynos-pm-domains.c
+@@ -128,6 +128,16 @@ static int exynos_pd_probe(struct platform_device *pdev)
+ 	pd->pd.power_on = exynos_pd_power_on;
+ 	pd->local_pwr_cfg = pm_domain_cfg->local_pwr_cfg;
+ 
++	/*
++	 * Some Samsung platforms with bootloaders turning on the splash-screen
++	 * and handing it over to the kernel, requires the power-domains to be
++	 * reset during boot.
++	 */
++	if (IS_ENABLED(CONFIG_ARM) &&
++	    of_device_is_compatible(np, "samsung,exynos4210-pd") &&
++	    (strstr(pd->pd.name, "LCD") || strstr(pd->pd.name, "DISP")))
++		exynos_pd_power_off(&pd->pd);
++
+ 	on = readl_relaxed(pd->base + 0x4) & pd->local_pwr_cfg;
+ 
+ 	pm_genpd_init(&pd->pd, NULL, !on);
+@@ -146,15 +156,6 @@ static int exynos_pd_probe(struct platform_device *pdev)
+ 				parent.np, child.np);
+ 	}
+ 
+-	/*
+-	 * Some Samsung platforms with bootloaders turning on the splash-screen
+-	 * and handing it over to the kernel, requires the power-domains to be
+-	 * reset during boot. As a temporary hack to manage this, let's enforce
+-	 * a sync_state.
+-	 */
+-	if (!ret)
+-		of_genpd_sync_state(np);
+-
+ 	pm_runtime_enable(dev);
+ 	return ret;
+ }
 -- 
-Thx and BRs,
-Zhongqiu Han
+2.34.1
+
 
