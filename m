@@ -1,142 +1,104 @@
-Return-Path: <linux-pm+bounces-36773-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36774-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3476BC05967
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Oct 2025 12:31:53 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D013C0595B
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Oct 2025 12:31:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 48DBF3B81AF
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Oct 2025 10:24:12 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 7A2CB4F7203
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Oct 2025 10:30:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6D1830FC2F;
-	Fri, 24 Oct 2025 10:23:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E69A30FF34;
+	Fri, 24 Oct 2025 10:30:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Xu7kS+BE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l/d2Y+U8"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED44630F927
-	for <linux-pm@vger.kernel.org>; Fri, 24 Oct 2025 10:23:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D65A72C08C5;
+	Fri, 24 Oct 2025 10:30:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761301428; cv=none; b=QBwIJOVLgDPjK6CZoprwd6Y1QynLJfIWImqSbYiTyjBtmVIc/EI2Abk4obvWVCXVIUS7WFnUv2hiNKPbIPHWCxoyifcLY2SQYlSfyP+qPVkHy2dnTj3hDDrwR+zL1rah3MhFKAQJ1BZ8DtiuIWggtwUKtTALvuFGn9QtqZl89A8=
+	t=1761301843; cv=none; b=WqszXQ8Y1GDhUpTUg/4Blg8h60kIOww2lHd7bdc1E5ECjLi8LEM9hShjyATOBDbKwo7ObuBo6lNVlH1Pn3aHzwn3zx3999FjBRwTzxlOKoFCew6LNvvc7Y5CQrPHfPO6S83gYCcNTy9zDD3g3bN1XJDkiBR0yyOz3t4GtdNYIOY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761301428; c=relaxed/simple;
-	bh=EgK+kcfj+z1f7cW/gci4+KX2Dl6IQeAZ1As7DQcKk4s=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=FL63z1Y96rB11SOroqFKv1oH4VwxtVSrisN7RMr3URUDWVrdq3+YSTlyz+PzdrmnkHGuuWUcF73IQy6ZQ9UBkL+NWtuHLaeAxNPhS1v2M/forR/4djiHoCL6o56GrAji8CtK7rIRretQ8Ht+zmqlKEb3nfiuRohq0+PZZk8ySxM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Xu7kS+BE; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1761301426;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=dTfuG7mkwdAcHRX5d7idU5PTbdJ+nPsDJiTr0D0zK8s=;
-	b=Xu7kS+BEVRkgg/4YmpCqP2bEDhMP3GoSHYDfcYay4TJyxVg7qxODvUUy4BfD3AIlkT9c47
-	kC/z8zMvOzLV3OvdrRf5bUcWNWYmK9KKUIlFK678b7fPYaCHt+dlQeX3cpHlgYJPsh63En
-	8I+LZ4TtYnWD/Au/MvKz30tA4q5uSMw=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-435-xMjsaOJWPMeaC3MMh3OPgw-1; Fri,
- 24 Oct 2025 06:23:40 -0400
-X-MC-Unique: xMjsaOJWPMeaC3MMh3OPgw-1
-X-Mimecast-MFC-AGG-ID: xMjsaOJWPMeaC3MMh3OPgw_1761301418
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0EB25196F742;
-	Fri, 24 Oct 2025 10:23:36 +0000 (UTC)
-Received: from [10.44.32.37] (unknown [10.44.32.37])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 57711195398C;
-	Fri, 24 Oct 2025 10:23:29 +0000 (UTC)
-Date: Fri, 24 Oct 2025 12:23:20 +0200 (CEST)
-From: Mikulas Patocka <mpatocka@redhat.com>
-To: Askar Safin <safinaskar@gmail.com>
-cc: linux-mm@kvack.org, linux-pm@vger.kernel.org, linux-block@vger.kernel.org, 
-    linux-crypto@vger.kernel.org, linux-lvm@lists.linux.dev, 
-    lvm-devel@lists.linux.dev, linux-raid@vger.kernel.org, 
-    DellClientKernel <Dell.Client.Kernel@dell.com>, dm-devel@lists.linux.dev, 
-    linux-btrfs@vger.kernel.org, Nhat Pham <nphamcs@gmail.com>, 
-    Kairui Song <ryncsn@gmail.com>, Pavel Machek <pavel@ucw.cz>, 
-    =?ISO-8859-15?Q?Rodolfo_Garc=EDa_Pe=F1as?= <kix@kix.es>, 
-    "Rafael J. Wysocki" <rafael@kernel.org>, 
-    Eric Biggers <ebiggers@kernel.org>, 
-    Lennart Poettering <mzxreary@0pointer.de>, 
-    Christian Brauner <brauner@kernel.org>, 
-    Linus Torvalds <torvalds@linux-foundation.org>, 
-    Milan Broz <milan@mazyland.cz>
-Subject: [PATCH] pm-hibernate: flush block device cache when hibernating
-In-Reply-To: <4cd2d217-f97d-4923-b852-4f8746456704@mazyland.cz>
-Message-ID: <03e58462-5045-e12f-9af6-be2aaf19f32c@redhat.com>
-References: <20251023112920.133897-1-safinaskar@gmail.com> <4cd2d217-f97d-4923-b852-4f8746456704@mazyland.cz>
+	s=arc-20240116; t=1761301843; c=relaxed/simple;
+	bh=xjBMkmI+qsDoGp9ZiRzBUp/jILZSgk47twlvE8podR4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=V3tLwzIjbKeEYPSi2uB1jC8xElcJElsFUQBW+bL3lag82L5dWdGogO0j2ND7PJNmpxax1BRahWTKnVW+FwatlmBO0j0TZaCR8rUzoFUPWoMS+UDuM5Akun5De4LI/orJEy7f4PX/+EC41MlB1w3ZYxwADrK6fwIjDdmBSK+BABM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l/d2Y+U8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E75CC4CEF1;
+	Fri, 24 Oct 2025 10:30:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761301842;
+	bh=xjBMkmI+qsDoGp9ZiRzBUp/jILZSgk47twlvE8podR4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=l/d2Y+U8bQs8VF+XsPwC/lo+bxBE0j4eWS6VDHNCD/dOyGEFM7pOVi7s1xB8wyT1F
+	 jv0kcNfIyneAU7DFc2XMuu8oHJ2C93dqlydWRrXYT3RCBqDbolkiQ18EsFfqCwzdIT
+	 F0FJ+u2jbBRNARJVywQ0ZMr1PM6LZQ50TTD9W4llmkHp0cxkQM8R7YTAZNZuhKj472
+	 K02nhKLn9f/Q1d19EUPlbhQT59235yFCKn8XDWmWaJOjbnUv34C0E0GbdT7yY2B8c1
+	 q4jVSAnw+7Qfl9JCs14YGXOOwUUitTY/lsolUgoznKOAtNMsr23PjYx6i1nIOnN4f/
+	 YsZZGbsmS20jw==
+Date: Fri, 24 Oct 2025 12:30:37 +0200
+From: Andi Shyti <andi.shyti@kernel.org>
+To: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Stephen Boyd <sboyd@kernel.org>, 
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Thomas Zimmermann <tzimmermann@suse.de>, 
+	Andrzej Hajda <andrzej.hajda@intel.com>, Robert Foss <rfoss@kernel.org>, Vinod Koul <vkoul@kernel.org>, 
+	Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>, 
+	Bartosz Golaszewski <brgl@bgdev.pl>, Guenter Roeck <linux@roeck-us.net>, 
+	Jonathan Cameron <jic23@kernel.org>, Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
+	Georgi Djakov <djakov@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
+	Joerg Roedel <joro@8bytes.org>, Jassi Brar <jassisinghbrar@gmail.com>, 
+	Mauro Carvalho Chehab <mchehab@kernel.org>, Lee Jones <lee@kernel.org>, 
+	Miquel Raynal <miquel.raynal@bootlin.com>, Richard Weinberger <richard@nod.at>, 
+	Vignesh Raghavendra <vigneshr@ti.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Johannes Berg <johannes@sipsolutions.net>, Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
+	Manivannan Sadhasivam <mani@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
+	Kishon Vijay Abraham I <kishon@kernel.org>, Sebastian Reichel <sre@kernel.org>, 
+	Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>, Mark Brown <broonie@kernel.org>, 
+	Mathieu Poirier <mathieu.poirier@linaro.org>, Philipp Zabel <p.zabel@pengutronix.de>, 
+	Olivia Mackall <olivia@selenic.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org, dmaengine@vger.kernel.org, 
+	linux-fpga@vger.kernel.org, linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-iio@vger.kernel.org, linux-input@vger.kernel.org, 
+	linux-pm@vger.kernel.org, iommu@lists.linux.dev, linux-media@vger.kernel.org, 
+	linux-mtd@lists.infradead.org, netdev@vger.kernel.org, linux-wireless@vger.kernel.org, 
+	linux-pci@vger.kernel.org, linux-phy@lists.infradead.org, linux-pwm@vger.kernel.org, 
+	linux-remoteproc@vger.kernel.org, linux-crypto@vger.kernel.org, linux-sound@vger.kernel.org, 
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Remove extra blank lines
+Message-ID: <fncqrwr6pi3ttxkf44hncy35ogxqdvql52hdcycq4yakbkeose@gv6lxr6a4uri>
+References: <20251023143957.2899600-1-robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251023143957.2899600-1-robh@kernel.org>
 
+Hi Rob,
 
-
-On Fri, 24 Oct 2025, Askar Safin wrote:
-
-> Hi.
+On Thu, Oct 23, 2025 at 09:37:56AM -0500, Rob Herring (Arm) wrote:
+> Generally at most 1 blank line is the standard style for DT schema
+> files. Remove the few cases with more than 1 so that the yamllint check
+> for this can be enabled.
 > 
-> Hibernate to swap located on dm-integrity doesn't work.
-> Let me first describe why I need this, then I will describe a bug with steps
-> to reproduce
-> (and some speculation on cause of the bug).
+> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
 
-Hi
+Acked-by: Andi Shyti <andi.shyti@kernel.org>
 
-Does this patch fix it?
-
-Mikulas
-
-
-From: Mikulas Patocka <mpatocka@redhat.com>
-
-There was reported failure that hibernation doesn't work with 
-dm-integrity. The reason for the failure is that the hibernation code 
-doesn't issue the FLUSH bio - the data still sits in the dm-integrity 
-cache and they are lost when poweroff happens.
-
-This commit fixes the suspend code so that it issues flushes before 
-writing the header and after writing the header.
-
-Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
-Reported-by: Askar Safin <safinaskar@gmail.com>
-Link: https://lore.kernel.org/dm-devel/a48a37e3-2c22-44fb-97a4-0e57dc20421a@gmail.com/T/
-Cc: stable@vger.kernel.org
-
----
- kernel/power/swap.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-Index: linux-2.6/kernel/power/swap.c
-===================================================================
---- linux-2.6.orig/kernel/power/swap.c	2025-10-13 21:42:48.000000000 +0200
-+++ linux-2.6/kernel/power/swap.c	2025-10-24 12:01:32.000000000 +0200
-@@ -320,8 +320,10 @@ static int mark_swapfiles(struct swap_ma
- 		swsusp_header->flags = flags;
- 		if (flags & SF_CRC32_MODE)
- 			swsusp_header->crc32 = handle->crc32;
--		error = hib_submit_io_sync(REQ_OP_WRITE | REQ_SYNC,
-+		error = hib_submit_io_sync(REQ_OP_WRITE | REQ_SYNC | REQ_PREFLUSH,
- 				      swsusp_resume_block, swsusp_header);
-+		if (!error)
-+			error = blkdev_issue_flush(file_bdev(hib_resume_bdev_file));
- 	} else {
- 		pr_err("Swap header not found!\n");
- 		error = -ENODEV;
-
+Thanks,
+Andi
 
