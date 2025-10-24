@@ -1,57 +1,56 @@
-Return-Path: <linux-pm+bounces-36786-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36787-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A03CC070DA
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Oct 2025 17:46:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id EABAAC070DD
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Oct 2025 17:46:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 19C113A8761
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Oct 2025 15:46:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A96F33A97A4
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Oct 2025 15:46:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B66B332C326;
-	Fri, 24 Oct 2025 15:46:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8EE432E695;
+	Fri, 24 Oct 2025 15:46:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HooQl49n"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qTPAWsJY"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 917BF324B27
-	for <linux-pm@vger.kernel.org>; Fri, 24 Oct 2025 15:46:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D5B332C303
+	for <linux-pm@vger.kernel.org>; Fri, 24 Oct 2025 15:46:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761320804; cv=none; b=WcyyMMVYhp3q8A8KAci2Ptbos88D1/445352qdJRAqZXf6fNssfBwrXM3sMpMBkmTGozvb6GNutamumkEZpOVsMqVzxvtYOsjc6+arqcGsd4KGJUfPT9DD5w2aX06Mbmqpcq8+ChHR3w9olUbfOCry8wFp2TlI231akyPdxllzE=
+	t=1761320806; cv=none; b=QkxpGjf28JQY5wey1m1+YVblyo++skW98j/6PW8qXDl8O4tITr3q8OM/AP7OjkR+3NNbFn21KQLmBhO4P0TqKVeyU9ClXO/Y56g3O/IDyGDvxHXIMdzJSnbwFb5Dq+XrzvcTCAmajGeR/jDt+shiT+2aKt4yzKIB3fyAt+QNI94=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761320804; c=relaxed/simple;
-	bh=Huh+5HfGYEwAMer0mcqMProfy5+osLVMVKj5LK1f3zI=;
+	s=arc-20240116; t=1761320806; c=relaxed/simple;
+	bh=ukvl7NB9QRrNqVAjfgVYGls9gG0n714WiCxOcDj3xTQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CC4z3bLJ8IX8DDFa70uT7DtNZXaqobeTTXhFcXjdGMXE+YPwAnABy9iXRZRAgKDKcz2dsUgQVDLcVN18hztdkVidJJT+dzHYRWxx/Qr+9CKxTFTx07UCtahny7rzNvr3GIEZwLU7ro+MecS+7wTOYG/5NFVGM+JaBSSDK6C2inA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HooQl49n; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48197C4CEF1;
-	Fri, 24 Oct 2025 15:46:41 +0000 (UTC)
+	 MIME-Version; b=mgXkH5fZfK0FeT6qj9knvx1dbZ0e/EZ9SHoF1/9sFcaqYGj8/OXz9Q+bypZybeMotU1Q48E2eFr6fJzQk4BhrZF/tTjzeodJMf1D4w2hcz8eC/aiYvrvY+51fudx9J5xgieHFobD8fXM4ak3pG9TN+1WtG9CncFMU29s+QWecks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qTPAWsJY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4DF1C4CEF1;
+	Fri, 24 Oct 2025 15:46:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761320804;
-	bh=Huh+5HfGYEwAMer0mcqMProfy5+osLVMVKj5LK1f3zI=;
+	s=k20201202; t=1761320806;
+	bh=ukvl7NB9QRrNqVAjfgVYGls9gG0n714WiCxOcDj3xTQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:Reply-To:From;
-	b=HooQl49nKY00rArXxuqw+gk3zphqT0TJ1WUuWS9iWELGK2U9+Shbp9oyY3RI7i7uo
-	 pjVM4pK/kZUYnZKAQo6FP0sRfsMUwhQu54REteKCMAhHv5BsCvyk0Z0yd0l8VbMb7X
-	 uTPUzc3Hri+bG4vmNCBpW3szmDbSDR2Jd8EED/mqRKmogLe981KoyuZd4EUaZrx+pw
-	 lXWIJgZhhERX7pdRkuDWnt22bvSQSnKhxJl7hEIe8Bzn5biJ5eW7r62ZGTTKNXMsdz
-	 E40NHBI+aWRMrXuzBzd/dI31TShnN4DZBDINqx4n+HIUhk3A6epKstdqqZ6RU1PzM4
-	 vY5q8Jo04MVhw==
+	b=qTPAWsJYvhJc9MsO72k94wRVlf+gr5NoPF72jgP9GxqghDpS6YREkBWZT3wBt/8SQ
+	 KijX0gctqnw5suYO66WPH+u5fVNuUYiMfrVUwSL0AzyOHIOJw7f+W/GyHhBbXuI2GV
+	 uQwiekhTB0KyYVMuCvbqyJS1gkmyBSodNNU/hTpulUSsFtD+6co2BNrlxp5WepfKwY
+	 V44TTp6D+idop41UoAnjhbBooIgFwjcl/3vwgaoJ8vUBiHJ67cCdK2kui/nt9HnkSu
+	 4SzJOeBLNwG+eHF8ZVNp1mpg7YZ4p5Nt6fmqOs2okoJK7VNvgb6e0MDNfbL1OcClGi
+	 zlC/G9kILLMzQ==
 From: Len Brown <lenb@kernel.org>
 To: rafael@kernel.org,
 	linux-pm@vger.kernel.org
-Cc: Len Brown <len.brown@intel.com>,
-	Andrej Tkalcec <andrej.tkalcec@intel.com>
-Subject: [PATCH 1/8] tools/power turbostat: Regression fix Uncore MHz printed in hex
-Date: Fri, 24 Oct 2025 12:38:11 -0300
-Message-ID: <92664f2e6ab2228a3330734fc72dabeaf8a49ee1.1761320252.git.len.brown@intel.com>
+Cc: Len Brown <len.brown@intel.com>
+Subject: [PATCH 2/8] tools/power turbostat: Add Wildcat Lake and Nova Lake support
+Date: Fri, 24 Oct 2025 12:38:12 -0300
+Message-ID: <4e35847d7b08e62e73b1636207f8c9074b4a4893.1761320252.git.len.brown@intel.com>
 X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20251024154630.18359-1-lenb@kernel.org>
-References: <20251024154630.18359-1-lenb@kernel.org>
+In-Reply-To: <92664f2e6ab2228a3330734fc72dabeaf8a49ee1.1761320252.git.len.brown@intel.com>
+References: <92664f2e6ab2228a3330734fc72dabeaf8a49ee1.1761320252.git.len.brown@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -64,70 +63,37 @@ Content-Transfer-Encoding: 8bit
 
 From: Len Brown <len.brown@intel.com>
 
-A patch to allow specifying FORMAT_AVERAGE to added counters...
-broke the internally added counter for Cluster Uncore MHz -- printing it in HEX.
+Treat Wildcat Lake and Nova Lake (and Panther Lake)
+the same as Lunar Lake, for now.
 
-Fixes: dcd1c379b0f1 ("tools/power turbostat: add format "average" for external attributes")
-Reported-by: Andrej Tkalcec <andrej.tkalcec@intel.com>
 Signed-off-by: Len Brown <len.brown@intel.com>
 ---
- tools/power/x86/turbostat/turbostat.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ tools/power/x86/turbostat/turbostat.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
 diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index f2512d78bcbd..1b5ca2f4e92f 100644
+index 1b5ca2f4e92f..7c24c2f9a075 100644
 --- a/tools/power/x86/turbostat/turbostat.c
 +++ b/tools/power/x86/turbostat/turbostat.c
-@@ -3285,13 +3285,13 @@ int format_counters(PER_THREAD_PARAMS)
+@@ -1210,6 +1210,9 @@ static const struct platform_data turbostat_pdata[] = {
+ 	{ INTEL_ARROWLAKE, &adl_features },
+ 	{ INTEL_LUNARLAKE_M, &lnl_features },
+ 	{ INTEL_PANTHERLAKE_L, &lnl_features },
++	{ INTEL_NOVALAKE, &lnl_features },
++	{ INTEL_NOVALAKE_L, &lnl_features },
++	{ INTEL_WILDCATLAKE_L, &lnl_features },
+ 	{ INTEL_ATOM_SILVERMONT, &slv_features },
+ 	{ INTEL_ATOM_SILVERMONT_D, &slvd_features },
+ 	{ INTEL_ATOM_AIRMONT, &amt_features },
+@@ -10126,7 +10129,7 @@ int get_and_dump_counters(void)
  
- 	/* Added counters */
- 	for (i = 0, mp = sys.tp; mp; i++, mp = mp->next) {
--		if (mp->format == FORMAT_RAW || mp->format == FORMAT_AVERAGE) {
-+		if (mp->format == FORMAT_RAW) {
- 			if (mp->width == 32)
- 				outp +=
- 				    sprintf(outp, "%s0x%08x", (printed++ ? delim : ""), (unsigned int)t->counter[i]);
- 			else
- 				outp += sprintf(outp, "%s0x%016llx", (printed++ ? delim : ""), t->counter[i]);
--		} else if (mp->format == FORMAT_DELTA) {
-+		} else if (mp->format == FORMAT_DELTA || mp->format == FORMAT_AVERAGE) {
- 			if ((mp->type == COUNTER_ITEMS) && sums_need_wide_columns)
- 				outp += sprintf(outp, "%s%8lld", (printed++ ? delim : ""), t->counter[i]);
- 			else
-@@ -3382,13 +3382,13 @@ int format_counters(PER_THREAD_PARAMS)
- 		outp += sprintf(outp, "%s%lld", (printed++ ? delim : ""), c->core_throt_cnt);
+ void print_version()
+ {
+-	fprintf(outf, "turbostat version 2025.09.09 - Len Brown <lenb@kernel.org>\n");
++	fprintf(outf, "turbostat version 2025.10.18 - Len Brown <lenb@kernel.org>\n");
+ }
  
- 	for (i = 0, mp = sys.cp; mp; i++, mp = mp->next) {
--		if (mp->format == FORMAT_RAW || mp->format == FORMAT_AVERAGE) {
-+		if (mp->format == FORMAT_RAW) {
- 			if (mp->width == 32)
- 				outp +=
- 				    sprintf(outp, "%s0x%08x", (printed++ ? delim : ""), (unsigned int)c->counter[i]);
- 			else
- 				outp += sprintf(outp, "%s0x%016llx", (printed++ ? delim : ""), c->counter[i]);
--		} else if (mp->format == FORMAT_DELTA) {
-+		} else if (mp->format == FORMAT_DELTA || mp->format == FORMAT_AVERAGE) {
- 			if ((mp->type == COUNTER_ITEMS) && sums_need_wide_columns)
- 				outp += sprintf(outp, "%s%8lld", (printed++ ? delim : ""), c->counter[i]);
- 			else
-@@ -3581,7 +3581,7 @@ int format_counters(PER_THREAD_PARAMS)
- 		outp += sprintf(outp, "%s%d", (printed++ ? delim : ""), p->uncore_mhz);
- 
- 	for (i = 0, mp = sys.pp; mp; i++, mp = mp->next) {
--		if (mp->format == FORMAT_RAW || mp->format == FORMAT_AVERAGE) {
-+		if (mp->format == FORMAT_RAW) {
- 			if (mp->width == 32)
- 				outp +=
- 				    sprintf(outp, "%s0x%08x", (printed++ ? delim : ""), (unsigned int)p->counter[i]);
-@@ -3758,7 +3758,7 @@ int delta_package(struct pkg_data *new, struct pkg_data *old)
- 	    new->rapl_dram_perf_status.raw_value - old->rapl_dram_perf_status.raw_value;
- 
- 	for (i = 0, mp = sys.pp; mp; i++, mp = mp->next) {
--		if (mp->format == FORMAT_RAW || mp->format == FORMAT_AVERAGE)
-+		if (mp->format == FORMAT_RAW)
- 			old->counter[i] = new->counter[i];
- 		else if (mp->format == FORMAT_AVERAGE)
- 			old->counter[i] = new->counter[i];
+ #define COMMAND_LINE_SIZE 2048
 -- 
 2.45.2
 
