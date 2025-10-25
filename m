@@ -1,79 +1,79 @@
-Return-Path: <linux-pm+bounces-36817-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36818-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id E698CC08AF3
-	for <lists+linux-pm@lfdr.de>; Sat, 25 Oct 2025 06:33:16 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B9C4C08B09
+	for <lists+linux-pm@lfdr.de>; Sat, 25 Oct 2025 06:34:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E86A54EA8C3
-	for <lists+linux-pm@lfdr.de>; Sat, 25 Oct 2025 04:33:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9DDDB40408B
+	for <lists+linux-pm@lfdr.de>; Sat, 25 Oct 2025 04:33:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F5E92877E7;
-	Sat, 25 Oct 2025 04:32:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C10E52690E7;
+	Sat, 25 Oct 2025 04:33:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g6SvKMbM"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I/aiqgIZ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70A3726D4DD
-	for <linux-pm@vger.kernel.org>; Sat, 25 Oct 2025 04:32:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB650261B8F
+	for <linux-pm@vger.kernel.org>; Sat, 25 Oct 2025 04:33:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761366779; cv=none; b=WilNEyS4AvmjKn9tCaaurh0pVqa+LCvHh863GbcHswOKWVxZ2sHbrQIEdZmLY31/pJ5b81Dis0IpN+QDjbk+2k5krlcphjOIEJk5fV7bhRdvGcMiMAqpMUYDzZUpuuwB1MlTC9g2k17YyKc6o3G9w/GODpXHFl0lN1Vp70I/qiM=
+	t=1761366793; cv=none; b=OAUVFZQjf80TJb1Dc3HqBfaUVcJ/rnXqlasraWUyTEGEl2ddy+YJgFJVDtJvjnkkL/bzDCNblnHv24sp9IDlMCGNFBn9BB3/OMS4t3nKdBRO11hAlU5cC1N5lbOe3ln1lAF1v5Yoe9Iu0wT0aIhWxQvGwGfqkg+CglpHEi/MgL8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761366779; c=relaxed/simple;
-	bh=J/zzc1ja43MRTCgO8LF4bp6opHtC/iF4Lw9TqE0/ybQ=;
+	s=arc-20240116; t=1761366793; c=relaxed/simple;
+	bh=vKwIkRtVEbLiJY2BlW4E9oyIfD48LqL7a3hDQ3iAOsA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=HsIb2RpahFm72RKq8Wa8RDQht//oj9L0uqYtd13MCWdlnM/mseD3hPRt7djrDFe81FEMLx582ES4OOFi6n26ciDCoSqXft3VihEZvxN3OSRLLIucmNiNARnOFwbpPBrvQarHubH8kbp59pjubi/p+ppX6Q0cBv8qdPoHIb3l8dk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g6SvKMbM; arc=none smtp.client-ip=209.85.208.169
+	 MIME-Version; b=PP6GjYAIPSCQz1jjL/KO9exdSHNwlIX0NohpMlR/15KUliJVPSkRtzVQ1/ca49dk6PuR6DM4B3vFoWPYFWBAlHUEat5vbXfdGqY0C5k1S/xLbZC6AbKrbIG3py3R5Fg6AkLwh9vY2yHjzv1GjryJzvLYpUxNvAUBp3FTkvg3C80=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I/aiqgIZ; arc=none smtp.client-ip=209.85.167.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-3737d0920e6so44922901fa.1
-        for <linux-pm@vger.kernel.org>; Fri, 24 Oct 2025 21:32:56 -0700 (PDT)
+Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-591c74fd958so3079536e87.3
+        for <linux-pm@vger.kernel.org>; Fri, 24 Oct 2025 21:33:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761366775; x=1761971575; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1761366790; x=1761971590; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=aU3qD3/P4X3aGl+GxoTABgHAWYmZmNCs4mQEkZTLmtc=;
-        b=g6SvKMbMx5mK95nUcQ8Jn+I/cpwcGYIi26wVqPU/lWP4xMdse69QnKDcbuOdGaD3w3
-         PCX9I/W2jOcGx10GSufAvchvpuxcYRW/sAd6WlFe1s9fMZ5ysWtJ18Ntg+f9tba+q2lz
-         UaNL9Vfbm+xVLgGh5FVvHaVq9fSBAtDp/SIw8w4K1fupzRiUb4UrKvtp3DJNeN9mXYbm
-         GPCkTz4CtA1JunK1dW1hRisRsS5aiSQoPsJ2NM/k2YA45pRC0H1whuToVmW/h8d4/H74
-         myoTCuaaaFlDnXZqctENXy+l6rO6UaqHrfxahBmcUirPcuiur3lhUlothbIOYD4dOwqy
-         Nkiw==
+        bh=BpucFmLklCdqMhA9C9XyPHvfCwLqk6dMk7FGikdB0lU=;
+        b=I/aiqgIZzf1+H/rfKheCJ5WcvKaTX0yc90/N4AmXtWycpheIw5SkaZcqhujrOPNV6w
+         2LsduEBQTtzysaBX+uU8zEY16HqiRk0OwD0Tm0KTyfbkljqFpiEPp0oILMG7jDsCP7z/
+         oV5yiruFkepNsm6ctESclmaqgFqe2ML1F3fnjcfgwsUD55h3QTEkacXyzvUsxHmryTJu
+         SCmMD7ioVbOYjpVCvH7PcXmyFLv9JrvoUPjp5ahdPW+9MAB0zAWz6OdQQftw631Z9zYZ
+         9iSh3BN7l+GMgIt8U4Qln/em7WnHncpW9fTGM0Xhthr5dK+6V537ZQ32t+dfncTMlHZV
+         9TEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761366775; x=1761971575;
+        d=1e100.net; s=20230601; t=1761366790; x=1761971590;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=aU3qD3/P4X3aGl+GxoTABgHAWYmZmNCs4mQEkZTLmtc=;
-        b=ZrhwQ33Xle1JeEfA9KAY5nXYhEaobwtgBSd9xl6ROxNDmv9pe262iZBDcKuqkVhcpd
-         S7XsHwf+Qt66PIVV6RFm8woaxstYzdIy+wubf1LlR9ud/8VOq07bywn3v2NFP8KdxSjM
-         qi4L4cHQgyXyp9UMYkgKD9Eu6C8JF1Qxg9Sxsf43gp7TidQZYRdwGnI1BsOYSf6LvlzS
-         s90tUuKBMYrFHcZ/ga1z3d1OkzQC7tDGJzhCYfL3YM3fYyimI0QPK0EP54/lbv1ybBYe
-         JEMab8F4O9KnV/szwfSaNDsTewZGqwCYIzIx5vypvpZaq1Wr/JH/wi+A9T6yGrgBavBU
-         zBMQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVbspG90zDOtVybDERIBSwpm4HZcdEp/FOb/4XT8YBhIUbLhS/wSbJom0cojSVLFmuN2R9obXA3ZA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx3UUbEIVAKcmLr7jmNd5Mv7iYaCAB+ZqSqCpl/NFY3JNE4RG/f
-	k0J0AlxYHA5Ly2ch+htKVIBsgNjz/kX6oViwgkhOY3me0EB0ZejMP9md
-X-Gm-Gg: ASbGncvVdd/aM6o/1s1/EJiFAynq+TAVq4k6ggpYQu+1pwH3OmqByA4HNNlB+B2425O
-	i+IsAdYfmXcQo0aSs5EmC28Cjcm5DXX87MugWFrEjU1PddtD9jqGmI97JQg4TExVdm6yLygIoUG
-	Bg75dcZ30Cml48MXlb9M5cxc2/xIJCbj/B9gFqPn1RpDLaEEaxaCg4MiIijKwTvUr8hkarX2YOv
-	ktfaJD6MHQu2KHgKCr6ALhHM2+WhV3M1uXoNAATxcAlKJSiyL7jWoWDIVBbBTpgqeTuFCuz555A
-	Y1Q+YXQeo10pxVpfTj32tsO832Dj54CpHgS58RhFrEFxvOyFWJyIVTaW5nCjp6c7pdXxPtjOiey
-	Ev06rxYTUM4DYgCKvkUo/bJcWTRwqIytJDjTMq9T1lwDehj0HbVlnTisdsuum5KgBIiFRWTyVBs
-	m7
-X-Google-Smtp-Source: AGHT+IH/eF1EDfMQXoqCn1NhnMmPtXp6P1wcPRtuabMRfy3u2y12SFECgEV2LqHRoicJ+PYpOzbYLg==
-X-Received: by 2002:a2e:a916:0:b0:376:4430:b545 with SMTP id 38308e7fff4ca-378e4648542mr13765001fa.49.1761366774636;
-        Fri, 24 Oct 2025 21:32:54 -0700 (PDT)
+        bh=BpucFmLklCdqMhA9C9XyPHvfCwLqk6dMk7FGikdB0lU=;
+        b=W8Q1kdB3sklbI5HQGdunswVSV9iChSt7T3jU6TNuAF34K5DUl0xv0fEPf70FS83kq1
+         De0Uv52dmnSsjNt/L6k3UqUcqTi6LQhllNZ+Qa1vQ+LbJs1Rbe5+ZQ+l6YOSkFgiRWMq
+         mUYGoQmQfnm9dHn5S3/NVAk1RT30OnKeHqn1A+k0eTIQ8fXIbv2C2v1DhvY1Fs0qhSev
+         LhCZMPO/kdMlWh2kp2d/bMw2x7o2Xg6wRT+eS1tBXVeC04hhDjppYlbyuUkp8RKk7I50
+         LijegmutVc0Qg1tKsGXbyKs3//KKqkCeHx5trFubHOdNqg/IFpcnnpBRfwXdRUMjGDD5
+         /Qyg==
+X-Forwarded-Encrypted: i=1; AJvYcCWBt2cITnr/ICMP7HJlWvtldmqjuhtvEO/4uodGyl6ngpvxtD/1oTt0mFIBT6yn9SWw0Hywe2gSWw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyZAqfKxXzZgt0SSyC6zhOLPdBQLOwwHjUzmS5C9TZ/L2pPu/MD
+	7p8XkcOa3uzi9UzDCtlN9pdULWGNpmPjsmoOZVC+EJz5r0+3hjBIKawK
+X-Gm-Gg: ASbGncvdAelXA9qnwmATaV5C+x23bhSlujUYXwl/okhre93GPM0F/jVTgbS0qye+aqU
+	dNlml0fbQBjWdg9JVYAgVVxldVfIfNzQPoxUeR/qTOPp5HWJ5ElH9gNptOJA4h9OkRJ0Mf3SYsv
+	pqslbXJiUhcTh/m+8qH9jUSVQtRqK8kidIujaNEIYOPv9mCWmI8YHh0f4ez2WsSyED28N5dynue
+	s0tyuT9ahmI7Tk7xVfreE6/WYg5UmDKvrlnO+kH4F9uznscQIYEQehNvrgiEpmM5iacUptOIIPF
+	AUOrvspPXlB/dRbhlg/AMWVn5GOoOj2iiXrm5bQh34hfoI9JkQ9OEzSmeCVWGTKfpTsjxrd9duN
+	ZY5AIo3aSHPZ4T9leZV9+mjytzedkdsAky6PgXq/S4GuSqwT/u/9feSico64bbnasM387j/vfs1
+	Vs
+X-Google-Smtp-Source: AGHT+IGI1bkGkIs+m+mcDg1QheXEpjkKTfwp/CVg0HfjhPonvg/HY7Zg24J0VSwSVIiajjlFuNgFMg==
+X-Received: by 2002:a05:651c:150c:b0:378:e58f:5f10 with SMTP id 38308e7fff4ca-378e58f613dmr12893371fa.35.1761366789881;
+        Fri, 24 Oct 2025 21:33:09 -0700 (PDT)
 Received: from junAIR ([176.106.241.81])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-378ee0ca7a0sm3409241fa.33.2025.10.24.21.32.41
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-378ee0ca7a0sm3409241fa.33.2025.10.24.21.32.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Oct 2025 21:32:54 -0700 (PDT)
+        Fri, 24 Oct 2025 21:33:09 -0700 (PDT)
 From: iuncuim <iuncuim@gmail.com>
 To: Vasily Khoruzhick <anarsoul@gmail.com>,
 	Yangtao Li <tiny.windzz@gmail.com>,
@@ -94,9 +94,9 @@ Cc: Andre Przywara <andre.przywara@arm.com>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-sunxi@lists.linux.dev,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v3 4/6] thermal/drivers/sun8i: get calibration data from two nvmem cells
-Date: Sat, 25 Oct 2025 12:31:27 +0800
-Message-ID: <20251025043129.160454-5-iuncuim@gmail.com>
+Subject: [PATCH v3 5/6] thermal/drivers/sun8i: Add support for A523 THS0/1 controllers
+Date: Sat, 25 Oct 2025 12:31:28 +0800
+Message-ID: <20251025043129.160454-6-iuncuim@gmail.com>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20251025043129.160454-1-iuncuim@gmail.com>
 References: <20251025043129.160454-1-iuncuim@gmail.com>
@@ -110,115 +110,197 @@ Content-Transfer-Encoding: 8bit
 
 From: Mikhail Kalashnikov <iuncuim@gmail.com>
 
-The A523 processor has calibration data in two nvmem cell. To be able to
-add support, the ability to add data from two cells into one array must be
-added.
+The A523 processor has two temperature controllers, THS0 and THS1.
+
+THS0 has only one temperature sensor, which is located in the DRAM.
+
+THS1 does have 3 sensors:
+ths1_0 - "big" cores
+ths1_1 - "little" cores
+ths1_2 - gpu
+
+The datasheet mentions a fourth sensor in the NPU, but lacks any registers
+for operation other than calibration registers. The vendor code reads the
+value from ths1_2, but uses separate calibration data, so we get two
+different values from real one.
 
 Signed-off-by: Mikhail Kalashnikov <iuncuim@gmail.com>
 ---
- drivers/thermal/sun8i_thermal.c | 77 ++++++++++++++++++++++-----------
- 1 file changed, 52 insertions(+), 25 deletions(-)
+ drivers/thermal/sun8i_thermal.c | 133 ++++++++++++++++++++++++++++++++
+ 1 file changed, 133 insertions(+)
 
 diff --git a/drivers/thermal/sun8i_thermal.c b/drivers/thermal/sun8i_thermal.c
-index aa496e1ba..d6d8e13e5 100644
+index d6d8e13e5..7d35ea3c4 100644
 --- a/drivers/thermal/sun8i_thermal.c
 +++ b/drivers/thermal/sun8i_thermal.c
-@@ -303,43 +303,70 @@ static int sun50i_h6_ths_calibrate(struct ths_device *tmdev,
+@@ -59,6 +59,12 @@
+ #define SUN50I_H6_THS_PC_TEMP_PERIOD(x)		((GENMASK(19, 0) & (x)) << 12)
+ #define SUN50I_H6_THS_DATA_IRQ_STS(x)		BIT(x)
  
++#define SUN55I_A523_DELIMITER			0x7c8
++#define SUN55I_A523_OFFSET_ABOVE		2736
++#define SUN55I_A523_OFFSET_BELOW		2825
++#define SUN55I_A523_SCALE_ABOVE			74
++#define SUN55I_A523_SCALE_BELOW			65
++
+ struct tsensor {
+ 	struct ths_device		*tmdev;
+ 	struct thermal_zone_device	*tzd;
+@@ -116,6 +122,15 @@ static int sun50i_h5_calc_temp(struct ths_device *tmdev,
+ 		return -1590 * reg / 10 + 276000;
+ }
+ 
++static int sun55i_a523_calc_temp(struct ths_device *tmdev,
++				 int id, int reg)
++{
++	if (reg >= SUN55I_A523_DELIMITER)
++		return SUN55I_A523_SCALE_ABOVE * (SUN55I_A523_OFFSET_ABOVE - reg);
++	else
++		return SUN55I_A523_SCALE_BELOW * (SUN55I_A523_OFFSET_BELOW - reg);
++}
++
+ static int sun8i_ths_get_temp(struct thermal_zone_device *tz, int *temp)
+ {
+ 	struct tsensor *s = thermal_zone_device_priv(tz);
+@@ -301,6 +316,97 @@ static int sun50i_h6_ths_calibrate(struct ths_device *tmdev,
+ 	return 0;
+ }
+ 
++/*
++ * The A523 nvmem calibration values. The ths1_3 is not used as it
++ * doesn't have its own sensor and doesn't have any internal switch.
++ * Instead, the value from the ths1_2 sensor is used, which gives the
++ * illusion of an independent sensor for NPU and GPU when using
++ * different calibration values.
++ *
++ * efuse layout 0x38-0x3F (caldata[0..3]):
++ *     caldata[0]      caldata[1]      caldata[2]      caldata[3]
++ * 0               16      24      32  36          48          60 64
++ * +---------------+---------------+---------------+---------------+
++ * |               |       |   temp    |  ths1_0   |  ths1_1   |   +
++ * +---------------+---------------+---------------+---------------+
++ *
++ * efuse layout 0x44-0x4B (caldata[4..7]):
++ *     caldata[4]      caldata[5]      caldata[6]      caldata[7]
++ * 0           12  16      24      32  36          48             64
++ * +---------------+---------------+---------------+---------------+
++ * |  ths1_2   |  ths1_3   |    ths0   |           |               +
++ * +---------------+---------------+---------------+---------------+
++ */
++static int sun55i_a523_ths_calibrate(struct ths_device *tmdev,
++				     u16 *caldata, int callen)
++{
++	struct device *dev = tmdev->dev;
++	int i, ft_temp;
++
++	if (!caldata[0])
++		return -EINVAL;
++
++	ft_temp = (((caldata[2] << 8) | (caldata[1] >> 8)) & FT_TEMP_MASK) * 100;
++
++	for (i = 0; i < tmdev->chip->sensor_num; i++) {
++		int sensor_reg, sensor_temp, cdata, offset;
++		/*
++		 * Chips ths0 and ths1 have common parameters for value
++		 * calibration. To separate them we can use the number of
++		 * temperature sensors on each chip.
++		 * For ths0 this value is 1.
++		 */
++		if (tmdev->chip->sensor_num == 1) {
++			sensor_reg = ((caldata[5] >> 8) | (caldata[6] << 8)) & TEMP_CALIB_MASK;
++		} else {
++			switch (i) {
++			case 0:
++				sensor_reg = (caldata[2] >> 4) & TEMP_CALIB_MASK;
++				break;
++			case 1:
++				sensor_reg = caldata[3] & TEMP_CALIB_MASK;
++				break;
++			case 2:
++				sensor_reg = caldata[4] & TEMP_CALIB_MASK;
++				break;
++			default:
++				sensor_reg = 0;
++				break;
++			}
++		}
++
++		sensor_temp = tmdev->chip->calc_temp(tmdev, i, sensor_reg);
++
++		/*
++		 * Calibration data is CALIBRATE_DEFAULT - (calculated
++		 * temperature from sensor reading at factory temperature
++		 * minus actual factory temperature) * X (scale from
++		 * temperature to register values)
++		 */
++		cdata = CALIBRATE_DEFAULT -
++			((sensor_temp - ft_temp) / SUN55I_A523_SCALE_ABOVE);
++
++		if (cdata & ~TEMP_CALIB_MASK) {
++			/*
++			 * Calibration value more than 12-bit, but calibration
++			 * register is 12-bit. In this case, ths hardware can
++			 * still work without calibration, although the data
++			 * won't be so accurate.
++			 */
++			dev_warn(dev, "sensor%d is not calibrated.\n", i);
++			continue;
++		}
++
++		offset = (i % 2) * 16;
++		regmap_update_bits(tmdev->regmap,
++				   SUN50I_H6_THS_TEMP_CALIB + (i / 2 * 4),
++				   TEMP_CALIB_MASK << offset,
++				   cdata << offset);
++	}
++
++	return 0;
++}
++
  static int sun8i_ths_calibrate(struct ths_device *tmdev)
  {
--	struct nvmem_cell *calcell;
-+	struct nvmem_cell *calcell = NULL;
- 	struct device *dev = tmdev->dev;
--	u16 *caldata;
--	size_t callen;
-+	struct device_node *np = dev_of_node(dev);
-+	struct property *prop;
-+	const char *cellname;
-+	u8 *caldata = NULL;
-+	size_t callen = 0;
- 	int ret = 0;
+ 	struct nvmem_cell *calcell = NULL;
+@@ -730,6 +836,31 @@ static const struct ths_thermal_chip sun50i_h616_ths = {
+ 	.calc_temp = sun8i_ths_calc_temp,
+ };
  
--	calcell = nvmem_cell_get(dev, "calibration");
--	if (IS_ERR(calcell)) {
--		if (PTR_ERR(calcell) == -EPROBE_DEFER)
--			return -EPROBE_DEFER;
--		/*
--		 * Even if the external calibration data stored in sid is
--		 * not accessible, the THS hardware can still work, although
--		 * the data won't be so accurate.
--		 *
--		 * The default value of calibration register is 0x800 for
--		 * every sensor, and the calibration value is usually 0x7xx
--		 * or 0x8xx, so they won't be away from the default value
--		 * for a lot.
--		 *
--		 * So here we do not return error if the calibration data is
--		 * not available, except the probe needs deferring.
--		 */
--		goto out;
-+	of_property_for_each_string(np, "nvmem-cell-names", prop, cellname) {
-+		size_t len;
-+		u8 *caldatapart;
++/* The A523 has a shared reset line for both chips */
++static const struct ths_thermal_chip sun55i_a523_ths0 = {
++	.sensor_num = 1,
++	.has_bus_clk_reset = true,
++	.has_gpadc_clk = true,
++	.ft_deviation = 5000,
++	.temp_data_base = SUN50I_H6_THS_TEMP_DATA,
++	.calibrate = sun55i_a523_ths_calibrate,
++	.init = sun50i_h6_thermal_init,
++	.irq_ack = sun50i_h6_irq_ack,
++	.calc_temp = sun55i_a523_calc_temp,
++};
 +
-+		calcell = of_nvmem_cell_get(np, cellname);
-+		if (IS_ERR(calcell)) {
-+			if (PTR_ERR(calcell) == -EPROBE_DEFER)
-+				return -EPROBE_DEFER;
-+			/*
-+			 * Even if the external calibration data stored in sid is
-+			 * not accessible, the THS hardware can still work, although
-+			 * the data won't be so accurate.
-+			 *
-+			 * The default value of calibration register is 0x800 for
-+			 * every sensor, and the calibration value is usually 0x7xx
-+			 * or 0x8xx, so they won't be away from the default value
-+			 * for a lot.
-+			 *
-+			 * So here we do not return error if the calibration data is
-+			 * not available, except the probe needs deferring.
-+			 */
-+			goto out;
-+		}
++static const struct ths_thermal_chip sun55i_a523_ths1 = {
++	.sensor_num = 3,
++	.has_bus_clk_reset = true,
++	.has_gpadc_clk = true,
++	.ft_deviation = 5000,
++	.temp_data_base = SUN50I_H6_THS_TEMP_DATA,
++	.calibrate = sun55i_a523_ths_calibrate,
++	.init = sun50i_h6_thermal_init,
++	.irq_ack = sun50i_h6_irq_ack,
++	.calc_temp = sun55i_a523_calc_temp,
++};
 +
-+		caldatapart = nvmem_cell_read(calcell, &len);
-+		nvmem_cell_put(calcell);
-+		calcell = NULL;
-+		if (IS_ERR(caldatapart)) {
-+			ret = PTR_ERR(caldatapart);
-+			goto out;
-+		}
-+
-+		caldata = devm_krealloc(dev, caldata, callen + len, GFP_KERNEL);
-+		if (!caldata) {
-+			kfree(caldatapart);
-+			ret = -ENOMEM;
-+			goto out;
-+		}
-+
-+		memcpy(caldata + callen, caldatapart, len);
-+		callen += len;
-+		kfree(caldatapart);
- 	}
- 
--	caldata = nvmem_cell_read(calcell, &callen);
- 	if (IS_ERR(caldata)) {
- 		ret = PTR_ERR(caldata);
- 		goto out;
- 	}
- 
--	tmdev->chip->calibrate(tmdev, caldata, callen);
-+	tmdev->chip->calibrate(tmdev, (u16 *)caldata, callen);
- 
--	kfree(caldata);
-+	devm_kfree(dev, caldata);
-+	caldata = NULL;
- out:
--	if (!IS_ERR(calcell))
-+	if (calcell && !IS_ERR(calcell))
- 		nvmem_cell_put(calcell);
- 	return ret;
- }
+ static const struct of_device_id of_ths_match[] = {
+ 	{ .compatible = "allwinner,sun8i-a83t-ths", .data = &sun8i_a83t_ths },
+ 	{ .compatible = "allwinner,sun8i-h3-ths", .data = &sun8i_h3_ths },
+@@ -740,6 +871,8 @@ static const struct of_device_id of_ths_match[] = {
+ 	{ .compatible = "allwinner,sun50i-h6-ths", .data = &sun50i_h6_ths },
+ 	{ .compatible = "allwinner,sun20i-d1-ths", .data = &sun20i_d1_ths },
+ 	{ .compatible = "allwinner,sun50i-h616-ths", .data = &sun50i_h616_ths },
++	{ .compatible = "allwinner,sun55i-a523-ths0", .data = &sun55i_a523_ths0 },
++	{ .compatible = "allwinner,sun55i-a523-ths1", .data = &sun55i_a523_ths1 },
+ 	{ /* sentinel */ },
+ };
+ MODULE_DEVICE_TABLE(of, of_ths_match);
 -- 
 2.51.0
 
