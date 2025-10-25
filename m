@@ -1,46 +1,46 @@
-Return-Path: <linux-pm+bounces-36810-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36811-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A7D5C087C5
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D2A53C087CA
 	for <lists+linux-pm@lfdr.de>; Sat, 25 Oct 2025 03:01:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 942E01A626D3
-	for <lists+linux-pm@lfdr.de>; Sat, 25 Oct 2025 01:01:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 79D363BBD8A
+	for <lists+linux-pm@lfdr.de>; Sat, 25 Oct 2025 01:01:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 001DD1FFC6D;
-	Sat, 25 Oct 2025 01:01:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B92620ADF8;
+	Sat, 25 Oct 2025 01:01:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ScedcqeB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jTL8UsKW"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D01111FF1BF
-	for <linux-pm@vger.kernel.org>; Sat, 25 Oct 2025 01:01:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 178D82080C8
+	for <linux-pm@vger.kernel.org>; Sat, 25 Oct 2025 01:01:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761354070; cv=none; b=j6f/B3SzIO0ajLm814EeR+hkN+Gqlllf2j2o/+5RJ2npFyXniJijfn+HY/O1uchxCAX9yclLhNcw12mxjftuWN+bpy6GYRdnx5G4/fAM6blqzdUq29oXMYl2/xgHIx1IEY0yFaS+DF/siv/vngvftTLwYZeUv9smh2PFzzsnCVg=
+	t=1761354072; cv=none; b=l5q5SWzpsxKZ1KBw13AI/zu7fcOO6p1Zo4tc1IL+69eumgvy+IWH/NcYuRegY+JZAmz0GdwF5I1+3XoKEDWMN7EdkJT78ay4cMvujfwwrBddj4Q2UBSt8JOCnXj0IOBPXCchMMfW/Iv5ARwbfgROgDThnCYuXD1Wembb2IEGL4M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761354070; c=relaxed/simple;
-	bh=z4s2rnpkLKKVn24LQ+yrvQrJv7Z/aSElqHhunimOlp4=;
+	s=arc-20240116; t=1761354072; c=relaxed/simple;
+	bh=c+ZpQvjae2c/AAdqSJlETeMLaKJkgZzOK5+wS4XXx/o=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LFnvRwRYpshWsZJhRQUy+xbYMgtdxz5onJNlh+CQF01TxpY27GLiviH7Xh7/XhkCrqv/daskf2Y8OAObdK97uwMXdLcAbj6ZM0ZpKYCy8fzhlKfqfrc9w9TH19nsdsLUGDXPkUZ83LANzltpI57l2zH9/kNDPvTGjlbhgz/JCtk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ScedcqeB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 115BEC4CEF5;
-	Sat, 25 Oct 2025 01:01:09 +0000 (UTC)
+	 MIME-Version; b=rXnlL9T9t8s3hv8sgrOa8N+z2sL4i9Q8cb8vgBRR3PYgE00Rg3BQPOCbrAp9x2Xb177OxudRcuJg4d73BScWBXtHDrSogImYdHB4TU7HyskCovpM5sBai9hnHx2Hp5BUJfuS/g2YggAkq1whKoCHnEfr2vHBYz552J955bRLLrI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jTL8UsKW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E22B6C4CEF1;
+	Sat, 25 Oct 2025 01:01:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761354070;
-	bh=z4s2rnpkLKKVn24LQ+yrvQrJv7Z/aSElqHhunimOlp4=;
+	s=k20201202; t=1761354071;
+	bh=c+ZpQvjae2c/AAdqSJlETeMLaKJkgZzOK5+wS4XXx/o=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ScedcqeBFbB9tYT4iB9wBOuqxb6CcobiqEIxzyq9GjEyRX0F+SsUmCa39UUaetvT6
-	 ZiWbTCxNI+O5MzhaHMNPvxP1JqLCSuzg0XJ8Fhko3gY8i0ZEEwrpgXXxhcP2WJFveH
-	 E7JTbZPHaRbqd5Ki2S1UlfpBvmZsDn0+g69iPRnHnOpGETTqYKA8OCuQKwaos8W9c5
-	 Sr4GBd35P0KCBEOnLDrY5s1tH8PAtjMjWAS4TG3zQ1qilR766HVRf/NLXH4TAPl5oh
-	 0e/Nv+09BPEQschl4iYRHv/mZkO5Mbfx7Avhi5jrJy5PKW6s4bWNDCPHuWcb4qzFZ8
-	 GghSHuiQUHT1A==
+	b=jTL8UsKWoovipVFWA/oyYkuWqKA7BhhalF0vb15+d5BcHviMHcj5buYRLUA9p6xGw
+	 pySDCDgcJmYP6aRHz3aK2dIwRgBeuEm/kOo9k+foc1k6WgzDzpzXmMDKS7Yqu31M7M
+	 LmXcn9PCpa1/hiB6vrn2mxK+FeN3aldGr+HV0OrzSeEWu9F/OlK0JQBK5/b8+Gq94a
+	 s2S3S8OtfluaaOeQiXQPsu79s1gFscBZzqxrXVsJD6cLHN4219BS/4xQTEiPpsgTGT
+	 6fFvKK3sN/JVQAGjqe1isjQkErRlOhwaMFSN7YYwb7HL+Wqmcu09GnImVcuJmkx1m6
+	 y82yRPl/8ucqQ==
 From: "Mario Limonciello (AMD)" <superm1@kernel.org>
 To: "Rafael J . Wysocki" <rafael@kernel.org>,
 	Alex Deucher <alexander.deucher@amd.com>
@@ -48,9 +48,9 @@ Cc: linux-pm@vger.kernel.org (open list:HIBERNATION (aka Software Suspend, aka s
 	amd-gfx@lists.freedesktop.org (open list:RADEON and AMDGPU DRM DRIVERS),
 	"Mario Limonciello (AMD)" <superm1@kernel.org>,
 	Muhammad Usama Anjum <usama.anjum@collabora.com>
-Subject: [PATCH v2 1/2] PM: Allow device drivers to manage the frozen state of a device
-Date: Fri, 24 Oct 2025 20:00:57 -0500
-Message-ID: <20251025010058.2417352-2-superm1@kernel.org>
+Subject: [PATCH v2 2/2] drm/amd: Manage frozen state internally
+Date: Fri, 24 Oct 2025 20:00:58 -0500
+Message-ID: <20251025010058.2417352-3-superm1@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20251025010058.2417352-1-superm1@kernel.org>
 References: <20251025010058.2417352-1-superm1@kernel.org>
@@ -62,84 +62,74 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-During a normal successful hibernate sequence devices will go through
-the freeze() callbacks create an image, go through the thaw() callbacks,
-and poweroff() callbacks.
+[Why]
+On a normal hibernate sequence amdgpu will skip the thaw step due to
+commit 530694f54dd5e ("drm/amdgpu: do not resume device in thaw for
+normal hibernation").
 
-During a successful hibernate sequence some device drivers may want to
-skip the thaw() callbacks.  This confuses the PM core though because it
-thinks the device is no longer suspended.
+If the hibernate sequence has been aborted however after this thawed
+step runs the PM core will think the device is suspended and will skip
+the restore() sequence for amdgpu.  This leads to accessing the device
+while in a low power state and will freeze the system.
 
-To accommodate drivers that want to do this, introduce a new is_frozen
-bit that the driver can set and manage.  From the driver perspective
-any thaw() or restore() callbacks that are being skipped should set
-is_frozen and return an error code.  The PM core will then put the
-device back into the list of devices to resume for any aborted hibernate.
+[How]
+Set `dev->power.is_frozen` to indicate to the PM core that an error
+code will be returned for thaw() callback because driver managed the
+frozen state.  If the restore() callback is called by the PM core the
+driver will resume the device.
 
 Tested-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 Signed-off-by: Mario Limonciello (AMD) <superm1@kernel.org>
 ---
 v2:
  * add tag
- * fix lkp robot issue
  * rebase on linux-pm/bleeding-edge
 ---
- Documentation/driver-api/pm/devices.rst | 8 ++++++++
- drivers/base/power/main.c               | 7 +++++++
- include/linux/pm.h                      | 3 +++
- 3 files changed, 18 insertions(+)
+ drivers/gpu/drm/amd/amdgpu/amdgpu_device.c | 10 ++++++++++
+ drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c    |  2 +-
+ 2 files changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/driver-api/pm/devices.rst b/Documentation/driver-api/pm/devices.rst
-index 36d5c9c9fd113..55c6337271086 100644
---- a/Documentation/driver-api/pm/devices.rst
-+++ b/Documentation/driver-api/pm/devices.rst
-@@ -578,6 +578,14 @@ should already have been stored during the ``freeze``, ``freeze_late`` or
- the entire system, so it is not necessary for the callback to put the device in
- a low-power state.
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+index 3d032c4e2dce1..693347eb6861b 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+@@ -5247,6 +5247,11 @@ int amdgpu_device_suspend(struct drm_device *dev, bool notify_clients)
+ 	if (r)
+ 		return r;
  
-+Skipping thaw phase
-+-------------------
-+In some rare situations, it may be desirable to skip the thaw phases
-+(``thaw_noirq``, ``thaw_early``, ``thaw``) of a device entirely.  This can be
-+achieved by a device driver returning an error code from any of it's thaw
-+callbacks but also setting dev->power.is_frozen to true.  This indicates to the
-+PM core that the device is still in the frozen state.  The PM core will consider
-+this when resuming the device in later phases such as `restore` or `poweroff`.
- 
- Leaving Hibernation
- -------------------
-diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
-index 7a8807ec9a5d0..c5a192fc04344 100644
---- a/drivers/base/power/main.c
-+++ b/drivers/base/power/main.c
-@@ -1110,6 +1110,13 @@ static void device_resume(struct device *dev, pm_message_t state, bool async)
- 
-  End:
- 	error = dpm_run_callback(callback, dev, state, info);
 +#ifdef CONFIG_HIBERNATE_CALLBACKS
-+	/* device manages frozen state */
-+	if (error && dev->power.is_frozen) {
-+		dev->power.is_suspended = true;
-+		error = 0;
-+	}
++	if (adev->in_s4)
++		dev->dev->power.is_frozen = 1;
 +#endif
++
+ 	return 0;
+ }
  
- 	device_unlock(dev);
- 	dpm_watchdog_clear(&wd);
-diff --git a/include/linux/pm.h b/include/linux/pm.h
-index a72e42eec1303..852902fc72158 100644
---- a/include/linux/pm.h
-+++ b/include/linux/pm.h
-@@ -689,6 +689,9 @@ struct dev_pm_info {
- #else
- 	bool			should_wakeup:1;
- #endif
+@@ -5385,6 +5390,11 @@ int amdgpu_device_resume(struct drm_device *dev, bool notify_clients)
+ 	if (amdgpu_acpi_smart_shift_update(adev, AMDGPU_SS_DEV_D0))
+ 		dev_warn(adev->dev, "smart shift update failed\n");
+ 
 +#ifdef CONFIG_HIBERNATE_CALLBACKS
-+	bool			is_frozen:1;	/* Owned by the driver */
++	if (adev->in_s4)
++		dev->dev->power.is_frozen = 0;
 +#endif
- #ifdef CONFIG_PM
- 	struct hrtimer		suspend_timer;
- 	u64			timer_expires;
++
+ 	return 0;
+ }
+ 
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+index 61268aa82df4d..d40af069f24dd 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+@@ -2681,7 +2681,7 @@ static int amdgpu_pmops_thaw(struct device *dev)
+ 
+ 	/* do not resume device if it's normal hibernation */
+ 	if (!pm_hibernate_is_recovering() && !pm_hibernation_mode_is_suspend())
+-		return 0;
++		return -EBUSY;
+ 
+ 	return amdgpu_device_resume(drm_dev, true);
+ }
 -- 
 2.43.0
 
