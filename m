@@ -1,125 +1,132 @@
-Return-Path: <linux-pm+bounces-36822-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36823-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48852C08B4E
-	for <lists+linux-pm@lfdr.de>; Sat, 25 Oct 2025 07:28:21 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F629C08B5A
+	for <lists+linux-pm@lfdr.de>; Sat, 25 Oct 2025 07:29:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5142A3A1F9F
-	for <lists+linux-pm@lfdr.de>; Sat, 25 Oct 2025 05:26:52 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 3FA764E5A4F
+	for <lists+linux-pm@lfdr.de>; Sat, 25 Oct 2025 05:29:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 001532BDC27;
-	Sat, 25 Oct 2025 05:26:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05A1D298CA2;
+	Sat, 25 Oct 2025 05:29:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Pjvfa8SE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HLGSFs9r"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0EA21DDC07
-	for <linux-pm@vger.kernel.org>; Sat, 25 Oct 2025 05:26:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C475027AC41;
+	Sat, 25 Oct 2025 05:29:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761370008; cv=none; b=M/ak1LhjyWv+xCyn+nkemVG12wX4a4OPNjeYPTCt+/NL67zRAzos91nq8wwM3VPURNa3jYvJWiRE9RluZVycztIkxvqmIwkIZUAcNhCZfR96tnvdFSg7mLiPdIx6HP/+w/TkQYDP7wBqT+aZTN732S7R1G3Chk6cxSDZvPAYijg=
+	t=1761370142; cv=none; b=biNBjH+Z1+KcHmcGsv9UDkvNMeuE6N+9UXioHQ8Zt/4fHBblYr+jdNcYy7G6ECAwJ+WAmAKz3Zn1LlOHUaFdN6JglzAL5lcfPGXW+w2Ptx/myLTewzEZ7FzuZ6xOYJpyU6q9sdkeKhcJgrtMLMtk4j8z+5JLkxHmz/eqmaWlVww=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761370008; c=relaxed/simple;
-	bh=/zQwfhMEJhTOa5/FV1euV1Dku1nFTDlTsbnBQjlqjDQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GtO/NLMGHzvXqAruYTjMXfrJP/xzT2AXafzYAT4u/pVfXsiTWqIiTvt6VZJ7uebGuIiBU1ixR4ft5LCWpUIUD4upGAkaBU1Psq4i5h/UGWzCq/lfncz3Yuzmxf1k97DBtW0fQQPihuN6rTY1MzPuUVXktwjHGMD4MUuDqc4t5SE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Pjvfa8SE; arc=none smtp.client-ip=209.85.208.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-63c0c9a408aso4506445a12.3
-        for <linux-pm@vger.kernel.org>; Fri, 24 Oct 2025 22:26:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761370005; x=1761974805; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mV8buuSZQP0rHOq5S4b8K+cOmbjRvDVQwA71gPDHBAE=;
-        b=Pjvfa8SEZbxsM/zJR4PQ+NRDcthojbCwES9h0rerasc6DuX+QlbPq3ReB7mSmCwZzk
-         G+RaYizITPByzjqWgNZCCdnHaJaARqKNOXhortmhpG6uojE+a0urH8nCO97GrZMm6zuO
-         DdvtNpTMeHn5rWMFFQ7Ju4peQwzCN+8hsCog0MMBRSxOQ39Bv9ts+qL7kuXrPafx2mDp
-         gsIImPcmgn6dRmfYObiegOz3nu/ZxylQPh2GOg8+npFQgjOqF89CdQqJEmYiltz2lDST
-         DmfDH2jHtwgINimt1F9lgcm6fSLUUT2WEstjXw4+XuAN4I8VbQ5sjQS+kAyiVJ8caOWb
-         zu7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761370005; x=1761974805;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mV8buuSZQP0rHOq5S4b8K+cOmbjRvDVQwA71gPDHBAE=;
-        b=U/hfKMMtsZ/HM0ACosOIiNrU36jnNg/mUV+h4y1+m45jhOHzZ2OEUb6cjZBmOdSvWG
-         WWFvC8qMrcmWYtMXXnrNnouFKqwMB6Y4rY1liH0IUcS1sz6sHrOqQdiUSpJRthmOkWWy
-         2J8n3hNj0PS22MQbPcR4If6yNP4HvODZEevQv01x9vCR2MD2vcWGmMV86uJ5i+7jSPrA
-         etoI5Rme9RnUSxHXBaH9Mv3jpcqCdlHj76RFrLcCimBXe09/QOoeIcfJ22QzOYlyFrll
-         Jc5eGOFORTG+Gjj5DeQRuBYlKOnh/eWNUklscPYIp1IG2Zq0JyZjpEv4gWSkeAoZ/pq1
-         LCrA==
-X-Forwarded-Encrypted: i=1; AJvYcCVyPPj3A032SBgc1DtFNmucs+aR9pjPHUXQsksxq2wwffHLEqj2olNpanPabT/34yMcY4FeGN2TVw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzV1wgKcQv9hReyJDmEXI4h+AUgE4wnVndBcQqCwrFP/4wdIFlV
-	27BwTwWyWrs8Yb3SyQ1B9so981ovvMY3+aCVAC+Qsrpf+SzGriMdCOJR
-X-Gm-Gg: ASbGnctEOant+KSddLO/8lyiN0/aAWutI2dR13kocJ7zBHYdC9KEulauSCgjjvvzvOZ
-	hgY3iTSWqoOjtdkwdmXDv9klIcKt+wjnUnUViJQTcFkWDoMkRS5JbIyIfyTLJ+8K31e3jlhiJqN
-	g30GaHFt9LfxML2nE2dYsqMvis4knchf/vYDAb7srs9JKZg3+GrfJvo8NXndyrKqm0JEN4F01fV
-	HUA6/iW6Ev6TtoF7H6UeLqLdMZfz/DzLyAnoxD/q79Vti6AP13uXyKZYaU7MvBBfP4Eg9Pt4msH
-	DL90BDNnLGXsILS85Y6zV953yKLYt2RncJrxjEkS2lX90Mf0QUfheKkJf3k75DYzltttOtFC8ac
-	mgepfFvh9qhLvMPvKmYw1gQLGR50iaq4pJHxAN1LPkULNcNmvEvol7xkzvFl9jA5tuNuOBaIcKk
-	T7JCvkeKtJMGE=
-X-Google-Smtp-Source: AGHT+IHk4JGeekekahtUg2k/EhAC9kyrxVTGjCsIExfHrDtgIcN62P8FCtHZWZXypDamfyJkpyvf/Q==
-X-Received: by 2002:a05:6402:40d5:b0:628:5b8c:64b7 with SMTP id 4fb4d7f45d1cf-63c1f64ec00mr33191598a12.6.1761370005212;
-        Fri, 24 Oct 2025 22:26:45 -0700 (PDT)
-Received: from localhost ([212.73.77.104])
-        by smtp.gmail.com with UTF8SMTPSA id 4fb4d7f45d1cf-63e7ef96105sm880960a12.19.2025.10.24.22.26.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Oct 2025 22:26:44 -0700 (PDT)
-From: Askar Safin <safinaskar@gmail.com>
-To: safinaskar@gmail.com
-Cc: Dell.Client.Kernel@dell.com,
-	brauner@kernel.org,
-	dm-devel@lists.linux.dev,
-	ebiggers@kernel.org,
-	gmazyland@gmail.com,
-	kix@kix.es,
-	linux-block@vger.kernel.org,
-	linux-btrfs@vger.kernel.org,
-	linux-crypto@vger.kernel.org,
-	linux-lvm@lists.linux.dev,
-	linux-mm@kvack.org,
-	linux-pm@vger.kernel.org,
-	linux-raid@vger.kernel.org,
-	lvm-devel@lists.linux.dev,
-	mzxreary@0pointer.de,
-	nphamcs@gmail.com,
-	pavel@ucw.cz,
-	rafael@kernel.org,
-	ryncsn@gmail.com,
-	torvalds@linux-foundation.org
-Subject: Re: dm bug: hibernate to swap located on dm-integrity doesn't work (how to get data redundancy for swap?)
-Date: Sat, 25 Oct 2025 08:26:37 +0300
-Message-ID: <20251025052637.422902-1-safinaskar@gmail.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20251024163142.376903-1-safinaskar@gmail.com>
-References: <20251024163142.376903-1-safinaskar@gmail.com>
+	s=arc-20240116; t=1761370142; c=relaxed/simple;
+	bh=MBe+jjtIDr5IzoKNMAI2MGqHi0h3OkoveqndsJQpEK0=;
+	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
+	 Message-Id:Subject; b=f4Fh3aDuDU2oBaGTpKdzTzY1odgXezBxJrhbyS+Ut/pyr5rYYdi7FxQ69ULv4MlwLVgZiL+IMTxbA4ERTKn39azPUxiQMkvCg68+qYG7dzPxn3jdq9mqLoqAwXIO4XrR+h1w3pZzc36oBg97NUxnxi2xRkHwHD6EEVfev7z69uE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HLGSFs9r; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15A84C4CEF5;
+	Sat, 25 Oct 2025 05:29:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761370142;
+	bh=MBe+jjtIDr5IzoKNMAI2MGqHi0h3OkoveqndsJQpEK0=;
+	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
+	b=HLGSFs9rY1X/SHLe+lLF9c+e3TE8ymj+c9UGRxTkzXVc/ublB4JRB8wN7MngtMawh
+	 LZBHigEL6GrNk6xZRJtpS3KCaZjizM1aYu0bTsrI3bDUOowU/36cQ7ocU8f9BWEJk8
+	 /kdIpkC1EeHaejB3xc/dxjUb3fOh0iIPYpYp7QWvD3WoTWMNOuajya9NW4Vm0WxP+4
+	 h9SrzHniO8fP1zcbGLtQerjTk9/M7zLb+1BM0gv+zUZwE36T+0zUqUwyp3Z/p8fW9l
+	 /IUVa5J/aN8qUz2ZrZ66yYREm3nBmAwTgYzAzRqEoj9PMES7yXZ2DQMRyRCW/v7/lX
+	 o5RTO9O2snzeA==
+Date: Sat, 25 Oct 2025 00:29:00 -0500
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+From: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: devicetree@vger.kernel.org, Vasily Khoruzhick <anarsoul@gmail.com>, 
+ linux-arm-kernel@lists.infradead.org, 
+ Daniel Lezcano <daniel.lezcano@linaro.org>, linux-pm@vger.kernel.org, 
+ linux-sunxi@lists.linux.dev, "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Jernej Skrabec <jernej.skrabec@gmail.com>, 
+ Conor Dooley <conor+dt@kernel.org>, linux-kernel@vger.kernel.org, 
+ Andre Przywara <andre.przywara@arm.com>, Chen-Yu Tsai <wens@csie.org>, 
+ Zhang Rui <rui.zhang@intel.com>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Lukasz Luba <lukasz.luba@arm.com>, Philipp Zabel <p.zabel@pengutronix.de>, 
+ Yangtao Li <tiny.windzz@gmail.com>, Samuel Holland <samuel@sholland.org>
+To: iuncuim <iuncuim@gmail.com>
+In-Reply-To: <20251025043129.160454-2-iuncuim@gmail.com>
+References: <20251025043129.160454-1-iuncuim@gmail.com>
+ <20251025043129.160454-2-iuncuim@gmail.com>
+Message-Id: <176137014046.3772400.925640654044482315.robh@kernel.org>
+Subject: Re: [PATCH v3 1/6] dt-bindings: thermal: sun8i: Add A523 THS0/1
+ controllers
 
-Askar Safin <safinaskar@gmail.com>:
-> Here is output of this script on master:
-> https://zerobin.net/?68ef6601ab203a11#7zBZ44AaVKmvRq161MJaOXIXY/5Hiv+hRUxWoqyZ7uE=
-[...]
-> Also, you will find backtrace in logs above. Disregard it. I think this
-> is just some master bug, which is unrelated to our dm-integrity bug.
 
-That WARNING in logs is unrelated bug, which happens always when I hibernate.
-I reported it here: https://lore.kernel.org/regressions/20251025050812.421905-1-safinaskar@gmail.com/
+On Sat, 25 Oct 2025 12:31:24 +0800, iuncuim wrote:
+> From: Mikhail Kalashnikov <iuncuim@gmail.com>
+> 
+> Add a binding for D1/T113s thermal sensor controller. Add dt-bindings
+> description of the thermal sensors in the A523 processor.
+> The controllers require activation of the additional frequency of the
+> associated gpadc controller, so a new clock property has been added.
+> 
+> The calibration data is split into two cells that are in different areas
+> of nvmem. Both controllers require access to both memory cell, so a new
+> property nvmem-cells has been added. To maintain backward compatibility,
+> the name of the old cell remains the same and the new nvmem-cell-names is
+> called calibration-second-part
+> 
+> Signed-off-by: Mikhail Kalashnikov <iuncuim@gmail.com>
+> ---
+>  .../thermal/allwinner,sun8i-a83t-ths.yaml     | 56 ++++++++++++++++++-
+>  1 file changed, 53 insertions(+), 3 deletions(-)
+> 
 
--- 
-Askar Safin
+My bot found errors running 'make dt_binding_check' on your patch:
+
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml: allOf:4:else:properties:nvmem-cell-names: {'maxItems': 1, 'items': [{'const': 'calibration'}]} should not be valid under {'required': ['maxItems']}
+	hint: "maxItems" is not needed with an "items" list
+	from schema $id: http://devicetree.org/meta-schemas/items.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml: properties:clock-names: {'minItems': 1, 'maxItems': 2, 'items': [{'const': 'bus'}, {'const': 'mod'}, {'const': 'gpadc'}]} should not be valid under {'required': ['maxItems']}
+	hint: "maxItems" is not needed with an "items" list
+	from schema $id: http://devicetree.org/meta-schemas/items.yaml
+Lexical error: Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.example.dts:126.25-32 Unexpected 'GIC_SPI'
+Lexical error: Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.example.dts:126.36-55 Unexpected 'IRQ_TYPE_LEVEL_HIGH'
+Lexical error: Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.example.dts:127.26-37 Unexpected 'CLK_BUS_THS'
+Lexical error: Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.example.dts:127.46-56 Unexpected 'CLK_GPADC1'
+Lexical error: Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.example.dts:129.26-37 Unexpected 'RST_BUS_THS'
+FATAL ERROR: Syntax error parsing input tree
+make[2]: *** [scripts/Makefile.dtbs:132: Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.example.dtb] Error 1
+make[2]: *** Waiting for unfinished jobs....
+make[1]: *** [/builds/robherring/dt-review-ci/linux/Makefile:1528: dt_binding_check] Error 2
+make: *** [Makefile:248: __sub-make] Error 2
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20251025043129.160454-2-iuncuim@gmail.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
 
