@@ -1,95 +1,102 @@
-Return-Path: <linux-pm+bounces-36820-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36821-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB71CC08B26
-	for <lists+linux-pm@lfdr.de>; Sat, 25 Oct 2025 07:08:32 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 578C5C08B35
+	for <lists+linux-pm@lfdr.de>; Sat, 25 Oct 2025 07:16:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9D6DA1B2354F
-	for <lists+linux-pm@lfdr.de>; Sat, 25 Oct 2025 05:08:56 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id F25554E2E20
+	for <lists+linux-pm@lfdr.de>; Sat, 25 Oct 2025 05:16:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CF29246BC7;
-	Sat, 25 Oct 2025 05:08:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8B391A2C25;
+	Sat, 25 Oct 2025 05:16:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BIVsuAuX"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JU3j+7ET"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA2B1221FCC
-	for <linux-pm@vger.kernel.org>; Sat, 25 Oct 2025 05:08:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 935FE288D6
+	for <linux-pm@vger.kernel.org>; Sat, 25 Oct 2025 05:16:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761368907; cv=none; b=q9Y+r641JwnEAjA2L/nvCaZvC+Jpc4Pv7Igcpxbtj2tFeirhLRHsGLHLB2qaFp/Gw/P0JoTlyEIdS281QDtT15wWtwKUF9cdyK4ZtzOub5yQkf3mJC7wrAgnWBI4NPshz2uBrsF0gKRZGZtTcNngGZG8lZqIgPd3AQzm97KTeTw=
+	t=1761369372; cv=none; b=pbVBbKvdQe+kLqhrjpS6moK1Df6M3idgEkQStbbMFNdZC6lJb/Vmr43hup2ULj6z3SjhoHYDZrnpV2/OHtCZuPE2apTHHzElw1RCNMayFH4p3tDPp3NPmVVd9mN9ui4Ttv2puloGmwW9RE/yOM+oOKe8S8XrO5ykhHsZsN4EceA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761368907; c=relaxed/simple;
-	bh=9sj97WqdM5/emB5ZezWNh1O1KphVBD/fj3cCp/SxgbQ=;
+	s=arc-20240116; t=1761369372; c=relaxed/simple;
+	bh=n3Y+AcN/I881f5Cyv0rcUjEkJzVPX7TxD3E/j95volA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SItKnhCGwWwhF2xhDBOoPUBh8d9m5PLrwM5/lCLeR8dlj08v0r7sM8y4TgvagIuUtXY0+euEUgvL6VG+BrzyXLoufwiiLvkSpMPVFvZPPL2qkLJTkaaHW4c6s9udW4s61G0t4RM68Cd06xifcNCVDa2GA3jQhX3iqsk/JLJ5+sY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BIVsuAuX; arc=none smtp.client-ip=209.85.218.45
+	 MIME-Version; b=JSt9wClqFU9hwYDmT4HGwQbDUIh+6kRrDJ6FFjHqfIzlM2pmmW3/ktiQgCCe86JGKdBD7d03LIdD3vWgZWS9K0hfbj0fbQlZvlE9ZHN1vhy2lnV0iOEYPrw09xMR8FM493LUG+4NNJXSDfcvRr2qb3BDj81lJBEOaIXa3/i1TMY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JU3j+7ET; arc=none smtp.client-ip=209.85.208.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-b6d78062424so326129466b.1
-        for <linux-pm@vger.kernel.org>; Fri, 24 Oct 2025 22:08:25 -0700 (PDT)
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-63e11cfb4a9so5031748a12.2
+        for <linux-pm@vger.kernel.org>; Fri, 24 Oct 2025 22:16:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761368904; x=1761973704; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1761369369; x=1761974169; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/wyvOizFeamc5J5XjDLMeHypdnVLhvC3mQKcXmMz7GA=;
-        b=BIVsuAuXHP/62HK33Z2I3MG7kIcUmr2V+K2OsBUChOl5LizA5zkWZzud2TDCCuODFS
-         Zt6e7NHH898J78AJPxsvV18Uaz426hgkG0EtVn/d8MJYTNdX5n5NKEnb+J5OzuRCkBcI
-         zriJkJTXnGD97x3KtvDIEcu/RYsnxBk4etbfCgAKajUEcb+raXdt9HdHynggM7qH1AGI
-         h3Nlo1qvm81QUJsqKYFdC2U3U2kE12KyYKsQCCA7RMFc4wg/64uiA5h8NhX7O9goZgzs
-         J8bpDylP1tXW8lXAkmikBwhcZ73vzmXDpB8xpokW0hYyuR02CHtiuLOB8vg7Rp5ikdOt
-         +50g==
+        bh=apaAoIq51aRtrkFWbmPU/2WaEbN9gRF7gSr6IfYPHi8=;
+        b=JU3j+7ET09LfzkDeo+C95SEee/p+pO28pfNZ1+hPVibtBMVnDRS+6URIIKLDOo1U4o
+         bJm68VDzWcr6QE4WLYClWoTl+yC9JMDuXBq7EukiTXwgCQFVJSqPWEbK5KV56PDnDpGT
+         YaevZgwuGHSo13Gj7aZFA+iFhHAUSKXeCjkVo3Ji/1c4h7NMNrAwBzgVcGgkZsopECa1
+         qKFtPqHYo81fGICKhuC/OA4fhcrIpZXAvG+zYHw4av6xHNl8c9wh6CmAZcfP1oO3pmBy
+         bvqO/gbmvSSGP/IGnvMZZ6J1Ow0EE85V6Sb91yAG6dd3kWDszEfv30TvRIPeNY+2LjHg
+         Uinw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761368904; x=1761973704;
+        d=1e100.net; s=20230601; t=1761369369; x=1761974169;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=/wyvOizFeamc5J5XjDLMeHypdnVLhvC3mQKcXmMz7GA=;
-        b=O/VVj+TbdMkA2lg4lxCWOVaZAXBIU+2D9CDU5ar3SLp6uHLYby0f3fhYMRBwlNe+i1
-         t9V6gRUtrTnmUHq6UvcXD7EoepfTXv+kw1zmcjcErfMntW9jHPgX2sj8RV8kXJ8SijX7
-         YVJZyT6Z2b7UCwRl3CxaudWgSZxNVtzJ0frcqrn5FtRgajvbFDDj2MoYmrKpg0H+giW+
-         toOaTnm2VgQM44EgyzEQFDXvOf0bgzQv24mMC5mZ+boYbbuZHrhqrH4T0B/ea7R4XJwC
-         2GROc8Cx1AxLavLTwiwlUj84DO5hY5SJeBZzGhwx8jrSmT6Ii2G4WFwZqUAcBWtaxCji
-         WWRw==
-X-Forwarded-Encrypted: i=1; AJvYcCXKzPYWnK34tbb6DAXncMYc08RcvQKFfkMbTGq03Rk8AXs0OCvDhhlpWm4NQ6LFGYgtUui3nCOW2Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy2Gbf44nMl6HCRLQbj2zPHVAtSIdxC0Vehb+iK44lhWQ83ns6B
-	Xwgiumai2PZe6oNwMDKaDGC/tjcWDZBEpNOjm0hTpurkpgd6mLo+cj6vU5Hu67/P
-X-Gm-Gg: ASbGncteRKQ7UL+hHyP11C95u99OFZec43jpuMO3S7929P1QFTu2FZGOz2Nx+HIOdgR
-	PgcYyYET58XDIkaHOvuAblGiOYIGcxnG1slXfJHbhQE0jfpxOV74HplKhRy0mJbS7q/Hjl6A5rl
-	pksitqa61hjrNMAulEOuzRHCPlykXUPYP9oytHjE488cDJOwXKuTR4TYVyEi6EDponW5xwUtLe1
-	NCZoIIhit6ZAFipQQPJ4Ty62nYxYW/j8uWEBRYAFz41hmhQD2z3I35F8slHxD8XICScNJA/5yXG
-	NLJdVVyBHQtNgjz0/3c91LCp7nIQ6bUkteFOgbHHOpxnVkkyjaZh+uRtCNz0M4mIJ/VDGUUuRx3
-	YpuChNV9IFZn8eHpJpbMBsGfxHBZfghxhkwfJQLdAvl7PUtLn+CvPMhnz5rr+jliOqELq7pkqHR
-	jx
-X-Google-Smtp-Source: AGHT+IGED30i/rKdoHj02khe2qIDFQObvhJ3a36vUQHMrmoCrPRoG3pb3BVWX1cfcmX/8CsErsWK4g==
-X-Received: by 2002:a17:907:9615:b0:b6d:7859:61eb with SMTP id a640c23a62f3a-b6d7859620fmr371817166b.29.1761368903851;
-        Fri, 24 Oct 2025 22:08:23 -0700 (PDT)
+        bh=apaAoIq51aRtrkFWbmPU/2WaEbN9gRF7gSr6IfYPHi8=;
+        b=ovU+IdORfPLx0qpIE0+As8S4EM74Dqh2ftSyEXCYiQWF0KHxndOGkVbTZQuUhIFJbS
+         yGSoTuUHenZ3p52mabBehtnBUHZOgZPySxBRjA3NlZgLlidRgxnM6ybiE4i0P6/J5hGz
+         xboeh48syf9w3hc/LYKrOQbUNjvtSkRcrAo57h3E5U18gtvRzFHZFeEz1hOxBaAlV6uh
+         pxsLtXOJsyN9z3CzMnx6f3DnyWGbDCBQmRTDJndc07zHuAG2ATs5jnoSk3KWGQwYDBPn
+         mVqJmj/lrxyX9ETUnEq1kc5GQ5g5hGksuD6NMihraDYGveM2lWt0ifwBY7DcNimoGBA/
+         tfbg==
+X-Forwarded-Encrypted: i=1; AJvYcCWYvoTG9vZEyPjLhf6+dD8EFLUvr3Jy1M9207oNaVUcmOHWHaARSkORRBE8siHsTHDASp0C1PF7Tw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzEkvFndtqt1Pb7th6ZzKPVEtg7w48dcqn7AAdRCTchetTknEt5
+	pX5u+AAbDxTxa58BNnEdPUK3IsDu00cSf3KupsWFjn5QwtKAAZEX2g+h
+X-Gm-Gg: ASbGnctXtfl9rDlvH3IGlGo1tq3fhP+AACUA28JM287T7el/QsTKfGS0KlTYmjP2bNL
+	szl71UsfIwStvYY4dA1TBd2U1kCaNN4xt91vdYhsKlpcf69U6LEqk0ywQka6kIuz2qEYYzA1iUd
+	RbWvRV372LcsWC4RkABu/fZmXMag/jSrtIBcNqrsHJGT8p63lmXzNS4E0os3FsyxBz3OiF95m2Y
+	lJEMLBxO9PL/6IftIOBTjQRAAVF769KHoosPxcaV2XtSMypYW5mgBpi8C3RDwClBRLKagiIpYCr
+	Y5emo9vr8qFmYXHOTeEWYlg6Hnz7HZCI9q3xG2V+lPnL1X/0LgZRda4waGm++57ovi9UINX7nNh
+	GMpNRvP/+/eZKWY8a0xr/4UUbj7A0MRDAGNb6l23bNSqQb8epOg125HwulxiWPeR2ddxN5wedGU
+	AI
+X-Google-Smtp-Source: AGHT+IHfK/YxWnxAyIXIhhMhxrwpBPWIhtUQlBAlwL0IaxEpVGMgxfc2H8XED61ydnCh6Xfhe0uFJA==
+X-Received: by 2002:a05:6402:2111:b0:639:fb11:9935 with SMTP id 4fb4d7f45d1cf-63e60084063mr4098867a12.4.1761369368832;
+        Fri, 24 Oct 2025 22:16:08 -0700 (PDT)
 Received: from localhost ([212.73.77.104])
-        by smtp.gmail.com with UTF8SMTPSA id a640c23a62f3a-b6d853077e8sm102873866b.14.2025.10.24.22.08.22
+        by smtp.gmail.com with UTF8SMTPSA id 4fb4d7f45d1cf-63e7efb9fa6sm826566a12.31.2025.10.24.22.16.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Oct 2025 22:08:23 -0700 (PDT)
+        Fri, 24 Oct 2025 22:16:08 -0700 (PDT)
 From: Askar Safin <safinaskar@gmail.com>
-To: rafael@kernel.org
-Cc: gregkh@linuxfoundation.org,
-	guoqing.zhang@amd.com,
+To: safinaskar@gmail.com
+Cc: Dell.Client.Kernel@dell.com,
+	andriy.shevchenko@linux.intel.com,
+	chetan.kumar@mediatek.com,
+	chris.feng@mediatek.com,
+	hua.yang@mediatek.com,
+	len.brown@intel.com,
+	liang.lu@mediatek.com,
 	linux-kernel@vger.kernel.org,
 	linux-pm@vger.kernel.org,
 	mario.limonciello@amd.com,
-	todd.e.brandt@linux.intel.com,
-	torvalds@linuxfoundation.org,
-	"regressions" <regressions@lists.linux.dev>
-Subject: [REGRESSION][BISECTED] Hibernation: WARNING at kernel/power/main.c:48 pm_restrict_gfp_mask (was: "[PATCH v1] PM: hibernate: Restrict GFP mask in hibernation_snapshot()")
-Date: Sat, 25 Oct 2025 08:08:12 +0300
-Message-ID: <20251025050812.421905-1-safinaskar@gmail.com>
+	pavel@ucw.cz,
+	rafael@kernel.org,
+	regressions@lists.linux.dev,
+	stable@kernel.org,
+	ting.wang@mediatek.com
+Subject: Re: [REGRESSION][BISECTED] "Wakeup event detected during hibernation" on Dell Precision 7780 (was "[PATCH v4] PM: hibernate: Avoid missing wakeup events during hibernation")
+Date: Sat, 25 Oct 2025 08:15:55 +0300
+Message-ID: <20251025051555.422427-1-safinaskar@gmail.com>
 X-Mailer: git-send-email 2.47.3
-In-Reply-To: <5924662.DvuYhMxLoT@rafael.j.wysocki>
-References: <5924662.DvuYhMxLoT@rafael.j.wysocki>
+In-Reply-To: <20251021125446.4384-1-safinaskar@gmail.com>
+References: <20251021125446.4384-1-safinaskar@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -98,38 +105,14 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-"Rafael J. Wysocki" <rafael@kernel.org>:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Askar Safin <safinaskar@gmail.com>:
+> This is "dmesg --level=debug+" on v6.18-rc2-with-1796f808e4bb-reverted:
 > 
-> Commit 12ffc3b1513e ("PM: Restrict swap use to later in the suspend
-> sequence") incorrectly removed a pm_restrict_gfp_mask() call from
-> hibernation_snapshot(), so memory allocations involving swap are not
-> prevented from being carried out in this code path any more which may
-> lead to serious breakage.
+> https://zerobin.net/?0459f6411446622d#8i0Ifo6o68By3+UlYUr2t2KL7YLXsKEXrkfszpE77Rw=
 
-#regzbot introduced: 449c9c02537a146ac97ef962327a221e21c9cab3
-
-This commit introduced regression: now I see WARNING every time when
-I hibernate. The bug reproduces both on real hardware and in Qemu.
-
-Here is script I used to reproduce this bug in Qemu:
-https://zerobin.net/?aadae7117a208c0a#Xh8aI5+u3pyk+vKwET7j+yXolLeoSLe/AedcvnNeCLs=
-
-Here is resulting log (dmesg) on current master (43e9ad0c55a3):
-https://zerobin.net/?471d17d0632e7f85#uYne0yUu+rP4KnDbOFFqtCrcDIi6UpQz2uIQw85lcdQ=
-
-Here is the most interesting part:
-
-[    1.735001] PM: Image saving progress:  90%
-[    1.746611] PM: Image saving progress: 100%
-[    1.747208] PM: Image saving done
-[    1.747403] PM: hibernation: Wrote 30164 kbytes in 0.13 seconds (232.03 MB/s)
-[    1.747837] PM: Image size after compression: 8908 kbytes
-[    1.748190] PM: S|
-[    1.750351] ------------[ cut here ]------------
-[    1.750627] WARNING: CPU: 0 PID: 1 at kernel/power/main.c:48 pm_restrict_gfp_mask+0x3b/0x40
-
-On real hardware exactly same thing happens (i. e. WARNING at kernel/power/main.c:48 pm_restrict_gfp_mask).
+This log contains WARNING. It is caused by unrelated bug, which is reproducible
+both on real hardware and in Qemu. I reported it here:
+https://lore.kernel.org/regressions/20251025050812.421905-1-safinaskar@gmail.com/
 
 -- 
 Askar Safin
