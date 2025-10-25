@@ -1,102 +1,107 @@
-Return-Path: <linux-pm+bounces-36821-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36822-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 578C5C08B35
-	for <lists+linux-pm@lfdr.de>; Sat, 25 Oct 2025 07:16:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 48852C08B4E
+	for <lists+linux-pm@lfdr.de>; Sat, 25 Oct 2025 07:28:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id F25554E2E20
-	for <lists+linux-pm@lfdr.de>; Sat, 25 Oct 2025 05:16:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5142A3A1F9F
+	for <lists+linux-pm@lfdr.de>; Sat, 25 Oct 2025 05:26:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8B391A2C25;
-	Sat, 25 Oct 2025 05:16:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 001532BDC27;
+	Sat, 25 Oct 2025 05:26:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JU3j+7ET"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Pjvfa8SE"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 935FE288D6
-	for <linux-pm@vger.kernel.org>; Sat, 25 Oct 2025 05:16:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0EA21DDC07
+	for <linux-pm@vger.kernel.org>; Sat, 25 Oct 2025 05:26:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761369372; cv=none; b=pbVBbKvdQe+kLqhrjpS6moK1Df6M3idgEkQStbbMFNdZC6lJb/Vmr43hup2ULj6z3SjhoHYDZrnpV2/OHtCZuPE2apTHHzElw1RCNMayFH4p3tDPp3NPmVVd9mN9ui4Ttv2puloGmwW9RE/yOM+oOKe8S8XrO5ykhHsZsN4EceA=
+	t=1761370008; cv=none; b=M/ak1LhjyWv+xCyn+nkemVG12wX4a4OPNjeYPTCt+/NL67zRAzos91nq8wwM3VPURNa3jYvJWiRE9RluZVycztIkxvqmIwkIZUAcNhCZfR96tnvdFSg7mLiPdIx6HP/+w/TkQYDP7wBqT+aZTN732S7R1G3Chk6cxSDZvPAYijg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761369372; c=relaxed/simple;
-	bh=n3Y+AcN/I881f5Cyv0rcUjEkJzVPX7TxD3E/j95volA=;
+	s=arc-20240116; t=1761370008; c=relaxed/simple;
+	bh=/zQwfhMEJhTOa5/FV1euV1Dku1nFTDlTsbnBQjlqjDQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JSt9wClqFU9hwYDmT4HGwQbDUIh+6kRrDJ6FFjHqfIzlM2pmmW3/ktiQgCCe86JGKdBD7d03LIdD3vWgZWS9K0hfbj0fbQlZvlE9ZHN1vhy2lnV0iOEYPrw09xMR8FM493LUG+4NNJXSDfcvRr2qb3BDj81lJBEOaIXa3/i1TMY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JU3j+7ET; arc=none smtp.client-ip=209.85.208.54
+	 MIME-Version; b=GtO/NLMGHzvXqAruYTjMXfrJP/xzT2AXafzYAT4u/pVfXsiTWqIiTvt6VZJ7uebGuIiBU1ixR4ft5LCWpUIUD4upGAkaBU1Psq4i5h/UGWzCq/lfncz3Yuzmxf1k97DBtW0fQQPihuN6rTY1MzPuUVXktwjHGMD4MUuDqc4t5SE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Pjvfa8SE; arc=none smtp.client-ip=209.85.208.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-63e11cfb4a9so5031748a12.2
-        for <linux-pm@vger.kernel.org>; Fri, 24 Oct 2025 22:16:10 -0700 (PDT)
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-63c0c9a408aso4506445a12.3
+        for <linux-pm@vger.kernel.org>; Fri, 24 Oct 2025 22:26:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761369369; x=1761974169; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1761370005; x=1761974805; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=apaAoIq51aRtrkFWbmPU/2WaEbN9gRF7gSr6IfYPHi8=;
-        b=JU3j+7ET09LfzkDeo+C95SEee/p+pO28pfNZ1+hPVibtBMVnDRS+6URIIKLDOo1U4o
-         bJm68VDzWcr6QE4WLYClWoTl+yC9JMDuXBq7EukiTXwgCQFVJSqPWEbK5KV56PDnDpGT
-         YaevZgwuGHSo13Gj7aZFA+iFhHAUSKXeCjkVo3Ji/1c4h7NMNrAwBzgVcGgkZsopECa1
-         qKFtPqHYo81fGICKhuC/OA4fhcrIpZXAvG+zYHw4av6xHNl8c9wh6CmAZcfP1oO3pmBy
-         bvqO/gbmvSSGP/IGnvMZZ6J1Ow0EE85V6Sb91yAG6dd3kWDszEfv30TvRIPeNY+2LjHg
-         Uinw==
+        bh=mV8buuSZQP0rHOq5S4b8K+cOmbjRvDVQwA71gPDHBAE=;
+        b=Pjvfa8SEZbxsM/zJR4PQ+NRDcthojbCwES9h0rerasc6DuX+QlbPq3ReB7mSmCwZzk
+         G+RaYizITPByzjqWgNZCCdnHaJaARqKNOXhortmhpG6uojE+a0urH8nCO97GrZMm6zuO
+         DdvtNpTMeHn5rWMFFQ7Ju4peQwzCN+8hsCog0MMBRSxOQ39Bv9ts+qL7kuXrPafx2mDp
+         gsIImPcmgn6dRmfYObiegOz3nu/ZxylQPh2GOg8+npFQgjOqF89CdQqJEmYiltz2lDST
+         DmfDH2jHtwgINimt1F9lgcm6fSLUUT2WEstjXw4+XuAN4I8VbQ5sjQS+kAyiVJ8caOWb
+         zu7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761369369; x=1761974169;
+        d=1e100.net; s=20230601; t=1761370005; x=1761974805;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=apaAoIq51aRtrkFWbmPU/2WaEbN9gRF7gSr6IfYPHi8=;
-        b=ovU+IdORfPLx0qpIE0+As8S4EM74Dqh2ftSyEXCYiQWF0KHxndOGkVbTZQuUhIFJbS
-         yGSoTuUHenZ3p52mabBehtnBUHZOgZPySxBRjA3NlZgLlidRgxnM6ybiE4i0P6/J5hGz
-         xboeh48syf9w3hc/LYKrOQbUNjvtSkRcrAo57h3E5U18gtvRzFHZFeEz1hOxBaAlV6uh
-         pxsLtXOJsyN9z3CzMnx6f3DnyWGbDCBQmRTDJndc07zHuAG2ATs5jnoSk3KWGQwYDBPn
-         mVqJmj/lrxyX9ETUnEq1kc5GQ5g5hGksuD6NMihraDYGveM2lWt0ifwBY7DcNimoGBA/
-         tfbg==
-X-Forwarded-Encrypted: i=1; AJvYcCWYvoTG9vZEyPjLhf6+dD8EFLUvr3Jy1M9207oNaVUcmOHWHaARSkORRBE8siHsTHDASp0C1PF7Tw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzEkvFndtqt1Pb7th6ZzKPVEtg7w48dcqn7AAdRCTchetTknEt5
-	pX5u+AAbDxTxa58BNnEdPUK3IsDu00cSf3KupsWFjn5QwtKAAZEX2g+h
-X-Gm-Gg: ASbGnctXtfl9rDlvH3IGlGo1tq3fhP+AACUA28JM287T7el/QsTKfGS0KlTYmjP2bNL
-	szl71UsfIwStvYY4dA1TBd2U1kCaNN4xt91vdYhsKlpcf69U6LEqk0ywQka6kIuz2qEYYzA1iUd
-	RbWvRV372LcsWC4RkABu/fZmXMag/jSrtIBcNqrsHJGT8p63lmXzNS4E0os3FsyxBz3OiF95m2Y
-	lJEMLBxO9PL/6IftIOBTjQRAAVF769KHoosPxcaV2XtSMypYW5mgBpi8C3RDwClBRLKagiIpYCr
-	Y5emo9vr8qFmYXHOTeEWYlg6Hnz7HZCI9q3xG2V+lPnL1X/0LgZRda4waGm++57ovi9UINX7nNh
-	GMpNRvP/+/eZKWY8a0xr/4UUbj7A0MRDAGNb6l23bNSqQb8epOg125HwulxiWPeR2ddxN5wedGU
-	AI
-X-Google-Smtp-Source: AGHT+IHfK/YxWnxAyIXIhhMhxrwpBPWIhtUQlBAlwL0IaxEpVGMgxfc2H8XED61ydnCh6Xfhe0uFJA==
-X-Received: by 2002:a05:6402:2111:b0:639:fb11:9935 with SMTP id 4fb4d7f45d1cf-63e60084063mr4098867a12.4.1761369368832;
-        Fri, 24 Oct 2025 22:16:08 -0700 (PDT)
+        bh=mV8buuSZQP0rHOq5S4b8K+cOmbjRvDVQwA71gPDHBAE=;
+        b=U/hfKMMtsZ/HM0ACosOIiNrU36jnNg/mUV+h4y1+m45jhOHzZ2OEUb6cjZBmOdSvWG
+         WWFvC8qMrcmWYtMXXnrNnouFKqwMB6Y4rY1liH0IUcS1sz6sHrOqQdiUSpJRthmOkWWy
+         2J8n3hNj0PS22MQbPcR4If6yNP4HvODZEevQv01x9vCR2MD2vcWGmMV86uJ5i+7jSPrA
+         etoI5Rme9RnUSxHXBaH9Mv3jpcqCdlHj76RFrLcCimBXe09/QOoeIcfJ22QzOYlyFrll
+         Jc5eGOFORTG+Gjj5DeQRuBYlKOnh/eWNUklscPYIp1IG2Zq0JyZjpEv4gWSkeAoZ/pq1
+         LCrA==
+X-Forwarded-Encrypted: i=1; AJvYcCVyPPj3A032SBgc1DtFNmucs+aR9pjPHUXQsksxq2wwffHLEqj2olNpanPabT/34yMcY4FeGN2TVw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzV1wgKcQv9hReyJDmEXI4h+AUgE4wnVndBcQqCwrFP/4wdIFlV
+	27BwTwWyWrs8Yb3SyQ1B9so981ovvMY3+aCVAC+Qsrpf+SzGriMdCOJR
+X-Gm-Gg: ASbGnctEOant+KSddLO/8lyiN0/aAWutI2dR13kocJ7zBHYdC9KEulauSCgjjvvzvOZ
+	hgY3iTSWqoOjtdkwdmXDv9klIcKt+wjnUnUViJQTcFkWDoMkRS5JbIyIfyTLJ+8K31e3jlhiJqN
+	g30GaHFt9LfxML2nE2dYsqMvis4knchf/vYDAb7srs9JKZg3+GrfJvo8NXndyrKqm0JEN4F01fV
+	HUA6/iW6Ev6TtoF7H6UeLqLdMZfz/DzLyAnoxD/q79Vti6AP13uXyKZYaU7MvBBfP4Eg9Pt4msH
+	DL90BDNnLGXsILS85Y6zV953yKLYt2RncJrxjEkS2lX90Mf0QUfheKkJf3k75DYzltttOtFC8ac
+	mgepfFvh9qhLvMPvKmYw1gQLGR50iaq4pJHxAN1LPkULNcNmvEvol7xkzvFl9jA5tuNuOBaIcKk
+	T7JCvkeKtJMGE=
+X-Google-Smtp-Source: AGHT+IHk4JGeekekahtUg2k/EhAC9kyrxVTGjCsIExfHrDtgIcN62P8FCtHZWZXypDamfyJkpyvf/Q==
+X-Received: by 2002:a05:6402:40d5:b0:628:5b8c:64b7 with SMTP id 4fb4d7f45d1cf-63c1f64ec00mr33191598a12.6.1761370005212;
+        Fri, 24 Oct 2025 22:26:45 -0700 (PDT)
 Received: from localhost ([212.73.77.104])
-        by smtp.gmail.com with UTF8SMTPSA id 4fb4d7f45d1cf-63e7efb9fa6sm826566a12.31.2025.10.24.22.16.07
+        by smtp.gmail.com with UTF8SMTPSA id 4fb4d7f45d1cf-63e7ef96105sm880960a12.19.2025.10.24.22.26.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Oct 2025 22:16:08 -0700 (PDT)
+        Fri, 24 Oct 2025 22:26:44 -0700 (PDT)
 From: Askar Safin <safinaskar@gmail.com>
 To: safinaskar@gmail.com
 Cc: Dell.Client.Kernel@dell.com,
-	andriy.shevchenko@linux.intel.com,
-	chetan.kumar@mediatek.com,
-	chris.feng@mediatek.com,
-	hua.yang@mediatek.com,
-	len.brown@intel.com,
-	liang.lu@mediatek.com,
-	linux-kernel@vger.kernel.org,
+	brauner@kernel.org,
+	dm-devel@lists.linux.dev,
+	ebiggers@kernel.org,
+	gmazyland@gmail.com,
+	kix@kix.es,
+	linux-block@vger.kernel.org,
+	linux-btrfs@vger.kernel.org,
+	linux-crypto@vger.kernel.org,
+	linux-lvm@lists.linux.dev,
+	linux-mm@kvack.org,
 	linux-pm@vger.kernel.org,
-	mario.limonciello@amd.com,
+	linux-raid@vger.kernel.org,
+	lvm-devel@lists.linux.dev,
+	mzxreary@0pointer.de,
+	nphamcs@gmail.com,
 	pavel@ucw.cz,
 	rafael@kernel.org,
-	regressions@lists.linux.dev,
-	stable@kernel.org,
-	ting.wang@mediatek.com
-Subject: Re: [REGRESSION][BISECTED] "Wakeup event detected during hibernation" on Dell Precision 7780 (was "[PATCH v4] PM: hibernate: Avoid missing wakeup events during hibernation")
-Date: Sat, 25 Oct 2025 08:15:55 +0300
-Message-ID: <20251025051555.422427-1-safinaskar@gmail.com>
+	ryncsn@gmail.com,
+	torvalds@linux-foundation.org
+Subject: Re: dm bug: hibernate to swap located on dm-integrity doesn't work (how to get data redundancy for swap?)
+Date: Sat, 25 Oct 2025 08:26:37 +0300
+Message-ID: <20251025052637.422902-1-safinaskar@gmail.com>
 X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20251021125446.4384-1-safinaskar@gmail.com>
-References: <20251021125446.4384-1-safinaskar@gmail.com>
+In-Reply-To: <20251024163142.376903-1-safinaskar@gmail.com>
+References: <20251024163142.376903-1-safinaskar@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -106,13 +111,14 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
 Askar Safin <safinaskar@gmail.com>:
-> This is "dmesg --level=debug+" on v6.18-rc2-with-1796f808e4bb-reverted:
-> 
-> https://zerobin.net/?0459f6411446622d#8i0Ifo6o68By3+UlYUr2t2KL7YLXsKEXrkfszpE77Rw=
+> Here is output of this script on master:
+> https://zerobin.net/?68ef6601ab203a11#7zBZ44AaVKmvRq161MJaOXIXY/5Hiv+hRUxWoqyZ7uE=
+[...]
+> Also, you will find backtrace in logs above. Disregard it. I think this
+> is just some master bug, which is unrelated to our dm-integrity bug.
 
-This log contains WARNING. It is caused by unrelated bug, which is reproducible
-both on real hardware and in Qemu. I reported it here:
-https://lore.kernel.org/regressions/20251025050812.421905-1-safinaskar@gmail.com/
+That WARNING in logs is unrelated bug, which happens always when I hibernate.
+I reported it here: https://lore.kernel.org/regressions/20251025050812.421905-1-safinaskar@gmail.com/
 
 -- 
 Askar Safin
