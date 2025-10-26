@@ -1,45 +1,46 @@
-Return-Path: <linux-pm+bounces-36832-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36833-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19DE2C0A2C8
-	for <lists+linux-pm@lfdr.de>; Sun, 26 Oct 2025 06:09:17 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D2396C0A2CB
+	for <lists+linux-pm@lfdr.de>; Sun, 26 Oct 2025 06:09:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C2D4D3A9D15
-	for <lists+linux-pm@lfdr.de>; Sun, 26 Oct 2025 05:09:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 50C3318A1BDC
+	for <lists+linux-pm@lfdr.de>; Sun, 26 Oct 2025 05:09:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A454B238C0A;
-	Sun, 26 Oct 2025 05:09:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50E81269CF1;
+	Sun, 26 Oct 2025 05:09:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SIvihrQ8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HsOgQSkw"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74DD61F418F;
-	Sun, 26 Oct 2025 05:09:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2231A1F418F;
+	Sun, 26 Oct 2025 05:09:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761455353; cv=none; b=CKOQVzMuoka+aIr3d+Wk0COQO9cMBb8LUbqdyrnSVJ5Z3pYvLWBq/5nreNVXFUO3lpFZkuC86JkNZ1vF7FW3HgJIc1kt0CSycVwXwTdqN6YmxOwcZPJLxCvGnJ7Z4w77vQWQc+atwGIZMgMU39X24m8V2JE+ZDjyPIK5ejfruss=
+	t=1761455355; cv=none; b=mXF7egPQEEIRIRe5pTRVWtNlXs7p0+XFDwr5cMkbLsGBKcPoK7IkzyYgQRupRNxvKXKDZv4SewXFsRezzbv9EIyZaPbT5xf6wCjNRX3aO97s09wQTRwAwvBDRWwTjp3t3KxPNZ+J4nMYMncQcfu5axPI851kTvomEo1bcxwdsho=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761455353; c=relaxed/simple;
-	bh=p0DuC0Tv4/qRF1AukIaOZxQa1x0y6FnUMyajKVqm+l0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Qws13x42TSyUKObRZXdSJZXNFdCduDX56hjpBQii7ojeCvVBZpFZxK0lkQQ8lD7Sx1uz8iQkAkUcqp2CT1Lhay9cCpmgYyGtEfXz+SmF34kwKXDAM3upniZ19KYOeddHUiCUm1h4T7VPs86L4ilsdIuh5OIQwn06CWZ4DPz4FQk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SIvihrQ8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83C95C4CEE7;
-	Sun, 26 Oct 2025 05:09:11 +0000 (UTC)
+	s=arc-20240116; t=1761455355; c=relaxed/simple;
+	bh=cH+0VkXpIeqlpI+foFbYT5pUyGloKQoAnRsc1lIosuA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=e2hVFw+hIn42cOolp7UZUnxyvU+XEG0qjQiIKea6RvBk19QSQaIBkclQryLo+Derx7XDYfkxKrpAYHRj2gXRrMuxHxyQZmLm7oMaZ8IVE7VK7Lol37/2natdEn0pmIHTwd6XlFSN5kNx9J2H8Rof22MkHhrUfTUmKT8V2kN0n20=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HsOgQSkw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38EBAC16AAE;
+	Sun, 26 Oct 2025 05:09:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761455353;
-	bh=p0DuC0Tv4/qRF1AukIaOZxQa1x0y6FnUMyajKVqm+l0=;
-	h=From:To:Cc:Subject:Date:From;
-	b=SIvihrQ8DoupRFx57SA2hauQ11QW1jeh5RROBf3c7kz4sEF35cRCnct1c6ufDSqCR
-	 85e3SEDwoNIZ3igCU+e0TVPBokqILeHNVvdNSRW9wTuPmyHQ+ADgOUS4RlU6sQlSDp
-	 pqX0yccXHGjNmB+xP8DA/YqwY4xM/GPd+jJ16GQ5uCBwI0lHxCWG6wMRup+p0j+Bsq
-	 4CZslaawJ+8Sms4cmzY4K6YEJLUHuUGgQGu5aK3kviB5odB2YKYJex0C184zi/1D0q
-	 N0a3/V9J1poGhOfumTEFS0KC8eMjhjcMgUrvOh4jsXokd4r5p/Z2KjwqRkPxpAahtk
-	 WTSerqiv+K4gg==
+	s=k20201202; t=1761455354;
+	bh=cH+0VkXpIeqlpI+foFbYT5pUyGloKQoAnRsc1lIosuA=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=HsOgQSkwexm63qYD6AoFGK0gLXkd8k5YQg62BfJE7uCyLmf9QQ7tY2DmT1EkETqXa
+	 O2MF77+zPfMD2R5M8tIkdv9cEV8ZxvPWIyNr0pMkhejSIOMRf4x31UEYxj4wxhhKIt
+	 u2g67garRHyAficwnE6YnW2De+ufSVsAez0RG8OAnkaVXJOvZxey/U0DR+lv8UA8Kl
+	 p23XlIomSVbvqDU19Y6KRi6qLbrCURW1GH+c3vEDw88YxZ2GR4T8UKJr9dg0pL6yfu
+	 FIjxa5QXgOa6rTbZ/1a4DgJn4I/E1uV+eOErnI/1twc2sIaMNs2Ozm2uNZPxZzo4lw
+	 EW011w6xMwJ6A==
 From: "Mario Limonciello (AMD)" <superm1@kernel.org>
 To: "Rafael J . Wysocki" <rafael@kernel.org>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -58,10 +59,12 @@ Cc: Pavel Machek <pavel@kernel.org>,
 	Eric Naim <dnaim@cachyos.org>,
 	"Guilherme G . Piccoli" <gpiccoli@igalia.com>,
 	"Mario Limonciello (AMD)" <superm1@kernel.org>
-Subject: [PATCH v9 0/4] Introduce and plumb PMSG_POWEROFF
-Date: Sun, 26 Oct 2025 00:09:01 -0500
-Message-ID: <20251026050905.764203-1-superm1@kernel.org>
+Subject: [PATCH v9 1/4] PM: Introduce new PMSG_POWEROFF event
+Date: Sun, 26 Oct 2025 00:09:02 -0500
+Message-ID: <20251026050905.764203-2-superm1@kernel.org>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20251026050905.764203-1-superm1@kernel.org>
+References: <20251026050905.764203-1-superm1@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -70,39 +73,125 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-I've been working on a series that uses the hibernate flows (S4)
-during shutdown (S5) [1], but it's a bit risky because it has changes
-all around the kernel.  To mitigate risk Rafael suggested [2] to split
-the series into at least 3 parts across different kernel cycles.
+PMSG_POWEROFF will be used for the PM core to allow differentiating between
+a hibernation or shutdown sequence when re-using callbacks for common code.
 
-Here is the first part, which just introduces a PMSG_POWEROFF event
-and uses it in any driver that manipulates PM events.
+Hibernation is started by writing a hibernation method (such as 'platform'
+'shutdown', or 'reboot') to use into /sys/power/disk and writing 'disk' to
+/sys/power/state.
 
-There are no functional changes for these changes and this series is
-intended for 6.19.
+Shutdown is initiated with the reboot() syscall with arguments on whether
+to halt the system or power it off.
 
-v8->v9:
- * Reword commit messages (Bjorn)
- * Apply on top of 6.18-rc2 kernel base
+Tested-by: Eric Naim <dnaim@cachyos.org>
+Signed-off-by: Mario Limonciello (AMD) <superm1@kernel.org>
+---
+v9:
+ * Add more detail to commit message (Bjorn)
+v8:
+ * Break series into 3 parts
+ * Drop PMSG_NO_WAKEUP change
+v7:
+ * Reword commit
+v5:
+ * Re-order and split
+ * Add tags
+v4:
+ * https://lore.kernel.org/linux-pci/20250616175019.3471583-1-superm1@kernel.org/
+---
+ drivers/base/power/main.c    | 7 +++++++
+ include/linux/pm.h           | 3 +++
+ include/trace/events/power.h | 3 ++-
+ 3 files changed, 12 insertions(+), 1 deletion(-)
 
-Link: https://lore.kernel.org/linux-pm/20250909191619.2580169-1-superm1@kernel.org/ [1]
-Link: https://lore.kernel.org/linux-pm/CAJZ5v0jHKp7c7dSQMZr5tmQOV6=fHOygTf-YG6Gx9YmurA9cTA@mail.gmail.com/ [2]
-
-Mario Limonciello (AMD) (4):
-  PM: Introduce new PMSG_POWEROFF event
-  scsi: Add PM_EVENT_POWEROFF into suspend callbacks
-  usb: sl811-hcd: Add PM_EVENT_POWEROFF into suspend callbacks
-  USB: Pass PMSG_POWEROFF event to suspend_common()
-
- drivers/base/power/main.c    |  7 +++++++
- drivers/scsi/mesh.c          |  1 +
- drivers/scsi/stex.c          |  1 +
- drivers/usb/core/hcd-pci.c   | 11 ++++++++++-
- drivers/usb/host/sl811-hcd.c |  1 +
- include/linux/pm.h           |  3 +++
- include/trace/events/power.h |  3 ++-
- 7 files changed, 25 insertions(+), 2 deletions(-)
-
+diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
+index 451d54486645b..ecdd88b578a04 100644
+--- a/drivers/base/power/main.c
++++ b/drivers/base/power/main.c
+@@ -95,6 +95,8 @@ static const char *pm_verb(int event)
+ 		return "restore";
+ 	case PM_EVENT_RECOVER:
+ 		return "recover";
++	case PM_EVENT_POWEROFF:
++		return "poweroff";
+ 	default:
+ 		return "(unknown PM event)";
+ 	}
+@@ -367,6 +369,7 @@ static pm_callback_t pm_op(const struct dev_pm_ops *ops, pm_message_t state)
+ 	case PM_EVENT_FREEZE:
+ 	case PM_EVENT_QUIESCE:
+ 		return ops->freeze;
++	case PM_EVENT_POWEROFF:
+ 	case PM_EVENT_HIBERNATE:
+ 		return ops->poweroff;
+ 	case PM_EVENT_THAW:
+@@ -401,6 +404,7 @@ static pm_callback_t pm_late_early_op(const struct dev_pm_ops *ops,
+ 	case PM_EVENT_FREEZE:
+ 	case PM_EVENT_QUIESCE:
+ 		return ops->freeze_late;
++	case PM_EVENT_POWEROFF:
+ 	case PM_EVENT_HIBERNATE:
+ 		return ops->poweroff_late;
+ 	case PM_EVENT_THAW:
+@@ -435,6 +439,7 @@ static pm_callback_t pm_noirq_op(const struct dev_pm_ops *ops, pm_message_t stat
+ 	case PM_EVENT_FREEZE:
+ 	case PM_EVENT_QUIESCE:
+ 		return ops->freeze_noirq;
++	case PM_EVENT_POWEROFF:
+ 	case PM_EVENT_HIBERNATE:
+ 		return ops->poweroff_noirq;
+ 	case PM_EVENT_THAW:
+@@ -1385,6 +1390,8 @@ static pm_message_t resume_event(pm_message_t sleep_state)
+ 		return PMSG_RECOVER;
+ 	case PM_EVENT_HIBERNATE:
+ 		return PMSG_RESTORE;
++	case PM_EVENT_POWEROFF:
++		return PMSG_ON;
+ 	}
+ 	return PMSG_ON;
+ }
+diff --git a/include/linux/pm.h b/include/linux/pm.h
+index 52ee38d72aa23..564133e53f0d3 100644
+--- a/include/linux/pm.h
++++ b/include/linux/pm.h
+@@ -507,6 +507,7 @@ const struct dev_pm_ops name = { \
+  * RECOVER	Creation of a hibernation image or restoration of the main
+  *		memory contents from a hibernation image has failed, call
+  *		->thaw() and ->complete() for all devices.
++ * POWEROFF	System will poweroff, call ->poweroff() for all devices.
+  *
+  * The following PM_EVENT_ messages are defined for internal use by
+  * kernel subsystems.  They are never issued by the PM core.
+@@ -537,6 +538,7 @@ const struct dev_pm_ops name = { \
+ #define PM_EVENT_USER		0x0100
+ #define PM_EVENT_REMOTE		0x0200
+ #define PM_EVENT_AUTO		0x0400
++#define PM_EVENT_POWEROFF	0x0800
+ 
+ #define PM_EVENT_SLEEP		(PM_EVENT_SUSPEND | PM_EVENT_HIBERNATE)
+ #define PM_EVENT_USER_SUSPEND	(PM_EVENT_USER | PM_EVENT_SUSPEND)
+@@ -551,6 +553,7 @@ const struct dev_pm_ops name = { \
+ #define PMSG_QUIESCE	((struct pm_message){ .event = PM_EVENT_QUIESCE, })
+ #define PMSG_SUSPEND	((struct pm_message){ .event = PM_EVENT_SUSPEND, })
+ #define PMSG_HIBERNATE	((struct pm_message){ .event = PM_EVENT_HIBERNATE, })
++#define PMSG_POWEROFF	((struct pm_message){ .event = PM_EVENT_POWEROFF, })
+ #define PMSG_RESUME	((struct pm_message){ .event = PM_EVENT_RESUME, })
+ #define PMSG_THAW	((struct pm_message){ .event = PM_EVENT_THAW, })
+ #define PMSG_RESTORE	((struct pm_message){ .event = PM_EVENT_RESTORE, })
+diff --git a/include/trace/events/power.h b/include/trace/events/power.h
+index 82904291c2b81..370f8df2fdb4b 100644
+--- a/include/trace/events/power.h
++++ b/include/trace/events/power.h
+@@ -179,7 +179,8 @@ TRACE_EVENT(pstate_sample,
+ 		{ PM_EVENT_HIBERNATE, "hibernate" }, \
+ 		{ PM_EVENT_THAW, "thaw" }, \
+ 		{ PM_EVENT_RESTORE, "restore" }, \
+-		{ PM_EVENT_RECOVER, "recover" })
++		{ PM_EVENT_RECOVER, "recover" }, \
++		{ PM_EVENT_POWEROFF, "poweroff" })
+ 
+ DEFINE_EVENT(cpu, cpu_frequency,
+ 
 -- 
 2.43.0
 
