@@ -1,49 +1,51 @@
-Return-Path: <linux-pm+bounces-36839-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36840-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 87CEFC0A709
-	for <lists+linux-pm@lfdr.de>; Sun, 26 Oct 2025 13:29:27 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C799C0A715
+	for <lists+linux-pm@lfdr.de>; Sun, 26 Oct 2025 13:30:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 478E43AC8CD
-	for <lists+linux-pm@lfdr.de>; Sun, 26 Oct 2025 12:29:26 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4C9914E3A95
+	for <lists+linux-pm@lfdr.de>; Sun, 26 Oct 2025 12:30:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BA0024466C;
-	Sun, 26 Oct 2025 12:29:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0814EACE;
+	Sun, 26 Oct 2025 12:30:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b="Id9AfSYA"
+	dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b="jzFkCQ0r"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mxout4.routing.net (mxout4.routing.net [134.0.28.9])
+Received: from mxout3.routing.net (mxout3.routing.net [134.0.28.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAE8B215075;
-	Sun, 26 Oct 2025 12:29:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.0.28.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CBF310E3;
+	Sun, 26 Oct 2025 12:30:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.0.28.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761481763; cv=none; b=sxYp5RvLwnrJQUeQ7hpYU6zekKS6Z63AQ9HLBPJUNdymk7ddLdoD8UYaRWqbgQE2Nf7rjiQCrSUoN8HgnNitulUnMqsnEyw6SJz8pnVa7vezP9/ewx3ng2knPrO5DjmIUrf8Abmyjdx7PiTPmgxudgSjImAXSCN3qZKgpVKqQmU=
+	t=1761481846; cv=none; b=uvWBXBqDoG7L+bDqonmIRCF1hHoD5D18bG+MACzUMaRNYVKLz0xmg61LhhcdJqq9TV4czYo+VU4AilOWIcAFlAlwgPqA4qJCWBnrBtkl58jVgtSLrxc4pSIhiWXmaTeVi6ojTNAcH0N6ISM21d/EZgtdxjbzumtnMgod0NLSNxk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761481763; c=relaxed/simple;
-	bh=1CueByyOn2jYWsMAY9FseSTU9JmKPZICHFQbNAZRxW4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pqyn+xZfxmV8+kzfEqZ8FtVATbEpUY/ViZOmwFRnmF7EByVk9ml+oAWvYZsk9w72QYkurpkk9oniUWkb9N4lFjCIwBE/njigCUdx2FtmAMgKiQbbN3xIG207sfRSVafHGQR5T4cVDsBM7QHGxyw4rRFvuoXL45mPm3aocwXJBRM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fw-web.de; spf=pass smtp.mailfrom=fw-web.de; dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b=Id9AfSYA; arc=none smtp.client-ip=134.0.28.9
+	s=arc-20240116; t=1761481846; c=relaxed/simple;
+	bh=FYbtBW4yebr7GZlwdi/roTYzRuQuBFijpmv4L+YCcvM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=C1VRr3p77TtPi7zYRHLJdCYd7UtVnPBmoSN2fUJyTsiKUQE5BZekH34jpZT1AW7+E4sBfFw9/kPtGzrs3Zv0b5SzgBjU+qxRJMhNgS0Cf4zeg2E9pqJU2FDMNSgTinstzIXUIEKFPk5u+xk028jbkqmXtWrT5PaDIaForycUyTk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fw-web.de; spf=pass smtp.mailfrom=fw-web.de; dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b=jzFkCQ0r; arc=none smtp.client-ip=134.0.28.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fw-web.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fw-web.de
 Received: from mxbulk.masterlogin.de (unknown [192.168.10.85])
-	by mxout4.routing.net (Postfix) with ESMTP id AF8551009AF;
+	by mxout3.routing.net (Postfix) with ESMTP id EAA3160666;
 	Sun, 26 Oct 2025 12:22:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
-	s=routing; t=1761481324;
+	s=routing; t=1761481325;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=J+oIT4ZSlvcfRBxWrhMbinuOO7yYO/gbdfjRoPL1coY=;
-	b=Id9AfSYAhE7BUezRgygKn+cTdeMOS9iccD0ng4R2WApmSTYJzCCbI8sBEueLCgAiyhfc/u
-	dYrXxb+B+75Ubd5pw4LPbgDBLXKAasM6sWSf8sJ48OLHS1xU5gBUxbuuhuY+S8rOE3To8t
-	GqlEZnhmeVB57YcfTr0Vj+DtPs1pZOA=
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=utgZIgZouZ2rivSw9fdUqvFMGknqClgIGWmWeoQd928=;
+	b=jzFkCQ0rm5xX/AZDOCLrqTZSn5am4MENCC0H+Ho2xlaXNHXFgJ+AKsYvXjQeqZpOg6wnjb
+	sPKmZvIwR5nnDZUB+kEYwVgNSXKErXUBoXuXLCUBbExorNtKZaNfeUL24rDCftc4ry0Poo
+	b96b3Ur9mhDC6x3sKXiF1rhmN9LZh1Q=
 Received: from frank-u24.. (fttx-pool-217.61.154.70.bambit.de [217.61.154.70])
-	by mxbulk.masterlogin.de (Postfix) with ESMTPSA id 60B4D1226BC;
+	by mxbulk.masterlogin.de (Postfix) with ESMTPSA id AA9F51226F7;
 	Sun, 26 Oct 2025 12:22:04 +0000 (UTC)
 From: Frank Wunderlich <linux@fw-web.de>
 To: "Rafael J. Wysocki" <rafael@kernel.org>,
@@ -65,10 +67,12 @@ Cc: Frank Wunderlich <frank-w@public-files.de>,
 	linux-kernel@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-mediatek@lists.infradead.org
-Subject: [PATCH v1 0/5] Add MT7987 Thermal support
-Date: Sun, 26 Oct 2025 13:21:29 +0100
-Message-ID: <20251026122143.71100-1-linux@fw-web.de>
+Subject: [PATCH v1 1/5] dt-bindings: thermal: mediatek: make interrupt only required for current SoCs
+Date: Sun, 26 Oct 2025 13:21:30 +0100
+Message-ID: <20251026122143.71100-2-linux@fw-web.de>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20251026122143.71100-1-linux@fw-web.de>
+References: <20251026122143.71100-1-linux@fw-web.de>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -79,22 +83,59 @@ Content-Transfer-Encoding: 8bit
 
 From: Frank Wunderlich <frank-w@public-files.de>
 
-This series adds Thermal support for MT7987.
+Upcoming MT7987 does not have a IRQ we have to make interrupt-property only
+required for current supported SoCs.
 
-Frank Wunderlich (5):
-  dt-bindings: thermal: mediatek: make interrupt only required for
-    current SoCs
-  dt-bindings: thermal: mediatek: Add LVTS thermal controller definition
-    for MT7987
-  thermal/drivers/mediatek/lvts_thermal: Add no-irq-mode for mt7987
-  thermal/drivers/mediatek/lvts_thermal: Add SoC based golden Temp
-  thermal/drivers/mediatek/lvts_thermal: Add mt7987 support
+Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+---
+ .../bindings/thermal/mediatek,lvts-thermal.yaml | 17 ++++++++++++++++-
+ 1 file changed, 16 insertions(+), 1 deletion(-)
 
- .../thermal/mediatek,lvts-thermal.yaml        |  18 +++-
- drivers/thermal/mediatek/lvts_thermal.c       | 102 ++++++++++++++++--
- .../thermal/mediatek,lvts-thermal.h           |   3 +
- 3 files changed, 111 insertions(+), 12 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml b/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
+index 0259cd3ce9c5..7ec9c46eef22 100644
+--- a/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
++++ b/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
+@@ -58,6 +58,16 @@ properties:
+ allOf:
+   - $ref: thermal-sensor.yaml#
+ 
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - mediatek,mt7988-lvts-ap
++    then:
++      required:
++        - interrupts
++
+   - if:
+       properties:
+         compatible:
+@@ -75,6 +85,9 @@ allOf:
+         nvmem-cell-names:
+           maxItems: 1
+ 
++      required:
++        - interrupts
++
+   - if:
+       properties:
+         compatible:
+@@ -91,10 +104,12 @@ allOf:
+         nvmem-cell-names:
+           minItems: 2
+ 
++      required:
++        - interrupts
++
+ required:
+   - compatible
+   - reg
+-  - interrupts
+   - clocks
+   - resets
+   - nvmem-cells
 -- 
 2.43.0
 
