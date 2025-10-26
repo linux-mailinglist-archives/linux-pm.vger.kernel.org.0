@@ -1,124 +1,123 @@
-Return-Path: <linux-pm+bounces-36859-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36861-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6062C0B3E4
-	for <lists+linux-pm@lfdr.de>; Sun, 26 Oct 2025 22:09:10 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 79153C0B625
+	for <lists+linux-pm@lfdr.de>; Sun, 26 Oct 2025 23:45:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A02103AF689
-	for <lists+linux-pm@lfdr.de>; Sun, 26 Oct 2025 21:09:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1C8133B7734
+	for <lists+linux-pm@lfdr.de>; Sun, 26 Oct 2025 22:45:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E81C6283121;
-	Sun, 26 Oct 2025 21:09:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 672482FE585;
+	Sun, 26 Oct 2025 22:45:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lUR1M4l/"
+	dkim=pass (2048-bit key) header.d=aurel32.net header.i=@aurel32.net header.b="0rBsHn9o"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from hall.aurel32.net (hall.aurel32.net [195.154.113.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFEC972633;
-	Sun, 26 Oct 2025 21:09:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5993020E03F;
+	Sun, 26 Oct 2025 22:44:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.154.113.88
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761512947; cv=none; b=m5rYzDYAkIP/0VpoRwDVJde95OaAmNV3kyQeCO1UgB9HhB+FmSFoYZ/K6StsMj9ZJ6pYfCSZL4POA+nP1zPNisqxyOhoHy640rt0yP2jQDYYC5uzUAuKK9BBXxtpgiOroe6D+4aFUUcyB768EMLqU1u8YNQzCOKR7IqE5Wdt/Og=
+	t=1761518700; cv=none; b=txE5+Oo3yPIkOcMquRsVjJlYBGNtAAJik93BkxTIOfYzDYkmomDftDGA+sQGW1hYBVG3oP3QF1Wg6/ewMYyT09hpa/uhF3CQHRDaDXN7L2A86IY7ibL21uDh4NgC1eTu9fq6SiQJmwV98RLf07JKbU6aUG056Afp/uZBLSpfLZg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761512947; c=relaxed/simple;
-	bh=PgGZkxx9eVXClCW73EbY+KTGYweRYJk4TsXoUCP0ekU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=S8bH4Ahtv/DplOi7oWo/kFnHRmFjGTAqidTbsIQ9ikV++cM0jC0i20tqLrAxi17a/hl9voxG6C7ts+9CQfsMUPUG+B9ifUNwZ3Ci1QAPkss1OKAjUNI5aJ13G/md+VECHuaPQ7/uPXb5p/KGY9aDVfFFtnDFmIJcJcWfumyqgAk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lUR1M4l/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0288BC4CEE7;
-	Sun, 26 Oct 2025 21:09:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761512947;
-	bh=PgGZkxx9eVXClCW73EbY+KTGYweRYJk4TsXoUCP0ekU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lUR1M4l/hP8HpiVUCzrPwKHQLA71phjUp7BimzWp+4GClN0UQGwSfzsd8fVfX8wRV
-	 0KoytM0amuJJnfRidVHRhWF4gVgqbUjaYBkx0UgwbwhUxE7brFWpTs3cfPKaXZM/I8
-	 n6dJKg1SqGyGQ0zzhY5F6uCksj42hmsX7iazM8feVgjyg6S9EWHkRQHbXDLxKUzJbJ
-	 c3RU3rCDY8rckM0EqsfDfWfpuz1NJQluvNWhvQ0sPexN6jKfSq5Uibhp/z7R5ims10
-	 /y4N93U9eb/LS2ZoU9sCmehKWKB0ja+59U53OG8NS5eVEGuiB3tGhyqAPKBeWVZ09p
-	 VJDTdJX0SgnXw==
-Date: Sun, 26 Oct 2025 16:09:05 -0500
-From: Rob Herring <robh@kernel.org>
-To: iuncuim <iuncuim@gmail.com>
-Cc: Vasily Khoruzhick <anarsoul@gmail.com>,
-	Yangtao Li <tiny.windzz@gmail.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Samuel Holland <samuel@sholland.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Andre Przywara <andre.przywara@arm.com>, linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/6] dt-bindings: thermal: sun8i: Add A523 THS0/1
- controllers
-Message-ID: <20251026210905.GA2941518-robh@kernel.org>
-References: <20251025043129.160454-1-iuncuim@gmail.com>
- <20251025043129.160454-2-iuncuim@gmail.com>
+	s=arc-20240116; t=1761518700; c=relaxed/simple;
+	bh=yXpM9twVj9tRxfx2N9X7IWTo8uHo345VMwoD2bH7bww=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YP0kW85OzE6lZTVHu9fZ85c28S5/LzOGkO+YlDpzfLs21uIYpEJRJe/pp71cjDsQXHGMrEGQrPE7BEsmYVks/ViClCFMd5uC3RKTRtalLdhKNTaCMk5ynjcRyBXRpryvBUZIbBorqmdBqRFFyyPKM+8PucRU5tDNGkGFoKT33Bo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=aurel32.net; spf=pass smtp.mailfrom=aurel32.net; dkim=pass (2048-bit key) header.d=aurel32.net header.i=@aurel32.net header.b=0rBsHn9o; arc=none smtp.client-ip=195.154.113.88
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=aurel32.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aurel32.net
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=aurel32.net
+	; s=202004.hall; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:
+	Subject:Cc:To:From:Content-Type:From:Reply-To:Subject:Content-ID:
+	Content-Description:In-Reply-To:References:X-Debbugs-Cc;
+	bh=Orn0lmQZTpTRXV6O0W26xT9lQ0WI/2Temggr2n9UBr8=; b=0rBsHn9okjlt+oed7tHwcHk4aw
+	NMRPnaKfkQ59JoneVtvr5pppB9acbJcBV65e9LMoO8fGpC/rIvy25aos9f8vHBzisz14t7dpwz//D
+	HhMUox3M1eKvsWNUYf5cO3qlFdg/h1QUw8UPA+yG5I3uCjeaPelwVGBg2QiEoMh04ZWuNdZjHAD7X
+	vCpVi4AmgIqs3rRS9apIj+3u/Qf4Ro+tKEbcMD8CPSCfsWl30LLFnzblTrJyuZLzV+QRKJKMiYwoj
+	Osi+v94H4QQ9H45pmj3rSHWoiF/XpIcebPBoyUVfB8Q6azhJ9RzMevAghYEaEXY1bOKZ9Efh+Q4Dv
+	0dZABUng==;
+Received: from [2a01:e34:ec5d:a741:1ee1:92ff:feb4:5ec0] (helo=ohm.rr44.fr)
+	by hall.aurel32.net with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <aurelien@aurel32.net>)
+	id 1vD9TV-0065U1-1G;
+	Sun, 26 Oct 2025 23:44:33 +0100
+From: Aurelien Jarno <aurelien@aurel32.net>
+To: linux-kernel@vger.kernel.org,
+	Lee Jones <lee@kernel.org>,
+	Sebastian Reichel <sre@kernel.org>,
+	Troy Mitchell <troy.mitchell@linux.spacemit.com>,
+	Yixun Lan <dlan@gentoo.org>,
+	Paul Walmsley <pjw@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Alexandre Ghiti <alex@ghiti.fr>,
+	linux-riscv@lists.infradead.org (open list:RISC-V ARCHITECTURE:Keyword:riscv),
+	spacemit@lists.linux.dev (open list:RISC-V SPACEMIT SoC Support:Keyword:spacemit)
+Cc: Aurelien Jarno <aurelien@aurel32.net>,
+	linux-pm@vger.kernel.org (open list:SYSTEM RESET/SHUTDOWN DRIVERS),
+	linux-riscv@lists.infradead.org (open list:RISC-V SPACEMIT SoC Support),
+	spacemit@lists.linux.dev (open list:RISC-V SPACEMIT SoC Support)
+Subject: [PATCH v4 0/2] driver: reset: spacemit-p1: add driver for poweroff/reboot
+Date: Sun, 26 Oct 2025 23:41:13 +0100
+Message-ID: <20251026224424.1891541-1-aurelien@aurel32.net>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251025043129.160454-2-iuncuim@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Sat, Oct 25, 2025 at 12:31:24PM +0800, iuncuim wrote:
-> From: Mikhail Kalashnikov <iuncuim@gmail.com>
-> 
-> Add a binding for D1/T113s thermal sensor controller. Add dt-bindings
-> description of the thermal sensors in the A523 processor.
-> The controllers require activation of the additional frequency of the
-> associated gpadc controller, so a new clock property has been added.
-> 
-> The calibration data is split into two cells that are in different areas
-> of nvmem. Both controllers require access to both memory cell, so a new
-> property nvmem-cells has been added. To maintain backward compatibility,
-> the name of the old cell remains the same and the new nvmem-cell-names is
-> called calibration-second-part
-> 
-> Signed-off-by: Mikhail Kalashnikov <iuncuim@gmail.com>
-> ---
->  .../thermal/allwinner,sun8i-a83t-ths.yaml     | 56 ++++++++++++++++++-
->  1 file changed, 53 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml b/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml
-> index 3e61689f6..b2f750ef2 100644
-> --- a/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml
-> +++ b/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml
-> @@ -24,18 +24,23 @@ properties:
->        - allwinner,sun50i-h5-ths
->        - allwinner,sun50i-h6-ths
->        - allwinner,sun50i-h616-ths
-> +      - allwinner,sun55i-a523-ths0
-> +      - allwinner,sun55i-a523-ths1
->  
->    clocks:
->      minItems: 1
->      items:
->        - description: Bus Clock
->        - description: Module Clock
-> +      - description: GPADC Clock
->  
->    clock-names:
->      minItems: 1
-> +    maxItems: 2
+This adds poweroff/reboot support for the SpacemiT P1 PMIC chip, which is
+commonly paired with the SpacemiT K1 SoC.
 
-How can the max be both 2 and...
+Note: For reliable operation, this driver depends on a this patch that adds
+atomic transfer support to the SpacemiT I2C controller driver:
+  https://lore.kernel.org/spacemit/20251009-k1-i2c-atomic-v4-1-a89367870286@linux.spacemit.com/
 
->      items:
->        - const: bus
->        - const: mod
-> +      - const: gpadc
+Changes between version 3 and version 4:
+- Replace the "select" by a "depends on"
+- Remove outdated Reviewed-by
 
-...3 entries?
+Here is version 3 of this series:
+  https://lore.kernel.org/spacemit/20251021201451.1013640-1-aurelien@aurel32.net/
+
+Changes between version 2 and version 3:
+- Allow building as a module
+- Remove outdated Acked-by and Tested-by
+- Collect Reviewed-by
+
+Here is version 2 of this series:
+  https://lore.kernel.org/spacemit/20251019191519.3898095-1-aurelien@aurel32.net/
+
+Changes between version 1 and version 2:
+- Rebase onto v6.18-rc1
+- Use dev_err_probe() to simplify the code
+- Fix indentation of patch 1
+- Collect Acked-by and Tested-by
+
+Here is version 1 of this series:
+  https://lore.kernel.org/spacemit/20250927220824.1267318-1-aurelien@aurel32.net/
+
+
+Aurelien Jarno (2):
+  driver: reset: spacemit-p1: add driver for poweroff/reboot
+  mfd: simple-mfd-i2c: add a reboot cell for the SpacemiT P1 chip
+
+ drivers/mfd/simple-mfd-i2c.c             |  1 +
+ drivers/power/reset/Kconfig              |  9 +++
+ drivers/power/reset/Makefile             |  1 +
+ drivers/power/reset/spacemit-p1-reboot.c | 88 ++++++++++++++++++++++++
+ 4 files changed, 99 insertions(+)
+ create mode 100644 drivers/power/reset/spacemit-p1-reboot.c
+
+-- 
+2.47.2
+
 
