@@ -1,46 +1,46 @@
-Return-Path: <linux-pm+bounces-36834-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36835-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id ADF5CC0A2E9
-	for <lists+linux-pm@lfdr.de>; Sun, 26 Oct 2025 06:10:27 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 138BCC0A2E0
+	for <lists+linux-pm@lfdr.de>; Sun, 26 Oct 2025 06:09:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 076194E6725
-	for <lists+linux-pm@lfdr.de>; Sun, 26 Oct 2025 05:09:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 029963A9F31
+	for <lists+linux-pm@lfdr.de>; Sun, 26 Oct 2025 05:09:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1374126CE2D;
-	Sun, 26 Oct 2025 05:09:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8EF326E702;
+	Sun, 26 Oct 2025 05:09:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z+I0Xk/9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n+oPqEmo"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D90991F418F;
-	Sun, 26 Oct 2025 05:09:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D5661F418F;
+	Sun, 26 Oct 2025 05:09:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761455357; cv=none; b=RKVDdSFRINJ1vhbNwj6oHVpMoT+Qzl91aDpxugFVGRg+Bdcp8YUiuof8RTNlB4u8MZO6iBbBthdu86f3YRVbydhXzrwlBWAFg3Jf+9wWvEMytdzXyNCSMpQC5NDQFYY5bDoZPnnVZ2ilJVPcL9wzadbmwQ67YimtM+TuNilvjhk=
+	t=1761455358; cv=none; b=cz4bYLeG2tAR4li1MLiIuBOx40QtmtcLj+AKys52uz93XrUnqOGBG7t1XQzCjbz9gbgszJPX/4Tg6X0eRKrbfyQRwAvT/5YYh1MWwN4bIxcg6TzQM+Cb01+7IoonRuKgUXnsRsLyJ2rHv76EEXlkyuFACAlUXQTWY3toz+DB9lQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761455357; c=relaxed/simple;
-	bh=+a3NIZ5LBAuFIjWG0tOX3YbHmV3EX8mnFBVq58cXdRw=;
+	s=arc-20240116; t=1761455358; c=relaxed/simple;
+	bh=6P7UqqCzlyOrQjDXavwBSKKqhOj7y6n2US3KKU6dV2s=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=UbAyReHwxMCqCm36sgJG1Doy/sV2XBsmYxHMAxODmo37PJfUHJQNeBE7U9njqc3ngZ26E1I/tNrabxVVpecOsMR5id/MD3GE59dewrGRdJOYq9R6HxcwjZlUXd4iV7e3YUEQpzWqunVQBH/W3IyrWIddPDHQ1xTcCMMQV8bqEhA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z+I0Xk/9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1FA9C4CEE7;
-	Sun, 26 Oct 2025 05:09:14 +0000 (UTC)
+	 MIME-Version; b=XbX5vc5+Qrfu4G2CqNX+DrnW+fL2LI48KWLf72/IlGjJEeIQsSHxxNNNMSbzrmM7JHjdGwAQt81vgJqzY/xyG6OUJQ6gARHUSrSzbiIe5fOP45j4LQLZYAH/TUXiSwK2OwBsxAhBeOGu1JyFTHDGcsUIjc2S6XR5kYUxnrV4+sw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n+oPqEmo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A73FAC4CEF7;
+	Sun, 26 Oct 2025 05:09:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761455356;
-	bh=+a3NIZ5LBAuFIjWG0tOX3YbHmV3EX8mnFBVq58cXdRw=;
+	s=k20201202; t=1761455358;
+	bh=6P7UqqCzlyOrQjDXavwBSKKqhOj7y6n2US3KKU6dV2s=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Z+I0Xk/9wQUo8wUURv4QbIcIRjdT2XJYaxgr8cam4lCHQVlmC//J6HUEEdnJghnoJ
-	 KRnQrKNiji0lO6acG7iIgcAKzaDoh9lM970pzkQ+MTerH4npEQd2FLCNRGJDYdddu3
-	 SbzO1LlST1n6gTi7F+37AkUotZKPk7UYXOp7R7gRF7tMiWDXphUoBjCBMqLJuFjDyf
-	 yoKIb8hGhKJPb+FmhImZqWOKlsXfg1A8Ogeykzo4RX8bBRrBlbh/ThLOQ12KBnMnOh
-	 edeVnIQY8a3cokSjWfavMORzvjSBmqu+aKPuVCh+iLJli01fa/sWJyzBeeE7UAvrgA
-	 Xzwg8q7dq2jZw==
+	b=n+oPqEmo+oJrANUSyNz/Sc9HkLlz14pJrlP1zd3weAYd6S6maksa5FDP8dt0hyKYm
+	 lzsvH5vdQZ7uLBvtXY68KwsrtnqBVNyVcXr4UZzy1Ywxw3TEZzxoaWDTvOzwzdNNrw
+	 dfJ0w1ytk+e7VoVXMtQRM98p1DL8xgsoa1mJVneOw+W8vadmjag3AjE6FuDDibvCRH
+	 EiwowUjWMa17KqRmknQs9HrcpH5Hne81OLxuQPt+BZeAKG/h/BQZwEtPhfx4WmOf6k
+	 oDThk0RcBeHdbTJ/AkDl2PFQEPKmpNaU8DJTyxtadQAcQ1hRLvirAk4WBVZdkUc6ze
+	 0HGuJw98seLsg==
 From: "Mario Limonciello (AMD)" <superm1@kernel.org>
 To: "Rafael J . Wysocki" <rafael@kernel.org>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -58,11 +58,10 @@ Cc: Pavel Machek <pavel@kernel.org>,
 	=?UTF-8?q?Merthan=20Karaka=C5=9F?= <m3rthn.k@gmail.com>,
 	Eric Naim <dnaim@cachyos.org>,
 	"Guilherme G . Piccoli" <gpiccoli@igalia.com>,
-	"Mario Limonciello (AMD)" <superm1@kernel.org>,
-	"Martin K . Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH v9 2/4] scsi: Add PM_EVENT_POWEROFF into suspend callbacks
-Date: Sun, 26 Oct 2025 00:09:03 -0500
-Message-ID: <20251026050905.764203-3-superm1@kernel.org>
+	"Mario Limonciello (AMD)" <superm1@kernel.org>
+Subject: [PATCH v9 3/4] usb: sl811-hcd: Add PM_EVENT_POWEROFF into suspend callbacks
+Date: Sun, 26 Oct 2025 00:09:04 -0500
+Message-ID: <20251026050905.764203-4-superm1@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20251026050905.764203-1-superm1@kernel.org>
 References: <20251026050905.764203-1-superm1@kernel.org>
@@ -74,54 +73,36 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-If the PM core uses hibernation callbacks for powering off the
-system, drivers will receive PM_EVENT_POWEROFF and should handle
-it the same as they previously handled PM_EVENT_HIBERNATE.
+When the ACPI core uses hibernation callbacks for shutdown drivers
+will receive PM_EVENT_POWEROFF and should handle it the same as
+PM_EVENT_HIBERNATE would have been used.
 
-Support this case in the scsi driver.  No functional changes.
-
-Reviewed-by: Martin K. Petersen <martin.petersen@oracle.com>
 Tested-by: Eric Naim <dnaim@cachyos.org>
 Signed-off-by: Mario Limonciello (AMD) <superm1@kernel.org>
 ---
-v9:
- * Reword commit (Bjorn)
 v8:
  * Break up series to 3 parts
- * Pick up tag
 v5:
  * Re-order
+ * Add tags
 v4:
  * https://lore.kernel.org/linux-pci/20250616175019.3471583-1-superm1@kernel.org/
 ---
- drivers/scsi/mesh.c | 1 +
- drivers/scsi/stex.c | 1 +
- 2 files changed, 2 insertions(+)
+ drivers/usb/host/sl811-hcd.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/scsi/mesh.c b/drivers/scsi/mesh.c
-index 1c15cac41d805..768b85eecc8fd 100644
---- a/drivers/scsi/mesh.c
-+++ b/drivers/scsi/mesh.c
-@@ -1762,6 +1762,7 @@ static int mesh_suspend(struct macio_dev *mdev, pm_message_t mesg)
- 	case PM_EVENT_SUSPEND:
- 	case PM_EVENT_HIBERNATE:
- 	case PM_EVENT_FREEZE:
-+	case PM_EVENT_POWEROFF:
+diff --git a/drivers/usb/host/sl811-hcd.c b/drivers/usb/host/sl811-hcd.c
+index ea3cab99c5d40..5d6dba681e503 100644
+--- a/drivers/usb/host/sl811-hcd.c
++++ b/drivers/usb/host/sl811-hcd.c
+@@ -1748,6 +1748,7 @@ sl811h_suspend(struct platform_device *dev, pm_message_t state)
  		break;
- 	default:
- 		return 0;
-diff --git a/drivers/scsi/stex.c b/drivers/scsi/stex.c
-index d8ad02c293205..e6357bc301cb9 100644
---- a/drivers/scsi/stex.c
-+++ b/drivers/scsi/stex.c
-@@ -1965,6 +1965,7 @@ static int stex_choice_sleep_mic(struct st_hba *hba, pm_message_t state)
  	case PM_EVENT_SUSPEND:
- 		return ST_S3;
  	case PM_EVENT_HIBERNATE:
 +	case PM_EVENT_POWEROFF:
- 		hba->msi_lock = 0;
- 		return ST_S4;
- 	default:
+ 	case PM_EVENT_PRETHAW:		/* explicitly discard hw state */
+ 		port_power(sl811, 0);
+ 		break;
 -- 
 2.43.0
 
