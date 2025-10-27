@@ -1,212 +1,125 @@
-Return-Path: <linux-pm+bounces-36875-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36876-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D6FC5C0C3CC
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Oct 2025 09:09:14 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA965C0C52B
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Oct 2025 09:34:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BBEF919A00D9
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Oct 2025 08:09:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 96A6C19A0FBE
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Oct 2025 08:35:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 033E52E7623;
-	Mon, 27 Oct 2025 08:09:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 311A52E7198;
+	Mon, 27 Oct 2025 08:34:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ILxdwon5"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kyLYAXnn"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43F0A2E5B21
-	for <linux-pm@vger.kernel.org>; Mon, 27 Oct 2025 08:09:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D1631DF27D
+	for <linux-pm@vger.kernel.org>; Mon, 27 Oct 2025 08:34:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761552547; cv=none; b=kqgx27yI9Csc1LXaC0M2qWIIfZy5Xn7bYpnSqwTYu1hR4czSq1obYBK/ufNEVsP+/WypiotCFlOQ+HgQU49DFJdayF91U+2yUFx9YbQsA1Tn4/lUN67BmqIlJDvAdJgbzba8a4cwBxcBGRCzmJy/jh+w57VhPI6FXDZPIWNmUKM=
+	t=1761554074; cv=none; b=J03wKLvG2nO2SUxXZxKOtoAtBUAGO8+a1vHyMNIS4McmuNjjiITC+CVyTgcZW2LXiRXmGIxCbkFhCBtlfBxXe4t3Pzlxbe3v9vSoAvOi4wJTV/uHdA44TERs7gH58SnKe6y10bhDbAiOIBI37uRmsP1Owrn8V1XVeajiSx/EBzg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761552547; c=relaxed/simple;
-	bh=XeTwlfFrQd3ECaXR1wyhrLcNrq8QGGpB79EUptps7TI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=f97xjCFcBPqnnjH4HVwCNxdvKaO+Kbn98aNAEBcA0fS2hzRGRPJeBgWwFyTriwHfjLx+uQfbFxsO4fzuMX+lH8h8aeiFzN8WTneiVCHMEaDDW2P8OGjyTRtlT9mEhPQFF6cbBgNNjlvHksEnJaIuLO4zvUq+bLJD2bTE9Hlw6EE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ILxdwon5; arc=none smtp.client-ip=209.85.218.52
+	s=arc-20240116; t=1761554074; c=relaxed/simple;
+	bh=hZTN/tQMYZInh7JvxfdJgJoSNB55wm3j6jMjFgi+HkU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Mh13T4nFgE1/h5Txuf+wjsbWDqGTHNnaHb8hMgiLjgqap1FaO6S4lTxw27lz9+DW45iAeALdc0WQN6byR6vgP1GxMeESUoxPG33x8TUaPyE0gTz/d+QcCXt3kN+nu26wbcmWiE1SCO9oOsG0vSAu9hEetYowfLNToxqZrIkvB+0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kyLYAXnn; arc=none smtp.client-ip=209.85.218.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-b3f5e0e2bf7so981600266b.3
-        for <linux-pm@vger.kernel.org>; Mon, 27 Oct 2025 01:09:05 -0700 (PDT)
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-b6d2f5c0e8eso897239666b.3
+        for <linux-pm@vger.kernel.org>; Mon, 27 Oct 2025 01:34:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761552543; x=1762157343; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1761554070; x=1762158870; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=yvxeQRhhg830l0sanhrt4dj9VmhvTVyDa0jNQUK1mG4=;
-        b=ILxdwon5B071nW61x/VZ+xyfOCGntOy6rdACq7vip+Gz0tFiA+QOfnnSXCdaSkFKMU
-         B5HqH8RryvcjIf72Fx5goN6rf3vo+XbnnTGq8vAuXqbkiR7aSXK1xPi0cSUHYU+tmPo9
-         4odYINsRYolDp3epXuPLegYHHMyLpyucGLFvIbX1zIjCskdGfzDkyjOa3oZufWTMtJY/
-         JF6IFoR5fLSZ10QJIzD8C3x33CoF+z2ygj2aRKcn1ak8GWoxKSzY0ctWDkwYfNkHDaw/
-         ES3Oxb8fkfnYuI+HfoI6NhyQM75T61QleNlov5roEr+LA/ruKO8/YPYtVt+uxUQHSzUi
-         /r/A==
+        bh=QXqA2AyYDwMAn5NeiBjETLweOL3QhYSqRjqxrljQDYI=;
+        b=kyLYAXnni860iyXZipirj1ouWIpiOII1jtdMfjXMlErQ6dOum3GjUR1FmWlO51eCaf
+         ooziWpmNBHa6xn87D336Taz6sYkrjM+ClNFD3FNo7aM/VUs1r7c6avi4YIhAVhgYCPEk
+         uL+Mk4M1ARpwbIbbYlc1B/sof3Bf3eJ1buTuFf/xsM8AyBXsA3ZiIKmL46OkJpHARTml
+         2HAt85RckGpaqPqYaU/Di8gBH8JtTf23CEqF4ZnQeJbtUdIbYsff5Psolv0MCInD2/cG
+         NRdFLB9gqa+D9XoHOURy2+xLIVVp5QbP6845dopJzXbFaihzSDEeKmQo6nkMh3SSv4oa
+         FRKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761552543; x=1762157343;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1761554070; x=1762158870;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=yvxeQRhhg830l0sanhrt4dj9VmhvTVyDa0jNQUK1mG4=;
-        b=DCdRk0Zh5TVGupfQPmPquHpc2YJfBQHd4Y4wmuXMiwDdv4R/rQGE7j2PKiU4nrEBDD
-         rAVxzXNv2MphVa+aEqLQi4z2P5WGUCp/R+RudljQBeUv68V7tUbG/Rz5+mEW3RwTKnGW
-         B4Lbc4OUiWkmAOz2pPxz923THRwlbFv5An72oO1LVPOgSDAyRwEFfFu2XcSswMUVsUTY
-         7HdwfMEAiVJUmaq0yWe6X1b+RYUrca7uBr9Bg8eenRVzb8PfnqmDF3H5jm8Bsry9UsKn
-         6dNIFbIiRHBWoFGrL8UYX6TmEnFdyKt7DkyfDyNxkjY1cNk7vbA/vDRVQSWMdX22GJuR
-         4iQA==
-X-Forwarded-Encrypted: i=1; AJvYcCVsh3ZqBrwMnNnQalu6mTBiGRLnFRPq9EnDVSDFMaa6eNqniuwF0W4tDVt0zneX3RBa3xlHAfJrxg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzWQlLyqxGVM9sjIa4As95ncoYoWIY2RO5Ei00KzE8TOq1i8D+/
-	0htWQjGjO6l2ZTXRifHwPmxaP0IftEFxTPB3XHMshsQ0pzWMQVlzhDVp
-X-Gm-Gg: ASbGncu3MKyvbAbE0BxJtu89rLkQoYLi9J4PkXOJeFwKi0cBSgYnz9ag1ssIC/NV2Tm
-	eSbE7OwWRrNOMWm0YUA21mIcM+ktHQEXGJMkvga9YoAU4dhoT+fX8gSUjqs0/xjNZD1qBaWPl8S
-	zq9R7OJKVrTEW2+Bo0LCbS5Z7yT3uyheRAUOFyZ1YFXbHZkc+dmx9OVFzdXqMUxFTl1dFPjf4x/
-	+8A9bCZyiGSSVMYFvq0ERf0bhGRl6ypsqhHkUdVMsowX9jfb0IDg9rVZ0dJGVQKSSH4qtHn49Fu
-	CWEd9y4mWPSPKaICLkb0CVo4PLAMVIFOXXAqCxJOULR8Ypknylhs6DTJ75yUYJPwr4prs/03tz3
-	LXOkR/8YFsCYTIZOiTU1SScZEvSeFf7NGxoMPYodAHZzJDuE4N256x4mGXZNet4JvAyM7KOFFyx
-	Z/
-X-Google-Smtp-Source: AGHT+IFijVOlnEStwgdV8OnlKBS1QW3pyY3ndH6Fj16lvbKA8iEuH12vqflityGstfLwZ0jBGpQJHQ==
-X-Received: by 2002:a17:906:c43:b0:b6d:7e01:cbc5 with SMTP id a640c23a62f3a-b6d7e01debbmr639439666b.53.1761552543311;
-        Mon, 27 Oct 2025 01:09:03 -0700 (PDT)
-Received: from localhost ([212.73.77.104])
-        by smtp.gmail.com with UTF8SMTPSA id a640c23a62f3a-b6db1c84813sm53108666b.19.2025.10.27.01.09.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Oct 2025 01:09:02 -0700 (PDT)
-From: Askar Safin <safinaskar@gmail.com>
-To: gmazyland@gmail.com
-Cc: Dell.Client.Kernel@dell.com,
-	brauner@kernel.org,
-	dm-devel@lists.linux.dev,
-	ebiggers@kernel.org,
-	kix@kix.es,
-	linux-block@vger.kernel.org,
-	linux-btrfs@vger.kernel.org,
-	linux-crypto@vger.kernel.org,
-	linux-lvm@lists.linux.dev,
-	linux-mm@kvack.org,
-	linux-pm@vger.kernel.org,
-	linux-raid@vger.kernel.org,
-	lvm-devel@lists.linux.dev,
-	mzxreary@0pointer.de,
-	nphamcs@gmail.com,
-	pavel@ucw.cz,
-	rafael@kernel.org,
-	ryncsn@gmail.com,
-	safinaskar@gmail.com,
-	torvalds@linux-foundation.org
-Subject: Re: dm bug: hibernate to swap located on dm-integrity doesn't work (how to get data redundancy for swap?)
-Date: Mon, 27 Oct 2025 11:08:56 +0300
-Message-ID: <20251027080856.2053794-1-safinaskar@gmail.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <a48a37e3-2c22-44fb-97a4-0e57dc20421a@gmail.com>
-References: <a48a37e3-2c22-44fb-97a4-0e57dc20421a@gmail.com>
+        bh=QXqA2AyYDwMAn5NeiBjETLweOL3QhYSqRjqxrljQDYI=;
+        b=qHggjLkSu8oobeFNZwVO9Zi7EdU+ei1Rcy2Vg91TSl+S+aaBn1enZxat7SyCb3NzEP
+         pJ+PFouMgHYYFvy0HqSY6tYLbUmMt5q/9btsnJT3yPjtaVraxf1JfqPMoGjxirF07bhI
+         bO0RI7NRC50E8UdH7UmPo+b0oaXcO2HwUYQCPX9FlyxnpOU4y2Zr6VeQWO+nSUPmy8MN
+         3AmCKwTvwIxvSJwaVD5GEk67SEaGoz+RuLSOAczm3lAwdM30Jw0Z1R2oFVD53bmdJu3S
+         5lMRm2RUXs/ldyti5uYqQwEl+mpJVY0N/VeVwJgB1R0Uw/foiv3KHKdCkAekAfxPjeJd
+         ypAA==
+X-Forwarded-Encrypted: i=1; AJvYcCXzevlGK/G6IUk1CBDdCSX0ISQoyEZ902H6FwMrreIzrBAl098+HRinZ7FsmMLIcVm3vH0YpUMf+g==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw+e6nsDpY5G60yWpN8dBqe9QGSllLaHr0yYt3C2+2RVm4OZJkL
+	7Usqu6KUQKuZnpoRy0yOHuSrGx2T06VOA6DgygWV/fIjwiBB9lZb20LEvpSCM0pdoQ1rAQX0bZS
+	67xZ34JMjqzbzcx+i0Ld06MU9Z3fGfnOcH4IPpPo=
+X-Gm-Gg: ASbGncs13ciqIRFvApfl1XvKj2fZU6LL+GcFWKfjP5WTHd1ofrJNXrAXpbpIAADGemm
+	A7FfiJDPPPbArEwpUdL+IuCoAHNubafBZ8P1fwDLYLDZvCO5ysGUG1f1Dn7+Xnaa/WSGSmbNKPb
+	ABV9KgBbdKnfq7FWEEabGEvT6rL41Ipjt4uUqbYVYAzEnV/QmHPVYEfhootMf74/DYwj+mcay2V
+	OK+heJntvabzObColBKQ1uYElnbWM+RZ43NdKYZQqS90NEJzM7OZxUynJm8yNvs9SB4pMCDbnaA
+	/n5dphr+CtxHNiarZgcmPlXT3FUOpA==
+X-Google-Smtp-Source: AGHT+IF4Ku7VBi6Rz5YATQmMp4K6m21OtDlsrRJ8R6TX/Zwi0y9zuA5CLxTmowv0xMLnRyevU+7TIZF7WyaAwQdIbqQ=
+X-Received: by 2002:a17:906:6a12:b0:b40:b6a9:f70f with SMTP id
+ a640c23a62f3a-b6d51aefb9amr1645192766b.4.1761554069622; Mon, 27 Oct 2025
+ 01:34:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20251024-aheev-checkpatch-uninitialized-free-v2-0-16c0900e8130@gmail.com>
+ <20251024-aheev-checkpatch-uninitialized-free-v2-2-16c0900e8130@gmail.com>
+ <aPvAm1E7CvQfOIuS@stanley.mountain> <81e6af8eea5b0399d1685797d0ea6a6ebc273270.camel@gmail.com>
+ <aP8CxkXYAitKB3vx@stanley.mountain>
+In-Reply-To: <aP8CxkXYAitKB3vx@stanley.mountain>
+From: ally heev <allyheev@gmail.com>
+Date: Mon, 27 Oct 2025 14:04:18 +0530
+X-Gm-Features: AWmQ_blvkJ9ZtBmHKBSTV_q6E3sXqzi4cxX3zWvk57-nTx4mfsifVuvdEYK6e1U
+Message-ID: <CAMB6jUGEJeOVKUEpeFosBFA3QsQk3kgdt_e1EAQJi_yqJp7H-A@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] add check for pointers with __free attribute
+ initialized to NULL
+To: Dan Carpenter <dan.carpenter@linaro.org>
+Cc: Dwaipayan Ray <dwaipayanray1@gmail.com>, Lukas Bulwahn <lukas.bulwahn@gmail.com>, 
+	Joe Perches <joe@perches.com>, Jonathan Corbet <corbet@lwn.net>, Andy Whitcroft <apw@canonical.com>, 
+	workflows@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, David Hunter <david.hunter.linux@gmail.com>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Viresh Kumar <vireshk@kernel.org>, 
+	Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>, linux-pm <linux-pm@vger.kernel.org>, 
+	dan.j.williams@intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Milan Broz <gmazyland@gmail.com>:
-> Hi,
-
-That patch doesn't fix the problem. I will send more details within some
-days, hopefully today.
-
-Also, I just found that for reliable reproduction you need to do
-"swapoff /dev/mapper/swap; cat /dev/mapper/swap > /dev/null" after resume
-(assuming you were able to resume, of course).
-
-So here is updated script for reproduction in Qemu:
-
-https://zerobin.net/?0aa379bae218cf92#DDVFMvfi6S3ydCQLSrL+us1lHjXQJIZasW55JI7gEfU=
-
-This script is very easy to use!
-
-Try 1-2 times to reproduce.
-
-Here is result of that script:
-
-https://zerobin.net/?3d9447900052f9ce#ng0htJDAdSsvqVunL+BnoLHXszM6ardt9R3wkbO9L28=
-
-This results are on 43e9ad0c55a3, which is current master, without Mikulas Patocka's
-patch, but with this Mario's patch:
-https://lore.kernel.org/linux-pm/20251026033115.436448-1-superm1@kernel.org/ .
-Mario's patch is needed, otherwise we get WARNING when we try to hibernate.
-
-Again: these logs are without Mikulas Patocka's patch. I will send results
-of testing his patch later, hopefully today. But don't expect much. As I said,
-his patch doesn't work.
-
-"log-def-1" is output of first Qemu invocation (i. e. first boot) with
-default integritysetup options. "log-def-2" is second Qemu invocation
-(i. e. when we try to resume).
-
-log-bit-{1,2} is same thing, but with "--integrity-bitmap-mode" added to
-"integritysetup format" and "integritysetup open".
-
-log-no-{1,2} is same, but with "--integrity-no-journal".
-
-log-nodm-{1,2} is same, but without dm-integrity at all, i. e. we create
-swap directly on partition.
-
-As you can see in logs, hibernate with dm-integrity never works perfectly.
-We either unable to resume, either we are able to resume, but then get
-integrity errors when we do "cat /dev/mapper/swap > /dev/null".
-
-Swap directly on partition works.
-
-Again: you may need 1-2 attempts to reproduce using this script.
-
-Also: the bug is reproducible even if we do "echo test_resume > /sys/power/disk".
-
-> Are you sure you used --integrity-no-journal both in activation before
-> hibernation and also in resume? If not, please try it.
-
-I'm totally sure. (You can see script above and "set -x" output in logs.)
-
-> You can verify it with "integritysetup status <device>" - it should say "journal: not active".
-
-I just checked. It indeed says so.
-
-> And if it does not work, could you try to use -integrity-recovery-mode the same
-> way (both before hibernation and later in resume)? This will effectively ignore checksums
-
-So I should pass it to both "integritysetup open" invocations, but
-not to "integritysetup format" invocation. Right? Okay, I did so.
-
-I. e. I did this:
-
-integritysetup format --batch-mode --integrity xxhash64 /dev/sda # when formatting
-integritysetup open --integrity-recovery-mode --integrity xxhash64 /dev/sda swap # before hibernate
-integritysetup open --integrity-recovery-mode --integrity xxhash64 /dev/sda early-swap # when resuming
-
-And something completely unexpected happened!
-"swapon" failed immediately after "mkswap"!!! I. e. "swapon" was
-unable to read swap signature right after "mkswap".
-Here is log:
-https://zerobin.net/?ebe34fc9ce94be45#6DWKSXvgUDKIrF4299th0ylhQNEcdqeeBfxzSJjROpA=
-This seems like another dm-integrity bug.
-
-> You can verify it with "integritysetup status <device>" - it should say "mode: read/write recovery".
-
-Yes, it says so in logs above.
-
-> You can also try to decrease journal commit time with --journal-commit-time option,
-
-I just put "--journal-commit-time 1" to format and both opens. I got the same
-result I get with default options: i. e. blkid returns "swap" instead of
-"swsuspend", when I try to resume. Here are logs:
-https://zerobin.net/?c5f8320eb89b1cfb#drrxRgnGk817oEDUA8idhn+WEQgocWjtbsAYuEHF5rI= .
-
-> Redundancy? You mean data integrity protection? There is no redundancy, only additional authentication tag
-> (detecting integrity error but not correcting it).
-
-Yes, I meant integrity protection.
-
--- 
-Askar Safin
+On Mon, Oct 27, 2025 at 10:57=E2=80=AFAM Dan Carpenter <dan.carpenter@linar=
+o.org> wrote:
+> > General question about the process for my understanding:
+> > Is checkpatch run on full tree by CI or someone and results reported
+> > regularly ?
+>
+> Newbies run it regularly.  Otherwise it gets run on subsystem CIs and
+> the zero-day bot runs it on new patches but it will report the old
+> warnings as well under the "Old warnings" section.
+>
+> > My understanding was that we would run it only on patches
+> > before submitting them Or we just run it on full tree before adding
+> > new checks to understand if they are catching real issues
+>
+> Eventually someone will look at all the warnings.  And probably it's
+> going to be a newbie and so we need to be careful with warning where
+> newbies might introduce bugs with their changes.
+>
+> regards,
+> dan carpenter
+>
+Makes sense. Thanks!!
+---
+aheev
 
