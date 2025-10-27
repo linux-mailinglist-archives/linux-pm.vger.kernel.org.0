@@ -1,47 +1,47 @@
-Return-Path: <linux-pm+bounces-36929-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36930-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EDA80C1179E
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Oct 2025 22:08:27 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F87AC117F1
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Oct 2025 22:14:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B59291A605E8
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Oct 2025 21:08:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9605B1A285C2
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Oct 2025 21:14:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5435D3254B1;
-	Mon, 27 Oct 2025 21:08:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A440D32AAB9;
+	Mon, 27 Oct 2025 21:13:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jl7iaCs8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rWpOCFtb"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 176E131062D;
-	Mon, 27 Oct 2025 21:08:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FC30329C7E;
+	Mon, 27 Oct 2025 21:13:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761599298; cv=none; b=s01HyFu3LQeTpRgUat/Ve4j2OucdMNso0sGuDTxh0A9234Jx8fqYbv8pthu/qYZP7MI4FyxoFAjhVOX+Po2fzri7IY2t+MLCQ5k0bMuc18OIVIUCjvgnir4ipYQ1Xi/K3a99NwgyR9ULhk8PrutCQGrPA4ri46fXv9ptguJhMp4=
+	t=1761599633; cv=none; b=FgZ3gAb4k1gDovz+EHQemkAVdHRs5uLeBhgVY134eCS7lQujB4wsdrbyjj8ohv4egmMck0CrYG7q3HX/y2eCuiD/71bxwQ/E+7caajMS0T1n+auIOBfRvHWsGhZ1wmOntY4xCUl4msPrqT85g6twa6GlDWts6PTtmn8pTrs2hJY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761599298; c=relaxed/simple;
-	bh=ma+k8nldqJngQini1R8j787y6UpbAMZD6PHdP4b+ilU=;
+	s=arc-20240116; t=1761599633; c=relaxed/simple;
+	bh=Z2f2s6Vx/ME2R1INYuqFan+qX6ijIZlGUXiT7rj2KSA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pp8Gkvx0hCKjhreYlGa2mBQD+M/mUiTKi3pgRCavAZcvOTp2JU0YAM/dMGnnY4zgW4lN7C/wzP9h4J8ksa60GxNyuHNFuxbXz3SzY35i092o0c/1o8W5Awvz1tgn9OQLMNU9B65BZd1g7fnYpDdl+G6PxROALyMI1o6m3qdJJYI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jl7iaCs8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BEFAC4CEF1;
-	Mon, 27 Oct 2025 21:08:17 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=JVNQiP7szEz0kdfrN4LuYFtbmgX9vcicf69AEsmOqfWTVJn2MA+LHg46qt60NhmyJLYUzW3oO+Uj4ZqFTi6ArxZTbjgix9y0S8P7nxiJukp/NKyX9YlEXYCjI84iOHW0zx5ICiX2uCSR1WbnvIPfoMIjYj86F9hdgYXYOtbR5pg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rWpOCFtb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8ADFEC113D0;
+	Mon, 27 Oct 2025 21:13:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761599297;
-	bh=ma+k8nldqJngQini1R8j787y6UpbAMZD6PHdP4b+ilU=;
+	s=k20201202; t=1761599632;
+	bh=Z2f2s6Vx/ME2R1INYuqFan+qX6ijIZlGUXiT7rj2KSA=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Jl7iaCs8Q/W05FCWMpt5JBolxcz4wFF64dKoBRAh5fVrVlJ+/EsrIOf7ioNgK1QXc
-	 WdsZjLMaZ0/yDnCatimSNRhdvrt3r2AzuVhFZIQnUPpZXLUNvwByaqCEv0IeBjJ71k
-	 kyn2W5Ic6Kr88x/f01dOPrd/RdxHPh6q33grRot0gbXArIUJn+9KXJcflzJa0dnXnL
-	 OymRKx4LXpUm/4+s9CMYLqnIATkp6Ci2GtCKPEGlOA+5cl6UY4rTNMLzob3nNgY92y
-	 JoJNv5RBsTCVSem6xmtAxyqx3doHWQNMuEGkB3/6HcRveaMrV96oKbhGC8oKLPx6ma
-	 cknD2Iobo5lpA==
-Date: Mon, 27 Oct 2025 16:08:16 -0500
+	b=rWpOCFtbpGNKYYb9YDxymOO1zXBoD7uCbSiz3rrDCXfMRpj9l7+3drtnBdOAk6bAD
+	 kNHccLsFJw3ETR+oBPBvkan9Mm9DAncirjkOgiBBYjVORGMC4/21DdPJO/zn6lbXTA
+	 qbBwZSQ5hlLkgP03AqUI5j15XlGk70yA92z4B8hHhlhOCEJkLpQewkhx8OEY1l19mr
+	 Em5CAWjQe8r0qjYhMSryJRcNx2lPrz2zZOw1hX0AsMuALBzPma/QxTq6MsuXBIJg3B
+	 islSq6FxpuMNkSA+UGoNvtJUaR8XAisCId06wZXWYrxNPYzoOMVVR7t230QmSjtwxQ
+	 V46+hf/MgpBpQ==
+Date: Mon, 27 Oct 2025 16:13:51 -0500
 From: Rob Herring <robh@kernel.org>
 To: Matti Vaittinen <mazziesaccount@gmail.com>
 Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
@@ -61,11 +61,10 @@ Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
 	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
 	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
 	linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v2 03/15] dt-bindings: power: supply: BD72720 managed
- battery
-Message-ID: <20251027210816.GB1565353-robh@kernel.org>
+Subject: Re: [PATCH v2 04/15] dt-bindings: mfd: ROHM BD72720
+Message-ID: <20251027211351.GC1565353-robh@kernel.org>
 References: <cover.1761564043.git.mazziesaccount@gmail.com>
- <e8d0273bcf0ac67382e17c40be87d345e28ac06c.1761564043.git.mazziesaccount@gmail.com>
+ <a5957c4f83724d4f32527fb892fc340af4eeddde.1761564043.git.mazziesaccount@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -74,145 +73,332 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e8d0273bcf0ac67382e17c40be87d345e28ac06c.1761564043.git.mazziesaccount@gmail.com>
+In-Reply-To: <a5957c4f83724d4f32527fb892fc340af4eeddde.1761564043.git.mazziesaccount@gmail.com>
 
-On Mon, Oct 27, 2025 at 01:45:23PM +0200, Matti Vaittinen wrote:
-> The BD72720 PMIC has a battery charger + coulomb counter block. These
-> can be used to manage charging of a lithium-ion battery and to do fuel
-> gauging.
+On Mon, Oct 27, 2025 at 01:45:46PM +0200, Matti Vaittinen wrote:
+> The ROHM BD72720 is a power management IC integrating regulators, GPIOs,
+> charger, LEDs, RTC and a clock gate.
 > 
-> ROHM has developed a so called "zero-correction" -algorithm to improve
-> the fuel-gauging accuracy close to the point where battery is depleted.
-> This relies on battery specific "VDR" tables, which are measured from
-> the battery, and which describe the voltage drop rate. More thorough
-> explanation about the "zero correction" and "VDR" parameters is here:
-> https://lore.kernel.org/all/676253b9-ff69-7891-1f26-a8b5bb5a421b@fi.rohmeurope.com/
-> 
-> Document the VDR zero-correction specific battery properties used by the
-> BD72720 and some other ROHM chargers.
+> Add dt-binding doc for ROHM BD72720.
 > 
 > Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+> 
 > ---
 > Revision history:
 >  RFCv1 => v2:
->  - Add units to rohm,volt-drop-soc (tenths of %)
->  - Give real temperatures matching the VDR tables, instead of vague
->    'high', 'normal', 'low', 'very low'. (Add table of temperatures and
->    use number matching the right temperature index in the VDR table name).
->  - Fix typoed 'algorithm' in commit message.
-> 
-> The parameters are describing the battery voltage drop rates - so they
-> are properties of the battery, not the charger. Thus they do not belong
-> in the charger node.
-> 
-> The right place for them is the battery node, which is described by the
-> generic "battery.yaml". I was not comfortable with adding these
-> properties to the generic battery.yaml because they are:
->   - Meaningful only for those charger drivers which have the VDR
->     algorithm implemented. (And even though the algorithm is not charger
->     specific, AFAICS, it is currently only used by some ROHM PMIC
->     drivers).
->   - Technique of measuring the VDR tables for a battery is not widely
->     known. AFAICS, only folks at ROHM are measuring those for some
->     customer products. We do have those tables available for some of the
->     products though (Kobo?).
+>  - Typofixes
 > ---
->  .../power/supply/rohm,vdr-battery.yaml        | 80 +++++++++++++++++++
->  1 file changed, 80 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/power/supply/rohm,vdr-battery.yaml
+>  .../bindings/mfd/rohm,bd72720-pmic.yaml       | 269 ++++++++++++++++++
+>  1 file changed, 269 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/rohm,bd72720-pmic.yaml
 > 
-> diff --git a/Documentation/devicetree/bindings/power/supply/rohm,vdr-battery.yaml b/Documentation/devicetree/bindings/power/supply/rohm,vdr-battery.yaml
+> diff --git a/Documentation/devicetree/bindings/mfd/rohm,bd72720-pmic.yaml b/Documentation/devicetree/bindings/mfd/rohm,bd72720-pmic.yaml
 > new file mode 100644
-> index 000000000000..1ab3418d4338
+> index 000000000000..b0d4bc01d199
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/supply/rohm,vdr-battery.yaml
-> @@ -0,0 +1,80 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +++ b/Documentation/devicetree/bindings/mfd/rohm,bd72720-pmic.yaml
+> @@ -0,0 +1,269 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
 > +%YAML 1.2
 > +---
-> +$id: http://devicetree.org/schemas/power/supply/rohm,vdr-battery.yaml#
+> +$id: http://devicetree.org/schemas/mfd/rohm,bd72720-pmic.yaml#
 > +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +title: Battery managed by the BD72720 PMIC
+> +title: ROHM BD72720 Power Management Integrated Circuit
 > +
 > +maintainers:
 > +  - Matti Vaittinen <mazziesaccount@gmail.com>
 > +
-> +description:
-> +  A battery which has VDR parameters measuerd for ROHM chargers.
+> +description: |
+> +  BD72720 is a single-chip power management IC for battery-powered portable
+> +  devices. The BD72720 integrates 10 bucks and 11 LDOs, and a 3000 mA
+> +  switching charger. The IC also includes a Coulomb counter, a real-time
+> +  clock (RTC), GPIOs and a 32.768 kHz clock gate.
 > +
-> +allOf:
-> +  - $ref: battery.yaml#
+> +# In addition to the properties found from the charger node, the ROHM BD72720
+> +# uses properties from a static battery node. Please see the:
+> +# Documentation/devicetree/bindings/power/supply/rohm,vdr-battery.yaml
+
+Why is all of this a comment?
+
+> +#
+> +# Following properties are used
+> +# when present:
+> +#
+> +# charge-full-design-microamp-hours: Battry capacity in mAh
+> +# voltage-max-design-microvolt:      Maximum voltage
+> +# voltage-min-design-microvolt:      Minimum voltage system is still operating.
+> +# degrade-cycle-microamp-hours:      Capacity lost due to aging at each full
+> +#                                    charge cycle.
+> +# ocv-capacity-celsius:              Array of OCV table temperatures. 1/table.
+> +# ocv-capacity-table-<N>:            Table of OCV voltage/SOC pairs. Corresponds
+> +#                                    N.th temperature in ocv-capacity-celsius
+> +#
+> +# ROHM specific properties:
+> +# rohm,voltage-vdr-thresh-microvolt: Threshold for starting the VDR correction
+> +# rohm,volt-drop-soc:                Table of capacity values matching the
+> +#                                    values in VDR tables.
+> +# rohm,volt-drop-high-temp-microvolt: VDR table for high temperature
+> +# rohm,volt-drop-normal-temp-microvolt: VDR table for normal temperature
+> +# rohm,volt-drop-low-temp-microvolt:  VDR table for low temperature
+> +# rohm,volt-drop-very-low-temp-microvolt: VDR table for very low temperature
+> +#
+> +# VDR tables are (usually) determined for a specific battery by ROHM.
+> +# The battery node would then be referred from the charger node:
+> +#
+> +# monitored-battery = <&battery>;
 > +
 > +properties:
-> +  rohm,voltage-vdr-thresh-microvolt:
-> +    description: Threshold for starting the VDR correction
+> +  compatible:
+> +    const: rohm,bd72720
+> +
+> +  reg:
+> +    description:
+> +      I2C slave address.
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  gpio-controller: true
+> +
+> +  "#gpio-cells":
+> +    const: 2
+> +    description: |
 
-No constraints? Is 4000V okay?
+Don't need '|'
+
+> +      The first cell is the pin number and the second cell is used to specify
+> +      flags. See ../gpio/gpio.txt for more information.
+
+Don't add new references to old .txt bindings.
 
 > +
-> +  rohm,volt-drop-soc:
-> +    description: Table of capacity values matching the values in VDR tables.
-> +      The value should be given as tenths of a percentage.
-
-We have a standard unit for this too. '-bp' or basis points (1/100 of 
-percent).
-
-> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> +  clocks:
+> +    maxItems: 1
 > +
-> +  rohm,volt-drop-temperatures-millicelsius:
-> +    description: An array containing the temperature in milli celsius, for each
-> +      of the VDR lookup table.
+> +  "#clock-cells":
+> +    const: 0
 > +
-> +patternProperties:
-> +  '^rohm,volt-drop-[0-9]-microvolt':
-> +    description: Table of the voltage drop rate (VDR) values. Each entry in the
-> +      table should match a capacity value in the rohm,volt-drop-soc table.
-> +      Furthermore, the values should be obtained for the temperature given in
-> +      rohm,volt-drop-temperatures-millicelsius table at index matching the
-> +      number in this table's name.
+> +  clock-output-names:
+> +    const: bd71828-32k-out
+> +
+> +  rohm,clkout-open-drain:
+> +    description: clk32kout mode. Set to 1 for "open-drain" or 0 for "cmos".
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    minimum: 0
+
+0 is already the minimum for unsigned.
+
+> +    maximum: 1
+> +
+> +  rohm,charger-sense-resistor-milli-ohms:
+> +    minimum: 10
+> +    maximum: 50
+> +    description: |
+
+Don't need '|'
+
+> +      BD72720 has a SAR ADC for measuring charging currents. External sense
+> +      resistor (RSENSE in data sheet) should be used. If some other but
+> +      30 mOhm resistor is used the resistance value should be given here in
+> +      milli Ohms.
+> +
+> +  regulators:
+> +    $ref: ../regulator/rohm,bd77270-regulator.yaml
+
+/schemas/regulator/...
+
+> +    description:
+> +      List of child nodes that specify the regulators.
+> +
+> +  leds:
+> +    $ref: ../leds/rohm,bd71828-leds.yaml
+
+/schemas/leds/...
+
+> +
+> +  rohm,pin-dvs0:
+> +    $ref: /schemas/types.yaml#/definitions/string
+> +    description:
+> +      BD72720 has 4 different OTP options to determine the use of dvs0-pin.
+> +      OTP0 - regulator RUN state control.
+> +      OTP1 - GPI.
+> +      OTP2 - GPO.
+> +      OTP3 - Power sequencer output.
+> +      This property specifies the use of the pin.
+> +    enum:
+> +      - dvs-input
+> +      - gpi
+> +      - gpo
+> +
+> +  rohm,pin-dvs1:
+> +    $ref: /schemas/types.yaml#/definitions/string
+> +    description:
+> +      see rohm,pin-dvs0
+> +    enum:
+> +      - dvs-input
+> +      - gpi
+> +      - gpo
+
+These 2 could be combined into a single entry in patternProperties.
+
+> +
+> +  rohm,pin-exten0:
+> +    $ref: /schemas/types.yaml#/definitions/string
+> +    description: BD72720 has an OTP option to use exten0-pin for different
+> +      purposes. Set this property accordingly.
+> +    const: gpo
+> +
+> +  rohm,pin-exten1:
+> +    $ref: /schemas/types.yaml#/definitions/string
+> +    description: BD72720 has an OTP option to use exten1-pin for different
+> +      purposes. Set this property accordingly.
+> +    const: gpo
+
+And these 2 also.
+
+> +
+> +  rohm,pin-fault_b:
+> +    $ref: /schemas/types.yaml#/definitions/string
+> +    description: BD72720 has an OTP option to use fault_b-pin for different
+> +      purposes. Set this property accordingly.
+> +    const: gpo
+
+Seems like different purposes would have more than 1 option.
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +  - "#clock-cells"
+> +  - regulators
+> +  - gpio-controller
+> +  - "#gpio-cells"
 > +
 > +additionalProperties: false
 > +
 > +examples:
 > +  - |
-> +    power {
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    #include <dt-bindings/leds/common.h>
+> +    i2c {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +        pmic: pmic@4b {
+> +            compatible = "rohm,bd71828";
+> +            reg = <0x4b>;
+
+Just 1 complete example in the mfd schema and drop this example.
+
 > +
-> +      battery: battery {
-> +        compatible = "simple-battery";
+> +            interrupt-parent = <&gpio1>;
+> +            interrupts = <29 IRQ_TYPE_LEVEL_LOW>;
 > +
-> +        ocv-capacity-celsius = <25>;
-> +        ocv-capacity-table-0 = <4200000 100 4184314 100 4140723 95 4099487 90
-> +          4060656 85 4024350 80 3991121 75 3954379 70 3913265 65 3877821 60
-> +          3855577 55 3837466 50 3822194 45 3809012 40 3795984 35 3780647 30
-> +          3760505 25 3741532 20 3718837 15 3696698 10 3690594 5 3581427 0>;
+> +            clocks = <&osc 0>;
+> +            #clock-cells = <0>;
+> +            clock-output-names = "bd71828-32k-out";
 > +
-> +        rohm,volt-drop-soc = <1000 1000 950 900 850 800 750 700 650 600 550 500
-> +          450 400 350 300 250 200 150 100 50 00 (-50)>;
+> +            gpio-controller;
+> +            #gpio-cells = <2>;
+> +            gpio-reserved-ranges = <0 1>, <2 1>;
 > +
-> +        rohm,volt-drop-temperatures-millicelsius = <45000 25000 5000 0>;
+> +            rohm,charger-sense-resistor-ohms = <10000000>;
 > +
-> +        rohm,volt-drop-0-microvolt =  <100 100 102 104 106 109 114 124
-> +          117 107 107 109 112 116 117 108 109 109 108 109 122 126 130>;
+> +            regulators {
+> +                buck1: BUCK1 {
+> +                    regulator-name = "buck1";
+> +                    regulator-min-microvolt = <500000>;
+> +                    regulator-max-microvolt = <2000000>;
+> +                    regulator-ramp-delay = <2500>;
+> +                };
+> +                buck2: BUCK2 {
+> +                    regulator-name = "buck2";
+> +                    regulator-min-microvolt = <500000>;
+> +                    regulator-max-microvolt = <2000000>;
+> +                    regulator-ramp-delay = <2500>;
+> +                };
+> +                buck3: BUCK3 {
+> +                    regulator-name = "buck3";
+> +                    regulator-min-microvolt = <1200000>;
+> +                    regulator-max-microvolt = <2000000>;
+> +                };
+> +                buck4: BUCK4 {
+> +                    regulator-name = "buck4";
+> +                    regulator-min-microvolt = <1000000>;
+> +                    regulator-max-microvolt = <1800000>;
+> +                };
+> +                buck5: BUCK5 {
+> +                    regulator-name = "buck5";
+> +                    regulator-min-microvolt = <2500000>;
+> +                    regulator-max-microvolt = <3300000>;
+> +                };
+> +                buck6: BUCK6 {
+> +                    regulator-name = "buck6";
+> +                    regulator-min-microvolt = <500000>;
+> +                    regulator-max-microvolt = <2000000>;
+> +                    regulator-ramp-delay = <2500>;
+> +                };
+> +                buck7: BUCK7 {
+> +                    regulator-name = "buck7";
+> +                    regulator-min-microvolt = <500000>;
+> +                    regulator-max-microvolt = <2000000>;
+> +                    regulator-ramp-delay = <2500>;
+> +                };
+> +                ldo1: LDO1 {
+> +                    regulator-name = "ldo1";
+> +                    regulator-min-microvolt = <800000>;
+> +                    regulator-max-microvolt = <3300000>;
+> +                };
+> +                ldo2: LDO2 {
+> +                    regulator-name = "ldo2";
+> +                    regulator-min-microvolt = <800000>;
+> +                    regulator-max-microvolt = <3300000>;
+> +                };
+> +                ldo3: LDO3 {
+> +                    regulator-name = "ldo3";
+> +                    regulator-min-microvolt = <800000>;
+> +                    regulator-max-microvolt = <3300000>;
+> +                };
+> +                ldo4: LDO4 {
+> +                    regulator-name = "ldo4";
+> +                    regulator-min-microvolt = <800000>;
+> +                    regulator-max-microvolt = <3300000>;
+> +                };
+> +                ldo5: LDO5 {
+> +                    regulator-name = "ldo5";
+> +                    regulator-min-microvolt = <800000>;
+> +                    regulator-max-microvolt = <3300000>;
+> +                };
+> +                ldo6: LDO6 {
+> +                    regulator-name = "ldo6";
+> +                    regulator-min-microvolt = <1800000>;
+> +                    regulator-max-microvolt = <1800000>;
+> +                };
+> +                ldo7_reg: LDO7 {
+> +                    regulator-name = "ldo7";
+> +                    regulator-min-microvolt = <800000>;
+> +                    regulator-max-microvolt = <3300000>;
+> +                };
+> +            };
 > +
-> +        rohm,volt-drop-1-microvolt = <100 100 102 105 98 100 105 102
-> +          101 99 98 100 103 105 109 117 111 109 110 114 128 141 154>;
+> +            leds {
+> +                compatible = "rohm,bd71828-leds";
 > +
-> +        rohm,volt-drop-2-microvolt = <100 100 98 107 112 114 118 118 112
-> +          108 108 110 111 113 117 123 131 144 157 181 220 283 399>;
-> +
-> +        rohm,volt-drop-3-temp-microvolt = <86 86 105 109 114 110 115 115
-> +          110 108 110 112 114 118 124 134 136 160 177 201 241 322 403>;
-> +
-> +        rohm,voltage-vdr-thresh-microvolt = <4150000>;
-> +
-> +        charge-full-design-microamp-hours = <1799000>;
-> +        voltage-max-design-microvolt = <4200000>;
-> +        voltage-min-design-microvolt = <3500000>;
-> +        degrade-cycle-microamp-hours = <131>;
-> +      };
+> +                led-1 {
+> +                    rohm,led-compatible = "bd71828-grnled";
+> +                    function = LED_FUNCTION_INDICATOR;
+> +                    color = <LED_COLOR_ID_GREEN>;
+> +                };
+> +                led-2 {
+> +                    rohm,led-compatible = "bd71828-ambled";
+> +                    function = LED_FUNCTION_CHARGING;
+> +                    color = <LED_COLOR_ID_AMBER>;
+> +                };
+> +            };
+> +        };
 > +    };
 > -- 
 > 2.51.0
