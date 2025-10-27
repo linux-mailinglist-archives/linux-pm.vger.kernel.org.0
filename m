@@ -1,47 +1,47 @@
-Return-Path: <linux-pm+bounces-36908-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36909-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68F75C0D71C
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Oct 2025 13:14:54 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E38C6C0D798
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Oct 2025 13:21:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 96AD6189D3A8
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Oct 2025 12:15:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D4F6C4013E1
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Oct 2025 12:16:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0E003009C8;
-	Mon, 27 Oct 2025 12:14:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76781288C26;
+	Mon, 27 Oct 2025 12:15:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LVFbo6i0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="goJwogGi"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DDB2EEAB;
-	Mon, 27 Oct 2025 12:14:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34E1234CDD;
+	Mon, 27 Oct 2025 12:15:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761567268; cv=none; b=gtlsnLAihHoYdm5mnZg7jm7wdBdfXuQiSdfcR7A4jgXD4lnpM2HUudWsf+dv1LsAtVk60sgZM/f03rULUAlLsCvHi94tNdaAQspuQvS6oDjqfU/ikjFEjMR0b3QSx857frudb5boCiss3V4HYlwT48BudepLRnE+oqQeCfAeLw8=
+	t=1761567350; cv=none; b=BzY0pB5tu7rYIWl3gwegr20amwB5idy1cOjzmYXfWfNQMwEZQdgpBQXpCLuScH8DgiJosLaJ9iFPPjApdbgBKZKlj09NpkDppFrzuef2fLDo7p10m6OuzzCH+wuCGnQZUr3WFmAlYcxo02wsXiQMOl9WmClkK/qkJ6JOvJqSwco=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761567268; c=relaxed/simple;
-	bh=rWHdHSJPVLgMn3etblo03n9fmEXg8Q3LI4UBHrXAqeU=;
+	s=arc-20240116; t=1761567350; c=relaxed/simple;
+	bh=tXiVqGv2VriRVuycYbx30w53ZLM4GSUJn3DkQxYaGUQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ljx86qHU0TtHlw2dxbCM6bVb9wQEIdzWFRe1LPN5Xv/abCQpgnavuX8k9PQyxjDlm6nhUkuUov8jXE8Xh3dOhmHMu6BynzKLloSC6U8ygODoGSfNuw1Evn3bGh64yb/1hNvelukuqGDXO5cBEj4m9llxzhaXzsn+tb4gUcq5Dbo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LVFbo6i0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DF80C4CEF1;
-	Mon, 27 Oct 2025 12:14:22 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=aSk7B+2GZg4j1fsyj1mwmuJpCsty+m78bktyqggOPwbNliejCtIHYROu4mhdAsBrVOQ+dxqin98Zu1gtWDVi3hb8n+PM9tU7Ivl5na1T9tnXv7MoNSYhnC5MDbGeQqseruxBL4vL9ILiBsWEEY5Au18fDLi+XKocUh/KpPIaCrA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=goJwogGi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DE44C4CEF1;
+	Mon, 27 Oct 2025 12:15:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761567268;
-	bh=rWHdHSJPVLgMn3etblo03n9fmEXg8Q3LI4UBHrXAqeU=;
+	s=k20201202; t=1761567347;
+	bh=tXiVqGv2VriRVuycYbx30w53ZLM4GSUJn3DkQxYaGUQ=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LVFbo6i0j8oUWrOC68//sH6s67P3CS8SShwRk1eyPZOI7fZ8dKHEN+el+eCGZH426
-	 /SvlLPhf48fwtfjRMFPs3tsBVc6ES6/P7rckdD/WvDk9+G9dz35Db+G6031yEmjUy5
-	 EqHHJvE5nAnM24ht3FoM+X+sfmwZtHu0l48tdWvefHMndQMNwoMKH+MVXdGccnAruQ
-	 MvPhWh/8oxl7KP9n4xbWYYagRxRBtBJVVomhkI0qtbfZ85Tb/W+ndI0wRWSACsmIv3
-	 XAiSeyclFV6nDNr0XcTKDFETTGsEWbOlYAlG9kpG/JEeVCZ+UUSntUrBNiZlA2h7hv
-	 6b2naZCEO9G3w==
-Date: Mon, 27 Oct 2025 12:14:18 +0000
+	b=goJwogGi1VkxLLiMt8s6kdmYmRaFSAe1PqnPeXpUSbMNlbiXaDUwt6zl/EdysDaYj
+	 sDeIVAvM7r8FHEXh7709edushUMiu/+QExY2ivd6DB3o35JBHOjfSB4FCeEwdM6iYS
+	 puOoo1U6tr+G0qoUyl/OjZgLpkQ23M/Rm/JXzoIY1lYA+iquVbM0tTvj2oDFHwOm7h
+	 jDHeARI9Y4JNWXklQE/75tezRB5wjw75ho5m3dZgY7hxdDqmqdg8BjdmCdw5k28GIY
+	 SFM+Z96eIHI0KNZKym7El9yro4bBhi+lY0OusIyhjUaADTYPYz+PMIMQEnxMCRBZOU
+	 lKUpCSDcyWICw==
+Date: Mon, 27 Oct 2025 12:15:37 +0000
 From: Mark Brown <broonie@kernel.org>
 To: Matti Vaittinen <mazziesaccount@gmail.com>
 Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
@@ -61,10 +61,10 @@ Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
 	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
 	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
 	linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v2 08/15] regulator: bd71828: rename IC specific entities
-Message-ID: <c4bdf649-0623-4529-b8e9-43d6701f0111@sirena.org.uk>
+Subject: Re: [PATCH v2 09/15] regulator: bd71828: Support ROHM BD72720
+Message-ID: <ad7357b6-8f9a-42c1-b287-201059e86e33@sirena.org.uk>
 References: <cover.1761564043.git.mazziesaccount@gmail.com>
- <aa2b31267e6cc93bad4c823ef1ba07ba43efd572.1761564043.git.mazziesaccount@gmail.com>
+ <28f888c9784058b2d727a4b6185ac49874552847.1761564043.git.mazziesaccount@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -72,39 +72,37 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="IGal/9MH6MaJjMWW"
+	protocol="application/pgp-signature"; boundary="RalfM7p0fJtqcro2"
 Content-Disposition: inline
-In-Reply-To: <aa2b31267e6cc93bad4c823ef1ba07ba43efd572.1761564043.git.mazziesaccount@gmail.com>
+In-Reply-To: <28f888c9784058b2d727a4b6185ac49874552847.1761564043.git.mazziesaccount@gmail.com>
 X-Cookie: How do I get HOME?
 
 
---IGal/9MH6MaJjMWW
+--RalfM7p0fJtqcro2
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Mon, Oct 27, 2025 at 01:46:57PM +0200, Matti Vaittinen wrote:
-> The new ROHM BD72720 PMIC has similarities with the BD71828. It makes
-> sense to support the regulator control for both PMICs using the same
-> driver. It is often more clear to have the IC specific functions and
-> globals named starting with the chip-name. So, as a preparatory step,
-> prefix the BD71828 specific functions and globals with the bd71828.
+On Mon, Oct 27, 2025 at 01:47:10PM +0200, Matti Vaittinen wrote:
+> ROHM BD72720 is a power management IC which integrates 10 buck and 11 LDO
+> regulators. This PMIC has plenty of commonalities with the BD71828 and
+> BD71879.
 
-Acked-by: Mark Brown <broonie@kernel.org>
+Reviewed-by: Mark Brown <broonie@kernel.org>
 
---IGal/9MH6MaJjMWW
+--RalfM7p0fJtqcro2
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmj/YhkACgkQJNaLcl1U
-h9Af5Af6Ax86Rk1w2Lm8l+WtM+HeqNG9SJTaC/xDAlF9R/wpX008syrILJMQXVEF
-BaXHf+QKJMvTFJeM3pSzKKdQ5NJmoPKlUtKiXSNBhceZGLet2eXw/MuqNR4nRmFC
-2iVksMbfY+P3YPg8ebdn6Zf1icxTngM1raSOPPQMeVAMDt+6MLxdKYbg0I+DMhG1
-Xp9Nz99ObSw5UinFmo7l2ZLaXsNnkQ8jRV4rS2C5uTV0vszr0Op+ym/9KAyLs+N/
-TVnbQ7H+84sRYeLEg/4JIzYyW7tDlg7EerOaP75F9MstIULAFDDZaHRVtVlAKxPV
-BSxxGZyJlVVu6loQH4yvZQimzgUWBQ==
-=lhBS
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmj/YmgACgkQJNaLcl1U
+h9B5dAf/cu/765SnwjfbjyK4dMHR/rt+cksNZQ9fRPOg08y6Xlu3+MASYltjYY7J
+yuZesa4qBrBafg4I9uRwOuEKJYY8AqDsCLQRZDAnEtCNeuxwgMG7dKumgzfFL/zJ
+kPXRf+2b70A4hFCgfFzXH4Y9yfEARoTlD4saNAKu9PIv+AzEhcBZly5clyS0sKDZ
+D/3c5woMxUiBGFJn3wWrWidDWMJ0D4gfxE5A2NBJ/LFLjqU8oWBd/+zKk4JOLmGA
+lJYxz9LP1Qvl5wVZNX+xodzZ5fkWkgDoZJwik64DSaZq7X3AEKw2LzpmDPouSD0k
+e9TQpuiElAnRZoU+EqqQ9A9QBRTceQ==
+=IHgl
 -----END PGP SIGNATURE-----
 
---IGal/9MH6MaJjMWW--
+--RalfM7p0fJtqcro2--
 
