@@ -1,126 +1,130 @@
-Return-Path: <linux-pm+bounces-36867-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36868-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BEC35C0BC75
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Oct 2025 05:43:36 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 94C62C0BCF7
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Oct 2025 06:15:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C2BB93B83DF
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Oct 2025 04:43:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0B6411895165
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Oct 2025 05:15:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3912D2D0C89;
-	Mon, 27 Oct 2025 04:43:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCCE51DB377;
+	Mon, 27 Oct 2025 05:15:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Gc6df/Os"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="VnR302Zu"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from fllvem-ot04.ext.ti.com (fllvem-ot04.ext.ti.com [198.47.19.246])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68D65221DAE
-	for <linux-pm@vger.kernel.org>; Mon, 27 Oct 2025 04:43:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B00541E1DFC;
+	Mon, 27 Oct 2025 05:15:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.246
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761540213; cv=none; b=CFbuZ/TGE6HP7Z4ZSaXG03ZpgdGrCbD0qLG+mld7QiHWkX2m5yyoC6eoMwQIM3wmBM/S4XQbguSKrMEn1ilWKb0jGLZxojqLHlJksHAin4mQd6qovcY67JGP7A3uv0aUzakXqdKoTIYGz6dvp+A5yjvYh2aAeSXGiTzpy1BCPBc=
+	t=1761542116; cv=none; b=R6NAmNXlNnizRSdI1B5N8XFPWnQT5a/NHcLvi8UHLf69mHuY8+WFv9qjQyNKN8ENpikR/PnOGyywFkF+xn2GO0uEY9xd00C6j9af27ycUZn2qUPqQGXxf6BHRmdnncnnRq3EKFxRVDfwrvBo+PUCBZBjtvN8M2jWYl4I5OursBQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761540213; c=relaxed/simple;
-	bh=8bfXAdq9mfBL34nfT6v8WgMOaMsrGDQQ3VU68s7RVwM=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ULFwthY5lW6EEgDaEczBFyQU2XeBB1K6OdbSRjCCe1MIiYO1fzMxaO37Y41APsGJgKET9fzxMWnJ1N/p7FJ1A+JlLMr6hL4UI2HcWpnlxuQpOV0YWThmF9+dtYJpqitiuaB8gX5P8HOj7HMeMcOSwMPkKXxUbOS0sz6X3EbwJfU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Gc6df/Os; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761540212; x=1793076212;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=8bfXAdq9mfBL34nfT6v8WgMOaMsrGDQQ3VU68s7RVwM=;
-  b=Gc6df/OsehfWw96kaE+6Vnbv2fA3wPjYqxH/IUsJYxg+F4ou0C00FOPK
-   RdtGQjMsGjxYuLJ7SvUQEXKYBeVMI05ZjqvW61D6p+ZovmRpNWJ9HsOxR
-   n2Eb7cYN7Ymvx+fc/Mb1qmed969mA39nblcC/Ks9TpgcAGYlSBJY5gXc/
-   gN9AU1Ep83sb3dCNwBa/w7raotevpWbIVDuLSFx0WU+bVwDBJlkdSrXYg
-   HnS+g2svV2HExNG+ab393fudZDMdpAI8RVtGst0a9X+T6F7Bi6yAqjjQJ
-   x+KqU99CKKZw7dMOk6mR1Vrn8XUW+zaz11cdehTMWILerNH+0USEVGNsl
-   Q==;
-X-CSE-ConnectionGUID: b2pFNU2uRTmqOISggIkAtQ==
-X-CSE-MsgGUID: XLiLYLR3TMGxL9M3jOB7DA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="51191036"
-X-IronPort-AV: E=Sophos;i="6.19,258,1754982000"; 
-   d="scan'208";a="51191036"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2025 21:43:31 -0700
-X-CSE-ConnectionGUID: lZevFk0qRYKlnHrcbdjHog==
-X-CSE-MsgGUID: ADI8BRu0SKuuMmINdhtoQQ==
-X-ExtLoop1: 1
-Received: from baandr0id001.iind.intel.com ([10.66.253.151])
-  by fmviesa003.fm.intel.com with ESMTP; 26 Oct 2025 21:43:29 -0700
-From: Kaushlendra Kumar <kaushlendra.kumar@intel.com>
-To: rafael@kernel.org,
-	pavel@kernel.org,
-	gregkh@linuxfoundation.org,
-	dakr@kernel.org
-Cc: linux-pm@vger.kernel.org,
-	Kaushlendra Kumar <kaushlendra.kumar@intel.com>
-Subject: [PATCH v3] PM: Delete timer before removing wakeup source from list
-Date: Mon, 27 Oct 2025 10:11:27 +0530
-Message-Id: <20251027044127.2456365-1-kaushlendra.kumar@intel.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1761542116; c=relaxed/simple;
+	bh=e5xuE5rLbucCcISmIA/XiNYbL29LalusADfloyh+L+8=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cJzcajWfOXCryMqHNsIggAGUtwDBntxB5PZxig3QZu8/nRqw41p/B8VlwbrZotunt9dm00jnvxHPigZIRY3tqkkdo72m3curkqbc8MWow0JSZ9FuWIY6n61PZOEBrW49fhXlFEfdgahB7DKaFsDfCBtZEVzcBlkcS+xNaKxYbM8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=VnR302Zu; arc=none smtp.client-ip=198.47.19.246
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from lelvem-sh02.itg.ti.com ([10.180.78.226])
+	by fllvem-ot04.ext.ti.com (8.15.2/8.15.2) with ESMTP id 59R5EWjH1193164;
+	Mon, 27 Oct 2025 00:14:32 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1761542072;
+	bh=tLqAyHlfVGllISEFF8v3MNzZES62GUDsy6UrvOylVXU=;
+	h=Date:From:To:CC:Subject:References:In-Reply-To;
+	b=VnR302ZuaKmvdFXakTcKvLEGgh5yGcGK442BMx72FeGfFw22gUWz+WJwLOVbEoKMj
+	 Im4m9ezN449UyieS9t5Lbq0ic5/FKDhgbS+DKnXc3VBinjKe5rMX2Wpg2kyQ5+1/l/
+	 28h12q5QAKsGRLA6DGStQ7KcpR6tKIIPMk/RNIEs=
+Received: from DLEE210.ent.ti.com (dlee210.ent.ti.com [157.170.170.112])
+	by lelvem-sh02.itg.ti.com (8.18.1/8.18.1) with ESMTPS id 59R5EW0i1433552
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Mon, 27 Oct 2025 00:14:32 -0500
+Received: from DLEE215.ent.ti.com (157.170.170.118) by DLEE210.ent.ti.com
+ (157.170.170.112) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 27 Oct
+ 2025 00:14:32 -0500
+Received: from lelvem-mr06.itg.ti.com (10.180.75.8) by DLEE215.ent.ti.com
+ (157.170.170.118) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
+ Transport; Mon, 27 Oct 2025 00:14:32 -0500
+Received: from localhost (lcpd911.dhcp.ti.com [172.24.233.130])
+	by lelvem-mr06.itg.ti.com (8.18.1/8.18.1) with ESMTP id 59R5EVbh118214;
+	Mon, 27 Oct 2025 00:14:31 -0500
+Date: Mon, 27 Oct 2025 10:44:30 +0530
+From: Dhruva Gole <d-gole@ti.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+CC: Linux PM <linux-pm@vger.kernel.org>,
+        Jonathan Cameron
+	<jonathan.cameron@huawei.com>,
+        Takashi Iwai <tiwai@suse.de>, LKML
+	<linux-kernel@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Alex
+ Williamson <alex.williamson@redhat.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Zhang Qilong <zhangqilong3@huawei.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>, Frank Li <Frank.Li@nxp.com>,
+        Dan Williams <dan.j.williams@intel.com>
+Subject: Re: [PATCH v1] PM: runtime: Fix conditional guard definitions
+Message-ID: <20251027051430.hmix3vxdqhmt5xfu@lcpd911>
+References: <5943878.DvuYhMxLoT@rafael.j.wysocki>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <5943878.DvuYhMxLoT@rafael.j.wysocki>
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-Replace timer_delete_sync() with timer_shutdown_sync() and move
-it before list_del_rcu() in wakeup_source_remove() to improve the
-cleanup ordering and code clarity. This change ensures that the
-timer is stopped before removing the wakeup source from the
-events list, providing a more logical cleanup sequence.
+On Oct 20, 2025 at 17:03:28 +0200, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> Since pm_runtime_get_active() returns 0 on success, all of the
+> DEFINE_GUARD_COND() macros in pm_runtime.h need the "_RET == 0"
+> condition at the end of the argument list or they would not work
+> correctly.
+> 
+> Fixes: 9a0abc39450a ("PM: runtime: Add auto-cleanup macros for "resume and get" operations")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Link: https://lore.kernel.org/linux-pm/202510191529.BCyjKlLQ-lkp@intel.com/
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>  include/linux/pm_runtime.h |    8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> --- a/include/linux/pm_runtime.h
+> +++ b/include/linux/pm_runtime.h
+> @@ -629,13 +629,13 @@ DEFINE_GUARD(pm_runtime_active_auto, str
+>   * device.
+>   */
+>  DEFINE_GUARD_COND(pm_runtime_active, _try,
+> -		  pm_runtime_get_active(_T, RPM_TRANSPARENT))
+> +		  pm_runtime_get_active(_T, RPM_TRANSPARENT), _RET == 0)
+>  DEFINE_GUARD_COND(pm_runtime_active, _try_enabled,
+> -		  pm_runtime_resume_and_get(_T))
+> +		  pm_runtime_resume_and_get(_T), _RET == 0)
+>  DEFINE_GUARD_COND(pm_runtime_active_auto, _try,
+> -		  pm_runtime_get_active(_T, RPM_TRANSPARENT))
+> +		  pm_runtime_get_active(_T, RPM_TRANSPARENT), _RET == 0)
+>  DEFINE_GUARD_COND(pm_runtime_active_auto, _try_enabled,
+> -		  pm_runtime_resume_and_get(_T))
+> +		  pm_runtime_resume_and_get(_T), _RET == 0)
 
-While the current ordering is functionally correct, stopping the timer
-first makes the cleanup flow more intuitive and follows the general
-pattern of disabling active components before removing data structures.
+The 3-argument form automatically assumes success, so we were
+essentially ignoring RET val. This seems correct now.
 
-Signed-off-by: Kaushlendra Kumar <kaushlendra.kumar@intel.com>
----
-Changes in v3:
-- Use timer_shutdown_sync() instead of timer_delete_sync() to prevent
-  timer re-arming as per review feedback
-- Remove timer.function clearing as timer_shutdown_sync() handles it
+Reviewed-by: Dhruva Gole <d-gole@ti.com>
 
-Changes in v2:
-- Reframed as cleanup/improvement rather than fix
-
- drivers/base/power/wakeup.c | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
-
-diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
-index d1283ff1080b..ab3eee23a52d 100644
---- a/drivers/base/power/wakeup.c
-+++ b/drivers/base/power/wakeup.c
-@@ -189,17 +189,11 @@ static void wakeup_source_remove(struct wakeup_source *ws)
- 	if (WARN_ON(!ws))
- 		return;
- 
-+	timer_shutdown_sync(&ws->timer);
- 	raw_spin_lock_irqsave(&events_lock, flags);
- 	list_del_rcu(&ws->entry);
- 	raw_spin_unlock_irqrestore(&events_lock, flags);
- 	synchronize_srcu(&wakeup_srcu);
--
--	timer_delete_sync(&ws->timer);
--	/*
--	 * Clear timer.function to make wakeup_source_not_registered() treat
--	 * this wakeup source as not registered.
--	 */
--	ws->timer.function = NULL;
- }
- 
- /**
--- 
-2.34.1
-
+Best regards,
+Dhruva Gole
+Texas Instruments Incorporated
 
