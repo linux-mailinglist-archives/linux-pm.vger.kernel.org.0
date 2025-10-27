@@ -1,170 +1,216 @@
-Return-Path: <linux-pm+bounces-36906-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36907-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C1FD8C0D593
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Oct 2025 12:59:35 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ABFF0C0D629
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Oct 2025 13:05:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CDBD042141E
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Oct 2025 11:50:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C2B79422537
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Oct 2025 11:56:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC0F83009C0;
-	Mon, 27 Oct 2025 11:48:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9B202FF656;
+	Mon, 27 Oct 2025 11:56:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DOl6EGX/"
+	dkim=pass (2048-bit key) header.d=public-files.de header.i=frank-w@public-files.de header.b="civc0jIU"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93F212FF173
-	for <linux-pm@vger.kernel.org>; Mon, 27 Oct 2025 11:48:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A22F2FBDEA;
+	Mon, 27 Oct 2025 11:56:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.22
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761565727; cv=none; b=ujKQ4qBOq2IeMzSh6cMAuWU09D5Yo763PEt6CE82T2gg8Ri7R0HRLzWyMJ4/vQeF5y31d42sHuPK+Ms/JQwjTUvlD/5tTqDZkEjYvrKXl3lPfwCEpuyCSZXAmcjiEPPbW2sfNMhSsakOApl+MSufvJInk23TiT/oOBvOYL/hyic=
+	t=1761566197; cv=none; b=oHFb1VB4UW1Ip+Ew3NISV1beF+EAKzYJ57kXbjSOeRU2DcOpJiuHpJ856uQ1McZwi4Rjupg67JRnt7Pq2IMBWUk8wY2n5rICsaonAeGL+AcLNIsOTjvIXto6evjidpgpHmAL9Wod+AFIhi8GGrxyJqjllwyhKVhGIWp5SI9GaFY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761565727; c=relaxed/simple;
-	bh=i5F5XSjM3QJPOTTHFDn4pVZhOuKFqmtvKFMtVhcqG/c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=coC6ld+QQwOaNf1CDcjAv1t0Zg0HTR+a72cLriOqzFk+as1VGBtH6bWPDUQTA8eFJoO89H7s2ym95MQlaa6csGPEos2L6i8xsSaK6R3V0EqzGH5IGN2OmXvkkVo4r85+cZ4gIY6aTlJC98z75XdTDHQqBcpmohiHCd22mPT9Ob8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DOl6EGX/; arc=none smtp.client-ip=209.85.167.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-592ff1d80feso3211951e87.2
-        for <linux-pm@vger.kernel.org>; Mon, 27 Oct 2025 04:48:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761565724; x=1762170524; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=PgT9stFn/poAbljDOlAYgxNBl2XctKW6jluiWQlJc8k=;
-        b=DOl6EGX/+8+hk8eLbTOmrd6+VL7zsHouc81K8c5OcjjiueeAXDnY7m8eDgA5Wd8d7H
-         +3wZPJo90Glu3zmfecJpvT4HxmuAuXgpuoAQkYVaF6ww0/W+xo6yjB3YdYKymx5++Sj7
-         8AXOI5K+ge/VGlEJPngZhoawc2kNlWQH0coozlMTTejMMFy0adF41dEPhrNAjFxMRivZ
-         3ZP7peyNbIbNQ73fOzB6RuHHbCVcO/C34cp5JIdJM1F/5q3sEfDyhBqy5s+RF+/Xc80a
-         XougV/F30ZSrwg3FmpXyLLJPeqAhxPul3Gdqqzhuf5xxpcaXyubqyuqT2f3oyg3I8HGx
-         WqUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761565724; x=1762170524;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PgT9stFn/poAbljDOlAYgxNBl2XctKW6jluiWQlJc8k=;
-        b=D5E2duoOveIesAGdZKitOj8BtLRYwJr1fqIyYmiqZlsERBJs/HNeLdd26y8uLp1XHm
-         gP4ZXcsGeSAyPbh6fcZQ+mKcCEkAT0DUkSU8AjymqT5oqs8yXWYTP+KOmdGIPwLvijRw
-         /XAy610RYkIx5JJ83WBUIHqzEa4WZPt/UoZumsS6HIve+lC/H85sHNBtqSxFv5D7Ej9y
-         +IWFWcPXojI8zGEU3Ci3UJrfv4o5RVoXMMEazh9tAjgLUiNbDijgvfpH4l8rM0rDYW2q
-         gFCv8oF/aLoAF/4mVTx6dilof9DB6z2slmRwldaha1w5TStU2HCjUZdaezYDVt3p+Pmr
-         v92A==
-X-Forwarded-Encrypted: i=1; AJvYcCWcMPTJNKTvgAY0KZ4z/flsKTGPQlyrPUe3k+IIOgq06xAUvJrW+htbfgiWDACh+LDkCl0xcwwkxQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw/AP3JrgIjcz0pXnYhXDLMyHgFcJufBF7SW3Axzs/Ve9fXVoM0
-	wTPHZ9rpc90ZADQWmYVuiApiitrtYjgWEMiJO/iEYE8toF/sPTeR6mdh
-X-Gm-Gg: ASbGncs+VfQ8s9lpAXADErEC6jo01ILXTBtAqq7Hu3/3HpJ3QySpojR78G+UenJQAuv
-	wxeq0bbScbB/nSf6gJF5MtJprNbJ3SD/b50YQyl9+93BxEPQEDewJb1z9zdGorAEZe7eGCz7/fD
-	kkAgehsmBJAEJ0Zm7vbEwYzNTZMnYHHtyV1xoSBVsIp0m/Qzm8oF3ZtxTf2TMrKhdAVmMqvgIkt
-	k0NGL9d+dlrU5T6eYaJhQibP4U7F6WD+GdnMt10BZKc8oukys5rDtm0kbgG+5jDkt/NVGXGuZD/
-	dCeBV/YgC0bA+cA33wF+NNh7ohpF+MZKqcsyn+cGDPwDzlbSHv4c5C4dFO9oOYJQdzCTlkLCXFV
-	/p5yHAD/OleznwNhfzC0uzcYOP9Lb9x9YdPYHOTCxf/1GdmWBuwJTm/BGiF1Blnj+c0CIheozdZ
-	Hsp7NXLvesbz+0Pn/7Vw==
-X-Google-Smtp-Source: AGHT+IGSnZ+yAlMhSP89/zGsbZ8XNjjCkf1vNfg2R/zfGqQhGr2QeTscx5csNq8cRoakqqj6FfPRlQ==
-X-Received: by 2002:a05:6512:3054:b0:592:f74f:a49a with SMTP id 2adb3069b0e04-592fc9e8f2bmr2863532e87.13.1761565723504;
-        Mon, 27 Oct 2025 04:48:43 -0700 (PDT)
-Received: from mva-rohm ([2a10:a5c0:800d:dd00:8fdf:935a:2c85:d703])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-59301f41cbbsm2306417e87.2.2025.10.27.04.48.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Oct 2025 04:48:41 -0700 (PDT)
-Date: Mon, 27 Oct 2025 13:48:37 +0200
-From: Matti Vaittinen <mazziesaccount@gmail.com>
-To: Matti Vaittinen <mazziesaccount@gmail.com>,
-	Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc: Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Sebastian Reichel <sre@kernel.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Matti Vaittinen <mazziesaccount@gmail.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Andreas Kemnade <andreas@kemnade.info>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-rtc@vger.kernel.org
-Subject: [PATCH v2 15/15] MAINTAINERS: Add ROHM BD72720 PMIC
-Message-ID: <a664a836ba419ea1eae1d8325f246c0955ec660a.1761564043.git.mazziesaccount@gmail.com>
-References: <cover.1761564043.git.mazziesaccount@gmail.com>
+	s=arc-20240116; t=1761566197; c=relaxed/simple;
+	bh=9OGkJVJ45qtPKQyI7/RCIvdM85jSkeuhNffNRsXu1vQ=;
+	h=MIME-Version:Message-ID:From:To:Cc:Subject:Content-Type:Date:
+	 In-Reply-To:References; b=b1DvGZ8Xx4GRwNT6ijl8kImhIZKPjzD9KIwdu6Yxj/1J1951GiXvMYfP4Gm45RbZfY0WlS98Tldc+5FblGHnscbZzoT/hKiMAONevIXpn5UI8K+q2lT1u6AwnHzghKMOohBpSxnFKcfm5P6pZyCL/sA5+MklJoSxLBfpu+mNarY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=public-files.de; spf=pass smtp.mailfrom=public-files.de; dkim=pass (2048-bit key) header.d=public-files.de header.i=frank-w@public-files.de header.b=civc0jIU; arc=none smtp.client-ip=212.227.17.22
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=public-files.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=public-files.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=public-files.de;
+	s=s31663417; t=1761566188; x=1762170988; i=frank-w@public-files.de;
+	bh=q1+2gFkrxY6m/U7u8dzCBDzgNo3djn7xfSEsltllsG4=;
+	h=X-UI-Sender-Class:MIME-Version:Message-ID:From:To:Cc:Subject:
+	 Content-Type:Date:In-Reply-To:References:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=civc0jIUwW6SoLobk7dIdSQStdwux08xKrwkDcRuzbluG+oK4Rr3A2Dqno+bYfYW
+	 rHSc0kMXS+GzW0p4LITyYrTyAkNOM+lwwNE8uMdfGyHdbN5Om6ULOWe0skarFhKdZ
+	 mij0PvBZoVaANU2m1UVeAX9eKCxsL9Egd5SltPqXa9lRpq1YrTTSdOEjDbcs8aNEV
+	 8X0tWQIaaB+lzmSyymdv0U97l5/XAOLDaW8DX5CxxWfiLgie33Jt/x/lGrXISqD7Y
+	 fKVQ/GzF23CuwTa8bkEoDKxg6pdMQgT83i50qX6TYVohHRDeXWWkByyzzJUGWpLWS
+	 WJ/vHwke3/CqRwLqzA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [217.61.159.158] ([217.61.159.158]) by
+ trinity-msg-rest-gmx-gmx-live-654c5495b9-nsbx8 (via HTTP); Mon, 27 Oct 2025
+ 11:56:28 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="PVPHd8ApeQQcOqGz"
-Content-Disposition: inline
-In-Reply-To: <cover.1761564043.git.mazziesaccount@gmail.com>
-
-
---PVPHd8ApeQQcOqGz
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Message-ID: <trinity-ecc07569-6b82-472e-80d4-5e41728a4ed1-1761566187916@trinity-msg-rest-gmx-gmx-live-654c5495b9-nsbx8>
+From: Frank Wunderlich <frank-w@public-files.de>
+To: angelogioacchino.delregno@collabora.com, linux@fw-web.de,
+ daniel.lezcano@linaro.org, rui.zhang@intel.com, lukasz.luba@arm.com,
+ robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+ matthias.bgg@gmail.com
+Cc: nfraprado@collabora.com, mason-cw.chang@mediatek.com,
+ u.kleine-koenig@baylibre.com, bchihi@baylibre.com,
+ linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-mediatek@lists.infradead.org, rafael@kernel.org
+Subject: Aw: Re: [PATCH v1 4/5] thermal/drivers/mediatek/lvts_thermal: Add
+ SoC based golden Temp
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 27 Oct 2025 11:56:28 +0000
+In-Reply-To: <6f71b834-2b4d-48a8-be6f-1efdf0e78812@collabora.com>
+References: <20251026122143.71100-1-linux@fw-web.de>
+ <20251026122143.71100-5-linux@fw-web.de>
+ <6f71b834-2b4d-48a8-be6f-1efdf0e78812@collabora.com>
+X-UI-CLIENT-META-MAIL-DROP: W10=
+X-Provags-ID: V03:K1:6q6PGOlzcCNzMNaTrdZ3gzfoNmPOdU+wx3DB5m2may/IeMwf4QtuG3f9yeaLhhpA05smP
+ jruORDfxpBXBuQT5ScmHGSRedy6RIjK4f8L4doDqjyVOo7KG/PILZPnhJjeK3Xm8S5JgAjz4IwU6
+ dX9IJevAcU29kLeuyZX/9pbbR0BavbvPzIXl4xG6x1LZjOYdKUz0n+8Y6pG+8FcN8ECilxjt8Nbt
+ WPvnr0bursIzseoEtQAdh2Hd+4a8pP08NbVtU3On7udme1LOsbuGjLAPD/Q3jpjBnxgCbH9mImPy
+ tbuoBShVH9e6v2kctnnxNmqYORCeZCJU5ndP91hoO2qCYncp5OTLIPe5siQ69Ql/vg=
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:1mI2S1j+1GM=;c6wDB2P1jLfG5s0jCPIAv7ijtL0
+ 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
+ ob+zRueSpyvQNv27eHgxrBa0UJcT0lrw==
 Content-Transfer-Encoding: quoted-printable
 
-Add the ROHM BD72720 PMIC driver files to be maintained by undersigned.
+Hi Angelo,
 
-Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+> Gesendet: Montag, 27. Oktober 2025 um 11:45
+> Von: "AngeloGioacchino Del Regno" <angelogioacchino.delregno@collabora.c=
+om>
+> Betreff: Re: [PATCH v1 4/5] thermal/drivers/mediatek/lvts_thermal: Add S=
+oC based golden Temp
+>
+> Il 26/10/25 13:21, Frank Wunderlich ha scritto:
+> > From: Frank Wunderlich <frank-w@public-files.de>
+> >=20
+> > Add SoC based golden temp for invalid efuse data.
+> >=20
+> > This is a preliminary patch for mt7987 support where goldentemp is
+> > slightly higher than other SOCs.
+> >=20
+>=20
+> I've found this "hack" required for all of the preproduction SoCs, as th=
+ose are
+> usually unfused and/or missing at least some calibration parameters.
+>=20
+> Are you using an early/preproduction/whatever SoC, or are you testing on=
+ a retail
+> board?
 
----
-Revision history:
- RFCv1 =3D>:
- - No changes
----
- MAINTAINERS | 2 ++
- 1 file changed, 2 insertions(+)
+thanks for looking into it. I'm using a Bananapi R4 Lite v1.1 so not pre-p=
+roduction SoC afaik.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index fe01aa31c58b..7e3c1eac7cda 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -22353,6 +22353,7 @@ S:	Supported
- F:	drivers/clk/clk-bd718x7.c
- F:	drivers/gpio/gpio-bd71815.c
- F:	drivers/gpio/gpio-bd71828.c
-+F:	drivers/gpio/gpio-bd72720.c
- F:	drivers/mfd/rohm-bd71828.c
- F:	drivers/mfd/rohm-bd718x7.c
- F:	drivers/mfd/rohm-bd9576.c
-@@ -22369,6 +22370,7 @@ F:	drivers/watchdog/bd96801_wdt.c
- F:	include/linux/mfd/rohm-bd71815.h
- F:	include/linux/mfd/rohm-bd71828.h
- F:	include/linux/mfd/rohm-bd718x7.h
-+F:	include/linux/mfd/rohm-bd72720.h
- F:	include/linux/mfd/rohm-bd957x.h
- F:	include/linux/mfd/rohm-bd96801.h
- F:	include/linux/mfd/rohm-bd96802.h
---=20
-2.51.0
+Not sure why i ported this patch from sdk (maybe due to patch compatibilit=
+y and thinking this is needed).
+Tested without it and it seems to work as far as i can tell. Will drop it =
+in next round.
 
+For the no-irq part i also ported this from SDK where no irq is defined (i=
+ also wondered about missing irq-support as it would require polling to ha=
+ndle emergency shutdown which seems not done in sdk too):
 
---PVPHd8ApeQQcOqGz
-Content-Type: application/pgp-signature; name=signature.asc
+https://git01.mediatek.com/plugins/gitiles/openwrt/feeds/mtk-openwrt-feeds=
+/+/HEAD/autobuild/unified/filogic/24.10/files/target/linux/mediatek/files-=
+6.6/arch/arm64/boot/dts/mediatek/mt7987.dtsi#556
 
------BEGIN PGP SIGNATURE-----
+https://git01.mediatek.com/plugins/gitiles/openwrt/feeds/mtk-openwrt-feeds=
+/+/HEAD/autobuild/unified/filogic/24.10/files/target/linux/mediatek/patche=
+s-6.6/999-2101-thermal-mediatek-add-mt7987-lvts-support.patch#160
 
-iQEzBAEBCgAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmj/XBUACgkQeFA3/03a
-ocX1rAf+OKqdSASLkvANGwIB/trs/JiLB0LQhsIiEMY6ZwKNN3UlkIbvSSEjJpmn
-nGD+STZZhVbwJP7cpf/Uz9omS2lSQDMtoCTzkzd2+8zXQuuHU0qt/EP20le9J6V6
-P/wHiPXOVDfIfD/Gr6JdPQ5XtPEhyPZdY478JbR0bQyzA1AskbLKvmRKZZfsISej
-QEzG1Qvzw2hj3tke8B+M51Gf+pJ9Gw+bILA9b96+BTI/JmHENSIEHxok2bSC2oZE
-0jJKnTR3LAtUkx7UCmvK8bgnaDTbHb5Es1tbd+ob6I4QuaUemtoDzgEILVMiXvx7
-ZY462g3yI8d+cYed3UTXxIuDnsHC2w==
-=qVnM
------END PGP SIGNATURE-----
+the irq_enable part is squashed with the mt7988 lvts support:
 
---PVPHd8ApeQQcOqGz--
+https://git01.mediatek.com/plugins/gitiles/openwrt/feeds/mtk-openwrt-feeds=
+/+/HEAD/autobuild/unified/filogic/24.10/files/target/linux/mediatek/patche=
+s-6.6/999-2100-thermal-mediatek-add-mt7988-lvts-support.patch#110
+
+regards Frank
+
+> Regards,
+> Angelo
+>=20
+> > Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> > ---
+> >   drivers/thermal/mediatek/lvts_thermal.c | 13 ++++++++++++-
+> >   1 file changed, 12 insertions(+), 1 deletion(-)
+
 
