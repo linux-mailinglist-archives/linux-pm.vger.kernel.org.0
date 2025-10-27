@@ -1,277 +1,212 @@
-Return-Path: <linux-pm+bounces-36874-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36875-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5E13CC0C08E
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Oct 2025 08:05:14 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D6FC5C0C3CC
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Oct 2025 09:09:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3B4A8189ECD1
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Oct 2025 07:05:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BBEF919A00D9
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Oct 2025 08:09:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD9F026C3A7;
-	Mon, 27 Oct 2025 07:05:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 033E52E7623;
+	Mon, 27 Oct 2025 08:09:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="zB+8ZTFA"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ILxdwon5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 950F11DF27D
-	for <linux-pm@vger.kernel.org>; Mon, 27 Oct 2025 07:05:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43F0A2E5B21
+	for <linux-pm@vger.kernel.org>; Mon, 27 Oct 2025 08:09:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761548711; cv=none; b=ZFz6Nr5kdhz9+StNTGrrzUzh1dC+npzdnIey+rqpPbQhfz3ndX2/Lir3xAJwEgTBW4RUYX7uPyzpaKT2lpaZSEaaV3t+U0grU0vI2TvF0MXrd2sNHruUdaXvIVa94+KFAP9G04xTm9VmmPxHZEIDwbqMFRKM+6Izjo5QEI/eYfY=
+	t=1761552547; cv=none; b=kqgx27yI9Csc1LXaC0M2qWIIfZy5Xn7bYpnSqwTYu1hR4czSq1obYBK/ufNEVsP+/WypiotCFlOQ+HgQU49DFJdayF91U+2yUFx9YbQsA1Tn4/lUN67BmqIlJDvAdJgbzba8a4cwBxcBGRCzmJy/jh+w57VhPI6FXDZPIWNmUKM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761548711; c=relaxed/simple;
-	bh=iqUA9ph6+kIZ1qP75MUE1cT/JZ8yoDuz07BzW79Hf2Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=frCq71UnZxmkJ1AFPHikbNty3rFSFuoCT/cW8Z4l9og/KHv+8fzBVopdsnPtrBwzJPs47RqExxLeqGZqtsMm0nGQ0dw2MRRiXMyxdi17or7WT+/n9t7gr4jPlu8CqMc28WF05oxLY8CgYF5eQ7vbWYhqOmtxPjiiltPa0MoFRhQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=zB+8ZTFA; arc=none smtp.client-ip=209.85.221.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-4270a0127e1so3323097f8f.3
-        for <linux-pm@vger.kernel.org>; Mon, 27 Oct 2025 00:05:07 -0700 (PDT)
+	s=arc-20240116; t=1761552547; c=relaxed/simple;
+	bh=XeTwlfFrQd3ECaXR1wyhrLcNrq8QGGpB79EUptps7TI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=f97xjCFcBPqnnjH4HVwCNxdvKaO+Kbn98aNAEBcA0fS2hzRGRPJeBgWwFyTriwHfjLx+uQfbFxsO4fzuMX+lH8h8aeiFzN8WTneiVCHMEaDDW2P8OGjyTRtlT9mEhPQFF6cbBgNNjlvHksEnJaIuLO4zvUq+bLJD2bTE9Hlw6EE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ILxdwon5; arc=none smtp.client-ip=209.85.218.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-b3f5e0e2bf7so981600266b.3
+        for <linux-pm@vger.kernel.org>; Mon, 27 Oct 2025 01:09:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1761548706; x=1762153506; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HJFfYykRlBHOdi5XlphjJ7Of6rfFrNXO8UImzwMboPo=;
-        b=zB+8ZTFAMBPb6xZpLRtAC3vWyo0B9DZ8+jhR3nGGsupXt+A201/cyfpdmuoDek4D6N
-         V6VV8eTLQIZkibwzvdjmelxYU4Jk0+aOQNjhynHmElp20lYWOoikXKKFnIKk9vRqd53H
-         LM+KV10sTkyBFdwp8ICE7aAIR8dbFt4Ly7N9MSnzsOnVbV2gcoIeonC7kIhXWa1Y5uRy
-         0sAFNEE9KZOR4PBtnCqu1SrQ4aefi9UUOe5dSAEg1aVOSOWjv6b8JcMBLrs1iQtJ4hPp
-         +9Yv9DMkn179EbDt7VRJjPYu2kjug7C0TOU4lp1nXGUpn75/tUX+hs0Ojk+8LI23S+Ue
-         L5vg==
+        d=gmail.com; s=20230601; t=1761552543; x=1762157343; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yvxeQRhhg830l0sanhrt4dj9VmhvTVyDa0jNQUK1mG4=;
+        b=ILxdwon5B071nW61x/VZ+xyfOCGntOy6rdACq7vip+Gz0tFiA+QOfnnSXCdaSkFKMU
+         B5HqH8RryvcjIf72Fx5goN6rf3vo+XbnnTGq8vAuXqbkiR7aSXK1xPi0cSUHYU+tmPo9
+         4odYINsRYolDp3epXuPLegYHHMyLpyucGLFvIbX1zIjCskdGfzDkyjOa3oZufWTMtJY/
+         JF6IFoR5fLSZ10QJIzD8C3x33CoF+z2ygj2aRKcn1ak8GWoxKSzY0ctWDkwYfNkHDaw/
+         ES3Oxb8fkfnYuI+HfoI6NhyQM75T61QleNlov5roEr+LA/ruKO8/YPYtVt+uxUQHSzUi
+         /r/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761548706; x=1762153506;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HJFfYykRlBHOdi5XlphjJ7Of6rfFrNXO8UImzwMboPo=;
-        b=GIbc02BO0IrqZw9kkbosImRrpdyUWpJ1sZbVQJEGKWQs1f4QUQv+qSLTKo8u5GXaQz
-         8GHXpBrLViB5d3F/1znwJdoi+hK84SU0EMR7tAkBgPNTdHIbLy22IIxAj7K54D/oPCQ7
-         yz74nHU1+IO8GtezQM5UcrRdF7GWSb1tJNHegsnJg0pTCXp9vZYR1HnRgyhEspyor764
-         8EFJNtcOZ22Qq7xlBrW8rHebqJLMy4RWpn2D0CjMkV2MQ5tyAWO7ZwgacAMX9VSpwpRq
-         6fKgjyhbT2n72axx/AVjyqqKi0pXc21/sbtSHigSaedgg4nCRHf6ucTau3EMjyH3vPHf
-         UKpw==
-X-Gm-Message-State: AOJu0YyH3NQpiVsMEUTqNaZZvRPMosV0qKAiFW6L7w26aSHAbQPSd3Yz
-	/2+ja3mFD26En0VTiAqJkt/mKEbKslt0NjiXFiYA+ivjATOkw7nAgYGfC6StonX3ABE=
-X-Gm-Gg: ASbGnctvrtwn5Ovk2u1gpaQA7HcdfJ7thw2PHQ8QxV6enklD3ol965KcpbdKSJlC+nC
-	5zkX4Asn0yfFaUV7ddS6pJpYhRMtKqK4Y7UxsVYDO/ffaKPm66eNxlzGqJ0R+44C63hJlhmMlFC
-	BtJAavpps34fD/XmuqGiVjsUmSFo7Il9aTK3k1LfBZXpta5L08w5b+hH6AhCbfJKj+zVuxjb2Om
-	uBk4w+rYQuiOjfr9FXdKEvW6DM6dyutBVsIvOj/W1JJFdp8IuE9dtXdi1SQtErBIo1yG7VqPCh0
-	+XEqygryXLQoJ25NHw0vKjY8vZsjEwbtRALUA80lvswQlIXbe8DJpYUcG83E9wzl9DFk5wRfkEn
-	rY6hSxR0Xr93m0CZ3Pmji0phEUAZxxiqssvnpEQ2x2ohh+IdaeBRd+PufMDjxlkuJJDvXXn/FuE
-	PRX2UoYw==
-X-Google-Smtp-Source: AGHT+IHDnxuF6aY8pbvXwwIn4O7yBK8Zhk1QQ4A/6lD/VCtErpeSNtvVwKJ1RrIizvoFYs0suVFpwg==
-X-Received: by 2002:a5d:64c4:0:b0:426:d51c:4d71 with SMTP id ffacd0b85a97d-42704d44253mr22554112f8f.8.1761548705515;
-        Mon, 27 Oct 2025 00:05:05 -0700 (PDT)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-429952d9e80sm12345048f8f.28.2025.10.27.00.05.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Oct 2025 00:05:05 -0700 (PDT)
-Date: Mon, 27 Oct 2025 10:05:01 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: linux-pm@vger.kernel.org, linux-mediatek@lists.infradead.org
-Subject: [bug report] pmdomain: mediatek: Add support for MT8196 SCPSYS power
- domains
-Message-ID: <aP8ZneXa5pcsb_9N@stanley.mountain>
+        d=1e100.net; s=20230601; t=1761552543; x=1762157343;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yvxeQRhhg830l0sanhrt4dj9VmhvTVyDa0jNQUK1mG4=;
+        b=DCdRk0Zh5TVGupfQPmPquHpc2YJfBQHd4Y4wmuXMiwDdv4R/rQGE7j2PKiU4nrEBDD
+         rAVxzXNv2MphVa+aEqLQi4z2P5WGUCp/R+RudljQBeUv68V7tUbG/Rz5+mEW3RwTKnGW
+         B4Lbc4OUiWkmAOz2pPxz923THRwlbFv5An72oO1LVPOgSDAyRwEFfFu2XcSswMUVsUTY
+         7HdwfMEAiVJUmaq0yWe6X1b+RYUrca7uBr9Bg8eenRVzb8PfnqmDF3H5jm8Bsry9UsKn
+         6dNIFbIiRHBWoFGrL8UYX6TmEnFdyKt7DkyfDyNxkjY1cNk7vbA/vDRVQSWMdX22GJuR
+         4iQA==
+X-Forwarded-Encrypted: i=1; AJvYcCVsh3ZqBrwMnNnQalu6mTBiGRLnFRPq9EnDVSDFMaa6eNqniuwF0W4tDVt0zneX3RBa3xlHAfJrxg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzWQlLyqxGVM9sjIa4As95ncoYoWIY2RO5Ei00KzE8TOq1i8D+/
+	0htWQjGjO6l2ZTXRifHwPmxaP0IftEFxTPB3XHMshsQ0pzWMQVlzhDVp
+X-Gm-Gg: ASbGncu3MKyvbAbE0BxJtu89rLkQoYLi9J4PkXOJeFwKi0cBSgYnz9ag1ssIC/NV2Tm
+	eSbE7OwWRrNOMWm0YUA21mIcM+ktHQEXGJMkvga9YoAU4dhoT+fX8gSUjqs0/xjNZD1qBaWPl8S
+	zq9R7OJKVrTEW2+Bo0LCbS5Z7yT3uyheRAUOFyZ1YFXbHZkc+dmx9OVFzdXqMUxFTl1dFPjf4x/
+	+8A9bCZyiGSSVMYFvq0ERf0bhGRl6ypsqhHkUdVMsowX9jfb0IDg9rVZ0dJGVQKSSH4qtHn49Fu
+	CWEd9y4mWPSPKaICLkb0CVo4PLAMVIFOXXAqCxJOULR8Ypknylhs6DTJ75yUYJPwr4prs/03tz3
+	LXOkR/8YFsCYTIZOiTU1SScZEvSeFf7NGxoMPYodAHZzJDuE4N256x4mGXZNet4JvAyM7KOFFyx
+	Z/
+X-Google-Smtp-Source: AGHT+IFijVOlnEStwgdV8OnlKBS1QW3pyY3ndH6Fj16lvbKA8iEuH12vqflityGstfLwZ0jBGpQJHQ==
+X-Received: by 2002:a17:906:c43:b0:b6d:7e01:cbc5 with SMTP id a640c23a62f3a-b6d7e01debbmr639439666b.53.1761552543311;
+        Mon, 27 Oct 2025 01:09:03 -0700 (PDT)
+Received: from localhost ([212.73.77.104])
+        by smtp.gmail.com with UTF8SMTPSA id a640c23a62f3a-b6db1c84813sm53108666b.19.2025.10.27.01.09.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Oct 2025 01:09:02 -0700 (PDT)
+From: Askar Safin <safinaskar@gmail.com>
+To: gmazyland@gmail.com
+Cc: Dell.Client.Kernel@dell.com,
+	brauner@kernel.org,
+	dm-devel@lists.linux.dev,
+	ebiggers@kernel.org,
+	kix@kix.es,
+	linux-block@vger.kernel.org,
+	linux-btrfs@vger.kernel.org,
+	linux-crypto@vger.kernel.org,
+	linux-lvm@lists.linux.dev,
+	linux-mm@kvack.org,
+	linux-pm@vger.kernel.org,
+	linux-raid@vger.kernel.org,
+	lvm-devel@lists.linux.dev,
+	mzxreary@0pointer.de,
+	nphamcs@gmail.com,
+	pavel@ucw.cz,
+	rafael@kernel.org,
+	ryncsn@gmail.com,
+	safinaskar@gmail.com,
+	torvalds@linux-foundation.org
+Subject: Re: dm bug: hibernate to swap located on dm-integrity doesn't work (how to get data redundancy for swap?)
+Date: Mon, 27 Oct 2025 11:08:56 +0300
+Message-ID: <20251027080856.2053794-1-safinaskar@gmail.com>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <a48a37e3-2c22-44fb-97a4-0e57dc20421a@gmail.com>
+References: <a48a37e3-2c22-44fb-97a4-0e57dc20421a@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-Hello AngeloGioacchino Del Regno,
+Milan Broz <gmazyland@gmail.com>:
+> Hi,
 
-Commit ead9cf65d50f ("pmdomain: mediatek: Add support for MT8196
-SCPSYS power domains") from Sep 25, 2025 (linux-next), leads to the
-following Smatch static checker warning:
+That patch doesn't fix the problem. I will send more details within some
+days, hopefully today.
 
-	drivers/pmdomain/mediatek/mtk-pm-domains.c:865 scpsys_add_one_domain()
-	error: we previously assumed 'pd->data' could be null (see line 840)
+Also, I just found that for reliable reproduction you need to do
+"swapoff /dev/mapper/swap; cat /dev/mapper/swap > /dev/null" after resume
+(assuming you were able to resume, of course).
 
-drivers/pmdomain/mediatek/mtk-pm-domains.c
-    718 static struct
-    719 generic_pm_domain *scpsys_add_one_domain(struct scpsys *scpsys, struct device_node *node)
-    720 {
-    721         const struct scpsys_domain_data *domain_data;
-    722         const struct scpsys_hwv_domain_data *hwv_domain_data;
-    723         struct scpsys_domain *pd;
-    724         struct property *prop;
-    725         const char *clk_name;
-    726         int i, ret, num_clks;
-    727         struct clk *clk;
-    728         int clk_ind = 0;
-    729         u32 id;
-    730 
-    731         ret = of_property_read_u32(node, "reg", &id);
-    732         if (ret) {
-    733                 dev_err(scpsys->dev, "%pOF: failed to retrieve domain id from reg: %d\n",
-    734                         node, ret);
-    735                 return ERR_PTR(-EINVAL);
-    736         }
-    737 
-    738         switch (scpsys->soc_data->type) {
-    739         case SCPSYS_MTCMOS_TYPE_DIRECT_CTL:
-    740                 if (id >= scpsys->soc_data->num_domains) {
-    741                         dev_err(scpsys->dev, "%pOF: invalid domain id %d\n", node, id);
-    742                         return ERR_PTR(-EINVAL);
-    743                 }
-    744 
-    745                 domain_data = &scpsys->soc_data->domains_data[id];
-    746                 hwv_domain_data = NULL;
-    747 
-    748                 if (domain_data->sta_mask == 0) {
-    749                         dev_err(scpsys->dev, "%pOF: undefined domain id %d\n", node, id);
-    750                         return ERR_PTR(-EINVAL);
-    751                 }
-    752 
-    753                 break;
-    754         case SCPSYS_MTCMOS_TYPE_HW_VOTER:
-    755                 if (id >= scpsys->soc_data->num_hwv_domains) {
-    756                         dev_err(scpsys->dev, "%pOF: invalid HWV domain id %d\n", node, id);
-    757                         return ERR_PTR(-EINVAL);
-    758                 }
-    759 
-    760                 domain_data = NULL;
+So here is updated script for reproduction in Qemu:
 
-NULL here.
+https://zerobin.net/?0aa379bae218cf92#DDVFMvfi6S3ydCQLSrL+us1lHjXQJIZasW55JI7gEfU=
 
-    761                 hwv_domain_data = &scpsys->soc_data->hwv_domains_data[id];
-    762 
-    763                 break;
-    764         default:
-    765                 return ERR_PTR(-EINVAL);
-    766         }
-    767 
-    768         pd = devm_kzalloc(scpsys->dev, sizeof(*pd), GFP_KERNEL);
-    769         if (!pd)
-    770                 return ERR_PTR(-ENOMEM);
-    771 
-    772         pd->data = domain_data;
-                ^^^^^^^^^^^^^^^^^^^^^^
+This script is very easy to use!
 
-    773         pd->hwv_data = hwv_domain_data;
-    774         pd->scpsys = scpsys;
-    775 
-    776         if (MTK_SCPD_CAPS(pd, MTK_SCPD_DOMAIN_SUPPLY)) {
-    777                 pd->supply = devm_of_regulator_get_optional(scpsys->dev, node, "domain");
-    778                 if (IS_ERR(pd->supply))
-    779                         return dev_err_cast_probe(scpsys->dev, pd->supply,
-    780                                       "%pOF: failed to get power supply.\n",
-    781                                       node);
-    782         }
-    783 
-    784         num_clks = of_clk_get_parent_count(node);
-    785         if (num_clks > 0) {
-    786                 /* Calculate number of subsys_clks */
-    787                 of_property_for_each_string(node, "clock-names", prop, clk_name) {
-    788                         char *subsys;
-    789 
-    790                         subsys = strchr(clk_name, '-');
-    791                         if (subsys)
-    792                                 pd->num_subsys_clks++;
-    793                         else
-    794                                 pd->num_clks++;
-    795                 }
-    796 
-    797                 pd->clks = devm_kcalloc(scpsys->dev, pd->num_clks, sizeof(*pd->clks), GFP_KERNEL);
-    798                 if (!pd->clks)
-    799                         return ERR_PTR(-ENOMEM);
-    800 
-    801                 pd->subsys_clks = devm_kcalloc(scpsys->dev, pd->num_subsys_clks,
-    802                                                sizeof(*pd->subsys_clks), GFP_KERNEL);
-    803                 if (!pd->subsys_clks)
-    804                         return ERR_PTR(-ENOMEM);
-    805 
-    806         }
-    807 
-    808         for (i = 0; i < pd->num_clks; i++) {
-    809                 clk = of_clk_get(node, i);
-    810                 if (IS_ERR(clk)) {
-    811                         ret = PTR_ERR(clk);
-    812                         dev_err_probe(scpsys->dev, ret,
-    813                                       "%pOF: failed to get clk at index %d\n", node, i);
-    814                         goto err_put_clocks;
-    815                 }
-    816 
-    817                 pd->clks[clk_ind++].clk = clk;
-    818         }
-    819 
-    820         for (i = 0; i < pd->num_subsys_clks; i++) {
-    821                 clk = of_clk_get(node, i + clk_ind);
-    822                 if (IS_ERR(clk)) {
-    823                         ret = PTR_ERR(clk);
-    824                         dev_err_probe(scpsys->dev, ret,
-    825                                       "%pOF: failed to get clk at index %d\n", node,
-    826                                       i + clk_ind);
-    827                         goto err_put_subsys_clocks;
-    828                 }
-    829 
-    830                 pd->subsys_clks[i].clk = clk;
-    831         }
-    832 
-    833         if (scpsys->domains[id]) {
-    834                 ret = -EINVAL;
-    835                 dev_err(scpsys->dev,
-    836                         "power domain with id %d already exists, check your device-tree\n", id);
-    837                 goto err_put_subsys_clocks;
-    838         }
-    839 
-    840         if (pd->data && pd->data->name)
-                    ^^^^^^^^
-Check for NULL
+Try 1-2 times to reproduce.
 
-    841                 pd->genpd.name = pd->data->name;
-    842         else if (pd->hwv_data && pd->hwv_data->name)
-    843                 pd->genpd.name = pd->hwv_data->name;
-    844         else
-    845                 pd->genpd.name = node->name;
-    846 
-    847         if (scpsys->soc_data->type == SCPSYS_MTCMOS_TYPE_DIRECT_CTL) {
-    848                 pd->genpd.power_off = scpsys_power_off;
-    849                 pd->genpd.power_on = scpsys_power_on;
-    850         } else {
-    851                 pd->genpd.power_off = scpsys_hwv_power_off;
-    852                 pd->genpd.power_on = scpsys_hwv_power_on;
-    853 
-    854                 /* HW-Voter code can be invoked in atomic context */
-    855                 pd->genpd.flags |= GENPD_FLAG_IRQ_SAFE;
-    856         }
-    857 
-    858         /*
-    859          * Initially turn on all domains to make the domains usable
-    860          * with !CONFIG_PM and to get the hardware in sync with the
-    861          * software.  The unused domains will be switched off during
-    862          * late_init time.
-    863          */
-    864         if (MTK_SCPD_CAPS(pd, MTK_SCPD_KEEP_DEFAULT_OFF)) {
---> 865                 if (scpsys_domain_is_on(pd))
-                                                ^^
-The patch adds an unchecked dereference of pd->data in the
-scpsys_domain_is_on() function.
+Here is result of that script:
 
+https://zerobin.net/?3d9447900052f9ce#ng0htJDAdSsvqVunL+BnoLHXszM6ardt9R3wkbO9L28=
 
-    866                         dev_warn(scpsys->dev,
-    867                                  "%pOF: A default off power domain has been ON\n", node);
-    868         } else {
-    869                 ret = pd->genpd.power_on(&pd->genpd);
-    870                 if (ret < 0) {
-    871                         dev_err(scpsys->dev, "%pOF: failed to power on domain: %d\n", node, ret);
-    872                         goto err_put_subsys_clocks;
-    873                 }
-    874 
-    875                 if (MTK_SCPD_CAPS(pd, MTK_SCPD_ALWAYS_ON))
-    876                         pd->genpd.flags |= GENPD_FLAG_ALWAYS_ON;
-    877         }
-    878 
+This results are on 43e9ad0c55a3, which is current master, without Mikulas Patocka's
+patch, but with this Mario's patch:
+https://lore.kernel.org/linux-pm/20251026033115.436448-1-superm1@kernel.org/ .
+Mario's patch is needed, otherwise we get WARNING when we try to hibernate.
 
-regards,
-dan carpenter
+Again: these logs are without Mikulas Patocka's patch. I will send results
+of testing his patch later, hopefully today. But don't expect much. As I said,
+his patch doesn't work.
+
+"log-def-1" is output of first Qemu invocation (i. e. first boot) with
+default integritysetup options. "log-def-2" is second Qemu invocation
+(i. e. when we try to resume).
+
+log-bit-{1,2} is same thing, but with "--integrity-bitmap-mode" added to
+"integritysetup format" and "integritysetup open".
+
+log-no-{1,2} is same, but with "--integrity-no-journal".
+
+log-nodm-{1,2} is same, but without dm-integrity at all, i. e. we create
+swap directly on partition.
+
+As you can see in logs, hibernate with dm-integrity never works perfectly.
+We either unable to resume, either we are able to resume, but then get
+integrity errors when we do "cat /dev/mapper/swap > /dev/null".
+
+Swap directly on partition works.
+
+Again: you may need 1-2 attempts to reproduce using this script.
+
+Also: the bug is reproducible even if we do "echo test_resume > /sys/power/disk".
+
+> Are you sure you used --integrity-no-journal both in activation before
+> hibernation and also in resume? If not, please try it.
+
+I'm totally sure. (You can see script above and "set -x" output in logs.)
+
+> You can verify it with "integritysetup status <device>" - it should say "journal: not active".
+
+I just checked. It indeed says so.
+
+> And if it does not work, could you try to use -integrity-recovery-mode the same
+> way (both before hibernation and later in resume)? This will effectively ignore checksums
+
+So I should pass it to both "integritysetup open" invocations, but
+not to "integritysetup format" invocation. Right? Okay, I did so.
+
+I. e. I did this:
+
+integritysetup format --batch-mode --integrity xxhash64 /dev/sda # when formatting
+integritysetup open --integrity-recovery-mode --integrity xxhash64 /dev/sda swap # before hibernate
+integritysetup open --integrity-recovery-mode --integrity xxhash64 /dev/sda early-swap # when resuming
+
+And something completely unexpected happened!
+"swapon" failed immediately after "mkswap"!!! I. e. "swapon" was
+unable to read swap signature right after "mkswap".
+Here is log:
+https://zerobin.net/?ebe34fc9ce94be45#6DWKSXvgUDKIrF4299th0ylhQNEcdqeeBfxzSJjROpA=
+This seems like another dm-integrity bug.
+
+> You can verify it with "integritysetup status <device>" - it should say "mode: read/write recovery".
+
+Yes, it says so in logs above.
+
+> You can also try to decrease journal commit time with --journal-commit-time option,
+
+I just put "--journal-commit-time 1" to format and both opens. I got the same
+result I get with default options: i. e. blkid returns "swap" instead of
+"swsuspend", when I try to resume. Here are logs:
+https://zerobin.net/?c5f8320eb89b1cfb#drrxRgnGk817oEDUA8idhn+WEQgocWjtbsAYuEHF5rI= .
+
+> Redundancy? You mean data integrity protection? There is no redundancy, only additional authentication tag
+> (detecting integrity error but not correcting it).
+
+Yes, I meant integrity protection.
+
+-- 
+Askar Safin
 
