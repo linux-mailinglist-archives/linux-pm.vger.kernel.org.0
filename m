@@ -1,148 +1,144 @@
-Return-Path: <linux-pm+bounces-36879-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36880-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7FC3DC0CA72
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Oct 2025 10:29:45 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E004C0CE3A
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Oct 2025 11:10:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A8A0F3AC127
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Oct 2025 09:25:08 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 5051E4EF0C2
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Oct 2025 10:10:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 218FE2F12CB;
-	Mon, 27 Oct 2025 09:24:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D5902E7631;
+	Mon, 27 Oct 2025 10:10:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="JpPZECOn"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="axWEOmC7"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4439D2F068F;
-	Mon, 27 Oct 2025 09:24:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.21.23.139
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2B5A27467E
+	for <linux-pm@vger.kernel.org>; Mon, 27 Oct 2025 10:10:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761557099; cv=none; b=eXPCpJlbI/O9CIxCKOupSEcr9lgT8X4NbeTG4jPHs92Es9ZjNgitLykaBe68bjADApB4EXScCZWrnerJ5+KJXNpwQQ73d7YqypZQnp6I8HZb+XwcswoOMgSnYBk42cUadzNeSI+ATitARiT35wDDcWTpGGVJTSjCFOcVJa9Jioo=
+	t=1761559842; cv=none; b=RC4uFa0MSNUMBNeYIVV6fwCg+BLgBfjQMgIaVp69SnnAI4pnDaB8hc2rA+fzGfx+jFGhwxBd68bCDzYKbdBmIoYH2BIKn4kabKVrjeJ6qnC2uF93yEnfjIcswyUs4M0naZWDyqI2s/1aGXDaUPnHguRCsNeVUCGWyUMwPqk2sQs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761557099; c=relaxed/simple;
-	bh=jfdUwDgnq3QfeqzXUtLRsl6YPhRoNT1QEbmdgk2ch84=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=t259oRb8AiUoBlAgI6hOoCoQQIM6S1oJqAt08CP1B8npipL1k7Hf3wIFShhxWhUS3jae2chv1ZZhm8XRgK5TJFDN+VuY9apeFIyfKSQ4pQTQBQf1fNjBE58o07nDR57dZMADDSZMtjTvwn1/tTwGrV3u9EFU3KuLguXI8vgg60w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=JpPZECOn; arc=none smtp.client-ip=178.21.23.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=disroot.org
-Received: from mail01.disroot.lan (localhost [127.0.0.1])
-	by disroot.org (Postfix) with ESMTP id AC628260B6;
-	Mon, 27 Oct 2025 10:24:54 +0100 (CET)
-X-Virus-Scanned: SPAM Filter at disroot.org
-Received: from layka.disroot.org ([127.0.0.1])
- by localhost (disroot.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fBjG5FigbkBP; Mon, 27 Oct 2025 10:24:53 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=disroot.org; s=mail;
-	t=1761557090; bh=jfdUwDgnq3QfeqzXUtLRsl6YPhRoNT1QEbmdgk2ch84=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=JpPZECOnKi87MZULsBuohtO3XHj9JWS0ZQmI9CIwmblDBg1PNP/DVR/VPhE3FE3/N
-	 krnmsUymLHPPKod8YPhGBFwK3iGfTcTQ3QwaE555bF3FCUr/1AS7SIF4horTM+Meci
-	 K4sFQkXbsPolJpnectPctepeKNgsxt5f/ReIjNVT+Fq0O/8m9YXBm9IoMGK3qzM0r1
-	 7NpTEOvJYSHA+kMMF7ZwABd3sWNKIs34O2N8QOcNSps0a9tKN+D/qnU8rpyA+pmd6Z
-	 JfnIF+KRicxclrDJxePl/xQOuTqeAhHmrc3UOsroq+rUB8ajsSa8/zLPSg3AXYkkrc
-	 Ff4VXpTW2YS1Q==
-Date: Mon, 27 Oct 2025 09:24:30 +0000
-From: Yao Zi <ziyao@disroot.org>
-To: Andreas Schwab <schwab@suse.de>
-Cc: Troy Mitchell <troy.mitchell@linux.spacemit.com>,
-	Aurelien Jarno <aurelien@aurel32.net>, linux-kernel@vger.kernel.org,
-	Lee Jones <lee@kernel.org>, Sebastian Reichel <sre@kernel.org>,
-	Yixun Lan <dlan@gentoo.org>, Paul Walmsley <pjw@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
-	"open list:RISC-V ARCHITECTURE:Keyword:riscv" <linux-riscv@lists.infradead.org>,
-	"open list:RISC-V SPACEMIT SoC Support:Keyword:spacemit" <spacemit@lists.linux.dev>,
-	"open list:SYSTEM RESET/SHUTDOWN DRIVERS" <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v4 1/2] driver: reset: spacemit-p1: add driver for
- poweroff/reboot
-Message-ID: <aP86TltQ2uqeK6FY@pie>
-References: <20251026224424.1891541-1-aurelien@aurel32.net>
- <20251026224424.1891541-2-aurelien@aurel32.net>
- <A73D83A7055D782E+aP7lAdAk66slv6l7@kernel.org>
- <aP8QHwsYDlbQxQJo@pie>
- <mvmh5vk67in.fsf@suse.de>
+	s=arc-20240116; t=1761559842; c=relaxed/simple;
+	bh=hiJDwH+LPatRk7Ku+OO2NdwWiJWDonBHOwfSJZDm210=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
+	 Content-Type:References; b=I0wNv53PBfAeiT2VEDk/79gpKaEE0b3GEjalm4Iw1yvXIBipJa85tUGeNOPN4juPU6JwxgGeDQI17bEUzl1QDWZd1QOTlNGivxpwvSr5kRWOh2f8MjrjM+e1JMxTOTh+e8AIIFOrMj41iYrsuxK3xkoMo6Uf8A8fYKAC1UVWuKM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=axWEOmC7; arc=none smtp.client-ip=210.118.77.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20251027101037euoutp02677c91cbebc3993ebfe3ba5d069c23b5~yUVbfxs7a0664506645euoutp02f
+	for <linux-pm@vger.kernel.org>; Mon, 27 Oct 2025 10:10:37 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20251027101037euoutp02677c91cbebc3993ebfe3ba5d069c23b5~yUVbfxs7a0664506645euoutp02f
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1761559837;
+	bh=kjtZ46mKxcAZEjgPl9ePNwMP7oO67THVIgGEnXxmoM0=;
+	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+	b=axWEOmC70gHOm39hC8GP/zReg8axV9+eFQ3HLmdgPYoPsiA40d+0NIlGnp4QKJblz
+	 WGYHy07IL7qlunLGseqzDclzoTe02QvUhIjrs8R2qg39b1S3YjoN5KAltZ9p2U83GX
+	 Hu7QSQZ8cGtu/bBHGyWBZ5r49lU2x2EjKGK6SQ6U=
+Received: from eusmtip2.samsung.com (unknown [203.254.199.222]) by
+	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+	20251027101037eucas1p2dedce2e04e84192fc3dacdcbb40b3f66~yUVa488jc3237932379eucas1p2O;
+	Mon, 27 Oct 2025 10:10:37 +0000 (GMT)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+	eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+	20251027101036eusmtip2de8b59ef890511949d68a84de3fee204~yUVaWyEkV2011620116eusmtip2h;
+	Mon, 27 Oct 2025 10:10:36 +0000 (GMT)
+Message-ID: <deeeba6b-af85-44ad-ad78-efa7e923621a@samsung.com>
+Date: Mon, 27 Oct 2025 11:10:36 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <mvmh5vk67in.fsf@suse.de>
+User-Agent: Betterbird (Windows)
+Subject: Re: [PATCH] pmdomain: samsung: Rework legacy splash-screen handover
+ workaround
+To: Krzysztof Kozlowski <krzk@kernel.org>, linux-pm@vger.kernel.org,
+	linux-samsung-soc@vger.kernel.org
+Cc: Ulf Hansson <ulf.hansson@linaro.org>, Alim Akhtar
+	<alim.akhtar@samsung.com>, =?UTF-8?Q?Andr=C3=A9_Draszik?=
+	<andre.draszik@linaro.org>, Peter Griffin <peter.griffin@linaro.org>
+Content-Language: en-US
+From: Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <cf9bc771-78a0-4439-a913-dfb8bd62c46c@kernel.org>
+Content-Transfer-Encoding: 8bit
+X-CMS-MailID: 20251027101037eucas1p2dedce2e04e84192fc3dacdcbb40b3f66
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20251024093617eucas1p2a84deaa88e39692fd4933d14684aaeb9
+X-EPHeader: CA
+X-CMS-RootMailID: 20251024093617eucas1p2a84deaa88e39692fd4933d14684aaeb9
+References: <CGME20251024093617eucas1p2a84deaa88e39692fd4933d14684aaeb9@eucas1p2.samsung.com>
+	<20251024093603.3484783-1-m.szyprowski@samsung.com>
+	<cf9bc771-78a0-4439-a913-dfb8bd62c46c@kernel.org>
 
-On Mon, Oct 27, 2025 at 10:03:44AM +0100, Andreas Schwab wrote:
-> On Okt 27 2025, Yao Zi wrote:
-> 
-> > On Mon, Oct 27, 2025 at 11:20:33AM +0800, Troy Mitchell wrote:
-> >> On Sun, Oct 26, 2025 at 11:41:14PM +0100, Aurelien Jarno wrote:
-> >> > This driver implements poweroff/reboot support for the SpacemiT P1 PMIC
-> >> > chip, which is commonly paired with the SpacemiT K1 SoC.
-> >> > 
-> >> > The SpacemiT P1 support is implemented as a MFD driver, so the access is
-> >> > done directly through the regmap interface. Reboot or poweroff is
-> >> > triggered by setting a specific bit in a control register, which is
-> >> > automatically cleared by the hardware afterwards.
-> >> > 
-> >> > Signed-off-by: Aurelien Jarno <aurelien@aurel32.net>
-> >> > ---
-> >> > v2:
-> >> >  - Replace the "select" by a "depends on"
-> >> >  - Remove outdated Reviewed-by
-> >> > 
-> >> >  drivers/power/reset/Kconfig              |  9 +++
-> >> >  drivers/power/reset/Makefile             |  1 +
-> >> >  drivers/power/reset/spacemit-p1-reboot.c | 88 ++++++++++++++++++++++++
-> >> >  3 files changed, 98 insertions(+)
-> >> >  create mode 100644 drivers/power/reset/spacemit-p1-reboot.c
-> >> > 
-> >> > diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
-> >> > index 8248895ca9038..61c16f3d5abc7 100644
-> >> > --- a/drivers/power/reset/Kconfig
-> >> > +++ b/drivers/power/reset/Kconfig
-> >> > @@ -283,6 +283,15 @@ config POWER_RESET_KEYSTONE
-> >> >  	help
-> >> >  	  Reboot support for the KEYSTONE SoCs.
-> >> >  
-> >> > +config POWER_RESET_SPACEMIT_P1
-> >> > +	tristate "SpacemiT P1 poweroff and reset driver"
-> >> > +	depends on ARCH_SPACEMIT || COMPILE_TEST
-> >> > +	depends on MFD_SPACEMIT_P1
-> >> > +	default m
-> >> default m if ARCH_SPACEMIT? Or default ARCH_SPACEMIT?
-> >> I believe that reboot and shutdown are actually essential functionalities,
-> >> so it might make more sense: default ARCH_SPACEMIT?
-> >
-> > I don't think there's anything preventing it to be built as module by
-> > default: even though it's "essential", it's unnecessary during kernel
-> > and userspace startup, thus I see no reason to build it in the image.
-> 
-> Wouldn't it be needed in a reboot-on-panic situation?
+On 24.10.2025 13:21, Krzysztof Kozlowski wrote:
+> On 24/10/2025 11:36, Marek Szyprowski wrote:
+>> Limit the workaround for splash-screen handover handling to the affected
+>> power domains in legacy ARM 32bit systems and replace forcing a
+>> sync_state by explicite power domain shutdown. This approach lets
+>> compiler to optimize it out on newer ARM 64bit systems.
+>>
+>> Suggested-by: Ulf Hansson <ulf.hansson@linaro.org>
+>> Fixes: 0745658aebbe ("pmdomain: samsung: Fix splash-screen handover by enforcing a sync_state")
+>> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
+>> ---
+>>   drivers/pmdomain/samsung/exynos-pm-domains.c | 19 ++++++++++---------
+>>   1 file changed, 10 insertions(+), 9 deletions(-)
+>>
+>> diff --git a/drivers/pmdomain/samsung/exynos-pm-domains.c b/drivers/pmdomain/samsung/exynos-pm-domains.c
+>> index f53e1bd24798..8e7ac1ab0780 100644
+>> --- a/drivers/pmdomain/samsung/exynos-pm-domains.c
+>> +++ b/drivers/pmdomain/samsung/exynos-pm-domains.c
+>> @@ -128,6 +128,16 @@ static int exynos_pd_probe(struct platform_device *pdev)
+>>   	pd->pd.power_on = exynos_pd_power_on;
+>>   	pd->local_pwr_cfg = pm_domain_cfg->local_pwr_cfg;
+>>   
+>> +	/*
+>> +	 * Some Samsung platforms with bootloaders turning on the splash-screen
+>> +	 * and handing it over to the kernel, requires the power-domains to be
+>> +	 * reset during boot.
+>> +	 */
+>> +	if (IS_ENABLED(CONFIG_ARM) &&
+>> +	    of_device_is_compatible(np, "samsung,exynos4210-pd") &&
+>> +	    (strstr(pd->pd.name, "LCD") || strstr(pd->pd.name, "DISP")))
+>
+> I thought you folks speak theoretically to point which power domains are
+> relevant here, not for real relying on labels. Labels are not an ABI,
+> these are user informative strings. If you wanted them to be ABI, then
+> the values would have to be documented.... and then they wouldn't be
+> user informative strings :/
 
-Oops, yeah, I missed this stuff. Seems systemd automatic boot assessment
-could switch to another boot option if one fails to boot. And if it's
-caused by a (very early) kernel panic, then reboot support does play a
-part here.
+Frankly speaking... we can drop label checks and simply always turn off 
+all the 'exynos4210-pd'-style domains and it will just work. I've just 
+tested that to be sure.
 
-So my statement, maybe as well as the module's default value, should be
-re-evaluated. Yixun, Emil, what do you think about it?
+If this sounds like a bit rude hack, then we can use 
+GENPD_FLAG_NO_STAY_ON workaround (like Rockchip and Renesas).
 
-Best regards,
-Yao Zi
+> If these were different devices, we would need front compatibles, but
+> since this is purely a bootloader stage, then we need a property for
+> that. Something like regulator-boot-on.
 
-> -- 
-> Andreas Schwab, SUSE Labs, schwab@suse.de
-> GPG Key fingerprint = 0196 BAD8 1CE9 1970 F4BE  1748 E4D4 88E3 0EEA B9D7
-> "And now for something completely different."
-> 
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+Just to clarify - this splash screen issue has not much with power 
+domain driver itself, but a side-effect of old genpd behavior has hidden 
+this issue deep enough that it was ignored for years.
+
+I think that it is now too late to add anything to the protocol between 
+the bootloader and kernel to pass the information about splash-screen, 
+so easiest way is to stick to old approach.
+
+Best regards
+-- 
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
+
 
