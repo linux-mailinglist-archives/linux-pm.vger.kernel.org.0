@@ -1,98 +1,76 @@
-Return-Path: <linux-pm+bounces-36870-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36871-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE670C0BD14
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Oct 2025 06:27:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2DCC4C0BE25
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Oct 2025 07:01:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F32B41885F80
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Oct 2025 05:28:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AD3713BC357
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Oct 2025 06:01:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 318592C08DA;
-	Mon, 27 Oct 2025 05:27:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6CCD2D94BE;
+	Mon, 27 Oct 2025 06:01:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="BgtQPv99"
+	dkim=pass (2048-bit key) header.d=aurel32.net header.i=@aurel32.net header.b="ToPggUCo"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from hall.aurel32.net (hall.aurel32.net [195.154.113.88])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 902EC219A67
-	for <linux-pm@vger.kernel.org>; Mon, 27 Oct 2025 05:27:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D114C236454;
+	Mon, 27 Oct 2025 06:01:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.154.113.88
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761542863; cv=none; b=Z50/ueRMhgoI/jetrIbwSB4SdOAuKQE6qGRZDnwMUj5PDh9xGpeUTQNpHobKh3GN7AIrsFVW2Dp9l9MGM3Vc0bIkuSE7u1mJNigtk2ZS9vK779KpM9mXp9PTVRoDU6grFjn8WiNcbDFLLMk5zegbKnk4+9F4tBbdTtdJvGabhOQ=
+	t=1761544890; cv=none; b=rv9tC+n7qvNHkms8GwXwf1WlP5RNA3p5S3kee0bTXkg5kgyrbyKkI4Nmjp6vGtyIBPMU/z7obInsYPv4ev6aO2K0v9QouK+YPqtRNJYIwaje37Xm+YVTxrKwHYs6A6eXeLX8FASTL9qT1A6lVZZxI5rA6YorVpxlqik993ogHtE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761542863; c=relaxed/simple;
-	bh=qh79cjfHvrOLCxvcq4oI/lS6q5OmL9Fn6ODduBM4yG8=;
+	s=arc-20240116; t=1761544890; c=relaxed/simple;
+	bh=/uSTh9jnNHxZr8l0AmC9H14h3So3FspudvBB4vT9/A0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Vxopun2zHmbJKvyCa0ERto+h7FNPH0KbSXqeOJ0hT8vvdVaukd/qCRe4+T2ZoyZuPq/BcOs7w2LnN07h4GPJ1yot/Bx4ObVyJKN+ftpkmM4/LFr7ye1xkPVLP8qm3ZJ7em38iFsiOdCH3cpWP0uuP7prVRrWdKxGYHaP5dsJ1c4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=BgtQPv99; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-47117f92e32so37379245e9.1
-        for <linux-pm@vger.kernel.org>; Sun, 26 Oct 2025 22:27:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1761542859; x=1762147659; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=sMQm/qKPeH1g9CIR6f10NMelAH+jy5bqtx5lzdYvSPI=;
-        b=BgtQPv991ykr+JyI16mc3aazZKz2nKl6PYyuef43uLMaE9Lcyrf+UABekbyHVgC7f5
-         H0lwbIbmFVFp/s4rGvsSOqeFSftOIlbzlLmpQRZurbiYMW2nBMawSBIVf84QV0IW4FVI
-         C/IPOxPeG5VGoL4KPUp6EHkINw2cOCGTB+vT0DG+fhh1oSVGrAVIq/cvqJwWeTvSc6o3
-         zySvJcNWYa1D7S6xnvfR7UZ1MWCr/2xB6UODCDHdBdLx5ynu+i0tpKuu9KZBhGuGv4hl
-         uwdVR7BMMXuI3+cbDwTxS0ml/w42LF8meAZuIVu0wFmTTUajmOi9Lc98fN8G9glhuKBJ
-         S8Dg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761542859; x=1762147659;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sMQm/qKPeH1g9CIR6f10NMelAH+jy5bqtx5lzdYvSPI=;
-        b=UHtp0HtA5QGIUwtDVKsxqVNYLaVSVMENtOprQ0rE5oEYf1BolDyxBDBYaNw8hHJpaZ
-         nQ9JWa7QSDFE//oAOZ9vR2lezTJCl5NiCKJGsYkIUftKodPbIbXZtvCDOlhQ+r1YwPYQ
-         Z0jtrmZTazGYrqSqaIH/uoOyTovhy+d92W95BJkmzNOshLJIZLgxb9A704QT+wYZuXS4
-         akqUIddEkGF24JzXfa1XSBndzglscWs5jeO/qmGAjkVV1I2GeRbZGH4wmNLcaEuTY/8d
-         HME6OVNj4/Ge8Up9D19vlVhhtEKghugZjAkCNwD4Af1Gc/Ju6eEdtTje76YgD4pfUuN5
-         IVTA==
-X-Forwarded-Encrypted: i=1; AJvYcCUm6n/4uu22pTBYF870DsKthmfrN9qmWXrLcy2INlaUHwyd1BUaKXT9+W2I6kOLDhHtFnY7O5O71w==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzTixHSb9iSBkevMMSEW2U4tRR+SKZHkyJqMQjw98Zer6zEuKpI
-	jC5/Tel0gQzq0M76y8O+8pUt/vPt1cF+QlS0PBy4iGsOJ/KJLQ32+BxwLpuIj3xv1jk=
-X-Gm-Gg: ASbGnctOyJQrlv15wbI4vo4bF2MlcchNogLPda7SviQl8lkkdzBYr5jg6vbEBn/5aGV
-	1gleCC9ffVwpdRkQ3tCGa4TglnDlJLdneiMME1qL5sEL+xlAbnr/p1+6TdtdDXycLDR0mvEPlbP
-	WXbSkCVLQ7Ww9RROPzANqH+gtzraTuKczF7y8ucNviXUnGPNVk4/iBNHLM8SiI4Qay3ECPIMvdU
-	+VCdVahcEMZakDGHXRJZ20KtG4pfE6iSRgEqt50BvHZHOtwOb3J4hhd8PE3REhLltv/0Z0uuXu9
-	qvUXEXNudZu0/c0+ViY8cKBgdYHEB+hI3pocvFnM7kBaTBkmz9CQhCDpw+WBPeOs4JXS3AeAGh/
-	UWvnPY+tm0mEM3IRK3qK3hpHkyFZU+lJrUoEDehfZKflE+JexdpEPW/elIUIAOh/l3rk4HbO3cQ
-	xUYLAWLeCYV+lLDL3EgfmjLbmLi08=
-X-Google-Smtp-Source: AGHT+IGGMWIW5dTfslm/6ukE4iyqbFwa7B8xtQ/z5FIOwZZue/OCt475nBYcheMy53fO8smuBJDifQ==
-X-Received: by 2002:a05:6000:2c0b:b0:427:84a:6dc9 with SMTP id ffacd0b85a97d-427084a6ff0mr24497662f8f.59.1761542858724;
-        Sun, 26 Oct 2025 22:27:38 -0700 (PDT)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-429952b7b43sm12237102f8f.6.2025.10.26.22.27.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Oct 2025 22:27:38 -0700 (PDT)
-Date: Mon, 27 Oct 2025 08:27:34 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: ally heev <allyheev@gmail.com>
-Cc: Dwaipayan Ray <dwaipayanray1@gmail.com>,
-	Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-	Joe Perches <joe@perches.com>, Jonathan Corbet <corbet@lwn.net>,
-	Andy Whitcroft <apw@canonical.com>, workflows@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	David Hunter <david.hunter.linux@gmail.com>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	linux-pm <linux-pm@vger.kernel.org>, dan.j.williams@intel.com
-Subject: Re: [PATCH v2 2/2] add check for pointers with __free attribute
- initialized to NULL
-Message-ID: <aP8CxkXYAitKB3vx@stanley.mountain>
-References: <20251024-aheev-checkpatch-uninitialized-free-v2-0-16c0900e8130@gmail.com>
- <20251024-aheev-checkpatch-uninitialized-free-v2-2-16c0900e8130@gmail.com>
- <aPvAm1E7CvQfOIuS@stanley.mountain>
- <81e6af8eea5b0399d1685797d0ea6a6ebc273270.camel@gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=aCQft3jH5XOZ7htdBUdnHBrBuK8ZBcOwZhDJdqWHIqc1p6EyAwNyZ9ZOLzydSmElxYadM7ynbbClkFYXdGS7BchovcOYWJ1xxk4wx829a+7ql8hLjRdGT64LHpwgwDlBx6DPt1krPQpS29tDgLOwKlXiBbRelIKuSiN25mCY4kg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=aurel32.net; spf=pass smtp.mailfrom=aurel32.net; dkim=pass (2048-bit key) header.d=aurel32.net header.i=@aurel32.net header.b=ToPggUCo; arc=none smtp.client-ip=195.154.113.88
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=aurel32.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aurel32.net
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=aurel32.net
+	; s=202004.hall; h=In-Reply-To:Content-Type:MIME-Version:References:
+	Message-ID:Subject:Cc:To:From:Date:Content-Transfer-Encoding:From:Reply-To:
+	Subject:Content-ID:Content-Description:X-Debbugs-Cc;
+	bh=gaYFdwY891p4uuTCbTw+bn5GIMXkeSKRlnDMN0uMIbE=; b=ToPggUCoz7Enp03xT9VVYhZwRd
+	DctaY9+fMIm0Jilb2UDw/quz1ygSP/8HF+mp9o8kCfX8GX1P/HTMDJ+UpjisBVIgPVJOnSadvCuHB
+	UL3bnQ2YIRWTEkCMge+FLHnEQKvv9gFbm+LYbTRCMSuv32HoiFd3vzE8GjbNWcugqcmecS6zeIloH
+	ZthKdMOBOov2OM7RJ72b1v42dUjzCi/DFXdTlB6GCrIO1XAHFUdHQF2yBsolPJrvuFyg/Mrl/gQT4
+	TLemeuJIuny0dJy+hfn+UsWXm45JNlpcaYlBa50wuqRbHD8C5xScwBeP3bG6LSnI7zVVac5nYK7ZX
+	bWQY/v5Q==;
+Received: from [2a01:e34:ec5d:a741:1ee1:92ff:feb4:5ec0] (helo=ohm.rr44.fr)
+	by hall.aurel32.net with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <aurelien@aurel32.net>)
+	id 1vDGI5-006Wiq-2q;
+	Mon, 27 Oct 2025 07:01:13 +0100
+Date: Mon, 27 Oct 2025 07:01:13 +0100
+From: Aurelien Jarno <aurelien@aurel32.net>
+To: Troy Mitchell <troy.mitchell@linux.spacemit.com>
+Cc: linux-kernel@vger.kernel.org, Lee Jones <lee@kernel.org>,
+	Sebastian Reichel <sre@kernel.org>, Yixun Lan <dlan@gentoo.org>,
+	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+	"open list:RISC-V ARCHITECTURE:Keyword:riscv" <linux-riscv@lists.infradead.org>,
+	"open list:RISC-V SPACEMIT SoC Support:Keyword:spacemit" <spacemit@lists.linux.dev>,
+	"open list:SYSTEM RESET/SHUTDOWN DRIVERS" <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v4 1/2] driver: reset: spacemit-p1: add driver for
+ poweroff/reboot
+Message-ID: <aP8KqZ1hlqfQVPii@aurel32.net>
+Mail-Followup-To: Troy Mitchell <troy.mitchell@linux.spacemit.com>,
+	linux-kernel@vger.kernel.org, Lee Jones <lee@kernel.org>,
+	Sebastian Reichel <sre@kernel.org>, Yixun Lan <dlan@gentoo.org>,
+	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+	"open list:RISC-V ARCHITECTURE:Keyword:riscv" <linux-riscv@lists.infradead.org>,
+	"open list:RISC-V SPACEMIT SoC Support:Keyword:spacemit" <spacemit@lists.linux.dev>,
+	"open list:SYSTEM RESET/SHUTDOWN DRIVERS" <linux-pm@vger.kernel.org>
+References: <20251026224424.1891541-1-aurelien@aurel32.net>
+ <20251026224424.1891541-2-aurelien@aurel32.net>
+ <A73D83A7055D782E+aP7lAdAk66slv6l7@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -101,50 +79,63 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <81e6af8eea5b0399d1685797d0ea6a6ebc273270.camel@gmail.com>
+In-Reply-To: <A73D83A7055D782E+aP7lAdAk66slv6l7@kernel.org>
+User-Agent: Mutt/2.2.13 (2024-03-09)
 
-On Sat, Oct 25, 2025 at 11:53:56AM +0530, ally heev wrote:
-> On Fri, 2025-10-24 at 21:08 +0300, Dan Carpenter wrote:
-> > On Fri, Oct 24, 2025 at 10:59:16PM +0530, Ally Heev wrote:
-> > > pointers with __free attribute initialized to NULL
-> > > pose potential cleanup issues [1] when a function uses
-> > > interdependent variables with cleanup attributes
-> > > 
-> > > Link: https://docs.kernel.org/core-api/cleanup.html [1]
-> > > Link: https://lore.kernel.org/all/68f7b830ec21a_10e910070@dwillia2-mobl4.notmuch/
-> > > Suggested-by: Dan Williams <dan.j.williams@intel.com>
-> > > Signed-off-by: Ally Heev <allyheev@gmail.com>
-> > > ---
+On 2025-10-27 11:20, Troy Mitchell wrote:
+> On Sun, Oct 26, 2025 at 11:41:14PM +0100, Aurelien Jarno wrote:
+> > This driver implements poweroff/reboot support for the SpacemiT P1 PMIC
+> > chip, which is commonly paired with the SpacemiT K1 SoC.
 > > 
-> > I don't think this patch is a good idea...  There are two issues to
-> > consider 1) The absolute number over warnings.  500+ is too high.
-> > 2) The ratio of bugs to false positives and we don't have any data on
-> > that but I bet it's low.  It needs to be at least 5%.  For anything
-> > lower than that, you're better off just reviewing code at random
-> > instead of looking through warnings.
+> > The SpacemiT P1 support is implemented as a MFD driver, so the access is
+> > done directly through the regmap interface. Reboot or poweroff is
+> > triggered by setting a specific bit in a control register, which is
+> > automatically cleared by the hardware afterwards.
 > > 
-> > regards,
-> > dan carpenter
-> 
-> makes sense
-> 
-> General question about the process for my understanding:
-> Is checkpatch run on full tree by CI or someone and results reported
-> regularly ?
+> > Signed-off-by: Aurelien Jarno <aurelien@aurel32.net>
+> > ---
+> > v2:
+> >  - Replace the "select" by a "depends on"
+> >  - Remove outdated Reviewed-by
+> > 
+> >  drivers/power/reset/Kconfig              |  9 +++
+> >  drivers/power/reset/Makefile             |  1 +
+> >  drivers/power/reset/spacemit-p1-reboot.c | 88 ++++++++++++++++++++++++
+> >  3 files changed, 98 insertions(+)
+> >  create mode 100644 drivers/power/reset/spacemit-p1-reboot.c
+> > 
+> > diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
+> > index 8248895ca9038..61c16f3d5abc7 100644
+> > --- a/drivers/power/reset/Kconfig
+> > +++ b/drivers/power/reset/Kconfig
+> > @@ -283,6 +283,15 @@ config POWER_RESET_KEYSTONE
+> >  	help
+> >  	  Reboot support for the KEYSTONE SoCs.
+> >  
+> > +config POWER_RESET_SPACEMIT_P1
+> > +	tristate "SpacemiT P1 poweroff and reset driver"
+> > +	depends on ARCH_SPACEMIT || COMPILE_TEST
+> > +	depends on MFD_SPACEMIT_P1
+> > +	default m
+> default m if ARCH_SPACEMIT?
 
-Newbies run it regularly.  Otherwise it gets run on subsystem CIs and
-the zero-day bot runs it on new patches but it will report the old
-warnings as well under the "Old warnings" section.
+As explained here, this is equivalent:
+https://lore.kernel.org/spacemit/CAJM55Z_BzfRo5aKf2VrneTymSizwDQq6OfMK_LNgyoGjp43K8Q@mail.gmail.com/
 
-> My understanding was that we would run it only on patches
-> before submitting them Or we just run it on full tree before adding
-> new checks to understand if they are catching real issues
+But I can make a v5 to change that, if it's the preferred form on the 
+SpacemiT side.
 
-Eventually someone will look at all the warnings.  And probably it's
-going to be a newbie and so we need to be careful with warning where
-newbies might introduce bugs with their changes.
+> Or default ARCH_SPACEMIT?
+> I believe that reboot and shutdown are actually essential functionalities,
+> so it might make more sense: default ARCH_SPACEMIT?
 
-regards,
-dan carpenter
+That was already changed in v3, following a request on v2:
+https://lore.kernel.org/spacemit/CANBLGczi3GeaC4aWECV8NS-zqSHgRa-5onynz9fGsZeN8qgysg@mail.gmail.com/
 
+Regards
+Aurelien
+
+-- 
+Aurelien Jarno                          GPG: 4096R/1DDD8C9B
+aurelien@aurel32.net                     http://aurel32.net
 
