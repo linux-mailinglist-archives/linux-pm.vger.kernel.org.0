@@ -1,185 +1,191 @@
-Return-Path: <linux-pm+bounces-36877-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36878-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 055D0C0C610
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Oct 2025 09:45:10 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 07D1FC0C93B
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Oct 2025 10:13:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 96851188B07D
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Oct 2025 08:43:49 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 7E0BE4F3A99
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Oct 2025 09:06:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2F6A2F2617;
-	Mon, 27 Oct 2025 08:42:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F28992F12A0;
+	Mon, 27 Oct 2025 09:03:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Bh7j9kBF"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="LA/mC7Gv";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="xwiKYER+";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="LA/mC7Gv";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="xwiKYER+"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DD392EE5FC
-	for <linux-pm@vger.kernel.org>; Mon, 27 Oct 2025 08:42:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B06C2FB967
+	for <linux-pm@vger.kernel.org>; Mon, 27 Oct 2025 09:03:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761554552; cv=none; b=LhJ+tlF10S7UIxi4b858IhlyPVHkkuKXFuvLQz7F/p5+M4zU4U8ZE09iCEyW9cpZtlpDECD4qZD5K5XZImfGltD7iR5ZCnjJkRWZzIfLMt2JfA+1DPirljtnG0nlKGX+cc2d+D+5Bpd8tXp/Ks/rfwii/6VSj0451gzCXVj9Lfo=
+	t=1761555827; cv=none; b=tHEv+5PAIFsholmHA3x4NJYnSW5ER9M8oX9TBkLhr8rg/42TgXgoZlzYa0GUP8peH36esYTFMhAv8A+v7MWHflN0KMdZoT4mMeqnLc3cCpIVJIISwaHe6tickD5oQJ7U2XvNG/bKh2gezFU+dxPHIbl/OzjKGmoED8GYhrpLcHs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761554552; c=relaxed/simple;
-	bh=UG8pE67BLGZgv3QifxWbYYEqvT3PKB5usDKrFSSOST8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=P4BJfC8oQM2DxJRbqPYLBPZ8C1OfGLrGR8xEW4FPqGvjGCsaL4N/YSnH9V4Cix2JHfkMRZL7/Z23YD83SxhMF5EiVUJGiutHWNXJglf2EP8g1feYvSV2j+x1EtuEuTp1MPLn47bkNXWzK/wSt7qVO9aJUvtS3B6y95HikaC50IU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Bh7j9kBF; arc=none smtp.client-ip=209.85.218.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-b3e9d633b78so994105866b.1
-        for <linux-pm@vger.kernel.org>; Mon, 27 Oct 2025 01:42:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761554549; x=1762159349; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iFlBtrits7DNlZ6h+mgbiMIVvWdiVqZSUXzsme0rVO8=;
-        b=Bh7j9kBFU1CekGtkw8gUdc6g4MwHmMZziwIOcuJR6f393+1syomtldv/ri0gdo75qo
-         CLZz4aNDjBZuK6NhDNOevGVN5naelzt/GG0D5f2NGqcJx4Y9Cf/TjX4cC4Up/PT2/55z
-         gf7vAitFMDtEjr7FDLlTmzm6qYsEzLZ5tNuyO3qiKPfe3z1dxrFDJ2YpZFZSiP3gItVT
-         2qR0YO4NR59xVacMBK27K7kH/ipyUY1oOpZ4M1OS/UB0c4uvE05fy6FChIjA6pJlK+Ve
-         A0PK+MQP6ha0nXImmmd7oYDUZRXQt2q5OuPGOSIP08Ycmg7gya5we6gYQHWWypBuNxY6
-         S8iw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761554549; x=1762159349;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iFlBtrits7DNlZ6h+mgbiMIVvWdiVqZSUXzsme0rVO8=;
-        b=WO5tidKJXaPUHa3Z5p4ROPc9SyZVOFGYVtO5+dHDkJJi11IkZYGVBJUDcP61wyVt3W
-         zMsr7f48+wBgCyMjYcHAxL9MDpGsNBrlCOkSNc2YBh4PHikfp/1bswfYxicpld1szzeU
-         MmF165sNMSqGR6NZRR3zg6n682/zFhUa66UINJf2XGfgBWQbVwU7IA2+EDcyGzqzWoNn
-         oV5kSrYG7Ae+/+lZyH6mfMOPtIsaAkYXjTQPPS7Amd3/bUW60B8MiHZ9IZecoxaITHmN
-         1mTOcC6XkPW64xzvKJCqlCBUpl3lYvtQ8HGCVB4ak+B79bpJpaAyHsf92IsFZohmfgX+
-         QZjA==
-X-Forwarded-Encrypted: i=1; AJvYcCXWhgfqdGlBGgb8LFA6igTKYRqoMlNdSrjltP31SfIRBD9xBJARklS2Yuv1x7UwrJ2337TEmmapMg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzOXIcT7DbCtBYgcx6FjyhN4V1pooB/8FaJxN0xN5Fpl8JF0zwI
-	U+OVs6Or29sLJtH1tnKJ9bK59lEeBzq+EWxqqGK3AYcdQl6LrbrBZegK
-X-Gm-Gg: ASbGncsEgVSS2I+XXwRiYuIuugb1ZbvWUGK5ykZVD5HtQIBQ6z2hCgMbvns7TBIe+8y
-	V0z9OllnowIxrJYx3jtXBsP8naidHSupNkCExYNgPIzfUocb59l6pxG2w4puX0IXgVj/SgfbQYy
-	WaYC6hSKSFiPAJp5VmQuPLUZ+uFhQEEOK3SOuafLuJUKuV/5qsVzFYOj001XVR5lDN65rS9yUOB
-	SLQ4xmH7KvjXUHGzuTZF0l4CXTjOIiIOgrdclMjYn4j5ZrOHT3vLDzmuHGQUpVbEMfrsw2iry/5
-	UV6u6pDFAfcnjM4cpaL2/dTcvNj7iFmcYQH/dV043wRgze6QIBCdFLqTukBG6gBiGqDSTywv37C
-	ucJw5bfdV5x0sKUAMFgbq6/FWyv1vEbRuUUg/Yyao+gQN9g1Lw5XS3Xk8Tk/+BhUuqP0wUsZq2T
-	Jd
-X-Google-Smtp-Source: AGHT+IHNDWdV6nOLEUPb8BsKdy1fTa79zHhvllKqWIEzW+JrO9Bj5NMu8vYte0D/T+VD4YYNH0vo+A==
-X-Received: by 2002:a17:907:1c85:b0:b64:6cc7:6ac7 with SMTP id a640c23a62f3a-b6d6bb9083emr1215693866b.22.1761554548711;
-        Mon, 27 Oct 2025 01:42:28 -0700 (PDT)
-Received: from localhost ([212.73.77.104])
-        by smtp.gmail.com with UTF8SMTPSA id a640c23a62f3a-b6d853696aesm704277666b.30.2025.10.27.01.42.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Oct 2025 01:42:28 -0700 (PDT)
-From: Askar Safin <safinaskar@gmail.com>
-To: mpatocka@redhat.com
-Cc: Dell.Client.Kernel@dell.com,
-	brauner@kernel.org,
-	dm-devel@lists.linux.dev,
-	ebiggers@kernel.org,
-	kix@kix.es,
-	linux-block@vger.kernel.org,
-	linux-btrfs@vger.kernel.org,
-	linux-crypto@vger.kernel.org,
-	linux-lvm@lists.linux.dev,
-	linux-mm@kvack.org,
-	linux-pm@vger.kernel.org,
-	linux-raid@vger.kernel.org,
-	lvm-devel@lists.linux.dev,
-	milan@mazyland.cz,
-	mzxreary@0pointer.de,
-	nphamcs@gmail.com,
-	pavel@ucw.cz,
-	rafael@kernel.org,
-	ryncsn@gmail.com,
-	safinaskar@gmail.com,
-	torvalds@linux-foundation.org
-Subject: Re: [PATCH] pm-hibernate: flush block device cache when hibernating
-Date: Mon, 27 Oct 2025 11:42:20 +0300
-Message-ID: <20251027084220.2064289-1-safinaskar@gmail.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <03e58462-5045-e12f-9af6-be2aaf19f32c@redhat.com>
-References: <03e58462-5045-e12f-9af6-be2aaf19f32c@redhat.com>
+	s=arc-20240116; t=1761555827; c=relaxed/simple;
+	bh=vQPs3K6Ka4RKxdyvekcQUqD4Pn6qxfT7zetNE77Dp/w=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=pZayZIMHsvVYdvkGv8RPWLXo6bIN2pf1TOjOFsVLIHZkMG5DziS6gji6oJEVU0WRTduA7GE1JZqS+8Z6e5zC2xS+LI7LoJoqjsK2QBtbXi1DIQjpXWf06twFTuFZDZIOT/lYruis80RwqQd3vi31qTDyW8w6gVbn7/hOa+AScdU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=LA/mC7Gv; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=xwiKYER+; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=LA/mC7Gv; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=xwiKYER+; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from hawking.nue2.suse.org (unknown [IPv6:2a07:de40:a101:3:92b1:1cff:fe69:ddc])
+	by smtp-out2.suse.de (Postfix) with ESMTP id 411041F387;
+	Mon, 27 Oct 2025 09:03:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1761555824; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=dMBkmHj4Il5WIq7tDNPinD42JrN2hAdCrLiWHZU59ug=;
+	b=LA/mC7GvBSYag5NCN1zSBUpPzUZIZrpIP0cSg2PNRiMcYySavYblijSOy6uT1pCpQccP2y
+	AMpExBsBSqiwti/wph3D/5Q+tLEFv3DsshFY6CuprLJq/VgfgSISg4fgByDR4Zc5aFJnAt
+	OAaiGtEAwwU4iPNT41OaFyKu3ng+qBc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1761555824;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=dMBkmHj4Il5WIq7tDNPinD42JrN2hAdCrLiWHZU59ug=;
+	b=xwiKYER+J7hn7pFMSEntBZ6A3dku7r5fvF07Y4j0KGHkHL4z/Sg2MLPTOFvm05reGdMqmp
+	CHE++/6NcY3FFcAw==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b="LA/mC7Gv";
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=xwiKYER+
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1761555824; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=dMBkmHj4Il5WIq7tDNPinD42JrN2hAdCrLiWHZU59ug=;
+	b=LA/mC7GvBSYag5NCN1zSBUpPzUZIZrpIP0cSg2PNRiMcYySavYblijSOy6uT1pCpQccP2y
+	AMpExBsBSqiwti/wph3D/5Q+tLEFv3DsshFY6CuprLJq/VgfgSISg4fgByDR4Zc5aFJnAt
+	OAaiGtEAwwU4iPNT41OaFyKu3ng+qBc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1761555824;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=dMBkmHj4Il5WIq7tDNPinD42JrN2hAdCrLiWHZU59ug=;
+	b=xwiKYER+J7hn7pFMSEntBZ6A3dku7r5fvF07Y4j0KGHkHL4z/Sg2MLPTOFvm05reGdMqmp
+	CHE++/6NcY3FFcAw==
+Received: by hawking.nue2.suse.org (Postfix, from userid 17005)
+	id 2ECB84A05B4; Mon, 27 Oct 2025 10:03:44 +0100 (CET)
+From: Andreas Schwab <schwab@suse.de>
+To: Yao Zi <ziyao@disroot.org>
+Cc: Troy Mitchell <troy.mitchell@linux.spacemit.com>,  Aurelien Jarno
+ <aurelien@aurel32.net>,  linux-kernel@vger.kernel.org,  Lee Jones
+ <lee@kernel.org>,  Sebastian Reichel <sre@kernel.org>,  Yixun Lan
+ <dlan@gentoo.org>,  Paul Walmsley <pjw@kernel.org>,  Palmer Dabbelt
+ <palmer@dabbelt.com>,  Albert Ou <aou@eecs.berkeley.edu>,  Alexandre Ghiti
+ <alex@ghiti.fr>,  "open list:RISC-V ARCHITECTURE:Keyword:riscv"
+ <linux-riscv@lists.infradead.org>,  "open list:RISC-V SPACEMIT SoC
+ Support:Keyword:spacemit" <spacemit@lists.linux.dev>,  "open list:SYSTEM
+ RESET/SHUTDOWN DRIVERS" <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v4 1/2] driver: reset: spacemit-p1: add driver for
+ poweroff/reboot
+In-Reply-To: <aP8QHwsYDlbQxQJo@pie> (Yao Zi's message of "Mon, 27 Oct 2025
+	06:24:31 +0000")
+References: <20251026224424.1891541-1-aurelien@aurel32.net>
+	<20251026224424.1891541-2-aurelien@aurel32.net>
+	<A73D83A7055D782E+aP7lAdAk66slv6l7@kernel.org> <aP8QHwsYDlbQxQJo@pie>
+Date: Mon, 27 Oct 2025 10:03:44 +0100
+Message-ID: <mvmh5vk67in.fsf@suse.de>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Rspamd-Queue-Id: 411041F387
+X-Rspamd-Action: no action
+X-Spam-Flag: NO
+X-Spam-Score: 2.59
+X-Spam-Level: **
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Spamd-Result: default: False [2.59 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	HFILTER_HOSTNAME_UNKNOWN(2.50)[];
+	RDNS_NONE(2.00)[];
+	ONCE_RECEIVED(1.20)[];
+	HFILTER_HELO_IP_A(1.00)[hawking.nue2.suse.org];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	HFILTER_HELO_NORES_A_OR_MX(0.30)[hawking.nue2.suse.org];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-0.996];
+	RCVD_NO_TLS_LAST(0.10)[];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	RCPT_COUNT_TWELVE(0.00)[14];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	DIRECT_TO_MX(0.00)[Gnus/5.13 (Gnus v5.13)];
+	DKIM_TRACE(0.00)[suse.de:+];
+	TO_DN_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	R_RATELIMIT(0.00)[from(RLajr16mudzow8bnf6sy)];
+	RCVD_COUNT_ONE(0.00)[1];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:email,suse.de:mid,suse.de:dkim]
+X-Spamd-Bar: ++
 
-Mikulas Patocka <mpatocka@redhat.com>:
-> Hi
-> 
-> Does this patch fix it?
-> 
-> Mikulas
-> 
-> 
-> From: Mikulas Patocka <mpatocka@redhat.com>
-> 
-> There was reported failure that hibernation doesn't work with 
-> dm-integrity. The reason for the failure is that the hibernation code 
-> doesn't issue the FLUSH bio - the data still sits in the dm-integrity 
-> cache and they are lost when poweroff happens.
+On Okt 27 2025, Yao Zi wrote:
 
-I tested this patch in Qemu on current master (43e9ad0c55a3). Also I
-applied Mario's patch
-https://lore.kernel.org/linux-pm/20251026033115.436448-1-superm1@kernel.org/ .
-It is needed, otherwise you get WARNING when you try to hibernate.
+> On Mon, Oct 27, 2025 at 11:20:33AM +0800, Troy Mitchell wrote:
+>> On Sun, Oct 26, 2025 at 11:41:14PM +0100, Aurelien Jarno wrote:
+>> > This driver implements poweroff/reboot support for the SpacemiT P1 PMIC
+>> > chip, which is commonly paired with the SpacemiT K1 SoC.
+>> > 
+>> > The SpacemiT P1 support is implemented as a MFD driver, so the access is
+>> > done directly through the regmap interface. Reboot or poweroff is
+>> > triggered by setting a specific bit in a control register, which is
+>> > automatically cleared by the hardware afterwards.
+>> > 
+>> > Signed-off-by: Aurelien Jarno <aurelien@aurel32.net>
+>> > ---
+>> > v2:
+>> >  - Replace the "select" by a "depends on"
+>> >  - Remove outdated Reviewed-by
+>> > 
+>> >  drivers/power/reset/Kconfig              |  9 +++
+>> >  drivers/power/reset/Makefile             |  1 +
+>> >  drivers/power/reset/spacemit-p1-reboot.c | 88 ++++++++++++++++++++++++
+>> >  3 files changed, 98 insertions(+)
+>> >  create mode 100644 drivers/power/reset/spacemit-p1-reboot.c
+>> > 
+>> > diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
+>> > index 8248895ca9038..61c16f3d5abc7 100644
+>> > --- a/drivers/power/reset/Kconfig
+>> > +++ b/drivers/power/reset/Kconfig
+>> > @@ -283,6 +283,15 @@ config POWER_RESET_KEYSTONE
+>> >  	help
+>> >  	  Reboot support for the KEYSTONE SoCs.
+>> >  
+>> > +config POWER_RESET_SPACEMIT_P1
+>> > +	tristate "SpacemiT P1 poweroff and reset driver"
+>> > +	depends on ARCH_SPACEMIT || COMPILE_TEST
+>> > +	depends on MFD_SPACEMIT_P1
+>> > +	default m
+>> default m if ARCH_SPACEMIT? Or default ARCH_SPACEMIT?
+>> I believe that reboot and shutdown are actually essential functionalities,
+>> so it might make more sense: default ARCH_SPACEMIT?
+>
+> I don't think there's anything preventing it to be built as module by
+> default: even though it's "essential", it's unnecessary during kernel
+> and userspace startup, thus I see no reason to build it in the image.
 
-The patch doesn't work.
-
-Here is script I used for reproduction:
-https://zerobin.net/?66669be7d2404586#xWufhCq7zCoOk3LJcJCj7W4k3vYT3U4vhGutTN3p8m0= .
-It is the same script as in previous letter. I just added some
-"integritysetup status /dev/mapper/..." calls.
-
-Here are results:
-https://zerobin.net/?2331637d633d20c5#EmyhxiHLDmoZT1jBVbe/q9iJKhDEw4n+Bwr5mAcaOpM= .
-
-File names mean the same as in previous letter, i. e.:
-
-> "log-def-1" is output of first Qemu invocation (i. e. first boot) with
-> default integritysetup options. "log-def-2" is second Qemu invocation
-> (i. e. when we try to resume).
-> 
-> log-bit-{1,2} is same thing, but with "--integrity-bitmap-mode" added to
-> "integritysetup format" and "integritysetup open".
-> 
-> log-no-{1,2} is same, but with "--integrity-no-journal".
-> 
-> log-nodm-{1,2} is same, but without dm-integrity at all, i. e. we create
-> swap directly on partition.
-
-Results are somewhat better than without the patch. Without the patch
-we don't even try to resume in default mode. "blkid" simply reports
-"swap" instead of "swsuspend". With patch "blkid" reports "swsuspend", and
-so we try to resume. But then in the middle of resuming we get this:
-
-[    1.008223] PM: Image loading progress:  70%
-[    1.017478] PM: Image loading progress:  80%
-[    1.027069] PM: Image loading progress:  90%
-[    1.029653] PM: hibernation: Read 36196 kbytes in 0.49 seconds (73.86 MB/s)
-[    1.030146] PM: Error -1 resuming
-[    1.030322] PM: hibernation: Failed to load image, recovering.
-
-(See link above for full logs.)
-
-Very similar thing happens in "--integrity-no-journal" mode in the middle of
-resuming:
-
-[    0.531245] device-mapper: integrity: dm-0: Checksum failed at sector 0x6e70
-[    0.531600] PM: Error -84 resuming
-[    0.531799] PM: hibernation: Failed to load image, recovering.
-
-The patch doesn't change anything in "--integrity-bitmap-mode" mode:
-we still are able to resume, but then get integrity errors when we do
-"cat /dev/mapper/swap > /dev/null".
+Wouldn't it be needed in a reboot-on-panic situation?
 
 -- 
-Askar Safin
+Andreas Schwab, SUSE Labs, schwab@suse.de
+GPG Key fingerprint = 0196 BAD8 1CE9 1970 F4BE  1748 E4D4 88E3 0EEA B9D7
+"And now for something completely different."
 
