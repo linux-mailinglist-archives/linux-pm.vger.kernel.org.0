@@ -1,71 +1,67 @@
-Return-Path: <linux-pm+bounces-36933-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36934-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F6B5C11C89
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Oct 2025 23:40:38 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E8D99C11D8E
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Oct 2025 23:46:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F00911A65DCE
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Oct 2025 22:40:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CAFA1580504
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Oct 2025 22:43:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C98D433FE0E;
-	Mon, 27 Oct 2025 22:35:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B97934AAFC;
+	Mon, 27 Oct 2025 22:35:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dSOPvCUl"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uoBqhw+T"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 971AC33F8BF;
-	Mon, 27 Oct 2025 22:35:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3E1B34AAF5;
+	Mon, 27 Oct 2025 22:35:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761604512; cv=none; b=OxzWINxhhJSsdpP2huORD+C+1ejYaDw0FAXdooa5u24Ve/n7Kg84hAQ0o9hYzYcD4qVUG1mEpN+TQNroFOr9Mem9gPkN9krHxQ6A6eox2+p7wGF4PartWmIWrfikFBgMpbdsO/GK8jQro7qhnz4WbYVflKRw0j/7olG/M41xItw=
+	t=1761604529; cv=none; b=Xq6hwBa34PwJDJxzctAYNdGqQyJBqNk+x87Trw20dNXoQ3D4HNpTvAWhPJpAqVh/ZssUSfwJiHC6WoMjIf+GVaxwgxZPMoE68udWXaaJ1Fu+JmmUmHRWb0Kd1B7LGBju9W+4QSzUKWqQDUrzvmAmMW/hcOXG+VWFkNx6NIvBQwE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761604512; c=relaxed/simple;
-	bh=GZ+ClJP4un9jzKP9mztXW62Rt3Pqp7Jft3mYPG/hZok=;
+	s=arc-20240116; t=1761604529; c=relaxed/simple;
+	bh=7Ii7lyDAUOoZcAzalxKR7YzpfZvEDQkxSBDrjbAdQOs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=tb01gfM5p2Au19JWZtDaksmhtu4EmB4q5mJCzFbg1RIr0zDTU5Kx0Vjk5H2Pi9eJbja83p1lF79DjvNkGWptHgti8RMidHYCDCrdKoArI3sE3VdBVIkrVi7a+TQ7Q0CIGGf0VzJ9oD/zl1cgn+UNUWzQoai4IvVey4jiQyKN8kw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dSOPvCUl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E34A5C113D0;
-	Mon, 27 Oct 2025 22:35:10 +0000 (UTC)
+	 MIME-Version:Content-Type; b=E+B4dZoMcdgDPkq8TIfwYSbSQffqqhVkKgSVn9vFxlM3Kaz7Xc/wNE1gpqvp61WHAGJhOvhlfS/v53rvuBK7O7oWhYd0LGXsTQJXCYRBz9d5BoR0JIg7345LUlizfwM7wLl+PzL1Ba0AV7QYjW92MoLAHOqhkNCUIetNQkyX4u0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uoBqhw+T; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5E74C116B1;
+	Mon, 27 Oct 2025 22:35:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761604512;
-	bh=GZ+ClJP4un9jzKP9mztXW62Rt3Pqp7Jft3mYPG/hZok=;
+	s=k20201202; t=1761604529;
+	bh=7Ii7lyDAUOoZcAzalxKR7YzpfZvEDQkxSBDrjbAdQOs=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=dSOPvCUl7W0HPFG3BicpvMexcGH0Yy1mVjH6yuElOWAuzsaRMYsk7E9k6dUxYAVoC
-	 7Uc3yUrt4KjhWG+KE+tE/851TzoBq22GidrHAtj+BswXVclzTKYfl1jj2Tt2e4CF21
-	 tOt3JN1u9JSinvEmn3AcqVk08JPWrYlFLqzt55LZrxQQux2IMSoo7LIZ3IihkQeXng
-	 pjVOjCqC7GG4jhaFU8yh5LJ+vu1BS1WguexZJSSH6ahOntiD3lZAE7/vk1jTfq/7ej
-	 8gSUSburehlTQJ1K9oq++VcXZGANmcbqTVZt+HHNO/7464CsQzVYpgFjAb3qZrDbyD
-	 TVvj8VinoDIjQ==
+	b=uoBqhw+TuH7YnNWXXWiXOcOjweN8yPBl6lLGK3Je9zBTRtyI2NsgsILyQPyYeBvaU
+	 U/J3oU9/leRrAgvT8lWw2jpd0atyiyTgm8Ro1w1dIn7nKrhJa2/id/r+Xnz7ntUJkv
+	 dgDEQ21i3CVh/67HQNOY8zeFbvB7mtUXb+nYdZoltv8dMVX0+HNFscaEv5z+XUYNN2
+	 R2heQ17hCvpfkBdr+aB53dV0zVurEWR8MA8GzMem9ry58UOtCbdoB1irSAe367BS7i
+	 GkMFkb+JqStQDEGTt7qh+gU4D9izsTYTrIkGzhkpN398M38bShYDPBwPdi/4yROrmD
+	 4EdP0xuckpNbA==
 From: Bjorn Andersson <andersson@kernel.org>
-To: Viresh Kumar <vireshk@kernel.org>,
-	Nishanth Menon <nm@ti.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	=?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+To: Georgi Djakov <djakov@kernel.org>,
 	Rob Herring <robh@kernel.org>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Konrad Dybcio <konradybcio@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
-	Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>
-Cc: linux-pm@vger.kernel.org,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Sibi Sankar <sibi.sankar@oss.qualcomm.com>,
+	Raviteja Laggyshetty <raviteja.laggyshetty@oss.qualcomm.com>
+Cc: linux-arm-msm@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	linux-pci@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org,
-	devicetree@vger.kernel.org
-Subject: Re: (subset) [PATCH v5 0/5] OPP: Add support to find OPP for a set of keys
-Date: Mon, 27 Oct 2025 17:37:05 -0500
-Message-ID: <176160465218.73268.17091212801966002684.b4-ty@kernel.org>
+	Mike Tipton <mike.tipton@oss.qualcomm.com>,
+	Odelu Kukatla <odelu.kukatla@oss.qualcomm.com>,
+	Imran Shaik <imran.shaik@oss.qualcomm.com>
+Subject: Re: (subset) [PATCH v3 0/2] Add OSM L3 provider support on QCS615 SoC
+Date: Mon, 27 Oct 2025 17:37:22 -0500
+Message-ID: <176160465171.73268.4640144203295643935.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20251013-opp_pcie-v5-0-eb64db2b4bd3@oss.qualcomm.com>
-References: <20251013-opp_pcie-v5-0-eb64db2b4bd3@oss.qualcomm.com>
+In-Reply-To: <20250819-talos-l3-icc-v3-0-04529e85dac7@oss.qualcomm.com>
+References: <20250819-talos-l3-icc-v3-0-04529e85dac7@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -76,26 +72,25 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
 
-On Mon, 13 Oct 2025 16:23:27 +0530, Krishna Chaitanya Chundru wrote:
-> The existing OPP table in the device tree for PCIe is shared across
-> different link configurations such as data rates 8GT/s x2 and 16GT/s x1.
-> These configurations often operate at the same frequency, allowing them
-> to reuse the same OPP entries. However, 8GT/s and 16 GT/s may have
-> different characteristics beyond frequency—such as RPMh votes in QCOM
-> case, which cannot be represented accurately when sharing a single OPP.
+On Tue, 19 Aug 2025 11:24:45 +0000, Raviteja Laggyshetty wrote:
+> Add Operation State Manager (OSM) L3 scaling support on QCS615 SoC.
+> This series has dependency on [1].
+> 
+> [1] https://lore.kernel.org/all/20250814-qcs615-mm-cpu-dt-v6-v6-0-a06f69928ab5@oss.qualcomm.com/
+> 
+> Changes since v2:
+>   - Updated SoB sequence [Dmitry].
+>   - Addressed review comments related to reg field in device node
+>     [Dmitry].
+>   - Updated the commit text as per review comment [Krzysztof]
+>   - Link to v2: https://lore.kernel.org/all/20250804061536.110-1-raviteja.laggyshetty@oss.qualcomm.com/
 > 
 > [...]
 
 Applied, thanks!
 
-[1/5] arm64: dts: qcom: sm8450: Add opp-level to indicate PCIe data rates
-      commit: 367c2f473f5f5a84cdf633df96e0f9b4a16e443d
-[2/5] arm64: dts: qcom: sm8550: Add opp-level to indicate PCIe data rates
-      commit: fc0ed54869be3a40c92879411b6db553d271de4d
-[3/5] arm64: dts: qcom: sm8650: Add opp-level to indicate PCIe data rates
-      commit: 860d514f09f0ccecd233808b44918ac5b2c10627
-[4/5] arm64: dts: qcom: x1e80100: Add opp-level to indicate PCIe data rates
-      commit: cfd8f45ddf8944fa95ae3e8cb5159c62fef95e34
+[2/2] arm64: dts: qcom: qcs615: Add OSM l3 interconnect provider node and CPU OPP tables to scale DDR/L3
+      commit: 44562f5918907b2e0d7e265540afebe7a42c48d2
 
 Best regards,
 -- 
