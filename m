@@ -1,125 +1,185 @@
-Return-Path: <linux-pm+bounces-36876-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36877-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA965C0C52B
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Oct 2025 09:34:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 055D0C0C610
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Oct 2025 09:45:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 96A6C19A0FBE
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Oct 2025 08:35:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 96851188B07D
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Oct 2025 08:43:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 311A52E7198;
-	Mon, 27 Oct 2025 08:34:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2F6A2F2617;
+	Mon, 27 Oct 2025 08:42:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kyLYAXnn"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Bh7j9kBF"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D1631DF27D
-	for <linux-pm@vger.kernel.org>; Mon, 27 Oct 2025 08:34:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DD392EE5FC
+	for <linux-pm@vger.kernel.org>; Mon, 27 Oct 2025 08:42:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761554074; cv=none; b=J03wKLvG2nO2SUxXZxKOtoAtBUAGO8+a1vHyMNIS4McmuNjjiITC+CVyTgcZW2LXiRXmGIxCbkFhCBtlfBxXe4t3Pzlxbe3v9vSoAvOi4wJTV/uHdA44TERs7gH58SnKe6y10bhDbAiOIBI37uRmsP1Owrn8V1XVeajiSx/EBzg=
+	t=1761554552; cv=none; b=LhJ+tlF10S7UIxi4b858IhlyPVHkkuKXFuvLQz7F/p5+M4zU4U8ZE09iCEyW9cpZtlpDECD4qZD5K5XZImfGltD7iR5ZCnjJkRWZzIfLMt2JfA+1DPirljtnG0nlKGX+cc2d+D+5Bpd8tXp/Ks/rfwii/6VSj0451gzCXVj9Lfo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761554074; c=relaxed/simple;
-	bh=hZTN/tQMYZInh7JvxfdJgJoSNB55wm3j6jMjFgi+HkU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Mh13T4nFgE1/h5Txuf+wjsbWDqGTHNnaHb8hMgiLjgqap1FaO6S4lTxw27lz9+DW45iAeALdc0WQN6byR6vgP1GxMeESUoxPG33x8TUaPyE0gTz/d+QcCXt3kN+nu26wbcmWiE1SCO9oOsG0vSAu9hEetYowfLNToxqZrIkvB+0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kyLYAXnn; arc=none smtp.client-ip=209.85.218.43
+	s=arc-20240116; t=1761554552; c=relaxed/simple;
+	bh=UG8pE67BLGZgv3QifxWbYYEqvT3PKB5usDKrFSSOST8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=P4BJfC8oQM2DxJRbqPYLBPZ8C1OfGLrGR8xEW4FPqGvjGCsaL4N/YSnH9V4Cix2JHfkMRZL7/Z23YD83SxhMF5EiVUJGiutHWNXJglf2EP8g1feYvSV2j+x1EtuEuTp1MPLn47bkNXWzK/wSt7qVO9aJUvtS3B6y95HikaC50IU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Bh7j9kBF; arc=none smtp.client-ip=209.85.218.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-b6d2f5c0e8eso897239666b.3
-        for <linux-pm@vger.kernel.org>; Mon, 27 Oct 2025 01:34:31 -0700 (PDT)
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-b3e9d633b78so994105866b.1
+        for <linux-pm@vger.kernel.org>; Mon, 27 Oct 2025 01:42:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761554070; x=1762158870; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1761554549; x=1762159349; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=QXqA2AyYDwMAn5NeiBjETLweOL3QhYSqRjqxrljQDYI=;
-        b=kyLYAXnni860iyXZipirj1ouWIpiOII1jtdMfjXMlErQ6dOum3GjUR1FmWlO51eCaf
-         ooziWpmNBHa6xn87D336Taz6sYkrjM+ClNFD3FNo7aM/VUs1r7c6avi4YIhAVhgYCPEk
-         uL+Mk4M1ARpwbIbbYlc1B/sof3Bf3eJ1buTuFf/xsM8AyBXsA3ZiIKmL46OkJpHARTml
-         2HAt85RckGpaqPqYaU/Di8gBH8JtTf23CEqF4ZnQeJbtUdIbYsff5Psolv0MCInD2/cG
-         NRdFLB9gqa+D9XoHOURy2+xLIVVp5QbP6845dopJzXbFaihzSDEeKmQo6nkMh3SSv4oa
-         FRKA==
+        bh=iFlBtrits7DNlZ6h+mgbiMIVvWdiVqZSUXzsme0rVO8=;
+        b=Bh7j9kBFU1CekGtkw8gUdc6g4MwHmMZziwIOcuJR6f393+1syomtldv/ri0gdo75qo
+         CLZz4aNDjBZuK6NhDNOevGVN5naelzt/GG0D5f2NGqcJx4Y9Cf/TjX4cC4Up/PT2/55z
+         gf7vAitFMDtEjr7FDLlTmzm6qYsEzLZ5tNuyO3qiKPfe3z1dxrFDJ2YpZFZSiP3gItVT
+         2qR0YO4NR59xVacMBK27K7kH/ipyUY1oOpZ4M1OS/UB0c4uvE05fy6FChIjA6pJlK+Ve
+         A0PK+MQP6ha0nXImmmd7oYDUZRXQt2q5OuPGOSIP08Ycmg7gya5we6gYQHWWypBuNxY6
+         S8iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761554070; x=1762158870;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1761554549; x=1762159349;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=QXqA2AyYDwMAn5NeiBjETLweOL3QhYSqRjqxrljQDYI=;
-        b=qHggjLkSu8oobeFNZwVO9Zi7EdU+ei1Rcy2Vg91TSl+S+aaBn1enZxat7SyCb3NzEP
-         pJ+PFouMgHYYFvy0HqSY6tYLbUmMt5q/9btsnJT3yPjtaVraxf1JfqPMoGjxirF07bhI
-         bO0RI7NRC50E8UdH7UmPo+b0oaXcO2HwUYQCPX9FlyxnpOU4y2Zr6VeQWO+nSUPmy8MN
-         3AmCKwTvwIxvSJwaVD5GEk67SEaGoz+RuLSOAczm3lAwdM30Jw0Z1R2oFVD53bmdJu3S
-         5lMRm2RUXs/ldyti5uYqQwEl+mpJVY0N/VeVwJgB1R0Uw/foiv3KHKdCkAekAfxPjeJd
-         ypAA==
-X-Forwarded-Encrypted: i=1; AJvYcCXzevlGK/G6IUk1CBDdCSX0ISQoyEZ902H6FwMrreIzrBAl098+HRinZ7FsmMLIcVm3vH0YpUMf+g==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw+e6nsDpY5G60yWpN8dBqe9QGSllLaHr0yYt3C2+2RVm4OZJkL
-	7Usqu6KUQKuZnpoRy0yOHuSrGx2T06VOA6DgygWV/fIjwiBB9lZb20LEvpSCM0pdoQ1rAQX0bZS
-	67xZ34JMjqzbzcx+i0Ld06MU9Z3fGfnOcH4IPpPo=
-X-Gm-Gg: ASbGncs13ciqIRFvApfl1XvKj2fZU6LL+GcFWKfjP5WTHd1ofrJNXrAXpbpIAADGemm
-	A7FfiJDPPPbArEwpUdL+IuCoAHNubafBZ8P1fwDLYLDZvCO5ysGUG1f1Dn7+Xnaa/WSGSmbNKPb
-	ABV9KgBbdKnfq7FWEEabGEvT6rL41Ipjt4uUqbYVYAzEnV/QmHPVYEfhootMf74/DYwj+mcay2V
-	OK+heJntvabzObColBKQ1uYElnbWM+RZ43NdKYZQqS90NEJzM7OZxUynJm8yNvs9SB4pMCDbnaA
-	/n5dphr+CtxHNiarZgcmPlXT3FUOpA==
-X-Google-Smtp-Source: AGHT+IF4Ku7VBi6Rz5YATQmMp4K6m21OtDlsrRJ8R6TX/Zwi0y9zuA5CLxTmowv0xMLnRyevU+7TIZF7WyaAwQdIbqQ=
-X-Received: by 2002:a17:906:6a12:b0:b40:b6a9:f70f with SMTP id
- a640c23a62f3a-b6d51aefb9amr1645192766b.4.1761554069622; Mon, 27 Oct 2025
- 01:34:29 -0700 (PDT)
+        bh=iFlBtrits7DNlZ6h+mgbiMIVvWdiVqZSUXzsme0rVO8=;
+        b=WO5tidKJXaPUHa3Z5p4ROPc9SyZVOFGYVtO5+dHDkJJi11IkZYGVBJUDcP61wyVt3W
+         zMsr7f48+wBgCyMjYcHAxL9MDpGsNBrlCOkSNc2YBh4PHikfp/1bswfYxicpld1szzeU
+         MmF165sNMSqGR6NZRR3zg6n682/zFhUa66UINJf2XGfgBWQbVwU7IA2+EDcyGzqzWoNn
+         oV5kSrYG7Ae+/+lZyH6mfMOPtIsaAkYXjTQPPS7Amd3/bUW60B8MiHZ9IZecoxaITHmN
+         1mTOcC6XkPW64xzvKJCqlCBUpl3lYvtQ8HGCVB4ak+B79bpJpaAyHsf92IsFZohmfgX+
+         QZjA==
+X-Forwarded-Encrypted: i=1; AJvYcCXWhgfqdGlBGgb8LFA6igTKYRqoMlNdSrjltP31SfIRBD9xBJARklS2Yuv1x7UwrJ2337TEmmapMg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzOXIcT7DbCtBYgcx6FjyhN4V1pooB/8FaJxN0xN5Fpl8JF0zwI
+	U+OVs6Or29sLJtH1tnKJ9bK59lEeBzq+EWxqqGK3AYcdQl6LrbrBZegK
+X-Gm-Gg: ASbGncsEgVSS2I+XXwRiYuIuugb1ZbvWUGK5ykZVD5HtQIBQ6z2hCgMbvns7TBIe+8y
+	V0z9OllnowIxrJYx3jtXBsP8naidHSupNkCExYNgPIzfUocb59l6pxG2w4puX0IXgVj/SgfbQYy
+	WaYC6hSKSFiPAJp5VmQuPLUZ+uFhQEEOK3SOuafLuJUKuV/5qsVzFYOj001XVR5lDN65rS9yUOB
+	SLQ4xmH7KvjXUHGzuTZF0l4CXTjOIiIOgrdclMjYn4j5ZrOHT3vLDzmuHGQUpVbEMfrsw2iry/5
+	UV6u6pDFAfcnjM4cpaL2/dTcvNj7iFmcYQH/dV043wRgze6QIBCdFLqTukBG6gBiGqDSTywv37C
+	ucJw5bfdV5x0sKUAMFgbq6/FWyv1vEbRuUUg/Yyao+gQN9g1Lw5XS3Xk8Tk/+BhUuqP0wUsZq2T
+	Jd
+X-Google-Smtp-Source: AGHT+IHNDWdV6nOLEUPb8BsKdy1fTa79zHhvllKqWIEzW+JrO9Bj5NMu8vYte0D/T+VD4YYNH0vo+A==
+X-Received: by 2002:a17:907:1c85:b0:b64:6cc7:6ac7 with SMTP id a640c23a62f3a-b6d6bb9083emr1215693866b.22.1761554548711;
+        Mon, 27 Oct 2025 01:42:28 -0700 (PDT)
+Received: from localhost ([212.73.77.104])
+        by smtp.gmail.com with UTF8SMTPSA id a640c23a62f3a-b6d853696aesm704277666b.30.2025.10.27.01.42.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Oct 2025 01:42:28 -0700 (PDT)
+From: Askar Safin <safinaskar@gmail.com>
+To: mpatocka@redhat.com
+Cc: Dell.Client.Kernel@dell.com,
+	brauner@kernel.org,
+	dm-devel@lists.linux.dev,
+	ebiggers@kernel.org,
+	kix@kix.es,
+	linux-block@vger.kernel.org,
+	linux-btrfs@vger.kernel.org,
+	linux-crypto@vger.kernel.org,
+	linux-lvm@lists.linux.dev,
+	linux-mm@kvack.org,
+	linux-pm@vger.kernel.org,
+	linux-raid@vger.kernel.org,
+	lvm-devel@lists.linux.dev,
+	milan@mazyland.cz,
+	mzxreary@0pointer.de,
+	nphamcs@gmail.com,
+	pavel@ucw.cz,
+	rafael@kernel.org,
+	ryncsn@gmail.com,
+	safinaskar@gmail.com,
+	torvalds@linux-foundation.org
+Subject: Re: [PATCH] pm-hibernate: flush block device cache when hibernating
+Date: Mon, 27 Oct 2025 11:42:20 +0300
+Message-ID: <20251027084220.2064289-1-safinaskar@gmail.com>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <03e58462-5045-e12f-9af6-be2aaf19f32c@redhat.com>
+References: <03e58462-5045-e12f-9af6-be2aaf19f32c@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251024-aheev-checkpatch-uninitialized-free-v2-0-16c0900e8130@gmail.com>
- <20251024-aheev-checkpatch-uninitialized-free-v2-2-16c0900e8130@gmail.com>
- <aPvAm1E7CvQfOIuS@stanley.mountain> <81e6af8eea5b0399d1685797d0ea6a6ebc273270.camel@gmail.com>
- <aP8CxkXYAitKB3vx@stanley.mountain>
-In-Reply-To: <aP8CxkXYAitKB3vx@stanley.mountain>
-From: ally heev <allyheev@gmail.com>
-Date: Mon, 27 Oct 2025 14:04:18 +0530
-X-Gm-Features: AWmQ_blvkJ9ZtBmHKBSTV_q6E3sXqzi4cxX3zWvk57-nTx4mfsifVuvdEYK6e1U
-Message-ID: <CAMB6jUGEJeOVKUEpeFosBFA3QsQk3kgdt_e1EAQJi_yqJp7H-A@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] add check for pointers with __free attribute
- initialized to NULL
-To: Dan Carpenter <dan.carpenter@linaro.org>
-Cc: Dwaipayan Ray <dwaipayanray1@gmail.com>, Lukas Bulwahn <lukas.bulwahn@gmail.com>, 
-	Joe Perches <joe@perches.com>, Jonathan Corbet <corbet@lwn.net>, Andy Whitcroft <apw@canonical.com>, 
-	workflows@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, David Hunter <david.hunter.linux@gmail.com>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Viresh Kumar <vireshk@kernel.org>, 
-	Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>, linux-pm <linux-pm@vger.kernel.org>, 
-	dan.j.williams@intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Mon, Oct 27, 2025 at 10:57=E2=80=AFAM Dan Carpenter <dan.carpenter@linar=
-o.org> wrote:
-> > General question about the process for my understanding:
-> > Is checkpatch run on full tree by CI or someone and results reported
-> > regularly ?
->
-> Newbies run it regularly.  Otherwise it gets run on subsystem CIs and
-> the zero-day bot runs it on new patches but it will report the old
-> warnings as well under the "Old warnings" section.
->
-> > My understanding was that we would run it only on patches
-> > before submitting them Or we just run it on full tree before adding
-> > new checks to understand if they are catching real issues
->
-> Eventually someone will look at all the warnings.  And probably it's
-> going to be a newbie and so we need to be careful with warning where
-> newbies might introduce bugs with their changes.
->
-> regards,
-> dan carpenter
->
-Makes sense. Thanks!!
----
-aheev
+Mikulas Patocka <mpatocka@redhat.com>:
+> Hi
+> 
+> Does this patch fix it?
+> 
+> Mikulas
+> 
+> 
+> From: Mikulas Patocka <mpatocka@redhat.com>
+> 
+> There was reported failure that hibernation doesn't work with 
+> dm-integrity. The reason for the failure is that the hibernation code 
+> doesn't issue the FLUSH bio - the data still sits in the dm-integrity 
+> cache and they are lost when poweroff happens.
+
+I tested this patch in Qemu on current master (43e9ad0c55a3). Also I
+applied Mario's patch
+https://lore.kernel.org/linux-pm/20251026033115.436448-1-superm1@kernel.org/ .
+It is needed, otherwise you get WARNING when you try to hibernate.
+
+The patch doesn't work.
+
+Here is script I used for reproduction:
+https://zerobin.net/?66669be7d2404586#xWufhCq7zCoOk3LJcJCj7W4k3vYT3U4vhGutTN3p8m0= .
+It is the same script as in previous letter. I just added some
+"integritysetup status /dev/mapper/..." calls.
+
+Here are results:
+https://zerobin.net/?2331637d633d20c5#EmyhxiHLDmoZT1jBVbe/q9iJKhDEw4n+Bwr5mAcaOpM= .
+
+File names mean the same as in previous letter, i. e.:
+
+> "log-def-1" is output of first Qemu invocation (i. e. first boot) with
+> default integritysetup options. "log-def-2" is second Qemu invocation
+> (i. e. when we try to resume).
+> 
+> log-bit-{1,2} is same thing, but with "--integrity-bitmap-mode" added to
+> "integritysetup format" and "integritysetup open".
+> 
+> log-no-{1,2} is same, but with "--integrity-no-journal".
+> 
+> log-nodm-{1,2} is same, but without dm-integrity at all, i. e. we create
+> swap directly on partition.
+
+Results are somewhat better than without the patch. Without the patch
+we don't even try to resume in default mode. "blkid" simply reports
+"swap" instead of "swsuspend". With patch "blkid" reports "swsuspend", and
+so we try to resume. But then in the middle of resuming we get this:
+
+[    1.008223] PM: Image loading progress:  70%
+[    1.017478] PM: Image loading progress:  80%
+[    1.027069] PM: Image loading progress:  90%
+[    1.029653] PM: hibernation: Read 36196 kbytes in 0.49 seconds (73.86 MB/s)
+[    1.030146] PM: Error -1 resuming
+[    1.030322] PM: hibernation: Failed to load image, recovering.
+
+(See link above for full logs.)
+
+Very similar thing happens in "--integrity-no-journal" mode in the middle of
+resuming:
+
+[    0.531245] device-mapper: integrity: dm-0: Checksum failed at sector 0x6e70
+[    0.531600] PM: Error -84 resuming
+[    0.531799] PM: hibernation: Failed to load image, recovering.
+
+The patch doesn't change anything in "--integrity-bitmap-mode" mode:
+we still are able to resume, but then get integrity errors when we do
+"cat /dev/mapper/swap > /dev/null".
+
+-- 
+Askar Safin
 
