@@ -1,176 +1,124 @@
-Return-Path: <linux-pm+bounces-36980-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36981-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD752C14DA8
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Oct 2025 14:31:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 485CCC14FBD
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Oct 2025 14:53:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9E151421209
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Oct 2025 13:27:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 309BB3AEFD4
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Oct 2025 13:48:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B61F03328F5;
-	Tue, 28 Oct 2025 13:26:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BF80218ACC;
+	Tue, 28 Oct 2025 13:48:13 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6B00331A50;
-	Tue, 28 Oct 2025 13:26:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.172
+Received: from mail-yx1-f45.google.com (mail-yx1-f45.google.com [74.125.224.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E18D2224B1E
+	for <linux-pm@vger.kernel.org>; Tue, 28 Oct 2025 13:48:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761658016; cv=none; b=OrLWsDF0ERkscPl2fS/4ywZJzSLvLeF64SkN44pmci6jgm5eA9pAjHjTduqvGyBRkw80iziKgwltEwUBDsvdDcTw5iGcrpqHLl8XGSPRcDp3Syn4JScW7bzcrNXYjygKYBbDRKngGqV0eZJvPxw/+sr34o29eqrZvHLD6cR9cEk=
+	t=1761659293; cv=none; b=a8Q+NqF48rH7w0CZ1XrTEDZ1uVGg6A0gs2n3h7SiyV9scn05iQPhYzjC4YTr1bvKMNWt3imjhG4BBUv/p22EDx+MOQe2KWQ9qC6T3zTjYV4kqSBlDIkNqPiXTejgbTbq1PdhYTDdMLC6zhErim8jycavBkdh/bTKOnlhMuGaq0M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761658016; c=relaxed/simple;
-	bh=V4L/H30OuBlemwDlVM8ADYwYLpVGXZKR1xdAcxgluVg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PRZa9LgDKG+AuRbJGgX8ESaTZg31o5iZM34SwFmLqWzPziCaZs2CK4WreGeyBp9pdhsWEdqnrwLJhn9vs1jq3i7jYpR9944P3drMF+GP4gGjITlUAPRaeL9hFFKvhT/kMWd9PMjdtZWOuJJwbWgRGNjl6np7F+1DJDJratjsdPE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com; spf=pass smtp.mailfrom=renesas.com; arc=none smtp.client-ip=210.160.252.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=renesas.com
-X-CSE-ConnectionGUID: I4wMIvZwTSGVxiOVXjc90Q==
-X-CSE-MsgGUID: BYQX+M04TrKSPZh6O30p3Q==
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie6.idc.renesas.com with ESMTP; 28 Oct 2025 22:26:53 +0900
-Received: from demon-pc.localdomain (unknown [10.226.92.5])
-	by relmlir5.idc.renesas.com (Postfix) with ESMTP id A3F2C40078A8;
-	Tue, 28 Oct 2025 22:26:48 +0900 (JST)
-From: Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
-To: 
-Cc: John Madieu <john.madieu.xa@bp.renesas.com>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>,
-	Lukasz Luba <lukasz.luba@arm.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
-Subject: [PATCH v2 9/9] arm64: dts: renesas: r9a09g087: add TSU and thermal zones support
-Date: Tue, 28 Oct 2025 15:25:17 +0200
-Message-ID: <20251028132519.1472676-10-cosmin-gabriel.tanislav.xa@renesas.com>
-X-Mailer: git-send-email 2.51.1
-In-Reply-To: <20251028132519.1472676-1-cosmin-gabriel.tanislav.xa@renesas.com>
-References: <20251028132519.1472676-1-cosmin-gabriel.tanislav.xa@renesas.com>
+	s=arc-20240116; t=1761659293; c=relaxed/simple;
+	bh=mo9APOFetC+o4+E2vl8lwuxRbZ/PNfLE6Ac+ecHV1dU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=cVwvbMZKUkvWwmQLer0zk3ax0vcW5QeAbDlUDlWPbnGSYnKGcDrF7SciQ85lR7diIqVFA4xCTBLDGkuyX2b5NwU1vVZ0IbFp2Jt4Lpih9Mvq7v5xqPbI6MRkBD4n9lvBJYCgUJM7Oe0NRSIskKPysqT1U0+t8zlFQByAEoV36hA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=74.125.224.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yx1-f45.google.com with SMTP id 956f58d0204a3-63d0692136bso7002258d50.1
+        for <linux-pm@vger.kernel.org>; Tue, 28 Oct 2025 06:48:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761659289; x=1762264089;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :reply-to:in-reply-to:references:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=oPMFTXsnoNZjm5dyqceKxk4gXVUdwjZcnDXHEFYHIA0=;
+        b=sLjlImcUYNsPh5JfozYKg1AWesSlVPfZUGYcmOzcBI0wpGtHZgtbPzNQOX73lQyIDQ
+         wN8mOaH8a+Eb1Q7chEDJ0dm7/D3Pe8SyIov7Smw4jZ1shncHpoPi4HGo8xPIEhuz/gN7
+         p1bgSZUAS/vsUWt1iwF5/MQh+urwXTQkP2/molqIqFODt6xzW65mFtT/GFXyYd/fKd8d
+         hteYMz+q3Fe5Vjwlt8Xr0+5FhuQ1Q29zxfGvrFUnah0f55CfUIG2XkwDQzIp6IdoZiLK
+         j3iYycK2ZmfDXWq7IhGT1jUzKocboQdx2zAVhOyUyRoqKPjHod8gd3wWVaHK6/mLfNIR
+         4F0A==
+X-Forwarded-Encrypted: i=1; AJvYcCXY6d7CUn965HwFAuMAFyWpN8NN9U9kMlPJO6cVGcakLDU2h+vp6KzegUvTQYj07XvuI96+68s21w==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzol3iWchJcJxk1/HgAp0wc7RCUiyYyLIPiQzsPDq9+l5+o5e4q
+	BwKxZlNuy6o8Oz5uPq4UodBgNC7bDSwTWBcYqUUbl687AuyBOkoAeXua3ETFTUsjMDWX57gqrLF
+	ojNOzEjrYE4HGYnBbC4P9Zr8+cFsMfLk=
+X-Gm-Gg: ASbGncvstOPTkh1KO7bn5KyyWhvDmUd7f4UndipIRV/qDr3ug21lQTE0u77EbRqTM78
+	Y8qjfZ6bNlhzxHta6P+XWWxXTNFyvcwZMhD1kBgbPu62OBm1FpvbLsVgXbKhW3ffk6W1SKftaqZ
+	0+HFbfmMJ/4bHoUrAAMh4LVhYEcdKvaCXL3ToUevSPII3GA6X7CSlKhbfoXCNAb5jAXuf0zSm8N
+	SGOCZnsgckqU8aw48JOpMYVQHvtHQz/oFU0fzTyG5QUTSFbpT74aoSxGxFBUfLZ9LfiK3DuKw==
+X-Google-Smtp-Source: AGHT+IEpad4qjzXZnnPUSnxLHEvfwEEW/p4NMzrGRe+eVIllVRD+MMw8/uUDVMbqy8K2DcaFli6aaeVoXMtxDLr8VQw=
+X-Received: by 2002:a05:690e:42cd:b0:63e:e9b:6220 with SMTP id
+ 956f58d0204a3-63f6ba95f0cmr2455437d50.47.1761659288840; Tue, 28 Oct 2025
+ 06:48:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250915062135.748653-1-zhangpengjie2@huawei.com> <651ffa3f-9098-4d00-877b-d22e3e8cd64a@huawei.com>
+In-Reply-To: <651ffa3f-9098-4d00-877b-d22e3e8cd64a@huawei.com>
+Reply-To: myungjoo.ham@gmail.com
+From: MyungJoo Ham <myungjoo.ham@samsung.com>
+Date: Tue, 28 Oct 2025 22:47:30 +0900
+X-Gm-Features: AWmQ_bk23k_KI096SoA9euoBCAKpEylPGoxdr43SmVwRmbr5t2KsgoFftr8vmtY
+Message-ID: <CAJ0PZbRsH6DcDKHhYGDktg-zejfWafnRR-DHrp8Zw89ervh2HQ@mail.gmail.com>
+Subject: Re: [PATCH] PM / devfreq: hisi: Fix potential UAF in OPP handling
+To: "zhangpengjie (A)" <zhangpengjie2@huawei.com>
+Cc: Kyungmin Park <kyungmin.park@samsung.com>, Chanwoo Choi <cw00.choi@samsung.com>, 
+	Linux PM list <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	zhanjie9@hisilicon.com, zhenglifeng1@huawei.com, lihuisong@huawei.com, 
+	yubowen8@huawei.com, linhongye@h-partners.com, linuxarm@huawei.com, 
+	jonathan.cameron@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The Renesas RZ/N2H (R9A09G087) SoC includes a Temperature Sensor Unit
-(TSU). The device provides real-time temperature measurements for
-thermal management, utilizing a single dedicated channel for temperature
-sensing.
+2025=EB=85=84 10=EC=9B=94 27=EC=9D=BC (=EC=9B=94) 11:28, zhangpengjie (A) <=
+zhangpengjie2@huawei.com>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
+>
+> On 9/15/2025 2:21 PM, Pengjie Zhang wrote:
+> > Ensure all required data is acquired before calling dev_pm_opp_put(opp)
+> > to maintain correct resource acquisition and release order.
+> >
+> > Fixes: 7da2fdaaa1e6 ("PM / devfreq: Add HiSilicon uncore frequency scal=
+ing driver")
+> > Signed-off-by: Pengjie Zhang <zhangpengjie2@huawei.com>
+> > ---
+> >   drivers/devfreq/hisi_uncore_freq.c | 3 ++-
+> >   1 file changed, 2 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/devfreq/hisi_uncore_freq.c b/drivers/devfreq/hisi_=
+uncore_freq.c
+> > index 96d1815059e3..c1ed70fa0a40 100644
+> > --- a/drivers/devfreq/hisi_uncore_freq.c
+> > +++ b/drivers/devfreq/hisi_uncore_freq.c
+> > @@ -265,10 +265,11 @@ static int hisi_uncore_target(struct device *dev,=
+ unsigned long *freq,
+> >               dev_err(dev, "Failed to get opp for freq %lu hz\n", *freq=
+);
+> >               return PTR_ERR(opp);
+> >       }
+> > -     dev_pm_opp_put(opp);
+> >
+> >       data =3D (u32)(dev_pm_opp_get_freq(opp) / HZ_PER_MHZ);
+> >
+> > +     dev_pm_opp_put(opp);
+> > +
+> >       return hisi_uncore_cmd_send(uncore, HUCF_PCC_CMD_SET_FREQ, &data)=
+;
+> >   }
+>
+> Gentle ping on this reviewed patch. =F0=9F=99=82
+>
+> Thanks!
+>
 
-The TSU loads calibration data via SMC SIP.
+Acked-by: MyungJoo Ham <myungjoo.ham@samsung.com>
 
-Signed-off-by: Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
----
- arch/arm64/boot/dts/renesas/r9a09g087.dtsi | 46 ++++++++++++++++++++++
- 1 file changed, 46 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/renesas/r9a09g087.dtsi b/arch/arm64/boot/dts/renesas/r9a09g087.dtsi
-index 5eef8c18037e..db117b6f75a1 100644
---- a/arch/arm64/boot/dts/renesas/r9a09g087.dtsi
-+++ b/arch/arm64/boot/dts/renesas/r9a09g087.dtsi
-@@ -36,6 +36,7 @@ cpu0: cpu@0 {
- 			next-level-cache = <&L3_CA55>;
- 			enable-method = "psci";
- 			clocks = <&cpg CPG_CORE R9A09G087_CLK_CA55C0>;
-+			#cooling-cells = <2>;
- 			operating-points-v2 = <&cluster0_opp>;
- 		};
- 
-@@ -46,6 +47,7 @@ cpu1: cpu@100 {
- 			next-level-cache = <&L3_CA55>;
- 			enable-method = "psci";
- 			clocks = <&cpg CPG_CORE R9A09G087_CLK_CA55C1>;
-+			#cooling-cells = <2>;
- 			operating-points-v2 = <&cluster0_opp>;
- 		};
- 
-@@ -56,6 +58,7 @@ cpu2: cpu@200 {
- 			next-level-cache = <&L3_CA55>;
- 			enable-method = "psci";
- 			clocks = <&cpg CPG_CORE R9A09G087_CLK_CA55C2>;
-+			#cooling-cells = <2>;
- 			operating-points-v2 = <&cluster0_opp>;
- 		};
- 
-@@ -66,6 +69,7 @@ cpu3: cpu@300 {
- 			next-level-cache = <&L3_CA55>;
- 			enable-method = "psci";
- 			clocks = <&cpg CPG_CORE R9A09G087_CLK_CA55C3>;
-+			#cooling-cells = <2>;
- 			operating-points-v2 = <&cluster0_opp>;
- 		};
- 
-@@ -244,6 +248,17 @@ wdt5: watchdog@80083400 {
- 			status = "disabled";
- 		};
- 
-+		tsu: thermal@80086000 {
-+			compatible = "renesas,r9a09g087-tsu", "renesas,r9a09g077-tsu";
-+			reg = <0 0x80086000 0 0x1000>;
-+			interrupts = <GIC_SPI 713 IRQ_TYPE_EDGE_RISING>,
-+				     <GIC_SPI 714 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "adi", "adcmpi";
-+			clocks = <&cpg CPG_MOD 307>;
-+			power-domains = <&cpg>;
-+			#thermal-sensor-cells = <0>;
-+		};
-+
- 		i2c0: i2c@80088000 {
- 			compatible = "renesas,riic-r9a09g087", "renesas,riic-r9a09g077";
- 			reg = <0 0x80088000 0 0x400>;
-@@ -844,6 +859,37 @@ sdhi1_vqmmc: vqmmc-regulator {
- 		};
- 	};
- 
-+	thermal-zones {
-+		cpu-thermal {
-+			polling-delay = <1000>;
-+			polling-delay-passive = <250>;
-+			thermal-sensors = <&tsu>;
-+
-+			cooling-maps {
-+				map0 {
-+					trip = <&target>;
-+					cooling-device = <&cpu0 0 1>, <&cpu1 0 1>,
-+							 <&cpu2 0 1>, <&cpu3 0 1>;
-+					contribution = <1024>;
-+				};
-+			};
-+
-+			trips {
-+				target: trip-point {
-+					temperature = <95000>;
-+					hysteresis = <1000>;
-+					type = "passive";
-+				};
-+
-+				sensor_crit: sensor-crit {
-+					temperature = <120000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+	};
-+
- 	stmmac_axi_setup: stmmac-axi-config {
- 		snps,lpi_en;
- 		snps,wr_osr_lmt = <0xf>;
--- 
-2.51.1
-
+PTAL, Chanwoo.
 
