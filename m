@@ -1,131 +1,171 @@
-Return-Path: <linux-pm+bounces-36965-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36966-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 75E1AC14828
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Oct 2025 13:03:51 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id D95F9C14A1D
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Oct 2025 13:30:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 64EA24E2145
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Oct 2025 12:03:50 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 480624F38F2
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Oct 2025 12:30:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD945308F18;
-	Tue, 28 Oct 2025 12:03:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E243632E728;
+	Tue, 28 Oct 2025 12:30:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ka2yzJ6Y"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IN9IXmlp"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8CCA2D5957
-	for <linux-pm@vger.kernel.org>; Tue, 28 Oct 2025 12:03:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF0F532E6B9
+	for <linux-pm@vger.kernel.org>; Tue, 28 Oct 2025 12:30:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761653027; cv=none; b=GfFmHyHsAJII/ECpPxWCf1BjVV8oEsjzXdtrHg/N8GPo225/uMYb5C69LDE/PjlGAKd8PDXK3B1A6WHbDliuYx/0YWcj1B9VpkAdwhh37Wn7ujY9WrMj07wlEgo9ib8Ka3LlEFkBKBT/E9ZbNvx32GU+0XFSJXTuV5agZy0w7r4=
+	t=1761654640; cv=none; b=g/JxzJ4w+wsyiSu5jb2TwQvt7lG3TIrPFVeVHw0l57cPW42jJ4DdHklzAi67Phiu0VRjuip1KFRn9z4EdngtzbxklgIxocApHFl/paXtAPQLJF/8Ebzlh+M5e9LraQ4htsS9++C1uIQ53ljoEg0E5+UmjL25mtcEzK04aKVI01s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761653027; c=relaxed/simple;
-	bh=NGL+IZJGTIxbqCDdaa88n3D2XlIAHmLG1x6h5o24+AM=;
+	s=arc-20240116; t=1761654640; c=relaxed/simple;
+	bh=FUJwnKqupuATzqa/yUkbLMKYSmrcPHWiju1XCYAtVvU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CSus0mgQEWCDCHXefWQWyFJzRlpkPIIH+vZBPRGQLmcyhUXEsO3Q3ahk77xegl3GFfNRI2msaPb8DrEjbpFk8k7Cq9j9Oqa3Bx9xKJ8JqahphdaxUvjFitGL8dSXhaxB9ynNdWfpemloxbnTlBJ2i5RCJZejxlu+xtWBcgtsywA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ka2yzJ6Y; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66D29C16AAE
-	for <linux-pm@vger.kernel.org>; Tue, 28 Oct 2025 12:03:47 +0000 (UTC)
+	 To:Cc:Content-Type; b=AgBjxo9YIYW8RSoTsHSocqhgGKKIG//uTeDa/C+4wxwzFfmnuZm8o/PMLarSTqUZfLBJi2H9OmBbks5dwQx3ZZpGylAHsVr2RlXVrwwJA5fJGC5OCbOYtVZytvcXguo60h8O70xLo9zzAG57UBHYrNRGJ0Bk6Fb/9DM4EGhUiqc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IN9IXmlp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C11FC2BC86
+	for <linux-pm@vger.kernel.org>; Tue, 28 Oct 2025 12:30:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761653027;
-	bh=NGL+IZJGTIxbqCDdaa88n3D2XlIAHmLG1x6h5o24+AM=;
+	s=k20201202; t=1761654640;
+	bh=FUJwnKqupuATzqa/yUkbLMKYSmrcPHWiju1XCYAtVvU=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Ka2yzJ6YVCcqht6zYotA60ouOMgNIYzL6TW+yPsfl1fLH5835e0SAf6BR/1BJrTL/
-	 jBU+ZDqjQDp3/CW5reGTDVfsTc4SWMGDkceSAnB3pqJpYXo0fp1Ie7md80ZKjnRHqJ
-	 KGtDa+f5MckIXEn81ma31OC83W3hjRmdkE2JnhLihPsNcamMuKKL6X7j3X3am8XGN/
-	 o7lxlMPem3YGGx1YiZ4MAOe99mKElS2Tfu59zzSaQOQpioQk27yrzLYlhwZttr+qyG
-	 bGUlgTo0X8UbVzmhphkA4L38GcLFlQ/i3HdtVJXlb7zoohjNCChvMu0igPhICa9kGl
-	 i7pIww7iLoOEw==
-Received: by mail-oi1-f177.google.com with SMTP id 5614622812f47-44db11c7ed6so1378303b6e.2
-        for <linux-pm@vger.kernel.org>; Tue, 28 Oct 2025 05:03:47 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUq5ypr2PJmxy9mItqRmXBMJQ6NTPeTWUBscpllkvHhfmUEIT9JwT+jfec/iFd56grY+rNJ+184vg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx5IS+n4y19urLgRAZoa88lFN49/61nOnOQ8z7udBAgm41B8oRm
-	0LlQ98wi0bJdtD0zi51X+CtyUNX7kVokFlGiIRWvWIw3bddjpIaGW6in/pV1oCENbpxJTdeAyQJ
-	Fp1ttjpUUYqrHVjQ5A6sjUiRqiQohJn0=
-X-Google-Smtp-Source: AGHT+IEbl+yOB806CIHgJBzvgTOTmW/YIaJ+LahZDXUFEDenvFO7sdJjf1V/C6J1whcFN9oW6EKkellD/nj1/P2u1tc=
-X-Received: by 2002:a05:6808:c2a4:b0:441:8f74:fce with SMTP id
- 5614622812f47-44f6bb54097mr1093233b6e.59.1761653026571; Tue, 28 Oct 2025
- 05:03:46 -0700 (PDT)
+	b=IN9IXmlpfWmyQMe+4yoJTRjrGkXONjtInjRNNGwLDljJ1Ic7/ddFwvqAuTWuBxGEf
+	 ggNv4arOeC36FTqSclS7agsLn0giGAlgy3711NOxA7QnriWNWG0jBFLFs9N5h4BZGw
+	 Q8c+lbqvJ6pAW0kKUoegNkJhQkV8aLUg35ip0R31lA0L+fU9zQfaSwQjysXPIvBTEI
+	 3RGk17q9uhF2ESP/I0/Ie5Dm/p5vDSh3YZTnUEYOO0p2nt4xh+HbjTSvfGCK5tFXHS
+	 m7IOMOESNFONZnvFolxLiDeuUIdGtz94/CWxElVzIK1hkjq/Yf6lT+t5faKd6ehqUp
+	 6HDN0JNqG/u5Q==
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-3c9a42d6349so7833652fac.1
+        for <linux-pm@vger.kernel.org>; Tue, 28 Oct 2025 05:30:40 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUkalFxm/KlzyhRUAgl4M5k130NtnID+JMB3yTFEldC4zcooFVSafdOaX3jFLg45BRj9Pp8vlG5Tw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzmcrxOyiPLsU/W2GnjA1LdW5k4Bk5x2UdWQ/UxYEz2GVu7F+ug
+	U4unX2pdssl/xDOj82d5fpJn+3nNZjysbOULYt7DvSrfmDjFK8r8moipQKWkjIoHzBJdWwpeiQ4
+	aESvhmPnpZ2NXlEwvS9QLcgSZVPGqy4s=
+X-Google-Smtp-Source: AGHT+IF4/+n4/HUbYzvmzntYRGMqRLoTUquPBb05pAoL2nb4JIDivDwVJlZRViGR0xOD6wLtOHPmiqYRVXII1LbUhvo=
+X-Received: by 2002:a05:6870:a188:b0:3d2:f6c1:1744 with SMTP id
+ 586e51a60fabf-3d5d9554f00mr1276006fac.28.1761654639396; Tue, 28 Oct 2025
+ 05:30:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251028060829.65434-1-linmq006@gmail.com>
-In-Reply-To: <20251028060829.65434-1-linmq006@gmail.com>
+References: <20251028053136.692462-1-ankur.a.arora@oracle.com> <20251028053136.692462-8-ankur.a.arora@oracle.com>
+In-Reply-To: <20251028053136.692462-8-ankur.a.arora@oracle.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 28 Oct 2025 13:03:34 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0h3YMqT9uH+aLxu7SKsqY12AN7R04fRrL8Q+Z4wo0JaOA@mail.gmail.com>
-X-Gm-Features: AWmQ_bkQc9jm8EG6beNx1vkq6okGIrtKCtxYZsndpTWZCgkZ3fOY0fn_g05yUDg
-Message-ID: <CAJZ5v0h3YMqT9uH+aLxu7SKsqY12AN7R04fRrL8Q+Z4wo0JaOA@mail.gmail.com>
-Subject: Re: [PATCH] thermal: thermal_of: Fix device node reference leak in thermal_of_cm_lookup
-To: Miaoqian Lin <linmq006@gmail.com>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Lukasz Luba <lukasz.luba@arm.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Date: Tue, 28 Oct 2025 13:30:28 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0hSvzHfsE4nrEW-Ey0dnJ+m=dSU-f1RywGNU0Xyi3jXtQ@mail.gmail.com>
+X-Gm-Features: AWmQ_bmK2EK_uRWSBm9YaeD6TrkAr4FPkjdGF2gNL1N7yUrOkz2AUZHQBAURvQI
+Message-ID: <CAJZ5v0hSvzHfsE4nrEW-Ey0dnJ+m=dSU-f1RywGNU0Xyi3jXtQ@mail.gmail.com>
+Subject: Re: [RESEND PATCH v7 7/7] cpuidle/poll_state: Poll via smp_cond_load_relaxed_timeout()
+To: Ankur Arora <ankur.a.arora@oracle.com>
+Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org, 
+	bpf@vger.kernel.org, arnd@arndb.de, catalin.marinas@arm.com, will@kernel.org, 
+	peterz@infradead.org, akpm@linux-foundation.org, mark.rutland@arm.com, 
+	harisokn@amazon.com, cl@gentwo.org, ast@kernel.org, rafael@kernel.org, 
+	daniel.lezcano@linaro.org, memxor@gmail.com, zhenglifeng1@huawei.com, 
+	xueshuai@linux.alibaba.com, joao.m.martins@oracle.com, 
+	boris.ostrovsky@oracle.com, konrad.wilk@oracle.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Oct 28, 2025 at 7:08=E2=80=AFAM Miaoqian Lin <linmq006@gmail.com> w=
-rote:
+On Tue, Oct 28, 2025 at 6:32=E2=80=AFAM Ankur Arora <ankur.a.arora@oracle.c=
+om> wrote:
 >
-> In thermal_of_cm_lookup(), of_parse_phandle() returns a device node with
-> its reference count incremented. The caller is responsible for releasing
-> this reference when the node is no longer needed.
+> The inner loop in poll_idle() polls over the thread_info flags,
+> waiting to see if the thread has TIF_NEED_RESCHED set. The loop
+> exits once the condition is met, or if the poll time limit has
+> been exceeded.
 >
-> Add of_node_put(tr_np) to fix the reference leaks.
+> To minimize the number of instructions executed in each iteration,
+> the time check is done only intermittently (once every
+> POLL_IDLE_RELAX_COUNT iterations). In addition, each loop iteration
+> executes cpu_relax() which on certain platforms provides a hint to
+> the pipeline that the loop busy-waits, allowing the processor to
+> reduce power consumption.
 >
-> Found via static analysis.
->
-> Fixes: 3fd6d6e2b4e8 ("thermal/of: Rework the thermal device tree initiali=
-zation")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+> This is close to what smp_cond_load_relaxed_timeout() provides. So,
+> restructure the loop and fold the loop condition and the timeout check
+> in smp_cond_load_relaxed_timeout().
+
+Well, it is close, but is it close enough?
+
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Signed-off-by: Ankur Arora <ankur.a.arora@oracle.com>
 > ---
->  drivers/thermal/thermal_of.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+>  drivers/cpuidle/poll_state.c | 29 ++++++++---------------------
+>  1 file changed, 8 insertions(+), 21 deletions(-)
 >
-> diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
-> index 1a51a4d240ff..2bb1b8e471cf 100644
-> --- a/drivers/thermal/thermal_of.c
-> +++ b/drivers/thermal/thermal_of.c
-> @@ -284,8 +284,11 @@ static bool thermal_of_cm_lookup(struct device_node =
-*cm_np,
->                 int count, i;
+> diff --git a/drivers/cpuidle/poll_state.c b/drivers/cpuidle/poll_state.c
+> index 9b6d90a72601..dc7f4b424fec 100644
+> --- a/drivers/cpuidle/poll_state.c
+> +++ b/drivers/cpuidle/poll_state.c
+> @@ -8,35 +8,22 @@
+>  #include <linux/sched/clock.h>
+>  #include <linux/sched/idle.h>
 >
->                 tr_np =3D of_parse_phandle(child, "trip", 0);
-> -               if (tr_np !=3D trip->priv)
-> +               if (tr_np !=3D trip->priv) {
-> +                       of_node_put(tr_np);
->                         continue;
-> +               }
-> +               of_node_put(tr_np);
-
-This will also work because tr_np is not dereferenced below:
-
-                tr_np =3D of_parse_phandle(child, "trip", 0);
-                of_node_put(tr_np);
-                if (tr_np !=3D trip->priv)
-                                continue;
-
-but a more general question is whether or not device nodes used for
-populating thermal zone trip points can be let go.
-
-If not, then this change needs to be combined with another one that
-will prevent them from going away.
-
-Presumably they need to be reference counted in
-thermal_of_populate_trip().  Daniel?
-
+> -#define POLL_IDLE_RELAX_COUNT  200
+> -
+>  static int __cpuidle poll_idle(struct cpuidle_device *dev,
+>                                struct cpuidle_driver *drv, int index)
+>  {
+> -       u64 time_start;
+> -
+> -       time_start =3D local_clock_noinstr();
+> +       u64 time_end;
+> +       u32 flags =3D 0;
 >
->                 /* The trip has been found, look up the cdev. */
->                 count =3D of_count_phandle_with_args(child, "cooling-devi=
-ce",
+>         dev->poll_time_limit =3D false;
+>
+> +       time_end =3D local_clock_noinstr() + cpuidle_poll_time(drv, dev);
+
+Is there any particular reason for doing this unconditionally?  If
+not, then it looks like an arbitrary unrelated change to me.
+
+> +
+>         raw_local_irq_enable();
+>         if (!current_set_polling_and_test()) {
+> -               unsigned int loop_count =3D 0;
+> -               u64 limit;
+> -
+> -               limit =3D cpuidle_poll_time(drv, dev);
+> -
+> -               while (!need_resched()) {
+> -                       cpu_relax();
+> -                       if (loop_count++ < POLL_IDLE_RELAX_COUNT)
+> -                               continue;
+> -
+> -                       loop_count =3D 0;
+> -                       if (local_clock_noinstr() - time_start > limit) {
+> -                               dev->poll_time_limit =3D true;
+> -                               break;
+> -                       }
+> -               }
+> +               flags =3D smp_cond_load_relaxed_timeout(&current_thread_i=
+nfo()->flags,
+> +                                                     (VAL & _TIF_NEED_RE=
+SCHED),
+> +                                                     (local_clock_noinst=
+r() >=3D time_end));
+
+So my understanding of this is that it reduces duplication with some
+other places doing similar things.  Fair enough.
+
+However, since there is "timeout" in the name, I'd expect it to take
+the timeout as an argument.
+
+> +               dev->poll_time_limit =3D !(flags & _TIF_NEED_RESCHED);
+>         }
+>         raw_local_irq_disable();
+>
 > --
 
