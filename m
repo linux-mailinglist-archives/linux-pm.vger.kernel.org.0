@@ -1,129 +1,322 @@
-Return-Path: <linux-pm+bounces-36939-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36940-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id E64A1C12BB6
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Oct 2025 04:18:38 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 43004C12C46
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Oct 2025 04:31:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 20FFF4EB68C
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Oct 2025 03:16:46 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id B83C03540CB
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Oct 2025 03:31:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FCB2224234;
-	Tue, 28 Oct 2025 03:16:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC24620F08C;
+	Tue, 28 Oct 2025 03:31:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Lv9fGlCp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eVtL5zvE"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15696158874
-	for <linux-pm@vger.kernel.org>; Tue, 28 Oct 2025 03:16:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B980D23AD;
+	Tue, 28 Oct 2025 03:31:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761621401; cv=none; b=KLcr0nljI5PSuAWtkc2gIBIbphrK+AtVzZqRIKjV8P213Pl6zoOsgdn77ZJB4UhnIoDBQqGZHatxj3oZpNtw2CdS8kB7uwvUQQnoRwanlfag6zBfLHCFJ3PYyv8cQWycvNV7UkhMjxmZmJfM+ol8oX6J32akBUPU7bb+gOW3U8s=
+	t=1761622307; cv=none; b=kSmFNvMfG/XPhjgErRdU4rWT0zBR/n9kBeC1uJMO9iBdfLK9hrf+D/HIpzuCFC9sn9CIJtyfz0uhgQPf1d1ySHRSLTnabXopAghUvPfbJOmiPLpPFyzOEIMKMmYtlNPVEX/PSGhOJ1fBwkRkVuLbqTbOFL0ZNT1ps7yxDql2sXw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761621401; c=relaxed/simple;
-	bh=cHHkD30AaxNGfUjFD9KtWlH0G5zDyjXDYQiWrVKJSIE=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=QPXLd+ntTmRvM4VDCK0QTS9dRqEFZA59yNWROTPkNsB+/iPoszz4dmSi5FNqLiOUimNGBCzJpTTB+txm0xO8mv5dCBFyZ3I6epy/aLWJYwMbwJpb4e4ikmW28Y+IOLEtZPeb3acq8QAnKVVxYccViOOZroXx/qb5foD+pJQg1NM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Lv9fGlCp; arc=none smtp.client-ip=209.85.210.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-77f67ba775aso6792932b3a.3
-        for <linux-pm@vger.kernel.org>; Mon, 27 Oct 2025 20:16:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761621399; x=1762226199; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=q7Dr88n0rsMeY0SbLXIpFyJggBzx8goTlgYQ7zbZXXM=;
-        b=Lv9fGlCpfXzsi6PkQ0jGtnCEf6t0rev5XwPG5y0I4hHwY/Y4ImeoGsil/3jeKiJygC
-         ovZuqV4YvhZQrD3ILzoS/sMiLFwLBpjKd5Brcu6N9LJhbKXh9+O6bht+vOlRRIJ+znef
-         JUR7wPR8aSUT/bbevN9Qi1Gb5PjPx81Y0UHNzXpnfEOqa/ttjrxHbVDY5qFc7ZQ9QL+Y
-         zV1tWc410U4XxTdojpFIvWviPsiRIDuAC3qR+GSqOfMd23964ciyz41sI6upV07lTmDq
-         xXcgEhhNLsS+id6X7A9yqhsnsOQ5GdoiKZkorcpVeDxgQ2IWQKFCZ843FlL/HlxoDH17
-         AXfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761621399; x=1762226199;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=q7Dr88n0rsMeY0SbLXIpFyJggBzx8goTlgYQ7zbZXXM=;
-        b=D3UTL5RWYFhO4OxGmUnDeZsn/kB82bOCAxYP/tWnQVFq/PDpKyMpfGZEFkvkIh9Vpw
-         rWxJpCXlLbRYcMs53xEwSGPP4eCWfyMHu7NxYB8Bw8i8t6n6mVhR7kaiMBnFIKGsTxKP
-         Fe9vF1Sy06k1bAcK+SU8jRgXy8H4oRiJumrCt1nzTB4peNpbYxzQnIF0JHbEJL5HtSCj
-         DvyTvTqepLDpCeFzARi4KCogRiktLIM1cx+AijYcNPyfv08tc+9V5ZDOk6HTEbGzV15T
-         MuOu/c89riFsfO8CwybwVZi7xbLGmGcMvUGdSdd4NH+j/t85/KqADIUaMkeUrJY4lLpu
-         SsRA==
-X-Forwarded-Encrypted: i=1; AJvYcCV+MXlQuveIrHu6i3vyfqSFtcovRvtDrRPs3KWNoiNBl5IQJ3LxHV0+pE0yunJTYiWUvbfft+N+Fg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxdOpZ9OXaYf8GTDnN0BQg35UpMmUOV6J411sjnWLHq9dJWmMq4
-	xoWjmTMSuv8PhBU52w08+md+M9BivcipRfyFrBqSprFmcT5SgSTkb7Aq
-X-Gm-Gg: ASbGncvqDSYOKiSHtK4kv6M6mKoc7dwD5DxibdWEQhVFuaUvqOE5iYAVgDhAJ6PlHnF
-	u1tf6OhIFjW03NgtHa9wIJBA0Z+tLwzNmb0OOKX9HR0W6pD6U2qY8mmcFY4Hk+k0rG1BHUP/Pfu
-	hJdM60OX8kpVXGPL0NqvWsc/S+cdWB9R/+PApSc29zNQxS2TiivPRhf7ufPyl/osxCo7J1aZJ7b
-	ACc61+ctngcqFPOL2baM2d4bVX+F3PQUJJszuK6ML8NgH+9dFr83+fZEq6cpOIKS5b5IPigHDvc
-	M9Wy0lnfb0OTtvJ68AAZ04F1fJjbTr/hE/svFHVJ1fh21CB7GAN8kXfI8a5QVqq+pH0zuZk6eh2
-	ZeJl/qeVVeFM+hm+dEfSKUWsx8Sq5KkMJGYyHuL6q4wTCFLNEeU062cNh+SX1ZDbHsEcl9N1FpB
-	ehP+LfVZBl8W5upUgWPqtf1g==
-X-Google-Smtp-Source: AGHT+IGeeElAGdz52QvzDON6TZ6X2VN+9KdN3tRsb9MvpzKrX+azsLuImQoCuSHnyIB4CWg/XHY7mQ==
-X-Received: by 2002:a05:6a00:c8d:b0:7a2:6b48:5359 with SMTP id d2e1a72fcca58-7a441c46a7cmr2594121b3a.24.1761621399271;
-        Mon, 27 Oct 2025 20:16:39 -0700 (PDT)
-Received: from localhost.localdomain ([124.77.218.104])
-        by smtp.googlemail.com with ESMTPSA id d2e1a72fcca58-7a41408c4dfsm9818276b3a.65.2025.10.27.20.16.36
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Mon, 27 Oct 2025 20:16:38 -0700 (PDT)
-From: Miaoqian Lin <linmq006@gmail.com>
-To: Ulf Hansson <ulf.hansson@linaro.org>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	"Rob Herring (Arm)" <robh@kernel.org>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Lucas Stach <l.stach@pengutronix.de>,
-	linux-pm@vger.kernel.org,
-	imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Cc: linmq006@gmail.com,
-	stable@vger.kernel.org
-Subject: [PATCH] soc: imx: gpc: fix reference count leak in imx_gpc_remove
-Date: Tue, 28 Oct 2025 11:16:20 +0800
-Message-Id: <20251028031623.43284-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
+	s=arc-20240116; t=1761622307; c=relaxed/simple;
+	bh=Jl/8CHVAK7+L4vEEBKRiYKyCXkLAMwmArYnWsTUg74Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ryhTCNerjog3O5aGuVDm5LksoRWERdbkotXvzu+Dq0PC7te/zqbmPyRRoBWfLS5ObjB7nRBTig6usEx/37KE7GjnrlaPBdavpHIv2V1fM/3fdLrhVZx1ibp9pCgsrdRqxy7Su++dDyH/mGJ/6XVdHwe+Wdw+miEBPvjsPOsnNaQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eVtL5zvE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33DD9C4CEF1;
+	Tue, 28 Oct 2025 03:31:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761622307;
+	bh=Jl/8CHVAK7+L4vEEBKRiYKyCXkLAMwmArYnWsTUg74Q=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=eVtL5zvE2Sw10TJD4SsYkiqzTAQtue5QkhxVXBEMu6PGR98ZO4hWUeFWZ1nd9sJhU
+	 IUMLgzg7shdljsdXSmXyEkx4UowbgfK3a55oOQz/HORjnlSw+gluAVF8uz/nWc4vCc
+	 nt/Oq9ddADgIDxNddJQI0lswU8CKJP1iiTG8bNwtqLhuMISeYZbOcvk8kTPzb7soD0
+	 I30ItpvPehfnNBrUnJLfHzGqu13Di0MCZIY6VAxF6HOsMKVtsFQxESr9FuI/Qr87Ap
+	 jvYm47igU8kBy6q4V/7kScMlRm0SsujXqm/fOr4bUg4qzsjHRjte7Yo13OXl0Vy+md
+	 +5E+MQ8sJKgQA==
+Date: Mon, 27 Oct 2025 22:34:41 -0500
+From: Bjorn Andersson <andersson@kernel.org>
+To: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
+Cc: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, 
+	Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Sudeep Holla <sudeep.holla@arm.com>, Souvik Chakravarty <Souvik.Chakravarty@arm.com>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Andy Yan <andy.yan@rock-chips.com>, Mark Rutland <mark.rutland@arm.com>, 
+	Lorenzo Pieralisi <lpieralisi@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Konrad Dybcio <konradybcio@kernel.org>, cros-qcom-dts-watchers@chromium.org, 
+	Vinod Koul <vkoul@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Florian Fainelli <florian.fainelli@broadcom.com>, 
+	Moritz Fischer <moritz.fischer@ettus.com>, John Stultz <john.stultz@linaro.org>, 
+	Matthias Brugger <matthias.bgg@gmail.com>, Krzysztof Kozlowski <krzk@kernel.org>, 
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>, 
+	Stephen Boyd <swboyd@chromium.org>, Andre Draszik <andre.draszik@linaro.org>, 
+	Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-arm-msm@vger.kernel.org, Elliot Berman <quic_eberman@quicinc.com>, 
+	Srinivas Kandagatla <srini@kernel.org>
+Subject: Re: [PATCH v16 01/14] power: reset: reboot-mode: Synchronize list
+ traversal
+Message-ID: <5l2tcjbdtikkhkuhuz64ymk5et6wtl4kwf2mc265su27oh57rt@3shmo3wfx7fb>
+References: <20251015-arm-psci-system_reset2-vendor-reboots-v16-0-b98aedaa23ee@oss.qualcomm.com>
+ <20251015-arm-psci-system_reset2-vendor-reboots-v16-1-b98aedaa23ee@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251015-arm-psci-system_reset2-vendor-reboots-v16-1-b98aedaa23ee@oss.qualcomm.com>
 
-of_get_child_by_name() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when not need anymore.
-Add missing of_node_put() to avoid refcount leak.
+On Wed, Oct 15, 2025 at 10:08:16AM +0530, Shivendra Pratap wrote:
+> List traversals must be synchronized to prevent race conditions
+> and data corruption. The reboot-mode list is not protected by a
+> lock currently, which can lead to concurrent access and race.
 
-Fixes: 721cabf6c660 ("soc: imx: move PGC handling to a new GPC driver")
-Cc: stable@vger.kernel.org
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- drivers/pmdomain/imx/gpc.c | 2 ++
- 1 file changed, 2 insertions(+)
+Is it a theoretical future race or something that we can hit in the
+current implementation?
 
-diff --git a/drivers/pmdomain/imx/gpc.c b/drivers/pmdomain/imx/gpc.c
-index 33991f3c6b55..a34b260274f7 100644
---- a/drivers/pmdomain/imx/gpc.c
-+++ b/drivers/pmdomain/imx/gpc.c
-@@ -536,6 +536,8 @@ static void imx_gpc_remove(struct platform_device *pdev)
- 			return;
- 		}
- 	}
-+
-+	of_node_put(pgc_node);
- }
- 
- static struct platform_driver imx_gpc_driver = {
--- 
-2.39.5 (Apple Git-154)
+> 
+> Introduce a mutex lock to guard all operations on the reboot-mode
+> list and ensure thread-safe access. The change prevents unsafe
+> concurrent access on reboot-mode list.
 
+I was under the impression that these lists where created during boot
+and then used at some later point, which at best would bring a
+theoretical window for a race... Reviewing the code supports my
+understanding, but perhaps I'm missing something?
+
+> 
+> Fixes: 4fcd504edbf7 ("power: reset: add reboot mode driver")
+> Fixes: ca3d2ea52314 ("power: reset: reboot-mode: better compatibility with DT (replace ' ,/')")
+> 
+
+Skip this empty line, please.
+
+
+And given that you have fixes here, I guess this is a problem today. In
+which case, this shouldn't have been carried for 16 versions - but have
+sent and been merged on its own already.
+
+So please, if this is a real issue, start your commit message with a
+descriptive problem description, to make it clear that this needs to be
+merged yesterday - or drop the fixes.
+
+> Signed-off-by: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
+> ---
+>  drivers/power/reset/reboot-mode.c | 96 +++++++++++++++++++++------------------
+>  include/linux/reboot-mode.h       |  4 ++
+>  2 files changed, 57 insertions(+), 43 deletions(-)
+> 
+> diff --git a/drivers/power/reset/reboot-mode.c b/drivers/power/reset/reboot-mode.c
+> index fba53f638da04655e756b5f8b7d2d666d1379535..8fc3e14638ea757c8dc3808c240ff569cbd74786 100644
+> --- a/drivers/power/reset/reboot-mode.c
+> +++ b/drivers/power/reset/reboot-mode.c
+> @@ -29,9 +29,11 @@ static unsigned int get_reboot_mode_magic(struct reboot_mode_driver *reboot,
+>  	if (!cmd)
+>  		cmd = normal;
+>  
+> -	list_for_each_entry(info, &reboot->head, list)
+> -		if (!strcmp(info->mode, cmd))
+> -			return info->magic;
+> +	scoped_guard(mutex, &reboot->rb_lock) {
+> +		list_for_each_entry(info, &reboot->head, list)
+> +			if (!strcmp(info->mode, cmd))
+> +				return info->magic;
+> +	}
+>  
+>  	/* try to match again, replacing characters impossible in DT */
+>  	if (strscpy(cmd_, cmd, sizeof(cmd_)) == -E2BIG)
+> @@ -41,9 +43,11 @@ static unsigned int get_reboot_mode_magic(struct reboot_mode_driver *reboot,
+>  	strreplace(cmd_, ',', '-');
+>  	strreplace(cmd_, '/', '-');
+>  
+> -	list_for_each_entry(info, &reboot->head, list)
+> -		if (!strcmp(info->mode, cmd_))
+> -			return info->magic;
+> +	scoped_guard(mutex, &reboot->rb_lock) {
+> +		list_for_each_entry(info, &reboot->head, list)
+> +			if (!strcmp(info->mode, cmd_))
+> +				return info->magic;
+> +	}
+>  
+>  	return 0;
+>  }
+> @@ -78,46 +82,50 @@ int reboot_mode_register(struct reboot_mode_driver *reboot)
+>  
+>  	INIT_LIST_HEAD(&reboot->head);
+>  
+> -	for_each_property_of_node(np, prop) {
+> -		if (strncmp(prop->name, PREFIX, len))
+> -			continue;
+> -
+> -		info = devm_kzalloc(reboot->dev, sizeof(*info), GFP_KERNEL);
+> -		if (!info) {
+> -			ret = -ENOMEM;
+> -			goto error;
+> -		}
+> -
+> -		if (of_property_read_u32(np, prop->name, &info->magic)) {
+> -			dev_err(reboot->dev, "reboot mode %s without magic number\n",
+> -				info->mode);
+> -			devm_kfree(reboot->dev, info);
+> -			continue;
+> -		}
+> -
+> -		info->mode = kstrdup_const(prop->name + len, GFP_KERNEL);
+> -		if (!info->mode) {
+> -			ret =  -ENOMEM;
+> -			goto error;
+> -		} else if (info->mode[0] == '\0') {
+> -			kfree_const(info->mode);
+> -			ret = -EINVAL;
+> -			dev_err(reboot->dev, "invalid mode name(%s): too short!\n",
+> -				prop->name);
+> -			goto error;
+> +	mutex_init(&reboot->rb_lock);
+> +
+> +	scoped_guard(mutex, &reboot->rb_lock) {
+
+I don't see how this can race with anything, reboot_mode_register() is
+supposed to be called from some probe function, with reboot_mode_driver
+being a "local" object.
+
+The guard here "protects" &reboot->head, but that is not a shared
+resources at this point.
+
+> +		for_each_property_of_node(np, prop) {
+> +			if (strncmp(prop->name, PREFIX, len))
+> +				continue;
+> +
+> +			info = devm_kzalloc(reboot->dev, sizeof(*info), GFP_KERNEL);
+> +			if (!info) {
+> +				ret = -ENOMEM;
+> +				goto error;
+> +			}
+> +
+> +			if (of_property_read_u32(np, prop->name, &info->magic)) {
+> +				dev_err(reboot->dev, "reboot mode %s without magic number\n",
+> +					info->mode);
+> +				devm_kfree(reboot->dev, info);
+> +				continue;
+> +			}
+> +
+> +			info->mode = kstrdup_const(prop->name + len, GFP_KERNEL);
+> +			if (!info->mode) {
+> +				ret =  -ENOMEM;
+> +				goto error;
+> +			} else if (info->mode[0] == '\0') {
+> +				kfree_const(info->mode);
+> +				ret = -EINVAL;
+> +				dev_err(reboot->dev, "invalid mode name(%s): too short!\n",
+> +					prop->name);
+> +				goto error;
+> +			}
+> +
+> +			list_add_tail(&info->list, &reboot->head);
+>  		}
+>  
+> -		list_add_tail(&info->list, &reboot->head);
+> -	}
+> -
+> -	reboot->reboot_notifier.notifier_call = reboot_mode_notify;
+> -	register_reboot_notifier(&reboot->reboot_notifier);
+> +		reboot->reboot_notifier.notifier_call = reboot_mode_notify;
+> +		register_reboot_notifier(&reboot->reboot_notifier);
+
+Once register_reboot_notifier() has been called, &reboot->head is
+visible outside the specific driver instance.
+
+So, there's no reason to lock in reboot_mode_register().
+
+>  
+> -	return 0;
+> +		return 0;
+>  
+>  error:
+> -	list_for_each_entry(info, &reboot->head, list)
+> -		kfree_const(info->mode);
+> +		list_for_each_entry(info, &reboot->head, list)
+> +			kfree_const(info->mode);
+> +	}
+>  
+>  	return ret;
+>  }
+> @@ -133,8 +141,10 @@ int reboot_mode_unregister(struct reboot_mode_driver *reboot)
+>  
+>  	unregister_reboot_notifier(&reboot->reboot_notifier);
+>  
+> -	list_for_each_entry(info, &reboot->head, list)
+> -		kfree_const(info->mode);
+> +	scoped_guard(mutex, &reboot->rb_lock) {
+
+get_reboot_mode_magic() is only called from reboot_mode_notify(), which
+is only invoked by blocking_notifier_call_chain().
+
+blocking_notifier_call_chain() takes a read semaphore.
+unregister_reboot_notifier() take a write semaphore.
+
+So, if we're racing with a shutdown or reboot, I see two possible
+things:
+
+1) blocking_notifier_call_chain() happens first and calls
+   reboot_mode_notify(), blocking unregister_reboot_notifier(). Once it
+   returns, the unregister proceeds and we enter case #2
+
+2) unregister_reboot_notifier() happens first (or after the
+   blocking_notifier_call_chain() returns). Our reboot object is removed
+   from the list and blocking_notifier_call_chain() will not invoke
+   reboot_mode_notify().
+
+In either case, the list has a single owner here.
+
+
+As far as I can see, the only race left is if multiple concurrent calls
+happens to blocking_notifier_call_chain(), the behavior of
+reboot->write() might be undefined. But I think that is reasonable.
+
+
+Please let me know if I'm missing something.
+
+Thanks,
+Bjorn
+
+> +		list_for_each_entry(info, &reboot->head, list)
+> +			kfree_const(info->mode);
+> +	}
+>  
+>  	return 0;
+>  }
+> diff --git a/include/linux/reboot-mode.h b/include/linux/reboot-mode.h
+> index 4a2abb38d1d612ec0fdf05eb18c98b210f631b7f..b73f80708197677db8dc2e43affc519782b7146e 100644
+> --- a/include/linux/reboot-mode.h
+> +++ b/include/linux/reboot-mode.h
+> @@ -2,11 +2,15 @@
+>  #ifndef __REBOOT_MODE_H__
+>  #define __REBOOT_MODE_H__
+>  
+> +#include <linux/mutex.h>
+> +
+>  struct reboot_mode_driver {
+>  	struct device *dev;
+>  	struct list_head head;
+>  	int (*write)(struct reboot_mode_driver *reboot, unsigned int magic);
+>  	struct notifier_block reboot_notifier;
+> +	/*Protects access to reboot mode list*/
+> +	struct mutex rb_lock;
+>  };
+>  
+>  int reboot_mode_register(struct reboot_mode_driver *reboot);
+> 
+> -- 
+> 2.34.1
+> 
 
