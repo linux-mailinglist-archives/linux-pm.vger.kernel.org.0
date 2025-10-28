@@ -1,144 +1,223 @@
-Return-Path: <linux-pm+bounces-36956-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36957-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7345EC13303
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Oct 2025 07:39:26 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9ECDFC1359E
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Oct 2025 08:44:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 52EC84E2F5C
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Oct 2025 06:39:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 373AB5E26A3
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Oct 2025 07:39:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EBF82C0F69;
-	Tue, 28 Oct 2025 06:39:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 412D323C39A;
+	Tue, 28 Oct 2025 07:39:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T+D/2g1Y"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hpw7dwnB"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A7762C0293
-	for <linux-pm@vger.kernel.org>; Tue, 28 Oct 2025 06:39:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DDE022D795
+	for <linux-pm@vger.kernel.org>; Tue, 28 Oct 2025 07:39:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761633561; cv=none; b=lySHDAsbsp7qzINHgqnpv5ALXq+KmtbbusHDtt3g7auF53Cm+M311gQidn3/LoYO58xAIBfFPX1COnUKdFxZX6P5cO7GyS6gvsCxvng9mW1s0PkBXcGIOOfReaicDJzk8PUX/30ixWrndzgtw3OuaC6nbhza3fYQtSkVPmuxyjo=
+	t=1761637148; cv=none; b=bGE3AsCENHl6h94jsRiFgjZbLuzEOigYotS1pefHa0L7mHDH/GQf2imE0Fjg4H9s5xD3pKrRCh41x7PQMkD8alzct66Tdk298oKEcFe7gfNrBVYfHM6ds76hsewFN6G3CXZTp7WFXdDr+5RMX9ryMhDhtGXPPJCOcCh1fGcv0z8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761633561; c=relaxed/simple;
-	bh=oe8UGTsyZQU+Sb6o4knYJm/Nl+RnNUK56OH6fcAsM64=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CZtzggoN01ig6bOjYWEeOZ+haYE0yCadJOnXf7vSeqR1q4MRQTCyjxPX0lum+1VddnaOsyWCEKKnjdG4VKU6buhLKnLvmBanNkiGfaHGQ+DorHHook/eqEnsfkbebfqR7qB8ZfCH/i6vh0eW5rm77RLCqw5Jexauh7iy2a3kPs0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=T+D/2g1Y; arc=none smtp.client-ip=209.85.208.170
+	s=arc-20240116; t=1761637148; c=relaxed/simple;
+	bh=sH3e7s8xPB6+HNIGAMv6PrTNEE0dGDJnlF85p02RvL0=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=c2rdlxFR9glff1J455SDfGn4iWHXNcbBx2EQIdcYLE/6EEvPAI33WCABPx/MuFDM7zWUtVPsHHM8j9E6J05srvqXDC5rgOJLtIvRCjOSSCMJCOlkQFRnR/2sgnoc3Svni9gTQoGHKaXGtVnKz2hCKwpiSgoNe+WzvDJeDnoseQw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hpw7dwnB; arc=none smtp.client-ip=209.85.215.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-378f010bf18so27445471fa.1
-        for <linux-pm@vger.kernel.org>; Mon, 27 Oct 2025 23:39:19 -0700 (PDT)
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-b6ce696c18bso5173197a12.1
+        for <linux-pm@vger.kernel.org>; Tue, 28 Oct 2025 00:39:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761633558; x=1762238358; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=o2NHp9DtfBxd6wakLEvsBSL0E8nIoGL8qMdT+jYFy9w=;
-        b=T+D/2g1YRWTe3hvcE6dzlW/v7H7zmsCuzU4PeToa71WdgD5U/gfl6VOqTMxwotTjow
-         sCXyzAruCgyhUpxXWKp1rtFdo83yEFxedHO305txU/NYFxqfBqkCgc4aISU1QtjjKzf/
-         H/ANG1sxpXpAtYR3rCJtXW8V1xMAvtI1BF3sNgW97zA4wHqIsOeuScWQkGFcEGG4U9Xa
-         E7jEWWZyDAqQmxpxfh+t/8Ufp0nVLgE9RXnVuhiUvGKtK0Rn8kOxo++RufEezI+tDRBy
-         RE/Rs0OA18VTS/KlBxm6gF8W92mwUpzogHFLtbaL/aFvAIyXx1asxi0vuBAOe+q3Zid0
-         vG8Q==
+        d=gmail.com; s=20230601; t=1761637145; x=1762241945; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=fZQcAE3NiFPEWRiaaSdgMTBw653ZGnPFrSKRDHStXzg=;
+        b=hpw7dwnB55uSuP5Je5uhHmIz73ieUoyx1pj2j8piFq/CcOuCuFHBFwt1BWnBmMZ18U
+         +UWiVOifZT+SJpKooYd9Hke/7rGEwoY4pFfuig7NGasUIKr9qrdigb1J1S3jE9BCbDaB
+         ZCINEKQbm2bSQqPelFfid1Slt4Z5pOMth3iDHgcTIzrUwdrsvJxVKCCJbWfC2cHhVj9x
+         5f9LWv5X6KRX34X4hi7gm4aBLwKBDzKvmTEg/msC2mdOyu/PmJUaRcQdsvhA57EpyKse
+         uhRRtO0dHS04omzW3F2FH03qFJTtubHC4fyo/ESS6VUIMO26E5cCb7Y3TOFW6RQ8ECQl
+         nr8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761633558; x=1762238358;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=o2NHp9DtfBxd6wakLEvsBSL0E8nIoGL8qMdT+jYFy9w=;
-        b=gxtLWKvDZGCn2TlcQji2PoaftZxpAlViAUdUyZAewDJHgw/FyWY3EtAg4qlW1wcsNG
-         O6PW8OcUVoZGGLMWmqnDBHY+++qPlqV8ndcmseK31gXzCdA+kjacBcwIGlrkUps9LAA8
-         aWdb2RpEs/vl5OWCxMg7DGlz2cBeTslEW9OihrjOHer4Pw1LCOlH2U5pMpf3eToJ3PmS
-         FZrxjz235Im8ah3ekv3FqBZ0OXNlb/Cojgd5UL4jUSs48LpNRIuLG53MtuZ6tkRfSuu8
-         lVyIHe2OWRA0FU1/jgjOryXLelmf20+0qO1eSLQgKAuv/KR8tgt3KmSGIcqYr3swbH7k
-         eyhg==
-X-Forwarded-Encrypted: i=1; AJvYcCUN9QY0GzxzqwMdp2hPNYWVD8EAD1rI5Q3agCZvI1jFDDiVdIPuxyQhT9KVJxv3Ocs8MJl4k+8mTg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzEcvEv+MMgG5XGcFsSxrbIQkZVorzeBNP74umK32BTcO+AvYKE
-	VDfo8BpGpqAsA+tbAbdwkChMLPKhQiZG3BHdKRJrpt+cbLlzXnWeb2jL
-X-Gm-Gg: ASbGncsSGox/IUuZC/eYpCr0iRPpItvRZLyL/LUbth9dzp4FrNKDsW1O0RBshY8hOT2
-	zjsRkTzcBbL85UibeeQBSxMrWA9k9SQvAup/XNHhOjIOpSnzDm8+TBWRaGDjPBRkWvsIAfDTUOW
-	kiSo8We9p/U42beyViCEO+JQnOLjetJ8YwqHE2gLjudf81wwWTgPO+WngqMXMYrNoOFH/7ZMlZW
-	5sV5rhFnF32jSX/PlB9KcvsTB6+D+BB9OHSFVR97PZySMBRAA1JHVutk1rgLnq48OK3BCb25T2S
-	ej4DkUT8vfgFTDP0mTgGq5lfi3zIAmP89tTw/5TkWRUJ7A1d5j3HRIH3DcDkKLeqPv4TRDFNFD1
-	vmJwPwnYsWi8AxJHCvEElf66p36fihk6RBBF/v9iamz2GrW4oujghAjk7/JAespjm++KD/+hPPe
-	UPd2D8nT2MsdnrMcbb3A+2mt2lPq92oxRyQWX4Q16FfQLcF/krMUTeo4NzpA==
-X-Google-Smtp-Source: AGHT+IHynrA8gmQbmSsLhwg1ZIot0gtNKrvR9BYrLAUuDbg/4/iyYf4/D5eEEzFU8nZaoyRtB4Zbkg==
-X-Received: by 2002:a05:651c:2228:b0:376:3933:1d89 with SMTP id 38308e7fff4ca-37907cbd1ecmr6519691fa.24.1761633557353;
-        Mon, 27 Oct 2025 23:39:17 -0700 (PDT)
-Received: from ?IPV6:2a10:a5c0:800d:dd00:8fdf:935a:2c85:d703? ([2a10:a5c0:800d:dd00:8fdf:935a:2c85:d703])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-378ee092282sm26491101fa.5.2025.10.27.23.39.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Oct 2025 23:39:16 -0700 (PDT)
-Message-ID: <3cd3996a-a9da-494c-b92f-a03a73d403e5@gmail.com>
-Date: Tue, 28 Oct 2025 08:39:15 +0200
+        d=1e100.net; s=20230601; t=1761637145; x=1762241945;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fZQcAE3NiFPEWRiaaSdgMTBw653ZGnPFrSKRDHStXzg=;
+        b=DXqnDgCA7osm8FRsHEXJEdWq0dXDOXx2EX1iiGi4L02D5QYB6E+/PLR/q4mo0t9dET
+         s2sGLALCZe2YdiGCZCFE9OeM2JaR+HZIjk4UdIJXSdM/VgPu/WKnPt6dbMwtfVole1sC
+         WMlF0FPWpqsiNrD7y5NuSmtOD2yNbUKW3k44+Y6XPic9UH3l+1AjFAN6FK0oMRSCmSfG
+         KzpCjsVQwiTzVF4TBdwqvJQe2KmEaJ+M7E/cxkRk7XVZc8TqbkrjuNqTJ7jIxuJen6B2
+         iDEA+Cf5Va4InbXd+gL+WzIDtY+GoAs5iO9qrvV5YGIEn+UwWtXYFAxmzC0BuWp5Gw+T
+         73cQ==
+X-Gm-Message-State: AOJu0Yy93ShwxZgyL4G//x3PmGsV4l9QO/IWIkaawnhNd2M/FTnb9Uuo
+	ZJMrmqG9R3aYY1ibmzGP7qeZPQPdM7fux6NOK0/nU6PKWhayUQNFTbaK9m2JmPZ8+cLAO3Gestr
+	J6CrHtlliL1t/n9ok12ZiYRPCbSM9a6q/mqMduyemKg==
+X-Gm-Gg: ASbGncuqj98RMNgpaFiASb9xURDfx5G2HDlhFp7go6XpICLP8vrWIbYLbiIeIqQ958L
+	rx9/mt1B2eKkP6ZRClwqVnqghFAQNo5+veipiQR2aNNXtxmVxrCU6D9oHBmSfjo4Z38XlwbQKV9
+	XStf9TGUcYJUEXvEylC6wkDId00SclObDOJNd8xX0JNMcHuWtoLbYqS/V8388AHgNv5E1jeQ8Xe
+	xfLMNNZlrm7PcQU+vu6P9N93lxgLWnsHCoZ/NRt2U2kKQ0H1SoD4WasnscERWb1/XgmWnRaC8tL
+	Io800W7oZ2m1Hw==
+X-Google-Smtp-Source: AGHT+IGFh2TYLasVGXUF21rpEaEF/tSw6kHufc0/I2DgN9Fg5FFpCLuzmunsuUK3bHPgMcURl/Aj5TjMj7GW+UrQwnM=
+X-Received: by 2002:a17:902:ce91:b0:27e:e1f3:f853 with SMTP id
+ d9443c01a7336-294cb35ec0emr25822415ad.8.1761637145420; Tue, 28 Oct 2025
+ 00:39:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 00/15] Support ROHM BD72720 PMIC
-To: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc: Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Sebastian Reichel <sre@kernel.org>,
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Linus Walleij <linus.walleij@linaro.org>,
- Bartosz Golaszewski <brgl@bgdev.pl>, Andreas Kemnade <andreas@kemnade.info>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-rtc@vger.kernel.org
-References: <cover.1761564043.git.mazziesaccount@gmail.com>
-Content-Language: en-US, en-AU, en-GB, en-BW
-From: Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <cover.1761564043.git.mazziesaccount@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+From: Christopher Harris <chris.harris79@gmail.com>
+Date: Tue, 28 Oct 2025 00:38:54 -0700
+X-Gm-Features: AWmQ_bnrt0pbyscnBc_FU7k8Dqzb61ZnfyKrV__muDPkT_bA0X_pvnkmcGfo5-g
+Message-ID: <CAM+eXpdDT7KjLV0AxEwOLkSJ2QtrsvGvjA2cCHvt1d0k2_C4Cw@mail.gmail.com>
+Subject: [REGRESSION] AMD P-State fails with "_CPC object is not present" on
+ AMD Zen 4 (EPYC 4484PX) between 6.10 and 6.11
+To: linux-pm@vger.kernel.org
+Cc: regressions@lists.linux.dev, mario.limonciello@amd.com, perry.yuan@amd.com, 
+	rafael@kernel.org, viresh.kumar@linaro.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 27/10/2025 13:44, Matti Vaittinen wrote:
-> The ROHM BD72720 is a new power management IC for portable, battery
-> powered devices. It integrates 10 BUCKs and 11 LDOs, RTC, charger, LEDs,
-> GPIOs and a clock gate. To me the BD72720 seems like a successor to the
-> BD71828 and BD71815 PMICs.
-> 
-> This series depends on the series: "[PATCH v5 0/3] power: supply: add
-> charger for BD71828":
-> https://lore.kernel.org/all/20250918-bd71828-charger-v5-0-851164839c28@kemnade.info/
-> sent by Andreas. The power-supplly and MAINTAINERs patches (2/3 and 3/3)
-> from that serties aren't merged yet.
-> 
-> Revision history:
->    RFCv1 => v2:
->    - Drop RFC status
->    - Use stacked regmaps to hide secondary map from the sub-drivers
->    - Quite a few styling fixes and improvements as suggested by
->      reviewers. More accurate changelog in individual patches.
->    - Link to v1:
->      https://lore.kernel.org/all/cover.1759824376.git.mazziesaccount@gmail.com/
+#regzbot introduced: v6.10..v6.11
 
-As Alexandre pointed out, the 07/15 (MFD) patch was missing from the 
-series. For some reason, google's SMTP severs refused from sending it 
-with the recipient list used for all other patches, with just: "Status: 
-5.7.1". After several retries I had to give-up yesterday.
+[Regression precisely identified: Last working 6.10.0, first broken 6.11.0]
 
-Today I managed to get it through, after I dropped every direct CC 
-address, leaving only the lists. No idea what is happening :(
+## Summary
 
-Anyways, it's in the lore for the interested:
-https://lore.kernel.org/all/4c964cef46a396209052aa4194d08fc03f989647.1761564043.git.mazziesaccount@gmail.com/
+The AMD P-State driver fails to initialize on AMD EPYC 4484PX
+processors starting
+with kernel 6.11.0, returning "_CPC object is not present in SBIOS or
+ACPI disabled"
+error. The same hardware works correctly with kernel 6.10.0 and earlier.
 
-I will in any case re-spin the series with suggested changes - so 
-hopefully I can get the v3 sent correctly to all the recipients :/
+The regression was introduced between 6.10.0 and 6.11.0.
 
-Yours,
-	-- Matti
+## Hardware
+
+- CPU: AMD EPYC 4484PX 12-Core Processor (Zen 4 architecture)
+- Motherboard: SuperMicro (confirmed CPPC enabled in BIOS by vendor)
+- Tested on multiple identical systems
+
+Note: This issue likely affects other AMD Zen 4 processors and
+possibly other AMD
+generations, though testing has been performed specifically on EPYC
+4484PX systems.
+
+## Regression Test Results
+
+**Working** (amd-pstate loads successfully):
+- 6.8.0-84-generic (Ubuntu 24.04)
+- 6.8.0-86-generic (Ubuntu 24.04)
+- 6.9.0-060900-generic (Ubuntu mainline)
+- 6.10.0-061000-generic (Ubuntu mainline)
+- 6.10.14-061014-generic (Ubuntu mainline) **<-- LAST WORKING (latest 6.10.x)**
+
+**Broken** (falls back to acpi-cpufreq with _CPC error):
+- 6.11.0-061100-generic (Ubuntu mainline) **<-- FIRST BROKEN**
+- 6.12.0-061200-generic (Ubuntu mainline)
+- 6.13.0-061300-generic (Ubuntu mainline)
+- 6.14.0-061400-generic (Ubuntu mainline)
+- 6.16.7-061607-generic (Ubuntu mainline)
+- 6.17.1-061701-generic (Ubuntu mainline)
+- 6.17.5-061705-generic (Ubuntu mainline)
+- 6.18.0-061800rc3-generic (Ubuntu mainline RC)
+- 6.17.1-1-cachyos-server-lto (Arch Linux)
+
+## Error Message
+
+```
+[    4.508125] amd_pstate: the _CPC object is not present in SBIOS or
+ACPI disabled
+```
+
+## Steps to Reproduce
+
+1. Boot with kernel parameter: amd_pstate=passive
+2. Check driver: cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_driver
+   Expected: amd-pstate
+   Actual: acpi-cpufreq
+3. Check dmesg: dmesg | grep "_CPC"
+   Shows: "the _CPC object is not present in SBIOS or ACPI disabled"
+
+## Kernel Configuration (identical in working and broken kernels)
+
+```
+CONFIG_ACPI_CPPC_LIB=y
+CONFIG_X86_AMD_PSTATE=y
+CONFIG_X86_AMD_PSTATE_DEFAULT_MODE=3
+CONFIG_X86_AMD_PSTATE_UT=m
+```
+
+## Testing Environment
+
+- Tested with vanilla kernels from Ubuntu mainline PPA
+- No additional modules or patches
+- Kernel not tainted
+- Reproduced on both Ubuntu 24.04 and Arch Linux distributions
+
+## Impact
+
+This regression prevents affected AMD systems from using the optimized
+AMD P-State
+driver, forcing fallback to generic acpi-cpufreq with approximately 5-10%
+performance loss. While confirmed on AMD EPYC 4484PX (Zen 4), this
+likely affects
+a broader range of AMD processors that support CPPC/ACPI P-States.
+
+## Next Steps
+
+I'm prepared to:
+1. Run amd-debug-tools to capture detailed reports if needed
+2. Test any proposed patches
+3. Perform git bisect between 6.10 and 6.11 if required
+4. Provide any additional debugging information
+
+## Bisection Results
+
+Through systematic testing of Ubuntu mainline kernels, I've identified the exact
+regression window:
+
+- **Last working version**: 6.10.14-061014-generic (latest 6.10.x series)
+- **First broken version**: 6.11.0-061100-generic
+
+The regression was introduced during the 6.11 merge window. All 6.10.x versions
+work correctly (tested through 6.10.14), while all 6.11+ versions
+fail. The issue
+persists through all subsequent versions tested up to 6.18.0-rc3.
+
+The regression appears to be in ACPI _CPC object detection/parsing, as the same
+BIOS/hardware combination works with the entire 6.10.x series but
+fails with 6.11+.
+
+## Additional Information
+
+The same ACPI tables and BIOS work correctly with 6.8 kernels, confirming
+this is not a firmware issue but a kernel regression in CPPC/ACPI handling.
+
+ACPI/CPPC related messages from working system (6.8.0):
+- No error messages, driver loads successfully
+
+ACPI/CPPC messages from broken system (6.17.5):
+```
+$ zgrep "ACPI.*CPPC" /proc/config.gz
+CONFIG_ACPI_CPPC_LIB=y
+$ dmesg | grep amd_pstate
+[    0.714133] amd_pstate: the _CPC object is not present in SBIOS or
+ACPI disabled
+```
+
+I've tested on multiple identical systems with the same results. I'm available
+for testing patches or providing additional debugging information as needed.
+
+Thank you for your attention to this regression.
+
+Best regards,
+
+Chris Harris
+chris.harris79@gmail.com
 
