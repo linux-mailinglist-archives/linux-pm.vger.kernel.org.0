@@ -1,148 +1,93 @@
-Return-Path: <linux-pm+bounces-36984-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36985-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0236BC155D4
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Oct 2025 16:15:37 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 958C0C15CFE
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Oct 2025 17:30:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6A54D1885A64
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Oct 2025 15:13:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DAC87460B71
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Oct 2025 16:22:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E47D275B0F;
-	Tue, 28 Oct 2025 15:12:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E4AB2853EE;
+	Tue, 28 Oct 2025 16:21:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MCcEq09F"
+	dkim=pass (1024-bit key) header.d=gentwo.org header.i=@gentwo.org header.b="PUp2zKMD"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from gentwo.org (gentwo.org [62.72.0.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 398801C6FE8
-	for <linux-pm@vger.kernel.org>; Tue, 28 Oct 2025 15:12:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3D3216F288;
+	Tue, 28 Oct 2025 16:21:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.72.0.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761664362; cv=none; b=C69xcjtdCT2v302LTU9qehvOlg3yg1gBMg/Bu5ff5rF1FSUcisNu1ymSI6ucgLy8E7AgRJfF9bkUgwmJ6jkYx9MdO0j1ilt0XSSALAAsZBVC5knzlBtn+zi8lHWbE3QlLas862DYTvx+4hkgPFY2Z2f4EDlq3a/GWuP2y88LLkM=
+	t=1761668512; cv=none; b=LMCZwQcIO9zTQbfAoZVv/Y/BdtD0k4tZTStQX30bQGRYurYrL0MpYesqCaObMHDqe51oVpRCHTuriVT8L3Q7sRkrHKBXRmGEnOsXR1pidWJQVAf1kedJ4D3ENmLxE8smNJtnfK/vWZyA+d67UhQJNAshr7XDVhGLcB3QFFLlnNc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761664362; c=relaxed/simple;
-	bh=i00n8zFtKP+mhhjoD55uYMZelLozBQ4aXy4CrqF63MA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=H9IVkeWacXO0fxGY/gUFJiyBX2IxzCtCk38MPn7P2ctKOYSo1ZGpwOaBr81VJyuFhvRRbHNtMPh/QzdpcFz+CD/CChbrpZHQ5ilXGzuSZKSld6w7p0gUXaEFIuDvU5igAmnxkIEzO4L/vb3n0wTKncGitLSMkU5bjoI9TgFXsZY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MCcEq09F; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97717C116C6
-	for <linux-pm@vger.kernel.org>; Tue, 28 Oct 2025 15:12:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761664361;
-	bh=i00n8zFtKP+mhhjoD55uYMZelLozBQ4aXy4CrqF63MA=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=MCcEq09FD9T4xr1diuip6Z0gox/Rr/KVB598GyvI6rkg5t1vCpnml6L1gesv/Kd/k
-	 UE0ZXw5P/ifI/pZyTV84hUpBgy8xmLEHP3H+qJ3lB8FqlixRC6pI3VRTqu7Fr3AP2p
-	 hIbE90NCxe0WYktM/0btNH291gppTPVd/BHG5AAqy5YXzYnHJqLaKt5U94Xl7wc+7d
-	 Smz0IT8y0eltDVvKhDCDsjeDX73llazN0lxC1OgqsV/llnxOmsvM7/dAEf32L3gd56
-	 21xugBtVLyxo2UatzmIBmqsAL2JhBj+vLMf9fcwoackQKurIuojmUIRMuNDVpmFMEy
-	 GMzJtz1aZSrzw==
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-3c73e93eadfso2183838fac.3
-        for <linux-pm@vger.kernel.org>; Tue, 28 Oct 2025 08:12:41 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVS5pazB+Rt1FGCroese/5dQewZNmEqWI+zxWSZrbpYNj95SsMWCDl4ESJwsfEbuPwM0tGHR/t6GQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy7KGHTiJER89hnaNZY3S8CmP3/9ECoJKnvyuKYUt4+kmWVvGL4
-	BGWK7m+l0LjFkFRas0awVRZdtozlnmedirpkiWleMybckVDPJ0JSNuz9TrNxSdpWbwUydpb8lGh
-	yyzjwAnzm2kpx+TAJRlz8FpOBSwQPph4=
-X-Google-Smtp-Source: AGHT+IEuOdDSyU9iNzilvEGk6zUlv5kvr73w1riKHIuVfEde781Ya6iiulxWyhWwZyo32pqGXM+e/C7QQGthCoWWQo4=
-X-Received: by 2002:a05:6871:7803:b0:3d2:b176:8f2e with SMTP id
- 586e51a60fabf-3d5da19c3d5mr1544868fac.44.1761664360852; Tue, 28 Oct 2025
- 08:12:40 -0700 (PDT)
+	s=arc-20240116; t=1761668512; c=relaxed/simple;
+	bh=7ap44HjH0YVkd/U/xEEXKG+E/eyCWGHQhfiU2g2gC+I=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=FlBPjMps1wLl3eWMP4meP2qqb8SbIsTEU1Kglgl1AmtP+fdfxpbZO6hvEw/+IqPBgs7r4zUR1BONdbGwmjh82T6dqAvmB/Jl53vPvuUYm+CcKWqz4ywHKjAajLCSIQaO2CH0Muh48yzQJuACdANgldoCYKxEKDjPMrVv587G1Nc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gentwo.org; spf=pass smtp.mailfrom=gentwo.org; dkim=pass (1024-bit key) header.d=gentwo.org header.i=@gentwo.org header.b=PUp2zKMD; arc=none smtp.client-ip=62.72.0.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gentwo.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gentwo.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gentwo.org;
+	s=default; t=1761668510;
+	bh=7ap44HjH0YVkd/U/xEEXKG+E/eyCWGHQhfiU2g2gC+I=;
+	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+	b=PUp2zKMDVkgsfqqbu0QS4ubCJqzkNXG8lZFZBzraFOsZzmaKQceSqL+JtksJLsT9A
+	 ffsdhEajqsL8bl4PDNRqP1qNlWtZ/Z9uxRH+8XTl6M7LY0jQ4rqqhWAtZa/cpemygO
+	 X+LwwJfxjDE907dfXDJ6SkH4X2Vx9m8NOD0EyeO0=
+Received: by gentwo.org (Postfix, from userid 1003)
+	id 56CAD402C4; Tue, 28 Oct 2025 09:21:50 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+	by gentwo.org (Postfix) with ESMTP id 55B4F402BD;
+	Tue, 28 Oct 2025 09:21:50 -0700 (PDT)
+Date: Tue, 28 Oct 2025 09:21:50 -0700 (PDT)
+From: "Christoph Lameter (Ampere)" <cl@gentwo.org>
+To: Arnd Bergmann <arnd@arndb.de>
+cc: Ankur Arora <ankur.a.arora@oracle.com>, linux-kernel@vger.kernel.org, 
+    Linux-Arch <linux-arch@vger.kernel.org>, 
+    linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org, 
+    bpf@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>, 
+    Will Deacon <will@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+    Andrew Morton <akpm@linux-foundation.org>, 
+    Mark Rutland <mark.rutland@arm.com>, Haris Okanovic <harisokn@amazon.com>, 
+    Alexei Starovoitov <ast@kernel.org>, 
+    "Rafael J . Wysocki" <rafael@kernel.org>, 
+    Daniel Lezcano <daniel.lezcano@linaro.org>, 
+    Kumar Kartikeya Dwivedi <memxor@gmail.com>, zhenglifeng1@huawei.com, 
+    xueshuai@linux.alibaba.com, Joao Martins <joao.m.martins@oracle.com>, 
+    Boris Ostrovsky <boris.ostrovsky@oracle.com>, 
+    Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
+Subject: Re: [RESEND PATCH v7 2/7] arm64: barrier: Support
+ smp_cond_load_relaxed_timeout()
+In-Reply-To: <3642cfd1-7da6-4a75-80b7-00c21ab6955f@app.fastmail.com>
+Message-ID: <82febb6d-ba14-6a23-1955-9d505372dc23@gentwo.org>
+References: <20251028053136.692462-1-ankur.a.arora@oracle.com> <20251028053136.692462-3-ankur.a.arora@oracle.com> <3642cfd1-7da6-4a75-80b7-00c21ab6955f@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251026033115.436448-1-superm1@kernel.org> <20251028111730.2261404-1-safinaskar@gmail.com>
- <CAJZ5v0iziWj0dWWFMz-otXAt2c1PBp6RwQKVjt_hwbrU4B_fVg@mail.gmail.com> <CAPnZJGCOR_zCOvLPdyYARQrZdafvBGwkXaDO-MGA6axw4etEsA@mail.gmail.com>
-In-Reply-To: <CAPnZJGCOR_zCOvLPdyYARQrZdafvBGwkXaDO-MGA6axw4etEsA@mail.gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 28 Oct 2025 16:12:29 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0jT222NbgqUp4VNfTA3sUNuG1dEoBBCCtFg78ZQQwm0dA@mail.gmail.com>
-X-Gm-Features: AWmQ_bnzBtq80brWlEpaL5vxLAg1dAYOSsy3Zf_o_Plica9GRE_q6ItajHQAiEc
-Message-ID: <CAJZ5v0jT222NbgqUp4VNfTA3sUNuG1dEoBBCCtFg78ZQQwm0dA@mail.gmail.com>
-Subject: Re: [PATCH] PM: hibernate: Restore GFP mask in power_down() for HIBERNATION_PLATFORM
-To: Askar Safin <safinaskar@gmail.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, superm1@kernel.org, lenb@kernel.org, 
-	linux-pm@vger.kernel.org, mario.limonciello@amd.com, pavel@kernel.org, 
-	rafael.j.wysocki@intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
 
-On Tue, Oct 28, 2025 at 1:56=E2=80=AFPM Askar Safin <safinaskar@gmail.com> =
-wrote:
->
-> On Tue, Oct 28, 2025 at 2:49=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.=
-org> wrote:
-> > What kind of damage are you talking about, specifically?
->
-> Again: "pm_restore_gfp_mask" will restore "gfp_allowed_mask" to its
-> normal value,
-> which will contain __GFP_IO and __GFP_FS. Thus "pm_suspended_storage" wil=
-l
-> start to return false.
->
-> But "pm_suspended_storage" is called here:
-> https://elixir.bootlin.com/linux/v6.18-rc3/source/mm/swapfile.c#L1895
->
-> (Also, please, read that big comment at this link.
-> Well, I have to admit I don't understand it in full.)
->
-> This check is needed to prevent swapping out pages during hibernation.
+On Tue, 28 Oct 2025, Arnd Bergmann wrote:
 
-It is actually more complicated, but fair enough.
+> After I looked at the entire series again, this one feels like
+> a missed opportunity. Especially on low-power systems but possibly
+> on any ARMv9.2+ implementation including Cortex-A320, it would
+> be nice to be able to both turn off the event stream and also
+> make this function take fewer wakeups:
 
-Basically, the concern is that a swap page can be freed and then
-re-used for storing another page of memory after the image has been
-created, so the swap metadata in the image would not match the reality
-any more.
+That is certainly something that should be done at some point but for now
+this patchset does the best possible with the available systems.
 
-> Call chain is so:
-> swap_writeout -> folio_free_swap -> folio_swapcache_freeable ->
-> pm_suspended_storage
->
-> So by calling "pm_restore_gfp_mask" we allow pages to be swapped out.
->
-> But we already wrote hibernation image by that point!
->
-> So swapping pages will make our swap partition inconsistent.
->
-> Moreover, as well as I understand, whole reason why we deal with GFP mask
-> in hibernation code is to prevent swapping out pages.
+Switching of the event stream is another set of complexities that should
+be handled separately later.
 
-No, it is not the whole reason.  It is also done to avoid accessing
-swap devices while they may not be (fully) operational.
+Lets just get this one finally in. We have been working on this issue
+now for more than 2 years.
 
-> We restrict GFP before creating hibernation image here:
-> https://elixir.bootlin.com/linux/v6.18-rc3/source/kernel/power/hibernate.=
-c#L463
-> .
->
-> We do this (as well as I understand) to prevent pages from swapping out.
->
-> And, starting from that moment, as well as I understand, we should
-> not restore GFP mask until either:
-> - we resume
-> - hibernation will abort for some reason (for example, "wake up event
-> detected during hibernation")
-
-Again, this is slightly more complicated because the GFP mask is going
-to be restricted again shortly after being restored temporarily by the
-$subject patch and if no memory allocations happen in the meantime,
-nothing bad will happen.  Also, if those memory allocations don't
-trigger swapping, nothing bad will happen either.  Now, it is quite
-unlikely that anyone will attempt to allocate a lot of memory during
-the "prepare" phase of a suspend or power-off transition, so all of
-this is not super-worrisome, but I agree that avoiding all of this GFP
-mask restrict/restore dance would be better overall.
-
-I'm going to remove the  pm_restrict_gfp_mask() and
-pm_restore_gfp_mask() calls from dpm_suspend_start() and
-dpm_suspend_end(), respectively, but that's not a change for 6.18.
-
-Thanks!
 
