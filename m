@@ -1,287 +1,203 @@
-Return-Path: <linux-pm+bounces-36990-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36992-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2FF3DC16CFB
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Oct 2025 21:45:01 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id B8385C16D40
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Oct 2025 21:54:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 26B323B9CC0
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Oct 2025 20:44:14 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 97BAB4E1233
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Oct 2025 20:54:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED73C34A3AA;
-	Tue, 28 Oct 2025 20:44:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40A0A34B408;
+	Tue, 28 Oct 2025 20:54:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LZzg/IGu"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="lMwF2qR/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD4E521D5B0;
-	Tue, 28 Oct 2025 20:44:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761684250; cv=none; b=fCb5oh2Agzq3ltA+8d+Zj7xC32JMdUq9mJSQiMnTUBFC4MAWyV53hCgQwzTmwnZrpOtjvU4z/C3LBump0AbCtmGQT5U2Lc2YqtV2qHYU8z6VybS9Le7kxM2Z4+cxvCCgUI/mPVt59WqyUIeyNp0XfjL6PwXnLNl5bWHRuyiu2A8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761684250; c=relaxed/simple;
-	bh=dk+J0esx7pFKcsDn2MQgotNehXmTk+OTtb/zxECTqnw=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=lRWQtNxlIfvUU2Y+Bi5P3QvIxijZLzezq1ulutIQMuYKpABn72CaYZNb5uMRUr9Fs+cHHB3l7vfI/G5/g35C46oYiIbb387R3T8vzxTqqXSmLtmgnZ2LrsYY/v4M81vLEqrQeM1VTIZpB0Y4ZXhydb7QN/3vLXdPkxBDu64owtg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LZzg/IGu; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761684249; x=1793220249;
-  h=date:from:to:cc:subject:message-id;
-  bh=dk+J0esx7pFKcsDn2MQgotNehXmTk+OTtb/zxECTqnw=;
-  b=LZzg/IGu6FBlRexS1Daeg5JiC8sldWOs26uMDooU7sAwYzjTUT4ZxuFx
-   ZzUuFHb67PhweVX8SyjqiTzuq10R461Hw+wnbK1Cr14xH62lb17GfQjYX
-   rXSG8vc8tyKomPj5u/ljGEIgWWfe9iagYsyiUV8hZSCpHA/aIMyMTW7bi
-   h4waPRBdhbRXYvBhnZAht5MHyKqRd975oqNDySbigk4RSRGXGDpPGiZPA
-   JINqtK3xMSxWZtDeTPQviXr8WWtYix5+uM3EOCRsLLnapz8E/hVHhYYC3
-   jxxu0kbkjERBq4JxpClZPHUDHUdzqaDfDiUfaG0pCUCKZ8bG3gfIfscTu
-   g==;
-X-CSE-ConnectionGUID: rnC+aRdIRVm1LBVFzf2RMw==
-X-CSE-MsgGUID: +8bnpySGRL2mGhz3PiX1ww==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="63002833"
-X-IronPort-AV: E=Sophos;i="6.19,262,1754982000"; 
-   d="scan'208";a="63002833"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2025 13:44:08 -0700
-X-CSE-ConnectionGUID: f9/T7ckJTsOyukLMvn369g==
-X-CSE-MsgGUID: ldMCCUPuRHS5IkNTBsAepA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,262,1754982000"; 
-   d="scan'208";a="185539751"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by orviesa008.jf.intel.com with ESMTP; 28 Oct 2025 13:44:05 -0700
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vDqXz-000JjZ-01;
-	Tue, 28 Oct 2025 20:44:03 +0000
-Date: Wed, 29 Oct 2025 04:43:05 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [rafael-pm:fixes] BUILD SUCCESS
- 4690ba72814c7fb94efe8212f51014982fc8599a
-Message-ID: <202510290400.hdUvwx0V-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64E35221721;
+	Tue, 28 Oct 2025 20:53:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1761684840; cv=pass; b=Ht8bAonpzuaOrU50Ls+rDHD8UOOuKf80Jv4KLJGDJ5i5vXW6WMrG72iEbU2CmsxMgEEZxpHY3cm/idIL1QTBmGqejUQwQDnTLAPzUI/OhJr+uGPD31buosCJ8MngfZbd5o8RtMUGtm9p/b8Jd9nKXxSy3Lng7so8KQkfkxqSkAw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1761684840; c=relaxed/simple;
+	bh=MjvqPmfgf+C1nNUx2A9aYfEppdpdf+lwclmu8PNPiow=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=TYFH4vNQdXkCt4kLJkwFHENx2e7ni4A9F2XFLsjnICSSk8F2AjgoxMfNzq8VNXod/KWGELokYFKNQYv0IAzvTk2ay2QtNRsKHCtmFdSh7h6xlht/wWIXE5xlBTcnUmP5IB7sHEVgdRL37ABHtaKlHbTLiABNObya1O26SUxWJ3A=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=lMwF2qR/; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1761684811; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=g8EjycDcqhGwlKbtxYiWa2PfFsO8TZkkNhlgLAeD7q7igYwYZrH2k1AymiEmD9lNq8rHNRQZV6FA4bjCI0YeqdwyGVRJsEMuJOQj5OaVvcY+Z1Gd+394AcNvuDaKfh3Z0z/2w7WDzKkiAwU/RnG32o6vmETKpmqveFknx4IlJys=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1761684811; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=Uoa0l908M7uaK/BpElXvfipCJAZA8oa5gvDtlPIWeEE=; 
+	b=dXjKtfXdJxBUTMxP8Y6UoRV7RncemrAVu49xP+eSAiPdLOhY0X0INH/cLrJqHhNxU85xh2asihIo4zB5CBvTJY/OkqXjOmMghuc6X8pdXRiMZKLlyl+wQbrZPGSGt1avgzJkemccTPGaIh4jRXIb8cvsjRyzzMDzicRkS7V201s=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
+	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1761684810;
+	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
+	bh=Uoa0l908M7uaK/BpElXvfipCJAZA8oa5gvDtlPIWeEE=;
+	b=lMwF2qR/oBJIzRXuisJG8fCGVaQwBeU1dYP6cMnxx8qlyMC34TXwCedLPQzcZvZH
+	5Gk21fSZsR/egZGHHKrQbt5czqH1IrG3sqZwJBBFwH3Rlbj6Q1Cx9jE5Db3UqMiqT4R
+	2bwEui5v0TEuk5vU7gMGNXPXk3AzMmZFKD+TGnzM=
+Received: by mx.zohomail.com with SMTPS id 1761684809056372.7090557520545;
+	Tue, 28 Oct 2025 13:53:29 -0700 (PDT)
+From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+To: Liviu Dudau <liviu.dudau@arm.com>
+Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ Boris Brezillon <boris.brezillon@collabora.com>,
+ Jassi Brar <jassisinghbrar@gmail.com>, Chia-I Wu <olvaffe@gmail.com>,
+ Chen-Yu Tsai <wenst@chromium.org>, Steven Price <steven.price@arm.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Matthias Brugger <matthias.bgg@gmail.com>, Kees Cook <kees@kernel.org>,
+ "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+ Ulf Hansson <ulf.hansson@linaro.org>, kernel@collabora.com,
+ dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-mediatek@lists.infradead.org, linux-hardening@vger.kernel.org,
+ linux-pm@vger.kernel.org
+Subject:
+ Re: [PATCH v8 1/5] dt-bindings: gpu: mali-valhall-csf: add
+ mediatek,mt8196-mali variant
+Date: Tue, 28 Oct 2025 21:51:43 +0100
+Message-ID: <6599426.lOV4Wx5bFT@workhorse>
+In-Reply-To: <aQD5gwByEmX6GQK9@e110455-lin.cambridge.arm.com>
+References:
+ <20251017-mt8196-gpufreq-v8-0-98fc1cc566a1@collabora.com>
+ <20251017-mt8196-gpufreq-v8-1-98fc1cc566a1@collabora.com>
+ <aQD5gwByEmX6GQK9@e110455-lin.cambridge.arm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="utf-8"
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git fixes
-branch HEAD: 4690ba72814c7fb94efe8212f51014982fc8599a  Merge branch 'acpi-tables' into fixes
+On Tuesday, 28 October 2025 18:12:35 Central European Standard Time Liviu Dudau wrote:
+> On Fri, Oct 17, 2025 at 05:31:08PM +0200, Nicolas Frattaroli wrote:
+> > The Mali-based GPU on the MediaTek MT8196 SoC uses a separate MCU to
+> > control the power and frequency of the GPU. This is modelled as a power
+> > domain and clock provider.
+> > 
+> > It lets us omit the OPP tables from the device tree, as those can now be
+> > enumerated at runtime from the MCU.
+> > 
+> > Add the necessary schema logic to handle what this SoC expects in terms
+> > of clocks and power-domains.
+> > 
+> > Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+> > Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> > Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+> > ---
+> >  .../bindings/gpu/arm,mali-valhall-csf.yaml         | 37 +++++++++++++++++++++-
+> >  1 file changed, 36 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/gpu/arm,mali-valhall-csf.yaml b/Documentation/devicetree/bindings/gpu/arm,mali-valhall-csf.yaml
+> > index 613040fdb444..860691ce985e 100644
+> > --- a/Documentation/devicetree/bindings/gpu/arm,mali-valhall-csf.yaml
+> > +++ b/Documentation/devicetree/bindings/gpu/arm,mali-valhall-csf.yaml
+> > @@ -45,7 +45,9 @@ properties:
+> >      minItems: 1
+> >      items:
+> >        - const: core
+> > -      - const: coregroup
+> > +      - enum:
+> > +          - coregroup
+> > +          - stacks
+> >        - const: stacks
+> 
+> I'm not sure how to parse this part of the change. We're overwriting the property
+> for mt8196-mali anyway so why do we need this? And if we do, should 'stacks'
+> still remain as a const?
 
-elapsed time: 1455m
+The properties section outside of the if branches outside here
+specifies a pattern of properties that matches for all devices.
 
-configs tested: 194
-configs skipped: 3
+In this case, I changed it so that the second clock-names item
+may either be "coregroup" or "stacks". Yes, the third "stacks"
+remains, though if you wanted to be extra precise you could
+then specify in the non-MT8196 cases that we should not have
+stacks followed by stacks, but I'd wager some checker for
+duplicate names may already catch that.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+However, I don't think it's a big enough deal to reroll this
+series again.
 
-tested configs:
-alpha                             allnoconfig    gcc-15.1.0
-alpha                            allyesconfig    clang-19
-alpha                            allyesconfig    gcc-15.1.0
-alpha                               defconfig    gcc-15.1.0
-arc                              allmodconfig    gcc-15.1.0
-arc                               allnoconfig    gcc-15.1.0
-arc                              allyesconfig    gcc-15.1.0
-arc                                 defconfig    gcc-15.1.0
-arc                        nsimosci_defconfig    clang-22
-arc                   randconfig-001-20251028    gcc-8.5.0
-arc                   randconfig-002-20251028    gcc-13.4.0
-arc                   randconfig-002-20251028    gcc-8.5.0
-arm                               allnoconfig    clang-22
-arm                               allnoconfig    gcc-15.1.0
-arm                                 defconfig    gcc-15.1.0
-arm                   randconfig-001-20251028    clang-22
-arm                   randconfig-001-20251028    gcc-8.5.0
-arm                   randconfig-002-20251028    clang-22
-arm                   randconfig-002-20251028    gcc-8.5.0
-arm                   randconfig-003-20251028    clang-22
-arm                   randconfig-003-20251028    gcc-8.5.0
-arm                   randconfig-004-20251028    gcc-8.5.0
-arm64                             allnoconfig    gcc-15.1.0
-arm64                            allyesconfig    gcc-15.1.0
-arm64                               defconfig    gcc-15.1.0
-arm64                 randconfig-001-20251028    clang-22
-arm64                 randconfig-002-20251028    clang-22
-arm64                 randconfig-003-20251028    gcc-11.5.0
-arm64                 randconfig-004-20251028    gcc-8.5.0
-csky                             allmodconfig    gcc-15.1.0
-csky                              allnoconfig    gcc-15.1.0
-csky                             allyesconfig    gcc-15.1.0
-csky                                defconfig    gcc-15.1.0
-csky                  randconfig-001-20251028    gcc-15.1.0
-csky                  randconfig-002-20251028    gcc-15.1.0
-hexagon                          allmodconfig    clang-17
-hexagon                          allmodconfig    clang-19
-hexagon                           allnoconfig    clang-22
-hexagon                           allnoconfig    gcc-15.1.0
-hexagon                          allyesconfig    clang-19
-hexagon                          allyesconfig    clang-22
-hexagon                             defconfig    gcc-15.1.0
-hexagon               randconfig-001-20251028    clang-22
-hexagon               randconfig-002-20251028    clang-17
-i386                             allmodconfig    clang-20
-i386                              allnoconfig    gcc-14
-i386                              allnoconfig    gcc-15.1.0
-i386                             allyesconfig    clang-20
-i386        buildonly-randconfig-001-20251028    gcc-14
-i386        buildonly-randconfig-002-20251028    gcc-14
-i386        buildonly-randconfig-003-20251028    gcc-14
-i386        buildonly-randconfig-004-20251028    gcc-14
-i386        buildonly-randconfig-005-20251028    gcc-14
-i386        buildonly-randconfig-006-20251028    gcc-14
-i386                                defconfig    gcc-15.1.0
-i386                  randconfig-011-20251028    gcc-14
-i386                  randconfig-012-20251028    gcc-14
-i386                  randconfig-013-20251028    gcc-14
-i386                  randconfig-014-20251028    gcc-14
-i386                  randconfig-015-20251028    gcc-14
-i386                  randconfig-016-20251028    gcc-14
-i386                  randconfig-017-20251028    gcc-14
-loongarch                        allmodconfig    clang-19
-loongarch                         allnoconfig    clang-22
-loongarch                        allyesconfig    gcc-15.1.0
-loongarch             randconfig-001-20251028    gcc-12.5.0
-loongarch             randconfig-002-20251028    clang-22
-m68k                             allmodconfig    gcc-15.1.0
-m68k                              allnoconfig    gcc-15.1.0
-m68k                             allyesconfig    gcc-15.1.0
-m68k                           sun3_defconfig    clang-22
-microblaze                       allmodconfig    gcc-15.1.0
-microblaze                        allnoconfig    gcc-15.1.0
-microblaze                       allyesconfig    gcc-15.1.0
-mips                             allmodconfig    gcc-15.1.0
-mips                              allnoconfig    gcc-15.1.0
-mips                             allyesconfig    gcc-15.1.0
-mips                      maltaaprp_defconfig    clang-22
-nios2                            allmodconfig    clang-22
-nios2                            allmodconfig    gcc-11.5.0
-nios2                             allnoconfig    gcc-11.5.0
-nios2                            allyesconfig    clang-22
-nios2                            allyesconfig    gcc-11.5.0
-nios2                 randconfig-001-20251028    gcc-8.5.0
-nios2                 randconfig-002-20251028    gcc-9.5.0
-openrisc                         allmodconfig    clang-22
-openrisc                         allmodconfig    gcc-15.1.0
-openrisc                          allnoconfig    clang-22
-openrisc                          allnoconfig    gcc-15.1.0
-openrisc                         allyesconfig    gcc-15.1.0
-openrisc                            defconfig    gcc-15.1.0
-parisc                           allmodconfig    gcc-15.1.0
-parisc                            allnoconfig    clang-22
-parisc                            allnoconfig    gcc-15.1.0
-parisc                           allyesconfig    gcc-15.1.0
-parisc                              defconfig    gcc-15.1.0
-parisc                randconfig-001-20251028    gcc-9.5.0
-parisc                randconfig-002-20251028    gcc-8.5.0
-powerpc                           allnoconfig    clang-22
-powerpc                           allnoconfig    gcc-15.1.0
-powerpc                 mpc8313_rdb_defconfig    clang-22
-powerpc               randconfig-001-20251028    gcc-15.1.0
-powerpc               randconfig-002-20251028    gcc-11.5.0
-powerpc               randconfig-003-20251028    gcc-8.5.0
-powerpc                    socrates_defconfig    clang-22
-powerpc                     tqm8541_defconfig    clang-22
-powerpc64             randconfig-001-20251028    clang-22
-powerpc64             randconfig-002-20251028    clang-22
-powerpc64             randconfig-003-20251028    gcc-13.4.0
-riscv                             allnoconfig    clang-22
-riscv                             allnoconfig    gcc-15.1.0
-riscv                               defconfig    clang-22
-riscv                               defconfig    gcc-15.1.0
-s390                             allmodconfig    clang-18
-s390                             allmodconfig    gcc-15.1.0
-s390                              allnoconfig    clang-22
-s390                             allyesconfig    gcc-15.1.0
-s390                                defconfig    clang-22
-s390                                defconfig    gcc-15.1.0
-sh                               allmodconfig    gcc-15.1.0
-sh                                allnoconfig    gcc-15.1.0
-sh                               allyesconfig    gcc-15.1.0
-sh                                  defconfig    gcc-14
-sh                                  defconfig    gcc-15.1.0
-sh                          r7785rp_defconfig    clang-22
-sparc                            alldefconfig    clang-22
-sparc                            allmodconfig    gcc-15.1.0
-sparc                             allnoconfig    gcc-15.1.0
-sparc                            allyesconfig    clang-22
-sparc                            allyesconfig    gcc-15.1.0
-sparc                               defconfig    gcc-15.1.0
-sparc                 randconfig-001-20251028    gcc-9.5.0
-sparc                 randconfig-002-20251028    gcc-9.5.0
-sparc64                          allmodconfig    clang-22
-sparc64                          allyesconfig    clang-22
-sparc64                             defconfig    clang-20
-sparc64                             defconfig    gcc-14
-sparc64               randconfig-001-20251028    gcc-9.5.0
-sparc64               randconfig-002-20251028    gcc-9.5.0
-um                               allmodconfig    clang-19
-um                                allnoconfig    clang-22
-um                               allyesconfig    clang-19
-um                               allyesconfig    gcc-14
-um                                  defconfig    clang-22
-um                                  defconfig    gcc-14
-um                             i386_defconfig    gcc-14
-um                    randconfig-001-20251028    gcc-9.5.0
-um                    randconfig-002-20251028    gcc-9.5.0
-um                           x86_64_defconfig    clang-22
-um                           x86_64_defconfig    gcc-14
-x86_64                           allmodconfig    clang-20
-x86_64                            allnoconfig    clang-20
-x86_64                            allnoconfig    clang-22
-x86_64                           allyesconfig    clang-20
-x86_64      buildonly-randconfig-001-20251028    clang-20
-x86_64      buildonly-randconfig-001-20251028    gcc-14
-x86_64      buildonly-randconfig-002-20251028    clang-20
-x86_64      buildonly-randconfig-002-20251028    gcc-14
-x86_64      buildonly-randconfig-003-20251028    clang-20
-x86_64      buildonly-randconfig-004-20251028    clang-20
-x86_64      buildonly-randconfig-005-20251028    clang-20
-x86_64      buildonly-randconfig-006-20251028    clang-20
-x86_64                              defconfig    gcc-14
-x86_64                                  kexec    clang-20
-x86_64                randconfig-001-20251028    clang-20
-x86_64                randconfig-002-20251028    clang-20
-x86_64                randconfig-003-20251028    clang-20
-x86_64                randconfig-004-20251028    clang-20
-x86_64                randconfig-005-20251028    clang-20
-x86_64                randconfig-006-20251028    clang-20
-x86_64                randconfig-011-20251028    clang-20
-x86_64                randconfig-012-20251028    clang-20
-x86_64                randconfig-013-20251028    clang-20
-x86_64                randconfig-014-20251028    clang-20
-x86_64                randconfig-015-20251028    clang-20
-x86_64                randconfig-016-20251028    clang-20
-x86_64                randconfig-071-20251028    clang-20
-x86_64                randconfig-072-20251028    clang-20
-x86_64                randconfig-073-20251028    clang-20
-x86_64                randconfig-074-20251028    clang-20
-x86_64                randconfig-075-20251028    clang-20
-x86_64                randconfig-076-20251028    clang-20
-x86_64                               rhel-9.4    clang-20
-x86_64                           rhel-9.4-bpf    gcc-14
-x86_64                          rhel-9.4-func    clang-20
-x86_64                    rhel-9.4-kselftests    clang-20
-x86_64                         rhel-9.4-kunit    gcc-14
-x86_64                           rhel-9.4-ltp    gcc-14
-x86_64                          rhel-9.4-rust    clang-20
-xtensa                            allnoconfig    clang-22
-xtensa                            allnoconfig    gcc-15.1.0
-xtensa                           allyesconfig    clang-22
-xtensa                randconfig-001-20251028    gcc-9.5.0
-xtensa                randconfig-002-20251028    gcc-9.5.0
+Kind regards,
+Nicolas Frattaroli
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> 
+> Best regards,
+> Liviu
+> 
+> >  
+> >    mali-supply: true
+> > @@ -110,6 +112,27 @@ allOf:
+> >          power-domain-names: false
+> >        required:
+> >          - mali-supply
+> > +  - if:
+> > +      properties:
+> > +        compatible:
+> > +          contains:
+> > +            const: mediatek,mt8196-mali
+> > +    then:
+> > +      properties:
+> > +        mali-supply: false
+> > +        sram-supply: false
+> > +        operating-points-v2: false
+> > +        power-domains:
+> > +          maxItems: 1
+> > +        power-domain-names: false
+> > +        clocks:
+> > +          maxItems: 2
+> > +        clock-names:
+> > +          items:
+> > +            - const: core
+> > +            - const: stacks
+> > +      required:
+> > +        - power-domains
+> >  
+> >  examples:
+> >    - |
+> > @@ -145,5 +168,17 @@ examples:
+> >              };
+> >          };
+> >      };
+> > +  - |
+> > +    gpu@48000000 {
+> > +        compatible = "mediatek,mt8196-mali", "arm,mali-valhall-csf";
+> > +        reg = <0x48000000 0x480000>;
+> > +        clocks = <&gpufreq 0>, <&gpufreq 1>;
+> > +        clock-names = "core", "stacks";
+> > +        interrupts = <GIC_SPI 606 IRQ_TYPE_LEVEL_HIGH 0>,
+> > +                     <GIC_SPI 605 IRQ_TYPE_LEVEL_HIGH 0>,
+> > +                     <GIC_SPI 604 IRQ_TYPE_LEVEL_HIGH 0>;
+> > +        interrupt-names = "job", "mmu", "gpu";
+> > +        power-domains = <&gpufreq>;
+> > +    };
+> >  
+> >  ...
+> > 
+> 
+> 
+
+
+
+
 
