@@ -1,152 +1,261 @@
-Return-Path: <linux-pm+bounces-36969-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36970-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1DD0C14B94
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Oct 2025 13:56:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C796DC14CA5
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Oct 2025 14:14:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9B1C63BCCE3
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Oct 2025 12:56:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B5F8E3AF4E8
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Oct 2025 13:11:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7207F32ABCC;
-	Tue, 28 Oct 2025 12:56:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UPcypZgz"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5BA1330D51;
+	Tue, 28 Oct 2025 13:11:55 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D926C2DAFD2
-	for <linux-pm@vger.kernel.org>; Tue, 28 Oct 2025 12:56:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.170
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F03202EFD90;
+	Tue, 28 Oct 2025 13:11:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761656210; cv=none; b=WOj0e+P+sDSqBI/2s8Otl+p+bHCaodxs5MvmvXHxHmwhJFPlbugDHHoO961UdIvRPqWGUFJ662hCLU4eMFfxS/cbRbKdO0podqXtPEPCqGojXsaMwTwy3uto7OZoRtTMfFrDVE8d+NyR3LDnr6tFj71jY66Y11bEUq2mx+iPe/A=
+	t=1761657115; cv=none; b=a3h63Cf0HfGlRM2GvXFT6ex6UsPYcVYTAHtzPT6PQaw2p8WpbCLFXoa/lzKqVX2PP4rNei7ls1LnWYsKauvDlbrC/60X32oApkbUV45Rw2R1KGsQ73pft9W09PtKzX76UXzuVhCg5LfqYmershiI0IoWvVBnGmgpyLmDX49i0pQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761656210; c=relaxed/simple;
-	bh=j+D/qyt7Pw1B5Ingaklbk01v2dTvdYRTa494exV2Eno=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eTgCEXUBKR91UGtC60Ts5+byniXkCAOjcuWhacIVzJtD7sVS4w6rI4ELZCoGrDzhFh8iimNaj3gUB6u+4M5EHv8MNIQNf2gMUMjH3sGp0cwyjAoZeSEXm26jruiCKiPda6VsgHgsynM2ei34KCMbn92P/0EGDYLXz4k2b8Xt02E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UPcypZgz; arc=none smtp.client-ip=209.85.128.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-781014f4e12so74314467b3.1
-        for <linux-pm@vger.kernel.org>; Tue, 28 Oct 2025 05:56:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761656207; x=1762261007; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=j+D/qyt7Pw1B5Ingaklbk01v2dTvdYRTa494exV2Eno=;
-        b=UPcypZgzJi06J91sefhzN5nYMrQPpnCX/YyboKAQJr4L1E0MXqhzplESkEWFcUgYrW
-         UMilj6k+pbfVXSQA2GUMvq/gO6b141d+EntMkaOmQ9euIXQVh96WUBvzXSxFCWQ6mq7M
-         qm5q7H+XqLfeYzw4mIhkn4FA0EendE1ZFVx2kciR2ua2Bs7DwVAFQh1CL1ew8ydJ8ckj
-         RSST4Yw2SPc77r0qoXZ7H3AsLR+3CvgRC83omQ6rH+n54HHVN8BdIGtk8QoIdBkM7Wzv
-         /IUECGMwk2/1pUoPW85oOnALdoqQ4HG3aaj3ybf3/atg7mVzFw6pkmfjyW6vkXubuQ61
-         aPDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761656207; x=1762261007;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=j+D/qyt7Pw1B5Ingaklbk01v2dTvdYRTa494exV2Eno=;
-        b=nhW84p2LQr32M2qQh9rQDT9oMAH4OKpz0xGUcE2XYvC+f5Aa2kgVz8uxTOsjuFhOqm
-         RbtTUvEY06SBOrdXgDmP2eJnKB/3Q4OYxnswqEK2ObxxJuLc7E/iS/gAQE165+mAMQiY
-         OkdiHI/3k31Ag9DtFOAf7ktG0de5Tsn7XN/sextMvBYYrQWTJ64KHD43GucSM+mhd+/4
-         WCWAGtRIGTJe4UVQxMpoKCyRQUaUZRpPpcGEhsufy5+XP5N3mINBVXHuXkrJ+Xu1qVqX
-         yqzTyz8JWRwtGxzMJfH+rZp9ndi8X4b2QWTTgn36ML/xYv/lMoZkFAeclrRM0Ed3UVUj
-         Wrcg==
-X-Forwarded-Encrypted: i=1; AJvYcCVYJaDmBDtPkVxBDWO96buhxSK7cK6UkJLPKtGDONAnzVxioHBWywmEdN7Wd1/tDAa2tfndqwRSrg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YysSPIci8epZpYNF0MxDu4berBKC3UEWq2CFEUKzYdjf17gpob4
-	jxtGghyQIR5DYmPYNaIwsug8F6lbaUp4wlnb/bY8D1XxnsVsqIt8tDl8loTFj2avG9DHkpzS8ct
-	9djawNTFVTay1wWO+JvNWA38SJljb+Eo=
-X-Gm-Gg: ASbGncsbKE3OLVxtbXbe3vjb4WGE1LEyH4CyRMdSzLhe41aG0b+uloRCB5XY90gSN7t
-	pCuM+5ktg6YZlsehquwWIhPGb6qmFm2uInuqD0zDx4/V8VZRD9NErJdxr1Xw/ohm/DVoE5+0rx7
-	PJ+0nHm/ItGJjOKFThTr0UqYHgEMZBP1vuxtjzB3vIcTDls8YIxcvceH7y8qBBzw6Io3zJPO4D3
-	nBUdakmkIj8Zyzwf4saSU0sEeE3Rp+F5BFI+cJzl1esM2w6UclZ8RkTNAiQ/WRJ
-X-Google-Smtp-Source: AGHT+IGtsJS49buUuXnldsSwr5pJwsNb6Tuyy9XWwb84EZE/f+Q+JyeRVvi5lf9lAmTAXAn6fgo6kde6+3fayMiFpV8=
-X-Received: by 2002:a05:690c:6a83:b0:784:92a3:68b3 with SMTP id
- 00721157ae682-78617e4187emr31380357b3.12.1761656206790; Tue, 28 Oct 2025
- 05:56:46 -0700 (PDT)
+	s=arc-20240116; t=1761657115; c=relaxed/simple;
+	bh=tGgMOwiHnEFu2eRiVpUtimjkdr+IfoZfTKO6O1q88+c=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=E3qbDX3sKdPB5PliLjisQs6IqvMKA72RGDJJXLi+bWLzb/IzEcDZOnlknSZOaq/c5VrKOCOvoedhBBSTNXN9CLR/Wug3Dxd04aRHLrFT1BPRfHnfh8X9Xq0rz3K54lyboxlqhocQKRX0lBvaFagjB4e34zPjqGLcDaHSCx0kEcY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2E1E1168F;
+	Tue, 28 Oct 2025 06:11:43 -0700 (PDT)
+Received: from [10.57.39.55] (unknown [10.57.39.55])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D1B6E3F673;
+	Tue, 28 Oct 2025 06:11:48 -0700 (PDT)
+Message-ID: <b4386726-9c50-47cb-b521-cd6f871d64de@arm.com>
+Date: Tue, 28 Oct 2025 13:12:21 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251026033115.436448-1-superm1@kernel.org> <20251028111730.2261404-1-safinaskar@gmail.com>
- <CAJZ5v0iziWj0dWWFMz-otXAt2c1PBp6RwQKVjt_hwbrU4B_fVg@mail.gmail.com>
-In-Reply-To: <CAJZ5v0iziWj0dWWFMz-otXAt2c1PBp6RwQKVjt_hwbrU4B_fVg@mail.gmail.com>
-From: Askar Safin <safinaskar@gmail.com>
-Date: Tue, 28 Oct 2025 15:56:09 +0300
-X-Gm-Features: AWmQ_bntAnYoYljGIuyjMjnQaWJ0nwhoVeromC8zJngYVgMffRf91LGENVsp4dM
-Message-ID: <CAPnZJGCOR_zCOvLPdyYARQrZdafvBGwkXaDO-MGA6axw4etEsA@mail.gmail.com>
-Subject: Re: [PATCH] PM: hibernate: Restore GFP mask in power_down() for HIBERNATION_PLATFORM
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: superm1@kernel.org, lenb@kernel.org, linux-pm@vger.kernel.org, 
-	mario.limonciello@amd.com, pavel@kernel.org, rafael.j.wysocki@intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 0/5] PM QoS: Add CPU affinity latency QoS support and
+ resctrl integration
+To: Zhongqiu Han <zhongqiu.han@oss.qualcomm.com>,
+ Zhongqiu Han <quic_zhonhan@quicinc.com>
+Cc: linux-pm@vger.kernel.org, lenb@kernel.org, christian.loehle@arm.com,
+ amit.kucheria@linaro.org, ulf.hansson@linaro.org, james.morse@arm.com,
+ Dave.Martin@arm.com, reinette.chatre@intel.com, tony.luck@intel.com,
+ pavel@kernel.org, linux-kernel@vger.kernel.org, rafael@kernel.org
+References: <20250721124104.806120-1-quic_zhonhan@quicinc.com>
+ <eb9abe9d-3d12-4bf1-85da-deb38b8da321@arm.com>
+ <f1195632-d973-4339-a89d-e1e62b98015d@oss.qualcomm.com>
+Content-Language: en-US
+From: Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <f1195632-d973-4339-a89d-e1e62b98015d@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Tue, Oct 28, 2025 at 2:49=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.or=
-g> wrote:
-> What kind of damage are you talking about, specifically?
 
-Again: "pm_restore_gfp_mask" will restore "gfp_allowed_mask" to its
-normal value,
-which will contain __GFP_IO and __GFP_FS. Thus "pm_suspended_storage" will
-start to return false.
 
-But "pm_suspended_storage" is called here:
-https://elixir.bootlin.com/linux/v6.18-rc3/source/mm/swapfile.c#L1895
+On 10/24/25 09:25, Zhongqiu Han wrote:
+> On 10/23/2025 9:09 PM, Lukasz Luba wrote:
+>> Hi Zhongqui,
+>>
+>> My apologies for being a bit late with my comments...
+>>
+>> On 7/21/25 13:40, Zhongqiu Han wrote:
+>>> Hi all,
+>>>
+>>> This patch series introduces support for CPU affinity-based latency
+>>> constraints in the PM QoS framework. The motivation is to allow
+>>> finer-grained power management by enabling latency QoS requests to 
+>>> target
+>>> specific CPUs, rather than applying system-wide constraints.
+>>>
+>>> The current PM QoS framework supports global and per-device CPU latency
+>>> constraints. However, in many real-world scenarios, such as IRQ affinity
+>>> or CPU-bound kernel threads, only a subset of CPUs are
+>>> performance-critical. Applying global constraints in such cases
+>>> unnecessarily prevents other CPUs from entering deeper C-states, leading
+>>> to increased power consumption.
+>>>
+>>> This series addresses that limitation by introducing a new interface 
+>>> that
+>>> allows latency constraints to be applied to a CPU mask. This is
+>>> particularly useful on heterogeneous platforms (e.g., big.LITTLE) and
+>>> embedded systems where power efficiency is critical for example:
+>>>
+>>>                          driver A       rt kthread B      module C
+>>>    CPU IDs (mask):         0-3              2-5              6-7
+>>>    target latency(us):     20               30               100
+>>>                            |                |                |
+>>>                            v                v                v
+>>>                            +---------------------------------+
+>>>                            |        PM  QoS  Framework       |
+>>>                            +---------------------------------+
+>>>                            |                |                |
+>>>                            v                v                v
+>>>    CPU IDs (mask):        0-3            2-3,4-5            6-7
+>>>    runtime latency(us):   20             20, 30             100
+>>>
+>>> The current implementation includes only cpu_affinity_latency_qos_add()
+>>> and cpu_affinity_latency_qos_remove() interfaces. An update interface is
+>>> planned for future submission, along with PM QoS optimizations in the 
+>>> UFS
+>>> subsystem.
+>>>
+>>> Patch1 introduces the core support for CPU affinity latency QoS in 
+>>> the PM
+>>> QoS framework.
+>>>
+>>> Patch2 removes redundant KERN_ERR prefixes in WARN() calls in the global
+>>> CPU PM QoS interface. This change addresses issues in existing code 
+>>> and is
+>>> not related to the new interface introduced in this patch series.
+>>>
+>>> Patch3 adds documentation for the new interface.
+>>>
+>>> Patch4 fixes a minor documentation issue related to the return type of
+>>> cpu_latency_qos_request_active(). This change addresses issues in 
+>>> existing
+>>> doc and is not related to the new interface introduced in this patch
+>>> series.
+>>>
+>>> Patch5 updates the resctrl pseudo-locking logic to use the new CPU
+>>> affinity latency QoS helpers, improving clarity and consistency. The 
+>>> only
+>>> functional and beneficial change is that the new interface actively 
+>>> wakes
+>>> up CPUs whose latency QoS values have changed, ensuring the latency 
+>>> limit
+>>> takes effect immediately.
+>>
+>> Could you describe a bit more the big picture of this proposed design,
+>> please?
+>>
+>> Ideally with some graph of connected frameworks & drivers and how they
+>> are going to work together.
+> 
+> Hi Lukasz,
+> Thank you very much for your review and discussion~
+> 
+> I will describe you one big picture if needed, please allow me
+> illustrate a simple scenario using pseudo code first:
+> 
+> Suppose there is a USB driver. This driver uses the kernel existing
+> cpu_latency_qos_* interfaces to boost its IRQ execution efficiency. Its
+> IRQ affinity is set to core0 and core1 according to DTS config, and the
+> affinity of its threaded IRQ (bottom half) is also set to CPU0 and CPU1.
+> 
+> 
+> =================================================================
+> Using the kernel existing cpu_latency_qos_* interfaces:
+> =================================================================
+> static int dwc3_sample_probe(struct platform_device *pdev)
+> {
+>    cpu_latency_qos_add_request(&foo->pm_qos_req,DEFAULT_VALUE);
+>    xxxx;
+>    ret = devm_request_threaded_irq(xxx,xxx,foo_dwc3_pwr_irq, ....)
+>    xxxx;
+> }
+> 
+> static irqreturn_t foo_dwc3_pwr_irq(int irq, void *dev)
+> {
+>    xxxx;
+>    cpu_latency_qos_update_request(&foo->pm_qos_req, 0);
+> 
+>    /*.... process interrupt ....*/
+> 
+>    cpu_latency_qos_update_request(&foo->pm_qos_req, DEFAULT_VALUE);
+> 
+>    return IRQ_HANDLED;
+> 
+> }
+> 
+> 
+> The number of IRQ executions on each CPU:
+> ==================================================================
+> IRQ  HWIRQ   affinity CPU0    CPU1   CPU2 CPU3 CPU4 CPU5 CPU6 CPU7
+> 320  0xb0    0x3      9782468 415472  0    0    0    0    0    0
+> ==================================================================
+> 
+> ==================================================================
+> Process: irq/320-dwc3, [affinity: 0x3]  cpu:1    pid:5250   ppid:2
+> ==================================================================
+> 
+> 
+>  From the code, we can see that the USB module using the kernel existing
+> cpu_latency_qos_* interfaces sets the CPU latency to 0, which prevents
+> all CPUs from entering idle states—even C1. During operation, the USB
+> IRQs is triggered 9,782,468 times on CPU0, and each time it runs, all
+> CPUs are blocked from entering deeper C-states. However, only CPU0, CPU1
+> are actually involved in handling the IRQ and its threaded bottom half.
+> It will cause unnecessary power consumption on other CPUs.
+> (Please note, due to the simplicity of the pseudocode, I did not show
+> how the IRQ bottom-half thread is synchronized to restrict CPU idle
+> states via PM QoS. In reality, it's clear that we can also apply a CPU
+> latency limit to the bottom-half thread.)
+> 
+> 
+> If we use current patch series API cpu_affinity_latency_qos_xxx, such
+> as:
+> 
+> =================================================================
+> Using current patch series cpu_affinity_latency_qos_* interfaces:
+> =================================================================
+> static int dwc3_sample_probe(struct platform_device *pdev)
+> {
+>    cpu_affinity_latency_qos_add(&foo->pm_qos_req,DEFAULT_VALUE, mask);
+>    xxxx;
+>    ret = devm_request_threaded_irq(xxx,xxx,foo_dwc3_pwr_irq, ....)
+>    xxxx;
+> }
+> 
+> We can only constrain the CPU latency PM QoS on CPU0 and CPU1 in order
+> to save power.
 
-(Also, please, read that big comment at this link.
-Well, I have to admit I don't understand it in full.)
+Thank you for this explanation. IMO this could be part of the
+documentation patch.
 
-This check is needed to prevent swapping out pages during hibernation.
+> 
+>>
+>> E.g.:
+>> 1. what are the other components in the kernel which would use this
+>> feature?
+> 
+> 1.Drivers such as Audio, USB, and UFS, which currently rely on the
+> kernel's global CPU Latency PM QoS interface, but only require latency
+> constraints on a subset of CPUs, can leverage this new interface to
+> achieve improved power efficiency.
+> 
+> 2.I’m considering supporting this feature in userspace.
+> Once implemented, userspace threads—such as mobile gaming threads that
+> aim to constrain CPU latency and are already bound to big cores—will be
+> able to use the API to help save power.
+> 
+>> 2. is there also a user-space interface planned for it so a HAL in
+>> the middle-ware would configure these "short-wake-up-CPU"?
+> 
+> Yes, I am considering to support userspace on patch V3.
+> 
+>> 3. Is it possible to view/debug from the user-space which component
+>> requested this setting for some subsets of cpus?
+> 
+> I'm uncertain whether we should provide the ability to inspect
+> which components are applying constraints on CPU latency. However,
+> what I do want to ensure is that—similar to the existing /dev
+> cpu_dma_latency interface in the current kernel—I can offer per-CPU
+> level latency value setting and querying.
+> 
+>
 
-Call chain is so:
-swap_writeout -> folio_free_swap -> folio_swapcache_freeable ->
-pm_suspended_storage
+OK, I think this is a good approach to not tackle all in single
+step, but in some phases. The user-space would need more thinking.
 
-So by calling "pm_restore_gfp_mask" we allow pages to be swapped out.
-
-But we already wrote hibernation image by that point!
-
-So swapping pages will make our swap partition inconsistent.
-
-Moreover, as well as I understand, whole reason why we deal with GFP mask
-in hibernation code is to prevent swapping out pages.
-
-We restrict GFP before creating hibernation image here:
-https://elixir.bootlin.com/linux/v6.18-rc3/source/kernel/power/hibernate.c#=
-L463
-.
-
-We do this (as well as I understand) to prevent pages from swapping out.
-
-And, starting from that moment, as well as I understand, we should
-not restore GFP mask until either:
-- we resume
-- hibernation will abort for some reason (for example, "wake up event
-detected during hibernation")
-
-Again: I'm not trying to insult anybody. I'm just trying to help. And
-to understand PM code.
-
-I'm not sure that my explanations are correct.
-
-In any case I think it will be good idea to add comment explaining why
-restoring GFP mask
-is safe there.
-
-I'm attempting to write code to fix this bug:
-https://lore.kernel.org/linux-pm/20251023112920.133897-1-safinaskar@gmail.c=
-om/
-
-And this is why I'm trying to understand PM code.
-
---=20
-Askar Safin
+Regards,
+Lukasz
 
