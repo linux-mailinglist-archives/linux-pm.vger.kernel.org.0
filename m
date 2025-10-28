@@ -1,84 +1,54 @@
-Return-Path: <linux-pm+bounces-36992-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36991-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8385C16D40
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Oct 2025 21:54:05 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49884C16D3A
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Oct 2025 21:53:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 97BAB4E1233
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Oct 2025 20:54:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1F29A1A679DB
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Oct 2025 20:53:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40A0A34B408;
-	Tue, 28 Oct 2025 20:54:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25720255E43;
+	Tue, 28 Oct 2025 20:52:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="lMwF2qR/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BIb9eyuI"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64E35221721;
-	Tue, 28 Oct 2025 20:53:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761684840; cv=pass; b=Ht8bAonpzuaOrU50Ls+rDHD8UOOuKf80Jv4KLJGDJ5i5vXW6WMrG72iEbU2CmsxMgEEZxpHY3cm/idIL1QTBmGqejUQwQDnTLAPzUI/OhJr+uGPD31buosCJ8MngfZbd5o8RtMUGtm9p/b8Jd9nKXxSy3Lng7so8KQkfkxqSkAw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761684840; c=relaxed/simple;
-	bh=MjvqPmfgf+C1nNUx2A9aYfEppdpdf+lwclmu8PNPiow=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=TYFH4vNQdXkCt4kLJkwFHENx2e7ni4A9F2XFLsjnICSSk8F2AjgoxMfNzq8VNXod/KWGELokYFKNQYv0IAzvTk2ay2QtNRsKHCtmFdSh7h6xlht/wWIXE5xlBTcnUmP5IB7sHEVgdRL37ABHtaKlHbTLiABNObya1O26SUxWJ3A=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=lMwF2qR/; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1761684811; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=g8EjycDcqhGwlKbtxYiWa2PfFsO8TZkkNhlgLAeD7q7igYwYZrH2k1AymiEmD9lNq8rHNRQZV6FA4bjCI0YeqdwyGVRJsEMuJOQj5OaVvcY+Z1Gd+394AcNvuDaKfh3Z0z/2w7WDzKkiAwU/RnG32o6vmETKpmqveFknx4IlJys=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1761684811; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=Uoa0l908M7uaK/BpElXvfipCJAZA8oa5gvDtlPIWeEE=; 
-	b=dXjKtfXdJxBUTMxP8Y6UoRV7RncemrAVu49xP+eSAiPdLOhY0X0INH/cLrJqHhNxU85xh2asihIo4zB5CBvTJY/OkqXjOmMghuc6X8pdXRiMZKLlyl+wQbrZPGSGt1avgzJkemccTPGaIh4jRXIb8cvsjRyzzMDzicRkS7V201s=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
-	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1761684810;
-	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
-	bh=Uoa0l908M7uaK/BpElXvfipCJAZA8oa5gvDtlPIWeEE=;
-	b=lMwF2qR/oBJIzRXuisJG8fCGVaQwBeU1dYP6cMnxx8qlyMC34TXwCedLPQzcZvZH
-	5Gk21fSZsR/egZGHHKrQbt5czqH1IrG3sqZwJBBFwH3Rlbj6Q1Cx9jE5Db3UqMiqT4R
-	2bwEui5v0TEuk5vU7gMGNXPXk3AzMmZFKD+TGnzM=
-Received: by mx.zohomail.com with SMTPS id 1761684809056372.7090557520545;
-	Tue, 28 Oct 2025 13:53:29 -0700 (PDT)
-From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-To: Liviu Dudau <liviu.dudau@arm.com>
-Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Boris Brezillon <boris.brezillon@collabora.com>,
- Jassi Brar <jassisinghbrar@gmail.com>, Chia-I Wu <olvaffe@gmail.com>,
- Chen-Yu Tsai <wenst@chromium.org>, Steven Price <steven.price@arm.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Matthias Brugger <matthias.bgg@gmail.com>, Kees Cook <kees@kernel.org>,
- "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- Ulf Hansson <ulf.hansson@linaro.org>, kernel@collabora.com,
- dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org, linux-hardening@vger.kernel.org,
- linux-pm@vger.kernel.org
-Subject:
- Re: [PATCH v8 1/5] dt-bindings: gpu: mali-valhall-csf: add
- mediatek,mt8196-mali variant
-Date: Tue, 28 Oct 2025 21:51:43 +0100
-Message-ID: <6599426.lOV4Wx5bFT@workhorse>
-In-Reply-To: <aQD5gwByEmX6GQK9@e110455-lin.cambridge.arm.com>
-References:
- <20251017-mt8196-gpufreq-v8-0-98fc1cc566a1@collabora.com>
- <20251017-mt8196-gpufreq-v8-1-98fc1cc566a1@collabora.com>
- <aQD5gwByEmX6GQK9@e110455-lin.cambridge.arm.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F05D9194A65;
+	Tue, 28 Oct 2025 20:52:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1761684756; cv=none; b=G5jqbqtHvUF9OVax9P3mseB9xZrPAKZu7wRf8JST+DJb2hleRnaZRlzxy9fl3MUnM32k6YU8BPhSHQucnMFrpYoHZOY15/VWNpk2cLjYB+yqmWq5jGIKkhlvr38hFAVPZ7kRSr2L3/Se+N+mm7esbPAtJ86xiGyfMGJ95/OkMDs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1761684756; c=relaxed/simple;
+	bh=Mu2bPbXVELL3QwMDUxBoYvXS8gR7TtieK5wTo2e4Cxw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Uusl58/4p77KsKeLCtUBEo1DP3ZSf+3ZSL64vrj5RQeN7FfyOLNM+XccFdsc7O6gUf2hh+EXSrO0xqPBfmjKin+bJZaHJr2NxXvTCkcrAzlfVeu6sOriT1D18qU+a5BU2q1xhxPYyOAbljx2exotZ/04vhoFrB+jHeE5gO1R7W0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BIb9eyuI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BE58C4CEE7;
+	Tue, 28 Oct 2025 20:52:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761684755;
+	bh=Mu2bPbXVELL3QwMDUxBoYvXS8gR7TtieK5wTo2e4Cxw=;
+	h=From:To:Cc:Subject:Date:From;
+	b=BIb9eyuIlOtGE1/3/lMQR6+nPSyHtcCM+glWUElrjnEjmIYV/lNaEV30Yok7G6FXW
+	 rSGLKCmCv7TRaA48Ch9Ejs5oekZNs8voV4vlfMdyY89TKrYewna/IJo0XN41PVN3qY
+	 lWCNavUUrC+m5SMEA+jVfZ3yylimymA+/kdFO4wwRE9q4RYPLbMK1F48NlgWFQ2Cq3
+	 6yvvkbvOvo84CCwUcbeDzfolFJtrRuP2k6QspFlhHf8Y+FbRCKOvTUP1c9Bos1kXmn
+	 vwNTbEawCHAXGDn213jQm2yTVp45Zbh62E9TlWDdh0Y7XHxQD4RXF57vLXHGqheHn2
+	 IaRhs0ETgbH4w==
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+To: Linux PM <linux-pm@vger.kernel.org>
+Cc: Askar Safin <safinaskar@gmail.com>,
+ Mario Limonciello <mario.limonciello@amd.com>,
+ LKML <linux-kernel@vger.kernel.org>
+Subject: [PATCH v1] PM: sleep: Allow pm_restrict_gfp_mask() stacking
+Date: Tue, 28 Oct 2025 21:52:31 +0100
+Message-ID: <5935682.DvuYhMxLoT@rafael.j.wysocki>
+Organization: Linux Kernel Development
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -86,117 +56,110 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset="UTF-8"
 
-On Tuesday, 28 October 2025 18:12:35 Central European Standard Time Liviu Dudau wrote:
-> On Fri, Oct 17, 2025 at 05:31:08PM +0200, Nicolas Frattaroli wrote:
-> > The Mali-based GPU on the MediaTek MT8196 SoC uses a separate MCU to
-> > control the power and frequency of the GPU. This is modelled as a power
-> > domain and clock provider.
-> > 
-> > It lets us omit the OPP tables from the device tree, as those can now be
-> > enumerated at runtime from the MCU.
-> > 
-> > Add the necessary schema logic to handle what this SoC expects in terms
-> > of clocks and power-domains.
-> > 
-> > Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
-> > Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> > Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-> > ---
-> >  .../bindings/gpu/arm,mali-valhall-csf.yaml         | 37 +++++++++++++++++++++-
-> >  1 file changed, 36 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/gpu/arm,mali-valhall-csf.yaml b/Documentation/devicetree/bindings/gpu/arm,mali-valhall-csf.yaml
-> > index 613040fdb444..860691ce985e 100644
-> > --- a/Documentation/devicetree/bindings/gpu/arm,mali-valhall-csf.yaml
-> > +++ b/Documentation/devicetree/bindings/gpu/arm,mali-valhall-csf.yaml
-> > @@ -45,7 +45,9 @@ properties:
-> >      minItems: 1
-> >      items:
-> >        - const: core
-> > -      - const: coregroup
-> > +      - enum:
-> > +          - coregroup
-> > +          - stacks
-> >        - const: stacks
-> 
-> I'm not sure how to parse this part of the change. We're overwriting the property
-> for mt8196-mali anyway so why do we need this? And if we do, should 'stacks'
-> still remain as a const?
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-The properties section outside of the if branches outside here
-specifies a pattern of properties that matches for all devices.
+Allow pm_restrict_gfp_mask() to be called many times in a row to avoid
+issues with calling dpm_suspend_start() when the GFP mask has been
+already restricted.
 
-In this case, I changed it so that the second clock-names item
-may either be "coregroup" or "stacks". Yes, the third "stacks"
-remains, though if you wanted to be extra precise you could
-then specify in the non-MT8196 cases that we should not have
-stacks followed by stacks, but I'd wager some checker for
-duplicate names may already catch that.
+Only the first invocation of pm_restrict_gfp_mask() will actually
+restrict the GFP mask and the subsequent calls will warn if there is
+a mismatch between the expected allowed GFP mask and the actual one.
 
-However, I don't think it's a big enough deal to reroll this
-series again.
+Moreover, if pm_restrict_gfp_mask() is called many times in a row,
+pm_restore_gfp_mask() needs to be called matching number of times in
+a row to actually restore the GFP mask.  Calling it when the GFP mask
+has not been restricted will cause it to warn.
 
-Kind regards,
-Nicolas Frattaroli
+This is necessary for the GFP mask restriction starting in
+hibernation_snapshot() to continue throughout the entire hibernation
+flow until it completes or it is aborted (either by a wakeup event or
+by an error).
 
-> 
-> Best regards,
-> Liviu
-> 
-> >  
-> >    mali-supply: true
-> > @@ -110,6 +112,27 @@ allOf:
-> >          power-domain-names: false
-> >        required:
-> >          - mali-supply
-> > +  - if:
-> > +      properties:
-> > +        compatible:
-> > +          contains:
-> > +            const: mediatek,mt8196-mali
-> > +    then:
-> > +      properties:
-> > +        mali-supply: false
-> > +        sram-supply: false
-> > +        operating-points-v2: false
-> > +        power-domains:
-> > +          maxItems: 1
-> > +        power-domain-names: false
-> > +        clocks:
-> > +          maxItems: 2
-> > +        clock-names:
-> > +          items:
-> > +            - const: core
-> > +            - const: stacks
-> > +      required:
-> > +        - power-domains
-> >  
-> >  examples:
-> >    - |
-> > @@ -145,5 +168,17 @@ examples:
-> >              };
-> >          };
-> >      };
-> > +  - |
-> > +    gpu@48000000 {
-> > +        compatible = "mediatek,mt8196-mali", "arm,mali-valhall-csf";
-> > +        reg = <0x48000000 0x480000>;
-> > +        clocks = <&gpufreq 0>, <&gpufreq 1>;
-> > +        clock-names = "core", "stacks";
-> > +        interrupts = <GIC_SPI 606 IRQ_TYPE_LEVEL_HIGH 0>,
-> > +                     <GIC_SPI 605 IRQ_TYPE_LEVEL_HIGH 0>,
-> > +                     <GIC_SPI 604 IRQ_TYPE_LEVEL_HIGH 0>;
-> > +        interrupt-names = "job", "mmu", "gpu";
-> > +        power-domains = <&gpufreq>;
-> > +    };
-> >  
-> >  ...
-> > 
-> 
-> 
+Fixes: 449c9c02537a1 ("PM: hibernate: Restrict GFP mask in hibernation_snapshot()")
+Fixes: 469d80a3712c ("PM: hibernate: Fix hybrid-sleep")
+Reported-by: Askar Safin <safinaskar@gmail.com>
+Closes: https://lore.kernel.org/linux-pm/20251025050812.421905-1-safinaskar@gmail.com/
+Link: https://lore.kernel.org/linux-pm/20251028111730.2261404-1-safinaskar@gmail.com/
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
 
+This supersedes
+
+https://lore.kernel.org/linux-pm/20251026033115.436448-1-superm1@kernel.org/
+
+as it allows the GFP mask to be restricted across the entire hibernation path.
+
+---
+ kernel/power/hibernate.c |    4 ----
+ kernel/power/main.c      |   22 +++++++++++++++++-----
+ 2 files changed, 17 insertions(+), 9 deletions(-)
+
+--- a/kernel/power/hibernate.c
++++ b/kernel/power/hibernate.c
+@@ -706,7 +706,6 @@ static void power_down(void)
+ 
+ #ifdef CONFIG_SUSPEND
+ 	if (hibernation_mode == HIBERNATION_SUSPEND) {
+-		pm_restore_gfp_mask();
+ 		error = suspend_devices_and_enter(mem_sleep_current);
+ 		if (!error)
+ 			goto exit;
+@@ -746,9 +745,6 @@ static void power_down(void)
+ 		cpu_relax();
+ 
+ exit:
+-	/* Match the pm_restore_gfp_mask() call in hibernate(). */
+-	pm_restrict_gfp_mask();
+-
+ 	/* Restore swap signature. */
+ 	error = swsusp_unmark();
+ 	if (error)
+--- a/kernel/power/main.c
++++ b/kernel/power/main.c
+@@ -31,23 +31,35 @@
+  * held, unless the suspend/hibernate code is guaranteed not to run in parallel
+  * with that modification).
+  */
++static unsigned int saved_gfp_count;
+ static gfp_t saved_gfp_mask;
+ 
+ void pm_restore_gfp_mask(void)
+ {
+ 	WARN_ON(!mutex_is_locked(&system_transition_mutex));
+-	if (saved_gfp_mask) {
+-		gfp_allowed_mask = saved_gfp_mask;
+-		saved_gfp_mask = 0;
+-	}
++
++	if (WARN_ON(!saved_gfp_count) || --saved_gfp_count)
++		return;
++
++	gfp_allowed_mask = saved_gfp_mask;
++	saved_gfp_mask = 0;
++
++	pm_pr_dbg("GFP mask restored\n");
+ }
+ 
+ void pm_restrict_gfp_mask(void)
+ {
+ 	WARN_ON(!mutex_is_locked(&system_transition_mutex));
+-	WARN_ON(saved_gfp_mask);
++
++	if (saved_gfp_count++) {
++		WARN_ON((saved_gfp_mask & ~(__GFP_IO | __GFP_FS)) != gfp_allowed_mask);
++		return;
++	}
++
+ 	saved_gfp_mask = gfp_allowed_mask;
+ 	gfp_allowed_mask &= ~(__GFP_IO | __GFP_FS);
++
++	pm_pr_dbg("GFP mask restricted\n");
+ }
+ 
+ unsigned int lock_system_sleep(void)
 
 
 
