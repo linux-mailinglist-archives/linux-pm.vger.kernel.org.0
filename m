@@ -1,103 +1,131 @@
-Return-Path: <linux-pm+bounces-36964-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36965-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id A0005C1477A
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Oct 2025 12:52:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 75E1AC14828
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Oct 2025 13:03:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C32A35030E6
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Oct 2025 11:50:11 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 64EA24E2145
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Oct 2025 12:03:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E60530C373;
-	Tue, 28 Oct 2025 11:49:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD945308F18;
+	Tue, 28 Oct 2025 12:03:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W8E2rnym"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ka2yzJ6Y"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E16F30BB88
-	for <linux-pm@vger.kernel.org>; Tue, 28 Oct 2025 11:49:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8CCA2D5957
+	for <linux-pm@vger.kernel.org>; Tue, 28 Oct 2025 12:03:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761652168; cv=none; b=nAUk6LTbrg9d/qvPdW+W4ZgYwROs6P5EQ56ng9r3YQchBavNEMDeQYTleqoSFsiAOjNTlO4FQUZr3yRfSrIZr9spWx8URry63yK9B1QWSwALvSgzunCKYiBIiHilbsALHzCHn2UxabN4BZmTdli6vw4BAo2ra76OCzf4n5e5eG0=
+	t=1761653027; cv=none; b=GfFmHyHsAJII/ECpPxWCf1BjVV8oEsjzXdtrHg/N8GPo225/uMYb5C69LDE/PjlGAKd8PDXK3B1A6WHbDliuYx/0YWcj1B9VpkAdwhh37Wn7ujY9WrMj07wlEgo9ib8Ka3LlEFkBKBT/E9ZbNvx32GU+0XFSJXTuV5agZy0w7r4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761652168; c=relaxed/simple;
-	bh=yDVNj89esrCye148y3REuDD7mWVsIyFWVwThy4TG/hY=;
+	s=arc-20240116; t=1761653027; c=relaxed/simple;
+	bh=NGL+IZJGTIxbqCDdaa88n3D2XlIAHmLG1x6h5o24+AM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=puJORfX4xn69vAKUiFTDVWsO9NInsrNKB8S+Fp7h7lrTZgYU/Kn+kMf8VTECTQAVxA9/MrEkbG73L5p0s5+Si3puFPO0GFgDcCp6TgLtZAOeiXhxBm1bRBN6eDqui5SCU19Kcs7b+q6sjsvuFcJY3GjmrgSW9vGan3yO1wb9tTg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W8E2rnym; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA4FFC116C6
-	for <linux-pm@vger.kernel.org>; Tue, 28 Oct 2025 11:49:27 +0000 (UTC)
+	 To:Cc:Content-Type; b=CSus0mgQEWCDCHXefWQWyFJzRlpkPIIH+vZBPRGQLmcyhUXEsO3Q3ahk77xegl3GFfNRI2msaPb8DrEjbpFk8k7Cq9j9Oqa3Bx9xKJ8JqahphdaxUvjFitGL8dSXhaxB9ynNdWfpemloxbnTlBJ2i5RCJZejxlu+xtWBcgtsywA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ka2yzJ6Y; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66D29C16AAE
+	for <linux-pm@vger.kernel.org>; Tue, 28 Oct 2025 12:03:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761652167;
-	bh=yDVNj89esrCye148y3REuDD7mWVsIyFWVwThy4TG/hY=;
+	s=k20201202; t=1761653027;
+	bh=NGL+IZJGTIxbqCDdaa88n3D2XlIAHmLG1x6h5o24+AM=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=W8E2rnymF1yobuKYPcr+HKlY0Q11revo3cBzfe8csd7Vb2AhiRfVwTs7FeFbjhTP1
-	 a5YNySFRYxVP3BxjhDMGUmWkm+sPQIgYwtJUdIsOPPNphzIIaa+CM2DrkR6S0LNJwe
-	 ie/rqaPEKE7JSoPixjxdayPW3rnVM35ANJDuM2UGAB72E6MBkPE3iatJAskGX/uQ5W
-	 9UrZ1TcdYwrbZgl8ZuT1uwidERd9rQTNDGOi7KU2VWAmasjGq9HAkTZHEsxEJaN2jQ
-	 1IXg/SWE1P9HFc8h7r3haxA0nR4VF20QcBmGL+hkN0oRoIw2wAQyzBU1PxhQsLG4Zo
-	 FknRvuNJMqdZw==
-Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-65675435ca3so51336eaf.2
-        for <linux-pm@vger.kernel.org>; Tue, 28 Oct 2025 04:49:27 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWshjFxpjeba4p1GiBHXLneqohxZY7x3pkExPUWRZkaiF/UE4dHNkOGrP3hfjbb1Jhp0f8XB7ClSg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyNtI4S320Vtxi+0cvsWJ6+eGqBJpQ1exgqKtoq9wfesQ0pfpkq
-	8ll5TvqPDveCIZxDk6nRu8PvE7GIUMf9CQ5uedah5GJMZzH3JVRB7/r7bMiKey53v0lpat7JgSS
-	Jewke666JcPoy/2sywuIIj5/KxgFbYsU=
-X-Google-Smtp-Source: AGHT+IFcfC28CqkuomWAoJi6nuf1h0zbD4+PngMUC+sEonuSzj6or+Llntw7DvjiJjZXfZ1e6P9eAva5e2hHzKEkGG8=
-X-Received: by 2002:a05:6820:199a:b0:654:f6f1:dd07 with SMTP id
- 006d021491bc7-6566f212fcamr1465807eaf.4.1761652166952; Tue, 28 Oct 2025
- 04:49:26 -0700 (PDT)
+	b=Ka2yzJ6YVCcqht6zYotA60ouOMgNIYzL6TW+yPsfl1fLH5835e0SAf6BR/1BJrTL/
+	 jBU+ZDqjQDp3/CW5reGTDVfsTc4SWMGDkceSAnB3pqJpYXo0fp1Ie7md80ZKjnRHqJ
+	 KGtDa+f5MckIXEn81ma31OC83W3hjRmdkE2JnhLihPsNcamMuKKL6X7j3X3am8XGN/
+	 o7lxlMPem3YGGx1YiZ4MAOe99mKElS2Tfu59zzSaQOQpioQk27yrzLYlhwZttr+qyG
+	 bGUlgTo0X8UbVzmhphkA4L38GcLFlQ/i3HdtVJXlb7zoohjNCChvMu0igPhICa9kGl
+	 i7pIww7iLoOEw==
+Received: by mail-oi1-f177.google.com with SMTP id 5614622812f47-44db11c7ed6so1378303b6e.2
+        for <linux-pm@vger.kernel.org>; Tue, 28 Oct 2025 05:03:47 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUq5ypr2PJmxy9mItqRmXBMJQ6NTPeTWUBscpllkvHhfmUEIT9JwT+jfec/iFd56grY+rNJ+184vg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx5IS+n4y19urLgRAZoa88lFN49/61nOnOQ8z7udBAgm41B8oRm
+	0LlQ98wi0bJdtD0zi51X+CtyUNX7kVokFlGiIRWvWIw3bddjpIaGW6in/pV1oCENbpxJTdeAyQJ
+	Fp1ttjpUUYqrHVjQ5A6sjUiRqiQohJn0=
+X-Google-Smtp-Source: AGHT+IEbl+yOB806CIHgJBzvgTOTmW/YIaJ+LahZDXUFEDenvFO7sdJjf1V/C6J1whcFN9oW6EKkellD/nj1/P2u1tc=
+X-Received: by 2002:a05:6808:c2a4:b0:441:8f74:fce with SMTP id
+ 5614622812f47-44f6bb54097mr1093233b6e.59.1761653026571; Tue, 28 Oct 2025
+ 05:03:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251026033115.436448-1-superm1@kernel.org> <20251028111730.2261404-1-safinaskar@gmail.com>
-In-Reply-To: <20251028111730.2261404-1-safinaskar@gmail.com>
+References: <20251028060829.65434-1-linmq006@gmail.com>
+In-Reply-To: <20251028060829.65434-1-linmq006@gmail.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 28 Oct 2025 12:49:14 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0iziWj0dWWFMz-otXAt2c1PBp6RwQKVjt_hwbrU4B_fVg@mail.gmail.com>
-X-Gm-Features: AWmQ_blUWlLQfv4YanZSIOGILp5fEcAmtoabeAfKnegnD857boU4WR3JnhUZKd8
-Message-ID: <CAJZ5v0iziWj0dWWFMz-otXAt2c1PBp6RwQKVjt_hwbrU4B_fVg@mail.gmail.com>
-Subject: Re: [PATCH] PM: hibernate: Restore GFP mask in power_down() for HIBERNATION_PLATFORM
-To: Askar Safin <safinaskar@gmail.com>
-Cc: superm1@kernel.org, lenb@kernel.org, linux-pm@vger.kernel.org, 
-	mario.limonciello@amd.com, pavel@kernel.org, rafael.j.wysocki@intel.com, 
-	rafael@kernel.org
+Date: Tue, 28 Oct 2025 13:03:34 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0h3YMqT9uH+aLxu7SKsqY12AN7R04fRrL8Q+Z4wo0JaOA@mail.gmail.com>
+X-Gm-Features: AWmQ_bkQc9jm8EG6beNx1vkq6okGIrtKCtxYZsndpTWZCgkZ3fOY0fn_g05yUDg
+Message-ID: <CAJZ5v0h3YMqT9uH+aLxu7SKsqY12AN7R04fRrL8Q+Z4wo0JaOA@mail.gmail.com>
+Subject: Re: [PATCH] thermal: thermal_of: Fix device node reference leak in thermal_of_cm_lookup
+To: Miaoqian Lin <linmq006@gmail.com>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	Lukasz Luba <lukasz.luba@arm.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Oct 28, 2025 at 12:17=E2=80=AFPM Askar Safin <safinaskar@gmail.com>=
- wrote:
+On Tue, Oct 28, 2025 at 7:08=E2=80=AFAM Miaoqian Lin <linmq006@gmail.com> w=
+rote:
 >
-> "Mario Limonciello (AMD)" <superm1@kernel.org>:
-> > commit 449c9c02537a1 ("PM: hibernate: Restrict GFP mask in
-> > hibernation_snapshot()") added a restrict GFP mask call that leads to
-> > mismatch when using the platform for hibernation.  As part of calling
-> > hibernation_platform_enter() the mask will be restricted when calling
-> > dpm_suspend_start().
+> In thermal_of_cm_lookup(), of_parse_phandle() returns a device node with
+> its reference count incremented. The caller is responsible for releasing
+> this reference when the node is no longer needed.
 >
-> Are you sure this is proper solution?
+> Add of_node_put(tr_np) to fix the reference leaks.
 >
-> As well as I understand, pm_restore_gfp_mask will make pm_suspended_stora=
-ge
-> to return false. And this will enable swapping. Thus it is possible that
-> we will write some pages to swap after this pm_restore_gfp_mask call, and=
- thus
-> we will damage swap.
+> Found via static analysis.
+>
+> Fixes: 3fd6d6e2b4e8 ("thermal/of: Rework the thermal device tree initiali=
+zation")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+> ---
+>  drivers/thermal/thermal_of.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
+> index 1a51a4d240ff..2bb1b8e471cf 100644
+> --- a/drivers/thermal/thermal_of.c
+> +++ b/drivers/thermal/thermal_of.c
+> @@ -284,8 +284,11 @@ static bool thermal_of_cm_lookup(struct device_node =
+*cm_np,
+>                 int count, i;
+>
+>                 tr_np =3D of_parse_phandle(child, "trip", 0);
+> -               if (tr_np !=3D trip->priv)
+> +               if (tr_np !=3D trip->priv) {
+> +                       of_node_put(tr_np);
+>                         continue;
+> +               }
+> +               of_node_put(tr_np);
 
-What kind of damage are you talking about, specifically?
+This will also work because tr_np is not dereferenced below:
 
-> Note: I'm not sure that my explanation is correct. Anyway I think you
-> should explain in commit message or comment why we will not damage swap
-> here.
+                tr_np =3D of_parse_phandle(child, "trip", 0);
+                of_node_put(tr_np);
+                if (tr_np !=3D trip->priv)
+                                continue;
 
-Well, if you have a specific failing scenario in mind, you need to say
-what it is.  Otherwise you are effectively saying something like
-"there is a bug in your code, but you need to find it yourself".
+but a more general question is whether or not device nodes used for
+populating thermal zone trip points can be let go.
+
+If not, then this change needs to be combined with another one that
+will prevent them from going away.
+
+Presumably they need to be reference counted in
+thermal_of_populate_trip().  Daniel?
+
+>
+>                 /* The trip has been found, look up the cdev. */
+>                 count =3D of_count_phandle_with_args(child, "cooling-devi=
+ce",
+> --
 
