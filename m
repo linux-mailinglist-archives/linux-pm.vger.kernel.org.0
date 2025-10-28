@@ -1,199 +1,142 @@
-Return-Path: <linux-pm+bounces-36960-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36961-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 30EAEC13E3C
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Oct 2025 10:44:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F0D0C13FAD
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Oct 2025 11:01:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 526811AA43F7
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Oct 2025 09:43:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A6C5619C2FC5
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Oct 2025 09:59:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50DBD2DA774;
-	Tue, 28 Oct 2025 09:43:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEB652F39B1;
+	Tue, 28 Oct 2025 09:58:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="hZ3Zu+2c";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="qI2XE+kW"
+	dkim=pass (2048-bit key) header.d=brainfault-org.20230601.gappssmtp.com header.i=@brainfault-org.20230601.gappssmtp.com header.b="J3k8HRJC"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fhigh-a5-smtp.messagingengine.com (fhigh-a5-smtp.messagingengine.com [103.168.172.156])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f169.google.com (mail-il1-f169.google.com [209.85.166.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D62BC221271;
-	Tue, 28 Oct 2025 09:43:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.156
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44FC9302773
+	for <linux-pm@vger.kernel.org>; Tue, 28 Oct 2025 09:58:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761644596; cv=none; b=T6b2lJelt/shMAQqnYPaCn3PaeV3vrsNogWPfm8Gic1FlL+n+/lsLtQiPKWSF5Ct1zpamiVLCqo42er+AfDzS1MFC/W6imfYwX9bFvV1UsFf3brPrIyK/mO9gItAo0qAXOBv/ISBNJYUvWedeh0znRbwTPRX8me76XaX7AxsAMQ=
+	t=1761645535; cv=none; b=p/7MmI64h8103j0ZFTDRh2+vt4YJN1pCCaywpg2KJjQzEET2W6eWa+4uqEqdiT256vT4ChriXL+A8ItCrh8XhA6rBhAmCBg8vwfoaFshA7L/PllC1WHl+idOTseAhqjUsS2I85ln43qikMRurOMJqCSgUpsWwG+rlxQEADll/AE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761644596; c=relaxed/simple;
-	bh=7SwGEFWgVJYL+WqqeJIHpTCNGoh9w23ubHCRPn5kD+g=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=Jg5s+IuVc1A3DSbXEi2UhHdaPXK8oMQh8PTex7Cq63W5aAb9JQEGBJbj33c+NqJ9MYD4ijeMqZibIL/k+o6lKIbsG6ZJ6ZAJGUE7/XnWgm1Nq5swNedKMG2tQDEfbg1zglPPu2MdLXkyQ+nIYlW8QAjGZl08oQOUTZb9S5CRyeQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=hZ3Zu+2c; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=qI2XE+kW; arc=none smtp.client-ip=103.168.172.156
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id DC06C1400312;
-	Tue, 28 Oct 2025 05:43:12 -0400 (EDT)
-Received: from phl-imap-17 ([10.202.2.105])
-  by phl-compute-04.internal (MEProxy); Tue, 28 Oct 2025 05:43:12 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1761644592;
-	 x=1761730992; bh=6R82CPYt/trwZwdJVbkGNN3GySFpmpbKddDWCQfqcFo=; b=
-	hZ3Zu+2c8VXu+fb3s7a4V6sVyr6Dkmgp4waxkIifbc1vZkIdkfwhhYjHFhNiQH7u
-	iD3Fb5MHRe4LHk+JLFnGP6N9lk9gHCy6jwSfrTr9y8tHQvYBXZfQMusoMyjUdFBS
-	2lQFogp/OgiY72SRE6lQ/40zdHYxhj4GhK37lvKZ6dvLWzIPFdEJqbCA6O9H1CHl
-	TnYwMBaK04oGqKLcvppXhgXf0yyQVgeIi1XdexRTb8zzjBOywni1wM6ZmptvLV94
-	O9VImnZmAIxlq3jjov/lbR9uYxW3KNHHB5qXSKxw7XYWVG4iOlRSVwiuSCaj/8Hb
-	EwbeHF4RhCi6fiUpRVF7Hg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1761644592; x=
-	1761730992; bh=6R82CPYt/trwZwdJVbkGNN3GySFpmpbKddDWCQfqcFo=; b=q
-	I2XE+kWL9O2Whx5kWRXiy7vupMuCpcBYU6gds3UU4lfCD1P55It2vTCmEDBTNQsz
-	Hg5C607peIZLudzQA3ottt3RGXq23BUXq8odSLdKNL5vRndkry/OBXSvWg3bXT/E
-	cyYe2GbqZAu4ssV2/JAYvSh+MIciqGKtfSuxzChqSYsR1wWV92cnnPZhv3lMJM7J
-	CfvK9CD+k7gU6QbyDk1wRxHIuxrWb67RZLC9khyxoRFmr3UP1eYQfd+Mzopdw2wV
-	W2Mtpi3T3y+NnTzuzpu65dJ0v8MuuHmI92tiJP3YgVT6mIjGN2iNc6VRLo45ERu3
-	oBLPI6ESDu9EmU4RbKP4A==
-X-ME-Sender: <xms:L5AAaepgVhI_--biGubsM3Nr3M8wlN6VDYKz6TPmJjGVCeEFru0K4A>
-    <xme:L5AAaXdTIIlkvOHjYT5jjJlI_2GO-8IJJ77k0gE69fz-3yB0TInq81plJ8-oTuaKR
-    QM9o_PLUt9-GsrcqqpUyHFii8QTUNg891YZ1-T1tOm0zWxtREnIQQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdduiedthedvucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhgu
-    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
-    hrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefggfevudegudevledvkefhvdei
-    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnh
-    gusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepvddvpdhmohguvgepshhmthhpohhu
-    thdprhgtphhtthhopehhrghrihhsohhknhesrghmrgiiohhnrdgtohhmpdhrtghpthhtoh
-    eptggrthgrlhhinhdrmhgrrhhinhgrshesrghrmhdrtghomhdprhgtphhtthhopehmrghr
-    khdrrhhuthhlrghnugesrghrmhdrtghomhdprhgtphhtthhopegtlhesghgvnhhtfihord
-    horhhgpdhrtghpthhtohepmhgvmhigohhrsehgmhgrihhlrdgtohhmpdhrtghpthhtohep
-    iihhvghnghhlihhfvghnghdusehhuhgrfigvihdrtghomhdprhgtphhtthhopehpvghtvg
-    hriiesihhnfhhrrgguvggrugdrohhrghdprhgtphhtthhopegrshhtsehkvghrnhgvlhdr
-    ohhrghdprhgtphhtthhopehrrghfrggvlheskhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:L5AAaQkEZbpjcMrnp2cBz3cCrzlBjlNPk_WjmqKFkTj3wM9E1zbjGQ>
-    <xmx:L5AAabZ0AGvD9DnKHfkLINOX7_s4yUcHdFAYIRKxXSJDYy73vNlamQ>
-    <xmx:L5AAaerRzzEh0ex-jpkrwDUeiZ33DGeLCXgCoL8uzZGYltOx0Kr1_g>
-    <xmx:L5AAaRiQHV7UBgJPQtk5tVYmq_rsY9kiIv6monQX0FSBIB5oa-NYNg>
-    <xmx:MJAAaRmcloNIn3dV-9w2KbccA11-XAcB3f44646tPJd_EK2pjxru_KiP>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 1CD9EC40054; Tue, 28 Oct 2025 05:43:11 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1761645535; c=relaxed/simple;
+	bh=Udw4Kac4IPS7oanBQ6UJdyxqv8+zAPZHZclswaCqs0E=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Gxl3lLeM974XQb8huOIDCy0ZKtFaU95VdgOdNpE6To0ZWRtOTT5t0WlUGTbMu5wf3e7Q09ef2WSQqKUZT7kYNgGErtQnurATGBec/zFVVCuYRGXAEA8w7bmwab9g2U6YsL1xCNOjPdpXqc2IcL+YdH/+wueyKaalt6JGaLET8Bc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org; spf=none smtp.mailfrom=brainfault.org; dkim=pass (2048-bit key) header.d=brainfault-org.20230601.gappssmtp.com header.i=@brainfault-org.20230601.gappssmtp.com header.b=J3k8HRJC; arc=none smtp.client-ip=209.85.166.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=brainfault.org
+Received: by mail-il1-f169.google.com with SMTP id e9e14a558f8ab-430c180d829so25365585ab.3
+        for <linux-pm@vger.kernel.org>; Tue, 28 Oct 2025 02:58:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brainfault-org.20230601.gappssmtp.com; s=20230601; t=1761645533; x=1762250333; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1PY8mCSuKOhJf2Q+W5FTads5NFbSblIDSqg2ZyPdi2M=;
+        b=J3k8HRJClO8sGnJrBPVRqmAHzuXoyZ6O9JTTC2GCDLv6qcXuPnG/EGHkXxgTzPYrGc
+         qi7ZOqLlExHdvLpw6d3ka/tZ/ExTCFt6AASgtoVEdogoK1BWKQKqvRqJldMsxkUVzEuB
+         yTrJM7VAzgrPRKgiPzWKjPxZGpVQOVLXUDkHYZMmNNWkLOLfB+/KHJe+3U8EkE8jC4Qu
+         GCujq28zK1Ria5s/hj2xEijJ+NJfDs9GeJrvETHt5vqTZicirOT8FIY25SgMqekfMlq1
+         gP0ARg7SHv5MCMg6nhmVseYR1dmTF+DdYM6nzfbmfc6HpRBHKX5LkUXUzNSqjxCQca2r
+         WKAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761645533; x=1762250333;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1PY8mCSuKOhJf2Q+W5FTads5NFbSblIDSqg2ZyPdi2M=;
+        b=VLoPFS/UptBLWEtZRV3O/vFgoq3jeSI21NKAFL6E/G6Nm5w3oXxNkrVxzKW0ukTq0G
+         /rKbvT6ryEMxU48ZUZR+iozIlhZe9uNfBNFH6GY13IwCebCrJWjguXJSmFhmFNTc+j6U
+         FunTpIVrcOmT53uueGb1P3GC73elodorjt4VF8GfVC/Ft2uCJ9FJPlskSE4/Pu2YQtM8
+         rw/J+xssh2a/cN7xYLY7AJGa5rmVXVM6LqaPNgfAgRNtfuVVHjivasqN805LRXbC49OL
+         gtQ0dDnRgtYV2iy8yLycZPvaI6RzvYG7NSlfaLLWDZza37LzRXqWtM/Jll6KHHbx/Gum
+         N3NQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVO1OXZPipBR1ljMc/I/aZovg7gNoQ38bKYSb/Dbl41JH/3R/fU8ICFkUXd40x3HbRGVCVaSXpnPw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzpd3iKGRZTUZfVV7YLx7s48FyWQELULIWzSTJ0UpWYv7cwbL6A
+	dlXt6We1MYCSnJyvRrI3HwOKIDsw/qvbtceKusOFrh0I213zvIr0r6UUp2iqnPWaMUMruSaacdo
+	gTAAA5TLkG9AjQDK9YCKoeNInQZ1o9paE4+hM0evExw==
+X-Gm-Gg: ASbGncvwxGVhl9284hbxWzvlsq6LnO+auNOWomcjpdJOZZQ75bYiwPzXXjAv1VzoEAg
+	gqzrc2Lgp0mMRHzal5qz/fEuyMu0BSsq0oLmcb8j9ICCZARHS3D3PTDPYrLXuWGdCnfBv25/43L
+	+BZnEbQPDyunOOARR7HnAU2Gaw8YjKn5XH01MQRTJWq1BxzBwXxGqscfuxEhh+OreYSsyoSUY8O
+	rFvNyH55lKja+K2zD+bxwnKWolyPXBwFuTymlUk9OX00IODzTJjAkAHmhhxuQuTOCLSAUUljBLg
+	btvQ2Uh9+7mMuIkwHA==
+X-Google-Smtp-Source: AGHT+IEg0a1CT3cJ1oaHQ17yWX2472MdL2RHimICjHVP34ZQDjWMsWJJoe7Ni16kwKdyIqohFYWx2NwOzODq5cmzegw=
+X-Received: by 2002:a05:6e02:d:b0:431:d73b:ea9c with SMTP id
+ e9e14a558f8ab-4320f6b1237mr44673025ab.6.1761645533137; Tue, 28 Oct 2025
+ 02:58:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: ArFVEkIwmB-N
-Date: Tue, 28 Oct 2025 10:42:49 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Ankur Arora" <ankur.a.arora@oracle.com>, linux-kernel@vger.kernel.org,
- Linux-Arch <linux-arch@vger.kernel.org>,
- linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
- bpf@vger.kernel.org
-Cc: "Catalin Marinas" <catalin.marinas@arm.com>,
- "Will Deacon" <will@kernel.org>, "Peter Zijlstra" <peterz@infradead.org>,
- "Andrew Morton" <akpm@linux-foundation.org>,
- "Mark Rutland" <mark.rutland@arm.com>,
- "Haris Okanovic" <harisokn@amazon.com>,
- "Christoph Lameter (Ampere)" <cl@gentwo.org>,
- "Alexei Starovoitov" <ast@kernel.org>,
- "Rafael J . Wysocki" <rafael@kernel.org>,
- "Daniel Lezcano" <daniel.lezcano@linaro.org>,
- "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, zhenglifeng1@huawei.com,
- xueshuai@linux.alibaba.com, "Joao Martins" <joao.m.martins@oracle.com>,
- "Boris Ostrovsky" <boris.ostrovsky@oracle.com>,
- "Konrad Rzeszutek Wilk" <konrad.wilk@oracle.com>
-Message-Id: <4c87bbf8-00a3-4666-b844-916edd678305@app.fastmail.com>
-In-Reply-To: <20251028053136.692462-2-ankur.a.arora@oracle.com>
-References: <20251028053136.692462-1-ankur.a.arora@oracle.com>
- <20251028053136.692462-2-ankur.a.arora@oracle.com>
-Subject: Re: [RESEND PATCH v7 1/7] asm-generic: barrier: Add
- smp_cond_load_relaxed_timeout()
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+References: <20251021135155.1409-1-thorsten.blum@linux.dev> <20251021135155.1409-2-thorsten.blum@linux.dev>
+In-Reply-To: <20251021135155.1409-2-thorsten.blum@linux.dev>
+From: Anup Patel <anup@brainfault.org>
+Date: Tue, 28 Oct 2025 15:28:41 +0530
+X-Gm-Features: AWmQ_bmouff25xtnvPr1URYNqHRT10uCqQrPn__6ZXy4Z26vl234qADpGcUh16E
+Message-ID: <CAAhSdy2Y25TXjZNmaMMKhwZBi-T-UzXjQGuVfqy-ThTuJ4rmNA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] cpuidle: riscv-sbi: Replace deprecated strcpy in sbi_cpuidle_init_cpu
+To: Thorsten Blum <thorsten.blum@linux.dev>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Alexandre Ghiti <alex@ghiti.fr>, linux-pm@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Oct 28, 2025, at 06:31, Ankur Arora wrote:
+On Tue, Oct 21, 2025 at 7:22=E2=80=AFPM Thorsten Blum <thorsten.blum@linux.=
+dev> wrote:
+>
+> strcpy() is deprecated; use strscpy() instead.
+>
+> Link: https://github.com/KSPP/linux/issues/88
+> Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
 
-> + */
-> +#ifndef smp_cond_load_relaxed_timeout
-> +#define smp_cond_load_relaxed_timeout(ptr, cond_expr, time_check_expr)	\
-> +({									\
-> +	typeof(ptr) __PTR = (ptr);					\
-> +	__unqual_scalar_typeof(*ptr) VAL;				\
-> +	u32 __n = 0, __spin = SMP_TIMEOUT_POLL_COUNT;			\
-> +									\
-> +	for (;;) {							\
-> +		VAL = READ_ONCE(*__PTR);				\
-> +		if (cond_expr)						\
-> +			break;						\
-> +		cpu_poll_relax(__PTR, VAL);				\
-> +		if (++__n < __spin)					\
-> +			continue;					\
-> +		if (time_check_expr) {					\
-> +			VAL = READ_ONCE(*__PTR);			\
-> +			break;						\
-> +		}							\
-> +		__n = 0;						\
-> +	}								\
-> +	(typeof(*ptr))VAL;						\
-> +})
-> +#endif
+LGTM.
 
-I'm trying to think of ideas for how this would done on arm64
-with FEAT_FWXT in a way that doesn't hurt other architectures.
+Reviewed-by: Anup Patel <anup@brainfault.org>
 
-The best idea I've come up with is to change that inner loop
-to combine the cpu_poll_relax() with the timecheck and then
-define the 'time_check_expr' so it has to return an approximate
-(ceiling) number of nanoseconds of remaining time or zero if
-expired.
+Regards,
+Anup
 
-The FEAT_WFXT version would then look something like
-
-static inline void __cmpwait_u64_timeout(volatile u64 *ptr, unsigned long val, __u64 ns)
-{
-   unsigned long tmp;
-   asm volatile ("sev; wfe; ldxr; eor; cbnz; wfet; 1:"
-        : "=&r" (tmp), "+Q" (*ptr)
-        : "r" (val), "r" (ns));
-}
-#define cpu_poll_relax_timeout_wfet(__PTR, VAL, TIMECHECK) \
-({                                                    \
-       u64 __t = TIMECHECK;
-       if (__t)
-            __cmpwait_u64_timeout(__PTR, VAL, __t);
-})
-
-while the 'wfe' version would continue to do the timecheck after the
-wait.
-
-I have two lesser concerns with the generic definition here:
-
-- having both a timeout and a spin counter in the same loop
-  feels redundant and error-prone, as the behavior in practice
-  would likely depend a lot on the platform. What is the reason
-  for keeping the counter if we already have a fixed timeout
-  condition?
-
-- I generally dislike the type-agnostic macros like this one,
-  it adds a lot of extra complexity here that I feel can be
-  completely avoided if we make explicitly 32-bit and 64-bit
-  wide versions of these macros. We probably won't be able
-  to resolve this as part of your series, but ideally I'd like
-  have explicitly-typed versions of cmpxchg(), smp_load_acquire()
-  and all the related ones, the same way we do for atomic_*()
-  and atomic64_*().
-
-       Arnd
+> ---
+>  drivers/cpuidle/cpuidle-riscv-sbi.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/cpuidle/cpuidle-riscv-sbi.c b/drivers/cpuidle/cpuidl=
+e-riscv-sbi.c
+> index a360bc4d20b7..19be6475d356 100644
+> --- a/drivers/cpuidle/cpuidle-riscv-sbi.c
+> +++ b/drivers/cpuidle/cpuidle-riscv-sbi.c
+> @@ -18,6 +18,7 @@
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+>  #include <linux/slab.h>
+> +#include <linux/string.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/pm_domain.h>
+>  #include <linux/pm_runtime.h>
+> @@ -303,8 +304,8 @@ static int sbi_cpuidle_init_cpu(struct device *dev, i=
+nt cpu)
+>         drv->states[0].exit_latency =3D 1;
+>         drv->states[0].target_residency =3D 1;
+>         drv->states[0].power_usage =3D UINT_MAX;
+> -       strcpy(drv->states[0].name, "WFI");
+> -       strcpy(drv->states[0].desc, "RISC-V WFI");
+> +       strscpy(drv->states[0].name, "WFI");
+> +       strscpy(drv->states[0].desc, "RISC-V WFI");
+>
+>         /*
+>          * If no DT idle states are detected (ret =3D=3D 0) let the drive=
+r
+> --
+> 2.51.0
+>
 
