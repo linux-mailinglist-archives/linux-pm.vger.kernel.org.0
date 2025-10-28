@@ -1,180 +1,152 @@
-Return-Path: <linux-pm+bounces-36968-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36969-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 869B0C14AE9
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Oct 2025 13:47:28 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E1DD0C14B94
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Oct 2025 13:56:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 0C3FE4E2448
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Oct 2025 12:47:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9B1C63BCCE3
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Oct 2025 12:56:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CEB832ABCA;
-	Tue, 28 Oct 2025 12:47:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7207F32ABCC;
+	Tue, 28 Oct 2025 12:56:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="rRgWkh1K";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="GFRK34vH";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="rRgWkh1K";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="GFRK34vH"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UPcypZgz"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1D981DE8AD
-	for <linux-pm@vger.kernel.org>; Tue, 28 Oct 2025 12:47:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D926C2DAFD2
+	for <linux-pm@vger.kernel.org>; Tue, 28 Oct 2025 12:56:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761655643; cv=none; b=T9Wp58c6NM7ttPmnrvGxmY09btqz9udcE0JqqAW/YJwbNwkHAM69uFJI390yoj6zm2kfEly1QsLvKmFX/ZDs064ssS7f6nbH4SX3G86ujlvGW3iOT2xozqOciItxt6GF7CJvD8lthbPgoulVWv65tYp59jkZAzIT2SDHwQ4HhjM=
+	t=1761656210; cv=none; b=WOj0e+P+sDSqBI/2s8Otl+p+bHCaodxs5MvmvXHxHmwhJFPlbugDHHoO961UdIvRPqWGUFJ662hCLU4eMFfxS/cbRbKdO0podqXtPEPCqGojXsaMwTwy3uto7OZoRtTMfFrDVE8d+NyR3LDnr6tFj71jY66Y11bEUq2mx+iPe/A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761655643; c=relaxed/simple;
-	bh=zn9QZORGnxY6ZMGmX6uLDnK9b7fOAtb7CHTU2diKlgY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=NtY1+oD3gPALEbg/Y0UGV4DkBcNU5t6/HgEYLf7fux0gYN8/MaTJVQeCtNUodsEFl7WHwlZGEuYqlXOqJepEDALaoVa/KyH8H0Trc/EQgqEgY7AzN3iH02RcDHOVVZOI24osdtNQo/R7CqTpoUCNpqDPdZxZVwDDwttHrhYCX6c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=rRgWkh1K; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=GFRK34vH; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=rRgWkh1K; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=GFRK34vH; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id C383D21A3A;
-	Tue, 28 Oct 2025 12:47:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1761655638; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type;
-	bh=D+8TRGN0i89jYErkfhVPoqDYXLalGCookKILuXZeFmo=;
-	b=rRgWkh1KOl7OnUL/1EFG6IvaJdt+K5d1GCYodvC4ZUHmGdfsrdWWQ7MT0xE4PHAYA7QAir
-	Xtyt+uIu5us90a5pllyk5WL3pi9tJKNKUA+DmtJQpqhjVvNJTa3kMzAfPIgSZHvpnyCauX
-	7CoPkiXoqOPULO+tSxMEW1+zsVgQxy0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1761655638;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type;
-	bh=D+8TRGN0i89jYErkfhVPoqDYXLalGCookKILuXZeFmo=;
-	b=GFRK34vH50PL/Xc3tTYPFCDWkElJbqM3BYJIyhcRIRDd0pUQyUPXak5SvwugLJS8ILLOvL
-	cMa6e83SZrd1X+CQ==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=rRgWkh1K;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=GFRK34vH
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1761655638; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type;
-	bh=D+8TRGN0i89jYErkfhVPoqDYXLalGCookKILuXZeFmo=;
-	b=rRgWkh1KOl7OnUL/1EFG6IvaJdt+K5d1GCYodvC4ZUHmGdfsrdWWQ7MT0xE4PHAYA7QAir
-	Xtyt+uIu5us90a5pllyk5WL3pi9tJKNKUA+DmtJQpqhjVvNJTa3kMzAfPIgSZHvpnyCauX
-	7CoPkiXoqOPULO+tSxMEW1+zsVgQxy0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1761655638;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type;
-	bh=D+8TRGN0i89jYErkfhVPoqDYXLalGCookKILuXZeFmo=;
-	b=GFRK34vH50PL/Xc3tTYPFCDWkElJbqM3BYJIyhcRIRDd0pUQyUPXak5SvwugLJS8ILLOvL
-	cMa6e83SZrd1X+CQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id AE3CD13693;
-	Tue, 28 Oct 2025 12:47:18 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id vE00KVa7AGmaOgAAD6G6ig
-	(envelope-from <trenn@suse.de>); Tue, 28 Oct 2025 12:47:18 +0000
-From: Thomas Renninger <trenn@suse.de>
-To: srinivas.pandruvada@linux.intel.com
-Cc: linux-pm@vger.kernel.org
-Subject:
- Disabling  Intel turbo on non IDA featured processor generally correct?
-Date: Tue, 28 Oct 2025 13:47:18 +0100
-Message-ID: <2764104.vuYhMxLoTh@localhost.localdomain>
+	s=arc-20240116; t=1761656210; c=relaxed/simple;
+	bh=j+D/qyt7Pw1B5Ingaklbk01v2dTvdYRTa494exV2Eno=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=eTgCEXUBKR91UGtC60Ts5+byniXkCAOjcuWhacIVzJtD7sVS4w6rI4ELZCoGrDzhFh8iimNaj3gUB6u+4M5EHv8MNIQNf2gMUMjH3sGp0cwyjAoZeSEXm26jruiCKiPda6VsgHgsynM2ei34KCMbn92P/0EGDYLXz4k2b8Xt02E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UPcypZgz; arc=none smtp.client-ip=209.85.128.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-781014f4e12so74314467b3.1
+        for <linux-pm@vger.kernel.org>; Tue, 28 Oct 2025 05:56:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1761656207; x=1762261007; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=j+D/qyt7Pw1B5Ingaklbk01v2dTvdYRTa494exV2Eno=;
+        b=UPcypZgzJi06J91sefhzN5nYMrQPpnCX/YyboKAQJr4L1E0MXqhzplESkEWFcUgYrW
+         UMilj6k+pbfVXSQA2GUMvq/gO6b141d+EntMkaOmQ9euIXQVh96WUBvzXSxFCWQ6mq7M
+         qm5q7H+XqLfeYzw4mIhkn4FA0EendE1ZFVx2kciR2ua2Bs7DwVAFQh1CL1ew8ydJ8ckj
+         RSST4Yw2SPc77r0qoXZ7H3AsLR+3CvgRC83omQ6rH+n54HHVN8BdIGtk8QoIdBkM7Wzv
+         /IUECGMwk2/1pUoPW85oOnALdoqQ4HG3aaj3ybf3/atg7mVzFw6pkmfjyW6vkXubuQ61
+         aPDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761656207; x=1762261007;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=j+D/qyt7Pw1B5Ingaklbk01v2dTvdYRTa494exV2Eno=;
+        b=nhW84p2LQr32M2qQh9rQDT9oMAH4OKpz0xGUcE2XYvC+f5Aa2kgVz8uxTOsjuFhOqm
+         RbtTUvEY06SBOrdXgDmP2eJnKB/3Q4OYxnswqEK2ObxxJuLc7E/iS/gAQE165+mAMQiY
+         OkdiHI/3k31Ag9DtFOAf7ktG0de5Tsn7XN/sextMvBYYrQWTJ64KHD43GucSM+mhd+/4
+         WCWAGtRIGTJe4UVQxMpoKCyRQUaUZRpPpcGEhsufy5+XP5N3mINBVXHuXkrJ+Xu1qVqX
+         yqzTyz8JWRwtGxzMJfH+rZp9ndi8X4b2QWTTgn36ML/xYv/lMoZkFAeclrRM0Ed3UVUj
+         Wrcg==
+X-Forwarded-Encrypted: i=1; AJvYcCVYJaDmBDtPkVxBDWO96buhxSK7cK6UkJLPKtGDONAnzVxioHBWywmEdN7Wd1/tDAa2tfndqwRSrg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YysSPIci8epZpYNF0MxDu4berBKC3UEWq2CFEUKzYdjf17gpob4
+	jxtGghyQIR5DYmPYNaIwsug8F6lbaUp4wlnb/bY8D1XxnsVsqIt8tDl8loTFj2avG9DHkpzS8ct
+	9djawNTFVTay1wWO+JvNWA38SJljb+Eo=
+X-Gm-Gg: ASbGncsbKE3OLVxtbXbe3vjb4WGE1LEyH4CyRMdSzLhe41aG0b+uloRCB5XY90gSN7t
+	pCuM+5ktg6YZlsehquwWIhPGb6qmFm2uInuqD0zDx4/V8VZRD9NErJdxr1Xw/ohm/DVoE5+0rx7
+	PJ+0nHm/ItGJjOKFThTr0UqYHgEMZBP1vuxtjzB3vIcTDls8YIxcvceH7y8qBBzw6Io3zJPO4D3
+	nBUdakmkIj8Zyzwf4saSU0sEeE3Rp+F5BFI+cJzl1esM2w6UclZ8RkTNAiQ/WRJ
+X-Google-Smtp-Source: AGHT+IGtsJS49buUuXnldsSwr5pJwsNb6Tuyy9XWwb84EZE/f+Q+JyeRVvi5lf9lAmTAXAn6fgo6kde6+3fayMiFpV8=
+X-Received: by 2002:a05:690c:6a83:b0:784:92a3:68b3 with SMTP id
+ 00721157ae682-78617e4187emr31380357b3.12.1761656206790; Tue, 28 Oct 2025
+ 05:56:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="nextPart4993414.OV4Wx5bFTl";
- micalg="pgp-sha256"; protocol="application/pgp-signature"
-X-Rspamd-Queue-Id: C383D21A3A
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Spamd-Result: default: False [-5.58 / 50.00];
-	BAYES_HAM(-2.97)[99.88%];
-	SIGNED_PGP(-2.00)[];
-	SUBJECT_ENDS_QUESTION(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	MIME_GOOD(-0.20)[multipart/signed,text/plain];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MX_GOOD(-0.01)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	RCPT_COUNT_TWO(0.00)[2];
-	FROM_HAS_DN(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	MIME_TRACE(0.00)[0:+,1:+,2:~];
-	ARC_NA(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DKIM_TRACE(0.00)[suse.de:+];
-	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	RCVD_COUNT_TWO(0.00)[2];
-	FROM_EQ_ENVFROM(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	TO_DN_NONE(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns,suse.de:dkim,opensuse.org:url]
-X-Rspamd-Action: no action
-X-Spam-Flag: NO
-X-Spam-Score: -5.58
-X-Spam-Level: 
+References: <20251026033115.436448-1-superm1@kernel.org> <20251028111730.2261404-1-safinaskar@gmail.com>
+ <CAJZ5v0iziWj0dWWFMz-otXAt2c1PBp6RwQKVjt_hwbrU4B_fVg@mail.gmail.com>
+In-Reply-To: <CAJZ5v0iziWj0dWWFMz-otXAt2c1PBp6RwQKVjt_hwbrU4B_fVg@mail.gmail.com>
+From: Askar Safin <safinaskar@gmail.com>
+Date: Tue, 28 Oct 2025 15:56:09 +0300
+X-Gm-Features: AWmQ_bntAnYoYljGIuyjMjnQaWJ0nwhoVeromC8zJngYVgMffRf91LGENVsp4dM
+Message-ID: <CAPnZJGCOR_zCOvLPdyYARQrZdafvBGwkXaDO-MGA6axw4etEsA@mail.gmail.com>
+Subject: Re: [PATCH] PM: hibernate: Restore GFP mask in power_down() for HIBERNATION_PLATFORM
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: superm1@kernel.org, lenb@kernel.org, linux-pm@vger.kernel.org, 
+	mario.limonciello@amd.com, pavel@kernel.org, rafael.j.wysocki@intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
---nextPart4993414.OV4Wx5bFTl
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="utf-8"; protected-headers="v1"
-From: Thomas Renninger <trenn@suse.de>
-To: srinivas.pandruvada@linux.intel.com
-Cc: linux-pm@vger.kernel.org
-Date: Tue, 28 Oct 2025 13:47:18 +0100
-Message-ID: <2764104.vuYhMxLoTh@localhost.localdomain>
-MIME-Version: 1.0
+On Tue, Oct 28, 2025 at 2:49=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.or=
+g> wrote:
+> What kind of damage are you talking about, specifically?
 
-Hello Srinivas,
+Again: "pm_restore_gfp_mask" will restore "gfp_allowed_mask" to its
+normal value,
+which will contain __GFP_IO and __GFP_FS. Thus "pm_suspended_storage" will
+start to return false.
 
-Since patch:
-ac4e04d9e378f5aa826c2406ad7871ae1b6a6fb9
+But "pm_suspended_storage" is called here:
+https://elixir.bootlin.com/linux/v6.18-rc3/source/mm/swapfile.c#L1895
 
-there is a user reporting turbo not working, while it worked before and
-he claims it works on Windows 11 as well.
-No related BIOS option avail.
+(Also, please, read that big comment at this link.
+Well, I have to admit I don't understand it in full.)
 
-The patch mentions Skylake-X systems, while the user seem to have another CPU:
-https://bugzilla.opensuse.org/show_bug.cgi?id=1252385
+This check is needed to prevent swapping out pages during hibernation.
 
-Can someone from Intel please double check.
+Call chain is so:
+swap_writeout -> folio_free_swap -> folio_swapcache_freeable ->
+pm_suspended_storage
 
-Thanks,
+So by calling "pm_restore_gfp_mask" we allow pages to be swapped out.
 
-           Thomas
---nextPart4993414.OV4Wx5bFTl
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part.
-Content-Transfer-Encoding: 7Bit
+But we already wrote hibernation image by that point!
 
------BEGIN PGP SIGNATURE-----
+So swapping pages will make our swap partition inconsistent.
 
-iQEzBAABCAAdFiEEo0EXulPW3gW/5bAoTxjWwdl3vVUFAmkAu1YACgkQTxjWwdl3
-vVW7bwgAt4qbJcbQXyEBqPLACcYHAgcuWVUMOcE5RZW4jSqNwyuEhqTJLKSrj3kn
-AObR/SpWjXFRJbnAYiI/ILCHz59KS19gXd/GlPWUgACjqlQXPLNNGv8pTypHtGgi
-EbQCAC2zc8aRjsA9uYDyBYYwRAARnKNip0kD21+1xvQ8HeV+SmjuessTqOMXv3dN
-jAJwczA43YQzJvGygWXlKawH9rCQ4hmbVCKmRcBAs4Ka3CMAnskwU5m744R+H3yz
-r8rOsie2ttpioEbJFuL1EZXtUsFFY76+kFk8frvsAh0uZTl+K0K8AB90mldbZ0xe
-r4uf414XXcu9I2iZT78TY+2+AiiaXg==
-=KuH0
------END PGP SIGNATURE-----
+Moreover, as well as I understand, whole reason why we deal with GFP mask
+in hibernation code is to prevent swapping out pages.
 
---nextPart4993414.OV4Wx5bFTl--
+We restrict GFP before creating hibernation image here:
+https://elixir.bootlin.com/linux/v6.18-rc3/source/kernel/power/hibernate.c#=
+L463
+.
 
+We do this (as well as I understand) to prevent pages from swapping out.
 
+And, starting from that moment, as well as I understand, we should
+not restore GFP mask until either:
+- we resume
+- hibernation will abort for some reason (for example, "wake up event
+detected during hibernation")
 
+Again: I'm not trying to insult anybody. I'm just trying to help. And
+to understand PM code.
+
+I'm not sure that my explanations are correct.
+
+In any case I think it will be good idea to add comment explaining why
+restoring GFP mask
+is safe there.
+
+I'm attempting to write code to fix this bug:
+https://lore.kernel.org/linux-pm/20251023112920.133897-1-safinaskar@gmail.c=
+om/
+
+And this is why I'm trying to understand PM code.
+
+--=20
+Askar Safin
 
