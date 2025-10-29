@@ -1,227 +1,236 @@
-Return-Path: <linux-pm+bounces-37020-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37021-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97B93C1A1C2
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 12:51:03 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB12EC1A29D
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 13:19:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 07B694EBA20
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 11:51:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D8221189A276
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 12:20:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E049B337692;
-	Wed, 29 Oct 2025 11:50:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F25D33A012;
+	Wed, 29 Oct 2025 12:19:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="nwx8NcEa"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="j5m+IZXK"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB8DD2DE71D;
-	Wed, 29 Oct 2025 11:50:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EB4E272816;
+	Wed, 29 Oct 2025 12:19:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761738657; cv=none; b=lfhEEYDPIbijMe8IblwnWfVjpAEYLnmVkNF84e7VDZ7tBUS0pBBcZG4sgvSA0qi8jrr/gxXYOvyc/XjwRUBofQPz45i0QUzV0+KkhvvCd6i9TMGy62jj1k3h0Fj98NiCKGVM3H8Irz8QSpnTJwSWK5UpyXQ58c9vK/P1Wftpyz0=
+	t=1761740371; cv=none; b=HfDSAPgm24UIkJX6v3BRifkhr/uvgF9JXB3V3kJP5xfRC2VtUDH/o7Gn+jvW0lMANgH6e1NAItRomgSwA2Tp7EamGHC0taimj43v7Ho0fV8yXlRu5PASsc4A43hCrmpdhK3l+RTI/qrxqSRhNT0GRVCgbsWJaeHZYT2U6lqCggw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761738657; c=relaxed/simple;
-	bh=aWBg/5FAXfkDx0QZCOU/nqj2uohrdhR0Ob7qiD0W2wE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fmvWd2X/yibCWEkXd9lfkWpJFbjxj5Z+JTLGaNQQ8ZtOYyD+CrzglIamVCiIXRtxM6WcCxbQ38RF57whQrcq+H279NO0bJBugF/eEBb4p+zAwQf3T5vaAhlbEdaEdrkIdr1TGbpUat4jFZEdKmT8XzMqh4TNvEYPXOM0iPsXheI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=nwx8NcEa; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1761738653;
-	bh=aWBg/5FAXfkDx0QZCOU/nqj2uohrdhR0Ob7qiD0W2wE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=nwx8NcEajHmNE7tE6vwMx7cecLGrrCBRulGwKWaSxaQYJprJ9yS6aYFgdBc71EgHD
-	 MFS6PIcS+SYMmlNWDNk0m1HvAHoyYYk4PZ5uIQUd4k159MpxarJL5/s2BWqTquJe8S
-	 kXyrhuCtJmxyZG5SwiZ+vmuw/pWqfeYM1WVeEoWenQ2VPWkdYRmQhRbE6rbeRIfee2
-	 P11j7XIBntKdBaSVNpV4KOIWSW91TF1CccQc0Vgmy8n6NYnQ2JG1Bw7xVHdxs3xf95
-	 /hJZRgwbfZOYF3qljCDP5FaTaYC7Ni9mccFe5hRCJmpwFSOK2G8uSBzJZW16nZn7sv
-	 V94AelF4TZxNA==
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 2BA4D17E1315;
-	Wed, 29 Oct 2025 12:50:53 +0100 (CET)
-Message-ID: <2cb49197-6588-4e89-8b37-29477bfc7e98@collabora.com>
-Date: Wed, 29 Oct 2025 12:50:52 +0100
+	s=arc-20240116; t=1761740371; c=relaxed/simple;
+	bh=20JxKDMpCz6SOe1Bp+62xWTJm6sDUhy881hKtyj8pqg=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=KHIsgLTHmicMnIkDGdIjWX35lQQyJe/Ut0HVANbxO3JyjR5+gYEgps7cDDHwkStjKnpreX4QTZP3B5alZ2kIgUzp8ppr6WqP/9CinlkQ7IZGcNLeJGrktc4g4mHe+71hJXPA4bOL3ZG/SDm+oRWDconFGohZTtKtks89QN1cO3k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=j5m+IZXK; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1761740370; x=1793276370;
+  h=date:from:to:cc:subject:message-id;
+  bh=20JxKDMpCz6SOe1Bp+62xWTJm6sDUhy881hKtyj8pqg=;
+  b=j5m+IZXKp7ZWQaKM043yDAPl7KvwTKrledhLe4+x8Dr5XIOtlF/V2HNs
+   LnxjxyWZq25eTbRYvlc56XeXhal0TfIFymLQn1Va+jrxRbDOSDx5IdcYI
+   oATrg1V/qt09RTIjFJGeipOC4me8hjqSEnqmAC09SpYIbbN8PNVTakZsf
+   ojYdC8Bk1Fa/aHnrqcM46DhIVkzJtq70ujbzFYDG2LxSrbKnJvccVE7nV
+   VUKwyQrjIGAVndr91xGzNwdoF01NoJXN9C02Csq6LYiDkgq3ZPe57rPPH
+   7WknHoq9NH8Q6HKBuPAB5b7SSTm278JZP7TYXK1ht+2SeS3wOd4DdX4KC
+   w==;
+X-CSE-ConnectionGUID: QbMQH+g1SE6OFcBY28HfVw==
+X-CSE-MsgGUID: 7PgDB98FS5imv7IF0xFsMw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11596"; a="75307207"
+X-IronPort-AV: E=Sophos;i="6.19,263,1754982000"; 
+   d="scan'208";a="75307207"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2025 05:19:29 -0700
+X-CSE-ConnectionGUID: p/iko70yQpOJFVN3N586lw==
+X-CSE-MsgGUID: q8hG1lXjTg6oEpRcu/ENkA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,263,1754982000"; 
+   d="scan'208";a="216509630"
+Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
+  by fmviesa001.fm.intel.com with ESMTP; 29 Oct 2025 05:19:27 -0700
+Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vE59A-000Kaf-2q;
+	Wed, 29 Oct 2025 12:19:24 +0000
+Date: Wed, 29 Oct 2025 20:18:26 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ d6e9920588cf094d2a89409fc444878781fe4e9c
+Message-ID: <202510292020.Dc1Lueh9-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 00/10] SPMI: Implement sub-devices and migrate drivers
-To: sboyd@kernel.org
-Cc: jic23@kernel.org, dlechner@baylibre.com, nuno.sa@analog.com,
- andy@kernel.org, arnd@arndb.de, gregkh@linuxfoundation.org,
- srini@kernel.org, vkoul@kernel.org, kishon@kernel.org, sre@kernel.org,
- krzysztof.kozlowski@linaro.org, u.kleine-koenig@baylibre.com,
- linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
- linux-pm@vger.kernel.org, kernel@collabora.com, wenst@chromium.org,
- casey.connolly@linaro.org
-References: <20251021083219.17382-1-angelogioacchino.delregno@collabora.com>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Content-Language: en-US
-In-Reply-To: <20251021083219.17382-1-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
-Il 21/10/25 10:32, AngeloGioacchino Del Regno ha scritto:
-> Changes in v7:
->   - Added commit to cleanup redundant dev_name() in the pre-existing
->     spmi_device_add() function
->   - Added commit removing unneeded goto and improving spmi_device_add()
->     readability by returning error in error path, and explicitly zero
->     for success at the end.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: d6e9920588cf094d2a89409fc444878781fe4e9c  Merge branches 'acpi-battery', 'acpi-misc', 'acpi-tad' and 'acpi-fan-next' into linux-next
 
-Any further comments on this series?
-Any chance we can get it picked in this merge window please?
+elapsed time: 1455m
 
-Please note that this series either needs two cycles or an immutable branch
-because of the driver migration commits.
+configs tested: 143
+configs skipped: 3
 
-Thanks,
-Angelo
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-> 
-> Changes in v6:
->   - Added commit to convert spmi.c to %pe error format and used
->     %pe error format in spmi_subdevice code as wanted by Uwe Kleine-Konig
-> 
-> Changes in v5:
->   - Changed dev_err to dev_err_probe in qcom-spmi-sdam (and done
->     that even though I disagree - because I wanted this series to
->     *exclusively* introduce the minimum required changes to
->     migrate to the new API, but okay, whatever....!);
->   - Added missing REGMAP dependency in Kconfig for qcom-spmi-sdam,
->     phy-qcom-eusb2-repeater and qcom-coincell to resolve build
->     issues when the already allowed COMPILE_TEST is enabled
->     as pointed out by the test robot's randconfig builds.
-> 
-> Changes in v4:
->   - Added selection of REGMAP_SPMI in Kconfig for qcom-coincell and
->     for phy-qcom-eusb2-repeater to resolve undefined references when
->     compiled with some randconfig
-> 
-> Changes in v3:
->   - Fixed importing "SPMI" namespace in spmi-devres.c
->   - Removed all instances of defensive programming, as pointed out by
->     jic23 and Sebastian
->   - Removed explicit casting as pointed out by jic23
->   - Moved ida_free call to spmi_subdev_release() and simplified error
->     handling in spmi_subdevice_alloc_and_add() as pointed out by jic23
-> 
-> Changes in v2:
->   - Fixed missing `sparent` initialization in phy-qcom-eusb2-repeater
->   - Changed val_bits to 8 in all Qualcomm drivers to ensure
->     compatibility as suggested by Casey
->   - Added struct device pointer in all conversion commits as suggested
->     by Andy
->   - Exported newly introduced functions with a new "SPMI" namespace
->     and imported the same in all converted drivers as suggested by Andy
->   - Added missing error checking for dev_set_name() call in spmi.c
->     as suggested by Andy
->   - Added comma to last entry of regmap_config as suggested by Andy
-> 
-> While adding support for newer MediaTek platforms, featuring complex
-> SPMI PMICs, I've seen that those SPMI-connected chips are internally
-> divided in various IP blocks, reachable in specific contiguous address
-> ranges... more or less like a MMIO, but over a slow SPMI bus instead.
-> 
-> I recalled that Qualcomm had something similar... and upon checking a
-> couple of devicetrees, yeah - indeed it's the same over there.
-> 
-> What I've seen then is a common pattern of reading the "reg" property
-> from devicetree in a struct member and then either
->   A. Wrapping regmap_{read/write/etc}() calls in a function that adds
->      the register base with "base + ..register", like it's done with
->      writel()/readl() calls; or
->   B. Doing the same as A. but without wrapper functions.
-> 
-> Even though that works just fine, in my opinion it's wrong.
-> 
-> The regmap API is way more complex than MMIO-only readl()/writel()
-> functions for multiple reasons (including supporting multiple busses
-> like SPMI, of course) - but everyone seemed to forget that regmap
-> can manage register base offsets transparently and automatically in
-> its API functions by simply adding a `reg_base` to the regmap_config
-> structure, which is used for initializing a `struct regmap`.
-> 
-> So, here we go: this series implements the software concept of an SPMI
-> Sub-Device (which, well, also reflects how Qualcomm and MediaTek's
-> actual hardware is laid out anyway).
-> 
->                 SPMI Controller
->                       |                ______
->                       |               /       Sub-Device 1
->                       V              /
->                SPMI Device (PMIC) ----------- Sub-Device 2
->                                      \
->                                       \______ Sub-Device 3
-> 
-> As per this implementation, an SPMI Sub-Device can be allocated/created
-> and added in any driver that implements a... well.. subdevice (!) with
-> an SPMI "main" device as its parent: this allows to create and finally
-> to correctly configure a regmap that is specific to the sub-device,
-> operating on its specific address range and reading, and writing, to
-> its registers with the regmap API taking care of adding the base address
-> of a sub-device's registers as per regmap API design.
-> 
-> All of the SPMI Sub-Devices are therefore added as children of the SPMI
-> Device (usually a PMIC), as communication depends on the PMIC's SPMI bus
-> to be available (and the PMIC to be up and running, of course).
-> 
-> Summarizing the dependency chain (which is obvious to whoever knows what
-> is going on with Qualcomm and/or MediaTek SPMI PMICs):
->      "SPMI Sub-Device x...N" are children "SPMI Device"
->      "SPMI Device" is a child of "SPMI Controller"
-> 
-> (that was just another way to say the same thing as the graph above anyway).
-> 
-> Along with the new SPMI Sub-Device registration functions, I have also
-> performed a conversion of some Qualcomm SPMI drivers and only where the
-> actual conversion was trivial.
-> 
-> I haven't included any conversion of more complex Qualcomm SPMI drivers
-> because I don't have the required bandwidth to do so (and besides, I think,
-> but haven't exactly verified, that some of those require SoCs that I don't
-> have for testing anyway).
-> 
-> AngeloGioacchino Del Regno (10):
->    spmi: Print error status with %pe format
->    spmi: Remove redundant dev_name() print in spmi_device_add()
->    spmi: Remove unneeded goto in spmi_device_add() error path
->    spmi: Implement spmi_subdevice_alloc_and_add() and devm variant
->    nvmem: qcom-spmi-sdam: Migrate to devm_spmi_subdevice_alloc_and_add()
->    power: reset: qcom-pon: Migrate to devm_spmi_subdevice_alloc_and_add()
->    phy: qualcomm: eusb2-repeater: Migrate to
->      devm_spmi_subdevice_alloc_and_add()
->    misc: qcom-coincell: Migrate to devm_spmi_subdevice_alloc_and_add()
->    iio: adc: qcom-spmi-iadc: Migrate to
->      devm_spmi_subdevice_alloc_and_add()
->    iio: adc: qcom-spmi-iadc: Remove regmap R/W wrapper functions
-> 
->   drivers/iio/adc/qcom-spmi-iadc.c              | 109 ++++++++----------
->   drivers/misc/Kconfig                          |   2 +
->   drivers/misc/qcom-coincell.c                  |  38 ++++--
->   drivers/nvmem/Kconfig                         |   1 +
->   drivers/nvmem/qcom-spmi-sdam.c                |  36 ++++--
->   drivers/phy/qualcomm/Kconfig                  |   2 +
->   .../phy/qualcomm/phy-qcom-eusb2-repeater.c    |  53 ++++++---
->   drivers/power/reset/qcom-pon.c                |  34 ++++--
->   drivers/spmi/spmi-devres.c                    |  24 ++++
->   drivers/spmi/spmi.c                           |  95 +++++++++++++--
->   include/linux/spmi.h                          |  16 +++
->   11 files changed, 289 insertions(+), 121 deletions(-)
-> 
+tested configs:
+alpha                             allnoconfig    gcc-15.1.0
+alpha                            allyesconfig    gcc-15.1.0
+arc                               allnoconfig    gcc-15.1.0
+arc                   randconfig-001-20251028    gcc-8.5.0
+arc                   randconfig-002-20251028    gcc-13.4.0
+arm                               allnoconfig    clang-22
+arm                     am200epdkit_defconfig    gcc-15.1.0
+arm                        clps711x_defconfig    clang-22
+arm                   randconfig-001-20251028    clang-22
+arm                   randconfig-002-20251028    clang-22
+arm                   randconfig-003-20251028    clang-22
+arm                   randconfig-004-20251028    gcc-8.5.0
+arm64                             allnoconfig    gcc-15.1.0
+arm64                 randconfig-001-20251028    clang-22
+arm64                 randconfig-002-20251028    clang-22
+arm64                 randconfig-003-20251028    gcc-11.5.0
+arm64                 randconfig-004-20251028    gcc-8.5.0
+csky                              allnoconfig    gcc-15.1.0
+csky                  randconfig-001-20251028    gcc-15.1.0
+csky                  randconfig-002-20251028    gcc-15.1.0
+hexagon                          allmodconfig    clang-17
+hexagon                           allnoconfig    clang-22
+hexagon                          allyesconfig    clang-22
+hexagon               randconfig-001-20251028    clang-22
+hexagon               randconfig-002-20251028    clang-17
+i386                              allnoconfig    gcc-14
+i386        buildonly-randconfig-001-20251028    gcc-14
+i386        buildonly-randconfig-002-20251028    gcc-14
+i386        buildonly-randconfig-003-20251028    gcc-14
+i386        buildonly-randconfig-004-20251028    gcc-14
+i386        buildonly-randconfig-005-20251028    gcc-14
+i386        buildonly-randconfig-006-20251028    gcc-14
+i386                  randconfig-001-20251029    gcc-14
+i386                  randconfig-002-20251029    gcc-14
+i386                  randconfig-003-20251029    clang-20
+i386                  randconfig-004-20251029    gcc-14
+i386                  randconfig-005-20251029    clang-20
+i386                  randconfig-006-20251029    gcc-14
+i386                  randconfig-007-20251029    clang-20
+i386                  randconfig-011-20251029    gcc-14
+i386                  randconfig-012-20251029    clang-20
+i386                  randconfig-013-20251029    gcc-14
+i386                  randconfig-014-20251029    gcc-14
+i386                  randconfig-015-20251029    gcc-14
+i386                  randconfig-016-20251029    gcc-14
+i386                  randconfig-017-20251029    gcc-14
+loongarch                        allmodconfig    clang-19
+loongarch                         allnoconfig    clang-22
+loongarch                           defconfig    clang-19
+loongarch             randconfig-001-20251028    gcc-12.5.0
+loongarch             randconfig-002-20251028    clang-22
+m68k                             allmodconfig    gcc-15.1.0
+m68k                              allnoconfig    gcc-15.1.0
+m68k                             allyesconfig    gcc-15.1.0
+m68k                                defconfig    gcc-15.1.0
+m68k                          hp300_defconfig    gcc-15.1.0
+microblaze                       allmodconfig    gcc-15.1.0
+microblaze                        allnoconfig    gcc-15.1.0
+microblaze                       allyesconfig    gcc-15.1.0
+microblaze                          defconfig    gcc-15.1.0
+mips                              allnoconfig    gcc-15.1.0
+nios2                             allnoconfig    gcc-11.5.0
+nios2                               defconfig    gcc-11.5.0
+nios2                 randconfig-001-20251028    gcc-8.5.0
+nios2                 randconfig-002-20251028    gcc-9.5.0
+openrisc                          allnoconfig    gcc-15.1.0
+openrisc                            defconfig    gcc-15.1.0
+parisc                            allnoconfig    gcc-15.1.0
+parisc                              defconfig    gcc-15.1.0
+parisc                randconfig-001-20251028    gcc-9.5.0
+parisc                randconfig-002-20251028    gcc-8.5.0
+parisc64                            defconfig    gcc-15.1.0
+powerpc                           allnoconfig    gcc-15.1.0
+powerpc                      katmai_defconfig    clang-22
+powerpc                     mpc83xx_defconfig    clang-22
+powerpc               randconfig-001-20251028    gcc-15.1.0
+powerpc               randconfig-002-20251028    gcc-11.5.0
+powerpc64             randconfig-001-20251028    clang-22
+powerpc64             randconfig-002-20251028    clang-22
+riscv                             allnoconfig    gcc-15.1.0
+riscv                               defconfig    clang-22
+riscv                 randconfig-001-20251029    clang-20
+riscv                 randconfig-002-20251029    clang-19
+s390                             allmodconfig    clang-18
+s390                              allnoconfig    clang-22
+s390                             allyesconfig    gcc-15.1.0
+s390                                defconfig    clang-22
+s390                  randconfig-001-20251029    gcc-11.5.0
+s390                  randconfig-002-20251029    gcc-8.5.0
+sh                               allmodconfig    gcc-15.1.0
+sh                                allnoconfig    gcc-15.1.0
+sh                               allyesconfig    gcc-15.1.0
+sh                                  defconfig    gcc-15.1.0
+sh                          landisk_defconfig    gcc-15.1.0
+sh                    randconfig-001-20251029    gcc-11.5.0
+sh                    randconfig-002-20251029    gcc-15.1.0
+sh                     sh7710voipgw_defconfig    gcc-15.1.0
+sparc                            allmodconfig    gcc-15.1.0
+sparc                             allnoconfig    gcc-15.1.0
+sparc                               defconfig    gcc-15.1.0
+sparc                 randconfig-001-20251028    gcc-8.5.0
+sparc                 randconfig-002-20251028    gcc-12.5.0
+sparc64                             defconfig    clang-20
+sparc64               randconfig-001-20251028    clang-22
+sparc64               randconfig-002-20251028    gcc-9.5.0
+um                               allmodconfig    clang-19
+um                                allnoconfig    clang-22
+um                               allyesconfig    gcc-14
+um                                  defconfig    clang-22
+um                             i386_defconfig    gcc-14
+um                    randconfig-001-20251028    gcc-14
+um                    randconfig-002-20251028    gcc-14
+um                           x86_64_defconfig    clang-22
+x86_64                            allnoconfig    clang-20
+x86_64      buildonly-randconfig-001-20251029    gcc-14
+x86_64      buildonly-randconfig-002-20251029    clang-20
+x86_64      buildonly-randconfig-003-20251029    clang-20
+x86_64      buildonly-randconfig-004-20251029    clang-20
+x86_64      buildonly-randconfig-005-20251029    clang-20
+x86_64      buildonly-randconfig-006-20251029    clang-20
+x86_64                              defconfig    gcc-14
+x86_64                randconfig-001-20251029    gcc-14
+x86_64                randconfig-002-20251029    gcc-14
+x86_64                randconfig-003-20251029    clang-20
+x86_64                randconfig-004-20251029    gcc-14
+x86_64                randconfig-005-20251029    gcc-12
+x86_64                randconfig-006-20251029    gcc-14
+x86_64                randconfig-011-20251029    clang-20
+x86_64                randconfig-012-20251029    clang-20
+x86_64                randconfig-013-20251029    gcc-14
+x86_64                randconfig-014-20251029    clang-20
+x86_64                randconfig-015-20251029    gcc-13
+x86_64                randconfig-016-20251029    gcc-13
+x86_64                randconfig-071-20251029    clang-20
+x86_64                randconfig-072-20251029    clang-20
+x86_64                randconfig-073-20251029    gcc-14
+x86_64                randconfig-074-20251029    gcc-14
+x86_64                randconfig-075-20251029    gcc-14
+x86_64                randconfig-076-20251029    clang-20
+xtensa                            allnoconfig    gcc-15.1.0
+xtensa                randconfig-001-20251028    gcc-15.1.0
+xtensa                randconfig-002-20251028    gcc-13.4.0
+xtensa                    smp_lx200_defconfig    gcc-15.1.0
 
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
