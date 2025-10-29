@@ -1,199 +1,130 @@
-Return-Path: <linux-pm+bounces-37064-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37065-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6FA13C1CD52
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 19:54:39 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7DD4DC1CDC7
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 20:00:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9E8F7188E0E1
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 18:53:48 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 68BA14E05A4
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 19:00:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEF805478D;
-	Wed, 29 Oct 2025 18:53:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 947113590C4;
+	Wed, 29 Oct 2025 19:00:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="om5GOMGN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kaMYCV0B"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5FDD35771A
-	for <linux-pm@vger.kernel.org>; Wed, 29 Oct 2025 18:53:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 700DD3590C1
+	for <linux-pm@vger.kernel.org>; Wed, 29 Oct 2025 19:00:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761763995; cv=none; b=DMjcp2fbWImIie0pY4MVpZyAJdIcoWMPqiRd2dmnqnvNDaoSEgjVBzwIbXHBBx3PRFxrL6sn/Peql29667jEkzVtpWnmyH4aSeJPnK3RTBq+2UyD7k/+bh1t3iXq///Abs3i+YUkFJSbj5Dpiwn1G/MgD5UHmGmgptct6uhZig0=
+	t=1761764433; cv=none; b=kyYMgE18/lxAl0eyYfsuyQLvTbwXkUc5FMV+uiFWsVfvLCLvNkNr4CC1QEEuhTZSmFBWmkt1ZWZT/dTzR99GQTzCaXZcKSaQ1d0578lxG3UQzuuc+rKFqIAwRjRVfo1sKQs8p6gez4klBKBDNRU3R+5cxRPv2VhUw6VYL0ksvXo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761763995; c=relaxed/simple;
-	bh=P1fpBKLpz3NhAHV8OSXmDOMSQKs45JoWLRgxhe1ZXi0=;
+	s=arc-20240116; t=1761764433; c=relaxed/simple;
+	bh=7lyiAV1rqHRrNNC2mebu+0d6w0qgxZqfz9LsUM51/IY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pNuMRP3/9nlH6rrn+5AbfJI6n0upBe4soL9D0PXcy7YreZ5bUef6Fhy9bOcXd7tgdbF82MJnMatstKOMpsQQZunuvml38sfgioe3rkxgXaiduTf+23W7Yz6hs/chLcmXi1jhlpvm7I1Wuhn7ZEXfVu52LVPZezt+hUvHxn+787Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=om5GOMGN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C30AC2BCB1
-	for <linux-pm@vger.kernel.org>; Wed, 29 Oct 2025 18:53:15 +0000 (UTC)
+	 To:Cc:Content-Type; b=A7R5FPpO4pB55ZkozbQJ37WQIkIYOqkkUBGlpVuhJARiZwMqPhD99cKJ19gyLywJc4xrhjmimIB1D6oQPKFdd5uWEeV1nr4PAwPaEhj9PmQVLsYWQiGXfZ2TmHbNwv14VexKl8DG93DR38+dEZ6bb3VzweGK817f91Bpcwyf5KM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kaMYCV0B; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 069D1C4AF09
+	for <linux-pm@vger.kernel.org>; Wed, 29 Oct 2025 19:00:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761763995;
-	bh=P1fpBKLpz3NhAHV8OSXmDOMSQKs45JoWLRgxhe1ZXi0=;
+	s=k20201202; t=1761764432;
+	bh=7lyiAV1rqHRrNNC2mebu+0d6w0qgxZqfz9LsUM51/IY=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=om5GOMGN4jz2H6VEosyifBY2fP9P2ZUxOzCaRZL+HWT0ktMU1vscRxWze4AnqmN8g
-	 U1PMJjoZkfd0gW1nqZKC/4AS3EJyhpT1K5fqsr9qPURuI6TSh5IKlZMIDmFkrfz2io
-	 lKsCwZumZaNJ+iVnccVNxAso/e1ludjC5D8+WgjeoXlSbcosCg+xn0eoC3C9uegr/y
-	 k4Hwo6K7QY68O8So1EonT0CeW5fABtEVwMaIi7LO9LkOh31l//qWPkMSV4jaZ6wOEQ
-	 CvAoxXEZwRlB4ud0b57tRWmXsQWCKq7c2kOIMG8Lzh9SQkguTQDCgf/u2KUV7ZENpw
-	 McpI/YV3EyWQQ==
-Received: by mail-oi1-f176.google.com with SMTP id 5614622812f47-44d9d9d94abso81891b6e.2
-        for <linux-pm@vger.kernel.org>; Wed, 29 Oct 2025 11:53:15 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCV8tVIbabwHXQUJjQUQOpewsClQAKJwgAEraMpGXkN49ExwLQPtdMs8ZwsHyMspLT//EIJpWPfo2g==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyMSXfzO2eybKlohEeb+Ic1qOBziyY0Y7ctRCLVKrjH6P7RSFon
-	hhHvbMB2qylY768NvWIQJDvUL7y1Vpv2VSrk70tRgHmfd7RwlRlA30nVUtRt0Q1cUaFmtC/Uk/Q
-	E3Dd9JaK/iXTTfDNuiL2B5rsIXuY6NY8=
-X-Google-Smtp-Source: AGHT+IHqLr30NAl5M0UDPxgOiX509nO1xreEttv2Ja7V2VTnyLfOfv1uaRlgWgHZXMApbjkmBIuGTq5OSxr3Ncgi/MM=
-X-Received: by 2002:a05:6808:148c:b0:441:cf96:934f with SMTP id
- 5614622812f47-44f7a89144cmr1770625b6e.47.1761763994437; Wed, 29 Oct 2025
- 11:53:14 -0700 (PDT)
+	b=kaMYCV0BjBakVZ+zrLfrrR3dVzNMx6/KLmy3R7stVpHx/DXX57k5gw0fYgKrgQDTE
+	 2mrcvm8YNi2uT/o3OjtZFjLCeXfauOfpiHJxeUfmi8JlfJZg0HLukuNHRdNAnVaMC9
+	 9gtkDiJ5zk0K1FQJHkgsdaaAMlsDh5Imm6Aabn7Q7UqpS0PtA81OCtfBiDnfbzpzja
+	 0c0Y33hD7y6iZ2nTd/hcIW/dxBz8W1MnoDLmGmLgnFTeqGFYNpkwFXRZaWHqg6GXUD
+	 09puiTffHYBoTYPiqgwQNUeP+dZAMCL4DNv8M2t+DDdZ+xPTxGOTF6XSWwnvAFwi9e
+	 F3zqmHPzU9Czw==
+Received: by mail-oi1-f169.google.com with SMTP id 5614622812f47-443ac891210so133780b6e.1
+        for <linux-pm@vger.kernel.org>; Wed, 29 Oct 2025 12:00:31 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVACcU26QmB4KfL0CHVdlwWekSc8k4yEB5T9KeWcah6dp/o6Skow7Uz6uNQ6XE4YXigoghNK3igMw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx12ZxHKszpyGglRjTVYp416NSyyISpAurNOQxXcjIPFrhZWvaj
+	ZTCqZTkgUrU6qBw4SRqrAn8n/inP3KyP8Brom9V+w3FvFq9VJD3onDhPZCLgtEVQ8/Yy0VJLZ4C
+	XTuKcX9JIPt9GMYbmBRIP6GjJCzG0pCw=
+X-Google-Smtp-Source: AGHT+IEM2thqrNFpWgW4GaxlYBwePV2dgOkn3wDq3C3a3TbN7GDItXTyZfYFUpWtpwDSnFCac7W45ElxoOHQJDadjYY=
+X-Received: by 2002:a05:6808:3990:b0:44d:bf83:d7f8 with SMTP id
+ 5614622812f47-44f7a3d0652mr1972133b6e.4.1761764431301; Wed, 29 Oct 2025
+ 12:00:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251028053136.692462-1-ankur.a.arora@oracle.com>
- <20251028053136.692462-8-ankur.a.arora@oracle.com> <CAJZ5v0hSvzHfsE4nrEW-Ey0dnJ+m=dSU-f1RywGNU0Xyi3jXtQ@mail.gmail.com>
- <87ms5ajp4c.fsf@oracle.com>
-In-Reply-To: <87ms5ajp4c.fsf@oracle.com>
+References: <20251026170527.262003-1-mrout@redhat.com>
+In-Reply-To: <20251026170527.262003-1-mrout@redhat.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 29 Oct 2025 19:53:03 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0hQ7G9jvOv9VtRmsCKahBpUcPJMMOe07k_2mqsvggWcWg@mail.gmail.com>
-X-Gm-Features: AWmQ_bk7-QDWwa1cDV85f7xAgSvOSsXB0uuTzMcOx_--MTMmqkafGtIfA3jK8No
-Message-ID: <CAJZ5v0hQ7G9jvOv9VtRmsCKahBpUcPJMMOe07k_2mqsvggWcWg@mail.gmail.com>
-Subject: Re: [RESEND PATCH v7 7/7] cpuidle/poll_state: Poll via smp_cond_load_relaxed_timeout()
-To: Ankur Arora <ankur.a.arora@oracle.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-pm@vger.kernel.org, bpf@vger.kernel.org, arnd@arndb.de, 
-	catalin.marinas@arm.com, will@kernel.org, peterz@infradead.org, 
-	akpm@linux-foundation.org, mark.rutland@arm.com, harisokn@amazon.com, 
-	cl@gentwo.org, ast@kernel.org, daniel.lezcano@linaro.org, memxor@gmail.com, 
-	zhenglifeng1@huawei.com, xueshuai@linux.alibaba.com, 
-	joao.m.martins@oracle.com, boris.ostrovsky@oracle.com, konrad.wilk@oracle.com
+Date: Wed, 29 Oct 2025 20:00:20 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0gtKTUAthA4OaCU-hV4j1OhRDuA10o-ZhXepFyq7J5L2g@mail.gmail.com>
+X-Gm-Features: AWmQ_bk6EPvPp1ZojFQfUZnAvpOOabuA0STIcW3pcPHz9eAU0AO-Pz444iRTH1g
+Message-ID: <CAJZ5v0gtKTUAthA4OaCU-hV4j1OhRDuA10o-ZhXepFyq7J5L2g@mail.gmail.com>
+Subject: Re: [PATCH] PM: runtime: fix typos in runtime.c comments
+To: Malaya Kumar Rout <mrout@redhat.com>
+Cc: linux-kernel@vger.kernel.org, lyude@redhat.com, malayarout91@gmail.com, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Oct 29, 2025 at 5:42=E2=80=AFAM Ankur Arora <ankur.a.arora@oracle.c=
-om> wrote:
+On Sun, Oct 26, 2025 at 6:05=E2=80=AFPM Malaya Kumar Rout <mrout@redhat.com=
+> wrote:
 >
+> Fix several typos in comments:
+> - "timesptamp" -> "timestamp"
+> - "involed" -> "involved"
+> - "nonero" -> "nonzero"
 >
-> Rafael J. Wysocki <rafael@kernel.org> writes:
+> Fix typos in comments to improve code documentation clarity.
 >
-> > On Tue, Oct 28, 2025 at 6:32=E2=80=AFAM Ankur Arora <ankur.a.arora@orac=
-le.com> wrote:
-> >>
-> >> The inner loop in poll_idle() polls over the thread_info flags,
-> >> waiting to see if the thread has TIF_NEED_RESCHED set. The loop
-> >> exits once the condition is met, or if the poll time limit has
-> >> been exceeded.
-> >>
-> >> To minimize the number of instructions executed in each iteration,
-> >> the time check is done only intermittently (once every
-> >> POLL_IDLE_RELAX_COUNT iterations). In addition, each loop iteration
-> >> executes cpu_relax() which on certain platforms provides a hint to
-> >> the pipeline that the loop busy-waits, allowing the processor to
-> >> reduce power consumption.
-> >>
-> >> This is close to what smp_cond_load_relaxed_timeout() provides. So,
-> >> restructure the loop and fold the loop condition and the timeout check
-> >> in smp_cond_load_relaxed_timeout().
-> >
-> > Well, it is close, but is it close enough?
+> Signed-off-by: Malaya Kumar Rout <mrout@redhat.com>
+> ---
+>  drivers/base/power/runtime.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 >
-> I guess that's the question.
->
-> >> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> >> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> >> Signed-off-by: Ankur Arora <ankur.a.arora@oracle.com>
-> >> ---
-> >>  drivers/cpuidle/poll_state.c | 29 ++++++++---------------------
-> >>  1 file changed, 8 insertions(+), 21 deletions(-)
-> >>
-> >> diff --git a/drivers/cpuidle/poll_state.c b/drivers/cpuidle/poll_state=
-.c
-> >> index 9b6d90a72601..dc7f4b424fec 100644
-> >> --- a/drivers/cpuidle/poll_state.c
-> >> +++ b/drivers/cpuidle/poll_state.c
-> >> @@ -8,35 +8,22 @@
-> >>  #include <linux/sched/clock.h>
-> >>  #include <linux/sched/idle.h>
-> >>
-> >> -#define POLL_IDLE_RELAX_COUNT  200
-> >> -
-> >>  static int __cpuidle poll_idle(struct cpuidle_device *dev,
-> >>                                struct cpuidle_driver *drv, int index)
-> >>  {
-> >> -       u64 time_start;
-> >> -
-> >> -       time_start =3D local_clock_noinstr();
-> >> +       u64 time_end;
-> >> +       u32 flags =3D 0;
-> >>
-> >>         dev->poll_time_limit =3D false;
-> >>
-> >> +       time_end =3D local_clock_noinstr() + cpuidle_poll_time(drv, de=
-v);
-> >
-> > Is there any particular reason for doing this unconditionally?  If
-> > not, then it looks like an arbitrary unrelated change to me.
->
-> Agreed. Will fix.
->
-> >> +
-> >>         raw_local_irq_enable();
-> >>         if (!current_set_polling_and_test()) {
-> >> -               unsigned int loop_count =3D 0;
-> >> -               u64 limit;
-> >> -
-> >> -               limit =3D cpuidle_poll_time(drv, dev);
-> >> -
-> >> -               while (!need_resched()) {
-> >> -                       cpu_relax();
-> >> -                       if (loop_count++ < POLL_IDLE_RELAX_COUNT)
-> >> -                               continue;
-> >> -
-> >> -                       loop_count =3D 0;
-> >> -                       if (local_clock_noinstr() - time_start > limit=
-) {
-> >> -                               dev->poll_time_limit =3D true;
-> >> -                               break;
-> >> -                       }
-> >> -               }
-> >> +               flags =3D smp_cond_load_relaxed_timeout(&current_threa=
-d_info()->flags,
-> >> +                                                     (VAL & _TIF_NEED=
-_RESCHED),
-> >> +                                                     (local_clock_noi=
-nstr() >=3D time_end));
-> >
-> > So my understanding of this is that it reduces duplication with some
-> > other places doing similar things.  Fair enough.
-> >
-> > However, since there is "timeout" in the name, I'd expect it to take
-> > the timeout as an argument.
->
-> The early versions did have a timeout but that complicated the
-> implementation significantly. And the current users poll_idle(),
-> rqspinlock don't need a precise timeout.
->
-> smp_cond_load_relaxed_timed(), smp_cond_load_relaxed_timecheck()?
->
-> The problem with all suffixes I can think of is that it makes the
-> interface itself nonobvious.
->
-> Possibly something with the sense of bail out might work.
+> diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
+> index 1b11a3cd4acc..7fe63cab2708 100644
+> --- a/drivers/base/power/runtime.c
+> +++ b/drivers/base/power/runtime.c
+> @@ -90,7 +90,7 @@ static void update_pm_runtime_accounting(struct device =
+*dev)
+>         /*
+>          * Because ktime_get_mono_fast_ns() is not monotonic during
+>          * timekeeping updates, ensure that 'now' is after the last saved
+> -        * timesptamp.
+> +        * timestamp.
+>          */
+>         if (now < last)
+>                 return;
+> @@ -217,7 +217,7 @@ static int dev_memalloc_noio(struct device *dev, void=
+ *data)
+>   *     resume/suspend callback of any one of its ancestors(or the
+>   *     block device itself), the deadlock may be triggered inside the
+>   *     memory allocation since it might not complete until the block
+> - *     device becomes active and the involed page I/O finishes. The
+> + *     device becomes active and the involved page I/O finishes. The
+>   *     situation is pointed out first by Alan Stern. Network device
+>   *     are involved in iSCSI kind of situation.
+>   *
+> @@ -1210,7 +1210,7 @@ EXPORT_SYMBOL_GPL(__pm_runtime_resume);
+>   *
+>   * Otherwise, if its runtime PM status is %RPM_ACTIVE and (1) @ign_usage=
+_count
+>   * is set, or (2) @dev is not ignoring children and its active child cou=
+nt is
+> - * nonero, or (3) the runtime PM usage counter of @dev is not zero, incr=
+ement
+> + * nonzero, or (3) the runtime PM usage counter of @dev is not zero, inc=
+rement
+>   * the usage counter of @dev and return 1.
+>   *
+>   * Otherwise, return 0 without changing the usage counter.
+> --
 
-It basically has two conditions, one of which is checked in every step
-of the internal loop and the other one is checked every
-SMP_TIMEOUT_POLL_COUNT steps of it.  That isn't particularly
-straightforward IMV.
-
-Honestly, I prefer the existing code.  It is much easier to follow and
-I don't see why the new code would be better.  Sorry.
+Applied as 6.19 material, thanks!
 
