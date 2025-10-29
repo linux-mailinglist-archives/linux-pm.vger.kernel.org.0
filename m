@@ -1,213 +1,144 @@
-Return-Path: <linux-pm+bounces-36998-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-36999-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AEC5EC17BF0
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 02:05:39 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A59B5C17CA7
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 02:13:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 488F51C831D1
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 01:06:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2C1F940414F
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 01:11:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20EA02D7DFB;
-	Wed, 29 Oct 2025 01:05:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49AC82D8767;
+	Wed, 29 Oct 2025 01:11:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=richtek.com header.i=@richtek.com header.b="ZO99G+x3";
+	dkim=pass (2048-bit key) header.d=richtek.com header.i=@richtek.com header.b="qLnEqdio"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68ABE2DA762
-	for <linux-pm@vger.kernel.org>; Wed, 29 Oct 2025 01:05:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mg.richtek.com (mg.richtek.com [220.130.44.152])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AD8B1A5B9E;
+	Wed, 29 Oct 2025 01:11:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.130.44.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761699915; cv=none; b=jdY6syttpQElbCtWhbUUJF0g4rDeFRldGr4uWNL96xuDkvJa11JEHerxXv+0yQqL4sNT97kAfwXlmSO841OFvDEvLdfFuIY0nm1kkMqmPdllAmDXPKPrsFWFWZdoO0qLz5e8VL2aXrKIZU/SFoI6VFHg2OCTTfi+i49CbJ6iEgM=
+	t=1761700310; cv=none; b=WsEqYlk06a5zuttDwzPUQL/6hSnlSM/dXe/8aUT/+lO7qoKYPcBFhcINrhO+9lsI608lxG/dW8cJ8na68qZxa9eDTl7HVTveY/NbOCwojPC1f9Vx/lznEV8PYTNggHPLYLUQEBp2rVA9IKo1PB4lejf1MGKHWJHbJeP13Hud0ZM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761699915; c=relaxed/simple;
-	bh=2gEXBV/GmnVYpOOK7VRqlBYbIREZJBxWWgWbeuGCpKk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CzxdxIsufYGSc67xrK//GlTN853y32bWLj5OabCkXbyMYAcjCiBAtz6rxVVHug8HP1fRG7sMbi4HETT4q6lHzHIkYfmLYXT76/1Sz7hKh4weICjBE4q5uqnVwl0drGKyryozVnnX6027syG6/xme+DLUTi1OXoe3ztMWqayIRwo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 408502972
-	for <linux-pm@vger.kernel.org>; Tue, 28 Oct 2025 18:05:05 -0700 (PDT)
-Received: from e110455-lin.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id D277C3F63F
-	for <linux-pm@vger.kernel.org>; Tue, 28 Oct 2025 18:05:12 -0700 (PDT)
-Date: Wed, 29 Oct 2025 01:04:42 +0000
-From: Liviu Dudau <liviu.dudau@arm.com>
-To: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Boris Brezillon <boris.brezillon@collabora.com>,
-	Jassi Brar <jassisinghbrar@gmail.com>,
-	Chia-I Wu <olvaffe@gmail.com>, Chen-Yu Tsai <wenst@chromium.org>,
-	Steven Price <steven.price@arm.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	Kees Cook <kees@kernel.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>, kernel@collabora.com,
-	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, linux-hardening@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Subject: Re: [PATCH v8 1/5] dt-bindings: gpu: mali-valhall-csf: add
- mediatek,mt8196-mali variant
-Message-ID: <aQFoKoWIlf7xPzZX@e110455-lin.cambridge.arm.com>
-References: <20251017-mt8196-gpufreq-v8-0-98fc1cc566a1@collabora.com>
- <20251017-mt8196-gpufreq-v8-1-98fc1cc566a1@collabora.com>
- <aQD5gwByEmX6GQK9@e110455-lin.cambridge.arm.com>
- <6599426.lOV4Wx5bFT@workhorse>
+	s=arc-20240116; t=1761700310; c=relaxed/simple;
+	bh=HEVP5pJVSu/NFi9c5YqUEUuNnptViTfI445gGp6oJAQ=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UYbj7vQWz8jDYBXNGITDQFuNBBEs2W9l/V31qCpxMdh1TkQFQnhAlIvRmgafek2SIMEdOtVlrqJHYjAeIRrUbkeT5Ym070rNWYxfYfU5xwGPhMoTsrgOcpTCeITWI9BWWFTVXujDrJ/lLQB5Is5zJl3RUHT65TkapRH3cIGRST4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=richtek.com; spf=pass smtp.mailfrom=richtek.com; dkim=pass (2048-bit key) header.d=richtek.com header.i=@richtek.com header.b=ZO99G+x3; dkim=pass (2048-bit key) header.d=richtek.com header.i=@richtek.com header.b=qLnEqdio; arc=none smtp.client-ip=220.130.44.152
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=richtek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=richtek.com
+X-MailGates: (SIP:2,PASS,NONE)(compute_score:DELIVER,40,3)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=richtek.com;
+	s=richtek; t=1761700305;
+	bh=/kYXnlcjTx2RptL/+pUQVYtHYYa379gM+kIJaewL2Es=; l=1996;
+	h=Date:From:To:Subject:Message-ID:MIME-Version;
+	b=ZO99G+x3tRgNqJ6Jo+MKI4/DJZ+/1Xv+g9hj/vnvUrv328/DPaS3oBpogt9LLiki8
+	 W0PTZ723U8r5pt40Plkcm125qdaVX+LJvqoqoQs12KObb285uF0bB0LnID6Y4eP3Kn
+	 2PyCoaP2oNXsVUsHR9D270bKbmrsAs0FNpKiNGbslqiP3+QIA9xe7cAAkvRMWm5PF8
+	 NbrVKlsD7YCYH51v/VZ2M87ic9oRxn1aUqnuCPYD+NLkUCQ8Voe+w4tqmEc3IEeRNn
+	 juVJTkugHSQ5cFP8jEv5zovOy3BiH1FtFn0bHxmdQbmPlyofO6LNDVP56wIwhgQn5Y
+	 Hl4A+VLRgmJCw==
+Received: from 192.168.8.21
+	by mg.richtek.com with MailGates ESMTP Server V3.0(1128079:0:AUTH_RELAY)
+	(envelope-from <prvs=13948D43A7=cy_huang@richtek.com>); Wed, 29 Oct 2025 09:11:39 +0800 (CST)
+X-MailGates: (compute_score:DELIVER,40,3)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=richtek.com;
+	s=richtek; t=1761700299;
+	bh=/kYXnlcjTx2RptL/+pUQVYtHYYa379gM+kIJaewL2Es=; l=1996;
+	h=Date:From:To:Subject:Message-ID:MIME-Version;
+	b=qLnEqdioJ2zMYwoehJW5khnXeRgFTKH3/qL7vkeyS5FA/fDA+M9aPZHTp9UYZTzaw
+	 n/eZzyFthCeckmIs3rn1NweIoUg3vN9RqbnNdpqBBwD2uvS/SwdhPuZEVprsTJ3pJQ
+	 2jARaIWmM5TG7qLYbUyDfbzgdI9PtqlfCrZ1YPSPn1kA20CP+sJFPVN1YSu+FRRdRA
+	 1J7Mt9riiy8LET7pHZakBz0Ha6rMeeCtqp63a42SymOPzHUah/qsZ57uoi2+RAkezq
+	 onb2qCWrJpsRgTPgHUKmE0TD5YD4h9doYEhqyxZ9sXUpW6nkY/kjjQYcrf/QKBDn+j
+	 dYcor5NBpQX5A==
+Received: from 192.168.10.47
+	by mg.richtek.com with MailGates ESMTPS Server V6.0(3436935:0:AUTH_RELAY)
+	(envelope-from <cy_huang@richtek.com>)
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256/256); Wed, 29 Oct 2025 09:03:27 +0800 (CST)
+Received: from ex4.rt.l (192.168.10.47) by ex4.rt.l (192.168.10.47) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1748.26; Wed, 29 Oct
+ 2025 09:03:27 +0800
+Received: from git-send.richtek.com (192.168.10.154) by ex4.rt.l
+ (192.168.10.45) with Microsoft SMTP Server id 15.2.1748.26 via Frontend
+ Transport; Wed, 29 Oct 2025 09:03:27 +0800
+Date: Wed, 29 Oct 2025 09:05:00 +0800
+From: ChiYuan Huang <cy_huang@richtek.com>
+To: Sebastian Reichel <sebastian.reichel@collabora.com>
+CC: Krzysztof Kozlowski <krzk+dt@kernel.org>, Rob Herring <robh@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, <devicetree@vger.kernel.org>,
+	<linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH RESEND v2 2/3] power: supply: rt9756: Add Richtek RT9756
+ smart cap divider charger
+Message-ID: <aQFoPKXDx2BfalXE@git-send.richtek.com>
+References: <cover.1755154950.git.cy_huang@richtek.com>
+ <2bceb1be91e8841cd373c1d04f0a79d88c888dd8.1755154950.git.cy_huang@richtek.com>
+ <uarjdpyemkqnwneoj6kdj7vfzzllbqmsurjnsjr5hkujao6thx@2ysih3s7mftj>
+ <aM0UBoynaX7ln2Tw@git-send.richtek.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <6599426.lOV4Wx5bFT@workhorse>
+In-Reply-To: <aM0UBoynaX7ln2Tw@git-send.richtek.com>
 
-On Tue, Oct 28, 2025 at 09:51:43PM +0100, Nicolas Frattaroli wrote:
-> On Tuesday, 28 October 2025 18:12:35 Central European Standard Time Liviu Dudau wrote:
-> > On Fri, Oct 17, 2025 at 05:31:08PM +0200, Nicolas Frattaroli wrote:
-> > > The Mali-based GPU on the MediaTek MT8196 SoC uses a separate MCU to
-> > > control the power and frequency of the GPU. This is modelled as a power
-> > > domain and clock provider.
+On Fri, Sep 19, 2025 at 04:27:50PM +0800, ChiYuan Huang wrote:
+> On Fri, Sep 19, 2025 at 01:43:02AM +0200, Sebastian Reichel wrote:
+> Hi, Sebastian:
+> > Hi,
+> > 
+> > On Thu, Aug 14, 2025 at 03:31:07PM +0800, cy_huang@richtek.com wrote:
+> > > From: ChiYuan Huang <cy_huang@richtek.com>
 > > > 
-> > > It lets us omit the OPP tables from the device tree, as those can now be
-> > > enumerated at runtime from the MCU.
+> > > Add support for RT9756 smart cap divider charger.
 > > > 
-> > > Add the necessary schema logic to handle what this SoC expects in terms
-> > > of clocks and power-domains.
+> > > The RT9759 is a high efficiency and high charge current charger. The
+> > > maximum charge current is up to 8A. It integrates a dual-phase charge
+> > > pump core with ADC monitoring.
 > > > 
-> > > Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
-> > > Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> > > Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+> > > Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
 > > > ---
-> > >  .../bindings/gpu/arm,mali-valhall-csf.yaml         | 37 +++++++++++++++++++++-
-> > >  1 file changed, 36 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/Documentation/devicetree/bindings/gpu/arm,mali-valhall-csf.yaml b/Documentation/devicetree/bindings/gpu/arm,mali-valhall-csf.yaml
-> > > index 613040fdb444..860691ce985e 100644
-> > > --- a/Documentation/devicetree/bindings/gpu/arm,mali-valhall-csf.yaml
-> > > +++ b/Documentation/devicetree/bindings/gpu/arm,mali-valhall-csf.yaml
-> > > @@ -45,7 +45,9 @@ properties:
-> > >      minItems: 1
-> > >      items:
-> > >        - const: core
-> > > -      - const: coregroup
-> > > +      - enum:
-> > > +          - coregroup
-> > > +          - stacks
-> > >        - const: stacks
 > > 
-> > I'm not sure how to parse this part of the change. We're overwriting the property
-> > for mt8196-mali anyway so why do we need this? And if we do, should 'stacks'
-> > still remain as a const?
-> 
-> The properties section outside of the if branches outside here
-> specifies a pattern of properties that matches for all devices.
-> 
-> In this case, I changed it so that the second clock-names item
-> may either be "coregroup" or "stacks".
-
-Why would we want to do that for non-MT8196 devices? It doesn't make sense to me.
-The overwrite in the if branch should be enough to give you want you want (i.e.
-core followed by stacks and only that).
-
-> Yes, the third "stacks"
-> remains, though if you wanted to be extra precise you could
-> then specify in the non-MT8196 cases that we should not have
-> stacks followed by stacks, but I'd wager some checker for
-> duplicate names may already catch that.
-> 
-> However, I don't think it's a big enough deal to reroll this
-> series again.
-
-I'm not asking you to re-roll the series but if you agree to drop that
-part I can make the edit when merging it.
-
-Best regards,
-Liviu
-
-> 
-> Kind regards,
-> Nicolas Frattaroli
-> 
+> > Sorry for the delay. This looks mostly good, but I really don't like
+> > the custom properties for the battery voltage and current. Instead
+> > of handling via custom properties, register a second power_supply
+> > device with POWER_SUPPLY_TYPE_BATTERY and use the normal 
+> > POWER_SUPPLY_PROP_VOLTAGE_NOW and POWER_SUPPLY_PROP_CURRENT_NOW
+> > properties. Having custom properties for the watchdog and the
+> > operating mode is fine with me, as these two things are quite
+> > specific to the RT9756 chips.
 > > 
-> > Best regards,
-> > Liviu
+> > While you are at it, you can also add this constant property for
+> > the battery device:
 > > 
-> > >  
-> > >    mali-supply: true
-> > > @@ -110,6 +112,27 @@ allOf:
-> > >          power-domain-names: false
-> > >        required:
-> > >          - mali-supply
-> > > +  - if:
-> > > +      properties:
-> > > +        compatible:
-> > > +          contains:
-> > > +            const: mediatek,mt8196-mali
-> > > +    then:
-> > > +      properties:
-> > > +        mali-supply: false
-> > > +        sram-supply: false
-> > > +        operating-points-v2: false
-> > > +        power-domains:
-> > > +          maxItems: 1
-> > > +        power-domain-names: false
-> > > +        clocks:
-> > > +          maxItems: 2
-> > > +        clock-names:
-> > > +          items:
-> > > +            - const: core
-> > > +            - const: stacks
-> > > +      required:
-> > > +        - power-domains
-> > >  
-> > >  examples:
-> > >    - |
-> > > @@ -145,5 +168,17 @@ examples:
-> > >              };
-> > >          };
-> > >      };
-> > > +  - |
-> > > +    gpu@48000000 {
-> > > +        compatible = "mediatek,mt8196-mali", "arm,mali-valhall-csf";
-> > > +        reg = <0x48000000 0x480000>;
-> > > +        clocks = <&gpufreq 0>, <&gpufreq 1>;
-> > > +        clock-names = "core", "stacks";
-> > > +        interrupts = <GIC_SPI 606 IRQ_TYPE_LEVEL_HIGH 0>,
-> > > +                     <GIC_SPI 605 IRQ_TYPE_LEVEL_HIGH 0>,
-> > > +                     <GIC_SPI 604 IRQ_TYPE_LEVEL_HIGH 0>;
-> > > +        interrupt-names = "job", "mmu", "gpu";
-> > > +        power-domains = <&gpufreq>;
-> > > +    };
-> > >  
-> > >  ...
-> > > 
+> > POWER_SUPPLY_PROP_TECHNOLOGY = POWER_SUPPLY_TECHNOLOGY_LION
 > > 
+> > Also the charger's power_supply_config should set the
+> > .supplied_to, listing the battery device, so that the kernel
+> > is aware of the link between those two devices.
 > > 
+> Essentianly, these two attributes are only used for battery monitoring
+> from charger side perspective.
 > 
-> 
-> 
-> 
+> As you know, RT9756 is a charger, not fuelgauge. To register a second
+> power supply seems weird. If what you cares is the keyword 'battery',
+> I can change it to 'vout'. What do you think?
 
--- 
-====================
-| I would like to |
-| fix the world,  |
-| but they're not |
-| giving me the   |
- \ source code!  /
-  ---------------
-    ¯\_(ツ)_/¯
+Since there's no reply for this discussion, I already followed your suggestion
+for the next revision.
+
+Thx.
+> 
+> Regards,
+> ChiYuan.
+> > Greetings,
+> > 
+> > -- Sebastian
 
