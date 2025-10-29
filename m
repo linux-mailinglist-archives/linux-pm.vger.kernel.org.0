@@ -1,167 +1,135 @@
-Return-Path: <linux-pm+bounces-37056-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37055-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3BDEAC1BFF0
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 17:16:11 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id D55C7C1BF48
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 17:11:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C2B751882791
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 16:12:04 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id AC7DD34BB71
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 16:11:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CA5B281525;
-	Wed, 29 Oct 2025 16:10:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D501A34B434;
+	Wed, 29 Oct 2025 16:08:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nxILBQOw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T0Prl2kN"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 680891F7575
-	for <linux-pm@vger.kernel.org>; Wed, 29 Oct 2025 16:10:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A855E34B41E;
+	Wed, 29 Oct 2025 16:08:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761754216; cv=none; b=unF/tpESwHq9t/Fwg2JuGxgflh+UA6jFB/yqEd+xtZa3wrvK3bjkIfbH3PoseEat57i8rUQkjapYWpAxn1GQ61XkseQ1ufapO83Vj3WD4h+SCNcbYqn+8UPwMIYjkbolsc4wtdb97sWwaFL244LHFksqoY/YYNJUVGyAplFfv3g=
+	t=1761754107; cv=none; b=KrNK09Srfu8EwWlj59xjLIzXjvSz5SkeXy2hmOtzICjRr35b0PnRfJki6N7Q6LjaTxfCaZ2m6r5SSRLNa5+xRxH1jSUSyx2kEbFxMG4eXXj9EZOnWnF33293feRhQt42x2Kz4DZXvXr+NQbfk5H4wkC9y1JeLYGN00pSVwKKFIM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761754216; c=relaxed/simple;
-	bh=bhppgf5z3TwuEAo+4Rr4KhZs8ynqvre+y0Ii9tlE860=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TZwTvouLY7ozNJ7qglps+DfWCQd0Xed12FaA8EJpGJaKbXe1PN0gxnPbA6ZO8rkPaHDxLWtx7LunplWp2tDb8NfTa/nx0i/ECdSqe5v/gHqmCmT7nneuMlFaytCHWlfv0IHqPNsWzVntPeMQc1nolV3sfnuw9C+UNWkREO9U96M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nxILBQOw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D82C2C4CEF7
-	for <linux-pm@vger.kernel.org>; Wed, 29 Oct 2025 16:10:15 +0000 (UTC)
+	s=arc-20240116; t=1761754107; c=relaxed/simple;
+	bh=M9VUXQ0sGm4MCTwj4cZe2NEqjEY3c4DzycPRMT5gMPQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=auL2zX6Nc7eeZriWqWCW09BsgZ6Pfp+ryrqOqAnBQwQfrISZyymFggJVzSnEp/GjQMVNlWUCb9f19cUECTNQCoIKUPXlloLQq+JZjHa8BUbvjDvyyz8K1eL38SYND6pOOg8tH8N+jIge1iYQJMZChXXTsgjSd7oku9/xyCU4PRs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T0Prl2kN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 517DDC4CEF7;
+	Wed, 29 Oct 2025 16:08:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761754215;
-	bh=bhppgf5z3TwuEAo+4Rr4KhZs8ynqvre+y0Ii9tlE860=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=nxILBQOwX3C1BaOsG9+DXkR2NEWD3lfOjqBNLQzddorhQXAJM2Xz+Ko3gDU7Ae2WM
-	 y22M5oeSWTu/snuXy8989O9jqWw9aIrY4xOomv8rwtssyvThIsyY/FjWcH99/MRgtf
-	 CS76C8VziuWHT3/7ZQFrkGxxHn5bXcZYmIJ7xQFYmxXPUqh8qGbjUxgyBJs/rt2pGu
-	 1sj5TvreEBeT96iACWrzbCXxVZrogRHPoTar9mS9u47qyaFgS92plSRc1YiOhTG3TB
-	 FLFbuVvalDTRbdr4DmSF+TMSTO4eKwZwClxL1F5HQqN6w2UnCqi4EnXW64y7Wh1USM
-	 vpFczKZdN6HUA==
-Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-65677b3aa4bso9091eaf.0
-        for <linux-pm@vger.kernel.org>; Wed, 29 Oct 2025 09:10:15 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVyXF9Go73TK2gEZNbB6m9GObp7d5xuKqcLC4jJNHIRGWrW1KAd/nVwdDZdQGvUz48EDgIr0xdlsw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzcjW5d7asBG+G4SNd8U34xE/d6LAvl0i2U17d7k4xs+y9KYCzZ
-	leq9MEViBURZgiXNRRY1e9z4l0ONqm+6Wj87FL6035bz/tSF+3tm+z5z9O+d9zzn94znbe/NDuC
-	eMpKLH1W3acrRUS63m4EAHt8cBfvtex0=
-X-Google-Smtp-Source: AGHT+IF7NkBqMpSOL34v/1QYZNB5PUHiunb7vHO9g1EXUy5G8xPXdGyVeFaaFxdElb7Izfb4h8IHQ0X+jpTyyEGl9hI=
-X-Received: by 2002:a05:6820:2229:b0:654:f452:45f2 with SMTP id
- 006d021491bc7-65677eed247mr1738225eaf.6.1761754215202; Wed, 29 Oct 2025
- 09:10:15 -0700 (PDT)
+	s=k20201202; t=1761754107;
+	bh=M9VUXQ0sGm4MCTwj4cZe2NEqjEY3c4DzycPRMT5gMPQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=T0Prl2kN0ilDjqzLDqH9l8QDBctE4hNV7ar7kS5HzEOGYHeGU2+O45IJHnDaUtmtY
+	 AqQqebI1WpSj4wOqSrSawSR9osPq3eXWa/ducp9RppYpS0UFr/WuyM9/znrxwqWa4/
+	 sA0DowkBFR/+U4KhGGu6urT5Zd8aHVNCHtDipzUMzIE9gtaaD4E+lkAFkoM+ecv7e4
+	 F4vylNdD4NzYHD3+yaTO8bq4LXDLzgcXyeiWBBp4O9OXh1ZPapjLw3WC1uD+hgmH1m
+	 ggj20qtOmE9eYC1ePD7w63cp6HN0bcKCfdpM9bvrSFBfz+0jvq9Pv684GPpILPQim7
+	 1qGrvRiG/vZrA==
+Date: Wed, 29 Oct 2025 11:11:30 -0500
+From: Bjorn Andersson <andersson@kernel.org>
+To: Christian Marangi <ansuelsmth@gmail.com>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+	Ilia Lin <ilia.lin@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Viresh Kumar <viresh.kumar@linaro.org>, Konrad Dybcio <konradybcio@kernel.org>, 
+	Raag Jadav <raag.jadav@intel.com>, Arnd Bergmann <arnd@arndb.de>, linux-arm-msm@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/3] soc: qcom: smem: better track SMEM uninitialized
+ state
+Message-ID: <qy3d2wqqi7y2l6lyjrlsjf4dlzoigvawwze7ulapjujozi7lhq@7tluyf4j6nbu>
+References: <20251029133323.24565-1-ansuelsmth@gmail.com>
+ <20251029133323.24565-2-ansuelsmth@gmail.com>
+ <aQIyZfQ-Tvxmh6vL@smile.fi.intel.com>
+ <69023398.df0a0220.25fede.8d9c@mx.google.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251029154329.3939680-1-kaushlendra.kumar@intel.com>
-In-Reply-To: <20251029154329.3939680-1-kaushlendra.kumar@intel.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 29 Oct 2025 17:10:03 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0itwsggK1JwL8h86Pow7vLkgfg6w1TKXaR3wk6rbrfXdw@mail.gmail.com>
-X-Gm-Features: AWmQ_bnTaHMVHZP-_w2l2c1JP5MwZsA6HbvID6IbG6U9r68ZPVjqIjKCgBH40Gc
-Message-ID: <CAJZ5v0itwsggK1JwL8h86Pow7vLkgfg6w1TKXaR3wk6rbrfXdw@mail.gmail.com>
-Subject: Re: [PATCH v3] ACPI: mrrm: Fix memory leaks and improve error handling
-To: Kaushlendra Kumar <kaushlendra.kumar@intel.com>
-Cc: rafael@kernel.org, tony.luck@intel.com, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <69023398.df0a0220.25fede.8d9c@mx.google.com>
 
-On Wed, Oct 29, 2025 at 4:45=E2=80=AFPM Kaushlendra Kumar
-<kaushlendra.kumar@intel.com> wrote:
->
-> Add proper error handling and resource cleanup to prevent memory leaks
-> in add_boot_memory_ranges(). The function now checks for NULL return
-> from kobject_create_and_add(), uses local buffer for range names to
-> avoid dynamic allocation, and implements a cleanup path that removes
-> previously created sysfs groups and kobjects on failure.
->
-> This prevents resource leaks when kobject creation or sysfs group
-> creation fails during boot memory range initialization.
->
-> Signed-off-by: Kaushlendra Kumar <kaushlendra.kumar@intel.com>
-> ---
-> Changes in v3:
-> - Fix memory leak in success path by adding kfree(kobjs) before
->   return.
-> Changes in v2:
-> - Use local buffer for range names instead of kasprintf/kfree as
->   suggested in review.
->
->  drivers/acpi/acpi_mrrm.c | 43 ++++++++++++++++++++++++++++++----------
->  1 file changed, 33 insertions(+), 10 deletions(-)
->
-> diff --git a/drivers/acpi/acpi_mrrm.c b/drivers/acpi/acpi_mrrm.c
-> index 47ea3ccc2142..a554f6443b4b 100644
-> --- a/drivers/acpi/acpi_mrrm.c
-> +++ b/drivers/acpi/acpi_mrrm.c
-> @@ -149,26 +149,49 @@ ATTRIBUTE_GROUPS(memory_range);
->
->  static __init int add_boot_memory_ranges(void)
->  {
-> -       struct kobject *pkobj, *kobj;
-> +       struct kobject *pkobj, *kobj, **kobjs;
->         int ret =3D -EINVAL;
-> -       char *name;
-> +       char name[16];
-> +       int i;
->
->         pkobj =3D kobject_create_and_add("memory_ranges", acpi_kobj);
-> +       if (!pkobj)
-> +               return -ENOMEM;
->
-> -       for (int i =3D 0; i < mrrm_mem_entry_num; i++) {
-> -               name =3D kasprintf(GFP_KERNEL, "range%d", i);
-> -               if (!name) {
-> -                       ret =3D -ENOMEM;
-> -                       break;
-> -               }
-> +       kobjs =3D kcalloc(mrrm_mem_entry_num, sizeof(*kobjs), GFP_KERNEL)=
-;
-> +       if (!kobjs) {
-> +               kobject_put(pkobj);
-> +               return -ENOMEM;
-> +       }
->
-> +       for (i =3D 0; i < mrrm_mem_entry_num; i++) {
-> +               snprintf(name, sizeof(name), "range%d", i);
+On Wed, Oct 29, 2025 at 04:32:35PM +0100, Christian Marangi wrote:
+> On Wed, Oct 29, 2025 at 05:27:33PM +0200, Andy Shevchenko wrote:
+> > On Wed, Oct 29, 2025 at 02:33:20PM +0100, Christian Marangi wrote:
+> > > There is currently a problem where, in the specific case of SMEM not
+> > > initialized by SBL, any SMEM API wrongly returns PROBE_DEFER
+> > > communicating wrong info to any user of this API.
+> > > 
+> > > A better way to handle this would be to track the SMEM state and return
+> > > a different kind of error than PROBE_DEFER.
+> > > 
+> > > Rework the __smem handle to always init it to the error pointer
+> > > -EPROBE_DEFER following what is already done by the SMEM API.
+> > > If we detect that the SBL didn't initialized SMEM, set the __smem handle
+> > > to the error pointer -ENODEV.
+> > > Also rework the SMEM API to handle the __smem handle to be an error
+> > > pointer and return it appropriately.
+> > 
+> > ...
+> > 
+> > >  	if (le32_to_cpu(header->initialized) != 1 ||
+> > >  	    le32_to_cpu(header->reserved)) {
+> > >  		dev_err(&pdev->dev, "SMEM is not initialized by SBL\n");
+> > > +		__smem = ERR_PTR(-ENODEV);
+> > >  		return -EINVAL;
+> > >  	}
+> > 
+> > I find this a bit confusing. Why the error code returned to the upper layer is
+> > different to the stored one?
+> >
+> 
+> It's INVAL for probe. But for any user of SMEM it's NODEV as there isn't
+> an actual SMEM usable.
+> 
+> Totally ok to change the error condition in probe if maybe NODEV is
+> better suited. I assume there isn't a specific pattern of the correct
+> error condition in probe.
+> 
 
-So someone will subsequently send a patch to replace this with scnprintf().
+I'd say ENODEV represents the error better than EINVAL, so I don't have
+any concerns with you changing the return value.
 
->                 kobj =3D kobject_create_and_add(name, pkobj);
-> +               if (!kobj) {
-> +                       ret =3D -ENOMEM;
-> +                       goto cleanup;
-> +               }
->
->                 ret =3D sysfs_create_groups(kobj, memory_range_groups);
-> -               if (ret)
-> -                       return ret;
-> +               if (ret) {
-> +                       kobject_put(kobj);
-> +                       goto cleanup;
-> +               }
-> +               kobjs[i] =3D kobj;
->         }
->
-> +       kfree(kobjs);
-> +       return 0;
-> +
-> +cleanup:
-> +       for (int j =3D 0; j < i; j++) {
-> +               if (kobjs[j]) {
-> +                       sysfs_remove_groups(kobjs[j], memory_range_groups=
-);
-> +                       kobject_put(kobjs[j]);
-> +               }
-> +       }
-> +       kfree(kobjs);
-> +       kobject_put(pkobj);
->         return ret;
->  }
->
-> --
+> > ...
+> > 
+> > Also, the series of patches should include the cover letter to explain not only
+> > series background but additionally
+> > - how it should be applied
+> > - if it has dependencies
+> > - etc
+> > 
+> 
+> Didn't add one they are trivial patch but I can add it if needed... it's
+> pretty stable code so no dependency or branch target
+> 
+
+Specifically, I should merge patch 1 and 2 through the qcom/soc tree,
+and patch 3 can be merged completely independently through the cpufreq
+tree.
+
+Regards,
+Bjorn
+
+> > 
+> > 
+> 
+> -- 
+> 	Ansuel
 
