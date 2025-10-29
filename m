@@ -1,113 +1,177 @@
-Return-Path: <linux-pm+bounces-37043-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37045-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 58EDFC1BC76
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 16:48:45 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7DA23C1BC85
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 16:49:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 9E78D5C6010
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 14:56:54 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 21EAC5A0C98
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 15:22:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C56772D7392;
-	Wed, 29 Oct 2025 14:53:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55B742F6912;
+	Wed, 29 Oct 2025 15:22:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YrROuBN+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hQT4rKcI"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A09AD24DCFD
-	for <linux-pm@vger.kernel.org>; Wed, 29 Oct 2025 14:53:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DEFA2DEA8C;
+	Wed, 29 Oct 2025 15:22:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761749581; cv=none; b=ryIWPBv8cx5DFXP3zQvTnloKlJ64rg0WeI9OT0fbGjYtPCnkcCFZ3BJUXPHcV/ElH4SpiBUzfZ5PUua8GqmhY521M81QNcN5SppR1GL2ccmbzH4DpPU5HtoDTXttIBW2+rPzLBmZ88ivtbLYMX5ywhbyGQ0q5lyJmED14lqpAzg=
+	t=1761751340; cv=none; b=l20i7vCen1gQJ2ez2PInXOsPQNH4RnoQSg81/6aEMqAaDkNaatu4v/luzTmp3iBkjaMDzrw2G0ouXNjQdmHnJ6e0hy0q9I/Ym8VuOoUieSJ5WlUS/EDDfXxrSUP6AC/U7ksgDDvALh98foqcPcP6qkdQjdn8r+iG1IcxuE6o1jc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761749581; c=relaxed/simple;
-	bh=DQH0u0ZQDLwDsRJfD+har9LQ+I2HvcKD308oH6IRn4g=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=V0hwCB9t4lKZosE4SZSqJQy8UGabfL2e0e6JYwcunIA3EkMMXlQ7/1YGhazSFvFhcysN+WX5T3SXkkdzBT597ikzKt+h6dVz4ODgnxux6jow8RrpWcQD6akXy/bJg196kuoqXDjp1ydvlGWoTNxTLhJFZZsyXYrbMR1dsIyRNFM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YrROuBN+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26900C2BC87
-	for <linux-pm@vger.kernel.org>; Wed, 29 Oct 2025 14:53:01 +0000 (UTC)
+	s=arc-20240116; t=1761751340; c=relaxed/simple;
+	bh=kd0zFIWO1a/ARX+pL8vZNG00zHaMnbNJfmTVzScY8gE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=AylSGm9yGioL9V5eap1LbrAym4/jONsfkzSMIkp3k0aQ+BJ8vcXYnq8Gvybe6P/9X2RWXPwJpqKn6tv0pcxH5TG5xLk21OAWztpUFwncdWMLVwL2CV58DJOc13zQattklrH1GinM7FLVkL20oo+TPy6Vh67C9I9f2Ncl0RJPBLk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hQT4rKcI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AC0BC4CEF7;
+	Wed, 29 Oct 2025 15:22:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761749581;
-	bh=DQH0u0ZQDLwDsRJfD+har9LQ+I2HvcKD308oH6IRn4g=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=YrROuBN+4pUzprXbDRNtrGilh5vjmxWMpum30kAPxchqj3hBTjq0jgOmqIigwjEv7
-	 sleoF+ejftj19YPlHymSo2FZNnDUZ+978ZMRbNbeNkdkuY8Ea/81fpU8n+HOs4AWSB
-	 cWxhPmQum761vdie//HW3LueIVjEIfW8Y5l/XzGT9OQEUXNQruLkU7BRU2OXYyfClj
-	 NRiU3+JfoLi9DnEpJaOvGM45wDANGAbKqQ06rVHYB4rFlAhOyVjBFFvAhKpQYicaIE
-	 +5NshrDY3FA3lkaet+ghjBdRUFQ2Zf8cVunm1IwU6zrL3wkNMi2RbBFwJQ5kwuAfIa
-	 S41ANLOKl3LyQ==
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-3d1e68f7a6cso457fac.3
-        for <linux-pm@vger.kernel.org>; Wed, 29 Oct 2025 07:53:01 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUIF59/9OWhhhZx/lWzmJdXnDkyeVPZjtQns/8+IS80K37uMhYu1E4uGPI54HmI8QWI78+bc0BeMw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwgJzZOTK25PGk0etPwBT39DVea3+Jop/CgeZMeHNy1WGN1NAzh
-	H8tFB0jDzCqilc4aUHmNu9ksjjDwz5ft2XU6/T5aN8gj3mo73taIVeQtGTrNhicreLJ0K+8+l/H
-	7GLBEYWmE6ePLAaShIgfDdUNoPWj8RKM=
-X-Google-Smtp-Source: AGHT+IHHEvoo8S5ZVkziH9usRZKCB4chGD4vG8XKVdFlee3Wg2AG1vFPXwy4+TktAqvO+ZdeeRHTEvLsRUtwvAjhYoQ=
-X-Received: by 2002:a05:6870:a08b:b0:2e4:68ee:4f21 with SMTP id
- 586e51a60fabf-3d745b88130mr1293044fac.20.1761749580304; Wed, 29 Oct 2025
- 07:53:00 -0700 (PDT)
+	s=k20201202; t=1761751339;
+	bh=kd0zFIWO1a/ARX+pL8vZNG00zHaMnbNJfmTVzScY8gE=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=hQT4rKcIemHJK22zWFEwiDApN9/S2TEiX+n+AqwBXYxcQ2phgcyyI/8T0vBedx0uZ
+	 nXoSZ8jLCP1wVwxpkHfu6nVzrIx3dQ7l4U3eELOf9xAF0//G9SKfKol6fPRvzElXS4
+	 phb/wdAbG83NAPEKsnosEGiIy3vmzB28khPLeeRS0HA/PoPJlKmmDvR1oYVqEJdpXz
+	 We1SCmtGZ3RZQPGtds837QlPK1PYwJ0B24SGJ2wVC0yh7Jj39do0wl8Ig8oEuJ6lff
+	 N3DnOfcTtoIMpjlgc5qcZTxm5xTYLOWF+Fh9g4tP+qnIJx8yzXRe6H3JFpu3y4ZPl5
+	 xZHqUAOvwrwZw==
+Message-ID: <4dd9d86f-7c20-40fa-838c-b7634bbebf9a@kernel.org>
+Date: Wed, 29 Oct 2025 10:22:18 -0500
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251016151929.75863-1-ulf.hansson@linaro.org>
-In-Reply-To: <20251016151929.75863-1-ulf.hansson@linaro.org>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 29 Oct 2025 15:52:48 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0i_0K6+nCvBC55Bbu7XuKYjHrky3uG_aZ3aM0HMymcfeg@mail.gmail.com>
-X-Gm-Features: AWmQ_bmuSJXu6C45Iw4pt8DNu7Ct3CGGKWF6PwDtKyiHtfXjuVhrJ-viSshACfM
-Message-ID: <CAJZ5v0i_0K6+nCvBC55Bbu7XuKYjHrky3uG_aZ3aM0HMymcfeg@mail.gmail.com>
-Subject: Re: [PATCH v2 0/4] PM: QoS: Introduce a CPU system-wakeup QoS limit
- for s2idle
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org, 
-	Vincent Guittot <vincent.guittot@linaro.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Kevin Hilman <khilman@baylibre.com>, Pavel Machek <pavel@kernel.org>, Len Brown <len.brown@intel.com>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, Saravana Kannan <saravanak@google.com>, 
-	Maulik Shah <quic_mkshah@quicinc.com>, Prasad Sodagudi <psodagud@quicinc.com>, 
-	Dhruva Gole <d-gole@ti.com>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1] PM: sleep: Allow pm_restrict_gfp_mask() stacking
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+ Linux PM <linux-pm@vger.kernel.org>
+Cc: Askar Safin <safinaskar@gmail.com>, LKML <linux-kernel@vger.kernel.org>
+References: <5935682.DvuYhMxLoT@rafael.j.wysocki>
+Content-Language: en-US
+From: Mario Limonciello <superm1@kernel.org>
+In-Reply-To: <5935682.DvuYhMxLoT@rafael.j.wysocki>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, Oct 16, 2025 at 5:19=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro.org=
-> wrote:
->
-> Changes in v2:
->         - Limit the new QoS to CPUs  and make some corresponding renaming=
- of the
->         functions along with name of the device node for user space.
->         - Make sure we deal with the failure/error path correctly when th=
-ere are
->         no state available for s2idle.
->         - Add documentation.
->
-> Some platforms supports multiple low-power states for CPUs that can be us=
-ed
-> when entering system-wide suspend and s2idle in particular. Currently we =
-are
-> always selecting the deepest possible state for the CPUs, which can break=
- the
-> system-wakeup latency constraint that may be required for some use-cases.
->
-> Therefore, this series suggests to introduce a new interface for user-spa=
-ce,
-> allowing us to specify the CPU system-wakeup QoS limit. The QoS limit is =
-then
-> taken into account when selecting a suitable low-power state for s2idle.
+On 10/28/25 3:52 PM, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> Allow pm_restrict_gfp_mask() to be called many times in a row to avoid
+> issues with calling dpm_suspend_start() when the GFP mask has been
+> already restricted.
+> 
+> Only the first invocation of pm_restrict_gfp_mask() will actually
+> restrict the GFP mask and the subsequent calls will warn if there is
+> a mismatch between the expected allowed GFP mask and the actual one.
+> 
+> Moreover, if pm_restrict_gfp_mask() is called many times in a row,
+> pm_restore_gfp_mask() needs to be called matching number of times in
+> a row to actually restore the GFP mask.  Calling it when the GFP mask
+> has not been restricted will cause it to warn.
+> 
+> This is necessary for the GFP mask restriction starting in
+> hibernation_snapshot() to continue throughout the entire hibernation
+> flow until it completes or it is aborted (either by a wakeup event or
+> by an error).
+> 
+> Fixes: 449c9c02537a1 ("PM: hibernate: Restrict GFP mask in hibernation_snapshot()")
+> Fixes: 469d80a3712c ("PM: hibernate: Fix hybrid-sleep")
+> Reported-by: Askar Safin <safinaskar@gmail.com>
+> Closes: https://lore.kernel.org/linux-pm/20251025050812.421905-1-safinaskar@gmail.com/
+> Link: https://lore.kernel.org/linux-pm/20251028111730.2261404-1-safinaskar@gmail.com/
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Last time we discussed this I said I would like the new limit to be
-taken into account by regular "runtime" cpuidle because the "s2idle"
-limit should not be less that the "runtime" limit (or at least it
-would be illogical if that happened).
+Great idea.  Looks good to me, and it passes the S4 tests on my side.
 
-It looks like that could be implemented by making
-cpuidle_governor_latency_req() take cpu_wakeup_latency_qos_limit()
-into account, couldn't it?
+Reviewed-by: Mario Limonciello (AMD) <superm1@kernel.org>
+Tested-by: Mario Limonciello (AMD) <superm1@kernel.org>
+
+> ---
+> 
+> This supersedes
+> 
+> https://lore.kernel.org/linux-pm/20251026033115.436448-1-superm1@kernel.org/
+> 
+> as it allows the GFP mask to be restricted across the entire hibernation path.
+> 
+> ---
+>   kernel/power/hibernate.c |    4 ----
+>   kernel/power/main.c      |   22 +++++++++++++++++-----
+>   2 files changed, 17 insertions(+), 9 deletions(-)
+> 
+> --- a/kernel/power/hibernate.c
+> +++ b/kernel/power/hibernate.c
+> @@ -706,7 +706,6 @@ static void power_down(void)
+>   
+>   #ifdef CONFIG_SUSPEND
+>   	if (hibernation_mode == HIBERNATION_SUSPEND) {
+> -		pm_restore_gfp_mask();
+>   		error = suspend_devices_and_enter(mem_sleep_current);
+>   		if (!error)
+>   			goto exit;
+> @@ -746,9 +745,6 @@ static void power_down(void)
+>   		cpu_relax();
+>   
+>   exit:
+> -	/* Match the pm_restore_gfp_mask() call in hibernate(). */
+> -	pm_restrict_gfp_mask();
+> -
+>   	/* Restore swap signature. */
+>   	error = swsusp_unmark();
+>   	if (error)
+> --- a/kernel/power/main.c
+> +++ b/kernel/power/main.c
+> @@ -31,23 +31,35 @@
+>    * held, unless the suspend/hibernate code is guaranteed not to run in parallel
+>    * with that modification).
+>    */
+> +static unsigned int saved_gfp_count;
+>   static gfp_t saved_gfp_mask;
+>   
+>   void pm_restore_gfp_mask(void)
+>   {
+>   	WARN_ON(!mutex_is_locked(&system_transition_mutex));
+> -	if (saved_gfp_mask) {
+> -		gfp_allowed_mask = saved_gfp_mask;
+> -		saved_gfp_mask = 0;
+> -	}
+> +
+> +	if (WARN_ON(!saved_gfp_count) || --saved_gfp_count)
+> +		return;
+> +
+> +	gfp_allowed_mask = saved_gfp_mask;
+> +	saved_gfp_mask = 0;
+> +
+> +	pm_pr_dbg("GFP mask restored\n");
+>   }
+>   
+>   void pm_restrict_gfp_mask(void)
+>   {
+>   	WARN_ON(!mutex_is_locked(&system_transition_mutex));
+> -	WARN_ON(saved_gfp_mask);
+> +
+> +	if (saved_gfp_count++) {
+> +		WARN_ON((saved_gfp_mask & ~(__GFP_IO | __GFP_FS)) != gfp_allowed_mask);
+> +		return;
+> +	}
+> +
+>   	saved_gfp_mask = gfp_allowed_mask;
+>   	gfp_allowed_mask &= ~(__GFP_IO | __GFP_FS);
+> +
+> +	pm_pr_dbg("GFP mask restricted\n");
+>   }
+>   
+>   unsigned int lock_system_sleep(void)
+> 
+> 
+> 
+
 
