@@ -1,68 +1,68 @@
-Return-Path: <linux-pm+bounces-37047-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37048-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5CECCC1BBFA
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 16:44:23 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 235ABC1BC27
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 16:46:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 18F12622408
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 15:27:45 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 63B105C135A
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 15:30:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D689B324B3C;
-	Wed, 29 Oct 2025 15:27:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 399572D94A5;
+	Wed, 29 Oct 2025 15:30:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="T3sYZJ4Z"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AyPmYQXN"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9089A37A3B9;
-	Wed, 29 Oct 2025 15:27:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D13D2BEC28;
+	Wed, 29 Oct 2025 15:30:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761751662; cv=none; b=plODmPWmbAvSuYFzw6obtKNNHld1Gsrdm3Y1aYzc8JmP1Tml1NOv/LfeUnOYtLiAhKLrxU0mqJLprr9zmF15fdCGSLcC0hUxXe/E8Nar79WrTggvEv/LkxD5liUm2RSvgv2a7i4suLqIaItH0sMAWkswwBi2dfrzF8PXrkvKFb0=
+	t=1761751828; cv=none; b=hK/vNQVCfNWD8wlXzkUwxjnWuo1Dx3EjEhbEaPhjHACXXqdwXVeV4Ggs+OnTe52VhwsM/ltWa/jg5kHoU1eGFY3EA7MdmTnMeYXMjTKXc1lOtNJj4G5wWYOTQQhmaI1pvm8x5enbo8yxkl9xOUvjcTslpPkms7zy7K+gqnaGxuo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761751662; c=relaxed/simple;
-	bh=+c2yWfsFAtcqK/RTBWhiA0Lm5EnE7WpuD065rADWS20=;
+	s=arc-20240116; t=1761751828; c=relaxed/simple;
+	bh=QI+3NuHAULegYSg+VL29kjpFXdr9o+ejvnVWqLJLfPA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EXhRKlVqk3rexyRW/xJfWcuk3yyxwxR1FNWhNOFj5yv9jdjDIhMpSDC6hh9R2dULTFsjsTcwMrS3eDoyZtt6bVyece9eBdx9zirxSWeXbzKW6Aym6C3715xBX6EdweyO5je/BY85M8hfFZgzRMcxEcXh2WQDtGvFQUSWgNb3Opw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=T3sYZJ4Z; arc=none smtp.client-ip=192.198.163.13
+	 Content-Type:Content-Disposition:In-Reply-To; b=S9MsB5tSFJIJZ9AF+oQGQWpPKQyRNrS6n2Lj5EIcIjNti1+IEpVx5senbJDchaRO2rGePiKvmOo1aMS6pgKUH6CdJjSoQh4kzKeWu3+2lKT0yQxbakFcp7QeCzLPNbWjBdcmIZjPda6nyftzHhxTCusnv7u61kCMQ+yGNUOm+go=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AyPmYQXN; arc=none smtp.client-ip=198.175.65.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761751660; x=1793287660;
+  t=1761751827; x=1793287827;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=+c2yWfsFAtcqK/RTBWhiA0Lm5EnE7WpuD065rADWS20=;
-  b=T3sYZJ4ZOfXxq+fhVDgdgIWandmqr3igJ2ZL1NRAJ5e6ZmqidVpC0w54
-   V2FNaI8aj9Fp5w/oGfvLwNviI28fsLZu4vNl20jffXwJcIvoBWPf0PlqM
-   gKKriFl9FSFQLdIRITF8TYIN5jfcNmR1pwPcHZVCXd2T3b4t0KKF6W0d7
-   ei1gp+rqU70PZzgFiGhNbB5AmMMPudatckK8wK64lra5t9HuJ3w1LvAzW
-   BBKI6MwvJnPOHospnHYDIhYW/Nfp4KeY5RTa4FY2Fub6iaXsvl3iepUe3
-   lQeTetiK9KYNkqGQbc2TblIxshpF0jy4v1T3Sq8Bu5HRj2+BhOjPDe4zK
-   A==;
-X-CSE-ConnectionGUID: uXQzv2MhSxy67/Gi9OLYew==
-X-CSE-MsgGUID: 2HT2pk+hQM6W2Pv5OP2KrA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11597"; a="66492835"
+  bh=QI+3NuHAULegYSg+VL29kjpFXdr9o+ejvnVWqLJLfPA=;
+  b=AyPmYQXNmRCE/jeEW46V2J1bHy5w878fG3PdTGafbU5e60Tj6kPP4Y7d
+   8eaKVhgb9QyB3/1sWEKO1iHyWmd62SsWKtq5MGM+kK9nfa//tDVlpQ66C
+   c4gSnzOfa2i0SXLyaCEv5nUEuJ+pEs6vHRx6fQz5UacDOfVDU6wrG3imf
+   zewErOVbTgVPRd3l3D/YgjjOXQ0PKWS/ntTYzmvn50MBtF9w4RzgSNJh5
+   UpmnLEwXBKMA3h0u8tkgiICKTyHGonkM+Ef4fWq/wYOFwUgTb4NdoiN+L
+   hwDke3gj732KR1AXlNRX/8BjYYhIh/ZyPzh3fQkAI0rPXVtCemNvtuU12
+   w==;
+X-CSE-ConnectionGUID: C7GA/+psTYePIrq5Jt606Q==
+X-CSE-MsgGUID: XpjhBACIRGa/o9kfzv7y1w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11597"; a="74994808"
 X-IronPort-AV: E=Sophos;i="6.19,264,1754982000"; 
-   d="scan'208";a="66492835"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2025 08:27:38 -0700
-X-CSE-ConnectionGUID: Uk4wX8dcSUydHcVqgfa9Jg==
-X-CSE-MsgGUID: rP7bmV0lQYu+vJXVD2B/1A==
+   d="scan'208";a="74994808"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2025 08:30:26 -0700
+X-CSE-ConnectionGUID: QAp6n/FITk6+MHT+dMkLdA==
+X-CSE-MsgGUID: 2K0V7+sYTO664w/WZy1PQw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,264,1754982000"; 
-   d="scan'208";a="216353841"
+   d="scan'208";a="185580899"
 Received: from mjarzebo-mobl1.ger.corp.intel.com (HELO ashevche-desk.local) ([10.245.244.248])
-  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2025 08:27:37 -0700
+  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2025 08:30:23 -0700
 Received: from andy by ashevche-desk.local with local (Exim 4.98.2)
 	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1vE85F-00000003eUN-2QGi;
-	Wed, 29 Oct 2025 17:27:33 +0200
-Date: Wed, 29 Oct 2025 17:27:33 +0200
+	id 1vE87w-00000003eWe-2GpP;
+	Wed, 29 Oct 2025 17:30:20 +0200
+Date: Wed, 29 Oct 2025 17:30:20 +0200
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To: Christian Marangi <ansuelsmth@gmail.com>
 Cc: Ilia Lin <ilia.lin@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
@@ -72,11 +72,11 @@ Cc: Ilia Lin <ilia.lin@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
 	Raag Jadav <raag.jadav@intel.com>, Arnd Bergmann <arnd@arndb.de>,
 	linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] soc: qcom: smem: better track SMEM uninitialized
- state
-Message-ID: <aQIyZfQ-Tvxmh6vL@smile.fi.intel.com>
+Subject: Re: [PATCH 3/3] cpufreq: qcom-nvmem: add compatible fallback for
+ ipq806x for no SMEM
+Message-ID: <aQIzDItA9vo0b9FB@smile.fi.intel.com>
 References: <20251029133323.24565-1-ansuelsmth@gmail.com>
- <20251029133323.24565-2-ansuelsmth@gmail.com>
+ <20251029133323.24565-3-ansuelsmth@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -85,44 +85,52 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251029133323.24565-2-ansuelsmth@gmail.com>
+In-Reply-To: <20251029133323.24565-3-ansuelsmth@gmail.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
  krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-On Wed, Oct 29, 2025 at 02:33:20PM +0100, Christian Marangi wrote:
-> There is currently a problem where, in the specific case of SMEM not
-> initialized by SBL, any SMEM API wrongly returns PROBE_DEFER
-> communicating wrong info to any user of this API.
+On Wed, Oct 29, 2025 at 02:33:21PM +0100, Christian Marangi wrote:
+> On some IPQ806x SoC SMEM might be not initialized by SBL. This is the
+> case for some Google devices (the OnHub family) that can't make use of
+> SMEM to detect the SoC ID.
 > 
-> A better way to handle this would be to track the SMEM state and return
-> a different kind of error than PROBE_DEFER.
+> To handle these specific case, check if the SMEM is not initialized (by
+> checking if the qcom_smem_get_soc_id returns -ENODEV) and fallback to
+> OF machine compatible checking to identify the SoC variant.
 > 
-> Rework the __smem handle to always init it to the error pointer
-> -EPROBE_DEFER following what is already done by the SMEM API.
-> If we detect that the SBL didn't initialized SMEM, set the __smem handle
-> to the error pointer -ENODEV.
-> Also rework the SMEM API to handle the __smem handle to be an error
-> pointer and return it appropriately.
+> Notice that the checking order is important as the machine compatible
+> are normally defined with the specific one following the generic SoC.
+> (for example compatible = "qcom,ipq8065", "qcom,ipq8064")
+
+Misplaced period, should be at the end of closing parenthesis.
 
 ...
 
->  	if (le32_to_cpu(header->initialized) != 1 ||
->  	    le32_to_cpu(header->reserved)) {
->  		dev_err(&pdev->dev, "SMEM is not initialized by SBL\n");
-> +		__smem = ERR_PTR(-ENODEV);
->  		return -EINVAL;
->  	}
+>  	ret = qcom_smem_get_soc_id(&msm_id);
+> -	if (ret)
+> -		goto exit;
+> +	if (ret) {
+> +		if (ret != -ENODEV)
+> +			goto exit;
 
-I find this a bit confusing. Why the error code returned to the upper layer is
-different to the stored one?
+	if (ret == ...) {
+		...
+	} else if (ret)
+		goto exit;
 
-...
+Even patch will look better after that.
 
-Also, the series of patches should include the cover letter to explain not only
-series background but additionally
-- how it should be applied
-- if it has dependencies
-- etc
+> +		/* Fallback to compatible match with no SMEM initialized */
+> +		if (of_machine_is_compatible("qcom,ipq8062"))
+> +			msm_id = QCOM_ID_IPQ8062;
+> +		else if (of_machine_is_compatible("qcom,ipq8065") ||
+> +			 of_machine_is_compatible("qcom,ipq8069"))
+> +			msm_id = QCOM_ID_IPQ8065;
+> +		else if (of_machine_is_compatible("qcom,ipq8064") ||
+> +			 of_machine_is_compatible("qcom,ipq8066") ||
+> +			 of_machine_is_compatible("qcom,ipq8068"))
+> +			msm_id = QCOM_ID_IPQ8064;
+> +	}
 
 -- 
 With Best Regards,
