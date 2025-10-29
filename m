@@ -1,236 +1,305 @@
-Return-Path: <linux-pm+bounces-37021-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37022-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB12EC1A29D
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 13:19:37 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 51345C1A4CB
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 13:41:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D8221189A276
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 12:20:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 52C46567CF1
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 12:30:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F25D33A012;
-	Wed, 29 Oct 2025 12:19:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4143358D24;
+	Wed, 29 Oct 2025 12:22:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="j5m+IZXK"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B+WtS5yz"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EB4E272816;
-	Wed, 29 Oct 2025 12:19:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E25B4346A02
+	for <linux-pm@vger.kernel.org>; Wed, 29 Oct 2025 12:22:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761740371; cv=none; b=HfDSAPgm24UIkJX6v3BRifkhr/uvgF9JXB3V3kJP5xfRC2VtUDH/o7Gn+jvW0lMANgH6e1NAItRomgSwA2Tp7EamGHC0taimj43v7Ho0fV8yXlRu5PASsc4A43hCrmpdhK3l+RTI/qrxqSRhNT0GRVCgbsWJaeHZYT2U6lqCggw=
+	t=1761740557; cv=none; b=NrIJjCtkOJ6fCWwr2qPsvgHo7MfHPU0A/7G5XIQiaUxOGHAsYmKSy6yyMioxNIT6XUwrfseryqIx2R6cUqVl2s5YDvK2IhhCMRy/XSQUMbhFV7VrffxlU8Spdh2oELyxaiUkLNayXu3lyisCP9M6sWVtA3+a9UhEydIn0q1INJk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761740371; c=relaxed/simple;
-	bh=20JxKDMpCz6SOe1Bp+62xWTJm6sDUhy881hKtyj8pqg=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=KHIsgLTHmicMnIkDGdIjWX35lQQyJe/Ut0HVANbxO3JyjR5+gYEgps7cDDHwkStjKnpreX4QTZP3B5alZ2kIgUzp8ppr6WqP/9CinlkQ7IZGcNLeJGrktc4g4mHe+71hJXPA4bOL3ZG/SDm+oRWDconFGohZTtKtks89QN1cO3k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=j5m+IZXK; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761740370; x=1793276370;
-  h=date:from:to:cc:subject:message-id;
-  bh=20JxKDMpCz6SOe1Bp+62xWTJm6sDUhy881hKtyj8pqg=;
-  b=j5m+IZXKp7ZWQaKM043yDAPl7KvwTKrledhLe4+x8Dr5XIOtlF/V2HNs
-   LnxjxyWZq25eTbRYvlc56XeXhal0TfIFymLQn1Va+jrxRbDOSDx5IdcYI
-   oATrg1V/qt09RTIjFJGeipOC4me8hjqSEnqmAC09SpYIbbN8PNVTakZsf
-   ojYdC8Bk1Fa/aHnrqcM46DhIVkzJtq70ujbzFYDG2LxSrbKnJvccVE7nV
-   VUKwyQrjIGAVndr91xGzNwdoF01NoJXN9C02Csq6LYiDkgq3ZPe57rPPH
-   7WknHoq9NH8Q6HKBuPAB5b7SSTm278JZP7TYXK1ht+2SeS3wOd4DdX4KC
-   w==;
-X-CSE-ConnectionGUID: QbMQH+g1SE6OFcBY28HfVw==
-X-CSE-MsgGUID: 7PgDB98FS5imv7IF0xFsMw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11596"; a="75307207"
-X-IronPort-AV: E=Sophos;i="6.19,263,1754982000"; 
-   d="scan'208";a="75307207"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2025 05:19:29 -0700
-X-CSE-ConnectionGUID: p/iko70yQpOJFVN3N586lw==
-X-CSE-MsgGUID: q8hG1lXjTg6oEpRcu/ENkA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,263,1754982000"; 
-   d="scan'208";a="216509630"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by fmviesa001.fm.intel.com with ESMTP; 29 Oct 2025 05:19:27 -0700
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vE59A-000Kaf-2q;
-	Wed, 29 Oct 2025 12:19:24 +0000
-Date: Wed, 29 Oct 2025 20:18:26 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- d6e9920588cf094d2a89409fc444878781fe4e9c
-Message-ID: <202510292020.Dc1Lueh9-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	s=arc-20240116; t=1761740557; c=relaxed/simple;
+	bh=2uVsXjqYAFXDMXZsaLDabWe8n3+FWhGwBNQ1WHtgWew=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=AJHHruDGjCtPLHeq0Lga00tQk7poMfwg8d/3eq3DvT6rzGBwrrHizgHEELgN8BvadjMYoH9gy9ebeqDwTaJVunE8Qun9k9Lhg/IRYh8lN6xBz9AEs7+Mcvbtq4xNR8ehSMoeCWhSDC7MSH9S32YR9mOK6jhzcbZFj6hEO8neCcU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B+WtS5yz; arc=none smtp.client-ip=209.85.208.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-378d50162e0so82411571fa.2
+        for <linux-pm@vger.kernel.org>; Wed, 29 Oct 2025 05:22:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1761740553; x=1762345353; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zZgl3eI7vg5tzy1n/3yyz3iAkoVI/IBOnqdMyOqmVk0=;
+        b=B+WtS5yzyIwpvOorO9CU/ozNNAtHkPHMMAjXFP3xqgEmQKRpMc19hxES+whEnMzcAP
+         Ua+K9G9dmrezmc9/NmRa4iUEjIzTGkY1sJNOcurg27zKfDjsSk7k88GPK2LpN7RGussR
+         n+9Antt2eU4T73u4NMvzOvv/58cz8kQd++01nlo8U7vF2ynyxq+t2vixohCpa7fsUsUE
+         D7SujO1reH5jhOVg+/rZ7B7kvE2acaQV9nMuMgCcVuLUHdsm5psGYhPJw8Q/kyO8Vcnf
+         AhU+tfTqYZReepGb7uXKa+w8I9df0RLPciZwLiEN+nq1O9XO/trAbUFiWpQdpFoyvC53
+         Vq4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761740553; x=1762345353;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zZgl3eI7vg5tzy1n/3yyz3iAkoVI/IBOnqdMyOqmVk0=;
+        b=eFhLRSsC6+bFyqwxz0gxRmZCGS8iBXIkeqAFRcslDdqSA2o0ecFujBSEvJGYKG+bTg
+         h1KTL4ZeFLHukSansJnk5DpA7zQkNwQG9tg9tMWiMGKEaOhrCSVfu3fLnaNdjOOoHXpx
+         klSpNxRXnVOLFCrqfdErkMgctd2VQnkAEZjyijuAUIyN/gKKKN+s1GyJkqa58sMDgjo7
+         UfWf4RqigbEl+TiVOfG+kqnKGNIeqQ/BGsk6eN0m9KZUuxDllsuBoxZddaBVlfWq8hXU
+         LJZrF4lpLChxEvN3xz0ItkMGtM3IYPEJz93rK6ur4xBW9scJ7bsyyUKYJ83X0wi5K5JK
+         CFww==
+X-Forwarded-Encrypted: i=1; AJvYcCUBUbysSPmVmm9nRCpBfm8Rp60CdVkcqMpWeTwgSYVq0Qi618qgTVqOIxJxEkpvhFFnxtfSZf6WBg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz/S5Resef/NJEiQzv1wMRMtF4233Wm8PBa6WQpPcnunOOtOuIy
+	tAbkorqXURZHFSSHKASffTY8E/Sx3B5sYe35i5wq77GuK9QJOVByachh
+X-Gm-Gg: ASbGncuobvC60EukLakJjJFja8SHcqk1YpR0bRvzPZA3iGGiQD/AOpWz7cTeUtNOhTo
+	9W3x5BKMXFctUi/1kjxdV7XwiO+OVwwhSoKZQ7PoSNtZe8njHYp8UFLTaPp/e6nA2Bc6uEF7gX0
+	W1E7F4le25sVKQstKkVuqXhICQGpnXKVUWYJEEOo6tfOIIkAofWv8bJrFBzcto8CWxy+aj/gRoI
+	tjq9F43fGghAwJd2vfuVksWmWV3SJSqOsAo50wzLNSq1iPPSxwfhDzZvq6wrXzM4SBMmuK+DhIi
+	Tf/14VQYy7cz/B79HGGAFc+rWsmVh9859ri1UfuphPQTTWcCFnzoEWcZUmdI6XU4ZfbcCRma5rj
+	ecj8k66GwoxI/RFbHlMhT8v5QhEGBuMrlhRynsi1mJiFXVSTTp85pOvwa8wkcLx4owYZ9NPmyd6
+	zqASWg6f60jw==
+X-Google-Smtp-Source: AGHT+IE2iQbJln+N7SD4pplQmz5pd5RsqX+x6DtY4QwXN3fjqhUrh1ZJZX1iVGCG3vRTmo+/4QF4Bg==
+X-Received: by 2002:a05:651c:1542:b0:36d:114b:52e2 with SMTP id 38308e7fff4ca-37a024017b7mr7425661fa.34.1761740552495;
+        Wed, 29 Oct 2025 05:22:32 -0700 (PDT)
+Received: from [10.38.18.54] ([213.255.186.37])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-378ee09229asm33470711fa.9.2025.10.29.05.22.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Oct 2025 05:22:31 -0700 (PDT)
+Message-ID: <c28bbb75-36b0-4776-b81c-c5dc2dd5ae28@gmail.com>
+Date: Wed, 29 Oct 2025 14:22:30 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 04/15] dt-bindings: mfd: ROHM BD72720
+To: Rob Herring <robh@kernel.org>
+Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+ Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Sebastian Reichel <sre@kernel.org>,
+ Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Linus Walleij <linus.walleij@linaro.org>,
+ Bartosz Golaszewski <brgl@bgdev.pl>, Andreas Kemnade <andreas@kemnade.info>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-rtc@vger.kernel.org
+References: <cover.1761564043.git.mazziesaccount@gmail.com>
+ <a5957c4f83724d4f32527fb892fc340af4eeddde.1761564043.git.mazziesaccount@gmail.com>
+ <20251027211351.GC1565353-robh@kernel.org>
+Content-Language: en-US, en-AU, en-GB, en-BW
+From: Matti Vaittinen <mazziesaccount@gmail.com>
+In-Reply-To: <20251027211351.GC1565353-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: d6e9920588cf094d2a89409fc444878781fe4e9c  Merge branches 'acpi-battery', 'acpi-misc', 'acpi-tad' and 'acpi-fan-next' into linux-next
+On 27/10/2025 23:13, Rob Herring wrote:
+> On Mon, Oct 27, 2025 at 01:45:46PM +0200, Matti Vaittinen wrote:
+>> The ROHM BD72720 is a power management IC integrating regulators, GPIOs,
+>> charger, LEDs, RTC and a clock gate.
+>>
+>> Add dt-binding doc for ROHM BD72720.
+>>
+>> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+>>
+>> ---
+>> Revision history:
+>>   RFCv1 => v2:
+>>   - Typofixes
+>> ---
+>>   .../bindings/mfd/rohm,bd72720-pmic.yaml       | 269 ++++++++++++++++++
+>>   1 file changed, 269 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/mfd/rohm,bd72720-pmic.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/mfd/rohm,bd72720-pmic.yaml b/Documentation/devicetree/bindings/mfd/rohm,bd72720-pmic.yaml
+>> new file mode 100644
+>> index 000000000000..b0d4bc01d199
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/mfd/rohm,bd72720-pmic.yaml
+>> @@ -0,0 +1,269 @@
+>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/mfd/rohm,bd72720-pmic.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: ROHM BD72720 Power Management Integrated Circuit
+>> +
+>> +maintainers:
+>> +  - Matti Vaittinen <mazziesaccount@gmail.com>
+>> +
+>> +description: |
+>> +  BD72720 is a single-chip power management IC for battery-powered portable
+>> +  devices. The BD72720 integrates 10 bucks and 11 LDOs, and a 3000 mA
+>> +  switching charger. The IC also includes a Coulomb counter, a real-time
+>> +  clock (RTC), GPIOs and a 32.768 kHz clock gate.
+>> +
+>> +# In addition to the properties found from the charger node, the ROHM BD72720
+>> +# uses properties from a static battery node. Please see the:
+>> +# Documentation/devicetree/bindings/power/supply/rohm,vdr-battery.yaml
+> 
+> Why is all of this a comment?
 
-elapsed time: 1455m
+Hi Rob,
 
-configs tested: 143
-configs skipped: 3
+Thanks for (all the) reviews! Much appreciated.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+I added these as comments because they aren't meant to be in the BD72720 
+charger-node (which is described by this driver), but in a static 
+battery node. The battery node does not belong in the charger node.
 
-tested configs:
-alpha                             allnoconfig    gcc-15.1.0
-alpha                            allyesconfig    gcc-15.1.0
-arc                               allnoconfig    gcc-15.1.0
-arc                   randconfig-001-20251028    gcc-8.5.0
-arc                   randconfig-002-20251028    gcc-13.4.0
-arm                               allnoconfig    clang-22
-arm                     am200epdkit_defconfig    gcc-15.1.0
-arm                        clps711x_defconfig    clang-22
-arm                   randconfig-001-20251028    clang-22
-arm                   randconfig-002-20251028    clang-22
-arm                   randconfig-003-20251028    clang-22
-arm                   randconfig-004-20251028    gcc-8.5.0
-arm64                             allnoconfig    gcc-15.1.0
-arm64                 randconfig-001-20251028    clang-22
-arm64                 randconfig-002-20251028    clang-22
-arm64                 randconfig-003-20251028    gcc-11.5.0
-arm64                 randconfig-004-20251028    gcc-8.5.0
-csky                              allnoconfig    gcc-15.1.0
-csky                  randconfig-001-20251028    gcc-15.1.0
-csky                  randconfig-002-20251028    gcc-15.1.0
-hexagon                          allmodconfig    clang-17
-hexagon                           allnoconfig    clang-22
-hexagon                          allyesconfig    clang-22
-hexagon               randconfig-001-20251028    clang-22
-hexagon               randconfig-002-20251028    clang-17
-i386                              allnoconfig    gcc-14
-i386        buildonly-randconfig-001-20251028    gcc-14
-i386        buildonly-randconfig-002-20251028    gcc-14
-i386        buildonly-randconfig-003-20251028    gcc-14
-i386        buildonly-randconfig-004-20251028    gcc-14
-i386        buildonly-randconfig-005-20251028    gcc-14
-i386        buildonly-randconfig-006-20251028    gcc-14
-i386                  randconfig-001-20251029    gcc-14
-i386                  randconfig-002-20251029    gcc-14
-i386                  randconfig-003-20251029    clang-20
-i386                  randconfig-004-20251029    gcc-14
-i386                  randconfig-005-20251029    clang-20
-i386                  randconfig-006-20251029    gcc-14
-i386                  randconfig-007-20251029    clang-20
-i386                  randconfig-011-20251029    gcc-14
-i386                  randconfig-012-20251029    clang-20
-i386                  randconfig-013-20251029    gcc-14
-i386                  randconfig-014-20251029    gcc-14
-i386                  randconfig-015-20251029    gcc-14
-i386                  randconfig-016-20251029    gcc-14
-i386                  randconfig-017-20251029    gcc-14
-loongarch                        allmodconfig    clang-19
-loongarch                         allnoconfig    clang-22
-loongarch                           defconfig    clang-19
-loongarch             randconfig-001-20251028    gcc-12.5.0
-loongarch             randconfig-002-20251028    clang-22
-m68k                             allmodconfig    gcc-15.1.0
-m68k                              allnoconfig    gcc-15.1.0
-m68k                             allyesconfig    gcc-15.1.0
-m68k                                defconfig    gcc-15.1.0
-m68k                          hp300_defconfig    gcc-15.1.0
-microblaze                       allmodconfig    gcc-15.1.0
-microblaze                        allnoconfig    gcc-15.1.0
-microblaze                       allyesconfig    gcc-15.1.0
-microblaze                          defconfig    gcc-15.1.0
-mips                              allnoconfig    gcc-15.1.0
-nios2                             allnoconfig    gcc-11.5.0
-nios2                               defconfig    gcc-11.5.0
-nios2                 randconfig-001-20251028    gcc-8.5.0
-nios2                 randconfig-002-20251028    gcc-9.5.0
-openrisc                          allnoconfig    gcc-15.1.0
-openrisc                            defconfig    gcc-15.1.0
-parisc                            allnoconfig    gcc-15.1.0
-parisc                              defconfig    gcc-15.1.0
-parisc                randconfig-001-20251028    gcc-9.5.0
-parisc                randconfig-002-20251028    gcc-8.5.0
-parisc64                            defconfig    gcc-15.1.0
-powerpc                           allnoconfig    gcc-15.1.0
-powerpc                      katmai_defconfig    clang-22
-powerpc                     mpc83xx_defconfig    clang-22
-powerpc               randconfig-001-20251028    gcc-15.1.0
-powerpc               randconfig-002-20251028    gcc-11.5.0
-powerpc64             randconfig-001-20251028    clang-22
-powerpc64             randconfig-002-20251028    clang-22
-riscv                             allnoconfig    gcc-15.1.0
-riscv                               defconfig    clang-22
-riscv                 randconfig-001-20251029    clang-20
-riscv                 randconfig-002-20251029    clang-19
-s390                             allmodconfig    clang-18
-s390                              allnoconfig    clang-22
-s390                             allyesconfig    gcc-15.1.0
-s390                                defconfig    clang-22
-s390                  randconfig-001-20251029    gcc-11.5.0
-s390                  randconfig-002-20251029    gcc-8.5.0
-sh                               allmodconfig    gcc-15.1.0
-sh                                allnoconfig    gcc-15.1.0
-sh                               allyesconfig    gcc-15.1.0
-sh                                  defconfig    gcc-15.1.0
-sh                          landisk_defconfig    gcc-15.1.0
-sh                    randconfig-001-20251029    gcc-11.5.0
-sh                    randconfig-002-20251029    gcc-15.1.0
-sh                     sh7710voipgw_defconfig    gcc-15.1.0
-sparc                            allmodconfig    gcc-15.1.0
-sparc                             allnoconfig    gcc-15.1.0
-sparc                               defconfig    gcc-15.1.0
-sparc                 randconfig-001-20251028    gcc-8.5.0
-sparc                 randconfig-002-20251028    gcc-12.5.0
-sparc64                             defconfig    clang-20
-sparc64               randconfig-001-20251028    clang-22
-sparc64               randconfig-002-20251028    gcc-9.5.0
-um                               allmodconfig    clang-19
-um                                allnoconfig    clang-22
-um                               allyesconfig    gcc-14
-um                                  defconfig    clang-22
-um                             i386_defconfig    gcc-14
-um                    randconfig-001-20251028    gcc-14
-um                    randconfig-002-20251028    gcc-14
-um                           x86_64_defconfig    clang-22
-x86_64                            allnoconfig    clang-20
-x86_64      buildonly-randconfig-001-20251029    gcc-14
-x86_64      buildonly-randconfig-002-20251029    clang-20
-x86_64      buildonly-randconfig-003-20251029    clang-20
-x86_64      buildonly-randconfig-004-20251029    clang-20
-x86_64      buildonly-randconfig-005-20251029    clang-20
-x86_64      buildonly-randconfig-006-20251029    clang-20
-x86_64                              defconfig    gcc-14
-x86_64                randconfig-001-20251029    gcc-14
-x86_64                randconfig-002-20251029    gcc-14
-x86_64                randconfig-003-20251029    clang-20
-x86_64                randconfig-004-20251029    gcc-14
-x86_64                randconfig-005-20251029    gcc-12
-x86_64                randconfig-006-20251029    gcc-14
-x86_64                randconfig-011-20251029    clang-20
-x86_64                randconfig-012-20251029    clang-20
-x86_64                randconfig-013-20251029    gcc-14
-x86_64                randconfig-014-20251029    clang-20
-x86_64                randconfig-015-20251029    gcc-13
-x86_64                randconfig-016-20251029    gcc-13
-x86_64                randconfig-071-20251029    clang-20
-x86_64                randconfig-072-20251029    clang-20
-x86_64                randconfig-073-20251029    gcc-14
-x86_64                randconfig-074-20251029    gcc-14
-x86_64                randconfig-075-20251029    gcc-14
-x86_64                randconfig-076-20251029    clang-20
-xtensa                            allnoconfig    gcc-15.1.0
-xtensa                randconfig-001-20251028    gcc-15.1.0
-xtensa                randconfig-002-20251028    gcc-13.4.0
-xtensa                    smp_lx200_defconfig    gcc-15.1.0
+My idea was still to document (for integrator) the battery properties 
+this charger uses from a static battery node when present. Only thing we 
+include directly to this node is the:
+monitored-battery = <&battery>; - reference.
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> 
+>> +#
+>> +# Following properties are used
+>> +# when present:
+>> +#
+>> +# charge-full-design-microamp-hours: Battry capacity in mAh
+>> +# voltage-max-design-microvolt:      Maximum voltage
+>> +# voltage-min-design-microvolt:      Minimum voltage system is still operating.
+>> +# degrade-cycle-microamp-hours:      Capacity lost due to aging at each full
+>> +#                                    charge cycle.
+>> +# ocv-capacity-celsius:              Array of OCV table temperatures. 1/table.
+>> +# ocv-capacity-table-<N>:            Table of OCV voltage/SOC pairs. Corresponds
+>> +#                                    N.th temperature in ocv-capacity-celsius
+>> +#
+>> +# ROHM specific properties:
+>> +# rohm,voltage-vdr-thresh-microvolt: Threshold for starting the VDR correction
+>> +# rohm,volt-drop-soc:                Table of capacity values matching the
+>> +#                                    values in VDR tables.
+>> +# rohm,volt-drop-high-temp-microvolt: VDR table for high temperature
+>> +# rohm,volt-drop-normal-temp-microvolt: VDR table for normal temperature
+>> +# rohm,volt-drop-low-temp-microvolt:  VDR table for low temperature
+>> +# rohm,volt-drop-very-low-temp-microvolt: VDR table for very low temperature
+>> +#
+>> +# VDR tables are (usually) determined for a specific battery by ROHM.
+>> +# The battery node would then be referred from the charger node:
+>> +#
+>> +# monitored-battery = <&battery>;
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: rohm,bd72720
+>> +
+>> +  reg:
+>> +    description:
+>> +      I2C slave address.
+>> +    maxItems: 1
+>> +
+>> +  interrupts:
+>> +    maxItems: 1
+>> +
+>> +  gpio-controller: true
+>> +
+>> +  "#gpio-cells":
+>> +    const: 2
+>> +    description: |
+
+// snip
+
+>> +
+>> +  rohm,pin-dvs0:
+>> +    $ref: /schemas/types.yaml#/definitions/string
+>> +    description:
+>> +      BD72720 has 4 different OTP options to determine the use of dvs0-pin.
+>> +      OTP0 - regulator RUN state control.
+>> +      OTP1 - GPI.
+>> +      OTP2 - GPO.
+>> +      OTP3 - Power sequencer output.
+>> +      This property specifies the use of the pin.
+>> +    enum:
+>> +      - dvs-input
+>> +      - gpi
+>> +      - gpo
+>> +
+>> +  rohm,pin-dvs1:
+>> +    $ref: /schemas/types.yaml#/definitions/string
+>> +    description:
+>> +      see rohm,pin-dvs0
+>> +    enum:
+>> +      - dvs-input
+>> +      - gpi
+>> +      - gpo
+> 
+> These 2 could be combined into a single entry in patternProperties.
+> 
+>> +
+>> +  rohm,pin-exten0:
+>> +    $ref: /schemas/types.yaml#/definitions/string
+>> +    description: BD72720 has an OTP option to use exten0-pin for different
+>> +      purposes. Set this property accordingly.
+>> +    const: gpo
+>> +
+>> +  rohm,pin-exten1:
+>> +    $ref: /schemas/types.yaml#/definitions/string
+>> +    description: BD72720 has an OTP option to use exten1-pin for different
+>> +      purposes. Set this property accordingly.
+>> +    const: gpo
+> 
+> And these 2 also.
+> 
+>> +
+>> +  rohm,pin-fault_b:
+>> +    $ref: /schemas/types.yaml#/definitions/string
+>> +    description: BD72720 has an OTP option to use fault_b-pin for different
+>> +      purposes. Set this property accordingly.
+>> +    const: gpo
+> 
+> Seems like different purposes would have more than 1 option.
+
+They do. I only omitted them because I don't think knowing those 
+use-cases is relevant for the software. OTOH, maybe they some day can be 
+so I will revise the other uses and make more complete list. Thanks.
+
+> 
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +  - interrupts
+>> +  - clocks
+>> +  - "#clock-cells"
+>> +  - regulators
+>> +  - gpio-controller
+>> +  - "#gpio-cells"
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    #include <dt-bindings/interrupt-controller/irq.h>
+>> +    #include <dt-bindings/leds/common.h>
+>> +    i2c {
+>> +        #address-cells = <1>;
+>> +        #size-cells = <0>;
+>> +        pmic: pmic@4b {
+>> +            compatible = "rohm,bd71828";
+>> +            reg = <0x4b>;
+> 
+> Just 1 complete example in the mfd schema and drop this example.
+
+Hmm? This is the MFD schema, right? :)
+
+Yours,
+	-- Matti
+
+
 
