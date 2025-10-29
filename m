@@ -1,70 +1,83 @@
-Return-Path: <linux-pm+bounces-37048-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37049-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 235ABC1BC27
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 16:46:18 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E7C9EC1BC7F
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 16:49:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 63B105C135A
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 15:30:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5FE046E26A5
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 15:33:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 399572D94A5;
-	Wed, 29 Oct 2025 15:30:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEDFA3376BA;
+	Wed, 29 Oct 2025 15:32:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AyPmYQXN"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DIxRUFcp"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D13D2BEC28;
-	Wed, 29 Oct 2025 15:30:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCB2F33F8AD
+	for <linux-pm@vger.kernel.org>; Wed, 29 Oct 2025 15:32:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761751828; cv=none; b=hK/vNQVCfNWD8wlXzkUwxjnWuo1Dx3EjEhbEaPhjHACXXqdwXVeV4Ggs+OnTe52VhwsM/ltWa/jg5kHoU1eGFY3EA7MdmTnMeYXMjTKXc1lOtNJj4G5wWYOTQQhmaI1pvm8x5enbo8yxkl9xOUvjcTslpPkms7zy7K+gqnaGxuo=
+	t=1761751964; cv=none; b=Ll3P4Ev+Fz1iDZx2An1Jgn5XQr5VHCwtuOinqTl+qQPwTgO6ylflMJ36fC8T/h29IKLWytXJTqKaVF7vAzG1VFcxDdH5sLfUzkaRQPUFeNkhDRrY6D/DN53WuSwirDCmhRIW0NOes+fewQk7Aq2vsUgYWhDGD+V4AJeYfLppWbM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761751828; c=relaxed/simple;
-	bh=QI+3NuHAULegYSg+VL29kjpFXdr9o+ejvnVWqLJLfPA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=S9MsB5tSFJIJZ9AF+oQGQWpPKQyRNrS6n2Lj5EIcIjNti1+IEpVx5senbJDchaRO2rGePiKvmOo1aMS6pgKUH6CdJjSoQh4kzKeWu3+2lKT0yQxbakFcp7QeCzLPNbWjBdcmIZjPda6nyftzHhxTCusnv7u61kCMQ+yGNUOm+go=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AyPmYQXN; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761751827; x=1793287827;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=QI+3NuHAULegYSg+VL29kjpFXdr9o+ejvnVWqLJLfPA=;
-  b=AyPmYQXNmRCE/jeEW46V2J1bHy5w878fG3PdTGafbU5e60Tj6kPP4Y7d
-   8eaKVhgb9QyB3/1sWEKO1iHyWmd62SsWKtq5MGM+kK9nfa//tDVlpQ66C
-   c4gSnzOfa2i0SXLyaCEv5nUEuJ+pEs6vHRx6fQz5UacDOfVDU6wrG3imf
-   zewErOVbTgVPRd3l3D/YgjjOXQ0PKWS/ntTYzmvn50MBtF9w4RzgSNJh5
-   UpmnLEwXBKMA3h0u8tkgiICKTyHGonkM+Ef4fWq/wYOFwUgTb4NdoiN+L
-   hwDke3gj732KR1AXlNRX/8BjYYhIh/ZyPzh3fQkAI0rPXVtCemNvtuU12
-   w==;
-X-CSE-ConnectionGUID: C7GA/+psTYePIrq5Jt606Q==
-X-CSE-MsgGUID: XpjhBACIRGa/o9kfzv7y1w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11597"; a="74994808"
-X-IronPort-AV: E=Sophos;i="6.19,264,1754982000"; 
-   d="scan'208";a="74994808"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2025 08:30:26 -0700
-X-CSE-ConnectionGUID: QAp6n/FITk6+MHT+dMkLdA==
-X-CSE-MsgGUID: 2K0V7+sYTO664w/WZy1PQw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,264,1754982000"; 
-   d="scan'208";a="185580899"
-Received: from mjarzebo-mobl1.ger.corp.intel.com (HELO ashevche-desk.local) ([10.245.244.248])
-  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2025 08:30:23 -0700
-Received: from andy by ashevche-desk.local with local (Exim 4.98.2)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1vE87w-00000003eWe-2GpP;
-	Wed, 29 Oct 2025 17:30:20 +0200
-Date: Wed, 29 Oct 2025 17:30:20 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Christian Marangi <ansuelsmth@gmail.com>
+	s=arc-20240116; t=1761751964; c=relaxed/simple;
+	bh=O5LYngdRuGQGjiLGrPFcUjIUov9snCTAkMU/N8J8a8w=;
+	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SC4jxOrzZa2DDPpvoyHNsqdisPebTEqhqPsg1mfyujUsvaEZruAdTHudDMNayQrxs3ACsZmSUFgEqVQyW04B9g5gS1jez9Rtu4yLTBcceJy1BwUwMk7kzCd/bDL5fYrWk4pk3mvzV+gK9Crq7/HW+8vIWCqhVB7YybZg/CeYVN4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DIxRUFcp; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-47710acf715so20141895e9.1
+        for <linux-pm@vger.kernel.org>; Wed, 29 Oct 2025 08:32:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1761751961; x=1762356761; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=3ikPywo67ZbgIof+9yDMrcwmh77/FesmeUjBMpQ4Gfk=;
+        b=DIxRUFcpOZNB4MM/bjr7GSvUrFnZhaIXGJHW9FB9dafTlQwuFDpJEr8TKbAOlEMUez
+         i8vQaX3yg2MI4UQKBHBAcpRPfr/m5tcEjzCk2GS6K7xbJpQX+yYV7cAVkhfzIVb/vLYK
+         vbfE9fdstS23a3pLs1NHkIyb4+4eNDQNG6cymT6Nh7B/1usYxQsHdOyMHK+TfOWNvgLZ
+         AyS1KTIFpe/epsDDaGak4KA1jZ13ajAF04BGOWwp2W/aDM6EfxXLYdPsBV008TjIQABi
+         ATEZ6WJxQ67ZEv6lJR4PJva8bZ5WsvX+A9c26yhy35KqDZSnQj52KixrvmyxiAMo/iYi
+         VLOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761751961; x=1762356761;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3ikPywo67ZbgIof+9yDMrcwmh77/FesmeUjBMpQ4Gfk=;
+        b=wuRLoaswShgouP+SfonCmeCaDYjE0ftiOjvqBwb6DyyjbhqGUSQAU1pvnVnyeU7Mud
+         2EqwgicqQd4juuHa8TuAtDaXQx5h8MJMDfa+Tyoo9N/PQYl0h7MLHOuOOdxDXLimx8QA
+         KEK/gJF07h+jxFcq7UQGFveocH5fwZWAak13N2CZWCQS1gxYAHQ06bb8v0ITwhiJMj0U
+         RiONvLeeDBe4YG3ZmfpuytX2HY4CHpka78pLIyIEhOwlI74bWz/MM18tTZFsybOcLNxm
+         Wndwj/9wtgo1RctQvHXUmJEJjiOF2lir0JSE+0hGCoxgjnkduqz0DfsRqrUEqGgNsyOb
+         EJEA==
+X-Forwarded-Encrypted: i=1; AJvYcCWkkXDfTz9qMYAAoQw/kGJiGecjfy9S/xrq9IKbGGLQYE5BqmVJEJBFrG8IZxuw4zyj/CBGx0EBxw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwIiLLeIRoM9oKyDlAznth05r2xRKaV2LJHhmGjmqsGIg7UV+s3
+	LG4EjvdvdOOp6M0blNofwZVJadLwdJToNf5zi193Tng8UaXOueVu/L0R
+X-Gm-Gg: ASbGncvHrb0c2FFdKo8i5RocHQL3wpCSBu4FEHtUisnBgo0AfnaxalrKK8p1W8B2vzJ
+	gE+F0E23owoCWbVj8ebm4UlawdPaUjSkY1LlhdLuLIx64DSd/fxLuCkK5lI4uOdNYVM6w3pGS8s
+	MY21aKfHgkxTHHsAKRdjiorgzG8v+xXOUNcLu+SRuq28fMq9MdujF9czM7QXAV4WNCSH7IWqdW+
+	R70AR78Jg3t8tZf6WSJJ//9UHIDBUXL6Be22kUa3wBYp8IOwTe3rAbsnZx9HKVa4/rHgoVjJ3bl
+	Rv5UkEVyX6BIXCanroVsCMVveTCaC3O4bpQV+cv6rm7xNIzAo28lnbl+gytjnNKwoq1/NmPh7vU
+	h2ITrmU+IwV3SnmgJmTOMbhttC36LVJ1NPQr41iCiEI+BSAKEzyYkMSEEq7qGd7rkWnTO56PUun
+	97xWOnCi8004VfGZqfQ+5RSeaZlo7K
+X-Google-Smtp-Source: AGHT+IGlxJUMPBcCnrjnToorbT55gMyEn0KVla2FyyxiHdY+dzp3Fb5seo1sUo4Wkl5T8gZsMwX+yw==
+X-Received: by 2002:a05:6000:22c6:b0:427:72d1:e398 with SMTP id ffacd0b85a97d-429aefde6f1mr2944132f8f.62.1761751960915;
+        Wed, 29 Oct 2025 08:32:40 -0700 (PDT)
+Received: from Ansuel-XPS. (93-34-90-37.ip49.fastwebnet.it. [93.34.90.37])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-429952d4494sm27355108f8f.21.2025.10.29.08.32.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Oct 2025 08:32:40 -0700 (PDT)
+Message-ID: <69023398.df0a0220.25fede.8d9c@mx.google.com>
+X-Google-Original-Message-ID: <aQIzk1wYEQJgJAdc@Ansuel-XPS.>
+Date: Wed, 29 Oct 2025 16:32:35 +0100
+From: Christian Marangi <ansuelsmth@gmail.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc: Ilia Lin <ilia.lin@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
 	Viresh Kumar <viresh.kumar@linaro.org>,
 	Bjorn Andersson <andersson@kernel.org>,
@@ -72,11 +85,11 @@ Cc: Ilia Lin <ilia.lin@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
 	Raag Jadav <raag.jadav@intel.com>, Arnd Bergmann <arnd@arndb.de>,
 	linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] cpufreq: qcom-nvmem: add compatible fallback for
- ipq806x for no SMEM
-Message-ID: <aQIzDItA9vo0b9FB@smile.fi.intel.com>
+Subject: Re: [PATCH 2/3] soc: qcom: smem: better track SMEM uninitialized
+ state
 References: <20251029133323.24565-1-ansuelsmth@gmail.com>
- <20251029133323.24565-3-ansuelsmth@gmail.com>
+ <20251029133323.24565-2-ansuelsmth@gmail.com>
+ <aQIyZfQ-Tvxmh6vL@smile.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -85,56 +98,59 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251029133323.24565-3-ansuelsmth@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+In-Reply-To: <aQIyZfQ-Tvxmh6vL@smile.fi.intel.com>
 
-On Wed, Oct 29, 2025 at 02:33:21PM +0100, Christian Marangi wrote:
-> On some IPQ806x SoC SMEM might be not initialized by SBL. This is the
-> case for some Google devices (the OnHub family) that can't make use of
-> SMEM to detect the SoC ID.
+On Wed, Oct 29, 2025 at 05:27:33PM +0200, Andy Shevchenko wrote:
+> On Wed, Oct 29, 2025 at 02:33:20PM +0100, Christian Marangi wrote:
+> > There is currently a problem where, in the specific case of SMEM not
+> > initialized by SBL, any SMEM API wrongly returns PROBE_DEFER
+> > communicating wrong info to any user of this API.
+> > 
+> > A better way to handle this would be to track the SMEM state and return
+> > a different kind of error than PROBE_DEFER.
+> > 
+> > Rework the __smem handle to always init it to the error pointer
+> > -EPROBE_DEFER following what is already done by the SMEM API.
+> > If we detect that the SBL didn't initialized SMEM, set the __smem handle
+> > to the error pointer -ENODEV.
+> > Also rework the SMEM API to handle the __smem handle to be an error
+> > pointer and return it appropriately.
 > 
-> To handle these specific case, check if the SMEM is not initialized (by
-> checking if the qcom_smem_get_soc_id returns -ENODEV) and fallback to
-> OF machine compatible checking to identify the SoC variant.
+> ...
 > 
-> Notice that the checking order is important as the machine compatible
-> are normally defined with the specific one following the generic SoC.
-> (for example compatible = "qcom,ipq8065", "qcom,ipq8064")
+> >  	if (le32_to_cpu(header->initialized) != 1 ||
+> >  	    le32_to_cpu(header->reserved)) {
+> >  		dev_err(&pdev->dev, "SMEM is not initialized by SBL\n");
+> > +		__smem = ERR_PTR(-ENODEV);
+> >  		return -EINVAL;
+> >  	}
+> 
+> I find this a bit confusing. Why the error code returned to the upper layer is
+> different to the stored one?
+>
 
-Misplaced period, should be at the end of closing parenthesis.
+It's INVAL for probe. But for any user of SMEM it's NODEV as there isn't
+an actual SMEM usable.
 
-...
+Totally ok to change the error condition in probe if maybe NODEV is
+better suited. I assume there isn't a specific pattern of the correct
+error condition in probe.
 
->  	ret = qcom_smem_get_soc_id(&msm_id);
-> -	if (ret)
-> -		goto exit;
-> +	if (ret) {
-> +		if (ret != -ENODEV)
-> +			goto exit;
+> ...
+> 
+> Also, the series of patches should include the cover letter to explain not only
+> series background but additionally
+> - how it should be applied
+> - if it has dependencies
+> - etc
+> 
 
-	if (ret == ...) {
-		...
-	} else if (ret)
-		goto exit;
+Didn't add one they are trivial patch but I can add it if needed... it's
+pretty stable code so no dependency or branch target
 
-Even patch will look better after that.
-
-> +		/* Fallback to compatible match with no SMEM initialized */
-> +		if (of_machine_is_compatible("qcom,ipq8062"))
-> +			msm_id = QCOM_ID_IPQ8062;
-> +		else if (of_machine_is_compatible("qcom,ipq8065") ||
-> +			 of_machine_is_compatible("qcom,ipq8069"))
-> +			msm_id = QCOM_ID_IPQ8065;
-> +		else if (of_machine_is_compatible("qcom,ipq8064") ||
-> +			 of_machine_is_compatible("qcom,ipq8066") ||
-> +			 of_machine_is_compatible("qcom,ipq8068"))
-> +			msm_id = QCOM_ID_IPQ8064;
-> +	}
+> 
+> 
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+	Ansuel
 
