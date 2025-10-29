@@ -1,156 +1,136 @@
-Return-Path: <linux-pm+bounces-37026-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37027-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A459DC1A8BB
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 14:11:45 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F04EC1A8F4
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 14:13:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 80BCE567597
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 13:00:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 288CF1AA5B62
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 13:04:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49477359F91;
-	Wed, 29 Oct 2025 12:40:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 415A7325726;
+	Wed, 29 Oct 2025 12:52:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XFBsqcdD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IRnjwtmM"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2405234D4F4
-	for <linux-pm@vger.kernel.org>; Wed, 29 Oct 2025 12:40:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C1CE20297E
+	for <linux-pm@vger.kernel.org>; Wed, 29 Oct 2025 12:52:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761741642; cv=none; b=Qx0BMInZ/pojg4z/138ocgaU+9/mA7fh2mREJ0J85iSV7qxNC+0MaVynYUOQIAwxDE7wkayGRAk4srB6TieIu2p+7FROqMS7FGrF0iWlBs89oc/MgbVaW5iTVGS127IiLh0sGpJp7f2UqNishtgERgchUA+nIvVgin5KGYLQeRU=
+	t=1761742346; cv=none; b=JXErBVvqa1HfyGbKChrMqJ6lpUgy29lzO9qr9mhxRjuHBcPQVyM3z8tpt+479GT/LLuX0TSiOXAQiUXR4quC7Ha5hTTYrTQm3qN35etRrkWsr45z0kXNcOXLWNScipvclHg7BUzOhHpZ9icdelhoFv/ul65iaWlucImGRcpOeoo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761741642; c=relaxed/simple;
-	bh=HLyHzsIaMwJmvkk7chpxGJkKDCM2GZFPnaxVFoPfG2w=;
+	s=arc-20240116; t=1761742346; c=relaxed/simple;
+	bh=WD9EMqtY5DL24YH0FouMSik/1xj4e29em6i20aKt1qc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SHb63Xe972lBk7AaMvASp5a6FqlTpJciz34jTIhMbWp3wH/fJoHf9c6j5fOwhoe1GSTe997UXV+tUKma+s8DHWCeZrX9Yx2HUtm4qrVoCY9mOxIYlo2x+4EEyw+cWvvmmUL8NFsTNZIIZitl5L4/mmjT3cHbV8oOBkkNHZKIwpo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XFBsqcdD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1031C16AAE
-	for <linux-pm@vger.kernel.org>; Wed, 29 Oct 2025 12:40:41 +0000 (UTC)
+	 To:Cc:Content-Type; b=FbcwyPLG+LwFLo8qfLkFWXJ1cB7rkccIvMmsqTPaZWACJJz8eJUoSneKyywNIg0LwiU5C66bIfr251pIXxEIf9TNrCysnb8+YZ8kNXI1Y3XVJkTiiG01je1/vNkOlEhgErt4gcV4hSQX4UByNXjLZ9fI+w8SDiVyN4XtnNsNA1Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IRnjwtmM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2EF4C4CEFD
+	for <linux-pm@vger.kernel.org>; Wed, 29 Oct 2025 12:52:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761741641;
-	bh=HLyHzsIaMwJmvkk7chpxGJkKDCM2GZFPnaxVFoPfG2w=;
+	s=k20201202; t=1761742346;
+	bh=WD9EMqtY5DL24YH0FouMSik/1xj4e29em6i20aKt1qc=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=XFBsqcdD446gGo2qwB9AHKHR60Jqc6qQ4Hzh98+WpBeieeEqlHG7PRVTXPleazCm9
-	 E1MRUiI5JZ9djk/L6Pz54PTGH3rA0ZQ8LojBjn4stJm3KwKjiW4Bw3/v72PdZ47lmj
-	 e4e1sZ7COVAAeJJ/dNZSqynpVXs32rQTYwVfdNOTqn7IeK2ybJAUwUzxFffTZ17uNc
-	 rqTnZqvhASn0m594tTjSbHN39u4jhdsXjTgRBRANZ++GYIC3xlv/Da7iqqj8dYjqwe
-	 n4OWldBPasDQnx9tw7o9nc9PCl1oUA/4JHIuRnrH8316NNsCKOWM3DIGMKVyID1ga7
-	 5Xf0u41Uv536Q==
-Received: by mail-oi1-f171.google.com with SMTP id 5614622812f47-443a58904efso2864589b6e.0
-        for <linux-pm@vger.kernel.org>; Wed, 29 Oct 2025 05:40:41 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVDkrgAJ0F5Cue0AcCRrirW0b7Yz/+Fc9xk6crk7cKpe0bDXYtOQRagwhgf9Q3mvFJb6LFQqBRtKg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YybRCEoS4h9C51l/eU/aj8Eq02yaSrByyy2mrsQja4XL+5y1lvN
-	n1K+V/RAoJBUNtR+RiUjarJ9zRIpI+zIjCdWZ/X0fVT2wuFg6Ww0FUX6+DaOmebjg5zcaTj4jN9
-	pV8VJvTQxmxKl3mk0tSiPDpFcyBZiCRk=
-X-Google-Smtp-Source: AGHT+IFLVKnwIIB4XqhE3o7qLBAL4OIdeCzcw/6i3Psjve4CcWWNJZTgMBA+WmTTq+UkAbwEf6DwDvPURJ99rfKYc2U=
-X-Received: by 2002:a05:6808:218c:b0:44d:a5ff:dfc5 with SMTP id
- 5614622812f47-44f7a54f9efmr1226879b6e.47.1761741641032; Wed, 29 Oct 2025
- 05:40:41 -0700 (PDT)
+	b=IRnjwtmMIpE4PFfid0J3Jju6xXLjnRMEOV/8gCobN/Y/nU0JBdjA+qc7M4/fq0AHw
+	 6kc7MqmBneT8KcOiT0xl6iF2qJffySGUolAWB+/XeQq+FpMrM+/Ah/gvioQA10g3Tc
+	 pvBo2ZVUAejDSoAFZsDaqvhasTh15WtbIKWaArhAmwPn15bswC7pa9zcYKkSeLOFXI
+	 /dD9Lq7MR90sEIUacprXdJtCyeFbo9sNpBU8+Hkd5Cz0gGoOSuqLXdZyzD2V97WZHr
+	 z0iRUxhm8N9/CJ17d4rv59Uoq9VBIPSXK/niDNlDNgue3uwYtkK4D/tiSkLLlwstaT
+	 AXQcN+z4F4B6Q==
+Received: by mail-oi1-f171.google.com with SMTP id 5614622812f47-44dbb57718bso1739666b6e.1
+        for <linux-pm@vger.kernel.org>; Wed, 29 Oct 2025 05:52:25 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWzaq4Sf1kN/xmy4ZhsvXjzr0NcvnlEq3CYgVouzsfaIX9SFxfbvbQPimhZSsXGFzJJfvgo28BiTQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzAfdpy1UQCR4m3PsHdci7EPj2utERxv6zEci9gIpKR7XI226Os
+	buHwlteIFn7is5ylbSPPgjK8ln09ps6RefKO0SS8qczsLlJfP4KcBKnGXZGs/7VpuHLs4N+IXgN
+	Fq+W0AaTDBczvk7sAuhsTc+xWG2H4cBU=
+X-Google-Smtp-Source: AGHT+IHz5MC1L5WHI4iPMvlWhwpNewNUXtmrTxAhrnnvCJh3KI8D8c4nRHpxFV467AmBxXAtJ87fFJEGmQYPasJKDAo=
+X-Received: by 2002:a05:6808:30a4:b0:44d:c03e:657a with SMTP id
+ 5614622812f47-44f7a4200dcmr1485327b6e.7.1761742345329; Wed, 29 Oct 2025
+ 05:52:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251028-fix-energy-v1-1-ab854fd6a97c@nxp.com> <40c2f7d9-23cf-4536-a1b1-0a55a0707830@arm.com>
-In-Reply-To: <40c2f7d9-23cf-4536-a1b1-0a55a0707830@arm.com>
+References: <20251017095338.4122406-1-luriwen@kylinos.cn>
+In-Reply-To: <20251017095338.4122406-1-luriwen@kylinos.cn>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 29 Oct 2025 13:40:29 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0hMSNfEVg-PUrzvPLO2oMFRJypgn26w7B8XqsD1_9KT4A@mail.gmail.com>
-X-Gm-Features: AWmQ_bkLCpdDmvZP6qSfrPZvMq_s6DscBj09Lsu1HyP9BjEkEcmTkBf7tEIC-I8
-Message-ID: <CAJZ5v0hMSNfEVg-PUrzvPLO2oMFRJypgn26w7B8XqsD1_9KT4A@mail.gmail.com>
-Subject: Re: [PATCH RFC] PM: EM: Add to em_pd_list only when no failure
-To: Lukasz Luba <lukasz.luba@arm.com>, Peng Fan <peng.fan@nxp.com>
-Cc: arm-scmi@vger.kernel.org, Sudeep Holla <sudeep.holla@arm.com>, 
-	Pavel Machek <pavel@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, 
-	Cristian Marussi <cristian.marussi@arm.com>, "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, 
+Date: Wed, 29 Oct 2025 13:52:13 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0h9hz51=wa0DvdyUti4GtQ0UaBorFfDRh_yisSpeYMMkA@mail.gmail.com>
+X-Gm-Features: AWmQ_bmi-iUWFPMuT0qtJBT3xKEJMGgyl9TUyxGmvwjtPJ8KHbKShjmD2BG_vEY
+Message-ID: <CAJZ5v0h9hz51=wa0DvdyUti4GtQ0UaBorFfDRh_yisSpeYMMkA@mail.gmail.com>
+Subject: Re: [PATCH v1] PM: suspend: Make pm_test delay interruptible by
+ wakeup events
+To: Riwen Lu <luriwen@kylinos.cn>
+Cc: rafael@kernel.org, pavel@kernel.org, lenb@kernel.org, 
 	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Len Brown <lenb@kernel.org>, Changwoo Min <changwoo@igalia.com>
+	xiongxin <xiongxin@kylinos.cn>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Oct 29, 2025 at 10:00=E2=80=AFAM Lukasz Luba <lukasz.luba@arm.com> =
-wrote:
+On Fri, Oct 17, 2025 at 11:53=E2=80=AFAM Riwen Lu <luriwen@kylinos.cn> wrot=
+e:
 >
+> Modify the suspend_test() function to make the test delay can be
+> interrupted by wakeup events.
 >
+> This improves the responsiveness of the system during suspend testing
+> when wakeup events occur, allowing the suspend process to proceed
+> without waiting for the full test delay to complte when wakeup events
+> are detected.
 >
-> On 10/28/25 14:23, Peng Fan wrote:
-> > When em_create_perf_table() returns failure, pd is freed, there dev->em=
-_pd
-> > is not valid. Then accessing dev->em_pd->node will trigger kernel panic
-> > in em_dev_register_pd_no_update(). So return early if 'ret' is non-zero=
-.
-> >
-> > Kernel dump:
-> > cpu cpu0: EM: invalid power: 0
-> > Unable to handle kernel NULL pointer dereference at virtual address
-> > 0000000000000008
-> > Mem abort info:
-> > pc : em_dev_register_pd_no_update+0xb4/0x79c
-> > lr : em_dev_register_pd_no_update+0x9c/0x79c
-> > Call trace:
-> >   em_dev_register_pd_no_update+0xb4/0x79c (P)
-> >   em_dev_register_perf_domain+0x18/0x58
-> >   scmi_cpufreq_register_em+0x84/0xb8
-> >   cpufreq_online+0x48c/0xb74
-> >   cpufreq_add_dev+0x80/0x98
-> >   subsys_interface_register+0x100/0x11c
-> >   cpufreq_register_driver+0x158/0x278
-> >   scmi_cpufreq_probe+0x1f8/0x2e0
-> >   scmi_dev_probe+0x28/0x3c
-> >   really_probe+0xbc/0x29c
-> >   __driver_probe_device+0x78/0x12c
-> >   driver_probe_device+0x3c/0x15c
-> >   __device_attach_driver+0xb8/0x134
-> >   bus_for_each_drv+0x84/0xe4
-> >
-> > Fixes: cbe5aeedecc7 ("PM: EM: Assign a unique ID when creating a perfor=
-mance domain")
-> > Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> > ---
-> >   kernel/power/energy_model.c | 5 ++++-
-> >   1 file changed, 4 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
-> > index e669d5057fca6da9612575a1c626474e60e7f7c4..11af9f64aa8276e47e0a5b2=
-d615b227368af5480 100644
-> > --- a/kernel/power/energy_model.c
-> > +++ b/kernel/power/energy_model.c
-> > @@ -693,13 +693,16 @@ int em_dev_register_pd_no_update(struct device *d=
-ev, unsigned int nr_states,
-> >
-> >   unlock:
-> >       mutex_unlock(&em_pd_mutex);
-> > +     if (ret)
-> > +             return ret;
-> >
-> >       mutex_lock(&em_pd_list_mutex);
-> >       list_add_tail(&dev->em_pd->node, &em_pd_list);
-> >       mutex_unlock(&em_pd_list_mutex);
-> >
-> >       em_notify_pd_created(dev->em_pd);
-> > -     return ret;
-> > +
-> > +     return 0;
-> >   }
-> >   EXPORT_SYMBOL_GPL(em_dev_register_pd_no_update);
-> >
-> >
-> > ---
-> > base-commit: f7d2388eeec24966fc4d5cf32d706f0514f29ac5
-> > change-id: 20251028-fix-energy-6b63b72ae9c6
-> >
-> > Best regards,
+> Additionally, using msleep() instead of mdelay() avoids potential soft
+> lockup "CPU stuck" issues when long test delays are configured.
 >
+> Signed-off-by: Riwen Lu <luriwen@kylinos.cn>
+> Signed-off-by: xiongxin <xiongxin@kylinos.cn>
+> ---
+>  kernel/power/suspend.c | 12 ++++++++++--
+>  1 file changed, 10 insertions(+), 2 deletions(-)
 >
-> Thank you for the patch!
->
-> Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+> diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
+> index 4bb4686c1c08..8f022d279635 100644
+> --- a/kernel/power/suspend.c
+> +++ b/kernel/power/suspend.c
+> @@ -344,10 +344,18 @@ MODULE_PARM_DESC(pm_test_delay,
+>  static int suspend_test(int level)
+>  {
+>  #ifdef CONFIG_PM_DEBUG
+> +       int i;
+> +
+>         if (pm_test_level =3D=3D level) {
+> -               pr_info("suspend debug: Waiting for %d second(s).\n",
 
-Applied, thanks!
+The message need not be changed, it is still valid in the absence of
+wakeup events.
+
+> +               for (i =3D 0; i < pm_test_delay; i++) {
+> +                       if (pm_wakeup_pending())
+> +                               break;
+> +                       msleep(1000);
+> +               }
+
+This can be rewritten as follows
+
+              for (i =3D 0; i < pm_test_delay && !pm_wakeup_pending(); i++)
+                      msleep(1000);
+
+> +               if (i =3D=3D pm_test_delay)
+> +                       pr_info("suspend debug: Already wait %d second(s)=
+.\n",
+
+And this isn't necessary.
+
+>                                 pm_test_delay);
+> -               mdelay(pm_test_delay * 1000);
+> +
+>                 return 1;
+>         }
+>  #endif /* !CONFIG_PM_DEBUG */
+> --
 
