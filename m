@@ -1,238 +1,158 @@
-Return-Path: <linux-pm+bounces-37069-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37070-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 32A4FC1D349
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 21:30:16 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D5BFCC1D379
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 21:35:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A85483BD80D
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 20:30:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E47AE1888186
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 20:36:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D440236334A;
-	Wed, 29 Oct 2025 20:30:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE5E2314D0A;
+	Wed, 29 Oct 2025 20:35:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PUcjl/s1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X1MmPlY5"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE28B363340
-	for <linux-pm@vger.kernel.org>; Wed, 29 Oct 2025 20:30:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9924E2773F0
+	for <linux-pm@vger.kernel.org>; Wed, 29 Oct 2025 20:35:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761769810; cv=none; b=fz6X2F5PmpX+WKGquYrvdTZeIESvsOa58v/Ixy3N+KsvQzb74xtv7Lz2lmjl7+B3mpk9C/GLSTMs/vuKCeh+rQ/GrbRP1+6SsAip2Ou/ZoEVVvAKJKJmRLmtIQxqoHkoNTBCZELtYaZuZzwE0tJ7ptPqeSHoXyqlwUzDn/g0VUk=
+	t=1761770141; cv=none; b=DOP1xeAetzbgDW99ULfF8EHJcM2jOxc+N8gKSeKrpzBpe1/mMHpdhVgqs51DBE6zOMVEk1/zDVfixJIC076NvyoDhZtTCJfK57bfh1aShyBs6to5MhDBt1bXr6QE8+GUc+pwlUqU4Dq5DJTnOfP0VfeyEtCLpIVOgUAbrlu9r+w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761769810; c=relaxed/simple;
-	bh=GOCTkUGLRQCwRuz7gY4C3QuQ/60lhuEdpy3XpjbsPDQ=;
+	s=arc-20240116; t=1761770141; c=relaxed/simple;
+	bh=lYD0muXFu9fggdu87VY6CF+5BTZQ2OUkE9xGyXbV8Vc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YSowIMDYprvTxzPVB2XRD+a//Lf8k4XL9bfFaoMFz7WInAl2kMz/pMzXAqrfgYX/vGQCxLVTBnFkf773Dk09LMjpnuoQKtZ2DQ+NxBjkXqYZDeIKhjNY2NPkkPEUQSfRhFkRxXFIW0z8MqmiQiML8RS45G83fYeZlv/MScedkyw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PUcjl/s1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 554F7C116D0
-	for <linux-pm@vger.kernel.org>; Wed, 29 Oct 2025 20:30:10 +0000 (UTC)
+	 To:Cc:Content-Type; b=XStLNmYJX0VsI9G3NWa1Bk4F5hv2vLiyypJJCjbJ63bJxIOPz0VchuM3ORAh/myVl1BgUIoqhV5A3Gjrlab8WSYmlai9ElXX7K5HMt9gypz5MXCH5jOeZt6w7bi3+RHorGR/AhXz8UWrdetpqWHErHzb1cpGD/osS8ygaWL/7MY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X1MmPlY5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3021AC116D0
+	for <linux-pm@vger.kernel.org>; Wed, 29 Oct 2025 20:35:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761769810;
-	bh=GOCTkUGLRQCwRuz7gY4C3QuQ/60lhuEdpy3XpjbsPDQ=;
+	s=k20201202; t=1761770141;
+	bh=lYD0muXFu9fggdu87VY6CF+5BTZQ2OUkE9xGyXbV8Vc=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=PUcjl/s14mLr6JgLAvYAvnZgA6MqBs8Iu7CBSaEqJBFaJx5B6bXJEoTEgxFWy7Oud
-	 7+cSqpzXRI8wiFSCkhg1+Kif0wI/OF7CPgiTw+kV0PD782paa60U0Aq3e2QXjeJWbI
-	 t7JdgaY6JEFIv3c5Qg/bNWHeiDjIWotZR1+uiUsl7hDC3cmiRnF7eRMajhYuJUlC/u
-	 Mwkc36rVb39Pqew94b7dYa+T4DadHlUrk33A2UF1TkD5/+tf8r3kALKb3T6NXCU6O7
-	 o3gfNe4ryokwsPaOU8zxy/qUQN3UGMrhLwolHNQIsyPUmR0s2QjZRAF1tdhrSikFd/
-	 /OuxUfSd3yPUQ==
-Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-65681d73936so143384eaf.3
-        for <linux-pm@vger.kernel.org>; Wed, 29 Oct 2025 13:30:10 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU5QUGetlH5EkE6E3KFL2x7czsqK9jWUmsQKxX40EkXyic1U2VNHp0L3t1rWY4CU7PRlbEjmtBSog==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxEU5uIEaCadi0iPIJvByhpt/kpgC08Oc9pj3BzWMueL9moCIb6
-	7l7JC4flz+wZSixRb5pZIkN6e+40Acrs9aDhkWWjW1GImr0fTXc/UvsUKg6KJ6FcxWRjONfxpvn
-	bNmo+g4FNgcUY/3xlwaoAhSvniDIRz+c=
-X-Google-Smtp-Source: AGHT+IHW5uDP7MsolaMgn8jVjNqIsXYfFdWF7n+vPR5mI6Oev9ZYaWWAWl38Nzs+ZKhKkYITN6nyOLzYlFHqUlA5Z1k=
-X-Received: by 2002:a05:6820:2207:b0:654:eb8d:a91 with SMTP id
- 006d021491bc7-65682418834mr281105eaf.8.1761769809367; Wed, 29 Oct 2025
- 13:30:09 -0700 (PDT)
+	b=X1MmPlY5o2VbkE0S75tTCpdthU5ybWfKqePEfp52gvDWiZFVzBWSJDzNm2vZYw5VP
+	 fysHPzqHX9gKxfKo1Y5L57s+p2kk+xRv938lhV2lnS1WbnX7Co5+vdcml4M7QjBz+D
+	 pfq0TetxgKjpKgFzYnwF+5sr/pPxfm6pnslZQFDKO+dbTLEYzT+Nu16Y4ALeK3W3pS
+	 mhM2hhqO3tKHrToNuQ+NvCfFUaMp709Ld+PkAznWX/2BgbZlHa4LSt3OLrAkGl8Eeq
+	 kuDW3m4SFVl9GtP8E9EFDI21LpoVPPmT0q7Eg5aL5qPNPz6Fm01MDJyq7Vo1ofBNLD
+	 G2sQtKnGCp2eA==
+Received: by mail-oi1-f170.google.com with SMTP id 5614622812f47-44f6c663452so186132b6e.0
+        for <linux-pm@vger.kernel.org>; Wed, 29 Oct 2025 13:35:41 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCW8FnzHilkcr6+dbC98sjZXIICeihTOOe4YgU+4RlXYiZ0zFe/J8SDDvzCrfXAlmx4l9CKNhEmEgw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzl1xDH+UomZDw+HAeKJ2KZDzXMNDckdAZVhpxScLGW1Us85BCD
+	otKX6SEoHB8tSsJG+xiv3J1a1IjF900y/uUbpW1ZY/Td5s5Ge4oeCa/fRETaMiRSw/hi5cHo8rE
+	N2KCWxtZO0YpgeFExH1LJ2OQtfNyTIFs=
+X-Google-Smtp-Source: AGHT+IFbVxi7LbsX5YUUfQ1aT5pnE/KDuR8YytDX/7ChhJDUz+pyYC60KiLVJJhi8rQ2OM8j3vjPwGLR7TACFHK8M9E=
+X-Received: by 2002:a05:6808:2e4e:b0:437:eb1d:cdde with SMTP id
+ 5614622812f47-44f89e61cf1mr307471b6e.33.1761770140410; Wed, 29 Oct 2025
+ 13:35:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251028053136.692462-1-ankur.a.arora@oracle.com>
- <20251028053136.692462-8-ankur.a.arora@oracle.com> <CAJZ5v0hSvzHfsE4nrEW-Ey0dnJ+m=dSU-f1RywGNU0Xyi3jXtQ@mail.gmail.com>
- <87ms5ajp4c.fsf@oracle.com> <CAJZ5v0hQ7G9jvOv9VtRmsCKahBpUcPJMMOe07k_2mqsvggWcWg@mail.gmail.com>
- <874irhjzcf.fsf@oracle.com>
-In-Reply-To: <874irhjzcf.fsf@oracle.com>
+References: <20251017233907.2305303-1-wusamuel@google.com> <CAJZ5v0g37NNj3inHcrZG8NHeTAGAncLAY7t9Yj3bTAv7GgAQJQ@mail.gmail.com>
+ <CAGETcx8ZL3jAwFRxO1B8SFSWmC2jCitc9_61hBG-N2AvzRQv7w@mail.gmail.com>
+ <CAJZ5v0jiLzMvwBfcXKJEOMqa_U=6OeWymnBCBdxYfcgU+7P1Aw@mail.gmail.com>
+ <CAJZ5v0hpG19Tj9qmTkXQ_6N+wTSBD4Lzx9UvFwTh3WtUagCOGQ@mail.gmail.com> <CAG2KctqoOPg4E6dN0UCjkTF8w0hC7FUwfYOWkw+i37G8OxcttQ@mail.gmail.com>
+In-Reply-To: <CAG2KctqoOPg4E6dN0UCjkTF8w0hC7FUwfYOWkw+i37G8OxcttQ@mail.gmail.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 29 Oct 2025 21:29:58 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0i5-8eO6T_-Sr-K=3Up89+_qtJW7NSjDknJSkk3Nhu8BQ@mail.gmail.com>
-X-Gm-Features: AWmQ_bk-kPvfwcU7JMvzIW3LgFhb5fas4TUCYzr6Ntlxek5O_3tqCEg-J-2w8JI
-Message-ID: <CAJZ5v0i5-8eO6T_-Sr-K=3Up89+_qtJW7NSjDknJSkk3Nhu8BQ@mail.gmail.com>
-Subject: Re: [RESEND PATCH v7 7/7] cpuidle/poll_state: Poll via smp_cond_load_relaxed_timeout()
-To: Ankur Arora <ankur.a.arora@oracle.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-pm@vger.kernel.org, bpf@vger.kernel.org, arnd@arndb.de, 
-	catalin.marinas@arm.com, will@kernel.org, peterz@infradead.org, 
-	akpm@linux-foundation.org, mark.rutland@arm.com, harisokn@amazon.com, 
-	cl@gentwo.org, ast@kernel.org, daniel.lezcano@linaro.org, memxor@gmail.com, 
-	zhenglifeng1@huawei.com, xueshuai@linux.alibaba.com, 
-	joao.m.martins@oracle.com, boris.ostrovsky@oracle.com, konrad.wilk@oracle.com
+Date: Wed, 29 Oct 2025 21:35:28 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0i_is4JZFGZcZhc3oiCzeUygKziPEtw5MwF5aZZxdPdvA@mail.gmail.com>
+X-Gm-Features: AWmQ_blOrHFIHQp7OefqbbO1cKs3vHtaUIUrw5h3o2TrZ7nKp3yKIFOibyMnnKE
+Message-ID: <CAJZ5v0i_is4JZFGZcZhc3oiCzeUygKziPEtw5MwF5aZZxdPdvA@mail.gmail.com>
+Subject: Re: [PATCH v5] PM: Support aborting sleep during filesystem sync
+To: Samuel Wu <wusamuel@google.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Saravana Kannan <saravanak@google.com>, 
+	Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, tuhaowen@uniontech.com, 
+	kernel-team@android.com, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Oct 29, 2025 at 8:13=E2=80=AFPM Ankur Arora <ankur.a.arora@oracle.c=
-om> wrote:
+On Wed, Oct 29, 2025 at 8:13=E2=80=AFPM Samuel Wu <wusamuel@google.com> wro=
+te:
 >
->
-> Rafael J. Wysocki <rafael@kernel.org> writes:
->
-> > On Wed, Oct 29, 2025 at 5:42=E2=80=AFAM Ankur Arora <ankur.a.arora@orac=
-le.com> wrote:
-> >>
-> >>
-> >> Rafael J. Wysocki <rafael@kernel.org> writes:
-> >>
-> >> > On Tue, Oct 28, 2025 at 6:32=E2=80=AFAM Ankur Arora <ankur.a.arora@o=
-racle.com> wrote:
-> >> >>
-> >> >> The inner loop in poll_idle() polls over the thread_info flags,
-> >> >> waiting to see if the thread has TIF_NEED_RESCHED set. The loop
-> >> >> exits once the condition is met, or if the poll time limit has
-> >> >> been exceeded.
-> >> >>
-> >> >> To minimize the number of instructions executed in each iteration,
-> >> >> the time check is done only intermittently (once every
-> >> >> POLL_IDLE_RELAX_COUNT iterations). In addition, each loop iteration
-> >> >> executes cpu_relax() which on certain platforms provides a hint to
-> >> >> the pipeline that the loop busy-waits, allowing the processor to
-> >> >> reduce power consumption.
-> >> >>
-> >> >> This is close to what smp_cond_load_relaxed_timeout() provides. So,
-> >> >> restructure the loop and fold the loop condition and the timeout ch=
-eck
-> >> >> in smp_cond_load_relaxed_timeout().
-> >> >
-> >> > Well, it is close, but is it close enough?
-> >>
-> >> I guess that's the question.
-> >>
-> >> >> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> >> >> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> >> >> Signed-off-by: Ankur Arora <ankur.a.arora@oracle.com>
-> >> >> ---
-> >> >>  drivers/cpuidle/poll_state.c | 29 ++++++++---------------------
-> >> >>  1 file changed, 8 insertions(+), 21 deletions(-)
-> >> >>
-> >> >> diff --git a/drivers/cpuidle/poll_state.c b/drivers/cpuidle/poll_st=
-ate.c
-> >> >> index 9b6d90a72601..dc7f4b424fec 100644
-> >> >> --- a/drivers/cpuidle/poll_state.c
-> >> >> +++ b/drivers/cpuidle/poll_state.c
-> >> >> @@ -8,35 +8,22 @@
-> >> >>  #include <linux/sched/clock.h>
-> >> >>  #include <linux/sched/idle.h>
-> >> >>
-> >> >> -#define POLL_IDLE_RELAX_COUNT  200
-> >> >> -
-> >> >>  static int __cpuidle poll_idle(struct cpuidle_device *dev,
-> >> >>                                struct cpuidle_driver *drv, int inde=
-x)
-> >> >>  {
-> >> >> -       u64 time_start;
-> >> >> -
-> >> >> -       time_start =3D local_clock_noinstr();
-> >> >> +       u64 time_end;
-> >> >> +       u32 flags =3D 0;
-> >> >>
-> >> >>         dev->poll_time_limit =3D false;
-> >> >>
-> >> >> +       time_end =3D local_clock_noinstr() + cpuidle_poll_time(drv,=
- dev);
-> >> >
-> >> > Is there any particular reason for doing this unconditionally?  If
-> >> > not, then it looks like an arbitrary unrelated change to me.
-> >>
-> >> Agreed. Will fix.
-> >>
-> >> >> +
-> >> >>         raw_local_irq_enable();
-> >> >>         if (!current_set_polling_and_test()) {
-> >> >> -               unsigned int loop_count =3D 0;
-> >> >> -               u64 limit;
-> >> >> -
-> >> >> -               limit =3D cpuidle_poll_time(drv, dev);
-> >> >> -
-> >> >> -               while (!need_resched()) {
-> >> >> -                       cpu_relax();
-> >> >> -                       if (loop_count++ < POLL_IDLE_RELAX_COUNT)
-> >> >> -                               continue;
-> >> >> -
-> >> >> -                       loop_count =3D 0;
-> >> >> -                       if (local_clock_noinstr() - time_start > li=
-mit) {
-> >> >> -                               dev->poll_time_limit =3D true;
-> >> >> -                               break;
-> >> >> -                       }
-> >> >> -               }
-> >> >> +               flags =3D smp_cond_load_relaxed_timeout(&current_th=
-read_info()->flags,
-> >> >> +                                                     (VAL & _TIF_N=
-EED_RESCHED),
-> >> >> +                                                     (local_clock_=
-noinstr() >=3D time_end));
-> >> >
-> >> > So my understanding of this is that it reduces duplication with some
-> >> > other places doing similar things.  Fair enough.
-> >> >
-> >> > However, since there is "timeout" in the name, I'd expect it to take
-> >> > the timeout as an argument.
-> >>
-> >> The early versions did have a timeout but that complicated the
-> >> implementation significantly. And the current users poll_idle(),
-> >> rqspinlock don't need a precise timeout.
-> >>
-> >> smp_cond_load_relaxed_timed(), smp_cond_load_relaxed_timecheck()?
-> >>
-> >> The problem with all suffixes I can think of is that it makes the
-> >> interface itself nonobvious.
-> >>
-> >> Possibly something with the sense of bail out might work.
+> On Wed, Oct 29, 2025 at 6:23=E2=80=AFAM Rafael J. Wysocki <rafael@kernel.=
+org> wrote:
 > >
-> > It basically has two conditions, one of which is checked in every step
-> > of the internal loop and the other one is checked every
-> > SMP_TIMEOUT_POLL_COUNT steps of it.  That isn't particularly
-> > straightforward IMV.
+> > On Fri, Oct 24, 2025 at 10:37=E2=80=AFAM Rafael J. Wysocki <rafael@kern=
+el.org> wrote:
+> > >
+> > > On Fri, Oct 24, 2025 at 12:47=E2=80=AFAM Saravana Kannan <saravanak@g=
+oogle.com> wrote:
+> > > >
+> > > > On Thu, Oct 23, 2025 at 12:43=E2=80=AFPM Rafael J. Wysocki <rafael@=
+kernel.org> wrote:
+> > > > >
+> > > > > On Sat, Oct 18, 2025 at 1:39=E2=80=AFAM Samuel Wu <wusamuel@googl=
+e.com> wrote:
+> > > > > >
+> >
+> > [cut]
+> >
+> > > > >
+> > > > > If I'm not mistaken, the mechanism by which one more sync is star=
+ted
+> > > > > right after completing the previous one (that was in progress whe=
+n
+> > > > > suspend started) can be designed differently.
+> > > > >
+> > > > > 1. Use a dedicated ordered workqueue for the sync work items.
+> > > > > 2. Use a counter instead of the two boolean vars for synchronizat=
+ion.
+> > > > > 3. In pm_sleep_fs_sync(), if the counter is less than 2, incremen=
+t the
+> > > > > counter and queue up a sync work item.
+> > > > > 4. In sync_filesystems_fn(), decrement the counter.
+> > > >
+> > > > The problem with this is that we can't reuse the same work item. We=
+'ll
+> > > > have to allocate one each time. Otherwise, we'll be queuing one tha=
+t's
+> > > > already queued. Right?
+> > >
+> > > Of course you can't queue up an already queued work, but there may be
+> > > two of them and then in 3 above use work0 when the counter is 0 and
+> > > use work1 when the counter is 1.  No big deal.
+> >
+> > Moreover, sync_filesystems_fn() doesn't use its work argument, so the
+> > work can be requeued as soon as it is not pending.
+> >
+> > Now, when it is not pending, it has not been queued yet or the work
+> > function is running, which is exactly when you want it to be queued:
+> >
+> > 1. Use a dedicated ordered workqueue for the sync work items.
+> > 2. Use a counter instead of the two boolean vars for synchronization.
+> > 3. In pm_sleep_fs_sync(), if the work is not pending, queue it up and
+> > increment the counter.
+> > 4. In sync_filesystems_fn(), decrement the counter (after carrying out
+> > the fs sync) and complete the completion if the counter is 0.
 >
-> Right. And that's similar to what poll_idle().
-
-My point is that the macro in its current form is not particularly
-straightforward.
-
-The code in poll_idle() does what it needs to do.
-
-> > Honestly, I prefer the existing code.  It is much easier to follow and
-> > I don't see why the new code would be better.  Sorry.
+> Thank you for the thoughtful feedback Rafael.
 >
-> I don't think there's any problem with the current code. However, I'd lik=
-e
-> to add support for poll_idle() on arm64 (and maybe other platforms) where
-> instead of spinning in a cpu_relax() loop, you wait on a cacheline.
-
-Well, there is MWAIT on x86, but it is not used here.  It just takes
-too much time to wake up from.  There are "fast" variants of that too,
-but they have been designed with user space in mind, so somewhat
-cumbersome for kernel use.
-
-> And that's what using something like smp_cond_load_relaxed_timeout()
-> would enable.
+> I agree with these points and will incorporate it in v6; this approach
+> seems more elegant.
 >
-> Something like the series here:
->   https://lore.kernel.org/lkml/87wmaljd81.fsf@oracle.com/
+> > Of course, the above requires locking, but I don't think that the lock
+> > needs to be spinlock.  A mutex would work just as well AFAICS.
+> >
+> > Thanks!
 >
-> (Sorry, should have mentioned this in the commit message.)
+> I'm still thinking this needs to be spin_lock_irqsave(), since
+> pm_stop_waiting_for_fs_sync() is called in an interrupt context and
+> needs the lock such that the abort signals don't get lost.
 
-I'm not sure how you can combine that with a proper timeout.  The
-timeout is needed because you want to break out of this when it starts
-to take too much time, so you can go back to the idle loop and maybe
-select a better idle state.
+OK, I see.  __pm_stay_awake() will call it under a spinlock, for one exampl=
+e.
+
+Yes, you need a spinlock, but in thread context it is sufficient to
+use spin_lock_irq() (no need to save the flags).
 
