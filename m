@@ -1,162 +1,244 @@
-Return-Path: <linux-pm+bounces-37035-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37036-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3010AC1B05F
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 14:58:20 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C2BDC1B20F
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 15:16:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 9E1295A8E26
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 13:43:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C2FF3664CE4
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 13:55:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E4C430C609;
-	Wed, 29 Oct 2025 13:33:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1FAA3590BD;
+	Wed, 29 Oct 2025 13:43:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ou1VjCWO"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="LASV/cyg"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 558EA302161;
-	Wed, 29 Oct 2025 13:33:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761744826; cv=none; b=BBspC1ngBHAxsZ79Djil4H/CRYgMOf2diltm3E9skpwMVN+8qnzQTXO+nOTt9Eime1pxi/E5uOSb2cJw/VdCDofYoNIo125zZdM1j0ddHaN6bdAa8ZpTC3RoEi6CDwvgJhTyO02+B2yTgu8kddrY4drLEVCPqUCi5BCzN2icuIY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761744826; c=relaxed/simple;
-	bh=ZHmNvpRE/27NOb0eEnH0tbeTut2ItrA5+TdUUFpGM7k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=blT7SeGxknvoDOgCUWRw1MXmnYjAQPPeXzgTUU0nXX4/0hLbguuFLh/Wn56SI6jAXCRakPuTwh4HzbmDMEWQGe0IQtAtoiTcrvJ1KGr5Kj2hq9JooXH2vKIEOEi2ldh679ICRalEnqSE5AvxfCdykTNe1wwqAIZel9coKGDlFI8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ou1VjCWO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 078FAC4CEFF;
-	Wed, 29 Oct 2025 13:33:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761744825;
-	bh=ZHmNvpRE/27NOb0eEnH0tbeTut2ItrA5+TdUUFpGM7k=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ou1VjCWOsp1l3s9vFI6F5hFO11knjGvnOej6wvPkNlcz5O9trZBuWS6cxW8obzWkb
-	 bMx37vdpUgjTmxB1gh1eVoiWHzy9/LiGlSL5LwAwAnGCSci6axkvgrSmx3KVIvRbxQ
-	 IYMNOrwm9nD8i7eRIW/WLbIs7RFi0pynXPTtFmRhO0WpmqOi9pwHNWRfUkMcm59dDr
-	 1DE6Df080zlVN+aRrOSPvvPx/0CyqeYw/EleSE9D7UKDMpMfH4tb3kBC/qRvroBooU
-	 LcYu8vzysBKt0so2mGg1SLT7NK+fR2PoP9EpZlRpeFx4hWkqjS/6m859KMB9Mj428o
-	 8GPcdUi8cgYWQ==
-Message-ID: <b81502cc-d91d-4801-ad72-034c20b1c72a@kernel.org>
-Date: Wed, 29 Oct 2025 14:33:39 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3A763590B6;
+	Wed, 29 Oct 2025 13:43:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1761745402; cv=pass; b=s5SEqGEAiGd8iNq+fcZ71NQdk5+sjQVBXBQB9G0FmrUuZuaSQBov5KNExnS/0+cG72sQOb09kPoAbyip3tcsju4VZDWGdBkh/V3XYcOGablVmR/OdtF6GZuVxJdUMKrWw9lGREfeN8H5RMo+Oj2z4+xjutPXn6WQ5pGfOWWvoAc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1761745402; c=relaxed/simple;
+	bh=RY7vIE6z4lot2dk7TULpGj0i+kPxWFQ2MUV3o/PNhJM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=dQoPYN5C23f4cuLvcCfBbB0wm1np5wf/5D8rKfhNVW1lCEGaQ6m0nh/gp56jN+Dj6YVkuY55OSf3oVTb8Gr0m2revyqKwEmz9OmaWhJ2XBv8Vs8bShODsV5NNVCRnunChKqvF0YClacQr9wvMuTfD/3/M4cHGdsLc5Ok7htAxek=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=LASV/cyg; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1761745368; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=h81/onpIhYuOCsTcPr2Gb7oyfd6fwWRgmZfIiuKae/fi7j/hjGCuuYrBGarMhSDAKCfwA28rnso+zZQMxPUmCi6eIhjrL03Y3K4dB+UxWoUm7LhCNUinoLZEJ2QIkJvEq4SBnxRnP7Nu+W4141TMnPAWTtvWbDt1A9jK7ILPCTY=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1761745368; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=cCR0jfooCQaKWozmb+jsMis00qYqqul+/rxMzKmTmmU=; 
+	b=QWwS5nxkTyBuPq20xvTojtXG88OqLd9AyJQQg+Dt7irE8knaTFpeqxTaQ8sQOcNAXK0X96MuqooGU2bzrb4/SAiTu5E2Jy7Qn2rU2Wntkq1nx2eSaJJtgyAYHXe6XmJbt8HnlVZzDqcObtE/yYanhq7g/0y6sfQHzOCsvdkgzbo=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
+	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1761745368;
+	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
+	bh=cCR0jfooCQaKWozmb+jsMis00qYqqul+/rxMzKmTmmU=;
+	b=LASV/cygFhk1DIFxrCeAprpl0JheXlhFKTAMzj7BjyJr2bUJ4pkbvBMfygwZCfjw
+	/9w/C72PZe2STjMJRGAydRx3ki3/vFUMx20PWlv1lI9zldmnqRU7v5aAGwm95ik7yH2
+	IRpnEbpvBjbCdCs5vNnowjfeoKcb/hJFBLXS8Q7U=
+Received: by mx.zohomail.com with SMTPS id 1761745366137989.9389961258449;
+	Wed, 29 Oct 2025 06:42:46 -0700 (PDT)
+From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+To: Liviu Dudau <liviu.dudau@arm.com>, Rob Herring <robh@kernel.org>
+Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ Boris Brezillon <boris.brezillon@collabora.com>,
+ Jassi Brar <jassisinghbrar@gmail.com>, Chia-I Wu <olvaffe@gmail.com>,
+ Chen-Yu Tsai <wenst@chromium.org>, Steven Price <steven.price@arm.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+ Matthias Brugger <matthias.bgg@gmail.com>, Kees Cook <kees@kernel.org>,
+ "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+ Ulf Hansson <ulf.hansson@linaro.org>, kernel@collabora.com,
+ dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-mediatek@lists.infradead.org, linux-hardening@vger.kernel.org,
+ linux-pm@vger.kernel.org
+Subject:
+ Re: [PATCH v8 1/5] dt-bindings: gpu: mali-valhall-csf: add
+ mediatek,mt8196-mali variant
+Date: Wed, 29 Oct 2025 14:42:35 +0100
+Message-ID: <3127655.ElGaqSPkdT@workhorse>
+In-Reply-To: <aQFoKoWIlf7xPzZX@e110455-lin.cambridge.arm.com>
+References:
+ <20251017-mt8196-gpufreq-v8-0-98fc1cc566a1@collabora.com>
+ <6599426.lOV4Wx5bFT@workhorse>
+ <aQFoKoWIlf7xPzZX@e110455-lin.cambridge.arm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 02/15] dt-bindings: Add trickle-charge upper limit
-To: Linus Walleij <linus.walleij@linaro.org>,
- Matti Vaittinen <mazziesaccount@gmail.com>
-Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
- Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Sebastian Reichel <sre@kernel.org>,
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
- Andreas Kemnade <andreas@kemnade.info>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-rtc@vger.kernel.org
-References: <cover.1761564043.git.mazziesaccount@gmail.com>
- <b13b733e7e0fba05652f49f727412fed9e0ceb02.1761564043.git.mazziesaccount@gmail.com>
- <20251029-adamant-mamba-of-patience-cddb65@kuoka>
- <a81fba66-adf0-440f-96e1-bf3a83d504d8@gmail.com>
- <CACRpkdZcszMZEU2Wzx8kaoR46ytziqtedmCrsjEL3QOrDtDgzg@mail.gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <CACRpkdZcszMZEU2Wzx8kaoR46ytziqtedmCrsjEL3QOrDtDgzg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="utf-8"
 
-On 29/10/2025 14:26, Linus Walleij wrote:
-> On Wed, Oct 29, 2025 at 7:22 AM Matti Vaittinen
-> <mazziesaccount@gmail.com> wrote:
+On Wednesday, 29 October 2025 02:04:42 Central European Standard Time Liviu Dudau wrote:
+> On Tue, Oct 28, 2025 at 09:51:43PM +0100, Nicolas Frattaroli wrote:
+> > On Tuesday, 28 October 2025 18:12:35 Central European Standard Time Liviu Dudau wrote:
+> > > On Fri, Oct 17, 2025 at 05:31:08PM +0200, Nicolas Frattaroli wrote:
+> > > > The Mali-based GPU on the MediaTek MT8196 SoC uses a separate MCU to
+> > > > control the power and frequency of the GPU. This is modelled as a power
+> > > > domain and clock provider.
+> > > > 
+> > > > It lets us omit the OPP tables from the device tree, as those can now be
+> > > > enumerated at runtime from the MCU.
+> > > > 
+> > > > Add the necessary schema logic to handle what this SoC expects in terms
+> > > > of clocks and power-domains.
+> > > > 
+> > > > Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+> > > > Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> > > > Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+> > > > ---
+> > > >  .../bindings/gpu/arm,mali-valhall-csf.yaml         | 37 +++++++++++++++++++++-
+> > > >  1 file changed, 36 insertions(+), 1 deletion(-)
+> > > > 
+> > > > diff --git a/Documentation/devicetree/bindings/gpu/arm,mali-valhall-csf.yaml b/Documentation/devicetree/bindings/gpu/arm,mali-valhall-csf.yaml
+> > > > index 613040fdb444..860691ce985e 100644
+> > > > --- a/Documentation/devicetree/bindings/gpu/arm,mali-valhall-csf.yaml
+> > > > +++ b/Documentation/devicetree/bindings/gpu/arm,mali-valhall-csf.yaml
+> > > > @@ -45,7 +45,9 @@ properties:
+> > > >      minItems: 1
+> > > >      items:
+> > > >        - const: core
+> > > > -      - const: coregroup
+> > > > +      - enum:
+> > > > +          - coregroup
+> > > > +          - stacks
+> > > >        - const: stacks
+> > > 
+> > > I'm not sure how to parse this part of the change. We're overwriting the property
+> > > for mt8196-mali anyway so why do we need this? And if we do, should 'stacks'
+> > > still remain as a const?
+> > 
+> > The properties section outside of the if branches outside here
+> > specifies a pattern of properties that matches for all devices.
+> > 
+> > In this case, I changed it so that the second clock-names item
+> > may either be "coregroup" or "stacks".
 > 
->>> But I believe this is wrong. Trickle charging does not switch to
->>> anything more, there is no fast charging after trickle. You have some
->>> sort of pre-pre-charging, which is just pre-charging.
->>
->> There is trickle, pre and fast-charge phases. Furthermore, the
->> fast-charge is further divided to CC and CV. Finally, if my memory
->> serves me well, Linus W did explain me that some chargers use
->> 'trickle-charging' as a _last_ charging phase for a full battery. Thus
->> the term 'trickle-charging' is slightly confusing - but it is already
->> used by the existing bindings...
->>
->> https://lore.kernel.org/all/20211116001755.2132036-1-linus.walleij@linaro.org/
-> 
-> I think we need to refer to a textbook or IEEE articles to get this
-> terminology right.
-> 
-> As you say it appears "trickle-charging" is ambiguous.
-> 
-> Maybe what Krzysztof suggest to use: "pre-pre-charging" or
-> "empty-battery-charging" or something like this is needed.
-> 
-> But we really need a trustworthy academic source here.
+> Why would we want to do that for non-MT8196 devices? It doesn't make sense to me.
+> The overwrite in the if branch should be enough to give you want you want (i.e.
+> core followed by stacks and only that).
 
-Trickle charging is accurate for both cases - pre-pre and top-off -
-because it just describes very small current. That's why I found it in
-many TI datasheets - mostly for Li-Ion batteries describing Matti's
-case, but also in at least one case for Ni-Mh describing top-off (or
-maintenance).
+I built my understanding of why on the same reason of why we specify
+a minItems of 1 but require it to be 3 in the if branch of the only
+other compatible (rk3588): it describes what may be found in those
+properties, not what is required by the specific compatible preceding
+the generic valhall compatible. arm,mali-valhall-csf is currently
+not described as a compatible that's allowed to appear stand-alone
+without some other compatible before it to specify further which SoC
+it's on, so it really just is whatever RK3588 needs vs. whatever
+MT8196 needs at the moment.
 
-I am fine with the naming, but I want to be clear that this property
-will describe trickle only in case of pre-pre charging. Termination
-voltage simply does not fit the top-off/maintenance mode.
+Arguably though, there's no functional difference here, and I'm not
+aware on any rules regarding this. My change may be problematic
+however, because of the whole double stacks thing.
 
-Best regards,
-Krzysztof
+> > Yes, the third "stacks"
+> > remains, though if you wanted to be extra precise you could
+> > then specify in the non-MT8196 cases that we should not have
+> > stacks followed by stacks, but I'd wager some checker for
+> > duplicate names may already catch that.
+> > 
+> > However, I don't think it's a big enough deal to reroll this
+> > series again.
+> 
+> I'm not asking you to re-roll the series but if you agree to drop that
+> part I can make the edit when merging it.
+
+If the other DT maintainers (especially Rob who gave it his R-b)
+are okay with dropping it, then yes please do.
+
+Kind regards,
+Nicolas Frattaroli
+
+> 
+> Best regards,
+> Liviu
+> 
+> > 
+> > Kind regards,
+> > Nicolas Frattaroli
+> > 
+> > > 
+> > > Best regards,
+> > > Liviu
+> > > 
+> > > >  
+> > > >    mali-supply: true
+> > > > @@ -110,6 +112,27 @@ allOf:
+> > > >          power-domain-names: false
+> > > >        required:
+> > > >          - mali-supply
+> > > > +  - if:
+> > > > +      properties:
+> > > > +        compatible:
+> > > > +          contains:
+> > > > +            const: mediatek,mt8196-mali
+> > > > +    then:
+> > > > +      properties:
+> > > > +        mali-supply: false
+> > > > +        sram-supply: false
+> > > > +        operating-points-v2: false
+> > > > +        power-domains:
+> > > > +          maxItems: 1
+> > > > +        power-domain-names: false
+> > > > +        clocks:
+> > > > +          maxItems: 2
+> > > > +        clock-names:
+> > > > +          items:
+> > > > +            - const: core
+> > > > +            - const: stacks
+> > > > +      required:
+> > > > +        - power-domains
+> > > >  
+> > > >  examples:
+> > > >    - |
+> > > > @@ -145,5 +168,17 @@ examples:
+> > > >              };
+> > > >          };
+> > > >      };
+> > > > +  - |
+> > > > +    gpu@48000000 {
+> > > > +        compatible = "mediatek,mt8196-mali", "arm,mali-valhall-csf";
+> > > > +        reg = <0x48000000 0x480000>;
+> > > > +        clocks = <&gpufreq 0>, <&gpufreq 1>;
+> > > > +        clock-names = "core", "stacks";
+> > > > +        interrupts = <GIC_SPI 606 IRQ_TYPE_LEVEL_HIGH 0>,
+> > > > +                     <GIC_SPI 605 IRQ_TYPE_LEVEL_HIGH 0>,
+> > > > +                     <GIC_SPI 604 IRQ_TYPE_LEVEL_HIGH 0>;
+> > > > +        interrupt-names = "job", "mmu", "gpu";
+> > > > +        power-domains = <&gpufreq>;
+> > > > +    };
+> > > >  
+> > > >  ...
+> > > > 
+> > > 
+> > > 
+> > 
+> > 
+> > 
+> > 
+> 
+> 
+
+
+
+
 
