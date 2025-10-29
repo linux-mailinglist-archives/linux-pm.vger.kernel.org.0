@@ -1,123 +1,199 @@
-Return-Path: <linux-pm+bounces-37063-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37064-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A632C1CCF1
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 19:41:12 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FA13C1CD52
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 19:54:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DE5CA402EF0
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 18:41:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9E8F7188E0E1
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 18:53:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 092E33563E2;
-	Wed, 29 Oct 2025 18:41:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEF805478D;
+	Wed, 29 Oct 2025 18:53:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gmFM8ywu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="om5GOMGN"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8B6B350299
-	for <linux-pm@vger.kernel.org>; Wed, 29 Oct 2025 18:41:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5FDD35771A
+	for <linux-pm@vger.kernel.org>; Wed, 29 Oct 2025 18:53:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761763267; cv=none; b=b9Z1int+kilKb461Zuo4Mh0THEjH4eA7c3BF341XM4WD0iX8JcVOW+/z3iNyoyo7gk2+Ikr/m5sq6nuph0uW4P4IwNt+MBBdIbP/WQ0oJ5Z95mXXfjOW4h6vy1QOWoFnt5XEaxrz7kx488MZXHvjha61EB5Aovkepu2xwPqfAPg=
+	t=1761763995; cv=none; b=DMjcp2fbWImIie0pY4MVpZyAJdIcoWMPqiRd2dmnqnvNDaoSEgjVBzwIbXHBBx3PRFxrL6sn/Peql29667jEkzVtpWnmyH4aSeJPnK3RTBq+2UyD7k/+bh1t3iXq///Abs3i+YUkFJSbj5Dpiwn1G/MgD5UHmGmgptct6uhZig0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761763267; c=relaxed/simple;
-	bh=GS1Zphv+EbG7XlBMw/aHGT00IIeC7ZPxd+Ab0bzQ7+M=;
+	s=arc-20240116; t=1761763995; c=relaxed/simple;
+	bh=P1fpBKLpz3NhAHV8OSXmDOMSQKs45JoWLRgxhe1ZXi0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=I77KCmVLYC16DiovQKAvc8f4SaD4tq8ALp9f5237XBOEnwWrD6Ys+c7rQaXQRXynZjDeWqmux2K/r9rqX6G1MQKEOoscxWdirdKGz1yA58xfeMLLMeApnWuCbFhyPPqRpueOyJKCOZ6Jsv94qyrXUwqzg69ls7vUD9O73dGSJL8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gmFM8ywu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54625C4CEF7
-	for <linux-pm@vger.kernel.org>; Wed, 29 Oct 2025 18:41:07 +0000 (UTC)
+	 To:Cc:Content-Type; b=pNuMRP3/9nlH6rrn+5AbfJI6n0upBe4soL9D0PXcy7YreZ5bUef6Fhy9bOcXd7tgdbF82MJnMatstKOMpsQQZunuvml38sfgioe3rkxgXaiduTf+23W7Yz6hs/chLcmXi1jhlpvm7I1Wuhn7ZEXfVu52LVPZezt+hUvHxn+787Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=om5GOMGN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C30AC2BCB1
+	for <linux-pm@vger.kernel.org>; Wed, 29 Oct 2025 18:53:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761763267;
-	bh=GS1Zphv+EbG7XlBMw/aHGT00IIeC7ZPxd+Ab0bzQ7+M=;
+	s=k20201202; t=1761763995;
+	bh=P1fpBKLpz3NhAHV8OSXmDOMSQKs45JoWLRgxhe1ZXi0=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=gmFM8ywuYVY5ZgYtZzSvmZ+feVT4U8RJMpmL6QsJvvuUno4k19FZJuf7g0016Q4cW
-	 8tc4eS0Cx4B0dlvOgFRzV2u2MghTqMBhCHu0R/gr4ABTL8J1VT+dDGxMUj/3dt3G3D
-	 b0puBkiMS1gGgwpyjOE3H1LD26aPjScEJ/FgiptPAkw0t4fyzjBcUJaE9Ho/e7Ir5+
-	 H38vOVMQDPNR9zaZaxZLL36DtV/JC2KVLL1zLg6u9TWlBQHBww6jpBP98qEhXliFTk
-	 2Fbfe1XqgBGU2ovyZ3ryeEBsIIXw8FuIydpff6umocoNzYS1hInW0Rt3ooE5kCdlSA
-	 ERbar3LRQ/Kjg==
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-3d5bb03d5c2so204163fac.1
-        for <linux-pm@vger.kernel.org>; Wed, 29 Oct 2025 11:41:07 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXwMmooNwfC/uvttsWFrJEogGAnEtG4Roq2wA9dm9B8XraWDGnfzN/mxybe3ALugmLaWT2R/+jlag==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzFN+3D+NzhBeBlRiI9Kca3WayjPvOAX2T08mD59521rnZCpzVo
-	bDHdt+f7u6I5kRIQiTgLj5TYQDjEkJMm86yntweeP3h8xTNziKZ89tu2cAP9VgZl8UAdaHguKzX
-	e4Ny7kBvKLA1wf2/DWjrvlch9JgQVKZo=
-X-Google-Smtp-Source: AGHT+IGaNLhHznXHN73xHwv4GOy2e1s6EiMsliq2a5Bos7xqurFN2wEF1eqj3ml1pO8IiKr1S510KDF68N5o+n1ilyQ=
-X-Received: by 2002:a05:6870:7023:b0:332:1b00:6d5 with SMTP id
- 586e51a60fabf-3d8c9b135f9mr208705fac.39.1761763266672; Wed, 29 Oct 2025
- 11:41:06 -0700 (PDT)
+	b=om5GOMGN4jz2H6VEosyifBY2fP9P2ZUxOzCaRZL+HWT0ktMU1vscRxWze4AnqmN8g
+	 U1PMJjoZkfd0gW1nqZKC/4AS3EJyhpT1K5fqsr9qPURuI6TSh5IKlZMIDmFkrfz2io
+	 lKsCwZumZaNJ+iVnccVNxAso/e1ludjC5D8+WgjeoXlSbcosCg+xn0eoC3C9uegr/y
+	 k4Hwo6K7QY68O8So1EonT0CeW5fABtEVwMaIi7LO9LkOh31l//qWPkMSV4jaZ6wOEQ
+	 CvAoxXEZwRlB4ud0b57tRWmXsQWCKq7c2kOIMG8Lzh9SQkguTQDCgf/u2KUV7ZENpw
+	 McpI/YV3EyWQQ==
+Received: by mail-oi1-f176.google.com with SMTP id 5614622812f47-44d9d9d94abso81891b6e.2
+        for <linux-pm@vger.kernel.org>; Wed, 29 Oct 2025 11:53:15 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCV8tVIbabwHXQUJjQUQOpewsClQAKJwgAEraMpGXkN49ExwLQPtdMs8ZwsHyMspLT//EIJpWPfo2g==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyMSXfzO2eybKlohEeb+Ic1qOBziyY0Y7ctRCLVKrjH6P7RSFon
+	hhHvbMB2qylY768NvWIQJDvUL7y1Vpv2VSrk70tRgHmfd7RwlRlA30nVUtRt0Q1cUaFmtC/Uk/Q
+	E3Dd9JaK/iXTTfDNuiL2B5rsIXuY6NY8=
+X-Google-Smtp-Source: AGHT+IHqLr30NAl5M0UDPxgOiX509nO1xreEttv2Ja7V2VTnyLfOfv1uaRlgWgHZXMApbjkmBIuGTq5OSxr3Ncgi/MM=
+X-Received: by 2002:a05:6808:148c:b0:441:cf96:934f with SMTP id
+ 5614622812f47-44f7a89144cmr1770625b6e.47.1761763994437; Wed, 29 Oct 2025
+ 11:53:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251017072703.2064390-1-kaushlendra.kumar@intel.com> <CAJZ5v0hK+ZaV2F8_LEjyCQyyvE-HeWX4Oyw-MVjzODQucyurkw@mail.gmail.com>
-In-Reply-To: <CAJZ5v0hK+ZaV2F8_LEjyCQyyvE-HeWX4Oyw-MVjzODQucyurkw@mail.gmail.com>
+References: <20251028053136.692462-1-ankur.a.arora@oracle.com>
+ <20251028053136.692462-8-ankur.a.arora@oracle.com> <CAJZ5v0hSvzHfsE4nrEW-Ey0dnJ+m=dSU-f1RywGNU0Xyi3jXtQ@mail.gmail.com>
+ <87ms5ajp4c.fsf@oracle.com>
+In-Reply-To: <87ms5ajp4c.fsf@oracle.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 29 Oct 2025 19:40:55 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0hpWd4Sr4-_OpNSKn5n6=pwqYDQnRX62iCeg9Td0tjeqg@mail.gmail.com>
-X-Gm-Features: AWmQ_blJDDtTbcs_x0LR4ioyaZaLGoklW7VPmOSVq6a9ZtdIf5LOsPBiHzWJZzU
-Message-ID: <CAJZ5v0hpWd4Sr4-_OpNSKn5n6=pwqYDQnRX62iCeg9Td0tjeqg@mail.gmail.com>
-Subject: Re: [PATCH] thermal: Fix UUID string comparison in current_uuid_store()
-To: Kaushlendra Kumar <kaushlendra.kumar@intel.com>
-Cc: daniel.lezcano@linaro.org, rui.zhang@intel.com, 
-	srinivas.pandruvada@linux.intel.com, linux-pm@vger.kernel.org
+Date: Wed, 29 Oct 2025 19:53:03 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0hQ7G9jvOv9VtRmsCKahBpUcPJMMOe07k_2mqsvggWcWg@mail.gmail.com>
+X-Gm-Features: AWmQ_bk7-QDWwa1cDV85f7xAgSvOSsXB0uuTzMcOx_--MTMmqkafGtIfA3jK8No
+Message-ID: <CAJZ5v0hQ7G9jvOv9VtRmsCKahBpUcPJMMOe07k_2mqsvggWcWg@mail.gmail.com>
+Subject: Re: [RESEND PATCH v7 7/7] cpuidle/poll_state: Poll via smp_cond_load_relaxed_timeout()
+To: Ankur Arora <ankur.a.arora@oracle.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-pm@vger.kernel.org, bpf@vger.kernel.org, arnd@arndb.de, 
+	catalin.marinas@arm.com, will@kernel.org, peterz@infradead.org, 
+	akpm@linux-foundation.org, mark.rutland@arm.com, harisokn@amazon.com, 
+	cl@gentwo.org, ast@kernel.org, daniel.lezcano@linaro.org, memxor@gmail.com, 
+	zhenglifeng1@huawei.com, xueshuai@linux.alibaba.com, 
+	joao.m.martins@oracle.com, boris.ostrovsky@oracle.com, konrad.wilk@oracle.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Oct 29, 2025 at 5:40=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.or=
-g> wrote:
+On Wed, Oct 29, 2025 at 5:42=E2=80=AFAM Ankur Arora <ankur.a.arora@oracle.c=
+om> wrote:
 >
-> On Fri, Oct 17, 2025 at 9:29=E2=80=AFAM Kaushlendra Kumar
-> <kaushlendra.kumar@intel.com> wrote:
-> >
-> > Use strlen() for UUID matching instead of sizeof() to ensure
-> > correct comparison of supported UUIDs. sizeof() returns pointer
-> > size instead of actual string length, causing incomplete UUID
-> > matching.
-> >
-> > Signed-off-by: Kaushlendra Kumar <kaushlendra.kumar@intel.com>
-> > ---
-> >  drivers/thermal/intel/int340x_thermal/int3400_thermal.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/=
-drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> > index 908cc1bf57f1..236003d12dc7 100644
-> > --- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> > +++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> > @@ -199,7 +199,7 @@ static ssize_t current_uuid_store(struct device *de=
-v,
-> >
-> >         for (i =3D 0; i < INT3400_THERMAL_MAXIMUM_UUID; ++i) {
 >
-> Exercise for the reader: Add a printk() here to print
-> sizeof(int3400_thermal_uuids[i]) and see what number gets printed.
+> Rafael J. Wysocki <rafael@kernel.org> writes:
+>
+> > On Tue, Oct 28, 2025 at 6:32=E2=80=AFAM Ankur Arora <ankur.a.arora@orac=
+le.com> wrote:
+> >>
+> >> The inner loop in poll_idle() polls over the thread_info flags,
+> >> waiting to see if the thread has TIF_NEED_RESCHED set. The loop
+> >> exits once the condition is met, or if the poll time limit has
+> >> been exceeded.
+> >>
+> >> To minimize the number of instructions executed in each iteration,
+> >> the time check is done only intermittently (once every
+> >> POLL_IDLE_RELAX_COUNT iterations). In addition, each loop iteration
+> >> executes cpu_relax() which on certain platforms provides a hint to
+> >> the pipeline that the loop busy-waits, allowing the processor to
+> >> reduce power consumption.
+> >>
+> >> This is close to what smp_cond_load_relaxed_timeout() provides. So,
+> >> restructure the loop and fold the loop condition and the timeout check
+> >> in smp_cond_load_relaxed_timeout().
+> >
+> > Well, it is close, but is it close enough?
+>
+> I guess that's the question.
+>
+> >> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> >> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> >> Signed-off-by: Ankur Arora <ankur.a.arora@oracle.com>
+> >> ---
+> >>  drivers/cpuidle/poll_state.c | 29 ++++++++---------------------
+> >>  1 file changed, 8 insertions(+), 21 deletions(-)
+> >>
+> >> diff --git a/drivers/cpuidle/poll_state.c b/drivers/cpuidle/poll_state=
+.c
+> >> index 9b6d90a72601..dc7f4b424fec 100644
+> >> --- a/drivers/cpuidle/poll_state.c
+> >> +++ b/drivers/cpuidle/poll_state.c
+> >> @@ -8,35 +8,22 @@
+> >>  #include <linux/sched/clock.h>
+> >>  #include <linux/sched/idle.h>
+> >>
+> >> -#define POLL_IDLE_RELAX_COUNT  200
+> >> -
+> >>  static int __cpuidle poll_idle(struct cpuidle_device *dev,
+> >>                                struct cpuidle_driver *drv, int index)
+> >>  {
+> >> -       u64 time_start;
+> >> -
+> >> -       time_start =3D local_clock_noinstr();
+> >> +       u64 time_end;
+> >> +       u32 flags =3D 0;
+> >>
+> >>         dev->poll_time_limit =3D false;
+> >>
+> >> +       time_end =3D local_clock_noinstr() + cpuidle_poll_time(drv, de=
+v);
+> >
+> > Is there any particular reason for doing this unconditionally?  If
+> > not, then it looks like an arbitrary unrelated change to me.
+>
+> Agreed. Will fix.
+>
+> >> +
+> >>         raw_local_irq_enable();
+> >>         if (!current_set_polling_and_test()) {
+> >> -               unsigned int loop_count =3D 0;
+> >> -               u64 limit;
+> >> -
+> >> -               limit =3D cpuidle_poll_time(drv, dev);
+> >> -
+> >> -               while (!need_resched()) {
+> >> -                       cpu_relax();
+> >> -                       if (loop_count++ < POLL_IDLE_RELAX_COUNT)
+> >> -                               continue;
+> >> -
+> >> -                       loop_count =3D 0;
+> >> -                       if (local_clock_noinstr() - time_start > limit=
+) {
+> >> -                               dev->poll_time_limit =3D true;
+> >> -                               break;
+> >> -                       }
+> >> -               }
+> >> +               flags =3D smp_cond_load_relaxed_timeout(&current_threa=
+d_info()->flags,
+> >> +                                                     (VAL & _TIF_NEED=
+_RESCHED),
+> >> +                                                     (local_clock_noi=
+nstr() >=3D time_end));
+> >
+> > So my understanding of this is that it reduces duplication with some
+> > other places doing similar things.  Fair enough.
+> >
+> > However, since there is "timeout" in the name, I'd expect it to take
+> > the timeout as an argument.
+>
+> The early versions did have a timeout but that complicated the
+> implementation significantly. And the current users poll_idle(),
+> rqspinlock don't need a precise timeout.
+>
+> smp_cond_load_relaxed_timed(), smp_cond_load_relaxed_timecheck()?
+>
+> The problem with all suffixes I can think of is that it makes the
+> interface itself nonobvious.
+>
+> Possibly something with the sense of bail out might work.
 
-It is 8, but note that comparing the first 7 characters is practically
-sufficient to distinguish all of the UUIDs in int3400_thermal_uuids[]
-from each other.
+It basically has two conditions, one of which is checked in every step
+of the internal loop and the other one is checked every
+SMP_TIMEOUT_POLL_COUNT steps of it.  That isn't particularly
+straightforward IMV.
 
-Also, this change would alter the kernel ABI, possibly confusing users
-who might notice that the first 7 characters mattered and might start
-to rely on that.
-
-If you want to clean up that piece of code, please change it to pass a
-symbol representing the number 7 as the last argument to strncmp(),
-but that is as much as can be done here.
-
-> >                 if (!strncmp(buf, int3400_thermal_uuids[i],
-> > -                            sizeof(int3400_thermal_uuids[i]) - 1)) {
-> > +                            strlen(int3400_thermal_uuids[i]))) {
-> >                         /*
-> >                          * If we have a list of supported UUIDs, make s=
-ure
-> >                          * this one is supported.
-> > --
+Honestly, I prefer the existing code.  It is much easier to follow and
+I don't see why the new code would be better.  Sorry.
 
