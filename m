@@ -1,116 +1,120 @@
-Return-Path: <linux-pm+bounces-37012-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37013-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D79EC187C3
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 07:36:35 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 07F5AC18903
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 07:58:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8551F1C66B2F
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 06:33:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AB8663A3F04
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 06:57:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2F702F0C62;
-	Wed, 29 Oct 2025 06:32:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1082C3064A9;
+	Wed, 29 Oct 2025 06:57:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EHGiotsU"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iXKtHUfG"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E21B21ABDC
-	for <linux-pm@vger.kernel.org>; Wed, 29 Oct 2025 06:32:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BF7D17A2E8
+	for <linux-pm@vger.kernel.org>; Wed, 29 Oct 2025 06:57:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761719563; cv=none; b=h44xQ3hY+yJYhUDyuwRuo2XB1c8lyCqqwLbMAJ4RcSf827jaBOWRq1tjkHA4NB7iP1oyHEgGmcUGD+XN2IWKukRlq0tnFO1Ol+TecIGW8+tqbDF6Z+fDVXGjgLcP6LffDs91a59fJPelBclmdCejFNQ2NpFDKuWZwqiFzimyf4c=
+	t=1761721032; cv=none; b=T2ySrwFrudyI0BzhjQRM0UVXJ1lcRSW3xl3iJDMIvOMrO25mpnLMby/xV0X0q0KL/LXV2qgU3QscNojE8hM0h5oy/mW7D+WY0MLIwccXXMqXZaCuTVbQ1wJ2Fn72fl2U5yFqIKdS6XgUAqyigK1x9f4ner2zQnoobbSp52kgJUE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761719563; c=relaxed/simple;
-	bh=8fqX1yNSZKPOAEeYYcZLsQwxSr8mhllePdhz+qlw4hc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GtOpj3E2+iz+ThA637B8G2waQXSypnuxJEkNlMNeiOU92MJfqP1BK0exPiRrdcvDoh6L5aM632vRy4X/WbjN2Fb/tgfqGgNasPEsYYqwdSY8G5zhNBPFPc3e2bmxonp+DIsEYaqpkB7OhP7gY+tDf4kTwzMFQ0pB4PgnYHaPWM8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EHGiotsU; arc=none smtp.client-ip=209.85.216.52
+	s=arc-20240116; t=1761721032; c=relaxed/simple;
+	bh=ok9dT4MfExQ5WiZNPWfHGVmnga3L7bykmmPx2qnik9M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LZ/sqqYRlsZQaSNW2wywkEpJNyHupU2Jozn4TQnnq3gvJn0ri9stCrT+Wbdt6JLS9md6//Vfdvaq7Z4Dhf4l15lWBwqFFT5dNKNpXAOri3SEPYfI9rIyZefT5G9Te4NyVFsZuFVT4qXr4ZEW2mYUOTNRhIy6eXlTeHdC2TqBDio=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iXKtHUfG; arc=none smtp.client-ip=209.85.214.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-339d7c403b6so6675285a91.2
-        for <linux-pm@vger.kernel.org>; Tue, 28 Oct 2025 23:32:41 -0700 (PDT)
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-29470bc80ceso9414065ad.1
+        for <linux-pm@vger.kernel.org>; Tue, 28 Oct 2025 23:57:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761719561; x=1762324361; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=8fqX1yNSZKPOAEeYYcZLsQwxSr8mhllePdhz+qlw4hc=;
-        b=EHGiotsUp2Abm7ooDXmMwop+Qir+8ydQKxShv4MhnIxUXdq1DxH1gd296PswilMPbP
-         CoSI2TzlIqcooeg0IBwB2RSV+aQLcGoofxoBjFVHI7wmakawJF3Z0dWzTl9XaVniDC3z
-         P9qlp/fn+gi5u2GMBB8K6WgCdRy1hrxelrTiE3rTahKzEx5o4dDYhzWrU3IpbaN9oJ2c
-         e2QM8BIT+HrgKxU75AYMkftALXw/jk9Y3VgzPkl0ihg/vYbrj0QR0IAzTMgQytXMILn8
-         tRaWBRNFSZ4WllpbZs+b1xPHbCpu4woDtx4Z3AFzXZev1a3KXGw4sJ3X6nI3Js28PQN9
-         T8fQ==
+        d=gmail.com; s=20230601; t=1761721030; x=1762325830; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=kAzHjA1DGMw75h1oXuHrNcgI7jwtDfH+p5O7whoKqeg=;
+        b=iXKtHUfGYI93jMssXQ4yZG7kK3WlaY57zDUP0fw2MwGzYp6j8T3REKmF/NYfOCT7FV
+         TcJXxveSlgIctPC1rJMsYUfrwerby7GhVgxkG21WDAxSBuM+jOp+8SUoWTGJs++fqjyZ
+         HfGmXoxBpaqlFBDIjbLxyY0qb7st5ioqYRe5qGhwti/TM9EzJzvGZkjsXmH4yQeKfVKe
+         3XiVD8JgahGexJQ7Sz/T8WUeRyz7Kcv275BBBoUJLJ9Ngv2Uim4bxM53c/frL7ITVNT+
+         l746QSIB7GvNnmf+4TN76FoGMu6ShuAaiB2SY/S5i8Ms8+lfasYc6JdDEOKBy8BBZUM/
+         0irg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761719561; x=1762324361;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8fqX1yNSZKPOAEeYYcZLsQwxSr8mhllePdhz+qlw4hc=;
-        b=RnHsXVtDD8ygTnanE5M1vaw8nH/un/ezGquAA83On6Ent5PKKyOHQUGA5cdPZ3SyKl
-         mKKo0UsL7rSaJtWPdCQ9OOuhJDW8Nmdr0r5qkdFHnYY/yq9DuOJvPClh7HFKIhAAkEsM
-         zisGg2rS8BJSGqcdscgXvTMht6BUcuzoLBqowrl0JTNL/D4gr28CcfJZf9eFC67UMuhp
-         cWkRMhF4J40nHQwDwP2PjO0fVmLe3cYOzXjzW1ft16DV/JJi6T+4ioSk9X0HGwYlREbZ
-         4bV7RBc6cgJwv2SrOJYIUWyc+R4pmDDMeyrLt0tXidqBhxZlkgGHBg2ftIXw1qKazAp4
-         4bQg==
-X-Forwarded-Encrypted: i=1; AJvYcCXfjyPiH8pr6fvEim8M83wfb+S6iSktpPJdkY7Uh77aXG4qyHEWaLsnZZToudlZ6SRlfRAphC7Q0A==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwHju0Z86SRh7IgZ5YVfcAB9jOy6PIXgT2UzCTbn0khtReZaERM
-	Lur9d1a/2CpzQL69FR+RQKsg/tgzK5Ec0wvVkofQ8DgRscwO5hj2EFA9NFLzjcLUnP1iwOXqwCL
-	2V7BRnlTF9zdVBkEw/ZiYqiseOX76Org=
-X-Gm-Gg: ASbGncvjcVGwBU/MTwES7xpOkOjuvx7NeV0HUkG/xdGY/U5dfJ/jhI5CxyguAPrQb+v
-	uKJuqOWwTbUD/tFLTc/Zy74NSMW9G8+o9bUI+7TrKgOkXKOsJzwzxJs2VMkV8zUS0SA9hrCk/42
-	WbFULvqddgPqvueOlEQN75xwONjANsBFyntobr8pTaHSUaY1RtH8QBBFcjIUaiAWUZoQ79eHk2T
-	09xabbenBz0VwKRJEnnsnzrw/KMHapUHfQctMPf4OED72PZoe8FqnkVybZjmApr9atIbDTHNA==
-X-Google-Smtp-Source: AGHT+IFFVo3TxCbMkZ5UI77sKbgoDsW97wn27M6ulWZD7oeWngePKzAxdda7IduW8N2Ts8l3ViDHxq6u4X6dWfeQ2as=
-X-Received: by 2002:a17:90b:586c:b0:339:a323:30fe with SMTP id
- 98e67ed59e1d1-3403a15c2eemr2084010a91.14.1761719561334; Tue, 28 Oct 2025
- 23:32:41 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1761721030; x=1762325830;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kAzHjA1DGMw75h1oXuHrNcgI7jwtDfH+p5O7whoKqeg=;
+        b=JuDi6NXnSl1JMF5Ij1J+W3ne0zUQc+iy+t7lNFQ4iYsNjrvxlbUQA5rCcRrLwqE88f
+         LN6S4ZsaUW9Y8+8txbPUOkSEkkco6tPqfCWIUMk2edK+Q+lD/8zIZ5aHTSynOJL/SpcF
+         vZ6pMW7IGm/90kmY9gPbDtuOTcLDnRLtdIN0uXJQzY7Ly6LPeR1Dh582DQKx+4qL68GS
+         ix6xxHdsNZh9WwTRM/ZGj02tJWxPRXI5BA3XMt5b+ZjuIa1LOyj5pkzYUSXSsmtQEEhJ
+         UyENQGUzUgvDtpl+KxuS2l/Tmu1IwU0eVz35TIUqQa/DfMz72boXxWoWv0uHVkVH863K
+         WTIw==
+X-Forwarded-Encrypted: i=1; AJvYcCXu/PQD4Um4h723mucm160OoNE/IUMi90dbnDJEopSOM/fYYooqiyX0VV0DAbHWH/Jjx68c8C/7uA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx2cwboj3y/BtxoOR6mLpiH3ZW51SZPwYbOgXVq4BHKoVVmUHlU
+	vlIRoY7LbQMy6DbNOtAvf2E7aFi18uH0ercIX612vM858ILuOKpYRpZu
+X-Gm-Gg: ASbGnctQ5dAxZ4qP5GffMWTbRYklmPg1BS0XaFd0z/H9LAVyEIEehhAugregsvsg+eG
+	oNpLZWsaXURCTwJmEAxFiDbo84HeI/KiHgXSF7LYm/8LgyxS3hackjxXSypbMNNlOZwLeIEmobY
+	n5iLBtdWiOFUbvXdIjKYNuHQ1+gjY/pkrzsicB8MP925Uuv2tglw7ycOFAWixALwXpDA9zfpilF
+	he7wNJuEoPHL3mnlvdHHLVh+9ilNX5nWIG1JT7HsEPojuNc8k3UawGCEWO29HfjlvmL9NhhWgGD
+	BQ9fEKx6OAzBYzXfYJvYZx9/Tq3i95GMQS7AyOSG/zTvKbyNpEbfYpQ9AvigbR7OYQ6DVMUTA6a
+	Gs2Ao9z6UEp/tyC+TSsyFnZ4qblbpxojAPeLXgIhDYDsGtWnpPFiv6TXG6w9JxfhQWtr0VPy7Qq
+	Yb8uqgEDE=
+X-Google-Smtp-Source: AGHT+IHAyxSSOH40p4t7F9MwgeCG/5rdk7C1zelhSNkfw2jl6rNnp0o+7NhxcY4tilgw3gjqSJR7Lw==
+X-Received: by 2002:a17:903:1a28:b0:293:639:6546 with SMTP id d9443c01a7336-294cc7538c3mr72609105ad.20.1761721029610;
+        Tue, 28 Oct 2025 23:57:09 -0700 (PDT)
+Received: from google.com ([2401:fa00:95:201:32e:3ee0:36e4:46c6])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-33fed807dbasm14531229a91.12.2025.10.28.23.57.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Oct 2025 23:57:09 -0700 (PDT)
+Date: Wed, 29 Oct 2025 14:57:05 +0800
+From: Kuan-Wei Chiu <visitorckw@gmail.com>
+To: rafael@kernel.org, daniel.lezcano@linaro.org
+Cc: rui.zhang@intel.com, lukasz.luba@arm.com, jacob.jun.pan@linux.intel.com,
+	jserv@ccns.ncku.edu.tw, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] tmon: Fix undefined behavior in left shift
+Message-ID: <aQG6wTDy7Bnf4XDI@google.com>
+References: <20250901144756.1179834-1-visitorckw@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1761564043.git.mazziesaccount@gmail.com>
- <b13b733e7e0fba05652f49f727412fed9e0ceb02.1761564043.git.mazziesaccount@gmail.com>
- <20251029-adamant-mamba-of-patience-cddb65@kuoka> <a81fba66-adf0-440f-96e1-bf3a83d504d8@gmail.com>
-In-Reply-To: <a81fba66-adf0-440f-96e1-bf3a83d504d8@gmail.com>
-From: Matti Vaittinen <mazziesaccount@gmail.com>
-Date: Wed, 29 Oct 2025 08:32:30 +0200
-X-Gm-Features: AWmQ_bmRIxkt0_0lmeBnGc_3ozd43KhfedH0KHXGki9EADGblZUmvI-2tDAdlfI
-Message-ID: <CANhJrGOpH2=h4M5MPM2XwVf0DqfM+5SSvK3Rse7+UaoDyvkUsA@mail.gmail.com>
-Subject: Re: [PATCH v2 02/15] dt-bindings: Add trickle-charge upper limit
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>, Lee Jones <lee@kernel.org>, 
-	Pavel Machek <pavel@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Sebastian Reichel <sre@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
-	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, 
-	Andreas Kemnade <andreas@kemnade.info>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-	linux-leds@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-rtc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250901144756.1179834-1-visitorckw@gmail.com>
 
-ke 29.10.2025 klo 8.22 Matti Vaittinen (mazziesaccount@gmail.com) kirjoitti:
->
-> On 29/10/2025 08:03, Krzysztof Kozlowski wrote:
-> > On Mon, Oct 27, 2025 at 01:45:05PM +0200, Matti Vaittinen wrote:
-> >> Some of the chargers for lithium-ion batteries use a trickle-charging as
-> >> a first charging phase for very empty batteries, to "wake-up" the battery.
-> >
->This is already reflected by existing bindings:
-> trickle-charge-current-microamp, Please, see:
-> bbcecd1b9335 ("dt-bindings: Add trickle-charge upper limit")
->
-Sorry, wrong commit! It should have been the
-e3420b49949c ("dt-bindings: battery: add new battery parameters")
-as you found out.
+On Mon, Sep 01, 2025 at 10:47:56PM +0800, Kuan-Wei Chiu wrote:
+> Using 1 << j when j reaches 31 triggers undefined behavior because
+> the constant 1 is of type int, and shifting it left by 31 exceeds
+> the range of signed int. UBSAN reports:
+> 
+> tmon.c:174:54: runtime error: left shift of 1 by 31 places cannot be represented in type 'int'
+> 
+> According to the C11 standard:
+> 
+> "If E1 has a signed type and E1 x 2^E2 is not representable in the
+> result type, the behavior is undefined."
+> 
+> Fix this by using 1U << j, ensuring the shift is performed on an
+> unsigned type where all 32 bits are representable.
+> 
+> Fixes: 94f69966faf8 ("tools/thermal: Introduce tmon, a tool for thermal subsystem")
+> Signed-off-by: Kuan-Wei Chiu <visitorckw@gmail.com>
 
-(Just a clarification for anyone reading this thread)
+I know maintainers are busy people, so I usually try to avoid sending
+ping messages. However, this patch was submitted about two months ago
+and hasn't received any feedback yet. It looks like it might have
+somehow got lost?
+
+Regards,
+Kuan-Wei
 
