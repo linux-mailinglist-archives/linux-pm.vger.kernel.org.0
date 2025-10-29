@@ -1,135 +1,116 @@
-Return-Path: <linux-pm+bounces-37055-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37057-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id D55C7C1BF48
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 17:11:03 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 31952C1C33F
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 17:46:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id AC7DD34BB71
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 16:11:01 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 2BD905A2058
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 16:31:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D501A34B434;
-	Wed, 29 Oct 2025 16:08:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 800C1334C08;
+	Wed, 29 Oct 2025 16:31:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T0Prl2kN"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SyCwToen"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A855E34B41E;
-	Wed, 29 Oct 2025 16:08:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE0C12F691C
+	for <linux-pm@vger.kernel.org>; Wed, 29 Oct 2025 16:31:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761754107; cv=none; b=KrNK09Srfu8EwWlj59xjLIzXjvSz5SkeXy2hmOtzICjRr35b0PnRfJki6N7Q6LjaTxfCaZ2m6r5SSRLNa5+xRxH1jSUSyx2kEbFxMG4eXXj9EZOnWnF33293feRhQt42x2Kz4DZXvXr+NQbfk5H4wkC9y1JeLYGN00pSVwKKFIM=
+	t=1761755499; cv=none; b=jUZqTB1eY0g5ZHZmeKMIIeh6/lFZgjtxiUpgTO9vQCR/rpWwr1Xkk4beGrstFLQ5Wl0X8as2vLj1Rq/buzzdt5leWpUg01ihf6Ym8/JdeUhRw9djpsljs6gYGCGcdQ0Bctz3e63mMUk8ujCxkZu09tymeszIRs5NdldQZAJ9jmc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761754107; c=relaxed/simple;
-	bh=M9VUXQ0sGm4MCTwj4cZe2NEqjEY3c4DzycPRMT5gMPQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=auL2zX6Nc7eeZriWqWCW09BsgZ6Pfp+ryrqOqAnBQwQfrISZyymFggJVzSnEp/GjQMVNlWUCb9f19cUECTNQCoIKUPXlloLQq+JZjHa8BUbvjDvyyz8K1eL38SYND6pOOg8tH8N+jIge1iYQJMZChXXTsgjSd7oku9/xyCU4PRs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T0Prl2kN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 517DDC4CEF7;
-	Wed, 29 Oct 2025 16:08:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761754107;
-	bh=M9VUXQ0sGm4MCTwj4cZe2NEqjEY3c4DzycPRMT5gMPQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=T0Prl2kN0ilDjqzLDqH9l8QDBctE4hNV7ar7kS5HzEOGYHeGU2+O45IJHnDaUtmtY
-	 AqQqebI1WpSj4wOqSrSawSR9osPq3eXWa/ducp9RppYpS0UFr/WuyM9/znrxwqWa4/
-	 sA0DowkBFR/+U4KhGGu6urT5Zd8aHVNCHtDipzUMzIE9gtaaD4E+lkAFkoM+ecv7e4
-	 F4vylNdD4NzYHD3+yaTO8bq4LXDLzgcXyeiWBBp4O9OXh1ZPapjLw3WC1uD+hgmH1m
-	 ggj20qtOmE9eYC1ePD7w63cp6HN0bcKCfdpM9bvrSFBfz+0jvq9Pv684GPpILPQim7
-	 1qGrvRiG/vZrA==
-Date: Wed, 29 Oct 2025 11:11:30 -0500
-From: Bjorn Andersson <andersson@kernel.org>
-To: Christian Marangi <ansuelsmth@gmail.com>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
-	Ilia Lin <ilia.lin@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Viresh Kumar <viresh.kumar@linaro.org>, Konrad Dybcio <konradybcio@kernel.org>, 
-	Raag Jadav <raag.jadav@intel.com>, Arnd Bergmann <arnd@arndb.de>, linux-arm-msm@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] soc: qcom: smem: better track SMEM uninitialized
- state
-Message-ID: <qy3d2wqqi7y2l6lyjrlsjf4dlzoigvawwze7ulapjujozi7lhq@7tluyf4j6nbu>
-References: <20251029133323.24565-1-ansuelsmth@gmail.com>
- <20251029133323.24565-2-ansuelsmth@gmail.com>
- <aQIyZfQ-Tvxmh6vL@smile.fi.intel.com>
- <69023398.df0a0220.25fede.8d9c@mx.google.com>
+	s=arc-20240116; t=1761755499; c=relaxed/simple;
+	bh=Tw5vEbrXWUB8SboVr/dUVdOqU8bkAxaparS/ZqBpR6Q=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=McQmQPQMFu2Z+C0H9Ohy9QQVKOFehuHmnc23zOxKC8Gs1PsYvUM1P5W1sAE1k2M0IFpATA8oo7wcp5rdwLZlpRvEp4PrC/MqdHk5mCDgMulIOLwLuVsN5Ns3UovspYJqVu3gFt7vDYcQwqL1rk1SKcT4lSSLuWnMKCMle2O8/gw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=SyCwToen; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1761755496;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=1T52Vj5IIAdBYMNDfCC4go6XkTYm9qfscMzwG6wwCuU=;
+	b=SyCwToenKZAhO6ww1+x7+NxkfC8i8BkjKmkM5Z4cMhRbN0FIPtNEJsB6e0D7vVb3z8m3g4
+	GeuF0/B7f282ikZ1jCjW3+Jcn29XF4+8ih1N5MHgWdBMjZkVqSz1ZMQSNs6KyvfwRBxE0A
+	iPF3L8+JYSgrfXs4XRGADpR7B7YoUHE=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-433-VrIc2NguM8WEFqbFBmCdqQ-1; Wed,
+ 29 Oct 2025 12:31:32 -0400
+X-MC-Unique: VrIc2NguM8WEFqbFBmCdqQ-1
+X-Mimecast-MFC-AGG-ID: VrIc2NguM8WEFqbFBmCdqQ_1761755489
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 18891196F74D;
+	Wed, 29 Oct 2025 16:31:28 +0000 (UTC)
+Received: from [10.45.225.163] (unknown [10.45.225.163])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id F0BFB19560AD;
+	Wed, 29 Oct 2025 16:31:20 +0000 (UTC)
+Date: Wed, 29 Oct 2025 17:31:13 +0100 (CET)
+From: Mikulas Patocka <mpatocka@redhat.com>
+To: Christoph Hellwig <hch@infradead.org>
+cc: "Rafael J. Wysocki" <rafael@kernel.org>, 
+    Askar Safin <safinaskar@gmail.com>, linux-mm@kvack.org, 
+    linux-pm@vger.kernel.org, linux-block@vger.kernel.org, 
+    linux-crypto@vger.kernel.org, linux-lvm@lists.linux.dev, 
+    lvm-devel@lists.linux.dev, linux-raid@vger.kernel.org, 
+    DellClientKernel <Dell.Client.Kernel@dell.com>, dm-devel@lists.linux.dev, 
+    linux-btrfs@vger.kernel.org, Nhat Pham <nphamcs@gmail.com>, 
+    Kairui Song <ryncsn@gmail.com>, Pavel Machek <pavel@ucw.cz>, 
+    =?ISO-8859-15?Q?Rodolfo_Garc=EDa_Pe=F1as?= <kix@kix.es>, 
+    Eric Biggers <ebiggers@kernel.org>, 
+    Lennart Poettering <mzxreary@0pointer.de>, 
+    Christian Brauner <brauner@kernel.org>, 
+    Linus Torvalds <torvalds@linux-foundation.org>, 
+    Milan Broz <milan@mazyland.cz>
+Subject: Re: [PATCH] pm-hibernate: flush block device cache when
+ hibernating
+In-Reply-To: <aQIm1bfwKlwaak52@infradead.org>
+Message-ID: <355486cd-6c52-df82-7636-a8259995b522@redhat.com>
+References: <20251023112920.133897-1-safinaskar@gmail.com> <4cd2d217-f97d-4923-b852-4f8746456704@mazyland.cz> <03e58462-5045-e12f-9af6-be2aaf19f32c@redhat.com> <CAJZ5v0gcEjZPVtKrysS=ek7kHpH3afinwY-apKm3Yd4PmKDHdA@mail.gmail.com>
+ <aQIm1bfwKlwaak52@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <69023398.df0a0220.25fede.8d9c@mx.google.com>
+Content-Type: text/plain; charset=US-ASCII
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-On Wed, Oct 29, 2025 at 04:32:35PM +0100, Christian Marangi wrote:
-> On Wed, Oct 29, 2025 at 05:27:33PM +0200, Andy Shevchenko wrote:
-> > On Wed, Oct 29, 2025 at 02:33:20PM +0100, Christian Marangi wrote:
-> > > There is currently a problem where, in the specific case of SMEM not
-> > > initialized by SBL, any SMEM API wrongly returns PROBE_DEFER
-> > > communicating wrong info to any user of this API.
-> > > 
-> > > A better way to handle this would be to track the SMEM state and return
-> > > a different kind of error than PROBE_DEFER.
-> > > 
-> > > Rework the __smem handle to always init it to the error pointer
-> > > -EPROBE_DEFER following what is already done by the SMEM API.
-> > > If we detect that the SBL didn't initialized SMEM, set the __smem handle
-> > > to the error pointer -ENODEV.
-> > > Also rework the SMEM API to handle the __smem handle to be an error
-> > > pointer and return it appropriately.
-> > 
-> > ...
-> > 
-> > >  	if (le32_to_cpu(header->initialized) != 1 ||
-> > >  	    le32_to_cpu(header->reserved)) {
-> > >  		dev_err(&pdev->dev, "SMEM is not initialized by SBL\n");
-> > > +		__smem = ERR_PTR(-ENODEV);
-> > >  		return -EINVAL;
-> > >  	}
-> > 
-> > I find this a bit confusing. Why the error code returned to the upper layer is
-> > different to the stored one?
-> >
-> 
-> It's INVAL for probe. But for any user of SMEM it's NODEV as there isn't
-> an actual SMEM usable.
-> 
-> Totally ok to change the error condition in probe if maybe NODEV is
-> better suited. I assume there isn't a specific pattern of the correct
-> error condition in probe.
-> 
 
-I'd say ENODEV represents the error better than EINVAL, so I don't have
-any concerns with you changing the return value.
 
-> > ...
+On Wed, 29 Oct 2025, Christoph Hellwig wrote:
+
+> On Wed, Oct 29, 2025 at 02:31:05PM +0100, Rafael J. Wysocki wrote:
+> > > This commit fixes the suspend code so that it issues flushes before
+> > > writing the header and after writing the header.
 > > 
-> > Also, the series of patches should include the cover letter to explain not only
-> > series background but additionally
-> > - how it should be applied
-> > - if it has dependencies
-> > - etc
-> > 
+> > Hmm, shouldn't it flush every time it does a sync write, and not just
+> > in these two cases?
 > 
-> Didn't add one they are trivial patch but I can add it if needed... it's
-> pretty stable code so no dependency or branch target
+> It certainly should not use the PREFLUSH flag that flushes before
+> writing, as the cache will be dirty again after that.
 > 
+> I'd expect a single blkdev_issue_flush after all writing is done,
+> under the assumption that the swsusp swap writing doesn't have
+> transaction integrity for individual writes anyway.
 
-Specifically, I should merge patch 1 and 2 through the qcom/soc tree,
-and patch 3 can be merged completely independently through the cpufreq
-tree.
+I think that we should use two flushes - one before writing the header and 
+the other after writing the header. Otherwise, it could be possible that 
+the header is written and some of the data is not written, if the system 
+loses power during hibernation.
 
-Regards,
-Bjorn
+Mikulas
 
-> > 
-> > 
-> 
-> -- 
-> 	Ansuel
 
