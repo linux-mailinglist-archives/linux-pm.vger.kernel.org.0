@@ -1,121 +1,230 @@
-Return-Path: <linux-pm+bounces-37040-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37041-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 24727C1B504
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 15:43:07 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5CBA7C1B4AE
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 15:39:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 888B3587FC1
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 14:26:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F1F3C188D503
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 14:31:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DF94289378;
-	Wed, 29 Oct 2025 14:26:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E8D92D2387;
+	Wed, 29 Oct 2025 14:28:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HDvjonVW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fTXKct5T"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 395122505AA
-	for <linux-pm@vger.kernel.org>; Wed, 29 Oct 2025 14:26:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A6F22D12EB
+	for <linux-pm@vger.kernel.org>; Wed, 29 Oct 2025 14:28:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761747986; cv=none; b=UhDVgnVtASutnAmrVVykBpBGsB6J25PJQRY0DOVNp4+6DKxyVyv5RQhsN08ubwASnGe8qeDnv5xukn2cmBPOKfsrfEbrkAzmcZTHJhslrEeZBQTWbRpqyyXJCDqmCA6f2iCQBvGtNff6RAnfsdeDi8P87d3jTDWpT54XDAzC28A=
+	t=1761748114; cv=none; b=fGom+o9B37LENMCAMX5GubvoAOgLix65GFAMib0gssrMZ+muJBtJ4eiJzevKjufb+5nPJZnYst3s6J+099nqFNclt4CGF9xgyivh0dyvmPeePDVMvFt9+sRJ6qpvVSw2g1k/vrTpQs3yAg4wnYeec6L2gehm4FAqwwk95xcDYRw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761747986; c=relaxed/simple;
-	bh=deFMZQXNY8fLOTRmMsgqeUpBMjR1GPSusJKEB2KZqZg=;
+	s=arc-20240116; t=1761748114; c=relaxed/simple;
+	bh=ycvf+w2/mE/h70FPsnRAceCWxI81fhZqTWfT4beEqSQ=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HvL9iQSnIzYF4irn9QmvmZVOddUOVRnzIhBsasI0bqyEyBxxauwqeN0SB/MBtXGt8vDLuVTXaJKfSbSxp0aG01HnSwoeFh1KFicEKZums6orwPBmZuGO1TEzars/Uu2Og5SPlc0lRdKc+Jk1I/kUqs395GPRabPyWVBrUhUElEQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HDvjonVW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3657C16AAE
-	for <linux-pm@vger.kernel.org>; Wed, 29 Oct 2025 14:26:25 +0000 (UTC)
+	 To:Cc:Content-Type; b=S2Y8Xs0DAxJDYovr0NHMUfb6RapkBOhIdiH2usMeMOTFxSaNxRnBJyBOnEVTEBRtgkxGwbv7mZa6Nx6u1MgIZLJ0Hj6q46UC2Skwcdx+HXuinUQ9ykQ5E6VA04mcC+sItiiYFNhnsq6/kgIPOFssDHrEQQsstXjfsk0vCOMiPU4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fTXKct5T; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA1A8C4CEF8
+	for <linux-pm@vger.kernel.org>; Wed, 29 Oct 2025 14:28:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761747985;
-	bh=deFMZQXNY8fLOTRmMsgqeUpBMjR1GPSusJKEB2KZqZg=;
+	s=k20201202; t=1761748113;
+	bh=ycvf+w2/mE/h70FPsnRAceCWxI81fhZqTWfT4beEqSQ=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=HDvjonVW3y52MO5l9LcJGfcIzDHlrYpReo/+R+YmWkfQkczPAlj3cHhKwvrTw6s92
-	 mXXjiDGDc5rDrjOG1sRuotntAK80LIVSU082OmDEsrJ8vcsDzGNXX4dP1kPUH8DSnA
-	 CSo0tD39o89iYeccOHLm0fkUakyUOkmUvxbtA4ZYG0JVuji1Fm/MV54TVTIXBNaYQf
-	 yKlEqP0iQQmt5UMldwvcCN63qIwH5rqGvrbdd6sP0Cxn/b5XhHnbcmtP9G1bjfc/TG
-	 mqPX1i1dsokmuVJ0xhgov6wVVqCRqBGbS0cLuu9WyHlZnJmuFLDHY68A2oQyzmTDqV
-	 67MrYhYPv/y9A==
-Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-378d6fa5aebso78856871fa.2
-        for <linux-pm@vger.kernel.org>; Wed, 29 Oct 2025 07:26:25 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXs9iJkUNfR/8y72jOWG+4ZmGBQFPlZhKn9zvHOZqIiKEXf1lpRfhU+IwJItqbyNTbYpTx4BxJLTA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwkSYOa3lOtllk5CqR6fnflhODQuGp1gzx/HNwYJiw6duoviruQ
-	MC8HYV0I1QzqVyZQBLdPm/tTALSObgLZlmbRawytcJatIoox3wDesskjs7WmTVPGuENYUm5cEmS
-	e7MPkzTkix0CuiCcFLaQa0QGC7d5fWak=
-X-Google-Smtp-Source: AGHT+IHtLPnk0JPcDIdcJGoxq1gKZPYo4bxdkb3wqnmpt7pouFgu14zB6uLReROjFscAOSMw0bvQHWgOcApBd3m3W5A=
-X-Received: by 2002:a2e:a98d:0:b0:378:e84c:d159 with SMTP id
- 38308e7fff4ca-37a023b0513mr11407331fa.5.1761747984618; Wed, 29 Oct 2025
- 07:26:24 -0700 (PDT)
+	b=fTXKct5Tr2OCcU7ojjD51pRyEUrXc+9BpzAI8O3q13A5PKttXUox/d92JvMblaF++
+	 /yI6seIlXdbbtxweiU8FU2zXD6g2+TAEMGTxx7YIW0m9s7XAWMtvtaDPSmGYbg4Fw3
+	 jJKitfK2viCKcOsyImlNwg1BVMQI5tpe+GluYKdvcjhkizVnOukzJfzjjOI9R3osj5
+	 RPJRMPJu2JsmuopW3JGTNaFBBeUGyBQPNk4ERIrEB/rrged4XbJAO+Wha5tG4k+IIQ
+	 TE7V5fNUArewtl25kBLnHdJkHN2RcgUiGw76Qo/riB6Nuh6bEEkjC6n8Q5gtyx3Ys7
+	 qLg30sfeoB2Lw==
+Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-654eb78f721so2596410eaf.1
+        for <linux-pm@vger.kernel.org>; Wed, 29 Oct 2025 07:28:33 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVmOZKgmaEGHcpDncK6FsSRMImPAMKceZ+LcVXFA4huHva629wj5w6F4pCKMdnVMLqylWpa8LztZQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxxCuGvPmu0Ly6/YiLouCvyvwNOdq169XyL3FPwtD7pQtoUiMiu
+	L97ItgHp6NyvCuYdRhgJTDPMOxkjE6gu+sUKnphXVsW55VN3DdSBzI09k3ihCEPeQDZpjk4Upsu
+	VvBmfqbhCS8AQZLrkP/qxRo3hXlq/bOs=
+X-Google-Smtp-Source: AGHT+IEbUd+JQ5DjQ2Y6NcLaDkmrtcoQ7Y649VF2s/mqXuH/MYD5YaA1OxjGFB3FBRuaAt9mj2Gb7FORgEwULlV/4P8=
+X-Received: by 2002:a05:6820:603:b0:64e:822b:e6de with SMTP id
+ 006d021491bc7-65677f12406mr1360346eaf.7.1761748112978; Wed, 29 Oct 2025
+ 07:28:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251023-opp-simpler-code-v2-1-44230ed00fd8@kernel.org>
- <gjlcd7nrmipdpim4dr2kfrk5mleo2yt2btwbhxdflzfcpckjjl@fieqlaavqja2> <CAJ-ks9=QNo670XQ11TsDMorgsRz4g1VhX_9qVUf8Za3Q44Jh7g@mail.gmail.com>
-In-Reply-To: <CAJ-ks9=QNo670XQ11TsDMorgsRz4g1VhX_9qVUf8Za3Q44Jh7g@mail.gmail.com>
-From: Tamir Duberstein <tamird@kernel.org>
-Date: Wed, 29 Oct 2025 10:25:48 -0400
-X-Gmail-Original-Message-ID: <CAJ-ks9nP6sWg4sR33caTDs3rr7Qkv=fg0LQQ4eCpjKA7VPF=mA@mail.gmail.com>
-X-Gm-Features: AWmQ_bkcBbckDOJo8gs6NJc7cFiyvba2tnkwitSB4WrtxXYEDF5uJbanvPwcfrE
-Message-ID: <CAJ-ks9nP6sWg4sR33caTDs3rr7Qkv=fg0LQQ4eCpjKA7VPF=mA@mail.gmail.com>
-Subject: Re: [PATCH v2] rust: opp: simplify callers of `to_c_str_array`
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, linux-pm@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+References: <20251016151929.75863-1-ulf.hansson@linaro.org>
+ <20251016151929.75863-2-ulf.hansson@linaro.org> <20251029081014.443psmqznd2pqm4i@lcpd911>
+In-Reply-To: <20251029081014.443psmqznd2pqm4i@lcpd911>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 29 Oct 2025 15:28:22 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0gcRQgj-3Yve_3OMsRJppdVmtWpBq51H5dk3JgTvSGLZw@mail.gmail.com>
+X-Gm-Features: AWmQ_bkIRMLKAw2hRsQOICKn11WWYrSkSN53qmpIka5w-KJlYGIgupNtIdm9ew8
+Message-ID: <CAJZ5v0gcRQgj-3Yve_3OMsRJppdVmtWpBq51H5dk3JgTvSGLZw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] PM: QoS: Introduce a CPU system-wakeup QoS limit
+To: Dhruva Gole <d-gole@ti.com>
+Cc: Ulf Hansson <ulf.hansson@linaro.org>, "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org, 
+	Vincent Guittot <vincent.guittot@linaro.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Kevin Hilman <khilman@baylibre.com>, Pavel Machek <pavel@kernel.org>, Len Brown <len.brown@intel.com>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, Saravana Kannan <saravanak@google.com>, 
+	Maulik Shah <quic_mkshah@quicinc.com>, Prasad Sodagudi <psodagud@quicinc.com>, 
 	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Oct 29, 2025 at 10:24=E2=80=AFAM Tamir Duberstein <tamird@kernel.or=
-g> wrote:
+On Wed, Oct 29, 2025 at 9:10=E2=80=AFAM Dhruva Gole <d-gole@ti.com> wrote:
 >
-> On Thu, Oct 23, 2025 at 11:23=E2=80=AFAM Viresh Kumar <viresh.kumar@linar=
-o.org> wrote:
-> >
-> > On 23-10-25, 09:59, Tamir Duberstein wrote:
-> > > Use `Option` combinators to make this a bit less noisy.
-> > >
-> > > Wrap the `dev_pm_opp_set_config` operation in a closure and use type
-> > > ascription to leverage the compiler to check for use after free.
-> > >
-> > > Signed-off-by: Tamir Duberstein <tamird@kernel.org>
-> > > ---
-> > > Note: this diff is much smaller with whitespace suppressed (`-w`).
-> > >
-> > > An alternative approach to compiler checking for UAF that doesn't cha=
-nge
-> > > indentation is to add `drop((self, clk_names, regulator_names))` afte=
-r
-> > > `let ret =3D ...;` but that felt more prone to becoming out of date i=
-f
-> > > more owned data needed to be added to the function scope.
-> > > ---
-> > > Changes in v2:
-> > > - Avoid use after free; add compiler checking. (Thanks Viresh!)
-> > > - Link to v1: https://patch.msgid.link/20251020-opp-simpler-code-v1-1=
--04f7f447712f@kernel.org
-> > > ---
-> > >  rust/kernel/opp.rs | 112 +++++++++++++++++++++++++++----------------=
-----------
-> > >  1 file changed, 58 insertions(+), 54 deletions(-)
-> >
-> > Thanks, tested this and it works.
-> >
-> > Lets see if someone has any more inputs, otherwise I can apply it.
+> Hi Ulf,
 >
-> Thanks for testing! Doesn't look like anyone has opinions. Good to go?
+> On Oct 16, 2025 at 17:19:21 +0200, Ulf Hansson wrote:
+> > Some platforms supports multiple low-power states for CPUs that can be =
+used
+> > when entering system-wide suspend. Currently we are always selecting th=
+e
+> > deepest possible state for the CPUs, which can break the system-wakeup
+> > latency constraint that may be required for some use-cases.
+> >
+> > Let's take the first step towards addressing this problem, by introduci=
+ng
+> > an interface for user-space, that allows us to specify the CPU
+> > system-wakeup QoS limit. Subsequent changes will start taking into acco=
+unt
+> > the new QoS limit.
+> >
+> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> > ---
+> >
+> > Changes in v2:
+> >       - Renamings to reflect the QoS are limited to CPUs.
+> >       - Move code inside "CONFIG_CPU_IDLE".
+> >
+> > ---
+> >  include/linux/pm_qos.h |   5 ++
+> >  kernel/power/qos.c     | 102 +++++++++++++++++++++++++++++++++++++++++
+> >  2 files changed, 107 insertions(+)
+> >
+> > diff --git a/include/linux/pm_qos.h b/include/linux/pm_qos.h
+> > index 4a69d4af3ff8..bf7524d38933 100644
+> > --- a/include/linux/pm_qos.h
+> > +++ b/include/linux/pm_qos.h
+> > @@ -149,6 +149,7 @@ bool cpu_latency_qos_request_active(struct pm_qos_r=
+equest *req);
+> >  void cpu_latency_qos_add_request(struct pm_qos_request *req, s32 value=
+);
+> >  void cpu_latency_qos_update_request(struct pm_qos_request *req, s32 ne=
+w_value);
+> >  void cpu_latency_qos_remove_request(struct pm_qos_request *req);
+> > +s32 cpu_wakeup_latency_qos_limit(void);
+> >  #else
+> >  static inline s32 cpu_latency_qos_limit(void) { return INT_MAX; }
+> >  static inline bool cpu_latency_qos_request_active(struct pm_qos_reques=
+t *req)
+> > @@ -160,6 +161,10 @@ static inline void cpu_latency_qos_add_request(str=
+uct pm_qos_request *req,
+> >  static inline void cpu_latency_qos_update_request(struct pm_qos_reques=
+t *req,
+> >                                                 s32 new_value) {}
+> >  static inline void cpu_latency_qos_remove_request(struct pm_qos_reques=
+t *req) {}
+> > +static inline s32 cpu_wakeup_latency_qos_limit(void)
+> > +{
+> > +     return PM_QOS_RESUME_LATENCY_NO_CONSTRAINT;
+> > +}
+> >  #endif
+> >
+> >  #ifdef CONFIG_PM
+> > diff --git a/kernel/power/qos.c b/kernel/power/qos.c
+> > index 4244b069442e..8c024d7dc43e 100644
+> > --- a/kernel/power/qos.c
+> > +++ b/kernel/power/qos.c
+> > @@ -415,6 +415,103 @@ static struct miscdevice cpu_latency_qos_miscdev =
+=3D {
+> >       .fops =3D &cpu_latency_qos_fops,
+> >  };
+> >
+> > +/* The CPU system wakeup latency QoS. */
+> > +static struct pm_qos_constraints cpu_wakeup_latency_constraints =3D {
+> > +     .list =3D PLIST_HEAD_INIT(cpu_wakeup_latency_constraints.list),
+> > +     .target_value =3D PM_QOS_RESUME_LATENCY_NO_CONSTRAINT,
+> > +     .default_value =3D PM_QOS_RESUME_LATENCY_NO_CONSTRAINT,
+> > +     .no_constraint_value =3D PM_QOS_RESUME_LATENCY_NO_CONSTRAINT,
+> > +     .type =3D PM_QOS_MIN,
+> > +};
+> > +
+> > +/**
+> > + * cpu_wakeup_latency_qos_limit - Current CPU system wakeup latency Qo=
+S limit.
+> > + *
+> > + * Returns the current CPU system wakeup latency QoS limit that may ha=
+ve been
+> > + * requested by user-space.
+> > + */
+> > +s32 cpu_wakeup_latency_qos_limit(void)
+> > +{
+> > +     return pm_qos_read_value(&cpu_wakeup_latency_constraints);
+> > +}
+> > +
+> > +static int cpu_wakeup_latency_qos_open(struct inode *inode, struct fil=
+e *filp)
+> > +{
+> > +     struct pm_qos_request *req;
+> > +
+> > +     req =3D kzalloc(sizeof(*req), GFP_KERNEL);
+> > +     if (!req)
+> > +             return -ENOMEM;
+> > +
+> > +     req->qos =3D &cpu_wakeup_latency_constraints;
+> > +     pm_qos_update_target(req->qos, &req->node, PM_QOS_ADD_REQ,
+> > +                          PM_QOS_RESUME_LATENCY_NO_CONSTRAINT);
+> > +     filp->private_data =3D req;
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static int cpu_wakeup_latency_qos_release(struct inode *inode,
+> > +                                       struct file *filp)
+> > +{
+> > +     struct pm_qos_request *req =3D filp->private_data;
+> > +
+> > +     filp->private_data =3D NULL;
+> > +     pm_qos_update_target(req->qos, &req->node, PM_QOS_REMOVE_REQ,
+> > +                          PM_QOS_RESUME_LATENCY_NO_CONSTRAINT);
+>
+> Please excuse the delay in reviewing these patches,
+> I was wondering why we have decided here in release to reset the
+> constraints set by a user. For eg. even when I was testing the previous
+> revision locally I'd just commented out this release hook, since I
+> wanted to be able to just echo 0xABCD into /dev/cpu_wakeup_latency...
 
-Ah I see you've already applied it. Thanks!
+If you want "fire and forget", that would be a different interface.
+Device special files are not for that.
+
+Cleaning up after closing a file descriptor is a safety measure and
+CPU wakeup latency constraints are a big deal.  Leaving leftover ones
+behind dead processes is not a good idea.
+
+> It seems an overkill to me that a userspace program be required to hold
+> open this file just to make sure the constraints are honoured for the
+> lifetime of the device. We should definitely give the freedom to just be
+> able to echo and also be able to cat and read back from the same place
+> about the latency constraint being set.
+
+So you'd want a sysfs attribute here, but that has its own issues (the
+last writer "wins", so if there are multiple users of it with
+different needs in user space, things get tricky).
+
+> One other thing on my mind is - and probably unrelated to this specific
+> series, but I think we must have some sysfs entry either appear in
+> /sys/.../cpu0/cpuidle or s2idle/ where we can show next feesible s2idle
+> state that the governor has chosen to enter based on the value set in
+> cpu_wakeup_latency.
+
+Exit latency values for all states are exposed via sysfs.  Since
+s2idle always uses the deepest state it can use, it is quite
+straightforward to figure out which of them will be used going
+forward, given a specific latency constraint.
 
