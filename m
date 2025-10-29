@@ -1,133 +1,127 @@
-Return-Path: <linux-pm+bounces-37003-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37004-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4673CC17CFB
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 02:15:47 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id D6176C181AF
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 03:58:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9D6FC1C66775
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 01:14:40 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 5A77B35060F
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 02:58:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAE522DECDE;
-	Wed, 29 Oct 2025 01:13:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=richtek.com header.i=@richtek.com header.b="Tbs53ZLL"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 781162EC554;
+	Wed, 29 Oct 2025 02:57:58 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mg.richtek.com (mg.richtek.com [220.130.44.152])
+Received: from canpmsgout01.his.huawei.com (canpmsgout01.his.huawei.com [113.46.200.216])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDEAC2DCBF7;
-	Wed, 29 Oct 2025 01:13:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.130.44.152
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3731C29A309;
+	Wed, 29 Oct 2025 02:57:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.216
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761700415; cv=none; b=HD7Pgy6l6h7ezBzsf90nkPRpRWhUKDbdpO5z9mKxdNPQ1DWUZZ2uG84/Rl5QxBoMUtV51s6hUopYm0dHpOtfZ9FV2nckPPvEe/V5DsAnXJE0rLKSNunYjitq6xVjaT6tiEB3byGFbq8AseYsUNBVO2wqMJt14r8pAGtu6hHtvwA=
+	t=1761706678; cv=none; b=JKiWmCfSkwA8/R36CS3EJr7A5L28w17fgldhGvRVEQaWxVk9NKHHoHs8tXGhpuvQKn+I4c8S5/CZYeYfniyt0LU0dsgJ59K0ZamyupRo5l6g8/L6Cxrn3dyS6yP0HeywGo4w9Fx326ON7q3A3xmWZMYInNYm5Ia97HFe6XfYsMY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761700415; c=relaxed/simple;
-	bh=vZmH4j1iRBHdyP/11gWs1D7OulzeT5LPIZQzEfM5xtY=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=tFkI9sbKvjgZVT0cjj5snWQ0uYTneS3BYYUnZM+dtMfXFRodWv6ULNQB/jVi7KYtLDD3+s4HXTvhvK7eEaM0+FPa6F1RImFkSSfdesXrwYWlnhxrnJfAFgS9Kq3J07WCz6Y+TE7EOOTPyGDuyV0Y9OBUUCp7KZ60SBP6TjJKA2U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=richtek.com; spf=pass smtp.mailfrom=richtek.com; dkim=pass (2048-bit key) header.d=richtek.com header.i=@richtek.com header.b=Tbs53ZLL; arc=none smtp.client-ip=220.130.44.152
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=richtek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=richtek.com
-X-MailGates: (SIP:2,PASS,NONE)(compute_score:DELIVER,40,3)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=richtek.com;
-	s=richtek; t=1761700404;
-	bh=SBAaGqZMQDv2mThH8h5PuvqVwOb0ebtKCEAGSC2lmyQ=; l=1765;
-	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=Tbs53ZLLPADmO3+rUDOwM4WaKn3qus59RgbEtXJU8dwt2z9MpFJ2He5dTpCz9vGQM
-	 LINm2hA7Y81dal8wVxs9qYcoc/cL77YCkZKz1Nf+ci77uvnmpoRIHj/59cUpy8JMWr
-	 4/j000YBlKiPTdkiglCuRhfEetyqgE5gpueHIygtM+9yJN05j2vFwsx5IGcKWRqWzS
-	 YN/esUx61lJyU7hnmnk64hrgzouRoe+9bET5H5ay/PPSYhuDg70J8INPFchNn91W7/
-	 7z1/yTWV8Vzca3AYicf3bHm7JUxnABZ6BkHdj2pfCHQRu/8ZCJ4MjDVGP2hkB9pNgU
-	 inx9+nnbOIraw==
-Received: from 192.168.10.46
-	by mg.richtek.com with MailGates ESMTPS Server V6.0(3436907:0:AUTH_RELAY)
-	(envelope-from <cy_huang@richtek.com>)
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256/256); Wed, 29 Oct 2025 09:13:19 +0800 (CST)
-Received: from ex3.rt.l (192.168.10.46) by ex3.rt.l (192.168.10.46) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1748.26; Wed, 29 Oct
- 2025 09:13:18 +0800
-Received: from git-send.richtek.com (192.168.10.154) by ex3.rt.l
- (192.168.10.45) with Microsoft SMTP Server id 15.2.1748.26 via Frontend
- Transport; Wed, 29 Oct 2025 09:13:18 +0800
-From: <cy_huang@richtek.com>
-To: Sebastian Reichel <sre@kernel.org>, Krzysztof Kozlowski
-	<krzk+dt@kernel.org>
-CC: Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
-	"ChiYuan Huang" <cy_huang@richtek.com>, <devicetree@vger.kernel.org>,
-	<linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3 3/3] Documentation: power: rt9756: Document exported sysfs entries
-Date: Wed, 29 Oct 2025 09:14:45 +0800
-Message-ID: <826a6c077242a411bf6947e51aaa4ea98d43b650.1761699952.git.cy_huang@richtek.com>
-X-Mailer: git-send-email 2.43.5
-In-Reply-To: <cover.1761699952.git.cy_huang@richtek.com>
-References: <cover.1761699952.git.cy_huang@richtek.com>
+	s=arc-20240116; t=1761706678; c=relaxed/simple;
+	bh=mep5AsfZ+dDh63QbAet0NjjS4x3Cwgihg7zVz53pHIg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=EAOSlohj6nyRabJHtiwhaXJZtddSfEWgg7vTUaqHjuw88sLtFm5pCWH0majNDJWLvhyvIXUKdVsPqFVb/5B6xP8dXMhCr3gA3cjR/Z1pufRKcw2Q9bf00pgxWfuQK8/KacT6XlkMn5XCLvU1UU41yE2kKnQ2W7qcDmofIDt+HGI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com; spf=pass smtp.mailfrom=hisilicon.com; arc=none smtp.client-ip=113.46.200.216
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hisilicon.com
+Received: from mail.maildlp.com (unknown [172.19.163.174])
+	by canpmsgout01.his.huawei.com (SkyGuard) with ESMTPS id 4cxBjD2TNmz1T4HJ;
+	Wed, 29 Oct 2025 10:56:48 +0800 (CST)
+Received: from kwepemr500004.china.huawei.com (unknown [7.202.195.141])
+	by mail.maildlp.com (Postfix) with ESMTPS id CCBC514027A;
+	Wed, 29 Oct 2025 10:57:51 +0800 (CST)
+Received: from [10.67.121.58] (10.67.121.58) by kwepemr500004.china.huawei.com
+ (7.202.195.141) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Wed, 29 Oct
+ 2025 10:57:51 +0800
+Message-ID: <4f02fbba-dcdf-4133-9cad-eb4a75273f0f@hisilicon.com>
+Date: Wed, 29 Oct 2025 10:57:50 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/2] cpufreq: CPPC: Don't warn if FIE init fails to
+ read counters
+To: Viresh Kumar <viresh.kumar@linaro.org>
+CC: <rafael@kernel.org>, <ionela.voinescu@arm.com>, <beata.michalska@arm.com>,
+	<zhenglifeng1@huawei.com>, <linux-pm@vger.kernel.org>,
+	<linux-acpi@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linuxarm@huawei.com>, <jonathan.cameron@huawei.com>
+References: <20250828110212.2108653-1-zhanjie9@hisilicon.com>
+ <20250828110212.2108653-2-zhanjie9@hisilicon.com>
+ <h2k4enovkvyasxkf3s6ceslpdnhhuvems3jmmv6a2q2zg4nsap@tlsqppgiszwo>
+Content-Language: en-US
+From: Jie Zhan <zhanjie9@hisilicon.com>
+In-Reply-To: <h2k4enovkvyasxkf3s6ceslpdnhhuvems3jmmv6a2q2zg4nsap@tlsqppgiszwo>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
+ kwepemr500004.china.huawei.com (7.202.195.141)
 
-From: ChiYuan Huang <cy_huang@richtek.com>
 
-Document the settings exported by rt9756 charger driver through sysfs
-entries:
 
-- watchdog_timer
-- operation_mode
-
-Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
----
-V3
-- Remove customized description for battery voltage and current
----
- .../ABI/testing/sysfs-class-power-rt9756      | 30 +++++++++++++++++++
- 1 file changed, 30 insertions(+)
- create mode 100644 Documentation/ABI/testing/sysfs-class-power-rt9756
-
-diff --git a/Documentation/ABI/testing/sysfs-class-power-rt9756 b/Documentation/ABI/testing/sysfs-class-power-rt9756
-new file mode 100644
-index 000000000000..c4d6c2b4715d
---- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-class-power-rt9756
-@@ -0,0 +1,30 @@
-+What:		/sys/class/power_supply/rt9756-*/watchdog_timer
-+Date:		Dec 2025
-+KernelVersion:	6.19
-+Contact:	ChiYuan Huang <cy_huang@richtek.com>
-+Description:
-+		This entry shows and sets the watchdog timer when rt9756 charger
-+		operates in charging mode. When the timer expires, the device
-+		will disable the charging. To prevent the timer expires, any
-+		host communication can make the timer restarted.
-+
-+		Access: Read, Write
-+
-+		Valid values:
-+		- 500, 1000, 5000, 30000, 40000, 80000, 128000 or 255000 (milliseconds),
-+		- 0: disabled
-+
-+What:		/sys/class/power_supply/rt9756-*/operation_mode
-+Date:		Dec 2025
-+KernelVersion:	6.19
-+Contact:	ChiYuan Huang <cy_huang@richtek.com>
-+Description:
-+		This entry shows and set the operation mode when rt9756 charger
-+		operates in charging phase. If 'bypass' mode is used, internal
-+		path will connect vbus directly to vbat. Else, default 'div2'
-+		mode for the switch-cap charging.
-+
-+		Access: Read, Write
-+
-+		Valid values:
-+		- 'bypass' or 'div2'
--- 
-2.34.1
-
+On 10/28/2025 1:10 PM, Viresh Kumar wrote:
+> On 28-08-25, 19:02, Jie Zhan wrote:
+>> During the CPPC FIE initialization, reading perf counters on offline cpus
+>> should be expected to fail.  Don't warn on this case.
+>>
+>> Also, change the error log level to debug since FIE is optional.
+>>
+>> Co-developed-by: Bowen Yu <yubowen8@huawei.com>
+>> Signed-off-by: Bowen Yu <yubowen8@huawei.com> # Changing loglevel to debug
+>> Signed-off-by: Jie Zhan <zhanjie9@hisilicon.com>
+>> ---
+>>  drivers/cpufreq/cppc_cpufreq.c | 12 +++---------
+>>  1 file changed, 3 insertions(+), 9 deletions(-)
+>>
+>> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+>> index 4a17162a392d..7724318b3415 100644
+>> --- a/drivers/cpufreq/cppc_cpufreq.c
+>> +++ b/drivers/cpufreq/cppc_cpufreq.c
+>> @@ -144,16 +144,10 @@ static void cppc_cpufreq_cpu_fie_init(struct cpufreq_policy *policy)
+>>  		init_irq_work(&cppc_fi->irq_work, cppc_irq_work);
+>>  
+>>  		ret = cppc_get_perf_ctrs(cpu, &cppc_fi->prev_perf_fb_ctrs);
+>> -		if (ret) {
+>> -			pr_warn("%s: failed to read perf counters for cpu:%d: %d\n",
+>> +		if (ret && cpu_online(cpu)) {
+>> +			pr_debug("%s: failed to read perf counters for cpu:%d: %d\n",
+>>  				__func__, cpu, ret);
+>> -
+>> -			/*
+>> -			 * Don't abort if the CPU was offline while the driver
+>> -			 * was getting registered.
+>> -			 */
+>> -			if (cpu_online(cpu))
+>> -				return;
+>> +			return;
+> 
+> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+> index 7724318b3415..5a30c1ec0cdd 100644
+> --- a/drivers/cpufreq/cppc_cpufreq.c
+> +++ b/drivers/cpufreq/cppc_cpufreq.c
+> @@ -144,6 +144,11 @@ static void cppc_cpufreq_cpu_fie_init(struct cpufreq_policy *policy)
+>                 init_irq_work(&cppc_fi->irq_work, cppc_irq_work);
+>  
+>                 ret = cppc_get_perf_ctrs(cpu, &cppc_fi->prev_perf_fb_ctrs);
+> +
+> +               /*
+> +                * Don't abort as the CPU was offline while the driver was
+> +                * getting registered.
+> +                */
+>                 if (ret && cpu_online(cpu)) {
+>                         pr_debug("%s: failed to read perf counters for cpu:%d: %d\n",
+>                                 __func__, cpu, ret);
+> 
+> Applied with this diff.
+> 
+Sure, thanks!
 
