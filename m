@@ -1,231 +1,343 @@
-Return-Path: <linux-pm+bounces-37145-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37146-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F591C22375
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Oct 2025 21:22:20 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A0211C225E3
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Oct 2025 22:02:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id BB57C4EB327
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Oct 2025 20:18:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A3CE83A1C55
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Oct 2025 21:01:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE41C334C10;
-	Thu, 30 Oct 2025 20:13:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70E6D285404;
+	Thu, 30 Oct 2025 21:01:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="mHx5IcZ2"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="AwzJap91"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7952E34D3AB
-	for <linux-pm@vger.kernel.org>; Thu, 30 Oct 2025 20:13:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A63EF274FEF
+	for <linux-pm@vger.kernel.org>; Thu, 30 Oct 2025 21:01:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761855185; cv=none; b=B+5K4lXoKpZK6RfLESnMV/BlwjX3bXC47mYZqN5/MEbkv5V/KN+U/7SCZiV2PWk/1CZW/orjes37oQinbH9JM7Az/Ir987uRPlc900sLTE2oU/JtIq1cUyWoj2V6IZZrwiaMH7qTZEDmta/HoCaH3/NA03VxkOJfqecQsDGXIe0=
+	t=1761858077; cv=none; b=PETjORNatBYVu3Nfgof5eGQ9TDKKI4qhJ0sfeZdppv1hHSYq5gQ8L/7PF+GymL5nijPUI3Tlj9NdfHBVmJEUJ+E/bCjz10RGhcfsy1v+NXf3wdYWGh7+P53Q+cwtQhWCR+EK62WH53DejDDaqcRQHnrmJ2OCCgQr4Mogjs+1vOE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761855185; c=relaxed/simple;
-	bh=X8TAoqJnNj6KHpFGGb0JdVN2l77IDpbRZrCb+k7NcUY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
-	 Content-Type:References; b=qLZWqbwJYQoZuCspHs/rytIDqY/drhn8U2wBS6AC35PL4ac85uV0cBJSDtAc7aGARjURtyIqiNol5/ZF6KClnYyyv3wdWmLm+ZvtSoa6ck/98pxDMnu4YfrnTGWDO9hSTwGWvrPUSKqxMcv+pk4i/QftDnVvd7ElYDqXM8xZ2Vs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=mHx5IcZ2; arc=none smtp.client-ip=210.118.77.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-	by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20251030201300euoutp01635c7687d14c2fcd7d2eab2ed300adfb~zXfOlZJ8j0086400864euoutp01Y
-	for <linux-pm@vger.kernel.org>; Thu, 30 Oct 2025 20:13:00 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20251030201300euoutp01635c7687d14c2fcd7d2eab2ed300adfb~zXfOlZJ8j0086400864euoutp01Y
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1761855180;
-	bh=aPKYrhN0h9lZ7e4uINlVO3+rklZ2bskVk9BKkD02NWo=;
-	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-	b=mHx5IcZ2ASo5hCahLWuk0hvToLtzwBoq1hrH3bY3DTMVfZtBM7ySQ/1dpgjkzTsl0
-	 ACEsC4K+DBrY8xb+NOrlgtfUJdsaHJZupv9M1+nk2TvR67bXf717+XALoqqorNCHui
-	 /KLFB/5iBfm3DRv9yPEiukG0yIG7jhsj3g6qRKhw=
-Received: from eusmtip2.samsung.com (unknown [203.254.199.222]) by
-	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-	20251030201259eucas1p159917c525b575ccecaab2cc5f32b2285~zXfOMIINF1012410124eucas1p1i;
-	Thu, 30 Oct 2025 20:12:59 +0000 (GMT)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-	eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20251030201258eusmtip2dda38e291c0a0eea3c42de8a3556ba08~zXfMpWucU2934129341eusmtip2e;
-	Thu, 30 Oct 2025 20:12:58 +0000 (GMT)
-Message-ID: <b02c8890-4568-4afe-8628-10b77e79bf44@samsung.com>
-Date: Thu, 30 Oct 2025 21:12:57 +0100
+	s=arc-20240116; t=1761858077; c=relaxed/simple;
+	bh=pSm68gUiqpDQYnDnJlfKYIXw088w3ya4Bqiww9ARBCw=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=Uz8MCKpGHkvh6A2E4alKN4wlFSpCto9Z6eR1btwQnimY2z3fHFS8ltW3AN89htjhjOU/sTAbxhRU0QQzVbzfPIbnA3JoteYkUovqqhBIhk5SRhyRRGuDtx5xeDyXbfvvTgdOPY9DODYTgsCYJABTYr+gZvyPkVp1abC9lm48W3A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--wusamuel.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=AwzJap91; arc=none smtp.client-ip=209.85.215.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--wusamuel.bounces.google.com
+Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-b62f9247dd1so1214337a12.0
+        for <linux-pm@vger.kernel.org>; Thu, 30 Oct 2025 14:01:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1761858075; x=1762462875; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=yM/R5fiiUTE4/cz4iiRL4jtb/AtneBwnINL9bc1sqX8=;
+        b=AwzJap91x82KmgpqKhueNMbBM+zPQ2mvFE/U70eeFcXc4mK7QLEl3pl2T/QhF2AJkB
+         +aRMRc2T+hoS1P+xKIY7OfHl5ALxmTf6ORmqq5IkZFalfmriGmNwgK/u0r9evHFAqwHe
+         NiDh91fI9yDj0T5vOzZz/DC4LsRUSYXciFH4uZEzvsyhOSZDmETg0sFf8y6J8bF7tEVE
+         4TR4W422fgT7ll/KKB9iN4Ojy+LryehQrmJevbvloAlV/sjR7NIDd3tp56mCD7YYJr9H
+         QoZKOw6W4YkJ5ZbFJmVJn6b39w1gIvgoFoqGXYX09v5kipGDjNn8r7+steswM8S8XZ4q
+         K2hA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761858075; x=1762462875;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yM/R5fiiUTE4/cz4iiRL4jtb/AtneBwnINL9bc1sqX8=;
+        b=wmKvs+RPZXdNfCyWwzvhef3wMvuHCH3M5VO1CenjmoRkpkftDLtFc8QiHguLoIe8jZ
+         odA2pJ0j1EEoGMgLVixjILkDyACznlGt0sfkeion41Wbd9IB22l0tFBQNQrekpB3biVn
+         aB3ltWenUQdMC+FWtb9Z9vA/QDtFttXQCTpvZMfCpG8Rc/Qj80HXB4KvBwi3/OEfLJW4
+         1dcSa1zi6tiTXJfYry83VnxCezHKbDndllUM4DmNVCnCo7gpnjV8zC+qmrgMMzWfu0Gm
+         ntwW9t5YwAmM99Mo7x6Wc/ypI2YAONKWqWM/hd3NqnA/sMK03+Cy7hNepF3aTLWwGOP4
+         FzWg==
+X-Forwarded-Encrypted: i=1; AJvYcCVRSpTEODBW6A/LPXuiy088YTijf/mftpmTela5iDg2lyE3C12rGHnL8F4Ra6E2RZOfY8BlBU7yow==@vger.kernel.org
+X-Gm-Message-State: AOJu0YydJSGLjBiEhjmn+B8A0A5yBmgBn5r9PC2nrdn0kcN1nA7aKvKY
+	O8GVVVFUOyvVymdrhBnlAcuDsfwUorqly/4qd3oKJpxO9+/9o+BZiZ5d4IoY9sEk+n4/Q87nN4E
+	s2OKZOt0bP8H+7Q==
+X-Google-Smtp-Source: AGHT+IE/FqLjssGK3CdsUrJ2TujA0jKIyTf2vP2v/Pgmy6iJinTA5Ft0H3KFGDPgPgZuOkNPae7QF4Lai7pW8w==
+X-Received: from plww12.prod.google.com ([2002:a17:902:d10c:b0:294:fae5:ee1b])
+ (user=wusamuel job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:902:f544:b0:270:ced4:911a with SMTP id d9443c01a7336-2951a36c2cbmr14141665ad.9.1761858074943;
+ Thu, 30 Oct 2025 14:01:14 -0700 (PDT)
+Date: Thu, 30 Oct 2025 21:01:09 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Betterbird (Windows)
-Subject: Re: RPi 4 deferred probe timeout of V3D PM domain
-To: Stefan Wahren <wahrenst@gmx.net>, Mark Brown <broonie@kernel.org>, Ulf
-	Hansson <ulf.hansson@linaro.org>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Florian Fainelli
-	<florian.fainelli@broadcom.com>, bcm-kernel-feedback-list@broadcom.com, Ray
-	Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>, Melissa Wen
-	<mwen@igalia.com>, =?UTF-8?Q?Ma=C3=ADra_Canal?= <mcanal@igalia.com>, Maxime
-	Ripard <mripard@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-	kernel-dev@igalia.com, kernel-list@raspberrypi.com,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, "open
- list:GENERIC PM DOMAINS" <linux-pm@vger.kernel.org>
-Content-Language: en-US
-From: Marek Szyprowski <m.szyprowski@samsung.com>
-In-Reply-To: <043f1702-52fc-4a83-82f7-683a26851623@gmx.net>
-Content-Transfer-Encoding: 8bit
-X-CMS-MailID: 20251030201259eucas1p159917c525b575ccecaab2cc5f32b2285
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20251030191426eucas1p29ce063b538b60e4a998bcd32f925267c
-X-EPHeader: CA
-X-CMS-RootMailID: 20251030191426eucas1p29ce063b538b60e4a998bcd32f925267c
-References: <20251005113816.6721-1-wahrenst@gmx.net>
-	<9ebda74e-e700-4fbe-bca5-382f92417a9c@sirena.org.uk>
-	<a5e1e279-7e20-458d-a75f-787e0adbc9fe@gmx.net>
-	<ad07546f-0c2d-4bc2-b794-755b892c7328@sirena.org.uk>
-	<a016e7e1-09f7-4056-a855-6cfaa8d51962@gmx.net>
-	<10a4ef77-0e70-4ef2-b1df-535b476d256d@sirena.org.uk>
-	<ecd75fd5-3131-4d10-ae3d-b6f608d9622a@gmx.net>
-	<25e500c2-3dc1-476c-b6c1-ac4098a0501d@sirena.org.uk>
-	<d6b14388-e0ab-44f0-b4d9-78adf74c2a7f@gmx.net>
-	<d88f6420-5013-4856-99d6-da28f79bd7a5@sirena.org.uk>
-	<CGME20251030191426eucas1p29ce063b538b60e4a998bcd32f925267c@eucas1p2.samsung.com>
-	<043f1702-52fc-4a83-82f7-683a26851623@gmx.net>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.51.1.930.gacf6e81ea2-goog
+Message-ID: <20251030210110.298612-1-wusamuel@google.com>
+Subject: [PATCH v6] PM: Support aborting sleep during filesystem sync
+From: Samuel Wu <wusamuel@google.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, Pavel Machek <pavel@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>
+Cc: tuhaowen@uniontech.com, Samuel Wu <wusamuel@google.com>, 
+	Saravana Kannan <saravanak@google.com>, kernel-team@android.com, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 30.10.2025 20:13, Stefan Wahren wrote:
->
-> Am 30.10.25 um 13:59 schrieb Mark Brown:
->> On Wed, Oct 29, 2025 at 08:51:38PM +0100, Stefan Wahren wrote:
->>> Am 28.10.25 um 19:47 schrieb Mark Brown:
->>> Okay, here is my theory. The difference is about (boot) time. In my 
->>> setup
->>> the whole device boot from SD card and in your case the kernel 
->>> modules are
->>> stored via NFS.
->>> V3D requires two resources, a clock and a PM domain. Additionally 
->>> the PM
->>> domain itself depends on the very same clock. In arm64/defconfig the
->>> relevant clock driver is build as module, but the PM domain driver is
->>> builtin.
->>> During boot "driver_deferred_probe_timeout" (10 s) expires before 
->>> the clock
->>> driver could be loaded via NFS. So the PM domain core gave up:
->>> [   16.936547] v3d fec00000.gpu: deferred probe timeout, ignoring 
->>> dependency
->>> So this breaks probing of V3D driver in this case.
->> That seems buggy on the part of the core, particularly since userspace
->> isn't there yet so we might be missing some filesystems - I would have
->> expected the device to probe once the supply becomes available. But I
->> do agree with your analysis, it doesn't look like an issue with this
->> driver.
-> recent changes to the Raspberry Pi 4 device tree revealed the issue 
-> for the following corner case:
-> V3D requires two resources, a clock and a PM domain. Additionally the 
-> PM domain itself depends on the very same clock. In arm64/defconfig 
-> the relevant clock driver clk-raspberrypi is build as module, but the 
-> PM domain driver bcm2835-pmdomain is builtin.
->
-> During boot "driver_deferred_probe_timeout" (10 s) expires before the 
-> clock driver could be loaded via NFS. So the PM domain core gave up:
-> [   16.936547] v3d fec00000.gpu: deferred probe timeout, ignoring 
-> dependency
->
-> Expected behavior would be that the pmdomain defers probing until the 
-> clk-driver is loaded from NFS.
->
-> I simulated Marks setup and replaced the dev_warn above with a 
-> dev_WARN and got the following result:
->
-> [   22.516225] v3d fec00000.gpu: __genpd_dev_pm_attach() failed to 
-> find PM domain: -2
-> [   22.516260] ------------[ cut here ]------------
-> [   22.516268] v3d fec00000.gpu: deferred probe timeout, ignoring 
-> dependency
-> [   22.516355] WARNING: CPU: 0 PID: 75 at drivers/base/dd.c:297 
-> driver_deferred_probe_check_state+0x64/0x80
-> [   22.516401] Modules linked in: aes_neon_blk af_alg brcmfmac_wcc 
-> qrtr vc4 brcmfmac snd_soc_hdmi_codec snd_soc_core brcmutil 
-> snd_compress snd_pcm_dmaengine sha256 snd_bcm2835(C) cfg80211 drm_exec 
-> hci_uart snd_pcm btqca snd_timer btbcm snd bluetooth soundcore 
-> drm_display_helper ecdh_generic broadcom v3d ecc bcm_phy_lib cec 
-> drm_shmem_helper drm_client_lib pcie_brcmstb gpu_sched drm_dma_helper 
-> genet raspberrypi_hwmon rfkill bcm2711_thermal drm_kms_helper 
-> irq_bcm2712_mip pwrseq_core i2c_bcm2835 nvmem_rmem vchiq(C) 
-> pwm_bcm2835 i2c_mux_pinctrl reset_gpio drm fuse backlight dm_mod ipv6
-> [   22.516721] CPU: 0 UID: 0 PID: 75 Comm: kworker/u16:3 Tainted: G   
->      C          6.18.0-rc3-dirty #7 PREEMPT
-> [   22.516743] Tainted: [C]=CRAP
-> [   22.516751] Hardware name: Raspberry Pi 4 Model B Rev 1.4 (DT)
-> [   22.516763] Workqueue: events_unbound deferred_probe_work_func
-> [   22.516792] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS 
-> BTYPE=--)
-> [   22.516806] pc : driver_deferred_probe_check_state+0x64/0x80
-> [   22.516828] lr : driver_deferred_probe_check_state+0x64/0x80
-> [   22.516847] sp : ffff800080c7ba90
-> [   22.516856] x29: ffff800080c7ba90 x28: 0000000000000000 x27: 
-> 0000000000000000
-> [   22.516884] x26: ffff00010001c028 x25: 0000000000000001 x24: 
-> ffff000100136c10
-> [   22.516910] x23: 0000000000000001 x22: fffffffffffffffe x21: 
-> 0000000000000000
-> [   22.516935] x20: ffff000100136c10 x19: ffff000100136c10 x18: 
-> fffffffffffe71c8
-> [   22.516958] x17: 616d6f64204d5020 x16: 646e6966206f7420 x15: 
-> ffffb4b9255d6c70
-> [   22.516982] x14: 0000000000000000 x13: ffffb4b9255d6cf8 x12: 
-> 00000000000004c5
-> [   22.517005] x11: 0000000000000197 x10: ffffb4b92562ecf8 x9 : 
-> ffffb4b9255d6cf8
-> [   22.517029] x8 : 00000000ffffefff x7 : ffffb4b92562ecf8 x6 : 
-> 80000000fffff000
-> [   22.517053] x5 : ffff0001fef97408 x4 : 0000000000000000 x3 : 
-> 0000000000000027
-> [   22.517076] x2 : 0000000000000000 x1 : 0000000000000000 x0 : 
-> ffff000100806900
-> [   22.517100] Call trace:
-> [   22.517111]  driver_deferred_probe_check_state+0x64/0x80 (P)
-> [   22.517135]  __genpd_dev_pm_attach+0x270/0x2c4
-> [   22.517159]  genpd_dev_pm_attach+0x64/0x74
-> [   22.517178]  dev_pm_domain_attach+0x78/0x7c
-> [   22.517200]  platform_probe+0x48/0x98
-> [   22.517215]  really_probe+0xbc/0x29c
-> [   22.517228]  __driver_probe_device+0x78/0x12c
-> [   22.517241]  driver_probe_device+0xd8/0x15c
-> [   22.517254]  __device_attach_driver+0xb8/0x134
-> [   22.517267]  bus_for_each_drv+0x88/0xe8
-> [   22.517286]  __device_attach+0xa0/0x190
-> [   22.517299]  device_initial_probe+0x14/0x20
-> [   22.517312]  bus_probe_device+0xac/0xb0
-> [   22.517331]  deferred_probe_work_func+0x88/0xc0
-> [   22.517351]  process_one_work+0x148/0x28c
-> [   22.517375]  worker_thread+0x2d0/0x3d8
-> [   22.517394]  kthread+0x12c/0x204
-> [   22.517413]  ret_from_fork+0x10/0x20
-> [   22.517433] ---[ end trace 0000000000000000 ]---
-> [   22.517450] v3d fec00000.gpu: probe with driver v3d failed with 
-> error -110
-> [   22.523164] platform fef05700.hdmi: deferred probe pending: (reason 
-> unknown)
-> [   22.523197] platform bcm2835-power: deferred probe pending: 
-> bcm2835-power: Failed to get clock v3d
->
-> Do you think issue is in bcm2835-pmdomain or in the pmdomain core?
-> Any ideas how to solve this?
+At the start of suspend and hibernate, filesystems will sync to save the
+current state of the device. However, the long tail of the filesystem
+sync can take upwards of 25 seconds. If during this filesystem sync
+there is some wakeup or abort signal, it will not be processed until the
+sync is complete; from a user's perspective, this looks like the device
+is unresponsive to any form of input.
 
-As I mentioned in the other thread, this is imho a configuration issue. 
-If core modules are distributed on NFS rootfs, then one should increase 
-deferred probe timeout by adding deferred_probe_timeout=60 to cmdline. 
-On the other hand drivers built into the kernel should not depend on the 
-resources provided by the drivers built as modules, so maybe it would 
-make sense to change CONFIG_CLK_RASPBERRYPI from 'm' to 'y' in 
-arch/arm64/configs/defconfig.
+This patch adds functionality to handle a sleep abort signal when in
+the filesystem sync phase of suspend or hibernate. This topic was first
+discussed by Saravana Kannan at LPC 2024 [1], where the general
+consensus was to allow filesystem sync on a parallel thread. In case of
+abort, the suspend process will stop waiting on an in-progress
+filesystem sync, and continue by aborting suspend before the filesystem
+sync is complete.
 
+Additionally, there is extra care needed to account for back-to-back
+sleeps while maintaining functionality to immediately abort during the
+filesystem sync stage. Furthermore, in the case of the back-to-back
+sleeps, a subsequent filesystem sync is needed to ensure the latest
+files are synced right before sleep. If necessary, a subsequent sleep's
+filesystem sync will be queued, and will only start when the previous
+sleep's filesystem sync has finished. While waiting for the previous
+sleep's filesystem sync to finish, the subsequent sleep will still abort
+early if a wakeup event is triggered, solving the original issue of
+filesystem sync blocking abort.
 
-Best regards
+[1]: https://lpc.events/event/18/contributions/1845/
+
+Suggested-by: Saravana Kannan <saravanak@google.com>
+Signed-off-by: Samuel Wu <wusamuel@google.com>
+---
+Changes in v6:
+- Use spin_lock_irq() in thread context
+- Use dedicated ordered workqueue for sync work items
+- Use a counter instead of two bools for synchronization
+- Queue fs_sync if it's not already pending on workqueue
+- pm_wakeup_clear(0) is prequisite to this feature, so move it within function
+- Updated commit text for motive of back-to-back fs syncs
+- Tighter lock/unlock around setup, checks, and loop
+- Fix function definitions for CONFIG_PM_SLEEP=n
+- v5 link: https://lore.kernel.org/all/20251017233907.2305303-1-wusamuel@google.com/
+
+Changes in v5:
+- Update spin_lock() to spin_lock_irqsave() since abort can be in IRQ context
+- Updated changelog description to be more precise regarding continuing abort
+  sleep before fs_sync() is complete
+- Rename abort_sleep_during_fs_sync() to pm_stop_waiting_for_fs_sync()
+- Simplify from a goto to do-while in pm_sleep_fs_sync()
+- v4 link: https://lore.kernel.org/all/20250911185314.2377124-1-wusamuel@google.com
+
+Changes in v4:
+- Removed patch 1/3 of v3 as it is already picked up on linux-pm
+- Squashed patches 2/3 and 3/3 from v3 into this single patch
+- Added abort during fs_sync functionality to hibernate in addition to suspend
+- Moved variables and functions for abort from power/suspend.c to power/main.c
+- Renamed suspend_fs_sync_with_abort() to pm_sleep_fs_sync()
+- Renamed suspend_abort_fs_sync() to abort_sleep_during_fs_sync()
+- v3 link: https://lore.kernel.org/all/20250821004237.2712312-1-wusamuel@google.com/
+
+Changes in v3:
+- Split v2 patch into 3 patches
+- Moved pm_wakeup_clear() outside of if(sync_on_suspend_enabled) condition
+- Updated documentation and comments within kernel/power/suspend.c
+- v2 link: https://lore.kernel.org/all/20250812232126.1814253-1-wusamuel@google.com/
+
+Changes in v2:
+- Added documentation for suspend_abort_fs_sync()
+- Made suspend_fs_sync_lock and suspend_fs_sync_complete declaration static
+- v1 link: https://lore.kernel.org/all/20250815004635.3684650-1-wusamuel@google.com
+
+ drivers/base/power/wakeup.c |  8 ++++
+ include/linux/suspend.h     |  4 ++
+ kernel/power/hibernate.c    |  5 ++-
+ kernel/power/main.c         | 81 +++++++++++++++++++++++++++++++++++++
+ kernel/power/suspend.c      |  4 +-
+ 5 files changed, 100 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
+index d1283ff1080b..689c16b08b38 100644
+--- a/drivers/base/power/wakeup.c
++++ b/drivers/base/power/wakeup.c
+@@ -570,6 +570,13 @@ static void wakeup_source_activate(struct wakeup_source *ws)
+ 
+ 	/* Increment the counter of events in progress. */
+ 	cec = atomic_inc_return(&combined_event_count);
++	/*
++	 * wakeup_source_activate() aborts sleep only if events_check_enabled
++	 * is set (see pm_wakeup_pending()). Similarly, abort sleep during
++	 * fs_sync only if events_check_enabled is set.
++	 */
++	if (events_check_enabled)
++		pm_stop_waiting_for_fs_sync();
+ 
+ 	trace_wakeup_source_activate(ws->name, cec);
+ }
+@@ -899,6 +906,7 @@ EXPORT_SYMBOL_GPL(pm_wakeup_pending);
+ void pm_system_wakeup(void)
+ {
+ 	atomic_inc(&pm_abort_suspend);
++	pm_stop_waiting_for_fs_sync();
+ 	s2idle_wake();
+ }
+ EXPORT_SYMBOL_GPL(pm_system_wakeup);
+diff --git a/include/linux/suspend.h b/include/linux/suspend.h
+index b02876f1ae38..4795f55f9cbe 100644
+--- a/include/linux/suspend.h
++++ b/include/linux/suspend.h
+@@ -450,6 +450,8 @@ void restore_processor_state(void);
+ extern int register_pm_notifier(struct notifier_block *nb);
+ extern int unregister_pm_notifier(struct notifier_block *nb);
+ extern void ksys_sync_helper(void);
++extern void pm_stop_waiting_for_fs_sync(void);
++extern int pm_sleep_fs_sync(void);
+ extern void pm_report_hw_sleep_time(u64 t);
+ extern void pm_report_max_hw_sleep(u64 t);
+ void pm_restrict_gfp_mask(void);
+@@ -505,6 +507,8 @@ static inline void pm_restrict_gfp_mask(void) {}
+ static inline void pm_restore_gfp_mask(void) {}
+ 
+ static inline void ksys_sync_helper(void) {}
++static inline void pm_stop_waiting_for_fs_sync(void) {}
++static inline int pm_sleep_fs_sync(void) { return 0; }
+ 
+ #define pm_notifier(fn, pri)	do { (void)(fn); } while (0)
+ 
+diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
+index 53166ef86ba4..1874fde4b4f3 100644
+--- a/kernel/power/hibernate.c
++++ b/kernel/power/hibernate.c
+@@ -820,7 +820,10 @@ int hibernate(void)
+ 	if (error)
+ 		goto Restore;
+ 
+-	ksys_sync_helper();
++	error = pm_sleep_fs_sync();
++	if (error)
++		goto Restore;
++
+ 	if (filesystem_freeze_enabled)
+ 		filesystems_freeze();
+ 
+diff --git a/kernel/power/main.c b/kernel/power/main.c
+index a6cbc3f4347a..23ca87a172a4 100644
+--- a/kernel/power/main.c
++++ b/kernel/power/main.c
+@@ -582,6 +582,84 @@ bool pm_sleep_transition_in_progress(void)
+ {
+ 	return pm_suspend_in_progress() || hibernation_in_progress();
+ }
++
++static int pm_sleep_fs_syncs_queued;
++static DEFINE_SPINLOCK(pm_sleep_fs_sync_lock);
++static DECLARE_COMPLETION(pm_sleep_fs_sync_complete);
++static struct workqueue_struct *pm_fs_sync_wq;
++
++static int __init pm_start_fs_sync_workqueue(void)
++{
++	pm_fs_sync_wq = alloc_ordered_workqueue("pm_fs_sync_wq", 0);
++
++	return pm_fs_sync_wq ? 0 : -ENOMEM;
++}
++
++/**
++ * pm_stop_waiting_for_fs_sync - Abort fs_sync to abort sleep early
++ *
++ * This function causes the suspend process to stop waiting on an in-progress
++ * filesystem sync, such that the suspend process can be aborted before the
++ * filesystem sync is complete.
++ */
++void pm_stop_waiting_for_fs_sync(void)
++{
++	unsigned long flags;
++
++	spin_lock_irqsave(&pm_sleep_fs_sync_lock, flags);
++	complete(&pm_sleep_fs_sync_complete);
++	spin_unlock_irqrestore(&pm_sleep_fs_sync_lock, flags);
++}
++
++static void sync_filesystems_fn(struct work_struct *work)
++{
++	ksys_sync_helper();
++
++	spin_lock_irq(&pm_sleep_fs_sync_lock);
++	pm_sleep_fs_syncs_queued--;
++	complete(&pm_sleep_fs_sync_complete);
++	spin_unlock_irq(&pm_sleep_fs_sync_lock);
++}
++static DECLARE_WORK(sync_filesystems, sync_filesystems_fn);
++
++/**
++ * pm_sleep_fs_sync - Trigger fs_sync with ability to abort
++ *
++ * Return 0 on successful file system sync, otherwise returns -EBUSY if file
++ * system sync was aborted.
++ */
++int pm_sleep_fs_sync(void)
++{
++	pm_wakeup_clear(0);
++	spin_lock_irq(&pm_sleep_fs_sync_lock);
++	/*
++	 * Handles back-to-back sleeps, by queuing a subsequent fs sync only if
++	 * the previous fs sync is running or is not queued. Multiple fs syncs
++	 * ensure that the latest files are saved immediately before sleep.
++	 */
++	if (!work_pending(&sync_filesystems)) {
++		pm_sleep_fs_syncs_queued++;
++		queue_work(pm_fs_sync_wq, &sync_filesystems);
++	}
++	do {
++		reinit_completion(&pm_sleep_fs_sync_complete);
++		spin_unlock_irq(&pm_sleep_fs_sync_lock);
++		/*
++		 * Completion is triggered by fs_sync finishing or a sleep
++		 * abort, whichever comes first
++		 */
++		wait_for_completion(&pm_sleep_fs_sync_complete);
++		spin_lock_irq(&pm_sleep_fs_sync_lock);
++		if (pm_wakeup_pending()) {
++			spin_unlock_irq(&pm_sleep_fs_sync_lock);
++			return -EBUSY;
++		}
++	} while (pm_sleep_fs_syncs_queued);
++	spin_unlock_irq(&pm_sleep_fs_sync_lock);
++
++	return 0;
++}
++
+ #endif /* CONFIG_PM_SLEEP */
+ 
+ #ifdef CONFIG_PM_SLEEP_DEBUG
+@@ -1076,6 +1154,9 @@ static int __init pm_start_workqueue(void)
+ static int __init pm_init(void)
+ {
+ 	int error = pm_start_workqueue();
++	if (error)
++		return error;
++	error = pm_start_fs_sync_workqueue();
+ 	if (error)
+ 		return error;
+ 	hibernate_image_size_init();
+diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
+index b4ca17c2fecf..04781a2c69e2 100644
+--- a/kernel/power/suspend.c
++++ b/kernel/power/suspend.c
+@@ -590,8 +590,10 @@ static int enter_state(suspend_state_t state)
+ 
+ 	if (sync_on_suspend_enabled) {
+ 		trace_suspend_resume(TPS("sync_filesystems"), 0, true);
+-		ksys_sync_helper();
++		error = pm_sleep_fs_sync();
+ 		trace_suspend_resume(TPS("sync_filesystems"), 0, false);
++		if (error)
++			goto Unlock;
+ 	}
+ 
+ 	pm_pr_dbg("Preparing system for sleep (%s)\n", mem_sleep_labels[state]);
 -- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
+2.51.1.930.gacf6e81ea2-goog
 
 
