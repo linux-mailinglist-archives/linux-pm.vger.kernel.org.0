@@ -1,161 +1,251 @@
-Return-Path: <linux-pm+bounces-37128-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37129-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C1C6CC218CA
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Oct 2025 18:46:57 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A4889C21B42
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Oct 2025 19:11:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F02111886AFC
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Oct 2025 17:46:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E40B0406524
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Oct 2025 18:11:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1CBE36C234;
-	Thu, 30 Oct 2025 17:46:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B80A72FCC0F;
+	Thu, 30 Oct 2025 18:11:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="a9aZc+oa"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sl6Je7xU"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2EA572639;
-	Thu, 30 Oct 2025 17:46:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 928EE25FA13
+	for <linux-pm@vger.kernel.org>; Thu, 30 Oct 2025 18:11:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761846372; cv=none; b=n5f8Txq4n8t+OpdBRFNNU8U6nzFw1YPTAgyPFMoz2H/5AAS0vT73o9UZqkxKGlNU5bqJt8BizRziXzBdnNGjG+D2IR7xe24m69CeOPGwRYOlk3sYSkXCBBNpmdJPYxQOe8L7yisE6ELu4GeRKwqGEa7W51PI3ix27LLT+Ta+Wlc=
+	t=1761847876; cv=none; b=H6D5Oo5X6ys9dCMwhhxFTdMsX7vEmPF4TumAMn1t8Qd8G62i7/5dLRfyd5sT4JvD6tpfBKYNAuSPOM+nbu+hMSHbRYLIC8BJRS+K2oBxO/4e19AreXw7IjAnusBOdVAaiaxSJj2ukkATYzx+t+81riwLtREFb1ghHpOiA9YYHKs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761846372; c=relaxed/simple;
-	bh=b2xexS6Qluhsr9ZmEqlGOXtDsR48B9OmLyAHTqqnzbk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LjoLq0MKGeFrLfUrUIe51XbsZqc5fwnua1H39mqhbrIWWIPo7VrKdPaH3TeEFTgHvFB/FYbNyqZ9N1x/rhz3Q/NlLsCiX+znGeQgYfu1ZfxerfyNVXKjQxSCz4/Vf9VU4tuL+xaSqzqYJZ2n5USdHGQYoe4A/PXYHfWY9Fku9KA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=a9aZc+oa; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761846371; x=1793382371;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=b2xexS6Qluhsr9ZmEqlGOXtDsR48B9OmLyAHTqqnzbk=;
-  b=a9aZc+oalwpkkO3hWqBjbs+vMi2rgj2oCJWDp9pLe3pUWSPg17iqCDkk
-   qtoML0dPBqScbo9FxrwSY7YmQ7R/AZQMGRtMEp8FyyOxwlGnBwjCp0Vvd
-   L5zCnMqUbvo4RtH77w62IQLIkhCDtzYEjNT4TpN6wIfv+x4EAb205jkxB
-   97ro6/cHB+/K2qd2xpsYHiqeTsw97hnUSzPDmTo3cwvzxloXWSuyDIOCt
-   bDsIGdyu3BwN9yVxbg8OTj1KZ84jVX/0rH6qbmoBK+b/LarR1PP3eI258
-   KPdDmAphYmaudT3bb5j5vaY6vXMiTcU8IyniGCQX7e13RwYO0LDCgyrqd
-   A==;
-X-CSE-ConnectionGUID: O6WR9q+wTHSEKlMPPgKEkA==
-X-CSE-MsgGUID: khR0DuIRQTuTyy4OBIblWQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11598"; a="64039302"
-X-IronPort-AV: E=Sophos;i="6.19,267,1754982000"; 
-   d="scan'208";a="64039302"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2025 10:46:10 -0700
-X-CSE-ConnectionGUID: b/GmOWjcS2aKDC4H8SgNzQ==
-X-CSE-MsgGUID: HAspeAjwQ7KrOmmY4Vdu1g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,267,1754982000"; 
-   d="scan'208";a="191158265"
-Received: from fpallare-mobl4.ger.corp.intel.com (HELO ashevche-desk.local) ([10.245.245.174])
-  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2025 10:45:58 -0700
-Received: from andy by ashevche-desk.local with local (Exim 4.98.2)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1vEWif-00000003zFy-3ih6;
-	Thu, 30 Oct 2025 19:45:53 +0200
-Date: Thu, 30 Oct 2025 19:45:53 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Andi Shyti <andi.shyti@kernel.org>
-Cc: Herve Codina <herve.codina@bootlin.com>, Andrew Lunn <andrew@lunn.ch>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Peter Rosin <peda@axentia.se>, Arnd Bergmann <arnd@arndb.de>,
-	Saravana Kannan <saravanak@google.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Charles Keepax <ckeepax@opensource.cirrus.com>,
-	Richard Fitzgerald <rf@opensource.cirrus.com>,
-	David Rhodes <david.rhodes@cirrus.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Mark Brown <broonie@kernel.org>,
-	Daniel Scally <djrscally@gmail.com>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Len Brown <lenb@kernel.org>, Davidlohr Bueso <dave@stgolabs.net>,
-	Jonathan Cameron <jonathan.cameron@huawei.com>,
-	Dave Jiang <dave.jiang@intel.com>,
-	Alison Schofield <alison.schofield@intel.com>,
-	Vishal Verma <vishal.l.verma@intel.com>,
-	Ira Weiny <ira.weiny@intel.com>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Wolfram Sang <wsa@kernel.org>, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-pci@vger.kernel.org,
-	linux-sound@vger.kernel.org, patches@opensource.cirrus.com,
-	linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-spi@vger.kernel.org, linux-acpi@vger.kernel.org,
-	linux-cxl@vger.kernel.org,
-	Allan Nielsen <allan.nielsen@microchip.com>,
-	Horatiu Vultur <horatiu.vultur@microchip.com>,
-	Steen Hegelund <steen.hegelund@microchip.com>,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v4 18/29] i2c: mux: Create missing devlink between mux
- and adapter physical device
-Message-ID: <aQOkUa1IwuiOeSvT@smile.fi.intel.com>
-References: <20251015071420.1173068-1-herve.codina@bootlin.com>
- <20251015071420.1173068-19-herve.codina@bootlin.com>
- <6tgbavtf2dqc44ebfighrs5chzx4j4zdmjk77fmulwqbhrex2b@lou7ekbsjekr>
+	s=arc-20240116; t=1761847876; c=relaxed/simple;
+	bh=uUizPZKluk7Jwn3HpmewDS0Fy2cfvBUvG9HSQEUfK4o=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=b04NrghcVjZ3fnZmqoiQlcJYNbsbfrZAYTuSlHRsR0R+6Ff6DePAkIrOnkOsjNqqWB0wYh0yVEu+EzoaH/2EC7yEP/euYQQc+Kt6/+Ze5UPc9fdAlkWEtG/tGYDbd0RkAgEYjO2q0qyTAQBEgfsS76lSowbtN68Kyg6E+6Kssuo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sl6Je7xU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44C7CC4AF0B
+	for <linux-pm@vger.kernel.org>; Thu, 30 Oct 2025 18:11:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761847876;
+	bh=uUizPZKluk7Jwn3HpmewDS0Fy2cfvBUvG9HSQEUfK4o=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=sl6Je7xUwBhTrJqbH4Zqa7uVjdz8vDZ4/W6UsoybPqgR29GjGQzhoV+upQWv6vV7f
+	 0RIAnAxQk89PdojrLXBEkSrpPU6ekHpvfQJKGSgUdVHOvghkacCa/dcoMa6WksRhIM
+	 ppBmnNTaDObXIHQuFmpdWhAbFa0V0dkUTmOJlGB6YcsBPqXd1HLEsWXRM4KbmikwmA
+	 0PHYJ9R3rniP+uoOFd7qPjQjiHi0aVI22tseIpEs+8vfkm1UnyHb6NuVBXHgRBsbLF
+	 EwHUh8BAsaHT3iCtmE8V+WE2Figt1PGOEx1Sr59tN1gZqnW6BrquPuQITMpyInXCEE
+	 cPaPzkZdyjy9w==
+Received: by mail-oi1-f177.google.com with SMTP id 5614622812f47-4491510f005so375567b6e.2
+        for <linux-pm@vger.kernel.org>; Thu, 30 Oct 2025 11:11:16 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXU5ZCmOt+BKcFL9GKvTuMwxdUc43fwx8kdN605KhBRVBLA4txwudYRoJc5aR+e1rvLd3ERrYq8pg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxxYSNl/O0/N2MLEZx5Cn+M2Gk7BXm1l/yLQ6He4q5DzNnUKJgG
+	xs9FogZHqYU1fdiSdKpbq5odx4KZsB0XtryF1rlTtwLK+eqplDDG8ib+y/9fbShMNh2CzaOm0cS
+	qoonRr4zSlysLCFZmwWCSHo6jvN3GUDk=
+X-Google-Smtp-Source: AGHT+IHW0nlsfsQxxGRyJgN07O4vnJjHufNj/PwIMwcNbkhmcasizwXLwJVkiitD3Ek49r3QecRqAhv+R7Y03Q/iMc0=
+X-Received: by 2002:a05:6808:189e:b0:44f:8f02:8a50 with SMTP id
+ 5614622812f47-44f95e19ca9mr316111b6e.12.1761847875470; Thu, 30 Oct 2025
+ 11:11:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6tgbavtf2dqc44ebfighrs5chzx4j4zdmjk77fmulwqbhrex2b@lou7ekbsjekr>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+References: <20251016151929.75863-1-ulf.hansson@linaro.org>
+ <20251016151929.75863-3-ulf.hansson@linaro.org> <CAJZ5v0hPUYoLFs=jZ10a1cX6TE1bmRF7CkBH1Ebejao9Hdfhnw@mail.gmail.com>
+ <CAPDyKFrrhw5vMYLEWJ5LRphVzwPwjiU-n=tdbgOtOmFSXGd0GQ@mail.gmail.com>
+ <CAJZ5v0g5p-8WrmNQ6-tvTEy50gVjfEMsmXxTK8bmLqafe30jKw@mail.gmail.com>
+ <CAPDyKFo+U=oJVxXCDBN_WZLBpkwPgv_=qw96hauAttFnAQuPtw@mail.gmail.com>
+ <CAJZ5v0h_OFzmhcKohS3SNWwz_vwpq6frymXSSgFjk_K27ncSTg@mail.gmail.com> <CAPDyKFqs_Mn57SxPNy5_e56LuFxx3KkfJfHqgg9_wp77rpn7Pw@mail.gmail.com>
+In-Reply-To: <CAPDyKFqs_Mn57SxPNy5_e56LuFxx3KkfJfHqgg9_wp77rpn7Pw@mail.gmail.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 30 Oct 2025 19:11:03 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0jTVZtyV2yeFNpGo4TnZY79CH_fpaSbVq1T9BJ0BohZsg@mail.gmail.com>
+X-Gm-Features: AWmQ_bn8g4XPjHgN-vPCtJtXbq8yiQaaFqzBPArGiQe8U_U8Qc85RIkrxzmOK1A
+Message-ID: <CAJZ5v0jTVZtyV2yeFNpGo4TnZY79CH_fpaSbVq1T9BJ0BohZsg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/4] pmdomain: Respect the CPU system-wakeup QoS limit
+ during s2idle
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org, 
+	Vincent Guittot <vincent.guittot@linaro.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Kevin Hilman <khilman@baylibre.com>, Pavel Machek <pavel@kernel.org>, Len Brown <len.brown@intel.com>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, Saravana Kannan <saravanak@google.com>, 
+	Maulik Shah <quic_mkshah@quicinc.com>, Prasad Sodagudi <psodagud@quicinc.com>, 
+	Dhruva Gole <d-gole@ti.com>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Oct 30, 2025 at 04:23:24PM +0100, Andi Shyti wrote:
+On Thu, Oct 30, 2025 at 4:07=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro.org=
+> wrote:
+>
+> On Thu, 30 Oct 2025 at 15:02, Rafael J. Wysocki <rafael@kernel.org> wrote=
+:
+> >
+> > On Thu, Oct 30, 2025 at 1:32=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro=
+.org> wrote:
+> > >
+> > > On Thu, 30 Oct 2025 at 13:23, Rafael J. Wysocki <rafael@kernel.org> w=
+rote:
+> > > >
+> > > > On Thu, Oct 30, 2025 at 1:00=E2=80=AFPM Ulf Hansson <ulf.hansson@li=
+naro.org> wrote:
+> > > > >
+> > > > > On Thu, 30 Oct 2025 at 11:45, Rafael J. Wysocki <rafael@kernel.or=
+g> wrote:
+> > > > > >
+> > > > > > On Thu, Oct 16, 2025 at 5:19=E2=80=AFPM Ulf Hansson <ulf.hansso=
+n@linaro.org> wrote:
+> > > > > > >
+> > > > > > > A CPU system-wakeup QoS limit may have been requested by user=
+-space. To
+> > > > > > > avoid breaking this constraint when entering a low-power stat=
+e during
+> > > > > > > s2idle through genpd, let's extend the corresponding genpd go=
+vernor for
+> > > > > > > CPUs. More precisely, during s2idle let the genpd governor se=
+lect a
+> > > > > > > suitable low-power state, by taking into account the QoS limi=
+t.
+> > > > > > >
+> > > > > > > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> > > > > > > ---
+> > > > > > >
+> > > > > > > Changes in v2:
+> > > > > > >         - Limite the change to the genpd governor for CPUs.
+> > > > > > >
+> > > > > > > ---
+> > > > > > >  drivers/pmdomain/core.c     | 10 ++++++++--
+> > > > > > >  drivers/pmdomain/governor.c | 27 +++++++++++++++++++++++++++
+> > > > > > >  include/linux/pm_domain.h   |  1 +
+> > > > > > >  3 files changed, 36 insertions(+), 2 deletions(-)
+> > > > > > >
+> > > > > > > diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.=
+c
+> > > > > > > index 61c2277c9ce3..4fd546ef0448 100644
+> > > > > > > --- a/drivers/pmdomain/core.c
+> > > > > > > +++ b/drivers/pmdomain/core.c
+> > > > > > > @@ -1425,8 +1425,14 @@ static void genpd_sync_power_off(struc=
+t generic_pm_domain *genpd, bool use_lock,
+> > > > > > >                         return;
+> > > > > > >         }
+> > > > > > >
+> > > > > > > -       /* Choose the deepest state when suspending */
+> > > > > > > -       genpd->state_idx =3D genpd->state_count - 1;
+> > > > > > > +       if (genpd->gov && genpd->gov->system_power_down_ok) {
+> > > > > > > +               if (!genpd->gov->system_power_down_ok(&genpd-=
+>domain))
+> > > > > > > +                       return;
+> > > > > > > +       } else {
+> > > > > > > +               /* Default to the deepest state. */
+> > > > > > > +               genpd->state_idx =3D genpd->state_count - 1;
+> > > > > > > +       }
+> > > > > > > +
+> > > > > > >         if (_genpd_power_off(genpd, false)) {
+> > > > > > >                 genpd->states[genpd->state_idx].rejected++;
+> > > > > > >                 return;
+> > > > > > > diff --git a/drivers/pmdomain/governor.c b/drivers/pmdomain/g=
+overnor.c
+> > > > > > > index 39359811a930..bd1b9d66d4a5 100644
+> > > > > > > --- a/drivers/pmdomain/governor.c
+> > > > > > > +++ b/drivers/pmdomain/governor.c
+> > > > > > > @@ -415,9 +415,36 @@ static bool cpu_power_down_ok(struct dev=
+_pm_domain *pd)
+> > > > > > >         return false;
+> > > > > > >  }
+> > > > > > >
+> > > > > > > +static bool cpu_system_power_down_ok(struct dev_pm_domain *p=
+d)
+> > > > > > > +{
+> > > > > > > +       s64 constraint_ns =3D cpu_wakeup_latency_qos_limit() =
+* NSEC_PER_USEC;
+> > > > > >
+> > > > > > I'm not sure why genpd needs to take cpu_wakeup_latency_qos_lim=
+it()
+> > > > > > into account directly.
+> > > > > >
+> > > > > > It should be told by cpuidle which state has been selected on t=
+he CPU
+> > > > > > side and it should not go any deeper than that anyway.
+> > > > >
+> > > > > For PSCI OS-initiated mode, cpuidle doesn't know about the states=
+ that
+> > > > > may be shared among a group of CPUs.
+> > > > >
+> > > > > Instead, those states are controlled through the PM domain topolo=
+gy by
+> > > > > genpd and its governor, hence this is needed too.
+> > > >
+> > > > All right, but I'd like to understand how all of that works.
+> > > >
+> > > > So cpuidle selects a state to enter for the given CPU and then genp=
+d
+> > > > is invoked.  It has to take the exit latency of that state into
+> > > > account, so it doesn't go too deep.  How does it do that?
+> > >
+> > > Depending on the state selected, in cpuidle-psci.c we may end up
+> > > calling __psci_enter_domain_idle_state() (only for the deepest
+> > > CPU-state).
+> > >
+> > > For s2idle this means we call dev_pm_genpd_suspend|resume(), to manag=
+e
+> > > the reference counting of the PM domains via genpd. This then may lea=
+d
+> > > to that genpd_sync_power_off() tries to select a state by calling the
+> > > new governor function above.
+> > >
+> > > Did that make sense?
+> >
+> > So IIUC this will only happen if the deepest idle state is selected in
+> > which case the cpu_wakeup_latency_qos_limit() value is greater than
+> > the exit latency of that state, but it may still need to be taken into
+> > account when selecting the domain state.  However, this means that the
+>
+> Correct.
+>
+> > exit latency number for the deepest idle state is too low (it should
+> > represent the worst-case exit latency which means the maximum domain
+> > exit latency in this particular case).
+>
+> Yes, from the cpuidle state-selection point of view, but how is that a pr=
+oblem?
 
-...
+It is confusing.  Otherwise, for s2idle, I guess it is not a big deal.
 
-> > +	dl = device_link_add(muxc->dev, parent_physdev, DL_FLAG_AUTOREMOVE_CONSUMER);
-> 
-> Not to call twice put_device, I would add it once here and then
-> check for !dl.
+I guess what happens is that genpd has a range of states with
+different latency values to choose from and it is not practical to
+expose all of them as CPU idle states, so you end up exposing just one
+of them with the lowest latency value to allow cpuidle to involve
+genpd often enough.
 
-I was almost commenting the same in one of the previous rounds, but...
+If that's the case, I'd make a note of that somewhere if I were you,
+or people will routinely get confused by it.
 
-> > +	if (!dl) {
-> > +		dev_err(muxc->dev, "failed to create device link to %s\n",
-> > +			dev_name(parent_physdev));
+> If the genpd-governor doesn't find a suitable "domain-idle-state", we
+> fallback to using the one cpuidle selected.
+>
+> >
+> > Moreover, it looks like the "runtime" cpuidle has the same problem, doe=
+sn't it?
+>
+> It works in a very similar way, but I fail to understand why you think
+> there is a problem.
 
-...haven't you noticed this use? With your (and my old) suggestion this may
-lead to NULL / stale pointer dereference.
+There is a problem because it may violate a "runtime" latency constraint.
 
-> > +		put_device(parent_physdev);
-> > +		ret = -EINVAL;
-> > +		goto err_free_priv;
-> > +	}
-> > +	put_device(parent_physdev);
+Say you expose 2 CPU idle states, a shallow one and a genpd one.  The
+advertised exit latency of the genpd state is X and the current
+latency constraint is Y > X.  The genpd state is selected and genpd
+doesn't look at the cpuidle_governor_latency_req() return value, so it
+chooses a real state with exit latency Z > Y.
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+To a minimum, genpd should be made aware of
+cpuidle_governor_latency_req(), but even then cpuidle governors take
+exit latency into consideration in their computations, so things may
+get confused somewhat.
 
