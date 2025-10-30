@@ -1,125 +1,189 @@
-Return-Path: <linux-pm+bounces-37086-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37087-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id B75D0C1F8FC
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Oct 2025 11:31:37 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 05890C1FA01
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Oct 2025 11:45:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4DEC44EAC39
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Oct 2025 10:30:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 868B83BCCA6
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Oct 2025 10:45:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 937183557EE;
-	Thu, 30 Oct 2025 10:28:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37DB2314D27;
+	Thu, 30 Oct 2025 10:45:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZIdOhvzy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PsKNXlGS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA73433B955
-	for <linux-pm@vger.kernel.org>; Thu, 30 Oct 2025 10:28:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12CDC2206AC
+	for <linux-pm@vger.kernel.org>; Thu, 30 Oct 2025 10:45:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761820139; cv=none; b=aAqsoCA4SdhjxkJfw6CFK2IJrnmicQpmqlFZwSNIulXrYZtWUw/GwSKym7SuiVeKzdtV3TV4lLEglqqPTIqmzBWuareQ1ozzTZOMBtAEDfPn4m9pczvryF1HZI8LTx9FAnStOvyMkyBAFLxrFP1ETZ/t3t5NZTbZ0Mm26CiTNQs=
+	t=1761821111; cv=none; b=Z4dgF0o6ZD+DA4PiJjypYh/es2Bdw4I8pFD+McXAJDD0K8RBkrDeCmFNxdJ9aqhf/EmVDtb27nTEO8FjjofhPVFxj+bb53zO1JWtsrK7X+G6XlC+iN/IcoZymmzCQLpSKbwpvpQXkrmWVeiqSNaBlrzxYafrAUx85oMP4Brz8IA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761820139; c=relaxed/simple;
-	bh=kzl9mAH6hTFguh9+K+POMEtXKft/c/zYEBMgKAxiGv4=;
-	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Gy9wH4WmHfxUq8BaIXlKRG8APpYuDoOshT/MZ0q0/mLYOiQZZLUlkSlt/dLk6yJ1gwjqmcvjeQqXaLsz7WDcUOffA1ktMXTxAEwX6gJ7x/8+Bt3d3gmqOVYDQlTlvXgz+k80C71c9Bi182vfd5LcxSC95bQwKuHmfWqbwmG7P/8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZIdOhvzy; arc=none smtp.client-ip=209.85.221.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-4270491e9easo749448f8f.2
-        for <linux-pm@vger.kernel.org>; Thu, 30 Oct 2025 03:28:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761820136; x=1762424936; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=Tc85XyLkyjY/htulnzTmfDFLZeGYW80xA63mZmVSpP4=;
-        b=ZIdOhvzy4lEw1lg7+j1FE1TIUNqc1hJe8i5Qw3bNHt4BC79AQopwHEkk10xWbRP6r+
-         dIgmBXojmjuJ9HGMdavQt/atIgPMlz3BbKB2S7PgG88uK8piBO2sX6/9LnfCjG5N0Y1q
-         Zz2poSYRNqekJyoO7A+2K5KcmJy0o4K4C7uyTfz94GCpXxu6DShyKEbfbSMkX+7PVJPq
-         d321msZEi4tP9uX6bE0zot25pqNuu/lEGqEiLXu6aFmjQnzE1ERBy78DMHBBDU3CXq3Y
-         HYiG6d+aCKmP4KbPKhUYpnrWO7uyi/d9vqvfXaLCqVLquCDaEHL3iXzYzpj1xmR0VkUw
-         ltGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761820136; x=1762424936;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Tc85XyLkyjY/htulnzTmfDFLZeGYW80xA63mZmVSpP4=;
-        b=tZqeAMFhKbctMHSBldatvyJp5YQjVgyR3BRUbANdYpfKxkY1q64s/VtbmSfT4mCkLu
-         kHXhvMqQh0ITjoqtSLzjnn0PIULSg+Pl6RPRjfAuO62EHzQxqRQOBJKvU2kCEBt1H69p
-         r3ZIHyVhspPrizVnNof8R6kIEWCdsw2GGqQZVfdqQyqCwmuW3ivvNymfg+sODdI2GRgD
-         gayOnlxlE2+uwsjclT8cc3N4GeDFxosipwyHH9bJlnDUfcFKQNyUOuqfZKWESwz2+BsR
-         zugMMW3GBrBK8NNDUfoG4l1aqNUInRMmY5aJplZ8P6Gvel1REtciarXiM8YdO+mt/GHt
-         0uvg==
-X-Forwarded-Encrypted: i=1; AJvYcCX0+IFZbpvaryr9IRZglefE3rd3HtXoLmarT3tkOqpzppt0tBAz/zom+R6nbIpFDnSOmv5P14GgGw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxg+uBKExOGFPwD24REuc6aCceZpGjCZICIYUPGX2xJ8iUpSyWM
-	OH+nyh7asazOHizkLrWzPXlksDMyE0FgFPactsMh1jkqj2mmF+sERyK0
-X-Gm-Gg: ASbGncsMML0zm+Q23oEHzwquU8sVQ4ccRgIsfktJ/BmoTHr+NIbu4ptBiVFEEZcOeIn
-	P0tJdPk7Xsfuhu5nXZ0IZjBLmGvoSq0s4AZcppPvQkmoWiFYpuqGTJ2zgMSN/+Gg5c7gbhOERO+
-	N161H8OOlqSEcTklbG58Yj6S6d0fGVbNzt722K4ahBQoNkyYInR/O2RxWuexI8quvSzzLwJV9Ss
-	fKqMtYgh7nOe/ShYaRljHekD88nyvtyq/uhNF7oWDD4dqkw1lJolGgd8efvlvv4pZyyvVVeGkTW
-	yW+wk2xqRWwnc1jw0zJU9O/vL/LVmCCzB7z5LG0PFkSv+nHotXU9pHODUvbdmcl81KMy6B3YxZb
-	02M2khCIOv/zyLXzALDi0cSRRhIBO3hyplyzuyhGpcivYd2s5t2jSJ9Cg9CH1KSD+X/+tfFFUGr
-	WnKox27nSEvPo7Gm64hHsx3dDwOuz6JFz1zlkevks=
-X-Google-Smtp-Source: AGHT+IF3Pmj4qbCJZe4BCr+sht1pza1y+0oRqN31cQl/tVeOBCZYjO0OsuO5WkG0CsnxbyhqDkQ6NA==
-X-Received: by 2002:a05:6000:2881:b0:429:8b8a:c32d with SMTP id ffacd0b85a97d-429b4c97e26mr2412283f8f.31.1761820135994;
-        Thu, 30 Oct 2025 03:28:55 -0700 (PDT)
-Received: from Ansuel-XPS. (93-34-90-37.ip49.fastwebnet.it. [93.34.90.37])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4772899fdf0sm32153555e9.3.2025.10.30.03.28.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Oct 2025 03:28:55 -0700 (PDT)
-Message-ID: <69033de7.050a0220.34ea6.780b@mx.google.com>
-X-Google-Original-Message-ID: <aQM95VjGr9NOrwix@Ansuel-XPS.>
-Date: Thu, 30 Oct 2025 11:28:53 +0100
-From: Christian Marangi <ansuelsmth@gmail.com>
-To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Cc: Ilia Lin <ilia.lin@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Raag Jadav <raag.jadav@intel.com>, Arnd Bergmann <arnd@arndb.de>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] cpufreq: qcom-nvmem: add compatible fallback for
- ipq806x for no SMEM
-References: <20251029133323.24565-1-ansuelsmth@gmail.com>
- <20251029133323.24565-3-ansuelsmth@gmail.com>
- <9343108b-7796-4783-afb1-afe758f78414@oss.qualcomm.com>
+	s=arc-20240116; t=1761821111; c=relaxed/simple;
+	bh=kDZJex61sWjLiqVb3qJeITth/PMvNL5VNldecXJ/H4c=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=YowSt8aWGD1P8UiHjOdRoubU5taoA7HSQWAp02FRxGBxvcPAN7hjIpCSo7k8XfPwulFMWYU3VsqAYhTeHoi8KmwYU+LtYXvwpa6E9F26EVPyMCsCL/xHiCTq8AigxUl/4rGYb0H7/4a8nZHbblR7X3DUiFtJJ12DxwTehphfmbI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PsKNXlGS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97387C4CEF1
+	for <linux-pm@vger.kernel.org>; Thu, 30 Oct 2025 10:45:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761821110;
+	bh=kDZJex61sWjLiqVb3qJeITth/PMvNL5VNldecXJ/H4c=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=PsKNXlGSbAna+TIx+H4y9oZVfrgkw5e/ata/7W03N+mUa9sfH0dOKkpgHCU1HUbqP
+	 D1IAWWN9U6DiavGMd8nGgYIaAo950mj7cCqi5OmPmgkpaxcG5Cw1eSCghavKgS5iLD
+	 6Jg1W7RN+Xy0G/Hh0+u8UCvDSE0plap5JzbbIrJKd1ujFrVyhP9PaDzOiW4rdAQPMQ
+	 w7ZhPDHbRHdjeYZ62Hba2OzaBsjl4IU0V7wpG3dbAf4iPkT8G6IFxbHJrf06NgmGQE
+	 l5zcydzbeimDdWiE4joR+6TcyATYnBo6X27/ssId9kM90cYD+/t+QGjhr8P3st3D20
+	 M72eB53SyZ21w==
+Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-6567542a9e2so239537eaf.0
+        for <linux-pm@vger.kernel.org>; Thu, 30 Oct 2025 03:45:10 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCW5AApXHUKpwG1K8v/vVOmemKrIq0/jLfFG54i9d3hT4xpbN9Bpue+iNquFRCaGaPdJioMQLMHK6Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz+HIZcGmix3Ki5Blle1oUrjEvHtrklViniVZaRf7jROrRxFYbH
+	te/3dX51mHUsINNojCV7qA1cUYM0ft28kVmdoYRi8pq9XUvM9yv40wUx9enzI/bw0w0Y7/yOCqI
+	0eGuNpMvXRuyahqu4MabWjuOCkpGjK+c=
+X-Google-Smtp-Source: AGHT+IFknkAGTskMUdjpwIHm/zqyOAs6MpHxUVMLUgqEIuqY7qKNu68fLVYOyH+hSP9v0IEvxTIDt1kXoSHcjPIHewE=
+X-Received: by 2002:a05:6820:308d:b0:654:f7f9:6887 with SMTP id
+ 006d021491bc7-65677db8d66mr2606976eaf.0.1761821109930; Thu, 30 Oct 2025
+ 03:45:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9343108b-7796-4783-afb1-afe758f78414@oss.qualcomm.com>
+References: <20251016151929.75863-1-ulf.hansson@linaro.org> <20251016151929.75863-3-ulf.hansson@linaro.org>
+In-Reply-To: <20251016151929.75863-3-ulf.hansson@linaro.org>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 30 Oct 2025 11:44:56 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0hPUYoLFs=jZ10a1cX6TE1bmRF7CkBH1Ebejao9Hdfhnw@mail.gmail.com>
+X-Gm-Features: AWmQ_blIb5xsRo-F9snUMbaEBJNNnLCkWAWdNfTcZWmTi5mkGniG5fF0ucDkDu4
+Message-ID: <CAJZ5v0hPUYoLFs=jZ10a1cX6TE1bmRF7CkBH1Ebejao9Hdfhnw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/4] pmdomain: Respect the CPU system-wakeup QoS limit
+ during s2idle
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org, 
+	Vincent Guittot <vincent.guittot@linaro.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Kevin Hilman <khilman@baylibre.com>, Pavel Machek <pavel@kernel.org>, Len Brown <len.brown@intel.com>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, Saravana Kannan <saravanak@google.com>, 
+	Maulik Shah <quic_mkshah@quicinc.com>, Prasad Sodagudi <psodagud@quicinc.com>, 
+	Dhruva Gole <d-gole@ti.com>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Oct 30, 2025 at 09:56:24AM +0100, Konrad Dybcio wrote:
-> On 10/29/25 2:33 PM, Christian Marangi wrote:
-> > On some IPQ806x SoC SMEM might be not initialized by SBL. This is the
-> > case for some Google devices (the OnHub family) that can't make use of
-> > SMEM to detect the SoC ID.
-> 
-> Oh this is (the unpleasant kind of ) interesting.. Is there any sort
-> of uboot/kernel tree for these machines available?
+On Thu, Oct 16, 2025 at 5:19=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro.org=
+> wrote:
 >
+> A CPU system-wakeup QoS limit may have been requested by user-space. To
+> avoid breaking this constraint when entering a low-power state during
+> s2idle through genpd, let's extend the corresponding genpd governor for
+> CPUs. More precisely, during s2idle let the genpd governor select a
+> suitable low-power state, by taking into account the QoS limit.
+>
+> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> ---
+>
+> Changes in v2:
+>         - Limite the change to the genpd governor for CPUs.
+>
+> ---
+>  drivers/pmdomain/core.c     | 10 ++++++++--
+>  drivers/pmdomain/governor.c | 27 +++++++++++++++++++++++++++
+>  include/linux/pm_domain.h   |  1 +
+>  3 files changed, 36 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
+> index 61c2277c9ce3..4fd546ef0448 100644
+> --- a/drivers/pmdomain/core.c
+> +++ b/drivers/pmdomain/core.c
+> @@ -1425,8 +1425,14 @@ static void genpd_sync_power_off(struct generic_pm=
+_domain *genpd, bool use_lock,
+>                         return;
+>         }
+>
+> -       /* Choose the deepest state when suspending */
+> -       genpd->state_idx =3D genpd->state_count - 1;
+> +       if (genpd->gov && genpd->gov->system_power_down_ok) {
+> +               if (!genpd->gov->system_power_down_ok(&genpd->domain))
+> +                       return;
+> +       } else {
+> +               /* Default to the deepest state. */
+> +               genpd->state_idx =3D genpd->state_count - 1;
+> +       }
+> +
+>         if (_genpd_power_off(genpd, false)) {
+>                 genpd->states[genpd->state_idx].rejected++;
+>                 return;
+> diff --git a/drivers/pmdomain/governor.c b/drivers/pmdomain/governor.c
+> index 39359811a930..bd1b9d66d4a5 100644
+> --- a/drivers/pmdomain/governor.c
+> +++ b/drivers/pmdomain/governor.c
+> @@ -415,9 +415,36 @@ static bool cpu_power_down_ok(struct dev_pm_domain *=
+pd)
+>         return false;
+>  }
+>
+> +static bool cpu_system_power_down_ok(struct dev_pm_domain *pd)
+> +{
+> +       s64 constraint_ns =3D cpu_wakeup_latency_qos_limit() * NSEC_PER_U=
+SEC;
 
-There is some sort of source but quite confusing. From the info they use
-coreboot and chromeos.
+I'm not sure why genpd needs to take cpu_wakeup_latency_qos_limit()
+into account directly.
 
-Looking at the source they comment everything related to SMEM
-(confirming the fact that they actually don't init it)
+It should be told by cpuidle which state has been selected on the CPU
+side and it should not go any deeper than that anyway.
 
-[1] https://chromium.googlesource.com/chromiumos/platform/depthcharge/+/refs/heads/firmware-storm-6315.B/src/board/storm
-[2] https://chromium.googlesource.com/chromiumos/third_party/coreboot/+/firmware-storm-6315.B
-
--- 
-	Ansuel
+> +       struct generic_pm_domain *genpd =3D pd_to_genpd(pd);
+> +       int state_idx =3D genpd->state_count - 1;
+> +
+> +       if (!(genpd->flags & GENPD_FLAG_CPU_DOMAIN)) {
+> +               genpd->state_idx =3D state_idx;
+> +               return true;
+> +       }
+> +
+> +       /* Find the deepest state for the latency constraint. */
+> +       while (state_idx >=3D 0) {
+> +               s64 latency_ns =3D genpd->states[state_idx].power_off_lat=
+ency_ns +
+> +                                genpd->states[state_idx].power_on_latenc=
+y_ns;
+> +
+> +               if (latency_ns <=3D constraint_ns) {
+> +                       genpd->state_idx =3D state_idx;
+> +                       return true;
+> +               }
+> +               state_idx--;
+> +       }
+> +
+> +       return false;
+> +}
+> +
+>  struct dev_power_governor pm_domain_cpu_gov =3D {
+>         .suspend_ok =3D default_suspend_ok,
+>         .power_down_ok =3D cpu_power_down_ok,
+> +       .system_power_down_ok =3D cpu_system_power_down_ok,
+>  };
+>  #endif
+>
+> diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
+> index f67a2cb7d781..93ba0143ca47 100644
+> --- a/include/linux/pm_domain.h
+> +++ b/include/linux/pm_domain.h
+> @@ -153,6 +153,7 @@ enum genpd_sync_state {
+>  };
+>
+>  struct dev_power_governor {
+> +       bool (*system_power_down_ok)(struct dev_pm_domain *domain);
+>         bool (*power_down_ok)(struct dev_pm_domain *domain);
+>         bool (*suspend_ok)(struct device *dev);
+>  };
+> --
+> 2.43.0
+>
 
