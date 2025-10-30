@@ -1,48 +1,53 @@
-Return-Path: <linux-pm+bounces-37139-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37144-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 209D5C21FCF
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Oct 2025 20:37:16 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15B47C221EE
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Oct 2025 21:07:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 040B03A4776
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Oct 2025 19:37:02 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id B2B614E50E0
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Oct 2025 20:07:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB0812F999A;
-	Thu, 30 Oct 2025 19:36:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7ED7C331A74;
+	Thu, 30 Oct 2025 20:07:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eQeGbKb1"
+	dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b="oNuCizO3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from l2mail1.panix.com (l2mail1.panix.com [166.84.1.75])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52C082F4A06;
-	Thu, 30 Oct 2025 19:36:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A99693655E9;
+	Thu, 30 Oct 2025 20:07:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.84.1.75
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761853019; cv=none; b=I2VmFu6bY+b5aSZZUoBmHbKlGP2wTTd6i1ee2610yUGodvmzA6g3II5PLvu9YZEhyfWz5mnnff2ZfT6qJujdglYd5yCYynLConHxAfeaduNq5tK2b3WKU+Rwe7qJwoSvFeQR7/y4RCuci6zbK20r4dNx2eYios6a7IbqYRmFW1A=
+	t=1761854823; cv=none; b=NifThsCnxeCNqERZdp5GrUSKDRtd8rIAd5TNwp/+e3jIeVWgG5eO9XsDqTyU5hOoNu0kLyH1YT62QDuXICTpYqSXErvwxtAXAC4Sg1/oKO5I7+zXpSf7fhVGWncYPrsayeYEfKlpmBIUEnfKBgMBtDCXxkMo6LMeX9151lzZwdw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761853019; c=relaxed/simple;
-	bh=hU8kIQqXqh2RC+ap5a3ScOWDHPyItHVVbCRN+iRanSI=;
+	s=arc-20240116; t=1761854823; c=relaxed/simple;
+	bh=tfmblrhzXjsA6ekSaTQtw6ENryGpp70gPKOdsvjs7ow=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=r8EhCTgYPfD0EKBb2sfxREqwnd4ygGnyY8dw/wR2KIquaxKE8Xw8vyS4w6q5mLaJzqpjRxUi6cpHNhuMHdg6jcgWI0SdvAHsRURHEnBvHLW2rQqUD1Xk1wl8Qh9Lll8IB02HvOy/ckPOCdww3Wq/g5EUKzlxSfPyK53s4j2/5aM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eQeGbKb1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E85CC4CEF1;
-	Thu, 30 Oct 2025 19:36:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761853018;
-	bh=hU8kIQqXqh2RC+ap5a3ScOWDHPyItHVVbCRN+iRanSI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=eQeGbKb15jG1AFdHRLlPy2zrAD0mCVbucZ1NArmVWPhcdslIRNb5ijKQSCJnSpPDP
-	 TLuHezc+uDkx5FDyzFHq813fZZxW2wXZQ3/ySBol7KnbgYGZuJA13sJNic6EZHXQ1t
-	 vlxsry3ug9k9vkzYvGCVoHnYNQOfbOUDP8gpp32JytTQTxjQlviu/PvorkruKIatEm
-	 2PaHBSe4uf6n0dsDSSJrn4YZFqFa9I4L1fxCH7+JgFlE0KsLFLLjpw0izMhNJtFNsb
-	 +oq5GkTY0SLZ8R3dqrqQp8XKoB6udYrmXLaiG61I1F2gcrZkkKoI2GC1ensKDHr1Y0
-	 zAN4EMtviV8SQ==
-Message-ID: <d7f57521-22d1-465e-a918-2a5c1ce5dc64@kernel.org>
-Date: Thu, 30 Oct 2025 20:36:52 +0100
+	 In-Reply-To:Content-Type; b=Y8r+nv/wt1xMvKIYE5VgQfgE/huaV2dT8zNbj0h82krYJ/kx4Ut9byTTO172qcLWdvcuoxTm5iSDmzywR5hOaiCr3/oHXyT1h1AVwCBZv6Ozfk1W7mP1QiY8Tew69fRLbss6Cof3I/kejxHgpYt01O/7cOXasg0DY++UFOalztY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com; spf=pass smtp.mailfrom=panix.com; dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b=oNuCizO3; arc=none smtp.client-ip=166.84.1.75
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=panix.com
+Received: from mailbackend.panix.com (mailbackend.panix.com [166.84.1.89])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (1024 bits) server-digest SHA256)
+	(No client certificate requested)
+	by l2mail1.panix.com (Postfix) with ESMTPS id 4cyF7n69jbzDRx;
+	Thu, 30 Oct 2025 15:49:57 -0400 (EDT)
+Received: from [10.50.4.39] (45-31-46-51.lightspeed.sndgca.sbcglobal.net [45.31.46.51])
+	by mailbackend.panix.com (Postfix) with ESMTPSA id 4cyF7d5b4gz44Zj;
+	Thu, 30 Oct 2025 15:49:49 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=panix.com; s=panix;
+	t=1761853790; bh=tfmblrhzXjsA6ekSaTQtw6ENryGpp70gPKOdsvjs7ow=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=oNuCizO3RYv9/mhuwRRgfbRoJJkLkYRWkhm/AhjjM1bs0n9UWZmOdWMyISiJgVMmn
+	 XEHGKzXyKIkGPjKiaKt1MpR5zhglkCteAWWulJlzB5VVm+8ID2FjjX7QK1a/iNQ/tI
+	 iBWF2mwoS5ItPU8KEk4UUFgL2+piNXEKg855C4tI=
+Message-ID: <777ab283-1189-4415-8602-ebe65ba0f4dc@panix.com>
+Date: Thu, 30 Oct 2025 12:49:48 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,117 +55,137 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: RPi 4 deferred probe timeout of V3D PM domain
-To: Stefan Wahren <wahrenst@gmx.net>, Mark Brown <broonie@kernel.org>,
- Ulf Hansson <ulf.hansson@linaro.org>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Florian Fainelli <florian.fainelli@broadcom.com>,
- bcm-kernel-feedback-list@broadcom.com, Ray Jui <rjui@broadcom.com>,
- Scott Branden <sbranden@broadcom.com>, Melissa Wen <mwen@igalia.com>,
- =?UTF-8?Q?Ma=C3=ADra_Canal?= <mcanal@igalia.com>,
- Maxime Ripard <mripard@kernel.org>,
- Marek Szyprowski <m.szyprowski@samsung.com>, Stephen Boyd
- <sboyd@kernel.org>, kernel-dev@igalia.com, kernel-list@raspberrypi.com,
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- "open list:GENERIC PM DOMAINS" <linux-pm@vger.kernel.org>
-References: <20251005113816.6721-1-wahrenst@gmx.net>
- <9ebda74e-e700-4fbe-bca5-382f92417a9c@sirena.org.uk>
- <a5e1e279-7e20-458d-a75f-787e0adbc9fe@gmx.net>
- <ad07546f-0c2d-4bc2-b794-755b892c7328@sirena.org.uk>
- <a016e7e1-09f7-4056-a855-6cfaa8d51962@gmx.net>
- <10a4ef77-0e70-4ef2-b1df-535b476d256d@sirena.org.uk>
- <ecd75fd5-3131-4d10-ae3d-b6f608d9622a@gmx.net>
- <25e500c2-3dc1-476c-b6c1-ac4098a0501d@sirena.org.uk>
- <d6b14388-e0ab-44f0-b4d9-78adf74c2a7f@gmx.net>
- <d88f6420-5013-4856-99d6-da28f79bd7a5@sirena.org.uk>
- <043f1702-52fc-4a83-82f7-683a26851623@gmx.net>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH v1] PM: sleep: Allow pm_restrict_gfp_mask() stacking
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+ Linux PM <linux-pm@vger.kernel.org>
+Cc: Askar Safin <safinaskar@gmail.com>,
+ Mario Limonciello <mario.limonciello@amd.com>,
+ LKML <linux-kernel@vger.kernel.org>
+References: <5935682.DvuYhMxLoT@rafael.j.wysocki>
 Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <043f1702-52fc-4a83-82f7-683a26851623@gmx.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+From: Kenneth Crudup <kenny@panix.com>
+In-Reply-To: <5935682.DvuYhMxLoT@rafael.j.wysocki>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On 30/10/2025 20:13, Stefan Wahren wrote:
-> Hi Ulf,
+
+
+
+On 10/28/25 13:52, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> Am 30.10.25 um 13:59 schrieb Mark Brown:
->> On Wed, Oct 29, 2025 at 08:51:38PM +0100, Stefan Wahren wrote:
->>> Am 28.10.25 um 19:47 schrieb Mark Brown:
->>> Okay, here is my theory. The difference is about (boot) time. In my setup
->>> the whole device boot from SD card and in your case the kernel modules are
->>> stored via NFS.
->>> V3D requires two resources, a clock and a PM domain. Additionally the PM
->>> domain itself depends on the very same clock. In arm64/defconfig the
->>> relevant clock driver is build as module, but the PM domain driver is
->>> builtin.
->>> During boot "driver_deferred_probe_timeout" (10 s) expires before the clock
->>> driver could be loaded via NFS. So the PM domain core gave up:
->>> [   16.936547] v3d fec00000.gpu: deferred probe timeout, ignoring dependency
->>> So this breaks probing of V3D driver in this case.
->> That seems buggy on the part of the core, particularly since userspace
->> isn't there yet so we might be missing some filesystems - I would have
->> expected the device to probe once the supply becomes available.  But I
->> do agree with your analysis, it doesn't look like an issue with this
->> driver.
-> recent changes to the Raspberry Pi 4 device tree revealed the issue for 
-> the following corner case:
-> V3D requires two resources, a clock and a PM domain. Additionally the PM 
-> domain itself depends on the very same clock. In arm64/defconfig the 
-> relevant clock driver clk-raspberrypi is build as module, but the PM 
-> domain driver bcm2835-pmdomain is builtin.
+> Allow pm_restrict_gfp_mask() to be called many times in a row to avoid
+> issues with calling dpm_suspend_start() when the GFP mask has been
+> already restricted.
 > 
-> During boot "driver_deferred_probe_timeout" (10 s) expires before the 
-> clock driver could be loaded via NFS. So the PM domain core gave up:
-> [   16.936547] v3d fec00000.gpu: deferred probe timeout, ignoring dependency
+> Only the first invocation of pm_restrict_gfp_mask() will actually
+> restrict the GFP mask and the subsequent calls will warn if there is
+> a mismatch between the expected allowed GFP mask and the actual one.
+> 
+> Moreover, if pm_restrict_gfp_mask() is called many times in a row,
+> pm_restore_gfp_mask() needs to be called matching number of times in
+> a row to actually restore the GFP mask.  Calling it when the GFP mask
+> has not been restricted will cause it to warn.
+> 
+> This is necessary for the GFP mask restriction starting in
+> hibernation_snapshot() to continue throughout the entire hibernation
+> flow until it completes or it is aborted (either by a wakeup event or
+> by an error).
+> 
+> Fixes: 449c9c02537a1 ("PM: hibernate: Restrict GFP mask in hibernation_snapshot()")
+> Fixes: 469d80a3712c ("PM: hibernate: Fix hybrid-sleep")
+> Reported-by: Askar Safin <safinaskar@gmail.com>
+> Closes: https://lore.kernel.org/linux-pm/20251025050812.421905-1-safinaskar@gmail.com/
+> Link: https://lore.kernel.org/linux-pm/20251028111730.2261404-1-safinaskar@gmail.com/
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+> 
+> This supersedes
+> 
+> https://lore.kernel.org/linux-pm/20251026033115.436448-1-superm1@kernel.org/
+> 
+> as it allows the GFP mask to be restricted across the entire hibernation path.
 
-Core clock modules you should have as part of your initramfs, not rely
-on rootfs to load. You can also move the domain to module, but it still
-won't solve the problem of lack of initramfs population.
+Tested-By: Kenneth R. Crudup <kenny@panix.com>
 
-Best regards,
-Krzysztof
+(Helgaas told me about "b4 shazam" and I've been applying all kinds of 
+interesting patches willy-nilly lately :) )
+
+> ---
+>   kernel/power/hibernate.c |    4 ----
+>   kernel/power/main.c      |   22 +++++++++++++++++-----
+>   2 files changed, 17 insertions(+), 9 deletions(-)
+> 
+> --- a/kernel/power/hibernate.c
+> +++ b/kernel/power/hibernate.c
+> @@ -706,7 +706,6 @@ static void power_down(void)
+>   
+>   #ifdef CONFIG_SUSPEND
+>   	if (hibernation_mode == HIBERNATION_SUSPEND) {
+> -		pm_restore_gfp_mask();
+>   		error = suspend_devices_and_enter(mem_sleep_current);
+>   		if (!error)
+>   			goto exit;
+> @@ -746,9 +745,6 @@ static void power_down(void)
+>   		cpu_relax();
+>   
+>   exit:
+> -	/* Match the pm_restore_gfp_mask() call in hibernate(). */
+> -	pm_restrict_gfp_mask();
+> -
+>   	/* Restore swap signature. */
+>   	error = swsusp_unmark();
+>   	if (error)
+> --- a/kernel/power/main.c
+> +++ b/kernel/power/main.c
+> @@ -31,23 +31,35 @@
+>    * held, unless the suspend/hibernate code is guaranteed not to run in parallel
+>    * with that modification).
+>    */
+> +static unsigned int saved_gfp_count;
+>   static gfp_t saved_gfp_mask;
+>   
+>   void pm_restore_gfp_mask(void)
+>   {
+>   	WARN_ON(!mutex_is_locked(&system_transition_mutex));
+> -	if (saved_gfp_mask) {
+> -		gfp_allowed_mask = saved_gfp_mask;
+> -		saved_gfp_mask = 0;
+> -	}
+> +
+> +	if (WARN_ON(!saved_gfp_count) || --saved_gfp_count)
+> +		return;
+> +
+> +	gfp_allowed_mask = saved_gfp_mask;
+> +	saved_gfp_mask = 0;
+> +
+> +	pm_pr_dbg("GFP mask restored\n");
+>   }
+>   
+>   void pm_restrict_gfp_mask(void)
+>   {
+>   	WARN_ON(!mutex_is_locked(&system_transition_mutex));
+> -	WARN_ON(saved_gfp_mask);
+> +
+> +	if (saved_gfp_count++) {
+> +		WARN_ON((saved_gfp_mask & ~(__GFP_IO | __GFP_FS)) != gfp_allowed_mask);
+> +		return;
+> +	}
+> +
+>   	saved_gfp_mask = gfp_allowed_mask;
+>   	gfp_allowed_mask &= ~(__GFP_IO | __GFP_FS);
+> +
+> +	pm_pr_dbg("GFP mask restricted\n");
+>   }
+>   
+>   unsigned int lock_system_sleep(void)
+> 
+> 
+> 
+> 
+
+-- 
+Kenneth R. Crudup / Sr. SW Engineer, Scott County Consulting, Orange 
+County CA
+
 
