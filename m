@@ -1,95 +1,96 @@
-Return-Path: <linux-pm+bounces-37085-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37086-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46B3DC1F7ED
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Oct 2025 11:22:21 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id B75D0C1F8FC
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Oct 2025 11:31:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 54A8E19C04F1
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Oct 2025 10:22:45 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4DEC44EAC39
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Oct 2025 10:30:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58B7A350A25;
-	Thu, 30 Oct 2025 10:22:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 937183557EE;
+	Thu, 30 Oct 2025 10:28:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O4nziRlZ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZIdOhvzy"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 941E726B2C8
-	for <linux-pm@vger.kernel.org>; Thu, 30 Oct 2025 10:22:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA73433B955
+	for <linux-pm@vger.kernel.org>; Thu, 30 Oct 2025 10:28:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761819737; cv=none; b=R8x0zPJdoknHGDk0zDvM7ZtKVx/2BaRl9ObwA/bXWSXd7rPJdMvkaZ0R2Ln6b+bgh7Vq/z/06Gk2/ikjOqlheKkBQYPtS0hVEwnRyffOyBm/yo4SyFfypgWX5YGsT2oxuFVPGhn/e18sfApNbkSJAzL8AJHi3dsDjdu9SpPrq8E=
+	t=1761820139; cv=none; b=aAqsoCA4SdhjxkJfw6CFK2IJrnmicQpmqlFZwSNIulXrYZtWUw/GwSKym7SuiVeKzdtV3TV4lLEglqqPTIqmzBWuareQ1ozzTZOMBtAEDfPn4m9pczvryF1HZI8LTx9FAnStOvyMkyBAFLxrFP1ETZ/t3t5NZTbZ0Mm26CiTNQs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761819737; c=relaxed/simple;
-	bh=G1w0BDUSacW0XOVA8splxjQGwNpkVsIpdBFy2H1rlrk=;
+	s=arc-20240116; t=1761820139; c=relaxed/simple;
+	bh=kzl9mAH6hTFguh9+K+POMEtXKft/c/zYEBMgKAxiGv4=;
 	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZZeKvQoY27l/VbuPi0mZ/5SSLRQc7U2yGUOmW7Jyf39zPQID5CqIID76mIYKgDk6ilPa1JXj05+YOrL/dCDw5O8N58ch6nXqNv284RVz+sabtLUZ3eKdPw7YEwi5UfZQFO6J66K9LRfPSJ8QlnQEqkp/t+9C1zTruEUQLv5Z9PA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=O4nziRlZ; arc=none smtp.client-ip=209.85.221.49
+	 Content-Type:Content-Disposition:In-Reply-To; b=Gy9wH4WmHfxUq8BaIXlKRG8APpYuDoOshT/MZ0q0/mLYOiQZZLUlkSlt/dLk6yJ1gwjqmcvjeQqXaLsz7WDcUOffA1ktMXTxAEwX6gJ7x/8+Bt3d3gmqOVYDQlTlvXgz+k80C71c9Bi182vfd5LcxSC95bQwKuHmfWqbwmG7P/8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZIdOhvzy; arc=none smtp.client-ip=209.85.221.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-429b85c3880so561563f8f.2
-        for <linux-pm@vger.kernel.org>; Thu, 30 Oct 2025 03:22:15 -0700 (PDT)
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-4270491e9easo749448f8f.2
+        for <linux-pm@vger.kernel.org>; Thu, 30 Oct 2025 03:28:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761819734; x=1762424534; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1761820136; x=1762424936; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:subject:cc
          :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=T2kUtsOiX/qEGmwwQ7Isl75d5/MBlGm1S9q3l+zR8t4=;
-        b=O4nziRlZhgxJfb1KvMVN2gNQbV2P+Xo4+fuBmNEr9fW8RTQz+B0i7jpMxzFaal93HW
-         k61fraA1ZvcPT12sNxmEgNUZgCz48e3IaclXacyTktXDJ3iypfXBqVTRg3QDalNeTetY
-         Syc5iJsTppy0NmrUPDed117+Dc5ebhdsFbJOjx1Dkdye9vKp0adQA7l1vhQZ9UcAzw4a
-         HQP6CFKG1F1p8u0IwNRWsny0YSGWj9p5GKjNlKx+V4KbJKplu5d1f0lUcV3GQ1es8sMJ
-         Cq60OSKCI0Y74Das+fyAmBL05LtvXZE5ncyaMf2YAdvQhN62ILqJzntogMij8FnV84uO
-         ebMw==
+        bh=Tc85XyLkyjY/htulnzTmfDFLZeGYW80xA63mZmVSpP4=;
+        b=ZIdOhvzy4lEw1lg7+j1FE1TIUNqc1hJe8i5Qw3bNHt4BC79AQopwHEkk10xWbRP6r+
+         dIgmBXojmjuJ9HGMdavQt/atIgPMlz3BbKB2S7PgG88uK8piBO2sX6/9LnfCjG5N0Y1q
+         Zz2poSYRNqekJyoO7A+2K5KcmJy0o4K4C7uyTfz94GCpXxu6DShyKEbfbSMkX+7PVJPq
+         d321msZEi4tP9uX6bE0zot25pqNuu/lEGqEiLXu6aFmjQnzE1ERBy78DMHBBDU3CXq3Y
+         HYiG6d+aCKmP4KbPKhUYpnrWO7uyi/d9vqvfXaLCqVLquCDaEHL3iXzYzpj1xmR0VkUw
+         ltGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761819734; x=1762424534;
+        d=1e100.net; s=20230601; t=1761820136; x=1762424936;
         h=in-reply-to:content-disposition:mime-version:references:subject:cc
          :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=T2kUtsOiX/qEGmwwQ7Isl75d5/MBlGm1S9q3l+zR8t4=;
-        b=Q1Pw2sr/ah7ajkMnguyWdpIdToUCKCZHnJbncKJiTGWTv6CLpl0Bt/gkPgSZk4YJVo
-         r/xZaVn4BoVP5uLeByT/8E22PxmywxGl4r7JqY7XDI789END7oDen3n84G60oOqZmTW6
-         Q5yC2LzfmLsL/myRfDoBQr38xFO1xpkLRDdWv5NINkOaEZbWw/3uS3qMTps1Px80QSEk
-         mQpcMTZYzxCH+oukTDWZKNTPsi7R7Ieg+v12lOXMVK36pHhNk9uXKtvoS1pF/gBdmHyT
-         YYRjpU8zYYI1cRTIy+KWYV2OB6MC73P1O8kFLqSvVBisK66nD+D8Kc2QZvOlukFvIY69
-         nPTA==
-X-Forwarded-Encrypted: i=1; AJvYcCXsCRWLQWTvJ93lMX+CLEQVS3bWYWH1ZJrsrA9HnQrsJahKxznWKHtD9iOZwm9rIp7CdmVUSfeflQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzHF53SS+Sdrd1MaGr9iZO1xGuEgqSdl2NDl46ijkUWC4b2UWLI
-	f3GoMzeelvJUm/s+FgcSapOrwd0IJQOC14yCh/MwpFJnaARdvYHseEA2
-X-Gm-Gg: ASbGnctZpwfxMjM4Z8mq0QpsFbtyE/dsFF1RY7yeeGCPlmQRm+V2ZQAdRN/FOLIxbA6
-	qgCSY8jzKub/1BKCz0yKqSurawQOdPUoRIZDO7I2onSSAj3vACq1BQmGveUVsh2mRGQU36oHXFV
-	MCpD3EJZ8JeuUy3tvGpfT7/ljG5txgeGnpYIfnaERGFjastYSLH/T7GJ2vIQ4rGfPqaJDmSQeaQ
-	LRWicgAxkCvwHjaJ/cvXGB5S4DJfwnwWYEfAgsOQIuAUtDDSl6UwkmOH0hXXnj0QoQ4l6HXWFjJ
-	z11UubSNbc34D7yRtyMb97wwRDmI8eqvD7VLVUcJIvWH0IHmvNMWG43Cx+y9odxQ1PMBH1HFo5N
-	OOh4NKdDKknVoTh6QCsY00IT5XM3tEjMScjsk4LqMvHFD7qOi+Qn51Hit3yEzw3kD6f8U58ToFL
-	oqr2WoC51aT2bUwzr86Z0eELlFwgwp
-X-Google-Smtp-Source: AGHT+IG2GvMxb9LZfEwn29dXFAw3jlFUGhKBMnjmh2/V3MU6jJoVJ3uGtYSEM3H6aIAKv8Kvh0ETuA==
-X-Received: by 2002:a05:6000:4012:b0:429:b7cd:47ff with SMTP id ffacd0b85a97d-429b7cd4e85mr1197378f8f.40.1761819733529;
-        Thu, 30 Oct 2025 03:22:13 -0700 (PDT)
+        bh=Tc85XyLkyjY/htulnzTmfDFLZeGYW80xA63mZmVSpP4=;
+        b=tZqeAMFhKbctMHSBldatvyJp5YQjVgyR3BRUbANdYpfKxkY1q64s/VtbmSfT4mCkLu
+         kHXhvMqQh0ITjoqtSLzjnn0PIULSg+Pl6RPRjfAuO62EHzQxqRQOBJKvU2kCEBt1H69p
+         r3ZIHyVhspPrizVnNof8R6kIEWCdsw2GGqQZVfdqQyqCwmuW3ivvNymfg+sODdI2GRgD
+         gayOnlxlE2+uwsjclT8cc3N4GeDFxosipwyHH9bJlnDUfcFKQNyUOuqfZKWESwz2+BsR
+         zugMMW3GBrBK8NNDUfoG4l1aqNUInRMmY5aJplZ8P6Gvel1REtciarXiM8YdO+mt/GHt
+         0uvg==
+X-Forwarded-Encrypted: i=1; AJvYcCX0+IFZbpvaryr9IRZglefE3rd3HtXoLmarT3tkOqpzppt0tBAz/zom+R6nbIpFDnSOmv5P14GgGw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxg+uBKExOGFPwD24REuc6aCceZpGjCZICIYUPGX2xJ8iUpSyWM
+	OH+nyh7asazOHizkLrWzPXlksDMyE0FgFPactsMh1jkqj2mmF+sERyK0
+X-Gm-Gg: ASbGncsMML0zm+Q23oEHzwquU8sVQ4ccRgIsfktJ/BmoTHr+NIbu4ptBiVFEEZcOeIn
+	P0tJdPk7Xsfuhu5nXZ0IZjBLmGvoSq0s4AZcppPvQkmoWiFYpuqGTJ2zgMSN/+Gg5c7gbhOERO+
+	N161H8OOlqSEcTklbG58Yj6S6d0fGVbNzt722K4ahBQoNkyYInR/O2RxWuexI8quvSzzLwJV9Ss
+	fKqMtYgh7nOe/ShYaRljHekD88nyvtyq/uhNF7oWDD4dqkw1lJolGgd8efvlvv4pZyyvVVeGkTW
+	yW+wk2xqRWwnc1jw0zJU9O/vL/LVmCCzB7z5LG0PFkSv+nHotXU9pHODUvbdmcl81KMy6B3YxZb
+	02M2khCIOv/zyLXzALDi0cSRRhIBO3hyplyzuyhGpcivYd2s5t2jSJ9Cg9CH1KSD+X/+tfFFUGr
+	WnKox27nSEvPo7Gm64hHsx3dDwOuz6JFz1zlkevks=
+X-Google-Smtp-Source: AGHT+IF3Pmj4qbCJZe4BCr+sht1pza1y+0oRqN31cQl/tVeOBCZYjO0OsuO5WkG0CsnxbyhqDkQ6NA==
+X-Received: by 2002:a05:6000:2881:b0:429:8b8a:c32d with SMTP id ffacd0b85a97d-429b4c97e26mr2412283f8f.31.1761820135994;
+        Thu, 30 Oct 2025 03:28:55 -0700 (PDT)
 Received: from Ansuel-XPS. (93-34-90-37.ip49.fastwebnet.it. [93.34.90.37])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-429952da12dsm31773234f8f.29.2025.10.30.03.22.12
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4772899fdf0sm32153555e9.3.2025.10.30.03.28.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Oct 2025 03:22:13 -0700 (PDT)
-Message-ID: <69033c55.df0a0220.1a33d7.49ff@mx.google.com>
-X-Google-Original-Message-ID: <aQM8U143LTOytPrj@Ansuel-XPS.>
-Date: Thu, 30 Oct 2025 11:22:11 +0100
+        Thu, 30 Oct 2025 03:28:55 -0700 (PDT)
+Message-ID: <69033de7.050a0220.34ea6.780b@mx.google.com>
+X-Google-Original-Message-ID: <aQM95VjGr9NOrwix@Ansuel-XPS.>
+Date: Thu, 30 Oct 2025 11:28:53 +0100
 From: Christian Marangi <ansuelsmth@gmail.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 Cc: Ilia Lin <ilia.lin@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
 	Viresh Kumar <viresh.kumar@linaro.org>,
 	Bjorn Andersson <andersson@kernel.org>,
 	Konrad Dybcio <konradybcio@kernel.org>,
 	Raag Jadav <raag.jadav@intel.com>, Arnd Bergmann <arnd@arndb.de>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
 	linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] err.h: add ERR_PTR_CONST macro
+Subject: Re: [PATCH 3/3] cpufreq: qcom-nvmem: add compatible fallback for
+ ipq806x for no SMEM
 References: <20251029133323.24565-1-ansuelsmth@gmail.com>
- <aQIzoGnvZWYuHuoQ@smile.fi.intel.com>
- <69023512.5d0a0220.3cccb7.8e65@mx.google.com>
- <aQMheocySykpTFDN@smile.fi.intel.com>
+ <20251029133323.24565-3-ansuelsmth@gmail.com>
+ <9343108b-7796-4783-afb1-afe758f78414@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -98,60 +99,26 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aQMheocySykpTFDN@smile.fi.intel.com>
+In-Reply-To: <9343108b-7796-4783-afb1-afe758f78414@oss.qualcomm.com>
 
-On Thu, Oct 30, 2025 at 10:27:38AM +0200, Andy Shevchenko wrote:
-> On Wed, Oct 29, 2025 at 04:38:53PM +0100, Christian Marangi wrote:
-> > On Wed, Oct 29, 2025 at 05:32:48PM +0200, Andy Shevchenko wrote:
-> > > On Wed, Oct 29, 2025 at 02:33:19PM +0100, Christian Marangi wrote:
-> > > > Add ERR_PTR_CONST macro to initialize global variables with error
-> > > 
-> > > ERR_PTR_CONST()
-> > > 
-> > > > pointers. This might be useful for specific case where there is a global
-> > > > variables initialized to an error condition and then later set to the
-> > > > real handle once probe finish/completes.
-> > > 
-> > > Okay, this has two caveats:
-> > > 
-> > > 1) naming is bad as it suggests something about const qualifier (and not, it's
-> > > not about that at all);
-> > > 
-> > > 2) it doesn't explain what's wrong with ERR_PTR().
-> > >
-> > 
-> > It can't be used for global variables as it does cause compilation
-> > error.
+On Thu, Oct 30, 2025 at 09:56:24AM +0100, Konrad Dybcio wrote:
+> On 10/29/25 2:33 PM, Christian Marangi wrote:
+> > On some IPQ806x SoC SMEM might be not initialized by SBL. This is the
+> > case for some Google devices (the OnHub family) that can't make use of
+> > SMEM to detect the SoC ID.
 > 
-> Can you show an example, please?
+> Oh this is (the unpleasant kind of ) interesting.. Is there any sort
+> of uboot/kernel tree for these machines available?
 >
 
-drivers/soc/qcom/smem.c:361:35: error: initializer element is not constant
-  361 | static struct qcom_smem *__smem = ERR_PTR(-EPROBE_DEFER);
-      |                                   ^~~~~~~
-make[9]: *** [scripts/Makefile.build:229: drivers/soc/qcom/smem.o] Error 1
+There is some sort of source but quite confusing. From the info they use
+coreboot and chromeos.
 
-You want me to add this to the commit? Or any hint to better reword this
-so it's more understandable?
+Looking at the source they comment everything related to SMEM
+(confirming the fact that they actually don't init it)
 
-> > I wanted to use ERR_PTR to set the __smem handle instead of freecode
-> > (void *) -EPROBE_DEFER and notice the compiler doesn't like using
-> > ERR_PTR().
-> > 
-> > Then the problem is clear as static declaration require constant value
-> > for initialization and ERR_PTR is a inline function.
-> > 
-> > This is why ERR_PTR_CONST following the pattern that was used for
-> > FIELD_PREP -> FIELD_PREP_CONST that was also introduced for similar
-> > case.
-> > 
-> > So yes this is specific for case of static global variables.
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
-> 
-> 
+[1] https://chromium.googlesource.com/chromiumos/platform/depthcharge/+/refs/heads/firmware-storm-6315.B/src/board/storm
+[2] https://chromium.googlesource.com/chromiumos/third_party/coreboot/+/firmware-storm-6315.B
 
 -- 
 	Ansuel
