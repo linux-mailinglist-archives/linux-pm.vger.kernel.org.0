@@ -1,73 +1,73 @@
-Return-Path: <linux-pm+bounces-37097-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37098-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44EA1C20092
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Oct 2025 13:33:33 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 54539C20116
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Oct 2025 13:44:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id ED9584E7DE7
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Oct 2025 12:32:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8B17B18955D0
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Oct 2025 12:44:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CCA73BBF2;
-	Thu, 30 Oct 2025 12:32:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E970D32B9B5;
+	Thu, 30 Oct 2025 12:44:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="KP12CxvW"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="yc8whvFa"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FE2AC2FB
-	for <linux-pm@vger.kernel.org>; Thu, 30 Oct 2025 12:32:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BE3F30FF1C
+	for <linux-pm@vger.kernel.org>; Thu, 30 Oct 2025 12:44:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761827572; cv=none; b=VgBXGmu8+RY1PtwXhEOoHPUjiWniClnHexCjsj2i3HhQPG8btaZPVnOZ4C3rcuZhLOqfqLqeFyyzixGzwOKl2TfppjAXDvoP6ZXArwTveMhkq+xDvXdbBl5QYNF0dvIgeUymWTBgTfEjEyVhLiG6e/+dgg6Fg+nzomQHxXcanSc=
+	t=1761828246; cv=none; b=hMvnc7S72xzf6fWqjLu2Vu1lpuE0cE2i9acl6ItwdEB/cjR+TVqTvkjehV6TeIHJLxgLdzeLdXh0r8TjuUlMfRGhxyiiN5sW0jE18HOOt2AWyvA703/LwyfYD0908MVdEqsgp4f1/8g9ZfV32iSs9YNeZptw8u/zwmLV7/INcu4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761827572; c=relaxed/simple;
-	bh=5uFh3plcA63WWwE8Rgd8BSWqIydPPVvm7ghEfQG37hY=;
+	s=arc-20240116; t=1761828246; c=relaxed/simple;
+	bh=Vsg6pHABg0QNnlZoDT/EUBC2xV1JRoFDH/4oiFVdKOE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JxCPtUqlefQNRrVMdQRXI8Fxb3FEO3GmhMRK8kHPz2qO4tUvJNBRhoypxAAn1nOGOY7h5wEBIzD9BfQtSwltRqinP02jprtFSC7kPaI8DmLE/yKmr9waBowHd9d7VeK0duJXCqpBUmM3WvXo5FxRv1LwyChqeiu/Brc9CfCff+8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=KP12CxvW; arc=none smtp.client-ip=209.85.128.175
+	 To:Cc:Content-Type; b=oBImT2byZSkcS5tbl775ozwp6RnDUxEHc3Wi1UrpQrtMococ7HfqR/kb0qxLZSaQ9gZ+2RWY0M3uvs76gRLwz0ac1NqldGW9vSiW+pzkmyAqH7oChkrNDL63BbCDToCuxt9ajwTuvDJXh0n+j76mQVt43NgAlxLi6eaAufEqzwM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=yc8whvFa; arc=none smtp.client-ip=209.85.128.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-784807fa38dso13962177b3.2
-        for <linux-pm@vger.kernel.org>; Thu, 30 Oct 2025 05:32:50 -0700 (PDT)
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-78485808eb3so13490327b3.3
+        for <linux-pm@vger.kernel.org>; Thu, 30 Oct 2025 05:44:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1761827569; x=1762432369; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1761828244; x=1762433044; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=jFq/TRCdCKks5FxRPsMVAHG1xUcLxQtFXtn1mAIRjKU=;
-        b=KP12CxvWB5Ox7B+kI1PtveGtnSHuFa0140MzsKHOzf8v0ZvjpxWBx4pmoaIosm7roY
-         WoBFd8su39ZUbrTJuRJTEbofRB677bGv5KmlCwyymTThrSBxbPASuA3eeiX05fpYazu2
-         RKdYABSKA/lewZXlw192hfn9n34o87wdZFOnOqF2XHxQVDnFyII9qFLXpVEdzAJMVoA8
-         c+pItifKapi7D14QTMT/lngzIXp6X+ygZe4mEDXLe+4FP3jQ0R61darm8G1CQBuV2O7I
-         KlMEaFFLwXWS6cqLRa9N48kGitx6RM7qItAT86Ng39cGLMtry0pnThAWDgqt2HUwnGUa
-         9LyQ==
+        bh=zDjyf2YcWAcYN9vEkqn7UbYwTq6TCYnnMJLBk0aUuPQ=;
+        b=yc8whvFa1Tmpuzr3K+A5YOFo3An4OohDN+/8+Aq+94D8QKXtIktbbHGBaRGFOwq6dG
+         2ySUQ9a4NL6UQkbOjQF+Ec5AeiHdKw4kCRP+fonQnVnUWOvTLfYl3zQmN+b5Q33MKASq
+         8USEHcWLNmwzKo1KBPuGZzpd4+459kHbecapQfiiU9ZhlO9OmbCgDjqeaj7JVHNDHCqf
+         kjQtdF/cSVSNEqZ+H1xNCxVulUTBt9b9H+GjgqfUDYfeWcFBi/riLImY80picPVK6evB
+         6KGOrGvOOXXKpseNkNyZUyGvnWvdyfFi/7ZmdhhNG9c+CkHn2+dyfF3md8GOFYMi8VVe
+         Aw5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761827569; x=1762432369;
+        d=1e100.net; s=20230601; t=1761828244; x=1762433044;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=jFq/TRCdCKks5FxRPsMVAHG1xUcLxQtFXtn1mAIRjKU=;
-        b=ZZ4UJesHj4JYNCVt78e6bwH7YMmFYeCy/LeNA+DdX71/vw+cbSFpkzIERWYImwAo4w
-         +f/FEgz8rtQ9nxMoxUE1v8qB4z9nXDI0b61mH3F7SO8pBhwTtsIVoYr1fyRD2ZnkiMiv
-         RYEIwq5HyEbEFRLf4dELsv4B0DsgkYQfwvfPmFcib06sy9TW47D1msmDlP/7JzwwOOux
-         WvnooSOPMGAhWNQkIaEmQBGCkSM89eG8Jug+biLrzY4tzJ66bQIwNA7ua1QpMrojFFd9
-         D/kWEYBDzs1VB7x0OmoBm7SuiJNrXMRMIT0FvXbP52prQLGQpV8hqlZFlsiSu+/eWsuq
-         9IKg==
-X-Gm-Message-State: AOJu0YwJwT1hAReINvoQWQaWBwL44XTlY3P7y7PfaSr3n+Eb8J/knWTV
-	XCbpPW7tzRXvvGgmGvdMBMtl3AzGaww67yjnEtJ+bjKTrL926+wwiJg4WBD4yya1FqWkN2iK6+X
-	CHD3aVkwofox2eUbe86iYrVcnMWqA/iev4TshsLV5Kw==
-X-Gm-Gg: ASbGnctF1yAvfrJiy4vNwQZiKyZffVHP397tBrkl/wYBQ2ZpRxHoNzsfv6b5l8Np+Kk
-	BKAyDCurLFXKUSSUq8obKOrmMWls+oq+PDgGGBJYUO5/pl6UfHQ1Bh0/5ViL8nS+MPIPcpKkeHQ
-	xCTvoJkoKe8UcO6qCNt7jtF02d7uDoAxuYMSvivO8jkB4gjLt1EDpL4paY0C4R8A6rsQALk7zD3
-	d6rF02/ybfUIUyEXmSZzGAhL4SUROov7d4PSLr2GQqpKKkponPKIookuZZ9BA==
-X-Google-Smtp-Source: AGHT+IGipO+I2seDTk/l/U6a3TYUm/dJfVO/MALsQ33bjRkdY68Wqj5U+OL4febm6PhGK715PrdgZGcHUZRLSiPCJmE=
-X-Received: by 2002:a05:690c:338b:b0:77e:47b:e847 with SMTP id
- 00721157ae682-78628fa8e2emr62662197b3.46.1761827568989; Thu, 30 Oct 2025
- 05:32:48 -0700 (PDT)
+        bh=zDjyf2YcWAcYN9vEkqn7UbYwTq6TCYnnMJLBk0aUuPQ=;
+        b=aVO/GbhYAVSJDJ3yO4I8/w0jxkWxRSohPbVzBlgsPzOIPFDeFILxB/RjlkIsLVajLY
+         f/Qx6FwGulzY7gyCKK+S7N6mhJUAHraoTy7EUaavXWw+097Cx9ArK8woJYHgYRH02gt8
+         mM7yIm50qC/G4J5wuDrBTshpnnpdRxW5q7I65PnpghkfNzYx0bqhqlYX1GcIPVEEeWGK
+         TdVJZEYLvduhfZnvNKeDjixrZ13FN3MPwX5Cu8QjxiwggfAQ6zatNogceMpAIeYCHD4A
+         AbiYOpgDl7X+EivqdUxXQUSpV91CI2EYn9LpwFbgM3Gr5jUUY3W73KI2Sm/+YKXIY4YP
+         JVsA==
+X-Gm-Message-State: AOJu0YwwZuoBmRrCSwzW+651koi5AthwKMo6x19qSqF0MMv71o145J9V
+	QZi1zVwS27qC/bY03Y0YJy+p6WRgHJ4RVON+ozcSF5/Dcz6thv3NTep+zzJUz8my+fKBJuV9P1F
+	wneJ7NiE57xJhar8b0bVCtmKEBk7pDxTJkA7aEYL5PQ==
+X-Gm-Gg: ASbGnctVjmdK4SM5Mqg8w9Fk+TK8gXyCpjiJK9m1UeLdbWt+wBlHgCdwQjiS3QBbPoP
+	xvK0JRvtJkUrFS7Y8w0vsOtpac4Rb7whBzWYuAujEDnkl90XGK+zFE+6bHeLrXUglkX9y+BFP50
+	OO9u4/YGH1VuLAIHm6JFNaiBH7VZlmw3eEtBNBCL/rl/0ascT/EHX2Hxj3PoT12/2Rx2+kCeIv5
+	2kxqoz+z57TVz4k3Pyf7yDXGV4ekZE7r5GUHUnsLgypDSzMV8bpG1P647hMNA==
+X-Google-Smtp-Source: AGHT+IHoJ3bGFdVpESH8uyHHz88xUNMEBC8Fu5HjAXHiNMtBHIYJ/tKO/aZSWr4m+lV+8zQnl1zuKQVq+qW0clPbizU=
+X-Received: by 2002:a05:690c:b89:b0:785:c7ab:97e6 with SMTP id
+ 00721157ae682-78628e82e1amr62754117b3.12.1761828244016; Thu, 30 Oct 2025
+ 05:44:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -75,15 +75,16 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20251016151929.75863-1-ulf.hansson@linaro.org>
- <20251016151929.75863-3-ulf.hansson@linaro.org> <CAJZ5v0hPUYoLFs=jZ10a1cX6TE1bmRF7CkBH1Ebejao9Hdfhnw@mail.gmail.com>
- <CAPDyKFrrhw5vMYLEWJ5LRphVzwPwjiU-n=tdbgOtOmFSXGd0GQ@mail.gmail.com> <CAJZ5v0g5p-8WrmNQ6-tvTEy50gVjfEMsmXxTK8bmLqafe30jKw@mail.gmail.com>
-In-Reply-To: <CAJZ5v0g5p-8WrmNQ6-tvTEy50gVjfEMsmXxTK8bmLqafe30jKw@mail.gmail.com>
+ <CAJZ5v0i_0K6+nCvBC55Bbu7XuKYjHrky3uG_aZ3aM0HMymcfeg@mail.gmail.com>
+ <CAPDyKFpYfLJ1F1ynLAZLJBoWp+Uk-k2B0796_yWQTNg4xT9zew@mail.gmail.com>
+ <CAJZ5v0igMhr=N90As66dioXXzL8YL11PN3k49n5-yoPuHNR-_w@mail.gmail.com> <CAJZ5v0jSvU7=bmscRyQrvoWA0q=AgbDE3Ad1jf+4PTdzZgSNjw@mail.gmail.com>
+In-Reply-To: <CAJZ5v0jSvU7=bmscRyQrvoWA0q=AgbDE3Ad1jf+4PTdzZgSNjw@mail.gmail.com>
 From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Thu, 30 Oct 2025 13:32:13 +0100
-X-Gm-Features: AWmQ_bl_qGRm7dJwQHdZBBFxNH0sxFuH3rclcytMluLaIPUXly734ZrKPicvB5s
-Message-ID: <CAPDyKFo+U=oJVxXCDBN_WZLBpkwPgv_=qw96hauAttFnAQuPtw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/4] pmdomain: Respect the CPU system-wakeup QoS limit
- during s2idle
+Date: Thu, 30 Oct 2025 13:43:28 +0100
+X-Gm-Features: AWmQ_blgVg55or3EyJ2go7j43VTMSM_CtPJYz4izL2KNF_jSNbaJ7DwH95vB6ks
+Message-ID: <CAPDyKFr=uVS0CsuFnTjXH+o+P+xrG7GKj2O92mGgqiSo-tk9Bg@mail.gmail.com>
+Subject: Re: [PATCH v2 0/4] PM: QoS: Introduce a CPU system-wakeup QoS limit
+ for s2idle
 To: "Rafael J. Wysocki" <rafael@kernel.org>
 Cc: linux-pm@vger.kernel.org, Vincent Guittot <vincent.guittot@linaro.org>, 
 	Peter Zijlstra <peterz@infradead.org>, Kevin Hilman <khilman@baylibre.com>, 
@@ -94,104 +95,96 @@ Cc: linux-pm@vger.kernel.org, Vincent Guittot <vincent.guittot@linaro.org>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, 30 Oct 2025 at 13:23, Rafael J. Wysocki <rafael@kernel.org> wrote:
+On Thu, 30 Oct 2025 at 13:29, Rafael J. Wysocki <rafael@kernel.org> wrote:
 >
-> On Thu, Oct 30, 2025 at 1:00=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro.o=
-rg> wrote:
+> On Thu, Oct 30, 2025 at 1:26=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.=
+org> wrote:
 > >
-> > On Thu, 30 Oct 2025 at 11:45, Rafael J. Wysocki <rafael@kernel.org> wro=
-te:
+> > On Thu, Oct 30, 2025 at 1:23=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro=
+.org> wrote:
 > > >
-> > > On Thu, Oct 16, 2025 at 5:19=E2=80=AFPM Ulf Hansson <ulf.hansson@lina=
-ro.org> wrote:
+> > > On Wed, 29 Oct 2025 at 15:53, Rafael J. Wysocki <rafael@kernel.org> w=
+rote:
 > > > >
-> > > > A CPU system-wakeup QoS limit may have been requested by user-space=
-. To
-> > > > avoid breaking this constraint when entering a low-power state duri=
-ng
-> > > > s2idle through genpd, let's extend the corresponding genpd governor=
- for
-> > > > CPUs. More precisely, during s2idle let the genpd governor select a
-> > > > suitable low-power state, by taking into account the QoS limit.
+> > > > On Thu, Oct 16, 2025 at 5:19=E2=80=AFPM Ulf Hansson <ulf.hansson@li=
+naro.org> wrote:
+> > > > >
+> > > > > Changes in v2:
+> > > > >         - Limit the new QoS to CPUs  and make some corresponding =
+renaming of the
+> > > > >         functions along with name of the device node for user spa=
+ce.
+> > > > >         - Make sure we deal with the failure/error path correctly=
+ when there are
+> > > > >         no state available for s2idle.
+> > > > >         - Add documentation.
+> > > > >
+> > > > > Some platforms supports multiple low-power states for CPUs that c=
+an be used
+> > > > > when entering system-wide suspend and s2idle in particular. Curre=
+ntly we are
+> > > > > always selecting the deepest possible state for the CPUs, which c=
+an break the
+> > > > > system-wakeup latency constraint that may be required for some us=
+e-cases.
+> > > > >
+> > > > > Therefore, this series suggests to introduce a new interface for =
+user-space,
+> > > > > allowing us to specify the CPU system-wakeup QoS limit. The QoS l=
+imit is then
+> > > > > taken into account when selecting a suitable low-power state for =
+s2idle.
 > > > >
-> > > > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> > > > ---
-> > > >
-> > > > Changes in v2:
-> > > >         - Limite the change to the genpd governor for CPUs.
-> > > >
-> > > > ---
-> > > >  drivers/pmdomain/core.c     | 10 ++++++++--
-> > > >  drivers/pmdomain/governor.c | 27 +++++++++++++++++++++++++++
-> > > >  include/linux/pm_domain.h   |  1 +
-> > > >  3 files changed, 36 insertions(+), 2 deletions(-)
-> > > >
-> > > > diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
-> > > > index 61c2277c9ce3..4fd546ef0448 100644
-> > > > --- a/drivers/pmdomain/core.c
-> > > > +++ b/drivers/pmdomain/core.c
-> > > > @@ -1425,8 +1425,14 @@ static void genpd_sync_power_off(struct gene=
-ric_pm_domain *genpd, bool use_lock,
-> > > >                         return;
-> > > >         }
-> > > >
-> > > > -       /* Choose the deepest state when suspending */
-> > > > -       genpd->state_idx =3D genpd->state_count - 1;
-> > > > +       if (genpd->gov && genpd->gov->system_power_down_ok) {
-> > > > +               if (!genpd->gov->system_power_down_ok(&genpd->domai=
-n))
-> > > > +                       return;
-> > > > +       } else {
-> > > > +               /* Default to the deepest state. */
-> > > > +               genpd->state_idx =3D genpd->state_count - 1;
-> > > > +       }
-> > > > +
-> > > >         if (_genpd_power_off(genpd, false)) {
-> > > >                 genpd->states[genpd->state_idx].rejected++;
-> > > >                 return;
-> > > > diff --git a/drivers/pmdomain/governor.c b/drivers/pmdomain/governo=
-r.c
-> > > > index 39359811a930..bd1b9d66d4a5 100644
-> > > > --- a/drivers/pmdomain/governor.c
-> > > > +++ b/drivers/pmdomain/governor.c
-> > > > @@ -415,9 +415,36 @@ static bool cpu_power_down_ok(struct dev_pm_do=
-main *pd)
-> > > >         return false;
-> > > >  }
-> > > >
-> > > > +static bool cpu_system_power_down_ok(struct dev_pm_domain *pd)
-> > > > +{
-> > > > +       s64 constraint_ns =3D cpu_wakeup_latency_qos_limit() * NSEC=
-_PER_USEC;
+> > > > Last time we discussed this I said I would like the new limit to be
+> > > > taken into account by regular "runtime" cpuidle because the "s2idle=
+"
+> > > > limit should not be less that the "runtime" limit (or at least it
+> > > > would be illogical if that happened).
 > > >
-> > > I'm not sure why genpd needs to take cpu_wakeup_latency_qos_limit()
-> > > into account directly.
+> > > Yes, we discussed this, but that was also before we concluded to add =
+a
+> > > new file for user-space to operate on after all.
 > > >
-> > > It should be told by cpuidle which state has been selected on the CPU
-> > > side and it should not go any deeper than that anyway.
+> > > To me, it looks unnecessarily limiting to not allow them to be
+> > > orthogonal,
 > >
-> > For PSCI OS-initiated mode, cpuidle doesn't know about the states that
-> > may be shared among a group of CPUs.
+> > So what's the use case in which it makes sense to have a lower latency
+> > limit for s2idle than for runtime?
+
+Honestly, I don't know, but I just wanted to keep things more flexible.
+
 > >
-> > Instead, those states are controlled through the PM domain topology by
-> > genpd and its governor, hence this is needed too.
+> > > but I am not insisting that it needs to be like this. I
+> > > was just thinking that we do not necessarily have to care about the
+> > > same use-case in runtime as in the system-suspend state. Moreover,
+> > > nothing would prevent user-space from applying the same constraint to
+> > > both of them, if that is needed.
+> > >
+> > > >
+> > > > It looks like that could be implemented by making
+> > > > cpuidle_governor_latency_req() take cpu_wakeup_latency_qos_limit()
+> > > > into account, couldn't it?
+> > >
+> > > Right, but I am not sure we want that. See above.
+> >
+> > I do or I need to be convinced that this is a bad idea.
 >
-> All right, but I'd like to understand how all of that works.
+> And there is a specific reason why I want that.
 >
-> So cpuidle selects a state to enter for the given CPU and then genpd
-> is invoked.  It has to take the exit latency of that state into
-> account, so it doesn't go too deep.  How does it do that?
+> Namely, say somebody wants to set the same limit for both s2idle and
+> "runtime" cpuidle.  If the s2idle limit did not affect "runtime", they
+> would need to open two device special files and write the same value
+> to both of them.  Otherwise, they just need to use the s2idle limit
+> and it will work for "runtime" automatically.
 
-Depending on the state selected, in cpuidle-psci.c we may end up
-calling __psci_enter_domain_idle_state() (only for the deepest
-CPU-state).
+Right. User-space would need to open two files instead of one, but is
+that really a problem?
 
-For s2idle this means we call dev_pm_genpd_suspend|resume(), to manage
-the reference counting of the PM domains via genpd. This then may lead
-to that genpd_sync_power_off() tries to select a state by calling the
-new governor function above.
+What if user-space doesn't want to affect the runtime state-selection,
+but cares only about a use-case that requires a cpu-wakeup constraint
+when resuming from s2idle.
 
-Did that make sense?
+It's your call, I can change if you prefer, np!
 
 Kind regards
 Uffe
