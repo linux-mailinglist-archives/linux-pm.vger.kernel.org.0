@@ -1,148 +1,207 @@
-Return-Path: <linux-pm+bounces-37107-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37108-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 836E3C20892
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Oct 2025 15:16:59 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A3FDC20BC3
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Oct 2025 15:52:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CED883B4F02
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Oct 2025 14:15:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4C95C1A2652D
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Oct 2025 14:47:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF623218AAF;
-	Thu, 30 Oct 2025 14:15:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0EF7277807;
+	Thu, 30 Oct 2025 14:46:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="kcl2qSSA";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="FTuiSQWf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FCcQ0B+w"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fhigh-b2-smtp.messagingengine.com (fhigh-b2-smtp.messagingengine.com [202.12.124.153])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4A1418871F;
-	Thu, 30 Oct 2025 14:15:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.153
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F88D14A91;
+	Thu, 30 Oct 2025 14:46:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761833749; cv=none; b=FrgbY2iMHXO0yNq9Xw4Mpp62f0jlFWWU/TnvunU612aYd3ComuWqc8K6Oo+svoy3nECY2ilxuv5iiMDbMMCFrBF2WrJgEmQqloXCRufsUHJQHheIrSyk3Vch72ymQZGO/sKBxZPmOiujgXc7xrUkcxwQAAbPP7SkVPCBB403yxQ=
+	t=1761835617; cv=none; b=bUWjfzZ8JZsrvMjC54vPYJCY/PT230PRPV/ystkJPp3ZB/z7jMprpGk2LPXm0ja47MY7dtFW+f9LePxZqX5eckFqzMogrVJWm96X2CDe8d0gRAEbuQ4sCD0UEcrAQIMXYggpRGtPMdRym4nEc90DUajp3HmIL30+wBnaHNMGr0U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761833749; c=relaxed/simple;
-	bh=F1wgaTOkD9whISVF5RbNhnoqw8bQcf8E1idtCKjXn0c=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=JCvDRXYOzqTm6gB4X5gP9cceGGk0M0j6tkN5lkdNwvJ0I/XYs9sHPZIjxWciv0+OyBLe0bPJ5zl0KA1tb1FGmxy5K+GHTz83joFf89UmnAbLKTJszBndgSRClT5/C6K3VerE9bYc12qNu0rPuoOlEFyg8PPTGZ6DSKnN16CoV6c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=kcl2qSSA; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=FTuiSQWf; arc=none smtp.client-ip=202.12.124.153
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id DD36E7A01F3;
-	Thu, 30 Oct 2025 10:15:46 -0400 (EDT)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-04.internal (MEProxy); Thu, 30 Oct 2025 10:15:47 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1761833746;
-	 x=1761920146; bh=Bcdffpiq94hB8xQFLbaa75mK7VRUJwUPjoKxC4ED+bI=; b=
-	kcl2qSSAtF3mZhbe97M6Dj6HgbewNoFG7oN2uarAFQTo8kldZSrCpjYniL6b/H2L
-	NhR/VJopzoMIQE3pVYn7qgYXPe4y6Ec663AS7DlxxYbHcjI/USIL09sMyCIUlm1w
-	tch9WPw1lm1jaVRzUpLokjU9T1HuMLxeDdNcr2Zv3r0ZMdPK1GYx+8jcLmvfWKxb
-	8R+qulj48mXobLodXMFobo0xnTYEGF3gqPaw+nb7IPpkfbl5clQ6D4i7F2w6C2yW
-	JI7Js+DI7jPn31/HYb1fd2/cGSckTl1wFqt5wHPXl68PEov14cK5t5RVZOprzRXE
-	5JhRrhZckueqBEQ+a0mhHg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1761833746; x=
-	1761920146; bh=Bcdffpiq94hB8xQFLbaa75mK7VRUJwUPjoKxC4ED+bI=; b=F
-	TuiSQWfsSlJ2Qc6wFBNF+VLftUhwqWMgKCDSpQ4tL9dt/M07mBUKnpeXvR7P3Gzl
-	UeNAIBmQmN8ows+9MKIbQ/eW9KxKj8xCLH4MDsWePBbLkh1v9R2ttP8A5xMm1Clv
-	Hx03RaFkzjxengpuFgEpVErD9XuXYViTyCxcTHXJZtBKzzVqaTHo8IT8jDjoW2HY
-	zy9g1pYOlpu3ZL2WlEyvQOY6Aw6CYELvk5gVOoXyt3PvXZNrCg1mC2GhxF3tIJVn
-	Wwo4v2oCNu6EUq6c16uNcT6J75pnHDQf0PFZ0o8aB16hx4iEkLBVkj+9OgeEds+y
-	3nWMEqPriCzh6HXjrYUqA==
-X-ME-Sender: <xms:EnMDacAUHjQ7s8n4OT8LC2fLtkaELROheJwYiohd1xq_tCbo6CvADw>
-    <xme:EnMDaZUpArReTaVDo1hyFC_b-KvmUsTyd9v1R4pcHLVYo6o2hew9P57dODSAoVTif
-    A6vjjpsbMbFDT602GN8fnGTjgoeRLpBg6gVzR_ALh9bLP3SsIZOjw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdduieeikedvucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhgu
-    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
-    hrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefggfevudegudevledvkefhvdei
-    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnh
-    gusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepuddupdhmohguvgepshhmthhpohhu
-    thdprhgtphhtthhopegrnhhsuhgvlhhsmhhthhesghhmrghilhdrtghomhdprhgtphhtth
-    hopehrrggrghdrjhgruggrvhesihhnthgvlhdrtghomhdprhgtphhtthhopegrnhguvghr
-    shhsohhnsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehilhhirgdrlhhinheskhgvrh
-    hnvghlrdhorhhgpdhrtghpthhtohepkhhonhhrrgguhigstghioheskhgvrhhnvghlrdho
-    rhhgpdhrtghpthhtoheprhgrfhgrvghlsehkvghrnhgvlhdrohhrghdprhgtphhtthhope
-    hvihhrvghshhdrkhhumhgrrheslhhinhgrrhhordhorhhgpdhrtghpthhtoheprghnughr
-    ihihrdhshhgvvhgthhgvnhhkoheslhhinhhugidrihhnthgvlhdrtghomhdprhgtphhtth
-    hopehlihhnuhigqdgrrhhmqdhmshhmsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:EnMDacmlMpuu-l0sMG6dsWHIA9M9MuhWv19inlmsTKU7fKeVmTlcbw>
-    <xmx:EnMDadZpfespG7-djx1OOlfUQQwP2vIE0cCFFIHzoyst6fqNDqSuYw>
-    <xmx:EnMDaZ7qTl2BO3owF7pdQwXT5AZzG6UCw3mj1hvU5nZ5prreciPqMw>
-    <xmx:EnMDafCqChq34ZTQ-aKKxmaCuWZ53_5c1oSxvC_CTrkNpr-r1ADDaQ>
-    <xmx:EnMDacNcGCDgKGxuEWMDkx_uAURo653_e9L2XXIVrYarUCQaY5XI1Q0G>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 64074700063; Thu, 30 Oct 2025 10:15:46 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1761835617; c=relaxed/simple;
+	bh=ZbD7yOLwW/cgaU5VsklEXPxgoTiYiE4edNqVj6qNico=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=e61Gp111G+88GCHPpvfyACPbeVEa3fw7ujsLioHbfn1WdfNd7WETM3webYkEcQGyQ6FVDOuZ7KhaLYWLd6Iw1jTYl4oa2MAYvRdJuOXqKs1HP2NhNxawgpVvihjzs5FN97DANRLXHYVLhFjb9BbjY83UKfG450dZuq3NFJNIf/0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FCcQ0B+w; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 840B5C4CEF8;
+	Thu, 30 Oct 2025 14:46:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761835616;
+	bh=ZbD7yOLwW/cgaU5VsklEXPxgoTiYiE4edNqVj6qNico=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=FCcQ0B+w8LJ6ToMaS6Qm6GHAn0D54ovIPp2mSH+uiK/SKSLzgJBCV3Snalz6zFMcp
+	 UUjEDY+D73uxZGayO0srDEnQe6uWD3GHNw3n7bYLcbuxIiA8/sBQTFaoJB7/cI09E2
+	 XxQaY0TUrWYvhLs4KGQYVdvBusWUB9vRkaSu58MVvJheIaPF3suaEBTcmQ/puWLR8C
+	 x0qSrQuC3NGFxPrA7RSI5DXKUzK3z0kbqOVAbyA6CUn+thpA0Y3NC/0rem3AnoO9I/
+	 UblRftK8xQfF4/jViVZT1NPycEdWVdsd+pHU/H15mBM2H2zkXd3RmKIn0omPOZRxHc
+	 Sf80ZkUjpjz5g==
+Date: Thu, 30 Oct 2025 09:46:50 -0500
+From: Rob Herring <robh@kernel.org>
+To: Herve Codina <herve.codina@bootlin.com>
+Cc: Andrew Lunn <andrew@lunn.ch>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Peter Rosin <peda@axentia.se>, Arnd Bergmann <arnd@arndb.de>,
+	Saravana Kannan <saravanak@google.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Charles Keepax <ckeepax@opensource.cirrus.com>,
+	Richard Fitzgerald <rf@opensource.cirrus.com>,
+	David Rhodes <david.rhodes@cirrus.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Mark Brown <broonie@kernel.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Daniel Scally <djrscally@gmail.com>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Len Brown <lenb@kernel.org>, Davidlohr Bueso <dave@stgolabs.net>,
+	Jonathan Cameron <jonathan.cameron@huawei.com>,
+	Dave Jiang <dave.jiang@intel.com>,
+	Alison Schofield <alison.schofield@intel.com>,
+	Vishal Verma <vishal.l.verma@intel.com>,
+	Ira Weiny <ira.weiny@intel.com>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Wolfram Sang <wsa@kernel.org>, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+	linux-i2c@vger.kernel.org, linux-pci@vger.kernel.org,
+	linux-sound@vger.kernel.org, patches@opensource.cirrus.com,
+	linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-spi@vger.kernel.org, linux-acpi@vger.kernel.org,
+	linux-cxl@vger.kernel.org,
+	Allan Nielsen <allan.nielsen@microchip.com>,
+	Horatiu Vultur <horatiu.vultur@microchip.com>,
+	Steen Hegelund <steen.hegelund@microchip.com>,
+	Luca Ceresoli <luca.ceresoli@bootlin.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v4 19/29] of: property: Allow fw_devlink device-tree on
+ x86
+Message-ID: <20251030144650.GA3911092-robh@kernel.org>
+References: <20251015071420.1173068-1-herve.codina@bootlin.com>
+ <20251015071420.1173068-20-herve.codina@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: A8oaPjpzjt_R
-Date: Thu, 30 Oct 2025 15:15:25 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
- "Christian Marangi" <ansuelsmth@gmail.com>
-Cc: "Ilia Lin" <ilia.lin@kernel.org>,
- "Rafael J . Wysocki" <rafael@kernel.org>,
- "Viresh Kumar" <viresh.kumar@linaro.org>,
- "Bjorn Andersson" <andersson@kernel.org>,
- "Konrad Dybcio" <konradybcio@kernel.org>,
- "Raag Jadav" <raag.jadav@intel.com>, linux-arm-msm@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Message-Id: <9f41aee8-49a1-4029-8b21-e4eafaa2e224@app.fastmail.com>
-In-Reply-To: <aQNvjqJGqFO30JTx@smile.fi.intel.com>
-References: <20251029133323.24565-1-ansuelsmth@gmail.com>
- <aQIzoGnvZWYuHuoQ@smile.fi.intel.com>
- <69023512.5d0a0220.3cccb7.8e65@mx.google.com>
- <aQMheocySykpTFDN@smile.fi.intel.com>
- <69033c55.df0a0220.1a33d7.49ff@mx.google.com>
- <aQNvjqJGqFO30JTx@smile.fi.intel.com>
-Subject: Re: [PATCH 1/3] err.h: add ERR_PTR_CONST macro
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251015071420.1173068-20-herve.codina@bootlin.com>
 
-On Thu, Oct 30, 2025, at 15:00, Andy Shevchenko wrote:
-> On Thu, Oct 30, 2025 at 11:22:11AM +0100, Christian Marangi wrote:
->> On Thu, Oct 30, 2025 at 10:27:38AM +0200, Andy Shevchenko wrote:
->> > On Wed, Oct 29, 2025 at 04:38:53PM +0100, Christian Marangi wrote:
+On Wed, Oct 15, 2025 at 09:14:06AM +0200, Herve Codina wrote:
+> PCI drivers can use a device-tree overlay to describe the hardware
+> available on the PCI board. This is the case, for instance, of the
+> LAN966x PCI device driver.
+> 
+> Adding some more nodes in the device-tree overlay adds some more
+> consumer/supplier relationship between devices instantiated from this
+> overlay.
+> 
+> Those fw_node consumer/supplier relationships are handled by fw_devlink
+> and are created based on the device-tree parsing done by the
+> of_fwnode_add_links() function.
+> 
+> Those consumer/supplier links are needed in order to ensure a correct PM
+> runtime management and a correct removal order between devices.
+> 
+> For instance, without those links a supplier can be removed before its
+> consumers is removed leading to all kind of issue if this consumer still
+> want the use the already removed supplier.
+> 
+> The support for the usage of an overlay from a PCI driver has been added
+> on x86 systems in commit 1f340724419ed ("PCI: of: Create device tree PCI
+> host bridge node").
+> 
+> In the past, support for fw_devlink on x86 had been tried but this
+> support has been removed in commit 4a48b66b3f52 ("of: property: Disable
+> fw_devlink DT support for X86"). Indeed, this support was breaking some
+> x86 systems such as OLPC system and the regression was reported in [0].
+> 
+> Instead of disabling this support for all x86 system, use a finer grain
+> and disable this support only for the possible problematic subset of x86
+> systems (at least OLPC and CE4100).
+> 
+> Those systems use a device-tree to describe their hardware. Identify
+> those systems using key properties in the device-tree.
+> 
+> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+> Link: https://lore.kernel.org/lkml/3c1f2473-92ad-bfc4-258e-a5a08ad73dd0@web.de/ [0]
+> ---
+>  drivers/of/property.c | 31 ++++++++++++++++++++++++++++++-
+>  1 file changed, 30 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/of/property.c b/drivers/of/property.c
+> index c1feb631e383..09b568e3b826 100644
+> --- a/drivers/of/property.c
+> +++ b/drivers/of/property.c
+> @@ -1600,12 +1600,41 @@ static int of_fwnode_irq_get(const struct fwnode_handle *fwnode,
+>  	return of_irq_get(to_of_node(fwnode), index);
+>  }
+>  
+> +static int match_property_by_path(const char *node_path, const char *prop_name,
+> +				  const char *value)
+> +{
+> +	struct device_node *np __free(device_node) = of_find_node_by_path(node_path);
+> +
+> +	return of_property_match_string(np, prop_name, value);
+> +}
+> +
+> +static bool of_is_fwnode_add_links_supported(void)
+> +{
+> +	static int is_supported = -1;
+> +
+> +	if (is_supported != -1)
+> +		return !!is_supported;
+> +
 
->> drivers/soc/qcom/smem.c:361:35: error: initializer element is not constant
->>   361 | static struct qcom_smem *__smem = ERR_PTR(-EPROBE_DEFER);
->>       |                                   ^~~~~~~
->> make[9]: *** [scripts/Makefile.build:229: drivers/soc/qcom/smem.o] Error 1
->> 
->> You want me to add this to the commit? Or any hint to better reword this
->> so it's more understandable?
->
-> Just the first line would be enough.
-> And perhaps better naming for the macro, but I have no ideas from top of my
-> head right now. Ah, actually I do. We call those either INIT_*() or DEFINE_*()
-> with the difference that INIT_*() works like your proposed idea. i.e. returns
-> a suitable value, but DEFINE_*() incorporates a variable and a type.
->
-> I think the INIT_ERR_PTR() is what we want as a name.
+All of this:
 
-Agreed, that seems better than ERR_PTR_CONST(). I'm still not sure
-there is much benefit in using this in static initializers, but
-I don't mind it either.
+> +	if (match_property_by_path("/soc", "compatible", "intel,ce4100-cp") >= 0)
+> +		goto not_supported;
+> +
+> +	if (match_property_by_path("/", "architecture", "OLPC") >= 0)
+> +		goto not_supported;
+> +
+> +	is_supported = 1;
+> +	return !!is_supported;
+> +
+> +not_supported:
+> +	is_supported = 0;
 
-    Arnd
+can be simplified to:
+
+is_supported = !((match_property_by_path("/soc", "compatible", "intel,ce4100-cp") >= 0) || 
+                 (match_property_by_path("/", "architecture", "OLPC") >= 0));
+
+> +	return !!is_supported;
+> +}
+> +
+>  static int of_fwnode_add_links(struct fwnode_handle *fwnode)
+>  {
+>  	const struct property *p;
+>  	struct device_node *con_np = to_of_node(fwnode);
+>  
+> -	if (IS_ENABLED(CONFIG_X86))
+> +	if (IS_ENABLED(CONFIG_X86) && !of_is_fwnode_add_links_supported())
+
+I would move the IS_ENABLED() check to 
+of_is_fwnode_add_links_supported().
+
+Rob
 
