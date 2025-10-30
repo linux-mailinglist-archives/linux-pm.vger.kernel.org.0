@@ -1,130 +1,118 @@
-Return-Path: <linux-pm+bounces-37065-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37062-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7DD4DC1CDC7
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 20:00:40 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BBD2EC1CC98
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 19:34:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 68BA14E05A4
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 19:00:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D5CE21882390
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Oct 2025 18:34:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 947113590C4;
-	Wed, 29 Oct 2025 19:00:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B46D3563C7;
+	Wed, 29 Oct 2025 18:34:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kaMYCV0B"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aoorhfRj"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 700DD3590C1
-	for <linux-pm@vger.kernel.org>; Wed, 29 Oct 2025 19:00:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 302F5320A0F
+	for <linux-pm@vger.kernel.org>; Wed, 29 Oct 2025 18:34:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761764433; cv=none; b=kyYMgE18/lxAl0eyYfsuyQLvTbwXkUc5FMV+uiFWsVfvLCLvNkNr4CC1QEEuhTZSmFBWmkt1ZWZT/dTzR99GQTzCaXZcKSaQ1d0578lxG3UQzuuc+rKFqIAwRjRVfo1sKQs8p6gez4klBKBDNRU3R+5cxRPv2VhUw6VYL0ksvXo=
+	t=1761762867; cv=none; b=TaJUsxhTXKI9kfW7Ue5BFo0HrSVWQ03HKj8U8h+fvxr/umd2M+Kg9w1nFqfugzoK7UtokIdbuw5Er8Fsj4AmieyybwWR1ytjfjkwig6Vt8MqtwQGkm8N1W5vnIPngzzT8q5zgrKMvoFUYAY9J/UTkDtWkmLHP9fhr1PU8iEn064=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761764433; c=relaxed/simple;
-	bh=7lyiAV1rqHRrNNC2mebu+0d6w0qgxZqfz9LsUM51/IY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=A7R5FPpO4pB55ZkozbQJ37WQIkIYOqkkUBGlpVuhJARiZwMqPhD99cKJ19gyLywJc4xrhjmimIB1D6oQPKFdd5uWEeV1nr4PAwPaEhj9PmQVLsYWQiGXfZ2TmHbNwv14VexKl8DG93DR38+dEZ6bb3VzweGK817f91Bpcwyf5KM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kaMYCV0B; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 069D1C4AF09
-	for <linux-pm@vger.kernel.org>; Wed, 29 Oct 2025 19:00:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761764432;
-	bh=7lyiAV1rqHRrNNC2mebu+0d6w0qgxZqfz9LsUM51/IY=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=kaMYCV0BjBakVZ+zrLfrrR3dVzNMx6/KLmy3R7stVpHx/DXX57k5gw0fYgKrgQDTE
-	 2mrcvm8YNi2uT/o3OjtZFjLCeXfauOfpiHJxeUfmi8JlfJZg0HLukuNHRdNAnVaMC9
-	 9gtkDiJ5zk0K1FQJHkgsdaaAMlsDh5Imm6Aabn7Q7UqpS0PtA81OCtfBiDnfbzpzja
-	 0c0Y33hD7y6iZ2nTd/hcIW/dxBz8W1MnoDLmGmLgnFTeqGFYNpkwFXRZaWHqg6GXUD
-	 09puiTffHYBoTYPiqgwQNUeP+dZAMCL4DNv8M2t+DDdZ+xPTxGOTF6XSWwnvAFwi9e
-	 F3zqmHPzU9Czw==
-Received: by mail-oi1-f169.google.com with SMTP id 5614622812f47-443ac891210so133780b6e.1
-        for <linux-pm@vger.kernel.org>; Wed, 29 Oct 2025 12:00:31 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVACcU26QmB4KfL0CHVdlwWekSc8k4yEB5T9KeWcah6dp/o6Skow7Uz6uNQ6XE4YXigoghNK3igMw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx12ZxHKszpyGglRjTVYp416NSyyISpAurNOQxXcjIPFrhZWvaj
-	ZTCqZTkgUrU6qBw4SRqrAn8n/inP3KyP8Brom9V+w3FvFq9VJD3onDhPZCLgtEVQ8/Yy0VJLZ4C
-	XTuKcX9JIPt9GMYbmBRIP6GjJCzG0pCw=
-X-Google-Smtp-Source: AGHT+IEM2thqrNFpWgW4GaxlYBwePV2dgOkn3wDq3C3a3TbN7GDItXTyZfYFUpWtpwDSnFCac7W45ElxoOHQJDadjYY=
-X-Received: by 2002:a05:6808:3990:b0:44d:bf83:d7f8 with SMTP id
- 5614622812f47-44f7a3d0652mr1972133b6e.4.1761764431301; Wed, 29 Oct 2025
- 12:00:31 -0700 (PDT)
+	s=arc-20240116; t=1761762867; c=relaxed/simple;
+	bh=CTWegixHFEa5eJOgjs271DCyYwGiTYFeBEQBky5Cs5E=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=cyWXta5wL5qNs2F+dbBVmMHgINvOchhInRREdvjKi/Dv7W/6XdGJhYqqlVazcRIUrhuZ6r1hNFOYBt9TKJquA9U9qMO505QOEQDQcb/6mUk0fM0i+ungz7fFTfFujOKvvnXQ/HXoqhglrRheoIBfdgjRgphYUJ9tmWJ+5+BomrQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aoorhfRj; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-290deb0e643so1125115ad.2
+        for <linux-pm@vger.kernel.org>; Wed, 29 Oct 2025 11:34:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1761762865; x=1762367665; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7ogeoHQ0O1BVIxTR+8ZrFN7NDholX1XeAgqEssh3smo=;
+        b=aoorhfRjrfo2xVbmWP4+R92Lxv95ViIUjXT3CnDE5dyVRwihzvRpHjnIcrgIbrd25k
+         0T7TRRZI1C2anRVGtQlWcjw5R2ejT5ZlzUd0VsPfIMA6bsIx3p10o9j3JuSLPuW3dIKJ
+         zUTVWKt49kLDmLvB8ria0EZ96iBe0e6UJMGchL+pUVs4tWY8RWUIowRxv+W7v5+h/2NC
+         JnCVBfkqDr6WGpJ1m1bfCzsD+fqvf+yWsUwCst9FL2jGZhONCTi/0qIIOaMys9vgS3fa
+         wBZNwbl8HM2m5GNeVoimc14BwmmUiqsgTXfeGfG4xaptRUXLHvbXRLCMjU2EqezrfmXa
+         crDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761762865; x=1762367665;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7ogeoHQ0O1BVIxTR+8ZrFN7NDholX1XeAgqEssh3smo=;
+        b=Wo7YlSrMUS+5iItn6F4Oc5lElTgcvjRD/UYJMF1Du2KYNp6Exo3V/HsKuEJHTiCvAy
+         8wJ8+Jl9o10gDBpox8o4crYZSD/FCanBfydC7bNmBR8q/DHumQgNSOJ1htAySG7iPapY
+         PhrDoPdfkiyrMNj3mHe9yPb7KbUJCmfsvyX2YX1LBL2vr4qLkcodiKDOV2VjyZGfqTTx
+         v7Og701OIi+M8goRbjBOw0B/IDjhD7VHbRmfLG/9FIZ8/FoM5bVzqH5W9Dn6GcMQ+4EJ
+         1kpKlLNiLKmqh4sqqdXzjaYJ7aWYt8SeOJfgJwFMooCsjcktS3suLLrPcdw0XA1d/iqt
+         gqUA==
+X-Forwarded-Encrypted: i=1; AJvYcCVT/nwTk2J85Z63yC+phvwdugMT6O6SLp2LEzGEZ4D+o37/vPELY7Y70LLjAAeZNDXUN8xawaoMAA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyMSH0TTJnK+GBC9OHxG1XGI7lk/3+SWtlmirVn/YBHfpuBkmzF
+	/ZqLlPCAZaPD2VbTTgMzPyJX0DEEh8UOKVJN+MJng9XtBgigSeP9MvGw
+X-Gm-Gg: ASbGncu+gTHANA3QOwwd0wWgO78RDURYllsQnKncvwxPnS3am+3Ac+CYlUHy8Pa9djR
+	HRUw7fRxH4xEU5/hOnDFX/XfI3WWNDa9qUR6BC5hozXed1PcY6SltpIAM4NqZNycji4pYtsvW1m
+	E2I9Pc+6BZM3C3iX85UsIYEF5iRF0IKAJzAbX949EKztQZ+yKcgOvFyW8HOzGgslWcbfqN5PXPj
+	eZymYR39Ui7Yp/JUQNKbzEkgrwuohwCSo3T7/qgTUHCek7FKyCKEpyyHXdIFd5HK9FFntFPsJKi
+	/ZiaW80OO5ZrI8uxXhRzSMt5sdaI2uRLZVsjD0t+ZIwRFHed6Dhk17b9O/KoJkwU9+eoyzUxZ77
+	V8ENbEtgur9zQqbE1uUn6Pw50cAC9tE8TlKvJR9zEeSUaj6iq/pK1Gc02g8kfkwDH3C8Tn1Pe8C
+	T3w+QAUpY=
+X-Google-Smtp-Source: AGHT+IEEht2FlqLLG0Ynfa5FSTjLG86LfIAz4K2RirDJOlW5Gbt1L9iZ3dBFembId9gkTaOOHsrmdA==
+X-Received: by 2002:a17:902:d512:b0:294:ccc6:cd2c with SMTP id d9443c01a7336-294dee491f3mr44845335ad.22.1761762865379;
+        Wed, 29 Oct 2025 11:34:25 -0700 (PDT)
+Received: from LilGuy ([2409:40c2:1057:4837:724a:2122:38a7:2755])
+        by smtp.googlemail.com with ESMTPSA id d9443c01a7336-29498e42afdsm156921855ad.99.2025.10.29.11.34.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Oct 2025 11:34:24 -0700 (PDT)
+From: Swaraj Gaikwad <swarajgaikwad1925@gmail.com>
+To: bagasdotme@gmail.com
+Cc: corbet@lwn.net,
+	david.hunter.linux@gmail.com,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	rafael@kernel.org,
+	skhan@linuxfoundation.org,
+	swarajgaikwad1925@gmail.com,
+	viresh.kumar@linaro.org
+Subject: Re: [PATCH] Documentation: pm: fix duplicate hyperlink target errors
+Date: Thu, 30 Oct 2025 00:04:08 +0000
+Message-ID: <20251030000408.44745-1-swarajgaikwad1925@gmail.com>
+X-Mailer: git-send-email 2.51.1
+In-Reply-To: <aQHyhU78m-9RPQ8q@archie.me>
+References: <aQHyhU78m-9RPQ8q@archie.me>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251026170527.262003-1-mrout@redhat.com>
-In-Reply-To: <20251026170527.262003-1-mrout@redhat.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 29 Oct 2025 20:00:20 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0gtKTUAthA4OaCU-hV4j1OhRDuA10o-ZhXepFyq7J5L2g@mail.gmail.com>
-X-Gm-Features: AWmQ_bk6EPvPp1ZojFQfUZnAvpOOabuA0STIcW3pcPHz9eAU0AO-Pz444iRTH1g
-Message-ID: <CAJZ5v0gtKTUAthA4OaCU-hV4j1OhRDuA10o-ZhXepFyq7J5L2g@mail.gmail.com>
-Subject: Re: [PATCH] PM: runtime: fix typos in runtime.c comments
-To: Malaya Kumar Rout <mrout@redhat.com>
-Cc: linux-kernel@vger.kernel.org, lyude@redhat.com, malayarout91@gmail.com, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Sun, Oct 26, 2025 at 6:05=E2=80=AFPM Malaya Kumar Rout <mrout@redhat.com=
-> wrote:
->
-> Fix several typos in comments:
-> - "timesptamp" -> "timestamp"
-> - "involed" -> "involved"
-> - "nonero" -> "nonzero"
->
-> Fix typos in comments to improve code documentation clarity.
->
-> Signed-off-by: Malaya Kumar Rout <mrout@redhat.com>
-> ---
->  drivers/base/power/runtime.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
-> index 1b11a3cd4acc..7fe63cab2708 100644
-> --- a/drivers/base/power/runtime.c
-> +++ b/drivers/base/power/runtime.c
-> @@ -90,7 +90,7 @@ static void update_pm_runtime_accounting(struct device =
-*dev)
->         /*
->          * Because ktime_get_mono_fast_ns() is not monotonic during
->          * timekeeping updates, ensure that 'now' is after the last saved
-> -        * timesptamp.
-> +        * timestamp.
->          */
->         if (now < last)
->                 return;
-> @@ -217,7 +217,7 @@ static int dev_memalloc_noio(struct device *dev, void=
- *data)
->   *     resume/suspend callback of any one of its ancestors(or the
->   *     block device itself), the deadlock may be triggered inside the
->   *     memory allocation since it might not complete until the block
-> - *     device becomes active and the involed page I/O finishes. The
-> + *     device becomes active and the involved page I/O finishes. The
->   *     situation is pointed out first by Alan Stern. Network device
->   *     are involved in iSCSI kind of situation.
->   *
-> @@ -1210,7 +1210,7 @@ EXPORT_SYMBOL_GPL(__pm_runtime_resume);
->   *
->   * Otherwise, if its runtime PM status is %RPM_ACTIVE and (1) @ign_usage=
-_count
->   * is set, or (2) @dev is not ignoring children and its active child cou=
-nt is
-> - * nonero, or (3) the runtime PM usage counter of @dev is not zero, incr=
-ement
-> + * nonzero, or (3) the runtime PM usage counter of @dev is not zero, inc=
-rement
->   * the usage counter of @dev and return 1.
->   *
->   * Otherwise, return 0 without changing the usage counter.
-> --
+Hi Bagas,
 
-Applied as 6.19 material, thanks!
+Thanks for reviewing!
+
+Here are the versions from my environment where the warnings appear:
+
+  sphinx-build 8.2.3
+  Docutils 0.22.2, Python 3.13.7, on linux)
+
+So it seems the issue shows up with docutils 0.22.2 but not with 0.21.2.
+
+Thanks again for confirming the diff looks good!
+
+Best regards,
+Swaraj
+
 
