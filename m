@@ -1,251 +1,180 @@
-Return-Path: <linux-pm+bounces-37129-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37130-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A4889C21B42
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Oct 2025 19:11:38 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id F2360C21C2E
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Oct 2025 19:26:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E40B0406524
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Oct 2025 18:11:20 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 3CF8E4ED715
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Oct 2025 18:24:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B80A72FCC0F;
-	Thu, 30 Oct 2025 18:11:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C2B93678DC;
+	Thu, 30 Oct 2025 18:24:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sl6Je7xU"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="X+q//aIJ";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="L4iAQRN9"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 928EE25FA13
-	for <linux-pm@vger.kernel.org>; Thu, 30 Oct 2025 18:11:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1B3E238C2F
+	for <linux-pm@vger.kernel.org>; Thu, 30 Oct 2025 18:24:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761847876; cv=none; b=H6D5Oo5X6ys9dCMwhhxFTdMsX7vEmPF4TumAMn1t8Qd8G62i7/5dLRfyd5sT4JvD6tpfBKYNAuSPOM+nbu+hMSHbRYLIC8BJRS+K2oBxO/4e19AreXw7IjAnusBOdVAaiaxSJj2ukkATYzx+t+81riwLtREFb1ghHpOiA9YYHKs=
+	t=1761848677; cv=none; b=a4M6MYpN8zKItqFB3MsQWabO3JEyECGVi1EMpMD6FyAwghxn+Al9dI1FEI7SXzHj8kRG8dDIsHaz7RL+KeEPGbrxAAa/NNnKjrkw4UFxrj6UBAj/6vildvMb9Q6DiOVMA7TON1xnD2SqSwEKqbD7oSy1eObjTOHSr/RFGvPsNIc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761847876; c=relaxed/simple;
-	bh=uUizPZKluk7Jwn3HpmewDS0Fy2cfvBUvG9HSQEUfK4o=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=b04NrghcVjZ3fnZmqoiQlcJYNbsbfrZAYTuSlHRsR0R+6Ff6DePAkIrOnkOsjNqqWB0wYh0yVEu+EzoaH/2EC7yEP/euYQQc+Kt6/+Ze5UPc9fdAlkWEtG/tGYDbd0RkAgEYjO2q0qyTAQBEgfsS76lSowbtN68Kyg6E+6Kssuo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sl6Je7xU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44C7CC4AF0B
-	for <linux-pm@vger.kernel.org>; Thu, 30 Oct 2025 18:11:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761847876;
-	bh=uUizPZKluk7Jwn3HpmewDS0Fy2cfvBUvG9HSQEUfK4o=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=sl6Je7xUwBhTrJqbH4Zqa7uVjdz8vDZ4/W6UsoybPqgR29GjGQzhoV+upQWv6vV7f
-	 0RIAnAxQk89PdojrLXBEkSrpPU6ekHpvfQJKGSgUdVHOvghkacCa/dcoMa6WksRhIM
-	 ppBmnNTaDObXIHQuFmpdWhAbFa0V0dkUTmOJlGB6YcsBPqXd1HLEsWXRM4KbmikwmA
-	 0PHYJ9R3rniP+uoOFd7qPjQjiHi0aVI22tseIpEs+8vfkm1UnyHb6NuVBXHgRBsbLF
-	 EwHUh8BAsaHT3iCtmE8V+WE2Figt1PGOEx1Sr59tN1gZqnW6BrquPuQITMpyInXCEE
-	 cPaPzkZdyjy9w==
-Received: by mail-oi1-f177.google.com with SMTP id 5614622812f47-4491510f005so375567b6e.2
-        for <linux-pm@vger.kernel.org>; Thu, 30 Oct 2025 11:11:16 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXU5ZCmOt+BKcFL9GKvTuMwxdUc43fwx8kdN605KhBRVBLA4txwudYRoJc5aR+e1rvLd3ERrYq8pg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxxYSNl/O0/N2MLEZx5Cn+M2Gk7BXm1l/yLQ6He4q5DzNnUKJgG
-	xs9FogZHqYU1fdiSdKpbq5odx4KZsB0XtryF1rlTtwLK+eqplDDG8ib+y/9fbShMNh2CzaOm0cS
-	qoonRr4zSlysLCFZmwWCSHo6jvN3GUDk=
-X-Google-Smtp-Source: AGHT+IHW0nlsfsQxxGRyJgN07O4vnJjHufNj/PwIMwcNbkhmcasizwXLwJVkiitD3Ek49r3QecRqAhv+R7Y03Q/iMc0=
-X-Received: by 2002:a05:6808:189e:b0:44f:8f02:8a50 with SMTP id
- 5614622812f47-44f95e19ca9mr316111b6e.12.1761847875470; Thu, 30 Oct 2025
- 11:11:15 -0700 (PDT)
+	s=arc-20240116; t=1761848677; c=relaxed/simple;
+	bh=n5LDDnU31B/FU4hkVylg5WKwzdJmETUQKTTzRhOKfsQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=n6dw60vFmHbZF09bzBSqhrJmvkeYw0sgYBt2hWEZemziZSzDDkUYRJz0HuGc/QDmjbyanwZWIthVWoIs2VaH6QdIiiv6ZsBYVaEqh54xUCspa913UlaprWY3VZknFjDtkv9DgT2baV6VWE1pXotZrry8TJmi7eBuLQijUSyLaog=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=X+q//aIJ; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=L4iAQRN9; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 59UF4iaI1599075
+	for <linux-pm@vger.kernel.org>; Thu, 30 Oct 2025 18:24:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=syXUOD6JoN9BeOT8Ps+v7SB2
+	QPgUbs++JkB3a+FX+aI=; b=X+q//aIJYPavTm/MJPOaMRJnxV388UO7RYFQCWvK
+	JjVcniBUwCX1CaGgS8IBovEx11gbOmz+apnTAa5WXHAQAwSWCXlAzcbme/YjQAW6
+	ldmw5uxe0LF92pmZmqW4HH+tHa5Ukec5c/eKlquYkm0lEhCAv+Imdg9NeDcUhXjC
+	8+AgnFGp1JiUyzEbLgO3Z+BPz0OxBWQKXDHeF4pOUmV2a5m4nPrArDUivC0378+y
+	sMji2N2LnUx0aSS7Uv+5VZIRyt2bX70YWQgWl0WDnMQU69HuAon/igIMoHj3pKVa
+	8xCzUEcnkL2q+5ohUXhM2N42XFD35qE0ms3YGsdRlCi5Tg==
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com [209.85.160.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4a3ta7uf2w-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Thu, 30 Oct 2025 18:24:33 +0000 (GMT)
+Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-4e8b33c1d8eso29527071cf.2
+        for <linux-pm@vger.kernel.org>; Thu, 30 Oct 2025 11:24:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1761848673; x=1762453473; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=syXUOD6JoN9BeOT8Ps+v7SB2QPgUbs++JkB3a+FX+aI=;
+        b=L4iAQRN9DXO1eznCaNfMRvre8dvaRlLK3GJ4JyZUqDqGpSJppHYbmSFXSFME3TgLQ3
+         o3C1NO/25Wn/YyV5aJA3YSu6H9S39wsDyJ/EFqMfufCrEGL7O+o68wihPJxOr7pLY5Ue
+         9BnPpBM4zJ50ngNNk6QVL8dhcFgY8Q9CJ5KKCCRXqQ8sfWFwFxGHsfzsgzWbcfaJHXiz
+         u4wBXDKp71mrGr17r5NrxZ8ATjlLOfpd+AGMIHvo0+ZhaNVDFcyu/PtdyJn9c99JoGF/
+         0hoLOdiSyIdnODgihyK2PKNXOm/54/s1+OyS9/aGc4e7SFkwDP+2uKvHBM8O4VvxZOSM
+         INqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761848673; x=1762453473;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=syXUOD6JoN9BeOT8Ps+v7SB2QPgUbs++JkB3a+FX+aI=;
+        b=riQODHsHFVwRd8fN6PqK2OWVXLg0gr1KogxGmaqGU5J0loUId9BtmAsl1tTFNvOYQV
+         uA2qTLPCAqEDu4SdD7q8BDCARYLgxNgHnoiGrCRKFd+knWrR7pkunsA8nfTWtqEn3Xe+
+         E04/2I7mmY+kO297fJ2iEzA9wyiPVdLIH0HycTzjq87mRax9CoG7X9Q1IwNR0f9kNzfa
+         ekpGOzsPy+MdqDMG71bKUVG0wn9iDQv1k3dLxDKAECqBH/nJnPulE8H3O/gLsRAccK6Z
+         8ue4jwh8Edaer9GE7iV10HyC+pdA8WkLtSUTEE5EeeUMuIKIYTaN98KzAx8Q8DOQgXHa
+         ZFXQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUG5Jbxl0o4ObFeX3T8wihy39okfsmV15bR8waOYjo4gxQLTuBFLliT0RD5c1YbRjiB35RTUYndXg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzVD7aZNgY7qASwZLuTuACj7cYjKZf3ChRneosYQZ5QsW7YAwj8
+	3naU3l6AANO227Z4Va5L2xV6IneTgJAaVUb5OdqDYy83916L4xPStTN9dZM9IactlnAFZ0zmtBd
+	efCZq5XTvN+zGVhFX7qZM7JdsbZDmx/W/cHx2f2OOP0LOGiBBdLWD0oFwhMO2vg==
+X-Gm-Gg: ASbGnct0cSh2iaWaAOIezgzygcooR0GQq4Kel0m4lBwuCy3xBL4CSN/tg1UL7En96g3
+	C6uXzp0jBx1SMHfbvik6ZaqZj7ryuaKk4/1Xv+Go6CpxVtHNWMgTURi4qrKy15GepX9VhB5NAFH
+	a8NWw7MFZh3hx1NTCgiwf0cqVKTDspOb2dnwOjQqIWMGwkGh2D5hHlMha4rjnkHKA5sz/ywHuy2
+	7uP4dNG1mmp6B7iUY/yuc7tNcURjzs57h/PZC909mJCT706yVAx+cHd1Rr/TVcy9cdLaT9Idn18
+	kywNpKNU7D3y9i84vmUYwhA56orCLTntatjGrBDtvamh2Y7dWZH3xDFEPiAeKy/Wgu/Jbs0KrKC
+	CCEBTG68+hvD9fY3+ih4VXQYC2MfOuoRK40dyKUEfG7OcMJPzvLPl7lYWEsoVpGaugClZE25XNP
+	RzQi4P0/BAdSih
+X-Received: by 2002:a05:622a:44c:b0:4e8:a3aa:7a89 with SMTP id d75a77b69052e-4ed30f97698mr7501951cf.45.1761848673056;
+        Thu, 30 Oct 2025 11:24:33 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEmXHfCUfcD2P7/jhUfHS2Z3Z/sOp48KQ53I4Yb9fWNOd7sgUr+yJyHxsPDN81BBTCGrNVwpQ==
+X-Received: by 2002:a05:622a:44c:b0:4e8:a3aa:7a89 with SMTP id d75a77b69052e-4ed30f97698mr7501491cf.45.1761848672452;
+        Thu, 30 Oct 2025 11:24:32 -0700 (PDT)
+Received: from umbar.lan (2001-14ba-a0c3-3a00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a0c3:3a00:264b:feff:fe8b:be8a])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-59301f87f14sm4837077e87.112.2025.10.30.11.24.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Oct 2025 11:24:31 -0700 (PDT)
+Date: Thu, 30 Oct 2025 20:24:29 +0200
+From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Cc: Georgi Djakov <djakov@kernel.org>,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        Dmitry Baryshkov <lumag@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH 2/2] arm64: dts: qcom: msm8996: add interconnect paths to
+ USB2 controller
+Message-ID: <hlj6cyeybsct4flwvm22t4u5coeyrlwcwfol2cuzab2fjkluwi@frs6m2sjyksp>
+References: <20251002-fix-msm8996-icc-v1-0-a36a05d1f869@oss.qualcomm.com>
+ <20251002-fix-msm8996-icc-v1-2-a36a05d1f869@oss.qualcomm.com>
+ <7ef8ba74-4e9e-4b19-998e-40917d997ca8@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251016151929.75863-1-ulf.hansson@linaro.org>
- <20251016151929.75863-3-ulf.hansson@linaro.org> <CAJZ5v0hPUYoLFs=jZ10a1cX6TE1bmRF7CkBH1Ebejao9Hdfhnw@mail.gmail.com>
- <CAPDyKFrrhw5vMYLEWJ5LRphVzwPwjiU-n=tdbgOtOmFSXGd0GQ@mail.gmail.com>
- <CAJZ5v0g5p-8WrmNQ6-tvTEy50gVjfEMsmXxTK8bmLqafe30jKw@mail.gmail.com>
- <CAPDyKFo+U=oJVxXCDBN_WZLBpkwPgv_=qw96hauAttFnAQuPtw@mail.gmail.com>
- <CAJZ5v0h_OFzmhcKohS3SNWwz_vwpq6frymXSSgFjk_K27ncSTg@mail.gmail.com> <CAPDyKFqs_Mn57SxPNy5_e56LuFxx3KkfJfHqgg9_wp77rpn7Pw@mail.gmail.com>
-In-Reply-To: <CAPDyKFqs_Mn57SxPNy5_e56LuFxx3KkfJfHqgg9_wp77rpn7Pw@mail.gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 30 Oct 2025 19:11:03 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0jTVZtyV2yeFNpGo4TnZY79CH_fpaSbVq1T9BJ0BohZsg@mail.gmail.com>
-X-Gm-Features: AWmQ_bn8g4XPjHgN-vPCtJtXbq8yiQaaFqzBPArGiQe8U_U8Qc85RIkrxzmOK1A
-Message-ID: <CAJZ5v0jTVZtyV2yeFNpGo4TnZY79CH_fpaSbVq1T9BJ0BohZsg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/4] pmdomain: Respect the CPU system-wakeup QoS limit
- during s2idle
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org, 
-	Vincent Guittot <vincent.guittot@linaro.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Kevin Hilman <khilman@baylibre.com>, Pavel Machek <pavel@kernel.org>, Len Brown <len.brown@intel.com>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, Saravana Kannan <saravanak@google.com>, 
-	Maulik Shah <quic_mkshah@quicinc.com>, Prasad Sodagudi <psodagud@quicinc.com>, 
-	Dhruva Gole <d-gole@ti.com>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7ef8ba74-4e9e-4b19-998e-40917d997ca8@oss.qualcomm.com>
+X-Authority-Analysis: v=2.4 cv=aaVsXBot c=1 sm=1 tr=0 ts=6903ad61 cx=c_pps
+ a=WeENfcodrlLV9YRTxbY/uA==:117 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
+ a=x6icFKpwvdMA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=EUspDBNiAAAA:8 a=VwQbUJbxAAAA:8 a=nBxtwQxsS3NGOZXr17YA:9 a=CjuIK1q_8ugA:10
+ a=kacYvNCVWA4VmyqE58fU:22
+X-Proofpoint-ORIG-GUID: VJkDovA9vK0tEi1OGCL7Rk14JGXOOnNj
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDMwMDE1MyBTYWx0ZWRfXxn5keH8jfxso
+ c+2rPald7UICfVkwKTcny5yV4oaHoGOzcLW5cWsy6RCDLsebU3Wh1Mxrw085ulvufN4V7mS9d/g
+ Ob9A2cLYc91QB47RLvwka+/mMwORl3c9IYfTqgHbFZQr64osn7ztUBShJJsmNsi1/Q2ZzuCOjqS
+ iYUY6d+z7BJDjDIHqOBkpLWUwYD/WJWMmnZ5TCheANnrmRNbydTkXNadpcpe7d++npKs7oqsL6Y
+ DaUavDcbthsV3S/cusj1KU0LwhCq9pSNaT4DhLmVIR1pcj92Z/iytrk0MVKwC63Hlsv8kLT29T9
+ kHXdJMTAkKMaMY55+EpaAKSILCss8NNnXs5XpAYoqwMUnCPxQDcTeg8ec0OFV7TyoYr2xBH2dpp
+ uY4EJAzeIFlzk6v4VA2lnYbM0C5DcQ==
+X-Proofpoint-GUID: VJkDovA9vK0tEi1OGCL7Rk14JGXOOnNj
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-10-30_06,2025-10-29_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ adultscore=0 priorityscore=1501 malwarescore=0 clxscore=1015 impostorscore=0
+ suspectscore=0 spamscore=0 phishscore=0 lowpriorityscore=0 bulkscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2510300153
 
-On Thu, Oct 30, 2025 at 4:07=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro.org=
-> wrote:
->
-> On Thu, 30 Oct 2025 at 15:02, Rafael J. Wysocki <rafael@kernel.org> wrote=
-:
-> >
-> > On Thu, Oct 30, 2025 at 1:32=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro=
-.org> wrote:
-> > >
-> > > On Thu, 30 Oct 2025 at 13:23, Rafael J. Wysocki <rafael@kernel.org> w=
-rote:
-> > > >
-> > > > On Thu, Oct 30, 2025 at 1:00=E2=80=AFPM Ulf Hansson <ulf.hansson@li=
-naro.org> wrote:
-> > > > >
-> > > > > On Thu, 30 Oct 2025 at 11:45, Rafael J. Wysocki <rafael@kernel.or=
-g> wrote:
-> > > > > >
-> > > > > > On Thu, Oct 16, 2025 at 5:19=E2=80=AFPM Ulf Hansson <ulf.hansso=
-n@linaro.org> wrote:
-> > > > > > >
-> > > > > > > A CPU system-wakeup QoS limit may have been requested by user=
--space. To
-> > > > > > > avoid breaking this constraint when entering a low-power stat=
-e during
-> > > > > > > s2idle through genpd, let's extend the corresponding genpd go=
-vernor for
-> > > > > > > CPUs. More precisely, during s2idle let the genpd governor se=
-lect a
-> > > > > > > suitable low-power state, by taking into account the QoS limi=
-t.
-> > > > > > >
-> > > > > > > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> > > > > > > ---
-> > > > > > >
-> > > > > > > Changes in v2:
-> > > > > > >         - Limite the change to the genpd governor for CPUs.
-> > > > > > >
-> > > > > > > ---
-> > > > > > >  drivers/pmdomain/core.c     | 10 ++++++++--
-> > > > > > >  drivers/pmdomain/governor.c | 27 +++++++++++++++++++++++++++
-> > > > > > >  include/linux/pm_domain.h   |  1 +
-> > > > > > >  3 files changed, 36 insertions(+), 2 deletions(-)
-> > > > > > >
-> > > > > > > diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.=
-c
-> > > > > > > index 61c2277c9ce3..4fd546ef0448 100644
-> > > > > > > --- a/drivers/pmdomain/core.c
-> > > > > > > +++ b/drivers/pmdomain/core.c
-> > > > > > > @@ -1425,8 +1425,14 @@ static void genpd_sync_power_off(struc=
-t generic_pm_domain *genpd, bool use_lock,
-> > > > > > >                         return;
-> > > > > > >         }
-> > > > > > >
-> > > > > > > -       /* Choose the deepest state when suspending */
-> > > > > > > -       genpd->state_idx =3D genpd->state_count - 1;
-> > > > > > > +       if (genpd->gov && genpd->gov->system_power_down_ok) {
-> > > > > > > +               if (!genpd->gov->system_power_down_ok(&genpd-=
->domain))
-> > > > > > > +                       return;
-> > > > > > > +       } else {
-> > > > > > > +               /* Default to the deepest state. */
-> > > > > > > +               genpd->state_idx =3D genpd->state_count - 1;
-> > > > > > > +       }
-> > > > > > > +
-> > > > > > >         if (_genpd_power_off(genpd, false)) {
-> > > > > > >                 genpd->states[genpd->state_idx].rejected++;
-> > > > > > >                 return;
-> > > > > > > diff --git a/drivers/pmdomain/governor.c b/drivers/pmdomain/g=
-overnor.c
-> > > > > > > index 39359811a930..bd1b9d66d4a5 100644
-> > > > > > > --- a/drivers/pmdomain/governor.c
-> > > > > > > +++ b/drivers/pmdomain/governor.c
-> > > > > > > @@ -415,9 +415,36 @@ static bool cpu_power_down_ok(struct dev=
-_pm_domain *pd)
-> > > > > > >         return false;
-> > > > > > >  }
-> > > > > > >
-> > > > > > > +static bool cpu_system_power_down_ok(struct dev_pm_domain *p=
-d)
-> > > > > > > +{
-> > > > > > > +       s64 constraint_ns =3D cpu_wakeup_latency_qos_limit() =
-* NSEC_PER_USEC;
-> > > > > >
-> > > > > > I'm not sure why genpd needs to take cpu_wakeup_latency_qos_lim=
-it()
-> > > > > > into account directly.
-> > > > > >
-> > > > > > It should be told by cpuidle which state has been selected on t=
-he CPU
-> > > > > > side and it should not go any deeper than that anyway.
-> > > > >
-> > > > > For PSCI OS-initiated mode, cpuidle doesn't know about the states=
- that
-> > > > > may be shared among a group of CPUs.
-> > > > >
-> > > > > Instead, those states are controlled through the PM domain topolo=
-gy by
-> > > > > genpd and its governor, hence this is needed too.
-> > > >
-> > > > All right, but I'd like to understand how all of that works.
-> > > >
-> > > > So cpuidle selects a state to enter for the given CPU and then genp=
-d
-> > > > is invoked.  It has to take the exit latency of that state into
-> > > > account, so it doesn't go too deep.  How does it do that?
-> > >
-> > > Depending on the state selected, in cpuidle-psci.c we may end up
-> > > calling __psci_enter_domain_idle_state() (only for the deepest
-> > > CPU-state).
-> > >
-> > > For s2idle this means we call dev_pm_genpd_suspend|resume(), to manag=
-e
-> > > the reference counting of the PM domains via genpd. This then may lea=
-d
-> > > to that genpd_sync_power_off() tries to select a state by calling the
-> > > new governor function above.
-> > >
-> > > Did that make sense?
-> >
-> > So IIUC this will only happen if the deepest idle state is selected in
-> > which case the cpu_wakeup_latency_qos_limit() value is greater than
-> > the exit latency of that state, but it may still need to be taken into
-> > account when selecting the domain state.  However, this means that the
->
-> Correct.
->
-> > exit latency number for the deepest idle state is too low (it should
-> > represent the worst-case exit latency which means the maximum domain
-> > exit latency in this particular case).
->
-> Yes, from the cpuidle state-selection point of view, but how is that a pr=
-oblem?
+On Mon, Oct 06, 2025 at 11:30:52AM +0200, Konrad Dybcio wrote:
+> On 10/2/25 10:53 AM, Dmitry Baryshkov wrote:
+> > Add the missing interconnects to the USB2 host. The Fixes tag points to
+> > the commit which broke probing of the USB host on that platform.
+> > 
+> > Fixes: 130733a10079 ("interconnect: qcom: msm8996: Promote to core_initcall")
+> > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+> > 
+> > ---
+> > Note: without the previous patch applying this one can result in the
+> > kernel stuck at booting because of the EPROBE_DEFER loop. I suggest
+> > applying them through the same tree in order to make sure that the tree
+> > is not broken (or using an immutable tag for the icc commit).
+> > ---
+> 
+> There seems to be syntax for this, at least for stable patches
+> (which we should probably either use or add +noautosel):
+> 
+> * Specify any additional patch prerequisites for cherry picking::
+> 
+>     xCxc: <stable@vger.kernel.org> # 3.3.x: a1f84a3: sched: Check for idle
+>     xCxc: <stable@vger.kernel.org> # 3.3.x: 1b9508f: sched: Rate-limit newidle
+>     xCxc: <stable@vger.kernel.org> # 3.3.x: fd21073: sched: Fix affinity logic
+>     xCxc: <stable@vger.kernel.org> # 3.3.x
+>     xSxixgxxnxexd-oxfxf-xbxy: Ingo Molnar <mingo@elte.hu>
+> 
+> (deliberatelly added a bunch of 'x'-es to not interrupt the maintainers'
+> b4 workflow)
 
-It is confusing.  Otherwise, for s2idle, I guess it is not a big deal.
+Bjorn, Georgi, Konrad, how should we proceed with this series?
 
-I guess what happens is that genpd has a range of states with
-different latency values to choose from and it is not practical to
-expose all of them as CPU idle states, so you end up exposing just one
-of them with the lowest latency value to allow cpuidle to involve
-genpd often enough.
-
-If that's the case, I'd make a note of that somewhere if I were you,
-or people will routinely get confused by it.
-
-> If the genpd-governor doesn't find a suitable "domain-idle-state", we
-> fallback to using the one cpuidle selected.
->
-> >
-> > Moreover, it looks like the "runtime" cpuidle has the same problem, doe=
-sn't it?
->
-> It works in a very similar way, but I fail to understand why you think
-> there is a problem.
-
-There is a problem because it may violate a "runtime" latency constraint.
-
-Say you expose 2 CPU idle states, a shallow one and a genpd one.  The
-advertised exit latency of the genpd state is X and the current
-latency constraint is Y > X.  The genpd state is selected and genpd
-doesn't look at the cpuidle_governor_latency_req() return value, so it
-chooses a real state with exit latency Z > Y.
-
-To a minimum, genpd should be made aware of
-cpuidle_governor_latency_req(), but even then cpuidle governors take
-exit latency into consideration in their computations, so things may
-get confused somewhat.
+-- 
+With best wishes
+Dmitry
 
