@@ -1,137 +1,94 @@
-Return-Path: <linux-pm+bounces-37142-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37143-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A03CC221AC
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Oct 2025 20:59:24 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DFC9CC221D9
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Oct 2025 21:03:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7BA961A27A50
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Oct 2025 19:59:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2F235189F286
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Oct 2025 20:03:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C29D1333735;
-	Thu, 30 Oct 2025 19:58:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 232B7359F85;
+	Thu, 30 Oct 2025 20:02:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aifjOcy5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Col8Tj6X"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D3DC33344B
-	for <linux-pm@vger.kernel.org>; Thu, 30 Oct 2025 19:58:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBA8832F777;
+	Thu, 30 Oct 2025 20:02:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761854336; cv=none; b=M8ImYfH2NaJQgIPPBPHtUa9CH6BlkFSi8Oew4e/4XAYDdHRUCJl92CvEEkC1d68uLvGBpProjOXdpZQaAYmEjUqnmpTvk9vQG1F9w1ShlXH5zcHXqxrTqWVZ/JPxIXiq9BlUAOmyk8IY7nMkp1pshrJ2KB2bafcsIsTjoZ9B8bA=
+	t=1761854563; cv=none; b=gRy9nFQaC/O6DKYlrx0qJTe2h2HiLtPZXElrCa5dj74VwZrO9s9U4EFVUsh6sBKWt0FG9gP+Qg2sU5aFtENWCjzi5M9AM897CRU+4E5nVI5HWG9kd4EbubW6i8/lTlo6UDaDbsDH614aErXZWRrT4Zu3O9HOVqwhOboHpr0tfYY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761854336; c=relaxed/simple;
-	bh=27Bt+XohUsCY6jPuadnGJYHmq2UygEPw3QOYlngYMe0=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=ZPiV1UZwrAna705Wk3ZQu9S4LYsbG41C5r6Bw95uPr+H5WhqU8/zplqvGPB5HX1n24tqqx99XKr0kYPE+peIC0C70Tx3GhV99TqEdvrtgcL91ZlLIn0jCZ24qkLGTY3yjAIN+pZorPqG9zhPaJERE0lWWsr39jZNlRNkc+trHIA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aifjOcy5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BA15C4AF09
-	for <linux-pm@vger.kernel.org>; Thu, 30 Oct 2025 19:58:56 +0000 (UTC)
+	s=arc-20240116; t=1761854563; c=relaxed/simple;
+	bh=r9g1+QBPnAwiLvwl2Y4ihxuJibESLERl8N7u/1HES3Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=na0UVpLKHhALwK4zFYScWppYVkn02o/BPqZEVJbG5Q8TixKMBmqJkir9X/tzRyN03JjwlAvNxYUcfb5rHgzFEOSOrDwtnaNPvqoqXPI+sDpqpy6SpwAEi0xiCoZ+3tU8RU0U4FbaSATrPIMxHjpkd/V/jmNM3wEZOjo+jDrUqMA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Col8Tj6X; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B96C8C4CEF1;
+	Thu, 30 Oct 2025 20:02:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761854336;
-	bh=27Bt+XohUsCY6jPuadnGJYHmq2UygEPw3QOYlngYMe0=;
-	h=From:Date:Subject:To:Cc:From;
-	b=aifjOcy5p31rA4UaJkpaf61qn0EzeV7pjNxuprvvXuySfZHVhGmrHq6aAWud1w/q0
-	 KjH8TtVkGCJUkahZrzDzxJDzK0pDjfQ5yOWK60SGWUAKHCVIy852/Ypep8uV9vDZf9
-	 pWlFSM5cdF0XVmq5t3a4kN7f43T6PS8f08esYKOZGaQ6FueX3gPFPtsYxUMxcY5OVK
-	 cD3R0ENYLDaCSVA8DU1YdPvBMfYFEYfbDbo6+obmfHV5Z92x3hHtFJH4s3O5os/2PV
-	 aPrba+vxKzWBIOgGEfOstK9IpMrsuMK6hI38vrFWg4bPxk5UUTnCXvj00olv6iA7su
-	 qqaSiYY8R508Q==
-Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-7c3e2221217so1037616a34.3
-        for <linux-pm@vger.kernel.org>; Thu, 30 Oct 2025 12:58:56 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCX7R8N35mx6p9C/i/a/O2QquiJkbw59DCSkkpCbDySVJ0jN7G6Z2RmIUA+cwPbPGBGB2LFhWSZH4A==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwA3t81ypoURpOeJxjUpwLtEol2WOQ90nqkETKTecofEfHpp7mw
-	DFNMB94tiOY3dTzsG8Rr2dwBlaqCJO2u7+6dGe1G6WJfGHRWg5qllW5la/OS3Lp6PDVAY8LrC9Z
-	HfYBYh69Zcovyq5FKuDkxsCC/lj0Sgz8=
-X-Google-Smtp-Source: AGHT+IG3Lr6fvBnfKNJvXTlqKqqyJFVgcQM1Ir5oNAP54/iFD1uFwuwIGNg2P27LmaSU/D7Xbc6eAsFKXBttWKKDO0c=
-X-Received: by 2002:a05:6808:2f1b:b0:43f:1daf:dad6 with SMTP id
- 5614622812f47-44f95fe10demr480804b6e.49.1761854335647; Thu, 30 Oct 2025
- 12:58:55 -0700 (PDT)
+	s=k20201202; t=1761854562;
+	bh=r9g1+QBPnAwiLvwl2Y4ihxuJibESLERl8N7u/1HES3Q=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Col8Tj6XUNGhXonaQskRLt2WlVen1XF5dChCHC7F9BBf/J7mLDrv2ON+5gKCVEG85
+	 YFOrLOQlNEf7fCXS1pEyBQJWrEsEsTpv4NffN+JLp/VJ75/HdFU+7Xq4Y9ufoi/m9I
+	 pZWpzdM5EAYxQqblD6RHZnDcqCBnocEZAAmRe4HGPDZsX6Od5SoVfvO80yfef8PpLl
+	 6yYDk+VfTGClwMISRLmVB76n+NylFvbHTdGEDaC+7E3mA8cZBK74ih7yo6ZhvBxGLQ
+	 nF7t75CP4LIte5QqX4Cyk9VpMRwP3B6kCGhqEr5IJ3200y4Cti78ipZEdjpb+Wt6DS
+	 qnH4jDf6Jflsw==
+Date: Thu, 30 Oct 2025 20:02:38 +0000
+From: Conor Dooley <conor@kernel.org>
+To: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: thermal: Drop db8500-thermal.txt
+Message-ID: <20251030-twins-cornhusk-0b2ea4d039bc@spud>
+References: <20251030195234.439141-1-robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 30 Oct 2025 20:58:44 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0gWU1sKjFQMcnhP17F4h6HbeX3Fvw4GQDqd6zbQknD4VQ@mail.gmail.com>
-X-Gm-Features: AWmQ_bns_GLKZyutIK1RZWaosqCZigZYk56k68y3_xnWg2bKlpCF1jjtmgftj0o
-Message-ID: <CAJZ5v0gWU1sKjFQMcnhP17F4h6HbeX3Fvw4GQDqd6zbQknD4VQ@mail.gmail.com>
-Subject: [GIT PULL] ACPI fixes for v6.18-rc4
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: ACPI Devel Maling List <linux-acpi@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-
-Hi Linus,
-
-Please pull from the tag
-
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- acpi-6.18-rc4
-
-with top-most commit 8907226bed1ebd10d069f6f70ff0aaa8840f3267
-
- Merge branches 'acpi-button', 'acpi-video' and 'acpi-fan'
-
-on top of commit dcb6fa37fd7bc9c3d2b066329b0d27dedf8becaa
-
- Linux 6.18-rc3
-
-to receive ACPI fixes for 6.18-rc4.
-
-These fix three ACPI driver issues and add version checks to two ACPI
-table parsers:
-
- - Call input_free_device() on failing input device registration as
-   necessary (and mentioned in the input subsystem documentation) in the
-   ACPI button driver (Kaushlendra Kumar)
-
- - Fix use-after-free in acpi_video_switch_brightness() by canceling
-   a delayed work during tear-down (Yuhao Jiang)
-
- - Use platform device for devres-related actions in the ACPI fan driver
-   to allow device-managed resources to be cleaned up properly (Armin
-   Wolf)
-
- - Add version checks to the MRRM and SPCR table paresers (Tony Luck and
-   Punit Agrawal)
-
-Thanks!
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="de59hFfPK3GXyBtd"
+Content-Disposition: inline
+In-Reply-To: <20251030195234.439141-1-robh@kernel.org>
 
 
----------------
+--de59hFfPK3GXyBtd
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Armin Wolf (2):
-      ACPI: fan: Use ACPI handle when retrieving _FST
-      ACPI: fan: Use platform device for devres-related actions
+On Thu, Oct 30, 2025 at 02:52:33PM -0500, Rob Herring (Arm) wrote:
+> The binding is already defined in mfd/stericsson,db8500-prcmu.yaml and no=
+ne
+> of 'the tripN.*' properties appear to be in use.
+>=20
+> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
 
-Kaushlendra Kumar (1):
-      ACPI: button: Call input_free_device() on failing input device
-registration
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
-Punit Agrawal (1):
-      ACPI: SPCR: Check for table version when using precise baudrate
+--de59hFfPK3GXyBtd
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Tony Luck (1):
-      ACPI: MRRM: Check revision of MRRM table
+-----BEGIN PGP SIGNATURE-----
 
-Yuhao Jiang (1):
-      ACPI: video: Fix use-after-free in acpi_video_switch_brightness()
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaQPEXgAKCRB4tDGHoIJi
+0lIcAP97f8tvjZE6V6uEXoHA+6k+pp5fimpgVm4xY+mid3ZneQEA6O/07u5q8+o+
+bowZo9WiYP188GzbGNFEHij8DgF6aw8=
+=O8F4
+-----END PGP SIGNATURE-----
 
----------------
-
- drivers/acpi/acpi_mrrm.c  |  3 +++
- drivers/acpi/acpi_video.c |  4 +++-
- drivers/acpi/button.c     |  4 +++-
- drivers/acpi/fan.h        |  7 ++++---
- drivers/acpi/fan_attr.c   |  2 +-
- drivers/acpi/fan_core.c   | 36 +++++++++++++++++++++++-------------
- drivers/acpi/fan_hwmon.c  | 11 +++++------
- drivers/acpi/spcr.c       |  2 +-
- 8 files changed, 43 insertions(+), 26 deletions(-)
+--de59hFfPK3GXyBtd--
 
