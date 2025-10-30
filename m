@@ -1,343 +1,184 @@
-Return-Path: <linux-pm+bounces-37146-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37147-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A0211C225E3
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Oct 2025 22:02:46 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D215BC2266D
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Oct 2025 22:19:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A3CE83A1C55
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Oct 2025 21:01:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 245B71A606D7
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Oct 2025 21:18:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70E6D285404;
-	Thu, 30 Oct 2025 21:01:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96958306B3D;
+	Thu, 30 Oct 2025 21:18:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="AwzJap91"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FhFs/8Cw"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A63EF274FEF
-	for <linux-pm@vger.kernel.org>; Thu, 30 Oct 2025 21:01:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7C7D2EC09E;
+	Thu, 30 Oct 2025 21:18:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761858077; cv=none; b=PETjORNatBYVu3Nfgof5eGQ9TDKKI4qhJ0sfeZdppv1hHSYq5gQ8L/7PF+GymL5nijPUI3Tlj9NdfHBVmJEUJ+E/bCjz10RGhcfsy1v+NXf3wdYWGh7+P53Q+cwtQhWCR+EK62WH53DejDDaqcRQHnrmJ2OCCgQr4Mogjs+1vOE=
+	t=1761859094; cv=none; b=QNigrptVYZQIL2YuHyeMRuBU5H8ETAErA1xQAQaQgXlza9YAlOR39c5qO2PILb4LtgdAxf9jwaLkKeeVL9tr2VD91DB9V5Vv5nUc/6J57I1/Bi6/gkqI23y97bF+5+AUD7s1Z9IJwY2WNlSvGHVaBf1BZSeggG4vJ5o5UJc3IvY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761858077; c=relaxed/simple;
-	bh=pSm68gUiqpDQYnDnJlfKYIXw088w3ya4Bqiww9ARBCw=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=Uz8MCKpGHkvh6A2E4alKN4wlFSpCto9Z6eR1btwQnimY2z3fHFS8ltW3AN89htjhjOU/sTAbxhRU0QQzVbzfPIbnA3JoteYkUovqqhBIhk5SRhyRRGuDtx5xeDyXbfvvTgdOPY9DODYTgsCYJABTYr+gZvyPkVp1abC9lm48W3A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--wusamuel.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=AwzJap91; arc=none smtp.client-ip=209.85.215.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--wusamuel.bounces.google.com
-Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-b62f9247dd1so1214337a12.0
-        for <linux-pm@vger.kernel.org>; Thu, 30 Oct 2025 14:01:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1761858075; x=1762462875; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=yM/R5fiiUTE4/cz4iiRL4jtb/AtneBwnINL9bc1sqX8=;
-        b=AwzJap91x82KmgpqKhueNMbBM+zPQ2mvFE/U70eeFcXc4mK7QLEl3pl2T/QhF2AJkB
-         +aRMRc2T+hoS1P+xKIY7OfHl5ALxmTf6ORmqq5IkZFalfmriGmNwgK/u0r9evHFAqwHe
-         NiDh91fI9yDj0T5vOzZz/DC4LsRUSYXciFH4uZEzvsyhOSZDmETg0sFf8y6J8bF7tEVE
-         4TR4W422fgT7ll/KKB9iN4Ojy+LryehQrmJevbvloAlV/sjR7NIDd3tp56mCD7YYJr9H
-         QoZKOw6W4YkJ5ZbFJmVJn6b39w1gIvgoFoqGXYX09v5kipGDjNn8r7+steswM8S8XZ4q
-         K2hA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761858075; x=1762462875;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yM/R5fiiUTE4/cz4iiRL4jtb/AtneBwnINL9bc1sqX8=;
-        b=wmKvs+RPZXdNfCyWwzvhef3wMvuHCH3M5VO1CenjmoRkpkftDLtFc8QiHguLoIe8jZ
-         odA2pJ0j1EEoGMgLVixjILkDyACznlGt0sfkeion41Wbd9IB22l0tFBQNQrekpB3biVn
-         aB3ltWenUQdMC+FWtb9Z9vA/QDtFttXQCTpvZMfCpG8Rc/Qj80HXB4KvBwi3/OEfLJW4
-         1dcSa1zi6tiTXJfYry83VnxCezHKbDndllUM4DmNVCnCo7gpnjV8zC+qmrgMMzWfu0Gm
-         ntwW9t5YwAmM99Mo7x6Wc/ypI2YAONKWqWM/hd3NqnA/sMK03+Cy7hNepF3aTLWwGOP4
-         FzWg==
-X-Forwarded-Encrypted: i=1; AJvYcCVRSpTEODBW6A/LPXuiy088YTijf/mftpmTela5iDg2lyE3C12rGHnL8F4Ra6E2RZOfY8BlBU7yow==@vger.kernel.org
-X-Gm-Message-State: AOJu0YydJSGLjBiEhjmn+B8A0A5yBmgBn5r9PC2nrdn0kcN1nA7aKvKY
-	O8GVVVFUOyvVymdrhBnlAcuDsfwUorqly/4qd3oKJpxO9+/9o+BZiZ5d4IoY9sEk+n4/Q87nN4E
-	s2OKZOt0bP8H+7Q==
-X-Google-Smtp-Source: AGHT+IE/FqLjssGK3CdsUrJ2TujA0jKIyTf2vP2v/Pgmy6iJinTA5Ft0H3KFGDPgPgZuOkNPae7QF4Lai7pW8w==
-X-Received: from plww12.prod.google.com ([2002:a17:902:d10c:b0:294:fae5:ee1b])
- (user=wusamuel job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:902:f544:b0:270:ced4:911a with SMTP id d9443c01a7336-2951a36c2cbmr14141665ad.9.1761858074943;
- Thu, 30 Oct 2025 14:01:14 -0700 (PDT)
-Date: Thu, 30 Oct 2025 21:01:09 +0000
+	s=arc-20240116; t=1761859094; c=relaxed/simple;
+	bh=W+0SK1qT8n+0l/533/lRHWF9H99SYMZQ9sU3yINs8Rg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eN0U85BKDwUb6/c8Rpz5zREXVNR1BsOH3gSowj6Vk/guHzIhlnZ2aBkpn6/HDXxs2gS9istAOjAVfwZZZhiUrCeI9jjdTkplgEi9J1O8f8DRNH7ib0bCZwd7mqMIWV+GrUQTD76djklgQqciBL9IaKlAIh2IOkgbEKTTZcL2ci8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FhFs/8Cw; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1761859094; x=1793395094;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=W+0SK1qT8n+0l/533/lRHWF9H99SYMZQ9sU3yINs8Rg=;
+  b=FhFs/8CwhwMU9DSK/b1WULGKSo7ekilo57+zBjNbUvvPjDfoRc2a25+r
+   FhDsyJvRuXgotW0u+TlaWbCsI6Cp0pcHcpE8ZVUIqmiYGJ33E7G3qldwi
+   Z8lZgmsW6UHr4LowVjD77EyrWlLrx1m0E9G0FvMM3nx3RYmkM1fPXEh62
+   4+cizn2ZYaSukjimADRCIkDBBrcac84AE/hWpSdswLxaZimUiBUmiV6eE
+   wQPRkjk4D6V5bv/f7y1ywe2FRwgTDSVQhJCrQlaFnEwpdlPSuRo8k6kJU
+   5e1GuzGf2vf9K/w2mIKWyg4C4HGegLuSd0B9RkT01SBANFVDTc6M60GWc
+   A==;
+X-CSE-ConnectionGUID: hIOzH4pDRPCU3bCs0/8zYw==
+X-CSE-MsgGUID: dlzO9D3xQn6sJXJfT60F2g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11598"; a="75465042"
+X-IronPort-AV: E=Sophos;i="6.19,267,1754982000"; 
+   d="scan'208";a="75465042"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2025 14:18:13 -0700
+X-CSE-ConnectionGUID: VZ8phKHuQCi8K6y+EhBKow==
+X-CSE-MsgGUID: U9alOzekQ3u0J76f6RP/5Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,267,1754982000"; 
+   d="scan'208";a="186399100"
+Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
+  by fmviesa008.fm.intel.com with ESMTP; 30 Oct 2025 14:18:10 -0700
+Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vEa23-000MXg-2S;
+	Thu, 30 Oct 2025 21:18:07 +0000
+Date: Fri, 31 Oct 2025 05:17:28 +0800
+From: kernel test robot <lkp@intel.com>
+To: cy_huang@richtek.com, Sebastian Reichel <sre@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>
+Cc: oe-kbuild-all@lists.linux.dev, Rob Herring <robh@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	ChiYuan Huang <cy_huang@richtek.com>, devicetree@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/3] power: supply: rt9756: Add Richtek RT9756 smart
+ cap divider charger
+Message-ID: <202510310457.iAWJdDLC-lkp@intel.com>
+References: <5eab51e111b092329519dd2c200858a522780626.1761699952.git.cy_huang@richtek.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.51.1.930.gacf6e81ea2-goog
-Message-ID: <20251030210110.298612-1-wusamuel@google.com>
-Subject: [PATCH v6] PM: Support aborting sleep during filesystem sync
-From: Samuel Wu <wusamuel@google.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, Pavel Machek <pavel@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>
-Cc: tuhaowen@uniontech.com, Samuel Wu <wusamuel@google.com>, 
-	Saravana Kannan <saravanak@google.com>, kernel-team@android.com, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5eab51e111b092329519dd2c200858a522780626.1761699952.git.cy_huang@richtek.com>
 
-At the start of suspend and hibernate, filesystems will sync to save the
-current state of the device. However, the long tail of the filesystem
-sync can take upwards of 25 seconds. If during this filesystem sync
-there is some wakeup or abort signal, it will not be processed until the
-sync is complete; from a user's perspective, this looks like the device
-is unresponsive to any form of input.
+Hi,
 
-This patch adds functionality to handle a sleep abort signal when in
-the filesystem sync phase of suspend or hibernate. This topic was first
-discussed by Saravana Kannan at LPC 2024 [1], where the general
-consensus was to allow filesystem sync on a parallel thread. In case of
-abort, the suspend process will stop waiting on an in-progress
-filesystem sync, and continue by aborting suspend before the filesystem
-sync is complete.
+kernel test robot noticed the following build warnings:
 
-Additionally, there is extra care needed to account for back-to-back
-sleeps while maintaining functionality to immediately abort during the
-filesystem sync stage. Furthermore, in the case of the back-to-back
-sleeps, a subsequent filesystem sync is needed to ensure the latest
-files are synced right before sleep. If necessary, a subsequent sleep's
-filesystem sync will be queued, and will only start when the previous
-sleep's filesystem sync has finished. While waiting for the previous
-sleep's filesystem sync to finish, the subsequent sleep will still abort
-early if a wakeup event is triggered, solving the original issue of
-filesystem sync blocking abort.
+[auto build test WARNING on sre-power-supply/for-next]
+[also build test WARNING on krzk-dt/for-next robh/for-next linus/master v6.18-rc3 next-20251030]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-[1]: https://lpc.events/event/18/contributions/1845/
+url:    https://github.com/intel-lab-lkp/linux/commits/cy_huang-richtek-com/dt-bindings-power-supply-Add-Richtek-RT9756-smart-cap-divider-charger/20251029-091554
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git for-next
+patch link:    https://lore.kernel.org/r/5eab51e111b092329519dd2c200858a522780626.1761699952.git.cy_huang%40richtek.com
+patch subject: [PATCH v3 2/3] power: supply: rt9756: Add Richtek RT9756 smart cap divider charger
+config: nios2-randconfig-r112-20251031 (https://download.01.org/0day-ci/archive/20251031/202510310457.iAWJdDLC-lkp@intel.com/config)
+compiler: nios2-linux-gcc (GCC) 9.5.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251031/202510310457.iAWJdDLC-lkp@intel.com/reproduce)
 
-Suggested-by: Saravana Kannan <saravanak@google.com>
-Signed-off-by: Samuel Wu <wusamuel@google.com>
----
-Changes in v6:
-- Use spin_lock_irq() in thread context
-- Use dedicated ordered workqueue for sync work items
-- Use a counter instead of two bools for synchronization
-- Queue fs_sync if it's not already pending on workqueue
-- pm_wakeup_clear(0) is prequisite to this feature, so move it within function
-- Updated commit text for motive of back-to-back fs syncs
-- Tighter lock/unlock around setup, checks, and loop
-- Fix function definitions for CONFIG_PM_SLEEP=n
-- v5 link: https://lore.kernel.org/all/20251017233907.2305303-1-wusamuel@google.com/
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510310457.iAWJdDLC-lkp@intel.com/
 
-Changes in v5:
-- Update spin_lock() to spin_lock_irqsave() since abort can be in IRQ context
-- Updated changelog description to be more precise regarding continuing abort
-  sleep before fs_sync() is complete
-- Rename abort_sleep_during_fs_sync() to pm_stop_waiting_for_fs_sync()
-- Simplify from a goto to do-while in pm_sleep_fs_sync()
-- v4 link: https://lore.kernel.org/all/20250911185314.2377124-1-wusamuel@google.com
+sparse warnings: (new ones prefixed by >>)
+>> drivers/power/supply/rt9756.c:645:41: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected unsigned int [usertype] size @@     got restricted gfp_t @@
+   drivers/power/supply/rt9756.c:645:41: sparse:     expected unsigned int [usertype] size
+   drivers/power/supply/rt9756.c:645:41: sparse:     got restricted gfp_t
+>> drivers/power/supply/rt9756.c:645:53: sparse: sparse: incorrect type in argument 3 (different base types) @@     expected restricted gfp_t [usertype] gfp @@     got unsigned int @@
+   drivers/power/supply/rt9756.c:645:53: sparse:     expected restricted gfp_t [usertype] gfp
+   drivers/power/supply/rt9756.c:645:53: sparse:     got unsigned int
+   drivers/power/supply/rt9756.c: note: in included file (through include/uapi/linux/swab.h, include/linux/swab.h, include/uapi/linux/byteorder/little_endian.h, ...):
+   arch/nios2/include/uapi/asm/swab.h:25:24: sparse: sparse: too many arguments for function __builtin_custom_ini
 
-Changes in v4:
-- Removed patch 1/3 of v3 as it is already picked up on linux-pm
-- Squashed patches 2/3 and 3/3 from v3 into this single patch
-- Added abort during fs_sync functionality to hibernate in addition to suspend
-- Moved variables and functions for abort from power/suspend.c to power/main.c
-- Renamed suspend_fs_sync_with_abort() to pm_sleep_fs_sync()
-- Renamed suspend_abort_fs_sync() to abort_sleep_during_fs_sync()
-- v3 link: https://lore.kernel.org/all/20250821004237.2712312-1-wusamuel@google.com/
+vim +645 drivers/power/supply/rt9756.c
 
-Changes in v3:
-- Split v2 patch into 3 patches
-- Moved pm_wakeup_clear() outside of if(sync_on_suspend_enabled) condition
-- Updated documentation and comments within kernel/power/suspend.c
-- v2 link: https://lore.kernel.org/all/20250812232126.1814253-1-wusamuel@google.com/
+   619	
+   620	static int rt9756_register_psy(struct rt9756_data *data)
+   621	{
+   622		struct power_supply_desc *desc = &data->psy_desc;
+   623		struct power_supply_desc *bat_desc = &data->bat_psy_desc;
+   624		struct power_supply_config cfg = {}, bat_cfg = {};
+   625		struct device *dev = data->dev;
+   626		char *psy_name, *bat_psy_name, **supplied_to;
+   627	
+   628		bat_cfg.drv_data = data;
+   629		bat_cfg.fwnode = dev_fwnode(dev);
+   630	
+   631		bat_psy_name = devm_kasprintf(dev, GFP_KERNEL, "rt9756-%s-battery", dev_name(dev));
+   632		if (!bat_psy_name)
+   633			return -ENOMEM;
+   634	
+   635		bat_desc->name = bat_psy_name;
+   636		bat_desc->type = POWER_SUPPLY_TYPE_BATTERY;
+   637		bat_desc->properties = rt9756_bat_psy_properties;
+   638		bat_desc->num_properties = ARRAY_SIZE(rt9756_bat_psy_properties);
+   639		bat_desc->get_property = rt9756_bat_psy_get_property;
+   640	
+   641		data->bat_psy = devm_power_supply_register(dev, bat_desc, &bat_cfg);
+   642		if (IS_ERR(data->bat_psy))
+   643			return dev_err_probe(dev, PTR_ERR(data->bat_psy), "Failed to register battery\n");
+   644	
+ > 645		supplied_to = devm_kzalloc(dev, GFP_KERNEL, sizeof(*supplied_to));
+   646		if (!supplied_to)
+   647			return -ENOMEM;
+   648	
+   649		/* Link charger psy to battery psy */
+   650		supplied_to[0] = bat_psy_name;
+   651	
+   652		cfg.drv_data = data;
+   653		cfg.fwnode = dev_fwnode(dev);
+   654		cfg.attr_grp = rt9756_sysfs_groups;
+   655		cfg.supplied_to = supplied_to;
+   656		cfg.num_supplicants = 1;
+   657	
+   658		psy_name = devm_kasprintf(dev, GFP_KERNEL, "rt9756-%s", dev_name(dev));
+   659		if (!psy_name)
+   660			return -ENOMEM;
+   661	
+   662		desc->name = psy_name;
+   663		desc->type = POWER_SUPPLY_TYPE_USB;
+   664		desc->usb_types = BIT(POWER_SUPPLY_USB_TYPE_UNKNOWN) | BIT(POWER_SUPPLY_USB_TYPE_SDP) |
+   665				  BIT(POWER_SUPPLY_USB_TYPE_DCP) | BIT(POWER_SUPPLY_USB_TYPE_CDP);
+   666		desc->properties = rt9756_psy_properties;
+   667		desc->num_properties = ARRAY_SIZE(rt9756_psy_properties);
+   668		desc->property_is_writeable = rt9756_psy_property_is_writeable;
+   669		desc->get_property = rt9756_psy_get_property;
+   670		desc->set_property = rt9756_psy_set_property;
+   671	
+   672		data->psy = devm_power_supply_register(dev, desc, &cfg);
+   673	
+   674		return PTR_ERR_OR_ZERO(data->psy);
+   675	}
+   676	
 
-Changes in v2:
-- Added documentation for suspend_abort_fs_sync()
-- Made suspend_fs_sync_lock and suspend_fs_sync_complete declaration static
-- v1 link: https://lore.kernel.org/all/20250815004635.3684650-1-wusamuel@google.com
-
- drivers/base/power/wakeup.c |  8 ++++
- include/linux/suspend.h     |  4 ++
- kernel/power/hibernate.c    |  5 ++-
- kernel/power/main.c         | 81 +++++++++++++++++++++++++++++++++++++
- kernel/power/suspend.c      |  4 +-
- 5 files changed, 100 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
-index d1283ff1080b..689c16b08b38 100644
---- a/drivers/base/power/wakeup.c
-+++ b/drivers/base/power/wakeup.c
-@@ -570,6 +570,13 @@ static void wakeup_source_activate(struct wakeup_source *ws)
- 
- 	/* Increment the counter of events in progress. */
- 	cec = atomic_inc_return(&combined_event_count);
-+	/*
-+	 * wakeup_source_activate() aborts sleep only if events_check_enabled
-+	 * is set (see pm_wakeup_pending()). Similarly, abort sleep during
-+	 * fs_sync only if events_check_enabled is set.
-+	 */
-+	if (events_check_enabled)
-+		pm_stop_waiting_for_fs_sync();
- 
- 	trace_wakeup_source_activate(ws->name, cec);
- }
-@@ -899,6 +906,7 @@ EXPORT_SYMBOL_GPL(pm_wakeup_pending);
- void pm_system_wakeup(void)
- {
- 	atomic_inc(&pm_abort_suspend);
-+	pm_stop_waiting_for_fs_sync();
- 	s2idle_wake();
- }
- EXPORT_SYMBOL_GPL(pm_system_wakeup);
-diff --git a/include/linux/suspend.h b/include/linux/suspend.h
-index b02876f1ae38..4795f55f9cbe 100644
---- a/include/linux/suspend.h
-+++ b/include/linux/suspend.h
-@@ -450,6 +450,8 @@ void restore_processor_state(void);
- extern int register_pm_notifier(struct notifier_block *nb);
- extern int unregister_pm_notifier(struct notifier_block *nb);
- extern void ksys_sync_helper(void);
-+extern void pm_stop_waiting_for_fs_sync(void);
-+extern int pm_sleep_fs_sync(void);
- extern void pm_report_hw_sleep_time(u64 t);
- extern void pm_report_max_hw_sleep(u64 t);
- void pm_restrict_gfp_mask(void);
-@@ -505,6 +507,8 @@ static inline void pm_restrict_gfp_mask(void) {}
- static inline void pm_restore_gfp_mask(void) {}
- 
- static inline void ksys_sync_helper(void) {}
-+static inline void pm_stop_waiting_for_fs_sync(void) {}
-+static inline int pm_sleep_fs_sync(void) { return 0; }
- 
- #define pm_notifier(fn, pri)	do { (void)(fn); } while (0)
- 
-diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-index 53166ef86ba4..1874fde4b4f3 100644
---- a/kernel/power/hibernate.c
-+++ b/kernel/power/hibernate.c
-@@ -820,7 +820,10 @@ int hibernate(void)
- 	if (error)
- 		goto Restore;
- 
--	ksys_sync_helper();
-+	error = pm_sleep_fs_sync();
-+	if (error)
-+		goto Restore;
-+
- 	if (filesystem_freeze_enabled)
- 		filesystems_freeze();
- 
-diff --git a/kernel/power/main.c b/kernel/power/main.c
-index a6cbc3f4347a..23ca87a172a4 100644
---- a/kernel/power/main.c
-+++ b/kernel/power/main.c
-@@ -582,6 +582,84 @@ bool pm_sleep_transition_in_progress(void)
- {
- 	return pm_suspend_in_progress() || hibernation_in_progress();
- }
-+
-+static int pm_sleep_fs_syncs_queued;
-+static DEFINE_SPINLOCK(pm_sleep_fs_sync_lock);
-+static DECLARE_COMPLETION(pm_sleep_fs_sync_complete);
-+static struct workqueue_struct *pm_fs_sync_wq;
-+
-+static int __init pm_start_fs_sync_workqueue(void)
-+{
-+	pm_fs_sync_wq = alloc_ordered_workqueue("pm_fs_sync_wq", 0);
-+
-+	return pm_fs_sync_wq ? 0 : -ENOMEM;
-+}
-+
-+/**
-+ * pm_stop_waiting_for_fs_sync - Abort fs_sync to abort sleep early
-+ *
-+ * This function causes the suspend process to stop waiting on an in-progress
-+ * filesystem sync, such that the suspend process can be aborted before the
-+ * filesystem sync is complete.
-+ */
-+void pm_stop_waiting_for_fs_sync(void)
-+{
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&pm_sleep_fs_sync_lock, flags);
-+	complete(&pm_sleep_fs_sync_complete);
-+	spin_unlock_irqrestore(&pm_sleep_fs_sync_lock, flags);
-+}
-+
-+static void sync_filesystems_fn(struct work_struct *work)
-+{
-+	ksys_sync_helper();
-+
-+	spin_lock_irq(&pm_sleep_fs_sync_lock);
-+	pm_sleep_fs_syncs_queued--;
-+	complete(&pm_sleep_fs_sync_complete);
-+	spin_unlock_irq(&pm_sleep_fs_sync_lock);
-+}
-+static DECLARE_WORK(sync_filesystems, sync_filesystems_fn);
-+
-+/**
-+ * pm_sleep_fs_sync - Trigger fs_sync with ability to abort
-+ *
-+ * Return 0 on successful file system sync, otherwise returns -EBUSY if file
-+ * system sync was aborted.
-+ */
-+int pm_sleep_fs_sync(void)
-+{
-+	pm_wakeup_clear(0);
-+	spin_lock_irq(&pm_sleep_fs_sync_lock);
-+	/*
-+	 * Handles back-to-back sleeps, by queuing a subsequent fs sync only if
-+	 * the previous fs sync is running or is not queued. Multiple fs syncs
-+	 * ensure that the latest files are saved immediately before sleep.
-+	 */
-+	if (!work_pending(&sync_filesystems)) {
-+		pm_sleep_fs_syncs_queued++;
-+		queue_work(pm_fs_sync_wq, &sync_filesystems);
-+	}
-+	do {
-+		reinit_completion(&pm_sleep_fs_sync_complete);
-+		spin_unlock_irq(&pm_sleep_fs_sync_lock);
-+		/*
-+		 * Completion is triggered by fs_sync finishing or a sleep
-+		 * abort, whichever comes first
-+		 */
-+		wait_for_completion(&pm_sleep_fs_sync_complete);
-+		spin_lock_irq(&pm_sleep_fs_sync_lock);
-+		if (pm_wakeup_pending()) {
-+			spin_unlock_irq(&pm_sleep_fs_sync_lock);
-+			return -EBUSY;
-+		}
-+	} while (pm_sleep_fs_syncs_queued);
-+	spin_unlock_irq(&pm_sleep_fs_sync_lock);
-+
-+	return 0;
-+}
-+
- #endif /* CONFIG_PM_SLEEP */
- 
- #ifdef CONFIG_PM_SLEEP_DEBUG
-@@ -1076,6 +1154,9 @@ static int __init pm_start_workqueue(void)
- static int __init pm_init(void)
- {
- 	int error = pm_start_workqueue();
-+	if (error)
-+		return error;
-+	error = pm_start_fs_sync_workqueue();
- 	if (error)
- 		return error;
- 	hibernate_image_size_init();
-diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
-index b4ca17c2fecf..04781a2c69e2 100644
---- a/kernel/power/suspend.c
-+++ b/kernel/power/suspend.c
-@@ -590,8 +590,10 @@ static int enter_state(suspend_state_t state)
- 
- 	if (sync_on_suspend_enabled) {
- 		trace_suspend_resume(TPS("sync_filesystems"), 0, true);
--		ksys_sync_helper();
-+		error = pm_sleep_fs_sync();
- 		trace_suspend_resume(TPS("sync_filesystems"), 0, false);
-+		if (error)
-+			goto Unlock;
- 	}
- 
- 	pm_pr_dbg("Preparing system for sleep (%s)\n", mem_sleep_labels[state]);
 -- 
-2.51.1.930.gacf6e81ea2-goog
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
