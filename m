@@ -1,50 +1,84 @@
-Return-Path: <linux-pm+bounces-37102-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37103-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0CDF1C204DE
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Oct 2025 14:45:27 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53BBDC207C0
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Oct 2025 15:06:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5D8FF560EFF
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Oct 2025 13:41:23 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E36ED4EC486
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Oct 2025 14:00:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C0BD255222;
-	Thu, 30 Oct 2025 13:41:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9227118A93F;
+	Thu, 30 Oct 2025 14:00:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hBwl913C"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EFF72512D7;
-	Thu, 30 Oct 2025 13:41:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BE051E5B9E;
+	Thu, 30 Oct 2025 14:00:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761831669; cv=none; b=r+vu2W6QRadWg/2cW6UrKvCDMOK1q/t71SaXkP6eX6AEOeWLMoL3M2hzitmTfV/dQqP9BtP7jhahQ9jJpfp1+dgpObIf498igk/MrX55sDESgkMMK1QKs96ba1qCdtyf/0f8sfU0qqIut9pQXMglVimWK+3x5+NY67+N+GXjOk4=
+	t=1761832855; cv=none; b=bMHnxBmzcl9YqA08njq40qYj7/YEdu5MdhqAkVjVRDKPJ0gAWRzqq192QO9Uh6gB3hRPByPXtka4K5fQLNWfZvkcMmUKLhRwf1qajVdbW2PMYP3RnycfHB9Tq8jt6gPIsu5o2PI89ojBBMB3uuNevMndieJgYUsvHDBsNO3zkP0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761831669; c=relaxed/simple;
-	bh=hzm/Id2y1VJcXDmD80EVO1LsHG4CVJ9Fx3ejcvQaMQ8=;
+	s=arc-20240116; t=1761832855; c=relaxed/simple;
+	bh=XUYybZu/Tr9eOAMQaOaQ+Fw4SF+ZmMyMy7iua1evwH8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JAIBqzpm7Rd0QqJQ+K17buq/Lap8Munv1AfKbeqmc0crWg+4KF2P/j+/CB2cuMC1Z9ScF5vREKMBEAncPqimEiwggnZH6ZKBwDGA6hxfl8cw5bodY/kEowJ3e/0SxRa8lAmC5OJYBKlrAQ19KV7S6CK0a5MffPbC3RGrpwCv1gc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7A9211EDB;
-	Thu, 30 Oct 2025 06:40:58 -0700 (PDT)
-Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 31F363F673;
-	Thu, 30 Oct 2025 06:41:02 -0700 (PDT)
-Date: Thu, 30 Oct 2025 14:41:02 +0100
-From: Beata Michalska <beata.michalska@arm.com>
-To: Jie Zhan <zhanjie9@hisilicon.com>
-Cc: viresh.kumar@linaro.org, rafael@kernel.org, ionela.voinescu@arm.com,
-	zhenglifeng1@huawei.com, linux-pm@vger.kernel.org,
-	linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linuxarm@huawei.com, jonathan.cameron@huawei.com
-Subject: Re: [PATCH v2 2/2] cpufreq: CPPC: Update FIE arch_freq_scale in
- ticks for non-PCC regs
-Message-ID: <aQNq7uwVCtFfBDMJ@arm.com>
-References: <20250828110212.2108653-1-zhanjie9@hisilicon.com>
- <20250828110212.2108653-3-zhanjie9@hisilicon.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=mZU+rT3Uo5Q4Axv4NMiayWcfuIlhnodD5WAHd3wU+AiYDBrATJ+u4YYfttQkm2CkWXLapysZBKTTcgcAdRI5BXLD1g6Uq8vnvalGrVywtnnWO784ek3Y9ngXCYPDoLZ4D53r0mace+xVYsx1CeZE1hgrp0tqiAmVY3d7kDKGWJY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hBwl913C; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1761832853; x=1793368853;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XUYybZu/Tr9eOAMQaOaQ+Fw4SF+ZmMyMy7iua1evwH8=;
+  b=hBwl913Cr6lZDpiQi0gxbtS78cf5ZCPADvez3v7JFDYquY8RvhK/3QB/
+   I+6b3uTXIVD3ZV6B8sf6wDIwKvl3Hr9mnDxKYmeAVy/2pqEaL3UV3ACCu
+   8p30d6U4ANbcjdgk588j4YsuO85gJvOdI9Z3j/1OYhOTp2l2BQkO2NyzV
+   G5zTlxIc8TL2dtM1NORgnAjcD1B2alpRELKRJnvb8oE6In+1f+JpPshU0
+   YFNMsmbK4mnmNfd9bg2aC7aIvBU6QT+X9O7rPof73LnBzsGOdiudhK/7w
+   IoCgbOwDO+KBRnA6MWEqqwCL9mywynMjslmn3ue6BxGylgzz8hIhU93y/
+   A==;
+X-CSE-ConnectionGUID: +udlj2gyTfKE+kKyJg6mcw==
+X-CSE-MsgGUID: vFuypyS5T3qNj1P6iP7X6w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11598"; a="63883650"
+X-IronPort-AV: E=Sophos;i="6.19,266,1754982000"; 
+   d="scan'208";a="63883650"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2025 07:00:53 -0700
+X-CSE-ConnectionGUID: U5k5Az+fQ6aj/IlFtAtMUA==
+X-CSE-MsgGUID: +cuqg9vjRzuNBlSxwz0xqA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,266,1754982000"; 
+   d="scan'208";a="223182374"
+Received: from fpallare-mobl4.ger.corp.intel.com (HELO ashevche-desk.local) ([10.245.245.174])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2025 07:00:50 -0700
+Received: from andy by ashevche-desk.local with local (Exim 4.98.2)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1vETCp-00000003vky-0vbP;
+	Thu, 30 Oct 2025 16:00:47 +0200
+Date: Thu, 30 Oct 2025 16:00:46 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Christian Marangi <ansuelsmth@gmail.com>
+Cc: Ilia Lin <ilia.lin@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Raag Jadav <raag.jadav@intel.com>, Arnd Bergmann <arnd@arndb.de>,
+	linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] err.h: add ERR_PTR_CONST macro
+Message-ID: <aQNvjqJGqFO30JTx@smile.fi.intel.com>
+References: <20251029133323.24565-1-ansuelsmth@gmail.com>
+ <aQIzoGnvZWYuHuoQ@smile.fi.intel.com>
+ <69023512.5d0a0220.3cccb7.8e65@mx.google.com>
+ <aQMheocySykpTFDN@smile.fi.intel.com>
+ <69033c55.df0a0220.1a33d7.49ff@mx.google.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -53,165 +87,68 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250828110212.2108653-3-zhanjie9@hisilicon.com>
+In-Reply-To: <69033c55.df0a0220.1a33d7.49ff@mx.google.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-Hi Jie,
-On Thu, Aug 28, 2025 at 07:02:12PM +0800, Jie Zhan wrote:
-> Currently, the CPPC Frequency Invariance Engine (FIE) is invoked from the
-> scheduler tick but defers the update of arch_freq_scale to a separate
-> thread because cppc_get_perf_ctrs() would sleep if the CPC regs are in PCC.
+On Thu, Oct 30, 2025 at 11:22:11AM +0100, Christian Marangi wrote:
+> On Thu, Oct 30, 2025 at 10:27:38AM +0200, Andy Shevchenko wrote:
+> > On Wed, Oct 29, 2025 at 04:38:53PM +0100, Christian Marangi wrote:
+> > > On Wed, Oct 29, 2025 at 05:32:48PM +0200, Andy Shevchenko wrote:
+> > > > On Wed, Oct 29, 2025 at 02:33:19PM +0100, Christian Marangi wrote:
+> > > > > Add ERR_PTR_CONST macro to initialize global variables with error
+> > > > 
+> > > > ERR_PTR_CONST()
+> > > > 
+> > > > > pointers. This might be useful for specific case where there is a global
+> > > > > variables initialized to an error condition and then later set to the
+> > > > > real handle once probe finish/completes.
+> > > > 
+> > > > Okay, this has two caveats:
+> > > > 
+> > > > 1) naming is bad as it suggests something about const qualifier (and not, it's
+> > > > not about that at all);
+> > > > 
+> > > > 2) it doesn't explain what's wrong with ERR_PTR().
+> > > >
+> > > 
+> > > It can't be used for global variables as it does cause compilation
+> > > error.
+> > 
+> > Can you show an example, please?
 > 
-> However, this deferred update mechanism is unnecessary and introduces extra
-> overhead for non-PCC register spaces (e.g. System Memory or FFH), where
-> accessing the regs won't sleep and can be safely performed from the tick
-> context.  Also, reading perf counters of a remote CPU may return 0 if it's
-> in a low-power idle state, e.g. power down or reset.
-I'm not sure how this is relevant to the changes (?)
+> drivers/soc/qcom/smem.c:361:35: error: initializer element is not constant
+>   361 | static struct qcom_smem *__smem = ERR_PTR(-EPROBE_DEFER);
+>       |                                   ^~~~~~~
+> make[9]: *** [scripts/Makefile.build:229: drivers/soc/qcom/smem.o] Error 1
 > 
-> Update arch_freq_scale directly in ticks for non-PCC regs and keep the
-> deferred update mechanism for PCC regs.
-> 
-> Signed-off-by: Jie Zhan <zhanjie9@hisilicon.com>
-> ---
->  drivers/cpufreq/cppc_cpufreq.c | 52 +++++++++++++++++++++++-----------
->  1 file changed, 36 insertions(+), 16 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-> index 7724318b3415..66d74b062ceb 100644
-> --- a/drivers/cpufreq/cppc_cpufreq.c
-> +++ b/drivers/cpufreq/cppc_cpufreq.c
-> @@ -55,31 +55,24 @@ static int cppc_perf_from_fbctrs(struct cppc_cpudata *cpu_data,
->  				 struct cppc_perf_fb_ctrs *fb_ctrs_t1);
->  
->  /**
-> - * cppc_scale_freq_workfn - CPPC arch_freq_scale updater for frequency invariance
-> - * @work: The work item.
-> + * __cppc_scale_freq_tick - CPPC arch_freq_scale updater for frequency invariance
-> + * @cppc_fi: per-cpu CPPC FIE data.
->   *
-> - * The CPPC driver register itself with the topology core to provide its own
-> + * The CPPC driver registers itself with the topology core to provide its own
->   * implementation (cppc_scale_freq_tick()) of topology_scale_freq_tick() which
->   * gets called by the scheduler on every tick.
->   *
->   * Note that the arch specific counters have higher priority than CPPC counters,
->   * if available, though the CPPC driver doesn't need to have any special
->   * handling for that.
-> - *
-> - * On an invocation of cppc_scale_freq_tick(), we schedule an irq work (since we
-> - * reach here from hard-irq context), which then schedules a normal work item
-> - * and cppc_scale_freq_workfn() updates the per_cpu arch_freq_scale variable
-> - * based on the counter updates since the last tick.
->   */
-> -static void cppc_scale_freq_workfn(struct kthread_work *work)
-> +static void __cppc_scale_freq_tick(struct cppc_freq_invariance *cppc_fi)
->  {
-> -	struct cppc_freq_invariance *cppc_fi;
->  	struct cppc_perf_fb_ctrs fb_ctrs = {0};
->  	struct cppc_cpudata *cpu_data;
->  	unsigned long local_freq_scale;
->  	u64 perf;
->  
-> -	cppc_fi = container_of(work, struct cppc_freq_invariance, work);
->  	cpu_data = cppc_fi->cpu_data;
->  
->  	if (cppc_get_perf_ctrs(cppc_fi->cpu, &fb_ctrs)) {
-> @@ -104,6 +97,14 @@ static void cppc_scale_freq_workfn(struct kthread_work *work)
->  	per_cpu(arch_freq_scale, cppc_fi->cpu) = local_freq_scale;
->  }
->  
-> +static void cppc_scale_freq_workfn(struct kthread_work *work)
-> +{
-> +	struct cppc_freq_invariance *cppc_fi;
-> +
-> +	cppc_fi = container_of(work, struct cppc_freq_invariance, work);
-> +	__cppc_scale_freq_tick(cppc_fi);
-> +}
-> +
->  static void cppc_irq_work(struct irq_work *irq_work)
->  {
->  	struct cppc_freq_invariance *cppc_fi;
-> @@ -112,7 +113,14 @@ static void cppc_irq_work(struct irq_work *irq_work)
->  	kthread_queue_work(kworker_fie, &cppc_fi->work);
->  }
->  
-> -static void cppc_scale_freq_tick(void)
-> +/*
-> + * Reading perf counters may sleep if the CPC regs are in PCC.  Thus, we
-> + * schedule an irq work in scale_freq_tick (since we reach here from hard-irq
-> + * context), which then schedules a normal work item cppc_scale_freq_workfn()
-> + * that updates the per_cpu arch_freq_scale variable based on the counter
-> + * updates since the last tick.
-> + */
-> +static void cppc_scale_freq_tick_pcc(void)
->  {
->  	struct cppc_freq_invariance *cppc_fi = &per_cpu(cppc_freq_inv, smp_processor_id());
->  
-> @@ -123,6 +131,11 @@ static void cppc_scale_freq_tick(void)
->  	irq_work_queue(&cppc_fi->irq_work);
->  }
->  
-> +static void cppc_scale_freq_tick(void)
-> +{
-> +	__cppc_scale_freq_tick(&per_cpu(cppc_freq_inv, smp_processor_id()));
-> +}
-> +
->  static struct scale_freq_data cppc_sftd = {
->  	.source = SCALE_FREQ_SOURCE_CPPC,
->  	.set_freq_scale = cppc_scale_freq_tick,
-> @@ -140,8 +153,10 @@ static void cppc_cpufreq_cpu_fie_init(struct cpufreq_policy *policy)
->  		cppc_fi = &per_cpu(cppc_freq_inv, cpu);
->  		cppc_fi->cpu = cpu;
->  		cppc_fi->cpu_data = policy->driver_data;
-> -		kthread_init_work(&cppc_fi->work, cppc_scale_freq_workfn);
-> -		init_irq_work(&cppc_fi->irq_work, cppc_irq_work);
-> +		if (cppc_perf_ctrs_in_pcc()) {
-I'm wondering if we really need to go through all present cpus every time this
-check is needed. Maybe the result of it could be stashed somehow, especially now
-that more invocations are added.
+> You want me to add this to the commit? Or any hint to better reword this
+> so it's more understandable?
 
----
-BR
-Beata
-> +			kthread_init_work(&cppc_fi->work, cppc_scale_freq_workfn);
-> +			init_irq_work(&cppc_fi->irq_work, cppc_irq_work);
-> +		}
->  
->  		ret = cppc_get_perf_ctrs(cpu, &cppc_fi->prev_perf_fb_ctrs);
->  		if (ret && cpu_online(cpu)) {
-> @@ -174,6 +189,9 @@ static void cppc_cpufreq_cpu_fie_exit(struct cpufreq_policy *policy)
->  	/* policy->cpus will be empty here, use related_cpus instead */
->  	topology_clear_scale_freq_source(SCALE_FREQ_SOURCE_CPPC, policy->related_cpus);
->  
-> +	if (!cppc_perf_ctrs_in_pcc())
-> +		return;
-> +
->  	for_each_cpu(cpu, policy->related_cpus) {
->  		cppc_fi = &per_cpu(cppc_freq_inv, cpu);
->  		irq_work_sync(&cppc_fi->irq_work);
-> @@ -206,9 +224,11 @@ static void __init cppc_freq_invariance_init(void)
->  		}
->  	}
->  
-> -	if (fie_disabled)
-> +	if (fie_disabled || !cppc_perf_ctrs_in_pcc())
->  		return;
->  
-> +	cppc_sftd.set_freq_scale = cppc_scale_freq_tick_pcc;
-> +
->  	kworker_fie = kthread_run_worker(0, "cppc_fie");
->  	if (IS_ERR(kworker_fie)) {
->  		pr_warn("%s: failed to create kworker_fie: %ld\n", __func__,
-> @@ -228,7 +248,7 @@ static void __init cppc_freq_invariance_init(void)
->  
->  static void cppc_freq_invariance_exit(void)
->  {
-> -	if (fie_disabled)
-> +	if (fie_disabled || !cppc_perf_ctrs_in_pcc())
->  		return;
->  
->  	kthread_destroy_worker(kworker_fie);
-> -- 
-> 2.33.0
-> 
+Just the first line would be enough.
+And perhaps better naming for the macro, but I have no ideas from top of my
+head right now. Ah, actually I do. We call those either INIT_*() or DEFINE_*()
+with the difference that INIT_*() works like your proposed idea. i.e. returns
+a suitable value, but DEFINE_*() incorporates a variable and a type.
+
+I think the INIT_ERR_PTR() is what we want as a name.
+
+> > > I wanted to use ERR_PTR to set the __smem handle instead of freecode
+> > > (void *) -EPROBE_DEFER and notice the compiler doesn't like using
+> > > ERR_PTR().
+> > > 
+> > > Then the problem is clear as static declaration require constant value
+> > > for initialization and ERR_PTR is a inline function.
+> > > 
+> > > This is why ERR_PTR_CONST following the pattern that was used for
+> > > FIELD_PREP -> FIELD_PREP_CONST that was also introduced for similar
+> > > case.
+> > > 
+> > > So yes this is specific for case of static global variables.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
 
