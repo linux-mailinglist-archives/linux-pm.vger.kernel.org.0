@@ -1,191 +1,120 @@
-Return-Path: <linux-pm+bounces-37098-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37099-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 54539C20116
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Oct 2025 13:44:10 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D7293C20322
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Oct 2025 14:19:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8B17B18955D0
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Oct 2025 12:44:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 63E493AA008
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Oct 2025 13:17:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E970D32B9B5;
-	Thu, 30 Oct 2025 12:44:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D0C822FE0E;
+	Thu, 30 Oct 2025 13:17:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="yc8whvFa"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="HC7j2p0A"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BE3F30FF1C
-	for <linux-pm@vger.kernel.org>; Thu, 30 Oct 2025 12:44:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.177
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761828246; cv=none; b=hMvnc7S72xzf6fWqjLu2Vu1lpuE0cE2i9acl6ItwdEB/cjR+TVqTvkjehV6TeIHJLxgLdzeLdXh0r8TjuUlMfRGhxyiiN5sW0jE18HOOt2AWyvA703/LwyfYD0908MVdEqsgp4f1/8g9ZfV32iSs9YNeZptw8u/zwmLV7/INcu4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761828246; c=relaxed/simple;
-	bh=Vsg6pHABg0QNnlZoDT/EUBC2xV1JRoFDH/4oiFVdKOE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oBImT2byZSkcS5tbl775ozwp6RnDUxEHc3Wi1UrpQrtMococ7HfqR/kb0qxLZSaQ9gZ+2RWY0M3uvs76gRLwz0ac1NqldGW9vSiW+pzkmyAqH7oChkrNDL63BbCDToCuxt9ajwTuvDJXh0n+j76mQVt43NgAlxLi6eaAufEqzwM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=yc8whvFa; arc=none smtp.client-ip=209.85.128.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-78485808eb3so13490327b3.3
-        for <linux-pm@vger.kernel.org>; Thu, 30 Oct 2025 05:44:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1761828244; x=1762433044; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zDjyf2YcWAcYN9vEkqn7UbYwTq6TCYnnMJLBk0aUuPQ=;
-        b=yc8whvFa1Tmpuzr3K+A5YOFo3An4OohDN+/8+Aq+94D8QKXtIktbbHGBaRGFOwq6dG
-         2ySUQ9a4NL6UQkbOjQF+Ec5AeiHdKw4kCRP+fonQnVnUWOvTLfYl3zQmN+b5Q33MKASq
-         8USEHcWLNmwzKo1KBPuGZzpd4+459kHbecapQfiiU9ZhlO9OmbCgDjqeaj7JVHNDHCqf
-         kjQtdF/cSVSNEqZ+H1xNCxVulUTBt9b9H+GjgqfUDYfeWcFBi/riLImY80picPVK6evB
-         6KGOrGvOOXXKpseNkNyZUyGvnWvdyfFi/7ZmdhhNG9c+CkHn2+dyfF3md8GOFYMi8VVe
-         Aw5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761828244; x=1762433044;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zDjyf2YcWAcYN9vEkqn7UbYwTq6TCYnnMJLBk0aUuPQ=;
-        b=aVO/GbhYAVSJDJ3yO4I8/w0jxkWxRSohPbVzBlgsPzOIPFDeFILxB/RjlkIsLVajLY
-         f/Qx6FwGulzY7gyCKK+S7N6mhJUAHraoTy7EUaavXWw+097Cx9ArK8woJYHgYRH02gt8
-         mM7yIm50qC/G4J5wuDrBTshpnnpdRxW5q7I65PnpghkfNzYx0bqhqlYX1GcIPVEEeWGK
-         TdVJZEYLvduhfZnvNKeDjixrZ13FN3MPwX5Cu8QjxiwggfAQ6zatNogceMpAIeYCHD4A
-         AbiYOpgDl7X+EivqdUxXQUSpV91CI2EYn9LpwFbgM3Gr5jUUY3W73KI2Sm/+YKXIY4YP
-         JVsA==
-X-Gm-Message-State: AOJu0YwwZuoBmRrCSwzW+651koi5AthwKMo6x19qSqF0MMv71o145J9V
-	QZi1zVwS27qC/bY03Y0YJy+p6WRgHJ4RVON+ozcSF5/Dcz6thv3NTep+zzJUz8my+fKBJuV9P1F
-	wneJ7NiE57xJhar8b0bVCtmKEBk7pDxTJkA7aEYL5PQ==
-X-Gm-Gg: ASbGnctVjmdK4SM5Mqg8w9Fk+TK8gXyCpjiJK9m1UeLdbWt+wBlHgCdwQjiS3QBbPoP
-	xvK0JRvtJkUrFS7Y8w0vsOtpac4Rb7whBzWYuAujEDnkl90XGK+zFE+6bHeLrXUglkX9y+BFP50
-	OO9u4/YGH1VuLAIHm6JFNaiBH7VZlmw3eEtBNBCL/rl/0ascT/EHX2Hxj3PoT12/2Rx2+kCeIv5
-	2kxqoz+z57TVz4k3Pyf7yDXGV4ekZE7r5GUHUnsLgypDSzMV8bpG1P647hMNA==
-X-Google-Smtp-Source: AGHT+IHoJ3bGFdVpESH8uyHHz88xUNMEBC8Fu5HjAXHiNMtBHIYJ/tKO/aZSWr4m+lV+8zQnl1zuKQVq+qW0clPbizU=
-X-Received: by 2002:a05:690c:b89:b0:785:c7ab:97e6 with SMTP id
- 00721157ae682-78628e82e1amr62754117b3.12.1761828244016; Thu, 30 Oct 2025
- 05:44:04 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81DBB22B8CB;
+	Thu, 30 Oct 2025 13:17:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1761830264; cv=pass; b=j9MftS4U/j/8h/Q+zxs8seW7gUtZKz1L+duvAiLCfaHqSR1sdCEOmF7Qc4ftABJRcFGfZukHNEQeJ+R7Dlk3n8WFZ7hYcY4hT+7+JhxrfYytaY0HAtj0eIBqUkTjJdYJqzRv6J1jiL+NpmXYZkYPwCP/wlVVyjh9nqJei+9Txrg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1761830264; c=relaxed/simple;
+	bh=TpvipFPL4XszV9vrC4IN6hE59uSeRT6tFNh3013ZQNk=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=GTP7E+aEcMAyObfjpY/XEF+c//bk/gTdzB/OwktK5UNPQ4szOY40DQ+5QFv04DPW9PGdUO3MvM3YI7WlQIy9TQQUaz+F9Bl44p+bHNbPuu5Q0XpnDz7O4tZprpuXUID180XpLzKVazd/iDLyggesF15yJT1iJR7kn2lP6qw/doc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=HC7j2p0A; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1761830243; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=bykFlocPyOEv6VJ8hGJ+2SlM+xv5ccun8eDeb4CYDlJ4o5ga5Un/K8leZovV9noOiAjw5Uvj5SiLsrRDkQBi3iNgnn4eiiq+NzpPfPBHqfb21Z7TJmCFREStXPu87hZl0wfYt0K/xs8oeUG2So3YXKnoqyPVdnwf3Vle+uJZ74c=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1761830243; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=X8vmjhEGyAb9Q+g3zprM6UMlHqaEvwlEm446UF+Fb5E=; 
+	b=TWYhI7IamV4ShVe5DfQv8czH5tnOKVadQeBdwRkjabBS6oV7ddLysULY//VHCn9xurf7/xkOqB+7ABr42PROAjtZ5uLe9LUqvpD80fQFu1054K1+wk0yO61EaWIJBPDlKB8isOH8WQLOOAnVgYjqZ40qc8xoPpjSeAJBIV5QMvk=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
+	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1761830243;
+	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
+	h=From:From:Date:Date:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Message-Id:To:To:Cc:Cc:Reply-To;
+	bh=X8vmjhEGyAb9Q+g3zprM6UMlHqaEvwlEm446UF+Fb5E=;
+	b=HC7j2p0ATKIKWHZ46ymqF+vJrTlNWIOnCOOYqQO0MMDfr6lfyrD0Z80kqZhYZVSV
+	lWO+hfdud/gLWlY2kAE83UVYj+aKhjGkSl0yKAtdO49d2EavR4alyJvyx6l1clowSsp
+	A8gD2CwNk2qC14FSAv3NvKOgIVOHYmGIr1uEBE40=
+Received: by mx.zohomail.com with SMTPS id 1761830240160609.6007241076173;
+	Thu, 30 Oct 2025 06:17:20 -0700 (PDT)
+From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+Date: Thu, 30 Oct 2025 14:17:10 +0100
+Subject: [PATCH] pmdomain: mediatek: mtk-mfg: select MAILBOX in Kconfig
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251016151929.75863-1-ulf.hansson@linaro.org>
- <CAJZ5v0i_0K6+nCvBC55Bbu7XuKYjHrky3uG_aZ3aM0HMymcfeg@mail.gmail.com>
- <CAPDyKFpYfLJ1F1ynLAZLJBoWp+Uk-k2B0796_yWQTNg4xT9zew@mail.gmail.com>
- <CAJZ5v0igMhr=N90As66dioXXzL8YL11PN3k49n5-yoPuHNR-_w@mail.gmail.com> <CAJZ5v0jSvU7=bmscRyQrvoWA0q=AgbDE3Ad1jf+4PTdzZgSNjw@mail.gmail.com>
-In-Reply-To: <CAJZ5v0jSvU7=bmscRyQrvoWA0q=AgbDE3Ad1jf+4PTdzZgSNjw@mail.gmail.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Thu, 30 Oct 2025 13:43:28 +0100
-X-Gm-Features: AWmQ_blgVg55or3EyJ2go7j43VTMSM_CtPJYz4izL2KNF_jSNbaJ7DwH95vB6ks
-Message-ID: <CAPDyKFr=uVS0CsuFnTjXH+o+P+xrG7GKj2O92mGgqiSo-tk9Bg@mail.gmail.com>
-Subject: Re: [PATCH v2 0/4] PM: QoS: Introduce a CPU system-wakeup QoS limit
- for s2idle
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: linux-pm@vger.kernel.org, Vincent Guittot <vincent.guittot@linaro.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Kevin Hilman <khilman@baylibre.com>, 
-	Pavel Machek <pavel@kernel.org>, Len Brown <len.brown@intel.com>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, Saravana Kannan <saravanak@google.com>, 
-	Maulik Shah <quic_mkshah@quicinc.com>, Prasad Sodagudi <psodagud@quicinc.com>, 
-	Dhruva Gole <d-gole@ti.com>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20251030-mfg-mailbox-dep-v1-1-8a8c591aff27@collabora.com>
+X-B4-Tracking: v=1; b=H4sIAFVlA2kC/zWMQQrDIBRErxL+uh+MoV3kKiULY8b0Q9VUbRFC7
+ l5p6PLN8N5OGUmQaex2SvhIlhga9JeO7MOEFSxLY9JKX3s1KPZuZW/kOcfKCzaGHTRc+3Az1Kw
+ twUn9Fe/TyQmvdwuXc6TZZLCN3ksZu4Ba+B+n6Ti+3kVVl5IAAAA=
+X-Change-ID: 20251030-mfg-mailbox-dep-ec32ef510e6a
+To: Ulf Hansson <ulf.hansson@linaro.org>, 
+ Matthias Brugger <matthias.bgg@gmail.com>, 
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
+ kernel@collabora.com, kernel test robot <lkp@intel.com>, 
+ Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+X-Mailer: b4 0.14.3
 
-On Thu, 30 Oct 2025 at 13:29, Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Thu, Oct 30, 2025 at 1:26=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.=
-org> wrote:
-> >
-> > On Thu, Oct 30, 2025 at 1:23=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro=
-.org> wrote:
-> > >
-> > > On Wed, 29 Oct 2025 at 15:53, Rafael J. Wysocki <rafael@kernel.org> w=
-rote:
-> > > >
-> > > > On Thu, Oct 16, 2025 at 5:19=E2=80=AFPM Ulf Hansson <ulf.hansson@li=
-naro.org> wrote:
-> > > > >
-> > > > > Changes in v2:
-> > > > >         - Limit the new QoS to CPUs  and make some corresponding =
-renaming of the
-> > > > >         functions along with name of the device node for user spa=
-ce.
-> > > > >         - Make sure we deal with the failure/error path correctly=
- when there are
-> > > > >         no state available for s2idle.
-> > > > >         - Add documentation.
-> > > > >
-> > > > > Some platforms supports multiple low-power states for CPUs that c=
-an be used
-> > > > > when entering system-wide suspend and s2idle in particular. Curre=
-ntly we are
-> > > > > always selecting the deepest possible state for the CPUs, which c=
-an break the
-> > > > > system-wakeup latency constraint that may be required for some us=
-e-cases.
-> > > > >
-> > > > > Therefore, this series suggests to introduce a new interface for =
-user-space,
-> > > > > allowing us to specify the CPU system-wakeup QoS limit. The QoS l=
-imit is then
-> > > > > taken into account when selecting a suitable low-power state for =
-s2idle.
-> > > >
-> > > > Last time we discussed this I said I would like the new limit to be
-> > > > taken into account by regular "runtime" cpuidle because the "s2idle=
-"
-> > > > limit should not be less that the "runtime" limit (or at least it
-> > > > would be illogical if that happened).
-> > >
-> > > Yes, we discussed this, but that was also before we concluded to add =
-a
-> > > new file for user-space to operate on after all.
-> > >
-> > > To me, it looks unnecessarily limiting to not allow them to be
-> > > orthogonal,
-> >
-> > So what's the use case in which it makes sense to have a lower latency
-> > limit for s2idle than for runtime?
+The mtk-mfg pmdomain driver calls common mailbox framework functions. If
+the common mailbox framework is not selected in the kernel's
+configuration, the build runs into a linker error, as the symbols are
+absent.
 
-Honestly, I don't know, but I just wanted to keep things more flexible.
+The hardware mailbox Kconfig system, MAILBOX, has no dependencies of its
+own. It's therefore safe to "select" it rather than use "depend on".
 
-> >
-> > > but I am not insisting that it needs to be like this. I
-> > > was just thinking that we do not necessarily have to care about the
-> > > same use-case in runtime as in the system-suspend state. Moreover,
-> > > nothing would prevent user-space from applying the same constraint to
-> > > both of them, if that is needed.
-> > >
-> > > >
-> > > > It looks like that could be implemented by making
-> > > > cpuidle_governor_latency_req() take cpu_wakeup_latency_qos_limit()
-> > > > into account, couldn't it?
-> > >
-> > > Right, but I am not sure we want that. See above.
-> >
-> > I do or I need to be convinced that this is a bad idea.
->
-> And there is a specific reason why I want that.
->
-> Namely, say somebody wants to set the same limit for both s2idle and
-> "runtime" cpuidle.  If the s2idle limit did not affect "runtime", they
-> would need to open two device special files and write the same value
-> to both of them.  Otherwise, they just need to use the s2idle limit
-> and it will work for "runtime" automatically.
+Declare this "select" dependency in the Kconfig for the driver.
 
-Right. User-space would need to open two files instead of one, but is
-that really a problem?
+Fixes: 1ff1f0db6aec ("pmdomain: mediatek: Add support for MFlexGraphics")
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202510301311.TcOCnZ1s-lkp@intel.com/
+Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+---
+I assume this can be squashed into the mtk-mfg driver addition commit of
+the maintainer that merged it.
+---
+ drivers/pmdomain/mediatek/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-What if user-space doesn't want to affect the runtime state-selection,
-but cares only about a use-case that requires a cpu-wakeup constraint
-when resuming from s2idle.
+diff --git a/drivers/pmdomain/mediatek/Kconfig b/drivers/pmdomain/mediatek/Kconfig
+index b06aaa9690f0..8923e6516441 100644
+--- a/drivers/pmdomain/mediatek/Kconfig
++++ b/drivers/pmdomain/mediatek/Kconfig
+@@ -32,6 +32,7 @@ config MTK_MFG_PM_DOMAIN
+ 	depends on PM
+ 	depends on OF
+ 	depends on COMMON_CLK
++	select MAILBOX
+ 	select PM_GENERIC_DOMAINS
+ 	imply MTK_GPUEB_MBOX
+ 	help
 
-It's your call, I can change if you prefer, np!
+---
+base-commit: d78b0fee454c25d292fb6343253eca06d7634fd9
+change-id: 20251030-mfg-mailbox-dep-ec32ef510e6a
 
-Kind regards
-Uffe
+Best regards,
+-- 
+Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+
 
