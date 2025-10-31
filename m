@@ -1,44 +1,46 @@
-Return-Path: <linux-pm+bounces-37159-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37160-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 02A6FC23737
-	for <lists+linux-pm@lfdr.de>; Fri, 31 Oct 2025 07:49:29 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8D979C23813
+	for <lists+linux-pm@lfdr.de>; Fri, 31 Oct 2025 08:11:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 112133A84A7
-	for <lists+linux-pm@lfdr.de>; Fri, 31 Oct 2025 06:47:16 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 111B334E00A
+	for <lists+linux-pm@lfdr.de>; Fri, 31 Oct 2025 07:11:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 268AD2FF176;
-	Fri, 31 Oct 2025 06:47:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5350326D6B;
+	Fri, 31 Oct 2025 07:11:19 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
+Received: from canpmsgout05.his.huawei.com (canpmsgout05.his.huawei.com [113.46.200.220])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 011AC2512DE;
-	Fri, 31 Oct 2025 06:46:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.243.244.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30292126F0A;
+	Fri, 31 Oct 2025 07:11:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.220
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761893222; cv=none; b=uq1Zwov0nvuYmHVzV6dQ6ZP2w4DQLp7AmdWrlxh3oJYxZy5MlDJaaOZ6xCRxO/0sxAgZGhmnNjINuZoqQMdfXSEyyaGRPREBIzgHd9MTy9BZRWvttHlZSFkvkndwNSo1gyZj9xb3i0biscgdxo9PyLVoXVlKz1IV2Ru270lAIYA=
+	t=1761894679; cv=none; b=EdQln1IxIDZaft25E7TgvAhG3PpUbDXll/5am7hqeHuXyujYjFZhwj6CdPE7sO7GkC1ngMLHE9gDiItg868waWLjtTLxf9ullRTROU/SkN9Pf6SHm+Lu44yrXu8CTC+Xi7JI9rlz7jYXCh7S1apTA1OFUhjL3+8JMw+ePh0aUU8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761893222; c=relaxed/simple;
-	bh=JZ4d4kYh8rfhRKOmG05eahnty61ao/DjaXEzL0J39VE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TskgaPVQJsUCUuHXplTXXLo5eukzUN6/Q7Wkl7H7QqPVPsZEkVxtSyvpZ9hLtQbI00b+JikGCQ9r5etgDgA4AVRoE3uzfS/kUMkVb5aXHKnLdOQ1mcVfG/U7REJOiDvSqXLK5YMgJ8zFJwpCYXnQOj1EYgo4xBq+LVuMpAXgCsY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=linux.starfivetech.com; spf=none smtp.mailfrom=linux.starfivetech.com; arc=none smtp.client-ip=54.243.244.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=linux.starfivetech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.starfivetech.com
-X-QQ-mid: esmtpgz13t1761893210tf21d82f4
-X-QQ-Originating-IP: R90kadoSj/Lu9jhXDo3EOBK+P2zoChp7ZYtBXxB6TvQ=
-Received: from [192.168.125.98] ( [113.104.140.154])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Fri, 31 Oct 2025 14:46:46 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 1332421492275545379
-Message-ID: <99841AD0EE6A35D4+4a6afacb-4d1c-4727-9a75-134190350aca@linux.starfivetech.com>
-Date: Fri, 31 Oct 2025 14:46:46 +0800
+	s=arc-20240116; t=1761894679; c=relaxed/simple;
+	bh=tnwbG5gjntBIwi0oGGVpAYxCyD3L5YMaw6KX+6pHdPo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=Q62LM8xvkKdgrzH9Z42lWXKwyhT4+ootiMNHMROep5jN7fS+zMXw7FFR/XayQtmLJdsLLbMVoSsf+PkzsaYPzIPkOD32XcfzuVBMOIK7Ig+bMG7F3AXmBWMNJ83vouWGxDUg4FeNvomiRGWXgNr5OkVwz1ep8yEjHyBb/nz0KVo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com; spf=pass smtp.mailfrom=hisilicon.com; arc=none smtp.client-ip=113.46.200.220
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hisilicon.com
+Received: from mail.maildlp.com (unknown [172.19.163.252])
+	by canpmsgout05.his.huawei.com (SkyGuard) with ESMTPS id 4cyXF35PtDz12LFQ;
+	Fri, 31 Oct 2025 15:10:31 +0800 (CST)
+Received: from kwepemr500004.china.huawei.com (unknown [7.202.195.141])
+	by mail.maildlp.com (Postfix) with ESMTPS id DDF21180B71;
+	Fri, 31 Oct 2025 15:11:07 +0800 (CST)
+Received: from [10.67.121.58] (10.67.121.58) by kwepemr500004.china.huawei.com
+ (7.202.195.141) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Fri, 31 Oct
+ 2025 15:11:07 +0800
+Message-ID: <5b8602a6-73ea-4c34-8154-0a48e218d4f4@hisilicon.com>
+Date: Fri, 31 Oct 2025 15:11:06 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -46,235 +48,204 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] dt-bindings: Remove extra blank lines
-To: "Rob Herring (Arm)" <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Thomas Zimmermann <tzimmermann@suse.de>,
- Andrzej Hajda <andrzej.hajda@intel.com>, Robert Foss <rfoss@kernel.org>,
- Vinod Koul <vkoul@kernel.org>, Moritz Fischer <mdf@kernel.org>,
- Xu Yilun <yilun.xu@intel.com>, Bartosz Golaszewski <brgl@bgdev.pl>,
- Guenter Roeck <linux@roeck-us.net>, Andi Shyti <andi.shyti@kernel.org>,
- Jonathan Cameron <jic23@kernel.org>,
- Dmitry Torokhov <dmitry.torokhov@gmail.com>,
- Georgi Djakov <djakov@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
- Joerg Roedel <joro@8bytes.org>, Jassi Brar <jassisinghbrar@gmail.com>,
- Mauro Carvalho Chehab <mchehab@kernel.org>, Lee Jones <lee@kernel.org>,
- Miquel Raynal <miquel.raynal@bootlin.com>,
- Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>,
- Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Johannes Berg <johannes@sipsolutions.net>,
- =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
- Manivannan Sadhasivam <mani@kernel.org>, Bjorn Helgaas
- <bhelgaas@google.com>, Kishon Vijay Abraham I <kishon@kernel.org>,
- Sebastian Reichel <sre@kernel.org>, =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?=
- <ukleinek@kernel.org>, Mark Brown <broonie@kernel.org>,
- Mathieu Poirier <mathieu.poirier@linaro.org>,
- Philipp Zabel <p.zabel@pengutronix.de>, Olivia Mackall <olivia@selenic.com>,
- Herbert Xu <herbert@gondor.apana.org.au>,
- Daniel Lezcano <daniel.lezcano@linaro.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
- linux-fbdev@vger.kernel.org, dmaengine@vger.kernel.org,
- linux-fpga@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
- linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
- linux-pm@vger.kernel.org, iommu@lists.linux.dev,
- linux-media@vger.kernel.org, linux-mtd@lists.infradead.org,
- netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
- linux-pci@vger.kernel.org, linux-phy@lists.infradead.org,
- linux-pwm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
- linux-crypto@vger.kernel.org, linux-sound@vger.kernel.org,
- linux-usb@vger.kernel.org
-References: <20251023143957.2899600-1-robh@kernel.org>
+Subject: Re: [PATCH v2 2/2] cpufreq: CPPC: Update FIE arch_freq_scale in ticks
+ for non-PCC regs
+To: Beata Michalska <beata.michalska@arm.com>
+CC: <viresh.kumar@linaro.org>, <rafael@kernel.org>, <ionela.voinescu@arm.com>,
+	<zhenglifeng1@huawei.com>, <linux-pm@vger.kernel.org>,
+	<linux-acpi@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linuxarm@huawei.com>, <jonathan.cameron@huawei.com>
+References: <20250828110212.2108653-1-zhanjie9@hisilicon.com>
+ <20250828110212.2108653-3-zhanjie9@hisilicon.com> <aQNq7uwVCtFfBDMJ@arm.com>
 Content-Language: en-US
-From: Hal Feng <hal.feng@linux.starfivetech.com>
-In-Reply-To: <20251023143957.2899600-1-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+From: Jie Zhan <zhanjie9@hisilicon.com>
+In-Reply-To: <aQNq7uwVCtFfBDMJ@arm.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: esmtpgz:linux.starfivetech.com:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-QQ-XMAILINFO: NqcI9G0mljVPHlZnLQw3xgw2kf/d9aF5s5+EcmMZEbvVRyQ1odkgRlRl
-	+jfT0Sidt0LxlobAov/UuxBi7zRZKcElztA9akkk9Jf1GOBzPvaDZtXD1xMUd81p8kJ6Hyz
-	EN4m3vx2HO1Fwx2f4zwGdxxIIr0yNkbGB9nRsdeno4MwsCzUWVRSm89jzWz4XgU20HkG+Bi
-	EPCLTEsgN0e6YwsD28Vn798fqTi1nH1xPULtv5+oRStTactxEaWhGZ2Ea5jBoUwrZPjNtCl
-	KtfL9Qpnl3gXMqJqPed9mGaRPgLTO2XV2K87xBoIqx3DA51puzSQPjSlObK+/xTi+aMlW+1
-	fDLmbrQzCBVwNaUic9Z8uTC1Bc5gtQH/TLs5kJLqlQtag514tIVBJ04QCs6pYonYaXsn6EG
-	2LkGw7y0X8Tz1HhEDDhPtVPtvJP8M+kzO5W0vWf21JiLG7CaQngncyqWLVa8A9d9txFIZA9
-	mQ/f6LwS2FZ4ICsdNKbWWMurhR3mHY9yTYmGXSyppy1nWpdPr2EO5e3E1qUiNnOYNd5d5jd
-	V8f6CYeN9xuI7DbWGhxoFhTuLoiEUL7CoMogQUNnAMO4plqO2VK0rrkAMIrU083OlyS4Onf
-	SMz/dzDKfGjsc4u1rGGYqfoxA8FZMK93gzdQnr8u4sIunrUJv98dX4cl/riclCVvACp6OtH
-	jda0HrhrC9NhVU2bZ5DXK8oo2xlp0AOtGom3D0Gyy9+hhP8aTeIapuUsEPRRj4wpv8bUJ2I
-	18qWpi3KC9XqEbK70FwErh4xBL/cMBO5VVI5Aw6D6Rk4AFHfvowV70/fTA2jml6v7I2r4t0
-	eiG3Vjo9wCe0n8sghLiMzSE1/U0XvJ2VNLkgbIBi2T2lBzPOGRIkM9glJMylFwKODsCC89V
-	aSwAkvc3R1W62fELjrfWLA3iIocfsjXatYoevXlYA+XazhCRU0XMTyH2HunXOrXP2xWqB9d
-	k9mhj/irc/bGlw7QrR84hCAHmWEp5hG8WgWM=
-X-QQ-XMRINFO: Nq+8W0+stu50PRdwbJxPCL0=
-X-QQ-RECHKSPAM: 0
+X-ClientProxiedBy: kwepems500001.china.huawei.com (7.221.188.70) To
+ kwepemr500004.china.huawei.com (7.202.195.141)
 
-On 10/23/2025 10:37 PM, Rob Herring (Arm) wrote:
-> Generally at most 1 blank line is the standard style for DT schema
-> files. Remove the few cases with more than 1 so that the yamllint check
-> for this can be enabled.
+
+
+On 10/30/2025 9:41 PM, Beata Michalska wrote:
+> Hi Jie,
+> On Thu, Aug 28, 2025 at 07:02:12PM +0800, Jie Zhan wrote:
+>> Currently, the CPPC Frequency Invariance Engine (FIE) is invoked from the
+>> scheduler tick but defers the update of arch_freq_scale to a separate
+>> thread because cppc_get_perf_ctrs() would sleep if the CPC regs are in PCC.
+>>
+>> However, this deferred update mechanism is unnecessary and introduces extra
+>> overhead for non-PCC register spaces (e.g. System Memory or FFH), where
+>> accessing the regs won't sleep and can be safely performed from the tick
+>> context.  Also, reading perf counters of a remote CPU may return 0 if it's
+>> in a low-power idle state, e.g. power down or reset.
+> I'm not sure how this is relevant to the changes (?)
+Hi Beata,
+
+The CPPC FIE is eventually handled in a thread, where it accesses perf
+counters of remote CPUs.
+
+Reading perf counters of a remote CPU may throw us warnings of
+"cppc_scale_freq_workfn: failed to read perf counters"
+because the CPC regs are in System Memory and the target CPU is in a
+power-down idle state.
+
+Moving the FIE handling back to the scheduler tick process makes the CPU
+handle its own perf counters so it won't fail.  Then the issue is
+inherently solved.
+
+I can update the commit log so this would be clear.
+>>
+>> Update arch_freq_scale directly in ticks for non-PCC regs and keep the
+>> deferred update mechanism for PCC regs.
+>>
+>> Signed-off-by: Jie Zhan <zhanjie9@hisilicon.com>
+>> ---
+>>  drivers/cpufreq/cppc_cpufreq.c | 52 +++++++++++++++++++++++-----------
+>>  1 file changed, 36 insertions(+), 16 deletions(-)
+>>
+>> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+>> index 7724318b3415..66d74b062ceb 100644
+>> --- a/drivers/cpufreq/cppc_cpufreq.c
+>> +++ b/drivers/cpufreq/cppc_cpufreq.c
+>> @@ -55,31 +55,24 @@ static int cppc_perf_from_fbctrs(struct cppc_cpudata *cpu_data,
+>>  				 struct cppc_perf_fb_ctrs *fb_ctrs_t1);
+>>  
+>>  /**
+>> - * cppc_scale_freq_workfn - CPPC arch_freq_scale updater for frequency invariance
+>> - * @work: The work item.
+>> + * __cppc_scale_freq_tick - CPPC arch_freq_scale updater for frequency invariance
+>> + * @cppc_fi: per-cpu CPPC FIE data.
+>>   *
+>> - * The CPPC driver register itself with the topology core to provide its own
+>> + * The CPPC driver registers itself with the topology core to provide its own
+>>   * implementation (cppc_scale_freq_tick()) of topology_scale_freq_tick() which
+>>   * gets called by the scheduler on every tick.
+>>   *
+>>   * Note that the arch specific counters have higher priority than CPPC counters,
+>>   * if available, though the CPPC driver doesn't need to have any special
+>>   * handling for that.
+>> - *
+>> - * On an invocation of cppc_scale_freq_tick(), we schedule an irq work (since we
+>> - * reach here from hard-irq context), which then schedules a normal work item
+>> - * and cppc_scale_freq_workfn() updates the per_cpu arch_freq_scale variable
+>> - * based on the counter updates since the last tick.
+>>   */
+>> -static void cppc_scale_freq_workfn(struct kthread_work *work)
+>> +static void __cppc_scale_freq_tick(struct cppc_freq_invariance *cppc_fi)
+>>  {
+>> -	struct cppc_freq_invariance *cppc_fi;
+>>  	struct cppc_perf_fb_ctrs fb_ctrs = {0};
+>>  	struct cppc_cpudata *cpu_data;
+>>  	unsigned long local_freq_scale;
+>>  	u64 perf;
+>>  
+>> -	cppc_fi = container_of(work, struct cppc_freq_invariance, work);
+>>  	cpu_data = cppc_fi->cpu_data;
+>>  
+>>  	if (cppc_get_perf_ctrs(cppc_fi->cpu, &fb_ctrs)) {
+>> @@ -104,6 +97,14 @@ static void cppc_scale_freq_workfn(struct kthread_work *work)
+>>  	per_cpu(arch_freq_scale, cppc_fi->cpu) = local_freq_scale;
+>>  }
+>>  
+>> +static void cppc_scale_freq_workfn(struct kthread_work *work)
+>> +{
+>> +	struct cppc_freq_invariance *cppc_fi;
+>> +
+>> +	cppc_fi = container_of(work, struct cppc_freq_invariance, work);
+>> +	__cppc_scale_freq_tick(cppc_fi);
+>> +}
+>> +
+>>  static void cppc_irq_work(struct irq_work *irq_work)
+>>  {
+>>  	struct cppc_freq_invariance *cppc_fi;
+>> @@ -112,7 +113,14 @@ static void cppc_irq_work(struct irq_work *irq_work)
+>>  	kthread_queue_work(kworker_fie, &cppc_fi->work);
+>>  }
+>>  
+>> -static void cppc_scale_freq_tick(void)
+>> +/*
+>> + * Reading perf counters may sleep if the CPC regs are in PCC.  Thus, we
+>> + * schedule an irq work in scale_freq_tick (since we reach here from hard-irq
+>> + * context), which then schedules a normal work item cppc_scale_freq_workfn()
+>> + * that updates the per_cpu arch_freq_scale variable based on the counter
+>> + * updates since the last tick.
+>> + */
+>> +static void cppc_scale_freq_tick_pcc(void)
+>>  {
+>>  	struct cppc_freq_invariance *cppc_fi = &per_cpu(cppc_freq_inv, smp_processor_id());
+>>  
+>> @@ -123,6 +131,11 @@ static void cppc_scale_freq_tick(void)
+>>  	irq_work_queue(&cppc_fi->irq_work);
+>>  }
+>>  
+>> +static void cppc_scale_freq_tick(void)
+>> +{
+>> +	__cppc_scale_freq_tick(&per_cpu(cppc_freq_inv, smp_processor_id()));
+>> +}
+>> +
+>>  static struct scale_freq_data cppc_sftd = {
+>>  	.source = SCALE_FREQ_SOURCE_CPPC,
+>>  	.set_freq_scale = cppc_scale_freq_tick,
+>> @@ -140,8 +153,10 @@ static void cppc_cpufreq_cpu_fie_init(struct cpufreq_policy *policy)
+>>  		cppc_fi = &per_cpu(cppc_freq_inv, cpu);
+>>  		cppc_fi->cpu = cpu;
+>>  		cppc_fi->cpu_data = policy->driver_data;
+>> -		kthread_init_work(&cppc_fi->work, cppc_scale_freq_workfn);
+>> -		init_irq_work(&cppc_fi->irq_work, cppc_irq_work);
+>> +		if (cppc_perf_ctrs_in_pcc()) {
+> I'm wondering if we really need to go through all present cpus every time this
+> check is needed. Maybe the result of it could be stashed somehow, especially now
+> that more invocations are added.
+Make sense.  I'll have a look whether it's safe to stash that in
+cppc_freq_invariance_init() and use the stashed value later.
+
+Thanks!
+Jie
 > 
-> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
 > ---
->  Documentation/devicetree/bindings/.yamllint                  | 2 +-
->  Documentation/devicetree/bindings/arm/psci.yaml              | 1 -
->  .../bindings/clock/allwinner,sun4i-a10-gates-clk.yaml        | 1 -
->  .../devicetree/bindings/clock/renesas,cpg-mssr.yaml          | 1 -
->  .../devicetree/bindings/clock/xlnx,clocking-wizard.yaml      | 1 -
->  .../display/allwinner,sun4i-a10-display-frontend.yaml        | 1 -
->  .../devicetree/bindings/display/allwinner,sun6i-a31-drc.yaml | 1 -
->  .../bindings/display/allwinner,sun8i-a83t-dw-hdmi.yaml       | 1 -
->  .../devicetree/bindings/display/amlogic,meson-vpu.yaml       | 1 -
->  .../devicetree/bindings/display/bridge/adi,adv7511.yaml      | 1 -
->  .../devicetree/bindings/display/bridge/lvds-codec.yaml       | 1 -
->  .../devicetree/bindings/display/bridge/toshiba,tc358767.yaml | 1 -
->  .../devicetree/bindings/display/ilitek,ili9486.yaml          | 1 -
->  Documentation/devicetree/bindings/display/msm/gpu.yaml       | 1 -
->  .../devicetree/bindings/display/panel/panel-timing.yaml      | 1 -
->  .../devicetree/bindings/display/panel/tpo,tpg110.yaml        | 1 -
->  .../devicetree/bindings/display/rockchip/rockchip,dw-dp.yaml | 1 -
->  .../devicetree/bindings/display/simple-framebuffer.yaml      | 1 -
->  .../devicetree/bindings/dma/snps,dma-spear1340.yaml          | 1 -
->  Documentation/devicetree/bindings/dma/stericsson,dma40.yaml  | 1 -
->  .../devicetree/bindings/dma/stm32/st,stm32-dma.yaml          | 1 -
->  Documentation/devicetree/bindings/edac/apm,xgene-edac.yaml   | 1 -
->  .../devicetree/bindings/firmware/qemu,fw-cfg-mmio.yaml       | 1 -
->  Documentation/devicetree/bindings/fpga/fpga-region.yaml      | 5 -----
->  .../devicetree/bindings/gpio/brcm,xgs-iproc-gpio.yaml        | 1 -
->  .../devicetree/bindings/gpio/fairchild,74hc595.yaml          | 1 -
->  Documentation/devicetree/bindings/hwmon/adi,ltc2947.yaml     | 1 -
->  Documentation/devicetree/bindings/hwmon/adi,max31827.yaml    | 1 -
->  Documentation/devicetree/bindings/hwmon/national,lm90.yaml   | 1 -
->  Documentation/devicetree/bindings/hwmon/ti,tmp513.yaml       | 1 -
->  Documentation/devicetree/bindings/hwmon/ti,tps23861.yaml     | 1 -
->  Documentation/devicetree/bindings/i2c/i2c-mux-gpmux.yaml     | 1 -
->  .../devicetree/bindings/i2c/realtek,rtl9301-i2c.yaml         | 1 -
->  Documentation/devicetree/bindings/i2c/tsd,mule-i2c-mux.yaml  | 2 --
->  Documentation/devicetree/bindings/iio/adc/adi,ad7380.yaml    | 1 -
->  Documentation/devicetree/bindings/iio/adc/adi,ad7606.yaml    | 1 -
->  Documentation/devicetree/bindings/iio/adc/adi,ad7949.yaml    | 1 -
->  Documentation/devicetree/bindings/iio/adc/adi,ade9000.yaml   | 1 -
->  .../devicetree/bindings/iio/adc/cosmic,10001-adc.yaml        | 1 -
->  Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml  | 1 -
->  .../devicetree/bindings/iio/adc/x-powers,axp209-adc.yaml     | 1 -
->  .../devicetree/bindings/iio/afe/voltage-divider.yaml         | 1 -
->  .../devicetree/bindings/iio/frequency/adi,admv4420.yaml      | 1 -
->  .../devicetree/bindings/iio/pressure/murata,zpa2326.yaml     | 1 -
->  .../devicetree/bindings/iio/proximity/semtech,sx9324.yaml    | 1 -
->  .../devicetree/bindings/iio/temperature/adi,ltc2983.yaml     | 1 -
->  Documentation/devicetree/bindings/input/ti,drv266x.yaml      | 1 -
->  .../devicetree/bindings/interconnect/qcom,rpmh.yaml          | 1 -
->  .../devicetree/bindings/interrupt-controller/arm,gic-v3.yaml | 1 -
->  .../bindings/interrupt-controller/aspeed,ast2700-intc.yaml   | 1 -
->  .../bindings/interrupt-controller/fsl,vf610-mscm-ir.yaml     | 1 -
->  .../bindings/interrupt-controller/loongson,liointc.yaml      | 1 -
->  .../bindings/interrupt-controller/mediatek,mtk-cirq.yaml     | 1 -
->  .../bindings/interrupt-controller/mscc,ocelot-icpu-intr.yaml | 1 -
->  Documentation/devicetree/bindings/iommu/arm,smmu.yaml        | 4 ----
->  Documentation/devicetree/bindings/mailbox/arm,mhu.yaml       | 1 -
->  Documentation/devicetree/bindings/mailbox/arm,mhuv2.yaml     | 1 -
->  Documentation/devicetree/bindings/mailbox/mtk,adsp-mbox.yaml | 1 -
->  Documentation/devicetree/bindings/media/amphion,vpu.yaml     | 1 -
->  Documentation/devicetree/bindings/media/i2c/adi,adv7604.yaml | 2 --
->  .../devicetree/bindings/media/i2c/techwell,tw9900.yaml       | 1 -
->  Documentation/devicetree/bindings/media/nxp,imx8-jpeg.yaml   | 1 -
->  .../devicetree/bindings/media/qcom,sc8280xp-camss.yaml       | 1 -
->  .../bindings/media/samsung,exynos4212-fimc-is.yaml           | 1 -
->  .../devicetree/bindings/media/samsung,s5pv210-jpeg.yaml      | 1 -
->  Documentation/devicetree/bindings/media/st,stm32-dma2d.yaml  | 1 -
->  .../devicetree/bindings/media/video-interface-devices.yaml   | 4 ----
->  .../memory-controllers/qcom,ebi2-peripheral-props.yaml       | 1 -
->  Documentation/devicetree/bindings/mfd/stericsson,ab8500.yaml | 1 -
->  .../devicetree/bindings/mtd/amlogic,meson-nand.yaml          | 1 -
->  .../devicetree/bindings/mtd/marvell,nand-controller.yaml     | 1 -
->  Documentation/devicetree/bindings/mux/mux-controller.yaml    | 1 -
->  .../devicetree/bindings/net/allwinner,sun8i-a83t-emac.yaml   | 2 --
->  Documentation/devicetree/bindings/net/brcm,bcmgenet.yaml     | 1 -
->  .../devicetree/bindings/net/brcm,mdio-mux-iproc.yaml         | 1 -
->  .../devicetree/bindings/net/cortina,gemini-ethernet.yaml     | 1 -
->  Documentation/devicetree/bindings/net/fsl,gianfar.yaml       | 2 --
->  .../devicetree/bindings/net/mdio-mux-multiplexer.yaml        | 1 -
->  Documentation/devicetree/bindings/net/qcom,ipa.yaml          | 1 -
->  Documentation/devicetree/bindings/net/ti,cpsw-switch.yaml    | 1 -
->  .../devicetree/bindings/net/wireless/ti,wlcore.yaml          | 1 -
->  .../devicetree/bindings/pci/altr,pcie-root-port.yaml         | 1 -
->  Documentation/devicetree/bindings/pci/loongson.yaml          | 1 -
->  Documentation/devicetree/bindings/pci/rockchip-dw-pcie.yaml  | 1 -
->  .../devicetree/bindings/pci/starfive,jh7110-pcie.yaml        | 1 -
->  Documentation/devicetree/bindings/pci/versatile.yaml         | 1 -
->  .../bindings/phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml         | 1 -
->  .../devicetree/bindings/pinctrl/brcm,bcm21664-pinctrl.yaml   | 1 -
->  .../devicetree/bindings/pinctrl/fsl,imx9-pinctrl.yaml        | 1 -
->  .../devicetree/bindings/pinctrl/qcom,qcs404-pinctrl.yaml     | 1 -
->  .../bindings/pinctrl/qcom,sm6115-lpass-lpi-pinctrl.yaml      | 1 -
->  .../devicetree/bindings/pinctrl/qcom,sm6125-tlmm.yaml        | 1 -
->  .../devicetree/bindings/pinctrl/renesas,rza1-ports.yaml      | 3 ---
->  .../devicetree/bindings/pinctrl/starfive,jh7100-pinctrl.yaml | 1 -
->  .../devicetree/bindings/power/supply/mt6360_charger.yaml     | 1 -
->  .../bindings/power/supply/stericsson,ab8500-charger.yaml     | 1 -
->  .../devicetree/bindings/pwm/allwinner,sun4i-a10-pwm.yaml     | 1 -
->  .../bindings/regulator/richtek,rt6245-regulator.yaml         | 1 -
->  .../devicetree/bindings/remoteproc/ti,k3-r5f-rproc.yaml      | 2 --
->  Documentation/devicetree/bindings/reset/ti,sci-reset.yaml    | 1 -
->  .../bindings/rng/inside-secure,safexcel-eip76.yaml           | 2 --
->  .../devicetree/bindings/soc/fsl/cpm_qe/fsl,qe-muram.yaml     | 1 -
->  .../devicetree/bindings/soc/mediatek/mediatek,mutex.yaml     | 1 -
->  .../bindings/soc/microchip/atmel,at91rm9200-tcb.yaml         | 1 -
->  Documentation/devicetree/bindings/soc/rockchip/grf.yaml      | 1 -
->  Documentation/devicetree/bindings/soc/ti/ti,pruss.yaml       | 3 ---
->  Documentation/devicetree/bindings/sound/adi,adau1372.yaml    | 1 -
->  Documentation/devicetree/bindings/sound/adi,adau7118.yaml    | 1 -
->  .../devicetree/bindings/sound/rockchip,i2s-tdm.yaml          | 1 -
->  .../devicetree/bindings/sound/rockchip,rk3328-codec.yaml     | 2 +-
->  Documentation/devicetree/bindings/sound/samsung,tm2.yaml     | 1 -
->  .../devicetree/bindings/sound/ti,tlv320dac3100.yaml          | 1 -
->  Documentation/devicetree/bindings/sound/wlf,wm8903.yaml      | 1 -
->  .../devicetree/bindings/timer/nvidia,tegra-timer.yaml        | 1 -
->  .../devicetree/bindings/timer/nvidia,tegra186-timer.yaml     | 1 -
->  Documentation/devicetree/bindings/usb/qcom,pmic-typec.yaml   | 1 -
->  116 files changed, 2 insertions(+), 136 deletions(-)
+> BR
+> Beata
+>> +			kthread_init_work(&cppc_fi->work, cppc_scale_freq_workfn);
+>> +			init_irq_work(&cppc_fi->irq_work, cppc_irq_work);
+>> +		}
+>>  
+>>  		ret = cppc_get_perf_ctrs(cpu, &cppc_fi->prev_perf_fb_ctrs);
+>>  		if (ret && cpu_online(cpu)) {
+>> @@ -174,6 +189,9 @@ static void cppc_cpufreq_cpu_fie_exit(struct cpufreq_policy *policy)
+>>  	/* policy->cpus will be empty here, use related_cpus instead */
+>>  	topology_clear_scale_freq_source(SCALE_FREQ_SOURCE_CPPC, policy->related_cpus);
+>>  
+>> +	if (!cppc_perf_ctrs_in_pcc())
+>> +		return;
+>> +
+>>  	for_each_cpu(cpu, policy->related_cpus) {
+>>  		cppc_fi = &per_cpu(cppc_freq_inv, cpu);
+>>  		irq_work_sync(&cppc_fi->irq_work);
+>> @@ -206,9 +224,11 @@ static void __init cppc_freq_invariance_init(void)
+>>  		}
+>>  	}
+>>  
+>> -	if (fie_disabled)
+>> +	if (fie_disabled || !cppc_perf_ctrs_in_pcc())
+>>  		return;
+>>  
+>> +	cppc_sftd.set_freq_scale = cppc_scale_freq_tick_pcc;
+>> +
+>>  	kworker_fie = kthread_run_worker(0, "cppc_fie");
+>>  	if (IS_ERR(kworker_fie)) {
+>>  		pr_warn("%s: failed to create kworker_fie: %ld\n", __func__,
+>> @@ -228,7 +248,7 @@ static void __init cppc_freq_invariance_init(void)
+>>  
+>>  static void cppc_freq_invariance_exit(void)
+>>  {
+>> -	if (fie_disabled)
+>> +	if (fie_disabled || !cppc_perf_ctrs_in_pcc())
+>>  		return;
+>>  
+>>  	kthread_destroy_worker(kworker_fie);
+>> -- 
+>> 2.33.0
+>>
 > 
-
-...
-
-> diff --git a/Documentation/devicetree/bindings/pci/starfive,jh7110-pcie.yaml b/Documentation/devicetree/bindings/pci/starfive,jh7110-pcie.yaml
-> index 5f432452c815..33c80626e8ec 100644
-> --- a/Documentation/devicetree/bindings/pci/starfive,jh7110-pcie.yaml
-> +++ b/Documentation/devicetree/bindings/pci/starfive,jh7110-pcie.yaml
-> @@ -16,7 +16,6 @@ properties:
->    compatible:
->      const: starfive,jh7110-pcie
->  
-> -
->    reg:
->      maxItems: 2
->  
-
-...
-
-> diff --git a/Documentation/devicetree/bindings/pinctrl/starfive,jh7100-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/starfive,jh7100-pinctrl.yaml
-> index f3258f2fd3a4..3f14eab01c54 100644
-> --- a/Documentation/devicetree/bindings/pinctrl/starfive,jh7100-pinctrl.yaml
-> +++ b/Documentation/devicetree/bindings/pinctrl/starfive,jh7100-pinctrl.yaml
-> @@ -32,7 +32,6 @@ description: |
->      | | |     |   |   |          -------
->      UART0     UART1 --
->  
-> -
->    The big MUX in the diagram only has 7 different ways of mapping peripherals
->    on the left to pins on the right. StarFive calls the 7 configurations "signal
->    groups".
-
-Reviewed-by: Hal Feng <hal.feng@starfivetech.com>
-
-Best regards,
-Hal
 
