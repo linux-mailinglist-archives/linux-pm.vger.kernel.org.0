@@ -1,166 +1,166 @@
-Return-Path: <linux-pm+bounces-37179-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37180-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 65BAAC24E89
-	for <lists+linux-pm@lfdr.de>; Fri, 31 Oct 2025 13:03:32 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 77D37C25014
+	for <lists+linux-pm@lfdr.de>; Fri, 31 Oct 2025 13:30:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BF1CA189BB64
-	for <lists+linux-pm@lfdr.de>; Fri, 31 Oct 2025 12:03:48 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 21B85350D5A
+	for <lists+linux-pm@lfdr.de>; Fri, 31 Oct 2025 12:30:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B2203054C2;
-	Fri, 31 Oct 2025 12:03:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7261D2DC78B;
+	Fri, 31 Oct 2025 12:30:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=dwurp.de header.i=@dwurp.de header.b="ZAYGvruo"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="f7SbTAvU"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail.dwurp.de (mail.dwurp.de [185.183.156.149])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE38730DD2A
-	for <linux-pm@vger.kernel.org>; Fri, 31 Oct 2025 12:03:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.183.156.149
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF0D41B142D;
+	Fri, 31 Oct 2025 12:30:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761912198; cv=none; b=oAUPqR0hsgKMxJdDoqswufzzk7yeHxRKQHp+kLxkeBBAooTKeFsMx0jB9brsf2PwY07pS/mXDRuhCzU8Hlqslq/W9Hnk5WoL43jPJp622x/tq6Xg7lTgWSJEfL9wOoDM+1wuLLLywzhpPd8aJbUFTTcanp4PA5nBTMnFsBJswaE=
+	t=1761913854; cv=none; b=Na57PyCDpAMEeoctr2fSNhROrZN92NLIsh0PA+kejwdfwtnPHGL/xKNoPAs+gV7PskOZSxjpAqQ4Gf/Jb1tGhNQZtU0D4su2VeV9XrYmzpViUkjAJk5ikAAiH29AfQ0/10vWV+tsZP/xLORjwb3P4A+zRAcgoGUJFBRoFjwZheY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761912198; c=relaxed/simple;
-	bh=mIJRpM7OMor0+Ent7b8EP0n6f3sY/K0CCDHCl8CUCfY=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type; b=PURLmVC2KO3mCSkukPqaSJwwRwm4PmuymfULd5lc/us6JTLs3w4VUcPz2/1VRLpYJzoUXChv0WdkNW3ncXNURyBEsI5F0dJg/wlWy143Cm2bROn4OGXhOaL5ygGz3SkGhsuPXi0MiNnl17W61LFXF8WcOpZ0n5AsCPuAi4uJ+Tg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=dwurp.de; spf=pass smtp.mailfrom=dwurp.de; dkim=pass (1024-bit key) header.d=dwurp.de header.i=@dwurp.de header.b=ZAYGvruo; arc=none smtp.client-ip=185.183.156.149
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=dwurp.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dwurp.de
-Message-ID: <078eef57-07c9-420a-99b1-e47b3dd93204@dwurp.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dwurp.de; s=mail;
-	t=1761912185;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=z7YtlgvEMBaBPvri+yrStwdxL2p0WLfpE3WhraNm/fE=;
-	b=ZAYGvruoMmOg9C7r5s4ecnj6RaLMN1a5LVei2ntznAMWU45g1Nji5fpKABuez1p3uhfMxO
-	QQfYT8XufpBUpgf1jCsdzg9pnvvTL2u79VuO5KDJg11G0+5O1gX/LEb2jGFhO6YLjooIui
-	2fwo67Hud6tSNtiINh1n5sLHFdsTG9A=
-Date: Fri, 31 Oct 2025 13:03:02 +0100
+	s=arc-20240116; t=1761913854; c=relaxed/simple;
+	bh=EKUBekgrM5YHzOr1CYFWpexPh2n9tyOsa3c5XVlztVs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kyRf7GMhuLdQor/fk6nNKJIIxTqPG0NICWs+cPU+IIO8FjmT4qUl45k1hTrCm0YKOxDkQR1sTMvxWolI3FiKe2B1nYd1SJgUAvsAdzmlH/Yc1G3pv2jr0G29gtOhjhNlaNoX3V78cVdjloDeH9oGi0o3XgN7fAKPEy7idASJnCw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=f7SbTAvU; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1761913852; x=1793449852;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=EKUBekgrM5YHzOr1CYFWpexPh2n9tyOsa3c5XVlztVs=;
+  b=f7SbTAvUUW1VK17EL9ske+KKNwt15/n+fWtafxwnHw6pCGgIYVBF7eof
+   9kiW+GEhC9EvCNdqCjdQeqYifIk6znlnPp3qBdtXBzTKy+skTQejQVKMn
+   UKnTPs4VMqAPV22tfsYzoyjD5qSEX8MdAxDW5U8FbowBdQfQgXOnhPcUk
+   g74egpKML2ejMljzOoFL9CpppfJWfRkMLp0FGCKLrYkuBYVY3fTn2k1Ze
+   BRzHFy+4lZ0daFZ/QdFHczvt+EiS1yOz5g3BIBkHtRdXnJA1LQGbJpSFy
+   ZQUAiDYFlheQQZbGkm+9K1i4Zr6Z0UnhKzFyM85YZzBnVxTW7p5aijg7W
+   A==;
+X-CSE-ConnectionGUID: 2dPckrK1QaKdg8VQJ0zouQ==
+X-CSE-MsgGUID: NraQ9150QUSdjnqGjRX4Og==
+X-IronPort-AV: E=McAfee;i="6800,10657,11598"; a="64224877"
+X-IronPort-AV: E=Sophos;i="6.19,269,1754982000"; 
+   d="scan'208";a="64224877"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2025 05:30:52 -0700
+X-CSE-ConnectionGUID: XmVY6QafQyWfspjt3dEkwQ==
+X-CSE-MsgGUID: YLrRAJLMSxe/Mv9d4uWDQg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,269,1754982000"; 
+   d="scan'208";a="185498784"
+Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
+  by orviesa010.jf.intel.com with ESMTP; 31 Oct 2025 05:30:49 -0700
+Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vEoHH-000N64-0O;
+	Fri, 31 Oct 2025 12:30:47 +0000
+Date: Fri, 31 Oct 2025 20:29:46 +0800
+From: kernel test robot <lkp@intel.com>
+To: Samuel Wu <wusamuel@google.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Len Brown <lenb@kernel.org>, Pavel Machek <pavel@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Danilo Krummrich <dakr@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	tuhaowen@uniontech.com, Samuel Wu <wusamuel@google.com>,
+	Saravana Kannan <saravanak@google.com>, kernel-team@android.com,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6] PM: Support aborting sleep during filesystem sync
+Message-ID: <202510312012.eHtS316T-lkp@intel.com>
+References: <20251030210110.298612-1-wusamuel@google.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Sebastian Fleer <dev@dwurp.de>
-Subject: power_supply sbs-9-000b: driver failed to report `technology'
- property: -5 on rk3399 google-gru
-To: Sebastian Reichel <sre@kernel.org>
-Cc: linux-pm@vger.kernel.org
-Content-Language: en-US, de-DE
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251030210110.298612-1-wusamuel@google.com>
 
-Hi,
+Hi Samuel,
 
-on an Acer Chromebook Tab 10 (RK3399 google-gru/scarlet) we see a lot of these error messages
-(sometime multiple times per second):
+kernel test robot noticed the following build errors:
 
-[  247.155467] power_supply sbs-9-000b: driver failed to report `technology' property: -5
+[auto build test ERROR on rafael-pm/linux-next]
+[also build test ERROR on rafael-pm/bleeding-edge linus/master v6.18-rc3 next-20251031]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-With POWER_SUPPLY_DEBUG=y these look like this:
+url:    https://github.com/intel-lab-lkp/linux/commits/Samuel-Wu/PM-Support-aborting-sleep-during-filesystem-sync/20251031-050330
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+patch link:    https://lore.kernel.org/r/20251030210110.298612-1-wusamuel%40google.com
+patch subject: [PATCH v6] PM: Support aborting sleep during filesystem sync
+config: sparc64-randconfig-002-20251031 (https://download.01.org/0day-ci/archive/20251031/202510312012.eHtS316T-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project d1c086e82af239b245fe8d7832f2753436634990)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251031/202510312012.eHtS316T-lkp@intel.com/reproduce)
 
-[  142.335138] power_supply sbs-9-000b: driver failed to report `technology' property: -5
-[  142.352393] sbs-battery 9-000b: sbs_unit_adjustment: no need for unit conversion 0
-[  142.352437] sbs-battery 9-000b: sbs_get_property: property = 0, value = 1
-[  142.353283] sbs-battery 9-000b: sbs_unit_adjustment: no need for unit conversion 51
-[  142.353310] sbs-battery 9-000b: sbs_get_property: property = 51, value = 0
-[  142.355202] sbs-battery 9-000b: sbs_unit_adjustment: no need for unit conversion 2
-[  142.355231] sbs-battery 9-000b: sbs_get_property: property = 2, value = 0
-[  142.359681] sbs-battery 9-000b: sbs_read_string_data_fallback: i2c read at address 0x22 failed
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510312012.eHtS316T-lkp@intel.com/
 
-Battery status reporting with upower seems to be hit or miss:
+All errors (new ones prefixed by >>):
 
-$ upower -i /org/freedesktop/UPower/devices/battery_sbs_9_000b
-   native-path:          sbs-9-000b
-   vendor:               <unkn>
-   model:                <BATT>
-   serial:               ffff
-   power supply:         yes
-   updated:              Fri Oct 31 12:41:02 2025 (3 seconds ago)
-   has history:          yes
-   has statistics:       yes
-   battery
-     present:             yes
-     rechargeable:        yes
-     state:               discharging
-     warning-level:       action
-     energy:              0 Wh
-     energy-empty:        0 Wh
-     energy-full:         36.55 Wh
-     energy-full-design:  33.78 Wh
-     voltage-min-design:  3.84 V
-     voltage-max-design:  3.84 V
-     energy-rate:         0 W
-     charge-cycles:       N/A
-     percentage:          0%
-     temperature:         23.9 degrees C
-     capacity:            100%
-     icon-name:          'battery-caution-symbolic'
-   History (charge):
-     1761910862  0.000   discharging
-     1761910806  62.000  discharging
-     1761910801  0.000   discharging
-     1761910796  62.000  discharging
-     1761910791  0.000   empty
-     1761910755  62.000  discharging
-   History (rate):
-     1761910851  0.000   discharging
-     1761910821  4.380   discharging
-     1761910791  0.000   empty
-     1761910760  1.658   discharging
+>> kernel/power/main.c:1159:10: error: call to undeclared function 'pm_start_fs_sync_workqueue'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1159 |         error = pm_start_fs_sync_workqueue();
+         |                 ^
+   kernel/power/main.c:1159:10: note: did you mean 'pm_start_workqueue'?
+   kernel/power/main.c:1147:19: note: 'pm_start_workqueue' declared here
+    1147 | static int __init pm_start_workqueue(void)
+         |                   ^
+    1148 | {
+    1149 |         pm_wq = alloc_workqueue("pm", WQ_FREEZABLE | WQ_UNBOUND, 0);
+    1150 | 
+    1151 |         return pm_wq ? 0 : -ENOMEM;
+    1152 | }
+    1153 | 
+    1154 | static int __init pm_init(void)
+    1155 | {
+    1156 |         int error = pm_start_workqueue();
+    1157 |         if (error)
+    1158 |                 return error;
+    1159 |         error = pm_start_fs_sync_workqueue();
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                 pm_start_workqueue
+   1 error generated.
 
-$ upower -i /org/freedesktop/UPower/devices/battery_sbs_9_000b
-   native-path:          sbs-9-000b
-   vendor:               <unkn>
-   model:                <BATT>
-   serial:               ffff
-   power supply:         yes
-   updated:              Fri Oct 31 12:41:07 2025 (18 seconds ago)
-   has history:          yes
-   has statistics:       yes
-   battery
-     present:             yes
-     rechargeable:        yes
-     state:               discharging
-     warning-level:       none
-     energy:              22.6548 Wh
-     energy-empty:        0 Wh
-     energy-full:         36.54 Wh
-     energy-full-design:  33.77 Wh
-     voltage-min-design:  3.84 V
-     voltage-max-design:  3.84 V
-     capacity-level:      Unknown
-     energy-rate:         73.1904 W
-     charge-cycles:       N/A
-     time to empty:       18.6 minutes
-     percentage:          62%
-     capacity:            100%
-     icon-name:          'battery-full-symbolic'
-   History (charge):
-     1761910867  62.000  discharging
-     1761910862  0.000   discharging
-     1761910806  62.000  discharging
-     1761910801  0.000   discharging
-     1761910796  62.000  discharging
-     1761910791  0.000   empty
-   History (rate):
-     1761910867  73.190  discharging
-     1761910851  0.000   discharging
-     1761910821  4.380   discharging
-     1761910791  0.000   empty
 
-These errors show up with kernel 6.12.55 as well as 6.17.5.
+vim +/pm_start_fs_sync_workqueue +1159 kernel/power/main.c
 
-More context is available here: https://gitlab.postmarketos.org/postmarketOS/pmaports/-/issues/2261
+  1153	
+  1154	static int __init pm_init(void)
+  1155	{
+  1156		int error = pm_start_workqueue();
+  1157		if (error)
+  1158			return error;
+> 1159		error = pm_start_fs_sync_workqueue();
+  1160		if (error)
+  1161			return error;
+  1162		hibernate_image_size_init();
+  1163		hibernate_reserved_size_init();
+  1164		pm_states_init();
+  1165		power_kobj = kobject_create_and_add("power", NULL);
+  1166		if (!power_kobj)
+  1167			return -ENOMEM;
+  1168		error = sysfs_create_groups(power_kobj, attr_groups);
+  1169		if (error)
+  1170			return error;
+  1171		pm_print_times_init();
+  1172		return pm_autosleep_init();
+  1173	}
+  1174	
 
-Any idea on how to fix this is highly appreciated.
-
-Best regards
-Sebastian
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
