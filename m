@@ -1,173 +1,139 @@
-Return-Path: <linux-pm+bounces-37194-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37195-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 194EBC25929
-	for <lists+linux-pm@lfdr.de>; Fri, 31 Oct 2025 15:30:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 58E26C2597D
+	for <lists+linux-pm@lfdr.de>; Fri, 31 Oct 2025 15:35:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 38EEA1A26E00
-	for <lists+linux-pm@lfdr.de>; Fri, 31 Oct 2025 14:30:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C6ADD1A6165E
+	for <lists+linux-pm@lfdr.de>; Fri, 31 Oct 2025 14:35:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EE4834C13F;
-	Fri, 31 Oct 2025 14:29:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C98BF34C989;
+	Fri, 31 Oct 2025 14:34:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="m/llmHWP"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cvZlJupw"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7926234BA5C;
-	Fri, 31 Oct 2025 14:29:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D666D34C811;
+	Fri, 31 Oct 2025 14:34:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761920997; cv=none; b=n14dpXEq2e/hECGKfujc9AB0EbuOgQHfWcXnP/NJqZKGDnapYfPWuVOCx1N381TUxSNkiB4QlCpJ59KMypefT1fJDU0IoDFFuec2r95YV3zZ6KG1c7WJvNaa9vp+2ExKlqmKfQW6fTXQQjRkKPnmbifeoV9+AmnO1ghFwgfswOM=
+	t=1761921272; cv=none; b=dciDHKUEZ3PUwTej1ZIq0ni9ZTjxPI31Q2bZ9GPNJnif2rnfJrzV3Is+xvYcMaXyAZ3sy0BfSATXD+T4WvHLImCPXbCzrWjc+b44i96n55MhQJJcez8iZgZ+AQ5regRtG6CsD0XT4bV3ZbVLYcV2b2uu1wALjsSxzzrEzxoprB0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761920997; c=relaxed/simple;
-	bh=DpRmmnQNFBCQ/QafgwFnqLT9Yw/H1JWWO9tLoLVtAy4=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=LRiJNLWcnqkDFoYr5w1+yKPbVMU8T/15UZKg7VB9CPNoid0taKLhOew+ODO8O+T7+EqbXU7eNz8kY/rL+iBw/WOi8fgz5FbtncGBZtKnRRozKBHcVRcidP6SJnTLQnW0MvI9esOamXnUbuX8wR2UkPasvHHP/u/iFENq04OZRd8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=m/llmHWP; arc=none smtp.client-ip=185.246.84.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id EF21C1A17AF;
-	Fri, 31 Oct 2025 14:29:51 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id BF96E60710;
-	Fri, 31 Oct 2025 14:29:51 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id C4B4A11818003;
-	Fri, 31 Oct 2025 15:29:31 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1761920989; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=H1xEmCgdr5BM399Kc4ZsWwaTbhEQ52MJYYiQpqbSK6Q=;
-	b=m/llmHWPK2GTOxgP86qebD1Z2Edet7KZozbxg7xHP71zP8WGHqlNCsjTjzbgRJW6AoYEg9
-	PGGuEBK7TNuc+3zADlLbC1jrjiYc/TXhPfAwEtjv3025kcM3TvB0cUwMNtHDn+fuYXbapk
-	18lKsj6lpv1/ObuOPQiBVRZx/Tm+zaLVFOXH7eT76X6+OiJSchpc3v+iGXicmC9AbAQ7Fi
-	n3R42rQTkma0JCEYRFgzMb9znRzRns4yCbMUv4DSU7pRjgiVIxLEd6NnupsCZT4TGW2iAp
-	n6HmKRiLt0yJEP375+9QgT+CNjKgF6b7Kiq48SW1im8mtyVm7PYpr3cu982RMw==
-Date: Fri, 31 Oct 2025 15:29:30 +0100
-From: Herve Codina <herve.codina@bootlin.com>
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Andrew Lunn <andrew@lunn.ch>, Rob Herring <robh@kernel.org>, Krzysztof
- Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Greg
- Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki"
- <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>, Shawn Guo
- <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix
- Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Andi Shyti <andi.shyti@kernel.org>, Wolfram Sang
- <wsa+renesas@sang-engineering.com>, Peter Rosin <peda@axentia.se>, Arnd
- Bergmann <arnd@arndb.de>, Saravana Kannan <saravanak@google.com>, Bjorn
- Helgaas <bhelgaas@google.com>, Charles Keepax
- <ckeepax@opensource.cirrus.com>, Richard Fitzgerald
- <rf@opensource.cirrus.com>, David Rhodes <david.rhodes@cirrus.com>, Linus
- Walleij <linus.walleij@linaro.org>, Ulf Hansson <ulf.hansson@linaro.org>,
- Mark Brown <broonie@kernel.org>, Andy Shevchenko
- <andriy.shevchenko@linux.intel.com>, Daniel Scally <djrscally@gmail.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>, Sakari Ailus
- <sakari.ailus@linux.intel.com>, Len Brown <lenb@kernel.org>, Davidlohr
- Bueso <dave@stgolabs.net>, Jonathan Cameron <jonathan.cameron@huawei.com>,
- Dave Jiang <dave.jiang@intel.com>, Alison Schofield
- <alison.schofield@intel.com>, Vishal Verma <vishal.l.verma@intel.com>, Ira
- Weiny <ira.weiny@intel.com>, Dan Williams <dan.j.williams@intel.com>, Geert
- Uytterhoeven <geert+renesas@glider.be>, Wolfram Sang <wsa@kernel.org>,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
- linux-clk@vger.kernel.org, linux-i2c@vger.kernel.org,
- linux-pci@vger.kernel.org, linux-sound@vger.kernel.org,
- patches@opensource.cirrus.com, linux-gpio@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-spi@vger.kernel.org,
- linux-acpi@vger.kernel.org, linux-cxl@vger.kernel.org, Allan Nielsen
- <allan.nielsen@microchip.com>, Horatiu Vultur
- <horatiu.vultur@microchip.com>, Steen Hegelund
- <steen.hegelund@microchip.com>, Luca Ceresoli <luca.ceresoli@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v4 05/29] dt-bindings: bus: Add simple-platform-bus
-Message-ID: <20251031152930.3c51a313@bootlin.com>
-In-Reply-To: <CAMuHMdVnsWMB24BTFKwggEXKOtqJ96GWZh2Xz+ogocQHM+=+6Q@mail.gmail.com>
-References: <20251015071420.1173068-1-herve.codina@bootlin.com>
-	<20251015071420.1173068-6-herve.codina@bootlin.com>
-	<CAMuHMdVnsWMB24BTFKwggEXKOtqJ96GWZh2Xz+ogocQHM+=+6Q@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+	s=arc-20240116; t=1761921272; c=relaxed/simple;
+	bh=/g1AxzJQOcya88xAhA0tStQsU9mezZXtDTiynle222Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=R7QscrN+x9qpRSmiKCtDpIsXPXTdIMAOKyCtbA5+FsvR1oGJc4jyTahUapxsIth7Xm1aPvVvntnBuZcjGaLKFpk5m8RyayO87TecL5osp/FObC806ennasEl+t7Hrm2zs/q9pZPgmJDh+myoUJL0T88+3dBGyWbFdYVPrWKkpN8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cvZlJupw; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1761921271; x=1793457271;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/g1AxzJQOcya88xAhA0tStQsU9mezZXtDTiynle222Y=;
+  b=cvZlJupwnd4jtEq6U0PT2GcuxICUJZ0aklBDtrQWyzkWd+EJ7/QCZOSY
+   pXi19iz/GDs9bO3dxHJu62JSPh/xOHEiiBU7vxJZonkQKzpvDeTFluPNR
+   RUmN+zmlbo/gqDkNo9+jPoS96MOlv5vDCQKhk1gMc0G0PfFtt/DFpXPzY
+   g6phIM8UkzoVcxYxkgHesBhpdyqIlx0sAwaF2xVWpwWFKM01O/iyrqkfV
+   NMRqa2lslYOFkP8yOhWw55Bp4GsG35AB+BE2lYO54EyyfMOsHgbHPMhSw
+   P00Mm5Xje1YH57uzw9P0F3SehtA/hua0VhzI4RGDR8+/heHAMXKSLlipm
+   A==;
+X-CSE-ConnectionGUID: r40qX6xxQkC+XhtIRK/zwg==
+X-CSE-MsgGUID: Qxs2tb4bSEiKZXEcG7Mzzg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11599"; a="51654686"
+X-IronPort-AV: E=Sophos;i="6.19,269,1754982000"; 
+   d="scan'208";a="51654686"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2025 07:34:30 -0700
+X-CSE-ConnectionGUID: /EQF3V/oQ/+hpsvXAymnpg==
+X-CSE-MsgGUID: DJ4WcSkuTQmrSZQtuuieLg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,269,1754982000"; 
+   d="scan'208";a="186990352"
+Received: from mgoodin-mobl3.amr.corp.intel.com (HELO ashevche-desk.local) ([10.124.220.66])
+  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2025 07:34:28 -0700
+Received: from andy by ashevche-desk.local with local (Exim 4.98.2)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1vEqCt-00000004IPL-0Zcq;
+	Fri, 31 Oct 2025 16:34:23 +0200
+Date: Fri, 31 Oct 2025 16:34:22 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Christian Marangi <ansuelsmth@gmail.com>
+Cc: Ilia Lin <ilia.lin@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, Raag Jadav <raag.jadav@intel.com>,
+	linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] cpufreq: qcom-nvmem: add compatible fallback for
+ ipq806x for no SMEM
+Message-ID: <aQTI7o1HQYbQ_Pl2@smile.fi.intel.com>
+References: <20251031130835.7953-1-ansuelsmth@gmail.com>
+ <20251031130835.7953-4-ansuelsmth@gmail.com>
+ <aQS5FpuOWk1bWnQd@smile.fi.intel.com>
+ <6904c563.050a0220.a13ee.0212@mx.google.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6904c563.050a0220.a13ee.0212@mx.google.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-On Fri, 31 Oct 2025 09:52:16 +0100
-Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+On Fri, Oct 31, 2025 at 03:19:12PM +0100, Christian Marangi wrote:
+> On Fri, Oct 31, 2025 at 03:26:46PM +0200, Andy Shevchenko wrote:
+> > On Fri, Oct 31, 2025 at 02:08:34PM +0100, Christian Marangi wrote:
 
-> Hi Hervé,
-> 
-> On Wed, 15 Oct 2025 at 09:17, Herve Codina <herve.codina@bootlin.com> wrote:
-> > A Simple Platform Bus is a transparent bus that doesn't need a specific
-> > driver to perform operations at bus level.
+...
+
+> > > +		if (of_machine_is_compatible("qcom,ipq8062"))
+> > > +			msm_id = QCOM_ID_IPQ8062;
+> > > +		else if (of_machine_is_compatible("qcom,ipq8065") ||
+> > > +			 of_machine_is_compatible("qcom,ipq8069"))
+> > > +			msm_id = QCOM_ID_IPQ8065;
+> > > +		else if (of_machine_is_compatible("qcom,ipq8064") ||
+> > > +			 of_machine_is_compatible("qcom,ipq8066") ||
+> > > +			 of_machine_is_compatible("qcom,ipq8068"))
+> > > +			msm_id = QCOM_ID_IPQ8064;
+> > 
+> > A nit-pick (in case you need a new version of the series): I would expect
+> > the conditionals be sorted by assigned value.
+> > 
+> > 		if (of_machine_is_compatible("qcom,ipq8062"))
+> > 			msm_id = QCOM_ID_IPQ8062;
+> > 		else if (of_machine_is_compatible("qcom,ipq8064") ||
+> > 			 of_machine_is_compatible("qcom,ipq8066") ||
+> > 			 of_machine_is_compatible("qcom,ipq8068"))
+> > 			msm_id = QCOM_ID_IPQ8064;
+> > 		else if (of_machine_is_compatible("qcom,ipq8065") ||
+> > 			 of_machine_is_compatible("qcom,ipq8069"))
+> > 			msm_id = QCOM_ID_IPQ8065;
 > >
-> > Similar to simple-bus, a Simple Platform Bus allows to automatically
-> > instantiate devices connected to this bus.
-> >
-> > Those devices are instantiated only by the Simple Platform Bus probe
-> > function itself.
-> >
-> > Signed-off-by: Herve Codina <herve.codina@bootlin.com>  
 > 
-> Thanks for your patch!
+> Hi as said in the commit, parsing 65/69 before 64 is needed as we might
+> have compatible like
 > 
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/bus/simple-platform-bus.yaml
-> > @@ -0,0 +1,50 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/bus/simple-platform-bus.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Simple Platform Bus
-> > +
-> > +maintainers:
-> > +  - Herve Codina <herve.codina@bootlin.com>
-> > +
-> > +description: |
-> > +  A Simple Platform Bus is a transparent bus that doesn't need a specific
-> > +  driver to perform operations at bus level.
-> > +
-> > +  Similar to simple-bus, a Simple Platform Bus allows to automatically
-> > +  instantiate devices connected to this bus. Those devices are instantiated
-> > +  only by the Simple Platform Bus probe function itself.  
-> 
-> So what are the differences with simple-bus? That its children are
-> instantiated "only by the Simple Platform Bus probe function itself"?
-> If that is the case, in which other places are simple-bus children
-> instantiated?
+> "qcom,ipq8065","qcom,ipq8064" so we might incorrectly parse msm_id
+> ipq8064.
 
-In of_platform_populate(). It call of_platform_bus_create() which is
-recursive:
-  https://elixir.bootlin.com/linux/v6.14/source/drivers/of/platform.c#L374
+Oh, this is unfortunate. Wouldn't it be possible to use some API that returns
+an index (or an error if not found) of the compatible? I believe we have a such
+for the regular 'compatible' properties.
 
-So children are instantiated out of the bus probe().
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
-> 
-> Do we need properties related to power-management (clocks, power-domains),
-> or will we need a "simple-pm-platform-bus" later? ;-)
-> 
-> FTR, I still think we wouldn't have needed the distinction between
-> "simple-bus" and "simple-pm-bus"...
-
-I would like that. Using simple-pm-bus solves my issue but I don't have any
-clocks or power-domains to set. The simple-pm-bus bus requires at least
-one of them. Even if the driver itself solved my issue, I cannot be
-compliant with its binding.
-
-Best regards,
-Hervé
 
