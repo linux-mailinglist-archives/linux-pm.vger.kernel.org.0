@@ -1,129 +1,149 @@
-Return-Path: <linux-pm+bounces-37181-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37182-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2AC53C250BC
-	for <lists+linux-pm@lfdr.de>; Fri, 31 Oct 2025 13:39:20 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C99BAC250F2
+	for <lists+linux-pm@lfdr.de>; Fri, 31 Oct 2025 13:43:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E4A224E11E6
-	for <lists+linux-pm@lfdr.de>; Fri, 31 Oct 2025 12:39:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 66E643AA15D
+	for <lists+linux-pm@lfdr.de>; Fri, 31 Oct 2025 12:43:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA0B3335569;
-	Fri, 31 Oct 2025 12:39:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1B3134A785;
+	Fri, 31 Oct 2025 12:43:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ruyJKIOO"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ezrt3+t3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C300C1C28E;
-	Fri, 31 Oct 2025 12:39:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D23C3342CA5;
+	Fri, 31 Oct 2025 12:43:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761914356; cv=none; b=VAnxT/+FHev12J6QvwHjOPTP9Cdqa1Ol1KqaBhbpVWeBuGE9KYvyV7NtilrHFagnBKhf1C2y3uI37dK8foPlQqtoc1VVYekalQ79Hac4V4PcQ1i2OIughyq5s0UJnhuD1ZjBaYAVrjmYc8n1x4lNSVAAF0U3DCH/TshDPeNyQ8k=
+	t=1761914622; cv=none; b=uyhVdn3IuUn6RLET10eNb0JvGo6JDxxJFgjyCj7SPF9KQzGKHcHzRvcl5sHfp8cMaILOW9Ua78N5pPdf+/D8dlpyYHCRh+lDLbmLiX8HuHBP1SqN+qnCXGg/895d2s4Y1dKkZC7R4IeHX5ujk4PRaXMq/dPbzoe6iqOWPD0iOKk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761914356; c=relaxed/simple;
-	bh=DUW2HwuVCCP1E1hde9M1EoWIauwT+OPTiC2Rn/96ljA=;
+	s=arc-20240116; t=1761914622; c=relaxed/simple;
+	bh=sF35hppqD3HWncobGIVIUzqVORCZRJuB6R7SU1cG6+U=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dNlGuhHxymjR/+rMyQ5l/wNrnBG+8K7ma8fPPHImXzlz8MCnLEanht35hgsP0OccV1RtJFWPbRILqYZg8rItJulihQo95F0cLmI7TdG44gF03Pr+PmO6NKfDlnkhJQOpvPibhmvgKDUjXspDzF6F0yt/JcHk175QpcqZgI2cbWc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ruyJKIOO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAD88C4CEE7;
-	Fri, 31 Oct 2025 12:39:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761914356;
-	bh=DUW2HwuVCCP1E1hde9M1EoWIauwT+OPTiC2Rn/96ljA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ruyJKIOOtOEEQ+8XOeehhB5S+GDMrNwlnu3aI44VE33hSi1Ioy465llBSJBU4/Luk
-	 4UMoUVh+knOSVCJYWdKaevlOpecb7oKclQv9LDsu6ABuFBIWa/p4RMfL+oHST+6hc5
-	 17lzxbGXPL0L5qJku0v0hThdiu+M2XSGC3GvEj1dfzNx55zGQ6oOtdmXsI6JwYqSNd
-	 szK0Bzgq0m07IQ6Fnad3pRhvoG+nkh8KCzIxurTJCQVpp+aLJS4cmNHfonZHo5VMB/
-	 +ZaW1crRWodnO0gcx+OIVf81QtXMoyeFyXhrpQ3SJUMdCkQZzu7TiT1fW1yJocJr23
-	 rDPdM210bQ7IA==
-Date: Fri, 31 Oct 2025 12:39:09 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Marek Szyprowski <m.szyprowski@samsung.com>
-Cc: Stefan Wahren <wahrenst@gmx.net>, Ulf Hansson <ulf.hansson@linaro.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	bcm-kernel-feedback-list@broadcom.com, Ray Jui <rjui@broadcom.com>,
-	Scott Branden <sbranden@broadcom.com>,
-	Melissa Wen <mwen@igalia.com>,
-	=?iso-8859-1?Q?Ma=EDra?= Canal <mcanal@igalia.com>,
-	Maxime Ripard <mripard@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-	kernel-dev@igalia.com, kernel-list@raspberrypi.com,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	"open list:GENERIC PM DOMAINS" <linux-pm@vger.kernel.org>
-Subject: Re: RPi 4 deferred probe timeout of V3D PM domain
-Message-ID: <3c171b6b-f8f5-4192-a3a3-da453a900316@sirena.org.uk>
-References: <ad07546f-0c2d-4bc2-b794-755b892c7328@sirena.org.uk>
- <a016e7e1-09f7-4056-a855-6cfaa8d51962@gmx.net>
- <10a4ef77-0e70-4ef2-b1df-535b476d256d@sirena.org.uk>
- <ecd75fd5-3131-4d10-ae3d-b6f608d9622a@gmx.net>
- <25e500c2-3dc1-476c-b6c1-ac4098a0501d@sirena.org.uk>
- <d6b14388-e0ab-44f0-b4d9-78adf74c2a7f@gmx.net>
- <d88f6420-5013-4856-99d6-da28f79bd7a5@sirena.org.uk>
- <CGME20251030191426eucas1p29ce063b538b60e4a998bcd32f925267c@eucas1p2.samsung.com>
- <043f1702-52fc-4a83-82f7-683a26851623@gmx.net>
- <b02c8890-4568-4afe-8628-10b77e79bf44@samsung.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=NEy35fTzxvkSOZmyKwf8JXGkBABuYPQYICPe9Ubw/442LQ3Ch1rFOxMKdCChaa0yk7eqtXdRK3XSmIg1w8PDpDrfEhjGXwDBppLW5zmJxLH7qYEE/3cadT6FyLf3ZAHJ6/ZrcVcs+ciBZOe8fByAKhKNtRQUlGX8vYY8PTCthuk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ezrt3+t3; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1761914607; x=1793450607;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=sF35hppqD3HWncobGIVIUzqVORCZRJuB6R7SU1cG6+U=;
+  b=ezrt3+t31QLLFGHgQo6NIgHwvxsx7rJuP39gYI2YnKWIaepA69umuWhQ
+   9QugiwP1BKFMs0V5qetbN7BxqaqGp+LacZgP5sdFfrkhXicn/EIgRjOia
+   61KTk7iopk9SenzAb9SwrJX+qgPLGfvcE9k2JClXK7qIJLQgyIKdhrCUE
+   MYNCVv9dPDn5yumFfi6fMSM3Lh7RjoXM4JDLXBjlrKJgyV91SJxV8nRP8
+   70uK/0iT7cSjKuhT6JGFSGm4nkiU7A1HgszwG4PgtwItiR4VpGpkgE0NA
+   R4By3qO9/OENnqOjpWUetmbPRZrUqLHBh/eNcj8GKvVlptCv7O6hGlVO9
+   A==;
+X-CSE-ConnectionGUID: GU3bK0a7S0SWLpy3A/PTVQ==
+X-CSE-MsgGUID: 8EdR+VC7T+WJngi1x3yjmQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11598"; a="67935027"
+X-IronPort-AV: E=Sophos;i="6.19,269,1754982000"; 
+   d="scan'208";a="67935027"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2025 05:43:22 -0700
+X-CSE-ConnectionGUID: AwmRUQfkS8mQ6Q97oh0umQ==
+X-CSE-MsgGUID: Ko1mJjW+QF6FrzORNVX+vA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,269,1754982000"; 
+   d="scan'208";a="185500706"
+Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
+  by orviesa010.jf.intel.com with ESMTP; 31 Oct 2025 05:43:19 -0700
+Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vEoSz-000N6m-10;
+	Fri, 31 Oct 2025 12:42:55 +0000
+Date: Fri, 31 Oct 2025 20:40:29 +0800
+From: kernel test robot <lkp@intel.com>
+To: Samuel Wu <wusamuel@google.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Len Brown <lenb@kernel.org>, Pavel Machek <pavel@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Danilo Krummrich <dakr@kernel.org>
+Cc: oe-kbuild-all@lists.linux.dev, tuhaowen@uniontech.com,
+	Samuel Wu <wusamuel@google.com>,
+	Saravana Kannan <saravanak@google.com>, kernel-team@android.com,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6] PM: Support aborting sleep during filesystem sync
+Message-ID: <202510312048.Ylb5GU76-lkp@intel.com>
+References: <20251030210110.298612-1-wusamuel@google.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="o3fwRCeo9dva3t0m"
-Content-Disposition: inline
-In-Reply-To: <b02c8890-4568-4afe-8628-10b77e79bf44@samsung.com>
-X-Cookie: Byte your tongue.
-
-
---o3fwRCeo9dva3t0m
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20251030210110.298612-1-wusamuel@google.com>
 
-On Thu, Oct 30, 2025 at 09:12:57PM +0100, Marek Szyprowski wrote:
-> On 30.10.2025 20:13, Stefan Wahren wrote:
+Hi Samuel,
 
-> > Any ideas how to solve this?
+kernel test robot noticed the following build errors:
 
-> As I mentioned in the other thread, this is imho a configuration issue.=
-=20
-> If core modules are distributed on NFS rootfs, then one should increase=
-=20
-> deferred probe timeout by adding deferred_probe_timeout=3D60 to cmdline.=
-=20
+[auto build test ERROR on rafael-pm/linux-next]
+[also build test ERROR on rafael-pm/bleeding-edge linus/master v6.18-rc3 next-20251031]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Like I say I just don't think we should apply timeouts that take things
-out of commision entirely.
+url:    https://github.com/intel-lab-lkp/linux/commits/Samuel-Wu/PM-Support-aborting-sleep-during-filesystem-sync/20251031-050330
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+patch link:    https://lore.kernel.org/r/20251030210110.298612-1-wusamuel%40google.com
+patch subject: [PATCH v6] PM: Support aborting sleep during filesystem sync
+config: arm64-randconfig-r061-20251031 (https://download.01.org/0day-ci/archive/20251031/202510312048.Ylb5GU76-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 15.1.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251031/202510312048.Ylb5GU76-lkp@intel.com/reproduce)
 
-> On the other hand drivers built into the kernel should not depend on the=
-=20
-> resources provided by the drivers built as modules, so maybe it would=20
-> make sense to change CONFIG_CLK_RASPBERRYPI from 'm' to 'y' in=20
-> arch/arm64/configs/defconfig.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510312048.Ylb5GU76-lkp@intel.com/
 
-Or the GPU driver should be moved to a module to match the clock.
+All errors (new ones prefixed by >>):
 
---o3fwRCeo9dva3t0m
-Content-Type: application/pgp-signature; name="signature.asc"
+   kernel/power/main.c: In function 'pm_init':
+>> kernel/power/main.c:1159:17: error: implicit declaration of function 'pm_start_fs_sync_workqueue'; did you mean 'pm_start_workqueue'? [-Wimplicit-function-declaration]
+    1159 |         error = pm_start_fs_sync_workqueue();
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                 pm_start_workqueue
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmkErewACgkQJNaLcl1U
-h9CwoAf/TasMrYudnRIfHbZsVEJFG+6aRlxnjE4Ih5HjcUqIsa72WZFNuGACxeR9
-lPgBRD2CZ8qVpdjik03ktb1PP/EnkwGxy/3elXC/YxgpWgyE4SGmiX668YojrLsw
-ZAzcmwOckrGshx2O2N34zF58asnUSdPRbBVKLMNQ02koZ7brVqtQ1fLJdK9kL9qr
-hu2AUeBcAOUuSGvmQKdg6cRf8owTOEv/hUd/lclvZVnZzK2CV5vs/vZG616sF8Mf
-wo7+WQktr1bs38NGV4NYNtHOpCK5XrrmZUF6kRxN8P+3X3DYWEj3a++itNGUJjz5
-rjOllqjvNXZrwXbKl34E5pNJNpNk8A==
-=MfxU
------END PGP SIGNATURE-----
+vim +1159 kernel/power/main.c
 
---o3fwRCeo9dva3t0m--
+  1153	
+  1154	static int __init pm_init(void)
+  1155	{
+  1156		int error = pm_start_workqueue();
+  1157		if (error)
+  1158			return error;
+> 1159		error = pm_start_fs_sync_workqueue();
+  1160		if (error)
+  1161			return error;
+  1162		hibernate_image_size_init();
+  1163		hibernate_reserved_size_init();
+  1164		pm_states_init();
+  1165		power_kobj = kobject_create_and_add("power", NULL);
+  1166		if (!power_kobj)
+  1167			return -ENOMEM;
+  1168		error = sysfs_create_groups(power_kobj, attr_groups);
+  1169		if (error)
+  1170			return error;
+  1171		pm_print_times_init();
+  1172		return pm_autosleep_init();
+  1173	}
+  1174	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
