@@ -1,104 +1,104 @@
-Return-Path: <linux-pm+bounces-37222-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37223-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A64CBC25B27
-	for <lists+linux-pm@lfdr.de>; Fri, 31 Oct 2025 15:53:44 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A6FCC25B72
+	for <lists+linux-pm@lfdr.de>; Fri, 31 Oct 2025 15:56:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C1E2B3BFED3
-	for <lists+linux-pm@lfdr.de>; Fri, 31 Oct 2025 14:52:39 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 32D1E4F858A
+	for <lists+linux-pm@lfdr.de>; Fri, 31 Oct 2025 14:53:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 963B02E03F9;
-	Fri, 31 Oct 2025 14:46:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07D7C2EDD69;
+	Fri, 31 Oct 2025 14:46:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="g0K+PSTI";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="kVlnmnKe"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="L3DeEiTN";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="DcU7Cu4D"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94BE42D6409
-	for <linux-pm@vger.kernel.org>; Fri, 31 Oct 2025 14:46:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9CA22D836D
+	for <linux-pm@vger.kernel.org>; Fri, 31 Oct 2025 14:46:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761921983; cv=none; b=aWU/Spg1jDIarvNXUR0VrDq9gl6HsnWF/ziLE/ArJoMqRCE4/pbku2SFJ/KTkmhLkFxZGtsBUYpuQtXBPeg1pqmspPSAlvppixg4UVw8El5zoCLy16S3TvBB66dOs/dJkaVS9P5mtg8dedJ0sov1dhvu1eoZ/gOg8et104Vw7w4=
+	t=1761921989; cv=none; b=vBg0QjbHTYBmL76K2Lq9PZEDlSdYWhp57zS2UDtYpe1LNZRPktFViqRFohDsSHWVXmGsZYdHGax0BDCbHdANOOoFbKH8jZIGrfPpcDEWPRn409uz17c9NBpcqRE8r/nLbXR8BsISXKjvhPU/DREDo/jp50oEHKmVmMEEszw6JU0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761921983; c=relaxed/simple;
-	bh=UTMSp5itHreXcBoLVD+xJQzvCRwbi+RS2sxfUoF/hUw=;
+	s=arc-20240116; t=1761921989; c=relaxed/simple;
+	bh=pr3fKTZRLSSNTQtl5HngIqO99mQdhgDDnsGsN5+papQ=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=NrUswvdFmhz/rK0qsj9jBNuDF3w5fCVXUPKvZbwxfApiseJalbuIFTwTxOaW+dYqfFjFgSbXDrNwbw2Am7LMmVgrtPOjkzeWY05WI3E/0oLv5VqvcT/GybCbbzIDCMG41j4U9+yegFMei36c9uRrTc/j94C4R093/dceWJKDhLQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=g0K+PSTI; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=kVlnmnKe; arc=none smtp.client-ip=205.220.180.131
+	 In-Reply-To:To:Cc; b=J5DxlGawnLx/8Dl9C/ibp0ttwVoUaDT1+6pLbWJPoWTuPvRZw72x23Jed/m0kf56u1Ra5fhd3xItNrOgDQ71Q2KHc9jgguAJN8vilvzeHQmM2PQFNTjffCm/H+C/m21u1pTK4ICktjyaVJ0C8iOSxVwIH4aTF0OXUPKQz9YNKZs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=L3DeEiTN; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=DcU7Cu4D; arc=none smtp.client-ip=205.220.168.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 59VDBiZ71826779
-	for <linux-pm@vger.kernel.org>; Fri, 31 Oct 2025 14:46:09 GMT
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 59V9jO5e2471162
+	for <linux-pm@vger.kernel.org>; Fri, 31 Oct 2025 14:46:12 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	zFG04JtAn0z0WBHCPtDhq8a0CWFcoe+peldNeAk6Owc=; b=g0K+PSTICk6cUzN7
-	qqye4RDbdKLNEc5oEZ/TSgRYpNFBJItjeU+l71emli22iIQlNf6IbYDG6TMZC6c/
-	/X+5x2XvWKSO358by3YQEmQzuQiGIz6bdYtE5CH8dcSU4JLZ9ivlloOTEIaEX0RJ
-	w9KZ+UkMHx7w8cQvMUU0XPWDdiym4INAZX5J9XTwDdXwFrRZLJ+qktEI4Uc4edT6
-	VmYrK2EnDWCRZ5N5qMAcg0ucodHB6I8gbcUoCTCtI3g4cdzGpaYub1+EakS/3kdX
-	l/LlTnFFc752dBsZ5kOhht1nZqaIxr1nB8oSZKyGiIqdcu4DgJB6L+lRQK7Ux8wy
-	UjKMvQ==
-Received: from mail-ua1-f69.google.com (mail-ua1-f69.google.com [209.85.222.69])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4a4p11sksn-1
+	z4WjVuw6q7EzY3Wj1nnUiH7YFZYHzRpW+DxYsFvQ3is=; b=L3DeEiTNiIQZoLSF
+	k+XVYnQiLg93LweTSJ09/lvbhOOqqzceD3+vDEaYPYwgac3Mz+XV7MbNE56sFsF6
+	+hfpqDXAlK1PNRcwakqV7nZZAn+YqMaBYudj1+7Mk8XnUB+cMWOqV3ZlcqWaKh32
+	zXXmIO7qx+NijXEZ2URH5oC2QpYdCrC0N4eip6AuTXbdhc4aPH1jEZ65r8lWE4w7
+	jnw5UClxj4GcR7/yOhSVDvR/lLPuv7oX5FllvER7TJBTUMfPpxMU8eTzX7sjBsIa
+	U7L6c7/YxRNQ9MMxhIgXIvBLWx863253t3AoiDi/c0vOuE5jxMcQxnYLR/eCBnwt
+	XOSVdg==
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com [209.85.160.198])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4a4trv0rvv-1
 	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Fri, 31 Oct 2025 14:46:08 +0000 (GMT)
-Received: by mail-ua1-f69.google.com with SMTP id a1e0cc1a2514c-934e1916338so3741511241.0
-        for <linux-pm@vger.kernel.org>; Fri, 31 Oct 2025 07:46:08 -0700 (PDT)
+	for <linux-pm@vger.kernel.org>; Fri, 31 Oct 2025 14:46:11 +0000 (GMT)
+Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-4ecf4540bb6so60132871cf.3
+        for <linux-pm@vger.kernel.org>; Fri, 31 Oct 2025 07:46:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1761921968; x=1762526768; darn=vger.kernel.org;
+        d=oss.qualcomm.com; s=google; t=1761921970; x=1762526770; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=zFG04JtAn0z0WBHCPtDhq8a0CWFcoe+peldNeAk6Owc=;
-        b=kVlnmnKeIy62MifTO4wrVCGCmVH7CBPwFjM32/Vln0/3mUttt/2u40jpSBsKF8RLvQ
-         j1n1W8Av9umozs664zMUtNU4hXq+twuYRUVqohoHOg1vEsnCLKmAUwbBHq7WLxfHGm+E
-         AiMzaaVy4TOsikX3yEhYL5wWQnRfnkqsWz8Dorxgw9M7zuUpQGaC4O0Y3W+0+a+He9p+
-         nUlzL5cjtMTjNQvC5MtcXFC8Njp9nXLs8CIU7X1i8j/clupifVYvMtCSY9HCd0kTpDQ/
-         8+4Vr2I5QiIHTfqb0CRwtaYIR6Uq8rOeHxXJwh3+fo6y/o+9Ex4pMAqZWKAMN+zqLTWx
-         MJag==
+        bh=z4WjVuw6q7EzY3Wj1nnUiH7YFZYHzRpW+DxYsFvQ3is=;
+        b=DcU7Cu4Dou1MBKkpzIipzyFktcCW7TxPlNYT2gQVmZpeMWdeo6llwIFZql0rzUiOBm
+         Cklr5OWeMD2vyLbki6w0Ju1cKVriPFeH8GKfkNf57itDZyJHIpnsUOaCkz0SlSZG5hgx
+         7esAVgkiSeCntxeFEkNVv8uSbWVYWGqYs/YsR/u4tZEI+d3UKo7X3HJL/ePTC+ye4nyg
+         c5/ieX20d5XlkiAz3TMWxadd4ZZSkP79tMAea1RXdj3wxMNDS8xyK83/eCv+nCyCnJtc
+         MShLLzgn2AWBQbXEOcqNIbVJrVKLE6qlpveU45IJ07ygeytK7S7CR8jHj4+1DmGdJeN+
+         XTog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761921968; x=1762526768;
+        d=1e100.net; s=20230601; t=1761921970; x=1762526770;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=zFG04JtAn0z0WBHCPtDhq8a0CWFcoe+peldNeAk6Owc=;
-        b=XCXHB8zEh2fOe5igv+VA00XoghqyqkYGde2c/JYMQLqWbnBMPnxL7z6Uj2tkD/gXHo
-         VLMkn1WiW3iDFg+J6eVO4QRCWlRIV/81MLKaZCmsq0aR9jv6T6HBr3Q01tGUTNToEpjv
-         0czrA2Fj8q/GXTGAMgVSW16xyV5B6Ln8BcefWJIVaSo+wkYtrcv0YkFF4+JkGSMb/gkd
-         N5KRcztpPk3X304DhLrWrbcFLq335HnaaYhcW7pNc2s8PAmkE9OZwuSBUItjg4NJfYap
-         tgE6IDwHxTbbOWC6QLKL+j9VRzO3Vg01rNorD4JVsisBQwuHzpMdKnRawFIVYhqRo0Nw
-         FZoA==
-X-Forwarded-Encrypted: i=1; AJvYcCX0sM99ZJ/XJyjYwAmVL1q4KvskElKnfY17RVbLjKNQ25vaj/C0Gi/5gRyoDHKawzpDq+6kH55TSQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxtB62GudSggHoipQ5xsTnR6SURP3epHh76ncyIcjHMbfrzkD9B
-	CTKVzTcC8L2kdPzrdaz5mtXFR+TGnaCswRcjMj/3f9P0cCCjemsmLpIlnaCeMufL/wNrBM+Rstc
-	gQ5xfjhzkA82AMFvK87QVtIiBn2fkXIL3jqlwPX44KPaBbhrvJdmwHIB1TMeLXA==
-X-Gm-Gg: ASbGncuSMvNjWaEwGcF/m+Y3bO2z5XQtsftbnrDEkQrJjw/RUD6dDzzmDewmR/Ofavm
-	DkgaRMD3irmGgE8FQ7WsldgzlgE3hk+p3AwGS3R4Rmpmx/2N5GJd0KsBdZ6P1qVuvMnQbHW7P83
-	vZoG0L6TGpytLShU9p9++Y7jksCQjSyEu5ciQItoCJL62gYdgQZQp99vI4ZX8mFG6n2NVS5uity
-	xZINPTA5EhH+CsyQao2BJQBHY4/HdyTQrp0YaBqQisAEE2pl7uAH9sCPz+DBzG8pSMospEPvUpP
-	QxJ+rKwUHP11bRdPAMNRF/MOweRaRErEjTFw5tTB9Q78ow0cXqa+QFdR6EJg6nfYlafA1ly04Rz
-	VE6ICGp/qvldPQIINyPlT/VF2a7i69s7xlDFs6/qNnaG8hylhRUiaWn+Ve1I0Ft/orqVG18Ed9t
-	3Hf9twuVrxvM4J
-X-Received: by 2002:a05:6102:3050:b0:5db:1e80:7813 with SMTP id ada2fe7eead31-5dbb1388fc8mr1177030137.43.1761921967898;
-        Fri, 31 Oct 2025 07:46:07 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFQ7Xa20Pjo9dHebHSyDKoTZzdY6himyzJcsD2BWlWT3iLAu8QsPVKThXae9OWUiP/+nj18Xg==
-X-Received: by 2002:a05:6102:3050:b0:5db:1e80:7813 with SMTP id ada2fe7eead31-5dbb1388fc8mr1176994137.43.1761921967162;
-        Fri, 31 Oct 2025 07:46:07 -0700 (PDT)
+        bh=z4WjVuw6q7EzY3Wj1nnUiH7YFZYHzRpW+DxYsFvQ3is=;
+        b=MSmSZy295Fo+Hrw0irjbvc8DO4tq5aXXa5PdpaGA2A3wU20fSBPn4eppMd7wru2zxb
+         3wkDKBlI2RXPzBxYkzzWnEDfn2LBkDB4oY5Vl9vGnDFjRIxXDn01/9qkGLnmtyHDTb3x
+         L+GsYW5ysO8RpIyfMhQUxkSPBt5PalHAocYADokxbsSGKp/jlHVyyz2yAYQapu8jC0fS
+         NCm9ignVNVUjDlI8WPbIQCEph6FfXw1bEdOjDZ7qlnE3chCtgxgp05v5kLyppKB6qybA
+         0aNVWaZB3ePkobebrCxtkIa4Pm7ZCLef49Lg2mAjIfiIkGb5SVGXlbM4mlEYGtf4WuSi
+         BMYw==
+X-Forwarded-Encrypted: i=1; AJvYcCVBk6QnEBwFR2iJHy6j5EufJ63F+W76GmJahu07ebE9U0GX3mvuCbIQQrWJJCMJEPKIlL/9Zub+bg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxk9QuBJqGFtShO46pn1Po8kc55utFhU0NFOKuwARfdpnyJ7NRi
+	9MUAO0wmIT4foZKrVbg2wrcP6GT/z9oHA+PfS8wDOGY6/dzMQF46GK/yD9hIlTPeFXYN3D/O04w
+	6izFkKHT89lYpkasWo9omSDNentTUPk+G8ap629X5fqRShbT9HoGEHgVwHasP0Q==
+X-Gm-Gg: ASbGnctDjoztNBRz/YNA0tZPZfaVTGYXw2oX6W+/byY5X7R360WJwydN+UgCX/rggZU
+	yAlcOP/+y5viuRa03OftehbbiBX7zmASzcQsTZuXryWCBP/Cpunw5D5UoSLmzvhOf+PkDOVjQSY
+	nJhB4VBTMRd9qC+XTahRE0I0rrUfGelqT12VYcoFXTe0BVMsQWrkEJ2fFpuMrLKR/lvRuomb4gf
+	fAAmGC8Pc8Wb2Bo95CWRPMQz/Dx4BfnezBtOyGUzlPRxnJt3ZymVHNebDHwgsYPDnAVsMmb/CPY
+	eblY1p5Cfh8dmamYqa5zZXktM7JwfygRlD4J0HA+jmdiXeGkn1SxT22M60OoTnr1D0Yz+Znvrb3
+	iugcaZ7w4a/JZ0NUc0cmt6LCG0Zru/UvHnvrOqlQdZ6Xa8hfEQpxrLIrUmmhJQOsH7L0tg9SbCX
+	BdPbD6Vi6NWnwr
+X-Received: by 2002:a05:622a:1a0e:b0:4ed:d2b:d43f with SMTP id d75a77b69052e-4ed30e166f3mr43681311cf.7.1761921969628;
+        Fri, 31 Oct 2025 07:46:09 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFpms+ndA5uQrKubhk2gL9dJtp/GeWkLP4SlWJYl0N0d649ENROjtnTqP6LNYaBLXDKvc0qmg==
+X-Received: by 2002:a05:622a:1a0e:b0:4ed:d2b:d43f with SMTP id d75a77b69052e-4ed30e166f3mr43680521cf.7.1761921968766;
+        Fri, 31 Oct 2025 07:46:08 -0700 (PDT)
 Received: from umbar.lan (2001-14ba-a0c3-3a00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a0c3:3a00:264b:feff:fe8b:be8a])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5941f5bc218sm541405e87.93.2025.10.31.07.46.04
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5941f5bc218sm541405e87.93.2025.10.31.07.46.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Oct 2025 07:46:06 -0700 (PDT)
+        Fri, 31 Oct 2025 07:46:07 -0700 (PDT)
 From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-Date: Fri, 31 Oct 2025 16:45:40 +0200
-Subject: [PATCH v3 24/25] interconnect: qcom: sm8750: convert to dynamic
- IDs
+Date: Fri, 31 Oct 2025 16:45:41 +0200
+Subject: [PATCH v3 25/25] interconnect: qcom: icc-rpmh: drop support for
+ non-dynamic IDS
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -107,1572 +107,2391 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251031-rework-icc-v3-24-0575304c9624@oss.qualcomm.com>
+Message-Id: <20251031-rework-icc-v3-25-0575304c9624@oss.qualcomm.com>
 References: <20251031-rework-icc-v3-0-0575304c9624@oss.qualcomm.com>
 In-Reply-To: <20251031-rework-icc-v3-0-0575304c9624@oss.qualcomm.com>
 To: Georgi Djakov <djakov@kernel.org>, Bjorn Andersson <andersson@kernel.org>
 Cc: linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=43342;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=84655;
  i=dmitry.baryshkov@oss.qualcomm.com; h=from:subject:message-id;
- bh=UTMSp5itHreXcBoLVD+xJQzvCRwbi+RS2sxfUoF/hUw=;
- b=owEBbQGS/pANAwAKAYs8ij4CKSjVAcsmYgBpBMuI0QP47OFqt5hQPQZEPbVJtduRsLF9f0GFB
- t9LGsHeVXaJATMEAAEKAB0WIQRMcISVXLJjVvC4lX+LPIo+Aiko1QUCaQTLiAAKCRCLPIo+Aiko
- 1TfeB/9fl2IZikKoEZpcb4zMz90grr4dzjwBNDZkRPZubkntlQ1jqPt49tKKo9r8FuEqIDwrk2/
- +floQuEqlYONZjtcEsCRgLpnfDETYGgZ7Q9fX+6gWK61kDMiK+UvOjoTlQdUCSKqL7CpKSBxTPR
- sgPF6ST9HVMUIaHndAAvTOWMMk4Rz3jBz+Lc1Ng3QbavtwETvHeczAP38NJ8l6gUaTJhb0eRAe2
- gm8q6E7pWpi6gBma5VYXywFpoDc4hdLXI+cWJK0vPttqr7AgMI6Bup8gs/6Rn8hX7kHYx+1t2wT
- aZfBy/945/mMplX+KSTq2eMdB5/z5JvoiVWMJTWb6U5FPdFQ
+ bh=pr3fKTZRLSSNTQtl5HngIqO99mQdhgDDnsGsN5+papQ=;
+ b=owEBbQGS/pANAwAKAYs8ij4CKSjVAcsmYgBpBMuJMtqh+Q2hquSHwjRr2aj7Z8S0unIXhXkgu
+ 4Y+Es19trmJATMEAAEKAB0WIQRMcISVXLJjVvC4lX+LPIo+Aiko1QUCaQTLiQAKCRCLPIo+Aiko
+ 1cDZB/9mMk3v5FbhixUg8jO53g/ucTkmxUZhhDWpOHif6npZPfAV5EWJLR0Ox6FhGIZyChiy7+n
+ 8pvroZFm5aPsudyX6QXW7ADbiyr4jXVimSXoMZudLEDk2viHofhFHkgna1khVZQkFQJOLCbRxQU
+ TQbvaIkK7IbVtKZDN+6EBu/i/CYg36h4Du9bHjJzCnHONALEJg2tPIRKAdMF56Dd8CKRa6SVE/A
+ XoNYxKjCnj00fZqv7Zn1d8vEj3D3WldVYr7mHudEEj7ZQcYIjNgnz0YOIQIX2QKCOpKnHY+P9xV
+ CXvaZ+394B18t7HNZhFy5BXBNt2Gpi8wEvLm+9+Zu04O6KT5
 X-Developer-Key: i=dmitry.baryshkov@oss.qualcomm.com; a=openpgp;
  fpr=8F88381DD5C873E4AE487DA5199BF1243632046A
-X-Proofpoint-ORIG-GUID: Em7pI3cNu02j4lWecXiJbQVqqeisVh7p
-X-Authority-Analysis: v=2.4 cv=RbCdyltv c=1 sm=1 tr=0 ts=6904cbb0 cx=c_pps
- a=UbhLPJ621ZpgOD2l3yZY1w==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+X-Proofpoint-ORIG-GUID: u7I5wT27pFiLUitUXKu9fWq4fGXMUPmM
+X-Proofpoint-GUID: u7I5wT27pFiLUitUXKu9fWq4fGXMUPmM
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDMxMDEzMyBTYWx0ZWRfX9hq6JbkJPZgv
+ RABw7IQ7d0jc4o4iQLEx15NFWTR2Ni2APPUXQcV+DESfR7UBvCwE9LvRkRK4ZomPc1ufiBA032n
+ cHgBmiI3Q3bma82EQNIRoylgGXNw58hHMcltVFe068TXKth5iwPicMzoNZzp66XAzQGhJ7dqKnn
+ wmhLeCIJuIAPTQy4qVQbMPsCfZQwm+L+R6sMg6LVtvpvKaWp1Ls32iekqypzJLRNALAkcEfeEXe
+ vMrECTA/rX6dzhb735ttrEK9ob5SBhXFaRzGFCIcsEotoMVanzaikRwOd/TS19++ZJJD26iq6lG
+ LVABYCcp/fuHT1YlpkIAa8sWic5IQbvNitoaNNSaBr/ZmTVJDHRiFFjdAzijPORMr+54RKBS5HA
+ 0y+ShKIdI2vwIdpfwxfe1hXPTb2KCg==
+X-Authority-Analysis: v=2.4 cv=XoP3+FF9 c=1 sm=1 tr=0 ts=6904cbb3 cx=c_pps
+ a=mPf7EqFMSY9/WdsSgAYMbA==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
  a=x6icFKpwvdMA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=EUspDBNiAAAA:8 a=WHz59lSFY7XMyUtRKVAA:9 a=QEXdDO2ut3YA:10
- a=TOPH6uDL9cOC6tEoww4z:22
-X-Proofpoint-GUID: Em7pI3cNu02j4lWecXiJbQVqqeisVh7p
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDMxMDEzMyBTYWx0ZWRfX1jkQuqLJ36Sc
- ggQ37LOwj/MLVkVLlWQgJaYBD7p8IZEHagnpHgEgHPU27d4W+4iC4PpsYCuNV6wTnRwsm01gMSg
- vxO01dOY3nc8cwJiR1oV9L980xqSJe0qaAXl3z6y2paFAa+LJsUo6cceXDUyUiri8hF5Uah2zF7
- j6ild+thMoE5qlt5Ki+8WH9TWloxqvoWHErEwNSEku9uCmftUr4duawvF9VXHhsBYOwlgtQPTJL
- rSvTObqEF1mCGDtbnae2K+w7Y536xVXTZoQsnhXsrnsrTSa6ms8SrD2ktnESaRFV2Ig867CwS2s
- kcxY3767vYOAP4Ka65X22JZjeSVPMwUcU6OFllaXuS+JOeHk8gli9XODjPoukEiTpQwKF8duk8W
- Z15Z/p4xMs4ZPYZp2o/T7bwlrfyfKw==
+ a=EUspDBNiAAAA:8 a=RZEUVV1GIZIMEZobOrsA:9 a=QEXdDO2ut3YA:10
+ a=dawVfQjAaf238kedN5IG:22
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
  definitions=2025-10-31_04,2025-10-29_03,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 impostorscore=0 suspectscore=0 phishscore=0 lowpriorityscore=0
- adultscore=0 bulkscore=0 clxscore=1015 priorityscore=1501 malwarescore=0
+ adultscore=0 impostorscore=0 spamscore=0 lowpriorityscore=0 clxscore=1015
+ priorityscore=1501 suspectscore=0 phishscore=0 malwarescore=0 bulkscore=0
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
  reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2510310133
 
-Stop using fixed and IDs and covert the platform to use dynamic IDs for
-the interconnect. This gives more flexibility and also allows us to drop
-the .num_links member, saving from possible errors related to it being
-not set or set incorrectly.
+Now as all RPMh interconnect drivers were converted to using the dynamic
+IDs, drop support for non-dynamic ID allocation.
 
 Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
 ---
- drivers/interconnect/qcom/sm8750.c | 616 ++++++++++++++-----------------------
- 1 file changed, 230 insertions(+), 386 deletions(-)
+ drivers/interconnect/qcom/glymur.c   | 21 ---------------------
+ drivers/interconnect/qcom/icc-rpmh.c | 18 +++++-------------
+ drivers/interconnect/qcom/icc-rpmh.h |  5 -----
+ drivers/interconnect/qcom/milos.c    | 12 ------------
+ drivers/interconnect/qcom/qcs615.c   |  8 --------
+ drivers/interconnect/qcom/qcs8300.c  | 13 -------------
+ drivers/interconnect/qcom/qdu1000.c  |  4 ----
+ drivers/interconnect/qcom/sa8775p.c  | 14 --------------
+ drivers/interconnect/qcom/sar2130p.c |  9 ---------
+ drivers/interconnect/qcom/sc7180.c   | 12 ------------
+ drivers/interconnect/qcom/sc7280.c   | 12 ------------
+ drivers/interconnect/qcom/sc8180x.c  | 11 -----------
+ drivers/interconnect/qcom/sc8280xp.c | 12 ------------
+ drivers/interconnect/qcom/sdm670.c   |  8 --------
+ drivers/interconnect/qcom/sdm845.c   |  8 --------
+ drivers/interconnect/qcom/sdx55.c    |  3 ---
+ drivers/interconnect/qcom/sdx65.c    |  3 ---
+ drivers/interconnect/qcom/sdx75.c    |  6 ------
+ drivers/interconnect/qcom/sm6350.c   | 10 ----------
+ drivers/interconnect/qcom/sm7150.c   | 10 ----------
+ drivers/interconnect/qcom/sm8150.c   | 10 ----------
+ drivers/interconnect/qcom/sm8350.c   | 10 ----------
+ drivers/interconnect/qcom/sm8450.c   | 11 -----------
+ drivers/interconnect/qcom/sm8550.c   | 14 --------------
+ drivers/interconnect/qcom/sm8650.c   | 14 --------------
+ drivers/interconnect/qcom/sm8750.c   | 14 --------------
+ drivers/interconnect/qcom/x1e80100.c | 19 -------------------
+ 27 files changed, 5 insertions(+), 286 deletions(-)
 
-diff --git a/drivers/interconnect/qcom/sm8750.c b/drivers/interconnect/qcom/sm8750.c
-index 69bc22222075280365eb419f1ad140d1aa4e752d..a46c1553ce0fd13b99a7d327eb575b232bc36509 100644
---- a/drivers/interconnect/qcom/sm8750.c
-+++ b/drivers/interconnect/qcom/sm8750.c
-@@ -14,1181 +14,1011 @@
- #include "bcm-voter.h"
- #include "icc-rpmh.h"
- 
--#define SM8750_MASTER_GPU_TCU				0
--#define SM8750_MASTER_SYS_TCU				1
--#define SM8750_MASTER_APPSS_PROC			2
--#define SM8750_MASTER_LLCC				3
--#define SM8750_MASTER_QDSS_BAM				4
--#define SM8750_MASTER_QSPI_0				5
--#define SM8750_MASTER_QUP_1				6
--#define SM8750_MASTER_QUP_2				7
--#define SM8750_MASTER_A1NOC_SNOC			8
--#define SM8750_MASTER_A2NOC_SNOC			9
--#define SM8750_MASTER_CAMNOC_HF				10
--#define SM8750_MASTER_CAMNOC_NRT_ICP_SF			11
--#define SM8750_MASTER_CAMNOC_RT_CDM_SF			12
--#define SM8750_MASTER_CAMNOC_SF				13
--#define SM8750_MASTER_GEM_NOC_CNOC			14
--#define SM8750_MASTER_GEM_NOC_PCIE_SNOC			15
--#define SM8750_MASTER_GFX3D				16
--#define SM8750_MASTER_LPASS_GEM_NOC			17
--#define SM8750_MASTER_LPASS_LPINOC			18
--#define SM8750_MASTER_LPIAON_NOC			19
--#define SM8750_MASTER_LPASS_PROC			20
--#define SM8750_MASTER_MDP				21
--#define SM8750_MASTER_MSS_PROC				22
--#define SM8750_MASTER_MNOC_HF_MEM_NOC			23
--#define SM8750_MASTER_MNOC_SF_MEM_NOC			24
--#define SM8750_MASTER_CDSP_PROC				25
--#define SM8750_MASTER_COMPUTE_NOC			26
--#define SM8750_MASTER_ANOC_PCIE_GEM_NOC			27
--#define SM8750_MASTER_SNOC_SF_MEM_NOC			28
--#define SM8750_MASTER_UBWC_P				29
--#define SM8750_MASTER_CDSP_HCP				30
--#define SM8750_MASTER_VIDEO_CV_PROC			31
--#define SM8750_MASTER_VIDEO_EVA				32
--#define SM8750_MASTER_VIDEO_MVP				33
--#define SM8750_MASTER_VIDEO_V_PROC			34
--#define SM8750_MASTER_CNOC_CFG				35
--#define SM8750_MASTER_CNOC_MNOC_CFG			36
--#define SM8750_MASTER_PCIE_ANOC_CFG			37
--#define SM8750_MASTER_QUP_CORE_0			38
--#define SM8750_MASTER_QUP_CORE_1			39
--#define SM8750_MASTER_QUP_CORE_2			40
--#define SM8750_MASTER_CRYPTO				41
--#define SM8750_MASTER_IPA				42
--#define SM8750_MASTER_QUP_3				43
--#define SM8750_MASTER_SOCCP_AGGR_NOC			44
--#define SM8750_MASTER_SP				45
--#define SM8750_MASTER_GIC				46
--#define SM8750_MASTER_PCIE_0				47
--#define SM8750_MASTER_QDSS_ETR				48
--#define SM8750_MASTER_QDSS_ETR_1			49
--#define SM8750_MASTER_SDCC_2				50
--#define SM8750_MASTER_SDCC_4				51
--#define SM8750_MASTER_UFS_MEM				52
--#define SM8750_MASTER_USB3_0				53
--#define SM8750_SLAVE_UBWC_P				54
--#define SM8750_SLAVE_EBI1				55
--#define SM8750_SLAVE_AHB2PHY_SOUTH			56
--#define SM8750_SLAVE_AHB2PHY_NORTH			57
--#define SM8750_SLAVE_AOSS				58
--#define SM8750_SLAVE_CAMERA_CFG				59
--#define SM8750_SLAVE_CLK_CTL				60
--#define SM8750_SLAVE_CRYPTO_0_CFG			61
--#define SM8750_SLAVE_DISPLAY_CFG			62
--#define SM8750_SLAVE_EVA_CFG				63
--#define SM8750_SLAVE_GFX3D_CFG				64
--#define SM8750_SLAVE_I2C				65
--#define SM8750_SLAVE_I3C_IBI0_CFG			66
--#define SM8750_SLAVE_I3C_IBI1_CFG			67
--#define SM8750_SLAVE_IMEM_CFG				68
--#define SM8750_SLAVE_IPA_CFG				69
--#define SM8750_SLAVE_IPC_ROUTER_CFG			70
--#define SM8750_SLAVE_CNOC_MSS				71
--#define SM8750_SLAVE_PCIE_CFG				72
--#define SM8750_SLAVE_PRNG				73
--#define SM8750_SLAVE_QDSS_CFG				74
--#define SM8750_SLAVE_QSPI_0				75
--#define SM8750_SLAVE_QUP_3				76
--#define SM8750_SLAVE_QUP_1				77
--#define SM8750_SLAVE_QUP_2				78
--#define SM8750_SLAVE_SDCC_2				79
--#define SM8750_SLAVE_SDCC_4				80
--#define SM8750_SLAVE_SOCCP				81
--#define SM8750_SLAVE_SPSS_CFG				82
--#define SM8750_SLAVE_TCSR				83
--#define SM8750_SLAVE_TLMM				84
--#define SM8750_SLAVE_TME_CFG				85
--#define SM8750_SLAVE_UFS_MEM_CFG			86
--#define SM8750_SLAVE_USB3_0				87
--#define SM8750_SLAVE_VENUS_CFG				88
--#define SM8750_SLAVE_VSENSE_CTRL_CFG			89
--#define SM8750_SLAVE_A1NOC_SNOC				90
--#define SM8750_SLAVE_A2NOC_SNOC				91
--#define SM8750_SLAVE_APPSS				92
--#define SM8750_SLAVE_GEM_NOC_CNOC			93
--#define SM8750_SLAVE_SNOC_GEM_NOC_SF			94
--#define SM8750_SLAVE_LLCC				95
--#define SM8750_SLAVE_LPASS_GEM_NOC			96
--#define SM8750_SLAVE_LPIAON_NOC_LPASS_AG_NOC		97
--#define SM8750_SLAVE_LPICX_NOC_LPIAON_NOC		98
--#define SM8750_SLAVE_MNOC_HF_MEM_NOC			99
--#define SM8750_SLAVE_MNOC_SF_MEM_NOC			100
--#define SM8750_SLAVE_CDSP_MEM_NOC			101
--#define SM8750_SLAVE_MEM_NOC_PCIE_SNOC			102
--#define SM8750_SLAVE_ANOC_PCIE_GEM_NOC			103
--#define SM8750_SLAVE_CNOC_CFG				104
--#define SM8750_SLAVE_DDRSS_CFG				105
--#define SM8750_SLAVE_CNOC_MNOC_CFG			106
--#define SM8750_SLAVE_PCIE_ANOC_CFG			107
--#define SM8750_SLAVE_QUP_CORE_0				108
--#define SM8750_SLAVE_QUP_CORE_1				109
--#define SM8750_SLAVE_QUP_CORE_2				110
--#define SM8750_SLAVE_BOOT_IMEM				111
--#define SM8750_SLAVE_IMEM				112
--#define SM8750_SLAVE_BOOT_IMEM_2			113
--#define SM8750_SLAVE_SERVICE_CNOC			114
--#define SM8750_SLAVE_SERVICE_MNOC			115
--#define SM8750_SLAVE_SERVICE_PCIE_ANOC			116
--#define SM8750_SLAVE_PCIE_0				117
--#define SM8750_SLAVE_QDSS_STM				118
--#define SM8750_SLAVE_TCU				119
-+static struct qcom_icc_node qhm_qspi;
-+static struct qcom_icc_node qhm_qup1;
-+static struct qcom_icc_node qxm_qup02;
-+static struct qcom_icc_node xm_sdc4;
-+static struct qcom_icc_node xm_ufs_mem;
-+static struct qcom_icc_node xm_usb3_0;
-+static struct qcom_icc_node qhm_qdss_bam;
-+static struct qcom_icc_node qhm_qup2;
-+static struct qcom_icc_node qxm_crypto;
-+static struct qcom_icc_node qxm_ipa;
-+static struct qcom_icc_node qxm_soccp;
-+static struct qcom_icc_node qxm_sp;
-+static struct qcom_icc_node xm_qdss_etr_0;
-+static struct qcom_icc_node xm_qdss_etr_1;
-+static struct qcom_icc_node xm_sdc2;
-+static struct qcom_icc_node qup0_core_master;
-+static struct qcom_icc_node qup1_core_master;
-+static struct qcom_icc_node qup2_core_master;
-+static struct qcom_icc_node qsm_cfg;
-+static struct qcom_icc_node qnm_gemnoc_cnoc;
-+static struct qcom_icc_node qnm_gemnoc_pcie;
-+static struct qcom_icc_node alm_gpu_tcu;
-+static struct qcom_icc_node alm_sys_tcu;
-+static struct qcom_icc_node chm_apps;
-+static struct qcom_icc_node qnm_gpu;
-+static struct qcom_icc_node qnm_lpass_gemnoc;
-+static struct qcom_icc_node qnm_mdsp;
-+static struct qcom_icc_node qnm_mnoc_hf;
-+static struct qcom_icc_node qnm_mnoc_sf;
-+static struct qcom_icc_node qnm_nsp_gemnoc;
-+static struct qcom_icc_node qnm_pcie;
-+static struct qcom_icc_node qnm_snoc_sf;
-+static struct qcom_icc_node qnm_ubwc_p;
-+static struct qcom_icc_node xm_gic;
-+static struct qcom_icc_node qnm_lpiaon_noc;
-+static struct qcom_icc_node qnm_lpass_lpinoc;
-+static struct qcom_icc_node qnm_lpinoc_dsp_qns4m;
-+static struct qcom_icc_node llcc_mc;
-+static struct qcom_icc_node qnm_camnoc_hf;
-+static struct qcom_icc_node qnm_camnoc_nrt_icp_sf;
-+static struct qcom_icc_node qnm_camnoc_rt_cdm_sf;
-+static struct qcom_icc_node qnm_camnoc_sf;
-+static struct qcom_icc_node qnm_mdp;
-+static struct qcom_icc_node qnm_vapss_hcp;
-+static struct qcom_icc_node qnm_video_cv_cpu;
-+static struct qcom_icc_node qnm_video_eva;
-+static struct qcom_icc_node qnm_video_mvp;
-+static struct qcom_icc_node qnm_video_v_cpu;
-+static struct qcom_icc_node qsm_mnoc_cfg;
-+static struct qcom_icc_node qnm_nsp;
-+static struct qcom_icc_node qsm_pcie_anoc_cfg;
-+static struct qcom_icc_node xm_pcie3;
-+static struct qcom_icc_node qnm_aggre1_noc;
-+static struct qcom_icc_node qnm_aggre2_noc;
-+static struct qcom_icc_node qns_a1noc_snoc;
-+static struct qcom_icc_node qns_a2noc_snoc;
-+static struct qcom_icc_node qup0_core_slave;
-+static struct qcom_icc_node qup1_core_slave;
-+static struct qcom_icc_node qup2_core_slave;
-+static struct qcom_icc_node qhs_ahb2phy0;
-+static struct qcom_icc_node qhs_ahb2phy1;
-+static struct qcom_icc_node qhs_camera_cfg;
-+static struct qcom_icc_node qhs_clk_ctl;
-+static struct qcom_icc_node qhs_crypto0_cfg;
-+static struct qcom_icc_node qhs_display_cfg;
-+static struct qcom_icc_node qhs_eva_cfg;
-+static struct qcom_icc_node qhs_gpuss_cfg;
-+static struct qcom_icc_node qhs_i2c;
-+static struct qcom_icc_node qhs_i3c_ibi0_cfg;
-+static struct qcom_icc_node qhs_i3c_ibi1_cfg;
-+static struct qcom_icc_node qhs_imem_cfg;
-+static struct qcom_icc_node qhs_mss_cfg;
-+static struct qcom_icc_node qhs_pcie_cfg;
-+static struct qcom_icc_node qhs_prng;
-+static struct qcom_icc_node qhs_qdss_cfg;
-+static struct qcom_icc_node qhs_qspi;
-+static struct qcom_icc_node qhs_qup02;
-+static struct qcom_icc_node qhs_qup1;
-+static struct qcom_icc_node qhs_qup2;
-+static struct qcom_icc_node qhs_sdc2;
-+static struct qcom_icc_node qhs_sdc4;
-+static struct qcom_icc_node qhs_spss_cfg;
-+static struct qcom_icc_node qhs_tcsr;
-+static struct qcom_icc_node qhs_tlmm;
-+static struct qcom_icc_node qhs_ufs_mem_cfg;
-+static struct qcom_icc_node qhs_usb3_0;
-+static struct qcom_icc_node qhs_venus_cfg;
-+static struct qcom_icc_node qhs_vsense_ctrl_cfg;
-+static struct qcom_icc_node qss_mnoc_cfg;
-+static struct qcom_icc_node qss_pcie_anoc_cfg;
-+static struct qcom_icc_node xs_qdss_stm;
-+static struct qcom_icc_node xs_sys_tcu_cfg;
-+static struct qcom_icc_node qhs_aoss;
-+static struct qcom_icc_node qhs_ipa;
-+static struct qcom_icc_node qhs_ipc_router;
-+static struct qcom_icc_node qhs_soccp;
-+static struct qcom_icc_node qhs_tme_cfg;
-+static struct qcom_icc_node qns_apss;
-+static struct qcom_icc_node qss_cfg;
-+static struct qcom_icc_node qss_ddrss_cfg;
-+static struct qcom_icc_node qxs_boot_imem;
-+static struct qcom_icc_node qxs_imem;
-+static struct qcom_icc_node qxs_modem_boot_imem;
-+static struct qcom_icc_node srvc_cnoc_main;
-+static struct qcom_icc_node xs_pcie;
-+static struct qcom_icc_node chs_ubwc_p;
-+static struct qcom_icc_node qns_gem_noc_cnoc;
-+static struct qcom_icc_node qns_llcc;
-+static struct qcom_icc_node qns_pcie;
-+static struct qcom_icc_node qns_lpass_ag_noc_gemnoc;
-+static struct qcom_icc_node qns_lpass_aggnoc;
-+static struct qcom_icc_node qns_lpi_aon_noc;
-+static struct qcom_icc_node ebi;
-+static struct qcom_icc_node qns_mem_noc_hf;
-+static struct qcom_icc_node qns_mem_noc_sf;
-+static struct qcom_icc_node srvc_mnoc;
-+static struct qcom_icc_node qns_nsp_gemnoc;
-+static struct qcom_icc_node qns_pcie_mem_noc;
-+static struct qcom_icc_node srvc_pcie_aggre_noc;
-+static struct qcom_icc_node qns_gemnoc_sf;
- 
- static struct qcom_icc_node qhm_qspi = {
- 	.name = "qhm_qspi",
--	.id = SM8750_MASTER_QSPI_0,
- 	.channels = 1,
- 	.buswidth = 4,
- 	.num_links = 1,
--	.links = { SM8750_SLAVE_A1NOC_SNOC },
-+	.link_nodes = { &qns_a1noc_snoc },
- };
- 
- static struct qcom_icc_node qhm_qup1 = {
- 	.name = "qhm_qup1",
--	.id = SM8750_MASTER_QUP_1,
- 	.channels = 1,
- 	.buswidth = 4,
- 	.num_links = 1,
--	.links = { SM8750_SLAVE_A1NOC_SNOC },
-+	.link_nodes = { &qns_a1noc_snoc },
- };
- 
- static struct qcom_icc_node qxm_qup02 = {
- 	.name = "qxm_qup02",
--	.id = SM8750_MASTER_QUP_3,
- 	.channels = 1,
- 	.buswidth = 8,
- 	.num_links = 1,
--	.links = { SM8750_SLAVE_A1NOC_SNOC },
-+	.link_nodes = { &qns_a1noc_snoc },
- };
- 
- static struct qcom_icc_node xm_sdc4 = {
- 	.name = "xm_sdc4",
--	.id = SM8750_MASTER_SDCC_4,
- 	.channels = 1,
- 	.buswidth = 8,
- 	.num_links = 1,
--	.links = { SM8750_SLAVE_A1NOC_SNOC },
-+	.link_nodes = { &qns_a1noc_snoc },
- };
- 
- static struct qcom_icc_node xm_ufs_mem = {
- 	.name = "xm_ufs_mem",
--	.id = SM8750_MASTER_UFS_MEM,
- 	.channels = 1,
- 	.buswidth = 16,
- 	.num_links = 1,
--	.links = { SM8750_SLAVE_A1NOC_SNOC },
-+	.link_nodes = { &qns_a1noc_snoc },
- };
- 
- static struct qcom_icc_node xm_usb3_0 = {
- 	.name = "xm_usb3_0",
--	.id = SM8750_MASTER_USB3_0,
- 	.channels = 1,
- 	.buswidth = 8,
- 	.num_links = 1,
--	.links = { SM8750_SLAVE_A1NOC_SNOC },
-+	.link_nodes = { &qns_a1noc_snoc },
- };
- 
- static struct qcom_icc_node qhm_qdss_bam = {
- 	.name = "qhm_qdss_bam",
--	.id = SM8750_MASTER_QDSS_BAM,
- 	.channels = 1,
- 	.buswidth = 4,
- 	.num_links = 1,
--	.links = { SM8750_SLAVE_A2NOC_SNOC },
-+	.link_nodes = { &qns_a2noc_snoc },
- };
- 
- static struct qcom_icc_node qhm_qup2 = {
- 	.name = "qhm_qup2",
--	.id = SM8750_MASTER_QUP_2,
- 	.channels = 1,
- 	.buswidth = 4,
- 	.num_links = 1,
--	.links = { SM8750_SLAVE_A2NOC_SNOC },
-+	.link_nodes = { &qns_a2noc_snoc },
- };
- 
- static struct qcom_icc_node qxm_crypto = {
- 	.name = "qxm_crypto",
--	.id = SM8750_MASTER_CRYPTO,
- 	.channels = 1,
- 	.buswidth = 8,
- 	.num_links = 1,
--	.links = { SM8750_SLAVE_A2NOC_SNOC },
-+	.link_nodes = { &qns_a2noc_snoc },
- };
- 
- static struct qcom_icc_node qxm_ipa = {
- 	.name = "qxm_ipa",
--	.id = SM8750_MASTER_IPA,
- 	.channels = 1,
- 	.buswidth = 8,
- 	.num_links = 1,
--	.links = { SM8750_SLAVE_A2NOC_SNOC },
-+	.link_nodes = { &qns_a2noc_snoc },
- };
- 
- static struct qcom_icc_node qxm_soccp = {
- 	.name = "qxm_soccp",
--	.id = SM8750_MASTER_SOCCP_AGGR_NOC,
- 	.channels = 1,
- 	.buswidth = 8,
- 	.num_links = 1,
--	.links = { SM8750_SLAVE_A2NOC_SNOC },
-+	.link_nodes = { &qns_a2noc_snoc },
- };
- 
- static struct qcom_icc_node qxm_sp = {
- 	.name = "qxm_sp",
--	.id = SM8750_MASTER_SP,
- 	.channels = 1,
- 	.buswidth = 8,
- 	.num_links = 1,
--	.links = { SM8750_SLAVE_A2NOC_SNOC },
-+	.link_nodes = { &qns_a2noc_snoc },
- };
- 
- static struct qcom_icc_node xm_qdss_etr_0 = {
- 	.name = "xm_qdss_etr_0",
--	.id = SM8750_MASTER_QDSS_ETR,
- 	.channels = 1,
- 	.buswidth = 8,
- 	.num_links = 1,
--	.links = { SM8750_SLAVE_A2NOC_SNOC },
-+	.link_nodes = { &qns_a2noc_snoc },
- };
- 
- static struct qcom_icc_node xm_qdss_etr_1 = {
- 	.name = "xm_qdss_etr_1",
--	.id = SM8750_MASTER_QDSS_ETR_1,
- 	.channels = 1,
- 	.buswidth = 8,
- 	.num_links = 1,
--	.links = { SM8750_SLAVE_A2NOC_SNOC },
-+	.link_nodes = { &qns_a2noc_snoc },
- };
- 
- static struct qcom_icc_node xm_sdc2 = {
- 	.name = "xm_sdc2",
--	.id = SM8750_MASTER_SDCC_2,
- 	.channels = 1,
- 	.buswidth = 8,
- 	.num_links = 1,
--	.links = { SM8750_SLAVE_A2NOC_SNOC },
-+	.link_nodes = { &qns_a2noc_snoc },
- };
- 
- static struct qcom_icc_node qup0_core_master = {
- 	.name = "qup0_core_master",
--	.id = SM8750_MASTER_QUP_CORE_0,
- 	.channels = 1,
- 	.buswidth = 4,
- 	.num_links = 1,
--	.links = { SM8750_SLAVE_QUP_CORE_0 },
-+	.link_nodes = { &qup0_core_slave },
- };
- 
- static struct qcom_icc_node qup1_core_master = {
- 	.name = "qup1_core_master",
--	.id = SM8750_MASTER_QUP_CORE_1,
- 	.channels = 1,
- 	.buswidth = 4,
- 	.num_links = 1,
--	.links = { SM8750_SLAVE_QUP_CORE_1 },
-+	.link_nodes = { &qup1_core_slave },
- };
- 
- static struct qcom_icc_node qup2_core_master = {
- 	.name = "qup2_core_master",
--	.id = SM8750_MASTER_QUP_CORE_2,
- 	.channels = 1,
- 	.buswidth = 4,
- 	.num_links = 1,
--	.links = { SM8750_SLAVE_QUP_CORE_2 },
-+	.link_nodes = { &qup2_core_slave },
- };
- 
- static struct qcom_icc_node qsm_cfg = {
- 	.name = "qsm_cfg",
--	.id = SM8750_MASTER_CNOC_CFG,
- 	.channels = 1,
- 	.buswidth = 4,
- 	.num_links = 33,
--	.links = { SM8750_SLAVE_AHB2PHY_SOUTH, SM8750_SLAVE_AHB2PHY_NORTH,
--			   SM8750_SLAVE_CAMERA_CFG, SM8750_SLAVE_CLK_CTL,
--			   SM8750_SLAVE_CRYPTO_0_CFG, SM8750_SLAVE_DISPLAY_CFG,
--			   SM8750_SLAVE_EVA_CFG, SM8750_SLAVE_GFX3D_CFG,
--			   SM8750_SLAVE_I2C, SM8750_SLAVE_I3C_IBI0_CFG,
--			   SM8750_SLAVE_I3C_IBI1_CFG, SM8750_SLAVE_IMEM_CFG,
--			   SM8750_SLAVE_CNOC_MSS, SM8750_SLAVE_PCIE_CFG,
--			   SM8750_SLAVE_PRNG, SM8750_SLAVE_QDSS_CFG,
--			   SM8750_SLAVE_QSPI_0, SM8750_SLAVE_QUP_3,
--			   SM8750_SLAVE_QUP_1, SM8750_SLAVE_QUP_2,
--			   SM8750_SLAVE_SDCC_2, SM8750_SLAVE_SDCC_4,
--			   SM8750_SLAVE_SPSS_CFG, SM8750_SLAVE_TCSR,
--			   SM8750_SLAVE_TLMM, SM8750_SLAVE_UFS_MEM_CFG,
--			   SM8750_SLAVE_USB3_0, SM8750_SLAVE_VENUS_CFG,
--			   SM8750_SLAVE_VSENSE_CTRL_CFG, SM8750_SLAVE_CNOC_MNOC_CFG,
--			   SM8750_SLAVE_PCIE_ANOC_CFG, SM8750_SLAVE_QDSS_STM,
--			   SM8750_SLAVE_TCU },
-+	.link_nodes = { &qhs_ahb2phy0, &qhs_ahb2phy1,
-+			&qhs_camera_cfg, &qhs_clk_ctl,
-+			&qhs_crypto0_cfg, &qhs_display_cfg,
-+			&qhs_eva_cfg, &qhs_gpuss_cfg,
-+			&qhs_i2c, &qhs_i3c_ibi0_cfg,
-+			&qhs_i3c_ibi1_cfg, &qhs_imem_cfg,
-+			&qhs_mss_cfg, &qhs_pcie_cfg,
-+			&qhs_prng, &qhs_qdss_cfg,
-+			&qhs_qspi, &qhs_qup02,
-+			&qhs_qup1, &qhs_qup2,
-+			&qhs_sdc2, &qhs_sdc4,
-+			&qhs_spss_cfg, &qhs_tcsr,
-+			&qhs_tlmm, &qhs_ufs_mem_cfg,
-+			&qhs_usb3_0, &qhs_venus_cfg,
-+			&qhs_vsense_ctrl_cfg, &qss_mnoc_cfg,
-+			&qss_pcie_anoc_cfg, &xs_qdss_stm,
-+			&xs_sys_tcu_cfg },
- };
- 
- static struct qcom_icc_node qnm_gemnoc_cnoc = {
- 	.name = "qnm_gemnoc_cnoc",
--	.id = SM8750_MASTER_GEM_NOC_CNOC,
- 	.channels = 1,
- 	.buswidth = 16,
- 	.num_links = 12,
--	.links = { SM8750_SLAVE_AOSS, SM8750_SLAVE_IPA_CFG,
--			   SM8750_SLAVE_IPC_ROUTER_CFG, SM8750_SLAVE_SOCCP,
--			   SM8750_SLAVE_TME_CFG, SM8750_SLAVE_APPSS,
--			   SM8750_SLAVE_CNOC_CFG, SM8750_SLAVE_DDRSS_CFG,
--			   SM8750_SLAVE_BOOT_IMEM, SM8750_SLAVE_IMEM,
--			   SM8750_SLAVE_BOOT_IMEM_2, SM8750_SLAVE_SERVICE_CNOC },
-+	.link_nodes = { &qhs_aoss, &qhs_ipa,
-+			&qhs_ipc_router, &qhs_soccp,
-+			&qhs_tme_cfg, &qns_apss,
-+			&qss_cfg, &qss_ddrss_cfg,
-+			&qxs_boot_imem, &qxs_imem,
-+			&qxs_modem_boot_imem, &srvc_cnoc_main },
- };
- 
- static struct qcom_icc_node qnm_gemnoc_pcie = {
- 	.name = "qnm_gemnoc_pcie",
--	.id = SM8750_MASTER_GEM_NOC_PCIE_SNOC,
- 	.channels = 1,
- 	.buswidth = 8,
- 	.num_links = 1,
--	.links = { SM8750_SLAVE_PCIE_0 },
-+	.link_nodes = { &xs_pcie },
- };
- 
- static struct qcom_icc_node alm_gpu_tcu = {
- 	.name = "alm_gpu_tcu",
--	.id = SM8750_MASTER_GPU_TCU,
- 	.channels = 1,
- 	.buswidth = 8,
- 	.num_links = 2,
--	.links = { SM8750_SLAVE_GEM_NOC_CNOC, SM8750_SLAVE_LLCC },
-+	.link_nodes = { &qns_gem_noc_cnoc, &qns_llcc },
- };
- 
- static struct qcom_icc_node alm_sys_tcu = {
- 	.name = "alm_sys_tcu",
--	.id = SM8750_MASTER_SYS_TCU,
- 	.channels = 1,
- 	.buswidth = 8,
- 	.num_links = 2,
--	.links = { SM8750_SLAVE_GEM_NOC_CNOC, SM8750_SLAVE_LLCC },
-+	.link_nodes = { &qns_gem_noc_cnoc, &qns_llcc },
- };
- 
- static struct qcom_icc_node chm_apps = {
- 	.name = "chm_apps",
--	.id = SM8750_MASTER_APPSS_PROC,
- 	.channels = 4,
- 	.buswidth = 32,
- 	.num_links = 4,
--	.links = { SM8750_SLAVE_UBWC_P, SM8750_SLAVE_GEM_NOC_CNOC,
--			   SM8750_SLAVE_LLCC, SM8750_SLAVE_MEM_NOC_PCIE_SNOC },
-+	.link_nodes = { &chs_ubwc_p, &qns_gem_noc_cnoc,
-+			&qns_llcc, &qns_pcie },
- };
- 
- static struct qcom_icc_node qnm_gpu = {
- 	.name = "qnm_gpu",
--	.id = SM8750_MASTER_GFX3D,
- 	.channels = 2,
- 	.buswidth = 32,
- 	.num_links = 2,
--	.links = { SM8750_SLAVE_GEM_NOC_CNOC, SM8750_SLAVE_LLCC },
-+	.link_nodes = { &qns_gem_noc_cnoc, &qns_llcc },
- };
- 
- static struct qcom_icc_node qnm_lpass_gemnoc = {
- 	.name = "qnm_lpass_gemnoc",
--	.id = SM8750_MASTER_LPASS_GEM_NOC,
- 	.channels = 1,
- 	.buswidth = 16,
- 	.num_links = 3,
--	.links = { SM8750_SLAVE_GEM_NOC_CNOC, SM8750_SLAVE_LLCC,
--			   SM8750_SLAVE_MEM_NOC_PCIE_SNOC },
-+	.link_nodes = { &qns_gem_noc_cnoc, &qns_llcc,
-+			&qns_pcie },
- };
- 
- static struct qcom_icc_node qnm_mdsp = {
- 	.name = "qnm_mdsp",
--	.id = SM8750_MASTER_MSS_PROC,
- 	.channels = 1,
- 	.buswidth = 16,
- 	.num_links = 3,
--	.links = { SM8750_SLAVE_GEM_NOC_CNOC, SM8750_SLAVE_LLCC,
--			   SM8750_SLAVE_MEM_NOC_PCIE_SNOC },
-+	.link_nodes = { &qns_gem_noc_cnoc, &qns_llcc,
-+			&qns_pcie },
- };
- 
- static struct qcom_icc_node qnm_mnoc_hf = {
- 	.name = "qnm_mnoc_hf",
--	.id = SM8750_MASTER_MNOC_HF_MEM_NOC,
- 	.channels = 2,
- 	.buswidth = 32,
- 	.num_links = 2,
--	.links = { SM8750_SLAVE_GEM_NOC_CNOC, SM8750_SLAVE_LLCC },
-+	.link_nodes = { &qns_gem_noc_cnoc, &qns_llcc },
- };
- 
- static struct qcom_icc_node qnm_mnoc_sf = {
- 	.name = "qnm_mnoc_sf",
--	.id = SM8750_MASTER_MNOC_SF_MEM_NOC,
- 	.channels = 2,
- 	.buswidth = 32,
- 	.num_links = 2,
--	.links = { SM8750_SLAVE_GEM_NOC_CNOC, SM8750_SLAVE_LLCC },
-+	.link_nodes = { &qns_gem_noc_cnoc, &qns_llcc },
- };
- 
- static struct qcom_icc_node qnm_nsp_gemnoc = {
- 	.name = "qnm_nsp_gemnoc",
--	.id = SM8750_MASTER_COMPUTE_NOC,
- 	.channels = 2,
- 	.buswidth = 32,
- 	.num_links = 3,
--	.links = { SM8750_SLAVE_GEM_NOC_CNOC, SM8750_SLAVE_LLCC,
--			   SM8750_SLAVE_MEM_NOC_PCIE_SNOC },
-+	.link_nodes = { &qns_gem_noc_cnoc, &qns_llcc,
-+			&qns_pcie },
- };
- 
- static struct qcom_icc_node qnm_pcie = {
- 	.name = "qnm_pcie",
--	.id = SM8750_MASTER_ANOC_PCIE_GEM_NOC,
- 	.channels = 1,
- 	.buswidth = 8,
- 	.num_links = 2,
--	.links = { SM8750_SLAVE_GEM_NOC_CNOC, SM8750_SLAVE_LLCC },
-+	.link_nodes = { &qns_gem_noc_cnoc, &qns_llcc },
- };
- 
- static struct qcom_icc_node qnm_snoc_sf = {
- 	.name = "qnm_snoc_sf",
--	.id = SM8750_MASTER_SNOC_SF_MEM_NOC,
- 	.channels = 1,
- 	.buswidth = 16,
- 	.num_links = 3,
--	.links = { SM8750_SLAVE_GEM_NOC_CNOC, SM8750_SLAVE_LLCC,
--			   SM8750_SLAVE_MEM_NOC_PCIE_SNOC },
-+	.link_nodes = { &qns_gem_noc_cnoc, &qns_llcc,
-+			&qns_pcie },
- };
- 
- static struct qcom_icc_node qnm_ubwc_p = {
- 	.name = "qnm_ubwc_p",
--	.id = SM8750_MASTER_UBWC_P,
- 	.channels = 1,
- 	.buswidth = 32,
- 	.num_links = 1,
--	.links = { SM8750_SLAVE_LLCC },
-+	.link_nodes = { &qns_llcc },
- };
- 
- static struct qcom_icc_node xm_gic = {
- 	.name = "xm_gic",
--	.id = SM8750_MASTER_GIC,
- 	.channels = 1,
- 	.buswidth = 8,
- 	.num_links = 1,
--	.links = { SM8750_SLAVE_LLCC },
-+	.link_nodes = { &qns_llcc },
- };
- 
- static struct qcom_icc_node qnm_lpiaon_noc = {
- 	.name = "qnm_lpiaon_noc",
--	.id = SM8750_MASTER_LPIAON_NOC,
- 	.channels = 1,
- 	.buswidth = 16,
- 	.num_links = 1,
--	.links = { SM8750_SLAVE_LPASS_GEM_NOC },
-+	.link_nodes = { &qns_lpass_ag_noc_gemnoc },
- };
- 
- static struct qcom_icc_node qnm_lpass_lpinoc = {
- 	.name = "qnm_lpass_lpinoc",
--	.id = SM8750_MASTER_LPASS_LPINOC,
- 	.channels = 1,
- 	.buswidth = 16,
- 	.num_links = 1,
--	.links = { SM8750_SLAVE_LPIAON_NOC_LPASS_AG_NOC },
-+	.link_nodes = { &qns_lpass_aggnoc },
- };
- 
- static struct qcom_icc_node qnm_lpinoc_dsp_qns4m = {
- 	.name = "qnm_lpinoc_dsp_qns4m",
--	.id = SM8750_MASTER_LPASS_PROC,
- 	.channels = 1,
- 	.buswidth = 16,
- 	.num_links = 1,
--	.links = { SM8750_SLAVE_LPICX_NOC_LPIAON_NOC },
-+	.link_nodes = { &qns_lpi_aon_noc },
- };
- 
- static struct qcom_icc_node llcc_mc = {
- 	.name = "llcc_mc",
--	.id = SM8750_MASTER_LLCC,
- 	.channels = 4,
- 	.buswidth = 4,
- 	.num_links = 1,
--	.links = { SM8750_SLAVE_EBI1 },
-+	.link_nodes = { &ebi },
- };
- 
- static struct qcom_icc_node qnm_camnoc_hf = {
- 	.name = "qnm_camnoc_hf",
--	.id = SM8750_MASTER_CAMNOC_HF,
- 	.channels = 2,
- 	.buswidth = 32,
- 	.num_links = 1,
--	.links = { SM8750_SLAVE_MNOC_HF_MEM_NOC },
-+	.link_nodes = { &qns_mem_noc_hf },
- };
- 
- static struct qcom_icc_node qnm_camnoc_nrt_icp_sf = {
- 	.name = "qnm_camnoc_nrt_icp_sf",
--	.id = SM8750_MASTER_CAMNOC_NRT_ICP_SF,
- 	.channels = 1,
- 	.buswidth = 8,
- 	.num_links = 1,
--	.links = { SM8750_SLAVE_MNOC_SF_MEM_NOC },
-+	.link_nodes = { &qns_mem_noc_sf },
- };
- 
- static struct qcom_icc_node qnm_camnoc_rt_cdm_sf = {
- 	.name = "qnm_camnoc_rt_cdm_sf",
--	.id = SM8750_MASTER_CAMNOC_RT_CDM_SF,
- 	.channels = 1,
- 	.buswidth = 8,
- 	.num_links = 1,
--	.links = { SM8750_SLAVE_MNOC_SF_MEM_NOC },
-+	.link_nodes = { &qns_mem_noc_sf },
- };
- 
- static struct qcom_icc_node qnm_camnoc_sf = {
- 	.name = "qnm_camnoc_sf",
--	.id = SM8750_MASTER_CAMNOC_SF,
- 	.channels = 2,
- 	.buswidth = 32,
- 	.num_links = 1,
--	.links = { SM8750_SLAVE_MNOC_SF_MEM_NOC },
-+	.link_nodes = { &qns_mem_noc_sf },
- };
- 
- static struct qcom_icc_node qnm_mdp = {
- 	.name = "qnm_mdp",
--	.id = SM8750_MASTER_MDP,
- 	.channels = 2,
- 	.buswidth = 32,
- 	.num_links = 1,
--	.links = { SM8750_SLAVE_MNOC_HF_MEM_NOC },
-+	.link_nodes = { &qns_mem_noc_hf },
- };
- 
- static struct qcom_icc_node qnm_vapss_hcp = {
- 	.name = "qnm_vapss_hcp",
--	.id = SM8750_MASTER_CDSP_HCP,
- 	.channels = 1,
- 	.buswidth = 32,
- 	.num_links = 1,
--	.links = { SM8750_SLAVE_MNOC_SF_MEM_NOC },
-+	.link_nodes = { &qns_mem_noc_sf },
- };
- 
- static struct qcom_icc_node qnm_video_cv_cpu = {
- 	.name = "qnm_video_cv_cpu",
--	.id = SM8750_MASTER_VIDEO_CV_PROC,
- 	.channels = 1,
- 	.buswidth = 8,
- 	.num_links = 1,
--	.links = { SM8750_SLAVE_MNOC_SF_MEM_NOC },
-+	.link_nodes = { &qns_mem_noc_sf },
- };
- 
- static struct qcom_icc_node qnm_video_eva = {
- 	.name = "qnm_video_eva",
--	.id = SM8750_MASTER_VIDEO_EVA,
- 	.channels = 2,
- 	.buswidth = 32,
- 	.num_links = 1,
--	.links = { SM8750_SLAVE_MNOC_SF_MEM_NOC },
-+	.link_nodes = { &qns_mem_noc_sf },
- };
- 
- static struct qcom_icc_node qnm_video_mvp = {
- 	.name = "qnm_video_mvp",
--	.id = SM8750_MASTER_VIDEO_MVP,
- 	.channels = 2,
- 	.buswidth = 32,
- 	.num_links = 1,
--	.links = { SM8750_SLAVE_MNOC_SF_MEM_NOC },
-+	.link_nodes = { &qns_mem_noc_sf },
- };
- 
- static struct qcom_icc_node qnm_video_v_cpu = {
- 	.name = "qnm_video_v_cpu",
--	.id = SM8750_MASTER_VIDEO_V_PROC,
- 	.channels = 1,
- 	.buswidth = 8,
- 	.num_links = 1,
--	.links = { SM8750_SLAVE_MNOC_SF_MEM_NOC },
-+	.link_nodes = { &qns_mem_noc_sf },
- };
- 
- static struct qcom_icc_node qsm_mnoc_cfg = {
- 	.name = "qsm_mnoc_cfg",
--	.id = SM8750_MASTER_CNOC_MNOC_CFG,
- 	.channels = 1,
- 	.buswidth = 4,
- 	.num_links = 1,
--	.links = { SM8750_SLAVE_SERVICE_MNOC },
-+	.link_nodes = { &srvc_mnoc },
- };
- 
- static struct qcom_icc_node qnm_nsp = {
- 	.name = "qnm_nsp",
--	.id = SM8750_MASTER_CDSP_PROC,
- 	.channels = 2,
- 	.buswidth = 32,
- 	.num_links = 1,
--	.links = { SM8750_SLAVE_CDSP_MEM_NOC },
-+	.link_nodes = { &qns_nsp_gemnoc },
- };
- 
- static struct qcom_icc_node qsm_pcie_anoc_cfg = {
- 	.name = "qsm_pcie_anoc_cfg",
--	.id = SM8750_MASTER_PCIE_ANOC_CFG,
- 	.channels = 1,
- 	.buswidth = 4,
- 	.num_links = 1,
--	.links = { SM8750_SLAVE_SERVICE_PCIE_ANOC },
-+	.link_nodes = { &srvc_pcie_aggre_noc },
- };
- 
- static struct qcom_icc_node xm_pcie3 = {
- 	.name = "xm_pcie3",
--	.id = SM8750_MASTER_PCIE_0,
- 	.channels = 1,
- 	.buswidth = 8,
- 	.num_links = 1,
--	.links = { SM8750_SLAVE_ANOC_PCIE_GEM_NOC },
-+	.link_nodes = { &qns_pcie_mem_noc },
- };
- 
- static struct qcom_icc_node qnm_aggre1_noc = {
- 	.name = "qnm_aggre1_noc",
--	.id = SM8750_MASTER_A1NOC_SNOC,
- 	.channels = 1,
- 	.buswidth = 16,
- 	.num_links = 1,
--	.links = { SM8750_SLAVE_SNOC_GEM_NOC_SF },
-+	.link_nodes = { &qns_gemnoc_sf },
- };
- 
- static struct qcom_icc_node qnm_aggre2_noc = {
- 	.name = "qnm_aggre2_noc",
--	.id = SM8750_MASTER_A2NOC_SNOC,
- 	.channels = 1,
- 	.buswidth = 16,
- 	.num_links = 1,
--	.links = { SM8750_SLAVE_SNOC_GEM_NOC_SF },
-+	.link_nodes = { &qns_gemnoc_sf },
- };
- 
- static struct qcom_icc_node qns_a1noc_snoc = {
- 	.name = "qns_a1noc_snoc",
--	.id = SM8750_SLAVE_A1NOC_SNOC,
- 	.channels = 1,
- 	.buswidth = 16,
- 	.num_links = 1,
--	.links = { SM8750_MASTER_A1NOC_SNOC },
-+	.link_nodes = { &qnm_aggre1_noc },
- };
- 
- static struct qcom_icc_node qns_a2noc_snoc = {
- 	.name = "qns_a2noc_snoc",
--	.id = SM8750_SLAVE_A2NOC_SNOC,
- 	.channels = 1,
- 	.buswidth = 16,
- 	.num_links = 1,
--	.links = { SM8750_MASTER_A2NOC_SNOC },
-+	.link_nodes = { &qnm_aggre2_noc },
- };
- 
- static struct qcom_icc_node qup0_core_slave = {
- 	.name = "qup0_core_slave",
--	.id = SM8750_SLAVE_QUP_CORE_0,
- 	.channels = 1,
- 	.buswidth = 4,
--	.num_links = 0,
- };
- 
- static struct qcom_icc_node qup1_core_slave = {
- 	.name = "qup1_core_slave",
--	.id = SM8750_SLAVE_QUP_CORE_1,
- 	.channels = 1,
- 	.buswidth = 4,
--	.num_links = 0,
- };
- 
- static struct qcom_icc_node qup2_core_slave = {
- 	.name = "qup2_core_slave",
--	.id = SM8750_SLAVE_QUP_CORE_2,
- 	.channels = 1,
- 	.buswidth = 4,
--	.num_links = 0,
- };
- 
- static struct qcom_icc_node qhs_ahb2phy0 = {
- 	.name = "qhs_ahb2phy0",
--	.id = SM8750_SLAVE_AHB2PHY_SOUTH,
- 	.channels = 1,
- 	.buswidth = 4,
--	.num_links = 0,
- };
- 
- static struct qcom_icc_node qhs_ahb2phy1 = {
- 	.name = "qhs_ahb2phy1",
--	.id = SM8750_SLAVE_AHB2PHY_NORTH,
- 	.channels = 1,
- 	.buswidth = 4,
--	.num_links = 0,
- };
- 
- static struct qcom_icc_node qhs_camera_cfg = {
- 	.name = "qhs_camera_cfg",
--	.id = SM8750_SLAVE_CAMERA_CFG,
- 	.channels = 1,
- 	.buswidth = 4,
--	.num_links = 0,
- };
- 
- static struct qcom_icc_node qhs_clk_ctl = {
- 	.name = "qhs_clk_ctl",
--	.id = SM8750_SLAVE_CLK_CTL,
- 	.channels = 1,
- 	.buswidth = 4,
--	.num_links = 0,
- };
- 
- static struct qcom_icc_node qhs_crypto0_cfg = {
- 	.name = "qhs_crypto0_cfg",
--	.id = SM8750_SLAVE_CRYPTO_0_CFG,
- 	.channels = 1,
- 	.buswidth = 4,
--	.num_links = 0,
- };
- 
- static struct qcom_icc_node qhs_display_cfg = {
- 	.name = "qhs_display_cfg",
--	.id = SM8750_SLAVE_DISPLAY_CFG,
- 	.channels = 1,
- 	.buswidth = 4,
--	.num_links = 0,
- };
- 
- static struct qcom_icc_node qhs_eva_cfg = {
- 	.name = "qhs_eva_cfg",
--	.id = SM8750_SLAVE_EVA_CFG,
- 	.channels = 1,
- 	.buswidth = 4,
--	.num_links = 0,
- };
- 
- static struct qcom_icc_node qhs_gpuss_cfg = {
- 	.name = "qhs_gpuss_cfg",
--	.id = SM8750_SLAVE_GFX3D_CFG,
- 	.channels = 1,
- 	.buswidth = 8,
--	.num_links = 0,
- };
- 
- static struct qcom_icc_node qhs_i2c = {
- 	.name = "qhs_i2c",
--	.id = SM8750_SLAVE_I2C,
- 	.channels = 1,
- 	.buswidth = 4,
--	.num_links = 0,
- };
- 
- static struct qcom_icc_node qhs_i3c_ibi0_cfg = {
- 	.name = "qhs_i3c_ibi0_cfg",
--	.id = SM8750_SLAVE_I3C_IBI0_CFG,
- 	.channels = 1,
- 	.buswidth = 4,
--	.num_links = 0,
- };
- 
- static struct qcom_icc_node qhs_i3c_ibi1_cfg = {
- 	.name = "qhs_i3c_ibi1_cfg",
--	.id = SM8750_SLAVE_I3C_IBI1_CFG,
- 	.channels = 1,
- 	.buswidth = 4,
--	.num_links = 0,
- };
- 
- static struct qcom_icc_node qhs_imem_cfg = {
- 	.name = "qhs_imem_cfg",
--	.id = SM8750_SLAVE_IMEM_CFG,
- 	.channels = 1,
- 	.buswidth = 4,
--	.num_links = 0,
- };
- 
- static struct qcom_icc_node qhs_mss_cfg = {
- 	.name = "qhs_mss_cfg",
--	.id = SM8750_SLAVE_CNOC_MSS,
- 	.channels = 1,
- 	.buswidth = 4,
--	.num_links = 0,
- };
- 
- static struct qcom_icc_node qhs_pcie_cfg = {
- 	.name = "qhs_pcie_cfg",
--	.id = SM8750_SLAVE_PCIE_CFG,
- 	.channels = 1,
- 	.buswidth = 4,
--	.num_links = 0,
- };
- 
- static struct qcom_icc_node qhs_prng = {
- 	.name = "qhs_prng",
--	.id = SM8750_SLAVE_PRNG,
- 	.channels = 1,
- 	.buswidth = 4,
--	.num_links = 0,
- };
- 
- static struct qcom_icc_node qhs_qdss_cfg = {
- 	.name = "qhs_qdss_cfg",
--	.id = SM8750_SLAVE_QDSS_CFG,
- 	.channels = 1,
- 	.buswidth = 4,
--	.num_links = 0,
- };
- 
- static struct qcom_icc_node qhs_qspi = {
- 	.name = "qhs_qspi",
--	.id = SM8750_SLAVE_QSPI_0,
- 	.channels = 1,
- 	.buswidth = 4,
--	.num_links = 0,
- };
- 
- static struct qcom_icc_node qhs_qup02 = {
- 	.name = "qhs_qup02",
--	.id = SM8750_SLAVE_QUP_3,
- 	.channels = 1,
- 	.buswidth = 4,
--	.num_links = 0,
- };
- 
- static struct qcom_icc_node qhs_qup1 = {
- 	.name = "qhs_qup1",
--	.id = SM8750_SLAVE_QUP_1,
- 	.channels = 1,
- 	.buswidth = 4,
--	.num_links = 0,
- };
- 
- static struct qcom_icc_node qhs_qup2 = {
- 	.name = "qhs_qup2",
--	.id = SM8750_SLAVE_QUP_2,
- 	.channels = 1,
- 	.buswidth = 4,
--	.num_links = 0,
- };
- 
- static struct qcom_icc_node qhs_sdc2 = {
- 	.name = "qhs_sdc2",
--	.id = SM8750_SLAVE_SDCC_2,
- 	.channels = 1,
- 	.buswidth = 4,
--	.num_links = 0,
- };
- 
- static struct qcom_icc_node qhs_sdc4 = {
- 	.name = "qhs_sdc4",
--	.id = SM8750_SLAVE_SDCC_4,
- 	.channels = 1,
- 	.buswidth = 4,
--	.num_links = 0,
- };
- 
- static struct qcom_icc_node qhs_spss_cfg = {
- 	.name = "qhs_spss_cfg",
--	.id = SM8750_SLAVE_SPSS_CFG,
- 	.channels = 1,
- 	.buswidth = 4,
--	.num_links = 0,
- };
- 
- static struct qcom_icc_node qhs_tcsr = {
- 	.name = "qhs_tcsr",
--	.id = SM8750_SLAVE_TCSR,
- 	.channels = 1,
- 	.buswidth = 4,
--	.num_links = 0,
- };
- 
- static struct qcom_icc_node qhs_tlmm = {
- 	.name = "qhs_tlmm",
--	.id = SM8750_SLAVE_TLMM,
- 	.channels = 1,
- 	.buswidth = 4,
--	.num_links = 0,
- };
- 
- static struct qcom_icc_node qhs_ufs_mem_cfg = {
- 	.name = "qhs_ufs_mem_cfg",
--	.id = SM8750_SLAVE_UFS_MEM_CFG,
- 	.channels = 1,
- 	.buswidth = 4,
--	.num_links = 0,
- };
- 
- static struct qcom_icc_node qhs_usb3_0 = {
- 	.name = "qhs_usb3_0",
--	.id = SM8750_SLAVE_USB3_0,
- 	.channels = 1,
- 	.buswidth = 4,
--	.num_links = 0,
- };
- 
- static struct qcom_icc_node qhs_venus_cfg = {
- 	.name = "qhs_venus_cfg",
--	.id = SM8750_SLAVE_VENUS_CFG,
- 	.channels = 1,
- 	.buswidth = 4,
--	.num_links = 0,
- };
- 
- static struct qcom_icc_node qhs_vsense_ctrl_cfg = {
- 	.name = "qhs_vsense_ctrl_cfg",
--	.id = SM8750_SLAVE_VSENSE_CTRL_CFG,
- 	.channels = 1,
- 	.buswidth = 4,
--	.num_links = 0,
- };
- 
- static struct qcom_icc_node qss_mnoc_cfg = {
- 	.name = "qss_mnoc_cfg",
--	.id = SM8750_SLAVE_CNOC_MNOC_CFG,
- 	.channels = 1,
- 	.buswidth = 4,
- 	.num_links = 1,
--	.links = { SM8750_MASTER_CNOC_MNOC_CFG },
-+	.link_nodes = { &qsm_mnoc_cfg },
- };
- 
- static struct qcom_icc_node qss_pcie_anoc_cfg = {
- 	.name = "qss_pcie_anoc_cfg",
--	.id = SM8750_SLAVE_PCIE_ANOC_CFG,
- 	.channels = 1,
- 	.buswidth = 4,
- 	.num_links = 1,
--	.links = { SM8750_MASTER_PCIE_ANOC_CFG },
-+	.link_nodes = { &qsm_pcie_anoc_cfg },
- };
- 
- static struct qcom_icc_node xs_qdss_stm = {
- 	.name = "xs_qdss_stm",
--	.id = SM8750_SLAVE_QDSS_STM,
- 	.channels = 1,
- 	.buswidth = 4,
--	.num_links = 0,
- };
- 
- static struct qcom_icc_node xs_sys_tcu_cfg = {
- 	.name = "xs_sys_tcu_cfg",
--	.id = SM8750_SLAVE_TCU,
- 	.channels = 1,
- 	.buswidth = 8,
--	.num_links = 0,
- };
- 
- static struct qcom_icc_node qhs_aoss = {
- 	.name = "qhs_aoss",
--	.id = SM8750_SLAVE_AOSS,
- 	.channels = 1,
- 	.buswidth = 4,
--	.num_links = 0,
- };
- 
- static struct qcom_icc_node qhs_ipa = {
- 	.name = "qhs_ipa",
--	.id = SM8750_SLAVE_IPA_CFG,
- 	.channels = 1,
- 	.buswidth = 4,
--	.num_links = 0,
- };
- 
- static struct qcom_icc_node qhs_ipc_router = {
- 	.name = "qhs_ipc_router",
--	.id = SM8750_SLAVE_IPC_ROUTER_CFG,
- 	.channels = 1,
- 	.buswidth = 4,
--	.num_links = 0,
- };
- 
- static struct qcom_icc_node qhs_soccp = {
- 	.name = "qhs_soccp",
--	.id = SM8750_SLAVE_SOCCP,
- 	.channels = 1,
- 	.buswidth = 4,
--	.num_links = 0,
- };
- 
- static struct qcom_icc_node qhs_tme_cfg = {
- 	.name = "qhs_tme_cfg",
--	.id = SM8750_SLAVE_TME_CFG,
- 	.channels = 1,
- 	.buswidth = 4,
--	.num_links = 0,
- };
- 
- static struct qcom_icc_node qns_apss = {
- 	.name = "qns_apss",
--	.id = SM8750_SLAVE_APPSS,
- 	.channels = 1,
- 	.buswidth = 8,
--	.num_links = 0,
- };
- 
- static struct qcom_icc_node qss_cfg = {
- 	.name = "qss_cfg",
--	.id = SM8750_SLAVE_CNOC_CFG,
- 	.channels = 1,
- 	.buswidth = 4,
- 	.num_links = 1,
--	.links = { SM8750_MASTER_CNOC_CFG },
-+	.link_nodes = { &qsm_cfg },
- };
- 
- static struct qcom_icc_node qss_ddrss_cfg = {
- 	.name = "qss_ddrss_cfg",
--	.id = SM8750_SLAVE_DDRSS_CFG,
- 	.channels = 1,
- 	.buswidth = 4,
--	.num_links = 0,
- };
- 
- static struct qcom_icc_node qxs_boot_imem = {
- 	.name = "qxs_boot_imem",
--	.id = SM8750_SLAVE_BOOT_IMEM,
- 	.channels = 1,
- 	.buswidth = 16,
--	.num_links = 0,
- };
- 
- static struct qcom_icc_node qxs_imem = {
- 	.name = "qxs_imem",
--	.id = SM8750_SLAVE_IMEM,
- 	.channels = 1,
- 	.buswidth = 8,
--	.num_links = 0,
- };
- 
- static struct qcom_icc_node qxs_modem_boot_imem = {
- 	.name = "qxs_modem_boot_imem",
--	.id = SM8750_SLAVE_BOOT_IMEM_2,
- 	.channels = 1,
- 	.buswidth = 8,
--	.num_links = 0,
- };
- 
- static struct qcom_icc_node srvc_cnoc_main = {
- 	.name = "srvc_cnoc_main",
--	.id = SM8750_SLAVE_SERVICE_CNOC,
- 	.channels = 1,
- 	.buswidth = 4,
--	.num_links = 0,
- };
- 
- static struct qcom_icc_node xs_pcie = {
- 	.name = "xs_pcie",
--	.id = SM8750_SLAVE_PCIE_0,
- 	.channels = 1,
- 	.buswidth = 8,
--	.num_links = 0,
- };
- 
- static struct qcom_icc_node chs_ubwc_p = {
- 	.name = "chs_ubwc_p",
--	.id = SM8750_SLAVE_UBWC_P,
- 	.channels = 1,
- 	.buswidth = 32,
--	.num_links = 0,
- };
- 
- static struct qcom_icc_node qns_gem_noc_cnoc = {
- 	.name = "qns_gem_noc_cnoc",
--	.id = SM8750_SLAVE_GEM_NOC_CNOC,
- 	.channels = 1,
- 	.buswidth = 16,
- 	.num_links = 1,
--	.links = { SM8750_MASTER_GEM_NOC_CNOC },
-+	.link_nodes = { &qnm_gemnoc_cnoc },
- };
- 
- static struct qcom_icc_node qns_llcc = {
- 	.name = "qns_llcc",
--	.id = SM8750_SLAVE_LLCC,
- 	.channels = 4,
- 	.buswidth = 16,
- 	.num_links = 1,
--	.links = { SM8750_MASTER_LLCC },
-+	.link_nodes = { &llcc_mc },
- };
- 
- static struct qcom_icc_node qns_pcie = {
- 	.name = "qns_pcie",
--	.id = SM8750_SLAVE_MEM_NOC_PCIE_SNOC,
- 	.channels = 1,
- 	.buswidth = 8,
- 	.num_links = 1,
--	.links = { SM8750_MASTER_GEM_NOC_PCIE_SNOC },
-+	.link_nodes = { &qnm_gemnoc_pcie },
- };
- 
- static struct qcom_icc_node qns_lpass_ag_noc_gemnoc = {
- 	.name = "qns_lpass_ag_noc_gemnoc",
--	.id = SM8750_SLAVE_LPASS_GEM_NOC,
- 	.channels = 1,
- 	.buswidth = 16,
- 	.num_links = 1,
--	.links = { SM8750_MASTER_LPASS_GEM_NOC },
-+	.link_nodes = { &qnm_lpass_gemnoc },
- };
- 
- static struct qcom_icc_node qns_lpass_aggnoc = {
- 	.name = "qns_lpass_aggnoc",
--	.id = SM8750_SLAVE_LPIAON_NOC_LPASS_AG_NOC,
- 	.channels = 1,
- 	.buswidth = 16,
- 	.num_links = 1,
--	.links = { SM8750_MASTER_LPIAON_NOC },
-+	.link_nodes = { &qnm_lpiaon_noc },
- };
- 
- static struct qcom_icc_node qns_lpi_aon_noc = {
- 	.name = "qns_lpi_aon_noc",
--	.id = SM8750_SLAVE_LPICX_NOC_LPIAON_NOC,
- 	.channels = 1,
- 	.buswidth = 16,
- 	.num_links = 1,
--	.links = { SM8750_MASTER_LPASS_LPINOC },
-+	.link_nodes = { &qnm_lpass_lpinoc },
- };
- 
- static struct qcom_icc_node ebi = {
- 	.name = "ebi",
--	.id = SM8750_SLAVE_EBI1,
- 	.channels = 4,
- 	.buswidth = 4,
--	.num_links = 0,
- };
- 
- static struct qcom_icc_node qns_mem_noc_hf = {
- 	.name = "qns_mem_noc_hf",
--	.id = SM8750_SLAVE_MNOC_HF_MEM_NOC,
- 	.channels = 2,
- 	.buswidth = 32,
- 	.num_links = 1,
--	.links = { SM8750_MASTER_MNOC_HF_MEM_NOC },
-+	.link_nodes = { &qnm_mnoc_hf },
- };
- 
- static struct qcom_icc_node qns_mem_noc_sf = {
- 	.name = "qns_mem_noc_sf",
--	.id = SM8750_SLAVE_MNOC_SF_MEM_NOC,
- 	.channels = 2,
- 	.buswidth = 32,
- 	.num_links = 1,
--	.links = { SM8750_MASTER_MNOC_SF_MEM_NOC },
-+	.link_nodes = { &qnm_mnoc_sf },
- };
- 
- static struct qcom_icc_node srvc_mnoc = {
- 	.name = "srvc_mnoc",
--	.id = SM8750_SLAVE_SERVICE_MNOC,
- 	.channels = 1,
- 	.buswidth = 4,
--	.num_links = 0,
- };
- 
- static struct qcom_icc_node qns_nsp_gemnoc = {
- 	.name = "qns_nsp_gemnoc",
--	.id = SM8750_SLAVE_CDSP_MEM_NOC,
- 	.channels = 2,
- 	.buswidth = 32,
- 	.num_links = 1,
--	.links = { SM8750_MASTER_COMPUTE_NOC },
-+	.link_nodes = { &qnm_nsp_gemnoc },
- };
- 
- static struct qcom_icc_node qns_pcie_mem_noc = {
- 	.name = "qns_pcie_mem_noc",
--	.id = SM8750_SLAVE_ANOC_PCIE_GEM_NOC,
- 	.channels = 1,
- 	.buswidth = 8,
- 	.num_links = 1,
--	.links = { SM8750_MASTER_ANOC_PCIE_GEM_NOC },
-+	.link_nodes = { &qnm_pcie },
- };
- 
- static struct qcom_icc_node srvc_pcie_aggre_noc = {
- 	.name = "srvc_pcie_aggre_noc",
--	.id = SM8750_SLAVE_SERVICE_PCIE_ANOC,
- 	.channels = 1,
- 	.buswidth = 4,
--	.num_links = 0,
- };
- 
- static struct qcom_icc_node qns_gemnoc_sf = {
- 	.name = "qns_gemnoc_sf",
--	.id = SM8750_SLAVE_SNOC_GEM_NOC_SF,
- 	.channels = 1,
- 	.buswidth = 16,
- 	.num_links = 1,
--	.links = { SM8750_MASTER_SNOC_SF_MEM_NOC },
-+	.link_nodes = { &qnm_snoc_sf },
- };
- 
- static struct qcom_icc_bcm bcm_acv = {
-@@ -1364,6 +1194,7 @@ static struct qcom_icc_node * const aggre1_noc_nodes[] = {
- };
- 
- static const struct qcom_icc_desc sm8750_aggre1_noc = {
-+	.alloc_dyn_id = true,
- 	.nodes = aggre1_noc_nodes,
+diff --git a/drivers/interconnect/qcom/glymur.c b/drivers/interconnect/qcom/glymur.c
+index 104ac6c1bd3665de92e15d577cb51111289c794a..e5c07795a6c67ab8a59daf2fc4b8a5fa6dd014d6 100644
+--- a/drivers/interconnect/qcom/glymur.c
++++ b/drivers/interconnect/qcom/glymur.c
+@@ -1878,7 +1878,6 @@ static const struct qcom_icc_desc glymur_aggre1_noc = {
  	.num_nodes = ARRAY_SIZE(aggre1_noc_nodes),
- };
-@@ -1386,6 +1217,7 @@ static struct qcom_icc_node * const aggre2_noc_nodes[] = {
+ 	.bcms = aggre1_noc_bcms,
+ 	.num_bcms = ARRAY_SIZE(aggre1_noc_bcms),
+-	.alloc_dyn_id = true,
  };
  
- static const struct qcom_icc_desc sm8750_aggre2_noc = {
-+	.alloc_dyn_id = true,
+ static struct qcom_icc_node * const aggre2_noc_nodes[] = {
+@@ -1900,7 +1899,6 @@ static const struct qcom_icc_desc glymur_aggre2_noc = {
+ 	.config = &glymur_aggre2_noc_regmap_config,
  	.nodes = aggre2_noc_nodes,
  	.num_nodes = ARRAY_SIZE(aggre2_noc_nodes),
- 	.bcms = aggre2_noc_bcms,
-@@ -1408,6 +1240,7 @@ static struct qcom_icc_node * const clk_virt_nodes[] = {
+-	.alloc_dyn_id = true,
+ 	.qos_requires_clocks = true,
  };
  
- static const struct qcom_icc_desc sm8750_clk_virt = {
-+	.alloc_dyn_id = true,
- 	.nodes = clk_virt_nodes,
+@@ -1929,7 +1927,6 @@ static const struct qcom_icc_desc glymur_aggre3_noc = {
+ 	.config = &glymur_aggre3_noc_regmap_config,
+ 	.nodes = aggre3_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(aggre3_noc_nodes),
+-	.alloc_dyn_id = true,
+ };
+ 
+ static struct qcom_icc_bcm * const aggre4_noc_bcms[] = {
+@@ -1958,7 +1955,6 @@ static const struct qcom_icc_desc glymur_aggre4_noc = {
+ 	.num_nodes = ARRAY_SIZE(aggre4_noc_nodes),
+ 	.bcms = aggre4_noc_bcms,
+ 	.num_bcms = ARRAY_SIZE(aggre4_noc_bcms),
+-	.alloc_dyn_id = true,
+ 	.qos_requires_clocks = true,
+ };
+ 
+@@ -1982,7 +1978,6 @@ static const struct qcom_icc_desc glymur_clk_virt = {
  	.num_nodes = ARRAY_SIZE(clk_virt_nodes),
  	.bcms = clk_virt_bcms,
-@@ -1457,6 +1290,7 @@ static struct qcom_icc_node * const config_noc_nodes[] = {
+ 	.num_bcms = ARRAY_SIZE(clk_virt_bcms),
+-	.alloc_dyn_id = true,
  };
  
- static const struct qcom_icc_desc sm8750_config_noc = {
-+	.alloc_dyn_id = true,
+ static struct qcom_icc_bcm * const cnoc_cfg_bcms[] = {
+@@ -2059,7 +2054,6 @@ static const struct qcom_icc_desc glymur_cnoc_cfg = {
+ 	.num_nodes = ARRAY_SIZE(cnoc_cfg_nodes),
+ 	.bcms = cnoc_cfg_bcms,
+ 	.num_bcms = ARRAY_SIZE(cnoc_cfg_bcms),
+-	.alloc_dyn_id = true,
+ };
+ 
+ static struct qcom_icc_bcm * const cnoc_main_bcms[] = {
+@@ -2092,7 +2086,6 @@ static const struct qcom_icc_desc glymur_cnoc_main = {
+ 	.num_nodes = ARRAY_SIZE(cnoc_main_nodes),
+ 	.bcms = cnoc_main_bcms,
+ 	.num_bcms = ARRAY_SIZE(cnoc_main_bcms),
+-	.alloc_dyn_id = true,
+ };
+ 
+ static struct qcom_icc_bcm * const hscnoc_bcms[] = {
+@@ -2136,7 +2129,6 @@ static const struct qcom_icc_desc glymur_hscnoc = {
+ 	.num_nodes = ARRAY_SIZE(hscnoc_nodes),
+ 	.bcms = hscnoc_bcms,
+ 	.num_bcms = ARRAY_SIZE(hscnoc_bcms),
+-	.alloc_dyn_id = true,
+ };
+ 
+ static struct qcom_icc_node * const lpass_ag_noc_nodes[] = {
+@@ -2156,7 +2148,6 @@ static const struct qcom_icc_desc glymur_lpass_ag_noc = {
+ 	.config = &glymur_lpass_ag_noc_regmap_config,
+ 	.nodes = lpass_ag_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(lpass_ag_noc_nodes),
+-	.alloc_dyn_id = true,
+ };
+ 
+ static struct qcom_icc_bcm * const lpass_lpiaon_noc_bcms[] = {
+@@ -2182,7 +2173,6 @@ static const struct qcom_icc_desc glymur_lpass_lpiaon_noc = {
+ 	.num_nodes = ARRAY_SIZE(lpass_lpiaon_noc_nodes),
+ 	.bcms = lpass_lpiaon_noc_bcms,
+ 	.num_bcms = ARRAY_SIZE(lpass_lpiaon_noc_bcms),
+-	.alloc_dyn_id = true,
+ };
+ 
+ static struct qcom_icc_node * const lpass_lpicx_noc_nodes[] = {
+@@ -2202,7 +2192,6 @@ static const struct qcom_icc_desc glymur_lpass_lpicx_noc = {
+ 	.config = &glymur_lpass_lpicx_noc_regmap_config,
+ 	.nodes = lpass_lpicx_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(lpass_lpicx_noc_nodes),
+-	.alloc_dyn_id = true,
+ };
+ 
+ static struct qcom_icc_bcm * const mc_virt_bcms[] = {
+@@ -2220,7 +2209,6 @@ static const struct qcom_icc_desc glymur_mc_virt = {
+ 	.num_nodes = ARRAY_SIZE(mc_virt_nodes),
+ 	.bcms = mc_virt_bcms,
+ 	.num_bcms = ARRAY_SIZE(mc_virt_bcms),
+-	.alloc_dyn_id = true,
+ };
+ 
+ static struct qcom_icc_bcm * const mmss_noc_bcms[] = {
+@@ -2259,7 +2247,6 @@ static const struct qcom_icc_desc glymur_mmss_noc = {
+ 	.num_nodes = ARRAY_SIZE(mmss_noc_nodes),
+ 	.bcms = mmss_noc_bcms,
+ 	.num_bcms = ARRAY_SIZE(mmss_noc_bcms),
+-	.alloc_dyn_id = true,
+ };
+ 
+ static struct qcom_icc_node * const nsinoc_nodes[] = {
+@@ -2280,7 +2267,6 @@ static const struct qcom_icc_desc glymur_nsinoc = {
+ 	.config = &glymur_nsinoc_regmap_config,
+ 	.nodes = nsinoc_nodes,
+ 	.num_nodes = ARRAY_SIZE(nsinoc_nodes),
+-	.alloc_dyn_id = true,
+ };
+ 
+ static struct qcom_icc_bcm * const nsp_noc_bcms[] = {
+@@ -2306,7 +2292,6 @@ static const struct qcom_icc_desc glymur_nsp_noc = {
+ 	.num_nodes = ARRAY_SIZE(nsp_noc_nodes),
+ 	.bcms = nsp_noc_bcms,
+ 	.num_bcms = ARRAY_SIZE(nsp_noc_bcms),
+-	.alloc_dyn_id = true,
+ };
+ 
+ static struct qcom_icc_node * const oobm_ss_noc_nodes[] = {
+@@ -2326,7 +2311,6 @@ static const struct qcom_icc_desc glymur_oobm_ss_noc = {
+ 	.config = &glymur_oobm_ss_noc_regmap_config,
+ 	.nodes = oobm_ss_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(oobm_ss_noc_nodes),
+-	.alloc_dyn_id = true,
+ };
+ 
+ static struct qcom_icc_bcm * const pcie_east_anoc_bcms[] = {
+@@ -2356,7 +2340,6 @@ static const struct qcom_icc_desc glymur_pcie_east_anoc = {
+ 	.num_nodes = ARRAY_SIZE(pcie_east_anoc_nodes),
+ 	.bcms = pcie_east_anoc_bcms,
+ 	.num_bcms = ARRAY_SIZE(pcie_east_anoc_bcms),
+-	.alloc_dyn_id = true,
+ 	.qos_requires_clocks = true,
+ };
+ 
+@@ -2388,7 +2371,6 @@ static const struct qcom_icc_desc glymur_pcie_east_slv_noc = {
+ 	.num_nodes = ARRAY_SIZE(pcie_east_slv_noc_nodes),
+ 	.bcms = pcie_east_slv_noc_bcms,
+ 	.num_bcms = ARRAY_SIZE(pcie_east_slv_noc_bcms),
+-	.alloc_dyn_id = true,
+ };
+ 
+ static struct qcom_icc_bcm * const pcie_west_anoc_bcms[] = {
+@@ -2420,7 +2402,6 @@ static const struct qcom_icc_desc glymur_pcie_west_anoc = {
+ 	.num_nodes = ARRAY_SIZE(pcie_west_anoc_nodes),
+ 	.bcms = pcie_west_anoc_bcms,
+ 	.num_bcms = ARRAY_SIZE(pcie_west_anoc_bcms),
+-	.alloc_dyn_id = true,
+ 	.qos_requires_clocks = true,
+ };
+ 
+@@ -2454,7 +2435,6 @@ static const struct qcom_icc_desc glymur_pcie_west_slv_noc = {
+ 	.num_nodes = ARRAY_SIZE(pcie_west_slv_noc_nodes),
+ 	.bcms = pcie_west_slv_noc_bcms,
+ 	.num_bcms = ARRAY_SIZE(pcie_west_slv_noc_bcms),
+-	.alloc_dyn_id = true,
+ };
+ 
+ static struct qcom_icc_bcm * const system_noc_bcms[] = {
+@@ -2488,7 +2468,6 @@ static const struct qcom_icc_desc glymur_system_noc = {
+ 	.num_nodes = ARRAY_SIZE(system_noc_nodes),
+ 	.bcms = system_noc_bcms,
+ 	.num_bcms = ARRAY_SIZE(system_noc_bcms),
+-	.alloc_dyn_id = true,
+ };
+ 
+ static const struct of_device_id qnoc_of_match[] = {
+diff --git a/drivers/interconnect/qcom/icc-rpmh.c b/drivers/interconnect/qcom/icc-rpmh.c
+index 001404e91041597eab7f251606873182e52e360c..f90c29111f48ef810a8949ecd25bfbacf20805cb 100644
+--- a/drivers/interconnect/qcom/icc-rpmh.c
++++ b/drivers/interconnect/qcom/icc-rpmh.c
+@@ -280,14 +280,10 @@ int qcom_icc_rpmh_probe(struct platform_device *pdev)
+ 		if (!qn)
+ 			continue;
+ 
+-		if (desc->alloc_dyn_id) {
+-			if (!qn->node)
+-				qn->node = icc_node_create_dyn();
+-			node = qn->node;
+-		} else {
+-			node = icc_node_create(qn->id);
+-		}
++		if (!qn->node)
++			qn->node = icc_node_create_dyn();
+ 
++		node = qn->node;
+ 		if (IS_ERR(node)) {
+ 			ret = PTR_ERR(node);
+ 			goto err_remove_nodes;
+@@ -302,12 +298,8 @@ int qcom_icc_rpmh_probe(struct platform_device *pdev)
+ 		node->data = qn;
+ 		icc_node_add(node, provider);
+ 
+-		for (j = 0; j < qn->num_links; j++) {
+-			if (desc->alloc_dyn_id)
+-				icc_link_nodes(node, &qn->link_nodes[j]->node);
+-			else
+-				icc_link_create(node, qn->links[j]);
+-		}
++		for (j = 0; j < qn->num_links; j++)
++			icc_link_nodes(node, &qn->link_nodes[j]->node);
+ 
+ 		data->nodes[i] = node;
+ 	}
+diff --git a/drivers/interconnect/qcom/icc-rpmh.h b/drivers/interconnect/qcom/icc-rpmh.h
+index b72939cceba38e92154f6af5a93149337fa13479..09d8791402dc4bd67fd092268eb1458bcd8c6c8f 100644
+--- a/drivers/interconnect/qcom/icc-rpmh.h
++++ b/drivers/interconnect/qcom/icc-rpmh.h
+@@ -81,8 +81,6 @@ struct qcom_icc_qosbox {
+ /**
+  * struct qcom_icc_node - Qualcomm specific interconnect nodes
+  * @name: the node name used in debugfs
+- * @links: an array of nodes where we can go next while traversing
+- * @id: a unique node identifier
+  * @link_nodes: links associated with this node
+  * @node: icc_node associated with this node
+  * @num_links: the total number of @links
+@@ -96,8 +94,6 @@ struct qcom_icc_qosbox {
+  */
+ struct qcom_icc_node {
+ 	const char *name;
+-	u16 links[MAX_LINKS];
+-	u16 id;
+ 	struct icc_node *node;
+ 	u16 num_links;
+ 	u16 channels;
+@@ -158,7 +154,6 @@ struct qcom_icc_desc {
+ 	struct qcom_icc_bcm * const *bcms;
+ 	size_t num_bcms;
+ 	bool qos_requires_clocks;
+-	bool alloc_dyn_id;
+ };
+ 
+ int qcom_icc_aggregate(struct icc_node *node, u32 tag, u32 avg_bw,
+diff --git a/drivers/interconnect/qcom/milos.c b/drivers/interconnect/qcom/milos.c
+index 814ec0517f6b8f42ae9d7ce3cd5cebcbaae35ae8..d010b106728a37c9384cd0625e53a4f93466ada4 100644
+--- a/drivers/interconnect/qcom/milos.c
++++ b/drivers/interconnect/qcom/milos.c
+@@ -1522,7 +1522,6 @@ static const struct qcom_icc_desc milos_aggre1_noc = {
+ 	.config = &milos_aggre1_noc_regmap_config,
+ 	.nodes = aggre1_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(aggre1_noc_nodes),
+-	.alloc_dyn_id = true,
+ };
+ 
+ static struct qcom_icc_bcm * const aggre2_noc_bcms[] = {
+@@ -1556,7 +1555,6 @@ static const struct qcom_icc_desc milos_aggre2_noc = {
+ 	.num_nodes = ARRAY_SIZE(aggre2_noc_nodes),
+ 	.bcms = aggre2_noc_bcms,
+ 	.num_bcms = ARRAY_SIZE(aggre2_noc_bcms),
+-	.alloc_dyn_id = true,
+ };
+ 
+ static struct qcom_icc_bcm * const clk_virt_bcms[] = {
+@@ -1576,7 +1574,6 @@ static const struct qcom_icc_desc milos_clk_virt = {
+ 	.num_nodes = ARRAY_SIZE(clk_virt_nodes),
+ 	.bcms = clk_virt_bcms,
+ 	.num_bcms = ARRAY_SIZE(clk_virt_bcms),
+-	.alloc_dyn_id = true,
+ };
+ 
+ static struct qcom_icc_bcm * const cnoc_cfg_bcms[] = {
+@@ -1637,7 +1634,6 @@ static const struct qcom_icc_desc milos_cnoc_cfg = {
+ 	.num_nodes = ARRAY_SIZE(cnoc_cfg_nodes),
+ 	.bcms = cnoc_cfg_bcms,
+ 	.num_bcms = ARRAY_SIZE(cnoc_cfg_bcms),
+-	.alloc_dyn_id = true,
+ };
+ 
+ static struct qcom_icc_bcm * const cnoc_main_bcms[] = {
+@@ -1680,7 +1676,6 @@ static const struct qcom_icc_desc milos_cnoc_main = {
+ 	.num_nodes = ARRAY_SIZE(cnoc_main_nodes),
+ 	.bcms = cnoc_main_bcms,
+ 	.num_bcms = ARRAY_SIZE(cnoc_main_bcms),
+-	.alloc_dyn_id = true,
+ };
+ 
+ static struct qcom_icc_bcm * const gem_noc_bcms[] = {
+@@ -1721,7 +1716,6 @@ static const struct qcom_icc_desc milos_gem_noc = {
+ 	.num_nodes = ARRAY_SIZE(gem_noc_nodes),
+ 	.bcms = gem_noc_bcms,
+ 	.num_bcms = ARRAY_SIZE(gem_noc_bcms),
+-	.alloc_dyn_id = true,
+ };
+ 
+ static struct qcom_icc_node * const lpass_ag_noc_nodes[] = {
+@@ -1741,7 +1735,6 @@ static const struct qcom_icc_desc milos_lpass_ag_noc = {
+ 	.config = &milos_lpass_ag_noc_regmap_config,
+ 	.nodes = lpass_ag_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(lpass_ag_noc_nodes),
+-	.alloc_dyn_id = true,
+ };
+ 
+ static struct qcom_icc_bcm * const mc_virt_bcms[] = {
+@@ -1759,7 +1752,6 @@ static const struct qcom_icc_desc milos_mc_virt = {
+ 	.num_nodes = ARRAY_SIZE(mc_virt_nodes),
+ 	.bcms = mc_virt_bcms,
+ 	.num_bcms = ARRAY_SIZE(mc_virt_bcms),
+-	.alloc_dyn_id = true,
+ };
+ 
+ static struct qcom_icc_bcm * const mmss_noc_bcms[] = {
+@@ -1795,7 +1787,6 @@ static const struct qcom_icc_desc milos_mmss_noc = {
+ 	.num_nodes = ARRAY_SIZE(mmss_noc_nodes),
+ 	.bcms = mmss_noc_bcms,
+ 	.num_bcms = ARRAY_SIZE(mmss_noc_bcms),
+-	.alloc_dyn_id = true,
+ };
+ 
+ static struct qcom_icc_bcm * const nsp_noc_bcms[] = {
+@@ -1821,7 +1812,6 @@ static const struct qcom_icc_desc milos_nsp_noc = {
+ 	.num_nodes = ARRAY_SIZE(nsp_noc_nodes),
+ 	.bcms = nsp_noc_bcms,
+ 	.num_bcms = ARRAY_SIZE(nsp_noc_bcms),
+-	.alloc_dyn_id = true,
+ };
+ 
+ static struct qcom_icc_bcm * const pcie_anoc_bcms[] = {
+@@ -1850,7 +1840,6 @@ static const struct qcom_icc_desc milos_pcie_anoc = {
+ 	.num_nodes = ARRAY_SIZE(pcie_anoc_nodes),
+ 	.bcms = pcie_anoc_bcms,
+ 	.num_bcms = ARRAY_SIZE(pcie_anoc_bcms),
+-	.alloc_dyn_id = true,
+ };
+ 
+ static struct qcom_icc_bcm * const system_noc_bcms[] = {
+@@ -1885,7 +1874,6 @@ static const struct qcom_icc_desc milos_system_noc = {
+ 	.num_nodes = ARRAY_SIZE(system_noc_nodes),
+ 	.bcms = system_noc_bcms,
+ 	.num_bcms = ARRAY_SIZE(system_noc_bcms),
+-	.alloc_dyn_id = true,
+ };
+ 
+ static const struct of_device_id qnoc_of_match[] = {
+diff --git a/drivers/interconnect/qcom/qcs615.c b/drivers/interconnect/qcom/qcs615.c
+index fb0f623c0e645dce540afb9857c6f11a24a70cd8..797956eb6ff542c8d9a25a4b564f1683409e43b9 100644
+--- a/drivers/interconnect/qcom/qcs615.c
++++ b/drivers/interconnect/qcom/qcs615.c
+@@ -1214,7 +1214,6 @@ static struct qcom_icc_node * const aggre1_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc qcs615_aggre1_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = aggre1_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(aggre1_noc_nodes),
+ 	.bcms = aggre1_noc_bcms,
+@@ -1233,7 +1232,6 @@ static struct qcom_icc_node * const camnoc_virt_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc qcs615_camnoc_virt = {
+-	.alloc_dyn_id = true,
+ 	.nodes = camnoc_virt_nodes,
+ 	.num_nodes = ARRAY_SIZE(camnoc_virt_nodes),
+ 	.bcms = camnoc_virt_bcms,
+@@ -1292,7 +1290,6 @@ static struct qcom_icc_node * const config_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc qcs615_config_noc = {
+-	.alloc_dyn_id = true,
  	.nodes = config_noc_nodes,
  	.num_nodes = ARRAY_SIZE(config_noc_nodes),
  	.bcms = config_noc_bcms,
-@@ -1486,6 +1320,7 @@ static struct qcom_icc_node * const cnoc_main_nodes[] = {
+@@ -1306,7 +1303,6 @@ static struct qcom_icc_node * const dc_noc_nodes[] = {
  };
  
- static const struct qcom_icc_desc sm8750_cnoc_main = {
-+	.alloc_dyn_id = true,
- 	.nodes = cnoc_main_nodes,
- 	.num_nodes = ARRAY_SIZE(cnoc_main_nodes),
- 	.bcms = cnoc_main_bcms,
-@@ -1519,6 +1354,7 @@ static struct qcom_icc_node * const gem_noc_nodes[] = {
+ static const struct qcom_icc_desc qcs615_dc_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = dc_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(dc_noc_nodes),
+ };
+@@ -1336,7 +1332,6 @@ static struct qcom_icc_node * const gem_noc_nodes[] = {
  };
  
- static const struct qcom_icc_desc sm8750_gem_noc = {
-+	.alloc_dyn_id = true,
+ static const struct qcom_icc_desc qcs615_gem_noc = {
+-	.alloc_dyn_id = true,
  	.nodes = gem_noc_nodes,
  	.num_nodes = ARRAY_SIZE(gem_noc_nodes),
  	.bcms = gem_noc_bcms,
-@@ -1531,6 +1367,7 @@ static struct qcom_icc_node * const lpass_ag_noc_nodes[] = {
+@@ -1354,7 +1349,6 @@ static struct qcom_icc_node * const mc_virt_nodes[] = {
  };
  
- static const struct qcom_icc_desc sm8750_lpass_ag_noc = {
-+	.alloc_dyn_id = true,
- 	.nodes = lpass_ag_noc_nodes,
- 	.num_nodes = ARRAY_SIZE(lpass_ag_noc_nodes),
- };
-@@ -1545,6 +1382,7 @@ static struct qcom_icc_node * const lpass_lpiaon_noc_nodes[] = {
- };
- 
- static const struct qcom_icc_desc sm8750_lpass_lpiaon_noc = {
-+	.alloc_dyn_id = true,
- 	.nodes = lpass_lpiaon_noc_nodes,
- 	.num_nodes = ARRAY_SIZE(lpass_lpiaon_noc_nodes),
- 	.bcms = lpass_lpiaon_noc_bcms,
-@@ -1557,6 +1395,7 @@ static struct qcom_icc_node * const lpass_lpicx_noc_nodes[] = {
- };
- 
- static const struct qcom_icc_desc sm8750_lpass_lpicx_noc = {
-+	.alloc_dyn_id = true,
- 	.nodes = lpass_lpicx_noc_nodes,
- 	.num_nodes = ARRAY_SIZE(lpass_lpicx_noc_nodes),
- };
-@@ -1572,6 +1411,7 @@ static struct qcom_icc_node * const mc_virt_nodes[] = {
- };
- 
- static const struct qcom_icc_desc sm8750_mc_virt = {
-+	.alloc_dyn_id = true,
+ static const struct qcom_icc_desc qcs615_mc_virt = {
+-	.alloc_dyn_id = true,
  	.nodes = mc_virt_nodes,
  	.num_nodes = ARRAY_SIZE(mc_virt_nodes),
  	.bcms = mc_virt_bcms,
-@@ -1601,6 +1441,7 @@ static struct qcom_icc_node * const mmss_noc_nodes[] = {
+@@ -1383,7 +1377,6 @@ static struct qcom_icc_node * const mmss_noc_nodes[] = {
  };
  
- static const struct qcom_icc_desc sm8750_mmss_noc = {
-+	.alloc_dyn_id = true,
+ static const struct qcom_icc_desc qcs615_mmss_noc = {
+-	.alloc_dyn_id = true,
  	.nodes = mmss_noc_nodes,
  	.num_nodes = ARRAY_SIZE(mmss_noc_nodes),
  	.bcms = mmss_noc_bcms,
-@@ -1617,6 +1458,7 @@ static struct qcom_icc_node * const nsp_noc_nodes[] = {
+@@ -1426,7 +1419,6 @@ static struct qcom_icc_node * const system_noc_nodes[] = {
  };
  
- static const struct qcom_icc_desc sm8750_nsp_noc = {
-+	.alloc_dyn_id = true,
- 	.nodes = nsp_noc_nodes,
- 	.num_nodes = ARRAY_SIZE(nsp_noc_nodes),
- 	.bcms = nsp_noc_bcms,
-@@ -1635,6 +1477,7 @@ static struct qcom_icc_node * const pcie_anoc_nodes[] = {
- };
- 
- static const struct qcom_icc_desc sm8750_pcie_anoc = {
-+	.alloc_dyn_id = true,
- 	.nodes = pcie_anoc_nodes,
- 	.num_nodes = ARRAY_SIZE(pcie_anoc_nodes),
- 	.bcms = pcie_anoc_bcms,
-@@ -1654,6 +1497,7 @@ static struct qcom_icc_node * const system_noc_nodes[] = {
- };
- 
- static const struct qcom_icc_desc sm8750_system_noc = {
-+	.alloc_dyn_id = true,
+ static const struct qcom_icc_desc qcs615_system_noc = {
+-	.alloc_dyn_id = true,
  	.nodes = system_noc_nodes,
  	.num_nodes = ARRAY_SIZE(system_noc_nodes),
  	.bcms = system_noc_bcms,
+diff --git a/drivers/interconnect/qcom/qcs8300.c b/drivers/interconnect/qcom/qcs8300.c
+index 077f4beb4bd1ae0e508c0683296f0a38cecc0471..70a377bbcf2930a4bdddcf6c3d98e95e4ad92561 100644
+--- a/drivers/interconnect/qcom/qcs8300.c
++++ b/drivers/interconnect/qcom/qcs8300.c
+@@ -1600,7 +1600,6 @@ static struct qcom_icc_node * const aggre1_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc qcs8300_aggre1_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = aggre1_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(aggre1_noc_nodes),
+ 	.bcms = aggre1_noc_bcms,
+@@ -1626,7 +1625,6 @@ static struct qcom_icc_node * const aggre2_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc qcs8300_aggre2_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = aggre2_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(aggre2_noc_nodes),
+ 	.bcms = aggre2_noc_bcms,
+@@ -1649,7 +1647,6 @@ static struct qcom_icc_node * const clk_virt_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc qcs8300_clk_virt = {
+-	.alloc_dyn_id = true,
+ 	.nodes = clk_virt_nodes,
+ 	.num_nodes = ARRAY_SIZE(clk_virt_nodes),
+ 	.bcms = clk_virt_bcms,
+@@ -1744,7 +1741,6 @@ static struct qcom_icc_node * const config_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc qcs8300_config_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = config_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(config_noc_nodes),
+ 	.bcms = config_noc_bcms,
+@@ -1758,7 +1754,6 @@ static struct qcom_icc_node * const dc_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc qcs8300_dc_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = dc_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(dc_noc_nodes),
+ };
+@@ -1792,7 +1787,6 @@ static struct qcom_icc_node * const gem_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc qcs8300_gem_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = gem_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(gem_noc_nodes),
+ 	.bcms = gem_noc_bcms,
+@@ -1810,7 +1804,6 @@ static struct qcom_icc_node * const gpdsp_anoc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc qcs8300_gpdsp_anoc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = gpdsp_anoc_nodes,
+ 	.num_nodes = ARRAY_SIZE(gpdsp_anoc_nodes),
+ 	.bcms = gpdsp_anoc_bcms,
+@@ -1834,7 +1827,6 @@ static struct qcom_icc_node * const lpass_ag_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc qcs8300_lpass_ag_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = lpass_ag_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(lpass_ag_noc_nodes),
+ 	.bcms = lpass_ag_noc_bcms,
+@@ -1852,7 +1844,6 @@ static struct qcom_icc_node * const mc_virt_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc qcs8300_mc_virt = {
+-	.alloc_dyn_id = true,
+ 	.nodes = mc_virt_nodes,
+ 	.num_nodes = ARRAY_SIZE(mc_virt_nodes),
+ 	.bcms = mc_virt_bcms,
+@@ -1882,7 +1873,6 @@ static struct qcom_icc_node * const mmss_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc qcs8300_mmss_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = mmss_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(mmss_noc_nodes),
+ 	.bcms = mmss_noc_bcms,
+@@ -1903,7 +1893,6 @@ static struct qcom_icc_node * const nspa_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc qcs8300_nspa_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = nspa_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(nspa_noc_nodes),
+ 	.bcms = nspa_noc_bcms,
+@@ -1921,7 +1910,6 @@ static struct qcom_icc_node * const pcie_anoc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc qcs8300_pcie_anoc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = pcie_anoc_nodes,
+ 	.num_nodes = ARRAY_SIZE(pcie_anoc_nodes),
+ 	.bcms = pcie_anoc_bcms,
+@@ -1950,7 +1938,6 @@ static struct qcom_icc_node * const system_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc qcs8300_system_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = system_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(system_noc_nodes),
+ 	.bcms = system_noc_bcms,
+diff --git a/drivers/interconnect/qcom/qdu1000.c b/drivers/interconnect/qcom/qdu1000.c
+index 4de0f17e4c57f77e9bd6f8bc7108359c4370c396..0006413241dc88bcc4397abc5beab1b8705dee27 100644
+--- a/drivers/interconnect/qcom/qdu1000.c
++++ b/drivers/interconnect/qcom/qdu1000.c
+@@ -834,7 +834,6 @@ static struct qcom_icc_node * const clk_virt_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc qdu1000_clk_virt = {
+-	.alloc_dyn_id = true,
+ 	.nodes = clk_virt_nodes,
+ 	.num_nodes = ARRAY_SIZE(clk_virt_nodes),
+ 	.bcms = clk_virt_bcms,
+@@ -862,7 +861,6 @@ static struct qcom_icc_node * const gem_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc qdu1000_gem_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = gem_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(gem_noc_nodes),
+ 	.bcms = gem_noc_bcms,
+@@ -880,7 +878,6 @@ static struct qcom_icc_node * const mc_virt_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc qdu1000_mc_virt = {
+-	.alloc_dyn_id = true,
+ 	.nodes = mc_virt_nodes,
+ 	.num_nodes = ARRAY_SIZE(mc_virt_nodes),
+ 	.bcms = mc_virt_bcms,
+@@ -967,7 +964,6 @@ static struct qcom_icc_node * const system_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc qdu1000_system_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = system_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(system_noc_nodes),
+ 	.bcms = system_noc_bcms,
+diff --git a/drivers/interconnect/qcom/sa8775p.c b/drivers/interconnect/qcom/sa8775p.c
+index d144e8cb5d1e3a69410975bd6b7abd9578c01407..8ce4e5fe05f2e5d0ad5cee0eb4100877ecd144cc 100644
+--- a/drivers/interconnect/qcom/sa8775p.c
++++ b/drivers/interconnect/qcom/sa8775p.c
+@@ -1841,7 +1841,6 @@ static const struct qcom_icc_desc sa8775p_aggre1_noc = {
+ 	.num_nodes = ARRAY_SIZE(aggre1_noc_nodes),
+ 	.bcms = aggre1_noc_bcms,
+ 	.num_bcms = ARRAY_SIZE(aggre1_noc_bcms),
+-	.alloc_dyn_id = true,
+ };
+ 
+ static struct qcom_icc_bcm * const aggre2_noc_bcms[] = {
+@@ -1869,7 +1868,6 @@ static const struct qcom_icc_desc sa8775p_aggre2_noc = {
+ 	.num_nodes = ARRAY_SIZE(aggre2_noc_nodes),
+ 	.bcms = aggre2_noc_bcms,
+ 	.num_bcms = ARRAY_SIZE(aggre2_noc_bcms),
+-	.alloc_dyn_id = true,
+ };
+ 
+ static struct qcom_icc_bcm * const clk_virt_bcms[] = {
+@@ -1894,7 +1892,6 @@ static const struct qcom_icc_desc sa8775p_clk_virt = {
+ 	.num_nodes = ARRAY_SIZE(clk_virt_nodes),
+ 	.bcms = clk_virt_bcms,
+ 	.num_bcms = ARRAY_SIZE(clk_virt_bcms),
+-	.alloc_dyn_id = true,
+ };
+ 
+ static struct qcom_icc_bcm * const config_noc_bcms[] = {
+@@ -2000,7 +1997,6 @@ static const struct qcom_icc_desc sa8775p_config_noc = {
+ 	.num_nodes = ARRAY_SIZE(config_noc_nodes),
+ 	.bcms = config_noc_bcms,
+ 	.num_bcms = ARRAY_SIZE(config_noc_bcms),
+-	.alloc_dyn_id = true,
+ };
+ 
+ static struct qcom_icc_bcm * const dc_noc_bcms[] = {
+@@ -2017,7 +2013,6 @@ static const struct qcom_icc_desc sa8775p_dc_noc = {
+ 	.num_nodes = ARRAY_SIZE(dc_noc_nodes),
+ 	.bcms = dc_noc_bcms,
+ 	.num_bcms = ARRAY_SIZE(dc_noc_bcms),
+-	.alloc_dyn_id = true,
+ };
+ 
+ static struct qcom_icc_bcm * const gem_noc_bcms[] = {
+@@ -2054,7 +2049,6 @@ static const struct qcom_icc_desc sa8775p_gem_noc = {
+ 	.num_nodes = ARRAY_SIZE(gem_noc_nodes),
+ 	.bcms = gem_noc_bcms,
+ 	.num_bcms = ARRAY_SIZE(gem_noc_bcms),
+-	.alloc_dyn_id = true,
+ };
+ 
+ static struct qcom_icc_bcm * const gpdsp_anoc_bcms[] = {
+@@ -2073,7 +2067,6 @@ static const struct qcom_icc_desc sa8775p_gpdsp_anoc = {
+ 	.num_nodes = ARRAY_SIZE(gpdsp_anoc_nodes),
+ 	.bcms = gpdsp_anoc_bcms,
+ 	.num_bcms = ARRAY_SIZE(gpdsp_anoc_bcms),
+-	.alloc_dyn_id = true,
+ };
+ 
+ static struct qcom_icc_bcm * const lpass_ag_noc_bcms[] = {
+@@ -2097,7 +2090,6 @@ static const struct qcom_icc_desc sa8775p_lpass_ag_noc = {
+ 	.num_nodes = ARRAY_SIZE(lpass_ag_noc_nodes),
+ 	.bcms = lpass_ag_noc_bcms,
+ 	.num_bcms = ARRAY_SIZE(lpass_ag_noc_bcms),
+-	.alloc_dyn_id = true,
+ };
+ 
+ static struct qcom_icc_bcm * const mc_virt_bcms[] = {
+@@ -2115,7 +2107,6 @@ static const struct qcom_icc_desc sa8775p_mc_virt = {
+ 	.num_nodes = ARRAY_SIZE(mc_virt_nodes),
+ 	.bcms = mc_virt_bcms,
+ 	.num_bcms = ARRAY_SIZE(mc_virt_bcms),
+-	.alloc_dyn_id = true,
+ };
+ 
+ static struct qcom_icc_bcm * const mmss_noc_bcms[] = {
+@@ -2148,7 +2139,6 @@ static const struct qcom_icc_desc sa8775p_mmss_noc = {
+ 	.num_nodes = ARRAY_SIZE(mmss_noc_nodes),
+ 	.bcms = mmss_noc_bcms,
+ 	.num_bcms = ARRAY_SIZE(mmss_noc_bcms),
+-	.alloc_dyn_id = true,
+ };
+ 
+ static struct qcom_icc_bcm * const nspa_noc_bcms[] = {
+@@ -2169,7 +2159,6 @@ static const struct qcom_icc_desc sa8775p_nspa_noc = {
+ 	.num_nodes = ARRAY_SIZE(nspa_noc_nodes),
+ 	.bcms = nspa_noc_bcms,
+ 	.num_bcms = ARRAY_SIZE(nspa_noc_bcms),
+-	.alloc_dyn_id = true,
+ };
+ 
+ static struct qcom_icc_bcm * const nspb_noc_bcms[] = {
+@@ -2190,7 +2179,6 @@ static const struct qcom_icc_desc sa8775p_nspb_noc = {
+ 	.num_nodes = ARRAY_SIZE(nspb_noc_nodes),
+ 	.bcms = nspb_noc_bcms,
+ 	.num_bcms = ARRAY_SIZE(nspb_noc_bcms),
+-	.alloc_dyn_id = true,
+ };
+ 
+ static struct qcom_icc_bcm * const pcie_anoc_bcms[] = {
+@@ -2208,7 +2196,6 @@ static const struct qcom_icc_desc sa8775p_pcie_anoc = {
+ 	.num_nodes = ARRAY_SIZE(pcie_anoc_nodes),
+ 	.bcms = pcie_anoc_bcms,
+ 	.num_bcms = ARRAY_SIZE(pcie_anoc_bcms),
+-	.alloc_dyn_id = true,
+ };
+ 
+ static struct qcom_icc_bcm * const system_noc_bcms[] = {
+@@ -2237,7 +2224,6 @@ static const struct qcom_icc_desc sa8775p_system_noc = {
+ 	.num_nodes = ARRAY_SIZE(system_noc_nodes),
+ 	.bcms = system_noc_bcms,
+ 	.num_bcms = ARRAY_SIZE(system_noc_bcms),
+-	.alloc_dyn_id = true,
+ };
+ 
+ static const struct of_device_id qnoc_of_match[] = {
+diff --git a/drivers/interconnect/qcom/sar2130p.c b/drivers/interconnect/qcom/sar2130p.c
+index a0b04929058f7e92a60e441b2cc82ee8984daf41..34cb3fc1f99575d25f397f02b848e4d4066f060d 100644
+--- a/drivers/interconnect/qcom/sar2130p.c
++++ b/drivers/interconnect/qcom/sar2130p.c
+@@ -1474,7 +1474,6 @@ static struct qcom_icc_node * const clk_virt_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sar2130p_clk_virt = {
+-	.alloc_dyn_id = true,
+ 	.nodes = clk_virt_nodes,
+ 	.num_nodes = ARRAY_SIZE(clk_virt_nodes),
+ 	.bcms = clk_virt_bcms,
+@@ -1537,7 +1536,6 @@ static struct qcom_icc_node * const config_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sar2130p_config_noc = {
+-	.alloc_dyn_id = true,
+ 	.config = &icc_regmap_config,
+ 	.nodes = config_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(config_noc_nodes),
+@@ -1568,7 +1566,6 @@ static struct qcom_icc_node * const gem_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sar2130p_gem_noc = {
+-	.alloc_dyn_id = true,
+ 	.config = &icc_regmap_config,
+ 	.nodes = gem_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(gem_noc_nodes),
+@@ -1592,7 +1589,6 @@ static struct qcom_icc_node * const lpass_ag_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sar2130p_lpass_ag_noc = {
+-	.alloc_dyn_id = true,
+ 	.config = &icc_regmap_config,
+ 	.nodes = lpass_ag_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(lpass_ag_noc_nodes),
+@@ -1611,7 +1607,6 @@ static struct qcom_icc_node * const mc_virt_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sar2130p_mc_virt = {
+-	.alloc_dyn_id = true,
+ 	.nodes = mc_virt_nodes,
+ 	.num_nodes = ARRAY_SIZE(mc_virt_nodes),
+ 	.bcms = mc_virt_bcms,
+@@ -1640,7 +1635,6 @@ static struct qcom_icc_node * const mmss_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sar2130p_mmss_noc = {
+-	.alloc_dyn_id = true,
+ 	.config = &icc_regmap_config,
+ 	.nodes = mmss_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(mmss_noc_nodes),
+@@ -1660,7 +1654,6 @@ static struct qcom_icc_node * const nsp_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sar2130p_nsp_noc = {
+-	.alloc_dyn_id = true,
+ 	.config = &icc_regmap_config,
+ 	.nodes = nsp_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(nsp_noc_nodes),
+@@ -1679,7 +1672,6 @@ static struct qcom_icc_node * const pcie_anoc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sar2130p_pcie_anoc = {
+-	.alloc_dyn_id = true,
+ 	.config = &icc_regmap_config,
+ 	.nodes = pcie_anoc_nodes,
+ 	.num_nodes = ARRAY_SIZE(pcie_anoc_nodes),
+@@ -1719,7 +1711,6 @@ static struct qcom_icc_node * const system_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sar2130p_system_noc = {
+-	.alloc_dyn_id = true,
+ 	.config = &icc_regmap_config,
+ 	.nodes = system_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(system_noc_nodes),
+diff --git a/drivers/interconnect/qcom/sc7180.c b/drivers/interconnect/qcom/sc7180.c
+index 9f94b987c4448a04dc984ad09b0733c33c9bb76a..0ea06facf81e2592e26e36bdf1db0fb27a6d8c51 100644
+--- a/drivers/interconnect/qcom/sc7180.c
++++ b/drivers/interconnect/qcom/sc7180.c
+@@ -1471,7 +1471,6 @@ static struct qcom_icc_node * const aggre1_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sc7180_aggre1_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = aggre1_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(aggre1_noc_nodes),
+ 	.bcms = aggre1_noc_bcms,
+@@ -1495,7 +1494,6 @@ static struct qcom_icc_node * const aggre2_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sc7180_aggre2_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = aggre2_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(aggre2_noc_nodes),
+ 	.bcms = aggre2_noc_bcms,
+@@ -1514,7 +1512,6 @@ static struct qcom_icc_node * const camnoc_virt_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sc7180_camnoc_virt = {
+-	.alloc_dyn_id = true,
+ 	.nodes = camnoc_virt_nodes,
+ 	.num_nodes = ARRAY_SIZE(camnoc_virt_nodes),
+ 	.bcms = camnoc_virt_bcms,
+@@ -1534,7 +1531,6 @@ static struct qcom_icc_node * const compute_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sc7180_compute_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = compute_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(compute_noc_nodes),
+ 	.bcms = compute_noc_bcms,
+@@ -1603,7 +1599,6 @@ static struct qcom_icc_node * const config_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sc7180_config_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = config_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(config_noc_nodes),
+ 	.bcms = config_noc_bcms,
+@@ -1617,7 +1612,6 @@ static struct qcom_icc_node * const dc_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sc7180_dc_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = dc_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(dc_noc_nodes),
+ };
+@@ -1646,7 +1640,6 @@ static struct qcom_icc_node * const gem_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sc7180_gem_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = gem_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(gem_noc_nodes),
+ 	.bcms = gem_noc_bcms,
+@@ -1664,7 +1657,6 @@ static struct qcom_icc_node * const mc_virt_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sc7180_mc_virt = {
+-	.alloc_dyn_id = true,
+ 	.nodes = mc_virt_nodes,
+ 	.num_nodes = ARRAY_SIZE(mc_virt_nodes),
+ 	.bcms = mc_virt_bcms,
+@@ -1692,7 +1684,6 @@ static struct qcom_icc_node * const mmss_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sc7180_mmss_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = mmss_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(mmss_noc_nodes),
+ 	.bcms = mmss_noc_bcms,
+@@ -1714,7 +1705,6 @@ static struct qcom_icc_node * const npu_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sc7180_npu_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = npu_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(npu_noc_nodes),
+ };
+@@ -1731,7 +1721,6 @@ static struct qcom_icc_node * const qup_virt_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sc7180_qup_virt = {
+-	.alloc_dyn_id = true,
+ 	.nodes = qup_virt_nodes,
+ 	.num_nodes = ARRAY_SIZE(qup_virt_nodes),
+ 	.bcms = qup_virt_bcms,
+@@ -1767,7 +1756,6 @@ static struct qcom_icc_node * const system_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sc7180_system_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = system_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(system_noc_nodes),
+ 	.bcms = system_noc_bcms,
+diff --git a/drivers/interconnect/qcom/sc7280.c b/drivers/interconnect/qcom/sc7280.c
+index 3dc8b81f917d5de69f67112bd313326b4658f77c..c4cb6443f2d49c132b779429d899d660d02ffa2a 100644
+--- a/drivers/interconnect/qcom/sc7280.c
++++ b/drivers/interconnect/qcom/sc7280.c
+@@ -1620,7 +1620,6 @@ static const struct regmap_config sc7280_aggre1_noc_regmap_config = {
+ };
+ 
+ static const struct qcom_icc_desc sc7280_aggre1_noc = {
+-	.alloc_dyn_id = true,
+ 	.config = &sc7280_aggre1_noc_regmap_config,
+ 	.nodes = aggre1_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(aggre1_noc_nodes),
+@@ -1653,7 +1652,6 @@ static struct qcom_icc_node * const aggre2_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sc7280_aggre2_noc = {
+-	.alloc_dyn_id = true,
+ 	.config = &sc7280_aggre2_noc_regmap_config,
+ 	.nodes = aggre2_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(aggre2_noc_nodes),
+@@ -1675,7 +1673,6 @@ static struct qcom_icc_node * const clk_virt_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sc7280_clk_virt = {
+-	.alloc_dyn_id = true,
+ 	.nodes = clk_virt_nodes,
+ 	.num_nodes = ARRAY_SIZE(clk_virt_nodes),
+ 	.bcms = clk_virt_bcms,
+@@ -1746,7 +1743,6 @@ static const struct regmap_config sc7280_cnoc2_regmap_config = {
+ };
+ 
+ static const struct qcom_icc_desc sc7280_cnoc2 = {
+-	.alloc_dyn_id = true,
+ 	.config = &sc7280_cnoc2_regmap_config,
+ 	.nodes = cnoc2_nodes,
+ 	.num_nodes = ARRAY_SIZE(cnoc2_nodes),
+@@ -1788,7 +1784,6 @@ static const struct regmap_config sc7280_cnoc3_regmap_config = {
+ };
+ 
+ static const struct qcom_icc_desc sc7280_cnoc3 = {
+-	.alloc_dyn_id = true,
+ 	.config = &sc7280_cnoc3_regmap_config,
+ 	.nodes = cnoc3_nodes,
+ 	.num_nodes = ARRAY_SIZE(cnoc3_nodes),
+@@ -1814,7 +1809,6 @@ static const struct regmap_config sc7280_dc_noc_regmap_config = {
+ };
+ 
+ static const struct qcom_icc_desc sc7280_dc_noc = {
+-	.alloc_dyn_id = true,
+ 	.config = &sc7280_dc_noc_regmap_config,
+ 	.nodes = dc_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(dc_noc_nodes),
+@@ -1860,7 +1854,6 @@ static const struct regmap_config sc7280_gem_noc_regmap_config = {
+ };
+ 
+ static const struct qcom_icc_desc sc7280_gem_noc = {
+-	.alloc_dyn_id = true,
+ 	.config = &sc7280_gem_noc_regmap_config,
+ 	.nodes = gem_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(gem_noc_nodes),
+@@ -1890,7 +1883,6 @@ static const struct regmap_config sc7280_lpass_ag_noc_regmap_config = {
+ };
+ 
+ static const struct qcom_icc_desc sc7280_lpass_ag_noc = {
+-	.alloc_dyn_id = true,
+ 	.config = &sc7280_lpass_ag_noc_regmap_config,
+ 	.nodes = lpass_ag_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(lpass_ag_noc_nodes),
+@@ -1917,7 +1909,6 @@ static const struct regmap_config sc7280_mc_virt_regmap_config = {
+ };
+ 
+ static const struct qcom_icc_desc sc7280_mc_virt = {
+-	.alloc_dyn_id = true,
+ 	.config = &sc7280_mc_virt_regmap_config,
+ 	.nodes = mc_virt_nodes,
+ 	.num_nodes = ARRAY_SIZE(mc_virt_nodes),
+@@ -1954,7 +1945,6 @@ static const struct regmap_config sc7280_mmss_noc_regmap_config = {
+ };
+ 
+ static const struct qcom_icc_desc sc7280_mmss_noc = {
+-	.alloc_dyn_id = true,
+ 	.config = &sc7280_mmss_noc_regmap_config,
+ 	.nodes = mmss_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(mmss_noc_nodes),
+@@ -1983,7 +1973,6 @@ static const struct regmap_config sc7280_nsp_noc_regmap_config = {
+ };
+ 
+ static const struct qcom_icc_desc sc7280_nsp_noc = {
+-	.alloc_dyn_id = true,
+ 	.config = &sc7280_nsp_noc_regmap_config,
+ 	.nodes = nsp_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(nsp_noc_nodes),
+@@ -2018,7 +2007,6 @@ static const struct regmap_config sc7280_system_noc_regmap_config = {
+ };
+ 
+ static const struct qcom_icc_desc sc7280_system_noc = {
+-	.alloc_dyn_id = true,
+ 	.config = &sc7280_system_noc_regmap_config,
+ 	.nodes = system_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(system_noc_nodes),
+diff --git a/drivers/interconnect/qcom/sc8180x.c b/drivers/interconnect/qcom/sc8180x.c
+index b80a255ba8c322f72f436a351ee3ea4a354be1fa..c9bf1af54e37f0d67575dfd805e2c02ca000f759 100644
+--- a/drivers/interconnect/qcom/sc8180x.c
++++ b/drivers/interconnect/qcom/sc8180x.c
+@@ -1790,7 +1790,6 @@ static struct qcom_icc_node * const system_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sc8180x_aggre1_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = aggre1_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(aggre1_noc_nodes),
+ 	.bcms = aggre1_noc_bcms,
+@@ -1798,7 +1797,6 @@ static const struct qcom_icc_desc sc8180x_aggre1_noc = {
+ };
+ 
+ static const struct qcom_icc_desc sc8180x_aggre2_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = aggre2_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(aggre2_noc_nodes),
+ 	.bcms = aggre2_noc_bcms,
+@@ -1806,7 +1804,6 @@ static const struct qcom_icc_desc sc8180x_aggre2_noc = {
+ };
+ 
+ static const struct qcom_icc_desc sc8180x_camnoc_virt = {
+-	.alloc_dyn_id = true,
+ 	.nodes = camnoc_virt_nodes,
+ 	.num_nodes = ARRAY_SIZE(camnoc_virt_nodes),
+ 	.bcms = camnoc_virt_bcms,
+@@ -1814,7 +1811,6 @@ static const struct qcom_icc_desc sc8180x_camnoc_virt = {
+ };
+ 
+ static const struct qcom_icc_desc sc8180x_compute_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = compute_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(compute_noc_nodes),
+ 	.bcms = compute_noc_bcms,
+@@ -1822,7 +1818,6 @@ static const struct qcom_icc_desc sc8180x_compute_noc = {
+ };
+ 
+ static const struct qcom_icc_desc sc8180x_config_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = config_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(config_noc_nodes),
+ 	.bcms = config_noc_bcms,
+@@ -1830,13 +1825,11 @@ static const struct qcom_icc_desc sc8180x_config_noc = {
+ };
+ 
+ static const struct qcom_icc_desc sc8180x_dc_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = dc_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(dc_noc_nodes),
+ };
+ 
+ static const struct qcom_icc_desc sc8180x_gem_noc  = {
+-	.alloc_dyn_id = true,
+ 	.nodes = gem_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(gem_noc_nodes),
+ 	.bcms = gem_noc_bcms,
+@@ -1844,7 +1837,6 @@ static const struct qcom_icc_desc sc8180x_gem_noc  = {
+ };
+ 
+ static const struct qcom_icc_desc sc8180x_mc_virt  = {
+-	.alloc_dyn_id = true,
+ 	.nodes = mc_virt_nodes,
+ 	.num_nodes = ARRAY_SIZE(mc_virt_nodes),
+ 	.bcms = mc_virt_bcms,
+@@ -1852,7 +1844,6 @@ static const struct qcom_icc_desc sc8180x_mc_virt  = {
+ };
+ 
+ static const struct qcom_icc_desc sc8180x_mmss_noc  = {
+-	.alloc_dyn_id = true,
+ 	.nodes = mmss_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(mmss_noc_nodes),
+ 	.bcms = mmss_noc_bcms,
+@@ -1860,7 +1851,6 @@ static const struct qcom_icc_desc sc8180x_mmss_noc  = {
+ };
+ 
+ static const struct qcom_icc_desc sc8180x_system_noc  = {
+-	.alloc_dyn_id = true,
+ 	.nodes = system_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(system_noc_nodes),
+ 	.bcms = system_noc_bcms,
+@@ -1881,7 +1871,6 @@ static struct qcom_icc_node * const qup_virt_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sc8180x_qup_virt = {
+-	.alloc_dyn_id = true,
+ 	.nodes = qup_virt_nodes,
+ 	.num_nodes = ARRAY_SIZE(qup_virt_nodes),
+ 	.bcms = qup_virt_bcms,
+diff --git a/drivers/interconnect/qcom/sc8280xp.c b/drivers/interconnect/qcom/sc8280xp.c
+index c46846191e63f41a16dd3af5f0a77919b4b14568..ed2161da37bfee48ac96876f4cf9d2054064b868 100644
+--- a/drivers/interconnect/qcom/sc8280xp.c
++++ b/drivers/interconnect/qcom/sc8280xp.c
+@@ -1998,7 +1998,6 @@ static struct qcom_icc_node * const aggre1_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sc8280xp_aggre1_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = aggre1_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(aggre1_noc_nodes),
+ 	.bcms = aggre1_noc_bcms,
+@@ -2035,7 +2034,6 @@ static struct qcom_icc_node * const aggre2_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sc8280xp_aggre2_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = aggre2_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(aggre2_noc_nodes),
+ 	.bcms = aggre2_noc_bcms,
+@@ -2058,7 +2056,6 @@ static struct qcom_icc_node * const clk_virt_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sc8280xp_clk_virt = {
+-	.alloc_dyn_id = true,
+ 	.nodes = clk_virt_nodes,
+ 	.num_nodes = ARRAY_SIZE(clk_virt_nodes),
+ 	.bcms = clk_virt_bcms,
+@@ -2163,7 +2160,6 @@ static struct qcom_icc_node * const config_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sc8280xp_config_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = config_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(config_noc_nodes),
+ 	.bcms = config_noc_bcms,
+@@ -2180,7 +2176,6 @@ static struct qcom_icc_node * const dc_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sc8280xp_dc_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = dc_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(dc_noc_nodes),
+ 	.bcms = dc_noc_bcms,
+@@ -2215,7 +2210,6 @@ static struct qcom_icc_node * const gem_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sc8280xp_gem_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = gem_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(gem_noc_nodes),
+ 	.bcms = gem_noc_bcms,
+@@ -2239,7 +2233,6 @@ static struct qcom_icc_node * const lpass_ag_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sc8280xp_lpass_ag_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = lpass_ag_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(lpass_ag_noc_nodes),
+ 	.bcms = lpass_ag_noc_bcms,
+@@ -2257,7 +2250,6 @@ static struct qcom_icc_node * const mc_virt_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sc8280xp_mc_virt = {
+-	.alloc_dyn_id = true,
+ 	.nodes = mc_virt_nodes,
+ 	.num_nodes = ARRAY_SIZE(mc_virt_nodes),
+ 	.bcms = mc_virt_bcms,
+@@ -2289,7 +2281,6 @@ static struct qcom_icc_node * const mmss_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sc8280xp_mmss_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = mmss_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(mmss_noc_nodes),
+ 	.bcms = mmss_noc_bcms,
+@@ -2310,7 +2301,6 @@ static struct qcom_icc_node * const nspa_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sc8280xp_nspa_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = nspa_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(nspa_noc_nodes),
+ 	.bcms = nspa_noc_bcms,
+@@ -2331,7 +2321,6 @@ static struct qcom_icc_node * const nspb_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sc8280xp_nspb_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = nspb_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(nspb_noc_nodes),
+ 	.bcms = nspb_noc_bcms,
+@@ -2361,7 +2350,6 @@ static struct qcom_icc_node * const system_noc_main_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sc8280xp_system_noc_main = {
+-	.alloc_dyn_id = true,
+ 	.nodes = system_noc_main_nodes,
+ 	.num_nodes = ARRAY_SIZE(system_noc_main_nodes),
+ 	.bcms = system_noc_main_bcms,
+diff --git a/drivers/interconnect/qcom/sdm670.c b/drivers/interconnect/qcom/sdm670.c
+index 5e6a5c54f485ebef7be619d76e4d901811956ee4..88f4768b765c58f7338aac341859f7221b4ebc82 100644
+--- a/drivers/interconnect/qcom/sdm670.c
++++ b/drivers/interconnect/qcom/sdm670.c
+@@ -1266,7 +1266,6 @@ static struct qcom_icc_node * const aggre1_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sdm670_aggre1_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = aggre1_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(aggre1_noc_nodes),
+ 	.bcms = aggre1_noc_bcms,
+@@ -1293,7 +1292,6 @@ static struct qcom_icc_node * const aggre2_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sdm670_aggre2_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = aggre2_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(aggre2_noc_nodes),
+ 	.bcms = aggre2_noc_bcms,
+@@ -1349,7 +1347,6 @@ static struct qcom_icc_node * const config_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sdm670_config_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = config_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(config_noc_nodes),
+ 	.bcms = config_noc_bcms,
+@@ -1366,7 +1363,6 @@ static struct qcom_icc_node * const dc_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sdm670_dc_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = dc_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(dc_noc_nodes),
+ 	.bcms = dc_noc_bcms,
+@@ -1385,7 +1381,6 @@ static struct qcom_icc_node * const gladiator_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sdm670_gladiator_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = gladiator_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(gladiator_noc_nodes),
+ 	.bcms = gladiator_noc_bcms,
+@@ -1421,7 +1416,6 @@ static struct qcom_icc_node * const mem_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sdm670_mem_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = mem_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(mem_noc_nodes),
+ 	.bcms = mem_noc_bcms,
+@@ -1452,7 +1446,6 @@ static struct qcom_icc_node * const mmss_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sdm670_mmss_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = mmss_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(mmss_noc_nodes),
+ 	.bcms = mmss_noc_bcms,
+@@ -1497,7 +1490,6 @@ static struct qcom_icc_node * const system_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sdm670_system_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = system_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(system_noc_nodes),
+ 	.bcms = system_noc_bcms,
+diff --git a/drivers/interconnect/qcom/sdm845.c b/drivers/interconnect/qcom/sdm845.c
+index 83d7a611cdf72d4b1cc17f86455106574a13cc9b..6d5bbeda0689d7ec8bec575fd384b0414c67ae03 100644
+--- a/drivers/interconnect/qcom/sdm845.c
++++ b/drivers/interconnect/qcom/sdm845.c
+@@ -1514,7 +1514,6 @@ static struct qcom_icc_node * const aggre1_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sdm845_aggre1_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = aggre1_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(aggre1_noc_nodes),
+ 	.bcms = aggre1_noc_bcms,
+@@ -1544,7 +1543,6 @@ static struct qcom_icc_node * const aggre2_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sdm845_aggre2_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = aggre2_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(aggre2_noc_nodes),
+ 	.bcms = aggre2_noc_bcms,
+@@ -1606,7 +1604,6 @@ static struct qcom_icc_node * const config_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sdm845_config_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = config_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(config_noc_nodes),
+ 	.bcms = config_noc_bcms,
+@@ -1623,7 +1620,6 @@ static struct qcom_icc_node * const dc_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sdm845_dc_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = dc_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(dc_noc_nodes),
+ 	.bcms = dc_noc_bcms,
+@@ -1642,7 +1638,6 @@ static struct qcom_icc_node * const gladiator_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sdm845_gladiator_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = gladiator_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(gladiator_noc_nodes),
+ 	.bcms = gladiator_noc_bcms,
+@@ -1678,7 +1673,6 @@ static struct qcom_icc_node * const mem_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sdm845_mem_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = mem_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(mem_noc_nodes),
+ 	.bcms = mem_noc_bcms,
+@@ -1713,7 +1707,6 @@ static struct qcom_icc_node * const mmss_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sdm845_mmss_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = mmss_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(mmss_noc_nodes),
+ 	.bcms = mmss_noc_bcms,
+@@ -1760,7 +1753,6 @@ static struct qcom_icc_node * const system_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sdm845_system_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = system_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(system_noc_nodes),
+ 	.bcms = system_noc_bcms,
+diff --git a/drivers/interconnect/qcom/sdx55.c b/drivers/interconnect/qcom/sdx55.c
+index b1a69e430ef444784fdc31edbe1f80877fc63cec..75ced12869198f53ebb5bfbccc603cbf2316aa1b 100644
+--- a/drivers/interconnect/qcom/sdx55.c
++++ b/drivers/interconnect/qcom/sdx55.c
+@@ -782,7 +782,6 @@ static struct qcom_icc_node * const mc_virt_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sdx55_mc_virt = {
+-	.alloc_dyn_id = true,
+ 	.nodes = mc_virt_nodes,
+ 	.num_nodes = ARRAY_SIZE(mc_virt_nodes),
+ 	.bcms = mc_virt_bcms,
+@@ -805,7 +804,6 @@ static struct qcom_icc_node * const mem_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sdx55_mem_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = mem_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(mem_noc_nodes),
+ 	.bcms = mem_noc_bcms,
+@@ -885,7 +883,6 @@ static struct qcom_icc_node * const system_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sdx55_system_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = system_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(system_noc_nodes),
+ 	.bcms = system_noc_bcms,
+diff --git a/drivers/interconnect/qcom/sdx65.c b/drivers/interconnect/qcom/sdx65.c
+index 7c8798174e026c9d1fa06b60a75bf15e01a34049..6c5b4e1ec82f5f7cce1a63584cf1b718f158d315 100644
+--- a/drivers/interconnect/qcom/sdx65.c
++++ b/drivers/interconnect/qcom/sdx65.c
+@@ -769,7 +769,6 @@ static struct qcom_icc_node * const mc_virt_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sdx65_mc_virt = {
+-	.alloc_dyn_id = true,
+ 	.nodes = mc_virt_nodes,
+ 	.num_nodes = ARRAY_SIZE(mc_virt_nodes),
+ 	.bcms = mc_virt_bcms,
+@@ -792,7 +791,6 @@ static struct qcom_icc_node * const mem_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sdx65_mem_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = mem_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(mem_noc_nodes),
+ 	.bcms = mem_noc_bcms,
+@@ -869,7 +867,6 @@ static struct qcom_icc_node * const system_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sdx65_system_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = system_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(system_noc_nodes),
+ 	.bcms = system_noc_bcms,
+diff --git a/drivers/interconnect/qcom/sdx75.c b/drivers/interconnect/qcom/sdx75.c
+index 3721d8f503a022e4c5fde62b0aa9eed9989c1554..e56202b9bc4b66e7824f5969ff001ea67e0e70d4 100644
+--- a/drivers/interconnect/qcom/sdx75.c
++++ b/drivers/interconnect/qcom/sdx75.c
+@@ -868,7 +868,6 @@ static struct qcom_icc_node * const clk_virt_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sdx75_clk_virt = {
+-	.alloc_dyn_id = true,
+ 	.nodes = clk_virt_nodes,
+ 	.num_nodes = ARRAY_SIZE(clk_virt_nodes),
+ 	.bcms = clk_virt_bcms,
+@@ -884,7 +883,6 @@ static struct qcom_icc_node * const dc_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sdx75_dc_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = dc_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(dc_noc_nodes),
+ };
+@@ -911,7 +909,6 @@ static struct qcom_icc_node * const gem_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sdx75_gem_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = gem_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(gem_noc_nodes),
+ 	.bcms = gem_noc_bcms,
+@@ -928,7 +925,6 @@ static struct qcom_icc_node * const mc_virt_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sdx75_mc_virt = {
+-	.alloc_dyn_id = true,
+ 	.nodes = mc_virt_nodes,
+ 	.num_nodes = ARRAY_SIZE(mc_virt_nodes),
+ 	.bcms = mc_virt_bcms,
+@@ -948,7 +944,6 @@ static struct qcom_icc_node * const pcie_anoc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sdx75_pcie_anoc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = pcie_anoc_nodes,
+ 	.num_nodes = ARRAY_SIZE(pcie_anoc_nodes),
+ 	.bcms = pcie_anoc_bcms,
+@@ -1027,7 +1022,6 @@ static struct qcom_icc_node * const system_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sdx75_system_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = system_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(system_noc_nodes),
+ 	.bcms = system_noc_bcms,
+diff --git a/drivers/interconnect/qcom/sm6350.c b/drivers/interconnect/qcom/sm6350.c
+index df2511dbfa96ba7454612ea0fcdf4a8f5fc39540..99c435a5968f6eb659e4713599d8cef73965a586 100644
+--- a/drivers/interconnect/qcom/sm6350.c
++++ b/drivers/interconnect/qcom/sm6350.c
+@@ -1389,7 +1389,6 @@ static struct qcom_icc_node * const aggre1_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm6350_aggre1_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = aggre1_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(aggre1_noc_nodes),
+ 	.bcms = aggre1_noc_bcms,
+@@ -1415,7 +1414,6 @@ static struct qcom_icc_node * const aggre2_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm6350_aggre2_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = aggre2_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(aggre2_noc_nodes),
+ 	.bcms = aggre2_noc_bcms,
+@@ -1443,7 +1441,6 @@ static struct qcom_icc_node * const clk_virt_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm6350_clk_virt = {
+-	.alloc_dyn_id = true,
+ 	.nodes = clk_virt_nodes,
+ 	.num_nodes = ARRAY_SIZE(clk_virt_nodes),
+ 	.bcms = clk_virt_bcms,
+@@ -1463,7 +1460,6 @@ static struct qcom_icc_node * const compute_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm6350_compute_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = compute_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(compute_noc_nodes),
+ 	.bcms = compute_noc_bcms,
+@@ -1524,7 +1520,6 @@ static struct qcom_icc_node * const config_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm6350_config_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = config_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(config_noc_nodes),
+ 	.bcms = config_noc_bcms,
+@@ -1541,7 +1536,6 @@ static struct qcom_icc_node * const dc_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm6350_dc_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = dc_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(dc_noc_nodes),
+ 	.bcms = dc_noc_bcms,
+@@ -1573,7 +1567,6 @@ static struct qcom_icc_node * const gem_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm6350_gem_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = gem_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(gem_noc_nodes),
+ 	.bcms = gem_noc_bcms,
+@@ -1601,7 +1594,6 @@ static struct qcom_icc_node * const mmss_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm6350_mmss_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = mmss_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(mmss_noc_nodes),
+ 	.bcms = mmss_noc_bcms,
+@@ -1626,7 +1618,6 @@ static struct qcom_icc_node * const npu_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm6350_npu_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = npu_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(npu_noc_nodes),
+ 	.bcms = npu_noc_bcms,
+@@ -1663,7 +1654,6 @@ static struct qcom_icc_node * const system_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm6350_system_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = system_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(system_noc_nodes),
+ 	.bcms = system_noc_bcms,
+diff --git a/drivers/interconnect/qcom/sm7150.c b/drivers/interconnect/qcom/sm7150.c
+index 296cf350a08fb521ea12fce69a6b1ab19b6c97a8..0390d0468b48c10b7bb254c73766fac24e5d6c72 100644
+--- a/drivers/interconnect/qcom/sm7150.c
++++ b/drivers/interconnect/qcom/sm7150.c
+@@ -1431,7 +1431,6 @@ static struct qcom_icc_node * const aggre1_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm7150_aggre1_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = aggre1_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(aggre1_noc_nodes),
+ 	.bcms = aggre1_noc_bcms,
+@@ -1461,7 +1460,6 @@ static struct qcom_icc_node * const aggre2_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm7150_aggre2_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = aggre2_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(aggre2_noc_nodes),
+ 	.bcms = aggre2_noc_bcms,
+@@ -1481,7 +1479,6 @@ static struct qcom_icc_node * const camnoc_virt_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm7150_camnoc_virt = {
+-	.alloc_dyn_id = true,
+ 	.nodes = camnoc_virt_nodes,
+ 	.num_nodes = ARRAY_SIZE(camnoc_virt_nodes),
+ 	.bcms = camnoc_virt_bcms,
+@@ -1499,7 +1496,6 @@ static struct qcom_icc_node * const compute_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm7150_compute_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = compute_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(compute_noc_nodes),
+ 	.bcms = compute_noc_bcms,
+@@ -1565,7 +1561,6 @@ static struct qcom_icc_node * const config_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm7150_config_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = config_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(config_noc_nodes),
+ 	.bcms = config_noc_bcms,
+@@ -1582,7 +1577,6 @@ static struct qcom_icc_node * const dc_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm7150_dc_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = dc_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(dc_noc_nodes),
+ 	.bcms = dc_noc_bcms,
+@@ -1614,7 +1608,6 @@ static struct qcom_icc_node * const gem_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm7150_gem_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = gem_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(gem_noc_nodes),
+ 	.bcms = gem_noc_bcms,
+@@ -1632,7 +1625,6 @@ static struct qcom_icc_node * const mc_virt_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm7150_mc_virt = {
+-	.alloc_dyn_id = true,
+ 	.nodes = mc_virt_nodes,
+ 	.num_nodes = ARRAY_SIZE(mc_virt_nodes),
+ 	.bcms = mc_virt_bcms,
+@@ -1664,7 +1656,6 @@ static struct qcom_icc_node * const mmss_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm7150_mmss_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = mmss_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(mmss_noc_nodes),
+ 	.bcms = mmss_noc_bcms,
+@@ -1701,7 +1692,6 @@ static struct qcom_icc_node * const system_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm7150_system_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = system_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(system_noc_nodes),
+ 	.bcms = system_noc_bcms,
+diff --git a/drivers/interconnect/qcom/sm8150.c b/drivers/interconnect/qcom/sm8150.c
+index 58a6643921bb4e9c3298352e3fb5755b92162a6d..ae732afbd155864137644e0789c6b61ef81a1414 100644
+--- a/drivers/interconnect/qcom/sm8150.c
++++ b/drivers/interconnect/qcom/sm8150.c
+@@ -1538,7 +1538,6 @@ static struct qcom_icc_node * const aggre1_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8150_aggre1_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = aggre1_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(aggre1_noc_nodes),
+ 	.bcms = aggre1_noc_bcms,
+@@ -1574,7 +1573,6 @@ static struct qcom_icc_node * const aggre2_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8150_aggre2_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = aggre2_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(aggre2_noc_nodes),
+ 	.bcms = aggre2_noc_bcms,
+@@ -1593,7 +1591,6 @@ static struct qcom_icc_node * const camnoc_virt_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8150_camnoc_virt = {
+-	.alloc_dyn_id = true,
+ 	.nodes = camnoc_virt_nodes,
+ 	.num_nodes = ARRAY_SIZE(camnoc_virt_nodes),
+ 	.bcms = camnoc_virt_bcms,
+@@ -1611,7 +1608,6 @@ static struct qcom_icc_node * const compute_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8150_compute_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = compute_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(compute_noc_nodes),
+ 	.bcms = compute_noc_bcms,
+@@ -1680,7 +1676,6 @@ static struct qcom_icc_node * const config_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8150_config_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = config_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(config_noc_nodes),
+ 	.bcms = config_noc_bcms,
+@@ -1697,7 +1692,6 @@ static struct qcom_icc_node * const dc_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8150_dc_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = dc_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(dc_noc_nodes),
+ 	.bcms = dc_noc_bcms,
+@@ -1733,7 +1727,6 @@ static struct qcom_icc_node * const gem_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8150_gem_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = gem_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(gem_noc_nodes),
+ 	.bcms = gem_noc_bcms,
+@@ -1751,7 +1744,6 @@ static struct qcom_icc_node * const mc_virt_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8150_mc_virt = {
+-	.alloc_dyn_id = true,
+ 	.nodes = mc_virt_nodes,
+ 	.num_nodes = ARRAY_SIZE(mc_virt_nodes),
+ 	.bcms = mc_virt_bcms,
+@@ -1782,7 +1774,6 @@ static struct qcom_icc_node * const mmss_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8150_mmss_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = mmss_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(mmss_noc_nodes),
+ 	.bcms = mmss_noc_bcms,
+@@ -1824,7 +1815,6 @@ static struct qcom_icc_node * const system_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8150_system_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = system_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(system_noc_nodes),
+ 	.bcms = system_noc_bcms,
+diff --git a/drivers/interconnect/qcom/sm8350.c b/drivers/interconnect/qcom/sm8350.c
+index 75a9b0ddb8d5c5a3d990bbe0e5067a06d5903a86..bb793d72489335aa145c99b09320f8b7faaa37d6 100644
+--- a/drivers/interconnect/qcom/sm8350.c
++++ b/drivers/interconnect/qcom/sm8350.c
+@@ -1497,7 +1497,6 @@ static struct qcom_icc_node * const aggre1_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8350_aggre1_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = aggre1_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(aggre1_noc_nodes),
+ 	.bcms = aggre1_noc_bcms,
+@@ -1529,7 +1528,6 @@ static struct qcom_icc_node * const aggre2_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8350_aggre2_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = aggre2_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(aggre2_noc_nodes),
+ 	.bcms = aggre2_noc_bcms,
+@@ -1609,7 +1607,6 @@ static struct qcom_icc_node * const config_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8350_config_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = config_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(config_noc_nodes),
+ 	.bcms = config_noc_bcms,
+@@ -1626,7 +1623,6 @@ static struct qcom_icc_node * const dc_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8350_dc_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = dc_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(dc_noc_nodes),
+ 	.bcms = dc_noc_bcms,
+@@ -1663,7 +1659,6 @@ static struct qcom_icc_node * const gem_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8350_gem_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = gem_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(gem_noc_nodes),
+ 	.bcms = gem_noc_bcms,
+@@ -1684,7 +1679,6 @@ static struct qcom_icc_node * const lpass_ag_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8350_lpass_ag_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = lpass_ag_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(lpass_ag_noc_nodes),
+ 	.bcms = lpass_ag_noc_bcms,
+@@ -1702,7 +1696,6 @@ static struct qcom_icc_node * const mc_virt_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8350_mc_virt = {
+-	.alloc_dyn_id = true,
+ 	.nodes = mc_virt_nodes,
+ 	.num_nodes = ARRAY_SIZE(mc_virt_nodes),
+ 	.bcms = mc_virt_bcms,
+@@ -1733,7 +1726,6 @@ static struct qcom_icc_node * const mmss_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8350_mmss_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = mmss_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(mmss_noc_nodes),
+ 	.bcms = mmss_noc_bcms,
+@@ -1753,7 +1745,6 @@ static struct qcom_icc_node * const nsp_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8350_compute_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = nsp_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(nsp_noc_nodes),
+ 	.bcms = nsp_noc_bcms,
+@@ -1779,7 +1770,6 @@ static struct qcom_icc_node * const system_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8350_system_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = system_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(system_noc_nodes),
+ 	.bcms = system_noc_bcms,
+diff --git a/drivers/interconnect/qcom/sm8450.c b/drivers/interconnect/qcom/sm8450.c
+index dd61e03b5a819ac8842afe5928800ed8640ff5ed..669a638bf3efcd9ed594d63f25c9022314fa1d54 100644
+--- a/drivers/interconnect/qcom/sm8450.c
++++ b/drivers/interconnect/qcom/sm8450.c
+@@ -1490,7 +1490,6 @@ static struct qcom_icc_node * const aggre1_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8450_aggre1_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = aggre1_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(aggre1_noc_nodes),
+ 	.bcms = aggre1_noc_bcms,
+@@ -1518,7 +1517,6 @@ static struct qcom_icc_node * const aggre2_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8450_aggre2_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = aggre2_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(aggre2_noc_nodes),
+ 	.bcms = aggre2_noc_bcms,
+@@ -1541,7 +1539,6 @@ static struct qcom_icc_node * const clk_virt_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8450_clk_virt = {
+-	.alloc_dyn_id = true,
+ 	.nodes = clk_virt_nodes,
+ 	.num_nodes = ARRAY_SIZE(clk_virt_nodes),
+ 	.bcms = clk_virt_bcms,
+@@ -1611,7 +1608,6 @@ static struct qcom_icc_node * const config_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8450_config_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = config_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(config_noc_nodes),
+ 	.bcms = config_noc_bcms,
+@@ -1647,7 +1643,6 @@ static struct qcom_icc_node * const gem_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8450_gem_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = gem_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(gem_noc_nodes),
+ 	.bcms = gem_noc_bcms,
+@@ -1670,7 +1665,6 @@ static struct qcom_icc_node * const lpass_ag_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8450_lpass_ag_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = lpass_ag_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(lpass_ag_noc_nodes),
+ 	.bcms = lpass_ag_noc_bcms,
+@@ -1692,7 +1686,6 @@ static struct qcom_icc_node * const mc_virt_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8450_mc_virt = {
+-	.alloc_dyn_id = true,
+ 	.nodes = mc_virt_nodes,
+ 	.num_nodes = ARRAY_SIZE(mc_virt_nodes),
+ 	.bcms = mc_virt_bcms,
+@@ -1728,7 +1721,6 @@ static struct qcom_icc_node * const mmss_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8450_mmss_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = mmss_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(mmss_noc_nodes),
+ 	.bcms = mmss_noc_bcms,
+@@ -1747,7 +1739,6 @@ static struct qcom_icc_node * const nsp_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8450_nsp_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = nsp_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(nsp_noc_nodes),
+ 	.bcms = nsp_noc_bcms,
+@@ -1767,7 +1758,6 @@ static struct qcom_icc_node * const pcie_anoc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8450_pcie_anoc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = pcie_anoc_nodes,
+ 	.num_nodes = ARRAY_SIZE(pcie_anoc_nodes),
+ 	.bcms = pcie_anoc_bcms,
+@@ -1796,7 +1786,6 @@ static struct qcom_icc_node * const system_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8450_system_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = system_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(system_noc_nodes),
+ 	.bcms = system_noc_bcms,
+diff --git a/drivers/interconnect/qcom/sm8550.c b/drivers/interconnect/qcom/sm8550.c
+index 24b682a5bdd1873b4e3e655a9c8021e43987f008..d01762e132722ff445e41efa9a23e898aa66fb74 100644
+--- a/drivers/interconnect/qcom/sm8550.c
++++ b/drivers/interconnect/qcom/sm8550.c
+@@ -1241,7 +1241,6 @@ static struct qcom_icc_node * const aggre1_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8550_aggre1_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = aggre1_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(aggre1_noc_nodes),
+ 	.bcms = aggre1_noc_bcms,
+@@ -1265,7 +1264,6 @@ static struct qcom_icc_node * const aggre2_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8550_aggre2_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = aggre2_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(aggre2_noc_nodes),
+ 	.bcms = aggre2_noc_bcms,
+@@ -1288,7 +1286,6 @@ static struct qcom_icc_node * const clk_virt_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8550_clk_virt = {
+-	.alloc_dyn_id = true,
+ 	.nodes = clk_virt_nodes,
+ 	.num_nodes = ARRAY_SIZE(clk_virt_nodes),
+ 	.bcms = clk_virt_bcms,
+@@ -1349,7 +1346,6 @@ static struct qcom_icc_node * const config_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8550_config_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = config_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(config_noc_nodes),
+ 	.bcms = config_noc_bcms,
+@@ -1374,7 +1370,6 @@ static struct qcom_icc_node * const cnoc_main_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8550_cnoc_main = {
+-	.alloc_dyn_id = true,
+ 	.nodes = cnoc_main_nodes,
+ 	.num_nodes = ARRAY_SIZE(cnoc_main_nodes),
+ 	.bcms = cnoc_main_bcms,
+@@ -1405,7 +1400,6 @@ static struct qcom_icc_node * const gem_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8550_gem_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = gem_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(gem_noc_nodes),
+ 	.bcms = gem_noc_bcms,
+@@ -1421,7 +1415,6 @@ static struct qcom_icc_node * const lpass_ag_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8550_lpass_ag_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = lpass_ag_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(lpass_ag_noc_nodes),
+ 	.bcms = lpass_ag_noc_bcms,
+@@ -1438,7 +1431,6 @@ static struct qcom_icc_node * const lpass_lpiaon_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8550_lpass_lpiaon_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = lpass_lpiaon_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(lpass_lpiaon_noc_nodes),
+ 	.bcms = lpass_lpiaon_noc_bcms,
+@@ -1454,7 +1446,6 @@ static struct qcom_icc_node * const lpass_lpicx_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8550_lpass_lpicx_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = lpass_lpicx_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(lpass_lpicx_noc_nodes),
+ 	.bcms = lpass_lpicx_noc_bcms,
+@@ -1472,7 +1463,6 @@ static struct qcom_icc_node * const mc_virt_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8550_mc_virt = {
+-	.alloc_dyn_id = true,
+ 	.nodes = mc_virt_nodes,
+ 	.num_nodes = ARRAY_SIZE(mc_virt_nodes),
+ 	.bcms = mc_virt_bcms,
+@@ -1501,7 +1491,6 @@ static struct qcom_icc_node * const mmss_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8550_mmss_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = mmss_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(mmss_noc_nodes),
+ 	.bcms = mmss_noc_bcms,
+@@ -1518,7 +1507,6 @@ static struct qcom_icc_node * const nsp_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8550_nsp_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = nsp_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(nsp_noc_nodes),
+ 	.bcms = nsp_noc_bcms,
+@@ -1538,7 +1526,6 @@ static struct qcom_icc_node * const pcie_anoc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8550_pcie_anoc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = pcie_anoc_nodes,
+ 	.num_nodes = ARRAY_SIZE(pcie_anoc_nodes),
+ 	.bcms = pcie_anoc_bcms,
+@@ -1562,7 +1549,6 @@ static struct qcom_icc_node * const system_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8550_system_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = system_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(system_noc_nodes),
+ 	.bcms = system_noc_bcms,
+diff --git a/drivers/interconnect/qcom/sm8650.c b/drivers/interconnect/qcom/sm8650.c
+index 629ff30e7ee70567beb4c9bd21b9b91f53b39526..cf3ae734d4c357d526d4e310bc03bda7ea602e2a 100644
+--- a/drivers/interconnect/qcom/sm8650.c
++++ b/drivers/interconnect/qcom/sm8650.c
+@@ -1595,7 +1595,6 @@ static struct qcom_icc_node * const aggre1_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8650_aggre1_noc = {
+-	.alloc_dyn_id = true,
+ 	.config = &icc_regmap_config,
+ 	.nodes = aggre1_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(aggre1_noc_nodes),
+@@ -1618,7 +1617,6 @@ static struct qcom_icc_node * const aggre2_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8650_aggre2_noc = {
+-	.alloc_dyn_id = true,
+ 	.config = &icc_regmap_config,
+ 	.nodes = aggre2_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(aggre2_noc_nodes),
+@@ -1642,7 +1640,6 @@ static struct qcom_icc_node * const clk_virt_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8650_clk_virt = {
+-	.alloc_dyn_id = true,
+ 	.nodes = clk_virt_nodes,
+ 	.num_nodes = ARRAY_SIZE(clk_virt_nodes),
+ 	.bcms = clk_virt_bcms,
+@@ -1704,7 +1701,6 @@ static struct qcom_icc_node * const config_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8650_config_noc = {
+-	.alloc_dyn_id = true,
+ 	.config = &icc_regmap_config,
+ 	.nodes = config_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(config_noc_nodes),
+@@ -1733,7 +1729,6 @@ static struct qcom_icc_node * const cnoc_main_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8650_cnoc_main = {
+-	.alloc_dyn_id = true,
+ 	.config = &icc_regmap_config,
+ 	.nodes = cnoc_main_nodes,
+ 	.num_nodes = ARRAY_SIZE(cnoc_main_nodes),
+@@ -1767,7 +1762,6 @@ static struct qcom_icc_node * const gem_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8650_gem_noc = {
+-	.alloc_dyn_id = true,
+ 	.config = &icc_regmap_config,
+ 	.nodes = gem_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(gem_noc_nodes),
+@@ -1781,7 +1775,6 @@ static struct qcom_icc_node * const lpass_ag_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8650_lpass_ag_noc = {
+-	.alloc_dyn_id = true,
+ 	.config = &icc_regmap_config,
+ 	.nodes = lpass_ag_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(lpass_ag_noc_nodes),
+@@ -1797,7 +1790,6 @@ static struct qcom_icc_node * const lpass_lpiaon_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8650_lpass_lpiaon_noc = {
+-	.alloc_dyn_id = true,
+ 	.config = &icc_regmap_config,
+ 	.nodes = lpass_lpiaon_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(lpass_lpiaon_noc_nodes),
+@@ -1811,7 +1803,6 @@ static struct qcom_icc_node * const lpass_lpicx_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8650_lpass_lpicx_noc = {
+-	.alloc_dyn_id = true,
+ 	.config = &icc_regmap_config,
+ 	.nodes = lpass_lpicx_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(lpass_lpicx_noc_nodes),
+@@ -1828,7 +1819,6 @@ static struct qcom_icc_node * const mc_virt_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8650_mc_virt = {
+-	.alloc_dyn_id = true,
+ 	.nodes = mc_virt_nodes,
+ 	.num_nodes = ARRAY_SIZE(mc_virt_nodes),
+ 	.bcms = mc_virt_bcms,
+@@ -1857,7 +1847,6 @@ static struct qcom_icc_node * const mmss_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8650_mmss_noc = {
+-	.alloc_dyn_id = true,
+ 	.config = &icc_regmap_config,
+ 	.nodes = mmss_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(mmss_noc_nodes),
+@@ -1875,7 +1864,6 @@ static struct qcom_icc_node * const nsp_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8650_nsp_noc = {
+-	.alloc_dyn_id = true,
+ 	.config = &icc_regmap_config,
+ 	.nodes = nsp_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(nsp_noc_nodes),
+@@ -1896,7 +1884,6 @@ static struct qcom_icc_node * const pcie_anoc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8650_pcie_anoc = {
+-	.alloc_dyn_id = true,
+ 	.config = &icc_regmap_config,
+ 	.nodes = pcie_anoc_nodes,
+ 	.num_nodes = ARRAY_SIZE(pcie_anoc_nodes),
+@@ -1918,7 +1905,6 @@ static struct qcom_icc_node * const system_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8650_system_noc = {
+-	.alloc_dyn_id = true,
+ 	.config = &icc_regmap_config,
+ 	.nodes = system_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(system_noc_nodes),
+diff --git a/drivers/interconnect/qcom/sm8750.c b/drivers/interconnect/qcom/sm8750.c
+index a46c1553ce0fd13b99a7d327eb575b232bc36509..1486c0b8f4c163030913dfcfc4c2af7fd3d36fb1 100644
+--- a/drivers/interconnect/qcom/sm8750.c
++++ b/drivers/interconnect/qcom/sm8750.c
+@@ -1194,7 +1194,6 @@ static struct qcom_icc_node * const aggre1_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8750_aggre1_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = aggre1_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(aggre1_noc_nodes),
+ };
+@@ -1217,7 +1216,6 @@ static struct qcom_icc_node * const aggre2_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8750_aggre2_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = aggre2_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(aggre2_noc_nodes),
+ 	.bcms = aggre2_noc_bcms,
+@@ -1240,7 +1238,6 @@ static struct qcom_icc_node * const clk_virt_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8750_clk_virt = {
+-	.alloc_dyn_id = true,
+ 	.nodes = clk_virt_nodes,
+ 	.num_nodes = ARRAY_SIZE(clk_virt_nodes),
+ 	.bcms = clk_virt_bcms,
+@@ -1290,7 +1287,6 @@ static struct qcom_icc_node * const config_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8750_config_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = config_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(config_noc_nodes),
+ 	.bcms = config_noc_bcms,
+@@ -1320,7 +1316,6 @@ static struct qcom_icc_node * const cnoc_main_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8750_cnoc_main = {
+-	.alloc_dyn_id = true,
+ 	.nodes = cnoc_main_nodes,
+ 	.num_nodes = ARRAY_SIZE(cnoc_main_nodes),
+ 	.bcms = cnoc_main_bcms,
+@@ -1354,7 +1349,6 @@ static struct qcom_icc_node * const gem_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8750_gem_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = gem_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(gem_noc_nodes),
+ 	.bcms = gem_noc_bcms,
+@@ -1367,7 +1361,6 @@ static struct qcom_icc_node * const lpass_ag_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8750_lpass_ag_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = lpass_ag_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(lpass_ag_noc_nodes),
+ };
+@@ -1382,7 +1375,6 @@ static struct qcom_icc_node * const lpass_lpiaon_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8750_lpass_lpiaon_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = lpass_lpiaon_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(lpass_lpiaon_noc_nodes),
+ 	.bcms = lpass_lpiaon_noc_bcms,
+@@ -1395,7 +1387,6 @@ static struct qcom_icc_node * const lpass_lpicx_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8750_lpass_lpicx_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = lpass_lpicx_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(lpass_lpicx_noc_nodes),
+ };
+@@ -1411,7 +1402,6 @@ static struct qcom_icc_node * const mc_virt_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8750_mc_virt = {
+-	.alloc_dyn_id = true,
+ 	.nodes = mc_virt_nodes,
+ 	.num_nodes = ARRAY_SIZE(mc_virt_nodes),
+ 	.bcms = mc_virt_bcms,
+@@ -1441,7 +1431,6 @@ static struct qcom_icc_node * const mmss_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8750_mmss_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = mmss_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(mmss_noc_nodes),
+ 	.bcms = mmss_noc_bcms,
+@@ -1458,7 +1447,6 @@ static struct qcom_icc_node * const nsp_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8750_nsp_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = nsp_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(nsp_noc_nodes),
+ 	.bcms = nsp_noc_bcms,
+@@ -1477,7 +1465,6 @@ static struct qcom_icc_node * const pcie_anoc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8750_pcie_anoc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = pcie_anoc_nodes,
+ 	.num_nodes = ARRAY_SIZE(pcie_anoc_nodes),
+ 	.bcms = pcie_anoc_bcms,
+@@ -1497,7 +1484,6 @@ static struct qcom_icc_node * const system_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc sm8750_system_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = system_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(system_noc_nodes),
+ 	.bcms = system_noc_bcms,
+diff --git a/drivers/interconnect/qcom/x1e80100.c b/drivers/interconnect/qcom/x1e80100.c
+index d5df26f02675de0150e2903df09fe419a8bd8892..2ba2823c7860e98bfbc2e018e8cb2e6f26be9911 100644
+--- a/drivers/interconnect/qcom/x1e80100.c
++++ b/drivers/interconnect/qcom/x1e80100.c
+@@ -1467,7 +1467,6 @@ static struct qcom_icc_node * const aggre1_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc x1e80100_aggre1_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = aggre1_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(aggre1_noc_nodes),
+ 	.bcms = aggre1_noc_bcms,
+@@ -1490,7 +1489,6 @@ static struct qcom_icc_node * const aggre2_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc x1e80100_aggre2_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = aggre2_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(aggre2_noc_nodes),
+ 	.bcms = aggre2_noc_bcms,
+@@ -1513,7 +1511,6 @@ static struct qcom_icc_node * const clk_virt_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc x1e80100_clk_virt = {
+-	.alloc_dyn_id = true,
+ 	.nodes = clk_virt_nodes,
+ 	.num_nodes = ARRAY_SIZE(clk_virt_nodes),
+ 	.bcms = clk_virt_bcms,
+@@ -1577,7 +1574,6 @@ static struct qcom_icc_node * const cnoc_cfg_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc x1e80100_cnoc_cfg = {
+-	.alloc_dyn_id = true,
+ 	.nodes = cnoc_cfg_nodes,
+ 	.num_nodes = ARRAY_SIZE(cnoc_cfg_nodes),
+ 	.bcms = cnoc_cfg_bcms,
+@@ -1608,7 +1604,6 @@ static struct qcom_icc_node * const cnoc_main_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc x1e80100_cnoc_main = {
+-	.alloc_dyn_id = true,
+ 	.nodes = cnoc_main_nodes,
+ 	.num_nodes = ARRAY_SIZE(cnoc_main_nodes),
+ 	.bcms = cnoc_main_bcms,
+@@ -1639,7 +1634,6 @@ static struct qcom_icc_node * const gem_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc x1e80100_gem_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = gem_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(gem_noc_nodes),
+ 	.bcms = gem_noc_bcms,
+@@ -1655,7 +1649,6 @@ static struct qcom_icc_node * const lpass_ag_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc x1e80100_lpass_ag_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = lpass_ag_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(lpass_ag_noc_nodes),
+ 	.bcms = lpass_ag_noc_bcms,
+@@ -1672,7 +1665,6 @@ static struct qcom_icc_node * const lpass_lpiaon_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc x1e80100_lpass_lpiaon_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = lpass_lpiaon_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(lpass_lpiaon_noc_nodes),
+ 	.bcms = lpass_lpiaon_noc_bcms,
+@@ -1688,7 +1680,6 @@ static struct qcom_icc_node * const lpass_lpicx_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc x1e80100_lpass_lpicx_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = lpass_lpicx_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(lpass_lpicx_noc_nodes),
+ 	.bcms = lpass_lpicx_noc_bcms,
+@@ -1706,7 +1697,6 @@ static struct qcom_icc_node * const mc_virt_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc x1e80100_mc_virt = {
+-	.alloc_dyn_id = true,
+ 	.nodes = mc_virt_nodes,
+ 	.num_nodes = ARRAY_SIZE(mc_virt_nodes),
+ 	.bcms = mc_virt_bcms,
+@@ -1735,7 +1725,6 @@ static struct qcom_icc_node * const mmss_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc x1e80100_mmss_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = mmss_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(mmss_noc_nodes),
+ 	.bcms = mmss_noc_bcms,
+@@ -1752,7 +1741,6 @@ static struct qcom_icc_node * const nsp_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc x1e80100_nsp_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = nsp_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(nsp_noc_nodes),
+ 	.bcms = nsp_noc_bcms,
+@@ -1770,7 +1758,6 @@ static struct qcom_icc_node * const pcie_center_anoc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc x1e80100_pcie_center_anoc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = pcie_center_anoc_nodes,
+ 	.num_nodes = ARRAY_SIZE(pcie_center_anoc_nodes),
+ 	.bcms = pcie_center_anoc_bcms,
+@@ -1788,7 +1775,6 @@ static struct qcom_icc_node * const pcie_north_anoc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc x1e80100_pcie_north_anoc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = pcie_north_anoc_nodes,
+ 	.num_nodes = ARRAY_SIZE(pcie_north_anoc_nodes),
+ 	.bcms = pcie_north_anoc_bcms,
+@@ -1808,7 +1794,6 @@ static struct qcom_icc_node * const pcie_south_anoc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc x1e80100_pcie_south_anoc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = pcie_south_anoc_nodes,
+ 	.num_nodes = ARRAY_SIZE(pcie_south_anoc_nodes),
+ 	.bcms = pcie_south_anoc_bcms,
+@@ -1831,7 +1816,6 @@ static struct qcom_icc_node * const system_noc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc x1e80100_system_noc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = system_noc_nodes,
+ 	.num_nodes = ARRAY_SIZE(system_noc_nodes),
+ 	.bcms = system_noc_bcms,
+@@ -1848,7 +1832,6 @@ static struct qcom_icc_node * const usb_center_anoc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc x1e80100_usb_center_anoc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = usb_center_anoc_nodes,
+ 	.num_nodes = ARRAY_SIZE(usb_center_anoc_nodes),
+ 	.bcms = usb_center_anoc_bcms,
+@@ -1865,7 +1848,6 @@ static struct qcom_icc_node * const usb_north_anoc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc x1e80100_usb_north_anoc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = usb_north_anoc_nodes,
+ 	.num_nodes = ARRAY_SIZE(usb_north_anoc_nodes),
+ 	.bcms = usb_north_anoc_bcms,
+@@ -1886,7 +1868,6 @@ static struct qcom_icc_node * const usb_south_anoc_nodes[] = {
+ };
+ 
+ static const struct qcom_icc_desc x1e80100_usb_south_anoc = {
+-	.alloc_dyn_id = true,
+ 	.nodes = usb_south_anoc_nodes,
+ 	.num_nodes = ARRAY_SIZE(usb_south_anoc_nodes),
+ 	.bcms = usb_south_anoc_bcms,
 
 -- 
 2.47.3
