@@ -1,182 +1,239 @@
-Return-Path: <linux-pm+bounces-37167-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37168-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D1B0C23F7D
-	for <lists+linux-pm@lfdr.de>; Fri, 31 Oct 2025 10:00:03 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3CEB8C245B4
+	for <lists+linux-pm@lfdr.de>; Fri, 31 Oct 2025 11:09:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6A20A564904
-	for <lists+linux-pm@lfdr.de>; Fri, 31 Oct 2025 08:58:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 929761881AFA
+	for <lists+linux-pm@lfdr.de>; Fri, 31 Oct 2025 10:04:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E5DC31A049;
-	Fri, 31 Oct 2025 08:58:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B50AC2EB843;
+	Fri, 31 Oct 2025 10:04:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="KC6hLbUp"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 813CB3128BC
-	for <linux-pm@vger.kernel.org>; Fri, 31 Oct 2025 08:58:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBF43224B1E
+	for <linux-pm@vger.kernel.org>; Fri, 31 Oct 2025 10:04:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761901087; cv=none; b=IkFOhnDT+2tVM8D52L0RhHOX7dH9FAMpSlf6z75iD1eiYU0RevwwNzD08/4sAjqNcrZHYsibDgk0Lx6AHHDg94JGV2+hh+eMLR+7LMlKT3448a7ILPxupkSX/zzDGzch9zdSj3Q7lVzUKPTpI1GktTcBsz/Rb9J/b07xWxrPiU8=
+	t=1761905066; cv=none; b=n56k/QwGzfNRgwi1kPfVW8UiT1ehqv98pmiHGm5vbwhWgwu5ak7QcVwDxq/HjMHYR1vulKB7CplpZbpD38e5H1JeJYU6fz1iNhb6ssBA0j9gBoD3Hh9nFe8hmBaSDebD5Nb+/heppT7KP1zcpamr6S34z2AXcvmqaa76TOJtIv0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761901087; c=relaxed/simple;
-	bh=NYbl8HJcgb3R5SVJ9GXGI/Jq2+mOIag8w0HzHBPHPoY=;
+	s=arc-20240116; t=1761905066; c=relaxed/simple;
+	bh=1NPwAuVD0brkPDsGNU2qpw0U6GQjpBoksa6hfCKwLjk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kleahjPSBy4CvMImJotsER+Cj/EsxawiL5a06YBPGMsPDYdZ0DebX4d0T5NO8WH4T3Wva47dBB1WHQmjkxmsBnbzGmJ5rstWfj7sKQCUMfaR3tlBCMDQQPKjUSSR2uPk+yBTepFSGZ5ypLDQhfpl/I6u/Mfnqnlf6/eYeIgWgHI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f172.google.com with SMTP id af79cd13be357-89ec7919c71so220660085a.1
-        for <linux-pm@vger.kernel.org>; Fri, 31 Oct 2025 01:58:04 -0700 (PDT)
+	 To:Cc:Content-Type; b=pQ4F0qDQh3Gi4Ram0nfQjyZhYbUB8R4AbqTGxVxjAK01xJZNOH7ABvYO9+Ay/T9Q6bH9RZ+drMr+AvvxaFPLL8ipO916LkwfbaoN72hTQCnIOrU8EPaxG8VLWbiAFMfP2a811rk+gAo7ikYuKZRAs80KzUkYBzCITdMzgfMHKWc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=KC6hLbUp; arc=none smtp.client-ip=209.85.128.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-78650258bacso3253527b3.3
+        for <linux-pm@vger.kernel.org>; Fri, 31 Oct 2025 03:04:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1761905064; x=1762509864; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=l7tYEGFUqGaeBpHUvE79YnYVY5qHGH/JQgyafV2cAr4=;
+        b=KC6hLbUpwlMQxk9+yKhg6ywRJI2XxyKAP96fQEBtA0DB88JnYiBMv0xdBIOsGmrSk0
+         MrZyFxUETIfjeBHjdMseOrHyiNqnJ2OoJopT4QxzJOg5SUoLN36O7gcEdXDlFBkFvk3x
+         xoMhq43DAIImqQxu3j5GyOQxi4vM7gb/bibSXvmCBQvKtSAYHGKLR56kwLxjasNN+FCU
+         CjRkTayO6iJBdtmpIPYwbWLW5ChylLvaXLCtSD2Ec9UNJvBeKpm4qdn3cHFTObleTM2N
+         7Ny1kcw+1o2cK5scQu1Ua5fVzKh+YvCn8TeI86nTTTszzN+FgxCLBgg710eiExswlTz4
+         g2kA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761901083; x=1762505883;
+        d=1e100.net; s=20230601; t=1761905064; x=1762509864;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=lQVVX5c2GB+a2QgL3UYe6DKU+bmVaydohzEFkpxq/1c=;
-        b=BzZgIikQBqAZ8yg/bGvfTDx2XTT/W/Vw0hs7DrnvgR4/PLpayNv3sIBFycVlYHzG7m
-         noSnn0URQSknIgewcHtO3WUyh0iN6vUzzoOqfru0htUnkVHBHUDtozcaRnWb34QEnU99
-         Eag/DPmFer5M8ow/76Sh7UiQH0CSH9ihG2lISlrlrnqwnO3c6MY6lgvp9+zN5I0vqqGs
-         +yjpBVP7VnaxFNB13D7eAXR46R0Vt2dA+/QwhHfSlKC0f+VMKfLwOcj7aIjdSeMBab8Y
-         QdZV6hC2jNgr6gXPf7OipX9OKhD50oOEMpBVu8Qh6S9xPlqhMEXOeTcghdntgmSA5+/x
-         9tnA==
-X-Forwarded-Encrypted: i=1; AJvYcCVitr6Rc7aybQJVl/vh46jBApK1gFEkJWRBjZKgPh+dHYwoj3G9NES/b5bzWtQ54gZJqSycwVNpvA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw0yH3Z8wnQO78B2Y0MCBCLefqQ114BbQFM3db7hjgCs3wWYflp
-	SQWHkr3QWZU4VZz9Qk0k0kDwjj0FK+r1J5BYgPmg4HYvInRuYcn1mDbHIeRiPxPa
-X-Gm-Gg: ASbGnctsiL0eGX07pwkxF6PnS8oY6hpnsi/8fKefNuzUQ7gSQNswhKqhO622HhiE2i/
-	ti4g/Q6agRqtvE1pr5GU1aEqTW1cGV6VWEK01e9HhPy3efAYTRPLVvFc68waUUlqbYZbYkS/Cqo
-	D+1QWARVgX6Dg7aUY/bqj+UFTs3Rp85c54B5wZO+zgKmLUX1PtVuGKtiYHudr88I8fx7VO1iO5g
-	CYKHJr12EUOC/Ps0JqN4jQYCVjqyv9m8286VyGoJy5oOx0gyxc6pEhtRMzRYCTCsJoN4jV9WPCQ
-	aA5N6L7nO5fOgE+in/bxw/fClVKOYsGGyuHyNaPFYkjAm7g2J9onro7SKbzKqrqi5g+/wWvYlTf
-	5HbcaKwytgf5MyCCopoGYRnRE4W3ep/SueyZPvEMyVV2GTPB68A7PluSOvVTA9fzQm/xKC1Velj
-	pmALfKFA5N+odlCCwhkPsIt0cVDn1RZ7k9DZxdD7AeZg==
-X-Google-Smtp-Source: AGHT+IGy4DyALOB5JSApMPkKpUGXMbuxgL9Ihco8TCYJYghFrN8yz7vkARu+tZi2w1LjvBOeH0CANQ==
-X-Received: by 2002:a05:620a:31a5:b0:863:42ea:d69d with SMTP id af79cd13be357-8ab9b59ad37mr271643285a.63.1761901083110;
-        Fri, 31 Oct 2025 01:58:03 -0700 (PDT)
-Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com. [209.85.222.169])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8ac005b1521sm75754785a.2.2025.10.31.01.58.02
-        for <linux-pm@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 31 Oct 2025 01:58:02 -0700 (PDT)
-Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-8a84ba42abbso225155985a.3
-        for <linux-pm@vger.kernel.org>; Fri, 31 Oct 2025 01:58:02 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXTi8nu+m01dCa6fi4FI3vNMJzxGJUIazn2Bxyxcd68kIYFqYA7U2XnR7xlBhA/7JqTQbvc1JRMKg==@vger.kernel.org
-X-Received: by 2002:a05:6102:c13:b0:5d5:f6ae:38c6 with SMTP id
- ada2fe7eead31-5dbb136ecc7mr717064137.37.1761900747573; Fri, 31 Oct 2025
- 01:52:27 -0700 (PDT)
+        bh=l7tYEGFUqGaeBpHUvE79YnYVY5qHGH/JQgyafV2cAr4=;
+        b=RJPBG1p27ASYcejU5FQA8wfegPPF2MAClJlKwrYF+fjApKAXv/7P6LVq7okngLlhE2
+         NT0gqsTn3Gg/rGFk/+PUasU2H8kyWvYXAc7ZJc2jBxieW/EWmhj6NZlgfSZauq/5Qj6R
+         d8pHsVods3CHwJYM89H0j75FwDxc6++m0Ux/6BgdlRpux8Ecrt7SfDtkHuurYbRP2nw6
+         itGrqGtvJ5W41J/FqvCBwZP8BMfL/8Tx9vvx+uattVBaQu/0/gaMBbRoKl2WPKYcx4N7
+         e6lC/4r17a08BK/FhXTFky7k+4Xou3dQEGsGuTeZZ4cxigzV8TEhr1T/OUlh1i6PneDN
+         XKOA==
+X-Gm-Message-State: AOJu0YzmlZKtWi0YovxFXOJMeu54Elp73eV2g5IE3kyqcuEXmH/EVOOy
+	IXPU8pBd2Hs14EAu0r53kiJxhf3rbvgV0S3Fe94QuyCSZnMseF9EDhMvB7d63PzrE7rtypB++A1
+	1Yit5YB5KAb4Q7fKeVO5h+oHsLhpTCXWdSToDzrmaDQ==
+X-Gm-Gg: ASbGncuQBzPee2ceeWd9Ff39Ns1WxfkqkIsBhWmDHeu5rl7inOQW3y771W63qfSCBIc
+	vxdCu64BAvLTZRHEyDOOufsiCGsj8Fr4SP4zOdnIFAlulC2eHWcOQeWIfsFPsafYTXuztbIstBY
+	Ral5g8sN2fkFo+wp2h8vEZu09xCuWU/RqK0SWgpiC6wrq7NtXdvYsfJlhwmuzDN+Zfg4gyUzJ0Z
+	CdCNYSKta0Qz1FbpxePWp3G1WwiXxUunTjUNvFXltRkY9LairQ6GlZsUeZ9xg==
+X-Google-Smtp-Source: AGHT+IEut91HJmfSs3799eVqsxwdMr6zHhHhc1/iIvEv2KM762zD6NDcJ1Xclh6t3YwkDZrmCLW33rwcsKuTtN39sMc=
+X-Received: by 2002:a05:690c:6008:b0:783:fa30:b783 with SMTP id
+ 00721157ae682-786485afedamr24175417b3.69.1761905063556; Fri, 31 Oct 2025
+ 03:04:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251015071420.1173068-1-herve.codina@bootlin.com> <20251015071420.1173068-6-herve.codina@bootlin.com>
-In-Reply-To: <20251015071420.1173068-6-herve.codina@bootlin.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Fri, 31 Oct 2025 09:52:16 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVnsWMB24BTFKwggEXKOtqJ96GWZh2Xz+ogocQHM+=+6Q@mail.gmail.com>
-X-Gm-Features: AWmQ_bm5vGlc5XXZic8RvnXrZNNcCRnf0-7M9Km7uh4sqx0Aign1FjKoX2MZmow
-Message-ID: <CAMuHMdVnsWMB24BTFKwggEXKOtqJ96GWZh2Xz+ogocQHM+=+6Q@mail.gmail.com>
-Subject: Re: [PATCH v4 05/29] dt-bindings: bus: Add simple-platform-bus
-To: Herve Codina <herve.codina@bootlin.com>
-Cc: Andrew Lunn <andrew@lunn.ch>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Danilo Krummrich <dakr@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
-	Fabio Estevam <festevam@gmail.com>, Michael Turquette <mturquette@baylibre.com>, 
-	Stephen Boyd <sboyd@kernel.org>, Andi Shyti <andi.shyti@kernel.org>, 
-	Wolfram Sang <wsa+renesas@sang-engineering.com>, Peter Rosin <peda@axentia.se>, 
-	Arnd Bergmann <arnd@arndb.de>, Saravana Kannan <saravanak@google.com>, 
-	Bjorn Helgaas <bhelgaas@google.com>, Charles Keepax <ckeepax@opensource.cirrus.com>, 
-	Richard Fitzgerald <rf@opensource.cirrus.com>, David Rhodes <david.rhodes@cirrus.com>, 
-	Linus Walleij <linus.walleij@linaro.org>, Ulf Hansson <ulf.hansson@linaro.org>, 
-	Mark Brown <broonie@kernel.org>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
-	Daniel Scally <djrscally@gmail.com>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	Sakari Ailus <sakari.ailus@linux.intel.com>, Len Brown <lenb@kernel.org>, 
-	Davidlohr Bueso <dave@stgolabs.net>, Jonathan Cameron <jonathan.cameron@huawei.com>, 
-	Dave Jiang <dave.jiang@intel.com>, Alison Schofield <alison.schofield@intel.com>, 
-	Vishal Verma <vishal.l.verma@intel.com>, Ira Weiny <ira.weiny@intel.com>, 
-	Dan Williams <dan.j.williams@intel.com>, Geert Uytterhoeven <geert+renesas@glider.be>, 
-	Wolfram Sang <wsa@kernel.org>, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
-	linux-clk@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-pci@vger.kernel.org, linux-sound@vger.kernel.org, 
-	patches@opensource.cirrus.com, linux-gpio@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linux-spi@vger.kernel.org, 
-	linux-acpi@vger.kernel.org, linux-cxl@vger.kernel.org, 
-	Allan Nielsen <allan.nielsen@microchip.com>, Horatiu Vultur <horatiu.vultur@microchip.com>, 
-	Steen Hegelund <steen.hegelund@microchip.com>, Luca Ceresoli <luca.ceresoli@bootlin.com>, 
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20251016151929.75863-1-ulf.hansson@linaro.org>
+ <CAJZ5v0i_0K6+nCvBC55Bbu7XuKYjHrky3uG_aZ3aM0HMymcfeg@mail.gmail.com>
+ <CAPDyKFpYfLJ1F1ynLAZLJBoWp+Uk-k2B0796_yWQTNg4xT9zew@mail.gmail.com>
+ <CAJZ5v0igMhr=N90As66dioXXzL8YL11PN3k49n5-yoPuHNR-_w@mail.gmail.com>
+ <CAJZ5v0jSvU7=bmscRyQrvoWA0q=AgbDE3Ad1jf+4PTdzZgSNjw@mail.gmail.com>
+ <CAPDyKFr=uVS0CsuFnTjXH+o+P+xrG7GKj2O92mGgqiSo-tk9Bg@mail.gmail.com>
+ <CAJZ5v0g2TebJDR5SWdFfyU7dksShZV0qXeO+yP6V_QTCsE--AQ@mail.gmail.com>
+ <CAPDyKFpBHZ758khTGhidcyYCwy7dDtkabJ4trg4K16BhWEpUYA@mail.gmail.com> <CAJZ5v0jdT28Q0mnyU_2RKEYWhEHhQvWBAzsra1Jp9dBCLSCO1Q@mail.gmail.com>
+In-Reply-To: <CAJZ5v0jdT28Q0mnyU_2RKEYWhEHhQvWBAzsra1Jp9dBCLSCO1Q@mail.gmail.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Fri, 31 Oct 2025 11:03:47 +0100
+X-Gm-Features: AWmQ_blhjMdakPq54VnrjwOCuXofMbvgMHqoyIVU62N3sTzQMJnLhn4YdtuO4nA
+Message-ID: <CAPDyKFo6DT0cagnEQ61_UkEet6Ao60xfFM=YJ3VQqUYH8KeJyg@mail.gmail.com>
+Subject: Re: [PATCH v2 0/4] PM: QoS: Introduce a CPU system-wakeup QoS limit
+ for s2idle
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: linux-pm@vger.kernel.org, Vincent Guittot <vincent.guittot@linaro.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Kevin Hilman <khilman@baylibre.com>, 
+	Pavel Machek <pavel@kernel.org>, Len Brown <len.brown@intel.com>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, Saravana Kannan <saravanak@google.com>, 
+	Maulik Shah <quic_mkshah@quicinc.com>, Prasad Sodagudi <psodagud@quicinc.com>, 
+	Dhruva Gole <d-gole@ti.com>, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Herv=C3=A9,
-
-On Wed, 15 Oct 2025 at 09:17, Herve Codina <herve.codina@bootlin.com> wrote=
-:
-> A Simple Platform Bus is a transparent bus that doesn't need a specific
-> driver to perform operations at bus level.
+On Thu, 30 Oct 2025 at 17:36, Rafael J. Wysocki <rafael@kernel.org> wrote:
 >
-> Similar to simple-bus, a Simple Platform Bus allows to automatically
-> instantiate devices connected to this bus.
+> On Thu, Oct 30, 2025 at 4:13=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro.o=
+rg> wrote:
+> >
+> > On Thu, 30 Oct 2025 at 15:06, Rafael J. Wysocki <rafael@kernel.org> wro=
+te:
+> > >
+> > > On Thu, Oct 30, 2025 at 1:44=E2=80=AFPM Ulf Hansson <ulf.hansson@lina=
+ro.org> wrote:
+> > > >
+> > > > On Thu, 30 Oct 2025 at 13:29, Rafael J. Wysocki <rafael@kernel.org>=
+ wrote:
+> > > > >
+> > > > > On Thu, Oct 30, 2025 at 1:26=E2=80=AFPM Rafael J. Wysocki <rafael=
+@kernel.org> wrote:
+> > > > > >
+> > > > > > On Thu, Oct 30, 2025 at 1:23=E2=80=AFPM Ulf Hansson <ulf.hansso=
+n@linaro.org> wrote:
+> > > > > > >
+> > > > > > > On Wed, 29 Oct 2025 at 15:53, Rafael J. Wysocki <rafael@kerne=
+l.org> wrote:
+> > > > > > > >
+> > > > > > > > On Thu, Oct 16, 2025 at 5:19=E2=80=AFPM Ulf Hansson <ulf.ha=
+nsson@linaro.org> wrote:
+> > > > > > > > >
+> > > > > > > > > Changes in v2:
+> > > > > > > > >         - Limit the new QoS to CPUs  and make some corres=
+ponding renaming of the
+> > > > > > > > >         functions along with name of the device node for =
+user space.
+> > > > > > > > >         - Make sure we deal with the failure/error path c=
+orrectly when there are
+> > > > > > > > >         no state available for s2idle.
+> > > > > > > > >         - Add documentation.
+> > > > > > > > >
+> > > > > > > > > Some platforms supports multiple low-power states for CPU=
+s that can be used
+> > > > > > > > > when entering system-wide suspend and s2idle in particula=
+r. Currently we are
+> > > > > > > > > always selecting the deepest possible state for the CPUs,=
+ which can break the
+> > > > > > > > > system-wakeup latency constraint that may be required for=
+ some use-cases.
+> > > > > > > > >
+> > > > > > > > > Therefore, this series suggests to introduce a new interf=
+ace for user-space,
+> > > > > > > > > allowing us to specify the CPU system-wakeup QoS limit. T=
+he QoS limit is then
+> > > > > > > > > taken into account when selecting a suitable low-power st=
+ate for s2idle.
+> > > > > > > >
+> > > > > > > > Last time we discussed this I said I would like the new lim=
+it to be
+> > > > > > > > taken into account by regular "runtime" cpuidle because the=
+ "s2idle"
+> > > > > > > > limit should not be less that the "runtime" limit (or at le=
+ast it
+> > > > > > > > would be illogical if that happened).
+> > > > > > >
+> > > > > > > Yes, we discussed this, but that was also before we concluded=
+ to add a
+> > > > > > > new file for user-space to operate on after all.
+> > > > > > >
+> > > > > > > To me, it looks unnecessarily limiting to not allow them to b=
+e
+> > > > > > > orthogonal,
+> > > > > >
+> > > > > > So what's the use case in which it makes sense to have a lower =
+latency
+> > > > > > limit for s2idle than for runtime?
+> > > >
+> > > > Honestly, I don't know, but I just wanted to keep things more flexi=
+ble.
+> > > >
+> > > > > >
+> > > > > > > but I am not insisting that it needs to be like this. I
+> > > > > > > was just thinking that we do not necessarily have to care abo=
+ut the
+> > > > > > > same use-case in runtime as in the system-suspend state. More=
+over,
+> > > > > > > nothing would prevent user-space from applying the same const=
+raint to
+> > > > > > > both of them, if that is needed.
+> > > > > > >
+> > > > > > > >
+> > > > > > > > It looks like that could be implemented by making
+> > > > > > > > cpuidle_governor_latency_req() take cpu_wakeup_latency_qos_=
+limit()
+> > > > > > > > into account, couldn't it?
+> > > > > > >
+> > > > > > > Right, but I am not sure we want that. See above.
+> > > > > >
+> > > > > > I do or I need to be convinced that this is a bad idea.
+> > > > >
+> > > > > And there is a specific reason why I want that.
+> > > > >
+> > > > > Namely, say somebody wants to set the same limit for both s2idle =
+and
+> > > > > "runtime" cpuidle.  If the s2idle limit did not affect "runtime",=
+ they
+> > > > > would need to open two device special files and write the same va=
+lue
+> > > > > to both of them.  Otherwise, they just need to use the s2idle lim=
+it
+> > > > > and it will work for "runtime" automatically.
+> > > >
+> > > > Right. User-space would need to open two files instead of one, but =
+is
+> > > > that really a problem?
+> > >
+> > > It is potentially confusing and error-prone.
+> > >
+> > > > What if user-space doesn't want to affect the runtime state-selecti=
+on,
+> > > > but cares only about a use-case that requires a cpu-wakeup constrai=
+nt
+> > > > when resuming from s2idle.
+> > >
+> > > Well, I'm not sure if this use case exists at all, which is key here.
+> > > If it doesn't exist, why make provisions for it?
+> >
+> > Well, because it's not possible to change afterwards as it becomes ABI.
+> >
+> > It would be silly having to add yet another file for userspace, down
+> > the road, if it turns out to be needed.
 >
-> Those devices are instantiated only by the Simple Platform Bus probe
-> function itself.
->
-> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+> OTOH doing things without a good reason is also not particularly wise.
 
-Thanks for your patch!
+Right. As I said, I don't have a use-case at hand at this very moment
+for why we shouldn't combine the constraints as you propose.
 
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/bus/simple-platform-bus.yaml
-> @@ -0,0 +1,50 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/bus/simple-platform-bus.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Simple Platform Bus
-> +
-> +maintainers:
-> +  - Herve Codina <herve.codina@bootlin.com>
-> +
-> +description: |
-> +  A Simple Platform Bus is a transparent bus that doesn't need a specifi=
-c
-> +  driver to perform operations at bus level.
-> +
-> +  Similar to simple-bus, a Simple Platform Bus allows to automatically
-> +  instantiate devices connected to this bus. Those devices are instantia=
-ted
-> +  only by the Simple Platform Bus probe function itself.
+I will send a new version, unless someone speaks up and suggests a
+different approach.
 
-So what are the differences with simple-bus? That its children are
-instantiated "only by the Simple Platform Bus probe function itself"?
-If that is the case, in which other places are simple-bus children
-instantiated?
-
-Do we need properties related to power-management (clocks, power-domains),
-or will we need a "simple-pm-platform-bus" later? ;-)
-
-FTR, I still think we wouldn't have needed the distinction between
-"simple-bus" and "simple-pm-bus"...
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+Kind regards
+Uffe
 
