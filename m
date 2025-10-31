@@ -1,158 +1,239 @@
-Return-Path: <linux-pm+bounces-37225-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37226-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C4A4C25D13
-	for <lists+linux-pm@lfdr.de>; Fri, 31 Oct 2025 16:24:12 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 50E57C268C8
+	for <lists+linux-pm@lfdr.de>; Fri, 31 Oct 2025 19:22:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E18104F594A
-	for <lists+linux-pm@lfdr.de>; Fri, 31 Oct 2025 15:20:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 79E60423CA7
+	for <lists+linux-pm@lfdr.de>; Fri, 31 Oct 2025 18:22:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24BAB2C159A;
-	Fri, 31 Oct 2025 15:20:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A3FF354ACD;
+	Fri, 31 Oct 2025 18:22:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="ZXX1Bma9"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="TzgpNHyK";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="CEH3HQeM";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="TzgpNHyK";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="CEH3HQeM"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A8382BEFE8;
-	Fri, 31 Oct 2025 15:20:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 580FB351FC0
+	for <linux-pm@vger.kernel.org>; Fri, 31 Oct 2025 18:22:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761924030; cv=none; b=ZNEKAbLyroFbt3tBAvQcZY9QYeTiAGiX1SzC8peQ4f8t+sDmwBelAleHe5XPOyzm9NUFeYsreEwcOGds458lXU5MraRIVJ0L6MNSAcyiDNtxm8zqSCuAi2I9F3QLJ22H/qeulh/VWG00arhqpdxT/nw4+xEbdGOGGzK3iXxMfdM=
+	t=1761934931; cv=none; b=lySfGlWgVzo32ieA3/Bt7SOMrjuTZiK8MgjQD6PW6h/RQwSGzW1eS+t7iUxl7oZU0XlYsLFtAU/VtTj8KbNlnrIkvP+KB/fd7wiiZm/eLmh0fUxc1AsQSnVvkklfcdKSJqqh4DIyc3TZ3YpdopRAegzaW6VBxclowcb/6OdaiFI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761924030; c=relaxed/simple;
-	bh=y3b+wUCsWckPBCTPgAZadRRNBEdlpxrfsSHKNnGesNY=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=IIaBcq2DZFuFNWCJ69Rp0+KvIfpGueRbZrey+b0r4YUEldPX23/cFLYyPXuR7y7OVFEDeUfC36Mk+wy6edhs8knsppObLPKWJzX7olzwvTmKIcm7U2PRpgMev9arNBx8aTv5dw3R4a0H4WpDPy2dAuPOut7Zp8NffcGGgLtXzO8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=ZXX1Bma9; arc=none smtp.client-ip=185.246.85.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id B52E14E41440;
-	Fri, 31 Oct 2025 15:20:25 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 8C26D60704;
-	Fri, 31 Oct 2025 15:20:25 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 067DE11818041;
-	Fri, 31 Oct 2025 16:20:05 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1761924023; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=goHQM/1NASiwEpJFuU+gt1w80LtYcWXr5Gc0K9tmMcc=;
-	b=ZXX1Bma9X3KMNXlEJ6m3KmzgeWaoHvqKZUDGbtyXcyczSWNcqa1WxZl7PaaP3QnmzL9gq4
-	h0YuPlq7t/ag22Qc0RV6DUkEOizZ8aU4YvVAi5tQ0oCrNCN9uTlgnrGvmTf6uzjWAFrc/P
-	iOZon5nGEinDurKqvP8UIygDFPUWAiUqm59zHUbmHyOs3e60XOGs63ifmZhf114mLUKRqK
-	bIKj+JoZJxnMO/w5PK2AbEIM7ADXeVegLKetdhc6qx0E6UYxyvcnSln30z+BZXKje9+TfM
-	AmSNEEcgTn5HJwFcJWmSNYyzhr1jXdHX0RhRB0lSnwspgtNFDoD+bFqnfo/hgQ==
-Date: Fri, 31 Oct 2025 16:20:04 +0100
-From: Herve Codina <herve.codina@bootlin.com>
-To: Rob Herring <robh@kernel.org>
-Cc: Andrew Lunn <andrew@lunn.ch>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
- Danilo Krummrich <dakr@kernel.org>, Shawn Guo <shawnguo@kernel.org>, Sascha
- Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team
- <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, Michael
- Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, Andi
- Shyti <andi.shyti@kernel.org>, Wolfram Sang
- <wsa+renesas@sang-engineering.com>, Peter Rosin <peda@axentia.se>, Arnd
- Bergmann <arnd@arndb.de>, Saravana Kannan <saravanak@google.com>, Bjorn
- Helgaas <bhelgaas@google.com>, Charles Keepax
- <ckeepax@opensource.cirrus.com>, Richard Fitzgerald
- <rf@opensource.cirrus.com>, David Rhodes <david.rhodes@cirrus.com>, Linus
- Walleij <linus.walleij@linaro.org>, Ulf Hansson <ulf.hansson@linaro.org>,
- Mark Brown <broonie@kernel.org>, Andy Shevchenko
- <andriy.shevchenko@linux.intel.com>, Daniel Scally <djrscally@gmail.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>, Sakari Ailus
- <sakari.ailus@linux.intel.com>, Len Brown <lenb@kernel.org>, Davidlohr
- Bueso <dave@stgolabs.net>, Jonathan Cameron <jonathan.cameron@huawei.com>,
- Dave Jiang <dave.jiang@intel.com>, Alison Schofield
- <alison.schofield@intel.com>, Vishal Verma <vishal.l.verma@intel.com>, Ira
- Weiny <ira.weiny@intel.com>, Dan Williams <dan.j.williams@intel.com>, Geert
- Uytterhoeven <geert+renesas@glider.be>, Wolfram Sang <wsa@kernel.org>,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
- linux-clk@vger.kernel.org, linux-i2c@vger.kernel.org,
- linux-pci@vger.kernel.org, linux-sound@vger.kernel.org,
- patches@opensource.cirrus.com, linux-gpio@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-spi@vger.kernel.org,
- linux-acpi@vger.kernel.org, linux-cxl@vger.kernel.org, Allan Nielsen
- <allan.nielsen@microchip.com>, Horatiu Vultur
- <horatiu.vultur@microchip.com>, Steen Hegelund
- <steen.hegelund@microchip.com>, Luca Ceresoli <luca.ceresoli@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v4 05/29] dt-bindings: bus: Add simple-platform-bus
-Message-ID: <20251031162004.180d5e3f@bootlin.com>
-In-Reply-To: <20251030141448.GA3853761-robh@kernel.org>
-References: <20251015071420.1173068-1-herve.codina@bootlin.com>
-	<20251015071420.1173068-6-herve.codina@bootlin.com>
-	<20251030141448.GA3853761-robh@kernel.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+	s=arc-20240116; t=1761934931; c=relaxed/simple;
+	bh=ivxC6rH3aWZdDf91ZyEVWpF+MAQfTwbgZSJgH5XVPfs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ahNQR1Djh2THpg/CpADH/jk8c8YMl6qHDTzjkMYX5DqUjlblqATB7pMoS1+0iiyAlZhrmVMEWjbS6B9oYjdKberLRFxairvhECDp2DW/VaB2T/cEIVNZs1NuiduxH+xZZLlyXX90HtXXA8es3bs19C3VtPlo5iaJ1v1tKPOT6Zc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=TzgpNHyK; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=CEH3HQeM; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=TzgpNHyK; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=CEH3HQeM; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 433DE223E4;
+	Fri, 31 Oct 2025 18:22:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1761934926; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=jessRx6TNC0QixhPKRj2h5XBAo+ylMyAf01j+QDGZrw=;
+	b=TzgpNHyKZcFSDWwunMLd2X71Jgz9ba03UiBxZQcLzDelaJP6atFhs4LA0UDe8oMvUnDgwp
+	PXC4sOOnEzEEwiKdsskYEq54s11zaGrTZsRRvvU0ig797fLdg+pXn4i0rHIPxMGOQUoN6l
+	l6wrLEjXKj2RmV1xsZ8efQstlGY02JY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1761934926;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=jessRx6TNC0QixhPKRj2h5XBAo+ylMyAf01j+QDGZrw=;
+	b=CEH3HQeMT3rUTyh+KA1JIrTOUkOIE/w2GWcujKzHW1fp1rCI2mIJMdd52lszF9KohAiG1t
+	YyI7HhGigbhCIZBg==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1761934926; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=jessRx6TNC0QixhPKRj2h5XBAo+ylMyAf01j+QDGZrw=;
+	b=TzgpNHyKZcFSDWwunMLd2X71Jgz9ba03UiBxZQcLzDelaJP6atFhs4LA0UDe8oMvUnDgwp
+	PXC4sOOnEzEEwiKdsskYEq54s11zaGrTZsRRvvU0ig797fLdg+pXn4i0rHIPxMGOQUoN6l
+	l6wrLEjXKj2RmV1xsZ8efQstlGY02JY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1761934926;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=jessRx6TNC0QixhPKRj2h5XBAo+ylMyAf01j+QDGZrw=;
+	b=CEH3HQeMT3rUTyh+KA1JIrTOUkOIE/w2GWcujKzHW1fp1rCI2mIJMdd52lszF9KohAiG1t
+	YyI7HhGigbhCIZBg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id A086D13991;
+	Fri, 31 Oct 2025 18:22:05 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id 1SBoJU3+BGn3bwAAD6G6ig
+	(envelope-from <svarbanov@suse.de>); Fri, 31 Oct 2025 18:22:05 +0000
+Message-ID: <309707dc-43e6-4c2c-9547-cbfce2e9e1fb@suse.de>
+Date: Fri, 31 Oct 2025 20:22:00 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/4] dt-bindings: soc: bcm: Add bcm2712 compatible
+To: Conor Dooley <conor@kernel.org>, Stanimir Varbanov <svarbanov@suse.de>
+Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-rpi-kernel@lists.infradead.org,
+ Broadcom internal kernel review list
+ <bcm-kernel-feedback-list@broadcom.com>, linux-pm@vger.kernel.org,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Florian Fainelli <florian.fainelli@broadcom.com>, Ray Jui
+ <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+ Lee Jones <lee@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
+ Willow Cunningham <willow.e.cunningham@gmail.com>,
+ Stefan Wahren <wahrenst@gmx.net>, Saenz Julienne <nsaenz@kernel.org>,
+ Andrea della Porta <andrea.porta@suse.com>,
+ Phil Elwell <phil@raspberrypi.com>, Jonathan Bell
+ <jonathan@raspberrypi.com>, Dave Stevenson <dave.stevenson@raspberrypi.com>
+References: <20251031102423.1150093-1-svarbanov@suse.de>
+ <20251031102423.1150093-3-svarbanov@suse.de>
+ <20251031-icon-woozy-58061dd3d4b4@spud>
+Content-Language: en-US
+From: Stanimir Varbanov <svarbanov@suse.de>
+In-Reply-To: <20251031-icon-woozy-58061dd3d4b4@spud>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Transfer-Encoding: 7bit
+X-Spamd-Result: default: False [-2.80 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	TAGGED_RCPT(0.00)[dt];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[23];
+	MID_RHS_MATCH_FROM(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com,gmx.net];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[vger.kernel.org,lists.infradead.org,broadcom.com,kernel.org,linaro.org,gmail.com,gmx.net,suse.com,raspberrypi.com];
+	TO_DN_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	TO_MATCH_ENVRCPT_SOME(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:mid,suse.de:email]
+X-Spam-Flag: NO
+X-Spam-Score: -2.80
+X-Spam-Level: 
 
-Hi Rob,
+Hi Conor,
 
-On Thu, 30 Oct 2025 09:14:48 -0500
-Rob Herring <robh@kernel.org> wrote:
-
-> On Wed, Oct 15, 2025 at 09:13:52AM +0200, Herve Codina wrote:
-> > A Simple Platform Bus is a transparent bus that doesn't need a specific
-> > driver to perform operations at bus level.
-> > 
-> > Similar to simple-bus, a Simple Platform Bus allows to automatically
-> > instantiate devices connected to this bus.
-> > 
-> > Those devices are instantiated only by the Simple Platform Bus probe
-> > function itself.  
+On 10/31/25 5:04 PM, Conor Dooley wrote:
+> On Fri, Oct 31, 2025 at 12:24:21PM +0200, Stanimir Varbanov wrote:
+>> Add bcm2712-pm compatible and update the bindings to satisfy it's
+>> requirements. The PM hardware block inside bcm2712 lacks the "asb"
+>> and "rpivid_asb" register ranges and also does not have clocks, update
+>> the bindings accordingly.
+>>
+>> Signed-off-by: Stanimir Varbanov <svarbanov@suse.de>
+>> Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
+>> ---
+>>  .../bindings/soc/bcm/brcm,bcm2835-pm.yaml     | 38 ++++++++++++++++---
+>>  1 file changed, 32 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/soc/bcm/brcm,bcm2835-pm.yaml b/Documentation/devicetree/bindings/soc/bcm/brcm,bcm2835-pm.yaml
+>> index e28ef198a801..ce910802ee9d 100644
+>> --- a/Documentation/devicetree/bindings/soc/bcm/brcm,bcm2835-pm.yaml
+>> +++ b/Documentation/devicetree/bindings/soc/bcm/brcm,bcm2835-pm.yaml
+>> @@ -13,23 +13,21 @@ description: |
+>>  maintainers:
+>>    - Nicolas Saenz Julienne <nsaenz@kernel.org>
+>>  
+>> -allOf:
+>> -  - $ref: /schemas/watchdog/watchdog.yaml#
+>> -
+>>  properties:
+>>    compatible:
+>>      items:
+>>        - enum:
+>>            - brcm,bcm2835-pm
+>>            - brcm,bcm2711-pm
+>> +          - brcm,bcm2712-pm
+>>        - const: brcm,bcm2835-pm-wdt
+>>  
+>>    reg:
+>> -    minItems: 2
+>> +    minItems: 1
+>>      maxItems: 3
+>>  
+>>    reg-names:
+>> -    minItems: 2
+>> +    minItems: 1
+>>      items:
+>>        - const: pm
+>>        - const: asb
+>> @@ -62,7 +60,35 @@ required:
+>>    - reg
+>>    - "#power-domain-cells"
+>>    - "#reset-cells"
+>> -  - clocks
+>> +
+>> +allOf:
+>> +  - $ref: /schemas/watchdog/watchdog.yaml#
+>> +
+>> +  - if:
+>> +      properties:
+>> +        compatible:
+>> +          contains:
+>> +            enum:
+>> +              - brcm,bcm2835-pm
+>> +              - brcm,bcm2711-pm
+>> +    then:
+>> +      required:
+>> +        - clocks
+>> +
+>> +      properties:
+>> +        reg:
+>> +          minItems: 2
+>> +
+>> +        reg-names:
+>> +          minItems: 2
 > 
-> Don't let Greg see this... :)
+>> +
+>> +    else:
+>> +      properties:
+>> +        reg:
+>> +          minItems: 1
+>> +
+>> +        reg-names:
+>> +          minItems: 1
 > 
-> I can't say I'm a fan either. "Platform bus" is a kernel thing, and the 
-> distinction here between the 2 compatibles is certainly a kernel thing.
-> 
-> I think this needs to be solved within the kernel.
+> This else has no impact, was it meant to be maxItems?
 
-I fully agree with that.
+Oops, yes it should be maxItems. Sending new version ...
 
-> 
-> What I previously said is define a list of compatibles to not 
-> instantiate the child devices. This would essentially be any case having 
-> a specific compatible and having its own driver. So if someone has 
-> 'compatible = "vendor,not-so-simple-bus", "simple-bus"', when and if 
-> they add a driver for "vendor,not-so-simple-bus", then they have to add 
-> the compatible to the list in the simple-pm-bus driver. I wouldn't 
-> expect this to be a large list. There's only a handful of cases where 
-> "simple-bus" has a more specific compatible. And only a few of those 
-> have a driver. A more general and complicated solution would be making 
-> linux handle 2 (or more) drivers matching a node and picking the driver 
-> with most specific match. That gets complicated with built-in vs. 
-> modules. I'm not sure we really need to solve that problem.
+~Stan
 
-Right. Let discard the "more general and complicated solution" and focus
-on the list of compatible to avoid child devices instantiation.
-
-Do you mean that, for "simple-bus" compatible we should:
- - Remove the recursive device instantiation from of_platform_populate().
- - In simple-bus probe(), check the device we probe against the
-   'no_instantiate_children' list
-      - If it matches, do not instantiate chidren
-      - If it doesn't match instantiate children
-
-Is that correct?
-
-Best regards,
-Hervé
 
