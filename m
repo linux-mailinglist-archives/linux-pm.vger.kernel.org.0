@@ -1,133 +1,102 @@
-Return-Path: <linux-pm+bounces-37161-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37165-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2B3EC23853
-	for <lists+linux-pm@lfdr.de>; Fri, 31 Oct 2025 08:18:46 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB36EC23CA0
+	for <lists+linux-pm@lfdr.de>; Fri, 31 Oct 2025 09:27:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 8A0F04E55F2
-	for <lists+linux-pm@lfdr.de>; Fri, 31 Oct 2025 07:18:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CAA131A22ABE
+	for <lists+linux-pm@lfdr.de>; Fri, 31 Oct 2025 08:27:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93D89329365;
-	Fri, 31 Oct 2025 07:18:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51BB430CD81;
+	Fri, 31 Oct 2025 08:27:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=richtek.com header.i=@richtek.com header.b="2iLh78A1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ea7EP1eQ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mg.richtek.com (mg.richtek.com [220.130.44.152])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADB8A45038;
-	Fri, 31 Oct 2025 07:18:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.130.44.152
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2151F2E2661;
+	Fri, 31 Oct 2025 08:27:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761895114; cv=none; b=CzXIfpaGZGkEFiCaBdXbiNeUbFgipzQ95c7S5f6z99revzAUuDq4o83FqcU60mgGPOKdAh8/nDRG+CNCegl+0JrKKJ55tMhKUW6p/Pjhcf1NfOsp6qxNg3vNjqDK0wOB7mdw13RkUISZfaJEMCCa65JEIYPnwnQ4dVu4tmLEudI=
+	t=1761899225; cv=none; b=GV0OQjS8FeGaowhga/kqKVrifV734+SyiidsMIrYgnrS6uk/8i9/fEXSzoMmiZ4hit5LCMqbngnHrtGV4M34O0gK2Z+wfu1d+IWfmRvffTZHjS0DsdJg7ob/DiU1P9wWXiDPkZbZmAH1jtN0UBzJ20Rq0jTstoVoTdXB4PWfi6I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761895114; c=relaxed/simple;
-	bh=vZmH4j1iRBHdyP/11gWs1D7OulzeT5LPIZQzEfM5xtY=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Lwhhfq/WpBA7k6Ay98xi1/692VOIydosv4P0eq499+1+KxaLTWCgo04k6oYUvGIxkFgig1MjT0wIzvSptrvwgLHxJzW8YP+inMDpVJqrz0roIbfN4JWMxBG3+Y/Rke6wahCaVx8yo7EGJpwjYuJyX5ZrcGRrZVo3gd+fr8vn47A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=richtek.com; spf=pass smtp.mailfrom=richtek.com; dkim=pass (2048-bit key) header.d=richtek.com header.i=@richtek.com header.b=2iLh78A1; arc=none smtp.client-ip=220.130.44.152
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=richtek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=richtek.com
-X-MailGates: (SIP:2,PASS,NONE)(compute_score:DELIVER,40,3)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=richtek.com;
-	s=richtek; t=1761895103;
-	bh=SBAaGqZMQDv2mThH8h5PuvqVwOb0ebtKCEAGSC2lmyQ=; l=1765;
-	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=2iLh78A1ZwXrpsX6RCU4pII2g/PSTKFfqRYiNeozJ8AeP8WeGOffgj+UovDDfX18N
-	 W0rPvHfdso1K2+7WW1WtTs6CqAQuuDMKr4kBz+8pTYon24hHcVAK5pD7cwuERmFSZt
-	 rrI+23A+oo88hSoa8VZObWszWetPoJKu/Udji1SBxdsY8gyWSY/nx2uFGfrJpEr/DQ
-	 Q3pFkcPYPiapQRPxjPzOAVsnyVL11T1+poiWfbek91l3gv3q0cOVWu8nvV/lIuY4PG
-	 NkqfY481tE2mlLbhCY92/nd4gthTd96Im0d+AWfe/KJfgTu3V/ynL/ySDxn+K89tya
-	 g+bU+MBBYJ+7w==
-Received: from 192.168.10.46
-	by mg.richtek.com with MailGates ESMTPS Server V6.0(3436931:0:AUTH_RELAY)
-	(envelope-from <cy_huang@richtek.com>)
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256/256); Fri, 31 Oct 2025 15:18:09 +0800 (CST)
-Received: from ex4.rt.l (192.168.10.47) by ex3.rt.l (192.168.10.46) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1748.26; Fri, 31 Oct
- 2025 15:18:08 +0800
-Received: from git-send.richtek.com (192.168.10.154) by ex4.rt.l
- (192.168.10.45) with Microsoft SMTP Server id 15.2.1748.26 via Frontend
- Transport; Fri, 31 Oct 2025 15:18:08 +0800
-From: <cy_huang@richtek.com>
-To: Sebastian Reichel <sre@kernel.org>, Krzysztof Kozlowski
-	<krzk+dt@kernel.org>
-CC: ob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>, "ChiYuan
- Huang" <cy_huang@richtek.com>, <devicetree@vger.kernel.org>,
-	<linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v4 3/3] Documentation: power: rt9756: Document exported sysfs entries
-Date: Fri, 31 Oct 2025 15:19:35 +0800
-Message-ID: <5138d4aa760d6ff81a5296cdf010a447056abce4.1761894605.git.cy_huang@richtek.com>
-X-Mailer: git-send-email 2.43.5
-In-Reply-To: <cover.1761894605.git.cy_huang@richtek.com>
-References: <cover.1761894605.git.cy_huang@richtek.com>
+	s=arc-20240116; t=1761899225; c=relaxed/simple;
+	bh=T7J9+XFKVg8HuPmkvReyqzEKUvKCj6+pGkV3l2AMnJs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bSBjIvQXwkBNHlCFxrb2Y3w/tG0vbOHhCPUuU12G59s4gvZtoQ06wvBU0/T7UfnI2QFJve9Ty3Z2mlYJ847Sxc9f44fsNsOsX5mQ/Jk9oiIMyjKZiQgmYryTQmxQ7g0L7bXH2HdRKTegT2BqVoFYDMfmj9j+eY7hnrd7iVjbiKo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ea7EP1eQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C282C4CEF1;
+	Fri, 31 Oct 2025 08:27:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761899224;
+	bh=T7J9+XFKVg8HuPmkvReyqzEKUvKCj6+pGkV3l2AMnJs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ea7EP1eQuY3M6A+U7svOwmqMrp7L9PJ8wkKsD1BhIrL8E/LIjlsJBDVK+Be6gsz6r
+	 3+dEnu9lsLh0YCW3ZOcHQbBe2r9aaudaUWDP5J5Qg8m3HFwinTIAuqMNzgIVBjz/OY
+	 gVWSQ3/MbeqxmClFCkw+UqCikQmInzSNkLs9v/atcC4MUjSu3nsHEW4TFTN7DAb8e+
+	 A5S0v4i654H/yjLFX7IKk/8ArQPxLxDLIdZqXOpgIKNWoSIep61iYm6LnZ8AFvbfPo
+	 QGra4+tQPCBWgZ064IEcy+/zWDCaOK7HoUglMA27Y4FdIgwF4o6oG5P1efPRojWGbW
+	 +wX5upBYMa8xw==
+Date: Fri, 31 Oct 2025 09:27:02 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Raviteja Laggyshetty <raviteja.laggyshetty@oss.qualcomm.com>
+Cc: Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Odelu Kukatla <odelu.kukatla@oss.qualcomm.com>
+Subject: Re: [PATCH v4 1/2] dt-bindings: interconnect: document the RPMh
+ Network-On-Chip interconnect in Kaanapali SoC
+Message-ID: <20251031-careful-fast-tapir-6ccece@kuoka>
+References: <20251031-knp-interconnect-v4-0-568bba2cb3e5@oss.qualcomm.com>
+ <20251031-knp-interconnect-v4-1-568bba2cb3e5@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20251031-knp-interconnect-v4-1-568bba2cb3e5@oss.qualcomm.com>
 
-From: ChiYuan Huang <cy_huang@richtek.com>
+On Fri, Oct 31, 2025 at 03:38:47AM +0000, Raviteja Laggyshetty wrote:
+> Document the RPMh Network-On-Chip Interconnect of the Kaanapali platform.
+> 
+> Co-developed-by: Odelu Kukatla <odelu.kukatla@oss.qualcomm.com>
+> Signed-off-by: Odelu Kukatla <odelu.kukatla@oss.qualcomm.com>
+> Signed-off-by: Raviteja Laggyshetty <raviteja.laggyshetty@oss.qualcomm.com>
+> ---
+>  .../bindings/interconnect/qcom,kaanapali-rpmh.yaml | 124 +++++++++++++++++
+>  .../dt-bindings/interconnect/qcom,kaanapali-rpmh.h | 149 +++++++++++++++++++++
+>  2 files changed, 273 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,kaanapali-rpmh.yaml b/Documentation/devicetree/bindings/interconnect/qcom,kaanapali-rpmh.yaml
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..9731e7df7eb3d8e1e291a57cbc5941bb8dce1fac
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/interconnect/qcom,kaanapali-rpmh.yaml
+> @@ -0,0 +1,124 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/interconnect/qcom,kaanapali-rpmh.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm RPMh Network-On-Chip Interconnect on KAANAPALI
 
-Document the settings exported by rt9756 charger driver through sysfs
-entries:
+Kaanapali
 
-- watchdog_timer
-- operation_mode
+Nowwhere in other patchsets this name is considered an acronym.
 
-Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
----
-V3
-- Remove customized description for battery voltage and current
----
- .../ABI/testing/sysfs-class-power-rt9756      | 30 +++++++++++++++++++
- 1 file changed, 30 insertions(+)
- create mode 100644 Documentation/ABI/testing/sysfs-class-power-rt9756
+With above fixed:
 
-diff --git a/Documentation/ABI/testing/sysfs-class-power-rt9756 b/Documentation/ABI/testing/sysfs-class-power-rt9756
-new file mode 100644
-index 000000000000..c4d6c2b4715d
---- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-class-power-rt9756
-@@ -0,0 +1,30 @@
-+What:		/sys/class/power_supply/rt9756-*/watchdog_timer
-+Date:		Dec 2025
-+KernelVersion:	6.19
-+Contact:	ChiYuan Huang <cy_huang@richtek.com>
-+Description:
-+		This entry shows and sets the watchdog timer when rt9756 charger
-+		operates in charging mode. When the timer expires, the device
-+		will disable the charging. To prevent the timer expires, any
-+		host communication can make the timer restarted.
-+
-+		Access: Read, Write
-+
-+		Valid values:
-+		- 500, 1000, 5000, 30000, 40000, 80000, 128000 or 255000 (milliseconds),
-+		- 0: disabled
-+
-+What:		/sys/class/power_supply/rt9756-*/operation_mode
-+Date:		Dec 2025
-+KernelVersion:	6.19
-+Contact:	ChiYuan Huang <cy_huang@richtek.com>
-+Description:
-+		This entry shows and set the operation mode when rt9756 charger
-+		operates in charging phase. If 'bypass' mode is used, internal
-+		path will connect vbus directly to vbat. Else, default 'div2'
-+		mode for the switch-cap charging.
-+
-+		Access: Read, Write
-+
-+		Valid values:
-+		- 'bypass' or 'div2'
--- 
-2.34.1
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
 
 
