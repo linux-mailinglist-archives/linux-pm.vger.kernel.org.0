@@ -1,102 +1,127 @@
-Return-Path: <linux-pm+bounces-37165-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37166-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB36EC23CA0
-	for <lists+linux-pm@lfdr.de>; Fri, 31 Oct 2025 09:27:28 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7736DC23E04
+	for <lists+linux-pm@lfdr.de>; Fri, 31 Oct 2025 09:44:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CAA131A22ABE
-	for <lists+linux-pm@lfdr.de>; Fri, 31 Oct 2025 08:27:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 769CC188C970
+	for <lists+linux-pm@lfdr.de>; Fri, 31 Oct 2025 08:43:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51BB430CD81;
-	Fri, 31 Oct 2025 08:27:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ea7EP1eQ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B7602ED87C;
+	Fri, 31 Oct 2025 08:43:15 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com [209.85.222.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2151F2E2661;
-	Fri, 31 Oct 2025 08:27:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64D992E9EA1
+	for <linux-pm@vger.kernel.org>; Fri, 31 Oct 2025 08:43:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761899225; cv=none; b=GV0OQjS8FeGaowhga/kqKVrifV734+SyiidsMIrYgnrS6uk/8i9/fEXSzoMmiZ4hit5LCMqbngnHrtGV4M34O0gK2Z+wfu1d+IWfmRvffTZHjS0DsdJg7ob/DiU1P9wWXiDPkZbZmAH1jtN0UBzJ20Rq0jTstoVoTdXB4PWfi6I=
+	t=1761900195; cv=none; b=bPHPe+lhzpgCMoZwEq2n/QL57BrRmw/+tgCiyYJZDJh1UA7Gnb6huH9pUwNEjFPO5YSJN67RoQRQs4PtWnvEjum07vfvFVcy4dlww+GmLW0rLCieecfUOzbrVtM5bKDyHXXo0IjAMSGylX7ucTiPijzPWpC0CwwmGlBXPg/v4aU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761899225; c=relaxed/simple;
-	bh=T7J9+XFKVg8HuPmkvReyqzEKUvKCj6+pGkV3l2AMnJs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bSBjIvQXwkBNHlCFxrb2Y3w/tG0vbOHhCPUuU12G59s4gvZtoQ06wvBU0/T7UfnI2QFJve9Ty3Z2mlYJ847Sxc9f44fsNsOsX5mQ/Jk9oiIMyjKZiQgmYryTQmxQ7g0L7bXH2HdRKTegT2BqVoFYDMfmj9j+eY7hnrd7iVjbiKo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ea7EP1eQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C282C4CEF1;
-	Fri, 31 Oct 2025 08:27:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761899224;
-	bh=T7J9+XFKVg8HuPmkvReyqzEKUvKCj6+pGkV3l2AMnJs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ea7EP1eQuY3M6A+U7svOwmqMrp7L9PJ8wkKsD1BhIrL8E/LIjlsJBDVK+Be6gsz6r
-	 3+dEnu9lsLh0YCW3ZOcHQbBe2r9aaudaUWDP5J5Qg8m3HFwinTIAuqMNzgIVBjz/OY
-	 gVWSQ3/MbeqxmClFCkw+UqCikQmInzSNkLs9v/atcC4MUjSu3nsHEW4TFTN7DAb8e+
-	 A5S0v4i654H/yjLFX7IKk/8ArQPxLxDLIdZqXOpgIKNWoSIep61iYm6LnZ8AFvbfPo
-	 QGra4+tQPCBWgZ064IEcy+/zWDCaOK7HoUglMA27Y4FdIgwF4o6oG5P1efPRojWGbW
-	 +wX5upBYMa8xw==
-Date: Fri, 31 Oct 2025 09:27:02 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Raviteja Laggyshetty <raviteja.laggyshetty@oss.qualcomm.com>
-Cc: Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Odelu Kukatla <odelu.kukatla@oss.qualcomm.com>
-Subject: Re: [PATCH v4 1/2] dt-bindings: interconnect: document the RPMh
- Network-On-Chip interconnect in Kaanapali SoC
-Message-ID: <20251031-careful-fast-tapir-6ccece@kuoka>
-References: <20251031-knp-interconnect-v4-0-568bba2cb3e5@oss.qualcomm.com>
- <20251031-knp-interconnect-v4-1-568bba2cb3e5@oss.qualcomm.com>
+	s=arc-20240116; t=1761900195; c=relaxed/simple;
+	bh=WJEG5aSHGx/vf+vzxryZjx84TMeZQxoBKx135ESeS9M=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fbocrcnfw6cIMEgG8eczqoNCmVmzitkDQT+MVWBuZ80rAop4FeobW827kHZytfnlge/r5tMcXRhzargf27dQiIvhVqLcbpXCDpOIAtO9lPfsUkxSWtC1fJcEKSb7B/39h9l+7rCkHjHExblUsNPtwzEli/cc8mLwBA1Vue3japA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ua1-f41.google.com with SMTP id a1e0cc1a2514c-935194112f4so20269241.3
+        for <linux-pm@vger.kernel.org>; Fri, 31 Oct 2025 01:43:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761900192; x=1762504992;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=srKuvBcN8qwhEwMAzIP9jvMl8T/5K7+6w69VAb/dJjw=;
+        b=SAanC4qStgybJqLaLvoun6Lh3Sfvo2esIkyfyCini3qocQAyQpyV1bWaA1pWESexIb
+         YVkVsk4PD3xyTMjs766ZaspE/aO/zt1L9Nkysz6N86ROLr5Rz+9+jzlL+o1gQnh3gcDe
+         zfhTB/TEocwHIW2wbECbylAIWRsDFD/h9UKxQaPCgwUz9OWEFQeSMtYsTeUT33/buG8g
+         tHelrzaOFvz5mF7sK+PtUHHGkHS4cmBexSPTzV7Cf+mvfC7nUkDtmwVFf/piq+B/edBN
+         qDe5mXFbrtSYslwCgoFOod+fvj8pRmpoNQlfqrIp5JChwZCgK+Jy4BvkvLaXNKBsJBPn
+         jyJQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUP5DCMGvRVzT8zbhiUpOtQ0Pu/9zcPRFS2+KFWGd4wk4gsqmxLr3eKraL93FbYrvchhdy8FgVZqA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxu63LA4spxpCw3H9A8DxHhGX7iU5UXI/CwhwZKpEiPg+jYtb4W
+	sKYYTjR8dFE/jUOxjF6w2UeVb+cPoh7W+q7KsMU8vZA/wmUIjRrEvl5QqYAFlTz7
+X-Gm-Gg: ASbGnctF8qeiE0AzxG3AKN6UVCoWUALi8I6oklFgiXpaF18RxJr9EiXvB36UpDkcWVS
+	yl8pqvdXjWzrHeZZ/Z85H6fq1pZgLjt6pgWZ+4XjIEYRWiBI/bKr5nXxzClSDSR/CjYuU+pbqSD
+	CwvMuLntJjNDSMjnRNK48N/mIH86CghrxLHucoIbL/G1XffL5ehSzmFei0RMo4C3rEgHZAHz3//
+	mvFeZInNrxxPyX9xInAKJ1FJzVyc1iXLBomRnuUHvi5Xb+vThEut1lPSEkEITScNl6E7j49+HX4
+	zk0DcKF8XkiNPv4lrBPGIOX35Wwuo2Yy7tTQAZNdssw1dG9M1CejmEqtWkT7l3sv0rydN0St4/h
+	3CtenkDPKwLzLyFEW4kZUgblgzqamfezuD4LY5uU+rfVAkQQnExr3BPrzu60m9UUv45c75fVxHl
+	uDqm+QgFPND8vntrlI78kHqT7PDHG6RQR4jofF2vy37+IT5X8l
+X-Google-Smtp-Source: AGHT+IGmkODTs/EjnDFkNiFSF2GsV2ctaQsmhogeTxCuPiY13hfUvU5QLJR3qSEpPFd7asVtaUNu+g==
+X-Received: by 2002:a05:6122:3d05:b0:559:3b8a:70ce with SMTP id 71dfb90a1353d-5593e2fbc4cmr901159e0c.7.1761900191879;
+        Fri, 31 Oct 2025 01:43:11 -0700 (PDT)
+Received: from mail-ua1-f47.google.com (mail-ua1-f47.google.com. [209.85.222.47])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-55944963708sm431945e0c.5.2025.10.31.01.43.11
+        for <linux-pm@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 31 Oct 2025 01:43:11 -0700 (PDT)
+Received: by mail-ua1-f47.google.com with SMTP id a1e0cc1a2514c-935194112f4so20261241.3
+        for <linux-pm@vger.kernel.org>; Fri, 31 Oct 2025 01:43:11 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUZFEPBnwwCzasSUllebnmgFBN7WRqmczKktp4WiCFwHSROnZi2HWtiEqt9pIwk3Yg0nvCyfMRuAA==@vger.kernel.org
+X-Received: by 2002:a05:6102:26d2:b0:5d5:f544:a88e with SMTP id
+ ada2fe7eead31-5dbb133e6acmr609871137.35.1761900191030; Fri, 31 Oct 2025
+ 01:43:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20251031-knp-interconnect-v4-1-568bba2cb3e5@oss.qualcomm.com>
+References: <CAMuHMdWapT40hV3c+CSBqFOW05aWcV1a6v_NiJYgoYi0i9_PDQ@mail.gmail.com>
+ <6854ea2b-b316-4711-b849-038d532f00c1@imgtec.com>
+In-Reply-To: <6854ea2b-b316-4711-b849-038d532f00c1@imgtec.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Fri, 31 Oct 2025 09:43:00 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUdYidx7u2FOFUmiijp-YeYaQQw_Lrj_E-BoUubuxxR_A@mail.gmail.com>
+X-Gm-Features: AWmQ_bl5-OwN-KWDVvu4tvr704LIaV03yTPqbwFu_WpQDxzklRlUNeQBSF_vnQU
+Message-ID: <CAMuHMdUdYidx7u2FOFUmiijp-YeYaQQw_Lrj_E-BoUubuxxR_A@mail.gmail.com>
+Subject: Re: drm/imagination: genpd_runtime_suspend() crash
+To: Matt Coster <Matt.Coster@imgtec.com>
+Cc: Frank Binns <Frank.Binns@imgtec.com>, Alessio Belle <Alessio.Belle@imgtec.com>, 
+	Alexandru Dadu <Alexandru.Dadu@imgtec.com>, Ulf Hansson <ulf.hansson@linaro.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Marek Vasut <marek.vasut+renesas@mailbox.org>, 
+	"dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>, 
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, 
+	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Oct 31, 2025 at 03:38:47AM +0000, Raviteja Laggyshetty wrote:
-> Document the RPMh Network-On-Chip Interconnect of the Kaanapali platform.
-> 
-> Co-developed-by: Odelu Kukatla <odelu.kukatla@oss.qualcomm.com>
-> Signed-off-by: Odelu Kukatla <odelu.kukatla@oss.qualcomm.com>
-> Signed-off-by: Raviteja Laggyshetty <raviteja.laggyshetty@oss.qualcomm.com>
-> ---
->  .../bindings/interconnect/qcom,kaanapali-rpmh.yaml | 124 +++++++++++++++++
->  .../dt-bindings/interconnect/qcom,kaanapali-rpmh.h | 149 +++++++++++++++++++++
->  2 files changed, 273 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,kaanapali-rpmh.yaml b/Documentation/devicetree/bindings/interconnect/qcom,kaanapali-rpmh.yaml
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..9731e7df7eb3d8e1e291a57cbc5941bb8dce1fac
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/interconnect/qcom,kaanapali-rpmh.yaml
-> @@ -0,0 +1,124 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/interconnect/qcom,kaanapali-rpmh.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm RPMh Network-On-Chip Interconnect on KAANAPALI
+Hi Matt,
 
-Kaanapali
+On Thu, 30 Oct 2025 at 13:18, Matt Coster <Matt.Coster@imgtec.com> wrote:
+> On 29/10/2025 14:08, Geert Uytterhoeven wrote:
+> > While playing with the PowerVR driver on various R-Car SoCs, I ran into
+> > a crash/race condition on Gray Hawk Single (R-Car V4M).  After adding
+> > the GPU device node to DTS, the driver fails to probe due to lack of
+> > suitable firmware, as expected:
+>
+> Thanks for the detailed report! I'll make time to look into this. Do you
+> encounter a similar issue on other R-Car platforms, or is this exclusive
+> to the V4M?
 
-Nowwhere in other patchsets this name is considered an acronym.
+Yes, I managed to trigger it on Salvator-X with R-Car M3-W, too.
+Reproduction steps at:
+https://lore.kernel.org/linux-renesas-soc/CAMuHMdWyKeQq31GEK+-y4BoaZFcCxJNac63S7NoocMj1cYKniw@mail.gmail.com
 
-With above fixed:
+renesas-drivers-2025-10-28 is available at
+https://web.git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git/tag/?h=renesas-drivers-2025-10-28-v6.18-rc3
+My aarch64-linux-gnu-gcc is gcc version 13.3.0 (Ubuntu 13.3.0-6ubuntu2~24.04)
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Thanks!
 
-Best regards,
-Krzysztof
+Gr{oetje,eeting}s,
 
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
