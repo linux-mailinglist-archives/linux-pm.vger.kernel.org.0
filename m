@@ -1,53 +1,53 @@
-Return-Path: <linux-pm+bounces-37156-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37157-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id D0C75C2338C
-	for <lists+linux-pm@lfdr.de>; Fri, 31 Oct 2025 04:56:06 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67B1EC233AD
+	for <lists+linux-pm@lfdr.de>; Fri, 31 Oct 2025 05:01:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 291C44E3137
-	for <lists+linux-pm@lfdr.de>; Fri, 31 Oct 2025 03:56:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2661B3A3556
+	for <lists+linux-pm@lfdr.de>; Fri, 31 Oct 2025 04:01:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2ECB5281504;
-	Fri, 31 Oct 2025 03:55:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13FA31F5842;
+	Fri, 31 Oct 2025 04:01:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K2iW+lV1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="axC+68zZ"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07A0E17A2F0
-	for <linux-pm@vger.kernel.org>; Fri, 31 Oct 2025 03:55:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E308DF50F
+	for <linux-pm@vger.kernel.org>; Fri, 31 Oct 2025 04:01:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761882958; cv=none; b=HPQZvnk122RuzTZQhrMsHiQCjBXWprVCV/ZuLg5ne1ytFFJ+yWakz1HMG5grm8fr/3pEv80DDeuV9pVsRyFdtfJMaMwMp4Y5+zgLhCb41jin7lVH0KQIJzHdRdJHmY4nPb8mZwNF7HULWwPsYfdGkNi3orcl+Ng81YJwFQRfEwo=
+	t=1761883309; cv=none; b=KZafF29S3aFS4O1A6NuFgPqPPdb5Ng1F+yLUDRXzKLOBq5PVYwR5ONX7ndNJlH+jcmxasgGZtBL63TrQjxqYcmVSiuRl1dnsay2xnBuObR3QE3Bo9jRGzZHrJIh4/9PZjKQfZCNAP22jVJkN8stC/b8kta3nmOWRDTnRMPeFRJU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761882958; c=relaxed/simple;
-	bh=aJY5YxHjrrs+bL/E4GDrICcV7CqSPu8ZnLFwgLCxZrM=;
+	s=arc-20240116; t=1761883309; c=relaxed/simple;
+	bh=pB3nubgErGiwfJWOSDag8giE25KjCt3FsCkN3P3elrw=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=VDU+KUs5MAc5/PmJtQiNqyqSgmR9jzCtyewpxz8Ef4mPU7Fxjbdrr8xIWjaiXSScb5vTRGTGRT/Re8OaKgqVBVo/6AHynqt1bn2hZ9YVJfLsH9fuHPCZg0o5I83n/yXU8D+g+p4+WBYboUBD2E2EFSKcuQxGHcDqG0cOVfVRMkY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K2iW+lV1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 87AEFC4CEFB
-	for <linux-pm@vger.kernel.org>; Fri, 31 Oct 2025 03:55:57 +0000 (UTC)
+	 Content-Type:MIME-Version; b=MaLu/5MGeL0rV7A2CYmSUmWkDSgoBgnY6aOdanJPCD0myU5AJYJhs6Ojk1CavV8MC1ZjrBIqapTuzJ0To35vdik0TQy/T+C9cRQWtsU6plbnXC5QJoiRoUsWnEqJGamXYNS4zcC16/PRTCXvWazSR3/LgGp6V1oLfk9n/4oLn1A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=axC+68zZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B81A3C4CEFD
+	for <linux-pm@vger.kernel.org>; Fri, 31 Oct 2025 04:01:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761882957;
-	bh=aJY5YxHjrrs+bL/E4GDrICcV7CqSPu8ZnLFwgLCxZrM=;
+	s=k20201202; t=1761883308;
+	bh=pB3nubgErGiwfJWOSDag8giE25KjCt3FsCkN3P3elrw=;
 	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=K2iW+lV1acvo7TV2cnxbgDt/suG1fDr0AqLh6+lH1h5yKQ8exUwRp8RxPjpI1oQR9
-	 d1OcrSF8Qdk91QzmgX+zlzVHnj/QdzK0/e9fK0uIkinRWDKTIrtmWC8p8mS5n6SwWf
-	 yoa2VGS55olSEZ31eJdSPebqx/gF2elHHtnY298BanQCNALL1GtCuUIllaK8b8ikiG
-	 mRuRiAcyCISgBECKC9ovmANgJK/RjgG3K/qwqB/w8sUVqvufdrH+GnFcchXmtTBCoF
-	 etKdrIrMKEk0Arwi0DCka9QGwxJgvwG8gs/NrfY1fSTAAOb0DbQPRsJ26YhqrGPuVO
-	 BG+/gXwb+oLOg==
+	b=axC+68zZjVdjXbpeP7sX1wMWAYAwwpyL9SCdfZD7fO+ux1WEjAOInZOH4FH9qZmqS
+	 2Ywbs9KPxigqc8ErmyQsqYOjEA3lm7zmSfjARg7VzhKPL1hq1fkUZ5CRFkVFMbM/u5
+	 ZnkxZaSsO5z8Cl7nK2KcG+68KHqKxLX4acRiSef2LWJ7gYEBi1Ivw0SzkSdUDZgqLE
+	 rdX7iCOsUDySIhdiVSW3O3cG935heX0GmCC/u2AZA2buq6lvKFHDMpVD0ZUX5xhOCu
+	 dTOzawFfi6trgUKM0mKm2BxYlKeEwqqt+/OSADEm/xbsHo0L89AtwURBt7AebSGX5I
+	 ReXLgWBe8qBPA==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 74E6EC4160E; Fri, 31 Oct 2025 03:55:57 +0000 (UTC)
+	id ABE47C4160E; Fri, 31 Oct 2025 04:01:48 +0000 (UTC)
 From: bugzilla-daemon@kernel.org
 To: linux-pm@vger.kernel.org
 Subject: [Bug 220715] [REGRESSION] AMD P-State fails with "_CPC object is not
  present" on AMD Zen 4 between 6.10 and 6.11
-Date: Fri, 31 Oct 2025 03:55:57 +0000
+Date: Fri, 31 Oct 2025 04:01:48 +0000
 X-Bugzilla-Reason: AssignedTo
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -63,7 +63,7 @@ X-Bugzilla-Priority: P3
 X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-220715-137361-iZWxSRqwWs@https.bugzilla.kernel.org/>
+Message-ID: <bug-220715-137361-WKfNkLh34c@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-220715-137361@https.bugzilla.kernel.org/>
 References: <bug-220715-137361@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -79,19 +79,13 @@ MIME-Version: 1.0
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D220715
 
---- Comment #1 from Mario Limonciello (AMD) (mario.limonciello@amd.com) ---
-So I do see _CPC entries in your acpi table dump, but I initially had a hard
-time decoding it on a machine with a newer acpica-tools package.
+--- Comment #2 from Mario Limonciello (AMD) (mario.limonciello@amd.com) ---
+Another thing that may be useful is to turn on dynamic debug statements for
+drivers/acpi/cppc_acpi.c at bootup on a current kernel.
 
-I tried on a machine with older acpica tools and could decode it though.
+The syntax should be something like this on your kernel command line.
 
-This has me wondering if the bug is perhaps not in amd-pstate but rather in
-acpica code (the kernel has an acpica based interpreter as well).
-
-Can you please check out the kernel source and do a bisect of actual kernel
-commits instead of the binary kernels from the Ubuntu mainline PPA?  This w=
-ill
-get us narrowed down to exactly what the root cause is.
+dyndbg=3D'file drivers/acpi/cppc_acpi.c +p'
 
 --=20
 You may reply to this email to add a comment.
