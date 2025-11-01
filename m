@@ -1,134 +1,114 @@
-Return-Path: <linux-pm+bounces-37243-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37244-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 619FBC283EC
-	for <lists+linux-pm@lfdr.de>; Sat, 01 Nov 2025 18:39:43 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6BA6CC287AF
+	for <lists+linux-pm@lfdr.de>; Sat, 01 Nov 2025 21:02:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 0BCC24E05A7
-	for <lists+linux-pm@lfdr.de>; Sat,  1 Nov 2025 17:39:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4DC2F3AA913
+	for <lists+linux-pm@lfdr.de>; Sat,  1 Nov 2025 19:59:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06F7E2F9DBD;
-	Sat,  1 Nov 2025 17:39:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CFBD296BBF;
+	Sat,  1 Nov 2025 19:59:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qv8XHu5u"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="IsIe3nGj";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Xli0ltPi"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB5D2287518;
-	Sat,  1 Nov 2025 17:39:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A5BF1F4E59;
+	Sat,  1 Nov 2025 19:59:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762018777; cv=none; b=H443N+mjADb65CiVoz90aNTgPHBngOqIaC5akQHUEFwksrvhrzz5xP3SY+qkK5pdZw6RZLhSygsNhud+qfiYjXWFACNX5/WSofk8c9w2tcgghOMK+5aRbnZKfwzp123dz9Cu8RD2HwNGqzlMqsjFmAXJ/BtbFEoAlFMyXhrgZzM=
+	t=1762027191; cv=none; b=erLrYC89zH5gGN3yV4M582MOuCg2hsrc0p3Ne+c8Hls/L0aFA3iGKapsu5MAdYs90CDZx2lPSqhBT1eiNFy/KHx2qkr5Aw/RzZyq/akEZje/pJZvN4dJw2UYjkuqJWmoDjM9JKNFC5gL0bdaXzu9Qog4m8LlHz+RzOxZVNuhWn0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762018777; c=relaxed/simple;
-	bh=jaSI9PNTjac7hlUazQQKeti2y4UuuMm8Ia+3VWtswo0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=biLCm815CGDFjY4pLlCOSd4uSfd/c2IOwRISYByrvMn40EhkaJMmSMvQ9f/QckYPIOePyY47qgRtrNv+gUPOdouNFQ2ZY9PlPu4C8ALni+XtFO8X9amooS1U9WsfmQ4J+gR+o1PvBLyJ4weG9dmuWoH/Ssy8SIsUXPfo/IlDNFY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qv8XHu5u; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3A47C4CEF1;
-	Sat,  1 Nov 2025 17:39:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762018777;
-	bh=jaSI9PNTjac7hlUazQQKeti2y4UuuMm8Ia+3VWtswo0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qv8XHu5uIpfwy46IgaXSKzFT1mtky30cDG1MtBpOcXdvGpJqmXf1iWAlPWUwep1yq
-	 /g8W52E7CKC4M91nNDXNN4VxbNwlJwLPiozuRDqHUBXxapzzTvqWJZABdkg1+629Fl
-	 Gdal3ohlx15frNALNhqNm2G47zjIqjX/sr1pH+B1AgRpytSt3aZYWlwY6AIWT5kQR2
-	 fFyWivhik+oti8F8QiUpqe2ucAs4L/UOpF7MXAEfqG6PjJACDJUz/t9V9R/hGyTuVB
-	 a9hH9dT4ZHQ2WyQKOlbnH+4jPLOIlzLqJdCWKUa+DvbTplBDkrsfOcTlHxJSyP6zSn
-	 uNCLgVNmWxaiQ==
-Date: Sat, 1 Nov 2025 12:42:55 -0500
-From: Bjorn Andersson <andersson@kernel.org>
-To: Christian Marangi <ansuelsmth@gmail.com>
-Cc: Ilia Lin <ilia.lin@kernel.org>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
-	Konrad Dybcio <konradybcio@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Raag Jadav <raag.jadav@intel.com>, linux-arm-msm@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] cpufreq: qcom-nvmem: add compatible fallback for
- ipq806x for no SMEM
-Message-ID: <qael7opoqary2n5iqefxxp42v3qoudfhfvcgjyxfe3t7353zge@ahgvniscxl7v>
-References: <20251031130835.7953-1-ansuelsmth@gmail.com>
- <20251031130835.7953-4-ansuelsmth@gmail.com>
+	s=arc-20240116; t=1762027191; c=relaxed/simple;
+	bh=3KyFPGTtlAIMq89X0yxIjS4dmMPbYQqV+iBk1qm6MVI=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=J6VgHS+vCcC5K1dPyoUyNr0gJjSy0/OsF6ySzBBt86+TJO3vXU/YBbKIEfKVJZ9dVvd0ZWPDSHhPC/n16o3Wbhk4ZlHnCXs7iCawwdcRamGfUXLW/zBP1JX8+/L8NOmgYg04TRWuh7x5PtxXhJpaKAfBMWySE96f5yliuI9SVPQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=IsIe3nGj; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Xli0ltPi; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1762027189;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=w9esUrg9Ter9Q/ySJkb9E3El3zRpChNBYljx3GplElA=;
+	b=IsIe3nGjD4+mFIPS/cGK5p82zifs7tYWuZwqkL+xHoOK4UukXvx2+bt/aztkvd5zAgMhzj
+	9YZZbgjGFUL/zmGeo5e+EDQlmSOY1h2Cp1SgtnoU5ZB8z9m8Nrcrwg/N6VkV8GD9OZFsF1
+	PivkGmLsqBa2jbxMfdINE5YQTgCN8+9WD90IfHPVA7So8O/rccyEnCvzfuCvJAb32JeiUb
+	e+tmQXmm2KgclYiKYVKTVd9ajmcVBFn4alhX5g1OqspAJNKHO5P18JcR3CVJ/Nij3+7mM8
+	0V0yJ22Aw8iIhOsoGktIefD6cXr1df4NczCpwJmESG4e4mTDvQSknA+zd563wg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1762027189;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=w9esUrg9Ter9Q/ySJkb9E3El3zRpChNBYljx3GplElA=;
+	b=Xli0ltPigchfb4g6wBaN2i7pjcT0uon5IYxstMvKeKhqRyMbnOQJS7ymbFGPod+iA1DSrm
+	JVl+U93Ifd31KHCQ==
+To: Ulf Hansson <ulf.hansson@linaro.org>, "Rafael J . Wysocki"
+ <rafael@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>, Marc Zyngier <maz@kernel.org>,
+ Maulik Shah <quic_mkshah@quicinc.com>, Sudeep Holla
+ <sudeep.holla@arm.com>, Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Vincent Guittot <vincent.guittot@linaro.org>, Ben Horgan
+ <ben.horgan@arm.com>, linux-pm@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, Ulf
+ Hansson <ulf.hansson@linaro.org>
+Subject: Re: [PATCH v3 1/2] smp: Introduce a helper function to check for
+ pending IPIs
+In-Reply-To: <20251031110106.62394-2-ulf.hansson@linaro.org>
+References: <20251031110106.62394-1-ulf.hansson@linaro.org>
+ <20251031110106.62394-2-ulf.hansson@linaro.org>
+Date: Sat, 01 Nov 2025 20:59:48 +0100
+Message-ID: <875xbty157.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251031130835.7953-4-ansuelsmth@gmail.com>
+Content-Type: text/plain
 
-On Fri, Oct 31, 2025 at 02:08:34PM +0100, Christian Marangi wrote:
-> On some IPQ806x SoC SMEM might be not initialized by SBL. This is the
-> case for some Google devices (the OnHub family) that can't make use of
-> SMEM to detect the SoC ID.
-> 
-> To handle these specific case, check if the SMEM is not initialized (by
-> checking if the qcom_smem_get_soc_id returns -ENODEV) and fallback to
-> OF machine compatible checking to identify the SoC variant.
-> 
-> Notice that the checking order is important as the machine compatible
-> are normally defined with the specific one following the generic SoC
-> (for example compatible = "qcom,ipq8065", "qcom,ipq8064").
-> 
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+On Fri, Oct 31 2025 at 12:00, Ulf Hansson wrote:
+> +/**
+> + * cpus_peek_for_pending_ipi - Check for pending IPI for CPUs
+> + * @mask: The CPU mask for the CPUs to check.
+> + *
+> + * This function walks through the @mask to check if there are any pending IPIs
+> + * scheduled, for any of the CPUs in the @mask.
+> + *
+> + * It's important for the caller to know that this function does not guarantee
+> + * correctness. It provides a snapshot, while being as lightweight as possible.
 
-Reviewed-by: Bjorn Andersson <andersson@kernel.org>
+This read clumsy. Just say:
 
-And as mentioned in v1, this (cpufreq) patch can be merged independently
-of the first two patches. So please merge it through the cpufreq tree.
+  * It does not guarantee correctness as it only can provide a racy snapshot.
 
-Regards,
-Bjorn
+or something like that.
 
-> ---
->  drivers/cpufreq/qcom-cpufreq-nvmem.c | 17 +++++++++++++++--
->  1 file changed, 15 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
-> index 3a8ed723a23e..5a9bd780a4f3 100644
-> --- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
-> +++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
-> @@ -257,8 +257,8 @@ static int qcom_cpufreq_ipq8064_name_version(struct device *cpu_dev,
->  					     char **pvs_name,
->  					     struct qcom_cpufreq_drv *drv)
->  {
-> +	int msm_id = -1, ret = 0;
->  	int speed = 0, pvs = 0;
-> -	int msm_id, ret = 0;
->  	u8 *speedbin;
->  	size_t len;
->  
-> @@ -275,8 +275,21 @@ static int qcom_cpufreq_ipq8064_name_version(struct device *cpu_dev,
->  	get_krait_bin_format_a(cpu_dev, &speed, &pvs, speedbin);
->  
->  	ret = qcom_smem_get_soc_id(&msm_id);
-> -	if (ret)
-> +	if (ret == -ENODEV) {
-> +		/* Fallback to compatible match with no SMEM initialized */
-> +		ret = 0;
-> +		if (of_machine_is_compatible("qcom,ipq8062"))
-> +			msm_id = QCOM_ID_IPQ8062;
-> +		else if (of_machine_is_compatible("qcom,ipq8065") ||
-> +			 of_machine_is_compatible("qcom,ipq8069"))
-> +			msm_id = QCOM_ID_IPQ8065;
-> +		else if (of_machine_is_compatible("qcom,ipq8064") ||
-> +			 of_machine_is_compatible("qcom,ipq8066") ||
-> +			 of_machine_is_compatible("qcom,ipq8068"))
-> +			msm_id = QCOM_ID_IPQ8064;
-> +	} else if (ret) {
->  		goto exit;
+> + * Returns true if there is a pending IPI scheduled and false otherwise.
+> + */
+> +bool cpus_peek_for_pending_ipi(const struct cpumask *mask)
+> +{
+> +	unsigned int cpu;
+> +
+> +	for_each_cpu(cpu, mask) {
+> +		if (!llist_empty(per_cpu_ptr(&call_single_queue, cpu)))
+> +			return true;
 > +	}
->  
->  	switch (msm_id) {
->  	case QCOM_ID_IPQ8062:
-> -- 
-> 2.51.0
-> 
+> +
+> +        return false;
+   ^^^^^^^^
+White space damage. Spaces instead of TAB.
+
+Thanks,
+
+        tglx
 
