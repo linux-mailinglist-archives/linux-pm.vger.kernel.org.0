@@ -1,310 +1,490 @@
-Return-Path: <linux-pm+bounces-37240-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37241-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F8BDC275DB
-	for <lists+linux-pm@lfdr.de>; Sat, 01 Nov 2025 03:20:52 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4CD70C278A2
+	for <lists+linux-pm@lfdr.de>; Sat, 01 Nov 2025 06:56:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A6845189B2B0
-	for <lists+linux-pm@lfdr.de>; Sat,  1 Nov 2025 02:21:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 97D00406CB4
+	for <lists+linux-pm@lfdr.de>; Sat,  1 Nov 2025 05:56:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 740B9253B66;
-	Sat,  1 Nov 2025 02:20:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E60BF2882D3;
+	Sat,  1 Nov 2025 05:56:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="llT2g3WP";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="kL8uqpnX"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e6KA+W9V"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C90757082A
-	for <linux-pm@vger.kernel.org>; Sat,  1 Nov 2025 02:20:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01A0F10942
+	for <linux-pm@vger.kernel.org>; Sat,  1 Nov 2025 05:56:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761963647; cv=none; b=l4iHYdTibU+x1gLntuWPUfVNbX0rgtWTKoUC4KelmEFM4TBUpCcrIQgSdw3pJcfO6pNJ0drRxWnJxmSEJOMfMsXSuOmzGZjNgcHMnl+CwgfW3F5NCcBnW34kBTwTJTvHwctuO+oSsZZR5JQM8SPs/XqU4ywXJTxxiYZs8fGovCc=
+	t=1761976602; cv=none; b=Afpd/Vk13m0JoV9F2O8EzPo0qAog998mclkxydMPd7azPBgO7Y0uMP/6NcTbfbztvwui6kNMjM2Ia/xo9ZsMLOv8chbyqNPtl+0fkSK4M9I+XFoxVhILmJBOk8cgUFta8bItCETerQ0TwDfRrbG3oBhGtcrV+4yB2s0x+v+BLnA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761963647; c=relaxed/simple;
-	bh=jf9nuEo/WZwv0Yv47DYo7uzLK5W5wJ2W9WpUgSib3Dk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sBlSGc9xkHctbtK0qT6MbhbkrrtX+cKYgvVCLmJT0PvpHKr0tTSWtXiRsCAiZubSRvf+on5CIvc3prRKlOLqKkoCsGyDdj/cwBQidVAjrNGW/fsFp2inJXKuvgOESN+bsFofRMcQ7n59saU4IZa2l9muo9+btD7qF9CRnbd74c0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=llT2g3WP; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=kL8uqpnX; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5A1298wE313249
-	for <linux-pm@vger.kernel.org>; Sat, 1 Nov 2025 02:20:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	ZvfEZK/lcMq9/a9VxgZ2s25HZusbbZGiu+j3EGbryv0=; b=llT2g3WPAh7zbrBa
-	ecjQiRralvIf1qIJQkH2gcGrd4XFXPSveAf4MDNz/vpHU4O7CZJwEqLPbYNC3/qI
-	t2LNUmSyiq37Nd2svsYEWpv+XIzoD73RiscEjtc3YFa6eMaCsIWz4/pHDkSi+38m
-	fQ36fQquW3B6NB2ci1WH1lXhayJT2GYXz6ETOcz67xY7pKrxvLyiLfs1azSGRa8D
-	COeEyIaFG0xCceJMlF2lgV5VjraZVJxgPfqmVtceaSV3yBLVZu2wXBuurI6q8zWo
-	9qM9PAovpjjmU8NcbqHVZqSf+VHKr4avw7uMWPAc+hYzPVggTfL8L18tpVBCTPZ0
-	IOaNIQ==
-Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com [209.85.216.72])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4a595rr0ee-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Sat, 01 Nov 2025 02:20:39 +0000 (GMT)
-Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-3407734d98bso2209367a91.3
-        for <linux-pm@vger.kernel.org>; Fri, 31 Oct 2025 19:20:39 -0700 (PDT)
+	s=arc-20240116; t=1761976602; c=relaxed/simple;
+	bh=ciqXU+1NcuVr4iigJo4KYFshbbWaXN1fMRAm85K4jo8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RWazhHT6sro3yDUixO2gQfyvinYYMWctZE1ak6mSNMMnJRuSz88QDk/uPGnbP1oBQ/OZ4lcwILS4gBaYSCHCRCLKkJ+3u215UUpCQMUS/nWv2AUSmsYKCO24Q0GIPrHp3h12zGg45i6ke8i8KARp1dGjAWrZQkzkRccbWO7gz8Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e6KA+W9V; arc=none smtp.client-ip=209.85.222.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qk1-f170.google.com with SMTP id af79cd13be357-88f239686f2so321412385a.0
+        for <linux-pm@vger.kernel.org>; Fri, 31 Oct 2025 22:56:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1761963636; x=1762568436; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZvfEZK/lcMq9/a9VxgZ2s25HZusbbZGiu+j3EGbryv0=;
-        b=kL8uqpnXWdX/mxm4441fFb1geJDjWHxUHO9n+egEBSNirEjICurxgSCBrY6eMDsn2g
-         Y0FcG5rrojCx+QenEEnrWfYFdYpbkkSp9T/H4dgL8y920NPR/HTaJ6FFxK0VAoRF/jRd
-         gdFZQMT4GIltyqzCa/vp/WlKNwNWXsQH3FhrEH8S/6eN6AkC6r1RDuVsBcfW/I3x+Urn
-         X7Wd9TtfDtKvnOHKhr0qKsrQ+9bFXMrHAhOj1VtSvnSEmee+c/f8pcYGvj5exeZArN5d
-         rWC2rcp7eNgwwfNoLOufWVN7Js1HOs44T/E7kDo1KVvHcPuql2e2Keu0JeTSTRf4E2Gn
-         keIQ==
+        d=gmail.com; s=20230601; t=1761976599; x=1762581399; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=cRCZltpC3RV67ZWRzBd3H/sPBTtda5yz34HGDlmtPjs=;
+        b=e6KA+W9V931lxF4l6UbnyH1SGU1QpYowTIK/a6/OG//mboqQtUwoIJUOpbjOp3qQIr
+         eq7J4G/ju6fIicJnEk/LWIGMNgzWJl1a2tHvMUg1hnXI3rVrK2/HlzbyC0ofFUTt8WNd
+         EANidwJjFg8/KN6yrVbEn7sZZzxoOsjxNKj2QVQ9JzsD2ExpA3l8RRASt8ThnsdkWCZB
+         rrIAlcFSibMyh6DD/xKcP9+YHGHiU+xjCAgHiD8mCoEY04gctVHZL0zObrAAVMu3BGeE
+         CpcG/w4hfRBkGQQobHZ5tj0bgir1lAmdqx3UQYgbS8Ig1acAPde/Bt30CY/+LXRplxOi
+         K4Tw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761963636; x=1762568436;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZvfEZK/lcMq9/a9VxgZ2s25HZusbbZGiu+j3EGbryv0=;
-        b=Ayyo322VJaXYayi538aiH5JYX0BTJ8rG/7PELCdqpUKyvYoPuQ4roNmWhDSnGB4tq6
-         s24i07crd0Os7uxKQHU66rUvnaKhnPMNxLWX0quV8V7/r59FhrcI8vcEsminEWMMCEmr
-         1Rrm5QUZnthiRGNGqOoS7M9+c4otaktlHx6YSGWKmORtsM4VrlfRjif2Tv9CZ3FO4VN+
-         jSWBh+c9bFD273ZZj8IPrNR6R9fdSsJBKG7ztjJJrxSrOLPx6l1bk37gAjouDZ+7jMDH
-         YoQw3Rl2VUIysoKpc31u5OjgNKo7Eb1U0kdSCc5K0h0e0BfOJnh0qEqclcX4MVB7pR9T
-         530w==
-X-Forwarded-Encrypted: i=1; AJvYcCWtuBBBjDMd1l7mQ7KuIBVdcjLbfDhazlrOq1g9A0s7OqcrtuJMkVirUHDwgsVn4MKIanRo1t8BRw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyMjHwPg5NIZVlNQXJtUX7fkj91ztmNp6YY3TZEchvcMMyALY23
-	tzZCCQ4u27lur5gv1Mczw6i/f+z6IoEQpQdvBpnS5jsoQ9YIeGRNKGd5RGmQlAgBjE1FMWApRf5
-	hrenDbrIew0QaqbudnAagH0yAIEC4nF0gWstYZB6Vu4GedcXq9+nPFTPO+EtOpQ==
-X-Gm-Gg: ASbGncuwvkQeNfjcANuirHM5gx6liXA4mJRqZwSLIF/RUXWczFI9HBRSvBf4MoYTSCU
-	htKO96l+4s050ZUrCQkJpVH7JaVaaiOHhfRZamrUXWLfdoP0UX9XaDj2RJfoaQJgBtQ+J4KtK2A
-	FKhiLKKwXZl535d3NM6GRzitl+4nKeIYpHvyZEQKehyrdNeKO4syerUfXsq18mrYlIPM+8nOzGA
-	N4BtbfC4AbVCAhhbtoPURUFRn5FgveAasaZFv/9cQgP8MbTrJbDMqhUyEpVTg/WBtYLz3ok7w6Q
-	RiyhzwVV67TyDdkMJtODx/BYkR6bzDBBOSFsGT2u+OF0yu2GLCw90LvEOSijdM18x6y123hOUBO
-	sTvsVRwbD0GUHcasEgC2cC10ijuIB
-X-Received: by 2002:a17:90b:4f86:b0:32d:e75a:5009 with SMTP id 98e67ed59e1d1-34082fc40f5mr6185252a91.1.1761963635902;
-        Fri, 31 Oct 2025 19:20:35 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFmrUTOAVQUC5qvFh43h8kZ9c7nnsaSwK0Esi4Ukjz3kmt1bDnV0nhclIVnDDy9QDV0qq28SQ==
-X-Received: by 2002:a17:90b:4f86:b0:32d:e75a:5009 with SMTP id 98e67ed59e1d1-34082fc40f5mr6185208a91.1.1761963635296;
-        Fri, 31 Oct 2025 19:20:35 -0700 (PDT)
-Received: from [10.216.5.37] ([202.46.23.19])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-34050bb7a29sm7309498a91.21.2025.10.31.19.20.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 31 Oct 2025 19:20:34 -0700 (PDT)
-Message-ID: <d10e2eea-4b86-4e1a-b7a0-54c55907a605@oss.qualcomm.com>
-Date: Sat, 1 Nov 2025 07:50:16 +0530
+        d=1e100.net; s=20230601; t=1761976599; x=1762581399;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cRCZltpC3RV67ZWRzBd3H/sPBTtda5yz34HGDlmtPjs=;
+        b=kLxa+N8v1XwknEnlRccu0wYwvCLD+ydTAxyR4KFvgegM5OS2RBtq2lqWN8ld4NbL4u
+         Y5rJSZFW7g5XmJfrMV5x38qkQWYieSpq8+XybPQJLgYNjCFNqxCLYeaJiaTKqOWX4dzw
+         rSjUM+sh3n1NPqjXcR4GoGLkogZWnX+4tOwZEg8A9A5Cmn3rbNQa9y1ViXGclcTw3kaS
+         efsIoh7H05r/R9PXbN9wEVminRMxO59zW9irsS92XXO+zDn7Hntu7i6sQCwVhJ2/OL6O
+         3M8sRvNQF+yrs1SK4JI5PhQzrtw7hRr8k6zwMzUpxpZz4Rywg4IIjm93QCZVqkGDvX3R
+         9d2g==
+X-Forwarded-Encrypted: i=1; AJvYcCXTK2io85azdspLwXjJKNy4plhpa2/DMrunGhZ8D2+JmB1/8LVYCp8Q03e6CPoagE6KrADVLvCyWQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzENmo1elvm74j0OUxEEqWvtKd34tMMuBsvo+HgrDaI3zfuigpY
+	IWd6Xi1laLRDNwHQ55uWzH/rXb1Wi2dq+i6e/B2jv2piAEL4Eg2ChlLR
+X-Gm-Gg: ASbGncumCyBV707hMrYH3mZf7sqyKrgLXCQCDtDufFBqjjZ2yrF9thtUBjsMvxAtlLz
+	WKMAi4gQ2IxzKxrQQFe2wTfyLnenCRu3FIeI6C/MPyWEwfqbt9HyeRjwzJjIlgNt6XmjY7p5QaE
+	fbgpeqmfzDDrs9Fm4loXFcGCWMpI3vVKsvqXD3q+ORLAyl9rsagmmFbAaXdlJOisQvpmSuQGx2D
+	evNuYMD9tLZBq6Ak0aDImaUV5kOPoFhZ98PAMDLOFuC/aH23RfxvcQEonjh1wDtYoKmwPjIB6Qk
+	5m78gNZJB9X+qJqGdV4A9TPooCPQfFAxdnyu1O0pWi04mvx9xW/Axabn4pXLfyU4UlKWAT99aTt
+	/0/f9apObp7FxuILVmE3YKBvLWYouiilR1/F5BiE2LdzQy9ipM/TzvlslZRQ+y0PpQpmcfdqz74
+	dx
+X-Google-Smtp-Source: AGHT+IHc0zrGSwszyLR24bRSf09Tu7kSTOa11Mr2wBs5EV0LlCeYsUd+vTRKfV7uXA70Z5R/dSJUTw==
+X-Received: by 2002:a05:620a:700d:b0:85c:bb2:ad8c with SMTP id af79cd13be357-8ab9b59957emr747008785a.74.1761976598533;
+        Fri, 31 Oct 2025 22:56:38 -0700 (PDT)
+Received: from archie.me ([210.87.74.117])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8ac0357f7desm247195085a.41.2025.10.31.22.56.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 Oct 2025 22:56:37 -0700 (PDT)
+Received: by archie.me (Postfix, from userid 1000)
+	id EF0004209E50; Sat, 01 Nov 2025 12:56:25 +0700 (WIB)
+From: Bagas Sanjaya <bagasdotme@gmail.com>
+To: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Documentation <linux-doc@vger.kernel.org>,
+	Linux Power Management <linux-pm@vger.kernel.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Bagas Sanjaya <bagasdotme@gmail.com>
+Subject: [PATCH] Documentation: intel-pstate: Use :ref: directive for internal linking
+Date: Sat,  1 Nov 2025 12:56:14 +0700
+Message-ID: <20251101055614.32270-1-bagasdotme@gmail.com>
+X-Mailer: git-send-email 2.51.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V7 3/5] dt-bindings: iio: adc: Add support for QCOM PMIC5
- Gen3 ADC
-To: Krzysztof Kozlowski <krzk@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        "Rob Herring (Arm)" <robh@kernel.org>, Lee Jones <lee@kernel.org>
-Cc: krzk+dt@kernel.org, conor+dt@kernel.org, agross@kernel.org,
-        andersson@kernel.org, lumag@kernel.org,
-        dmitry.baryshkov@oss.qualcomm.com, konradybcio@kernel.org,
-        daniel.lezcano@linaro.org, sboyd@kernel.org, amitk@kernel.org,
-        thara.gopinath@gmail.com, rafael@kernel.org,
-        subbaraman.narayanamurthy@oss.qualcomm.com,
-        david.collins@oss.qualcomm.com, anjelique.melendez@oss.qualcomm.com,
-        kamal.wadhwa@oss.qualcomm.com, rui.zhang@intel.com,
-        lukasz.luba@arm.com, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        cros-qcom-dts-watchers@chromium.org, quic_kotarake@quicinc.com,
-        neil.armstrong@linaro.org, stephan.gerhold@linaro.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-References: <20250826083657.4005727-1-jishnu.prakash@oss.qualcomm.com>
- <20250829-classic-dynamic-clam-addbd8@kuoka>
- <5d662148-408f-49e1-a769-2a5d61371cae@oss.qualcomm.com>
- <4e974e77-adfc-49e5-90c8-cf8996ded513@kernel.org>
- <a0e885be-e87d-411a-884e-3e38a0d761e5@oss.qualcomm.com>
- <8c90cc3f-115e-4362-9293-05d9bee24214@linaro.org>
- <5d4edecf-51f3-4d4a-861f-fce419e3a314@oss.qualcomm.com>
- <20250927144757.4d36d5c8@jic23-huawei>
- <a3158843-dfac-4adc-838a-35bb4b0cbea4@oss.qualcomm.com>
- <CAGE=qrrCvq28pr9Y7it-CGMW=szKUnU+XBj1TmpoUwuASM05ig@mail.gmail.com>
- <31bd08ce-823a-4a71-baca-a9d1e02fcb6a@oss.qualcomm.com>
- <08eb477f-ea34-4a31-b181-bfc629aef4c8@kernel.org>
- <68a9b8e8-bdf4-430f-baef-6a293ccea78d@oss.qualcomm.com>
- <d8a78b7c-e3a9-44b5-986d-8ac32f328eb6@kernel.org>
- <3a32746a-5b0e-4c0a-8322-00cd3a84394a@oss.qualcomm.com>
- <4979bd26-0a77-4390-9db2-6d40cd7f963c@kernel.org>
- <c4b2c474-c6d0-4b1d-bcc3-a3fddea699c7@oss.qualcomm.com>
- <d7627a5d-893a-4bc3-8b67-c151ee0bea32@kernel.org>
-Content-Language: en-US
-From: Jishnu Prakash <jishnu.prakash@oss.qualcomm.com>
-In-Reply-To: <d7627a5d-893a-4bc3-8b67-c151ee0bea32@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: uy9loDUzQZjF9rEGo4NjUnLthKPFSL9P
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTAxMDAxOCBTYWx0ZWRfX6JF12WtCQ3fs
- 9bX8Y4EmB6w3WjdgxCSmEjOpquwvDlPxzI053MpV6mGonsgT2YGOAdabtWKD3yCsa4/lAjvbCYU
- y63UAIWmeFqfIMVEgE8g39qMLdUS+uCGYuCjbNTFJnJWxFBBlBOcI0IdvoqBG5wpYQSSq21gIXQ
- O76YG0BM9E70ibFHZE+yoPExQdbGNaIg9JU6+9Y7vDGTIioOozSUFxwPr4FPe5bNiwnMx5ZoC+t
- hwBsh3YqNrlSvURYYO6W3UAf3LrWOn2MdJcKjOqiy2E+sRt3ACrfaNsXIofWqmcD1WIWQ2xzPBR
- 3bL76PXMQ3Xv6UKvBbWHlCEDcuJs3qkYoeypdToxzNrKk4ofMTkRkvPxx8r4cPSrb9RLAYGfpj/
- WwgzHucTGdj4DFLSm7VMevnd7o0NRw==
-X-Proofpoint-ORIG-GUID: uy9loDUzQZjF9rEGo4NjUnLthKPFSL9P
-X-Authority-Analysis: v=2.4 cv=XYeEDY55 c=1 sm=1 tr=0 ts=69056e77 cx=c_pps
- a=RP+M6JBNLl+fLTcSJhASfg==:117 a=j4ogTh8yFefVWWEFDRgCtg==:17
- a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=EUspDBNiAAAA:8 a=X18Rc80VOUBE94RK4nMA:9
- a=QEXdDO2ut3YA:10 a=iS9zxrgQBfv6-_F4QbHw:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-10-31_08,2025-10-29_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 priorityscore=1501 phishscore=0 impostorscore=0 malwarescore=0
- bulkscore=0 adultscore=0 lowpriorityscore=0 spamscore=0 suspectscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2511010018
+X-Developer-Signature: v=1; a=openpgp-sha256; l=19443; i=bagasdotme@gmail.com; h=from:subject; bh=ciqXU+1NcuVr4iigJo4KYFshbbWaXN1fMRAm85K4jo8=; b=owGbwMvMwCX2bWenZ2ig32LG02pJDJmsCwr/T7+j+OREpvLzGbKiPadX7evzuMQTa1o21fb2u aX3AiYFdpSyMIhxMciKKbJMSuRrOr3LSORC+1pHmDmsTCBDGLg4BWAiU/kYfjImPrp05v/deZUO Lw3WrxKczKt3Ldxi2tp7pscPChuITIliZLhR+TDOatIpq6lCj1prDEX2aPuapfxk//Zkrq+Yrvb lQ1wA
+X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
+Content-Transfer-Encoding: 8bit
 
-Hi Krzysztof,
+pstate docs uses standard reST construct (`Section title`_) for
+cross-referencing sections (internal linking), rather than for external
+links. Incorrect cross-references are not caught when these are written
+in that syntax, however (fortunately docutils 0.22 raise duplicate
+target warnings that get fixed in cb908f8b0acc7e ("Documentation:
+intel_pstate: fix duplicate hyperlink target errors")).
 
-On 10/27/2025 10:00 PM, Krzysztof Kozlowski wrote:
-> On 22/10/2025 13:02, Konrad Dybcio wrote:
->>>>>>>>
->>>>>>>> On 10/4/2025 12:22 PM, Krzysztof Kozlowski wrote:
->>>>>>>>> On Sat, 4 Oct 2025 at 11:42, Jishnu Prakash
->>>>>>>>> <jishnu.prakash@oss.qualcomm.com> wrote:
->>>>>>>>>>
->>>>>>>>>> Hi Jonathan,
->>>>>>>>>>
->>>>>>>>>> On 9/27/2025 7:17 PM, Jonathan Cameron wrote:
->>>>>>>>>>> On Fri, 19 Sep 2025 20:17:43 +0530
->>>>>>>>>>> Jishnu Prakash <jishnu.prakash@oss.qualcomm.com> wrote:
->>>>
->>>> [...]
->>>>
->>>>>> Can you please provide your suggestions on changes we can make
->>>>>> in the above points ?
->>>>>
->>>>> You just pasted DT. I asked about SW, software. Please read carefully
->>>>> previous comments.
->>>>
->>>> Is the problem that Jishnu included some indices in dt-bindings without
->>>> also adding them in the driver's adc5_gen3_chans_pmic[] array?
->>>>
->>>> As in, would the resolution to this thread be simply handling all of
->>>> them in the driver correctly?
->>>
->>> The solution is to remove them from the bindings, just like we do with
->>> many other hardware constants. Of course if these are not hardware
->>> constants, but part of ABI, then solution would be different but no one
->>> provided proof or argument that this is any binding. All proofs were
->>> "but I want to use it in my DTS", which proofs nothing. Not a binding.
->>>
->>> While this issue is not that important, we keep discussing it because
->>> author does not try to understand the problem or even keep up the
->>> discussion. Instead repeats the same without really reading my
->>> messages... and then disappears for month or more.
->>
->> In Bulgaria, people shake their heads left to right to say "yes", and
->> up&down to say "no" (or so I've heard).. I feel like we're having a
->> similar situation here..
->>
->> I'll try to make a case for keeping these defines in some form.
->> Here's hopefully all the related aspects, condensed down:
->>
->> 1. In a multi-PMIC setup, only the main PMIC's ADC is accessible by the OS.
->>    It then mediates accesses to secondary PMICs' ADCs through internal
->>    mechanisms, which requires the SID of the target to be retrieved and written
->>    to a register, along with the physical index of the desired channel to be
->>    measured (see patch 3/5 commit msg).
-> 
-> 
-> SID is still a hardware value, right? Combination of two hardware values
-> is still a hardware value, not a software ABI construct. Even if you
-> claim only the driver can decode it. These are still the hardware values.
-> 
-> If you had two IIO cells - one for SID and one for ADC channel - would
-> you claim they are both needed for software? Probably not.
-> 
-> io-channels = <&pm8550_adc SID_whatever CHANNEL_XYZ>
-> 
-> It's basically the same as some pin muxes, like NXP:
-> git grep MX8MM_IOMUXC_GPIO1_IO04_GPIO1_IO4
-> 
-> Complex value, which driver parses. Is it SW construct? No. These are
-> register values.
-> 
-> 
->>
->> 2. The PMIC SIDs are fixed per board and are the values of PMIC top-level
->>    nodes' reg property (since forever)
->>
->> 3. The channel indices are fixed in HW, but this patchset proposed to reuse
->>    them for logical mappings consumed through io-channels = <> as well (because
->>    of 1.), with the drivers taking the lower 8 bits that of reg/io-channels[1]
->>    value as the ADC channel id and the higher 8 bits as the SID (this is the
->>    define macros with an argument)
->>
->> 4. Fixing 3. in a "simply define all possible options and bind them to
->>    consecutive integers" fashion would require a huge table matching 0..n to
->>    [0-max_sid][0-max_chan] which is unreasonable
-> 
-> I do not insist on fixing anything or changing the interface. I only
-> question their necessity to be a binding.
-> 
->>
->> The alternative to the SID packing would be to reference the target PMIC
->> somehow, be it by referencing the PMIC itself:
->>
->> io-channels = <&pm8550_adc &pmr735a CHANNEL_XYZ>
->>
->> or by creating a faux node for the actual inaccessible ADC onboard each of
->> the PMICs:
->>
->> io-channels = <&pm8550_adc &pmr735a_adc CHANNEL_XYZ>
->>
->> and have the OS retrieve the SID from the DT node & encode that value instead
->> of hardcoding it in the DT, leaving just the actual channel IDs in dt-bindings.
->>
->>
->> The define macros without an argument do specify physical channel indices, but
->> we do need some sort of an identifier to put into io-channels (which is why this
->> lives in dt-bindings in the first place), and a 1:1 mapping to the physical id
->> sounds like a good option.
->>
->>
->> I don't think anyone objects to any of these resolutions, so long as they
->> are acceptable from your side
-> 
-> You can go these ways, but I never proposed to change the interface.
-> Just don't store these as bindings, so they don't have to be treated as
-> ABI, because they are not. They do not constitute the contract between
-> software (driver) and DTS. Treat them the same as we treat all hardware
-> constants - directly encoded or moved to DTS headers (which we did for
-> many of such cases already - see commit
-> 9d9292576810d0b36897718c24dfbc1a2835314b 3 years ago and other)
-> 
+Convert the cross-references to use :ref: directive, which doesn't
+exhibit this problem.
 
-Thanks for your explanation and the above suggestion and example,
-it's clear now. I'll move the macros we need into a DTS header file.
+Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+---
+ Documentation/admin-guide/pm/intel_pstate.rst | 133 +++++++++---------
+ 1 file changed, 70 insertions(+), 63 deletions(-)
 
+diff --git a/Documentation/admin-guide/pm/intel_pstate.rst b/Documentation/admin-guide/pm/intel_pstate.rst
+index 9cdd9dad651698..fde967b0c2e0e5 100644
+--- a/Documentation/admin-guide/pm/intel_pstate.rst
++++ b/Documentation/admin-guide/pm/intel_pstate.rst
+@@ -48,8 +48,9 @@ only way to pass early-configuration-time parameters to it is via the kernel
+ command line.  However, its configuration can be adjusted via ``sysfs`` to a
+ great extent.  In some configurations it even is possible to unregister it via
+ ``sysfs`` which allows another ``CPUFreq`` scaling driver to be loaded and
+-registered (see `below <status_attr_>`_).
++registered (see :ref:`below <status_attr>`).
+ 
++.. _operation_modes:
+ 
+ Operation Modes
+ ===============
+@@ -62,7 +63,7 @@ a certain performance scaling algorithm.  Which of them will be in effect
+ depends on what kernel command line options are used and on the capabilities of
+ the processor.
+ 
+-.. _Active Mode:
++.. _active_mode:
+ 
+ Active Mode
+ -----------
+@@ -96,7 +97,7 @@ Which of the P-state selection algorithms is used by default depends on the
+ Namely, if that option is set, the ``performance`` algorithm will be used by
+ default, and the other one will be used by default if it is not set.
+ 
+-.. _Active Mode With HWP:
++.. _active_mode_hwp:
+ 
+ Active Mode With HWP
+ ~~~~~~~~~~~~~~~~~~~~
+@@ -127,7 +128,7 @@ Energy-Performance Bias (EPB) knob (otherwise), which means that the processor's
+ internal P-state selection logic is expected to focus entirely on performance.
+ 
+ This will override the EPP/EPB setting coming from the ``sysfs`` interface
+-(see `Energy vs Performance Hints`_ below).  Moreover, any attempts to change
++(see :ref:`energy_performance_hints` below).  Moreover, any attempts to change
+ the EPP/EPB to a value different from 0 ("performance") via ``sysfs`` in this
+ configuration will be rejected.
+ 
+@@ -196,7 +197,7 @@ This is the default P-state selection algorithm if the
+ :c:macro:`CONFIG_CPU_FREQ_DEFAULT_GOV_PERFORMANCE` kernel configuration option
+ is not set.
+ 
+-.. _Passive Mode:
++.. _passive_mode:
+ 
+ Passive Mode
+ ------------
+@@ -295,12 +296,12 @@ Unlike ``_PSS`` objects in the ACPI tables, ``intel_pstate`` always exposes
+ the entire range of available P-states, including the whole turbo range, to the
+ ``CPUFreq`` core and (in the passive mode) to generic scaling governors.  This
+ generally causes turbo P-states to be set more often when ``intel_pstate`` is
+-used relative to ACPI-based CPU performance scaling (see `below <acpi-cpufreq_>`_
+-for more information).
++used relative to ACPI-based CPU performance scaling (see
++:ref:`below <acpi-cpufreq>` for more information).
+ 
+ Moreover, since ``intel_pstate`` always knows what the real turbo threshold is
+ (even if the Configurable TDP feature is enabled in the processor), its
+-``no_turbo`` attribute in ``sysfs`` (described `below <no_turbo_attr_>`_) should
++``no_turbo`` attribute in ``sysfs`` (described :ref:`below <no_turbo_attr>`) should
+ work as expected in all cases (that is, if set to disable turbo P-states, it
+ always should prevent ``intel_pstate`` from using them).
+ 
+@@ -313,12 +314,12 @@ pieces of information on it to be known, including:
+ 
+  * The minimum supported P-state.
+ 
+- * The maximum supported `non-turbo P-state <turbo_>`_.
++ * The maximum supported :ref:`non-turbo P-state <turbo>`.
+ 
+  * Whether or not turbo P-states are supported at all.
+ 
+- * The maximum supported `one-core turbo P-state <turbo_>`_ (if turbo P-states
+-   are supported).
++ * The maximum supported :ref:`one-core turbo P-state <turbo>` (if turbo
++   P-states are supported).
+ 
+  * The scaling formula to translate the driver's internal representation
+    of P-states into frequencies and the other way around.
+@@ -406,10 +407,10 @@ Energy-Aware Scheduling Support
+ 
+ If ``CONFIG_ENERGY_MODEL`` has been set during kernel configuration and
+ ``intel_pstate`` runs on a hybrid processor without SMT, in addition to enabling
+-`CAS <CAS_>`_ it registers an Energy Model for the processor.  This allows the
++:ref:`CAS` it registers an Energy Model for the processor.  This allows the
+ Energy-Aware Scheduling (EAS) support to be enabled in the CPU scheduler if
+ ``schedutil`` is used as the  ``CPUFreq`` governor which requires ``intel_pstate``
+-to operate in the `passive mode <Passive Mode_>`_.
++to operate in the :ref:`passive mode <passive_mode>`.
+ 
+ The Energy Model registered by ``intel_pstate`` is artificial (that is, it is
+ based on abstract cost values and it does not include any real power numbers)
+@@ -438,7 +439,7 @@ the ``energy_model`` directory in ``debugfs`` (typlically mounted on
+ User Space Interface in ``sysfs``
+ =================================
+ 
+-.. _Global Attributes:
++.. _global_attributes:
+ 
+ Global Attributes
+ -----------------
+@@ -452,8 +453,8 @@ argument is passed to the kernel in the command line.
+ 
+ ``max_perf_pct``
+ 	Maximum P-state the driver is allowed to set in percent of the
+-	maximum supported performance level (the highest supported `turbo
+-	P-state <turbo_>`_).
++	maximum supported performance level (the highest supported :ref:`turbo
++	P-state <turbo>`).
+ 
+ 	This attribute will not be exposed if the
+ 	``intel_pstate=per_cpu_perf_limits`` argument is present in the kernel
+@@ -461,8 +462,8 @@ argument is passed to the kernel in the command line.
+ 
+ ``min_perf_pct``
+ 	Minimum P-state the driver is allowed to set in percent of the
+-	maximum supported performance level (the highest supported `turbo
+-	P-state <turbo_>`_).
++	maximum supported performance level (the highest supported :ref:`turbo
++	P-state <turbo>`).
+ 
+ 	This attribute will not be exposed if the
+ 	``intel_pstate=per_cpu_perf_limits`` argument is present in the kernel
+@@ -471,18 +472,18 @@ argument is passed to the kernel in the command line.
+ ``num_pstates``
+ 	Number of P-states supported by the processor (between 0 and 255
+ 	inclusive) including both turbo and non-turbo P-states (see
+-	`Turbo P-states Support`_).
++	:ref:`turbo`).
+ 
+ 	This attribute is present only if the value exposed by it is the same
+ 	for all of the CPUs in the system.
+ 
+ 	The value of this attribute is not affected by the ``no_turbo``
+-	setting described `below <no_turbo_attr_>`_.
++	setting described :ref:`below <no_turbo_attr>`.
+ 
+ 	This attribute is read-only.
+ 
+ ``turbo_pct``
+-	Ratio of the `turbo range <turbo_>`_ size to the size of the entire
++	Ratio of the :ref:`turbo range <turbo>` size to the size of the entire
+ 	range of supported P-states, in percent.
+ 
+ 	This attribute is present only if the value exposed by it is the same
+@@ -494,7 +495,7 @@ argument is passed to the kernel in the command line.
+ 
+ ``no_turbo``
+ 	If set (equal to 1), the driver is not allowed to set any turbo P-states
+-	(see `Turbo P-states Support`_).  If unset (equal to 0, which is the
++	(see :ref:`turbo`).  If unset (equal to 0, which is the
+ 	default), turbo P-states can be set by the driver.
+ 	[Note that ``intel_pstate`` does not support the general ``boost``
+ 	attribute (supported by some other scaling drivers) which is replaced
+@@ -503,11 +504,11 @@ argument is passed to the kernel in the command line.
+ 	This attribute does not affect the maximum supported frequency value
+ 	supplied to the ``CPUFreq`` core and exposed via the policy interface,
+ 	but it affects the maximum possible value of per-policy P-state	limits
+-	(see `Interpretation of Policy Attributes`_ below for details).
++	(see :ref:`policy_attributes_interpretation` below for details).
+ 
+ ``hwp_dynamic_boost``
+ 	This attribute is only present if ``intel_pstate`` works in the
+-	`active mode with the HWP feature enabled <Active Mode With HWP_>`_ in
++	:ref:`active mode with the HWP feature enabled <active_mode_hwp>` in
+ 	the processor.  If set (equal to 1), it causes the minimum P-state limit
+ 	to be increased dynamically for a short time whenever a task previously
+ 	waiting on I/O is selected to run on a given logical CPU (the purpose
+@@ -522,12 +523,12 @@ argument is passed to the kernel in the command line.
+ 	Operation mode of the driver: "active", "passive" or "off".
+ 
+ 	"active"
+-		The driver is functional and in the `active mode
+-		<Active Mode_>`_.
++		The driver is functional and in the :ref:`active mode
++		<active_mode>`.
+ 
+ 	"passive"
+-		The driver is functional and in the `passive mode
+-		<Passive Mode_>`_.
++		The driver is functional and in the :ref:`passive mode
++		<passive_mode>`.
+ 
+ 	"off"
+ 		The driver is not functional (it is not registered as a scaling
+@@ -555,13 +556,15 @@ argument is passed to the kernel in the command line.
+ 	attribute to "1" enables the energy-efficiency optimizations and setting
+ 	to "0" disables them.
+ 
++.. _policy_attributes_interpretation:
++
+ Interpretation of Policy Attributes
+ -----------------------------------
+ 
+ The interpretation of some ``CPUFreq`` policy attributes described in
+ Documentation/admin-guide/pm/cpufreq.rst is special with ``intel_pstate``
+ as the current scaling driver and it generally depends on the driver's
+-`operation mode <Operation Modes_>`_.
++:ref:`operation mode <operation_modes>`.
+ 
+ First of all, the values of the ``cpuinfo_max_freq``, ``cpuinfo_min_freq`` and
+ ``scaling_cur_freq`` attributes are produced by applying a processor-specific
+@@ -570,9 +573,10 @@ Also, the values of the ``scaling_max_freq`` and ``scaling_min_freq``
+ attributes are capped by the frequency corresponding to the maximum P-state that
+ the driver is allowed to set.
+ 
+-If the ``no_turbo`` `global attribute <no_turbo_attr_>`_ is set, the driver is
+-not allowed to use turbo P-states, so the maximum value of ``scaling_max_freq``
+-and ``scaling_min_freq`` is limited to the maximum non-turbo P-state frequency.
++If the ``no_turbo`` :ref:`global attribute <no_turbo_attr>` is set, the driver
++is not allowed to use turbo P-states, so the maximum value of
++``scaling_max_freq`` and ``scaling_min_freq`` is limited to the maximum
++non-turbo P-state frequency.
+ Accordingly, setting ``no_turbo`` causes ``scaling_max_freq`` and
+ ``scaling_min_freq`` to go down to that value if they were above it before.
+ However, the old values of ``scaling_max_freq`` and ``scaling_min_freq`` will be
+@@ -584,7 +588,7 @@ and ``scaling_min_freq`` corresponds to the maximum supported turbo P-state,
+ which also is the value of ``cpuinfo_max_freq`` in either case.
+ 
+ Next, the following policy attributes have special meaning if
+-``intel_pstate`` works in the `active mode <Active Mode_>`_:
++``intel_pstate`` works in the :ref:`active mode <active_mode>`:
+ 
+ ``scaling_available_governors``
+ 	List of P-state selection algorithms provided by ``intel_pstate``.
+@@ -605,20 +609,22 @@ processor:
+ 	Shows the base frequency of the CPU. Any frequency above this will be
+ 	in the turbo frequency range.
+ 
+-The meaning of these attributes in the `passive mode <Passive Mode_>`_ is the
++The meaning of these attributes in the :ref:`passive mode <passive_mode>` is the
+ same as for other scaling drivers.
+ 
+ Additionally, the value of the ``scaling_driver`` attribute for ``intel_pstate``
+ depends on the operation mode of the driver.  Namely, it is either
+-"intel_pstate" (in the `active mode <Active Mode_>`_) or "intel_cpufreq" (in the
+-`passive mode <Passive Mode_>`_).
++"intel_pstate" (in the :ref:`active mode <active_mode>`) or "intel_cpufreq"
++(in the :ref:`passive mode <passive_mode>`).
++
++.. _pstate_limits_coordination:
+ 
+ Coordination of P-State Limits
+ ------------------------------
+ 
+ ``intel_pstate`` allows P-state limits to be set in two ways: with the help of
+-the ``max_perf_pct`` and ``min_perf_pct`` `global attributes
+-<Global Attributes_>`_ or via the ``scaling_max_freq`` and ``scaling_min_freq``
++the ``max_perf_pct`` and ``min_perf_pct`` :ref:`global attributes
++<global_attributes>` or via the ``scaling_max_freq`` and ``scaling_min_freq``
+ ``CPUFreq`` policy attributes.  The coordination between those limits is based
+ on the following rules, regardless of the current operation mode of the driver:
+ 
+@@ -640,17 +646,18 @@ on the following rules, regardless of the current operation mode of the driver:
+ 
+  3. The global and per-policy limits can be set independently.
+ 
+-In the `active mode with the HWP feature enabled <Active Mode With HWP_>`_, the
++In the :ref:`active mode with the HWP feature enabled <active_mode_hwp>`, the
+ resulting effective values are written into hardware registers whenever the
+ limits change in order to request its internal P-state selection logic to always
+ set P-states within these limits.  Otherwise, the limits are taken into account
+-by scaling governors (in the `passive mode <Passive Mode_>`_) and by the driver
+-every time before setting a new P-state for a CPU.
++by scaling governors (in the :ref:`passive mode <passive_mode>`) and by the
++driver every time before setting a new P-state for a CPU.
+ 
+ Additionally, if the ``intel_pstate=per_cpu_perf_limits`` command line argument
+ is passed to the kernel, ``max_perf_pct`` and ``min_perf_pct`` are not exposed
+ at all and the only way to set the limits is by using the policy attributes.
+ 
++.. _energy_performance_hints:
+ 
+ Energy vs Performance Hints
+ ---------------------------
+@@ -710,9 +717,9 @@ output.
+ On those systems each ``_PSS`` object returns a list of P-states supported by
+ the corresponding CPU which basically is a subset of the P-states range that can
+ be used by ``intel_pstate`` on the same system, with one exception: the whole
+-`turbo range <turbo_>`_ is represented by one item in it (the topmost one).  By
+-convention, the frequency returned by ``_PSS`` for that item is greater by 1 MHz
+-than the frequency of the highest non-turbo P-state listed by it, but the
++:ref:`turbo range <turbo>` is represented by one item in it (the topmost one).
++By convention, the frequency returned by ``_PSS`` for that item is greater by
++1 MHz than the frequency of the highest non-turbo P-state listed by it, but the
+ corresponding P-state representation (following the hardware specification)
+ returned for it matches the maximum supported turbo P-state (or is the
+ special value 255 meaning essentially "go as high as you can get").
+@@ -738,18 +745,18 @@ benefit from running at turbo frequencies will be given non-turbo P-states
+ instead.
+ 
+ One more issue related to that may appear on systems supporting the
+-`Configurable TDP feature <turbo_>`_ allowing the platform firmware to set the
+-turbo threshold.  Namely, if that is not coordinated with the lists of P-states
+-returned by ``_PSS`` properly, there may be more than one item corresponding to
+-a turbo P-state in those lists and there may be a problem with avoiding the
+-turbo range (if desirable or necessary).  Usually, to avoid using turbo
+-P-states overall, ``acpi-cpufreq`` simply avoids using the topmost state listed
+-by ``_PSS``, but that is not sufficient when there are other turbo P-states in
+-the list returned by it.
++:ref:`Configurable TDP feature <turbo>` allowing the platform firmware to set
++the turbo threshold.  Namely, if that is not coordinated with the lists of
++P-states returned by ``_PSS`` properly, there may be more than one item
++corresponding to a turbo P-state in those lists and there may be a problem with
++avoiding the turbo range (if desirable or necessary).  Usually, to avoid using
++turbo P-states overall, ``acpi-cpufreq`` simply avoids using the topmost state
++listed by ``_PSS``, but that is not sufficient when there are other turbo
++P-states in the list returned by it.
+ 
+ Apart from the above, ``acpi-cpufreq`` works like ``intel_pstate`` in the
+-`passive mode <Passive Mode_>`_, except that the number of P-states it can set
+-is limited to the ones listed by the ACPI ``_PSS`` objects.
++:ref:`passive mode <passive_mode>`, except that the number of P-states it can
++set is limited to the ones listed by the ACPI ``_PSS`` objects.
+ 
+ 
+ Kernel Command Line Options for ``intel_pstate``
+@@ -764,11 +771,11 @@ of them have to be prepended with the ``intel_pstate=`` prefix.
+ 	processor is supported by it.
+ 
+ ``active``
+-	Register ``intel_pstate`` in the `active mode <Active Mode_>`_ to start
+-	with.
++	Register ``intel_pstate`` in the :ref:`active mode <active_mode>` to
++        start with.
+ 
+ ``passive``
+-	Register ``intel_pstate`` in the `passive mode <Passive Mode_>`_ to
++	Register ``intel_pstate`` in the :ref:`passive mode <passive_mode>` to
+ 	start with.
+ 
+ ``force``
+@@ -801,12 +808,12 @@ of them have to be prepended with the ``intel_pstate=`` prefix.
+ 	and this option has no effect.
+ 
+ ``per_cpu_perf_limits``
+-	Use per-logical-CPU P-State limits (see `Coordination of P-state
+-	Limits`_ for details).
++	Use per-logical-CPU P-State limits (see
++        :ref:`pstate_limits_coordination` for details).
+ 
+ ``no_cas``
+-	Do not enable `capacity-aware scheduling <CAS_>`_ which is enabled by
+-	default on hybrid systems without SMT.
++	Do not enable :ref:`capacity-aware scheduling <CAS>` which is enabled
++        by default on hybrid systems without SMT.
+ 
+ Diagnostics and Tuning
+ ======================
+@@ -818,7 +825,7 @@ There are two static trace events that can be used for ``intel_pstate``
+ diagnostics.  One of them is the ``cpu_frequency`` trace event generally used
+ by ``CPUFreq``, and the other one is the ``pstate_sample`` trace event specific
+ to ``intel_pstate``.  Both of them are triggered by ``intel_pstate`` only if
+-it works in the `active mode <Active Mode_>`_.
++it works in the :ref:`active mode <active_mode>`.
+ 
+ The following sequence of shell commands can be used to enable them and see
+ their output (if the kernel is generally configured to support event tracing)::
+@@ -830,7 +837,7 @@ their output (if the kernel is generally configured to support event tracing)::
+  gnome-terminal--4510  [001] ..s.  1177.680733: pstate_sample: core_busy=107 scaled=94 from=26 to=26 mperf=1143818 aperf=1230607 tsc=29838618 freq=2474476
+  cat-5235  [002] ..s.  1177.681723: cpu_frequency: state=2900000 cpu_id=2
+ 
+-If ``intel_pstate`` works in the `passive mode <Passive Mode_>`_, the
++If ``intel_pstate`` works in the :ref:`passive mode <passive_mode>`, the
+ ``cpu_frequency`` trace event will be triggered either by the ``schedutil``
+ scaling governor (for the policies it is attached to), or by the ``CPUFreq``
+ core (for the policies with other scaling governors).
 
-Also to Lee/Rob/Jonathan, as you had given your Acked-by tags on
-patch 1 - based on the discussion in this thread, I think it's
-also best to update patch 1 similarly now, to move the ADC channel macros
-from the include/dt-bindings/iio folder to the arch/arm(64)/boot/dts/qcom
-folders. I'll make this update in the next version, please have a look
-at it too.
-
-Thanks,
-Jishnu
-
-> Best regards,
-> Krzysztof
+base-commit: eda819ce75b976da206c2c605d380a881e9281b1
+-- 
+An old man doll... just what I always wanted! - Clara
 
 
