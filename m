@@ -1,114 +1,92 @@
-Return-Path: <linux-pm+bounces-37244-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37245-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6BA6CC287AF
-	for <lists+linux-pm@lfdr.de>; Sat, 01 Nov 2025 21:02:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 31D30C287B6
+	for <lists+linux-pm@lfdr.de>; Sat, 01 Nov 2025 21:19:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4DC2F3AA913
-	for <lists+linux-pm@lfdr.de>; Sat,  1 Nov 2025 19:59:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DFC853B7931
+	for <lists+linux-pm@lfdr.de>; Sat,  1 Nov 2025 20:19:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CFBD296BBF;
-	Sat,  1 Nov 2025 19:59:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB51222D78A;
+	Sat,  1 Nov 2025 20:19:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="IsIe3nGj";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Xli0ltPi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UzWuxoyf"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A5BF1F4E59;
-	Sat,  1 Nov 2025 19:59:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8619F1684B0
+	for <linux-pm@vger.kernel.org>; Sat,  1 Nov 2025 20:19:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762027191; cv=none; b=erLrYC89zH5gGN3yV4M582MOuCg2hsrc0p3Ne+c8Hls/L0aFA3iGKapsu5MAdYs90CDZx2lPSqhBT1eiNFy/KHx2qkr5Aw/RzZyq/akEZje/pJZvN4dJw2UYjkuqJWmoDjM9JKNFC5gL0bdaXzu9Qog4m8LlHz+RzOxZVNuhWn0=
+	t=1762028347; cv=none; b=VJVNemaFkOZKNV9fQD+HY795LwXAeikpIHpEBc+Uk1c5QNd1xTWQdp9Gks5ZPO9vG5HUwadC53oG/YllWnzUgnyVjLERuzXIN/hw13Sdgqu7inZpOhyWpMg8LYXqJNXRmbJ6p2ONGdPt6SYXci3UfJrN6QXg1GdhiBV/md2oIWo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762027191; c=relaxed/simple;
-	bh=3KyFPGTtlAIMq89X0yxIjS4dmMPbYQqV+iBk1qm6MVI=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=J6VgHS+vCcC5K1dPyoUyNr0gJjSy0/OsF6ySzBBt86+TJO3vXU/YBbKIEfKVJZ9dVvd0ZWPDSHhPC/n16o3Wbhk4ZlHnCXs7iCawwdcRamGfUXLW/zBP1JX8+/L8NOmgYg04TRWuh7x5PtxXhJpaKAfBMWySE96f5yliuI9SVPQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=IsIe3nGj; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Xli0ltPi; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1762027189;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=w9esUrg9Ter9Q/ySJkb9E3El3zRpChNBYljx3GplElA=;
-	b=IsIe3nGjD4+mFIPS/cGK5p82zifs7tYWuZwqkL+xHoOK4UukXvx2+bt/aztkvd5zAgMhzj
-	9YZZbgjGFUL/zmGeo5e+EDQlmSOY1h2Cp1SgtnoU5ZB8z9m8Nrcrwg/N6VkV8GD9OZFsF1
-	PivkGmLsqBa2jbxMfdINE5YQTgCN8+9WD90IfHPVA7So8O/rccyEnCvzfuCvJAb32JeiUb
-	e+tmQXmm2KgclYiKYVKTVd9ajmcVBFn4alhX5g1OqspAJNKHO5P18JcR3CVJ/Nij3+7mM8
-	0V0yJ22Aw8iIhOsoGktIefD6cXr1df4NczCpwJmESG4e4mTDvQSknA+zd563wg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1762027189;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=w9esUrg9Ter9Q/ySJkb9E3El3zRpChNBYljx3GplElA=;
-	b=Xli0ltPigchfb4g6wBaN2i7pjcT0uon5IYxstMvKeKhqRyMbnOQJS7ymbFGPod+iA1DSrm
-	JVl+U93Ifd31KHCQ==
-To: Ulf Hansson <ulf.hansson@linaro.org>, "Rafael J . Wysocki"
- <rafael@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>, Marc Zyngier <maz@kernel.org>,
- Maulik Shah <quic_mkshah@quicinc.com>, Sudeep Holla
- <sudeep.holla@arm.com>, Daniel Lezcano <daniel.lezcano@linaro.org>,
- Vincent Guittot <vincent.guittot@linaro.org>, Ben Horgan
- <ben.horgan@arm.com>, linux-pm@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, Ulf
- Hansson <ulf.hansson@linaro.org>
-Subject: Re: [PATCH v3 1/2] smp: Introduce a helper function to check for
- pending IPIs
-In-Reply-To: <20251031110106.62394-2-ulf.hansson@linaro.org>
-References: <20251031110106.62394-1-ulf.hansson@linaro.org>
- <20251031110106.62394-2-ulf.hansson@linaro.org>
-Date: Sat, 01 Nov 2025 20:59:48 +0100
-Message-ID: <875xbty157.ffs@tglx>
+	s=arc-20240116; t=1762028347; c=relaxed/simple;
+	bh=DAVgnXhAnTJMQQUdNWjo/0W+kXN7vX16P5oen/O19/8=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=jChiM8NfGU5G3E2Op7Dl9RPyE+0KjKux2VfT4Ry6g7TCl8Auf9Gv5wGNhjbO6wVxe7wjNrG87fiLLqM0VsCUMeBPDFkGfKHoWPZzlGDu0XTepBxoqN2ngfuGUUDUJZ4ScEhg7EHjXFmp4qby8PmodmwBZ4vfFMfQ0RxHNopoE7I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UzWuxoyf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E6F54C4CEF1
+	for <linux-pm@vger.kernel.org>; Sat,  1 Nov 2025 20:19:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762028344;
+	bh=DAVgnXhAnTJMQQUdNWjo/0W+kXN7vX16P5oen/O19/8=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=UzWuxoyfNjJqV2Huf0Uh5T+GsYV26oFp8Q7PrweOJ5ju1b8ctoAS3Sd44MtO7ze7Q
+	 0A46wN+VQOdF/M4loSc3o7MIFyVqF6jSqbfsxELVCLKK7uozqoNJ5PI21AgX5zxQbC
+	 bH9VENwuy3r4OyUMIWUFcuJ8RJ06kr4d1lJYN5Mys6ZMDvXDxOhdl3Wf6NXdGYxV2I
+	 rcpxMdVJDV9+sN2m7ZdxAhPiE1lCVjvDmBICHwCAK/pBHnGPNTEFIRCe/nned06OkY
+	 S12wQgmtV1VDrqB6uQlwd3ApVFZc79jD4G8a9gey/g1xjFR8pnxlTHKLGh7rHd5KdJ
+	 SiN2I6LrAhqig==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id D8DEDC4160E; Sat,  1 Nov 2025 20:19:04 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-pm@vger.kernel.org
+Subject: [Bug 220715] [REGRESSION] AMD P-State fails with "_CPC object is not
+ present" on AMD Zen 4 between 6.10 and 6.11
+Date: Sat, 01 Nov 2025 20:19:04 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: chris.harris79@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: attachments.created
+Message-ID: <bug-220715-137361-Pd2XPRsISp@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-220715-137361@https.bugzilla.kernel.org/>
+References: <bug-220715-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
 
-On Fri, Oct 31 2025 at 12:00, Ulf Hansson wrote:
-> +/**
-> + * cpus_peek_for_pending_ipi - Check for pending IPI for CPUs
-> + * @mask: The CPU mask for the CPUs to check.
-> + *
-> + * This function walks through the @mask to check if there are any pending IPIs
-> + * scheduled, for any of the CPUs in the @mask.
-> + *
-> + * It's important for the caller to know that this function does not guarantee
-> + * correctness. It provides a snapshot, while being as lightweight as possible.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D220715
 
-This read clumsy. Just say:
+--- Comment #3 from Chris Harris (chris.harris79@gmail.com) ---
+Created attachment 308879
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D308879&action=3Dedit
+First Bad Commit Contents
 
-  * It does not guarantee correctness as it only can provide a racy snapshot.
+--=20
+You may reply to this email to add a comment.
 
-or something like that.
-
-> + * Returns true if there is a pending IPI scheduled and false otherwise.
-> + */
-> +bool cpus_peek_for_pending_ipi(const struct cpumask *mask)
-> +{
-> +	unsigned int cpu;
-> +
-> +	for_each_cpu(cpu, mask) {
-> +		if (!llist_empty(per_cpu_ptr(&call_single_queue, cpu)))
-> +			return true;
-> +	}
-> +
-> +        return false;
-   ^^^^^^^^
-White space damage. Spaces instead of TAB.
-
-Thanks,
-
-        tglx
+You are receiving this mail because:
+You are the assignee for the bug.=
 
