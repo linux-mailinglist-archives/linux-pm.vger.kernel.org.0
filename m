@@ -1,51 +1,51 @@
-Return-Path: <linux-pm+bounces-37264-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37262-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F03DC29964
-	for <lists+linux-pm@lfdr.de>; Mon, 03 Nov 2025 00:04:37 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 25415C29952
+	for <lists+linux-pm@lfdr.de>; Mon, 03 Nov 2025 00:04:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A08063A4ACB
-	for <lists+linux-pm@lfdr.de>; Sun,  2 Nov 2025 23:04:29 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 138434E624E
+	for <lists+linux-pm@lfdr.de>; Sun,  2 Nov 2025 23:04:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0E2F24DCFD;
-	Sun,  2 Nov 2025 23:04:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6890D21D3E8;
+	Sun,  2 Nov 2025 23:04:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=aurel32.net header.i=@aurel32.net header.b="mghBgXfr"
+	dkim=pass (2048-bit key) header.d=aurel32.net header.i=@aurel32.net header.b="GVZ31j4j"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from hall.aurel32.net (hall.aurel32.net [195.154.113.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ECD81494CC;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EC94846F;
 	Sun,  2 Nov 2025 23:04:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.154.113.88
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762124658; cv=none; b=fEiVYEdJVmOlc7InwhDOOxC87913Atclrzwn2012j+2xNLaELuEKH6i263Ti3EoWJUHJfg2usAr2yMAhA6IsQ6xk8720jUXqD+A0+wjnUAiDZAh1SlLYXIOxl7Ekm8U+iAmk0CuFsASAtEba/Gze3JmXuhZqoKWuxyI1sO2r3ww=
+	t=1762124657; cv=none; b=f+Nw6XTWtou/qOSSTTwZLer7j77v6/XuNd0Yimy+FeYA8tdpEpP09uSUbMuTz1OvydW795a6zkpxsmJUFtlDnHfc6DE5VRX9VirbQ3C3oTroUtgmqPdSEjtViq3ikWLpsZxluTYnzUpwcYK/1JrtsPp6oWVK5lx/Hix3VmEL2xw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762124658; c=relaxed/simple;
-	bh=/ZctMb3ijVFbDbFMpwi7uCY5o9V8kaO1yvgya8+M8xo=;
+	s=arc-20240116; t=1762124657; c=relaxed/simple;
+	bh=t28XyJHhYqsEmY/twa7Txt1DmZbhP56O7Q0XUm71p9w=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MGae8Hb36ziSEFeopr9TZyRQKXyS2VALDxl3y1QIcOdrG9pht4weKiqqMLhE3CsZVh6/ELPbmgFhYhL/+457NE7qn89eROf/78BNFHIHUfFvOOi9sBpL0GMPUE5hGdOhR0zbHCO4F6lMuaibbaC5roe08bUCpz1SN2k6xgZHV7Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=aurel32.net; spf=pass smtp.mailfrom=aurel32.net; dkim=pass (2048-bit key) header.d=aurel32.net header.i=@aurel32.net header.b=mghBgXfr; arc=none smtp.client-ip=195.154.113.88
+	 MIME-Version; b=odnL6AEnsBg3WG58gncvBexc5UI/qCdfkWhO2pY5xxOs9qy6GWr9+TNwnuRbEiYgcSFHcD/HmbLaj7T5PqXpXUqhBb4hp0KjH6kyjZ68eJzqXBwk8HwpObbHZOCz1DbkeZYjZ5JJeMpubock2807M2JfCwT9oSZt6TCuOOfMX8k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=aurel32.net; spf=pass smtp.mailfrom=aurel32.net; dkim=pass (2048-bit key) header.d=aurel32.net header.i=@aurel32.net header.b=GVZ31j4j; arc=none smtp.client-ip=195.154.113.88
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=aurel32.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aurel32.net
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=aurel32.net
 	; s=202004.hall; h=Content-Transfer-Encoding:MIME-Version:References:
 	In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Content-Type:From:Reply-To:
 	Subject:Content-ID:Content-Description:X-Debbugs-Cc;
-	bh=aWdd3sD4ESHWezzbYg8K/JEm+yaSiqHzT7xdMAjAhkk=; b=mghBgXfrqnLnlmDJdNI3EHVSYH
-	CryqKGEVcPOEirDSzBQ50uwuSUu7oQvI6bfb/uiKJQLaKXy3XvG4pPQL+i6lErqFTA/J/hhibZpEp
-	TmyqgH1se42inL+kmVK8dSVZGLnofsYH/Bpb3d7w3HspIWgOwFoetGpcBQIxkIgJJhLn9NjM9/Mtu
-	UPNVvpCNsTTL9se2bJyom4TZ4CNPKkCFbj/+ZXY+MzaWcuvZrHMkejx9G/FtgBUNeHWg18wXp/aDm
-	omuvAsYjknrlKw7NMAsz+QTiVnIUGlDGtw7uzp96RhkpP6rOIKywxaOMCEH59hkh17fFH4r+zKMup
-	nrk/DeWg==;
+	bh=hql68ROiQCHicq3ZGKu3LUefXDb5IsbisbAg9bD5eXA=; b=GVZ31j4joqWfYmv2qfzUWYuTzl
+	FvYMq7y+iDON7MAqRHqiwoXxxgVAFnK4foK4USdvf0wSofOva8eY8ghFWij3fRats5SSaSN1xrKzD
+	aS0EgXHAfYS6QBeDWDuCBPVQ6Hf83IRygZF79xXP0QX0qtd6dZKIDUE6zFNE1ClJjvzGSpw223kIl
+	CWZ1ouRqaZzqrtECsFNwLfpnvK9zZp+4qmXO7u2viZC6EGw8sHZKTPdJVm3kN/kS/2UUfnlSJ0pA/
+	6pfnDF294odgdQF6A6nxXP0zmnrZkV29dzReKTdHwpUoM4y/vVX4qbopj/jdr4y+hcnD8psVh0SjO
+	LmSn8kdg==;
 Received: from [2a01:e34:ec5d:a741:1ee1:92ff:feb4:5ec0] (helo=ohm.rr44.fr)
 	by hall.aurel32.net with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.98.2)
 	(envelope-from <aurelien@aurel32.net>)
-	id 1vFh7A-00000006eMH-0EqI;
+	id 1vFh7A-00000006eMI-0qhm;
 	Mon, 03 Nov 2025 00:04:00 +0100
 From: Aurelien Jarno <aurelien@aurel32.net>
 To: linux-kernel@vger.kernel.org,
@@ -58,15 +58,14 @@ To: linux-kernel@vger.kernel.org,
 	Albert Ou <aou@eecs.berkeley.edu>,
 	Alexandre Ghiti <alex@ghiti.fr>,
 	linux-riscv@lists.infradead.org (open list:RISC-V ARCHITECTURE:Keyword:riscv),
-	spacemit@lists.linux.dev (open list:RISC-V SPACEMIT SoC Support:Keyword:spacemit),
-	linux-pm@vger.kernel.org (open list:SYSTEM RESET/SHUTDOWN DRIVERS)
+	spacemit@lists.linux.dev (open list:RISC-V SPACEMIT SoC Support:Keyword:spacemit)
 Cc: Aurelien Jarno <aurelien@aurel32.net>,
 	linux-pm@vger.kernel.org (open list:SYSTEM RESET/SHUTDOWN DRIVERS),
 	linux-riscv@lists.infradead.org (open list:RISC-V SPACEMIT SoC Support),
 	spacemit@lists.linux.dev (open list:RISC-V SPACEMIT SoC Support)
-Subject: [PATCH v5 1/2] driver: reset: spacemit-p1: add driver for poweroff/reboot
-Date: Mon,  3 Nov 2025 00:01:59 +0100
-Message-ID: <20251102230352.914421-2-aurelien@aurel32.net>
+Subject: [PATCH v5 2/2] mfd: simple-mfd-i2c: add a reboot cell for the SpacemiT P1 chip
+Date: Mon,  3 Nov 2025 00:02:00 +0100
+Message-ID: <20251102230352.914421-3-aurelien@aurel32.net>
 X-Mailer: git-send-email 2.47.2
 In-Reply-To: <20251102230352.914421-1-aurelien@aurel32.net>
 References: <20251102230352.914421-1-aurelien@aurel32.net>
@@ -78,151 +77,27 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This driver implements poweroff/reboot support for the SpacemiT P1 PMIC
-chip, which is commonly paired with the SpacemiT K1 SoC.
-
-The SpacemiT P1 support is implemented as a MFD driver, so the access is
-done directly through the regmap interface. Reboot or poweroff is
-triggered by setting a specific bit in a control register, which is
-automatically cleared by the hardware afterwards.
+Add a "spacemit-p1-reboot" cell for the SpacemiT P1 chip.
 
 Signed-off-by: Aurelien Jarno <aurelien@aurel32.net>
 ---
-v5:
- - Change default to "MFD_SPACEMIT_P1"
+v5: no changes
 
- drivers/power/reset/Kconfig              |  9 +++
- drivers/power/reset/Makefile             |  1 +
- drivers/power/reset/spacemit-p1-reboot.c | 88 ++++++++++++++++++++++++
- 3 files changed, 98 insertions(+)
- create mode 100644 drivers/power/reset/spacemit-p1-reboot.c
+ drivers/mfd/simple-mfd-i2c.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
-index 8248895ca9038..f6c1bcbb57def 100644
---- a/drivers/power/reset/Kconfig
-+++ b/drivers/power/reset/Kconfig
-@@ -283,6 +283,15 @@ config POWER_RESET_KEYSTONE
- 	help
- 	  Reboot support for the KEYSTONE SoCs.
+diff --git a/drivers/mfd/simple-mfd-i2c.c b/drivers/mfd/simple-mfd-i2c.c
+index 0a607a1e3ca1d..542d378cdcd1f 100644
+--- a/drivers/mfd/simple-mfd-i2c.c
++++ b/drivers/mfd/simple-mfd-i2c.c
+@@ -99,6 +99,7 @@ static const struct regmap_config spacemit_p1_regmap_config = {
+ };
  
-+config POWER_RESET_SPACEMIT_P1
-+	tristate "SpacemiT P1 poweroff and reset driver"
-+	depends on ARCH_SPACEMIT || COMPILE_TEST
-+	depends on MFD_SPACEMIT_P1
-+	default MFD_SPACEMIT_P1
-+	help
-+	  This driver supports power-off and reset operations for the SpacemiT
-+	  P1 PMIC.
-+
- config POWER_RESET_SYSCON
- 	bool "Generic SYSCON regmap reset driver"
- 	depends on OF
-diff --git a/drivers/power/reset/Makefile b/drivers/power/reset/Makefile
-index 51da87e05ce76..0e4ae6f6b5c55 100644
---- a/drivers/power/reset/Makefile
-+++ b/drivers/power/reset/Makefile
-@@ -24,6 +24,7 @@ obj-$(CONFIG_POWER_RESET_LTC2952) += ltc2952-poweroff.o
- obj-$(CONFIG_POWER_RESET_QNAP) += qnap-poweroff.o
- obj-$(CONFIG_POWER_RESET_REGULATOR) += regulator-poweroff.o
- obj-$(CONFIG_POWER_RESET_RESTART) += restart-poweroff.o
-+obj-$(CONFIG_POWER_RESET_SPACEMIT_P1) += spacemit-p1-reboot.o
- obj-$(CONFIG_POWER_RESET_ST) += st-poweroff.o
- obj-$(CONFIG_POWER_RESET_TH1520_AON) += th1520-aon-reboot.o
- obj-$(CONFIG_POWER_RESET_TORADEX_EC) += tdx-ec-poweroff.o
-diff --git a/drivers/power/reset/spacemit-p1-reboot.c b/drivers/power/reset/spacemit-p1-reboot.c
-new file mode 100644
-index 0000000000000..9ec3d1fff8f3d
---- /dev/null
-+++ b/drivers/power/reset/spacemit-p1-reboot.c
-@@ -0,0 +1,88 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2025 by Aurelien Jarno
-+ */
-+
-+#include <linux/bits.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/platform_device.h>
-+#include <linux/regmap.h>
-+#include <linux/reboot.h>
-+
-+/* Power Control Register 2 */
-+#define PWR_CTRL2		0x7e
-+#define PWR_CTRL2_SHUTDOWN	BIT(2)	/* Shutdown request */
-+#define PWR_CTRL2_RST		BIT(1)	/* Reset request */
-+
-+static int spacemit_p1_pwroff_handler(struct sys_off_data *data)
-+{
-+	struct regmap *regmap = data->cb_data;
-+	int ret;
-+
-+	/* Put the PMIC into shutdown state */
-+	ret = regmap_set_bits(regmap, PWR_CTRL2, PWR_CTRL2_SHUTDOWN);
-+	if (ret) {
-+		dev_err(data->dev, "shutdown failed: %d\n", ret);
-+		return notifier_from_errno(ret);
-+	}
-+
-+	return NOTIFY_DONE;
-+}
-+
-+static int spacemit_p1_restart_handler(struct sys_off_data *data)
-+{
-+	struct regmap *regmap = data->cb_data;
-+	int ret;
-+
-+	/* Put the PMIC into reset state */
-+	ret = regmap_set_bits(regmap, PWR_CTRL2, PWR_CTRL2_RST);
-+	if (ret) {
-+		dev_err(data->dev, "restart failed: %d\n", ret);
-+		return notifier_from_errno(ret);
-+	}
-+
-+	return NOTIFY_DONE;
-+}
-+
-+static int spacemit_p1_reboot_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct regmap *regmap;
-+	int ret;
-+
-+	regmap = dev_get_regmap(dev->parent, NULL);
-+	if (!regmap)
-+		return -ENODEV;
-+
-+	ret = devm_register_power_off_handler(dev, &spacemit_p1_pwroff_handler,
-+					      regmap);
-+	if (ret)
-+		return dev_err_probe(dev, ret,
-+				     "Failed to register power off handler\n");
-+
-+	ret = devm_register_restart_handler(dev, spacemit_p1_restart_handler,
-+					    regmap);
-+	if (ret)
-+		return dev_err_probe(dev, ret,
-+				     "Failed to register restart handler\n");
-+
-+	return 0;
-+}
-+
-+static const struct platform_device_id spacemit_p1_reboot_id_table[] = {
-+	{ "spacemit-p1-reboot", },
-+	{ /* sentinel */ },
-+};
-+MODULE_DEVICE_TABLE(platform, spacemit_p1_reboot_id_table);
-+
-+static struct platform_driver spacemit_p1_reboot_driver = {
-+	.driver = {
-+		.name = "spacemit-p1-reboot",
-+	},
-+	.probe = spacemit_p1_reboot_probe,
-+	.id_table = spacemit_p1_reboot_id_table,
-+};
-+module_platform_driver(spacemit_p1_reboot_driver);
-+
-+MODULE_DESCRIPTION("SpacemiT P1 reboot/poweroff driver");
-+MODULE_LICENSE("GPL");
+ static const struct mfd_cell spacemit_p1_cells[] = {
++	{ .name = "spacemit-p1-reboot", },
+ 	{ .name = "spacemit-p1-regulator", },
+ 	{ .name = "spacemit-p1-rtc", },
+ };
 -- 
 2.47.2
 
