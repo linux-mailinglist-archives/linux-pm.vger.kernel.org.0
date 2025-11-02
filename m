@@ -1,53 +1,53 @@
-Return-Path: <linux-pm+bounces-37252-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37253-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D3B0C28A2C
-	for <lists+linux-pm@lfdr.de>; Sun, 02 Nov 2025 07:55:27 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D81DC2908E
+	for <lists+linux-pm@lfdr.de>; Sun, 02 Nov 2025 15:54:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 18A613A5B24
-	for <lists+linux-pm@lfdr.de>; Sun,  2 Nov 2025 06:55:26 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id CD5684E2357
+	for <lists+linux-pm@lfdr.de>; Sun,  2 Nov 2025 14:53:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C8907262A;
-	Sun,  2 Nov 2025 06:55:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 643D41ACEDA;
+	Sun,  2 Nov 2025 14:53:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="svzr873t"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kP453L6s"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D99B215D1
-	for <linux-pm@vger.kernel.org>; Sun,  2 Nov 2025 06:55:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D191E555
+	for <linux-pm@vger.kernel.org>; Sun,  2 Nov 2025 14:53:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762066523; cv=none; b=uS9WoaIf0WOizNSgj2Tfh81wPFKtqWxPoD57O4F9KYKI7ffAdaAjhAcOP0wNrMvXfDklHm0D3leQAU05l0j8Z683GtYUe9cWNYErfcpQ/erYueLBjcRE06HiwBvBF51PaLkHEd6N9GD+POOY49YNXpxcMNdZLIfebfFZNqY+3hM=
+	t=1762095237; cv=none; b=sxRCqB7QLSgGhkIYryInNViHV80KfQnWPSqh17e1Tnbg4BDyaDy522V0xk3lgLl9cLDTsdPzK88gcsQTV5X3rzzJJ8nk9b18CUVmQFo1kx6yGe7yHnYgY+76xTTFzCpYhkbYKReD8h/VmJWr310vYfgFP9hgE0zRAgsfAQZ5jRA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762066523; c=relaxed/simple;
-	bh=tBYnTGyH9qfXFlc8Aao4j3dp21bBQ/38W4gFxr38L7c=;
+	s=arc-20240116; t=1762095237; c=relaxed/simple;
+	bh=BrVzzLd9SkCDa8z+dtFP1J16e1Wf88nr2ARQWxfi6Mc=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=BKY/FZlh2ctEV/3GUrj0rN7HYZmdSrV1MUaGpjH6JBW2pDC/J9kgQPGs761kO4sics6u0l9a40o2BK3B9Fqqd9qq8MvLLr2+gp9BLyhTkaAyhlt/IfY1IT3NeTEKPSci2bUh5fQgUQigixPkwrK/1mrn4XRRuh43gNoCyFbesQU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=svzr873t; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5ADA2C4CEF7
-	for <linux-pm@vger.kernel.org>; Sun,  2 Nov 2025 06:55:23 +0000 (UTC)
+	 Content-Type:MIME-Version; b=HbyDb90fWRttd3h28smzTu7d+bNWlOPBXp79cOYrfwnlzfqzQ6k2dLobM+Q9q4k2luFcbBry6tJiUR+fAs7LTTaPrC0hB8H6gNaut2FtIO9tLwcGgl0TnCSxGjGkaxs4AZlMd4GozFoRD/xFlz/ippcJm6URW2XQtTCYAr4QN9k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kP453L6s; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B5E05C4CEF7
+	for <linux-pm@vger.kernel.org>; Sun,  2 Nov 2025 14:53:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762066523;
-	bh=tBYnTGyH9qfXFlc8Aao4j3dp21bBQ/38W4gFxr38L7c=;
+	s=k20201202; t=1762095236;
+	bh=BrVzzLd9SkCDa8z+dtFP1J16e1Wf88nr2ARQWxfi6Mc=;
 	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=svzr873tOdvFdAgL2DMSX0Yug8I0NIYWUxAEUVU791aGOQ/ULEI8FyrAXbuBXuR1e
-	 /CtCnWY4QmzrHpmO7/O8vuShyCnYD/XvAngmFLNUB0o1UQgC+d3xppCHnp1sEKy8cm
-	 4w40+7Bc5VwJ6fRufKojBp82e5dH0JZU8anZcpEoYva8d7w00145njowWjQ8L8wQVb
-	 p3trfOaoTWQD8JA5fSRAM+tzW4RUZ5rkmLF4EqOveWddj9yfgtKe4rNnuS8A8b2XA/
-	 cZNLDE/3bVYAj/DZTXQtUczcPRqlutJ6nNFa15j8j1PQSxs1l3M+wp3IzjH6K4x9CG
-	 2GRjTqfTK0Mww==
+	b=kP453L6sBasJP15zHilaVnJcRKa2g0ihEtOI7H3t9jv9J22s0idbPNNBbk87A18g6
+	 gvNFCjhnCbBnuwMYGAHG0Dwelf45daLca1aWFOYjI0x1j6e9V3q7cJ+IHLaJ8HVboy
+	 WAivRFyBx/UeSvk3M5ZxSCayVfscYv8aKElbD+hDPQF8qxlZu4BpP5/TEh2JFrUp8H
+	 +V9FK3yyGD4WrlZ7rH8GB9sMsC3GlQtE2ejtYV35u8U1mzZQVfLiURg3GJZ4pCJwzn
+	 9jHEibhB2B3ev763n+xo6neH0gkSU1tXl1bbLH/0o3UTfzFHkzmpng7XySlQ0+YHz+
+	 pfZFAYU3Fdliw==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 4EFA8C41613; Sun,  2 Nov 2025 06:55:23 +0000 (UTC)
+	id AD00BC433E1; Sun,  2 Nov 2025 14:53:56 +0000 (UTC)
 From: bugzilla-daemon@kernel.org
 To: linux-pm@vger.kernel.org
 Subject: [Bug 220715] [REGRESSION] AMD P-State fails with "_CPC object is not
  present" on AMD Zen 4 between 6.10 and 6.11
-Date: Sun, 02 Nov 2025 06:55:23 +0000
+Date: Sun, 02 Nov 2025 14:53:56 +0000
 X-Bugzilla-Reason: AssignedTo
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -63,7 +63,7 @@ X-Bugzilla-Priority: P3
 X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-220715-137361-QIx3MqF8Jv@https.bugzilla.kernel.org/>
+Message-ID: <bug-220715-137361-2s9GqPZ63K@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-220715-137361@https.bugzilla.kernel.org/>
 References: <bug-220715-137361@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -79,49 +79,14 @@ MIME-Version: 1.0
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D220715
 
---- Comment #8 from Chris Harris (chris.harris79@gmail.com) ---
-Thank you for the continued engagement
-
-1) Good suggestion to test removal of 'nosmt' in the presence of
-'amd_pstate=3Dpassive' on the problem kernel versions, results:
-In the absence of 'nosmt=3Dforce' *I am* successfully getting the "amd-psta=
-te"
-scaling driver.  In the presence of 'nosmt=3Dforce' I fail to get the
-"amd-pstate" driver, and instead receive "acpi-cpufreq", along with the err=
-or
-"amd_pstate: the _CPC object is not present in SBIOS or ACPI disabled".  Th=
-is
-behavior of 'amd_pstate=3Dpassive' failing in the presence of 'nosmt' did n=
-ot
-occur on the kernels prior to the commit identified. In my view, it does se=
-em
-to be a bug, as one should be able to achieve both 'amd_pstate=3Dpassive' a=
-nd
-'nosmt' (as I have been on kernels prior to the affected kernels).
-
-2) I can confirm the Ryzen 7950X is affected.  I primarily tested against
-4484PX on seven identical servers, all which behave similarly -- the logs
-shared are from one of these servers.  I did a sanity-check on a single 795=
-0X
-server, which as I said was also similarly affected, but I did not share lo=
-gs
-from that server.
-
-3) LLM: I'll test this patch shortly. Based on the findings from question 1=
-,=20
-this makes perfect sense - the issue is specifically the interaction betwee=
-n=20
-the commit and nosmt=3Dforce. Your patch changes the loop to check only ena=
-bled=20
-CPUs rather than all present CPUs, which should skip the disabled SMT threa=
-ds=20
-that don't have CPC structures initialized.
-
-I'll apply this to a current kernel (6.11+) and test with both:
-- amd_pstate=3Dpassive + nosmt=3Dforce (currently broken)
-- amd_pstate=3Dpassive without nosmt (currently works)
-
-Will report back with results tomorrow.
+--- Comment #9 from Chris Harris (chris.harris79@gmail.com) ---
+3 follow-up) The patch does not fix the issue.
+- Applied patch to v6.11 source, verified with grep, built and installed
+- Booted with amd_pstate=3Dpassive + nosmt=3Dforce
+- Confirmed nosmt in effect: lscpu shows 'Thread(s) per core =3D 1'
+- Result: Driver still falls back to acpi-cpufreq
+- Error: "amd_pstate: the _CPC object is not present in SBIOS or ACPI disab=
+led"
 
 --=20
 You may reply to this email to add a comment.
