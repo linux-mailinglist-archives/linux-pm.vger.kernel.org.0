@@ -1,197 +1,230 @@
-Return-Path: <linux-pm+bounces-37258-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37259-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78EC2C29742
-	for <lists+linux-pm@lfdr.de>; Sun, 02 Nov 2025 22:40:32 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B567C29754
+	for <lists+linux-pm@lfdr.de>; Sun, 02 Nov 2025 22:41:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id B89E1346BD9
-	for <lists+linux-pm@lfdr.de>; Sun,  2 Nov 2025 21:40:31 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 6F63B4E2C0F
+	for <lists+linux-pm@lfdr.de>; Sun,  2 Nov 2025 21:41:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4FF621D3EE;
-	Sun,  2 Nov 2025 21:40:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33715220F5C;
+	Sun,  2 Nov 2025 21:41:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="RV7uRs3v";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="utcngmW8"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="jQmS/STx"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fhigh-b2-smtp.messagingengine.com (fhigh-b2-smtp.messagingengine.com [202.12.124.153])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A31FBA45;
-	Sun,  2 Nov 2025 21:40:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.153
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762119625; cv=none; b=tRO5ospH2AhHktkVhwC8zEzFgOxnW6Bdd6B5I4HtrejM3gHwblBxMs8lMiDWCaWcGYgVZ9ZoBE7MNiUw/0hGHZGkTGDNGsAkPBMxAX1pPZZKS7amNXupHUTlUegeYYCPQPEoRoGpN3jMKkw7qUfgu/ec5OIq6+LQzKgru2ZHlS8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762119625; c=relaxed/simple;
-	bh=Ji4fYl5V7nF22PzSh+1gNJQ2WcwuRq4RfxI+te+IoVg=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=TvlSmUdoSJasyljdEDkcH+PGSJ5V11wCFw5VZaS8VTlz4CiiUNoz4DLIomeuFJX6gxk5SKDbXR2/N3AMgxcSgyV/VEyHxVAqhYNe84t5c/FAHTFrUajxDnpec8HegYQg1krkzfyW3JMxAHmCFUVFBsM6/i/0ewUeR584q1UB1Do=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=RV7uRs3v; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=utcngmW8; arc=none smtp.client-ip=202.12.124.153
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id 738127A0158;
-	Sun,  2 Nov 2025 16:40:21 -0500 (EST)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-04.internal (MEProxy); Sun, 02 Nov 2025 16:40:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1762119621;
-	 x=1762206021; bh=8B1xp+SmLXggwATnlZ56FNZ4Kfou721p8uoDtFoWNy4=; b=
-	RV7uRs3vimLSXn6Afc+9B4lLmPGColOELBjahtzeRc3gOVIkP88nxF2/LuBNCzU9
-	xz7MXGS0YsfdTM33xxL5jV4r12BYm816kL1YTVASb3eT46kalb7VRw+eVFHzGG9D
-	wlhIQuLWTdzHbYZNxz5zcC4pj6ym+Vt/v5rdm+MCoVgg1CUFbOo6gJH+XlsBldN7
-	fpEJWNmD4tcvNm0Kr/Wwh3dh0pzMwdSkLzYf+iQzyL1zVk2wOVXevEN4PlTijnNY
-	FLRep8oOhdmJiWXaanIDfUhtB9hvMlqAyh8T3WZzto55tlIBve6vRM7HbuHrwzMJ
-	m7Sk5PX35dEHojKA4syKwQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1762119621; x=
-	1762206021; bh=8B1xp+SmLXggwATnlZ56FNZ4Kfou721p8uoDtFoWNy4=; b=u
-	tcngmW8NumqKEtJZRC61dRQcY5oRVtSYld384hctmb6co+AFxgEQknIMtfXquK+b
-	BE4yTtO/aTGUR4i43NyQavxqLW07MBGoFZJ5CjzlSecSDabw4+DxsU7nis7PTNBU
-	4/TcaafzIz1rSvSUtcxxYHOqe02HsBy1P1L3Klzv8rMEcI2ND5i43z+70dt/yR/+
-	tyLgMnjqjDScBQc1lpViE2gIFzwIoTfT8bbyN0k0ADw07wDM/urcbGgnbkjWj+8Z
-	1iKoipFDG20XY+wQdeyBr5fq7su0W3JF/EuZglh0M6UwOay3+3OptwqCZy6sJa5p
-	KpF5SGCd0a/NM6vsvFr6Q==
-X-ME-Sender: <xms:ws8HaRO3Z2R6gtrzw7TOb7KdjsMCj-JgEmab2t6605D0EhlP6Jdp0g>
-    <xme:ws8HaezYtglLhvkuSO4TMO6GZ71_2ei-E_YHrNKdq8BPrFaGAn9xmTKkFMya1292K
-    ANkeq0JPLlLkpeIMbS_E5XVGsxAPQvOW3QcjjtY-u8FGFcj5H_QKqhN>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddujeeifeeiucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepofggfffhvfevkfgjfhfutgfgsehtqhertdertdejnecuhfhrohhmpedftehrnhgu
-    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
-    hrnhepvdfhvdekueduveffffetgfdvveefvdelhedvvdegjedvfeehtdeggeevheefleej
-    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnh
-    gusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepvddvpdhmohguvgepshhmthhpohhu
-    thdprhgtphhtthhopehhrghrihhsohhknhesrghmrgiiohhnrdgtohhmpdhrtghpthhtoh
-    eptggrthgrlhhinhdrmhgrrhhinhgrshesrghrmhdrtghomhdprhgtphhtthhopehmrghr
-    khdrrhhuthhlrghnugesrghrmhdrtghomhdprhgtphhtthhopegtlhesghgvnhhtfihord
-    horhhgpdhrtghpthhtohepmhgvmhigohhrsehgmhgrihhlrdgtohhmpdhrtghpthhtohep
-    iihhvghnghhlihhfvghnghdusehhuhgrfigvihdrtghomhdprhgtphhtthhopehpvghtvg
-    hriiesihhnfhhrrgguvggrugdrohhrghdprhgtphhtthhopegrshhtsehkvghrnhgvlhdr
-    ohhrghdprhgtphhtthhopehrrghfrggvlheskhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:ws8HaRq9eQIUCLNoV0sLHNJIDsI3IIjDWFNun-OjdPISQPGYv9gxpA>
-    <xmx:ws8HafOGxBOTYFM7_HNmx1Z0WD7tO-j-PZMunUB7QMP53mcHAcnJbw>
-    <xmx:ws8HaeNj6uut1gZb-8vqDSEsN1HNSwIczXM446XhQ1wg7RrmJAM2QQ>
-    <xmx:ws8HaR1tH_q1HG1L6VawcNcKP8QU9co3bJd7lDw4S6Fqbwa5idiMUQ>
-    <xmx:xc8HaZntFxU_iduZUOwzYhm1s0mvM8DwXkvnjdVyDPtbtYFo7WSN8-PV>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id EE582700063; Sun,  2 Nov 2025 16:40:17 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56FD4BA45;
+	Sun,  2 Nov 2025 21:41:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1762119705; cv=pass; b=Jj0xSJtMgU6B+L+HzJkMkT/PXiCdPuGXUxhpH1qEKBNX40VEKTHYPYjNhmvw7wgre3ap8Nz/HKO+YPKAYaDVbfd8dIj+d++zRsEaqAPlEzFFRvVsHnsqbORrJY2TYuRqwR++7TonwQR3pU5rI174LLU/Usos755Use4g+k07vvs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1762119705; c=relaxed/simple;
+	bh=yj5jv6qws0AK+OrvvRxVe3RtYYFaSHwdmeDIuoel4+8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Y5t9I65W6ievI3BeOwWs5wddjFnRw5Pvt6aoLoJSqKwpEAHagFuHiyVEMUsSP61vKoAozzGIpvvJqIODynIw+cgQKleCiByHYDIvaHnKRfsdTZDv0rubH4ob3mB8eBul25OGBrTX2GTvsFFcTUuy4MvECNbwSEFlJyvnTGycj5w=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=jQmS/STx; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1762119687; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=ABB+56HZ7qn1KmVWZZY5LRPHfTTnj6eNeEkgHRsfVe82VYvwcgyUYOltYR3PaUD9fSb+RUqWNXNtIi/sxIMHp7x9/y01JQ6SwbyP4/0XCdnBAZJzpQlTqEE/EMfKaw1TcFBYP9iFJwPJCQXbkYd2lzEqN69KvPfFqNgt6mYctZQ=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1762119687; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=etIaDZzEoMN+1wq9IfBUL9NKOUN82tlDPPxEr6WHWuk=; 
+	b=mxoGCDUziziLWkqOeajNg+AT0qnQfEeB01q/3yfFe0DHEJNgE26IitwyjRtPla9jNQLmD30ED18J6WaBbHBXAWepUhz5iDRMENRzgbx0gPX/KB9px5svtAffXtNeC2heklVDhQcMuzgJkKVZIUrJlLyj9eE90HFXnibL0hbYPhk=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
+	dmarc=pass header.from=<sebastian.reichel@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1762119687;
+	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
+	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Content-Transfer-Encoding:Message-Id:Reply-To;
+	bh=etIaDZzEoMN+1wq9IfBUL9NKOUN82tlDPPxEr6WHWuk=;
+	b=jQmS/STxEIAsGCEmibOu/3+wUE84BNrhRRBFfKf9DBiv7AwryCKoRgtfogvjQxLx
+	YAnf/iKlv+EQBHxA0NgzJpUxoWp/85qCGLSwrzXktL2GH30qHMbtjsVGnXIEnd9fJLd
+	l1yorqzlve+Y3v8yKk0c+XSoMll8SIr1zfkUdB/8=
+Received: by mx.zohomail.com with SMTPS id 1762119685630153.93783567988442;
+	Sun, 2 Nov 2025 13:41:25 -0800 (PST)
+Received: by venus (Postfix, from userid 1000)
+	id 15EB4180CDA; Sun, 02 Nov 2025 22:41:15 +0100 (CET)
+Date: Sun, 2 Nov 2025 22:41:15 +0100
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
+To: Otto =?utf-8?Q?Pfl=C3=BCger?= <otto.pflueger@abscue.de>
+Cc: Lee Jones <lee@kernel.org>, Orson Zhai <orsonzhai@gmail.com>, 
+	Baolin Wang <baolin.wang@linux.alibaba.com>, Chunyan Zhang <zhang.lyra@gmail.com>, 
+	Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-spi@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 3/3] power: reset: sc27xx: Drop unused driver
+Message-ID: <kkmidihu45exxt35wrb4r2i4vehixsfsn6vlgmcgxocqeyno4a@uwlmcrjnqsgq>
+References: <20251007-sc27xx-mfd-poweroff-v1-0-89a2f919b731@abscue.de>
+ <20251007-sc27xx-mfd-poweroff-v1-3-89a2f919b731@abscue.de>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: Ab2ZwGVH8-qs
-Date: Sun, 02 Nov 2025 22:39:42 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Catalin Marinas" <catalin.marinas@arm.com>,
- "Ankur Arora" <ankur.a.arora@oracle.com>
-Cc: linux-kernel@vger.kernel.org, Linux-Arch <linux-arch@vger.kernel.org>,
- linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
- bpf@vger.kernel.org, "Will Deacon" <will@kernel.org>,
- "Peter Zijlstra" <peterz@infradead.org>,
- "Andrew Morton" <akpm@linux-foundation.org>,
- "Mark Rutland" <mark.rutland@arm.com>,
- "Haris Okanovic" <harisokn@amazon.com>,
- "Christoph Lameter (Ampere)" <cl@gentwo.org>,
- "Alexei Starovoitov" <ast@kernel.org>,
- "Rafael J . Wysocki" <rafael@kernel.org>,
- "Daniel Lezcano" <daniel.lezcano@linaro.org>,
- "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, zhenglifeng1@huawei.com,
- xueshuai@linux.alibaba.com, "Joao Martins" <joao.m.martins@oracle.com>,
- "Boris Ostrovsky" <boris.ostrovsky@oracle.com>,
- "Konrad Rzeszutek Wilk" <konrad.wilk@oracle.com>
-Message-Id: <746c2de4-7613-4f13-911c-c2c4e071ed73@app.fastmail.com>
-In-Reply-To: <aQEy6ObvE0s2Gfbg@arm.com>
-References: <20251028053136.692462-1-ankur.a.arora@oracle.com>
- <20251028053136.692462-3-ankur.a.arora@oracle.com>
- <3642cfd1-7da6-4a75-80b7-00c21ab6955f@app.fastmail.com>
- <87qzumq51p.fsf@oracle.com> <aQEy6ObvE0s2Gfbg@arm.com>
-Subject: Re: [RESEND PATCH v7 2/7] arm64: barrier: Support
- smp_cond_load_relaxed_timeout()
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+In-Reply-To: <20251007-sc27xx-mfd-poweroff-v1-3-89a2f919b731@abscue.de>
 Content-Transfer-Encoding: quoted-printable
+X-ZohoMailClient: External
 
-On Tue, Oct 28, 2025, at 22:17, Catalin Marinas wrote:
-> On Tue, Oct 28, 2025 at 11:01:22AM -0700, Ankur Arora wrote:
->> Arnd Bergmann <arnd@arndb.de> writes:
->> > On Tue, Oct 28, 2025, at 06:31, Ankur Arora wrote:
->> >> +
->> >
->> > Since the caller knows exactly how long it wants to wait for,
->> > we should be able to fit a 'wfet' based primitive in here and
->> > pass the timeout as another argument.
->>=20
->> Per se, I don't disagree with this when it comes to WFET.
->>=20
->> Handling a timeout, however, is messier when we use other mechanisms.
->>=20
->> Some problems that came up in my earlier discussions with Catalin:
->>=20
->>   - when using WFE, we also need some notion of slack
->>     - and if a caller specifies only a small or no slack, then we need
->>       to combine WFE+cpu_relax()
+Hi,
 
-I don't see the difference to what you have: with the event stream,
-you implicitly define a slack to be the programmed event stream rate
-of ~100=C2=B5s.
+On Tue, Oct 07, 2025 at 08:14:21PM +0200, Otto Pfl=FCger wrote:
+> This driver was never actually probed because it was missing an OF matc=
+h
+> table and was not integrated into the MFD driver. Remove it now that th=
+e
+> power off functionality is handled directly in the MFD driver.
+>=20
+> Signed-off-by: Otto Pfl=FCger <otto.pflueger@abscue.de>
 
+Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 
-I'm not asking for anything better in this case, only for machines
-with WFET but no event stream to also avoid the spin loop.
+-- Sebastian
 
->>   - for platforms that only use a polling primitive, we want to check
->>     the clock only intermittently for power reasons.
-
-Right, I missed that bit.
-
->>     Now, this could be done with an architecture specific spin-count.
->>     However, if the caller specifies a small slack, then we might need
->>     to we check the clock more often as we get closer to the deadline=
- etc.
-
-Again, I think this is solved by defining the slack as architecture
-specific as well rather than an explicit argument, which is essentially
-what we already have.
-=20
->> A smaller problem was that different users want different clocks and =
-so
->> folding the timeout in a 'timeout_cond_expr' lets us do away with the
->> interface having to handle any of that.
->>
->> I had earlier versions [v2] [v3] which had rather elaborate policies =
-for
->> handling timeout, slack etc. But, given that the current users of the
->> interface don't actually care about precision, all of that seemed
->> a little overengineered.
->
-> Indeed, we've been through all these options and without a concrete us=
-er
-> that needs a more precise timeout, we decided it's not worth it. It ca=
-n,
-> however, be improved later if such users appear.
-
-The main worry I have is that we get too many users of cpu_poll_relax()
-hardcoding the use of the event stream without a timeout argument, it
-becomes too hard to change later without introducing regressions
-from the behavior change.
-
-As far as I can tell, the only place that currently uses the
-event stream on a functional level is the delay() loop, and that
-has a working wfet based version.
-
-     Arnd
+>  drivers/power/reset/Kconfig           |  9 ----
+>  drivers/power/reset/Makefile          |  1 -
+>  drivers/power/reset/sc27xx-poweroff.c | 79 ---------------------------=
+--------
+>  3 files changed, 89 deletions(-)
+>=20
+> diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
+> index 8248895ca90389c1db33c7b09e5f5925a9034cee..c4a28f6f04f6be13d20ce2b=
+08427fd1679b1df5a 100644
+> --- a/drivers/power/reset/Kconfig
+> +++ b/drivers/power/reset/Kconfig
+> @@ -320,15 +320,6 @@ config SYSCON_REBOOT_MODE
+>  	  register, then the bootloader can read it to take different
+>  	  action according to the mode.
+> =20
+> -config POWER_RESET_SC27XX
+> -	tristate "Spreadtrum SC27xx PMIC power-off driver"
+> -	depends on MFD_SC27XX_PMIC || COMPILE_TEST
+> -	help
+> -	  This driver supports powering off a system through
+> -	  Spreadtrum SC27xx series PMICs. The SC27xx series
+> -	  PMICs includes the SC2720, SC2721, SC2723, SC2730
+> -	  and SC2731 chips.
+> -
+>  config NVMEM_REBOOT_MODE
+>  	tristate "Generic NVMEM reboot mode driver"
+>  	depends on OF
+> diff --git a/drivers/power/reset/Makefile b/drivers/power/reset/Makefil=
+e
+> index 51da87e05ce76bc608d961485063555c3ba5d96c..cabaa0de2de68794bea5f95=
+23855bb9ef0083ef0 100644
+> --- a/drivers/power/reset/Makefile
+> +++ b/drivers/power/reset/Makefile
+> @@ -37,6 +37,5 @@ obj-$(CONFIG_POWER_RESET_SYSCON_POWEROFF) +=3D syscon=
+-poweroff.o
+>  obj-$(CONFIG_POWER_RESET_RMOBILE) +=3D rmobile-reset.o
+>  obj-$(CONFIG_REBOOT_MODE) +=3D reboot-mode.o
+>  obj-$(CONFIG_SYSCON_REBOOT_MODE) +=3D syscon-reboot-mode.o
+> -obj-$(CONFIG_POWER_RESET_SC27XX) +=3D sc27xx-poweroff.o
+>  obj-$(CONFIG_NVMEM_REBOOT_MODE) +=3D nvmem-reboot-mode.o
+>  obj-$(CONFIG_POWER_MLXBF) +=3D pwr-mlxbf.o
+> diff --git a/drivers/power/reset/sc27xx-poweroff.c b/drivers/power/rese=
+t/sc27xx-poweroff.c
+> deleted file mode 100644
+> index 90287c31992c4889f9241e82a21a1949ecca7702..00000000000000000000000=
+00000000000000000
+> --- a/drivers/power/reset/sc27xx-poweroff.c
+> +++ /dev/null
+> @@ -1,79 +0,0 @@
+> -// SPDX-License-Identifier: GPL-2.0
+> -/*
+> - * Copyright (C) 2018 Spreadtrum Communications Inc.
+> - * Copyright (C) 2018 Linaro Ltd.
+> - */
+> -
+> -#include <linux/cpu.h>
+> -#include <linux/kernel.h>
+> -#include <linux/module.h>
+> -#include <linux/platform_device.h>
+> -#include <linux/pm.h>
+> -#include <linux/regmap.h>
+> -#include <linux/syscore_ops.h>
+> -
+> -#define SC27XX_PWR_PD_HW	0xc2c
+> -#define SC27XX_PWR_OFF_EN	BIT(0)
+> -#define SC27XX_SLP_CTRL		0xdf0
+> -#define SC27XX_LDO_XTL_EN	BIT(3)
+> -
+> -static struct regmap *regmap;
+> -
+> -/*
+> - * On Spreadtrum platform, we need power off system through external S=
+C27xx
+> - * series PMICs, and it is one similar SPI bus mapped by regmap to acc=
+ess PMIC,
+> - * which is not fast io access.
+> - *
+> - * So before stopping other cores, we need release other cores' resour=
+ce by
+> - * taking cpus down to avoid racing regmap or spi mutex lock when powe=
+roff
+> - * system through PMIC.
+> - */
+> -static void sc27xx_poweroff_shutdown(void)
+> -{
+> -#ifdef CONFIG_HOTPLUG_CPU
+> -	int cpu;
+> -
+> -	for_each_online_cpu(cpu) {
+> -		if (cpu !=3D smp_processor_id())
+> -			remove_cpu(cpu);
+> -	}
+> -#endif
+> -}
+> -
+> -static struct syscore_ops poweroff_syscore_ops =3D {
+> -	.shutdown =3D sc27xx_poweroff_shutdown,
+> -};
+> -
+> -static void sc27xx_poweroff_do_poweroff(void)
+> -{
+> -	/* Disable the external subsys connection's power firstly */
+> -	regmap_write(regmap, SC27XX_SLP_CTRL, SC27XX_LDO_XTL_EN);
+> -
+> -	regmap_write(regmap, SC27XX_PWR_PD_HW, SC27XX_PWR_OFF_EN);
+> -}
+> -
+> -static int sc27xx_poweroff_probe(struct platform_device *pdev)
+> -{
+> -	if (regmap)
+> -		return -EINVAL;
+> -
+> -	regmap =3D dev_get_regmap(pdev->dev.parent, NULL);
+> -	if (!regmap)
+> -		return -ENODEV;
+> -
+> -	pm_power_off =3D sc27xx_poweroff_do_poweroff;
+> -	register_syscore_ops(&poweroff_syscore_ops);
+> -	return 0;
+> -}
+> -
+> -static struct platform_driver sc27xx_poweroff_driver =3D {
+> -	.probe =3D sc27xx_poweroff_probe,
+> -	.driver =3D {
+> -		.name =3D "sc27xx-poweroff",
+> -	},
+> -};
+> -module_platform_driver(sc27xx_poweroff_driver);
+> -
+> -MODULE_DESCRIPTION("Power off driver for SC27XX PMIC Device");
+> -MODULE_AUTHOR("Baolin Wang <baolin.wang@unisoc.com>");
+> -MODULE_LICENSE("GPL v2");
+>=20
+> --=20
+> 2.50.0
+>=20
 
