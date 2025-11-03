@@ -1,230 +1,164 @@
-Return-Path: <linux-pm+bounces-37309-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37310-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FD17C2D25C
-	for <lists+linux-pm@lfdr.de>; Mon, 03 Nov 2025 17:33:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C3A09C2DA38
+	for <lists+linux-pm@lfdr.de>; Mon, 03 Nov 2025 19:20:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 208B7188C862
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Nov 2025 16:31:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 10266189B6CC
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Nov 2025 18:20:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09246318139;
-	Mon,  3 Nov 2025 16:30:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E728623D7F4;
+	Mon,  3 Nov 2025 18:20:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ofmBnPmX"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Z9zzrCtz";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="RQPeYjsR"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 882DA31812C
-	for <linux-pm@vger.kernel.org>; Mon,  3 Nov 2025 16:30:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AB0E2264A3
+	for <linux-pm@vger.kernel.org>; Mon,  3 Nov 2025 18:20:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762187439; cv=none; b=MxiJ92zbLcJYx0WGKS9Yc3oqWtdRoi/ZcJw9AfKDExFiIBYA3ZLJMv8Fca7ienLtMfJdNF7VF44TSFlwdW9Pot9DnVt23uJiKbZ2ZD0tNX8gyyGpnFzipszng4czN5Pk6fdrAeKVsXpyBr/yv7jimdciJmD/0u02rlNi89ymtDE=
+	t=1762194017; cv=none; b=qUAWjS7Rgrr2JpsfVjbvLVC3g6O4yeGx0GIQHpKZHqVd+AQf0ZJK3PyUMMmdm1gR6F2gZyirr5ZSa1WXftRhA1mV7PQrz7jtScIwwdb1QEfhGUE4MxOZgPXdWM5MSB8w4qI1L7WgqmL1eO5E99Y5ks98ode4O3Wbe8UJel4Zwrw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762187439; c=relaxed/simple;
-	bh=3jHO59Spn4QAaN4bMhxNmHfKwqFWC6l3wa2Li9DQ1oo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=UKhGYLn4ZrnYXsZIXTkQw3GhxIIvJjTEK4ELk1XaTEIyUxRTZbpFR/WDmyTvfIW7uu9MsH/qKq/FTIyxT4dugRlxE1KnTHzpDLnmu9DC/69VWOgRUdXePI3jVpyuWXmw04wqLvOLdj0/0qAKOnLsFwypWQtp7mn6q8Ehk5+8oXk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ofmBnPmX; arc=none smtp.client-ip=209.85.218.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-b50206773adso993720266b.0
-        for <linux-pm@vger.kernel.org>; Mon, 03 Nov 2025 08:30:36 -0800 (PST)
+	s=arc-20240116; t=1762194017; c=relaxed/simple;
+	bh=syrVo5iAk9XaMLm2MH+TdWb0GD40r/RhxWOefaejDCs=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=aEvudfr2H5lGG0CjyBkOKmLD9r+sBgR6sXfHb2RI9zB1cbo2Gm9Rb8XvzjKTkpFIU8iz6zHHMk0ZD7SjyJ5BXcUBfV0xCft5DVFK2JZN+AEIjAaseHIyvFdBYvQpLRajwzG/rJH1OoXGBt8qNSuzZ0YUh/l2/A8GnLEASCpuqzE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Z9zzrCtz; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=RQPeYjsR; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5A3H6Y8L3693566
+	for <linux-pm@vger.kernel.org>; Mon, 3 Nov 2025 18:20:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=qcppdkim1; bh=wPVHU2n1xWHeMQ/KtrkQ1BmHwX9kME/Pa4e
+	Pu4JGIqk=; b=Z9zzrCtziM2uxHm5o5pqGgv3IlEUO+2hr9zrosBrqJvA33bbX3C
+	et8ajjKheRir/dq8nstHvNjXvWtOgz7ROySYNSfd72RfUfbiYvJOywvbI7H9UKr6
+	fegPCEKxboExzyuegKmtURDTErZ6A+8PptCEuzdyMT4GIa7FZpiz/InhNJgEzZDV
+	UMM0CFscqv1ushalZ/ytBXK9/bjUPKP7MDdyQt0epqZh+OdCQ+yB1StXBHP8Xrnz
+	ZSsqsUKj+QPfY2+0LDRS+/iRYEvM0lAQgAZSRFFexgcvmc1XNRWiE4nX1hUCDU5o
+	LZOPA/qSJmGzEHIaby48paC3izzOSpL2AZA==
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com [209.85.160.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4a70gm87cf-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Mon, 03 Nov 2025 18:20:15 +0000 (GMT)
+Received: by mail-qt1-f200.google.com with SMTP id d75a77b69052e-4e8916e8d4aso142031411cf.2
+        for <linux-pm@vger.kernel.org>; Mon, 03 Nov 2025 10:20:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1762187435; x=1762792235; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3jHO59Spn4QAaN4bMhxNmHfKwqFWC6l3wa2Li9DQ1oo=;
-        b=ofmBnPmXOeDvNaVosLFTlkpXACP+535o18d9ZkWZ140rFLY0AJ6j43ttXDkdb0T+HT
-         jR/Vndkku8XfOu0lxklkLs9c/IQkt0o5HwEXqZZRPLqykPRpifpEpTSYjI5//srbEgWF
-         jq6KBcBKFfTL7ba6OECRhCEcsIui6vahFEnpIqZp1ENJ5fpDiHzy/q9TSZ7ojsgcfkzC
-         QeHKaIEWqbN2i3vtqVrv7tpUGHEHIKjwTRkZYBDYh+klcbad/NJg+XOHvAntdcYe8zNR
-         v0TfrreHQwx/dAPPMKI+GIts+cHBL2mLZ1tfcs3N0/JqMtAngcAxy29KmDzPsHy1ZVCz
-         B3Ig==
+        d=oss.qualcomm.com; s=google; t=1762194014; x=1762798814; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=wPVHU2n1xWHeMQ/KtrkQ1BmHwX9kME/Pa4ePu4JGIqk=;
+        b=RQPeYjsRe3yA8Dd479ekOoJ4wuIrti9RoFRV1Xx7SsjikiK6Q3aDwUzP0k35OxLleu
+         ytE0ePNpDeAnNxHuR3GX/Nao861WK1qJxzS2cxtQxQWMB1VVbOK22vDmRcypz0zVZ1/G
+         l6XE24vFsLTvhVo5iF6cma+u+zT8LTyM/+9Rr2VcClfGa/LrZmsqdeNbiPILrN6iZKRh
+         dGigHsecDZEw7UciGArYA9batOqh6kK5DtpdX1O5oSuhrs4yVggE2efFHfdbHyt2bbvJ
+         2M+dUtytKsQ/A7SFWoeSWOxcSybsqTTqpMUEoXIqoHvvTUWu5N8XQRDVe6HjzzGypxiH
+         kRqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762187435; x=1762792235;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3jHO59Spn4QAaN4bMhxNmHfKwqFWC6l3wa2Li9DQ1oo=;
-        b=RMOWe4gabeIguEdp838apmZaY+Rs3XKAUczO30QWDeEiX1kYAgp+277Hjtovdfjga8
-         ApWN04w6OIpHjczGzBIPo+P9rXmYKndcBDjZsyhlBP2x90F1wlUQg8M8YRtW7QdbUeR8
-         JhGgEAa3GqYp5VVcfhCB1/78UWnipOJPWe2HKgFXjolfUNk36MGIs7Lg9kUpjn5uOzqZ
-         xPQuYZuc/i6rbUdF47+uUrYusq6O+EgkTDM7MkOYRVYWy/bN6kkxKXs1fXjs/LBQTAWq
-         qF62FfEt7mGl/N11Um/8v6sgqyOSEJDq/U+oSMwQpQGg/lbtevUDS9ScRihH3mtI3iRG
-         DOSw==
-X-Forwarded-Encrypted: i=1; AJvYcCXcyqCbxtd2s50uD0aaCM8RbQIo0OEo6mu1QDr9EE6v2Mrawv9TaHjofKvecoxZEnNbWepUOy9X0w==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzkCkwSNA6Lbb4DkZ3YAtjBx9eA51ryb4St8lAK3AvYfvDHFbL/
-	pEON3SQ4XAQE3eC9F9qcfsR1KH+U3kIITgMR+cnJG42BgMKaJ7UW8WNtU59hNGOzmOpbdLj5qdg
-	OC9bB2XzsRDiVP71vswgCyZjaQ0LTPCn7z7NlQA7b
-X-Gm-Gg: ASbGncsSATDJdOi6Xvf1nVgzXOL4Rzgl7cjvYENniu9jOxLuTrSormtOkY0HwAfgrrz
-	HAzn/lXkncQP5s8LYn47Yh+c1gwj2PfFwa3M1G30UVYhXVJRPdXMOCWvk1GihG/UlzvMjShA87x
-	dib8xUJNFIMyg27YxP4R6k+7vKI9WGed5UbHhwZDF1bSVOMeSsuaVSzHamma3YTWHEZYPNclKYt
-	K760C579KKv9aoiJ04q/3sG8bd9eHg2E7XcS4+z6RGNFLcWAy1jQUbdQUqxsw==
-X-Google-Smtp-Source: AGHT+IEazeo19yYwXbrlW+SfBjEyqX4LiokguCi4PzahYxjLvk/Xq8fmQ/+sYzRyHdMWvx9uISoizNeAkPmwtH/q/P8=
-X-Received: by 2002:a17:907:7209:b0:b6d:ba71:a17f with SMTP id
- a640c23a62f3a-b705212b184mr2030477366b.18.1762187434663; Mon, 03 Nov 2025
- 08:30:34 -0800 (PST)
+        d=1e100.net; s=20230601; t=1762194014; x=1762798814;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wPVHU2n1xWHeMQ/KtrkQ1BmHwX9kME/Pa4ePu4JGIqk=;
+        b=X6mptT/Nz6AoZVZAJYavKF301vKLrmQIVoMKe0kBpar97bYYgoyh/pYx0HKlkc7trF
+         1RKmuA+ZTaSTsln+ZtaW68oge4kYHLb+Iy38ky9m4G5zJKgMpza1cVUbpY1u2jPBVyuw
+         gFO9iU0eAl2dSk7vwFwbIHIon+JB68UqZuUW2DUb1sxnp4zXOUL9G5q3rcq8LeE+WjWb
+         Cm+iI5TVEgGk9cXbgVlZo7q0++pNq944gGiOmg6RWxgxd7RplsJLN0u4fFspxXg2d2Mu
+         6KKvSlHuzvATaPsazXaVSE5NrGGNcicCekIAX3O6U4DGxzoc7UtpvwucAsfJhHq+qtRu
+         HjTA==
+X-Forwarded-Encrypted: i=1; AJvYcCXl9piPsFzdVB/Cc3z+qWMsWY5j2iJ/xx3F7EvROKqbK1CaunDd2Hx2XDULJMNznXJ/vtO8mP2ZHA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzadOfcOuFtOJ9tzZMpYWsTMW6Wm3kqXhAYHlK7BEmHxFY+TIRP
+	RH15IA9l6/rPTFosadry3ggNZrpES23q+7SuYGsXrkT0f/+oqEm6ubwp82xCrdLPKzaAflgBRZF
+	tYYhoetVHWz9KjZ0zKHe+04yA4y8FYwBzvUM/c7sqLj3oSuGGKbChi4Ulc9v8hw==
+X-Gm-Gg: ASbGncv8K6VtsHxDXwOfX9ZIQcPIs6R+LVCgdfhPyAQHW8nHxdNTrn4X0e9ADNA4jLP
+	IRD5+N7MhOgNb4ydhJwKbG7FnlZtjmJXOPDbg9ZxgPaxWgM1TTyInA4aQMlF7zuFRX2U+fCfK8q
+	e5s3e/OIEr5dm5RkYWfsCf5xyM617oAQqd1xSz93q+mo5XhHNrLHesQ+iC15UJ6gIMsYNyGKHgO
+	q82KbrnvdD27YwWMyjwcNXKPg+aoow/SEfqeLbhoWGmkFGFOx05qomHlBKF8s0re+kYnemKvPUX
+	QQmDz+n+acz2ZK23rBuVGBqJe4Fwvku+SaLlv2ATdxAKEmXkKJ7mwPTtRUTkKfEh6byxFbWdGtN
+	Pv3sCuUAJHMrHG2lc/pd4OjnyBsFqqXgESknSLZ9Q4O4pzR/EFN/MGJbVpSglavb1XA==
+X-Received: by 2002:a05:622a:a957:20b0:4ed:4367:690c with SMTP id d75a77b69052e-4ed436782c2mr106020681cf.70.1762194014122;
+        Mon, 03 Nov 2025 10:20:14 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IEnmkpLdRJfLyfrfsLo+5DFqcgDt9d5665umRIC/cdopqANzLtOcjv7bkzUR7TAplZYJhjATw==
+X-Received: by 2002:a05:622a:a957:20b0:4ed:4367:690c with SMTP id d75a77b69052e-4ed436782c2mr106020041cf.70.1762194013354;
+        Mon, 03 Nov 2025 10:20:13 -0800 (PST)
+Received: from QCOM-eG0v1AUPpu.qualcomm.com ([2a01:e0a:82c:5f0:8842:5746:daeb:a8f8])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4773c53ec2csm169096545e9.11.2025.11.03.10.20.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Nov 2025 10:20:12 -0800 (PST)
+From: Loic Poulain <loic.poulain@oss.qualcomm.com>
+To: andersson@kernel.org, konradybcio@kernel.org, robh@kernel.org,
+        krzk+dt@kernel.org, conor+dt@kernel.org, sre@kernel.org
+Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, Loic Poulain <loic.poulain@oss.qualcomm.com>
+Subject: [PATCH 0/5] Add EDL reboot and warm reset support for QRB2210
+Date: Mon,  3 Nov 2025 19:20:01 +0100
+Message-Id: <20251103182006.1158383-1-loic.poulain@oss.qualcomm.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251002113404.3117429-1-srosek@google.com> <20251002113404.3117429-3-srosek@google.com>
- <CAJZ5v0iQToOkedruYqsowSm8=fxpnyJf86JJHB36E8+aCSZ5Hw@mail.gmail.com>
- <CAF3aWvFSomq+cm2sj+KjkYw=WODsrwH-VLDL=yOc6o9dqc5hWA@mail.gmail.com>
- <CAJZ5v0g72U3+u_KedKpZh2TuN-iYbXPcnZhN16oDvi4UqUTr7Q@mail.gmail.com>
- <CAF3aWvFc5ZZo3VaJSr68FwGuCFYJU=tXsJ6Fm1vmNLs4B=+8dg@mail.gmail.com> <CAJZ5v0gJYOcTCACj6jKYL6juAYpUvJUf89kZ6ZxU3fMOpBjFzQ@mail.gmail.com>
-In-Reply-To: <CAJZ5v0gJYOcTCACj6jKYL6juAYpUvJUf89kZ6ZxU3fMOpBjFzQ@mail.gmail.com>
-From: =?UTF-8?Q?S=C5=82awomir_Rosek?= <srosek@google.com>
-Date: Mon, 3 Nov 2025 17:30:22 +0100
-X-Gm-Features: AWmQ_bkxaBBdR7r8KnybjDiudQOBfZf1J4aHlS3iONHtKxrvEfx-n7LoFV4QQ9k
-Message-ID: <CAF3aWvGN2ipXNPs_3UNppJppwo+2J1uvjVTD2tyXoQ6ATdkuPQ@mail.gmail.com>
-Subject: Re: [PATCH v3 2/6] ACPI: DPTF: Move INT340X device IDs to header
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Alex Hung <alexhung@gmail.com>, Hans de Goede <hansg@kernel.org>, 
-	Ilpo Jarvinen <ilpo.jarvinen@linux.intel.com>, AceLan Kao <acelan.kao@canonical.com>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Zhang Rui <rui.zhang@intel.com>, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Tomasz Nowicki <tnowicki@google.com>, 
-	Stanislaw Kardach <skardach@google.com>, Michal Krawczyk <mikrawczyk@google.com>, 
-	linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org, 
-	platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-ORIG-GUID: OFlBMOEA7OYSp1GiJJHGFG9hDSFS8bZt
+X-Proofpoint-GUID: OFlBMOEA7OYSp1GiJJHGFG9hDSFS8bZt
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTAzMDE2NCBTYWx0ZWRfX/gP/P7wJV3W4
+ 0YDl30WNFL50uRCkF7bISY2XW0UWmENYtHL6CUB26m9tB2baFFroU2zFaBiaftIy8b0vBh3uw5g
+ FI10DKmFhSo5nUuhk0lJ+4plQVAzIdzeV/c+MIoYL2o2Iya+3HrdnCYP/h+Nwnsb/HIeLomB5i9
+ TsU0R2r7jKPh9QLFp9FoIkF/nXmXP67Kof460LYFClYHhgEqMfnMrmoHwtyGVqN6bU9jGCzothz
+ nSPHs8MXycv/7f4bsKNFWrsv48LyxQMxrAXV7uAG5XUrR2BYcP/Ae2fGp0UdHqPYPfiSbYb9VF0
+ RL1vKHtFelnzv8NVMd3zvhjngfr8gRnTRptT7a57SJFi3MBDW2KKVJ/jHVbg54nie159LLICGyn
+ SLDRdpMdEZ0O7cZRqhizUQw+Mp9Oyg==
+X-Authority-Analysis: v=2.4 cv=CeMFJbrl c=1 sm=1 tr=0 ts=6908f25f cx=c_pps
+ a=JbAStetqSzwMeJznSMzCyw==:117 a=xqWC_Br6kY4A:10 a=6UeiqGixMTsA:10
+ a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22 a=Wdf2HVhBgUAoo5M4yR4A:9
+ a=uxP6HrT_eTzRwkO_Te1X:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-11-03_04,2025-11-03_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 spamscore=0 bulkscore=0 adultscore=0 lowpriorityscore=0
+ impostorscore=0 phishscore=0 clxscore=1011 suspectscore=0 malwarescore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2511030164
 
-On Thu, Oct 23, 2025 at 6:30=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.or=
-g> wrote:
->
-> On Thu, Oct 23, 2025 at 6:27=E2=80=AFPM S=C5=82awomir Rosek <srosek@googl=
-e.com> wrote:
-> >
-> > On Thu, Oct 23, 2025 at 5:11=E2=80=AFPM Rafael J. Wysocki <rafael@kerne=
-l.org> wrote:
-> > >
-> > > On Thu, Oct 23, 2025 at 4:41=E2=80=AFPM S=C5=82awomir Rosek <srosek@g=
-oogle.com> wrote:
-> > > >
-> > > > On Wed, Oct 22, 2025 at 8:46=E2=80=AFPM Rafael J. Wysocki <rafael@k=
-ernel.org> wrote:
-> > > > >
-> > > > > On Thu, Oct 2, 2025 at 1:34=E2=80=AFPM Slawomir Rosek <srosek@goo=
-gle.com> wrote:
-> > > > > >
-> > > > > > The ACPI INT340X device IDs are shared between the DPTF core
-> > > > > > and thermal drivers, thus they are moved to the common header.
-> > > > > >
-> > > > > > Signed-off-by: Slawomir Rosek <srosek@google.com>
-> > > > >
-> > > > > I've actually started to wonder if int340x_thermal_handler is nee=
-ded at all.
-> > > > >
-> > > > > It just creates a platform device if the given ACPI device ID is =
-in
-> > > > > its list,
-> > > >
-> > > > That's true. It creates platform device for the given ACPI device I=
-D,
-> > > > but only if CONFIG_INT340X_THERMAL is enabled.
-> > > >
-> > > > > but acpi_default_enumeration() would do that too with the
-> > > > > caveat that it would also be done for CONFIG_INT340X_THERMAL unse=
-t.
-> > > >
-> > > > Not exactly. scan handler returns ret=3D1, so device is marked as e=
-numerated
-> > > > https://elixir.bootlin.com/linux/v6.18-rc2/source/drivers/acpi/scan=
-.c#L2314
-> > > >
-> > > > > That should not be a problem though because if CONFIG_INT340X_THE=
-RMAL,
-> > > > > there are no drivers that will bind to those platform devices, so=
- the
-> > > > > net outcome should be the same.
-> > > >
-> > > > If CONFIG_INT340X_THERMAL is not set and there are no drivers to at=
-tach
-> > > > to platform devices and int340x_thermal_handler is removed then you=
- are
-> > > > right, acpi_default_enumeration() will enumerate ACPI bus anyway an=
-d
-> > > > create platform devices for all ACPI device IDs. However, for me it=
- looks
-> > > > like it was intentional to prevent this behaviour unless INT340X dr=
-ivers
-> > > > are "present" in the system (were enabled for build so should be).
-> > > > I am not sure how DPTF works and what may happen if platform device=
-s are
-> > > > visible in sysfs while drivers are not loaded.
-> > >
-> > > Such a dependency would be unexpected and confusing.
-> > >
-> > > Also, I'm not sure why it would be useful because the lack of drivers
-> > > means that the devices in question are not handled, so no
-> > > functionality related to them is provided by the kernel.
-> > >
-> > > > >
-> > > > > Thus I'm wondering if the way to go might be to drop
-> > > > > int340x_thermal_handler and simply keep the device IDs in the dri=
-vers
-> > > > > that use them for device binding.
-> > > >
-> > > > Even better. If it's not required for DPTF to prevent enumeration
-> > > > on the platform bus I can simply remove the scan handler.
-> > >
-> > > I would at least try to do that.
-> >
-> > Makes sense, so I'll give it a try. Removing handler will result with
-> > only two patches, one to update dts_doc_thermal kconfig and second
-> > to remove the dptf scan handler, the rest won't be needed for a new
-> > patchset. Should I send it as v4?
->
-> Yes, please!
+This patch series adds support for Emergency Download (EDL) reboot mode
+via the qcom-scm interface, allowing the platform to enter a recovery
+mode through the primary bootloader. Additionally, since this 'mode'
+requires warm reset and platforms like the QRB2210-RB1 lacks PSCI
+warm reset support, a fallback mechanism using the PMIC is introduced.
 
-I removed the scan handler and tested it on i7-9750H using Ubuntu
-24.04, Linux 6.12.56
-and DPTF 9.0.11402. With CONFIG_INT340X_THERMAL enabled DPTF daemon
-starts without
-errors, with CONFIG_INT340X_THERMAL disabled the int340x devices are enumer=
-ated
-on the platform bus and DPTF fails to retrieve TCC Offset on initialization=
-:
+The series includes:
+- Documentation updates for new DT bindings.
+- SCM firmware support for EDL reboot.
+- PMIC warm reset support in the qcom-pon driver.
+- Device tree updates for the QRB2210-RB1 platform.
 
-2025-11-03T09:03:07.108038+01:00 localhost kernel: Consider using
-thermal netlink events interface
-2025-11-03T09:03:07.109139+01:00 localhost DPTF[4098]:
-ERROR:[<ACTION>ActionSysfsGet@esif_uf_action_sysfs_os_lin.c#1205]<176215698=
-7108
-ms>: Error retrieving TCC Offset value from sysfs.
+Tested on QRB2210-RB1.
 
-For comparison, with CONFIG_INT340X_THERMAL disabled on the pure Linux 6.12=
-.56
-the int340x are not enumerated on the platform bus and DPTF initialization =
-fails
-as follow:
+Loic Poulain (5):
+  dt-bindings: power: reset: qcom-pon: Document qcom,warm-reset
+  power: reset: qcom-pon: Add support for WARM reset
+  dt-bindings: firmware: qcom,scm: Document reboot mode
+  firmware: qcom: scm: Support for EDL reboot mode
+  arm64: dts: qcom: qrb2210-rb1: Add support for EDL reboot
 
-2025-11-03T08:43:31.725514+01:00 localhost kernel: Consider using
-thermal netlink events interface
-2025-11-03T08:43:31.727119+01:00 localhost DPTF[4046]:
-ERROR:[<LINUX>GetManagerSysfsPath@esif_uf_sysfs_enumerate_os_lin.c#1004]<17=
-62155811726
-ms>: GetManagerSysfsPathFromAcpiId failed
-2025-11-03T08:43:31.727934+01:00 localhost DPTF[4046]:
-ERROR:[<ACTION>ActionSysfsGet@esif_uf_action_sysfs_os_lin.c#1205]<176215581=
-1727
-ms>: Error retrieving TCC Offset value from sysfs.
-2025-11-03T08:43:31.729027+01:00 localhost DPTF[4046]:
-ERROR:[<ACTION>GetGddvData@esif_uf_action_sysfs_os_lin.c#2818]<176215581172=
-8
-ms>: g_ManagerSysfsPath Invalid
+ .../bindings/firmware/qcom,scm.yaml           |  4 ++
+ .../bindings/power/reset/qcom,pon.yaml        |  7 +++
+ arch/arm64/boot/dts/qcom/pm4125.dtsi          |  2 +-
+ arch/arm64/boot/dts/qcom/qrb2210-rb1.dts      |  8 ++++
+ drivers/firmware/qcom/qcom_scm.c              | 22 +++++++++
+ drivers/power/reset/qcom-pon.c                | 47 +++++++++++++++++++
+ 6 files changed, 89 insertions(+), 1 deletion(-)
 
-Link to v4: https://lore.kernel.org/all/20251103162516.2606158-1-srosek@goo=
-gle.com/
+-- 
+2.34.1
 
-Thanks!
 
