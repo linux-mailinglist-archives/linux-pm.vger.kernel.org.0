@@ -1,154 +1,218 @@
-Return-Path: <linux-pm+bounces-37290-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37291-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7509EC2ADC7
-	for <lists+linux-pm@lfdr.de>; Mon, 03 Nov 2025 10:52:39 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E506C2B465
+	for <lists+linux-pm@lfdr.de>; Mon, 03 Nov 2025 12:19:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 364683A6E25
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Nov 2025 09:52:25 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 412044EF4FB
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Nov 2025 11:19:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3ED722F9DAB;
-	Mon,  3 Nov 2025 09:52:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52BC930171C;
+	Mon,  3 Nov 2025 11:19:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="awVu9mZE";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="cqZQESdH"
+	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="vNgT36HX";
+	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="gKncODgr";
+	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="M9Q6EN/h"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mail1.bemta41.messagelabs.com (mail1.bemta41.messagelabs.com [195.245.230.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E035D2FABF7
-	for <linux-pm@vger.kernel.org>; Mon,  3 Nov 2025 09:52:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DFFF3019A7;
+	Mon,  3 Nov 2025 11:19:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.245.230.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762163542; cv=none; b=gF1gsToeeJxDwyz0JRbqJVyaISM5A4IbtqJfWZlU1SNmbVF2s/o6tymaW5vz5hWYvdlbd9KbqcHUsreRWHkvnkd7OdIt3vnVG2icigQPfeLc8halkI799aiJZllnddNKy3EcTodVYnFHed5RnL3vu6CDxu1LH44ThxvHrMR9CEM=
+	t=1762168743; cv=none; b=IuNAVFyCLavpVSEHzlT0ILKa9EqKlV6M867yu8CYZBZf+frCMggmQsrMAo05fc1TjShogmlzlr91JB3Cz8ZFXlFVKJrII/4tsCIPySXyDO6ij9nvLxfhczS4EHAvW048HlmE9uuD/blOC7EcE7o9Lsd/N3f8+9wEUgOSTmVNjmE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762163542; c=relaxed/simple;
-	bh=ilouYp44rCS2DbXYyq7hh9q0vM4P/bamUocBhybD/nw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iuc5I9RDMbSB/u422pvzXOOa3hdql/9zduxffjkjjkAcJ0ys/whsFjdgpHM9qRtIUnETUpeWLQGQyJw1vsA8qKQFWuz8xOA0ZLQ8uzYN6kJIu9c0Y3GnpouOI+O12fpA09DPhOehhcVoWRDOso9qfZDwXSudBHRX5/XnD85UkLY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=awVu9mZE; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=cqZQESdH; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5A38QwZo1381634
-	for <linux-pm@vger.kernel.org>; Mon, 3 Nov 2025 09:52:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	b9/hMynrjGoov5sKXV3QPhZeYgKZmJt12Z9R/C9Mx04=; b=awVu9mZEgPmSkXkX
-	vuhMKMbQnQu4DPR1WIqoIJQM6MD9p8+kuaCMa4XlCSzY7XiRPIeEXiNo6z+S0HhJ
-	gyB+HTvxEjet2wZnVCcMYpf+yRXN23b9T7CWWwautB8Em3huG1CAlbpmA04UJv+F
-	6jN5CBzO4nXnwsykJybFvbU0oX3BGwSvermAk+qe+XFT+ieAt2RDyCRv+27oX2D3
-	1102Gxk275LkAt9hIfm/086UufQDYJk79aQdrhsNEPFLKbXHXkGECe6FYqDg0mNn
-	zFajXZbsoWuqi39TqUKbqKInwJoU4/P7BtF7qIIOZfAmu3sVp6Fd8UIWpNnQidZF
-	VEXwGQ==
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com [209.85.219.71])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4a5977c8yn-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Mon, 03 Nov 2025 09:52:18 +0000 (GMT)
-Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-87ff7511178so10678406d6.2
-        for <linux-pm@vger.kernel.org>; Mon, 03 Nov 2025 01:52:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1762163537; x=1762768337; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=b9/hMynrjGoov5sKXV3QPhZeYgKZmJt12Z9R/C9Mx04=;
-        b=cqZQESdHgIn6iRNr7K73W3+1WM/C1fcZjIIkDvpd1OFeDmR+aUN5gpsRd9NyxHggHg
-         CPnlCSqGFzqTomUen0xWVneED54hRy1ET/wzbUgPoH6W1DSYtoxRF5DrS6yEZvjHPV0j
-         J2dRDJ6TnNtvgORy79ZeDwchu+3GnUL1XXxx7UGUw9ttKj7BB8saBbhHvQ4c+nTpTnQv
-         h+/7nh/rFuqUhCv1HkGZvYYgabQGY47ueP2AejFnqDEzAw3Iz2iwfsd8cC9BWHCWloY6
-         PW1smVfx/iIpPwKlyfVX33LW76RCGCwLVRwzTklSVLbJF3yN1jtyLIha1DFV/6L8mun8
-         DUaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762163537; x=1762768337;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=b9/hMynrjGoov5sKXV3QPhZeYgKZmJt12Z9R/C9Mx04=;
-        b=uPFNulmsKRV0kZ0tkR3RDiABuwGd2ivk8OtprigbqUcElrL9SO6IGEJcb7bJ7UovCE
-         ArkOnSbcUqPD181IJBX9ZZH3o6s9UTdkTlr5YOgmCHrHuDAgkF4KQAl5z4D2cv0S/gZB
-         kPsXGuhOTkXgnXziH3Te8Zq4jPc7APcdr6PXWYLGSZCtYZh3qIR6pkjPuE2pyFcbhhr5
-         LjzzW7pg2UjEhTxGCfbjTn5nbHzESB4OQUVzHApmVgL3CafH01LUWfh95/BphT/fN/fR
-         okCJbwRvgRL1zfvKumfJgCutu37BZSOXLwN99v0ZJhtSyubrnQFSed5tDpD6JyNqB94A
-         s7YA==
-X-Forwarded-Encrypted: i=1; AJvYcCXDtXh0PhVMIHlCo0z1rjZFud/j0IuNetu21GC3+pO1S0egDijabWO0M3THCC7ULN2u2wXNzPjTIw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwjB2gjzNaPntN+Xxaxt+/pyP1gh3Mt0Blin4IVNs5KwRaYekoL
-	oEMYgJB+m2qHnFRi8Gjf7qDUgu18lYxJXVpbEnHcCvtFzvBOZutYoi/IfTYqV0CjKBSFpylfK0b
-	lOVSy/zPORE+dMw7HZGEYvTs2wKXdLqGA3bDeC6piWfjmuPLBx+zOn0GExZM1OwLQTuveRg==
-X-Gm-Gg: ASbGncuyHEjVl31gzhFLyNr5Eu1dgucmGX8lX3bzEBepNddxZXDJZx9HpBFJhtGeOYG
-	GCFyXCMsNipYgDgs3gqiQW5VyhnFQqGu+5HA1/PCvxNDYsxPzUG3TMqdML1WTAhVn9Fdxn3zwPi
-	PzysPGwOJQlrk98UGOzrUOeM2IazEFOria4SNXzCgjScxsK1TIVVO1DcoydagVrpakqe67QtkEg
-	cG5KLri1kSsP63aaQI8kl+4WC8gp7/6aqiFiS9bJY2KKPn0h8ZCVSCiGiN87811Nw5rAmy7L0mz
-	DeRbhsC9xKC4i2BemfCwXVEiro7ZiybVOlFTLd4DHzwHzo3B28YHTVhgDFiXIXfpcobTnc/cU1W
-	0I/DEf0MeDytX1m+B+M/wROcIPRvJ7qH/+6YqA0Qkk71jmUeypp10rT/S
-X-Received: by 2002:a05:6214:19c9:b0:880:51f0:5b92 with SMTP id 6a1803df08f44-88051f062e8mr36977046d6.1.1762163537403;
-        Mon, 03 Nov 2025 01:52:17 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGMuJXaeDPuSQb7uyKLednlPXSsjDtFnz5mwdcOTCCfsl7GSBy4eQ2+uDGZPWhbH7VIlYSjtg==
-X-Received: by 2002:a05:6214:19c9:b0:880:51f0:5b92 with SMTP id 6a1803df08f44-88051f062e8mr36976806d6.1.1762163536701;
-        Mon, 03 Nov 2025 01:52:16 -0800 (PST)
-Received: from [192.168.119.202] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6407b42821bsm9228053a12.22.2025.11.03.01.52.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Nov 2025 01:52:16 -0800 (PST)
-Message-ID: <e5d7654e-91da-4662-9055-df3a9d9d7bd5@oss.qualcomm.com>
-Date: Mon, 3 Nov 2025 10:52:14 +0100
+	s=arc-20240116; t=1762168743; c=relaxed/simple;
+	bh=O/a7IoG10D6HLlLciKIAfeG+yrgUWRtc1OljxapqmNI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=XJyI9sWf9mKXQ38kpTUb1OK4gVcxuFMwUTWqIiHAKcF4lSBDnarinAv0PDu40Nqop6wCW7ZG5/dyep0EOaUTkgwe6uESRVEy12XdnFD/HNvcE1yw5xDVIWquz6lHF33ElG/hJ60c0mEXyHsBUQJnl/5aKhb/72H/25AzAa4kxtI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com; spf=pass smtp.mailfrom=fujitsu.com; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=vNgT36HX; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=gKncODgr; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=M9Q6EN/h; arc=none smtp.client-ip=195.245.230.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fujitsu.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fujitsu.com;
+	s=170520fj; t=1762168738; i=@fujitsu.com;
+	bh=lWTfQaYpm6VfJ/9xy4tbemZZIjRJl7XPms8i1uMtQrA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding;
+	b=vNgT36HXcahiUoOr+WTvCOk4n19fpHCC4ZY9+acbRHCd2P/ufjH2AUX/RSZovoYdQ
+	 WEJ1CmvmDL9cnU4qMGVJZK2wManAuWhXeJuxZaAqkUsJxvmq6JhMitDrxfBGKdQPh2
+	 PXqbOhXwonIC5OA1QAfLrH/dN7AD9ri3Mhf3MU+wF2BNFKvrfD99pFKOaY3eeVZb5Y
+	 BNYAaJD74/ZhNCY8cMXYRSEmiGMNnc/cR9ckbNEX5i7ErhAUaxsyrtN4uJKfYCGLyC
+	 soIJjcL/ckGK/wRyvTpx7+sg1xtsJN1Wv9x9TVamDn3Ewhy4EpzW30yeR1gBRySijG
+	 gNobxAN49CtnQ==
+X-Brightmail-Tracker: H4sIAAAAAAAAA1WSfUwTdxjH+d1djxMoOcqLP5mgdogLpmW4aH4
+  6cEyz7SRBlk2zxCWyUg56SWnrXWGwZBvlZVEZvqBdR0FAZKiIYQNGUCAwJPI6QAYKZWyOQdZB
+  BDbY7AJsu9Kh7r8nz+f7/T7fPx4Klw2RgRSbbmR5nUorJz2I/ZFUnaL0LMW9OMyjiZ8HSfTX0
+  jxA50v+xNDil3+TyGIeBKhrzESiG2PVAGVfqSHRQN0KiVqnfyFQkSUbQwWNIziqunyfRNaLLR
+  gasPYQqLmlm0Df3S4m0WJ+B0C5JY8AOjltxtB1x4oEnZzPxFFnfhuGLi2ZcfT9Z5UAWeyrElS
+  99BuOxrsGJMh27i6Glh3FZHQw8zj3DMHkDq2SzC3rhDuT0/FIwtRdC2OuNP+KMbVVp0im9VK1
+  O2OvKwRM28wqYMxFHzN9ZR3uzGJtMLNcdBe86X1MwukS9OnvSTTtn8xihnsB6V3dZpAJsn1PA
+  w9KRtcCWHBn0v002EARdCxsmmyWOAFBNxDQ1D8LnEBG52Kw7HrMumh44BTumkXRHy0hrqTPAZ
+  zNthNOQNLhcPRC8ZrZjw6GD2ry1lJx+h8J7LTPrQFf+ii8YL/63+ntsHiqYS1VSu+Htp8eYs4
+  Z0lvgzMU6iXPeQO+Cl5tKMFejCHhr1gZceh/YXTglHqbEAztgTYnMucZFa/bXRbgrJhSO9Nfi
+  54Cf9RmH9anD+oyjDOBVAAksn8byit3KBJ5L1hhTVJxWqfpAoVayqbzewCreZwVjhDJZbVCyg
+  qAUMlLU2kSljjXWAvG9PBa2nm8EpVM54e1gE4XJ/aUv6ShO5p2gT8zQqARNPJ+qZYV2sJmi5F
+  BqzxeZD88ms+lJnFZ80nUMKS+5nzQmRcRSwaBKEbhkF+oBCuqrH9pacBmh0+vYwI3SVz4VRbR
+  TpEnVPYlYf/UhEBToKwVubm4yLwPLp3DG//MZsJECcl9pjrOJF6czPrk0I5bAxBJ2zN1Zwqh6
+  igIzsdibWcPxaV5YVFEG2JzWy+1enezY9sarbnHR3HTnnoCVQ+9GR8UGhc035O8YHnu9TH+zt
+  Kdv4aNSU1zltdCkEX1BuQMG//hFaH+B5zd7TeNbiLiob/Ne8/WPPMFEtY8GJI1++HaIW2TFpm
+  TcQxHRKqseenDQm9h39r7nPvMZajB/QO2J/56XVL63bcwBD/bXx20v1PJdWYPHj0Bbz1zijWO
+  Wynq4c/r5O8v84ccxCYcPFNvmOip6bVd9vKbKFS1b+Ymm50bGyyez/ExvzZlePh5/IHd1+UTQ
+  gqFS/Y5DH9hYUd8bvss/1LAtLnJP7CF1xgvmvp0hXP/Rew5+Nh08vG05IicEjSoiDOcF1b8tN
+  b+NZQQAAA==
+X-Env-Sender: tomasz.wolski@fujitsu.com
+X-Msg-Ref: server-8.tower-858.messagelabs.com!1762168731!338533!1
+X-SYMC-ESS-Client-Auth: outbound-route-from=pass
+X-StarScan-Received:
+X-StarScan-Version: 9.119.0; banners=-,-,-
+X-VirusChecked: Checked
+Received: (qmail 23889 invoked from network); 3 Nov 2025 11:18:53 -0000
+Received: from unknown (HELO n03ukasimr04.n03.fujitsu.local) (62.60.8.179)
+  by server-8.tower-858.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 3 Nov 2025 11:18:53 -0000
+Received: from n03ukasimr04.n03.fujitsu.local (localhost [127.0.0.1])
+	by n03ukasimr04.n03.fujitsu.local (Postfix) with ESMTP id 0AC01151D;
+	Mon,  3 Nov 2025 11:18:51 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 n03ukasimr04.n03.fujitsu.local 0AC01151D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fujitsu.com;
+	s=dspueurope; t=1762168731;
+	bh=lWTfQaYpm6VfJ/9xy4tbemZZIjRJl7XPms8i1uMtQrA=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=gKncODgrZzwHl4PEYLXht0aC7IzMZ1z9L+eCdas5sX0gWQw2ci7M/QHv8lm17ksmv
+	 WKCtSHsbkGtqisHTIHRElitvmWdWsJvfEIHMqs9Vx9W57rBwPLBEp07kAT7Q0I2OVu
+	 6oXl1c07LH5rYH0K7TpYng+lUqBaTiZvqQgCPRZaiJTm240GVrcQE/ntTB0olUAWMe
+	 HqpZefvqeKGX1jBhoGcXB6ojjMz84YcKEV92lwuo2N/yqW5KImwvgnmR9yTUTxVpkM
+	 89KtLCtV7mAF/ggysSRhmDYOdI/NqJoySRuTta1UlECnDyIqjAwZcnNdwR9v+RcIi0
+	 OOL9UkqCFw8vA==
+Received: from ubuntudhcp (unknown [10.172.107.4])
+	(using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by n03ukasimr04.n03.fujitsu.local (Postfix) with ESMTPS id D97581536;
+	Mon,  3 Nov 2025 11:18:50 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 n03ukasimr04.n03.fujitsu.local D97581536
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fujitsu.com;
+	s=dspueurope; t=1762168730;
+	bh=lWTfQaYpm6VfJ/9xy4tbemZZIjRJl7XPms8i1uMtQrA=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=M9Q6EN/h+42pxoTlI4UOVvRWaRiLvHO9CiLKwlEffXZJn6m1tyYwyMpy52NChaBNU
+	 kFTVz2K6ltS1k68OVkcyI1tjYdVSl8hMNWkTkyYtQNfIrq9+w1hAb836ckoxRG+UJP
+	 czLDEsBjFA/quhMV+RSuyTBq/8/5O5XFUqJop041tH0CH/TrSbNxbZGunxjcAaUdlc
+	 9y0xoh8MuFNaWYVoHPiuZAP7Lc83op5gVszxkpnuUQ49EPFJM2Xoo5/PuXfFkuvuR4
+	 gyeGGoDEurAKlN0TAX/pWpxy9tIp4N8F33hE1biKMToMkXfkibAsFMxZ8gkSmU16kx
+	 IPjyyosHmoEEQ==
+Received: from localhost.BIOS.GDCv6 (unknown [10.172.196.36])
+	by ubuntudhcp (Postfix) with ESMTP id 78A702202BC;
+	Mon,  3 Nov 2025 11:18:50 +0000 (UTC)
+From: Tomasz Wolski <tomasz.wolski@fujitsu.com>
+To: alison.schofield@intel.com
+Cc: Smita.KoralahalliChannabasappa@amd.com,
+	ardb@kernel.org,
+	benjamin.cheatham@amd.com,
+	bp@alien8.de,
+	dan.j.williams@intel.com,
+	dave.jiang@intel.com,
+	dave@stgolabs.net,
+	gregkh@linuxfoundation.org,
+	huang.ying.caritas@gmail.com,
+	ira.weiny@intel.com,
+	jack@suse.cz,
+	jeff.johnson@oss.qualcomm.com,
+	jonathan.cameron@huawei.com,
+	len.brown@intel.com,
+	linux-cxl@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	lizhijian@fujitsu.com,
+	ming.li@zohomail.com,
+	nathan.fontenot@amd.com,
+	nvdimm@lists.linux.dev,
+	pavel@kernel.org,
+	peterz@infradead.org,
+	rafael@kernel.org,
+	rrichter@amd.com,
+	skoralah@amd.com,
+	terry.bowman@amd.com,
+	vishal.l.verma@intel.com,
+	willy@infradead.org,
+	yaoxt.fnst@fujitsu.com
+Subject: Re: [PATCH v3 0/5] dax/hmem, cxl: Coordinate Soft Reserved handling with CXL
+Date: Mon,  3 Nov 2025 12:18:37 +0100
+Message-ID: <20251103111840.22057-1-tomasz.wolski@fujitsu.com>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <aQAmhrS3Im21m_jw@aschofie-mobl2.lan>
+References: <aQAmhrS3Im21m_jw@aschofie-mobl2.lan>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 25/25] interconnect: qcom: icc-rpmh: drop support for
- non-dynamic IDS
-To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-        Georgi Djakov <djakov@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc: linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20251031-rework-icc-v3-0-0575304c9624@oss.qualcomm.com>
- <20251031-rework-icc-v3-25-0575304c9624@oss.qualcomm.com>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <20251031-rework-icc-v3-25-0575304c9624@oss.qualcomm.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: 2v5KfWmTusugK89iM2zD1tN2Vav5BefO
-X-Proofpoint-ORIG-GUID: 2v5KfWmTusugK89iM2zD1tN2Vav5BefO
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTAzMDA5MCBTYWx0ZWRfXzQ96YQlVEWGu
- GOnEAqsDdneVCiorgWrGODHNI6Pn7zBW328+dTwG3glECgcxyFs5Ck4NCxGRA5+XGShwu8XcZBw
- ZLJ9ksVi99KFnACgSGKB3F4DZOek6NdJ+XSj/sKfiRrjmoHpOXMs+6HyVYr4QJwGrFH9trAFsUK
- WMW5MsDL4tMN5kuhH+6+3N3gA8SNPsR7tBkc+Ok5PEbtNm5Cn/cnALWrPhwdOWH77hel21pJ1Bu
- oiTBzcH4GFbI+I6z0Qqr70urd1+1uwCeMRRJVU9faeBOAVlsInXjK9De1s0DgEuclT8KlSXzzPL
- Uo98HfxbqCanqPfTdeaxbl23GjJp2hwxLwVHGxTFrN4GzQoLCBO1rxYHGq9QJAkqGqCxanZmi5S
- uGeZTQ6LuBSlN2mumUwRO2Z0NM7Y2w==
-X-Authority-Analysis: v=2.4 cv=WcABqkhX c=1 sm=1 tr=0 ts=69087b52 cx=c_pps
- a=UgVkIMxJMSkC9lv97toC5g==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
- a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=EUspDBNiAAAA:8 a=--u-uVyheMlGKQUkfXoA:9
- a=QEXdDO2ut3YA:10 a=1HOtulTD9v-eNWfpl4qZ:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-11-03_01,2025-10-29_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- phishscore=0 lowpriorityscore=0 adultscore=0 priorityscore=1501
- impostorscore=0 spamscore=0 malwarescore=0 clxscore=1015 suspectscore=0
- bulkscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
- adjust=0 reason=mlx scancount=1 engine=8.22.0-2510240001
- definitions=main-2511030090
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: ClamAV using ClamSMTP
 
-On 10/31/25 3:45 PM, Dmitry Baryshkov wrote:
-> Now as all RPMh interconnect drivers were converted to using the dynamic
-> IDs, drop support for non-dynamic ID allocation.
-> 
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-> ---
+Hi Alison and Smita,
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+I’ve been following your patch proposal and testing it on a few QEMU setups
 
-Konrad
+> Will it work to search directly for the region above by using params
+> IORESOURCE_MEM, IORES_DESC_NONE. This way we only get region conflicts,
+> no empty windows to examine. I think that might replace cxl_region_exists()
+> work below.
+
+I see expected 'dropping CXL range' message (case when region covers full CXL window)
+
+[   31.783945] hmem_platform hmem_platform.0: deferring range to CXL: [mem 0xa90000000-0xb8fffffff flags 0x80000200]
+[   31.784609] deferring range to CXL: [mem 0xa90000000-0xb8fffffff flags 0x80000200]
+[   31.790588] hmem_platform hmem_platform.0: dropping CXL range: [mem 0xa90000000-0xb8fffffff flags 0x80000200]
+[   31.791102] dropping CXL range: [mem 0xa90000000-0xb8fffffff flags 0x80000200]
+
+a90000000-b8fffffff : CXL Window 0
+  a90000000-b8fffffff : region0
+    a90000000-b8fffffff : dax0.0
+      a90000000-b8fffffff : System RAM (kmem)
+
+[   31.384899] hmem_platform hmem_platform.0: deferring range to CXL: [mem 0xa90000000-0xc8fffffff flags 0x80000200]
+[   31.385586] deferring range to CXL: [mem 0xa90000000-0xc8fffffff flags 0x80000200]
+[   31.391107] hmem_platform hmem_platform.0: dropping CXL range: [mem 0xa90000000-0xc8fffffff flags 0x80000200]
+[   31.391676] dropping CXL range: [mem 0xa90000000-0xc8fffffff flags 0x80000200]
+
+a90000000-c8fffffff : CXL Window 0
+  a90000000-b8fffffff : region0
+    a90000000-b8fffffff : dax0.0
+      a90000000-b8fffffff : System RAM (kmem)
+  b90000000-c8fffffff : region1
+    b90000000-c8fffffff : dax1.0
+      b90000000-c8fffffff : System RAM (kmem)
+	  
+a90000000-b8fffffff : CXL Window 0
+  a90000000-b8fffffff : region0
+    a90000000-b8fffffff : dax0.0
+      a90000000-b8fffffff : System RAM (kmem)
+b90000000-c8fffffff : CXL Window 1
+  b90000000-c8fffffff : region1
+    b90000000-c8fffffff : dax1.0
+      b90000000-c8fffffff : System RAM (kmem)
+
+However, when testing version with cxl_region_exists() I didn't see expected 'registering CXL range' message
+when the CXL region does not fully occupy CXL window - please see below.
+I should mention that I’m still getting familiar with CXL internals, so maybe I might be missing some context :)
+
+a90000000-bcfffffff : CXL Window 0
+  a90000000-b8fffffff : region0
+    a90000000-b8fffffff : dax0.0
+      a90000000-b8fffffff : System RAM (kmem)
+
+[   30.434385] hmem_platform hmem_platform.0: deferring range to CXL: [mem 0xa90000000-0xbcfffffff flags 0x80000200]
+[   30.435116] deferring range to CXL: [mem 0xa90000000-0xbcfffffff flags 0x80000200]
+[   30.436530] hmem_platform hmem_platform.0: dropping CXL range: [mem 0xa90000000-0xbcfffffff flags 0x80000200]
+[   30.437070] hmem_platform hmem_platform.0: dropping CXL range: [mem 0xa90000000-0xbcfffffff flags 0x80000200]
+[   30.437599] dropping CXL range: [mem 0xa90000000-0xbcfffffff flags 0x80000200]
+
+Thanks,
+Tomasz
 
