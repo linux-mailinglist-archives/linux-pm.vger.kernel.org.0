@@ -1,175 +1,162 @@
-Return-Path: <linux-pm+bounces-37319-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37320-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B1D09C2DF41
-	for <lists+linux-pm@lfdr.de>; Mon, 03 Nov 2025 20:56:40 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C44DC2E00A
+	for <lists+linux-pm@lfdr.de>; Mon, 03 Nov 2025 21:09:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6C61E3BC7CF
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Nov 2025 19:56:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9E39E1894702
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Nov 2025 20:10:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EA0229E113;
-	Mon,  3 Nov 2025 19:56:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5183629D27F;
+	Mon,  3 Nov 2025 20:09:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cd4FU5WC"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KTAjsdbb"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59E76238C1B
-	for <linux-pm@vger.kernel.org>; Mon,  3 Nov 2025 19:56:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B87229AAF7
+	for <linux-pm@vger.kernel.org>; Mon,  3 Nov 2025 20:09:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762199792; cv=none; b=hfEaeQ2mZzITUfHHUrnxNcX0I2pNT5DP7+F/BihiIPjZjoVK7XHmLhGLCG8+1J7Xn4W7AFNAeNUDaH7ZeqC77CBxspvUMy/6rCFoydafcuawabVKsj0j+rl/yLOBkahv74ABqKRc7pqoWGAbPinrnHF9GVqgXUoeyLmARZkhMJk=
+	t=1762200578; cv=none; b=JBQN8/dK4qJTmWtqjITsXvdLr7JAYN8uTAcDRV/ij7O4g2fm8qifipTq/r8v0U7FZeOY8JcUupSU0dSYAMPAC7LU7uFEIjfN0U/1QeCT3N9Ore+/D5pAFdmegBaqsLeDHveCbNyFtuJAvqbRRuDfrtgItt3D53gdfUsyK+oQnxc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762199792; c=relaxed/simple;
-	bh=K8U9FjbSy68cHFiBv6fP3tmAtWKlD6ipzwvHHEvYLv4=;
+	s=arc-20240116; t=1762200578; c=relaxed/simple;
+	bh=oaRZmfFMKL6+SPCVhh6hkk7N+IiGpHtQNsDtpxFD1uk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rMK3w2K8r205y7JwaH+Ewcfxv7aZx754XccW0GfEeFyzlPGq480xJgr/85BJgXXtV7fBmifjdJ2Hv7elrU2c6ZInvxJdnNlMZfPxY8GDyExVfeSTfVErE1YqfvprdSaDcAdYFkTEzj2mQlB+ClVPrlZra7AlCfCI2TVrE9576K0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cd4FU5WC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C71A6C113D0
-	for <linux-pm@vger.kernel.org>; Mon,  3 Nov 2025 19:56:31 +0000 (UTC)
+	 To:Cc:Content-Type; b=lQnTFtOquMiyxM73TC+WrkyONA/bf9ep/RoZb+iFMN4Jv7peqdGoiHnHXlhz4PpTDgKy6OjlduBfFn2ywP0F0HwRPgIWXL+NY5FW0XQCISQpBJDafLpkzUN9irCLO4wgEtPgRZlmj8n6OCMWR7FgK3/5FxoDe+rOaU09Bxs79Eo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KTAjsdbb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCC73C4AF09
+	for <linux-pm@vger.kernel.org>; Mon,  3 Nov 2025 20:09:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762199791;
-	bh=K8U9FjbSy68cHFiBv6fP3tmAtWKlD6ipzwvHHEvYLv4=;
+	s=k20201202; t=1762200577;
+	bh=oaRZmfFMKL6+SPCVhh6hkk7N+IiGpHtQNsDtpxFD1uk=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Cd4FU5WCBfGXFnP9m3HY77kLl06nseMXEwojC6X3kDXlc0+e/oPZrYc/9ePox2ojh
-	 zDZORSbY5DDLm+GeEcMLNCxqmn/7tyADGYb84kxc8wUQleYO8PDmS/7f8iu7RDTJz2
-	 ET/4WeopbBP3lLiZgZalzqRrdXBDL5rtbkUHMCNlz7AW4U2RQOwmSa3IjL42hd53hb
-	 gS+H1pCwhKNKwU4Og/JOC5kYTYqGcCU7Pwic5KiWY1pUejNSmrxjmJnyPCiCMR0h8n
-	 5p6Hh/k9teKeF1oxMu0P0chi5+z5I+Tn562f6NV6fIOT1q1ONXVa1J4ImtjxzSTn0y
-	 y3yaschxevwhQ==
-Received: by mail-oi1-f174.google.com with SMTP id 5614622812f47-44fa105ce72so1342007b6e.2
-        for <linux-pm@vger.kernel.org>; Mon, 03 Nov 2025 11:56:31 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVKXr+IDuN6LNVOkwrnCS6zVER+R0LLpUwexwcFBuF+nZMkFUdzfPc8OxMEYQdYV5utLePMGUMJZQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy2PYXEbP/nK+YJj1B2ViNG/7rD6mMT0IJXKcZsNmmg1E2RFaMo
-	T/JsR0BGxPdAENFYUXM62gpsWeylA8B9JV5t6uG1nY5pakgo5e7+ZTKsvfdrgH4ua6uQYrfcO88
-	5ZTImpkFbUlX4m27GO7szmFpizIp/VqA=
-X-Google-Smtp-Source: AGHT+IFLBIvlFygNPnaui76B4Uc/Q8alPYhqukXcVN9dqWzcvHCti1vpdnsQMxld4YiAMnmiHZgk6pz1Dnkkto30Uew=
-X-Received: by 2002:a05:6808:448e:b0:43f:42d4:aca5 with SMTP id
- 5614622812f47-44f95f46bd6mr5773953b6e.37.1762199791150; Mon, 03 Nov 2025
- 11:56:31 -0800 (PST)
+	b=KTAjsdbbKeKZiK0H3EnH/5YITwWqUJNXMDJeDzoIAlofjmAdWLNPqqcG7vKRfD570
+	 nsiwC16Uq7okoApeAq6cJMjI4CgKKv5HUBLUA4PUj/WgV1TN6ZiqGmGGBhT9DR9A3z
+	 7OpyUd4e1pSC+ggs1WUSFcIy64fwDzm896mBh+1jzvIYJClVsVwo3QpqQwPGpYPG4G
+	 R4aEZy+HEFfUaL7gdi75agh+ArLu2i9s+9ipeUhklCp16MqIhVleuUbS5MGMZ65+eO
+	 susdeNJV0qfWhCA0sdjJGZvlJtJfyBcGx2LXkYwQxn4PhhoElhz9KzSdxnyg+ZgAjW
+	 +Tpd+03vXvSbA==
+Received: by mail-oi1-f181.google.com with SMTP id 5614622812f47-4439ecf6004so3616098b6e.1
+        for <linux-pm@vger.kernel.org>; Mon, 03 Nov 2025 12:09:37 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUrmJSJP962IZL+M8rXUm37EGHHBNl3oSu9nG6qGS7DiTV6zaibQrdvDcwFMBQ/dhRINoxBjmxe3A==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyhbWqsTLQEgLoxzWg322oYUl0JXSCJIuNK2arwbcM2F70nZaTU
+	R+m/PhITGNILOamVhFLqpHXTqqC60QAnoRRF4vu83Oduy09heAZi8fyW/u11dvGgJC4+cDYSZkP
+	JtyRnSonJTX9e7B7upsOZcEyR29n0nzU=
+X-Google-Smtp-Source: AGHT+IF+xjBmK1e1Hm7NYeA/5t6Jo1JKsIrxkw4mGzCE6i4w9LqUCGe2VoP9x0Rqin8tHF2QI+AlMJ9+aymtRMzj6sE=
+X-Received: by 2002:a05:6808:50a9:b0:44d:b997:d82c with SMTP id
+ 5614622812f47-44fdbfcc8bcmr357233b6e.18.1762200577146; Mon, 03 Nov 2025
+ 12:09:37 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251025004341.2386868-1-superm1@kernel.org>
-In-Reply-To: <20251025004341.2386868-1-superm1@kernel.org>
+References: <20251026050905.764203-1-superm1@kernel.org> <20251026050905.764203-5-superm1@kernel.org>
+In-Reply-To: <20251026050905.764203-5-superm1@kernel.org>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 3 Nov 2025 20:56:20 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0ivamhYUY_-0KYjDhy0esvxHgLayyhx4BE3ELZnBmS7NA@mail.gmail.com>
-X-Gm-Features: AWmQ_bkdpMtbpeCj5vDZZF6lpgqCZ-HR9ktEEdT769kkMtfO8s8iBfF71stVQxQ
-Message-ID: <CAJZ5v0ivamhYUY_-0KYjDhy0esvxHgLayyhx4BE3ELZnBmS7NA@mail.gmail.com>
-Subject: Re: [PATCH] Documentation: power: Add document on debugging shutdown hangs
+Date: Mon, 3 Nov 2025 21:09:26 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0hXR5wb5chsqT1Vu5i5ucneeGpbRDEU9TPVxZVCAfuiow@mail.gmail.com>
+X-Gm-Features: AWmQ_bnLo68AwsBkeTbZXdr1s26v2XElYjbbdn0dEZuatcIMcgzUIPjHjEb-CuI
+Message-ID: <CAJZ5v0hXR5wb5chsqT1Vu5i5ucneeGpbRDEU9TPVxZVCAfuiow@mail.gmail.com>
+Subject: Re: [PATCH v9 4/4] USB: Pass PMSG_POWEROFF event to suspend_common()
 To: "Mario Limonciello (AMD)" <superm1@kernel.org>
-Cc: mario.limonciello@amd.com, rafael@kernel.org, lenb@kernel.org, 
-	pavel@kernel.org, Harry Wentland <harry.wentland@amd.com>, linux-pm@vger.kernel.org
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Danilo Krummrich <dakr@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, Pavel Machek <pavel@kernel.org>, 
+	Len Brown <lenb@kernel.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	"open list:HIBERNATION (aka Software Suspend, aka swsusp)" <linux-pm@vger.kernel.org>, 
+	"open list:SCSI SUBSYSTEM" <linux-scsi@vger.kernel.org>, 
+	"open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>, AceLan Kao <acelan.kao@canonical.com>, 
+	Kai-Heng Feng <kaihengf@nvidia.com>, Mark Pearson <mpearson-lenovo@squebb.ca>, 
+	=?UTF-8?Q?Merthan_Karaka=C5=9F?= <m3rthn.k@gmail.com>, 
+	Eric Naim <dnaim@cachyos.org>, "Guilherme G . Piccoli" <gpiccoli@igalia.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Oct 25, 2025 at 2:44=E2=80=AFAM Mario Limonciello (AMD)
+On Sun, Oct 26, 2025 at 6:09=E2=80=AFAM Mario Limonciello (AMD)
 <superm1@kernel.org> wrote:
 >
-> If the kernel hangs while shutting down ideally a UART log should be
-> captured to debug the problem.  However if one isn't available users can
-> use the pstore functionality to retrieve logs.  Add a document explaining
-> how this works to make it more accessible to users.
+> suspend_common() passes a PM message indicating what type of event
+> is occurring.  PMSG_POWEROFF is intended to be used when hibernate
+> callbacks were utilized for turning off the system.
 >
-> Tested-by: Harry Wentland <harry.wentland@amd.com>
+> Add a new callback hcd_pci_poweroff() which will
+> determine if target state is power off and pass PMSG_POWEROFF as the
+> message.
+>
+> suspend_common() doesn't do any special handling with this case at
+> the moment, so there are no functional changes in this patch.
+>
 > Signed-off-by: Mario Limonciello (AMD) <superm1@kernel.org>
 > ---
->  Documentation/power/index.rst              |  1 +
->  Documentation/power/shutdown-debugging.rst | 53 ++++++++++++++++++++++
->  2 files changed, 54 insertions(+)
->  create mode 100644 Documentation/power/shutdown-debugging.rst
+> v9:
+>  * Reword commit message (Bjorn)
+> v8:
+>  * Drop SYSTEM_HALT case
+> v7:
+>  * Reword commit mesasge
+> v6:
+>  * Fix LKP robot issue without CONFIG_PM_SLEEP
+> v5:
+>  * New patch
+> v4:
+>  * https://lore.kernel.org/linux-pci/20250616175019.3471583-1-superm1@ker=
+nel.org/
+> ---
+>  drivers/usb/core/hcd-pci.c | 11 ++++++++++-
+>  1 file changed, 10 insertions(+), 1 deletion(-)
 >
-> diff --git a/Documentation/power/index.rst b/Documentation/power/index.rs=
-t
-> index a0f5244fb4279..ea70633d9ce6c 100644
-> --- a/Documentation/power/index.rst
-> +++ b/Documentation/power/index.rst
-> @@ -19,6 +19,7 @@ Power Management
->      power_supply_class
->      runtime_pm
->      s2ram
-> +    shutdown-debugging
->      suspend-and-cpuhotplug
->      suspend-and-interrupts
->      swsusp-and-swap-files
-> diff --git a/Documentation/power/shutdown-debugging.rst b/Documentation/p=
-ower/shutdown-debugging.rst
-> new file mode 100644
-> index 0000000000000..cdfa2cd90e5c6
-> --- /dev/null
-> +++ b/Documentation/power/shutdown-debugging.rst
-> @@ -0,0 +1,53 @@
-> +.. SPDX-License-Identifier: GPL-2.0
+> diff --git a/drivers/usb/core/hcd-pci.c b/drivers/usb/core/hcd-pci.c
+> index cd223475917ef..959baccfb07d1 100644
+> --- a/drivers/usb/core/hcd-pci.c
+> +++ b/drivers/usb/core/hcd-pci.c
+> @@ -6,6 +6,7 @@
+>  #include <linux/kernel.h>
+>  #include <linux/module.h>
+>  #include <linux/pci.h>
+> +#include <linux/pm.h>
+>  #include <linux/usb.h>
+>  #include <linux/usb/hcd.h>
+>
+> @@ -531,6 +532,13 @@ static int hcd_pci_freeze(struct device *dev)
+>         return suspend_common(dev, PMSG_FREEZE);
+>  }
+>
+> +static int hcd_pci_poweroff(struct device *dev)
+> +{
+> +       if (system_state =3D=3D SYSTEM_POWER_OFF)
+> +               return suspend_common(dev, PMSG_POWEROFF);
+> +       return suspend_common(dev, PMSG_SUSPEND);
+> +}
 > +
-> +Debugging Kernel Shutdown Hangs with pstore
-> ++++++++++++++++++++++++++++++++++++++++++++
-> +
-> +Overview
-> +=3D=3D=3D=3D=3D=3D=3D=3D
-> +If the system hangs while shutting down, the kernel logs may need to be
-> +retrieved to debug the issue.
-> +
-> +On systems that have a UART available, it is best to configure the kerne=
-l to use
-> +this UART for kernel console output.
-> +
-> +If a UART isn't available, the ``pstore`` subsystem provides a mechanism=
- to
-> +persist this data across a system reset, allowing it to be retrieved on =
-the next
-> +boot.
-> +
-> +Kernel Configuration
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +To enable ``pstore`` and enable saving kernel ring buffer logs, set the
-> +following kernel configuration options:
-> +
-> +* ``CONFIG_PSTORE=3Dy``
-> +* ``CONFIG_PSTORE_CONSOLE=3Dy``
-> +
-> +Additionally, enable a backend to store the data. Depending upon your pl=
-atform
-> +some options include:
-> +
-> +* ``CONFIG_EFI_VARS_PSTORE=3Dy``
-> +* ``CONFIG_PSTORE_RAM=3Dy``
-> +* ``CONFIG_PSTORE_FIRMWARE=3Dy``
-> +* ``CONFIG_PSTORE_BLK=3Dy``
-> +
-> +Kernel Command-line Parameters
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D
-> +Add these parameters to your kernel command line:
-> +
-> +* ``printk.always_kmsg_dump=3DY``
-> +       * Forces the kernel to dump the entire message buffer to pstore d=
-uring
-> +               shutdown
-> +* ``efi_pstore.pstore_disable=3DN``
-> +       * For EFI-based systems, ensures the EFI backend is active
-> +
-> +Userspace Interaction and Log Retrieval
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +On the next boot after a hang, pstore logs will be available in the psto=
-re
-> +filesystem (``/sys/fs/pstore``) and can be retrieved by userspace.
-> +
-> +On systemd systems, the ``systemd-pstore`` service will help do the foll=
-owing:
-> +
-> +#. Locate pstore data in ``/sys/fs/pstore``
-> +#. Read and save it to ``/var/lib/systemd/pstore``
-> +#. Clear pstore data for the next event
+>  static int hcd_pci_suspend_noirq(struct device *dev)
+>  {
+>         struct pci_dev          *pci_dev =3D to_pci_dev(dev);
+> @@ -602,6 +610,7 @@ static int hcd_pci_restore(struct device *dev)
+>  #define hcd_pci_suspend                NULL
+>  #define hcd_pci_freeze                 NULL
+>  #define hcd_pci_suspend_noirq  NULL
+> +#define hcd_pci_poweroff       NULL
+>  #define hcd_pci_poweroff_late  NULL
+>  #define hcd_pci_resume_noirq   NULL
+>  #define hcd_pci_resume         NULL
+> @@ -639,7 +648,7 @@ const struct dev_pm_ops usb_hcd_pci_pm_ops =3D {
+>         .freeze_noirq   =3D check_root_hub_suspended,
+>         .thaw_noirq     =3D NULL,
+>         .thaw           =3D hcd_pci_resume,
+> -       .poweroff       =3D hcd_pci_suspend,
+> +       .poweroff       =3D hcd_pci_poweroff,
+>         .poweroff_late  =3D hcd_pci_poweroff_late,
+>         .poweroff_noirq =3D hcd_pci_suspend_noirq,
+>         .restore_noirq  =3D hcd_pci_resume_noirq,
 > --
 
-Applied as 6.19 material, thanks!
+I would defer this patch until you know what exactly suspend_common()
+will do for PMSG_POWEROFF because it may just be simpler to check
+system_state =3D=3D SYSTEM_POWER_OFF in it internally.
 
