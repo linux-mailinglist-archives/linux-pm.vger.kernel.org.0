@@ -1,46 +1,50 @@
-Return-Path: <linux-pm+bounces-37267-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37276-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 51075C29B72
-	for <lists+linux-pm@lfdr.de>; Mon, 03 Nov 2025 01:49:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C65BFC29BA5
+	for <lists+linux-pm@lfdr.de>; Mon, 03 Nov 2025 01:50:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EB4F91885FF2
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Nov 2025 00:49:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 54322188F76F
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Nov 2025 00:50:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A85C717C211;
-	Mon,  3 Nov 2025 00:48:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F4CC2264CC;
+	Mon,  3 Nov 2025 00:48:41 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CF9486329;
-	Mon,  3 Nov 2025 00:48:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E94FE221FAC;
+	Mon,  3 Nov 2025 00:48:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762130918; cv=none; b=SD3CxX5e+aSFl+7N/YdqXNebe/i2sKULLzI2ut0rZfQW0ogo/EXipiJxOgvaMUzqYsHoGnqxbKr55fuiVczESdCkjkedrpdVM+9LlRc87AUDj0Aq+2ErF9zwMLzaK8jvQw5WKllPI5pls1OCfoIgnDVbNWMgI6dxrEs+1cc8UAY=
+	t=1762130920; cv=none; b=SZI5HUVGr9W0ooUDfr16iYyjLSFo91D3lHQYyyYJcEqLpSqbDh6OFjRH9h9lNIZgXEvJkOQWQ1zx3KQDj1Qr0Joyf0GJHcK1Xdo0T3bCIefX7Fvm07RDlPWX+vXh6WdjWh4QeiP53EEX6WLq601gSJWANFcWvItsO/w9h1CLPmQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762130918; c=relaxed/simple;
-	bh=lRmNRXW79BJacRZiBSLo6rgqKBbUGx6eh1YWYDJmvUw=;
+	s=arc-20240116; t=1762130920; c=relaxed/simple;
+	bh=DABp0fKEMg+lSEv60zNnxUCwpuY3JzvS9U8KBv6eSVU=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=d26yK2y8w4j0pGRLC6RFn7EmBq4R8fUZYf1YqfB+BCnY6BnzLhoidCGMiMfBj1swFPZL8TR0epZrh7U5whBUx2EjCUDhRHog3NYmtzHgN/V2ZW/grujTM9vVkkGgrwlimiGDoMRO+j3ESEImNnmxqrRaHsyF0r4Pu5tlL7h3uBU=
+	 MIME-Version:Content-Type; b=A3CppbhlZ6n3x/j2Mq0Ib2b/VzxL4X74gcz2sCX71MzKV+nYZFDakRdhQSoeuuZ0fLhIU02TudjBM/Kl+OSpH4kjtgLbTCeMXo9RaJzrF2ttOvscl/K9WSQcNMaLkVr1NaZBs0MBIIo1kmxYKZpGCYDbhC9d7cTC+yUil23B4e8=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D415BC4AF0B;
-	Mon,  3 Nov 2025 00:48:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F30EC4CEFB;
+	Mon,  3 Nov 2025 00:48:40 +0000 (UTC)
 Received: by venus (Postfix, from userid 1000)
-	id 3F434180CC5; Mon, 03 Nov 2025 01:48:33 +0100 (CET)
+	id 477301811F7; Mon, 03 Nov 2025 01:48:33 +0100 (CET)
 From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org, 
- Haotian Zhang <vulab@iscas.ac.cn>
-Cc: linux-kernel@vger.kernel.org
-In-Reply-To: <20250929113234.1726-1-vulab@iscas.ac.cn>
-References: <20250929031536.2274-1-vulab@iscas.ac.cn>
- <20250929113234.1726-1-vulab@iscas.ac.cn>
-Subject: Re: [PATCH v2] power: supply: rt5033_charger: Fix device node
- reference leaks
-Message-Id: <176213091325.301408.8119254276502287887.b4-ty@collabora.com>
+To: Iskren Chernev <me@iskren.info>, 
+ Ivan Abramov <i.abramov@mt-integration.ru>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>, 
+ Marek Szyprowski <m.szyprowski@samsung.com>, 
+ Matheus Castello <matheus@castello.eng.br>, 
+ Sebastian Reichel <sre@kernel.org>, Svyatoslav Ryhel <clamor95@gmail.com>, 
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ lvc-project@linuxtesting.org
+In-Reply-To: <20251008133648.559286-1-i.abramov@mt-integration.ru>
+References: <20251008133648.559286-1-i.abramov@mt-integration.ru>
+Subject: Re: [PATCH 1/1] power: supply: max17040: Check
+ iio_read_channel_processed() return code
+Message-Id: <176213091328.301408.17011168216759468685.b4-ty@collabora.com>
 Date: Mon, 03 Nov 2025 01:48:33 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -53,20 +57,17 @@ Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.14.3
 
 
-On Mon, 29 Sep 2025 19:32:34 +0800, Haotian Zhang wrote:
-> The device node pointers `np_conn` and `np_edev`, obtained from
-> of_parse_phandle() and of_get_parent() respectively, are not released.
-> This results in a reference count leak.
+On Wed, 08 Oct 2025 16:36:47 +0300, Ivan Abramov wrote:
+> Since iio_read_channel_processed() may fail, return its exit code on error.
 > 
-> Add of_node_put() calls after the last use of these device nodes to
-> properly release their references and fix the leaks.
+> Found by Linux Verification Center (linuxtesting.org) with SVACE.
 > 
-> [...]
+> 
 
 Applied, thanks!
 
-[1/1] power: supply: rt5033_charger: Fix device node reference leaks
-      commit: 6cdc4d488c2f3a61174bfba4e8cc4ac92c219258
+[1/1] power: supply: max17040: Check iio_read_channel_processed() return code
+      commit: 2c68ac48c52ad146523f32b01d70009622bf81aa
 
 Best regards,
 -- 
