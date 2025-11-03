@@ -1,173 +1,390 @@
-Return-Path: <linux-pm+bounces-37322-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37323-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 47D94C2E0CE
-	for <lists+linux-pm@lfdr.de>; Mon, 03 Nov 2025 21:38:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B5204C2E12F
+	for <lists+linux-pm@lfdr.de>; Mon, 03 Nov 2025 22:01:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6B6593BC79F
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Nov 2025 20:38:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5FFE53B6F5F
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Nov 2025 21:01:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C15A62C0290;
-	Mon,  3 Nov 2025 20:38:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFC0E2C17A1;
+	Mon,  3 Nov 2025 21:01:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l+ZNbBgS"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="hwOqE8Rt";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="TLeSbOUn"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BCBD2BF015
-	for <linux-pm@vger.kernel.org>; Mon,  3 Nov 2025 20:38:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762202303; cv=none; b=LxMuHYweQXEmMS+IJyr9Yl3g98w/VQ+YXNjnHot98h1FXIMKFgpjeNXvS59hhfu9jGy3WxNLvYSt1OVrPctPRlBsjJXQ28N/36DFOY9Wf+nPittce3RCWZRZOSB65HwUKnRaUwchusM4HfNoH4XEm06QmIbgI1f+HWqcDn1okNQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762202303; c=relaxed/simple;
-	bh=ixbbKT/7jqNzUp3sJiQZjwNrkqcxk+Z2mOz6dmayOHU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pePZLMIKu7AoKZa29MemXJ4ZU2APqxahTnHsvWoV3muSlkkC3GT5kR7xs397RMbLbKsTno8E2IeZJp9JH/rE2CWnmuRJ5LRB/UN3g7jiaaEI4rijXJ3QhYcmil9fRp0KUGFVoyvlg66wellXDswM13J5HrJ5eIXbdi3KtDU/Y0k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l+ZNbBgS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49E75C19425
-	for <linux-pm@vger.kernel.org>; Mon,  3 Nov 2025 20:38:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762202303;
-	bh=ixbbKT/7jqNzUp3sJiQZjwNrkqcxk+Z2mOz6dmayOHU=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=l+ZNbBgSXx5aDZFRoc9b5owIKB7nwcCnLzZpf2Tr5xIStNtAtwSviif+8y8gjxA/q
-	 zGOEYMCDeNemPauW5Y1nBiWw2GGvcvBMYehVNr1cfFVpN5ErhRW1UGBv9JEsepnysG
-	 0lgVLDmZJ3BNUurgnHimUzJpDzZMkeBCp2lEhL9z8Iw2wg0Q7uL0iMK1GJr6YGIEqx
-	 c6sPprFXpr9+4vHUonR34doW7juV3ZZPS/qDDTas0mjl0sqiWXFtAhKJ/7t5vDNCur
-	 7jhPd82BJJiRh68G/t7vsvas09CEtjYPsU1t4ZyGn7yttZKhS8sWggBpXemxz+B9eE
-	 gJXckVQ1iL7Ig==
-Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-65681b64384so2577069eaf.0
-        for <linux-pm@vger.kernel.org>; Mon, 03 Nov 2025 12:38:23 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUPydiZE1aqRSoEQxkYri728Ivd0dOnHn/UjjbgnLEoc3GD2i2zU+c7I0RM87t97MlNhjpZAEGUnQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx4krLlizt6IBrYcoxATeVHf9ahN2eh1acsd/ch5M/o00kdNcOn
-	HK1CioH8kZ+17aMCGxj3pFl8dXQWSGc9H5Z02ztWbZPR5ZUjLx3JHI8KTxkt0Vmo7i+5FFXnGUO
-	6Jty032x9qzVFUzzqgzdLRkscvwaTz7M=
-X-Google-Smtp-Source: AGHT+IFrdJTnVd9pdPPOBL58HjDw/lTNVI1R1ajOYhQDDMukScMp485ggihIVn1/BiIBlZMX7crGxhCf9XNFtvOYS64=
-X-Received: by 2002:a4a:ee0e:0:b0:651:ce89:27b8 with SMTP id
- 006d021491bc7-6568a00e5d5mr6457806eaf.0.1762202302577; Mon, 03 Nov 2025
- 12:38:22 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 063DA285068;
+	Mon,  3 Nov 2025 21:01:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1762203697; cv=fail; b=mt0NxDRQWhjq0VGVTihQcETBWjl52kGwi/ka+J088zSjbxdlmiJ/xSpip0npvmOIm/5jq90UUxTbhibkxzNHCcMkLQ00GSYqqdcMrHY5leXIS1uiQ1VAIilZr4AkWvRYJLeBq3KOIL1T1jUUWnutnF+KvkmdwxyObvVmDto4jAc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1762203697; c=relaxed/simple;
+	bh=45PNxSLwMZ6EuWc42zs0zk3B296yGpGQmyxGLjuoSgM=;
+	h=References:From:To:Cc:Subject:In-reply-to:Message-ID:Date:
+	 Content-Type:MIME-Version; b=sgkSahFOMu2xeihc/YZkHWRMHcdcj+yA+11DG8bTa6H5uDNHcBNDA//g1yYwXjZFULtbJzC8VP3acRU1vUjwgnUfyH5D6VasCSGbiwrR4jMq1/RDIGcnlHU2WoCZ4v4dy3/A4+zObsiblJHATas4nL1uPO0in5f7A2VvKKLNJoY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=hwOqE8Rt; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=TLeSbOUn; arc=fail smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5A3KxlNA018430;
+	Mon, 3 Nov 2025 21:00:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=
+	corp-2025-04-25; bh=OAurcg/BZPpDDyYkk/4KiK3JUR+nhmPKERnKJxfqVvI=; b=
+	hwOqE8RtfTYmaHY9MKe9g0VJTj22d75sz7PVKZs+akW24z/kJM7vWAp+22nbNZnl
+	sbFTV4Fi2mGGXd4YdNZ77zVIQc6QuyNGLoGhqs7CbgFp3qLyhSHPAZS1Cx8y9LQB
+	bwESbwwziKgWbZYWKVsu+a/ngfgKjgtaKAFJFqsp7I7LPO+IITcaxrIu+r3J+nuW
+	bwtT6+fx4LK0g03VY18hsBUOOk9FjnOWjYMMHE2xBRUulb4ptvh4RDJT81Vp6/gK
+	33g1MUrzI6mNFM3J/iQFypMR3l5sjF2GH3d0EfVjwXB/O3xZDFblgC1uOQ/+WIi/
+	pJA14Fl9S04QWDhyr+h4eQ==
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4a73wq8012-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 03 Nov 2025 21:00:47 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 5A3Ip5aP020962;
+	Mon, 3 Nov 2025 21:00:46 GMT
+Received: from mw6pr02cu001.outbound.protection.outlook.com (mail-westus2azon11012068.outbound.protection.outlook.com [52.101.48.68])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4a58n8pt8d-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 03 Nov 2025 21:00:45 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=MAvq9A7vVv/yI3ysTtMlLXKh7g7xTfOeK4i2bQ0zWk2bQjCOCQya5OmNoMxny+3A+QPRjmsM9XlYUK9J3dKd7THHbgg74pTcQFsCpYIojry645qAThmJWxnuVC9YbEh154YP7GP0m8gPfrp3n/PBHZrfMgmyWPUyYDrY+oH0tYkTwAvMzitmwrG99xbvJU0yH2bZ4SaBAkDfPg1kCh8ne0kDcBh7aCsbB3YPtWaLrXmvNgiDB+SwpnbK9Kvsr9cYxy+fCcP1jwJSvgO3Gna/ySYGFiM+00XRJKL1IcEHoRRmfuaHvfPTqpytKahEnINgGk2VW/MN4IPGXQS5EdhU5w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=OAurcg/BZPpDDyYkk/4KiK3JUR+nhmPKERnKJxfqVvI=;
+ b=ijwlCe2vFyB0XI891JdBDbt3s0fkpAEEdwp3yYFllV8PML48yUqtW+2br16U+GfX6I/une8uYMJTOOClnAv/QsxYa7m9X5BIRJeX4zN7GY9G0+fpU/PwbAasACO3ROyZXTcHr+NryirkYWnN6wYWfAmKKyh9EVYw3ONK4Oe1Y+2kqmsIkC8I6cwmj55G6SOBmgWokG7nCOULGSTC9cqZypf2EVoBkaDH6Tt1DzxrAUjT5SfmOxJqA0y9B40m5MWJDPOUuSBp35sYCNtEkdVjkWQ39nNRwD7X/TSPS7Y+cpJpdvVOon+6g/Szw5Q23T+iTIAEKWF6Nyz/LZcKxzD97Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OAurcg/BZPpDDyYkk/4KiK3JUR+nhmPKERnKJxfqVvI=;
+ b=TLeSbOUnHhpJlEnQ7YQ8lTZakHZoWtL0Uq5ETJhhYRiwzE6/LuIWiGofmO7EoO3QXZrLeZjUeG9pBAB9BtJR76TJDlWTsHJEbOhC34wC//xV0DGYuPL+2OU40zXc1d2X4fx69uhy8073+5H4AiNRw5s7/qEVpbAEVJSy5XyXsR8=
+Received: from CO6PR10MB5409.namprd10.prod.outlook.com (2603:10b6:5:357::14)
+ by DS4PPFF3A3AE169.namprd10.prod.outlook.com (2603:10b6:f:fc00::d59) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9275.16; Mon, 3 Nov
+ 2025 21:00:38 +0000
+Received: from CO6PR10MB5409.namprd10.prod.outlook.com
+ ([fe80::3c92:21f3:96a:b574]) by CO6PR10MB5409.namprd10.prod.outlook.com
+ ([fe80::3c92:21f3:96a:b574%4]) with mapi id 15.20.9275.015; Mon, 3 Nov 2025
+ 21:00:38 +0000
+References: <20251028053136.692462-1-ankur.a.arora@oracle.com>
+ <20251028053136.692462-3-ankur.a.arora@oracle.com>
+ <3642cfd1-7da6-4a75-80b7-00c21ab6955f@app.fastmail.com>
+ <87qzumq51p.fsf@oracle.com> <aQEy6ObvE0s2Gfbg@arm.com>
+ <746c2de4-7613-4f13-911c-c2c4e071ed73@app.fastmail.com>
+User-agent: mu4e 1.4.10; emacs 27.2
+From: Ankur Arora <ankur.a.arora@oracle.com>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+        Ankur Arora
+ <ankur.a.arora@oracle.com>, linux-kernel@vger.kernel.org,
+        Linux-Arch
+ <linux-arch@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        bpf@vger.kernel.org, Will Deacon
+ <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton
+ <akpm@linux-foundation.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Haris
+ Okanovic <harisokn@amazon.com>,
+        "Christoph Lameter (Ampere)"
+ <cl@gentwo.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        "Rafael J . Wysocki"
+ <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Kumar
+ Kartikeya Dwivedi <memxor@gmail.com>, zhenglifeng1@huawei.com,
+        xueshuai@linux.alibaba.com, Joao Martins <joao.m.martins@oracle.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Konrad Rzeszutek Wilk
+ <konrad.wilk@oracle.com>
+Subject: Re: [RESEND PATCH v7 2/7] arm64: barrier: Support
+ smp_cond_load_relaxed_timeout()
+In-reply-to: <746c2de4-7613-4f13-911c-c2c4e071ed73@app.fastmail.com>
+Message-ID: <87ikfqesr2.fsf@oracle.com>
+Date: Mon, 03 Nov 2025 13:00:33 -0800
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-ClientProxiedBy: MW4PR04CA0325.namprd04.prod.outlook.com
+ (2603:10b6:303:82::30) To CO6PR10MB5409.namprd10.prod.outlook.com
+ (2603:10b6:5:357::14)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251026050905.764203-1-superm1@kernel.org> <20251026050905.764203-5-superm1@kernel.org>
- <CAJZ5v0hXR5wb5chsqT1Vu5i5ucneeGpbRDEU9TPVxZVCAfuiow@mail.gmail.com> <06cd1b43-e765-4597-9f61-5058c8a13425@kernel.org>
-In-Reply-To: <06cd1b43-e765-4597-9f61-5058c8a13425@kernel.org>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 3 Nov 2025 21:38:11 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0iH4rvRPB5XVgTKV-9aKimYOM5NkjskCTUX31eyoB0_eQ@mail.gmail.com>
-X-Gm-Features: AWmQ_bkYnk_805y71jbTKIR5ivNrzQaf6fI4vWybP9d6lc31RvZY0gwuRQxXpTY
-Message-ID: <CAJZ5v0iH4rvRPB5XVgTKV-9aKimYOM5NkjskCTUX31eyoB0_eQ@mail.gmail.com>
-Subject: Re: [PATCH v9 4/4] USB: Pass PMSG_POWEROFF event to suspend_common()
-To: "Mario Limonciello (AMD) (kernel.org)" <superm1@kernel.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Danilo Krummrich <dakr@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, Pavel Machek <pavel@kernel.org>, 
-	Len Brown <lenb@kernel.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	"open list:HIBERNATION (aka Software Suspend, aka swsusp)" <linux-pm@vger.kernel.org>, 
-	"open list:SCSI SUBSYSTEM" <linux-scsi@vger.kernel.org>, 
-	"open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>, AceLan Kao <acelan.kao@canonical.com>, 
-	Kai-Heng Feng <kaihengf@nvidia.com>, Mark Pearson <mpearson-lenovo@squebb.ca>, 
-	=?UTF-8?Q?Merthan_Karaka=C5=9F?= <m3rthn.k@gmail.com>, 
-	Eric Naim <dnaim@cachyos.org>, "Guilherme G . Piccoli" <gpiccoli@igalia.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO6PR10MB5409:EE_|DS4PPFF3A3AE169:EE_
+X-MS-Office365-Filtering-Correlation-Id: c5e0b99e-377b-4a85-a15f-08de1b1c0846
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|376014|1800799024|366016|7053199007;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?Uyt0YU5wNVN3QlluRkZGMGFoVndUbTB5S3dleHl4ZWxWVmk3Lzljb2hGWVQ3?=
+ =?utf-8?B?TEJZM0JaV1ozYlZUcVc3QzljNnhwUkkwMVVjTzM0OS9vV3Vtdi8wSmhRSVlX?=
+ =?utf-8?B?c2JqdE9mYlp0NWVTV2l6UTdGQ0NtZE1TeFdJTEVSb28ra2Z0em9ObklCRFk4?=
+ =?utf-8?B?S2QvWFBkc0tXTHdxckduQXdyOVlGSSthRndKejBOQmhqYlBQSVFwWUdlaWdi?=
+ =?utf-8?B?MkgxaGtYZU9qb3ZoR1ZMa25BZmpyMXlpQUlyVXoydVZITWxGTkdPN0dtMCsy?=
+ =?utf-8?B?VmNLTUdibkFjZDFCMmptRmFlOUVIV3JoV1RvcEk4MEVLR0hBRG5aZ3R0NXJZ?=
+ =?utf-8?B?TXNnVElmQy9GVXV3WnZuRllJWTZsSzdtbjZKS2ZaeUNmSzlsWjkyemU4TU1E?=
+ =?utf-8?B?ZFl3ODArZlBzeUpWeFVXTE9tbENrdnNQL1Q0VXN3M3R5eEdtWG5vNWtzUy8r?=
+ =?utf-8?B?VDFvbzlyQU5GZU1jbXB3T3FtWFJBQzV0a1RuZll1ZE1aZXgveGYvUzdWSEx6?=
+ =?utf-8?B?YjhHM2lXbm5XSGVyMXJLRU02U2FJMElDai9Vd0VISlBrL3J4d0E5ZGM2OXFO?=
+ =?utf-8?B?dldhNzE5YnRMaVNWbGdSZXBnaGJvQ25VbGZWT3h4V0x5bnVkaHZrTFRGN1B5?=
+ =?utf-8?B?bFUySkFidVl1UXUxSHFMb2RWblJDSnZuNzFHYjkxdWszbDJYYkZ0SWxkckI3?=
+ =?utf-8?B?Rm4zTGw2cHVNTldEYXF6WEFTcWxWaHJEQVlRSmhkckNhcSt4WG9iZDd3dHFt?=
+ =?utf-8?B?MmRsM0tCak1UZTFXZHhPR2FGOEdpc3l2REwxVTBaV1ZNYVpZUW9PT0YwOWhF?=
+ =?utf-8?B?SWVIbERUVmwzK2F4TmRwVFYxa1ptU2MxVUVqdjlxUExBU2J6YTVIdDFqL0hZ?=
+ =?utf-8?B?N2VzOTduY1p2NzlweTN4dGNrQnEyeWJXMWx0a3ZhN0EyaFl2OThaNVpYVnRE?=
+ =?utf-8?B?SXRhODlKaE1yQTZLalNiRjIxOXo3VWp1QkQ4dDFURzl1YzFHaThObXdvOUdR?=
+ =?utf-8?B?cHpydjJJT3YwUDdHUDRWWVRYNldNSFd0RDdTVldBRlV6dklwT1hmaUR0dzJQ?=
+ =?utf-8?B?djhZY1hRZVAyb1hWalIra2p6dmNoM0s3NWI1ZzdqWDhvUVFuc0FPMWlkRVRi?=
+ =?utf-8?B?WVh1Znk4THo4dDRYNVdKQVdYOHUydWRJZGFJMW9QNXJvc2NaRWRKODhTSWVT?=
+ =?utf-8?B?aEx0WFNIVk05clVvVzl2MXZrVE9VNEk1Sm0vTHhhZ3FCRXRTOUh0TlF6T0sx?=
+ =?utf-8?B?NzR2eVQ1YnhLbFpMTlQyZ3UzeWxFd2dzSTRnVE96alNrTHNpNjFaZ3d3N3cv?=
+ =?utf-8?B?VDE4MUFyUGZxNmZWd3grdEdPS2MyOUFZZkZ1Z1MwYmRmSlhpR25mSC9KMWJM?=
+ =?utf-8?B?SEZpV1RzTWFjRmY0ZHlMNkl2aUlhUDkyTWx0ZmZva2xZNEx4djZjRXlBbmYz?=
+ =?utf-8?B?aUNFdE5EL1BnSnZVcnFCYlgyOXIvcElCN3JVZGRvYWgrcTMzZE9SbW5YYmt4?=
+ =?utf-8?B?NHZaT1R4d3EyalZ3T3g4RGFPR09qbDIyTHY2ellrV1plb2dWYW5UMzNJYm5k?=
+ =?utf-8?B?L3JjeUZlZVlQWDhCdVJ3YXJpWURrRE9TZmVkOE1Rbk1aSEp6SStRSzYvRC91?=
+ =?utf-8?B?T1p0SDJrR2ZVYWlBc3FMK1U2UDkzUHFtRTJ1MXlxdTV3R3lhN1Z3c3BlanBM?=
+ =?utf-8?B?NDZVYVpIclZ4b21VNlhHaXdibmVpaGtWS1Zhc2pocG04eW1xckRBaFdrbm9u?=
+ =?utf-8?B?cUhKemp6Snk1bGcwaFJnNWVUNTVBN0NoV201NUF5SlpyaTVmQWR5U0ZoWWN4?=
+ =?utf-8?B?SXBha2psQkhqOGJtZDVRVGZyQmNlbmZtblo2SkdiVHAyVlArK2wyMkhEWS9L?=
+ =?utf-8?B?NHRWeGNqSi9ZNGluVU50WUQrZmFIbmtQK1B5T3VGUEh6WDVYRjl1dEVhallX?=
+ =?utf-8?B?dU4xc0xLQ0lRQTBJQXBqUksvSVZEb2U0bGMwQVRENVNmRHl3dGdCa1BDQ01h?=
+ =?utf-8?B?dExxd1RiSUNRPT0=?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR10MB5409.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?TDlMeFFvbTdsQUp4VWtnQzUvdkdRSk1QVEFicG1ONld2VDd5TVNod2wyWjNU?=
+ =?utf-8?B?cHdhZ2pMREpCQWVBaU5nRTFaekFZUVdzeklsZTczY2pCcExLVmRJcGNneW8v?=
+ =?utf-8?B?dWs2U3pQSUs4aFF5ek1IUzJZb1VHZStZTjVockt6UVdVMFdOWllrUE53Qjl6?=
+ =?utf-8?B?KzBQQXhvbG8rVDFYekNFQUVIb0x6a0Y2eE1oRmFhU1JKMzdaRDdWNzZvS0No?=
+ =?utf-8?B?YU1xZ2FESGlpTUFyanE0by92bmxYQzFEUTQwWVJHNEVOdVlpSVBSNXNrRnpy?=
+ =?utf-8?B?a2hhdUR1RnRadm5uWGRyQXp0R3dVQjhvK2l4MHQ2WHl1eVU4T2NMUDk1N3pJ?=
+ =?utf-8?B?a0dHNFIxd1FlUjZBTGV0R0JtT0pRWlZiVkd3a3IwOHp2czN5V0xLNko0a3d3?=
+ =?utf-8?B?RGlyN3p6d0Ztc3lpVURLZE82RlBxTWJBNHdPNXNRdVJ6QlBuQkppT2tMOVBh?=
+ =?utf-8?B?bWFuOGtnTXFiZkI3WjFkYkM1N1htaXFKUzI4dU9rK3NoUGF3TE02bVVDTWRJ?=
+ =?utf-8?B?MDhmOUJzeUtRYWh3YnJocGV6KzVuREhnOFo0SnowM3BsY3g5RHUzZ3R6Q1RF?=
+ =?utf-8?B?SzErUGI2MFlSQ0JuSzBtcDBOemZnMi9NV1A5Yk42QXFzUW5nekMyME54SEFV?=
+ =?utf-8?B?SGlwKzcrcEJzL0Q5UkU5OEF3WG5nRmJTUG5leHQwS2hjZlhzNGgrTWRBUk0x?=
+ =?utf-8?B?aUNyaHF1VFNYSmNpSnNnTHZaekF4RVdhQURaSitYUVIzUVlWeDA2YitCMnNS?=
+ =?utf-8?B?SXB6bTloblJGSlBpbkFDKzUxOTE1c3JUY25YUmNOWEJEVWk2MTlDUE80bFVB?=
+ =?utf-8?B?d3NUWThIbTdHRG1DcnlWbHJDZ0ZWdFFsdjVFUVhiaC91aG9vVWVzaVFaRFk5?=
+ =?utf-8?B?S0FQbEFGa1IxWHFFdjBmWTZNYW5xRDVRQWZwWmV4TWczU2pCamxwbC9rMW83?=
+ =?utf-8?B?bmQ3OUFNWW8vQml3eXdibytZd1JNYUQ2aFlnd0srWmtKL3BLUEFtZGNMT1Nn?=
+ =?utf-8?B?b01aVDlVZEV1b1RLWkgyK1dRaXhpVDhzd1hGWnVIa3RpNVhKSVRHYjc4dUhV?=
+ =?utf-8?B?VGRwNjlGMTVWcUhlRFF2Zi9ac2VYZXNSQnBuMXFycjRrbFEvUUlXcTl2dGVT?=
+ =?utf-8?B?enRyeWFNOHd0cldGS3RwbjZQZ3ZpWmRTRUdnNFMwdDVMZnNYSHZtSk5QbXk5?=
+ =?utf-8?B?OE14U2IzRGY5WHppbVhvTU1EU1RRUzZXU1dRWFRCeTZaUllVOFJPZXprYjZT?=
+ =?utf-8?B?WFE1cnc3Q0cyd1l0QTdTTXd3UGo5bjVHVk9ZSVdFbHBndUs2MlNGNnM3MGZR?=
+ =?utf-8?B?MElVNkQvY2FQbkJ5bkU3cXM3b2hRQkVwWjQvTisyKy9ZS01OVHZUemVveC9L?=
+ =?utf-8?B?S0xxY2Nrek1YalYzOWtlQ0ZKdEx4UEFWNUtFamp1UlhUTjJ0SWs1Nm9rc0JO?=
+ =?utf-8?B?dml4QTdkRisvbFpJaGtmQzhTbVlyWjhlUncyRGFLcXdNM2xyTlZWd2JnUXhT?=
+ =?utf-8?B?cGg1RkN1YUhKUjBMS1RSeWt1QXdkb1VmYzRGWEFtQkRBMjR1aFpzMkt1bTgw?=
+ =?utf-8?B?anBaenI2SmpHT0p4UXpMMG5KVkFmTFplZDlrZCs5cTJIZGlucFYrdmN6V1Uv?=
+ =?utf-8?B?cW96L1RMUXlTZTJPd1VzSlcyT2xKdks0OUlOL2MzcElRK0JqQ3dCMW11dHhH?=
+ =?utf-8?B?TEN4WnJWWEJmUHcxQVZiUkZhRjNNeWN3eWZIaERVenE2RjhhOHN3ZFhmNUR0?=
+ =?utf-8?B?ZUJIOFRnbkkzb3ZQdnRSMnVjMFpjQWJNcXcrVlJrT0YyRTVRUWxBR3VQK21o?=
+ =?utf-8?B?SDUrcDBzV2xvaE1xQjVManBUbUlEUllJTU1SZHg0bWt5QkZRR1dtdGliWUJz?=
+ =?utf-8?B?eTFtMmpwRS9aSmVaR3RseUh1VXNaQm1haTNCcjUyV1ZmSG01QTB5VU1sMW13?=
+ =?utf-8?B?TytMTXJTR21Rb3MxTFpYd0VjV2RLUnFxRzhHSDdmVU91aTdHY1pYMVNOWWVq?=
+ =?utf-8?B?d3RleFlmMEo2ZDgwa1J3UjB0OFM5VXlKUU9aUGJPUlQzTnE0VlpLRlpldzJK?=
+ =?utf-8?B?amM3RFBUdzkyQ0VUZVNVKzk1Zk42OW0wUVVRdFpzU1ZoSWFqd0YzcjZhYUN6?=
+ =?utf-8?B?anUxNTVjWmptdGE0dHNOMktUYnZUUU5lUEhEODg5eSt6c2lXV3IrTkw5cEhv?=
+ =?utf-8?B?ZWc9PQ==?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	9j/M7z1076CJc2ExenlEeHfQfaH8kQcDkGOFLEQThgkJn+vY9D/EQF2KKV9+x3ohdzK22rNeU0kIsnDYSwZZNwUzZS/PygGTBVoeTYpN8DTirmGrvHkdMpG15hvhduuxzPQfepw/8zQd01/rPtpp4QHQq50a/z5SXI17QpuuGTqs+eLWoxQkQPdtijk7jKLypv1e/l6bDQ6gwRovEuXOca7/yAV/2KJD/mTOK3Fl+mCEqUTOklYAHD24FZKI6Ewka7wvlTOM9Tl9QKUeFGqPfzy00e1jiKNIDOCiwF4mX7wvAcZA0h5mMBVgzRObqEwpsw8p6EeXuXC/KpB2gVOtZSA2ZG73tRJF67PaBb1AT8kAvWNcI6rTQzMvjCXHIaFlCeuCBhPvN4c+zSL8QZgXWpGZ7Pr4J7XlwRxSrGdzyNJF1lTF2MK5zVUExkcDc0PqOHBvKTHe7Jno7TZpK3Kz9ArqZszErjwM9tP/FjTRUJN8qQMGAxrmQVIqg4y3UaV68qnlczWVQkr1G+jeVl6hahLs5W4SFsbaoTPRoRzXjxgBLV4y0117De4sg+zs2Yh5jSR3NJfvPDngZOOTWp2OOQ8DklNsQVNw5rkvY8wGH2U=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c5e0b99e-377b-4a85-a15f-08de1b1c0846
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR10MB5409.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Nov 2025 21:00:38.5161
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: K47HlQoVqURps0niTKNhUXUBI9bLFT6NcK8hPHm26Iq3NzEEKrI6Wf5vsd1HKhbI892RRw+jQnDB6dIFzi8HcRzcbHi9YH8KGc8R1LHhn1w=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS4PPFF3A3AE169
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-11-03_05,2025-11-03_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 bulkscore=0 malwarescore=0
+ spamscore=0 suspectscore=0 mlxscore=0 adultscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2510240000
+ definitions=main-2511030187
+X-Proofpoint-ORIG-GUID: ZJg3Nr-ijcEAeT6TenSWrEc2ffQjjmIk
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTAzMDE4NyBTYWx0ZWRfX/JbP5P+ov0wn
+ 3LW88rdc18+WppshLAgcsI48llW4nFBTDBJVBi5KPSFxAnvBDbvQmaQtTn8fworarHd9L+SmO40
+ hSW+uOFk/ZIPM4TA4Vktam9h3BCxpIBM2GI0/AB11gDHQPFwsWdcglLTeu9/cnExVVuIoJDmKvQ
+ KKNU3PuEH5bdL0MU7r8N8efmCSQHCwKKYmHSrzk+k04+18QMjr3B0LkwQWRLkLSdbndLmmTIzXQ
+ 1duxhb/9U+C6Iv8KaHdJ2D71W48EfXvsSFP6mD28nfh5Za/H2b3nbdqFIB7/8Xz1bU7C2hAmndJ
+ X+hrhk6dtr1QsRZboVAmzfSgaNVQKUE/AtXtPfbd8KLBFx6c+xL01zoOcBx6H+PXkxaTk2vui1r
+ w4+rA80RMUAZb08rQwwtx8o0qfTpRw==
+X-Proofpoint-GUID: ZJg3Nr-ijcEAeT6TenSWrEc2ffQjjmIk
+X-Authority-Analysis: v=2.4 cv=Ft8IPmrq c=1 sm=1 tr=0 ts=690917ff cx=c_pps
+ a=OOZaFjgC48PWsiFpTAqLcw==:117 a=OOZaFjgC48PWsiFpTAqLcw==:17
+ a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
+ a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+ a=6UeiqGixMTsA:10 a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=VwQbUJbxAAAA:8 a=yPCof4ZbAAAA:8 a=7CQSdrXTAAAA:8 a=aovI93sUCckBJ56wFnsA:9
+ a=QEXdDO2ut3YA:10 a=a-qgeE7W1pNrGK8U0ZQC:22 a=cPQSjfK2_nFv0Q5t_7PE:22
 
-On Mon, Nov 3, 2025 at 9:10=E2=80=AFPM Mario Limonciello (AMD) (kernel.org)
-<superm1@kernel.org> wrote:
->
->
->
-> On 11/3/2025 2:09 PM, Rafael J. Wysocki wrote:
-> > On Sun, Oct 26, 2025 at 6:09=E2=80=AFAM Mario Limonciello (AMD)
-> > <superm1@kernel.org> wrote:
-> >>
-> >> suspend_common() passes a PM message indicating what type of event
-> >> is occurring.  PMSG_POWEROFF is intended to be used when hibernate
-> >> callbacks were utilized for turning off the system.
-> >>
-> >> Add a new callback hcd_pci_poweroff() which will
-> >> determine if target state is power off and pass PMSG_POWEROFF as the
-> >> message.
-> >>
-> >> suspend_common() doesn't do any special handling with this case at
-> >> the moment, so there are no functional changes in this patch.
-> >>
-> >> Signed-off-by: Mario Limonciello (AMD) <superm1@kernel.org>
-> >> ---
-> >> v9:
-> >>   * Reword commit message (Bjorn)
-> >> v8:
-> >>   * Drop SYSTEM_HALT case
-> >> v7:
-> >>   * Reword commit mesasge
-> >> v6:
-> >>   * Fix LKP robot issue without CONFIG_PM_SLEEP
-> >> v5:
-> >>   * New patch
-> >> v4:
-> >>   * https://lore.kernel.org/linux-pci/20250616175019.3471583-1-superm1=
-@kernel.org/
-> >> ---
-> >>   drivers/usb/core/hcd-pci.c | 11 ++++++++++-
-> >>   1 file changed, 10 insertions(+), 1 deletion(-)
-> >>
-> >> diff --git a/drivers/usb/core/hcd-pci.c b/drivers/usb/core/hcd-pci.c
-> >> index cd223475917ef..959baccfb07d1 100644
-> >> --- a/drivers/usb/core/hcd-pci.c
-> >> +++ b/drivers/usb/core/hcd-pci.c
-> >> @@ -6,6 +6,7 @@
-> >>   #include <linux/kernel.h>
-> >>   #include <linux/module.h>
-> >>   #include <linux/pci.h>
-> >> +#include <linux/pm.h>
-> >>   #include <linux/usb.h>
-> >>   #include <linux/usb/hcd.h>
-> >>
-> >> @@ -531,6 +532,13 @@ static int hcd_pci_freeze(struct device *dev)
-> >>          return suspend_common(dev, PMSG_FREEZE);
-> >>   }
-> >>
-> >> +static int hcd_pci_poweroff(struct device *dev)
-> >> +{
-> >> +       if (system_state =3D=3D SYSTEM_POWER_OFF)
-> >> +               return suspend_common(dev, PMSG_POWEROFF);
-> >> +       return suspend_common(dev, PMSG_SUSPEND);
-> >> +}
-> >> +
-> >>   static int hcd_pci_suspend_noirq(struct device *dev)
-> >>   {
-> >>          struct pci_dev          *pci_dev =3D to_pci_dev(dev);
-> >> @@ -602,6 +610,7 @@ static int hcd_pci_restore(struct device *dev)
-> >>   #define hcd_pci_suspend                NULL
-> >>   #define hcd_pci_freeze                 NULL
-> >>   #define hcd_pci_suspend_noirq  NULL
-> >> +#define hcd_pci_poweroff       NULL
-> >>   #define hcd_pci_poweroff_late  NULL
-> >>   #define hcd_pci_resume_noirq   NULL
-> >>   #define hcd_pci_resume         NULL
-> >> @@ -639,7 +648,7 @@ const struct dev_pm_ops usb_hcd_pci_pm_ops =3D {
-> >>          .freeze_noirq   =3D check_root_hub_suspended,
-> >>          .thaw_noirq     =3D NULL,
-> >>          .thaw           =3D hcd_pci_resume,
-> >> -       .poweroff       =3D hcd_pci_suspend,
-> >> +       .poweroff       =3D hcd_pci_poweroff,
-> >>          .poweroff_late  =3D hcd_pci_poweroff_late,
-> >>          .poweroff_noirq =3D hcd_pci_suspend_noirq,
-> >>          .restore_noirq  =3D hcd_pci_resume_noirq,
-> >> --
-> >
-> > I would defer this patch until you know what exactly suspend_common()
-> > will do for PMSG_POWEROFF because it may just be simpler to check
-> > system_state =3D=3D SYSTEM_POWER_OFF in it internally.
->
-> OK - in that case would you just take the first 3 for 6.19?
 
-I still need to go through them once again, but overall that's the plan.
+Arnd Bergmann <arnd@arndb.de> writes:
+
+> On Tue, Oct 28, 2025, at 22:17, Catalin Marinas wrote:
+>> On Tue, Oct 28, 2025 at 11:01:22AM -0700, Ankur Arora wrote:
+>>> Arnd Bergmann <arnd@arndb.de> writes:
+>>> > On Tue, Oct 28, 2025, at 06:31, Ankur Arora wrote:
+>>> >> +
+>>> >
+>>> > Since the caller knows exactly how long it wants to wait for,
+>>> > we should be able to fit a 'wfet' based primitive in here and
+>>> > pass the timeout as another argument.
+>>>
+>>> Per se, I don't disagree with this when it comes to WFET.
+>>>
+>>> Handling a timeout, however, is messier when we use other mechanisms.
+>>>
+>>> Some problems that came up in my earlier discussions with Catalin:
+>>>
+>>>   - when using WFE, we also need some notion of slack
+>>>     - and if a caller specifies only a small or no slack, then we need
+>>>       to combine WFE+cpu_relax()
+>
+> I don't see the difference to what you have: with the event stream,
+> you implicitly define a slack to be the programmed event stream rate
+> of ~100=C2=B5s.
+
+True. The thinking was that an adding an explicit timeout just begs the
+question of how closely the interface adheres to the timeout and I guess
+the final interface tried to sidestep all of that.
+
+> I'm not asking for anything better in this case, only for machines
+> with WFET but no event stream to also avoid the spin loop.
+
+That makes sense. It's a good point that the WFET+event-stream-off case
+would just end up using the spin lock which is quite suboptimal.
+
+>>>   - for platforms that only use a polling primitive, we want to check
+>>>     the clock only intermittently for power reasons.
+>
+> Right, I missed that bit.
+>
+>>>     Now, this could be done with an architecture specific spin-count.
+>>>     However, if the caller specifies a small slack, then we might need
+>>>     to we check the clock more often as we get closer to the deadline e=
+tc.
+>
+> Again, I think this is solved by defining the slack as architecture
+> specific as well rather than an explicit argument, which is essentially
+> what we already have.
+
+Great. I think that means that I can keep more or less the same interface
+with an explicit time_end. Which allows WFET to do the right thing.
+And, WFE can have an architecture specific slack (event-stream period).
+
+>>> A smaller problem was that different users want different clocks and so
+>>> folding the timeout in a 'timeout_cond_expr' lets us do away with the
+>>> interface having to handle any of that.
+>>>
+>>> I had earlier versions [v2] [v3] which had rather elaborate policies fo=
+r
+>>> handling timeout, slack etc. But, given that the current users of the
+>>> interface don't actually care about precision, all of that seemed
+>>> a little overengineered.
+>>
+>> Indeed, we've been through all these options and without a concrete user
+>> that needs a more precise timeout, we decided it's not worth it. It can,
+>> however, be improved later if such users appear.
+>
+> The main worry I have is that we get too many users of cpu_poll_relax()
+> hardcoding the use of the event stream without a timeout argument, it
+> becomes too hard to change later without introducing regressions
+> from the behavior change.
+
+True.
+
+> As far as I can tell, the only place that currently uses the
+> event stream on a functional level is the delay() loop, and that
+> has a working wfet based version.
+
+Will send out the next version with an interface on the following lines:
+
+    /**
+    * smp_cond_load_relaxed_timeout() - (Spin) wait for cond with no orderi=
+ng
+    * guarantees until a timeout expires.
+    * @ptr: pointer to the variable to wait on
+    * @cond: boolean expression to wait for
+    * @time_expr: time expression in caller's preferred clock
+    * @time_end: end time in nanosecond (compared against time_expr;
+    * might also be used for setting up a future event.)
+    *
+    * Equivalent to using READ_ONCE() on the condition variable.
+    *
+    * Note that the expiration of the timeout might have an architecture sp=
+ecific
+    * delay.
+    */
+    #ifndef smp_cond_load_relaxed_timeout
+    #define smp_cond_load_relaxed_timeout(ptr, cond_expr, time_expr, time_e=
+nd_ns)	\
+    ({									\
+            typeof(ptr) __PTR =3D (ptr);					\
+            __unqual_scalar_typeof(*ptr) VAL;				\
+            u32 __n =3D 0, __spin =3D SMP_TIMEOUT_POLL_COUNT;		\
+            u64 __time_end_ns =3D (time_end_ns);				\
+                                                                        \
+            for (;;) {							\
+                    VAL =3D READ_ONCE(*__PTR);				\
+                    if (cond_expr)					\
+                            break;					\
+                    cpu_poll_relax(__PTR, VAL, __time_end_ns);		\
+                    if (++__n < __spin)				\
+                            continue;					\
+                    if ((time_expr) >=3D __time_end_ns) {		\
+                            VAL =3D READ_ONCE(*__PTR);			\
+                            break;					\
+                    }							\
+                    __n =3D 0;						\
+            }								\
+            (typeof(*ptr))VAL;						\
+    })
+    #endif
+
+That allows for a __cmpwait_timeout() as you had outlined and similar to
+these two patches:
+
+ https://lore.kernel.org/lkml/20241107190818.522639-15-ankur.a.arora@oracle=
+.com/
+ https://lore.kernel.org/lkml/20241107190818.522639-16-ankur.a.arora@oracle=
+.com/
+ (this one incorporating some changes that Catalin had suggested:
+  https://lore.kernel.org/lkml/aKRTRyQAaWFtRvDv@arm.com/)
+
+--
+ankur
 
