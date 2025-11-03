@@ -1,158 +1,259 @@
-Return-Path: <linux-pm+bounces-37301-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37302-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA0BCC2C715
-	for <lists+linux-pm@lfdr.de>; Mon, 03 Nov 2025 15:42:15 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7324DC2D030
+	for <lists+linux-pm@lfdr.de>; Mon, 03 Nov 2025 17:12:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 227BE188FA9A
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Nov 2025 14:42:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4EC91621622
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Nov 2025 15:32:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DD70281503;
-	Mon,  3 Nov 2025 14:41:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="VeYd96dS"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCCFF31E11D;
+	Mon,  3 Nov 2025 15:25:04 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sender4-op-o12.zoho.com (sender4-op-o12.zoho.com [136.143.188.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2A08280332;
-	Mon,  3 Nov 2025 14:41:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.12
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762180912; cv=pass; b=nhDzq3ulEOgRF4eGBYuqRmFA+w9CObQuIzD1UBRPZ2VouwES4n2/wyqgCdaYbMmuuRrAm7bDE14awDFifK9vZDTVV42DFqqbJZgdKex1/2Ex3onyCao2KH7sOl5Byv6fhVU898rXEuTbubjfwwCfDuDvji/hp/6WRlaTmVGzHbc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762180912; c=relaxed/simple;
-	bh=BUl4881EemL8NcxQjWfrxFrtq5eOPgoL55eAIrCawk4=;
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0B8631E0FE
+	for <linux-pm@vger.kernel.org>; Mon,  3 Nov 2025 15:25:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1762183504; cv=none; b=Vb9vToJZSOfPEmGKX+tK5VTEj8ETJcNSk3WsmSFaus0UAk5Zuc6p3bUQs5A2abslSxO64Yud/SiGunTrJR27mDKh7yeyFapAdMHG/LYVtKMUwoeRADGc83ysRaPeh4kvs9uLDkN+2rHgjwzej7Wtmgi981DCiaPEgvPtwYDvips=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1762183504; c=relaxed/simple;
+	bh=j9iWIyYbIjwGY5VJA0VqTrLshnsJrIZGxJpSOueV+Bk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=G4apDUwHBOackVLXXl3O6lfRC4pjZBpephyWDS36/hGXpWxmSUOe5SY+/5pt9TegLB62biwzVc6/f+3zDhP8vBmEjySFOkKbUPR5xR5c3NfXq7AF31v1TV6b0nqcC30f3yIZ3N63oVRv0XJ2hFrg0PRX6PraVgUqGV8VBqkWj4Y=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=VeYd96dS; arc=pass smtp.client-ip=136.143.188.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1762180904; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=OlKkFhWTkkZmHDRb7PemfXYw1xb1t5cwjCkAoGPiLLeS6ZxLAoiqRtfWJhipl9/1fkVIw7MVd6RpBrmZRiijQbXg12AVF/qL/m2t4hvG1emCRz4sA+qRSEBPwFkdcp9RNZkYxNrDK0OIlmj413oF7UpY/ap0GSdjgRBWRTLkNe4=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1762180904; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=CFrpz06o4t32EOpXiL8ubv+Q3woK4DQ1oFqsHtdiZec=; 
-	b=YXjkVHlhXsHdABlm8TETglEK+4r0xGY7J5QyJvgGHlPigO1oJyFxdP7+AohBdPdiDmONh8V2n5V0t8r/SlHvnMI1Y5RLuBQafZIjyhbqnBwraBpAaoI2NwX+xOe4KzcaA73kKkW14wxr67IgaIJx87gjI68mrUaurh+ZveK9khY=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
-	dmarc=pass header.from=<sebastian.reichel@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1762180904;
-	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
-	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
-	bh=CFrpz06o4t32EOpXiL8ubv+Q3woK4DQ1oFqsHtdiZec=;
-	b=VeYd96dSXPT6JQzaR2aiEzRpoywFReKq7haWEhOYFMYfz7a4gckgZljsCh8N9Hdd
-	e2k0D8vkL7p/Jf+MRulSPQo96n1w4qmobo2NOonGOiFjO82Yc/ALAwtYttlvoa+rom7
-	H+kICzSsXW9z3CD8E3pfmzxiZx3bPtO8hdSDyYrM=
-Received: by mx.zohomail.com with SMTPS id 1762180900981611.5667236444241;
-	Mon, 3 Nov 2025 06:41:40 -0800 (PST)
-Received: by venus (Postfix, from userid 1000)
-	id 5BEDD182F6C; Mon, 03 Nov 2025 15:41:35 +0100 (CET)
-Date: Mon, 3 Nov 2025 15:41:35 +0100
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Val Packett <val@packett.cool>
-Cc: Fenglin Wu <fenglin.wu@oss.qualcomm.com>, 
-	Neil Armstrong <neil.armstrong@linaro.org>, linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] power: supply: qcom_battmgr: improve charge control
- threshold handling
-Message-ID: <3nauihzsyl2flnwiim7e42dhitoubhuzimrbdddasy4z7abqyi@sjm4gd3jtjpy>
-References: <20251012233333.19144-2-val@packett.cool>
- <176213091335.301408.9120443011267055817.b4-ty@collabora.com>
- <8f003bfb-8279-4c65-a271-c1e4a029043d@packett.cool>
+	 Content-Type:Content-Disposition:In-Reply-To; b=ad4aF/+HbMySwOYe8fYCYA52+ImItMoycHJSeMST5EfsZL/XH9Vg3jfLYBF6ShKGvqFAzpaYT82fUqZjF3nijIG94OM6sfKsvaTzXYFvtskwcEfjH2EPd4s3T9WrEzQDTL9DFoGjhQO0GcRBsXW1bsgOHttNZcFBsj92cqWO7P0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 919142BC3
+	for <linux-pm@vger.kernel.org>; Mon,  3 Nov 2025 07:24:54 -0800 (PST)
+Received: from e110455-lin.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 2800A3F66E
+	for <linux-pm@vger.kernel.org>; Mon,  3 Nov 2025 07:25:02 -0800 (PST)
+Date: Mon, 3 Nov 2025 15:24:31 +0000
+From: Liviu Dudau <liviu.dudau@arm.com>
+To: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+Cc: Rob Herring <robh@kernel.org>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Boris Brezillon <boris.brezillon@collabora.com>,
+	Jassi Brar <jassisinghbrar@gmail.com>,
+	Chia-I Wu <olvaffe@gmail.com>, Chen-Yu Tsai <wenst@chromium.org>,
+	Steven Price <steven.price@arm.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	Kees Cook <kees@kernel.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>, kernel@collabora.com,
+	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, linux-hardening@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Subject: Re: [PATCH v8 1/5] dt-bindings: gpu: mali-valhall-csf: add
+ mediatek,mt8196-mali variant
+Message-ID: <aQjJLwd33aVY-ss9@e110455-lin.cambridge.arm.com>
+References: <20251017-mt8196-gpufreq-v8-0-98fc1cc566a1@collabora.com>
+ <6599426.lOV4Wx5bFT@workhorse>
+ <aQFoKoWIlf7xPzZX@e110455-lin.cambridge.arm.com>
+ <3127655.ElGaqSPkdT@workhorse>
+ <aQIc39c8MvU37G_q@e110455-lin.cambridge.arm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="amxtoasgmrgegheu"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <8f003bfb-8279-4c65-a271-c1e4a029043d@packett.cool>
-X-Zoho-Virus-Status: 1
-X-Zoho-Virus-Status: 1
-X-Zoho-AV-Stamp: zmail-av-1.5.1/262.144.53
-X-ZohoMailClient: External
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <aQIc39c8MvU37G_q@e110455-lin.cambridge.arm.com>
+
+On Wed, Oct 29, 2025 at 01:56:14PM +0000, Liviu Dudau wrote:
+> On Wed, Oct 29, 2025 at 02:42:35PM +0100, Nicolas Frattaroli wrote:
+> > On Wednesday, 29 October 2025 02:04:42 Central European Standard Time Liviu Dudau wrote:
+> > > On Tue, Oct 28, 2025 at 09:51:43PM +0100, Nicolas Frattaroli wrote:
+> > > > On Tuesday, 28 October 2025 18:12:35 Central European Standard Time Liviu Dudau wrote:
+> > > > > On Fri, Oct 17, 2025 at 05:31:08PM +0200, Nicolas Frattaroli wrote:
+> > > > > > The Mali-based GPU on the MediaTek MT8196 SoC uses a separate MCU to
+> > > > > > control the power and frequency of the GPU. This is modelled as a power
+> > > > > > domain and clock provider.
+> > > > > > 
+> > > > > > It lets us omit the OPP tables from the device tree, as those can now be
+> > > > > > enumerated at runtime from the MCU.
+> > > > > > 
+> > > > > > Add the necessary schema logic to handle what this SoC expects in terms
+> > > > > > of clocks and power-domains.
+> > > > > > 
+> > > > > > Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+> > > > > > Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> > > > > > Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+> > > > > > ---
+> > > > > >  .../bindings/gpu/arm,mali-valhall-csf.yaml         | 37 +++++++++++++++++++++-
+> > > > > >  1 file changed, 36 insertions(+), 1 deletion(-)
+> > > > > > 
+> > > > > > diff --git a/Documentation/devicetree/bindings/gpu/arm,mali-valhall-csf.yaml b/Documentation/devicetree/bindings/gpu/arm,mali-valhall-csf.yaml
+> > > > > > index 613040fdb444..860691ce985e 100644
+> > > > > > --- a/Documentation/devicetree/bindings/gpu/arm,mali-valhall-csf.yaml
+> > > > > > +++ b/Documentation/devicetree/bindings/gpu/arm,mali-valhall-csf.yaml
+> > > > > > @@ -45,7 +45,9 @@ properties:
+> > > > > >      minItems: 1
+> > > > > >      items:
+> > > > > >        - const: core
+> > > > > > -      - const: coregroup
+> > > > > > +      - enum:
+> > > > > > +          - coregroup
+> > > > > > +          - stacks
+> > > > > >        - const: stacks
+> > > > > 
+> > > > > I'm not sure how to parse this part of the change. We're overwriting the property
+> > > > > for mt8196-mali anyway so why do we need this? And if we do, should 'stacks'
+> > > > > still remain as a const?
+> > > > 
+> > > > The properties section outside of the if branches outside here
+> > > > specifies a pattern of properties that matches for all devices.
+> > > > 
+> > > > In this case, I changed it so that the second clock-names item
+> > > > may either be "coregroup" or "stacks".
+> > > 
+> > > Why would we want to do that for non-MT8196 devices? It doesn't make sense to me.
+> > > The overwrite in the if branch should be enough to give you want you want (i.e.
+> > > core followed by stacks and only that).
+> > 
+> > I built my understanding of why on the same reason of why we specify
+> > a minItems of 1 but require it to be 3 in the if branch of the only
+> > other compatible (rk3588): it describes what may be found in those
+> > properties, not what is required by the specific compatible preceding
+> > the generic valhall compatible. arm,mali-valhall-csf is currently
+> > not described as a compatible that's allowed to appear stand-alone
+> > without some other compatible before it to specify further which SoC
+> > it's on, so it really just is whatever RK3588 needs vs. whatever
+> > MT8196 needs at the moment.
+> > 
+> > Arguably though, there's no functional difference here, and I'm not
+> > aware on any rules regarding this. My change may be problematic
+> > however, because of the whole double stacks thing.
+> 
+> I think I'm saying the same thing. The "arm,mali-valhall-csf" is the most general
+> compatible string and defines the common denominator if not overwritten. I'm
+> not expecting anyone to use just that string for a compatible, but downstream
+> we have additional compatible strings that don't have to update the schema at all.
+> rk3588 has a specific setup that requires 3 clocks so you cannot have any optional,
+> that's why it is overwriting the minItems. Your whole double stack thing is
+> actually not needed if all you do is overwrite in the MT8196 case the clock
+> names and maxItems to only need two clocks.
+> 
+> > 
+> > > > Yes, the third "stacks"
+> > > > remains, though if you wanted to be extra precise you could
+> > > > then specify in the non-MT8196 cases that we should not have
+> > > > stacks followed by stacks, but I'd wager some checker for
+> > > > duplicate names may already catch that.
+> > > > 
+> > > > However, I don't think it's a big enough deal to reroll this
+> > > > series again.
+> > > 
+> > > I'm not asking you to re-roll the series but if you agree to drop that
+> > > part I can make the edit when merging it.
+> > 
+> > If the other DT maintainers (especially Rob who gave it his R-b)
+> > are okay with dropping it, then yes please do.
+> 
+> Rob, do you agree with dropping the change in the generic bindings?
+
+I haven't got any answers, so I'll push the patch as is and send a separate
+fix that hopefully catches Rob's attention quicker.
+
+Best regards,
+Liviu
 
 
---amxtoasgmrgegheu
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH 0/2] power: supply: qcom_battmgr: improve charge control
- threshold handling
-MIME-Version: 1.0
+> > > > > 
+> > > > > >  
+> > > > > >    mali-supply: true
+> > > > > > @@ -110,6 +112,27 @@ allOf:
+> > > > > >          power-domain-names: false
+> > > > > >        required:
+> > > > > >          - mali-supply
+> > > > > > +  - if:
+> > > > > > +      properties:
+> > > > > > +        compatible:
+> > > > > > +          contains:
+> > > > > > +            const: mediatek,mt8196-mali
+> > > > > > +    then:
+> > > > > > +      properties:
+> > > > > > +        mali-supply: false
+> > > > > > +        sram-supply: false
+> > > > > > +        operating-points-v2: false
+> > > > > > +        power-domains:
+> > > > > > +          maxItems: 1
+> > > > > > +        power-domain-names: false
+> > > > > > +        clocks:
+> > > > > > +          maxItems: 2
+> > > > > > +        clock-names:
+> > > > > > +          items:
+> > > > > > +            - const: core
+> > > > > > +            - const: stacks
+> > > > > > +      required:
+> > > > > > +        - power-domains
+> > > > > >  
+> > > > > >  examples:
+> > > > > >    - |
+> > > > > > @@ -145,5 +168,17 @@ examples:
+> > > > > >              };
+> > > > > >          };
+> > > > > >      };
+> > > > > > +  - |
+> > > > > > +    gpu@48000000 {
+> > > > > > +        compatible = "mediatek,mt8196-mali", "arm,mali-valhall-csf";
+> > > > > > +        reg = <0x48000000 0x480000>;
+> > > > > > +        clocks = <&gpufreq 0>, <&gpufreq 1>;
+> > > > > > +        clock-names = "core", "stacks";
+> > > > > > +        interrupts = <GIC_SPI 606 IRQ_TYPE_LEVEL_HIGH 0>,
+> > > > > > +                     <GIC_SPI 605 IRQ_TYPE_LEVEL_HIGH 0>,
+> > > > > > +                     <GIC_SPI 604 IRQ_TYPE_LEVEL_HIGH 0>;
+> > > > > > +        interrupt-names = "job", "mmu", "gpu";
+> > > > > > +        power-domains = <&gpufreq>;
+> > > > > > +    };
+> > > > > >  
+> > > > > >  ...
+> > > > > > 
+> > > > > 
+> > > > > 
+> > > > 
+> > > > 
+> > > > 
+> > > > 
+> > > 
+> > > 
+> > 
+> > 
+> > 
+> > 
+> 
+> -- 
+> ====================
+> | I would like to |
+> | fix the world,  |
+> | but they're not |
+> | giving me the   |
+>  \ source code!  /
+>   ---------------
+>     ¯\_(ツ)_/¯
 
-Hi,
-
-On Mon, Nov 03, 2025 at 12:46:13AM -0300, Val Packett wrote:
-> On 11/2/25 9:48 PM, Sebastian Reichel wrote:
->=20
-> > On Sun, 12 Oct 2025 20:32:17 -0300, Val Packett wrote:
-> > > Currently, upowerd is unable to turn off the battery preservation mod=
-e[1]
-> > > on Qualcomm laptops, because it does that by setting the start thresh=
-old to
-> > > zero and the driver returns an error:
-> > >=20
-> > > pmic_glink.power-supply.0: charge control start threshold exceed rang=
-e: [50 - 95]
-> > >=20
-> > > Kernel documentation says the end threshold must be clamped[2] but do=
-es
-> > > not say anything about the start threshold.
-> > >=20
-> > > [...]
-> > Applied, thanks!
-> >=20
-> > [1/2] power: supply: qcom_battmgr: clamp charge control thresholds
-> >        commit: 8809980fdc8a86070667032fa4005ee83f1c62f3
-> > [2/2] power: supply: qcom_battmgr: support disabling charge control
-> >        commit: 446fcf494691da4e685923e5fad02b163955fc0e
->=20
->=20
-> Woahh.. please revert the second one.
->=20
-> I'm sorry, I thought this was discussed here but apparently it was only on
-> IRC and I must've assumed that the patches weren't going anywhere because=
- of
-> the lack of R-b..
->=20
-> The disable bit was acting rather strange after all, we'd need more work =
-to
-> figure out if that's even possible. Let's leave it at the clamp only.
-
-DONE.
-
-Greetings,
-
--- Sebastian
-
---amxtoasgmrgegheu
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmkIvxsACgkQ2O7X88g7
-+prgiA//ftqPbxE2sIyhCq0WRMBAt1kjIgiF/UrKpgrgSHNrW97LCCAq/ZfT+at3
-zWb0tiy0xblcgrrg4Uyq7qOoCJitoS3HoJeRAzboIAPZ9BTm8a2MNP9b+4uvCD8O
-w8Cc2mejVj1nYWaFRClhHtYS5rrXZYF+xUCOweGIzrSeqiBgaRBTaQYKHK3iMnuT
-tFCDEfrr92CJ3z3geOEPbiAf/rsxxoOhkARa347YTJr+fU4F3j4Jv7S2KKfKTjd4
-w14yqkiRBiQQODJjM4jTZpoR1nT/AfIbOb868Mxb5x/cTYEY/+BjyfAHhM/xlzqa
-vP0eMQQZw366b9Q6kPm0YSipxc1LI9Ci7OotPKn5Nj4V4d0zEC5jFPnwmxJgMY+a
-TgIxZkB4CWZtOknWqtQ5zPTB2shabJNrK9GhBCfAec/h+TySxXzv/fF8bRx63DXn
-YtP3Zs7m/mJ2jN4EaKUEz3BSSCTGGnYz+eULSxgNQtEh1zHxVl/yrmBwBtRhxTCV
-29DKKG3lJiIqp4sAixdsL11X1K4moff2sJHneG78QCOoFfqBR+R3cxv0dVTW1gCL
-rrYBehwolL/BG1xtOiDI4wq3QYZTDxUBwlKB3piZ9zIw75/JfL1IFF7hN1+qTwIw
-Y33jWKbCcHUWMLvv+QCylgEepaCTfpeSoYEJkpxicDX3c9u1IuQ=
-=2Ym3
------END PGP SIGNATURE-----
-
---amxtoasgmrgegheu--
+-- 
+====================
+| I would like to |
+| fix the world,  |
+| but they're not |
+| giving me the   |
+ \ source code!  /
+  ---------------
+    ¯\_(ツ)_/¯
 
