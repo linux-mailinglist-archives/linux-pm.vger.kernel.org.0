@@ -1,171 +1,175 @@
-Return-Path: <linux-pm+bounces-37298-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37299-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66156C2BB40
-	for <lists+linux-pm@lfdr.de>; Mon, 03 Nov 2025 13:35:59 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 78269C2BAB6
+	for <lists+linux-pm@lfdr.de>; Mon, 03 Nov 2025 13:30:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 8837D4F227A
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Nov 2025 12:27:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1D73C1881FF7
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Nov 2025 12:30:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9198D306B06;
-	Mon,  3 Nov 2025 12:27:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FFC22FE57F;
+	Mon,  3 Nov 2025 12:30:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b="UxFSrtPC"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Ib9ny1Od"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5E852EFD86
-	for <linux-pm@vger.kernel.org>; Mon,  3 Nov 2025 12:27:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1F1D30C617
+	for <linux-pm@vger.kernel.org>; Mon,  3 Nov 2025 12:30:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762172859; cv=none; b=OjvwCBr9BxAqpJn653+S6hz3jrqT/9HDBgzPm8HU6lXxVQFiKfk9proCw+YHRLBHez41bnwo2Lur3BLFIIJgpNs84+F1CPJGBd83snDhY/zq6xLTanhqOpGPy7cM4hFl3UrbWtkrNXccfLHFAyjRRc6gSot/Qp5ypySrOsGsgEQ=
+	t=1762173029; cv=none; b=rPP+gAcZCpmgZpoe0cqFa1wUiu+/On8rcPODcuIWMHjVbHzIzZAYC/tEEqEzGp0KDM/5VO/p+GhVrVUt6zjwxg4Q0bKj9/16Gwtt3O+oHTivahUsSxk++/qQGZWOjoU+vLvPuG0XdvS4Fxfyt8ev1bT4m0k3g6Ud6/PcfHQUVMs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762172859; c=relaxed/simple;
-	bh=yaE3waDSHbugCSGkUwyAGQoN36hcWzHi1nzoJVJHs4Q=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=LqHg5LU4TDGeoFszlZYjo191nDql3uEoGixb9mzVXY9Ttyk17syYCxtstuzbQjH3YWsO2pnW6yEKjosGRLMfg4o5TJQycAHWcRelIfAk0P7kvUOjhMDTAk32tgLqJYdb0bNXB4T56scjc0l16pYVnGBiLH4y+tBJDwupSBChpmM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fairphone.com; spf=pass smtp.mailfrom=fairphone.com; dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b=UxFSrtPC; arc=none smtp.client-ip=209.85.218.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fairphone.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fairphone.com
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-b70406feed3so944315466b.3
-        for <linux-pm@vger.kernel.org>; Mon, 03 Nov 2025 04:27:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair; t=1762172856; x=1762777656; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IoGEKixiOf6+YbSpHpvXgbHu1MiS0fbcnkKp3M0gywo=;
-        b=UxFSrtPCRZaQCPRwxdSo0StEpyhByP8lFVh5QezkmgLTDerEbkDiptJ3fT6m7zxCzK
-         +SNntZ/+EUssDvJYH7p+1YbyrR3XwIPqiEW2OmiCnnrGaaDjcrCHlnvEEqEbL2GGP4Xb
-         VYmAu4unJod26yp+USib1mgLcxXa1zwJ9ymZmxNySAIIDLpN2YbZf/E/x25+J7aYaatu
-         Syb3ezcve0bZ7F0FrP6XIw1momDtIxd3UOO08lRjUidVeC6HadchyelzLtzZYNSLJG8Y
-         ZOPPqdZtNymtL3QMBPUcG/K/Pjlc+qHnii1aAUSqU/iXwUb0dHukHRYxqbnl/7a88Q2N
-         08KQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762172856; x=1762777656;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=IoGEKixiOf6+YbSpHpvXgbHu1MiS0fbcnkKp3M0gywo=;
-        b=VKP1gDJZYJvKGc6oNKMkNKIuF/F+0K5sDhwu4YoPI7XcwLm4u9914T/uQbNMZCD+AW
-         5CK9bDtkHdNQO04veLxCBbOCjwmRXkabsX7JD0qpG0b277riixCeymdgVVqP15Xla/a6
-         bfnk7ml9x35P6GuRtnN9Ce0GfXvoSDrpr6tRLub0SDY74Wv6oJcj/KOOcGnyZHS03BLD
-         yeTDbL+CVrCIM9s6+db6RfVGfqn4Sp74trVYX06DTJaG7aYEroJROg0yt6UJryAEjBSl
-         LTWCOiX3K5H8Tdlg1+Y0ds2JDxHPSa2lnUFvSJp6DwRnNoYZh1aK+Hp7tTPr5wm3++eW
-         O3mg==
-X-Forwarded-Encrypted: i=1; AJvYcCXYcDF1eOIRIktHRoXoq2CSu0xnHipoUrLd4+UQSC+S19oOa5IzpDjU77BAk4s/SL5DCSdnhmxVdQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxKyLplaVPu/RayBeJQZOdruSVpMwn+ATWDv/0dnk30Mp3d1xAc
-	iJWBy4nE37j3Jm6KnmnhmqwEugti4c/3Me2bhA54jR0Yu+m5Te4EGN5Ga0DKzEmy3zk=
-X-Gm-Gg: ASbGnctFNJWGtYG+/eRq/jNQOikdeMQwOnd+/KoTOf/TvhgAo437N6rZXCZxMIv618i
-	57mxBCsfnOzQux6ZrqAanBYgXJvQN37omwPoTIk73/Jtm7o912++EMezDQ2a8XDrDEN/ZDq2R2T
-	57My5APt6jUL2YWUBXt7jcMPNZudXBlbbD86og881uzr+fb2eQGQP6L2rli+2NKzmUYBBgNOuCN
-	8C4JPJM+70/MTK7eqWrCUyxQiue00F7Jv8hVfAnTgtweORldg+88hsCDF3YDovOilE72y2RTUGO
-	aOVGdYkBv0szeRKBJHIyPfPE+kmcjmORamvZ7o9GzrLSaZ8sudBC7LxEcF8qHjtdGumLdKzD3Jn
-	tIrt/IdAslYQ+Uxc3G+6gw5lprwPUrz6t4+tmX0pR6N65gsOjFlkGQJpt5Lq+xSxj8PjdxM2k74
-	OKKCjv2Ts+5Gxz4flM0dHlTf7Ykgco2CZD25x7SWnwbkAjsA==
-X-Google-Smtp-Source: AGHT+IEDliw+6lMJHirYDXmx61WJGlCahIYt8y75zXE63Jfyn2/OoGc7w3DNRT31bKf1ipSgsYdjnQ==
-X-Received: by 2002:a17:906:c10b:b0:b6d:8e29:8f67 with SMTP id a640c23a62f3a-b70701ae016mr1324652566b.26.1762172855980;
-        Mon, 03 Nov 2025 04:27:35 -0800 (PST)
-Received: from localhost (144-178-202-139.static.ef-service.nl. [144.178.202.139])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b70a9fb80e2sm548025366b.69.2025.11.03.04.27.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Nov 2025 04:27:35 -0800 (PST)
+	s=arc-20240116; t=1762173029; c=relaxed/simple;
+	bh=7UZyhD9GK9Zjc302Yk/ECdUVVsZM2bGjXpiyAcsOwVs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Dl0563ksfLtrjdzzN0Xm9YDKYbes6/uGihPAtEORTTp5AYNPXXC5G68UqkQ6XqkUwCLWpcEkSMU5m4jZAJ/26Z0V8YcOO9LvxySM4OM9SdyAvi7JhK7cHexFOuRO12m60IkrRiKR7rBG+WfWOpTlQAAz6sAGXwn7of4HryWnr64=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=Ib9ny1Od; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=Z/kn0ov0H0hmjl/LRgH623c40HkibKXrRsxezh1g2cQ=; b=Ib9ny1OdZKFbxFDl1YJXXNwC0a
+	rFGdodxJh2y4+X5Q8G8HETc30eg+S8q8ppA5x1kq2q2T9Uz/S+8yvvyAYdh2gojuEYMSMHb19cwQ7
+	PLkWS7J2C4Z2j4LHhWSpaJ+RHc0FP4Ak4H4QMuH0rMfsHvO1bFBz89mAeqPooEx2Iia6Gwnu5AfaF
+	AACoT8SVKtNFwRR4+C8AGhyTgB/sHuna4F8mTgGNyo/7PeT2soON7zRWIYYZhwEv+qsJeEPgZ+k+a
+	smv9TnmZVAB0a/Oz/fGehTNe0QhgNn8tqa9IBAI3z5jOc/Bx3HTGC4nu8FYr12g/A6RZu6dvx5boP
+	QaiS+Rog==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vFspq-0000000FK8v-1Oxz;
+	Mon, 03 Nov 2025 11:34:54 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 1231630023C; Mon, 03 Nov 2025 13:30:23 +0100 (CET)
+Date: Mon, 3 Nov 2025 13:30:23 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Marcelo Tosatti <mtosatti@redhat.com>
+Cc: Frederic Weisbecker <frederic@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+	Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH v3] sched/idle: disable tick in idle=poll idle entry
+Message-ID: <20251103123023.GZ3245006@noisy.programming.kicks-ass.net>
+References: <aQiWfnnSzxsnwa2o@tpad>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 03 Nov 2025 13:27:35 +0100
-Message-Id: <DDZ2560R89E4.2A538CLIBA9B2@fairphone.com>
-Cc: <~postmarketos/upstreaming@lists.sr.ht>, <phone-devel@vger.kernel.org>,
- <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
- <linux-crypto@vger.kernel.org>
-Subject: Re: [PATCH v3 0/7] Various dt-bindings for Milos and The Fairphone
- (Gen. 6) addition
-From: "Luca Weiss" <luca.weiss@fairphone.com>
-To: "Konrad Dybcio" <konrad.dybcio@oss.qualcomm.com>, "Luca Weiss"
- <luca.weiss@fairphone.com>, "Rafael J. Wysocki" <rafael@kernel.org>,
- "Viresh Kumar" <viresh.kumar@linaro.org>, "Rob Herring" <robh@kernel.org>,
- "Krzysztof Kozlowski" <krzk+dt@kernel.org>, "Conor Dooley"
- <conor+dt@kernel.org>, "Manivannan Sadhasivam" <mani@kernel.org>, "Herbert
- Xu" <herbert@gondor.apana.org.au>, "David S. Miller" <davem@davemloft.net>,
- "Vinod Koul" <vkoul@kernel.org>, "Thomas Gleixner" <tglx@linutronix.de>,
- "Bjorn Andersson" <andersson@kernel.org>, "Konrad Dybcio"
- <konradybcio@kernel.org>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20250905-sm7635-fp6-initial-v3-0-0117c2eff1b7@fairphone.com>
- <c93afd94-9d94-42fb-a312-df6e26bb2bc8@oss.qualcomm.com>
- <DDZ1X799V2KV.269J9YL1AGCIF@fairphone.com>
- <0fd020e4-636a-4bb3-9c22-7a5b16e4d3c3@oss.qualcomm.com>
- <89d1eaba-557c-4df6-b65c-b2105ec20788@oss.qualcomm.com>
-In-Reply-To: <89d1eaba-557c-4df6-b65c-b2105ec20788@oss.qualcomm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aQiWfnnSzxsnwa2o@tpad>
 
-On Mon Nov 3, 2025 at 1:24 PM CET, Konrad Dybcio wrote:
-> On 11/3/25 1:23 PM, Konrad Dybcio wrote:
->> On 11/3/25 1:17 PM, Luca Weiss wrote:
->>> On Mon Nov 3, 2025 at 1:14 PM CET, Konrad Dybcio wrote:
->>>> On 9/5/25 12:40 PM, Luca Weiss wrote:
->>>>> Document various bits of the Milos SoC in the dt-bindings, which don'=
-t
->>>>> really need any other changes.
->>>>>
->>>>> Then we can add the dtsi for the Milos SoC and finally add a dts for
->>>>> the newly announced The Fairphone (Gen. 6) smartphone.
->>>>>
->>>>> Dependencies:
->>>>> * The dt-bindings should not have any dependencies on any other patch=
-es.
->>>>> * The qcom dts bits depend on most other Milos patchsets I have sent =
-in
->>>>>   conjuction with this one. The exact ones are specified in the b4 de=
-ps.
->>>>>
->>>>> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
->>>>> ---
->>>>
->>>> FWIW this looks good.. where are we with regards to the dependencies?
->>>>
->>>> Are we waiting for anything else than the PMIV0104 (as part of glymur/
->>>> kaanapali)?
->>>
->>> Hi,
->>>
->>> From my side, I'm not aware of any patches that have any unresolved
->>> comments, so I'm essentially just waiting for the correct maintainers t=
-o
->>> pick up the variety of dt-bindings patches in this series, and the
->>> PMIV0104 and PM7550 series.
->>>
->>> Any advice to make this actually proceed would be appreciated since mos=
-t
->>> have been waiting for quite a while.
->>=20
->> Apparently I misremembered, kaanapali actually uses PMH0101 and PMH0110
->> and PMH0104, whereas glymur uses pmh0101, pmcx0102, pmh0110 and pmh0104
->>=20
->> (it is not easy indeed)
->>=20
->> so it looks like PMIV0104 only showed up with your series.. and I'm not
->> opposed to it, let me leave some review tags there, and I suppose I'll
->> just ask you to rebase this series on next & make sure the bindings
->> checker is happy
->
-> Well I apparently already left the review tags there.. please resend
-> all of them (2 pmics + this one) as a single v4
+On Mon, Nov 03, 2025 at 08:48:14AM -0300, Marcelo Tosatti wrote:
+> 
+> Commit a5183862e76fdc25f36b39c2489b816a5c66e2e5
+> ("tick/nohz: Conditionally restart tick on idle exit") allows
 
-Will this help with anything though? Most/all dt-bindings patches have
-been unmodified since v2 and haven't been picked up since 13 July...
+Quoting a commit usually shortens the hash to 12 charters, no?
 
-I can try if you really think it could help...
+> a nohz_full CPU to enter idle and return from it with the
+> scheduler tick disabled (since the tick might be undesired noise).
+> 
+> The idle=poll case still unconditionally restarts the tick when entering
+> idle.
+> 
+> To reduce the noise for that case as well, stop the tick when entering
+> idle, for the idle=poll case.
+> 
+> Change tick_nohz_full_kick_cpu to set NEED_RESCHED bit, to handle the
+> case where a new timer is added from an interrupt. This breaks out of
+> cpu_idle_poll and rearms the timer if necessary.
+> 
+> Signed-off-by: Marcelo Tosatti <mtosatti@redhat.com>
+> 
+> ---
+> 
+> v3: Add comment with proper explanation (Frederic Weisbecker)
+>     Add signed-off-by			(Thomas Gleixner)
+> v2: Handle the case where a new timer is added from an interrupt (Frederic Weisbecker)
+> 
+>  include/linux/sched.h    |    2 ++
+>  kernel/sched/core.c      |   10 ++++++++++
+>  kernel/sched/idle.c      |    2 +-
+>  kernel/time/tick-sched.c |    7 +++++++
+>  4 files changed, 20 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/sched.h b/include/linux/sched.h
+> index cbb7340c5866..1f6938dc20cd 100644
+> --- a/include/linux/sched.h
+> +++ b/include/linux/sched.h
+> @@ -2428,4 +2428,6 @@ extern void migrate_enable(void);
+>  
+>  DEFINE_LOCK_GUARD_0(migrate, migrate_disable(), migrate_enable())
+>  
+> +void set_tif_resched_if_polling(int cpu);
+> +
+>  #endif
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index f1ebf67b48e2..f0b84600084b 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -988,6 +988,11 @@ static bool set_nr_if_polling(struct task_struct *p)
+>  	return true;
+>  }
+>  
+> +void set_tif_resched_if_polling(int cpu)
+> +{
+> +	set_nr_if_polling(cpu_rq(cpu)->idle);
+> +}
+> +
+>  #else
+>  static inline bool set_nr_and_not_polling(struct thread_info *ti, int tif)
+>  {
+> @@ -999,6 +1004,11 @@ static inline bool set_nr_if_polling(struct task_struct *p)
+>  {
+>  	return false;
+>  }
+> +
+> +void set_tif_resched_if_polling(int cpu)
+> +{
+> +	set_tsk_need_resched(cpu_rq(cpu)->idle);
+> +}
+>  #endif
+>  
+>  static bool __wake_q_add(struct wake_q_head *head, struct task_struct *task)
+> diff --git a/kernel/sched/idle.c b/kernel/sched/idle.c
+> index c39b089d4f09..428c2d1cbd1b 100644
+> --- a/kernel/sched/idle.c
+> +++ b/kernel/sched/idle.c
+> @@ -324,7 +324,7 @@ static void do_idle(void)
+>  		 * idle as we know that the IPI is going to arrive right away.
+>  		 */
+>  		if (cpu_idle_force_poll || tick_check_broadcast_expired()) {
+> -			tick_nohz_idle_restart_tick();
+> +			tick_nohz_idle_stop_tick();
+>  			cpu_idle_poll();
+>  		} else {
+>  			cpuidle_idle_call();
+> diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
+> index c527b421c865..9ec51da49591 100644
+> --- a/kernel/time/tick-sched.c
+> +++ b/kernel/time/tick-sched.c
+> @@ -408,6 +408,13 @@ void tick_nohz_full_kick_cpu(int cpu)
+>  	if (!tick_nohz_full_cpu(cpu))
+>  		return;
+>  
+> +	/*
+> +	 * When idle=poll, with the tick disabled (therefore idle CPU looping
+> +	 * at cpu_idle_poll), if a new timer is added from an interrupt,
+> +	 * the cpu_idle_poll only exits when TIF_NEED_RESCHED gets set.
+> +	 */
+> +	set_tif_resched_if_polling(cpu);
+> +
+>  	irq_work_queue_on(&per_cpu(nohz_full_kick_work, cpu), cpu);
+>  }
 
-Regards
-Luca
+I'm confused. Why is this here and not in tick_nohz_start_idle() or
+something?
 
