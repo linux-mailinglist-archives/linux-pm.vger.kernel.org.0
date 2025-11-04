@@ -1,105 +1,99 @@
-Return-Path: <linux-pm+bounces-37364-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37365-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF874C31547
-	for <lists+linux-pm@lfdr.de>; Tue, 04 Nov 2025 14:57:27 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D5565C3164F
+	for <lists+linux-pm@lfdr.de>; Tue, 04 Nov 2025 15:06:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3CC7D3BAB98
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Nov 2025 13:56:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E486E189988B
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Nov 2025 14:04:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95C03329E54;
-	Tue,  4 Nov 2025 13:56:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15C9C32B989;
+	Tue,  4 Nov 2025 14:04:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YjJ9+vF/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hLf0Vjvn"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70E25328B52
-	for <linux-pm@vger.kernel.org>; Tue,  4 Nov 2025 13:56:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D672532AAC3;
+	Tue,  4 Nov 2025 14:04:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762264585; cv=none; b=rxBeW7DheKsCoDBrFde9DR4hovk7LkGZxYrL2FWRyQH7zMlbckfKclwHklHkDVdnzysl/dUc5Um+aR+jZQcxlhy6tArvqrzoDEH4qxI1HGejeqitS2DbnQXkcYxlRlyXiHl1rD2eAnjmizuBQA3wVHpiubmkV+tbseUEP6HnX6o=
+	t=1762265042; cv=none; b=PqbTej/ONtFESrkIUXOwQVmH+fbZIoMZj0l54p2BmU+GOKbRZo4EYozkxX4fqBPtaLCb97kLKeymfhuymagBVAFpRgvSSqhihTp08AOeCxAfP5BDuLdsTV1PPxgAhyPLRObvpqUByETaWDccmPjCDN+uEDRPGtVhvUfj8QamuLc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762264585; c=relaxed/simple;
-	bh=ON9Xwwa6YRLAwjqlOjOKf11KP6Gq4UoxydPsFMEQAL0=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ABbHdIM3R6/LtY0Q5Apsz18WtFkp9CvcclvzNh8BU2pbf+JprNkEfuizSO+wcaS1WVXFWNhFLj0qzNBV5A/H2Yu9QIvS6TojmD848nvwg3I7YDawwcSxS8/93YH12SGSHSj59/z1+YO/bG80jXOXMUmqOcA6JJ1p6FGtzQDutXY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YjJ9+vF/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 11AD7C19422
-	for <linux-pm@vger.kernel.org>; Tue,  4 Nov 2025 13:56:25 +0000 (UTC)
+	s=arc-20240116; t=1762265042; c=relaxed/simple;
+	bh=PLgn57zEwgHEIBzbw8uwLpryBbI82qdfuHqoYYL6TBE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rCS07LbCZg9OecxOaukCN9j3ChAneOHIMt44Lmh17tJ1AEgyosIaNumS4OXDkpP/KmhhdC4SDbRHD4+7qzNAulIyUHTNDjcvF1GF1OzQj5YC812UiT//JhA70UjTmCA/QRjOXAx7TK5kJzsD55veXr9HVe1uBnyuXHyygnJXuCY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hLf0Vjvn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD922C116B1;
+	Tue,  4 Nov 2025 14:04:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762264585;
-	bh=ON9Xwwa6YRLAwjqlOjOKf11KP6Gq4UoxydPsFMEQAL0=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=YjJ9+vF/jKXBJyKw/MHu0pnAGIdkhc/IGLsju/O9nAg8d+/M2fLI4rJdG/GVYKwEf
-	 VHuOVRPQ0UeDK/ud1w7pxv1CiwZZ9Jgb0wlCHyW47x00/+E7lNGOn1syknMbWS1jyE
-	 BpIcD7vYJz7b1qbIxeMR2rddrDJdXgxU6oOKKDTYEUfYnCKXZDdziV4DcOwKOWpjpE
-	 BA31eFH9s2gz4ariPHQyu9DmhdBm0k+KpNRAOZwswmzP1r+CrtM8ixjN3anWOC6RqK
-	 rltHekFfk7FB/UBi7G8kkc9xWp3lg0bFJrsXQXRWZFS+pg6g1SRRV2gpwJmC9zL16h
-	 pyv+yVjLfQ+sA==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 0CABDC4160E; Tue,  4 Nov 2025 13:56:25 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-pm@vger.kernel.org
-Subject: [Bug 220715] [REGRESSION] AMD P-State fails with "_CPC object is not
- present" on AMD Zen 4 between 6.10 and 6.11
-Date: Tue, 04 Nov 2025 13:56:24 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: mario.limonciello@amd.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-220715-137361-eGtBBt2Ti6@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-220715-137361@https.bugzilla.kernel.org/>
-References: <bug-220715-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=k20201202; t=1762265041;
+	bh=PLgn57zEwgHEIBzbw8uwLpryBbI82qdfuHqoYYL6TBE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=hLf0Vjvna0PLyCsTb08l03l2o2Lp96BmB0KXTDfFW9QyYUUl+7TBLw95DYncgaf+y
+	 ckO47xGvTkzu6DfgNs7oT9Pifr8PGoVtAuucG8Xu9TxknEFUYMYhuJ1+cBYBrRqm2j
+	 yy/0mEgSM0VYeZnV0UG/nD07lv10sxU1TOYC5sFdZ7wBwzkQbSMY5oYPveuE/hq+71
+	 a1UUxORqWJefahxD+b4xW+/CaHRV7UmlNHHsc9zjPP0BjMS78TgFLNeNMD9DuwN4Au
+	 2QTMQ+fRkVI2YwSIJgZf0umb4U4wP1WCIezL5aupwV6e/+omenNF5zILaf2QLANCo5
+	 nJJOYcdheUP0w==
+Date: Tue, 4 Nov 2025 15:03:58 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Loic Poulain <loic.poulain@oss.qualcomm.com>
+Cc: andersson@kernel.org, konradybcio@kernel.org, robh@kernel.org, 
+	krzk+dt@kernel.org, conor+dt@kernel.org, sre@kernel.org, 
+	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 1/5] dt-bindings: power: reset: qcom-pon: Document
+ qcom,warm-reset
+Message-ID: <20251104-spiritual-jade-marmoset-0fa0dc@kuoka>
+References: <20251103182006.1158383-1-loic.poulain@oss.qualcomm.com>
+ <20251103182006.1158383-2-loic.poulain@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20251103182006.1158383-2-loic.poulain@oss.qualcomm.com>
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D220715
+On Mon, Nov 03, 2025 at 07:20:02PM +0100, Loic Poulain wrote:
+> This property can be used as a fallback mechanism when a warm reset
+> cannot be achieved through the standard firmware interface (SCPI).
+> 
+> Signed-off-by: Loic Poulain <loic.poulain@oss.qualcomm.com>
+> ---
+>  .../devicetree/bindings/power/reset/qcom,pon.yaml          | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml b/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
+> index 979a377cb4ff..ad8691c87f4f 100644
+> --- a/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
+> +++ b/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
+> @@ -38,6 +38,13 @@ properties:
+>      minItems: 1
+>      maxItems: 2
+>  
+> +  qcom,warm-reset:
+> +    description: |
 
---- Comment #19 from Mario Limonciello (AMD) (mario.limonciello@amd.com) ---
-I believe there are (at least) two issues leading to the same behavior.  Can
-you please try Gautham's patch plus this one on 6.17?
+Do not need '|' unless you need to preserve formatting.
 
-diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
-index ab4651205e8ad..6da278e398943 100644
---- a/drivers/acpi/cppc_acpi.c
-+++ b/drivers/acpi/cppc_acpi.c
-@@ -460,7 +460,7 @@ bool acpi_cpc_valid(void)
-        if (acpi_disabled)
-                return false;
+> +      The PON (Power-On) peripheral provides support for warm reset, which can
+> +      be used as a fallback mechanism when a warm reset cannot be achieved
+> +      through the standard firmware interface.
 
--       for_each_present_cpu(cpu) {
-+       for_each_online_cpu(cpu) {
-                cpc_ptr =3D per_cpu(cpc_desc_ptr, cpu);
-                if (!cpc_ptr)
-                        return false;
+You described the desired Linux feature or behavior, not the actual
+hardware. The bindings are about the latter, so instead you need to
+rephrase the property and its description to match actual hardware
+capabilities/features/configuration etc.
 
---=20
-You may reply to this email to add a comment.
+Best regards,
+Krzysztof
 
-You are receiving this mail because:
-You are the assignee for the bug.=
 
