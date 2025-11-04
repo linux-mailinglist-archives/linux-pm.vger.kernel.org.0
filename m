@@ -1,157 +1,141 @@
-Return-Path: <linux-pm+bounces-37376-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37377-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95D58C3215B
-	for <lists+linux-pm@lfdr.de>; Tue, 04 Nov 2025 17:34:41 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 24811C32179
+	for <lists+linux-pm@lfdr.de>; Tue, 04 Nov 2025 17:37:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1F29C189BA0E
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Nov 2025 16:35:06 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 9BD97348226
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Nov 2025 16:37:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8FA433345B;
-	Tue,  4 Nov 2025 16:34:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43FA72F5308;
+	Tue,  4 Nov 2025 16:37:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Z+oOM1zV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nEvciSum"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yx1-f44.google.com (mail-yx1-f44.google.com [74.125.224.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBF89333457
-	for <linux-pm@vger.kernel.org>; Tue,  4 Nov 2025 16:34:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F53C23EAA4
+	for <linux-pm@vger.kernel.org>; Tue,  4 Nov 2025 16:37:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762274079; cv=none; b=ef8CszxrFdaO7gTSssMciEjtPQ32TJ8JdYCR/5ZnKCWG65nIm2OsmT7nycjgwsG69Z4XY4JiSZtLEZdmG/RXTtgtSPA6hziW3xzubp3Iidz7MTQjkWFEsFvKjkRgqji74nXr8uAXDTQum1ne4bwbk3HFiievUqwi5d3c9l7x7nU=
+	t=1762274257; cv=none; b=YKoMkYJc5HfwtmHbGqI5x/ML9f++cMgbx19aVXSNCq7XOw9AHSV7y5KAcuWU61R/NuejHExI/92hyIJnLmH/24X8iaGUsb4lH+k8ARpuzYyrJOBNsH4qFwJp3/5Gqb9mdMO3KAlPDvy8QJgCrURmQEfyS3tQuoJxSYX20TwfCTg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762274079; c=relaxed/simple;
-	bh=ZCRrsNnGD1S09B2y5p35lTy0oeCos0DFHrUpZ52om0g=;
+	s=arc-20240116; t=1762274257; c=relaxed/simple;
+	bh=DuOOhubZcWA1xgwlxUOpIDKiy3RUsyOZEd3bVejwO5Q=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Q1jNIwROSM1bkkOQBd1Jc1ezNsjGzkNFoYQCCVnKVLa/SklHtUe3vte7UE2sGgnCORbVktbwfR1MUwCVqxf+BNpppk8bfrjmeCQbam9HSzto2GzynUAQI8UwFSlNojoZSXZoNjU7u83YvKh6Aa/oEiypYUIombNSEyL5545oduM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Z+oOM1zV; arc=none smtp.client-ip=74.125.224.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yx1-f44.google.com with SMTP id 956f58d0204a3-63cf0df1abbso6128038d50.2
-        for <linux-pm@vger.kernel.org>; Tue, 04 Nov 2025 08:34:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1762274077; x=1762878877; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ddGDx7DY8ZvT+UQbsTdKBb2vYIe/GE/fB2OEWm/nLJk=;
-        b=Z+oOM1zVJKti99ORIdAEPWGKiTiHHMt4gN9j9j9VyTpsH0FJke8b/o2PeTufKQf06+
-         QMGhAVamfy9AVHbZlkGtLIPCHRWeHsFT3McddFfWJLRpWDPsudiIqN7t0Z5R31nStK1C
-         h4/kZfPW17y0TrZn5XYIuiZp4JbVDHMY0DAym3KOad5SqR+Rc1ShRMDog6uwjoQmdI93
-         n4XagCCKQCTAi8sjfGYMGeJv7HspXwS5eP/VGlUSxjr/fem8qVnlLs9E9/dCHS7ZI6vg
-         HSFZUKhdmFDMfEP3hTCbQxbgSQv0i1NuyaIBP/OEPh8x37Zvb0Tn77bW9bT7nlBGQqZZ
-         ssVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762274077; x=1762878877;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ddGDx7DY8ZvT+UQbsTdKBb2vYIe/GE/fB2OEWm/nLJk=;
-        b=oUdddcA0a5NpGmh6Vu0AUmvcnSNfoPvBrG40iStRqPfnrc+gggO5P+Gqo8LozV2TBg
-         FlyRk7mZHr7KmN3rn+ZRmagdGwNhHdNw5oFj/u9o0FZKDNCqlb8hscljt+H7ce28kOLk
-         zfXuaqLk+6eXEMR9W8WIIlp6MFZzdd2slaYpclx8oWo6gFXRYJ5SCIS7UIN20nbG7LmR
-         plPhyz8UbiuUt6MXSdQ+aquzncTw1QpDGwkaX7R13IO3cqgy/BUY28Zv6ImSs+QluSUF
-         vrYCdJONvmSb6azj3yGYDByauzroKVzNN9Gjh6l3wg0Xdg/Vt37x+fAmEX2FRGskpeCC
-         d+1Q==
-X-Gm-Message-State: AOJu0YxBVuUFSr+aeyvQybtQd+sEhp/93Td+VaV3+8abPhuJPogq4Pez
-	brfTBccc9kfXcv+jUM5SOioWbYL0Q4STrTd+qGUb2QbwZ+YPyRuQmExn+G/dUQQGboWPhHdzLXb
-	Ugd8ypkiSt5j+Ps9ZWz5fO789HjdpXvEqS2iK8nWoNQ==
-X-Gm-Gg: ASbGncsEvBYTgQfhFnJEHQZ7AqBEwJvjNGoiZYQqLB2CEkx25WKkiz+51kiGSwQjrp/
-	EFM359qnG4u+wB57o1zHDXclBzHOxT0aPk+tC0NSDp7WGTG04zHm3U4l0IA/+lWcbtbaGHO4OWW
-	rCiCOpef7uMjwUETojFLki1TEPQt4vtPzgTsat1MvbVX/U6A41T2aTnham/2znl60AGAtYGZJdB
-	t6+n1NXshRjse2fOj5+A4wHpWbnzRnwKfXe/19ls7G4zJTNRGFNpbboA642SQ==
-X-Google-Smtp-Source: AGHT+IHbMYmustVhhlT+m6xRfPZ0ZgypdMtcu7VuUMd6mP1bXe2DJ9gFsZnpH6bI4QSialr+pLyKljrmmrvqLPvCmm8=
-X-Received: by 2002:a05:690e:23cb:b0:63c:f5a6:f2ef with SMTP id
- 956f58d0204a3-63fd35bd9d8mr38659d50.65.1762274076778; Tue, 04 Nov 2025
- 08:34:36 -0800 (PST)
+	 To:Cc:Content-Type; b=rZnnAhHZOrhxksX08jRNZWQpJjzmykw+zNOK23s6Mg2qGlxU22ihTbhb2J4/SaLT5I8ZfwPbYW1JaKdvKQ09IjKLmmNRiG8xKunVJPzQZ2+r7miV98v9NvCJSDkwugKD/h3AKK5bWx5KLVWVBZKrHUcPuo/b7JBGriZCsLCQDVA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nEvciSum; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4218C19423
+	for <linux-pm@vger.kernel.org>; Tue,  4 Nov 2025 16:37:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762274256;
+	bh=DuOOhubZcWA1xgwlxUOpIDKiy3RUsyOZEd3bVejwO5Q=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=nEvciSumdSXML6/82981cg4ywxlDGMGJo2vxdJgHCvBVkwYLi/74Xg9omMac1D3pU
+	 k4W4hkLmOSux9rCBsDqvuBfBU+tmRNC80e/gE52gYleWIENihN7SvHY1crzp8cG9ai
+	 nulUxXNg8tr9g7srqY9Tujn5/h4+SejVFixj4OarIejH+EnUpR89ku1cNdgkwi7rJ9
+	 ZC192t8HyneHE7+2VZRGW86Y+v1h0u3tpvIBAnFLJ1zh2qbURj2iR5DOWHyTuhw/Ut
+	 DL70wEPdpG4MJH5mfcWPwTUrgHLTbWw6iBR9Ub92wpgE/smkeiBF82hczvm3oXrx8p
+	 Ji5KdeR1eA96g==
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-3d322b3fd7eso2115671fac.0
+        for <linux-pm@vger.kernel.org>; Tue, 04 Nov 2025 08:37:36 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXNZfmcZs7aI4+hjEfieb2z4UXtH1VUV0cc64hAh2O6xBRK0fS//1inqe2o1+JYAhhvTqKeLWSxOg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyGzH76iYIo4hzUFhjy0wSOLcagXp66w/88fu5ljNs/td9CuqX7
+	EIiFjes+YPGXLovMdoYZh+YKprfRu4FpjdIZn2x7FTYtmjEk0gY47Yos80TMuCxiS3EZ2xDVD/4
+	b6AbiB0YOM+oUIA06vyiwL/xPCNo/1rw=
+X-Google-Smtp-Source: AGHT+IFXhOxmxGRnAcwSt+4j7yeZnol49jxRf5wL+5NFterYp0qzsLK3BsehgdFzddQzZeagyb8msspIXFqt3WTKgmw=
+X-Received: by 2002:a05:6871:e70e:b0:3cd:c87c:c639 with SMTP id
+ 586e51a60fabf-3daccf0f1d7mr7881618fac.49.1762274256026; Tue, 04 Nov 2025
+ 08:37:36 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CGME20251027125521eucas1p206cd5a0dd4c3a80bc8abe7d9a5e61706@eucas1p2.samsung.com>
- <20251027125515.1219940-1-m.szyprowski@samsung.com>
-In-Reply-To: <20251027125515.1219940-1-m.szyprowski@samsung.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Tue, 4 Nov 2025 17:34:00 +0100
-X-Gm-Features: AWmQ_blmnc7xyq9khBlGTyV4UvzKjRpkE7cFZ6cuEA1Z_dVEpjKnivKnW8fVoDI
-Message-ID: <CAPDyKFr3JDgh2c_XVvSdWrzTeiH_aSy2AE3pqW7HC2sWJZsrRQ@mail.gmail.com>
-Subject: Re: [PATCH v2] pmdomain: samsung: Rework legacy splash-screen
- handover workaround
-To: Marek Szyprowski <m.szyprowski@samsung.com>
-Cc: linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org, 
-	Krzysztof Kozlowski <krzk@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
-	=?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
-	Peter Griffin <peter.griffin@linaro.org>
+References: <20251016151929.75863-1-ulf.hansson@linaro.org>
+ <20251016151929.75863-3-ulf.hansson@linaro.org> <7h1pmik3w9.fsf@baylibre.com> <CAPDyKFr1bC1=3psegT0DM0tPQaCUm1DoOxV3xBa-gVV6oSuRVA@mail.gmail.com>
+In-Reply-To: <CAPDyKFr1bC1=3psegT0DM0tPQaCUm1DoOxV3xBa-gVV6oSuRVA@mail.gmail.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 4 Nov 2025 17:37:24 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0gfd+nvvkthtjtKgw22kek02K68rOLYTy=a39D0uZYpMw@mail.gmail.com>
+X-Gm-Features: AWmQ_bn6BjRKXNK8_yMwOIPmPhLg_KvpDrsfbP_oTSAaCe6f9Sz3SI5DxQrz6q4
+Message-ID: <CAJZ5v0gfd+nvvkthtjtKgw22kek02K68rOLYTy=a39D0uZYpMw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/4] pmdomain: Respect the CPU system-wakeup QoS limit
+ during s2idle
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Kevin Hilman <khilman@baylibre.com>, "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org, 
+	Vincent Guittot <vincent.guittot@linaro.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Pavel Machek <pavel@kernel.org>, Len Brown <len.brown@intel.com>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, Saravana Kannan <saravanak@google.com>, 
+	Maulik Shah <quic_mkshah@quicinc.com>, Prasad Sodagudi <psodagud@quicinc.com>, 
+	Dhruva Gole <d-gole@ti.com>, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 27 Oct 2025 at 13:55, Marek Szyprowski <m.szyprowski@samsung.com> wrote:
+On Tue, Nov 4, 2025 at 5:10=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro.org>=
+ wrote:
 >
-> Limit the workaround for the lack of the proper splash-screen handover
-> handling to the legacy ARM 32bit systems and replace forcing a sync_state
-> by explicite power domain shutdown. This approach lets compiler to
-> optimize it out on newer ARM 64bit systems.
+> On Sat, 1 Nov 2025 at 01:11, Kevin Hilman <khilman@baylibre.com> wrote:
+> >
+> > Ulf Hansson <ulf.hansson@linaro.org> writes:
+> >
+> > > A CPU system-wakeup QoS limit may have been requested by user-space. =
+To
+> > > avoid breaking this constraint when entering a low-power state during
+> > > s2idle through genpd, let's extend the corresponding genpd governor f=
+or
+> > > CPUs. More precisely, during s2idle let the genpd governor select a
+> > > suitable low-power state, by taking into account the QoS limit.
+> >
+> > In addition to a QoS limit requested by userspace, shouldn't any
+> > per-device QoS limits from devices in the PM domain with CPUs/clusters
+> > also be considered?
+> >
+> > Right now, if a device is in a PM domain that also contains CPUs, any
+> > per-device QoS constraints for those devices should also impact the
+> > state chosen by s2idle.
 >
-> Suggested-by: Ulf Hansson <ulf.hansson@linaro.org>
-> Fixes: 0745658aebbe ("pmdomain: samsung: Fix splash-screen handover by enforcing a sync_state")
-> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> I am not so sure about that. The existing dev PM QoS latency is
+> targeted towards runtime suspend of a device and the genpd governor
+> also takes it into account for this use case.
+>
+> If we would start to take the same dev PM QoS latency constraint into
+> account for system suspend (s2idle), it may not be what the user
+> really intended. Instead, I think we should consider extending the dev
+> PM QoS interface, to allow the user to set a specific latency limit
+> for system wakeup. Then the genpd governor should take that into
+> account for s2idle.
+>
+> >
+> > I just tried a quick hack of extending you cpu_system_power_down_ok()
+> > function to look for any per-device QoS constraints set all devices in
+> > the PM domain (and subdomains).  It takes the min of all the per-device
+> > QoS constratins, compares it to the one from userspace, and uses the mi=
+n
+> > of those to decide the genpd state.
+> >
+> > That has the effect I'm after, but curious what you think about the
+> > usecase and the idea?
+>
+> It makes sense, but as stated above, I think we need a new QoS limit
+> specific for system suspend.
+>
+> Rafael, what's your thoughts around this?
 
-Applied for fixes, thanks!
+Well, it's analogous to the CPU latency limit case, so if a new
+"system suspend" QoS limit is introduced for CPUs, that also needs to
+be done for the other devices.
 
-Kind regards
-Uffe
+However, as in the CPU case, my personal view is that the "system
+suspend" latency limits should be greater than or equal to the
+corresponding latency limits for runtime PM.
 
-
-> ---
-> v2:
-> - removed label check, as this violates ABI
->
-> v1: https://lore.kernel.org/all/20251024093603.3484783-1-m.szyprowski@samsung.com/
-> ---
->  drivers/pmdomain/samsung/exynos-pm-domains.c | 18 +++++++++---------
->  1 file changed, 9 insertions(+), 9 deletions(-)
->
-> diff --git a/drivers/pmdomain/samsung/exynos-pm-domains.c b/drivers/pmdomain/samsung/exynos-pm-domains.c
-> index f53e1bd24798..5c3aa8983087 100644
-> --- a/drivers/pmdomain/samsung/exynos-pm-domains.c
-> +++ b/drivers/pmdomain/samsung/exynos-pm-domains.c
-> @@ -128,6 +128,15 @@ static int exynos_pd_probe(struct platform_device *pdev)
->         pd->pd.power_on = exynos_pd_power_on;
->         pd->local_pwr_cfg = pm_domain_cfg->local_pwr_cfg;
->
-> +       /*
-> +        * Some Samsung platforms with bootloaders turning on the splash-screen
-> +        * and handing it over to the kernel, requires the power-domains to be
-> +        * reset during boot.
-> +        */
-> +       if (IS_ENABLED(CONFIG_ARM) &&
-> +           of_device_is_compatible(np, "samsung,exynos4210-pd"))
-> +               exynos_pd_power_off(&pd->pd);
-> +
->         on = readl_relaxed(pd->base + 0x4) & pd->local_pwr_cfg;
->
->         pm_genpd_init(&pd->pd, NULL, !on);
-> @@ -146,15 +155,6 @@ static int exynos_pd_probe(struct platform_device *pdev)
->                                 parent.np, child.np);
->         }
->
-> -       /*
-> -        * Some Samsung platforms with bootloaders turning on the splash-screen
-> -        * and handing it over to the kernel, requires the power-domains to be
-> -        * reset during boot. As a temporary hack to manage this, let's enforce
-> -        * a sync_state.
-> -        */
-> -       if (!ret)
-> -               of_genpd_sync_state(np);
-> -
->         pm_runtime_enable(dev);
->         return ret;
->  }
-> --
-> 2.34.1
->
+One more thing that has just occurred to me is that there are systems
+in which I don't want to enable the "system suspend" limits at all.
+IOW, all of this needs to be disabled unless the platform opts in.
 
