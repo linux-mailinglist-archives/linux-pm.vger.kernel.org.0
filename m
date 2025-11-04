@@ -1,233 +1,129 @@
-Return-Path: <linux-pm+bounces-37362-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37363-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id A88EEC3148D
-	for <lists+linux-pm@lfdr.de>; Tue, 04 Nov 2025 14:46:35 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id B706CC3152F
+	for <lists+linux-pm@lfdr.de>; Tue, 04 Nov 2025 14:56:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 7F2A94EACDA
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Nov 2025 13:44:00 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id B0FEC4E6946
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Nov 2025 13:55:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 420CC328B58;
-	Tue,  4 Nov 2025 13:43:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="I9hwvzaw"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90236329E52;
+	Tue,  4 Nov 2025 13:55:44 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A4FA2E9721
-	for <linux-pm@vger.kernel.org>; Tue,  4 Nov 2025 13:43:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.173
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56E31320CC0;
+	Tue,  4 Nov 2025 13:55:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762263839; cv=none; b=AhNXBXvZImULIKiLosKs7sevngN8pNmL/GhvHKxbOXIxoCAe6ujTmpTCw2eBD6djev8QGNc6eOK64L109MUyzTRsOSKSq3FIYLTJu8UO4S9I4guWFU/zKjGFnNYppxBgI1svJvMvv9oddVVDPsKYwXcAUEAZhXxLhHQ0B/YDJ+w=
+	t=1762264544; cv=none; b=h3KvIo0fmrC3tAx5Tn6GKRjr5hOiHQFN2fMi6FfLW4w8fRgs0DMNVk0Rb5QE2/1zyh/V/tAd2OKiw6WUXnp1w8L7SL2VZc9GUl1XaIqeBc1YONx7m1jiu0rhv1Sbv5GrCuv17bWMcJEPRYK7dw+/ISD6yqlj731WOUK5pJB7ZHU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762263839; c=relaxed/simple;
-	bh=lFb4yPpZtK3Bwon0C6HzQEwc8sB9kXocdlaLUdamsf0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jTzn+TZ2pGZcRxXGNDLOBps6xv0LlTQjYcOlLgu9sNrTrbG8PRBR7kR6eUPL+rNv6njM2tilHL638/W9QS61a9MPRFvZroyL2VGk8x7umkUOBeDF5qVMk/zeKHAZp3vEsuEPXItpIZPRPUatkeLVD3Si1di0r1694sxFmcU1NGM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=I9hwvzaw; arc=none smtp.client-ip=209.85.128.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-786943affbaso10577437b3.0
-        for <linux-pm@vger.kernel.org>; Tue, 04 Nov 2025 05:43:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1762263835; x=1762868635; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=bjiVDEb6cm0IQNwx2lZ93BPJc14dj5R/bK/BpZzo6VU=;
-        b=I9hwvzawBO4KDl6ZO6louKM+uvS6N6d4rzjhWMmpIhuMK2ZDivLApkeJnEO0fbpFnf
-         B40OIoh//ioyAtiLwpv78oEn0oR1LQNdPY44fn1LBwyKVijDAyuLK0ERe87143zx9ybH
-         /l5oxsXUA3lib1ijp43oXr4sc5yHStcZjWmMwqXYtrhzLd3KfjZ01j4s9Hd/vE7dfqF/
-         +Vn9wL/EoD2qybmetygq1gIAHhLehjMXh5+mzgpiBMSoozrByM+7kxC7a4JLFZ8lEE4S
-         UDmXngdwOCALajwBdmid0wQnmdNBEkqaT1YdzX72eX4wpFOxTK6NHfSRw0dB0owxEEfk
-         58Aw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762263835; x=1762868635;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bjiVDEb6cm0IQNwx2lZ93BPJc14dj5R/bK/BpZzo6VU=;
-        b=WzHE39agKTYoKki+rwpbwGfLSzZJw9WMabPrOyS9sdvhydRyjeUGTW/DOVRvQ3cjuj
-         IeWepBytuRhfw57FUXKXnLxMyxOy9um9eIys4npL1yGW/5SIDoALiOUJSq9vVFhNBrkS
-         W0Ah+kbbNNKF8+w40o2VbT5klfxoU1XnmMB3kuZE2LoPiXFK2tEgC9OE9o5VfwuhL3++
-         WrFQWQ93rTW/cqNU5jpXoMj5PMTHgg0t+KxnUoFwlRDuUWdNkBXGjawFD4ldP8BBFU5h
-         tsq7gOvReaClr4bFZrAIR4LkflT4M2HkamNdPgQi8QuvZGi0Au+yfF/MK0sQB/JAvt24
-         9n4Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXKHWJ2oLlLcmjfzuqDpsCCyx2fMPvG7uR+RA1Wm/Lru6XGOgqnINIS5ozr3DG9f5diHm7HkaMQ0A==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw4xE6UeE1RFjrp/UgV7izcVbwL5LLnktZCmXT0kVzkIc5HKTqT
-	8FgXTPEGiJizRdunY0NTpFyODE8/l7LKUH4Zg3bNVpSBxra09uzbjB/HhAG0924z+ljz2cdkSC8
-	LmP5JESnxESoQyfOHHVM3mK8xHAkHIy8Ges8r/KSTbQ==
-X-Gm-Gg: ASbGncuqHCRCbtNs/qwwpl05T5rj/MTtD7EH7PbuZ3rCt+XmHNGjySsXpdrQBfH7kyV
-	65djYilDxNKGQvFi+qDCdV+FOohWcOnuQkwBdibwv9NNvPedDJq2rJVg6W6FVFhxbPmtHvXPg3r
-	LUjHKzuZIfsncTlphyHshmP5K2hnydBrySL+QNjWXXN6J6VwmQarOvCFE7fJ2WoS9rXu4RZFC5t
-	LL0/uFNwB2UlmdJBIeoI1F7oh5CPSdFto6yCRHXgk7KaVHnsBxLCQYYnfFcWA==
-X-Google-Smtp-Source: AGHT+IH+xJM5OuT+ynGz/BcB2JMNDwt+HfQJxGitdqIPsmVDhekVmNUAamUG4n8DzrZpGoHggRFap3lMfbO2RdQhyHw=
-X-Received: by 2002:a05:690c:708f:b0:781:212f:b508 with SMTP id
- 00721157ae682-786485533d5mr151925497b3.63.1762263834960; Tue, 04 Nov 2025
- 05:43:54 -0800 (PST)
+	s=arc-20240116; t=1762264544; c=relaxed/simple;
+	bh=WlATIyN7OY1lmmvv+dDA36bx0fRkHJFpAzHG8BwceyI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JJbbhoODmVIfErwzg3/kN3QdgMw0S3w6FtboGRbgec/Ka4ViIJliR4Ndr8grmYrbr2HQrB7jHmfICivrt+pE3l54HnsFDHgW1CdGbcPEHiOASO6b7kYSihJdwUoEWqyuXsXrkPkP/okzb/E7EzpDaO23UbQGx+vsLpLr6gayiYg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 97F9E1CE0;
+	Tue,  4 Nov 2025 05:55:33 -0800 (PST)
+Received: from arm.com (RQ4T19M611-5.cambridge.arm.com [10.1.31.107])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 004DB3F694;
+	Tue,  4 Nov 2025 05:55:37 -0800 (PST)
+Date: Tue, 4 Nov 2025 13:55:35 +0000
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Ankur Arora <ankur.a.arora@oracle.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+	Linux-Arch <linux-arch@vger.kernel.org>,
+	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+	bpf@vger.kernel.org, Will Deacon <will@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Haris Okanovic <harisokn@amazon.com>,
+	"Christoph Lameter (Ampere)" <cl@gentwo.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, zhenglifeng1@huawei.com,
+	xueshuai@linux.alibaba.com,
+	Joao Martins <joao.m.martins@oracle.com>,
+	Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+	Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
+Subject: Re: [RESEND PATCH v7 2/7] arm64: barrier: Support
+ smp_cond_load_relaxed_timeout()
+Message-ID: <aQoF1-uKTgJo89W8@arm.com>
+References: <20251028053136.692462-1-ankur.a.arora@oracle.com>
+ <20251028053136.692462-3-ankur.a.arora@oracle.com>
+ <3642cfd1-7da6-4a75-80b7-00c21ab6955f@app.fastmail.com>
+ <87qzumq51p.fsf@oracle.com>
+ <aQEy6ObvE0s2Gfbg@arm.com>
+ <746c2de4-7613-4f13-911c-c2c4e071ed73@app.fastmail.com>
+ <87ikfqesr2.fsf@oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251016151929.75863-1-ulf.hansson@linaro.org>
- <20251016151929.75863-4-ulf.hansson@linaro.org> <20251031192322.kpsy5biokvuywzdj@lcpd911>
-In-Reply-To: <20251031192322.kpsy5biokvuywzdj@lcpd911>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Tue, 4 Nov 2025 14:43:19 +0100
-X-Gm-Features: AWmQ_bn-zdaH9ELfagCV1hR3Eqqv5E86xcqWdZ7QiiQHIMqA2xOLmg6yZU16JBQ
-Message-ID: <CAPDyKFp8DuNE-j6Fpejgbg3+HK00RiuvbtG+Ypud4uzFBRO99g@mail.gmail.com>
-Subject: Re: [PATCH v2 3/4] sched: idle: Respect the CPU system-wakeup QoS
- limit for s2idle
-To: Dhruva Gole <d-gole@ti.com>
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org, 
-	Vincent Guittot <vincent.guittot@linaro.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Kevin Hilman <khilman@baylibre.com>, Pavel Machek <pavel@kernel.org>, Len Brown <len.brown@intel.com>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, Saravana Kannan <saravanak@google.com>, 
-	Maulik Shah <quic_mkshah@quicinc.com>, Prasad Sodagudi <psodagud@quicinc.com>, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87ikfqesr2.fsf@oracle.com>
 
-On Fri, 31 Oct 2025 at 20:23, Dhruva Gole <d-gole@ti.com> wrote:
->
-> On Oct 16, 2025 at 17:19:23 +0200, Ulf Hansson wrote:
-> > A CPU system-wakeup QoS limit may have been requested by user-space. To
-> > avoid breaking this constraint when entering a low-power state during
-> > s2idle, let's start to take into account the QoS limit.
-> >
-> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> > ---
-> >
-> > Changes in v2:
-> >       - Rework the code to take into account the failure/error path, when we
-> >       don't find a s2idle specific state.
-> >
-> > ---
-> >  drivers/cpuidle/cpuidle.c | 12 +++++++-----
-> >  include/linux/cpuidle.h   |  6 ++++--
-> >  kernel/sched/idle.c       | 12 +++++++-----
-> >  3 files changed, 18 insertions(+), 12 deletions(-)
-> >
-> > diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
-> > index 56132e843c99..c7876e9e024f 100644
-> > --- a/drivers/cpuidle/cpuidle.c
-> > +++ b/drivers/cpuidle/cpuidle.c
-> > @@ -184,20 +184,22 @@ static noinstr void enter_s2idle_proper(struct cpuidle_driver *drv,
-> >   * cpuidle_enter_s2idle - Enter an idle state suitable for suspend-to-idle.
-> >   * @drv: cpuidle driver for the given CPU.
-> >   * @dev: cpuidle device for the given CPU.
-> > + * @latency_limit_ns: Idle state exit latency limit
-> >   *
-> >   * If there are states with the ->enter_s2idle callback, find the deepest of
-> >   * them and enter it with frozen tick.
-> >   */
-> > -int cpuidle_enter_s2idle(struct cpuidle_driver *drv, struct cpuidle_device *dev)
-> > +int cpuidle_enter_s2idle(struct cpuidle_driver *drv, struct cpuidle_device *dev,
-> > +                      u64 latency_limit_ns)
-> >  {
-> >       int index;
-> >
-> >       /*
-> > -      * Find the deepest state with ->enter_s2idle present, which guarantees
-> > -      * that interrupts won't be enabled when it exits and allows the tick to
-> > -      * be frozen safely.
-> > +      * Find the deepest state with ->enter_s2idle present that meets the
-> > +      * specified latency limit, which guarantees that interrupts won't be
-> > +      * enabled when it exits and allows the tick to be frozen safely.
-> >        */
-> > -     index = find_deepest_state(drv, dev, U64_MAX, 0, true);
-> > +     index = find_deepest_state(drv, dev, latency_limit_ns, 0, true);
-> >       if (index > 0) {
-> >               enter_s2idle_proper(drv, dev, index);
-> >               local_irq_enable();
-> > diff --git a/include/linux/cpuidle.h b/include/linux/cpuidle.h
-> > index a9ee4fe55dcf..4073690504a7 100644
-> > --- a/include/linux/cpuidle.h
-> > +++ b/include/linux/cpuidle.h
-> > @@ -248,7 +248,8 @@ extern int cpuidle_find_deepest_state(struct cpuidle_driver *drv,
-> >                                     struct cpuidle_device *dev,
-> >                                     u64 latency_limit_ns);
-> >  extern int cpuidle_enter_s2idle(struct cpuidle_driver *drv,
-> > -                             struct cpuidle_device *dev);
-> > +                             struct cpuidle_device *dev,
-> > +                             u64 latency_limit_ns);
-> >  extern void cpuidle_use_deepest_state(u64 latency_limit_ns);
-> >  #else
-> >  static inline int cpuidle_find_deepest_state(struct cpuidle_driver *drv,
-> > @@ -256,7 +257,8 @@ static inline int cpuidle_find_deepest_state(struct cpuidle_driver *drv,
-> >                                            u64 latency_limit_ns)
-> >  {return -ENODEV; }
-> >  static inline int cpuidle_enter_s2idle(struct cpuidle_driver *drv,
-> > -                                    struct cpuidle_device *dev)
-> > +                                    struct cpuidle_device *dev,
-> > +                                    u64 latency_limit_ns)
-> >  {return -ENODEV; }
-> >  static inline void cpuidle_use_deepest_state(u64 latency_limit_ns)
-> >  {
-> > diff --git a/kernel/sched/idle.c b/kernel/sched/idle.c
-> > index c39b089d4f09..c1c3d0166610 100644
-> > --- a/kernel/sched/idle.c
-> > +++ b/kernel/sched/idle.c
-> > @@ -131,12 +131,13 @@ void __cpuidle default_idle_call(void)
-> >  }
-> >
-> >  static int call_cpuidle_s2idle(struct cpuidle_driver *drv,
-> > -                            struct cpuidle_device *dev)
-> > +                            struct cpuidle_device *dev,
-> > +                            u64 max_latency_ns)
-> >  {
-> >       if (current_clr_polling_and_test())
-> >               return -EBUSY;
-> >
-> > -     return cpuidle_enter_s2idle(drv, dev);
-> > +     return cpuidle_enter_s2idle(drv, dev, max_latency_ns);
-> >  }
-> >
-> >  static int call_cpuidle(struct cpuidle_driver *drv, struct cpuidle_device *dev,
-> > @@ -205,12 +206,13 @@ static void cpuidle_idle_call(void)
-> >               u64 max_latency_ns;
-> >
-> >               if (idle_should_enter_s2idle()) {
-> > +                     max_latency_ns = cpu_wakeup_latency_qos_limit() *
-> > +                                      NSEC_PER_USEC;
->
-> This is only taking into account the new API for the
-> cpu_wakeup_latency_qos_limit, however what if someone has set
-> cpu_latency_qos_limit, doesn't that need to be honoured?
-> Just trying to understand the differences in both qos here and why one
-> is chosen over the other.
+On Mon, Nov 03, 2025 at 01:00:33PM -0800, Ankur Arora wrote:
+>     /**
+>     * smp_cond_load_relaxed_timeout() - (Spin) wait for cond with no ordering
+>     * guarantees until a timeout expires.
+>     * @ptr: pointer to the variable to wait on
+>     * @cond: boolean expression to wait for
+>     * @time_expr: time expression in caller's preferred clock
+>     * @time_end: end time in nanosecond (compared against time_expr;
+>     * might also be used for setting up a future event.)
+>     *
+>     * Equivalent to using READ_ONCE() on the condition variable.
+>     *
+>     * Note that the expiration of the timeout might have an architecture specific
+>     * delay.
+>     */
+>     #ifndef smp_cond_load_relaxed_timeout
+>     #define smp_cond_load_relaxed_timeout(ptr, cond_expr, time_expr, time_end_ns)	\
+>     ({									\
+>             typeof(ptr) __PTR = (ptr);					\
+>             __unqual_scalar_typeof(*ptr) VAL;				\
+>             u32 __n = 0, __spin = SMP_TIMEOUT_POLL_COUNT;		\
+>             u64 __time_end_ns = (time_end_ns);				\
+>                                                                         \
+>             for (;;) {							\
+>                     VAL = READ_ONCE(*__PTR);				\
+>                     if (cond_expr)					\
+>                             break;					\
+>                     cpu_poll_relax(__PTR, VAL, __time_end_ns);		\
 
-cpu_latency_qos_limit is for runtime only, during regular cpuidle idle
-state selection.
+With time_end_ns being passed to cpu_poll_relax(), we assume that this
+is always the absolute time. Do we still need time_expr in this case?
+It works for WFET as long as we can map this time_end_ns onto the
+hardware CNTVCT.
 
-The new cpu_wakeup_latency_qos_limit is taken into account above for
-s2idle, specifically.
+Alternatively, we could pass something like remaining_ns, though not
+sure how smp_cond_load_relaxed_timeout() can decide to spin before
+checking time_expr again (we probably went over this in the past two
+years ;)).
 
-That said, Rafael suggests that the new cpu_wakeup_latency_qos_limit
-should be respected for runtime cpuidle state selection too, so I am
-working on updating the series to take that into account.
+>                     if (++__n < __spin)				\
+>                             continue;					\
+>                     if ((time_expr) >= __time_end_ns) {		\
+>                             VAL = READ_ONCE(*__PTR);			\
+>                             break;					\
+>                     }							\
+>                     __n = 0;						\
+>             }								\
+>             (typeof(*ptr))VAL;						\
+>     })
+>     #endif
 
->
-> >
-> > -                     entered_state = call_cpuidle_s2idle(drv, dev);
-> > +                     entered_state = call_cpuidle_s2idle(drv, dev,
-> > +                                                         max_latency_ns);
-> >                       if (entered_state > 0)
-> >                               goto exit_idle;
-> > -
-> > -                     max_latency_ns = U64_MAX;
-> >               } else {
-> >                       max_latency_ns = dev->forced_idle_latency_limit_ns;
-> >               }
-> > --
-> > 2.43.0
-> >
->
-
-Kind regards
-Uffe
+-- 
+Catalin
 
