@@ -1,170 +1,291 @@
-Return-Path: <linux-pm+bounces-37381-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37382-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61131C3275A
-	for <lists+linux-pm@lfdr.de>; Tue, 04 Nov 2025 18:55:29 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id F2D2BC32850
+	for <lists+linux-pm@lfdr.de>; Tue, 04 Nov 2025 19:08:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B8EA24606BD
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Nov 2025 17:53:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 41566428157
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Nov 2025 18:08:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4186C32F75A;
-	Tue,  4 Nov 2025 17:53:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2678B33DEF4;
+	Tue,  4 Nov 2025 18:08:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hfVCOmmQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KJrL8B9V"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BD60265CAD
-	for <linux-pm@vger.kernel.org>; Tue,  4 Nov 2025 17:53:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F386A33BBCB
+	for <linux-pm@vger.kernel.org>; Tue,  4 Nov 2025 18:08:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762278835; cv=none; b=tvt7GOPgwE9iLMq+5fnoHVQ7+GFZqsDleDcuqqcH+hyTv8dhDl5VMz2JulJK1mCnmQu5T2KA/PqTwhr+AXw7NMmwuiWNdiQKGoMDktUg1Gve3tJltauWvV2ljdU+w+a+Y5AF94KMMlaF/aDibNsBttwWX7+kwJtL/WHpFxRX7H8=
+	t=1762279689; cv=none; b=pBMCH7gsqxQBChLKOok5UwXEd16p9DlfeYzXrRorTUPBtCVXri8wPrOx7sjiPwHFoKoBy4nbMlvn9GsXJH47XUH7sw0Fo8g1ISAjHEhSU+QUDmGylfybmZE2P/wxKoD0GVe9lOwQy2s6zOm2o5Um4lVEja7BEgZIPShcIrmVU9s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762278835; c=relaxed/simple;
-	bh=4hzRU6ss8U4fWqin9nFCaI1qV2IBedG+xi67mTxhfaQ=;
+	s=arc-20240116; t=1762279689; c=relaxed/simple;
+	bh=H+B0qEVhv/M/Hrjk3KWB9ja4t4CC1iXUb3hu7bcvErk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TiZMjo6H3X8+YShTTEN98272pFAzJfEr82dfBGfWnwAiVSo2pXnoKl19BZ3Dx6ZyEqxtOv98LgjcCvtmlztmUbuJV7S7/35Ce34nTHrUlIQ0ddUY13n1TZygDasg/BMYwDiHY+9J7vQdyArkMTcF7GQSvi/lEXdy/OcIajA7lwM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hfVCOmmQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEC07C2BC86
-	for <linux-pm@vger.kernel.org>; Tue,  4 Nov 2025 17:53:54 +0000 (UTC)
+	 To:Cc:Content-Type; b=TEoeKm8q6z9OEBXIf9uR6RmER6b7fAsg3L0RTUb2uFCwN4ab72NoYlybAsRM1tWywej+w6Uy84PC3vnsmE4tbtoPt9Q93jfHWY2adVsqqXsCP2Q1hN1SbFTNExfyYXwux3tQGq1ySlOYlVYQRfkZpZRVfTBjm9y8mPmOnpEhBgE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KJrL8B9V; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A249EC2BCB3
+	for <linux-pm@vger.kernel.org>; Tue,  4 Nov 2025 18:08:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762278834;
-	bh=4hzRU6ss8U4fWqin9nFCaI1qV2IBedG+xi67mTxhfaQ=;
+	s=k20201202; t=1762279688;
+	bh=H+B0qEVhv/M/Hrjk3KWB9ja4t4CC1iXUb3hu7bcvErk=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=hfVCOmmQP9my7tztW2X3uNkkzAMrEXVQLAhzZEqQ4wwo83P9U/3qgh8fcVVf5buN2
-	 2GnXS/+AXcvUq1cefO3FtsMeAbSyQRBNPoquZQMxSKtLKwMUx0mwR2S2T4F2CwHvJm
-	 coYCaalAZ9E9farbt951E7ZJMc8Qouvps76C9gCYB9JVJVcDBWW3W6a1yk3HSM6MUZ
-	 bvbnx1A5doYxaInpx7KzlBcxkgBDgTOncWtnp7kB02Yis9//ep4UMtwZn4xpq1vTQp
-	 q36gkwI9QnxfOEUXsufWXGdS+QA8DOSU/pOcr9IT1AlslwRImihnO1QBz6u+Ikq5kP
-	 jV7fZXn0XxT6A==
-Received: by mail-oi1-f178.google.com with SMTP id 5614622812f47-44fe3f9c5easo144937b6e.3
-        for <linux-pm@vger.kernel.org>; Tue, 04 Nov 2025 09:53:54 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXLkzx5lsRjJ2WKFwu+2D/9BG6rIPaHc58L83uvIKEVe246lJR2dXwy84B1RMfy5BCYpfSWnSjn8Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywl96kV9TFPdpTmbdQYIxcEypkyg++296TpdY1cJ+qX6ulmczpE
-	zjbnSh4AaVMTyCJcYu0IR/DqFpNVTm3TpC9mDjFrODn2HpZMgd8AXrZzoUJjQcITH9fZDIRB6N3
-	mS/NHpZ8Mj0R2eL9KX1F2kGswk+MGGOI=
-X-Google-Smtp-Source: AGHT+IGFLqkcQhOUrzEwptPqwx82pkPWkJsPcVzdUWOMk7xclq7T/jTZ1hHNBQ3utDZS0Ipkng83GkWOb8pRiRw79ew=
-X-Received: by 2002:a05:6808:4f6b:b0:438:40c3:8765 with SMTP id
- 5614622812f47-44fed10da20mr141549b6e.0.1762278833950; Tue, 04 Nov 2025
- 09:53:53 -0800 (PST)
+	b=KJrL8B9VsSLFRaN5Nv1r2sEA54BPIO+ykvVUGuuC08YenM2w7o8J20Ceh7r/NCmzj
+	 s+/VQhStBW6h0154jcj66OvTOKzoTYmHA4KoQHqhpkqymuqUgSzhPOFK428T7rF5rZ
+	 CM6CIC9CIRUaqwmp3Lf//Y4xAZARt4PPzAXnFBh1okMmZcTGMpRiR8hkrEdk8xS4VD
+	 i0UT0nODeY+9zE3P1Di1G8dOh73jcDZFxvRwDSydikmuYS/0GmWGDUJarf2amWYZWy
+	 3VqVc0kiCG6KaSsXelDoTIeuK9tK5oc0hNTIEeDA6CWKO75wyt5WOIX1UdYmfrRCj1
+	 gSWTA4WPA4vVw==
+Received: by mail-oi1-f179.google.com with SMTP id 5614622812f47-44fe4ba1c1bso240241b6e.2
+        for <linux-pm@vger.kernel.org>; Tue, 04 Nov 2025 10:08:08 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUnHxPi4t9MatidC6dHSfh3DeKK3xcAwFtJWe3AKlrge7UHsKbCpKRkVGnVIwrvNT9K55/w5bwOcg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywvgvn93g+F7ViNb/u1swaDJN5lJ9MXpI1IcNb1C450Eut8q1Bj
+	oypu0N3Jfvm9PZNmwl6st++D/WTf//BtawZ3jgMROz1mFvfNuY0tjqDeW3qqoXCAhSt9ksnW5QU
+	q43oiP9ISnpGHNIQJh56H7nqo9IUvPWc=
+X-Google-Smtp-Source: AGHT+IHrSDGsNm50EjcF44D9MNFIEETayiGYgQQjLT67U0YPEVK8ag1wTkiiHIa/UUFfTk6ozb0F0TfYt8pNd0QYGzw=
+X-Received: by 2002:a05:6808:c146:b0:44d:ba5b:ad34 with SMTP id
+ 5614622812f47-44fed503d77mr152270b6e.65.1762279687546; Tue, 04 Nov 2025
+ 10:08:07 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251016151929.75863-1-ulf.hansson@linaro.org>
- <20251016151929.75863-3-ulf.hansson@linaro.org> <7h1pmik3w9.fsf@baylibre.com>
- <CAPDyKFr1bC1=3psegT0DM0tPQaCUm1DoOxV3xBa-gVV6oSuRVA@mail.gmail.com>
- <CAJZ5v0gfd+nvvkthtjtKgw22kek02K68rOLYTy=a39D0uZYpMw@mail.gmail.com> <CAPDyKFrgJf05H8S8_p9+w3V3ND7NPpHSU=bpEBk75-goO+FUjA@mail.gmail.com>
-In-Reply-To: <CAPDyKFrgJf05H8S8_p9+w3V3ND7NPpHSU=bpEBk75-goO+FUjA@mail.gmail.com>
+References: <20251028053136.692462-1-ankur.a.arora@oracle.com>
+ <20251028053136.692462-8-ankur.a.arora@oracle.com> <CAJZ5v0hSvzHfsE4nrEW-Ey0dnJ+m=dSU-f1RywGNU0Xyi3jXtQ@mail.gmail.com>
+ <87ms5ajp4c.fsf@oracle.com> <CAJZ5v0hQ7G9jvOv9VtRmsCKahBpUcPJMMOe07k_2mqsvggWcWg@mail.gmail.com>
+ <874irhjzcf.fsf@oracle.com> <CAJZ5v0i5-8eO6T_-Sr-K=3Up89+_qtJW7NSjDknJSkk3Nhu8BQ@mail.gmail.com>
+ <875xbxifs0.fsf@oracle.com>
+In-Reply-To: <875xbxifs0.fsf@oracle.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 4 Nov 2025 18:53:41 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0hbpKBd7jFJKPG80o3TAgXSX9JZ5cCALkTu055VgDnMww@mail.gmail.com>
-X-Gm-Features: AWmQ_blgBgFORxei_JYnBfMjTHZJZd9ppgNZnqJJz09mTdSEqIPO8xPE-u6TFh4
-Message-ID: <CAJZ5v0hbpKBd7jFJKPG80o3TAgXSX9JZ5cCALkTu055VgDnMww@mail.gmail.com>
-Subject: Re: [PATCH v2 2/4] pmdomain: Respect the CPU system-wakeup QoS limit
- during s2idle
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Kevin Hilman <khilman@baylibre.com>, linux-pm@vger.kernel.org, 
-	Vincent Guittot <vincent.guittot@linaro.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Pavel Machek <pavel@kernel.org>, Len Brown <len.brown@intel.com>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, Saravana Kannan <saravanak@google.com>, 
-	Maulik Shah <quic_mkshah@quicinc.com>, Prasad Sodagudi <psodagud@quicinc.com>, 
-	Dhruva Gole <d-gole@ti.com>, linux-kernel@vger.kernel.org
+Date: Tue, 4 Nov 2025 19:07:56 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0izSBR0_DeH5HVnSLFGRfV9WoSzbu9Mh5yvvuyrvw7fLg@mail.gmail.com>
+X-Gm-Features: AWmQ_bntcfH83903HLZKfZK6BYsGABjvLPwboKVkSn1BQkd0aPOXL15UK_L4_Us
+Message-ID: <CAJZ5v0izSBR0_DeH5HVnSLFGRfV9WoSzbu9Mh5yvvuyrvw7fLg@mail.gmail.com>
+Subject: Re: [RESEND PATCH v7 7/7] cpuidle/poll_state: Poll via smp_cond_load_relaxed_timeout()
+To: Ankur Arora <ankur.a.arora@oracle.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-pm@vger.kernel.org, bpf@vger.kernel.org, arnd@arndb.de, 
+	catalin.marinas@arm.com, will@kernel.org, peterz@infradead.org, 
+	akpm@linux-foundation.org, mark.rutland@arm.com, harisokn@amazon.com, 
+	cl@gentwo.org, ast@kernel.org, daniel.lezcano@linaro.org, memxor@gmail.com, 
+	zhenglifeng1@huawei.com, xueshuai@linux.alibaba.com, 
+	joao.m.martins@oracle.com, boris.ostrovsky@oracle.com, konrad.wilk@oracle.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Nov 4, 2025 at 5:52=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro.org>=
- wrote:
+On Wed, Oct 29, 2025 at 10:01=E2=80=AFPM Ankur Arora <ankur.a.arora@oracle.=
+com> wrote:
 >
-> On Tue, 4 Nov 2025 at 17:37, Rafael J. Wysocki <rafael@kernel.org> wrote:
+>
+> Rafael J. Wysocki <rafael@kernel.org> writes:
+>
+> > On Wed, Oct 29, 2025 at 8:13=E2=80=AFPM Ankur Arora <ankur.a.arora@orac=
+le.com> wrote:
+> >>
+> >>
+> >> Rafael J. Wysocki <rafael@kernel.org> writes:
+> >>
+> >> > On Wed, Oct 29, 2025 at 5:42=E2=80=AFAM Ankur Arora <ankur.a.arora@o=
+racle.com> wrote:
+> >> >>
+> >> >>
+> >> >> Rafael J. Wysocki <rafael@kernel.org> writes:
+> >> >>
+> >> >> > On Tue, Oct 28, 2025 at 6:32=E2=80=AFAM Ankur Arora <ankur.a.aror=
+a@oracle.com> wrote:
+> >> >> >>
+> >> >> >> The inner loop in poll_idle() polls over the thread_info flags,
+> >> >> >> waiting to see if the thread has TIF_NEED_RESCHED set. The loop
+> >> >> >> exits once the condition is met, or if the poll time limit has
+> >> >> >> been exceeded.
+> >> >> >>
+> >> >> >> To minimize the number of instructions executed in each iteratio=
+n,
+> >> >> >> the time check is done only intermittently (once every
+> >> >> >> POLL_IDLE_RELAX_COUNT iterations). In addition, each loop iterat=
+ion
+> >> >> >> executes cpu_relax() which on certain platforms provides a hint =
+to
+> >> >> >> the pipeline that the loop busy-waits, allowing the processor to
+> >> >> >> reduce power consumption.
+> >> >> >>
+> >> >> >> This is close to what smp_cond_load_relaxed_timeout() provides. =
+So,
+> >> >> >> restructure the loop and fold the loop condition and the timeout=
+ check
+> >> >> >> in smp_cond_load_relaxed_timeout().
+> >> >> >
+> >> >> > Well, it is close, but is it close enough?
+> >> >>
+> >> >> I guess that's the question.
+> >> >>
+> >> >> >> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> >> >> >> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> >> >> >> Signed-off-by: Ankur Arora <ankur.a.arora@oracle.com>
+> >> >> >> ---
+> >> >> >>  drivers/cpuidle/poll_state.c | 29 ++++++++---------------------
+> >> >> >>  1 file changed, 8 insertions(+), 21 deletions(-)
+> >> >> >>
+> >> >> >> diff --git a/drivers/cpuidle/poll_state.c b/drivers/cpuidle/poll=
+_state.c
+> >> >> >> index 9b6d90a72601..dc7f4b424fec 100644
+> >> >> >> --- a/drivers/cpuidle/poll_state.c
+> >> >> >> +++ b/drivers/cpuidle/poll_state.c
+> >> >> >> @@ -8,35 +8,22 @@
+> >> >> >>  #include <linux/sched/clock.h>
+> >> >> >>  #include <linux/sched/idle.h>
+> >> >> >>
+> >> >> >> -#define POLL_IDLE_RELAX_COUNT  200
+> >> >> >> -
+> >> >> >>  static int __cpuidle poll_idle(struct cpuidle_device *dev,
+> >> >> >>                                struct cpuidle_driver *drv, int i=
+ndex)
+> >> >> >>  {
+> >> >> >> -       u64 time_start;
+> >> >> >> -
+> >> >> >> -       time_start =3D local_clock_noinstr();
+> >> >> >> +       u64 time_end;
+> >> >> >> +       u32 flags =3D 0;
+> >> >> >>
+> >> >> >>         dev->poll_time_limit =3D false;
+> >> >> >>
+> >> >> >> +       time_end =3D local_clock_noinstr() + cpuidle_poll_time(d=
+rv, dev);
+> >> >> >
+> >> >> > Is there any particular reason for doing this unconditionally?  I=
+f
+> >> >> > not, then it looks like an arbitrary unrelated change to me.
+> >> >>
+> >> >> Agreed. Will fix.
+> >> >>
+> >> >> >> +
+> >> >> >>         raw_local_irq_enable();
+> >> >> >>         if (!current_set_polling_and_test()) {
+> >> >> >> -               unsigned int loop_count =3D 0;
+> >> >> >> -               u64 limit;
+> >> >> >> -
+> >> >> >> -               limit =3D cpuidle_poll_time(drv, dev);
+> >> >> >> -
+> >> >> >> -               while (!need_resched()) {
+> >> >> >> -                       cpu_relax();
+> >> >> >> -                       if (loop_count++ < POLL_IDLE_RELAX_COUNT=
+)
+> >> >> >> -                               continue;
+> >> >> >> -
+> >> >> >> -                       loop_count =3D 0;
+> >> >> >> -                       if (local_clock_noinstr() - time_start >=
+ limit) {
+> >> >> >> -                               dev->poll_time_limit =3D true;
+> >> >> >> -                               break;
+> >> >> >> -                       }
+> >> >> >> -               }
+> >> >> >> +               flags =3D smp_cond_load_relaxed_timeout(&current=
+_thread_info()->flags,
+> >> >> >> +                                                     (VAL & _TI=
+F_NEED_RESCHED),
+> >> >> >> +                                                     (local_clo=
+ck_noinstr() >=3D time_end));
+> >> >> >
+> >> >> > So my understanding of this is that it reduces duplication with s=
+ome
+> >> >> > other places doing similar things.  Fair enough.
+> >> >> >
+> >> >> > However, since there is "timeout" in the name, I'd expect it to t=
+ake
+> >> >> > the timeout as an argument.
+> >> >>
+> >> >> The early versions did have a timeout but that complicated the
+> >> >> implementation significantly. And the current users poll_idle(),
+> >> >> rqspinlock don't need a precise timeout.
+> >> >>
+> >> >> smp_cond_load_relaxed_timed(), smp_cond_load_relaxed_timecheck()?
+> >> >>
+> >> >> The problem with all suffixes I can think of is that it makes the
+> >> >> interface itself nonobvious.
+> >> >>
+> >> >> Possibly something with the sense of bail out might work.
+> >> >
+> >> > It basically has two conditions, one of which is checked in every st=
+ep
+> >> > of the internal loop and the other one is checked every
+> >> > SMP_TIMEOUT_POLL_COUNT steps of it.  That isn't particularly
+> >> > straightforward IMV.
+> >>
+> >> Right. And that's similar to what poll_idle().
 > >
-> > On Tue, Nov 4, 2025 at 5:10=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro.=
-org> wrote:
-> > >
-> > > On Sat, 1 Nov 2025 at 01:11, Kevin Hilman <khilman@baylibre.com> wrot=
-e:
-> > > >
-> > > > Ulf Hansson <ulf.hansson@linaro.org> writes:
-> > > >
-> > > > > A CPU system-wakeup QoS limit may have been requested by user-spa=
-ce. To
-> > > > > avoid breaking this constraint when entering a low-power state du=
-ring
-> > > > > s2idle through genpd, let's extend the corresponding genpd govern=
-or for
-> > > > > CPUs. More precisely, during s2idle let the genpd governor select=
- a
-> > > > > suitable low-power state, by taking into account the QoS limit.
-> > > >
-> > > > In addition to a QoS limit requested by userspace, shouldn't any
-> > > > per-device QoS limits from devices in the PM domain with CPUs/clust=
-ers
-> > > > also be considered?
-> > > >
-> > > > Right now, if a device is in a PM domain that also contains CPUs, a=
-ny
-> > > > per-device QoS constraints for those devices should also impact the
-> > > > state chosen by s2idle.
-> > >
-> > > I am not so sure about that. The existing dev PM QoS latency is
-> > > targeted towards runtime suspend of a device and the genpd governor
-> > > also takes it into account for this use case.
-> > >
-> > > If we would start to take the same dev PM QoS latency constraint into
-> > > account for system suspend (s2idle), it may not be what the user
-> > > really intended. Instead, I think we should consider extending the de=
-v
-> > > PM QoS interface, to allow the user to set a specific latency limit
-> > > for system wakeup. Then the genpd governor should take that into
-> > > account for s2idle.
-> > >
-> > > >
-> > > > I just tried a quick hack of extending you cpu_system_power_down_ok=
-()
-> > > > function to look for any per-device QoS constraints set all devices=
- in
-> > > > the PM domain (and subdomains).  It takes the min of all the per-de=
-vice
-> > > > QoS constratins, compares it to the one from userspace, and uses th=
-e min
-> > > > of those to decide the genpd state.
-> > > >
-> > > > That has the effect I'm after, but curious what you think about the
-> > > > usecase and the idea?
-> > >
-> > > It makes sense, but as stated above, I think we need a new QoS limit
-> > > specific for system suspend.
-> > >
-> > > Rafael, what's your thoughts around this?
+> > My point is that the macro in its current form is not particularly
+> > straightforward.
 > >
-> > Well, it's analogous to the CPU latency limit case, so if a new
-> > "system suspend" QoS limit is introduced for CPUs, that also needs to
-> > be done for the other devices.
->
-> Agreed!
->
+> > The code in poll_idle() does what it needs to do.
 > >
-> > However, as in the CPU case, my personal view is that the "system
-> > suspend" latency limits should be greater than or equal to the
-> > corresponding latency limits for runtime PM.
->
-> Right, we should treat general devices similar to CPUs.
->
+> >> > Honestly, I prefer the existing code.  It is much easier to follow a=
+nd
+> >> > I don't see why the new code would be better.  Sorry.
+> >>
+> >> I don't think there's any problem with the current code. However, I'd =
+like
+> >> to add support for poll_idle() on arm64 (and maybe other platforms) wh=
+ere
+> >> instead of spinning in a cpu_relax() loop, you wait on a cacheline.
 > >
-> > One more thing that has just occurred to me is that there are systems
-> > in which I don't want to enable the "system suspend" limits at all.
-> > IOW, all of this needs to be disabled unless the platform opts in.
+> > Well, there is MWAIT on x86, but it is not used here.  It just takes
+> > too much time to wake up from.  There are "fast" variants of that too,
+> > but they have been designed with user space in mind, so somewhat
+> > cumbersome for kernel use.
+> >
+> >> And that's what using something like smp_cond_load_relaxed_timeout()
+> >> would enable.
+> >>
+> >> Something like the series here:
+> >>   https://lore.kernel.org/lkml/87wmaljd81.fsf@oracle.com/
+> >>
+> >> (Sorry, should have mentioned this in the commit message.)
+> >
+> > I'm not sure how you can combine that with a proper timeout.
 >
-> Okay. So are you thinking of using a Kconfig for this or better to
-> manage this in runtime?
+> Would taking the timeout as a separate argument work?
+>
+>   flags =3D smp_cond_load_relaxed_timeout(&current_thread_info()->flags,
+>                                          (VAL & _TIF_NEED_RESCHED),
+>                                          local_clock_noinstr(), time_end)=
+;
+>
+> Or you are thinking of something on different lines from the smp_cond_loa=
+d
+> kind of interface?
 
-Hmm, Kconfig might be a good fit because, for instance, I don't quite
-see how this can be made to generally work on x86 except for some
-corner cases.
+I would like it to be something along the lines of
+
+arch_busy_wait_for_need_resched(time_limit);
+dev->poll_time_limit =3D !need_resched();
+
+and I don't care much about how exactly this is done in the arch code,
+so long as it does what it says.
+
+> > The timeout is needed because you want to break out of this when it sta=
+rts
+> > to take too much time, so you can go back to the idle loop and maybe
+> > select a better idle state.
+>
+> Agreed. And that will happen with the version in the patch:
+>
+>      flags =3D smp_cond_load_relaxed_timeout(&current_thread_info()->flag=
+s,
+>                                             (VAL & _TIF_NEED_RESCHED),
+>                                             (local_clock_noinstr() >=3D t=
+ime_end));
+>
+> Just that with waited mode on arm64 the timeout might be delayed dependin=
+g
+> on granularity of the event stream.
+
+That's fine.  cpuidle_poll_time() is not exact anyway.
 
