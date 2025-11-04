@@ -1,101 +1,55 @@
-Return-Path: <linux-pm+bounces-37357-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37358-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43F64C30F27
-	for <lists+linux-pm@lfdr.de>; Tue, 04 Nov 2025 13:17:32 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00239C30F30
+	for <lists+linux-pm@lfdr.de>; Tue, 04 Nov 2025 13:18:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 8B9C24EBB7D
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Nov 2025 12:14:21 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id A21524FA401
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Nov 2025 12:14:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2CB52F0678;
-	Tue,  4 Nov 2025 12:13:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 484EB23F424;
+	Tue,  4 Nov 2025 12:14:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="O0lTtuMK";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="Sx9Gy9tb"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="aBnRRmHc"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CEC42EDD51
-	for <linux-pm@vger.kernel.org>; Tue,  4 Nov 2025 12:13:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0EE02EBDFA
+	for <linux-pm@vger.kernel.org>; Tue,  4 Nov 2025 12:14:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762258438; cv=none; b=erl3M0THOkCCU1AAxEEG00S48E3fPC7p6MjvP/3v/eRMi9LTJNCGQvZW/Ev11eVA2sUD0pnMmRVFc6voUk9Vl6vyltZHEUMTyIdlnhctxmflgiYAyl2N/jrVJJCRPR0ZrIRJ5JkpkF1AFY59pSzA7oP3XtiF8WzE9hABCDqoi9M=
+	t=1762258483; cv=none; b=X+Vtbaj813hh6BvwqCY7V30V8rb61Qbn8RTIYklN/DxA225ZrfHRxI206vAp5z/v7OkFJgXgK71yZeD28yiBrRzUgDUWubnz9ytPQBcXLexIa96f4gUdSyQM9d0aAMoMKDuKRvvssi4au1GuoAoxdWqpzwB/1LOysd0+XJqQlWA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762258438; c=relaxed/simple;
-	bh=JE7DOtpr7ITJlPf8byrRLaTgyDpLMDlPpNKa7BnbAaU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=foqE4kz/H34hc1PyWECa61Ikynujl5EsqzmC3WV/TB6nCazMS8TTizEVmNtSr9+F4nqgDu45AUXea0pa7rQvkMtQ8FnNMXsSVWgnm97Ci+Ovgcka5ef83LyTUDigmDz/5/n6VzgWFVNtsBdAOkBIiCQXTPOAYvKIqnHVfiqVha4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=O0lTtuMK; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=Sx9Gy9tb; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5A48gNRT1395462
-	for <linux-pm@vger.kernel.org>; Tue, 4 Nov 2025 12:13:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	C6bQ2/OXa3s0d++jskzDVbMIDhfmlWkdwhbo6GHDRt8=; b=O0lTtuMKRaVw+kkt
-	IGYhvZAE1FirDAzLs7//Pi0pqIbYcm607gnhP6aauo5gQ701w6uEoKOi02wKKYBS
-	TcK+sXoEXIaGX7/oV+D4fQE0Y1+clJB7w6yl6daU6srsRIOl8Zo84u3yvDlu5Vst
-	kjfoTPK0z+SA+/ZQ/scad8c8gV7KR+HGjPRpg3JIXvpyjU4AwVWuH78COMahXmGr
-	9pU0AEFAIyo7fEcW7DSi0vItwRIoSbFJYxh4TKlFNJo2Q1pqrv4wrlPjk/s/cUNN
-	pyfXln6+AvYKXh16jn+lg0GN/nz/JksyUmloh6+HK7p2sTFhlwWwphU0/WxK5XFJ
-	kbviIg==
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com [209.85.222.198])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4a70exjuc6-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Tue, 04 Nov 2025 12:13:56 +0000 (GMT)
-Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-8a79a3e23d5so105625185a.1
-        for <linux-pm@vger.kernel.org>; Tue, 04 Nov 2025 04:13:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1762258436; x=1762863236; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=C6bQ2/OXa3s0d++jskzDVbMIDhfmlWkdwhbo6GHDRt8=;
-        b=Sx9Gy9tbIGVBlTNJotCJNsQHFNeKr7YvCEPwen8EtjCN7qqRA0KRT/jLwjvM+ecbqj
-         msPW/7UaAheYwvJ6B8QHy6bdpg0QmI7nBmssmzJG/Z5xtVguIqXgc1G2SUDpkvJ8AxiN
-         Wb0v3MbaQqLir/nTwD47KarK/4rwxjOklMTY7xg5N2GS6pJeW3I3hPUjceBn3ISQfGH5
-         TsuhHCRYiaKFhFE/CBzE8+iASKLajjNVIm0oDBlKyGAANR0Sh04njyGxdak66oF2emsE
-         8j5vgkrA/dMX8+HF0fMTSBgNNWfoaec80J6gALVBnsbLVidWcyGnHpFP9W2KM8FzLqk6
-         uQug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762258436; x=1762863236;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=C6bQ2/OXa3s0d++jskzDVbMIDhfmlWkdwhbo6GHDRt8=;
-        b=COO8+sAxpoDJJ3qAtV8mrGxEDWagKahwn4CGGHP4aOflxSz1OomRKDxA9rO4Yxzyxx
-         61ywi0fl1oCY2llP7v7YCSSaTF15uO8J1nFJDfJSUsQiOZ35tjgEU1AD1z/hOMCpzb4K
-         rLp44ShsPjtGNTMjCsCineca413aAmpbmlZux8BJaDF0X3g9zUz1zpJOBo9zIlcyPu1B
-         zXogiGyRxjwGy0vTsPqAZ1SqhpWx6spyvYn5CaggFt+YB+tY9HtMmwtTGpgsN9lVE0NK
-         1F/RB1+L9sFt6+7Ns7bcpicEVpWarxtHULV4UScv01VYEhPh4AL0OVJ36cAh/6GtIJnG
-         xMKw==
-X-Forwarded-Encrypted: i=1; AJvYcCXcyZ1Ke6LSiOL4JYH67jT3c82XrUVQv+pMgMfcRfPe/ydirU+28QtU81UFE2NwmdlQduub9yZkhQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzdLEG+UD0j8osDJawnUSQI2N0CUAfakvrLsN5aWYD7iHxgPxSu
-	PfN6VZMSQYmzPdrM8hX5Q7Liuys1O19DwemW0HT+qCgP/j4+7P+Gs/wzDuH3Qtc2hnBT3WCpT7h
-	EQJJK+KezL93LGV1ogcNY1Pk/cfcxx5BJzmRtnIW7G9doMWqwemLv3MnMFAoXAg==
-X-Gm-Gg: ASbGnctKW+W+4v4Qji8k+7EO7mk6nbIpru8aicjpiGtxXYOuNbaJUhw2Lvr96q4JhBF
-	5NvC2g/Bax2cZSZQ+9kpY4AVkTAKnqxYufIC9DS/Tw4QNI7tMluZUvDCiYtc6ABnrP349OFlQzc
-	519qKxNnH8/1Sf1TKOwigIOwcUxNKcDUj84tgUWVjf/AtQlM96bQqS8tqJdv0/UF8hlqLjb8EUG
-	WZrE6rYLPWpBfizzqwysPmjPmNAMnKsfnbrw8xMeviQCEzeVjm/8tOmuvUwZmhIE/4ZNE70aOk5
-	4Giq31CGITYbdK07OWvIG7auiuwiYMMjMp2q4ytOulwIA8x9gJZdju1/WeyMbSxD6a/tww1ehN+
-	7qhnNxFkll0rmzExcPYGz56a7cBKG7Hcuz99/cjOvc1+Z/eNersC0VDBd
-X-Received: by 2002:a05:620a:4493:b0:89d:4a69:1502 with SMTP id af79cd13be357-8ab98ec0098mr1526323685a.3.1762258435521;
-        Tue, 04 Nov 2025 04:13:55 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IElJoqWX2xrJV5ag5CnmreVfKvqZQk0wt43HdbcV3tEqeG9gBU7GfIBlEbi5qoANhqsgYZfbg==
-X-Received: by 2002:a05:620a:4493:b0:89d:4a69:1502 with SMTP id af79cd13be357-8ab98ec0098mr1526317685a.3.1762258434614;
-        Tue, 04 Nov 2025 04:13:54 -0800 (PST)
-Received: from [192.168.119.202] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b723d3a336asm197311766b.7.2025.11.04.04.13.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Nov 2025 04:13:54 -0800 (PST)
-Message-ID: <1bd7da17-ae41-4d86-9f80-960f68821ee4@oss.qualcomm.com>
-Date: Tue, 4 Nov 2025 13:13:51 +0100
+	s=arc-20240116; t=1762258483; c=relaxed/simple;
+	bh=/Qy/aym9q8YCUfwjiPQd/n7jZkHfZZHQXb2JvW7Fapg=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=c2ztNYVq+IgrsIAzKD8R0tuTJDPkVXW7dxaK2hvK5RulUHY1kf41h00KdB1uRCHiGkhNHUu05F5E8fvE7jnaqjAdBV/EhLfEF9opJkSuhtD1Ns9YS/L7zvIMQ74xcAhidU0VWrQqtU1rCJlescxBMI4Nfuku16OwP/Lv1K59/zc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=aBnRRmHc; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1762258478;
+	bh=/Qy/aym9q8YCUfwjiPQd/n7jZkHfZZHQXb2JvW7Fapg=;
+	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+	b=aBnRRmHcCFeS3d9OTVFvs1wwX2Vs9HaoNn2YrPZE8uDhBVzlkTj6sgPxkUlFarxLn
+	 8i2qN8t7/L9BhXtA0KQ3Dpjz9nUnnYGFLDXNaAnJ9qeay6hlmbz0CSsXc8jSwLZ8f+
+	 HLwQqvKoFOr/i+1RbQu87tRjbUIZvPSX5OOaQb/nh5Vh0nTaVqTexDIwv/N12Uc5YU
+	 SPgRA82Ntv4093s6Bj4S8AoWkmhGKzqiG0FojVMfqxoSgW4OiPO4/I+ifUEIcn0pE2
+	 uoC8druNYC/56d0sGq7Qkd0cTXZOKR4qgOoP63HuY+Kpx9C8NbYF598KjaOH1lBRBP
+	 avJQBG/43GP1g==
+Received: from [192.168.100.50] (unknown [144.48.130.189])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: usama.anjum)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 640E217E12AA;
+	Tue,  4 Nov 2025 13:14:37 +0100 (CET)
+Message-ID: <4b9d9753-e097-4b39-873c-da1a118f3321@collabora.com>
+Date: Tue, 4 Nov 2025 17:14:07 +0500
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -103,77 +57,213 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/3] cpufreq: qcom-nvmem: add compatible fallback for
- ipq806x for no SMEM
-To: Christian Marangi <ansuelsmth@gmail.com>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc: Ilia Lin <ilia.lin@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Konrad Dybcio <konradybcio@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Raag Jadav <raag.jadav@intel.com>, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20251031130835.7953-1-ansuelsmth@gmail.com>
- <20251031130835.7953-4-ansuelsmth@gmail.com>
- <qael7opoqary2n5iqefxxp42v3qoudfhfvcgjyxfe3t7353zge@ahgvniscxl7v>
- <6909eabc.050a0220.54944.cd03@mx.google.com>
+Cc: usama.anjum@collabora.com, Alex Deucher <alexander.deucher@amd.com>,
+ "open list:HIBERNATION (aka Software Suspend, aka swsusp)"
+ <linux-pm@vger.kernel.org>,
+ "open list:RADEON and AMDGPU DRM DRIVERS" <amd-gfx@lists.freedesktop.org>
+Subject: Re: [PATCH v2 1/2] PM: Allow device drivers to manage the frozen
+ state of a device
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+ "Mario Limonciello (AMD)" <superm1@kernel.org>
+References: <20251025010058.2417352-1-superm1@kernel.org>
+ <20251025010058.2417352-2-superm1@kernel.org>
+ <CAJZ5v0icgrXW0ErPMqOnxKHXZ6cH4gd9274SkJfba981Z=s0fw@mail.gmail.com>
 Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <6909eabc.050a0220.54944.cd03@mx.google.com>
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <CAJZ5v0icgrXW0ErPMqOnxKHXZ6cH4gd9274SkJfba981Z=s0fw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Authority-Analysis: v=2.4 cv=APHuRV3Y c=1 sm=1 tr=0 ts=6909ee04 cx=c_pps
- a=qKBjSQ1v91RyAK45QCPf5w==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
- a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=pGLkceISAAAA:8 a=VwQbUJbxAAAA:8
- a=CWkO6e9Jn2YNH3FdQYoA:9 a=QEXdDO2ut3YA:10 a=NFOGd7dJGGMPyQGDc5-O:22
-X-Proofpoint-GUID: CwUhRhHD6bwq-YX6RtCpQzsZQCpg1Iz2
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTA0MDEwMSBTYWx0ZWRfX9wp+AVWYLiwB
- bTJP8FGf6bhvhABb78iabSqzH1V/55IzgwjE5p2r4nmhuoifGtf53W7axbqLtMlxY/0+8oacKMi
- KyVwfrc7mSXpbVoutm2dHxC0ad/SjDRF8d5a65ksViu/Ae/vtNgeGBS7W48rwVsumvHfjt9NQ6M
- FvoVpOEf187xPXNl4XDW+wjBMmOpzpoOzxyrEyXzbTANkezyFQzOFlnx60HIfKNIwrDwyELZeIE
- GNNnfDlIaoCp3HgmudrXSbEN1MsaFtfrshVMWwNQqbLLlXnwMurgkKAoJ31J2DcCKe6MuMdsI+X
- f4rnyTBhAloxYgR8ig857aiIWV2ifjpykImDeZz/wMlXMPJSWZ+rG3wE8zMLtlvEad+rejlsZM1
- um36v4Rj4JiCerGaJo21f42kqlOnEQ==
-X-Proofpoint-ORIG-GUID: CwUhRhHD6bwq-YX6RtCpQzsZQCpg1Iz2
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-11-04_01,2025-11-03_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 clxscore=1015 impostorscore=0 priorityscore=1501 phishscore=0
- suspectscore=0 adultscore=0 bulkscore=0 spamscore=0 lowpriorityscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2511040101
+Content-Transfer-Encoding: 8bit
 
-On 11/4/25 12:59 PM, Christian Marangi wrote:
-> On Sat, Nov 01, 2025 at 12:42:55PM -0500, Bjorn Andersson wrote:
->> On Fri, Oct 31, 2025 at 02:08:34PM +0100, Christian Marangi wrote:
->>> On some IPQ806x SoC SMEM might be not initialized by SBL. This is the
->>> case for some Google devices (the OnHub family) that can't make use of
->>> SMEM to detect the SoC ID.
->>>
->>> To handle these specific case, check if the SMEM is not initialized (by
->>> checking if the qcom_smem_get_soc_id returns -ENODEV) and fallback to
->>> OF machine compatible checking to identify the SoC variant.
->>>
->>> Notice that the checking order is important as the machine compatible
->>> are normally defined with the specific one following the generic SoC
->>> (for example compatible = "qcom,ipq8065", "qcom,ipq8064").
->>>
->>> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+On 11/4/25 12:50 AM, Rafael J. Wysocki wrote:
+> On Sat, Oct 25, 2025 at 3:01 AM Mario Limonciello (AMD)
+> <superm1@kernel.org> wrote:
 >>
->> Reviewed-by: Bjorn Andersson <andersson@kernel.org>
+>> During a normal successful hibernate sequence devices will go through
+>> the freeze() callbacks create an image, go through the thaw() callbacks,
+>> and poweroff() callbacks.
 >>
->> And as mentioned in v1, this (cpufreq) patch can be merged independently
->> of the first two patches. So please merge it through the cpufreq tree.
->>
+>> During a successful hibernate sequence some device drivers may want to
+>> skip the thaw() callbacks.  This confuses the PM core though because it
+>> thinks the device is no longer suspended.
+
+With RFC [1] applied and hibernation is cancelled until or from inside of
+dpm_suspend(), this series restores the amdgpu driver. 
+
+hibernate()
+-> hibernation_snapshot()
+   -> dpm_suspend()
+
 > 
-> I will send a new revision just for this patch so I can use
-> of_match_node()
+> The problem only really occurs if hibernation is aborted before or
+> during the final "poweroff" transition.
+This isn't supported yet. I'm working on a new patch to cancel hibernation
+after dpm_suspend() and before power_down(). But it causes missed resumption
+of amdgpu even after applying this series. Probably some 
+dpm_resume_start(PMSG_RECOVER) and dpm_resume_end(PMSG_RECOVER) are missing.
+I've not been able to sort it out. 
+
+Its a very late stage and I'm not getting console logs. I don't have serial
+connection to get those logs as well.
+
+I'll send the series without this patch in coming days if I'm not able to sort
+it out.
+
+[1] https://lore.kernel.org/all/20251018142114.897445-1-usama.anjum@collabora.com 
+
 > 
-> Should be ok since it hasn't been picked right?
+> What happens is that if a driver decides to leave the device in the
+> "frozen" state during its "thaw" callback and its "poweroff" callback
+> is not invoked because hibernation is aborted earlier, the device will
+> be left in the "frozen" state going forward.
+> 
+> The goal of the change should be to make the core detect that
+> situation and "thaw" the device.
+> 
+>> To accommodate drivers that want to do this, introduce a new is_frozen
+>> bit that the driver can set and manage.  From the driver perspective
+>> any thaw() or restore() callbacks that are being skipped should set
+>> is_frozen and return an error code.
+> 
+> "Restore" has nothing to do with this, it is just about "freeze".
+> 
+>> The PM core will then put the device back into the list of devices to resume for any aborted hibernate.
+> 
+> That's not what the patch does, though (see below).
+> 
+> All of this is mainly about what the core should do when it sees the
+> "is_frozen" flag set, so a few observations to that end:
+> 
+> 1. That flag is only relevant when hibernation is aborted before
+> invoking the given driver's "poweroff" callback (because that callback
+> must be prepared to deal with a "frozen" device).
+> 
+> 2. If the final "poweroff" transition is aborted during its "prepare"
+> phase, the "frozen" device may need to be "thawed" even if its
+> driver's "prepare" callback is not invoked.
+> 
+> 3. There is a possibility, not taken into account so far, that
+> hibernation is aborted because of a failure to save the image.  Then,
+> "frozen" devices will need to be "thawed" before starting the final
+> "poweroff" transition.
+> 
+> Moreover, I'm not sure if it really makes sense to invoke "complete"
+> callbacks during the "thaw" transition for the devices left in the
+> "frozen" state.
+> 
+> All of the above means that the approach needs to be rethought and my
+> advice is to revert the commit causing the AMD driver to leave its
+> device in the "frozen" for 6.18 (and previous kernels).
+> 
+>> Tested-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+>> Signed-off-by: Mario Limonciello (AMD) <superm1@kernel.org>
+>> ---
+>> v2:
+>>  * add tag
+>>  * fix lkp robot issue
+>>  * rebase on linux-pm/bleeding-edge
+>> ---
+>>  Documentation/driver-api/pm/devices.rst | 8 ++++++++
+>>  drivers/base/power/main.c               | 7 +++++++
+>>  include/linux/pm.h                      | 3 +++
+>>  3 files changed, 18 insertions(+)
+>>
+>> diff --git a/Documentation/driver-api/pm/devices.rst b/Documentation/driver-api/pm/devices.rst
+>> index 36d5c9c9fd113..55c6337271086 100644
+>> --- a/Documentation/driver-api/pm/devices.rst
+>> +++ b/Documentation/driver-api/pm/devices.rst
+>> @@ -578,6 +578,14 @@ should already have been stored during the ``freeze``, ``freeze_late`` or
+>>  the entire system, so it is not necessary for the callback to put the device in
+>>  a low-power state.
+>>
+>> +Skipping thaw phase
+>> +-------------------
+>> +In some rare situations, it may be desirable to skip the thaw phases
+>> +(``thaw_noirq``, ``thaw_early``, ``thaw``) of a device entirely.  This can be
+>> +achieved by a device driver returning an error code from any of it's thaw
+>> +callbacks but also setting dev->power.is_frozen to true.
+> 
+> Returning an error code should not be necessary.
+> 
+> Also this needs to be done in "thaw_noirq" or maybe even in
+> "freeze_noirq" because "thaw_noirq" may involve some bus type actions
+> changing the state of the device before the driver gets to it.
+> 
+> So the driver would opt in for leaving the device in the "frozen"
+> state at the "noirq" stage of the preceding "freeze" transition.  That
+> can be achieved by setting a "leave_in_freeze" flag, so no callbacks
+> would be run for any devices with that flag set during the subsequent
+> "thaw" transition.
+> 
+> If hibernation is aborted before the final "poweroff" transition
+> begins, the "thaw*" and "complete" callbacks will have to be run for
+> all of those devices (I'm wondering if any ordering issues may arise
+> at that point; presumably, devices that depend on the "frozen" ones
+> would also need to be "frozen"?).
+> 
+> During the final "poweroff" transition, since "complete" has not been
+> called for any of the "frozen" devices, it should not be necessary to
+> call "prepare" for any of them, so that one can be skipped.
+> 
+> Again, if hibernation is aborted at this point, all of the "thaw*" and
+> complete callbacks need to be run for all of the "frozen" devices.
+> 
+> Now, "poweroff", "poweroff" and "poweroff_noirq" callbacks for the
+> "frozen" devices need to be prepared to deal with them, but the exact
+> rules there will need some consideration.  They kind of need to assume
+> that "freeze" may be changed into "poweroff" transparently without a
+> "thaw" in between and that generally depends on the bus type/PM domain
+> involved.
+> 
+>> This indicates to the
+>> +PM core that the device is still in the frozen state.  The PM core will consider
+>> +this when resuming the device in later phases such as `restore` or `poweroff`.
+>>
+>>  Leaving Hibernation
+>>  -------------------
+>> diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
+>> index 7a8807ec9a5d0..c5a192fc04344 100644
+>> --- a/drivers/base/power/main.c
+>> +++ b/drivers/base/power/main.c
+>> @@ -1110,6 +1110,13 @@ static void device_resume(struct device *dev, pm_message_t state, bool async)
+>>
+>>   End:
+>>         error = dpm_run_callback(callback, dev, state, info);
+>> +#ifdef CONFIG_HIBERNATE_CALLBACKS
+> 
+> CONFIG_HIBERNATION should be sufficient.
+> 
+>> +       /* device manages frozen state */
+>> +       if (error && dev->power.is_frozen) {
+>> +               dev->power.is_suspended = true;
+>> +               error = 0;
+>> +       }
+> 
+> This assumes that the callback will run, but what if hibernation is
+> aborted before running it?  Isn't that really the problem at hand?
+> 
+>> +#endif
+>>
+>>         device_unlock(dev);
+>>         dpm_watchdog_clear(&wd);
+>> diff --git a/include/linux/pm.h b/include/linux/pm.h
+>> index a72e42eec1303..852902fc72158 100644
+>> --- a/include/linux/pm.h
+>> +++ b/include/linux/pm.h
+>> @@ -689,6 +689,9 @@ struct dev_pm_info {
+>>  #else
+>>         bool                    should_wakeup:1;
+>>  #endif
+>> +#ifdef CONFIG_HIBERNATE_CALLBACKS
+>> +       bool                    is_frozen:1;    /* Owned by the driver */
+>> +#endif
+>>  #ifdef CONFIG_PM
+>>         struct hrtimer          suspend_timer;
+>>         u64                     timer_expires;
+>> --
 
-Yes, this is desired, even
 
-Konrad
+-- 
+---
+Thanks,
+Usama
 
