@@ -1,177 +1,160 @@
-Return-Path: <linux-pm+bounces-37368-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37369-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED8AEC316A0
-	for <lists+linux-pm@lfdr.de>; Tue, 04 Nov 2025 15:07:43 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45A59C317BB
+	for <lists+linux-pm@lfdr.de>; Tue, 04 Nov 2025 15:22:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id BCCF44EF632
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Nov 2025 14:06:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 874514276FB
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Nov 2025 14:15:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C8CE32C95C;
-	Tue,  4 Nov 2025 14:06:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B6ED32E139;
+	Tue,  4 Nov 2025 14:15:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YptXjI4a"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="d2hS0VxF";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="LgIrfhDX"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06EE332BF5D
-	for <linux-pm@vger.kernel.org>; Tue,  4 Nov 2025 14:06:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFB9023B604
+	for <linux-pm@vger.kernel.org>; Tue,  4 Nov 2025 14:15:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762265209; cv=none; b=a1uO+mbPyqd+obz3tqjZjSQmAmk4yk8iYLWxinCnUJAdBCiooEbQAA4nUwgoFCxGaYxNd1Fu5OBx/PdgtmF/IhV40Y8S3IQnWAnb/j1V30IKeRJRg6sFeOPewVo/Q0DXpzFOrKUtuZG3/PBhw9tzZzSYMFGLVlxHDDKY8hv8HuQ=
+	t=1762265717; cv=none; b=D/88X/IFoV7a9mYkexfjqcnw5+CKRC8pG3AgBxV7p+8onDNeA9Ddq/dYcsFSeEWY4zJ/BHaMcoNXR737Ms9tFlUsHmX3HxidN//DUkPGw+Vh9re4LUi+853pNYe3QmFZZN2shUTOjLgNwgA/MUssOno3MQbjYnPruFDNWAhFTmE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762265209; c=relaxed/simple;
-	bh=J7o+qvVj/pTXaFpXaAcj2Tg3Jq+K/NDPOk446ICszDs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=e5f0IeiEmk1P01CtSMOypwg7P6P75IP/xFzUaEqDs6XJoYHSVec4JRa6uApxFUHFGW8Y2DlYNT2i1/jNraWMKfzi2P/7rIH1IA27G6WnbnXPmv+tZQc3aneoSl0BngBRM9urq6+3ae/fUrHSQPirorCuy7UmQqMHdWE+XpIZgCk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YptXjI4a; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-47118259fd8so41649355e9.3
-        for <linux-pm@vger.kernel.org>; Tue, 04 Nov 2025 06:06:47 -0800 (PST)
+	s=arc-20240116; t=1762265717; c=relaxed/simple;
+	bh=4kBQhnMmMZ/Vy1JwfBL2bis3lRa4wBFnh9JULuE5Ri4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=dDUidqYXVoblCl3/qmQQ/K1HaprFXAcM4/RXKGP4rUnqk7tTDqoKZBgio6PJG8l0nQ/HIyjUjRBkB1yUx+5Y0sdRYOt5I7sjtehKmGE94uAJkHrEe0qfDpuBDYrYacBZrEj/4Fyfc5Lt88u2LTJ+SY5Z7K7YJu3ItZuG2xCf5O8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=d2hS0VxF; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=LgIrfhDX; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5A4Cg66c2007674
+	for <linux-pm@vger.kernel.org>; Tue, 4 Nov 2025 14:15:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	ZawzPU1DPbFarr1ZZzIREyZz+hjl5nYRiQ8rgw6UyOo=; b=d2hS0VxFizwnb3BW
+	uVAga6h34ZWMfLPqjAOnk0ObVLn3KSsrJ0mdCrJfhufeY+UYDhCeV+LKqKkbw1Nb
+	NaEk+FQ6r4mYne0iHeC0EbSu/O+WC4bhomJKaKUzlk74jwNhehhhDoi8ZZwKkafV
+	FlQBhkr9Qai2wi8/Su6BdGO2JoTIQpKe1Rjgsem07lt6XpKDoUgJ32dBP/ujef5n
+	3F1UdVJ2V15gulYGj7H43bnD5DgYKFOA/yiZKUzqTPOkLyBOhPWJukExyn8j+xS0
+	lt3vdvv+BBK8twD8vemZzu5ilHLRnW24+CLw9FLLMnOOUvsEntrUC8S0UbKoaeik
+	IuuL7g==
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com [209.85.160.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4a7c7jh8tr-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Tue, 04 Nov 2025 14:15:14 +0000 (GMT)
+Received: by mail-qt1-f200.google.com with SMTP id d75a77b69052e-4e8b86d977fso23698201cf.1
+        for <linux-pm@vger.kernel.org>; Tue, 04 Nov 2025 06:15:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762265206; x=1762870006; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=B0YVoVEFCaf8aeEHsaoJ6V5EGSx1RgPZYK2i+8/mRSY=;
-        b=YptXjI4adkOTCyiRqXG3uqUAAMK98so0pcxjH7BsYWb4FzmqRhOgFmu12Pf5xqm2tx
-         g5O/gmF/bXw3NLLlOyCeR4eYskUi5RmIiPmeMWllZ8O1hWaQqwenKtRQkZ6fJwqQzWpe
-         aoRVg8H+r1w5EFWRdSPeQPqZ/pEYsQpj9tz+L5w84EGm89HaFKiJqCd7TS5QtP1Ofqzj
-         tTX7W+f54GdCu/HDrtYg1C/28HzeJzWy1GH2GBe/Tbw9J5aEd2JLz8FbNS24MzzWIUYA
-         WXFMCYV1mQH2nYAqg9O+7HZGXwLKVXSxSVzGramPI0RK4YH05QM3xqan3/ms2fCLsL+t
-         SgOA==
+        d=oss.qualcomm.com; s=google; t=1762265714; x=1762870514; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZawzPU1DPbFarr1ZZzIREyZz+hjl5nYRiQ8rgw6UyOo=;
+        b=LgIrfhDXUOpygd+EDO5ndj9qqPEPQ63bEDMepnoM3bIsz8PixgnIpLClhVfPMTnvlk
+         HybEiSsl3bcNDLzly14Qbso3dyn2ItUmYZahYFL2+jPYoXVrr/h0NGg9yQ7odFJIRojx
+         t2cnIrsV0MfqQc8K0KtLROeRrU/mi4uF6yCijIhNatoK3glVRezSoYwi4KgObf0Hei3q
+         vzsNRxq0jsb3et7SB0uGP7mBP5RrXHkSLB6/h+hr8Vibv3IXJpTMksXDUa4G0iLaqkBu
+         NqUbxymya7tt1Z9KO0sx0FDcAcpZtKcyevp/hebuxtfvXkHAZDPann9kZiQ8pdUdzeNf
+         RoEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762265206; x=1762870006;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=B0YVoVEFCaf8aeEHsaoJ6V5EGSx1RgPZYK2i+8/mRSY=;
-        b=lbfC30Vb/Lgw5HT6aVS4xwQLvHz7syDwWY/tOL4031Pf0Bn1NocBksmxZgvfsqEcm1
-         P2KgB9agMiWTMB1onljj6dYLeJMrfOtnvIuij7ca+dxQc+kJ4iZ1IoXzUu5IK08fRDcn
-         mDmSaA7AhMq2524FblbyAky6srKK27886KiDBFZTEJ/Er8SiYYv2XxyuIjGIinRyNFWr
-         B92fvEpoH+QmSDbqzBsvMukMJ4+le7pvGdhgwYo51yxkhc8p4dhXMdTAFqp5L80zpibA
-         wSpFbwbt6Tf5x3f17Oo/Gq6ohOU7F8/3ZhDQf//XC52SH1IL2v/1O3ZkoPqT4dgTrRKU
-         1e9Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUMXJMQ26QaTfO2TzCanbi7lDWlZKYex3sNAroiNJNmh5NZCDs28Bd0gGxitqcTF057NeYqrMh28A==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzxOcMYPqxnzS9ljshnLivA48xB3qSmHb0fMsPSYrBH2ULRIBwj
-	stdD1L4aNLvHiKJF51FC4X656iwco1jpmO7tqA8XPoaqDI0zfxOtEnqGy5j5/w==
-X-Gm-Gg: ASbGncvPb6WN+MN2/5pmTrFUpzwpO9XGMo44jDID6rR528aCWpQgLw47dGZqrFSMVin
-	D/CaR4iU59P5IuuzE+0OEmM3uEc/iDboVu3fRBztV31DoWJVbgr8OjBqHt53wQ3+bt1OIPBPx+Q
-	yHvtfoqpRgw/Y5gUUTGkuxRLvfPhexH3pG4N6mqX08PvmQ+cV4l4eGImxukCdpaMgJLB1gmO6gW
-	SyKc+/Fllr4GwIFY3Z7bGbG0ehT+lp7UDtSBkw4ssUDGs5GIs5WAEc1vn8I+M0duWvJt85btYPH
-	0ubmcpUQWFLRlohOYyFJJV0aJfhvMyhbGcBpGo/Yqi8pDSd+ykDWl/NxMDK21ydKWHp8DBgD5uS
-	ljactMTgui9mEvGjyTFyWe5V1ka9j8WEw8PejfNjJVYwAatBhz7unqMhwmD7D0ioQU8VTCqbuab
-	l3F1hoFX/S+ykdttcALDNXe6cnroEjxQ==
-X-Google-Smtp-Source: AGHT+IHysG3/qeAR1noZEqq9C4WhUroWJnqAclS/5AWKKIu7XUXyFIQ1hIfpstDAPpN5e6K90GHyhQ==
-X-Received: by 2002:a05:600c:5020:b0:471:700:f281 with SMTP id 5b1f17b1804b1-477308a15a7mr136413305e9.25.1762265205897;
-        Tue, 04 Nov 2025 06:06:45 -0800 (PST)
-Received: from Ansuel-XPS24 (93-34-90-37.ip49.fastwebnet.it. [93.34.90.37])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-47754adcd08sm52511205e9.5.2025.11.04.06.06.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Nov 2025 06:06:45 -0800 (PST)
-From: Christian Marangi <ansuelsmth@gmail.com>
-To: Ilia Lin <ilia.lin@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	linux-pm@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Christian Marangi <ansuelsmth@gmail.com>,
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-Subject: [PATCH v3 1/1] cpufreq: qcom-nvmem: add compatible fallback for ipq806x for no SMEM
-Date: Tue,  4 Nov 2025 15:06:30 +0100
-Message-ID: <20251104140635.25965-2-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20251104140635.25965-1-ansuelsmth@gmail.com>
-References: <20251104140635.25965-1-ansuelsmth@gmail.com>
+        d=1e100.net; s=20230601; t=1762265714; x=1762870514;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZawzPU1DPbFarr1ZZzIREyZz+hjl5nYRiQ8rgw6UyOo=;
+        b=eZ0vOXHvWIo9KJP5l794srQJ6MspW9e7MwUCWITNTWBcQlcaY5rq6MRkoicKVX/Ydv
+         Xp3vIStzQPumbq11NvBWVAR7AGlyQ5Sk0EMULLVICySyXZBdt0vQeqRwxUtskxUpXuLP
+         44BlNMpbaXp1QU47+NmvX/nb5FHOv7Jz+FPUgWezTE45gp0v1/9iKuRGq//5z/GwlXYV
+         t983buHNKvf35OaDmcnfAcuBSw4JC0+c5/kBZ6lq85CXRVui9mx5zecrx4b4vDADpkSA
+         M7pbc4DszZbLSUEJ4gqDcTGeZnGt/SEONsbL1m6qpdByLtkQAzeqXJn+abE91QelmdTV
+         OTTg==
+X-Forwarded-Encrypted: i=1; AJvYcCWA+Av5LIAUezSzMGeaOTJ1zYPAtUhXKcY2j2gB4Hn7a28xtxtfIBuWJW2Iom8XGjmk9qRnN3gnxg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YznzuRmhmR0Txx6kDCkP+q3YwZnzjJWwTbs7av5JHv1qX0aeR0V
+	Qv3g91cifPY6WiPMXJMOncsYFgY1vnomWL4/AuZl94XxgVpKpYvvDP1cXc1wTMBUFyIrGqUIenu
+	ic1YSEMdzZcvD9hbzejkjOGHw41W3dths2bPp0CNUtLuMFQiPXHBv+xC1VNr1eQ==
+X-Gm-Gg: ASbGnctIpzQ2095jw5ap6w43JeC0iXC+WEJhuNwGLI/45SPzFE/hxVCvkqZLTK66uFA
+	PHfUqKUOB6Tcbg6Nvy6/CgEb6UUttVcqQX/QBEg9Ez62f1BkzouRlSTQs39fd9oXYRRVobJyfJ5
+	FTHZwVLNZ18H5gb2u4L3Fq8F5yNCAKkYgsnGr2ADfY0MBL1MqnIrcyUhLtuPX9Zn+ZvoEYsk5Mg
+	ZEULnEAqk45ER/fgZDOYkuc38eXG+oxuvwsvrhn2UMHBLUT6Tga1lh6LvVgupIyhLTUoKnqcvLA
+	vUZfAV2+Kl9gXjX5e/TfwiJQaweaFOFXnw83ELci3CYInucRBrjsQyFHuJ5VeTto0n1aJvLWSiv
+	6Vy6JAnUhtYlqZm/l8QX/Ad81ISeuozW8OWJYFuQX85SZb1Lp2oq0bV2b
+X-Received: by 2002:a05:622a:114:b0:4e8:90f4:c3aa with SMTP id d75a77b69052e-4ed30fa1f91mr141074351cf.8.1762265713693;
+        Tue, 04 Nov 2025 06:15:13 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHCnoT8noK1WKbItMnFv98+PdZWeIxVjd/vScz7EL4P+FoEmsmNlCNB/0M/VxORbweqoFtfOA==
+X-Received: by 2002:a05:622a:114:b0:4e8:90f4:c3aa with SMTP id d75a77b69052e-4ed30fa1f91mr141068421cf.8.1762265706797;
+        Tue, 04 Nov 2025 06:15:06 -0800 (PST)
+Received: from [192.168.119.202] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b7240751077sm217902466b.75.2025.11.04.06.15.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Nov 2025 06:15:06 -0800 (PST)
+Message-ID: <e50ec922-64b7-4d18-b527-0563260fb5fc@oss.qualcomm.com>
+Date: Tue, 4 Nov 2025 15:15:04 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/1] cpufreq: qcom-nvmem: add compatible fallback for
+ ipq806x for no SMEM
+To: Christian Marangi <ansuelsmth@gmail.com>, Ilia Lin <ilia.lin@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+References: <20251104140635.25965-1-ansuelsmth@gmail.com>
+ <20251104140635.25965-2-ansuelsmth@gmail.com>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <20251104140635.25965-2-ansuelsmth@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTA0MDExOCBTYWx0ZWRfX3noV7y5ClvJ5
+ LKtWXRI5HJkCKVL3b0Jws1LUA2oqZbAlkhHHWHIJ1U9djhBEHKX0m/2Uog3uYTzL7kbzMlbXMgn
+ lzMm6ILjIdI8U4mPS2c7YJE7FN8aEGH0zFGxuzgPxsMbOFrQf7pOc76oAzKWVWK3YuX7C2a4yYH
+ j6A8Qm8ch1lQaRD3DND3ME9xe6qAXTyHRXedCDK8WpmRSBY2q3McAX0AA3JSS2P0H8v5qLOJIgn
+ V2FDKc8OSVxrE/hwEDclSfCe25jy82T/KypoLujBisdmViox47JOsGumzCtID/ivOKGSYcwo3jH
+ pDaen0vMNCc8vLBrXQ13KRCF9DGt1lg9u5F9qbK36h9sXpSTwK7ZFxGLEtVCUnNC03xuM8d+q66
+ ZO3Lq5dhbH550lUjVA7fb3tHY5jtlg==
+X-Proofpoint-ORIG-GUID: cufliYf1uglhdn3FwUy_gzj_JiFMbjwE
+X-Proofpoint-GUID: cufliYf1uglhdn3FwUy_gzj_JiFMbjwE
+X-Authority-Analysis: v=2.4 cv=DvNbOW/+ c=1 sm=1 tr=0 ts=690a0a72 cx=c_pps
+ a=JbAStetqSzwMeJznSMzCyw==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
+ a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=EUspDBNiAAAA:8 a=pGLkceISAAAA:8
+ a=oITguE-HI76OPg9VQbsA:9 a=QEXdDO2ut3YA:10 a=zgiPjhLxNE0A:10
+ a=uxP6HrT_eTzRwkO_Te1X:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-11-04_01,2025-11-03_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1015 impostorscore=0 malwarescore=0 phishscore=0 bulkscore=0
+ lowpriorityscore=0 priorityscore=1501 adultscore=0 suspectscore=0 spamscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2511040118
 
-On some IPQ806x SoC SMEM might be not initialized by SBL. This is the
-case for some Google devices (the OnHub family) that can't make use of
-SMEM to detect the SoC ID.
+On 11/4/25 3:06 PM, Christian Marangi wrote:
+> On some IPQ806x SoC SMEM might be not initialized by SBL. This is the
+> case for some Google devices (the OnHub family) that can't make use of
+> SMEM to detect the SoC ID.
+> 
+> To handle these specific case, check if the SMEM is not initialized (by
+> checking if the qcom_smem_get_soc_id returns -ENODEV) and fallback to
+> OF machine compatible checking to identify the SoC variant.
+> 
+> Suggested-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> ---
 
-To handle these specific case, check if the SMEM is not initialized (by
-checking if the qcom_smem_get_soc_id returns -ENODEV) and fallback to
-OF machine compatible checking to identify the SoC variant.
+Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 
-Suggested-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
----
- drivers/cpufreq/qcom-cpufreq-nvmem.c | 35 ++++++++++++++++++++++++++--
- 1 file changed, 33 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
-index 3a8ed723a23e..17c79955ff2f 100644
---- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
-+++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
-@@ -252,13 +252,22 @@ static int qcom_cpufreq_krait_name_version(struct device *cpu_dev,
- 	return ret;
- }
- 
-+static const struct of_device_id qcom_cpufreq_ipq806x_match_list[] = {
-+	{ .compatible = "qcom,ipq8062", .data = (const void *)QCOM_ID_IPQ8062 },
-+	{ .compatible = "qcom,ipq8064", .data = (const void *)QCOM_ID_IPQ8064 },
-+	{ .compatible = "qcom,ipq8065", .data = (const void *)QCOM_ID_IPQ8065 },
-+	{ .compatible = "qcom,ipq8066", .data = (const void *)QCOM_ID_IPQ8066 },
-+	{ .compatible = "qcom,ipq8068", .data = (const void *)QCOM_ID_IPQ8068 },
-+	{ .compatible = "qcom,ipq8069", .data = (const void *)QCOM_ID_IPQ8069 },
-+};
-+
- static int qcom_cpufreq_ipq8064_name_version(struct device *cpu_dev,
- 					     struct nvmem_cell *speedbin_nvmem,
- 					     char **pvs_name,
- 					     struct qcom_cpufreq_drv *drv)
- {
-+	int msm_id = -1, ret = 0;
- 	int speed = 0, pvs = 0;
--	int msm_id, ret = 0;
- 	u8 *speedbin;
- 	size_t len;
- 
-@@ -275,8 +284,30 @@ static int qcom_cpufreq_ipq8064_name_version(struct device *cpu_dev,
- 	get_krait_bin_format_a(cpu_dev, &speed, &pvs, speedbin);
- 
- 	ret = qcom_smem_get_soc_id(&msm_id);
--	if (ret)
-+	if (ret == -ENODEV) {
-+		const struct of_device_id *match;
-+		struct device_node *root;
-+
-+		root = of_find_node_by_path("/");
-+		if (!root) {
-+			ret = -ENODEV;
-+			goto exit;
-+		}
-+
-+		/* Fallback to compatible match with no SMEM initialized */
-+		match = of_match_node(qcom_cpufreq_ipq806x_match_list, root);
-+		of_node_put(root);
-+		if (!match) {
-+			ret = -ENODEV;
-+			goto exit;
-+		}
-+
-+		/* We found a matching device, get the msm_id from the data entry */
-+		msm_id = (int)match->data;
-+		ret = 0;
-+	} else if (ret) {
- 		goto exit;
-+	}
- 
- 	switch (msm_id) {
- 	case QCOM_ID_IPQ8062:
--- 
-2.51.0
-
+Konrad
 
