@@ -1,121 +1,95 @@
-Return-Path: <linux-pm+bounces-37334-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37335-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE573C2F018
-	for <lists+linux-pm@lfdr.de>; Tue, 04 Nov 2025 03:42:21 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 012D6C2F07C
+	for <lists+linux-pm@lfdr.de>; Tue, 04 Nov 2025 03:54:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 17A75189998D
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Nov 2025 02:42:08 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id B7F454E3002
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Nov 2025 02:53:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67B54242D7F;
-	Tue,  4 Nov 2025 02:41:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C77B625CC6C;
+	Tue,  4 Nov 2025 02:53:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SyodFqsU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sgnE4SHz"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38A0C1DF74F;
-	Tue,  4 Nov 2025 02:41:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A24FB1FFC6D
+	for <linux-pm@vger.kernel.org>; Tue,  4 Nov 2025 02:53:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762224099; cv=none; b=VsG3j8pKIijIqN+kMqKlQgz6vjsTJrdsN2Qpcmatxtl2pF0N0ibTq9C5hHiQX5fD7oy35iC6UVHVNDe1t06Rn26GCEdHokBuPwnq/+huTQj2/kRRkIHytQmexZUUbWDJOnPGNarAgBdSTo9Gv/lPHqBJGpVJG3uIvvvP5O3s8P8=
+	t=1762224815; cv=none; b=ZAtFcbAAGG+DEyFtC6m9HhIkGGgvbPKosJSrl+dGINwgXd6VJVIoM16JQ6GlRPs2kYqK1q6dndgBtykExVKK4tRxo4cbWdffGQW/HuOSzeAnf503kty7xxtu87tszkqJklimyUMxP1QKBgZ2fRCdijUwO44VjNNPLtXO4baiLEI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762224099; c=relaxed/simple;
-	bh=L1Vyy0PfGISfrRK/clj7TOjY02zLhIa3JzmfpiRF/eY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=j+uD27evuY692sw6C5BBAxDUcngJIsS6tA25dwFRjGFGY01XlZg991IuyWLARrAGTPaEb5anuOflSyvSv940mbt0bSVChfgob2aS4KRTIRgG3JTqT+4nwUKtt3ZHPHdmsNaZR8pjLXB7bX636cbYNksBQuT0bIbz6gQw+bjC8W0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SyodFqsU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2608FC4CEE7;
-	Tue,  4 Nov 2025 02:41:38 +0000 (UTC)
+	s=arc-20240116; t=1762224815; c=relaxed/simple;
+	bh=uu+MdTMRcFKtS7aigUDdX+eCFpsKLhPPGHNqB36gT4w=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=c3HdHIfV/kahjA1QF2AmHxlrDQletJvX37XvEVKP+1zAFU5Kq2SCVLHCpSkKbbSdWIdr39Z6TLs4cvDoZRQwws232HQniwfYdA+FgSAvJzbl2/zFzyC2SQaGhkGf3q01s8ej8YPDH1V5yLwzhxxTV+Uijkw9G70FJ1RxazDeK8c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sgnE4SHz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6E5F5C116C6
+	for <linux-pm@vger.kernel.org>; Tue,  4 Nov 2025 02:53:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762224098;
-	bh=L1Vyy0PfGISfrRK/clj7TOjY02zLhIa3JzmfpiRF/eY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=SyodFqsUDNkLnlBlqsquusKwwzas97COyReMM+17WQNUAiXjaGm/7hEVBBLGp15qS
-	 QdNzXQ4qJW/wUykco1gUpfLNPZ8D3FwjV+Bm8uqp/FmIVCp0wvf2zgQKUIhXYCl4yO
-	 fHHm8oPSLpZzkLKGtiE8Md0BySiiiYWsc0rE4KvN+/MHhRBZ8UJIa1pA8sHMhEAyQD
-	 DgfYmBkBsgIIc/Vy6zJrpeNxSYFJ8xeTOsNUohDIR+ehlc4uCfdMVz3zDr/7gmz+Vv
-	 L0eGmUFgYiSHJMuc1rWCPKH/pb+aHBx/4qZbK8YTMrM9foDLkjpRWpRd3v6UVi71lz
-	 EUv6/pMCpaYdg==
-Date: Mon, 3 Nov 2025 20:45:11 -0600
-From: Bjorn Andersson <andersson@kernel.org>
-To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-Cc: Loic Poulain <loic.poulain@oss.qualcomm.com>, konradybcio@kernel.org, 
-	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, sre@kernel.org, 
-	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 3/5] dt-bindings: firmware: qcom,scm: Document reboot mode
-Message-ID: <ary7qhe4gh2yixweoey6bl5euorzdephyp22pujrr623sbnmtu@fqqwvreujiod>
-References: <20251103182006.1158383-1-loic.poulain@oss.qualcomm.com>
- <20251103182006.1158383-4-loic.poulain@oss.qualcomm.com>
- <aqoxdaq72prkeqwxmmohlmbpx7icuc32sej7did6vt6rzrgfib@bvmt7ppkvloc>
- <v5dbwbgic5cogxsf3lkmdwmlkpnqvo2niy3s7qu6ow3btpo7se@2altcz3nhbo2>
+	s=k20201202; t=1762224815;
+	bh=uu+MdTMRcFKtS7aigUDdX+eCFpsKLhPPGHNqB36gT4w=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=sgnE4SHzXynn+AC3nRpaO4ZBLiBobb2HnZXpOOxNSQGm6G4k/dAfgHgOeix+WMD9V
+	 XS0APYwsjAZBzaxlpAvbEJuEoL/LG7F69aKIkCq6kKS2ATJ/RQDCBA9KIhCWD67GQy
+	 o4MkhpK8KsSColVifkJftxDoTnkNDa7Mhj/jFRWpDBM3+36rDbcbXKhRz80WjYFqGz
+	 m/jQ99o9DuNRcSUiXDL4sjFRK6mHWIiCPT3slb5dkP3Oj0VTjF4cgBh2QHS2O1hHaz
+	 G3x8icrvyWNBdVL/kyRsdqVY3XTT2Z60CBUrCW+ZoqREe9LYceoqhhFXfGcpZP9I2O
+	 R3JJJkg26sRdA==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 5C486C3279F; Tue,  4 Nov 2025 02:53:35 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-pm@vger.kernel.org
+Subject: [Bug 220715] [REGRESSION] AMD P-State fails with "_CPC object is not
+ present" on AMD Zen 4 between 6.10 and 6.11
+Date: Tue, 04 Nov 2025 02:53:35 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: chris.harris79@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: attachments.created
+Message-ID: <bug-220715-137361-lgpJG4A9yk@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-220715-137361@https.bugzilla.kernel.org/>
+References: <bug-220715-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <v5dbwbgic5cogxsf3lkmdwmlkpnqvo2niy3s7qu6ow3btpo7se@2altcz3nhbo2>
 
-On Tue, Nov 04, 2025 at 04:19:14AM +0200, Dmitry Baryshkov wrote:
-> On Mon, Nov 03, 2025 at 08:16:30PM -0600, Bjorn Andersson wrote:
-> > On Mon, Nov 03, 2025 at 07:20:04PM +0100, Loic Poulain wrote:
-> > > SCM can be used to support reboot mode such as Emergency Recovery Mode.
-> > 
-> > "such as"? Do we have any other useful bits in here?
-> > 
-> > > 
-> > > Signed-off-by: Loic Poulain <loic.poulain@oss.qualcomm.com>
-> > > ---
-> > >  Documentation/devicetree/bindings/firmware/qcom,scm.yaml | 4 ++++
-> > >  1 file changed, 4 insertions(+)
-> > > 
-> > > diff --git a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
-> > > index b913192219e4..c8bb7dacd900 100644
-> > > --- a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
-> > > +++ b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
-> > > @@ -121,6 +121,10 @@ properties:
-> > >            - description: offset of the download mode control register
-> > >      description: TCSR hardware block
-> > >  
-> > > +patternProperties:
-> > > +  "^mode-.*$":
-> > 
-> > I'd only ever expect mode-edl = <1>. Do we have additional modes that
-> > warrant the generic nature of this?
-> 
-> fastboot / bootloader?
-> 
+https://bugzilla.kernel.org/show_bug.cgi?id=3D220715
 
-They go in the PON_SOFT_RB_SPARE register, in the pon driver. But that
-apparently doesn't tickle the EDL bit.
+--- Comment #13 from Chris Harris (chris.harris79@gmail.com) ---
+Created attachment 308888
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D308888&action=3Dedit
+dmesg-6.17-patched-full-debug
 
-But it's a good question, I'd like for it to be answered in one of the
-commit messages.
+- Full dmesg output with both acpi/cppc and cpufreq debug enabled
+- Shows extensive cpufreq initialization debug messages
 
-Regards,
-Bjorn
+--=20
+You may reply to this email to add a comment.
 
-> > 
-> > Regards,
-> > Bjorn
-> > 
-> > > +    maxItems: 1
-> > > +
-> > >  allOf:
-> > >    # Clocks
-> > >    - if:
-> > > -- 
-> > > 2.34.1
-> > > 
-> 
-> -- 
-> With best wishes
-> Dmitry
+You are receiving this mail because:
+You are the assignee for the bug.=
 
