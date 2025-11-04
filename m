@@ -1,144 +1,157 @@
-Return-Path: <linux-pm+bounces-37375-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37376-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8235AC32182
-	for <lists+linux-pm@lfdr.de>; Tue, 04 Nov 2025 17:38:41 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 95D58C3215B
+	for <lists+linux-pm@lfdr.de>; Tue, 04 Nov 2025 17:34:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2D8273BF703
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Nov 2025 16:34:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1F29C189BA0E
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Nov 2025 16:35:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E76433344C;
-	Tue,  4 Nov 2025 16:34:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8FA433345B;
+	Tue,  4 Nov 2025 16:34:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dgukZ9Wt"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Z+oOM1zV"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yx1-f46.google.com (mail-yx1-f46.google.com [74.125.224.46])
+Received: from mail-yx1-f44.google.com (mail-yx1-f44.google.com [74.125.224.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A02D1946C8
-	for <linux-pm@vger.kernel.org>; Tue,  4 Nov 2025 16:34:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBF89333457
+	for <linux-pm@vger.kernel.org>; Tue,  4 Nov 2025 16:34:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762274069; cv=none; b=peyVU0A6ninZbmQw7Fis8ywKG0AXsmfRpztUxNHb0taJiKebz8XRFfG93IM1/xYEU9bZ4ribI97IiZefszvs5aGDcFGrm9mElTnh2Xh2NNSUwLBdNDwwOo8djl8YKYeNHCN2OVlUiXM8YLF51R5qySA5WTO6aOmLbIBA25lSJRQ=
+	t=1762274079; cv=none; b=ef8CszxrFdaO7gTSssMciEjtPQ32TJ8JdYCR/5ZnKCWG65nIm2OsmT7nycjgwsG69Z4XY4JiSZtLEZdmG/RXTtgtSPA6hziW3xzubp3Iidz7MTQjkWFEsFvKjkRgqji74nXr8uAXDTQum1ne4bwbk3HFiievUqwi5d3c9l7x7nU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762274069; c=relaxed/simple;
-	bh=K0YyegNjV3CrpjVAJkKYS2lK+2AdnL3qhw0eEMQppNU=;
+	s=arc-20240116; t=1762274079; c=relaxed/simple;
+	bh=ZCRrsNnGD1S09B2y5p35lTy0oeCos0DFHrUpZ52om0g=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MT0+s8qsmcy1FbAnYmJsBtGwChwV29DMQM5iXXfndMvaUaIxtIProCYfmvLh3jtD7qul2SAWMtiFrPNM7yJJ99IsTfVS/BmSs48iF5YlWqf/34cTcVwPG4llOE0xfwYCrCbQo59bnjI/AyrbSm0TrCEfn4v7TVSK2lEXRCy0VIw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=dgukZ9Wt; arc=none smtp.client-ip=74.125.224.46
+	 To:Cc:Content-Type; b=Q1jNIwROSM1bkkOQBd1Jc1ezNsjGzkNFoYQCCVnKVLa/SklHtUe3vte7UE2sGgnCORbVktbwfR1MUwCVqxf+BNpppk8bfrjmeCQbam9HSzto2GzynUAQI8UwFSlNojoZSXZoNjU7u83YvKh6Aa/oEiypYUIombNSEyL5545oduM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Z+oOM1zV; arc=none smtp.client-ip=74.125.224.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yx1-f46.google.com with SMTP id 956f58d0204a3-63e393c49f1so5257146d50.0
-        for <linux-pm@vger.kernel.org>; Tue, 04 Nov 2025 08:34:28 -0800 (PST)
+Received: by mail-yx1-f44.google.com with SMTP id 956f58d0204a3-63cf0df1abbso6128038d50.2
+        for <linux-pm@vger.kernel.org>; Tue, 04 Nov 2025 08:34:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1762274067; x=1762878867; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1762274077; x=1762878877; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZURaLbDo3dwoVqwyM02ToCv5MutkNZmPeTZy84rbNEQ=;
-        b=dgukZ9WtimTXIEowesZB5thCKlLVP3GbkE05sE4lrkuNRASQOoqFXPl71pfCBbaHAN
-         6LC91WExLd++ugRZJCUyLBCULNIVgHKqNaCibUjCS5EvvdGacpMxLrmztnEYWT2i+NV5
-         fS4iha/okSN/8/h0t76wL+nQmi5gqZQ65ICFZD/fF+2r0bZ0dZe6OkjlSZjh83k75eOY
-         46CnfYCYK0iK+XOI91eMD6UkFHWCsSlV2id7oRjBRuifD6n6KHhF9AfOS1GQV/Jsg4Cw
-         E56r43rMCDPwAGlHyAMJ7F7E/s07Z2NWqVQTYOmhUwwVTn4MpSq2U/7QYmA4AXYDxVnj
-         slIQ==
+        bh=ddGDx7DY8ZvT+UQbsTdKBb2vYIe/GE/fB2OEWm/nLJk=;
+        b=Z+oOM1zVJKti99ORIdAEPWGKiTiHHMt4gN9j9j9VyTpsH0FJke8b/o2PeTufKQf06+
+         QMGhAVamfy9AVHbZlkGtLIPCHRWeHsFT3McddFfWJLRpWDPsudiIqN7t0Z5R31nStK1C
+         h4/kZfPW17y0TrZn5XYIuiZp4JbVDHMY0DAym3KOad5SqR+Rc1ShRMDog6uwjoQmdI93
+         n4XagCCKQCTAi8sjfGYMGeJv7HspXwS5eP/VGlUSxjr/fem8qVnlLs9E9/dCHS7ZI6vg
+         HSFZUKhdmFDMfEP3hTCbQxbgSQv0i1NuyaIBP/OEPh8x37Zvb0Tn77bW9bT7nlBGQqZZ
+         ssVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762274067; x=1762878867;
+        d=1e100.net; s=20230601; t=1762274077; x=1762878877;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ZURaLbDo3dwoVqwyM02ToCv5MutkNZmPeTZy84rbNEQ=;
-        b=P/NLGPqOasPqKeVkFq4ZRjBt6VgBrZY5gIs3yaCBUdwqPnuWyLc4aPVSCKx+N7kwr5
-         AgPSQ78HriDZHS/eLIJlvtxe50WDIZ2u9omHiG3efBVnTZKEz8vZGFStRRHJ+3c+8Nxb
-         wRWhNs9iNaqAklqGt0R7KSgaqXH2zApHmti/vgi3S0F0CvDM/WAnfxkRsJ/lVfmzwfl3
-         pV7UmHAj4yvQYjSKoJZH9vIrO43JYn02Oab+54xAc73kGcF3KBNhZP4n55f4Sg26uAWH
-         0/xx9U2I994Yi5VqYKjO3rAqhLnt7LU7b98C3WKOoHjpxg8clEZiHWAxiC2TZ3Unx/Mx
-         XxXg==
-X-Forwarded-Encrypted: i=1; AJvYcCXGi/uP2df65qRnIRaDcPBg/wznuZ0A1TmApc/JjkOHjhOmRgTnyEJ/WjxkWzvI4ygRNqLkD3opLQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxc3/mb2GZfgcWRmcGHXuj7wF9r47h+dle45NYbIMdDBK7uIp0z
-	rWyW3PsXEfa+sShty4U943kDEcbahuRGi4K6TIbcz2/cW+8uW89KYj+CezF/YQcL3Da5b5d6gif
-	DJET+WAzeN+FOVr96Ev6uaDTzk9b9GfxMNpI8XgUugMqz/Liak+PrbTk=
-X-Gm-Gg: ASbGncvM6yfc9guPkm36Q6f75HMlgFNk/P5cw8mUl0LLao4Glrs/BkP2s/aQ09WaWMA
-	fPesbWXm9WSal71uH3JmCwSJya/AEfVmV4A1Klwhjeu0tbKxnayM3KEDIXJyge635e3h/Mbhykq
-	b7ehhAuur3K73uitiu7345zDV1ueL2iy7GswrhaW4g1u3QSkaVSV5tuRxUiNQtbs/lCR77JCt2q
-	U6szvNdV1KUTXtj+gzErp4QGxYklP4J4EcWnmPDCU8amFQSyHxU6msbC9vOCQ==
-X-Google-Smtp-Source: AGHT+IGVTYPjRbvY2dc+1i1hVKSl6/mUpbt8rBD57n2a05T5582PeM1IiJduGFBi48QQYI8y525MVnCW3dK3LdtTGiE=
-X-Received: by 2002:a05:690e:419b:b0:63f:c10e:6401 with SMTP id
- 956f58d0204a3-63fd358fe2bmr57363d50.59.1762274067017; Tue, 04 Nov 2025
- 08:34:27 -0800 (PST)
+        bh=ddGDx7DY8ZvT+UQbsTdKBb2vYIe/GE/fB2OEWm/nLJk=;
+        b=oUdddcA0a5NpGmh6Vu0AUmvcnSNfoPvBrG40iStRqPfnrc+gggO5P+Gqo8LozV2TBg
+         FlyRk7mZHr7KmN3rn+ZRmagdGwNhHdNw5oFj/u9o0FZKDNCqlb8hscljt+H7ce28kOLk
+         zfXuaqLk+6eXEMR9W8WIIlp6MFZzdd2slaYpclx8oWo6gFXRYJ5SCIS7UIN20nbG7LmR
+         plPhyz8UbiuUt6MXSdQ+aquzncTw1QpDGwkaX7R13IO3cqgy/BUY28Zv6ImSs+QluSUF
+         vrYCdJONvmSb6azj3yGYDByauzroKVzNN9Gjh6l3wg0Xdg/Vt37x+fAmEX2FRGskpeCC
+         d+1Q==
+X-Gm-Message-State: AOJu0YxBVuUFSr+aeyvQybtQd+sEhp/93Td+VaV3+8abPhuJPogq4Pez
+	brfTBccc9kfXcv+jUM5SOioWbYL0Q4STrTd+qGUb2QbwZ+YPyRuQmExn+G/dUQQGboWPhHdzLXb
+	Ugd8ypkiSt5j+Ps9ZWz5fO789HjdpXvEqS2iK8nWoNQ==
+X-Gm-Gg: ASbGncsEvBYTgQfhFnJEHQZ7AqBEwJvjNGoiZYQqLB2CEkx25WKkiz+51kiGSwQjrp/
+	EFM359qnG4u+wB57o1zHDXclBzHOxT0aPk+tC0NSDp7WGTG04zHm3U4l0IA/+lWcbtbaGHO4OWW
+	rCiCOpef7uMjwUETojFLki1TEPQt4vtPzgTsat1MvbVX/U6A41T2aTnham/2znl60AGAtYGZJdB
+	t6+n1NXshRjse2fOj5+A4wHpWbnzRnwKfXe/19ls7G4zJTNRGFNpbboA642SQ==
+X-Google-Smtp-Source: AGHT+IHbMYmustVhhlT+m6xRfPZ0ZgypdMtcu7VuUMd6mP1bXe2DJ9gFsZnpH6bI4QSialr+pLyKljrmmrvqLPvCmm8=
+X-Received: by 2002:a05:690e:23cb:b0:63c:f5a6:f2ef with SMTP id
+ 956f58d0204a3-63fd35bd9d8mr38659d50.65.1762274076778; Tue, 04 Nov 2025
+ 08:34:36 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251030-mfg-mailbox-dep-v1-1-8a8c591aff27@collabora.com>
-In-Reply-To: <20251030-mfg-mailbox-dep-v1-1-8a8c591aff27@collabora.com>
+References: <CGME20251027125521eucas1p206cd5a0dd4c3a80bc8abe7d9a5e61706@eucas1p2.samsung.com>
+ <20251027125515.1219940-1-m.szyprowski@samsung.com>
+In-Reply-To: <20251027125515.1219940-1-m.szyprowski@samsung.com>
 From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Tue, 4 Nov 2025 17:33:50 +0100
-X-Gm-Features: AWmQ_blVz8oV6Q800iTY_FXK63-gujrHnWpwcZPlwshpI-BtZsgfevwVde_Zipk
-Message-ID: <CAPDyKFrJdN_6FyyjMrfNCKwXt6kFPEPAxcuosdasoxtbJHk2GA@mail.gmail.com>
-Subject: Re: [PATCH] pmdomain: mediatek: mtk-mfg: select MAILBOX in Kconfig
-To: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-Cc: Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-mediatek@lists.infradead.org, kernel@collabora.com, 
-	kernel test robot <lkp@intel.com>
+Date: Tue, 4 Nov 2025 17:34:00 +0100
+X-Gm-Features: AWmQ_blmnc7xyq9khBlGTyV4UvzKjRpkE7cFZ6cuEA1Z_dVEpjKnivKnW8fVoDI
+Message-ID: <CAPDyKFr3JDgh2c_XVvSdWrzTeiH_aSy2AE3pqW7HC2sWJZsrRQ@mail.gmail.com>
+Subject: Re: [PATCH v2] pmdomain: samsung: Rework legacy splash-screen
+ handover workaround
+To: Marek Szyprowski <m.szyprowski@samsung.com>
+Cc: linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org, 
+	Krzysztof Kozlowski <krzk@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
+	=?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
+	Peter Griffin <peter.griffin@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 
-On Thu, 30 Oct 2025 at 14:17, Nicolas Frattaroli
-<nicolas.frattaroli@collabora.com> wrote:
+On Mon, 27 Oct 2025 at 13:55, Marek Szyprowski <m.szyprowski@samsung.com> wrote:
 >
-> The mtk-mfg pmdomain driver calls common mailbox framework functions. If
-> the common mailbox framework is not selected in the kernel's
-> configuration, the build runs into a linker error, as the symbols are
-> absent.
+> Limit the workaround for the lack of the proper splash-screen handover
+> handling to the legacy ARM 32bit systems and replace forcing a sync_state
+> by explicite power domain shutdown. This approach lets compiler to
+> optimize it out on newer ARM 64bit systems.
 >
-> The hardware mailbox Kconfig system, MAILBOX, has no dependencies of its
-> own. It's therefore safe to "select" it rather than use "depend on".
->
-> Declare this "select" dependency in the Kconfig for the driver.
->
-> Fixes: 1ff1f0db6aec ("pmdomain: mediatek: Add support for MFlexGraphics")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202510301311.TcOCnZ1s-lkp@intel.com/
-> Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+> Suggested-by: Ulf Hansson <ulf.hansson@linaro.org>
+> Fixes: 0745658aebbe ("pmdomain: samsung: Fix splash-screen handover by enforcing a sync_state")
+> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
 
-Applied for next, thanks!
+Applied for fixes, thanks!
 
 Kind regards
 Uffe
 
 
 > ---
-> I assume this can be squashed into the mtk-mfg driver addition commit of
-> the maintainer that merged it.
+> v2:
+> - removed label check, as this violates ABI
+>
+> v1: https://lore.kernel.org/all/20251024093603.3484783-1-m.szyprowski@samsung.com/
 > ---
->  drivers/pmdomain/mediatek/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
+>  drivers/pmdomain/samsung/exynos-pm-domains.c | 18 +++++++++---------
+>  1 file changed, 9 insertions(+), 9 deletions(-)
 >
-> diff --git a/drivers/pmdomain/mediatek/Kconfig b/drivers/pmdomain/mediatek/Kconfig
-> index b06aaa9690f0..8923e6516441 100644
-> --- a/drivers/pmdomain/mediatek/Kconfig
-> +++ b/drivers/pmdomain/mediatek/Kconfig
-> @@ -32,6 +32,7 @@ config MTK_MFG_PM_DOMAIN
->         depends on PM
->         depends on OF
->         depends on COMMON_CLK
-> +       select MAILBOX
->         select PM_GENERIC_DOMAINS
->         imply MTK_GPUEB_MBOX
->         help
+> diff --git a/drivers/pmdomain/samsung/exynos-pm-domains.c b/drivers/pmdomain/samsung/exynos-pm-domains.c
+> index f53e1bd24798..5c3aa8983087 100644
+> --- a/drivers/pmdomain/samsung/exynos-pm-domains.c
+> +++ b/drivers/pmdomain/samsung/exynos-pm-domains.c
+> @@ -128,6 +128,15 @@ static int exynos_pd_probe(struct platform_device *pdev)
+>         pd->pd.power_on = exynos_pd_power_on;
+>         pd->local_pwr_cfg = pm_domain_cfg->local_pwr_cfg;
 >
-> ---
-> base-commit: d78b0fee454c25d292fb6343253eca06d7634fd9
-> change-id: 20251030-mfg-mailbox-dep-ec32ef510e6a
+> +       /*
+> +        * Some Samsung platforms with bootloaders turning on the splash-screen
+> +        * and handing it over to the kernel, requires the power-domains to be
+> +        * reset during boot.
+> +        */
+> +       if (IS_ENABLED(CONFIG_ARM) &&
+> +           of_device_is_compatible(np, "samsung,exynos4210-pd"))
+> +               exynos_pd_power_off(&pd->pd);
+> +
+>         on = readl_relaxed(pd->base + 0x4) & pd->local_pwr_cfg;
 >
-> Best regards,
+>         pm_genpd_init(&pd->pd, NULL, !on);
+> @@ -146,15 +155,6 @@ static int exynos_pd_probe(struct platform_device *pdev)
+>                                 parent.np, child.np);
+>         }
+>
+> -       /*
+> -        * Some Samsung platforms with bootloaders turning on the splash-screen
+> -        * and handing it over to the kernel, requires the power-domains to be
+> -        * reset during boot. As a temporary hack to manage this, let's enforce
+> -        * a sync_state.
+> -        */
+> -       if (!ret)
+> -               of_genpd_sync_state(np);
+> -
+>         pm_runtime_enable(dev);
+>         return ret;
+>  }
 > --
-> Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+> 2.34.1
 >
 
