@@ -1,49 +1,49 @@
-Return-Path: <linux-pm+bounces-37384-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37385-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1656AC32C98
-	for <lists+linux-pm@lfdr.de>; Tue, 04 Nov 2025 20:31:25 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F222C32CA8
+	for <lists+linux-pm@lfdr.de>; Tue, 04 Nov 2025 20:33:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id C0D9534C9F6
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Nov 2025 19:31:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D955D3B6CB1
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Nov 2025 19:32:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 206D129B78E;
-	Tue,  4 Nov 2025 19:31:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB59B2EFD8F;
+	Tue,  4 Nov 2025 19:31:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c+M40Ynf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pFwvRvy1"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD0DD23183F;
-	Tue,  4 Nov 2025 19:31:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7807D184540;
+	Tue,  4 Nov 2025 19:31:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762284678; cv=none; b=CnSkonHj+wGyhHRj2Xeg+6ALfGyVSLLd6gmqY7PDzgazu+gy3suPD0foYM3KY7CVDpR8Pzg1lhQGwgjGDaUUDmF4TUlnZ6GXPJmZ2QyKDVzR3PntVp+DSYVqkXnY8fRO04Eo0Uc6D65Ua3gB128HrE4xHSz/FkJ5VGoFHU4Mb08=
+	t=1762284686; cv=none; b=XdQUeQMMJVZZfXs1rT4LS+yB2wy1b38b6vagDPjwwhSKMPjYZOHtFSZ/bP7ITOWIRIAzfd4nSxSGaZ4xP+6kI0cttxvb09Pm4nS47P/0VYlqFz+A/NLX2srvbeTIRABNuxwqHvuK9xmIY2TkO3bKT5pcryg88ULHRyR5ZuJfmc0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762284678; c=relaxed/simple;
-	bh=bv5RrLvyhbRRTVmzsWpNHNTYrpGvKzpe/nqRzbjAMOc=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=uTNXtKZ6sgVsmkXyCp63aqeAgU8sIkQrdzc/GEaJpuWXIKv76cwu2Yq7wKZUkPJ6AYLXvJvUNOqL+LYrHYRQN6PDDf3YNlP1ifgkQznNzjuF5yNV2Ru5W7ufm/N2ek0jZ1hC0IF2DcUwU6dVM0t69TDofCFBr+NemG8xLzPg3CQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c+M40Ynf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD05FC116B1;
-	Tue,  4 Nov 2025 19:31:08 +0000 (UTC)
+	s=arc-20240116; t=1762284686; c=relaxed/simple;
+	bh=SAKuXSfZNz9/EAVAmCp7JYbqmQM7W23GtYtWdelr3Qo=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=i0Xm0lbx4IAeEQnVFgM7Pa50i1ZWIUDgcDzaBaRgQ4k7MmG8xa2Uicc+Kc1UYY7CrayL+40ky3Ll/CdscCBAkBk+owGdqA3Lqklk8yQpCP3lBIl5pnWf1IG/agb46kr4cMMevn1981NbNlR2/7fyanioY787+gxDeWDRX1CriZY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pFwvRvy1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20B8CC4CEF7;
+	Tue,  4 Nov 2025 19:31:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762284677;
-	bh=bv5RrLvyhbRRTVmzsWpNHNTYrpGvKzpe/nqRzbjAMOc=;
-	h=From:Subject:Date:To:Cc:From;
-	b=c+M40YnfD7beibvpnLx5x7JTJxsI8UKfWeerqy+wnhCGnuIEEdKuAPbMRrmL14vG7
-	 OP5Z8LhbKV6qlXKCmk/umHqs2ez0wm6y99i+x+3EE8JpbkXhTr14Lc6PZYNTbaQecI
-	 7U1is6qB+I4HGST8GzSf0pZIKBGMbda5tDdOmPNHr8H+gntvMRIX9oQngYiEvGYZz/
-	 ScJEhzNnsDL/NDqU63Mt3U8z7f6wYjzLXSuybWHK81ljSvq4Zlq6OJ6TAXpb2gnSPH
-	 1uy+xh8BIcofnCeXYt3SuC3AqYaxjFkrJwyTENJo73bWBCt0SxHd2b0BE8/SwC53JT
-	 zeFXGRBL7tLew==
+	s=k20201202; t=1762284686;
+	bh=SAKuXSfZNz9/EAVAmCp7JYbqmQM7W23GtYtWdelr3Qo=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=pFwvRvy155KkheZWLi+wQphNKPKdkknzqvqNRPudlH+RDQMMaz+ei3L5gjXQF28Hh
+	 eB5mnHBu1cVLhJ1gi7i6NDWsyuL1JtliDOOV2YWg6K/zVUD1Lj9vHHEI6NYYZKcQP6
+	 dIWD4DOgv+3f4M+R+tj0U3jBeWBVDRU6t15MN/8BjrIbTbdMknnrAvFUenlTTWPf2r
+	 Y10Wk9ISdl776cJwunw1LmJCIzvGGlg7lDFq5dCbrBZ58YtwK/chXjy/v3j35e5BAG
+	 qRP8FrUNWIqQrVbosnfAY8T3mhDy9TQVayHIMy2wlL+nCqatfaqiSJRean5o0xrtHf
+	 NIq3PHwODeexQ==
 From: Konrad Dybcio <konradybcio@kernel.org>
-Subject: [PATCH 0/5] Define VDD_MXC for SC8280XP
-Date: Tue, 04 Nov 2025 20:31:05 +0100
-Message-Id: <20251104-topic-8280_mxc-v1-0-df545af0ef94@oss.qualcomm.com>
+Date: Tue, 04 Nov 2025 20:31:06 +0100
+Subject: [PATCH 1/5] dt-bindings: power: qcom,rpmpd: Add SC8280XP_MXC_AO
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -52,10 +52,9 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAHlUCmkC/x3MSwqAMAwA0atI1haSqlC9iohIGjULP7QiQvHuF
- pdvMZMgSlCJ0BUJgtwa9dgzqCyA12lfxKjPBou2IcLaXMepbJx1OG4PG2kte+KKkBBydAaZ9fm
- H/fC+H75OoqtgAAAA
-X-Change-ID: 20251104-topic-8280_mxc-e92cd1c31010
+Message-Id: <20251104-topic-8280_mxc-v1-1-df545af0ef94@oss.qualcomm.com>
+References: <20251104-topic-8280_mxc-v1-0-df545af0ef94@oss.qualcomm.com>
+In-Reply-To: <20251104-topic-8280_mxc-v1-0-df545af0ef94@oss.qualcomm.com>
 To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
  Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
  Johan Hovold <johan+linaro@kernel.org>, 
@@ -72,53 +71,42 @@ To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
 Cc: Krzysztof Kozlowski <krzk@kernel.org>, linux-arm-msm@vger.kernel.org, 
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-remoteproc@vger.kernel.org, linux-clk@vger.kernel.org, 
- linux-pm@vger.kernel.org, Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>, 
- Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+ linux-pm@vger.kernel.org, Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1762284668; l=1567;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1762284668; l=875;
  i=konrad.dybcio@oss.qualcomm.com; s=20230215; h=from:subject:message-id;
- bh=bv5RrLvyhbRRTVmzsWpNHNTYrpGvKzpe/nqRzbjAMOc=;
- b=H5Hd0okQAulEy5VeWlV8Ukx2Eq3uQdliujWHUP28jquv7CdJcQSVW5tPKUZqcsIBq/Oc0n+VX
- g4PRdGKoPoZDtMDG/DJ8gVlJ+7R3S7koWQx/xzhvi9gc0dNm/ZJgGt2
+ bh=1su1l6NZzR9E7hkUkP7zqBfafRJ3lMp5LWeh0VrhAV4=;
+ b=EruAmEhpnU07EYNQ6TKVTAUFr+3mDDVKu8jVNijcBHnUsXio0M8FFOpcidXtcfopj0H1B25zE
+ MxMIPBEc0qjDRrWdNeJGEHWaVceFawA2tK6Br3SqerQFDaEDVtj0uv0
 X-Developer-Key: i=konrad.dybcio@oss.qualcomm.com; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 
-This has somehow been omitted, leading to potentially stale votes.
-On the flip side, the domain will now be powered off, which will
-uncover any omissions we've made in the DTs so far.
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 
-Reasonably tested on an x13s without pd_ignore_unused (camera still
-works).
+Not sure how useful it's gonna be in practice, but the definition is
+missing (unlike the previously-unused SC8280XP_MXC-non-_AO), so add it
+to allow the driver to create the corresponding pmdomain.
 
-Video (not upstream right now) will also need this connection.
-
-This series defines VDD_MXC and wires it up to consumers.
-
-pmdomain patches extracted from:
-https://lore.kernel.org/linux-arm-msm/20250728-topic-gpucc_power_plumbing-v1-0-09c2480fe3e6@oss.qualcomm.com
-
+Fixes: dbfb5f94e084 ("dt-bindings: power: rpmpd: Add sc8280xp RPMh power-domains")
+Acked-by: Rob Herring (Arm) <robh@kernel.org>
 Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 ---
-Konrad Dybcio (5):
-      dt-bindings: power: qcom,rpmpd: Add SC8280XP_MXC_AO
-      dt-bindings: remoteproc: qcom,sc8280xp-pas: Fix CDSP power desc
-      dt-bindings: clock: qcom: Allow MXC on SC8280XP CAMCC
-      pmdomain: qcom: rpmhpd: Add MXC to SC8280XP
-      arm64: dts: qcom: sc8280xp: Add missing VDD_MXC links
+ include/dt-bindings/power/qcom,rpmhpd.h | 1 +
+ 1 file changed, 1 insertion(+)
 
- .../bindings/clock/qcom,sa8775p-camcc.yaml         | 13 -------------
- .../bindings/clock/qcom,sm8450-camcc.yaml          |  2 ++
- .../bindings/remoteproc/qcom,sc8280xp-pas.yaml     |  4 ++++
- arch/arm64/boot/dts/qcom/sc8280xp.dtsi             | 22 ++++++++++++++++------
- drivers/pmdomain/qcom/rpmhpd.c                     |  4 ++++
- include/dt-bindings/power/qcom,rpmhpd.h            |  1 +
- 6 files changed, 27 insertions(+), 19 deletions(-)
----
-base-commit: 17490bd0527f59d841168457b245581f314b5fa0
-change-id: 20251104-topic-8280_mxc-e92cd1c31010
+diff --git a/include/dt-bindings/power/qcom,rpmhpd.h b/include/dt-bindings/power/qcom,rpmhpd.h
+index 50e7c886709d..06851363ae0e 100644
+--- a/include/dt-bindings/power/qcom,rpmhpd.h
++++ b/include/dt-bindings/power/qcom,rpmhpd.h
+@@ -264,5 +264,6 @@
+ #define SC8280XP_NSP		13
+ #define SC8280XP_QPHY		14
+ #define SC8280XP_XO		15
++#define SC8280XP_MXC_AO		16
+ 
+ #endif
 
-Best regards,
 -- 
-Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+2.51.2
 
 
