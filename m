@@ -1,291 +1,280 @@
-Return-Path: <linux-pm+bounces-37382-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37383-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2D2BC32850
-	for <lists+linux-pm@lfdr.de>; Tue, 04 Nov 2025 19:08:14 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id DAA05C32B54
+	for <lists+linux-pm@lfdr.de>; Tue, 04 Nov 2025 19:52:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 41566428157
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Nov 2025 18:08:13 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id BA0464E2893
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Nov 2025 18:52:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2678B33DEF4;
-	Tue,  4 Nov 2025 18:08:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD57333BBBC;
+	Tue,  4 Nov 2025 18:52:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KJrL8B9V"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AxK/pcKI"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F386A33BBCB
-	for <linux-pm@vger.kernel.org>; Tue,  4 Nov 2025 18:08:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 887F52CCC5
+	for <linux-pm@vger.kernel.org>; Tue,  4 Nov 2025 18:52:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762279689; cv=none; b=pBMCH7gsqxQBChLKOok5UwXEd16p9DlfeYzXrRorTUPBtCVXri8wPrOx7sjiPwHFoKoBy4nbMlvn9GsXJH47XUH7sw0Fo8g1ISAjHEhSU+QUDmGylfybmZE2P/wxKoD0GVe9lOwQy2s6zOm2o5Um4lVEja7BEgZIPShcIrmVU9s=
+	t=1762282336; cv=none; b=iB1pjNwM93gjrsQtbKvZyhhC+978dBge7YSiduewSTgpt8t8nB8ETPBhRfcj/HiuKwQWERY02K3GI1b/3rfyWF2rtOtCSukVD6ATZOnEBeYT+BXI0DH/sxdho9/3b/AEymoK7evw5oG/cSNqHyHZztSHEmRVIlwBRwJG1NoTucc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762279689; c=relaxed/simple;
-	bh=H+B0qEVhv/M/Hrjk3KWB9ja4t4CC1iXUb3hu7bcvErk=;
+	s=arc-20240116; t=1762282336; c=relaxed/simple;
+	bh=avC7b+3xiPbCx+s77oGh8yEmaxeXEduSTSnIsjlfEQk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TEoeKm8q6z9OEBXIf9uR6RmER6b7fAsg3L0RTUb2uFCwN4ab72NoYlybAsRM1tWywej+w6Uy84PC3vnsmE4tbtoPt9Q93jfHWY2adVsqqXsCP2Q1hN1SbFTNExfyYXwux3tQGq1ySlOYlVYQRfkZpZRVfTBjm9y8mPmOnpEhBgE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KJrL8B9V; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A249EC2BCB3
-	for <linux-pm@vger.kernel.org>; Tue,  4 Nov 2025 18:08:08 +0000 (UTC)
+	 To:Cc:Content-Type; b=T+rXXsjSbzIOFf6+p8bgBFl/6np3Plf8Asa3dn+gWeALhPWioirHD9ihgP8o0wHhwvOwLbDhXyfS7yi0rnF+lu6yDbGCUN4uCgSGlDilA+hMnwIqrbjVAigupxVhpnFE6AQgB0O4R+q2Hv8gfA6DqWyp3tbsynLmY4qb4HZGYOc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AxK/pcKI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A0A0C116D0
+	for <linux-pm@vger.kernel.org>; Tue,  4 Nov 2025 18:52:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762279688;
-	bh=H+B0qEVhv/M/Hrjk3KWB9ja4t4CC1iXUb3hu7bcvErk=;
+	s=k20201202; t=1762282336;
+	bh=avC7b+3xiPbCx+s77oGh8yEmaxeXEduSTSnIsjlfEQk=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=KJrL8B9VsSLFRaN5Nv1r2sEA54BPIO+ykvVUGuuC08YenM2w7o8J20Ceh7r/NCmzj
-	 s+/VQhStBW6h0154jcj66OvTOKzoTYmHA4KoQHqhpkqymuqUgSzhPOFK428T7rF5rZ
-	 CM6CIC9CIRUaqwmp3Lf//Y4xAZARt4PPzAXnFBh1okMmZcTGMpRiR8hkrEdk8xS4VD
-	 i0UT0nODeY+9zE3P1Di1G8dOh73jcDZFxvRwDSydikmuYS/0GmWGDUJarf2amWYZWy
-	 3VqVc0kiCG6KaSsXelDoTIeuK9tK5oc0hNTIEeDA6CWKO75wyt5WOIX1UdYmfrRCj1
-	 gSWTA4WPA4vVw==
-Received: by mail-oi1-f179.google.com with SMTP id 5614622812f47-44fe4ba1c1bso240241b6e.2
-        for <linux-pm@vger.kernel.org>; Tue, 04 Nov 2025 10:08:08 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUnHxPi4t9MatidC6dHSfh3DeKK3xcAwFtJWe3AKlrge7UHsKbCpKRkVGnVIwrvNT9K55/w5bwOcg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywvgvn93g+F7ViNb/u1swaDJN5lJ9MXpI1IcNb1C450Eut8q1Bj
-	oypu0N3Jfvm9PZNmwl6st++D/WTf//BtawZ3jgMROz1mFvfNuY0tjqDeW3qqoXCAhSt9ksnW5QU
-	q43oiP9ISnpGHNIQJh56H7nqo9IUvPWc=
-X-Google-Smtp-Source: AGHT+IHrSDGsNm50EjcF44D9MNFIEETayiGYgQQjLT67U0YPEVK8ag1wTkiiHIa/UUFfTk6ozb0F0TfYt8pNd0QYGzw=
-X-Received: by 2002:a05:6808:c146:b0:44d:ba5b:ad34 with SMTP id
- 5614622812f47-44fed503d77mr152270b6e.65.1762279687546; Tue, 04 Nov 2025
- 10:08:07 -0800 (PST)
+	b=AxK/pcKIRnApjUYcl9uil8u3IzRqoE4eIqXMKvqs00oBl61yF10y7png9OBT3aQRN
+	 quGmpeKzG1kZc3Hs1dD2W84tNn1iQcthnI8hOwNdiKhgXCg8T1SHkpOATmmjSsNaF/
+	 NKtTK5bTRMiAjR2rYpdtwZce0IeTLyAaegp3BHnpTlKgtwpgKc2IdPGyhViACPP6Th
+	 qkXp3BGbjbEoRn2bTXD+5eHpgFG8NDbIzkaqVKRgzpEO5jzGjE5zuR64AwPb8Y+3Q6
+	 TaY/OHM0VIrC01fDZw+NnfzlG+im1VN/v7mTAanuyzXyn1yl112Axyr25usFruvQIa
+	 1TeX9oTseAduA==
+Received: by mail-oo1-f49.google.com with SMTP id 006d021491bc7-656b32a0cc4so240626eaf.1
+        for <linux-pm@vger.kernel.org>; Tue, 04 Nov 2025 10:52:16 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWFoNGl8UCENiNi6RG3ElYVZZqsTPnv0BAGC/531cKofAEJ3CkUMW7/sfa5E8HJhy9byZLG2mGBSA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzz/up+67X/1xJl0hvITOTgrhAtptO4jlRro1YTqnDV+XK9eblr
+	vb+2HsM/6btzglq8ElHHr+KFMd/q/t2abn7+DQ8O45h5+zu4fwJ+JE0blSSjUN+1muRVBoJAd21
+	2/3vEeP9Bk4M+DBmzB1hVnV9XoTukPYs=
+X-Google-Smtp-Source: AGHT+IH8D6yx0YUpcs7+ZieKnEh+aQ2mXyltMfZKUXcnlQjaLiwp59/SbD+G7DQKCQ+46we2g8i41BTrb6VJJRqKgr4=
+X-Received: by 2002:a05:6808:21aa:b0:44e:c106:8192 with SMTP id
+ 5614622812f47-44fed318ce3mr176398b6e.11.1762282335291; Tue, 04 Nov 2025
+ 10:52:15 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251028053136.692462-1-ankur.a.arora@oracle.com>
- <20251028053136.692462-8-ankur.a.arora@oracle.com> <CAJZ5v0hSvzHfsE4nrEW-Ey0dnJ+m=dSU-f1RywGNU0Xyi3jXtQ@mail.gmail.com>
- <87ms5ajp4c.fsf@oracle.com> <CAJZ5v0hQ7G9jvOv9VtRmsCKahBpUcPJMMOe07k_2mqsvggWcWg@mail.gmail.com>
- <874irhjzcf.fsf@oracle.com> <CAJZ5v0i5-8eO6T_-Sr-K=3Up89+_qtJW7NSjDknJSkk3Nhu8BQ@mail.gmail.com>
- <875xbxifs0.fsf@oracle.com>
-In-Reply-To: <875xbxifs0.fsf@oracle.com>
+References: <20251030210110.298612-1-wusamuel@google.com>
+In-Reply-To: <20251030210110.298612-1-wusamuel@google.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 4 Nov 2025 19:07:56 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0izSBR0_DeH5HVnSLFGRfV9WoSzbu9Mh5yvvuyrvw7fLg@mail.gmail.com>
-X-Gm-Features: AWmQ_bntcfH83903HLZKfZK6BYsGABjvLPwboKVkSn1BQkd0aPOXL15UK_L4_Us
-Message-ID: <CAJZ5v0izSBR0_DeH5HVnSLFGRfV9WoSzbu9Mh5yvvuyrvw7fLg@mail.gmail.com>
-Subject: Re: [RESEND PATCH v7 7/7] cpuidle/poll_state: Poll via smp_cond_load_relaxed_timeout()
-To: Ankur Arora <ankur.a.arora@oracle.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-pm@vger.kernel.org, bpf@vger.kernel.org, arnd@arndb.de, 
-	catalin.marinas@arm.com, will@kernel.org, peterz@infradead.org, 
-	akpm@linux-foundation.org, mark.rutland@arm.com, harisokn@amazon.com, 
-	cl@gentwo.org, ast@kernel.org, daniel.lezcano@linaro.org, memxor@gmail.com, 
-	zhenglifeng1@huawei.com, xueshuai@linux.alibaba.com, 
-	joao.m.martins@oracle.com, boris.ostrovsky@oracle.com, konrad.wilk@oracle.com
+Date: Tue, 4 Nov 2025 19:52:04 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0gzKN1cXfj508G4_9O2hKR0HncW4et3BNbaV+5Erh=LMA@mail.gmail.com>
+X-Gm-Features: AWmQ_bmQW4WMiFEqSUNK7drgYfAsIRfAIBn5ujpwJwEx4UZpZGSny_GdVggcv3o
+Message-ID: <CAJZ5v0gzKN1cXfj508G4_9O2hKR0HncW4et3BNbaV+5Erh=LMA@mail.gmail.com>
+Subject: Re: [PATCH v6] PM: Support aborting sleep during filesystem sync
+To: Samuel Wu <wusamuel@google.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, Pavel Machek <pavel@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, tuhaowen@uniontech.com, 
+	Saravana Kannan <saravanak@google.com>, kernel-team@android.com, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Oct 29, 2025 at 10:01=E2=80=AFPM Ankur Arora <ankur.a.arora@oracle.=
-com> wrote:
+On Thu, Oct 30, 2025 at 10:01=E2=80=AFPM Samuel Wu <wusamuel@google.com> wr=
+ote:
 >
+> At the start of suspend and hibernate, filesystems will sync to save the
+> current state of the device. However, the long tail of the filesystem
+> sync can take upwards of 25 seconds. If during this filesystem sync
+> there is some wakeup or abort signal, it will not be processed until the
+> sync is complete; from a user's perspective, this looks like the device
+> is unresponsive to any form of input.
 >
-> Rafael J. Wysocki <rafael@kernel.org> writes:
+> This patch adds functionality to handle a sleep abort signal when in
+> the filesystem sync phase of suspend or hibernate. This topic was first
+> discussed by Saravana Kannan at LPC 2024 [1], where the general
+> consensus was to allow filesystem sync on a parallel thread. In case of
+> abort, the suspend process will stop waiting on an in-progress
+> filesystem sync, and continue by aborting suspend before the filesystem
+> sync is complete.
 >
-> > On Wed, Oct 29, 2025 at 8:13=E2=80=AFPM Ankur Arora <ankur.a.arora@orac=
-le.com> wrote:
-> >>
-> >>
-> >> Rafael J. Wysocki <rafael@kernel.org> writes:
-> >>
-> >> > On Wed, Oct 29, 2025 at 5:42=E2=80=AFAM Ankur Arora <ankur.a.arora@o=
-racle.com> wrote:
-> >> >>
-> >> >>
-> >> >> Rafael J. Wysocki <rafael@kernel.org> writes:
-> >> >>
-> >> >> > On Tue, Oct 28, 2025 at 6:32=E2=80=AFAM Ankur Arora <ankur.a.aror=
-a@oracle.com> wrote:
-> >> >> >>
-> >> >> >> The inner loop in poll_idle() polls over the thread_info flags,
-> >> >> >> waiting to see if the thread has TIF_NEED_RESCHED set. The loop
-> >> >> >> exits once the condition is met, or if the poll time limit has
-> >> >> >> been exceeded.
-> >> >> >>
-> >> >> >> To minimize the number of instructions executed in each iteratio=
-n,
-> >> >> >> the time check is done only intermittently (once every
-> >> >> >> POLL_IDLE_RELAX_COUNT iterations). In addition, each loop iterat=
-ion
-> >> >> >> executes cpu_relax() which on certain platforms provides a hint =
-to
-> >> >> >> the pipeline that the loop busy-waits, allowing the processor to
-> >> >> >> reduce power consumption.
-> >> >> >>
-> >> >> >> This is close to what smp_cond_load_relaxed_timeout() provides. =
-So,
-> >> >> >> restructure the loop and fold the loop condition and the timeout=
- check
-> >> >> >> in smp_cond_load_relaxed_timeout().
-> >> >> >
-> >> >> > Well, it is close, but is it close enough?
-> >> >>
-> >> >> I guess that's the question.
-> >> >>
-> >> >> >> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> >> >> >> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> >> >> >> Signed-off-by: Ankur Arora <ankur.a.arora@oracle.com>
-> >> >> >> ---
-> >> >> >>  drivers/cpuidle/poll_state.c | 29 ++++++++---------------------
-> >> >> >>  1 file changed, 8 insertions(+), 21 deletions(-)
-> >> >> >>
-> >> >> >> diff --git a/drivers/cpuidle/poll_state.c b/drivers/cpuidle/poll=
-_state.c
-> >> >> >> index 9b6d90a72601..dc7f4b424fec 100644
-> >> >> >> --- a/drivers/cpuidle/poll_state.c
-> >> >> >> +++ b/drivers/cpuidle/poll_state.c
-> >> >> >> @@ -8,35 +8,22 @@
-> >> >> >>  #include <linux/sched/clock.h>
-> >> >> >>  #include <linux/sched/idle.h>
-> >> >> >>
-> >> >> >> -#define POLL_IDLE_RELAX_COUNT  200
-> >> >> >> -
-> >> >> >>  static int __cpuidle poll_idle(struct cpuidle_device *dev,
-> >> >> >>                                struct cpuidle_driver *drv, int i=
-ndex)
-> >> >> >>  {
-> >> >> >> -       u64 time_start;
-> >> >> >> -
-> >> >> >> -       time_start =3D local_clock_noinstr();
-> >> >> >> +       u64 time_end;
-> >> >> >> +       u32 flags =3D 0;
-> >> >> >>
-> >> >> >>         dev->poll_time_limit =3D false;
-> >> >> >>
-> >> >> >> +       time_end =3D local_clock_noinstr() + cpuidle_poll_time(d=
-rv, dev);
-> >> >> >
-> >> >> > Is there any particular reason for doing this unconditionally?  I=
-f
-> >> >> > not, then it looks like an arbitrary unrelated change to me.
-> >> >>
-> >> >> Agreed. Will fix.
-> >> >>
-> >> >> >> +
-> >> >> >>         raw_local_irq_enable();
-> >> >> >>         if (!current_set_polling_and_test()) {
-> >> >> >> -               unsigned int loop_count =3D 0;
-> >> >> >> -               u64 limit;
-> >> >> >> -
-> >> >> >> -               limit =3D cpuidle_poll_time(drv, dev);
-> >> >> >> -
-> >> >> >> -               while (!need_resched()) {
-> >> >> >> -                       cpu_relax();
-> >> >> >> -                       if (loop_count++ < POLL_IDLE_RELAX_COUNT=
-)
-> >> >> >> -                               continue;
-> >> >> >> -
-> >> >> >> -                       loop_count =3D 0;
-> >> >> >> -                       if (local_clock_noinstr() - time_start >=
- limit) {
-> >> >> >> -                               dev->poll_time_limit =3D true;
-> >> >> >> -                               break;
-> >> >> >> -                       }
-> >> >> >> -               }
-> >> >> >> +               flags =3D smp_cond_load_relaxed_timeout(&current=
-_thread_info()->flags,
-> >> >> >> +                                                     (VAL & _TI=
-F_NEED_RESCHED),
-> >> >> >> +                                                     (local_clo=
-ck_noinstr() >=3D time_end));
-> >> >> >
-> >> >> > So my understanding of this is that it reduces duplication with s=
-ome
-> >> >> > other places doing similar things.  Fair enough.
-> >> >> >
-> >> >> > However, since there is "timeout" in the name, I'd expect it to t=
-ake
-> >> >> > the timeout as an argument.
-> >> >>
-> >> >> The early versions did have a timeout but that complicated the
-> >> >> implementation significantly. And the current users poll_idle(),
-> >> >> rqspinlock don't need a precise timeout.
-> >> >>
-> >> >> smp_cond_load_relaxed_timed(), smp_cond_load_relaxed_timecheck()?
-> >> >>
-> >> >> The problem with all suffixes I can think of is that it makes the
-> >> >> interface itself nonobvious.
-> >> >>
-> >> >> Possibly something with the sense of bail out might work.
-> >> >
-> >> > It basically has two conditions, one of which is checked in every st=
-ep
-> >> > of the internal loop and the other one is checked every
-> >> > SMP_TIMEOUT_POLL_COUNT steps of it.  That isn't particularly
-> >> > straightforward IMV.
-> >>
-> >> Right. And that's similar to what poll_idle().
-> >
-> > My point is that the macro in its current form is not particularly
-> > straightforward.
-> >
-> > The code in poll_idle() does what it needs to do.
-> >
-> >> > Honestly, I prefer the existing code.  It is much easier to follow a=
-nd
-> >> > I don't see why the new code would be better.  Sorry.
-> >>
-> >> I don't think there's any problem with the current code. However, I'd =
-like
-> >> to add support for poll_idle() on arm64 (and maybe other platforms) wh=
-ere
-> >> instead of spinning in a cpu_relax() loop, you wait on a cacheline.
-> >
-> > Well, there is MWAIT on x86, but it is not used here.  It just takes
-> > too much time to wake up from.  There are "fast" variants of that too,
-> > but they have been designed with user space in mind, so somewhat
-> > cumbersome for kernel use.
-> >
-> >> And that's what using something like smp_cond_load_relaxed_timeout()
-> >> would enable.
-> >>
-> >> Something like the series here:
-> >>   https://lore.kernel.org/lkml/87wmaljd81.fsf@oracle.com/
-> >>
-> >> (Sorry, should have mentioned this in the commit message.)
-> >
-> > I'm not sure how you can combine that with a proper timeout.
+> Additionally, there is extra care needed to account for back-to-back
+> sleeps while maintaining functionality to immediately abort during the
+> filesystem sync stage. Furthermore, in the case of the back-to-back
+> sleeps, a subsequent filesystem sync is needed to ensure the latest
+> files are synced right before sleep. If necessary, a subsequent sleep's
+> filesystem sync will be queued, and will only start when the previous
+> sleep's filesystem sync has finished. While waiting for the previous
+> sleep's filesystem sync to finish, the subsequent sleep will still abort
+> early if a wakeup event is triggered, solving the original issue of
+> filesystem sync blocking abort.
 >
-> Would taking the timeout as a separate argument work?
+> [1]: https://lpc.events/event/18/contributions/1845/
 >
->   flags =3D smp_cond_load_relaxed_timeout(&current_thread_info()->flags,
->                                          (VAL & _TIF_NEED_RESCHED),
->                                          local_clock_noinstr(), time_end)=
-;
+> Suggested-by: Saravana Kannan <saravanak@google.com>
+> Signed-off-by: Samuel Wu <wusamuel@google.com>
+> ---
+> Changes in v6:
+> - Use spin_lock_irq() in thread context
+> - Use dedicated ordered workqueue for sync work items
+> - Use a counter instead of two bools for synchronization
+> - Queue fs_sync if it's not already pending on workqueue
+> - pm_wakeup_clear(0) is prequisite to this feature, so move it within fun=
+ction
+> - Updated commit text for motive of back-to-back fs syncs
+> - Tighter lock/unlock around setup, checks, and loop
+> - Fix function definitions for CONFIG_PM_SLEEP=3Dn
+> - v5 link: https://lore.kernel.org/all/20251017233907.2305303-1-wusamuel@=
+google.com/
 >
-> Or you are thinking of something on different lines from the smp_cond_loa=
-d
-> kind of interface?
-
-I would like it to be something along the lines of
-
-arch_busy_wait_for_need_resched(time_limit);
-dev->poll_time_limit =3D !need_resched();
-
-and I don't care much about how exactly this is done in the arch code,
-so long as it does what it says.
-
-> > The timeout is needed because you want to break out of this when it sta=
-rts
-> > to take too much time, so you can go back to the idle loop and maybe
-> > select a better idle state.
+> Changes in v5:
+> - Update spin_lock() to spin_lock_irqsave() since abort can be in IRQ con=
+text
+> - Updated changelog description to be more precise regarding continuing a=
+bort
+>   sleep before fs_sync() is complete
+> - Rename abort_sleep_during_fs_sync() to pm_stop_waiting_for_fs_sync()
+> - Simplify from a goto to do-while in pm_sleep_fs_sync()
+> - v4 link: https://lore.kernel.org/all/20250911185314.2377124-1-wusamuel@=
+google.com
 >
-> Agreed. And that will happen with the version in the patch:
+> Changes in v4:
+> - Removed patch 1/3 of v3 as it is already picked up on linux-pm
+> - Squashed patches 2/3 and 3/3 from v3 into this single patch
+> - Added abort during fs_sync functionality to hibernate in addition to su=
+spend
+> - Moved variables and functions for abort from power/suspend.c to power/m=
+ain.c
+> - Renamed suspend_fs_sync_with_abort() to pm_sleep_fs_sync()
+> - Renamed suspend_abort_fs_sync() to abort_sleep_during_fs_sync()
+> - v3 link: https://lore.kernel.org/all/20250821004237.2712312-1-wusamuel@=
+google.com/
 >
->      flags =3D smp_cond_load_relaxed_timeout(&current_thread_info()->flag=
-s,
->                                             (VAL & _TIF_NEED_RESCHED),
->                                             (local_clock_noinstr() >=3D t=
-ime_end));
+> Changes in v3:
+> - Split v2 patch into 3 patches
+> - Moved pm_wakeup_clear() outside of if(sync_on_suspend_enabled) conditio=
+n
+> - Updated documentation and comments within kernel/power/suspend.c
+> - v2 link: https://lore.kernel.org/all/20250812232126.1814253-1-wusamuel@=
+google.com/
 >
-> Just that with waited mode on arm64 the timeout might be delayed dependin=
+> Changes in v2:
+> - Added documentation for suspend_abort_fs_sync()
+> - Made suspend_fs_sync_lock and suspend_fs_sync_complete declaration stat=
+ic
+> - v1 link: https://lore.kernel.org/all/20250815004635.3684650-1-wusamuel@=
+google.com
+>
+>  drivers/base/power/wakeup.c |  8 ++++
+>  include/linux/suspend.h     |  4 ++
+>  kernel/power/hibernate.c    |  5 ++-
+>  kernel/power/main.c         | 81 +++++++++++++++++++++++++++++++++++++
+>  kernel/power/suspend.c      |  4 +-
+>  5 files changed, 100 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
+> index d1283ff1080b..689c16b08b38 100644
+> --- a/drivers/base/power/wakeup.c
+> +++ b/drivers/base/power/wakeup.c
+> @@ -570,6 +570,13 @@ static void wakeup_source_activate(struct wakeup_sou=
+rce *ws)
+>
+>         /* Increment the counter of events in progress. */
+>         cec =3D atomic_inc_return(&combined_event_count);
+> +       /*
+> +        * wakeup_source_activate() aborts sleep only if events_check_ena=
+bled
+> +        * is set (see pm_wakeup_pending()). Similarly, abort sleep durin=
 g
-> on granularity of the event stream.
+> +        * fs_sync only if events_check_enabled is set.
+> +        */
+> +       if (events_check_enabled)
+> +               pm_stop_waiting_for_fs_sync();
+>
+>         trace_wakeup_source_activate(ws->name, cec);
+>  }
+> @@ -899,6 +906,7 @@ EXPORT_SYMBOL_GPL(pm_wakeup_pending);
+>  void pm_system_wakeup(void)
+>  {
+>         atomic_inc(&pm_abort_suspend);
+> +       pm_stop_waiting_for_fs_sync();
+>         s2idle_wake();
+>  }
+>  EXPORT_SYMBOL_GPL(pm_system_wakeup);
+> diff --git a/include/linux/suspend.h b/include/linux/suspend.h
+> index b02876f1ae38..4795f55f9cbe 100644
+> --- a/include/linux/suspend.h
+> +++ b/include/linux/suspend.h
+> @@ -450,6 +450,8 @@ void restore_processor_state(void);
+>  extern int register_pm_notifier(struct notifier_block *nb);
+>  extern int unregister_pm_notifier(struct notifier_block *nb);
+>  extern void ksys_sync_helper(void);
+> +extern void pm_stop_waiting_for_fs_sync(void);
+> +extern int pm_sleep_fs_sync(void);
+>  extern void pm_report_hw_sleep_time(u64 t);
+>  extern void pm_report_max_hw_sleep(u64 t);
+>  void pm_restrict_gfp_mask(void);
+> @@ -505,6 +507,8 @@ static inline void pm_restrict_gfp_mask(void) {}
+>  static inline void pm_restore_gfp_mask(void) {}
+>
+>  static inline void ksys_sync_helper(void) {}
+> +static inline void pm_stop_waiting_for_fs_sync(void) {}
+> +static inline int pm_sleep_fs_sync(void) { return 0; }
+>
+>  #define pm_notifier(fn, pri)   do { (void)(fn); } while (0)
+>
+> diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
+> index 53166ef86ba4..1874fde4b4f3 100644
+> --- a/kernel/power/hibernate.c
+> +++ b/kernel/power/hibernate.c
+> @@ -820,7 +820,10 @@ int hibernate(void)
+>         if (error)
+>                 goto Restore;
+>
+> -       ksys_sync_helper();
+> +       error =3D pm_sleep_fs_sync();
+> +       if (error)
+> +               goto Restore;
+> +
+>         if (filesystem_freeze_enabled)
+>                 filesystems_freeze();
+>
+> diff --git a/kernel/power/main.c b/kernel/power/main.c
+> index a6cbc3f4347a..23ca87a172a4 100644
+> --- a/kernel/power/main.c
+> +++ b/kernel/power/main.c
+> @@ -582,6 +582,84 @@ bool pm_sleep_transition_in_progress(void)
+>  {
+>         return pm_suspend_in_progress() || hibernation_in_progress();
+>  }
+> +
+> +static int pm_sleep_fs_syncs_queued;
+> +static DEFINE_SPINLOCK(pm_sleep_fs_sync_lock);
+> +static DECLARE_COMPLETION(pm_sleep_fs_sync_complete);
+> +static struct workqueue_struct *pm_fs_sync_wq;
+> +
+> +static int __init pm_start_fs_sync_workqueue(void)
+> +{
+> +       pm_fs_sync_wq =3D alloc_ordered_workqueue("pm_fs_sync_wq", 0);
+> +
+> +       return pm_fs_sync_wq ? 0 : -ENOMEM;
+> +}
+> +
+> +/**
+> + * pm_stop_waiting_for_fs_sync - Abort fs_sync to abort sleep early
+> + *
+> + * This function causes the suspend process to stop waiting on an in-pro=
+gress
+> + * filesystem sync, such that the suspend process can be aborted before =
+the
+> + * filesystem sync is complete.
+> + */
+> +void pm_stop_waiting_for_fs_sync(void)
+> +{
+> +       unsigned long flags;
+> +
+> +       spin_lock_irqsave(&pm_sleep_fs_sync_lock, flags);
+> +       complete(&pm_sleep_fs_sync_complete);
+> +       spin_unlock_irqrestore(&pm_sleep_fs_sync_lock, flags);
+> +}
 
-That's fine.  cpuidle_poll_time() is not exact anyway.
+Apart from the kernel test robot reports,
+pm_stop_waiting_for_fs_sync() has become slightly too heavy for
+calling it from wakeup_source_activate().
+
+Waking up the suspend process from there should be sufficient.  The
+completion is not necessary for that in principle.
 
