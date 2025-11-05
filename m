@@ -1,125 +1,175 @@
-Return-Path: <linux-pm+bounces-37476-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37477-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A16D1C373E3
-	for <lists+linux-pm@lfdr.de>; Wed, 05 Nov 2025 19:05:21 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id DEB09C374BD
+	for <lists+linux-pm@lfdr.de>; Wed, 05 Nov 2025 19:28:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 24FDD188912B
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Nov 2025 18:05:41 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 9F04E4E3F5D
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Nov 2025 18:27:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9FBC2FDC42;
-	Wed,  5 Nov 2025 18:05:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88400283FD8;
+	Wed,  5 Nov 2025 18:27:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jYrDwk9y"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NAMHAa8S"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D5941F4615
-	for <linux-pm@vger.kernel.org>; Wed,  5 Nov 2025 18:05:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E702027E06C
+	for <linux-pm@vger.kernel.org>; Wed,  5 Nov 2025 18:27:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762365912; cv=none; b=oT1Pk1QAdIE0TEdUmcCqCqXl3dQGZJ5IFbRwESaBkOUacPIq5RqWql2Gk1UnbNp9o8Jow/GJ8Mz5SUoJuPeFNMyGAR4etjgoPsaoXKCj+Arzo4iHDpf8RJ2QIR5UcwiQbuOZd35QoWydVyQ6O2gt/6f+iQnTWY6P4QKPy1LfkOw=
+	t=1762367225; cv=none; b=KZ19q9PGzHo/BK7NnZIlNigLEkn8JYi5P1ydk8sZBUuAllxMgW0B0DwNkGGxuud8xIfnFSzFmWzma+k2Eywalq/+WhUWPlv37WepQEQzupsRtboVIDAP7nYSogCYaO/hSSkwDZZpn82kpHHAzrQNd9ufra7KU7fyT82T4495IlY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762365912; c=relaxed/simple;
-	bh=SLlEzq/aHHznoF5NtEnXd89nH9yrisCZS8IvSbSkoX8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RFJjZP2RZgugX8Y7DNl1+Ko7AR+GQSmrVi0JGhsGcveW6HWTfMccHq/UXP5EW2+UdKs6sglAoOmm7HanE8uKx4JIO9zS18Ef2Lq7vlQj6s9jucLxZdH77sctGcx0nF0Kl48IH4b8/M4lQemnwzPdZ/Mq6r3Tit/xtNtUSXsKqo0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jYrDwk9y; arc=none smtp.client-ip=209.85.221.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-3ece1102998so71727f8f.2
-        for <linux-pm@vger.kernel.org>; Wed, 05 Nov 2025 10:05:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762365909; x=1762970709; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=g7Y3LSh825KmwZimhlKVYdvvUH4zjD7r/BAWVMm2aBY=;
-        b=jYrDwk9yVFe3NBna2p33Id/9h/dRXLKnWISCG1fEYJEc72JueVZYQ1yAPvEuXLfXpx
-         jQaGVJVgmlIkOnR8ugpN6ZccoDgi2JV1HpZp/TBcqCHNlMMFyyB+e7V4BF4WyPTLd2HR
-         NbB4zEJGVicuxiUhv43Gy+/kpyi5ha75ugQ+OGU3tSo9lOesfupO8OMFWOVqFy1VHn6A
-         IRHiR+SKhUKjpmzdX5Q8nkFj2nAL9Fy6eQXoHJnlQmFYzDQLtbCAD4i9dGKGYlg8rzWD
-         mOlkg0EA1cYfxpRehTP/8H1adN6KggqHdN/aaagk0eGURoA7a0oPKjJh+fjaWPigJIjj
-         4Ghg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762365909; x=1762970709;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=g7Y3LSh825KmwZimhlKVYdvvUH4zjD7r/BAWVMm2aBY=;
-        b=qnJ34kJl/OixwYr/NyOx1OyLnQM7Yn4d5rQHf83SfaRm1lLphmiAGIW/+tpEmrVlpD
-         LdjVZ67qmyByxD4TWQt4twzeoqsHfu00V1Q077XMKj6zEZjm6jcCDxgOqgKXhH+JPcyO
-         U9F7+r0O8VsRsRtN68FZQrVbv5oolSHozRgMB8A4TNGrJCcc0SzTFToS6orGkJlVPcy7
-         5bHMpKqtKbG4V5UTfEF0tAdFPEgDPg70jkPGXoZNFRdM3PClhDW0YeoLCwjLb/SupJkQ
-         2ciuz24Hzd6wg/tL/hlGOk24aI57SNJ7+m/n225w6uTPpCIEkhBJOMbWfOm4yYEb6s88
-         98qQ==
-X-Gm-Message-State: AOJu0YzDgXy8E4vO+Ly30hqVIOZo8/Q9eJoy5bVMfMIx029MdythDeXH
-	f3WnUhIYbAwg1y4irwKMZ9zKRuqeJBoMqqZ68o80hZSGiHNu/Lk3AHTxdci9BA==
-X-Gm-Gg: ASbGncuP3ORda7X5e+vamkj0SKS+1oZS3rxpA/KLVatHIB0UqQQufE+bRMQ4LLdNYhi
-	01OIXAoQZupuNj4NL2rh43IRpr8/NKJtwrilaaXGn8ap8dtAPS0LCuiroVlHdR1so3Xpr1nw2o0
-	JoNWPunlyAPQZaYZxrsd/2iqebhj3GNnZHpPxLSc+YK24Esv2Fh1/zQgwx3kfjs9jGBMkaunJzz
-	vuMXvPzV3bgwzv5+Qmt3sV0QHkr6s5e/dixS8LNTmh7GULRSjJWeA5lQpcbkMT2p7TmSXvmxpXG
-	pkVW17e4EyeG0OFfvij17He8CT0ocECCXRF5nkXIUPMKCBklYcZRahl3M9rooc9IZv1cKEY8T0L
-	Z2+ZlZwBeUWpBGYciXZ0jhMwB4pM3xsCMXWn4P2lpRhF6wdH9VxNZjdQInii6Qo1Txl/yvfTT
-X-Google-Smtp-Source: AGHT+IFvjz6KaeHi9KvXSNZLQFBICoxSxvjX7MeOrDe5/OMGDLBMUyAaLnCNl7AQt8k5pY3UrxxYqg==
-X-Received: by 2002:a05:6000:210c:b0:429:d6fa:da05 with SMTP id ffacd0b85a97d-429e3306238mr2949216f8f.38.1762365908996;
-        Wed, 05 Nov 2025 10:05:08 -0800 (PST)
-Received: from localhost ([212.73.77.104])
-        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-429eb4037c7sm87922f8f.3.2025.11.05.10.05.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Nov 2025 10:05:08 -0800 (PST)
-From: Askar Safin <safinaskar@gmail.com>
-To: linux-pm@vger.kernel.org
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	superm1@kernel.org
-Subject: hibernate bug: "Image size after compression: -1210935 kbytes"
-Date: Wed,  5 Nov 2025 21:05:03 +0300
-Message-ID: <20251105180506.137448-1-safinaskar@gmail.com>
-X-Mailer: git-send-email 2.47.3
+	s=arc-20240116; t=1762367225; c=relaxed/simple;
+	bh=uXdwPX+sqwNaiMNWlx1OGxjphxNRGZBzbCCFWA8AB1Q=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=pveAFMKFRLg/3emXtzX/1GyqT1BlH7hEKC+QM2qBg8m5+FEmvez626DKJJdG5geGRBZ3dNktQJLqlFdb9BsdcTxXN4rNjBT1J1PbmEK0trJi7lOnFluLMhXG7dUff0H9B17kqclTnTCqEBOvFQiXJKCIqiLb0e5Ezy5Q8VROfPY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NAMHAa8S; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1762367223; x=1793903223;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version;
+  bh=uXdwPX+sqwNaiMNWlx1OGxjphxNRGZBzbCCFWA8AB1Q=;
+  b=NAMHAa8SqoYhM3wiFZm5IFuLIHrD8ZD+kCeVLRpEu9U0A3y8+2lMyFRS
+   3pKNZsMiM8fEJ6cFhB5oNmAl/9yz97wjYH1wgAI5M5NrveE3UL0G1s2+z
+   CB9pTUUItRk879aw9h+PvnXDPJ2FGdBelfEeBr4UuQVZefeYDEngE4XPE
+   yenRcL2Q+7uC1keSIiAM/r4Wl3aKwKau4mikiZQXCLTx8IfekH7Q5C6oR
+   apb5lzz9cA+SvvoSgjfQPPyY2KFDdECXKhi0qRZM+HMsj8R7oCZDNZbgK
+   AgYNC6/fI2U5bX1Ezg+LyEywMYC9ZO5CIwS7zo81xLWrsL6aH2D4rCKwM
+   A==;
+X-CSE-ConnectionGUID: 1kxP6oeWRQ6c6XVGGtGVpw==
+X-CSE-MsgGUID: ZJPP+uhyQgKpH+684E1kyQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11604"; a="64406563"
+X-IronPort-AV: E=Sophos;i="6.19,282,1754982000"; 
+   d="scan'208,223";a="64406563"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2025 10:27:02 -0800
+X-CSE-ConnectionGUID: 4Nee4X9MQamXTCuLgQ78mw==
+X-CSE-MsgGUID: Q5MvtlIdS3yvy0ltE+N/Ow==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,282,1754982000"; 
+   d="scan'208,223";a="192594309"
+Received: from spandruv-desk2.jf.intel.com ([10.88.27.176])
+  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2025 10:27:02 -0800
+Message-ID: <ea04e2c8d6f31354bbd96835498c3384cbccea44.camel@linux.intel.com>
+Subject: Re: Disabling  Intel turbo on non IDA featured processor generally
+ correct?
+From: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To: Thomas Renninger <trenn@suse.de>
+Cc: linux-pm@vger.kernel.org, ez2blost@yahoo.com
+Date: Wed, 05 Nov 2025 10:27:01 -0800
+In-Reply-To: <5615342.jMkzrH9lRO@linux.fritz.box>
+References: <2764104.vuYhMxLoTh@localhost.localdomain>
+	 <356b1c77ef385158d062ad2ecebfa275dc663017.camel@linux.intel.com>
+	 <5615342.jMkzrH9lRO@linux.fritz.box>
+Content-Type: multipart/mixed; boundary="=-zwuTUIE9zIpeCjPXys6B"
+User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-I found hibernation bug: kernel sometimes reports negative size of
-hibernation image.
+--=-zwuTUIE9zIpeCjPXys6B
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Steps to reproduce:
-- Your memory size should be 10000 MiB
-- Your swap size should be 3000 MiB
-- Mount ramfs
-- Create 4000 MiB file with random (uncompressable) data in that ramfs
-- Try to hibernate
-- Of course, hibernation will fail, because you cannot fit 4000 MiB random file to
-3000 MiB swap
-- But you will see very strange message in kernel logs
-"Image size after compression: -1210935 kbytes" (or similar)
+On Wed, 2025-11-05 at 15:55 +0100, Thomas Renninger wrote:
+> On Mittwoch, 5. November 2025 14:06:42 Mitteleurop=C3=A4ische Normalzeit
+> srinivas=20
+> pandruvada wrote:
+> > Hi Thomas,
+> >=20
+> > The BIOS shipped with system disabled turbo on boot and user had to
+> > manually force via the sysfs. With the new change that is not an
+> > option.
+>=20
+> User (adding EZ, sorry for missing you out on initial post)
+> claims that cpuid shows:
+> So I ran the cpuid commend and it returned:
+> Thermal and Power Management Features (6):
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 digital thermometer=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 =3D true
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Intel Turbo Boost Technology=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =3D true
+> =C2=A0...
+>=20
+> Not sure whether this really is the same bit and whether this is
+> prove that=20
+> IDA feature bit has been switched by Linux OS (by
+> SMI/firmware?)Fixes: 0fb5be7fea98 ("cpufreq: intel_pstate: Unchecked
+> MSR aceess in legacy mode") after=20
+> initializing?
+>=20
+> IDA cpufeature bit is not set in /proc/cpuinfo
+>=20
+> EZ probably can do the one or other msr read/write if you need
+> someone tests.
+>=20
+If the BIOS does it correctly there is a way to know as the limits can
+be dynamic.
 
-Here is script for reproduction this bug in Qemu:
-https://zerobin.net/?7d87d78855b41e07#yvP+T2c/v9A1AJr2d1tjWCbA6KUZZscDeESvbHqfqOo=
+Here probably we need to reevaluate again. Try the attached change and
+check if this brings back the old hack.
 
-Here is resulting output (dmesg):
-https://zerobin.net/?76c5a5e312ff7e6d#fH6jAkatrtRvtOWvFdo5EldWWP86wVxJrzzOCzvCQZc=
+Thanks,
+Srinivas
 
-Reproducibility in Qemu: always (assuming you use script above).
 
-The bug reproduces (in Qemu) on current master (284922f4c563).
+> Good luck,
+>=20
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Thomas
+> >=20
+> > We are trying to contact the manufacturer, but no solution yet.
+>=20
+> That is appreciated!
 
-I see two bugs in this output. First, negative size of hibernation image.
-Second, "dmesg" doesn't contain any hibernation error. I. e. "dmesg" looks like
-hibernation succeed, but it did not.
+--=-zwuTUIE9zIpeCjPXys6B
+Content-Disposition: attachment;
+	filename*0=0001-cpufreq-intel_pstate-Reevaluate-IDA-presence-on-no_t.pat;
+	filename*1=ch
+Content-Transfer-Encoding: base64
+Content-Type: text/x-patch;
+	name="0001-cpufreq-intel_pstate-Reevaluate-IDA-presence-on-no_t.patch";
+	charset="UTF-8"
 
-The bug is reproducible both in Qemu and on real hardware.
-(Note: I reproduced it on real hardware with v6.12.48 kernel.)
+RnJvbSA0MDVkMjdlODcxZjdiYzg1YTc4NmY4NDg3N2EzNWRhNTRjODEzYjM5IE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBTcmluaXZhcyBQYW5kcnV2YWRhIDxzcmluaXZhcy5wYW5kcnV2
+YWRhQGxpbnV4LmludGVsLmNvbT4KRGF0ZTogV2VkLCA1IE5vdiAyMDI1IDA5OjU3OjAzIC0wODAw
+ClN1YmplY3Q6IFtQQVRDSF0gY3B1ZnJlcTogaW50ZWxfcHN0YXRlOiBSZWV2YWx1YXRlIElEQSBw
+cmVzZW5jZSBvbiBub190dXJibwogYXR0cmlidXRlIGNoYW5nZQoKSWYgaGFyZHdhcmUgZGlzYWJs
+ZWQgSURBIChJbnRlbCBEeW5hbWljIEFjY2VsZXJhdGlvbiB0ZWNobm9sb2d5KSBmZWF0dXJlCmJl
+Zm9yZSBPUyBib290LCB0dXJibyBtb2RlIHN1cHBvcnQgd2lsbCBiZSBkaXNhYmxlZCBwZXJtYW5l
+bnRseS4gSW4gdGhpcwpjYXNlIENQVUlELjA2SDogRUFYWzFdIHJlcG9ydHMgMCBhbmQgYXR0cmli
+dXRlCiIvc3lzL2RldmljZXMvc3lzdGVtL2NwdS9pbnRlbF9wc3RhdGUvbm9fdHVyYm8iIHdpbGwg
+c2hvdyAiMSIgYW5kIHN0YXR1cwpjYW4ndCBiZSBjaGFuZ2VkIHRvICIwIi4KCldoZW4gbm9fdHVy
+Ym8gaXMgd3JpdHRlbiB3aXRoIDAsIGluIHRoaXMgY2FzZSBldmFsdWF0ZSBDUFVJRC4wNkg6IEVB
+WFsxXQphZ2Fpbi4gSWYgdGhlIGZlYXR1cmUgc3RhdHVzIGlzIGNoYW5nZWQgdG8gMSBwb3N0IE9T
+IGJvb3QgdGhlbiBhbGxvdyB0bwplbmFibGUgdHVyYm8gbW9kZS4KClNpZ25lZC1vZmYtYnk6IFNy
+aW5pdmFzIFBhbmRydXZhZGEgPHNyaW5pdmFzLnBhbmRydXZhZGFAbGludXguaW50ZWwuY29tPgot
+LS0KIGRyaXZlcnMvY3B1ZnJlcS9pbnRlbF9wc3RhdGUuYyB8IDcgKysrKysrLQogMSBmaWxlIGNo
+YW5nZWQsIDYgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQoKZGlmZiAtLWdpdCBhL2RyaXZl
+cnMvY3B1ZnJlcS9pbnRlbF9wc3RhdGUuYyBiL2RyaXZlcnMvY3B1ZnJlcS9pbnRlbF9wc3RhdGUu
+YwppbmRleCA0M2U4NDdlOWY3NDEuLjBlYzQ1YTYxMGI0NSAxMDA2NDQKLS0tIGEvZHJpdmVycy9j
+cHVmcmVxL2ludGVsX3BzdGF0ZS5jCisrKyBiL2RyaXZlcnMvY3B1ZnJlcS9pbnRlbF9wc3RhdGUu
+YwpAQCAtNTk2LDEwICs1OTYsMTUgQEAgc3RhdGljIHZvaWQgaW50ZWxfcHN0YXRlX2h5YnJpZF9o
+d3BfYWRqdXN0KHN0cnVjdCBjcHVkYXRhICpjcHUpCiAKIHN0YXRpYyBib29sIHR1cmJvX2lzX2Rp
+c2FibGVkKHZvaWQpCiB7CisJdW5zaWduZWQgaW50IGVheCwgZWJ4LCBlY3gsIGVkeDsKIAl1NjQg
+bWlzY19lbjsKIAotCWlmICghY3B1X2ZlYXR1cmVfZW5hYmxlZChYODZfRkVBVFVSRV9JREEpKQor
+CWVheCA9IDA7CisJY3B1aWQoNiwgJmVheCwgJmVieCwgJmVjeCwgJmVkeCk7CisJaWYgKCEoZWF4
+ICYgQklUKDEpKSkgeworCQlwcl9pbmZvKCJUdXJibyBpcyBkaXNhYmxlZFxuIik7CiAJCXJldHVy
+biB0cnVlOworCX0KIAogCXJkbXNybChNU1JfSUEzMl9NSVNDX0VOQUJMRSwgbWlzY19lbik7CiAK
+LS0gCjIuNDMuMAoK
 
-This looks like integer overflow. I suggest double-checking that all
-size calculations are 64-bit (on 64-bit systems) in hibernation code.
 
--- 
-Askar Safin
+--=-zwuTUIE9zIpeCjPXys6B--
 
