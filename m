@@ -1,114 +1,99 @@
-Return-Path: <linux-pm+bounces-37473-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37475-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA7E6C36C2F
-	for <lists+linux-pm@lfdr.de>; Wed, 05 Nov 2025 17:44:34 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 96E1EC36FBD
+	for <lists+linux-pm@lfdr.de>; Wed, 05 Nov 2025 18:12:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 863E762439D
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Nov 2025 16:00:30 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id CC7F1503878
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Nov 2025 17:02:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B85B3333452;
-	Wed,  5 Nov 2025 16:00:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E027233EAEB;
+	Wed,  5 Nov 2025 16:55:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q1GS72Zr"
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="DGOJa+Bf"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay.smtp-ext.broadcom.com (relay.smtp-ext.broadcom.com [192.19.166.231])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8850B33343D;
-	Wed,  5 Nov 2025 16:00:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 426D533E34E;
+	Wed,  5 Nov 2025 16:55:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.19.166.231
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762358428; cv=none; b=pI/yo+Y+phs5A0FDbpYs+d2ZIVxj2oAsNedekyk9lJSvaPo2gFpgsNd2tAEFUBiXVoAt1QyweEP3vctItv7KRF5nfO1QQTxmk+VEhZWW6AI9joP3x7k7k+BdqGNFIEM4oHcgfWmwhJRd8YueGgVDxWVJ6jDZq+TzLK2JhAvpM04=
+	t=1762361756; cv=none; b=o5fhVXwtdmY+1LoEvWcw3Ki8KpXJR01euzkxkcypCXn1yC0cgi3R1CXDP6Zz6B9KuBMWUhy3af2osACVGS+DnMIT5dcrESMES8CgkCJyGcGy7zBWxsVJAcygbfy1o3bLiFhMdulxW3CdyzRCVUloc6FWFE7G+zmIIu9fqy71LEY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762358428; c=relaxed/simple;
-	bh=QDwOSjuGqHxR2tFeoqzVBgZh1UGkHD1E/jr70OrfSUk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=STsMV3svT5ubtREqOR13NYuM5ErNDUJbPZKLg4VEd+54En+/cmh6yaTSzOXzwJDt9wv+QBKFvSw63UvRxl1ya3/F3Jeh0tzpHWPaSC8aIIklnnoMqc/tzAo7gQLVWNd+/8300Lu1Ey7H7TP/3pSd8LdtKfcj1N+qIRYKBl4bvEE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q1GS72Zr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 136E6C4CEF5;
-	Wed,  5 Nov 2025 16:00:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762358428;
-	bh=QDwOSjuGqHxR2tFeoqzVBgZh1UGkHD1E/jr70OrfSUk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Q1GS72ZrJB/rCT58NrVsIO4qtyuJORUH/uYUgHdo+sAxAnoLzx+XEQD09lCsBMOva
-	 KbToYUsKRdf2q7zftVuVYRyryuKXh8sFxWzhgcUQXCxB30k6WhlhrN+JjT4SSRgtiO
-	 yZVi6pL5wjpizGVA1RREJodxsCOCi/nohp9RzwapEwZRuFE5B8vP0+SVFort/9hxv4
-	 lres1KOI/G9SDk+j2ZVzJphk7YDRiPaH0JbNA1NH+IO+v/LnAfLOalZGTIZ1pLwBUB
-	 BetfVd56FBVOR0yOCNM9F75HZBYeWFAccJcdWAu/7JnblMbBIrfhuRdrDBF8iO5O6U
-	 CtNdDZdo+BYKg==
-Message-ID: <1f6c7144-9b4e-4252-b62e-71c348f11827@kernel.org>
-Date: Wed, 5 Nov 2025 10:00:25 -0600
+	s=arc-20240116; t=1762361756; c=relaxed/simple;
+	bh=hhmB2iuEddEFafCKIiqCt3bOeo4u0PYRS/qdEvn1g1o=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=HH82nufdRZXP3eJ15p5i1cnfkm0j3Sh3yvl42IN3D8wo+89ZvZNAE3Kaw2rSW37CVy/U+cvOmEPcxLZqzSSm4F3X59IFN3Af4I1xRjiDRP3LbTYBFBuEufQ6n3XTjE+6mLYgwnJ0zAu+1IudIQWW0QCana/SXSxgRYA1q8tuUbM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=DGOJa+Bf; arc=none smtp.client-ip=192.19.166.231
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+Received: from mail-lvn-it-01.broadcom.com (mail-lvn-it-01.lvn.broadcom.net [10.36.132.253])
+	by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id 2332BC001055;
+	Wed,  5 Nov 2025 08:55:54 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com 2332BC001055
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
+	s=dkimrelay; t=1762361754;
+	bh=hhmB2iuEddEFafCKIiqCt3bOeo4u0PYRS/qdEvn1g1o=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=DGOJa+BfYggHttBXoamP/7JZv+HvhrIOijicHJi91MiXVTCs54RtQjD3BRIrvcGsf
+	 2FbSvQxP+ukiYKrJZENwhZRO/zLRWMkT8Z4kE7S37J36FyjzANabEpjQnz55VlXm0O
+	 IS1MfEwRSSsazuAM1fIOjxDH4heBgk3D1HLtJeqE=
+Received: from fainelli-desktop.igp.broadcom.net (fainelli-desktop.dhcp.broadcom.net [10.67.48.245])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail-lvn-it-01.broadcom.com (Postfix) with ESMTPSA id C9DD01800051E;
+	Wed,  5 Nov 2025 08:55:53 -0800 (PST)
+From: Florian Fainelli <florian.fainelli@broadcom.com>
+To: bcm-kernel-feedback-list@broadcom.com,
+	Stanimir Varbanov <svarbanov@suse.de>,
+	linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rpi-kernel@lists.infradead.org,
+	linux-pm@vger.kernel.org
+Cc: Florian Fainelli <f.fainelli@gmail.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Ray Jui <rjui@broadcom.com>,
+	Scott Branden <sbranden@broadcom.com>,
+	Lee Jones <lee@kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Willow Cunningham <willow.e.cunningham@gmail.com>,
+	Stefan Wahren <wahrenst@gmx.net>,
+	Saenz Julienne <nsaenz@kernel.org>,
+	Andrea della Porta <andrea.porta@suse.com>,
+	Phil Elwell <phil@raspberrypi.com>,
+	Jonathan Bell <jonathan@raspberrypi.com>,
+	Dave Stevenson <dave.stevenson@raspberrypi.com>
+Subject: Re: [PATCH v3 4/4] arm64: dts: broadcom: bcm2712: Add watchdog DT node
+Date: Wed,  5 Nov 2025 08:55:53 -0800
+Message-ID: <20251105165553.3910996-1-florian.fainelli@broadcom.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20251031183309.1163384-5-svarbanov@suse.de>
+References: <20251031183309.1163384-1-svarbanov@suse.de> <20251031183309.1163384-5-svarbanov@suse.de>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/4] ACPI: CPPC: Fixes to limit actions to online CPUs
-To: "Gautham R. Shenoy" <gautham.shenoy@amd.com>,
- "Rafael J . Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>,
- Yunhui Cui <cuiyunhui@bytedance.com>, Jeremy Linton <jeremy.linton@arm.com>,
- Viresh Kumar <viresh.kumar@linaro.org>,
- Ionela Voinescu <ionela.voinescu@arm.com>
-Cc: linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
- Christopher Harris <chris.harris79@gmail.com>, linux-pm@vger.kernel.org
-References: <20251105143851.4251-1-gautham.shenoy@amd.com>
-Content-Language: en-US
-From: "Mario Limonciello (AMD) (kernel.org)" <superm1@kernel.org>
-In-Reply-To: <20251105143851.4251-1-gautham.shenoy@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
+From: Florian Fainelli <f.fainelli@gmail.com>
 
+On Fri, 31 Oct 2025 20:33:09 +0200, Stanimir Varbanov <svarbanov@suse.de> wrote:
+> Add watchdog device-tree node for bcm2712 SoC.
+> 
+> Signed-off-by: Stanimir Varbanov <svarbanov@suse.de>
+> ---
 
-On 11/5/2025 8:38 AM, Gautham R. Shenoy wrote:
-> Hello,
-> 
-> Christopher Harris reported a regression between v6.10 to v6.11 that
-> the amd-pstate driver failed to load even when the commandline had
-> "amd_pstate=passive"
-> (https://lore.kernel.org/lkml/CAM+eXpdDT7KjLV0AxEwOLkSJ2QtrsvGvjA2cCHvt1d0k2_C4Cw@mail.gmail.com/)
-> 
-> On debugging the issue it was observed that when the commandline
-> contains "nosmt=force", the CPPC code fails when performing certain
-> checks such as checking for the presence of preferred cores and
-> validity of the _CPC object since it iterates through all "present"
-> CPUs while the object state was populated only for "online" CPUs.
-> 
-> This patchset contains fixes to address this issue.
-> 
-> The first two patches in the series address the issue reported by
-> Chris.
-> 
-> Patches 3 and 4 harden the code in a couple of more functions which
-> iterated through the present CPUs when it is more apt to restrict the
-> operations to online CPUs
-> 
-> 
-> 
-> Gautham R. Shenoy (4):
->    ACPI: CPPC: Detect preferred core availability on online CPUs
->    ACPI: CPPC: Check _CPC validity for only the online CPUs
->    ACPI: CPPC: Perform fast check switch only for online CPUs
->    ACPI: CPPC: Limit perf ctrs in PCC check only to online CPUs
-> 
->   arch/x86/kernel/acpi/cppc.c | 2 +-
->   drivers/acpi/cppc_acpi.c    | 6 +++---
->   2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-
-The series looks good to me.
-
-Reviewed-by: Mario Limonciello (AMD) <superm1@kernel.org>
-
-But I would say I noticed we are also using for_each_present_cpu() in 
-amd-pstate with amd_pstate_change_mode_without_dvr_change().
-
-Should that also get a similar change?
+Applied to https://github.com/Broadcom/stblinux/commits/devicetree-arm64/next, thanks!
+--
+Florian
 
