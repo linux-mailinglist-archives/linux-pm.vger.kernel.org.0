@@ -1,179 +1,199 @@
-Return-Path: <linux-pm+bounces-37469-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37470-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 855B9C361ED
-	for <lists+linux-pm@lfdr.de>; Wed, 05 Nov 2025 15:42:53 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A75EC3632F
+	for <lists+linux-pm@lfdr.de>; Wed, 05 Nov 2025 16:00:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 1E203343258
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Nov 2025 14:42:48 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 76E154EF499
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Nov 2025 14:55:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20694330B2B;
-	Wed,  5 Nov 2025 14:41:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFD9931329D;
+	Wed,  5 Nov 2025 14:55:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="PeMjFFwR"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="JRnzehlv";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="/hqneUYy";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="scPuO0Ty";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="oat6Q9H7"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from CH1PR05CU001.outbound.protection.outlook.com (mail-northcentralusazon11010063.outbound.protection.outlook.com [52.101.193.63])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CB5F32E68F;
-	Wed,  5 Nov 2025 14:41:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.193.63
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762353696; cv=fail; b=FwuEoLBq7WlK/reTHLBP6aWklsOIP8yCFPwrV2S2wPv2gjNziX4lb9UvcJjtqfoETFxrffBwFgqVf5j38b1pifD/QUaxs93VTiySYo1Inz9KglYCfrYcxyaUfsLU6ptJdOyzhzL7+8bXWaQaNxp8esZDzpBT6IhixmDlOrAqVzI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762353696; c=relaxed/simple;
-	bh=YNJshCYQUwrPA63hHVbFZwEWyn15/ueOZ1MbDDl98vc=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=rm1pMKNXDga4i8Alk6mD2XDy8hHepJlPJ4YgsWzY7CVNtFm2wOR09J9XOEmp5omSE5aET2Z7vdydqexuZ9U+eGvPmPfqoPcH9vF/j0zmQ/91mABd0i1QlBY2XS5GTC7OQSUoMb7/odyzlleWDGCjAvLCnV7/5+RLAcnqvpLn344=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=PeMjFFwR; arc=fail smtp.client-ip=52.101.193.63
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=QqqccDG0IuV6vKTfrdErO9pMeR1mVhdRscP+PeJct9ojA3Tl3oAvfAFmhT5S5Uh4SgtrCkQ79WwlhLwhLiIay6KcycpW5UyoRo9FdgMhIT2VQNR4D7j+hRphqP8NUGCI98y7r3VLBbCXtLJnX4RIfUk0sVeoIC+ra+cv2umXxxV5Dij0u7EtG2h8DOYXbA+GB1nKh8KRb7o07T0yyI7ou5OYqxpFhZePxaUL37avkcpMT0I6MYEBfzskqIt1oBnmqmyqHWp2Etwb/EjNePbgl3VLsd1mlwoHIJEp/lOY9Rquy5wVud2y26NP/dCSMLnLXrWuHp1/Uq3dyC1FRTe/Zw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZqQaR26R/Cu7w+D/eMKDKKtRja+2Zg2FEKl838Exoss=;
- b=CuLKmEPjcc8vfLF96DNptySGyqvaFeEbWxnhqZoWHp6YUGKuKqzz0V6tzwETLvXqPu3y1niQABSnTe/bFG3EQGIAq4RObUsz8bw1OvP+j+fkv5/Kdk2VWvSAh4o2X8uNVQ59z0yqIcwRiWHacD3C8cm6ZKyveHrprJ0Iwyv+iC67nFvQDlCBAV4BFwmsDB25FHaN7Nc/ZhVDlxzhw1pgQTm/q6FzGEDt6Agly+c53EaB0nFUq979kKtAOwPIFXJ74+HiLtog6XACiCAMsdEwdr7/uMmmgJOvUNPqBb0XDPz3VlShk+pkt6W9D5WhP8Fk3yvVWPLZl4eYRp1KtNuUpg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZqQaR26R/Cu7w+D/eMKDKKtRja+2Zg2FEKl838Exoss=;
- b=PeMjFFwRO5CCj5q3oAfSPnxOtxYWaAuX0/nOjXVdNSCYGChaVCM8+laqRGSsmrOuIgRVA5YG5TuIWqWIQRMpAGAvkFvHfGQnbBv5akR8JtZcK/+xSOW0FuyRDxME57KevjObwqehU6MofhQkNASTbpQox1X4Q+DvkzjIy82YHMI=
-Received: from MW4PR04CA0051.namprd04.prod.outlook.com (2603:10b6:303:6a::26)
- by MW6PR12MB8705.namprd12.prod.outlook.com (2603:10b6:303:24c::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9298.7; Wed, 5 Nov
- 2025 14:41:31 +0000
-Received: from SJ1PEPF00002314.namprd03.prod.outlook.com
- (2603:10b6:303:6a:cafe::ca) by MW4PR04CA0051.outlook.office365.com
- (2603:10b6:303:6a::26) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9298.8 via Frontend Transport; Wed, 5
- Nov 2025 14:41:30 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=satlexmb07.amd.com; pr=C
-Received: from satlexmb07.amd.com (165.204.84.17) by
- SJ1PEPF00002314.mail.protection.outlook.com (10.167.242.168) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9298.6 via Frontend Transport; Wed, 5 Nov 2025 14:41:30 +0000
-Received: from BLRRASHENOY1.amd.com (10.180.168.240) by satlexmb07.amd.com
- (10.181.42.216) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Wed, 5 Nov
- 2025 06:41:26 -0800
-From: "Gautham R. Shenoy" <gautham.shenoy@amd.com>
-To: "Rafael J . Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>,
-	Mario Limonciello <mario.limonciello@amd.com>, Yunhui Cui
-	<cuiyunhui@bytedance.com>, Jeremy Linton <jeremy.linton@arm.com>, "Viresh
- Kumar" <viresh.kumar@linaro.org>, Ionela Voinescu <ionela.voinescu@arm.com>
-CC: <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "Christopher
- Harris" <chris.harris79@gmail.com>, <linux-pm@vger.kernel.org>, "Gautham R.
- Shenoy" <gautham.shenoy@amd.com>
-Subject: [PATCH 4/4] ACPI: CPPC: Limit perf ctrs in PCC check only to online CPUs
-Date: Wed, 5 Nov 2025 20:08:51 +0530
-Message-ID: <20251105143851.4251-5-gautham.shenoy@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20251105143851.4251-1-gautham.shenoy@amd.com>
-References: <20251105143851.4251-1-gautham.shenoy@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A415248F57
+	for <linux-pm@vger.kernel.org>; Wed,  5 Nov 2025 14:55:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1762354527; cv=none; b=brMxYldCzfLRh3TwnO1KqzSNRtmNcdxfuHPCyCfx1ATayVdmRW9XAkaqqRJJSzCsc8a8PY+pkmF0xHLlU2lZubl6PP7xMAyISGpZeOdbIbXYmWQKMFdjtmK3kGZyEhu7QXRpbLbvZgY2KeF4lbDIDZS4OA0azqR96g2LomLGEbM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1762354527; c=relaxed/simple;
+	bh=8kM8XjSBqrakd3ipAxKuiLcqN1EkJRNUvy59jMuUP0s=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=senqnkctGZ1eCw4OLRGMnbgqtAqT2n1w30RyWGJPUCL5VGA/x17l6q0eQd276DHmVJmOKsW22pdo6fKHsOb4CtP1bVI75SyK1ojhodQEMzdwzAHbqEszx/0i+xKTmdRiPD3farI3C+uW9y+94Vlmk7sfiPGuqKc2yNsDVgrrIt8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=JRnzehlv; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=/hqneUYy; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=scPuO0Ty; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=oat6Q9H7; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 59BA92117C;
+	Wed,  5 Nov 2025 14:55:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1762354524; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=w4JdB2tm3Uwm3dzKebg2BDrKnUG8tTSeNWJ9pLlQEBc=;
+	b=JRnzehlvkXMlN9P3Xi1ljjnn62tBurw9dHrmRVnG1e4FsNXcy88VpvEks6qTVaBolmI2De
+	0CghM87IuK8FsRcqKAbew4dZZPc3RDdDwyxj26ZQvdDBDAysOQtQrWYThaxE8lDKjKjHxO
+	qYgKR+Gnjzd4/vN+sKgaTZi7IJMY99s=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1762354524;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=w4JdB2tm3Uwm3dzKebg2BDrKnUG8tTSeNWJ9pLlQEBc=;
+	b=/hqneUYysDEXOS3r0wHCtRG9z8scQvpu7SQ46uOY9vnMQQTQyeGZoQGFNCgXRxT7zTV+Af
+	vsUJQ+z/5TY34iAA==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1762354523; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=w4JdB2tm3Uwm3dzKebg2BDrKnUG8tTSeNWJ9pLlQEBc=;
+	b=scPuO0TyVdAB3oHQAZ1HmQj2qg6O0gCVL/uBIxz1DWylqIeOVqHzmdf10VJDDD9NvGRTwr
+	6tH0754yEAO8WlqPE5Yb7jZdWDNtq+bIUPliAnY3nAUaNY6Y4iwGDQWc+HiN5VoZThQVCd
+	Bah80uLRhuAdLqvFdRd1EiXz147GD3w=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1762354523;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=w4JdB2tm3Uwm3dzKebg2BDrKnUG8tTSeNWJ9pLlQEBc=;
+	b=oat6Q9H7TeapJzEoYZlXBANBDxcIUF/mdOMJf2wDFDxNZHqn/JysIqs42kbfEiko+rO5lZ
+	iZm6X5Vtkb7rjwDQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 3ACD1132DD;
+	Wed,  5 Nov 2025 14:55:23 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id ixsiDVtlC2lnaAAAD6G6ig
+	(envelope-from <trenn@suse.de>); Wed, 05 Nov 2025 14:55:23 +0000
+From: Thomas Renninger <trenn@suse.de>
+To: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc: linux-pm@vger.kernel.org, ez2blost@yahoo.com
+Subject:
+ Re: Disabling  Intel turbo on non IDA featured processor generally correct?
+Date: Wed, 05 Nov 2025 15:55:22 +0100
+Message-ID: <5615342.jMkzrH9lRO@linux.fritz.box>
+In-Reply-To: <356b1c77ef385158d062ad2ecebfa275dc663017.camel@linux.intel.com>
+References:
+ <2764104.vuYhMxLoTh@localhost.localdomain>
+ <356b1c77ef385158d062ad2ecebfa275dc663017.camel@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: satlexmb08.amd.com (10.181.42.217) To satlexmb07.amd.com
- (10.181.42.216)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ1PEPF00002314:EE_|MW6PR12MB8705:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1fe38b13-253f-405a-20ec-08de1c7968d5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|82310400026|376014|7416014|36860700013;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?me3jDVoWu/HlV5JRgb0jglcdxd4xjG3ZpIOtVmhwsB8fxq5FJELOvVAbrIG6?=
- =?us-ascii?Q?RKyXh/yuoZ4cXVtaZ5CXR1PihgwJqYp/Dk+JN70FdXQOABULB/BLaWuwI/54?=
- =?us-ascii?Q?7N2ifiLHli4aLGs5paksVQgb4xvtxR2TBdcUQVcFbO7FgXE5KE4DecpqUsVw?=
- =?us-ascii?Q?GP60fqvaWAuIKXEaeCb20tvy9rdzVguGMLWIE4RI1X7Dwnx+LXoqbkrixl4G?=
- =?us-ascii?Q?8L3+hRwZHYfqnmZ6jhrxMhfb/H4LurOzoSyph/ch+OlhFSlpXg7tmcOorBls?=
- =?us-ascii?Q?LkMdik+pXu8WawX2xIqXevykrWJZzsq4oToQ+lxMWSpllqiHmyp/VpKh+DL5?=
- =?us-ascii?Q?RDAqy2Ip/QocMJ0hUzQ+0t466HsmsG1E1yd+wxL2Ql2DRlAjUjXAzjYCr7Sb?=
- =?us-ascii?Q?iQOkocaUF0sgl7RwqlYwR04Z9l2enNw/JtRGRtlPpP7Gq4uEe+H7wztmWMiR?=
- =?us-ascii?Q?3p4+8Qkp0n/le4i2SOOk5UEq+TqexuY8+qt17TGKiez6y/ot/Xa6gDIfLy2X?=
- =?us-ascii?Q?prF6TdJg+7YYqQEbbYubMtlyp/38bzCj6+9liNGJ5UommVN1AaW+yBQhBT21?=
- =?us-ascii?Q?H7eNtc89utD08bfhXLLCC3khs98YeTnoYa+RN5L7TJmdjW4996FZYjWUgG3P?=
- =?us-ascii?Q?o8B7Ijqjv4H64ZqsJgCHpb197MSmr0392jsW/Gzhm7l9ZnwbCudVrJegrgO2?=
- =?us-ascii?Q?WeiE8B9mW3n7L86lDjhubCkFuh92ARUtsBvvxCBSDoZsUgzeKhjesGS/6pGB?=
- =?us-ascii?Q?30X10iEX98IQAb7+/J2/mtI3UGB2iN8c9z8GV5NNr4Qoty0oiuQu7kAEpzUl?=
- =?us-ascii?Q?STodvU94bUUVgqyS82ctcsm7oB2KEGmxFpUbf4Wb0ZDMA7qwN+ub502j7sqc?=
- =?us-ascii?Q?iHbJpaK1elxCrgByreFIZoDF10s9VLepc3MW2JLoovMjZPJwI/Ya1kX/NCdw?=
- =?us-ascii?Q?tC5buyOQqvyCJAybjZzvlX/0q89GvWg0CRkBofgngMdcciHnk2RP7hh4NkxG?=
- =?us-ascii?Q?Irw4BmxXyXoKzUEbdbK3+y2vUIC33HiAI35SbNvKcIuQZgW7oC3SPVb4LHxY?=
- =?us-ascii?Q?lSE37X0GoIV4swww97JAWvTdiqanlr9uuzpFn5KIyvjp5zhVM8tMzBFNDy5m?=
- =?us-ascii?Q?2BMvB27QCcVCgpDyWFYIg8c961UEKdA+qnZ3P5+3wAkzN9EVvih2XfpsYhsF?=
- =?us-ascii?Q?qTrQ3XIs3GYXH3cf5v6fqDYAkkdflX4RGmp7qmR4F66SLd0cleBXu7TU00dW?=
- =?us-ascii?Q?b7SOD83R0EUju0lwQFC8OzZJrfx8pCL9DHZZ6PnNoHLstCPd+mFYzNavcEGb?=
- =?us-ascii?Q?3kxPBK7NCLFpwK2PHXJUbf6YW4wWVnetqwPdhjCw6AIl/FzE/2fwMnGSqVZ1?=
- =?us-ascii?Q?ZcEbGVPqgAbAxQOILCRqGF06cqPMfvPiLBr+Fu/j4BMX2kCcc2bis116a42N?=
- =?us-ascii?Q?JikxhCTOsR3OgoknWfjoWstxLDVOg2LRnfcCAtzW9ILDcOsynOX30SIXdGF3?=
- =?us-ascii?Q?r4cQfw63rWLxTT+RfvSb4G38sV1y/YMg5cMJAsUFfb3VrNRG3YDOb/PlkJ09?=
- =?us-ascii?Q?l7XPCoq7XCc/E4w+/rM=3D?=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(82310400026)(376014)(7416014)(36860700013);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Nov 2025 14:41:30.7255
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1fe38b13-253f-405a-20ec-08de1c7968d5
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb07.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SJ1PEPF00002314.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW6PR12MB8705
+Content-Type: multipart/signed; boundary="nextPart1829022.F6Skx1H6Bt";
+ micalg="pgp-sha256"; protocol="application/pgp-signature"
+X-Spam-Level: 
+X-Spamd-Result: default: False [-5.40 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	SIGNED_PGP(-2.00)[];
+	SUBJECT_ENDS_QUESTION(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MIME_GOOD(-0.20)[multipart/signed,text/plain];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	TO_DN_SOME(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	ARC_NA(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[yahoo.com];
+	RCPT_COUNT_THREE(0.00)[3];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[vger.kernel.org,yahoo.com];
+	RCVD_TLS_ALL(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo]
+X-Spam-Flag: NO
+X-Spam-Score: -5.40
 
-per_cpu(cpc_desc_ptr, cpu) object is initialized for only the online
-CPU via acpi_soft_cpu_online() --> __acpi_processor_start() -->
-acpi_cppc_processor_probe().
+--nextPart1829022.F6Skx1H6Bt
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"; protected-headers="v1"
+From: Thomas Renninger <trenn@suse.de>
+To: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc: linux-pm@vger.kernel.org, ez2blost@yahoo.com
+Date: Wed, 05 Nov 2025 15:55:22 +0100
+Message-ID: <5615342.jMkzrH9lRO@linux.fritz.box>
+MIME-Version: 1.0
 
-However the function cppc_perf_ctrs_in_pcc() checks if the CPPC
-perf-ctrs are in a PCC region for all the present CPUs, which breaks
-when the kernel is booted with "nosmt=force".
+On Mittwoch, 5. November 2025 14:06:42 Mitteleurop=C3=A4ische Normalzeit sr=
+inivas=20
+pandruvada wrote:
+> Hi Thomas,
+>=20
+> The BIOS shipped with system disabled turbo on boot and user had to
+> manually force via the sysfs. With the new change that is not an
+> option.
 
-Hence, limit the check only to the online CPUs.
+User (adding EZ, sorry for missing you out on initial post)
+claims that cpuid shows:
+So I ran the cpuid commend and it returned:
+Thermal and Power Management Features (6):
+      digital thermometer                     =3D true
+      Intel Turbo Boost Technology            =3D true
+ ...
 
-Fixes: ae2df912d1a5 ("ACPI: CPPC: Disable FIE if registers in PCC regions")
-Signed-off-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
----
- drivers/acpi/cppc_acpi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Not sure whether this really is the same bit and whether this is prove that=
+=20
+IDA feature bit has been switched by Linux OS (by SMI/firmware?) after=20
+initializing?
 
-diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
-index fb7696b27d82..f49c72d3a78b 100644
---- a/drivers/acpi/cppc_acpi.c
-+++ b/drivers/acpi/cppc_acpi.c
-@@ -1435,7 +1435,7 @@ bool cppc_perf_ctrs_in_pcc(void)
- {
- 	int cpu;
- 
--	for_each_present_cpu(cpu) {
-+	for_each_online_cpu(cpu) {
- 		struct cpc_register_resource *ref_perf_reg;
- 		struct cpc_desc *cpc_desc;
- 
--- 
-2.34.1
+IDA cpufeature bit is not set in /proc/cpuinfo
+
+EZ probably can do the one or other msr read/write if you need someone test=
+s.
+
+Good luck,
+
+         Thomas
+>=20
+> We are trying to contact the manufacturer, but no solution yet.
+
+That is appreciated!
+--nextPart1829022.F6Skx1H6Bt
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part.
+Content-Transfer-Encoding: 7Bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iQFPBAABCAA5FiEEo0EXulPW3gW/5bAoTxjWwdl3vVUFAmkLZVobFIAAAAAABAAO
+bWFudTIsMi41KzEuMTEsMiwyAAoJEE8Y1sHZd71V9SYH/11miU+DAkhbB9gKTfQi
+fsrgNn1ZKijxVfYhNB0Jn/4MO2dtDs6HcRhrqxXRzsUjtCfjBQojTwyvOg+FPO/i
+V+Jl9/7WEWaJLu6fdI/BjdJ95Z8+TCSJOP+Q2wLmnxrwksV7j5LaedAyYgsqLYcN
+td2O18iXkxV4haJihjqCN3fBza9dyUbKbHhH6INj43TtJF13NmQ3bWe4RxmC/DLH
+1kxIyzVM+5O2Xy6u3GMflUKsT04YlzJFSYrRMqK+NYntAWicO8a9v0lrWWXNxHGL
+7zg5cfuOYXH/OBWy3LlH8UFGGKaYeb1YFZh555SrihmlEvvTSldrbsajlXVOa2I7
+tEU=
+=ANKd
+-----END PGP SIGNATURE-----
+
+--nextPart1829022.F6Skx1H6Bt--
+
+
 
 
