@@ -1,45 +1,45 @@
-Return-Path: <linux-pm+bounces-37412-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37413-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A375FC344E2
-	for <lists+linux-pm@lfdr.de>; Wed, 05 Nov 2025 08:42:11 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B2B8C344E5
+	for <lists+linux-pm@lfdr.de>; Wed, 05 Nov 2025 08:42:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A477B19205A0
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Nov 2025 07:39:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C4B2A18C5BBA
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Nov 2025 07:39:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D8B52D8396;
-	Wed,  5 Nov 2025 07:38:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 587042D6E6A;
+	Wed,  5 Nov 2025 07:38:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="nqsj1XZD"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="izfSyTys"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
+Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72BB42D3EEE
-	for <linux-pm@vger.kernel.org>; Wed,  5 Nov 2025 07:38:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5F772D46B3;
+	Wed,  5 Nov 2025 07:38:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762328308; cv=none; b=RGXO8Df7dJ3oQix821KJibMmXWNINmUilY18lwvUNIFSdzF9OdayhGwVNL5JCaUQAePh1X94PcHmUkq/Rx9kqKRcVllCWwf6iFOb4oNlzo4iBv3aqATF3S1zX9+7QMSrdvBvm3Glzfi6T87/Ua5J5Vev3Y0qwurSSs1Rl74Y064=
+	t=1762328325; cv=none; b=L5AwTOFTvIkLpGaorBtxKocH1E9lw6hsHSNvPCZtMbGS2wmbG+DYjm/nLeLloNx/dGeEmnQzURhWSBqlu2f/bdZ4m4gN02rmjspJr60kaccfJlfcbhLMS396fclayhF5uNfkGGlLM+4oxlkde6869eAhUadwnFLFmsOnCcNKIhE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762328308; c=relaxed/simple;
-	bh=CrSVLsFQ2g4Vp8qYJ/d+JrzOW9SlRqmsxIUiQJQBEEE=;
+	s=arc-20240116; t=1762328325; c=relaxed/simple;
+	bh=7V4uZoCNuUQ9AngztiC4l5G2ZvOUqs5T1rEJeRzhZPM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Kf7PYyiJLKSnUusSTYT0Eewb6RVUxPIdf/pihmIDCNPtPYWaTRtjiGVFfPu7QlE5Fw8F7jKt4YMOPZ+DYQ9ym+ShalKK8fCRmo0UA4xSU971jtdn5Eq5gd8auRGmhW5Yi2gobay9++6Io2lfoX0Y1wnTdz6LFMSt3vpEFIc9TiM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=nqsj1XZD; arc=none smtp.client-ip=95.215.58.172
+	 Content-Type:Content-Disposition:In-Reply-To; b=gn4XGYq6b4fG58eIpwQvzJQy11suhMGPjxxfl6HiM9LTFkaEr1kdsy5eCHh54MMdepDM4jhcRzUVNfRXNTq0MAK7peVerwqGZhZ80Ad35daQPhDYsxxWWNZdPdIHMRdulM9+sXRwmT6Xn1BZ0zeu5cv8oOvMn+CrIPqFh2YWlFY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=izfSyTys; arc=none smtp.client-ip=91.218.175.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Date: Wed, 5 Nov 2025 09:38:14 +0200
+Date: Wed, 5 Nov 2025 09:38:33 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1762328303; h=from:from:reply-to:reply-to:subject:subject:date:date:
+	t=1762328320; h=from:from:reply-to:reply-to:subject:subject:date:date:
 	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
 	 content-type:content-type:in-reply-to:in-reply-to:  references:references;
-	bh=h9I7knpHT4J14uzYxcuabcbNMvDFhzFTPEqjgekU/SM=;
-	b=nqsj1XZD5x0jJQRAlWgl3u3/wZIaWq8Xbi3xPBJRGkI7wD96ru5bwsTGSnuLlKy5wOvIFt
-	DCPyEbupk3crI/sS/R9naQtADCgflYc+RpnoTKpkp5TqLJoZO8dz7vqjRVbbOS4TjDqwmx
-	ax3WG2pe09GDseb5X8u6isX4hVs5Lxk=
+	bh=jl+Ndo+WQFgvm4WNJEYhyf3oq3RwOx4wpXuIzBr+heo=;
+	b=izfSyTysOjY0fC5XH2/t1w1n4VOTmrdsFpWoZLZSXSt6eNM/cuS5FPPe7NCZBTNoFsZfaT
+	7CUvdDC04kbxgj3ILuvC4qrLpRLl3SCZ0kfpwhMF2ROMfxSP0MwqYa2xRYkVzRpvQYvptM
+	B+GxMICf1UyPs+BybDGPZHlZH3rFWE0=
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Matti Vaittinen <matti.vaittinen@linux.dev>
 To: Matti Vaittinen <mazziesaccount@gmail.com>,
@@ -61,8 +61,8 @@ Cc: Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>,
 	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
 	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
 	linux-rtc@vger.kernel.org, Andreas Kemnade <andreas@kemnade.info>
-Subject: [PATCH v3 09/16] regulator: bd71828: rename IC specific entities
-Message-ID: <f1f08dd633e4e79940f462ce2c30595633140845.1762327887.git.mazziesaccount@gmail.com>
+Subject: [PATCH v3 10/16] regulator: bd71828: Support ROHM BD72720
+Message-ID: <a6688b12b4dc3956b641085b50e40586273421fa.1762327887.git.mazziesaccount@gmail.com>
 Reply-To: Matti Vaittinen <mazziesaccount@gmail.com>
 References: <cover.1762327887.git.mazziesaccount@gmail.com>
 Precedence: bulk
@@ -72,189 +72,1189 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="y0oeG/X9+ICE50D1"
+	protocol="application/pgp-signature"; boundary="PZ7Ggpi5sPX7/at+"
 Content-Disposition: inline
 In-Reply-To: <cover.1762327887.git.mazziesaccount@gmail.com>
 X-Migadu-Flow: FLOW_OUT
 
 
---y0oeG/X9+ICE50D1
+--PZ7Ggpi5sPX7/at+
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 =46rom: Matti Vaittinen <mazziesaccount@gmail.com>
 
-The new ROHM BD72720 PMIC has similarities with the BD71828. It makes
-sense to support the regulator control for both PMICs using the same
-driver. It is often more clear to have the IC specific functions and
-globals named starting with the chip-name. So, as a preparatory step,
-prefix the BD71828 specific functions and globals with the bd71828.
+ROHM BD72720 is a power management IC which integrates 10 buck and 11 LDO
+regulators. This PMIC has plenty of commonalities with the BD71828 and
+BD71879.
 
-It would be tempting to try also removing the chip ID from those
-functions which will be common for both PMICs. I have bad experiences on
-this as it tends to lead to problems when yet another IC is being
-supported with the same driver, and we will have some functions used for
-all, some for two of the three, and some for just one. At this point
-I used to start inventing wildcards like BD718XX or BD7272X. This
-approach is pretty much always failing as we tend to eventually have
-something like BD73900 - where all the wildcard stuff will break down.
+The BD72720 does also have similar 'run-level'-concept as the BD71828 had.
+It allows controlling the regulator's 'en masse', although only BUCK1
+and LDO1 can utilize this in BD72720. Similar to BD71828, this 'en
+masse' -control is not supported by this driver.
 
-So, my approach these days is to:
- - keep the original chip-id prefix for anything that had it already
-   (and avoid the churn).
- - use same prefix for all things that are used by multiple ICs -
-   typically the chip-ID of the first chip. This typically matches also
-   the driver and file names.
- - use specific chip-ID as a prefix for anything which is specific to
-   just one chip.
-
-As a preparatory step to adding the BD72720, add bd71828 prefix to all
-commonly usable functions and globals.
+Support the voltage and enable/disable state control for the BD72720.
 
 Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
-Acked-by: Mark Brown <broonie@kernel.org>
+Reviewed-by: Mark Brown <broonie@kernel.org>
 
 ---
 Revision history:
- RFCv1 =3D>:
+ v2 =3D> v3:
+ - The ldon-head dt-property was changed to microvolts. Adapt the driver
+   to that
+ RFCv1 =3D> v2:
  - No changes
-No functional changes intended.
----
- drivers/regulator/bd71828-regulator.c | 32 +++++++++++++--------------
- 1 file changed, 16 insertions(+), 16 deletions(-)
 
+There are some new variants planned. Most notably, the BD73900 should be
+similar to the BD72720 what comes to the regulator control logic.
+
+If the run-level control is needed, there are some downstream extensions
+available at:
+https://rohmsemiconductor.github.io/Linux-Kernel-PMIC-Drivers/BD72720/
+---
+ drivers/regulator/Kconfig             |   8 +-
+ drivers/regulator/bd71828-regulator.c | 993 +++++++++++++++++++++++++-
+ 2 files changed, 992 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/regulator/Kconfig b/drivers/regulator/Kconfig
+index d84f3d054c59..660863f096e3 100644
+--- a/drivers/regulator/Kconfig
++++ b/drivers/regulator/Kconfig
+@@ -241,13 +241,13 @@ config REGULATOR_BD71815
+ 	  will be called bd71815-regulator.
+=20
+ config REGULATOR_BD71828
+-	tristate "ROHM BD71828 Power Regulator"
++	tristate "ROHM BD71828, BD72720 and BD73900 Power Regulators"
+ 	depends on MFD_ROHM_BD71828
+ 	select REGULATOR_ROHM
+ 	help
+-	  This driver supports voltage regulators on ROHM BD71828 PMIC.
+-	  This will enable support for the software controllable buck
+-	  and LDO regulators.
++	  This driver supports voltage regulators on ROHM BD71828,
++	  BD71879, BD72720 and BD73900 PMICs. This will enable
++	  support for the software controllable buck and LDO regulators.
+=20
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called bd71828-regulator.
 diff --git a/drivers/regulator/bd71828-regulator.c b/drivers/regulator/bd71=
 828-regulator.c
-index dd871ffe979c..3d18dbfdb84e 100644
+index 3d18dbfdb84e..ba16671ece42 100644
 --- a/drivers/regulator/bd71828-regulator.c
 +++ b/drivers/regulator/bd71828-regulator.c
-@@ -28,7 +28,7 @@ struct bd71828_regulator_data {
- 	int reg_init_amnt;
- };
+@@ -3,12 +3,15 @@
+ // bd71828-regulator.c ROHM BD71828GW-DS1 regulator driver
+ //
 =20
--static const struct reg_init buck1_inits[] =3D {
-+static const struct reg_init bd71828_buck1_inits[] =3D {
- 	/*
- 	 * DVS Buck voltages can be changed by register values or via GPIO.
- 	 * Use register accesses by default.
-@@ -40,7 +40,7 @@ static const struct reg_init buck1_inits[] =3D {
++#include <linux/cleanup.h>
+ #include <linux/delay.h>
+ #include <linux/err.h>
+ #include <linux/interrupt.h>
+ #include <linux/kernel.h>
+ #include <linux/mfd/rohm-bd71828.h>
++#include <linux/mfd/rohm-bd72720.h>
+ #include <linux/module.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/regmap.h>
+@@ -16,6 +19,7 @@
+ #include <linux/regulator/machine.h>
+ #include <linux/regulator/of_regulator.h>
+=20
++#define BD72720_MASK_LDON_HEAD GENMASK(2, 0)
+ struct reg_init {
+ 	unsigned int reg;
+ 	unsigned int mask;
+@@ -64,6 +68,26 @@ static const struct reg_init bd71828_buck7_inits[] =3D {
  	},
  };
 =20
--static const struct reg_init buck2_inits[] =3D {
-+static const struct reg_init bd71828_buck2_inits[] =3D {
++#define BD72720_MASK_DVS_BUCK1_CTRL BIT(4)
++#define BD72720_MASK_DVS_LDO1_CTRL BIT(5)
++
++static const struct reg_init bd72720_buck1_inits[] =3D {
++	{
++		.reg =3D BD72720_REG_PS_CTRL_2,
++		.mask =3D BD72720_MASK_DVS_BUCK1_CTRL,
++		.val =3D 0, /* Disable "run-level" control */
++	},
++};
++
++static const struct reg_init bd72720_ldo1_inits[] =3D {
++	{
++		.reg =3D BD72720_REG_PS_CTRL_2,
++		.mask =3D BD72720_MASK_DVS_LDO1_CTRL,
++		.val =3D 0, /* Disable "run-level" control */
++	},
++};
++
++/* BD71828 Buck voltages */
+ static const struct linear_range bd71828_buck1267_volts[] =3D {
+ 	REGULATOR_LINEAR_RANGE(500000, 0x00, 0xef, 6250),
+ 	REGULATOR_LINEAR_RANGE(2000000, 0xf0, 0xff, 0),
+@@ -84,13 +108,79 @@ static const struct linear_range bd71828_buck5_volts[]=
+ =3D {
+ 	REGULATOR_LINEAR_RANGE(3300000, 0x10, 0x1f, 0),
+ };
+=20
++/* BD71828 LDO voltages */
+ static const struct linear_range bd71828_ldo_volts[] =3D {
+ 	REGULATOR_LINEAR_RANGE(800000, 0x00, 0x31, 50000),
+ 	REGULATOR_LINEAR_RANGE(3300000, 0x32, 0x3f, 0),
+ };
+=20
++/* BD72720 Buck voltages */
++static const struct linear_range bd72720_buck1234_volts[] =3D {
++	REGULATOR_LINEAR_RANGE(500000, 0x00, 0xc0, 6250),
++	REGULATOR_LINEAR_RANGE(1700000, 0xc1, 0xff, 0),
++};
++
++static const struct linear_range bd72720_buck589_volts[] =3D {
++	REGULATOR_LINEAR_RANGE(500000, 0x00, 0x78, 10000),
++	REGULATOR_LINEAR_RANGE(1700000, 0x79, 0xff, 0),
++};
++
++static const struct linear_range bd72720_buck67_volts[] =3D {
++	REGULATOR_LINEAR_RANGE(1500000, 0x00, 0xb4, 10000),
++	REGULATOR_LINEAR_RANGE(3300000, 0xb5, 0xff, 0),
++};
++
++/*
++ * The BUCK10 on BD72720 has two modes of operation, depending on a LDON_H=
+EAD
++ * setting. When LDON_HEAD is 0x0, the behaviour is as with other bucks, e=
+g.
++ * voltage can be set to a values indicated below using the VSEL register.
++ *
++ * However, when LDON_HEAD is set to 0x1 ... 0x7, BUCK 10 voltage is, acco=
+rding
++ * to the data-sheet, "automatically adjusted following LDON_HEAD setting =
+and
++ * clamped to BUCK10_VID setting".
++ *
++ * Again, reading the data-sheet shows a "typical connection" where the BU=
+CK10
++ * is used to supply the LDOs 1-4. My assumption is that in practice, this
++ * means that the BUCK10 voltage will be adjusted based on the maximum out=
+put
++ * of the LDO 1-4 (to minimize power loss). This makes sense.
++ *
++ * Auto-adjusting regulators aren't something I really like to model in the
++ * driver though - and, if the auto-adjustment works as intended, then the=
+re
++ * should really be no need to software to care about the buck10 voltages.
++ * If enable/disable control is still needed, we can implement buck10 as a
++ * regulator with only the enable/disable ops - and device-tree can be used
++ * to model the supply-relations. I believe this could allow the regulator
++ * framework to automagically disable the BUCK10 if all LDOs that are being
++ * supplied by it are disabled.
++ */
++static const struct linear_range bd72720_buck10_volts[] =3D {
++	REGULATOR_LINEAR_RANGE(500000, 0x00, 0xc0, 6250),
++	REGULATOR_LINEAR_RANGE(1700000, 0xc1, 0xff, 0),
++};
++
++/* BD72720 LDO voltages */
++static const struct linear_range bd72720_ldo1234_volts[] =3D {
++	REGULATOR_LINEAR_RANGE(500000, 0x00, 0x50, 6250),
++	REGULATOR_LINEAR_RANGE(1000000, 0x51, 0x7f, 0),
++};
++
++static const struct linear_range bd72720_ldo57891011_volts[] =3D {
++	REGULATOR_LINEAR_RANGE(750000, 0x00, 0xff, 10000),
++};
++
++static const struct linear_range bd72720_ldo6_volts[] =3D {
++	REGULATOR_LINEAR_RANGE(600000, 0x00, 0x78, 10000),
++	REGULATOR_LINEAR_RANGE(1800000, 0x79, 0x7f, 0),
++};
++
+ static const unsigned int bd71828_ramp_delay[] =3D { 2500, 5000, 10000, 20=
+000 };
+=20
++/*
++ * BD72720 supports setting both the ramp-up and ramp-down values
++ * separately. Do we need to support ramp-down setting?
++ */
++static const unsigned int bd72720_ramp_delay[] =3D { 5000, 7500, 10000, 12=
+500 };
++
+ static int buck_set_hw_dvs_levels(struct device_node *np,
+ 				  const struct regulator_desc *desc,
+ 				  struct regulator_config *cfg)
+@@ -171,6 +261,24 @@ static const struct regulator_ops bd71828_ldo6_ops =3D=
+ {
+ 	.is_enabled =3D regulator_is_enabled_regmap,
+ };
+=20
++static const struct regulator_ops bd72720_regulator_ops =3D {
++	.enable =3D regulator_enable_regmap,
++	.disable =3D regulator_disable_regmap,
++	.is_enabled =3D regulator_is_enabled_regmap,
++	.list_voltage =3D regulator_list_voltage_linear_range,
++	.set_voltage_sel =3D regulator_set_voltage_sel_regmap,
++	.get_voltage_sel =3D regulator_get_voltage_sel_regmap,
++	.set_voltage_time_sel =3D regulator_set_voltage_time_sel,
++	.set_ramp_delay =3D regulator_set_ramp_delay_regmap,
++};
++
++static const struct regulator_ops bd72720_buck10_ldon_head_op =3D {
++	.enable =3D regulator_enable_regmap,
++	.disable =3D regulator_disable_regmap,
++	.is_enabled =3D regulator_is_enabled_regmap,
++	.set_ramp_delay =3D regulator_set_ramp_delay_regmap,
++};
++
+ static const struct bd71828_regulator_data bd71828_rdata[] =3D {
  	{
- 		.reg =3D BD71828_REG_PS_CTRL_1,
- 		.mask =3D BD71828_MASK_DVS_BUCK2_CTRL,
-@@ -48,7 +48,7 @@ static const struct reg_init buck2_inits[] =3D {
+ 		.desc =3D {
+@@ -677,22 +785,890 @@ static const struct bd71828_regulator_data bd71828_r=
+data[] =3D {
  	},
  };
 =20
--static const struct reg_init buck6_inits[] =3D {
-+static const struct reg_init bd71828_buck6_inits[] =3D {
- 	{
- 		.reg =3D BD71828_REG_PS_CTRL_1,
- 		.mask =3D BD71828_MASK_DVS_BUCK6_CTRL,
-@@ -56,7 +56,7 @@ static const struct reg_init buck6_inits[] =3D {
- 	},
- };
++#define BD72720_BUCK10_DESC_INDEX 10
++#define BD72720_NUM_BUCK_VOLTS 0x100
++#define BD72720_NUM_LDO_VOLTS 0x100
++#define BD72720_NUM_LDO12346_VOLTS 0x80
++
++static const struct bd71828_regulator_data bd72720_rdata[] =3D {
++	{
++		.desc =3D {
++			.name =3D "buck1",
++			.of_match =3D of_match_ptr("buck1"),
++			.regulators_node =3D of_match_ptr("regulators"),
++			.id =3D BD72720_BUCK1,
++			.type =3D REGULATOR_VOLTAGE,
++
++			/*
++			 * The BD72720 BUCK1 and LDO1 support GPIO toggled
++			 * sub-RUN states called RUN0, RUN1, RUN2 and RUN3.
++			 * The "operating mode" (sub-RUN states or normal)
++			 * can be changed by a register.
++			 *
++			 * When the sub-RUN states are used, the voltage and
++			 * enable state depend on a state specific
++			 * configuration. The voltage and enable configuration
++			 * for BUCK1 and LDO1 can be defined for each sub-RUN
++			 * state using BD72720_REG_[BUCK,LDO]1_VSEL_R[0,1,2,3]
++			 * voltage selection registers and the bits
++			 * BD72720_MASK_RUN_[0,1,2,3]_EN in the enable registers.
++			 * The PMIC will change both the BUCK1 and LDO1 voltages
++			 * to the states defined in these registers when
++			 * "DVS GPIOs" are toggled.
++			 *
++			 * If RUN 0 .. RUN 4 states are to be used, the normal
++			 * voltage configuration mechanisms do not apply
++			 * and we should overwrite the ops and ignore the
++			 * voltage setting/getting registers which are setup
++			 * here. This is not supported for now. If you need
++			 * this functionality, you may try merging functionality
++			 * from a downstream driver:
++			 * https://rohmsemiconductor.github.io/Linux-Kernel-PMIC-Drivers/BD7272=
+0/
++			 */
++			.ops =3D &bd72720_regulator_ops,
++			.linear_ranges =3D bd72720_buck1234_volts,
++			.n_linear_ranges =3D ARRAY_SIZE(bd72720_buck1234_volts),
++			.n_voltages =3D BD72720_NUM_BUCK_VOLTS,
++			.enable_reg =3D BD72720_REG_BUCK1_ON,
++			.enable_mask =3D BD72720_MASK_RUN_B_EN,
++			.vsel_reg =3D BD72720_REG_BUCK1_VSEL_RB,
++			.vsel_mask =3D BD72720_MASK_BUCK_VSEL,
++
++			.ramp_delay_table =3D bd72720_ramp_delay,
++			.n_ramp_values =3D ARRAY_SIZE(bd72720_ramp_delay),
++			.ramp_reg =3D BD72720_REG_BUCK1_MODE,
++			.ramp_mask =3D BD72720_MASK_RAMP_UP_DELAY,
++			.owner =3D THIS_MODULE,
++			.of_parse_cb =3D buck_set_hw_dvs_levels,
++		},
++		.dvs =3D {
++			.level_map =3D ROHM_DVS_LEVEL_RUN | ROHM_DVS_LEVEL_IDLE |
++				     ROHM_DVS_LEVEL_SUSPEND |
++				     ROHM_DVS_LEVEL_LPSR, /* Deep idle in data-sheet */
++			.run_reg =3D BD72720_REG_BUCK1_VSEL_RB,
++			.run_mask =3D BD72720_MASK_BUCK_VSEL,
++			.idle_reg =3D BD72720_REG_BUCK1_VSEL_I,
++			.idle_mask =3D BD72720_MASK_BUCK_VSEL,
++			.idle_on_mask =3D BD72720_MASK_IDLE_EN,
++			.suspend_reg =3D BD72720_REG_BUCK1_VSEL_S,
++			.suspend_mask =3D BD72720_MASK_BUCK_VSEL,
++			.suspend_on_mask =3D BD72720_MASK_SUSPEND_EN,
++			.lpsr_reg =3D BD72720_REG_BUCK1_VSEL_DI,
++			.lpsr_mask =3D BD72720_MASK_BUCK_VSEL,
++			.lpsr_on_mask =3D BD72720_MASK_DEEP_IDLE_EN,
++		},
++		.reg_inits =3D bd72720_buck1_inits,
++		.reg_init_amnt =3D ARRAY_SIZE(bd72720_buck1_inits),
++	}, {
++		.desc =3D {
++			.name =3D "buck2",
++			.of_match =3D of_match_ptr("buck2"),
++			.regulators_node =3D of_match_ptr("regulators"),
++			.id =3D BD72720_BUCK2,
++			.type =3D REGULATOR_VOLTAGE,
++			.ops =3D &bd72720_regulator_ops,
++			.linear_ranges =3D bd72720_buck1234_volts,
++			.n_linear_ranges =3D ARRAY_SIZE(bd72720_buck1234_volts),
++			.n_voltages =3D BD72720_NUM_BUCK_VOLTS,
++			.enable_reg =3D BD72720_REG_BUCK2_ON,
++			.enable_mask =3D BD72720_MASK_RUN_B_EN,
++			.vsel_reg =3D BD72720_REG_BUCK2_VSEL_R,
++			.vsel_mask =3D BD72720_MASK_BUCK_VSEL,
++
++			.ramp_delay_table =3D bd72720_ramp_delay,
++			.n_ramp_values =3D ARRAY_SIZE(bd72720_ramp_delay),
++			.ramp_reg =3D BD72720_REG_BUCK2_MODE,
++			.ramp_mask =3D BD72720_MASK_RAMP_UP_DELAY,
++			.owner =3D THIS_MODULE,
++			.of_parse_cb =3D buck_set_hw_dvs_levels,
++		},
++		.dvs =3D {
++			.level_map =3D ROHM_DVS_LEVEL_RUN | ROHM_DVS_LEVEL_IDLE |
++				     ROHM_DVS_LEVEL_SUSPEND |
++				     ROHM_DVS_LEVEL_LPSR,
++			.run_reg =3D BD72720_REG_BUCK2_VSEL_R,
++			.run_mask =3D BD72720_MASK_BUCK_VSEL,
++			.idle_reg =3D BD72720_REG_BUCK2_VSEL_I,
++			.idle_mask =3D BD72720_MASK_BUCK_VSEL,
++			.idle_on_mask =3D BD72720_MASK_IDLE_EN,
++			.suspend_reg =3D BD72720_REG_BUCK2_VSEL_S,
++			.suspend_mask =3D BD72720_MASK_BUCK_VSEL,
++			.suspend_on_mask =3D BD72720_MASK_SUSPEND_EN,
++			.lpsr_reg =3D BD72720_REG_BUCK2_VSEL_DI,
++			.lpsr_mask =3D BD72720_MASK_BUCK_VSEL,
++			.lpsr_on_mask =3D BD72720_MASK_DEEP_IDLE_EN,
++		},
++	}, {
++		.desc =3D {
++			.name =3D "buck3",
++			.of_match =3D of_match_ptr("buck3"),
++			.regulators_node =3D of_match_ptr("regulators"),
++			.id =3D BD72720_BUCK3,
++			.type =3D REGULATOR_VOLTAGE,
++			.ops =3D &bd72720_regulator_ops,
++			.linear_ranges =3D bd72720_buck1234_volts,
++			.n_linear_ranges =3D ARRAY_SIZE(bd72720_buck1234_volts),
++			.n_voltages =3D BD72720_NUM_BUCK_VOLTS,
++			.enable_reg =3D BD72720_REG_BUCK3_ON,
++			.enable_mask =3D BD72720_MASK_RUN_B_EN,
++			.vsel_reg =3D BD72720_REG_BUCK3_VSEL_R,
++			.vsel_mask =3D BD72720_MASK_BUCK_VSEL,
++
++			.ramp_delay_table =3D bd72720_ramp_delay,
++			.n_ramp_values =3D ARRAY_SIZE(bd72720_ramp_delay),
++			.ramp_reg =3D BD72720_REG_BUCK3_MODE,
++			.ramp_mask =3D BD72720_MASK_RAMP_UP_DELAY,
++			.owner =3D THIS_MODULE,
++			.of_parse_cb =3D buck_set_hw_dvs_levels,
++		},
++		.dvs =3D {
++			.level_map =3D ROHM_DVS_LEVEL_RUN | ROHM_DVS_LEVEL_IDLE |
++				     ROHM_DVS_LEVEL_SUSPEND |
++				     ROHM_DVS_LEVEL_LPSR,
++			.run_reg =3D BD72720_REG_BUCK3_VSEL_R,
++			.run_mask =3D BD72720_MASK_BUCK_VSEL,
++			.idle_reg =3D BD72720_REG_BUCK3_VSEL_I,
++			.idle_mask =3D BD72720_MASK_BUCK_VSEL,
++			.idle_on_mask =3D BD72720_MASK_IDLE_EN,
++			.suspend_reg =3D BD72720_REG_BUCK3_VSEL_S,
++			.suspend_mask =3D BD72720_MASK_BUCK_VSEL,
++			.suspend_on_mask =3D BD72720_MASK_SUSPEND_EN,
++			.lpsr_reg =3D BD72720_REG_BUCK3_VSEL_DI,
++			.lpsr_mask =3D BD72720_MASK_BUCK_VSEL,
++			.lpsr_on_mask =3D BD72720_MASK_DEEP_IDLE_EN,
++		},
++	}, {
++		.desc =3D {
++			.name =3D "buck4",
++			.of_match =3D of_match_ptr("buck4"),
++			.regulators_node =3D of_match_ptr("regulators"),
++			.id =3D BD72720_BUCK4,
++			.type =3D REGULATOR_VOLTAGE,
++			.ops =3D &bd72720_regulator_ops,
++			.linear_ranges =3D bd72720_buck1234_volts,
++			.n_linear_ranges =3D ARRAY_SIZE(bd72720_buck1234_volts),
++			.n_voltages =3D BD72720_NUM_BUCK_VOLTS,
++			.enable_reg =3D BD72720_REG_BUCK4_ON,
++			.enable_mask =3D BD72720_MASK_RUN_B_EN,
++			.vsel_reg =3D BD72720_REG_BUCK4_VSEL_R,
++			.vsel_mask =3D BD72720_MASK_BUCK_VSEL,
++
++			.ramp_delay_table =3D bd72720_ramp_delay,
++			.n_ramp_values =3D ARRAY_SIZE(bd72720_ramp_delay),
++			.ramp_reg =3D BD72720_REG_BUCK4_MODE,
++			.ramp_mask =3D BD72720_MASK_RAMP_UP_DELAY,
++			.owner =3D THIS_MODULE,
++			.of_parse_cb =3D buck_set_hw_dvs_levels,
++		},
++		.dvs =3D {
++			.level_map =3D ROHM_DVS_LEVEL_RUN | ROHM_DVS_LEVEL_IDLE |
++				     ROHM_DVS_LEVEL_SUSPEND |
++				     ROHM_DVS_LEVEL_LPSR,
++			.run_reg =3D BD72720_REG_BUCK4_VSEL_R,
++			.run_mask =3D BD72720_MASK_BUCK_VSEL,
++			.idle_reg =3D BD72720_REG_BUCK4_VSEL_I,
++			.idle_mask =3D BD72720_MASK_BUCK_VSEL,
++			.idle_on_mask =3D BD72720_MASK_IDLE_EN,
++			.suspend_reg =3D BD72720_REG_BUCK4_VSEL_S,
++			.suspend_mask =3D BD72720_MASK_BUCK_VSEL,
++			.suspend_on_mask =3D BD72720_MASK_SUSPEND_EN,
++			.lpsr_reg =3D BD72720_REG_BUCK4_VSEL_DI,
++			.lpsr_mask =3D BD72720_MASK_BUCK_VSEL,
++			.lpsr_on_mask =3D BD72720_MASK_DEEP_IDLE_EN,
++		},
++	}, {
++		.desc =3D {
++			.name =3D "buck5",
++			.of_match =3D of_match_ptr("buck5"),
++			.regulators_node =3D of_match_ptr("regulators"),
++			.id =3D BD72720_BUCK5,
++			.type =3D REGULATOR_VOLTAGE,
++			.ops =3D &bd72720_regulator_ops,
++			.linear_ranges =3D bd72720_buck589_volts,
++			.n_linear_ranges =3D ARRAY_SIZE(bd72720_buck589_volts),
++			.n_voltages =3D BD72720_NUM_BUCK_VOLTS,
++			.enable_reg =3D BD72720_REG_BUCK5_ON,
++			.enable_mask =3D BD72720_MASK_RUN_B_EN,
++			.vsel_reg =3D BD72720_REG_BUCK5_VSEL,
++			.vsel_mask =3D BD72720_MASK_BUCK_VSEL,
++
++			.ramp_delay_table =3D bd72720_ramp_delay,
++			.n_ramp_values =3D ARRAY_SIZE(bd72720_ramp_delay),
++			.ramp_reg =3D BD72720_REG_BUCK5_MODE,
++			.ramp_mask =3D BD72720_MASK_RAMP_UP_DELAY,
++			.owner =3D THIS_MODULE,
++			.of_parse_cb =3D buck_set_hw_dvs_levels,
++		},
++		.dvs =3D {
++			.level_map =3D ROHM_DVS_LEVEL_RUN | ROHM_DVS_LEVEL_IDLE |
++				     ROHM_DVS_LEVEL_SUSPEND |
++				     ROHM_DVS_LEVEL_LPSR,
++			.run_reg =3D BD72720_REG_BUCK5_VSEL,
++			.run_mask =3D BD72720_MASK_BUCK_VSEL,
++			.idle_on_mask =3D BD72720_MASK_IDLE_EN,
++			.suspend_on_mask =3D BD72720_MASK_SUSPEND_EN,
++			.lpsr_on_mask =3D BD72720_MASK_DEEP_IDLE_EN,
++		},
++	}, {
++		.desc =3D {
++			.name =3D "buck6",
++			.of_match =3D of_match_ptr("buck6"),
++			.regulators_node =3D of_match_ptr("regulators"),
++			.id =3D BD72720_BUCK6,
++			.type =3D REGULATOR_VOLTAGE,
++			.ops =3D &bd72720_regulator_ops,
++			.linear_ranges =3D bd72720_buck67_volts,
++			.n_linear_ranges =3D ARRAY_SIZE(bd72720_buck67_volts),
++			.n_voltages =3D BD72720_NUM_BUCK_VOLTS,
++			.enable_reg =3D BD72720_REG_BUCK6_ON,
++			.enable_mask =3D BD72720_MASK_RUN_B_EN,
++			.vsel_reg =3D BD72720_REG_BUCK6_VSEL,
++			.vsel_mask =3D BD72720_MASK_BUCK_VSEL,
++
++			.ramp_delay_table =3D bd72720_ramp_delay,
++			.n_ramp_values =3D ARRAY_SIZE(bd72720_ramp_delay),
++			.ramp_reg =3D BD72720_REG_BUCK6_MODE,
++			.ramp_mask =3D BD72720_MASK_RAMP_UP_DELAY,
++			.owner =3D THIS_MODULE,
++			.of_parse_cb =3D buck_set_hw_dvs_levels,
++		},
++		.dvs =3D {
++			.level_map =3D ROHM_DVS_LEVEL_RUN | ROHM_DVS_LEVEL_IDLE |
++				     ROHM_DVS_LEVEL_SUSPEND |
++				     ROHM_DVS_LEVEL_LPSR,
++			.run_reg =3D BD72720_REG_BUCK6_VSEL,
++			.run_mask =3D BD72720_MASK_BUCK_VSEL,
++			.idle_on_mask =3D BD72720_MASK_IDLE_EN,
++			.suspend_on_mask =3D BD72720_MASK_SUSPEND_EN,
++			.lpsr_on_mask =3D BD72720_MASK_DEEP_IDLE_EN,
++		},
++	}, {
++		.desc =3D {
++			.name =3D "buck7",
++			.of_match =3D of_match_ptr("buck7"),
++			.regulators_node =3D of_match_ptr("regulators"),
++			.id =3D BD72720_BUCK7,
++			.type =3D REGULATOR_VOLTAGE,
++			.ops =3D &bd72720_regulator_ops,
++			.linear_ranges =3D bd72720_buck67_volts,
++			.n_linear_ranges =3D ARRAY_SIZE(bd72720_buck67_volts),
++			.n_voltages =3D BD72720_NUM_BUCK_VOLTS,
++			.enable_reg =3D BD72720_REG_BUCK7_ON,
++			.enable_mask =3D BD72720_MASK_RUN_B_EN,
++			.vsel_reg =3D BD72720_REG_BUCK7_VSEL,
++			.vsel_mask =3D BD72720_MASK_BUCK_VSEL,
++
++			.ramp_delay_table =3D bd72720_ramp_delay,
++			.n_ramp_values =3D ARRAY_SIZE(bd72720_ramp_delay),
++			.ramp_reg =3D BD72720_REG_BUCK7_MODE,
++			.ramp_mask =3D BD72720_MASK_RAMP_UP_DELAY,
++			.owner =3D THIS_MODULE,
++			.of_parse_cb =3D buck_set_hw_dvs_levels,
++		},
++		.dvs =3D {
++			.level_map =3D ROHM_DVS_LEVEL_RUN | ROHM_DVS_LEVEL_IDLE |
++				     ROHM_DVS_LEVEL_SUSPEND |
++				     ROHM_DVS_LEVEL_LPSR,
++			.run_reg =3D BD72720_REG_BUCK7_VSEL,
++			.run_mask =3D BD72720_MASK_BUCK_VSEL,
++			.idle_on_mask =3D BD72720_MASK_IDLE_EN,
++			.suspend_on_mask =3D BD72720_MASK_SUSPEND_EN,
++			.lpsr_on_mask =3D BD72720_MASK_DEEP_IDLE_EN,
++		},
++	}, {
++		.desc =3D {
++			.name =3D "buck8",
++			.of_match =3D of_match_ptr("buck8"),
++			.regulators_node =3D of_match_ptr("regulators"),
++			.id =3D BD72720_BUCK8,
++			.type =3D REGULATOR_VOLTAGE,
++			.ops =3D &bd72720_regulator_ops,
++			.linear_ranges =3D bd72720_buck589_volts,
++			.n_linear_ranges =3D ARRAY_SIZE(bd72720_buck589_volts),
++			.n_voltages =3D BD72720_NUM_BUCK_VOLTS,
++			.enable_reg =3D BD72720_REG_BUCK8_ON,
++			.enable_mask =3D BD72720_MASK_RUN_B_EN,
++			.vsel_reg =3D BD72720_REG_BUCK8_VSEL,
++			.vsel_mask =3D BD72720_MASK_BUCK_VSEL,
++
++			.ramp_delay_table =3D bd72720_ramp_delay,
++			.n_ramp_values =3D ARRAY_SIZE(bd72720_ramp_delay),
++			.ramp_reg =3D BD72720_REG_BUCK8_MODE,
++			.ramp_mask =3D BD72720_MASK_RAMP_UP_DELAY,
++			.owner =3D THIS_MODULE,
++			.of_parse_cb =3D buck_set_hw_dvs_levels,
++		},
++		.dvs =3D {
++			.level_map =3D ROHM_DVS_LEVEL_RUN | ROHM_DVS_LEVEL_IDLE |
++				     ROHM_DVS_LEVEL_SUSPEND |
++				     ROHM_DVS_LEVEL_LPSR,
++			.run_reg =3D BD72720_REG_BUCK8_VSEL,
++			.run_mask =3D BD72720_MASK_BUCK_VSEL,
++			.idle_on_mask =3D BD72720_MASK_IDLE_EN,
++			.suspend_on_mask =3D BD72720_MASK_SUSPEND_EN,
++			.lpsr_on_mask =3D BD72720_MASK_DEEP_IDLE_EN,
++		},
++	}, {
++		.desc =3D {
++			.name =3D "buck9",
++			.of_match =3D of_match_ptr("buck9"),
++			.regulators_node =3D of_match_ptr("regulators"),
++			.id =3D BD72720_BUCK9,
++			.type =3D REGULATOR_VOLTAGE,
++			.ops =3D &bd72720_regulator_ops,
++			.linear_ranges =3D bd72720_buck589_volts,
++			.n_linear_ranges =3D ARRAY_SIZE(bd72720_buck589_volts),
++			.n_voltages =3D BD72720_NUM_BUCK_VOLTS,
++			.enable_reg =3D BD72720_REG_BUCK9_ON,
++			.enable_mask =3D BD72720_MASK_RUN_B_EN,
++			.vsel_reg =3D BD72720_REG_BUCK9_VSEL,
++			.vsel_mask =3D BD72720_MASK_BUCK_VSEL,
++
++			.ramp_delay_table =3D bd72720_ramp_delay,
++			.n_ramp_values =3D ARRAY_SIZE(bd72720_ramp_delay),
++			.ramp_reg =3D BD72720_REG_BUCK9_MODE,
++			.ramp_mask =3D BD72720_MASK_RAMP_UP_DELAY,
++			.owner =3D THIS_MODULE,
++			.of_parse_cb =3D buck_set_hw_dvs_levels,
++		},
++		.dvs =3D {
++			.level_map =3D ROHM_DVS_LEVEL_RUN | ROHM_DVS_LEVEL_IDLE |
++				     ROHM_DVS_LEVEL_SUSPEND |
++				     ROHM_DVS_LEVEL_LPSR,
++			.run_reg =3D BD72720_REG_BUCK9_VSEL,
++			.run_mask =3D BD72720_MASK_BUCK_VSEL,
++			.idle_on_mask =3D BD72720_MASK_IDLE_EN,
++			.suspend_on_mask =3D BD72720_MASK_SUSPEND_EN,
++			.lpsr_on_mask =3D BD72720_MASK_DEEP_IDLE_EN,
++		},
++	}, {
++		.desc =3D {
++			.name =3D "buck10",
++			.of_match =3D of_match_ptr("buck10"),
++			.regulators_node =3D of_match_ptr("regulators"),
++			.id =3D BD72720_BUCK10,
++			.type =3D REGULATOR_VOLTAGE,
++			.ops =3D &bd72720_regulator_ops,
++			.linear_ranges =3D bd72720_buck10_volts,
++			.n_linear_ranges =3D ARRAY_SIZE(bd72720_buck10_volts),
++			.n_voltages =3D BD72720_NUM_BUCK_VOLTS,
++			.enable_reg =3D BD72720_REG_BUCK10_ON,
++			.enable_mask =3D BD72720_MASK_RUN_B_EN,
++			.vsel_reg =3D BD72720_REG_BUCK10_VSEL,
++			.vsel_mask =3D BD72720_MASK_BUCK_VSEL,
++
++			.ramp_delay_table =3D bd72720_ramp_delay,
++			.n_ramp_values =3D ARRAY_SIZE(bd72720_ramp_delay),
++			.ramp_reg =3D BD72720_REG_BUCK10_MODE,
++			.ramp_mask =3D BD72720_MASK_RAMP_UP_DELAY,
++			.owner =3D THIS_MODULE,
++			.of_parse_cb =3D buck_set_hw_dvs_levels,
++		},
++		.dvs =3D {
++			.level_map =3D ROHM_DVS_LEVEL_RUN | ROHM_DVS_LEVEL_IDLE |
++				     ROHM_DVS_LEVEL_SUSPEND |
++				     ROHM_DVS_LEVEL_LPSR,
++			.run_reg =3D BD72720_REG_BUCK10_VSEL,
++			.run_mask =3D BD72720_MASK_BUCK_VSEL,
++			.idle_on_mask =3D BD72720_MASK_IDLE_EN,
++			.suspend_on_mask =3D BD72720_MASK_SUSPEND_EN,
++			.lpsr_on_mask =3D BD72720_MASK_DEEP_IDLE_EN,
++		},
++	}, {
++		.desc =3D {
++			.name =3D "ldo1",
++			.of_match =3D of_match_ptr("ldo1"),
++			.regulators_node =3D of_match_ptr("regulators"),
++			.id =3D BD72720_LDO1,
++			.type =3D REGULATOR_VOLTAGE,
++			.ops =3D &bd72720_regulator_ops,
++			.linear_ranges =3D bd72720_ldo1234_volts,
++			.n_linear_ranges =3D ARRAY_SIZE(bd72720_ldo1234_volts),
++			.n_voltages =3D BD72720_NUM_LDO12346_VOLTS,
++			.enable_reg =3D BD72720_REG_LDO1_ON,
++			.enable_mask =3D BD72720_MASK_RUN_B_EN,
++			.vsel_reg =3D BD72720_REG_LDO1_VSEL_RB,
++			.vsel_mask =3D BD72720_MASK_LDO12346_VSEL,
++
++			.ramp_delay_table =3D bd72720_ramp_delay,
++			.n_ramp_values =3D ARRAY_SIZE(bd72720_ramp_delay),
++			.ramp_reg =3D BD72720_REG_LDO1_MODE1,
++			.ramp_mask =3D BD72720_MASK_RAMP_UP_DELAY,
++			.owner =3D THIS_MODULE,
++			.of_parse_cb =3D buck_set_hw_dvs_levels,
++		},
++		.dvs =3D {
++			.level_map =3D ROHM_DVS_LEVEL_RUN | ROHM_DVS_LEVEL_IDLE |
++				     ROHM_DVS_LEVEL_SUSPEND |
++				     ROHM_DVS_LEVEL_LPSR,
++			.run_reg =3D BD72720_REG_LDO1_VSEL_RB,
++			.run_mask =3D BD72720_MASK_LDO12346_VSEL,
++			.idle_reg =3D BD72720_REG_LDO1_VSEL_I,
++			.idle_mask =3D BD72720_MASK_LDO12346_VSEL,
++			.idle_on_mask =3D BD72720_MASK_IDLE_EN,
++			.suspend_reg =3D BD72720_REG_LDO1_VSEL_S,
++			.suspend_mask =3D BD72720_MASK_LDO12346_VSEL,
++			.suspend_on_mask =3D BD72720_MASK_SUSPEND_EN,
++			.lpsr_reg =3D BD72720_REG_LDO1_VSEL_DI,
++			.lpsr_mask =3D BD72720_MASK_LDO12346_VSEL,
++			.lpsr_on_mask =3D BD72720_MASK_DEEP_IDLE_EN,
++		},
++		.reg_inits =3D bd72720_ldo1_inits,
++		.reg_init_amnt =3D ARRAY_SIZE(bd72720_ldo1_inits),
++	}, {
++		.desc =3D {
++			.name =3D "ldo2",
++			.of_match =3D of_match_ptr("ldo2"),
++			.regulators_node =3D of_match_ptr("regulators"),
++			.id =3D BD72720_LDO2,
++			.type =3D REGULATOR_VOLTAGE,
++			.ops =3D &bd72720_regulator_ops,
++			.linear_ranges =3D bd72720_ldo1234_volts,
++			.n_linear_ranges =3D ARRAY_SIZE(bd72720_ldo1234_volts),
++			.n_voltages =3D BD72720_NUM_LDO12346_VOLTS,
++			.enable_reg =3D BD72720_REG_LDO2_ON,
++			.enable_mask =3D BD72720_MASK_RUN_B_EN,
++			.vsel_reg =3D BD72720_REG_LDO2_VSEL_R,
++			.vsel_mask =3D BD72720_MASK_LDO12346_VSEL,
++
++			.ramp_delay_table =3D bd72720_ramp_delay,
++			.n_ramp_values =3D ARRAY_SIZE(bd72720_ramp_delay),
++			.ramp_reg =3D BD72720_REG_LDO2_MODE,
++			.ramp_mask =3D BD72720_MASK_RAMP_UP_DELAY,
++			.owner =3D THIS_MODULE,
++			.of_parse_cb =3D buck_set_hw_dvs_levels,
++		},
++		.dvs =3D {
++			.level_map =3D ROHM_DVS_LEVEL_RUN | ROHM_DVS_LEVEL_IDLE |
++				     ROHM_DVS_LEVEL_SUSPEND |
++				     ROHM_DVS_LEVEL_LPSR,
++			.run_reg =3D BD72720_REG_LDO2_VSEL_R,
++			.run_mask =3D BD72720_MASK_LDO12346_VSEL,
++			.idle_reg =3D BD72720_REG_LDO2_VSEL_I,
++			.idle_mask =3D BD72720_MASK_LDO12346_VSEL,
++			.idle_on_mask =3D BD72720_MASK_IDLE_EN,
++			.suspend_reg =3D BD72720_REG_LDO2_VSEL_S,
++			.suspend_mask =3D BD72720_MASK_LDO12346_VSEL,
++			.suspend_on_mask =3D BD72720_MASK_SUSPEND_EN,
++			.lpsr_reg =3D BD72720_REG_LDO2_VSEL_DI,
++			.lpsr_mask =3D BD72720_MASK_LDO12346_VSEL,
++			.lpsr_on_mask =3D BD72720_MASK_DEEP_IDLE_EN,
++		},
++	}, {
++		.desc =3D {
++			.name =3D "ldo3",
++			.of_match =3D of_match_ptr("ldo3"),
++			.regulators_node =3D of_match_ptr("regulators"),
++			.id =3D BD72720_LDO3,
++			.type =3D REGULATOR_VOLTAGE,
++			.ops =3D &bd72720_regulator_ops,
++			.linear_ranges =3D bd72720_ldo1234_volts,
++			.n_linear_ranges =3D ARRAY_SIZE(bd72720_ldo1234_volts),
++			.n_voltages =3D BD72720_NUM_LDO12346_VOLTS,
++			.enable_reg =3D BD72720_REG_LDO3_ON,
++			.enable_mask =3D BD72720_MASK_RUN_B_EN,
++			.vsel_reg =3D BD72720_REG_LDO3_VSEL_R,
++			.vsel_mask =3D BD72720_MASK_LDO12346_VSEL,
++
++			.ramp_delay_table =3D bd72720_ramp_delay,
++			.n_ramp_values =3D ARRAY_SIZE(bd72720_ramp_delay),
++			.ramp_reg =3D BD72720_REG_LDO3_MODE,
++			.ramp_mask =3D BD72720_MASK_RAMP_UP_DELAY,
++			.owner =3D THIS_MODULE,
++			.of_parse_cb =3D buck_set_hw_dvs_levels,
++		},
++		.dvs =3D {
++			.level_map =3D ROHM_DVS_LEVEL_RUN | ROHM_DVS_LEVEL_IDLE |
++				     ROHM_DVS_LEVEL_SUSPEND |
++				     ROHM_DVS_LEVEL_LPSR,
++			.run_reg =3D BD72720_REG_LDO3_VSEL_R,
++			.run_mask =3D BD72720_MASK_LDO12346_VSEL,
++			.idle_reg =3D BD72720_REG_LDO3_VSEL_I,
++			.idle_mask =3D BD72720_MASK_LDO12346_VSEL,
++			.idle_on_mask =3D BD72720_MASK_IDLE_EN,
++			.suspend_reg =3D BD72720_REG_LDO3_VSEL_S,
++			.suspend_mask =3D BD72720_MASK_LDO12346_VSEL,
++			.suspend_on_mask =3D BD72720_MASK_SUSPEND_EN,
++			.lpsr_reg =3D BD72720_REG_LDO3_VSEL_DI,
++			.lpsr_mask =3D BD72720_MASK_LDO12346_VSEL,
++			.lpsr_on_mask =3D BD72720_MASK_DEEP_IDLE_EN,
++		},
++	}, {
++		.desc =3D {
++			.name =3D "ldo4",
++			.of_match =3D of_match_ptr("ldo4"),
++			.regulators_node =3D of_match_ptr("regulators"),
++			.id =3D BD72720_LDO4,
++			.type =3D REGULATOR_VOLTAGE,
++			.ops =3D &bd72720_regulator_ops,
++			.linear_ranges =3D bd72720_ldo1234_volts,
++			.n_linear_ranges =3D ARRAY_SIZE(bd72720_ldo1234_volts),
++			.n_voltages =3D BD72720_NUM_LDO12346_VOLTS,
++			.enable_reg =3D BD72720_REG_LDO4_ON,
++			.enable_mask =3D BD72720_MASK_RUN_B_EN,
++			.vsel_reg =3D BD72720_REG_LDO4_VSEL_R,
++			.vsel_mask =3D BD72720_MASK_LDO12346_VSEL,
++
++			.ramp_delay_table =3D bd72720_ramp_delay,
++			.n_ramp_values =3D ARRAY_SIZE(bd72720_ramp_delay),
++			.ramp_reg =3D BD72720_REG_LDO4_MODE,
++			.ramp_mask =3D BD72720_MASK_RAMP_UP_DELAY,
++			.owner =3D THIS_MODULE,
++			.of_parse_cb =3D buck_set_hw_dvs_levels,
++		},
++		.dvs =3D {
++			.level_map =3D ROHM_DVS_LEVEL_RUN | ROHM_DVS_LEVEL_IDLE |
++				     ROHM_DVS_LEVEL_SUSPEND |
++				     ROHM_DVS_LEVEL_LPSR,
++			.run_reg =3D BD72720_REG_LDO4_VSEL_R,
++			.run_mask =3D BD72720_MASK_LDO12346_VSEL,
++			.idle_reg =3D BD72720_REG_LDO4_VSEL_I,
++			.idle_mask =3D BD72720_MASK_LDO12346_VSEL,
++			.idle_on_mask =3D BD72720_MASK_IDLE_EN,
++			.suspend_reg =3D BD72720_REG_LDO4_VSEL_S,
++			.suspend_mask =3D BD72720_MASK_LDO12346_VSEL,
++			.suspend_on_mask =3D BD72720_MASK_SUSPEND_EN,
++			.lpsr_reg =3D BD72720_REG_LDO4_VSEL_DI,
++			.lpsr_mask =3D BD72720_MASK_LDO12346_VSEL,
++			.lpsr_on_mask =3D BD72720_MASK_DEEP_IDLE_EN,
++		},
++	}, {
++		.desc =3D {
++			.name =3D "ldo5",
++			.of_match =3D of_match_ptr("ldo5"),
++			.regulators_node =3D of_match_ptr("regulators"),
++			.id =3D BD72720_LDO5,
++			.type =3D REGULATOR_VOLTAGE,
++			.ops =3D &bd72720_regulator_ops,
++			.linear_ranges =3D bd72720_ldo57891011_volts,
++			.n_linear_ranges =3D ARRAY_SIZE(bd72720_ldo57891011_volts),
++			.n_voltages =3D BD72720_NUM_LDO_VOLTS,
++			.enable_reg =3D BD72720_REG_LDO5_ON,
++			.enable_mask =3D BD72720_MASK_RUN_B_EN,
++			.vsel_reg =3D BD72720_REG_LDO5_VSEL,
++			.vsel_mask =3D BD72720_MASK_LDO_VSEL,
++
++			.ramp_delay_table =3D bd72720_ramp_delay,
++			.n_ramp_values =3D ARRAY_SIZE(bd72720_ramp_delay),
++			.ramp_reg =3D BD72720_REG_LDO5_MODE,
++			.ramp_mask =3D BD72720_MASK_RAMP_UP_DELAY,
++			.owner =3D THIS_MODULE,
++			.of_parse_cb =3D buck_set_hw_dvs_levels,
++		},
++		.dvs =3D {
++			.level_map =3D ROHM_DVS_LEVEL_RUN | ROHM_DVS_LEVEL_IDLE |
++				     ROHM_DVS_LEVEL_SUSPEND |
++				     ROHM_DVS_LEVEL_LPSR,
++			.run_reg =3D BD72720_REG_LDO5_VSEL,
++			.run_mask =3D BD72720_MASK_LDO_VSEL,
++			.idle_on_mask =3D BD72720_MASK_IDLE_EN,
++			.suspend_on_mask =3D BD72720_MASK_SUSPEND_EN,
++			.lpsr_on_mask =3D BD72720_MASK_DEEP_IDLE_EN,
++		},
++	}, {
++		.desc =3D {
++			.name =3D "ldo6",
++			.of_match =3D of_match_ptr("ldo6"),
++			.regulators_node =3D of_match_ptr("regulators"),
++			.id =3D BD72720_LDO6,
++			.type =3D REGULATOR_VOLTAGE,
++			.ops =3D &bd72720_regulator_ops,
++			.linear_ranges =3D bd72720_ldo6_volts,
++			.n_linear_ranges =3D ARRAY_SIZE(bd72720_ldo6_volts),
++			.n_voltages =3D BD72720_NUM_LDO12346_VOLTS,
++			.enable_reg =3D BD72720_REG_LDO6_ON,
++			.enable_mask =3D BD72720_MASK_RUN_B_EN,
++			.vsel_reg =3D BD72720_REG_LDO6_VSEL,
++			.vsel_mask =3D BD72720_MASK_LDO12346_VSEL,
++
++			.ramp_delay_table =3D bd72720_ramp_delay,
++			.n_ramp_values =3D ARRAY_SIZE(bd72720_ramp_delay),
++			.ramp_reg =3D BD72720_REG_LDO6_MODE,
++			.ramp_mask =3D BD72720_MASK_RAMP_UP_DELAY,
++			.owner =3D THIS_MODULE,
++			.of_parse_cb =3D buck_set_hw_dvs_levels,
++		},
++		.dvs =3D {
++			.level_map =3D ROHM_DVS_LEVEL_RUN | ROHM_DVS_LEVEL_IDLE |
++				     ROHM_DVS_LEVEL_SUSPEND |
++				     ROHM_DVS_LEVEL_LPSR,
++			.run_reg =3D BD72720_REG_LDO6_VSEL,
++			.run_mask =3D BD72720_MASK_LDO12346_VSEL,
++			.idle_on_mask =3D BD72720_MASK_IDLE_EN,
++			.suspend_on_mask =3D BD72720_MASK_SUSPEND_EN,
++			.lpsr_on_mask =3D BD72720_MASK_DEEP_IDLE_EN,
++		},
++	}, {
++		.desc =3D {
++			.name =3D "ldo7",
++			.of_match =3D of_match_ptr("ldo7"),
++			.regulators_node =3D of_match_ptr("regulators"),
++			.id =3D BD72720_LDO7,
++			.type =3D REGULATOR_VOLTAGE,
++			.ops =3D &bd72720_regulator_ops,
++			.linear_ranges =3D bd72720_ldo57891011_volts,
++			.n_linear_ranges =3D ARRAY_SIZE(bd72720_ldo57891011_volts),
++			.n_voltages =3D BD72720_NUM_LDO_VOLTS,
++			.enable_reg =3D BD72720_REG_LDO7_ON,
++			.enable_mask =3D BD72720_MASK_RUN_B_EN,
++			.vsel_reg =3D BD72720_REG_LDO7_VSEL,
++			.vsel_mask =3D BD72720_MASK_LDO_VSEL,
++
++			.ramp_delay_table =3D bd72720_ramp_delay,
++			.n_ramp_values =3D ARRAY_SIZE(bd72720_ramp_delay),
++			.ramp_reg =3D BD72720_REG_LDO7_MODE,
++			.ramp_mask =3D BD72720_MASK_RAMP_UP_DELAY,
++			.owner =3D THIS_MODULE,
++			.of_parse_cb =3D buck_set_hw_dvs_levels,
++		},
++		.dvs =3D {
++			.level_map =3D ROHM_DVS_LEVEL_RUN | ROHM_DVS_LEVEL_IDLE |
++				     ROHM_DVS_LEVEL_SUSPEND |
++				     ROHM_DVS_LEVEL_LPSR,
++			.run_reg =3D BD72720_REG_LDO7_VSEL,
++			.run_mask =3D BD72720_MASK_LDO_VSEL,
++			.idle_on_mask =3D BD72720_MASK_IDLE_EN,
++			.suspend_on_mask =3D BD72720_MASK_SUSPEND_EN,
++			.lpsr_on_mask =3D BD72720_MASK_DEEP_IDLE_EN,
++		},
++	}, {
++		.desc =3D {
++			.name =3D "ldo8",
++			.of_match =3D of_match_ptr("ldo8"),
++			.regulators_node =3D of_match_ptr("regulators"),
++			.id =3D BD72720_LDO8,
++			.type =3D REGULATOR_VOLTAGE,
++			.ops =3D &bd72720_regulator_ops,
++			.linear_ranges =3D bd72720_ldo57891011_volts,
++			.n_linear_ranges =3D ARRAY_SIZE(bd72720_ldo57891011_volts),
++			.n_voltages =3D BD72720_NUM_LDO_VOLTS,
++			.enable_reg =3D BD72720_REG_LDO8_ON,
++			.enable_mask =3D BD72720_MASK_RUN_B_EN,
++			.vsel_reg =3D BD72720_REG_LDO8_VSEL,
++			.vsel_mask =3D BD72720_MASK_LDO_VSEL,
++
++			.ramp_delay_table =3D bd72720_ramp_delay,
++			.n_ramp_values =3D ARRAY_SIZE(bd72720_ramp_delay),
++			.ramp_reg =3D BD72720_REG_LDO8_MODE,
++			.ramp_mask =3D BD72720_MASK_RAMP_UP_DELAY,
++			.owner =3D THIS_MODULE,
++			.of_parse_cb =3D buck_set_hw_dvs_levels,
++		},
++		.dvs =3D {
++			.level_map =3D ROHM_DVS_LEVEL_RUN | ROHM_DVS_LEVEL_IDLE |
++				     ROHM_DVS_LEVEL_SUSPEND |
++				     ROHM_DVS_LEVEL_LPSR,
++			.run_reg =3D BD72720_REG_LDO8_VSEL,
++			.run_mask =3D BD72720_MASK_LDO_VSEL,
++			.idle_on_mask =3D BD72720_MASK_IDLE_EN,
++			.suspend_on_mask =3D BD72720_MASK_SUSPEND_EN,
++			.lpsr_on_mask =3D BD72720_MASK_DEEP_IDLE_EN,
++		},
++	}, {
++		.desc =3D {
++			.name =3D "ldo9",
++			.of_match =3D of_match_ptr("ldo9"),
++			.regulators_node =3D of_match_ptr("regulators"),
++			.id =3D BD72720_LDO9,
++			.type =3D REGULATOR_VOLTAGE,
++			.ops =3D &bd72720_regulator_ops,
++			.linear_ranges =3D bd72720_ldo57891011_volts,
++			.n_linear_ranges =3D ARRAY_SIZE(bd72720_ldo57891011_volts),
++			.n_voltages =3D BD72720_NUM_LDO_VOLTS,
++			.enable_reg =3D BD72720_REG_LDO9_ON,
++			.enable_mask =3D BD72720_MASK_RUN_B_EN,
++			.vsel_reg =3D BD72720_REG_LDO9_VSEL,
++			.vsel_mask =3D BD72720_MASK_LDO_VSEL,
++
++			.ramp_delay_table =3D bd72720_ramp_delay,
++			.n_ramp_values =3D ARRAY_SIZE(bd72720_ramp_delay),
++			.ramp_reg =3D BD72720_REG_LDO9_MODE,
++			.ramp_mask =3D BD72720_MASK_RAMP_UP_DELAY,
++			.owner =3D THIS_MODULE,
++			.of_parse_cb =3D buck_set_hw_dvs_levels,
++		},
++		.dvs =3D {
++			.level_map =3D ROHM_DVS_LEVEL_RUN | ROHM_DVS_LEVEL_IDLE |
++				     ROHM_DVS_LEVEL_SUSPEND |
++				     ROHM_DVS_LEVEL_LPSR,
++			.run_reg =3D BD72720_REG_LDO9_VSEL,
++			.run_mask =3D BD72720_MASK_LDO_VSEL,
++			.idle_on_mask =3D BD72720_MASK_IDLE_EN,
++			.suspend_on_mask =3D BD72720_MASK_SUSPEND_EN,
++			.lpsr_on_mask =3D BD72720_MASK_DEEP_IDLE_EN,
++		},
++	}, {
++		.desc =3D {
++			.name =3D "ldo10",
++			.of_match =3D of_match_ptr("ldo10"),
++			.regulators_node =3D of_match_ptr("regulators"),
++			.id =3D BD72720_LDO10,
++			.type =3D REGULATOR_VOLTAGE,
++			.ops =3D &bd72720_regulator_ops,
++			.linear_ranges =3D bd72720_ldo57891011_volts,
++			.n_linear_ranges =3D ARRAY_SIZE(bd72720_ldo57891011_volts),
++			.n_voltages =3D BD72720_NUM_LDO_VOLTS,
++			.enable_reg =3D BD72720_REG_LDO10_ON,
++			.enable_mask =3D BD72720_MASK_RUN_B_EN,
++			.vsel_reg =3D BD72720_REG_LDO10_VSEL,
++			.vsel_mask =3D BD72720_MASK_LDO_VSEL,
++
++			.ramp_delay_table =3D bd72720_ramp_delay,
++			.n_ramp_values =3D ARRAY_SIZE(bd72720_ramp_delay),
++			.ramp_reg =3D BD72720_REG_LDO10_MODE,
++			.ramp_mask =3D BD72720_MASK_RAMP_UP_DELAY,
++			.owner =3D THIS_MODULE,
++			.of_parse_cb =3D buck_set_hw_dvs_levels,
++		},
++		.dvs =3D {
++			.level_map =3D ROHM_DVS_LEVEL_RUN | ROHM_DVS_LEVEL_IDLE |
++				     ROHM_DVS_LEVEL_SUSPEND |
++				     ROHM_DVS_LEVEL_LPSR,
++			.run_reg =3D BD72720_REG_LDO10_VSEL,
++			.run_mask =3D BD72720_MASK_LDO_VSEL,
++			.idle_on_mask =3D BD72720_MASK_IDLE_EN,
++			.suspend_on_mask =3D BD72720_MASK_SUSPEND_EN,
++			.lpsr_on_mask =3D BD72720_MASK_DEEP_IDLE_EN,
++		},
++	}, {
++		.desc =3D {
++			.name =3D "ldo11",
++			.of_match =3D of_match_ptr("ldo11"),
++			.regulators_node =3D of_match_ptr("regulators"),
++			.id =3D BD72720_LDO11,
++			.type =3D REGULATOR_VOLTAGE,
++			.ops =3D &bd72720_regulator_ops,
++			.linear_ranges =3D bd72720_ldo57891011_volts,
++			.n_linear_ranges =3D ARRAY_SIZE(bd72720_ldo57891011_volts),
++			.n_voltages =3D BD72720_NUM_LDO_VOLTS,
++			.enable_reg =3D BD72720_REG_LDO11_ON,
++			.enable_mask =3D BD72720_MASK_RUN_B_EN,
++			.vsel_reg =3D BD72720_REG_LDO11_VSEL,
++			.vsel_mask =3D BD72720_MASK_LDO_VSEL,
++
++			.ramp_delay_table =3D bd72720_ramp_delay,
++			.n_ramp_values =3D ARRAY_SIZE(bd72720_ramp_delay),
++			.ramp_reg =3D BD72720_REG_LDO11_MODE,
++			.ramp_mask =3D BD72720_MASK_RAMP_UP_DELAY,
++			.owner =3D THIS_MODULE,
++			.of_parse_cb =3D buck_set_hw_dvs_levels,
++		},
++		.dvs =3D {
++			.level_map =3D ROHM_DVS_LEVEL_RUN | ROHM_DVS_LEVEL_IDLE |
++				     ROHM_DVS_LEVEL_SUSPEND |
++				     ROHM_DVS_LEVEL_LPSR,
++			.run_reg =3D BD72720_REG_LDO11_VSEL,
++			.run_mask =3D BD72720_MASK_LDO_VSEL,
++			.idle_on_mask =3D BD72720_MASK_IDLE_EN,
++			.suspend_on_mask =3D BD72720_MASK_SUSPEND_EN,
++			.lpsr_on_mask =3D BD72720_MASK_DEEP_IDLE_EN,
++		},
++	},
++};
++
++static int bd72720_buck10_ldon_head_mode(struct device *dev,
++					 struct device_node *npreg,
++					 struct regmap *regmap,
++					 struct regulator_desc *buck10_desc)
++{
++	struct device_node *np __free(device_node) =3D
++		of_get_child_by_name(npreg, "buck10");
++	uint32_t ldon_head;
++	int ldon_val;
++	int ret;
++
++	if (!np) {
++		dev_err(dev, "failed to find buck10 regulator node\n");
++		return -ENODEV;
++	}
++
++	ret =3D of_property_read_u32(np, "rohm,ldon-head-microvolt", &ldon_head);
++	if (ret =3D=3D -EINVAL)
++		return 0;
++	if (ret)
++		return ret;
++
++	/*
++	 * LDON_HEAD mode means the BUCK10 is used to supply LDOs 1-4 and
++	 * the BUCK 10 voltage is automatically set to follow LDO 1-4
++	 * settings. Thus the BUCK10 should not allow voltage [g/s]etting.
++	 */
++	buck10_desc->ops =3D &bd72720_buck10_ldon_head_op;
++
++	ldon_val =3D ldon_head / 50000 + 1;
++	if (ldon_head > 300000) {
++		dev_warn(dev, "Unsupported LDON_HEAD, clamping to 300 mV\n");
++		ldon_val =3D 7;
++	}
++
++	return regmap_update_bits(regmap, BD72720_REG_LDO1_MODE2,
++				  BD72720_MASK_LDON_HEAD, ldon_val);
++}
++
++static int bd72720_dt_parse(struct device *dev,
++			    struct regulator_desc *buck10_desc,
++			    struct regmap *regmap)
++{
++	struct device_node *nproot __free(device_node) =3D
++		of_get_child_by_name(dev->parent->of_node, "regulators");
++
++	if (!nproot) {
++		dev_err(dev, "failed to find regulators node\n");
++		return -ENODEV;
++	}
++
++	return bd72720_buck10_ldon_head_mode(dev, nproot, regmap, buck10_desc);
++}
++
+ static int bd71828_probe(struct platform_device *pdev)
+ {
+-	int i, j, ret;
++	int i, j, ret, num_regulators;
+ 	struct regulator_config config =3D {
+ 		.dev =3D pdev->dev.parent,
+ 	};
++	enum rohm_chip_type chip =3D platform_get_device_id(pdev)->driver_data;
++	struct bd71828_regulator_data *rdata;
 =20
--static const struct reg_init buck7_inits[] =3D {
-+static const struct reg_init bd71828_buck7_inits[] =3D {
- 	{
- 		.reg =3D BD71828_REG_PS_CTRL_1,
- 		.mask =3D BD71828_MASK_DVS_BUCK7_CTRL,
-@@ -102,9 +102,9 @@ static int buck_set_hw_dvs_levels(struct device_node *n=
-p,
- 	return rohm_regulator_set_dvs_levels(&data->dvs, np, desc, cfg->regmap);
+ 	config.regmap =3D dev_get_regmap(pdev->dev.parent, NULL);
+ 	if (!config.regmap)
+ 		return -ENODEV;
+=20
+-	for (i =3D 0; i < ARRAY_SIZE(bd71828_rdata); i++) {
++	switch (chip) {
++	case ROHM_CHIP_TYPE_BD72720:
++		rdata =3D devm_kmemdup(&pdev->dev, bd72720_rdata,
++				     sizeof(bd72720_rdata), GFP_KERNEL);
++		if (!rdata)
++			return -ENOMEM;
++
++		ret =3D bd72720_dt_parse(&pdev->dev, &rdata[BD72720_BUCK10_DESC_INDEX].d=
+esc,
++				       config.regmap);
++		if (ret)
++			return ret;
++
++		num_regulators =3D ARRAY_SIZE(bd72720_rdata);
++		break;
++
++	case ROHM_CHIP_TYPE_BD71828:
++		rdata =3D devm_kmemdup(&pdev->dev, bd71828_rdata,
++				     sizeof(bd71828_rdata), GFP_KERNEL);
++		if (!rdata)
++			return -ENOMEM;
++
++		num_regulators =3D ARRAY_SIZE(bd71828_rdata);
++
++		break;
++	default:
++		return dev_err_probe(&pdev->dev, -EINVAL,
++				     "Unsupported device\n");
++	}
++
++	for (i =3D 0; i < num_regulators; i++) {
+ 		struct regulator_dev *rdev;
+-		const struct bd71828_regulator_data *rd;
++		struct bd71828_regulator_data *rd;
++
++		rd =3D &rdata[i];
+=20
+-		rd =3D &bd71828_rdata[i];
++		config.driver_data =3D rd;
+ 		rdev =3D devm_regulator_register(&pdev->dev,
+ 					       &rd->desc, &config);
+ 		if (IS_ERR(rdev))
+@@ -714,12 +1690,20 @@ static int bd71828_probe(struct platform_device *pde=
+v)
+ 	return 0;
  }
 =20
--static int ldo6_parse_dt(struct device_node *np,
--			 const struct regulator_desc *desc,
--			 struct regulator_config *cfg)
-+static int bd71828_ldo6_parse_dt(struct device_node *np,
-+				 const struct regulator_desc *desc,
-+				 struct regulator_config *cfg)
- {
- 	int ret, i;
- 	uint32_t uv =3D 0;
-@@ -212,8 +212,8 @@ static const struct bd71828_regulator_data bd71828_rdat=
-a[] =3D {
- 			 */
- 			.lpsr_on_mask =3D BD71828_MASK_LPSR_EN,
- 		},
--		.reg_inits =3D buck1_inits,
--		.reg_init_amnt =3D ARRAY_SIZE(buck1_inits),
-+		.reg_inits =3D bd71828_buck1_inits,
-+		.reg_init_amnt =3D ARRAY_SIZE(bd71828_buck1_inits),
++static const struct platform_device_id bd71828_pmic_id[] =3D {
++	{ "bd71828-pmic", ROHM_CHIP_TYPE_BD71828 },
++	{ "bd72720-pmic", ROHM_CHIP_TYPE_BD72720 },
++	{ },
++};
++MODULE_DEVICE_TABLE(platform, bd71828_pmic_id);
++
+ static struct platform_driver bd71828_regulator =3D {
+ 	.driver =3D {
+ 		.name =3D "bd71828-pmic",
+ 		.probe_type =3D PROBE_PREFER_ASYNCHRONOUS,
  	},
- 	{
- 		.desc =3D {
-@@ -253,8 +253,8 @@ static const struct bd71828_regulator_data bd71828_rdat=
-a[] =3D {
- 			.lpsr_reg =3D BD71828_REG_BUCK2_SUSP_VOLT,
- 			.lpsr_mask =3D BD71828_MASK_BUCK1267_VOLT,
- 		},
--		.reg_inits =3D buck2_inits,
--		.reg_init_amnt =3D ARRAY_SIZE(buck2_inits),
-+		.reg_inits =3D bd71828_buck2_inits,
-+		.reg_init_amnt =3D ARRAY_SIZE(bd71828_buck2_inits),
- 	},
- 	{
- 		.desc =3D {
-@@ -399,8 +399,8 @@ static const struct bd71828_regulator_data bd71828_rdat=
-a[] =3D {
- 			.lpsr_reg =3D BD71828_REG_BUCK6_SUSP_VOLT,
- 			.lpsr_mask =3D BD71828_MASK_BUCK1267_VOLT,
- 		},
--		.reg_inits =3D buck6_inits,
--		.reg_init_amnt =3D ARRAY_SIZE(buck6_inits),
-+		.reg_inits =3D bd71828_buck6_inits,
-+		.reg_init_amnt =3D ARRAY_SIZE(bd71828_buck6_inits),
- 	},
- 	{
- 		.desc =3D {
-@@ -440,8 +440,8 @@ static const struct bd71828_regulator_data bd71828_rdat=
-a[] =3D {
- 			.lpsr_reg =3D BD71828_REG_BUCK7_SUSP_VOLT,
- 			.lpsr_mask =3D BD71828_MASK_BUCK1267_VOLT,
- 		},
--		.reg_inits =3D buck7_inits,
--		.reg_init_amnt =3D ARRAY_SIZE(buck7_inits),
-+		.reg_inits =3D bd71828_buck7_inits,
-+		.reg_init_amnt =3D ARRAY_SIZE(bd71828_buck7_inits),
- 	},
- 	{
- 		.desc =3D {
-@@ -633,7 +633,7 @@ static const struct bd71828_regulator_data bd71828_rdat=
-a[] =3D {
- 			 * LDO6 only supports enable/disable for all states.
- 			 * Voltage for LDO6 is fixed.
- 			 */
--			.of_parse_cb =3D ldo6_parse_dt,
-+			.of_parse_cb =3D bd71828_ldo6_parse_dt,
- 		},
- 	}, {
- 		.desc =3D {
+ 	.probe =3D bd71828_probe,
++	.id_table =3D bd71828_pmic_id,
+ };
+=20
+ module_platform_driver(bd71828_regulator);
+@@ -727,4 +1711,3 @@ module_platform_driver(bd71828_regulator);
+ MODULE_AUTHOR("Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>");
+ MODULE_DESCRIPTION("BD71828 voltage regulator driver");
+ MODULE_LICENSE("GPL");
+-MODULE_ALIAS("platform:bd71828-pmic");
 --=20
 2.51.0
 
 
---y0oeG/X9+ICE50D1
+--PZ7Ggpi5sPX7/at+
 Content-Type: application/pgp-signature; name=signature.asc
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmkK/uYACgkQeFA3/03a
-ocVqpggAl9cKMSv9gw4L+j09KH0F4p+9l3STEjL3w7IfE89o5Z/Tl+UBwubA6+qe
-+nVlRUtQ+Zr7osv45zO2frllXBB+FkFqW/ZHUhByaOJ2caHJ7JvDrBgDGUvv8obq
-u3oteVdet+uTYJL2wd+7oxewlKgHzHKcK0qoNwzYZyDRUSTcL9EZbPfOJVvrjMa+
-P7+/2NG9IRIhnnYlwhVQRR2000QWD+5bTmPBQgQeB1eGeK2kjwk7cRgYr1cr5zHY
-KrK1XOSu0LA6okeILlckqgF93sntRUNwZximfhPr5qbYgwRpqIvdBT53xH4bpKdh
-fvy+v1uwdL2EAS/fafMLS3zv1TYkJg==
-=cC19
+iQEzBAEBCgAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmkK/vkACgkQeFA3/03a
+ocWYvgf9GXHnlA6yGEjAa1hGFxfK/QtTEKVXrk9nUfHqiGNDOfGgdTOQkyaBg9OD
+hE9srxzDuOaEwdUFlrZq60xFIwtMkdxNb6J2yygIncegq62uKYFkN2UEDum2C4TK
+SLBDzrRfKU3/DSKHJGxJA3n/P4TpHV5OOjfc9FDd302QhFCgwZRoiFLrwWeRLlbF
+zUfVJwf3BIwBgTAxgbX9fdYdzdswsR8318RSheBhgkt6B/Phtca1LXTWEFm9N2p6
+zXrCXbGqYYWtkQigk18FN21JN8ouf5fXo8xF1g1T+7g09a2QD4WKMRyVGOE4oFTs
+LQbYfJ6upVYMT7fljL3KTECp8TZEQA==
+=7eBi
 -----END PGP SIGNATURE-----
 
---y0oeG/X9+ICE50D1--
+--PZ7Ggpi5sPX7/at+--
 
