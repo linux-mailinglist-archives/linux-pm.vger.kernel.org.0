@@ -1,183 +1,241 @@
-Return-Path: <linux-pm+bounces-37449-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37450-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46638C3559A
-	for <lists+linux-pm@lfdr.de>; Wed, 05 Nov 2025 12:27:55 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DBA71C3566B
+	for <lists+linux-pm@lfdr.de>; Wed, 05 Nov 2025 12:40:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 48F053B4770
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Nov 2025 11:22:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6AF8F1A216C0
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Nov 2025 11:39:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5154130FC04;
-	Wed,  5 Nov 2025 11:22:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DEA330FF3B;
+	Wed,  5 Nov 2025 11:39:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ugo+/H9y"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="O9+7+W/8"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from BL0PR03CU003.outbound.protection.outlook.com (mail-eastusazon11012015.outbound.protection.outlook.com [52.101.53.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5570730C370
-	for <linux-pm@vger.kernel.org>; Wed,  5 Nov 2025 11:22:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.176
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762341766; cv=none; b=HznF0XepAXx4uwwnww67Ijavzd2UNSRfwnfAm8hDEFXNlff54CklzO1sNZO7buIOx73KEA9hshuxcCqTjgoygUxhrzgOPIgvWoJlaP6DSF8bouOeAb1PuPieO89U3spNRts9yVngWdAATr6IY7JbXK7ItuqHRgn0InUWJOi2Xr8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762341766; c=relaxed/simple;
-	bh=Ii9b2rpzXiRDukDeUtY2WS5XvNAk5U97MkCbAXQdp7s=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JxjfYkKHGgZWhzgtpA0pbquSYuQD/H9QDtjn6JPiPYyc5+EAj42x9arVIGFFvZhsDyhx9yz+6O5SkIQTn7hunq0oAAVKVBpozX+ibC+XNNMkovkAn3zedWSRBG/MpfLrvturt5pW4YNdEuxUKn5VzlPBIWDpViifUW2TGSNZFOg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ugo+/H9y; arc=none smtp.client-ip=209.85.208.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-378d50e1c77so52645501fa.0
-        for <linux-pm@vger.kernel.org>; Wed, 05 Nov 2025 03:22:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762341762; x=1762946562; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Lgjq5frjKtchDAt0hCN8TCDb53mEX1KChcG+cIgj+As=;
-        b=Ugo+/H9y30ONhr7fDfdxbpsqWR3tRjLh+BuyplYG+qinlo2qxVVE4FuU4lqg9t8UmP
-         fVDVTXoFX4dBwApTOCOGf3JNHagxzSd5IcYye46YRifeue4oQvK+rCDY6250s2aOUHg5
-         fWNdaQqGIKnqGL+6iwoCI4B1KwMjvSghMySRVbLo/w8XC1vtrbeE+e8rvaXdbSppm6Pu
-         jwzcMBE7OMaVCmpZm+PQVU/4EMvbFWk7ZoQe404b7k5sOktFJtHcSqzL3FIgWmRkzwO0
-         dAicFKMGSMh+zzlQdFh553R+WyaxAPatOLu++DAI9JeRl9GL5PnvoTJduTUCYgVMQAlm
-         q8Gg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762341762; x=1762946562;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Lgjq5frjKtchDAt0hCN8TCDb53mEX1KChcG+cIgj+As=;
-        b=IpC37BjxI+N0aaXhKQXN83fWIeh3LYKWT8S0fZ+5Lvq/uRGvHf8U/NJb9PfFhuFplX
-         RDOfWNn0kTHIqLaJpGUDXHkTS4hEg/IezeCiVu3oVkhl1QuXA1pSTHXuwGYwZoAOYJd/
-         OVZlZqCM/Ct+oOMNaUkK+7GIdDm64CW/R2O05/q126W/ejzGlZm/S2SEsrnCcK7cKOax
-         4OSWJdr9bLQZuBw7j1kXb08j6xgP1sojCZXNvBvKIFhZJRf13k99M97VBtWn0fiuTiWo
-         wOJ9AAy+m1MSIzi1jHqmYTkNPgyh/6UueY9+7BSho0fpQJMqT/YD6lSxr1rbl0Vpwatq
-         dSfA==
-X-Forwarded-Encrypted: i=1; AJvYcCWjK/ofP5iZYKgRMB2T2uUmGBFlFgmcu7w2XhwmNCQLSNkWMtZx1xnk0aWmQvt8IZpj4gXOxoURRg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxon4lkbyKvhSuxKFq8Z8teAbFrfnODKslnTxhZTVHqdBjnDarn
-	xRpXdb1zudVLncOObnyjK49ZZjtEv7IdfrewddcllwtY+phyFoJUjOHi
-X-Gm-Gg: ASbGnctBl3fdWYxJsDS4iZnRxXgG/X1k0NaI8LSz1/Vy61SdNwqtCh6SZluHXlnPKre
-	CQTxT131ncYotjamO+dXZJzW7O3XtNlbALEDumCosE5Wa514vDcEIV7bC7yBDDjFrDf+euJfXD3
-	6dhawB/mijivCzqoD/Xj4SddqDaO5txAsaW/OKaBOMW72TdOkNibUhDhSO+oENL5N09vSS/eVUx
-	qH/jdpIluFYbc2nzZ75V9xuwOMd3M6t6drLv9qC7N0WuuT7cdI0mmCB4Z0uYjOM7cigPFDThWrT
-	PylLVwlIoYUVbGF3SGixxEnSQThXhUzvRdLct0Wq3XihRkbqbsb3mICBLieZk8wpmpIVc0jeZ0B
-	iS3R7DkyNih7yvcZdmJRup2UAm1iPuXMJ43gTJkPrcXxnfQt2t6cl+GpzlxKw/Mhex24XrZ22ex
-	YxuUmbmsExjCxNuCz/47iVjfQ78kXvH9jgT+9caSChsDeyjpXhz8FETCGguQ==
-X-Google-Smtp-Source: AGHT+IHpvSjuUZgOT3CU6iwhd3QH+qr/blJkYgQLVxgzQhufOUjboKrykT4Eu5lvIJTa8VYLu1Svkg==
-X-Received: by 2002:a05:651c:4006:b0:37a:3b04:1a1b with SMTP id 38308e7fff4ca-37a513e604fmr6509411fa.12.1762341762189;
-        Wed, 05 Nov 2025 03:22:42 -0800 (PST)
-Received: from ?IPV6:2a10:a5c0:800d:dd00:8fdf:935a:2c85:d703? ([2a10:a5c0:800d:dd00:8fdf:935a:2c85:d703])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-37a415c8070sm14290231fa.28.2025.11.05.03.22.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Nov 2025 03:22:41 -0800 (PST)
-Message-ID: <1aedf1a8-ddff-47fd-8afb-dd60dc42e12b@gmail.com>
-Date: Wed, 5 Nov 2025 13:22:40 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA33A30F81A;
+	Wed,  5 Nov 2025 11:39:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.53.15
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1762342758; cv=fail; b=HOJcCSlf0jF+SnlBx+hrTJ2fVJVrt3I7rfDlTmTsLK0QdYLHNaG/yVzif3hNfvVKTWMFTaY13STEQMApFbKpmyIluabMUxC8wAyNWuk4TKl6h8pixcZAln6G1kLGR6rWa0cIKikuNzJ4Z9fsizLVQ+1MjpujomME27AwowgZjF0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1762342758; c=relaxed/simple;
+	bh=2F5yWJZMCbQaVtl1Y8ghSk0unlN+2DHx+eW3i147bG0=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=bPLKvy9OHTovOgNbW1aT6w+uYkCsk5PEI1g/Aa/COfGnReeYFki6/n6ImDp78aE8vT3IrXig0qz9ddOBlilOW2iHVyNKoKmzAPwZo8cyDVtUcsbfqLAaYKmtEKTzUQo4y5QRKLEklgm0lVsxEbucdUiH0fTiRrkBTphuaB8tY3A=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=O9+7+W/8; arc=fail smtp.client-ip=52.101.53.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Y0QBAs9wjKeo5INEjullESoMH4AYYR9iL4sHWHhZZxBdbGVg/ebi3G6Uz2Y7TGrZwgHLLYJty9a4U62cpw96V7NkUact+B4OS3xC8iOD023o75TOOGUJwL5LrH0Q7QzTK+nSMih8C5BbNKDYj/WNjMPzkLWfrVVts7SUF9ya2w2/jJVyIvrcJApUGKpeoa/2NoxekqFMD9Hk3tQ1+WgLKiSsLaFXfafQYwtQxmLJ6w68jtmUQUiABIeapTJ2gnqIWzDtt15r7krvC9dqUZ3nzVa6NrChxKXRo+QhBo8f1+7xX6/CjfrxrKTKMXW7IWrS6Fw48WgndYgFqfDZkzK3kQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1LDOX5TutPntvPOtfohqjDSGZ+iPmup+JB1H7UCTYr4=;
+ b=N01QpvmqJZ7E6ExnA0N3r1LMag+1fK5RvB4JmY4EQ3qc/lcmcGrzc3ALNUUWJnr622fNwxYsm3+TgVhAGz1foBceFYbgby5DUpuCRTMADfZAyZMClj7GL+V8oYfndemtZvtGVpBkgj0mClQrXDvNC57TFIsELxQlHJ0TNbvZUQKzZqwROk5pSAtHRpBYYk3COR9MVp6od3qNWxOan/nrqwXrig1+zU2Akq8C5bgbYd+cTf+N03T8tJT5h89DCYwhGYLEGcRs1VUceR1e1kDqqaUiM8JZphOFWIxiYb7vrJxcraqh+vugsTUZkfAftoPYU+zYRCBjBfphPad0Uy7Iig==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1LDOX5TutPntvPOtfohqjDSGZ+iPmup+JB1H7UCTYr4=;
+ b=O9+7+W/8rmOdtWuTietLcWr1zI7f//hURg65hhOJpccNQCWyzpSo3SmZAyfUDcEHoNT5Asu869zDVmBTV7QfldqycK1ETbpv3T+vs7RsGzpO9pTomAebd6CA9ovrT2WBp8nnfqC87QjmoHSn2uGBzQVrTaLCFUabvWxYbycvW9Kv6FlQxPpoueE6N63gWr3snr44wjAZ0sQmJqe9Ye0RMTgxHXaiIJO/9Tb251Zhs5CU9lTevhO+nIoQFBf5UrCePbKBPov5GkinYtTjersD6YREfEmkTV9d15hCzLTw0mIUGQJksCh4LewV24zDylaswdfAtnzuJxbBS5vNNo96JQ==
+Received: from MN2PR13CA0001.namprd13.prod.outlook.com (2603:10b6:208:160::14)
+ by CH8PR12MB9838.namprd12.prod.outlook.com (2603:10b6:610:270::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9275.15; Wed, 5 Nov
+ 2025 11:39:11 +0000
+Received: from BL6PEPF00020E66.namprd04.prod.outlook.com
+ (2603:10b6:208:160:cafe::3c) by MN2PR13CA0001.outlook.office365.com
+ (2603:10b6:208:160::14) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9298.8 via Frontend Transport; Wed, 5
+ Nov 2025 11:39:08 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ BL6PEPF00020E66.mail.protection.outlook.com (10.167.249.27) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9298.6 via Frontend Transport; Wed, 5 Nov 2025 11:39:11 +0000
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 5 Nov
+ 2025 03:38:55 -0800
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail202.nvidia.com
+ (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 5 Nov
+ 2025 03:38:55 -0800
+Received: from sumitg-l4t.nvidia.com (10.127.8.14) by mail.nvidia.com
+ (10.129.68.7) with Microsoft SMTP Server id 15.2.2562.20 via Frontend
+ Transport; Wed, 5 Nov 2025 03:38:48 -0800
+From: Sumit Gupta <sumitg@nvidia.com>
+To: <rafael@kernel.org>, <viresh.kumar@linaro.org>, <lenb@kernel.org>,
+	<robert.moore@intel.com>, <corbet@lwn.net>, <pierre.gondois@arm.com>,
+	<zhenglifeng1@huawei.com>, <rdunlap@infradead.org>, <ray.huang@amd.com>,
+	<gautham.shenoy@amd.com>, <mario.limonciello@amd.com>, <perry.yuan@amd.com>,
+	<ionela.voinescu@arm.com>, <zhanjie9@hisilicon.com>,
+	<linux-pm@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
+	<linux-doc@vger.kernel.org>, <acpica-devel@lists.linux.dev>,
+	<linux-kernel@vger.kernel.org>
+CC: <linux-tegra@vger.kernel.org>, <treding@nvidia.com>,
+	<jonathanh@nvidia.com>, <vsethi@nvidia.com>, <ksitaraman@nvidia.com>,
+	<sanjayc@nvidia.com>, <nhartman@nvidia.com>, <bbasu@nvidia.com>,
+	<sumitg@nvidia.com>
+Subject: [PATCH v4 0/8] Enhanced autonomous selection and improvements
+Date: Wed, 5 Nov 2025 17:08:36 +0530
+Message-ID: <20251105113844.4086250-1-sumitg@nvidia.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 01/16] dt-bindings: regulator: ROHM BD72720
-To: "Rob Herring (Arm)" <robh@kernel.org>,
- Matti Vaittinen <matti.vaittinen@linux.dev>
-Cc: Conor Dooley <conor+dt@kernel.org>, linux-kernel@vger.kernel.org,
- Lee Jones <lee@kernel.org>, devicetree@vger.kernel.org,
- Linus Walleij <linus.walleij@linaro.org>, Sebastian Reichel
- <sre@kernel.org>, Andreas Kemnade <andreas@kemnade.info>,
- Bartosz Golaszewski <brgl@bgdev.pl>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Stephen Boyd <sboyd@kernel.org>, Pavel Machek <pavel@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-gpio@vger.kernel.org,
- linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-leds@vger.kernel.org,
- Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
- Michael Turquette <mturquette@baylibre.com>, linux-rtc@vger.kernel.org,
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>
-References: <cover.1762327887.git.mazziesaccount@gmail.com>
- <48fe6e2642db4484640b173cd71be1b245929122.1762327887.git.mazziesaccount@gmail.com>
- <176233320981.143013.4115240062372455834.robh@kernel.org>
-Content-Language: en-US, en-AU, en-GB, en-BW
-From: Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <176233320981.143013.4115240062372455834.robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-NVConfidentiality: public
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL6PEPF00020E66:EE_|CH8PR12MB9838:EE_
+X-MS-Office365-Filtering-Correlation-Id: fdd273a4-485d-4a0f-185c-08de1c5ff076
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|376014|1800799024|82310400026|36860700013|13003099007|921020;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?rXM6vBe3BsSBIL/+ggU9LtpIROgF6isSO+PkxJ5cHN9hR3bqrzhu18VsWATD?=
+ =?us-ascii?Q?iSTYv+ioOEwvm0HSA8qDL2iV0SBkaNyKBDgDet3Lw0VZOLU9ewppunYT8YJH?=
+ =?us-ascii?Q?d5H+pbLkIW1nLTjc5lnX3bEXDmb/2Pra2ZS1jpHundWT1tNO9W4BlwpIwApX?=
+ =?us-ascii?Q?786JhcRbzeakaiMlalRQ+HxcjdfdcdxwWRaVlLXZNNiGGhJhlvXylBqO3Uy3?=
+ =?us-ascii?Q?UTN+Za3CxFSgyUnixjMOM11eh+ajmJZlu7R6MszINfEvAaFYf8NGt81TzZdS?=
+ =?us-ascii?Q?JualMcUYxoOgII/YaeG7wZZdVNo9xevpT+Rv6SM3SmaTSOeEhpFPK82B5Ml0?=
+ =?us-ascii?Q?fH4pZbVXglD+46BDHwisn79cDgZuvGh0cwyVyCFh0hfOF4khi50fM1/eYdiR?=
+ =?us-ascii?Q?84cnoBkjb83ZvJTSAHTFoNH/Ou6pN/Jz1Jic6TdYrE6Hf4vYipkbwhB49iQs?=
+ =?us-ascii?Q?Vb36ZjfhQ2WRDWRZodweA1xRTrYiH+nitb5HFy/VKJHcKoGyroAIooizjklM?=
+ =?us-ascii?Q?oyxzRKNI6TaK01Q6A0ipXdVSioNoZmosrAFAB/Im0KW+Ws0/Go9UKQsUZcJc?=
+ =?us-ascii?Q?SpCEVUhgYz+NM48RoBDGB7rV30/jCLXybaEjxEMQeu0YK0gHGypQt3DFnXFQ?=
+ =?us-ascii?Q?FfWOQZLs0X6g3ujN2jN1+MkWYgANNQLaYDPuWuobAqgp7ipi/B+YFWJ6BrSr?=
+ =?us-ascii?Q?5BkcZhQR9z9ozYMrknH8IL+6d4Jriw5772i/IBTINQYyquENdG8nNdBwXGsL?=
+ =?us-ascii?Q?iJ8uU8RN16aW+zSl1HtcUJuhTV7guLJKqU7OAB9sSe/M425Oj/Ng6QJ1mVsz?=
+ =?us-ascii?Q?TgLu9QhxxG7WMYUN7J3AWlqtQpUtXk5XF2I63JP6EN6TFxj69Crj+twns9Zi?=
+ =?us-ascii?Q?W488Pma09sc3v2eS5MRub7yhc2rtKabkCwxXsfdPBcn/UkiNJMDHUEiCI0H9?=
+ =?us-ascii?Q?4NEcznbmk9VgD13r9R6cFqcidea2ermWcvYL7bJz3vdJBkhppVbGWdGwunzu?=
+ =?us-ascii?Q?yingQC0TioF3eJ6M62WZt45nHid6aHK3vQOuvS17jgWY6vCgN9tM4tw5jm5G?=
+ =?us-ascii?Q?1c9eQR18iuGHBnh8E9xTmZM7HjS8+n0VhJxscHebiIMvSMudfte4eFEf7WXc?=
+ =?us-ascii?Q?tp4FuCRu742XZ/A5FzobiC3Jo0kTc0DOGH2f0zytVW5OQ8Ju1O3tv3Ms7oF6?=
+ =?us-ascii?Q?AWXLejPXL40z60KX6QTh32zX8laA/d693mSvBPqYnTbGgDjXKR0S3u023o1P?=
+ =?us-ascii?Q?P2Te2fSWD6Jg8C1XacMNVxYs4LkYyGRy2qV9FJnk/U157vAz/hMvNDappWm7?=
+ =?us-ascii?Q?QbHr5ZOMwbfW9HPXHo7WOp/Pofm+VkmH9wLLJw6TpWHZM6n1L6YPu6g9wFMl?=
+ =?us-ascii?Q?7TugqavnHSU+JwFa9NDKQ+zaEvylHSMM5vA9pjm4DqmCqguoD8TuITBVEtu/?=
+ =?us-ascii?Q?16zDS7T/n3NuI5oFqRdRMcib3Wr9h4aVwiivDt1bchUmpvGBG1G/4BZvZjZ9?=
+ =?us-ascii?Q?rAHF4nSx3Hbxe6YyKAxOzJwfjxUsc02FHoIgAuZSjwR1RUnvqAN4/M7/qz2h?=
+ =?us-ascii?Q?Xs3eDYK3/sSD5tHsO4H/SE2iJJrh2rqw/voE6QGP?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(82310400026)(36860700013)(13003099007)(921020);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Nov 2025 11:39:11.3017
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: fdd273a4-485d-4a0f-185c-08de1c5ff076
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BL6PEPF00020E66.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH8PR12MB9838
 
-On 05/11/2025 11:00, Rob Herring (Arm) wrote:
-> 
-> On Wed, 05 Nov 2025 09:35:59 +0200, Matti Vaittinen wrote:
->> From: Matti Vaittinen <mazziesaccount@gmail.com>
->>
->> The ROHM BD72720 is a new PMIC with 10 BUCk and 11 LDO regulators.
->>
->> The BD72720 is designed to support using the BUCK10 as a supply for
->> the LDOs 1 to 4. When the BUCK10 is used for this, it can be set to a
->> LDON_HEAD mode. In this mode, the BUCK10 voltage can't be controlled by
->> software, but the voltage is adjusted by PMIC to match the LDO1 .. LDO4
->> voltages with a given offset. Offset can be 50mV .. 300mV and is
->> changeable at 50mV steps.
->>
->> Add 'ldon-head-microvolt' property to denote a board which is designed
->> to utilize the LDON_HEAD mode.
->>
->> All other properties are already existing.
->>
->> Add dt-binding doc for ROHM BD72720 regulators to make it usable.
->>
->> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
->>
->> ---
->> Revision history:
->>   v2 => v3:
->>   - drop unnecessary descriptions
->>   - use microvolts for the 'ldon-head' dt-property
->>
->>   RFCv1 => v2:
->>   - No changes
->> ---
->>   .../regulator/rohm,bd72720-regulator.yaml     | 149 ++++++++++++++++++
->>   1 file changed, 149 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/regulator/rohm,bd72720-regulator.yaml
->>
-> 
-> My bot found errors running 'make dt_binding_check' on your patch:
-> 
-> yamllint warnings/errors:
-> 
-> dtschema/dtc warnings/errors:
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/regulator/rohm,bd72720-regulator.yaml: patternProperties:^buck[1-10]$:properties:rohm,ldon-head-microvolt: '$ref' should not be valid under {'const': '$ref'}
-> 	hint: Standard unit suffix properties don't need a type $ref
-> 	from schema $id: http://devicetree.org/meta-schemas/core.yaml
+This patch series enhances the ACPI CPPC CPUFREQ driver with
+comprehensive support for autonomous performance selection, expanded
+runtime control interfaces and improvements.
 
-Nice! I'm not sure if anyone has said it but these bots are helpful :) I 
-forgot the type to ldon-head when switching from -millivolt to 
--microvolt. I'll address this for the next version.
+It adds support for below:
+- Expose sysfs to read/write the Minimum/Maximum Performance Registers
+  using frequency (kHz), with internal conversion to performance values.
+  Also, update the policy min/max accordingly.
+    /sys/.../cpufreq/policy*/min_perf and max_perf
 
-> doc reference errors (make refcheckdocs):
+- Expose sysfs to read/write the Performance Limited Register.
+    /sys/.../cpufreq/policy*/perf_limited
 
-Thanks for including the make -command to the mail! I didn't even know 
-about 'refcheckdocs' target.
+- When toggling autonomous selection, synchronize the policy limits
+  by updating the policy min/max.
 
-> Warning: Documentation/devicetree/bindings/regulator/rohm,bd72720-regulator.yaml references a file that doesn't exist: Documentation/devicetree/bindings/mfd/rohm,bd72720-pmic.yaml
-> Documentation/devicetree/bindings/regulator/rohm,bd72720-regulator.yaml: Documentation/devicetree/bindings/mfd/rohm,bd72720-pmic.yaml
+- System-wide autonomous mode configuration via 'auto_sel_mode' boot
+  parameter. Mode can be switched dynamically on individual CPUs.
 
-Hmm. I suppose this is because the MFD binding is added only later in 
-the series(?) I suppose we can't help it because the MFD binding 
-references the regulator binding as well. So, this is kind of a chicken 
-and egg problem?
+- Generic sysfs helper functions to reduce code duplication.
 
-Yours,
-	-- Matti
+The patches are grouped as below:
+- Patch 1, 2 & 3: Improvements. Can be applied independently.
+- Patch 4: Sysfs to update min/max_perf. Can be applied independently.
+- Patch 5: Sysfs to update perf_limited. Can be applied independently.
+- Patch 6: add sysfs documentation. Depends on 'Patch 4 and 5'.
+- Patch 7: sync policy min/max with auto_select. Depends on 'Patch 4'.
+- Patch 8: Boot Parameter Support. Depends on 'Patch 4 and 7'.
+
+---
+v3[3] -> v4:
+- patch1: changed param order for show/store and moved them above use.
+- patch3: write epp and auto_sel registers independently. 
+- patch4:
+  - move mutex define outside macro.
+  - return EOPNOTSUPP error also to the caller to handle appropriately.
+  - change min/max_perf sysfs to accept freq, convert to perf internally
+- patch6:
+  - update dates and corrected names in description.
+  - remove dependency of min/max_perf on auto_sel.
+  - add info about highest_perf and lowest_perf interfaces.
+  - update info about min/max_perf interface to read/write freq in kHz.
+
+v2[2] -> v3:
+- drop changes to rename exisiting APIs.
+- add new 'patch 1' with generic helpers for sysfs show/store.
+- used guard(mutex)() in place of mutex_lock/unlock.
+- update kernel-parameters text to 'enable if supported by hardware'.
+- disable auto_sel for all cpus if one fails in auto_sel_mode.
+- use min/max_perf values if set from bootloader.
+- general code improvements, error handling and reduced redundancies.
+
+v1[1] -> v2:
+- Move CPC register set sysfs from acpi_cppc to cpufreq directory.
+- No sysfs to set auto_sel and epp. They were merged from diff series.
+- Remove 'cppc_cpufreq_epp' instance of the 'cppc_cpufreq' driver.
+- Synchronize perf_min/max with policy min/max.
+- Update policy min/max Toggling auto_select.
+- add sysfs to update the perf_limited register.
+
+Sumit Gupta (8):
+  cpufreq: CPPC: Add generic helpers for sysfs show/store
+  ACPI: CPPC: Add cppc_get_perf() API to read performance controls
+  ACPI: CPPC: extend APIs to support auto_sel and epp
+  ACPI: CPPC: add APIs and sysfs interface for min/max_perf
+  ACPI: CPPC: add APIs and sysfs interface for perf_limited register
+  cpufreq: CPPC: Add sysfs for min/max_perf and perf_limited
+  cpufreq: CPPC: update policy min/max when toggling auto_select
+  cpufreq: CPPC: add autonomous mode boot parameter support
+
+ .../ABI/testing/sysfs-devices-system-cpu      |  46 ++
+ .../admin-guide/kernel-parameters.txt         |  12 +
+ drivers/acpi/cppc_acpi.c                      | 196 +++++++-
+ drivers/cpufreq/cppc_cpufreq.c                | 425 ++++++++++++++++--
+ include/acpi/cppc_acpi.h                      |  39 +-
+ 5 files changed, 676 insertions(+), 42 deletions(-)
+
+[1] https://lore.kernel.org/lkml/20250211103737.447704-1-sumitg@nvidia.com/
+[2] https://lore.kernel.org/lkml/20250823200121.1320197-1-sumitg@nvidia.com/
+[3] https://lore.kernel.org/lkml/20251001150104.1275188-1-sumitg@nvidia.com/
 
 -- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
+2.34.1
 
-~~ When things go utterly wrong vim users can always type :help! ~~
 
