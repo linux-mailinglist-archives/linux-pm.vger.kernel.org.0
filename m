@@ -1,203 +1,136 @@
-Return-Path: <linux-pm+bounces-37487-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37488-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B9ED6C38410
-	for <lists+linux-pm@lfdr.de>; Wed, 05 Nov 2025 23:50:00 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A1A6C3843A
+	for <lists+linux-pm@lfdr.de>; Wed, 05 Nov 2025 23:52:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5889E3AEBC4
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Nov 2025 22:49:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B31191890EC8
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Nov 2025 22:50:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1816F23D7FD;
-	Wed,  5 Nov 2025 22:49:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EC922D3739;
+	Wed,  5 Nov 2025 22:49:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=dwurp.de header.i=@dwurp.de header.b="GAzy5t8M"
+	dkim=pass (2048-bit key) header.d=aurel32.net header.i=@aurel32.net header.b="p9/HaLn8"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail.dwurp.de (mail.dwurp.de [185.183.156.149])
+Received: from hall.aurel32.net (hall.aurel32.net [195.154.113.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C0F3224B05
-	for <linux-pm@vger.kernel.org>; Wed,  5 Nov 2025 22:49:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.183.156.149
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EE372D2388;
+	Wed,  5 Nov 2025 22:49:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.154.113.88
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762382982; cv=none; b=r0aCZsRJ97NLompFDqlLQc1zW4KAZhmM5u7Xur54mn57pWdq6D2HD2TTjep7VdCo8xQgR8C1d1R4Y3JUaKvy2BIjKIiRJIO4Rq/WjwPHYrLevnBDOmu3+wbXveA02TerZddEuH5lyccIKMjm9KIbVNNbGcbcVOEgM5jETD4Fqa0=
+	t=1762382986; cv=none; b=dwu+JAO51TLWKCIr386yXCmyGjcQMaOLnS4qehj0hVzSWadqFYvNggNETlpg7TansEWonMdzrNvFryY6Xd9y0qqUUylvSUHTxS0Zx7Lg6Xjvpc8S+PHx2VUsSU1XWaZn18TYerFVvIvDkNWLHNl4yIFA9AqnzH78flFsEP+xEOY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762382982; c=relaxed/simple;
-	bh=9F3XJYLt35mAIFM063WVpEY5tPNT/Nh59aryt/Rq8Xg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dWTABDOitl/N8/zvj8Ydblv0spvuWVjwEFLD0G4OSO050DNU8ZkG+VSTbaPQsAhOzJ3VGP5Nfvgm1pjpWnCiOU7kOEXKXkaZmkerMYG3pqXG3aA+YLZPcU1lmwGhWjvlytMU6QdoqC1cJcxBXACV0ahnXwYk8dvqy4Ogx+zqMGA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=dwurp.de; spf=pass smtp.mailfrom=dwurp.de; dkim=pass (1024-bit key) header.d=dwurp.de header.i=@dwurp.de header.b=GAzy5t8M; arc=none smtp.client-ip=185.183.156.149
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=dwurp.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dwurp.de
-Message-ID: <20427849-18d2-4e86-aefd-41e8cf168554@dwurp.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dwurp.de; s=mail;
-	t=1762382971;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=wDrFD3ika0qCdZhHIcveH5pRUZ45bC2mb/Wutkpszk0=;
-	b=GAzy5t8M+mGjRitF+bjKd8ElZ6Ag6ZDYUquemHi4jZXvyhRTOSo3UTGuhuDhfZ1dPOdqVQ
-	n8OSVkMqVE4YhcjlN0+XUONgsKQAsvntufq6qjdyxhVXYffQWQL09050iPhuSCZYX877xa
-	aZOSoIAguHiEuf4nmjpE2cCQrcIEZMQ=
-Date: Wed, 5 Nov 2025 23:49:29 +0100
+	s=arc-20240116; t=1762382986; c=relaxed/simple;
+	bh=9W+JZgh6zEumSbgA+u40BdlWRsUbWYl5s3WkNt9fkPo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PQ8iDy02U9OUkKfWloqoGf8xXCt6U8z7brzox9l++FfaYbaCQhEJrez/dlAqphAdGZkK2dxO/e/cp6jRVT6BLj/It1+aAbVOwsNr+6S/raTtx1ZUidV5Tg41TxWiwxakc5exvMNvhS7idS85dDXgE2jFCHFId0+0OasylzMEiL4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=aurel32.net; spf=pass smtp.mailfrom=aurel32.net; dkim=pass (2048-bit key) header.d=aurel32.net header.i=@aurel32.net header.b=p9/HaLn8; arc=none smtp.client-ip=195.154.113.88
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=aurel32.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aurel32.net
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=aurel32.net
+	; s=202004.hall; h=In-Reply-To:Content-Transfer-Encoding:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:Reply-To:
+	Subject:Content-ID:Content-Description:X-Debbugs-Cc;
+	bh=7B7gYt+LYlqrQkECAw+Erqll5FdWOFdju69wPPGYGxM=; b=p9/HaLn80YendaEi5jpbR2NlAy
+	mmLPxWqqxHK9lg4A6MmefTNtD17WB2gX1XXiiEEMjMwutwfEnpYic/hupIJwGxc7yBsM9ntzxsQ4D
+	uC9d7qDgfARmpqYG+mB/lfWHr4w15x+D1OQuaW1GEqKY3vTaY+Ii+Fk/QSZxtpoF/mHIPi37dhJPW
+	KexrSMMUp6GVBIfZj1YXqoyTDmj3dIYudXM3XwglXE9HOCJTjQyjUP7kmOD6iW/fqSBfJZbw/xxmz
+	KHVCjFHztMyARI3qxDfDTkQGWhi6bh5+LKrd8JDv/osSeeHMMKyU9U++hj3iT1SHWCSrdiq2mgnsB
+	rtgInH2g==;
+Received: from [2a01:e34:ec5d:a741:1ee1:92ff:feb4:5ec0] (helo=ohm.rr44.fr)
+	by hall.aurel32.net with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.98.2)
+	(envelope-from <aurelien@aurel32.net>)
+	id 1vGmJt-0000000Ag2k-3AUR;
+	Wed, 05 Nov 2025 23:49:37 +0100
+Date: Wed, 5 Nov 2025 23:49:37 +0100
+From: Aurelien Jarno <aurelien@aurel32.net>
+To: Troy Mitchell <troy.mitchell@linux.spacemit.com>
+Cc: Lee Jones <lee@kernel.org>,
+	Sebastian Reichel <sebastian.reichel@collabora.com>,
+	linux-kernel@vger.kernel.org, Sebastian Reichel <sre@kernel.org>,
+	Yixun Lan <dlan@gentoo.org>, Paul Walmsley <pjw@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+	linux-riscv@lists.infradead.org, spacemit@lists.linux.dev,
+	linux-pm@vger.kernel.org
+Subject: Re: (subset) [PATCH v5 0/2] driver: reset: spacemit-p1: add driver
+ for poweroff/reboot
+Message-ID: <aQvUgQvM48LsSzei@aurel32.net>
+Mail-Followup-To: Troy Mitchell <troy.mitchell@linux.spacemit.com>,
+	Lee Jones <lee@kernel.org>,
+	Sebastian Reichel <sebastian.reichel@collabora.com>,
+	linux-kernel@vger.kernel.org, Sebastian Reichel <sre@kernel.org>,
+	Yixun Lan <dlan@gentoo.org>, Paul Walmsley <pjw@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+	linux-riscv@lists.infradead.org, spacemit@lists.linux.dev,
+	linux-pm@vger.kernel.org
+References: <20251102230352.914421-1-aurelien@aurel32.net>
+ <176213091347.301408.11587695003687450479.b4-ty@collabora.com>
+ <FA447DF1D2398A79+aQlVuEbrLMCiGMpc@kernel.org>
+ <20251105093347.GD8064@google.com>
+ <E205F88FB1EE06C5+aQscI0Uy7pgiMzEt@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: power_supply sbs-9-000b: driver failed to report `technology'
- property: -5 on rk3399 google-gru
-To: Sebastian Reichel <sre@kernel.org>
-Cc: linux-pm@vger.kernel.org
-References: <078eef57-07c9-420a-99b1-e47b3dd93204@dwurp.de>
- <5njqjtvi72z35b5chhgf66jqucvycy43ul3z4b35nfijhod2ah@v7mtbeb3mqp5>
-Content-Language: en-US, de-DE
-From: Sebastian Fleer <dev@dwurp.de>
-In-Reply-To: <5njqjtvi72z35b5chhgf66jqucvycy43ul3z4b35nfijhod2ah@v7mtbeb3mqp5>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <E205F88FB1EE06C5+aQscI0Uy7pgiMzEt@kernel.org>
+User-Agent: Mutt/2.2.13 (2024-03-09)
 
-Hey,
+On 2025-11-05 17:42, Troy Mitchell wrote:
+> On Wed, Nov 05, 2025 at 09:34:21AM +0000, Lee Jones wrote:
+> > On Tue, 04 Nov 2025, Troy Mitchell wrote:
+> >=20
+> > > On Mon, Nov 03, 2025 at 01:48:33AM +0100, Sebastian Reichel wrote:
+> > > >=20
+> > > > On Mon, 03 Nov 2025 00:01:58 +0100, Aurelien Jarno wrote:
+> > > > > This adds poweroff/reboot support for the SpacemiT P1 PMIC chip, =
+which is
+> > > > > commonly paired with the SpacemiT K1 SoC.
+> > > > >=20
+> > > > > Note: For reliable operation, this driver depends on a this patch=
+ that adds
+> > > > > atomic transfer support to the SpacemiT I2C controller driver:
+> > > > >   https://lore.kernel.org/spacemit/20251009-k1-i2c-atomic-v4-1-a8=
+9367870286@linux.spacemit.com/
+> ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> dependency is here.
 
-On 11/3/25 00:44, Sebastian Reichel wrote:
-> Hi,
-> 
-> On Fri, Oct 31, 2025 at 01:03:02PM +0100, Sebastian Fleer wrote:
->> Hi,
->>
->> on an Acer Chromebook Tab 10 (RK3399 google-gru/scarlet) we see a lot of these error messages
->> (sometime multiple times per second):
->>
->> [  247.155467] power_supply sbs-9-000b: driver failed to report `technology' property: -5
->>
->> With POWER_SUPPLY_DEBUG=y these look like this:
->>
->> [  142.335138] power_supply sbs-9-000b: driver failed to report `technology' property: -5
->> [  142.352393] sbs-battery 9-000b: sbs_unit_adjustment: no need for unit conversion 0
->> [  142.352437] sbs-battery 9-000b: sbs_get_property: property = 0, value = 1
->> [  142.353283] sbs-battery 9-000b: sbs_unit_adjustment: no need for unit conversion 51
->> [  142.353310] sbs-battery 9-000b: sbs_get_property: property = 51, value = 0
->> [  142.355202] sbs-battery 9-000b: sbs_unit_adjustment: no need for unit conversion 2
->> [  142.355231] sbs-battery 9-000b: sbs_get_property: property = 2, value = 0
->> [  142.359681] sbs-battery 9-000b: sbs_read_string_data_fallback: i2c read at address 0x22 failed
->>
->> Battery status reporting with upower seems to be hit or miss:
->>
->> $ upower -i /org/freedesktop/UPower/devices/battery_sbs_9_000b
->>    native-path:          sbs-9-000b
->>    vendor:               <unkn>
->>    model:                <BATT>
->>    serial:               ffff
->>    power supply:         yes
->>    updated:              Fri Oct 31 12:41:02 2025 (3 seconds ago)
->>    has history:          yes
->>    has statistics:       yes
->>    battery
->>      present:             yes
->>      rechargeable:        yes
->>      state:               discharging
->>      warning-level:       action
->>      energy:              0 Wh
->>      energy-empty:        0 Wh
->>      energy-full:         36.55 Wh
->>      energy-full-design:  33.78 Wh
->>      voltage-min-design:  3.84 V
->>      voltage-max-design:  3.84 V
->>      energy-rate:         0 W
->>      charge-cycles:       N/A
->>      percentage:          0%
->>      temperature:         23.9 degrees C
->>      capacity:            100%
->>      icon-name:          'battery-caution-symbolic'
->>    History (charge):
->>      1761910862  0.000   discharging
->>      1761910806  62.000  discharging
->>      1761910801  0.000   discharging
->>      1761910796  62.000  discharging
->>      1761910791  0.000   empty
->>      1761910755  62.000  discharging
->>    History (rate):
->>      1761910851  0.000   discharging
->>      1761910821  4.380   discharging
->>      1761910791  0.000   empty
->>      1761910760  1.658   discharging
->>
->> $ upower -i /org/freedesktop/UPower/devices/battery_sbs_9_000b
->>    native-path:          sbs-9-000b
->>    vendor:               <unkn>
->>    model:                <BATT>
->>    serial:               ffff
->>    power supply:         yes
->>    updated:              Fri Oct 31 12:41:07 2025 (18 seconds ago)
->>    has history:          yes
->>    has statistics:       yes
->>    battery
->>      present:             yes
->>      rechargeable:        yes
->>      state:               discharging
->>      warning-level:       none
->>      energy:              22.6548 Wh
->>      energy-empty:        0 Wh
->>      energy-full:         36.54 Wh
->>      energy-full-design:  33.77 Wh
->>      voltage-min-design:  3.84 V
->>      voltage-max-design:  3.84 V
->>      capacity-level:      Unknown
->>      energy-rate:         73.1904 W
->>      charge-cycles:       N/A
->>      time to empty:       18.6 minutes
->>      percentage:          62%
->>      capacity:            100%
->>      icon-name:          'battery-full-symbolic'
->>    History (charge):
->>      1761910867  62.000  discharging
->>      1761910862  0.000   discharging
->>      1761910806  62.000  discharging
->>      1761910801  0.000   discharging
->>      1761910796  62.000  discharging
->>      1761910791  0.000   empty
->>    History (rate):
->>      1761910867  73.190  discharging
->>      1761910851  0.000   discharging
->>      1761910821  4.380   discharging
->>      1761910791  0.000   empty
->>
->> These errors show up with kernel 6.12.55 as well as 6.17.5.
->>
->> More context is available here: https://gitlab.postmarketos.org/postmarketOS/pmaports/-/issues/2261
->>
->> Any idea on how to fix this is highly appreciated.
->>
->> Best regards
->> Sebastian
-> 
-> Looks like 'google,cros-ec-i2c-tunnel' being crappy again. Can
-> you check, that you are running the latest EC firmware? Apparently
-> things are being fixed in its firmware, see e.g. this thread:
-> 
-> https://lore.kernel.org/all/20240418-sbs-time-empty-now-error-v3-1-f286e29e3fca@collabora.com/
-> 
-> Greetings,
-> 
-> -- Sebastian
+Oh indeed, I have forgotten about this part.
 
-Thanks for your hint. In this particular case "the latest EC firmware"
-means one from 2021, since scarlet doesn't receive updates by Google
-anymore, unfortunately.
+> > > > >=20
+> > > > > [...]
+> > > >=20
+> > > > Applied, thanks!
+> > > >=20
+> > > > [1/2] driver: reset: spacemit-p1: add driver for poweroff/reboot
+> > > >       commit: 28124cc0fb8c7dc01a6834d227351e25d9a92c58
+> > > Should we apply it now? The dependency patch hasn=E2=80=99t been merg=
+ed yet...
+> >=20
+> > What is the dependency?
+> I point it out above.
+> Without this patch, reboot and shutdown would end up calling the non-atom=
+ic i2c_transfer.
 
-I don't know whether it's possible to build an EC firmware for this
-device with some of the fixes mentioned in the linked thread. But even
-if so, this would be difficult to distribute to other users running
-mainline Linux on this device.
+Note however this is not a strong dependency, it is needed to make the=20
+reset or power off reliable. Calling non-atomic i2c_transfer lead to a=20
+successful reset or power off a bit more than half of the time.
 
-If there is a way to solve this problem on the kernel side, that would
-be great. But I can also understand if it is not desirable to work
-around bugs in an older EC version in the kernel driver.
+Regards
+Aurelien
 
-Best regards
-Sebastian
+--=20
+Aurelien Jarno                          GPG: 4096R/1DDD8C9B
+aurelien@aurel32.net                     http://aurel32.net
 
