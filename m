@@ -1,47 +1,47 @@
-Return-Path: <linux-pm+bounces-37423-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37424-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39AFBC34ABB
-	for <lists+linux-pm@lfdr.de>; Wed, 05 Nov 2025 10:05:26 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A7E5C34A94
+	for <lists+linux-pm@lfdr.de>; Wed, 05 Nov 2025 10:04:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id ADA174FC25C
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Nov 2025 09:00:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B0917561F59
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Nov 2025 09:00:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B73962F066A;
-	Wed,  5 Nov 2025 09:00:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 247BE2F12B7;
+	Wed,  5 Nov 2025 09:00:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A/KPLMib"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qkk/g2HF"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75F1F2D948F;
-	Wed,  5 Nov 2025 09:00:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFC752F12A5;
+	Wed,  5 Nov 2025 09:00:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762333214; cv=none; b=VUKYo2ZXWM52f0468T7qTXYE9CPfDHbAV7ub72dd2t8c6bBeDEPWmirj03D+SNMKN3csl+eolWAKGarGoLgdjk/xS5WL1xF6+CMpvt0j6cT2nx+YAa2nxFti4/ftdIqqKkJzkYvcTQMfJCiReYkgQBhUWUUC+82UJtNJZqzOzqQ=
+	t=1762333216; cv=none; b=hCbqhp9OrVVpcWxjyUhEO3+E41W0CrpYdtgirvGO0YuxLyKgO01RkM/gCoRXsTBlhUQie81l+9cSAj4e2pbii3rITBp6rDzNPg9kZmt4dBPkrh3rzcKamiLhlSurz64FQW1GOPMxtVXG8jbUZJZegqDwLxAEoz3k6l1qWU8srL8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762333214; c=relaxed/simple;
-	bh=yKua4EFf/iQ9wqQ49OIZDbWZGZXzrKwgI56kqg8U9bI=;
+	s=arc-20240116; t=1762333216; c=relaxed/simple;
+	bh=rEzwEs+yJAIoQExDfVRQ9vn4jFUd5q2ZMcOlcMimKqs=;
 	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
-	 Message-Id:Subject; b=K6SA7ZJH5J7h8nm6rYCRxDzELqlc57STgrLLN9Oc1H5DmzaH4/qiNAuGtln5GQSyR1NLXCnevvAJtlvHrpVZkaUG02Q9PJ3/bVnVBHf3MqXsE+Hh6JrwkCpG7P3DDvUeRFQB+p3S9skMVxdRfgWRKsRWL1bUuGwCX2nlLQw29Vk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A/KPLMib; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D79F8C4CEFB;
-	Wed,  5 Nov 2025 09:00:13 +0000 (UTC)
+	 Message-Id:Subject; b=Q3FTkJhIFc5aTkUDq+1bTxwvKyzpBJvIvJ+bxpJwlKYJXHlKkRFw6p+89oe/1Ff6XZmnDI2UEPhLwh1xZN1DOfwp+AKYlmWkDLX16tzdl7Y/d45juoKU/lUhDtHMDBi48bxLGwDLqbUfd3yXm4FJJcBCGe8QH+It5F80nG2qi9c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qkk/g2HF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46BABC116B1;
+	Wed,  5 Nov 2025 09:00:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762333214;
-	bh=yKua4EFf/iQ9wqQ49OIZDbWZGZXzrKwgI56kqg8U9bI=;
+	s=k20201202; t=1762333215;
+	bh=rEzwEs+yJAIoQExDfVRQ9vn4jFUd5q2ZMcOlcMimKqs=;
 	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
-	b=A/KPLMibnINLMRVsLQd1DDnNoe1f70o5j/npukAxp624gpaLMEFr1GG5t5Qr6yMG3
-	 4lPC2a/HqEEgJZl5V7ejjH6R1BA7k5VGLp7OQ3vV47Rcr3QX87SdMomgh51/beWmla
-	 KPgFroOOHq8IDKVSwIaWt0YYmgLoFNaO5hsYvp3eUjFDoGBWGbb45v/729t6Kg0xF3
-	 vK/fbHBOfS/NdiBlqUN5uFz7zBwiN+0+gbVc2l22YXjn63HvMcRWjdNQPV+1aiv6qR
-	 Jv1zMzDA75P4njxJqP1ESuKho+8bvsIgWb3CHRTOouEFgIP3VzO2jGSD3O9LDIK9W2
-	 hm4fSJ+7Y7/sA==
-Date: Wed, 05 Nov 2025 03:00:12 -0600
+	b=qkk/g2HFQsw36jgb+BG6+sHZFJCiPoiZr4OUOZjXtnFUgUL6rNzcUukcJio9Xx9Uq
+	 aT0gljuWDVheRc1wULO3Fr2cLJvrqxbeDQ56b/GhcL0pdKtAT/uXdkt+gF+lM0LBas
+	 m7e1FRGPEVCWHfL9WQFnUZeS5K7ZaOvFaDBXdFYbGc/Cmn4+tu5b3zqgjlsNi4A2Pq
+	 8TVR9SJJ+gyTn4Lm7ro+cT8z4i8tLaBmu/JTTNVirrp1/lxGEx2sQbCV+SqGoEJihO
+	 NtOtQLZmj8E/V0AJ+rZ7q5YYFJAZIqBVPu4843Dl9k1MatNFGjBCJ45S27w+s693E5
+	 Cu4FtSzHzXDzg==
+Date: Wed, 05 Nov 2025 03:00:14 -0600
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
@@ -51,60 +51,83 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 From: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: Conor Dooley <conor+dt@kernel.org>, linux-kernel@vger.kernel.org, 
- Lee Jones <lee@kernel.org>, devicetree@vger.kernel.org, 
- Linus Walleij <linus.walleij@linaro.org>, 
- Sebastian Reichel <sre@kernel.org>, Andreas Kemnade <andreas@kemnade.info>, 
- Bartosz Golaszewski <brgl@bgdev.pl>, 
+Cc: Linus Walleij <linus.walleij@linaro.org>, 
  Alexandre Belloni <alexandre.belloni@bootlin.com>, 
- Matti Vaittinen <mazziesaccount@gmail.com>, Stephen Boyd <sboyd@kernel.org>, 
- Pavel Machek <pavel@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- linux-gpio@vger.kernel.org, linux-clk@vger.kernel.org, 
- linux-pm@vger.kernel.org, linux-leds@vger.kernel.org, 
+ linux-rtc@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>, 
  Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>, 
- Michael Turquette <mturquette@baylibre.com>, linux-rtc@vger.kernel.org, 
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>
+ Liam Girdwood <lgirdwood@gmail.com>, linux-pm@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Bartosz Golaszewski <brgl@bgdev.pl>, 
+ Pavel Machek <pavel@kernel.org>, linux-leds@vger.kernel.org, 
+ Sebastian Reichel <sre@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+ Michael Turquette <mturquette@baylibre.com>, devicetree@vger.kernel.org, 
+ linux-gpio@vger.kernel.org, Matti Vaittinen <mazziesaccount@gmail.com>, 
+ Mark Brown <broonie@kernel.org>, Andreas Kemnade <andreas@kemnade.info>, 
+ Lee Jones <lee@kernel.org>, linux-clk@vger.kernel.org, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>
 To: Matti Vaittinen <matti.vaittinen@linux.dev>
-In-Reply-To: <48fe6e2642db4484640b173cd71be1b245929122.1762327887.git.mazziesaccount@gmail.com>
+In-Reply-To: <a45e7230ecd08eed2081cbe7e7b4719d1fc8a581.1762327887.git.mazziesaccount@gmail.com>
 References: <cover.1762327887.git.mazziesaccount@gmail.com>
- <48fe6e2642db4484640b173cd71be1b245929122.1762327887.git.mazziesaccount@gmail.com>
-Message-Id: <176233320981.143013.4115240062372455834.robh@kernel.org>
-Subject: Re: [PATCH v3 01/16] dt-bindings: regulator: ROHM BD72720
+ <a45e7230ecd08eed2081cbe7e7b4719d1fc8a581.1762327887.git.mazziesaccount@gmail.com>
+Message-Id: <176233321101.143066.16817673032324313304.robh@kernel.org>
+Subject: Re: [PATCH v3 04/16] dt-bindings: power: supply: BD72720 managed
+ battery
 
 
-On Wed, 05 Nov 2025 09:35:59 +0200, Matti Vaittinen wrote:
+On Wed, 05 Nov 2025 09:36:49 +0200, Matti Vaittinen wrote:
 > From: Matti Vaittinen <mazziesaccount@gmail.com>
 > 
-> The ROHM BD72720 is a new PMIC with 10 BUCk and 11 LDO regulators.
+> The BD72720 PMIC has a battery charger + coulomb counter block. These
+> can be used to manage charging of a lithium-ion battery and to do fuel
+> gauging.
 > 
-> The BD72720 is designed to support using the BUCK10 as a supply for
-> the LDOs 1 to 4. When the BUCK10 is used for this, it can be set to a
-> LDON_HEAD mode. In this mode, the BUCK10 voltage can't be controlled by
-> software, but the voltage is adjusted by PMIC to match the LDO1 .. LDO4
-> voltages with a given offset. Offset can be 50mV .. 300mV and is
-> changeable at 50mV steps.
+> ROHM has developed a so called "zero-correction" -algorithm to improve
+> the fuel-gauging accuracy close to the point where battery is depleted.
+> This relies on battery specific "VDR" tables, which are measured from
+> the battery, and which describe the voltage drop rate. More thorough
+> explanation about the "zero correction" and "VDR" parameters is here:
+> https://lore.kernel.org/all/676253b9-ff69-7891-1f26-a8b5bb5a421b@fi.rohmeurope.com/
 > 
-> Add 'ldon-head-microvolt' property to denote a board which is designed
-> to utilize the LDON_HEAD mode.
-> 
-> All other properties are already existing.
-> 
-> Add dt-binding doc for ROHM BD72720 regulators to make it usable.
+> Document the VDR zero-correction specific battery properties used by the
+> BD72720 and some other ROHM chargers.
 > 
 > Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 > 
 > ---
+> NOTE:
+> Linus' rb-tag holds only if there's no further comments from Rob.
+> 
 > Revision history:
 >  v2 => v3:
->  - drop unnecessary descriptions
->  - use microvolts for the 'ldon-head' dt-property
+>  - Constrain VDR threshold voltage to 48V
+>  - Use standard '-bp' -suffix for the rohm,volt-drop-soc
 > 
 >  RFCv1 => v2:
->  - No changes
+>  - Add units to rohm,volt-drop-soc (tenths of %)
+>  - Give real temperatures matching the VDR tables, instead of vague
+>    'high', 'normal', 'low', 'very low'. (Add table of temperatures and
+>    use number matching the right temperature index in the VDR table name).
+>  - Fix typoed 'algorithm' in commit message.
+> 
+> The parameters are describing the battery voltage drop rates - so they
+> are properties of the battery, not the charger. Thus they do not belong
+> in the charger node.
+> 
+> The right place for them is the battery node, which is described by the
+> generic "battery.yaml". I was not comfortable with adding these
+> properties to the generic battery.yaml because they are:
+>   - Meaningful only for those charger drivers which have the VDR
+>     algorithm implemented. (And even though the algorithm is not charger
+>     specific, AFAICS, it is currently only used by some ROHM PMIC
+>     drivers).
+>   - Technique of measuring the VDR tables for a battery is not widely
+>     known. AFAICS, only folks at ROHM are measuring those for some
+>     customer products. We do have those tables available for some of the
+>     products though (Kobo?).
 > ---
->  .../regulator/rohm,bd72720-regulator.yaml     | 149 ++++++++++++++++++
->  1 file changed, 149 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/regulator/rohm,bd72720-regulator.yaml
+>  .../power/supply/rohm,vdr-battery.yaml        | 80 +++++++++++++++++++
+>  1 file changed, 80 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/power/supply/rohm,vdr-battery.yaml
 > 
 
 My bot found errors running 'make dt_binding_check' on your patch:
@@ -112,15 +135,12 @@ My bot found errors running 'make dt_binding_check' on your patch:
 yamllint warnings/errors:
 
 dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/regulator/rohm,bd72720-regulator.yaml: patternProperties:^buck[1-10]$:properties:rohm,ldon-head-microvolt: '$ref' should not be valid under {'const': '$ref'}
-	hint: Standard unit suffix properties don't need a type $ref
-	from schema $id: http://devicetree.org/meta-schemas/core.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/power/supply/rohm,vdr-battery.example.dtb: battery (simple-battery): 'degrade-cycle-microamp-hours', 'rohm,volt-drop-0-microvolt', 'rohm,volt-drop-1-microvolt', 'rohm,volt-drop-2-microvolt', 'rohm,volt-drop-3-temp-microvolt', 'rohm,volt-drop-soc-bp', 'rohm,volt-drop-temperatures-millicelsius', 'rohm,voltage-vdr-thresh-microvolt' do not match any of the regexes: '^ocv-capacity-table-[0-9]+$', '^pinctrl-[0-9]+$'
+	from schema $id: http://devicetree.org/schemas/power/supply/battery.yaml
 
 doc reference errors (make refcheckdocs):
-Warning: Documentation/devicetree/bindings/regulator/rohm,bd72720-regulator.yaml references a file that doesn't exist: Documentation/devicetree/bindings/mfd/rohm,bd72720-pmic.yaml
-Documentation/devicetree/bindings/regulator/rohm,bd72720-regulator.yaml: Documentation/devicetree/bindings/mfd/rohm,bd72720-pmic.yaml
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/48fe6e2642db4484640b173cd71be1b245929122.1762327887.git.mazziesaccount@gmail.com
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/a45e7230ecd08eed2081cbe7e7b4719d1fc8a581.1762327887.git.mazziesaccount@gmail.com
 
 The base for the series is generally the latest rc1. A different dependency
 should be noted in *this* patch.
