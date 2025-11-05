@@ -1,130 +1,235 @@
-Return-Path: <linux-pm+bounces-37460-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37461-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1F4BC35B5A
-	for <lists+linux-pm@lfdr.de>; Wed, 05 Nov 2025 13:53:34 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C9CBC35BC6
+	for <lists+linux-pm@lfdr.de>; Wed, 05 Nov 2025 13:59:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C1F204E6408
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Nov 2025 12:53:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3CF79188B602
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Nov 2025 12:59:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9564A315D30;
-	Wed,  5 Nov 2025 12:53:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 130B12F1FD2;
+	Wed,  5 Nov 2025 12:58:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="tO88aW2X"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LIOGxatn"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yx1-f53.google.com (mail-yx1-f53.google.com [74.125.224.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA82B314B64
-	for <linux-pm@vger.kernel.org>; Wed,  5 Nov 2025 12:53:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D4FE30AAC2
+	for <linux-pm@vger.kernel.org>; Wed,  5 Nov 2025 12:58:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762347209; cv=none; b=dgTrWuPjfu3UFqNYa2WeyYYvScxEnA6wdhTj1l3SBMPyRHZCCNK9iZVbS+RZ4wBoJrIemu17T5eckbuCvmquRLtkxhtyIsLCk2GkC4roZcQUOBELPRibaf/4yT5e9h64MUCVpw2rBmlkLLRTjSiFxpV2QkYlWGQCutEpbuqM78Y=
+	t=1762347514; cv=none; b=mKUbvtT89yiKwnNPDgWufIILHjq5ekXWvP8fBtoHPz+Xfp2yRdF0A8ymOJJ2Z9w84GmhqHJ4BZ3T/1HFfjHjG5i30N1wm/uScT675KEAokqMmg1eXT3uEPRyx+tqj8Ep/jLQe8R9+df8pxYGgbtQwNBymmSF8mrZxv5SZBGC+YA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762347209; c=relaxed/simple;
-	bh=+ZOOz+bd9i752tRldCuS12aOoHVwIBWiXPKmP/KxxI8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FyLSxBKcCPR0Nr8wpyblclES1QlbpX9UwIJX9YrSWloQ9BUn/s1/JMXh+JxprSMCsynKL9nK/FszojtvMXyV5ZWK1LmpX21qbMh0IwUSQ2d9cY+zislIEiyOeW1H4hz8iOnZfFzpddEwKpVwwx3eBeJy2tL0nhdRL2Dc5sNfe8w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=tO88aW2X; arc=none smtp.client-ip=74.125.224.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yx1-f53.google.com with SMTP id 956f58d0204a3-63fd2b18c40so869678d50.0
-        for <linux-pm@vger.kernel.org>; Wed, 05 Nov 2025 04:53:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1762347207; x=1762952007; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Jssj8tcz0aY4xx9zjyBXJVY+CGYy95sOugmtidwxoNQ=;
-        b=tO88aW2XEymmZlg8+1B+OhDnem5E2e+1wEdhZf6Qt7stm8/6vymVy2KvLgaRtacbsT
-         IpGU+0SHBDJiCo3Op8nJCoL6y0se97A+TqZE0hXmrg5pO5cXmwdMLInAjD7/uzPwb5yJ
-         Do5WLMB5Ir0zQL3oAG+erHu747Ox3Nyh4IUEdrWcRG41KTcLboXr0WdtNfSgshRr35mR
-         zhZn+/+B82GjS5HZe2S8yB4CSeE8KcQF5KN3Y8MJkj7+bSQOqsa91r5S1Yx44g9kKjU5
-         2eaFJMXlzbpjv7CXr+HzSpY9ziYh425irVZol3XlkXQCUTpeq1qjA6RzlFBPAwVxtFIy
-         hpEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762347207; x=1762952007;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Jssj8tcz0aY4xx9zjyBXJVY+CGYy95sOugmtidwxoNQ=;
-        b=k/uTv+e9YYQ82zwkko0XtaJ5cbbXfgmQ/7cLDDHbfLfgz4CUzQFIcRRtxOXe2TBjUn
-         7H0xP1MOD2k7kPE0eRlmuXc9UwLjzLmeJ3gmsIEjzK8Ag/n9POvOQWD+LK7GDnX7KUOc
-         vJS3XJkA95XYvV3H9rBAbIA2u4gjUA/kAdcYSAbnk7AX8qCqXFZZySsX4k9BypL2lmAp
-         CS6nN5zuRpVX2n6UDFFUn2GBqVlfFA+uFPW2bWIswqShs7vuWTclrAmIpWAcM2RR858r
-         3/B2M5JeJTDhCHSglEMpc1CMR11EdxknPUwJDNafSvTLcAo2s52t08Die9Cd5C6MLHX2
-         SBtw==
-X-Forwarded-Encrypted: i=1; AJvYcCVyqf3FTyBgV0Kq9jeegMmVctlK5csOSoR7p3DOsjKoUDoG93aKEvnNlutFItpHDY1z2hlINXZ6lg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyFnUOBxMgoDOSksZXrv+nTU3EbnEzwIADApsHPLtlaq/ubHJ8i
-	2E1vpDH8EVFFVcm857Oh0tnJQddqSkYDjGOY8XVE8VwWzyz1fyF+yMWl74bzUb7qVMAXDGSfuLC
-	vLLA5h7tCNJErU11DSeGOjOhdei3LGpubg/2K41x9Dw==
-X-Gm-Gg: ASbGncssFPfIFuSro4no7sPgtmueDR5yVLFl1TDxGUQlRmIOttfiP7zmkwNrlq+Muoc
-	eBX8JtsPaocxA7j7cFOBiF/62ZUeLPVJESsnnDinSqhTx9Rswwy5GUO5R29oif5tDxiXHkzcjss
-	8vW6OaVxr2LRf3FlAzDjJWV5WjXmWWHdcLiLXjLzbJRpN7pO4XW7UrCR48rcezHUxnG0jRAcDEc
-	XtzPr+VJpN5SpN4JESpIIatvSIM+Ox5s6oRvOyaIMl/Ib2NJOsPq+74xqTdzw==
-X-Google-Smtp-Source: AGHT+IEfE0sgdiFVkZmKF1dZxXig2jTxj45vJSC6LxMQVNg2FzDnEW5ajmYQgYPmXHM9+L5zmqyzIeI1NXQMsR92k1k=
-X-Received: by 2002:a05:690e:15d4:b0:63f:bca7:fff6 with SMTP id
- 956f58d0204a3-63fd3571aadmr1876951d50.36.1762347206857; Wed, 05 Nov 2025
- 04:53:26 -0800 (PST)
+	s=arc-20240116; t=1762347514; c=relaxed/simple;
+	bh=UqnjuxcD9MQN38GQZKVy1H8/olE/Jg0mHGkei6faPR8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kXFejQp+JC6JzdP7hFzvBX3oNpkt3suUYwDBuSXNtc7ZUn8HOoBHAEnD3eYtRscFCpm+pU/DjcL86/rkMPpcc/l5tpGD5LouGE/3xzZY6HjHWretkGyuP8S2o54K4OH16iqelMWku+JHt/LXSgPefY8qIyaVdcMWuzG7S/eSjZo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=LIOGxatn; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1762347511;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=PVbDoYss/CrkMhspWj4Y09kqO8xeZn9jROt9O+XHEOA=;
+	b=LIOGxatnaqfZWE7b8abBK3nPg9P6sAWdl7dvLRtyrVuzUoUHhVIvPlyUqiLWy147DNoro4
+	9C/Pa4bYoLgBp/akvilWThL/xbo2P8qxVwr2hFEkEFJYnHyiTwwxv2uB3nsPenEfYbJ1Ws
+	FYfe+qgo9i51sGr0f6VsUtqwu/rIqDo=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-259-qj3XRElbMNKVEpmBFXbGAg-1; Wed,
+ 05 Nov 2025 07:58:26 -0500
+X-MC-Unique: qj3XRElbMNKVEpmBFXbGAg-1
+X-Mimecast-MFC-AGG-ID: qj3XRElbMNKVEpmBFXbGAg_1762347505
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 4BA751956095;
+	Wed,  5 Nov 2025 12:58:24 +0000 (UTC)
+Received: from tpad.localdomain (unknown [10.96.133.2])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 536E2195608E;
+	Wed,  5 Nov 2025 12:58:22 +0000 (UTC)
+Received: by tpad.localdomain (Postfix, from userid 1000)
+	id 7D8C1400FD41F; Wed,  5 Nov 2025 09:57:48 -0300 (-03)
+Date: Wed, 5 Nov 2025 09:57:48 -0300
+From: Marcelo Tosatti <mtosatti@redhat.com>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Frederic Weisbecker <frederic@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+	Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH v3] sched/idle: disable tick in idle=poll idle entry
+Message-ID: <aQtJzK7c/FpSWX74@tpad>
+References: <aQiWfnnSzxsnwa2o@tpad>
+ <20251103123023.GZ3245006@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251031183309.1163384-1-svarbanov@suse.de>
-In-Reply-To: <20251031183309.1163384-1-svarbanov@suse.de>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Wed, 5 Nov 2025 13:52:50 +0100
-X-Gm-Features: AWmQ_blullTpT8Nfe-qMS1ztFmCY1ERew4O3PuDztRrqUvx0BImetke1Cxs_hWE
-Message-ID: <CAPDyKFqHizQKSDCuPopNBWtt1mNCNuWegv9c=PcXEEVaUaP3cw@mail.gmail.com>
-Subject: Re: [PATCH v3 0/4] Add watchdog support for bcm2712
-To: Stanimir Varbanov <svarbanov@suse.de>, Florian Fainelli <florian.fainelli@broadcom.com>
-Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-rpi-kernel@lists.infradead.org, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, linux-pm@vger.kernel.org, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>, Lee Jones <lee@kernel.org>, 
-	Willow Cunningham <willow.e.cunningham@gmail.com>, Stefan Wahren <wahrenst@gmx.net>, 
-	Saenz Julienne <nsaenz@kernel.org>, Andrea della Porta <andrea.porta@suse.com>, 
-	Phil Elwell <phil@raspberrypi.com>, Jonathan Bell <jonathan@raspberrypi.com>, 
-	Dave Stevenson <dave.stevenson@raspberrypi.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251103123023.GZ3245006@noisy.programming.kicks-ass.net>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-On Fri, 31 Oct 2025 at 19:33, Stanimir Varbanov <svarbanov@suse.de> wrote:
->
-> Hello,
->
-> Changes since v2:
->  * 2/4 - Use maxItems instead of wrong minItems in else clause (Conor).
->
-> Comments are welcome!
->
-> regards,
-> ~Stan
->
-> Stanimir Varbanov (4):
->   pmdomain: bcm: bcm2835-power: Prepare to support BCM2712
->   dt-bindings: soc: bcm: Add bcm2712 compatible
->   mfd: bcm2835-pm: Add support for BCM2712
->   arm64: dts: broadcom: bcm2712: Add watchdog DT node
->
->  .../bindings/soc/bcm/brcm,bcm2835-pm.yaml     | 38 ++++++++++++++++---
->  arch/arm64/boot/dts/broadcom/bcm2712.dtsi     |  9 +++++
->  drivers/mfd/bcm2835-pm.c                      |  1 +
->  drivers/pmdomain/bcm/bcm2835-power.c          | 17 +++++++--
->  4 files changed, 55 insertions(+), 10 deletions(-)
->
-> --
-> 2.47.0
->
+On Mon, Nov 03, 2025 at 01:30:23PM +0100, Peter Zijlstra wrote:
+> On Mon, Nov 03, 2025 at 08:48:14AM -0300, Marcelo Tosatti wrote:
+> > 
+> > Commit a5183862e76fdc25f36b39c2489b816a5c66e2e5
+> > ("tick/nohz: Conditionally restart tick on idle exit") allows
+> 
+> Quoting a commit usually shortens the hash to 12 charters, no?
+> 
+> > a nohz_full CPU to enter idle and return from it with the
+> > scheduler tick disabled (since the tick might be undesired noise).
+> > 
+> > The idle=poll case still unconditionally restarts the tick when entering
+> > idle.
+> > 
+> > To reduce the noise for that case as well, stop the tick when entering
+> > idle, for the idle=poll case.
+> > 
+> > Change tick_nohz_full_kick_cpu to set NEED_RESCHED bit, to handle the
+> > case where a new timer is added from an interrupt. This breaks out of
+> > cpu_idle_poll and rearms the timer if necessary.
+> > 
+> > Signed-off-by: Marcelo Tosatti <mtosatti@redhat.com>
+> > 
+> > ---
+> > 
+> > v3: Add comment with proper explanation (Frederic Weisbecker)
+> >     Add signed-off-by			(Thomas Gleixner)
+> > v2: Handle the case where a new timer is added from an interrupt (Frederic Weisbecker)
+> > 
+> >  include/linux/sched.h    |    2 ++
+> >  kernel/sched/core.c      |   10 ++++++++++
+> >  kernel/sched/idle.c      |    2 +-
+> >  kernel/time/tick-sched.c |    7 +++++++
+> >  4 files changed, 20 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/include/linux/sched.h b/include/linux/sched.h
+> > index cbb7340c5866..1f6938dc20cd 100644
+> > --- a/include/linux/sched.h
+> > +++ b/include/linux/sched.h
+> > @@ -2428,4 +2428,6 @@ extern void migrate_enable(void);
+> >  
+> >  DEFINE_LOCK_GUARD_0(migrate, migrate_disable(), migrate_enable())
+> >  
+> > +void set_tif_resched_if_polling(int cpu);
+> > +
+> >  #endif
+> > diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> > index f1ebf67b48e2..f0b84600084b 100644
+> > --- a/kernel/sched/core.c
+> > +++ b/kernel/sched/core.c
+> > @@ -988,6 +988,11 @@ static bool set_nr_if_polling(struct task_struct *p)
+> >  	return true;
+> >  }
+> >  
+> > +void set_tif_resched_if_polling(int cpu)
+> > +{
+> > +	set_nr_if_polling(cpu_rq(cpu)->idle);
+> > +}
+> > +
+> >  #else
+> >  static inline bool set_nr_and_not_polling(struct thread_info *ti, int tif)
+> >  {
+> > @@ -999,6 +1004,11 @@ static inline bool set_nr_if_polling(struct task_struct *p)
+> >  {
+> >  	return false;
+> >  }
+> > +
+> > +void set_tif_resched_if_polling(int cpu)
+> > +{
+> > +	set_tsk_need_resched(cpu_rq(cpu)->idle);
+> > +}
+> >  #endif
+> >  
+> >  static bool __wake_q_add(struct wake_q_head *head, struct task_struct *task)
+> > diff --git a/kernel/sched/idle.c b/kernel/sched/idle.c
+> > index c39b089d4f09..428c2d1cbd1b 100644
+> > --- a/kernel/sched/idle.c
+> > +++ b/kernel/sched/idle.c
+> > @@ -324,7 +324,7 @@ static void do_idle(void)
+> >  		 * idle as we know that the IPI is going to arrive right away.
+> >  		 */
+> >  		if (cpu_idle_force_poll || tick_check_broadcast_expired()) {
+> > -			tick_nohz_idle_restart_tick();
+> > +			tick_nohz_idle_stop_tick();
+> >  			cpu_idle_poll();
+> >  		} else {
+> >  			cpuidle_idle_call();
+> > diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
+> > index c527b421c865..9ec51da49591 100644
+> > --- a/kernel/time/tick-sched.c
+> > +++ b/kernel/time/tick-sched.c
+> > @@ -408,6 +408,13 @@ void tick_nohz_full_kick_cpu(int cpu)
+> >  	if (!tick_nohz_full_cpu(cpu))
+> >  		return;
+> >  
+> > +	/*
+> > +	 * When idle=poll, with the tick disabled (therefore idle CPU looping
+> > +	 * at cpu_idle_poll), if a new timer is added from an interrupt,
+> > +	 * the cpu_idle_poll only exits when TIF_NEED_RESCHED gets set.
+> > +	 */
+> > +	set_tif_resched_if_polling(cpu);
+> > +
+> >  	irq_work_queue_on(&per_cpu(nohz_full_kick_work, cpu), cpu);
+> >  }
+> 
+> I'm confused. Why is this here and not in tick_nohz_start_idle() or
+> something?
+> 
+> 
 
-Patch 1->3 applied for next, thanks!
+Hi Peter,
 
-Note the dt patch (patch2) is also available on the immutable dt branch.
+The codepath being followed is:
 
-Kind regards
-Uffe
+enqueue_timer -> trigger_dyntick_cpu -> wake_up_nohz_cpu ->
+wake_up_full_nohz_cpu -> tick_nohz_full_kick_cpu ->
+set_tif_resched_if_polling. 
+
+So we only set the PF_RESCHED bit if there is a pending timer
+on the CPU.
+
+Calling unconditionally from tick_nohz_start_idle seems strange:
+
+/**
+ * tick_nohz_idle_enter - prepare for entering idle on the current CPU
+ *
+ * Called when we start the idle loop.
+ */
+void tick_nohz_idle_enter(void)
+{
+        struct tick_sched *ts;
+        
+        lockdep_assert_irqs_enabled();
+
+        local_irq_disable();
+
+        ts = this_cpu_ptr(&tick_cpu_sched);
+
+        WARN_ON_ONCE(ts->timer_expires_base);
+
+        tick_sched_flag_set(ts, TS_FLAG_INIDLE);
+        tick_nohz_start_idle(ts);
+
+        local_irq_enable();
+}
+
+Can test for TS_FLAG_INIDLE before calling set_tif_resched_if_polling 
+(but seems not necessary since tick_nohz_full_kick_cpu will wake up the 
+CPU anyway and is a slow path (timer addition)).
+
+What do you think?
+
+
 
