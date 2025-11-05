@@ -1,317 +1,337 @@
-Return-Path: <linux-pm+bounces-37397-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37398-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 159ECC33A0C
-	for <lists+linux-pm@lfdr.de>; Wed, 05 Nov 2025 02:22:48 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC9E6C33D15
+	for <lists+linux-pm@lfdr.de>; Wed, 05 Nov 2025 04:00:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 2A3D84EB73F
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Nov 2025 01:21:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3D42E189FA47
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Nov 2025 03:00:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A607E243956;
-	Wed,  5 Nov 2025 01:20:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE83525F994;
+	Wed,  5 Nov 2025 03:00:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="at0Ugswd"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="keyWjXu8"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from BYAPR05CU005.outbound.protection.outlook.com (mail-westusazon11010039.outbound.protection.outlook.com [52.101.85.39])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D87923D7D9
-	for <linux-pm@vger.kernel.org>; Wed,  5 Nov 2025 01:20:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762305655; cv=none; b=kuuOfK/qwiKMlAfFPnYTalrHgrEHdNyfkLiq6Ggiak0MEymoEXSLHlarpt7y0ZUJkm8GBuOvMmrRl1XtPRbm8fv9SNRsdp04RKkuLckrWSQbz4d0BZ/fqPGKQUYj1qdMSzb+8uR68aZ8QparwNlyrAiK1s0aNvmykSpyT1IuUC8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762305655; c=relaxed/simple;
-	bh=+BvOjstNdthscfcGN46++3tHZYMI8w0sGNk4MpZikcI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gw5CrMEVJkitmB7n5MzWRoPdyF4UEF6S4BQujcLZ24VS24PBYcREWTzJj1evwlLo/S5+8vKYw6+61QCKTBhlkIBzjcNQsI9Rqo7wAapc6EkPfgDyt6nvo4xKwxcqoLa3i8g6F8PQ9Ze+F2Q4RlUsWy2zttimGbVNFSsumomPfOI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=at0Ugswd; arc=none smtp.client-ip=209.85.208.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-63bdfd73e6eso687081a12.0
-        for <linux-pm@vger.kernel.org>; Tue, 04 Nov 2025 17:20:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1762305651; x=1762910451; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VYCtOX6JdfLkpXjrVaBs6n3i8C5xzqN11bh5ynZORqQ=;
-        b=at0UgswdEaq6Jxgx5um9F3kXeg+gOY3arYaDNUsV53xAEocDTjjPSLC8X/lFAGYADM
-         iTrkOQ1wGou8kQy1jC9Rj2vRo2DLIQdgdj8mNlVEU7d5NqR9vcrPsLuDWPfk368e0IHZ
-         SOlDyLUxHVOkQB6TO/lGuxY8aNHlGdoZ3a+WonlRLObMay7B26MUgzTNwkKjMJLG4mnX
-         mPdjka370t53FgjwIF2bI8Nz9IB4a2qADBwwOpvyA9HoBhR32zurbbt0fOd2QhGrLyrT
-         Ury+SxWxCA5vBD7QpR2W9uFaSftW4RCmW24zWBgy0q8zvqXvK0akRFUxmnfXFOB61pxX
-         5/cA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762305651; x=1762910451;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VYCtOX6JdfLkpXjrVaBs6n3i8C5xzqN11bh5ynZORqQ=;
-        b=pgLL4Dq4aVRZFACI8xgg/EEsqGbQ0slibRcY0im3TN1C3EAhlEP93mRB5oRvI8jj1R
-         sc1FxBGD0EqMVAgn6lEytW+X/1+xZNopRRRn/PlPGrr1wRekYiVdjcRq45sYUwDUAvFN
-         SKr3uG0RG1pz+08ScMEcVSIoY9FdUfxJ6W8sSljPrwA3LRDkZY+7KCKjcswQ4mJY7WFn
-         eTeyTcRulrEiK+hhkvYl7ENIWkILcRHaL1xsWRj8EGDIZIWrfFjtSUf3rCGVNKgwARl6
-         Nby4zho0qNeWma/OwzgjBF3iOmpM8C9JOFwkyCHbECE+opFzVX5/I6yOb1PKq1QAeSLa
-         DaWQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV+fB7/dki4Fmby/SoTBcJRgo2HFAzLabn1MUZJWP7UQUbv8FkiByAxLI6Iy5EC6FwlWoQnp59K6Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxJI20piEl9yAZApjml5FDFTrShEytJ1ByM0hgXtXYiKuOpCNR9
-	ZJwZIpAEDEP1ZCh6TlI0vs+ud4WWJZrn2E8pH97XQWGx7PfGyOngptQT8AHkCF7wHMEKCkp21ew
-	L0F/+iPhFpWt+InBqcwQ9LNypPSp9Tuk6ira770yd
-X-Gm-Gg: ASbGncsBmfZ6PQxdLitp66fKlHwiuYGAvDEN+h3wpFZoP6EGBNs7+MLtt+Z5WOdqwXq
-	t4ZLnAyLht3Mr6QC7EuGHLiq/x77j0O7DGLgw8IEDkXprChtZkWUDVx1EeOU0z0HjYr3GzYn/Dy
-	CC3nK9rhZZjJasEcMXC15Jn5EGa0rdefRWVueJ0YGk27er4jmJM2BTOFlMt+rW2RzBtzm4RU1PV
-	DnQgdQkbPGatQM6XuCDOIl6Zmm28OxOHm76i8xPaK8aLI6sulVPgIudU6xfKuCFhAAAo2wqvcUc
-	aI7CGTXYMPcC6UA=
-X-Google-Smtp-Source: AGHT+IER/Rl328p8Mbq9Kpo3IyO2sLgJt2wPzx3JJ1RzOtnXHrglyDPRuOnejaVQmhvkP3wGIphnkwxudGVd+UL2XE0=
-X-Received: by 2002:a17:907:6eac:b0:b72:6224:7e95 with SMTP id
- a640c23a62f3a-b7263023406mr162766066b.1.1762305650588; Tue, 04 Nov 2025
- 17:20:50 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF6851E3787;
+	Wed,  5 Nov 2025 03:00:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.85.39
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1762311610; cv=fail; b=lmAcITA8hB3B2ju4j0yKumwn4N+UsyKqyFAp3zyqkS9XVFv3HmNfoyXn6mojY2QYbHn+/ItNKBvqJ3oFpB4rwQJF+Yb3ljVNMhWhYl3iJ1H5Mkf4+gDWXU/KkXojW1itNa9ak6OdwEhTPLz9Bj4tXyx1njhsOgEJ2FGW2MMBNjk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1762311610; c=relaxed/simple;
+	bh=EVjWRp0TiOr6+/kf50FO8UwfNLNwSmizAp3ZkNGfAG4=;
+	h=Message-ID:Date:From:Subject:To:Cc:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=k5uyneBfg0RK1Lybm2A+gS2Pxz54IKnLI6/QB+BI4ZyHHnva5ewUBRZk17h4V17Zk+5kfKr5wsKVaKJyZIOEJ6eM5dQTlVNqOfFEmGAsBWVC8s/zrLLHW5ajjfeIcJoM+XRZOFKk/7RuwCxYdM+yQzLn17ga1DuIDTSrN+KYkKM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=keyWjXu8; arc=fail smtp.client-ip=52.101.85.39
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Gy3OgWjMnAjoGBC6p1Xp7/mBxH7XmUE4H3nE6r+cV03KPDott8Zt2WdU8rtj3UcP7W2/2s0r92y+KteVk5GrawfaAq6vmXCjLzkRha2uKg/Uk66KeAAmwvPw50lmKSIE57nSgteRwANPUHgND0lh7spkMQFOcaZVWcy4oJhtzPrIYYeUdNS5LOzMASSrsMLxzF2O850iOcIKGLBFho/43hLUdaonFoR+vZNbDL8+zA6wLzapwTENTvxjI/k4hS/Vk/Mp9ydOZuKwEVx11ImgfWbQNEmQLLLFRDwYUPkbZ0TKGZaGXu9uUFMii4ZJxAdKCf79wKpZJuzmW81nFJdslA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=dYGk9CMSoD4/w/JZaCie4bdwD+PRauDEN+0Hxrru7cM=;
+ b=yE4K2rlXIgiUFnZUBDsZIuBE4UjuB4daDdPHhFjrir9G9SRvOHzdli8/D+z409s8CaCQyx7ORfyipTq9TS0c4ITDcLXfaH/h5KDumjH+6f3x5aKK6lkWCQPfK86R3E73yynoIc4MTQnjS88qzblH6GXpPQMa1HsjFrpQjXoDXcwuZgK316pcgXzIT3rFMjnnNPJ3i4LpiRH+3U9NwEWDqtRbuut3+V2yOnVu7T3yYpNVYJ+7zTgt6bfCBGxUS/NRLAqFEEZniarSpaHI0b/6iJ0NNcTkFebGBFfqCDXvdOp08+Im4pc1ZDKvlbd+XeFiCbpmgWLzdtwooq26Hvqmqw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=dYGk9CMSoD4/w/JZaCie4bdwD+PRauDEN+0Hxrru7cM=;
+ b=keyWjXu8o5SNPAiZoKx2AoeFPvUEgFU26wldpbviw3fch5c5nZvLz7aJCfqamrWlUEGFmwWpoM8fal/+wgZvwicJeULiYnQaTUeTfI5OWJ6/2996e0qxHXJ4tf+AvGh6FCGLa6KwMzCpSlioTTa0VB5aEJaonDnh60spNPO1wIE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from LV8PR12MB9714.namprd12.prod.outlook.com (2603:10b6:408:2a0::5)
+ by CH0PR12MB8488.namprd12.prod.outlook.com (2603:10b6:610:18d::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9298.7; Wed, 5 Nov
+ 2025 03:00:03 +0000
+Received: from LV8PR12MB9714.namprd12.prod.outlook.com
+ ([fe80::c18e:2d2:3255:7a8c]) by LV8PR12MB9714.namprd12.prod.outlook.com
+ ([fe80::c18e:2d2:3255:7a8c%4]) with mapi id 15.20.9275.015; Wed, 5 Nov 2025
+ 03:00:02 +0000
+Message-ID: <d4b9402e-7dc9-4933-bded-0d92f4aeb064@amd.com>
+Date: Tue, 4 Nov 2025 18:59:57 -0800
+User-Agent: Mozilla Thunderbird
+From: "Koralahalli Channabasappa, Smita" <skoralah@amd.com>
+Subject: Re: [PATCH v3 0/5] dax/hmem, cxl: Coordinate Soft Reserved handling
+ with CXL
+To: Tomasz Wolski <tomasz.wolski@fujitsu.com>, alison.schofield@intel.com,
+ Dan Williams <dan.j.williams@intel.com>
+Cc: Smita.KoralahalliChannabasappa@amd.com, ardb@kernel.org,
+ benjamin.cheatham@amd.com, bp@alien8.de, dan.j.williams@intel.com,
+ dave.jiang@intel.com, dave@stgolabs.net, gregkh@linuxfoundation.org,
+ huang.ying.caritas@gmail.com, ira.weiny@intel.com, jack@suse.cz,
+ jeff.johnson@oss.qualcomm.com, jonathan.cameron@huawei.com,
+ len.brown@intel.com, linux-cxl@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org, lizhijian@fujitsu.com, ming.li@zohomail.com,
+ nathan.fontenot@amd.com, nvdimm@lists.linux.dev, pavel@kernel.org,
+ peterz@infradead.org, rafael@kernel.org, rrichter@amd.com,
+ terry.bowman@amd.com, vishal.l.verma@intel.com, willy@infradead.org,
+ yaoxt.fnst@fujitsu.com
+References: <aQAmhrS3Im21m_jw@aschofie-mobl2.lan>
+ <20251103111840.22057-1-tomasz.wolski@fujitsu.com>
+Content-Language: en-US
+In-Reply-To: <20251103111840.22057-1-tomasz.wolski@fujitsu.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: BY3PR10CA0030.namprd10.prod.outlook.com
+ (2603:10b6:a03:255::35) To LV8PR12MB9714.namprd12.prod.outlook.com
+ (2603:10b6:408:2a0::5)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251030210110.298612-1-wusamuel@google.com> <CAJZ5v0gzKN1cXfj508G4_9O2hKR0HncW4et3BNbaV+5Erh=LMA@mail.gmail.com>
-In-Reply-To: <CAJZ5v0gzKN1cXfj508G4_9O2hKR0HncW4et3BNbaV+5Erh=LMA@mail.gmail.com>
-From: Samuel Wu <wusamuel@google.com>
-Date: Tue, 4 Nov 2025 17:20:38 -0800
-X-Gm-Features: AWmQ_bncBwv0EAdZpBVqmr6E11lPWwEekjyA5IZwVkjxL8pp9OZvfSmdjj6Qnss
-Message-ID: <CAG2KctonFbbN9KrKWweQWaRKNN=rZkpWQCmyyY2rKfcAUzF=sA@mail.gmail.com>
-Subject: Re: [PATCH v6] PM: Support aborting sleep during filesystem sync
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Len Brown <lenb@kernel.org>, Pavel Machek <pavel@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, tuhaowen@uniontech.com, 
-	Saravana Kannan <saravanak@google.com>, kernel-team@android.com, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV8PR12MB9714:EE_|CH0PR12MB8488:EE_
+X-MS-Office365-Filtering-Correlation-Id: a81c3012-701b-4ec7-ac90-08de1c176a27
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|7416014|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?Y1ZvYTA3WkRqeUp1eWNSdUU4cjQwR04yZXVuWkplWEFadUR0Mk5FaVYxSm5T?=
+ =?utf-8?B?elZjYVZleitrUnNvckR6TmJrdGZhNjFKK3FMZWhNa0hTbGpNVUZJWlgvUjRX?=
+ =?utf-8?B?djVYT0xJYXdRQjdtSy83WjFSZno2K1BTaEptVmlhcG54Ty95VzE3aHdQbWwx?=
+ =?utf-8?B?NnZScmNCLy9ERzJKRzJNNzlxd2pPdGw3T1Q2ViswdXhOSUU1YUtIaHlYemtN?=
+ =?utf-8?B?c3BBTmY3ZHRuWG9UZzdWQmh6Y1U5b01pOFVPenRwM0Rwa2xMQ2NNYnlmUEgz?=
+ =?utf-8?B?YUwxTVpYSFZsME1yMzBmTFM5NlRGSWF3NEhtOGNCQ05HdkpKL1A2RFFRbkVP?=
+ =?utf-8?B?ZFRmbjgvWTZxUUx3ZGxSVW5wUDluSjdqNlhEQkVuUlBDV2cySFJjM1N0eGFv?=
+ =?utf-8?B?aGI3TVM3eDhpSmVCOHAwRVI4S3Z0UXFPZEhxZE1xUmkzWDVpMDNQam40eGJP?=
+ =?utf-8?B?NitZUlVMWWN3NzF6K05XdjIvMzFsWVorczM2R3J1N2xyeEFYblZWaVFEV1VK?=
+ =?utf-8?B?Mmx1S1JJS0lWZUErckNUVWEwbGhZZTZCSTQ5K1lYOTVLcUVvV0F4Mlp6dW9T?=
+ =?utf-8?B?N2h0Q2pEMkZkaWFoV2xLRm1wS2M5U0JjaU5mWmhoMjRVYWtSZjhNdzBiUUsy?=
+ =?utf-8?B?ejNMTkFLamJTRS9kOW1ESTVqd20yODlkdWxiamRPUXdPSXNNZG9WMHhYWjJo?=
+ =?utf-8?B?T295endjWmhJRkc2TTc4R2JHQXNlL3lvZUJGc3dDektTbG1DR09Zc2xKS3VL?=
+ =?utf-8?B?cmVTaWhzUUNTMlVyRTBaOTV1d1g5WVR6QnZ6MlZQTytQeWQ0czhkUTFaZ0Zv?=
+ =?utf-8?B?cFJNZVg5M1F4OURYbmF4Z2tqZGp4eUpMWmVMZVhPTEFVdXhRQ2NFZlY3b0lI?=
+ =?utf-8?B?elkxL1J4YXJaeWY1Y1I2bVFnMjVGZnk3MDNtYSsyOXFUZUt6c3I4akRYcksz?=
+ =?utf-8?B?alEvNUszWW5GR2tlWnlnWU03SG1MZzg5TzJ4RFVrV1ZRMUNpeU9qWlJ3QWIv?=
+ =?utf-8?B?emJNWTd4NU1JclVTU0h1a0w0WkQrckNUTXFDWkt3R3lrZGRZdW1KMmxuVkow?=
+ =?utf-8?B?UTZHQko4OGdnRENqZHpjdGRhRXhUbWtyK1VHam8vRXR2emFqNVorY1ZOYXd4?=
+ =?utf-8?B?dDE1d3h0dUdVbXJHWWZmQlVneWNFaWRyajM3ZEFXcXJlZDYxUzJJSlo4RFk4?=
+ =?utf-8?B?akVnN25VS1AzM0pNbGUxbndvZ3Roc0M1ZFVRbUVyNXdycGw1YWR4alo5N1BM?=
+ =?utf-8?B?eDlIak9WM1ROV0hpZlJaUGpvYUVtWHZPRVM5d1RwZkhoQlJ3NVBBYUc4TXRy?=
+ =?utf-8?B?Tjd2RldVK2xOcmRhVVR1RDJabHZTTHRBYjFtemdEUkd0anFmU1RnUWF0VmhB?=
+ =?utf-8?B?ZGtMU3pDWWEzQmh6cm44cmlLdFRJK0RmUHV3M0c5VzljQ0NHSFFBbGdCVUYx?=
+ =?utf-8?B?RmVHZHJ2QyttUW03TVJwM2d5V21FdG9GSGxVWWlxd3dzQVpDdFpYV2lYYm4y?=
+ =?utf-8?B?VlJWNGg4UDhGa21MVVRnZENxOXp5ZzFCYU1WcUxveEJoamNxWG9BMjFyYStH?=
+ =?utf-8?B?d2gzSkJpSXQ1eERxWXA2VnpHVC9UK3BsV2pUSXhBSmdGZE5zZHcxamtZUWVS?=
+ =?utf-8?B?NWtKZkFibXFkcy91Zjd3M0d6aDZQaytXRE9wSGN0ZEFSZXg1TnRLSGhvcjBn?=
+ =?utf-8?B?NXBtL25XV0g5UG1tUVVjcnppWVc1dmdRVTBoSFl0dTdJb1lIcXc5Rlo1cXQ5?=
+ =?utf-8?B?SnpucGU2Q25nN2dkeVdUZ3MrNDhWcTVzdmpucEFlQXRManhYOG55MjVLOTlH?=
+ =?utf-8?B?enB3YmFLbGtZOEJueGtmTGVDUStnb1lEd0Nsc3lQYTVkUDlTQXhUdmJhS2tj?=
+ =?utf-8?B?SmpvelErNDNMS0lWdlMrQ05xVjBwTmNuRkdNY3llOXpaU3o1bGo1SVpoUStB?=
+ =?utf-8?Q?JEDvak/9KUKdkYTlUPjQCmcY3ByWgX2n?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR12MB9714.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?Q3BISjc1Vy9HRDBzYUd4UCs1TnlDZEdrS3duSXNrL3kzamdNMWwyZTRydFhK?=
+ =?utf-8?B?NTR5ZjJJckJ5d1hsK0hMSzZpbXl4QWpXMEs0U1NWVm1NdlE5NmRJMGFsVEdj?=
+ =?utf-8?B?RXgxd0ErbnVuaW15dDhZN1B1QkpDZGxmclhUMzVxT3plMW4wM2M1cDl2akhj?=
+ =?utf-8?B?ajdrWWtwcEdrMUlrUXV0Tm9kSWRWUDZnSFpIQ0dOZUJIYUg4T1NBVGpDMHFx?=
+ =?utf-8?B?TXBQbGVNQjdBdENhR2dqMTBubklIdW5EUlBPUEhQN3AyVTQ0VHB2WEtKMUMr?=
+ =?utf-8?B?RHlIaG9tdFlsUUdMWWEreGJlbGlFTnV4SUM1RHp2Wlc5TFJjcjJUQ3FRQWZm?=
+ =?utf-8?B?aHRza0QzelNkNE9HeG9MREFtcHhVdW40MTdGcmZ6K3FHU0ozRkJINnd5d2sw?=
+ =?utf-8?B?RkZzN3BQcCtJcCtETTFpa29oRHlGdEFpVXhFUEwzZHNmUEpsUWhzZzZxb2Y2?=
+ =?utf-8?B?VkV0TkpvRk1iOHpzVTE5TDhJeUwwUVNvSFNzRkRDYmdzL2NuOXJRSGE2UnhO?=
+ =?utf-8?B?SXNKbjd6OUVqYVduUW5HbVRKeW1EdVhqdjl0WFE0UVhibzRXT29VRjV4a0V0?=
+ =?utf-8?B?d1JrZFNKaFBaQXZRSDgxTDRINk0rQkZSRitOcFgxbml5V0VQZ3lrWnVCb3NK?=
+ =?utf-8?B?K3V2aXRRTmtjY2VGVHVQcXpqMHNmekw4eFhjZFRBbktNbDJKWUsray9KWjVC?=
+ =?utf-8?B?bjFuSjhzdEJiVDFqYVJYWkFqSnd4UURPMVJJNXFlNDV2RU9COVJZWnZhT0Nr?=
+ =?utf-8?B?WVJoVGN4OEx3MEd5aVBjb1VBTlZkTjhzMExlRzYyTVd4MWFXVkY4SXB2eSt3?=
+ =?utf-8?B?aFo4L3dSd0lqWjRRSDFOdWFjb1grRHp1RFZXbWZjdEF5LzBwbzJjSGtzQmF2?=
+ =?utf-8?B?MVk5S2EvTlhTVmpQRkd3Z0ZweGUzRmt2NXJramlOVzVMN3l3NmhMd09LT0Qx?=
+ =?utf-8?B?YmE2T3VaK1lkVGtOQXJsK3l2SDFmUWFJSStCQ3FFZmdHampXVUY5cTFIWFJ1?=
+ =?utf-8?B?RzNwamtpU25BUVM4aFFwWUxsNHZBSHYwYWI2VmJrQ1UwWlJZWlVjSG9POFVZ?=
+ =?utf-8?B?ZFJxNW1YOE9EMGRLL3RzM1UzbU1TZ3pWRFUrM3A5bC9pcndXdFh2V3VCbFRi?=
+ =?utf-8?B?eWpMVXpsTjNCUTRzempUQ0hiWHhXWFVIbnVoaGhFc1R4VEt2WWs5ZVR3YWVl?=
+ =?utf-8?B?VkpxS0lWbW0zaFdsR3JDemRvWVk1N09XMGdkQm5ielVnczd6alQvK2dPdkww?=
+ =?utf-8?B?SndmTk11TkQrTnNBVlN4UHF5VGhjZFpDK2pTWVVmV0QrKzVTaFRYVGtqSXpJ?=
+ =?utf-8?B?aCtQSytiSklXUm55ZE5WbU5QOXVjamJ1eVlYOG1FL0FKakhBcTVFckxEMVk4?=
+ =?utf-8?B?UzU4cWk3SWRON2lHUERpWHZmMi9lK0haWTBVaS9RTnVBZzBld3RQQUZmUFYz?=
+ =?utf-8?B?R1lSbVVrZVNoUG1wNGpaWjNaQUFndDlpRzJDM3ZudktVUzZZYnNxVDUvVGl4?=
+ =?utf-8?B?VFlvenlMWVhMK2orNk9iL1F0ZkVPcjIwZU5qQzFTUXpZZ1F4MTZ5ajU3aGlS?=
+ =?utf-8?B?VnRxZjlSN1pjNUwwTnh6bHFIVzE4ZzRvdE1OY2ZERUdMc3lXNFRNU1c2d2ZU?=
+ =?utf-8?B?WXhTbkxobStXektlRFJMcUYvK1l1RnZiaTVvOEIvZllocDB6YXVyTDRtNkl0?=
+ =?utf-8?B?WWJqaXFLd0hoaGtQdW8zUTdkZzcwVjVGVnAydzcvbU5TWGJwVjA5am5ZdDl6?=
+ =?utf-8?B?a1ZzOTViT3ptcm85aWV2NkVTNEtYZEJMTUtWN2RaVy8vcW55K2xUbVBhZnZk?=
+ =?utf-8?B?UmQ3b0NnRFhZelBCQWh0TElZZmNQeDV0eVprdmpFZzFUQ1k5YUxsN28rNStN?=
+ =?utf-8?B?MGZ3MFNWRzVsOThvd1A4ZnF6M2p4OVovNGd1QnZrVmpDTzJ2OFdpaHVMYnIy?=
+ =?utf-8?B?YWNPa0xTZnAwS2EwTjVZQlBZL2NwOTNFdGc4dTI4VW1YS0swVWgwamJUaXZs?=
+ =?utf-8?B?aURQUnV3M3pmRk9FbkFHRGU2TlNVWmJyc05Cajdud0lhR2s3RVdiMUNVSGhn?=
+ =?utf-8?B?dTZvOGpGblVnUzJ1UzJpVXBCM3Q4TGZnR3QzYWVIcEs4YjViaVJIQXYzV0hD?=
+ =?utf-8?Q?pTfMSqRTiOX55qDHeGN+oh0aO?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a81c3012-701b-4ec7-ac90-08de1c176a27
+X-MS-Exchange-CrossTenant-AuthSource: LV8PR12MB9714.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Nov 2025 03:00:02.6485
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 4mUzUoDRgLXcdADgWFCn75+4rVTTA5zSf90xMcLTjv+Fmhb022iwCkXm7nxUMs81tjq575rJjGk8tbbeBonLxQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB8488
 
-On Tue, Nov 4, 2025 at 10:52=E2=80=AFAM Rafael J. Wysocki <rafael@kernel.or=
-g> wrote:
->
-> On Thu, Oct 30, 2025 at 10:01=E2=80=AFPM Samuel Wu <wusamuel@google.com> =
-wrote:
-> >
-> > At the start of suspend and hibernate, filesystems will sync to save th=
-e
-> > current state of the device. However, the long tail of the filesystem
-> > sync can take upwards of 25 seconds. If during this filesystem sync
-> > there is some wakeup or abort signal, it will not be processed until th=
-e
-> > sync is complete; from a user's perspective, this looks like the device
-> > is unresponsive to any form of input.
-> >
-> > This patch adds functionality to handle a sleep abort signal when in
-> > the filesystem sync phase of suspend or hibernate. This topic was first
-> > discussed by Saravana Kannan at LPC 2024 [1], where the general
-> > consensus was to allow filesystem sync on a parallel thread. In case of
-> > abort, the suspend process will stop waiting on an in-progress
-> > filesystem sync, and continue by aborting suspend before the filesystem
-> > sync is complete.
-> >
-> > Additionally, there is extra care needed to account for back-to-back
-> > sleeps while maintaining functionality to immediately abort during the
-> > filesystem sync stage. Furthermore, in the case of the back-to-back
-> > sleeps, a subsequent filesystem sync is needed to ensure the latest
-> > files are synced right before sleep. If necessary, a subsequent sleep's
-> > filesystem sync will be queued, and will only start when the previous
-> > sleep's filesystem sync has finished. While waiting for the previous
-> > sleep's filesystem sync to finish, the subsequent sleep will still abor=
-t
-> > early if a wakeup event is triggered, solving the original issue of
-> > filesystem sync blocking abort.
-> >
-> > [1]: https://lpc.events/event/18/contributions/1845/
-> >
-> > Suggested-by: Saravana Kannan <saravanak@google.com>
-> > Signed-off-by: Samuel Wu <wusamuel@google.com>
-> > ---
-> > Changes in v6:
-> > - Use spin_lock_irq() in thread context
-> > - Use dedicated ordered workqueue for sync work items
-> > - Use a counter instead of two bools for synchronization
-> > - Queue fs_sync if it's not already pending on workqueue
-> > - pm_wakeup_clear(0) is prequisite to this feature, so move it within f=
-unction
-> > - Updated commit text for motive of back-to-back fs syncs
-> > - Tighter lock/unlock around setup, checks, and loop
-> > - Fix function definitions for CONFIG_PM_SLEEP=3Dn
-> > - v5 link: https://lore.kernel.org/all/20251017233907.2305303-1-wusamue=
-l@google.com/
-> >
-> > Changes in v5:
-> > - Update spin_lock() to spin_lock_irqsave() since abort can be in IRQ c=
-ontext
-> > - Updated changelog description to be more precise regarding continuing=
- abort
-> >   sleep before fs_sync() is complete
-> > - Rename abort_sleep_during_fs_sync() to pm_stop_waiting_for_fs_sync()
-> > - Simplify from a goto to do-while in pm_sleep_fs_sync()
-> > - v4 link: https://lore.kernel.org/all/20250911185314.2377124-1-wusamue=
-l@google.com
-> >
-> > Changes in v4:
-> > - Removed patch 1/3 of v3 as it is already picked up on linux-pm
-> > - Squashed patches 2/3 and 3/3 from v3 into this single patch
-> > - Added abort during fs_sync functionality to hibernate in addition to =
-suspend
-> > - Moved variables and functions for abort from power/suspend.c to power=
-/main.c
-> > - Renamed suspend_fs_sync_with_abort() to pm_sleep_fs_sync()
-> > - Renamed suspend_abort_fs_sync() to abort_sleep_during_fs_sync()
-> > - v3 link: https://lore.kernel.org/all/20250821004237.2712312-1-wusamue=
-l@google.com/
-> >
-> > Changes in v3:
-> > - Split v2 patch into 3 patches
-> > - Moved pm_wakeup_clear() outside of if(sync_on_suspend_enabled) condit=
-ion
-> > - Updated documentation and comments within kernel/power/suspend.c
-> > - v2 link: https://lore.kernel.org/all/20250812232126.1814253-1-wusamue=
-l@google.com/
-> >
-> > Changes in v2:
-> > - Added documentation for suspend_abort_fs_sync()
-> > - Made suspend_fs_sync_lock and suspend_fs_sync_complete declaration st=
-atic
-> > - v1 link: https://lore.kernel.org/all/20250815004635.3684650-1-wusamue=
-l@google.com
-> >
-> >  drivers/base/power/wakeup.c |  8 ++++
-> >  include/linux/suspend.h     |  4 ++
-> >  kernel/power/hibernate.c    |  5 ++-
-> >  kernel/power/main.c         | 81 +++++++++++++++++++++++++++++++++++++
-> >  kernel/power/suspend.c      |  4 +-
-> >  5 files changed, 100 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
-> > index d1283ff1080b..689c16b08b38 100644
-> > --- a/drivers/base/power/wakeup.c
-> > +++ b/drivers/base/power/wakeup.c
-> > @@ -570,6 +570,13 @@ static void wakeup_source_activate(struct wakeup_s=
-ource *ws)
-> >
-> >         /* Increment the counter of events in progress. */
-> >         cec =3D atomic_inc_return(&combined_event_count);
-> > +       /*
-> > +        * wakeup_source_activate() aborts sleep only if events_check_e=
-nabled
-> > +        * is set (see pm_wakeup_pending()). Similarly, abort sleep dur=
-ing
-> > +        * fs_sync only if events_check_enabled is set.
-> > +        */
-> > +       if (events_check_enabled)
-> > +               pm_stop_waiting_for_fs_sync();
-> >
-> >         trace_wakeup_source_activate(ws->name, cec);
-> >  }
-> > @@ -899,6 +906,7 @@ EXPORT_SYMBOL_GPL(pm_wakeup_pending);
-> >  void pm_system_wakeup(void)
-> >  {
-> >         atomic_inc(&pm_abort_suspend);
-> > +       pm_stop_waiting_for_fs_sync();
-> >         s2idle_wake();
-> >  }
-> >  EXPORT_SYMBOL_GPL(pm_system_wakeup);
-> > diff --git a/include/linux/suspend.h b/include/linux/suspend.h
-> > index b02876f1ae38..4795f55f9cbe 100644
-> > --- a/include/linux/suspend.h
-> > +++ b/include/linux/suspend.h
-> > @@ -450,6 +450,8 @@ void restore_processor_state(void);
-> >  extern int register_pm_notifier(struct notifier_block *nb);
-> >  extern int unregister_pm_notifier(struct notifier_block *nb);
-> >  extern void ksys_sync_helper(void);
-> > +extern void pm_stop_waiting_for_fs_sync(void);
-> > +extern int pm_sleep_fs_sync(void);
-> >  extern void pm_report_hw_sleep_time(u64 t);
-> >  extern void pm_report_max_hw_sleep(u64 t);
-> >  void pm_restrict_gfp_mask(void);
-> > @@ -505,6 +507,8 @@ static inline void pm_restrict_gfp_mask(void) {}
-> >  static inline void pm_restore_gfp_mask(void) {}
-> >
-> >  static inline void ksys_sync_helper(void) {}
-> > +static inline void pm_stop_waiting_for_fs_sync(void) {}
-> > +static inline int pm_sleep_fs_sync(void) { return 0; }
-> >
-> >  #define pm_notifier(fn, pri)   do { (void)(fn); } while (0)
-> >
-> > diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-> > index 53166ef86ba4..1874fde4b4f3 100644
-> > --- a/kernel/power/hibernate.c
-> > +++ b/kernel/power/hibernate.c
-> > @@ -820,7 +820,10 @@ int hibernate(void)
-> >         if (error)
-> >                 goto Restore;
-> >
-> > -       ksys_sync_helper();
-> > +       error =3D pm_sleep_fs_sync();
-> > +       if (error)
-> > +               goto Restore;
-> > +
-> >         if (filesystem_freeze_enabled)
-> >                 filesystems_freeze();
-> >
-> > diff --git a/kernel/power/main.c b/kernel/power/main.c
-> > index a6cbc3f4347a..23ca87a172a4 100644
-> > --- a/kernel/power/main.c
-> > +++ b/kernel/power/main.c
-> > @@ -582,6 +582,84 @@ bool pm_sleep_transition_in_progress(void)
-> >  {
-> >         return pm_suspend_in_progress() || hibernation_in_progress();
-> >  }
-> > +
-> > +static int pm_sleep_fs_syncs_queued;
-> > +static DEFINE_SPINLOCK(pm_sleep_fs_sync_lock);
-> > +static DECLARE_COMPLETION(pm_sleep_fs_sync_complete);
-> > +static struct workqueue_struct *pm_fs_sync_wq;
-> > +
-> > +static int __init pm_start_fs_sync_workqueue(void)
-> > +{
-> > +       pm_fs_sync_wq =3D alloc_ordered_workqueue("pm_fs_sync_wq", 0);
-> > +
-> > +       return pm_fs_sync_wq ? 0 : -ENOMEM;
-> > +}
-> > +
-> > +/**
-> > + * pm_stop_waiting_for_fs_sync - Abort fs_sync to abort sleep early
-> > + *
-> > + * This function causes the suspend process to stop waiting on an in-p=
-rogress
-> > + * filesystem sync, such that the suspend process can be aborted befor=
-e the
-> > + * filesystem sync is complete.
-> > + */
-> > +void pm_stop_waiting_for_fs_sync(void)
-> > +{
-> > +       unsigned long flags;
-> > +
-> > +       spin_lock_irqsave(&pm_sleep_fs_sync_lock, flags);
-> > +       complete(&pm_sleep_fs_sync_complete);
-> > +       spin_unlock_irqrestore(&pm_sleep_fs_sync_lock, flags);
-> > +}
->
-> Apart from the kernel test robot reports,
+Hi Tomasz,
 
-Of course, I'll fix this in v7.
+On 11/3/2025 3:18 AM, Tomasz Wolski wrote:
+> Hi Alison and Smita,
+> 
+> I’ve been following your patch proposal and testing it on a few QEMU setups
+> 
+>> Will it work to search directly for the region above by using params
+>> IORESOURCE_MEM, IORES_DESC_NONE. This way we only get region conflicts,
+>> no empty windows to examine. I think that might replace cxl_region_exists()
+>> work below.
+> 
+> I see expected 'dropping CXL range' message (case when region covers full CXL window)
+> 
+> [   31.783945] hmem_platform hmem_platform.0: deferring range to CXL: [mem 0xa90000000-0xb8fffffff flags 0x80000200]
+> [   31.784609] deferring range to CXL: [mem 0xa90000000-0xb8fffffff flags 0x80000200]
+> [   31.790588] hmem_platform hmem_platform.0: dropping CXL range: [mem 0xa90000000-0xb8fffffff flags 0x80000200]
+> [   31.791102] dropping CXL range: [mem 0xa90000000-0xb8fffffff flags 0x80000200]
+> 
+> a90000000-b8fffffff : CXL Window 0
+>    a90000000-b8fffffff : region0
+>      a90000000-b8fffffff : dax0.0
+>        a90000000-b8fffffff : System RAM (kmem)
+> 
+> [   31.384899] hmem_platform hmem_platform.0: deferring range to CXL: [mem 0xa90000000-0xc8fffffff flags 0x80000200]
+> [   31.385586] deferring range to CXL: [mem 0xa90000000-0xc8fffffff flags 0x80000200]
+> [   31.391107] hmem_platform hmem_platform.0: dropping CXL range: [mem 0xa90000000-0xc8fffffff flags 0x80000200]
+> [   31.391676] dropping CXL range: [mem 0xa90000000-0xc8fffffff flags 0x80000200]
+> 
+> a90000000-c8fffffff : CXL Window 0
+>    a90000000-b8fffffff : region0
+>      a90000000-b8fffffff : dax0.0
+>        a90000000-b8fffffff : System RAM (kmem)
+>    b90000000-c8fffffff : region1
+>      b90000000-c8fffffff : dax1.0
+>        b90000000-c8fffffff : System RAM (kmem)
+> 	
+> a90000000-b8fffffff : CXL Window 0
+>    a90000000-b8fffffff : region0
+>      a90000000-b8fffffff : dax0.0
+>        a90000000-b8fffffff : System RAM (kmem)
+> b90000000-c8fffffff : CXL Window 1
+>    b90000000-c8fffffff : region1
+>      b90000000-c8fffffff : dax1.0
+>        b90000000-c8fffffff : System RAM (kmem)
+> 
+> However, when testing version with cxl_region_exists() I didn't see expected 'registering CXL range' message
+> when the CXL region does not fully occupy CXL window - please see below.
+> I should mention that I’m still getting familiar with CXL internals, so maybe I might be missing some context :)
+> 
+> a90000000-bcfffffff : CXL Window 0
+>    a90000000-b8fffffff : region0
+>      a90000000-b8fffffff : dax0.0
+>        a90000000-b8fffffff : System RAM (kmem)
+> 
+> [   30.434385] hmem_platform hmem_platform.0: deferring range to CXL: [mem 0xa90000000-0xbcfffffff flags 0x80000200]
+> [   30.435116] deferring range to CXL: [mem 0xa90000000-0xbcfffffff flags 0x80000200]
+> [   30.436530] hmem_platform hmem_platform.0: dropping CXL range: [mem 0xa90000000-0xbcfffffff flags 0x80000200]
+> [   30.437070] hmem_platform hmem_platform.0: dropping CXL range: [mem 0xa90000000-0xbcfffffff flags 0x80000200]
+> [   30.437599] dropping CXL range: [mem 0xa90000000-0xbcfffffff flags 0x80000200]
 
-> pm_stop_waiting_for_fs_sync() has become slightly too heavy for
-> calling it from wakeup_source_activate().
+Thanks for testing and sharing the logs.
 
-Trying to understand- are you saying spin_lock_irqsave() makes
-pm_stop_waiting_for_fs_sync() too slow?
+After off-list discussion with Alison and Dan (please jump in if I’m 
+misrepresenting anything)
 
-> Waking up the suspend process from there should be sufficient.  The
-> completion is not necessary for that in principle.
+Ownership is determined by CXL regions, not window sizing. A CXL Window 
+may be larger or smaller than the Soft Reserved (SR) span and that 
+should not affect the decision.
 
-Can you elaborate more on what "there" means and why completion isn't
-necessary? From what I can see, the only way to abort the suspend
-_early_ is with the completion.
+Key thing to check is: Do the CXL regions fully and contiguously cover 
+the entire Soft Reserved range?
 
-Thanks!
-Sam
+Yes - CXL owns SR (“dropping CXL range”).
+
+No - CXL must give up SR (“registering CXL range”). More on giving up SR 
+below.
+
+The previous child->start <= start && child->end <= end check needs to 
+be replaced with a full coverage test:
+
+1. Decide ownership based on region coverage: We check whether all CXL 
+regions together fully and contiguously cover the "given" SR range.
+If fully covered - CXL owns it.
+If not fully covered - CXL must give up and the SR is owned by HMEM.
+
+2. If CXL must give up - Remove the CXL regions that overlap SR before 
+registering the SR via hmem_register_device().
+
+3. Ensure dax_kmem never onlines memory until after this decision. 
+dax_kmem must always probe after dax_hmem decides ownership.
+
+Some of the valid configs (CXL owns: drop CXL range)
+
+1.3ff0d0000000-3ff10fffffff : SR
+     3ff0d0000000-3ff10fffffff : Window 1
+         3ff0d0000000-3ff0dfffffff : region1
+         3ff0e0000000-3ff0efffffff : region2
+          3ff0f0000000-3ff0ffffffff : region3
+          3ff100000000-3ff10fffffff : region4
+
+2. 3ff0d0000000-3ff10fffffff : Window 1
+      3ff0d0000000-3ff0dfffffff : SR
+         3ff0d0000000-3ff0dfffffff : region1
+      3ff0e0000000-3ff0efffffff : SR
+         3ff0e0000000-3ff0efffffff : region2
+      3ff0f0000000-3ff0ffffffff : SR
+          3ff0f0000000-3ff0ffffffff : region3
+      3ff100000000-3ff10fffffff : SR
+          3ff100000000-3ff10fffffff : region4
+
+3. 3ff0d0000000-3ff20fffffff : Window 1
+       3ff0d0000000-3ff10fffffff : SR
+         3ff0d0000000-3ff0dfffffff : region1
+         3ff0e0000000-3ff0efffffff : region2
+          3ff0f0000000-3ff0ffffffff : region3
+          3ff100000000-3ff10fffffff : region4
+
+4. 3ff0d0000000-3ff10fffffff : SR
+     3ff0d0000000-3ff10fffffff : Window 1
+         3ff0d0000000-3ff10fffffff : region1
+
+Invalid configs (HMEM owns: registering CXL range)
+
+1. 3ff0d0000000-3ff20fffffff : SR
+     3ff0d0000000-3ff20fffffff : Window 1
+         3ff0d0000000-3ff10fffffff : region1
+
+2. 3ff0d0000000-3ff20fffffff : SR
+     3ff0d0000000-3ff10fffffff : Window 1
+         3ff0d0000000-3ff0dfffffff : region1
+         3ff0e0000000-3ff0efffffff : region2
+          3ff0f0000000-3ff0ffffffff : region3
+          3ff100000000-3ff10fffffff : region4
+
+3. region2 assembly failed or incorrect BIOS config
+3ff0d0000000-3ff10fffffff : SR
+     3ff0d0000000-3ff10fffffff : Window 1
+         3ff0d0000000-3ff0dfffffff : region1
+          3ff0f0000000-3ff0ffffffff : region3
+          3ff100000000-3ff10fffffff : region4
+
+I will work on incorporating the 3 steps mentioned above.
+
+Thanks
+Smita
+
+> 
+> Thanks,
+> Tomasz
+
 
