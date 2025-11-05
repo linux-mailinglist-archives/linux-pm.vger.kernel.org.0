@@ -1,191 +1,184 @@
-Return-Path: <linux-pm+bounces-37479-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37480-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A130AC37AD5
-	for <lists+linux-pm@lfdr.de>; Wed, 05 Nov 2025 21:19:35 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 19E86C37C79
+	for <lists+linux-pm@lfdr.de>; Wed, 05 Nov 2025 21:48:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D68503BCB93
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Nov 2025 20:18:16 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 6DA1534F564
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Nov 2025 20:48:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 992FF33291C;
-	Wed,  5 Nov 2025 20:18:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AD1E2D4B71;
+	Wed,  5 Nov 2025 20:48:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="H+ja5aDU";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="Gg5J5Cdb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BMpa0q86"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A2FA2F28FC
-	for <linux-pm@vger.kernel.org>; Wed,  5 Nov 2025 20:18:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 464F02D3EE3
+	for <linux-pm@vger.kernel.org>; Wed,  5 Nov 2025 20:48:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762373893; cv=none; b=UHbJ44gNSXfH49aBmMTn2KsC8vad9GAVIClAslhcoIf68xgm70io6NNl0QIVHeJLQTkss7JC94xyoxf0eajc3KMgRcaOSM0FcxhLEpP3BlyxMgU9pK1L3m4GY+Dsh3n3oE9NlP+TuYCCh2ALxwNtLKpD81VBErri/yah5Uj6h8k=
+	t=1762375695; cv=none; b=pAujonn7yTtMSxO+cVjLpK9TynIg1jNNjIvxVXGzcVB00p781al3Dz1/ZBlsducAQa1KLCZlHwJiu4e6SdgVJJWWtV5Uzw/FVM+25FDCwa8wfl1D6N3OOxwcI9gJBeeSiQCVX2pU1A0PZ8hXJ1ImV/AG11BEu+CLQg7MpvzJ0w0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762373893; c=relaxed/simple;
-	bh=eZRekEh3HwONE3jQUKo6gZdFTvSDFxxM2XeygklXRC0=;
+	s=arc-20240116; t=1762375695; c=relaxed/simple;
+	bh=JTg+bvRiNn5UFdTygaB109vTbehpdMctAz277/oudVw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Jem5SjZ/ZgqFBDvitKOJ1OmdJJzIkwmFIk2VaslFGxdlZuFmXlLkujzg+Esy3tlQFtiejAvY8J0B+21mF8tk++80e56gXEV9FQJSFasJXqHFHJN7NPxHIM7Z5wmGsToF7kW9yBX1UK3KkCKUF1LLeMF29N19/ZL/t8MpFXsKIdA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=H+ja5aDU; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=Gg5J5Cdb; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5A5KEs5w1804564
-	for <linux-pm@vger.kernel.org>; Wed, 5 Nov 2025 20:18:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	mVMNUsAndpmo/afDJ79jdAjzVssUiGR4aZoBZnoV3VQ=; b=H+ja5aDUPL7gcsV0
-	vqTNiO/I6mni83MlNqPxvpQ23u8CmLbSEJh4+0RpjLy3Z2ney4SxzDyPCkO2CSBr
-	TKJeHnkBnGGnFwiAjIdJ0XczKrxFwOS7Ljt76cO4LoOkzbNnWV+zBiHXhkv2lzbA
-	s0Y3t9NErT2TdMQSs/Vld1476z+/V+lk3O5eK7x+uraTeI+cZ/RGNJcLxEDWYp9b
-	rV2LW4PQVscM4CkJbk8oxMu9X9bz9Fbi387z6DCPnfRPGTMvbRMT1+T/pwuZSFKH
-	fXfJ7abGp7qU2jHp4YAec4tagizXVt966GhmuhCkyHBTddPwt9V51QYc/bXsEGpo
-	SdTpLA==
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com [209.85.160.197])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4a8c8s87nk-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Wed, 05 Nov 2025 20:18:10 +0000 (GMT)
-Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-4e88c912928so5701411cf.0
-        for <linux-pm@vger.kernel.org>; Wed, 05 Nov 2025 12:18:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1762373890; x=1762978690; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mVMNUsAndpmo/afDJ79jdAjzVssUiGR4aZoBZnoV3VQ=;
-        b=Gg5J5CdbvOxXmpP9JulGUuFb1jhYvjkClJhvvtOdvJEibCScxO+e803L3TJkicnS3E
-         +e2r1bsMhk2QKVTVe9Thj2TX/E4D+pXjd3ghq6D1Yhwt4Bzv6gNsVQ/+PV2YD6D/7/WK
-         5+km291pQu51B6DTwjfj3bhP2GNGO2xQv3Wm7gEGfSXr9TvqkqAH91Gptmx0cP4V9VRy
-         rncf17C2pyhrM/oNsSMS3GKY+dXyWcwNLcuNfNWl/iTpuItgPidEu1n271gZTdlOB9S5
-         XgGnQ8MT7dvolAgEjYhD3NHeY0Gflnmu7Mda4PJbVt7BwKf4e2DO2Tf87oknsC0Anric
-         IAnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762373890; x=1762978690;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mVMNUsAndpmo/afDJ79jdAjzVssUiGR4aZoBZnoV3VQ=;
-        b=hOxvVbhi89OFYwMtTZa+rOYLnZoonIFF1sfmRSRuRJf2EqHAPF01gEtWZTNyxnbByt
-         FtqopcR1glIhF53B/Ub9famtY4w3ZJagS1TtiWJPQCWLFRTzlwJtU+c8LsVddIx9TfPy
-         Lu4IR93yIC8xueP9BGwdivQFLDVKxWtypTFWv3bbTlNnIBqhRswTSEKw9JQ8Zki85/Fq
-         BMDfxbfLnc41qPyxAayT3d2RuuqNpBG37NGCP5pGUMcT7Rqpj+xNwjZd0HgspSPeVEFc
-         ZpFsNma+w9UQspT+2DQ1dxFTdgE86wlRnUxPcQpjqTcN2Vv+f9vjG850KtTSkDw2t/P7
-         z9KA==
-X-Forwarded-Encrypted: i=1; AJvYcCUrM2Nn6XVJ22ti8i0/s6kYtzM+vE5XvAE9bKNh+VoKfYSCDMSxKfCSnWLKPZfqgVSFSQex6bNxJg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywl2qRVzupu+fUzdBf/TA/85xHUvL31ZrPhZymmNkuXXQOMzK7o
-	5pDAu4xreTpfBDcsZUIJpx9r7hbnbVe4dnbMYY7Nmd45AdLv9WCnZ8zp3ZBRJAAN2k4r/e/9JG9
-	D7PdpEEZIDGZFE5QJ62bKMtaVuWZMSl15y7SGt5OkpWz7kbcnWBoDpIxoWL8uoXxsPMPrq1NoBk
-	mtJklNPC11NyEzROgAuLBXcWdOiMGtbrybyYqn
-X-Gm-Gg: ASbGnctDbYZhsvoNf1aR704WXVjp4+vXstbBs99qP1BDVJVM9gx7rTWQtYMQbKZiHlJ
-	SBtbJbThm5ObJDI7aCSD9gVG91SVpbhRTR6dt40TWg3Xf5pWbo8vjus5DNtUQIi6mr7PUcrRf24
-	90IZXsub3I2swfuWL9/Xw/LotF0PsCQqYdD2KHuxJrJVop8gtwiAOyEyK9Cg5UJgqW5th0BX0f/
-	/jzPiBc9Lji4Jzw
-X-Received: by 2002:a05:622a:1886:b0:4ed:64ee:b946 with SMTP id d75a77b69052e-4ed72333348mr51703901cf.9.1762373890113;
-        Wed, 05 Nov 2025 12:18:10 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFknbGL8kDYadqiGGxH48R8FaOno64y50cF374SF4ia9AEJDBcUfCkCTNspvhX/pYvSffhCWkWgrW2OaHtB9nM=
-X-Received: by 2002:a05:622a:1886:b0:4ed:64ee:b946 with SMTP id
- d75a77b69052e-4ed72333348mr51703511cf.9.1762373889645; Wed, 05 Nov 2025
- 12:18:09 -0800 (PST)
+	 To:Cc:Content-Type; b=r2G4LKdU8qeXCDIorK2Q3VkAFRQk/+5SHiIocsoMcsLXEVd+LmWKEJ3k6mCDvj/cEB6yMucpmIvsQWzl+77OCaH1+zDmV93NvWY18BjcikANdCQutHym3/vAnZQCN0x3rOC3LzWdWTJqQMTKygqAYKFlz+oLSBPLX9vMv9DM/aY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BMpa0q86; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5731C116D0
+	for <linux-pm@vger.kernel.org>; Wed,  5 Nov 2025 20:48:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762375694;
+	bh=JTg+bvRiNn5UFdTygaB109vTbehpdMctAz277/oudVw=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=BMpa0q869YETfxcZU22s+JKyrIH0G/rcGe2js31PwkhgQZuipUHj2iP5M/ZIfvvOG
+	 wliDDMqHS/Qg4soYF9zp1VSmtOvi+22Mn9+Y6FCRWBAzyt41CWZUwCeJwD03Q5gmUc
+	 ddtHTZ9EjiRm6TVK/lfBb+H1xmfmYvpcTNNb1pelE658Hx0ld9UzYPdeGb0euq0WMB
+	 fE646ToX+RW1uSJRoB+Bc7GrZYilmPU6SI0aZ0gBY5SWXU2Ma6wRxKTYAgP2u8MLVC
+	 2WdKZS84LapmILR9bi5eZ6L7N7p9DA8ZUn14Uid1eW/pmzkESyI4ddRm554Z3H2a/Q
+	 CoZk8FWZ335Qg==
+Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-6504c33afb1so130003eaf.1
+        for <linux-pm@vger.kernel.org>; Wed, 05 Nov 2025 12:48:14 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVAkVDaj38qKYVcKplAdkrGWCVo0sWnQs11CvbwCPoj4ieaC3MFNc7cLWcVzrnW87s4XneSe8LXeg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyN1VtJKvofZjDH7di2qvDPGA4KkNw2vn5NENr+Et8BG3iLjw/B
+	7TXjh1b3BCvXWWf6OL4PLRohNQK1Wh/4x5XWVr/8PMWLnTg8pZAhZj6na/E3PdEIh/tl2LVugqg
+	nTgT5x5D+/3ToKUIuhCZHmDF8bR9v0tk=
+X-Google-Smtp-Source: AGHT+IGTF0w/KUSIJrwMfiUpRJMd9hORSn2HDMxoBKX227bqy0ph3H0jWas3aeRyqGLR2+TMmIokwt7+VKWuKyhE+mI=
+X-Received: by 2002:a05:6820:22a6:b0:61e:16d0:9ea2 with SMTP id
+ 006d021491bc7-656c48942e3mr414366eaf.3.1762375694106; Wed, 05 Nov 2025
+ 12:48:14 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251103182006.1158383-1-loic.poulain@oss.qualcomm.com>
- <20251103182006.1158383-4-loic.poulain@oss.qualcomm.com> <aqoxdaq72prkeqwxmmohlmbpx7icuc32sej7did6vt6rzrgfib@bvmt7ppkvloc>
- <CAFEp6-2GGA2gvBKfO0fZemVmJmjQpTQEJ0vLfEewfhHKOYQGSQ@mail.gmail.com> <be0a418b-5e8f-4895-a3b8-482b6ad6a40e@oss.qualcomm.com>
-In-Reply-To: <be0a418b-5e8f-4895-a3b8-482b6ad6a40e@oss.qualcomm.com>
-From: Loic Poulain <loic.poulain@oss.qualcomm.com>
-Date: Wed, 5 Nov 2025 21:17:58 +0100
-X-Gm-Features: AWmQ_bkV1EiNnXP-IZWkGBXUSPax1s7heO54hBldRL1TWbKl8UzCsFgnGQYPesE
-Message-ID: <CAFEp6-1qPw7vdqYNKYv00M1sDo0HhEPgrHuEZAJ5vabErR7ChA@mail.gmail.com>
-Subject: Re: [PATCH 3/5] dt-bindings: firmware: qcom,scm: Document reboot mode
-To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Cc: Bjorn Andersson <andersson@kernel.org>, konradybcio@kernel.org,
-        robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-        sre@kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org
+References: <CAEmPcwsNMNnNXuxgvHTQ93Mx-q3Oz9U57THQsU_qdcCx1m4w5g@mail.gmail.com>
+ <a50064b2-e6aa-4237-a715-12f21a65e9a6@arm.com> <ed1e64dc-91c9-44d9-b3d3-9f142bcf7a8d@arm.com>
+In-Reply-To: <ed1e64dc-91c9-44d9-b3d3-9f142bcf7a8d@arm.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 5 Nov 2025 21:48:03 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0g9Jndez5y5i4pPW1C+qfj=4iiu51HV7Eb1dBGd1jg-CA@mail.gmail.com>
+X-Gm-Features: AWmQ_bkGhWkVOXmMVDDhnCwrmB6uRYE2Py3ShZxZlrbZm3odvkgKRGirfpJSNkc
+Message-ID: <CAJZ5v0g9Jndez5y5i4pPW1C+qfj=4iiu51HV7Eb1dBGd1jg-CA@mail.gmail.com>
+Subject: Re: Regression in TEO cpuidle governor between 6.6 and 6.12
+To: Christian Loehle <christian.loehle@arm.com>
+Cc: Reka Norman <rekanorman@chromium.org>, rafael@kernel.org, daniel.lezcano@linaro.org, 
+	linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTA1MDE1OCBTYWx0ZWRfX522s22h0HyJk
- ZtRzYzB4Pu2JKQfJn1Cmf5LgrLUyR2OoPBS/oX4MEdAw04blNUpboUTVrcmBXkjhSTqilrC9nK3
- zOUK2DBbtDEM9gisJx600/E6aqwqjwtQ60XovcNBcYyr2vefeKPXMnlMvAOxiT0cKl3tLmfQ/9H
- rIyUyJABA7lszCfaJtp5tTLI85d6BUeaCV3KUxTzzS8lV5R3XDOn2cCwncsybkXD0OUULHwa9KT
- VO+2jilGsfL/F6xvqXf5NdPVZmDu+WP8khXabyPumTpLOsfN0ynJ+N7v90x1PNfAp3ZwhXpxN6t
- 4aGgd60ty7LV5KEYP9eEny7562+deUes1DzL2GXgSvEaZgExL9Xvko1QjkUu9Nhads161XPZ7HH
- U2RMBv2+zMTIKTTcmDn3sf5D5o3dhw==
-X-Authority-Analysis: v=2.4 cv=RLu+3oi+ c=1 sm=1 tr=0 ts=690bb102 cx=c_pps
- a=EVbN6Ke/fEF3bsl7X48z0g==:117 a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10
- a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22 a=EUspDBNiAAAA:8 a=VwQbUJbxAAAA:8
- a=hOEl-9L8IPZEmPzWKaAA:9 a=QEXdDO2ut3YA:10 a=a_PwQJl-kcHnX1M80qC6:22
-X-Proofpoint-ORIG-GUID: qH9CVed-hGHKCmvVf7EmhJljtUY-lNv9
-X-Proofpoint-GUID: qH9CVed-hGHKCmvVf7EmhJljtUY-lNv9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-11-05_07,2025-11-03_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- suspectscore=0 spamscore=0 priorityscore=1501 clxscore=1015 impostorscore=0
- phishscore=0 adultscore=0 malwarescore=0 bulkscore=0 lowpriorityscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2511050158
 
-On Wed, Nov 5, 2025 at 10:44=E2=80=AFAM Konrad Dybcio
-<konrad.dybcio@oss.qualcomm.com> wrote:
+On Wed, Nov 5, 2025 at 12:24=E2=80=AFAM Christian Loehle
+<christian.loehle@arm.com> wrote:
 >
-> On 11/4/25 10:19 PM, Loic Poulain wrote:
-> > On Tue, Nov 4, 2025 at 3:12=E2=80=AFAM Bjorn Andersson <andersson@kerne=
-l.org> wrote:
+> On 11/4/25 09:03, Christian Loehle wrote:
+> > On 11/4/25 03:36, Reka Norman wrote:
+> >> Hi,
 > >>
-> >> On Mon, Nov 03, 2025 at 07:20:04PM +0100, Loic Poulain wrote:
-> >>> SCM can be used to support reboot mode such as Emergency Recovery Mod=
-e.
+> >> I=E2=80=99m seeing a regression in the TEO governor between 6.6 and 6.=
+12. At
+> >> 6.12, when the system is idle it=E2=80=99s spending almost 100% of tim=
+e in
+> >> WFI, compared to about 6% at 6.6. At mainline it has improved compared
+> >> to 6.12 but is still a lot worse than 6.6, spending about 50% in WFI.
 > >>
-> >> "such as"? Do we have any other useful bits in here?
+> >> The system is a ChromeOS device with Mediatek MT8196.
+> >>
+> >> Bisecting showed the specific commit which caused the regression is:
+> >> 4b20b07ce72f ("cpuidle: teo: Don't count non-existent intercepts")
+> >>
+> >> I=E2=80=99ve attached sysfs dumps showing the issue. All were taken a =
+couple
+> >> of minutes after boot, with the device having been idle since boot.
+> >> The cases tested are:
+> >> cpuidle_6_6.txt      =3D 6.6 kernel
+> >> cpuidle_6_12.txt     =3D 6.6 kernel with teo commits up to 6.12
+> >> cpuidle_mainline.txt =3D 6.6 kernel with teo commits up to mainline
+> >>
+> >> Summary of the percentage time spent in each state (averaged across CP=
+Us):
+> >>
+> >> |            |   6.6 |  6.12 | mainline |
+> >> |------------|------:|------:|---------:|
+> >> | WFI        |  6.02 | 99.94 |    56.84 |
+> >> | cpuoff     | 11.02 |     0 |     0.65 |
+> >> | clusteroff | 82.96 |  0.05 |    42.51 |
+> >> | s2idle     |     0 |     0 |        0 |
+> >>
+> >> Any help would be much appreciated. Let me know if there's any other
+> >> debugging information I should provide.
+> >>
 > >
-> >  I heard we may have different EDL modes supported like USB or SD
-> > based EDL, but I don't know much about the details.
+> > That's not good.
+> > If the system is mostly idle (only boot activity but dumps are taken af=
+ter
+> > ~3mins?), what is causing the wakeups? Even in 6.6 There are definitely=
+ more
+> > than I would've expected?
+> > I noticed that clusteroff and cpuoff have equal residency, which is
+> > obviously a bit awkward for cpuidle, but shouldn't be relevant to your =
+issue.
 > >
-> >>
-> >>>
-> >>> Signed-off-by: Loic Poulain <loic.poulain@oss.qualcomm.com>
-> >>> ---
-> >>>  Documentation/devicetree/bindings/firmware/qcom,scm.yaml | 4 ++++
-> >>>  1 file changed, 4 insertions(+)
-> >>>
-> >>> diff --git a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml=
- b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
-> >>> index b913192219e4..c8bb7dacd900 100644
-> >>> --- a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
-> >>> +++ b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
-> >>> @@ -121,6 +121,10 @@ properties:
-> >>>            - description: offset of the download mode control registe=
-r
-> >>>      description: TCSR hardware block
-> >>>
-> >>> +patternProperties:
-> >>> +  "^mode-.*$":
-> >>
-> >> I'd only ever expect mode-edl =3D <1>. Do we have additional modes tha=
-t
-> >> warrant the generic nature of this?
+> > I'm a bit puzzled by your bisect results.
+> > 4b20b07ce72f ("cpuidle: teo: Don't count non-existent intercepts")
+> > made the intercept logic *less* prone to count (false) intercepts, yet =
+it
+> > seems to count more of them? (resulting in more WFI).
+> > I'll think about it some more, for now of course a trace would be very
+> > helpful. (cpuidle events, ipi_raise, irqs?)
+> > Are there ever any latency constraints set?
 > >
-> > We may extend this to mode-ramdump if it makes sense, but as of now
-> > it's indeed only edl, will fix it.
+> > FWIW the mainline results look the most reasonable, from a 30000 feet v=
+iew
+> > anyway:
+> > Cluster       State           above   below   usage   above%  below%
+> > LITTLE        cpuoff-l        ~75     ~65     ~140    23%     20%
+> > LITTLE        clusteroff-l    ~800    0       ~100    89%     0%
+> > MID   cpuoff-m        ~3=E2=80=934    ~15     ~20     15%     55%
+> > MID   clusteroff-m    ~1300   0       ~4000   24%     0%
+> > BIG   cpuoff-b        0       1       1       =E2=80=94       =E2=80=94
+> > BIG   clusteroff-b    ~800    0       ~1900   30%     0%
+> >
+> > (WFI seems mostly the correct choice for little CPUs, that's fine, the =
+energy
+> > savings compared to cpuoff should be marginal anyway.)
+> >
+> > Do you mind trying:
+> > 13ed5c4a6d9c cpuidle: teo: Skip getting the sleep length if wakeups are=
+ very frequent
+> > on 6.12?
+> >
 >
-> Would adding ramdump here be a matter of:
->
-> + mode-ramdump =3D <0xmagic>
+> So just thinking out loud, the only case I can actually thing of to expla=
+in your
+> bisect to 4b20b07ce72f ("cpuidle: teo: Don't count non-existent intercept=
+s")
+> is that the workload essentially changed dramatically because of our call=
+s
+> to tick_nohz_get_sleep_length() now.
+> I'm not sure how likely I think that is, but I'm lacking imagination for =
+another
+> cause. That's why results with
+> 13ed5c4a6d9c ("cpuidle: teo: Skip getting the sleep length if wakeups are=
+ very frequent")
+> would be interesting.
 
-Not in its current form, I=E2=80=99ll need to slightly adjust the qcom,scm
-driver mask for the reboot mode and also prevent the dload inhibit
-during reboot. I can include these changes in v2 if that would be
-helpful.
+My current theory is that this issue is related to the
+tick_nohz_get_sleep_length() overhead and the way "intercepts" are
+distinguished from "hits" in teo.
 
-Regards,
-Loic
+Namely, teo assumes that its own overhead is negligible and so it
+counts a given event as an "intercept" if the measured time spent in
+the idle state (with the exit latency roughly taken into account)
+falls into a different "state bin" than the sleep length (the expected
+time till the next timer).  However, the sleep length is computed as a
+difference between the upcoming timer wakeup event time and
+ts->idle_entrytime, so it actually includes the time taken by
+tick_nohz_next_event().  If the latter is significant, it may
+contribute to the difference seen by teo_update() and cause extra
+"intercepts" to appear.
 
