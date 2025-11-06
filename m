@@ -1,200 +1,134 @@
-Return-Path: <linux-pm+bounces-37501-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37502-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D991C39FAE
-	for <lists+linux-pm@lfdr.de>; Thu, 06 Nov 2025 11:00:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 529B6C3A4D7
+	for <lists+linux-pm@lfdr.de>; Thu, 06 Nov 2025 11:37:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 239204248BD
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Nov 2025 09:54:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 84E74420D26
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Nov 2025 10:31:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5633330F526;
-	Thu,  6 Nov 2025 09:51:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3549280035;
+	Thu,  6 Nov 2025 10:31:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="TNlZMLsb";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="IhbnKY5Z"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="STVLeWeH"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D52430C634
-	for <linux-pm@vger.kernel.org>; Thu,  6 Nov 2025 09:51:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8466245C0B;
+	Thu,  6 Nov 2025 10:31:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762422670; cv=none; b=IWN1Pv6AeUeb7MCgvIToz2niZGj9VKqz8fHLXhay3J0tGMb75nEpFgLqp5XVr3xSHWgq13lTN3RHZ+Tt+5XtbxR5Uy+UEEvvIr/FSwhIFZ00hlHHQ8qwo0niCAMjjT+y3BmKtqNBWliEb7OFuxohMvGATk8RpxLbVDxO0+aiXsM=
+	t=1762425072; cv=none; b=iTMCrveAFh8hznfDw/IzKOHds4ed1DyjFbqM2ozecrdkq7D0xeGX/01OvcqeYAlj2PlDvkA4Q2cglNPGEl3isHtnUD3hiWrPIMbqSaxlcM8TDhq3k9omqHKQYRX28mkvxh4mLbcBYvdWB3AIV0ctWZZ0yr6a09XhPlc1UM1X4hc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762422670; c=relaxed/simple;
-	bh=nXSRMf9/aZ7Q9VqSPsWiKmuE1hBg/kBZqOFH3xssUmw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TbJCO2y2VeZqmmd/lBRKNJPdo7lE1SRtRpeTgkptD1dlZbEoaDlCbKWScZzkg+7v2Gj5KtUaK4hekh670TVApa6f3HqZ6xds5Iba7GGud9dntnNR+6bxND5xpCAPdxuCZdHzhFn9RMsmiTnaTzBByO1RA51lnvoUML90KXnqkYo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=TNlZMLsb; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=IhbnKY5Z; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5A68l3k82389024
-	for <linux-pm@vger.kernel.org>; Thu, 6 Nov 2025 09:51:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	tZsRCzXp9F2PQY4ggZIqyN7UEW8FExIqJdOsCcIvnqU=; b=TNlZMLsbj7CDm8hw
-	biToZd0J9wQhXAyeUjAmL/EB4ts6sHqw54l1TTgkCeIWG1YDdcPAXRDZuPbb5Aac
-	7v7dBAklyq36/LWH7D+pho6m7X7TOnYDrEYKmetg57G8akLonrVw2LN8WctArYIY
-	doZI5SvBHzgIXCSQJbVmUI7d+0gv00jrqKbnuef4qIM1xjaI+hCjDiE/NNLQHAdg
-	gj1ZpebOTriQfd4AKZqMt6CVHtPEOFZwpbCcnjH0zWbzSmqs9R4GqxU1SRuOMZFp
-	TVdYTI2u85qzVPhI1AvSoJc7K7uqLE6fxy3OsHP9jo8Xp4dmq4K7LSRqqiwp5mXa
-	bStvEg==
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com [209.85.219.72])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4a8h9usdn7-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Thu, 06 Nov 2025 09:51:07 +0000 (GMT)
-Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-88088964786so710216d6.3
-        for <linux-pm@vger.kernel.org>; Thu, 06 Nov 2025 01:51:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1762422666; x=1763027466; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tZsRCzXp9F2PQY4ggZIqyN7UEW8FExIqJdOsCcIvnqU=;
-        b=IhbnKY5Z6QkhfIinFeCRgWJkWhkP1aqh5WPk98e1n6mgyuUcI+WmbcUoixsDyuKrKW
-         xqsApusLJKYqXdvGPl13ltD9W0c26cloqAtsbb/ZarmP3SkPuqB9WpUMPkQCRVz3EuB0
-         K6mIXxjcI9f8NO9IxFXxrgzDqBRnGbLfZeTSrq+kvB3dU8RhZOp3HlN2UIvzPKgtazrx
-         UENzEjDOky6VxFkwLjYfG9s+G4EUcDxKVIwnMQAszonIBx1vV44shny0vI82WivC1g5a
-         P/pN30l4a3YPSvYPCBZXff05MzFqcQDD9udgLGTDvtFm1kZSp3vFXsOrwlwA/WsgJ5b4
-         Utzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762422666; x=1763027466;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tZsRCzXp9F2PQY4ggZIqyN7UEW8FExIqJdOsCcIvnqU=;
-        b=gNiRoMP9hfna7coMNyuytrHI2eQLYSM4Vaa/QBjmaufZIzApvYi+I3J82qwWujNSYH
-         AH2nM9SlOKP2CQm5g58SMKhqPxV3wwbtkA+3sZEMFnt2RN+rvIqmg8Rp9tuLtBPXGytY
-         AIupJEWvaJ2Ivbi3EuB87UWKFUUl1HOCGhUj10pyCofk6/mH7UdikKC6hGV2IIQlrUi/
-         v4tvjg23DoZNA/7mzxrMpCwsQzvqKC3R2T8nnaul7UIS0iiK0XdLT+oOrrw3pz7IUwc5
-         RWJ33N7vdHybmuY34pjAMsT4R2B9IkDA/NInUkWclfv8PfUY6VSgXWxwfkuuVtei5mtI
-         WXIw==
-X-Forwarded-Encrypted: i=1; AJvYcCWXeusXbZ78LB24J3iRQH+BnW2A/YVbAnfMxAIjdCONe2dKCvpTH6aA4thzSlO5AQq1mZVrtJHy4w==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxVnkTn0NHFTxgUOvROWDnZBF48KRYDonQszvPbUm0z3NlzaFpX
-	jy9E1W4axiTD030lnDLM15EVXfGLaEgDtSIJkp69VGLPsPAbwawwkaJ4z1zJ2LEjDNZUbo8PbAW
-	bKs6RDEHZmGSS6DZpDiOt3aVAbfTKkNdZpJ0P4nYpOZoJRhN+pJ9XR2EiyeoEQw==
-X-Gm-Gg: ASbGnctg45CMpL11AGIoYiAvjZkPoCnKWUBg+LVHESl7Tu1nB2hw2nilBsQJfdd9DRK
-	ICbRJLOuNYLDUcua6/2GkXqNVDNPEmAwKdkNETBxjJ0jBM3T5uj6cjo5m52FN7OJPSNHJayi52M
-	0s9CItpyM0Vm+zqgD65zHWE/+XkfOAatwI1V3o7WQS/A+dh5LOMFv0ocFEgrBu9sJYYFn17sFoC
-	k5pWUhbL7nafZWdGUBYa0H16cjKNajFFkF6YOgsL3iVydpqau6tsv9XJtWJAxP2DzTqWrKz1Bja
-	+bel3jIn5AAwXxVzHd2B7wjYvcwY0NUeXdCoZ/gRlFXmhIg1A1r7U4ats6Uuh4a+Qxr5D2er/ia
-	bw1uhqHTz9HzgIdTcaf9gtm3k1ejGiEJs8Ff/gNQ7cY9iD8VuOfKSeIjt
-X-Received: by 2002:ad4:5f86:0:b0:87c:2360:d41f with SMTP id 6a1803df08f44-88082f23ee9mr18251086d6.3.1762422666539;
-        Thu, 06 Nov 2025 01:51:06 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHPT/BAVfUWlvYl6K4WhBqXTZmQpbLXz9xtVoeJwcK31/pU4lMp/uDh04+Fm7fJy69yKEsuhw==
-X-Received: by 2002:ad4:5f86:0:b0:87c:2360:d41f with SMTP id 6a1803df08f44-88082f23ee9mr18250936d6.3.1762422666082;
-        Thu, 06 Nov 2025 01:51:06 -0800 (PST)
-Received: from [192.168.119.202] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b7289334257sm182354966b.6.2025.11.06.01.51.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Nov 2025 01:51:05 -0800 (PST)
-Message-ID: <6bd38ab5-cf60-48b3-a27c-a33de9762cf0@oss.qualcomm.com>
-Date: Thu, 6 Nov 2025 10:51:03 +0100
+	s=arc-20240116; t=1762425072; c=relaxed/simple;
+	bh=JFOdbYffsARPA55o25J5nmd1eh1TGG+Rp7ggcIJ/X3I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=E2TfHKG+2tG4O+EGr8tgoOBm1nvB7cnG3Gy0t562xy5Lt2YiezRLm2EvgKs0QU2AD8gGPt5k70RlQSYH9wAbud6y9u9LKM8gSFZ+d0x57ItpR1nJX/35pGNSuK/64Q7zSlvCYJ+o4B3qp0gP5tx2bbtEEaGLzGA5igoNQqp7bVY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=STVLeWeH; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1762425071; x=1793961071;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=JFOdbYffsARPA55o25J5nmd1eh1TGG+Rp7ggcIJ/X3I=;
+  b=STVLeWeHzv6ILv38R2/zQgW/qNBZtJTXA6cqGDCuVjLEXzLwB5pAmRil
+   ROUq5W8wj0jH8XTLBT8lX0G2ogpoodfxBYAPB98DhUuIQVy2TLsbBR0sB
+   RV8s0g61kjt1ty9uJNqxfkzOW/zYzz9gaht7e6Tgi65Bei+jwfp/snfgR
+   DJSlvPscg5d/uXF9LqXVJTUHjuZC2FS5nTvay3pn1Moq2NzwhQeS+53Y5
+   wy5s6+pm+0CbkNgNi8Nr4g7Lof0KKV23eILNq6FyZRAD1GvNk/PMkHHhQ
+   1k2Vyt62LD1GtIkEHFxr2IVz0iB39Xox+DId41h7cPZYpOe7Ut+BS4arn
+   w==;
+X-CSE-ConnectionGUID: COzVy9g0T82U3s7hNBjJgw==
+X-CSE-MsgGUID: WYZMXqnhRP2siWooEQS4AA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11604"; a="82187838"
+X-IronPort-AV: E=Sophos;i="6.19,284,1754982000"; 
+   d="scan'208";a="82187838"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2025 02:31:10 -0800
+X-CSE-ConnectionGUID: dnlOyaMCRDCGbU6AZp/ILA==
+X-CSE-MsgGUID: VPaCKE7sRxmOnX0GhoFMRA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,284,1754982000"; 
+   d="scan'208";a="186974815"
+Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
+  by orviesa006.jf.intel.com with ESMTP; 06 Nov 2025 02:31:03 -0800
+Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vGxGf-000Tlq-05;
+	Thu, 06 Nov 2025 10:31:01 +0000
+Date: Thu, 6 Nov 2025 18:30:18 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sumit Gupta <sumitg@nvidia.com>, rafael@kernel.org,
+	viresh.kumar@linaro.org, lenb@kernel.org, robert.moore@intel.com,
+	corbet@lwn.net, pierre.gondois@arm.com, zhenglifeng1@huawei.com,
+	rdunlap@infradead.org, ray.huang@amd.com, gautham.shenoy@amd.com,
+	mario.limonciello@amd.com, perry.yuan@amd.com,
+	ionela.voinescu@arm.com, zhanjie9@hisilicon.com,
+	linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
+	linux-doc@vger.kernel.org, acpica-devel@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-tegra@vger.kernel.org, treding@nvidia.com,
+	jonathanh@nvidia.com, vsethi@nvidia.com, ksitaraman@nvidia.com,
+	sanjayc@nvidia.com, nhartman@nvidia.com, bbasu@nvidia.com,
+	sumitg@nvidia.com
+Subject: Re: [PATCH v4 4/8] ACPI: CPPC: add APIs and sysfs interface for
+ min/max_perf
+Message-ID: <202511061802.lIq09jwh-lkp@intel.com>
+References: <20251105113844.4086250-5-sumitg@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/5] dt-bindings: firmware: qcom,scm: Document reboot mode
-To: Loic Poulain <loic.poulain@oss.qualcomm.com>
-Cc: Bjorn Andersson <andersson@kernel.org>, konradybcio@kernel.org,
-        robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-        sre@kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20251103182006.1158383-1-loic.poulain@oss.qualcomm.com>
- <20251103182006.1158383-4-loic.poulain@oss.qualcomm.com>
- <aqoxdaq72prkeqwxmmohlmbpx7icuc32sej7did6vt6rzrgfib@bvmt7ppkvloc>
- <CAFEp6-2GGA2gvBKfO0fZemVmJmjQpTQEJ0vLfEewfhHKOYQGSQ@mail.gmail.com>
- <be0a418b-5e8f-4895-a3b8-482b6ad6a40e@oss.qualcomm.com>
- <CAFEp6-1qPw7vdqYNKYv00M1sDo0HhEPgrHuEZAJ5vabErR7ChA@mail.gmail.com>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <CAFEp6-1qPw7vdqYNKYv00M1sDo0HhEPgrHuEZAJ5vabErR7ChA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Authority-Analysis: v=2.4 cv=R5UO2NRX c=1 sm=1 tr=0 ts=690c6f8b cx=c_pps
- a=7E5Bxpl4vBhpaufnMqZlrw==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
- a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=EUspDBNiAAAA:8 a=VwQbUJbxAAAA:8
- a=U3JJaeWcYHlj1SPvQKAA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=pJ04lnu7RYOZP9TFuWaZ:22
-X-Proofpoint-ORIG-GUID: hrXDrnUKtOSfGAMB4PZpQhmb8WGnzj-j
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTA2MDA3OCBTYWx0ZWRfX1W6V8bv3XvaH
- ZTFvhSyWjePX1DdIZ3Mhnvz/u1y121oP0pdnLuRTAPRN37YROyo9D2ttymV8QZq2hFa9J5otiI7
- z+JT21E2VJom/B3t+fdAi7linxZtVlgKRvb0WNXQ9p6V/gFaBnUlblJg5xZ66mq0rILAoAtKCvY
- CeULZPSko5VD/tdo8AfMgTmC8HmbhvHlYvzgWxhr0ipb7Hzj8e/wyM3B82PeTTpuI5GMG8gTKHV
- z4z1ySXCrsFLMzcN334ri79MLf/W954AXdLUhxs2RKXtwkSn3a65qJpKK0FqStDIf0pWH2hf3q2
- 5Fc4475mCuOrfuWtM3+XBr9533AeDLUcse41hjIHIlFmaxt5LCRXcA9Aw6WnwNAKKDG2C62QmJz
- 4F9MymTZkVFft5BY3eE2ZuJ0k553Jg==
-X-Proofpoint-GUID: hrXDrnUKtOSfGAMB4PZpQhmb8WGnzj-j
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-11-06_02,2025-11-06_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 impostorscore=0 phishscore=0 adultscore=0 spamscore=0
- priorityscore=1501 lowpriorityscore=0 bulkscore=0 suspectscore=0
- malwarescore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2510240001
- definitions=main-2511060078
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251105113844.4086250-5-sumitg@nvidia.com>
 
-On 11/5/25 9:17 PM, Loic Poulain wrote:
-> On Wed, Nov 5, 2025 at 10:44 AM Konrad Dybcio
-> <konrad.dybcio@oss.qualcomm.com> wrote:
->>
->> On 11/4/25 10:19 PM, Loic Poulain wrote:
->>> On Tue, Nov 4, 2025 at 3:12 AM Bjorn Andersson <andersson@kernel.org> wrote:
->>>>
->>>> On Mon, Nov 03, 2025 at 07:20:04PM +0100, Loic Poulain wrote:
->>>>> SCM can be used to support reboot mode such as Emergency Recovery Mode.
->>>>
->>>> "such as"? Do we have any other useful bits in here?
->>>
->>>  I heard we may have different EDL modes supported like USB or SD
->>> based EDL, but I don't know much about the details.
->>>
->>>>
->>>>>
->>>>> Signed-off-by: Loic Poulain <loic.poulain@oss.qualcomm.com>
->>>>> ---
->>>>>  Documentation/devicetree/bindings/firmware/qcom,scm.yaml | 4 ++++
->>>>>  1 file changed, 4 insertions(+)
->>>>>
->>>>> diff --git a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
->>>>> index b913192219e4..c8bb7dacd900 100644
->>>>> --- a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
->>>>> +++ b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
->>>>> @@ -121,6 +121,10 @@ properties:
->>>>>            - description: offset of the download mode control register
->>>>>      description: TCSR hardware block
->>>>>
->>>>> +patternProperties:
->>>>> +  "^mode-.*$":
->>>>
->>>> I'd only ever expect mode-edl = <1>. Do we have additional modes that
->>>> warrant the generic nature of this?
->>>
->>> We may extend this to mode-ramdump if it makes sense, but as of now
->>> it's indeed only edl, will fix it.
->>
->> Would adding ramdump here be a matter of:
->>
->> + mode-ramdump = <0xmagic>
-> 
-> Not in its current form, I’ll need to slightly adjust the qcom,scm
-> driver mask for the reboot mode and also prevent the dload inhibit
-> during reboot. I can include these changes in v2 if that would be
-> helpful.
+Hi Sumit,
 
-Let's do it incrementally, as changing the scope usually ends up
-causing chaos
+kernel test robot noticed the following build warnings:
 
-Konrad
+[auto build test WARNING on rafael-pm/linux-next]
+[also build test WARNING on rafael-pm/bleeding-edge linus/master v6.18-rc4 next-20251106]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Sumit-Gupta/cpufreq-CPPC-Add-generic-helpers-for-sysfs-show-store/20251105-194715
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+patch link:    https://lore.kernel.org/r/20251105113844.4086250-5-sumitg%40nvidia.com
+patch subject: [PATCH v4 4/8] ACPI: CPPC: add APIs and sysfs interface for min/max_perf
+config: riscv-defconfig (https://download.01.org/0day-ci/archive/20251106/202511061802.lIq09jwh-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project d2625a438020ad35330cda29c3def102c1687b1b)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251106/202511061802.lIq09jwh-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511061802.lIq09jwh-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> Warning: drivers/cpufreq/cppc_cpufreq.c:954 function parameter 'policy' not described in 'show_min_perf'
+>> Warning: drivers/cpufreq/cppc_cpufreq.c:954 function parameter 'buf' not described in 'show_min_perf'
+>> Warning: drivers/cpufreq/cppc_cpufreq.c:976 function parameter 'policy' not described in 'store_min_perf'
+>> Warning: drivers/cpufreq/cppc_cpufreq.c:976 function parameter 'buf' not described in 'store_min_perf'
+>> Warning: drivers/cpufreq/cppc_cpufreq.c:976 function parameter 'count' not described in 'store_min_perf'
+>> Warning: drivers/cpufreq/cppc_cpufreq.c:1003 function parameter 'policy' not described in 'show_max_perf'
+>> Warning: drivers/cpufreq/cppc_cpufreq.c:1003 function parameter 'buf' not described in 'show_max_perf'
+>> Warning: drivers/cpufreq/cppc_cpufreq.c:1025 function parameter 'policy' not described in 'store_max_perf'
+>> Warning: drivers/cpufreq/cppc_cpufreq.c:1025 function parameter 'buf' not described in 'store_max_perf'
+>> Warning: drivers/cpufreq/cppc_cpufreq.c:1025 function parameter 'count' not described in 'store_max_perf'
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
