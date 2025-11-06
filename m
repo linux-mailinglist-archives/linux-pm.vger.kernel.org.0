@@ -1,83 +1,82 @@
-Return-Path: <linux-pm+bounces-37549-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37550-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74E0CC3D288
-	for <lists+linux-pm@lfdr.de>; Thu, 06 Nov 2025 20:09:11 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 779D9C3D29D
+	for <lists+linux-pm@lfdr.de>; Thu, 06 Nov 2025 20:09:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id ED25B352273
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Nov 2025 19:09:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E7C49188D9F7
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Nov 2025 19:09:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27E473559FA;
-	Thu,  6 Nov 2025 19:08:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E9513570A5;
+	Thu,  6 Nov 2025 19:08:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="oxPG+PMz"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="pFMf2J6p"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B544A35580D
-	for <linux-pm@vger.kernel.org>; Thu,  6 Nov 2025 19:08:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10CA13559EE
+	for <linux-pm@vger.kernel.org>; Thu,  6 Nov 2025 19:08:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762456101; cv=none; b=BQ599OHwDRQHK8BFYxziSWDEICXkxS/uJo20i9TzKgcN4BdwS1fhpziqn/OviKw9ZHPyDqF+IXW4kA66GbFp0h3DQDhT4oog059xj5jn7IatnUev3E0t+kKOGe4pvVeXGFe7RaTWiZungxSLD+7faWskr0BYxRgnO80CBXBvmWc=
+	t=1762456102; cv=none; b=qOIHJPLpk5sux/4C2Zj8Cg8RlcVWpmP3YuT4Oq6qg9bU/jf3CMW3ZAywyZq6U9DBrC8YLkDAfi8gMuq4tb+N306s8Vy2x7ZeBXu3P+7Os2QbjwnmCIvHs7VtE4Rig4zA0EtHfj5oVVNYukeZlpKgCPFdJ05uLwAVSMtWc/JpBgY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762456101; c=relaxed/simple;
-	bh=VJX4q1mmI2ou2O4fS/+roMRPBdhrTr0mfp9hVrUEt3U=;
+	s=arc-20240116; t=1762456102; c=relaxed/simple;
+	bh=TMccTrAY6jfews27rwbvbYNjT+D0HJWoublqLUUZsRg=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=H8iW+H62Ij8N6WMVjZzika2jyQefJ8HIyLsBs81pF4h1r49YvN8xmVeWsLYSxKSXKAkLVPEThqDlua2ifgUgCR8suxHS1QkuduIqENeuN7vHCWfes6FsvVHTD+uitVeYN5EHYdd1QneuFonq73frOW+L3in7DPyejv7/uy+bPxk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=oxPG+PMz; arc=none smtp.client-ip=209.85.218.45
+	 In-Reply-To:To:Cc; b=Uid585cSMhOo+l4vrAh0IaH43V4fjiK3WlS/THyz6aOU4HAIPjikgr3szCISYRoVXuCO3G7EMrj/ZKHqRAUypCpIuIqRzneWPfIjmq0P6OqdDOHIlKxhFwzKx5szyCyebLTANKqaTTAJMPzpL1KY4WbGvkByfOziaVmgxKK02x8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=pFMf2J6p; arc=none smtp.client-ip=209.85.218.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-b72a88397f3so12741866b.0
-        for <linux-pm@vger.kernel.org>; Thu, 06 Nov 2025 11:08:18 -0800 (PST)
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-b7128683174so19877566b.2
+        for <linux-pm@vger.kernel.org>; Thu, 06 Nov 2025 11:08:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1762456097; x=1763060897; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1762456099; x=1763060899; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=l4JMGsObTs14isSyw/2HDk5qr9bB4dzim7Xxg/79G90=;
-        b=oxPG+PMzCudnRvNQHTNgmenQfoJbuUn9LCXdHNOi4zkbhgf7Z2RZLfMfGreNy1jfIy
-         37MHa9Tz8XILwak6miMhbgWTKCxyNXpp9x/VQOfv9WH+s6LPCFU65AKNwhAWrRZGtpmq
-         PeIeBGS6ckK3aNnFEsXiEFntnUB+S6kP5QEt7JfvNmTFZWLn0svGxE69//RnYon47Ihd
-         iV/IzU8gt9yH1tTTKaUVayeCMFY/84gH8QQBxDbY7zBSLwGWupr/VfAZEvwPamHI2KI2
-         m1PDo6GCK+B1JzRqGc07LaS7THJSHgGdnau0w0h8+3fYHZ8aUoq5XLCg0xb8Jj1OClD3
-         +/3w==
+        bh=0EMfoJJAJUSJrYVhvefLkn8x0fM0S4lrrFEN5ZpP6No=;
+        b=pFMf2J6pq6OPcsMh6NM3h8fhbzref8vj9T1FiWrgTZV/qMUiJS7XFt82jdO4Qs2/kP
+         6CVy9ci8XSu+HobAjiuMoDvkioxFbgN+m35GUsTX/0hKlDYnswRhnFBj0r69o5FP5N5B
+         qVby6FTscwZN+/+5RmzOwXEtRoH27BZX9Tc9dA4dQ15q6fBjF2Uz1tP2gWZrvlKPmh/h
+         IWM05G2w+8QVjKOSVBdIOF9DRJDBv2E6BC0DioxlUmEEnEjQEw6rvROewmjhpUQsVBkz
+         uqL5C4hPZ/YLYTjz22mfC9gFWO/2ro0dflcZjvVr871xEChX0lRRNT6DM+RfoLDUYSHI
+         AUUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762456097; x=1763060897;
+        d=1e100.net; s=20230601; t=1762456099; x=1763060899;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=l4JMGsObTs14isSyw/2HDk5qr9bB4dzim7Xxg/79G90=;
-        b=jf3/lril6qebv2UOMTOp2bbmLV1JqCyW/fumJv9SyRkNPhm0hI1/jWUl8EyO9/j/Sf
-         WY/Umyinne4pj9L7kfB14OGl35W70YywaPlFjUJc4IXPs+Q6NLSmD5sjR2nk20Q28wJJ
-         fdZtzIThJ2NrkSLn6FePaiZvtpnbIeBdB57aIxtF6GUumi0RDelyPgikWyy1SEf9EWjF
-         3lxllzHRv4UK7oVHvkvlY7tBjHBtrOEtubDAk4TaNRWK3ErqorlvwdF+FL06rv60JSEP
-         UehSLJUV7X7EdtUA+s0cVNigOuN+IE3qoyXM5tg1do3BJaqCgaaEkmGIN+GEpYNnIlF7
-         oyjg==
-X-Forwarded-Encrypted: i=1; AJvYcCVWtAS40IfjOeacW4UcHNooTo0iM4kTN2pib6jnXhd6+tm7bJm5kS78CQLeC11ZbFHujTWuyy3kXA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YycQLtT8BK09Zm/HAxAqrz8JG0U0/+kTNSuAanMMO3urjmE9jXD
-	dm5TGpLnoWZiTc1tt9gq9Ihdlt/o169gKeAJTd7uVFoUHO3691fgXEv21Uc+pIiNE8Y=
-X-Gm-Gg: ASbGncuC363zVzHntJoRreUDvT8cuXrgEWuySNdp58Y+vJPX9/CJiy7S++aByCgpawj
-	xclYiWRJo/ua7SQeneTYi4+8rpMCIDd8mVhfUL2tci8zJONHt9T63JULDr15q1TckxzO5rIlxF1
-	Qq33x4UKtW+wRYgvrCJkgVfmMvTTFiPl72yXxcaao4W4uZf9DtRvdsy0vhRyEw1GQMLjTxNeqXz
-	3MO9FIKfV7/DBAQfdznvOsIQ7lQOs7C9R1Pv6Yi+ODOR3hU7ZG3gu0UW7U9G4wl0/cM4illVDqU
-	/LreY3f/MensvIt81scviGJusYEazXv3nVKR8WzaUCmKyHVtSuHxvrhZeb8rHoL6aWkw2J2X8IZ
-	aPiO2F3kExLaOKBSypJPTlqSfMt0EqdpXQtIfNOGWaf8u2G9sBy6fbezh+hN5se7AHrXYQDbazx
-	ogEAvyxK5ZYKAZnZRU
-X-Google-Smtp-Source: AGHT+IFk+bNY3frZKV9s/ojuNfqyzPuYp51TMnp260XUevSmM92K38NtOvI6xgFcbZ7/Qd6kA8xBlA==
-X-Received: by 2002:a17:907:7b8f:b0:b5f:d4db:731 with SMTP id a640c23a62f3a-b72c04ee049mr25494066b.0.1762456097132;
-        Thu, 06 Nov 2025 11:08:17 -0800 (PST)
+        bh=0EMfoJJAJUSJrYVhvefLkn8x0fM0S4lrrFEN5ZpP6No=;
+        b=H/vc+Y01errm063tJDuCxloE+3efpif3sXNEK9NzKW4CjYYNNUPvmy3ukbxuPllYZq
+         uqGcXJXfwp3qSwNOpwubqUDj3tNTiQwu2G+iuaflFF6bvvfAchgYLX1UGwPXTEY/9X0O
+         Oofpq6QroKCSoxxEkaV06qL2uPYNV+RHur2kNoyvM0YqlnZ5Q7pwvKFQa+DKcb748mxm
+         gbK7isa336wLawG8yu4y+zeTy1pkG6GWUyp6xpimqEaNfQ+ElvoNGCBJ9WktTlFOAsLM
+         p2mYviZLnTgWGM84tDYndvUtIgURs7werJBZ5Cx2xm/QI6BCX3/HdQCYPmcrJn1bNn82
+         D6sg==
+X-Forwarded-Encrypted: i=1; AJvYcCUZBamE/J6bfUXgGrmGu8vq/CJu4RTcN/0wmd0DLxy+BvNdxnBTtoDxXbPCcpOxrjlIDakZUEWKKg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwxnePhJ5dzOwHg3bxbAutddeHMp2l3k53Fhni/gMiapTyIi6Dp
+	hRYJAYjSoIoecSdWN/uv/ekDctkPFmrEbkCQmeGbbcB2QC3RSIqXzJTlrI/VgUQeZ5A=
+X-Gm-Gg: ASbGnct3u6vseNvi4KOS5SDcNMyvz7iX7+6xamjRUes6KylV9S3ndAZGpr0pGC97kU3
+	gdVkEL1VfJxyJSqryNeNZoUM7B1zkQc/D/xyriinZxak74ZkLR9vj5YeYzwMweWdZmiNuf7pQew
+	jvkypRlyMBpV4MFrdPx/eZndyDOGu3Nc6zQpASMYPL5AZM0z5+C1YHdsqDLMpVRuXsDeP1+33J6
+	0D26K+pmWTvcuIs0w0qn3oOxABDzLK8gJ8lX4fLgWGI5EOcPtJ2UQ+Q0ESe6zEgiEa3uHZJx9YH
+	8SiIVJwME6NFJityM3jFGIajosy/iy2wulM0f7zc7b1X5hjQRuPQkEpfnv7rj2o6OvCuXCLmYGJ
+	iZEMsNl+JzNmjSEnM8JEEn5EOzOGrBoPB95NkK+VI3Vg2lDngP8HT/Oo5eYTyM3txViZuioyAPi
+	C+J501GSqAOlT6fVJgdLI+4pahBTA=
+X-Google-Smtp-Source: AGHT+IHpy6g/ExB/tXdG9aK+X/w5cAOjpzKRGt7oFbCPlJ5xOgLfDQqFln7LmAaTDVmt8oPYZbetjw==
+X-Received: by 2002:a17:906:c142:b0:b71:a627:3da5 with SMTP id a640c23a62f3a-b72c052b1acmr20747066b.0.1762456099430;
+        Thu, 06 Nov 2025 11:08:19 -0800 (PST)
 Received: from [127.0.1.1] ([178.197.219.123])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b72bfa2510esm26739566b.72.2025.11.06.11.08.14
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b72bfa2510esm26739566b.72.2025.11.06.11.08.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Nov 2025 11:08:16 -0800 (PST)
+        Thu, 06 Nov 2025 11:08:18 -0800 (PST)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Date: Thu, 06 Nov 2025 20:07:11 +0100
-Subject: [PATCH 04/13] cpufreq: sun50i: Simplify with
- of_machine_device_match()
+Date: Thu, 06 Nov 2025 20:07:12 +0100
+Subject: [PATCH 05/13] cpufreq: ti: Simplify with of_machine_device_match()
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -86,7 +85,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251106-b4-of-match-matchine-data-v1-4-d780ea1780c2@linaro.org>
+Message-Id: <20251106-b4-of-match-matchine-data-v1-5-d780ea1780c2@linaro.org>
 References: <20251106-b4-of-match-matchine-data-v1-0-d780ea1780c2@linaro.org>
 In-Reply-To: <20251106-b4-of-match-matchine-data-v1-0-d780ea1780c2@linaro.org>
 To: Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>, 
@@ -117,21 +116,21 @@ Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-tegra@vger.kernel.org, 
  Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1496;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1357;
  i=krzysztof.kozlowski@linaro.org; h=from:subject:message-id;
- bh=VJX4q1mmI2ou2O4fS/+roMRPBdhrTr0mfp9hVrUEt3U=;
- b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBpDPIMHFyxNlu4T2drLcnz2sjdbxNslTCnq8MD7
- ICJBBochkeJAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCaQzyDAAKCRDBN2bmhouD
- 12JLD/9wxXcPWvHWK1TxOFBiNFBChyh3nSefla4W1FxvqtSjyYx7Ic6ZAWJQq0liz3u1ImNOUdW
- RKYq8vLm8PFRV/zuG8GhaamOHTAWvffbvpspD6tSO1JtKEBAbU+Y0mfF2l0okz/5XURUV/Azqoh
- IOKkU4s8fPs+1SeHX3dmJNLMD6iW7SredyCcNbRemCu2s692b7Z4Jjx8HsCIkSqsBYFEHDf3jA9
- Vt7uKrTHEExDkXxgTy6tCEIyYLknTaHZt0p//RhYPbOWa0Mkt1SUPC4TxwzZ8D4Sq1VcNmncG4t
- o6ZjpoF2Ina0n0SZ1iXnJwtgr/L51tqs3iDrxvgy9MOj/OYA3efvHNhODve5eNJYdvOwEhw82pT
- wYLVt2p7e/E+JSrkn4fzwQchUWkcVUqKs+NVqHiMMmR24G5PrP1PoWDUKivHZaqmla1XplHxF+H
- YjavMrtr0DiOkMnh7lQYhVSzQgQuGKY6qRZnLxIMh2ygHZx/MxcQkDtNOS1Xd8yowtDli1z5P5R
- SoRdK0Yb0Rnj4Ey/uypxoBDFFBeGBYfaszQAimrcw5t7lgmV6RRU19VFs47jOLkmj/o9g2Uiuf5
- XN6FX0JUwwkVHnhIr3f5NuPFaWZrkoYtGJsGbAj46rhCogv/a3exsmBhboYP4WWG/zB8RU+0ppz
- cKXKSifLH8r8STw==
+ bh=TMccTrAY6jfews27rwbvbYNjT+D0HJWoublqLUUZsRg=;
+ b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBpDPINB2hcjM8CllrcU/oYMlxMVbOrIG9ZbKt4r
+ J6A6ykHWZOJAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCaQzyDQAKCRDBN2bmhouD
+ 18HqD/42Qwhh3/IZCwym1Z2urYA7CwYVB0JU2PVOoJidbH45aheJiAWatbUnTpQFaKg3s6UY/mG
+ 6YgQWLLLUEM44nIcAqUj1X7y/lJyx5tsfzotB0ZHdFOalzT89gwIBXCVg2sIEwjTV9snZYAfPDT
+ 1Pd3QZhFbWmTMmmyMFkX5dQGM4lnd0eRqml1TuEdr3MuhBaHqf5McFPM+YDg15hSXu8+hs4OkiT
+ KEwlJCETrfYYWbNcQCHObHuiSUKqDazpYiNiiC5ETOrgjctCN0/aknRcm9lYgJIx0xflcJFT7RI
+ mcodL8/DSE2FEc2chRC2iYMWb6ulfHrvkPPHZiIMaqLA589bwocGzqGvKin3kil8du8Z7goWk9a
+ E4D9PHxlumE2TIwLlciKDQKo5ivphUdDLk6G4r8DdlPf49USQ7QowjNwn9pKh0zCM6c8fm7wmdT
+ y/hISSHuivvUxDO7fSRLcA9sWKGCbviaEYXkqiUadw/4cgbM4jOmomFLhQ5NI+ED/Xv/HsrkxcL
+ 4MsQ8/PPH5X/DZe7hJGMzD/ib7ejn2sBTqeLBRqERrAYwKdlV+iGwk53skesHNPE29+S1daNwZ6
+ gyB3Si51e0pvvHjEd/ZJg3rRwBbu+ySMPDMpSi6sxJxgCLs/rHlUkNzMV5SZRV1UVZNRzWmZVjv
+ rdRauxzz0zz6+ZQ==
 X-Developer-Key: i=krzysztof.kozlowski@linaro.org; a=openpgp;
  fpr=9BD07E0E0C51F8D59677B7541B93437D3B41629B
 
@@ -144,40 +143,40 @@ Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Depends on the first OF patch.
 ---
- drivers/cpufreq/sun50i-cpufreq-nvmem.c | 11 +----------
- 1 file changed, 1 insertion(+), 10 deletions(-)
+ drivers/cpufreq/ti-cpufreq.c | 13 +------------
+ 1 file changed, 1 insertion(+), 12 deletions(-)
 
-diff --git a/drivers/cpufreq/sun50i-cpufreq-nvmem.c b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-index 744312a44279..4fffc8e83692 100644
---- a/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-+++ b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-@@ -332,13 +332,6 @@ static const struct of_device_id sun50i_cpufreq_match_list[] = {
+diff --git a/drivers/cpufreq/ti-cpufreq.c b/drivers/cpufreq/ti-cpufreq.c
+index 6ee76f5fe9c5..b59c46a3cbd6 100644
+--- a/drivers/cpufreq/ti-cpufreq.c
++++ b/drivers/cpufreq/ti-cpufreq.c
+@@ -470,16 +470,6 @@ static const struct of_device_id ti_cpufreq_of_match[]  __maybe_unused = {
+ 	{},
  };
- MODULE_DEVICE_TABLE(of, sun50i_cpufreq_match_list);
  
--static const struct of_device_id *sun50i_cpufreq_match_node(void)
+-static const struct of_device_id *ti_cpufreq_match_node(void)
 -{
 -	struct device_node *np __free(device_node) = of_find_node_by_path("/");
+-	const struct of_device_id *match;
 -
--	return of_match_node(sun50i_cpufreq_match_list, np);
+-	match = of_match_node(ti_cpufreq_of_match, np);
+-
+-	return match;
 -}
 -
- /*
-  * Since the driver depends on nvmem drivers, which may return EPROBE_DEFER,
-  * all the real activity is done in the probe, which may be defered as well.
-@@ -346,11 +339,9 @@ static const struct of_device_id *sun50i_cpufreq_match_node(void)
-  */
- static int __init sun50i_cpufreq_init(void)
+ static int ti_cpufreq_probe(struct platform_device *pdev)
  {
--	const struct of_device_id *match;
- 	int ret;
+ 	u32 version[VERSION_COUNT];
+@@ -564,8 +554,7 @@ static int __init ti_cpufreq_init(void)
+ 	const struct of_device_id *match;
  
--	match = sun50i_cpufreq_match_node();
--	if (!match)
-+	if (!of_machine_device_match(sun50i_cpufreq_match_list))
- 		return -ENODEV;
+ 	/* Check to ensure we are on a compatible platform */
+-	match = ti_cpufreq_match_node();
+-	if (match)
++	if (of_machine_device_match(ti_cpufreq_of_match))
+ 		platform_device_register_data(NULL, "ti-cpufreq", -1, match,
+ 					      sizeof(*match));
  
- 	ret = platform_driver_register(&sun50i_cpufreq_driver);
 
 -- 
 2.48.1
