@@ -1,78 +1,78 @@
-Return-Path: <linux-pm+bounces-37562-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37563-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 54819C3D512
-	for <lists+linux-pm@lfdr.de>; Thu, 06 Nov 2025 21:02:14 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C06B8C3D524
+	for <lists+linux-pm@lfdr.de>; Thu, 06 Nov 2025 21:04:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 464534E4A39
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Nov 2025 20:01:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 66F301890873
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Nov 2025 20:04:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 780AC3AC39;
-	Thu,  6 Nov 2025 20:01:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D76833CEAE;
+	Thu,  6 Nov 2025 20:04:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nPs9G8X9"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PfkbZs6T"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C83362C3258
-	for <linux-pm@vger.kernel.org>; Thu,  6 Nov 2025 20:01:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C8823346AB
+	for <linux-pm@vger.kernel.org>; Thu,  6 Nov 2025 20:04:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762459286; cv=none; b=Wv8FCUt/lEYKCNLJE+yHjN3F4xWTlAJ4u25EYCJR7qtq6yHn7G5phee5Dwett5RhBweBnHPSq5Bax4Q9xU8A7vPc0TuI+9IenGeSNChFKwHqFaWgDJ9BubDXg7gIiRlwRGPqBjjCI6QJR/Kk/0eZmMZkD9T3b6/HNyn0hkLlwEY=
+	t=1762459445; cv=none; b=IKTWsWBmsdaBJme8mxT9p6Ct0l8hUo3VmVRn+nHsf+4CWicQlnFi4g2bFjpEppQZp3PWkZfZ9o9uYodTp/mBbECA4CZurDEmA/IN4H6WrIvU4NXfEFc2GBY8KRrtsnzkNssaRdD3eXMKOaajpzg/WVF5RkuId7BLiq+I+IULVvw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762459286; c=relaxed/simple;
-	bh=/RVfP0610YIt4L5/hYCpMwugXVmYG5GgiXajs25enfE=;
+	s=arc-20240116; t=1762459445; c=relaxed/simple;
+	bh=cHynKQOLc5ii50Gt3yz1TrQddPsrH9nDQ8nW8Q6lgRo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cu9CjFXZY7YZjEpE2Oj2fxRUwXNh0QUv9u7MfC5tV6EaEICpV0e7FpfMwday3gBzsE/rRkYjo2gJ2upf8Y1MFh4T12b6djyV+7KdF7PQOLY6kNkwGqC3gRIW3D3u+3hULEHQ7XDU3dNLCS+g6fJi6CgsBfC19gaXBZ+zduTY4Ko=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nPs9G8X9; arc=none smtp.client-ip=209.85.128.46
+	 MIME-Version; b=PpwR/zrL02R1xe+l7jkLv0/hFYDIoIX3i1Uxf56MTG3jvbXLfNMjqrWd6QK8xHE7kYfy6HPNgu0m0YaZqA6zpYGNLsKon4Xj724z70+encP3m8Mbiwo3GM4stcD71jFxY+8xPIHuBZNYUMC397iM6XQzfbe+gwmNTDIzBd81eXg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PfkbZs6T; arc=none smtp.client-ip=209.85.221.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-47754547a38so119435e9.2
-        for <linux-pm@vger.kernel.org>; Thu, 06 Nov 2025 12:01:24 -0800 (PST)
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-3f0ae439b56so4045f8f.3
+        for <linux-pm@vger.kernel.org>; Thu, 06 Nov 2025 12:04:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762459283; x=1763064083; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1762459442; x=1763064242; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=GH7CiLaeHOxdySZSXu0AqoTXTbwIQUziIzU1/c2Rp0g=;
-        b=nPs9G8X9xjKVQriunNoPgDRV1KOmORr4wKcQknYkVqo8mvKBn3XoRs239+oZyxWzNI
-         7vrN8bEYCGMuaXRwkEh507gc0ljmFfRTs8mfUMRtNvRSqBDGZCTkftDedqdgpPtkbPkM
-         JG6NyuwNsQ1iyVGtAKwYRutmNXmQGFbo4z2iuspsJpv5Wzd093zsH/DuR6deZqvohRL3
-         NFKVs8mfe4LwYjIro8vMF8Q06iT33ffDl8wmH7JNUkuezALbAaWEMROWqTMDQxoeiqH+
-         73Do8HNt41Jy//L3MrBVE89SzTcDOg9bJsKA1vNzFFnT2R4k8oC9/y9/ttLMvoruhD5u
-         nZsg==
+        bh=X7yR2bHRK9gzns7PW7bXBGW/+15SiHKbafHBuxGBdc4=;
+        b=PfkbZs6TFtpzKRJ9CoYDZOhw7NtdtNTuDF40poqZ4LB0HZqYFeA17JPa1cCpLgWYF2
+         f5mpQxbsJlIomF2p4NHppD83ogUPEc+lia08KjnpJ65y3ewpv3uPgjv1VUhfUsWIfsDn
+         mzswVHeHgHo2yVJ+zQAVHxlIDaMGymBv/2kAYVMjrxfdujzczVPChBu8XSE41X+EOJXa
+         XmwIEvYw3u8051s3H2BnN8NZNI3eaDFHNehR3YSoviz7FbCnH/yNcMBg/G1YBS9xWp9W
+         zT0e/4DbOK4cWFOVxIa6qOzJwrl6KXu81XNc0leke/C7jhPqLDuhQSeNgDTZgv5gLgFm
+         f2eQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762459283; x=1763064083;
+        d=1e100.net; s=20230601; t=1762459442; x=1763064242;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=GH7CiLaeHOxdySZSXu0AqoTXTbwIQUziIzU1/c2Rp0g=;
-        b=IHXCpS7ZjUYJ7taB+LnJtsB1B/SnMy9vvT1LA07NX5REQFceBGiqsXUAl9uBwi8DJt
-         mvY247iHmlkCTUmtXgeOk0rSYITxK9LYlEn92mryXBmQnHuWyRIz3IlBseoy2MKHF6W7
-         vXcda/92OKxBI46G6RlSVBEKcywXmiYk7/9eM+XBIhrEf6JDpdTIy6mpLgjh2NlWZX0D
-         XDnA8vmNtvg4FrrN/hvYWUoBj8QED8AhRQHHhLl2dZLpZNON2SVkXRuJW4SF2fpnMyYL
-         yN89I8YDPa/ToywLBIBufoQdSNaS7/C/VcjCvLH9/ZBYB45YC7mklHWUWwjfqa4bsj/P
-         PzYQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWG/AMDx8UGHeWtoYLSmGt0ldE6JqMuZqz2JWFeU99qL9zHXwYLxsC/XrbGADcsiD893pcfMY0UIA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyYKNHGFtOw2QEg7drepTtiF7ZnhiKaffQelD8Y/ClHHklRxmWa
-	gXSwpo9QtKxhyFj5L//FoUZXT7xCbnpixJyzsLhBsFTbNausdgI+h82L
-X-Gm-Gg: ASbGnctidXEBqWdA+t18h9HB/poBllmg3SJTkIaVYfnfJDw/dT2yFyhwf7U/dusWKB9
-	2FzkV1DiG2SJi0HR/P8kBfyOIi3kWuihQcM7RpX4lD7vjUjTaadZiEuZGqTMYAhGcoRD9Jc31P1
-	BY2faZg1hmkAgnMErAQZAVAuaFGUEkE0jBgtCvCSQg3dSnWhTjfWyt6zNEIUUND76faNLHAW3WB
-	hyJ1/ZhIgiUZZKsawR+t8OAX+nGx4OD/a5/Tn1++h0A1uEz+evAdIdh86JnmATVebWpNO0eak3W
-	+3nHby89YRkZbQQLK7+hy91R0wWkKmOygRLCNAyc/fogHWuoKxfRZ++vaDXV/nDrv7BufAwKAbx
-	T/TPvm7xafbGtHTJYIRVttgbZHnUb3CT9P9zlZkGZfJUi+RxtnNLs1F699yX1bLwn7rGxWf0n
-X-Google-Smtp-Source: AGHT+IGI6Wr3SSGjm+C23YdiGLW8MqrqwbEkHb0h4+MRsQ1cm2FmVQjP33iSFpfhzOkuS8ZoRJh0Vw==
-X-Received: by 2002:a05:600c:1d1b:b0:46e:2e93:589f with SMTP id 5b1f17b1804b1-4776bc96763mr4571145e9.14.1762459283077;
-        Thu, 06 Nov 2025 12:01:23 -0800 (PST)
+        bh=X7yR2bHRK9gzns7PW7bXBGW/+15SiHKbafHBuxGBdc4=;
+        b=M82Olo74SjGzLJlsgdxhKaHFYkWa68jQR9voXC0X4ANxHcGLGllrvspRsWlyWTnH3m
+         oqT+b3eGrDxGTXk1jfFmiOmrDVVu6rA2BD8TasnJaVYnCrY5NXa2PuJcnzYqVxSIH1Nj
+         6oNEYiPd7pRdYQ37fQyv7cPlzgzWQQCb1WblPM2OtXTA2jDobdk+pa0IENaYEJ1Ed76L
+         jwu8seL1Dy/hAZ7163QrwRJuYTbVwcXD+Bgly9woohAIefnVkLlW29ZpjeIbfvROiWWJ
+         Q1I29N8XVTIwIrCbPAgbKLNJqjZl9JvECZa/Z0zCzm3v8ThJ8m7yTzdy/ejIgiaPiNdm
+         Rdag==
+X-Forwarded-Encrypted: i=1; AJvYcCUzZfV/gQ521ZNR5rbcOcmJe5IFPESP/+glQrjCsKETuU4zBGuzd0l2fl9DWI0KuD71V/XP4lKNWg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyIbgb2FUt/d88BGI0TKaALr4R7XsyOQ/tsxJXOpmq5FSArCO0B
+	DKlcjxUhRZKuGvy2Ok4PCzuZBDewD0+QRWw9IXNh2f4Vd58xF+Hu9pEE
+X-Gm-Gg: ASbGncstRyxTQa0aTDP9Fa3ZzQ8Hvl6ywWgyVmwJkyqKemsHzu0ClUvDR0vLzGiMd02
+	1/xrD+7v76pOZ65l181Ft8KEEud3bysAukTTk8Px4jd5FtDOV8fgXEz5LXNTsDvU4fsMxgQBrzT
+	gWpPPRmVFdIpcc6idGogUeKoa8Y6Jo3Rv5BxzbZJOkTrugs/NBl0U5z3kHBwjTUaOyDgTe9ABjr
+	VRIWr9yIl3pnP8zaZpPcA89YhkWmmjQ2PQrYji7srDaTG2PBgZviKwljqEo4DlSIGln02eKRLr4
+	MfsJD7cf6bORDZ0kY8hYsHCRLWi4MtHXgYifu3KBu37zGchokfmJCW1Hbl/wBlK/2q7gIEN2o/b
+	L/HZxmDXFdcVWOeo91aIexibS3ajU4sfJL078hc6/8eXAcjBOu3B68XrVSA5ohxmUGshE0aOy
+X-Google-Smtp-Source: AGHT+IG30M3iSEO8D3c9yVbtgdXYbEKgf+NVCjIV8t9OJJNcKVz7gcFg2k8DBnqnw/S4QNyvM11IDw==
+X-Received: by 2002:a5d:5f51:0:b0:429:8b01:c08d with SMTP id ffacd0b85a97d-42ae5ac38eamr463450f8f.41.1762459441776;
+        Thu, 06 Nov 2025 12:04:01 -0800 (PST)
 Received: from localhost ([212.73.77.104])
-        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-47763dd53ecsm25538385e9.1.2025.11.06.12.01.21
+        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-42abe64fd90sm924084f8f.21.2025.11.06.12.03.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Nov 2025 12:01:22 -0800 (PST)
+        Thu, 06 Nov 2025 12:04:00 -0800 (PST)
 From: Askar Safin <safinaskar@gmail.com>
 To: superm1@kernel.org
 Cc: lenb@kernel.org,
@@ -81,12 +81,12 @@ Cc: lenb@kernel.org,
 	pavel@kernel.org,
 	rafael@kernel.org,
 	safinaskar@gmail.com
-Subject: Re: [PATCH 2/3] PM: hibernate: Use atomic64_t for compressed_size variable
-Date: Thu,  6 Nov 2025 23:01:14 +0300
-Message-ID: <20251106200114.8019-1-safinaskar@gmail.com>
+Subject: Re: [PATCH 0/3] Fixups for hibernate issues reported by Askar Safin
+Date: Thu,  6 Nov 2025 23:03:56 +0300
+Message-ID: <20251106200356.8213-1-safinaskar@gmail.com>
 X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20251106045158.3198061-3-superm1@kernel.org>
-References: <20251106045158.3198061-3-superm1@kernel.org>
+In-Reply-To: <20251106045158.3198061-1-superm1@kernel.org>
+References: <20251106045158.3198061-1-superm1@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -96,23 +96,13 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
 "Mario Limonciello (AMD)" <superm1@kernel.org>:
-> `compressed_size` can overflow, showing nonsensical values.
-> Change from `atomic_t` to `atomic64_t` to prevent overflow.
+> Askar Safin reported some usability issues with hibernate messageing in
+> some failure cases.  This series fixes those issues as well as some style
+> issues I noticed while touching the function.
 
-This is bug fix, too. Please, add:
+I tested in Qemu. Now everything works. Thank you!
 
-> Cc: <stable@vger.kernel.org>
-> Fixes: a06c6f5d3cc9 ("PM: hibernate: Move to crypto APIs for LZO compression")
-
-a06c6f5d3cc9 introduced variable "compressed_size".
-
-(Yes, this commit responsible for both bugs.)
-
-> -		atomic_set(&compressed_size, atomic_read(&compressed_size) + d->cmp_len);
-
-So, we read atomic variable, then add something to it, and then write?
-This looks like textbook parallel programming error. Very strange.
-Anyway, you fixed this, Mario! Thank you!
+Tested-By: <safinaskar@gmail.com>
 
 -- 
 Askar Safin
