@@ -1,882 +1,223 @@
-Return-Path: <linux-pm+bounces-37542-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37543-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EEA70C3CD4D
-	for <lists+linux-pm@lfdr.de>; Thu, 06 Nov 2025 18:28:33 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 90DB4C3CDB3
+	for <lists+linux-pm@lfdr.de>; Thu, 06 Nov 2025 18:32:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EAAB0623B96
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Nov 2025 17:20:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B1910188785D
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Nov 2025 17:32:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3167D34DB53;
-	Thu,  6 Nov 2025 17:20:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7089334B196;
+	Thu,  6 Nov 2025 17:31:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SvdWdNRK"
+	dkim=pass (2048-bit key) header.d=kfocus-org.20230601.gappssmtp.com header.i=@kfocus-org.20230601.gappssmtp.com header.b="NlYFc3wb"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f173.google.com (mail-il1-f173.google.com [209.85.166.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEBF02EC0A3;
-	Thu,  6 Nov 2025 17:19:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 965BE324B10
+	for <linux-pm@vger.kernel.org>; Thu,  6 Nov 2025 17:31:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762449601; cv=none; b=LK3Ht+p4wtfXuqdx8sRBGihWh4brGb+pNkSSFQhX/iL/IH3Gj4qqJVm2otSEjanb8KU/SviqabQVvZzL0CejZNF20MphBGg3gD6sr9t1BOqaVxRkL0VOXsNoMDiqzfDYCQ62jylYS8fdIWivU1HIOySFqnA/+PXjuakSrZ+Drk0=
+	t=1762450305; cv=none; b=L1yOGbnH3MuQWWkBRMm+LqVMApw0L+L3ltpVRP+Z74bgXO1TGrgkorKxprrvklRjR+5kp05Yeq1N0P7tP5TnmUPDHkr6qByvuGjeU4JS62mxSYK14u09AUVdNI1TagYe5lM8UD7/aZu1EbixYXv38TduRnDEVjIUST4MnXz+dLo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762449601; c=relaxed/simple;
-	bh=2iaeJc/IbZ140mT+gHMLPHOFg9Bw2nlRFGcOl7dtn9g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Z4q6PPC5d29aeHX7vplim6Ex43QNP5P5ZZmWt0zRbHEfDjCDSmljK96DQBvUqSEFVYVAF4nlw356LOWYyA+vV2VwLmTzdvYZ8CqKNoyXCGqeS08+J57ypQwkTP8U4jQquNLiFqWxFrrgaUuquNQuqeX6+vZK7Cdl3+PB6gpiRyo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SvdWdNRK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 676ACC4CEF7;
-	Thu,  6 Nov 2025 17:19:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762449599;
-	bh=2iaeJc/IbZ140mT+gHMLPHOFg9Bw2nlRFGcOl7dtn9g=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=SvdWdNRKJsMkyu/fjacQpnMqCaeWQ8S2I7VlVL27249y/0sNo9NRM1sRboTYD/Jir
-	 dnlWXTi04457fooRhIFWSe+Seg/3IGl9CSCD5axOtJy6o9qruX5K71T4UWVjECPX0X
-	 3UQn5O5Niki2dvLFyXtgk2PAvf9YqdeKjIDWrUkzGBuBmIrpklGyf1dE5GMa05lDaS
-	 FD0ulOYILR02lkuxfUZgR3F8INLjK3dnm/qVsazE9G5A39OL7Y5Ho4Qdtfle8/5ncL
-	 9Hh3Z7fEetaPqSDNSd9JR5qCR8kIAscUdgJjW6JcAUrpCWVvplbr0u9kRlO7TZGQMi
-	 sWiXyN8hy8dMQ==
-Date: Thu, 6 Nov 2025 17:19:53 +0000
-From: Conor Dooley <conor@kernel.org>
-To: "irving.ch.lin" <irving-ch.lin@mediatek.com>
-Cc: Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Richard Cochran <richardcochran@gmail.com>,
-	Qiqi Wang <qiqi.wang@mediatek.com>, linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
-	netdev@vger.kernel.org,
-	Project_Global_Chrome_Upstream_Group@mediatek.com,
-	sirius.wang@mediatek.com, vince-wl.liu@mediatek.com,
-	jh.hsu@mediatek.com
-Subject: Re: [PATCH v3 01/21] dt-bindings: clock: mediatek: Add MT8189 clock
- definitions
-Message-ID: <20251106-hug-stingray-2d3ff42fd365@spud>
-References: <20251106124330.1145600-1-irving-ch.lin@mediatek.com>
- <20251106124330.1145600-2-irving-ch.lin@mediatek.com>
+	s=arc-20240116; t=1762450305; c=relaxed/simple;
+	bh=zvM6cdXMIl2o5YrUYpRcbskZAazZPGSPd0IzRPXWkXY=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=phOtaeD732yknO8gqgbXz2uf2mP7lidJbJMf7iNDdWtud+YMVzP11JYnV6ayR2OjNC2QxnDepXTjl01U3Kv23qsOVO1ftEzfjlMH302islRAVTV+hppKTPQq3zErZ+9A1miuzTO1r5aS6RcqQU11BULElsqojWjYU9HLv+lc8RA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kfocus.org; spf=pass smtp.mailfrom=kfocus.org; dkim=pass (2048-bit key) header.d=kfocus-org.20230601.gappssmtp.com header.i=@kfocus-org.20230601.gappssmtp.com header.b=NlYFc3wb; arc=none smtp.client-ip=209.85.166.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kfocus.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kfocus.org
+Received: by mail-il1-f173.google.com with SMTP id e9e14a558f8ab-43321629a25so11019945ab.3
+        for <linux-pm@vger.kernel.org>; Thu, 06 Nov 2025 09:31:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kfocus-org.20230601.gappssmtp.com; s=20230601; t=1762450302; x=1763055102; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:organization:references
+         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=nh8x1k2Zf7IvtO+dGH7W6iW6tYC0mC1F9bM8nm3prqk=;
+        b=NlYFc3wbbxXyc4dQnyp+qIZ8eAOKxSo53CmJ0eMxpJtPBLU7sz5mSFvb2YQuwTU7+5
+         3lwLq1nlgrh/Tj18Ic8fC51ao91R9NFItSt9+yuHqkFcf5klimfMRLi0SPHwxgQpie3X
+         jKWFXbd6C3H7HNZLkAJkFqGrD1nK5Jk1XVJg1sRGaS1t/CJXrRhFoJUTp7bl2z5Ts/cO
+         b1vnjQsF06JS7rqnvbh702IqDWE8vukL1aTICOREa5JGN5cHRP1vqdc5Jotu7G8/Raix
+         agg54M6PuPxRunbmcOsRVy9ocsp/eMkLiA8RsCS3H3NlB7huWYJOQL46zyn+kl5S7PVv
+         rfGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762450302; x=1763055102;
+        h=content-transfer-encoding:mime-version:organization:references
+         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nh8x1k2Zf7IvtO+dGH7W6iW6tYC0mC1F9bM8nm3prqk=;
+        b=o/G8S8MOqAaXZJR+Lc3Kij8XdzxRKMeyvsId//p4jsm/0fkZQQKMXtK4pjFYj1qMOZ
+         lBXy+fjSZIoORw9Q+fzttuVJweS0cX3osEnB7DW6oLiVHgWS6rbQ30bk4FbbjDvsCUo/
+         +uZNr5JMHYdKHS4PrWMTh2XvKYZTN97fr7NeppHIKDolFS1FwTFBNVndXFgOVR56eUoc
+         DMxcheEZuMcIBtUlHffvSEOYgQhKO4a3ZueBE88WnKTV3K/JkaJ4L6QCT1muNkLgw9IC
+         OMYXefGojvWS6k34paySPtQUCb4RPAVxk1MQSCTl0MrDGAtCGMvZND0EXqVB2KS4zZNF
+         h1Pg==
+X-Forwarded-Encrypted: i=1; AJvYcCX/3GTPmwMy7Ocg3YP/Z816K8EwVbUMGP9UOeTD1rW084IJ0VfX7TnDhXyGRQ5KhsA+jpjvvFPOow==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx/EXhLQ4PBc68Oj+9oMkRd7wjehyIxzqgd+zYLElV7ehGVxtyI
+	G4nHw9vFK4LuCKQeru98+qpByZUXiXKUPy/8qN8gEcTJrL2r+OdBRYhSQs8rqU4vE5I=
+X-Gm-Gg: ASbGnct0wk5Fth2dtjr4PubRiTXjr972Ff+vIAhJG5pUPF9Ua9lbQGvsWi6cxeCkQK0
+	Zj4meP2niCUzSwpd/TQ3SYHmHMX4XzpZYMH5sYg0OzpnCBv8O2x8gh4MDX2FZSFKMysKq/8x3Cb
+	PkgDlwKp6WXRgDJeHrBb4LAFDpE9tY0geU1GWYlQSNgfY9bcFMf9XQHbmZSSL9drSJny9EXZEvY
+	/rQfroQ61o8swrTAJUKHQcV6tOVB+8X1JNqT6JFIYKj598h2xwWCRM8slp7BO2phzyfBHvHYzm4
+	bVG7A0rv/2qci8iYCsAiQjwS92PEWJ/5/CIhGlm1hU9EVnm33fcGJDTA9r45W4D61ynBDZG2Cse
+	QAJW9FRXN4s1EPKOgamiGKmT72rOdu+MXciNmgPlekVQG6D7XqKexLhFLUIQeDQUV5Ars/IebYw
+	==
+X-Google-Smtp-Source: AGHT+IFOf38k1P2MZKKvXM296nue+jFu8GBwBsGrU4QKGabNFqUeQWQ05rRExCsPshCvY3hti7+jIg==
+X-Received: by 2002:a05:6e02:188f:b0:433:298a:eb17 with SMTP id e9e14a558f8ab-4335f3a165emr3297095ab.4.1762450302486;
+        Thu, 06 Nov 2025 09:31:42 -0800 (PST)
+Received: from kf-m2g5 ([2607:fb90:cf2c:12ad:f89e:38ef:3ffa:2ec1])
+        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-4334f42cad7sm12823155ab.4.2025.11.06.09.31.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Nov 2025 09:31:42 -0800 (PST)
+Date: Thu, 6 Nov 2025 11:31:37 -0600
+From: Aaron Rainbolt <arainbolt@kfocus.org>
+To: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, viresh.kumar@linaro.org,
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ stable@vger.kernel.org, mmikowski@kfocus.org
+Subject: Re: [REGRESSION] Intel Turbo Boost stuck disabled on some Clevo
+ machines (was: [PATCH] cpufreq: intel_pstate: Unchecked MSR aceess in
+ legacy mode)
+Message-ID: <20251106113137.5b83bb3f@kf-m2g5>
+In-Reply-To: <db92b8a310d88214e2045a73d3da6d0ffe8606f7.camel@linux.intel.com>
+References: <20250429210711.255185-1-srinivas.pandruvada@linux.intel.com>
+	<CAJZ5v0h99RFF26qAnJf07LS0t-6ATm9c2zrQVzdi96x3FAPXQg@mail.gmail.com>
+	<20250910113650.54eafc2b@kf-m2g5>
+	<dda1d8d23407623c99e2f22e60ada1872bca98fe.camel@linux.intel.com>
+	<20250910153329.10dcef9d@kf-m2g5>
+	<db92b8a310d88214e2045a73d3da6d0ffe8606f7.camel@linux.intel.com>
+Organization: Kubuntu Focus
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.41; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="l1CBpLaBOXuNOWR+"
-Content-Disposition: inline
-In-Reply-To: <20251106124330.1145600-2-irving-ch.lin@mediatek.com>
-
-
---l1CBpLaBOXuNOWR+
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Nov 06, 2025 at 08:41:46PM +0800, irving.ch.lin wrote:
-> From: Irving-CH Lin <irving-ch.lin@mediatek.com>
+On Thu, 06 Nov 2025 07:23:14 -0800
+srinivas pandruvada <srinivas.pandruvada@linux.intel.com> wrote:
+
+> Hi Aaron,
 >=20
-> Add device tree bindings for the clock of MediaTek MT8189 SoC.
->=20
-> Signed-off-by: Irving-CH Lin <irving-ch.lin@mediatek.com>
+> On Wed, 2025-09-10 at 15:33 -0500, Aaron Rainbolt wrote:
+> > On Wed, 10 Sep 2025 10:15:00 -0700
+> > srinivas pandruvada <srinivas.pandruvada@linux.intel.com> wrote:
+> >  =20
+> > > On Wed, 2025-09-10 at 11:36 -0500, Aaron Rainbolt wrote: =20
+> > > > On Wed, 30 Apr 2025 16:29:09 +0200
+> > > > "Rafael J. Wysocki" <rafael@kernel.org> wrote:
+> > > > =C2=A0  =20
+> > > > > On Tue, Apr 29, 2025 at 11:07=E2=80=AFPM Srinivas Pandruvada
+> > > > > <srinivas.pandruvada@linux.intel.com> wrote:=C2=A0  =20
+> > > > > >=20
+> > > > > > When turbo mode is unavailable on a Skylake-X system,
+> > > > > > executing
+> > > > > > the
+> > > > > > command:
+> > > > > > "echo 1 > /sys/devices/system/cpu/intel_pstate/no_turbo"
+> > > > > > results in an unchecked MSR access error: WRMSR to 0x199
+> > > > > > (attempted to write 0x0000000100001300). =20
+> Please try the attached patch, if this address this issue.
 
-Before I approve this, can you share the dts that actually uses it?
-This many different syscons really does look suspect, and that not all
-of these should be nodes of their own. They may very well be, I would
-just like to see what the dts looks like. Doesn't need to be a patch, a
-link to your tree will suffice.
+I can confirm that this patch does resolve the issue when applied to
+Kubuntu Focus's 6.14 kernel. CPU frequencies are available that require
+turbo boost, and `cat /sys/devices/system/cpu/intel_pstate` returns
+`0`. The logs from `dmesg` also indicate that turbo was disabled
+earlier in boot, but the warnings about turbo being disabled stop
+appearing later on, even when manipulating the `no_turbo` file:
 
-Cheers,
-Conor.
+[   25.893012] intel_pstate: Turbo is disabled
+[   25.893019] intel_pstate: Turbo disabled by BIOS or unavailable on proce=
+ssor
+[   25.950587] NET: Registered PF_QIPCRTR protocol family
+[   26.599013] Realtek Internal NBASE-T PHY r8169-0-6c00:00: attached PHY d=
+river (mii_bus:phy_addr=3Dr8169-0-6c00:00, irq=3DMAC)
+[   26.725959] ACPI BIOS Error (bug): Could not resolve symbol [\_TZ.ETMD],=
+ AE_NOT_FOUND (20240827/psargs-332)
 
-> ---
->  .../bindings/clock/mediatek,mt8189-clock.yaml |  90 +++
->  .../clock/mediatek,mt8189-sys-clock.yaml      |  58 ++
->  .../dt-bindings/clock/mediatek,mt8189-clk.h   | 580 ++++++++++++++++++
->  3 files changed, 728 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/mediatek,mt81=
-89-clock.yaml
->  create mode 100644 Documentation/devicetree/bindings/clock/mediatek,mt81=
-89-sys-clock.yaml
->  create mode 100644 include/dt-bindings/clock/mediatek,mt8189-clk.h
->=20
-> diff --git a/Documentation/devicetree/bindings/clock/mediatek,mt8189-cloc=
-k.yaml b/Documentation/devicetree/bindings/clock/mediatek,mt8189-clock.yaml
-> new file mode 100644
-> index 000000000000..25f7c9fb99fe
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/clock/mediatek,mt8189-clock.yaml
-> @@ -0,0 +1,90 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/clock/mediatek,mt8189-clock.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: MediaTek Functional Clock Controller for MT8189
-> +
-> +maintainers:
-> +  - Qiqi Wang <qiqi.wang@mediatek.com>
-> +
-> +description: |
-> +  The clock architecture in MediaTek like below
-> +  PLLs -->
-> +          dividers -->
-> +                      muxes -->
-> +                               clock gate
-> +
-> +  The devices provide clock gate control in different IP blocks.
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +        - mediatek,mt8189-camsys-main
-> +        - mediatek,mt8189-camsys-rawa
-> +        - mediatek,mt8189-camsys-rawb
-> +        - mediatek,mt8189-dbg-ao
-> +        - mediatek,mt8189-dem
-> +        - mediatek,mt8189-dispsys
-> +        - mediatek,mt8189-dvfsrc-top
-> +        - mediatek,mt8189-gce-d
-> +        - mediatek,mt8189-gce-m
-> +        - mediatek,mt8189-iic-wrap-e
-> +        - mediatek,mt8189-iic-wrap-en
-> +        - mediatek,mt8189-iic-wrap-s
-> +        - mediatek,mt8189-iic-wrap-ws
-> +        - mediatek,mt8189-imgsys1
-> +        - mediatek,mt8189-imgsys2
-> +        - mediatek,mt8189-infra-ao
-> +        - mediatek,mt8189-ipesys
-> +        - mediatek,mt8189-mdpsys
-> +        - mediatek,mt8189-mfgcfg
-> +        - mediatek,mt8189-mm-infra
-> +        - mediatek,mt8189-peri-ao
-> +        - mediatek,mt8189-scp-clk
-> +        - mediatek,mt8189-scp-i2c-clk
-> +        - mediatek,mt8189-ufscfg-ao
-> +        - mediatek,mt8189-ufscfg-pdn
-> +        - mediatek,mt8189-vdec-core
-> +        - mediatek,mt8189-venc
-> +      - const: syscon
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  '#clock-cells':
-> +    const: 1
-> +
-> +  '#reset-cells':
-> +    const: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - '#clock-cells'
-> +
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - mediatek,mt8189-peri-ao
-> +              - mediatek,mt8189-ufscfg-ao
-> +              - mediatek,mt8189-ufscfg-pdn
-> +
-> +    then:
-> +      required:
-> +        - '#reset-cells'
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    clock-controller@11b21000 {
-> +        compatible =3D "mediatek,mt8189-iic-wrap-ws", "syscon";
-> +        reg =3D <0x11b21000 0x1000>;
-> +        #clock-cells =3D <1>;
-> +    };
-> diff --git a/Documentation/devicetree/bindings/clock/mediatek,mt8189-sys-=
-clock.yaml b/Documentation/devicetree/bindings/clock/mediatek,mt8189-sys-cl=
-ock.yaml
-> new file mode 100644
-> index 000000000000..ba36c303617e
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/clock/mediatek,mt8189-sys-clock.y=
-aml
-> @@ -0,0 +1,58 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/clock/mediatek,mt8189-sys-clock.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: MediaTek System Clock Controller for MT8189
-> +
-> +maintainers:
-> +  - Qiqi Wang <qiqi.wang@mediatek.com>
-> +
-> +description: |
-> +  The clock architecture in MediaTek like below
-> +  PLLs -->
-> +          dividers -->
-> +                      muxes -->
-> +                               clock gate
-> +
-> +  The apmixedsys provides most of PLLs which generated from SoC 26m.
-> +  The topckgen provides dividers and muxes which provide the clock sourc=
-e to other IP blocks.
-> +  The infracfg_ao provides clock gate in peripheral and infrastructure I=
-P blocks.
-> +  The mcusys provides mux control to select the clock source in AP MCU.
-> +  The device nodes also provide the system control capacity for configur=
-ation.
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - mediatek,mt8189-apmixedsys
-> +          - mediatek,mt8189-topckgen
-> +          - mediatek,mt8189-vlpckgen
-> +          - mediatek,mt8189-vlp-ao-ckgen
-> +          - mediatek,mt8189-vlpcfg-ao
-> +      - const: syscon
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  '#clock-cells':
-> +    const: 1
-> +
-> +  '#reset-cells':
-> +    const: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - '#clock-cells'
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    clock-controller@10000000 {
-> +        compatible =3D "mediatek,mt8189-topckgen", "syscon";
-> +        reg =3D <0x10000000 0x1000>;
-> +        #clock-cells =3D <1>;
-> +    };
-> diff --git a/include/dt-bindings/clock/mediatek,mt8189-clk.h b/include/dt=
--bindings/clock/mediatek,mt8189-clk.h
-> new file mode 100644
-> index 000000000000..139db869a3ec
-> --- /dev/null
-> +++ b/include/dt-bindings/clock/mediatek,mt8189-clk.h
-> @@ -0,0 +1,580 @@
-> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)  */
-> +/*
-> + * Copyright (c) 2025 MediaTek Inc.
-> + * Author: Qiqi Wang <qiqi.wang@mediatek.com>
-> + */
-> +
-> +#ifndef _DT_BINDINGS_CLK_MT8189_H
-> +#define _DT_BINDINGS_CLK_MT8189_H
-> +
-> +/* TOPCKGEN */
-> +#define CLK_TOP_AXI_SEL					0
-> +#define CLK_TOP_AXI_PERI_SEL				1
-> +#define CLK_TOP_AXI_U_SEL				2
-> +#define CLK_TOP_BUS_AXIMEM_SEL				3
-> +#define CLK_TOP_DISP0_SEL				4
-> +#define CLK_TOP_MMINFRA_SEL				5
-> +#define CLK_TOP_UART_SEL				6
-> +#define CLK_TOP_SPI0_SEL				7
-> +#define CLK_TOP_SPI1_SEL				8
-> +#define CLK_TOP_SPI2_SEL				9
-> +#define CLK_TOP_SPI3_SEL				10
-> +#define CLK_TOP_SPI4_SEL				11
-> +#define CLK_TOP_SPI5_SEL				12
-> +#define CLK_TOP_MSDC_MACRO_0P_SEL			13
-> +#define CLK_TOP_MSDC50_0_HCLK_SEL			14
-> +#define CLK_TOP_MSDC50_0_SEL				15
-> +#define CLK_TOP_AES_MSDCFDE_SEL				16
-> +#define CLK_TOP_MSDC_MACRO_1P_SEL			17
-> +#define CLK_TOP_MSDC30_1_SEL				18
-> +#define CLK_TOP_MSDC30_1_HCLK_SEL			19
-> +#define CLK_TOP_MSDC_MACRO_2P_SEL			20
-> +#define CLK_TOP_MSDC30_2_SEL				21
-> +#define CLK_TOP_MSDC30_2_HCLK_SEL			22
-> +#define CLK_TOP_AUD_INTBUS_SEL				23
-> +#define CLK_TOP_ATB_SEL					24
-> +#define CLK_TOP_DISP_PWM_SEL				25
-> +#define CLK_TOP_USB_TOP_P0_SEL				26
-> +#define CLK_TOP_USB_XHCI_P0_SEL				27
-> +#define CLK_TOP_USB_TOP_P1_SEL				28
-> +#define CLK_TOP_USB_XHCI_P1_SEL				29
-> +#define CLK_TOP_USB_TOP_P2_SEL				30
-> +#define CLK_TOP_USB_XHCI_P2_SEL				31
-> +#define CLK_TOP_USB_TOP_P3_SEL				32
-> +#define CLK_TOP_USB_XHCI_P3_SEL				33
-> +#define CLK_TOP_USB_TOP_P4_SEL				34
-> +#define CLK_TOP_USB_XHCI_P4_SEL				35
-> +#define CLK_TOP_I2C_SEL					36
-> +#define CLK_TOP_SENINF_SEL				37
-> +#define CLK_TOP_SENINF1_SEL				38
-> +#define CLK_TOP_AUD_ENGEN1_SEL				39
-> +#define CLK_TOP_AUD_ENGEN2_SEL				40
-> +#define CLK_TOP_AES_UFSFDE_SEL				41
-> +#define CLK_TOP_U_SEL					42
-> +#define CLK_TOP_U_MBIST_SEL				43
-> +#define CLK_TOP_AUD_1_SEL				44
-> +#define CLK_TOP_AUD_2_SEL				45
-> +#define CLK_TOP_VENC_SEL				46
-> +#define CLK_TOP_VDEC_SEL				47
-> +#define CLK_TOP_PWM_SEL					48
-> +#define CLK_TOP_AUDIO_H_SEL				49
-> +#define CLK_TOP_MCUPM_SEL				50
-> +#define CLK_TOP_MEM_SUB_SEL				51
-> +#define CLK_TOP_MEM_SUB_PERI_SEL			52
-> +#define CLK_TOP_MEM_SUB_U_SEL				53
-> +#define CLK_TOP_EMI_N_SEL				54
-> +#define CLK_TOP_DSI_OCC_SEL				55
-> +#define CLK_TOP_AP2CONN_HOST_SEL			56
-> +#define CLK_TOP_IMG1_SEL				57
-> +#define CLK_TOP_IPE_SEL					58
-> +#define CLK_TOP_CAM_SEL					59
-> +#define CLK_TOP_CAMTM_SEL				60
-> +#define CLK_TOP_DSP_SEL					61
-> +#define CLK_TOP_SR_PKA_SEL				62
-> +#define CLK_TOP_DXCC_SEL				63
-> +#define CLK_TOP_MFG_REF_SEL				64
-> +#define CLK_TOP_MDP0_SEL				65
-> +#define CLK_TOP_DP_SEL					66
-> +#define CLK_TOP_EDP_SEL					67
-> +#define CLK_TOP_EDP_FAVT_SEL				68
-> +#define CLK_TOP_ETH_250M_SEL				69
-> +#define CLK_TOP_ETH_62P4M_PTP_SEL			70
-> +#define CLK_TOP_ETH_50M_RMII_SEL			71
-> +#define CLK_TOP_SFLASH_SEL				72
-> +#define CLK_TOP_GCPU_SEL				73
-> +#define CLK_TOP_MAC_TL_SEL				74
-> +#define CLK_TOP_VDSTX_DG_CTS_SEL			75
-> +#define CLK_TOP_PLL_DPIX_SEL				76
-> +#define CLK_TOP_ECC_SEL					77
-> +#define CLK_TOP_APLL_I2SIN0_MCK_SEL			78
-> +#define CLK_TOP_APLL_I2SIN1_MCK_SEL			79
-> +#define CLK_TOP_APLL_I2SIN2_MCK_SEL			80
-> +#define CLK_TOP_APLL_I2SIN3_MCK_SEL			81
-> +#define CLK_TOP_APLL_I2SIN4_MCK_SEL			82
-> +#define CLK_TOP_APLL_I2SIN6_MCK_SEL			83
-> +#define CLK_TOP_APLL_I2SOUT0_MCK_SEL			84
-> +#define CLK_TOP_APLL_I2SOUT1_MCK_SEL			85
-> +#define CLK_TOP_APLL_I2SOUT2_MCK_SEL			86
-> +#define CLK_TOP_APLL_I2SOUT3_MCK_SEL			87
-> +#define CLK_TOP_APLL_I2SOUT4_MCK_SEL			88
-> +#define CLK_TOP_APLL_I2SOUT6_MCK_SEL			89
-> +#define CLK_TOP_APLL_FMI2S_MCK_SEL			90
-> +#define CLK_TOP_APLL_TDMOUT_MCK_SEL			91
-> +#define CLK_TOP_MFG_SEL_MFGPLL				92
-> +#define CLK_TOP_APLL12_CK_DIV_I2SIN0			93
-> +#define CLK_TOP_APLL12_CK_DIV_I2SIN1			94
-> +#define CLK_TOP_APLL12_CK_DIV_I2SOUT0			95
-> +#define CLK_TOP_APLL12_CK_DIV_I2SOUT1			96
-> +#define CLK_TOP_APLL12_CK_DIV_FMI2S			97
-> +#define CLK_TOP_APLL12_CK_DIV_TDMOUT_M			98
-> +#define CLK_TOP_APLL12_CK_DIV_TDMOUT_B			99
-> +#define CLK_TOP_MAINPLL_D3				100
-> +#define CLK_TOP_MAINPLL_D4				101
-> +#define CLK_TOP_MAINPLL_D4_D2				102
-> +#define CLK_TOP_MAINPLL_D4_D4				103
-> +#define CLK_TOP_MAINPLL_D4_D8				104
-> +#define CLK_TOP_MAINPLL_D5				105
-> +#define CLK_TOP_MAINPLL_D5_D2				106
-> +#define CLK_TOP_MAINPLL_D5_D4				107
-> +#define CLK_TOP_MAINPLL_D5_D8				108
-> +#define CLK_TOP_MAINPLL_D6				109
-> +#define CLK_TOP_MAINPLL_D6_D2				110
-> +#define CLK_TOP_MAINPLL_D6_D4				111
-> +#define CLK_TOP_MAINPLL_D6_D8				112
-> +#define CLK_TOP_MAINPLL_D7				113
-> +#define CLK_TOP_MAINPLL_D7_D2				114
-> +#define CLK_TOP_MAINPLL_D7_D4				115
-> +#define CLK_TOP_MAINPLL_D7_D8				116
-> +#define CLK_TOP_MAINPLL_D9				117
-> +#define CLK_TOP_UNIVPLL_D2				118
-> +#define CLK_TOP_UNIVPLL_D3				119
-> +#define CLK_TOP_UNIVPLL_D4				120
-> +#define CLK_TOP_UNIVPLL_D4_D2				121
-> +#define CLK_TOP_UNIVPLL_D4_D4				122
-> +#define CLK_TOP_UNIVPLL_D4_D8				123
-> +#define CLK_TOP_UNIVPLL_D5				124
-> +#define CLK_TOP_UNIVPLL_D5_D2				125
-> +#define CLK_TOP_UNIVPLL_D5_D4				126
-> +#define CLK_TOP_UNIVPLL_D6				127
-> +#define CLK_TOP_UNIVPLL_D6_D2				128
-> +#define CLK_TOP_UNIVPLL_D6_D4				129
-> +#define CLK_TOP_UNIVPLL_D6_D8				130
-> +#define CLK_TOP_UNIVPLL_D6_D16				131
-> +#define CLK_TOP_UNIVPLL_D7				132
-> +#define CLK_TOP_UNIVPLL_D7_D2				133
-> +#define CLK_TOP_UNIVPLL_D7_D3				134
-> +#define CLK_TOP_LVDSTX_DG_CTS				135
-> +#define CLK_TOP_UNIVPLL_192M				136
-> +#define CLK_TOP_UNIVPLL_192M_D2				137
-> +#define CLK_TOP_UNIVPLL_192M_D4				138
-> +#define CLK_TOP_UNIVPLL_192M_D8				139
-> +#define CLK_TOP_UNIVPLL_192M_D10			140
-> +#define CLK_TOP_UNIVPLL_192M_D16			141
-> +#define CLK_TOP_UNIVPLL_192M_D32			142
-> +#define CLK_TOP_APLL1_D2				143
-> +#define CLK_TOP_APLL1_D4				144
-> +#define CLK_TOP_APLL1_D8				145
-> +#define CLK_TOP_APLL1_D3				146
-> +#define CLK_TOP_APLL2_D2				147
-> +#define CLK_TOP_APLL2_D4				148
-> +#define CLK_TOP_APLL2_D8				149
-> +#define CLK_TOP_APLL2_D3				150
-> +#define CLK_TOP_MMPLL_D4				151
-> +#define CLK_TOP_MMPLL_D4_D2				152
-> +#define CLK_TOP_MMPLL_D4_D4				153
-> +#define CLK_TOP_VPLL_DPIX				154
-> +#define CLK_TOP_MMPLL_D5				155
-> +#define CLK_TOP_MMPLL_D5_D2				156
-> +#define CLK_TOP_MMPLL_D5_D4				157
-> +#define CLK_TOP_MMPLL_D6				158
-> +#define CLK_TOP_MMPLL_D6_D2				159
-> +#define CLK_TOP_MMPLL_D7				160
-> +#define CLK_TOP_MMPLL_D9				161
-> +#define CLK_TOP_TVDPLL1_D2				162
-> +#define CLK_TOP_TVDPLL1_D4				163
-> +#define CLK_TOP_TVDPLL1_D8				164
-> +#define CLK_TOP_TVDPLL1_D16				165
-> +#define CLK_TOP_TVDPLL2_D2				166
-> +#define CLK_TOP_TVDPLL2_D4				167
-> +#define CLK_TOP_TVDPLL2_D8				168
-> +#define CLK_TOP_TVDPLL2_D16				169
-> +#define CLK_TOP_ETHPLL_D2				170
-> +#define CLK_TOP_ETHPLL_D8				171
-> +#define CLK_TOP_ETHPLL_D10				172
-> +#define CLK_TOP_MSDCPLL_D2				173
-> +#define CLK_TOP_VOWPLL                                  174
-> +#define CLK_TOP_UFSPLL_D2				175
-> +#define CLK_TOP_F26M_CK_D2				176
-> +#define CLK_TOP_OSC_D2					177
-> +#define CLK_TOP_OSC_D4					178
-> +#define CLK_TOP_OSC_D8					179
-> +#define CLK_TOP_OSC_D16					180
-> +#define CLK_TOP_OSC_D3					181
-> +#define CLK_TOP_OSC_D7					182
-> +#define CLK_TOP_OSC_D10					183
-> +#define CLK_TOP_OSC_D20					184
-> +#define CLK_TOP_FMCNT_P0_EN				185
-> +#define CLK_TOP_FMCNT_P1_EN				186
-> +#define CLK_TOP_FMCNT_P2_EN				187
-> +#define CLK_TOP_FMCNT_P3_EN				188
-> +#define CLK_TOP_FMCNT_P4_EN				189
-> +#define CLK_TOP_USB_F26M_CK_EN				190
-> +#define CLK_TOP_SSPXTP_F26M_CK_EN			191
-> +#define CLK_TOP_USB2_PHY_RF_P0_EN			192
-> +#define CLK_TOP_USB2_PHY_RF_P1_EN			193
-> +#define CLK_TOP_USB2_PHY_RF_P2_EN			194
-> +#define CLK_TOP_USB2_PHY_RF_P3_EN			195
-> +#define CLK_TOP_USB2_PHY_RF_P4_EN			196
-> +#define CLK_TOP_USB2_26M_CK_P0_EN			197
-> +#define CLK_TOP_USB2_26M_CK_P1_EN			198
-> +#define CLK_TOP_USB2_26M_CK_P2_EN			199
-> +#define CLK_TOP_USB2_26M_CK_P3_EN			200
-> +#define CLK_TOP_USB2_26M_CK_P4_EN			201
-> +#define CLK_TOP_F26M_CK_EN				202
-> +#define CLK_TOP_AP2CON_EN				203
-> +#define CLK_TOP_EINT_N_EN				204
-> +#define CLK_TOP_TOPCKGEN_FMIPI_CSI_UP26M_CK_EN		205
-> +#define CLK_TOP_DRAMULP_CK_EN				206
-> +#define CLK_TOP_EINT_E_EN				207
-> +#define CLK_TOP_EINT_W_EN				208
-> +#define CLK_TOP_EINT_S_EN				209
-> +
-> +/* INFRACFG_AO */
-> +#define CLK_IFRAO_CQ_DMA_FPC				0
-> +#define CLK_IFRAO_DEBUGSYS				1
-> +#define CLK_IFRAO_DBG_TRACE				2
-> +#define CLK_IFRAO_CQ_DMA				3
-> +
-> +/* APMIXEDSYS */
-> +#define CLK_APMIXED_ARMPLL_LL				0
-> +#define CLK_APMIXED_ARMPLL_BL				1
-> +#define CLK_APMIXED_CCIPLL				2
-> +#define CLK_APMIXED_MAINPLL				3
-> +#define CLK_APMIXED_UNIVPLL				4
-> +#define CLK_APMIXED_MMPLL				5
-> +#define CLK_APMIXED_MFGPLL				6
-> +#define CLK_APMIXED_APLL1				7
-> +#define CLK_APMIXED_APLL2				8
-> +#define CLK_APMIXED_EMIPLL				9
-> +#define CLK_APMIXED_APUPLL2				10
-> +#define CLK_APMIXED_APUPLL				11
-> +#define CLK_APMIXED_TVDPLL1				12
-> +#define CLK_APMIXED_TVDPLL2				13
-> +#define CLK_APMIXED_ETHPLL				14
-> +#define CLK_APMIXED_MSDCPLL				15
-> +#define CLK_APMIXED_UFSPLL				16
-> +
-> +/* PERICFG_AO */
-> +#define CLK_PERAO_UART0					0
-> +#define CLK_PERAO_UART1					1
-> +#define CLK_PERAO_UART2					2
-> +#define CLK_PERAO_UART3					3
-> +#define CLK_PERAO_PWM_H					4
-> +#define CLK_PERAO_PWM_B					5
-> +#define CLK_PERAO_PWM_FB1				6
-> +#define CLK_PERAO_PWM_FB2				7
-> +#define CLK_PERAO_PWM_FB3				8
-> +#define CLK_PERAO_PWM_FB4				9
-> +#define CLK_PERAO_DISP_PWM0				10
-> +#define CLK_PERAO_DISP_PWM1				11
-> +#define CLK_PERAO_SPI0_B				12
-> +#define CLK_PERAO_SPI1_B				13
-> +#define CLK_PERAO_SPI2_B				14
-> +#define CLK_PERAO_SPI3_B				15
-> +#define CLK_PERAO_SPI4_B				16
-> +#define CLK_PERAO_SPI5_B				17
-> +#define CLK_PERAO_SPI0_H				18
-> +#define CLK_PERAO_SPI1_H				19
-> +#define CLK_PERAO_SPI2_H				20
-> +#define CLK_PERAO_SPI3_H				21
-> +#define CLK_PERAO_SPI4_H				22
-> +#define CLK_PERAO_SPI5_H				23
-> +#define CLK_PERAO_AXI					24
-> +#define CLK_PERAO_AHB_APB				25
-> +#define CLK_PERAO_TL					26
-> +#define CLK_PERAO_REF					27
-> +#define CLK_PERAO_I2C					28
-> +#define CLK_PERAO_DMA_B					29
-> +#define CLK_PERAO_SSUSB0_REF				30
-> +#define CLK_PERAO_SSUSB0_FRMCNT				31
-> +#define CLK_PERAO_SSUSB0_SYS				32
-> +#define CLK_PERAO_SSUSB0_XHCI				33
-> +#define CLK_PERAO_SSUSB0_F				34
-> +#define CLK_PERAO_SSUSB0_H				35
-> +#define CLK_PERAO_SSUSB1_REF				36
-> +#define CLK_PERAO_SSUSB1_FRMCNT				37
-> +#define CLK_PERAO_SSUSB1_SYS				38
-> +#define CLK_PERAO_SSUSB1_XHCI				39
-> +#define CLK_PERAO_SSUSB1_F				40
-> +#define CLK_PERAO_SSUSB1_H				41
-> +#define CLK_PERAO_SSUSB2_REF				42
-> +#define CLK_PERAO_SSUSB2_FRMCNT				43
-> +#define CLK_PERAO_SSUSB2_SYS				44
-> +#define CLK_PERAO_SSUSB2_XHCI				45
-> +#define CLK_PERAO_SSUSB2_F				46
-> +#define CLK_PERAO_SSUSB2_H				47
-> +#define CLK_PERAO_SSUSB3_REF				48
-> +#define CLK_PERAO_SSUSB3_FRMCNT				49
-> +#define CLK_PERAO_SSUSB3_SYS				50
-> +#define CLK_PERAO_SSUSB3_XHCI				51
-> +#define CLK_PERAO_SSUSB3_F				52
-> +#define CLK_PERAO_SSUSB3_H				53
-> +#define CLK_PERAO_SSUSB4_REF				54
-> +#define CLK_PERAO_SSUSB4_FRMCNT				55
-> +#define CLK_PERAO_SSUSB4_SYS				56
-> +#define CLK_PERAO_SSUSB4_XHCI				57
-> +#define CLK_PERAO_SSUSB4_F				58
-> +#define CLK_PERAO_SSUSB4_H				59
-> +#define CLK_PERAO_MSDC0					60
-> +#define CLK_PERAO_MSDC0_H				61
-> +#define CLK_PERAO_MSDC0_FAES				62
-> +#define CLK_PERAO_MSDC0_MST_F				63
-> +#define CLK_PERAO_MSDC0_SLV_H				64
-> +#define CLK_PERAO_MSDC1					65
-> +#define CLK_PERAO_MSDC1_H				66
-> +#define CLK_PERAO_MSDC1_MST_F				67
-> +#define CLK_PERAO_MSDC1_SLV_H				68
-> +#define CLK_PERAO_MSDC2					69
-> +#define CLK_PERAO_MSDC2_H				70
-> +#define CLK_PERAO_MSDC2_MST_F				71
-> +#define CLK_PERAO_MSDC2_SLV_H				72
-> +#define CLK_PERAO_SFLASH				73
-> +#define CLK_PERAO_SFLASH_F				74
-> +#define CLK_PERAO_SFLASH_H				75
-> +#define CLK_PERAO_SFLASH_P				76
-> +#define CLK_PERAO_AUDIO0				77
-> +#define CLK_PERAO_AUDIO1				78
-> +#define CLK_PERAO_AUDIO2				79
-> +#define CLK_PERAO_AUXADC_26M				80
-> +
-> +/* UFSCFG_AO_REG */
-> +#define CLK_UFSCFG_AO_REG_UNIPRO_TX_SYM			0
-> +#define CLK_UFSCFG_AO_REG_UNIPRO_RX_SYM0		1
-> +#define CLK_UFSCFG_AO_REG_UNIPRO_RX_SYM1		2
-> +#define CLK_UFSCFG_AO_REG_UNIPRO_SYS			3
-> +#define CLK_UFSCFG_AO_REG_U_SAP_CFG			4
-> +#define CLK_UFSCFG_AO_REG_U_PHY_TOP_AHB_S_BUS		5
-> +
-> +/* UFSCFG_PDN_REG */
-> +#define CLK_UFSCFG_REG_UFSHCI_UFS			0
-> +#define CLK_UFSCFG_REG_UFSHCI_AES			1
-> +#define CLK_UFSCFG_REG_UFSHCI_U_AHB			2
-> +#define CLK_UFSCFG_REG_UFSHCI_U_AXI			3
-> +
-> +/* IMP_IIC_WRAP_WS */
-> +#define CLK_IMPWS_I2C2					0
-> +
-> +/* IMP_IIC_WRAP_E */
-> +#define CLK_IMPE_I2C0					0
-> +#define CLK_IMPE_I2C1					1
-> +
-> +/* IMP_IIC_WRAP_S */
-> +#define CLK_IMPS_I2C3					0
-> +#define CLK_IMPS_I2C4					1
-> +#define CLK_IMPS_I2C5					2
-> +#define CLK_IMPS_I2C6					3
-> +
-> +/* IMP_IIC_WRAP_EN */
-> +#define CLK_IMPEN_I2C7					0
-> +#define CLK_IMPEN_I2C8					1
-> +
-> +/* MFG */
-> +#define CLK_MFG_BG3D					0
-> +
-> +/* DISPSYS_CONFIG */
-> +#define CLK_MM_DISP_OVL0_4L				0
-> +#define CLK_MM_DISP_OVL1_4L				1
-> +#define CLK_MM_VPP_RSZ0					2
-> +#define CLK_MM_VPP_RSZ1					3
-> +#define CLK_MM_DISP_RDMA0				4
-> +#define CLK_MM_DISP_RDMA1				5
-> +#define CLK_MM_DISP_COLOR0				6
-> +#define CLK_MM_DISP_COLOR1				7
-> +#define CLK_MM_DISP_CCORR0				8
-> +#define CLK_MM_DISP_CCORR1				9
-> +#define CLK_MM_DISP_CCORR2				10
-> +#define CLK_MM_DISP_CCORR3				11
-> +#define CLK_MM_DISP_AAL0				12
-> +#define CLK_MM_DISP_AAL1				13
-> +#define CLK_MM_DISP_GAMMA0				14
-> +#define CLK_MM_DISP_GAMMA1				15
-> +#define CLK_MM_DISP_DITHER0				16
-> +#define CLK_MM_DISP_DITHER1				17
-> +#define CLK_MM_DISP_DSC_WRAP0				18
-> +#define CLK_MM_VPP_MERGE0				19
-> +#define CLK_MMSYS_0_DISP_DVO				20
-> +#define CLK_MMSYS_0_DISP_DSI0				21
-> +#define CLK_MM_DP_INTF0					22
-> +#define CLK_MM_DPI0					23
-> +#define CLK_MM_DISP_WDMA0				24
-> +#define CLK_MM_DISP_WDMA1				25
-> +#define CLK_MM_DISP_FAKE_ENG0				26
-> +#define CLK_MM_DISP_FAKE_ENG1				27
-> +#define CLK_MM_SMI_LARB					28
-> +#define CLK_MM_DISP_MUTEX0				29
-> +#define CLK_MM_DIPSYS_CONFIG				30
-> +#define CLK_MM_DUMMY					31
-> +#define CLK_MMSYS_1_DISP_DSI0				32
-> +#define CLK_MMSYS_1_LVDS_ENCODER			33
-> +#define CLK_MMSYS_1_DPI0				34
-> +#define CLK_MMSYS_1_DISP_DVO				35
-> +#define CLK_MM_DP_INTF					36
-> +#define CLK_MMSYS_1_LVDS_ENCODER_CTS			37
-> +#define CLK_MMSYS_1_DISP_DVO_AVT			38
-> +
-> +/* IMGSYS1 */
-> +#define CLK_IMGSYS1_LARB9				0
-> +#define CLK_IMGSYS1_LARB11				1
-> +#define CLK_IMGSYS1_DIP					2
-> +#define CLK_IMGSYS1_GALS				3
-> +
-> +/* IMGSYS2 */
-> +#define CLK_IMGSYS2_LARB9				0
-> +#define CLK_IMGSYS2_LARB11				1
-> +#define CLK_IMGSYS2_MFB					2
-> +#define CLK_IMGSYS2_WPE					3
-> +#define CLK_IMGSYS2_MSS					4
-> +#define CLK_IMGSYS2_GALS				5
-> +
-> +/* VDEC_CORE */
-> +#define CLK_VDEC_CORE_LARB_CKEN				0
-> +#define CLK_VDEC_CORE_VDEC_CKEN				1
-> +#define CLK_VDEC_CORE_VDEC_ACTIVE			2
-> +
-> +/* VENC_GCON */
-> +#define CLK_VEN1_CKE0_LARB				0
-> +#define CLK_VEN1_CKE1_VENC				1
-> +#define CLK_VEN1_CKE2_JPGENC				2
-> +#define CLK_VEN1_CKE3_JPGDEC				3
-> +#define CLK_VEN1_CKE4_JPGDEC_C1				4
-> +#define CLK_VEN1_CKE5_GALS				5
-> +#define CLK_VEN1_CKE6_GALS_SRAM				6
-> +
-> +/* VLPCFG_REG */
-> +#define CLK_VLPCFG_REG_SCP				0
-> +#define CLK_VLPCFG_REG_RG_R_APXGPT_26M			1
-> +#define CLK_VLPCFG_REG_DPMSRCK_TEST			2
-> +#define CLK_VLPCFG_REG_RG_DPMSRRTC_TEST			3
-> +#define CLK_VLPCFG_REG_DPMSRULP_TEST			4
-> +#define CLK_VLPCFG_REG_SPMI_P_MST			5
-> +#define CLK_VLPCFG_REG_SPMI_P_MST_32K			6
-> +#define CLK_VLPCFG_REG_PMIF_SPMI_P_SYS			7
-> +#define CLK_VLPCFG_REG_PMIF_SPMI_P_TMR			8
-> +#define CLK_VLPCFG_REG_PMIF_SPMI_M_SYS			9
-> +#define CLK_VLPCFG_REG_PMIF_SPMI_M_TMR			10
-> +#define CLK_VLPCFG_REG_DVFSRC				11
-> +#define CLK_VLPCFG_REG_PWM_VLP				12
-> +#define CLK_VLPCFG_REG_SRCK				13
-> +#define CLK_VLPCFG_REG_SSPM_F26M			14
-> +#define CLK_VLPCFG_REG_SSPM_F32K			15
-> +#define CLK_VLPCFG_REG_SSPM_ULPOSC			16
-> +#define CLK_VLPCFG_REG_VLP_32K_COM			17
-> +#define CLK_VLPCFG_REG_VLP_26M_COM			18
-> +
-> +/* VLP_CKSYS */
-> +#define CLK_VLP_CK_SCP_SEL				0
-> +#define CLK_VLP_CK_PWRAP_ULPOSC_SEL			1
-> +#define CLK_VLP_CK_SPMI_P_MST_SEL			2
-> +#define CLK_VLP_CK_DVFSRC_SEL				3
-> +#define CLK_VLP_CK_PWM_VLP_SEL				4
-> +#define CLK_VLP_CK_AXI_VLP_SEL				5
-> +#define CLK_VLP_CK_SYSTIMER_26M_SEL			6
-> +#define CLK_VLP_CK_SSPM_SEL				7
-> +#define CLK_VLP_CK_SSPM_F26M_SEL			8
-> +#define CLK_VLP_CK_SRCK_SEL				9
-> +#define CLK_VLP_CK_SCP_SPI_SEL				10
-> +#define CLK_VLP_CK_SCP_IIC_SEL				11
-> +#define CLK_VLP_CK_SCP_SPI_HIGH_SPD_SEL			12
-> +#define CLK_VLP_CK_SCP_IIC_HIGH_SPD_SEL			13
-> +#define CLK_VLP_CK_SSPM_ULPOSC_SEL			14
-> +#define CLK_VLP_CK_APXGPT_26M_SEL			15
-> +#define CLK_VLP_CK_VADSP_SEL				16
-> +#define CLK_VLP_CK_VADSP_VOWPLL_SEL			17
-> +#define CLK_VLP_CK_VADSP_UARTHUB_BCLK_SEL		18
-> +#define CLK_VLP_CK_CAMTG0_SEL				19
-> +#define CLK_VLP_CK_CAMTG1_SEL				20
-> +#define CLK_VLP_CK_CAMTG2_SEL				21
-> +#define CLK_VLP_CK_AUD_ADC_SEL				22
-> +#define CLK_VLP_CK_KP_IRQ_GEN_SEL			23
-> +#define CLK_VLP_CK_VADSYS_VLP_26M_EN			24
-> +#define CLK_VLP_CK_SEJ_13M_EN				25
-> +#define CLK_VLP_CK_SEJ_26M_EN				26
-> +#define CLK_VLP_CK_FMIPI_CSI_UP26M_CK_EN		27
-> +
-> +/* SCP_IIC */
-> +#define CLK_SCP_IIC_I2C0_W1S				0
-> +#define CLK_SCP_IIC_I2C1_W1S				1
-> +
-> +/* SCP */
-> +#define CLK_SCP_SET_SPI0				0
-> +#define CLK_SCP_SET_SPI1				1
-> +
-> +/* CAMSYS_MAIN */
-> +#define CLK_CAM_M_LARB13				0
-> +#define CLK_CAM_M_LARB14				1
-> +#define CLK_CAM_M_CAMSYS_MAIN_CAM			2
-> +#define CLK_CAM_M_CAMSYS_MAIN_CAMTG			3
-> +#define CLK_CAM_M_SENINF				4
-> +#define CLK_CAM_M_CAMSV1				5
-> +#define CLK_CAM_M_CAMSV2				6
-> +#define CLK_CAM_M_CAMSV3				7
-> +#define CLK_CAM_M_FAKE_ENG				8
-> +#define CLK_CAM_M_CAM2MM_GALS				9
-> +#define CLK_CAM_M_CAMSV4				10
-> +#define CLK_CAM_M_PDA					11
-> +
-> +/* CAMSYS_RAWA */
-> +#define CLK_CAM_RA_CAMSYS_RAWA_LARBX			0
-> +#define CLK_CAM_RA_CAMSYS_RAWA_CAM			1
-> +#define CLK_CAM_RA_CAMSYS_RAWA_CAMTG			2
-> +
-> +/* CAMSYS_RAWB */
-> +#define CLK_CAM_RB_CAMSYS_RAWB_LARBX			0
-> +#define CLK_CAM_RB_CAMSYS_RAWB_CAM			1
-> +#define CLK_CAM_RB_CAMSYS_RAWB_CAMTG			2
-> +
-> +/* IPESYS */
-> +#define CLK_IPE_LARB19					0
-> +#define CLK_IPE_LARB20					1
-> +#define CLK_IPE_SMI_SUBCOM				2
-> +#define CLK_IPE_FD					3
-> +#define CLK_IPE_FE					4
-> +#define CLK_IPE_RSC					5
-> +#define CLK_IPESYS_GALS					6
-> +
-> +/* VLPCFG_AO_REG */
-> +#define CLK_VLPCFG_AO_APEINT_RX				0
-> +
-> +/* DVFSRC_TOP */
-> +#define CLK_DVFSRC_TOP_DVFSRC_EN			0
-> +
-> +/* MMINFRA_CONFIG */
-> +#define CLK_MMINFRA_GCE_D				0
-> +#define CLK_MMINFRA_GCE_M				1
-> +#define CLK_MMINFRA_SMI					2
-> +#define CLK_MMINFRA_GCE_26M				3
-> +
-> +/* GCE_D */
-> +#define CLK_GCE_D_TOP					0
-> +
-> +/* GCE_M */
-> +#define CLK_GCE_M_TOP					0
-> +
-> +/* MDPSYS_CONFIG */
-> +#define CLK_MDP_MUTEX0					0
-> +#define CLK_MDP_APB_BUS					1
-> +#define CLK_MDP_SMI0					2
-> +#define CLK_MDP_RDMA0					3
-> +#define CLK_MDP_RDMA2					4
-> +#define CLK_MDP_HDR0					5
-> +#define CLK_MDP_AAL0					6
-> +#define CLK_MDP_RSZ0					7
-> +#define CLK_MDP_TDSHP0					8
-> +#define CLK_MDP_COLOR0					9
-> +#define CLK_MDP_WROT0					10
-> +#define CLK_MDP_FAKE_ENG0				11
-> +#define CLK_MDPSYS_CONFIG				12
-> +#define CLK_MDP_RDMA1					13
-> +#define CLK_MDP_RDMA3					14
-> +#define CLK_MDP_HDR1					15
-> +#define CLK_MDP_AAL1					16
-> +#define CLK_MDP_RSZ1					17
-> +#define CLK_MDP_TDSHP1					18
-> +#define CLK_MDP_COLOR1					19
-> +#define CLK_MDP_WROT1					20
-> +#define CLK_MDP_RSZ2					21
-> +#define CLK_MDP_WROT2					22
-> +#define CLK_MDP_RSZ3					23
-> +#define CLK_MDP_WROT3					24
-> +#define CLK_MDP_BIRSZ0					25
-> +#define CLK_MDP_BIRSZ1					26
-> +
-> +/* DBGAO */
-> +#define CLK_DBGAO_ATB_EN				0
-> +
-> +/* DEM */
-> +#define CLK_DEM_ATB_EN					0
-> +#define CLK_DEM_BUSCLK_EN				1
-> +#define CLK_DEM_SYSCLK_EN				2
-> +
-> +#endif /* _DT_BINDINGS_CLK_MT8189_H */
-> --=20
-> 2.45.2
->=20
+[   26.725976] No Local Variables are initialized for Method [_OSC]
 
---l1CBpLaBOXuNOWR+
-Content-Type: application/pgp-signature; name="signature.asc"
+[   26.725978] Initialized Arguments for Method [_OSC]:  (4 arguments defin=
+ed for method invocation)
+[   26.725979]   Arg0:   0000000030ddf166 <Obj>           Buffer(16) 5D A8 =
+3B B2 B7 C8 42 35
+[   26.725991]   Arg1:   0000000002bd3ac4 <Obj>           Integer 000000000=
+0000001
+[   26.725996]   Arg2:   0000000033eb047e <Obj>           Integer 000000000=
+0000002
+[   26.725999]   Arg3:   00000000de6cf5f1 <Obj>           Buffer(8) 00 00 0=
+0 00 05 00 00 00
 
------BEGIN PGP SIGNATURE-----
+[   26.726010] ACPI Error: Aborting method \_SB.IETM._OSC due to previous e=
+rror (AE_NOT_FOUND) (20240827/psparse-529)
+[   26.726056] Consider using thermal netlink events interface
+[   26.769209] r8169 0000:6c:00.0 enp108s0: Link is Down
+[   26.857318] zram0: detected capacity change from 0 to 195035136
+[   26.864390] vboxdrv: Found 32 processor cores/threads
+[   26.873227] Adding 97517564k swap on /dev/zram0.  Priority:-2 extents:1 =
+across:97517564k SS
+[   26.880588] vboxdrv: TSC mode is Invariant, tentative frequency 24191946=
+40 Hz
+[   26.880592] vboxdrv: Successfully loaded version 7.2.4 r170995 (interfac=
+e 0x00340001)
+[   26.895725] intel_pstate: Turbo is disabled
+[   26.895730] intel_pstate: Turbo disabled by BIOS or unavailable on proce=
+ssor
+[   26.943715] iwlwifi 0000:00:14.3: WFPM_UMAC_PD_NOTIFICATION: 0x20
+[   26.943746] iwlwifi 0000:00:14.3: WFPM_LMAC2_PD_NOTIFICATION: 0x1f
+[   26.943755] iwlwifi 0000:00:14.3: WFPM_AUTH_KEY_0: 0x90
+[   26.943765] iwlwifi 0000:00:14.3: CNVI_SCU_SEQ_DATA_DW9: 0x0
+[   26.944901] iwlwifi 0000:00:14.3: RFIm is deactivated, reason =3D 5
+[   27.045437] iwlwifi 0000:00:14.3: Registered PHC clock: iwlwifi-PTP, wit=
+h index: 0
+[   27.098590] VBoxNetFlt: Successfully started.
+[   27.101687] VBoxNetAdp: Successfully started.
+[   27.153602] bridge: filtering via arp/ip/ip6tables is no longer availabl=
+e by default. Update your scripts to load br_netfilter if you need this.
+[   27.851014] loop14: detected capacity change from 0 to 8
+[   27.895706] r8169 0000:6c:00.0: invalid VPD tag 0xff (size 0) at offset =
+0; assume missing optional EEPROM
+[   28.898015] intel_pstate: Turbo is disabled
+[   28.898021] intel_pstate: Turbo disabled by BIOS or unavailable on proce=
+ssor
+[   31.900781] intel_pstate: Turbo is disabled
+[   31.900788] intel_pstate: Turbo disabled by BIOS or unavailable on proce=
+ssor
+[   33.959448] Bluetooth: RFCOMM TTY layer initialized
+[   33.959456] Bluetooth: RFCOMM socket layer initialized
+[   33.959462] Bluetooth: RFCOMM ver 1.11
+[   36.903768] intel_pstate: Turbo is disabled
+[   36.903777] intel_pstate: Turbo disabled by BIOS or unavailable on proce=
+ssor
+[   38.054345] systemd-journald[883]: /var/log/journal/a9e8e3d2041547169b10=
+7e1e1a23f2ce/user-1000.journal: Journal file uses a different sequence numb=
+er ID, rotating.
+[   39.799560] warning: `kded5' uses wireless extensions which will stop wo=
+rking for Wi-Fi 7 hardware; use nl80211
+[   40.884365] wlp0s20f3: authenticate with 18:ee:86:8b:16:a2 (local addres=
+s=3D98:bd:80:8a:e9:27)
+[   40.885147] wlp0s20f3: send auth to 18:ee:86:8b:16:a2 (try 1/3)
+[   40.968595] wlp0s20f3: authenticate with 18:ee:86:8b:16:a2 (local addres=
+s=3D98:bd:80:8a:e9:27)
+[   40.968603] wlp0s20f3: send auth to 18:ee:86:8b:16:a2 (try 1/3)
+[   40.980941] wlp0s20f3: authenticated
+[   40.981904] wlp0s20f3: associate with 18:ee:86:8b:16:a2 (try 1/3)
+[   41.042933] wlp0s20f3: RX AssocResp from 18:ee:86:8b:16:a2 (capab=3D0x14=
+31 status=3D0 aid=3D14)
+[   41.046917] wlp0s20f3: associated
 
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaQzYuQAKCRB4tDGHoIJi
-0pGaAP9WFZY/r0ca8LrFQxCHlx8PWDV8pmGfyoFVPPlFTTtbcQEAgK1PKybO1IjQ
-M3rl0eDe/MUp1bItgaHMwbRt2pntaQw=
-=i7Ds
------END PGP SIGNATURE-----
+If you post the patch, I'm happy to add a `Tested-by` tag for it.
+Thank you for your help!
 
---l1CBpLaBOXuNOWR+--
+> Thanks,
+> Srinivas
+
 
