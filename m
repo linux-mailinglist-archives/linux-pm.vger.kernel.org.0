@@ -1,118 +1,117 @@
-Return-Path: <linux-pm+bounces-37567-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37568-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id ABDD4C3D7F3
-	for <lists+linux-pm@lfdr.de>; Thu, 06 Nov 2025 22:28:11 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 816CFC3D85C
+	for <lists+linux-pm@lfdr.de>; Thu, 06 Nov 2025 22:45:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 9B19A4E2938
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Nov 2025 21:28:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F137F188865B
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Nov 2025 21:45:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7289B306B39;
-	Thu,  6 Nov 2025 21:28:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90936273D68;
+	Thu,  6 Nov 2025 21:45:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J09Eadt7"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="FATfLOCF"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BC5E305056
-	for <linux-pm@vger.kernel.org>; Thu,  6 Nov 2025 21:28:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97D5122A817
+	for <linux-pm@vger.kernel.org>; Thu,  6 Nov 2025 21:45:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762464486; cv=none; b=SgVGLGqaax51a3qjzCWLVAPwkgYOBw3pQSkviQEnzAuTDH+trDgczUgGZBoowCo1BNwwWnhNiV7ZpVXN9Dm7Y14t3T8p0+hZg+HxmPLND6JDQi+JZW00c73sHlx0ajXzXUDTgpJBihqyrvF+87SvadJaHF+xr5gCDllsFrbEzQ0=
+	t=1762465526; cv=none; b=szQ7hJsGE0FIW6S9jpDK0Xqvs62N6j1MwEXLF8gr+6mtoq6vmdDXTNWeECj8DHu2BqlIcm7dwsXEvdQqtQKSGe91RPnss1IvYtaazObr88hsqM5BA2eQk7ZxJioK7wVzI9UwM3FPzrYZRcJTELN2waH5kRam/Ayz8nCVfRBpH6M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762464486; c=relaxed/simple;
-	bh=K0MBA/NDjuYhSJlc9XQF6LJrAQaSHSLl0UPjoCj5H8A=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=MpoMQttl6/vRN7UJ/MdmLHrZAO/3J+irL2o1gDWo8d1xK4ElpeHU4/FKF6pN1gXz15/xopz1DH3O/gAGBEdF+xJ3Jrprj7F4KLhCDuHHn7nOOdXZ72EDUnkRRT3p8n5B+94HboopcE8oRmcNJPWL1RMnX0N+eJ0SytQek7i1y9I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J09Eadt7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFF58C4AF0B
-	for <linux-pm@vger.kernel.org>; Thu,  6 Nov 2025 21:28:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762464486;
-	bh=K0MBA/NDjuYhSJlc9XQF6LJrAQaSHSLl0UPjoCj5H8A=;
-	h=From:Date:Subject:To:Cc:From;
-	b=J09Eadt7NWuzAS9T6YnRJ24RePODcr71iDuGW1ckL0ucWjfewEDm58YVDYVPfR9pU
-	 Fp0qx91AwDRJZmgsEyLKYIb/rCp/8M3uuWpT5DrLeoqoAiLUprHz7TW5dblXThl3iK
-	 U/mkkzUkM07pi7Aggv1T+yuvV62GhEwsERrCYw1Ak1AfogR7Oke7uVDA32x59ZMmXZ
-	 H4PbHeX1mzaBmfEL6HViRydmeZNU3qnaGgp66zlgdgYSP9R99Ra98nnqZws4ayqiuB
-	 zEGTJu/lQN7NQICv0gB/C0iELAahiqluJWKLUEDyLfy0RFv7BJWbGLaub/8+PgkVa6
-	 ul3DYlqR0sPYA==
-Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-65363319bacso29405eaf.2
-        for <linux-pm@vger.kernel.org>; Thu, 06 Nov 2025 13:28:05 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVPW8XfQoz5i40yDVQikqU+CcmauRgdrOStmQBaAmPrIdTxGZalTIu/PFo/RR8VEbzsaE/mS0IXkg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyYP/qKh0gh8pxVAYE3XLL9Vty5WVZAYIJCMdbxD+FumbsVzRwB
-	YsK+bc0b7KeX4NNUyHsrbj6fq0+hAM+jj7zW4J4+xELzWgKQWU+E4I9GHDlAXXqLc6asK56CFzi
-	K4HbUGf/ibTQCLAJvlUKvHQpAQ7W/44w=
-X-Google-Smtp-Source: AGHT+IF7dXr2RjLUY6C1fn8TVkoQlFIs4Kvq8HgR0agdfLt+A1tmPiUwMKNIMRKDuTeki2c06C7v7pnTpBbzrMNIFWE=
-X-Received: by 2002:a05:6808:4f2a:b0:44d:c03e:657a with SMTP id
- 5614622812f47-45015cf2fc2mr529707b6e.7.1762464485311; Thu, 06 Nov 2025
- 13:28:05 -0800 (PST)
+	s=arc-20240116; t=1762465526; c=relaxed/simple;
+	bh=uYNICSMwcINFxtVKDTUkwR+jyvr09smdSqwTdsQ/N2E=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MmdcSlsPUyZ9yqvs7XP0XFgJTdB4gHrpTQszkFwd28S1D8duZJjCf4D8FKxv+UV5M0lCcUV14vEZH/Gu5h0n9FPWVmG6mPTOzKvZYWTM4Xod291vFbk+djtn7V4m3m9FNr9OyuZHBzyzVT7FfLr9FOU9oPZP6ktFVPrJUz36wxw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=FATfLOCF; arc=none smtp.client-ip=209.85.160.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-3e3dac349easo85949fac.2
+        for <linux-pm@vger.kernel.org>; Thu, 06 Nov 2025 13:45:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1762465523; x=1763070323; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8wSNQhkx/Wd+48yznHEtHRoC01Ub8HTXtVN4/9DOki0=;
+        b=FATfLOCFnVCLZmqXCPUul0e4ze1iFPTFXOfe5hYdDdqCViyQtUSRVqO0DXloUCvWhX
+         ts3swklm98BKGdTPRsNIIjGA34tiyNgwvDavS2/YZow2K/NFvdi5b98+d4YdUwH0xfh4
+         lUh7mJfCwgvjfPqniSdMRs9lLy9Gn7mKzlFv0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762465523; x=1763070323;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8wSNQhkx/Wd+48yznHEtHRoC01Ub8HTXtVN4/9DOki0=;
+        b=oc8lkWCzluuY0Jy20zq50eKhVPvr/0YYK39XdBNwRBMfdsRxWl3OOCVGIqPMEPg0TO
+         6P/nto1ylXRD3qDxlXTDfgjqQ6n0rvRGwe9Hm4Uqnll2g/wB+Y8gN3nEBxyaMKhtURF5
+         KjuDuJWXcz+KQZM5EZEEKV6FeHJZSIngYfmUut2OXPDi2p9N4+Gw5OgTn2UPJERp/Z1d
+         e9UOyDBgDsQvilKWnjhwMZTu/G2Hc816jaaeSOawAf4m6r3rqO9TQUBDknkEserJWyfn
+         9R9UMU3bDbWJOdarIZ92UD7Wm78f+kjOkjQauwtVcyC/7jY9kP1qjSfXtmI0mQmOPA0P
+         UAzw==
+X-Forwarded-Encrypted: i=1; AJvYcCUGrx5rsX1nBbqbEcGhGtVGAjhwhrYNTLfW3v4+Bu7OznA+syxruB/YnbzhAdlBEiJ3N/SA1a0LCA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx1+x3/kcYUWFtUrK/CaISYRGW4tQxGJWPQtKenEjEMyH0pQnMc
+	QeNiWysKydYAI9Evgfr5hS1iG51ZBB1AwJD0EUe5ciXGggmqE6IDpYP5Xg/5KuxtDkE=
+X-Gm-Gg: ASbGncu4giKLYODlwu/jHfmWo2+uUMxSblBfbOJ88be8xBC4nV9X+gamspdZCiveFRo
+	utLr9Q4wM3lTuerRWSeQGDL9Q4QeMLY6PHLVH8gjmV82V5qNJTuwcJqFuFdsZ9p4qus40rrekha
+	MHe6wW14Hdp2UippjGz599gMJIXJ4a/ZmbWpSrC2aktVfkn0gp0WfdpfSjHV1UXPxZhIJ9Mf7xb
+	FZDHiNVLarzLHgXCeoEwWFFPy61rUbrqSC0WKxiHwXbv2LMquGMj0uP71/fqVaP6/+ZXOtdLtQ4
+	PuYpXSIDw5E/s4A6o53iroRDKJPqbzErxhR2Qz4wUKnByJFW7DLbU5YJis1nHdXu03jl9VHRyKV
+	Ffr01JurEngyD0l+mOd23joyO1BbEO+c9QtFiaIx+7fJyRNRuXtTHOshTxJxS1xH8NXFFTXccG4
+	eyFQsdd8c+iUSC
+X-Google-Smtp-Source: AGHT+IFFVIQF5Ulg2gZsQPEo/D+7GUIlS0dUTcdAO+ODEVaczrhF+CoVdirV/snfEdNdIRTEZuc7SQ==
+X-Received: by 2002:a05:6870:c195:b0:3d2:5173:7019 with SMTP id 586e51a60fabf-3e41e742ebbmr836672fac.43.1762465523583;
+        Thu, 06 Nov 2025 13:45:23 -0800 (PST)
+Received: from [192.168.1.14] ([38.175.187.108])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7c6f0f5f64fsm346086a34.12.2025.11.06.13.45.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Nov 2025 13:45:23 -0800 (PST)
+Message-ID: <5fe00261-7cdd-42c1-9668-60dc08c6479f@linuxfoundation.org>
+Date: Thu, 6 Nov 2025 14:45:22 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 6 Nov 2025 22:27:54 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0heXyzAAP5mH-kP9iS9yGJ-ceGFUJG5m-FL-rMMWx4eJg@mail.gmail.com>
-X-Gm-Features: AWmQ_bmo8bBBfH4_s2z-itlUMPz6AjaSxaBC6mGyOgstB6XZR-N0AaE5S4zWuOw
-Message-ID: <CAJZ5v0heXyzAAP5mH-kP9iS9yGJ-ceGFUJG5m-FL-rMMWx4eJg@mail.gmail.com>
-Subject: [GIT PULL] ACPI fixes for v6.18-rc5
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: ACPI Devel Maling List <linux-acpi@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] tools/power/cpupower: Support building libcpupower
+ statically
+To: Zuo An <zuoan.penguin@gmail.com>, linux-pm@vger.kernel.org
+Cc: Thomas Renninger <trenn@suse.com>, Shuah Khan <shuah@kernel.org>,
+ "John B. Wyatt IV" <jwyatt@redhat.com>, John Kacur <jkacur@redhat.com>,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <x7geegquiks3zndiavw2arihdc2rk7e2dx3lk7yxkewqii6zpg@tzjijqxyzwmu>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <x7geegquiks3zndiavw2arihdc2rk7e2dx3lk7yxkewqii6zpg@tzjijqxyzwmu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Linus,
+On 10/23/25 23:46, Zuo An wrote:
+> The cpupower Makefile built and installed libcpupower as a shared
+> library (libcpupower.so) without passing `STATIC=true`, but did not
+> build a static version of the library even with `STATIC=true`. (Only the
+> programs were static). Thus, out-of-tree programs using libcpupower
+> were unable to link statically against the library without having access
+> to intermediate object files produced during the build.
+> 
+> This fixes that situation by ensuring that libcpupower.a is built and
+> installed when `STATIC=true` is specified.
+> 
+> Signed-off-by: Zuo An <zuoan.penguin@gmail.com>
+> ---
 
-Please pull from the tag
+Applied to
+git.kernel.org/pub/scm/linux/kernel/git/shuah/linux.git/ cpupower
+branch for Linux 6.19
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- acpi-6.18-rc5
-
-with top-most commit 771e8f483583728cd2ef164f7c2256c4bf2adf4c
-
- Merge branches 'acpi-cppc' and 'acpi-docs'
-
-on top of commit 6146a0f1dfae5d37442a9ddcba012add260bceb0
-
- Linux 6.18-rc4
-
-to receive ACPI support fixes for 6.18-rc5.
-
-These fix a coding mistake in the ACPI Smart Battery Subsystem (SBS)
-driver and two documentation issues:
-
- - Fix computation of the battery->present value in acpi_battery_read()
-   to work when battery->id is not zero (Dan Carpenter)
-
- - Fix comment typo in the ACPI CPPC library (Chu Guangqing)
-
- - Fix I2C device references in two ASL examples in the firmware guide
-   that were broken by a previous update (Jonas Gorski)
-
-Thanks!
-
-
----------------
-
-Chu Guangqing (1):
-      ACPI: CPPC: Fix typo in a comment
-
-Dan Carpenter (1):
-      ACPI: SBS: Fix present test in acpi_battery_read()
-
-Jonas Gorski (1):
-      Documentation: ACPI: i2c-muxes: fix I2C device references
-
----------------
-
- Documentation/firmware-guide/acpi/i2c-muxes.rst | 8 ++++----
- drivers/acpi/cppc_acpi.c                        | 2 +-
- drivers/acpi/sbs.c                              | 2 +-
- 3 files changed, 6 insertions(+), 6 deletions(-)
+thanks,
+-- Shuah
 
