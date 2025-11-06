@@ -1,134 +1,168 @@
-Return-Path: <linux-pm+bounces-37502-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37503-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 529B6C3A4D7
-	for <lists+linux-pm@lfdr.de>; Thu, 06 Nov 2025 11:37:23 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 07874C3A7B3
+	for <lists+linux-pm@lfdr.de>; Thu, 06 Nov 2025 12:13:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 84E74420D26
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Nov 2025 10:31:17 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 8138B34BDC0
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Nov 2025 11:13:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3549280035;
-	Thu,  6 Nov 2025 10:31:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="STVLeWeH"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 754832EDD5F;
+	Thu,  6 Nov 2025 11:13:13 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8466245C0B;
-	Thu,  6 Nov 2025 10:31:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FAEB3074B1
+	for <linux-pm@vger.kernel.org>; Thu,  6 Nov 2025 11:13:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762425072; cv=none; b=iTMCrveAFh8hznfDw/IzKOHds4ed1DyjFbqM2ozecrdkq7D0xeGX/01OvcqeYAlj2PlDvkA4Q2cglNPGEl3isHtnUD3hiWrPIMbqSaxlcM8TDhq3k9omqHKQYRX28mkvxh4mLbcBYvdWB3AIV0ctWZZ0yr6a09XhPlc1UM1X4hc=
+	t=1762427593; cv=none; b=jZu3ETyH/d3POUobH23NvA+tqOiZC5C5ajI3CXTWBfn069YP81Y3iwgMQEdUcBRK9vSUWmgQuE7sjqThvNxTrUAiF7WYI6R642qnLdKInzMCXjSZrwNi7WnAFXIGnTWMtEAp6vMvzB7PxZXLL/P1jNHB8ekp7CLTAgCDrkGpjbk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762425072; c=relaxed/simple;
-	bh=JFOdbYffsARPA55o25J5nmd1eh1TGG+Rp7ggcIJ/X3I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=E2TfHKG+2tG4O+EGr8tgoOBm1nvB7cnG3Gy0t562xy5Lt2YiezRLm2EvgKs0QU2AD8gGPt5k70RlQSYH9wAbud6y9u9LKM8gSFZ+d0x57ItpR1nJX/35pGNSuK/64Q7zSlvCYJ+o4B3qp0gP5tx2bbtEEaGLzGA5igoNQqp7bVY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=STVLeWeH; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762425071; x=1793961071;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=JFOdbYffsARPA55o25J5nmd1eh1TGG+Rp7ggcIJ/X3I=;
-  b=STVLeWeHzv6ILv38R2/zQgW/qNBZtJTXA6cqGDCuVjLEXzLwB5pAmRil
-   ROUq5W8wj0jH8XTLBT8lX0G2ogpoodfxBYAPB98DhUuIQVy2TLsbBR0sB
-   RV8s0g61kjt1ty9uJNqxfkzOW/zYzz9gaht7e6Tgi65Bei+jwfp/snfgR
-   DJSlvPscg5d/uXF9LqXVJTUHjuZC2FS5nTvay3pn1Moq2NzwhQeS+53Y5
-   wy5s6+pm+0CbkNgNi8Nr4g7Lof0KKV23eILNq6FyZRAD1GvNk/PMkHHhQ
-   1k2Vyt62LD1GtIkEHFxr2IVz0iB39Xox+DId41h7cPZYpOe7Ut+BS4arn
-   w==;
-X-CSE-ConnectionGUID: COzVy9g0T82U3s7hNBjJgw==
-X-CSE-MsgGUID: WYZMXqnhRP2siWooEQS4AA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11604"; a="82187838"
-X-IronPort-AV: E=Sophos;i="6.19,284,1754982000"; 
-   d="scan'208";a="82187838"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2025 02:31:10 -0800
-X-CSE-ConnectionGUID: dnlOyaMCRDCGbU6AZp/ILA==
-X-CSE-MsgGUID: VPaCKE7sRxmOnX0GhoFMRA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,284,1754982000"; 
-   d="scan'208";a="186974815"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by orviesa006.jf.intel.com with ESMTP; 06 Nov 2025 02:31:03 -0800
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vGxGf-000Tlq-05;
-	Thu, 06 Nov 2025 10:31:01 +0000
-Date: Thu, 6 Nov 2025 18:30:18 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sumit Gupta <sumitg@nvidia.com>, rafael@kernel.org,
-	viresh.kumar@linaro.org, lenb@kernel.org, robert.moore@intel.com,
-	corbet@lwn.net, pierre.gondois@arm.com, zhenglifeng1@huawei.com,
-	rdunlap@infradead.org, ray.huang@amd.com, gautham.shenoy@amd.com,
-	mario.limonciello@amd.com, perry.yuan@amd.com,
-	ionela.voinescu@arm.com, zhanjie9@hisilicon.com,
-	linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
-	linux-doc@vger.kernel.org, acpica-devel@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-tegra@vger.kernel.org, treding@nvidia.com,
-	jonathanh@nvidia.com, vsethi@nvidia.com, ksitaraman@nvidia.com,
-	sanjayc@nvidia.com, nhartman@nvidia.com, bbasu@nvidia.com,
-	sumitg@nvidia.com
-Subject: Re: [PATCH v4 4/8] ACPI: CPPC: add APIs and sysfs interface for
- min/max_perf
-Message-ID: <202511061802.lIq09jwh-lkp@intel.com>
-References: <20251105113844.4086250-5-sumitg@nvidia.com>
+	s=arc-20240116; t=1762427593; c=relaxed/simple;
+	bh=SzCSS56vB8/bzF8mya6d920cNSvBzOQEFAsgjKM1HtQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZmafC9UamFu3Xg1kiRG5l1bghDSG8LA4lV8OuTi3P+Pyq1zFlxDPBGyrWj1grsaeTiNLvpckDLW98/uLxzGsCd+cj6aqy+jTmXWiZbU+X2TV0sUWtkyRSVSkLUv2++y+BWnxU9JmCvUERdH+7igEMY34dMrR1CCfl1DYZk47XMQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 24ED01596;
+	Thu,  6 Nov 2025 03:13:03 -0800 (PST)
+Received: from [10.1.28.78] (e127648.arm.com [10.1.28.78])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 254983F63F;
+	Thu,  6 Nov 2025 03:13:10 -0800 (PST)
+Message-ID: <b910a35c-83aa-4050-9c6c-de40f13a2a55@arm.com>
+Date: Thu, 6 Nov 2025 11:13:07 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251105113844.4086250-5-sumitg@nvidia.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: Regression in TEO cpuidle governor between 6.6 and 6.12
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Reka Norman <rekanorman@chromium.org>, daniel.lezcano@linaro.org,
+ linux-pm@vger.kernel.org
+References: <CAEmPcwsNMNnNXuxgvHTQ93Mx-q3Oz9U57THQsU_qdcCx1m4w5g@mail.gmail.com>
+ <a50064b2-e6aa-4237-a715-12f21a65e9a6@arm.com>
+ <ed1e64dc-91c9-44d9-b3d3-9f142bcf7a8d@arm.com>
+ <CAJZ5v0g9Jndez5y5i4pPW1C+qfj=4iiu51HV7Eb1dBGd1jg-CA@mail.gmail.com>
+Content-Language: en-US
+From: Christian Loehle <christian.loehle@arm.com>
+In-Reply-To: <CAJZ5v0g9Jndez5y5i4pPW1C+qfj=4iiu51HV7Eb1dBGd1jg-CA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi Sumit,
+On 11/5/25 20:48, Rafael J. Wysocki wrote:
+> On Wed, Nov 5, 2025 at 12:24 AM Christian Loehle
+> <christian.loehle@arm.com> wrote:
+>>
+>> On 11/4/25 09:03, Christian Loehle wrote:
+>>> On 11/4/25 03:36, Reka Norman wrote:
+>>>> Hi,
+>>>>
+>>>> I’m seeing a regression in the TEO governor between 6.6 and 6.12. At
+>>>> 6.12, when the system is idle it’s spending almost 100% of time in
+>>>> WFI, compared to about 6% at 6.6. At mainline it has improved compared
+>>>> to 6.12 but is still a lot worse than 6.6, spending about 50% in WFI.
+>>>>
+>>>> The system is a ChromeOS device with Mediatek MT8196.
+>>>>
+>>>> Bisecting showed the specific commit which caused the regression is:
+>>>> 4b20b07ce72f ("cpuidle: teo: Don't count non-existent intercepts")
+>>>>
+>>>> I’ve attached sysfs dumps showing the issue. All were taken a couple
+>>>> of minutes after boot, with the device having been idle since boot.
+>>>> The cases tested are:
+>>>> cpuidle_6_6.txt      = 6.6 kernel
+>>>> cpuidle_6_12.txt     = 6.6 kernel with teo commits up to 6.12
+>>>> cpuidle_mainline.txt = 6.6 kernel with teo commits up to mainline
+>>>>
+>>>> Summary of the percentage time spent in each state (averaged across CPUs):
+>>>>
+>>>> |            |   6.6 |  6.12 | mainline |
+>>>> |------------|------:|------:|---------:|
+>>>> | WFI        |  6.02 | 99.94 |    56.84 |
+>>>> | cpuoff     | 11.02 |     0 |     0.65 |
+>>>> | clusteroff | 82.96 |  0.05 |    42.51 |
+>>>> | s2idle     |     0 |     0 |        0 |
+>>>>
+>>>> Any help would be much appreciated. Let me know if there's any other
+>>>> debugging information I should provide.
+>>>>
+>>>
+>>> That's not good.
+>>> If the system is mostly idle (only boot activity but dumps are taken after
+>>> ~3mins?), what is causing the wakeups? Even in 6.6 There are definitely more
+>>> than I would've expected?
+>>> I noticed that clusteroff and cpuoff have equal residency, which is
+>>> obviously a bit awkward for cpuidle, but shouldn't be relevant to your issue.
+>>>
+>>> I'm a bit puzzled by your bisect results.
+>>> 4b20b07ce72f ("cpuidle: teo: Don't count non-existent intercepts")
+>>> made the intercept logic *less* prone to count (false) intercepts, yet it
+>>> seems to count more of them? (resulting in more WFI).
+>>> I'll think about it some more, for now of course a trace would be very
+>>> helpful. (cpuidle events, ipi_raise, irqs?)
+>>> Are there ever any latency constraints set?
+>>>
+>>> FWIW the mainline results look the most reasonable, from a 30000 feet view
+>>> anyway:
+>>> Cluster       State           above   below   usage   above%  below%
+>>> LITTLE        cpuoff-l        ~75     ~65     ~140    23%     20%
+>>> LITTLE        clusteroff-l    ~800    0       ~100    89%     0%
+>>> MID   cpuoff-m        ~3–4    ~15     ~20     15%     55%
+>>> MID   clusteroff-m    ~1300   0       ~4000   24%     0%
+>>> BIG   cpuoff-b        0       1       1       —       —
+>>> BIG   clusteroff-b    ~800    0       ~1900   30%     0%
+>>>
+>>> (WFI seems mostly the correct choice for little CPUs, that's fine, the energy
+>>> savings compared to cpuoff should be marginal anyway.)
+>>>
+>>> Do you mind trying:
+>>> 13ed5c4a6d9c cpuidle: teo: Skip getting the sleep length if wakeups are very frequent
+>>> on 6.12?
+>>>
+>>
+>> So just thinking out loud, the only case I can actually thing of to explain your
+>> bisect to 4b20b07ce72f ("cpuidle: teo: Don't count non-existent intercepts")
+>> is that the workload essentially changed dramatically because of our calls
+>> to tick_nohz_get_sleep_length() now.
+>> I'm not sure how likely I think that is, but I'm lacking imagination for another
+>> cause. That's why results with
+>> 13ed5c4a6d9c ("cpuidle: teo: Skip getting the sleep length if wakeups are very frequent")
+>> would be interesting.
+> 
+> My current theory is that this issue is related to the
+> tick_nohz_get_sleep_length() overhead and the way "intercepts" are
+> distinguished from "hits" in teo.
+> 
+> Namely, teo assumes that its own overhead is negligible and so it
+> counts a given event as an "intercept" if the measured time spent in
+> the idle state (with the exit latency roughly taken into account)
+> falls into a different "state bin" than the sleep length (the expected
+> time till the next timer).  However, the sleep length is computed as a
+> difference between the upcoming timer wakeup event time and
+> ts->idle_entrytime, so it actually includes the time taken by
+> tick_nohz_next_event().  If the latter is significant, it may
+> contribute to the difference seen by teo_update() and cause extra
+> "intercepts" to appear.
 
-kernel test robot noticed the following build warnings:
+Right, additionally with psci pc-mode and the exposed clusteroff states we end
+up vastly exaggerating the wakeup latency (i.e. underestimating the actual idle time)
+for three reasons:
+- wakeup latency = entry+exit latency (worst case: pay full latencies on both
+even though for most cases we don't incur the entry latency)
+- Wakeup latency is a worst-case and often is more like 2x-3x of the average.
+- We use the (higher) clusteroff values even though the clusteroff state couldn't
+possibly have been entered as not the entire cluster is idle.
 
-[auto build test WARNING on rafael-pm/linux-next]
-[also build test WARNING on rafael-pm/bleeding-edge linus/master v6.18-rc4 next-20251106]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Sumit-Gupta/cpufreq-CPPC-Add-generic-helpers-for-sysfs-show-store/20251105-194715
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/20251105113844.4086250-5-sumitg%40nvidia.com
-patch subject: [PATCH v4 4/8] ACPI: CPPC: add APIs and sysfs interface for min/max_perf
-config: riscv-defconfig (https://download.01.org/0day-ci/archive/20251106/202511061802.lIq09jwh-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project d2625a438020ad35330cda29c3def102c1687b1b)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251106/202511061802.lIq09jwh-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511061802.lIq09jwh-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> Warning: drivers/cpufreq/cppc_cpufreq.c:954 function parameter 'policy' not described in 'show_min_perf'
->> Warning: drivers/cpufreq/cppc_cpufreq.c:954 function parameter 'buf' not described in 'show_min_perf'
->> Warning: drivers/cpufreq/cppc_cpufreq.c:976 function parameter 'policy' not described in 'store_min_perf'
->> Warning: drivers/cpufreq/cppc_cpufreq.c:976 function parameter 'buf' not described in 'store_min_perf'
->> Warning: drivers/cpufreq/cppc_cpufreq.c:976 function parameter 'count' not described in 'store_min_perf'
->> Warning: drivers/cpufreq/cppc_cpufreq.c:1003 function parameter 'policy' not described in 'show_max_perf'
->> Warning: drivers/cpufreq/cppc_cpufreq.c:1003 function parameter 'buf' not described in 'show_max_perf'
->> Warning: drivers/cpufreq/cppc_cpufreq.c:1025 function parameter 'policy' not described in 'store_max_perf'
->> Warning: drivers/cpufreq/cppc_cpufreq.c:1025 function parameter 'buf' not described in 'store_max_perf'
->> Warning: drivers/cpufreq/cppc_cpufreq.c:1025 function parameter 'count' not described in 'store_max_perf'
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Nonetheless these are all just a "intercept counting is significantly more likely"
+while the results show not a single state >0 entered => the intercept logic
+probably triggers every cpuidle entry. Feels like there should be an issue in the
+feedback loop.
+Anyway I'll try to reproduce what Reka is seeing.
 
