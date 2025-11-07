@@ -1,289 +1,146 @@
-Return-Path: <linux-pm+bounces-37614-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37615-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 009A1C3FBFE
-	for <lists+linux-pm@lfdr.de>; Fri, 07 Nov 2025 12:36:16 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5343AC3FEB9
+	for <lists+linux-pm@lfdr.de>; Fri, 07 Nov 2025 13:37:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 5508E3486A6
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Nov 2025 11:36:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 62C6418968A9
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Nov 2025 12:38:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB9392E1C7C;
-	Fri,  7 Nov 2025 11:36:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 765C6319857;
+	Fri,  7 Nov 2025 12:36:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PkxsdfD+"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Ff/sjVJJ";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="UHHigW6L"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6AA32D8DA8
-	for <linux-pm@vger.kernel.org>; Fri,  7 Nov 2025 11:36:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62BF73064A6
+	for <linux-pm@vger.kernel.org>; Fri,  7 Nov 2025 12:36:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762515372; cv=none; b=rc/NBkzOpetH77Cx5VTBJaro9gjv1WjbiSkPnk7kIIoBBmC8czIaWzDerrNxwyN1JTS8kVtxfylwUOP3VKl/Ha9kDkGhrr6Uyns0ovryYI3J+ULgzUiOi2NMZsIQo0QmbD8b7GcMNcEHbo3KZgq48nUkzRV49nrz1T59QvCuoBM=
+	t=1762518990; cv=none; b=Ri6WWZsxzyxy2cu3GN2IYhktrlJvGCCb0MGgrmmISTX64TuVbWaRVH//twH5e96seZUVavFweZv25JykQyECBrZ1XamXguquRb6jeUxDa2915h9MX6CiMK0rs9JRP6mz2wb/kbEqP01SY4EUbOcVyz4wnQk50eNrukoqouEf/KY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762515372; c=relaxed/simple;
-	bh=NVXmcX+N5Z8qyU9clkL0WOP631Jjrk+MV8BCCsUgWpA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PFpN7ZKFZn+xeVQT0rr959A/4DwlS09DjibSAd/ZW5DOUP+WqmvL0plycHqk+Cs/ngsSQBRTtsrP/LjAByFPCvmR1SxU+khFxscMZP4pwSK/NMVW5lfb5skwhZi8XCZdkkRti5drA58GCtaWteTVcXY/e74ZWDgR0dy/H+dBXJY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PkxsdfD+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36B7FC19421
-	for <linux-pm@vger.kernel.org>; Fri,  7 Nov 2025 11:36:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762515369;
-	bh=NVXmcX+N5Z8qyU9clkL0WOP631Jjrk+MV8BCCsUgWpA=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=PkxsdfD+NGnDjyt9KmOcU0mPlsedc1Gpn6k7aw2l8LAfZJO2pUdcbQPIzPmiqmTXO
-	 qIg6C1llEwmA0cP3Q28MI0nbPoVuohqY5G73le+WkdNihowbVRVTyPDdLRBzqh12xa
-	 52dE/g4ksRNRuxGD9Q6RX37aqwVB0R3BmqfiSwXHqCQN4JPbRyY8OkiaRMsd4GlZ2c
-	 hulwz8GedaVhjQ4Ts5QBdaIOQmFZlBUbeSDMS6jP9un4W0N3e/BrWQcwGy+VFHFrg5
-	 wWZmWg6i01z6OoyntRVkeASXM/hzGmlj7/fladtJWTFq+p2QhbtVSFwstnVzJZrv/X
-	 ybozdyPoF2wbQ==
-Received: by mail-ot1-f54.google.com with SMTP id 46e09a7af769-7c5333e7033so200504a34.2
-        for <linux-pm@vger.kernel.org>; Fri, 07 Nov 2025 03:36:09 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWoAutHpPT6E8xiVDE1UX5zJhr8Oqts3GboXAGdo8CxCs/JtsKG/dpwVa4I8sNYDh4JY2NNuWZLeQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxCGkj3Zy1tr5tGVCqh3uR3BG8N0IEjM4hDapDvnkUkym/LHovn
-	L6e08Ve/mOtNsV6um49ZSLFLOHvDZlkjmZNAFwh/ixu79iqs8kjBRGH0KMbu7jWen5VaLwX/aJf
-	uZbQhrUlZtvMNBNucYLQY3ueEBdtSrn0=
-X-Google-Smtp-Source: AGHT+IGMraaEUZuaSZGyJap8VbBWHoBgwHAMFV2rLhgj0mY/gxejSx1HmMKOUNyMgGxe+eyY4Ol44ZwktA8egyX/kC8=
-X-Received: by 2002:a05:6830:6750:b0:7c6:8ede:ca96 with SMTP id
- 46e09a7af769-7c6effbfaedmr1645415a34.26.1762515368486; Fri, 07 Nov 2025
- 03:36:08 -0800 (PST)
+	s=arc-20240116; t=1762518990; c=relaxed/simple;
+	bh=fcggPcLDIQTv6YFTOVcBGogTQrJwnTz4cX4nFLOhcUA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uBRnQZ/v2gmnpo+7/tL9G56mdOp0kpbJKkarAmTHp3fHT8MOvFMv2bJn1CDr+Pq2mkZzmktj24qEge6NPczj1/2OUJjccYw5HnjluaRd2EMBExWXr7AcJ8Y4nRBPI7XMdUVhxkUO1ONhyfm1Cwn/E0khERgI7r81zpVHQ8EUX1k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Ff/sjVJJ; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=UHHigW6L; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1762518987;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=1siZim9NDW4Tl0EKq7x9rZRpMbOBM1ClHh169bAxgS0=;
+	b=Ff/sjVJJMW3PHtFLpZMVkIolfJgSjKW5OAdkulfuACAw8dIqMwW7Ok5Ivbz3ept7A53nEQ
+	zhjCqbJjUUazyGvXN/HMfD1rOTHQHrCtkUBALNRqrFoD0gBPvbv7j+twkgJ2ewgs06pXRx
+	XFYP0owtl9BBXEVPwTqn1cKXR1D8g0w=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-7-a6Y-SMzdM3u13-BvZ4yCZQ-1; Fri, 07 Nov 2025 07:36:26 -0500
+X-MC-Unique: a6Y-SMzdM3u13-BvZ4yCZQ-1
+X-Mimecast-MFC-AGG-ID: a6Y-SMzdM3u13-BvZ4yCZQ_1762518985
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-429b7b46eebso572506f8f.2
+        for <linux-pm@vger.kernel.org>; Fri, 07 Nov 2025 04:36:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1762518985; x=1763123785; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=1siZim9NDW4Tl0EKq7x9rZRpMbOBM1ClHh169bAxgS0=;
+        b=UHHigW6LthOEZ4R2I9BAcE5P+CMup/pWkdtnc/BqG8ZEhQu8D8gtwSfoJa0idjxvkm
+         dYzZDCbrNlCbsK6UbrBjLCXicfzs2fOzBaQiZyeOTitKfol76+TeW3C8Thkmvp9ZND9p
+         pAiz5u4FU6T95Zr9Q/yik7kYn+WrAAlpKxF1+SUUtKw+gYUnbwxHbqd02+44cqSAfjV2
+         ClV8ltrJhJhlzvCR/bigTsTmUAtivFFDdjsaggVDOUiZTjEyd45Jc24UZVmP8j67Stb8
+         rSJLR/yfZgqYjMWncdmR341NyDelGHdSrXpO5QLox4p35qv3AAbkigUihiFxi0+tScDA
+         DV4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762518985; x=1763123785;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1siZim9NDW4Tl0EKq7x9rZRpMbOBM1ClHh169bAxgS0=;
+        b=ALJaYOGzGRORRe9lQwCaU4uxTz900v3biFCKjxXYIPfJWBWNM6JMReGquFvVsHwkRP
+         C+LIaeso7BwbupVytMgCetd/KrXtdBIJe6vyTbzKKt624DgVmVrkD5u948a7/kZX10d4
+         ouZERgiHcmLpKzkwMxuiausTb9eOcZf2F7I4Icwea53AF20lE+Mbd3eHYsYCAlG2jBe5
+         HI7PKPRrS9tzgJROm7JqEwuoh9UcKYnQy1U8qTAH47hsa0fM+EAXvKHaZwvmW32qWeTc
+         h0xAWBm0ooGu9ndoycp/2bmoQJdDmM6Tb76LMTybGz0QQZui02ZvvdYTReITF8hidTxH
+         EC+A==
+X-Forwarded-Encrypted: i=1; AJvYcCVSFesDqhHVSU1G14GlnE5jBuxpF2SToqIejV9jwIMHP4k0bbW5BsZxZib2+G5IpWtxdkmXLhxjIA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyMz7kD8sN3d8Z5bmdgUIBZSBmIazcJscSuY6iUI1anZE1ejMo7
+	ZLNE+eXKqAHTjDGMjad1hoMVlX9T7danNNPd+1bByLJVIFwqpIrJjXvtPpC5dTPPfSOB8EzwJbY
+	fQ4GX3WhAg8KDw2hrMrErjLnXlIlHkmtxxenBQQQ1+Rt9U8mvWnHSK6+XJEdx
+X-Gm-Gg: ASbGncuxXedHI6q1tpmgDcz/4ynaJnBkSa2l0vesXLvxDe4gRfUjZggKfd2qBopI+kJ
+	xf14WjUzhVwr2DL2Si3VvS0vKqew5WjayA+jqxW6TLI7qbi4SKCb8zzi6iKtOIDHXldQwQFsOrV
+	kL1m+vNdqXtqCIGnCtlTrgaavX53TGQ6YkiPhD6xX4lcrRl7y2VsqbKIosiJF0R+JzXfTjVxJEo
+	A2QGGRtwJLl6iXxtaTcPBX+q8aztSIxUFoALJx2iDWTHlQsgx9don1jjXPNF1RoJXUpEK78orz3
+	ziaaRxBitqUUHfgcVCpbavsFlCQ0Llg26pW2ZCpcsvUctsJKLlmj51hB2+KLzgtaWCa8Xnwv6Pn
+	IDkVEL83NuPdo6EGT9Z9Lb3ZWVkrt+Vb1AnmtJA+ORKG7tAUN
+X-Received: by 2002:a05:6000:26cb:b0:429:d426:fb9 with SMTP id ffacd0b85a97d-42ae5ac987bmr2037286f8f.34.1762518984964;
+        Fri, 07 Nov 2025 04:36:24 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IEylXKmQTrFotELc6oCwxKJ4KvmE3IvEF0/zAZ97as2az8kWIyuFMKUbHCj4k9Gpi+YSaCAyg==
+X-Received: by 2002:a05:6000:26cb:b0:429:d426:fb9 with SMTP id ffacd0b85a97d-42ae5ac987bmr2037266f8f.34.1762518984562;
+        Fri, 07 Nov 2025 04:36:24 -0800 (PST)
+Received: from lbulwahn-thinkpadx1carbongen12.rmtde.csb ([2a02:810d:7e01:ef00:1622:5a48:afdc:799f])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42ac67921c3sm5146947f8f.40.2025.11.07.04.36.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Nov 2025 04:36:24 -0800 (PST)
+From: Lukas Bulwahn <lbulwahn@redhat.com>
+X-Google-Original-From: Lukas Bulwahn <lukas.bulwahn@redhat.com>
+To: Andreas Kemnade <andreas@kemnade.info>,
+	Matti Vaittinen <mazziesaccount@gmail.com>,
+	Sebastian Reichel <sebastian.reichel@collabora.com>,
+	Sebastian Reichel <sre@kernel.org>,
+	linux-pm@vger.kernel.org
+Cc: kernel-janitors@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Lukas Bulwahn <lukas.bulwahn@redhat.com>
+Subject: [PATCH] MAINTAINERS: adjust file entry in ROHM BD71828 CHARGER
+Date: Fri,  7 Nov 2025 13:36:21 +0100
+Message-ID: <20251107123621.425633-1-lukas.bulwahn@redhat.com>
+X-Mailer: git-send-email 2.51.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAEmPcwsNMNnNXuxgvHTQ93Mx-q3Oz9U57THQsU_qdcCx1m4w5g@mail.gmail.com>
- <a50064b2-e6aa-4237-a715-12f21a65e9a6@arm.com> <ed1e64dc-91c9-44d9-b3d3-9f142bcf7a8d@arm.com>
- <CAJZ5v0g9Jndez5y5i4pPW1C+qfj=4iiu51HV7Eb1dBGd1jg-CA@mail.gmail.com>
- <b910a35c-83aa-4050-9c6c-de40f13a2a55@arm.com> <CAJZ5v0h6qAgWkEad5OGM-V-HOE-1PwD_XqgsDWbnJNxLWOKDfA@mail.gmail.com>
- <CAEmPcws_pvYpzRMQfMyRPBw=7bUyYCcnP3BHN2H4wgUeLLszFg@mail.gmail.com>
-In-Reply-To: <CAEmPcws_pvYpzRMQfMyRPBw=7bUyYCcnP3BHN2H4wgUeLLszFg@mail.gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 7 Nov 2025 12:35:55 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0i_ZUD1=3JDABJZ3fcdD7r8uMU36=mam8r2=1P02YksYw@mail.gmail.com>
-X-Gm-Features: AWmQ_bkMQcZXkdUeJBXJR75APx0O3Un17vVtfzLd_ekUoe-TGmrpixv7T-2fEQA
-Message-ID: <CAJZ5v0i_ZUD1=3JDABJZ3fcdD7r8uMU36=mam8r2=1P02YksYw@mail.gmail.com>
-Subject: Re: Regression in TEO cpuidle governor between 6.6 and 6.12
-To: Reka Norman <rekanorman@chromium.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Christian Loehle <christian.loehle@arm.com>, 
-	daniel.lezcano@linaro.org, linux-pm@vger.kernel.org
-Content-Type: multipart/mixed; boundary="00000000000073624f0642ff960f"
+Content-Transfer-Encoding: 8bit
 
---00000000000073624f0642ff960f
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+From: Lukas Bulwahn <lukas.bulwahn@redhat.com>
 
-On Fri, Nov 7, 2025 at 4:28=E2=80=AFAM Reka Norman <rekanorman@chromium.org=
-> wrote:
->
-> On Fri, Nov 7, 2025 at 7:33=E2=80=AFAM Rafael J. Wysocki <rafael@kernel.o=
-rg> wrote:
-> >
-> > On Thu, Nov 6, 2025 at 12:13=E2=80=AFPM Christian Loehle
-> > <christian.loehle@arm.com> wrote:
-> > >
-> > > On 11/5/25 20:48, Rafael J. Wysocki wrote:
-> > > > On Wed, Nov 5, 2025 at 12:24=E2=80=AFAM Christian Loehle
-> > > > <christian.loehle@arm.com> wrote:
-> > > >>
-> > > >> On 11/4/25 09:03, Christian Loehle wrote:
-> > > >>> On 11/4/25 03:36, Reka Norman wrote:
-> > > >>>> Hi,
-> > > >>>>
-> > > >>>> I=E2=80=99m seeing a regression in the TEO governor between 6.6 =
-and 6.12. At
-> > > >>>> 6.12, when the system is idle it=E2=80=99s spending almost 100% =
-of time in
-> > > >>>> WFI, compared to about 6% at 6.6. At mainline it has improved co=
-mpared
-> > > >>>> to 6.12 but is still a lot worse than 6.6, spending about 50% in=
- WFI.
-> > > >>>>
-> > > >>>> The system is a ChromeOS device with Mediatek MT8196.
-> > > >>>>
-> > > >>>> Bisecting showed the specific commit which caused the regression=
- is:
-> > > >>>> 4b20b07ce72f ("cpuidle: teo: Don't count non-existent intercepts=
-")
-> > > >>>>
-> > > >>>> I=E2=80=99ve attached sysfs dumps showing the issue. All were ta=
-ken a couple
-> > > >>>> of minutes after boot, with the device having been idle since bo=
-ot.
-> > > >>>> The cases tested are:
-> > > >>>> cpuidle_6_6.txt      =3D 6.6 kernel
-> > > >>>> cpuidle_6_12.txt     =3D 6.6 kernel with teo commits up to 6.12
-> > > >>>> cpuidle_mainline.txt =3D 6.6 kernel with teo commits up to mainl=
-ine
-> > > >>>>
-> > > >>>> Summary of the percentage time spent in each state (averaged acr=
-oss CPUs):
-> > > >>>>
-> > > >>>> |            |   6.6 |  6.12 | mainline |
-> > > >>>> |------------|------:|------:|---------:|
-> > > >>>> | WFI        |  6.02 | 99.94 |    56.84 |
-> > > >>>> | cpuoff     | 11.02 |     0 |     0.65 |
-> > > >>>> | clusteroff | 82.96 |  0.05 |    42.51 |
-> > > >>>> | s2idle     |     0 |     0 |        0 |
-> > > >>>>
-> > > >>>> Any help would be much appreciated. Let me know if there's any o=
-ther
-> > > >>>> debugging information I should provide.
-> > > >>>>
-> > > >>>
-> > > >>> That's not good.
-> > > >>> If the system is mostly idle (only boot activity but dumps are ta=
-ken after
-> > > >>> ~3mins?), what is causing the wakeups? Even in 6.6 There are defi=
-nitely more
-> > > >>> than I would've expected?
-> > > >>> I noticed that clusteroff and cpuoff have equal residency, which =
-is
-> > > >>> obviously a bit awkward for cpuidle, but shouldn't be relevant to=
- your issue.
-> > > >>>
-> > > >>> I'm a bit puzzled by your bisect results.
-> > > >>> 4b20b07ce72f ("cpuidle: teo: Don't count non-existent intercepts"=
-)
-> > > >>> made the intercept logic *less* prone to count (false) intercepts=
-, yet it
-> > > >>> seems to count more of them? (resulting in more WFI).
-> > > >>> I'll think about it some more, for now of course a trace would be=
- very
-> > > >>> helpful. (cpuidle events, ipi_raise, irqs?)
-> > > >>> Are there ever any latency constraints set?
-> > > >>>
-> > > >>> FWIW the mainline results look the most reasonable, from a 30000 =
-feet view
-> > > >>> anyway:
-> > > >>> Cluster       State           above   below   usage   above%  bel=
-ow%
-> > > >>> LITTLE        cpuoff-l        ~75     ~65     ~140    23%     20%
-> > > >>> LITTLE        clusteroff-l    ~800    0       ~100    89%     0%
-> > > >>> MID   cpuoff-m        ~3=E2=80=934    ~15     ~20     15%     55%
-> > > >>> MID   clusteroff-m    ~1300   0       ~4000   24%     0%
-> > > >>> BIG   cpuoff-b        0       1       1       =E2=80=94       =E2=
-=80=94
-> > > >>> BIG   clusteroff-b    ~800    0       ~1900   30%     0%
-> > > >>>
-> > > >>> (WFI seems mostly the correct choice for little CPUs, that's fine=
-, the energy
-> > > >>> savings compared to cpuoff should be marginal anyway.)
-> > > >>>
-> > > >>> Do you mind trying:
-> > > >>> 13ed5c4a6d9c cpuidle: teo: Skip getting the sleep length if wakeu=
-ps are very frequent
-> > > >>> on 6.12?
-> > > >>>
-> > > >>
-> > > >> So just thinking out loud, the only case I can actually thing of t=
-o explain your
-> > > >> bisect to 4b20b07ce72f ("cpuidle: teo: Don't count non-existent in=
-tercepts")
-> > > >> is that the workload essentially changed dramatically because of o=
-ur calls
-> > > >> to tick_nohz_get_sleep_length() now.
-> > > >> I'm not sure how likely I think that is, but I'm lacking imaginati=
-on for another
-> > > >> cause. That's why results with
-> > > >> 13ed5c4a6d9c ("cpuidle: teo: Skip getting the sleep length if wake=
-ups are very frequent")
-> > > >> would be interesting.
-> > > >
-> > > > My current theory is that this issue is related to the
-> > > > tick_nohz_get_sleep_length() overhead and the way "intercepts" are
-> > > > distinguished from "hits" in teo.
-> > > >
-> > > > Namely, teo assumes that its own overhead is negligible and so it
-> > > > counts a given event as an "intercept" if the measured time spent i=
-n
-> > > > the idle state (with the exit latency roughly taken into account)
-> > > > falls into a different "state bin" than the sleep length (the expec=
-ted
-> > > > time till the next timer).  However, the sleep length is computed a=
-s a
-> > > > difference between the upcoming timer wakeup event time and
-> > > > ts->idle_entrytime, so it actually includes the time taken by
-> > > > tick_nohz_next_event().  If the latter is significant, it may
-> > > > contribute to the difference seen by teo_update() and cause extra
-> > > > "intercepts" to appear.
-> > >
-> > > Right, additionally with psci pc-mode and the exposed clusteroff stat=
-es we end
-> > > up vastly exaggerating the wakeup latency (i.e. underestimating the a=
-ctual idle time)
-> > > for three reasons:
-> > > - wakeup latency =3D entry+exit latency (worst case: pay full latenci=
-es on both
-> > > even though for most cases we don't incur the entry latency)
-> > > - Wakeup latency is a worst-case and often is more like 2x-3x of the =
-average.
-> > > - We use the (higher) clusteroff values even though the clusteroff st=
-ate couldn't
-> > > possibly have been entered as not the entire cluster is idle.
-> > >
-> > > Nonetheless these are all just a "intercept counting is significantly=
- more likely"
-> > > while the results show not a single state >0 entered =3D> the interce=
-pt logic
-> > > probably triggers every cpuidle entry.
-> >
-> > It has to for this to happen, if timers are not frequent enough.
-> >
-> > > Feels like there should be an issue in the feedback loop.
-> >
-> > I'm wondering what the issue could be though.  The change in commit
-> > 4b20b07ce72f only affects the cases when idle state 0 is about to be
-> > selected and it only really changes the sleep length value from
-> > KTIME_MAX to something more realistic (but it still may be KTIME_MAX).
-> >
-> > It may turn an "intercept" into a "hit", but only if the CPU is not
-> > woken up by the tick because those cases had been already counted as
-> > "hits" before commit 4b20b07ce72f.
-> >
-> > Now, if the majority of wakeups in the workload are tick wakeups, the
-> > only real difference appears to be the presence of
-> > tick_nohz_get_sleep_length() in that code path.
-> >
-> > Frankly, I would try to remove the update of cpu_data->sleep_length_ns
-> > right before the "goto out_tick" statement (in 6.12 that should be
-> > line 426) and see what happens.
->
-> Just tried this quickly. Results attached. It goes back to behaving
-> the same as 6.6 - about 2% WFI.
+Commit 5bff79dad20a ("power: supply: Add bd718(15/28/78) charger driver")
+adds the file bd71828-power.c in drivers/power/supply/, whereas commit
+b838cecc2291 ("MAINTAINERS: Add entry for BD71828 charger") from the same
+patch series, adds a section referring to the non-existing file
+bd71828-charger.c in the directory above.
 
-Thanks for checking this!  It means that the
-tick_nohz_get_sleep_length() overhead doesn't matter here that much.
+Adjust the file entry to refer to the intended existing file.
 
-Instead of making the change above, can you please try the 6.12
-equivalent of the attached patch?
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@redhat.com>
+---
+ MAINTAINERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Or alternatively, apply this one to the mainline and see if it changes
-the idle states selection proportions?
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 58c7e3f678d8..68774e9d1d57 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -22481,7 +22481,7 @@ ROHM BD71828 CHARGER
+ M:	Andreas Kemnade <andreas@kemnade.info>
+ M:	Matti Vaittinen <mazziesaccount@gmail.com>
+ S:	Maintained
+-F:	drivers/power/supply/bd71828-charger.c
++F:	drivers/power/supply/bd71828-power.c
+ 
+ ROHM BD79703 DAC
+ M:	Matti Vaittinen <mazziesaccount@gmail.com>
+-- 
+2.51.1
 
---00000000000073624f0642ff960f
-Content-Type: text/x-patch; charset="US-ASCII"; name="cpuidle-teo-reflect-refinement.patch"
-Content-Disposition: attachment; 
-	filename="cpuidle-teo-reflect-refinement.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_mhos33nx0>
-X-Attachment-Id: f_mhos33nx0
-
-LS0tCiBkcml2ZXJzL2NwdWlkbGUvZ292ZXJub3JzL3Rlby5jIHwgICAgMyArLS0KIDEgZmlsZSBj
-aGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMiBkZWxldGlvbnMoLSkKCi0tLSBhL2RyaXZlcnMvY3B1
-aWRsZS9nb3Zlcm5vcnMvdGVvLmMKKysrIGIvZHJpdmVycy9jcHVpZGxlL2dvdmVybm9ycy90ZW8u
-YwpAQCAtNTA3LDggKzUwNyw3IEBAIHN0YXRpYyB2b2lkIHRlb19yZWZsZWN0KHN0cnVjdCBjcHVp
-ZGxlX2QKIAlzdHJ1Y3QgdGVvX2NwdSAqY3B1X2RhdGEgPSBwZXJfY3B1X3B0cigmdGVvX2NwdXMs
-IGRldi0+Y3B1KTsKIAogCWRldi0+bGFzdF9zdGF0ZV9pZHggPSBzdGF0ZTsKLQlpZiAoZGV2LT5w
-b2xsX3RpbWVfbGltaXQgfHwKLQkgICAgKHRpY2tfbm9oel9pZGxlX2dvdF90aWNrKCkgJiYgY3B1
-X2RhdGEtPnNsZWVwX2xlbmd0aF9ucyA+IFRJQ0tfTlNFQykpIHsKKwlpZiAoZGV2LT5wb2xsX3Rp
-bWVfbGltaXQgfHwgdGlja19ub2h6X2lkbGVfZ290X3RpY2soKSkgewogCQkvKgogCQkgKiBUaGUg
-d2FrZXVwIHdhcyBub3QgImdlbnVpbmUiLCBidXQgdHJpZ2dlcmVkIGJ5IG9uZSBvZiB0aGUKIAkJ
-ICogc2FmZXR5IG5ldHMuCg==
---00000000000073624f0642ff960f--
 
