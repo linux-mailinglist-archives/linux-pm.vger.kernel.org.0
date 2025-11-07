@@ -1,110 +1,239 @@
-Return-Path: <linux-pm+bounces-37620-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37621-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A9C4C40900
-	for <lists+linux-pm@lfdr.de>; Fri, 07 Nov 2025 16:20:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B60ADC409E1
+	for <lists+linux-pm@lfdr.de>; Fri, 07 Nov 2025 16:36:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 27F391A402A4
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Nov 2025 15:20:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3D110188726B
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Nov 2025 15:37:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B5D12F533E;
-	Fri,  7 Nov 2025 15:20:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9311B2F83BC;
+	Fri,  7 Nov 2025 15:36:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o6jLEhf1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KR2yb5c9"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25F8F2F1FC3
-	for <linux-pm@vger.kernel.org>; Fri,  7 Nov 2025 15:20:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DD68268690
+	for <linux-pm@vger.kernel.org>; Fri,  7 Nov 2025 15:36:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762528822; cv=none; b=YPGtBZoUlldL1GYvq406DCgAgIOhb8ZxSls7bk7X09YhPGL0lIJiRYnTg88SUlOi4nwqlqlw036tatssa1pq5basosxc5gXvy4SQroU/mgNLQLH02v/jSs4rO8jGZnwqrYXctt2Q+YV/UaNMuDktIMhEHxb8l5o8XY8uCbJd6Os=
+	t=1762529815; cv=none; b=rFOPY0RPg+1A+KigqylZu+1v9yWwMOtO5DeWy/akUWefwUl3qhZYAlyldy6Bx7NzV8aYxZODw6lrJh7ZLW91SQWrG1mevwaaUAeab+EMlaAye1lJUU01Ww7eEBfFEYv4oJQUWc6CQ6uTWTnT8Ja9WRUPPYICRUIN1cSGuAKwHgo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762528822; c=relaxed/simple;
-	bh=kmG68tRMF1kPY1q9rfO7CHCJ7nW2UrBUgxaHdVFnj6o=;
+	s=arc-20240116; t=1762529815; c=relaxed/simple;
+	bh=Si2Bq8Ogur87f5qpKbgXK8PPxENzv8KywcYsabwMvc8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Nm5EhHfF+M8LxreNi8ArBtwk7AocIfC31hG2+OriuJnDr/v8/uzpEws4jN5TeEaBYN1TAf1blhqNA7DqywdeX0SDy/hq/HUHMQA9IFsAWcC599MyU1jFVi9DxatGyZbx3Xs2eRPU5D2+PnuTyUgavskvbGRpzdRIzBY63dNxlxg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o6jLEhf1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 680DCC19424
-	for <linux-pm@vger.kernel.org>; Fri,  7 Nov 2025 15:20:21 +0000 (UTC)
+	 To:Cc:Content-Type; b=RdxH2rkfhZeS48o97aV8/hZMkWjGskYLe+qZc+Hza9RPHbJQCrpvW9yVCJtjlp5u8hhhBKHzDdipJexeZSf1Tf3LJPk8FTLaQ5RWqJlVOolrulTlDZg6lBqh5z3JbJ32kOt4IA6N4/4uve9ePsfhJHf3fiJIzAWpk/nc8RdFG8E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KR2yb5c9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38386C2BCB0
+	for <linux-pm@vger.kernel.org>; Fri,  7 Nov 2025 15:36:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762528821;
-	bh=kmG68tRMF1kPY1q9rfO7CHCJ7nW2UrBUgxaHdVFnj6o=;
+	s=k20201202; t=1762529815;
+	bh=Si2Bq8Ogur87f5qpKbgXK8PPxENzv8KywcYsabwMvc8=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=o6jLEhf1Y2maaTyixByh7C34dfqIfFMx5VhYkGxenQ2yfIbi9Daiv6WkPsdtAI+dA
-	 /fNOA6Z9uIyBfvhkhW+CCAgUv7iGt50JfwC6rAuashBw2UgJu3cjaww0pKPWfAvKFM
-	 KehV4FevCyD2z0PQrMJ82oSbo88xutSIK8BWR7vK/mt63W1+owQJIxR6eFc88fJbuJ
-	 xCUxzjq9ImznXjYzEBbA/eMrH1+/2hVxikHb9Uc9TmjmQGFT7iEhcS4h7EWuZ1cKA8
-	 rClUsUmjBcAQTe7H/XCpRNFCNtRMMvTQCZoLApIthIDCMWz3LQCJ+9l6O67qPrD9dD
-	 3svYGnScwSXbQ==
-Received: by mail-oo1-f49.google.com with SMTP id 006d021491bc7-656b8ca52e8so345754eaf.3
-        for <linux-pm@vger.kernel.org>; Fri, 07 Nov 2025 07:20:21 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXWTDPsJ6pngesux+eLuN6IneybPXgjQlvqgGfB66EIxlWUSKMgDAgGyH8W7txoUaWc7hKYSAOB+A==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzzLrU7FkveTao6Ko3rqW+AYAgbWcuqRt6l7UAM9kgcE35obOqj
-	y25TG9u+i6X6hGHzw9dOWmYiv3+hVVzuGDyDghMdb4zIwjybAPEIfGDcMtH+6MotulaCGYS1Mi3
-	vSNS9HYGJ2jR3TWJPHhRcahJQumHz9PU=
-X-Google-Smtp-Source: AGHT+IES4Az0qzCiwB3v1Q683tjZFfLurhZkG7kR1xrSEX7VeL4WGckReVCT2aWGZTT6ikfbr4/J1ZnyDH38BymC0Z4=
-X-Received: by 2002:a05:6820:2009:b0:654:f452:45f2 with SMTP id
- 006d021491bc7-656cdddd185mr1775662eaf.6.1762528820628; Fri, 07 Nov 2025
- 07:20:20 -0800 (PST)
+	b=KR2yb5c9YsDcniYO9MhFxn8ROzzP61FaKLLKDq/2b0fX45fmexiKPW71Yl2Hulsey
+	 Hj9RkVvIM53wgNnTNQcgv+X47CExD2V8a7VNT1nt2GLFcg/14zQpQ+p4wOD4ocRvUT
+	 KlFcMNQlUg7rq0LG89sjO+JMYD94clcTjMSifQNhBs56V7XdZjAZ8Xcn0hQPPkdjzo
+	 PibnhB0ikeVEnpA1eNtQqkO+AVZ8pFy3DAATyJ7Y3c/9N43zCzm7Y2nPxRi8Xlftb1
+	 Sxr678V6g52OJibI388rn67K527nhkcmAHw6ZDImKOTq6w2MJopZcNxm8m2DAVZYID
+	 EodC5E2P/xtYw==
+Received: by mail-oi1-f179.google.com with SMTP id 5614622812f47-450154aa53fso390628b6e.2
+        for <linux-pm@vger.kernel.org>; Fri, 07 Nov 2025 07:36:55 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVxD+azikFI/DykZYIaZHnfTMEMF24F15LREaJioDy0TOGxgn0x5O+kuzTmnLfc2AzkgUhoh4V0wA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxPUT4hpKhROL4CYHT38Wh8bD3HcTE+or7793WzJGwSysdzS9Yo
+	VsooQQeUbf8/s3VOsRxdYJRZCKjLIvLNod/BSdM4g3OWWLH3khoEv5F6zZ6MAtNHfjzNwi8noRl
+	yCnAjJSIKmz0mNtd/Nl+bR4ewyRfkD10=
+X-Google-Smtp-Source: AGHT+IF+hF0a/4jdccGprT1Ok5sOlEoV5zNYSD6Sa1iO8XyJe7DWuz0CF46Gyo7rs83DksyLvuUHXTduouMUBwzEkNA=
+X-Received: by 2002:a05:6808:c145:b0:441:8f74:fcc with SMTP id
+ 5614622812f47-45015f57eebmr2100597b6e.57.1762529814298; Fri, 07 Nov 2025
+ 07:36:54 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251106142524.3841343-1-superm1@kernel.org>
-In-Reply-To: <20251106142524.3841343-1-superm1@kernel.org>
+References: <20251106113938.34693-1-adelodunolaoluwa@yahoo.com> <20251106113938.34693-2-adelodunolaoluwa@yahoo.com>
+In-Reply-To: <20251106113938.34693-2-adelodunolaoluwa@yahoo.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 7 Nov 2025 16:20:08 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0gXe2UH4thiUHtpc11CMe5z19KHpPc1eEXywCzQAqJ_Cw@mail.gmail.com>
-X-Gm-Features: AWmQ_bkFuJApQBeGxpwJRk6PsPlgT8KCC4AVXZmpn0zZyynj-9CnAebXG-Crc5s
-Message-ID: <CAJZ5v0gXe2UH4thiUHtpc11CMe5z19KHpPc1eEXywCzQAqJ_Cw@mail.gmail.com>
-Subject: Re: [PATCH] Documentation: power: Correct a mistaken configuration option
-To: "Mario Limonciello (AMD)" <superm1@kernel.org>
-Cc: mario.limonciello@amd.com, rafael@kernel.org, lenb@kernel.org, 
-	pavel@kernel.org, Rodrigo Siqueira <siqueira@igalia.com>, linux-pm@vger.kernel.org
+Date: Fri, 7 Nov 2025 16:36:43 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0gG3C4r-d+v2xGPqcF1Hn927NR7yBA7kLx4t6TjEo0rGA@mail.gmail.com>
+X-Gm-Features: AWmQ_bln76la9sUIlc6o0dhJ2_1ERWzWQa1zkPxNs6CHxbD_ok4RRm8d0omTNBU
+Message-ID: <CAJZ5v0gG3C4r-d+v2xGPqcF1Hn927NR7yBA7kLx4t6TjEo0rGA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] power/swap: add missing params and Return:
+ descriptions to kernel-doc comments
+To: Sunday Adelodun <adelodunolaoluwa@yahoo.com>
+Cc: rafael@kernel.org, lenb@kernel.org, pavel@kernel.org, 
+	anna-maria@linutronix.de, frederic@kernel.org, mingo@kernel.org, 
+	tglx@linutronix.de, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Nov 6, 2025 at 3:25=E2=80=AFPM Mario Limonciello (AMD)
-<superm1@kernel.org> wrote:
+On Thu, Nov 6, 2025 at 12:40=E2=80=AFPM Sunday Adelodun
+<adelodunolaoluwa@yahoo.com> wrote:
 >
-> Somehow CONFIG_PSTORE_FIRMWARE ended up in this document when I intended
-> it to be CONFIG_CHROMEOS_PSTORE.  Correct the configuration option and
-> make it clear that not all options are required.
+> Kernel-doc checks (scripts/kernel-doc) reported a number of warnings
+> for missing parameters and `Return:` descriptions in kernel/power/swap.c.
+> These missing return descriptions make the generated documentation
+> noisy and break doc-build when -Werror is used.
 >
-> Reported-by: Rodrigo Siqueira <siqueira@igalia.com>
-> Signed-off-by: Mario Limonciello (AMD) <superm1@kernel.org>
-> ---
->  Documentation/power/shutdown-debugging.rst | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> Update the kernel-doc comment blocks to add explicit
+> Return: lines (and a few parameter tags where helpful) for the functions
+> that were triggering warnings. No functional code changes are made.
 >
-> diff --git a/Documentation/power/shutdown-debugging.rst b/Documentation/p=
-ower/shutdown-debugging.rst
-> index cdfa2cd90e5c6..c510122e0bbc2 100644
-> --- a/Documentation/power/shutdown-debugging.rst
-> +++ b/Documentation/power/shutdown-debugging.rst
-> @@ -24,11 +24,11 @@ following kernel configuration options:
->  * ``CONFIG_PSTORE_CONSOLE=3Dy``
+> Example warnings that motivated this change:
+>  - Warning: kernel/power/swap.c:535 No description found for return value
+>    of 'save_image'
+>  - Warning: kernel/power/swap.c:687 No description found for return value
+>   of 'save_compressed_image'
+>  - Warning: kernel/power/swap.c:941 No description found for return value
+>    of 'swsusp_write'
 >
->  Additionally, enable a backend to store the data. Depending upon your pl=
-atform
-> -some options include:
-> +some potential options include:
->
->  * ``CONFIG_EFI_VARS_PSTORE=3Dy``
->  * ``CONFIG_PSTORE_RAM=3Dy``
-> -* ``CONFIG_PSTORE_FIRMWARE=3Dy``
-> +* ``CONFIG_CHROMEOS_PSTORE=3Dy``
->  * ``CONFIG_PSTORE_BLK=3Dy``
->
->  Kernel Command-line Parameters
-> --
+> Signed-off-by: Sunday Adelodun <adelodunolaoluwa@yahoo.com>
 
-Applied, thanks!
+These comments need more changes to become proper kerneldocs and in
+some cases it is not even necessary because the functions in question
+are static.
+
+If the goal is to avoid warnings, why don't you change them all to
+non-kerneldoc regular comments?
+
+> ---
+>  kernel/power/swap.c | 35 +++++++++++++++++++++++++++++++----
+>  1 file changed, 31 insertions(+), 4 deletions(-)
+>
+> diff --git a/kernel/power/swap.c b/kernel/power/swap.c
+> index 0beff7eeaaba..3f0df7a26bc3 100644
+> --- a/kernel/power/swap.c
+> +++ b/kernel/power/swap.c
+> @@ -341,6 +341,8 @@ unsigned int swsusp_header_flags;
+>   *     and get its index (if so)
+>   *
+>   *     This is called before saving image
+> + *
+> + *     Return: 0 on success, negative error code on failure.
+>   */
+>  static int swsusp_swap_check(void)
+>  {
+> @@ -367,6 +369,8 @@ static int swsusp_swap_check(void)
+>   *     @buf:           Address we're writing.
+>   *     @offset:        Offset of the swap page we're writing to.
+>   *     @hb:            bio completion batch
+> + *
+> + *     Return: 0 on success, negative error code on failure.
+>   */
+>
+>  static int write_page(void *buf, sector_t offset, struct hib_bio_batch *=
+hb)
+> @@ -528,6 +532,11 @@ static int swap_writer_finish(struct swap_map_handle=
+ *handle,
+>
+>  /**
+>   *     save_image - save the suspend image data
+> + *     @handle: swap map handle for writing the image
+> + *     @snapshot: snapshot handle to read pages from
+> + *     @nr_to_write: number of pages to write
+> + *
+> + *     Return: 0 on success, negative error on failure
+>   */
+>
+>  static int save_image(struct swap_map_handle *handle,
+> @@ -676,6 +685,8 @@ static int compress_threadfn(void *data)
+>   * @handle: Swap map handle to use for saving the image.
+>   * @snapshot: Image to read data from.
+>   * @nr_to_write: Number of pages to save.
+> + *
+> + * Return: 0 on success, negative error code on failure.
+>   */
+>  static int save_compressed_image(struct swap_map_handle *handle,
+>                                  struct snapshot_handle *snapshot,
+> @@ -906,8 +917,9 @@ static int save_compressed_image(struct swap_map_hand=
+le *handle,
+>
+>  /**
+>   *     enough_swap - Make sure we have enough swap to save the image.
+> + *     @nr_pages: number of pages we need to save
+>   *
+> - *     Returns TRUE or FALSE after checking the total amount of swap
+> + *     Return: TRUE or FALSE after checking the total amount of swap
+>   *     space available from the resume partition.
+>   */
+>
+> @@ -930,6 +942,8 @@ static int enough_swap(unsigned int nr_pages)
+>   *     them synced (in case something goes wrong) but we DO not want to =
+mark
+>   *     filesystem clean: it is not. (And it does not matter, if we resum=
+e
+>   *     correctly, we'll mark system clean, anyway.)
+> + *
+> + *     Return: 0 on success, negative error code on failure.
+>   */
+>
+>  int swsusp_write(unsigned int flags)
+> @@ -1078,9 +1092,12 @@ static int swap_reader_finish(struct swap_map_hand=
+le *handle)
+>  }
+>
+>  /**
+> - *     load_image - load the image using the swap map handle
+> - *     @handle and the snapshot handle @snapshot
+> - *     (assume there are @nr_pages pages to load)
+> + *     load_image - load the image using the swap map and snapshot handl=
+es
+> + *     @handle: pointer to the swap map used for reading swap pages
+> + *     @snapshot: pointer to the snapshot handle that tracks image pages
+> + *     @nr_to_read: number of pages to read from the snapshot
+> + *
+> + *     Return: 0 on success, negative error code on failure.
+>   */
+>
+>  static int load_image(struct swap_map_handle *handle,
+> @@ -1195,6 +1212,8 @@ static int decompress_threadfn(void *data)
+>   * @handle: Swap map handle to use for loading data.
+>   * @snapshot: Image to copy uncompressed data into.
+>   * @nr_to_read: Number of pages to load.
+> + *
+> + * Return: 0 on success, negative error code on failure.
+>   */
+>  static int load_compressed_image(struct swap_map_handle *handle,
+>                                  struct snapshot_handle *snapshot,
+> @@ -1529,6 +1548,8 @@ static int load_compressed_image(struct swap_map_ha=
+ndle *handle,
+>   *     swsusp_read - read the hibernation image.
+>   *     @flags_p: flags passed by the "frozen" kernel in the image header=
+ should
+>   *               be written into this memory location
+> + *
+> + *     Return: 0 on success, negative error code on failure.
+>   */
+>
+>  int swsusp_read(unsigned int *flags_p)
+> @@ -1567,6 +1588,10 @@ static void *swsusp_holder;
+>  /**
+>   * swsusp_check - Open the resume device and check for the swsusp signat=
+ure.
+>   * @exclusive: Open the resume device exclusively.
+> + *
+> + * Return:
+> + *        0 if a valid hibernation image is found,
+> + *        negative error code on failure.
+>   */
+>
+>  int swsusp_check(bool exclusive)
+> @@ -1631,6 +1656,8 @@ void swsusp_close(void)
+>
+>  /**
+>   *      swsusp_unmark - Unmark swsusp signature in the resume device
+> + *
+> + *      Return: 0 on success, negative error code on failure.
+>   */
+>
+>  #ifdef CONFIG_SUSPEND
+> --
+> 2.43.0
+>
 
