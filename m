@@ -1,165 +1,124 @@
-Return-Path: <linux-pm+bounces-37643-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37644-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1DD56C4155B
-	for <lists+linux-pm@lfdr.de>; Fri, 07 Nov 2025 19:46:31 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9078AC41564
+	for <lists+linux-pm@lfdr.de>; Fri, 07 Nov 2025 19:47:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 034724EDDB8
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Nov 2025 18:46:07 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 2C17C4E669E
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Nov 2025 18:47:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EE6633C533;
-	Fri,  7 Nov 2025 18:45:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2E2F2E7F00;
+	Fri,  7 Nov 2025 18:47:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="a68+iFZt"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FnIM8Sdo"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9593E33A018;
-	Fri,  7 Nov 2025 18:45:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30D392DAFD7;
+	Fri,  7 Nov 2025 18:47:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762541138; cv=none; b=APhA2K1YjHHMoSxEf6LvrAqplKlxdTb0rpRNNCK9jXmeeprEzYKkxvTccq7vATVY+LiCYFtrPHtHv56epAhdiLVZ2j0JNOU0YZQeoN6Q0g3GUaE2ralUCbaHijBQFAKKe63X+nJjM8ke9lRipJxD1Q86NJtZFtElSs5Ug5ETkh8=
+	t=1762541261; cv=none; b=Tem2nYDViQMpgWdy2do+TKUbC+fa2VbrWamzYoU35D1Bty516RK3PdK7/UhajN9naCgVBQ/ShhlKWj1csG72ad1Q3yMuL5YvPY+ZZa+oPmPZetxZqWF6tlWd4VNUE3ZIFrtIPiedNmOD3aglvBTRxxEnJdBNoSJsd/K1Hr4lrBA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762541138; c=relaxed/simple;
-	bh=pMaB8Afh0kVsepOVHLiBuIVRvMz+wN1V9FeD5y8QKKE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=lxLBgIW6vJGFZaER92Lh0Qsoo8t9qtZvSTi+VDAnYUSHIJDUBC30WBu3xwQsbWM9CrnJ9LS+1n7fuYkqsrr2tjnLqeyATdqcJUnrPyrAVX1MzZWV4xfXXJly8WWzapbt3hjoPHKiNd9yQk44nztNoxkXlWUYcW7VEUEc0IrL/20=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=a68+iFZt; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1762541135;
-	bh=pMaB8Afh0kVsepOVHLiBuIVRvMz+wN1V9FeD5y8QKKE=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=a68+iFZtXi+o+FKwXWjf/BzcpOjpRywybGV5OpY4oUNilY+6Eam/Xhn6KwMLmstoG
-	 dXif6+axpRacotN2j9eJtI4xx9/uekNbg3OOqo7QoJf9fgxGQmyMDFVtWIM6Z14vFz
-	 lLPSsoLCNEJ3N0dl5a0Lfg+wxBJP7zHMYF8cpgonYdskwhZTWKEKjpQttgLV74XjoU
-	 gmVD9DGpAqCUqjAeQdR3F5UkdoN+s3o1KpqkswO7qmDJvIyn9j5TTAqfLEipBwPaC3
-	 7aRt41KDNRwaWVYmat9QfssGNQdBdc/+N4yjhXGLXWmKDTJQgaMd26ZRfsaMKZR7pZ
-	 QKf5l5OquOukw==
-Received: from mt.tail9873f4.ts.net (unknown [144.48.130.189])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: usama.anjum)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 66ED317E108B;
-	Fri,  7 Nov 2025 19:45:31 +0100 (CET)
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Len Brown <lenb@kernel.org>,
-	Pavel Machek <pavel@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Peter Zijlstra <peterz@infradead.org>,
-	linux-acpi@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	linux-input@vger.kernel.org
-Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
-	kernel@collabora.com,
-	superm1@kernel.org
-Subject: [PATCH 4/4] PM: sleep: clear pm_abort_suspend at suspend
-Date: Fri,  7 Nov 2025 23:44:31 +0500
-Message-ID: <20251107184438.1328717-5-usama.anjum@collabora.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20251107184438.1328717-1-usama.anjum@collabora.com>
-References: <20251107184438.1328717-1-usama.anjum@collabora.com>
+	s=arc-20240116; t=1762541261; c=relaxed/simple;
+	bh=MBYEgML9xeAqoHhLBXAHRikDAexWLU0pW8dUQsj3V1Q=;
+	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
+	 MIME-Version:Date; b=RwSLS4/sZdYd1cVOGWyIHhl2NBCQuO8PbmUNsmeLhC+WZYFxNraYnuefqG9v3ag3BRnKQ47BXEXvgLXrGUwj7700X7OTvFvtkoomyH5Y2r37D401Y8Sad0mMk14X6a6xSIYF0PxaH+YvvatfNYCTL1/cejNCNGKKMLrgLm6OxJw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FnIM8Sdo; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1762541260; x=1794077260;
+  h=message-id:subject:from:to:cc:in-reply-to:references:
+   content-transfer-encoding:mime-version:date;
+  bh=MBYEgML9xeAqoHhLBXAHRikDAexWLU0pW8dUQsj3V1Q=;
+  b=FnIM8Sdo7nVxokK3dhXvN6E7kbowLJJyNmMMYjg/L1H74d0IzWRSMFKN
+   fpr+WYWqhbsFigwZJAeaxke52IwHpB3h+XtnEqaASAez+zRV6JIxIumg8
+   bvNFIehLZh0JkcL+mWCaXrqqNYMhsXLF4IG5zHx0jgOhrBkIIqQ38CZfe
+   ISQMl2FSGph61VSc9XXhwLVrjLkZJ+QAQYKO9vkzV+LZV8xLPoaLDb8yG
+   NoVVa0YRrx+uBxWG+wbzNcvsH/VsvG50ZDkiORcwpc5GA/ku4FoU+VW9d
+   1LEYd3cE7LMSMAM3P96yqIUA45zUfv1X7MAQ5PgUQtQv7p/0cRZNjEGBg
+   A==;
+X-CSE-ConnectionGUID: PAKHbQm8SJuI/uwUvqqJ+Q==
+X-CSE-MsgGUID: jtVbfgwuT5WrSB9D0A6PUw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11606"; a="64735706"
+X-IronPort-AV: E=Sophos;i="6.19,287,1754982000"; 
+   d="scan'208";a="64735706"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2025 10:47:39 -0800
+X-CSE-ConnectionGUID: sQ3H9dx8TKS4Od4vej+7Ng==
+X-CSE-MsgGUID: 9uADhjd8QY6YrCGYGLAvMQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,287,1754982000"; 
+   d="scan'208";a="211546391"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmviesa002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2025 10:47:38 -0800
+Received: from [10.245.245.126] (unknown [10.245.245.126])
+	by linux.intel.com (Postfix) with ESMTP id 8C06620BA6F5;
+	Fri,  7 Nov 2025 10:47:36 -0800 (PST)
+Message-ID: <a8d3fe252f5ed9d513c026331eeabfe5971196b1.camel@linux.intel.com>
+Subject: Re: [PATCH v1] cpuidle: Add sanity check for exit latency and
+ target residency
+From: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM
+ <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, Daniel Lezcano
+	 <daniel.lezcano@linaro.org>
+In-Reply-To: <5939579.DvuYhMxLoT@rafael.j.wysocki>
+References: <5939579.DvuYhMxLoT@rafael.j.wysocki>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Date: Fri, 07 Nov 2025 20:47:20 +0200
+User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
 
-Clear pm_abort_suspend counter in case a wakeup is detected during
-hibernation process. If this counter isn't reset, it'll affect the
-next hibernation cycle and next time hibernation will not happen as
-pm_abort_suspend is still positive.
+On Fri, 2025-11-07 at 19:19 +0100, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>=20
+> Make __cpuidle_driver_init() sanitize CPU idle states so that the exit
+> latency of a given state is not greater than its target residency which
+> would break cpuidle assumptions.
+>=20
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>  drivers/cpuidle/driver.c |   11 +++++++++++
+>  1 file changed, 11 insertions(+)
+>=20
+> --- a/drivers/cpuidle/driver.c
+> +++ b/drivers/cpuidle/driver.c
+> @@ -193,6 +193,16 @@ static void __cpuidle_driver_init(struct
+>  			s->exit_latency_ns =3D  0;
+>  		else
+>  			s->exit_latency =3D div_u64(s->exit_latency_ns, NSEC_PER_USEC);
+> +
+> +		/*
+> +		 * Ensure that the exit latency of a CPU idle state does not
+> +		 * exceed its target residency which is assumed in cpuidle in
+> +		 * multiple places.
+> +		 */
+> +		if (s->exit_latency_ns > s->target_residency_ns) {
+> +			s->target_residency_ns =3D s->exit_latency_ns;
+> +			s->target_residency =3D s->exit_latency;
+> +		}
 
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
----
- drivers/base/power/main.c | 2 ++
- kernel/cpu.c              | 1 +
- kernel/power/hibernate.c  | 5 ++++-
- kernel/power/process.c    | 1 +
- 4 files changed, 8 insertions(+), 1 deletion(-)
+I suggest to error out instead of capping it. Because as soon as you
+cap it, you may end up with the target residency of the next C-state.=C2=A0
 
-diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
-index 5760abb25b591..84e76f8df1e02 100644
---- a/drivers/base/power/main.c
-+++ b/drivers/base/power/main.c
-@@ -1642,6 +1642,7 @@ static void device_suspend_late(struct device *dev, pm_message_t state, bool asy
- 		goto Complete;
- 
- 	if (pm_wakeup_pending()) {
-+		pm_wakeup_clear(0);
- 		WRITE_ONCE(async_error, -EBUSY);
- 		goto Complete;
- 	}
-@@ -1887,6 +1888,7 @@ static void device_suspend(struct device *dev, pm_message_t state, bool async)
- 
- 	if (pm_wakeup_pending()) {
- 		dev->power.direct_complete = false;
-+		pm_wakeup_clear(0);
- 		WRITE_ONCE(async_error, -EBUSY);
- 		goto Complete;
- 	}
-diff --git a/kernel/cpu.c b/kernel/cpu.c
-index db9f6c539b28c..74c9f6b4947dd 100644
---- a/kernel/cpu.c
-+++ b/kernel/cpu.c
-@@ -1921,6 +1921,7 @@ int freeze_secondary_cpus(int primary)
- 
- 		if (pm_wakeup_pending()) {
- 			pr_info("Wakeup pending. Abort CPU freeze\n");
-+			pm_wakeup_clear(0);
- 			error = -EBUSY;
- 			break;
- 		}
-diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-index e15907f28c4cd..1f6b60df45d34 100644
---- a/kernel/power/hibernate.c
-+++ b/kernel/power/hibernate.c
-@@ -349,8 +349,10 @@ static int create_image(int platform_mode)
- 		goto Enable_irqs;
- 	}
- 
--	if (hibernation_test(TEST_CORE) || pm_wakeup_pending())
-+	if (hibernation_test(TEST_CORE) || pm_wakeup_pending()) {
-+		pm_wakeup_clear(0);
- 		goto Power_up;
-+	}
- 
- 	in_suspend = 1;
- 	save_processor_state();
-@@ -660,6 +662,7 @@ int hibernation_platform_enter(void)
- 		goto Enable_irqs;
- 
- 	if (pm_wakeup_pending()) {
-+		pm_wakeup_clear(0);
- 		error = -EAGAIN;
- 		goto Power_up;
- 	}
-diff --git a/kernel/power/process.c b/kernel/power/process.c
-index dc0dfc349f22b..e935b27a04ae0 100644
---- a/kernel/power/process.c
-+++ b/kernel/power/process.c
-@@ -67,6 +67,7 @@ static int try_to_freeze_tasks(bool user_only)
- 			break;
- 
- 		if (pm_wakeup_pending()) {
-+			pm_wakeup_clear(0);
- 			wakeup = true;
- 			break;
- 		}
--- 
-2.47.3
+
+Just erroring out is very explicit, no surprises, and the table
+provider will have to just fix the table.
+
+
+Thanks, Artem.
 
 
