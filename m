@@ -1,55 +1,98 @@
-Return-Path: <linux-pm+bounces-37609-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37610-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB371C3F2D9
-	for <lists+linux-pm@lfdr.de>; Fri, 07 Nov 2025 10:34:48 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E449C3F470
+	for <lists+linux-pm@lfdr.de>; Fri, 07 Nov 2025 10:55:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 669F03B0764
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Nov 2025 09:34:37 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 14492343934
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Nov 2025 09:55:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAA67302748;
-	Fri,  7 Nov 2025 09:34:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A0A62C1580;
+	Fri,  7 Nov 2025 09:55:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="fEglRBsP"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="JlvjTBkr";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="NPrRT8Pt"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D6182FFFB8;
-	Fri,  7 Nov 2025 09:34:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E00682D2497
+	for <linux-pm@vger.kernel.org>; Fri,  7 Nov 2025 09:55:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762508058; cv=none; b=Z42WWph0HfLdd7zsGe4frGeHpBSgmQR7K9EC67K4KyAvLwCfpsLRO8n+HiC7f/au0IfQgeGI1Mk0k/8MFzwzx4l5KNo4PCAreYZbGvghIFpw77ibUHzb6QnNNIBYtipynLfFE3nsK+cFdA6MLWzvkyXRSSWodmvOf/28LKlNytc=
+	t=1762509338; cv=none; b=ESjJXvagDIiczKpFfugZWs9gCsLFgFrpnK6dTg8KhgHjM5NDlSuIm/Wqrh9zAedlRBKzVrndMjdZaWau4krpXFJxxwPUuHuZ+F7pAZ+a3iyiRt0XkUiH7/oHDyb5LRkdA+kH0oW8joSW5yBKGNtLuGHg6asP4u9LHm+U10uXxGU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762508058; c=relaxed/simple;
-	bh=a5UV+lpy9dJymplUqRI6ybHCajuv+eTwea9Ciur0RJs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Pj2Ye3a6heFcHnulNQgZ7yVxF3BWrf2Lb4sX5BuAqpblZV9DOABc17nvbwLshC7O1TiKdKvLmPUYzC3YSwl8mDllBDCBtG9vem8B8cYvfMG1ttxJkojEuYIhKMlfPzevmVumxcfkDtEX6+BrpvN1IO8MgXJumSOJ91bWbXRQXuQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=fEglRBsP; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1762508053;
-	bh=a5UV+lpy9dJymplUqRI6ybHCajuv+eTwea9Ciur0RJs=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=fEglRBsPOQsTZmKXs8OKcLH0cWVanEagjfT04Qjlwm4ZuF27ym/Sjv9+KBKd20oiL
-	 PnLIyErMJ3DYtEnAaB47eEveSPBg38+YWCKY49ISzuiBAozG6wW4K3buwuDchX7QDN
-	 jEJge2CO6mPLeiXUGXN7is7jvmirC1WEcblWgoOlJsKrSu9lHmnQezKKubpf9mxvpS
-	 1OZ/cAp9k9PwvrdQHBx3cY9gW3oF4XhKR5VthJYIP0CSPrzwaGdjZcivalB5SNFc0b
-	 V1MgH/4a/XlmjhwqgN/Kwyis1+sms8+fu87uiJqs2XShNfPoLVHOyQr8+30TPH6WFA
-	 I9Oywewz2w9qg==
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 1B10C17E0097;
-	Fri,  7 Nov 2025 10:34:13 +0100 (CET)
-Message-ID: <5faabbd0-2e7b-46ec-8da0-7be24f2e888e@collabora.com>
-Date: Fri, 7 Nov 2025 10:34:12 +0100
+	s=arc-20240116; t=1762509338; c=relaxed/simple;
+	bh=AA4GvAUxG5NmI5Ah/Q03bqp8XQ+LpmzDglQJlTKGmx0=;
+	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=N5mhvMPZvAzczp88KC80Hlh0TAV3KLvFcQxeBNtfX30f8FQ6Z1EkqBdrKwnVV3mWyDaPlt1Z34QjDKRp1pm2AgbIEPB8hyBQy/nIdBj+3p9MMq6Zu1uIjft8UylOrP2yeo92mn3nd4HztSYJQZZnLlTMeTQc6MBn73ioNvmCPp8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=JlvjTBkr; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=NPrRT8Pt; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5A74kf16584022
+	for <linux-pm@vger.kernel.org>; Fri, 7 Nov 2025 09:55:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=C1UlincikuK9zot9j7llv9
+	oNhy3LkT99kGDQ+bZ0yK8=; b=JlvjTBkryFSb6YbPrum/xqByG7GLgXfrgWoJOq
+	zpZCkOG4fZAAWwSUVXGHTfj37hXRmRBqNN2HbTJQLQZMBofF8p85Lr8dWqJZQeeA
+	Katq2yKQSuP6bOEGHXlYrPi20C+Ajf4ikeSIHQprzR+HO2NmR2d3It+73sPzu9Oi
+	nGCSzQNjrV8yh4WNqIwtSvNtxKlLpaIWpm5izQPvdhR949STNNZQg9QPBoIBwPAo
+	DKHIvU9n8fw9aACpGqJKqLjXB53apaEvURLiRmxUGiHZR95ATQ4+zAT32/HzpB2j
+	TKouEn46FOuoptapENae1pxdEXO9+0HrQhWL9MQGhf7bFCfA==
+Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com [209.85.216.71])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4a8yktjmkj-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Fri, 07 Nov 2025 09:55:36 +0000 (GMT)
+Received: by mail-pj1-f71.google.com with SMTP id 98e67ed59e1d1-3418ada9e6cso806562a91.1
+        for <linux-pm@vger.kernel.org>; Fri, 07 Nov 2025 01:55:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1762509335; x=1763114135; darn=vger.kernel.org;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=C1UlincikuK9zot9j7llv9oNhy3LkT99kGDQ+bZ0yK8=;
+        b=NPrRT8PtfqTYcc1Irl6QBdyCcadTCs5g3Hav76sFkmhZqfaMgmFmgcAEERRZFifoeB
+         bSwzqNn3B1hO4O/zdwsop1qwRmdlOePcwD+dj0H+OAS6liswIaCLhmA8WrqAzicDd7wu
+         AOit0sPvdcRsN4uxebovSFhHVqcJjNoM3CFHwdPc3uP1jfQKp3UTORY5BCWFZYp5Ou8a
+         ZJzWWboReDUdLML/anodXTSZeUNj697NVy+Oxm/zRdA5OkBCKQ2XJSq7CCn9zNz1B7Gf
+         NUqkwr5fUO5J/EtedDuZzrRnpsyCCjr12/5KwNVo5DPiiLihZi2/MRZstY3mUFpw2SOK
+         44Kw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762509335; x=1763114135;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=C1UlincikuK9zot9j7llv9oNhy3LkT99kGDQ+bZ0yK8=;
+        b=QV5fC61DvzoE2+Ez5zLMqjpgCbCqyywg58gYcZdjvulxJOpuPhsHSWeT/crPmm0Hpq
+         8oUhzcfo5jXSX4bB2CeTwjA7GEaXk/56kZciPJcjTaoj8pa+kD4jEI3ayZkli5+Bgkbs
+         DQuPHTglOZOYDnLOP4DbpmU9Ob6eR1cg9rGAQ7BQZbtaffoK3PgrgV+uaWEoGxPj5Y9L
+         JYlfWdgowVZLlbadSKgRr0dA4kZrY9MdkKh+dAu5+ZDAN5XJUtxOmELOYRMbW5RxcgHB
+         Pd+fqsmPYLvV8qwr3AywpHx7yyeWe3ao+0PYMRjIp+xYvEFwyAWYBNVSQNCXiYXGfilK
+         9Lvw==
+X-Gm-Message-State: AOJu0Ywxgd7Kpe9JcrTN/ebwglFHoqwxL4n7uFhcewRz/OOafMkEXlqD
+	nix9RnZ3eLMaE/TckHP+605lNe0rblFykvNjOxwUfqSHLqjJXmtgBYn0DdMTuZRZm6/INjMdEWt
+	NaI2nIrP85NWecnq1iDxIWOsyy+BCRp5EFse6s1j11aIVia+nSmofdjqqEtMsoQ==
+X-Gm-Gg: ASbGnctWHi4aGJYd/HOt2lHAZLAhuuy+4H3Xg1ZYbdk2HcfghxXgkFSwRjoKSJaXMXu
+	QXUzdiIaBOT2TXLD6skn/D/qYKIJOMmh/92vVAC3tpENl3SCy3duIqaczK2LPrujzyGz7l6Ogs/
+	B6usVRDR+EwuRqcWrifcB+yNrR9x5nk+jUh7j6kztPSBomxDXD8zNRlpL/rtCg+SxIajYU7YAMz
+	oXeO1T/6avu14QO71FvX7H3DoCe+DWGODhvwGOsvV1PZZ7Ku3qkErU300AUzTDQuUBYxgsoKrSg
+	Gil5LQLQ05ymNSwWaBOqGgqkYncKY1eskvNLsmZczL3CjuGB+uKhgNNOEv68gvk8sL6v6DDCYR4
+	ry6KArElXmFRfBZeUV7lx5Hxso8lCM14=
+X-Received: by 2002:a17:90b:4c03:b0:340:d1b5:bfda with SMTP id 98e67ed59e1d1-3434c4dc527mr2872318a91.3.1762509335359;
+        Fri, 07 Nov 2025 01:55:35 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFPgao8WCT219+Rl6ZeGkPUmiLBfMV+4DJHZlRaTl4PgtufgzbryrZdxx19c0zqo88eKEDKBA==
+X-Received: by 2002:a17:90b:4c03:b0:340:d1b5:bfda with SMTP id 98e67ed59e1d1-3434c4dc527mr2872294a91.3.1762509334801;
+        Fri, 07 Nov 2025 01:55:34 -0800 (PST)
+Received: from [10.218.35.45] ([202.46.22.19])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3434c300173sm2119631a91.4.2025.11.07.01.55.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 07 Nov 2025 01:55:34 -0800 (PST)
+Message-ID: <8e542a9d-132d-45c3-b17f-1dcea4bdf337@oss.qualcomm.com>
+Date: Fri, 7 Nov 2025 15:25:30 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -57,87 +100,65 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 03/21] clk: mediatek: fix mfg mux issue
-To: "irving.ch.lin" <irving-ch.lin@mediatek.com>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>,
- Ulf Hansson <ulf.hansson@linaro.org>,
- Richard Cochran <richardcochran@gmail.com>
-Cc: Qiqi Wang <qiqi.wang@mediatek.com>, linux-clk@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
- linux-pm@vger.kernel.org, netdev@vger.kernel.org,
- Project_Global_Chrome_Upstream_Group@mediatek.com, sirius.wang@mediatek.com,
- vince-wl.liu@mediatek.com, jh.hsu@mediatek.com
-References: <20251106124330.1145600-1-irving-ch.lin@mediatek.com>
- <20251106124330.1145600-4-irving-ch.lin@mediatek.com>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Content-Language: en-US
-In-Reply-To: <20251106124330.1145600-4-irving-ch.lin@mediatek.com>
+To: vireshk@kernel.org, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc: linux-pm@vger.kernel.org, Manivannan Sadhasivam <mani@kernel.org>,
+        ulf.hansson@linaro.org
+From: Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>
+Subject: Queries on required-opps on calling dev_pm_opp_set_opp()
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Authority-Analysis: v=2.4 cv=bOgb4f+Z c=1 sm=1 tr=0 ts=690dc218 cx=c_pps
+ a=UNFcQwm+pnOIJct1K4W+Mw==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
+ a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=P-IC7800AAAA:8 a=VwQbUJbxAAAA:8
+ a=z55VWBr64nYxIy90qn4A:9 a=QEXdDO2ut3YA:10 a=uKXjsCUrEbL0IQVhDsJ9:22
+ a=d3PnA9EDa4IxuAV0gXij:22
+X-Proofpoint-ORIG-GUID: mDhYmMuRF08xgBrmIRsorw4iQTrRRN7V
+X-Proofpoint-GUID: mDhYmMuRF08xgBrmIRsorw4iQTrRRN7V
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTA3MDA3OSBTYWx0ZWRfX1mCVlqfhKsRx
+ DL4i4KlUZW943/XJY7GR76Zs2Wqge1/QACYmT4M3iNqjjO8NVxTQz2t+qo1ByigbSJvBgvjc2Vb
+ 89u3VkvBi++c16qNuWGM+cY/yobZllaypXRKL3rLXx+Ff6Ka2vsa+gI/mKSKGhemD2GSAJbW4Mg
+ lO4F6GQzlUhCTX+kmVfBL6QAlx610Gt6I0+/mP3gWhCidESq7+o2tYDM/vkTaIwOltMTk8SI/Pp
+ kknXdDqr82XXHg/600Xozubi3ZvSOBUsyJk8WoEvivK+yMB7R5AK7N40ijiKVaOY+xSnQWW3wTn
+ Y00cRM5icsdHft2Z6+va80S0khXjmhrY5TrvpUeRwPY8j9OELbSxN0Her/Iwt6LCNEZnuPsDDo5
+ +Cs8Wt8HjhC+KB0rmgg3lVsXdqIvfg==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-11-07_02,2025-11-06_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 bulkscore=0 lowpriorityscore=0 spamscore=0 clxscore=1015
+ impostorscore=0 malwarescore=0 phishscore=0 adultscore=0 suspectscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2511070079
 
-Il 06/11/25 13:41, irving.ch.lin ha scritto:
-> From: Irving-CH Lin <irving-ch.lin@mediatek.com>
-> 
-> MFG mux design is different for MTK SoCs,
-> For MT8189, we need to enable parent first
-> to garentee parent clock stable.
-> 
+Hi Viresh,
 
-Title:
-clk: mediatek: clk-mux: Make sure bypass clk enabled while setting MFG rate
+As you are aware that we had OPP enabled for PCIe[1].
+We plan to introduce a OPP table for phy node also where we want to 
+change the frequency of the clock based on
+PCIe data rate it operates. we planned to have the reference of OPP 
+table of phy in the controller node so that
+when ever controller node sets a opp then corresponding phy opp also 
+will get set.
 
-Also, please add a Fixes tag, this is not only useful for MT8189 - for the
-others, this worked because the bypass (alt) clock is already enabled due to
-it being a MFG power domain requirement, but the parent still needs to be enabled
-otherwise there's no input clock to MFG during the PLL reconfiguration.
+But currently we see calling dev_pm_opp_set_opp() for required opps is 
+removed with this patch[2]
 
-Besides, please clarify the commit description (and no, 8189 is not special
-and doesn't really have a mux design that is all that different from the others).
+Can you tell us if it is ok to call dev_pm_opp_set_opp() for required 
+opps if level is OPP_LEVEL_UNSET
+or is there a way to know that opp is for PM domain (maybe 
+dev->pm_domain)? if know that we can call dev_pm_opp_set_opp() for 
+remaining devs.
 
-> Signed-off-by: Irving-CH Lin <irving-ch.lin@mediatek.com>
-> ---
->   drivers/clk/mediatek/clk-mux.c | 4 ++++
->   1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/clk/mediatek/clk-mux.c b/drivers/clk/mediatek/clk-mux.c
-> index c5af6dc078a3..15309c7dbbfb 100644
-> --- a/drivers/clk/mediatek/clk-mux.c
-> +++ b/drivers/clk/mediatek/clk-mux.c
-> @@ -414,16 +414,20 @@ static int mtk_clk_mux_notifier_cb(struct notifier_block *nb,
->   	struct clk_notifier_data *data = _data;
->   	struct clk_hw *hw = __clk_get_hw(data->clk);
->   	struct mtk_mux_nb *mux_nb = to_mtk_mux_nb(nb);
-> +	struct clk_hw *p_hw = clk_hw_get_parent_by_index(hw,
-> +							 mux_nb->bypass_index);
+[1] sm8450.dtsi - arch/arm64/boot/dts/qcom/sm8450.dtsi - Linux source 
+code v6.18-rc4 - Bootlin Elixir Cross Referencer
+<https://elixir.bootlin.com/linux/v6.18-rc4/source/arch/arm64/boot/dts/qcom/sm8450.dtsi#L2047>[2] 
+OPP: Fix support for required OPPs for multiple PM domains - 
+kernel/git/torvalds/linux.git - Linux kernel source tree 
+<https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9ec87c5957ea9bf68d36f5e098605b585b2571e4>
 
-Fits in one line, 84 columns is ok.
-
->   	int ret = 0;
->   
->   	switch (event) {
->   	case PRE_RATE_CHANGE:
-> +		clk_prepare_enable(p_hw->clk);
-
-You have to check for error here - if you can't enable the clock, your system
-is going to crash as soon as you switch parents.
-
-Cheers,
-Angelo
-
->   		mux_nb->original_index = mux_nb->ops->get_parent(hw);
->   		ret = mux_nb->ops->set_parent(hw, mux_nb->bypass_index);
->   		break;
->   	case POST_RATE_CHANGE:
->   	case ABORT_RATE_CHANGE:
->   		ret = mux_nb->ops->set_parent(hw, mux_nb->original_index);
-> +		clk_disable_unprepare(p_hw->clk);
->   		break;
->   	}
->   
-
+- Krishna Chaitanya.
 
 
