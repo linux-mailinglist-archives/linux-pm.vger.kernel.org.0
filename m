@@ -1,307 +1,181 @@
-Return-Path: <linux-pm+bounces-37579-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37580-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F19B1C3E281
-	for <lists+linux-pm@lfdr.de>; Fri, 07 Nov 2025 02:48:17 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4302FC3E52A
+	for <lists+linux-pm@lfdr.de>; Fri, 07 Nov 2025 04:16:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9E8BD3AC9FD
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Nov 2025 01:48:16 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id BFE6B34ACD6
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Nov 2025 03:16:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7F7A2E7F1E;
-	Fri,  7 Nov 2025 01:48:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C67092836A6;
+	Fri,  7 Nov 2025 03:16:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ag2YoIxQ"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="akoRC4Mu";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="aUAkbeUY"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EDFE20C037;
-	Fri,  7 Nov 2025 01:48:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 207D91D5151
+	for <linux-pm@vger.kernel.org>; Fri,  7 Nov 2025 03:16:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762480094; cv=none; b=nRJxFHUR22vPpwj/tYzL0NoY5x5fk/6FuvMoxEo7gKpcvTjR7bt9u81TMzpOBO4AyM+5MTaE0GIIPKRA11Q44kJdg72rvMoNk7JoG9g1Hrv4uCmHptw5QcOBDf6YHObuXPzgChIjaT6wNLrJB+Q5kkvvs9SFtiRlCdP72pBmRRk=
+	t=1762485389; cv=none; b=rOV2Z/PAbYM0bHeoGnH6mbOSBFulBD/Dtg/47SwkrVnX7As0kI5wUW+dUG3hRkidokg+Cx68OXD0/O9ZXG7QOxlyicxxdb9pbp1ojtK+DjU3cpr/9vdKAG6YIQA0hhhGW/vjXGkolZHmTIg128jYcglORCLF+jCdwG7jD/NCPG0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762480094; c=relaxed/simple;
-	bh=v6zB7iF5EiKs73sB6PUObq4nGfpH3jYdCoelt/6miLs=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=stEZEYS7xrTVrnKURSXTGac2FobvtonDU5UIqsaBMVj9ZguwF7g7f5hq/2bNTX6ZbzAN+aRoO3ibwGnYLJXbRgTPDGWmkH0i2ostCwtOHvJ4chz4BGMPCQ1hIp2WXDkeb/44NWfMDMw5gr6hMm5hUw7xVwOHdMQ7lVpgVWMmdT4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ag2YoIxQ; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762480092; x=1794016092;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version;
-  bh=v6zB7iF5EiKs73sB6PUObq4nGfpH3jYdCoelt/6miLs=;
-  b=ag2YoIxQ50k4fGsf79jKbSeX7fV319ARFCIGJJv8Vx8F/y16l3cUwORq
-   kd3d2agyLnEZ/iEkovHSOdz2qzOyKASZdvVRXxA8vOttiOBnqvVq83iAm
-   /OXfNCZKCasXm1niSzTUXZe/SRL6m/xJBKDL3KkQvYvKpfmXJvD7RcoPF
-   8IGNTR1PY54zmTjQGLZHi401/QOS3akSRgAYSFSbrkHgFzKy9CrcPMl59
-   8Y9P1U8bpTGkS0f1MwgvKQrzquEUaHFB89+/ZnpU9P4Mzgmtr/50mkWjV
-   AgXiL7jPjnp5dUuVz+wXkBBNq4jQOPmQiLFf6zd+G8FkrQ6JUKo/FCVzd
-   w==;
-X-CSE-ConnectionGUID: zxsUaSvMQgafFaykqN0+jA==
-X-CSE-MsgGUID: DifoU98DQ8+Nv/sGUIcwMg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11605"; a="67241706"
-X-IronPort-AV: E=Sophos;i="6.19,285,1754982000"; 
-   d="scan'208,223";a="67241706"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2025 17:48:11 -0800
-X-CSE-ConnectionGUID: /AutPi0LR1iLAUCfBEN1LA==
-X-CSE-MsgGUID: OaLG+u0DTzeLtN74sO/HoA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,285,1754982000"; 
-   d="scan'208,223";a="187864855"
-Received: from dwesterg-mobl1.amr.corp.intel.com ([10.125.111.51])
-  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2025 17:48:11 -0800
-Message-ID: <8794c34dc127ee1bd3ed4d746ca7c1235ca3cb93.camel@linux.intel.com>
-Subject: Re: [REGRESSION] Intel Turbo Boost stuck disabled on some Clevo
- machines (was: [PATCH] cpufreq: intel_pstate: Unchecked MSR aceess in
- legacy mode)
-From: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To: Aaron Rainbolt <arainbolt@kfocus.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, viresh.kumar@linaro.org, 
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- stable@vger.kernel.org,  mmikowski@kfocus.org
-Date: Thu, 06 Nov 2025 17:48:10 -0800
-In-Reply-To: <20251106113137.5b83bb3f@kf-m2g5>
-References: <20250429210711.255185-1-srinivas.pandruvada@linux.intel.com>
-	 <CAJZ5v0h99RFF26qAnJf07LS0t-6ATm9c2zrQVzdi96x3FAPXQg@mail.gmail.com>
-	 <20250910113650.54eafc2b@kf-m2g5>
-	 <dda1d8d23407623c99e2f22e60ada1872bca98fe.camel@linux.intel.com>
-	 <20250910153329.10dcef9d@kf-m2g5>
-	 <db92b8a310d88214e2045a73d3da6d0ffe8606f7.camel@linux.intel.com>
-	 <20251106113137.5b83bb3f@kf-m2g5>
-Content-Type: multipart/mixed; boundary="=-9Wrt8BcrBEO56xUhdjM+"
-User-Agent: Evolution 3.52.3-0ubuntu1 
+	s=arc-20240116; t=1762485389; c=relaxed/simple;
+	bh=1morzm8NYa0wAvKPrknK4exKQLvQ7AJODwCifEu2fT0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Q/sQRvOcvgux/vLEGmRr7QKXSxkpz7FhC+5Q4598ldYq9S82uiR1oim7JAzk93u+zw+VtcHi3SiufP2MJdOTeGgjpNOh00Zruyd3QrrWdAfCv82+9Le9ettWZATpcrUtel30NsV4wj+iz8RG6J9HRn7uvWvvAIQBo/OeIyU3y0A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=akoRC4Mu; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=aUAkbeUY; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5A718FSN1709810
+	for <linux-pm@vger.kernel.org>; Fri, 7 Nov 2025 03:16:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	prIk2oxefhTBMGizLe5VBrcTGfPiFu9uI/8uXkNkJYM=; b=akoRC4MuJEYOHcOn
+	GOEn/RdiVZ7pF80wuWp1tK7XtyCbDnPhVvV5K3NlayL39B5GLS7OVb0OPNdyxT0L
+	UwlgfdmR1BjFq0wfhVEVCFiKlGUEBscmUObbhU6iO0ubpIMbjM5bd4E5zZ9OIj/X
+	M5sESt2ytsYmiRF9TZzGrnbfCGUz9t5UFOM0LLFFFQZ1Px0dlIwUfHkLEc0iZu5J
+	C8PQpcWoDpAL8QbKj/ol9Er8atBO+i01LkHnRLNc9NwK4T9KJoGjhZqUvV45MzJ1
+	jeXa9gBi3NS9yHmaKTLj0vUUWVkMeUOZRSitKpdZW3qD8yQVQTZr4APjMCvGtMJ1
+	ULCOfg==
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com [209.85.160.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4a96ue0axr-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Fri, 07 Nov 2025 03:16:26 +0000 (GMT)
+Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-4ed74ab4172so8826891cf.1
+        for <linux-pm@vger.kernel.org>; Thu, 06 Nov 2025 19:16:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1762485386; x=1763090186; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=prIk2oxefhTBMGizLe5VBrcTGfPiFu9uI/8uXkNkJYM=;
+        b=aUAkbeUYR2CzB1FT67n+T3F2ltWI+PArEtEEU8txJTmTc8ivPVxERb1agImDues9mR
+         TC/SIxDSnzdeX2xxDu03Dz7S0+2FijpQOqxPqAayXzROEs4x3khG1NWRRfHheZxnV9jC
+         PKgIjsVEGSQc0so4QDwvWYlRY3fIEjjga+lrHyiq11/Q/CJi4JMSgwQyUEWiR7l4yiuX
+         ThAxTYLiUePZraKJMeUMF8E9L16lvNLjPwj1slpeS3bi021hJPrGw834J6PK/saaOP07
+         iq1rAMSUpWn4EaGuuMS3ix75cwA6RRSSf454nXn+6phlz6imMZKr2hirY90JaslG91F7
+         7jew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762485386; x=1763090186;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=prIk2oxefhTBMGizLe5VBrcTGfPiFu9uI/8uXkNkJYM=;
+        b=QA1hRCpINoBgno/UuyrsZNEyID9He2r2+2+w78qVroUmTjpSKnrz7cAxURExidkkWt
+         Rgt2NB3m3mtM30xfuXobHyE8FO7h5bukfgFHyCD2gFDgQU8wRICj8g35zc7I7QkHK6u0
+         tO/R6+P8qkquh+T+vdev+7md4gczTu9+uvArG1WQVqj5aTfnOjSiJLTtjLlISUdEYO+L
+         pUwKNV5BIITmRv2NNERwflJuvCK6zWg5aMmbuJ5tPHtGn0xWmMf3skMGY3tXC/kn1Vnd
+         EGGkiNa3HWZwqVT4uj5YgcFSWGRiuxr0EcifkVb+R37dPn8mxsMz3HnJxdtbiniZnsl+
+         LKcA==
+X-Forwarded-Encrypted: i=1; AJvYcCVHr52yo6vqKIR++gLIuyIi7+ywnn3GbrClUURNn1/LtNsHHiwi3iy/4NTySZrXlvyjRy+xtezMDg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzDjzuAIZTIUJKhv45OH2mXZR461XKBkxNNsVRmq10+s2UsYmwi
+	JdrLds37cwwg29WP0CWNRtqLGuFOji6mKcsTlPNKvr55PxeySqXEiL7X3+dOtSDHuzHbilcEXa5
+	TMuSeHaz3g3a+xQ8z+fsoOzHGHJj8Tye6UpDTAgs82H8w9SBs4sofv+qm/VhwWQ==
+X-Gm-Gg: ASbGnct/cc9IWblJurJvLF0AiO8TNViA9aUs3Ju4vIsCZDmhsd6/jt64mlCm2DjRjlB
+	6CaagKvDqzjC4cbW1kRipiA5vaCdOd/PjgLVpvYLoik2l0uG7BMsCgI6Q1DkUR62PismciwclUv
+	vmFsfwXzDLGdXYNKZsNLBr6qTUiykQIcjvibzJ1JskdaW6lEXy91Vlf3SolJmndz4iWaeGEloF9
+	/c2jgiqUC+ksqZZlsoRvDt7+4RsdH1+a2XWUunOrjPMOBySkLuv1wNpeOda3pLyCe+WquwFO/fe
+	0gKheADz85qDnyNWq5KvXMQD/ZHQsTTlIGN1S6rUZ0EzwgDOr3Ahdv4Xd0SQa/7B5E1YVBIS8iN
+	7pZmM3otowiR0o9O4q+Zb6iU0Ha5IbcJGFkl2EyCSH8/CFpYgJVR4aObpg3Z3PI5bs6U/xFJeuk
+	LOHn/Mmbgvjovl
+X-Received: by 2002:ac8:578c:0:b0:4ed:23df:6a4d with SMTP id d75a77b69052e-4ed94a83250mr20198731cf.68.1762485386342;
+        Thu, 06 Nov 2025 19:16:26 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IGrhuAniX3epDvEEwBYOamZ5qOgePgMzHNWTJLDWUcznPxtnIGIxwFlzJYufCft4rDvBY1XrA==
+X-Received: by 2002:ac8:578c:0:b0:4ed:23df:6a4d with SMTP id d75a77b69052e-4ed94a83250mr20198521cf.68.1762485385913;
+        Thu, 06 Nov 2025 19:16:25 -0800 (PST)
+Received: from umbar.lan (2001-14ba-a0c3-3a00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a0c3:3a00:264b:feff:fe8b:be8a])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5944a0b779fsm1134734e87.56.2025.11.06.19.16.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Nov 2025 19:16:25 -0800 (PST)
+Date: Fri, 7 Nov 2025 05:16:23 +0200
+From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+To: MyungJoo Ham <myungjoo.ham@samsung.com>
+Cc: Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        Robie Basak <robibasa@qti.qualcomm.com>
+Subject: Re: [PATCH RESEND v2] devfreq: move governor.h to a public header
+ location
+Message-ID: <cdzlgnun7kpn24hziut23njsnlnzl465hdquq4zfmur7ylt5id@ioaqt5ilixwt>
+References: <20251030-governor-public-v2-1-432a11a9975a@oss.qualcomm.com>
+ <CGME20251030182636epcas1p2b332b417c1c42fb559a6f34e9e9f408c@epcms1p5>
+ <20251107005809epcms1p5f33e9560755367f0ba4b7df82c87fc85@epcms1p5>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20251107005809epcms1p5f33e9560755367f0ba4b7df82c87fc85@epcms1p5>
+X-Authority-Analysis: v=2.4 cv=fYKgCkQF c=1 sm=1 tr=0 ts=690d648b cx=c_pps
+ a=WeENfcodrlLV9YRTxbY/uA==:117 a=xqWC_Br6kY4A:10 a=8nJEP1OIZ-IA:10
+ a=6UeiqGixMTsA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=NEAV23lmAAAA:8 a=EUspDBNiAAAA:8 a=40jZUBKxUhFIhurt5UIA:9 a=3ZKOabzyN94A:10
+ a=wPNLvfGTeEIA:10 a=kacYvNCVWA4VmyqE58fU:22
+X-Proofpoint-ORIG-GUID: 0ez2anKnt5VYIzwECNRoWPr0I0HvXNYE
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTA3MDAyMyBTYWx0ZWRfXxGiQG0lCa3DC
+ gefkzmvES9/LRvvD5+rOuzD0tOBG2pPEB8VL+x+fFfS3I2Mpdo8C7mjPgB7r05KUFyNK6pQbRWD
+ RnNhc/RhdwsknYGoFLYHRVpaE9WFbG30jv/NoOzGG5YWIpvzhBIlNN50AN84Q4hhHCrDYKSdGp9
+ rw5ZqXxN3M+LKHuTOaRauWovNIe+NBj9Qgj1K2+21sYEiRnP5M7g2Knk6SQylswA1/SXP5HBAcZ
+ 2sZXLUc7oLXWT2fufdBJJacELnN3MWzSt4iZXqOgIFHm9nenp8kOMvSN0QRaqvOC7V3NW4owLp2
+ vpsovlcFimDdTAGBPO4rgr04UkULdlWPjpxgq5uMVQpnvKbt1H4dFimhkZLMDp9IlSjb7r5OBoy
+ oS7SENGzPEXcf6dXtapxRwlKs+115w==
+X-Proofpoint-GUID: 0ez2anKnt5VYIzwECNRoWPr0I0HvXNYE
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-11-06_05,2025-11-06_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ suspectscore=0 phishscore=0 priorityscore=1501 malwarescore=0 spamscore=0
+ lowpriorityscore=0 bulkscore=0 impostorscore=0 clxscore=1015 adultscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2511070023
 
---=-9Wrt8BcrBEO56xUhdjM+
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+On Fri, Nov 07, 2025 at 09:58:09AM +0900, MyungJoo Ham wrote:
+> >Sender: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com> 
+> >Date: 2025-10-31 03:26 (GMT+9)
+> >Title: [PATCH RESEND v2] devfreq: move governor.h to a public header location
+> >
+> >Some device drivers (and out-of-tree modules) might want to define
+> >device-specific device governors. Rather than restricting all of them to
+> >be a part of drivers/devfreq/ (which is not possible for out-of-tree
+> >drivers anyway) move governor.h to include/linux/devfreq-governor.h and
+> >update all drivers to use it.
+> >
+> >The devfreq_cpu_data is only used internally, by the passive governor,
+> >so it is moved to the driver source rather than being a part of the
+> >public interface.
+> 
+> Hi!
+> 
+> Could you please direct me to the governors or drivers needing this?
+> (Qualcomm drivers?)
 
-Hi Aaron,
+This has been prompted by the Qualcomm KGSL driver:
 
-Please again verify this change. This limits the scope.
-Patch attached.
+- https://github.com/qualcomm-linux/kgsl
+- https://github.com/qualcomm-linux/kgsl/issues/11
 
-Thanks,
-Srinivas
+But I think this issue is not limited to the KGSL driver. Other
+out-of-tree modules might also implement device-specific governors.
 
-On Thu, 2025-11-06 at 11:31 -0600, Aaron Rainbolt wrote:
-> On Thu, 06 Nov 2025 07:23:14 -0800
-> srinivas pandruvada <srinivas.pandruvada@linux.intel.com> wrote:
->=20
-> > Hi Aaron,
-> >=20
-> > On Wed, 2025-09-10 at 15:33 -0500, Aaron Rainbolt wrote:
-> > > On Wed, 10 Sep 2025 10:15:00 -0700
-> > > srinivas pandruvada <srinivas.pandruvada@linux.intel.com> wrote:
-> > > =C2=A0=20
-> > > > On Wed, 2025-09-10 at 11:36 -0500, Aaron Rainbolt wrote:=C2=A0=20
-> > > > > On Wed, 30 Apr 2025 16:29:09 +0200
-> > > > > "Rafael J. Wysocki" <rafael@kernel.org> wrote:
-> > > > > =C2=A0=C2=A0=C2=A0=20
-> > > > > > On Tue, Apr 29, 2025 at 11:07=E2=80=AFPM Srinivas Pandruvada
-> > > > > > <srinivas.pandruvada@linux.intel.com> wrote:=C2=A0=C2=A0=C2=A0=
-=20
-> > > > > > >=20
-> > > > > > > When turbo mode is unavailable on a Skylake-X system,
-> > > > > > > executing
-> > > > > > > the
-> > > > > > > command:
-> > > > > > > "echo 1 > /sys/devices/system/cpu/intel_pstate/no_turbo"
-> > > > > > > results in an unchecked MSR access error: WRMSR to 0x199
-> > > > > > > (attempted to write 0x0000000100001300).=C2=A0=20
-> > Please try the attached patch, if this address this issue.
->=20
-> I can confirm that this patch does resolve the issue when applied to
-> Kubuntu Focus's 6.14 kernel. CPU frequencies are available that
-> require
-> turbo boost, and `cat /sys/devices/system/cpu/intel_pstate` returns
-> `0`. The logs from `dmesg` also indicate that turbo was disabled
-> earlier in boot, but the warnings about turbo being disabled stop
-> appearing later on, even when manipulating the `no_turbo` file:
->=20
-> [=C2=A0=C2=A0 25.893012] intel_pstate: Turbo is disabled
-> [=C2=A0=C2=A0 25.893019] intel_pstate: Turbo disabled by BIOS or unavaila=
-ble on
-> processor
-> [=C2=A0=C2=A0 25.950587] NET: Registered PF_QIPCRTR protocol family
-> [=C2=A0=C2=A0 26.599013] Realtek Internal NBASE-T PHY r8169-0-6c00:00: at=
-tached
-> PHY driver (mii_bus:phy_addr=3Dr8169-0-6c00:00, irq=3DMAC)
-> [=C2=A0=C2=A0 26.725959] ACPI BIOS Error (bug): Could not resolve symbol
-> [\_TZ.ETMD], AE_NOT_FOUND (20240827/psargs-332)
->=20
-> [=C2=A0=C2=A0 26.725976] No Local Variables are initialized for Method [_=
-OSC]
->=20
-> [=C2=A0=C2=A0 26.725978] Initialized Arguments for Method [_OSC]:=C2=A0 (=
-4 arguments
-> defined for method invocation)
-> [=C2=A0=C2=A0 26.725979]=C2=A0=C2=A0 Arg0:=C2=A0=C2=A0 0000000030ddf166 <=
-Obj>=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Buffer(16)
-> 5D A8 3B B2 B7 C8 42 35
-> [=C2=A0=C2=A0 26.725991]=C2=A0=C2=A0 Arg1:=C2=A0=C2=A0 0000000002bd3ac4 <=
-Obj>=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Integer
-> 0000000000000001
-> [=C2=A0=C2=A0 26.725996]=C2=A0=C2=A0 Arg2:=C2=A0=C2=A0 0000000033eb047e <=
-Obj>=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Integer
-> 0000000000000002
-> [=C2=A0=C2=A0 26.725999]=C2=A0=C2=A0 Arg3:=C2=A0=C2=A0 00000000de6cf5f1 <=
-Obj>=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Buffer(8)
-> 00 00 00 00 05 00 00 00
->=20
-> [=C2=A0=C2=A0 26.726010] ACPI Error: Aborting method \_SB.IETM._OSC due t=
-o
-> previous error (AE_NOT_FOUND) (20240827/psparse-529)
-> [=C2=A0=C2=A0 26.726056] Consider using thermal netlink events interface
-> [=C2=A0=C2=A0 26.769209] r8169 0000:6c:00.0 enp108s0: Link is Down
-> [=C2=A0=C2=A0 26.857318] zram0: detected capacity change from 0 to 195035=
-136
-> [=C2=A0=C2=A0 26.864390] vboxdrv: Found 32 processor cores/threads
-> [=C2=A0=C2=A0 26.873227] Adding 97517564k swap on /dev/zram0.=C2=A0 Prior=
-ity:-2
-> extents:1 across:97517564k SS
-> [=C2=A0=C2=A0 26.880588] vboxdrv: TSC mode is Invariant, tentative freque=
-ncy
-> 2419194640 Hz
-> [=C2=A0=C2=A0 26.880592] vboxdrv: Successfully loaded version 7.2.4 r1709=
-95
-> (interface 0x00340001)
-> [=C2=A0=C2=A0 26.895725] intel_pstate: Turbo is disabled
-> [=C2=A0=C2=A0 26.895730] intel_pstate: Turbo disabled by BIOS or unavaila=
-ble on
-> processor
-> [=C2=A0=C2=A0 26.943715] iwlwifi 0000:00:14.3: WFPM_UMAC_PD_NOTIFICATION:=
- 0x20
-> [=C2=A0=C2=A0 26.943746] iwlwifi 0000:00:14.3: WFPM_LMAC2_PD_NOTIFICATION=
-: 0x1f
-> [=C2=A0=C2=A0 26.943755] iwlwifi 0000:00:14.3: WFPM_AUTH_KEY_0: 0x90
-> [=C2=A0=C2=A0 26.943765] iwlwifi 0000:00:14.3: CNVI_SCU_SEQ_DATA_DW9: 0x0
-> [=C2=A0=C2=A0 26.944901] iwlwifi 0000:00:14.3: RFIm is deactivated, reaso=
-n =3D 5
-> [=C2=A0=C2=A0 27.045437] iwlwifi 0000:00:14.3: Registered PHC clock: iwlw=
-ifi-
-> PTP, with index: 0
-> [=C2=A0=C2=A0 27.098590] VBoxNetFlt: Successfully started.
-> [=C2=A0=C2=A0 27.101687] VBoxNetAdp: Successfully started.
-> [=C2=A0=C2=A0 27.153602] bridge: filtering via arp/ip/ip6tables is no lon=
-ger
-> available by default. Update your scripts to load br_netfilter if you
-> need this.
-> [=C2=A0=C2=A0 27.851014] loop14: detected capacity change from 0 to 8
-> [=C2=A0=C2=A0 27.895706] r8169 0000:6c:00.0: invalid VPD tag 0xff (size 0=
-) at
-> offset 0; assume missing optional EEPROM
-> [=C2=A0=C2=A0 28.898015] intel_pstate: Turbo is disabled
-> [=C2=A0=C2=A0 28.898021] intel_pstate: Turbo disabled by BIOS or unavaila=
-ble on
-> processor
-> [=C2=A0=C2=A0 31.900781] intel_pstate: Turbo is disabled
-> [=C2=A0=C2=A0 31.900788] intel_pstate: Turbo disabled by BIOS or unavaila=
-ble on
-> processor
-> [=C2=A0=C2=A0 33.959448] Bluetooth: RFCOMM TTY layer initialized
-> [=C2=A0=C2=A0 33.959456] Bluetooth: RFCOMM socket layer initialized
-> [=C2=A0=C2=A0 33.959462] Bluetooth: RFCOMM ver 1.11
-> [=C2=A0=C2=A0 36.903768] intel_pstate: Turbo is disabled
-> [=C2=A0=C2=A0 36.903777] intel_pstate: Turbo disabled by BIOS or unavaila=
-ble on
-> processor
-> [=C2=A0=C2=A0 38.054345] systemd-journald[883]:
-> /var/log/journal/a9e8e3d2041547169b107e1e1a23f2ce/user-1000.journal:
-> Journal file uses a different sequence number ID, rotating.
-> [=C2=A0=C2=A0 39.799560] warning: `kded5' uses wireless extensions which =
-will
-> stop working for Wi-Fi 7 hardware; use nl80211
-> [=C2=A0=C2=A0 40.884365] wlp0s20f3: authenticate with 18:ee:86:8b:16:a2 (=
-local
-> address=3D98:bd:80:8a:e9:27)
-> [=C2=A0=C2=A0 40.885147] wlp0s20f3: send auth to 18:ee:86:8b:16:a2 (try 1=
-/3)
-> [=C2=A0=C2=A0 40.968595] wlp0s20f3: authenticate with 18:ee:86:8b:16:a2 (=
-local
-> address=3D98:bd:80:8a:e9:27)
-> [=C2=A0=C2=A0 40.968603] wlp0s20f3: send auth to 18:ee:86:8b:16:a2 (try 1=
-/3)
-> [=C2=A0=C2=A0 40.980941] wlp0s20f3: authenticated
-> [=C2=A0=C2=A0 40.981904] wlp0s20f3: associate with 18:ee:86:8b:16:a2 (try=
- 1/3)
-> [=C2=A0=C2=A0 41.042933] wlp0s20f3: RX AssocResp from 18:ee:86:8b:16:a2
-> (capab=3D0x1431 status=3D0 aid=3D14)
-> [=C2=A0=C2=A0 41.046917] wlp0s20f3: associated
->=20
-> If you post the patch, I'm happy to add a `Tested-by` tag for it.
-> Thank you for your help!
->=20
-> > Thanks,
-> > Srinivas
->=20
->=20
-
-
---=-9Wrt8BcrBEO56xUhdjM+
-Content-Disposition: attachment;
-	filename*0=0001-cpufreq-intel_pstate-Check-IDA-feature-only-during-M.pat;
-	filename*1=ch
-Content-Type: text/x-patch;
-	name="0001-cpufreq-intel_pstate-Check-IDA-feature-only-during-M.patch";
-	charset="UTF-8"
-Content-Transfer-Encoding: base64
-
-RnJvbSAxNGE3MjI1ZGVhODZkZjBmMjg4Zjk0ZGYxNzRlM2QxZmNkMGExOGVkIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBTcmluaXZhcyBQYW5kcnV2YWRhIDxzcmluaXZhcy5wYW5kcnV2
-YWRhQGxpbnV4LmludGVsLmNvbT4KRGF0ZTogVGh1LCA2IE5vdiAyMDI1IDE3OjM0OjA5IC0wODAw
-ClN1YmplY3Q6IFtQQVRDSF0gY3B1ZnJlcTogaW50ZWxfcHN0YXRlOiBDaGVjayBJREEgZmVhdHVy
-ZSBvbmx5IGR1cmluZyBNU1IKIDB4MTk5IHdyaXRlCgpDb21taXQgMGZiNWJlN2ZlYTk4ICgiY3B1
-ZnJlcTogaW50ZWxfcHN0YXRlOiBVbmNoZWNrZWQgTVNSIGFjZWVzcyBpbgpsZWdhY3kgbW9kZSIp
-IGludHJvZHVjZWQgYSBjaGVjayBmb3IgZmVhdHVyZSBYODZfRkVBVFVSRV9JREEgdG8gdmVyaWZ5
-CnR1cmJvIG1vZGUgc3VwcG9ydC4gQWx0aG91Z2ggdGhpcyBpcyB0aGUgY29ycmVjdCB3YXkgdG8g
-Y2hlY2sgZm9yIHR1cmJvCm1vZGUsIGl0IGNhdXNlcyBpc3N1ZXMgb24gc29tZSBwbGF0Zm9ybXMg
-dGhhdCBkaXNhYmxlIHR1cmJvIGR1cmluZyBPUwpib290IGJ1dCBlbmFibGUgaXQgbGF0ZXIuIFdp
-dGhvdXQgdGhpcyBmZWF0dXJlIGNoZWNrLCB1c2VycyB3ZXJlIGFibGUgdG8Kd3JpdGUgMCB0byAv
-c3lzL2RldmljZXMvc3lzdGVtL2NwdS9pbnRlbF9wc3RhdGUvbm9fdHVyYm8gcG9zdC1ib290IHRv
-CmdldCB0dXJibyBtb2RlIGZyZXF1ZW5jaWVzLgoKVG8gcmVzdG9yZSB0aGUgb2xkIGJlaGF2aW9y
-IHdoaWxlIHN0aWxsIGFkZHJlc3NpbmcgdGhlIHVuY2hlY2tlZCBNU1IKaXNzdWUgb24gc29tZSBT
-a3lsYWtlLVggc3lzdGVtcywgbGltaXQgdGhlIFg4Nl9GRUFUVVJFX0lEQSBjaGVjayB0byBvbmx5
-CndoZW4gc2V0dGluZyBNU1IgMHgxOTkgVHVyYm8gRW5nYWdlIEJpdCAoYml0IDMyKS4KCkZpeGVz
-OiAwZmI1YmU3ZmVhOTggKCJjcHVmcmVxOiBpbnRlbF9wc3RhdGU6IFVuY2hlY2tlZCBNU1IgYWNl
-ZXNzIGluIGxlZ2FjeSBtb2RlIikKU2lnbmVkLW9mZi1ieTogU3Jpbml2YXMgUGFuZHJ1dmFkYSA8
-c3Jpbml2YXMucGFuZHJ1dmFkYUBsaW51eC5pbnRlbC5jb20+Ci0tLQogZHJpdmVycy9jcHVmcmVx
-L2ludGVsX3BzdGF0ZS5jIHwgOSArKysrLS0tLS0KIDEgZmlsZSBjaGFuZ2VkLCA0IGluc2VydGlv
-bnMoKyksIDUgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvZHJpdmVycy9jcHVmcmVxL2ludGVs
-X3BzdGF0ZS5jIGIvZHJpdmVycy9jcHVmcmVxL2ludGVsX3BzdGF0ZS5jCmluZGV4IDQzZTg0N2U5
-Zjc0MS4uMzhhOGU4NzdmMjIyIDEwMDY0NAotLS0gYS9kcml2ZXJzL2NwdWZyZXEvaW50ZWxfcHN0
-YXRlLmMKKysrIGIvZHJpdmVycy9jcHVmcmVxL2ludGVsX3BzdGF0ZS5jCkBAIC01OTgsOSArNTk4
-LDYgQEAgc3RhdGljIGJvb2wgdHVyYm9faXNfZGlzYWJsZWQodm9pZCkKIHsKIAl1NjQgbWlzY19l
-bjsKIAotCWlmICghY3B1X2ZlYXR1cmVfZW5hYmxlZChYODZfRkVBVFVSRV9JREEpKQotCQlyZXR1
-cm4gdHJ1ZTsKLQogCXJkbXNybChNU1JfSUEzMl9NSVNDX0VOQUJMRSwgbWlzY19lbik7CiAKIAly
-ZXR1cm4gISEobWlzY19lbiAmIE1TUl9JQTMyX01JU0NfRU5BQkxFX1RVUkJPX0RJU0FCTEUpOwpA
-QCAtMjAxNCw3ICsyMDExLDggQEAgc3RhdGljIHU2NCBhdG9tX2dldF92YWwoc3RydWN0IGNwdWRh
-dGEgKmNwdWRhdGEsIGludCBwc3RhdGUpCiAJdTMyIHZpZDsKIAogCXZhbCA9ICh1NjQpcHN0YXRl
-IDw8IDg7Ci0JaWYgKFJFQURfT05DRShnbG9iYWwubm9fdHVyYm8pICYmICFSRUFEX09OQ0UoZ2xv
-YmFsLnR1cmJvX2Rpc2FibGVkKSkKKwlpZiAoUkVBRF9PTkNFKGdsb2JhbC5ub190dXJibykgJiYg
-IVJFQURfT05DRShnbG9iYWwudHVyYm9fZGlzYWJsZWQpICYmCisJICAgIGNwdV9mZWF0dXJlX2Vu
-YWJsZWQoWDg2X0ZFQVRVUkVfSURBKSkKIAkJdmFsIHw9ICh1NjQpMSA8PCAzMjsKIAogCXZpZF9m
-cCA9IGNwdWRhdGEtPnZpZC5taW4gKyBtdWxfZnAoCkBAIC0yMTc5LDcgKzIxNzcsOCBAQCBzdGF0
-aWMgdTY0IGNvcmVfZ2V0X3ZhbChzdHJ1Y3QgY3B1ZGF0YSAqY3B1ZGF0YSwgaW50IHBzdGF0ZSkK
-IAl1NjQgdmFsOwogCiAJdmFsID0gKHU2NClwc3RhdGUgPDwgODsKLQlpZiAoUkVBRF9PTkNFKGds
-b2JhbC5ub190dXJibykgJiYgIVJFQURfT05DRShnbG9iYWwudHVyYm9fZGlzYWJsZWQpKQorCWlm
-IChSRUFEX09OQ0UoZ2xvYmFsLm5vX3R1cmJvKSAmJiAhUkVBRF9PTkNFKGdsb2JhbC50dXJib19k
-aXNhYmxlZCkgJiYKKwkgICAgY3B1X2ZlYXR1cmVfZW5hYmxlZChYODZfRkVBVFVSRV9JREEpKQog
-CQl2YWwgfD0gKHU2NCkxIDw8IDMyOwogCiAJcmV0dXJuIHZhbDsKLS0gCjIuNDMuMAoK
-
-
---=-9Wrt8BcrBEO56xUhdjM+--
+-- 
+With best wishes
+Dmitry
 
