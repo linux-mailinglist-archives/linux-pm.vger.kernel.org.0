@@ -1,48 +1,55 @@
-Return-Path: <linux-pm+bounces-37604-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37605-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id C44E5C3F09C
-	for <lists+linux-pm@lfdr.de>; Fri, 07 Nov 2025 09:53:35 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 47C46C3F196
+	for <lists+linux-pm@lfdr.de>; Fri, 07 Nov 2025 10:13:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id B37F74E4232
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Nov 2025 08:53:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3FEA53B0A4F
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Nov 2025 09:12:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 560932C17A0;
-	Fri,  7 Nov 2025 08:53:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAB2E3195EA;
+	Fri,  7 Nov 2025 09:12:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KMuOvj0Q"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="ZV4g5enh"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28865295516;
-	Fri,  7 Nov 2025 08:53:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64FC8317704;
+	Fri,  7 Nov 2025 09:12:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762505610; cv=none; b=XJdiSwrZnzOmkLF4bES/jueqE9x+COuDOW8NpPiMujaMx0VDB8U8MblB6Sxz/BDWwURxQ4oTVVHlq9ymBKSlQ0T8CyQdTbiFVdndLnx2jrz1IZdRp8NWBZFNrzY0uuYXc13HtT/Heo2L9PQbeprPMHctrtF0CtYu6ZXLXU4CTcA=
+	t=1762506739; cv=none; b=Mj2zws+iG0XLOYYbS8vsMTYvl7GXn+1L7EE8+AyfJqfpEcfOizhSMFt9WJZ6SK7vUb1K8Mvm0PSZBoIoWEt02fGo7gG5phsJcPV5EZZCQBHqJjbxN/puigPEy1jZ08nY1sU6BQTrXt1Qq2zItGy4uBjCfnQC5TsKIwYmE7bph0A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762505610; c=relaxed/simple;
-	bh=nPTi+SRWdBNdBtOKjt7WzWSq++sZMLkBbtvgv9XbRLM=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=XFPeWx6qio0XyjlKKTfOzqIZgV61ijxadAyCrSvgESY1/3S95nyn4kmxR2gkMIyMGvjxUPsBpmm14/wwUzI31TVUG0TIynnlf8Njd+XNI/PjWxGOu8tZmmw9JdAfirqrBH+5woopklRwJgY1Y9QuOpD9klqmw/kJD+CPTVBCPco=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KMuOvj0Q; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9C76C113D0;
-	Fri,  7 Nov 2025 08:53:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762505609;
-	bh=nPTi+SRWdBNdBtOKjt7WzWSq++sZMLkBbtvgv9XbRLM=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=KMuOvj0QlwrolFnGl6LFOYwWrw9/W/xZEuLmymByaj6L0/1Y7WNMc1Jix3XgcK4tz
-	 489/4ysImnZTg55XqUGB8Nk8m/md4hT++/Wm5zbBdcOaLCuPPdI7MB9XTwTGKxv2VH
-	 Af/9MMEY5B41hiHpQBFFQtii1jxSfPPa3wXl8JX8pzh6BfPRNJXXoSYKX7q2Abd50A
-	 ybYObxdo9f+wjpS/+l3jPdkleGlcOHxkdpD7HHSB88aPTfHL3DgOSa2CgSN0xZQ3Cw
-	 eiAtEJB/QFtdZsDvxpJaCq95bLdU0f4TkTBmhRXBp0XDkBa42JwtqgW3ujwzoEfe1P
-	 ZSfxzw8oZlchg==
-Message-ID: <d2127339-914e-44f1-a994-315d151b08c5@kernel.org>
-Date: Fri, 7 Nov 2025 09:53:25 +0100
+	s=arc-20240116; t=1762506739; c=relaxed/simple;
+	bh=i8bcLE32FSf57bRwMIQrvB0FS0CV25f/s7GHzJcLydY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=j5J3g1Y73D/KN6v0CWw7TRG9wHGudLUC/xlInMK83SWep5+nJ/GivRNpBvLsAWKn6qZgXWErJQQppDgDBU8oyuCqz72ZWEvfGm45ZtN7YPlRd0IoqhsvuFq3zVQwaFHDaTcmwW1R2CJzb8Ae49YIl5+XWs7lU1ghaPCd9eAQ954=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=ZV4g5enh; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1762506735;
+	bh=i8bcLE32FSf57bRwMIQrvB0FS0CV25f/s7GHzJcLydY=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=ZV4g5enhu7yMNXiqcYlHi5Uh8Ct+jfotnXthdw+buHcJBzmP79S01Qv14L4479JWS
+	 chqM3FT3ErebbYQ+XTWXCIK94+/zh40V7IRctnfNG+One7TnwGU9NbOjNfFRhbKc4w
+	 bB1VEhGgtS/Iqp5ripBmfz32PRC7ggxC6ax1NQ8kk28jIi4a2+MnIcBogtW5Vverum
+	 G6HcJHqBmyati/8X3w4V6TU6i2dIm/igLgYc2LhC8bKO3rWf7oqahRte1Lpc94d1qz
+	 lhZoLf26ODR+ipMc/Xsl8yUmLmWN1N69Y//kNWC7Pk4hU+CgU9yXX18OIKyqql2lbn
+	 wTlXeJc6o9IIw==
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 7211717E12D5;
+	Fri,  7 Nov 2025 10:12:14 +0100 (CET)
+Message-ID: <7642d2bb-f246-41f9-bea8-6211fc2ad176@collabora.com>
+Date: Fri, 7 Nov 2025 10:12:13 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,96 +57,109 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 4/5] dt-bindings: arm: airoha: Add the chip-scu node
- for AN7583 SoC
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Christian Marangi <ansuelsmth@gmail.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>, Lorenzo Bianconi <lorenzo@kernel.org>,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org
-References: <20251106225929.1778398-1-ansuelsmth@gmail.com>
- <20251106225929.1778398-5-ansuelsmth@gmail.com>
- <20251107-splendid-alpaca-of-influence-97216f@kuoka>
+Subject: Re: [PATCH 00/13] of: Add wrappers to match root node with OF device
+ ID tables
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+ Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>,
+ Matthias Brugger <matthias.bgg@gmail.com>, Yangtao Li
+ <tiny.windzz@gmail.com>, Chen-Yu Tsai <wens@kernel.org>,
+ Jernej Skrabec <jernej.skrabec@gmail.com>,
+ Samuel Holland <samuel@sholland.org>,
+ Lorenzo Pieralisi <lpieralisi@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konradybcio@kernel.org>, Thomas Gleixner
+ <tglx@linutronix.de>, Nicolas Ferre <nicolas.ferre@microchip.com>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+ Maximilian Luz <luzmaximilian@gmail.com>, Hans de Goede <hansg@kernel.org>,
+ =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ Daniel Lezcano <daniel.lezcano@kernel.org>,
+ Thierry Reding <thierry.reding@gmail.com>,
+ Jonathan Hunter <jonathanh@nvidia.com>
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-mediatek@lists.infradead.org, linux-sunxi@lists.linux.dev,
+ linux-arm-msm@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+ linux-tegra@vger.kernel.org
+References: <20251106-b4-of-match-matchine-data-v1-0-d780ea1780c2@linaro.org>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20251107-splendid-alpaca-of-influence-97216f@kuoka>
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <20251106-b4-of-match-matchine-data-v1-0-d780ea1780c2@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 07/11/2025 08:45, Krzysztof Kozlowski wrote:
-> On Thu, Nov 06, 2025 at 11:59:13PM +0100, Christian Marangi wrote:
->> Document support for Airoha AN7583 chip-scu node.
->>
->> This is similar to Airoha EN7581 with the addition of the presence of
->> thermal sensor in addition to controlling HW PIN and other miscellaneous
->> pheriperals.
->>
->> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
->> ---
->>  .../bindings/arm/airoha,en7581-chip-scu.yaml       | 14 ++++++++++++++
->>  1 file changed, 14 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/arm/airoha,en7581-chip-scu.yaml b/Documentation/devicetree/bindings/arm/airoha,en7581-chip-scu.yaml
->> index 67c449d804c2..0d042fb90a78 100644
->> --- a/Documentation/devicetree/bindings/arm/airoha,en7581-chip-scu.yaml
->> +++ b/Documentation/devicetree/bindings/arm/airoha,en7581-chip-scu.yaml
->> @@ -18,16 +18,30 @@ properties:
->>    compatible:
->>      items:
->>        - enum:
->> +          - airoha,an7583-chip-scu
+Il 06/11/25 20:07, Krzysztof Kozlowski ha scritto:
+> Dependency/merging
+> ==================
+> All patches depend on the first patch, thus everything could go via
+> Rob's tree with people's acks.
 > 
-> Again, random order.
+> Description
+> ===========
+> Several drivers duplicate same code for getting reference to the root
+> node, matching it against 'struct of_device_id' table and getting out
+> the match data from the table entry.
+> 
+> There is a of_machine_compatible_match() wrapper but it takes array of
+> strings, which is not suitable for many drivers since they want the
+> driver data associated with each compatible.
+> 
+> Add two wrappers, similar to existing of_device_get_match_data():
+> 1. of_machine_device_match() doing only matching against 'struct
+>     of_device_id' and returning bool.
+> 2. of_machine_get_match_data() doing the matching and returning
+>     associated driver data for found compatible.
+> 
+> Best regards,
+> Krzysztof
+> 
 
-D'oh! That's a correct order. Missed a/e difference.
+Makes sense. Whole series is
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Best regards,
-Krzysztof
+Cheers!
+Angelo
+
+> ---
+> Krzysztof Kozlowski (13):
+>        of: Add wrappers to match root node with OF device ID tables
+>        cpufreq: dt-platdev: Simplify with of_machine_get_match_data()
+>        cpufreq: mediatek: Simplify with of_machine_get_match_data()
+>        cpufreq: sun50i: Simplify with of_machine_device_match()
+>        cpufreq: ti: Simplify with of_machine_device_match()
+>        cpuidle: big_little: Simplify with of_machine_device_match()
+>        firmware: qcom: scm: Simplify with of_machine_device_match()
+>        irqchip/atmel-aic: Simplify with of_machine_get_match_data()
+>        platform: surface: Simplify with of_machine_get_match_data()
+>        powercap: dtpm: Simplify with of_machine_get_match_data()
+>        soc: qcom: Simplify with of_machine_get_match_data()
+>        soc: qcom: ubwc: Simplify with of_machine_get_match_data()
+>        soc: tegra: Simplify with of_machine_device_match()
+> 
+>   drivers/cpufreq/cpufreq-dt-platdev.c               | 15 ++-----
+>   drivers/cpufreq/mediatek-cpufreq.c                 | 12 +-----
+>   drivers/cpufreq/sun50i-cpufreq-nvmem.c             | 11 +----
+>   drivers/cpufreq/ti-cpufreq.c                       | 13 +-----
+>   drivers/cpuidle/cpuidle-big_little.c               | 11 +----
+>   drivers/firmware/qcom/qcom_scm.c                   | 17 +-------
+>   drivers/irqchip/irq-atmel-aic-common.c             | 15 ++-----
+>   drivers/of/base.c                                  | 47 ++++++++++++++++++++++
+>   .../platform/surface/surface_aggregator_registry.c | 13 +-----
+>   drivers/powercap/dtpm.c                            | 16 +-------
+>   drivers/soc/qcom/qcom_pd_mapper.c                  | 17 +-------
+>   drivers/soc/qcom/ubwc_config.c                     | 14 ++-----
+>   drivers/soc/tegra/common.c                         | 12 +-----
+>   include/linux/of.h                                 | 13 ++++++
+>   14 files changed, 82 insertions(+), 144 deletions(-)
+> ---
+> base-commit: e5efebeef746a24f45b98dbdfcf334285848b32a
+> change-id: 20251106-b4-of-match-matchine-data-4a64bf046814
+> 
+> Best regards,
+
+
 
