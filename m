@@ -1,103 +1,90 @@
-Return-Path: <linux-pm+bounces-37653-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37654-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E775C41A04
-	for <lists+linux-pm@lfdr.de>; Fri, 07 Nov 2025 21:47:02 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D4CDC41A1C
+	for <lists+linux-pm@lfdr.de>; Fri, 07 Nov 2025 21:51:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2A5E0189891A
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Nov 2025 20:47:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 25CD03BB9BD
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Nov 2025 20:51:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9BC6306D57;
-	Fri,  7 Nov 2025 20:46:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9655A30DD25;
+	Fri,  7 Nov 2025 20:51:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WMhhYjCv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e6gxHOYz"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8022C2BEC3A
-	for <linux-pm@vger.kernel.org>; Fri,  7 Nov 2025 20:46:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70E202C3248
+	for <linux-pm@vger.kernel.org>; Fri,  7 Nov 2025 20:51:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762548418; cv=none; b=m9uG/1NkB1I/yfYSSTDj1hy+xqbxRwX5F/f/K/fj1xkvanLIFx+cSArxG8+ajqNl/XV+azbhEFMihxo7m1nloIig3BkZqFYGeBjgYF92SzkQSh2J3m6qAyqaWcb2POaK4rLzTavBi0g6pY9kaU4wx8/zvYDu0tviRk53eYiayhc=
+	t=1762548680; cv=none; b=tivIACvK22EUn/BJ45W3ictRKTEovdp2qlHkMknym/XX7EeeNW7XjCRY7KyPXHXVPmqjos5zbhYFAwrLc6bl9ax567MM9+hdOxOCnRDlXE29fyu78o39fY9j4UVxAVqD4a7VCD5p+bHtFMX+8VttKE4pDwFecNYwcTFNBhaoQj4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762548418; c=relaxed/simple;
-	bh=LIm70iNe4RFU4RUlEutJN3YV5NeEGUMDBkArh71fotc=;
+	s=arc-20240116; t=1762548680; c=relaxed/simple;
+	bh=WTtbFz33dXhqJo9ANoAPz8grF76PUGzuxWS4fyg+qNg=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SLzJQ8009pwoovW6VJZsg44mUud9g/ahwSLCWl8wYXAMCk5uySc8dvmjsPb3j8aie77T9FTCn1jFduf40JrcuA1KWYXs6hfR3EUByKBPmYqVdCajavm+0ddaGtRy/BQjvaiLTkGxln+7cLOEQgta0kCzPQbmHoFxAspJki3F4wc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WMhhYjCv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C061C113D0
-	for <linux-pm@vger.kernel.org>; Fri,  7 Nov 2025 20:46:58 +0000 (UTC)
+	 To:Cc:Content-Type; b=WBa+82YYIOJjjigorcQipE4SOxLqQPKc49cgDNKNZORU7D/5nRmjtzzbtEspDX/PPCcvFjZ390D4TCSwsR6fTeSlgp7tBYO/D7pYg5wq8SJO1yl4sMUb9QxAYlc2yA5K1VfcXvfWYbno16CAZ2gWQkiw0ZBqvtz5sSUNsU7HhL8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e6gxHOYz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22B17C4CEF8
+	for <linux-pm@vger.kernel.org>; Fri,  7 Nov 2025 20:51:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762548418;
-	bh=LIm70iNe4RFU4RUlEutJN3YV5NeEGUMDBkArh71fotc=;
+	s=k20201202; t=1762548680;
+	bh=WTtbFz33dXhqJo9ANoAPz8grF76PUGzuxWS4fyg+qNg=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=WMhhYjCvKeqaUFrZGUz2DfH+dGlVKDL7Fb6ACkMO6utCzYlyd1/0qbXfKkU3HhsYL
-	 I/ebhA6kgXfECnIyRBrcMTsCnHJ9RuLZx1T7PKRDzP99b3XSMmVzoCbAwdJ4m9hVOd
-	 RU/l0/Nw6FozbPpsq11ddweUXW7FGcTO7e+9UsRKD3+YKOeRYCwfNodNpqODJ9R5qF
-	 UYW0a3bVKt2bAZC6sTmHDFDtiEnn3LHr8S9Dogxl/Lm2aqiN1wxhItvAVcDvTE7Nfi
-	 L7V96Ah7QeW51or0Sk2WKo5dU6rk/z1lDOL+tGrBMP+5njQXHnLj8i9HAUKsf5TP7t
-	 q3vk2CTfYcSJQ==
-Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-656b7a2e7dcso588556eaf.1
-        for <linux-pm@vger.kernel.org>; Fri, 07 Nov 2025 12:46:58 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVOQtjMicKpXYuy1Fbu+DMF/vpibW3gJ9FazfdiGYE1xaQR+rXcOn66rMM8hwa3F+fXH/3Sba1oog==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yypf/jdoWTkx38eh/zmYHAqO1HKtzWKGnnkwUYVmdmpBrLC+8hM
-	ffjnjJLPUHXGpWaQIF9fpmVE/M5h+EwS62lvFUsBKUtNw+i09s90CawoX4CUCoDePqyHVX+nQ3m
-	NEgJh0QCV7NnddhUumwdzzsob5/Ck7pU=
-X-Google-Smtp-Source: AGHT+IFZgui/RGbbYfRP+5Hu0XZ0807MD+8j83XPiVHELdFX/cz59XT9FYbwREuS1eUKNMBS4AtPkqNXvMbOQubmHw4=
-X-Received: by 2002:a05:6820:3102:b0:656:b1fb:a8fd with SMTP id
- 006d021491bc7-656d872f363mr507199eaf.1.1762548417413; Fri, 07 Nov 2025
- 12:46:57 -0800 (PST)
+	b=e6gxHOYz6sjSzfeFkx4yUp9Jt0GU/yyM9265M4O8QQdNuhVEOBoaCWS9ipEjqhul3
+	 HjyMipjUpFlXH1hICKpIiZ1qxNR711Hbq3wiHADSopuureeCHIaCG3XTEBNHbcpHPt
+	 8bZY0Y63h2s8VkeBKhxdSjxMk9mWWUOTJQBuRJIpKh2XP9cX0WHVLr7+1PGBQRkr+u
+	 bIlFdrf5xZ2g2XYOENfBDR9kp8kmYlct/z14EuvOadVaBrXbvKsY/FuVuSVBoCD29d
+	 GoQwwjYgQg6TaR3QCLLQBgaUHT8Gn28wFbh8nW0MhonWfs0mTxfjPRIJBS2TCAYjxO
+	 icld4NRNRZ0bw==
+Received: by mail-oi1-f175.google.com with SMTP id 5614622812f47-45002de5102so597390b6e.1
+        for <linux-pm@vger.kernel.org>; Fri, 07 Nov 2025 12:51:20 -0800 (PST)
+X-Gm-Message-State: AOJu0Yzds1E2eC8OrcO9XmqiJvfxYITt4kqBzFYYHnoOEDw2Ynfs0ttB
+	89gLvZtiRsJtkx8Jgl2DmFe3UCDXE3ZMx5o132mcWJ3eYQEUNfOsQpInXKp9G6kGPC9h4KqHR8H
+	qC5jnPhqzaYzDAqgxBBUq7iLv9FYRwKE=
+X-Google-Smtp-Source: AGHT+IFOeJxOzK13dXv6/IvbdfBV5woURzjQq5it8IcVKiVCMbd4OG+sLlTTZLFjY6qk+dq3Ob+E6g7ptHvyJi3CuD4=
+X-Received: by 2002:a05:6808:30a1:b0:441:c851:b3c with SMTP id
+ 5614622812f47-4502a245b87mr347755b6e.25.1762548679337; Fri, 07 Nov 2025
+ 12:51:19 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251027044127.2456365-1-kaushlendra.kumar@intel.com>
-In-Reply-To: <20251027044127.2456365-1-kaushlendra.kumar@intel.com>
+References: <20251030023228.3956296-1-kaushlendra.kumar@intel.com> <SJ1PR11MB608336094D9FA095D1EE2EAFFCFBA@SJ1PR11MB6083.namprd11.prod.outlook.com>
+In-Reply-To: <SJ1PR11MB608336094D9FA095D1EE2EAFFCFBA@SJ1PR11MB6083.namprd11.prod.outlook.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 7 Nov 2025 21:46:45 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0iAHMUQ99Mc_cBDHPHcjG5p+o67SDmvwd_eAkDxR5zZmA@mail.gmail.com>
-X-Gm-Features: AWmQ_bns5c7gHcJ8aj4uyf6qXF2ZBCXrlTot4dguVWxOgp1LgeZ7h4jRvY0DKcQ
-Message-ID: <CAJZ5v0iAHMUQ99Mc_cBDHPHcjG5p+o67SDmvwd_eAkDxR5zZmA@mail.gmail.com>
-Subject: Re: [PATCH v3] PM: Delete timer before removing wakeup source from list
-To: Kaushlendra Kumar <kaushlendra.kumar@intel.com>
-Cc: rafael@kernel.org, pavel@kernel.org, gregkh@linuxfoundation.org, 
-	dakr@kernel.org, linux-pm@vger.kernel.org
+Date: Fri, 7 Nov 2025 21:51:08 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0j8T_psbfg-3K0kKOeuU4+wq38_K6cUkJpHydKrEJB8xA@mail.gmail.com>
+X-Gm-Features: AWmQ_blyhlNO_UjhwGQxgr6Ic681oF6vYdeQt_Jgvgw5vImntltCgQ2-DPuZLX4
+Message-ID: <CAJZ5v0j8T_psbfg-3K0kKOeuU4+wq38_K6cUkJpHydKrEJB8xA@mail.gmail.com>
+Subject: Re: [PATCH v4] ACPI: mrrm: Fix memory leaks and improve error handling
+To: "Luck, Tony" <tony.luck@intel.com>, "Kumar, Kaushlendra" <kaushlendra.kumar@intel.com>
+Cc: "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, 
+	ACPI Devel Maling List <linux-acpi@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Oct 27, 2025 at 5:43=E2=80=AFAM Kaushlendra Kumar
-<kaushlendra.kumar@intel.com> wrote:
+On Thu, Oct 30, 2025 at 4:28=E2=80=AFPM Luck, Tony <tony.luck@intel.com> wr=
+ote:
 >
-> Replace timer_delete_sync() with timer_shutdown_sync() and move
-> it before list_del_rcu() in wakeup_source_remove() to improve the
-> cleanup ordering and code clarity. This change ensures that the
-> timer is stopped before removing the wakeup source from the
-> events list, providing a more logical cleanup sequence.
+> > Add proper error handling and resource cleanup to prevent memory leaks
+> > in add_boot_memory_ranges(). The function now checks for NULL return
+> > from kobject_create_and_add(), uses local buffer for range names to
+> > avoid dynamic allocation, and implements a cleanup path that removes
+> > previously created sysfs groups and kobjects on failure.
+> >
+> > This prevents resource leaks when kobject creation or sysfs group
+> > creation fails during boot memory range initialization.
+> >
+> > Signed-off-by: Kaushlendra Kumar <kaushlendra.kumar@intel.com>
 >
-> While the current ordering is functionally correct, stopping the timer
-> first makes the cleanup flow more intuitive and follows the general
-> pattern of disabling active components before removing data structures.
->
-> Signed-off-by: Kaushlendra Kumar <kaushlendra.kumar@intel.com>
-> ---
-> Changes in v3:
-> - Use timer_shutdown_sync() instead of timer_delete_sync() to prevent
->   timer re-arming as per review feedback
-> - Remove timer.function clearing as timer_shutdown_sync() handles it
+> Reviewed-by: Tony Luck <tony.luck@intel.com>
 
-So you need to delete the WARN_ONCE() from wakeup_source_activate()
-along with wakeup_source_not_registered() because now it may trigger
-before removing the wakeup source from the list.
-
-Frankly, I'm not sure you know what you are doing here and I'm not
-going to consider any new versions of this patch until I'm convinced
-that this is the case.
-
-Thanks!
+Applied as 6.18-rc material, thanks!
 
