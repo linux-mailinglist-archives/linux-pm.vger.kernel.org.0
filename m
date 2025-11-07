@@ -1,120 +1,126 @@
-Return-Path: <linux-pm+bounces-37646-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37647-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B196C41622
-	for <lists+linux-pm@lfdr.de>; Fri, 07 Nov 2025 20:07:37 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1ACAFC4178E
+	for <lists+linux-pm@lfdr.de>; Fri, 07 Nov 2025 20:49:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 03E6A189BDC8
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Nov 2025 19:08:02 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id B16403503BE
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Nov 2025 19:48:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF0B4299ABF;
-	Fri,  7 Nov 2025 19:07:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E95113396FA;
+	Fri,  7 Nov 2025 19:48:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vBhrDtkL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ef58Lus/"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A51981DB125;
-	Fri,  7 Nov 2025 19:07:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2AF53375CF
+	for <linux-pm@vger.kernel.org>; Fri,  7 Nov 2025 19:48:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762542453; cv=none; b=pHLml3CALBirXZTsXQC/mNH3BvVByNK2m01QVkMIfwoycGLAr3qAhysLJ+zQGnwnKLTLPZR0YiTj5wxdgxdYZ1VkIXa6ur6nlbjlrfQNNblMYtScneyc63P78T0/pGpasWL6D1fGO9bvTNzRnm2coWQbkMmu/9HpxqPV/vvB63E=
+	t=1762544913; cv=none; b=Gnn+95e34eVJGjFDUrjKA47S6F4o0iXJDl0o6eP81yVK9OXt4S1oTC4bKziA5Bqei8tycs1RTaLxnoqD6w5ast2KTn1Xn+DsbbOXRg39AmbmMfpKTJmFf2nCeFy9prkySimSEwbTEICz3Oguy4wrEbL8EZ3TXN5n3o/sjl1Btqg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762542453; c=relaxed/simple;
-	bh=sryXcWbfbtKjRhof6o+o8YX3yFfe5opZuYDtIKsbm60=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=m3ED+qEl0OGkOPNNhA3YOIC8HJet7f9aJI3zAM5aq6NB5A5/6+KX0ZpSbAQf+lcOTKTQYJ2AJ+1MK/oFAAGUJ1HvSrSUlkRc+7gokyM4/ptr9nUUi2XW2nj4MdHGhDpIgFgEjIqah9YyhPfnv1+i9TDYQXaJ/+bnJRpHRa+PruQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vBhrDtkL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AD42C4CEF8;
-	Fri,  7 Nov 2025 19:07:31 +0000 (UTC)
+	s=arc-20240116; t=1762544913; c=relaxed/simple;
+	bh=jVmrd4OImxyn7gwQSEP1GTQ4NDcZIuueF+51qwhy7Bs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=FSM0tHj0CeGjfUH8xXxErWLcM0BhwDDmSBM5+NUSESjhYnAtWwMbVTebN8Eb07VHaiZbCOyZrvoKR5yG0TQJ2Hs0GygqRIJoVHNAwpAUQuYI8+yL98rySFt1Ms8wDusiBpsk4V24tROOnrEZA7b4Co4ziwgHeg0oFJOkqJyuV9g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ef58Lus/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A362C19423
+	for <linux-pm@vger.kernel.org>; Fri,  7 Nov 2025 19:48:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762542453;
-	bh=sryXcWbfbtKjRhof6o+o8YX3yFfe5opZuYDtIKsbm60=;
-	h=From:To:Cc:Subject:Date:From;
-	b=vBhrDtkLzYRm/MJdhjPL6tLdpXslkDBcJKP5fty38Lu4v2z470PKURpRjuueEt2C4
-	 Os6l8FPmzZmGVLVjxv0FXFOHMjifKxrFYYEHZO0YucLG52WFkZ38df/0/8WIrtX/1U
-	 nCx3ZDUCk3T9POoXZuNLwgxCgWZKuGK7/a+XD5sCUwXKXy2a0uByEMT0RX2cir7ZUF
-	 agMFrtbZ3cTiRp5JMhygrmjYTv9tu2O/G4VySOf+T+cdWhbk5ulRz9qPTmtmYIb5LR
-	 uYfO5+NPFsmFprcLL3AgZ2xhJh6dWW9NJRvIMqwIw3CLgv0jVhoB58jy299x6M6L70
-	 hg2UyftlSczvQ==
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-To: Linux PM <linux-pm@vger.kernel.org>,
- Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
-Cc: LKML <linux-kernel@vger.kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject:
- [PATCH v2] cpuidle: Add sanity check for exit latency and target residency
-Date: Fri, 07 Nov 2025 20:07:28 +0100
-Message-ID: <12779486.O9o76ZdvQC@rafael.j.wysocki>
-Organization: Linux Kernel Development
+	s=k20201202; t=1762544913;
+	bh=jVmrd4OImxyn7gwQSEP1GTQ4NDcZIuueF+51qwhy7Bs=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Ef58Lus/T4l61OLQyp3LuWhB4ykyNSOTnZve3WeJtIWNIjIu7DtTPYdUo65b51np3
+	 5nP2Aix/uRNEDOV5f2XfNiAuSy392lJ8pE+H/4WHede8R/gBk1mnBQhAHtOFDag0Y3
+	 AYjc54nhVDMP7en0zClM8jMTStFGzRjtybyDdJCXQPQ3IC1lHuTYZpDPyGT6RmL/1d
+	 IQV0lIs6BG6DGx5XrKEihBaOL2et+TZvewZR40aTB3SELTNaNyG7+icgZvTIveuZg+
+	 ND1S3YOz0Oelwtg3vTBIjVwoRM/oorpAtqakl/9fyJTUcEgn3M0IjTZioDTwD3K2I6
+	 tfvcbpQ9uNr/Q==
+Received: by mail-oi1-f169.google.com with SMTP id 5614622812f47-44fffff5f73so562491b6e.0
+        for <linux-pm@vger.kernel.org>; Fri, 07 Nov 2025 11:48:33 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXUFvvGe1QetzEpJYWeYXW0fxkJ1eB09Nmtzn6v1U+AP2/6YaVl7USi2/wnDic+WRetMKZnlunzJg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzxhhw0xxhnQH+ZHKp+REIPlRnBSy9997svA2WfrmP6mi91JSpr
+	JERU+IC1YnXaNo764VBCeiEPZT3QVpNiutLmrGQr/aHPCEPLAw8QZRtjfcdKubbuYG8QaOGH1Gx
+	a7SJWGsF/eCh7urr77Ncfs1uZ4Y8tuMA=
+X-Google-Smtp-Source: AGHT+IFfjcZQMaSMf/O0E7bHDvyenSz2TU7wnFXyLVZ2U6iGaSEGM0Li0KrPZeYcaNcWs96gi7YlfQIKTtL1lzqsBTE=
+X-Received: by 2002:a05:6808:4f13:b0:43d:2e06:4e84 with SMTP id
+ 5614622812f47-4501c747f7fmr1415267b6e.13.1762544912008; Fri, 07 Nov 2025
+ 11:48:32 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
+References: <20251103162516.2606158-1-srosek@google.com>
+In-Reply-To: <20251103162516.2606158-1-srosek@google.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Fri, 7 Nov 2025 20:48:21 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0jPdfut_QHz9f0x+SSexD_i8xEb5bhkzMv_m=a598Hqxw@mail.gmail.com>
+X-Gm-Features: AWmQ_bk_tz9nQGJAp7GZKrIe43u7pcO4azGS2YQ7FnFcvmD2-6KLrj0eNLfHFuw
+Message-ID: <CAJZ5v0jPdfut_QHz9f0x+SSexD_i8xEb5bhkzMv_m=a598Hqxw@mail.gmail.com>
+Subject: Re: [PATCH v4 0/2] ACPI: DPTF: Move INT340X enumeration from DPTF
+ scan handler to ACPI core
+To: Slawomir Rosek <srosek@google.com>
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Alex Hung <alexhung@gmail.com>, 
+	Hans de Goede <hansg@kernel.org>, Ilpo Jarvinen <ilpo.jarvinen@linux.intel.com>, 
+	AceLan Kao <acelan.kao@canonical.com>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Zhang Rui <rui.zhang@intel.com>, 
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Tomasz Nowicki <tnowicki@google.com>, 
+	Stanislaw Kardach <skardach@google.com>, Michal Krawczyk <mikrawczyk@google.com>, 
+	linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org, 
+	platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Mon, Nov 3, 2025 at 5:25=E2=80=AFPM Slawomir Rosek <srosek@google.com> w=
+rote:
+>
+> The Intel Dynamic Platform and Thermal Framework (DPTF) relies on
+> the INT340X ACPI device objects. The temperature information and
+> cooling ability are exposed to the userspace via those objects.
+>
+> Since kernel v3.17 the ACPI bus scan handler is introduced to prevent
+> enumeration of INT340X ACPI device objects on the platform bus unless
+> related thermal drivers are enabled. However, using the IS_ENABLED()
+> macro in the ACPI scan handler forces the kernel to be recompiled
+> when thermal drivers are enabled or disabled, which is a significant
+> limitation of its modularity. The IS_ENABLED() macro is particularly
+> problematic for the Android Generic Kernel Image (GKI) project which
+> uses unified core kernel while SoC/board support is moved to loadable
+> vendor modules.
+>
+> The DPTF requires thermal drivers to be loaded at runtime, thus
+> ACPI bus scan handler is not needed and acpi_default_enumeration()
+> may create all platform devices, regardless of the actual setting
+> of CONFIG_INT340X_THERMAL.
+>
+> Link to v1: https://lore.kernel.org/all/20250830053404.763995-1-srosek@go=
+ogle.com/
+> Link to v2: https://lore.kernel.org/all/20250917120719.2390847-1-srosek@g=
+oogle.com/
+> Link to v3: https://lore.kernel.org/all/20251002113404.3117429-1-srosek@g=
+oogle.com/
+>
+> In v4 the SoC DTS thermal explicitly depends on the X86_64 and NET,
+> so the INT340X driver may safely be selected by the SoC DTS thermal
+> driver. In addition most of previously submitted patches are dropped
+> as they are not necessary, instead the ACPI bus scan handler is simply
+> removed from the kernel, thus all platform devices are enumerated by
+> the acpi_default_enumeration().
+>
+> Slawomir Rosek (2):
+>   ACPI: DPTF: Ignore SoC DTS thermal while scanning
+>   ACPI: DPTF: Remove int340x thermal scan handler
 
-Make __cpuidle_driver_init() fail if the exit latency of one of the
-driver's idle states is less than its exit latency which would break
-cpuidle assumptions.
+Both patches applied as 6.19 material, but the subject of the first
+patch has been changed to "thermal: intel: Select INT340X_THERMAL from
+INTEL_SOC_DTS_THERMAL".
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
-
-v1 -> v2: Make __cpuidle_driver_init() fail if the check is not passed (Artem).
-
----
- drivers/cpuidle/driver.c |   16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
-
---- a/drivers/cpuidle/driver.c
-+++ b/drivers/cpuidle/driver.c
-@@ -152,7 +152,7 @@ static void cpuidle_setup_broadcast_time
-  * __cpuidle_driver_init - initialize the driver's internal data
-  * @drv: a valid pointer to a struct cpuidle_driver
-  */
--static void __cpuidle_driver_init(struct cpuidle_driver *drv)
-+static int __cpuidle_driver_init(struct cpuidle_driver *drv)
- {
- 	int i;
- 
-@@ -193,7 +193,17 @@ static void __cpuidle_driver_init(struct
- 			s->exit_latency_ns =  0;
- 		else
- 			s->exit_latency = div_u64(s->exit_latency_ns, NSEC_PER_USEC);
-+
-+		/*
-+		 * Ensure that the exit latency of a CPU idle state does not
-+		 * exceed its target residency which is assumed in cpuidle in
-+		 * multiple places.
-+		 */
-+		if (s->exit_latency_ns > s->target_residency_ns)
-+			return -EINVAL;
- 	}
-+
-+	return 0;
- }
- 
- /**
-@@ -223,7 +233,9 @@ static int __cpuidle_register_driver(str
- 	if (cpuidle_disabled())
- 		return -ENODEV;
- 
--	__cpuidle_driver_init(drv);
-+	ret = __cpuidle_driver_init(drv);
-+	if (ret)
-+		return ret;
- 
- 	ret = __cpuidle_set_driver(drv);
- 	if (ret)
-
-
-
+Thanks!
 
