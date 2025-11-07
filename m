@@ -1,202 +1,135 @@
-Return-Path: <linux-pm+bounces-37648-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37650-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8904C41857
-	for <lists+linux-pm@lfdr.de>; Fri, 07 Nov 2025 21:09:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id EC0B0C4191E
+	for <lists+linux-pm@lfdr.de>; Fri, 07 Nov 2025 21:19:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C08EE423D35
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Nov 2025 20:08:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A56C13AC19F
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Nov 2025 20:19:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A80A308F36;
-	Fri,  7 Nov 2025 20:08:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 925CE2FCC01;
+	Fri,  7 Nov 2025 20:19:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SgWH+hkh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="awGnFpZr"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43EA1302CAC
-	for <linux-pm@vger.kernel.org>; Fri,  7 Nov 2025 20:08:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D98F2D9EE0
+	for <linux-pm@vger.kernel.org>; Fri,  7 Nov 2025 20:19:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762546133; cv=none; b=KkIULfYZUjnNQQQjHCubOxJK8pXXPJZrKzsz3tl7NQovpLT0x5Z7TGYaDYcqjzLEsqAkYaT+oxoiYiTZ+XIZeg0CaU+AmrH+1iP0OuUWVzX7vwOoeTnUqkJlLjzdol7qycXgb+qUTqM0/eqG/vTRUpH2oRu4cyIVAk6gtb/GY5U=
+	t=1762546755; cv=none; b=kJN6GK3m0Z6ntHAXLbFy5crw1BQgIq2v4vNuz2r5qgC7JgvmZ0gl26NDCrXu4H3RbD87hpRAd+ZVyyauvy8PV41tDPQenxHj1QerdVY1o4JhKrqymOapeFp2Mfw3ll5WLbXz/jRo8ajtDt4ftsFprvk15hnI7mvGg0pQ/TsOboc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762546133; c=relaxed/simple;
-	bh=szesQpSM5oo7OsiDU5UKtOwtIL9eGv7CnUXjP7KFeos=;
+	s=arc-20240116; t=1762546755; c=relaxed/simple;
+	bh=17TsjTD9vWN3vxnRR6ra2LaUXASrfs1y4D40Ies1qAk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=tUaoVVpMiDKi4Sj+Hu8y8NNFVYqOdoC4ysudb5rsO7NsqanGRvoL+9igdtgvoSXrZtK15OK1qtiRQ0N40ySpX2fklzAM2k1dD6wObKesiG/eUKXrIiuf1lBDCOFslU/1H4wI8bldVQIFTXOQyQDzJm03Ryy3EyeAB5DV4iFIxaI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SgWH+hkh; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3F83C2BCB0
-	for <linux-pm@vger.kernel.org>; Fri,  7 Nov 2025 20:08:52 +0000 (UTC)
+	 To:Cc:Content-Type; b=XCXE56ikKyshxRv6V5HXmpPzfSCeGQhCZbjQ9289hWb5HgCFF9qc+OYIE9MIV/q0J/lZ+YNIcDuLnHBl62ujuKL5xm4l++f6zgiH/bZB9XlUTCTlbmJpDLfGoK3op6+YQ7iTW1rEc4NUKlZfPRkb92HkoTliqN2uLtOSbjbiM0Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=awGnFpZr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8140C116C6
+	for <linux-pm@vger.kernel.org>; Fri,  7 Nov 2025 20:19:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762546132;
-	bh=szesQpSM5oo7OsiDU5UKtOwtIL9eGv7CnUXjP7KFeos=;
+	s=k20201202; t=1762546754;
+	bh=17TsjTD9vWN3vxnRR6ra2LaUXASrfs1y4D40Ies1qAk=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=SgWH+hkhgSTsQ8dSxR7qNCQ35d4hulsb8mbX0ntPBArxOwl6HSgKfEtq8xuzzp6rL
-	 5JgQye24wVB59NbdxzvGUtOR3lterwp+FFULp8wYzgprBEASDKgwxIAIyqcrCiSYFg
-	 D/D2HQz/MQGCL5WZRbneF/bQy0MMZqRDa2HT5Gsr/7e2ILt6OEhuywaUy/yLGmALYB
-	 9uLFj+MW/aQAz73QLJNBfnT4YpeBplbhVBeTIWCLYh10gL0O7iB8B92Dks/+82hEhL
-	 AIakL9jriZdml/GdLrsmzgd5VclXyQAv0Rub9SWzwvF2s98MJXjJSYVlySJdszC37U
-	 B7VpMVeIo+dyw==
-Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-656cd6c1c5eso487098eaf.0
-        for <linux-pm@vger.kernel.org>; Fri, 07 Nov 2025 12:08:52 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVhhPhHf+TxlktCFlrwq3npOgwhUQeXEmCx/QMnAdr8DGY4s+VHNVkdGBK9YRbgiX/L1DdUYU3ZlQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxvRiRzJCjXwQFsp/sbA9s+qReCAQB/G0JyWsDGarJmArMwL2YU
-	BSYMIXIsSHkdpGQyxkLpdubcArCGnRr3FGNM+kEovLFyEGG7edvORHNSYsn5xPcU4KNJJAY2rD6
-	xhjn4eji6Llwq9nFkkg0+i+WZR6/1efE=
-X-Google-Smtp-Source: AGHT+IGA04jm71Ij9xeQJEzJY7AxE62iCGgrrBQyNvtjVXE70OmsxBr7+clNSkaS9F9EzCSb46Qp9YHiGNZGj0RJ2fQ=
-X-Received: by 2002:a05:6820:16a6:b0:656:8360:3906 with SMTP id
- 006d021491bc7-656d8ea527dmr426344eaf.8.1762546131960; Fri, 07 Nov 2025
- 12:08:51 -0800 (PST)
+	b=awGnFpZrCcROEqMsUDRzchPQCiL3ASAyi34ZIJ8VSEkySW/83zMREveqRUs4wDhD0
+	 hm8QSeKgD/QxU3Y6s62gPWrMvxHPhuKvcghVA2sMKXSXyhjgNn4AWNsg38TWD/J2BZ
+	 x9/MKY+q/doANVFdMhngcwDqh9IClgD4eHWmRcosuz9kDATKbn937mZQ+0MKPGSpeD
+	 XdxkgNdRXnddSUQJVMIIrZ5efd5voS4kzdWe4ock6IQ02pPzg3sf8vTSFmHlc6yDaQ
+	 lD9dR8NZRp3fTMAxGPAymRoSCwvHjSR4MHWq2hlvCGsM6n008XwlFmtLKdeXY9QYmb
+	 lDwzt6j8RlG/w==
+Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-7c531b9a45bso295467a34.0
+        for <linux-pm@vger.kernel.org>; Fri, 07 Nov 2025 12:19:14 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCW1ZmbLngkhhkEBWo+bHVouW1p1bb6GP9ToAwwqV6mHsd92qo2ddWojfV7r3h7RjKDTpHETq+8ZxQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwVuR4t5J/FwDgHlzx8qz54x1zOAck01LThTVLDDwLeT4G3p+z8
+	k2o7rGf0sgEbuCUug98vVrdJ6uDwuajPNI1YiOVlwvVgvjvyAlZbjJSGEo7Qca5NHmJp6LwYqUv
+	jEIPJ5nnfHZZGIDMD3u0tzs9fHAr4LKg=
+X-Google-Smtp-Source: AGHT+IG17jvOmL905CDn6ZhcH+amHb2vD+8gvkPXfGOKhCm0vT/i2vT+f6eQf338SgjblQyGQ6Xdcf5mmxanKX3VgKE=
+X-Received: by 2002:a05:6808:30a9:b0:44d:a805:1218 with SMTP id
+ 5614622812f47-4502a3b6b11mr327221b6e.55.1762546754125; Fri, 07 Nov 2025
+ 12:19:14 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251105113844.4086250-5-sumitg@nvidia.com> <202511061802.lIq09jwh-lkp@intel.com>
- <be696cb5-7d0d-44f6-970b-e417c2f89a8e@nvidia.com>
-In-Reply-To: <be696cb5-7d0d-44f6-970b-e417c2f89a8e@nvidia.com>
+References: <20251106113938.34693-1-adelodunolaoluwa@yahoo.com>
+ <20251106113938.34693-2-adelodunolaoluwa@yahoo.com> <CAJZ5v0gG3C4r-d+v2xGPqcF1Hn927NR7yBA7kLx4t6TjEo0rGA@mail.gmail.com>
+ <b6f467c5-4a70-46a2-8497-1c351b3bfea9@yahoo.com>
+In-Reply-To: <b6f467c5-4a70-46a2-8497-1c351b3bfea9@yahoo.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 7 Nov 2025 21:08:40 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0j8bQm+00+m75rmpKpm8yVumvYsWzCdYyCPwksnebY__A@mail.gmail.com>
-X-Gm-Features: AWmQ_bnyTo8wfwCEW9lyu_1xYl179djStUEiTR_5ulbMLWD8CjXHhBWwog1DvlU
-Message-ID: <CAJZ5v0j8bQm+00+m75rmpKpm8yVumvYsWzCdYyCPwksnebY__A@mail.gmail.com>
-Subject: Re: [PATCH v4 4/8] ACPI: CPPC: add APIs and sysfs interface for min/max_perf
-To: Sumit Gupta <sumitg@nvidia.com>
-Cc: kernel test robot <lkp@intel.com>, rafael@kernel.org, viresh.kumar@linaro.org, 
-	lenb@kernel.org, robert.moore@intel.com, corbet@lwn.net, 
-	pierre.gondois@arm.com, zhenglifeng1@huawei.com, rdunlap@infradead.org, 
-	ray.huang@amd.com, gautham.shenoy@amd.com, mario.limonciello@amd.com, 
-	perry.yuan@amd.com, ionela.voinescu@arm.com, zhanjie9@hisilicon.com, 
-	linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org, 
-	linux-doc@vger.kernel.org, acpica-devel@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	oe-kbuild-all@lists.linux.dev, linux-tegra@vger.kernel.org, 
-	treding@nvidia.com, jonathanh@nvidia.com, vsethi@nvidia.com, 
-	ksitaraman@nvidia.com, sanjayc@nvidia.com, nhartman@nvidia.com, 
-	bbasu@nvidia.com
+Date: Fri, 7 Nov 2025 21:19:02 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0jga6AtyWnAgKhcKYFJagEf+ZQmnm5y92zaPXGAkXHQZg@mail.gmail.com>
+X-Gm-Features: AWmQ_bknLYx82HZHH_AyTndZcLC4yRAXR2uLAm_FlX8-cm4oHIXwoNmPdd46gP4
+Message-ID: <CAJZ5v0jga6AtyWnAgKhcKYFJagEf+ZQmnm5y92zaPXGAkXHQZg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] power/swap: add missing params and Return:
+ descriptions to kernel-doc comments
+To: Sunday Adelodun <adelodunolaoluwa@yahoo.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, lenb@kernel.org, pavel@kernel.org, 
+	anna-maria@linutronix.de, frederic@kernel.org, mingo@kernel.org, 
+	tglx@linutronix.de, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Nov 7, 2025 at 11:00=E2=80=AFAM Sumit Gupta <sumitg@nvidia.com> wro=
-te:
+On Fri, Nov 7, 2025 at 9:09=E2=80=AFPM Sunday Adelodun
+<adelodunolaoluwa@yahoo.com> wrote:
 >
+> On 11/7/25 16:36, Rafael J. Wysocki wrote:
+> > On Thu, Nov 6, 2025 at 12:40=E2=80=AFPM Sunday Adelodun
+> > <adelodunolaoluwa@yahoo.com> wrote:
+> >> Kernel-doc checks (scripts/kernel-doc) reported a number of warnings
+> >> for missing parameters and `Return:` descriptions in kernel/power/swap=
+.c.
+> >> These missing return descriptions make the generated documentation
+> >> noisy and break doc-build when -Werror is used.
+> >>
+> >> Update the kernel-doc comment blocks to add explicit
+> >> Return: lines (and a few parameter tags where helpful) for the functio=
+ns
+> >> that were triggering warnings. No functional code changes are made.
+> >>
+> >> Example warnings that motivated this change:
+> >>   - Warning: kernel/power/swap.c:535 No description found for return v=
+alue
+> >>     of 'save_image'
+> >>   - Warning: kernel/power/swap.c:687 No description found for return v=
+alue
+> >>    of 'save_compressed_image'
+> >>   - Warning: kernel/power/swap.c:941 No description found for return v=
+alue
+> >>     of 'swsusp_write'
+> >>
+> >> Signed-off-by: Sunday Adelodun <adelodunolaoluwa@yahoo.com>
+> > These comments need more changes to become proper kerneldocs and in
+> > some cases it is not even necessary because the functions in question
+> > are static.
+> >
+> > If the goal is to avoid warnings, why don't you change them all to
+> > non-kerneldoc regular comments?
 >
-> On 06/11/25 16:00, kernel test robot wrote:
-> > External email: Use caution opening links or attachments
-> >
-> >
-> > Hi Sumit,
-> >
-> > kernel test robot noticed the following build warnings:
-> >
-> > [auto build test WARNING on rafael-pm/linux-next]
-> > [also build test WARNING on rafael-pm/bleeding-edge linus/master v6.18-=
-rc4 next-20251106]
-> > [If your patch is applied to the wrong git tree, kindly drop us a note.
-> > And when submitting patch, we suggest to use '--base' as documented in
-> > https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> >
-> > url:    https://github.com/intel-lab-lkp/linux/commits/Sumit-Gupta/cpuf=
-req-CPPC-Add-generic-helpers-for-sysfs-show-store/20251105-194715
-> > base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git linux-next
-> > patch link:    https://lore.kernel.org/r/20251105113844.4086250-5-sumit=
-g%40nvidia.com
-> > patch subject: [PATCH v4 4/8] ACPI: CPPC: add APIs and sysfs interface =
-for min/max_perf
-> > config: riscv-defconfig (https://download.01.org/0day-ci/archive/202511=
-06/202511061802.lIq09jwh-lkp@intel.com/config)
-> > compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project=
- d2625a438020ad35330cda29c3def102c1687b1b)
-> > reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/arc=
-hive/20251106/202511061802.lIq09jwh-lkp@intel.com/reproduce)
-> >
-> > If you fix the issue in a separate patch/commit (i.e. not just a new ve=
-rsion of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202511061802.lIq09jwh-l=
-kp@intel.com/
-> >
-> > All warnings (new ones prefixed by >>):
-> >
-> >>> Warning: drivers/cpufreq/cppc_cpufreq.c:954 function parameter 'polic=
-y' not described in 'show_min_perf'
-> >>> Warning: drivers/cpufreq/cppc_cpufreq.c:954 function parameter 'buf' =
-not described in 'show_min_perf'
-> >>> Warning: drivers/cpufreq/cppc_cpufreq.c:976 function parameter 'polic=
-y' not described in 'store_min_perf'
-> >>> Warning: drivers/cpufreq/cppc_cpufreq.c:976 function parameter 'buf' =
-not described in 'store_min_perf'
-> >>> Warning: drivers/cpufreq/cppc_cpufreq.c:976 function parameter 'count=
-' not described in 'store_min_perf'
-> >>> Warning: drivers/cpufreq/cppc_cpufreq.c:1003 function parameter 'poli=
-cy' not described in 'show_max_perf'
-> >>> Warning: drivers/cpufreq/cppc_cpufreq.c:1003 function parameter 'buf'=
- not described in 'show_max_perf'
-> >>> Warning: drivers/cpufreq/cppc_cpufreq.c:1025 function parameter 'poli=
-cy' not described in 'store_max_perf'
-> >>> Warning: drivers/cpufreq/cppc_cpufreq.c:1025 function parameter 'buf'=
- not described in 'store_max_perf'
-> >>> Warning: drivers/cpufreq/cppc_cpufreq.c:1025 function parameter 'coun=
-t' not described in 'store_max_perf'
-> > --
-> > 0-DAY CI Kernel Test Service
-> > https://github.com/intel/lkp-tests/wiki
+> Thank you very much for the feedback.
 >
->
-> Thank you for the report.
-> Below change to comments seem to be fixing this warning.
+> For the functions that are not static, could you please suggest the
+> appropriate changes needed to make their comments proper? I would like
+> to improve them accordingly.
 
-So can you please send a new version of this patch with the changes
-below folded in?
+There are some white space changes to be made and general formatting
+needs to be improved in some cases.
 
-> -------------------------------------------------------
->    /**
->    * show_min_perf - Show minimum performance as frequency (kHz)
-> + * @policy: cpufreq policy
-> + * @buf: buffer to write the frequency value to
->    *
->    * Reads the MIN_PERF register and converts the performance value to
->    * frequency (kHz) for user-space consumption.
-> @@ -1117,6 +1119,9 @@ static ssize_t show_min_perf(struct cpufreq_policy
-> *policy, char *buf)
+> My initial goal was to address the warnings, but if converting them to
+> regular comments
 >
->   /**
->    * store_min_perf - Set minimum performance from frequency (kHz)
-> + * @policy: cpufreq policy
-> + * @buf: buffer to write the frequency value to
-> + * @count: size of @buf
->    *
->    * Converts the user-provided frequency (kHz) to a performance value
->    * and writes it to the MIN_PERF register.
-> @@ -1144,6 +1149,8 @@ static ssize_t store_min_perf(struct
-> cpufreq_policy *policy, const char *buf, si
->
->   /**
->    * show_max_perf - Show maximum performance as frequency (kHz)
-> + * @policy: cpufreq policy
-> + * @buf: buffer to write the frequency value to
->    *
->    * Reads the MAX_PERF register and converts the performance value to
->    * frequency (kHz) for user-space consumption.
-> @@ -1166,6 +1173,9 @@ static ssize_t show_max_perf(struct cpufreq_policy
-> *policy, char *buf)
->
->   /**
->    * store_max_perf - Set maximum performance from frequency (kHz)
-> + * @policy: cpufreq policy
-> + * @buf: buffer to write the frequency value to
-> + * @count: size of @buf
-> -------------------------------------------------------
+> is the preferred approach, I will go ahead and update them that way in v2=
+.
 
-As for the whole series, I generally need ARM folks to review it and
-tell me that it is fine.
+I would split this into 2 patches, one changing the comments on the
+static functions to non-kerneldoc (and maybe dropping some of them
+entirely) and the other changing the remaining comments into proper
+kerneldoc ones.
 
 Thanks!
 
