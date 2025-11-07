@@ -1,124 +1,119 @@
-Return-Path: <linux-pm+bounces-37644-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37645-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9078AC41564
-	for <lists+linux-pm@lfdr.de>; Fri, 07 Nov 2025 19:47:46 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 13B40C415E0
+	for <lists+linux-pm@lfdr.de>; Fri, 07 Nov 2025 20:00:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 2C17C4E669E
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Nov 2025 18:47:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 920FA189EAFB
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Nov 2025 19:00:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2E2F2E7F00;
-	Fri,  7 Nov 2025 18:47:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EE4733C515;
+	Fri,  7 Nov 2025 18:58:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FnIM8Sdo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fb1sayqI"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30D392DAFD7;
-	Fri,  7 Nov 2025 18:47:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DECC933B97A
+	for <linux-pm@vger.kernel.org>; Fri,  7 Nov 2025 18:58:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762541261; cv=none; b=Tem2nYDViQMpgWdy2do+TKUbC+fa2VbrWamzYoU35D1Bty516RK3PdK7/UhajN9naCgVBQ/ShhlKWj1csG72ad1Q3yMuL5YvPY+ZZa+oPmPZetxZqWF6tlWd4VNUE3ZIFrtIPiedNmOD3aglvBTRxxEnJdBNoSJsd/K1Hr4lrBA=
+	t=1762541937; cv=none; b=d5D1XFtztSNon4Z5TzaWLlZI/3UbQRBFIri/+3mVx40Z31IfqI10m/UOi0uB5dJIuhr18itEyFf6lVU1zrUcf/gwiZ1ffa+bIb1pH092iYiSRSbGIjAsBqT8agFOgaoyW/11Hwo5ueczTeX4KfaAjt6683IxRm1jiQFteKVzK0c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762541261; c=relaxed/simple;
-	bh=MBYEgML9xeAqoHhLBXAHRikDAexWLU0pW8dUQsj3V1Q=;
-	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
-	 MIME-Version:Date; b=RwSLS4/sZdYd1cVOGWyIHhl2NBCQuO8PbmUNsmeLhC+WZYFxNraYnuefqG9v3ag3BRnKQ47BXEXvgLXrGUwj7700X7OTvFvtkoomyH5Y2r37D401Y8Sad0mMk14X6a6xSIYF0PxaH+YvvatfNYCTL1/cejNCNGKKMLrgLm6OxJw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FnIM8Sdo; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762541260; x=1794077260;
-  h=message-id:subject:from:to:cc:in-reply-to:references:
-   content-transfer-encoding:mime-version:date;
-  bh=MBYEgML9xeAqoHhLBXAHRikDAexWLU0pW8dUQsj3V1Q=;
-  b=FnIM8Sdo7nVxokK3dhXvN6E7kbowLJJyNmMMYjg/L1H74d0IzWRSMFKN
-   fpr+WYWqhbsFigwZJAeaxke52IwHpB3h+XtnEqaASAez+zRV6JIxIumg8
-   bvNFIehLZh0JkcL+mWCaXrqqNYMhsXLF4IG5zHx0jgOhrBkIIqQ38CZfe
-   ISQMl2FSGph61VSc9XXhwLVrjLkZJ+QAQYKO9vkzV+LZV8xLPoaLDb8yG
-   NoVVa0YRrx+uBxWG+wbzNcvsH/VsvG50ZDkiORcwpc5GA/ku4FoU+VW9d
-   1LEYd3cE7LMSMAM3P96yqIUA45zUfv1X7MAQ5PgUQtQv7p/0cRZNjEGBg
-   A==;
-X-CSE-ConnectionGUID: PAKHbQm8SJuI/uwUvqqJ+Q==
-X-CSE-MsgGUID: jtVbfgwuT5WrSB9D0A6PUw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11606"; a="64735706"
-X-IronPort-AV: E=Sophos;i="6.19,287,1754982000"; 
-   d="scan'208";a="64735706"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2025 10:47:39 -0800
-X-CSE-ConnectionGUID: sQ3H9dx8TKS4Od4vej+7Ng==
-X-CSE-MsgGUID: 9uADhjd8QY6YrCGYGLAvMQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,287,1754982000"; 
-   d="scan'208";a="211546391"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmviesa002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2025 10:47:38 -0800
-Received: from [10.245.245.126] (unknown [10.245.245.126])
-	by linux.intel.com (Postfix) with ESMTP id 8C06620BA6F5;
-	Fri,  7 Nov 2025 10:47:36 -0800 (PST)
-Message-ID: <a8d3fe252f5ed9d513c026331eeabfe5971196b1.camel@linux.intel.com>
-Subject: Re: [PATCH v1] cpuidle: Add sanity check for exit latency and
- target residency
-From: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM
- <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, Daniel Lezcano
-	 <daniel.lezcano@linaro.org>
-In-Reply-To: <5939579.DvuYhMxLoT@rafael.j.wysocki>
-References: <5939579.DvuYhMxLoT@rafael.j.wysocki>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+	s=arc-20240116; t=1762541937; c=relaxed/simple;
+	bh=JY3ffK3b9GTcr8PiL6cpOTkjcyjA8THe0BXledAm0cA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fQmRZuEy/EAdHZiAluVvSBbA/426jzXKYNKUW2y4Fwrqt6juw//gbUTsEK3Kr5IfQ3O36wzIxk0pkBdJTdnJN3fpJEgyW76y8IcRi/z5d4tAxUnYP4w6F+fvr6H4uT+C24S6A4Z9INjqUf01bwOSxMCob1mLe5Ii9hbZZg/9teU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fb1sayqI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7719BC19422
+	for <linux-pm@vger.kernel.org>; Fri,  7 Nov 2025 18:58:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762541936;
+	bh=JY3ffK3b9GTcr8PiL6cpOTkjcyjA8THe0BXledAm0cA=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=fb1sayqIpSmHJhNUvMdB7sENEBhJLQmNT3BnAoxwXizoFu9HXvmMa1x+8mD5JBEgC
+	 H6qDECqPHiMcsCmSYk4EvfxWSAdKzQmjolSL6/zqLUJuuXkHQ9l7m0yAmN16W39a/W
+	 DvVl1PDGtfbMbdoYwVGVRw/YbN0L9aEkBd/3XuoyyZKAIMPjM9qhPHx9L+043b/s/+
+	 tyAiygZHy5ToaumEAPgQqpsy8zLz/q+CQODmz6aoarw5GYLJ7EW7zTnGyRMK2n9syS
+	 EFrHc7S7h4URj2EZv1cpGGY9AVZFFsAqSFsxp8C/3Mw5lwJw+nqKYXNdVj+Jk0q8Tm
+	 MwLL7qUm8SKXg==
+Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-656ce836420so392441eaf.1
+        for <linux-pm@vger.kernel.org>; Fri, 07 Nov 2025 10:58:56 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVlbtGYjiOSfw5HK0kEkJVJBcd7VSQnVK6M7LCAj+XIXED4A6dlknvdj+a6cBByuQ+fjZG1X/Iggw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyvuIy6L3uARjKSmJ8TE5wzj+LEqb1nUwKqNk7eKB9sS7dO6Hpf
+	L7lvjD6e5XPNHqGbLfWcTw/Dz8l03fAdEmXWi8cMn+nVjg65six323Za3LUgK+ANj1oZxud2PFh
+	I6hI7qGTaBb334m4BVrSr9eACDj/g39Q=
+X-Google-Smtp-Source: AGHT+IHxdorsHFt+kPRK92oTkZiIgZZZSZc5IXKfRWQPTnaBbxj43YOS77ijVBe6ftZfCHNn4jYNDaEDCRuWKu7LM2A=
+X-Received: by 2002:a05:6820:c09c:10b0:656:77b8:9e3d with SMTP id
+ 006d021491bc7-656d873b0f7mr284668eaf.1.1762541935644; Fri, 07 Nov 2025
+ 10:58:55 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Fri, 07 Nov 2025 20:47:20 +0200
-User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
+References: <5939579.DvuYhMxLoT@rafael.j.wysocki> <a8d3fe252f5ed9d513c026331eeabfe5971196b1.camel@linux.intel.com>
+In-Reply-To: <a8d3fe252f5ed9d513c026331eeabfe5971196b1.camel@linux.intel.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Fri, 7 Nov 2025 19:58:44 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0hVPbU__=LZA1una8+1JSmGFytpBjBEXq2EuL_VOSYw2A@mail.gmail.com>
+X-Gm-Features: AWmQ_bkcuYZN_3aiXuOj1GS8pTncdqvYhI5mHsCPvwQJeJ57BnL8AOo3PDnxS1E
+Message-ID: <CAJZ5v0hVPbU__=LZA1una8+1JSmGFytpBjBEXq2EuL_VOSYw2A@mail.gmail.com>
+Subject: Re: [PATCH v1] cpuidle: Add sanity check for exit latency and target residency
+To: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 2025-11-07 at 19:19 +0100, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->=20
-> Make __cpuidle_driver_init() sanitize CPU idle states so that the exit
-> latency of a given state is not greater than its target residency which
-> would break cpuidle assumptions.
->=20
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
->  drivers/cpuidle/driver.c |   11 +++++++++++
->  1 file changed, 11 insertions(+)
->=20
-> --- a/drivers/cpuidle/driver.c
-> +++ b/drivers/cpuidle/driver.c
-> @@ -193,6 +193,16 @@ static void __cpuidle_driver_init(struct
->  			s->exit_latency_ns =3D  0;
->  		else
->  			s->exit_latency =3D div_u64(s->exit_latency_ns, NSEC_PER_USEC);
-> +
-> +		/*
-> +		 * Ensure that the exit latency of a CPU idle state does not
-> +		 * exceed its target residency which is assumed in cpuidle in
-> +		 * multiple places.
-> +		 */
-> +		if (s->exit_latency_ns > s->target_residency_ns) {
-> +			s->target_residency_ns =3D s->exit_latency_ns;
-> +			s->target_residency =3D s->exit_latency;
-> +		}
+On Fri, Nov 7, 2025 at 7:47=E2=80=AFPM Artem Bityutskiy
+<artem.bityutskiy@linux.intel.com> wrote:
+>
+> On Fri, 2025-11-07 at 19:19 +0100, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > Make __cpuidle_driver_init() sanitize CPU idle states so that the exit
+> > latency of a given state is not greater than its target residency which
+> > would break cpuidle assumptions.
+> >
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > ---
+> >  drivers/cpuidle/driver.c |   11 +++++++++++
+> >  1 file changed, 11 insertions(+)
+> >
+> > --- a/drivers/cpuidle/driver.c
+> > +++ b/drivers/cpuidle/driver.c
+> > @@ -193,6 +193,16 @@ static void __cpuidle_driver_init(struct
+> >                       s->exit_latency_ns =3D  0;
+> >               else
+> >                       s->exit_latency =3D div_u64(s->exit_latency_ns, N=
+SEC_PER_USEC);
+> > +
+> > +             /*
+> > +              * Ensure that the exit latency of a CPU idle state does =
+not
+> > +              * exceed its target residency which is assumed in cpuidl=
+e in
+> > +              * multiple places.
+> > +              */
+> > +             if (s->exit_latency_ns > s->target_residency_ns) {
+> > +                     s->target_residency_ns =3D s->exit_latency_ns;
+> > +                     s->target_residency =3D s->exit_latency;
+> > +             }
+>
+> I suggest to error out instead of capping it. Because as soon as you
+> cap it, you may end up with the target residency of the next C-state.
 
-I suggest to error out instead of capping it. Because as soon as you
-cap it, you may end up with the target residency of the next C-state.=C2=A0
+Good point.
 
+> Just erroring out is very explicit, no surprises, and the table
+> provider will have to just fix the table.
 
-Just erroring out is very explicit, no surprises, and the table
-provider will have to just fix the table.
-
-
-Thanks, Artem.
-
+Alternatively, the state may just be dropped, but let's try with
+failing to begin with.
 
