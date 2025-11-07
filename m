@@ -1,249 +1,289 @@
-Return-Path: <linux-pm+bounces-37613-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37614-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E03E8C3F8F9
-	for <lists+linux-pm@lfdr.de>; Fri, 07 Nov 2025 11:47:01 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 009A1C3FBFE
+	for <lists+linux-pm@lfdr.de>; Fri, 07 Nov 2025 12:36:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7A85F3B4A0B
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Nov 2025 10:43:26 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 5508E3486A6
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Nov 2025 11:36:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F9F2309EE8;
-	Fri,  7 Nov 2025 10:42:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB9392E1C7C;
+	Fri,  7 Nov 2025 11:36:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="e8lS7TSg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PkxsdfD+"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from BYAPR05CU005.outbound.protection.outlook.com (mail-westusazon11010035.outbound.protection.outlook.com [52.101.85.35])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CF212F7ACB;
-	Fri,  7 Nov 2025 10:42:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.85.35
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762512166; cv=fail; b=CHZ3eYDzBvRmN0zIukV704Y+iDZLawsOnfLoD7gvgGMtffWRTG5a8ElZ6fx2UhUMXURGuh04fT1CZ68mEyOsmAFpWNfqUPj1E2PqZgScS8R7QI4sQlqkpTq5Ewza7z9CzDrlKqRxzf3DcvkEYWPV2I2hhyWz4xCJSEPYtsHwjdM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762512166; c=relaxed/simple;
-	bh=M8lV+sLZgXEHOu3oSFKKTN9PcMkLHOgJhylbgIHN1fk=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=YjxxtjPFcT0Pv7I3LaSP5AoTFlU+27j23kEnFTeAQ4WBikNzQCAYNhTfyWQtbLQBhaBlAnBO8lP8KiaXoYsm+/kVGTHSUWcI3PNIb8sPKrt59xc0sQzWZYybEJh6Mg6z2eiirB+3gf0B5Y7jp+MuhLXtvSaLTUtxIfSJd2omevg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=e8lS7TSg; arc=fail smtp.client-ip=52.101.85.35
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=VYmbyKHfizggFWID3C3VqFDu77Z+rZklj/24w0Rh3/kNHpi8ZHiTyAxGna3Njib/ojZGeUzMU/hW+O8hjvKPulTCEpSbatCpus1d4iPWyVsy1I8Bf/I2PMu0mA0ANUVVDyRqjmuAa5Nxo+kfuPb8lR58HcPJkYqiFiyDYowiokaiMlCaMwMmJdwtsktUnmuFRQmufdt8cWkI14pJ179VJd+oPgyJBK4ad8djEoBaLh4qyEwWVgydexE/cYV9EvxFWJY2uopEu4+bhJYg/eGbxqFxK5on9oZgiokjXIeK5TuFcbbIzGnzM1Wz6MCbL0m8kLbiBw2QSbJOkJOwnPs3mg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FWEJj8S2gFidF5AkZI8EogrgNXuKX9P3ObB+HlyzvVI=;
- b=AR6fqD02JgN1LLxqxks695aUVC8JwBEDNVNcrkDdAPtG0GpC2UtYn0Fkdo+RzGLY7pZLp7PQ/4GqvPneILXaO8TW32XydgMpv0zG3QSzZ8JikgESqDYKczv2sE29tExh5R8qwTDh6kBNAVYNAqDNAxQYHstZch9lSZnU0hUK+FGiogVH7VYzk8PQOp9IqdB0tCPsQJMyj0HwwSoeT2AllL8AdQx6sEQNGS+qhS05QXwHI0als1aKOaZhofCB3GMORpBK6fdEftB4VUKPg6jwE08vUgXf/gTC8qGvCwLl7l4O4mOmIFdtCMr9I9ZxKTOLDAr1knp3sOLc/w34V7hjqA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FWEJj8S2gFidF5AkZI8EogrgNXuKX9P3ObB+HlyzvVI=;
- b=e8lS7TSgMJagiBMRiKWz426Pbrzt99H5NsJLuoIb77omFLeeqgLhLQMv71ocL6NrRtAkEezZOAegJ2Nw1T73Bh6rc/uBN6EaruprtDTNy3iadrt1lMeNlYdSLH8ew840YAOKSYZbBIR4iobGKEZYmCoRQZvNCQkVDI753dXsuYadvRSuybVHBvzaFTFei3uQsaKi6Z+WOwbEIBg3XfyTWt1RX90NxWodJ0n/WKnTPD7adr8kZtiYT6Z3bk7aiJymzLq4QJMLW9EF7aKFnx2OudieOGmnWx0icxw62o9FlFncwp0Kz7BLWgKonbyvP/Wf92+3QPfeKKKgzbvlxS69Bw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from PH0PR12MB8773.namprd12.prod.outlook.com (2603:10b6:510:28d::18)
- by DS0PR12MB9057.namprd12.prod.outlook.com (2603:10b6:8:c7::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9298.12; Fri, 7 Nov
- 2025 10:42:41 +0000
-Received: from PH0PR12MB8773.namprd12.prod.outlook.com
- ([fe80::47a4:8efb:3dca:c296]) by PH0PR12MB8773.namprd12.prod.outlook.com
- ([fe80::47a4:8efb:3dca:c296%4]) with mapi id 15.20.9298.010; Fri, 7 Nov 2025
- 10:42:41 +0000
-Message-ID: <58ec9a04-8f1f-4367-84b7-698348690df0@nvidia.com>
-Date: Fri, 7 Nov 2025 10:41:56 +0000
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 13/13] soc: tegra: Simplify with of_machine_device_match()
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Viresh Kumar <viresh.kumar@linaro.org>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Yangtao Li <tiny.windzz@gmail.com>, Chen-Yu Tsai <wens@kernel.org>,
- Jernej Skrabec <jernej.skrabec@gmail.com>,
- Samuel Holland <samuel@sholland.org>,
- Lorenzo Pieralisi <lpieralisi@kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>,
- Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konradybcio@kernel.org>, Thomas Gleixner
- <tglx@linutronix.de>, Nicolas Ferre <nicolas.ferre@microchip.com>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Claudiu Beznea <claudiu.beznea@tuxon.dev>,
- Maximilian Luz <luzmaximilian@gmail.com>, Hans de Goede <hansg@kernel.org>,
- =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
- Daniel Lezcano <daniel.lezcano@kernel.org>,
- Thierry Reding <thierry.reding@gmail.com>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org, linux-sunxi@lists.linux.dev,
- linux-arm-msm@vger.kernel.org, platform-driver-x86@vger.kernel.org,
- linux-tegra@vger.kernel.org
-References: <20251106-b4-of-match-matchine-data-v1-0-d780ea1780c2@linaro.org>
- <20251106-b4-of-match-matchine-data-v1-13-d780ea1780c2@linaro.org>
-From: Jon Hunter <jonathanh@nvidia.com>
-Content-Language: en-US
-In-Reply-To: <20251106-b4-of-match-matchine-data-v1-13-d780ea1780c2@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO2P123CA0100.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:139::15) To SJ2PR12MB8784.namprd12.prod.outlook.com
- (2603:10b6:a03:4d0::11)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6AA32D8DA8
+	for <linux-pm@vger.kernel.org>; Fri,  7 Nov 2025 11:36:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1762515372; cv=none; b=rc/NBkzOpetH77Cx5VTBJaro9gjv1WjbiSkPnk7kIIoBBmC8czIaWzDerrNxwyN1JTS8kVtxfylwUOP3VKl/Ha9kDkGhrr6Uyns0ovryYI3J+ULgzUiOi2NMZsIQo0QmbD8b7GcMNcEHbo3KZgq48nUkzRV49nrz1T59QvCuoBM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1762515372; c=relaxed/simple;
+	bh=NVXmcX+N5Z8qyU9clkL0WOP631Jjrk+MV8BCCsUgWpA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PFpN7ZKFZn+xeVQT0rr959A/4DwlS09DjibSAd/ZW5DOUP+WqmvL0plycHqk+Cs/ngsSQBRTtsrP/LjAByFPCvmR1SxU+khFxscMZP4pwSK/NMVW5lfb5skwhZi8XCZdkkRti5drA58GCtaWteTVcXY/e74ZWDgR0dy/H+dBXJY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PkxsdfD+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36B7FC19421
+	for <linux-pm@vger.kernel.org>; Fri,  7 Nov 2025 11:36:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762515369;
+	bh=NVXmcX+N5Z8qyU9clkL0WOP631Jjrk+MV8BCCsUgWpA=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=PkxsdfD+NGnDjyt9KmOcU0mPlsedc1Gpn6k7aw2l8LAfZJO2pUdcbQPIzPmiqmTXO
+	 qIg6C1llEwmA0cP3Q28MI0nbPoVuohqY5G73le+WkdNihowbVRVTyPDdLRBzqh12xa
+	 52dE/g4ksRNRuxGD9Q6RX37aqwVB0R3BmqfiSwXHqCQN4JPbRyY8OkiaRMsd4GlZ2c
+	 hulwz8GedaVhjQ4Ts5QBdaIOQmFZlBUbeSDMS6jP9un4W0N3e/BrWQcwGy+VFHFrg5
+	 wWZmWg6i01z6OoyntRVkeASXM/hzGmlj7/fladtJWTFq+p2QhbtVSFwstnVzJZrv/X
+	 ybozdyPoF2wbQ==
+Received: by mail-ot1-f54.google.com with SMTP id 46e09a7af769-7c5333e7033so200504a34.2
+        for <linux-pm@vger.kernel.org>; Fri, 07 Nov 2025 03:36:09 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWoAutHpPT6E8xiVDE1UX5zJhr8Oqts3GboXAGdo8CxCs/JtsKG/dpwVa4I8sNYDh4JY2NNuWZLeQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxCGkj3Zy1tr5tGVCqh3uR3BG8N0IEjM4hDapDvnkUkym/LHovn
+	L6e08Ve/mOtNsV6um49ZSLFLOHvDZlkjmZNAFwh/ixu79iqs8kjBRGH0KMbu7jWen5VaLwX/aJf
+	uZbQhrUlZtvMNBNucYLQY3ueEBdtSrn0=
+X-Google-Smtp-Source: AGHT+IGMraaEUZuaSZGyJap8VbBWHoBgwHAMFV2rLhgj0mY/gxejSx1HmMKOUNyMgGxe+eyY4Ol44ZwktA8egyX/kC8=
+X-Received: by 2002:a05:6830:6750:b0:7c6:8ede:ca96 with SMTP id
+ 46e09a7af769-7c6effbfaedmr1645415a34.26.1762515368486; Fri, 07 Nov 2025
+ 03:36:08 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR12MB8773:EE_|DS0PR12MB9057:EE_
-X-MS-Office365-Filtering-Correlation-Id: ba89b9e3-6493-4138-ab48-08de1dea4f9e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|7416014|366016|1800799024|921020|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?UHd2UmtoMWJWc29TSkVPUTd2MjB3SC8xNWtTdTNiY3Bhd0YyblVpMmRZNVZl?=
- =?utf-8?B?SVlFbzJUNXRlNTJ1Z0s3NmJVcWR4ZXhGOWx2UjhzMlU4aDhOaEdiUk14NUYv?=
- =?utf-8?B?M1FzOTlKckd3Y1hkOHlNbDBrMDJMM1M5NHhMZUhGMWU5MkpCNk5VWElpaU96?=
- =?utf-8?B?RFJRMEFsQ1BaY2Qwc3d3UHJNWUxWMk9jbDl5VXZ4bWVwT3RrZklhdzhxRnZj?=
- =?utf-8?B?Tm9mMEYrcmtEb2tkN1lsbi9NYzVhZFMzQzQ0NlE1eXd0SnppTGtRdzZ0YUVx?=
- =?utf-8?B?RTYwbTlJUWt0Zk8zSjJ1eWZHbFdsTkIrVGVVMDgzYmxUTHRrNGZpQjhQUFBt?=
- =?utf-8?B?Y1hhMWg2R3BiRTdPb2dIQWpJNUJtdjFHK1owV3pWeFRESHowRmwvVE9mcEwv?=
- =?utf-8?B?WHFMNE5OVkZPd1VKQXlCaXBrV2VnUTBjeFFvRDNtdDZHdjcreFMrTjd6ZjNY?=
- =?utf-8?B?QnVqUjBtWDEraXcrb0VwZVBUUDZxZmlPb0pNTU9PaVVSeXdDVjIvYlV1YlNj?=
- =?utf-8?B?OVErMEdXZzc3QmpNMFVxNVNjbnRVU0xLTFp3MlpTR3BGck9VSGpwd1hLOUti?=
- =?utf-8?B?ck1QUHV3OHpLbWxOYTM3djAxSTNJNnAxWk1UZ0RPODZtSUx1Z2Y2Y1JzVmdl?=
- =?utf-8?B?UzhKWjVKT0ZMTFQxMDFISzBPV01SaTdhT0JHOXU0Q1U5UURJWjJTSFpkYXpS?=
- =?utf-8?B?dTRnekFYS3B1Y1UrbWVNWnpkbjd0Q1dJaTJGOGQ5RlJKbzdrYmEwQ01tbUlp?=
- =?utf-8?B?NURJU3ZnblRnaStwS01VNE9acU1uRGRlbnJvd21udUg3ejd2N3JLVDEvSVhE?=
- =?utf-8?B?MzI3YVU0NUE0bkFXRzRXeVYyMmpTdmEwV0l0cU1QN2NkeVZQWERsbmE2SkVS?=
- =?utf-8?B?MDg0RVlxVnVoUWwwbmp1TDdIRjVlZ3B5NkM4MFZFR3ZNay9SQ2loM2RscE1m?=
- =?utf-8?B?c0hNRFI2cjlCZXF6VlJPUWhaMTFjRjBScGlQRVVUS0x4aXJOaEV4MVh1NTUv?=
- =?utf-8?B?RE1qcjJod3FPdU9JdDBUMWZ4Yk1rS0lkMVd1MVhKN1htNENrdE5wOFNxc1dH?=
- =?utf-8?B?NEpGSEZlZ0RzdEVwUHo3ajIrek51eGhGMjVLSU8vNzN3aXlMdnJvRkVUbnho?=
- =?utf-8?B?bjdFZ0NlR2wwOUhyWCs1alBlNHVPOGNXT3BVNFpkYWZja2p4MDhuN1NIWVBj?=
- =?utf-8?B?S0c3bG4yUWJ1bUphOWdFQlNYYUF4dWhZMFk0VEZCWXl4TUsxeDhEdUlRbTE2?=
- =?utf-8?B?ZnRyTUVwb082TkhrQnp4aXYvMlFqVVJRdXpYL0xPY3lNTlJkNFptSys5Rmg2?=
- =?utf-8?B?V1ZEOXJoYUFrUE1GdFVYbTcxdXV1L3hPY1NYNEV1c09xVStKYk1kUGQ0VGxM?=
- =?utf-8?B?Q3k2TXZnM09tVzBpVjZxdVowUFhVUW1HZm1BOVhhSXdoemR6Q1ZiU1ZwR0tS?=
- =?utf-8?B?aGk0VGxXVVNKZ2hIVEFzbTRUb2VXcDlKSjVvZTl1aUpXZzJWWWxvamIydmUw?=
- =?utf-8?B?SXBVNVViVXZzZEVBOXBabEZoa2JQN2d2amRUMGtqK1ozeFhwWHk1K2NUaUFM?=
- =?utf-8?B?NlBRS25RZHltYWFFWHZNMEFLaHU4aThudFNMRTZrRXNFbHZudzVORmxhdHpZ?=
- =?utf-8?B?ajMrQ0FuR0N4aGw2dW1qdktqdVF0UzVCdVJaV1VzWGRhSzhHN1YvUUVKOFpk?=
- =?utf-8?B?WmZWQW1FWWNNKy9obEMrU09PZHJTd0VlU1pZZEdWNWlXOWNuYzkzNEVLNmt5?=
- =?utf-8?B?cnh6SDVZWkk4dTRvNXhjZG1zY1BOOStMTFB1L1JVYi96NHdxRWtRekdWZ0s0?=
- =?utf-8?B?bUxSZFY5RUdkeGV5cXJtdEVWR2xXTGwwYmQzMTlEc0J0aGk4U2lWVmFhMTVP?=
- =?utf-8?B?bElQVUZTNnp3T1pPUEN0RVl5cjc0VFpkR2hqOFd5aGdiRU9VTDV4MEM4aklj?=
- =?utf-8?B?ZlNGZFBNNjdUM0tIRGt4RXRQNE0xVlcrdTBYZnVOWjFUdGRkbVdaRXowL1RB?=
- =?utf-8?Q?RMTM65PWe/Q0zAgk9ro0B0zmfZg/g4=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR12MB8773.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024)(921020)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?eFNPM1F5aXNDYjUxMm5YVUVZQ0VqeVNDOFJ0dUZuWm9OSXlmYVJJVk44SXlH?=
- =?utf-8?B?a3M0Y1prcjcvL29FdG1jcW9kT0lpK1ljc2V1MUFMMkxVVVVUR2JBUWpQTXRF?=
- =?utf-8?B?eHJwc2xsZHZGOFg5M1JBSC91aTV4RmdFUUN6NlY3RXFnc2NSRlo0SnE5NUE0?=
- =?utf-8?B?cHpHOFQ0aXdxTGpSSDZ5djNQTFBTQlBTdVJ0eTl6N25zajliTWhEMjFTQlFM?=
- =?utf-8?B?R0lqR0UzQWNqRE9FU2pQdm5UQkFYNGVDTWo2eUQrdUx5ZExmTm1oSzJ0UGNJ?=
- =?utf-8?B?SkpNa3hOVFFTN0dSTldXWGNiUG9Pc2VSOUVVc3pXWDRTOERiRDJrMFhTNnJO?=
- =?utf-8?B?K0pjK2EwWTRvR090M29uYkk0OTZlM3RLcjlOVlFLTjNudEw2RlhWOHYyT0pW?=
- =?utf-8?B?RHk3a2pYRHV2L3lMV1VUeVM5R09wdlBucUZHdE15eTdtbnZHMUIyZm9zRVVj?=
- =?utf-8?B?eXBaWG9vYVI3RjQra2dHMUZaZHdSdENrcEYzRnRuL2FOTVRUN011VTVLTERC?=
- =?utf-8?B?UERKOXdPOFBhdDdBRDF1S0ZYZGVIdkJVWjRIaVpQTHZFM0dmYVprSUNTdTYy?=
- =?utf-8?B?amdjaVpKNFV4OVNreGdncW5PSGR1Zk5yVDZKbjdhemlMUkwvM1JIYVhHMjV2?=
- =?utf-8?B?MHJHeW0wZUpIelp2UXYvNk5qd2hZVkZodXhjVnFESHZhRFVnZ1Ixa3l6Rm1n?=
- =?utf-8?B?SEdMSGczRElKR2lpL20wTHNxMXZmTXFqTUw4Y3lQaDd2clMwS3BGbWdoLzd1?=
- =?utf-8?B?bjJLQUFiRndZc1NQbXhQWW42Y1c1c1NMYXVHbTM2dDhST3dQWlZ1VUhUcmsr?=
- =?utf-8?B?SUNPYmxXWTFiNUY3VjVwQzRmdEtxWEFpRE5NZ08yamFGN1JMOWtsc0tXcFFy?=
- =?utf-8?B?YmIxd2d6TVFKV0NvM0tScEhhb0ZEZVUySTVEU2JYTnpXQ1M0VkxqMXNXVFVY?=
- =?utf-8?B?UmdnODMwS29NeXE4NTNxUUw4MXRScUJDRDJ3UWYvNGF1dmk1c05mbitZcExB?=
- =?utf-8?B?RWN0dzRYdE0xMFRidVdFSDlmVUxmNmFFZzlYeDBlakJzK1NUd0x0ZlBsTWhu?=
- =?utf-8?B?THQ2aFBkd2xEWTVmODFnUFN5OWVDbDMwYitvQXRIMURxZ2EvZ1Y2aTl5bUtp?=
- =?utf-8?B?YlJRMldQK1BLRVVFb2MrNlN4ZE9YVm80QUpmQ0hpL2VrMjRSejEzc2w4cUgx?=
- =?utf-8?B?SU1pVjJIZ1JoMi8yYk1TbzR3S2VMczhlNWg3R05JUm13ZXpQTVNMbWRTSEd1?=
- =?utf-8?B?SDRnTkdNYkI1SWZpNzZ0bHBVT1RjV3VZSFNBSVllWnVUeklUUVdGT3l1Wm9K?=
- =?utf-8?B?U3VidGYrMG5jZ0NIL0pWUUpuQUpqSHVPSVhWa0R3RkN4YVdTQzQ3OUNpME50?=
- =?utf-8?B?Mzg4ZGhLOFFNY0N6dnZ4MGE3YnJ1NlRPQjZ5V2FIUXdMTDFSSG1nZVNidTZp?=
- =?utf-8?B?SFQrODRWUUZtWUREcDV6Vkx6MENPa3VNR3h0SUNtYU0vMExVMTJLUU91NGc0?=
- =?utf-8?B?SHFqNnlLQ1U2SmdoUnFtZ2ErN1BmcXpONWlnRzM3NXZlTVZsRFQ2T0l0YWl0?=
- =?utf-8?B?bHBaZ0habkRWQXV5SGt1bkNYZDRzSFZTOEcxWmZlbmIyN1I5dElRNGtmaTVw?=
- =?utf-8?B?NnJpbkFhTVZwSlo5MmNSQkM4NUt4VElKZFlsNDBSMkphQlB6emU2OElySUxa?=
- =?utf-8?B?elFIT3ZYYlN5bVFBTVc0YTBPUElQR1Q5VFc5UEpsNXUvY2FOOE15NWJsK0kw?=
- =?utf-8?B?NUYwTkNTNStHUDc3TFBETWxBOVp1RktPMHlENVZLL0Y2Vy93Nk5ldHIwM1NV?=
- =?utf-8?B?MGE3LytRYlNqeHREZDRYdXp5VFdxbWdYSkdyUWN5V283VUxrcnVwS2lJaVJE?=
- =?utf-8?B?cW9xOVA1OVRsMWRTblEyREI3RjgxWitVaERFUFpiejBaOElEaytqVHkyVEkv?=
- =?utf-8?B?MTVUb2czQUdtU2N4b1hoNE4vRlJtZEpOcjlnR083bExNblFwRnIzUWQycHE1?=
- =?utf-8?B?Mmd0WVRKeVVMdnd4TDZtRmF2S08xb3FaUUt5VTdsbWZhNVVPVFU5bmJXZHYr?=
- =?utf-8?B?YndNN0JGQjBFaEs1RFBMc3dpZHNWaHFyQVJFd3cyL1AveGkzVCtQeDhBejRz?=
- =?utf-8?B?elpwSCtiNzJVTjZCNWZLNElHUVNmZUovQWErbkNzOVhCQ0FGWkpYNXZ1R0tt?=
- =?utf-8?B?VWc9PQ==?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ba89b9e3-6493-4138-ab48-08de1dea4f9e
-X-MS-Exchange-CrossTenant-AuthSource: SJ2PR12MB8784.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Nov 2025 10:42:41.3419
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: sZNdlADb+O0I1KKNx/sMxoX4sgrp1viWkdS2tDJzjRkQv2duMx6Q/r2ImkVsoERfwy8HSuMzRPdCzPWKLBE6Yg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB9057
+References: <CAEmPcwsNMNnNXuxgvHTQ93Mx-q3Oz9U57THQsU_qdcCx1m4w5g@mail.gmail.com>
+ <a50064b2-e6aa-4237-a715-12f21a65e9a6@arm.com> <ed1e64dc-91c9-44d9-b3d3-9f142bcf7a8d@arm.com>
+ <CAJZ5v0g9Jndez5y5i4pPW1C+qfj=4iiu51HV7Eb1dBGd1jg-CA@mail.gmail.com>
+ <b910a35c-83aa-4050-9c6c-de40f13a2a55@arm.com> <CAJZ5v0h6qAgWkEad5OGM-V-HOE-1PwD_XqgsDWbnJNxLWOKDfA@mail.gmail.com>
+ <CAEmPcws_pvYpzRMQfMyRPBw=7bUyYCcnP3BHN2H4wgUeLLszFg@mail.gmail.com>
+In-Reply-To: <CAEmPcws_pvYpzRMQfMyRPBw=7bUyYCcnP3BHN2H4wgUeLLszFg@mail.gmail.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Fri, 7 Nov 2025 12:35:55 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0i_ZUD1=3JDABJZ3fcdD7r8uMU36=mam8r2=1P02YksYw@mail.gmail.com>
+X-Gm-Features: AWmQ_bkMQcZXkdUeJBXJR75APx0O3Un17vVtfzLd_ekUoe-TGmrpixv7T-2fEQA
+Message-ID: <CAJZ5v0i_ZUD1=3JDABJZ3fcdD7r8uMU36=mam8r2=1P02YksYw@mail.gmail.com>
+Subject: Re: Regression in TEO cpuidle governor between 6.6 and 6.12
+To: Reka Norman <rekanorman@chromium.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Christian Loehle <christian.loehle@arm.com>, 
+	daniel.lezcano@linaro.org, linux-pm@vger.kernel.org
+Content-Type: multipart/mixed; boundary="00000000000073624f0642ff960f"
 
+--00000000000073624f0642ff960f
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 06/11/2025 19:07, Krzysztof Kozlowski wrote:
-> Replace open-coded getting root OF node and matching against it with
-> new of_machine_device_match() helper.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> ---
-> 
-> Depends on the first OF patch.
-> ---
->   drivers/soc/tegra/common.c | 12 +-----------
->   1 file changed, 1 insertion(+), 11 deletions(-)
-> 
-> diff --git a/drivers/soc/tegra/common.c b/drivers/soc/tegra/common.c
-> index dff6d5ef4e46..d82b7670abb7 100644
-> --- a/drivers/soc/tegra/common.c
-> +++ b/drivers/soc/tegra/common.c
-> @@ -27,17 +27,7 @@ static const struct of_device_id tegra_machine_match[] = {
->   
->   bool soc_is_tegra(void)
->   {
-> -	const struct of_device_id *match;
-> -	struct device_node *root;
-> -
-> -	root = of_find_node_by_path("/");
-> -	if (!root)
-> -		return false;
-> -
-> -	match = of_match_node(tegra_machine_match, root);
-> -	of_node_put(root);
-> -
-> -	return match != NULL;
-> +	return of_machine_device_match(tegra_machine_match);
->   }
->   
->   static int tegra_core_dev_init_opp_state(struct device *dev)
-> 
+On Fri, Nov 7, 2025 at 4:28=E2=80=AFAM Reka Norman <rekanorman@chromium.org=
+> wrote:
+>
+> On Fri, Nov 7, 2025 at 7:33=E2=80=AFAM Rafael J. Wysocki <rafael@kernel.o=
+rg> wrote:
+> >
+> > On Thu, Nov 6, 2025 at 12:13=E2=80=AFPM Christian Loehle
+> > <christian.loehle@arm.com> wrote:
+> > >
+> > > On 11/5/25 20:48, Rafael J. Wysocki wrote:
+> > > > On Wed, Nov 5, 2025 at 12:24=E2=80=AFAM Christian Loehle
+> > > > <christian.loehle@arm.com> wrote:
+> > > >>
+> > > >> On 11/4/25 09:03, Christian Loehle wrote:
+> > > >>> On 11/4/25 03:36, Reka Norman wrote:
+> > > >>>> Hi,
+> > > >>>>
+> > > >>>> I=E2=80=99m seeing a regression in the TEO governor between 6.6 =
+and 6.12. At
+> > > >>>> 6.12, when the system is idle it=E2=80=99s spending almost 100% =
+of time in
+> > > >>>> WFI, compared to about 6% at 6.6. At mainline it has improved co=
+mpared
+> > > >>>> to 6.12 but is still a lot worse than 6.6, spending about 50% in=
+ WFI.
+> > > >>>>
+> > > >>>> The system is a ChromeOS device with Mediatek MT8196.
+> > > >>>>
+> > > >>>> Bisecting showed the specific commit which caused the regression=
+ is:
+> > > >>>> 4b20b07ce72f ("cpuidle: teo: Don't count non-existent intercepts=
+")
+> > > >>>>
+> > > >>>> I=E2=80=99ve attached sysfs dumps showing the issue. All were ta=
+ken a couple
+> > > >>>> of minutes after boot, with the device having been idle since bo=
+ot.
+> > > >>>> The cases tested are:
+> > > >>>> cpuidle_6_6.txt      =3D 6.6 kernel
+> > > >>>> cpuidle_6_12.txt     =3D 6.6 kernel with teo commits up to 6.12
+> > > >>>> cpuidle_mainline.txt =3D 6.6 kernel with teo commits up to mainl=
+ine
+> > > >>>>
+> > > >>>> Summary of the percentage time spent in each state (averaged acr=
+oss CPUs):
+> > > >>>>
+> > > >>>> |            |   6.6 |  6.12 | mainline |
+> > > >>>> |------------|------:|------:|---------:|
+> > > >>>> | WFI        |  6.02 | 99.94 |    56.84 |
+> > > >>>> | cpuoff     | 11.02 |     0 |     0.65 |
+> > > >>>> | clusteroff | 82.96 |  0.05 |    42.51 |
+> > > >>>> | s2idle     |     0 |     0 |        0 |
+> > > >>>>
+> > > >>>> Any help would be much appreciated. Let me know if there's any o=
+ther
+> > > >>>> debugging information I should provide.
+> > > >>>>
+> > > >>>
+> > > >>> That's not good.
+> > > >>> If the system is mostly idle (only boot activity but dumps are ta=
+ken after
+> > > >>> ~3mins?), what is causing the wakeups? Even in 6.6 There are defi=
+nitely more
+> > > >>> than I would've expected?
+> > > >>> I noticed that clusteroff and cpuoff have equal residency, which =
+is
+> > > >>> obviously a bit awkward for cpuidle, but shouldn't be relevant to=
+ your issue.
+> > > >>>
+> > > >>> I'm a bit puzzled by your bisect results.
+> > > >>> 4b20b07ce72f ("cpuidle: teo: Don't count non-existent intercepts"=
+)
+> > > >>> made the intercept logic *less* prone to count (false) intercepts=
+, yet it
+> > > >>> seems to count more of them? (resulting in more WFI).
+> > > >>> I'll think about it some more, for now of course a trace would be=
+ very
+> > > >>> helpful. (cpuidle events, ipi_raise, irqs?)
+> > > >>> Are there ever any latency constraints set?
+> > > >>>
+> > > >>> FWIW the mainline results look the most reasonable, from a 30000 =
+feet view
+> > > >>> anyway:
+> > > >>> Cluster       State           above   below   usage   above%  bel=
+ow%
+> > > >>> LITTLE        cpuoff-l        ~75     ~65     ~140    23%     20%
+> > > >>> LITTLE        clusteroff-l    ~800    0       ~100    89%     0%
+> > > >>> MID   cpuoff-m        ~3=E2=80=934    ~15     ~20     15%     55%
+> > > >>> MID   clusteroff-m    ~1300   0       ~4000   24%     0%
+> > > >>> BIG   cpuoff-b        0       1       1       =E2=80=94       =E2=
+=80=94
+> > > >>> BIG   clusteroff-b    ~800    0       ~1900   30%     0%
+> > > >>>
+> > > >>> (WFI seems mostly the correct choice for little CPUs, that's fine=
+, the energy
+> > > >>> savings compared to cpuoff should be marginal anyway.)
+> > > >>>
+> > > >>> Do you mind trying:
+> > > >>> 13ed5c4a6d9c cpuidle: teo: Skip getting the sleep length if wakeu=
+ps are very frequent
+> > > >>> on 6.12?
+> > > >>>
+> > > >>
+> > > >> So just thinking out loud, the only case I can actually thing of t=
+o explain your
+> > > >> bisect to 4b20b07ce72f ("cpuidle: teo: Don't count non-existent in=
+tercepts")
+> > > >> is that the workload essentially changed dramatically because of o=
+ur calls
+> > > >> to tick_nohz_get_sleep_length() now.
+> > > >> I'm not sure how likely I think that is, but I'm lacking imaginati=
+on for another
+> > > >> cause. That's why results with
+> > > >> 13ed5c4a6d9c ("cpuidle: teo: Skip getting the sleep length if wake=
+ups are very frequent")
+> > > >> would be interesting.
+> > > >
+> > > > My current theory is that this issue is related to the
+> > > > tick_nohz_get_sleep_length() overhead and the way "intercepts" are
+> > > > distinguished from "hits" in teo.
+> > > >
+> > > > Namely, teo assumes that its own overhead is negligible and so it
+> > > > counts a given event as an "intercept" if the measured time spent i=
+n
+> > > > the idle state (with the exit latency roughly taken into account)
+> > > > falls into a different "state bin" than the sleep length (the expec=
+ted
+> > > > time till the next timer).  However, the sleep length is computed a=
+s a
+> > > > difference between the upcoming timer wakeup event time and
+> > > > ts->idle_entrytime, so it actually includes the time taken by
+> > > > tick_nohz_next_event().  If the latter is significant, it may
+> > > > contribute to the difference seen by teo_update() and cause extra
+> > > > "intercepts" to appear.
+> > >
+> > > Right, additionally with psci pc-mode and the exposed clusteroff stat=
+es we end
+> > > up vastly exaggerating the wakeup latency (i.e. underestimating the a=
+ctual idle time)
+> > > for three reasons:
+> > > - wakeup latency =3D entry+exit latency (worst case: pay full latenci=
+es on both
+> > > even though for most cases we don't incur the entry latency)
+> > > - Wakeup latency is a worst-case and often is more like 2x-3x of the =
+average.
+> > > - We use the (higher) clusteroff values even though the clusteroff st=
+ate couldn't
+> > > possibly have been entered as not the entire cluster is idle.
+> > >
+> > > Nonetheless these are all just a "intercept counting is significantly=
+ more likely"
+> > > while the results show not a single state >0 entered =3D> the interce=
+pt logic
+> > > probably triggers every cpuidle entry.
+> >
+> > It has to for this to happen, if timers are not frequent enough.
+> >
+> > > Feels like there should be an issue in the feedback loop.
+> >
+> > I'm wondering what the issue could be though.  The change in commit
+> > 4b20b07ce72f only affects the cases when idle state 0 is about to be
+> > selected and it only really changes the sleep length value from
+> > KTIME_MAX to something more realistic (but it still may be KTIME_MAX).
+> >
+> > It may turn an "intercept" into a "hit", but only if the CPU is not
+> > woken up by the tick because those cases had been already counted as
+> > "hits" before commit 4b20b07ce72f.
+> >
+> > Now, if the majority of wakeups in the workload are tick wakeups, the
+> > only real difference appears to be the presence of
+> > tick_nohz_get_sleep_length() in that code path.
+> >
+> > Frankly, I would try to remove the update of cpu_data->sleep_length_ns
+> > right before the "goto out_tick" statement (in 6.12 that should be
+> > line 426) and see what happens.
+>
+> Just tried this quickly. Results attached. It goes back to behaving
+> the same as 6.6 - about 2% WFI.
 
-Looks good to me ...
+Thanks for checking this!  It means that the
+tick_nohz_get_sleep_length() overhead doesn't matter here that much.
 
-Reviewed-by: Jon Hunter <jonathanh@nvidia.com>
+Instead of making the change above, can you please try the 6.12
+equivalent of the attached patch?
 
-Thanks
-Jon
+Or alternatively, apply this one to the mainline and see if it changes
+the idle states selection proportions?
 
--- 
-nvpublic
+--00000000000073624f0642ff960f
+Content-Type: text/x-patch; charset="US-ASCII"; name="cpuidle-teo-reflect-refinement.patch"
+Content-Disposition: attachment; 
+	filename="cpuidle-teo-reflect-refinement.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_mhos33nx0>
+X-Attachment-Id: f_mhos33nx0
 
+LS0tCiBkcml2ZXJzL2NwdWlkbGUvZ292ZXJub3JzL3Rlby5jIHwgICAgMyArLS0KIDEgZmlsZSBj
+aGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMiBkZWxldGlvbnMoLSkKCi0tLSBhL2RyaXZlcnMvY3B1
+aWRsZS9nb3Zlcm5vcnMvdGVvLmMKKysrIGIvZHJpdmVycy9jcHVpZGxlL2dvdmVybm9ycy90ZW8u
+YwpAQCAtNTA3LDggKzUwNyw3IEBAIHN0YXRpYyB2b2lkIHRlb19yZWZsZWN0KHN0cnVjdCBjcHVp
+ZGxlX2QKIAlzdHJ1Y3QgdGVvX2NwdSAqY3B1X2RhdGEgPSBwZXJfY3B1X3B0cigmdGVvX2NwdXMs
+IGRldi0+Y3B1KTsKIAogCWRldi0+bGFzdF9zdGF0ZV9pZHggPSBzdGF0ZTsKLQlpZiAoZGV2LT5w
+b2xsX3RpbWVfbGltaXQgfHwKLQkgICAgKHRpY2tfbm9oel9pZGxlX2dvdF90aWNrKCkgJiYgY3B1
+X2RhdGEtPnNsZWVwX2xlbmd0aF9ucyA+IFRJQ0tfTlNFQykpIHsKKwlpZiAoZGV2LT5wb2xsX3Rp
+bWVfbGltaXQgfHwgdGlja19ub2h6X2lkbGVfZ290X3RpY2soKSkgewogCQkvKgogCQkgKiBUaGUg
+d2FrZXVwIHdhcyBub3QgImdlbnVpbmUiLCBidXQgdHJpZ2dlcmVkIGJ5IG9uZSBvZiB0aGUKIAkJ
+ICogc2FmZXR5IG5ldHMuCg==
+--00000000000073624f0642ff960f--
 
